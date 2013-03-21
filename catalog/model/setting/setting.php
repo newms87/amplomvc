@@ -1,0 +1,63 @@
+<?php 
+class ModelSettingSetting extends Model {
+	public function getSetting($group, $store_id = 0) {
+		$data = array(); 
+		
+		$query = $this->query("SELECT * FROM " . DB_PREFIX . "setting WHERE store_id = '" . (int)$store_id . "' AND `group` = '" . $this->db->escape($group) . "'");
+		
+		foreach ($query->rows as $result) {
+			if (!$result['serialized']) {
+				$data[$result['key']] = $result['value'];
+			} else {
+				$data[$result['key']] = unserialize($result['value']);
+			}
+		}
+
+		return $data;
+	}
+   
+   public function editSettingKey($group, $key = null, $value = array(), $store_id = 0){
+      if(is_array($value) || is_object($value)){
+         $value = serialize($value);
+         $serialized = 1;
+      }
+      else{
+         $serialized = 0;
+      }
+      
+      $values = array(
+         'group' => $group,
+         'key' => $key,
+         'value' => $value,
+         'serialized' => $serialized,
+         'store_id' => $store_id,
+      );
+      
+      $this->delete('setting',"`group` = '$group' AND `key` = '$key' AND store_id = '$store_id'");
+      
+      $this->insert('setting',  $values);
+   }
+   
+   public function editSetting($group, $data, $store_id = 0) {
+      $this->delete('setting',"`group` = '$group' AND store_id = '$store_id'");
+      
+      foreach ($data as $key => $value) {
+         $values = array(
+            'store_id' => $store_id,
+            'group'    => $group,
+            'key'      => $key
+         );
+         
+         if(is_array($value) || is_object($value)){
+            $values['value'] = serialize($value);
+            $values['serialized'] = 1;
+         }
+         else{
+            $values['value'] = $value;
+            $values['serialized'] = 0;
+         }
+         
+         $this->insert('setting', $values);
+      }
+   }
+}

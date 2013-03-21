@@ -1,0 +1,228 @@
+<?php
+//Registration Form
+$fields = array();
+      
+$fields['firstname'] = array(
+   'type'=>'text',
+   '#class'=>'large-field',
+   'validation' => array('text', 1, 32),
+   'required' => true,
+   'active' => true,
+  );
+
+$fields['lastname'] = array(
+   'type'=>'text',
+   '#class'=>'large-field',
+   'validation' => array('text', 1, 32),
+   'required' => true,
+   'active' => true,
+  );
+
+$fields['email'] = array(
+   'type'=>'text',
+   '#class'=>'large-field',
+   'validation' => 'email',
+   'required' => true,
+   'active' => true,
+  );
+  
+$fields['telephone'] = array(
+   'type'=>'text',
+   '#class'=>'large-field',
+   'validation' => 'phone',
+   'required' => false,
+   'active' => false,
+  );
+
+$fields['fax'] = array(
+   'type'=>'text',
+   '#class'=>'large-field',
+   'validation' => 'phone',
+   'required' => false,
+   'active' => false,
+  );
+
+$_form['register'] = array(
+   'fields' => $fields,
+);
+
+//Payment Address Form
+$fields = array();
+         
+$fields['firstname'] = array(
+   'type'=>'text',
+   'name'=>'payment_address[firstname]',
+   '#class'=>'large-field',
+   'validation' => array('text', 1, 32),
+   'required' => false,
+   'active' => false,
+  );
+
+$fields['lastname'] = array(
+   'type'=>'text',
+   'name'=>'payment_address[lastname]',
+   '#class'=>'large-field',
+   'validation' => array('text', 1, 32),
+   'required' => false,
+   'active' => false,
+  );
+
+$fields['company'] = array(
+   'type'=>'text',
+   'name'=>'payment_address[company]',
+   '#class'=>'large-field',
+   'required' => false,
+   'active' => true,
+  );
+
+$fields['address_1'] = array(
+   'type'=>'text',
+   'name'=>'payment_address[address_1]',
+   '#class'=>'large-field',
+   'validation' => array('text', 1, 128),
+   'required' => true,
+   'active' => true,
+  );
+  
+$fields['address_2'] = array(
+   'type'=>'text',
+   'name'=>'payment_address[address_2]',
+   '#class'=>'large-field',
+   'validation' => array('text', 0, 128),
+   'required' => false,
+   'active' => true,
+  );
+
+$fields['postcode'] = array(
+   'type'         =>'text',
+   'name'         =>'payment_address[postcode]',
+   '#class'       =>'large-field',
+   'validation' => 'postcode',
+   'required' => true,
+   'active' => true,
+  );
+  
+$fields['city'] = array(
+   'type'   =>'text',
+   'name'   =>'payment_address[city]',
+   '#class' =>'large-field',
+   'validation' => array('text', 1, 128),
+   'required' => true,
+   'active' => true,
+  );
+
+$fields['country_id'] = array(
+   'type'         => 'select',
+   'name'         => 'payment_address[country_id]',
+   '#class'       => 'country_select large-field',
+   'default'      => $this->config->get('config_country_id'),
+   'empty_option' => $this->language->get('text_select'),
+   'validation' => 'not_empty_zero',
+   'required' => true,
+   'active' => true,
+  );
+
+$fields['zone_id'] = array(
+   'type'=>'select',
+   'name'=>'payment_address[zone_id]',
+   '#class' => 'zone_select large-field',
+   'empty_option' => $this->language->get('text_select'),
+   'validation' => 'not_empty_zero',
+   'required' => true,
+   'active' => true,
+  );
+
+$_form['payment_address'] = array(
+   'fields' => $fields,
+);
+
+//Shipping Address Form
+$fields = array();
+         
+$fields['firstname'] = array(
+   'type'=>'text',
+   'name'=>'shipping_address[firstname]',
+   '#class'=>'large-field',
+   'validation' => array('text', 1, 32),
+   'required' => true,
+   'active' => true,
+  );
+
+$fields['lastname'] = array(
+   'type'=>'text',
+   'name'=>'shipping_address[lastname]',
+   '#class'=>'large-field',
+   'validation' => array('text', 1, 32),
+   'required' => true,
+   'active' => true,
+  );
+
+$fields['company'] = array(
+   'type'=>'text',
+   'name'=>'shipping_address[company]',
+   '#class'=>'large-field',
+   'required' => false,
+   'active' => true,
+  );
+
+$fields['address_1'] = array(
+   'type'=>'text',
+   'name'=>'shipping_address[address_1]',
+   '#class'=>'large-field',
+   'validation' => array('text', 1, 128),
+   'required' => true,
+   'active' => true,
+  );
+  
+$fields['address_2'] = array(
+   'type'=>'text',
+   'name'=>'shipping_address[address_2]',
+   '#class'=>'large-field',
+   'validation' => array('text', 1, 128),
+   'required' => false,
+   'active' => true,
+  );
+
+$fields['postcode'] = array(
+   'type'         =>'text',
+   'name'         =>'shipping_address[postcode]',
+   '#class'       =>'large-field',
+   'validation' => 'postcode',
+   'required' => true,
+   'active' => true,
+  );
+  
+$fields['city'] = array(
+   'type'   =>'text',
+   'name'   =>'shipping_address[city]',
+   '#class' =>'large-field',
+   'validation' => array('text', 1, 128),
+   'required' => true,
+   'active' => true,
+  );
+
+$fields['country_id'] = array(
+   'type'         => 'select',
+   'name'         => 'shipping_address[country_id]',
+   '#class'       => 'country_select large-field',
+   'empty_option' => $this->language->get('text_select'),
+   'default'      => $this->config->get('config_country_id'),
+   'validation' => 'not_empty_zero',
+   'required' => true,
+   'active' => true,
+  );
+
+$fields['zone_id'] = array(
+   'type'=>'select',
+   'name'=>'shipping_address[zone_id]',
+   '#class' => 'zone_select large-field',
+   'empty_option' => $this->language->get('text_select'),
+   'validation' => 'not_empty_zero',
+   'required' => true,
+   'active' => true,
+  );
+
+$_form['shipping_address'] = array(
+   'fields' => $fields,
+);
+

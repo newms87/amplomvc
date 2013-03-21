@@ -1,0 +1,89 @@
+<?php
+class ControllerModuleDnCarousel extends Controller {
+	 
+	 
+	public function index() {   
+$this->template->load('module/dn_carousel');
+
+		$this->load->language('module/dn_carousel');
+
+		$this->document->setTitle($this->_('heading_title'));
+		
+		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+			$this->model_setting_setting->editSetting('dn_carousel', $_POST);		
+			
+			$this->message->add('success', $this->_('text_success'));
+						
+			$this->redirect($this->url->link('extension/module'));
+		}
+				
+		$this->language->set('button_add_module', $this->_('button_add_carousel'));
+		$this->document->addScript("image_manager.js");
+
+ 		if (isset($this->error['warning'])) {
+			$this->data['error_warning'] = $this->error['warning'];
+		} else {
+			$this->data['error_warning'] = '';
+		}
+
+			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+			$this->breadcrumb->add($this->_('text_module'), $this->url->link('extension/module'));
+			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('module/dn_carousel'));
+
+		$this->data['action'] = $this->url->link('module/dn_carousel');
+		
+		$this->data['cancel'] = $this->url->link('extension/module');
+
+		$this->data['modules'] = array();
+		
+		if (isset($_POST['dn_carousel_module'])) {
+			$this->data['modules'] = $_POST['dn_carousel_module'];
+		} elseif ($this->config->get('dn_carousel_module')) { 
+			$this->data['modules'] = $this->config->get('dn_carousel_module');
+		}	
+		
+		
+		foreach($this->data['modules'] as $mod_key=>$mod){
+			foreach($mod['data'] as $key=>$md){
+				$a = $this->model_cms_article->getArticle($md['article_id']);
+				$this->data['modules'][$mod_key]['data'][$key]['article_title'] = isset($a['title'])?$a['title']:"Article Not Found";
+				$image = $this->data['modules'][$mod_key]['data'][$key]['image'];
+				$image = isset($image) && !empty($image) && file_exists(DIR_IMAGE . $image) ? $image:"no_image.jpg";
+				$this->data['modules'][$mod_key]['data'][$key]['thumb'] = $this->image->resize($image, 100, 100);
+				$this->data['modules'][$mod_key]['data'][$key]['image'] = $image;
+			}
+		}
+
+		$this->data['no_image'] = $this->image->resize('no_image.jpg', 100, 100);
+		
+		
+		$this->data['languages'] = $this->model_localisation_language->getLanguages();
+		$this->data['lang_id'] = $this->config->get('config_language_id');
+
+		
+		$layouts = $this->model_design_layout->getLayouts();
+		$this->data['layouts'] = array();
+		foreach($layouts as $layout)
+			$this->data['layouts'][$layout['layout_id']] = $layout['name']; 
+		
+		$this->data['positions'] = array('above_content'=>'Above Content', 'content_top'=>'Content Top', 'content_bottom'=>"Content Bottom", 'column_left'=>"Column Left", 'column_right'=>"Column Right");
+		$this->children = array(
+			'common/header',
+			'common/footer'
+		);
+				
+		$this->response->setOutput($this->render());
+	}
+	
+	private function validate() {
+		if (!$this->user->hasPermission('modify', 'module/dn_carousel')) {
+			$this->error['warning'] = $this->_('error_permission');
+		}
+		
+		if (!$this->error) {
+			return true;
+		} else {
+			return false;
+		}	
+	}
+}

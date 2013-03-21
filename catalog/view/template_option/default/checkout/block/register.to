@@ -1,0 +1,136 @@
+<?php
+//Registration Form
+$fields = array();
+      
+$fields['firstname'] = array(
+   'type'=>'text',
+   '#class'=>'large-field',
+   'validation' => array('text', 1, 32),
+   'required' => true,
+   'active' => true,
+  );
+
+$fields['lastname'] = array(
+   'type'=>'text',
+   '#class'=>'large-field',
+   'validation' => array('text', 1, 32),
+   'required' => true,
+   'active' => true,
+  );
+
+$fields['email'] = array(
+   'type'=>'text',
+   '#class'=>'large-field',
+   'validation' => 'email',
+   'required' => true,
+   'active' => true,
+  );
+  
+$fields['telephone'] = array(
+   'type'=>'text',
+   '#class'=>'large-field',
+   'validation' => 'phone',
+   'required' => false,
+   'active' => false,
+  );
+
+$fields['fax'] = array(
+   'type'=>'text',
+   '#class'=>'large-field',
+   'validation' => 'phone',
+   'required' => false,
+   'active' => false,
+  );
+
+$_form['register'] = array(
+   'fields' => $fields,
+);
+
+
+//Password Form
+$fields = array();
+
+$fields['password'] = array(
+   'type'=>'password',
+   '#class'=>'large-field',
+   'validation' => 'password',
+   'required' => true,
+   'active' => true,
+  );
+
+$fields['confirm'] = array(
+   'type'=>'password',
+   '#class'=>'large-field',
+   'required' => true,
+   'active' => true,
+  );
+
+$_form['password'] = array(
+   'fields' => $fields,
+);
+        
+
+//Address Form
+$fields = array();
+
+$fields['company'] = array(
+   'type'=>'text',
+   '#class'=>'large-field',
+   'required' => false,
+   'active' => true,
+  );
+
+$fields['address_1'] = array(
+   'type'=>'text',
+   '#class'=>'large-field',
+   'validation' => array('text', 1, 128),
+   'required' => true,
+   'active' => true,
+  );
+  
+$fields['address_2'] = array(
+   'type'=>'text',
+   '#class'=>'large-field',
+   'validation' => array('text', 0, 128),
+   'required' => false,
+   'active' => true,
+  );
+
+$fields['postcode'] = array(
+   'type'         =>'text',
+   '#class'       =>'large-field',
+   'validation' => 'postcode',
+   'required' => true,
+   'active' => true,
+  );
+  
+$fields['city'] = array(
+   'type'   =>'text',
+   '#class' =>'large-field',
+   'validation' => array('text', 1, 128),
+   'required' => true,
+   'active' => true,
+  );
+
+$fields['country_id'] = array(
+   'type'         => 'select',
+   '#class'       => 'country_select large-field',
+   'default'      => $this->config->get('config_country_id'),
+   'empty_option' => $this->language->get('text_select'),
+   'validation' => 'not_empty_zero',
+   'required' => true,
+   'active' => true,
+  );
+
+$fields['zone_id'] = array(
+   'type'=>'select',
+   '#class' => 'zone_select large-field',
+   'empty_option' => $this->language->get('text_select'),
+   'validation' => 'not_empty_zero',
+   'required' => true,
+   'active' => true,
+  );
+
+$_form['address'] = array(
+   'fields' => $fields,
+);

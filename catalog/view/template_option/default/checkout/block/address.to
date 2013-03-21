@@ -1,0 +1,93 @@
+<?php
+//Address Form
+$fields = array();
+      
+$fields['firstname'] = array(
+   'type'=>'text',
+   '#class'=>'large-field',
+   'validation' => array('text', 1, 32),
+   'required' => true,
+   'active' => true,
+   'column' => 1,
+  );
+
+$fields['lastname'] = array(
+   'type'=>'text',
+   '#class'=>'large-field',
+   'validation' => array('text', 1, 32),
+   'required' => true,
+   'active' => true,
+   'column' => 1,
+  );
+
+$fields['company'] = array(
+   'type'=>'text',
+   '#class'=>'large-field',
+   'required' => false,
+   'active' => true,
+   'column' => 1,
+  );
+
+$fields['address_1'] = array(
+   'type'=>'text',
+   '#class'=>'large-field',
+   'validation' => array('text', 1, 128),
+   'required' => true,
+   'active' => true,
+   'column' => 2,
+  );
+  
+$fields['address_2'] = array(
+   'type'=>'text',
+   '#class'=>'large-field',
+   'validation' => array('text', 0, 128),
+   'required' => false,
+   'active' => true,
+   'column' => 2,
+  );
+  
+$fields['city'] = array(
+   'type'   =>'text',
+   '#class' =>'large-field',
+   'validation' => array('text', 1, 128),
+   'required' => true,
+   'active' => true,
+   'column' => 2,
+  );
+
+$fields['postcode'] = array(
+   'type'         =>'text',
+   '#class'       =>'large-field',
+   'validation' => 'postcode',
+   'required' => true,
+   'active' => true,
+   'column' => 2,
+  );
+  
+$fields['country_id'] = array(
+   'type'         => 'select',
+   '#class'       => 'country_select large-field',
+   'default'      => $this->config->get('config_country_id'),
+   'empty_option' => $this->language->get('text_select'),
+   'validation' => 'not_empty_zero',
+   'required' => true,
+   'active' => true,
+   'column' => 2,
+  );
+
+$fields['zone_id'] = array(
+   'type'=>'select',
+   '#class' => 'zone_select large-field',
+   'empty_option' => $this->language->get('text_select'),
+   'validation' => 'not_empty_zero',
+   'required' => true,
+   'active' => true,
+   'column' => 2,
+  );
+
+$_form['address'] = array(
+   'fields' => $fields,
+   'action' => '',
+   'method' => 'POST',
+   'data' => array('max_column' => 2),
+);

@@ -1,0 +1,41 @@
+<?php
+$columns = array();
+
+$columns['id'] = array(
+   'name' => 'newsletter_id'
+);
+
+$columns['name'] = array(
+   'type' => 'text',
+   'filter' => true,
+   'filter_type' => 'text',
+   'align' => 'center',
+   'sortable' => true,
+   'active' => true,
+);
+
+$columns['send_date'] = array(
+   'type' => 'datetime',
+   'filter' => true,
+   'filter_type' => 'datetime_range',
+   'display_type' => 'datetime',
+   'align' => 'center',
+   'sortable' => true,
+   'active' => true,
+);
+
+$columns['status'] = array(
+   'type' => 'int',
+   'filter' => true,
+   'align' => 'center',
+   'sortable' => true,
+   'active' => true,
+);
+
+$_table['listview'] = array(
+   'filters' => true,
+   'row_id' => 'newsletter_id',
+   'route' => 'mail/newsletter',
+   'columns' => $columns,
+);
+
