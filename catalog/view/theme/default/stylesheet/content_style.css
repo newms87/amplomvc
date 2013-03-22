@@ -246,7 +246,10 @@
 }
 
 
-.option_image:hover, .option_image.selected_option{
+.option_image:hover{
+	border-color: #999999;
+}
+.option_image.selected_option{
 	border-color: #EF3F8D;
 }
 

@@ -26,6 +26,8 @@ $(document).ready(function(){
    });
    $('.zoombox').jqzoom({zoomWidth:<?=$zoombox_width;?>,zoomHeight:<?=$zoombox_height;?>,position:'<?=$zoombox_position;?>',xOffset:<?=$zoombox_x;?>, yOffset:<?=$zoombox_y;?>,preloadText:'<?=$text_zoombox_load;?>'});
    
+   <? //TODO: Make the zoombox have option to click for popup colorbox. ;?>
+   
    $('#the_zoombox').colorbox({});
    $('#the_zoombox').click(function(){console.log('hmm');});
 });

@@ -34,11 +34,17 @@
        case 'image': ?>
        <div class='option_image_list'>
        <? foreach($option['product_option_value'] as $product_option_value){ ?>
-         <div class="option_image" onclick="select_me($(this)); $(this).find('img').click();" ov="<?= $product_option_value['option_value_id'];?>" value="<?= $product_option_value['product_option_value_id'];?>" id="pov-<?= $product_option_value['product_option_value_id'];?>">
+         <div class="option_image" onclick="select_me($(this));" ov="<?= $product_option_value['option_value_id'];?>" value="<?= $product_option_value['product_option_value_id'];?>" id="pov-<?= $product_option_value['product_option_value_id'];?>">
             <div class='option_image_box'>
+            	<? if($product_option_value['thumb']) {?>
                <a href="javscript:void(0);" title="<?= $product_option_value['name']; ?>" rel="<?=$product_option_value['rel'];?>" >
                   <img src="<?= $product_option_value['thumb'];?>" />
                </a>
+               <? } else { ?>
+               	<a href="javscript:void(0);" title="<?= $product_option_value['name']; ?>">
+	                  <img src="<?= $option_value_no_image;?>" />
+	               </a>
+               <? } ?>
             </div>
             <div class='option_image_name'><?=$product_option_value['name'];?></div>
          </div>
@@ -95,37 +101,3 @@ function select_me(context){
    update_option_restrictions(parseInt(context.attr('ov')));
 }
 //--></script>
-
-
-<script type="text/javascript" src="catalog/view/javascript/jquery/ajaxupload.js"></script>
-<? foreach ($product_options as $option) { ?>
-<? if ($option['type'] == 'file') { ?>
-<script type="text/javascript">
-//<!--
-new AjaxUpload('#button-option-<?= $option['product_option_id']; ?>', {
-   action: 'index.php?route=product/product/upload',
-   name: 'file',
-   autoSubmit: true,
-   responseType: 'json',
-   onSubmit: function(file, extension) {
-      $('#button-option-<?= $option['product_option_id']; ?>').after('<img src="catalog/view/theme/default/image/loading.gif" class="loading" style="padding-left: 5px;" />');
-   },
-   onComplete: function(file, json) {
-      $('.error').remove();
-      
-      if (json.success) {
-         alert(json.success);
-         
-         $('input[name=\'option[<?= $option['product_option_id']; ?>]\']').attr('value', json.file);
-      }
-      
-      if (json.error) {
-         $('#option-<?= $option['product_option_id']; ?>').after('<span class="error">' + json.error + '</span>');
-      }
-      
-      $('.loading').remove(); 
-   }
-});
-//--></script>
-<? } ?>
-<? } ?>
