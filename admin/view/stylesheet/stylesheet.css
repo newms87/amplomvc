@@ -185,6 +185,10 @@ li ul.link_list{
 
 li.active > ul.link_list{
 	-webkit-transition: -webkit-transform 0s linear 1s,left 0s linear 1s;
+		-moz-transition: -moz-transform 0s linear 1s,left 0s linear 1s;
+		 -ms-transition: -ms-transform 0s linear 1s,left 0s linear 1s;
+		  -o-transition: -o-transform 0s linear 1s,left 0s linear 1s;
+			  transition: transform 0s linear 1s,left 0s linear 1s;
 }
 
 li ul.link_list li ul.link_list{
@@ -216,7 +220,15 @@ ul.top_menu > li:hover > a, ul.top_menu > li.active > a{
 li:hover > ul.link_list{
 	left: 0;
 	-webkit-transform: scale3d(1,1,1) !important;
+		-moz-transform: scale3d(1,1,1) !important;
+		 -ms-transform: scale3d(1,1,1) !important;
+		  -o-transform: scale3d(1,1,1) !important;
+			  transform: scale3d(1,1,1) !important;
 	-webkit-transition: -webkit-transform .2s linear;
+		-moz-transition: -moz-transform .2s linear;
+		 -ms-transition: -ms-transform .2s linear;
+		  -o-transition: -o-transform .2s linear;
+			  transition: transform .2s linear;
 }
 
 ul > li > ul > li:hover > ul.link_list, ul > li > ul > li.active > ul.link_list{
@@ -478,9 +490,10 @@ a.button.designer{
 
 .list .sortable.desc:after {
 	background-position: right center;
+	
+	-webkit-transform: scaleY(-1);
 	-moz-transform: scaleY(-1);
     -o-transform: scaleY(-1);
-    -webkit-transform: scaleY(-1);
     transform: scaleY(-1);
     filter: FlipV;
     -ms-filter: "FlipV";
@@ -493,9 +506,10 @@ a.button.designer{
 
 .list .sortable.asc:hover:after{
 	background-position: right bottom;
+	
+	-webkit-transform: scaleY(-1);
 	-moz-transform: scaleY(-1);
     -o-transform: scaleY(-1);
-    -webkit-transform: scaleY(-1);
     transform: scaleY(-1);
     filter: FlipV;
     -ms-filter: "FlipV";
@@ -503,12 +517,13 @@ a.button.designer{
 
 .list .sortable.desc:hover:after{
 	background-position: right bottom;
-	-moz-transform: none;
-    -o-transform: none;
-    -webkit-transform: none;
-    transform: none;
-    filter: none;
-    -ms-filter: none;
+	-webkit-transform: none;
+		-moz-transform: none;
+    	  -o-transform: none;
+    		  transform: none;
+	
+	filter: none;
+	-ms-filter: none;
 }
 
 .list tr.filter td {
@@ -1013,11 +1028,11 @@ ul.phone_list + a{
 	float:right;
 }
 
-.actions .action_value{
+.batch_actions .action_value{
 	position:relative;
 	display:none;
 }
-.actions .action_value.active{
+.batch_actions .action_value.active{
 	display:inline-block;
 }
 
