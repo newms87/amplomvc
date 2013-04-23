@@ -44,6 +44,10 @@ $(document).ready(function(){
             }
         }
     });
+    
+    $('.action-delete').click(function(){
+		return confirm("Deleting this entry will completely remove all data associated from the system. Are you sure?");
+    });
     	
     // Confirm Uninstall
     $('a').click(function(){
@@ -53,8 +57,20 @@ $(document).ready(function(){
             }
         }
     });
+    
+    
+    //toggle active state for drop down menus
+	$('.link_list li').mouseover(function(){
+		if(!$(this).hasClass('active')){
+			$('.active').removeClass('active');
+			$(this).addClass('active').parents('.link_list li').addClass('active');
+		}
+	});
+
 });
 
-console = console || {};
-console.log = console.log || function(msg){};
-console.dir = console.dir || function(obj){};
+if(!console){
+	console = {};
+	console.log = function(msg){};
+	console.dir = function(obj){};
+}

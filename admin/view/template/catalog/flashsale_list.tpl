@@ -4,7 +4,7 @@
   <div class="box">
     <div class="heading">
       <h1><img src="view/image/setting.png" alt="" /> <?= $heading_title; ?></h1>
-      <div class="actions" style="margin-left:10px;margin-right:5px;padding-top:7px;float:right">
+      <div class="batch_actions">
          Batch Action: <?= $this->builder->build('select',$update_actions, 'action','',array('id'=>'update_action'));?>
          <a class="button" onclick="$('#form').attr('action', '<?=$list_update;?>'.replace(/%action%/,$('#update_action').val())).submit();" >Go</a>
      </div>

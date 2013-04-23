@@ -32,6 +32,9 @@ class Builder extends Controller{
 		}
 		
       $html = "<ul class=\"link_list $class\">";
+		
+		$zindex = count($links);
+		
       foreach($links as $link){
       	
          $attr_list = '';
@@ -66,7 +69,9 @@ class Builder extends Controller{
 				$href = "href=\"$link[href]\"";
 			}
 			
-         $html .= "<li $sub_class><a $href $attr_list>$link[display]</a>$children</li>";
+         $html .= "<li $sub_class style=\"z-index:$zindex\"><a $href $attr_list>$link[display]</a>$children</li>";
+			
+			$zindex--;
       }
       
 		$html .= "</ul>";
@@ -125,7 +130,6 @@ class Builder extends Controller{
       }
    }
 
-   
    public function image_input($name, $image = '', $thumb = null, $no_image = null, $width = null, $height = null, $escape_quotes = false){
       $text_clear = $this->language->get('text_clear');
       $text_browse = $this->language->get('text_browse');
@@ -173,9 +177,10 @@ class Builder extends Controller{
 		$html = '';
 		
 		if($this->builder_template == 'click_image'){
-			$html .= "<div class='image'>";
-			$html .= 	"<img onclick=" . ($escape_quotes ? "\\" : '') . "\"el_uploadSingle($(this).parent().find('input').attr('id'),$(this).attr('id'));" . ($escape_quotes ? "\\" : '') . "\" src='$thumb' alt='' id='thumb-$id' /><br />";
+			$html .= "<div class='image' onclick=" . ($escape_quotes ? "\\" : '') . "\"el_uploadSingle($(this).children('input').attr('id'),$(this).children('img').attr('id'));" . ($escape_quotes ? "\\" : '') . "\">";
+			$html .= 	"<img src='$thumb' alt='' id='thumb-$id' /><br />";
 			$html .= 	"<input type='hidden' name='$name' value='$image' id='image-$id' />";
+			$html .= 	"<div class='click_image_text'><img src='/admin/view/image/small_plus_icon.gif' /><span>Click to Change<span></div>";
 			$html .= "</div>";
 		}else{
 			$html .= "<div class='image'>";
@@ -185,8 +190,6 @@ class Builder extends Controller{
          $html .= 	"<a onclick=" . ($escape_quotes ? "\\" : '') . "\"$(this).parent().find('img').attr('src', '$no_image'); $(this).parent().find('input').attr('value', '');" . ($escape_quotes ? "\\" : '') . "\">$text_clear</a>";
 			$html .= "</div>";
 		}
-		
-		$this->document->addScript('image_manager.js');
 		
 		return $html;
    }
@@ -199,7 +202,7 @@ class Builder extends Controller{
     * @param $name - the key in the array to use as the display name
     * @param (optional) $type - How the $id keys should be treated (eg: int, string, float, etc.). If no type is set, it will try to figure it out on its own
     */
-   public function set_builder_config($id,$name, $type=null){
+   public function set_config($id,$name, $type=null){
       $this->builder_id = $id;
       $this->builder_name = $name;
       $this->builder_type = $type;
@@ -285,7 +288,7 @@ JSC;
 			$select = array($select);
 		}
 		
-		$cast_to = function($value, $key, $type){
+		$cast_to = function($value, $type){
 			switch($type){
 				case 'int':
 					return (int)$value;
@@ -293,12 +296,11 @@ JSC;
 					return (float)$value;
 				case 'string':
 					return (string)$value;
-				default: return;
+				default:
+					trigger_error("Invalid Builder Type: " . $type. ". Valid values are 'int', 'string', 'float', 'none'");
+					return null;
 			}
 		};
-		
-		//type cast all the select values
-		array_walk($select, $cast_to, $this->builder_type);
 		
       $options='';
       $selected_options = ''; //for clickable list
@@ -307,7 +309,7 @@ JSC;
          
          if(is_array($display)){
             if(!isset($this->builder_id) || !isset($this->builder_name) || !isset($display[$this->builder_id]) || !isset($display[$this->builder_name])){
-               trigger_error("You must set the ID and Name to keys in the \$data Array using \$this->builder->set_builder_config(\$id,\$name)");
+               trigger_error("You must set the ID and Name to keys in the \$data Array using \$this->builder->set_config(\$id,\$name)");
                return; 
             }
             
@@ -315,25 +317,33 @@ JSC;
             $display = $display[$this->builder_name];
          }
          
-			//TODO: FINISH THIS! $this->cast_to should cast the value to the type specified in builder_type
-			if($this->builder_type){
-				$value = $this->cast_to($value, null, $this->builder_type);
-				
-				if(!$value){
-					trigger_error("Invalid Builder Type: " . $this->builder_type. ". Valid values are 'int', 'string', 'float', 'none'");
+			
+			//Determine if the value is a selected value.
+			//If the user specified the type of vars, use that type.,
+			//otherwise try to guess the type.
+			$selected = false;
+			
+			foreach($select as $s){
+				if(is_array($s)){
+					$s = $s[$this->builder_id];
 				}
 				
-				$selected = in_array($value, $select);
-			}
-         else{
-         	$selected = false;
-				
-         	foreach($select as $s){
-	            $v = is_integer($s) ? (int)$value : $value;
-	            if(((is_integer($v) && $s !=='' && !is_bool($s) && !is_null($s))?(int)$s:$s) === $v){
+				if($this->builder_type){
+					$value = $cast_to($value, $this->builder_type);
+					
+					if($cast_to($s, $this->builder_type) === $value){
 						$selected = true;
+						break;
 					}
 				}
+	         else{
+	            $v = is_integer($s) ? (int)$value : $value;
+					
+	            if(((is_integer($v) && $s !=='' && !is_bool($s) && !is_null($s))?(int)$s:$s) === $v){
+						$selected = true;
+						break;
+					}
+	         }
          }
          
          switch($type){

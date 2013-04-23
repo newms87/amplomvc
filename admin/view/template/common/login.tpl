@@ -28,9 +28,6 @@
             <td style="text-align: right;"><a onclick="$('#form').submit();" class="button"><?= $button_login; ?></a></td>
           </tr>
         </table>
-        <? if ($redirect) { ?>
-        <input type="hidden" name="redirect" value="<?= $redirect; ?>" />
-        <? } ?>
       </form>
     </div>
     <div class="content" style="min-height:80px">

@@ -101,14 +101,14 @@
           <tr>
              <td><?= $entry_category; ?></td>
              <td>
-                <? $this->builder->set_builder_config('cms_category_id','name');?>
+                <? $this->builder->set_config('cms_category_id','name');?>
                 <?=$this->builder->build_select_list($categories, 'article_category[]',$article_category);?>
              </td>
            </tr>
            <tr>
               <td><?= $entry_store; ?></td>
               <td>
-                 <? $this->builder->set_builder_config('store_id','name');?>
+                 <? $this->builder->set_config('store_id','name');?>
                  <?=$this->builder->build_select_list($stores, 'article_store[]',$article_store);?>
               </td>
             </tr>
@@ -137,7 +137,7 @@
                 <td class="left"><?= $entry_layout; ?></td>
               </tr>
             </thead>
-            <? $this->builder->set_builder_config('layout_id','name');?>
+            <? $this->builder->set_config('layout_id','name');?>
             <? foreach ($stores as $store) { ?>
             <tbody>
               <tr>

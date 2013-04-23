@@ -3,17 +3,16 @@ class Table {
    private $columns = array();
    private $file;
    private $path;
-   private $builder;
    private $route;
    private $row_id;
    private $data;
    private $extra_data = array();
    private $table_data;
-   private $request;
-   private $language;
-   private $error = array();
    
-   function __construct($table){
+   private $error = array();
+	private $controller;
+   
+   function __construct($table, $controller = null){
       $this->columns = $table['columns'];
       
       $this->route = isset($table['route']) ? $table['route'] : '';
@@ -22,18 +21,22 @@ class Table {
       if(!empty($table['data'])){
          $this->extra_data = $table['data'];
       }
+		
+		$this->controller = $controller;
    }
    
+	public function __get($key){
+		return $this->controller->$key;
+	}
+	
    function initialize($controller){
+   	$this->controller = $controller;
       $this->path       = $controller->template->template();
-      $this->builder    = $controller->builder;
-      $this->tool       = $controller->tool;
-      $this->data       = $controller->data;
-      $this->request    = $controller->request;
-      $this->language   = $controller->language;
+		$this->data       = $controller->data;
+		
       $this->extra_data = array();
    }
-   
+	
    public function get_errors(){
       return $this->error;
    }
@@ -329,6 +332,12 @@ class Table {
               break;
               
            case 'image':
+			  	  $image_width = isset($column['image_width']) ? $column['image_width'] : $this->config->get('config_image_admin_list_width');
+				  $image_height = isset($column['image_height']) ? $column['image_height'] : $this->config->get('config_image_admin_list_height');
+			     
+				  foreach($this->table_data as &$item){
+			     	  $column['display_data'] = $this->image->resize($item[$name], $image_width, $image_height);
+				  }
               break;
            
            default:

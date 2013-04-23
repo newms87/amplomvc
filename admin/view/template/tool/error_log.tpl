@@ -32,7 +32,7 @@
         <tr>
            <td><?=$entry_filter_by;?></td>
            <td id='filter_types'>
-              <? $this->builder->set_builder_config('store_id', 'name','string');?>
+              <? $this->builder->set_config('store_id', 'name','string');?>
               <?= $this->builder->build('select', $stores, 'filter_store', $filter_store);?>
               <a id='filter_link' class='button' href="<?=$filter_url;?>" onclick="return set_filter_url();"><?=$button_filter;?></a>
            </td>

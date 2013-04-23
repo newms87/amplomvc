@@ -4,6 +4,9 @@ class Tool {
    
    public function __construct(&$registry) {
       $this->registry = &$registry;
+		
+		define("FILELIST_STRING", 1);
+		define("FILELIST_SPLFILEINFO",2);
    }
 	
 	public function __get($key){
@@ -38,13 +41,21 @@ class Tool {
       return preg_match("/%.*%/",$d,$date_format)?preg_replace("/%.*%/",date(preg_replace("/%/",'',$date_format[0])), $d):$d;
    }
    
-   public function format_datetime($date=null, $format = NULL){
+   public function format_datetime($date = null, $format = ''){
       if(!$format){
          $format = $this->language->getInfo('datetime_format');
       }
       
       if($date){
-         return is_object($date) ? $date->format($format) : date_format(date_create($date),$format);
+      	if(is_int($date)){
+      		return date($format, $date);
+			}
+			else if(is_object($date)){
+				return $date->format($format);
+			}
+			else{
+         	return date_format(date_create($date),$format);
+			}
       }
       else{
          return date_format(date_create(), $format);
@@ -57,7 +68,15 @@ class Tool {
       }
       
       if($date){
-         return is_object($date) ? $date->format($format) : date_format(date_create($date),$format);
+      	if(is_int($date)){
+      		return date($format, $date);
+			}
+			else if(is_object($date)){
+				return $date->format($format);
+			}
+			else{
+         	return date_format(date_create($date),$format);
+			}
       }
       else{
          return date_format(date_create(), $format);
@@ -111,4 +130,43 @@ class Tool {
       } 
       return $return; 
    }
+	
+	
+	/**
+	 * Retrieves files in a specified directory recursively
+	 * 
+	 * @param $dir - the directory to recursively search for files
+	 * @param $exts - the file extensions to search for. Use false to include all file extensions.
+	 * @param $return_type - can by FILELIST_STRING (for a string) or FILELIST_SPLFILEINFO (for an SPLFileInfo Object)
+	 * 
+	 * @return array - Each value in the array will be determined by the $return_type param.
+	 */
+	function get_files_r($dir, $exts = array('php','tpl','css','js','to'), $return_type = FILELIST_SPLFILEINFO){
+		if(!is_dir($dir)) return array();
+		
+		$dir_iterator = new RecursiveDirectoryIterator($dir);
+		$iterator = new RecursiveIteratorIterator($dir_iterator, RecursiveIteratorIterator::CHILD_FIRST);
+		
+		$files = array();
+		
+		foreach ($iterator as $file) {
+			if($file->isFile() && (!$exts || in_array($file->getExtension(), $exts))){
+				switch($return_type){
+					case FILELIST_STRING:
+						$files[] = $file->getPathName();
+						break;
+					case FILELIST_SPLFILEINFO:
+						$files[] = $file;
+						break;
+					default:
+						trigger_error(__FUNCTION__ . ": invalid return type requested! Options are FILELIST_SPLFILEINFO or FILELIST_STRING. SplFileInfo type was returned.");
+						$files[] = $file;
+						break;
+				}
+			}
+		}
+		
+		return $files;
+	}
+
 }

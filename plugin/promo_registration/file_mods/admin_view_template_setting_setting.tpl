@@ -18,7 +18,7 @@
             <tr>
               <td><?= $entry_promo_registration_coupon_id; ?></td>
               <td>
-                 <? $this->builder->set_builder_config('coupon_id','name');?>
+                 <? $this->builder->set_config('coupon_id','name');?>
                  <?=$this->builder->build('select',$coupons, "config_promo_registration_coupon_id", $config_promo_registration_coupon_id);?>
               </td>
             </tr>

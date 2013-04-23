@@ -119,7 +119,7 @@
               <td class="left"><?= $customer['ip']; ?></td>
               <td class="left"><?= $customer['date_added']; ?></td>
               <td class="left">
-					<? $this->builder->set_builder_config('store_id', 'name');?>
+					<? $this->builder->set_config('store_id', 'name');?>
 					<?= $this->builder->build('select', $data_stores, "store_login", '', array('onchange' => "if(this.value !== '')window.open('index.php?route=sale/customer/login&customer_id=$customer[customer_id]&store_id=' + this.value);"));?>
 				  </td>
               <td class="right"><? foreach ($customer['action'] as $action) { ?>

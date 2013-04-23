@@ -91,6 +91,8 @@ $this->template->load('setting/setting');
                         'config_icon',
                         'config_image_admin_thumb_width',
                         'config_image_admin_thumb_height',
+                        'config_image_admin_list_width',
+                        'config_image_admin_list_height',
                         'config_image_category_width',
                         'config_image_category_height',
                         'config_image_manufacturer_width',
@@ -170,7 +172,7 @@ $this->template->load('setting/setting');
         $this->data[$oct] = intval($this->data[$oct]);
       }
 
-      $this->data['layouts'] = $this->model_design_layout->getLayouts();
+      $this->data['data_layouts'] = $this->model_design_layout->getLayouts();
       
       $this->data['templates'] = array();
       $directories = glob(DIR_CATALOG . 'view/theme/*', GLOB_ONLYDIR);
@@ -266,6 +268,14 @@ $this->template->load('setting/setting');
 			$this->error['config_title'] = $this->_('error_title');
 		}	
 		
+		if (!$_POST['config_image_admin_thumb_width'] || !$_POST['config_image_admin_thumb_height']) {
+			$this->error['image_admin_thumb'] = $this->_('error_image_admin_thumb');
+		} 
+		
+		if (!$_POST['config_image_admin_list_width'] || !$_POST['config_image_admin_list_height']) {
+			$this->error['image_admin_list'] = $this->_('error_image_admin_list');
+		}
+
 		if (!$_POST['config_image_category_width'] || !$_POST['config_image_category_height']) {
 			$this->error['image_category'] = $this->_('error_image_category');
 		} 

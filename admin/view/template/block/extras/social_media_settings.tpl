@@ -47,6 +47,7 @@ function add_network(data){
 	img_input = html.find('.image input');
 	img_thumb = html.find('.image img');
 	
+	//we update the ID tag because the image uploader will not work properly if there are duplicates.
 	img_input.attr('id', img_input.attr('id') +network_id);
 	img_thumb.attr('id', img_thumb.attr('id') +network_id);
 	

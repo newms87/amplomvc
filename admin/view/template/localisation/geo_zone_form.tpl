@@ -41,7 +41,7 @@
           <? foreach ($zone_to_geo_zones as $zone_to_geo_zone) { ?>
             <tr class='geozone_selector'>
               <td class="left">
-                 <? $this->builder->set_builder_config('country_id', 'name');?>
+                 <? $this->builder->set_config('country_id', 'name');?>
                  <?= $this->builder->build('select', $countries, "zone_to_geo_zone[$zone_to_geo_zone_row][country_id]", $zone_to_geo_zone['country_id'], array('class'=>'country_selector'));?>
                  <a onclick="add_all_zones($(this))" style="text-decoration:none; display:block"><?= $button_add_all_zones;?></a>
               </td>
@@ -103,7 +103,7 @@ function addGeoZone(country_id, zone_id) {
    country_id = country_id || 0;
    
 	html  = '<tr class="geozone_selector">';
-   <? $this->builder->set_builder_config('country_id', 'name');?>
+   <? $this->builder->set_config('country_id', 'name');?>
 	html += '  <td class="left">' + "<?= $this->builder->build('select', $countries, "zone_to_geo_zone[%geozone_row%][country_id]", '', array('class'=>'country_selector'), true);?>" + '<a onclick="add_all_zones($(this))" style="text-decoration:none;display:block;"><?= $button_add_all_zones;?></a></td>';
 	html += '  <td class="left"><select name="zone_to_geo_zone[%geozone_row%][zone_id]" class="zone_selector" zone_id="' + zone_id + '"></select></td>';
 	html += '  <td class="left"><a onclick="$(this).closest(\'.geozone_selector\').remove();" class="button"><?= $button_remove; ?></a></td>';

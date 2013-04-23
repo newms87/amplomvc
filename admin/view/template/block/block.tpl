@@ -60,14 +60,14 @@
     	<tr>
         <td><?= $entry_store; ?></td>
         <td>
-        	<? $this->builder->set_builder_config("store_id", "name");?>
+        	<? $this->builder->set_config("store_id", "name");?>
         	<?= $this->builder->build('multiselect', $stores, "profiles[%pid%][store_ids]");?>
         </td>
       </tr>
       <tr>
         <td><?= $entry_layout; ?></td>
         <td>
-        	<? $this->builder->set_builder_config("layout_id", "name");?>
+        	<? $this->builder->set_config("layout_id", "name");?>
         	<?= $this->builder->build('multiselect', $layouts, "profiles[%pid%][layout_ids]");?>
         </td>
       </tr>

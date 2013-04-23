@@ -31,13 +31,13 @@
     </div>
   </div>
   <!--<div class="product-compare"><a href="<?= $compare; ?>" id="compare-total"><?= $text_compare; ?></a></div> -->
-  <div id="product_list" class='grid'>
+  <div id="catalog_list" class='grid'>
     <? foreach ($products as $product) { ?>
-    <div class="product_block">
+    <div class="item_block">
       <? if ($product['thumb']) { ?>
       <div class="image"><a href="<?= $product['href']; ?>"><img src="<?= $product['thumb']; ?>" title="<?= $product['name']; ?>" alt="<?= $product['name']; ?>" /></a></div>
       <? } ?>
-      <div class="product_text">
+      <div class="item_text">
 	      <div class="name"><a href="<?= $product['href']; ?>"><?= $product['name']; ?></a></div>
 	      <div class="description"><?= $product['description']; ?></div>
 	   </div>
@@ -88,13 +88,13 @@ $('[name=show_limit]').change(function(){
 
 function display(view) {
 	if (view == 'list') {
-		$('#product_list').removeClass('grid').addClass('list');
+		$('#catalog_list').removeClass('grid').addClass('list');
 		
 		$('.display').html('<b><?= $text_display; ?></b> <?= $text_list; ?> <b>/</b> <a onclick="display(\'grid\');"><?= $text_grid; ?></a>');
 		
 		$.cookie('display', 'list'); 
 	} else {
-		$('#product_list').removeClass('list').addClass('grid');
+		$('#catalog_list').removeClass('list').addClass('grid');
 		
 		$('.display').html('<b><?= $text_display; ?></b> <a onclick="display(\'list\');"><?= $text_list; ?></a> <b>/</b> <?= $text_grid; ?>');
 		

@@ -8,7 +8,7 @@
     <? } ?>
     <b><?= $option['display_name']; ?>:</b><br />
     
-  <?=$this->builder->set_builder_config('product_option_value_id','name');?>
+  <?=$this->builder->set_config('product_option_value_id','name');?>
   
   <? switch ($option['type']) {
        case 'select': ?>

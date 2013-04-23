@@ -82,7 +82,7 @@
             <tr>
               <td><span class="required">*</span> <?= $entry_country; ?></td>
               <td>
-                 <?= $this->builder->set_builder_config('country_id', 'name');?>
+                 <?= $this->builder->set_config('country_id', 'name');?>
                  <?= $this->builder->build('select', $countries, 'country_id', $country_id);?>
                 <? if ($error_country) { ?>
                 <span class="error"><?= $error_country; ?></span>

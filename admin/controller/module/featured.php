@@ -35,18 +35,21 @@ $this->template->load('module/featured');
 		}	
 	   
 	   $this->data['featured_product'] = array();
-		foreach ($products as $product_id) {
-			$product_info = $this->model_catalog_product->getProduct($product_id);
-			
-			if ($product_info) {
-				$this->data['featured_product'][] = array(
-					'product_id' => $product_info['product_id'],
-					'name'       => $product_info['name']
-				);
-			}
-		}	
 		
-		$dfp=$this->config->get('default_product_filter');
+		if(!empty($products)){
+			foreach ($products as $product_id) {
+				$product_info = $this->model_catalog_product->getProduct($product_id);
+				
+				if ($product_info) {
+					$this->data['featured_product'][] = array(
+						'product_id' => $product_info['product_id'],
+						'name'       => $product_info['name']
+					);
+				}
+			}
+		}
+		
+		$dfp = $this->config->get('default_product_filter');
       $this->data['default_product_filter'] = isset($dfp)?$dfp:'';
       $pft=$this->config->get('product_filter_types');
       $this->data['product_filter_types'] = isset($pft)?$pft:array();

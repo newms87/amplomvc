@@ -4,7 +4,7 @@
   <div class="box">
     <div class="heading">
       <h1><img src="view/image/setting.png" alt="" /> <?= $heading_title; ?></h1>
-      <div class="actions" style="margin-left:10px;margin-right:5px;padding-top:7px;float:right">
+      <div class="batch_actions">
          <?=$this->builder->build_batch_actions($text_batch_action,$batch_actions,$batch_action_values, html_entity_decode($batch_action_go));?>
      </div>
       <div class="buttons">

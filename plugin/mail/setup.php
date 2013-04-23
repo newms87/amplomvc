@@ -1,7 +1,7 @@
 <?php 
 class SetupMail implements SetupPlugin {
 
-   public function install($registry, &$controller_adapters, &$db_requests, &$language_extensions, &$file_modifications){
+   public function install($registry, &$controller_adapters, &$db_requests){
       
    	$controller_adapters[] = array(
    		'for' 			 => 'mail/messages',
@@ -10,10 +10,6 @@ class SetupMail implements SetupPlugin {
    		'callback'		 => 'mail_settings',
    		'priority'		 => 0
    	);
-      
-      $file_modifications = array(
-         'admin/view/template/mail/messages.tpl'=>'view/mail_messages.tpl'
-      );
    }
    
    public function update($version, $registry){

@@ -420,7 +420,6 @@ class ControllerCatalogProduct extends Controller {
       //Get Product Attributes
 		if (!isset($this->data['product_attributes'])){
 			$this->data['product_attributes'] = $this->model_catalog_product->getProductAttributes($product_id);
-			html_dump($this->data['product_attributes'],'attrs');
       }
 		
       
@@ -528,13 +527,13 @@ class ControllerCatalogProduct extends Controller {
       
 		$this->data['no_image'] = $this->image->resize('no_image.jpg', 100, 100);
 
-		$this->data['downloads'] = $this->model_catalog_download->getDownloads();
+		$this->data['data_downloads'] = $this->model_catalog_download->getDownloads();
 		
 		if (!isset($this->data['product_download'])){
 			$this->data['product_download'] = $this->model_catalog_product->getProductDownloads($product_id);
       }
 		
-		$this->data['categories'] = $this->model_catalog_category->getCategories(0);
+		$this->data['data_categories'] = $this->model_catalog_category->getCategories(0);
 		
 		if (!isset($this->data['product_category'])){
 			$this->data['product_category'] = $this->model_catalog_product->getProductCategories($product_id);

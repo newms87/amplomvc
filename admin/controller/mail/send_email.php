@@ -30,7 +30,7 @@ class ControllerMailSendEmail extends Controller {
             $this->mail->setText($message);
          }
          
-         if(!empty($_FILES['attachment'])){
+         if(!empty($_FILES['attachment']) && empty($_FILES['attachment']['error'])){
             $files = $_FILES['attachment'];
             
             for($i = 0; $i < count($files['name']); $i++){

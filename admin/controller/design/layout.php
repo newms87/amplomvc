@@ -336,12 +336,6 @@ $this->template->load('design/layout_form');
 				$this->error['warning'] = $this->_('error_default');
 			}
 			
-			$store_total = $this->model_setting_store->getTotalStoresByLayoutId($layout_id);
-
-			if ($store_total) {
-				$this->error['warning'] = sprintf($this->_('error_store'), $store_total);
-			}
-			
 			$product_total = $this->model_catalog_product->getTotalProductsByLayoutId($layout_id);
 	
 			if ($product_total) {

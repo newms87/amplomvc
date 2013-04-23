@@ -151,13 +151,15 @@ abstract class Model {
    }
    
    protected function insert($table, $data){
+   	$this->action_filter('insert', $table, $data);
+		
       //This will grab the info for the function that called insert()
       list(,$caller) = debug_backtrace(false);
       
       $this->plugin_handler->execute_db_requests($table, 'insert', 'before', $caller['class'], $caller['function'], $data);
-      
+		
       $escaped_values = $this->get_escaped_values($table, $data, false);
-      
+		
       $values = '';
       foreach($escaped_values as $key=>$value){
          $values .= ($values?',':'') . "`$key`='$value'";
@@ -179,6 +181,8 @@ abstract class Model {
    }
    
    protected function update($table, $data, $where){
+   	$this->action_filter('update', $table, $data);
+		
       //This will grab the info for the function that called update()
       list(,$caller) = debug_backtrace(false);
       
@@ -232,6 +236,8 @@ abstract class Model {
    }
    
    protected function delete($table, $where=null){
+   	$this->action_filter('delete', $table, $data);
+		
       //This will grab the info for the function that called delete()
       list(,$caller) = debug_backtrace(false);
       
@@ -417,9 +423,9 @@ abstract class Model {
       }
       $table_string = $this->get_table_string($tables);
       
-      $where_string = $this->get_where_string($where);
+      $where_string = $this->build_where_string($where);
       
-      $order_limit_string = $this->get_order_limit_string($data);
+      $order_limit_string = $this->extract_order_limit_string($data);
       
       $sql = "SELECT $select FROM " . DB_PREFIX . "$table $table_string $where_string $order_limit_string";
       
@@ -440,7 +446,7 @@ abstract class Model {
       return $table_string;
    }
    
-   public function get_where_string($where){
+   public function build_where_string($where){
       if(!$where) return '';
       
       if(is_string($where)){
@@ -454,7 +460,7 @@ abstract class Model {
       return "WHERE $and_string $or_string";
    }
    
-   public function get_order_limit_string($data){
+   public function extract_order_limit_string($data){
       $order_limit = '';
 
       if(isset($data['sort'])){
@@ -480,4 +486,34 @@ abstract class Model {
       
       return $order_limit;
    }
+
+	private function action_filter($action, $table, &$data){
+		$hooks = $this->config->get('db_hook_' . $action . '_' . $table);
+		
+		if($hooks){
+			foreach($hooks as $hook){
+				if(is_array($hook['callback'])){
+					$classname = key($hook['callback']);
+					$function = current($hook['callback']);
+					
+					$class = $this->$classname;
+					
+					if(method_exists($class, $function)){
+						$class->$function($data, $hook['param']);
+					}
+					else{
+						trigger_error("Model::action_filter(): The following method does not exist: $class::$function().");
+					}
+				}
+				else{
+					if(function_exists($hook['callback'])){
+						$hook['callback']($hook['param']);
+					}
+					else{
+						trigger_error("Model::action_filter(): The following function does not exist: $hook[callback]().");
+					}
+				}
+			}
+		}
+	}
 }

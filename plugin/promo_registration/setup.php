@@ -1,7 +1,7 @@
 <?php 
 class SetupPromoRegistration implements SetupPlugin {
       
-   public function install($registry, &$controller_adapters, &$db_requests, &$language_extensions, &$file_modifications){
+   public function install($registry, &$controller_adapters, &$db_requests){
       
    	$controller_adapters[] = array(
    		'for' 			 => 'setting/setting',
@@ -45,12 +45,6 @@ class SetupPromoRegistration implements SetupPlugin {
             'when'         => 'after',
             'callback'     => 'promo_addCustomer'
            );
-           
-           
-      $file_modifications = array(
-         'admin/view/template/setting/setting.tpl'=>'view/mod_setting.tpl',
-         'catalog/controller/account/register.php'=>'catalog/mod_account_register.php'
-      );
    }
    
    public function update($version, $registry){

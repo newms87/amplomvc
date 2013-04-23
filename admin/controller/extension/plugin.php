@@ -135,17 +135,15 @@ $this->template->load('extension/plugin_form');
          _require_once($setup_file);
          
          $user_class = 'Setup'.preg_replace("/[^A-Z0-9]/i", "",$name);
-         $user_class = new $user_class();
+         $user_class = new $user_class($this->registry);
          
          if(method_exists($user_class, 'install')){
          	$controller_adapters = array();
             $db_requests 			= array();
-            $language_extensions = array();
-            $file_modifications  = array();
             
-            $user_class->install($this->registry, $controller_adapters, $db_requests, $language_extensions, $file_modifications);
+            $user_class->install($controller_adapters, $db_requests);
             
-            if($this->model_setting_plugin->install($name, $controller_adapters, $db_requests, $language_extensions, $file_modifications)){
+            if($this->model_setting_plugin->install($name, $controller_adapters, $db_requests)){
                $this->message->add('success',sprintf($this->_("success_install"),$name));
             }
          }
@@ -163,8 +161,8 @@ $this->template->load('extension/plugin_form');
       
       $this->language->load("extension/plugin");
       
-      $name = isset($_GET['name'])?$_GET['name']:'';
-      $keep_data = isset($_GET['keep_data'])?$_GET['keep_data']:true;
+      $name = isset($_GET['name']) ? $_GET['name'] : '';
+      $keep_data = isset($_GET['keep_data']) ? $_GET['keep_data'] : true;
       
       $setup_file = DIR_PLUGIN . $name . '/setup.php';
       
@@ -176,10 +174,10 @@ $this->template->load('extension/plugin_form');
          _require_once($setup_file);
          
          $user_class = 'Setup'.preg_replace("/[^A-Z0-9]/i", "",$name);
-         $user_class = new $user_class();
+         $user_class = new $user_class($this->registry);
          
          if(method_exists($user_class, 'uninstall')){
-            $data = $user_class->uninstall($this->registry, $keep_data);
+            $data = $user_class->uninstall($keep_data);
          }
          
          if($this->model_setting_plugin->uninstall($name, $data)){

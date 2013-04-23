@@ -106,7 +106,7 @@ class ModelModulejanrain extends Model
 					firstname  = '" . $this->db->escape($user_data['firstname']) . "',
 					lastname = '" . $this->db->escape($user_data['lastname']) . "', 
 					email = '" . $this->db->escape($user_data['email']) . "', 
-					password = '" . $this->db->escape(md5($user_data['password'])) . "',  
+					password = '" . $this->user->encrypt($user_data['password']) . "',  
 					customer_group_id = '" . (int)$user_data['customer_group_id'] . "', 
 					status = '" . (int)$user_data['status'] . "',
 					approved  = '" . (int)$user_data['approved'] . "',  

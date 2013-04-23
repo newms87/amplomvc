@@ -94,13 +94,15 @@ class ControllerProductBlockOptions extends Controller {
             $product_option['product_option_value'] = $blank_option + $product_option['product_option_value'];
          }
       }
+
+		$this->data['option_value_no_image'] = $this->image->resize('data/no_image.png', $this->config->get('config_image_product_option_width'), $this->config->get('config_image_product_option_height'));
       
       $this->data['product_options'] = $product_options;
       
       $this->data['product_option_restrictions'] = $this->model_catalog_product->getProductOptionValueRestrictions($product_id);
       
 		$this->children = array();
-					
+		
 		$this->response->setOutput($this->render());
   	}
 }

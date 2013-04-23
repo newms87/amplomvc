@@ -2,16 +2,13 @@
 class Language {
 	private $default = 'english';
 	private $directory;
-   private $plugin_handler;
    private $orig_data = array();
    private $info;
    private $latest_modified_file = 0;
    
    public  $data = array();
  
-	public function __construct($language, $plugin_handler) {
-      $this->plugin_handler = $plugin_handler;
-      
+	public function __construct($language) {
 	   if(is_string($language)){
 		   $this->directory = $language;
       }
@@ -68,7 +65,7 @@ class Language {
       
       require($file);
       
-      $this->data = array_merge($this->data, $_, $this->plugin_handler->loadLanguageExtensions($filename));
+      $this->data = $_ + $this->data;
       
       return $this->data;
   	}
@@ -116,7 +113,7 @@ class Language {
       
       require($file);
       
-      $this->data = array_merge($this->data, $_, $this->plugin_handler->loadLanguageExtensions($filename, $name));
+      $this->data = $_ + $this->data;
       
       return $this->data;
    }

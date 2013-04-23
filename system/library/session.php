@@ -19,7 +19,7 @@ class Session {
          
 			session_start();
 		}
-	   
+		
 		$this->data =& $_SESSION;
       
       //TODO: validate this is safe? Since the token has to be in database and we will only save to db right before calling an admin page only.
@@ -38,7 +38,7 @@ class Session {
 				unset($this->data['session_token_saved']);
 			}
       }
-      elseif(isset($this->data['token'])){
+      elseif(isset($this->data['token']) && empty($_COOKIE)){
       	unset($this->data['token']);
          $this->data['messages']['warning'][] = "You must enable cookies to login to the admin portal!";
          header('Status: 401');
@@ -83,23 +83,30 @@ class Session {
       
       $this->delete_cookie($this->name);
       
-      unset($this->data);
-      
-		if (session_id()) {
-      	session_destroy();
+		$to_save = array(
+			'messages',
+		);
+		
+		foreach($_SESSION as $key => $s){
+			if(!in_array($key, $to_save)){
+				unset($_SESSION[$key]);
+			}
 		}
    }
    
    public function set_cookie($name, $value, $expire = 3600){
       //TODO: ADD EXPIRATION TIME BACK IN! Remove because Chrome was not working
-      setcookie($name, $value, false, '/', COOKIE_DOMAIN);
+      setcookie($name, $value, time() + $expire, '/', COOKIE_DOMAIN);
    }
    
    public function delete_cookie($name){
       $this->set_cookie($name, '', -3600);
    }
    
-   public function set_token($token){
+   public function set_token($token = null){
+   	if(!$token){
+   		$token = md5(mt_rand());
+		}
       $this->set_cookie("token", $token, 3600);
 		$this->data['token'] = $token;
    }

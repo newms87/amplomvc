@@ -8,7 +8,19 @@
       <div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a onclick="location = '<?= $cancel; ?>';" class="button"><?= $button_cancel; ?></a></div>
     </div>
     <div class="content">
-      <div id="tabs" class="htabs"><a href="#tab-general"><?= $tab_general; ?></a><a href="#tab-data"><?= $tab_data; ?></a><a href="#tab-links"><?= $tab_links; ?></a><a href="#tab-attribute"><?= $tab_attribute; ?></a><a href="#tab-option"><?= $tab_option; ?></a><a href="#tab-discount"><?= $tab_discount; ?></a><a href="#tab-special"><?= $tab_special; ?></a><a href="#tab-image"><?= $tab_image; ?></a><a href="#tab-reward"><?= $tab_reward; ?></a><a href="#tab-design"><?= $tab_design; ?></a></div>
+      <div id="tabs" class="htabs">
+      	<a href="#tab-general"><?= $tab_general; ?></a>
+      	<a href="#tab-data"><?= $tab_data; ?></a>
+      	<a href="#tab-shipping"><?= $tab_shipping; ?></a>
+      	<a href="#tab-links"><?= $tab_links; ?></a>
+      	<a href="#tab-attribute"><?= $tab_attribute; ?></a>
+      	<a href="#tab-option"><?= $tab_option; ?></a>
+      	<a href="#tab-discount"><?= $tab_discount; ?></a>
+      	<a href="#tab-special"><?= $tab_special; ?></a>
+      	<a href="#tab-image"><?= $tab_image; ?></a>
+      	<a href="#tab-reward"><?= $tab_reward; ?></a>
+      	<a href="#tab-design"><?= $tab_design; ?></a>
+      </div>
       <form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
         <div id="tab-general">
           <div id="languages" class="htabs">
@@ -96,7 +108,7 @@
             <tr>
               <td><?= $entry_tax_class; ?></td>
               <td>
-                 <? $this->builder->set_builder_config('tax_class_id','title');?>
+                 <? $this->builder->set_config('tax_class_id','title');?>
                  <?=$this->builder->build('select',$tax_classes,'tax_class_id',$tax_class_id);?>
               </td>
             </tr>
@@ -114,11 +126,6 @@
               		<?=$this->builder->build('select', $yes_no, "subtract", (int)$subtract);?>
               		<input type='hidden' name='stock_status_id' value='<?=$stock_status_id;?>' />
               	</td>
-            </tr>
-            
-            <tr>
-              <td><?= $entry_shipping; ?></td>
-              <td><?= $this->builder->build('radio', $yes_no, "shipping", (int)$shipping);?></td>
             </tr>
             <tr>
               <td><?= $entry_image; ?></td>
@@ -138,6 +145,28 @@
               <td><input type="text" name="date_expires" value="<?= $date_expires; ?>" size="12" class="datetime" /></td>
             </tr>
             <tr>
+              <td><?= $entry_status; ?></td>
+              <td><?= $this->builder->build('select',$statuses,"status",$status);?></td>
+            </tr>
+            <tr>
+               <td><?=$entry_editable;?></td>
+               <td><?= $this->builder->build('select',$yes_no, 'editable',$editable);?></td>
+            </tr>
+            <tr>
+              <td><?= $entry_sort_order; ?></td>
+              <td><input type="text" name="sort_order" value="<?= $sort_order; ?>" size="2" /></td>
+            </tr>
+          </table>
+        </div>
+        <div id="tab-shipping">
+          <table class="form">
+          	<tr>
+              <td><?= $entry_shipping; ?></td>
+              <td><?= $this->builder->build('radio', $yes_no, "shipping", (int)$shipping);?></td>
+            </tr>
+          </table>
+          <table class="form" id="shipping_details">
+          	<tr>
               <td><?= $entry_dimension; ?></td>
               <td><input type="text" name="length" value="<?= $length; ?>" size="4" />
                 <input type="text" name="width" value="<?= $width; ?>" size="4" />
@@ -171,18 +200,6 @@
                   <? } ?>
                 </select></td>
             </tr>
-            <tr>
-              <td><?= $entry_status; ?></td>
-              <td><?= $this->builder->build('select',$statuses,"status",$status);?></td>
-            </tr>
-            <tr>
-               <td><?=$entry_editable;?></td>
-               <td><?= $this->builder->build('select',$yes_no, 'editable',$editable);?></td>
-            </tr>
-            <tr>
-              <td><?= $entry_sort_order; ?></td>
-              <td><input type="text" name="sort_order" value="<?= $sort_order; ?>" size="2" /></td>
-            </tr>
           </table>
         </div>
         <div id="tab-links">
@@ -193,45 +210,18 @@
             </tr>
             <tr>
               <td><?= $entry_category; ?></td>
-              <td><div class="scrollbox">
-                  <? $class = 'odd'; ?>
-                  <? foreach ($categories as $category) { ?>
-                  <? $class = ($class == 'even' ? 'odd' : 'even'); ?>
-                  <div class="<?= $class; ?>">
-                    <? if (in_array($category['category_id'], $product_category)) { ?>
-                    <input type="checkbox" name="product_category[]" value="<?= $category['category_id']; ?>" checked="checked" />
-                    <?= $category['name']; ?>
-                    <? } else { ?>
-                    <input type="checkbox" name="product_category[]" value="<?= $category['category_id']; ?>" />
-                    <?= $category['name']; ?>
-                    <? } ?>
-                  </div>
-                  <? } ?>
-                </div>
-                <a onclick="$(this).parent().find(':checkbox').attr('checked', true);"><?= $text_select_all; ?></a> / <a onclick="$(this).parent().find(':checkbox').attr('checked', false);"><?= $text_unselect_all; ?></a></td>
+              <? $this->builder->set_config('category_id', 'name');?>
+              <td><?= $this->builder->build('multiselect', $data_categories, "product_category", $product_category);?></td>
             </tr>
             <tr>
               <td><?= $entry_store; ?></td>
-              <? $this->builder->set_builder_config('store_id', 'name');?>
+              <? $this->builder->set_config('store_id', 'name');?>
               <td><?= $this->builder->build('multiselect', $data_stores, "product_store", $product_store);?></td>
             </tr>
             <tr>
               <td><?= $entry_download; ?></td>
-              <td><div class="scrollbox">
-                  <? $class = 'odd'; ?>
-                  <? foreach ($downloads as $download) { ?>
-                  <? $class = ($class == 'even' ? 'odd' : 'even'); ?>
-                  <div class="<?= $class; ?>">
-                    <? if (in_array($download['download_id'], $product_download)) { ?>
-                    <input type="checkbox" name="product_download[]" value="<?= $download['download_id']; ?>" checked="checked" />
-                    <?= $download['name']; ?>
-                    <? } else { ?>
-                    <input type="checkbox" name="product_download[]" value="<?= $download['download_id']; ?>" />
-                    <?= $download['name']; ?>
-                    <? } ?>
-                  </div>
-                  <? } ?>
-                </div></td>
+              <? $this->builder->set_config('download_id', 'name');?>
+              <td><?= $this->builder->build('multiselect', $data_downloads, "product_download", $product_download);?></td>
             </tr>
             <tr>
               <td><?= $entry_related; ?></td>
@@ -377,7 +367,7 @@
                            <? if(isset($product_option_value['restrictions'])){?>
                            <? foreach($product_option_value['restrictions'] as $row=>$restriction){?>
                            <tr>
-                              <?=$this->builder->set_builder_config('option_value_id', 'name');?>
+                              <?=$this->builder->set_config('option_value_id', 'name');?>
                                <td class="center"><?=$this->builder->build('select', $all_product_option_values, "product_options[$option_id][product_option_value][$option_value_id][restrictions][$row][restrict_option_value_id]", $restriction['restrict_option_value_id'], array('class'=>'restrict_option_values'));?></td>
                                <td class="center"><input type="text" size='3' name="product_options[<?= $option_id; ?>][product_option_value][<?= $option_value_id; ?>][restrictions][<?=$row;?>][quantity]" value="<?=$restriction['quantity'];?>" /></td>
                                <td class="center"><a onclick="$(this).closest('tr').remove()" class="button_remove"></a></td>
@@ -573,7 +563,7 @@
               <tr>
                 <td class="left"><?= $store['name']; ?></td>
                 <td class="left">
-                   <? $this->builder->set_builder_config('layout_id', 'name');?>
+                   <? $this->builder->set_config('layout_id', 'name');?>
                    <?= $this->builder->build('select', $layouts, "product_layout[$store[store_id]][layout_id]", isset($product_layout[$store['store_id']]) ? $product_layout[$store['store_id']] : '');?>
                 </td>
                 <td class="left">
@@ -616,6 +606,19 @@ function generate_model(c){
       alert("Please make a name for this product before generating the Model ID");
    $.post('index.php?route=catalog/product/generate_model',{product_id:<?=$product_id?$product_id:0;?>,name:name},function(json){$('input[name="model"]').val(json);},'json');
 }
+//--></script>
+
+<script type="text/javascript">//<!--
+$('[name=shipping]').change(function(){
+	if($(this).is(':checked')){
+		if($(this).val() === '1'){
+			$('#shipping_details').show();
+		}
+		else{
+			$('#shipping_details').hide();
+		}
+	}
+}).change();
 //--></script>
 
 <script type="text/javascript">//<!--
@@ -815,7 +818,7 @@ $('#option-add input').autocomplete({
 //--></script>
 
 <span id='all_product_option_values' style='display:none'>
-   <?=$this->builder->set_builder_config('option_value_id', 'name');?>
+   <?=$this->builder->set_config('option_value_id', 'name');?>
    <?=$this->builder->build('select', $all_product_option_values, "product_options[%option_id%][product_option_value][%option_value_id%][restrictions][%row%][restrict_option_value_id]", '', array('class'=>'restrict_option_values'));?>
 </span>
           
@@ -887,7 +890,7 @@ var restrict_row = 0;
 
 function add_restriction_value(context, option_id, option_value_id){
    html =  '<tr>';
-         <?=$this->builder->set_builder_config('product_option_value_id', 'name');?>
+         <?=$this->builder->set_config('product_option_value_id', 'name');?>
    html += '   <td class="center">' + $('#all_product_option_values').html() + '</td>';
    html += '   <td class="center"><input type="text" size="3" name="product_options[%option_id%][product_option_value][%option_value_id%][restrictions][%row%][quantity]" value="1" /></td>';
    html += '   <td class="center"><a onclick="$(this).closest(\'tr\').remove()" class="button_remove"></a></td>';

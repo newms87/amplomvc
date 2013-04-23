@@ -19,7 +19,7 @@ class ControllerModuleFeaturedFlashsale extends Controller {
          
          foreach($featured_list as $id=>$name){
             if(substr($id,0,7) == "product"){
-               $item = $this->model_catalog_product->getProductSimple((int)substr($id,7));
+               $item = $this->model_catalog_product->getProduct((int)substr($id,7));
                if(!empty($item)){
                   $items[$id] = $item;
                   $items[$id]['href'] = $this->url->link('product/product','product_id='.$items[$id]['product_id']);

@@ -58,7 +58,7 @@
            </tr>
            <tr>
               <td><?= $entry_store; ?></td>
-              <? $this->builder->set_builder_config('store_id', 'name');?>
+              <? $this->builder->set_config('store_id', 'name');?>
               <td><?= $this->builder->build('multiselect', $data_stores, "manufacturer_store", $manufacturer_store);?></td>
             </tr>
             <tr>

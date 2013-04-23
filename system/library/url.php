@@ -27,7 +27,7 @@ class Url {
    }
    
    public function current_page(){
-      $protocol = isset($_SERVER['HTTPS']) ? 'https://':'http://';
+      $protocol = !empty($_SERVER['HTTPS']) ? 'https://':'http://';
       return $protocol . $_SERVER['SERVER_NAME'] . preg_replace('/&amp;/','%26',$_SERVER['REQUEST_URI']);
    }
    
@@ -227,6 +227,12 @@ class Url {
       return preg_replace("/%26amp%3B/i","%26",urlencode($this->link($uri,$query)));
    }
    
+   public function decodeURIcomponent($uri){
+      $patterns = array('/&gt;/','/&lt;/');
+      $replacements = array('>','<');
+      return preg_replace($patterns, $replacements, rawurldecode($uri));
+   }
+	
 	public function addRewrite($rewrite) {
 		$this->rewrite[] = $rewrite;
 	}
@@ -383,11 +389,5 @@ class Url {
       }
       
       return trim($query, '&');
-   }
-   
-   public function decodeURIcomponent($uri){
-      $patterns = array('/&gt;/','/&lt;/');
-      $replacements = array('>','<');
-      return preg_replace($patterns, $replacements, rawurldecode($uri));
    }
 }

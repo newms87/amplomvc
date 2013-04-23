@@ -159,7 +159,7 @@
                            <? if(isset($product_option_value['restrictions'])){?>
                            <? foreach($product_option_value['restrictions'] as $row=>$restriction){?>
                            <tr>
-                              <?=$this->builder->set_builder_config('option_value_id', 'name');?>
+                              <?=$this->builder->set_config('option_value_id', 'name');?>
                                <td class="center"><?=$this->builder->build('select', $all_product_option_values, "product_options[$option_id][product_option_value][$option_value_id][restrictions][$row][restrict_option_value_id]", $restriction['restrict_option_value_id'], array('class'=>'restrict_option_values'));?></td>
                                <td class="center"><input type="text" size='3' name="product_options[<?= $option_id; ?>][product_option_value][<?= $option_value_id; ?>][restrictions][<?=$row;?>][quantity]" value="<?=$restriction['quantity'];?>" /></td>
                                <td class="center"><a onclick="$(this).closest('tr').remove()" class="button_remove"></a></td>
@@ -430,7 +430,7 @@ $('#option-add input').catcomplete({
 //--></script>
 
 <span id='all_product_option_values' style='display:none'>
-   <?=$this->builder->set_builder_config('option_value_id', 'name');?>
+   <?=$this->builder->set_config('option_value_id', 'name');?>
    <?=$this->builder->build('select', $all_product_option_values, "product_options[%option_id%][product_option_value][%option_value_id%][restrictions][%row%][restrict_option_value_id]", '', array('class'=>'restrict_option_values'));?>
 </span>
           
@@ -503,7 +503,7 @@ var restrict_row = 0;
 
 function add_restriction_value(context, option_id, option_value_id){
    html =  '<tr>';
-         <?=$this->builder->set_builder_config('product_option_value_id', 'name');?>
+         <?=$this->builder->set_config('product_option_value_id', 'name');?>
    html += '   <td class="center">' + $('#all_product_option_values').html() + '</td>';
    html += '   <td class="center"><input type="text" size="3" name="product_options[%option_id%][product_option_value][%option_value_id%][restrictions][%row%][quantity]" value="1" /></td>';
    html += '   <td class="center"><a onclick="$(this).closest(\'tr\').remove()" class="button_remove"></a></td>';

@@ -1,6 +1,6 @@
 <?php 
 class SetupCms implements SetupPlugin {
-   function install($registry, &$controller_adapters, &$db_requests, &$language_extensions, &$file_modifications){
+   function install($registry, &$controller_adapters, &$db_requests){
    
       $hooks = array(
          'settings_validate' => array('when'=>'after', 'callback'=>'validate')

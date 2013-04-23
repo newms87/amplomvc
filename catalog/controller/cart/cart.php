@@ -40,7 +40,7 @@ class ControllerCartCart extends Controller {
       $this->data['block_total'] = $this->getBlock('cart', 'total');
       
       if(isset($_GET['redirect']) && preg_match("/route=cart\/cart/",$_GET['redirect']) == 0){
-         $this->data['continue'] = preg_replace('/&amp;/','&',$_GET['redirect']);
+         $this->data['continue'] = urldecode($_GET['redirect']);
       }
       else{
          $this->data['continue'] = $this->url->link('common/home');

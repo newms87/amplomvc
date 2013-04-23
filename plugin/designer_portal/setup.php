@@ -1,7 +1,7 @@
 <?php 
 class SetupDesignerPortal implements SetupPlugin {
    
-   public function install($registry, &$controller_adapters, &$db_requests, &$language_extensions, &$file_modifications){
+   public function install($registry, &$controller_adapters, &$db_requests){
          
       $controller_adapters[] = array(
          'for'           => 'common/header',
@@ -17,10 +17,6 @@ class SetupDesignerPortal implements SetupPlugin {
          'plugin_file'   => 'designer_portal',
          'callback'      => 'are_you_designer_link',
          'priority'      => 0
-      );
-      
-      $file_modifications = array(
-         'admin/controller/catalog/product.php'=>'file_mods/admin_controller_catalog_product.php'
       );
    }
    

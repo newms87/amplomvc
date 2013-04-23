@@ -159,7 +159,7 @@
               <tr>
                 <td><span class="required">*</span> <?= $entry_country; ?></td>
                 <td>
-                   <?= $this->builder->set_builder_config('country_id', 'name');?>
+                   <?= $this->builder->set_config('country_id', 'name');?>
                    <?= $this->builder->build('select', $countries, "address[$address_row][country_id]", $address['country_id'], array('class'=>'country_select'));?>
                   <? if (isset($error_address_country[$address_row])) { ?>
                   <span class="error"><?= $error_address_country[$address_row]; ?></span>

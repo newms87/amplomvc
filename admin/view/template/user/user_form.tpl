@@ -32,7 +32,7 @@
             <td><?= $entry_user_group; ?></td>
             <td>
                <? if($this->user->isTopAdmin()){?>
-                  <? $this->builder->set_builder_config('user_group_id','name');?>
+                  <? $this->builder->set_config('user_group_id','name');?>
                   <?=$this->builder->build('select',$user_groups, "user_group_id",(int)$user_group_id);?>
                <? }else{?>
                   <? foreach($user_groups as $ug){ if($ug['user_group_id'] == $user_group_id){?>

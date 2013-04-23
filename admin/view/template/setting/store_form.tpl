@@ -91,7 +91,7 @@
             <tr>
               <td><?= $entry_country; ?></td>
               <td>
-                 <?= $this->builder->set_builder_config('country_id', 'name');?>
+                 <?= $this->builder->set_config('country_id', 'name');?>
                  <?= $this->builder->build('select', $countries, "config_country_id", $config_country_id, array('class'=>"country_select"));?>
               </td>
             </tr>
@@ -134,7 +134,7 @@
             <tr>
               <td><?= $entry_allowed_shipping_zone; ?></td>
               <td>
-                 <? $this->builder->set_builder_config('geo_zone_id','name');?>
+                 <? $this->builder->set_config('geo_zone_id','name');?>
                  <?=$this->builder->build('select',$geo_zones, "config_allowed_shipping_zone", (int)$config_allowed_shipping_zone);?>
               </td>
             </tr>

@@ -29,77 +29,31 @@ $registry = new Registry();
 $loader = new Loader($registry);
 $registry->set('load', $loader);
 
-// Config
-$config = new Config();
-$registry->set('config', $config);
-
 // Database
 $db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 $registry->set('db', $db);
 
-// Settings
-$query = $db->query("SELECT * FROM " . DB_PREFIX . "setting WHERE store_id = '0'");
+// Cache
+$cache = new Cache();
+$registry->set('cache', $cache); 
 
-if(!$query->num_rows){
-	$msg = "There were no entries in the system configuration database! Please resolve this before continuing!";
-	echo $msg;
-	exit;
-}
+// Config
+$config = new Config($registry);
+$registry->set('config', $config);
 
-foreach ($query->rows as $setting) {
-	if (!$setting['serialized']) {
-		$config->set($setting['key'], $setting['value']);
-	} else {
-		$config->set($setting['key'], unserialize($setting['value']));
-	}
-}
+//Setup Cache ignore list
+foreach(explode(',',$config->get('config_cache_ignore')) as $ci)
+   $cache->ignore($ci);
 
-// Check image directory is writable
-make_test_dir(DIR_IMAGE, $config->get('config_image_dir_mode'));
 
-//Check image cache directory is writable
-make_test_dir(DIR_IMAGE . 'cache/', $config->get('config_image_dir_mode'));
-
-//Check cache directory is writable
-make_test_dir(DIR_CACHE, $config->get('config_default_dir_mode'));
-
-//Check download directory is writable
-make_test_dir(DIR_DOWNLOAD, $config->get('config_default_dir_mode'));
-
-//Check logs directory is writable
-make_test_dir(DIR_LOGS, $config->get('config_default_dir_mode'));
-
-// Session
-$session = new Session($registry);
-$registry->set('session', $session);
-
-//Messages
-$registry->set('message', new Message($session));
-
-// Request
-$request = new Request();
-$registry->set('request', $request);
-
-// Url
-$url = new Url($registry, HTTP_SERVER, $config->get('config_use_ssl') ? HTTPS_SERVER : '');
-if($config->get('config_seo_url'))
-   $url->getSeoUrl();
-$registry->set('url', $url);
-
-if(!isset($_GET['route'])){
-   $_GET['route'] = 'common/home';
-}
-
-// Log 
+//System Logging 
 $error_log = new Log($config->get('config_error_filename'), 'Admin');
 $registry->set('error_log', $error_log);
 
 $log = new Log($config->get('config_log_filename'), 'Admin');
 $registry->set('log', $log);
 
-function error_handler($errno, $errstr, $errfile, $errline) {
-	global $error_log, $config;
-	
+$error_handler = function($errno, $errstr, $errfile, $errline) use($error_log, $config){
 	switch ($errno) {
 		case E_NOTICE:
 		case E_USER_NOTICE:
@@ -127,23 +81,50 @@ function error_handler($errno, $errstr, $errfile, $errline) {
 	}
 
 	return true;
+};
+
+set_error_handler($error_handler);
+
+//Validate the necessary directories are writable
+_is_writable(DIR_IMAGE, $config->get('config_image_dir_mode'));
+_is_writable(DIR_IMAGE . 'cache/', $config->get('config_image_dir_mode'));
+_is_writable(DIR_DOWNLOAD, $config->get('config_default_dir_mode'));
+_is_writable(DIR_LOGS, $config->get('config_default_dir_mode'));
+
+// Session
+$session = new Session($registry);
+$registry->set('session', $session);
+
+//Messages
+$registry->set('message', new Message($session));
+
+// Request
+$request = new Request();
+$registry->set('request', $request);
+
+// Url
+$url = new Url($registry, HTTP_SERVER, $config->get('config_use_ssl') ? HTTPS_SERVER : '');
+if($config->get('config_seo_url'))
+   $url->getSeoUrl();
+$registry->set('url', $url);
+
+if(!isset($_GET['route'])){
+   $_GET['route'] = 'common/home';
 }
 
-// Error Handler
-set_error_handler('error_handler');
-
-// Cache
-$cache = new Cache($registry);
-foreach(explode(',',$config->get('config_cache_ignore')) as $ci)
-   $cache->ignore($ci);
-$registry->set('cache', $cache); 
+//Database Structure Validation
+$db_last_update = $cache->get('db_last_update');
+if(!$db_last_update){
+	$db_last_update = 0;
+}
+$query = $db->query("SHOW GLOBAL STATUS WHERE Variable_name = 'com_alter_table' AND Value > '$db_last_update'");
+if($query->num_rows){
+	$cache->delete('model');
+	$cache->set('db_last_update', $query->row['Value']);
+}
 
 //Images
 $registry->set('image', new Image($registry));
-
-//Plugins
-$plugin_handler = new pluginHandler($registry, 0, 1, $merge_registry);
-$registry->set('plugin_handler', $plugin_handler);
 
 // Response
 $response = new Response();
@@ -169,8 +150,12 @@ foreach ($query->rows as $result) {
 $config->set('config_language_id', $languages[$config->get('config_admin_language')]['language_id']);
 
 // Language	
-$language = new Language($languages[$config->get('config_admin_language')], $plugin_handler);
+$language = new Language($languages[$config->get('config_admin_language')]);
 $registry->set('language', $language); 		
+
+//Plugins
+$plugin_handler = new pluginHandler($registry, 0, 1, $merge_registry);
+$registry->set('plugin_handler', $plugin_handler);
 
 // Document
 $document = new Document($registry);

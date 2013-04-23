@@ -1,53 +1,94 @@
 <?php 
-class SetupCollections implements SetupPlugin {
-
-   public function install($registry, &$controller_adapters, &$db_requests, &$language_extensions, &$file_modifications){
-   	
+class SetupCollections extends SetupPlugin {
+	function __construct($registry){
+		parent::__construct($registry);
+		
+		define("COLLECTION_LAYOUT_NAME", "Collections");
+	}
+	
+   public function install(&$controller_adapters, &$db_requests){
+		//Create collection table
 		$table = DB_PREFIX . "collection";
 		
 		$sql =<<<SQL
-CREATE  TABLE `$table` (
+CREATE TABLE IF NOT EXISTS `$table` (
   `collection_id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
   `name` VARCHAR(45) NOT NULL ,
-  `image` VARCHAR(45) NULL ,
+  `image` TEXT NULL ,
   `meta_description` TEXT NULL ,
   `meta_keywords` TEXT NULL ,
   `description` TEXT NULL ,
+  `status` INT UNSIGNED NOT NULL DEFAULT 1 ,
   PRIMARY KEY (`collection_id`)
 )
 SQL;
 
-		$registry->get('db')->query($sql);
+		$this->db->query($sql);
 		
+		//Create collection_product table
 		$table = DB_PREFIX . "collection_product";
 		
 		$sql = <<<SQL
-CREATE TABLE `$table` (
+CREATE TABLE IF NOT EXISTS `$table` (
   `collection_id` int(10) unsigned NOT NULL,
   `product_id` int(10) unsigned NOT NULL,
+  `name` VARCHAR(255) NULL ,
   PRIMARY KEY (`collection_id`,`product_id`)
 )
 SQL;
    	
-   	$registry->get('db')->query($sql);
+   	$this->db->query($sql);
 		
+		//Create collection_category table
+		$table = DB_PREFIX . "collection_category";
+		
+		$sql = <<<SQL
+CREATE  TABLE IF NOT EXISTS `$table` (
+  `collection_id` INT UNSIGNED NOT NULL ,
+  `category_id` INT UNSIGNED NOT NULL ,
+  PRIMARY KEY (`collection_id`, `category_id`)
+);
+SQL;
+		
+		$this->db->query($sql);
+		
+		//Create collection_store table
+		$table = DB_PREFIX . "collection_store";
+		
+		$sql = <<<SQL
+CREATE TABLE IF NOT EXISTS `$table` (
+  `collection_id` int(10) unsigned NOT NULL,
+  `store_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`collection_id`,`store_id`)
+)
+SQL;
+   	
+   	$this->db->query($sql);
+		
+		//Add Collections Layout
+		$this->model_design_layout->add_new_layout(COLLECTION_LAYOUT_NAME, 'product/collection');
+		
+		//Enable image sorting for the 'collection' table on column 'image'
+		$this->extend->enable_image_sorting('collection', 'image');
    }
    
-   public function update($version, $registry){
-      switch($version){
-         case '1.53':
-         case '1.52':
-         case '1.51':
-         default:
-            break;
-      }
-   }
-   
-   public function uninstall($registry){
-   	$table = DB_PREFIX . "collection";
-		$registry->get('db')->query("DROP TABLE $table");
+   public function uninstall($keep_data = false){
+   	$keep_data = true;
 		
-		$table = DB_PREFIX . "collection_product";
-		$registry->get('db')->query("DROP TABLE $table");
+		//disable image sorting for 'collection' table
+		$this->extend->disable_image_sorting('collection', 'image');
+		$this->model_design_layout->delete_layout_by_name(COLLECTION_LAYOUT_NAME);
+		
+		//Remove data last as good practice
+		if(!$keep_data){
+	   	$table = DB_PREFIX . "collection";
+			$this->db->query("DROP TABLE $table");
+			
+			$table = DB_PREFIX . "collection_product";
+			$this->db->query("DROP TABLE $table");
+			
+			$table = DB_PREFIX . "collection_store";
+			$this->db->query("DROP TABLE $table");
+		}
    }
 }

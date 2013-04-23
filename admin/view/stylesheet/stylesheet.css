@@ -43,6 +43,10 @@ form {
 label {
 	cursor: pointer;
 }
+
+.clear{
+	clear:both;
+}
 #header .div1 {
 	height: 112px;
 	padding: 0px 30px;
@@ -69,12 +73,19 @@ label {
 
 
 #menu.links{
-	background: url('../image/menu.png') repeat-x;
+	background: #414141; /* Old browsers */
+	background: -webkit-linear-gradient(top,  #414141 0%,#212121 100%); /* Chrome10+,Safari5.1+ */
+	background: -moz-linear-gradient(top,  #414141 0%, #212121 100%); /* FF3.6+ */
+	background: -o-linear-gradient(top,  #414141 0%,#212121 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #414141 0%,#212121 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #414141 0%,#212121 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#414141', endColorstr='#212121',GradientType=0 ); /* IE6-8 */
+
 	position: relative;
 	z-index: 1;
-	height: 34px;
 	clear: both;
-	padding: 0px 30px;
+	padding-right: 30px;
+	overflow:visible;
 }
 
 #menu ul{
@@ -83,9 +94,11 @@ label {
 }
 #menu.links > .left {
 	float: left;
+	width:80%;
 }
 #menu.links > .right {
 	float: right;
+	width:20%
 }
 
 #menu.links ul.top_menu > li + li {
@@ -95,12 +108,21 @@ label {
 #menu.links ul.top_menu > li {
 	display: inline-block;
 	text-decoration: none;
-	margin-top:2px;
-	padding: 5px 0;
+	margin: 2px 0;
+	padding: 6px 0;
 }
 
 #menu.links ul.top_menu > li:hover{
 	background: black;
+	cursor: pointer;
+}
+
+#menu.links ul.top_menu > li:first-child{
+	margin-left:0;
+}
+
+#menu.links ul.top_menu > li:last-child{
+	margin-right:0;
 }
 
 #menu.links ul.top_menu > li > a{
@@ -111,13 +133,6 @@ label {
 	padding: 0 15px;
 }
 
-#menu.links ul.top_menu > li:first-child{
-	margin-left:0;
-}
-
-#menu.links ul.top_menu > li:last-child{
-	margin-right:0;
-}
 
 #menu.links ul.top_menu .selected .top {
 	background: url('../image/selected.png') repeat-x;
@@ -151,7 +166,7 @@ ul.link_list > li{
 
 li ul.link_list{
 	position:absolute;
-	top: 123%;
+	top: 108%;
 	left: -9999px;
 	min-width:190px;
 	padding: 0;
@@ -166,11 +181,10 @@ li ul.link_list{
 		 -ms-transform-origin: 0 0;
 		  -o-transform-origin: 0 0;
 			  transform-origin: 0 0;
-	-webkit-transition: -webkit-transform .2s linear;
-		-moz-transition: -moz-transform .2s linear;
-		 -ms-transition: -ms-transform .2s linear;
-		  -o-transition: -o-transform .2s linear;
-			  transition: transform .2s linear;
+}
+
+li.active > ul.link_list{
+	-webkit-transition: -webkit-transform 0s linear 1s,left 0s linear 1s;
 }
 
 li ul.link_list li ul.link_list{
@@ -194,17 +208,18 @@ li ul.link_list li:hover{
 }
 
 
-ul.top_menu > li:hover > a{
+ul.top_menu > li:hover > a, ul.top_menu > li.active > a{
 	padding-bottom:25px !important;
 	
 }
 
-li:hover > ul.link_list, li.active > ul.link_list{
+li:hover > ul.link_list{
 	left: 0;
 	-webkit-transform: scale3d(1,1,1) !important;
+	-webkit-transition: -webkit-transform .2s linear;
 }
 
-ul > li > ul > li:hover > ul.link_list, li.active > ul.link_list{
+ul > li > ul > li:hover > ul.link_list, ul > li > ul > li.active > ul.link_list{
 	left: 100%;
 	top:0;
 }
@@ -224,6 +239,10 @@ body > #container {
 	padding: 10px 30px 0px 30px;
 	min-width: 900px;
 	padding-bottom: 128px;
+}
+
+.list .actions a{
+	text-decoration:none;
 }
 
 .list tbody tr:nth-child(even) > td{
@@ -260,6 +279,12 @@ body > #container {
 	-moz-border-radius: 5px 5px 5px 5px;
 	-khtml-border-radius: 5px 5px 5px 5px;
 	border-radius: 5px 5px 5px 5px;
+}
+
+.message_box strong{
+	color: #003A88;
+	font-weight:bold;
+	font-size:13px;
 }
 
 .message_box.success {
@@ -317,6 +342,19 @@ body > #container {
 .image img {
 	margin-bottom: 5px;
 }
+
+.click_image_text{
+	position:relative;
+	font-size:10px;
+	color: #999;
+	text-align:center;
+}
+.click_image_text img{
+	position:relative;
+	top:6px;
+	margin-right:5px;
+}
+
 .box {
 	margin-bottom: 15px;
 }
@@ -417,14 +455,62 @@ a.button.designer{
 	text-align: center;
 	padding: 7px;
 }
-.list .asc {
-	padding-right: 15px;
-	background: url('../image/asc.png') right center no-repeat;
+
+.list .column_title{
+	font-size: 20px;
+	font-weight:bold;
 }
-.list .desc {
-	padding-right: 15px;
-	background: url('../image/desc.png') right center no-repeat;
+
+.list .sortable:after{
+	position:relative;
+	top: 5px;
+	padding-left:10px;
+	height: 24px;
+	width: 17px;
+	background: url('../image/sort-sprite.png') right top no-repeat;
+	display:inline-block;
+	content:"";
 }
+
+.list .sortable.asc:after {
+	background-position: right center;
+}
+
+.list .sortable.desc:after {
+	background-position: right center;
+	-moz-transform: scaleY(-1);
+    -o-transform: scaleY(-1);
+    -webkit-transform: scaleY(-1);
+    transform: scaleY(-1);
+    filter: FlipV;
+    -ms-filter: "FlipV";
+	
+}
+
+.list .sortable:hover:after{
+	background-position: right bottom;
+}
+
+.list .sortable.asc:hover:after{
+	background-position: right bottom;
+	-moz-transform: scaleY(-1);
+    -o-transform: scaleY(-1);
+    -webkit-transform: scaleY(-1);
+    transform: scaleY(-1);
+    filter: FlipV;
+    -ms-filter: "FlipV";
+}
+
+.list .sortable.desc:hover:after{
+	background-position: right bottom;
+	-moz-transform: none;
+    -o-transform: none;
+    -webkit-transform: none;
+    transform: none;
+    filter: none;
+    -ms-filter: none;
+}
+
 .list tr.filter td {
 	padding: 5px;
 	background: #E7EFEF;
@@ -558,8 +644,9 @@ ol.scrollbox li {
 }
 
 .scrollbox input + label{
-	display: inline-block;
-	width:93%;
+	display: block;
+	padding:3px;
+	margin:0;
 }
 
 .scrollbox td:hover, .scrollbox li{
@@ -579,13 +666,12 @@ ol.scrollbox > li > div{
 }
 
 .scrollbox div input, .scrollbox li input {
-	margin: 0px;
 	padding: 0px;
-	margin-right: 3px;
+	margin: 3px 3px 0 3px;
+	float:left;
 }
 
 ul.scrollbox li{
-	padding: 3px;
 	list-style:none;
 	overflow:auto;
 	background: #FFF;
@@ -618,7 +704,7 @@ ul.scrollbox li{
 .scrollbox.clickable div{
 	cursor: pointer;
 	overflow:auto;
-	padding: 0 10px;
+	padding: 1px 10px;
 }
 .scrollbox.clickable div:hover{
 	background: #BBDF8D;
@@ -920,7 +1006,7 @@ ul.phone_list + a{
 	width:130px;
 }
 
-.actions{
+.batch_actions{
 	margin-left:10px;
 	margin-right:5px;
 	padding-top:7px;
@@ -935,6 +1021,12 @@ ul.phone_list + a{
 	display:inline-block;
 }
 
+.action-delete{
+	color: red;
+}
+.action-delete:visited{
+	color: red;
+}
 
 #featured_articles, #featured_designers, #featured_list{
 	list-style:none;
@@ -1361,4 +1453,9 @@ td.mail_info label{
 #press_item_list li .button_remove{
 	margin-left:20px;
 	margin-top:100px;
+}
+
+/** Autocomplete **/
+.autocomplete_label{
+	padding:0;
 }

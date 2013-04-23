@@ -42,7 +42,7 @@
        <div id='category_list'>
           <b><?= $entry_category; ?></b><br />
           
-          <? $this->builder->set_builder_config('category_id','name');?>
+          <? $this->builder->set_config('category_id','name');?>
           
           <? foreach($category as $key=>$cat){?>
             <div class='category_item'>
@@ -98,7 +98,7 @@
 <script type='text/javascript'>//<!--
 function add_category(context){
    html =  '<div class="category_item">';
-      <? $this->builder->set_builder_config('category_id','name');?>
+      <? $this->builder->set_config('category_id','name');?>
    html += "   <?=$this->builder->build('select',$categories,'category[]','', array('onchange'=>"check_for_other(this)"),true);?>";
    html += '   <a onclick="$(this).parent().remove()"><?=$button_remove;?></a>';
    html += '</div>';

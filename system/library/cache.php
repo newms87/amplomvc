@@ -3,15 +3,11 @@ class Cache {
 	private $expire;
    private $ignore_list = array();
    private $loaded = array();
-
-  	public function __construct($registry) {
+	
+  	public function __construct() {
   	   $this->expire = CACHE_FILE_EXPIRATION;
       
-		if(!is_dir(DIR_CACHE)){
-         $mode = octdec($registry->get('config')->get('config_default_dir_mode'));
-         mkdir(DIR_CACHE, $mode,true);
-         chmod(DIR_CACHE, $mode);
-      }
+		_is_writable(DIR_CACHE);
 		
 		$files = glob(DIR_CACHE . '*.cache');
 		
@@ -27,7 +23,7 @@ class Cache {
     		}
 		}
   	}
-   
+	
    public function get_cache_time($key){
       if(!isset($this->loaded[$key])){
          $this->get($key);
@@ -80,6 +76,8 @@ class Cache {
 				}
     		}
 		}
+		
+		$this->loaded = array();
   	}
    
    public function ignore($key){

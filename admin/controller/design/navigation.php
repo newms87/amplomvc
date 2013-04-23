@@ -117,20 +117,15 @@ class ControllerDesignNavigation extends Controller {
       $table->set_template('table/sort_filter_list');
       
 		//Add Sorting / Paging information to the table and the $data query
-      $data_list = array(
+      $data = array(
          'sort'  =>'name',
          'order' =>'ASC',
          'page'  =>1
       );
       
-      $data = array();
-      
-      foreach($data_list as $key => $default){
+      foreach($data as $key => $default){
          if(isset($_GET[$key])){
             $data[$key] = $_GET[$key];
-         }
-         else{
-            $data[$key] = $default;
          }
       }
       
@@ -138,8 +133,9 @@ class ControllerDesignNavigation extends Controller {
       
 		//Set the filter value if set by user
       if(isset($_GET['filter'])){
+      	$data += $_GET['filter'];
+			
          foreach($_GET['filter'] as $filter => $value){
-            $data[$filter] = $value;
             $table->set_column_filter_value($filter, $value);
          }
       }

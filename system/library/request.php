@@ -12,7 +12,7 @@ class Request {
   	public function clean($data) {
 		if(is_array($data)){
 			foreach ($data as $key => $value) {
-	  			$clean_key = htmlspecialchars($key, ENT_COMPAT);
+	  			$clean_key = htmlspecialchars(stripslashes($key), ENT_COMPAT);
 				
 				if($clean_key !== $key){
 					unset($data[$key]);
@@ -21,7 +21,7 @@ class Request {
 	    		$data[$clean_key] = $this->clean($value);
 	  		}
 		} else { 
-	  		$data = htmlspecialchars($data, ENT_COMPAT);
+	  		$data = htmlspecialchars(stripslashes($data), ENT_COMPAT);
 		}
 		
 		return $data;

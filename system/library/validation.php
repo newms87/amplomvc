@@ -25,7 +25,7 @@ class Validation {
    public function fetch_error(){
       return array_pop($this->error);
    }
-   
+	
    public function not_empty($value, $allow_zero = true, $allow_false = true){
       if($value === '' || is_null($value) || (is_array($value) && empty($value))){
          $this->error['empty'] = true;

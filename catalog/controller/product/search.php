@@ -150,10 +150,10 @@ $this->template->load('product/search');
 		
 		$this->data['products'] = array();
 		
-		if (isset($_GET['filter_name']) || isset($_GET['filter_tag'])) {
+		if (isset($_GET['filter_name']) || isset($_GET['product_tag'])) {
 			$data = array(
 				'filter_name'         => $filter_name, 
-				'filter_tag'          => $filter_tag, 
+				'product_tag'          => $filter_tag, 
 				'filter_description'  => $filter_description,
 				'filter_category_id'  => $filter_category_id, 
 				'filter_sub_category' => $filter_sub_category, 

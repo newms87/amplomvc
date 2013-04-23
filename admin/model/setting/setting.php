@@ -21,14 +21,15 @@ class ModelSettingSetting extends Model {
 		return $data;
 	}
 	
-	public function editSetting($group, $data, $store_id = 0) {
+	public function editSetting($group, $data, $store_id = 0, $auto_load = true) {
 	   $this->deleteSetting($group, $store_id);
 
 		foreach ($data as $key => $value) {
 		   $values = array(
 		      'store_id'  => $store_id,
             'group'     => $group,
-            'key'       =>$key
+            'key'       =>$key,
+            'auto_load' => $auto_load ? 1 : 0
            );
          
          if(is_array($value) || is_object($value)){
@@ -42,9 +43,33 @@ class ModelSettingSetting extends Model {
          
       	$this->insert('setting', $values);
 		}
-      
-      $this->cache->delete('template');
 	}
+	
+	public function editSettingKey($group, $key = null, $value = array(), $store_id = 0, $auto_load = true){
+      if(is_array($value) || is_object($value)){
+         $value = serialize($value);
+         $serialized = 1;
+      }
+      else{
+         $serialized = 0;
+      }
+      
+      $values = array(
+         'group' => $group,
+         'key' => $key,
+         'value' => $value,
+         'serialized' => $serialized,
+         'store_id' => $store_id,
+         'auto_load' => $auto_load ? 1 : 0
+      );
+      
+      $this->delete('setting',"`group` = '$group' AND `key` = '$key' AND store_id = '$store_id'");
+      
+      $this->insert('setting',  $values);
+		
+		$this->cache->delete('setting');
+		$this->cache->delete('store');
+   }
 	
 	public function deleteSetting($group, $store_id = 0) {
 	   $values = array(
@@ -55,5 +80,7 @@ class ModelSettingSetting extends Model {
       $this->delete('setting', $values);
       
       $this->cache->delete('template');
+		$this->cache->delete('setting');
+		$this->cache->delete('store');
 	}
 }

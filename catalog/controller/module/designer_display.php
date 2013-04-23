@@ -24,7 +24,7 @@ $this->template->load('module/designer_display');
 					$image = false;
 				}
 				
-				$featured_product = $this->model_catalog_product->getProductBasic($designer_info['featured_product_id']);
+				$featured_product = $this->model_catalog_product->getProduct($designer_info['featured_product_id']);
             
             //product not found or not active
             if(empty($featured_product))continue;

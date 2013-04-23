@@ -19,7 +19,7 @@
           </tr>
           <tr>
             <td><span class="required">*</span> <?= $entry_store; ?></td>
-            <? $this->builder->set_builder_config('store_id', 'name');?>
+            <? $this->builder->set_config('store_id', 'name');?>
             <td><?= $this->builder->build('multiselect', $data_stores, "store_ids", $store_ids);?></td>
           </tr>
           <tr>

@@ -56,7 +56,7 @@
               <input type="text" id='image-<?=$module_row;?>' name="bestseller_module[<?= $module_row; ?>][image_height]" value="<?= $module['image_height']; ?>" size="3" />
             </td>
             <td class="left">
-               <? $this->builder->set_builder_config('layout_id','name');?>
+               <? $this->builder->set_config('layout_id','name');?>
                <?=$this->builder->build('select',$layouts, "bestseller_module[$module_row][layout_id]", $module['layout_id']);?>
             </td>
             <td class="left">
@@ -89,7 +89,7 @@ function addModule() {
 	html += '  <tr>';
 	html += '    <td class="left"><input type="text" name="bestseller_module[' + module_row + '][limit]" value="4" size="1" /></td>';
 	html += '    <td class="left"><input type="text" name="bestseller_module[' + module_row + '][image_width]" value="174" size="3" /> <input type="text" name="bestseller_module[' + module_row + '][image_height]" value="138" size="3" /></td>';		
-	 <? $this->builder->set_builder_config('layout_id','name');?>
+	 <? $this->builder->set_config('layout_id','name');?>
 	html += '    <td class="left">' + "<?=$this->builder->build('select',$layouts, "bestseller_module[%modrow%][layout_id]");?>" + '</td>';
 	html += '    <td class="left">' + "<?=$this->builder->build('select',$data_positions, "bestseller_module[%modrow%][position]",'content_bottom');?>" + '</td>';
 	html += '    <td class="left">' + "<?=$this->builder->build('select',$data_statuses, "bestseller_module[%modrow%][status]",1);?>" + '</td>';

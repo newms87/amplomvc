@@ -248,7 +248,9 @@ class Mail {
 			}
 		} elseif ($this->protocol == 'smtp') {
 			$handle = fsockopen($this->hostname, $this->port, $errno, $errstr, $this->timeout);
-
+			
+			$handle = fsockopen('localhost', 25, $errno, $errstr, 3);
+			
 			if (!$handle) {
 				trigger_error('Error: ' . $errstr . ' (' . $errno . ')');
 			} else {
@@ -281,7 +283,7 @@ class Mail {
 
 				if (!empty($this->username)  && !empty($this->password)) {
 					fputs($handle, 'EHLO ' . getenv('SERVER_NAME') . $this->crlf);
-
+					
 					$reply = '';
 
 					while ($line = fgets($handle, 515)) {
@@ -291,7 +293,7 @@ class Mail {
 							break;
 						}
 					}
-
+					
 					if (substr($reply, 0, 3) != 250) {
 						trigger_error('Error: EHLO not accepted from server!');
 						exit();								
@@ -349,7 +351,7 @@ class Mail {
 					}
 				} else {
 					fputs($handle, 'HELO ' . getenv('SERVER_NAME') . $this->crlf);
-
+					
 					$reply = '';
 
 					while ($line = fgets($handle, 515)) {

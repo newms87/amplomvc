@@ -100,10 +100,6 @@ final class Loader {
 		}
 	}
 	
-	public function config($config) {
-		$this->config->load($config);
-	}
-	
 	public function language($language) {
 		return $this->language->load($language);
 	}

@@ -4,12 +4,16 @@ class pluginHandler{
    private $merge_registry = array();
    
    protected $registry;
+	protected $plugin_registry;
    protected $plugins;
-   protected $language_extensions = array();
 	protected $controller_adapters;
    
    function __construct(&$registry, $store_id, $admin, $merge_registry){
       $this->registry = &$registry;
+		
+		$this->load_plugin_file_registry();
+		
+		$this->validate_plugin_file_registry();
       
 		$this->load_controller_adapters($store_id);
       
@@ -22,6 +26,205 @@ class pluginHandler{
 		return $this->registry->get($key);
 	}
 	
+	private function load_plugin_file_registry(){
+		$this->plugin_registry = $this->cache->get('plugin.registry');
+		
+		if(!$this->plugin_registry){
+			$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "plugin_registry");
+			
+			$this->plugin_registry = array();
+			
+			foreach($query->rows as &$row){
+				$this->plugin_registry[$row['live_file']] = $row;
+			}
+			
+			$this->cache->set('plugin.registry',$this->plugin_registry);
+		}
+	}
+	
+	public function validate_plugin_file_registry(){
+		if(isset($_GET['set_dev_mode'])){
+			$this->set_development_mode($_GET['set_dev_mode']);
+			$this->clean_reload();
+		}
+		
+		if(!empty($_GET['sync_plugin_file'])){
+			$this->sync_plugin_file($_GET['plugin_name'], $_GET['sync_plugin_file']);
+			$this->clean_reload();
+		}
+		
+		$dev_mode = false;
+		
+		foreach($this->plugin_registry as $reg){
+			if(filemtime($reg['plugin_file']) > (int)$reg['plugin_file_modified']){
+				$this->message->add('notify', "Updating file $reg[live_file] from Plugin <strong>$reg[name]</strong>. File was out of date.");
+				$this->activate_plugin_file($reg['name'], new SplFileObject($reg['plugin_file']));
+			}
+			elseif(filemtime($reg['live_file']) > $reg['live_file_modified']){
+				if(!empty($_COOKIE['development_mode'])){
+					$this->sync_plugin_file($reg['name'], $reg['plugin_file']);
+				}
+				else{
+					$_GET['plugin_name'] = $reg['name'];
+					$_GET['sync_plugin_file'] = $reg['plugin_file'];
+					
+					$merge_url = $this->url->link($_GET['route'], $this->url->get_query());
+					
+					$this->message->add('warning', "The live file $reg[live_file] has been modified for the plugin <strong>$reg[name]</strong>! Click <a href=\"$merge_url\">here</a> to update the original plugin file.");
+					
+					$dev_mode = true;
+				}
+			}
+		}
+		
+		if($dev_mode){
+			$_GET['set_dev_mode'] = 1;
+			$dev_url = $this->url->link($_GET['route'], $this->url->get_query());
+			
+			$this->message->add('warning', "<br/>Turn on <a href=\"$dev_url\">Development Mode</a> to automatically update plugin files.");
+		}
+	}
+
+	public function clean_reload(){
+		unset($_GET['plugin_name']);
+		unset($_GET['sync_plugin_file']);
+		unset($_GET['set_dev_mode']);
+		unset($_GET['redirect']);
+		
+		$url = $this->url->link($_GET['route'], $this->url->get_query());
+		$this->url->redirect($url);
+	}
+	
+	
+	public function sync_plugin_file($name, $file){
+		$file =  new SplFileObject($file);
+		
+		$dir = DIR_PLUGIN . $name . '/new_files/';
+		
+		$plugin_file = preg_replace("/\\\\/", "/", $file->getPathName());
+		$live_file = str_replace($dir, SITE_DIR, $plugin_file);
+		
+		if(!is_file($plugin_file) || !is_file($live_file)){
+			$missing_file = is_file($live_file) ? $plugin_file : $live_file;
+			$this->message->add('warning', "Error while syncing $live_file to $plugin_file for the plugin <strong>$name</strong>! $missing_file does not exist!");
+			return false;
+		}
+		
+		if(!copy($live_file, $plugin_file)){
+			$this->message->add("warning", "There was an error while syncing $live_file to $plugin_file for the plugin <strong>$name</strong>!");
+			return false;
+		}
+		
+		touch($plugin_file);
+		
+		$data = array(
+			'name' => $name,
+			'date_added' => $this->tool->format_datetime(),
+			'live_file' => $live_file,
+			'plugin_file' => $plugin_file,
+			'live_file_modified' => filemtime($live_file),
+			'plugin_file_modified' => time(),
+		);
+		
+      $values = '';
+      foreach($data as $key=>$value){
+         $values .= ($values?',':'') . "`$key`='$value'";
+      }
+      
+		$this->db->query("DELETE FROM " . DB_PREFIX . "plugin_registry WHERE live_file = '$live_file'");
+      $this->db->query("INSERT INTO " . DB_PREFIX . "plugin_registry SET $values");
+		
+		$this->cache->delete("plugin");
+		
+		$this->load_plugin_file_registry();
+		
+		$this->message->add('notify', "The file $plugin_file for the plugin <strong>$name</strong> has been updated successfully!");
+		
+		return true;
+	}
+	
+	public function activate_plugin_file($name, $file){
+		$dir = DIR_PLUGIN . $name . '/new_files/';
+		
+		$plugin_file = preg_replace("/\\\\/", "/", $file->getPathName());
+		$live_file = str_replace($dir, SITE_DIR, $plugin_file);
+		
+		if(strpos($live_file, '@template')){
+			$live_file = str_replace('@template', 'default', $live_file);
+		}
+		
+		$query = $this->url->get_query();
+		$query = $query ? '&'.$query : '';
+				
+		$overwrite_files_url = $this->url->link($_GET['route'], "name=$name&overwrite_files=1" . $query);
+		
+		if(is_file($live_file)){
+			if(isset($this->plugin_registry[$live_file])){
+				$reg = $this->plugin_registry[$live_file];
+				if(filemtime($reg['live_file']) > $reg['live_file_modified'] && empty($_GET['overwrite_files'])){
+					$this->message->add("warning", "The file $live_file in plugin <strong>$name</strong> could not be updated because the file has been edited! <a href='$overwrite_files_url'>Click Here</a> to overwrite these files.");
+					return false;
+				}
+			}
+			elseif(empty($_GET['overwrite_files'])){
+				$this->message->add("warning", "The File $live_file already exists! Cannot Integrate the file $plugin_file for the plugin <strong>$name</strong> due to the conflict! <a href='$overwrite_files_url'>Click Here</a> to overwrite these files.");
+				return false;
+			}
+		}
+		
+		$copy_dir = dirname($live_file);
+		
+		if(!is_dir($copy_dir)){
+			mkdir($copy_dir, 0777, true);
+		}
+		else{
+			$mode = octdec($this->config->get('config_default_dir_mode'));
+      	chmod($copy_dir, $mode);
+		}
+		
+		if(!copy($file->getPathName(), $live_file)){
+			$this->message->add("warning", "There was an error while copying $plugin_file to $live_file for plugin <strong>$name</strong>.");
+			return false;
+		}
+		
+		$data = array(
+			'name' => $name,
+			'date_added' => $this->tool->format_datetime(),
+			'live_file' => $live_file,
+			'plugin_file' => $plugin_file,
+			'live_file_modified' => time(),
+			'plugin_file_modified' => filemtime($plugin_file)
+		);
+		
+      $values = '';
+      foreach($data as $key=>$value){
+         $values .= ($values?',':'') . "`$key`='$value'";
+      }
+      
+		$this->db->query("DELETE FROM " . DB_PREFIX . "plugin_registry WHERE live_file = '$live_file'");
+      $this->db->query("INSERT INTO " . DB_PREFIX . "plugin_registry SET $values");
+		
+		$this->cache->delete("plugin");
+		
+		return true;
+	}
+
+	public function set_development_mode($status){
+		if($status){
+			//activate development mode for 24 hours
+			$this->session->set_cookie('development_mode', '1', 3600 * 24);
+			
+			$_GET['set_dev_mode'] = 0;
+			$dev_url = $this->url->link($_GET['route'], $this->url->get_query());
+			$this->message->add('warning', "Warning! Development Mode is now active. Any changes made to LIVE plugin files will automatically overwrite the original plugin files. Click to <a href='$dev_url'>deactivate.</a>");
+		}
+		else{
+			$this->session->delete_cookie('development_mode');
+			
+			$this->message->add('notify', "Development Mode has been deactivated.");
+		}
+	}
+
 	private function load_controller_adapters($store_id){
 		$cache_file = 'plugin.controller_adapters.' . (int)$store_id . "." . (defined("IS_ADMIN") ? 'admin' : 'store');
 		
@@ -50,8 +253,8 @@ class pluginHandler{
    			$file = DIR_PLUGIN . $adapter['name'] . '/' . $adapter['plugin_file'] . '.php';
    			
    			if(!file_exists($file)){
-   				trigger_error("The plugin file $file did not exists for the plugin $name.");
-   				echo "The plugin file $file did not exists for the plugin $name.";
+   				trigger_error("The plugin file $file did not exists for the plugin <strong>$name</strong>.");
+   				echo "The plugin file $file did not exists for the plugin <strong>$name</strong>.";
    				return;
    			}
    			
@@ -116,37 +319,6 @@ class pluginHandler{
          trigger_error("Could not find the method $class::$request[callback] in the plugin $request[name]");
          return;
       }
-   }
-   
-   public function loadLanguageExtensions($filename, $plugin_name=null){
-      //Leave until we implement plugin language extending
-      if($plugin_name) return array();
-      
-      $data = $this->cache->get('lang_ext.'.$filename);
-      
-      if($data === false || $data === NULL){
-         $data = array();
-         
-         $query = $this->db->query("SELECT name, lang_ext FROM " . DB_PREFIX . "plugin_language_ext WHERE filename='" . $this->db->escape($filename) . "' ORDER BY priority ASC");
-         
-         foreach($query->rows as $ext){
-            $file = DIR_PLUGIN . $ext['name'] . '/' . $ext['lang_ext'] . '.php';
-            if(file_exists($file)){
-               $_ = array();
-               
-               require($file);
-               
-               $data = array_merge($data, $_);
-            }
-            else{
-               trigger_error("Error: Could not load language file $file requested by plugin");
-            }
-         }
-         
-         $this->cache->set('lang_ext.'.$filename, $data);
-      }
-      
-      return $data;
    }
 
    public function load_merge_registry(){

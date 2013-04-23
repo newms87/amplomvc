@@ -45,7 +45,7 @@
           <tbody id="route-row<?= $route_row; ?>">
             <tr>
               <td class="left">
-					<? $this->builder->set_builder_config('store_id', 'name');?>
+					<? $this->builder->set_config('store_id', 'name');?>
 					<?= $this->builder->build('select', $data_stores, "layout_route[$route_row][store_id]", $layout_route['store_id']);?>
 				  </td>
               <td class="left"><input type="text" name="layout_route[<?= $route_row; ?>][route]" value="<?= $layout_route['route']; ?>" /></td>
@@ -88,7 +88,7 @@ function addRoute() {
 	html  = '<tbody id="route-row' + route_row + '">';
 	html += '  <tr>';
 	html += '    <td class="left"><select name="layout_route[' + route_row + '][store_id]">';
-	<? foreach ($stores as $store) { ?>
+	<? foreach ($data_stores as $store) { ?>
 	html += '<option value="<?= $store['store_id']; ?>"><?= addslashes($store['name']); ?></option>';
 	<? } ?>   
 	html += '    </select></td>';

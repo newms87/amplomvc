@@ -16,7 +16,7 @@
           <? break;
         case 'select': ?>
           <? if(isset($field['values']) && $field['values']) {?>
-            <? $this->builder->set_builder_config($field['id'], $field['name']); ?>
+            <? $this->builder->set_config($field['id'], $field['name']); ?>
             <?= $this->builder->build('select', $field['values'], $name, $value, array('class'=>'large-field')); ?>
           <? } else { ?>
              <select name="<?= $name;?>" class="large-field"</select>

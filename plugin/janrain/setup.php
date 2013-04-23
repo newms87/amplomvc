@@ -1,7 +1,7 @@
 <?php 
 class SetupJanrain implements SetupPlugin {
  
-   public function install($registry, &$controller_adapters, &$db_requests, &$language_extensions, &$file_modifications){
+   public function install($registry, &$controller_adapters, &$db_requests){
 
    }
    

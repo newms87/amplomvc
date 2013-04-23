@@ -77,7 +77,7 @@
 		      <td class="left"><input type="text" name="featured_carousel_module[<?= $module_row; ?>][limit]" value="<?= $module['limit']; ?>" size="1" maxlength='2' /></td>
 		      <td class="left"><input type="text" name="featured_carousel_module[<?= $module_row; ?>][size]" value="<?= $module['size']; ?>" size="1" maxlength='3' /></td>
 		      <td class='left'><?= $this->builder->build('select',$data_styles, "featured_carousel_module[$module_row][style]", $module['style']);?></td>
-		          <? $this->builder->set_builder_config('layout_id','name');?>
+		          <? $this->builder->set_config('layout_id','name');?>
             <td class='left'><?= $this->builder->build('select',$data_layouts, "featured_carousel_module[$module_row][layout_id]", (int)$module['layout_id']);?></td>
 				<td class='left'><?= $this->builder->build('select',$data_positions, "featured_carousel_module[$module_row][position]", $module['position']);?></td>
             <td class="left"><?= $this->builder->build('select',$data_statuses, "featured_carousel_module[$module_row][status]", (int)$module['status']);?></td>
@@ -148,7 +148,7 @@ function addModule() {
 	html += '    <td class="left"><input type="text" name="featured_carousel_module[%modrow%][limit]" value="5" size="1" maxlength="2" /></td>';
 	html += '    <td class="left"><input type="text" name="featured_carousel_module[%modrow%][size]" value="260" size="1" maxlength="3" /></td>';
 	html += '    <td class="left">' + "<?= $this->builder->build('select',$data_styles, 'featured_carousel_module[%modrow%][style]');?>" +'</td>';
-	        <? $this->builder->set_builder_config('layout_id','name');?>
+	        <? $this->builder->set_config('layout_id','name');?>
 	html += '    <td class="left">' + "<?= $this->builder->build('select',$data_layouts,'featured_carousel_module[%modrow%][layout_id]');?>" + '</td>';
 	html += '    <td class="left">' + "<?= $this->builder->build('select',$data_positions,'featured_carousel_module[%modrow%][position]','content_top');?>" + '</td>';
 	html += '    <td class="left">' + "<?= $this->builder->build('select',$data_statuses,'featured_carousel_module[%modrow%][status]',1);?>" + '</td>';

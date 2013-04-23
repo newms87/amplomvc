@@ -87,15 +87,8 @@
             </tr>
             <tr>
               <td><?= $entry_layout; ?></td>
-              <td><select name="config_default_layout_id">
-                  <? foreach ($layouts as $layout) { ?>
-                  <? if ($layout['layout_id'] == $config_default_layout_id) { ?>
-                  <option value="<?= $layout['layout_id']; ?>" selected="selected"><?= $layout['name']; ?></option>
-                  <? } else { ?>
-                  <option value="<?= $layout['layout_id']; ?>"><?= $layout['name']; ?></option>
-                  <? } ?>
-                  <? } ?>
-                </select></td>
+              <? $this->builder->set_config('layout_id', 'name');?>
+              <td><?= $this->builder->build('select', $data_layouts, 'config_default_layout_id', $config_default_layout_id);?></td>
             </tr>
           </table>
         </div>
@@ -108,7 +101,7 @@
             <tr>
               <td><?= $entry_country; ?></td>
               <td>
-                 <?= $this->builder->set_builder_config('country_id', 'name');?>
+                 <?= $this->builder->set_config('country_id', 'name');?>
                  <?= $this->builder->build('select', $countries, "config_country_id", $config_country_id, array('class'=>"country_select"));?>
               </td>
             </tr>
@@ -239,7 +232,7 @@
             <tr>
                <td><?=$entry_tax_default_id;?></td>
                <td>
-                  <? $this->builder->set_builder_config('tax_class_id','title');?>
+                  <? $this->builder->set_config('tax_class_id','title');?>
                   <?=$this->builder->build('select',$tax_classes,'config_tax_default_id',$config_tax_default_id);?>
                </td>
             </tr>
@@ -569,6 +562,12 @@
               <td><input type="text" name="config_image_admin_thumb_width" value="<?= $config_image_admin_thumb_width; ?>" size="3" />
                 x
                 <input type="text" name="config_image_admin_thumb_height" value="<?= $config_image_admin_thumb_height; ?>" size="3" />
+            </tr>
+            <tr>
+              <td><span class="required">*</span> <?= $entry_image_admin_list; ?></td>
+              <td><input type="text" name="config_image_admin_list_width" value="<?= $config_image_admin_list_width; ?>" size="3" />
+                x
+                <input type="text" name="config_image_admin_list_height" value="<?= $config_image_admin_list_height; ?>" size="3" />
             </tr>
             <tr>
               <td><span class="required">*</span> <?= $entry_image_category; ?></td>

@@ -30,7 +30,7 @@
          
          case 'select':
 				if(isset($column['filter_config'])){
-					$this->builder->set_builder_config(key($column['filter_config']), current($column['filter_config']));
+					$this->builder->set_config(key($column['filter_config']), current($column['filter_config']));
 				}
             echo $this->builder->build('select', $column['filter_data'], "filter[$column[name]]", $column['filter_value']);
             break;
@@ -94,7 +94,7 @@
           <? break;
           
           case 'image': ?>
-            <td class="<?= $col['align'];?>"><img src="<?= $data[$name]; ?>" /></td>
+            <td class="<?= $col['align'];?>"><img src="<?= $col['display_data']; ?>" /></td>
           <? break;
           
           case 'text_list': ?>

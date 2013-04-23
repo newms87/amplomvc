@@ -6,7 +6,7 @@ class ModelAccountCustomer extends Model {
 		$data['store_id']          = $this->config->get('config_store_id');
       $data['customer_group_id'] = $this->config->get('config_customer_group_id');
       $data['date_added']        = date_format(date_create(), 'Y-m-d H:i:s');
-      $data['password']          = md5($data['password']);
+      $data['password']          = $this->customer->encrypt($data['password']);
       $data['status']            = 1;
       
       if(!isset($data['newsletter'])){
@@ -93,7 +93,7 @@ class ModelAccountCustomer extends Model {
 
 	public function editPassword($email, $password) {
 	   $data = array(
-	     'password' => md5($password)
+	     'password' => $this->customer->encrypt($password)
        );
       
       $where = array(

@@ -1,7 +1,7 @@
 <?php 
 class SetupContactsExtend implements SetupPlugin {
    
-   public function install($registry, &$controller_adapters, &$db_requests, &$language_extensions, &$file_modifications){
+   public function install($registry, &$controller_adapters, &$db_requests){
       $db = $registry->get('db');
       
       $db->table_add_column('contact', 'lookbook', 'VARCHAR(255)', true);

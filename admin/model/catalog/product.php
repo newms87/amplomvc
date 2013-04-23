@@ -122,7 +122,7 @@ class ModelCatalogProduct extends Model {
          }
       }
 
-      		
+      
 		if(!$this->user->isDesigner()){
 		   
          //Product Categories
@@ -368,7 +368,6 @@ class ModelCatalogProduct extends Model {
             $this->insert('product_image', $product_image);
          }
       }
-      
       
       if(!$this->user->isDesigner()){
             

@@ -47,7 +47,7 @@
             </tr>
             <tr>
               <td><?= $entry_store; ?></td>
-              <? $this->builder->set_builder_config('store_id', 'name');?>
+              <? $this->builder->set_config('store_id', 'name');?>
               <td><?= $this->builder->build('multiselect', $data_stores, "category_store", $category_store);?></td>
             </tr>
             <tr>
@@ -94,7 +94,7 @@
               <tr>
                 <td class="left"><?= $store['name']; ?></td>
                 <td class="left">
-                	<? $this->builder->set_builder_config('layout_id', 'name');?>
+                	<? $this->builder->set_config('layout_id', 'name');?>
                   <?=$this->builder->build('select',$data_layouts, "category_layout[$store[store_id]][layout_id]", isset($category_layout[$store['store_id']])?(int)$category_layout[$store['store_id']]:'');?>
                 </td>
               </tr>

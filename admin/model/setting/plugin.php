@@ -14,7 +14,9 @@ class ModelSettingPlugin extends Model {
       return $installed;
    }
    
-   public function install($name, $controller_adapters, $db_requests, $language_extensions, $file_modifications) {
+   public function install($name, $controller_adapters, $db_requests) {
+   	$this->cache->delete('plugin');
+		
 		$stores = $this->model_setting_store->getStores();
 		
       $this->delete('plugin', array('name'=>$name));
@@ -59,31 +61,15 @@ class ModelSettingPlugin extends Model {
          }
       }
       
-      //Language Extensions
-      $this->delete('plugin_language_ext', array('name'=>$name));
-      
-      foreach($language_extensions as $filename=>$lang_ext){
-         if(is_array($lang_ext)){
-            $priority = $lang_ext['priority'];
-            $ext_path = $lang_ext['path'];
-         }
-         else{
-            $priority = 0;
-            $ext_path = $lang_ext;
-         }
-         
-         $ext = array(
-            'name'      => $name,
-            'filename'  =>$filename,
-            'lang_ext'  =>$ext_path,
-            'priority'  =>$priority
-            
-           );
-           
-         $this->insert('plugin_language_ext', $ext);
-      }
-      
-		$file_mods = $this->get_file_mods($name);
+		//New Files
+		if(!$this->integrate_new_files($name)){
+			$this->message->add("warning", "There was a problem while integrating the files in the new_files library for $name. The plugin has been uninstalled!<br />");
+			$this->uninstall($name);
+			return false;
+		}
+		
+      //File Modifications
+      $file_mods = $this->get_file_mods($name);
 		
 		if($file_mods === false){
 			$this->message->add("warning", "There was a problem with the file_mods library for $name. The plugin has been uninstalled!<br />");
@@ -91,12 +77,9 @@ class ModelSettingPlugin extends Model {
 			return false;
 		}
 		
-		$file_modifications += $file_mods;
-		
-      //File Modifications
-      if($file_modifications){
+      if($file_mods){
          
-         $this->plugin_handler->add_merge_files($name, $file_modifications);
+         $this->plugin_handler->add_merge_files($name, $file_mods);
          
          if(!$this->plugin_handler->apply_merge_registry()){
             $this->message->add('warning', "The installation of the plugin $name has failed and has been uninstalled!<br />");
@@ -104,19 +87,30 @@ class ModelSettingPlugin extends Model {
             return false;
          }
       }
-		
-		$this->cache->delete('plugin');
       
       return true;
    }
    
    public function uninstall($name) {
+   	$this->cache->delete('plugin');
+		
+   	//remove files from plugin that were registered
+		$query = $this->get('plugin_registry', '*', array('name' => $name));
+   	
+		foreach($query->rows as $row){
+			if(is_file($row['live_file'])){
+				$this->message->add("notify", "removing plugin file $row[live_file]");
+				unlink($row['live_file']);
+			}
+		}
+		
+		$this->delete('plugin_registry', array('name' => $name));
+		
       $this->delete('plugin', array('name'=>$name));
       $this->delete('plugin_controller_adapter', array('name'=>$name));
       $this->delete('plugin_db', array('name'=>$name));
       $this->delete('plugin_file_modification', array('name'=>$name));
-      $this->delete('plugin_language_ext', array('name'=>$name));
-      
+		
       if(!$this->plugin_handler->reload_merge_registry()){
          $this->message->add('warning', "There was a problem while uninstalling $name! Please try again.");
          return false;
@@ -183,30 +177,50 @@ class ModelSettingPlugin extends Model {
       $this->delete('plugin', $where);
    }
 	
+	public function integrate_new_files($name){
+		$dir = DIR_PLUGIN . $name . '/new_files/';
+		
+		$files = $this->tool->get_files_r($dir);
+		
+		foreach($files as $file){
+			if(!$this->plugin_handler->activate_plugin_file($name, $file)){
+				return false;
+			}
+		}
+		
+		return true;
+	}
 	
 	public function get_file_mods($name){
-		$dir = DIR_PLUGIN . $name . '/file_mods/';
+		$dir = DIR_PLUGIN . $name . '/file_mods';
 		
 		if(!is_dir($dir)) return array();
 		
-		$files = glob($dir . '*');
+		$files = $this->tool->get_files_r($dir, false, FILELIST_STRING);
 		
 		$file_mods = array();
 		
 		foreach($files as $file){
+			$rel_file = str_replace('\\','/',substr(str_replace($dir, '', $file),1));
+			
+			if(is_file(SITE_DIR . $rel_file)){
+				$file_mods[$rel_file] = 'file_mods/' . $rel_file;
+				continue;
+			}
+			
 			$filename = basename($file);
 			
 			if(strpos($filename, '@template_') === 0){
-				$templates = glob(SITE_DIR . 'catalog/view/theme/*', GLOB_ONLYDIR);
+				$themes = glob(SITE_DIR . 'catalog/view/theme/*', GLOB_ONLYDIR);
 				
-				foreach($templates as $tpl){
-					$t_path = $this->name_to_path($tpl . '/template/', str_replace('@template_', '', $filename));
+				foreach($themes as $theme){
+					$theme_path = $this->name_to_path($theme . '/template/', str_replace('@template_', '', $filename));
 					
-					if($t_path){
-						$file_mods[str_replace(SITE_DIR, '', $t_path)] = 'file_mods/' . $filename;
+					if($theme_path){
+						$file_mods[str_replace(SITE_DIR, '', $theme_path)] = 'file_mods/' . $filename;
 					}
 					else{
-						$this->message->add("warning", "The template " . basename($tpl) . " may be incompatible with the plugin $name because the template did not have a version of the file $filename.");
+						$this->message->add("warning", "The template " . basename($theme) . " may be incompatible with the plugin $name because the template did not have a version of the file $filename.");
 					}
 				}
 			}
@@ -222,7 +236,7 @@ class ModelSettingPlugin extends Model {
 				}
 			}
 		}
-
+		
 		return $file_mods;
 	}
 	

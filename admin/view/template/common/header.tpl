@@ -50,6 +50,7 @@ window.history.pushState(url_state_object,'<?=addslashes($title);?>', '<?=isset(
   <div id="menu" class="links">
 	 <div class="left"><?= $this->builder->build_links($links_admin);?></div>
   	 <div class="right"><?= $this->builder->build_links($links_right);?></div>
+  	 <div class="clear"></div>
   </div>
   <? } ?>
 </div>

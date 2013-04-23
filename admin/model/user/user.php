@@ -2,7 +2,7 @@
 class ModelUserUser extends Model {
 	public function addUser($data) {
 	   if($this->user->isDesigner())return;
-		$this->query("INSERT INTO `" . DB_PREFIX . "user` SET username = '" . $this->db->escape($data['username']) . "', password = '" . $this->db->escape(md5($data['password'])) . "', firstname = '" . $this->db->escape($data['firstname']) . "', lastname = '" . $this->db->escape($data['lastname']) . "', email = '" . $this->db->escape($data['email']) . "', user_group_id = '" . (int)$data['user_group_id'] . "', status = '" . (int)$data['status'] . "', date_added = NOW()");
+		$this->query("INSERT INTO `" . DB_PREFIX . "user` SET username = '" . $this->db->escape($data['username']) . "', password = '" . $this->user->encrypt($data['password']) . "', firstname = '" . $this->db->escape($data['firstname']) . "', lastname = '" . $this->db->escape($data['lastname']) . "', email = '" . $this->db->escape($data['email']) . "', user_group_id = '" . (int)$data['user_group_id'] . "', status = '" . (int)$data['status'] . "', date_added = NOW()");
       if(isset($data['designers']) && $data['designers']){
          $user_id = $this->db->getLastId();
          foreach(array_unique($data['designers']) as $designer_id)
@@ -24,7 +24,7 @@ class ModelUserUser extends Model {
       }
 		
 		if ($data['password']) {
-			$this->query("UPDATE `" . DB_PREFIX . "user` SET password = '" . $this->db->escape(md5($data['password'])) . "' WHERE user_id = '" . (int)$user_id . "'");
+			$this->query("UPDATE `" . DB_PREFIX . "user` SET password = '" . $this->user->encrypt($data['password']) . "' WHERE user_id = '" . (int)$user_id . "'");
 		}
       
       if($this->user->isAdmin()){
@@ -44,7 +44,7 @@ class ModelUserUser extends Model {
 	}
 
 	public function editPassword($user_id, $password) {
-		$this->query("UPDATE `" . DB_PREFIX . "user` SET password = '" . $this->db->escape(md5($password)) . "' WHERE user_id = '" . (int)$user_id . "'");
+		$this->query("UPDATE `" . DB_PREFIX . "user` SET password = '" . $this->user->encrypt($password) . "' WHERE user_id = '" . (int)$user_id . "'");
 	}
 
 	public function editCode($email, $code) {

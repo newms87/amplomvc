@@ -53,7 +53,7 @@
                <a class='remove_hook' onclick='addHook(this);'><?=$button_add_hook;?></a>
             </td>
             <td class='left'>
-               <? $this->builder->set_builder_config('store_id','name');?>
+               <? $this->builder->set_config('store_id','name');?>
                <?= $this->builder->build('select',$data_stores, "plugin_data[$row][store_id]", (int)$data['store_id']);?>
             </td>
             <td class="left"><?= $this->builder->build('select',$statuses, "plugin_data[$row][status]", (int)$data['status']);?></td>
@@ -88,7 +88,7 @@ function addPlug() {
    html += '     <td class="left"><input type="text" name="plugin_data[%plug_row%][class_path]" value="" size="30" /></td>';
    html += '     <td class="left">'+"<?=$this->builder->build('select',$types, "plugin_data[%plug_row%][type]");?>" + '</td>';
    html += '     <td class="left"><a class="center" onclick="addHook(this);"><?=$button_add_hook;?></a></td>';
-             <? $this->builder->set_builder_config('store_id','name');?>
+             <? $this->builder->set_config('store_id','name');?>
    html += '     <td class="left">' + "<?= $this->builder->build('select',$data_stores, "plugin_data[%plug_row%][store_id]");?>" + '</td>';
    html += '     <td class="left">' + "<?= $this->builder->build('select',$statuses, "plugin_data[%plug_row%][status]");?>" + '</td>';
    html += '     <td class="left"><a onclick="$(\'#plug-row%plug_row%\').remove();" class="button"><?= $button_remove;?></a></td>';

@@ -82,7 +82,7 @@ table#janrain_table .janrain_img{ margin:0 0 3px 10px;vertical-align:middle;}
         <tbody id="module-row<?= $module_row; ?>">
           <tr>
             <td class="center">
-               <? $this->builder->set_builder_config('layout_id','name');?>
+               <? $this->builder->set_config('layout_id','name');?>
                <?=$this->builder->build('select',$layouts, "janrain_module[$module_row][layout_id]", $module['layout_id']);?>
             </td>
    			<td class="center">
@@ -119,7 +119,7 @@ var module_row = <?= $module_row; ?>;
 function addModule() {	
 	html  = '<tbody id="module-row%modrow%">';
 	html += '  <tr>';
-	  <? $this->builder->set_builder_config('layout_id','name');?>
+	  <? $this->builder->set_config('layout_id','name');?>
 	html += '    <td class="center">' + "<?=$this->builder->build('select',$layouts, "janrain_module[%modrow%][layout_id]");?>" + '</td>';
 	html += '    <td class="center">' + "<?=$this->builder->build('select',$display_types,"janrain_module[%modrow%][display_type]");?>" + '</td>';
 	html += '    <td class="center">' + "<?=$this->builder->build('select',$icon_sizes,"janrain_module[%modrow%][icon_size]");?>" + '</td>';

@@ -3,7 +3,7 @@
   <?= $this->builder->display_breadcrumbs();?>
   <div class="box">
     <div class="heading">
-      <div class="actions">
+      <div class="batch_actions">
          <?=$this->builder->build_batch_actions($text_batch_action,$batch_actions,$batch_action_values, html_entity_decode($batch_action_go));?>
       </div>
       <h1><img src="view/image/product.png" alt="" /> <?= $heading_title; ?></h1>

@@ -36,11 +36,11 @@
            <td>
               <div><?= $entry_featured;?></div>
               <div>
-                 <?= $this->builder->set_builder_config('manufacturer_id', 'name');?>
+                 <?= $this->builder->set_config('manufacturer_id', 'name');?>
                  <?= $this->builder->build('select', $data_designers, "newsletter[featured][designer][designer_id]", !empty($newsletter) ? $newsletter['featured']['designer']['designer_id'] : '', array('id'=>'designer_select'));?>
               </div>
               <div>
-                 <?= $this->builder->set_builder_config('product_id', 'name');?>
+                 <?= $this->builder->set_config('product_id', 'name');?>
                  <?= $this->builder->build('select', $data_designer_products, "newsletter[featured][product][product_id]", !empty($newsletter) ? $newsletter['featured']['product']['product_id'] : '', array('id'=>'product_select'));?>
               </div>
            </td>
