@@ -1,9 +1,7 @@
 <?= $header; ?>
 <div class="content">
   <?= $this->builder->display_breadcrumbs();?>
-  <? if ($error_warning) { ?>
-  <div class="message_box warning"><?= $error_warning; ?></div>
-  <? } ?>
+  <?= $this->builder->display_errors($errors);?>
   <div class="box">
     <div class="heading">
       <h1><img src="view/image/user-group.png" alt="" /> <?= $heading_title; ?></h1>
@@ -14,52 +12,21 @@
         <table class="form">
           <tr>
             <td><span class="required">*</span> <?= $entry_name; ?></td>
-            <td><input type="text" name="name" value="<?= $name; ?>" />
-              <? if ($error_name) { ?>
-              <span class="error"><?= $error_name; ?></span>
-              <?  } ?></td>
+            <td><input type="text" name="name" value="<?= $name; ?>" /></td>
           </tr>
           <tr>
             <td><?= $entry_access; ?></td>
-            <td><div class="scrollbox">
-                <? $class = 'odd'; ?>
-                <? foreach ($permissions as $permission) { ?>
-                <? $class = ($class == 'even' ? 'odd' : 'even'); ?>
-                <div class="<?= $class; ?>">
-                  <? if (in_array($permission, $access)) { ?>
-                  <input type="checkbox" name="permission[access][]" value="<?= $permission; ?>" checked="checked" />
-                  <?= $permission; ?>
-                  <? } else { ?>
-                  <input type="checkbox" name="permission[access][]" value="<?= $permission; ?>" />
-                  <?= $permission; ?>
-                  <? } ?>
-                </div>
-                <? } ?>
-              </div>
-              <a onclick="$(this).parent().find(':checkbox').attr('checked', true);"><?= $text_select_all; ?></a> / <a onclick="$(this).parent().find(':checkbox').attr('checked', false);"><?= $text_unselect_all; ?></a></td>
+				<td><?= $this->builder->build('multiselect', $data_controllers, "permissions[access]", $permissions['access']);?></td>
           </tr>
           <tr>
             <td><?= $entry_modify; ?></td>
-            <td><div class="scrollbox">
-                <? $class = 'odd'; ?>
-                <? foreach ($permissions as $permission) { ?>
-                <? $class = ($class == 'even' ? 'odd' : 'even'); ?>
-                <div class="<?= $class; ?>">
-                  <? if (in_array($permission, $modify)) { ?>
-                  <input type="checkbox" name="permission[modify][]" value="<?= $permission; ?>" checked="checked" />
-                  <?= $permission; ?>
-                  <? } else { ?>
-                  <input type="checkbox" name="permission[modify][]" value="<?= $permission; ?>" />
-                  <?= $permission; ?>
-                  <? } ?>
-                </div>
-                <? } ?>
-              </div>
-              <a onclick="$(this).parent().find(':checkbox').attr('checked', true);"><?= $text_select_all; ?></a> / <a onclick="$(this).parent().find(':checkbox').attr('checked', false);"><?= $text_unselect_all; ?></a></td>
-          </tr>
+            <td><?= $this->builder->build('multiselect', $data_controllers, "permissions[modify]", $permissions['modify']);?></td>
+			 </tr>
         </table>
       </form>
     </div>
   </div>
 </div>
 <?= $footer; ?> 
+
+<?=$this->builder->js('errors',$errors);?>

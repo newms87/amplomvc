@@ -231,108 +231,61 @@ $this->template->load('user/user_group_list');
  	}
 
 	private function getForm() {
-$this->template->load('user/user_group_form');
+		$this->template->load('user/user_group_form');
 
- 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
+		$user_group_id = !empty($_GET['user_group_id']) ? (int)$_GET['user_group_id'] : 0;
+		
+ 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('user/user_permission'));
+		
+		$url_query = $this->url->get_query('sort','order','page');
+		
+		if ($user_group_id) {
+			$this->data['action'] = $this->url->link('user/user_permission/update', 'user_group_id=' . $user_group_id . $url_query);
 		} else {
-			$this->data['error_warning'] = '';
+			$this->data['action'] = $this->url->link('user/user_permission/insert', $url_query);
+		}
+
+    	$this->data['cancel'] = $this->url->link('user/user_permission', $url_query);
+
+		if ($user_group_id && $_SERVER['REQUEST_METHOD'] != 'POST') {
+			$user_group_info = $this->model_user_user_group->getUserGroup($user_group_id);
 		}
 		
- 		if (isset($this->error['name'])) {
-			$this->data['error_name'] = $this->error['name'];
-		} else {
-			$this->data['error_name'] = '';
+		//initialize the values in order of Post, Database, Default
+      $defaults = array(
+         'name' => '',
+			'permissions' => array(),
+      );
+
+      foreach($defaults as $key => $default){
+         if (isset($_POST[$key])) {
+            $this->data[$key] = $_POST[$key];
+         } elseif (isset($user_group_info[$key])) {
+            $this->data[$key] = $user_group_info[$key];
+         } elseif(!$user_group_id) {
+            $this->data[$key] = $default;
+         }
+      }
+		
+		if(!isset($this->data['permissions']['access'])){
+			$this->data['permissions']['access'] = array();
 		}
 
-		$url = '';
-
-		if (isset($_GET['sort'])) {
-			$url .= '&sort=' . $_GET['sort'];
-		}
-
-		if (isset($_GET['order'])) {
-			$url .= '&order=' . $_GET['order'];
-		}
-			
-		if (isset($_GET['page'])) {
-			$url .= '&page=' . $_GET['page'];
+		if(!isset($this->data['permissions']['modify'])){
+			$this->data['permissions']['modify'] = array();
 		}
 		
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('user/user_permission', $url));
-
-		if (!isset($_GET['user_group_id'])) {
-			$this->data['action'] = $this->url->link('user/user_permission/insert', $url);
-		} else {
-			$this->data['action'] = $this->url->link('user/user_permission/update', 'user_group_id=' . $_GET['user_group_id'] . $url);
-		}
-		  
-    	$this->data['cancel'] = $this->url->link('user/user_permission', $url);
-
-		if (isset($_GET['user_group_id']) && $_SERVER['REQUEST_METHOD'] != 'POST') {
-			$user_group_info = $this->model_user_user_group->getUserGroup($_GET['user_group_id']);
-		}
-
-		if (isset($_POST['name'])) {
-			$this->data['name'] = $_POST['name'];
-		} elseif (!empty($user_group_info)) {
-			$this->data['name'] = $user_group_info['name'];
-		} else {
-			$this->data['name'] = '';
-		}
+		$this->data['data_controllers'] = $this->model_user_user_group->get_controller_list();
 		
-		$ignore = array(
-			'common/home',
-			'common/startup',
-			'common/login',
-			'common/logout',
-			'common/forgotten',
-			'common/reset',			
-			'error/not_found',
-			'error/permission',
-			'common/footer',
-			'common/header'
-		);
-				
-		$this->data['permissions'] = array();
-		
-		$files = glob(DIR_APPLICATION . 'controller/*/*.php');
-		
-		foreach ($files as $file) {
-			$data = explode('/', dirname($file));
-			
-			$permission = end($data) . '/' . basename($file, '.php');
-			
-			if (!in_array($permission, $ignore)) {
-				$this->data['permissions'][] = $permission;
-			}
-		}
-		
-		if (isset($_POST['permission']['access'])) {
-			$this->data['access'] = $_POST['permission']['access'];
-		} elseif (isset($user_group_info['permission']['access'])) {
-			$this->data['access'] = $user_group_info['permission']['access'];
-		} else { 
-			$this->data['access'] = array();
-		}
-
-		if (isset($_POST['permission']['modify'])) {
-			$this->data['modify'] = $_POST['permission']['modify'];
-		} elseif (isset($user_group_info['permission']['modify'])) {
-			$this->data['modify'] = $user_group_info['permission']['modify'];
-		} else { 
-			$this->data['modify'] = array();
-		}
-	
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
-				
+		
 		$this->response->setOutput($this->render());
 	}
-
+	
 	private function validateForm() {
 		if (!$this->user->hasPermission('modify', 'user/user_permission')) {
 			$this->error['warning'] = $this->_('error_permission');

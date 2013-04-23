@@ -1,15 +1,19 @@
 <?php
 class ModelUserUserGroup extends Model {
 	public function addUserGroup($data) {
-		$this->query("INSERT INTO " . DB_PREFIX . "user_group SET name = '" . $this->db->escape($data['name']) . "', permission = '" . (isset($data['permission']) ? serialize($data['permission']) : '') . "'");
+		$data['permission'] = !empty($data['permissions']) ? serialize($data['permissions']) : '';
+		
+		$this->insert('user_group', $data);
 	}
 	
 	public function editUserGroup($user_group_id, $data) {
-		$this->query("UPDATE " . DB_PREFIX . "user_group SET name = '" . $this->db->escape($data['name']) . "', permission = '" . (isset($data['permission']) ? serialize($data['permission']) : '') . "' WHERE user_group_id = '" . (int)$user_group_id . "'");
+		$data['permission'] = !empty($data['permissions']) ? serialize($data['permissions']) : '';
+		
+		$this->update('user_group', $data, $user_group_id);
 	}
 	
 	public function deleteUserGroup($user_group_id) {
-		$this->query("DELETE FROM " . DB_PREFIX . "user_group WHERE user_group_id = '" . (int)$user_group_id . "'");
+		$this->delete('user_group', $user_group_id);
 	}
 
 	public function addPermission($user_id, $type, $page) {
@@ -33,7 +37,7 @@ class ModelUserUserGroup extends Model {
 		
 		$user_group = array(
 			'name'       => $query->row['name'],
-			'permission' => unserialize($query->row['permission'])
+			'permissions' => unserialize($query->row['permission'])
 		);
 		
 		return $user_group;
@@ -65,6 +69,37 @@ class ModelUserUserGroup extends Model {
 		$query = $this->query($sql);
 		
 		return $query->rows;
+	}
+	
+	public function get_controller_list(){
+		$ignore = array(
+			'common/home',
+			'common/startup',
+			'common/login',
+			'common/logout',
+			'common/forgotten',
+			'common/reset',			
+			'error/not_found',
+			'error/permission',
+			'common/footer',
+			'common/header'
+		);
+		
+		$files = glob(DIR_APPLICATION . 'controller/*/*.php');
+		
+		$permissions = array();
+		
+		foreach ($files as $file) {
+			$data = explode('/', dirname($file));
+			
+			$permission = end($data) . '/' . basename($file, '.php');
+			
+			if (!in_array($permission, $ignore)) {
+				$permissions[$permission] = $permission;
+			}
+		}
+		
+		return $permissions;
 	}
 	
 	public function getTotalUserGroups() {
