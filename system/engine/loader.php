@@ -15,6 +15,8 @@ final class Loader {
 	}
 	
 	public function library($library) {
+		$library = strtolower($library);
+		
 		$file = DIR_SYSTEM . 'library/' . $library . '.php';
 		
 		if (file_exists($file)) {
