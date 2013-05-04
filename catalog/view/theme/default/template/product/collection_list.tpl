@@ -82,13 +82,13 @@ $('[name=show_limit]').change(function(){
 
 function display(view) {
 	if (view == 'list') {
-		$('#product_list').removeClass('grid').addClass('list');
+		$('#catalog_list').removeClass('grid').addClass('list');
 		
 		$('.display').html('<b><?= $text_display; ?></b> <?= $text_list; ?> <b>/</b> <a onclick="display(\'grid\');"><?= $text_grid; ?></a>');
 		
 		$.cookie('display', 'list');
 	} else {
-		$('#product_list').removeClass('list').addClass('grid');
+		$('#catalog_list').removeClass('list').addClass('grid');
 		
 		$('.display').html('<b><?= $text_display; ?></b> <a onclick="display(\'list\');"><?= $text_list; ?></a> <b>/</b> <?= $text_grid; ?>');
 		

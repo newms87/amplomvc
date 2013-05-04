@@ -3,7 +3,7 @@ class ControllerPaymentWebPaymentSoftware extends Controller {
 	 
 
 	public function index() {
-$this->template->load('payment/web_payment_software');
+		$this->template->load('payment/web_payment_software');
 
 		$this->load->language('payment/web_payment_software');
 

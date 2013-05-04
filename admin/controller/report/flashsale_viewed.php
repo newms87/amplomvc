@@ -1,7 +1,7 @@
 <?php
 class ControllerReportFlashsaleViewed extends Controller {
 	public function index() {
-$this->template->load('report/flashsale_viewed');
+		$this->template->load('report/flashsale_viewed');
 
 	   $this->load->language('report/flashsale_viewed');
 

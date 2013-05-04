@@ -2,7 +2,7 @@
 class ControllerModuleJanrain extends Controller {
 	
 	public function index() {
-$this->template->load('module/janrain');
+		$this->template->load('module/janrain');
 
 	   $this->load->language('module/janrain');
 

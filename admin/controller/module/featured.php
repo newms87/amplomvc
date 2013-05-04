@@ -3,7 +3,7 @@ class ControllerModuleFeatured extends Controller {
 	 
 	
 	public function index() {   
-$this->template->load('module/featured');
+		$this->template->load('module/featured');
 
 		$this->load->language('module/featured');
 

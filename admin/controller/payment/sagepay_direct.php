@@ -3,7 +3,7 @@ class ControllerPaymentSagepayDirect extends Controller {
 	 
 
 	public function index() {
-$this->template->load('payment/sagepay_direct');
+		$this->template->load('payment/sagepay_direct');
 
 		$this->load->language('payment/sagepay_direct');
 

@@ -3,7 +3,7 @@ class ControllerToolBackup extends Controller {
 	
 	
 	public function index() {		
-$this->template->load('tool/backup');
+		$this->template->load('tool/backup');
 
 		$this->load->language('tool/backup');
 

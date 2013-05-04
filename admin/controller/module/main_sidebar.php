@@ -3,7 +3,7 @@ class ControllerModuleMainSidebar extends Controller {
 	 
 	
 	public function index() {   
-$this->template->load('module/main_sidebar');
+		$this->template->load('module/main_sidebar');
 
 		$this->load->language('module/main_sidebar');
 

@@ -3,7 +3,7 @@ class ControllerPaymentAuthorizenetAim extends Controller {
 	 
 
 	public function index() {
-$this->template->load('payment/authorizenet_aim');
+		$this->template->load('payment/authorizenet_aim');
 
 		$this->load->language('payment/authorizenet_aim');
 

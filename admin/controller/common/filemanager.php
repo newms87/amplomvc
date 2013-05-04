@@ -3,7 +3,7 @@ class ControllerCommonFileManager extends Controller {
 	
 	
 	public function index() {
-$this->template->load('common/filemanager');
+		$this->template->load('common/filemanager');
 
 		$this->load->language('common/filemanager');
 		

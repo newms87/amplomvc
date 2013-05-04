@@ -1,7 +1,7 @@
 <?php  
 class ControllerModuleLanguage extends Controller {
 	protected function index() {
-$this->template->load('module/language');
+		$this->template->load('module/language');
 
     	if (isset($_POST['language_code'])) {
 			$this->session->data['language'] = $_POST['language_code'];

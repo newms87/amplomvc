@@ -1,7 +1,7 @@
 <?php
 class ControllerReportSaleShipping extends Controller {
 	public function index() {     
-$this->template->load('report/sale_shipping');
+		$this->template->load('report/sale_shipping');
 
 		$this->load->language('report/sale_shipping');
 

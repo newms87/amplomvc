@@ -3,7 +3,7 @@ class ControllerModuleAccount extends Controller {
 	 
 	
 	public function index() {   
-$this->template->load('module/account');
+		$this->template->load('module/account');
 
 		$this->load->language('module/account');
 

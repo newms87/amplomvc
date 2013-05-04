@@ -3,7 +3,7 @@ class ControllerAccountEdit extends Controller {
 	
 
 	public function index() {
-$this->template->load('account/edit');
+		$this->template->load('account/edit');
 
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/edit');

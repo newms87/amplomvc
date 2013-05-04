@@ -3,7 +3,7 @@ class ControllerTotalReward extends Controller {
 	 
 	 
 	public function index() { 
-$this->template->load('total/reward');
+		$this->template->load('total/reward');
 
 		$this->load->language('total/reward');
 

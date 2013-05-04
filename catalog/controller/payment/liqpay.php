@@ -1,7 +1,7 @@
 <?php
 class ControllerPaymentLiqPay extends Controller {
 	protected function index() {
-$this->template->load('payment/liqpay');
+		$this->template->load('payment/liqpay');
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 		

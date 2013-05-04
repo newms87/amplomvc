@@ -199,7 +199,7 @@ class ControllerSaleReturn extends Controller {
   	}  
     
   	private function getList() {
-$this->template->load('sale/return_list');
+		$this->template->load('sale/return_list');
 
 		if (isset($_GET['filter_return_id'])) {
 			$filter_return_id = $_GET['filter_return_id'];
@@ -512,7 +512,7 @@ $this->template->load('sale/return_list');
   	}
   
   	private function getForm() {
-$this->template->load('sale/return_form');
+		$this->template->load('sale/return_form');
 
 		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -783,7 +783,7 @@ $this->template->load('sale/return_form');
 		$return_info = $this->model_sale_return->getReturn($return_id);
 		
 		if ($return_info) {
-$this->template->load('sale/return_info');
+		$this->template->load('sale/return_info');
 			$this->load->language('sale/return');
 		
 			$this->document->setTitle($this->_('heading_title'));
@@ -905,7 +905,7 @@ $this->template->load('sale/return_info');
 					
 			$this->response->setOutput($this->render());		
 		} else {
-$this->template->load('error/not_found');
+		$this->template->load('error/not_found');
 			$this->load->language('error/not_found');
 
 			$this->document->setTitle($this->_('heading_title'));
@@ -1001,7 +1001,7 @@ $this->template->load('error/not_found');
 	}
 		
 	public function history() {
-$this->template->load('sale/return_history');
+		$this->template->load('sale/return_history');
 
     	$this->language->load('sale/return');
 		

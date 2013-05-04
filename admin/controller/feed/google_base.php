@@ -3,7 +3,7 @@ class ControllerFeedGoogleBase extends Controller {
 	 
 	
 	public function index() {
-$this->template->load('feed/google_base');
+		$this->template->load('feed/google_base');
 
 		$this->load->language('feed/google_base');
 

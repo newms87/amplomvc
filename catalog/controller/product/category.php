@@ -105,7 +105,7 @@ class ControllerProductCategory extends Controller {
 				$product['tax'] = $this->currency->format((float)$product['special'] ? $product['special'] : $product['price']);
 			} else {
 				$product['tax'] = false;
-			}				
+			}
 			
 			if ($this->config->get('config_review_status')) {
 				$product['rating'] = (int)$product['rating'];

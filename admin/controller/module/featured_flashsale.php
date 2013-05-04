@@ -3,7 +3,7 @@ class ControllerModuleFeaturedFlashsale extends Controller {
 	 
 	
 	public function index() {   
-$this->template->load('module/featured_flashsale');
+		$this->template->load('module/featured_flashsale');
 
 		$this->load->language('module/featured_flashsale');
 

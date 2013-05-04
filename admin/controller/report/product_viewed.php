@@ -1,7 +1,7 @@
 <?php
 class ControllerReportProductViewed extends Controller {
 	public function index() {
-$this->template->load('report/product_viewed');
+		$this->template->load('report/product_viewed');
 
 	   $this->load->language('report/product_viewed');
 

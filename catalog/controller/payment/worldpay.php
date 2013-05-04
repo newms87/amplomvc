@@ -1,7 +1,7 @@
 <?php
 class ControllerPaymentWorldPay extends Controller {
 	protected function index() {
-$this->template->load('payment/worldpay');
+		$this->template->load('payment/worldpay');
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 		
@@ -53,7 +53,7 @@ $this->template->load('payment/worldpay');
 		$this->language->format('text_failure_wait', $this->url->link('checkout/checkout'));
 	   
 		if (isset($_POST['transStatus']) && $_POST['transStatus'] == 'Y') { 
-$this->template->load('payment/worldpay_success');
+		$this->template->load('payment/worldpay_success');
 
 			// If returned successful but callbackPW doesn't match, set order to pendind and record reason
 			if (isset($_POST['callbackPW']) && ($_POST['callbackPW'] == $this->config->get('worldpay_password'))) {
@@ -108,7 +108,7 @@ $this->template->load('payment/worldpay_success');
 
 			$this->response->setOutput($this->render());				
 		} else {
-$this->template->load('payment/worldpay_failure');
+		$this->template->load('payment/worldpay_failure');
 
 			$this->data['continue'] = $this->url->link('cart/cart');
 	

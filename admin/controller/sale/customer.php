@@ -257,7 +257,7 @@ class ControllerSaleCustomer extends Controller {
 	} 
     
   	private function getList() {
-$this->template->load('sale/customer_list');
+		$this->template->load('sale/customer_list');
 
 		if (isset($_GET['filter_name'])) {
 			$filter_name = $_GET['filter_name'];
@@ -543,7 +543,7 @@ $this->template->load('sale/customer_list');
   	}
   
   	private function getForm() {
-$this->template->load('sale/customer_form');
+		$this->template->load('sale/customer_form');
 
 		if (isset($_GET['customer_id'])) {
 			$this->data['customer_id'] = $_GET['customer_id'];
@@ -940,7 +940,7 @@ $this->template->load('sale/customer_form');
 				$this->redirect(HTTP_CATALOG . 'index.php?route=account/login&token=' . $token);
 			}
 		} else {
-$this->template->load('error/not_found');
+		$this->template->load('error/not_found');
 
 			$this->load->language('error/not_found');
 
@@ -959,7 +959,7 @@ $this->template->load('error/not_found');
 	}
 
 	public function transaction() {
-$this->template->load('sale/customer_transaction');
+		$this->template->load('sale/customer_transaction');
 
     	$this->language->load('sale/customer');
 		
@@ -1013,7 +1013,7 @@ $this->template->load('sale/customer_transaction');
 	}
 			
 	public function reward() {
-$this->template->load('sale/customer_reward');
+		$this->template->load('sale/customer_reward');
 
     	$this->language->load('sale/customer');
 		

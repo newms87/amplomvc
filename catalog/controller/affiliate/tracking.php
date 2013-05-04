@@ -1,7 +1,7 @@
 <?php 
 class ControllerAffiliateTracking extends Controller { 
 	public function index() {
-$this->template->load('affiliate/tracking');
+		$this->template->load('affiliate/tracking');
 
 		if (!$this->affiliate->isLogged()) {
 	  		$this->session->data['redirect'] = $this->url->link('affiliate/tracking');

@@ -2,7 +2,7 @@
 class ControllerShippingAmount extends Controller {
 	 
 	public function index() {
-$this->template->load('shipping/amount');
+		$this->template->load('shipping/amount');
 
 	   $this->load->language('shipping/amount');
 

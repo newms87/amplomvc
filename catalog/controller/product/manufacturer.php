@@ -1,7 +1,7 @@
 <?php 
 class ControllerProductManufacturer extends Controller {  
 	public function index() { 
-$this->template->load('product/manufacturer_list');
+		$this->template->load('product/manufacturer_list');
 
 		$this->language->load('product/manufacturer');
 		

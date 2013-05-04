@@ -3,7 +3,7 @@ class ControllerTotalSubTotal extends Controller {
 	 
 	 
 	public function index() { 
-$this->template->load('total/sub_total');
+		$this->template->load('total/sub_total');
 
 		$this->load->language('total/sub_total');
 

@@ -1,7 +1,7 @@
 <?php
 class ControllerPaymentFreeCheckout extends Controller {
 	protected function index() {
-$this->template->load('payment/free_checkout');
+		$this->template->load('payment/free_checkout');
 
 		$this->data['continue'] = $this->url->link('checkout/success');
 

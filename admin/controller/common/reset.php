@@ -16,7 +16,7 @@ class ControllerCommonReset extends Controller {
 		$user_info = $this->model_user_user->getUserByCode($code);
 		
 		if ($user_info) {
-$this->template->load('common/reset');
+		$this->template->load('common/reset');
 
 			$this->load->language('common/reset');
 			

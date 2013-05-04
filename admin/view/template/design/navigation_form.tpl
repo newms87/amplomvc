@@ -37,9 +37,13 @@
 				       	<div id='new_navigation_link'>
 				       		<div class="editable">
 				       			<input type="hidden" class="parent_id" name="links[%link_num%][parent_id]" value="0" />
+				       			<div class="link_entry_display_name">
+										<label for="link_display_name_%link_num%"><?=$entry_link_display_name;?></label>
+										<input id='link_display_name_%link_num%' type="text" name="links[%link_num%][display_name]" onkeyup="update_display_name($(this));" value="" />
+									</div>
 									<div class="link_entry_name">
 										<label for="link_name_%link_num%"><?=$entry_link_name;?></label>
-										<input id='link_name_%link_num%' type="text" name="links[%link_num%][name]" onkeyup="update_display_name($(this));" value="" />
+										<input id='link_name_%link_num%' type="text" name="links[%link_num%][name]" value="" />
 									</div>
 									<div class="link_entry_title">
 										<label for="link_title_%link_num%"><?=$entry_link_title;?></label>
@@ -77,9 +81,13 @@
 										<div class="link_name"><span class="display_name"><?= $link['name'];?></span><span class="show_link_edit" onclick="toggle_edit_link($(this))"><span class="edit_text"><?= $text_edit_link;?></span><img class="remove_link" src="view/image/delete.png" onclick="$(this).closest('li').remove();"/></span></div>
 										<div class="editable" style="display:none">
 											<input type="hidden" class="parent_id" name="links[<?= $link_num;?>][parent_id]" value="0" />
+											<div class="link_entry_display_name">
+												<label for="link_display_name_<?= $link_num;?>"><?=$entry_link_display_name;?></label>
+												<input id='link_display_name_<?=$link_num;?>' type="text" name="links[<?=$link_num;?>][display_name]" onkeyup="update_display_name($(this));" value="<?= $link['display_name'];?>" />
+											</div>
 											<div class="link_entry_name">
 												<label for="link_name_<?= $link_num;?>"><?=$entry_link_name;?></label>
-												<input id='link_name_<?=$link_num;?>' type="text" name="links[<?=$link_num;?>][name]" onkeyup="update_display_name($(this));" value="<?= $link['name'];?>" />
+												<input id='link_name_<?=$link_num;?>' type="text" name="links[<?=$link_num;?>][name]" value="<?= $link['name'];?>" />
 											</div>
 											<div class="link_entry_title">
 												<label for="link_title_<?= $link_num;?>"><?=$entry_link_title;?></label>
@@ -211,7 +219,7 @@ var link_num = <?= $max_link;?>;
 function add_navigation_link(){
 	var link_info = $('#new_navigation_link .editable').clone(true);
 	
-	name = link_info.find('input[name="links[%link_num%][name]"]').val();
+	display_name = link_info.find('input[name="links[%link_num%][display_name]"]').val();
 	
 	attrs = $('#new_navigation_link .editable [name^="links"]');
 	var attr_save = {};
@@ -228,7 +236,7 @@ function add_navigation_link(){
 	
 	html = '<li link_id="%link_num%">';
 	html +='	<div class="link_info">';
-	html +='		<div class="link_name"><span class="display_name">' + name + '</span><span class="show_link_edit" onclick="toggle_edit_link($(this))"><span class="edit_text"><?= $text_edit_link;?></span><img class="remove_link" src="view/image/delete.png" onclick="$(this).closest(\'li\');"/></span></div>';
+	html +='		<div class="link_name"><span class="display_name">' + display_name + '</span><span class="show_link_edit" onclick="toggle_edit_link($(this))"><span class="edit_text"><?= $text_edit_link;?></span><img class="remove_link" src="view/image/delete.png" onclick="$(this).closest(\'li\');"/></span></div>';
 	html +='	</div>';
 	html += '<ul></ul>';
 	html +='</li>';

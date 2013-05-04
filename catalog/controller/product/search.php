@@ -1,7 +1,7 @@
 <?php 
 class ControllerProductSearch extends Controller { 	
 	public function index() { 
-$this->template->load('product/search');
+		$this->template->load('product/search');
 
     	$this->language->load('product/search');
 		

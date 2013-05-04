@@ -3,7 +3,7 @@ class ControllerPaymentCheque extends Controller {
 	 
 
 	public function index() {
-$this->template->load('payment/cheque');
+		$this->template->load('payment/cheque');
 
 		$this->load->language('payment/cheque');
 

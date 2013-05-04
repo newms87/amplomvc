@@ -4,7 +4,7 @@ class ControllerProductCollection extends Controller {
 		$this->language->load('product/collection');
 		
 		$sort_defaults = array(
-			'sort' => '',
+			'sort' => 'sort_order',
 			'order' => 'ASC',
 			'page' => 1,
 			'limit' => $this->config->get('config_catalog_limit'),
@@ -17,9 +17,11 @@ class ControllerProductCollection extends Controller {
 		$this->template->load('product/collection');
 
   		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('text_title_all'), $this->url->link('product/collection'));
 		
 		$collection_id = isset($_GET['collection_id']) ? $_GET['collection_id'] : 0;
-		
+		$category_id = isset($_GET['category_id']) ? $_GET['category_id'] : 0;
+			
 		if($collection_id){
 			$collection_info = $this->model_catalog_collection->getCollection($collection_id);
 		
@@ -32,6 +34,12 @@ class ControllerProductCollection extends Controller {
 			$this->document->setTitle($collection_info['name']);
 			$this->document->setDescription($collection_info['meta_description']);
 			$this->document->setKeywords($collection_info['meta_keywords']);
+			
+			if($collection_info['category_id']){
+				$this->breadcrumb->add($this->model_catalog_category->getCategoryName($collection_info['category_id']), $this->url->link('product/collection', 'category_id=' . $collection_info['category_id']));
+			}
+			
+			$this->breadcrumb->add($collection_info['name'], $this->url->link('product/collection', 'collection_id=' . $collection_id));
 			
 			$this->language->set('heading_title', $collection_info['name']);
 			
@@ -98,13 +106,26 @@ class ControllerProductCollection extends Controller {
 			$this->template->load('product/collection_list');
 						
 			$this->language->set('heading_title', $this->_('text_name_all'));
-
+			
 			$this->data['thumb'] = '';
 			
 			$this->data['description'] = $this->_('text_description_all');
 			
-			$item_total = $this->model_catalog_collection->getTotalCollections();
-			$collections = $this->model_catalog_collection->getCollections();
+			$data = array(
+				'sort'               => $sort,
+				'order'              => $order,
+				'start'              => ($page - 1) * $limit,
+				'limit'              => $limit
+			);
+			
+			if($category_id){
+				$data['category_id'] = $category_id;
+				
+				$this->breadcrumb->add($this->model_catalog_category->getCategoryName($category_id), $this->url->link('product/collection', 'category_id=' . $category_id));
+			}
+			
+			$item_total = $this->model_catalog_collection->getTotalCollections($data);
+			$collections = $this->model_catalog_collection->getCollections($data);
 			
 			foreach($collections as &$collection){
 				$collection['thumb'] = $this->image->resize($collection['image'], $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height'));
@@ -119,29 +140,18 @@ class ControllerProductCollection extends Controller {
 			$this->data['collections'] = $collections;
 		}
 		
-		
-		
-		$url = $this->url->get_query('limit');
+		$url = $this->url->get_query('category_id', 'limit');
 		
 		$this->data['sort_select'] = $this->url->get_query('sort', 'order');
 		$this->data['sort_url'] = $this->url->link('product/collection', 'collection_id=' . $collection_id . '&' . $url);
 		
 		$this->data['sorts'] = array(
-			'sort=p.sort_order&order=ASC' => $this->_('text_default'),
-			'sort=pd.name&order=ASC' => $this->_('text_name_asc'),
-			'sort=pd.name&order=DESC' => $this->_('text_name_desc'),
-			'sort=p.price&order=ASC' => $this->_('text_price_asc'),
-			'sort=p.price&order=DESC' => $this->_('text_price_desc'),
-			'sort=p.model&order=ASC' => $this->_('text_model_asc'),
-			'sort=p.model&order=DESC' => $this->_('text_model_desc'),
+			'sort=sort_order&order=ASC' => $this->_('text_default'),
+			'sort=name&order=ASC' => $this->_('text_name_asc'),
+			'sort=name&order=DESC' => $this->_('text_name_desc'),
 		);
 		
-		if ($this->config->get('config_review_status')) {
-			$this->data['sorts']['sort=rating&order=ASC'] = $this->_('text_rating_asc');
-			$this->data['sorts']['sort=rating&order=DESC'] = $this->_('text_rating_desc');
-		}
-		
-		$query = $this->url->get_query('sort','order');
+		$query = $this->url->get_query('category_id', 'sort','order');
 		
 		$query_collection = $collection_id ? '&collection_id=' . $collection_id : '';
 		$this->data['limit_url'] = $this->url->link('product/collection', $query . $query_collection . '&limit=');

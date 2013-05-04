@@ -19,7 +19,7 @@
  <thead>
 	<tr>
 		<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);" /></td>
-		<td class="center column_title"><?= $column_action; ?></td>
+		<td class="center column_title"><span><?= $column_action; ?></span></td>
 		<? foreach($columns as $column) {?>
 		<td class="column_title <?= $column['align'];?>">
 			<? if($column['sortable']) {
@@ -28,11 +28,11 @@
 				?>
 				<a href="<?= $sort_url; ?>&sort=<?= $column['sort_value']; ?>&order=<?= $c_order; ?>" class="sortable <?= $class; ?>"><?= $column['display_name']; ?></a>
 			<? } else {?>
-				<?= $column['display_name'];?>
+				<span><?= $column['display_name'];?></span>
 			<? } ?>
 		</td>
 		<? } ?>
-		<td class="center column_title"><?= $column_action; ?></td>
+		<td class="center column_title"><span><?= $column_action; ?></span></td>
 	</tr>
  </thead>
  <tbody>

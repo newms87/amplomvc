@@ -1,7 +1,7 @@
 <?php  
 class ControllerModuleSlideshow extends Controller {
 	protected function index($setting) {
-$this->template->load('module/slideshow');
+		$this->template->load('module/slideshow');
 
 		static $module = 0;
 		

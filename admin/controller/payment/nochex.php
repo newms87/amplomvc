@@ -3,7 +3,7 @@ class ControllerPaymentNOCHEX extends Controller {
 	 
 
 	public function index() {
-$this->template->load('payment/nochex');
+		$this->template->load('payment/nochex');
 
 		$this->load->language('payment/nochex');
 

@@ -3,7 +3,7 @@ class ControllerModuleSlideshow extends Controller {
 	 
 	
 	public function index() {   
-$this->template->load('module/slideshow');
+		$this->template->load('module/slideshow');
 
 		$this->load->language('module/slideshow');
 

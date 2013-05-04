@@ -110,7 +110,7 @@ class ControllerCmsArticle extends Controller {
    }
 
   	private function getList() {
-$this->template->load('cms/article_list');
+		$this->template->load('cms/article_list');
 
   	   $sort_list = array('sort'=>'ad.title','order'=>'ASC','page'=>1);
   	   foreach($sort_list as $key=>$default)
@@ -205,7 +205,7 @@ $this->template->load('cms/article_list');
 	}
   
   	private function getForm() {
-$this->template->load('cms/article_form');
+		$this->template->load('cms/article_form');
 
   	   $article_id = isset($_GET['article_id'])?(int)$_GET['article_id']:null;
       

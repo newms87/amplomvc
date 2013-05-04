@@ -15,6 +15,13 @@ class ControllerProductProduct extends Controller {
 			$collection_info = $this->model_catalog_collection->getCollectionByProduct($product_id);
 			
 			if($collection_info){
+				$this->language->plugin('collections', 'catalog/product');
+				$this->breadcrumb->add($this->_('text_all_collections'), $this->url->link('product/collection'));
+				
+				if($collection_info['category_id']){
+					$this->breadcrumb->add($this->model_catalog_category->getCategoryName($collection_info['category_id']), $this->url->link('product/collection', 'category_id=' . $collection_info['category_id']));
+				}
+				
 				$this->breadcrumb->add($collection_info['name'], $this->url->link('product/collection', 'collection_id=' . $collection_info['collection_id']));
 			}
 			else{

@@ -103,7 +103,7 @@ class ControllerLocalisationGeoZone extends Controller {
 	}
 
 	private function getList() {
-$this->template->load('localisation/geo_zone_list');
+		$this->template->load('localisation/geo_zone_list');
 
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
@@ -233,7 +233,7 @@ $this->template->load('localisation/geo_zone_list');
 	}
 
 	private function getForm() {
-$this->template->load('localisation/geo_zone_form');
+		$this->template->load('localisation/geo_zone_form');
 
 		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];

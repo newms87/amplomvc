@@ -3,7 +3,7 @@ class ControllerToolErrorLog extends Controller {
 	
 	
 	public function index() {
-$this->template->load('tool/error_log');
+		$this->template->load('tool/error_log');
 
 	   $this->load->language('tool/error_log');
 

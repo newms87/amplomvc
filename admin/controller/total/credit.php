@@ -3,7 +3,7 @@ class ControllerTotalCredit extends Controller {
 	 
 	 
 	public function index() { 
-$this->template->load('total/credit');
+		$this->template->load('total/credit');
 
 		$this->load->language('total/credit');
 

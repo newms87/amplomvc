@@ -1,7 +1,7 @@
 <?php
 class ControllerExtensionShipping extends Controller {
 	public function index() {
-$this->template->load('extension/shipping');
+		$this->template->load('extension/shipping');
 
 		$this->load->language('extension/shipping');
 		 

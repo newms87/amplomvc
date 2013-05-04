@@ -1,0 +1,48 @@
+<?php
+$columns = array();
+
+$columns['id'] = array(
+   'name' => 'collection_id'
+);
+
+$columns['image'] = array(
+   'type' => 'image',
+   'filter' => false,
+   'align' => 'center',
+   'sortable' => false,
+   'active' => true,
+);
+
+$columns['name'] = array(
+   'type' => 'text',
+   'filter' => true,
+   'filter_type' => 'text',
+   'align' => 'center',
+   'sortable' => true,
+   'active' => true,
+);
+
+$columns['store_ids'] = array(
+   'type' => 'text',
+   'filter' => true,
+   'align' => 'center',
+   'sortable' => false,
+   'active' => true,
+);
+
+
+$columns['status'] = array(
+   'type' => 'int',
+   'filter' => true,
+   'align' => 'center',
+   'sortable' => true,
+   'active' => true,
+);
+
+$_table['listview'] = array(
+   'filters' => true,
+   'row_id' => 'collection_id',
+   'route' => 'catalog/collection',
+   'columns' => $columns,
+);
+

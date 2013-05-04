@@ -3,7 +3,7 @@ class ControllerModuleStore extends Controller {
 	 
 	
 	public function index() {   
-$this->template->load('module/store');
+		$this->template->load('module/store');
 
 		$this->load->language('module/store');
 

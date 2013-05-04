@@ -1,7 +1,7 @@
 <?php 
 class ControllerCmsCategory extends Controller {  
 	public function index() {
-$this->template->load('cms/category');
+		$this->template->load('cms/category');
 
 		$this->language->load('cms/category');
       

@@ -3,7 +3,7 @@ class ControllerModuleSearchBar extends Controller {
 	 
 	
 	public function index() {   
-$this->template->load('module/search_bar');
+		$this->template->load('module/search_bar');
 
 		$this->load->language('module/search_bar');
 

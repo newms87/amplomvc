@@ -3,7 +3,7 @@ class ControllerShippingParcelforce48 extends Controller {
 	 
 	
 	public function index() {   
-$this->template->load('shipping/parcelforce_48');
+		$this->template->load('shipping/parcelforce_48');
 
 		$this->load->language('shipping/parcelforce_48');
 

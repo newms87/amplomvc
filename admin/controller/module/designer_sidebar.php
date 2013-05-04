@@ -2,7 +2,7 @@
 class ControllerModuleDesignerSidebar extends Controller {
 	 
 	public function index() {
-$this->template->load('module/designer_sidebar');
+		$this->template->load('module/designer_sidebar');
 
 	   $this->load->language('module/designer_sidebar');
 

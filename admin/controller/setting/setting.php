@@ -2,7 +2,7 @@
 class ControllerSettingSetting extends Controller {
  
 	public function index() {
-$this->template->load('setting/setting');
+		$this->template->load('setting/setting');
 
 	   $this->load->language('setting/setting');
 

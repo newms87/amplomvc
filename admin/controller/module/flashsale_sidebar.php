@@ -3,7 +3,7 @@ class ControllerModuleFlashsaleSidebar extends Controller {
 	 
 	
 	public function index() {
-$this->template->load('module/flashsale_sidebar');
+		$this->template->load('module/flashsale_sidebar');
 
 	   $this->load->language('module/flashsale_sidebar');
 

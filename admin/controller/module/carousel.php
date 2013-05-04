@@ -3,7 +3,7 @@ class ControllerModuleCarousel extends Controller {
 	 
 	
 	public function index() {   
-$this->template->load('module/carousel');
+		$this->template->load('module/carousel');
 
 		$this->load->language('module/carousel');
 

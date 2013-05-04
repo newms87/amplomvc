@@ -3,7 +3,7 @@ class ControllerPaymentAlertPay extends Controller {
 	 
 
 	public function index() {
-$this->template->load('payment/alertpay');
+		$this->template->load('payment/alertpay');
 
 		$this->load->language('payment/alertpay');
 

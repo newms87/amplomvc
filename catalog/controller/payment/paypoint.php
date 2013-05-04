@@ -1,7 +1,7 @@
 <?php
 class ControllerPaymentPaypoint extends Controller {
 	protected function index() {
-$this->template->load('payment/paypoint');
+		$this->template->load('payment/paypoint');
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
@@ -108,7 +108,7 @@ $this->template->load('payment/paypoint');
 			$this->language->format('text_failure_wait', $this->url->link('cart/cart'));
 	
 			if (isset($_GET['code']) && $_GET['code'] == 'A') {
-$this->template->load('payment/paypoint_success');
+		$this->template->load('payment/paypoint_success');
 
 				$this->model_checkout_order->confirm($_GET['trans_id'], $this->config->get('config_order_status_id'));
 	
@@ -155,7 +155,7 @@ $this->template->load('payment/paypoint_success');
 	
 				$this->response->setOutput($this->render());
 			} else {
-$this->template->load('payment/paypoint_failure');
+		$this->template->load('payment/paypoint_failure');
 
 				$this->data['continue'] = $this->url->link('cart/cart');
 	

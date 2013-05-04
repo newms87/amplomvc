@@ -3,7 +3,7 @@ class ControllerPaymentPerpetualPayments extends Controller {
 	 
 
 	public function index() {
-$this->template->load('payment/perpetual_payments');
+		$this->template->load('payment/perpetual_payments');
 
 		$this->load->language('payment/perpetual_payments');
 

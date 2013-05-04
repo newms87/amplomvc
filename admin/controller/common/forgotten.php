@@ -3,7 +3,7 @@ class ControllerCommonForgotten extends Controller {
 	
 
 	public function index() {
-$this->template->load('common/forgotten');
+		$this->template->load('common/forgotten');
 
 		if ($this->user->isLogged()) {
 			$this->redirect($this->url->link('common/home'));

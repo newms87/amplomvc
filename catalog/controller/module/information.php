@@ -1,7 +1,7 @@
 <?php  
 class ControllerModuleInformation extends Controller {
 	protected function index() {
-$this->template->load('module/information');
+		$this->template->load('module/information');
 
 		$this->language->load('module/information');
 		

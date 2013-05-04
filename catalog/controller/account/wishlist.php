@@ -1,7 +1,7 @@
 <?php 
 class ControllerAccountWishList extends Controller {
 	public function index() {
-$this->template->load('account/wishlist');
+		$this->template->load('account/wishlist');
 
     	if (!$this->customer->isLogged()) {
 	  		$this->session->data['redirect'] = $this->url->link('account/wishlist');

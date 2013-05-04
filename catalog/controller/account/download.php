@@ -18,7 +18,7 @@ class ControllerAccountDownload extends Controller {
 		$download_total = $this->model_account_download->getTotalDownloads();
 		
 		if ($download_total) {
-$this->template->load('account/download');
+		$this->template->load('account/download');
 
 			if (isset($_GET['page'])) {
 				$page = $_GET['page'];
@@ -92,7 +92,7 @@ $this->template->load('account/download');
 							
 			$this->response->setOutput($this->render());				
 		} else {
-$this->template->load('error/not_found');
+		$this->template->load('error/not_found');
 
 			$this->language->set('text_error', $this->_('text_empty'));
 

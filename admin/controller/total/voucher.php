@@ -3,7 +3,7 @@ class ControllerTotalVoucher extends Controller {
 	 
 	 
 	public function index() { 
-$this->template->load('total/voucher');
+		$this->template->load('total/voucher');
 
 		$this->load->language('total/voucher');
 

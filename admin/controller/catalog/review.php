@@ -103,7 +103,7 @@ class ControllerCatalogReview extends Controller {
 	}
 
 	private function getList() {
-$this->template->load('catalog/review_list');
+		$this->template->load('catalog/review_list');
 
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
@@ -239,7 +239,7 @@ $this->template->load('catalog/review_list');
 	}
 
 	private function getForm() {
-$this->template->load('catalog/review_form');
+		$this->template->load('catalog/review_form');
 
  		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];

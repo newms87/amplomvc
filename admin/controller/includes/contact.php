@@ -2,7 +2,7 @@
 class ControllerIncludesContact extends Controller {  
    
    public function index($args) {
-$this->template->load('includes/contact');
+		$this->template->load('includes/contact');
 
       $this->load->language('includes/contact');
       $id = isset($args['id'])?$args['id']:null;

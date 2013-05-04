@@ -60,7 +60,7 @@ class ControllerCmsCategory extends Controller {
 	}
 
 	private function getList() {
-$this->template->load('cms/category_list');
+		$this->template->load('cms/category_list');
 
 	   $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
       $this->breadcrumb->add($this->_('heading_title'), $this->url->link('cms/category'));
@@ -98,7 +98,7 @@ $this->template->load('cms/category_list');
 	}
 
 	private function getForm() {
-$this->template->load('cms/category_form');
+		$this->template->load('cms/category_form');
 
 	   $cms_category_id = isset($_GET['cms_category_id'])?$_GET['cms_category_id']:null;
 	   

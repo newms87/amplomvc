@@ -3,7 +3,7 @@ class ControllerModuleGoogleTalk extends Controller {
 	 
 	
 	public function index() {   
-$this->template->load('module/google_talk');
+		$this->template->load('module/google_talk');
 
 		$this->load->language('module/google_talk');
 

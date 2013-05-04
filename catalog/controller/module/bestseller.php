@@ -1,7 +1,7 @@
 <?php
 class ControllerModuleBestSeller extends Controller {
 	protected function index($setting) {
-$this->template->load('module/bestseller');
+		$this->template->load('module/bestseller');
 
 		$this->language->load('module/bestseller');
  

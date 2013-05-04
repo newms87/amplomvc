@@ -1,7 +1,7 @@
 <?php
 class ControllerPaymentTwoCheckout extends Controller {
 	protected function index() {
-$this->template->load('payment/twocheckout');
+		$this->template->load('payment/twocheckout');
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 		

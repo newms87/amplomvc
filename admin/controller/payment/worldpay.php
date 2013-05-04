@@ -3,7 +3,7 @@ class ControllerPaymentWorldPay extends Controller {
 	 
 
 	public function index() {
-$this->template->load('payment/worldpay');
+		$this->template->load('payment/worldpay');
 
 		$this->load->language('payment/worldpay');
 

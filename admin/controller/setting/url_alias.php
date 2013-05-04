@@ -60,7 +60,7 @@ class ControllerSettingUrlAlias extends Controller {
   	}
 	
 	private function getList() {
-$this->template->load('setting/url_alias_list');
+		$this->template->load('setting/url_alias_list');
 
 	   $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
       $this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/url_alias'));
@@ -93,7 +93,7 @@ $this->template->load('setting/url_alias_list');
 	}
 	 
 	public function getForm() {
-$this->template->load('setting/url_alias_form');
+		$this->template->load('setting/url_alias_form');
 
 	   $url_alias_id = isset($_GET['url_alias_id']) ? $_GET['url_alias_id']:null;
       

@@ -1,7 +1,7 @@
 <?php
 class ControllerPaymentPPPro extends Controller {
 	protected function index() {
-$this->template->load('payment/pp_pro');
+		$this->template->load('payment/pp_pro');
 
     	$this->language->load('payment/pp_pro');
 		

@@ -3,7 +3,7 @@ class ControllerShippingFree extends Controller {
 	 
 	
 	public function index() {   
-$this->template->load('shipping/free');
+		$this->template->load('shipping/free');
 
 		$this->load->language('shipping/free');
 

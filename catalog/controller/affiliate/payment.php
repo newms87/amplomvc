@@ -3,7 +3,7 @@ class ControllerAffiliatePayment extends Controller {
 	
 
 	public function index() {
-$this->template->load('affiliate/payment');
+		$this->template->load('affiliate/payment');
 
 		if (!$this->affiliate->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('affiliate/payment');

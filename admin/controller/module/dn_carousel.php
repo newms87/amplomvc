@@ -3,7 +3,7 @@ class ControllerModuleDnCarousel extends Controller {
 	 
 	 
 	public function index() {   
-$this->template->load('module/dn_carousel');
+		$this->template->load('module/dn_carousel');
 
 		$this->load->language('module/dn_carousel');
 

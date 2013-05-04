@@ -10,6 +10,83 @@ class Extend {
 		return $this->registry->get($key);
 	}
 	
+	public function add_navigation_link($link, $group = 'admin'){
+		$defaults = array(
+			'display' => '',
+			'title' => '',
+			'href' => '',
+			'query' => '',
+			'is_route' => '',
+			'parent_id' => 0,
+			'sort_order' => 0,
+			'status' => 1,
+		);
+		
+		foreach($defaults as $key => $default){
+			if(!isset($link[$key])){
+				$link[$key] = $default;
+			}
+		}
+		
+		$link['name'] = $this->tool->get_slug($link['name']);
+		
+		$result = $this->db->query("SELECT navigation_group_id FROM " . DB_PREFIX . "navigation_group WHERE name = '" . $this->db->escape($group) . "'");
+		
+		if($result->num_rows){
+			$this->model_design_navigation->addNavigationLink($result->row['navigation_group_id'], $link);
+		}
+	}
+	
+	public function remove_navigation_link($name){
+		$result = $this->db->query("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE name = '" . $this->db->escape($name) . "'");
+		
+		if($result->num_rows){
+			$this->model_design_navigation->deleteNavigationLink($result->row['navigation_id']);
+		}
+	}
+	
+	public function add_layout($name, $routes = array(), $data = array()){
+		if(!is_array($routes)){
+			$routes = array($routes);
+		}
+		
+		$query = $this->db->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . "layout WHERE name='$name'");
+		
+		if($query->row['total']){
+			$this->message->add("warning", "Error while adding $name to layout! Duplicate name exists!");
+			return false;
+		}
+		
+		$layout = array(
+			'name' => $name,
+		);
+		
+		$layout += $data;
+		
+		if(!empty($routes)){
+			$stores = $this->model_setting_store->getStores();
+			
+			foreach($stores as $store){
+				foreach($routes as $route){
+					$layout['layout_route'][] = array(
+						'store_id' => $store['store_id'],
+						'route' => $route 
+					);
+				}
+			}
+		}
+		
+		$this->model_design_layout->addLayout($layout);
+	}
+	
+	public function remove_layout($name){
+		$result = $this->db->query("SELECT layout_id FROM " . DB_PREFIX . "layout WHERE name='" . $this->db->escape($name) . "' LIMIT 1");
+		
+		if($result->num_rows){
+			$this->model_design_layout->deleteLayout($result->row['layout_id']);
+		}
+	}
+	
 	public function add_db_hook($hook_set, $action, $table, $callback, $param = null, $priority = 0){
 		$config_id = 'db_hook_' . $action . '_' . $table;
 		

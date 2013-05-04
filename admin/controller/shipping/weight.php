@@ -3,7 +3,7 @@ class ControllerShippingWeight extends Controller {
 	
 	
 	public function index() {  
-$this->template->load('shipping/weight');
+		$this->template->load('shipping/weight');
 
 		$this->load->language('shipping/weight');
 

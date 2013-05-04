@@ -3,7 +3,7 @@ class ControllerAccountVoucher extends Controller {
 	
 	
 	public function index() {
-$this->template->load('account/voucher');
+		$this->template->load('account/voucher');
 
 		$this->language->load('account/voucher');
 		
@@ -151,7 +151,7 @@ $this->template->load('account/voucher');
   	}
 	
   	public function success() {
-$this->template->load('common/success');
+		$this->template->load('common/success');
 
 		$this->language->load('account/voucher');
 

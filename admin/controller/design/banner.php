@@ -67,7 +67,7 @@ class ControllerDesignBanner extends Controller {
 	}
 
 	private function getList() {
-$this->template->load('design/banner_list');
+		$this->template->load('design/banner_list');
 
 	   $default_urls = array('sort'=>'name','order'=>'ASC','page'=>1);
       foreach($default_urls as $key=>$default){
@@ -150,7 +150,7 @@ $this->template->load('design/banner_list');
 	}
 
 	private function getForm() {
-$this->template->load('design/banner_form');
+		$this->template->load('design/banner_form');
 
 	   $banner_id = isset($_GET['banner_id'])?$_GET['banner_id']:0;
       

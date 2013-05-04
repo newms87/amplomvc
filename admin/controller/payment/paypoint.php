@@ -3,7 +3,7 @@ class ControllerPaymentPayPoint extends Controller {
 	
 
 	public function index() {
-$this->template->load('payment/paypoint');
+		$this->template->load('payment/paypoint');
 
 		$this->load->language('payment/paypoint');
 

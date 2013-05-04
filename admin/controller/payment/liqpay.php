@@ -3,7 +3,7 @@ class ControllerPaymentLiqPay extends Controller {
 	 
 
 	public function index() {
-$this->template->load('payment/liqpay');
+		$this->template->load('payment/liqpay');
 
 		$this->load->language('payment/liqpay');
 

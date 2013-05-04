@@ -98,7 +98,7 @@ class ControllerProductProduct extends Controller {
   	}
 
 	public function review() {
-$this->template->load('product/review');
+		$this->template->load('product/review');
 
     	$this->language->load('product/product');
 		

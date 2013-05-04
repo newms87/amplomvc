@@ -1,7 +1,7 @@
 <?php  
 class ControllerProductCompare extends Controller {
 	public function index() { 
-$this->template->load('product/compare');
+		$this->template->load('product/compare');
 
 		$this->language->load('product/compare');
 		

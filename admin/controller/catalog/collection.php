@@ -285,6 +285,7 @@ class ControllerCatalogCollection extends Controller {
          'categories' => array(),
          'stores' => array(0),
          'status' => 1,
+         'sort_order' => 0,
       );
 
       foreach($defaults as $key => $default){

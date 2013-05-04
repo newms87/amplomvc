@@ -3,7 +3,7 @@ class ControllerModulespecial extends Controller {
 	 
 	
 	public function index() {   
-$this->template->load('module/special');
+		$this->template->load('module/special');
 
 		$this->load->language('module/special');
 

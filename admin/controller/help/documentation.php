@@ -2,7 +2,7 @@
 class ControllerHelpDocumentation extends Controller {
 	 
 	public function index() {   
-$this->template->load('help/documentation');
+		$this->template->load('help/documentation');
 
 		$this->load->language('help/documentation');
 

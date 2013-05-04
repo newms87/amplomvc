@@ -14,7 +14,7 @@ class ControllerPaymentPPStandard extends Controller {
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
 		if ($order_info) {
-$this->template->load('payment/pp_standard');
+		$this->template->load('payment/pp_standard');
 
 		   $this->data['order_id'] = $this->session->data['order_id'];
 			$this->data['business'] = $this->config->get('pp_standard_email');

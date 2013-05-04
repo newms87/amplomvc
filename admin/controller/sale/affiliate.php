@@ -225,7 +225,7 @@ class ControllerSaleAffiliate extends Controller {
 	} 
 	    
   	private function getList() {
-$this->template->load('sale/affiliate_list');
+		$this->template->load('sale/affiliate_list');
 
 		if (isset($_GET['filter_name'])) {
 			$filter_name = $_GET['filter_name'];
@@ -464,7 +464,7 @@ $this->template->load('sale/affiliate_list');
   	}
   
   	private function getForm() {
-$this->template->load('sale/affiliate_form');
+		$this->template->load('sale/affiliate_form');
 
 		if (isset($_GET['affiliate_id'])) {
 			$this->data['affiliate_id'] = $_GET['affiliate_id'];
@@ -902,7 +902,7 @@ $this->template->load('sale/affiliate_form');
   	} 
 
 	public function transaction() {
-$this->template->load('sale/affiliate_transaction');
+		$this->template->load('sale/affiliate_transaction');
     	$this->language->load('sale/affiliate');
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->user->hasPermission('modify', 'sale/affiliate')) { 

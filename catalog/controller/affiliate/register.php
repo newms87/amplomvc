@@ -3,7 +3,7 @@ class ControllerAffiliateRegister extends Controller {
 	
 	      
   	public function index() {
-$this->template->load('affiliate/register');
+		$this->template->load('affiliate/register');
 
 		if ($this->affiliate->isLogged()) {
 	  		$this->redirect($this->url->link('affiliate/account'));

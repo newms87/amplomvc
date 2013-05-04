@@ -14,7 +14,7 @@ class ControllerPaymentKlarna extends Controller {
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
 		if ($order_info) {
-$this->template->load('payment/pp_standard');
+		$this->template->load('payment/pp_standard');
 
 			$this->data['business'] = $this->config->get('pp_standard_email');
 			$this->data['item_name'] = html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');				

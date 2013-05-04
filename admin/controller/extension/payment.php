@@ -1,7 +1,7 @@
 <?php
 class ControllerExtensionPayment extends Controller {
 	public function index() {
-$this->template->load('extension/payment');
+		$this->template->load('extension/payment');
 
 		$this->load->language('extension/payment');
 		 

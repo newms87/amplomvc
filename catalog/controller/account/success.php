@@ -1,7 +1,7 @@
 <?php 
 class ControllerAccountSuccess extends Controller {  
 	public function index() {
-$this->template->load('common/success');
+		$this->template->load('common/success');
 
     	$this->language->load('account/success');
   

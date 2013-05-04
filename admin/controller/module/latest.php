@@ -3,7 +3,7 @@ class ControllerModuleLatest extends Controller {
 	 
 	
 	public function index() {   
-$this->template->load('module/latest');
+		$this->template->load('module/latest');
 
 		$this->load->language('module/latest');
 

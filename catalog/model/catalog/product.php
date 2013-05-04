@@ -153,7 +153,7 @@ class ModelCatalogProduct extends Model {
 		
 		$product_data = $this->cache->get($cache_id);
 		
-		if (!$product_data) {
+		if (!$product_data || true) {
 			
 			//SELECT
 			if($total){
@@ -169,12 +169,12 @@ class ModelCatalogProduct extends Model {
 			
 			//WHERE
 			$where = 
-				"p2s.store_id = '$store_id' AND m.status='1' AND p.date_available <= NOW()" . 
+				"p.status='1' AND p2s.store_id = '$store_id' AND m.status='1' AND p.date_available <= NOW()" . 
 				" AND (p.date_expires > NOW() OR p.date_expires = '" . DATETIME_ZERO . "')";
 			
-			
 			//Product Description if needed
-			if(!empty($data['name']) || !empty($data['name_like']) || !empty($data['search'])){
+			if( (!empty($data['sort']) && $data['sort'] == 'pd.name') || 
+				  !empty($data['name']) || !empty($data['name_like']) || !empty($data['search']) ){
 				$tables .= " LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id)";
 				
 				$where .= " AND pd.language_id='$language_id'";

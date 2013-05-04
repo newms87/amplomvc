@@ -2,7 +2,7 @@
 class ControllerInformationContact extends Controller {
 	
   	public function index() {
-$this->template->load('information/contact');
+		$this->template->load('information/contact');
 
 		$this->language->load('information/contact');
 
@@ -64,7 +64,7 @@ $this->template->load('information/contact');
   	}
 
   	public function success() {
-$this->template->load('common/success');
+		$this->template->load('common/success');
 
 		$this->language->load('information/contact');
 

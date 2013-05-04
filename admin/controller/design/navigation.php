@@ -1,7 +1,42 @@
 <?php 
 class ControllerDesignNavigation extends Controller {
 	
+	public function display_links($links, $parent = '', $depth = 2){
+		$tab1 = str_repeat("\t", $depth);
+		$tab = str_repeat("\t", $depth+1);
+		$html = '';
+		
+		foreach($links as $key => $link){
+			$link['name'] = $parent . $link['name'];
+			
+			$html .= $tab1 . "'$link[name]' => array(\r\n";
+			$html .= $tab . "'display_name'\t=> '" . $link['display_name'] . "',\r\n";
+			$html .= $tab . "'name'\t\t\t=> '" . $link['name'] . "',\r\n";
+			$html .= $tab . "'title'\t\t\t=> '',\r\n";
+			$html .= $tab . "'href'\t\t\t=> '" . $link['href'] . "',\r\n";
+			$html .= $tab . "'query'\t\t\t=> '" . $link['query'] . "',\r\n";
+			$html .= $tab . "'is_route'\t\t=> " . $link['is_route'] . ",\r\n";
+			$html .= $tab . "'parent_id'\t\t=> '" . $parent . "',\r\n";
+			$html .= $tab . "'sort_order'\t=> " . $link['sort_order'] . ",\r\n";
+			$html .= $tab . "'status'\t\t\t=> " . $link['status'] . ",\r\n";
+			
+			$html .= $tab1 . "),\r\n\r\n";
+			
+			if(!empty($link['children'])){
+				$html .= $this->display_links($link['children'], $link['name'], $depth+1);
+			}
+		}
+		
+		return $html;
+	}
+	
 	public function index() {
+		$links = $this->model_design_navigation->getNavigationLinks();
+		html_dump($links['admin'],'links');
+		$html = $this->display_links($links['admin']);
+		
+		file_put_contents(SITE_DIR . 'admin_text.txt', $html);
+		 
 		$this->load->language('design/navigation');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -59,6 +94,14 @@ class ControllerDesignNavigation extends Controller {
 		}
 
 		$this->getList();
+	}
+	
+	public function reset_admin_navigation(){
+		$this->model_design_navigation->reset_admin_navigation_group();
+		
+		$this->message->add("notify", "Admin Navigation Group has been reset!");
+		
+		$this->redirect($this->url->link("design/navigation"));
 	}
 	
 	public function batch_update() {
@@ -246,7 +289,9 @@ class ControllerDesignNavigation extends Controller {
          }
       }
 		
-      $this->data['data_stores'] = array('admin' => array('store_id' => -1, 'name' => $this->_('text_admin_panel'))) + $this->model_setting_store->getStores();
+		$admin_store = array('admin' => array('store_id' => -1, 'name' => $this->_('text_admin_panel')));
+		
+      $this->data['data_stores'] = $admin_store + $this->model_setting_store->getStores();
 		
 		$this->children = array(
 			'common/header',
@@ -261,26 +306,45 @@ class ControllerDesignNavigation extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
+		$navigation_group_id = isset($_GET['navigation_group_id']) ? (int)$_GET['navigation_group_id'] : 0;
+		
 		if(!isset($_POST['store_ids'])){
 			$_POST['store_ids'] = array('');
 		}
 		
-		$navigation_group_id = isset($_GET['navigation_group_id']) ? $_GET['navigation_group_id'] : 0;
-		$name = $_POST['name'];
-		
-		$query = $this->db->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . "navigation_group WHERE name = '$name' AND navigation_group_id != $navigation_group_id");
-		
-		if($query->row['total']){
-			$this->error['name'] = $this->language->format('error_duplicate_name', $name);
+		if(!$this->validation->text($_POST['name'], 3, 64)){
+			$this->error['name'] = $this->_('error_name');
 		}
 		
 		//unset the fake link
 		unset($_POST['links']['%link_num%']);
 		
-		if ((strlen($name) < 3) || (strlen($name) > 64)) {
-			$this->error['name'] = $this->_('error_name');
+		foreach($_POST['links'] as $key => $link){
+			if(!$this->validation->text($link['display_name'], 1, 255)){
+				$link_name = !empty($link['name']) ? $link['name'] : ( !empty($link['display_name']) ? $link['display_name'] : $key ); 
+				$this->error["links[$key][display_name]"] = $this->language->format('error_display_name', $link_name);
+			}
+		
+			//If name already exists in database, append _n to the name
+			if(empty($link['name'])){
+				$name = $this->tool->get_slug($link['display_name']);
+			}
+			else{
+				$name = $this->db->escape($this->tool->get_slug($link['name']));
+			}
+			
+			$count = 0;
+			do{
+				$check_name = $count ? $name . '_' . $count : $name;
+				
+				$result = $this->db->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . "navigation_group WHERE name = '$check_name' AND navigation_group_id != $navigation_group_id");
+				
+				$count++;
+			}while($result->row['total']);
+			
+			$_POST['links'][$key]['name'] = $check_name;
 		}
-
+		
 		return $this->error ? false : true;
 	}
 

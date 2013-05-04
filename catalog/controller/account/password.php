@@ -3,7 +3,7 @@ class ControllerAccountPassword extends Controller {
 	
 	     
   	public function index() {	
-$this->template->load('account/password');
+		$this->template->load('account/password');
 
     	if (!$this->customer->isLogged()) {
       		$this->session->data['redirect'] = $this->url->link('account/password');

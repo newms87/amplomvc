@@ -1,7 +1,7 @@
 <?php  
 class ControllerCommonHome extends Controller {
 	public function index() {
-$this->template->load('common/home');
+		$this->template->load('common/home');
 
 	   $this->document->setTitle($this->config->get('config_title'));
 		$this->document->setDescription($this->config->get('config_meta_description'));

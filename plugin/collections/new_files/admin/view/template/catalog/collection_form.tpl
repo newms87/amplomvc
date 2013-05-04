@@ -70,6 +70,10 @@
 						<td><?= $entry_status; ?></td>
 						<td><?=$this->builder->build('select',$data_statuses,'status',(int)$status);?></td>
 					</tr>
+					<tr>
+						<td><?= $entry_sort_order; ?></td>
+						<td><input type="text" name="sort_order" size="1" value="<?= $sort_order;?>" /></td>
+					</tr>
 				</table>
 			</div>
 			</form>

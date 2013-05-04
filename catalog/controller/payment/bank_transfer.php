@@ -1,7 +1,7 @@
 <?php
 class ControllerPaymentBankTransfer extends Controller {
 	protected function index() {
-$this->template->load('payment/bank_transfer');
+		$this->template->load('payment/bank_transfer');
 
 		$this->language->load('payment/bank_transfer');
 		

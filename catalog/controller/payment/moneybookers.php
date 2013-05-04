@@ -1,7 +1,7 @@
 <?php
 class ControllerPaymentMoneybookers extends Controller {
 	protected function index() {
-$this->template->load('payment/moneybookers');
+		$this->template->load('payment/moneybookers');
 
 		$this->language->load('payment/moneybookers');
 		

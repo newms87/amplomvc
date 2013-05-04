@@ -3,7 +3,7 @@ class ControllerShippingItem extends Controller {
 	 
 	
 	public function index() {  
-$this->template->load('shipping/item');
+		$this->template->load('shipping/item');
 
 		$this->load->language('shipping/item');
 

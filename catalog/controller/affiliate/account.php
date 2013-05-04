@@ -1,7 +1,7 @@
 <?php 
 class ControllerAffiliateAccount extends Controller { 
 	public function index() {
-$this->template->load('affiliate/account');
+		$this->template->load('affiliate/account');
 
 		if (!$this->affiliate->isLogged()) {
 	  		$this->session->data['redirect'] = $this->url->link('affiliate/account');

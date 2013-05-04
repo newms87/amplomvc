@@ -3,7 +3,7 @@ class ControllerFeedGoogleSitemap extends Controller {
 	 
 	
 	public function index() {
-$this->template->load('feed/google_sitemap');
+		$this->template->load('feed/google_sitemap');
 
 		$this->load->language('feed/google_sitemap');
 

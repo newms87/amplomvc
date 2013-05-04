@@ -21,6 +21,13 @@ class Tool {
       return false;
    }
    
+	public function get_slug($name){
+		$slug = preg_replace("/\s/",'_', strtolower(trim($name)));
+		$slug = preg_replace("/[^a-z0-9_]/", '', $slug);
+		
+		return $slug;
+	}
+	
    public function error_info(){
       list(,,$caller) = debug_backtrace(false);
       return "<span style='font-weight:bold; color:#E72727'>$caller[file] on line $caller[line]: </span>";

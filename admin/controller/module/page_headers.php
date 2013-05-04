@@ -3,7 +3,7 @@ class ControllerModulePageHeaders extends Controller {
 	 
 	
 	public function index() {   
-$this->template->load('module/page_headers');
+		$this->template->load('module/page_headers');
 
 		$this->load->language('module/page_headers');
 

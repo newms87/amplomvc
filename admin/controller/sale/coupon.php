@@ -155,7 +155,7 @@ class ControllerSaleCoupon extends Controller {
   	}
 
   	private function getForm() {
-$this->template->load('sale/coupon_form');
+		$this->template->load('sale/coupon_form');
 
   	   $coupon_id = $this->data['coupon_id'] = isset($_GET['coupon_id'])?$_GET['coupon_id']:0;
       
@@ -295,7 +295,7 @@ $this->template->load('sale/coupon_form');
   	}	
 	
 	public function history() {
-$this->template->load('sale/coupon_history');
+		$this->template->load('sale/coupon_history');
 	   $coupon_id = $this->data['coupon_id'] = isset($_GET['coupon_id'])?$_GET['coupon_id']:0;
 	   
 	   $this->language->load('sale/coupon');

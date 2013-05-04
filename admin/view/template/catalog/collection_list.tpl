@@ -16,9 +16,9 @@
       <form action="" method="post" enctype="multipart/form-data" id="form">
         <?= $list_view;?>
       </form>
-       <div class="pagination"><?= $pagination; ?></div>
+      <div class="pagination"><?= $pagination; ?></div>
     </div>
   </div>
 </div>
 
-<?= $footer; ?> 
+<?= $footer; ?>

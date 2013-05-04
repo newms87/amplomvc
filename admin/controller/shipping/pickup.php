@@ -3,7 +3,7 @@ class ControllerShippingPickup extends Controller {
 	 
 	
 	public function index() {   
-$this->template->load('shipping/pickup');
+		$this->template->load('shipping/pickup');
 
 		$this->load->language('shipping/pickup');
 

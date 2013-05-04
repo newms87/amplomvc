@@ -3,7 +3,7 @@ class ControllerPaymentMoneyBookers extends Controller {
 	 
 	
 	public function index() {
-$this->template->load('payment/moneybookers');
+		$this->template->load('payment/moneybookers');
 
 		$this->load->language('payment/moneybookers');
 		

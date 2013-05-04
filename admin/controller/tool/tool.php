@@ -3,7 +3,7 @@ class ControllerToolTool extends Controller {
 	
 	
 	public function index() {		
-$this->template->load('tool/tool');
+		$this->template->load('tool/tool');
 
 		$this->load->language('tool/tool');
 
@@ -56,11 +56,6 @@ $this->template->load('tool/tool');
 			$this->error['warning'] = $this->_('error_permission');
 		}
       
-		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}		
+		return $this->error ? false : true;
 	}
 }

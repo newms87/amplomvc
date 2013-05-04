@@ -1,7 +1,7 @@
 <?php
 class ControllerAccountReward extends Controller {
 	public function index() {
-$this->template->load('account/reward');
+		$this->template->load('account/reward');
 
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/reward');

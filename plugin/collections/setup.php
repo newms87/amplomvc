@@ -66,7 +66,7 @@ SQL;
    	$this->db->query($sql);
 		
 		//Add Collections Layout
-		$this->model_design_layout->add_new_layout(COLLECTION_LAYOUT_NAME, 'product/collection');
+		$this->extend->add_layout(COLLECTION_LAYOUT_NAME, 'product/collection');
 		
 		//Enable image sorting for the 'collection' table on column 'image'
 		$this->extend->enable_image_sorting('collection', 'image');
@@ -77,7 +77,9 @@ SQL;
 		
 		//disable image sorting for 'collection' table
 		$this->extend->disable_image_sorting('collection', 'image');
-		$this->model_design_layout->delete_layout_by_name(COLLECTION_LAYOUT_NAME);
+		
+		//Remove Collections Layout
+		$this->extend->remove_layout(COLLECTION_LAYOUT_NAME);
 		
 		//Remove data last as good practice
 		if(!$keep_data){

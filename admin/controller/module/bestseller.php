@@ -2,7 +2,7 @@
 class ControllerModuleBestSeller extends Controller {
 	 
 	public function index() {
-$this->template->load('module/bestseller');
+		$this->template->load('module/bestseller');
 
 	   $this->load->language('module/bestseller');
 

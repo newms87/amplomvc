@@ -3,7 +3,7 @@ class ControllerShippingRoyalMail extends Controller {
 	 
 	
 	public function index() {   
-$this->template->load('shipping/royal_mail');
+		$this->template->load('shipping/royal_mail');
 
 		$this->load->language('shipping/royal_mail');
 

@@ -103,7 +103,7 @@ class ControllerUserUserPermission extends Controller {
 	}
 
 	private function getList() {
-$this->template->load('user/user_group_list');
+		$this->template->load('user/user_group_list');
 
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];

@@ -1,7 +1,7 @@
 <?php
 class ControllerPaymentGoogleCheckout extends Controller {
 	public function index() {
-$this->template->load('payment/google_checkout');
+		$this->template->load('payment/google_checkout');
 
 		if (!$this->config->get('google_checkout_test')) {
 			$this->data['action'] = 'https://checkout.google.com/api/checkout/v2/checkout/Merchant/' . $this->config->get('google_checkout_merchant_id');	

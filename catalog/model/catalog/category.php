@@ -89,6 +89,12 @@ class ModelCatalogCategory extends Model {
 		return $categories;
 	}
 	
+	public function getCategoryName($category_id){
+		$result = $this->query("SELECT * FROM " . DB_PREFIX . "category_description WHERE category_id='" . (int)$category_id . "'");
+		
+		return $result->row['name'];
+	}
+	
 	public function getCategoryLayoutId($category_id) {
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "category_to_layout WHERE category_id = '" . (int)$category_id . "' AND store_id = '" . (int)$this->config->get('config_store_id') . "'");
 		

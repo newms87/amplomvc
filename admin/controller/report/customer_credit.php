@@ -1,7 +1,7 @@
 <?php
 class ControllerReportCustomerCredit extends Controller {
 	public function index() {     
-$this->template->load('report/customer_credit');
+		$this->template->load('report/customer_credit');
 
 		$this->load->language('report/customer_credit');
 

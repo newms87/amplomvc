@@ -2,7 +2,7 @@
 class ControllerCartBlockReward {
    
    public function index($settings = null){
-$this->template->load('cart/block/reward');
+		$this->template->load('cart/block/reward');
 
          
       if (isset($_POST['reward']) && $this->validateReward()) { 

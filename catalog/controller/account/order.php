@@ -122,7 +122,7 @@ class ControllerAccountOrder extends Controller {
 		$order_info = $this->model_account_order->getOrder($order_id);
 		
 		if ($order_info) {
-$this->template->load('account/order_info');
+		$this->template->load('account/order_info');
 
 			$this->document->setTitle($this->_('text_order'));
 			
@@ -300,7 +300,7 @@ $this->template->load('account/order_info');
 								
 			$this->response->setOutput($this->render());		
     	} else {
-$this->template->load('error/not_found');
+		$this->template->load('error/not_found');
 
 			$this->document->setTitle($this->_('text_order'));
 			

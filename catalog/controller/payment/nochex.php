@@ -3,7 +3,7 @@
 // Nochex via APC maybe only avaiable to "Merchant" account holders only - site docs a bit vague on this point
 class ControllerPaymentNochex extends Controller {
 	protected function index() {
-$this->template->load('payment/nochex');
+		$this->template->load('payment/nochex');
 
 		$this->load->language('payment/nochex');
 		

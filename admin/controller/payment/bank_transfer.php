@@ -3,7 +3,7 @@ class ControllerPaymentBankTransfer extends Controller {
 	 
 
 	public function index() {
-$this->template->load('payment/bank_transfer');
+		$this->template->load('payment/bank_transfer');
 
 		$this->load->language('payment/bank_transfer');
 

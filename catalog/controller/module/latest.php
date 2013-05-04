@@ -1,7 +1,7 @@
 <?php
 class ControllerModuleLatest extends Controller {
 	protected function index($setting) {
-$this->template->load('module/latest');
+		$this->template->load('module/latest');
 
 		$this->language->load('module/latest');
 		

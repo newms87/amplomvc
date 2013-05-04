@@ -104,7 +104,7 @@ class ControllerAccountAddress extends Controller {
   	}
 
   	private function getList() {
-$this->template->load('account/address_list');
+		$this->template->load('account/address_list');
 
   	   $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
       $this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
@@ -171,7 +171,7 @@ $this->template->load('account/address_list');
   	}
 
   	private function getForm() {
-$this->template->load('account/address_form');
+		$this->template->load('account/address_form');
 
   	   $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
       $this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/account'));

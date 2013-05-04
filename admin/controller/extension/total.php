@@ -1,7 +1,7 @@
 <?php
 class ControllerExtensionTotal extends Controller {
 	public function index() {
-$this->template->load('extension/total');
+		$this->template->load('extension/total');
 
 		$this->load->language('extension/total');
 		 

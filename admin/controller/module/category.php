@@ -3,7 +3,7 @@ class ControllerModuleCategory extends Controller {
 	 
 	
 	public function index() {   
-$this->template->load('module/category');
+		$this->template->load('module/category');
 
 		$this->load->language('module/category');
 

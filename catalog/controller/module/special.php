@@ -1,7 +1,7 @@
 <?php
 class ControllerModuleSpecial extends Controller {
 	protected function index($setting) {
-$this->template->load('module/special');
+		$this->template->load('module/special');
 
 		$this->language->load('module/special');
  

@@ -1,7 +1,7 @@
 <?php  
 class ControllerModuleBanner extends Controller {
 	protected function index($setting) {
-$this->template->load('module/banner');
+		$this->template->load('module/banner');
 
 		static $module = 0;
 		

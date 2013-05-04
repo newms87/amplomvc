@@ -2,7 +2,7 @@
 class ControllerInformationAreYouADesigner extends Controller {
 	
   	public function index() {
-$this->template->load('information/are_you_a_designer');
+		$this->template->load('information/are_you_a_designer');
 
 		$this->language->load('information/are_you_a_designer');
 
@@ -95,7 +95,7 @@ $this->template->load('information/are_you_a_designer');
   	}
 
   	public function success() {
-$this->template->load('common/success');
+		$this->template->load('common/success');
 
 		$this->language->load('information/are_you_a_designer');
 

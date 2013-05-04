@@ -1,7 +1,7 @@
 <?php
 class ControllerExtensionFeed extends Controller {
 	public function index() {
-$this->template->load('extension/feed');
+		$this->template->load('extension/feed');
 
 		$this->load->language('extension/feed');
 		 

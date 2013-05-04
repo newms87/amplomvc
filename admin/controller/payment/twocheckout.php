@@ -3,7 +3,7 @@ class ControllerPaymentTwoCheckout extends Controller {
 	 
 
 	public function index() {
-$this->template->load('payment/twocheckout');
+		$this->template->load('payment/twocheckout');
 
 		$this->load->language('payment/twocheckout');
 

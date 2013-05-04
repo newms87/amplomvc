@@ -3,7 +3,7 @@ class ControllerShippingFlat extends Controller {
 	 
 	
 	public function index() {   
-$this->template->load('shipping/flat');
+		$this->template->load('shipping/flat');
 
 		$this->load->language('shipping/flat');
 

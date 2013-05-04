@@ -103,7 +103,7 @@ class ControllerLocalisationTaxRate extends Controller {
 	}
 
 	private function getList() {
-$this->template->load('localisation/tax_rate_list');
+		$this->template->load('localisation/tax_rate_list');
 
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
@@ -241,7 +241,7 @@ $this->template->load('localisation/tax_rate_list');
 	}
 
 	private function getForm() {
-$this->template->load('localisation/tax_rate_form');
+		$this->template->load('localisation/tax_rate_form');
 
  		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];

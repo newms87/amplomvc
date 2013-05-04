@@ -3,7 +3,7 @@ class ControllerModuleWelcome extends Controller {
 	 
 	 
 	public function index() {   
-$this->template->load('module/welcome');
+		$this->template->load('module/welcome');
 
 		$this->load->language('module/welcome');
 

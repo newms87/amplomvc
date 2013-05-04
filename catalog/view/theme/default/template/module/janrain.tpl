@@ -82,5 +82,7 @@ else{
    src='http://widget-cdn.rpxnow.com/js/lib/<?= $janrain_application_domain;?>/engage.js';
 }
 
-$.getScript(src);
+$(document).ready(function(){
+	$.getScript(src);
+});
 //--></script>

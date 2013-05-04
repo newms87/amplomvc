@@ -103,7 +103,7 @@ class ControllerCatalogOption extends Controller {
 	}
 
 	private function getList() {
-$this->template->load('catalog/option_list');
+		$this->template->load('catalog/option_list');
 
 	   $defaults = array('sort'=>'od.name','order'=>'ASC','page'=>1);
       foreach($defaults as $key=>$default){
@@ -186,7 +186,7 @@ $this->template->load('catalog/option_list');
 	}
 
 	private function getForm() {
-$this->template->load('catalog/option_form');
+		$this->template->load('catalog/option_form');
 
 	   $option_id = isset($_GET['option_id'])?$_GET['option_id']:false;
       

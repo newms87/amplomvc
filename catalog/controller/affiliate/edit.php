@@ -3,7 +3,7 @@ class ControllerAffiliateEdit extends Controller {
 	
 
 	public function index() {
-$this->template->load('affiliate/edit');
+		$this->template->load('affiliate/edit');
 
 		if (!$this->affiliate->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('affiliate/edit');

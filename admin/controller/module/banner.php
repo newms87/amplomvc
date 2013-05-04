@@ -3,7 +3,7 @@ class ControllerModuleBanner extends Controller {
 	 
 	
 	public function index() {   
-$this->template->load('module/banner');
+		$this->template->load('module/banner');
 
 		$this->load->language('module/banner');
 

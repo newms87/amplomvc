@@ -3,7 +3,7 @@ class ControllerPaymentCod extends Controller {
 	 
 	 
 	public function index() { 
-$this->template->load('payment/cod');
+		$this->template->load('payment/cod');
 
 		$this->load->language('payment/cod');
 

@@ -1,7 +1,7 @@
 <?php
 class ControllerReportSaleCoupon extends Controller {
 	public function index() {     
-$this->template->load('report/sale_coupon');
+		$this->template->load('report/sale_coupon');
 
 		$this->load->language('report/sale_coupon');
 

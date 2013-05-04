@@ -75,7 +75,7 @@ class ControllerCatalogManufacturer extends Controller {
   	}  
     
   	private function getList() {
-$this->template->load('catalog/manufacturer_list');
+		$this->template->load('catalog/manufacturer_list');
 
   	   $sort_list = array('sort'=>'name','order'=>'ASC','page'=>1);
   	   foreach($sort_list as $key=>$default)

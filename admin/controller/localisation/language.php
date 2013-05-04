@@ -61,7 +61,7 @@ class ControllerLocalisationLanguage extends Controller {
 	}
 
 	private function getList() {
-$this->template->load('localisation/language_list');
+		$this->template->load('localisation/language_list');
 
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
@@ -167,7 +167,7 @@ $this->template->load('localisation/language_list');
 	}
 
 	private function getForm() {
-$this->template->load('localisation/language_form');
+		$this->template->load('localisation/language_form');
 
 	   $language_id = isset($_GET['language_id']) ? $_GET['language_id'] : false;
       

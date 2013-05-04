@@ -1,7 +1,7 @@
 <?php
 class ControllerReportCustomerOrder extends Controller {
 	public function index() {     
-$this->template->load('report/customer_order');
+		$this->template->load('report/customer_order');
 
 		$this->load->language('report/customer_order');
 

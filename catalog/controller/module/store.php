@@ -8,7 +8,7 @@ class ControllerModuleStore extends Controller {
 		}
 		
 		if ($status) {
-$this->template->load('module/store');
+		$this->template->load('module/store');
 
 			$this->language->load('module/store');
 			

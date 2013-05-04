@@ -4,20 +4,57 @@ class ModelCatalogCollection extends Model {
 		$store_id = $this->config->get('config_store_id');
 		
 		$result = $this->query(
-			"SELECT * FROM " . DB_PREFIX . "collection c " .
-			"LEFT JOIN " . DB_PREFIX . "collection_store cs ON (c.collection_id=cs.collection_id) " .
-			"WHERE cs.store_id='$store_id' AND c.collection_id='" . (int)$collection_id . "'"
+			"SELECT * FROM " . DB_PREFIX . "collection c" .
+			" LEFT JOIN " . DB_PREFIX . "collection_store cs ON (c.collection_id=cs.collection_id)" .
+			" LEFT JOIN " . DB_PREFIX . "collection_category cc ON (c.collection_id=cc.collection_id)"  .
+			" WHERE cs.store_id='$store_id' AND c.collection_id='" . (int)$collection_id . "' LIMIT 1"
 		);
 		
 		return $result->row;
 	}
 	
-	public function getCollections() {
-		$result = $this->query(
-			"SELECT * FROM " . DB_PREFIX . "collection c " .
-			"LEFT JOIN " . DB_PREFIX . "collection_store cs ON (c.collection_id = cs.collection_id) " .
-			"WHERE cs.store_id = '" . (int)$this->config->get('config_store_id') . "'  AND c.status = '1'"
-		);
+	public function getCollections($data = array(), $total = false) {
+		if($total){
+			$select = 'COUNT(*) as total';
+		}
+		else{
+			$select = '*';
+		}
+		
+		$tables = " LEFT JOIN " . DB_PREFIX . "collection_store cs ON (c.collection_id = cs.collection_id)";
+		
+		$where = "WHERE cs.store_id = '" . (int)$this->config->get('config_store_id') . "'  AND c.status = '1'";
+		
+		if(isset($data['category_id'])){
+			$tables .= " LEFT JOIN " . DB_PREFIX . "collection_category cc ON (c.collection_id=cc.collection_id)";
+			
+			$where .= " AND cc.category_id='" . (int)$data['category_id'] . "'";
+		}
+		
+		//ORDER BY and LIMIT
+		$order_by = '';
+		$limit = '';
+		
+		if(!$total){
+			if(!empty($data['sort'])){
+				$order = (!empty($data['order']) && $data['order'] == 'DESC') ? 'DESC' : 'ASC';
+				
+				$order_by = "ORDER BY $data[sort] $order";
+			}
+			
+			$start = !empty($data['start']) ? (int)$data['start'] : 0;
+			$limit = !empty($data['limit']) ? (int)$data['limit'] : $this->config->get('config_catalog_limit');
+			
+			$limit = "LIMIT $start,$limit";
+		}
+		
+		$query = "SELECT $select FROM " . DB_PREFIX . "collection c $tables $where $order_by $limit";
+		
+		$result = $this->query($query);
+		
+		if($total){
+			return $result->row['total'];
+		}
 		
 		return $result->rows;
 	}
@@ -26,8 +63,9 @@ class ModelCatalogCollection extends Model {
 		$store_id = $this->config->get('config_store_id');
 		
 		$query = $this->query(
-			"SELECT c.* FROM " . DB_PREFIX . "collection c " .
+			"SELECT c.*, cc.category_id FROM " . DB_PREFIX . "collection c " .
 			"LEFT JOIN " . DB_PREFIX . "collection_store cs ON (c.collection_id=cs.collection_id) " .
+			"LEFT JOIN " . DB_PREFIX . "collection_category cc ON (c.collection_id=cc.collection_id) " .
 			"LEFT JOIN " . DB_PREFIX . "collection_product cp ON (c.collection_id=cp.collection_id) " . 
 			"WHERE cs.store_id='$store_id' AND cp.product_id='" . (int)$product_id . "' LIMIT 1"
 		);
@@ -76,10 +114,8 @@ class ModelCatalogCollection extends Model {
 		return $result->rows;
 	}
 	
-	public function getTotalCollections(){
-		$query = $this->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . "collection");
-		
-		return $query->row['total'];
+	public function getTotalCollections($data = array()){
+		return $this->getCollections($data, true);
 	}
 	
 	public function getTotalCollectionProducts($collection_id, $data = array()){

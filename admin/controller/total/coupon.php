@@ -3,7 +3,7 @@ class ControllerTotalCoupon extends Controller {
 	 
 	 
 	public function index() { 
-$this->template->load('total/coupon');
+		$this->template->load('total/coupon');
 
 		$this->load->language('total/coupon');
 

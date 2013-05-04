@@ -3,7 +3,7 @@ class ControllerShippingCitylink extends Controller {
 	 
 	
 	public function index() {   
-$this->template->load('shipping/citylink');
+		$this->template->load('shipping/citylink');
 
 		$this->load->language('shipping/citylink');
 

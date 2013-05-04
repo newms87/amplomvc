@@ -1,7 +1,7 @@
 <?php  
 class ControllerModuleMainSidebar extends Controller {
 	protected function index() {
-$this->template->load('error/not_found');
+		$this->template->load('error/not_found');
 
 		$this->language->load('module/main_sidebar');
 		

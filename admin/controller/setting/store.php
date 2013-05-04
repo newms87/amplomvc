@@ -67,7 +67,7 @@ class ControllerSettingStore extends Controller {
   	}
 	
 	private function getList() {
-$this->template->load('setting/store_list');
+		$this->template->load('setting/store_list');
 
 	   $url = $this->get_url(array('page'));
       

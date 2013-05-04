@@ -1,7 +1,7 @@
 <?php
 class ControllerModuleDesignerDisplay extends Controller {
 	protected function index($setting) {
-$this->template->load('module/designer_display');
+		$this->template->load('module/designer_display');
 
 		$this->language->load('module/designer_display'); 
 

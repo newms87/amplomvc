@@ -1,7 +1,7 @@
 <?php
 class ControllerPaymentAlertPay extends Controller {
 	protected function index() {
-$this->template->load('payment/alertpay');
+		$this->template->load('payment/alertpay');
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 		

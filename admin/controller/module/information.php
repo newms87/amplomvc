@@ -3,7 +3,7 @@ class ControllerModuleInformation extends Controller {
 	 
 	
 	public function index() {   
-$this->template->load('module/information');
+		$this->template->load('module/information');
 
 		$this->load->language('module/information');
 

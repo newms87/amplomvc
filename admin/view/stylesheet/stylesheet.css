@@ -469,13 +469,17 @@ a.button.designer{
 }
 
 .list .column_title{
-	font-size: 20px;
+	font-size: 17px;
 	font-weight:bold;
+}
+.list .column_title > a{
+	position: relative;
+	top:-5px;
 }
 
 .list .sortable:after{
 	position:relative;
-	top: 5px;
+	top: 7px;
 	padding-left:10px;
 	height: 24px;
 	width: 17px;

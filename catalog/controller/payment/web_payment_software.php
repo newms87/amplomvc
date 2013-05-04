@@ -1,7 +1,7 @@
 <?php
 class ControllerPaymentWebPaymentSoftware extends Controller {
 	protected function index() {
-$this->template->load('payment/web_payment_software');
+		$this->template->load('payment/web_payment_software');
 
 		$this->language->load('payment/web_payment_software');
 		

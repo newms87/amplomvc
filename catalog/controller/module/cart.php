@@ -1,7 +1,7 @@
 <?php 
 class ControllerModuleCart extends Controller {
 	public function index() {
-$this->template->load('module/cart');
+		$this->template->load('module/cart');
 
 		$this->language->load('module/cart');
 		

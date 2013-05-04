@@ -3,7 +3,7 @@ class ControllerAffiliateForgotten extends Controller {
 	
 
 	public function index() {
-$this->template->load('affiliate/forgotten');
+		$this->template->load('affiliate/forgotten');
 
 		if ($this->affiliate->isLogged()) {
 			$this->redirect($this->url->link('affiliate/account'));

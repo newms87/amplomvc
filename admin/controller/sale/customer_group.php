@@ -103,7 +103,7 @@ class ControllerSaleCustomerGroup extends Controller {
 	}
 
 	private function getList() {
-$this->template->load('sale/customer_group_list');
+		$this->template->load('sale/customer_group_list');
 
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
@@ -231,7 +231,7 @@ $this->template->load('sale/customer_group_list');
  	}
 
 	private function getForm() {
-$this->template->load('sale/customer_group_form');
+		$this->template->load('sale/customer_group_form');
 
  		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];

@@ -2,7 +2,7 @@
 class ControllerAccountReturn extends Controller { 
 	
 	public function index() {
-$this->template->load('account/return_list');
+		$this->template->load('account/return_list');
 
     	if (!$this->customer->isLogged()) {
       		$this->session->data['redirect'] = $this->url->link('account/return');
@@ -90,7 +90,7 @@ $this->template->load('account/return_list');
 		$return_info = $this->model_account_return->getReturn($return_id);
 		
 		if ($return_info) {
-$this->template->load('account/return_info');
+		$this->template->load('account/return_info');
 
 			$this->document->setTitle($this->_('text_return'));
          
@@ -152,7 +152,7 @@ $this->template->load('account/return_info');
 									
 			$this->response->setOutput($this->render());		
 		} else {
-$this->template->load('error/not_found');
+		$this->template->load('error/not_found');
 
 			$this->document->setTitle($this->_('text_return'));
          
@@ -187,7 +187,7 @@ $this->template->load('error/not_found');
 	}
 		
 	public function insert() {
-$this->template->load('account/return_form');
+		$this->template->load('account/return_form');
 
 	   $order_id = isset($_GET['order_id'])?$_GET['order_id']:0;
 		$this->language->load('account/return');
@@ -275,7 +275,7 @@ $this->template->load('account/return_form');
   	}
 	
   	public function success() {
-$this->template->load('common/success');
+		$this->template->load('common/success');
 
 		$this->language->load('account/return');
 

@@ -3,7 +3,7 @@ class ControllerModuleRssArticle extends Controller {
 	 
 	
 	public function index() {   
-$this->template->load('module/rss_article');
+		$this->template->load('module/rss_article');
 
 		$this->load->language('module/rss_article');
 

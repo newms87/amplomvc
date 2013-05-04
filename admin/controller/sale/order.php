@@ -175,7 +175,7 @@ class ControllerSaleOrder extends Controller {
   	}
 
   	private function getList() {
-$this->template->load('sale/order_list');
+		$this->template->load('sale/order_list');
   	   
       $query_defaults = array(
          'filter_order_id'        => null,
@@ -362,7 +362,7 @@ $this->template->load('sale/order_list');
   	}
 
   	public function getForm() {
-$this->template->load('sale/order_form');
+		$this->template->load('sale/order_form');
 
 		if (isset($_GET['order_id'])) {
 			$this->data['order_id'] = $_GET['order_id'];
@@ -918,7 +918,7 @@ $this->template->load('sale/order_form');
 		$order_info = $this->model_sale_order->getOrder($order_id);
 
 		if ($order_info) {
-$this->template->load('sale/order_info');
+		$this->template->load('sale/order_info');
 			$this->load->language('sale/order');
 
 			$this->document->setTitle($this->_('heading_title'));
@@ -1322,7 +1322,7 @@ $this->template->load('sale/order_info');
 			
 			$this->response->setOutput($this->render());
 		} else {
-$this->template->load('error/not_found');
+		$this->template->load('error/not_found');
 			$this->load->language('error/not_found');
 
 			$this->document->setTitle($this->_('heading_title'));
@@ -1508,7 +1508,7 @@ $this->template->load('error/not_found');
   	}
 
 	public function history() {
-$this->template->load('sale/order_history');
+		$this->template->load('sale/order_history');
 
     	$this->language->load('sale/order');
 		
@@ -1589,7 +1589,7 @@ $this->template->load('sale/order_history');
 				exit('Error: Headers already sent out!');
 			}
 		} else {
-$this->template->load('error/not_found');
+		$this->template->load('error/not_found');
 
 			$this->load->language('error/not_found');
 
@@ -1656,7 +1656,7 @@ $this->template->load('error/not_found');
 	}
 			
   	public function invoice() {
-$this->template->load('sale/order_invoice');
+		$this->template->load('sale/order_invoice');
 
 		$this->load->language('sale/order');
 

@@ -89,7 +89,7 @@ class ControllerCatalogFlashsale extends Controller {
    }
 
    private function getList() {
-$this->template->load('catalog/flashsale_list');
+		$this->template->load('catalog/flashsale_list');
 
       $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
       $this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/flashsale'));

@@ -2,7 +2,7 @@
 class ControllerExtensionPlugin extends Controller {
    
 	public function index() {
-$this->template->load('extension/plugin');
+		$this->template->load('extension/plugin');
 
 	   $this->load->language('extension/plugin');
 		 
@@ -57,7 +57,7 @@ $this->template->load('extension/plugin');
 	}
 	
    public function form(){
-$this->template->load('extension/plugin_form');
+		$this->template->load('extension/plugin_form');
 
       $this->load->language('extension/plugin');
       

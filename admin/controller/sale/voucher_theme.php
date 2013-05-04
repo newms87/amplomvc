@@ -103,7 +103,7 @@ class ControllerSaleVoucherTheme extends Controller {
   	}
     
   	private function getList() {
-$this->template->load('sale/voucher_theme_list');
+		$this->template->load('sale/voucher_theme_list');
 
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
@@ -231,7 +231,7 @@ $this->template->load('sale/voucher_theme_list');
   	}
   
   	private function getForm() {
-$this->template->load('sale/voucher_theme_form');
+		$this->template->load('sale/voucher_theme_form');
 		
 		$this->document->addScript("image_manager.js");
 		

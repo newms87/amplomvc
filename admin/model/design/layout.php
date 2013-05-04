@@ -12,40 +12,6 @@ class ModelDesignLayout extends Model {
 		}
 	}
 	
-	public function add_new_layout($name, $routes = array(), $data = array()){
-		if(!is_array($routes)){
-			$routes = array($routes);
-		}
-		
-		$query = $this->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . "layout WHERE name='$name'");
-		
-		if($query->row['total']){
-			$this->message->add("warning", "Error while adding $name to layout! Duplicate name exists!");
-			return false;
-		}
-		
-		$layout = array(
-			'name' => $name,
-		);
-		
-		$layout += $data;
-		
-		if(!empty($routes)){
-			$stores = $this->model_setting_store->getStores();
-			
-			foreach($stores as $store){
-				foreach($routes as $route){
-					$layout['layout_route'][] = array(
-						'store_id' => $store['store_id'],
-						'route' => $route 
-					);
-				}
-			}
-		}
-		
-		$this->addLayout($layout);
-	}
-	
 	public function editLayout($layout_id, $data) {
 		$this->query("UPDATE " . DB_PREFIX . "layout SET name = '" . $this->db->escape($data['name']) . "' WHERE layout_id = '" . (int)$layout_id . "'");
 		
@@ -95,14 +61,6 @@ class ModelDesignLayout extends Model {
 		$this->query("DELETE FROM " . DB_PREFIX . "category_to_layout WHERE layout_id = '" . (int)$layout_id . "'");
 		$this->query("DELETE FROM " . DB_PREFIX . "product_to_layout WHERE layout_id = '" . (int)$layout_id . "'");
 		$this->query("DELETE FROM " . DB_PREFIX . "information_to_layout WHERE layout_id = '" . (int)$layout_id . "'");		
-	}
-	
-	public function delete_layout_by_name($name){
-		$query = $this->query("SELECT layout_id FROM " . DB_PREFIX . "layout WHERE name='" . $this->db->escape($name) . "' LIMIT 1");
-		
-		if($query->num_rows){
-			$this->deleteLayout($query->row['layout_id']);
-		}
 	}
 	
 	public function getLayout($layout_id) {

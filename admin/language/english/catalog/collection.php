@@ -27,6 +27,7 @@ $_['entry_meta_description']        = 'Meta Description:<span class="help">This 
 $_['entry_product']       = 'Products:';
 $_['entry_store']       = 'Stores:';
 $_['entry_status']       = 'Status:';
+$_['entry_sort_order']       = 'Sort Order:';
 
 // Error
 $_['error_permission']  = 'Warning: You do not have permission to modify Collections!';

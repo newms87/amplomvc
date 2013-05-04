@@ -3,7 +3,7 @@ class ControllerModuleAffiliate extends Controller {
 	 
 	
 	public function index() {   
-$this->template->load('module/affiliate');
+		$this->template->load('module/affiliate');
 
 		$this->load->language('module/affiliate');
 

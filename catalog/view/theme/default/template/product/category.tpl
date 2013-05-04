@@ -17,7 +17,7 @@
   <div class="product-filter">
     <div class="display">
     	<span><?= $text_display; ?></span>
-    	<?= $text_grid;?> <b>/</b> <a onclick="display('list');"><?= $text_list; ?></a>
+    	<a onclick="display('list');"><?= $text_list; ?></a> <b>/</b> <?= $text_grid;?>
     </div>
     <div class="limit">
     	<span><?= $text_limit; ?></span>

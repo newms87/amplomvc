@@ -2,7 +2,7 @@
 class ControllerCartBlockVoucher extends Controller{
    
    public function index($settings = null){
-$this->template->load('cart/block/voucher');
+		$this->template->load('cart/block/voucher');
 
       $this->language->load('cart/block/shipping');
       

@@ -230,7 +230,7 @@ class ControllerDesignLayout extends Controller {
 	}
 
 	private function getForm() {
-$this->template->load('design/layout_form');
+		$this->template->load('design/layout_form');
 
 		$this->data['languages'] = $this->model_localisation_language->getLanguages();
 		if (isset($this->error['warning'])) {

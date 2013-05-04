@@ -1,7 +1,7 @@
 <?php 
 class ControllerPaymentPaymate extends Controller {
 	protected function index() {
-$this->template->load('payment/paymate');
+		$this->template->load('payment/paymate');
 
 		if (!$this->config->get('paymate_test')) {
 			$this->data['action'] = 'https://www.paymate.com/PayMate/ExpressPayment';
@@ -66,7 +66,7 @@ $this->template->load('payment/paymate');
 		}	
       
 		if ($error) {
-$this->template->load('common/success');
+		$this->template->load('common/success');
 
 				$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 				$this->breadcrumb->add($this->_('text_basket'), $this->url->link('cart/cart'));

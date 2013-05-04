@@ -103,7 +103,7 @@ class ControllerSaleVoucher extends Controller {
   	}
 
   	private function getList() {
-$this->template->load('sale/voucher_list');
+		$this->template->load('sale/voucher_list');
 
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
@@ -243,7 +243,7 @@ $this->template->load('sale/voucher_list');
   	}
 
   	private function getForm() {
-$this->template->load('sale/voucher_form');
+		$this->template->load('sale/voucher_form');
 
 		if (isset($_GET['voucher_id'])) {
 			$this->data['voucher_id'] = $_GET['voucher_id'];
@@ -473,7 +473,7 @@ $this->template->load('sale/voucher_form');
   	}	
 	
 	public function history() {
-$this->template->load('sale/voucher_history');
+		$this->template->load('sale/voucher_history');
     	$this->language->load('sale/voucher');
 		
 		if (isset($_GET['page'])) {

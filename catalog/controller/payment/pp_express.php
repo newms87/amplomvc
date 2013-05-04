@@ -1,7 +1,7 @@
 <?php
 class ControllerPaymentPPExpress extends Controller {
 	protected function index() {
-$this->template->load('payment/pp_express');
+		$this->template->load('payment/pp_express');
 
 		if (!$this->config->get('pp_express_test')) {
     		$this->data['action'] = 'https://www.pp_express.com/cgi-bin/webscr';

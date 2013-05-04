@@ -1,7 +1,7 @@
 <?php 
 class ControllerAccountLogout extends Controller {
 	public function index() {
-$this->template->load('common/success');
+		$this->template->load('common/success');
 
     	if ($this->customer->isLogged()) {
       		$this->customer->logout();

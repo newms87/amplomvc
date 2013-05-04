@@ -1,7 +1,7 @@
 <?php  
 class ControllerModuleCurrency extends Controller {
 	protected function index() {
-$this->template->load('module/currency');
+		$this->template->load('module/currency');
 
 		if (isset($_POST['currency_code'])) {
       		$this->currency->set($_POST['currency_code']);

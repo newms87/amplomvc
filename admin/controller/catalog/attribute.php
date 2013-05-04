@@ -103,7 +103,7 @@ class ControllerCatalogAttribute extends Controller {
   	}
     
   	private function getList() {
-$this->template->load('catalog/attribute_list');
+		$this->template->load('catalog/attribute_list');
 
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
@@ -235,7 +235,7 @@ $this->template->load('catalog/attribute_list');
   	}
   
   	private function getForm() {
-$this->template->load('catalog/attribute_form');
+		$this->template->load('catalog/attribute_form');
 
  		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];

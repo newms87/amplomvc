@@ -3,7 +3,7 @@ class ControllerTotalShipping extends Controller {
 	 
 	 
 	public function index() { 
-$this->template->load('total/shipping');
+		$this->template->load('total/shipping');
 
 		$this->load->language('total/shipping');
 

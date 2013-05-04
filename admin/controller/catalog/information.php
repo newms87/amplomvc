@@ -103,7 +103,7 @@ class ControllerCatalogInformation extends Controller {
 	}
 
 	private function getList() {
-$this->template->load('catalog/information_list');
+		$this->template->load('catalog/information_list');
 
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
@@ -233,7 +233,7 @@ $this->template->load('catalog/information_list');
 	}
 
 	private function getForm() {
-$this->template->load('catalog/information_form');
+		$this->template->load('catalog/information_form');
 
 		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];

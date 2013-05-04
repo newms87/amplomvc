@@ -1,7 +1,7 @@
 <?php 
 class ControllerAffiliateLogout extends Controller {
 	public function index() {
-$this->template->load('common/success');
+		$this->template->load('common/success');
 
     	if ($this->affiliate->isLogged()) {
       		$this->affiliate->logout();

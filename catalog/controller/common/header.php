@@ -1,7 +1,7 @@
 <?php   
 class ControllerCommonHeader extends Controller {
 	protected function index() {
-$this->template->load('common/header');
+		$this->template->load('common/header');
 
 	   
 	   if($this->config->get('config_debug') && isset($_SESSION['debug'])){

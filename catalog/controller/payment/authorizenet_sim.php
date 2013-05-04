@@ -1,7 +1,7 @@
 <?php
 class ControllerPaymentAuthorizeNetSim extends Controller {
 	protected function index() {
-$this->template->load('payment/authorizenet_sim_index');
+		$this->template->load('payment/authorizenet_sim_index');
 
 		$this->data['action'] = $this->config->get('authorizenet_sim_url');
 		
@@ -169,7 +169,7 @@ $this->template->load('payment/authorizenet_sim_index');
 	}
 	
 	public function callback() {
-$this->template->load('payment/authorizenet_sim_callback');
+		$this->template->load('payment/authorizenet_sim_callback');
 
 		//Transaction_Approved
 		$details =& $_POST;

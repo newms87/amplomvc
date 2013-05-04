@@ -1,7 +1,7 @@
 <?php  
 class ControllerInformationSitemap extends Controller {
 	public function index() {
-$this->template->load('information/sitemap');
+		$this->template->load('information/sitemap');
 
     	$this->language->load('information/sitemap');
  

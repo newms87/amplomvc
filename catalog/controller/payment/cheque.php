@@ -1,7 +1,7 @@
 <?php
 class ControllerPaymentCheque extends Controller {
 	protected function index() {
-$this->template->load('payment/cheque');
+		$this->template->load('payment/cheque');
 
 		$this->language->load('payment/cheque');
 		

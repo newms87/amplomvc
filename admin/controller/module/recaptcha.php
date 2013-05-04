@@ -3,7 +3,7 @@ class ControllerModuleRecaptcha extends Controller {
 	 
 
 	public function index() {   
-$this->template->load('module/recaptcha');
+		$this->template->load('module/recaptcha');
 
 		$this->load->language('module/recaptcha');
 

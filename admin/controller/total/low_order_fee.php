@@ -3,7 +3,7 @@ class ControllerTotalLowOrderFee extends Controller {
 	 
 	 
 	public function index() { 
-$this->template->load('total/low_order_fee');
+		$this->template->load('total/low_order_fee');
 
 		$this->load->language('total/low_order_fee');
 

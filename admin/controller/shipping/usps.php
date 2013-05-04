@@ -3,7 +3,7 @@ class ControllerShippingUsps extends Controller {
 	
 
 	public function index() {
-$this->template->load('shipping/usps');
+		$this->template->load('shipping/usps');
 
 		$this->load->language('shipping/usps');
 

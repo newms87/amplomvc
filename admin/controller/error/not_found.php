@@ -1,7 +1,7 @@
 <?php    
 class ControllerErrorNotFound extends Controller {    
 	public function index() { 
-$this->template->load('error/not_found');
+		$this->template->load('error/not_found');
 
     	$this->load->language('error/not_found');
  
