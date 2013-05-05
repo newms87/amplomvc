@@ -78,7 +78,7 @@
 								<? $max_link = max($max_link, $link_num);?>
 								<li link_id='<?=$link_num;?>' parent_id="<?=$link['parent_id'];?>">
 									<div class="link_info">
-										<div class="link_name"><span class="display_name"><?= $link['name'];?></span><span class="show_link_edit" onclick="toggle_edit_link($(this))"><span class="edit_text"><?= $text_edit_link;?></span><img class="remove_link" src="view/image/delete.png" onclick="$(this).closest('li').remove();"/></span></div>
+										<div class="link_name"><span class="display_name"><?= $link['display_name'];?></span><span class="show_link_edit" onclick="toggle_edit_link($(this))"><span class="edit_text"><?= $text_edit_link;?></span><img class="remove_link" src="view/image/delete.png" onclick="$(this).closest('li').remove();"/></span></div>
 										<div class="editable" style="display:none">
 											<input type="hidden" class="parent_id" name="links[<?= $link_num;?>][parent_id]" value="0" />
 											<div class="link_entry_display_name">

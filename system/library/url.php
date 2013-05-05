@@ -211,7 +211,7 @@ class Url {
    public function site($uri='', $query='', $base_site=false){
       return ($base_site ? SITE_URL : $this->url) . $uri . (!empty($query)?"?$query":'');
    }
-   
+	
    public function store($store_id, $uri='', $query=''){
       $link = $this->ssl ? 'ssl' : 'url';
       

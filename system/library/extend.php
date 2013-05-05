@@ -10,9 +10,8 @@ class Extend {
 		return $this->registry->get($key);
 	}
 	
-	public function add_navigation_link($link, $group = 'admin'){
+	public function add_navigation_link($link, $parent = '', $group = 'admin'){
 		$defaults = array(
-			'display' => '',
 			'title' => '',
 			'href' => '',
 			'query' => '',
@@ -28,13 +27,31 @@ class Extend {
 			}
 		}
 		
-		$link['name'] = $this->tool->get_slug($link['name']);
+		if(empty($link['display_name'])){
+			$this->message->add("warning", "Extend::add_navigation_link(): You must specify the display_name when adding a new navigation link!");
+			
+			return false;
+		}
+		
+		if(!$link['name']){
+			$link['name'] = $this->tool->get_slug($link['display_name']);
+		}
+		
+		if(!$link['parent_id'] && $parent){
+			$result = $this->db->query("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE name ='" . $this->db->escape($parent) . "'");
+			
+			if($result->num_rows){
+				$link['parent_id'] = $result->row['navigation_id'];
+			}
+		}
 		
 		$result = $this->db->query("SELECT navigation_group_id FROM " . DB_PREFIX . "navigation_group WHERE name = '" . $this->db->escape($group) . "'");
 		
 		if($result->num_rows){
 			$this->model_design_navigation->addNavigationLink($result->row['navigation_group_id'], $link);
 		}
+		
+		return true;
 	}
 	
 	public function remove_navigation_link($name){

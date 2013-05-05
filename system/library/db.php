@@ -33,6 +33,18 @@ class DB {
 		return $resource;
   	}
 	
+	public function get_tables(){
+		$result = $this->driver->query("SHOW TABLES");
+		
+		$tables = array();
+		
+		foreach($result->rows as $row){
+			$tables[current($row)] = current($row);
+		}
+		
+		return $tables;
+	}
+	
    private function has_column($table, $column){
       $query = $this->driver->query("SHOW COLUMNS FROM " . DB_PREFIX . "$table");
       foreach($query->rows as $row){

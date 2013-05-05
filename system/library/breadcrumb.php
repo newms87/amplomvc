@@ -12,21 +12,24 @@ class Breadcrumb {
       }
    }
    
-   public function add($text, $href, $separator = ''){
-      if(!empty($this->crumbs)){
-         if(!$separator){
-            $separator = $this->default_separator;
-         }
-      }
-      else{
-         $separator = '';
+   public function add($text, $href, $separator = '', $position = null){
+      
+      if(!$separator){
+         $separator = $this->default_separator;
       }
       
-      $this->crumbs[] = array(
-         'text' => $text,
-         'href' => $href,
-         'separator' => $separator
-        );
+		$crumb = array(
+			'text' => $text,
+			'href' => $href,
+			'separator' => $separator
+		);
+		
+		if($position !== null && !empty($this->crumbs)){
+			array_splice($this->crumbs, $position, 0, array($crumb));
+		}
+		else{
+      	$this->crumbs[] = $crumb;
+		}
    }
    
    public function get(){

@@ -1,0 +1,9 @@
+.dev_console_item{
+	display:block;
+	float:left;
+	margin: 20px;
+}
+
+.dev_console_item .image{
+	border:none;
+}

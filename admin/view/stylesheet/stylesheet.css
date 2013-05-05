@@ -1100,7 +1100,10 @@ ul#designer_list a{
 
 td label{
 	margin-right:10px;
-	margin-left:20px;
+}
+
+td + td label{
+	margin-left: 20px;
 }
 
 td input+label{

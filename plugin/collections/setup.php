@@ -4,6 +4,7 @@ class SetupCollections extends SetupPlugin {
 		parent::__construct($registry);
 		
 		define("COLLECTION_LAYOUT_NAME", "Collections");
+		define("COLLECTION_NAVIGATION_LINK_NAME", "catalog_collection");
 	}
 	
    public function install(&$controller_adapters, &$db_requests){
@@ -65,6 +66,17 @@ SQL;
    	
    	$this->db->query($sql);
 		
+		//Add Collections Navigation
+		$link = array(
+			'display_name' => "Collections",
+			'name' => COLLECTION_NAVIGATION_LINK_NAME,
+			'href' => 'catalog/collection',
+			'is_route' => 1,
+			'sort_order' => 4,
+		);
+		
+		$this->extend->add_navigation_link($link, 'catalog', 'admin');
+		
 		//Add Collections Layout
 		$this->extend->add_layout(COLLECTION_LAYOUT_NAME, 'product/collection');
 		
@@ -74,6 +86,9 @@ SQL;
    
    public function uninstall($keep_data = false){
    	$keep_data = true;
+		
+		//Remove Collections Navigation
+		$this->extend->remove_navigation_link(COLLECTION_NAVIGATION_LINK_NAME);
 		
 		//disable image sorting for 'collection' table
 		$this->extend->disable_image_sorting('collection', 'image');

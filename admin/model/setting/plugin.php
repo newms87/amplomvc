@@ -180,7 +180,9 @@ class ModelSettingPlugin extends Model {
 	public function integrate_new_files($name){
 		$dir = DIR_PLUGIN . $name . '/new_files/';
 		
-		$files = $this->tool->get_files_r($dir);
+		$file_types = array('php', 'tpl', 'js', 'css', 'png', 'jpg', 'gif');
+		
+		$files = $this->tool->get_files_r($dir, $file_types);
 		
 		foreach($files as $file){
 			if(!$this->plugin_handler->activate_plugin_file($name, $file)){

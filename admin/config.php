@@ -20,6 +20,7 @@ define("IS_ADMIN",true);
 define('HTTP_SERVER', SITE_URL . 'admin/');
 define('HTTP_CATALOG', SITE_URL);
 define('HTTP_IMAGE', HTTP_CATALOG . 'image/');
+define('HTTP_STYLES', SITE_URL . 'admin/view/stylesheet/');
 
 // HTTPS
 define('HTTPS_SERVER', HTTP_SERVER);

@@ -48,8 +48,8 @@ class Builder extends Controller{
             $attr_list .= "title=\"$link[title]\"";
          }
          
-         if(empty($link['display'])){
-         	$link['display'] = $link['name'];
+         if(empty($link['display_name'])){
+         	$link['display_name'] = $link['name'];
 			}
 			
 			$children = '';
@@ -69,7 +69,7 @@ class Builder extends Controller{
 				$href = "href=\"$link[href]\"";
 			}
 			
-         $html .= "<li $sub_class style=\"z-index:$zindex\"><a $href $attr_list>$link[display]</a>$children</li>";
+         $html .= "<li $sub_class style=\"z-index:$zindex\"><a $href $attr_list>$link[display_name]</a>$children</li>";
 			
 			$zindex--;
       }
@@ -81,8 +81,8 @@ class Builder extends Controller{
    
    public function display_breadcrumbs(){
       $html = "";
-      foreach ($this->breadcrumb->get() as $crumb){
-        $html .= $crumb['separator'] . "<a href='$crumb[href]'>$crumb[text]</a>";
+      foreach ($this->breadcrumb->get() as $key => $crumb){
+        $html .= ($key > 0 ? $crumb['separator'] : '') . "<a href='$crumb[href]'>$crumb[text]</a>";
       }
       
       return "<div class='breadcrumb'>$html</div>";

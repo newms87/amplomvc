@@ -1,42 +1,7 @@
 <?php 
 class ControllerDesignNavigation extends Controller {
 	
-	public function display_links($links, $parent = '', $depth = 2){
-		$tab1 = str_repeat("\t", $depth);
-		$tab = str_repeat("\t", $depth+1);
-		$html = '';
-		
-		foreach($links as $key => $link){
-			$link['name'] = $parent . $link['name'];
-			
-			$html .= $tab1 . "'$link[name]' => array(\r\n";
-			$html .= $tab . "'display_name'\t=> '" . $link['display_name'] . "',\r\n";
-			$html .= $tab . "'name'\t\t\t=> '" . $link['name'] . "',\r\n";
-			$html .= $tab . "'title'\t\t\t=> '',\r\n";
-			$html .= $tab . "'href'\t\t\t=> '" . $link['href'] . "',\r\n";
-			$html .= $tab . "'query'\t\t\t=> '" . $link['query'] . "',\r\n";
-			$html .= $tab . "'is_route'\t\t=> " . $link['is_route'] . ",\r\n";
-			$html .= $tab . "'parent_id'\t\t=> '" . $parent . "',\r\n";
-			$html .= $tab . "'sort_order'\t=> " . $link['sort_order'] . ",\r\n";
-			$html .= $tab . "'status'\t\t\t=> " . $link['status'] . ",\r\n";
-			
-			$html .= $tab1 . "),\r\n\r\n";
-			
-			if(!empty($link['children'])){
-				$html .= $this->display_links($link['children'], $link['name'], $depth+1);
-			}
-		}
-		
-		return $html;
-	}
-	
 	public function index() {
-		$links = $this->model_design_navigation->getNavigationLinks();
-		html_dump($links['admin'],'links');
-		$html = $this->display_links($links['admin']);
-		
-		file_put_contents(SITE_DIR . 'admin_text.txt', $html);
-		 
 		$this->load->language('design/navigation');
 
 		$this->document->setTitle($this->_('heading_title'));

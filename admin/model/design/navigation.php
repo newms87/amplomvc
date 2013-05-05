@@ -17,10 +17,12 @@ class ModelDesignNavigation extends Model {
 		$parent = array();
 		$sort_index = 0;
 		
-		html_dump($data['links'], 'links');
 		foreach($data['links'] as $link_id => $link){
 			$link['navigation_group_id'] = $navigation_group_id;
-			$link['sort_order'] = $sort_index++;
+			
+			if(empty($link['sort_order'])){
+				$link['sort_order'] = $sort_index++;
+			}
 			
 			if($link['parent_id']){
 				if(!isset($parent[$link['parent_id']])){
@@ -70,7 +72,10 @@ class ModelDesignNavigation extends Model {
 			
 			foreach($data['links'] as $link_id => $link){
 				$link['navigation_group_id'] = $navigation_group_id;
-				$link['sort_order'] = $sort_index++;
+				
+				if(empty($link['sort_order'])){
+					$link['sort_order'] = $sort_index++;
+				}
 
 				if($link['parent_id']){
 					if(!isset($parent[$link['parent_id']])){
@@ -192,7 +197,13 @@ class ModelDesignNavigation extends Model {
 				$parent_ref = array();
 				
 				foreach($nav_group_links as $key => &$link){
-					$link['children'] = array();
+					if(!empty($parent_ref[$link['navigation_id']]['children'])){
+						$link['children'] = &$parent_ref[$link['navigation_id']]['children'];
+					}
+					else{
+						$link['children'] = array();
+					}
+					
 					$parent_ref[$link['navigation_id']] = &$link;
 					
 					if($link['parent_id']){
@@ -211,9 +222,9 @@ class ModelDesignNavigation extends Model {
 	}
 	
 	public function getNavigationGroupLinks($navigation_group_id){
-		$query = $this->get("navigation", '*', array("navigation_group_id" => $navigation_group_id));
+		$result = $this->query("SELECT * FROM " . DB_PREFIX . "navigation WHERE navigation_group_id = '" . (int)$navigation_group_id . "' ORDER BY sort_order ASC");
 		
-		return $query->rows;
+		return $result->rows;
 	}
 	
 	public function getNavigationGroupStores($navigation_group_id){
@@ -235,1214 +246,1202 @@ class ModelDesignNavigation extends Model {
 	public function reset_admin_navigation_group(){
 		$links = array(
 			'home' => array(
-				'display_name'	=> '',
+				'display_name'	=> 'Home',
 				'name'			=> 'home',
 				'title'			=> '',
 				'href'			=> 'common/home',
 				'query'			=> '',
 				'is_route'		=> 1,
-				'parent_id'		=> '0',
-				'sort_order'	=> 1,
+				'parent_id'		=> '',
+				'sort_order'	=> 0,
 				'status'			=> 1,
 			),
 	
 			'magazine_content' => array(
-				'display_name'	=> '',
+				'display_name'	=> 'Magazine Content',
 				'name'			=> 'magazine_content',
 				'title'			=> '',
 				'href'			=> '',
 				'query'			=> '',
 				'is_route'		=> 0,
-				'parent_id'		=> '0',
-				'sort_order'	=> 2,
+				'parent_id'		=> '',
+				'sort_order'	=> 1,
 				'status'			=> 1,
 			),
 	
-				'articles' => array(
-					'display_name'	=> '',
-					'name'			=> 'articles',
+				'magazine_content_articles' => array(
+					'display_name'	=> 'Articles',
+					'name'			=> 'magazine_content_articles',
 					'title'			=> '',
 					'href'			=> 'cms/article',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'magazine_content',
-					'sort_order'	=> 3,
+					'sort_order'	=> 0,
 					'status'			=> 1,
 				),
 	
-				'rss_articles' => array(
-					'display_name'	=> '',
-					'name'			=> 'rss_articles',
+				'magazine_content_rss_articles' => array(
+					'display_name'	=> 'RSS Articles',
+					'name'			=> 'magazine_content_rss_articles',
 					'title'			=> '',
 					'href'			=> 'module/rss_article',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'magazine_content',
-					'sort_order'	=> 4,
+					'sort_order'	=> 1,
 					'status'			=> 1,
 				),
 	
-				'categories' => array(
-					'display_name'	=> '',
-					'name'			=> 'categories',
+				'magazine_content_categories' => array(
+					'display_name'	=> 'Categories',
+					'name'			=> 'magazine_content_categories',
 					'title'			=> '',
 					'href'			=> 'cms/category',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'magazine_content',
-					'sort_order'	=> 5,
+					'sort_order'	=> 2,
 					'status'			=> 1,
 				),
 	
 			'flashsales' => array(
-				'display_name'	=> '',
+				'display_name'	=> 'Flashsales',
 				'name'			=> 'flashsales',
 				'title'			=> '',
 				'href'			=> '',
 				'query'			=> '',
 				'is_route'		=> 0,
-				'parent_id'		=> '0',
-				'sort_order'	=> 6,
+				'parent_id'		=> '',
+				'sort_order'	=> 2,
 				'status'			=> 1,
 			),
 	
-				'new_flashsales' => array(
-					'display_name'	=> '',
-					'name'			=> 'new_flashsales',
+				'flashsales_new_flashsales' => array(
+					'display_name'	=> 'New Flashsales',
+					'name'			=> 'flashsales_new_flashsales',
 					'title'			=> '',
 					'href'			=> 'catalog/flashsale/insert',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'flashsales',
-					'sort_order'	=> 7,
+					'sort_order'	=> 0,
 					'status'			=> 1,
 				),
 	
-				'flashsales_link' => array(
-					'display_name'	=> '',
-					'name'			=> 'flashsales_link',
+				'flashsales_flashsales' => array(
+					'display_name'	=> 'Flashsales',
+					'name'			=> 'flashsales_flashsales',
 					'title'			=> '',
 					'href'			=> 'catalog/flashsale',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'flashsales',
-					'sort_order'	=> 8,
+					'sort_order'	=> 1,
 					'status'			=> 1,
 				),
 	
-				'featured_flashsales' => array(
-					'display_name'	=> '',
-					'name'			=> 'featured_flashsales',
+				'flashsales_featured_flashsales' => array(
+					'display_name'	=> 'Featured Flashsales',
+					'name'			=> 'flashsales_featured_flashsales',
 					'title'			=> '',
 					'href'			=> 'module/featured_flashsale',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'flashsales',
-					'sort_order'	=> 9,
+					'sort_order'	=> 2,
 					'status'			=> 1,
 				),
 	
-				'flashsale_sidebar' => array(
-					'display_name'	=> '',
-					'name'			=> 'flashsale_sidebar',
+				'flashsales_flashsale_sidebar' => array(
+					'display_name'	=> 'Flashsale Sidebar',
+					'name'			=> 'flashsales_flashsale_sidebar',
 					'title'			=> '',
 					'href'			=> 'module/flashsale_sidebar',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'flashsales',
-					'sort_order'	=> 10,
+					'sort_order'	=> 3,
 					'status'			=> 1,
 				),
 	
 			'content' => array(
-				'display_name'	=> '',
+				'display_name'	=> 'Content',
 				'name'			=> 'content',
 				'title'			=> '',
 				'href'			=> '',
 				'query'			=> '',
 				'is_route'		=> 0,
-				'parent_id'		=> '0',
-				'sort_order'	=> 11,
+				'parent_id'		=> '',
+				'sort_order'	=> 3,
 				'status'			=> 1,
 			),
 	
-				'blocks' => array(
-					'display_name'	=> '',
-					'name'			=> 'blocks',
+				'content_blocks' => array(
+					'display_name'	=> 'Blocks',
+					'name'			=> 'content_blocks',
 					'title'			=> '',
 					'href'			=> 'block/block',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'content',
-					'sort_order'	=> 12,
+					'sort_order'	=> 0,
 					'status'			=> 1,
 				),
 	
-				'featured_products' => array(
-					'display_name'	=> '',
-					'name'			=> 'featured_products',
+				'content_featured_products' => array(
+					'display_name'	=> 'Featured Products',
+					'name'			=> 'content_featured_products',
 					'title'			=> '',
 					'href'			=> 'module/featured',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'content',
-					'sort_order'	=> 13,
+					'sort_order'	=> 1,
 					'status'			=> 1,
 				),
 	
-				'leaderboard' => array(
-					'display_name'	=> '',
-					'name'			=> 'leaderboard',
+				'content_leaderboard' => array(
+					'display_name'	=> 'Leaderboard',
+					'name'			=> 'content_leaderboard',
 					'title'			=> '',
 					'href'			=> 'module/page_headers',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'content',
-					'sort_order'	=> 14,
+					'sort_order'	=> 2,
 					'status'			=> 1,
 				),
 	
-				'bestsellers_list' => array(
-					'display_name'	=> '',
-					'name'			=> 'bestsellers_list',
+				'content_bestsellers_list' => array(
+					'display_name'	=> 'Bestsellers List',
+					'name'			=> 'content_bestsellers_list',
 					'title'			=> '',
 					'href'			=> 'module/bestseller',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'content',
-					'sort_order'	=> 15,
+					'sort_order'	=> 3,
 					'status'			=> 1,
 				),
 	
-				'newsletter' => array(
-					'display_name'	=> '',
-					'name'			=> 'newsletter',
+				'content_newsletter' => array(
+					'display_name'	=> 'Newsletter',
+					'name'			=> 'content_newsletter',
 					'title'			=> '',
 					'href'			=> 'mail/newsletter',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'content',
-					'sort_order'	=> 16,
+					'sort_order'	=> 4,
 					'status'			=> 1,
 				),
 	
-				'featured_carousel' => array(
-					'display_name'	=> '',
-					'name'			=> 'featured_carousel',
+				'content_featured_carousel' => array(
+					'display_name'	=> 'Featured Carousel',
+					'name'			=> 'content_featured_carousel',
 					'title'			=> '',
 					'href'			=> 'module/featured_carousel',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'content',
-					'sort_order'	=> 17,
+					'sort_order'	=> 5,
 					'status'			=> 1,
 				),
 	
 			'catalog' => array(
-				'display_name'	=> '',
+				'display_name'	=> 'Catalog',
 				'name'			=> 'catalog',
 				'title'			=> '',
 				'href'			=> '',
 				'query'			=> '',
 				'is_route'		=> 0,
-				'parent_id'		=> '0',
-				'sort_order'	=> 18,
+				'parent_id'		=> '',
+				'sort_order'	=> 4,
 				'status'			=> 1,
 			),
 	
-				'attributes' => array(
-					'display_name'	=> '',
-					'name'			=> 'attributes',
+				'catalog_attributes' => array(
+					'display_name'	=> 'Attributes',
+					'name'			=> 'catalog_attributes',
 					'title'			=> '',
 					'href'			=> '',
 					'query'			=> '',
 					'is_route'		=> 0,
 					'parent_id'		=> 'catalog',
-					'sort_order'	=> 19,
+					'sort_order'	=> 0,
 					'status'			=> 1,
 				),
 	
-					'attributes_link' => array(
-						'display_name'	=> '',
-						'name'			=> 'attributes_link',
+					'catalog_attributes_attributes' => array(
+						'display_name'	=> 'Attributes',
+						'name'			=> 'catalog_attributes_attributes',
 						'title'			=> '',
 						'href'			=> 'catalog/attribute',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'attributes',
-						'sort_order'	=> 20,
+						'parent_id'		=> 'catalog_attributes',
+						'sort_order'	=> 0,
 						'status'			=> 1,
 					),
 	
-					'attribute_groups' => array(
-						'display_name'	=> '',
-						'name'			=> 'attribute_groups',
+					'catalog_attributes_attribute_groups' => array(
+						'display_name'	=> 'Attribute Groups',
+						'name'			=> 'catalog_attributes_attribute_groups',
 						'title'			=> '',
 						'href'			=> 'catalog/attribute_group',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'attributes',
-						'sort_order'	=> 21,
+						'parent_id'		=> 'catalog_attributes',
+						'sort_order'	=> 1,
 						'status'			=> 1,
 					),
 	
-				'options' => array(
-					'display_name'	=> '',
-					'name'			=> 'options',
+				'catalog_options' => array(
+					'display_name'	=> 'Options',
+					'name'			=> 'catalog_options',
 					'title'			=> '',
 					'href'			=> 'catalog/option',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'catalog',
-					'sort_order'	=> 22,
+					'sort_order'	=> 1,
 					'status'			=> 1,
 				),
 	
-				'categories' => array(
-					'display_name'	=> '',
-					'name'			=> 'categories',
+				'catalog_categories' => array(
+					'display_name'	=> 'Categories',
+					'name'			=> 'catalog_categories',
 					'title'			=> '',
 					'href'			=> 'catalog/category',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'catalog',
-					'sort_order'	=> 23,
+					'sort_order'	=> 2,
 					'status'			=> 1,
 				),
 	
-				'collections' => array(
-					'display_name'	=> '',
-					'name'			=> 'collections',
-					'title'			=> '',
-					'href'			=> 'catalog/collection',
-					'query'			=> '',
-					'is_route'		=> 1,
-					'parent_id'		=> 'catalog',
-					'sort_order'	=> 24,
-					'status'			=> 1,
-				),
-	
-				'products' => array(
-					'display_name'	=> '',
-					'name'			=> 'products',
+				'catalog_products' => array(
+					'display_name'	=> 'Products',
+					'name'			=> 'catalog_products',
 					'title'			=> '',
 					'href'			=> 'catalog/product',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'catalog',
-					'sort_order'	=> 25,
+					'sort_order'	=> 3,
 					'status'			=> 1,
 				),
 	
-				'designers' => array(
-					'display_name'	=> '',
-					'name'			=> 'designers',
+				'catalog_designers' => array(
+					'display_name'	=> 'Designers',
+					'name'			=> 'catalog_designers',
 					'title'			=> '',
 					'href'			=> 'catalog/manufacturer',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'catalog',
-					'sort_order'	=> 26,
+					'sort_order'	=> 4,
 					'status'			=> 1,
 				),
 	
-				'downloads' => array(
-					'display_name'	=> '',
-					'name'			=> 'downloads',
+				'catalog_downloads' => array(
+					'display_name'	=> 'Downloads',
+					'name'			=> 'catalog_downloads',
 					'title'			=> '',
 					'href'			=> 'catalog/download',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'catalog',
-					'sort_order'	=> 27,
+					'sort_order'	=> 5,
 					'status'			=> 1,
 				),
 	
-				'reviews' => array(
-					'display_name'	=> '',
-					'name'			=> 'reviews',
+				'catalog_reviews' => array(
+					'display_name'	=> 'Reviews',
+					'name'			=> 'catalog_reviews',
 					'title'			=> '',
 					'href'			=> 'catalog/review',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'catalog',
-					'sort_order'	=> 28,
+					'sort_order'	=> 6,
 					'status'			=> 1,
 				),
 	
-				'information' => array(
-					'display_name'	=> '',
-					'name'			=> 'information',
+				'catalog_information' => array(
+					'display_name'	=> 'Information',
+					'name'			=> 'catalog_information',
 					'title'			=> '',
 					'href'			=> 'catalog/information',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'catalog',
-					'sort_order'	=> 29,
+					'sort_order'	=> 7,
 					'status'			=> 1,
 				),
 	
 			'sales' => array(
-				'display_name'	=> '',
+				'display_name'	=> 'Sales',
 				'name'			=> 'sales',
 				'title'			=> '',
 				'href'			=> '',
 				'query'			=> '',
 				'is_route'		=> 0,
-				'parent_id'		=> '0',
-				'sort_order'	=> 30,
+				'parent_id'		=> '',
+				'sort_order'	=> 5,
 				'status'			=> 1,
 			),
 	
-				'affiliates' => array(
-					'display_name'	=> '',
-					'name'			=> 'affiliates',
+				'sales_affiliates' => array(
+					'display_name'	=> 'Affiliates',
+					'name'			=> 'sales_affiliates',
 					'title'			=> '',
 					'href'			=> 'sale/affiliate',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'sales',
-					'sort_order'	=> 31,
+					'sort_order'	=> 0,
 					'status'			=> 1,
 				),
 	
-				'coupons' => array(
-					'display_name'	=> '',
-					'name'			=> 'coupons',
+				'sales_coupons' => array(
+					'display_name'	=> 'Coupons',
+					'name'			=> 'sales_coupons',
 					'title'			=> '',
 					'href'			=> 'sale/coupon',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'sales',
-					'sort_order'	=> 32,
+					'sort_order'	=> 1,
 					'status'			=> 1,
 				),
 	
-				'customers' => array(
-					'display_name'	=> '',
-					'name'			=> 'customers',
+				'sales_customers' => array(
+					'display_name'	=> 'Customers',
+					'name'			=> 'sales_customers',
 					'title'			=> '',
 					'href'			=> '',
 					'query'			=> '',
 					'is_route'		=> 0,
 					'parent_id'		=> 'sales',
-					'sort_order'	=> 33,
+					'sort_order'	=> 2,
 					'status'			=> 1,
 				),
 	
-					'customers_link' => array(
-						'display_name'	=> '',
-						'name'			=> 'customers_link',
+					'sales_customers_customers' => array(
+						'display_name'	=> 'Customers',
+						'name'			=> 'sales_customers_customers',
 						'title'			=> '',
 						'href'			=> 'sale/customer',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'customers',
-						'sort_order'	=> 34,
+						'parent_id'		=> 'sales_customers',
+						'sort_order'	=> 0,
 						'status'			=> 1,
 					),
 	
-					'customer_groups' => array(
-						'display_name'	=> '',
-						'name'			=> 'customer_groups',
+					'sales_customers_customer_groups' => array(
+						'display_name'	=> 'Customer Groups',
+						'name'			=> 'sales_customers_customer_groups',
 						'title'			=> '',
 						'href'			=> 'sale/customer_group',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'customers',
-						'sort_order'	=> 35,
+						'parent_id'		=> 'sales_customers',
+						'sort_order'	=> 1,
 						'status'			=> 1,
 					),
 	
-					'ip_blacklist' => array(
-						'display_name'	=> '',
-						'name'			=> 'ip_blacklist',
+					'sales_customers_ip_blacklist' => array(
+						'display_name'	=> 'IP Blacklist',
+						'name'			=> 'sales_customers_ip_blacklist',
 						'title'			=> '',
 						'href'			=> 'sale/customer_blacklist',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'customers',
-						'sort_order'	=> 36,
+						'parent_id'		=> 'sales_customers',
+						'sort_order'	=> 2,
 						'status'			=> 1,
 					),
 	
-				'orders' => array(
-					'display_name'	=> '',
-					'name'			=> 'orders',
+				'sales_orders' => array(
+					'display_name'	=> 'Orders',
+					'name'			=> 'sales_orders',
 					'title'			=> '',
 					'href'			=> 'sale/order',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'sales',
-					'sort_order'	=> 37,
+					'sort_order'	=> 3,
 					'status'			=> 1,
 				),
 	
-				'gift_vouchers' => array(
-					'display_name'	=> '',
-					'name'			=> 'gift_vouchers',
+				'sales_gift_vouchers' => array(
+					'display_name'	=> 'Gift Vouchers',
+					'name'			=> 'sales_gift_vouchers',
 					'title'			=> '',
 					'href'			=> '',
 					'query'			=> '',
 					'is_route'		=> 0,
 					'parent_id'		=> 'sales',
-					'sort_order'	=> 38,
+					'sort_order'	=> 4,
 					'status'			=> 1,
 				),
 	
-					'voucher_themes' => array(
-						'display_name'	=> '',
-						'name'			=> 'voucher_themes',
+					'sales_gift_vouchers_voucher_themes' => array(
+						'display_name'	=> 'Voucher Themes',
+						'name'			=> 'sales_gift_vouchers_voucher_themes',
 						'title'			=> '',
 						'href'			=> 'sale/voucher_theme',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'gift_vouchers',
-						'sort_order'	=> 39,
+						'parent_id'		=> 'sales_gift_vouchers',
+						'sort_order'	=> 0,
 						'status'			=> 1,
 					),
 	
-					'gift_vouchers_link' => array(
-						'display_name'	=> '',
-						'name'			=> 'gift_vouchers_link',
+					'sales_gift_vouchers_gift_vouchers' => array(
+						'display_name'	=> 'Gift Vouchers',
+						'name'			=> 'sales_gift_vouchers_gift_vouchers',
 						'title'			=> '',
 						'href'			=> 'sale/voucher',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'gift_vouchers',
-						'sort_order'	=> 40,
+						'parent_id'		=> 'sales_gift_vouchers',
+						'sort_order'	=> 1,
 						'status'			=> 1,
 					),
 	
-				'returns' => array(
-					'display_name'	=> '',
-					'name'			=> 'returns',
+				'sales_returns' => array(
+					'display_name'	=> 'Returns',
+					'name'			=> 'sales_returns',
 					'title'			=> '',
 					'href'			=> 'sale/return',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'sales',
-					'sort_order'	=> 41,
+					'sort_order'	=> 5,
 					'status'			=> 1,
 				),
 	
 			'extensions' => array(
-				'display_name'	=> '',
+				'display_name'	=> 'Extensions',
 				'name'			=> 'extensions',
 				'title'			=> '',
 				'href'			=> '',
 				'query'			=> '',
 				'is_route'		=> 0,
-				'parent_id'		=> '0',
-				'sort_order'	=> 42,
+				'parent_id'		=> '',
+				'sort_order'	=> 6,
 				'status'			=> 1,
 			),
 	
-				'plugins' => array(
-					'display_name'	=> '',
-					'name'			=> 'plugins',
+				'extensions_plugins' => array(
+					'display_name'	=> 'Plugins',
+					'name'			=> 'extensions_plugins',
 					'title'			=> '',
 					'href'			=> 'extension/plugin',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'extensions',
-					'sort_order'	=> 43,
+					'sort_order'	=> 0,
 					'status'			=> 1,
 				),
 	
-				'payments' => array(
-					'display_name'	=> '',
-					'name'			=> 'payments',
+				'extensions_payments' => array(
+					'display_name'	=> 'Payments',
+					'name'			=> 'extensions_payments',
 					'title'			=> '',
 					'href'			=> 'extension/payment',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'extensions',
-					'sort_order'	=> 44,
+					'sort_order'	=> 1,
 					'status'			=> 1,
 				),
 	
-				'modules' => array(
-					'display_name'	=> '',
-					'name'			=> 'modules',
+				'extensions_modules' => array(
+					'display_name'	=> 'Modules',
+					'name'			=> 'extensions_modules',
 					'title'			=> '',
 					'href'			=> 'extension/module',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'extensions',
-					'sort_order'	=> 45,
+					'sort_order'	=> 2,
 					'status'			=> 1,
 				),
 	
-				'product_feeds' => array(
-					'display_name'	=> '',
-					'name'			=> 'product_feeds',
+				'extensions_product_feeds' => array(
+					'display_name'	=> 'Product Feeds',
+					'name'			=> 'extensions_product_feeds',
 					'title'			=> '',
 					'href'			=> 'extension/feed',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'extensions',
-					'sort_order'	=> 46,
+					'sort_order'	=> 3,
 					'status'			=> 1,
 				),
 	
-				'order_totals' => array(
-					'display_name'	=> '',
-					'name'			=> 'order_totals',
+				'extensions_order_totals' => array(
+					'display_name'	=> 'Order Totals',
+					'name'			=> 'extensions_order_totals',
 					'title'			=> '',
 					'href'			=> 'extension/total',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'extensions',
-					'sort_order'	=> 47,
+					'sort_order'	=> 4,
 					'status'			=> 1,
 				),
 	
-				'shipping' => array(
-					'display_name'	=> '',
-					'name'			=> 'shipping',
+				'extensions_shipping' => array(
+					'display_name'	=> 'Shipping',
+					'name'			=> 'extensions_shipping',
 					'title'			=> '',
 					'href'			=> 'extension/shipping',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'extensions',
-					'sort_order'	=> 48,
+					'sort_order'	=> 5,
 					'status'			=> 1,
 				),
 	
 			'users' => array(
-				'display_name'	=> '',
+				'display_name'	=> 'Users',
 				'name'			=> 'users',
 				'title'			=> '',
 				'href'			=> '',
 				'query'			=> '',
 				'is_route'		=> 0,
-				'parent_id'		=> '0',
-				'sort_order'	=> 49,
+				'parent_id'		=> '',
+				'sort_order'	=> 7,
 				'status'			=> 1,
 			),
 	
-				'users_link' => array(
-					'display_name'	=> '',
-					'name'			=> 'users_link',
+				'users_users' => array(
+					'display_name'	=> 'Users',
+					'name'			=> 'users_users',
 					'title'			=> '',
 					'href'			=> 'user/user',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'users',
-					'sort_order'	=> 50,
+					'sort_order'	=> 0,
 					'status'			=> 1,
 				),
 	
-				'user_groups' => array(
-					'display_name'	=> '',
-					'name'			=> 'user_groups',
+				'users_user_groups' => array(
+					'display_name'	=> 'User Groups',
+					'name'			=> 'users_user_groups',
 					'title'			=> '',
 					'href'			=> 'user/user_permission',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'users',
-					'sort_order'	=> 51,
+					'sort_order'	=> 1,
 					'status'			=> 1,
 				),
 	
 			'reports' => array(
-				'display_name'	=> '',
+				'display_name'	=> 'Reports',
 				'name'			=> 'reports',
 				'title'			=> '',
 				'href'			=> '',
 				'query'			=> '',
 				'is_route'		=> 0,
-				'parent_id'		=> '0',
-				'sort_order'	=> 52,
+				'parent_id'		=> '',
+				'sort_order'	=> 8,
 				'status'			=> 1,
 			),
 	
-				'affiliates' => array(
-					'display_name'	=> '',
-					'name'			=> 'affiliates',
+				'reports_affiliates' => array(
+					'display_name'	=> 'Affiliates',
+					'name'			=> 'reports_affiliates',
 					'title'			=> '',
 					'href'			=> '',
 					'query'			=> '',
 					'is_route'		=> 0,
 					'parent_id'		=> 'reports',
-					'sort_order'	=> 53,
+					'sort_order'	=> 0,
 					'status'			=> 1,
 				),
 	
-					'commission' => array(
-						'display_name'	=> '',
-						'name'			=> 'commission',
+					'reports_affiliates_commission' => array(
+						'display_name'	=> 'Commission',
+						'name'			=> 'reports_affiliates_commission',
 						'title'			=> '',
 						'href'			=> 'report/affiliate_commission',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'affiliates',
-						'sort_order'	=> 54,
+						'parent_id'		=> 'reports_affiliates',
+						'sort_order'	=> 0,
 						'status'			=> 1,
 					),
 	
-				'affiliates_customers' => array(
-					'display_name'	=> '',
-					'name'			=> 'affiliates_customers',
+				'reports_customers' => array(
+					'display_name'	=> 'Customers',
+					'name'			=> 'reports_customers',
 					'title'			=> '',
 					'href'			=> '',
 					'query'			=> '',
 					'is_route'		=> 0,
 					'parent_id'		=> 'reports',
-					'sort_order'	=> 55,
+					'sort_order'	=> 1,
 					'status'			=> 1,
 				),
 	
-					'credit' => array(
-						'display_name'	=> '',
-						'name'			=> 'credit',
+					'reports_customers_credit' => array(
+						'display_name'	=> 'Credit',
+						'name'			=> 'reports_customers_credit',
 						'title'			=> '',
 						'href'			=> 'report/customer_credit',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'customers',
-						'sort_order'	=> 56,
+						'parent_id'		=> 'reports_customers',
+						'sort_order'	=> 0,
 						'status'			=> 1,
 					),
 	
-					'reward_points' => array(
-						'display_name'	=> '',
-						'name'			=> 'reward_points',
+					'reports_customers_reward_points' => array(
+						'display_name'	=> 'Reward Points',
+						'name'			=> 'reports_customers_reward_points',
 						'title'			=> '',
 						'href'			=> 'report/customer_reward',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'customers',
-						'sort_order'	=> 57,
+						'parent_id'		=> 'reports_customers',
+						'sort_order'	=> 1,
 						'status'			=> 1,
 					),
 	
-					'affiliates_customer_orders' => array(
-						'display_name'	=> '',
-						'name'			=> 'affiliates_customer_orders',
+					'reports_customers_orders' => array(
+						'display_name'	=> 'Orders',
+						'name'			=> 'reports_customers_orders',
 						'title'			=> '',
 						'href'			=> 'report/customer_order',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'customers',
-						'sort_order'	=> 58,
+						'parent_id'		=> 'reports_customers',
+						'sort_order'	=> 2,
 						'status'			=> 1,
 					),
 	
-				'affiliates_products' => array(
-					'display_name'	=> '',
-					'name'			=> 'affiliates_products',
+				'reports_products' => array(
+					'display_name'	=> 'Products',
+					'name'			=> 'reports_products',
 					'title'			=> '',
 					'href'			=> '',
 					'query'			=> '',
 					'is_route'		=> 0,
 					'parent_id'		=> 'reports',
-					'sort_order'	=> 59,
+					'sort_order'	=> 2,
 					'status'			=> 1,
 				),
 	
-					'purchased' => array(
-						'display_name'	=> '',
-						'name'			=> 'purchased',
+					'reports_products_purchased' => array(
+						'display_name'	=> 'Purchased',
+						'name'			=> 'reports_products_purchased',
 						'title'			=> '',
 						'href'			=> 'report/product_purchased',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'products',
-						'sort_order'	=> 60,
+						'parent_id'		=> 'reports_products',
+						'sort_order'	=> 0,
 						'status'			=> 1,
 					),
 	
-					'viewed' => array(
-						'display_name'	=> '',
-						'name'			=> 'viewed',
+					'reports_products_viewed' => array(
+						'display_name'	=> 'Viewed',
+						'name'			=> 'reports_products_viewed',
 						'title'			=> '',
 						'href'			=> 'report/product_viewed',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'products',
-						'sort_order'	=> 61,
+						'parent_id'		=> 'reports_products',
+						'sort_order'	=> 1,
 						'status'			=> 1,
 					),
 	
-				'sales' => array(
-					'display_name'	=> '',
-					'name'			=> 'sales',
+				'reports_sales' => array(
+					'display_name'	=> 'Sales',
+					'name'			=> 'reports_sales',
 					'title'			=> '',
 					'href'			=> '',
 					'query'			=> '',
 					'is_route'		=> 0,
 					'parent_id'		=> 'reports',
-					'sort_order'	=> 62,
+					'sort_order'	=> 3,
 					'status'			=> 1,
 				),
 	
-					'orders' => array(
-						'display_name'	=> '',
-						'name'			=> 'orders',
+					'reports_sales_orders' => array(
+						'display_name'	=> 'Orders',
+						'name'			=> 'reports_sales_orders',
 						'title'			=> '',
 						'href'			=> 'report/sale_order',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'sales',
-						'sort_order'	=> 63,
+						'parent_id'		=> 'reports_sales',
+						'sort_order'	=> 0,
 						'status'			=> 1,
 					),
 	
-					'tax' => array(
-						'display_name'	=> '',
-						'name'			=> 'tax',
+					'reports_sales_tax' => array(
+						'display_name'	=> 'Tax',
+						'name'			=> 'reports_sales_tax',
 						'title'			=> '',
 						'href'			=> 'report/sale_tax',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'sales',
-						'sort_order'	=> 64,
+						'parent_id'		=> 'reports_sales',
+						'sort_order'	=> 1,
 						'status'			=> 1,
 					),
 	
-					'coupons' => array(
-						'display_name'	=> '',
-						'name'			=> 'coupons',
+					'reports_sales_coupons' => array(
+						'display_name'	=> 'Coupons',
+						'name'			=> 'reports_sales_coupons',
 						'title'			=> '',
 						'href'			=> 'report/sale_coupon',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'sales',
-						'sort_order'	=> 65,
+						'parent_id'		=> 'reports_sales',
+						'sort_order'	=> 2,
 						'status'			=> 1,
 					),
 	
-					'shipping' => array(
-						'display_name'	=> '',
-						'name'			=> 'shipping',
+					'reports_sales_shipping' => array(
+						'display_name'	=> 'Shipping',
+						'name'			=> 'reports_sales_shipping',
 						'title'			=> '',
 						'href'			=> 'report/sale_shipping',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'sales',
-						'sort_order'	=> 66,
+						'parent_id'		=> 'reports_sales',
+						'sort_order'	=> 3,
 						'status'			=> 1,
 					),
 	
-					'returns' => array(
-						'display_name'	=> '',
-						'name'			=> 'returns',
+					'reports_sales_returns' => array(
+						'display_name'	=> 'Returns',
+						'name'			=> 'reports_sales_returns',
 						'title'			=> '',
 						'href'			=> 'report/sale_return',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'sales',
-						'sort_order'	=> 67,
+						'parent_id'		=> 'reports_sales',
+						'sort_order'	=> 4,
 						'status'			=> 1,
 					),
 	
 			'system' => array(
-				'display_name'	=> '',
+				'display_name'	=> 'System',
 				'name'			=> 'system',
 				'title'			=> '',
 				'href'			=> '',
 				'query'			=> '',
 				'is_route'		=> 0,
-				'parent_id'		=> '0',
-				'sort_order'	=> 68,
+				'parent_id'		=> '',
+				'sort_order'	=> 9,
 				'status'			=> 1,
 			),
 	
-				'settings' => array(
-					'display_name'	=> '',
-					'name'			=> 'settings',
+				'system_settings' => array(
+					'display_name'	=> 'Settings',
+					'name'			=> 'system_settings',
 					'title'			=> '',
 					'href'			=> 'setting/store',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'system',
-					'sort_order'	=> 69,
+					'sort_order'	=> 0,
 					'status'			=> 1,
 				),
 	
-				'mail' => array(
-					'display_name'	=> '',
-					'name'			=> 'mail',
+				'system_mail' => array(
+					'display_name'	=> 'Mail',
+					'name'			=> 'system_mail',
 					'title'			=> '',
 					'href'			=> '',
 					'query'			=> '',
 					'is_route'		=> 0,
 					'parent_id'		=> 'system',
-					'sort_order'	=> 70,
+					'sort_order'	=> 1,
 					'status'			=> 1,
 				),
 	
-					'send_email' => array(
-						'display_name'	=> '',
-						'name'			=> 'send_email',
+					'system_mail_send_email' => array(
+						'display_name'	=> 'Send Email',
+						'name'			=> 'system_mail_send_email',
 						'title'			=> '',
 						'href'			=> 'mail/send_email',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'mail',
-						'sort_order'	=> 71,
+						'parent_id'		=> 'system_mail',
+						'sort_order'	=> 0,
 						'status'			=> 1,
 					),
 	
-					'mail_messages' => array(
-						'display_name'	=> '',
-						'name'			=> 'mail_messages',
+					'system_mail_mail_messages' => array(
+						'display_name'	=> 'Mail Messages',
+						'name'			=> 'system_mail_mail_messages',
 						'title'			=> '',
 						'href'			=> 'mail/messages',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'mail',
-						'sort_order'	=> 72,
+						'parent_id'		=> 'system_mail',
+						'sort_order'	=> 1,
 						'status'			=> 1,
 					),
 	
-				'url_alias' => array(
-					'display_name'	=> '',
-					'name'			=> 'url_alias',
+				'system_url_alias' => array(
+					'display_name'	=> 'URL Alias',
+					'name'			=> 'system_url_alias',
 					'title'			=> '',
 					'href'			=> 'setting/url_alias',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'system',
-					'sort_order'	=> 73,
+					'sort_order'	=> 2,
 					'status'			=> 1,
 				),
 	
-				'db_rules' => array(
-					'display_name'	=> '',
-					'name'			=> 'db_rules',
+				'system_db_rules' => array(
+					'display_name'	=> 'DB Rules',
+					'name'			=> 'system_db_rules',
 					'title'			=> '',
 					'href'			=> 'setting/db_rules',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'system',
-					'sort_order'	=> 74,
+					'sort_order'	=> 3,
 					'status'			=> 1,
 				),
 	
-				'cron' => array(
-					'display_name'	=> '',
-					'name'			=> 'cron',
+				'system_cron' => array(
+					'display_name'	=> 'Cron',
+					'name'			=> 'system_cron',
 					'title'			=> '',
 					'href'			=> 'module/cron',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'system',
-					'sort_order'	=> 75,
+					'sort_order'	=> 4,
 					'status'			=> 1,
 				),
 	
-				'design' => array(
-					'display_name'	=> '',
-					'name'			=> 'design',
+				'system_design' => array(
+					'display_name'	=> 'Design',
+					'name'			=> 'system_design',
 					'title'			=> '',
 					'href'			=> '',
 					'query'			=> '',
 					'is_route'		=> 0,
 					'parent_id'		=> 'system',
-					'sort_order'	=> 76,
+					'sort_order'	=> 5,
 					'status'			=> 1,
 				),
 	
-					'banners' => array(
-						'display_name'	=> '',
-						'name'			=> 'banners',
+					'system_design_banners' => array(
+						'display_name'	=> 'Banners',
+						'name'			=> 'system_design_banners',
 						'title'			=> '',
 						'href'			=> 'design/banner',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'design',
-						'sort_order'	=> 77,
+						'parent_id'		=> 'system_design',
+						'sort_order'	=> 0,
 						'status'			=> 1,
 					),
 	
-					'navigation' => array(
-						'display_name'	=> '',
-						'name'			=> 'navigation',
+					'system_design_navigation' => array(
+						'display_name'	=> 'Navigation',
+						'name'			=> 'system_design_navigation',
 						'title'			=> '',
 						'href'			=> 'design/navigation',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'design',
-						'sort_order'	=> 78,
+						'parent_id'		=> 'system_design',
+						'sort_order'	=> 1,
 						'status'			=> 1,
 					),
 	
-					'layouts' => array(
-						'display_name'	=> '',
-						'name'			=> 'layouts',
+					'system_design_layouts' => array(
+						'display_name'	=> 'Layouts',
+						'name'			=> 'system_design_layouts',
 						'title'			=> '',
 						'href'			=> 'design/layout',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'design',
-						'sort_order'	=> 79,
+						'parent_id'		=> 'system_design',
+						'sort_order'	=> 2,
 						'status'			=> 1,
 					),
 	
-				'backup__restore' => array(
-					'display_name'	=> '',
-					'name'			=> 'backup__restore',
+				'system_backup__restore' => array(
+					'display_name'	=> 'Backup / Restore',
+					'name'			=> 'system_backup__restore',
 					'title'			=> '',
 					'href'			=> 'tool/backup',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'system',
-					'sort_order'	=> 80,
+					'sort_order'	=> 6,
 					'status'			=> 1,
 				),
 	
-				'system_tools' => array(
-					'display_name'	=> '',
-					'name'			=> 'system_tools',
+				'system_system_tools' => array(
+					'display_name'	=> 'System Tools',
+					'name'			=> 'system_system_tools',
 					'title'			=> '',
 					'href'			=> 'tool/tool',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'system',
-					'sort_order'	=> 81,
+					'sort_order'	=> 7,
 					'status'			=> 1,
 				),
 	
-				'error_logs' => array(
-					'display_name'	=> '',
-					'name'			=> 'error_logs',
+				'system_error_logs' => array(
+					'display_name'	=> 'Error Logs',
+					'name'			=> 'system_error_logs',
 					'title'			=> '',
 					'href'			=> 'tool/error_log',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'system',
-					'sort_order'	=> 82,
+					'sort_order'	=> 8,
 					'status'			=> 1,
 				),
 	
-				'localisation' => array(
-					'display_name'	=> '',
-					'name'			=> 'localisation',
+				'system_localisation' => array(
+					'display_name'	=> 'Localisation',
+					'name'			=> 'system_localisation',
 					'title'			=> '',
 					'href'			=> '',
 					'query'			=> '',
 					'is_route'		=> 0,
 					'parent_id'		=> 'system',
-					'sort_order'	=> 83,
+					'sort_order'	=> 9,
 					'status'			=> 1,
 				),
 	
-					'currencies' => array(
-						'display_name'	=> '',
-						'name'			=> 'currencies',
+					'system_localisation_currencies' => array(
+						'display_name'	=> 'Currencies',
+						'name'			=> 'system_localisation_currencies',
 						'title'			=> '',
 						'href'			=> 'localisation/currency',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'localisation',
-						'sort_order'	=> 84,
+						'parent_id'		=> 'system_localisation',
+						'sort_order'	=> 0,
 						'status'			=> 1,
 					),
 	
-					'languages' => array(
-						'display_name'	=> '',
-						'name'			=> 'languages',
+					'system_localisation_languages' => array(
+						'display_name'	=> 'Languages',
+						'name'			=> 'system_localisation_languages',
 						'title'			=> '',
 						'href'			=> 'localisation/language',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'localisation',
-						'sort_order'	=> 85,
+						'parent_id'		=> 'system_localisation',
+						'sort_order'	=> 1,
 						'status'			=> 1,
 					),
 	
-					'returns' => array(
-						'display_name'	=> '',
-						'name'			=> 'returns',
+					'system_localisation_returns' => array(
+						'display_name'	=> 'Returns',
+						'name'			=> 'system_localisation_returns',
 						'title'			=> '',
 						'href'			=> '',
 						'query'			=> '',
 						'is_route'		=> 0,
-						'parent_id'		=> 'localisation',
-						'sort_order'	=> 86,
+						'parent_id'		=> 'system_localisation',
+						'sort_order'	=> 2,
 						'status'			=> 1,
 					),
 	
-						'return_reasons' => array(
-							'display_name'	=> '',
-							'name'			=> 'return_reasons',
+						'system_localisation_returns_return_reasons' => array(
+							'display_name'	=> 'Return Reasons',
+							'name'			=> 'system_localisation_returns_return_reasons',
 							'title'			=> '',
 							'href'			=> 'localisation/return_reason',
 							'query'			=> '',
 							'is_route'		=> 1,
-							'parent_id'		=> 'returns',
-							'sort_order'	=> 87,
+							'parent_id'		=> 'system_localisation_returns',
+							'sort_order'	=> 0,
 							'status'			=> 1,
 						),
 	
-						'return_actions' => array(
-							'display_name'	=> '',
-							'name'			=> 'return_actions',
+						'system_localisation_returns_return_actions' => array(
+							'display_name'	=> 'Return Actions',
+							'name'			=> 'system_localisation_returns_return_actions',
 							'title'			=> '',
 							'href'			=> 'localisation/return_action',
 							'query'			=> '',
 							'is_route'		=> 1,
-							'parent_id'		=> 'returns',
-							'sort_order'	=> 88,
+							'parent_id'		=> 'system_localisation_returns',
+							'sort_order'	=> 1,
 							'status'			=> 1,
 						),
 	
-						'return_statuses' => array(
-							'display_name'	=> '',
-							'name'			=> 'return_statuses',
+						'system_localisation_returns_return_statuses' => array(
+							'display_name'	=> 'Return Statuses',
+							'name'			=> 'system_localisation_returns_return_statuses',
 							'title'			=> '',
 							'href'			=> 'localisation/return_status',
 							'query'			=> '',
 							'is_route'		=> 1,
-							'parent_id'		=> 'returns',
-							'sort_order'	=> 89,
+							'parent_id'		=> 'system_localisation_returns',
+							'sort_order'	=> 2,
 							'status'			=> 1,
 						),
 	
-					'taxes' => array(
-						'display_name'	=> '',
-						'name'			=> 'taxes',
+					'system_localisation_taxes' => array(
+						'display_name'	=> 'Taxes',
+						'name'			=> 'system_localisation_taxes',
 						'title'			=> '',
 						'href'			=> '',
 						'query'			=> '',
 						'is_route'		=> 0,
-						'parent_id'		=> 'localisation',
-						'sort_order'	=> 90,
+						'parent_id'		=> 'system_localisation',
+						'sort_order'	=> 3,
 						'status'			=> 1,
 					),
 	
-						'tax_classes' => array(
-							'display_name'	=> '',
-							'name'			=> 'tax_classes',
+						'system_localisation_taxes_tax_classes' => array(
+							'display_name'	=> 'Tax Classes',
+							'name'			=> 'system_localisation_taxes_tax_classes',
 							'title'			=> '',
 							'href'			=> 'localisation/tax_class',
 							'query'			=> '',
 							'is_route'		=> 1,
-							'parent_id'		=> 'taxes',
-							'sort_order'	=> 91,
+							'parent_id'		=> 'system_localisation_taxes',
+							'sort_order'	=> 0,
 							'status'			=> 1,
 						),
 	
-						'tax_rates' => array(
-							'display_name'	=> '',
-							'name'			=> 'tax_rates',
+						'system_localisation_taxes_tax_rates' => array(
+							'display_name'	=> 'Tax Rates',
+							'name'			=> 'system_localisation_taxes_tax_rates',
 							'title'			=> '',
 							'href'			=> 'localisation/tax_rate',
 							'query'			=> '',
 							'is_route'		=> 1,
-							'parent_id'		=> 'taxes',
-							'sort_order'	=> 92,
+							'parent_id'		=> 'system_localisation_taxes',
+							'sort_order'	=> 1,
 							'status'			=> 1,
 						),
 	
-					'zones' => array(
-						'display_name'	=> '',
-						'name'			=> 'zones',
+					'system_localisation_zones' => array(
+						'display_name'	=> 'Zones',
+						'name'			=> 'system_localisation_zones',
 						'title'			=> '',
 						'href'			=> 'localisation/zone',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'localisation',
-						'sort_order'	=> 93,
+						'parent_id'		=> 'system_localisation',
+						'sort_order'	=> 4,
 						'status'			=> 1,
 					),
 	
-					'geo_zones' => array(
-						'display_name'	=> '',
-						'name'			=> 'geo_zones',
+					'system_localisation_geo_zones' => array(
+						'display_name'	=> 'Geo Zones',
+						'name'			=> 'system_localisation_geo_zones',
 						'title'			=> '',
 						'href'			=> 'localisation/geo_zone',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'localisation',
-						'sort_order'	=> 94,
+						'parent_id'		=> 'system_localisation',
+						'sort_order'	=> 5,
 						'status'			=> 1,
 					),
 	
-					'stock_statuses' => array(
-						'display_name'	=> '',
-						'name'			=> 'stock_statuses',
+					'system_localisation_stock_statuses' => array(
+						'display_name'	=> 'Stock Statuses',
+						'name'			=> 'system_localisation_stock_statuses',
 						'title'			=> '',
 						'href'			=> 'localisation/stock_status',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'localisation',
-						'sort_order'	=> 95,
+						'parent_id'		=> 'system_localisation',
+						'sort_order'	=> 6,
 						'status'			=> 1,
 					),
 	
-					'order_statuses' => array(
-						'display_name'	=> '',
-						'name'			=> 'order_statuses',
+					'system_localisation_order_statuses' => array(
+						'display_name'	=> 'Order Statuses',
+						'name'			=> 'system_localisation_order_statuses',
 						'title'			=> '',
 						'href'			=> 'localisation/order_status',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'localisation',
-						'sort_order'	=> 96,
+						'parent_id'		=> 'system_localisation',
+						'sort_order'	=> 7,
 						'status'			=> 1,
 					),
 	
-					'length_classes' => array(
-						'display_name'	=> '',
-						'name'			=> 'length_classes',
+					'system_localisation_length_classes' => array(
+						'display_name'	=> 'Length Classes',
+						'name'			=> 'system_localisation_length_classes',
 						'title'			=> '',
 						'href'			=> 'localisation/length_class',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'localisation',
-						'sort_order'	=> 97,
+						'parent_id'		=> 'system_localisation',
+						'sort_order'	=> 8,
 						'status'			=> 1,
 					),
 	
-					'weight_classes' => array(
-						'display_name'	=> '',
-						'name'			=> 'weight_classes',
+					'system_localisation_weight_classes' => array(
+						'display_name'	=> 'Weight Classes',
+						'name'			=> 'system_localisation_weight_classes',
 						'title'			=> '',
 						'href'			=> 'localisation/weight_class',
 						'query'			=> '',
 						'is_route'		=> 1,
-						'parent_id'		=> 'localisation',
-						'sort_order'	=> 98,
+						'parent_id'		=> 'system_localisation',
+						'sort_order'	=> 9,
 						'status'			=> 1,
 					),
 	
-				'countries' => array(
-					'display_name'	=> '',
-					'name'			=> 'countries',
+				'system_countries' => array(
+					'display_name'	=> 'Countries',
+					'name'			=> 'system_countries',
 					'title'			=> '',
 					'href'			=> 'localisation/country',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'system',
-					'sort_order'	=> 99,
+					'sort_order'	=> 10,
 					'status'			=> 1,
 				),
 	
 			'help' => array(
-				'display_name'	=> '',
+				'display_name'	=> 'Help',
 				'name'			=> 'help',
 				'title'			=> '',
 				'href'			=> '',
 				'query'			=> '',
 				'is_route'		=> 0,
-				'parent_id'		=> '0',
-				'sort_order'	=> 100,
+				'parent_id'		=> '',
+				'sort_order'	=> 10,
 				'status'			=> 1,
 			),
 	
-				'documentation' => array(
-					'display_name'	=> '',
-					'name'			=> 'documentation',
+				'help_documentation' => array(
+					'display_name'	=> 'Documentation',
+					'name'			=> 'help_documentation',
 					'title'			=> '',
 					'href'			=> 'help/documentation',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'help',
-					'sort_order'	=> 101,
+					'sort_order'	=> 0,
 					'status'			=> 1,
 				),
 		);
@@ -1456,7 +1455,7 @@ class ModelDesignNavigation extends Model {
 		$data = array(
 			'name' => 'admin',
 			'status' => 1,
-			'store_ids' => -1,
+			'store_ids' => array(-1),
 			'links' => $links 
 		);
 		
