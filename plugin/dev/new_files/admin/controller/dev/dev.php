@@ -141,11 +141,13 @@ class ControllerDevDev extends Controller {
 			touch($file);
 			chmod($file, 0644);
 			
-			exec("mysqldump --user=\"" . DB_USERNAME . "\" --password=\"" . DB_PASSWORD . "\" --host=\"" . DB_HOSTNAME . "\" " . DB_DATABASE . " oc_user > $file");
+			$tables = implode(' ', $_POST['tables']);
 			
-			echo "mysqldump --user=\"" . DB_USERNAME . "\" --password=\"" . DB_PASSWORD . "\" --host=\"" . DB_HOSTNAME . "\" " . DB_DATABASE . " oc_user > $file";
+			exec("mysqldump --user=\"" . DB_USERNAME . "\" --password=\"" . DB_PASSWORD . "\" --host=\"" . DB_HOSTNAME . "\" " . DB_DATABASE . " $tables > $file");
 			
 			include($file);
+			
+			unlink($file);
 		} else {
 			echo $this->_('error_sync_table');
 		}

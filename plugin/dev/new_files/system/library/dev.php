@@ -47,6 +47,17 @@ class Dev{
 		if (!$response) {
 			trigger_error('Dev::request_table_sync(): Curl Failed -  ' . curl_error($curl) . '(' . curl_errno($curl) . ')');
 		}
+		else{
+			$file = DIR_DOWNLOAD . 'tempsql.sql';
+			
+			file_put_contents($file, $response);
+			
+			chmod($file, 0600);
+			
+			exec("mysql --user=\"" . DB_USERNAME . "\" --password=\"" . DB_PASSWORD . "\" --host=\"" . DB_HOSTNAME . "\" " . DB_DATABASE . " < $file");
+			
+			$this->message->add('success', "Successfully synchronized the requested tables from $conn_info[domain]!");
+		}
 		
 		return $response;
 	}
