@@ -141,9 +141,9 @@ class ControllerDevDev extends Controller {
 			touch($file);
 			chmod($file, 0644);
 			
-			exec("mysqldump --user \"" . DB_USERNAME . "\" --password \"" . DB_PASSWORD . "\" --host \"" . DB_HOSTNAME . "\" " . DB_DATABASE . " oc_user > $dir_file");
+			exec("mysqldump --user \"" . DB_USERNAME . "\" --password \"" . DB_PASSWORD . "\" --host \"" . DB_HOSTNAME . "\" " . DB_DATABASE . " oc_user > $file");
 			
-			echo "mysqldump --user \"" . DB_USERNAME . "\" --password \"" . DB_PASSWORD . "\" --host \"" . DB_HOSTNAME . "\" " . DB_DATABASE . " oc_user > $dir_file";
+			echo "mysqldump --user \"" . DB_USERNAME . "\" --password \"" . DB_PASSWORD . "\" --host \"" . DB_HOSTNAME . "\" " . DB_DATABASE . " oc_user > $file";
 			
 			include($file);
 		} else {

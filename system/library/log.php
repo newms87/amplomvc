@@ -22,7 +22,7 @@ class Log {
                    'q'=>$_SERVER['QUERY_STRING'],
                    's'=>$this->store_name,
                    'ip'=>$_SERVER['REMOTE_ADDR'],
-                   'a'=>$_SERVER['HTTP_USER_AGENT']
+                   'a'=> isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : ''
                   ); 
 		fwrite($handle, serialize($log) . "\n");
 			
