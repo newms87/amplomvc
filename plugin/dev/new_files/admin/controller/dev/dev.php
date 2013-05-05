@@ -136,7 +136,16 @@ class ControllerDevDev extends Controller {
 		$this->language->load('dev/dev');
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['tables']) && $this->validate()) {
-			echo $this->_('success_sync_table');
+			$file = DIR_DOWNLOAD . 'tempsql.sql';
+			
+			touch($file);
+			chmod($file, 0644);
+			
+			exec("mysqldump --user \"" . DB_USERNAME . "\" --password \"" . DB_PASSWORD . "\" --host \"" . DB_HOSTNAME . "\" " . DB_DATABASE . " oc_user > $dir_file");
+			
+			echo "mysqldump --user \"" . DB_USERNAME . "\" --password \"" . DB_PASSWORD . "\" --host \"" . DB_HOSTNAME . "\" " . DB_DATABASE . " oc_user > $dir_file";
+			
+			include($file);
 		} else {
 			echo $this->_('error_sync_table');
 		}
