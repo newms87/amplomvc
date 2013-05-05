@@ -17,7 +17,10 @@ class ControllerCommonLogin extends Controller {
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
       	if (!empty($_GET['redirect'])) {
       		$this->redirect(urldecode($_GET['redirect']));
-			} else {
+			} elseif(!empty($_GET['response'])) {
+				$this->response->setOutput('SUCCESS');
+				return;
+			}else{
 				$this->redirect($this->url->link('common/home'));
 			}
 		}

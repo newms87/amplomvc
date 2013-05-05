@@ -56,6 +56,10 @@ final class MySQL implements Database{
     	}
   	}
 	
+	public function execute_file($file){
+		return false;
+	}
+	
 	public function escape($value) {
 		return mysql_real_escape_string($value, $this->link);
 	}

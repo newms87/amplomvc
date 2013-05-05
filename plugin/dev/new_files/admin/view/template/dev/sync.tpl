@@ -26,6 +26,10 @@
 						</td>
 					</tr>
 					<tr>
+						<td><label for="password"><?= $entry_password;?></label></td>
+						<td><input id="password" type="password" name="password" value="" /></td>
+					</tr>
+					<tr>
 						<td><input type="submit" class="button" name="sync_site" value="<?= $button_sync; ?>" /></td>
 					</tr>
 				</table>

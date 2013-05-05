@@ -91,6 +91,7 @@ _is_writable(DIR_IMAGE . 'cache/', $config->get('config_image_dir_mode'));
 _is_writable(DIR_DOWNLOAD, $config->get('config_default_dir_mode'));
 _is_writable(DIR_LOGS, $config->get('config_default_dir_mode'));
 
+
 // Session
 $session = new Session($registry);
 $registry->set('session', $session);

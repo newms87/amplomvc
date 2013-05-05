@@ -3,6 +3,11 @@ class DB {
 	private $driver;
 	
 	public function __construct($driver, $hostname, $username, $password, $database) {
+		//We cannot redeclare the mysqli class so mysqli is an alias for our wrapper class msyqlidb
+		if($driver == 'mysqli'){
+			$driver = 'mysqlidb';
+		}
+		
 	   //the database interface
 	   _require_once(DIR_DATABASE . 'database.php');
       
@@ -32,6 +37,21 @@ class DB {
       
 		return $resource;
   	}
+	
+	public function execute_file($file){
+		if(!shell_exec("mysql --user=\"" . DB_USERNAME . "\" --password=\"" . DB_PASSWORD . "\" --host=\"" . DB_HOSTNAME . "\" " . DB_DATABASE . " < $file")){
+			$this->driver->execute_file($file);
+		}
+	}
+	
+	public function dump($tables, $file){
+		touch($file);
+		chmod($file, 0644);
+		
+		$tables = implode(' ', $tables);
+		
+		exec("mysqldump --user=\"" . DB_USERNAME . "\" --password=\"" . DB_PASSWORD . "\" --host=\"" . DB_HOSTNAME . "\" " . DB_DATABASE . " $tables > $file");
+	}
 	
 	public function get_tables(){
 		$result = $this->driver->query("SHOW TABLES");

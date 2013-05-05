@@ -40,7 +40,7 @@ class ControllerToolErrorLog extends Controller {
       }
       
       
-      $current = 0;
+      $current = -1;
       
       $file = DIR_LOGS . $this->config->get('config_error_filename');
       $log = array();
@@ -49,25 +49,27 @@ class ControllerToolErrorLog extends Controller {
 		   $handle = @fopen($file, "r");
 	    	if($handle){
 	      	while (($buffer = fgets($handle, 4096)) !== false && ($current < ($start+$limit))) {
+	      		$current++;
+					
                if($current >= $start){
                	
-                  $b = unserialize(str_replace("\0",'',$buffer));
-                  if(!is_array($b)){
-                     echo 'invalid log entry<br>' . $current;
-							$this->remove($current);
-                     html_dump($buffer);
-                  }
-                  else{
-                     if($store_name){
-                        if($store_name != $b['s']){
-                           $current++;
-                           continue;
-                        }
-                     }
-                     $log[] = array_merge(array('line'=>$current),$b);
-                  }
+                  $data = explode("\t", $buffer, 7);
+                  
+						if(count($data) < 6 || ($store_name && $store_name != $data[4])){
+							continue;
+						}
+						
+                  $log[] = array(
+                  	'line'	=> $current,
+                  	'date'	=> $data[0],
+                  	'ip'		=> $data[1],
+                  	'uri'		=> $data[2],
+                  	'query'	=> $data[3],
+                  	'store'	=> $data[4],
+                  	'agent'	=> $data[5],
+                  	'message'=> $data[6],
+                  );
                }
-               $current++;	
             }
             fclose($handle);
          }
@@ -204,11 +206,11 @@ class ControllerToolErrorLog extends Controller {
          
       if($store_name){
          $file_lines = explode("\n", file_get_contents($file));
-         
+			
          foreach($file_lines as $key=>$line){
-            $data = unserialize(str_replace("\0",'',$line));
+            $data = explode("\t", $line);
             
-            if($data['s'] == $store_name){
+            if($data[4] == $store_name){
                unset($file_lines[$key]);
             }
          }

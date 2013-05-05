@@ -99,6 +99,7 @@ label {
 #menu.links > .right {
 	float: right;
 	width:20%
+	text-align:right;
 }
 
 #menu.links ul.top_menu > li + li {

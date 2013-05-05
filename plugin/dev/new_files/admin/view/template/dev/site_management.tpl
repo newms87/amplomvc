@@ -21,10 +21,6 @@
 						<td><input id="username" type="text" name="username" value="<?= $username;?>" /></td>
 					</tr>
 					<tr>
-						<td><label for="password"><?= $entry_password;?></label></td>
-						<td><input id="password" type="password" name="password" value="<?= $password;?>" /></td>
-					</tr>
-					<tr>
 						<td><label for="status"><?= $entry_status;?></label></td>
 						<td>
 							<?= $this->builder->build('select', $data_site_status, 'status', $status);?>

@@ -24,20 +24,27 @@ class ControllerDevDev extends Controller {
 		
 		if($_SERVER["REQUEST_METHOD"] == 'POST' && $this->validate()){
 			if(isset($_POST['sync_site'])){
-				$key = array_search($_POST['domain'], $dev_sites);
-				foreach($dev_sites as $site){
-					if($_POST['domain'] == $site['domain']){
-						$table_data = $this->dev->request_table_sync($dev_sites[$key], $_POST['tables']);
-					}
-				}
-				
-				echo 'syncing...<br>';
-				if($table_data){
-					$this->message->add("success", "Successfully fetched data from the server at $_POST[domain]");
-					html_dump($table_data, 'table_data');
+				if(!isset($_POST['tables'])){
+					$this->message->add('warning', "You must select at least 1 table to sync.");
 				}
 				else{
-					$this->message->add('warning', "There was no data retrieved from the server at $_POST[domain]");
+					$key = array_search($_POST['domain'], $dev_sites);
+					foreach($dev_sites as $site){
+						if($_POST['domain'] == $site['domain']){
+							$dev_sites[$key]['password'] = $_POST['password'];
+							
+							$table_data = $this->dev->request_table_sync($dev_sites[$key], $_POST['tables']);
+						}
+					}
+					
+					echo 'syncing...<br>';
+					if($table_data){
+						$this->message->add("success", "Successfully fetched data from the server at $_POST[domain]");
+						html_dump($table_data, 'table_data');
+					}
+					else{
+						$this->message->add('warning', "There was no data retrieved from the server at $_POST[domain]");
+					}
 				}
 			}
 		}
@@ -97,7 +104,6 @@ class ControllerDevDev extends Controller {
 		$defaults = array(
 			'domain' => '',
 			'username' => '',
-			'password' => '',
 			'status' => 'live',
 		);
 
@@ -138,12 +144,7 @@ class ControllerDevDev extends Controller {
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['tables']) && $this->validate()) {
 			$file = DIR_DOWNLOAD . 'tempsql.sql';
 			
-			touch($file);
-			chmod($file, 0644);
-			
-			$tables = implode(' ', $_POST['tables']);
-			
-			exec("mysqldump --user=\"" . DB_USERNAME . "\" --password=\"" . DB_PASSWORD . "\" --host=\"" . DB_HOSTNAME . "\" " . DB_DATABASE . " $tables > $file");
+			$this->db->dump($_POST['tables'], $file);
 			
 			include($file);
 			
@@ -159,11 +160,7 @@ class ControllerDevDev extends Controller {
 		if (!$this->user->hasPermission('modify', 'dev/dev')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
-		
-		if(isset($_POST['password'])){
-			$_POST['password'] = $this->user->encrypt($_POST['password']);
-		}
-		
+				
 		return $this->error ? false : true;
 	}
 }

@@ -54,7 +54,7 @@ class Dev{
 			
 			chmod($file, 0600);
 			
-			exec("mysql --user=\"" . DB_USERNAME . "\" --password=\"" . DB_PASSWORD . "\" --host=\"" . DB_HOSTNAME . "\" " . DB_DATABASE . " < $file");
+			$this->db->execute_file($file);
 			
 			$this->message->add('success', "Successfully synchronized the requested tables from $conn_info[domain]!");
 		}

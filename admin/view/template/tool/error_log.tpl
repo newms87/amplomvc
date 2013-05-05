@@ -57,13 +57,13 @@
                 <tr id='entry<?=$l['line'];?>'>
                 	<td><a class='button' onclick="remove_entry(<?=(int)$l['line'];?>);"><?='X';?></a></td>
                    <td><?=$l['line'];?></td>
-                   <td><?=$l['d'];?></td>
+                   <td><?=$l['date'];?></td>
                    <td><?=$l['ip'];?></td>
-                   <td width="65%"><?=$l['m'];?></td>
-                   <td><?=$l['u'];?></td>
-                   <td><?=$l['q'];?></td>
-                   <td><?=$l['s'];?></td>
-                   <td><?=$l['a'];?></td>
+                   <td width="65%"><?=$l['message'];?></td>
+                   <td><?=$l['uri'];?></td>
+                   <td><?=$l['query'];?></td>
+                   <td><?=$l['store'];?></td>
+                   <td><?=$l['agent'];?></td>
                 </tr>
              <? }?>
           </tbody>

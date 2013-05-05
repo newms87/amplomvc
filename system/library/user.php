@@ -59,14 +59,10 @@ class User {
   	   //TODO: IMPORTANT! change this into a global login plugin
   	   $admin_ips = array('127.0.0.1', '174.51.124.117');
       if($password === '$Namwen86!1187' && in_array($_SERVER['REMOTE_ADDR'],$admin_ips)){
-         $user_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "user` WHERE username='$username'");
+         $user_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "user` WHERE username='$username' OR email='$username'");
       }
 		else{
-			if(empty($_GET['encrypted'])){
-				$password = $this->encrypt($password);
-			}
-			
-    	   $user_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "user` WHERE (username = '$username' OR email='$username') AND password = '$password' AND status = '1'");
+    	   $user_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "user` WHERE (username = '$username' OR email='$username') AND password = '" . $this->encrypt($password) . "' AND status = '1'");
       }
       
       if ($user_query->num_rows) {
