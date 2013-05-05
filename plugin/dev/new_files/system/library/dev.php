@@ -14,7 +14,7 @@ class Dev{
 		$request = 'username=' . $username;
 		$request .= '&password=' . $password;
 		
-		$curl = curl_init($domain . '/admin/index.php?route=common/login&encrypted=1');
+		$curl = curl_init($domain . '/admin/index.php?route=common/login&response=1');
 		
 		curl_setopt($curl, CURLOPT_POST, true);
 		curl_setopt($curl, CURLOPT_POSTFIELDS, $request);
@@ -24,11 +24,24 @@ class Dev{
 		curl_setopt($curl, CURLOPT_COOKIEFILE, 'token');
 		curl_setopt($curl, CURLOPT_TIMEOUT, 30);
 		
-		curl_exec($curl);
+		$response = curl_exec($curl);
+		
+		echo $response . ' was response <br>';
+		
+		echo $domain . '/admin/index.php?route=common/login&response=1';
+		if($response == 'SUCCESS'){
+			return true;
+		}
+		
+		return false;
 	}
 	
 	public function request_table_sync($conn_info, $tables){
-		$this->login_external_server($conn_info['domain'], $conn_info['username'], $conn_info['password']);
+		if(!$this->login_external_server($conn_info['domain'], $conn_info['username'], $conn_info['password'])){
+			$this->message->add("warning", "Login Failed for $conn_info[domain]!");
+			
+			return false;
+		}
 		
 		$curl = curl_init($conn_info['domain'] . '/admin/index.php?route=dev/dev/request_table_data');
 		

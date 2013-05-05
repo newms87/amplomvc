@@ -54,6 +54,7 @@ final class mysqlidb implements Database{
 	public function execute_file($file){
 		$sql = file_get_contents($file);
 		
+		echo "executing file... $file";
 		if(!$sql){
 			trigger_error("MySQLi::execute_file(): Error opening file $file.");
 			return false;

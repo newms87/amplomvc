@@ -1,7 +1,7 @@
 <?php  
 class ControllerCommonLogin extends Controller { 
 	
-	public function index() { 
+	public function index() {
       $this->template->load('common/login');
 
     	$this->load->language('common/login');
@@ -9,7 +9,10 @@ class ControllerCommonLogin extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		//IF user is logged in, redirect to the homepage
-      if ($this->user->isLogged()){
+		if(isset($_POST['username']) && isset($_POST['password'])){
+			$this->user->logout();
+		}
+		elseif ($this->user->isLogged()){
 			$this->redirect($this->url->link('common/home'));
 		}
       
@@ -17,9 +20,6 @@ class ControllerCommonLogin extends Controller {
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
       	if (!empty($_GET['redirect'])) {
       		$this->redirect(urldecode($_GET['redirect']));
-			} elseif(!empty($_GET['response'])) {
-				$this->response->setOutput('SUCCESS');
-				return;
 			}else{
 				$this->redirect($this->url->link('common/home'));
 			}
@@ -81,9 +81,19 @@ class ControllerCommonLogin extends Controller {
 		
 	private function validate() {
 		if (isset($_POST['username']) && isset($_POST['password']) && !$this->user->login($_POST['username'], $_POST['password'])) {
+			if(!empty($_GET['response'])){
+				echo "FAILURE";
+				exit;
+			}
+		
 			$this->message->add('warning', $this->_('error_login'));
 			
          return false;
+		}
+		
+		if(!empty($_GET['response'])){
+			echo "SUCCESS";
+			exit;
 		}
       
       return true;
