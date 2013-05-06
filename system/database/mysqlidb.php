@@ -46,21 +46,67 @@ final class mysqlidb implements Database{
 				return true;
 			}
 		} else {
-		   $this->err_msg = "MySQLi Error ($this->mysqli->errno): $this->mysqli->error<br />$sql";
+		   $this->err_msg = "<strong>MySQLi Error (" . $this->mysqli->errno . "):</strong> " . $this->mysqli->error . "<br /><br />$sql";
+			
 			return false;
     	}
   	}
 	
-	public function execute_file($file){
-		$sql = file_get_contents($file);
+  	public function multi_query($sql) {
+		$this->mysqli->multi_query($sql);
 		
-		echo "executing file... $file";
-		if(!$sql){
-			trigger_error("MySQLi::execute_file(): Error opening file $file.");
-			return false;
+		while ($this->mysqli->more_results() && $this->mysqli->next_result()){
 		}
 		
-		return $this->query($sql);
+		if($this->mysqli->errno) {
+		   $this->err_msg = "<strong>MySQLi Error (" . $this->mysqli->errno . "):</strong> " . $this->mysqli->error . "<br /><br />$sql";
+			
+			return false;
+    	}
+		
+		return true;
+  	}
+		
+	public function execute_file($file){
+		$mysql = defined("DB_MYSQL_FILE") ? DB_MYSQL_FILE : 'mysql';
+		
+		$file = escapeshellarg($file);
+		
+		$cmd = "\"$mysql\" --max_allowed_packet=10G --user=\"" . DB_USERNAME . "\" --password=\"" . DB_PASSWORD . "\" --host=\"" . DB_HOSTNAME . "\" " . DB_DATABASE . " < $file";
+		
+		if(shell_exec($cmd) === null){
+			if(!defined("DB_MYSQL_FILE") ||  !is_file(DB_MYSQL_FILE)){
+				trigger_error("You must define DB_MYSQL_FILE to contain the file and path to mysql (mysql.exe on windows) for execute_file()!");
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	public function dump($file, $tables = null){
+		$mysqldump = defined("DB_MYSQLDUMP_FILE") ? DB_MYSQLDUMP_FILE : 'mysqldump';
+		
+		if(!empty($tables)){
+			$tables = implode(' ', $tables);
+		}
+		else{
+			$tables = '';
+		}
+		
+		$file = escapeshellarg($file);
+		$tables = escapeshellarg($tables);
+		
+		$cmd = "\"$mysqldump\" --user=\"" . DB_USERNAME . "\" --password=\"" . DB_PASSWORD . "\" --host=\"" . DB_HOSTNAME . "\" " . DB_DATABASE . " $tables > $file";
+		
+		if(shell_exec($cmd . ' | echo 1') === null){
+			if(!defined("DB_MYSQLDUMP_FILE") ||  !is_file(DB_MYSQLDUMP_FILE)){
+				trigger_error("You must define DB_MYSQLDUMP_FILE to contain the file and path to mysqldump (mysqldump.exe on windows) for dump!");
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	
 	public function escape($value) {

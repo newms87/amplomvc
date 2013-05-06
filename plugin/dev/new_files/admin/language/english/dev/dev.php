@@ -14,10 +14,12 @@ $_['text_sync_site']      = 'Sync Sites';
 $_['text_sync_tables']      = 'Sync Tables';
 $_['text_sync']				= 'Synchronize Sites';
 $_['text_site_management']	= 'Site Management';
+$_['text_backup_restore']	= 'Backup & Restore';
 
 //Console
 $_['console_sync'] = "Synchronize Sites";
 $_['console_site_management'] = "Site Management";
+$_['console_backup_restore'] = "Site Backup & Restore";
 
 //Column
 $_['column_domain'] = "Domain";
@@ -30,12 +32,15 @@ $_['entry_domain']    = 'Site Domain: <span class="help">(eg: www.yourdomain.com
 $_['entry_username']    = 'Username:';
 $_['entry_password']    = 'Password:';
 $_['entry_status']    = 'Site Status:';
+$_['entry_backup']    = 'Full Site Backup:';
+$_['entry_restore']    = 'Restore Site From Backup:';
 
 
 //Button
 $_['button_add_site'] = "Add Site";
 $_['button_sync'] = "Request Synchronization";
 $_['button_return'] = "Back To Dashboard";
+$_['button_backup'] = "Backup Database";
 
 //Success
 $_['success_sync_table'] = 'The table %s was successfully synchronized!';

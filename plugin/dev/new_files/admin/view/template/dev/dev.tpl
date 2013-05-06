@@ -17,6 +17,10 @@
 				<div class="title"><?= $console_sync;?></div>
 				<div class="image"><img src="view/image/dev/sync.png" /></div>
 			</a>
+			<a class="dev_console_item" href="<?= $url_backup_restore;?>">
+				<div class="title"><?= $console_backup_restore;?></div>
+				<div class="image"><img src="view/image/dev/restore.png" /></div>
+			</a>
 		</div>
 	</div>
 </div>

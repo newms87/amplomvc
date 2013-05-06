@@ -9,6 +9,7 @@ class ControllerDevDev extends Controller {
 		
 		$this->data['url_sync'] = $this->url->link("dev/dev/sync");
 		$this->data['url_site_management'] = $this->url->link("dev/dev/site_management");
+		$this->data['url_backup_restore'] = $this->url->link("dev/dev/backup_restore");
 		
 		$this->content();
 	}
@@ -33,17 +34,10 @@ class ControllerDevDev extends Controller {
 						if($_POST['domain'] == $site['domain']){
 							$dev_sites[$key]['password'] = $_POST['password'];
 							
-							$table_data = $this->dev->request_table_sync($dev_sites[$key], $_POST['tables']);
+							$this->dev->request_table_sync($dev_sites[$key], $_POST['tables']);
+							
+							break;
 						}
-					}
-					
-					echo 'syncing...<br>';
-					if($table_data){
-						$this->message->add("success", "Successfully fetched data from the server at $_POST[domain]");
-						html_dump($table_data, 'table_data');
-					}
-					else{
-						$this->message->add('warning', "There was no data retrieved from the server at $_POST[domain]");
 					}
 				}
 			}
@@ -117,6 +111,29 @@ class ControllerDevDev extends Controller {
 		}
 		
 		$this->data['dev_sites'] = $dev_sites;
+		
+		$this->content();
+	}
+	
+	public function backup_restore(){
+		$this->template->load('dev/backup_restore');
+		
+		$this->load->language('dev/dev');
+		
+		$this->document->setTitle($this->_('text_backup_restore'));
+		
+		if($_SERVER["REQUEST_METHOD"] == 'POST' && $this->validate()){
+			if(isset($_POST['site_backup'])){
+				$this->dev->site_backup();
+			}
+			elseif(isset($_POST['site_restore'])){
+				$this->dev->site_restore($_POST['backup_file']);
+			}
+		}
+		
+		$this->breadcrumb->add($this->_('text_backup_restore'), $this->url->link('dev/dev/backup_restore'));
+		
+		$this->data['data_backup_files'] = $this->model_dev_dev->getBackupFiles();
 		
 		$this->content();
 	}

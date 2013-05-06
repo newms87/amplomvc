@@ -26,7 +26,8 @@ class DB {
    
   	public function query($sql) {
   	   //Use debug_backtrace to get caller class / function name. Then call any plugins requesting to modify query string
-      $resource = $this->driver->query($sql);
+  	   $resource = $this->driver->query($sql);
+		
       if(!$resource){
       	$stack = debug_stack();
       	$_SESSION['debug']['call stack'] = $stack; 
@@ -39,18 +40,36 @@ class DB {
   	}
 	
 	public function execute_file($file){
-		if(!shell_exec("mysql --user=\"" . DB_USERNAME . "\" --password=\"" . DB_PASSWORD . "\" --host=\"" . DB_HOSTNAME . "\" " . DB_DATABASE . " < $file")){
-			$this->driver->execute_file($file);
+		if($this->driver->execute_file($file)){
+			return true;
 		}
+		
+		$sql = file_get_contents($file);
+		
+		if(!$sql){
+			trigger_error("DB::execute_file(): Error opening file $file.");
+			return false;
+		}
+		
+		if(!$this->driver->multi_query($sql)){
+			trigger_error($this->get_error());
+			
+			return false;
+		}
+		
+		return true;
 	}
 	
-	public function dump($tables, $file){
-		touch($file);
-		chmod($file, 0644);
+	public function dump($file, $tables = ''){
+		_is_writable(dirname($file));
 		
-		$tables = implode(' ', $tables);
+		if($this->driver->dump($file, $tables)){
+			return true;
+		}
 		
-		exec("mysqldump --user=\"" . DB_USERNAME . "\" --password=\"" . DB_PASSWORD . "\" --host=\"" . DB_HOSTNAME . "\" " . DB_DATABASE . " $tables > $file");
+		trigger_error("DB::dump(): Failed to dump database tables, $table_string, to file $file");
+		
+		return false;
 	}
 	
 	public function get_tables(){

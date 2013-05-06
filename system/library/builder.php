@@ -363,7 +363,7 @@ JSC;
                
             case 'radio':
                $s = $selected?'checked="checked"':'';
-               $options .= "<span><input type='radio' id='radio-$name-$value' name='$name' value='$value' $s /><label for='radio-$name-$value'>$display</label></span>";
+               $options .= "<span class='radio_button'><input type='radio' id='radio-$name-$value' name='$name' value='$value' $s /><label for='radio-$name-$value'>$display</label></span>";
                break;
             
 				case 'multiselect':

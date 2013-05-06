@@ -10,6 +10,44 @@ class Dev{
 		return $this->registry->get($key);
 	}
 	
+	public function site_backup($file = null){
+		$site_name = $this->config->get('config_name');
+		
+		if(!$file){
+			$file = DIR_DATABASE_BACKUP . "full_backup_" . date('Y-m-d-G_i_s') . ".sql";
+		}
+		
+		if($this->db->dump($file)){
+			$this->message->add('success', "Successfully backed up $site_name!");
+			
+			return true;
+		}
+		else{
+			$this->message->add('warning', "There was a problem while backing up $site_name!");
+		}
+		
+		return false;
+	}
+	
+	public function site_restore($file){
+		$site_name = $this->config->get('config_name');
+		
+		if(!is_file($file)){
+			$this->message->add('warning', "Failed to restore $site_name from $file. The File was not found.");
+			return false;
+		}
+		
+		if($this->db->execute_file($file)){
+			$this->message->add('success', "Successfully restored $site_name from backup file $file!");
+			return true;
+		}
+		else{
+			$this->message->add('warning', "There was a problem while restoring $site_name!");
+		}
+		
+		return false;
+	}
+	
 	public function login_external_server($domain, $username, $password){
 		$request = 'username=' . $username;
 		$request .= '&password=' . $password;
@@ -26,11 +64,14 @@ class Dev{
 		
 		$response = curl_exec($curl);
 		
-		echo $response . ' was response <br>';
-		
-		echo $domain . '/admin/index.php?route=common/login&response=1';
 		if($response == 'SUCCESS'){
 			return true;
+		}
+		elseif($response == 'FAILURE'){
+			$this->message->add('warning', "Login Failed for $domain!");
+		}
+		else{
+			$this->message->add('warning', "There was an error while connecting to the server at $domain."); 
 		}
 		
 		return false;
@@ -38,8 +79,6 @@ class Dev{
 	
 	public function request_table_sync($conn_info, $tables){
 		if(!$this->login_external_server($conn_info['domain'], $conn_info['username'], $conn_info['password'])){
-			$this->message->add("warning", "Login Failed for $conn_info[domain]!");
-			
 			return false;
 		}
 		
@@ -61,17 +100,32 @@ class Dev{
 			trigger_error('Dev::request_table_sync(): Curl Failed -  ' . curl_error($curl) . '(' . curl_errno($curl) . ')');
 		}
 		else{
-			$file = DIR_DOWNLOAD . 'tempsql.sql';
+			//First always backup the Database before making changes
+			if(!empty($tables)){
+				$table_string = count($tables) > 3 ? $tables[0] . '+' . $tables[1] . '+' . $tables[2] . '+' . (count($tables)-3) . '_more' : implode('+', $tables);
+				$backup_file = DIR_DATABASE_BACKUP . "dump_" . $table_string . '_' . date('Y-m-d-G_i_s') . ".sql";
+			}
+			else{
+				$backup_file = DIR_DATABASE_BACKUP . "full_backup_" . date('Y-m-d-G_i_s') . ".sql";
+			}
+			
+			$this->db->dump($backup_file, $tables);
+			
+			//Save the database sync file in a temp file
+			$file = DIR_DOWNLOAD . 'tempdbs.txt';
 			
 			file_put_contents($file, $response);
 			
-			chmod($file, 0600);
-			
-			$this->db->execute_file($file);
-			
-			$this->message->add('success', "Successfully synchronized the requested tables from $conn_info[domain]!");
+			//Execute the database sync file
+			if($this->db->execute_file($file)){
+				$this->message->add('success', "Successfully synchronized the requested tables from $conn_info[domain]!");
+				
+				return true;
+			}
 		}
 		
-		return $response;
+		$this->message->add('warning', "There was a problem while synchronizing the requested tables from $conn_info[domain].");
+		
+		return false;
 	}
 }
