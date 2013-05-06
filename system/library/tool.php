@@ -125,7 +125,36 @@ class Tool {
       
       return $short;
    }
-    
+   
+	public function bytes2str($size, $decimals = 2, $unit = null){
+		$unit_sizes = array(
+			'TB' => 1024*1024*1024*1024,
+			'GB' => 1024*1024*1024,			
+			'MB' => 1024*1024,
+			'KB' => 1024,
+			'B' => 1,
+		);
+		
+		if($unit && isset($unit_sizes[$unit])){
+			$divisor = $unit_sizes[$unit];
+		}
+		else{
+			foreach($unit_sizes as $key => $unit_size){
+				if($size > $unit_size){
+					$divisor = $unit_size;
+					$unit = $key;
+					break;
+				}
+			}
+		}
+		
+		if($unit == 'B'){
+			$decimals = 0;
+		}
+				
+		return sprintf("%." . $decimals . "f $unit", ($size / $divisor));
+	}
+	
    public function parse_xml_to_array($xml){
       $return = array();
       foreach ($xml->children() as $parent => $child){

@@ -12,6 +12,7 @@ class ModelDevDev extends Model {
 				'name' => basename($file),
 				'date' => filemtime($file),
 				'path' => str_replace('\\', '/', $file),
+				'size' => (int)filesize($file),
 			);
 			
 			$sort_order[] = filemtime($file);

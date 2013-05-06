@@ -161,7 +161,13 @@ class ControllerDevDev extends Controller {
 				$this->data[$key] = $default;
 		}
 		
-		$this->data['data_backup_files'] = $this->model_dev_dev->getBackupFiles();
+		$backup_files = $this->model_dev_dev->getBackupFiles();
+		
+		foreach($backup_files as &$backup){
+			$backup['name'] = $backup['name'] . ' - <strong>' . $this->tool->bytes2str($backup['size'],2) . '</strong>';
+		}
+		
+		$this->data['data_backup_files'] = $backup_files;
 		
 		$this->data['data_tables'] = $this->db->get_tables();
 		
