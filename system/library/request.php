@@ -5,7 +5,6 @@ class Request {
 		$_POST = $this->clean($_POST);
 		$_REQUEST = $this->clean($_REQUEST);
 		$_COOKIE = $this->clean($_COOKIE);
-		$_FILES = $this->clean($_FILES);
 		$_SERVER = $this->clean($_SERVER);
 	}
 	

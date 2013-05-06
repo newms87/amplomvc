@@ -40,8 +40,10 @@ class DB {
   	}
 	
 	public function execute_file($file){
-		if($this->driver->execute_file($file)){
-			return true;
+		$result = $this->driver->execute_file($file);
+		
+		if(!is_null($result)){
+			return $result;
 		}
 		
 		$sql = file_get_contents($file);
@@ -82,6 +84,12 @@ class DB {
 		}
 		
 		return $tables;
+	}
+	
+	public function count_tables(){
+		$result = $this->driver->query("SHOW TABLES");
+		
+		return $result->num_rows;
 	}
 	
    private function has_column($table, $column){

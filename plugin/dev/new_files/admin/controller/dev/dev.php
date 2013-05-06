@@ -124,16 +124,46 @@ class ControllerDevDev extends Controller {
 		
 		if($_SERVER["REQUEST_METHOD"] == 'POST' && $this->validate()){
 			if(isset($_POST['site_backup'])){
-				$this->dev->site_backup();
+				$tables = isset($_POST['tables']) ? $_POST['tables'] : null;
+				
+				if(count($tables) == $this->db->count_tables()){
+					$tables = null;
+				}
+				
+				$this->dev->site_backup(null, $tables);
 			}
 			elseif(isset($_POST['site_restore'])){
 				$this->dev->site_restore($_POST['backup_file']);
+			}
+			elseif(isset($_POST['execute_file'])){
+				if (is_uploaded_file($_FILES['filename']['tmp_name'])) {
+					$filename = $_FILES['filename']['name'];
+					if($this->db->execute_file($_FILES['filename']['tmp_name'])){
+						$this->message->add('success', "Successfully executed the contents of $filename!");
+					}
+					else{
+						$this->message->add('warning', "There was a problem while executing $filename. " . $this->db->get_error());
+					}
+				}
 			}
 		}
 		
 		$this->breadcrumb->add($this->_('text_backup_restore'), $this->url->link('dev/dev/backup_restore'));
 		
+		$defaults = array(
+			'tables' => '',
+		);
+
+		foreach($defaults as $key=>$default){
+			if(isset($_POST[$key]))
+				$this->data[$key] = $_POST[$key];
+			else
+				$this->data[$key] = $default;
+		}
+		
 		$this->data['data_backup_files'] = $this->model_dev_dev->getBackupFiles();
+		
+		$this->data['data_tables'] = $this->db->get_tables();
 		
 		$this->content();
 	}

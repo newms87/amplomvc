@@ -32,8 +32,9 @@ $_['entry_domain']    = 'Site Domain: <span class="help">(eg: www.yourdomain.com
 $_['entry_username']    = 'Username:';
 $_['entry_password']    = 'Password:';
 $_['entry_status']    = 'Site Status:';
-$_['entry_backup']    = 'Full Site Backup:';
+$_['entry_backup']    = 'Full Database Backup:';
 $_['entry_restore']    = 'Restore Site From Backup:';
+$_['entry_execute_file']    = 'Execute DB Script File:';
 
 
 //Button
@@ -41,6 +42,7 @@ $_['button_add_site'] = "Add Site";
 $_['button_sync'] = "Request Synchronization";
 $_['button_return'] = "Back To Dashboard";
 $_['button_backup'] = "Backup Database";
+$_['button_execute_file'] = "Execute File";
 
 //Success
 $_['success_sync_table'] = 'The table %s was successfully synchronized!';

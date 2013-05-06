@@ -10,14 +10,18 @@ class Dev{
 		return $this->registry->get($key);
 	}
 	
-	public function site_backup($file = null){
+	public function site_backup($file = null, $tables = null){
 		$site_name = $this->config->get('config_name');
 		
-		if(!$file){
+		if(!empty($tables)){
+			$table_string = count($tables) > 3 ? $tables[0] . '+' . $tables[1] . '+' . (count($tables)-2) . '_more' : implode('+', $tables);
+			$file = DIR_DATABASE_BACKUP . "dump_" . $table_string . '_' . date('Y-m-d-G_i_s') . ".sql";
+		}
+		else{
 			$file = DIR_DATABASE_BACKUP . "full_backup_" . date('Y-m-d-G_i_s') . ".sql";
 		}
 		
-		if($this->db->dump($file)){
+		if($this->db->dump($file, $tables)){
 			$this->message->add('success', "Successfully backed up $site_name!");
 			
 			return true;
@@ -101,15 +105,7 @@ class Dev{
 		}
 		else{
 			//First always backup the Database before making changes
-			if(!empty($tables)){
-				$table_string = count($tables) > 3 ? $tables[0] . '+' . $tables[1] . '+' . $tables[2] . '+' . (count($tables)-3) . '_more' : implode('+', $tables);
-				$backup_file = DIR_DATABASE_BACKUP . "dump_" . $table_string . '_' . date('Y-m-d-G_i_s') . ".sql";
-			}
-			else{
-				$backup_file = DIR_DATABASE_BACKUP . "full_backup_" . date('Y-m-d-G_i_s') . ".sql";
-			}
-			
-			$this->db->dump($backup_file, $tables);
+			$this->site_backup(null, $tables);
 			
 			//Save the database sync file in a temp file
 			$file = DIR_DOWNLOAD . 'tempdbs.txt';

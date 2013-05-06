@@ -72,12 +72,33 @@ final class mysqlidb implements Database{
 		
 		$file = escapeshellarg($file);
 		
-		$cmd = "\"$mysql\" --max_allowed_packet=10G --user=\"" . DB_USERNAME . "\" --password=\"" . DB_PASSWORD . "\" --host=\"" . DB_HOSTNAME . "\" " . DB_DATABASE . " < $file";
+		$cmd = "\"$mysql\" --max_allowed_packet=2G --user=\"" . DB_USERNAME . "\" --password=\"" . DB_PASSWORD . "\" --host=\"" . DB_HOSTNAME . "\" " . DB_DATABASE . " < $file";
 		
-		if(shell_exec($cmd) === null){
+		$error_file = DIR_LOGS . 'db_file_error.txt';
+		
+		shell_exec($cmd . ' 2> ' . $error_file);
+		
+		if(filesize($error_file) > 1){
+			$has_error = false;
+			
+			$handle = fopen($error_file, 'r');
+			
+			while (($buffer = fgets($handle, 4096)) !== false) {
+				if(strpos($buffer, 'ERROR') !== false){
+					$this->err_msg = "MySQLi::execute_file(): " . $buffer;
+					$has_error = true;
+				}
+   		}
+			
+			fclose($handle);
+			
+			file_put_contents($error_file, '');
+			
+			if($has_error) return false;
+			
 			if(!defined("DB_MYSQL_FILE") ||  !is_file(DB_MYSQL_FILE)){
 				trigger_error("You must define DB_MYSQL_FILE to contain the file and path to mysql (mysql.exe on windows) for execute_file()!");
-				return false;
+				return null;
 			}
 		}
 		
@@ -95,7 +116,6 @@ final class mysqlidb implements Database{
 		}
 		
 		$file = escapeshellarg($file);
-		$tables = escapeshellarg($tables);
 		
 		$cmd = "\"$mysqldump\" --user=\"" . DB_USERNAME . "\" --password=\"" . DB_PASSWORD . "\" --host=\"" . DB_HOSTNAME . "\" " . DB_DATABASE . " $tables > $file";
 		
