@@ -43,11 +43,13 @@
 		<? if($column['filter']) { ?>
 		<td class='column_filter <?= $column['align'];?>'>
 			<? switch($column['type']) {
-				case 'text':
-				case 'int': ?>
+				case 'text': ?>
 					<input type="text" name="filter[<?= $slug;?>]" value="<?= $column['filter_value'];?>" />
 				<? break;
 				
+				case 'int': ?>
+					<div class="filter_number_range"><input type="text" name="filter[<?= $slug; ?>]" value="<?= $column['filter_value']; ?>" /></div> 
+				<? break;
 				case 'select':
 				case 'multiselect':
 					if(isset($column['build_config'])){
@@ -57,11 +59,11 @@
 					echo $this->builder->build('select', $blank_option + $column['build_data'], "filter[$slug]", $column['filter_value']);
 					break;
 				
-				case 'date_range':
-				case 'time_range':
-				case 'datetime_range': ?>
-					<label><?= $entry_date_from;?></label> <input class='<?= str_replace('_range', '', $column['type']); ?>' type="text" name="filter[<?= $slug;?>][start]" value="<?= isset($column['value']['start']) ? $column['value']['start'] : '';?>" />
-					<label><?= $entry_date_to;?></label> <input class='<?= str_replace('_range', '', $column['type']); ?>' type="text" name="filter[<?= $slug?>][end]" value="<?= isset($column['value']['end']) ? $column['value']['end'] : '';?>" />
+				case 'date':
+				case 'time':
+				case 'datetime': ?>
+					<label class="date_from"><?= $entry_date_from;?></label><input class='<?= str_replace('_range', '', $column['type']); ?>' type="text" name="filter[<?= $slug;?>][start]" value="<?= isset($column['value']['start']) ? $column['value']['start'] : '';?>" />
+					<label class="date_to"><?= $entry_date_to;?></label><input class='<?= str_replace('_range', '', $column['type']); ?>' type="text" name="filter[<?= $slug?>][end]" value="<?= isset($column['value']['end']) ? $column['value']['end'] : '';?>" />
 				<? break;
 				
 				default: break;
@@ -93,66 +95,72 @@
 			
 			$value = $data[$slug];
 			
-			switch($column['type']) {
-				case 'text':
-				case 'int':?>
-					<?= $value; ?>
-				<? break;
-				
-				case 'date': ?>
-					<?= $this->tool->format_datetime($value, 'M d, Y'); ?>
-				<? break;
-				
-				case 'datetime': ?>
-					<?= $this->tool->format_datetime($value, 'M d, Y H:i A'); ?>
-				<? break;
-				
-				case 'time': ?>
-					<?= $this->tool->format_datetime($value, 'H:i A'); ?>
-				<? break;
-				
-				case 'map': ?>
-					<?= isset($column['display_data'][$value]) ? $column['display_data'][$value] : ''; ?>
-				<? break;
-				
-				case 'select':
-					foreach($column['build_data'] as $c_data){
-						if($c_data[key($column['build_config'])] == $value){ ?>
-							<?= $column['build_data'][$value][current($column['build_config'])];?>
-						<? }
-					}
-					break;
+			//Check if the raw string override has been set for this value
+			if(isset($data['#' . $slug])){
+				echo $data['#' . $slug];
+			}
+			else{
+				switch($column['type']) {
+					case 'text':
+					case 'int':?>
+						<?= $value; ?>
+					<? break;
 					
-				case 'multiselect':
-					foreach($value as $v){
-						$ms_value = is_array($v) ? $v[key($column['build_config'])] : $v;
+					case 'date': ?>
+						<?= $this->tool->format_datetime($value, 'M d, Y'); ?>
+					<? break;
+					
+					case 'datetime': ?>
+						<?= $this->tool->format_datetime($value, 'M d, Y H:i A'); ?>
+					<? break;
+					
+					case 'time': ?>
+						<?= $this->tool->format_datetime($value, 'H:i A'); ?>
+					<? break;
+					
+					case 'map': ?>
+						<?= isset($column['display_data'][$value]) ? $column['display_data'][$value] : ''; ?>
+					<? break;
+					
+					case 'select':
 						foreach($column['build_data'] as $c_data){
-							if($c_data[key($column['build_config'])] == $ms_value){
-								echo $c_data[current($column['build_config'])] . "<br/>";
-								break;
+							if($c_data[key($column['build_config'])] == $value){ ?>
+								<?= $c_data[current($column['build_config'])];?>
+							<? }
+						}
+						break;
+						
+					case 'multiselect':
+						foreach($value as $v){
+							$ms_value = is_array($v) ? $v[key($column['build_config'])] : $v;
+							foreach($column['build_data'] as $c_data){
+								if($c_data[key($column['build_config'])] == $ms_value){
+									echo $c_data[current($column['build_config'])] . "<br/>";
+									break;
+								}
 							}
 						}
-					}
-					break;
+						break;
+						
+					case 'format': ?>
+						<?= sprintf($column['format'],$value); ?>
+					<? break;
 					
-				case 'format': ?>
-					<?= sprintf($column['format'],$value); ?>
-				<? break;
-				
-				case 'image': ?>
-					<img src="<?= $data['thumb']; ?>" />
-				<? break;
-				
-				case 'text_list':
-					if(!empty($value) && is_array($value)){
-						foreach($value as $item){
-							echo $item[$column['display_data']];
+					case 'image': ?>
+						<img src="<?= $data['thumb']; ?>" />
+					<? break;
+					
+					case 'text_list':
+						if(!empty($value) && is_array($value)){
+							foreach($value as $item){
+								echo $item[$column['display_data']];
+							}
 						}
-					}
-					break;
-				
-				default: break;
-			} ?>
+						break;
+					
+					default: break;
+				}
+			}?>
 			</td>
 		<? } ?>
 		<td class="center actions">
@@ -164,7 +172,7 @@
 	<? } ?>
 	<? } else { ?>
 	<tr>
-		<td class="center" colspan="11"><?= $text_no_results; ?></td>
+		<td class="center" colspan="<?= count($columns) + 3;?>"><?= $text_no_results; ?></td>
 	</tr>
 	<? } ?>
  </tbody>

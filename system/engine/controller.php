@@ -15,7 +15,7 @@ abstract class Controller {
       $this->class_path = $class_path;
       
       if($class_path){
-         $this->template = new Template($this, defined('IS_ADMIN') ? '' : $this->config->get('config_template'));
+         $this->template = new Template($registry, $this->config->get('config_template'), $this);
       }
 	}
    

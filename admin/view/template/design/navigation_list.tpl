@@ -5,7 +5,7 @@
     <div class="heading">
       <h1><img src="view/image/setting.png" alt="" /> <?= $heading_title; ?></h1>
       <div class="batch_actions">
-         <?=$this->builder->build_batch_actions($text_batch_action,$batch_actions,$batch_action_values, html_entity_decode($batch_action_go));?>
+         <?=$this->builder->build_batch_actions($text_batch_action, $batch_actions, $batch_update);?>
      </div>
       <div class="buttons">
          <a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a>

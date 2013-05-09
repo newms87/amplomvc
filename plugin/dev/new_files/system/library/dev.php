@@ -118,6 +118,9 @@ class Dev{
 				
 				return true;
 			}
+			else{
+				$this->message->add('warning', $this->db->get_error());
+			}
 		}
 		
 		$this->message->add('warning', "There was a problem while synchronizing the requested tables from $conn_info[domain].");

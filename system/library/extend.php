@@ -148,6 +148,18 @@ class Extend {
 		$this->add_db_hook($hook_set, 'update', $table, array('Extend' => 'update_hsv_value'), $column);
 		
 		$this->db->table_add_column($table, '__image_sort__' . $column, 'FLOAT');
+		
+		$key_column = $this->db->get_key_column($table);
+		
+		$result = $this->db->query("SELECT $key_column, $column FROM " . DB_PREFIX . "$table");
+		
+		$sort_column = '__image_sort__' . $column;
+		 
+		foreach($result->rows as $row){
+			$this->update_hsv_value($row, $column);
+			
+			$this->db->query("UPDATE " . DB_PREFIX . "$table SET `$sort_column` = '$row[$sort_column]' WHERE `$key_column` = '$row[$key_column]'");
+		}
 	}
 	
 	public function disable_image_sorting($table, $column){
@@ -159,7 +171,7 @@ class Extend {
 	}
 	
 	public function update_hsv_value(&$data, $column){
-		//TODO: Implement this! How do we hook into the DB for plugins that have called $this->enable_image_sorting()?
+		if(!isset($data[$column])) return;
 		
 		$colors = $this->image->get_dominant_color($data[$column]);
 		$HSV = $this->image->RGB_to_HSV($colors['r'], $colors['g'], $colors['b']);

@@ -173,7 +173,7 @@ class ModelCatalogProduct extends Model {
 				" AND (p.date_expires > NOW() OR p.date_expires = '" . DATETIME_ZERO . "')";
 			
 			//Product Description if needed
-			if( (!empty($data['sort']) && $data['sort'] == 'pd.name') || 
+			if( ( !empty($data['sort']) && $data['sort'] == 'pd.name' ) || 
 				  !empty($data['name']) || !empty($data['name_like']) || !empty($data['search']) ){
 				$tables .= " LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id)";
 				

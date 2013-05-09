@@ -24,8 +24,16 @@
 					<tr>
 						<td><?= $entry_restore; ?></td>
 						<td>
-							<? $this->builder->set_config('path', 'name');?>
-							<?= $this->builder->build('radio', $data_backup_files, 'backup_file');?>
+							<? foreach($data_backup_files as $file){ ?>
+								<span class="radio_button">
+									<input type="radio" name="backup_file" value="<?= $file['path'];?>" id="radio_button_<?=md5($file['path']);?>" />
+									<label for="radio_button_<?=md5($file['path']);?>">
+										<span class="date"><?= $file['display_date'];?></span> - 
+										<span class="name"><?= $file['name'];?></span> - 
+										<span class="size"><?= $file['display_size'];?></span>
+									</label>
+								</span>
+							<? } ?>
 						</td>
 					</tr>
 					<tr>

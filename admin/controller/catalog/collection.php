@@ -17,7 +17,9 @@ class ControllerCatalogCollection extends Controller {
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_catalog_collection->addCollection($_POST);
 			
-			$this->message->add('success', $this->_('text_success'));
+			if(!$this->message->error_set()){
+            $this->message->add('success',$this->_('text_success'));
+         }
 			
 			unset($_POST);
 			
@@ -36,7 +38,9 @@ class ControllerCatalogCollection extends Controller {
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_catalog_collection->editCollection($_GET['collection_id'], $_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			if(!$this->message->error_set()){
+            $this->message->add('success',$this->_('text_success'));
+         }
 			
 			unset($_POST);
 			
@@ -52,21 +56,12 @@ class ControllerCatalogCollection extends Controller {
  
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if ($this->validateDelete()) {
-			if(isset($_POST['selected'])){ 
-				foreach ($_POST['selected'] as $collection_id) {
-					$this->model_catalog_collection->deleteCollection($collection_id);
-				}
-			}
-			elseif(isset($_GET['collection_id'])){
-				$this->model_catalog_collection->deleteCollection($_GET['collection_id']);
-			}
+		if (!empty($_GET['collection_id']) && $this->validateDelete()) {
+			$this->model_catalog_collection->deleteCollection($_GET['collection_id']);
 			
-			$this->message->add('success', $this->_('text_success'));
-			
-			unset($_POST);
-			
-			$this->getList();
+			if(!$this->message->error_set()){
+            $this->message->add('success',$this->_('text_success'));
+         }
 		}
 
 		$this->getList();
@@ -79,13 +74,16 @@ class ControllerCatalogCollection extends Controller {
          foreach ($_POST['selected'] as $collection_id) {
             switch($_GET['action']){
                case 'enable':
-                  $this->model_catalog_collection->batch_update($collection_id, array('status' => 1));
+                  $this->model_catalog_collection->update_field($collection_id, array('status' => 1));
                   break;
                case 'disable':
-                  $this->model_catalog_collection->batch_update($collection_id, array('status' => 0));
+                  $this->model_catalog_collection->update_field($collection_id, array('status' => 0));
                   break;
 					case 'delete':
 						$this->model_catalog_collection->deleteCollection($collection_id);
+						break;
+					case 'copy':
+						$this->model_catalog_collection->copyCollection($collection_id);
 						break;
             }
             if($this->error)
@@ -103,8 +101,6 @@ class ControllerCatalogCollection extends Controller {
    }
 
 	private function getList() {
-      $this->language->load('catalog/collection');
-      
       $this->template->load('catalog/collection_list');
 
       $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -117,8 +113,8 @@ class ControllerCatalogCollection extends Controller {
 		   'type' => 'image',
 		   'display_name' => $this->_('column_image'),
 		   'filter' => false,
-		   'sortable' => true,
-		   'sort_value' => '__image_sort__image'
+		   'sortable' => false,
+		   //'sort_value' => '__image_sort__image'
 		);
 		
 		$columns['name'] = array(
@@ -154,24 +150,28 @@ class ControllerCatalogCollection extends Controller {
 		   'sortable' => true,
 		);
 		
-		//The Sort / filter data
+		//The Sort data
 		$data = array();
 		
-		$sort_page = array(
+		$sort_defaults = array(
 			'sort' => 'name',
 			'order' => 'ASC',
 			'limit' => $this->config->get('config_admin_limit'),
 			'page' => 1,
 		);
 		
-		foreach($sort_page as $key => $default){
+		foreach($sort_defaults as $key => $default){
 			$data[$key] = $$key = isset($_GET[$key]) ? $_GET[$key] : $default;
 		}
 		
       $data['start'] = ($page - 1) * $limit;
 		
+		//Filter
 		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
-		$data += $filter_values;
+		
+		if($filter_values){
+			$data += $filter_values;
+		}
 		
 		//Retrieve the Filtered Table row data
       $collection_total = $this->model_catalog_collection->getTotalCollections($data);
@@ -196,8 +196,8 @@ class ControllerCatalogCollection extends Controller {
 			$collection['stores'] = $this->model_catalog_collection->getCollectionStores($collection['collection_id']);
       }unset($collection);
 		
-		//The table data
-		$table = array(
+		//The table template data
+		$tt_data = array(
 		   'row_id'		=> 'collection_id',
 		   'route'		=> 'catalog/collection',
 		   'sort'		=> $sort,
@@ -208,12 +208,12 @@ class ControllerCatalogCollection extends Controller {
 		   'data'		=> $collections,
 		);
 		
-		$table += $this->language->data;
+		$tt_data += $this->language->data;
 		
 		//Build the table template
 		$this->mytable->init();
 		$this->mytable->set_template('table/list_view');
-		$this->mytable->set_table($table);
+		$this->mytable->set_template_data($tt_data);
 		$this->mytable->map_attribute('filter_value', $filter_values);
 		
       $this->data['list_view'] = $this->mytable->build();
@@ -222,17 +222,23 @@ class ControllerCatalogCollection extends Controller {
       $url_query = $this->url->get_query('filter', 'sort', 'order', 'page');
 		
       $this->data['batch_actions'] = array(
-      	'enable'	=> "Enable",
-      	'disable'=>	"Disable",
-      	'delete' => "Delete",
+      	'enable'	=> array(
+      		'label' => "Enable"
+      	),
+      	'disable'=>	array(
+      		'label' => "Disable",
+      	),
+      	'delete' => array(
+      		'label' => "Delete",
+      	),
 		);
-		$this->data['batch_action_values'] = array();
 		
-      $this->data['batch_action_go'] = html_entity_decode($this->url->link('catalog/collection/batch_update', $url_query));
+      $this->data['batch_update'] = html_entity_decode($this->url->link('catalog/collection/batch_update', $url_query));
       
+		//Action Buttons
       $this->data['insert'] = $this->url->link('catalog/collection/insert', $url_query);
-      $this->data['copy'] = $this->url->link('catalog/collection/copy', $url_query);
       
+		//Pagination
       $url_query = $this->url->get_query('filter', 'sort', 'order');
       
       $this->pagination->init();
@@ -244,11 +250,13 @@ class ControllerCatalogCollection extends Controller {
       
       $this->data['pagination'] = $this->pagination->render();
       
+		//Template Children
       $this->children = array(
          'common/header',
          'common/footer'
       );
       
+		//Render
       $this->response->setOutput($this->render());
    }
 

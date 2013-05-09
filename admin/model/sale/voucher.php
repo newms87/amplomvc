@@ -88,7 +88,7 @@ class ModelSaleVoucher extends Model {
 				$language->load('mail/voucher');
 				
 				// HTML Mail
-				$template = new Template();				
+				$template = new Template();
 				
 				$template->data['title'] = sprintf($language->get('text_subject'), $voucher_info['from_name']);
 				

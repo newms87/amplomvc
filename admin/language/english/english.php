@@ -33,17 +33,17 @@ $_['text_pagination']         = 'Showing {start} to {end} of {total} ({pages} Pa
 $_['text_no_results']         = 'No results!';
 $_['text_separator']          = ' &gt; ';
 $_['text_edit']               = 'Edit';
+$_['text_delete']			= 'Delete';
 $_['text_view']               = 'View';
 $_['text_home']               = 'Home';
 $_['text_browse']             = 'Browse';
 $_['text_clear']             = 'Clear';
 $_['text_batch_action']      = 'Batch Action:';
-$_['text_batch_action_go']      = 'Go';
 $_['text_autocomplete']      = '<span class="help">(autocomplete)</span>';
 
 //Entry
-$_['entry_date_from'] = "From:";
-$_['entry_date_to'] = "To:";
+$_['entry_date_from'] = "";
+$_['entry_date_to'] = " - ";
 
 //Column
 $_['column_action']           = 'Action';
@@ -61,6 +61,7 @@ $_['button_filter']           = 'Filter';
 $_['button_send']             = 'Send';
 $_['button_edit']             = 'Edit';
 $_['button_copy']             = 'Copy';
+$_['button_batch_update']      = 'Go';
 $_['button_back']             = 'Back';
 $_['button_remove']           = 'Remove';
 $_['button_backup']           = 'Backup';

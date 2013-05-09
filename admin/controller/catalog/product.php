@@ -21,10 +21,6 @@ class ControllerCatalogProduct extends Controller {
          if(!$this->message->error_set()){
 			   $this->message->add('success',$this->_('text_success'));
          }
-         else{
-            'insert failed';
-            exit;
-         }
 	  
 			$this->getList();
          return;
@@ -89,7 +85,7 @@ class ControllerCatalogProduct extends Controller {
     	$this->getList();
  	}
 	
-   public function list_update() {
+   public function batch_update() {
       $this->load->language('catalog/product');
 
       $this->document->setTitle($this->_('heading_title'));
@@ -140,134 +136,246 @@ class ControllerCatalogProduct extends Controller {
    
   	private function getList() {
 		$this->template->load('catalog/product_list');
-
-  	   $filters = array(
-  	      'filter_name'=>null,'filter_model'=>null,'filter_price'=>null,'filter_cost'=>null,'filter_quantity'=>null,
-         'filter_manufacturer_id'=>null,'filter_category_id'=>null,'filter_is_final'=>null,'filter_date_expires'=>null,
-         'filter_status'=>null,'filter_editable'=>null,'sort'=>'pd.name','order'=>'ASC','page'=>1
-      );
-
-      
-      foreach($filters as $f=>$default){
-         $data[$f] = $this->data[$f] = $$f = isset($_GET[$f])?$_GET[$f]:$default;
-      }
-
-	   $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		
+		//Breadcrumbs
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
       $this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/product'));
-  		
-      $categories = array();
-      foreach($this->model_catalog_category->getCategories(null) as $cat){
-         $categories[$cat['category_id']] = $cat['name'];
-		}
-      
 		
-		$url = $this->get_url();
+		//The Table Columns
+		$columns = array();
 		
-      //Batch actions
-      $this->data['batch_actions'] = array('enable'=>'Enable','disable'=>'Disable', 'date_expires'=>'Product Expiration Date','is_final'=>"Final Sale",
-                                            'add_cat'=>'Add Category', 'remove_cat'=>"Remove Category", 'editable'=>'Allow Designer Edits',
-                                            'ship_policy'=>"Update Shipping / Return Policy"
-                                           );
-      $this->data['batch_action_values'] = array('date_expires'=>array('#type'=>'text','#default'=>DATETIME_ZERO,'#attrs'=>array('class'=>'datetime')),
-                                                  'is_final'=>array('#type'=>'select','#default'=>1, '#values'=>$this->_('yes_no')),
-                                                  'add_cat'=>array('#type'=>'select','#values'=>$categories),
-                                                  'remove_cat'=>array('#type'=>'select','#values'=>$categories),
-                                                  'editable'=>array('#type'=>'select','#default'=>1, '#values'=>$this->_('yes_no')),
-                                                  'ship_policy'=>array('#type'=>'ckedit', '#default'=>$this->_('shipping_return_policy'))
-                                                 );
-      $this->data['batch_action_go'] = $this->url->link('catalog/product/list_update', $url);
-      
-      
-      //Action Buttons
-		$this->data['insert'] = $this->url->link('catalog/product/insert', $url);
-		$this->data['copy'] = $this->url->link('catalog/product/copy', $url);	
-		$this->data['delete'] = $this->url->link('catalog/product/delete', $url);
-    	
-		$this->data['products'] = array();
+  		$columns['thumb'] = array(
+		   'type' => 'image',
+		   'display_name' => $this->_('column_image'),
+		   'filter' => false,
+		   'sortable' => true,
+		   'sort_value' => '__image_sort__image',
+		);
+		
+		$columns['name'] = array(
+		   'type' => 'text',
+		   'display_name' => $this->_('column_name'),
+		   'filter' => true,
+		   'sortable' => true,
+		   'sort_value' => 'pd.name',
+		);
+		
+		$columns['model'] = array(
+		   'type' => 'text',
+		   'display_name' => $this->_('column_model'),
+		   'filter' => true,
+		   'sortable' => true,
+		   'sort_value' => 'p.model',
+		);
+		
+		$columns['price'] = array(
+		   'type' => 'int',
+		   'display_name' => $this->_('column_price'),
+		   'filter' => true,
+		   'sortable' => true,
+		   'sort_value' => 'p.price',
+		);
+		
+		$columns['cost'] = array(
+		   'type' => 'int',
+		   'display_name' => $this->_('column_cost'),
+		   'filter' => true,
+		   'sortable' => true,
+		   'sort_value' => 'p.cost',
+		);
+		
+		$columns['special'] = array(
+		   'type' => 'int',
+		   'display_name' => $this->_('column_special'),
+		   'filter' => true,
+		   'sortable' => true,
+		);
+		
+		$columns['categories'] = array(
+			'type' => 'multiselect',
+			'display_name' => $this->_('column_category'),
+			'filter' => true,
+			'build_config' => array('category_id' => 'name'),
+			'build_data' => $this->model_catalog_category->getCategories(),
+			'sortable' => false,
+		);
+		
+		$columns['manufacturer_id'] = array(
+		   'type' => 'select',
+		   'display_name' => $this->_('column_manufacturer'),
+		   'filter' => true,
+		   'build_config' => array('manufacturer_id' => 'name'),
+	   	'build_data' => $this->model_catalog_manufacturer->getManufacturers(),
+		   'sortable' => true,
+		   'sort_value' => 'm.name',
+		);
+		
+		$columns['quantity'] = array(
+		   'type' => 'int',
+		   'display_name' => $this->_('column_quantity'),
+		   'filter' => true,
+		   'sortable' => true,
+		   'sort_value' => 'p.quantity',
+		);
+		
+		/*
+		$columns['date_expires'] = array(
+		   'type' => 'datetime',
+		   'display_name' => $this->_('column_date_expires'),
+		   'filter' => true,
+		   'sortable' => true,
+		);
+		*/
+		$columns['status'] = array(
+		   'type' => 'select',
+		   'display_name' => $this->_('column_status'),
+		   'filter' => true,
+		   'build_data' => $this->_('data_statuses'),
+		   'sortable' => true,
+		   'sort_value' => 'p.status',
+		);
 
-      $data['start']= ($page - 1) * $this->config->get('config_admin_limit');
-		$data['limit'] = $this->config->get('config_admin_limit');
+  	   //The Sort data
+		$data = array();
+		
+		$sort_defaults = array(
+			'sort' => 'name',
+			'order' => 'ASC',
+			'limit' => $this->config->get('config_admin_limit'),
+			'page' => 1,
+		);
+		
+		foreach($sort_defaults as $key => $default){
+			$data[$key] = $$key = isset($_GET[$key]) ? $_GET[$key] : $default;
+		}
+		
+      $data['start'] = ($page - 1) * $limit;
+		
+		//Filter
+		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
+		
+		if($filter_values){
+			$data += $filter_values;
+		}
+		
+		$url = $this->url->get_query('filter', 'sort', 'order', 'page');
 		
 		$product_total = $this->model_catalog_product->getTotalProducts($data);
-		$results = $this->model_catalog_product->getProducts($data);
+		$products = $this->model_catalog_product->getProducts($data);
       
-		foreach ($results as $result) {
-			$action = array();
-			
-			$action[] = array(
-				'text' => $this->_('text_edit'),
-				'href' => $this->url->link('catalog/product/update', 'product_id=' . $result['product_id'] . $url)
+		foreach ($products as &$product) {
+			$product['actions'] = array(
+				'edit' => array(
+					'text' => $this->_('text_edit'),
+					'href' => $this->url->link('catalog/product/update', 'product_id=' . $product['product_id'] . $url)
+				),
+				'delete' => array(
+					'text' => $this->_('text_delete'),
+					'href' => $this->url->link('catalog/product/delete', 'product_id=' . $product['product_id'] . $url)
+				)
 			);
 			
-			if ($result['image'] && file_exists(DIR_IMAGE . $result['image'])) {
-				$image = $this->image->resize($result['image'], 40, 40);
-			} else {
-				$image = $this->image->resize('no_image.jpg', 40, 40);
-			}
+			$product['thumb'] = $this->image->resize($product['image'], $this->config->get('config_image_admin_list_width'), $this->config->get('config_image_admin_list_height'));
          
-         $categories = $this->model_catalog_product->getProductCategories($result['product_id']);
+         $product['categories'] = $this->model_catalog_product->getProductCategories($product['product_id']);
          
-			$special = false;
-			$product_specials = $this->model_catalog_product->getProductSpecials($result['product_id']);
+			$product['price'] = $this->currency->format($product['price']);
+			$product['cost'] = $this->currency->format($product['cost']);
 			
-			foreach ($product_specials  as $product_special) {
-				if (($product_special['date_start'] == DATETIME_ZERO || $product_special['date_start'] < date('Y-m-d H:i:s')) && ($product_special['date_end'] == DATETIME_ZERO || $product_special['date_end'] > date('Y-m-d H:i:s'))) {
-					$special = $product_special['price'];
+			$special = $this->model_catalog_product->getProductActiveSpecial($product['product_id']);
+			$product['special'] = !empty($special) ? $this->currency->format($special['price']) : '';
 			
-					break;
-				}					
+			//The # in front of the key signifies we want to output the raw string for the value when rendering the table
+         if($product['date_expires'] == DATETIME_ZERO){
+         	$product['#date_expires'] = $this->_('text_no_expiration');
 			}
-         
-      		$this->data['products'][] = array(
-				'product_id' => $result['product_id'],
-				'name'       => $result['name'],
-				'model'      => $result['model'],
-				'price'      => $result['price'],
-				'cost'      => $result['cost'],
-				'special'    => $special,
-				'image'      => $image,
-				'categories' => $categories,
-				'manufacturer_id' => $result['manufacturer_id']?$result['manufacturer_id']:'',
-				'quantity'   => $result['quantity'],
-				'is_final'   => $result['is_final'],
-				'date_expires'   => $result['date_expires'] == DATETIME_ZERO?"No Expiration":$result['date_expires'],
-				'editable'   => ($result['editable']?"Yes":"No"),
-				'status'     => ($result['status'] ? $this->_('text_enabled') : $this->_('text_disabled')),
-				'selected'   => isset($_POST['selected']) && in_array($result['product_id'], $_POST['selected']),
-				'action'     => $action
-			);
     	}
 		
-	   $this->data['category_list'] = array(''=>'');
-      foreach($this->model_catalog_category->getCategories(null) as $cat){
-         $this->data['category_list'][$cat['category_id']] = $cat['name'];
-      }
-      
-      $this->data['manufacturer_list'] = array(''=>'');
-      
-      $m_data = array(
-         'sort' => 'name',
-      );
-      
-      $manufacturers = $this->model_catalog_manufacturer->getManufacturers($m_data);
-      
-      foreach($manufacturers as $manufacturer){
-         $this->data['manufacturer_list'][$manufacturer['manufacturer_id']] = $manufacturer['name'];
-      }
-
-		$url = $this->get_url(true);
+		//The table template data
+		$tt_data = array(
+		   'row_id'		=> 'product_id',
+		   'route'		=> 'catalog/product',
+		   'sort'		=> $sort,
+		   'order'		=> $order,
+		   'page'		=> $page,
+		   'sort_url'	=> $this->url->link('catalog/product', $this->url->get_query('filter')),
+		   'columns'	=> $columns,
+		   'data'		=> $products,
+		);
 		
-      $sort_by = array(
-         'sort_name'=>'pd.name','sort_model'=>'p.model','sort_price'=>'p.price','sort_cost'=>'p.cost','sort_is_final'=>'p.is_final',
-         'sort_manufacturer'=>'m.name','sort_category'=>'c.name','sort_date_expires'=>'p.date_expires','sort_quantity'=>'p.quantity','sort_editable'=>'p.editable',
-         'sort_status'=>'p.status','sort_order'=>'p.sort_order'
-        );
-        
-      foreach($sort_by as $s=>$q)
-         $this->data[$s] = $this->url->link('catalog/product', "sort=$q" . $url);
+		$tt_data += $this->language->data;
 		
-		$url = $this->get_url();
-	   
+		//Build the table template
+		$this->mytable->init();
+		$this->mytable->set_template('table/list_view');
+		$this->mytable->set_template_data($tt_data);
+		$this->mytable->map_attribute('filter_value', $filter_values);
+		
+      $this->data['list_view'] = $this->mytable->build();
+		
+		$categories = $this->model_catalog_category->getCategories(null);
+		
+		//Batch actions
+      $this->data['batch_actions'] = array(
+      	'enable'=> array(
+      		'label' => "Enable",
+   		),
+   		
+   		'disable' => array(
+   			'label' => "Disable",
+   		),
+   		
+			'date_expires' => array(
+				'label'	=> "Product Expiration Date",
+				'type'	=>'datetime',
+				'default'=> DATETIME_ZERO,
+			),
+			
+			'is_final' => array(
+				'label' => "Final Sale",
+				'type' => 'select',
+				'default' => 1,
+				'build_data' => $this->_('data_yes_no'),
+			),
+			
+			'add_cat' => array(
+				'label' => "Add Category",
+				'type' => 'select',
+				'build_data' => $categories,
+				'build_config' => array('category_id' => 'name'),
+			),
+			
+			'remove_cat' => array(
+				'label' => "Remove Category",
+				'type' => 'select',
+				'build_data' => $categories,
+				'build_config' => array('category_id' => 'name'),
+			),
+			
+			'editable' => array(
+				'label' => "Allow Designer Edits",
+				'type' => 'select',
+				'default' => 1,
+				'build_data' => $this->_('data_yes_no'),
+			),
+			
+			'ship_policy' => array(
+				'label' => "Update Shipping / Return Policy",
+				'type' => 'ckedit',
+				'default' => $this->_('shipping_return_policy'),
+			)
+		);
+		
+		$url = $this->url->get_query('filter', 'sort', 'order', 'page');
+		
+      $this->data['batch_update'] = $this->url->link('catalog/product/batch_update', $url);
+      
+		//Action Buttons
+		$this->data['insert'] = $this->url->link('catalog/product/insert', $url);
+		
+		//Pagination
+		$url = $this->url->get_query('filter', 'sort', 'order');
+		
 		$this->pagination->init();
 		$this->pagination->total = $product_total;
 		$this->pagination->page = $page;
@@ -277,12 +385,13 @@ class ControllerCatalogProduct extends Controller {
 			
 		$this->data['pagination'] = $this->pagination->render();
 	   
-         
+      //Child Templates
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
-				
+		
+		//Render
 		$this->response->setOutput($this->render());
   	}
 

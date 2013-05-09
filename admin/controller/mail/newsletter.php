@@ -41,47 +41,8 @@ class ControllerMailNewsletter extends Controller {
 
       $this->getForm();
    }
-   
-   public function copy() {
-      $this->load->language('mail/newsletter');
-      
-      $this->document->setTitle($this->_('heading_title'));
-      
-      if (isset($_POST['selected']) && $this->validateModify()) {
-         foreach ($_POST['selected'] as $newsletter_id) {
-            $this->model_mail_newsletter->copyNewsletter($newsletter_id);
-         }
 
-         if(!$this->message->error_set()){
-            $this->message->add('success',$this->_('text_success_copy'));
-         }
-         else{
-            $this->message->add('error', $this->_('error_copy'));
-         }
-      }
-
-      $this->getList();
-   }
-
-   public function delete() {
-      $this->load->language('mail/newsletter');
-
-      $this->document->setTitle($this->_('heading_title'));
-      
-      if (isset($_POST['selected']) && $this->validateModify()) {
-         foreach ($_POST['selected'] as $newsletter_id) {
-            $this->model_mail_newsletter->deleteNewsletter($newsletter_id);
-         }
-
-         if(!$this->message->error_set()){
-            $this->message->add('success',$this->_('text_success'));
-         }
-      }
-
-      $this->getList();
-   }
-   
-   public function list_update() {
+   public function batch_update() {
       $this->load->language('mail/newsletter');
 
       $this->document->setTitle($this->_('heading_title'));
@@ -95,6 +56,11 @@ class ControllerMailNewsletter extends Controller {
                case 'disable':
                   $this->model_mail_newsletter->editNewsletter($newsletter_id, array('status' => 0));
                   break;
+					case 'copy':
+						$this->model_mail_newsletter->copyNewsletter($newsletter_id);
+						break;
+					case 'delete':
+						$this->model_mail_newsletter->deleteNewsletter($newsletter_id);
                default:
                   $this->error['warning'] = "Invalid Action Selected!";
                   break;
@@ -113,55 +79,58 @@ class ControllerMailNewsletter extends Controller {
    }
 
    private function getList() {
-      $this->language->load('mail/newsletter');
-      
       $this->template->load('mail/newsletter_list');
+		$this->language->load('mail/newsletter');
 
       $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
       $this->breadcrumb->add($this->_('heading_title'), $this->url->link('mail/newsletter'));
-      
-		//This table is data pulled from admin/view/template_option/[template]/design/newsletter_list.to file
-      $table = $this->template->get_table('listview');
-      
-      $table->set_template('table/sort_filter_list');
-      
-      $data_list = array(
-         'sort'  =>'name',
-         'order' =>'ASC',
-         'page'  =>1
-      );
-      
-      $data = array();
-      
-      foreach($data_list as $key => $default){
-         if(isset($_GET[$key])){
-            $data[$key] = $_GET[$key];
-         }
-         else{
-            $data[$key] = $default;
-         }
-      }
-      
-      $table->add_extra_data($data);
-      
-      if(isset($_GET['filter'])){
-         foreach($_GET['filter'] as $filter => $value){
-            $data[$filter] = $value;
-            $table->set_column_value($filter, 'filter_value', $value);
-         }
-      }
-      
-      $queries = array(
-         'filter_query' => $this->url->get_query('filter'),
-      ); 
-      
-      $table->add_extra_data($queries);
-      
-      $data['limit'] = $this->config->get('config_admin_limit');
-      $data['start'] = ($data['page'] - 1) * $data['limit'];
+
+		//The Table Columns
+		$columns = array();
+		
+		$columns['name'] = array(
+			'display_name' => $this->_('column_name'),
+		   'type' => 'text',
+		   'filter' => true,
+		   'sortable' => true,
+		);
+		
+		$columns['send_date'] = array(
+			'display_name' => $this->_('column_send_date'),
+		   'type' => 'datetime',
+		   'filter' => true,
+		   'sortable' => false,
+		);
+		
+		$columns['status'] = array(
+			'display_name' => $this->_('column_status'),
+		   'type' => 'select',
+		   'filter' => true,
+		   'build_data' => $this->_('data_statuses'),
+		   'sortable' => true,
+		);
+		
+		//The Sort / filter data
+		$data = array();
+		
+		$sort_page = array(
+			'sort' => 'name',
+			'order' => 'ASC',
+			'limit' => $this->config->get('config_admin_limit'),
+			'page' => 1,
+		);
+		
+		foreach($sort_page as $key => $default){
+			$data[$key] = $$key = isset($_GET[$key]) ? $_GET[$key] : $default;
+		}
+		
+      $data['start'] = ($page - 1) * $limit;
+		
+		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
+		
+		$data += $filter_values;
       
       $newsletter_total = $this->model_mail_newsletter->getTotalNewsletters($data);
-      
       $results = $this->model_mail_newsletter->getNewsletters($data);
       
       $newsletters = array();
@@ -186,7 +155,7 @@ class ControllerMailNewsletter extends Controller {
       
       $this->data['update_actions'] = array('enable'=>'Enable','disable'=>'Disable');
       
-      $this->data['list_update'] = $this->url->link('mail/newsletter/list_update', $url . '&action=%action%');
+      $this->data['batch_update'] = $this->url->link('mail/newsletter/batch_update', $url . '&action=%action%');
       
       $this->data['insert'] = $this->url->link('mail/newsletter/insert', $url);
       $this->data['copy'] = $this->url->link('mail/newsletter/copy', $url);

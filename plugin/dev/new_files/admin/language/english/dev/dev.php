@@ -32,7 +32,7 @@ $_['entry_domain']    = 'Site Domain: <span class="help">(eg: www.yourdomain.com
 $_['entry_username']    = 'Username:';
 $_['entry_password']    = 'Password:';
 $_['entry_status']    = 'Site Status:';
-$_['entry_backup']    = 'Full Database Backup:';
+$_['entry_backup']    = 'Database Backup:';
 $_['entry_restore']    = 'Restore Site From Backup:';
 $_['entry_execute_file']    = 'Execute DB Script File:';
 

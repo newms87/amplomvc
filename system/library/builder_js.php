@@ -67,7 +67,7 @@ country_selectors.each(function(i,e){
  * @param $route - The route of the page to load
  * @param $filters - The list of filters to activate
  */
-   case 'filter_url': 
+   case 'filter_url':
       if(count($args) < 2 || count($args) > 3){
          trigger_error("Template JS: filter_url: excepts exactly 1 argument! Usage: \$this->builder->js('filter_url', selector, route, query='');");
          return '';

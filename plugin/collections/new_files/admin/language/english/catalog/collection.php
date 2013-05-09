@@ -6,7 +6,6 @@ $_['heading_title']     = 'Collection';
 $_['text_success']      = 'Success: You have modified collection!';
 $_['text_add_link']      = 'Add Link';
 $_['text_edit_link']      = 'Edit Link';
-$_['text_delete']			= 'Delete';
 $_['text_hide_link']      = 'Hide';
 $_['text_admin_panel'] = "Admin Panel";
 

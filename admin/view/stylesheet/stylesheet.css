@@ -535,6 +535,21 @@ a.button.designer{
 	padding: 5px;
 	background: #E7EFEF;
 }
+
+.list .filter_number_range{
+}
+.list .filter_number_range > input{
+	width: 40px;
+}
+
+.list label.date_from{
+	margin: 0;
+}
+
+.list label.date_to{
+	margin: 0 3px;
+}
+
 .pagination {
 	border-top: 1px solid #DDDDDD;
 	display: inline-block;

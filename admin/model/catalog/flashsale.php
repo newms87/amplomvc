@@ -307,12 +307,12 @@ class ModelCatalogFlashsale extends Model {
          }
          
          if(!$total){
-   	      if(isset($data['sort']) && $data['sort']){
+   	      if(!empty($data['sort'])){
                $order = (isset($data['order'])?$data['order']:'ASC');
                $options['order_by'] = $data['sort'] . ' ' . $order;
             }
             
-            if(isset($data['limit'])){
+            if(!empty($data['limit'])){
                $start = isset($data['start']) ? $data['start']:0;
                $options['limit'] = "$start, $data[limit]";
             }

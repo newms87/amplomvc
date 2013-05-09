@@ -187,9 +187,17 @@ class ControllerDesignNavigation extends Controller {
       $url = $this->url->get_query('filter', 'sort', 'order', 'page');
       
 		//Batch Actions
-      $this->data['batch_actions'] = array('enable'=>'Enable','disable'=>'Disable');
-		$this->data['batch_action_values'] = array();
-      $this->data['batch_action_go'] = $this->url->link('design/navigation/batch_update', $url);
+      $this->data['batch_actions'] = array(
+      	'enable' => array(
+      		'label' => "Enable",
+   		),
+   		
+   		'disable' => array(
+   			'label' => "Disable",
+			)
+		);
+		
+      $this->data['batch_update'] = $this->url->link('design/navigation/batch_update', $url);
       
       $this->data['insert'] = $this->url->link('design/navigation/insert', $url);
       $this->data['copy'] = $this->url->link('design/navigation/copy', $url);

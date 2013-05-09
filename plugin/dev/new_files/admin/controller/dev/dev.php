@@ -164,7 +164,8 @@ class ControllerDevDev extends Controller {
 		$backup_files = $this->model_dev_dev->getBackupFiles();
 		
 		foreach($backup_files as &$backup){
-			$backup['name'] = $backup['name'] . ' - <strong>' . $this->tool->bytes2str($backup['size'],2) . '</strong>';
+			$backup['display_size'] = $this->tool->bytes2str($backup['size'],2);
+			$backup['display_date'] = $this->tool->format_datetime($backup['date'], 'd M, Y'); 
 		}
 		
 		$this->data['data_backup_files'] = $backup_files;

@@ -1,5 +1,7 @@
 <?php
 class Template {
+	private $registry;
+	
 	public $data = array();
    
    private $tables  = array();
@@ -19,7 +21,11 @@ class Template {
    private $template;
    private $theme;
    
-   function __construct($controller = null, $theme = ''){
+	private $controller;
+	
+   function __construct(&$registry, $theme = '', $controller = null){
+   	$this->registry = $registry;
+		
       if($controller){
          $this->controller = $controller;
          $this->db         = $controller->db;
@@ -39,6 +45,10 @@ class Template {
       }
    }
    
+	public function __get($key){
+		return $this->registry->get($key);
+	}
+	
    private function _($key){
       return $this->language->data[$key];
    }
@@ -59,7 +69,7 @@ class Template {
          $this->file = DIR_TEMPLATE . 'default/template/' . $file_name . '.tpl';
       }
       else{
-         if($this->name){
+         if($this->name && $this->controller){
             $this->cache->delete('template'.$this->name);
          }
          trigger_error('Error: Could not load template ' . DIR_TEMPLATE . $this->template . $file_name . '.tpl!');
@@ -67,6 +77,10 @@ class Template {
       }
    }
    
+	public function set_data($data){
+		$this->data = $data;
+	}
+	
    public function has_table($table){
       return isset($this->tables[$table]);
    }
@@ -244,11 +258,32 @@ class Template {
       
       $this->data = $data;
       
-      $file_name = $this->load_template_option($name);
+		if($this->controller){
+      	$file_name = $this->load_template_option($name);
+		}
+		else{
+			$file_name = $name;
+		}
       
       $this->set_file($file_name);
    }
    
+	public function render(){
+		if(file_exists($this->file)){
+			extract($this->data);
+			
+			ob_start();
+			
+			include($this->file);
+			
+			return ob_get_clean();
+		}
+		else {
+			trigger_error('Error: Could not load template file ' . $this->file . '! ' . get_caller(1));
+			exit();
+		}
+	}
+	
 	public function fetch($filename) {
 		$file = DIR_TEMPLATE . $filename;
     

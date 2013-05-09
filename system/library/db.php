@@ -92,7 +92,17 @@ class DB {
 		return $result->num_rows;
 	}
 	
-   private function has_column($table, $column){
+	public function get_key_column($table){
+		$result = $this->driver->query("SHOW KEYS FROM " . DB_PREFIX . "$table WHERE Key_name = 'PRIMARY'");
+		
+		if($result->num_rows){
+			return $result->row['Column_name'];
+		}
+		
+		return false;
+	}
+	
+   public function has_column($table, $column){
       $query = $this->driver->query("SHOW COLUMNS FROM " . DB_PREFIX . "$table");
       foreach($query->rows as $row){
          if(strtolower($row['Field']) == strtolower($column))

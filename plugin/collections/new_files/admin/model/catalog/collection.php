@@ -97,7 +97,7 @@ class ModelCatalogCollection extends Model {
 		
 	}
 	
-	public function batch_update($collection_id, $data){
+	public function update_field($collection_id, $data){
 		$this->update('collection', $data, $collection_id);
 	}
 	
@@ -160,14 +160,20 @@ class ModelCatalogCollection extends Model {
       }
       
 		//Order By & Limit
-		$order_limit = $this->extract_order_limit_string($data);
+		if(!$total){
+			$order_limit = $this->extract_order_limit_string($data);
+		}
+		else{
+			$order_limit = '';
+		}
 		
-		//Construct Query
+		//The Query
 		$sql = "SELECT $select FROM $from $where $order_limit";
 		
-		//Execute Query
+		//Execute
       $result = $this->query($sql);
       
+		//Process Results
       if($total){
          return $result->row['total'];
       }

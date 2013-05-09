@@ -660,117 +660,147 @@ class ModelCatalogProduct extends Model {
 		return $query->row;
 	}
 	
-	public function getProducts($data = array(), $select = null) {
+	public function getProducts($data = array(), $select = '', $total = false) {
 	   $lang_id = (int)$this->config->get('config_language_id');
       
-      if(!$data){
-         $products = $this->cache->get('product.' . $lang_id);
-         
-         if($products){
-            return $products;
-         }
+		//Select
+		if($total){
+         $select = 'COUNT(*) as total';
+      }
+      elseif(!$select){
+         $select = 'pd.*, p.*';
       }
       
-      if(!$select){
-		   $select = "pd.*, p.*";
+		//From
+		$from = "FROM " . DB_PREFIX . "product p";
+		$from .= " LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id=pd.product_id AND pd.language_id = '$lang_id')";
+		
+		//Where
+      $where = "WHERE 1";
+      
+      if(isset($data['pd.name'])){
+         $where .= " AND pd.name like '%" . $this->db->escape($data['pd.name']) . "%'";
       }
-      
-      //JOIN Required tables
-      $tables = array();
-      
-      $tables["LEFT JOIN"]["product_description pd"] = "p.product_id = pd.product_id AND pd.language_id = '$lang_id'";
+		
+		if(isset($data['p.model'])){
+         $where .= " AND p.model like '%" . $this->db->escape($data['p.model']) . "%'";
+      }
+		
+		if(isset($data['p.model'])){
+         $where .= " AND p.model like '%" . $this->db->escape($data['p.model']) . "%'";
+      }
+		
+		if(!empty($data['categories'])){
+			//TODO: Need to grab sub categories as well! Maybe this should be in controller?
+			$category_ids = is_array($data['categories']) ? $data['categories'] : array((int)$data['categories']);
+			
+			$from .= " LEFT JOIN " . DB_PREFIX . "product_to_category pc ON (p.product_id=pc.product_id)";
+			
+			$where .= " AND pc.category_id IN (" . implode(',', $category_ids) . ")";
+		}
+		
+		if(!empty($data['manufacturer_id'])){
+			$where .= " AND p.manufacturer_id = '" . (int)$data['manufacturer_id'] . "'";
+		}
 
-		if (isset($data['filter_category_id']) && !empty($data['filter_category_id'])) {
-		   $tables["LEFT JOIN"]['product_to_category p2c'] = "p.product_id = p2c.product_id";
+		if((isset($data['sort']) && $data['sort'] == 'm.name') || !empty($data['m.name'])){
+			$from .= " LEFT JOIN " . DB_PREFIX . "manufacturer m ON(m.manufacturer_id=p.manufacturer_id)";
+			
+			if(!empty($data['m.name'])){
+				$where  .= " AND m.name = '" . $this->db->escape($data['m.name']) . "'";
+			}
+      }
+      
+		if (!empty($data['p.price']['low'])) {
+			$where .= " AND p.price >= '" . (int)$data['p.price']['low'] . "'";
 		}
 		
-      if(isset($data['sort']) && $data['sort'] == 'm.name'){
-         $tables["LEFT JOIN"]['manufacturer m'] = 'p.manufacturer_id = m.manufacturer_id';
-      }
-      
-      $where = array();
-		
-		if (!empty($data['filter_name'])) {
-			$where["AND"][] = "LCASE(pd.name) LIKE '%" . $this->db->escape(strtolower($data['filter_name'])) . "%'";
-		}
-
-		if (!empty($data['filter_model'])) {
-			$where["AND"][] = "LCASE(p.model) LIKE '%" . $this->db->escape(strtolower($data['filter_model'])) . "%'";
-		}
-		if (!empty($data['filter_manufacturer_id'])) {
-		   if(is_array($data['filter_manufacturer_id'])){
-            $where["AND"][] = "p.manufacturer_id IN (" . implode(',',$data['filter_manufacturer_id']) . ")";
-         }
-         else{
-            $where["AND"][] = "p.manufacturer_id ='" . (int)$data['filter_manufacturer_id'] . "'";
-         }
-      }
-      
-		if (!empty($data['filter_price']['low'])) {
-			$where["AND"][] = "p.price >= '" . (int)$data['filter_price'] . "'";
-		}
-      
-      if (!empty($data['filter_price']['high'])) {
-         $where["AND"][] = "p.price <= '" . (int)$data['filter_price'] . "'";
-      }
-      
-      if (!empty($data['filter_cost']['low'])) {
-         $where["AND"][] = "p.cost >= '" . (int)$data['filter_cost'] . "'";
-      }
-      
-      if (!empty($data['filter_cost']['high'])) {
-         $where["AND"][] = "p.cost <= '" . (int)$data['filter_cost'] . "'";
-      }
-      
-      if (isset($data['filter_is_final'])) {
-         $where["AND"][] = "p.is_final = '" . (int)$data['filter_is_final'] . "'";
-      }
-		
-		if (!empty($data['filter_date_expires']['start'])) {
-         $where["AND"][] = "p.date_expires > '" . $this->db->escape($data['filter_date_expires']['start']) . "'";
-      }
-      
-      if (!empty($data['filter_date_expires']['end'])) {
-         $where["AND"][] = "p.date_expires < '" . $this->db->escape($data['filter_date_expires']['end']) . "'";
-      }
-		
-		if (isset($data['filter_quantity'])) {
-			$where["AND"][] = "p.quantity = '" . (int)$data['filter_quantity'] . "'";
+		if (!empty($data['p.price']['high'])) {
+			$where .= " AND p.price <= '" . (int)$data['p.price']['high'] . "'";
 		}
 		
-      if (isset($data['filter_editable'])) {
-         $where["AND"][] = "p.editable = '" . (int)$data['filter_editable'] . "'";
-      }
-      
-		if (isset($data['filter_status'])) {
-			$where["AND"][] = "p.status = '" . (int)$data['filter_status'] . "'";
+		if (!empty($data['p.cost']['low'])) {
+			$where .= " AND p.cost >= '" . (int)$data['p.cost']['low'] . "'";
 		}
 		
-		//TODO: Optimize this so we pull p2c.category_id IN (SELECT category_id ...) for sub categories
-		if (!empty($data['filter_category_id'])) {
-			if (!empty($data['filter_sub_category'])) {
-				   
-				$implode_data = array((int)$data['filter_category_id']);
-				
-				$categories = $this->model_catalog_category->getCategories($data['filter_category_id']);
-				
-				foreach ($categories as $category) {
-					$implode_data[] = (int)$category['category_id'];
-				}
-				
-				$where["AND"][] = "p2c.category_id IN (" . implode(',', $implode_data) . ")";			
-			} else {
-				$where["AND"][] = "p2c.category_id = '" . (int)$data['filter_category_id'] . "'";
+		if (!empty($data['p.cost']['high'])) {
+			$where .= " AND p.cost <= '" . (int)$data['p.cost']['high'] . "'";
+		}
+		
+		if (!empty($data['special']) || (isset($data['sort']) && $data['sort'] == 'special')) {
+			$select .= ", (SELECT price FROM " . DB_PREFIX . "product_special ps WHERE ps.product_id = p.product_id AND ((ps.date_start = '" . DATETIME_ZERO . "' OR ps.date_start < NOW()) AND (ps.date_end = '". DATETIME_ZERO . "' OR ps.date_end > NOW())) ORDER BY ps.priority ASC, ps.price ASC LIMIT 1) AS special";
+			
+			if(!empty($data['special']['high'])){
+				$where .= " AND special <= '" . (int)$data['special']['high'] . "'";
+			}
+			
+			if(!empty($data['special']['low'])){
+				$where .= " AND special >= '" . (int)$data['special']['low'] . "'";
 			}
 		}
-		
-      $query = $this->execute('product p', $select, $tables, $where, $data);
-	   
-	   if(!$data && $query->num_rows > 2){
-         $this->cache->set('product.' . $lang_id, $query->rows);
-      }
       
-		return $query->rows;
+		if(!empty($data['p.is_final'])){
+			$where .= " AND p.is_final = '" . ($data['p.is_final'] ? 1 : 0) . "'";
+		}
+		
+		if(!empty($data['date_expires']['from'])){
+			$dt_zero = DATETIME_ZERO;
+			
+			$where .= " AND (p.date_expires == '$dt_zero' OR p.date_expires >= '" . $this->db->escape($data['date_expires']['from']) . "'";
+		}
+		
+		if(!empty($data['date_expires']['to'])){
+			$where .= " AND (p.date_expires <= '" . $this->db->escape($data['date_expires']['to']) . "'";
+		}
+		
+		if (isset($data['p.quantity'])) {
+			$where .= " AND p.quantity = '" . (int)$data['p.quantity'] . "'";
+		}
+		
+      if(isset($data['status'])){
+         $where .= " AND p.status = '" . ($data['status'] ? 1 : 0) . "'";
+      }
+		
+      //GROUP BY
+		$group_by = " GROUP BY p.product_id";
+		
+		//ORDER BY and LIMIT
+		$order_by = '';
+		$limit = '';
+		
+		if(!$total){
+			if(!empty($data['sort'])){
+				//enable image sorting if requested and not already installed
+				if(strpos($data['sort'], '__image_sort__') === 0){
+					if(!$this->db->has_column('product', $data['sort'])){
+						$this->extend->enable_image_sorting('product', str_replace('__image_sort__', '', $data['sort']));
+					}
+				}
+		
+				$order = (!empty($data['order']) && $data['order'] == 'DESC') ? 'DESC' : 'ASC'; 
+				
+				$order_by = "ORDER BY $data[sort] $order";
+			}
+			
+			$start = !empty($data['start']) ? (int)$data['start'] : 0;
+			$limit = !empty($data['limit']) ? (int)$data['limit'] : $this->config->get('config_catalog_limit');
+			
+			$limit = "LIMIT $start,$limit";
+		}
+		
+		//The Query
+		$query = "SELECT $select $from $where $group_by $order_by $limit";
+		
+		//Execute
+		$result = $this->query($query);
+		
+		//Process Results
+		if($total){
+			return $result->row['total'];
+		}
+		else{
+			return $result->rows;
+		}
 	}
 	
    public function isEditable($product_id){
@@ -906,6 +936,14 @@ class ModelCatalogProduct extends Model {
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "product_special WHERE product_id = '" . (int)$product_id . "' ORDER BY priority, price");
 		
 		return $query->rows;
+	}
+	
+	public function getProductActiveSpecial($product_id){
+		$datetime_zero = DATETIME_ZERO;
+		
+		$result = $this->query("SELECT * FROM " . DB_PREFIX . "product_special WHERE product_id = '" . (int)$product_id . "' AND (date_start = '$datetime_zero' OR date_start <= NOW()) AND (date_end = '$datetime_zero' OR date_end > NOW()) ORDER BY priority, price LIMIT 1"); 
+		
+		return $result->row;
 	}
 	
 	public function getProductRewards($product_id) {

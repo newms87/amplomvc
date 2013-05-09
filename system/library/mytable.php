@@ -1,7 +1,7 @@
 <?php
 class mytable {
    private $file;
-	private $table;
+	private $template_data;
 	private $path;
 	private $registry;
    
@@ -21,8 +21,8 @@ class mytable {
 		$this->path = $path;
 	}
 	
-	public function set_table($table){
-		$this->table = $table;
+	public function set_template_data($template_data){
+		$this->template_data = $template_data;
 	}
 	
    public function set_template($file){
@@ -43,12 +43,12 @@ class mytable {
    }
    
 	public function map_attribute($attr, $values){
-		if(empty($this->table['columns'])){
-			trigger_error("Error: You must set the table structure with Table::set_table() before mapping data!" . get_caller(3));
+		if(empty($this->template_data['columns'])){
+			trigger_error("Error: You must set the table structure with Table::set_template_data() before mapping data!" . get_caller(3));
 			exit();
 		}
 		
-		foreach($this->table['columns'] as $slug => &$column){
+		foreach($this->template_data['columns'] as $slug => &$column){
 			$column[$attr] = isset($values[$slug]) ? $values[$slug] : null;
 		}
 	}
@@ -56,7 +56,7 @@ class mytable {
    public function build(){
      	$this->prepare();
       
-      extract($this->table);
+      extract($this->template_data);
 		
       //render the file
       ob_start();
@@ -76,12 +76,12 @@ class mytable {
          exit();
       }
       
-      if(!isset($this->table)){
-         trigger_error("The table structure was not set! Please call Table::set_table(\$table) before building! " . get_caller(3));
+      if(!isset($this->template_data)){
+         trigger_error("The table structure was not set! Please call Table::set_template_data(\$tt_data) before building! " . get_caller(3));
          exit();
       }
       
-      foreach($this->table['columns'] as $slug => &$column){
+      foreach($this->template_data['columns'] as $slug => &$column){
          
          if(!isset($column['type'])){
             trigger_error("Invalid table column! The type was not set for $slug! " . get_caller(3));
@@ -147,14 +147,16 @@ class mytable {
 						}
 					}
 					
-					//normalize the data for easier processing
-					foreach($column['build_data'] as $key => &$bd_item){
-						$bd_item = array(
-							'key' => $key,
-							'name' => $bd_item
-						);
+					if(!is_array(current($column['build_data']))){
+						//normalize the data for easier processing
+						foreach($column['build_data'] as $key => $bd_item){
+							$column['build_data'][$key] = array(
+								'key' => $key,
+								'name' => $bd_item
+							);
+						}
+						$column['build_config'] = array('key' => 'name');
 					}
-					$column['build_config'] = array('key' => 'name');
 					
 					break;
             default: 

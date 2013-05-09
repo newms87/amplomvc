@@ -27,9 +27,6 @@ class ControllerCommonHeader extends Controller {
       
 		$this->data['canonical_link'] = $this->document->getCanonicalLink();	
       
-		$this->data['css_styles'] = $this->document->getStyles();
-		$this->data['js_scripts'] = $this->document->getScripts();
-		
 		$this->language->set('lang', $this->language->getInfo('code'));
       if($this->config->get('config_seo_url')){
          $this->data['pretty_url'] = $this->url->get_pretty_url();
@@ -72,6 +69,8 @@ class ControllerCommonHeader extends Controller {
 					);
 					
 					$this->document->addLink('admin', $link_image_manager);
+					
+					$this->document->addScript('image_manager.js');
 				}
 			}
 			
@@ -112,6 +111,10 @@ class ControllerCommonHeader extends Controller {
 			
 			$this->data['links_right'] = $this->document->getLinks('right');
 		}
+		
+		
+		$this->data['css_styles'] = $this->document->getStyles();
+		$this->data['js_scripts'] = $this->document->getScripts();
 		
 		$this->render();
 	}

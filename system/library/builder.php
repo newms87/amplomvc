@@ -212,54 +212,42 @@ class Builder extends Controller{
 		$this->builder_template = $template;
 	}
    
-   function build_batch_actions($title, $actions, $action_values, $go){
-      $html = "<span class='batch_action_title'>$title</span>";
-      $html .= $this->build('select',$actions, 'action','',array('id'=>'update_action'));
-      foreach($action_values as $for=>$av){
-         $form = '';
-         $default = isset($av['#default'])?$av['#default']:'';
-         $attrs = '';
-         if(isset($av['#attrs']))
-            foreach($av['#attrs'] as $attr=>$val)
-               $attrs .= "$attr='$val' ";
+   function build_batch_actions($form, $actions, $url){
+   	
+		foreach($actions as $key => &$action){
+			$action['attrs'] = '';
+			
+			//All keys beginning with '#' are html tag attributes
+			foreach($action as $attr => $val){
+				if(strpos($attr, '#') === 0){
+					$action['attrs'] .= "$attr='$val' ";
+				}
+			}
          
-         switch($av['#type']){
-            case 'text':
-               $form = "<input type='text' name='action_value' $attrs value='$default' />";
-               break;
-            case 'ckedit':
-               $form = "<textarea class='ckedit batch_ckedit' id='ba-$for' name='action_value'>$default</textarea>";
-               break;
-            case 'select':
-               $form = "<select name='action_value' $attrs>";
-               foreach($av['#values'] as $key=>$val)
-                  $form .= "<option value='$key'>$val</option>";
-               $form .= "</select>";
-            default:
-               break;
-         }
-         $html .= "<div class='action_value' id='for-$for'>$form</div>";
+			if(!isset($action['default'])){
+				$action['default'] = '';
+			}
+				
+			if(!isset($action['key'])){
+         	$action['key'] = $key;
+			}
       }
-      
-      $js = <<<JSC
-<script type='text/javascript'>//<!--
-$('#update_action').change(function(){
-   $('.action_value').removeClass('active');
-   $('#for-' + $(this).val()).addClass('active');
-});
-
-function do_batch_action(){
-   av=$('.action_value.active [name="action_value"]');
-   if(av.hasClass('ckedit'))
-      av = escape(CKEDITOR.instances[av.attr('id')].getData());
-   else	
-      av = av.val() || '';
-      
-   $('#form').attr('action', '$go' + '&action=' + $('#update_action').val() + '&action_value=' + av).submit();
-}
-//--></script>
-JSC;
-      return $html . '<a class="button" onclick="do_batch_action()" >Go</a>' . $js;
+		
+		$data = array(
+			'form' => $form,
+			'text_batch_action' => $this->_('text_batch_action'),
+			'actions' => $actions,
+			'url' => $url,
+			'button_batch_update' => $this->_('button_batch_update'),
+		);
+		
+		//Load Batch Action template
+		$template = new Template($this->registry, $this->config->get('config_template'));
+		
+		$template->load('widget/batch_action');
+		$template->set_data($data);
+		
+		return $template->render();
    }
    
    
@@ -309,7 +297,7 @@ JSC;
          
          if(is_array($display)){
             if(!isset($this->builder_id) || !isset($this->builder_name) || !isset($display[$this->builder_id]) || !isset($display[$this->builder_name])){
-               trigger_error("You must set the ID and Name to keys in the \$data Array using \$this->builder->set_config(\$id,\$name)");
+               trigger_error("You must set the ID and Name to keys in the \$data Array using \$this->builder->set_config(\$id,\$name). " . get_caller());
                return; 
             }
             

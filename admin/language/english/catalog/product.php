@@ -18,6 +18,7 @@ $_['text_amount']            = 'Fixed Amount';
 $_['text_ship_autofill']     = 'Automatically Fill Shipping Policy For:';
 $_['text_option_help']       = '<br>To add an option category:<br><br>1.type the category into the input field above (eg: "Size", "Color", etc.).<br><br>2. As you type the available options will be displayed, click on the name when it appears.<br><br>3. Click on "Add Option Value" button<br><br>4. Choose the option Value from the dropdown box<br><br>5. Specify the Quantity of this product option that is available.<br><br>6. If you have a limited number of this Option Value leave Subtract Stock as "yes", if you do not want to limit the availability set to "no" (this will use the default quantity set in the Data tab)<br><br>7. repeat steps 3 through 6 for each Option Value this product has.<br><br> If you cannot find the appropriate Option Category or Option Value for your product, please contact your Designer Rep or email <a class="normal" href="mailto:%s?subject=New Product Option Request">Our Support Team</a>';
 $_['text_not_editable']      = 'We are sorry. You may not modify %s because the Product is currently active on our site! Please contact <a target="_blank" href="mailto:%s">Support</a> to edit this Product.';
+$_['text_no_expiration']		= "No Expiration";
 
 // Column
 $_['column_name']            = 'Product Name';
@@ -27,6 +28,7 @@ $_['column_model']           = 'Model ID';
 $_['column_image']           = 'Image';
 $_['column_price']           = 'Price';
 $_['column_cost']            = 'Cost';
+$_['column_special']          = 'Special';
 $_['column_is_final']        = 'Final Sale';
 $_['column_quantity']        = 'Quantity';
 $_['column_date_expires']    = 'Expiration Date';

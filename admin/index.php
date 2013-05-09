@@ -37,9 +37,13 @@ $registry->set('db', $db);
 $cache = new Cache();
 $registry->set('cache', $cache); 
 
+//TODO: WE NEED TO SEPARATE OUT ADMIN CONFIG FROM FRONT END CONFIGS (and common in both front / back and front only)!!
 // Config
 $config = new Config($registry);
 $registry->set('config', $config);
+
+//TODO: remove this line after separating admin from front.
+$config->set('config_template', '');
 
 //Setup Cache ignore list
 foreach(explode(',',$config->get('config_cache_ignore')) as $ci)
