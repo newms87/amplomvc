@@ -1,7 +1,7 @@
 <?php 
-class SetupMail implements SetupPlugin {
+class SetupMail extends SetupPlugin {
 
-   public function install($registry, &$controller_adapters, &$db_requests){
+   public function install(&$controller_adapters, &$db_requests){
       
    	$controller_adapters[] = array(
    		'for' 			 => 'mail/messages',
@@ -12,7 +12,7 @@ class SetupMail implements SetupPlugin {
    	);
    }
    
-   public function update($version, $registry){
+   public function update($version){
       switch($version){
          case '1.53':
          case '1.52':

@@ -49,10 +49,12 @@ class ControllerCommonHeader extends Controller {
          $menu_items = array();
          if($this->user->isDesigner()){
             $this->language->format('support',"mailto:" . $this->config->get('config_email'));
-            $menu_items = array('product'=>'catalog/product','product_insert'=>'catalog/product/insert',
-                                'home'=>'common/home',
-                                'designers'=>'catalog/manufacturer',
-                                'logout'=>'common/logout');
+				$menu_items = array(
+					'product'=>'catalog/product','product_insert'=>'catalog/product/insert',
+					'home'=>'common/home',
+					'designers'=>'catalog/manufacturer',
+					'logout'=>'common/logout'
+				);
             $this->data['user_info'] = $this->url->link('user/user/update','user_id='.$this->user->getId());
          }
          else{
@@ -76,12 +78,12 @@ class ControllerCommonHeader extends Controller {
 			
 			$this->data['links_admin'] = $this->document->getLinks('admin');
 			
+			html_dump($this->data['links_admin'], 'admin');
 			//The Right Side Navigation Menu
 			
-			//Stores title
 			$link_stores = array(
 				'name' => 'stores',
-				'display' => $this->_('text_stores'),
+				'display_name' => $this->_('text_stores'),
 			);
 			
 			$this->document->addLink('right', $link_stores);
@@ -91,7 +93,7 @@ class ControllerCommonHeader extends Controller {
 			foreach($stores as $store){
 				$link_store = array(
 					'name' => 'store_' . $store['store_id'],
-					'display' => $store['name'],
+					'display_name' => $store['name'],
 					'href' => $this->url->link('common/home', '', $store['store_id']),
 					'parent' => 'stores',
 					'attrs' => array('target'=>'_blank')
@@ -103,13 +105,14 @@ class ControllerCommonHeader extends Controller {
 			//Logout link
 			$link_logout = array(
 				'name' => 'logout',
-				'display' => $this->_('text_logout'),
+				'display_name' => $this->_('text_logout'),
 				'href' => $this->url->link('common/logout'),
 			);
 			
 			$this->document->addLink('right', $link_logout);
 			
 			$this->data['links_right'] = $this->document->getLinks('right');
+			html_dump($this->data['links_right'], 'right');
 		}
 		
 		

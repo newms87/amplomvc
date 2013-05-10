@@ -1,11 +1,11 @@
 <?php 
-class SetupJanrain implements SetupPlugin {
+class SetupJanrain extends SetupPlugin {
  
-   public function install($registry, &$controller_adapters, &$db_requests){
+   public function install(&$controller_adapters, &$db_requests){
 
    }
    
-   public function update($version, $registry){
+   public function update($version){
       switch($version){
          case '1.53':
          case '1.52':
@@ -15,6 +15,6 @@ class SetupJanrain implements SetupPlugin {
       }
    }
    
-   public function uninstall($registry){
+   public function uninstall($keep_data = false){
    }
 }

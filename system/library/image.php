@@ -368,8 +368,9 @@ class Image {
 	    //   attempting to calculate it would cause division by zero (see
 	    //   below), so most applications simply substitute a Hue of zero.
 	    // Saturation will always be zero in this case, see below for details.
-	    if ($chroma == 0)
-	        return array(0, 0, $computedV);
+	    if ($chroma == 0){
+	        return array('H' => 0, 'S' => 0, 'V' => $computedV);
+		 }
 	
 	    // Saturation is also simple to compute, and is simply the chroma
 	    //   over the Value (or Brightness)

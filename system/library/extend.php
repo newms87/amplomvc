@@ -58,7 +58,9 @@ class Extend {
 		$result = $this->db->query("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE name = '" . $this->db->escape($name) . "'");
 		
 		if($result->num_rows){
-			$this->model_design_navigation->deleteNavigationLink($result->row['navigation_id']);
+			foreach($result->rows as $row){
+				$this->model_design_navigation->deleteNavigationLink($row['navigation_id']);
+			}
 		}
 	}
 	

@@ -55,7 +55,7 @@ class Document {
 	public function addLink($group = 'primary', $link_info) {
 		//Declare valid link_info parameters
 		$name = null;
-		$display = '';
+		$display_name = '';
 		$href = '';
 		$query = null;
 		$title = '';
@@ -73,7 +73,7 @@ class Document {
 		
 		$new_link = array(
 			'name' => $name,
-			'display'=>$display,
+			'display_name'=>$display_name,
 			'href'=>$href,
 			'query' => $query,
 			'title' => $title,
