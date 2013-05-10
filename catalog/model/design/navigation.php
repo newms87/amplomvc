@@ -1,15 +1,15 @@
 <?php
 class ModelDesignNavigation extends Model {
 	public function getNavigationGroup($name) {
-		$query = $this->get("navigation_group", '*', $navigation_group_id);
+		$query  = "SELECT ng.* FROM " . DB_PREFIX . "navigation_group ng";
+		$query .= " LEFT JOIN " . DB_PREFIX . "navigation_store ns ON (ng.navigation_group_id=ns.navigation_group_id)";
+		$query .= " WHERE ng.name = '" . $this->db->escape($name) . "' AND ng.status='1' AND ns.store_id='" . $this->config->get('config_store_id') . "'";
 		
-		$query = $this->query("SELECT ng.* FROM " . DB_PREFIX . "navigation_group ng" . 
-				" LEFT JOIN " . DB_PREFIX . "navigation_store ns ON (ng.navigation_group_id=ns.navigation_group_id)" .
-				" WHERE ng.name = '" . $this->db->escape($name) . "' AND ng.status='1' AND ns.store_id='" . $this->config->get('config_store_id') . "'");
-				
-		$nav_group = $query->row;
+		$result = $this->query($query);
 		
-		$nav_group['store_ids'] = $this->getNavigationGroupStores($navigation_group_id);
+		$nav_group = $result->row;
+		
+		$nav_group['stores'] = $this->getNavigationGroupStores($navigation_group_id);
 		
 		$nav_group['links'] = $this->getNavigationGroupLinks($navigation_group_id);
 		
@@ -20,14 +20,16 @@ class ModelDesignNavigation extends Model {
 		$store_id = $this->config->get("config_store_id");
 		$nav_groups = $this->cache->get("navigation_groups.store.$store_id");
 		
-		if(!$nav_groups){
-			$query = $this->query("SELECT ng.* FROM " . DB_PREFIX . "navigation_group ng" . 
-				" LEFT JOIN " . DB_PREFIX . "navigation_store ns ON (ng.navigation_group_id=ns.navigation_group_id)" .
-				" WHERE ng.status='1' AND ns.store_id='$store_id'");
+		if(!$nav_groups || true){
+			$query = "SELECT ng.* FROM " . DB_PREFIX . "navigation_group ng";
+			$query .= " LEFT JOIN " . DB_PREFIX . "navigation_store ns ON (ng.navigation_group_id=ns.navigation_group_id)";
+			$query .= " WHERE ng.status='1' AND ns.store_id='$store_id'";
+			
+			$result = $this->query($query);
 			
 			$nav_groups = array();
 			
-			foreach($query->rows as &$group){
+			foreach($result->rows as &$group){
 				$nav_group_links = $this->getNavigationGroupLinks($group['navigation_group_id']);
 				
 				$parent_ref = array();
@@ -37,7 +39,7 @@ class ModelDesignNavigation extends Model {
 					$parent_ref[$link['navigation_id']] = &$link;
 					
 					if($link['parent_id']){
-						$parent_ref[$link['parent_id']]['children'][] = $link;
+						$parent_ref[$link['parent_id']]['children'][] = &$link;
 						unset($nav_group_links[$key]);
 					}
 				}
@@ -52,8 +54,8 @@ class ModelDesignNavigation extends Model {
 	}
 
 	public function getNavigationGroupLinks($navigation_group_id){
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "navigation WHERE status='1' AND navigation_group_id='" . (int)$navigation_group_id . "' ORDER BY parent_id ASC, sort_order ASC");
+		$result = $this->query("SELECT * FROM " . DB_PREFIX . "navigation WHERE status='1' AND navigation_group_id='" . (int)$navigation_group_id . "' ORDER BY parent_id ASC, sort_order ASC");
 
-		return $query->rows;
+		return $result->rows;
 	}
 }

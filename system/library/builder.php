@@ -129,7 +129,19 @@ class Builder extends Controller{
          return $html;
       }
    }
-
+	
+	public function attrs($data){
+		$html = '';
+		
+		foreach($data as $key => $value){
+			if(strpos($key,'#') === 0){
+				$html .= substr($key,1) . "=\"$value\"";
+			}
+		}
+		
+		return $html;
+	}
+	
    public function image_input($name, $image = '', $thumb = null, $no_image = null, $width = null, $height = null, $escape_quotes = false){
       $text_clear = $this->language->get('text_clear');
       $text_browse = $this->language->get('text_browse');

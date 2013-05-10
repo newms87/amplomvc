@@ -65,7 +65,7 @@ class ControllerCommonHeader extends Controller {
       	//The Welcome Message
       	$link_logged = array(
       		'name' => 'logged',
-      		'display' => $this->language->format('text_logged', $this->customer->getFullName()),
+      		'display_name' => $this->language->format('text_logged', $this->customer->getFullName()),
       		'sort_order' => 0,
    		);
 			
@@ -74,7 +74,7 @@ class ControllerCommonHeader extends Controller {
 			//Account Link
 			$link_account = array(
 				'name' => 'account',
-				'display' => $this->_('text_account'),
+				'display_name' => $this->_('text_account'),
 				'href' => $this->url->link('account/account'),
 				'sort_order' => 1,
 			);
@@ -84,7 +84,7 @@ class ControllerCommonHeader extends Controller {
 			//Cart Link
 			$link_cart = array(
 				'name' => 'cart',
-				'display' => $this->_('text_shopping_cart'),
+				'display_name' => $this->_('text_shopping_cart'),
 				'href' => $this->url->link('cart/cart', "redirect=" . preg_replace('/redirect=[^&]*/','',$this->url->current_page())),
 				'sort_order' => 2,
 			);
@@ -95,7 +95,7 @@ class ControllerCommonHeader extends Controller {
 	      if($this->cart->hasProducts()){
 	      	$link_checkout= array(
 					'name' => 'checkout',
-					'display' => $this->_('text_checkout'),
+					'display_name' => $this->_('text_checkout'),
 					'href' => $this->url->link('checkout/checkout'),
 					'sort_order' => 3,
 				);
@@ -105,7 +105,7 @@ class ControllerCommonHeader extends Controller {
 			
 			$link_logout = array(
 				'name' => 'logout',
-				'display' => $this->_('text_logout'),
+				'display_name' => $this->_('text_logout'),
 				'href' => $this->url->link('account/logout'),
 				'sort_order' => 4,
 			);
@@ -117,16 +117,9 @@ class ControllerCommonHeader extends Controller {
       else{
 			$this->data['block_login'] = $this->getBlock('account', 'login', array('header'));
        }
-		
-		if (isset($_GET['filter_name'])) {
-			$this->data['filter_name'] = $_GET['filter_name'];
-		} else {
-			$this->data['filter_name'] = '';
-		}
 
       $this->data['home'] = $this->url->link('common/home');
       
-		
 		$this->data['social_networks'] = $this->getBlock('extras', 'social_media');
 		
 		$this->children = array(

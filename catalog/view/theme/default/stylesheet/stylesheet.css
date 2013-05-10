@@ -387,6 +387,16 @@ ul{
 	text-decoration:none;
 }
 
+#links_primary ul.child_menu{
+	position:relative;
+	background:none;
+	box-shadow:none;
+	margin:0;
+	padding:0;
+	margin-left: 10px;
+	left: 0!important;
+}
+
 #links_secondary{
 	padding-top:10px;
 	overflow:auto;

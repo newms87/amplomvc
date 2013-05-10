@@ -81,7 +81,7 @@
 		<td class="center"><input type="checkbox" name="selected[]" value="<?= $data[$row_id];?>" <?= (isset($data['selected']) && $data['selected']) ? "checked='checked'" : "";?> /></td>
 		<td class="center actions">
 			<?foreach($data['actions'] as $key => $action){?>
-			[ <a href="<?= $action['href']; ?>" class="action-<?= $key;?>"><?= $action['text']; ?></a> ]
+			[ <a href="<?= $action['href']; ?>" <?= $this->builder->attrs($action); ?>><?= $action['text']; ?></a> ]
 			<? } ?>
 		</td>
 		<? foreach($columns as $slug => $column) {
@@ -165,7 +165,7 @@
 		<? } ?>
 		<td class="center actions">
 			<?foreach($data['actions'] as $key => $action){?>
-			[ <a href="<?= $action['href']; ?>" class="action-<?= $key;?>"><?= $action['text']; ?></a> ]
+			[ <a href="<?= $action['href']; ?>" <?= $this->builder->attrs($action); ?>><?= $action['text']; ?></a> ]
 			<? } ?>
 		</td>
 	</tr>

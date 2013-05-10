@@ -78,9 +78,11 @@ class ControllerCommonHeader extends Controller {
 			
 			$this->data['links_admin'] = $this->document->getLinks('admin');
 			
-			html_dump($this->data['links_admin'], 'admin');
-			//The Right Side Navigation Menu
+			/*
+			 * Right Side Navigation Menu 
+			 */
 			
+			//Store Navigation
 			$link_stores = array(
 				'name' => 'stores',
 				'display_name' => $this->_('text_stores'),
@@ -112,7 +114,6 @@ class ControllerCommonHeader extends Controller {
 			$this->document->addLink('right', $link_logout);
 			
 			$this->data['links_right'] = $this->document->getLinks('right');
-			html_dump($this->data['links_right'], 'right');
 		}
 		
 		

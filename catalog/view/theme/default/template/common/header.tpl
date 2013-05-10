@@ -91,7 +91,7 @@ DD_belatedPNG.fix('#logo img');
 					<span><?= $text_login_link;?></span>
 				<? } ?>
 			<? } else { ?>
-				<? $this->builder->set_config("href", "display") ;?>
+				<? $this->builder->set_config("href", "display_name") ;?>
 				<?=$this->builder->build('select', $links_account, 'account_menu', '', array('onchange' => "window.location = $(this).val()"));?>
 			<? } ?>
 		</div>

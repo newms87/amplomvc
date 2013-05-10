@@ -24,6 +24,7 @@ $_['entry_description']        = 'Description:';
 $_['entry_meta_keywords']        = 'Meta Keywords:<span class="help">This is used for SEO purposes.</span>';
 $_['entry_meta_description']        = 'Meta Description:<span class="help">This is used for SEO purposes.</span>';
 $_['entry_product']       = 'Products:';
+$_['entry_category']       = 'Categories:';
 $_['entry_store']       = 'Stores:';
 $_['entry_status']       = 'Status:';
 $_['entry_sort_order']       = 'Sort Order:';

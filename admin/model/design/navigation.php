@@ -4,7 +4,7 @@ class ModelDesignNavigation extends Model {
 		$navigation_group_id = $this->insert("navigation_group", $data);
 		
 		//Add Stores
-		foreach($data['store_ids'] as $store_id){
+		foreach($data['stores'] as $store_id){
 			$store_data = array(
 				'navigation_group_id' => $navigation_group_id,
 				'store_id' => $store_id
@@ -49,10 +49,10 @@ class ModelDesignNavigation extends Model {
 		$this->update("navigation_group", $data, $navigation_group_id);
 		
 		//Update Stores
-		if(isset($data['store_ids'])){
+		if(isset($data['stores'])){
 			$this->delete("navigation_store", array("navigation_group_id" => $navigation_group_id));
 			
-			foreach($data['store_ids'] as $store_id){
+			foreach($data['stores'] as $store_id){
 				$store_data = array(
 					'navigation_group_id' => $navigation_group_id,
 					'store_id' => $store_id
@@ -127,7 +127,7 @@ class ModelDesignNavigation extends Model {
 		
 		$nav_group = $query->row;
 		
-		$nav_group['store_ids'] = $this->getNavigationGroupStores($navigation_group_id);
+		$nav_group['stores'] = $this->getNavigationGroupStores($navigation_group_id);
 		
 		$nav_group['links'] = $this->getNavigationGroupLinks($navigation_group_id);
 		
@@ -143,41 +143,55 @@ class ModelDesignNavigation extends Model {
          $select = '*';
       }
       
-		//Join Tables
-		$join = array();
+		//From
+		$from = "FROM " . DB_PREFIX . "navigation_group ng";
 		
-		if(isset($data['store_id'])){
-			$join['LEFT JOIN']['navigation_store ns'] = "ns.navigation_group_id = ng.navigation_group_id";
+		//Where
+		$where = "WHERE 1";
+		
+		if(!empty($data['name'])){
+			$where .= " AND name like '%" . $this->db->escape($data['name']) . "%'";
 		}
 		
-		
-		//WHERE statement
-      $where = array();
-      
-      if(isset($data['name'])){
-         $where['AND'][] = "ng.name like '%" . $this->db->escape($data['name']) . "%'";
-      }
-      
-		if(isset($data['store_id'])){
-         $where['AND'][] = "ns.store_id = '" . (int)$data['store_id'] . "'";
-      }
+		if(isset($data['stores'])){
+			$from .= " LEFT JOIN " . DB_PREFIX . "navigation_store ns ON (ns.navigation_group_id=ng.navigation_group_id)";
+			
+			if(!is_array($data['stores'])){
+				$data['stores'] = array((int)$data['stores']);
+			}
+			
+			$where .= " AND ns.store_id IN (" . implode(',', $data['stores']) . ")";
+		}
       
       if(isset($data['status'])){
-         $where['AND'][] = "ng.status = '" . ($data['status'] ? 1 : 0) . "'";
+         $where .= " AND status = '" . ($data['status'] ? 1 : 0) . "'";
       }
       
-      $query = $this->execute('navigation_group ng', $select, $join, $where, $data);
+		//Order By & Limit
+		if(!$total){
+			$order_limit = $this->extract_order_limit_string($data);
+		}
+		else{
+			$order_limit = '';
+		}
+		
+		//The Query
+		$query = "SELECT $select $from $where $order_limit";
       
+		//Execute
+		$result = $this->query($query);
+		
+		//Process Results
       if($total){
-         return $query->row['total'];
+         return $result->row['total'];
       }
       else{
-         foreach($query->rows as $key => &$row){
+         foreach($result->rows as $key => &$row){
             $row['links'] = $this->getNavigationGroupLinks($row['navigation_group_id']);
-				$row['store_ids'] = $this->getNavigationGroupStores($row['navigation_group_id']);
+				$row['stores'] = $this->getNavigationGroupStores($row['navigation_group_id']);
          }
          
-         return $query->rows;
+         return $result->rows;
       }
 	}
 	
@@ -185,9 +199,11 @@ class ModelDesignNavigation extends Model {
 		$nav_groups = $this->cache->get('navigation_groups.admin');
 		
 		if(!$nav_groups){
-			$query = $this->query("SELECT ng.* FROM " . DB_PREFIX . "navigation_group ng" . 
-				" LEFT JOIN " . DB_PREFIX . "navigation_store ns ON (ng.navigation_group_id=ns.navigation_group_id)" .
-				" WHERE ng.status='1' AND ns.store_id='-1'");
+			$query = "SELECT ng.* FROM " . DB_PREFIX . "navigation_group ng"; 
+			$query .= " LEFT JOIN " . DB_PREFIX . "navigation_store ns ON (ng.navigation_group_id=ns.navigation_group_id)";
+			$query .= " WHERE ng.status='1' AND ns.store_id='-1'";
+			
+			$query = $this->query($query);
 			
 			$nav_groups = array();
 			
@@ -1455,7 +1471,7 @@ class ModelDesignNavigation extends Model {
 		$data = array(
 			'name' => 'admin',
 			'status' => 1,
-			'store_ids' => array(-1),
+			'stores' => array(-1),
 			'links' => $links 
 		);
 		

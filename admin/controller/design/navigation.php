@@ -83,6 +83,9 @@ class ControllerDesignNavigation extends Controller {
                case 'disable':
                   $this->model_design_navigation->editNavigationGroup($navigation_group_id, array('status' => 0));
                   break;
+					case 'delete':
+                  $this->model_design_navigation->deleteNavigationGroup($navigation_group_id);
+                  break;
             }
             if($this->error)
                break;
@@ -101,91 +104,110 @@ class ControllerDesignNavigation extends Controller {
    }
 
 	private function getList() {
-      $this->language->load('design/navigation');
-      
       $this->template->load('design/navigation_list');
 
       $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
       $this->breadcrumb->add($this->_('heading_title'), $this->url->link('design/navigation'));
       
-		//This table column data is in admin/view/template_option/[template]/design/navigation_list.to
-      $table = $this->template->get_table('listview');
-      
-		$this->data['data_stores'] = array('admin' => array('store_id' => '-', 'name' => $this->_('text_admin_panel'))) + $this->model_setting_store->getStores();
+		//The Table Columns
+		$columns = array();
 		
-		//Add table filter data		
-		$table->set_column_filter('store_ids', 'select', array(''=>'') + $this->data['data_stores'], array('store_id' => 'name'));
-		$table->set_column_filter('status', 'select', $this->_('data_statuses_blank'));
+		$columns['name'] = array(
+		   'type' => 'text',
+		   'display_name' => $this->_('column_name'),
+		   'filter' => true,
+		   'sortable' => true,
+		   'sort_value' => 'name',
+		);
 		
+		$stores = array('admin' => array('store_id' => 'admin', 'name' => 'Admin Panel')) + $this->model_setting_store->getStores();
 		
-		//Add Table Cell Data array
-		$table->set_column_cell_data('store_ids', 'assoc_array', $this->data['data_stores'], array('store_id' => 'name','store_id'));
-		$table->set_column_cell_data('status', 'map', $this->_('data_statuses'));
+		$columns['stores'] = array(
+		   'type' => 'multiselect',
+		   'display_name' => $this->_('column_stores'),
+		   'filter' => true,
+		   'build_config' => array('store_id' => 'name'),
+	   	'build_data' => $stores,
+		   'sortable' => false,
+		);
 		
-      $table->set_template('table/sort_filter_list');
+		$columns['status'] = array(
+		   'type' => 'select',
+		   'display_name' => $this->_('column_status'),
+		   'filter' => true,
+		   'build_data' => $this->_('data_statuses'),
+		   'sortable' => true,
+		   'sort_value' => 'status',
+		);
+
+  	   //The Sort data
+		$data = array();
+		
+		$sort_defaults = array(
+			'sort' => 'name',
+			'order' => 'ASC',
+			'limit' => $this->config->get('config_admin_limit'),
+			'page' => 1,
+		);
+		
+		foreach($sort_defaults as $key => $default){
+			$data[$key] = $$key = isset($_GET[$key]) ? $_GET[$key] : $default;
+		}
+		
+      $data['start'] = ($page - 1) * $limit;
+		
+		//Filter
+		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
+		
+		if($filter_values){
+			$data += $filter_values;
+		}
       
-		//Add Sorting / Paging information to the table and the $data query
-      $data = array(
-         'sort'  =>'name',
-         'order' =>'ASC',
-         'page'  =>1
-      );
+		
+      $navigation_groups_total = $this->model_design_navigation->getTotalNavigationGroups($data);
+      $navigation_groups = $this->model_design_navigation->getNavigationGroups($data);
       
-      foreach($data as $key => $default){
-         if(isset($_GET[$key])){
-            $data[$key] = $_GET[$key];
-         }
-      }
-      
-      $table->add_extra_data($data);
-      
-		//Set the filter value if set by user
-      if(isset($_GET['filter'])){
-      	$data += $_GET['filter'];
+      foreach ($navigation_groups as &$nav_group) {
+      	$action = array();
 			
-         foreach($_GET['filter'] as $filter => $value){
-            $table->set_column_filter_value($filter, $value);
-         }
-      }
-      
-		//Filter Query is for saving the previous filter and adding to the URL query string
-      $queries = array(
-         'filter_query' => $this->url->get_query('filter'),
-      ); 
-      
-      $table->add_extra_data($queries);
-      
-		//finish adding $data query information
-      $data['limit'] = $this->config->get('config_admin_limit');
-      $data['start'] = ($data['page'] - 1) * $data['limit'];
-      
-		
-		//Retrieve the Filtered Table row data
-      $nav_group_total = $this->model_design_navigation->getTotalNavigationGroups($data);
-      
-      $results = $this->model_design_navigation->getNavigationGroups($data);
-      
-      $navigation_groups = array();
-      
-      foreach ($results as $result) {
-         $action = array(
+         $action[] = array(
             'text' => $this->_('text_edit'),
-            'href' => $this->url->link('design/navigation/update', 'navigation_group_id=' . $result['navigation_group_id'])
+            'href' => $this->url->link('design/navigation/update', 'navigation_group_id=' . $nav_group['navigation_group_id']),
          );
          
-         $result['action'] = $action;
-         
-         $navigation_groups[] = $result;
+			if($nav_group['name'] == 'admin'){
+				$action[] = array(
+					'text' => $this->_('button_admin_nav_reset'),
+					'href' => $this->url->link('design/navigation/reset_admin_navigation'),
+					'#class' => 'reset',
+				);
+			}
+			
+         $nav_group['actions'] = $action;
       }
       
-		//This sets the table row data
-      $table->set_table_data($navigation_groups);
-      
-      $this->data['navigation_group_view'] = $table->build();
-      
-      
-      $url = $this->url->get_query('filter', 'sort', 'order', 'page');
-      
+      //The table template data
+		$tt_data = array(
+		   'row_id'		=> 'navigation_group_id',
+		   'route'		=> 'design/navigation',
+		   'sort'		=> $sort,
+		   'order'		=> $order,
+		   'page'		=> $page,
+		   'sort_url'	=> $this->url->link('design/navigation', $this->url->get_query('filter')),
+		   'columns'	=> $columns,
+		   'data'		=> $navigation_groups,
+		);
+		
+		$tt_data += $this->language->data;
+		
+		//Build the table template
+		$this->mytable->init();
+		$this->mytable->set_template('table/list_view');
+		$this->mytable->set_template_data($tt_data);
+		$this->mytable->map_attribute('filter_value', $filter_values);
+		
+      $this->data['list_view'] = $this->mytable->build();
+		
 		//Batch Actions
       $this->data['batch_actions'] = array(
       	'enable' => array(
@@ -194,19 +216,24 @@ class ControllerDesignNavigation extends Controller {
    		
    		'disable' => array(
    			'label' => "Disable",
-			)
+			),
+			
+			'delete' => array(
+				'label' => "Delete",
+			),
 		);
 		
+		$url = $this->url->get_query('filter', 'sort', 'order', 'page');
+      
       $this->data['batch_update'] = $this->url->link('design/navigation/batch_update', $url);
       
+		//Action Buttons
       $this->data['insert'] = $this->url->link('design/navigation/insert', $url);
-      $this->data['copy'] = $this->url->link('design/navigation/copy', $url);
-      $this->data['delete'] = $this->url->link('design/navigation/delete', $url);
       
       $url = $this->url->get_query('filter', 'sort', 'order');
       
       $this->pagination->init();
-      $this->pagination->total = $nav_group_total;
+      $this->pagination->total = $navigation_groups_total;
       $this->pagination->page = $data['page'];
       $this->pagination->limit = $this->config->get('config_admin_limit');
       $this->pagination->text = $this->_('text_pagination');
@@ -248,7 +275,7 @@ class ControllerDesignNavigation extends Controller {
       $defaults = array(
          'name' => '',
          'links' => array(),
-         'store_ids' => array(0),
+         'stores' => array(0),
          'status' => 1,
       );
 
@@ -281,8 +308,8 @@ class ControllerDesignNavigation extends Controller {
 		
 		$navigation_group_id = isset($_GET['navigation_group_id']) ? (int)$_GET['navigation_group_id'] : 0;
 		
-		if(!isset($_POST['store_ids'])){
-			$_POST['store_ids'] = array('');
+		if(!isset($_POST['stores'])){
+			$_POST['stores'] = array('');
 		}
 		
 		if(!$this->validation->text($_POST['name'], 3, 64)){

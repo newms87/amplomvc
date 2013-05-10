@@ -9,10 +9,15 @@ $_['text_edit_link']      = 'Edit Link';
 $_['text_hide_link']      = 'Hide';
 $_['text_admin_panel'] = "Admin Panel";
 
+$_['text_admin_nav_reset'] = "This will reset the Admin Navigation menu to the Default Menu. You will lose all changes made by Plugins and User entries. Are you sure you want to continue?";
+
+//Buttons
+$_['button_admin_nav_reset'] = "Reset Admin Navigation";
+
 // Column
 $_['column_name']       = 'Navigation Group';
 $_['column_action']     = 'Action';
-$_['column_store_ids']     = 'Stores';
+$_['column_stores']     = 'Stores';
 $_['column_status']     = 'Status';
 
 // Entry
