@@ -63,6 +63,9 @@ class DB {
 	}
 	
 	public function dump($file, $tables = ''){
+		if(!is_string($file)){
+			echo "not string: " . get_caller();
+		}
 		_is_writable(dirname($file));
 		
 		if($this->driver->dump($file, $tables)){

@@ -106,7 +106,7 @@ class Dev{
 			trigger_error('Dev::request_table_sync(): Curl Failed -  ' . curl_error($curl) . '(' . curl_errno($curl) . ')');
 		}
 		else{
-			if(preg_match("/ERROR/i", $response) || preg_match("/WARNING/i", $response)){
+			if(preg_match("/ERROR/i", $response) || preg_match("/WARNING/i", $response) || preg_match("/NOTICE/i", $response)){
 				$this->message->add('warning', "There was an error returned from the server: $response");
 				
 				return false;

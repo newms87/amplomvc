@@ -198,7 +198,7 @@ class ControllerDevDev extends Controller {
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['tables']) && $this->validate()) {
 			$file = DIR_DOWNLOAD . 'tempsql.sql';
 			
-			$this->db->dump($_POST['tables'], $file);
+			$this->db->dump($file, $_POST['tables']);
 			
 			include($file);
 			
