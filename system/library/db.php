@@ -63,6 +63,11 @@ class DB {
 	}
 	
 	public function dump($file, $tables = ''){
+		if(!is_file($file)){
+			trigger_error("DB::dump(): Could not find file $file. " . caller());
+			return false;
+		}
+		
 		_is_writable(dirname($file));
 		
 		if($this->driver->dump($file, $tables)){
