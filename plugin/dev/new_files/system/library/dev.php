@@ -21,6 +21,8 @@ class Dev{
 			$file = DIR_DATABASE_BACKUP . "full_backup_" . date('Y-m-d-G_i_s') . ".sql";
 		}
 		
+		echo $file;
+		
 		if($this->db->dump($file, $tables)){
 			$this->message->add('success', "Successfully backed up $site_name!");
 			
@@ -99,11 +101,17 @@ class Dev{
 		curl_setopt($curl, CURLOPT_TIMEOUT, 30);
 		
 		$response = curl_exec($curl);
-			
+		
 		if (!$response) {
 			trigger_error('Dev::request_table_sync(): Curl Failed -  ' . curl_error($curl) . '(' . curl_errno($curl) . ')');
 		}
 		else{
+			if(preg_match("/ERROR/i", $response) || preg_match("/WARNING/i", $response)){
+				$this->message->add('warning', "There was an error returned from the server: $response");
+				
+				return false;
+			}
+			
 			//First always backup the Database before making changes
 			$this->site_backup(null, $tables);
 			
