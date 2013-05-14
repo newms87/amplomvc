@@ -8,7 +8,7 @@ class ControllerAccountEdit extends Controller {
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/edit');
 
-			$this->redirect($this->url->link('account/login'));
+			$this->url->redirect($this->url->link('account/login'));
 		}
 
 		$this->language->load('account/edit');
@@ -20,7 +20,7 @@ class ControllerAccountEdit extends Controller {
 			
 			$this->message->add('success', $this->_('text_success'));
 
-			$this->redirect($this->url->link('account/account'));
+			$this->url->redirect($this->url->link('account/account'));
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));

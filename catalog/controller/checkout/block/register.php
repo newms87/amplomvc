@@ -161,13 +161,13 @@ class ControllerCheckoutBlockRegister extends Controller {
 		
       if(isset($_GET['no_ajax'])){
          if(isset($json['redirect'])){
-            $this->redirect($json['redirect']);
+            $this->url->redirect($json['redirect']);
          }
          elseif(isset($json['error'])){
             $this->message->add('warning', $json['error']);
          }
          else{
-            $this->redirect($this->url->link('checkout/checkout'));
+            $this->url->redirect($this->url->link('checkout/checkout'));
          }
       }
 

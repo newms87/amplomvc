@@ -6,13 +6,10 @@ $_['heading_title']       = 'RSS Article Teaser';
 $_['text_module']         = 'Modules';
 $_['text_article_help']  = '<span class="help">Drag to specify ordering of articles.</span>';
 $_['text_success']        = 'Success: You have modified module RSS Article!';
-$_['text_above_content']    = 'Above Content';
-$_['text_content_top']    = 'Content Top';
-$_['text_content_bottom'] = 'Content Bottom';
-$_['text_column_left']    = 'Column Left';
-$_['text_column_right']   = 'Column Right';
 
+//Buttons
 $_['button_update_rss']   = 'Update From RSS';
+
 // Entry
 $_['entry_limit']         = 'Limit:';
 $_['entry_rss_url']         = 'RSS Location:';

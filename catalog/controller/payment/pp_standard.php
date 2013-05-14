@@ -83,11 +83,8 @@ class ControllerPaymentPPStandard extends Controller {
 			$this->data['cancel_return'] = $this->url->link('checkout/checkout');
          $this->data['page_style'] = $this->config->get('pp_standard_page_style');
          
-         if (isset($_SERVER['HTTPS']) && (($_SERVER['HTTPS'] == 'on') || ($_SERVER['HTTPS'] == '1'))) {
-            $server = HTTPS_IMAGE;
-         } else {
-            $server = HTTP_IMAGE;
-         }
+			$server = $this->url->is_ssl() ? HTTPS_IMAGE : HTTP_IMAGE;
+			
          $this->data['image_url'] = $server . $this->config->get('config_logo');
 			
 			if (!$this->config->get('pp_standard_transaction')) {

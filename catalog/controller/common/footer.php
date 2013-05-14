@@ -41,7 +41,7 @@ class ControllerCommonFooter extends Controller {
 			$link_admin = array(
 				'name' => 'admin_portal',
 				'display' => $this->_('text_portal'),
-				'href' => $this->url->site('admin'),
+				'href' => $this->url->admin(),
 			);
 			
 			$this->document->addLink('footer', $link_admin);

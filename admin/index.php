@@ -38,12 +38,9 @@ $cache = new Cache();
 $registry->set('cache', $cache); 
 
 //TODO: WE NEED TO SEPARATE OUT ADMIN CONFIG FROM FRONT END CONFIGS (and common in both front / back and front only)!!
-// Config
-$config = new Config($registry);
-$registry->set('config', $config);
 
-//TODO: remove this line after separating admin from front.
-$config->set('config_template', '');
+//config is self assigning to registry in order to use immediately!
+$config = new Config($registry);
 
 //Setup Cache ignore list
 foreach(explode(',',$config->get('config_cache_ignore')) as $ci)
@@ -108,7 +105,7 @@ $request = new Request();
 $registry->set('request', $request);
 
 // Url
-$url = new Url($registry, HTTP_SERVER, $config->get('config_use_ssl') ? HTTPS_SERVER : '');
+$url = new Url($registry, SITE_URL, $config->get('config_use_ssl') ? SITE_SSL : '');
 if($config->get('config_seo_url'))
    $url->getSeoUrl();
 $registry->set('url', $url);
@@ -159,13 +156,19 @@ $language = new Language($languages[$config->get('config_admin_language')]);
 $registry->set('language', $language); 		
 
 //Plugins
-$plugin_handler = new pluginHandler($registry, 0, 1, $merge_registry);
+$plugin_handler = new pluginHandler($registry, $merge_registry);
 $registry->set('plugin_handler', $plugin_handler);
 
 // Document
 $document = new Document($registry);
 $document->setCanonicalLink($url->get_pretty_url());
 $registry->set('document', $document);
+
+//Theme
+$registry->set('theme', new Theme($registry));
+
+//Initialize site configurations
+$config->run_site_config();
 
 // Front Controller
 $controller = new Front($registry);

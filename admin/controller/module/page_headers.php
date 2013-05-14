@@ -12,7 +12,7 @@ class ControllerModulePageHeaders extends Controller {
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_design_layout->setLayoutPageHeaders($_POST);
 			$this->message->add('success', $this->_('text_success'));
-			$this->redirect($this->url->link('module/page_headers'));
+			$this->url->redirect($this->url->link('module/page_headers'));
 		}
 	   
       $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));

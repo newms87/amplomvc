@@ -8,19 +8,10 @@ $_['text_cart']                      = 'Shopping Cart';
 $_['text_edit_cart']                      = 'Edit Order';
 $_['text_zone_allowed']                      = 'We deliver only to the following countries:';
 $_['text_zone_separator']            = ', ';
-$_['text_login_success']           = 'You were successfully logged into your account!';
 $_['text_checkout_option']           = 'Login or Register a New Account';
 $_['text_checkout_information']      = 'Shipping and Payment Information';
 $_['text_checkout_confirm']          = 'Confirm Order';
 $_['text_modify']                    = 'Modify &raquo;';
-$_['text_new_customer']              = 'New Customer';
-$_['text_returning_customer']        = 'Returning Customer';
-$_['text_checkout']                  = 'Register a New Account or checkout as a Guest:';
-$_['text_i_am_returning_customer']   = 'I am a returning customer';
-$_['text_register']                  = 'Register Account';
-$_['text_guest']                     = 'Guest Checkout';
-$_['text_register_account']          = 'By creating an account you will be able to shop faster, be up to date on an order\'s status, and keep track of the orders you have previously made.';
-$_['text_forgotten']                 = 'Forgotten Password';
 $_['text_your_details']              = 'Your Personal Details';
 $_['text_your_address']              = 'Your Address';
 $_['text_your_password']             = 'Your Password';
@@ -32,6 +23,7 @@ $_['text_payment_method']            = 'Please select the preferred payment meth
 $_['text_comments']                  = 'Add Comments About Your Order';
 $_['text_no_shipping_address']                  = 'Please specify a Shipping Address and the shipping methods will automatically be calculated.';
 $_['text_no_payment_address']                  = 'Please specify a Payment Address and the available payment methods will be displayed.';
+$_['text_address_success']              = 'You have successfully updated your Address Book!';
 
 // Column
 $_['column_name']                    = 'Product Name';
@@ -58,14 +50,14 @@ $_['entry_country_id']                  = 'Country:';
 $_['entry_zone_id']                     = 'Region / State:';
 $_['entry_newsletter']               = 'I wish to subscribe to the %s newsletter.';
 $_['entry_set_default']                 = 'Make this your default address';
+$_['entry_submit_address']             = 'Add New Address';
 
 //Button
-$_['button_add_address']             = 'Add New Address';
+$_['button_select'] 				= "Select";
 
 // Error
 $_['error_warning']                  = 'There was a problem while trying to process your order! If the problem persists please try selecting a different payment method or you can contact the store owner by <a href="%s">clicking here</a>.';
 $_['error_page_load']                = 'There was a problem while trying to process your order! Please contact <a href="mailto:%s">Customer Service</a> to notify them of the problem, and complete your order.';
-$_['error_login']                    = 'Warning: No match for E-Mail Address and/or Password.';
 $_['error_exists']                   = 'Warning: E-Mail Address is already registered!';
 $_['error_firstname']                = 'First Name must be between 1 and 32 characters!';
 $_['error_lastname']                 = 'Last Name must be between 1 and 32 characters!';

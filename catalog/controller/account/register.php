@@ -5,7 +5,7 @@ class ControllerAccountRegister extends Controller {
   	   $this->template->load('account/register');
       
 		if ($this->customer->isLogged()) {
-	  		$this->redirect($this->url->link('account/account'));
+	  		$this->url->redirect($this->url->link('account/account'));
     	}
 
     	$this->language->load('account/register');
@@ -19,7 +19,7 @@ class ControllerAccountRegister extends Controller {
 
 			$this->customer->login($_POST['email'], $_POST['password']);
 	  	   
-	  		$this->redirect($this->url->link('account/success'));
+	  		$this->url->redirect($this->url->link('account/success'));
     	}
       
       

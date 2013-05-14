@@ -7,8 +7,8 @@ class ControllerModuleSlideshow extends Controller {
 		
 		$this->document->addScript('catalog/view/javascript/jquery/nivo-slider/jquery.nivo.slider.pack.js');
 		
-		if (file_exists('catalog/view/theme/' . $this->config->get('config_template') . '/stylesheet/slideshow.css')) {
-			$this->document->addStyle('catalog/view/theme/' . $this->config->get('config_template') . '/stylesheet/slideshow.css');
+		if (file_exists('catalog/view/theme/' . $this->config->get('config_theme') . '/stylesheet/slideshow.css')) {
+			$this->document->addStyle('catalog/view/theme/' . $this->config->get('config_theme') . '/stylesheet/slideshow.css');
 		} else {
 			$this->document->addStyle('catalog/view/theme/default/stylesheet/slideshow.css');
 		}

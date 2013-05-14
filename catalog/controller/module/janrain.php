@@ -22,7 +22,7 @@ class ControllerModuleJanrain extends Controller
          $login_redir = $this->config->get('janrain_login_redir');
       }
       else {
-         $login_redir = (isset($_SERVER['HTTPS'])?'https://':'http://'). $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+         $login_redir = ($this->url->is_ssl() ? 'https://' : 'http://') . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
       }
 		$_SESSION['janrain_login_redir'] = preg_replace("/\/logout/","/account",$login_redir);
 		
@@ -112,7 +112,7 @@ class ControllerModuleJanrain extends Controller
          } 
          else {
             $this->message->add("warning",sprintf($this->_('error_janrain_auth'),$this->config->get('config_email'),$this->config->get('config_email')));
-            $this->redirect($this->url->link('account/login'));
+            $this->url->redirect($this->url->link('account/login'));
          }
       }
    
@@ -126,7 +126,7 @@ class ControllerModuleJanrain extends Controller
       else {
          $login_redir = $this->url->site();
       }
-      $this->redirect(preg_replace("/\/logout/","/account",$login_redir));
+      $this->url->redirect(preg_replace("/\/logout/","/account",$login_redir));
    }
 
 	function parseJanrainInfo($auth_info,$raw_json='')
@@ -189,7 +189,7 @@ class ControllerModuleJanrain extends Controller
 				$this->model_module_janrain->janrainCreateUser( $user_id, $customer_email, $auth_provider, $auth_identifier );
 				
 				// send email to admin to notify about new customer
-				$subject = sprintf($this->_('text_subject'), HTTPS_SERVER);
+				$subject = sprintf($this->_('text_subject'), SITE_SSL);
 			
 				$message = $this->_('text_hello') . "\n\n";
 				
@@ -197,7 +197,7 @@ class ControllerModuleJanrain extends Controller
 				if($customer_info['lastname'])
 					$customer_name .= ' ' . $customer_info['lastname'];
 					
-				$message .= sprintf($this->_('text_message'), HTTPS_SERVER). "\n\n";
+				$message .= sprintf($this->_('text_message'), SITE_SSL). "\n\n";
 				$message .= $this->_('text_customer_detail') . "\n";
 				$message .= $this->_('text_dash_line') . "\n";
 				$message .= sprintf($this->_('text_customer_id'), $customer_info['customer_id']). "\n";
@@ -368,7 +368,7 @@ class ControllerModuleJanrain extends Controller
          $redirect = $this->url->site();
       }
 
-		$this->redirect($redirect);
+		$this->url->redirect($redirect);
   	}
 	
 	public function generateEmailAddress( $auth_profile, $auth_provider, $auth_identifier ) 

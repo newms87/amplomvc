@@ -1,26 +1,26 @@
 <?php
 class ModelSettingStore extends Model {
 	public function addStore($data) {
-		$this->query("INSERT INTO " . DB_PREFIX . "store SET name = '" . $this->db->escape($data['config_name']) . "', `url` = '" . $this->db->escape($data['config_url']) . "', `ssl` = '" . $this->db->escape($data['config_ssl']) . "'");
+		$store_id = $this->insert('store', $data);
 		
 		$this->cache->delete('store');
-      $this->cache->delete('template');
+      $this->cache->delete('theme');
 		
-		return $this->db->getLastId();
+		return $store_id;
 	}
 	
 	public function editStore($store_id, $data) {
-		$this->query("UPDATE " . DB_PREFIX . "store SET name = '" . $this->db->escape($data['config_name']) . "', `url` = '" . $this->db->escape($data['config_url']) . "', `ssl` = '" . $this->db->escape($data['config_ssl']) . "' WHERE store_id = '" . (int)$store_id . "'");
+		$this->update('store', $data, $store_id);
 						
 		$this->cache->delete('store');
-      $this->cache->delete('template');
+      $this->cache->delete('theme');
 	}
 	
 	public function deleteStore($store_id) {
-		$this->query("DELETE FROM " . DB_PREFIX . "store WHERE store_id = '" . (int)$store_id . "'");
+		$this->delete('store', $store_id);
 			
 		$this->cache->delete('store');
-      $this->cache->delete('template');
+      $this->cache->delete('theme');
 	}	
 	
    
@@ -46,25 +46,25 @@ class ModelSettingStore extends Model {
       return $query->rows;
    }
    
-	public function getStores($data = array()) {
-		$store_data = $this->cache->get('store');
-	
-		if (!$store_data) {
-			$query = $this->get('store', '*');
-
-			$default_store = array(
-				'store_id' => 0,
-				'name' => $this->config->get('config_name'),
-				'url' => HTTP_SERVER,
-				'ssl' => HTTPS_SERVER,
-			);
-			
-			$store_data = array($default_store) + $query->rows;
-		
-			$this->cache->set('store', $store_data);
+	public function getStores($data = array(), $total = false) {
+		if($total){
+			$select = "COUNT(*) as total";
 		}
+		else{
+			$select = "*";
+		}
+		
+		$from = DB_PREFIX . "store s";
+		
+		$where = "store_id > 0";
+		
+		$order_limit = $this->extract_order_limit_string($data);
+		
+		$query = "SELECT $select FROM $from WHERE $where $order_limit";
+		
+		$result = $this->query($query);
 	 
-		return $store_data;
+		return $result->rows;
 	}
 
 	public function getTotalStores() {

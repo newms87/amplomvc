@@ -18,7 +18,7 @@ class ControllerCmsCategory extends Controller {
 		$category_info = $this->model_cms_category->getCategory($cms_category_id);
 	
 		if (!$category_info) {
-		   $this->redirect($this->url->link('cms/category'),302);
+		   $this->url->redirect($this->url->link('cms/category'),302);
       }
       
   		$this->document->setTitle($category_info['title']);
@@ -27,7 +27,7 @@ class ControllerCmsCategory extends Controller {
 		
 		$this->language->set('heading_title', $category_info['name']);
       
-		$this->data['image'] = $this->image->get($category_info['image']?$category_info['image']:'data/no_image.jpg');
+		$this->data['image'] = $this->image->get($category_info['image']?$category_info['image']:'data/no_image.png');
 		
 		//$this->data['description'] = html_entity_decode($category_info['description'], ENT_QUOTES, 'UTF-8');
 		

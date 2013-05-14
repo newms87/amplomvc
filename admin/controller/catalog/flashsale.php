@@ -18,7 +18,7 @@ class ControllerCatalogFlashsale extends Controller {
 
 			$this->message->add('success', $this->_('text_success'));
 			
-			$this->redirect($this->url->link('catalog/flashsale')); 
+			$this->url->redirect($this->url->link('catalog/flashsale')); 
 		}
 
 		$this->getForm();
@@ -34,7 +34,7 @@ class ControllerCatalogFlashsale extends Controller {
 			
 			$this->message->add('success', $this->_('text_success'));
 			
-			$this->redirect($this->url->link('catalog/flashsale'));
+			$this->url->redirect($this->url->link('catalog/flashsale'));
 		}
 
 		$this->getForm();
@@ -52,7 +52,7 @@ class ControllerCatalogFlashsale extends Controller {
 
 			$this->message->add('success', $this->_('text_success'));
 
-			$this->redirect($this->url->link('catalog/flashsale'));
+			$this->url->redirect($this->url->link('catalog/flashsale'));
 		}
 
 		$this->getList();
@@ -81,7 +81,7 @@ class ControllerCatalogFlashsale extends Controller {
          if(!$this->error){
             $this->message->add('success', $this->_('text_success'));
             
-            $this->redirect($this->url->link('catalog/flashsale', $this->url->get_query()));
+            $this->url->redirect($this->url->link('catalog/flashsale', $this->url->get_query()));
          }
       }
 
@@ -224,8 +224,6 @@ class ControllerCatalogFlashsale extends Controller {
       $this->template->load('catalog/flashsale_form');
 
 	   $flashsale_id = $this->data['flashsale_id'] = isset($_GET['flashsale_id'])?$_GET['flashsale_id']:0;
-      
-		$this->document->addScript("image_manager.js");
 		
 	   $manufacturers = $this->model_catalog_manufacturer->getManufacturers();
       $this->data['designer_list'] = array(0=>'(Select)');
@@ -256,7 +254,7 @@ class ControllerCatalogFlashsale extends Controller {
 		}
 		
       if($flashsale_id){
-         $this->data['preview'] = $this->url->link('sales/flashsale', 'flashsale_id=' . $flashsale_id . '&preview_flashsale=1', 1);
+         $this->data['preview'] = $this->url->store($this->config->get('config_default_store'), 'sales/flashsale', 'flashsale_id=' . $flashsale_id . '&preview_flashsale=1');
       }
       
 		$this->data['cancel'] = $this->url->link('catalog/flashsale');
@@ -269,10 +267,10 @@ class ControllerCatalogFlashsale extends Controller {
 		if (!empty($flashsale_info) && $flashsale_info['image'] && file_exists(DIR_IMAGE . $flashsale_info['image'])) {
 			$this->data['thumb'] = $this->image->resize($flashsale_info['image'], 100, 100);
 		} else {
-			$this->data['thumb'] = $this->image->resize('no_image.jpg', 100, 100);
+			$this->data['thumb'] = $this->image->resize('no_image.png', 100, 100);
 		}
 		
-		$this->data['no_image'] = $this->image->resize('no_image.jpg', 100, 100);
+		$this->data['no_image'] = $this->image->resize('no_image.png', 100, 100);
 		
       
       //initialize the values in order of Post, Database, Default
@@ -282,7 +280,7 @@ class ControllerCatalogFlashsale extends Controller {
          'name'=>'',
          'blurb'=>'',
          'teaser'=>'',
-         'image'=>'no_image.jpg',
+         'image'=>'no_image.png',
          'keyword'=>'',
          'date_start'=>'',
          'date_end'=>'',
@@ -330,7 +328,7 @@ class ControllerCatalogFlashsale extends Controller {
                              'products'=>$products,
                              'name'=>$designer['name'],
                              'image'=>$designer['image'],
-                             'thumb'=>$this->image->resize($designer['image']?$designer['image']:'no_image.jpg',100,100),
+                             'thumb'=>$this->image->resize($designer['image']?$designer['image']:'no_image.png',100,100),
                              'description'=>$description
                             );
       echo json_encode($designer_info);

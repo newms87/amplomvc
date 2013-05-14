@@ -14,7 +14,7 @@ class ControllerShippingParcelforce48 extends Controller {
 					
 			$this->message->add('success', $this->_('text_success'));
 						
-			$this->redirect($this->url->link('extension/shipping'));
+			$this->url->redirect($this->url->link('extension/shipping'));
 		}
 				
  		if (isset($this->error['warning'])) {

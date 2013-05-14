@@ -15,7 +15,7 @@ class ControllerDesignersDesigners extends Controller {
          $designer = $this->model_catalog_designer->getDesigner($designer_id,true);
          
          if(!$designer){
-            $this->redirect($this->url->link('designers/designers'), 302);
+            $this->url->redirect($this->url->link('designers/designers'), 302);
          }
             
          $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -105,7 +105,7 @@ class ControllerDesignersDesigners extends Controller {
             $this->data['close_quote'] = $this->image->get('data/close_quote.png');
             
             $this->data['description'] = html_entity_decode($designer['description']);
-            $image = $designer['image']?$designer['image']:'data/no_image.jpg';
+            $image = $designer['image']?$designer['image']:'data/no_image.png';
             $this->data['designer_image'] = $this->image->resize($image, $this->config->get('config_image_manufacturer_width'),$this->config->get('config_image_manufacturer_height'));
             
 
@@ -143,7 +143,7 @@ class ControllerDesignersDesigners extends Controller {
 
             foreach($designers as $key=>&$d){
                if($this->model_catalog_designer->hasProducts($d['designer_id'])){
-                  $d['image'] =$this->image->resize( (isset($d['image'])?$d['image']:"no_image.jpg") ,196,206);
+                  $d['image'] =$this->image->resize( (isset($d['image'])?$d['image']:"no_image.png") ,196,206);
                   $d['href'] = $this->url->site($d['keyword']);
                   $d['flashsale'] = $this->model_catalog_designer->is_flashsale_page($d['designer_id'], true);
                }

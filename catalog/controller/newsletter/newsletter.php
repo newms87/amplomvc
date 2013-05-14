@@ -7,11 +7,20 @@ class ControllerNewsletterNewsletter extends Controller {
       
       if(!$newsletter_id){
          $this->message->add('warning', $this->_('error_newsletter_preview'));
-         $this->redirect($this->url->link('error/not_found'));
+         $this->url->redirect($this->url->link('error/not_found'));
          return;
       }
       
-      $html = $this->url->load($this->url->link_admin('mail/newsletter/preview', 'newsletter_id=' . $newsletter_id), true);
+		if(!$this->user->validate_token()){
+         $this->user->login('guest','guest');
+      }
+      
+      if(empty($this->session->data['token'])){
+         trigger_error("There was an error while generating the Admin link. The token was not set!");
+         return '';
+      }
+		
+      $html = $this->url->load($this->url->admin('mail/newsletter/preview', 'newsletter_id=' . $newsletter_id), true);
       
       $this->response->setOutput($html);
    }

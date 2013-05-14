@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']            = 'Settings';
+$_['heading_title']            = 'General Settings';
 
 //Data
 $_['data_stock_display_types'] = array(
@@ -19,8 +19,8 @@ $_['text_shipping']            = 'Shipping Address';
 $_['text_payment']             = 'Payment Address';
 $_['text_mail']                = 'Mail';
 $_['text_smtp']                = 'SMTP';
-
 $_['text_mode_explanation']  = "The file permissions are set user (owner), group, others == ugo == 755 == user has full, group has read & write, others have read & write permissions.";
+$_['text_settings']		= 'Settings';
 
 // Entry
 $_['entry_name']               = 'Store Name:';
@@ -32,11 +32,12 @@ $_['entry_email_error']        = 'Error Email:<span class="help">Please specify 
 $_['entry_telephone']          = 'Telephone:';
 $_['entry_fax']                = 'Fax:';
 $_['entry_title']              = 'Title:';
+$_['entry_default_store']		= 'Default Store';
 $_['entry_meta_description']   = 'Meta Tag Description:';
 $_['entry_layout']             = 'Default Layout:';
 $_['entry_debug']               = 'Turn on Global Debug:<span class="help">Should be turned off for production sites.</span>';
 $_['entry_allow_close_message_box'] = "Allow Customers to Close Notification Messages?<span class='help'>These are popups that display warning, success and alert/notify messages</span>";
-$_['entry_template']           = 'Template:';
+$_['entry_theme']           = 'Theme:';
 $_['entry_address_format']     = 'Default Address Format: <span class="help">Insertables:<br/> {firstname}, {lastname}, {company}, {address_1}, {address_2}, {postcode}, {zone}, {zone_code}, {country}. <br/><br />Can be individually set under System > Localisation > Countries</span>';
 $_['entry_country']            = 'Country:';
 $_['entry_zone']               = 'Region / State:';
@@ -120,6 +121,8 @@ $_['entry_error_display']      = 'Display Errors:';
 $_['entry_error_log']          = 'Log Errors:';
 $_['entry_error_filename']     = 'Error Log Filename:';
 $_['entry_statcounter']        = 'Stat Counter Code:<span class="help">Sign up at <a onclick="window.open(\'http://www.statcounter.com/sign-up/\');"><u>Stat Counter</u></a> and copy and past the code in this field.</span>';
+$_['entry_statcounter_project'] = 'Project ID';
+$_['entry_statcounter_security'] = 'Security Code';
 $_['entry_google_analytics']   = 'Google Analytics Code:<br /><span class="help">Login to your <a onclick="window.open(\'http://www.google.com/analytics/\');"><u>Google Analytics</u></a> account and after creating your web site profile copy and paste the analytics code into this field.</span>';
 $_['entry_mail_registration']  = 'Customer Registration Email:';
 $_['entry_mail_mailto'] = "Send To:<span class='help'>(comma separated list)</span>";

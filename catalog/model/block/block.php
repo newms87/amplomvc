@@ -2,9 +2,13 @@
 class ModelBlockBlock extends Model {
 	private $blocks;
 	
-	public function getBlockSettings($name) {
-		if(!$this->blocks) $this->loadBlocks();
+	function __construct(&$registry){
+		parent::__construct($registry);
 		
+		$this->loadBlocks();
+	}
+	
+	public function getBlockSettings($name) {
 		if(isset($this->blocks[$name])){
 			return $this->blocks[$name];
 		}
@@ -18,23 +22,23 @@ class ModelBlockBlock extends Model {
 		
 		$blocks = $this->cache->get("blocks.$store_id.$layout_id");
 		
-		if(!$blocks){
-			$blocks = array();
+		if(!$blocks || true){
+			$results = $this->query("SELECT * FROM " . DB_PREFIX . "block WHERE status = '1'");
 			
-			$query = $this->get('block', '*');
+			$blocks = array('positions' => array());
 			
-			foreach($query->rows as &$row){
-				if(!$row['status']) continue;
-				
+			foreach($results->rows as &$row){
 				$row['settings'] = unserialize($row['settings']);
 				$row['profiles'] = unserialize($row['profiles']);
 				
 				foreach($row['profiles'] as $profile){
-					if($profile['status'] && in_array($layout_id, $profile['layout_ids']) && in_array($store_id, $profile['store_ids'])){
+					if(in_array($layout_id, $profile['layout_ids']) && in_array($store_id, $profile['store_ids'])){
 						$blocks[$row['name']] = array(
 							'profile' => $profile,
 							'settings' => $row['settings'],
 						);
+						
+						$blocks['position'][$profile['position']][$row['name']] = &$blocks[$row['name']];
 					}
 				}
 			}
@@ -46,37 +50,10 @@ class ModelBlockBlock extends Model {
 	}
 	
 	public function getBlocksForPosition($position){
-		$store_id = $this->config->get('config_store_id');
-		$layout_id = $this->config->get('config_layout_id');
-		
-		$blocks = $this->cache->get("blocks.$store_id.$layout_id.$position");
-		
-		if(!$blocks && !is_array($blocks)){
-			$blocks = array();
-			
-			$query = $this->get('block', '*');
-			
-			foreach($query->rows as &$row){
-				if(!$row['status']) continue;
-				
-				$row['settings'] = unserialize($row['settings']);
-				$row['profiles'] = unserialize($row['profiles']);
-				
-				foreach($row['profiles'] as $profile){
-					if($profile['status'] && !empty($profile['position']) && $profile['position'] == $position 
-							&& in_array($layout_id, $profile['layout_ids']) && in_array($store_id, $profile['store_ids'])){
-								
-						$blocks[$row['name']] = array(
-							'profile' => $profile,
-							'settings' => $row['settings'],
-						);
-					}
-				}
-			}
-			
-			$this->cache->set("blocks.$store_id.$layout_id.$position", $blocks);
+		if(isset($this->blocks['position'][$position])){
+			return $this->blocks['position'][$position];
 		}
-		
-		return $blocks;
+
+		return array();
 	}
 }

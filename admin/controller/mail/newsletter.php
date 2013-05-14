@@ -20,7 +20,7 @@ class ControllerMailNewsletter extends Controller {
             $this->message->add('success',$this->_('text_success'));
          }
          
-         $this->redirect($this->url->link('mail/newsletter/update', 'newsletter_id=' . $newsletter_id));
+         $this->url->redirect($this->url->link('mail/newsletter/update', 'newsletter_id=' . $newsletter_id));
       }
 
       $this->getForm();
@@ -71,7 +71,7 @@ class ControllerMailNewsletter extends Controller {
          if(!$this->error){
             $this->message->add('success', $this->_('text_success'));
             
-            $this->redirect($this->url->link('mail/newsletter', $this->url->get_query()));
+            $this->url->redirect($this->url->link('mail/newsletter', $this->url->get_query()));
          }
       }
 
@@ -188,13 +188,12 @@ class ControllerMailNewsletter extends Controller {
       $this->template->load('mail/newsletter_form');
 
       $newsletter_id = $this->data['newsletter_id'] = isset($_GET['newsletter_id'])?$_GET['newsletter_id']:0;
-      
+      $store_id = $this->config->get('config_default_store');
+		
       if($newsletter_id){
-         $this->data['url_active'] = $this->url->link("newsletter/newsletter", 'newsletter_id=' . $newsletter_id, 1);
+         $this->data['url_active'] = $this->url->store($store_id, "newsletter/newsletter", 'newsletter_id=' . $newsletter_id);
       }
       
-      $this->document->addScript("image_manager.js");
-		
       //Breadcrumbs
       $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
       $this->breadcrumb->add($this->_('heading_title'), $this->url->link('mail/newsletter'));
@@ -289,7 +288,9 @@ class ControllerMailNewsletter extends Controller {
    }
    
    public function preview(){
-      $this->language->load('mail/newsletter');
+   	$store_id = $this->config->get('config_default_store');
+		
+   	$this->language->load('mail/newsletter');
       
       if($_SERVER['REQUEST_METHOD'] == 'POST'){
          if($this->validateForm()){
@@ -297,7 +298,7 @@ class ControllerMailNewsletter extends Controller {
          else{
             $this->message->add('warning', $this->_('error_newsletter_preview'));
             $this->message->add('warning', $this->error);
-            $this->redirect($this->url->link('error/not_found'));
+            $this->url->redirect($this->url->link('error/not_found'));
          }
          
          $this->data = $_POST;
@@ -307,7 +308,7 @@ class ControllerMailNewsletter extends Controller {
          
          if(!$newsletter_id){
             $this->message->add('warning', $this->_('error_newsletter_preview'));
-            $this->redirect($this->url->link('error/not_found'));
+            $this->url->redirect($this->url->link('error/not_found'));
             return;
          }
          
@@ -339,7 +340,7 @@ class ControllerMailNewsletter extends Controller {
       $this->draw->render(DIR_GENERATED_IMAGE . 'newsletter/' . preg_replace("/[^A-Z0-9_]/i",'',$featured_designer['title']) . '.png');
       $featured_designer['title_image'] = $this->draw->get_image_url();
       
-      $featured_designer['href'] = $this->url->link('designers/designers', 'designer_id=' . $featured_designer['designer_id'], 1);
+      $featured_designer['href'] = $this->url->store($store_id, 'designers/designers', 'designer_id=' . $featured_designer['designer_id']);
       
       $featured_designer['description'] = html_entity_decode($featured_designer['description'], ENT_QUOTES, 'UTF-8');
       
@@ -354,7 +355,7 @@ class ControllerMailNewsletter extends Controller {
          $featured_product['thumb'] = $this->image->resize($featured_product['image'], $featured_product['width'],$featured_product['height'], '#FFFFFF');
       }
       
-      $featured_product['href'] = $this->url->link('product/product', 'product_id=' . $featured_product['product_id'], 1);
+      $featured_product['href'] = $this->url->store($store_id, 'product/product', 'product_id=' . $featured_product['product_id']);
       
       $result = $this->model_catalog_product->getProductFull($featured_product['product_id']);
       
@@ -399,12 +400,12 @@ class ControllerMailNewsletter extends Controller {
             $result['price'] = $this->currency->format($result['price']);
             
             if(!$result['image']){
-               $result['image'] = 'no_image.jpg';
+               $result['image'] = 'no_image.png';
             }
 
             $result['thumb'] = $this->image->resize($result['image'], 155, 121);
             
-            $result['href'] = $this->url->link('product/product','product_id=' . $result['product_id'], 1);
+            $result['href'] = $this->url->store($store_id, 'product/product','product_id=' . $result['product_id']);
             
             $product = $result;
          }
@@ -420,14 +421,14 @@ class ControllerMailNewsletter extends Controller {
             if(!$result){
                $result['teaser'] = "This Designer is not active";
                $result['manufacturer_id'] = 0;
-               $result['image'] = 'no_image.jpg';
+               $result['image'] = 'no_image.png';
             }
             
             $result['name'] = $designer['name'];
             
             $result['thumb'] = $this->image->resize($result['image'], 154, 164);
             
-            $result['href'] = $this->url->link("designers/designers", 'designer_id=' . $result['manufacturer_id'], 1);
+            $result['href'] = $this->url->store($store_id, "designers/designers", 'designer_id=' . $result['manufacturer_id']);
             
             $designer = $result;
          }
@@ -440,13 +441,13 @@ class ControllerMailNewsletter extends Controller {
       }
       
       if(empty($this->data['newsletter']['articles_image'])){
-         $this->data['newsletter']['articles_image'] = 'no_image.jpg';
+         $this->data['newsletter']['articles_image'] = 'no_image.png';
       }
       
       $this->data['newsletter']['articles_image'] = $this->image->resize($this->data['newsletter']['articles_image'], 225, 136);
       
       //Extra Data
-      $this->data['link_see_all_sales'] = $this->url->link('sales/flashsale', '', 1);
+      $this->data['link_see_all_sales'] = $this->url->store($store_id, 'sales/flashsale', '');
       
       $this->response->setOutput($this->render());
    }

@@ -88,7 +88,7 @@ class ModelSaleVoucher extends Model {
 				$language->load('mail/voucher');
 				
 				// HTML Mail
-				$template = new Template();
+				$template = new Template($this->registry);
 				
 				$template->data['title'] = sprintf($language->get('text_subject'), $voucher_info['from_name']);
 				
@@ -123,7 +123,7 @@ class ModelSaleVoucher extends Model {
 			}  else {
 				$this->language->load('mail/voucher');
 				
-				$template = new Template();		
+				$template = new Template($this->registry);		
 				
 				$template->data['title'] = sprintf($this->_('text_subject'), $voucher_info['from_name']);
 				

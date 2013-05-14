@@ -6,7 +6,7 @@ class ControllerAffiliateLogout extends Controller {
     	if ($this->affiliate->isLogged()) {
       		$this->affiliate->logout();
 			
-      		$this->redirect($this->url->link('affiliate/logout'));
+      		$this->url->redirect($this->url->link('affiliate/logout'));
     	}
  
     	$this->language->load('affiliate/logout');

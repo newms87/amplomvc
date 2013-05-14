@@ -8,13 +8,6 @@ $_['data_no_yes'] = $_['no_yes']                 = array(0=>'No',1=>'Yes');
 $_['data_yes_no_blank'] = $_['yes_no_blank']     = array(''=>'',1=>'Yes',0=>'No');
 $_['data_no_yes_blank'] = $_['no_yes_blank']     = array(''=>'',0=>'No',1=>'Yes');
 
-$_['data_positions'] = $_['positions']           = array(
-                                 'above_content'=>"Above Content",
-                                 'content_top'=>"Content Top",
-                                 'content_bottom'=>"Content Bottom",
-                                 'column_left'=>"Column Left",
-                                 'column_right'=>"Column Right"
-                                );
 
 // Text
 $_['text_yes']                = 'Yes';
@@ -40,6 +33,18 @@ $_['text_browse']             = 'Browse';
 $_['text_clear']             = 'Clear';
 $_['text_batch_action']      = 'Batch Action:';
 $_['text_autocomplete']      = '<span class="help">(autocomplete)</span>';
+$_['text_above_content']		= "Above Content";
+$_['text_content_top']		= "Content Top";
+$_['text_content_bottom']		= "Content Bottom";
+$_['text_column_left']		= "Column Left";
+$_['text_column_right']		= "Column Right";
+
+//Positions
+$_['position_above_content']	= "Above Content";
+$_['position_content_top']		= "Content Top";
+$_['position_content_bottom']	= "Content Bottom";
+$_['position_column_left']		= "Column Left";
+$_['position_column_right']	= "Column Right";
 
 //Entry
 $_['entry_date_from'] = "";

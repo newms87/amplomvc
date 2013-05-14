@@ -33,9 +33,18 @@ function getQuerystring(key, defaultValue) {
 
 
 //-----------------------------------------
+// Submit form on enter key
 // Confirm Actions (delete, uninstall)
+// Drop down menu
 //-----------------------------------------
 $(document).ready(function(){
+	//Submit form on enter key
+	$('form input').keydown(function(e) {
+		if (e.keyCode == 13) {
+			$(this).closest('form').submit();
+		}
+	});
+	
     // Confirm Delete
     $('#form').submit(function(){
         if ($(this).attr('action').indexOf('delete',1) != -1) {

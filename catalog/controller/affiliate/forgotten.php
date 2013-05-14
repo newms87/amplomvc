@@ -6,7 +6,7 @@ class ControllerAffiliateForgotten extends Controller {
 		$this->template->load('affiliate/forgotten');
 
 		if ($this->affiliate->isLogged()) {
-			$this->redirect($this->url->link('affiliate/account'));
+			$this->url->redirect($this->url->link('affiliate/account'));
 		}
 
 		$this->language->load('affiliate/forgotten');
@@ -37,7 +37,7 @@ class ControllerAffiliateForgotten extends Controller {
 			
 			$this->message->add('success', $this->_('text_success'));
 
-			$this->redirect($this->url->link('affiliate/login'));
+			$this->url->redirect($this->url->link('affiliate/login'));
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));

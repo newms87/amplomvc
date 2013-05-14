@@ -1,7 +1,7 @@
 <div class="buttons">
   <div class="right">
     <input type="button" value="<?= $button_confirm; ?>" id="button-confirm" class="button" />
-    <div id='submit_payment' style='display:none'><img src="catalog/view/theme/default/image/loading.gif" alt="" /><span><?= $text_submit_payment;?></span></div>
+    <div id='submit_payment' style='display:none'><img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /><span><?= $text_submit_payment;?></span></div>
   </div>
 </div>
 <script type="text/javascript">

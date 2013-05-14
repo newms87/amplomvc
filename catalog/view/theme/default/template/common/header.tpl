@@ -17,20 +17,10 @@
 <? if($canonical_link) {?>
 <link href="<?= $canonical_link;?>" rel="canonical" />
 <? }?>
-	<!--[if lt IE 10]>
-<link rel="stylesheet" type="text/css" href="catalog/view/theme/default/stylesheet/ie_style.css" />
-<![endif]-->
-	<? foreach ($css_styles as $style) { ?>
+
+<? foreach ($css_styles as $style) { ?>
 <link rel="<?= $style['rel']; ?>" type="text/css" href="<?= $style['href']; ?>" media="<?= $style['media']; ?>" />
 <? } ?>
-<script type="text/javascript" src="catalog/view/javascript/jquery/jquery-1.7.1.min.js"></script>
-<script type="text/javascript" src="catalog/view/javascript/jquery/ui/jquery-ui-1.8.16.custom.min.js"></script>
-<link rel="stylesheet" type="text/css" href="catalog/view/javascript/jquery/ui/themes/ui-lightness/jquery-ui-1.8.16.custom.css" />
-<script type="text/javascript" src="catalog/view/javascript/jquery/ui/external/jquery.cookie.js"></script>
-<script type="text/javascript" src="catalog/view/javascript/jquery/colorbox/jquery.colorbox.js"></script>
-<link rel="stylesheet" type="text/css" href="catalog/view/javascript/jquery/colorbox/colorbox.css" media="screen" />
-<script type="text/javascript" src="catalog/view/javascript/jquery/tabs.js"></script>
-<script type="text/javascript" src="catalog/view/javascript/common.js"></script>
 
 <? /*TODO: Do we want to do something with this? Right now useles...	
 <![if !IE]>
@@ -44,25 +34,45 @@
 <? foreach ($js_scripts as $script) { ?>
 <script type="text/javascript" src="<?= $script; ?>"></script>
 <? } ?>
+
+<!--[if lt IE 10]>
+<link rel="stylesheet" type="text/css" href="catalog/view/theme/default/stylesheet/ie_style.css" />
+<![endif]-->
 <!--[if IE 9]>
-<link rel="stylesheet" type="text/css" href="catalog/view/theme/default/stylesheet/ie9.css" />
+<link rel="stylesheet" type="text/css" href="<?= HTTP_STYLE . 'ie9.css'; ?>" />
 <![endif]-->
 	<!--[if IE 8]>
-<link rel="stylesheet" type="text/css" href="catalog/view/theme/default/stylesheet/ie8.css" />
+<link rel="stylesheet" type="text/css" href="<?= HTTP_STYLE . 'ie8.css'; ?>" />
 <![endif]-->
 <!--[if IE 7]>
-<link rel="stylesheet" type="text/css" href="catalog/view/theme/default/stylesheet/ie7.css" />
-<![endif]-->
-<!--[if lt IE 7]>
-<link rel="stylesheet" type="text/css" href="catalog/view/theme/default/stylesheet/ie6.css" />
-<script type="text/javascript" src="catalog/view/javascript/DD_belatedPNG_0.0.8a-min.js"></script>
-<script type="text/javascript">
-DD_belatedPNG.fix('#logo img');
-</script>
+<link rel="stylesheet" type="text/css" href="<?= HTTP_STYLE . 'ie7.css'; ?>" />
 <![endif]-->
 
+<? if($google_analytics) { ?>
+<!-- Google Analytics Tracker -->
+<script type="text/javascript">//<!--
 <?= $google_analytics; ?>
-<?= $statcounter;?>
+//--></script>
+<? } ?>
+
+<? if(!empty($statcounter)) { ?>
+<!-- Stat Counter Tracker -->
+<script type="text/javascript">//<!--
+var sc_project="<?= $statcounter['project']; ?>";
+var sc_invisible=1;
+var sc_security="<?= $statcounter['security']; ?>";
+
+//--></script>
+<script type="text/javascript" src="http://www.statcounter.com/counter/counter.js"></script>
+<noscript>
+	<div class="statcounter">
+		<a title="tumblr tracker" href="http://statcounter.com/tumblr/" target="_blank">
+			<img class="statcounter" src="http://c.statcounter.com/<?= $statcounter['project']; ?>/0/<?= $statcounter['security']; ?>/1/" alt="tumblr tracker">
+		</a>
+	</div>
+</noscript>
+<? } ?>
+
 </head>
 <body>
 <div id="container">

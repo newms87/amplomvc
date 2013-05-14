@@ -79,7 +79,7 @@ class ModelSettingSetting extends Model {
        
       $this->delete('setting', $values);
       
-      $this->cache->delete('template');
+      $this->cache->delete('theme');
 		$this->cache->delete('setting');
 		$this->cache->delete('store');
 	}

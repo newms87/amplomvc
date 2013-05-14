@@ -18,7 +18,7 @@ class ControllerProductCompare extends Controller {
 		
 			$this->message->add('success', $this->_('text_remove'));
 		
-			$this->redirect($this->url->link('product/compare'));
+			$this->url->redirect($this->url->link('product/compare'));
 		}
 		
 		$this->document->setTitle($this->_('heading_title'));

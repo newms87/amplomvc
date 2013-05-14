@@ -3,8 +3,7 @@ final class Registry {
 	private $data = array();
    
 	public function get($key) {
-	   
-      if(isset($this->data[$key])){
+	   if(isset($this->data[$key])){
          return $this->data[$key];
       }
       elseif(strpos($key,'model_') === 0){

@@ -185,7 +185,7 @@ class ControllerCatalogProduct extends Controller {
 //>>>>> {php}
       if($this->user->isDesigner() && isset($_GET['product_id']) && !$this->model_catalog_product->isEditable($_GET['product_id'])){
          $this->session->data['warning'] = $this->_('warning_not_editable');
-         $this->redirect($this->url->link('catalog/product'));
+         $this->url->redirect($this->url->link('catalog/product'));
       }
 //-----
 //=====
@@ -209,7 +209,7 @@ class ControllerCatalogProduct extends Controller {
 //>>>>> {php}
       if($this->user->isDesigner() && !$this->model_catalog_product->isEditable($_GET['product_id'])){
          $this->session->data['warning'] = $this->_('warning_not_editable');
-         $this->redirect($this->url->link('catalog/product'));
+         $this->url->redirect($this->url->link('catalog/product'));
       }
 //-----
 //=====

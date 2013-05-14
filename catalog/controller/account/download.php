@@ -4,7 +4,7 @@ class ControllerAccountDownload extends Controller {
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/download');
 
-			$this->redirect($this->url->link('account/login'));
+			$this->url->redirect($this->url->link('account/login'));
 		}
          		
 		$this->language->load('account/download');
@@ -121,7 +121,7 @@ class ControllerAccountDownload extends Controller {
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/download');
 
-			$this->redirect($this->url->link('account/login'));
+			$this->url->redirect($this->url->link('account/login'));
 		}
 
 		if (isset($_GET['order_download_id'])) {
@@ -159,7 +159,7 @@ class ControllerAccountDownload extends Controller {
 				exit('Error: Headers already sent out!');
 			}
 		} else {
-			$this->redirect($this->url->link('account/download'));
+			$this->url->redirect($this->url->link('account/download'));
 		}
 	}
 }

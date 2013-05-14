@@ -8,14 +8,14 @@ class pluginHandler{
    protected $plugins;
 	protected $controller_adapters;
    
-   function __construct(&$registry, $store_id, $admin, $merge_registry){
+   function __construct(&$registry, $merge_registry){
       $this->registry = &$registry;
 		
 		$this->load_plugin_file_registry();
 		
 		$this->validate_plugin_file_registry();
       
-		$this->load_controller_adapters($store_id);
+		$this->load_controller_adapters();
       
       $this->merge_registry = $merge_registry;
       
@@ -225,12 +225,12 @@ class pluginHandler{
 		}
 	}
 
-	private function load_controller_adapters($store_id){
-		$cache_file = 'plugin.controller_adapters.' . (int)$store_id . "." . (defined("IS_ADMIN") ? 'admin' : 'store');
+	private function load_controller_adapters(){
+		$cache_file = 'plugin.controller_adapters.' . (defined("IS_ADMIN") ? 'admin' : 'store');
 		
 		$this->controller_adapters = $this->cache->get($cache_file);
 		if(!isset($this->controller_adapters)){
-		   $query = $this->db->query("SELECT pca.name, pca.for, pca.admin, pca.plugin_file, pca.callback FROM " . DB_PREFIX . "plugin_controller_adapter pca JOIN " . DB_PREFIX . "plugin p ON (p.name = pca.name) WHERE p.status='1' AND p.store_id = '" . (int)$store_id . "' AND pca.admin = '" . (defined("IS_ADMIN") ? 1 : 0) . "' ORDER BY pca.priority ASC");
+		   $query = $this->db->query("SELECT pca.name, pca.for, pca.admin, pca.plugin_file, pca.callback FROM " . DB_PREFIX . "plugin_controller_adapter pca JOIN " . DB_PREFIX . "plugin p ON (p.name = pca.name) WHERE p.status='1' AND pca.admin = '" . (defined("IS_ADMIN") ? 1 : 0) . "' ORDER BY pca.priority ASC");
 			
 			$this->controller_adapters = array();
 			

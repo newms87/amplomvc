@@ -44,7 +44,7 @@ $('#button-confirm').bind('click', function() {
 		beforeSend: function() {
 			$('#button-confirm').attr('disabled', true);
 			
-			$('#payment').before('<div class="attention"><img src="catalog/view/theme/default/image/loading.gif" alt="" /> <?= $text_wait; ?></div>');
+			$('#payment').before('<div class="attention"><img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> <?= $text_wait; ?></div>');
 		},
 		success: function(json) {
 			if (json['error']) {

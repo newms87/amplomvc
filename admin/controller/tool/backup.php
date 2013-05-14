@@ -21,7 +21,7 @@ class ControllerToolBackup extends Controller {
 				
 				$this->message->add('success', $this->_('text_success'));
 				
-				$this->redirect($this->url->link('tool/backup'));
+				$this->url->redirect($this->url->link('tool/backup'));
 			} else {
 				$this->error['warning'] = $this->_('error_empty');
 			}

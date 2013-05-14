@@ -106,7 +106,7 @@ class ControllerReportProductViewed extends Controller {
 		
 		$this->message->add('success', $this->_('text_success'));
 		
-		$this->redirect($this->url->link('report/product_viewed'));
+		$this->url->redirect($this->url->link('report/product_viewed'));
 	}
    
    private function get_url($filters=null){

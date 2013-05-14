@@ -12,7 +12,7 @@
       <div><b><?= $text_date_added; ?></b> <?= $return['date_added']; ?><br />
         <b><?= $text_order_id; ?></b> <?= $return['order_id']; ?></div>
       <div><b><?= $text_customer; ?></b> <?= $return['name']; ?></div>
-      <div class="return-info"><a href="<?= $return['href']; ?>"><img src="catalog/view/theme/default/image/info.png" alt="<?= $button_view; ?>" title="<?= $button_view; ?>" /></a></div>
+      <div class="return-info"><a href="<?= $return['href']; ?>"><img src="<?= HTTP_THEME_IMAGE . 'info.png'; ?>" alt="<?= $button_view; ?>" title="<?= $button_view; ?>" /></a></div>
     </div>
   </div>
   <? } ?>

@@ -110,7 +110,7 @@ class ModelSaleAffiliate extends Model {
 	
 			$message  = sprintf($this->_('text_approve_welcome'), $this->config->get('config_name')) . "\n\n";
 			$message .= $this->_('text_approve_login') . "\n";
-			$message .= HTTP_CATALOG . 'index.php?route=affiliate/login' . "\n\n";
+			$message .= $this->url->store($this->config->get('config_default_store'), 'affiliate/login');
 			$message .= $this->_('text_approve_services') . "\n\n";
 			$message .= $this->_('text_approve_thanks') . "\n";
 			$message .= $this->config->get('config_name');

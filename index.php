@@ -63,20 +63,23 @@ $cache = new Cache($registry);
 $registry->set('cache', $cache);
 
 //Resolve Store ID
-$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https://' : 'http://';
-$store_query = $db->query("SELECT * FROM " . DB_PREFIX . "store WHERE REPLACE(`ssl`, 'www.', '') = '" . $db->escape($scheme . str_replace('www.', '', $_SERVER['HTTP_HOST']) . rtrim(dirname($_SERVER['PHP_SELF']), '/.\\') . '/') . "'");
+if(!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off'){
+	$scheme = 'https://';
+	$field = 'ssl';
+}
+else{
+	$scheme = 'http://';
+	$field = 'url';
+}
 
-$store_id = $store_query->num_rows ? (int)$store_query->row['store_id'] : 0;
+$url = $scheme . str_replace('www.', '', $_SERVER['HTTP_HOST']) . rtrim(dirname($_SERVER['PHP_SELF']), '/.\\') . '/';
+
+$store = $db->query_row("SELECT * FROM " . DB_PREFIX . "store WHERE `$field` = '" . $db->escape($url) . "'");
+
+$store_id = $store ? (int)$store['store_id'] : null;
 
 // Config
 $config = new Config($registry, $store_id);
-$registry->set('config', $config);
-
-//Store URL setup
-if (!$store_query->num_rows) {
-	$config->set('config_url', HTTP_SERVER);
-	$config->set('config_ssl', HTTPS_SERVER);
-}
 
 //Setup Cache ignore list
 foreach(explode(',',$config->get('config_cache_ignore')) as $ci)
@@ -223,7 +226,7 @@ $registry->set('language', $language);
 
 
 //Plugins
-$plugin_handler = new pluginHandler($registry,$config->get('config_store_id'),0, $merge_registry);
+$plugin_handler = new pluginHandler($registry, $merge_registry);
 $registry->set('plugin_handler', $plugin_handler);
 
 // Document
@@ -234,6 +237,9 @@ $registry->set('document', $document);
 if (isset($_GET['tracking']) && !isset($_COOKIE['tracking'])) {
 	setcookie('tracking', $_GET['tracking'], time() + 3600 * 24 * 1000, '/');
 }
+
+//Theme
+$registry->set('theme', new Theme($registry));
 
 // Front Controller 
 $controller = new Front($registry);

@@ -19,7 +19,7 @@ class ControllerCmsCategory extends Controller {
 
 			$this->message->add('success', $this->_('text_success'));
 			
-			$this->redirect($this->url->link('cms/category')); 
+			$this->url->redirect($this->url->link('cms/category')); 
 		}
 
 		$this->getForm();
@@ -35,7 +35,7 @@ class ControllerCmsCategory extends Controller {
 			
 			$this->message->add('success', $this->_('text_success'));
 			
-			$this->redirect($this->url->link('cms/category'));
+			$this->url->redirect($this->url->link('cms/category'));
 		}
 
 		$this->getForm();
@@ -53,7 +53,7 @@ class ControllerCmsCategory extends Controller {
 
 			$this->message->add('success', $this->_('text_success'));
 
-			$this->redirect($this->url->link('cms/category'));
+			$this->url->redirect($this->url->link('cms/category'));
 		}
 
 		$this->getList();
@@ -157,10 +157,10 @@ class ControllerCmsCategory extends Controller {
       if (!empty($category_info) && $category_info['image'] && file_exists(DIR_IMAGE . $category_info['image'])) {
          $this->data['thumb'] = $this->image->resize($category_info['image'], 100, 100);
       } else {
-         $this->data['thumb'] = $this->image->resize('no_image.jpg', 100, 100);
+         $this->data['thumb'] = $this->image->resize('no_image.png', 100, 100);
       }
       
-      $this->data['no_image'] = $this->image->resize('no_image.jpg', 100, 100);
+      $this->data['no_image'] = $this->image->resize('no_image.png', 100, 100);
       
       $this->data['categories'] = array(0=>'-- None --');
 		$categories = $this->model_cms_category->getCategories(0);

@@ -14,7 +14,7 @@ class ControllerPaymentWorldPay extends Controller {
 			
 			$this->message->add('success', $this->_('text_success'));
 
-			$this->redirect($this->url->link('extension/payment'));
+			$this->url->redirect($this->url->link('extension/payment'));
 		}
 
  		if (isset($this->error['warning'])) {
@@ -55,7 +55,7 @@ class ControllerPaymentWorldPay extends Controller {
 			$this->data['worldpay_password'] = $this->config->get('worldpay_password');
 		}
 		
-		$this->data['callback'] = HTTP_CATALOG . 'index.php?route=payment/worldpay/callback';
+		$this->data['callback'] = SITE_URL . 'index.php?route=payment/worldpay/callback';
 
 		if (isset($_POST['worldpay_test'])) {
 			$this->data['worldpay_test'] = $_POST['worldpay_test'];

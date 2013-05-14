@@ -92,6 +92,11 @@ $(document).ready(function() {
 		});
 	});
 	
+	$('form input').keydown(function(e) {
+		if (e.keyCode == 13) {
+			$(this).closest('form').submit();
+		}
+	});
 	
 	if($('.flash_countdown').length > 0)
 			countdown();

@@ -41,7 +41,7 @@ class ControllerInformationAreYouADesigner extends Controller {
          
          $this->message->add('success', html_entity_decode($this->_('text_message_sent'), ENT_QUOTES, 'UTF-8'));
 	  		
-	  		$this->redirect($this->url->link('information/are_you_a_designer/success'));
+	  		$this->url->redirect($this->url->link('information/are_you_a_designer/success'));
     	}
       
       $this->language->format('text_are_you_a_designer', $this->config->get('config_name'));

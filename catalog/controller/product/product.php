@@ -82,7 +82,7 @@ class ControllerProductProduct extends Controller {
 			
          $this->model_catalog_product->updateViewed($product_info['product_id']);
 		} else {
-         $this->redirect($this->url->link('error/not_found'));
+         $this->url->redirect($this->url->link('error/not_found'));
     	}
       
       $this->children = array(

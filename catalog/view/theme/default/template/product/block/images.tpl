@@ -14,9 +14,8 @@
 <? } ?>
 
 
-<script type='text/javascript' src='catalog/view/javascript/jqzoom/js/jqzoom-core-min.js'></script>
-<script type='text/javascript'>
-//<!--
+<script type="text/javascript" src="<?= HTTP_THEME_JS . "jqzoom/js/jqzoom-core-min.js"; ?>"></script>
+<script type="text/javascript">//<!--
 $(document).ready(function(){
    $('.image-additional a img, .option_image a img').click(function(){
       if($(this).attr('src').replace(/-\d+x\d+/,'') == $('#the_zoombox .zoomPad > img').attr('src').replace(/-\d+x\d+/,'')){
@@ -28,7 +27,7 @@ $(document).ready(function(){
    
    <? //TODO: Make the zoombox have option to click for popup colorbox. ;?>
    
-   $('#the_zoombox').colorbox({});
-   $('#the_zoombox').click(function(){console.log('hmm');});
+   //$('#the_zoombox').colorbox({});
+   //$('#the_zoombox').click(function(){console.log('hmm');});
 });
 //--></script>

@@ -95,7 +95,7 @@ class ControllerProductBlockOptions extends Controller {
          }
       }
 
-		$this->data['option_value_no_image'] = $this->image->resize('data/no_image.png', $this->config->get('config_image_product_option_width'), $this->config->get('config_image_product_option_height'));
+		$this->data['option_value_no_image'] = $this->image->resize('no_image.png', $this->config->get('config_image_product_option_width'), $this->config->get('config_image_product_option_height'));
       
       $this->data['product_options'] = $product_options;
       

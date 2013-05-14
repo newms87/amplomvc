@@ -12,7 +12,7 @@ class ControllerCartBlockShipping extends Controller{
          $this->message->add('success', $this->_('text_shipping'));
          
          if($_POST['redirect']){
-            $this->redirect(urldecode($_POST['redirect']));
+            $this->url->redirect(urldecode($_POST['redirect']));
          }
       }
       

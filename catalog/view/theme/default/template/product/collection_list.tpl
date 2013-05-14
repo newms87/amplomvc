@@ -1,7 +1,9 @@
-<?= $header; ?><?= $column_left; ?><?= $column_right; ?>
+<?= $header; ?>
+<?= $column_left; ?>
+<?= $column_right; ?>
 <div class="content collections">
 	<?= $content_top; ?>
-	<?= $this->builder->display_breadcrumbs();?>
+	<?= $this->builder->display_breadcrumbs(); ?>
 	<h1><?= $heading_title; ?></h1>
 	<? if ($thumb || $description) { ?>
 	<div class="header-info">
@@ -42,8 +44,8 @@
 			<div class="item_text">
 				<div class="name"><a href="<?= $collection['href']; ?>"><?= $collection['name']; ?></a></div>
 				<div class="description"><?= $collection['description']; ?></div>
-		 </div>
-		 <? if ($collection['price']) { ?>
+		 	</div>
+		 	<? if ($collection['price']) { ?>
 			<div class="price">
 				<? if (!$collection['special']) { ?>
 				<?= $collection['price']; ?>
@@ -55,9 +57,9 @@
 			<? } ?>
 			<? if ($collection['rating']) { ?>
 			<div class="rating">
-				<img src="catalog/view/theme/default/image/stars-<?= $collection['rating']; ?>.png" alt="<?= $collection['reviews']; ?>" />
+				<img src="<?= HTTP_THEME_IMAGE . "stars-$collection[rating].png"; ?>" alt="<?= $collection['reviews']; ?>" />
 			</div>
-	 	<? } ?>
+		 	<? } ?>
 		</div>
 		<? } ?>
 	</div>

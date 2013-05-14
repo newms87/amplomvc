@@ -8,7 +8,7 @@ class ControllerAccountOrder extends Controller {
     	if (!$this->customer->isLogged()) {
       		$this->session->data['redirect'] = $this->url->link('account/order');
 
-	  		$this->redirect($this->url->link('account/login'));
+	  		$this->url->redirect($this->url->link('account/login'));
     	}
 		
 		$this->language->load('account/order');
@@ -34,7 +34,7 @@ class ControllerAccountOrder extends Controller {
                $this->cart->add($order_product['product_id'], $order_product['quantity'], $option_data);
 				}
 									
-				$this->redirect($this->url->link('cart/cart'));
+				$this->url->redirect($this->url->link('cart/cart'));
 			}
 		}
 
@@ -108,7 +108,7 @@ class ControllerAccountOrder extends Controller {
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/order/info', 'order_id=' . $order_id);
 			
-			$this->redirect($this->url->link('account/login'));
+			$this->url->redirect($this->url->link('account/login'));
     	}
 			
 		$this->language->load('account/order');

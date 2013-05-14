@@ -12,7 +12,7 @@
       <div><b><?= $text_remaining; ?></b> <?= $download['remaining']; ?></div>
       <div class="download-info">
         <? if ($download['remaining'] > 0) { ?>
-        <a href="<?= $download['href']; ?>"><img src="catalog/view/theme/default/image/download.png" alt="<?= $button_download; ?>" title="<?= $button_download; ?>" /></a>
+        <a href="<?= $download['href']; ?>"><img src="<?= HTTP_THEME_IMAGE . 'download.png'; ?>" alt="<?= $button_download; ?>" title="<?= $button_download; ?>" /></a>
         <? } ?>
       </div>
     </div>

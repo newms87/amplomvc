@@ -34,7 +34,7 @@ class ControllerSaleVoucherTheme extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 						
-      		$this->redirect($this->url->link('sale/voucher_theme', $url));
+      		$this->url->redirect($this->url->link('sale/voucher_theme', $url));
 		}
 	
     	$this->getForm();
@@ -64,7 +64,7 @@ class ControllerSaleVoucherTheme extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->redirect($this->url->link('sale/voucher_theme', $url));
+			$this->url->redirect($this->url->link('sale/voucher_theme', $url));
     	}
 	
     	$this->getForm();
@@ -96,7 +96,7 @@ class ControllerSaleVoucherTheme extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->redirect($this->url->link('sale/voucher_theme', $url));
+			$this->url->redirect($this->url->link('sale/voucher_theme', $url));
    		}
 	
     	$this->getList();
@@ -233,8 +233,6 @@ class ControllerSaleVoucherTheme extends Controller {
   	private function getForm() {
 		$this->template->load('sale/voucher_theme_form');
 		
-		$this->document->addScript("image_manager.js");
-		
  		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
 		} else {
@@ -303,10 +301,10 @@ class ControllerSaleVoucherTheme extends Controller {
 		if (isset($voucher_theme_info) && $voucher_theme_info['image'] && file_exists(DIR_IMAGE . $voucher_theme_info['image'])) {
 			$this->data['thumb'] = $this->image->resize($voucher_theme_info['image'], 100, 100);
 		} else {
-			$this->data['thumb'] = $this->image->resize('no_image.jpg', 100, 100);
+			$this->data['thumb'] = $this->image->resize('no_image.png', 100, 100);
 		}
 		
-		$this->data['no_image'] = $this->image->resize('no_image.jpg', 100, 100);
+		$this->data['no_image'] = $this->image->resize('no_image.png', 100, 100);
 				
 		$this->children = array(
 			'common/header',

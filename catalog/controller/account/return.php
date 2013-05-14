@@ -7,7 +7,7 @@ class ControllerAccountReturn extends Controller {
     	if (!$this->customer->isLogged()) {
       		$this->session->data['redirect'] = $this->url->link('account/return');
 
-	  		$this->redirect($this->url->link('account/login'));
+	  		$this->url->redirect($this->url->link('account/login'));
     	}
  
     	$this->language->load('account/return');
@@ -84,7 +84,7 @@ class ControllerAccountReturn extends Controller {
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/return/info', 'return_id=' . $return_id);
 			
-			$this->redirect($this->url->link('account/login'));
+			$this->url->redirect($this->url->link('account/login'));
     	}
 		
 		$return_info = $this->model_account_return->getReturn($return_id);
@@ -195,7 +195,7 @@ class ControllerAccountReturn extends Controller {
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_account_return->addReturn($_POST);
 	  		
-			$this->redirect($this->url->link('account/return/success'));
+			$this->url->redirect($this->url->link('account/return/success'));
     	} 
 							
 		$this->document->setTitle($this->_('heading_title'));

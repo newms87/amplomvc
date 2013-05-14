@@ -97,7 +97,7 @@ function html_backtrace($depth=3, $var_depth = -1, $print = true){
 function debug_stack($depth = 10, $offset = 0){
 	return array_slice(debug_backtrace(false), 1 + $offset, $depth);
 }
- 
+
 function get_caller($offset = 0){
 	$calls = debug_backtrace(false);
 	$caller = $calls[$offset + 1];

@@ -6,7 +6,7 @@ class ControllerAccountForgotten extends Controller {
 		$this->template->load('account/forgotten');
 
 		if ($this->customer->isLogged()) {
-			$this->redirect($this->url->link('account/account'));
+			$this->url->redirect($this->url->link('account/account'));
 		}
 
 		$this->language->load('account/forgotten');
@@ -37,7 +37,7 @@ class ControllerAccountForgotten extends Controller {
 			
 			$this->message->add('success', $this->_('text_success'));
 
-			$this->redirect($this->url->link('account/login'));
+			$this->url->redirect($this->url->link('account/login'));
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));

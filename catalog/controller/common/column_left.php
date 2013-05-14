@@ -7,7 +7,7 @@ class ControllerCommonColumnLeft extends Controller {
 	
 		$module_data = array();
 		
-		$extensions = $this->model_setting_extension->getExtensions('module');		
+		$extensions = $this->model_setting_extension->getExtensions('module');
 		
 		foreach ($extensions as $extension) {
 			$modules = $this->config->get($extension['code'] . '_module');
@@ -25,7 +25,7 @@ class ControllerCommonColumnLeft extends Controller {
 			}
 		}
 		
-		$sort_order = array(); 
+		$sort_order = array();
 	  
 		foreach ($module_data as $key => $value) {
       		$sort_order[$key] = $value['sort_order'];
@@ -43,6 +43,7 @@ class ControllerCommonColumnLeft extends Controller {
 			}
 		}
 		
+		//Load Blocks associated with this position
 		$blocks = $this->model_block_block->getBlocksForPosition('column_left');
 		
 		$this->data['blocks'] = array();

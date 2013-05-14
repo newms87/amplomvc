@@ -29,8 +29,7 @@ final class Loader {
          return $class;
          
 		} else {
-			list(,$caller) = debug_backtrace(false);
-         trigger_error('Error: Could not load library ' . $library . '! In ' . $caller['file'] . ' on line ' . $caller['line'] . '.');
+         trigger_error('Could not load library ' . $library . '! ' . get_caller(3), E_USER_WARNING);
          return null;
 		}
 	}

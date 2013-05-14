@@ -40,7 +40,7 @@ class ControllerModuleFeaturedFlashsale extends Controller {
 		$size = $setting['size'];
       
       foreach($blocks as &$block){
-			$block['image'] =$this->image->resize( (isset($block['image'])?$block['image']:"no_image.jpg") ,(int)(.754*$size),(int)(.754*$size));
+			$block['image'] =$this->image->resize( (isset($block['image'])?$block['image']:"no_image.png") ,(int)(.754*$size),(int)(.754*$size));
          
          if(!isset($block['href'])){
 			   $block['href'] = isset($block['keyword']) ? $this->url->site($block['keyword']) : '';

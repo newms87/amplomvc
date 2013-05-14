@@ -7,8 +7,8 @@ class ControllerModuleCarousel extends Controller {
 		
 		$this->document->addScript('catalog/view/javascript/jquery/jquery.jcarousel.min.js');
 		
-		if (file_exists('catalog/view/theme/' . $this->config->get('config_template') . '/stylesheet/carousel.css')) {
-			$this->document->addStyle('catalog/view/theme/' . $this->config->get('config_template') . '/stylesheet/carousel.css');
+		if (file_exists('catalog/view/theme/' . $this->config->get('config_theme') . '/stylesheet/carousel.css')) {
+			$this->document->addStyle('catalog/view/theme/' . $this->config->get('config_theme') . '/stylesheet/carousel.css');
 		} else {
 			$this->document->addStyle('catalog/view/theme/default/stylesheet/carousel.css');
 		}

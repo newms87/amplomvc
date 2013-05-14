@@ -19,7 +19,7 @@ class ControllerModuleStore extends Controller {
 			$this->data['stores'][] = array(
 				'store_id' => 0,
 				'name'     => $this->_('text_default'),
-				'url'      => HTTP_SERVER . 'index.php?route=common/home'
+				'url'      => $this->url->link('common/home'),
 			);
 			
 			$results = $this->model_setting_store->getStores();

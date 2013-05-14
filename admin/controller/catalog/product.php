@@ -399,10 +399,8 @@ class ControllerCatalogProduct extends Controller {
       $this->template->load('catalog/product_form');
 
   	   $product_id = $this->data['product_id'] = isset($_GET['product_id'])?$_GET['product_id']:false;
-      
-      $this->document->addScript("image_manager.js");
 		
-      $url = $this->get_url();
+      $url = $this->get_url('filter', 'sort', 'order', 'page');
       
       $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
       $this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/product'));
@@ -501,7 +499,7 @@ class ControllerCatalogProduct extends Controller {
 		$this->data['languages'] = $this->model_localisation_language->getLanguages();
 		
       
-		$thumb = ($this->data['image'] && file_exists(DIR_IMAGE . $this->data['image']))?$this->data['image']:'no_image.jpg'; 
+		$thumb = ($this->data['image'] && file_exists(DIR_IMAGE . $this->data['image']))?$this->data['image']:'no_image.png'; 
 	   $this->data['thumb'] = $this->image->resize($thumb, 100, 100);
 		
       $this->data['manufacturers'] = array(0=>$this->_('text_none'));
@@ -628,13 +626,13 @@ class ControllerCatalogProduct extends Controller {
 		
 		foreach ($this->data['product_images'] as &$product_image) {
 			if (!$product_image['image'] || !file_exists(DIR_IMAGE . $product_image['image'])) {
-				$product_image['image'] = 'no_image.jpg';
+				$product_image['image'] = 'no_image.png';
 			}
          
          $product_image['thumb'] = $this->image->resize($product_image['image'], 100, 100);
 		}
       
-		$this->data['no_image'] = $this->image->resize('no_image.jpg', 100, 100);
+		$this->data['no_image'] = $this->image->resize('no_image.png', 100, 100);
 
 		$this->data['data_downloads'] = $this->model_catalog_download->getDownloads();
 		
@@ -717,7 +715,7 @@ class ControllerCatalogProduct extends Controller {
 		
       if(isset($_POST['product_images'])){
          foreach($_POST['product_images']  as $key=>$image){
-            if(strtolower($image['image']) == 'data/no_image.jpg' || !$image['image']){
+            if(strtolower($image['image']) == 'data/no_image.png' || !$image['image']){
                unset($_POST['product_images'][$key]);
             }
          }
@@ -857,31 +855,25 @@ class ControllerCatalogProduct extends Controller {
 	public function autocomplete() {
 	   $json = array();
       
-      $filters = array(
-         'filter_name' => null,
-         'filter_model' => null,
-         'filter_category_id' => null,
-         'filter_sub_category' => null,
-         'filter_status' => null,
-         'filter_quantity' => null,
-         'filter_manufacturer_id' => null,
-         'filter_price' => null,
+      $query_args = array(
          'start' => 0,
          'limit' => 20,
-       );
+      );
       
       $data = array();
       
-      foreach($filters as $key => $default){
+      foreach($query_args as $key => $default){
          if (isset($_GET[$key])) {
             $data[$key] = $_GET[$key];
          } elseif(!is_null($default)) {
             $data[$key] = $default;
          }
       }
+		
+		$data += !empty($_GET['filter']) ? $_GET['filter'] : array();
       
 		$results = $this->model_catalog_product->getProducts($data);
-			
+		
 		foreach ($results as $result) {
 			$option_data = array();
 			
@@ -950,21 +942,5 @@ class ControllerCatalogProduct extends Controller {
       $desc = $this->model_catalog_manufacturer->getManufacturerDescriptions($id);
       echo json_encode($desc);
       exit;
-   }
-   
-   private function get_url($new_sort=false){
-      $url = '';
-      $queries = array('filter_name','filter_model','filter_category_id','filter_manufacturer_id','filter_price','filter_cost','filter_is_final','filter_quantity','filter_date_expires','filter_editable','filter_status','sort','order','page');
-      foreach($queries as $query){
-         if($new_sort && in_array($query,array('sort','order'))){
-            if($query == 'order'){
-               $order = (isset($_GET['order']) && $_GET['order'] == 'ASC')?'DESC':'ASC';
-               $url .= "&order=$order";
-            }
-            continue;
-         }
-         $url .= isset($_GET[$query])?"&$query=" . $_GET[$query]:'';
-      }
-      return $url;
    }
 }

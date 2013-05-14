@@ -14,7 +14,7 @@ class ControllerToolErrorLog extends Controller {
       
       $url_query = $this->url->get_query(array('filter_store'));
       
-		$this->data['remove'] = $this->url->link('tool/error_log/remove',$url_query,false,false);
+		$this->data['remove'] = $this->url->link('tool/error_log/remove',$url_query);
 		$this->data['clear'] = $this->url->link('tool/error_log/clear', $url_query);
 		
       $defaults = array('limit'=>100,'start'=>0);
@@ -86,7 +86,7 @@ class ControllerToolErrorLog extends Controller {
       
       $url_query = $this->url->get_query(array('limit','start'));
 		
-      $this->data['filter_url'] = $this->url->link('tool/error_log', '', false, false);
+      $this->data['filter_url'] = $this->url->link('tool/error_log');
       
 		$this->data['loading'] = $this->image->get('data/ajax-loader.gif');
       

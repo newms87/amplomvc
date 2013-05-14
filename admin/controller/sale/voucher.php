@@ -34,7 +34,7 @@ class ControllerSaleVoucher extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->redirect($this->url->link('sale/voucher', $url));
+			$this->url->redirect($this->url->link('sale/voucher', $url));
     	}
     
     	$this->getForm();
@@ -64,7 +64,7 @@ class ControllerSaleVoucher extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->redirect($this->url->link('sale/voucher', $url));
+			$this->url->redirect($this->url->link('sale/voucher', $url));
 		}
     
     	$this->getForm();
@@ -96,7 +96,7 @@ class ControllerSaleVoucher extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->redirect($this->url->link('sale/voucher', $url));
+			$this->url->redirect($this->url->link('sale/voucher', $url));
     	}
 	
     	$this->getList();

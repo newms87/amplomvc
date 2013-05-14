@@ -85,7 +85,7 @@ class ControllerExtensionFeed extends Controller {
     	if (!$this->user->hasPermission('modify', 'extension/feed')) {
       		$this->session->data['error'] = $this->_('error_permission'); 
 			
-			$this->redirect($this->url->link('extension/feed'));
+			$this->url->redirect($this->url->link('extension/feed'));
     	} else {
 			$this->model_setting_extension->install('feed', $_GET['extension']);
 		
@@ -101,7 +101,7 @@ class ControllerExtensionFeed extends Controller {
 				$class->install();
 			}
 		
-			$this->redirect($this->url->link('extension/feed'));			
+			$this->url->redirect($this->url->link('extension/feed'));			
 		}
 	}
 	
@@ -109,7 +109,7 @@ class ControllerExtensionFeed extends Controller {
     	if (!$this->user->hasPermission('modify', 'extension/feed')) {
       		$this->session->data['error'] = $this->_('error_permission'); 
 			
-			$this->redirect($this->url->link('extension/feed'));
+			$this->url->redirect($this->url->link('extension/feed'));
     	} else {		
 			$this->model_setting_extension->uninstall('feed', $_GET['extension']);
 		
@@ -124,7 +124,7 @@ class ControllerExtensionFeed extends Controller {
 				$class->uninstall();
 			}
 		
-			$this->redirect($this->url->link('extension/feed'));
+			$this->url->redirect($this->url->link('extension/feed'));
 		}
 	}
 }

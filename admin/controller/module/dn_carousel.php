@@ -14,11 +14,10 @@ class ControllerModuleDnCarousel extends Controller {
 			
 			$this->message->add('success', $this->_('text_success'));
 						
-			$this->redirect($this->url->link('extension/module'));
+			$this->url->redirect($this->url->link('extension/module'));
 		}
 				
 		$this->language->set('button_add_module', $this->_('button_add_carousel'));
-		$this->document->addScript("image_manager.js");
 
  		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -48,13 +47,13 @@ class ControllerModuleDnCarousel extends Controller {
 				$a = $this->model_cms_article->getArticle($md['article_id']);
 				$this->data['modules'][$mod_key]['data'][$key]['article_title'] = isset($a['title'])?$a['title']:"Article Not Found";
 				$image = $this->data['modules'][$mod_key]['data'][$key]['image'];
-				$image = isset($image) && !empty($image) && file_exists(DIR_IMAGE . $image) ? $image:"no_image.jpg";
+				$image = isset($image) && !empty($image) && file_exists(DIR_IMAGE . $image) ? $image:"no_image.png";
 				$this->data['modules'][$mod_key]['data'][$key]['thumb'] = $this->image->resize($image, 100, 100);
 				$this->data['modules'][$mod_key]['data'][$key]['image'] = $image;
 			}
 		}
 
-		$this->data['no_image'] = $this->image->resize('no_image.jpg', 100, 100);
+		$this->data['no_image'] = $this->image->resize('no_image.png', 100, 100);
 		
 		
 		$this->data['languages'] = $this->model_localisation_language->getLanguages();
@@ -66,7 +65,6 @@ class ControllerModuleDnCarousel extends Controller {
 		foreach($layouts as $layout)
 			$this->data['layouts'][$layout['layout_id']] = $layout['name']; 
 		
-		$this->data['positions'] = array('above_content'=>'Above Content', 'content_top'=>'Content Top', 'content_bottom'=>"Content Bottom", 'column_left'=>"Column Left", 'column_right'=>"Column Right");
 		$this->children = array(
 			'common/header',
 			'common/footer'

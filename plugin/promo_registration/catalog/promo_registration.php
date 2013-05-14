@@ -13,7 +13,7 @@ class ControllerPlugin_Promo_registrationCatalogPromoRegistration extends Contro
             else{
                $redirect = $this->url->link("account/register");
             }
-            $this->redirect($redirect, 302);
+            $this->url->redirect($redirect, 302);
          }
          unset($this->data['page_header']);
          $this->data['my_links'] = array();
@@ -46,8 +46,8 @@ class ControllerPlugin_Promo_registrationCatalogPromoRegistration extends Contro
          
          $this->breadcrumb->add($this->_('text_early_registration'), $this->url->link('account/register'));
          
-         $template =$this->config->get('config_template') . '/template/account/register_promo.tpl';
-         if (file_exists(DIR_TEMPLATE . $template)) {
+         $template =$this->config->get('config_theme') . '/template/account/register_promo.tpl';
+         if (file_exists(DIR_THEME . $template)) {
             $this->template_file = $template;
          }
          

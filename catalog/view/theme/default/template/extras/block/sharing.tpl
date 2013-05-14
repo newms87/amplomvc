@@ -1,5 +1,5 @@
 <div class='share_block' class="share">
-  <div class='share_block_loading'><img src="catalog/view/theme/default/image/loading.gif" alt="" /><?= $text_share_loading;?></div>
+  <div class='share_block_loading'><img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /><?= $text_share_loading;?></div>
   <div class="addthis_toolbox addthis_default_style share_block_content" style='display:none'>
     <a class="addthis_button_pinterest_pinit"></a>
     <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>

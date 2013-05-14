@@ -6,7 +6,7 @@ class ControllerAccountNewsletter extends Controller {
 		if (!$this->customer->isLogged()) {
 	  		$this->session->data['redirect'] = $this->url->link('account/newsletter');
 	  
-	  		$this->redirect($this->url->link('account/login'));
+	  		$this->url->redirect($this->url->link('account/login'));
     	} 
 		
 		$this->language->load('account/newsletter');
@@ -18,7 +18,7 @@ class ControllerAccountNewsletter extends Controller {
 			
 			$this->message->add('success', $this->_('text_success'));
 			
-			$this->redirect($this->url->link('account/account'));
+			$this->url->redirect($this->url->link('account/account'));
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));

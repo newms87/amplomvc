@@ -25,8 +25,6 @@ class ControllerModuleFeaturedCarousel extends Controller {
       
 		$this->data['action'] = $this->url->link('module/featured_carousel', 'another=343');
 		$this->data['cancel'] = $this->url->link('extension/module');
-
-		$this->document->addScript("image_manager.js");
 		
 		$defaults = array(
          'featured_carousel_module' => array(),
@@ -62,7 +60,7 @@ class ControllerModuleFeaturedCarousel extends Controller {
       
 		$this->data['data_layouts'] = $this->model_design_layout->getLayouts();
       
-      $this->data['no_image'] = $this->image->resize('no_image.jpg', 100, 100);
+      $this->data['no_image'] = $this->image->resize('no_image.png', 100, 100);
       
 		$this->children = array(
 			'common/header',

@@ -49,6 +49,8 @@ class ControllerCheckoutBlockShippingMethod extends Controller {
          $this->data['code'] = '';
       }
       
+		$this->data['validate_shipping_method'] = $this->url->link('checkout/block/shipping_method/validate');
+		
 		$this->response->setOutput($this->render());
   	}
 	

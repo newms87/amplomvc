@@ -28,7 +28,7 @@ class ControllerCommonAboveContent extends Controller {
 		$sort_order = array(); 
 	  
 		foreach ($module_data as $key => $value) {
-      		$sort_order[$key] = $value['sort_order'];
+   		$sort_order[$key] = $value['sort_order'];
     	}
 		
 		array_multisort($sort_order, SORT_ASC, $module_data);
@@ -42,7 +42,8 @@ class ControllerCommonAboveContent extends Controller {
 				$this->data['modules'][] = $module;
 			}
 		}
-
+		
+		//Load Blocks associated with this position
 		$blocks = $this->model_block_block->getBlocksForPosition('above_content');
 		
 		$this->data['blocks'] = array();

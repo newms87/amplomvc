@@ -1,24 +1,32 @@
 <?php
 class Image {
-    private $file;
-    private $image;
-    private $info;
-	 private $dir_mode;
-		
+	
+	private $registry;
+	private $file;
+	private $image;
+	private $info;
+	private $dir_mode;
+	
 	public function __construct($registry, $file = null) {
-		if($file) $this->set_image($file);
+		$this->registry = $registry;
 		
-		$this->dir_mode = $registry->get('config')->get('config_image_dir_mode');
+		if($file){
+			$this->set_image($file);
+		}
+		
+		$this->dir_mode = $this->config->get('config_image_dir_mode');
+	}
+	
+	public function __get($key){
+		return $this->registry->get($key);
 	}
 	
 	public function get($filename){
-		if(!is_file(DIR_IMAGE . $filename)) return '';
-		
-		if (isset($_SERVER['HTTPS']) && (($_SERVER['HTTPS'] == 'on') || ($_SERVER['HTTPS'] == '1'))) {
-			return HTTPS_IMAGE . $filename;
-		} else {
-			return HTTP_IMAGE . $filename;
+		if(!is_file(DIR_IMAGE . $filename)){
+			return is_file($filename) ? $filename : '';
 		}
+		
+		return ($this->url->is_ssl() ? HTTPS_IMAGE : HTTP_IMAGE) . $filename;
 	}
 	
 	public function set_image($file){
@@ -101,7 +109,21 @@ class Image {
 	
     public function resize($filename, $width = 0, $height = 0, $background_color = '') {
     	if (!is_file(DIR_IMAGE . $filename)) {
-			return '';
+    		//If the file exists but not in the image directory, move it to the image directory and continue
+    		if(is_file($filename)){
+    			$copy_file = 'data/' . str_replace(SITE_DIR, '', $filename);
+				
+				if(!is_file(DIR_IMAGE . $copy_file)){
+					_is_writable(DIR_IMAGE . dirname($copy_file));
+					
+					copy($filename, DIR_IMAGE . $copy_file);
+				}
+				
+				$filename = $copy_file;
+			}
+			else{
+				return '';
+			}
 		}
 		
 		$info = pathinfo($filename);

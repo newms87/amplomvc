@@ -72,7 +72,7 @@ class ModelCartVoucher extends Model {
 			
 			foreach ($voucher_query->rows as $voucher) {
 				// HTML Mail
-				$template = new Template();
+				$template = new Template($this->registry);
 				
 				$template->data['title'] = sprintf($language->get('text_subject'), $voucher['from_name']);
 				
@@ -92,8 +92,8 @@ class ModelCartVoucher extends Model {
 				$template->data['store_url'] = $order_info['store_url'];
 				$template->data['message'] = nl2br($voucher['message']);
 			
-				if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/mail/voucher.tpl')) {
-					$html = $template->fetch($this->config->get('config_template') . '/template/mail/voucher.tpl');
+				if (file_exists(DIR_THEME . $this->config->get('config_theme') . '/template/mail/voucher.tpl')) {
+					$html = $template->fetch($this->config->get('config_theme') . '/template/mail/voucher.tpl');
 				} else {
 					$html = $template->fetch('default/template/mail/voucher.tpl');
 				}

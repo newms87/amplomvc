@@ -1,6 +1,6 @@
 <?= $header; ?>
 <? if ($success) { ?>
-<div class="message_box success"><?= $success; ?><img src="catalog/view/theme/default/image/close.png" alt="" class="close" /></div>
+<div class="message_box success"><?= $success; ?><img src="<?= HTTP_THEME_IMAGE . 'close.png'; ?>" alt="" class="close" /></div>
 <? } ?>
 <?= $column_left; ?><?= $column_right; ?>
 <div id="content" style='padding-top:0'><?= $content_top; ?>
@@ -37,7 +37,7 @@
               <? } ?>
             </div>
             <? } ?></td>
-          <td class="action"><img src="catalog/view/theme/default/image/cart-add.png" alt="<?= $button_cart; ?>" title="<?= $button_cart; ?>" onclick="addToCart('<?= $product['product_id']; ?>');" />&nbsp;&nbsp;<a href="<?= $product['remove']; ?>"><img src="catalog/view/theme/default/image/remove.png" alt="<?= $button_remove; ?>" title="<?= $button_remove; ?>" /></a></td>
+          <td class="action"><img src="<?= HTTP_THEME_IMAGE . 'cart-add.png'; ?>" alt="<?= $button_cart; ?>" title="<?= $button_cart; ?>" onclick="addToCart('<?= $product['product_id']; ?>');" />&nbsp;&nbsp;<a href="<?= $product['remove']; ?>"><img src="<?= HTTP_THEME_IMAGE . 'remove.png'; ?>" alt="<?= $button_remove; ?>" title="<?= $button_remove; ?>" /></a></td>
         </tr>
       </tbody>
       <? } ?>

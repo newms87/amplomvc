@@ -34,7 +34,7 @@ class ControllerLocalisationGeoZone extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->redirect($this->url->link('localisation/geo_zone', $url));
+			$this->url->redirect($this->url->link('localisation/geo_zone', $url));
 		}
 
 		$this->getForm();
@@ -64,7 +64,7 @@ class ControllerLocalisationGeoZone extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->redirect($this->url->link('localisation/geo_zone', $url));
+			$this->url->redirect($this->url->link('localisation/geo_zone', $url));
 		}
 
 		$this->getForm();
@@ -96,7 +96,7 @@ class ControllerLocalisationGeoZone extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->redirect($this->url->link('localisation/geo_zone', $url));
+			$this->url->redirect($this->url->link('localisation/geo_zone', $url));
 		}
 
 		$this->getList();

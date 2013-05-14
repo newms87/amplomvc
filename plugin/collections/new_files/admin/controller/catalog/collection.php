@@ -306,8 +306,6 @@ class ControllerCatalogCollection extends Controller {
          }
       }
 		
-		$this->document->addScript('image_manager.js');
-		
 		//Image
 		$this->data['thumb'] = $this->image->resize($this->data['image'], $this->config->get('config_image_admin_width'), $this->config->get('config_image_admin_height'));
 		

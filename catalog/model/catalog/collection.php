@@ -114,6 +114,24 @@ class ModelCatalogCollection extends Model {
 		return $result->rows;
 	}
 	
+	public function getCollectionCategories(){
+		$language_id = $this->config->get('config_language_id');
+		
+		$select = "cc.*, c.parent_id, cd.name";
+		
+		$from = DB_PREFIX . "collection_category cc";
+		$from .= " LEFT JOIN " . DB_PREFIX . "category c ON (c.category_id = cc.category_id)";
+		$from .= " LEFT JOIN " . DB_PREFIX . "category_description cd ON (cd.category_id = cc.category_id AND cd.language_id = '$language_id')";
+		
+		$where = "1";
+		
+		$query = "SELECT $select FROM $from WHERE $where";
+		
+		$result = $this->query($query);
+		
+		return $result->rows;
+	}
+	
 	public function getTotalCollections($data = array()){
 		return $this->getCollections($data, true);
 	}

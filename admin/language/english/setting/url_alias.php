@@ -9,14 +9,14 @@ $_['column_action']            = 'Action';
 $_['entry_keyword']          = 'URL Alias:';
 $_['entry_route']              = 'Route:';
 $_['entry_query']              = 'Query:';
-$_['entry_admin']              = 'For Admin:';
+$_['entry_store']              = 'Store:';
 $_['entry_redirect']              = 'Redirect:';
 $_['entry_status']             = 'Status:';
 
 $_['column_route']            = 'Route:';
 $_['column_query']            = 'Query:';
 $_['column_keyword']            = 'URL Alias:';
-$_['column_admin']            = 'For Admin:';
+$_['column_store']            = 'Store:';
 $_['column_redirect']            = 'Redirect:';
 $_['column_status']            = 'Status:';
 

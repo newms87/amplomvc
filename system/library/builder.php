@@ -39,9 +39,14 @@ class Builder extends Controller{
       	
          $attr_list = '';
 			if(!empty($link['attrs'])){
-	         foreach($link['attrs'] as $key=>$value){
-	            $attr_list .= "$key=\"$value\"";
-	         }
+				if(is_string($link['attrs'])){
+					$attr_list .= $link['attrs'];
+				}
+				else{
+		         foreach($link['attrs'] as $key=>$value){
+		            $attr_list .= "$key=\"$value\"";
+		         }
+				}
 			}
          
          if(!empty($link['title']) && !isset($link['attrs']['title'])){
@@ -173,10 +178,10 @@ class Builder extends Controller{
 		}
       
       if(!$no_image){
-         $no_image = $this->image->resize('no_image.jpg', $width, $height);
+         $no_image = $this->image->resize('no_image.png', $width, $height);
       }
       
-      if($image){
+      if(!is_file($thumb) && $image){
          $thumb = $this->image->resize($image, $width, $height);
       }
       
@@ -188,20 +193,34 @@ class Builder extends Controller{
       
 		$html = '';
 		
-		if($this->builder_template == 'click_image'){
-			$html .= "<div class='image' onclick=" . ($escape_quotes ? "\\" : '') . "\"el_uploadSingle($(this).children('input').attr('id'),$(this).children('img').attr('id'));" . ($escape_quotes ? "\\" : '') . "\">";
-			$html .= 	"<img src='$thumb' alt='' id='thumb-$id' /><br />";
-			$html .= 	"<input type='hidden' name='$name' value='$image' id='image-$id' />";
-			$html .= 	"<div class='click_image_text'><img src='/admin/view/image/small_plus_icon.gif' /><span>Click to Change<span></div>";
-			$html .= "</div>";
-		}else{
-			$html .= "<div class='image'>";
-			$html .= 	"<img src='$thumb' alt='' id='thumb-$id' /><br />";
-			$html .= 	"<input type='hidden' name='$name' value='$image' id='image-$id' />";
-			$html .= 	"<a onclick=" . ($escape_quotes ? "\\" : '') . "\"el_uploadSingle($(this).parent().find('input').attr('id'),$(this).parent().find('img').attr('id'));" . ($escape_quotes ? "\\" : '') . "\">$text_browse</a>&nbsp;&nbsp;|&nbsp;&nbsp;";
-         $html .= 	"<a onclick=" . ($escape_quotes ? "\\" : '') . "\"$(this).parent().find('img').attr('src', '$no_image'); $(this).parent().find('input').attr('value', '');" . ($escape_quotes ? "\\" : '') . "\">$text_clear</a>";
-			$html .= "</div>";
+		switch($this->builder_template){
+			case 'click_image':
+				$html .= "<div class=\"image\" onclick=\"upload_image('image-$id','thumb-$id');\">";
+				$html .= 	"<img src='$thumb' alt='' id='thumb-$id' /><br />";
+				$html .= 	"<input type='hidden' name='$name' value='$image' id='image-$id' />";
+				$html .= 	"<div class='click_image_text'><img src='" . HTTP_THEME_IMAGE . "small_plus_icon.gif' /><span>Click to Change<span></div>";
+				$html .= "</div>";
+				break;
+			
+			case 'click_image_small':
+				$html .= "<div class=\"image\" onclick=\"upload_image('image-$id','thumb-$id');\">";
+				$html .= 	"<img src='$thumb' alt='' id='thumb-$id' />";
+				$html .= 	"<input type='hidden' name='$name' value='$image' id='image-$id' />";
+				$html .= 	"<img src='$no_image' alt='' class='click_image_small_change' />";
+				$html .= "</div>";
+				break;
+				
+			default:
+				$html .= "<div class='image'>";
+				$html .= 	"<img src='$thumb' alt='' id='thumb-$id' /><br />";
+				$html .= 	"<input type='hidden' name='$name' value='$image' id='image-$id' />";
+				$html .= 	"<a onclick=\"upload_image('image-$id',thumb-$id');\">$text_browse</a>&nbsp;&nbsp;|&nbsp;&nbsp;";
+	         $html .= 	"<a onclick=\"$('image-$id').val(''); $('thumb-$id').attr('src', '$no_image');\">$text_clear</a>";
+				$html .= "</div>";
+				break;
 		}
+		
+		$html .= $this->builder->js('image_manager');
 		
 		return $html;
    }
@@ -254,7 +273,7 @@ class Builder extends Controller{
 		);
 		
 		//Load Batch Action template
-		$template = new Template($this->registry, $this->config->get('config_template'));
+		$template = new Template($this->registry);
 		
 		$template->load('widget/batch_action');
 		$template->set_data($data);
@@ -373,10 +392,10 @@ class Builder extends Controller{
 					
             case 'clickable_list':
                if($selected){
-                  $selected_options .= "<div onclick='clickable_list_remove($(this))'><span>$display</span><input type='hidden' value='$value' name='$value' /><img src='view/image/remove.png' /></div>";
+                  $selected_options .= "<div onclick='clickable_list_remove($(this))'><span>$display</span><input type='hidden' value='$value' name='$value' /><img src='view/theme/default/image/remove.png' /></div>";
                }
                else{
-                  $options .= "<div onclick='clickable_list_add($(this), '$value')'><span>$display</span><img src='view/image/add.png' /></div>";
+                  $options .= "<div onclick='clickable_list_add($(this), '$value')'><span>$display</span><img src='view/theme/default/image/add.png' /></div>";
                }
             default:
                break;
@@ -439,14 +458,16 @@ HTML;
 
 
    public function js($js){
+   	static $js_loaded_files = array();
+		
       $args = func_get_args();
       array_shift($args);
-            
+		
       ob_start();
+		
       include('builder_js.php');
-      $script = ob_get_contents();
-      ob_end_clean();
-      return $script;
+      
+		return ob_get_clean();
    }
   
 }

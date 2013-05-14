@@ -13,7 +13,7 @@ class ControllerSalesFlashsale extends Controller {
          $flashsale = $this->model_catalog_flashsale->getFlashsale($flashsale_id);
          
          if(!$flashsale || $this->model_catalog_flashsale->getStatus($flashsale) != 'active')
-            $this->redirect($this->url->link('sales/flashsale'), 302);
+            $this->url->redirect($this->url->link('sales/flashsale'), 302);
          
          if( ! (isset($_GET['preview_flashsale']) && $this->user->canPreview('flashsale')) ){
             $this->model_catalog_flashsale->updateViewed($flashsale_id);
@@ -150,7 +150,7 @@ class ControllerSalesFlashsale extends Controller {
             $this->data['fs_tac'] = $this->image->resize('data/pink_tac.png', 36,52);
 
             foreach($flashsales as &$fs){
-               $fs['image'] =$this->image->resize( (isset($fs['image'])?$fs['image']:"no_image.jpg") ,196,196);
+               $fs['image'] =$this->image->resize( (isset($fs['image'])?$fs['image']:"no_image.png") ,196,196);
                $fs['href'] = $this->url->site($fs['keyword']);
             }
          }

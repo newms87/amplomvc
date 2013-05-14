@@ -12,11 +12,19 @@ class ControllerCommonHeader extends Controller {
 
 	   $this->data['title'] = $this->document->getTitle();
       
-		if (isset($_SERVER['HTTPS']) && (($_SERVER['HTTPS'] == 'on') || ($_SERVER['HTTPS'] == '1'))) {
-			$this->data['base'] = HTTPS_SERVER;
-		} else {
-			$this->data['base'] = HTTP_SERVER;
-		}
+		$this->data['base'] = $this->url->is_ssl() ? SITE_SSL : SITE_URL;
+		
+		$this->data['theme'] = $this->config->get('config_theme');
+		
+		//Add Styles
+		$this->document->addStyle(HTTP_THEME_STYLE . 'style.css');
+		$this->document->addStyle(HTTP_JS . 'jquery/ui/themes/ui-lightness/jquery-ui-1.9.2.custom.css');
+		
+		//Add Scripts
+		$this->document->addScript(HTTP_JS . 'jquery/jquery-1.7.1.min.js');
+		$this->document->addScript(HTTP_JS . 'jquery/ui/jquery-ui-1.9.2.custom.min.js');
+		$this->document->addScript(HTTP_JS . 'jquery/tabs.js');
+		$this->document->addScript(HTTP_THEME_JS . 'common.js');
 		
       $this->data['messages'] = $this->message->fetch();
       
@@ -28,12 +36,13 @@ class ControllerCommonHeader extends Controller {
 		$this->data['canonical_link'] = $this->document->getCanonicalLink();	
       
 		$this->language->set('lang', $this->language->getInfo('code'));
+		
       if($this->config->get('config_seo_url')){
          $this->data['pretty_url'] = $this->url->get_pretty_url();
       } 
 		
 		$this->load->language('common/header');
-           
+      
       $this->data['admin_logo'] = $this->image->get($this->config->get('config_admin_logo'));
          
       
@@ -60,19 +69,17 @@ class ControllerCommonHeader extends Controller {
          else{
             $this->language->format('support', $this->config->get('config_email_support'));
             
-            $this->data['store'] = HTTP_CATALOG;
+            $this->data['store'] = SITE_URL;
 				
 				//Add the Image Manager to the Main Menu if user has permissions
-				if($this->user->hasPermission('access','common/elmanager')){
+				if($this->user->hasPermission('access','common/filemanager')){
 					$link_image_manager = array(
 						'name' => $this->_('text_image_manager'),
 						'sort_order' => 3,
-						'attrs' => array('onclick' => 'dqis_image_manager();'),
+						'attrs' => array('onclick' => 'image_manager();'),
 					);
 					
 					$this->document->addLink('admin', $link_image_manager);
-					
-					$this->document->addScript('image_manager.js');
 				}
 			}
 			
@@ -92,11 +99,12 @@ class ControllerCommonHeader extends Controller {
 			
 			//Link to all of the stores under the stores top level navigation
 			$stores = $this->model_setting_store->getStores();
+			
 			foreach($stores as $store){
 				$link_store = array(
 					'name' => 'store_' . $store['store_id'],
 					'display_name' => $store['name'],
-					'href' => $this->url->link('common/home', '', $store['store_id']),
+					'href' => $this->url->store($store['store_id'], 'common/home', ''),
 					'parent' => 'stores',
 					'attrs' => array('target'=>'_blank')
 				);

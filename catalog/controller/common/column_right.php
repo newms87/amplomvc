@@ -43,7 +43,7 @@ class ControllerCommonColumnRight extends Controller {
 			}
 		}
 		
-
+		//Load Blocks associated with this position
 		$blocks = $this->model_block_block->getBlocksForPosition('column_right');
 		
 		$this->data['blocks'] = array();

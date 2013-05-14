@@ -58,7 +58,7 @@ class ControllerSaleOrder extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->redirect($this->url->link('sale/order', $url));
+			$this->url->redirect($this->url->link('sale/order', $url));
 		}
 		
     	$this->getForm();
@@ -112,7 +112,7 @@ class ControllerSaleOrder extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->redirect($this->url->link('sale/order', $url));
+			$this->url->redirect($this->url->link('sale/order', $url));
 		}
 		
     	$this->getForm();
@@ -168,7 +168,7 @@ class ControllerSaleOrder extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->redirect($this->url->link('sale/order', $url));
+			$this->url->redirect($this->url->link('sale/order', $url));
     	}
 
     	$this->getList();
@@ -433,7 +433,7 @@ class ControllerSaleOrder extends Controller {
 		
 		$this->data['data_stores'] = $this->model_setting_store->getStores();
 		
-		$this->data['store_url'] = HTTP_CATALOG;
+		$this->data['store_url'] = SITE_URL;
 		
 		if (isset($_POST['customer'])) {
 			$this->data['customer'] = $_POST['customer'];
@@ -1662,11 +1662,7 @@ class ControllerSaleOrder extends Controller {
 
 		$this->language->set('title', $this->_('heading_title'));
 
-		if (isset($_SERVER['HTTPS']) && (($_SERVER['HTTPS'] == 'on') || ($_SERVER['HTTPS'] == '1'))) {
-			$this->data['base'] = HTTPS_SERVER;
-		} else {
-			$this->data['base'] = HTTP_SERVER;
-		}
+		$this->data['base'] = $this->url->is_ssl() ? SITE_SSL : SITE_URL;
 
 		$this->language->set('language', $this->language->getInfo('code'));
 

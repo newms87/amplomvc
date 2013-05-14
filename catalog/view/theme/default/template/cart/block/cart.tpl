@@ -50,9 +50,9 @@
          <td class="model"><?= $product['model']; ?></td>
          <td class="quantity">
            <input type="text" name="quantity[<?= $product['key']; ?>]" value="<?= $product['quantity']; ?>" size="1" />
-           <input type="image" <?= $ajax_cart ? 'onclick="handle_ajax_cart_update(); return false;"' : '';?> name='action' value='update' src="catalog/view/theme/default/image/update.png" alt="<?= $button_update; ?>" title="<?= $button_update; ?>" id='cart_update'/>
+           <input type="image" <?= $ajax_cart ? 'onclick="handle_ajax_cart_update(); return false;"' : '';?> name='action' value='update' src="<?= HTTP_THEME_IMAGE . 'update.png'; ?>" alt="<?= $button_update; ?>" title="<?= $button_update; ?>" id='cart_update'/>
            <label for='cart_update'><?=$text_update_cart;?></label>
-           <input type='image' <?= $ajax_cart ? 'onclick="handle_ajax_cart_remove($(this)); return false;"' : '';?> name='action' value="remove<?= $product['key'];?>" src="catalog/view/theme/default/image/remove.png" alt="<?= $button_remove; ?>" title="<?= $button_remove; ?>" />
+           <input type='image' <?= $ajax_cart ? 'onclick="handle_ajax_cart_remove($(this)); return false;"' : '';?> name='action' value="remove<?= $product['key'];?>" src="<?= HTTP_THEME_IMAGE . 'remove.png'; ?>" alt="<?= $button_remove; ?>" title="<?= $button_remove; ?>" />
          </td>
          <td class='final_sale_item'>
          <? if($product['is_final']){;?>
@@ -73,7 +73,7 @@
          <td class="quantity">
             <input type="text" name="" value="1" size="1" disabled="disabled" />
             <a href="<?= $voucher['remove']; ?>">
-               <img src="catalog/view/theme/default/image/remove.png" alt="<?= $text_remove; ?>" title="<?= $button_remove; ?>" />
+               <img src="<?= HTTP_THEME_IMAGE . 'remove.png'; ?>" alt="<?= $text_remove; ?>" title="<?= $button_remove; ?>" />
             </a>
          </td>
          <? if(!isset($no_price_display)){ ?>

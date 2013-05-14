@@ -14,7 +14,7 @@ class ControllerTotalShipping extends Controller {
 		
 			$this->message->add('success', $this->_('text_success'));
 			
-			$this->redirect($this->url->link('extension/total'));
+			$this->url->redirect($this->url->link('extension/total'));
 		}
 		
  		if (isset($this->error['warning'])) {

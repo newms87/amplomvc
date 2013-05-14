@@ -16,7 +16,7 @@ class ControllerModuleLatest extends Controller {
 			
 			$this->message->add('success', $this->_('text_success'));
 						
-			$this->redirect($this->url->link('extension/module'));
+			$this->url->redirect($this->url->link('extension/module'));
 		}
 				
  		if (isset($this->error['warning'])) {

@@ -34,7 +34,7 @@ class ControllerCatalogAttribute extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 						
-      		$this->redirect($this->url->link('catalog/attribute', $url));
+      		$this->url->redirect($this->url->link('catalog/attribute', $url));
 		}
 	
     	$this->getForm();
@@ -64,7 +64,7 @@ class ControllerCatalogAttribute extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->redirect($this->url->link('catalog/attribute', $url));
+			$this->url->redirect($this->url->link('catalog/attribute', $url));
     	}
 	
     	$this->getForm();
@@ -96,7 +96,7 @@ class ControllerCatalogAttribute extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->redirect($this->url->link('catalog/attribute', $url));
+			$this->url->redirect($this->url->link('catalog/attribute', $url));
    		}
 	
     	$this->getList();

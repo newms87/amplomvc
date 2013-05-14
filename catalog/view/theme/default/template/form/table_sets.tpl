@@ -1,6 +1,4 @@
-<? if($use_form_tag) {?>
-<form action="<?= $action;?>" method="<?= $method;?>" <?= $form_tag_attrs;?>>
-<? } ?>
+<form action="<?= $action;?>" method="<?= $method;?>">
 
 <? $columns = array();
   
@@ -67,6 +65,4 @@
 </table>
 <? } ?>
 
-<? if($use_form_tag) {?>
 </form>
-<? } ?>

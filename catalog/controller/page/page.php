@@ -4,13 +4,13 @@ class ControllerPagePage extends Controller {
 		$this->template->load('page/page');
 		
 		if(empty($_GET['page_id'])){
-			$this->redirect("error/not_found");
+			$this->url->redirect("error/not_found");
 		}
 		
 		$page = $this->model_page_page->getPage($_GET['page_id']);
 		
 		if(!$page){
-			$this->redirect("error/not_found");
+			$this->url->redirect("error/not_found");
 		}
 		
 		$this->config->set('config_layout_id', $page['layout_id']);

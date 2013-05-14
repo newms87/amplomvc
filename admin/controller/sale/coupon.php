@@ -21,7 +21,7 @@ class ControllerSaleCoupon extends Controller {
 
 			$url = $this->get_url();
          						
-			$this->redirect($this->url->link('sale/coupon', $url));
+			$this->url->redirect($this->url->link('sale/coupon', $url));
     	}
     
     	$this->getForm();
@@ -39,7 +39,7 @@ class ControllerSaleCoupon extends Controller {
 	  
 			$url = $this->get_url();
 						
-			$this->redirect($this->url->link('sale/coupon', $url));
+			$this->url->redirect($this->url->link('sale/coupon', $url));
 		}
     
     	$this->getForm();
@@ -59,7 +59,7 @@ class ControllerSaleCoupon extends Controller {
 	  
 			$url = $this->get_url();
 						
-			$this->redirect($this->url->link('sale/coupon', $url));
+			$this->url->redirect($this->url->link('sale/coupon', $url));
     	}
 	
     	$this->getList();

@@ -5,6 +5,7 @@ class Language {
    private $orig_data = array();
    private $info;
    private $latest_modified_file = 0;
+	private $last_loaded = '';
    
    public  $data = array();
  
@@ -19,8 +20,8 @@ class Language {
       }
 	}
 	
-  	public function get($key) {
-		return (isset($this->data[$key]) ? $this->data[$key] : $key);
+  	public function get($key, $return_value = null) {
+		return (isset($this->data[$key]) ? $this->data[$key] : ($return_value === null ? $key : $return_value));
   	}
    
    public function set($key, $value){
@@ -47,7 +48,8 @@ class Language {
    }
 	
 	public function load($filename) {
-	   
+		if($this->last_loaded == $filename) return;
+		
 		$file = DIR_LANGUAGE . $this->directory . '/' . $filename . '.php';
     	
       if(!file_exists($file)){
@@ -67,6 +69,8 @@ class Language {
       
       $this->data = $_ + $this->data;
       
+		$this->last_loaded = $filename;
+		
       return $this->data;
   	}
    

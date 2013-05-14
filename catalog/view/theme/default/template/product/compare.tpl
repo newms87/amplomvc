@@ -1,6 +1,6 @@
 <?= $header; ?>
 <? if ($success) { ?>
-<div class="message_box success"><?= $success; ?><img src="catalog/view/theme/default/image/close.png" alt="" class="close" /></div>
+<div class="message_box success"><?= $success; ?><img src="<?= HTTP_THEME_IMAGE . 'close.png'; ?>" alt="" class="close" /></div>
 <? } ?>
 <?= $column_left; ?><?= $column_right; ?>
 <div id="content"><?= $content_top; ?>
@@ -61,7 +61,7 @@
       <tr>
         <td><?= $text_rating; ?></td>
         <? foreach ($products as $product) { ?>
-        <td><img src="catalog/view/theme/default/image/stars-<?= $products[$product['product_id']]['rating']; ?>.png" alt="<?= $products[$product['product_id']]['reviews']; ?>" /><br />
+        <td><img src="<?= HTTP_THEME_IMAGE . "stars-" .$products[$product['product_id']]['rating'] . ".png"; ?>" alt="<?= $products[$product['product_id']]['reviews']; ?>" /><br />
           <?= $products[$product['product_id']]['reviews']; ?></td>
         <? } ?>
       </tr>

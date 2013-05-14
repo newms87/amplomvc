@@ -26,3 +26,6 @@ $_['button_add_profile'] = "New Profile";
 
 //Success
 $_['text_success'] = "The Block was saved successfully!";
+
+//Error
+$_['error_unknown_block'] = "Attempted to access unknown block!";

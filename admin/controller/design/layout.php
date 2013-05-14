@@ -33,7 +33,7 @@ class ControllerDesignLayout extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->redirect($this->url->link('design/layout', $url));
+			$this->url->redirect($this->url->link('design/layout', $url));
 		}
 
 		$this->getForm();
@@ -63,7 +63,7 @@ class ControllerDesignLayout extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 					
-			$this->redirect($this->url->link('design/layout', $url));
+			$this->url->redirect($this->url->link('design/layout', $url));
 		}
 
 		$this->getForm();
@@ -95,7 +95,7 @@ class ControllerDesignLayout extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->redirect($this->url->link('design/layout', $url));
+			$this->url->redirect($this->url->link('design/layout', $url));
 		}
 
 		$this->getList();

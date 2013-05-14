@@ -96,7 +96,7 @@ $('#button-review').bind('click', function() {
       beforeSend: function() {
          $('.success, .warning').remove();
          $('#button-review').attr('disabled', true);
-         $('#review-title').after('<div class="attention"><img src="catalog/view/theme/default/image/loading.gif" alt="" /> <?= $text_wait; ?></div>');
+         $('#review-title').after('<div class="attention"><img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> <?= $text_wait; ?></div>');
       },
       complete: function() {
          $('#button-review').attr('disabled', false);

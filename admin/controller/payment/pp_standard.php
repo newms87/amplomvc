@@ -14,7 +14,7 @@ class ControllerPaymentPPStandard extends Controller {
 
 			$this->message->add('success', $this->_('text_success'));
 
-			$this->redirect($this->url->link('extension/payment'));
+			$this->url->redirect($this->url->link('extension/payment'));
 		}
       
       $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));

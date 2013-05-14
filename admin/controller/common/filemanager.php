@@ -1,19 +1,38 @@
 <?php
 class ControllerCommonFileManager extends Controller {
 	
-	
 	public function index() {
 		$this->template->load('common/filemanager');
+
+		$this->data['base'] = $this->url->is_ssl() ? SITE_SSL : SITE_URL;
+		
+		$dir = '';
+      
+      $this->data['elfinder_root_dir'] = '';
+      
+      if($this->user->isDesigner()){
+         $dir = 'user_uploads/user_' . $this->user->getUserName();
+         $this->data['elfinder_root_dir'] = 'data/user_uploads/';
+      }
+      
+		_is_writable(DIR_IMAGE.'data/'.$dir, $this->config->get('config_image_dir_mode'));
+      
+      $_SESSION['elfinder_root_dir'] = $dir;
+      $_SESSION['elfinder_dir_mode'] = $this->config->get('config_image_dir_mode');
+      $_SESSION['elfinder_file_mode'] = $this->config->get('config_image_file_mode');
+      
+		
+		$this->response->setOutput($this->render());
+	}	
+	
+	public function ckeditor(){
+		$this->template->load('common/ckeditor');
 
 		$this->load->language('common/filemanager');
 		
 		$this->language->set('title', $this->_('heading_title'));
 		
-		if (isset($_SERVER['HTTPS']) && (($_SERVER['HTTPS'] == 'on') || ($_SERVER['HTTPS'] == '1'))) {
-			$this->data['base'] = HTTPS_SERVER;
-		} else {
-			$this->data['base'] = HTTP_SERVER;
-		}
+		$this->data['base'] = $this->url->is_ssl() ? SITE_SSL : SITE_URL;
 		
 		$this->data['directory'] = HTTP_IMAGE . 'data/';
 		
@@ -31,7 +50,7 @@ class ControllerCommonFileManager extends Controller {
 		
 		
 		$this->response->setOutput($this->render());
-	}	
+	}
 	
 	public function image() {
 		if (isset($_GET['image'])) {

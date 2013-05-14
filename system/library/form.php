@@ -1,51 +1,86 @@
 <?php
 class Form {
-   private $fields = array();
-   private $file;
-   private $path;
-   private $builder;
-   private $data;
-   private $request;
-   private $language;
-   private $validation;
-   private $error = array();
-   
-   private $use_form_tag = false;
-   private $action;
+	private $registry;
+	
+	private $name;
+	private $show_tag;
+	private $action;
    private $method;
-   private $form_tag_attrs;
+	private $encryption;
+	
+   private $fields = array();
    
-   private $form_data = null;
-   private $default_attrs = null;
+	private $template_file;
+	private $data = array();
+	
+   private $error;
    
-   function __construct($form){
-      $this->fields = $form['fields'];
-      
-      if(isset($form['action'])){
-         $method = isset($form['method']) ? $form['method'] : 'POST';
-         $attrs  = isset($form['attrs']) ? $form['attrs'] : array();
-         
-         $this->use_form_tag($form['action'], $method, $attrs);
-      }
-      
-      if(!empty($form['data'])){
-         $this->form_data = $form['data'];
-      }
+   function __construct($registry){
+   	$this->registry = $registry;
    }
+	
+	public function __get($key){
+		return $this->registry->get($key);
+	}
    
-   function initialize($controller){
-      $this->path       = $controller->template->template();
-      $this->builder    = $controller->builder;
-      $this->data       = $controller->data;
-      $this->request    = $controller->request;
-      $this->language   = $controller->language;
-      $this->validation = $controller->validation;
-   }
-   
+	public function init($form){
+		$this->name = $form;
+		$this->show_tag = true;
+		$this->action = '';
+		$this->method = 'post';
+		$this->encryption = false;
+		$this->template_file = 'default';
+		
+		$file = DIR_FORM . $form . '.php';
+		
+		if(!is_file($file)){
+			$this->fields = array();
+		
+			trigger_error("Could not find form $form!");
+		}
+		else{
+			$_ = array();
+			
+			include($file);
+			
+			$this->fields = $_;
+		}
+	}
+	
    public function get_errors(){
       return $this->error;
    }
    
+	public function show_form_tag($show = true){
+		$this->show_tag = $show;
+	}
+	
+	public function set_action($action){
+		$this->action = $action;
+	}
+	
+	public function set_method($method){
+		$this->method = $method;
+	}
+	
+	public function set_encryption($encryption){
+		$this->encryption = $encryption;
+	}
+	
+	public function set_field($field, $data){
+		$this->fields[$field] = $data;
+	}
+	
+	public function set_field_options($field, $options, $config = null){
+		if(isset($this->fields[$field])){
+			$this->fields[$field]['options'] = $options;
+			$this->fields[$field]['build_config'] = $config;
+		}
+		else{
+			trigger_error("Attempt to set options for unknown field $field! " . get_caller());
+		}
+	}
+	
    public function get_fields(){
       return $this->fields;
    }
@@ -64,50 +99,13 @@ class Form {
       }
    }
    
-   public function use_form_tag($action, $method = 'POST', $attrs = array()){
-      if($action === false || $action === null){
-         $this->use_form_tag = false;
-      }
-      else{
-         $this->use_form_tag = true;
-         $this->action = $action;
-         $this->method = $method;
-         
-         $this->form_tag_attrs = '';
-         foreach($attrs as $attr => $value){
-            $this->form_tag_attrs .= $attr . '="' . $value . '"';
-         }
-      }
-   }
-   
    public function set_template($file){
-      if(!preg_match("/\.tpl$/", $file)){
-         $file .= '.tpl';
+      $this->template_file = $this->template->find_file($file);
+		
+      if(!$this->template_file){
+      	$this->error = "Could not load form template $file!" . get_caller();
+         trigger_error($this->error);
       }
-      
-      if (file_exists(DIR_TEMPLATE . $this->path . $file)) {
-         $this->file = DIR_TEMPLATE . $this->path . $file; 
-      }
-      elseif(file_exists(DIR_TEMPLATE . 'default/template/' . $file)) {
-         $this->file = DIR_TEMPLATE . 'default/template/' . $file;
-      }
-      else{
-         list(,$caller) = debug_backtrace(false);
-         trigger_error("Error: Could not load form template " . DIR_TEMPLATE . $this->path . $file . "! Called from $caller[class]::$caller[function]().");
-         exit();
-      }
-   }
-   
-   public function set_fields($fields){
-      $this->fields = $fields;
-   }
-   
-   public function set_form_data($data){
-      $this->form_data = $data;
-   }
-   
-   public function set_default_attrs($attrs){
-      $this->default_attrs = $attrs;
    }
    
    public function fill_data_from(){
@@ -160,44 +158,40 @@ class Form {
    }
    
    public function build(){
-      $this->prepare();
+   	//Prep the form data
+      if(!$this->prepare()){
+			trigger_error($this->error . ' ' . get_caller());
+      	return false;
+		}
       
-      //make the fields accessible from the template file
-      $fields = $this->fields;
-      
-      //Make the Form element vars accessible
-      $use_form_tag = $this->use_form_tag;
+		//Make the data accessible to the form generator
+		$form_id	  = 'form_' . uniqid();
+		$form_name	  = 'form_' . $this->name;
+		$show_tag = $this->show_tag;
       $action = $this->action;
       $method = $this->method;
-      $form_tag_attrs = $this->form_tag_attrs;
+		$fields = $this->fields;
       
-      //add any additional data for the form template
-      $this->form_data ? extract($this->form_data) : '';
+		extract($this->data);
       
       //render the file
       ob_start();
       
-      require($this->file);
+      require($this->template_file);
       
-      $output = ob_get_contents();
-         
-      ob_end_clean();
-      
-      return $output;
+      return ob_get_clean();
    }
    
    private function prepare(){
-      if(!$this->file || !file_exists($this->file)){
-         list(,,$caller) = debug_backtrace(false);
-         trigger_error("You must set the template for the form before building! Called from $caller[class]::$caller[function]().");
-         exit();
+      if(!$this->template_file || !is_file($this->template_file)){
+         $this->error = "You must set the template for the form before building!";
+			return false;
       }
       
       foreach($this->fields as $name => &$field){
          if(!isset($field['type'])){
-            list(,,$caller) = debug_backtrace(false);
-            trigger_error("Invalid form field! The type was not set for $name! Called from $caller[class]::$caller[function]().");
-            exit();
+            $this->error = "Invalid form field! The type was not set for $name!";
+				return false;
          }
          
          if(!isset($field['name'])){
@@ -209,15 +203,18 @@ class Form {
          }
          
          if(!isset($field['display_name'])){
-            $field['display_name'] = $this->language->get('entry_' . $name);
+            $display_name = $this->language->get('entry_' . $name);
+				
+				if(($display_name == 'entry_' . $name) && isset($field['label'])){
+					$field['display_name'] = $field['label'];
+				}
+				else{
+					$field['display_name'] = $display_name;
+				} 
          }
          
          if(!isset($field['attrs'])){
             $field['attrs'] = array();
-             
-            if(empty($field['attrs']) && $this->default_attrs){
-               $field['attrs'] = $this->default_attrs;
-            }
          }
          
          //additional / overridden attributes
@@ -234,15 +231,15 @@ class Form {
          }
          
          
-         if(!isset($field['select'])){
+         if(!isset($field['value'])){
             if(isset($this->data[$name])){
-               $field['select'] = $this->data[$name];
+               $field['value'] = $this->data[$name];
             }
-            elseif(isset($field['default'])){
-               $field['select'] = $field['default'];
+            elseif(isset($field['default_value'])){
+               $field['value'] = $field['default_value'];
             }
             else{
-               $field['select'] = '';
+               $field['value'] = '';
             }
          }
          
@@ -252,47 +249,28 @@ class Form {
             
             case 'radio':
             case 'select':
-               if(!isset($field['values']) || !is_array($field['values'])){
-                  $field['values'] = array();
+               if(empty($field['options'])){
+                  $field['options'] = array();
+						
+						if(!isset($field['build_config'])){
+							$field['build_config'] = array('' => '');
+						}
+						
+						continue;
                }
-               
-               $first_field = current($field['values']);
-               
-               //attempt to determine field values primary key and display name
-               if(!empty($field['values']) && is_array($first_field)){
-                     
-                  if(!isset($field['builder_name']) && isset($first_field['name'])){
-                     $field['builder_name'] = 'name';
-                  }
-
-                  foreach(array_keys($first_field) as $key){
-                     if(!isset($field['builder_id'])){
-                        if(strpos($key, '_id')){
-                           $field['builder_id'] = $key;
-                        }
-                     }
-                     if(!isset($field['builder_name'])){
-                        if(strpos($key, 'name') !== false){
-                           $field['builder_name'] = $key;
-                        }
-                     }
-                  }
-                  
-                  if(!isset($field['builder_name']) || !isset($field['builder_id'])){
-                     list(,,$caller) = debug_backtrace(false);
-                     trigger_error("Invalid Form Field! The builder ID and Name pair could not be determined for $name! Called from $caller[class]::$caller[function]().");
-                     exit();
-                  }
-                  
-                  if(isset($field['empty_option']) && $field['empty_option']){
-                     $field['values'] = array('' => $field['empty_option']) + $field['values'];
-                  }
-               }
-               else{
-                  $field['builder_name'] = $field['builder_id'] = '';
-               }
-               
-               unset($first_field);
+					else{
+	               $first_option = current($field['options']);
+						
+						if(is_array($first_option)){
+							$key = key($field['build_config']);
+							$value = current($field['build_config']);
+							
+							if(!isset($first_option[$key]) || !isset($first_option[$value])){ 
+								$this->error = "You must specify the build config options for $name!";
+								return false;
+							}
+						}
+					}
                break;
             
             case 'checkbox':
@@ -302,45 +280,53 @@ class Form {
                break;
          }
       }
+
+		return true;
    }
 
    public function validate($data){
+   	$this->language->load('system/form');
+		
+   	//For Each Field Validate the data, set $this->error if invalid
       foreach($this->fields as $field_name => $field){
-         if(!isset($field['validate'])){
-            if((!isset($field['validation']) || !$field['validation']) && !isset($field['required']) || !$field['required']){
-               continue;
-            }
-         }
-         elseif(!$field['validate']){
+      	$field_display_name = $this->language->get('entry_' . $field_name, isset($field['label']) ? $field['label'] : $field_name);
+			
+			//Check if this field is set and if it is required
+      	if(!empty($field['required']) && (!isset($data[$field_name]) || is_null($data[$field_name]) || $data[$field_name] === '')){
+   			$this->error[$field_name] = $this->language->get('error_required_' . $field_name, $this->language->format('error_required', $field_display_name));
+				continue;
+			}
+			
+			//Not required and no value given
+			if(empty($field['required']) && empty($data[$field_name])){
+				continue;
+			}
+			
+			//If not required and not set or does not require auto validation, Skip!
+			if(!isset($data[$field_name]) || empty($field['validation'])){
+				continue;
+			}
+			
+			//If a custom validation function is provided, call that instead
+			if(is_callable($field['validation'])){
+            $field['validation']($data[$field_name]);
             continue;
          }
+			
+			//Call the validation function from the library
+			$args = array('#value' => $data[$field_name]);
+			
+			if(is_array($field['validation'])){
+				$method = array_shift($field['validation']);
+				
+				$args += $field['validation'];
+			}
+			else{
+		   	$method = $field['validation'];
+			}
          
-         if(isset($data[$field_name])){
-            if(!isset($field['validation'])){
-               $field['validation'] = 'not_empty';
-            }
-            
-            if(is_callable($field['validation'])){
-               $field['validation']();
-               continue;
-            }
-            elseif(is_array($field['validation'])){
-               $method = array_shift($field['validation']);
-               
-               $args = array('#value'=>$data[$field_name]) + $field['validation'];
-               
-               if(is_callable($method)){
-                  $method($args);
-               }
-            }
-            else{
-               $method = $field['validation'];
-               $args = array('#value' => $data[$field_name]);
-            }
-            
-            if(!call_user_func_array(array($this->validation, $method), $args)){
-               $this->error[$field_name] = $this->validation->fetch_error();
-            }
+         if(!call_user_func_array(array($this->validation, $method), $args)){
+            $this->error[$field_name] = $this->language->get('error_' . $field_name, $this->language->format('error_invalid_field', $field_display_name));
          }
       }
       

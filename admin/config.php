@@ -17,14 +17,17 @@ else{
 define("IS_ADMIN",true);
 
 // HTTP
-define('HTTP_SERVER', SITE_URL . 'admin/');
+define('HTTP_ROOT', SITE_URL . 'admin/');
+define('HTTP_CONTENT', SITE_URL . 'admin/');
+define('HTTP_ADMIN', SITE_URL . 'admin/');
 define('HTTP_CATALOG', SITE_URL);
-define('HTTP_IMAGE', HTTP_CATALOG . 'image/');
-define('HTTP_STYLES', SITE_URL . 'admin/view/stylesheet/');
+define('HTTP_IMAGE', SITE_URL . 'image/');
+define('HTTP_JS', SITE_URL . 'system/javascript/');
+define('HTTP_THEME_JS', HTTP_ADMIN . 'view/javascript/');
 
 // HTTPS
-define('HTTPS_SERVER', HTTP_SERVER);
-define('HTTPS_IMAGE', HTTP_IMAGE);
+define('HTTPS_ROOT', SITE_SSL . 'admin/');
+define('HTTPS_IMAGE', SITE_SSL . 'image/');
 
 define('ELFINDER_URL', SITE_URL. 'system/elfinder/');
 
@@ -32,7 +35,7 @@ define('ELFINDER_URL', SITE_URL. 'system/elfinder/');
 define('DIR_APPLICATION', SITE_DIR . 'admin/');
 define('DIR_PLUGIN', SITE_DIR . 'plugin/');
 define('DIR_LANGUAGE', SITE_DIR . 'admin/language/');
-define('DIR_TEMPLATE', SITE_DIR . 'admin/view/template/');
-define('DIR_TEMPLATE_OPTION', SITE_DIR . 'admin/view/template_option/');
+define('DIR_THEME', SITE_DIR . 'admin/view/theme/');
+define('DIR_THEME_OPTION', SITE_DIR . 'admin/view/template_option/');
 define('DIR_CATALOG', SITE_DIR . 'catalog/');
 define('DIR_GENERATED_IMAGE', SITE_DIR . 'image/generated/');

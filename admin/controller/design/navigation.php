@@ -19,7 +19,7 @@ class ControllerDesignNavigation extends Controller {
 			
 			$this->message->add('success', $this->_('text_success'));
 			
-			$this->redirect($this->url->link('design/navigation'));
+			$this->url->redirect($this->url->link('design/navigation'));
 		}
 		else{
 			$this->getForm();
@@ -36,7 +36,7 @@ class ControllerDesignNavigation extends Controller {
 
 			$this->message->add('success', $this->_('text_success'));
 			
-			$this->redirect($this->url->link('design/navigation'));
+			$this->url->redirect($this->url->link('design/navigation'));
 		}
 		else{
 			$this->getForm();
@@ -55,7 +55,7 @@ class ControllerDesignNavigation extends Controller {
 			
 			$this->message->add('success', $this->_('text_success'));
 			
-			$this->redirect($this->url->link('design/navigation'));
+			$this->url->redirect($this->url->link('design/navigation'));
 		}
 
 		$this->getList();
@@ -66,7 +66,7 @@ class ControllerDesignNavigation extends Controller {
 		
 		$this->message->add("notify", "Admin Navigation Group has been reset!");
 		
-		$this->redirect($this->url->link("design/navigation"));
+		$this->url->redirect($this->url->link("design/navigation"));
 	}
 	
 	public function batch_update() {
@@ -95,7 +95,7 @@ class ControllerDesignNavigation extends Controller {
             if(!$this->message->error_set()){
                $this->message->add('success',$this->_('text_success'));
 					
-					$this->redirect($this->url->link('design/navigation'));
+					$this->url->redirect($this->url->link('design/navigation'));
             }
          }
       }

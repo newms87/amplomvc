@@ -41,8 +41,7 @@ class Session {
       elseif(isset($this->data['token']) && empty($_COOKIE)){
       	unset($this->data['token']);
          $this->data['messages']['warning'][] = "You must enable cookies to login to the admin portal!";
-         header('Status: 401');
-         header('Location: ' . HTTP_SERVER);
+         $this->url->redirect($this->url->link('common/home'));
          exit();
       }
 		elseif(!isset($this->data['session_token_saved'])){			

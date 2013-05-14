@@ -62,7 +62,7 @@ class ControllerSaleCustomer extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->redirect($this->url->link('sale/customer', $url));
+			$this->url->redirect($this->url->link('sale/customer', $url));
 		}
     	
     	$this->getForm();
@@ -120,7 +120,7 @@ class ControllerSaleCustomer extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->redirect($this->url->link('sale/customer', $url));
+			$this->url->redirect($this->url->link('sale/customer', $url));
 		}
     
     	$this->getForm();
@@ -180,7 +180,7 @@ class ControllerSaleCustomer extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->redirect($this->url->link('sale/customer', $url));
+			$this->url->redirect($this->url->link('sale/customer', $url));
     	}
     
     	$this->getList();
@@ -250,7 +250,7 @@ class ControllerSaleCustomer extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}	
 	
-			$this->redirect($this->url->link('sale/customer', $url));			
+			$this->url->redirect($this->url->link('sale/customer', $url));			
 		}
 		
 		$this->getList();
@@ -935,9 +935,9 @@ class ControllerSaleCustomer extends Controller {
 			$store_info = $this->model_setting_store->getStore($store_id);
 			
 			if ($store_info) {
-				$this->redirect($store_info['url'] . 'index.php?route=account/login&token=' . $token);
+				$this->url->redirect($this->url->store($store_id, 'account/login'));
 			} else { 
-				$this->redirect(HTTP_CATALOG . 'index.php?route=account/login&token=' . $token);
+				$this->url->redirect($this->url->store($this->config->get('config_default_store'), 'account/login'));
 			}
 		} else {
 		$this->template->load('error/not_found');

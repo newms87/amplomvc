@@ -52,7 +52,7 @@
     <div class="right">
       <div id='submit_pp_button'><div id="submit_payment"><?=$text_submit_payment;?></div><input id='submit_pp_button' type="submit" value="<?= $button_confirm; ?>" class="button" /></div>
       <div id='processing_payment'>
-         <img src="catalog/view/theme/default/image/loading.gif" alt="" /><span><?= $text_processing_payment;?></span><br />
+         <img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /><span><?= $text_processing_payment;?></span><br />
          <input type="submit" value="<?= $button_try_again; ?>" class="button" />
       </div>
     </div>

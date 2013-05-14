@@ -47,7 +47,7 @@ class ControllerCatalogDownload extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->redirect($this->url->link('catalog/download', $url));
+			$this->url->redirect($this->url->link('catalog/download', $url));
 		}
 	
     	$this->getForm();
@@ -90,7 +90,7 @@ class ControllerCatalogDownload extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->redirect($this->url->link('catalog/download', $url));
+			$this->url->redirect($this->url->link('catalog/download', $url));
 		}
 		
     	$this->getForm();
@@ -131,7 +131,7 @@ class ControllerCatalogDownload extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->redirect($this->url->link('catalog/download', $url));
+			$this->url->redirect($this->url->link('catalog/download', $url));
     	}
 
     	$this->getList();

@@ -22,7 +22,7 @@ class ControllerCmsArticle extends Controller {
          
 			$url = $this->get_url();
 			
-			$this->redirect($this->url->link('cms/article', $url));
+			$this->url->redirect($this->url->link('cms/article', $url));
 		}
     
     	$this->getForm();
@@ -41,7 +41,7 @@ class ControllerCmsArticle extends Controller {
 
 			$url = $this->get_url();
 			
-			$this->redirect($this->url->link('cms/article', $url));
+			$this->url->redirect($this->url->link('cms/article', $url));
 		}
     
     	$this->getForm();
@@ -62,7 +62,7 @@ class ControllerCmsArticle extends Controller {
 			
 			$url = $this->get_url();
 			
-			$this->redirect($this->url->link('cms/article', $url));
+			$this->url->redirect($this->url->link('cms/article', $url));
     	}
 	
     	$this->getList();
@@ -279,10 +279,10 @@ class ControllerCmsArticle extends Controller {
 		if (!empty($article_info) && $article_info['image'] && file_exists(DIR_IMAGE . $article_info['image'])) {
 			$this->data['thumb'] = $this->image->resize($article_info['image'], 100, 100);
 		} else {
-			$this->data['thumb'] = $this->image->resize('no_image.jpg', 100, 100);
+			$this->data['thumb'] = $this->image->resize('no_image.png', 100, 100);
 		}
 		
-		$this->data['no_image'] = $this->image->resize('no_image.jpg', 100, 100);
+		$this->data['no_image'] = $this->image->resize('no_image.png', 100, 100);
       
       
       $this->data['languages'] = $this->model_localisation_language->getLanguages();

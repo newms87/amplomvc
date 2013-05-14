@@ -34,7 +34,7 @@ class ControllerSaleCustomerBlacklist extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->redirect($this->url->link('sale/customer_blacklist', $url));
+			$this->url->redirect($this->url->link('sale/customer_blacklist', $url));
 		}
     	
     	$this->getForm();
@@ -64,7 +64,7 @@ class ControllerSaleCustomerBlacklist extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->redirect($this->url->link('sale/customer_blacklist', $url));
+			$this->url->redirect($this->url->link('sale/customer_blacklist', $url));
 		}
     
     	$this->getForm();
@@ -96,7 +96,7 @@ class ControllerSaleCustomerBlacklist extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->redirect($this->url->link('sale/customer_blacklist', $url));
+			$this->url->redirect($this->url->link('sale/customer_blacklist', $url));
     	}
     
     	$this->getList();

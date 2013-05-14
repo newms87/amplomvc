@@ -26,7 +26,7 @@ class ControllerCatalogManufacturer extends Controller {
          
 			$url = $this->get_url();
 			
-			$this->redirect($this->url->link('catalog/manufacturer', $url));
+			$this->url->redirect($this->url->link('catalog/manufacturer', $url));
 		}
     
     	$this->getForm();
@@ -47,7 +47,7 @@ class ControllerCatalogManufacturer extends Controller {
 
 			$url = $this->get_url();
 			
-			$this->redirect($this->url->link('catalog/manufacturer', $url));
+			$this->url->redirect($this->url->link('catalog/manufacturer', $url));
 		}
     
     	$this->getForm();
@@ -68,7 +68,7 @@ class ControllerCatalogManufacturer extends Controller {
 			
 			$url = $this->get_url();
 			
-			$this->redirect($this->url->link('catalog/manufacturer', $url));
+			$this->url->redirect($this->url->link('catalog/manufacturer', $url));
     	}
 	
     	$this->getList();
@@ -170,8 +170,6 @@ class ControllerCatalogManufacturer extends Controller {
   	   $manufacturer_id = $this->data['manufacturer_id'] = isset($_GET['manufacturer_id'])?(int)$_GET['manufacturer_id']:null;
       
       $this->check_user_can_modify($manufacturer_id);
-      
-		$this->document->addScript("image_manager.js");
 		
       $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
       $this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/manufacturer'));
@@ -227,10 +225,10 @@ class ControllerCatalogManufacturer extends Controller {
 		if (!empty($manufacturer_info) && $manufacturer_info['image'] && file_exists(DIR_IMAGE . $manufacturer_info['image'])) {
 			$this->data['thumb'] = $this->image->resize($manufacturer_info['image'], 100, 100);
 		} else {
-			$this->data['thumb'] = $this->image->resize('no_image.jpg', 100, 100);
+			$this->data['thumb'] = $this->image->resize('no_image.png', 100, 100);
 		}
 		
-		$this->data['no_image'] = $this->image->resize('no_image.jpg', 100, 100);
+		$this->data['no_image'] = $this->image->resize('no_image.png', 100, 100);
       
       if($manufacturer_id){
          $this->data['articles'] = $this->model_catalog_manufacturer->getManufacturerArticles($manufacturer_id);
@@ -272,7 +270,7 @@ class ControllerCatalogManufacturer extends Controller {
       
       if($this->user->isDesigner() && isset($_GET['manufacturer_id']) && !$this->model_catalog_manufacturer->isEditable($_GET['manufacturer_id'])){
          $this->message->add('warning', $this->_('warning_not_editable'));
-         $this->redirect($this->url->link('catalog/manufacturer'));
+         $this->url->redirect($this->url->link('catalog/manufacturer'));
       }
       
 		if (!$this->error) {
@@ -325,7 +323,7 @@ class ControllerCatalogManufacturer extends Controller {
                $found = true;
          if(!$found){
             $this->message->add('warning', $this->_('error_invalid_designer_id'));
-            $this->redirect($this->url->link('catalog/manufacturer'));
+            $this->url->redirect($this->url->link('catalog/manufacturer'));
          }
       }
    }

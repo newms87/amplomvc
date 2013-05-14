@@ -30,14 +30,14 @@ class mytable {
          $file .= '.tpl';
       }
       
-      if (file_exists(DIR_TEMPLATE . $this->path . $file)) {
-         $this->file = DIR_TEMPLATE . $this->path . $file; 
+      if (file_exists(DIR_THEME . $this->path . $file)) {
+         $this->file = DIR_THEME . $this->path . $file; 
       }
-      elseif(file_exists(DIR_TEMPLATE . 'default/template/' . $file)) {
-         $this->file = DIR_TEMPLATE . 'default/template/' . $file;
+      elseif(file_exists(DIR_THEME . 'default/template/' . $file)) {
+         $this->file = DIR_THEME . 'default/template/' . $file;
       }
       else{
-         trigger_error("Error: Could not load form template " . DIR_TEMPLATE . $this->path . $file . "!" . get_caller(3));
+         trigger_error("Error: Could not load form template " . DIR_THEME . $this->path . $file . "!" . get_caller(3));
          exit();
       }
    }

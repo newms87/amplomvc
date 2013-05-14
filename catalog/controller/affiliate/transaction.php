@@ -6,7 +6,7 @@ class ControllerAffiliateTransaction extends Controller {
 		if (!$this->affiliate->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('affiliate/transaction');
 			
-	  		$this->redirect($this->url->link('affiliate/login'));
+	  		$this->url->redirect($this->url->link('affiliate/login'));
     	}		
 		
 		$this->language->load('affiliate/transaction');

@@ -6,7 +6,7 @@ class ControllerAffiliateRegister extends Controller {
 		$this->template->load('affiliate/register');
 
 		if ($this->affiliate->isLogged()) {
-	  		$this->redirect($this->url->link('affiliate/account'));
+	  		$this->url->redirect($this->url->link('affiliate/account'));
     	}
 
     	$this->language->load('affiliate/register');
@@ -18,7 +18,7 @@ class ControllerAffiliateRegister extends Controller {
 
 			$this->affiliate->login($_POST['email'], $_POST['password']);
 
-	  		$this->redirect($this->url->link('affiliate/success'));
+	  		$this->url->redirect($this->url->link('affiliate/success'));
     	} 
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));

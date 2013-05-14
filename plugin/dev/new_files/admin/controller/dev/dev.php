@@ -176,7 +176,7 @@ class ControllerDevDev extends Controller {
 	}
 	
 	public function content(){
-		$this->document->addStyle(HTTP_STYLES . 'dev.css');
+		$this->document->addStyle(HTTP_THEME_STYLE . 'dev.css');
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'), '', 0);
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('dev/dev'), '', 1);

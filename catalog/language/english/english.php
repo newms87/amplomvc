@@ -20,6 +20,14 @@ $_['text_separator']        = ' &raquo; ';
 $_['text_submit_payment']        = '<span style="font-size:16px;font-weight:bold">Please wait while we process your order.</span><br />You will be redirected after the order has been submitted. Thank you!';
 $_['text_submit_payment_done'] = 'Complete! You will now be redirected.';
 
+//Positions
+$_['position_above_content']	= "Above Content";
+$_['position_content_top']		= "Content Top";
+$_['position_content_bottom']	= "Content Bottom";
+$_['position_column_left']		= "Column Left";
+$_['position_column_right']	= "Column Right";
+
+
 // Buttons
 $_['button_add_address']    = 'Add Address';
 $_['button_back']           = 'Back';

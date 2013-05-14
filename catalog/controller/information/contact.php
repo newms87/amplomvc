@@ -18,7 +18,7 @@ class ControllerInformationContact extends Controller {
 	  		$this->mail->setText(strip_tags(html_entity_decode($_POST['enquiry'], ENT_QUOTES, 'UTF-8')));
    		$this->mail->send();
 
-	  		$this->redirect($this->url->link('information/contact/success'));
+	  		$this->url->redirect($this->url->link('information/contact/success'));
     	}
       
       $this->language->format('text_contact_us', $this->config->get('config_name'));

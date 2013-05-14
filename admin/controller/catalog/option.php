@@ -189,8 +189,6 @@ class ControllerCatalogOption extends Controller {
 		$this->template->load('catalog/option_form');
 
 	   $option_id = isset($_GET['option_id'])?$_GET['option_id']:false;
-      
-	   $this->document->addScript("image_manager.js");
 		
 		$url = $this->get_url();
       
@@ -238,7 +236,7 @@ class ControllerCatalogOption extends Controller {
             if ($option_value['image'] && file_exists(DIR_IMAGE . $option_value['image'])) {
                $image = $option_value['image'];
             } else {
-               $image = 'no_image.jpg';
+               $image = 'no_image.png';
             }
             
             $option_value['image'] = $image;
@@ -249,7 +247,7 @@ class ControllerCatalogOption extends Controller {
 		}
 		
 		
-		$this->data['no_image'] = $this->image->resize('no_image.jpg', 100, 100);
+		$this->data['no_image'] = $this->image->resize('no_image.png', 100, 100);
 
 		$this->children = array(
 			'common/header',

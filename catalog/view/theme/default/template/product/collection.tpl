@@ -55,7 +55,7 @@
 			<? } ?>
 			<? if ($product['rating']) { ?>
 			<div class="rating">
-				<img src="catalog/view/theme/default/image/stars-<?= $product['rating']; ?>.png" alt="<?= $product['reviews']; ?>" />
+				<img src="<?= HTTP_THEME_IMAGE . "stars-$product[rating].png"; ?>" alt="<?= $product['reviews']; ?>" />
 			</div>
 	 	<? } ?>
 		</div>

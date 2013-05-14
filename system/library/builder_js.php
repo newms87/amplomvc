@@ -58,7 +58,23 @@ country_selectors.each(function(i,e){
 //--></script>
 <?     break;
 
+/**
+ * upload_image
+ * 
+ * Makes the function upload_image available which displays the image upload manager 
+ * with a callback to a image input field(s).
+ */
 
+	case 'image_manager': ?>
+<? if(!isset($js_loaded_files['image_manager'])) { ?>
+<script type="text/javascript">//<!--
+var image_manager_url = "<?= HTTP_ROOT . "index.php?route=common/filemanager"; ?>";
+//--></script>
+<script type="text/javascript" src="<?= HTTP_JS . "image_manager.js"; ?>"></script>
+<? } ?>
+	<? break;
+	
+	
 /**
  * filter_url
  * 
@@ -77,11 +93,11 @@ country_selectors.each(function(i,e){
       $url = $args[1];
       $query = isset($args[2]) ? $args[2] : '';
       
-      $sort_query = $this->url->get_query('sort','order','page');
+      $sort_query = $this->url->get_query("sort","order","page");
    ?>
 <script type="text/javascript">//<!--
 function filter() {
-   url = 'index.php?route=<?= $url . '&' . $sort_query . ($query ? '&'.$query : '');?>';
+   url = '<?= HTTP_ROOT; ?>index.php?route=<?= $url . '&' . $sort_query . ($query ? '&'.$query : '');?>';
    
    filter_list = $('<?= $selector;?> [name]').not('[value=""]');
    
@@ -96,8 +112,8 @@ function filter() {
 
 
    case 'datepicker': ?>
-         
-<script type="text/javascript" src="view/javascript/jquery/ui/jquery-ui-timepicker-addon.js"></script> 
+<? if(!isset($js_loaded_files['datepicker'])) {?>
+<script type="text/javascript" src="<?= HTTP_JS . 'jquery/ui/jquery-ui-timepicker-addon.js'; ?>"></script>
 <script type="text/javascript">//<!--
 $('.date').datepicker({dateFormat: 'yy-mm-dd'});
 $('.datetime').datetimepicker({
@@ -106,7 +122,7 @@ $('.datetime').datetimepicker({
 });
 $('.time').timepicker({timeFormat: 'h:m'});
 //--></script>
-
+<? } ?>
 <?php  break;
       
       
@@ -138,15 +154,21 @@ for(var e in errors){
       $label = $args[1];
       $value = $args[2];
       $callback = $args[3];
+		
+		$sort_query = $this->url->get_query("sort","limit");
    ?>
 <script type="text/javascript">//<!--
 $('<?=$selector;?>').each(function(i,e){
    $(e).autocomplete({
       delay: 0,
       source: function(request, response) {
+      	filter = {};
+      	filter[$('<?= $selector; ?>').attr('filter')] = request.term;
+		   
          $.ajax({
-            url: 'index.php?route=' + $(e).attr('route') + '&' + $(e).attr('filter') + '=' +  encodeURIComponent(request.term),
+            url: '<?= HTTP_ROOT; ?>index.php?route=' + $(e).attr('route') + '&<?= $sort_query; ?>',
             dataType: 'json',
+            data: {filter: filter},
             success: function(json) {
                response($.map(json, function(item) {
                   item['label'] = item.<?= $label;?>;
@@ -156,7 +178,6 @@ $('<?=$selector;?>').each(function(i,e){
                }));
             }
          });
-         
       }, 
       select: function(event, ui) {
          <?= $callback;?>($(e), ui.item);
@@ -170,9 +191,8 @@ $('<?=$selector;?>').each(function(i,e){
 
 
    case 'ckeditor': ?>
-
-<?php $src = (defined("IS_ADMIN")?'':'catalog/') .'view/javascript/ckeditor/ckeditor.js';?>  
-<script type="text/javascript" src="<?=$src;?>"></script>
+<? if(!isset($js_loaded_files['ckeditor'])) { ?>
+<script type="text/javascript" src="<?= HTTP_JS .'ckeditor/ckeditor.js'; ?>"></script>
 <script type="text/javascript">//<!--
 ckedit_index = Math.random() * 9000 + 1000;
 $('.ckedit').each(function(i,e){
@@ -184,19 +204,19 @@ $('.ckedit').each(function(i,e){
 function init_ckeditor_for(id){
    if(!id)throw new Error("CKEDITOR: You must include an ID on elements using the CKEDITOR");
    ck = CKEDITOR.replace(id, {
-      filebrowserBrowseUrl: 'index.php?route=common/filemanager',
-      filebrowserImageBrowseUrl: 'index.php?route=common/filemanager',
-      filebrowserFlashBrowseUrl: 'index.php?route=common/filemanager',
-      filebrowserUploadUrl: 'index.php?route=common/filemanager',
-      filebrowserImageUploadUrl: 'index.php?route=common/filemanager',
-      filebrowserFlashUploadUrl: 'index.php?route=common/filemanager'
+      filebrowserBrowseUrl: 'index.php?route=common/filemanager/ckeditor',
+      filebrowserImageBrowseUrl: 'index.php?route=common/filemanager/ckeditor',
+      filebrowserFlashBrowseUrl: 'index.php?route=common/filemanager/ckeditor',
+      filebrowserUploadUrl: 'index.php?route=common/filemanager/ckeditor',
+      filebrowserImageUploadUrl: 'index.php?route=common/filemanager/ckeditor',
+      filebrowserFlashUploadUrl: 'index.php?route=common/filemanager/ckeditor'
    });
 }
 function remove_ckeditor_for(id){
    CKEDITOR.instances[id].destroy();
 }
 //--></script>
-
+<? } ?>
 <?php break;
 
 
@@ -373,3 +393,5 @@ function get_html_translation_table (table, quote_style) {
    default:
       break;
 }
+
+$js_loaded_files[$js] = true;

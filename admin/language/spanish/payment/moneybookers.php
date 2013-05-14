@@ -5,7 +5,7 @@ $_['heading_title']		      = 'Moneybookers';
 // Text 					
 $_['text_payment']		      = 'Pago';
 $_['text_success']		      = 'Éxito: has modificado los detalles de Moneybookers.';
-$_['text_moneybookers']	      = '<a onclick="window.open(\'https://www.moneybookers.com/app/?rid=10111486\');"><img src="view/image/payment/moneybookers.png" alt="Moneybookers" title="Moneybookers" style="border: 1px solid #EEEEEE;" /></a>';
+$_['text_moneybookers']	      = '<a onclick="window.open(\'https://www.moneybookers.com/app/?rid=10111486\');"><img src="view/theme/default/image/payment/moneybookers.png" alt="Moneybookers" title="Moneybookers" style="border: 1px solid #EEEEEE;" /></a>';
 	
 // Entry					
 $_['entry_email']		      = 'E-Mail:';

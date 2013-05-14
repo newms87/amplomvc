@@ -22,7 +22,7 @@ class ControllerDesignBanner extends Controller {
 
 			$url = $this->get_url();
 			
-			$this->redirect($this->url->link('design/banner', $url));
+			$this->url->redirect($this->url->link('design/banner', $url));
 		}
 
 		$this->getForm();
@@ -40,7 +40,7 @@ class ControllerDesignBanner extends Controller {
 
 			$url = $this->get_url();
 					
-			$this->redirect($this->url->link('design/banner', $url));
+			$this->url->redirect($this->url->link('design/banner', $url));
 		}
 
 		$this->getForm();
@@ -60,7 +60,7 @@ class ControllerDesignBanner extends Controller {
 
 			$url = $this->get_url();
 
-			$this->redirect($this->url->link('design/banner', $url));
+			$this->url->redirect($this->url->link('design/banner', $url));
 		}
 
 		$this->getList();
@@ -153,8 +153,6 @@ class ControllerDesignBanner extends Controller {
 		$this->template->load('design/banner_form');
 
 	   $banner_id = isset($_GET['banner_id'])?$_GET['banner_id']:0;
-      
-	   $this->document->addScript("image_manager.js");
 		
 		$url = $this->get_url();
       
@@ -203,7 +201,7 @@ class ControllerDesignBanner extends Controller {
 			if ($banner_image['image'] && file_exists(DIR_IMAGE . $banner_image['image'])) {
 				$image = $banner_image['image'];
 			} else {
-				$image = 'no_image.jpg';
+				$image = 'no_image.png';
 			}			
 			
 			$this->data['banner_images'][] = array(
@@ -215,7 +213,7 @@ class ControllerDesignBanner extends Controller {
 			);	
 		} 
 	
-		$this->data['no_image'] = $this->image->resize('no_image.jpg', 100, 100);		
+		$this->data['no_image'] = $this->image->resize('no_image.png', 100, 100);		
 
 		$this->children = array(
 			'common/header',

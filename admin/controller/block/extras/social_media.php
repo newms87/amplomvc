@@ -22,7 +22,7 @@ class ControllerBlockExtrasSocialMedia extends Controller {
 		$this->data['thumb_width'] = $thumb_width;
 		$this->data['thumb_height'] = $thumb_height;
 		
-		$this->data['no_image'] = $this->image->resize('data/no_image.png', $thumb_width, $thumb_height);
+		$this->data['no_image'] = $this->image->resize('no_image.png', $thumb_width, $thumb_height);
 		
 		$this->render();
 	}

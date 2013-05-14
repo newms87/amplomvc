@@ -26,7 +26,7 @@ class ControllerProductCollection extends Controller {
 			$collection_info = $this->model_catalog_collection->getCollection($collection_id);
 		
 			if (!$collection_info) {
-				$this->redirect($this->url->link('product/collection'), 302);
+				$this->url->redirect($this->url->link('product/collection'), 302);
 			}
 			
 			$this->template->load('product/collection');

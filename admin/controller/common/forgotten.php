@@ -6,7 +6,7 @@ class ControllerCommonForgotten extends Controller {
 		$this->template->load('common/forgotten');
 
 		if ($this->user->isLogged()) {
-			$this->redirect($this->url->link('common/home'));
+			$this->url->redirect($this->url->link('common/home'));
 		}
 
 		$this->language->load('common/forgotten');
@@ -38,7 +38,7 @@ class ControllerCommonForgotten extends Controller {
 			
 			$this->message->add('success', $this->_('text_success'));
 
-			$this->redirect($this->url->link('common/login'));
+			$this->url->redirect($this->url->link('common/login'));
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));

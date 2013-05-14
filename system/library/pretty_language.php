@@ -48,19 +48,19 @@ class PrettyLanguage{
                   array_pop($brackets);
             }
             
-            if(strpos($line, "DIR_TEMPLATE") !== false){
+            if(strpos($line, "DIR_THEME") !== false){
                $dir_temp = 0;
             }
             
             switch($dir_temp){
                case 0:
-                  if(!preg_match('/if\s*\(file_exists\(DIR_TEMPLATE\s*\.\s*\$this->config->get\([^\)]*\)\s*\.\s*\'[^\']*\'\)\)\s*\{/', $line)){
+                  if(!preg_match('/if\s*\(file_exists\(DIR_THEME\s*\.\s*\$this->config->get\([^\)]*\)\s*\.\s*\'[^\']*\'\)\)\s*\{/', $line)){
                      echo "PROBLEM at 0";exit;
                   }
                   $lines[$num] .= "**REMOVE ME**";
                   break;
                case 1:
-                  if(!preg_match('/\$this->template_file\s*=\s*\$this->config->get\(\'config_template\'\)\s*\.\s*\'[^\']*\';/', $line)){
+                  if(!preg_match('/\$this->template_file\s*=\s*\$this->config->get\(\'config_theme\'\)\s*\.\s*\'[^\']*\';/', $line)){
                      echo "PROBLEM at 1"; exit;
                   }
                   $lines[$num] .= "**REMOVE ME**";

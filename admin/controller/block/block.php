@@ -8,6 +8,13 @@ class ControllerBlockBlock extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if(isset($_GET['name'])){
+				
+			if(!$this->model_block_block->is_block($_GET['name'])){
+				$this->message->add('warning', $this->_('error_unknown_block'));
+				
+				$this->url->redirect($this->url->link('block/block'));
+			}
+			
 			$this->getForm();
 		}
 		else{
@@ -21,105 +28,137 @@ class ControllerBlockBlock extends Controller {
       $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
       $this->breadcrumb->add($this->_('heading_title'), $this->url->link('block/block'));
       
-		//This table column data is in admin/view/template_option/[template]/design/navigation_list.to
-      $table = $this->template->get_table('listview');
-      
-		//Add table filter data	
-		$table->set_column_filter('status', 'select', $this->_('data_statuses_blank'));
+		//The Table Columns
+		$columns = array();
+
+		$columns['display_name'] = array(
+		   'type' => 'text',
+		   'display_name' => $this->_('column_display_name'),
+		   'filter' => true,
+		   'sortable' => true,
+		);
 		
-		//Add Table Cell Data array
-		$table->set_column_cell_data('status', 'map', $this->_('data_statuses'));
+		$columns['name'] = array(
+		   'type' => 'text',
+		   'display_name' => $this->_('column_name'),
+		   'filter' => true,
+		   'sortable' => true,
+		);
 		
-      $table->set_template('table/sort_filter_list');
-      
-		//Add Sorting / Paging information to the table and the $data query
-      $data_list = array(
-         'sort'  =>'name',
-         'order' =>'ASC',
-         'page'  =>1
-      );
-      
-      $data = array();
-      
-      foreach($data_list as $key => $default){
-         if(isset($_GET[$key])){
-            $data[$key] = $_GET[$key];
-         }
-         else{
-            $data[$key] = $default;
-         }
-      }
-      
-      $table->add_extra_data($data);
-      
-		//Set the filter value if set by user
-      if(isset($_GET['filter'])){
-         foreach($_GET['filter'] as $filter => $value){
-            $data[$filter] = $value;
-            $table->set_column_filter_value($filter, $value);
-         }
-      }
-      
-		//Filter Query is for saving the previous filter and adding to the URL query string
-      $queries = array(
-         'filter_query' => $this->url->get_query('filter'),
-      ); 
-      
-      $table->add_extra_data($queries);
-      
-		//finish adding $data query information
-      $data['limit'] = $this->config->get('config_admin_limit');
-      $data['start'] = ($data['page'] - 1) * $data['limit'];
-      
 		
-		//Retrieve the Filtered Table row data
+		$columns['status'] = array(
+		   'type' => 'select',
+		   'display_name' => $this->_('column_status'),
+		   'filter' => true,
+		   'build_data' => $this->_('data_statuses'),
+		   'sortable' => true,
+		);
+		
+		//The Sort data
+		$data = array();
+		
+		$sort_defaults = array(
+			'sort' => 'name',
+			'order' => 'ASC',
+			'limit' => $this->config->get('config_admin_limit'),
+			'page' => 1,
+		);
+		
+		foreach($sort_defaults as $key => $default){
+			$data[$key] = $$key = isset($_GET[$key]) ? $_GET[$key] : $default;
+		}
+		
+      $data['start'] = ($page - 1) * $limit;
+		
+		//Filter
+		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
+		
+		if($filter_values){
+			$data += $filter_values;
+		}
+		
+		//Table Row Data
+		$block_total = $this->model_block_block->getTotalBlocks($data);
       $blocks = $this->model_block_block->getBlocks($data);
       
       foreach ($blocks as &$block) {
-      	$this->language->load('block/' . $block['name']);
-			
-			$block['display_name'] = $this->_('heading_title');
-			
-         $action = array(
-            'text' => $this->_('text_edit'),
-            'href' => $this->url->link('block/block', 'name=' . $block['name'])
+      	$actions = array(
+				'edit' => array(
+	            'text' => $this->_('text_edit'),
+	            'href' => $this->url->link('block/block', 'name=' . $block['name'])
+				),
          );
          
-         $block['action'] = $action;
+         $block['actions'] = $actions;
       }
       
-		//This sets the table row data
-      $table->set_table_data($blocks);
+		//The table template data
+		$tt_data = array(
+		   'row_id'		=> 'name',
+		   'route'		=> 'block/block',
+		   'sort'		=> $sort,
+		   'order'		=> $order,
+		   'page'		=> $page,
+		   'sort_url'	=> $this->url->link('block/block', $this->url->get_query('filter')),
+		   'columns'	=> $columns,
+		   'data'		=> $blocks,
+		);
+		
+		$tt_data += $this->language->data;
+		
+		//Build the table template
+		$this->mytable->init();
+		$this->mytable->set_template('table/list_view');
+		$this->mytable->set_template_data($tt_data);
+		$this->mytable->map_attribute('filter_value', $filter_values);
+		
+      $this->data['list_view'] = $this->mytable->build();
       
-      $this->data['block_list'] = $table->build();
-      
+		//Action Buttons
       $this->data['insert'] = $this->url->link('block/block', 'name=new');
-      $this->data['delete'] = $this->url->link('block/block/delete');
       
+		//Pagination
+      $url_query = $this->url->get_query('filter', 'sort', 'order');
+      
+      $this->pagination->init();
+      $this->pagination->total = $block_total;
+      $this->pagination->limit = $limit;
+		$this->pagination->page = $page;
+      $this->pagination->text = $this->_('text_pagination');
+      $this->pagination->url = $this->url->link('block/block', $url_query . '&page={page}');
+      
+      $this->data['pagination'] = $this->pagination->render();
+		
+		//Template Children
       $this->children = array(
          'common/header',
          'common/footer'
       );
       
+		//Render
       $this->response->setOutput($this->render());
 	}
 	
 	private function getForm(){
 		$this->template->load('block/block');
 		
+		$name = $_GET['name'];
+		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_block_block->updateBlock($_GET['name'], $_POST);
+			$this->model_block_block->updateBlock($name, $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
-			$this->redirect($this->url->link('block/block'));
+			$this->url->redirect($this->url->link('block/block'));
 		}
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_block_list'), $this->url->link('block/block'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('block/block','name=' . $_GET['name']));
+		
+		$this->language->load('block/' . $name);
+		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('block/block','name=' . $name));
 
-		$this->data['action'] = $this->url->link('block/block','name=' . $_GET['name']);
+		$this->data['action'] = $this->url->link('block/block','name=' . $name);
 		
 		$this->data['cancel'] = $this->url->link('block/block');
 
@@ -127,7 +166,7 @@ class ControllerBlockBlock extends Controller {
 			$this->data['profiles'] = isset($_POST['profiles']) ? $_POST['profiles'] : array();
 			$this->data['settings'] = isset($_POST['settings']) ? $_POST['settings'] : array();
 		} else {
-			$block = $this->model_block_block->getBlock($_GET['name']);
+			$block = $this->model_block_block->getBlock($name);
 			
 			if(!empty($block)){
 				$this->data['profiles'] = $block['profiles'];
@@ -163,9 +202,9 @@ class ControllerBlockBlock extends Controller {
 		//Get additional Block settings and profile data (this is the plugin part)
 		$this->load_block_data();
 		
-		$this->data['stores'] = $this->model_setting_store->getStores();
-		$this->data['layouts'] = $this->model_design_layout->getLayouts();
-		$this->data['data_positions'] = array('' => $this->_('text_none')) + $this->_('data_positions');
+		$this->data['data_stores'] = $this->model_setting_store->getStores();
+		$this->data['data_layouts'] = $this->model_design_layout->getLayouts();
+		$this->data['data_positions'] = array('' => $this->_('text_none')) + $this->theme->get_setting('data_positions');
 		 
 		$this->children = array(
 			'common/header',

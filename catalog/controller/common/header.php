@@ -11,16 +11,27 @@ class ControllerCommonHeader extends Controller {
       
 		$this->data['title'] = $this->document->getTitle();
 		
-		if (isset($_SERVER['HTTPS']) && (($_SERVER['HTTPS'] == 'on') || ($_SERVER['HTTPS'] == '1'))) {
-			$this->data['base'] = $this->config->get('config_ssl');
-		} else {
-			$this->data['base'] = $this->config->get('config_url');
-		}
+		$this->data['base'] = $this->url->is_ssl() ? $this->config->get('config_ssl') : $this->config->get('config_url');
 		
-		$template_style_dir = 'catalog/view/theme/'. $this->config->get('config_template') . "/stylesheet/";
-		$this->document->addStyle($template_style_dir . 'content_style.css');
-		$this->document->addStyle($template_style_dir . 'stylesheet.css');
-		$this->document->addStyle($template_style_dir . 'module_styles.css');
+		//Add Styles
+		$this->document->addStyle(HTTP_THEME_STYLE . 'content_style.css');
+		$this->document->addStyle(HTTP_THEME_STYLE . 'style.css');
+		$this->document->addStyle(HTTP_THEME_STYLE . 'module_styles.css');
+		$this->document->addStyle(HTTP_JS . 'jquery/ui/themes/ui-lightness/jquery-ui-1.9.2.custom.css');
+		$this->document->addStyle(HTTP_JS . 'jquery/colorbox/colorbox.css');
+		
+		//Add Scripts
+		$this->document->addScript(HTTP_JS . 'jquery/jquery-1.7.1.min.js');
+		$this->document->addScript(HTTP_JS . 'jquery/ui/jquery-ui-1.9.2.custom.min.js');
+		$this->document->addScript(HTTP_JS . 'jquery/ui/external/jquery.bgiframe-2.1.2.js');
+		$this->document->addScript(HTTP_JS . 'jquery/ui/external/jquery.cookie.js');
+		$this->document->addScript(HTTP_JS . 'jquery/tabs.js');
+		$this->document->addScript(HTTP_JS . 'jquery/colorbox/jquery.colorbox.min.js');
+		
+		//Add Theme Scripts
+		$this->document->addScript(HTTP_THEME_JS . 'common.js');
+		
+		
 		
       $this->data['direction'] = $this->language->getInfo('direction');
       
@@ -35,7 +46,7 @@ class ControllerCommonHeader extends Controller {
 		$this->language->set('lang', $this->language->getInfo('code'));
       
 		$this->data['google_analytics'] = html_entity_decode($this->config->get('config_google_analytics'), ENT_QUOTES, 'UTF-8');
-      $this->data['statcounter'] = html_entity_decode($this->config->get('config_statcounter'), ENT_QUOTES, 'UTF-8');
+      $this->data['statcounter'] = $this->config->get('config_statcounter');
 		
 		$this->language->load('common/header');
 		

@@ -38,11 +38,5 @@
     </div>
   </div>
   <?= $content_bottom; ?></div>
-<script type="text/javascript">//<!--
-$('#login input').keydown(function(e) {
-	if (e.keyCode == 13) {
-		$('#login').submit();
-	}
-});
-//--></script> 
+  
 <?= $footer; ?>

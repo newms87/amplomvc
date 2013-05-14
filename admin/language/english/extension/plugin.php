@@ -18,7 +18,6 @@ $_['entry_hooks']   = 'Hook Functions:';
 $_['entry_base_type']   = 'Base Folder:';
 $_['entry_route']   = 'Plugin For Route:';
 $_['entry_type']   = 'Plugin Type';
-$_['entry_store_id']   = 'Store';
 $_['entry_status']   = 'Status';
 $_['entry_hook_method']   = 'Call Plugin Method';
 $_['entry_hook_for']   = 'Invoking';

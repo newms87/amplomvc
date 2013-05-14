@@ -13,20 +13,20 @@ class ControllerCommonLogin extends Controller {
 			$this->user->logout();
 		}
 		elseif ($this->user->isLogged()){
-			$this->redirect($this->url->link('common/home'));
+			$this->url->redirect($this->url->link('common/home'));
 		}
       
 		//if user is not logged in and has provided valid login credentals
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
       	if (!empty($_GET['redirect'])) {
-      		$this->redirect(urldecode($_GET['redirect']));
+      		$this->url->redirect(urldecode($_GET['redirect']));
 			}else{
-				$this->redirect($this->url->link('common/home'));
+				$this->url->redirect($this->url->link('common/home'));
 			}
 		}
 		
-      $this->language->format('text_lost', $this->url->store(1, 'home',''));
-      $this->language->format('text_are_you_a_designer', $this->url->store(1, 'home','route=information/are_you_a_designer'));
+      $this->language->format('text_lost', $this->url->store($this->config->get('config_default_store'), 'common/home'));
+      $this->language->format('text_are_you_a_designer', $this->url->store($this->config->get('config_default_store'), 'information/are_you_a_designer'));
 		
 		if(isset($this->session->data['token']) && !isset($_COOKIE['token'])){
 			$this->error['warning'] = $this->_('error_token');

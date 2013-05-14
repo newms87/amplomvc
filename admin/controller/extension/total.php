@@ -86,7 +86,7 @@ class ControllerExtensionTotal extends Controller {
 		if (!$this->user->hasPermission('modify', 'extension/total')) {
 			$this->session->data['error'] = $this->_('error_permission'); 
 			
-			$this->redirect($this->url->link('extension/total'));
+			$this->url->redirect($this->url->link('extension/total'));
 		} else {				
 			$this->model_setting_extension->install('total', $_GET['extension']);
 
@@ -102,7 +102,7 @@ class ControllerExtensionTotal extends Controller {
 				$class->install();
 			}
 			
-			$this->redirect($this->url->link('extension/total'));
+			$this->url->redirect($this->url->link('extension/total'));
 		}
 	}
 	
@@ -110,7 +110,7 @@ class ControllerExtensionTotal extends Controller {
 		if (!$this->user->hasPermission('modify', 'extension/total')) {
 			$this->session->data['error'] = $this->_('error_permission'); 
 			
-			$this->redirect($this->url->link('extension/total'));
+			$this->url->redirect($this->url->link('extension/total'));
 		} else {			
 			$this->model_setting_extension->uninstall('total', $_GET['extension']);
 		
@@ -125,7 +125,7 @@ class ControllerExtensionTotal extends Controller {
 				$class->uninstall();
 			}
 		
-			$this->redirect($this->url->link('extension/total'));
+			$this->url->redirect($this->url->link('extension/total'));
 		}
 	}	
 }

@@ -201,7 +201,7 @@ class ModelDesignNavigation extends Model {
 		if(!$nav_groups){
 			$query = "SELECT ng.* FROM " . DB_PREFIX . "navigation_group ng"; 
 			$query .= " LEFT JOIN " . DB_PREFIX . "navigation_store ns ON (ng.navigation_group_id=ns.navigation_group_id)";
-			$query .= " WHERE ng.status='1' AND ns.store_id='-1'";
+			$query .= " WHERE ng.status='1' AND ns.store_id='0'";
 			
 			$query = $this->query($query);
 			

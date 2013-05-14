@@ -14,7 +14,7 @@ class ControllerPaymentPPPro extends Controller {
 			
 			$this->message->add('success', $this->_('text_success'));
 
-			$this->redirect($this->url->link('extension/payment'));
+			$this->url->redirect($this->url->link('extension/payment'));
 		}
 
  		if (isset($this->error['warning'])) {

@@ -11,12 +11,12 @@ class ControllerAccountLogin extends Controller {
 			$customer_info = $this->model_account_customer->getCustomerByToken($_COOKIE['customer_token']);
 			
 		 	if ($customer_info && $this->customer->login($customer_info['email'], '', true)) {
-				$this->redirect($this->url->link('account/account')); 
+				$this->url->redirect($this->url->link('account/account')); 
 			}
 		}
 		
 		if ($this->customer->isLogged()) {
-      	$this->redirect($this->url->link('account/account'));
+      	$this->url->redirect($this->url->link('account/account'));
     	}
 	
     	$this->language->load('account/login');
@@ -26,11 +26,10 @@ class ControllerAccountLogin extends Controller {
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			unset($this->session->data['guest']);
 			
-			// Added strpos check to pass McAfee PCI compliance test (http://forum.opencart.com/viewtopic.php?f=10&t=12043&p=151494#p151295)
-			if (isset($_POST['redirect']) && (strpos($_POST['redirect'], HTTP_SERVER) !== false || strpos($_POST['redirect'], HTTPS_SERVER) !== false)) {
-				$this->redirect(str_replace('&amp;', '&', $_POST['redirect']));
+			if (!empty($_POST['redirect'])) {
+				$this->url->redirect(str_replace('&amp;', '&', $_POST['redirect']));
 			} else {
-				$this->redirect($this->url->link('account/account')); 
+				$this->url->redirect($this->url->link('account/account'));
 			}
     	}  
 		
@@ -42,11 +41,10 @@ class ControllerAccountLogin extends Controller {
 		$this->data['register'] = $this->url->link('account/register');
 		$this->data['forgotten'] = $this->url->link('account/forgotten');
 
-    	// Added strpos check to pass McAfee PCI compliance test (http://forum.opencart.com/viewtopic.php?f=10&t=12043&p=151494#p151295)
-		if (isset($_POST['redirect']) && (strpos($_POST['redirect'], HTTP_SERVER) !== false || strpos($_POST['redirect'], HTTPS_SERVER) !== false)) {
+		if (!empty($_POST['redirect'])) {
 			$this->data['redirect'] = $_POST['redirect'];
 		} elseif (isset($this->session->data['redirect'])) {
-      		$this->data['redirect'] = $this->session->data['redirect'];
+   		$this->data['redirect'] = $this->session->data['redirect'];
 	  		
 			unset($this->session->data['redirect']);
     	} else {
@@ -69,7 +67,13 @@ class ControllerAccountLogin extends Controller {
     	if (!$this->customer->login($_POST['email'], $_POST['password'])) {
       		$this->error['warning'] = $this->_('error_login');
     	}
-	
+		
+		//Verify redirect stays on our site for security purposes
+		if(isset($_POST['redirect']) && strpos($_POST['redirect'], SITE_URL) !== 0 && strpos($_POST['redirect'], SITE_SSL) !== 0){
+			$this->error['warning'] = $this->_('error_redirect_domain');
+			unset($_POST['redirect']);
+		}
+		
     	return $this->error ? false : true;
   	}
 }

@@ -24,7 +24,7 @@ class ControllerModuleCron extends Controller {
 			
 			$this->message->add('success', $this->_('text_success'));
 			
-			$this->redirect($this->url->link('module/cron'));
+			$this->url->redirect($this->url->link('module/cron'));
 		}
       
       $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -34,7 +34,7 @@ class ControllerModuleCron extends Controller {
 		$this->data['action'] = $this->url->link('module/cron');
 		$this->data['cancel'] = $this->url->link('extension/module');
 
-      $this->data['run_cron'] = $this->url->link('cron/cron','', 1);
+      $this->data['run_cron'] = $this->url->store(null, 'cron/cron');
       
 		$info = isset($_POST['cron_tasks'])?$_POST['cron_tasks']:$this->model_setting_setting->getSetting('cron_tasks');
 		$this->data['tasks'] = isset($info['tasks']) ? $info['tasks'] : array();

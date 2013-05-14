@@ -6,7 +6,7 @@ class ControllerAffiliateLogin extends Controller {
 		$this->template->load('affiliate/login');
 
 		if ($this->affiliate->isLogged()) {  
-      		$this->redirect($this->url->link('affiliate/account'));
+      		$this->url->redirect($this->url->link('affiliate/account'));
     	}
 	
     	$this->language->load('affiliate/login');
@@ -15,9 +15,9 @@ class ControllerAffiliateLogin extends Controller {
 						
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['email']) && isset($_POST['password']) && $this->validate()) {
 			if (isset($_POST['redirect'])) {
-				$this->redirect(str_replace('&amp;', '&', $_POST['redirect']));
+				$this->url->redirect(str_replace('&amp;', '&', $_POST['redirect']));
 			} else {
-				$this->redirect($this->url->link('affiliate/account'));
+				$this->url->redirect($this->url->link('affiliate/account'));
 			} 
 		}
 		

@@ -20,7 +20,7 @@ class ControllerCatalogCategory extends Controller {
 
 			$this->message->add('success', $this->_('text_success'));
 			
-			$this->redirect($this->url->link('catalog/category')); 
+			$this->url->redirect($this->url->link('catalog/category')); 
 		}
 
 		$this->getForm();
@@ -36,7 +36,7 @@ class ControllerCatalogCategory extends Controller {
 			
 			$this->message->add('success', $this->_('text_success'));
 			
-			$this->redirect($this->url->link('catalog/category'));
+			$this->url->redirect($this->url->link('catalog/category'));
 		}
 
 		$this->getForm();
@@ -54,7 +54,7 @@ class ControllerCatalogCategory extends Controller {
 
 			$this->message->add('success', $this->_('text_success'));
 
-			$this->redirect($this->url->link('catalog/category'));
+			$this->url->redirect($this->url->link('catalog/category'));
 		}
 
 		$this->getList();
@@ -102,8 +102,6 @@ class ControllerCatalogCategory extends Controller {
 		$this->template->load('catalog/category_form');
 
 	   $category_id = $this->data['category_id'] = isset($_GET['category_id'])?$_GET['category_id']:null;
-	   
-	   $this->document->addScript("image_manager.js");
 		
       $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
       $this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/category'));
@@ -160,10 +158,10 @@ class ControllerCatalogCategory extends Controller {
       if (!empty($category_info) && $category_info['image'] && file_exists(DIR_IMAGE . $category_info['image'])) {
          $this->data['thumb'] = $this->image->resize($category_info['image'], 100, 100);
       } else {
-         $this->data['thumb'] = $this->image->resize('no_image.jpg', 100, 100);
+         $this->data['thumb'] = $this->image->resize('no_image.png', 100, 100);
       }
       
-      $this->data['no_image'] = $this->image->resize('no_image.jpg', 100, 100);
+      $this->data['no_image'] = $this->image->resize('no_image.png', 100, 100);
       
       $this->data['categories'] = array(0=>'-- None --');
 		$categories = $this->model_catalog_category->getCategories(0);

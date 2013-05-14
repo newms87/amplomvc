@@ -63,12 +63,12 @@ function handle_ajax_cart_load(action, data){
 <? }?>
 
 <div id='loading_details' style='display:none'>
-   <img src='catalog/view/theme/default/image/loading.gif' />
+   <img src="<?= HTTP_THEME_IMAGE . 'loading.gif';?>" />
    <span class='loading_message'><?= $text_loading_details;?></span>
 </div>
 
 <? } else { ?>
 <script type="text/javascript">//<!--
-location = '<?= $redirect; ?>';
-//--></script> 
+location = "<?= $redirect; ?>";
+//--></script>
 <? } ?>

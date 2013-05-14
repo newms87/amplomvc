@@ -12,10 +12,10 @@ abstract class Controller {
 	public function __construct($class_path, &$registry) {
 	   $this->registry = &$registry;
       
-      $this->class_path = $class_path;
-      
       if($class_path){
-         $this->template = new Template($registry, $this->config->get('config_template'), $this);
+      	$this->class_path = $class_path;
+			
+         $this->template = new Template($registry);
       }
 	}
    
@@ -33,12 +33,6 @@ abstract class Controller {
 
 	protected function forward($route, $args = array()) {
 		return new Action($route, $args);
-	}
-
-	protected function redirect($url, $status = 302) {
-		header('Status: ' . $status);
-		header('Location: ' . str_replace('&amp;', '&', $url));
-		exit();
 	}
 	
 	protected function getBlock($context, $name, $args = array()){

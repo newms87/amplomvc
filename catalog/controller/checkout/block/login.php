@@ -2,8 +2,11 @@
 class ControllerCheckoutBlockLogin extends Controller { 
 	public function index() {
       $this->template->load('checkout/block/login');
-
-		$this->language->load('checkout/checkout');
+		$this->language->load('checkout/block/login');
+		
+		if(isset($_POST['username'])){
+			$this->validate();
+		}
 		
 		$this->data['guest_checkout'] = ($this->config->get('config_guest_checkout') && !$this->config->get('config_customer_price') && !$this->cart->hasDownload());
 		
@@ -13,27 +16,37 @@ class ControllerCheckoutBlockLogin extends Controller {
 			$this->data['account'] = 'register';
 		}
 		
-		$this->data['rpx_login'] = $this->getChild('module/janrain',array('login_redir'=>$this->url->link('checkout/checkout'),'display_type'=>'popup','icon_size'=>'large'));
-      
-      //Build the Login Form
-      $form = $this->template->get_form('login');
-      
-      $form->set_template('form/table');
-      
-      $form->set_field_value('password', 'content_after', '<br /><a href="' . $this->url->link('account/forgotten') . '">' . $this->_('text_forgotten') . '</a><br /><br />');
-      
-      $form->set_field_value('submit', 'display_name', $this->_('button_login'));
-      
-      $this->data['form_login'] = $form->build();
+		$janrain_args = array(
+			'login_redir'	=> $this->url->link('checkout/checkout'),
+			'display_type'	=> 'popup',
+			'icon_size'		=> 'large'
+		);
 		
+		$this->data['rpx_login'] = $this->getChild('module/janrain', $janrain_args);
+      
+		$defaults = array(
+			'username' => '',
+		);
+		
+		foreach($defaults as $key => $default){
+			if(isset($_POST[$key])){
+				$this->data[$key] = $_POST[$key];
+			} else {
+				$this->data[$key] = $default;
+			}
+		}
+		
+		$this->data['validate_login'] = $this->url->link('checkout/block/login/validate');
+		
+		$this->data['url_forgotten'] = $this->url->link('account/forgotten');
       
 		$this->response->setOutput($this->render());
 	}
 	
 	public function validate() {
-		$this->language->load('checkout/checkout');
+		$this->language->load('checkout/block/login');
 		
-      if ($this->customer->login($_POST['email'], $_POST['password'])) {
+      if ($this->customer->login($_POST['username'], $_POST['password'])) {
          unset($this->session->data['guest']);
          $this->message->add('success', $this->_('text_login_success'));
       } else {
@@ -41,9 +54,9 @@ class ControllerCheckoutBlockLogin extends Controller {
       }
       
 		if (!$this->cart->validate()) {
-			$this->redirect($this->url->link('cart/cart'));
+			$this->url->redirect($this->url->link('cart/cart'));
 		}	
       
-      $this->redirect($this->url->link('checkout/checkout'));
+      $this->url->redirect($this->url->link('checkout/checkout'));
 	}
 }

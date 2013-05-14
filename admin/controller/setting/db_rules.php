@@ -20,7 +20,7 @@ class ControllerSettingDbRules extends Controller {
 	  		
 			$this->message->add('success', $this->_('text_success'));
 			
-			$this->redirect($this->url->link('setting/db_rules'));
+			$this->url->redirect($this->url->link('setting/db_rules'));
     	}
 	
     	$this->getForm();
@@ -36,7 +36,7 @@ class ControllerSettingDbRules extends Controller {
 			
 			$this->message->add('success', $this->_('text_success'));
 			
-			$this->redirect($this->url->link('setting/db_rules', 'store_id=' . $_GET['store_id']));
+			$this->url->redirect($this->url->link('setting/db_rules', 'store_id=' . $_GET['store_id']));
 		}
 
     	$this->getForm();
@@ -54,7 +54,7 @@ class ControllerSettingDbRules extends Controller {
 
 			$this->message->add('success', $this->_('text_success'));
 			
-			$this->redirect($this->url->link('setting/db_rules'));
+			$this->url->redirect($this->url->link('setting/db_rules'));
 		}
 
     	$this->getList();

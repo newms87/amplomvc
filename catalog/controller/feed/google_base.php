@@ -7,7 +7,7 @@ class ControllerFeedGoogleBase extends Controller {
             $output .= '<channel>';
 			$output .= '<title>' . $this->config->get('config_name') . '</title>'; 
 			$output .= '<description>' . $this->config->get('config_meta_description') . '</description>';
-			$output .= '<link>' . HTTP_SERVER . '</link>';
+			$output .= '<link>' . SITE_URL . '</link>';
 			
 			$products = $this->model_catalog_product->getProducts();
 			
@@ -24,7 +24,7 @@ class ControllerFeedGoogleBase extends Controller {
 					if ($product['image']) {
 						$output .= '<g:image_link>' . $this->image->resize($product['image'], 500, 500) . '</g:image_link>';
 					} else {
-						$output .= '<g:image_link>' . $this->image->resize('no_image.jpg', 500, 500) . '</g:image_link>';
+						$output .= '<g:image_link>' . $this->image->resize('no_image.png', 500, 500) . '</g:image_link>';
 					}
 					
 					$output .= '<g:mpn>' . $product['model'] . '</g:mpn>';

@@ -141,7 +141,7 @@ function validate_checkout_item(c_item, validate){
 
 function page_loading(){
    $('#checkout_process .button').attr('disabled', true);
-   $('#checkout_process .button').after('<span class="wait">&nbsp;<img src="catalog/view/theme/default/image/loading.gif" alt="" /></span>');
+   $('#checkout_process .button').after('<span class="wait">&nbsp;<img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /></span>');
 }
 
 function page_received(){

@@ -15,7 +15,7 @@ class ControllerModuleRssArticle extends Controller {
 			
 			$this->message->add('success', $this->_('text_success'));
 			
-			$this->redirect($this->url->link('module/rss_article'));
+			$this->url->redirect($this->url->link('module/rss_article'));
 		}
 	   
       $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -76,7 +76,7 @@ class ControllerModuleRssArticle extends Controller {
          
          if(isset($_GET['redirect'])){
             $this->message->add('success', "Successfully Updated the RSS Feed!");
-            $this->redirect($this->url->link('module/rss_article'));
+            $this->url->redirect($this->url->link('module/rss_article'));
          }
          echo "Updated RSS Feed!";
          exit;

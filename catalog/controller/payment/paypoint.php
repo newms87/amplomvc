@@ -94,12 +94,8 @@ class ControllerPaymentPaypoint extends Controller {
 			$this->language->load('payment/paypoint');
 	
 			$this->data['title'] = $this->language->format('heading_title', $this->config->get('config_name'));
-	
-			if (!isset($_SERVER['HTTPS']) || ($_SERVER['HTTPS'] != 'on')) {
-				$this->data['base'] = HTTP_SERVER;
-			} else {
-				$this->data['base'] = HTTPS_SERVER;
-			}
+			
+			$this->data['base'] = $this->url->is_ssl() ? SITE_SSL : SITE_URL;
 	
 			$this->language->set('language', $this->language->getInfo('code'));
 			$this->language->format('heading_title', $this->config->get('config_name'));

@@ -12,47 +12,28 @@ class Template {
    private $name;
    private $file;
 	
-   private $db;
-   private $cache;
-   private $config;
-   private $language;
-   private $url;
-   
    private $template;
-   private $theme;
    
-	private $controller;
+	private $template_data;
 	
-   function __construct(&$registry, $theme = '', $controller = null){
+   function __construct(&$registry){
    	$this->registry = $registry;
 		
-      if($controller){
-         $this->controller = $controller;
-         $this->db         = $controller->db;
-         $this->cache      = $controller->cache;
-         $this->config     = $controller->config;
-         $this->language   = $controller->language;
-         $this->url        = $controller->url;
-      }
-      
-      if($theme){
-         $this->template = trim($theme, '/') . '/template/';
-         $this->theme = $theme;
-      }
-      else{
-         $this->template = '';
-         $this->theme = 'default';
-      }
+		$this->load_template_data();
    }
    
 	public function __get($key){
 		return $this->registry->get($key);
 	}
-	
-   private function _($key){
-      return $this->language->data[$key];
-   }
    
+	public function load_template_data(){
+		//TODO: Need to actually load template data here... This may be the data_statuses, data_yes_no, etc...
+	}
+	
+	public function get_template_data(){
+		return $this->template_data;
+	}
+	
    public function template(){
       return $this->template;
    }
@@ -61,18 +42,18 @@ class Template {
       return $this->file;
    }
    
-   public function set_file($file_name){
-      if (file_exists(DIR_TEMPLATE . $this->template . $file_name . '.tpl')) {
-         $this->file = DIR_TEMPLATE . $this->template . $file_name . '.tpl'; 
-      }
-      elseif(file_exists(DIR_TEMPLATE . 'default/template/' . $file_name . '.tpl')) {
-         $this->file = DIR_TEMPLATE . 'default/template/' . $file_name . '.tpl';
-      }
-      else{
-         if($this->name && $this->controller){
-            $this->cache->delete('template'.$this->name);
+	public function set_file($file_name){
+		$file = $this->theme->find_file($file_name . '.tpl');
+		
+		if($file){
+			$this->file = $file;
+		}
+		else{
+         if($this->name){
+            $this->cache->delete('template' . $this->name);
          }
-         trigger_error('Error: Could not load template ' . DIR_TEMPLATE . $this->template . $file_name . '.tpl!');
+			
+         trigger_error('Error: Could not load template ' . $file_name . '.tpl!');
          exit();
       }
    }
@@ -129,143 +110,14 @@ class Template {
       }
    }
    
-   public function load_template_option($name){
-      
-      $template = $this->cache->get('template.' . $name);
-      
-      $to_file = DIR_TEMPLATE_OPTION . $this->theme . '/' . $name . '.to';
-      
-      if($template){
-         if($template['last_modified']){
-            //check if the file has been modified since caching
-            if(filemtime($to_file) > $template['last_modified']){
-               $template = false;
-            }
-            //check if the current language has been modified since caching
-            elseif($this->language->get_latest_modified_file() > $this->cache->get_cache_time('template.' . $name)){
-               $template = false;
-            }
-         }
-         //of if a new file has been created for this template
-         elseif(file_exists($to_file)){
-            $template = false;
-         }
-      }
-      
-      if(!$template){
-         $_table  = array();
-         $_form   = array();
-         $_block  = array();
-         $_option = array();
-         $template_file = $name;
-         
-         if (file_exists($to_file)) {
-            extract($this->data);
-            
-            require($to_file);
-            
-            $mtime = filemtime($to_file);
-         }
-         else{
-            $mtime = false;
-         }
-         
-         $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "template WHERE `name` = '" . $this->db->escape($name) . "' LIMIT 1");
-         
-         if($query->num_rows){
-            $tables   = unserialize($query->row['tables']);
-            $forms   = unserialize($query->row['forms']);
-            $blocks  = unserialize($query->row['blocks']);
-            $options = unserialize($query->row['options']);
-            
-            if(is_array($forms)){
-               $_table = $tables + $_table;
-            }
-            
-            if(is_array($forms)){
-               $_form   = $forms + $_form;
-            }
-            
-            if(is_array($blocks)){
-               $_block  = $blocks + $_block;
-            }
-            
-            if(is_array($options)){
-               $_option = $options + $_option;
-            }
-            
-            if($query->row['template_file']){
-               $template_file = $query->row['template_file'];
-            }
-         }
-         
-         $table_objects = array();
-         
-         foreach($_table as $table_name => $table){
-            foreach($table['columns'] as $column_name => $column){
-               if(empty($column['active'])){
-                  unset($table['columns'][$column_name]);
-               }
-            }
-            
-            $table_objects[$table_name] = new Table($table);
-         }
-         
-         $form_objects = array();
-         
-         foreach($_form as $form_name => $form){
-            foreach($form['fields'] as $field_name => $field){
-               if(empty($field['active'])){
-                  unset($form['fields'][$field_name]);
-               }
-            }
-            
-            $form_objects[$form_name] = new Form($form);
-         }
-         
-         $template = array(
-            'tables'        => $table_objects,
-            'forms'         => $form_objects,
-            'blocks'        => $_block,
-            'options'       => $_option,
-            'file'          => $template_file,
-            'last_modified' => $mtime,
-          );
-         
-         $this->cache->set('template.'.$name, $template);
-      }
-      
-      foreach($template['tables'] as $t){
-         $t->initialize($this->controller);
-      }
-      
-      foreach($template['forms'] as $f){
-         $f->initialize($this->controller);
-      }
-      
-      $this->tables  = $template['tables'];
-      $this->forms   = $template['forms'];
-      $this->blocks  = $template['blocks'];
-      $this->options = $template['options'];
-      
-      return $template['file'];
-   }
-   
-   public function load($name, $data = array()){
+	public function load($name, $data = array()){
       if($this->name == $name) return;
       
       $this->name = $name;
       
       $this->data = $data;
-      
-		if($this->controller){
-      	$file_name = $this->load_template_option($name);
-		}
-		else{
-			$file_name = $name;
-		}
-      
-      $this->set_file($file_name);
+   
+	   $this->set_file($this->name);
    }
    
 	public function render(){
@@ -285,7 +137,7 @@ class Template {
 	}
 	
 	public function fetch($filename) {
-		$file = DIR_TEMPLATE . $filename;
+		$file = DIR_THEME . $filename;
     
 		if (file_exists($file)) {
 			extract($this->data);
@@ -303,5 +155,11 @@ class Template {
 			trigger_error('Error: Could not load template file ' . $file . '!');
 			exit();				
     	}	
+	}
+	
+	public function find_file($file){
+		$file = preg_replace("/\\.tpl\$/", '', $file) . '.tpl';
+		
+		return $this->theme->find_file($file);
 	}
 }

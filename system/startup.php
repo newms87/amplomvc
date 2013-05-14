@@ -113,5 +113,6 @@ _require_once(DIR_SYSTEM . 'library/request.php');
 _require_once(DIR_SYSTEM . 'library/response.php');
 _require_once(DIR_SYSTEM . 'library/session.php');
 _require_once(DIR_SYSTEM . 'library/table.php');
+_require_once(DIR_SYSTEM . 'library/theme.php');
 _require_once(DIR_SYSTEM . 'library/template.php');
 _require_once(DIR_SYSTEM . 'library/url.php');

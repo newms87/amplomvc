@@ -24,20 +24,73 @@ class DB {
       return $this->driver->get_error();
    }
    
-  	public function query($sql) {
-  	   //Use debug_backtrace to get caller class / function name. Then call any plugins requesting to modify query string
+	/**
+	 * Returns an array with 3 elements, 'row', 'rows', and 'num_rows'.
+	 * 'row' is the first row of the query
+	 * 'rows' are all of the resulting rows of the MySQL query.
+	 * 'num_rows' is the count of rows in the return result
+	 * 
+	 * @param $sql - the MySQL query string
+	 * @return mixed - An array as described above, or false on failure
+	 * 
+	 */
+	public function query($sql) {
   	   $resource = $this->driver->query($sql);
 		
       if(!$resource){
-      	$stack = debug_stack();
-      	$_SESSION['debug']['call stack'] = $stack; 
-         trigger_error($this->driver->get_error());
-			html_dump($stack, 'call stack');
+      	$this->query_error();
+			
          return false;
       }
       
 		return $resource;
   	}
+	
+	/**
+	 * Returns an An associative array with the Select field as the keys
+	 * and the column data as the values for the MySQL query
+	 * 
+	 * @param $sql - the MySQL query string
+	 * @return mixed - An associative array of field => value pairs, or false on failure
+	 * 
+	 */
+	public function query_row($sql) {
+  	   $resource = $this->driver->query($sql);
+		
+      if(!$resource){
+      	$this->query_error();
+			
+         return false;
+      }
+      
+		return $resource->row;
+  	}
+	
+	/**
+	 * Returns the first field in the first row of the query
+	 * 
+	 * @param $sql - the MySQL query string
+	 * @return mixed - The DB table field value as an integer, float or string, or null on failure
+	 * 
+	 */
+  	public function query_var($sql) {
+  	   $resource = $this->driver->query($sql);
+		
+      if(!$resource){
+      	$this->query_error();
+			
+         return null;
+      }
+      
+		return current($resource->row);
+  	}
+	
+	private function query_error(){
+		$stack = debug_stack();
+   	$_SESSION['debug']['call stack'] = $stack;
+      trigger_error($this->driver->get_error() . get_caller(2));
+		html_dump($stack, 'call stack');
+	}
 	
 	public function execute_file($file){
 		$result = $this->driver->execute_file($file);
@@ -126,6 +179,22 @@ class DB {
       }
    }
    
+	public function set_autoincrement($table, $value){
+		if(!$this->driver->set_autoincrement($table, $value)){
+			trigger_error($this->driver->get_error());
+		}
+	}
+	
+	public function get_insert_string($data){
+		$str = array();
+		
+		foreach($data as $key => $value){
+			$str[] = "`$key`='$value'";
+		}
+		
+		return implode(',', $str);
+	}
+	
 	public function escape($value) {
 		return $this->driver->escape($value);
 	}

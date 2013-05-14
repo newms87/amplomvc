@@ -6,7 +6,6 @@ class ControllerCheckoutBlockNewAddress extends Controller {
       $this->template->load('checkout/block/new_address');
       
       //New Address Form
-      $this->template->load_template_option('checkout/block/address');
       
       $form = $this->template->get_form('address');
       
@@ -38,8 +37,7 @@ class ControllerCheckoutBlockNewAddress extends Controller {
 		}
 		
 		if (!$json) {
-			$this->template->load_template_option('checkout/block/address');
-         
+			
          //Validate the payment address
          $form = $this->template->get_form('address');
          

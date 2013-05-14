@@ -129,6 +129,10 @@ final class mysqlidb implements Database{
 		return true;
 	}
 	
+	public function set_autoincrement($table, $value){
+		return $this->query("ALTER TABLE " . DB_PREFIX . "$table AUTO_INCREMENT=" . (int)$value . "");
+	}
+	
 	public function escape($value) {
 		return $this->mysqli->real_escape_string($value);
 	}

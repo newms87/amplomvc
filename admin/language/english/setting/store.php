@@ -4,11 +4,11 @@ $_['heading_title']            = 'Settings';
 
 //Data
 $_['data_stock_display_types'] = array(
-     'hide' => "Do not display stock",
-      'status' => "Only show stock status",
-      -1 => "Display stock quantity available",
-      10 => "Display quantity up to 10"
-   );
+	'hide' 	=> "Do not display stock",
+	'status' => "Only show stock status",
+	-1 		=> "Display stock quantity available",
+	10 		=> "Display quantity up to 10",
+);
    
 // Text
 $_['text_success']             = 'Success: You have modified settings!';
@@ -17,6 +17,10 @@ $_['text_browse']              = 'Browse Files';
 $_['text_clear']               = 'Clear Image';
 $_['text_shipping']            = 'Shipping Address';
 $_['text_payment']             = 'Payment Address';
+$_['text_settings_menu']		= 'Settings Menu';
+
+//Button
+$_['button_admin_settings'] = "General Settings";
 
 // Column
 $_['column_name']              = 'Store Name';
@@ -35,7 +39,7 @@ $_['entry_fax']                = 'Fax:';
 $_['entry_title']              = 'Title:';
 $_['entry_meta_description']   = 'Meta Tag Description:';
 $_['entry_layout']             = 'Default Layout:';
-$_['entry_template']           = 'Template:';
+$_['entry_theme']           = 'Theme:';
 $_['entry_country']            = 'Country:';
 $_['entry_zone']               = 'Region / State:';
 $_['entry_language']           = 'Language:';
@@ -69,14 +73,16 @@ $_['entry_image_cart']         = 'Cart Image Size:';
 $_['entry_use_ssl']            = 'Use SSL:<br /><span class="help">To use SSL check with your host if a SSL certificate is installed.</span>';
 
 // Error
+$_['error_store_invalid']            = 'You attempted to access a store that does not exist!';
 $_['error_warning']            = 'Warning: Please check the form carefully for errors!';
 $_['error_permission']         = 'Warning: You do not have permission to modify stores!';
-$_['error_name']               = 'Store Name must be between 3 and 32 characters!';
+$_['error_name']               = 'Store Name must be between 1 and 64 characters!';
 $_['error_owner']              = 'Store Owner must be between 3 and 64 characters!';
 $_['error_address']            = 'Store Address must be between 10 and 256 characters!';
 $_['error_email']              = 'E-Mail Address does not appear to be valid!';
 $_['error_telephone']          = 'Telephone must be between 3 and 32 characters!';
-$_['error_url']                = 'Store URL required!';
+$_['error_url']                = 'Store URL invalid! Please provide a properly formatted URL (eg: http://yourstore.com)';
+$_['error_ssl']                = 'Store SSL invalid!  Please provide a properly formatted URL (eg: http://yourstore.com). NOTE: you may set this to the same value as URL, does not have to be HTTPS protocol.';
 $_['error_title']              = 'Title must be between 3 and 32 characters!';
 $_['error_limit']       	   = 'Limit required!';
 $_['error_image_thumb']        = 'Product Image Thumb Size dimensions required!';

@@ -53,6 +53,8 @@ class ControllerCheckoutBlockPaymentMethod extends Controller {
 			$this->data['agree'] = '';
 		}
       
+		$this->data['validate_payment_method'] = $this->url->link('checkout/block/payment_method/validate');
+		
 		$this->response->setOutput($this->render());
   	}
 	

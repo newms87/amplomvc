@@ -34,7 +34,7 @@ class ControllerLocalisationStockStatus extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 						
-      		$this->redirect($this->url->link('localisation/stock_status', $url));
+      		$this->url->redirect($this->url->link('localisation/stock_status', $url));
 		}
 	
     	$this->getForm();
@@ -64,7 +64,7 @@ class ControllerLocalisationStockStatus extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->redirect($this->url->link('localisation/stock_status', $url));
+			$this->url->redirect($this->url->link('localisation/stock_status', $url));
     	}
 	
     	$this->getForm();
@@ -96,7 +96,7 @@ class ControllerLocalisationStockStatus extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->redirect($this->url->link('localisation/stock_status', $url));
+			$this->url->redirect($this->url->link('localisation/stock_status', $url));
    		}
 	
     	$this->getList();

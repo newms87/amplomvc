@@ -18,7 +18,7 @@
         </div>
         <? } ?>
         <? if ($product['rating']) { ?>
-        <div class="rating"><img src="catalog/view/theme/default/image/stars-<?= $product['rating']; ?>.png" alt="<?= $product['reviews']; ?>" /></div>
+        <div class="rating"><img src="<?= HTTP_THEME_IMAGE . "stars-$product[rating].png"; ?>" alt="<?= $product['reviews']; ?>" /></div>
         <? } ?>
         <div class="cart"><input type="button" value="<?= $button_cart; ?>" onclick="addToCart('<?= $product['product_id']; ?>');" class="button" /></div>
       </div>

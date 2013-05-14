@@ -10,7 +10,7 @@ class ControllerBlockModulePress extends Controller {
 		$thumb_width = $this->config->get('config_image_default_width');
 		$thumb_height = $this->config->get('config_image_default_height');
 		
-		$this->data['no_image'] = $this->image->resize('data/no_image.jpg', $thumb_width, $thumb_height);
+		$this->data['no_image'] = $this->image->resize('data/no_image.png', $thumb_width, $thumb_height);
 		$this->data['thumb_width'] = $thumb_width;
 		$this->data['thumb_height'] = $thumb_height;
 		

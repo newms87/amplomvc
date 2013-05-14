@@ -21,7 +21,7 @@ class Draw {
    function __construct($registry){
       $this->config = $registry->get('config');
       
-      $this->font_path = defined("IS_ADMIN") ? DIR_APPLICATION . "view/fonts/" : DIR_TEMPLATE . $this->config->get('config_template') . '/fonts/';
+      $this->font_path = defined("IS_ADMIN") ? DIR_APPLICATION . "view/fonts/" : DIR_THEME . $this->config->get('config_theme') . '/fonts/';
       
       $this->set_canvas('default');
    }

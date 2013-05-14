@@ -19,7 +19,7 @@ class ControllerSettingUrlAlias extends Controller {
 	  		
 			$this->message->add('success', $this->_('text_success'));
 			
-			$this->redirect($this->url->link('setting/url_alias'));
+			$this->url->redirect($this->url->link('setting/url_alias'));
     	}
 	
     	$this->getForm();
@@ -35,7 +35,7 @@ class ControllerSettingUrlAlias extends Controller {
 			
 			$this->message->add('success', $this->_('text_success'));
 			
-			$this->redirect($this->url->link('setting/url_alias', 'store_id=' . $_GET['store_id']));
+			$this->url->redirect($this->url->link('setting/url_alias', 'store_id=' . $_GET['store_id']));
 		}
 
     	$this->getForm();
@@ -53,7 +53,7 @@ class ControllerSettingUrlAlias extends Controller {
 
 			$this->message->add('success', $this->_('text_success'));
 			
-			$this->redirect($this->url->link('setting/url_alias'));
+			$this->url->redirect($this->url->link('setting/url_alias'));
 		}
 
     	$this->getList();
@@ -73,16 +73,17 @@ class ControllerSettingUrlAlias extends Controller {
 		$aliases = $this->model_setting_url_alias->getUrlAliases();
  
     	foreach ($aliases as &$alias) {
-			$action = array(
+			$alias['action'] = array(
 				'text' => $this->_('text_edit'),
 				'href' => $this->url->link('setting/url_alias/update', 'url_alias_id=' . $alias['url_alias_id'])
 			);
-         
+			
          $alias['selected'] = isset($_POST['selected']) && in_array($result['url_alias_id'], $_POST['selected']);
-			$alias['action']   = $action;
 		}
       
       $this->data['aliases'] = $aliases;
+		
+		$this->data['data_stores'] = $this->model_setting_store->getStores();
 	
 		$this->children = array(
 			'common/header',

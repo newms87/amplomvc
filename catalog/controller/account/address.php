@@ -5,7 +5,7 @@ class ControllerAccountAddress extends Controller {
     	if (!$this->customer->isLogged()) {
 	  		$this->session->data['redirect'] = $this->url->link('account/address');
 
-	  		$this->redirect($this->url->link('account/login')); 
+	  		$this->url->redirect($this->url->link('account/login')); 
     	}
 	
     	$this->language->load('account/address');
@@ -19,7 +19,7 @@ class ControllerAccountAddress extends Controller {
     	if (!$this->customer->isLogged()) {
 	  		$this->session->data['redirect'] = $this->url->link('account/address');
 
-	  		$this->redirect($this->url->link('account/login')); 
+	  		$this->url->redirect($this->url->link('account/login')); 
     	} 
 
     	$this->language->load('account/address');
@@ -31,7 +31,7 @@ class ControllerAccountAddress extends Controller {
 			
       		$this->message->add('success', $this->_('text_insert'));
 
-	  		$this->redirect($this->url->link('account/address'));
+	  		$this->url->redirect($this->url->link('account/address'));
     	} 
 	  	
 		$this->getForm();
@@ -41,7 +41,7 @@ class ControllerAccountAddress extends Controller {
     	if (!$this->customer->isLogged()) {
 	  		$this->session->data['redirect'] = $this->url->link('account/address');
 
-	  		$this->redirect($this->url->link('account/login')); 
+	  		$this->url->redirect($this->url->link('account/login')); 
     	} 
 		
     	$this->language->load('account/address');
@@ -63,7 +63,7 @@ class ControllerAccountAddress extends Controller {
 			
 			$this->message->add('success', $this->_('text_update'));
 	  
-	  		$this->redirect($this->url->link('account/address'));
+	  		$this->url->redirect($this->url->link('account/address'));
     	} 
 	  	
 		$this->getForm();
@@ -73,7 +73,7 @@ class ControllerAccountAddress extends Controller {
     	if (!$this->customer->isLogged()) {
 	  		$this->session->data['redirect'] = $this->url->link('account/address');
 
-	  		$this->redirect($this->url->link('account/login')); 
+	  		$this->url->redirect($this->url->link('account/login')); 
     	} 
 			
     	$this->language->load('account/address');
@@ -97,7 +97,7 @@ class ControllerAccountAddress extends Controller {
 			
 			$this->message->add('success', $this->_('text_delete'));
 	  
-	  		$this->redirect($this->url->link('account/address'));
+	  		$this->url->redirect($this->url->link('account/address'));
     	}
 	
 		$this->getList();	

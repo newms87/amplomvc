@@ -6,7 +6,7 @@ class ControllerAccountWishList extends Controller {
     	if (!$this->customer->isLogged()) {
 	  		$this->session->data['redirect'] = $this->url->link('account/wishlist');
 
-	  		$this->redirect($this->url->link('account/login')); 
+	  		$this->url->redirect($this->url->link('account/login')); 
     	}    	
 		
 		$this->language->load('account/wishlist');
@@ -24,7 +24,7 @@ class ControllerAccountWishList extends Controller {
 		
 			$this->message->add('success', $this->_('text_remove'));
 		
-			$this->redirect($this->url->link('account/wishlist'));
+			$this->url->redirect($this->url->link('account/wishlist'));
 		}
 						
 		$this->document->setTitle($this->_('heading_title'));	

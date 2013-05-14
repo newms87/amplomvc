@@ -5,7 +5,7 @@ $_['heading_title']					 = 'PayPal Standard';
 // Text
 $_['text_payment']					 = 'Pago';
 $_['text_success']					 = 'Éxito: has modificado detalles de cuenta de Paypal!';
-$_['text_pp_standard']				 = '<a onclick="window.open(\'https://www.paypal.com/uk/mrb/pal=W9TBB5DTD6QJW\');"><img src="view/image/payment/paypal.png" alt="PayPal" title="PayPal" style="border: 1px solid #EEEEEE;" /></a>';
+$_['text_pp_standard']				 = '<a onclick="window.open(\'https://www.paypal.com/uk/mrb/pal=W9TBB5DTD6QJW\');"><img src="view/theme/default/image/payment/paypal.png" alt="PayPal" title="PayPal" style="border: 1px solid #EEEEEE;" /></a>';
 $_['text_authorization']			 = 'Autorización';
 $_['text_sale']						 = 'Venta';
 

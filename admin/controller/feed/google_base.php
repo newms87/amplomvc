@@ -14,7 +14,7 @@ class ControllerFeedGoogleBase extends Controller {
 			
 			$this->message->add('success', $this->_('text_success'));
 
-			$this->redirect($this->url->link('extension/feed'));
+			$this->url->redirect($this->url->link('extension/feed'));
 		}
 
  		if (isset($this->error['warning'])) {
@@ -37,7 +37,7 @@ class ControllerFeedGoogleBase extends Controller {
 			$this->data['google_base_status'] = $this->config->get('google_base_status');
 		}
 		
-		$this->data['data_feed'] = HTTP_CATALOG . 'index.php?route=feed/google_base';
+		$this->data['data_feed'] = SITE_URL . 'index.php?route=feed/google_base';
 
 		$this->children = array(
 			'common/header',

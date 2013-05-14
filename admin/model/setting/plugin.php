@@ -17,20 +17,13 @@ class ModelSettingPlugin extends Model {
    public function install($name, $controller_adapters, $db_requests) {
    	$this->cache->delete('plugin');
 		
-		$stores = $this->model_setting_store->getStores();
-		
       $this->delete('plugin', array('name'=>$name));
-      
-      //Activate this plugin for all stores
-      foreach($stores as $store){
-         $plugin['name']         = $name;
-         $plugin['store_id']     = $store['store_id'];
-         $plugin['status']       = 1;
-         
-         $this->insert('plugin', $plugin);
-      }
-      
 		
+      $plugin['name']         = $name;
+      $plugin['status']       = 1;
+      
+      $this->insert('plugin', $plugin);
+   	
 		//Controller Adapters
 		$this->delete('plugin_controller_adapter', array('name' => $name));
 		
@@ -155,7 +148,6 @@ class ModelSettingPlugin extends Model {
          $plugin['plugin_path'] = $this->db->escape($data['plugin_path']);
          $plugin['base_type'] = $this->db->escape($data['base_type']);
          $plugin['route'] = $this->db->escape($data['route']);
-         $plugin['store_id'] = (int)$data['store_id'];
          $plugin['class_path'] = $this->db->escape($data['class_path']);
          $plugin['type'] = $this->db->escape($data['type']);
          $plugin['hooks'] = $data['hooks']?serialize($data['hooks']):'';

@@ -12,7 +12,7 @@
         <b><?= $text_products; ?></b> <?= $order['products']; ?></div>
       <div><b><?= $text_customer; ?></b> <?= $order['name']; ?><br />
         <b><?= $text_total; ?></b> <?= $order['total']; ?></div>
-      <div class="order-info"><a href="<?= $order['href']; ?>"><img src="catalog/view/theme/default/image/info.png" alt="<?= $button_view; ?>" title="<?= $button_view; ?>" /></a>&nbsp;&nbsp;<a href="<?= $order['reorder']; ?>"><img src="catalog/view/theme/default/image/reorder.png" alt="<?= $button_reorder; ?>" title="<?= $button_reorder; ?>" /></a></div>
+      <div class="order-info"><a href="<?= $order['href']; ?>"><img src="<?= HTTP_THEME_IMAGE . 'info.png'; ?>" alt="<?= $button_view; ?>" title="<?= $button_view; ?>" /></a>&nbsp;&nbsp;<a href="<?= $order['reorder']; ?>"><img src="<?= HTTP_THEME_IMAGE . 'reorder.png'; ?>" alt="<?= $button_reorder; ?>" title="<?= $button_reorder; ?>" /></a></div>
     </div>
   </div>
   <? } ?>

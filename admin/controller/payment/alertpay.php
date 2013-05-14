@@ -14,7 +14,7 @@ class ControllerPaymentAlertPay extends Controller {
 			
 			$this->message->add('success', $this->_('text_success'));
 
-			$this->redirect($this->url->link('extension/payment'));
+			$this->url->redirect($this->url->link('extension/payment'));
 		}
 
   		if (isset($this->error['warning'])) {
@@ -55,7 +55,7 @@ class ControllerPaymentAlertPay extends Controller {
 			$this->data['alertpay_security'] = $this->config->get('alertpay_security');
 		}
 		
-		$this->data['callback'] = HTTP_CATALOG . 'index.php?route=payment/alertpay/callback';
+		$this->data['callback'] = SITE_URL . 'index.php?route=payment/alertpay/callback';
 		
 		if (isset($_POST['alertpay_total'])) {
 			$this->data['alertpay_total'] = $_POST['alertpay_total'];

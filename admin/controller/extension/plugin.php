@@ -2,12 +2,24 @@
 class ControllerExtensionPlugin extends Controller {
    
 	public function index() {
-		$this->template->load('extension/plugin');
-
 	   $this->load->language('extension/plugin');
 		 
-		$this->document->setTitle($this->_('heading_title')); 
-      
+		$this->document->setTitle($this->_('heading_title'));
+		
+		$this->getList();
+	}
+	
+	public function update(){
+		$this->load->language('extension/plugin');
+		 
+		$this->document->setTitle($this->_('heading_title'));
+		
+		$this->getForm();
+	}
+	
+	public function getList(){
+		$this->template->load('extension/plugin');
+		
       $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
       $this->breadcrumb->add($this->_('heading_title'), $this->url->link('extension/plugin'));
       
@@ -27,7 +39,7 @@ class ControllerExtensionPlugin extends Controller {
             if(in_array($dir,$installed_plugins)){
    				$action[] = array(
    					'text' => $this->_('text_edit'),
-   					'href' => $this->url->link('extension/plugin/form', 'name='.$dir)
+   					'href' => $this->url->link('extension/plugin/update', 'name='.$dir)
    				);
                $action[] = array(
                   'text' => $this->_('text_uninstall'),
@@ -56,14 +68,12 @@ class ControllerExtensionPlugin extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-   public function form(){
+   public function getForm(){
 		$this->template->load('extension/plugin_form');
-
-      $this->load->language('extension/plugin');
       
       if(!isset($_GET['name'])){
          $this->message->add('warning', $this->_('error_no_plugin'));
-         $this->redirect($this->url->link('extension/plugin'));
+         $this->url->redirect($this->url->link('extension/plugin'));
       }
       $plugin_name = $_GET['name'];
        
@@ -80,8 +90,6 @@ class ControllerExtensionPlugin extends Controller {
       }
       
       $this->data['name'] = $plugin_name;
-      
-      $this->data['data_stores'] = array(''=>'All') + $this->model_setting_store->getStores();
 
       $this->data['action'] = $this->url->link('extension/plugin/update','name='.$plugin_name); 
       $this->data['cancel'] = $this->url->link('extension/plugin');
@@ -101,7 +109,7 @@ class ControllerExtensionPlugin extends Controller {
 
       if(!isset($_GET['name'])){
          $this->message->add('warning', $this->_('error_no_plugin'));
-         $this->redirect($this->url->link('extension/plugin'));
+         $this->url->redirect($this->url->link('extension/plugin'));
       }
 
       $this->document->setTitle($this->_('heading_title'));
@@ -111,10 +119,10 @@ class ControllerExtensionPlugin extends Controller {
          
          $this->message->add('success', $this->_('text_success'));
          
-         $this->redirect($this->url->link('extension/plugin'));
+         $this->url->redirect($this->url->link('extension/plugin'));
       }
 
-      $this->form();
+      $this->getForm();
    }
    
    public function install(){

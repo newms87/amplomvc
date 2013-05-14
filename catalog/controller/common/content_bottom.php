@@ -43,7 +43,7 @@ class ControllerCommonContentBottom extends Controller {
 			}
 		}
 
-
+		//Load Blocks associated with this position
 		$blocks = $this->model_block_block->getBlocksForPosition('content_bottom');
 		
 		$this->data['blocks'] = array();

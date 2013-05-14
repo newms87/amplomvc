@@ -717,9 +717,9 @@ class Cart {
       $data['store_name'] = $this->config->get('config_name');
       
       if ($data['store_id']) {
-         $data['store_url'] = $this->config->get('config_url');      
+         $data['store_url'] = $this->config->get('config_url');
       } else {
-         $data['store_url'] = HTTP_SERVER;
+         $data['store_url'] = SITE_URL;
       }
       
       $totals = $this->getTotals();

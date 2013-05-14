@@ -9,30 +9,38 @@ class ControllerModuleBlockSidebar extends Controller {
 	
 		$menu_items[0] = array(
 			'name' => $this->_('text_name_all'),
-			'href' => $this->url->link("product/category"),
+			'href' => $this->url->link("product/collection"),
 		);
 		
-		$categories = $this->model_catalog_category->getAllCategories();
+		$collections = $this->model_catalog_collection->getCollectionCategories();
 		
-		$menu_items += $this->build_category_menu($categories);
+		$menu_items += $this->build_collection_menu($collections);
 		
 		$this->data['menu_items'] = $menu_items;
 		
 		$this->render();
 	}
 
-	private function build_category_menu($categories){
-		foreach($categories as $category){
-			$category_menu[$category['category_id']] = array(
-				'name' => $category['name'],
-				'href' => $this->url->link('product/category', 'category_id=' . $category['category_id']),
+	private function build_collection_menu($collections){
+		$collection_menu = array();
+		$parents = array();
+		
+		//NOTE: This is only a 2 level menu
+		foreach($collections as $collection){
+			
+			$menu_item = array(
+				'name' => $collection['name'],
+				'href' => $this->url->link('product/collection', 'collection_id=' . $collection['collection_id'] . '&' . $collection['category_id']),
 			);
 			
-			if(!empty($category['children'])){
-				$category_menu[$category['category_id']]['children'] = $this->build_category_menu($category['children']);
+			if((int)$collection['parent_id'] == 0){
+				$parents[$collection['category_id']] = $menu_item;
+			}
+			else{
+				$parents[$collection['parent_id']]['children'][] = $menu_item;
 			}
 		}
 		
-		return $category_menu;
+		return $parents;
 	}
 }

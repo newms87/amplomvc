@@ -26,9 +26,9 @@ class ControllerUserUser extends Controller {
 			$url = $this->get_url();
 						
 			if($this->user->isAdmin())
-            $this->redirect($this->url->link('user/user', $url));
+            $this->url->redirect($this->url->link('user/user', $url));
          else
-            $this->redirect($this->url->link('common/home', $url));
+            $this->url->redirect($this->url->link('common/home', $url));
     	}
 	
     	$this->getForm();
@@ -46,11 +46,11 @@ class ControllerUserUser extends Controller {
          
          if($this->user->isDesigner()){
             $this->message->add('success', $this->_('text_success_portal'));
-            $this->redirect($this->url->link('common/home', $url));
+            $this->url->redirect($this->url->link('common/home', $url));
          }
          else{
 			   $this->message->add('success', $this->_('text_success'));
-            $this->redirect($this->url->link('user/user', $url));
+            $this->url->redirect($this->url->link('user/user', $url));
          }  
     	}
 	
@@ -74,7 +74,7 @@ class ControllerUserUser extends Controller {
 			
 			$url = $this->get_url();
 			
-			$this->redirect($this->url->link('user/user', $url));
+			$this->url->redirect($this->url->link('user/user', $url));
     	}
 	
     	$this->getList();
@@ -82,7 +82,7 @@ class ControllerUserUser extends Controller {
 
   	private function getList() {
   	   if($this->user->isDesigner()){
-  	      $this->redirect($this->url->link('common/home'));
+  	      $this->url->redirect($this->url->link('common/home'));
       }
       
       $this->template->load('user/user_list');
@@ -321,7 +321,7 @@ class ControllerUserUser extends Controller {
          $user_id = isset($user_id) ? $user_id : (isset($_GET['user_id']) ? $_GET['user_id'] : 0);
          if($user_id != $this->user->getId()){
             $this->message->add('warning', $this->_('error_wrong_user'));
-            $this->redirect($this->url->link("common/home"));
+            $this->url->redirect($this->url->link("common/home"));
          }
       }
    }

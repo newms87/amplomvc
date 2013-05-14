@@ -95,7 +95,7 @@ class ControllerExtensionPayment extends Controller {
 		if (!$this->user->hasPermission('modify', 'extension/payment')) {
 			$this->session->data['error'] = $this->_('error_permission'); 
 			
-			$this->redirect($this->url->link('extension/payment'));
+			$this->url->redirect($this->url->link('extension/payment'));
 		} else {
 			$this->model_setting_extension->install('payment', $_GET['extension']);
 
@@ -111,7 +111,7 @@ class ControllerExtensionPayment extends Controller {
 				$class->install();
 			}
 			
-			$this->redirect($this->url->link('extension/payment'));
+			$this->url->redirect($this->url->link('extension/payment'));
 		}
 	}
 	
@@ -119,7 +119,7 @@ class ControllerExtensionPayment extends Controller {
 		if (!$this->user->hasPermission('modify', 'extension/payment')) {
 			$this->session->data['error'] = $this->_('error_permission'); 
 			
-			$this->redirect($this->url->link('extension/payment'));
+			$this->url->redirect($this->url->link('extension/payment'));
 		} else {		
 			$this->model_setting_extension->uninstall('payment', $_GET['extension']);
 		
@@ -134,7 +134,7 @@ class ControllerExtensionPayment extends Controller {
 				$class->uninstall();
 			}
 		
-			$this->redirect($this->url->link('extension/payment'));	
+			$this->url->redirect($this->url->link('extension/payment'));	
 		}			
 	}
 }

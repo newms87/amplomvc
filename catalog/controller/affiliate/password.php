@@ -8,7 +8,7 @@ class ControllerAffiliatePassword extends Controller {
     	if (!$this->affiliate->isLogged()) {
       		$this->session->data['redirect'] = $this->url->link('affiliate/password');
 
-      		$this->redirect($this->url->link('affiliate/login'));
+      		$this->url->redirect($this->url->link('affiliate/login'));
     	}
 
 		$this->language->load('affiliate/password');
@@ -20,7 +20,7 @@ class ControllerAffiliatePassword extends Controller {
  
       		$this->message->add('success', $this->_('text_success'));
 	  
-	  		$this->redirect($this->url->link('affiliate/account'));
+	  		$this->url->redirect($this->url->link('affiliate/account'));
     	}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));

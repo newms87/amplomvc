@@ -71,7 +71,7 @@
            <? if($product['is_final']){?>
               <div class='final_sale_small'><span class='final_sale'></span></div>
            <? }else{?>
-              <a href="<?= $product['return']; ?>"><img src="catalog/view/theme/default/image/return.png" alt="<?= $button_return; ?>" title="<?= $button_return; ?>" /></a></td>
+              <a href="<?= $product['return']; ?>"><img src="<?= HTTP_THEME_IMAGE . 'return.png'; ?>" alt="<?= $button_return; ?>" title="<?= $button_return; ?>" /></a></td>
            <? }?>
       </tr>
       <? } ?>

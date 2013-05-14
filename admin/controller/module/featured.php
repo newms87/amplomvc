@@ -19,7 +19,7 @@ class ControllerModuleFeatured extends Controller {
 			
 			$this->message->add('success', $this->_('text_success'));
 			
-			$this->redirect($this->url->link('module/featured'));
+			$this->url->redirect($this->url->link('module/featured'));
 		}
       
       $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));

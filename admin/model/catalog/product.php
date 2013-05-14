@@ -679,15 +679,11 @@ class ModelCatalogProduct extends Model {
       $where = "WHERE 1";
       
       if(isset($data['pd.name'])){
-         $where .= " AND pd.name like '%" . $this->db->escape($data['pd.name']) . "%'";
+         $where .= " AND LCASE(pd.name) like '%" . strtolower($this->db->escape($data['pd.name'])) . "%'";
       }
 		
 		if(isset($data['p.model'])){
-         $where .= " AND p.model like '%" . $this->db->escape($data['p.model']) . "%'";
-      }
-		
-		if(isset($data['p.model'])){
-         $where .= " AND p.model like '%" . $this->db->escape($data['p.model']) . "%'";
+         $where .= " AND LCASE(p.model) like '%" . strtolower($this->db->escape($data['p.model'])) . "%'";
       }
 		
 		if(!empty($data['categories'])){
@@ -707,7 +703,7 @@ class ModelCatalogProduct extends Model {
 			$from .= " LEFT JOIN " . DB_PREFIX . "manufacturer m ON(m.manufacturer_id=p.manufacturer_id)";
 			
 			if(!empty($data['m.name'])){
-				$where  .= " AND m.name = '" . $this->db->escape($data['m.name']) . "'";
+				$where  .= " AND LCASE(m.name) = '" . strtolower($this->db->escape($data['m.name'])) . "'";
 			}
       }
       

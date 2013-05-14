@@ -42,7 +42,7 @@ $('#button-quote').live('click', function() {
       dataType: 'json',    
       beforeSend: function() {
          $('#button-quote').attr('disabled', true);
-         $('#button-quote').after('<span class="wait">&nbsp;<img src="catalog/view/theme/default/image/loading.gif" alt="" /></span>');
+         $('#button-quote').after('<span class="wait">&nbsp;<img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /></span>');
       },
       complete: function() {
          $('#button-quote').attr('disabled', false);
