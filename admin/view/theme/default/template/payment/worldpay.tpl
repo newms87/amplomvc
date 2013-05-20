@@ -13,14 +13,14 @@
       <form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
         <table class="form">
           <tr>
-            <td><span class="required">*</span> <?= $entry_merchant; ?></td>
+            <td><span class="required"></span> <?= $entry_merchant; ?></td>
             <td><input type="text" name="worldpay_merchant" value="<?= $worldpay_merchant; ?>" />
               <? if ($error_merchant) { ?>
               <span class="error"><?= $error_merchant; ?></span>
               <? } ?></td>
           </tr>
           <tr>
-            <td><span class="required">*</span> <?= $entry_password; ?></td>
+            <td><span class="required"></span> <?= $entry_password; ?></td>
             <td><input type="text" name="worldpay_password" value="<?= $worldpay_password; ?>" />
               <? if ($error_password) { ?>
               <span class="error"><?= $error_password; ?></span>

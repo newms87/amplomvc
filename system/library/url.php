@@ -30,7 +30,7 @@ class Url {
       return $this->registry->get($key);
    }
    
-   public function current_page(){
+   public function here(){
       $protocol = $this->is_ssl() ? 'https://':'http://';
       return $protocol . $_SERVER['SERVER_NAME'] . preg_replace('/&amp;/','%26',$_SERVER['REQUEST_URI']);
    }
@@ -309,23 +309,24 @@ class Url {
       $url = $this->store_base($store_id);
       
       if(empty($alias_keyword)){
-      	if($query){
-	      	parse_str($query, $args);
-				
-	      	if(isset($args['route'])){
-					unset($args['route']);
-				}
-				if(isset($args['_route_'])){
-					unset($args['_route_']);
-				}
-				
+      	
+      	parse_str($query, $args);
+			
+      	if(isset($args['route'])){
+				unset($args['route']);
+			}
+			if(isset($args['_route_'])){
+				unset($args['_route_']);
+			}
+			
+			if($query){
 				$query = '&' . http_build_query($args);
 			}
 			else{
 				$query = '';
 			}
 			
-         return $url . 'index.php?route=' . $route . $query;
+         return $url . 'index.php?route=' . rtrim($route . $query, '&');
       }else{
          return $url . $alias_keyword . ($alias_query ? '?' . $alias_query : '');
       }

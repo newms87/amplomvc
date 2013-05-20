@@ -11,7 +11,7 @@
       <form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
         <table class="form">
           <tr>
-            <td><span class="required">*</span> <?= $entry_name; ?></td>
+            <td><span class="required"></span> <?= $entry_name; ?></td>
             <td>
               <? foreach ($languages as $language) { ?>
                  <input type="text" name="option_description[<?= $language['language_id']; ?>][name]" value="<?= isset($option_description[$language['language_id']]) ? $option_description[$language['language_id']]['name'] : ''; ?>" />
@@ -20,7 +20,7 @@
             </td>
           </tr>
           <tr>
-            <td><span class="required">*</span> <?= $entry_display_name; ?></td>
+            <td><span class="required"></span> <?= $entry_display_name; ?></td>
             <td>
               <? foreach ($languages as $language) { ?>
                  <input type="text" name="option_description[<?= $language['language_id']; ?>][display_name]" value="<?= isset($option_description[$language['language_id']]) ? $option_description[$language['language_id']]['display_name'] : ''; ?>" />
@@ -44,7 +44,7 @@
         <table id="option-value" class="list">
           <thead>
             <tr>
-              <td class="left"><span class="required">*</span> <?= $entry_value; ?></td>
+              <td class="left"><span class="required"></span> <?= $entry_value; ?></td>
               <td class="left"><?= $entry_image; ?></td>
               <td class="right"><?= $entry_sort_order; ?></td>
               <td></td>

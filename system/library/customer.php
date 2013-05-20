@@ -159,17 +159,13 @@ class Customer {
 	public function logout() {
 		$this->db->query("UPDATE " . DB_PREFIX . "customer SET cart = '" . $this->db->escape(isset($this->session->data['cart']) ? serialize($this->session->data['cart']) : '') . "', wishlist = '" . $this->db->escape(isset($this->session->data['wishlist']) ? serialize($this->session->data['wishlist']) : '') . "' WHERE customer_id = '" . (int)$this->customer_id . "'");
 		
-		unset($this->session->data['customer_id']);
-
-		$this->customer_id = '';
-      
-		if($this->information){
-	      foreach($this->information as &$i){
-	         $i = '';
-	      }
-      }
+		$this->session->end();
 		
-		//TODO: REMOVE THIS
+		$this->customer_id = null;
+      
+		$this->information = array();
+		
+		//TODO: REMOVE THIS?
 		$this->message->add('notify', "Logged Out");
   	}
   
@@ -288,22 +284,6 @@ class Customer {
       return true;
    }
    
-   public function verifyPaymentInfo(){
-      if(!$this->payment_info || empty($this->payment_info['address_id'])) return false;
-      
-      $query = $this->db->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . "address WHERE address_id = '" . $this->db->escape($this->payment_info['address_id']) . "' AND customer_id = '$this->customer_id'");
-      
-      if(!$query->row['total']){
-         $this->delete_setting('payment_info_' . $this->payment_info['payment_code']);
-         
-         //if the payment info has not been set, we use our default shipping address for now
-         $this->payment_info = $this->information['address_id'];
-         
-         return $address_id;
-      }
-      
-      return true;
-   }
    
    public function getPaymentInfo($key = null){
       if($key && isset($this->payment_info[$key])){

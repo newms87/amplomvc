@@ -15,7 +15,7 @@
         <thead>
           <tr>
             <td class="left"><?= $entry_banner; ?></td>
-            <td class="left"><span class="required">*</span> <?= $entry_dimension; ?></td>
+            <td class="left"><span class="required"></span> <?= $entry_dimension; ?></td>
             <td class="left"><?= $entry_layout; ?></td>
             <td class="left"><?= $entry_position; ?></td>
             <td class="left"><?= $entry_status; ?></td>

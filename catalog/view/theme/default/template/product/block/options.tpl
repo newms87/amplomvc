@@ -4,7 +4,7 @@
   <? foreach ($product_options as $option) { ?>
   <div id="option-<?= $option['product_option_id']; ?>" option_id='<?=$option['product_option_id'];?>' class="option">
      <? if ($option['required']) { ?>
-    <span class="required">*</span>
+    <span class="required"></span>
     <? } ?>
     <b><?= $option['display_name']; ?>:</b><br />
     

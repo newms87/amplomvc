@@ -13,14 +13,14 @@
       <form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
         <table class="form">
           <tr>
-            <td><span class="required">*</span> <?= $entry_vendor; ?></td>
+            <td><span class="required"></span> <?= $entry_vendor; ?></td>
             <td><input type="text" name="sagepay_vendor" value="<?= $sagepay_vendor; ?>" />
               <? if ($error_vendor) { ?>
               <span class="error"><?= $error_vendor; ?></span>
               <? } ?></td>
           </tr>
           <tr>
-            <td><span class="required">*</span> <?= $entry_password; ?></td>
+            <td><span class="required"></span> <?= $entry_password; ?></td>
             <td><input type="text" name="sagepay_password" value="<?= $sagepay_password; ?>" />
               <? if ($error_password) { ?>
               <span class="error"><?= $error_password; ?></span>

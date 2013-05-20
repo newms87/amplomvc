@@ -25,14 +25,14 @@
 				<div id="tab-general">
 					<div id="languages" class="htabs">
 						<? foreach ($languages as $language) { ?>
-						<a href="#language<?= $language['language_id']; ?>"><img src="<?= HTTP_THEME_IMAGE . 'flags/<?= $language['image']; ?>'; ?>" title="<?= $language['name']; ?>" /> <?= $language['name']; ?></a>
+						<a href="#language<?= $language['language_id']; ?>"><img src="<?= HTTP_THEME_IMAGE . "flags/$language[image]"; ?>" title="<?= $language['name']; ?>" /> <?= $language['name']; ?></a>
 						<? } ?>
 					</div>
 					<? foreach ($languages as $language) { ?>
 					<div id="language<?= $language['language_id']; ?>">
 						<table class="form">
 							<tr>
-								<td><span class="required">*</span> <?= $entry_name; ?></td>
+								<td><span class="required"></span> <?= $entry_name; ?></td>
 								<td><input type="text" name="product_description[<?= $language['language_id']; ?>][name]" size="100" value="<?= isset($product_description[$language['language_id']]) ? $product_description[$language['language_id']]['name'] : ''; ?>" /></td>
 							</tr>
 							<tr>
@@ -66,14 +66,14 @@
 				<div id="tab-data">
 					<table class="form">
 						<tr>
-							<td><span class="required">*</span> <?= $entry_model; ?></td>
+							<td><span class="required"></span> <?= $entry_model; ?></td>
 							<td>
 								<input type="text" name="model" value="<?= $model; ?>" />
 								<a class='gen_url' onclick='generate_model(this)'><?=$button_generate_model;?></a>
 							</td>
 						</tr>
 						<tr>
-							<td><span class="required">*</span><?= $entry_keyword; ?></td>
+							<td><span class="required"></span><?= $entry_keyword; ?></td>
 							<td>
 								<input type="text" onfocus='generate_url_warning(this)' name="keyword" value="<?= $keyword; ?>" />
 								<a class='gen_url' onclick='generate_url(this)'><?=$button_generate_url;?></a>
@@ -130,8 +130,8 @@
 						<tr>
 							<td><?= $entry_image; ?></td>
 							<td>
-								<?= $this->builder->set_builder_template('click_image');?>
-						<?= $this->builder->image_input("image", $image, $thumb);?>
+								<?= $this->builder->set_builder_template('click_image'); ?>
+								<?= $this->builder->image_input("image", $image);?>
 							</td>
 						</tr>
 						<tr>
@@ -306,13 +306,16 @@
 								<td>
 										<div class='scrollbox option_value_list clickable'>
 										<? foreach($unused_option_values[$option_id] as $ov) {?>
-												<div onclick="addOptionValue(<?= $option_id;?>,<?=$ov['option_value_id'];?>,'<?= addslashes($ov['name']);?>'); $(this).remove();" ><span class='po_label'><?=$ov['name'];?></span><img src='<?= HTTP_THEME_IMAGE . 'add.png' /></div>
+												<div onclick="addOptionValue(<?= $option_id;?>,<?=$ov['option_value_id'];?>,'<?= addslashes($ov['name']);?>'); $(this).remove();" >
+													<span class='po_label'><?=$ov['name'];?></span>
+													<img src="<?= HTTP_THEME_IMAGE . "add.png"; ?>" />
+												</div>
 										<? }?>
 										</div>
 								</td>
 							</tr>
 						</table>
-						<table id='; ?>"option-value<?= $option_id; ?>" class="list">
+						<table id="option-value<?= $option_id; ?>" class="list">
 							<thead>
 								<tr>
 									<td class="left"><?= $entry_option_value; ?></td>

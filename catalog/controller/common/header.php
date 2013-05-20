@@ -96,7 +96,7 @@ class ControllerCommonHeader extends Controller {
 			$link_cart = array(
 				'name' => 'cart',
 				'display_name' => $this->_('text_shopping_cart'),
-				'href' => $this->url->link('cart/cart', "redirect=" . preg_replace('/redirect=[^&]*/','',$this->url->current_page())),
+				'href' => $this->url->link('cart/cart', "redirect=" . preg_replace('/redirect=[^&]*/','',$this->url->here())),
 				'sort_order' => 2,
 			);
 			

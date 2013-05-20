@@ -375,7 +375,13 @@ abstract class Model {
       
       $data = array_intersect_key($data, $table_model);
   
-      foreach($data as $key=>&$value){
+      foreach($data as $key => &$value){
+      		
+      	if(is_resource($value) || is_array($value) || is_object($value)){
+				trigger_error("Model::escape_value(): The field $key was given a value that was not a valid type! Value: " . gettype($value) . ". " . get_caller(1));
+				exit;
+			}
+			
          switch((int)$table_model[$key]){
             case DB_AUTO_INCREMENT_PK:
             case DB_AUTO_INCREMENT:

@@ -168,7 +168,7 @@ class ControllerMailNewsletter extends Controller {
       $this->pagination->page = $data['page'];
       $this->pagination->limit = $this->config->get('config_admin_limit');
       $this->pagination->text = $this->_('text_pagination');
-      $this->pagination->url = $this->url->link('mail/newsletter', $url . '&page={page}');
+      $this->pagination->url = $this->url->link('mail/newsletter', $url);
          
       $this->data['pagination'] = $this->pagination->render();
       

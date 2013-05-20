@@ -19,28 +19,28 @@
         <div id="tab-general">
           <table class="form">
             <tr>
-              <td><span class="required">*</span> <?= $entry_firstname; ?></td>
+              <td><span class="required"></span> <?= $entry_firstname; ?></td>
               <td><input type="text" name="firstname" value="<?= $firstname; ?>" />
                 <? if ($error_firstname) { ?>
                 <span class="error"><?= $error_firstname; ?></span>
                 <? } ?></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_lastname; ?></td>
+              <td><span class="required"></span> <?= $entry_lastname; ?></td>
               <td><input type="text" name="lastname" value="<?= $lastname; ?>" />
                 <? if ($error_lastname) { ?>
                 <span class="error"><?= $error_lastname; ?></span>
                 <? } ?></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_email; ?></td>
+              <td><span class="required"></span> <?= $entry_email; ?></td>
               <td><input type="text" name="email" value="<?= $email; ?>" />
                 <? if ($error_email) { ?>
                 <span class="error"><?= $error_email; ?></span>
                 <?  } ?></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_telephone; ?></td>
+              <td><span class="required"></span> <?= $entry_telephone; ?></td>
               <td><input type="text" name="telephone" value="<?= $telephone; ?>" />
                 <? if ($error_telephone) { ?>
                 <span class="error"><?= $error_telephone; ?></span>
@@ -55,7 +55,7 @@
               <td><input type="text" name="company" value="<?= $company; ?>" /></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_address_1; ?></td>
+              <td><span class="required"></span> <?= $entry_address_1; ?></td>
               <td><input type="text" name="address_1" value="<?= $address_1; ?>" />
                 <? if ($error_address_1) { ?>
                 <span class="error"><?= $error_address_1; ?></span>
@@ -66,21 +66,21 @@
               <td><input type="text" name="address_2" value="<?= $address_2; ?>" /></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_city; ?></td>
+              <td><span class="required"></span> <?= $entry_city; ?></td>
               <td><input type="text" name="city" value="<?= $city; ?>" />
                 <? if ($error_city) { ?>
                 <span class="error"><?= $error_city ?></span>
                 <?  } ?></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_postcode; ?></td>
+              <td><span class="required"></span> <?= $entry_postcode; ?></td>
               <td><input type="text" name="postcode" value="<?= $postcode; ?>" />
                 <? if ($error_postcode) { ?>
                 <span class="error"><?= $error_postcode ?></span>
                 <?  } ?></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_country; ?></td>
+              <td><span class="required"></span> <?= $entry_country; ?></td>
               <td>
                  <?= $this->builder->set_config('country_id', 'name');?>
                  <?= $this->builder->build('select', $countries, 'country_id', $country_id);?>
@@ -89,14 +89,14 @@
                 <? } ?></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_zone; ?></td>
+              <td><span class="required"></span> <?= $entry_zone; ?></td>
               <td><select zone_id='<?=$zone_id;?>' name="zone_id"></select>
                 <? if ($error_zone) { ?>
                 <span class="error"><?= $error_zone; ?></span>
                 <? } ?></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_code; ?></td>
+              <td><span class="required"></span> <?= $entry_code; ?></td>
               <td><input type="code" name="code" value="<?= $code; ?>"  />
                 <? if ($error_code) { ?>
                 <span class="error"><?= $error_code; ?></span>
@@ -189,11 +189,11 @@
                 <td><input type="text" name="bank_swift_code" value="<?= $bank_swift_code; ?>" /></td>
               </tr>
               <tr>
-                <td><span class="required">*</span> <?= $entry_bank_account_name; ?></td>
+                <td><span class="required"></span> <?= $entry_bank_account_name; ?></td>
                 <td><input type="text" name="bank_account_name" value="<?= $bank_account_name; ?>" /></td>
               </tr>
               <tr>
-                <td><span class="required">*</span> <?= $entry_bank_account_number; ?></td>
+                <td><span class="required"></span> <?= $entry_bank_account_number; ?></td>
                 <td><input type="text" name="bank_account_number" value="<?= $bank_account_number; ?>" /></td>
               </tr>
             </tbody>

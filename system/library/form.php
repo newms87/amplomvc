@@ -7,8 +7,10 @@ class Form {
 	private $action;
    private $method;
 	private $encryption;
+	private $name_format = '';
 	
    private $fields = array();
+	private $disabled_fields = array();
    
 	private $template_file;
 	private $data = array();
@@ -26,9 +28,11 @@ class Form {
 	public function init($form){
 		$this->name = $form;
 		$this->show_tag = true;
+		$this->data = array();
 		$this->action = '';
 		$this->method = 'post';
 		$this->encryption = false;
+		$this->name_format = '';
 		$this->template_file = 'default';
 		
 		$file = DIR_FORM . $form . '.php';
@@ -43,16 +47,32 @@ class Form {
 			
 			include($file);
 			
-			$this->fields = $_;
+			$this->fields = array();
+			
+			//TODO: Sort Order cannot be set before runtime.. is this a limitation?
+			$sort_order = 0;
+			
+			foreach($_ as $key => $field){
+				$this->fields[$key] = $field;
+				$this->fields[$key]['sort_order'] = $sort_order++;
+			}
 		}
 	}
 	
    public function get_errors(){
+   	if($this->name_format){
+   		return $this->tool->name_format($this->name_format, $this->error);
+		}
+		
       return $this->error;
    }
    
 	public function show_form_tag($show = true){
 		$this->show_tag = $show;
+	}
+	
+	public function set_data($data){
+		$this->data = $data;
 	}
 	
 	public function set_action($action){
@@ -65,6 +85,10 @@ class Form {
 	
 	public function set_encryption($encryption){
 		$this->encryption = $encryption;
+	}
+	
+	public function set_name_format($name_format){
+		$this->name_format = $name_format;
 	}
 	
 	public function set_field($field, $data){
@@ -98,6 +122,73 @@ class Form {
          $this->fields[$field][$key] = $value;
       }
    }
+	
+	public function add_field($field){
+		$this->fields[] = $field;
+	}
+	
+	public function add_fields($fields){
+		foreach($fields as $field){
+			$this->add_field($field);
+		}
+	}
+	
+	public function set_fields(){
+		$args = func_get_args();
+		
+		if(empty($args)) return;
+		
+		if(is_array($args[0])){
+			$args = $args[0];
+		}
+		
+		//reset the field list
+		if(!empty($this->disabled_fields)){
+			$this->fields += $this->disabled_fields;
+		}
+		
+		//filter out the fields that are not in the requested list
+		foreach($this->fields as $key => $field){
+			if(!in_array($key, $args)){
+				$this->disabled_fields[$key] = $field;
+				unset($this->fields[$key]);
+			}
+		}
+	}
+	
+	public function enable_fields(){
+		$args = func_get_args();
+		
+		if(empty($args)) return;
+		
+		if(is_array($args[0])){
+			$args = $args[0];
+		}
+		
+		foreach($args as $field){
+			if(isset($this->disabled_fields[$field])){
+				$this->fields[$field] = $this->disabled_fields[$field];
+				unset($this->disabled_fields[$field]);
+			}
+		}
+	}
+	
+	public function disable_fields(){
+		$args = func_get_args();
+		
+		if(empty($args)) return;
+		
+		if(is_array($args[0])){
+			$args = $args[0];
+		}
+		
+		foreach($args as $field){
+			if(isset($this->fields[$field])){
+				$this->disabled_fields[$field] = $this->fields[$field];
+				unset($this->fields[$field]);
+			}
+		}
+	}
    
    public function set_template($file){
       $this->template_file = $this->template->find_file($file);
@@ -105,55 +196,6 @@ class Form {
       if(!$this->template_file){
       	$this->error = "Could not load form template $file!" . get_caller();
          trigger_error($this->error);
-      }
-   }
-   
-   public function fill_data_from(){
-      $args = func_get_args();
-      
-      foreach($this->fields as $key => &$field){
-         foreach($args as $arg_num => $arg){
-               
-            if(isset($field['select'])){
-               break;
-            }
-            
-            if(is_string($arg)){
-               switch($arg){
-                  case 'POST':
-                     if(isset($_POST[$key])){
-                        $field['select'] = $_POST[$key];
-                     }
-                     break;
-                  case 'SESSION':
-                     if(isset($this->request->session[$key])){
-                        $field['select'] = $this->request->session;
-                     }
-                     break;
-                  case 'GET':
-                     if(isset($_GET[$key])){
-                        $field['select'] = $_GET[$key];
-                     }
-                     break;
-                  case 'DEFAULT':
-                     if(isset($field['default'])){
-                        $field['select'] = $field['default'];
-                     }
-                     break;
-                  default:
-                     $field['select'] = $arg;
-                     break;
-               }
-            }
-            elseif(is_array($arg)){
-               if(isset($arg[$key])){
-                  $field['select'] = $arg[$key];
-               }
-            }
-            elseif(!is_null($arg)){
-               $field['select'] = $arg;
-            }
-         }
       }
    }
    
@@ -171,8 +213,6 @@ class Form {
       $action = $this->action;
       $method = $this->method;
 		$fields = $this->fields;
-      
-		extract($this->data);
       
       //render the file
       ob_start();
@@ -194,8 +234,11 @@ class Form {
 				return false;
          }
          
-         if(!isset($field['name'])){
-            $field['name'] = $name;
+			if($this->name_format){
+      		$field['name'] = preg_replace("/%name%/", $name, $this->name_format);
+			}
+			elseif(!isset($field['name'])){
+         	$field['name'] = $name;
          }
          
          if(!isset($field['required'])){
@@ -280,7 +323,9 @@ class Form {
                break;
          }
       }
-
+		
+		uasort($this->fields, function($a,$b){ return $a['sort_order'] > $b['sort_order']; });
+		
 		return true;
    }
 

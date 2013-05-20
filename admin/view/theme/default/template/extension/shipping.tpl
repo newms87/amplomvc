@@ -1,12 +1,6 @@
 <?= $header; ?>
 <div class="content">
   <?= $this->builder->display_breadcrumbs();?>
-  <? if ($success) { ?>
-  <div class="message_box success"><?= $success; ?></div>
-  <? } ?>
-  <? if ($error) { ?>
-  <div class="message_box warning"><?= $error; ?></div>
-  <? } ?>
   <div class="box">
     <div class="heading">
       <h1><img src="<?= HTTP_THEME_IMAGE . 'shipping.png'; ?>" alt="" /> <?= $heading_title; ?></h1>

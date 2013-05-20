@@ -51,7 +51,7 @@ class ControllerAffiliateTransaction extends Controller {
 		$this->pagination->page = $page;
 		$this->pagination->limit = 10; 
 		$this->pagination->text = $this->_('text_pagination');
-		$this->pagination->url = $this->url->link('affiliate/transaction', 'page={page}');
+		$this->pagination->url = $this->url->link('affiliate/transaction');
 			
 		$this->data['pagination'] = $this->pagination->render();
 		

@@ -96,7 +96,6 @@ class ModelCatalogFlashsale extends Model {
       $query = $this->query("SELECT m.manufacturer_id, m.status FROM " . DB_PREFIX . "flashsale_designer fd LEFT JOIN " . DB_PREFIX . "manufacturer m ON(m.manufacturer_id=fd.designer_id) WHERE fd.flashsale_id='" . (int)$flashsale_id . "'");
       foreach($query->rows as $row){
          if(!(int)$row['status']){
-            $this->load->model("catalog/designer");
             $this->model_catalog_designer->setDesignerStatus($row['manufacturer_id'], 1);
          }
       }

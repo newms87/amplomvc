@@ -13,14 +13,14 @@
       <form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
         <table class="form">
           <tr>
-            <td><span class="required">*</span> <?= $entry_login; ?></td>
+            <td><span class="required"></span> <?= $entry_login; ?></td>
             <td><input type="text" name="authorizenet_aim_login" value="<?= $authorizenet_aim_login; ?>" />
               <? if ($error_login) { ?>
               <span class="error"><?= $error_login; ?></span>
               <? } ?></td>
           </tr>
           <tr>
-            <td><span class="required">*</span> <?= $entry_key; ?></td>
+            <td><span class="required"></span> <?= $entry_key; ?></td>
             <td><input type="text" name="authorizenet_aim_key" value="<?= $authorizenet_aim_key; ?>" />
               <? if ($error_key) { ?>
               <span class="error"><?= $error_key; ?></span>

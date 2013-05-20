@@ -13,7 +13,7 @@
       <form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
         <table class="form">
           <tr>
-            <td><span class="required">*</span> <?= $entry_title; ?></td>
+            <td><span class="required"></span> <?= $entry_title; ?></td>
             <td><? foreach ($languages as $language) { ?>
               <input type="text" name="length_class_description[<?= $language['language_id']; ?>][title]" value="<?= isset($length_class_description[$language['language_id']]) ? $length_class_description[$language['language_id']]['title'] : ''; ?>" />
               <img src="<?= HTTP_THEME_IMAGE . 'flags/<?= $language['image']; ?>'; ?>" title="<?= $language['name']; ?>" /><br />
@@ -23,7 +23,7 @@
               <? } ?></td>
           </tr>
           <tr>
-            <td><span class="required">*</span> <?= $entry_unit; ?></td>
+            <td><span class="required"></span> <?= $entry_unit; ?></td>
             <td><? foreach ($languages as $language) { ?>
               <input type="text" name="length_class_description[<?= $language['language_id']; ?>][unit]" value="<?= isset($length_class_description[$language['language_id']]) ? $length_class_description[$language['language_id']]['unit'] : ''; ?>" />
               <img src="<?= HTTP_THEME_IMAGE . 'flags/<?= $language['image']; ?>'; ?>" title="<?= $language['name']; ?>" /><br />

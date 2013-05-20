@@ -13,14 +13,14 @@
       <form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
         <table class="form">
           <tr>
-            <td><span class="required">*</span> <?= $entry_user_id; ?></td>
+            <td><span class="required"></span> <?= $entry_user_id; ?></td>
             <td><input type="text" name="usps_user_id" value="<?= $usps_user_id; ?>" />
               <? if ($error_user_id) { ?>
               <span class="error"><?= $error_user_id; ?></span>
               <? } ?></td>
           </tr>
           <tr>
-            <td><span class="required">*</span> <?= $entry_postcode; ?></td>
+            <td><span class="required"></span> <?= $entry_postcode; ?></td>
             <td><input type="text" name="usps_postcode" value="<?= $usps_postcode; ?>" />
               <? if ($error_postcode) { ?>
               <span class="error"><?= $error_postcode; ?></span>
@@ -419,7 +419,7 @@
               </select></td>
           </tr>
           <tr>
-            <td><span class="required">*</span> <?= $entry_dimension; ?></td>
+            <td><span class="required"></span> <?= $entry_dimension; ?></td>
             <td>
 		      <input type="text" name="usps_length" value="<?= $usps_length; ?>" size="4" />
               <input type="text" name="usps_width" value="<?= $usps_width; ?>" size="4" />

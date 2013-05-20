@@ -13,7 +13,7 @@
       <form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
         <table class="form">
           <tr>
-            <td><span class="required">*</span> <?= $entry_payable; ?></td>
+            <td><span class="required"></span> <?= $entry_payable; ?></td>
             <td><input type="text" name="cheque_payable" value="<?= $cheque_payable; ?>" />
               <? if ($error_payable) { ?>
               <span class="error"><?= $error_payable; ?></span>

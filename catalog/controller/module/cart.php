@@ -28,7 +28,6 @@ class ControllerModuleCart extends Controller {
 		
 		foreach ($results as $result) {
 			if ($this->config->get($result['code'] . '_status')) {
-				$this->load->model('total/' . $result['code']);
 	
 				$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
 			}

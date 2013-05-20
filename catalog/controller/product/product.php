@@ -101,8 +101,6 @@ class ControllerProductProduct extends Controller {
 		$this->template->load('product/review');
 
     	$this->language->load('product/product');
-		
-		$this->load->model('catalog/review','text_no_reviews');
 
 		if (isset($_GET['page'])) {
 			$page = $_GET['page'];
@@ -131,7 +129,7 @@ class ControllerProductProduct extends Controller {
 		$this->pagination->page = $page;
 		$this->pagination->limit = 5; 
 		$this->pagination->text = $this->_('text_pagination');
-		$this->pagination->url = $this->url->link('product/product/review', 'product_id=' . $_GET['product_id'] . '&page={page}');
+		$this->pagination->url = $this->url->link('product/product/review', 'product_id=' . $_GET['product_id']);
 			
 		$this->data['pagination'] = $this->pagination->render();
 		

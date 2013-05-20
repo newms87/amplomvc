@@ -1,115 +1,137 @@
 <?php
 class Pagination {
+	private $registry;
+	private $default_template = 'widget/pagination';
+	private $template_file;
+	
 	public $total;
 	public $page;
 	public $limit;
 	public $num_links;
 	public $url;
-	public $text;
-	public $text_first;
-	public $text_last;
-	public $text_next;
-	public $text_prev;
-	public $style_links;
-	public $style_results;
+	public $attrs = array();
 	
-   function __construct(){
+   function __construct($registry){
+   	$this->registry = $registry;
+		
       $this->init();
    }
    
+	public function __get($key){
+		return $this->registry->get($key);
+	}
+	
    public function init(){
+   	$this->template_file = $this->default_template;
       $this->total = 0;
-      $this->page = 1;
-      $this->limit = 20;
+      $this->page = 0;
+      $this->limit = 0;
       $this->num_links = 10;
       $this->url = '';
-      $this->text = 'Showing {start} to {end} of {total} ({pages} Pages)';
-      $this->text_first = '|&lt;';
-      $this->text_last = '&gt;|';
-      $this->text_next = '&gt;';
-      $this->text_prev = '&lt;';
-      $this->style_links = 'links';
-      $this->style_results = 'results';
+      $this->attrs = array(
+      	'class' => 'links'
+      );
    }
    
 	public function render() {
-		$total = $this->total;
+		$this->template->load($this->template_file);
 		
-		if ($this->page < 1) {
-			$page = 1;
+		$language = $this->language->fetch('widget/pagination');
+		
+		//Setup Query to add page=n 
+		if(strpos($this->url, '?') === false){
+			$this->url .= '?';
 		} else {
-			$page = $this->page;
+			$this->url .= '&';
 		}
 		
-		if (!(int)$this->limit) {
-			$limit = 10;
+		if($this->page){
+			$this->page = (int)$this->page > 1 ? (int)$this->page : 1;
 		} else {
-			$limit = $this->limit;
+			$this->page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 		}
 		
-		$num_links = $this->num_links;
-		$num_pages = ceil($total / $limit);
+		if($this->limit){
+			$this->limit = (int)$this->limit ? (int)$this->limit : 10;
+		} else {
+			$this->limit = isset($_GET['limit']) ? (int)$_GET['limit'] : $this->config->get('config_admin_limit');
+			$this->url .= 'limit=' . $this->limit . '&';
+		}
 		
-		$output = '';
+		//To avoid divide by zero, we only want 1 page for no limit
+		if($this->limit < 1){
+			$this->limit = $this->total;
+		}
 		
-		if ($page > 1) {
-			$output .= ' <a href="' . str_replace('{page}', 1, $this->url) . '">' . $this->text_first . '</a> <a href="' . str_replace('{page}', $page - 1, $this->url) . '">' . $this->text_prev . '</a> ';
-    	}
-
-		if ($num_pages > 1) {
-			if ($num_pages <= $num_links) {
-				$start = 1;
-				$end = $num_pages;
-			} else {
-				$start = $page - floor($num_links / 2);
-				$end = $page + floor($num_links / 2);
+		$num_pages = ceil($this->total / $this->limit);
+		
+		if ($num_pages > $this->num_links) {
+			$num_before = floor(($this->num_links - 1) / 2);
+			$num_after = floor($this->num_links / 2);
 			
-				if ($start < 1) {
-					$end += abs($start) + 1;
-					$start = 1;
-				}
-						
-				if ($end > $num_pages) {
-					$start -= ($end - $num_pages);
-					$end = $num_pages;
-				}
+			if($page + $num_after >= $num_pages){
+				$start = $num_pages - $this->num_links;
+				$end = $num_pages;
 			}
-
-			if ($start > 1) {
-				$output .= ' .... ';
+			elseif($page - $num_before <= 1){
+				$start = 1;
+				$end = $this->num_links;
 			}
-
+			else{
+				$start = $page - $num_before;
+				$end = $page + $num_after;
+			}
+		}
+		else{
+			$start = 1;
+			$end = $num_pages;
+		}
+		
+		$pages = array();
+		
+		if($num_pages > 1){
 			for ($i = $start; $i <= $end; $i++) {
-				if ($page == $i) {
-					$output .= ' <b>' . $i . '</b> ';
-				} else {
-					$output .= ' <a href="' . str_replace('{page}', $i, $this->url) . '">' . $i . '</a> ';
-				}	
-			}
-							
-			if ($end < $num_pages) {
-				$output .= ' .... ';
+				$pages[$i] = $this->url . 'page=' . $i;
 			}
 		}
 		
-   		if ($page < $num_pages) {
-			$output .= ' <a href="' . str_replace('{page}', $page + 1, $this->url) . '">' . $this->text_next . '</a> <a href="' . str_replace('{page}', $num_pages, $this->url) . '">' . $this->text_last . '</a> ';
+		$attrs = '';
+		
+		if(!empty($this->attrs)){
+			foreach($this->attrs as $attr => $value){
+				$attrs .= "$attr=\"$value\" ";
+			}
 		}
 		
-		$find = array(
-			'{start}',
-			'{end}',
-			'{total}',
-			'{pages}'
+		$data = array(
+			'total'	=> $this->total,
+			'page'	=> $this->page,
+			'limit'	=> $this->limit,
+			'url_first' => $this->url . 'page=1',
+			'url_prev' => $this->url . 'page=' . ($this->page - 1),
+			'url_next' => $this->url . 'page=' . ($this->page + 1),
+			'url_last' => $this->url . 'page=' . $num_pages,
+			'start' => $start,
+			'end' => $end,
+			'attrs' => $attrs,
+			'num_pages' => $num_pages,
+			'pages' => $pages,
 		);
 		
-		$replace = array(
-			($total) ? (($page - 1) * $limit) + 1 : 0,
-			((($page - 1) * $limit) > ($total - $limit)) ? $total : ((($page - 1) * $limit) + $limit),
-			$total, 
-			$num_pages
+		$item_start = (($this->page - 1) * $this->limit) + 1;
+		$item_end = ($this->page * $this->limit > $this->total) ? $this->total : $this->page * $this->limit;
+		
+		$insertables = array(
+			'start' => $item_start,
+			'end'	 => $item_end,
+			'total' => $this->total,
+			'pages' => $num_pages,
 		);
 		
-		return ($output ? '<div class="' . $this->style_links . '">' . $output . '</div>' : '') . '<div class="' . $this->style_results . '">' . str_replace($find, $replace, $this->text) . '</div>';
+		$language['text_pager'] = $this->tool->insertables($insertables, $language['text_pager']);
+		
+		$this->template->set_data($data + $language);
+		
+		return $this->template->render();
 	}
 }

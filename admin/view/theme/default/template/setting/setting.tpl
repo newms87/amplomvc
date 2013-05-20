@@ -26,31 +26,31 @@
 				<div id="tab-general">
 					<table class="form">
 						<tr>
-							<td><span class="required">*</span> <?= $entry_name; ?></td>
+							<td><span class="required"></span> <?= $entry_name; ?></td>
 							<td><input type="text" name="config_name" value="<?= $config_name; ?>" size="40" />
 						</tr>
 						<tr>
-							<td><span class="required">*</span> <?= $entry_owner; ?></td>
+							<td><span class="required"></span> <?= $entry_owner; ?></td>
 							<td><input type="text" name="config_owner" value="<?= $config_owner; ?>" size="40" />
 						</tr>
 						<tr>
-							<td><span class="required">*</span> <?= $entry_address; ?></td>
+							<td><span class="required"></span> <?= $entry_address; ?></td>
 							<td><textarea name="config_address" cols="40" rows="5"><?= $config_address; ?></textarea>
 						</tr>
 						<tr>
-							<td><span class="required">*</span> <?= $entry_email; ?></td>
+							<td><span class="required"></span> <?= $entry_email; ?></td>
 							<td><input type="text" name="config_email" value="<?= $config_email; ?>" size="40" />
 						</tr>
 						<tr>
-							<td><span class="required">*</span> <?= $entry_email_support; ?></td>
+							<td><span class="required"></span> <?= $entry_email_support; ?></td>
 							<td><input type="text" name="config_email_support" value="<?= $config_email_support; ?>" size="40" />
 						</tr>
 						<tr>
-							<td><span class="required">*</span> <?= $entry_email_error; ?></td>
+							<td><span class="required"></span> <?= $entry_email_error; ?></td>
 							<td><input type="text" name="config_email_error" value="<?= $config_email_error; ?>" size="40" />
 						</tr>
 						<tr>
-							<td><span class="required">*</span> <?= $entry_telephone; ?></td>
+							<td><span class="required"></span> <?= $entry_telephone; ?></td>
 							<td><input type="text" name="config_telephone" value="<?= $config_telephone; ?>" />
 						</tr>
 						<tr>
@@ -62,7 +62,7 @@
 				<div id="tab-store">
 					<table class="form">
 						<tr>
-							<td><span class="required">*</span> <?= $entry_title; ?></td>
+							<td><span class="required"></span> <?= $entry_title; ?></td>
 							<td><input type="text" name="config_title" value="<?= $config_title; ?>" />
 						</tr>
 						<tr>
@@ -190,23 +190,23 @@
 				<div id="tab-option">
 					<table class="form">
 						<tr>
-							<td><span class="required">*</span> <?= $entry_breadcrumb_display; ?></td>
+							<td><span class="required"></span> <?= $entry_breadcrumb_display; ?></td>
 							<td><?= $this->builder->build('select', $yes_no, "config_breadcrumb_display", $config_breadcrumb_display);?></td>
 						</tr>
 						<tr>
-							<td><span class="required">*</span> <?= $entry_breadcrumb_separator; ?></td>
+							<td><span class="required"></span> <?= $entry_breadcrumb_separator; ?></td>
 							<td><input type="text" style='font-size:20px' name="config_breadcrumb_separator" value="<?= $config_breadcrumb_separator; ?>" size="1" />
 						</tr>
 						<tr>
-							<td><span class="required">*</span> <?= $entry_breadcrumb_separator_admin; ?></td>
+							<td><span class="required"></span> <?= $entry_breadcrumb_separator_admin; ?></td>
 							<td><input type="text" style='font-size:20px' name="config_breadcrumb_separator_admin" value="<?= $config_breadcrumb_separator_admin; ?>" size="1" />
 						</tr>
 						<tr>
-							<td><span class="required">*</span> <?= $entry_catalog_limit; ?></td>
+							<td><span class="required"></span> <?= $entry_catalog_limit; ?></td>
 							<td><input type="text" name="config_catalog_limit" value="<?= $config_catalog_limit; ?>" size="3" />
 						</tr>
 						<tr>
-							<td><span class="required">*</span> <?= $entry_admin_limit; ?></td>
+							<td><span class="required"></span> <?= $entry_admin_limit; ?></td>
 							<td><input type="text" name="config_admin_limit" value="<?= $config_admin_limit; ?>" size="3" />
 						</tr>
 						<tr>
@@ -551,79 +551,79 @@
 							</td>
 						</tr>
 						<tr>
-							<td><span class="required">*</span> <?= $entry_image_admin_thumb; ?></td>
+							<td><span class="required"></span> <?= $entry_image_admin_thumb; ?></td>
 							<td><input type="text" name="config_image_admin_thumb_width" value="<?= $config_image_admin_thumb_width; ?>" size="3" />
 								x
 								<input type="text" name="config_image_admin_thumb_height" value="<?= $config_image_admin_thumb_height; ?>" size="3" />
 						</tr>
 						<tr>
-							<td><span class="required">*</span> <?= $entry_image_admin_list; ?></td>
+							<td><span class="required"></span> <?= $entry_image_admin_list; ?></td>
 							<td><input type="text" name="config_image_admin_list_width" value="<?= $config_image_admin_list_width; ?>" size="3" />
 								x
 								<input type="text" name="config_image_admin_list_height" value="<?= $config_image_admin_list_height; ?>" size="3" />
 						</tr>
 						<tr>
-							<td><span class="required">*</span> <?= $entry_image_category; ?></td>
+							<td><span class="required"></span> <?= $entry_image_category; ?></td>
 							<td><input type="text" name="config_image_category_width" value="<?= $config_image_category_width; ?>" size="3" />
 								x
 								<input type="text" name="config_image_category_height" value="<?= $config_image_category_height; ?>" size="3" />
 						</tr>
 						<tr>
-							<td><span class="required">*</span> <?= $entry_image_manufacturer; ?></td>
+							<td><span class="required"></span> <?= $entry_image_manufacturer; ?></td>
 							<td><input type="text" name="config_image_manufacturer_width" value="<?= $config_image_manufacturer_width; ?>" size="3" />
 								x
 								<input type="text" name="config_image_manufacturer_height" value="<?= $config_image_manufacturer_height; ?>" size="3" />
 						</tr>
 						<tr>
-							<td><span class="required">*</span> <?= $entry_image_thumb; ?></td>
+							<td><span class="required"></span> <?= $entry_image_thumb; ?></td>
 							<td><input type="text" name="config_image_thumb_width" value="<?= $config_image_thumb_width; ?>" size="3" />
 								x
 								<input type="text" name="config_image_thumb_height" value="<?= $config_image_thumb_height; ?>" size="3" />
 						</tr>
 						<tr>
-							<td><span class="required">*</span> <?= $entry_image_popup; ?></td>
+							<td><span class="required"></span> <?= $entry_image_popup; ?></td>
 							<td><input type="text" name="config_image_popup_width" value="<?= $config_image_popup_width; ?>" size="3" />
 								x
 								<input type="text" name="config_image_popup_height" value="<?= $config_image_popup_height; ?>" size="3" />
 						</tr>
 						<tr>
-							<td><span class="required">*</span> <?= $entry_image_product; ?></td>
+							<td><span class="required"></span> <?= $entry_image_product; ?></td>
 							<td><input type="text" name="config_image_product_width" value="<?= $config_image_product_width; ?>" size="3" />
 								x
 								<input type="text" name="config_image_product_height" value="<?= $config_image_product_height; ?>" size="3" />
 						</tr>
 						<tr>
-							<td><span class="required">*</span> <?= $entry_image_product_option; ?></td>
+							<td><span class="required"></span> <?= $entry_image_product_option; ?></td>
 							<td><input type="text" name="config_image_product_option_width" value="<?= $config_image_product_option_width; ?>" size="3" />
 								x
 								<input type="text" name="config_image_product_option_height" value="<?= $config_image_product_option_height; ?>" size="3" />
 						</tr>
 						<tr>
-							<td><span class="required">*</span> <?= $entry_image_additional; ?></td>
+							<td><span class="required"></span> <?= $entry_image_additional; ?></td>
 							<td><input type="text" name="config_image_additional_width" value="<?= $config_image_additional_width; ?>" size="3" />
 								x
 								<input type="text" name="config_image_additional_height" value="<?= $config_image_additional_height; ?>" size="3" />
 						</tr>
 						<tr>
-							<td><span class="required">*</span> <?= $entry_image_related; ?></td>
+							<td><span class="required"></span> <?= $entry_image_related; ?></td>
 							<td><input type="text" name="config_image_related_width" value="<?= $config_image_related_width; ?>" size="3" />
 								x
 								<input type="text" name="config_image_related_height" value="<?= $config_image_related_height; ?>" size="3" />
 						</tr>
 						<tr>
-							<td><span class="required">*</span> <?= $entry_image_compare; ?></td>
+							<td><span class="required"></span> <?= $entry_image_compare; ?></td>
 							<td><input type="text" name="config_image_compare_width" value="<?= $config_image_compare_width; ?>" size="3" />
 								x
 								<input type="text" name="config_image_compare_height" value="<?= $config_image_compare_height; ?>" size="3" />
 						</tr>
 						<tr>
-							<td><span class="required">*</span> <?= $entry_image_wishlist; ?></td>
+							<td><span class="required"></span> <?= $entry_image_wishlist; ?></td>
 							<td><input type="text" name="config_image_wishlist_width" value="<?= $config_image_wishlist_width; ?>" size="3" />
 								x
 								<input type="text" name="config_image_wishlist_height" value="<?= $config_image_wishlist_height; ?>" size="3" />
 						</tr>
 						<tr>
-							<td><span class="required">*</span> <?= $entry_image_cart; ?></td>
+							<td><span class="required"></span> <?= $entry_image_cart; ?></td>
 							<td><input type="text" name="config_image_cart_width" value="<?= $config_image_cart_width; ?>" size="3" />
 								x
 								<input type="text" name="config_image_cart_height" value="<?= $config_image_cart_height; ?>" size="3" />
@@ -886,7 +886,7 @@
 								<? } ?></td>
 						</tr>
 						<tr>
-							<td><span class="required">*</span> <?= $entry_error_filename; ?></td>
+							<td><span class="required"></span> <?= $entry_error_filename; ?></td>
 							<td><input type="text" name="config_error_filename" value="<?= $config_error_filename; ?>" />
 						</tr>
 						<tr>

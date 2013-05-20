@@ -84,12 +84,6 @@ class ControllerPaymentGoogleCheckout extends Controller {
 			$this->data['button'] = 'http://sandbox.google.com/checkout/buttons/checkout.gif?merchant_id=' . $this->config->get('google_checkout_merchant_id') . '&w=180&h=46&style=white&variant=text&loc=en_US';
 		}
 		
-
-
-
-
-
-
 		$this->render();
 	}
 
@@ -106,51 +100,6 @@ class ControllerPaymentGoogleCheckout extends Controller {
 		$log = new Logger('error.txt');
 		$log->write($content);
 		
-/*
-<calculate>
-    <addresses>
-        <anonymous-address>
-            <country-code>US</country-code>
-            <city>Mountain View</city>
-            <region>CA</region>
-            <postal-code>94043</postal-code>
-        </anonymous-address>
-    </addresses>
-    <shipping>
-        <method name="FedEx Overnight Shipping"/>
-        <method name="UPS Ground"/>
-    </shipping>
-</calculate>
-
-
-
-		$quote_data = array();
-		
-		$results = $this->model_setting_extension->getExtensions('shipping');
-		
-		foreach ($results as $result) {
-			$this->load->model('shipping/' . $result['code']);
-			
-			$quote = $this->{'model_shipping_' . $result['code']}->getQuote(); 
-
-			if ($quote) {
-				$quote_data[$result['code']] = array(
-					'title'      => $quote['title'],
-					'quote'      => $quote['quote'], 
-					'sort_order' => $quote['sort_order'],
-					'error'      => $quote['error']
-				);
-			}
-		}
-
-		$sort_order = array();
-	  
-		foreach ($quote_data as $key => $value) {
-      		$sort_order[$key] = $value['sort_order'];
-    	}
-
-    	array_multisort($sort_order, SORT_ASC, $quote_data);
-*/
 		$xml = '<shipping-methods>';
 		
 		foreach ($quote_data as $shipping) {

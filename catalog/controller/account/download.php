@@ -69,7 +69,7 @@ class ControllerAccountDownload extends Controller {
 			$this->pagination->page = $page;
 			$this->pagination->limit = $this->config->get('config_catalog_limit');
 			$this->pagination->text = $this->_('text_pagination');
-			$this->pagination->url = $this->url->link('account/download', 'page={page}');
+			$this->pagination->url = $this->url->link('account/download');
 			
 			$this->data['pagination'] = $this->pagination->render();
 			

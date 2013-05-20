@@ -1,38 +1,30 @@
 <?php  
 class ControllerCheckoutBlockPaymentMethod extends Controller {
   	public function index() {
+  		$this->language->load('checkout/checkout');
       $this->template->load('checkout/block/payment_method');
-
-		$this->language->load('checkout/checkout');
 		
-		$payment_methods = $this->cart->getPaymentMethods();
-      
-      if ($payment_methods) {
-         $this->session->data['payment_methods'] = $payment_methods;
-		   $this->data['payment_methods'] = $payment_methods;
-		} else {
-		   $this->data['payment_methods'] = array();
-		   $this->error['warning'] = $this->language->format('error_no_payment', $this->url->link('information/contact'));
-		}	
-	   
-      $this->data['guest_checkout'] = !$this->customer->isLogged();
-      
-      if (isset($this->session->data['payment_method']['code'])) {
-			$this->data['code'] = $this->session->data['payment_method']['code'];
-		} else {
-			if(count($this->data['payment_methods']) == 1){
-            $key = key($this->data['payment_methods']);
-            $this->data['code'] = $this->data['payment_methods'][$key]['code'];
-         }
-         else{
-            $this->data['code'] = '';
-         }
+		if($this->cart->hasPaymentAddress()){
+			$payment_methods = $this->cart->getPaymentMethods();
+	      
+	      if (!$payment_methods) {
+			   $this->message->add('error', $this->language->format('error_no_payment', $this->url->link('information/contact')));
+			}	
+		   
+	      if ($this->cart->hasPaymentMethod()) {
+				$this->data['code'] = $this->cart->getPaymentMethodId();
+			} elseif(count($payment_methods) == 1){
+	         $method = current($payment_methods);
+	         $this->data['code'] = $method['code'];
+	      }
+	      else{
+	         $this->data['code'] = '';
+			}
+			
+			$this->data['payment_methods'] = $payment_methods;
 		}
-		
-		if (isset($this->session->data['comment'])) {
-			$this->data['comment'] = $this->session->data['comment'];
-		} else {
-			$this->data['comment'] = '';
+		else{
+			$this->data['no_payment_address'] = true;
 		}
 		
 		if ($this->config->get('config_checkout_id')) {
@@ -40,17 +32,22 @@ class ControllerCheckoutBlockPaymentMethod extends Controller {
 			
 			if ($information_info) {
 				$this->language->format('text_agree', $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_checkout_id')), $information_info['title'], $information_info['title']);
-			} else {
-				$this->language->set('text_agree', '');
+				
+				$this->data['agree_to_payment'] = true;
 			}
-		} else {
-			$this->language->set('text_agree', '');
 		}
 		
-		if (isset($this->session->data['agree'])) {
-			$this->data['agree'] = $this->session->data['agree'];
-		} else {
-			$this->data['agree'] = '';
+		$session_defaults = array(
+			'comment' => '',
+			'agree' => '',
+		);
+		
+		foreach($session_defaults as $key => $default){
+			if(isset($this->session->data[$key])){
+				$this->data[$key] = $this->session->data[$key];
+			}else{
+				$this->data[$key] = $default;
+			}
 		}
       
 		$this->data['validate_payment_method'] = $this->url->link('checkout/block/payment_method/validate');
@@ -64,47 +61,35 @@ class ControllerCheckoutBlockPaymentMethod extends Controller {
 		$json = array();
 		
 		// Validate if payment address has been set.
-		if ($this->customer->isLogged() && isset($this->session->data['payment_address_id'])) {
-			$payment_address = $this->model_account_address->getAddress($this->session->data['payment_address_id']);		
-		} elseif (isset($this->session->data['guest']['payment_address'])) {
-			$payment_address = $this->session->data['guest']['payment_address'];
-		}	
-      else{
+		if ($this->cart->hasPaymentAddress()) {
+			$payment_address = $this->cart->getPaymentAddress();
+		}else{
          $json['error']['payment_address'] = $this->_('error_payment_address');
       }
       
       if(!$this->cart->validate()){
          $json['redirect'] = $this->url->link('cart/cart');
-         $this->message->add($this->cart->get_errors());
+         $this->message->add('warning', $this->cart->get_errors());
       }
 		
 		if (!$json) {
-			if (!isset($_POST['payment_method'])) {
-				$json['error']['warning'] = $this->_('error_payment');
-			} else {
-			   if(!isset($this->session->data['payment_methods'])){
-			      $this->session->data['payment_methods'] = $this->cart->getPaymentMethods();
-            }
-            
-				if (!isset($this->session->data['payment_methods'][$_POST['payment_method']])) {
-					$json['error']['warning'] = $this->_('error_payment');
-				}
-			}
-							
 			if ($this->config->get('config_checkout_id')) {
 				$information_info = $this->model_catalog_information->getInformation($this->config->get('config_checkout_id'));
 				
-				if ($information_info && !isset($_POST['agree'])) {
-					$json['error']['warning'] = sprintf($this->_('error_agree'), $information_info['title']);
+				if ($information_info && empty($_POST['agree'])) {
+					$json['error']['agree'] = sprintf($this->_('error_agree'), $information_info['title']);
 				}
 			}
 			
+			if(!$json && !$this->cart->setPaymentMethod($_POST['payment_method'])){
+				$json['error'] = $this->cart->get_errors('payment_method');
+			}
+			
 			if (!$json) {
-				$this->session->data['payment_method'] = $this->session->data['payment_methods'][$_POST['payment_method']];
-			  
-            if($this->customer->isLogged()){
+				//TODO: do we need any of this!? Maybe rethink set_default_payment_code()...
+				if($this->customer->isLogged()){
                $payment_info = array(
-                  'address_id' => $this->session->data['payment_address_id'],
+                  'address_id' => $this->cart->getPaymentAddressId(),
                );
                
                $code = $_POST['payment_method'];

@@ -205,7 +205,7 @@ class ControllerCatalogFlashsale extends Controller {
       $this->pagination->page = $page;
       $this->pagination->limit = $this->config->get('config_admin_limit');
       $this->pagination->text = $this->_('text_pagination');
-      $this->pagination->url = $this->url->link('catalog/flashsale', $url . '&page={page}');
+      $this->pagination->url = $this->url->link('catalog/flashsale', $url);
          
       $this->data['pagination'] = $this->pagination->render();
 
@@ -340,7 +340,6 @@ class ControllerCatalogFlashsale extends Controller {
       $flashsale_id= isset($_POST['flashsale_id'])?$_POST['flashsale_id']:0;
       if(!$name)return;
       
-      $this->load->model("catalog/flashsale");
       echo json_encode($this->model_catalog_flashsale->generate_url($flashsale_id,$name));
       exit;
    }

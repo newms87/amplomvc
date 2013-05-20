@@ -4,12 +4,11 @@ class ModelTotalTax extends Model {
 		foreach ($taxes as $key => $value) {
 			if ($value > 0) {
 			   
-            //TODO: Make this more intuitive
-            $r = $this->session->data['applied_tax_rates'][$key];
+            $tax_info = $this->tax->getRateInfo($key);
             
 				$total_data[] = array(
 					'code'       => 'tax',
-					'title'      => $this->tax->getRateName($key) . ($r['type']=='P'?' @ ' . $r['rate'].'%':''), //TODO - need to add tax rate to data? 
+					'title'      => $tax_info['name'] . ($tax_info['type'] == 'P' ? ' @ ' . $tax_info['rate'] . '%' : ''), 
 					'text'       => $this->currency->format($value),
 					'value'      => $value,
 					'sort_order' => $this->config->get('tax_sort_order')

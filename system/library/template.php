@@ -18,8 +18,6 @@ class Template {
 	
    function __construct(&$registry){
    	$this->registry = $registry;
-		
-		$this->load_template_data();
    }
    
 	public function __get($key){

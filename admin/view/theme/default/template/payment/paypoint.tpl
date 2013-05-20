@@ -13,7 +13,7 @@
       <form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
         <table class="form">
           <tr>
-            <td><span class="required">*</span> <?= $entry_merchant; ?></td>
+            <td><span class="required"></span> <?= $entry_merchant; ?></td>
             <td><input type="text" name="paypoint_merchant" value="<?= $paypoint_merchant; ?>" />
               <? if ($error_merchant) { ?>
               <span class="error"><?= $error_merchant; ?></span>

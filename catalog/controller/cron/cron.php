@@ -1,8 +1,6 @@
 <?php
 class ControllerCronCron extends Controller {
    function index() {
-      $this->load->model("setting/setting");
-      
       $tasks = $this->model_setting_setting->getSetting('cron_tasks');
       
 		echo "Running Cron - " . $this->tool->format_datetime() . "<br><br>";

@@ -78,6 +78,15 @@ $(document).ready(function(){
 
 });
 
+function show_msg(type, html){
+	$('.messagebox').remove();
+
+	$('#content').prepend('<div class="message_box ' + type + '" style="display: none;">' + html + '<span class="close"></span></div>');
+	$('.message_box.'+type).fadeIn('slow');
+	$('.message_box .close').click(function(){$(this).parent().remove();});
+}
+
+
 if(!console){
 	console = {};
 	console.log = function(msg){};

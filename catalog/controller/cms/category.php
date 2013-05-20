@@ -45,7 +45,7 @@ class ControllerCmsCategory extends Controller {
 		$this->pagination->page = $page;
 		$this->pagination->limit = $limit;
 		$this->pagination->text = $this->_('text_pagination');
-		$this->pagination->url = $this->url->link('cms/category', '&page={page}');
+		$this->pagination->url = $this->url->link('cms/category');
 	
 		$this->data['pagination'] = $this->pagination->render();
 	

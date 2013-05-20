@@ -1,54 +1,39 @@
 <?php 
 class ControllerCheckoutBlockShippingMethod extends Controller {
   	public function index() {
+  		$this->language->load('checkout/checkout');
       $this->template->load('checkout/block/shipping_method');
-
-		$this->language->load('checkout/checkout');
 		
-      $shipping_methods = $this->cart->getShippingMethods();
-      
-      $this->data['guest_checkout'] = !$this->customer->isLogged();
-      
-      if($shipping_methods){
-         $this->session->data['shipping_methods'] = $shipping_methods;
-         $this->data['shipping_methods'] = $shipping_methods;
-      }
-      else {
-         if($this->cart->has_error('checkout>shipping_address')){
-            $this->data['no_shipping_address'] = $this->_('text_no_shipping_address');
-         }
-         else{
-            $this->data['shipping_methods'] = array();
-            
-            $this->data['allowed_geo_zones'] = array();
-               
-            $geo_zone_id = $this->config->get('config_allowed_shipping_zone');
-            
-            if($geo_zone_id > 0){
-               $zones = $this->model_localisation_zone->getZonesByGeoZone($geo_zone_id);
-               
-               foreach($zones as $zone){
-                  $country = $this->model_localisation_country->getCountry($zone['country_id']);
-                  $this->data['allowed_geo_zones'][] = array(
-                     'country' => $country,
-                     'zone'    => $zone
-                   );
-               }
-            }
-            
-            $this->error['warning'] = $this->language->format('error_no_shipping', $this->url->link('information/contact'));
-         }
-      }
+		if(isset($_POST['shipping_method'])){
+			$this->validate();
+		}
+		
+		if($this->cart->hasShippingAddress()){
+	      $shipping_methods = $this->cart->getShippingMethods();
+	      
+	      if(!empty($shipping_methods)){
+	         $this->data['shipping_methods'] = $shipping_methods;
+				
+				$shipping_method_id = '';
+				
+				if ($this->cart->hasShippingMethod()) {
+		         $shipping_method_id = $this->cart->getShippingMethodId();
+		      } else {
+		      	//Check the first shipping method, if not selected
+		         $shipping_method_id = key($shipping_methods);
+		      }
+				
+				$this->data['shipping_method_id'] = $shipping_method_id;
+	      }
+	      else {
+            $this->data['cart_error_shipping_method'] = $this->cart->get_errors('shipping_method');
+				$this->data['allowed_shipping_zones'] = $this->cart->getAllowedShippingZones();
+	      }
+		}
+		else{
+			$this->data['no_shipping_address'] = true;
+		}
          
-      if (isset($this->session->data['shipping_method']['code'])) {
-         $this->data['code'] = $this->session->data['shipping_method']['code'];
-      } elseif(!empty($this->data['shipping_methods']) && count($this->data['shipping_methods']) == 1){
-         $key = key($this->data['shipping_methods']);
-         $this->data['code'] = $this->data['shipping_methods'][$key]['quote'][$key]['code'];
-      }else{
-         $this->data['code'] = '';
-      }
-      
 		$this->data['validate_shipping_method'] = $this->url->link('checkout/block/shipping_method/validate');
 		
 		$this->response->setOutput($this->render());
@@ -70,34 +55,12 @@ class ControllerCheckoutBlockShippingMethod extends Controller {
       }
 		
 		if (!$json) {
-		   // Validate if shipping address has been set.    
-         if ($this->customer->isLogged() && isset($this->session->data['shipping_address_id'])) {              
-            $shipping_address = $this->model_account_address->getAddress($this->session->data['shipping_address_id']);     
-         } elseif (isset($this->session->data['guest']['shipping_address'])) {
-            $shipping_address = $this->session->data['guest']['shipping_address'];
-         }
-         else{
-            $json['error']['shipping_address'] = $this->_('error_shipping_address');
-         }
-         
-			if (!isset($_POST['shipping_method'])) {
-				$json['error']['warning'] = $this->_('error_shipping');
+		   if (!isset($_POST['shipping_method'])) {
+				$json['error']['warning'] = $this->_('error_shipping_method');
 			} else {
-				$shipping = explode('.', $_POST['shipping_method']);
-			   
-            if(!isset($this->session->data['shipping_methods'])){
-               $this->session->data['shipping_methods'] = $this->cart->getShippingMethods();
-            }
-            
-				if (!isset($shipping[0]) || !isset($shipping[1]) || !isset($this->session->data['shipping_methods'][$shipping[0]]['quote'][$shipping[1]])) {			
-					$json['error']['warning'] = $this->_('error_shipping');
+				if(!$this->cart->setShippingMethod($_POST['shipping_method'])){
+					$json['error']['shipping_method'] = $this->cart->get_errors('shipping_method');
 				}
-			}
-			
-			if (!$json) {
-				$shipping = explode('.', $_POST['shipping_method']);
-					
-				$this->session->data['shipping_method'] = $this->session->data['shipping_methods'][$shipping[0]]['quote'][$shipping[1]];
 			}							
 		}
 		

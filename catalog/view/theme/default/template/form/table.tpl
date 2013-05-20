@@ -8,7 +8,7 @@
   <tr>
     <td>
       <? if($field['required']) { ;?>
-      <span class="required">*</span>
+      <span class="required"></span>
       <? }?>
       <span class='form_entry'><?= $field['display_name'];?></span>
     </td>

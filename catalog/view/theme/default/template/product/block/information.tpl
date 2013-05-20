@@ -168,7 +168,7 @@ $('#button-cart, #button-buy-now').bind('click', function() {
                window.location = '<?=$checkout_link;?>';
             }
             else{
-               display_notification('success', json['success']);
+               show_msg('success', json['success']);
                $('#cart-total').html(json['total']);
             }
          }  
@@ -179,7 +179,7 @@ $('#button-cart, #button-buy-now').bind('click', function() {
          }
          
          if(status != 'success'){
-            display_notification('warning', '<?= $error_add_to_cart;?>');
+            show_msg('warning', '<?= $error_add_to_cart;?>');
          }
       }
    });

@@ -20,7 +20,7 @@
           <div id="language<?= $language['language_id']; ?>">
             <table class="form">
               <tr>
-                <td><span class="required">*</span> <?= $entry_name; ?></td>
+                <td><span class="required"></span> <?= $entry_name; ?></td>
                 <td><input type="text" name="category_description[<?= $language['language_id']; ?>][name]" size="100" value="<?= isset($category_description[$language['language_id']]) ? $category_description[$language['language_id']]['name'] : ''; ?>" /></td>
               </tr>
               <tr>

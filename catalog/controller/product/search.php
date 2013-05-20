@@ -397,7 +397,7 @@ class ControllerProductSearch extends Controller {
 			$this->pagination->page = $page;
 			$this->pagination->limit = $limit;
 			$this->pagination->text = $this->_('text_pagination');
-			$this->pagination->url = $this->url->link('product/search', $url . '&page={page}');
+			$this->pagination->url = $this->url->link('product/search', $url);
 			
 			$this->data['pagination'] = $this->pagination->render();
 		}	

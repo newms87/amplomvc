@@ -5,7 +5,7 @@
   <tr>
     <td>
       <? if($this->template->option('require_' . $name)) { ;?>
-      <span class="required">*</span>
+      <span class="required"></span>
       <? }?>
       <span class='form_entry'><?= ${'entry_' . $name};?></span>
     </td>

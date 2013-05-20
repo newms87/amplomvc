@@ -175,7 +175,7 @@ class ControllerProductCollection extends Controller {
 		$this->pagination->page = $page;
 		$this->pagination->limit = $limit;
 		$this->pagination->text = $this->_('text_pagination');
-		$this->pagination->url = $this->url->link('product/collection', 'collection_id=' . $collection_id . '&' . $url . '&page={page}');
+		$this->pagination->url = $this->url->link('product/collection', 'collection_id=' . $collection_id . '&' . $url);
 	
 		$this->data['pagination'] = $this->pagination->render();
 	

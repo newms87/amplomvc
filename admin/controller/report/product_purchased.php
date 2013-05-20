@@ -96,7 +96,7 @@ class ControllerReportProductPurchased extends Controller {
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
 		$this->pagination->text = $this->_('text_pagination');
-		$this->pagination->url = $this->url->link('report/product_purchased', $url . '&page={page}');
+		$this->pagination->url = $this->url->link('report/product_purchased', $url);
 			
 		$this->data['pagination'] = $this->pagination->render();		
 		

@@ -40,7 +40,7 @@ country_selectors.live('change', function(event){
   
   zone_selector.attr('country_id', cs.val());
   
-  zone_selector.attr('zone_id', zone_selector.val() ||  zone_selector.attr('zone_id') || 0);
+  zone_selector.attr('zone_id', zone_selector.val() ||  zone_selector.attr('zone_id') || zone_selector.attr('select_value') || 0);
    
   zone_selector.load('index.php?route=tool/data/load_zones&country_id=' + cs.val() + '<?=$allow_all;?>', 
     function(){

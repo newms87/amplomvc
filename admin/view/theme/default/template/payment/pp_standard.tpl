@@ -11,7 +11,7 @@
       <form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
         <table class="form">
           <tr>
-            <td><span class="required">*</span> <?= $entry_email; ?></td>
+            <td><span class="required"></span> <?= $entry_email; ?></td>
             <td><input type="text" name="pp_standard_email" value="<?= $pp_standard_email; ?>" /></td>
           </tr>
           <tr>

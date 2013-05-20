@@ -18,7 +18,7 @@
 	      </div>
         <table class="form">
           <tr>
-            <td><span class="required">*</span> <?= $entry_name; ?></td>
+            <td><span class="required"></span> <?= $entry_name; ?></td>
             <td><input type="text" name="name" value="<?= $name; ?>" />
               <? if ($error_name) { ?>
               <span class="error"><?= $error_name; ?></span>

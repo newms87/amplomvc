@@ -32,7 +32,7 @@
     <td>
     <? if(!empty($field) && !in_array($field['type'], array('image','button', 'submit'))){ ?>
       <? if($field['required']) { ;?>
-      <span class="required">*</span>
+      <span class="required"></span>
       <? }?>
       <span class='form_entry'><?= $field['display_name'];?></span>
     <? } ?>

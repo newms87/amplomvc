@@ -190,7 +190,6 @@ class ControllerCmsCategory extends Controller {
       $name = isset($_POST['name'])?$_POST['name']:'';
       if(!$name)return;
       
-      $this->load->model("cms/category");
       echo json_encode($this->model_cms_category->generate_url($name));
       exit;
    }

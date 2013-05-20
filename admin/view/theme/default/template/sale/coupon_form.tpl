@@ -17,11 +17,11 @@
         <div id="tab-general">
           <table class="form">
             <tr>
-              <td><span class="required">*</span> <?= $entry_name; ?></td>
+              <td><span class="required"></span> <?= $entry_name; ?></td>
               <td><input name="name" value="<?= $name; ?>" /></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_code; ?></td>
+              <td><span class="required"></span> <?= $entry_code; ?></td>
               <td><input type="text" name="code" value="<?= $code; ?>" /></td>
             </tr>
             <tr>

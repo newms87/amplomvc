@@ -29,7 +29,7 @@ class ControllerModuleLanguage extends Controller {
 					'name'  => $result['name'],
 					'code'  => $result['code'],
 					'image' => $result['image']
-				);	
+				);
 			}
 		}
 
@@ -53,12 +53,6 @@ class ControllerModuleLanguage extends Controller {
 			$this->data['redirect'] = $this->url->link($route, $url);
 		}
 		
-
-
-
-
-
-
 		$this->render();
 	}
 }

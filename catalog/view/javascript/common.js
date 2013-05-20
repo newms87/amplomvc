@@ -165,7 +165,7 @@ function select_menu_item(item){
 	$(item).closest('select_dd').find('.current_selection').html($(item).html());
 }
 
-function display_notification(type, html){
+function show_msg(type, html){
 	$('.warning, .success, .notify').remove();
 	var notify = $('#notification').show();
 
@@ -201,7 +201,7 @@ function addToCart(product_id, quantity) {
 			
 			if (json['success']) {
 				var notify = json['success'] + '<span class="close"></span>';
-				display_notification('success', notify);
+				show_msg('success', notify);
 				
 				$('#cart-total').html(json['total']);
 			}	
@@ -217,7 +217,7 @@ function addToWishList(product_id){
 		success: function(json) {
 			$('.success, .warning, .attention, .information').remove();
 			if (json['success']) {
-				display_notification('success', json['success']);
+				show_msg('success', json['success']);
 				$('#wishlist-total').html(json['total']);
 			}	
 		}
@@ -234,7 +234,7 @@ function addToCompare(product_id) {
 			$('.success, .warning, .attention, .information').remove();
 						
 			if (json['success']) {
-				display_notification('success', notify);
+				show_msg('success', notify);
 				$('#compare-total').html(json['total']);
 			}	
 		}
@@ -271,11 +271,11 @@ function submit_block(type, url, form){
 	$.post(url, form.serialize(), 
       function(json){
          if(json['error']){
-            display_notification('warning', json['error']);
+            show_msg('warning', json['error']);
             $('body').trigger(type + '_error', json);
          }
          else if(json['success']){
-            display_notification('success', json['success']);
+            show_msg('success', json['success']);
             $('body').trigger(type + '_success', json);
          }
       }
@@ -286,6 +286,20 @@ function load_block(context, route, data){
 	data = data || {};
 	
 	context.load('index.php?route=' + route, data, function(){context.trigger('loaded')});
+}
+
+function handle_ajax_error(jqXHR, status){
+	if(jqXHR.responseText.length < 1000){
+		msg = jqXHR.responseText;
+	}else{
+		msg = '';
+	}
+	
+	show_msg('warning', '<?= $error_ajax_response; ?>' + msg);
+	
+	if(console && console.log){
+		console.log('validate_form(): Ajax Error: ' + jqXHR.responseText);
+	}
 }
 
 console = console || {};

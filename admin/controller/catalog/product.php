@@ -378,10 +378,8 @@ class ControllerCatalogProduct extends Controller {
 		
 		$this->pagination->init();
 		$this->pagination->total = $product_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
 		$this->pagination->text = $this->_('text_pagination');
-		$this->pagination->url = $this->url->link('catalog/product', $url . '&page={page}');
+		$this->pagination->url = $this->url->link('catalog/product', $url);
 			
 		$this->data['pagination'] = $this->pagination->render();
 	   
@@ -400,7 +398,7 @@ class ControllerCatalogProduct extends Controller {
 
   	   $product_id = $this->data['product_id'] = isset($_GET['product_id'])?$_GET['product_id']:false;
 		
-      $url = $this->get_url('filter', 'sort', 'order', 'page');
+      $url = $this->url->get_query('filter', 'sort', 'order', 'page');
       
       $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
       $this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/product'));
@@ -920,7 +918,6 @@ class ControllerCatalogProduct extends Controller {
       $product_id = isset($_POST['product_id'])?$_POST['product_id']:'';
       if(!$name)return;
       
-      $this->load->model("catalog/product");
       echo json_encode($this->model_catalog_product->generate_url($product_id,$name));
       exit;
    }
@@ -929,7 +926,6 @@ class ControllerCatalogProduct extends Controller {
       $name = isset($_POST['name'])?$_POST['name']:'';
       if(!$name)return;
       
-      $this->load->model("catalog/product");
       echo json_encode($this->model_catalog_product->generate_model($name));
       exit;
    }
@@ -938,7 +934,6 @@ class ControllerCatalogProduct extends Controller {
       $id = isset($_POST['manufacturer_id'])?$_POST['manufacturer_id']:'';
       if(!$id)return;
       
-      $this->load->model("catalog/manufacturer");
       $desc = $this->model_catalog_manufacturer->getManufacturerDescriptions($id);
       echo json_encode($desc);
       exit;

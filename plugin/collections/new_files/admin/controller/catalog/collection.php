@@ -246,7 +246,7 @@ class ControllerCatalogCollection extends Controller {
       $this->pagination->limit = $limit;
 		$this->pagination->page = $page;
       $this->pagination->text = $this->_('text_pagination');
-      $this->pagination->url = $this->url->link('catalog/collection', $url_query . '&page={page}');
+      $this->pagination->url = $this->url->link('catalog/collection', $url_query);
       
       $this->data['pagination'] = $this->pagination->render();
       

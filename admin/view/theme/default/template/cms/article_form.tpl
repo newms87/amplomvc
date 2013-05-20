@@ -18,18 +18,18 @@
                <? } ?>
            </div>
             <tr>
-              <td><span class="required">*</span> <?= $entry_title; ?></td>
+              <td><span class="required"></span> <?= $entry_title; ?></td>
               <? foreach ($languages as $language) {?>
                   <td id='language<?= $language['language_id'];?>'><input type="text" name="article_description[<?=$language['language_id'];?>][title]" value="<?= isset($article_description[$language['language_id']]) ? $article_description[$language['language_id']]['title'] : '';?>" size="100" /></td>
               <? }?>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_author; ?></td>
+              <td><span class="required"></span> <?= $entry_author; ?></td>
               <td><input type="text" name="author" value="<?= $author; ?>" size="100" />
               </td>
             </tr>
             <tr>
-              <td><span class="required">*</span><?= $entry_keyword; ?></td>
+              <td><span class="required"></span><?= $entry_keyword; ?></td>
               <td>
                  <input type="text" onfocus='generate_url_warning(this)' name="keyword" value="<?= $keyword; ?>" />
                  <a class='gen_url' onclick='generate_url(this)'><?=$button_generate_url;?></a>

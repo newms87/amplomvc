@@ -73,6 +73,25 @@ class Language {
 		
       return $this->data;
   	}
+	
+	public function fetch($filename){
+		$file = DIR_LANGUAGE . $this->directory . '/' . $filename . '.php';
+    	
+      if(!file_exists($file)){
+         $file = DIR_LANGUAGE . $this->default . '/' . $filename . '.php';
+         
+         if(!file_exists($file)){
+            trigger_error('Error: Could not fetch language ' . $filename . '! ' . get_caller());
+            exit();
+         }
+      }
+      
+      $_ = array();
+      
+      include($file);
+      
+      return $_;
+	}
    
    public function set_orig($key,$value){
       $this->orig_data[$key] = $value;

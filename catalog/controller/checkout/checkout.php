@@ -3,27 +3,10 @@ class ControllerCheckoutCheckout extends Controller {
 	public function index() {
 		$this->template->load('checkout/checkout');
 
-		// Validate cart has products and has stock.
-		if ((!$this->cart->hasProducts() && empty($this->session->data['vouchers'])) || (!$this->cart->hasStock() && !$this->config->get('config_stock_checkout'))) {
+		if (!$this->cart->validate()) {
+			$this->message->add('warning', $this->cart->get_errors());
 	  		$this->url->redirect($this->url->link('cart/cart'));
-    	}	
-		
-		// Validate minimum quantity requirments.			
-		$products = $this->cart->getProducts();
-				
-		foreach ($products as $product) {
-			$product_total = 0;
-				
-			foreach ($products as $product_2) {
-				if ($product_2['product_id'] == $product['product_id']) {
-					$product_total += $product_2['quantity'];
-				}
-			}		
-			
-			if ($product['minimum'] > $product_total) {
-				$this->url->redirect($this->url->link('cart/cart'));
-			}				
-		}
+    	}
 		
       $this->language->load('checkout/checkout');
 		
@@ -46,7 +29,7 @@ class ControllerCheckoutCheckout extends Controller {
 			'common/footer',
 			'common/header'	
 		);
-				
+		
 		$this->response->setOutput($this->render());
   	}
 }

@@ -13,7 +13,7 @@
       <form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
         <table class="form">
           <tr>
-            <td><span class="required">*</span> <?= $entry_name; ?></td>
+            <td><span class="required"></span> <?= $entry_name; ?></td>
             <td><? foreach ($languages as $language) { ?>
               <input type="text" name="order_status[<?= $language['language_id']; ?>][name]" value="<?= isset($order_status[$language['language_id']]) ? $order_status[$language['language_id']]['name'] : ''; ?>" />
               <img src="<?= HTTP_THEME_IMAGE . 'flags/<?= $language['image']; ?>'; ?>" title="<?= $language['name']; ?>" /><br />

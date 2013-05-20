@@ -27,6 +27,8 @@ class ModelLocalisationZone extends Model {
 	}
    
    public function inGeoZone($geo_zone, $country_id = 0, $zone_id = 0){
+   	if(!$geo_zone) return true;
+		
       $zone = $country = '';
       
       if($country_id){

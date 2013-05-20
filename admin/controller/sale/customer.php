@@ -515,7 +515,7 @@ class ControllerSaleCustomer extends Controller {
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
 		$this->pagination->text = $this->_('text_pagination');
-		$this->pagination->url = $this->url->link('sale/customer', $url . '&page={page}');
+		$this->pagination->url = $this->url->link('sale/customer', $url);
 			
 		$this->data['pagination'] = $this->pagination->render();
 
@@ -1004,7 +1004,7 @@ class ControllerSaleCustomer extends Controller {
 		$this->pagination->page = $page;
 		$this->pagination->limit = 10; 
 		$this->pagination->text = $this->_('text_pagination');
-		$this->pagination->url = $this->url->link('sale/customer/transaction', 'customer_id=' . $_GET['customer_id'] . '&page={page}');
+		$this->pagination->url = $this->url->link('sale/customer/transaction', 'customer_id=' . $_GET['customer_id']);
 			
 		$this->data['pagination'] = $this->pagination->render();
 
@@ -1058,7 +1058,7 @@ class ControllerSaleCustomer extends Controller {
 		$this->pagination->page = $page;
 		$this->pagination->limit = 10; 
 		$this->pagination->text = $this->_('text_pagination');
-		$this->pagination->url = $this->url->link('sale/customer/reward', 'customer_id=' . $_GET['customer_id'] . '&page={page}');
+		$this->pagination->url = $this->url->link('sale/customer/reward', 'customer_id=' . $_GET['customer_id']);
 			
 		$this->data['pagination'] = $this->pagination->render();
 

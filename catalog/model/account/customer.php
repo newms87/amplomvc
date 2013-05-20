@@ -1,57 +1,48 @@
 <?php
 class ModelAccountCustomer extends Model {
 	public function addCustomer($data) {
-	   
-      //Add New Customer
-		$data['store_id']          = $this->config->get('config_store_id');
-      $data['customer_group_id'] = $this->config->get('config_customer_group_id');
-      $data['date_added']        = date_format(date_create(), 'Y-m-d H:i:s');
-      $data['password']          = $this->customer->encrypt($data['password']);
-      $data['status']            = 1;
-      
-      if(!isset($data['newsletter'])){
-         $data['newsletter'] = 0;
-      }
-      
-      if($this->config->get('config_customer_approval')) {
-         $data['approved'] = 1;
-      }
-      else{
-         $data['approved'] = 0;
-      }
-      
-      $data['customer_id'] = $this->insert('customer', $data);
-      
-      $address_id = $this->insert('address',  $data);
 		
-      
-      //Add Address ID to new customer
-		$values = array(
-         'address_id' => $address_id
-        );
-      
-      $where = array(
-         'customer_id' => $data['customer_id']
-        );
-        
-   	$this->update('customer', $values, $where);
+		//Add New Customer
+		$data['store_id']		= $this->config->get('config_store_id');
+		$data['customer_group_id'] = $this->config->get('config_customer_group_id');
+		$data['date_added']		= date_format(date_create(), 'Y-m-d H:i:s');
+		$data['password']		= $this->customer->encrypt($data['password']);
+		$data['status']				= 1;
 		
-      
-      //Send Mail to new customer
+		if(!isset($data['newsletter'])){
+			$data['newsletter'] = 0;
+		}
+		
+		if($this->config->get('config_customer_approval')) {
+			$data['approved'] = 1;
+		}
+		else{
+			$data['approved'] = 0;
+		}
+		
+		$data['customer_id'] = $this->insert('customer', $data);
+		
+		$address_id = $this->insert('address',  $data);
+		
+		
+		//Add Address ID to new customer
+		$this->update('customer', array('address_id' => $address_id) , $data['customer_id']);
+		
+		//Send Mail to new customer
 		$this->language->load('mail/customer');
 		
 		$insertables = array(
-		    'first_name'   => $data['firstname'],
-		    'last_name'    => $data['lastname'],
-		    'store_name'   => $this->config->get('config_name'),
-		    'store_url'    => $this->url->site()
-         );
-         
-      $subject = $this->tool->insertables($insertables, $this->config->get('mail_registration_subject'));
-      $message = $this->tool->insertables($insertables, $this->config->get('mail_registration_message'));
+			'first_name'	=> $data['firstname'],
+			'last_name'=> $data['lastname'],
+			'store_name'	=> $this->config->get('config_name'),
+			'store_url'=> $this->url->site()
+		);
+			
+		$subject = $this->tool->insertables($insertables, $this->config->get('mail_registration_subject'));
+		$message = $this->tool->insertables($insertables, $this->config->get('mail_registration_message'));
 		
 		$this->mail->init();
-      
+		
 		$this->mail->setTo($data['email']);
 		$this->mail->setFrom($this->config->get('config_email'));
 		$this->mail->setSender($this->config->get('config_name'));
@@ -69,49 +60,46 @@ class ModelAccountCustomer extends Model {
 			$emails = explode(',', $this->config->get('config_alert_emails'));
 			
 			foreach ($emails as $email) {
-				if (strlen($email) > 0 && preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $email)) {
+				if ($this->validation->email($email)) {
 					$this->mail->setTo($email);
 					$this->mail->send();
 				}
 			}
 		}
-      
-      return $data['customer_id'];
+		
+		return $data['customer_id'];
 	}
 	
 	public function editCustomer($data) {
-	   $where = array(
-	     'customer_id' => $this->customer->getId()
-       );
-       
-       //we do not allow editing the password here ( must be done via $this->editPassword() )
-       if(isset($data['password']))
-         unset($data['password']);
-       
+		$where = array(
+			'customer_id' => $this->customer->getId()
+		);
+	
+		//we do not allow editing the password here ( must be done via $this->editPassword() )
+		if(isset($data['password'])){
+			unset($data['password']);
+		}
+	
 		$this->update('customer', $data, $where);
 	}
 
 	public function editPassword($email, $password) {
-	   $data = array(
-	     'password' => $this->customer->encrypt($password)
-       );
-      
-      $where = array(
-         'email' => $email
-        );
-        
-   	$this->update('customer', $data, $where);
+		$data = array(
+			'password' => $this->customer->encrypt($password)
+		);
+		
+		$this->update('customer', $data, array('email' => $email));
 	}
 
 	public function editNewsletter($newsletter) {
-	   $data = array(
-	     'newsletter' => $newsletter
-	    );
-      
-      $where = array(
-         'customer_id' => $this->customer->getId()
-        );
-        
+		$data = array(
+			'newsletter' => $newsletter
+		);
+		
+		$where = array(
+			'customer_id' => $this->customer->getId()
+		);
+		
 		$this->update('customer', $data, $where);
 	}
 					

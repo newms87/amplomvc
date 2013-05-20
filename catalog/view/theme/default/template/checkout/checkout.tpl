@@ -8,11 +8,11 @@
       <div class="checkout-heading"><?= $text_step . ' ' . $step++;?>. <?= $text_checkout_option; ?></div>
       <div class="checkout-content"></div>
     </div>
-    <div id="customer_information" class='checkout_item' route='checkout/block/customer_information' validate='checkout/block/customer_information/validate'>
+    <div id="customer_information" class='checkout_item' route='checkout/block/customer_information'>
       <div class="checkout-heading"><?= $text_step . ' ' . $step++;?>. <?= $text_checkout_information; ?></div>
       <div class="checkout-content"></div>
     </div>
-    <div id="confirm" class='checkout_item' route='checkout/block/confirm' validate='checkout/block/confirm/validate'>
+    <div id="confirm" class='checkout_item' route='checkout/block/confirm'>
       <div class="checkout-heading"><?= $text_step . ' ' . $step++;?>. <?= $text_checkout_confirm; ?></div>
       <div class="checkout-content"></div>
     </div>
@@ -20,11 +20,7 @@
   <?= $content_bottom; ?>
 </div>
 
-<script type="text/javascript">
-//<!--
-$('.checkout-heading a').live('click', function() {
-   load_checkout_item($(this).closest('.checkout_item'));
-});
+<script type="text/javascript">//<!--
 
 $(document).ready(function() {
    <? if($logged){ ?>
@@ -71,72 +67,15 @@ function load_checkout_item(c_item, route){
          headings = <?= $logged ? 'c_item.prevUntil("#login")' : 'c_item.prevAll()'; ?>;
           
          headings.each(function(i,e){
-            $(e).find('.checkout-heading').append('<a><?= $text_modify; ?></a>');
+            $(e).find('.checkout-heading').append("<a class=\"modify\" onclick=\"load_checkout_item($(this).closest('.checkout_item'))\"><?= $text_modify; ?></a>");
          });
       },
-      error: function(xhr, ajaxOptions, thrownError) {
-         c_item.find('.message_box').remove();
-         html = '<div class="message_box warning" style="display: none;"><div><?= $error_page_load;?></div></div>';
-         c_item.find('.checkout-content').prepend(html);
-         c_item.find('.warning').fadeIn('fast');
-      }
+      error: handle_ajax_error
    });
 }
 
 function load_next_checkout_item(){
    load_checkout_item($('.active_checkout_item').next());
-}
-
-function validate_checkout_item(c_item, validate){
-   if(typeof c_item == 'string'){
-      c_item = $('#' + c_item);
-   }
-   
-   validate = validate || c_item.attr('validate');
-   
-   if(!c_item.length) return;
-   
-   if(!validate){
-      load_next_checkout_item();
-   }
-   else{
-      $.ajax({
-         url: 'index.php?route=' + validate,
-         type: 'post',
-         data: c_item.find('select, input:checked, input[type="text"], input[type="password"], input[type="hidden"], textarea'),
-         dataType: 'json',
-         beforeSend: page_loading,
-         complete: page_received,
-         success: function(json) {
-            c_item.find('.error, .warning').remove();
-            
-            if (json['redirect']) {
-               location = json['redirect'];
-            }
-            
-            if (json['error']) {
-               msgs = '';
-               for(var e in json['error']){
-                  msg = '<span class="error">' + json['error'][e] + '</span>';
-                  c_item.find('[name="'+e+'"]').after(msg);
-                  msgs += msg;
-               }
-               if(msgs){
-                  c_item.find('.checkout-content').prepend('<div class="message_box warning" style="display: none;">' + msgs + '</div>');
-                  c_item.find('.warning').fadeIn('fast');
-               }
-            } else {
-               load_next_checkout_item();
-            }
-         },
-         error: function(xhr, ajaxOptions, thrownError) {
-            c_item.find('.message_box').remove();
-            html = '<div class="message_box warning" style="display: none;"><div><?= $error_page_load;?></div></div>';
-            c_item.find('.checkout-content').prepend(html);
-            c_item.find('.warning').fadeIn('fast');
-         }
-      });
-   }
 }
 
 function page_loading(){
@@ -152,20 +91,72 @@ function page_received(){
 
 function submit_checkout_item(context){
    id = context.attr('id');
-   if(id == 'button-account'){
-      if($('[name=account]:checked').val() == 'register'){
-         load_checkout_item('customer_information', 'checkout/block/register');
-      }
-      else{
-         load_next_checkout_item();
-      }
+   
+   if(id && id == 'button-account' && $('[name=account]:checked').val() == 'register'){
+      load_checkout_item('customer_information', 'checkout/block/register');
+      return;
    }
-   else if(id == 'button-register'){
-      validate_checkout_item(context.closest('.checkout_item'), 'checkout/block/register/validate');
-   }
-   else{
-      validate_checkout_item(context.closest('.checkout_item'));
-   }
+   
+   load_next_checkout_item();
+}
+
+
+function validate_form(form, callback){
+	if(!form.attr('action')) return;
+	
+	data = form.serialize();
+	
+	//Add Submit name attribute to query
+	form_submit = form.find('input[type=submit]');
+	
+	if(form_submit){
+		data += '&' + form_submit.attr('name') + '=' + form_submit.val();
+	}
+	
+	//Add asynchronous ajax call flag
+	data += '&async=1';
+	
+	$.ajax({
+		url: form.attr('action'),
+		type: 'post',
+		data: data,
+		dataType: 'json',
+		success: function(json) {
+			handle_validation_response(form, json);
+			
+			if(typeof callback == 'function'){
+				callback(form, json);
+			}
+		},
+		error: function(jqXHR, status){
+			handle_ajax_error(jqXHR, status);
+			
+			handle_validation_response(form, {});
+		}
+	});
+}
+
+function handle_validation_response(form, json){
+	json = json || {};
+	
+	if (json['redirect']) {
+		location = json['redirect'];
+	}
+	
+	form.find('.message_box, .error').remove();
+	
+	if (json['error']) {
+		msgs = '';
+		for(var e in json['error']){
+			msg = '<span class="error">' + json['error'][e] + '</span>';
+			form.find('[name="'+e+'"]').after(msg);
+			msgs += msg;
+		}
+		if(msgs){
+			form.prepend('<div class="message_box warning" style="display: none;">' + msgs + '</div>');
+			$('.warning').fadeIn('fast');
+		}
+	}
 }
 //--></script> 
 <?= $footer; ?>

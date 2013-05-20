@@ -1,6 +1,10 @@
 <?php 
+
+//TODO: This Process has been forsaken... Gotta fix at some point right?
+
 class ControllerCheckoutManual extends Controller {
 	public function index() {
+		
 		$this->load->language('checkout/manual');
 		
 		$json = array();
@@ -320,7 +324,6 @@ class ControllerCheckoutManual extends Controller {
 					
 					foreach ($results as $result) {
 						if ($this->config->get($result['code'] . '_status')) {
-							$this->load->model('shipping/' . $result['code']);
 							
 							$quote = $this->{'model_shipping_' . $result['code']}->getQuote($address_data); 
 				
@@ -427,7 +430,6 @@ class ControllerCheckoutManual extends Controller {
 			
 			foreach ($results as $result) {
 				if ($this->config->get($result['code'] . '_status')) {
-					$this->load->model('total/' . $result['code']);
 		
 					$this->{'model_total_' . $result['code']}->getTotal($json['order_total'], $total, $taxes);
 				}
@@ -501,8 +503,7 @@ class ControllerCheckoutManual extends Controller {
 		
 				foreach ($results as $result) {
 					if ($this->config->get($result['code'] . '_status')) {
-						$this->load->model('payment/' . $result['code']);
-						
+
 						$method = $this->{'model_payment_' . $result['code']}->getMethod($address_data, $total); 
 						
 						if ($method) {

@@ -10,22 +10,6 @@ class ControllerExtensionShipping extends Controller {
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('extension/shipping'));
 
-		if (isset($this->session->data['success'])) {
-			$this->data['success'] = $this->session->data['success'];
-		
-			unset($this->session->data['success']);
-		} else {
-			$this->data['success'] = '';
-		}
-		
-		if (isset($this->session->data['error'])) {
-			$this->data['error'] = $this->session->data['error'];
-		
-			unset($this->session->data['error']);
-		} else {
-			$this->data['error'] = '';
-		}
-
 		$extensions = $this->model_setting_extension->getInstalled('shipping');
 		
 		foreach ($extensions as $key => $value) {

@@ -82,8 +82,13 @@ class Session {
       
       $this->delete_cookie($this->name);
       
+		$this->end();
+   }
+	
+	public function end(){
 		$to_save = array(
 			'messages',
+			'language',
 		);
 		
 		foreach($_SESSION as $key => $s){
@@ -91,7 +96,7 @@ class Session {
 				unset($_SESSION[$key]);
 			}
 		}
-   }
+	}
    
    public function set_cookie($name, $value, $expire = 3600){
       //TODO: ADD EXPIRATION TIME BACK IN! Remove because Chrome was not working

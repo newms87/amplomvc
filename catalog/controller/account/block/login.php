@@ -22,7 +22,7 @@ class ControllerAccountBlockLogin extends Controller {
       
 		$this->data['email'] = !empty($_POST['email']) ? $_POST['email'] : '';
 		
-		$this->data['redirect'] = $this->url->current_page();
+		$this->data['redirect'] = $this->url->here();
 		
     	$this->render();
   	}

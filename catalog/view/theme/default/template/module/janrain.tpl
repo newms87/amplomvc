@@ -65,6 +65,9 @@
    </div>
 </div>
 <? }?>
+
+<? global $janrain_call_once;
+if(!isset($janrain_call_once)) { ?>
 <script type="text/javascript">//<!--
 if(typeof window.janrain!=='object'){window.janrain={};}
 if(typeof window.janrain.settings!=='object'){window.janrain.settings={};}
@@ -75,7 +78,7 @@ janrain.settings.language='<?= $janrain_lang;?>';
 janrain.settings.showAttribution=false;
 janrain.ready=true;
 
-if(document.location.protocol==='https:'){
+if(document.location.protocol === 'https:'){
    src='https://rpxnow.com/js/lib/<?= $janrain_application_domain;?>/engage.js';
 }
 else{
@@ -86,3 +89,5 @@ $(document).ready(function(){
 	$.getScript(src);
 });
 //--></script>
+<? $janrain_call_once = true; ?>
+<? } ?>

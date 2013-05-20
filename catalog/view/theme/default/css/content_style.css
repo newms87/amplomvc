@@ -522,9 +522,13 @@ ul#section_nav a.active,ul#section_nav li a:hover{
 	width: 98%;
 }
 
-#guest-checkout form{
+#guest_checkout form{
 	display:block;
-	overflow:auto;
+	overflow:visible;
+}
+
+#guest_checkout .shipping_address{
+	margin-top:10px;
 }
 
 .allowed_zone_list{

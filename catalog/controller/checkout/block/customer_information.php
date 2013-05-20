@@ -2,41 +2,26 @@
 class ControllerCheckoutBlockCustomerInformation extends Controller {
    public function index(){
       $this->template->load('checkout/block/customer_information');
+      $this->language->load('checkout/block/customer_information');
+		
+      if(!$this->customer->isLogged()){
+      	$this->data['guest_checkout'] = true;
       
-      $this->data['guest_checkout'] = !$this->customer->isLogged();
-      
-      if($this->data['guest_checkout']){
-         if(isset($this->session->data['guest'])){
-            $this->data['had_guest_info'] = true;
-         }
-         $this->data['guest_information'] = $this->getBlock('checkout', 'guest_information');
-         
-         if($this->cart->hasShipping()){
-            $this->data['shipping_method'] = $this->getBlock('checkout', 'shipping_method');
-         }
-         
-         $this->data['payment_method'] = $this->getBlock('checkout', 'payment_method');
-      }
-      elseif($this->customer->verifyDefaultAddress()){
-         $this->data['payment_address'] = $this->getBlock('checkout', 'payment_address');
-         
-         $this->data['payment_method'] = $this->getBlock('checkout', 'payment_method');
-         
-         if($this->cart->hasShipping()){
-            $this->data['shipping_address'] = $this->getBlock('checkout', 'shipping_address');
-            
-            $this->data['shipping_method'] = $this->getBlock('checkout', 'shipping_method');
-         }
+         $this->data['block_guest_information'] = $this->getBlock('checkout', 'guest_information');
       }
       else{
-         $this->data['no_address'] = true;
+         $this->data['block_payment_address'] = $this->getBlock('checkout', 'payment_address');
          
-         $this->data['new_address'] = $this->getBlock('checkout', 'new_address');
-         
+         if($this->cart->hasShipping()){
+            $this->data['block_shipping_address'] = $this->getBlock('checkout', 'shipping_address');
+         }
+      }
+		
+		if($this->cart->hasShipping()){
+         $this->data['block_shipping_method'] = $this->getBlock('checkout', 'shipping_method');
       }
       
-      //TODO - move this to top after updating language system to load new language objects for each controller instance.
-      $this->language->load('checkout/block/customer_information');
+      $this->data['block_payment_method'] = $this->getBlock('checkout', 'payment_method');
       
       $this->response->setOutput($this->render());
    }
@@ -46,20 +31,22 @@ class ControllerCheckoutBlockCustomerInformation extends Controller {
       
       $this->language->load('checkout/block/customer_information');
       
-      if(!isset($this->session->data['guest']['payment_address']) && !isset($this->session->data['payment_address_id'])){
+      if(!$this->cart->hasPaymentAddress()){
          $json['error']['payment_address'] = $this->_('error_payment_address');
       }
-      
-      if(!isset($this->session->data['guest']['shipping_address']) && !isset($this->session->data['shipping_address_id'])){
-         $json['error']['shipping_address'] = $this->_('error_shipping_address');
-      }
-      
-      if(!isset($this->session->data['payment_method'])){
+		
+		if(!$this->cart->hasPaymentMethod()){
          $json['error']['payment_method'] = $this->_('error_payment_method');
       }
-
-      if(!isset($this->session->data['shipping_method'])){
-         $json['error']['shipping_method'] = $this->_('error_shipping_method');
+      
+		if($this->cart->hasShipping()){
+	      if(!$this->cart->hasShippingAddress()){
+	         $json['error']['shipping_address'] = $this->_('error_shipping_address');
+	      }
+	      
+	      if(!$this->cart->hasShippingMethod()){
+	         $json['error']['shipping_method'] = $this->_('error_shipping_method');
+	      }
       }
 
       $this->response->setOutput(json_encode($json));

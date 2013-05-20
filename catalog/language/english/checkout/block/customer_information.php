@@ -4,7 +4,6 @@ $_['text_shipping_information'] = 'Delivery Information';
 $_['text_shipping_address'] = 'Delivery Address';
 $_['text_shipping_method']  = 'Delivery Method';
 $_['text_payment_method']   = 'Payment Method';
-$_['text_new_address']                = 'Please Provide a new Delivery Address';
 
 $_['text_info_loading'] = "Loading... please wait.";
 $_['text_info_validating'] = "Validating...";

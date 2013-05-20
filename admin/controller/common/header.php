@@ -128,6 +128,15 @@ class ControllerCommonHeader extends Controller {
 		$this->data['css_styles'] = $this->document->getStyles();
 		$this->data['js_scripts'] = $this->document->getScripts();
 		
+		
+		//Failed Email Messages warnings
+		$failed_count = $this->model_mail_error->total_failed_messages();
+		
+		if($failed_count){
+			$view_mail_errors = $this->url->admin('mail/error');
+			$this->message->add('warning', "There are <strong>$failed_count</strong> failed email messages! <a href=\"$view_mail_errors\">(view errors)</a>");
+		}
+		
 		$this->render();
 	}
 }

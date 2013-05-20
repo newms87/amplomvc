@@ -16,7 +16,12 @@ class ControllerSaleOrder extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-      	  	$this->model_sale_order->addOrder($_POST);
+			//TODO - Need to change this so it will actually work when ordering!
+			$this->message->add('warning', "This order method is not in use! sale/order/insert.");
+			$this->url->redirect($this->url->link('common/home'));
+			
+			//TODO - we have updated the order method...
+			$this->model_sale_order->addOrder($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 		  
@@ -337,7 +342,7 @@ class ControllerSaleOrder extends Controller {
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
 		$this->pagination->text = $this->_('text_pagination');
-		$this->pagination->url = $this->url->link('sale/order', $url . '&page={page}');
+		$this->pagination->url = $this->url->link('sale/order', $url);
 
 		$this->data['pagination'] = $this->pagination->render();
 
@@ -1548,7 +1553,7 @@ class ControllerSaleOrder extends Controller {
 		$this->pagination->page = $page;
 		$this->pagination->limit = 10; 
 		$this->pagination->text = $this->_('text_pagination');
-		$this->pagination->url = $this->url->link('sale/order/history', 'order_id=' . $_GET['order_id'] . '&page={page}');
+		$this->pagination->url = $this->url->link('sale/order/history', 'order_id=' . $_GET['order_id']);
 			
 		$this->data['pagination'] = $this->pagination->render();
 		

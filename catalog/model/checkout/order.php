@@ -10,6 +10,7 @@ class ModelCheckoutOrder extends Model {
 			$data['email'] = 'guest';
 		}
       
+		//TODO - Remove invoice_no from DB?
       $data['invoice_no'] = 0;
       $data['date_added'] = $this->tool->format_datetime();
       $data['date_modified'] = $this->tool->format_datetime();
@@ -253,8 +254,6 @@ class ModelCheckoutOrder extends Model {
 		$order_total_query = $this->query("SELECT * FROM `" . DB_PREFIX . "order_total` WHERE order_id = '" . (int)$order_id . "' ORDER BY sort_order ASC");
 		
 		foreach ($order_total_query->rows as $order_total) {
-			$this->load->model('total/' . $order_total['code']);
-			
 			if (method_exists($this->{'model_total_' . $order_total['code']}, 'confirm')) {
 				$this->{'model_total_' . $order_total['code']}->confirm($order_info, $order_total);
 			}

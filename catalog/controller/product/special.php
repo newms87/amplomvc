@@ -239,7 +239,7 @@ class ControllerProductSpecial extends Controller {
 		$this->pagination->page = $page;
 		$this->pagination->limit = $limit;
 		$this->pagination->text = $this->_('text_pagination');
-		$this->pagination->url = $this->url->link('product/special', $url . '&page={page}');
+		$this->pagination->url = $this->url->link('product/special', $url);
 			
 		$this->data['pagination'] = $this->pagination->render();
 			

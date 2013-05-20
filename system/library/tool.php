@@ -28,6 +28,16 @@ class Tool {
 		return $slug;
 	}
 	
+	public function name_format($format, $data){
+		$formatted_data = array();
+		
+		foreach($data as $name => $d){
+			$formatted_data[preg_replace("/%name%/",$name, $format)] = $d;
+		}
+		
+		return $formatted_data;
+	}
+	
    public function error_info(){
       list(,,$caller) = debug_backtrace(false);
       return "<span style='font-weight:bold; color:#E72727'>$caller[file] on line $caller[line]: </span>";
@@ -36,10 +46,12 @@ class Tool {
    public function insertables($insertables, $text, $start = '%', $end = '%'){
       $patterns = array();
       $replacements = array();
-      foreach($insertables as $key=>$value){
+		
+      foreach($insertables as $key => $value){
          $patterns[] = "/$start" . $key . "$end/";
-         $replacements[] = $value?$value:'';
+         $replacements[] = $value;
       }
+		
       return preg_replace($patterns, $replacements, $text);
    }
    

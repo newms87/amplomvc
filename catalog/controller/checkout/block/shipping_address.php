@@ -94,7 +94,6 @@ class ControllerCheckoutBlockShippingAddress extends Controller {
 				$this->session->data['shipping_address_id'] = $_POST['address_id'];
 				
 				unset($this->session->data['shipping_method']);
-				unset($this->session->data['shipping_methods']);
 			}
 		}
 		
@@ -107,52 +106,24 @@ class ControllerCheckoutBlockShippingAddress extends Controller {
 		$json = $this->validate();
 		
 		if(!$json){
-			//Validate the form (Be sure error language files are loaded! eg: checkout/checkout has errors for address.)
+			//Validate Shipping Address Form
 			$this->form->init('address');
 			
 			if(!$this->form->validate($_POST)){
 				$json['error'] = $this->form->get_errors();
 			}
 			
-			//Additional Error checking
-			$country_info = $this->model_localisation_country->getCountry($_POST['country_id']);
-			
-			if (!$country_info){
-				$json['error']['country_id'] = $this->_('error_country_id');
+			if(!$json && !$this->cart->validateShippingAddress($_POST)){
+				$json['error'] +=  $this->cart->get_errors('shipping_address');
 			}
 			
-			$geo_zone = $this->config->get('config_allowed_shipping_zone');
-			
-			if($geo_zone > 0){
-				$valid_country_id = $valid_zone_id = false;
-				
-				$zones = $this->model_localisation_zone->getZonesByGeoZone($geo_zone);
-				
-				foreach($zones as $z){
-					if($_POST['country_id'] == $z['country_id']){
-						$valid_country_id = true;
-						if($_POST['zone_id'] == $z['zone_id'] || $z['zone_id'] == 0){
-							$valid_zone_id = true;
-						}
-					}
-				}
-				
-				if(!$valid_country_id){
-					$json['error']['country_id'] = $this->_('error_country_shipping');
-				}
-				
-				if(!$valid_zone_id){
-					$json['error']['zone_id'] = $this->_('error_zone_shipping');
-				}
-			}
-			
-			if (!$json) {
+			if(!$json){
 				$this->session->data['shipping_address_id'] = $this->model_account_address->addAddress($_POST);
 				
 				unset($this->session->data['shipping_method']);
-				unset($this->session->data['shipping_methods']);
 			}
 			
+			//If this is not an ajax call
 			if(!isset($_POST['async'])){
 				if($json){
 					$this->message->add('warning', $json['error']);

@@ -139,7 +139,7 @@ class ControllerSaleCoupon extends Controller {
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
 		$this->pagination->text = $this->_('text_pagination');
-		$this->pagination->url = $this->url->link('sale/coupon', $url . '&page={page}');
+		$this->pagination->url = $this->url->link('sale/coupon', $url);
 			
 		$this->data['pagination'] = $this->pagination->render();
 
@@ -325,7 +325,7 @@ class ControllerSaleCoupon extends Controller {
 		$this->pagination->total = $history_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = 10; 
-		$this->pagination->url = $this->url->link('sale/coupon/history', 'coupon_id=' . $coupon_id . '&page={page}');
+		$this->pagination->url = $this->url->link('sale/coupon/history', 'coupon_id=' . $coupon_id);
 			
 		$this->data['pagination'] = $this->pagination->render();
 		

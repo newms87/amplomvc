@@ -26,19 +26,19 @@
                 <input type="hidden" name="customer_group_id" value="<?= $customer_group_id; ?>" /></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_firstname; ?></td>
+              <td><span class="required"></span> <?= $entry_firstname; ?></td>
               <td><input type="text" name="firstname" value="<?= $firstname; ?>" /></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_lastname; ?></td>
+              <td><span class="required"></span> <?= $entry_lastname; ?></td>
               <td><input type="text" name="lastname" value="<?= $lastname; ?>" /></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_email; ?></td>
+              <td><span class="required"></span> <?= $entry_email; ?></td>
               <td><input type="text" name="email" value="<?= $email; ?>" /></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_telephone; ?></td>
+              <td><span class="required"></span> <?= $entry_telephone; ?></td>
               <td><input type="text" name="telephone" value="<?= $telephone; ?>" /></td>
             </tr>
             <tr>
@@ -59,11 +59,11 @@
                 </select></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_firstname; ?></td>
+              <td><span class="required"></span> <?= $entry_firstname; ?></td>
               <td><input type="text" name="payment_firstname" value="<?= $payment_firstname; ?>" /></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_lastname; ?></td>
+              <td><span class="required"></span> <?= $entry_lastname; ?></td>
               <td><input type="text" name="payment_lastname" value="<?= $payment_lastname; ?>" /></td>
             </tr>
             <tr>
@@ -71,7 +71,7 @@
               <td><input type="text" name="payment_company" value="<?= $payment_company; ?>" /></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_address_1; ?></td>
+              <td><span class="required"></span> <?= $entry_address_1; ?></td>
               <td><input type="text" name="payment_address_1" value="<?= $payment_address_1; ?>" /></td>
             </tr>
             <tr>
@@ -79,22 +79,22 @@
               <td><input type="text" name="payment_address_2" value="<?= $payment_address_2; ?>" /></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_city; ?></td>
+              <td><span class="required"></span> <?= $entry_city; ?></td>
               <td><input type="text" name="payment_city" value="<?= $payment_city; ?>" /></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_postcode; ?></td>
+              <td><span class="required"></span> <?= $entry_postcode; ?></td>
               <td><input type="text" name="payment_postcode" value="<?= $payment_postcode; ?>" /></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_country; ?></td>
+              <td><span class="required"></span> <?= $entry_country; ?></td>
               <td>
                  <?= $this->builder->set_config('country_id', 'name');?>
                  <?= $this->builder->build('select', $countries, "payment_country_id", $payment_country_id, array('class'=>"country_select"));?>
               </td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_zone; ?></td>
+              <td><span class="required"></span> <?= $entry_zone; ?></td>
               <td><select name="payment_zone_id" class="zone_select" zone_id="<?= $payment_zone_id;?>" ></select></td>
             </tr>
           </table>
@@ -111,11 +111,11 @@
                 </select></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_firstname; ?></td>
+              <td><span class="required"></span> <?= $entry_firstname; ?></td>
               <td><input type="text" name="shipping_firstname" value="<?= $shipping_firstname; ?>" /></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_lastname; ?></td>
+              <td><span class="required"></span> <?= $entry_lastname; ?></td>
               <td><input type="text" name="shipping_lastname" value="<?= $shipping_lastname; ?>" /></td>
             </tr>
             <tr>
@@ -123,7 +123,7 @@
               <td><input type="text" name="shipping_company" value="<?= $shipping_company; ?>" /></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_address_1; ?></td>
+              <td><span class="required"></span> <?= $entry_address_1; ?></td>
               <td><input type="text" name="shipping_address_1" value="<?= $shipping_address_1; ?>" /></td>
             </tr>
             <tr>
@@ -131,22 +131,22 @@
               <td><input type="text" name="shipping_address_2" value="<?= $shipping_address_2; ?>" /></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_city; ?></td>
+              <td><span class="required"></span> <?= $entry_city; ?></td>
               <td><input type="text" name="shipping_city" value="<?= $shipping_city; ?>" /></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_postcode; ?></td>
+              <td><span class="required"></span> <?= $entry_postcode; ?></td>
               <td><input type="text" name="shipping_postcode" value="<?= $shipping_postcode; ?>" /></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_country; ?></td>
+              <td><span class="required"></span> <?= $entry_country; ?></td>
               <td>
                  <?= $this->builder->set_config('country_id', 'name');?>
                  <?= $this->builder->build('select', $countries, "shipping_country_id", $shipping_country_id, array('class'=>"country_select"));?>
               </td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_zone; ?></td>
+              <td><span class="required"></span> <?= $entry_zone; ?></td>
               <td><select name="shipping_zone_id" zone_id="<?= $shipping_zone_id;?>" class="zone_select"></select></td>
             </tr>
           </table>
@@ -291,23 +291,23 @@
             </thead>
             <tbody>
               <tr>
-                <td class="left"><span class="required">*</span> <?= $entry_to_name; ?></td>
+                <td class="left"><span class="required"></span> <?= $entry_to_name; ?></td>
                 <td class="left"><input type="text" name="to_name" value="" /></td>
               </tr>
               <tr>
-                <td class="left"><span class="required">*</span> <?= $entry_to_email; ?></td>
+                <td class="left"><span class="required"></span> <?= $entry_to_email; ?></td>
                 <td class="left"><input type="text" name="to_email" value="" /></td>
               </tr>
               <tr>
-                <td class="left"><span class="required">*</span> <?= $entry_from_name; ?></td>
+                <td class="left"><span class="required"></span> <?= $entry_from_name; ?></td>
                 <td class="left"><input type="text" name="from_name" value="" /></td>
               </tr>
               <tr>
-                <td class="left"><span class="required">*</span> <?= $entry_from_email; ?></td>
+                <td class="left"><span class="required"></span> <?= $entry_from_email; ?></td>
                 <td class="left"><input type="text" name="from_email" value="" /></td>
               </tr>
               <tr>
-                <td class="left"><span class="required">*</span> <?= $entry_theme; ?></td>
+                <td class="left"><span class="required"></span> <?= $entry_theme; ?></td>
                 <td class="left"><select name="voucher_theme_id">
                     <? foreach ($voucher_themes as $voucher_theme) { ?>
                     <option value="<?= $voucher_theme['voucher_theme_id']; ?>"><?= addslashes($voucher_theme['name']); ?></option>
@@ -319,7 +319,7 @@
                 <td class="left"><textarea name="message" cols="40" rows="5"></textarea></td>
               </tr>
               <tr>
-                <td class="left"><span class="required">*</span> <?= $entry_amount; ?></td>
+                <td class="left"><span class="required"></span> <?= $entry_amount; ?></td>
                 <td class="left"><input type="text" name="amount" value="25.00" size="5" /></td>
               </tr>
             </tbody>
@@ -626,7 +626,7 @@ $('input[name=\'product\']').autocomplete({
 					html += '<div id="option-' + option['product_option_id'] + '">';
 					
 					if (option['required']) {
-						html += '<span class="required">*</span> ';
+						html += '<span class="required"></span> ';
 					}
 				
 					html += option['name'] + '<br />';
@@ -654,7 +654,7 @@ $('input[name=\'product\']').autocomplete({
 					html += '<div id="option-' + option['product_option_id'] + '">';
 					
 					if (option['required']) {
-						html += '<span class="required">*</span> ';
+						html += '<span class="required"></span> ';
 					}
 				
 					html += option['name'] + '<br />';
@@ -682,7 +682,7 @@ $('input[name=\'product\']').autocomplete({
 					html += '<div id="option-' + option['product_option_id'] + '">';
 					
 					if (option['required']) {
-						html += '<span class="required">*</span> ';
+						html += '<span class="required"></span> ';
 					}
 					
 					html += option['name'] + '<br />';
@@ -709,7 +709,7 @@ $('input[name=\'product\']').autocomplete({
 					html += '<div id="option-' + option['product_option_id'] + '">';
 					
 					if (option['required']) {
-						html += '<span class="required">*</span> ';
+						html += '<span class="required"></span> ';
 					}
 				
 					html += option['name'] + '<br />';
@@ -737,7 +737,7 @@ $('input[name=\'product\']').autocomplete({
 					html += '<div id="option-' + option['product_option_id'] + '">';
 					
 					if (option['required']) {
-						html += '<span class="required">*</span> ';
+						html += '<span class="required"></span> ';
 					}
 					
 					html += option['name'] + '<br />';
@@ -750,7 +750,7 @@ $('input[name=\'product\']').autocomplete({
 					html += '<div id="option-' + option['product_option_id'] + '">';
 					
 					if (option['required']) {
-						html += '<span class="required">*</span> ';
+						html += '<span class="required"></span> ';
 					}
 					
 					html += option['name'] + '<br />';
@@ -763,7 +763,7 @@ $('input[name=\'product\']').autocomplete({
 					html += '<div id="option-' + option['product_option_id'] + '">';
 					
 					if (option['required']) {
-						html += '<span class="required">*</span> ';
+						html += '<span class="required"></span> ';
 					}
 					
 					html += option['name'] + '<br />';
@@ -777,7 +777,7 @@ $('input[name=\'product\']').autocomplete({
 					html += '<div id="option-' + option['product_option_id'] + '">';
 					
 					if (option['required']) {
-						html += '<span class="required">*</span> ';
+						html += '<span class="required"></span> ';
 					}
 					
 					html += option['name'] + '<br />';
@@ -790,7 +790,7 @@ $('input[name=\'product\']').autocomplete({
 					html += '<div id="option-' + option['product_option_id'] + '">';
 					
 					if (option['required']) {
-						html += '<span class="required">*</span> ';
+						html += '<span class="required"></span> ';
 					}
 					
 					html += option['name'] + '<br />';
@@ -803,7 +803,7 @@ $('input[name=\'product\']').autocomplete({
 					html += '<div id="option-' + option['product_option_id'] + '">';
 					
 					if (option['required']) {
-						html += '<span class="required">*</span> ';
+						html += '<span class="required"></span> ';
 					}
 					
 					html += option['name'] + '<br />';

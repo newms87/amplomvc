@@ -1,79 +1,46 @@
 <div id="customer_information_box">
-	<? if(isset($no_address)){ ?>
-		<div id='new_address_form' class='info_item' route='checkout/block/new_address'>
-			<h2 class='info_heading'><?= $text_new_address;?></h2>
-			<div class='info_content'><?= $new_address;?></div>
+	<? if(!empty($guest_checkout)) { ?>
+		<div id='guest_information' class='info_item' route='checkout/block/guest_information'>
+			<div class='info_content'><?= $block_guest_information;?></div>
 			<div class='validation_status'></div>
 		</div>
 	<? } else { ?>
-	
-		<? if($guest_checkout){ ?>
-			<div id='guest_information' class='info_item' route='checkout/block/guest_information'>
-				<div class='info_content'><?= $guest_information;?></div>
-				<div class='validation_status'></div>
-			</div>
-		<? } else { ?>
-			<? if(isset($shipping_address)) {?>
+		<? if(!empty($block_shipping_address)) {?>
 			<div id='shipping_address' class='info_item' route='checkout/block/shipping_address'>
 				<h2 class='info_heading'><?= $text_shipping_information;?></h2>
-				<div class='info_content'><?= $shipping_address;?></div>
-				<div class='validation_status'></div>
-			</div>
-			<? }?>
-			<div id='payment_address' class='info_item' route='checkout/block/payment_address'>
-				<h2 class='info_heading'><?= $text_payment_address;?></h2>
-				<div class='info_content'><?= $payment_address;?></div>
+				<div class='info_content'><?= $block_shipping_address;?></div>
 				<div class='validation_status'></div>
 			</div>
 		<? }?>
-		<? if(isset($shipping_method)) {?>
-		<div id='shipping_method' class='info_item' route='checkout/block/shipping_method'>
-			<h2 class='info_heading'><?= $guest_checkout ? $text_shipping_method : '';?></h2>
-			<div class='info_content'><?= $shipping_method;?></div>
-			<div class='validation_status'></div>
-		</div>
-		<? }?>
-		<div id='payment_method' class='info_item' route='checkout/block/payment_method'>
-			<h2 class='info_heading'><?= $text_payment_method;?></h2>
-			<div class='info_content'><?= $payment_method;?></div>
-			<div class='validation_status'></div>
-		</div>
 		
-		<div class="buttons">
-		<div class="right"><input type="button" value="<?= $button_continue; ?>" onclick="validate_submit()" id="button-customer-information" class="button" /></div>
+		<div id='payment_address' class='info_item' route='checkout/block/payment_address'>
+			<h2 class='info_heading'><?= $text_payment_address;?></h2>
+			<div class='info_content'><?= $block_payment_address;?></div>
+			<div class='validation_status'></div>
 		</div>
+	<? }?>
 	
-	<? } ?>
+	<? if(!empty($block_shipping_method)) {?>
+		<div id='shipping_method' class='info_item' route='checkout/block/shipping_method'>
+			<h2 class='info_heading'><?= !empty($guest_checkout) ? $text_shipping_method : '';?></h2>
+			<div class='info_content'><?= $block_shipping_method;?></div>
+			<div class='validation_status'></div>
+		</div>
+	<? }?>
+	
+	<div id='payment_method' class='info_item' route='checkout/block/payment_method'>
+		<h2 class='info_heading'><?= $text_payment_method;?></h2>
+		<div class='info_content'><?= $block_payment_method;?></div>
+		<div class='validation_status'></div>
+	</div>
+	
+	<div id="customer_checkout_submit" class="buttons">
+		<div class="right"><input type="button" value="<?= $button_continue; ?>" onclick="validate_submit($(this))" class="button" /></div>
+	</div>
 </div>
 
 
 <script type="text/javascript">//<!--
-function validate_submit(){
-	if(!is_valid($('#shipping_address'))){
-		if($('[name=shipping_address]:checked').val() == 'existing'){
-			validate_form($('#shipping_existing form'));
-		}
-		else{
-			validate_form($('#shipping_new form'));
-		}
-	}
-	else if(!is_valid($('#payment_address'))){
-		if($('[name=payment_address]:checked').val() == 'existing'){
-			validate_form($('#payment_existing form'));
-		}
-		else{
-			validate_form($('#payment_new form'));
-		}
-	}
-	else{
-		submit_checkout_item($('#button-customer-information'));
-	}
-}
-
-function is_valid(info_item){
-	return info_item.hasClass('valid');
-}
-
 //invalidate an info item if any changes are detected
 $('.info_item [name]').change(function(){
 	info_item = $(this).closest('.info_item');
@@ -88,6 +55,8 @@ function set_validation_status(info_item, status, msg){
 	
 	info_item.removeClass('validating invalid valid loading').addClass(status)
 	.find('.validation_status').html(msg);
+	
+	handle_dependencies(info_item);
 }
 
 function info_page_loading(info_item){
@@ -95,29 +64,16 @@ function info_page_loading(info_item){
 }
 
 function info_page_received(info_item){
-	handle_dependencies(info_item);
-}
-
-function not_ready(info_item){
-	if(info_item.hasClass('loading') || info_item.hasClass('validating')){
-		return true;
-	}
-	
-	return false;
 }
 
 function load_info_item(info_item, route, callback){
-	if(typeof info_item == 'string'){
-		info_item = $('#' + info_item);
-	}
-	
-	if(not_ready(info_item)) return;
+	//Still loading..
+	if(info_item.hasClass('loading') || info_item.hasClass('validating')) return;
 	
 	route = route || info_item.attr('route');
 	
 	set_validation_status(info_item, 'loading', '<?= $text_info_loading;?>');
 	
-	console.log('load_info_item ' + info_item.attr('id'));
 	info_item.find('.info_content').load('index.php?route=' + route, {},
 		function(){ 
 			set_validation_status(info_item, '', '');
@@ -125,107 +81,133 @@ function load_info_item(info_item, route, callback){
 				callback();
 			}
 			
-			console.log('trigger loaded ' + info_item.attr('id'));
 			info_item.trigger('loaded');
 		}
 	);
 }
 
-function validate_form(form, reload){
-	var info_item = form.closest('.info_item');
-	
+function ci_validate_form(form, reload){
 	reload = reload || false;
 	
-	data = form.serialize();
+	info_page_loading(form.closest('.info_item'));
 	
-	form_submit = form.find('input[type=submit]');
-	
-	if(form_submit){
-		data += '&' + form_submit.attr('name') + '=' + form_submit.val();
-	}
-	
-	data += '&async=1';
-	
-	$.ajax({
-		url: form.attr('action'),
-		type: 'post',
-		data: data,
-		dataType: 'json',
-		beforeSend: function(){ info_page_loading(info_item); },
-		success: function(json) {
-			console.log('validated ' + info_item.attr('id'));
-			if(handle_validation_response(info_item, json) && reload){
-				console.log("loading from hre");
+	validate_form(form, function(form, json){
+		info_item = form.closest('.info_item');
+		
+		if (!json || json['error']) {
+			set_validation_status(info_item, 'invalid', '<?= $text_info_error;?>');
+			
+		} else {
+			set_validation_status(info_item, 'valid', '');
+			
+			if(reload){
 				load_info_item(info_item);
 			}
 		}
 	});
 }
 
-function handle_validation_response(info_item, json){
-	json = json || {};
-	
-	info_item.find('.error, .warning').remove();
-	
-	if (json['redirect']) {
-		location = json['redirect'];
-	}
-	
-	if (json['error']) {
-		msgs = '';
-		for(var e in json['error']){
-			msg = '<span class="error">' + json['error'][e] + '</span>';
-			info_item.find('[name="'+e+'"]').after(msg);
-			msgs += msg;
-		}
-		if(msgs){
-			info_item.find('.info_heading').after('<div class="message_box warning" style="display: none;">' + msgs + '</div>');
-			$('.warning').fadeIn('fast');
-		}
-		
-		set_validation_status(info_item, 'invalid', '<?= $text_info_error;?>');
-		
-	} else {
-		set_validation_status(info_item, 'valid', '');
-		
-		handle_dependencies(info_item);
-		return true;
-	}
-	
-	return false;
-}
-
 function handle_dependencies(info_item){
 	switch(info_item.attr('id')){
 		case 'shipping_address':
-			load_info_item('shipping_method');
+			if(info_item.hasClass('valid')){
+				load_info_item($('#shipping_method'));
+			}
 			break;
 		case 'payment_address':
-			load_info_item('payment_method');
+			if(info_item.hasClass('valid')){
+				load_info_item($('#payment_method'));
+			}
 			break
+		case 'guest_information':
+			if(info_item.hasClass('valid')){
+				load_info_item($('#shipping_method'));
+				load_info_item($('#payment_method'));
+				$('#shipping_method, #payment_method, #customer_checkout_submit').slideDown('fast');
+				$('#guest_checkout_submit').hide();
+			}
+			else{
+				$('#shipping_method, #payment_method, #customer_checkout_submit').hide();
+				$('#guest_checkout_submit').show();
+			}
+			break;
 		default:
 			break;
 	}
 }
+
+//Validate all the form items before submitting Customer Information
+function validate_submit(submit){
+	if($('#shipping_address').length && !$('#shipping_address').hasClass('valid')){
+		if($('[name=shipping_address]:checked').val() == 'existing'){
+			ci_validate_form($('#shipping_existing form'));
+		}
+		else{
+			ci_validate_form($('#shipping_new form'));
+		}
+	}
+	else if($('#payment_address').length && !$('#payment_address').hasClass('valid')){
+		if($('[name=payment_address]:checked').val() == 'existing'){
+			ci_validate_form($('#payment_existing form'));
+		}
+		else{
+			ci_validate_form($('#payment_new form'));
+		}
+	}
+	else if($('#guest_information').length && !$('#guest_information').hasClass('valid')){
+		ci_validate_form($('#guest_information form'));
+	}
+	else if($('#shipping_method').length && !$('#shipping_method').hasClass('valid')){
+		ci_validate_form($('#shipping_method form'));
+	}
+	else if(!$('#payment_method').hasClass('valid')){
+		ci_validate_form($('#payment_method form'));
+	}
+	else{
+		submit_checkout_item(submit);
+	}
+	
+	return false;
+}
 //--></script>
 
 <script type="text/javascript">//<!--
-<? if($guest_checkout) {?>
-
-$('#guest_information').find('input, select, textarea').live('keyup change', function(){
-	if($(this).closest('.info_item').hasClass('valid')){
-		set_validation_status($(this).closest('.info_item'), '', '');
-	}
-});
-
-<? } else { ?>
-
-$('#shipping_new input[type=submit], #payment_new input[type=submit], #add_new_address input[type=submit]').live('click', function(){
-	validate_form($(this).closest('form'), true);
+<? if(!empty($guest_checkout)) { ?>
+	
+$('input[name=submit_guest_checkout]').live('click', function(){
+	ci_validate_form($('#guest_checkout form'));
 	
 	return false;
 });
+
+$('#guest_checkout').on('loaded', function(){
+	handle_dependencies($('#guest_information'));
+}).trigger('loaded');
+
+<? } else { ?>
+	
+$('#shipping_new input[type=submit], #payment_new input[type=submit]').live('click', function(){
+	ci_validate_form($(this).closest('form'), true);
+	
+	return false;
+});
+
+$('#shipping_address').on('loaded', function(){
+	sa_form = $('#shipping_existing form');
+	if(sa_form.find('select[name=address_id]').val()){
+		ci_validate_form(sa_form);
+	}
+});
+
+$('#payment_address').on('loaded', function(){
+	sa_form = $('#payment_existing form');
+	if(sa_form.find('select[name=address_id]').val()){
+		ci_validate_form(sa_form);
+	}
+});
+
 <? } ?>
+
 
 $('#add_comment textarea').live('keyup', function(){
 	if($(this).closest('.info_item').hasClass('valid')){
@@ -233,26 +215,14 @@ $('#add_comment textarea').live('keyup', function(){
 	}
 });
 
-$('#shipping_address').on('loaded', function(){
-	sa_form = $('#shipping_existing form');
-	if(sa_form.find('select[name=address_id]').val()){
-		validate_form(sa_form);
-	}
-});
-
-$('#payment_address').on('loaded', function(){
-	sa_form = $('#payment_existing form');
-	if(sa_form.find('select[name=address_id]').val()){
-		validate_form(sa_form);
-	}
-});
-
 $('#shipping_method, #payment_method').on('loaded', function(){
-	console.log('loaded ' + $(this).attr('id'));
 	sa_form = $(this).find('form');
 	
 	if(sa_form.find(':checked').val()){
-		validate_form(sa_form);
+		ci_validate_form(sa_form);
+	}
+	else{
+		set_validation_status($(this), 'invalid', '');
 	}
 });
 

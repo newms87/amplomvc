@@ -56,7 +56,7 @@ class ControllerCommonLogin extends Controller {
 	      		$redirect = urlencode($this->url->link('common/home'));
 	         }
 				else{
-					$redirect = urlencode(preg_replace("/redirect=[^&#]*/",'',$this->url->current_page()));
+					$redirect = urlencode(preg_replace("/redirect=[^&#]*/",'',$this->url->here()));
 				}
 			}
 			else{

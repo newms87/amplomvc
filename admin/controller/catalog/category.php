@@ -189,7 +189,6 @@ class ControllerCatalogCategory extends Controller {
       $category_id= isset($_POST['category_id'])?$_POST['category_id']:0;
       if(!$name)return;
       
-      $this->load->model("catalog/category");
       echo json_encode($this->model_catalog_category->generate_url($category_id, $name));
       exit;
    }

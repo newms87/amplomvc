@@ -18,7 +18,7 @@
           <div id="language<?= $language['language_id']; ?>">
             <table class="form">
               <tr>
-                <td><span class="required">*</span> <?= $entry_name; ?></td>
+                <td><span class="required"></span> <?= $entry_name; ?></td>
                 <td><input type="text" name="product_description[<?= $language['language_id']; ?>][name]" size="100" value="<?= isset($product_description[$language['language_id']]) ? $product_description[$language['language_id']]['name'] : ''; ?>" /></td>
               </tr>
               <tr style='display:none'>

@@ -13,7 +13,7 @@
     <form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
       <table class="form">
         <tr>
-          <td><span class="required">*</span> <?= $entry_code; ?></td>
+          <td><span class="required"></span> <?= $entry_code; ?></td>
           <td><textarea name="google_talk_code" cols="40" rows="5"><?= $google_talk_code; ?></textarea>
             <? if ($error_code) { ?>
             <span class="error"><?= $error_code; ?></span>

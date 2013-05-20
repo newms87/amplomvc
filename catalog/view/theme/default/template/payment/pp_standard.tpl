@@ -72,7 +72,7 @@ function check_order_update(){
          }
       },
       complete: function(){
-         setTimeout(check_order_update,500);
+         setTimeout(check_order_update,2000);
       }
    });
 }

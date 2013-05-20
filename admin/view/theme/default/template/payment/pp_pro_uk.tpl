@@ -13,28 +13,28 @@
       <form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
         <table class="form">
           <tr>
-            <td><span class="required">*</span> <?= $entry_vendor; ?></td>
+            <td><span class="required"></span> <?= $entry_vendor; ?></td>
             <td><input type="text" name="pp_pro_uk_vendor" value="<?= $pp_pro_uk_vendor; ?>" />
               <? if ($error_vendor) { ?>
               <span class="error"><?= $error_vendor; ?></span>
               <? } ?></td>
           </tr>
           <tr>
-            <td><span class="required">*</span> <?= $entry_user; ?></td>
+            <td><span class="required"></span> <?= $entry_user; ?></td>
             <td><input type="text" name="pp_pro_uk_user" value="<?= $pp_pro_uk_user; ?>" />
               <? if ($error_user) { ?>
               <span class="error"><?= $error_user; ?></span>
               <? } ?></td>
           </tr>
           <tr>
-            <td><span class="required">*</span> <?= $entry_password; ?></td>
+            <td><span class="required"></span> <?= $entry_password; ?></td>
             <td><input type="text" name="pp_pro_uk_password" value="<?= $pp_pro_uk_password; ?>" />
               <? if ($error_password) { ?>
               <span class="error"><?= $error_password; ?></span>
               <? } ?></td>
           </tr>
           <tr>
-            <td><span class="required">*</span> <?= $entry_partner; ?></td>
+            <td><span class="required"></span> <?= $entry_partner; ?></td>
             <td><input type="text" name="pp_pro_uk_partner" value="<?= $pp_pro_uk_partner; ?>" />
               <? if ($error_partner) { ?>
               <span class="error"><?= $error_partner; ?></span>

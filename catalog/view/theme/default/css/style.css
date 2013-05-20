@@ -657,9 +657,10 @@ li:hover > ul.link_list, li.active > ul.link_list{
 	background-size: 32px 16px;
 }
 
-.required {
+.required:after{
+	content: '*';
 	color: #FF0000;
-	font-weight: bold;
+	font-weight: bold; 
 }
 .error {
 	display: block;
@@ -762,7 +763,7 @@ table.radio label {
 	text-decoration: none;
 	color: #A3A3A3;
 }
-.pagination .links b {
+.pagination .links .current {
 	display: inline-block;
 	border: 1px solid #269BC6;
 	padding: 4px 10px;
@@ -771,7 +772,7 @@ table.radio label {
 	color: #269BC6;
 	background: #FFFFFF;
 }
-.pagination .results {
+.pagination .pager_text {
 	float: right;
 	padding-top: 3px;
 }
@@ -1297,6 +1298,11 @@ a.button:active, input.button:active {
 }
 
 /* Product list Grid view */
+.list_grid_toggle a.active{
+	color: black;
+	cursor: default;
+	text-decoration: none;
+}
 #catalog_list.grid .item_block{
 	display:inline-block;
 	vertical-align: bottom;
@@ -1906,14 +1912,20 @@ a.button:active, input.button:active {
 	margin: 5px 0;
 }
 
+.checkout_form{
+	width:300px;
+}
+
+.checkout_newsletter_signup{
+	clear: both;
+	padding-top: 15px;
+	border-top: 1px solid #EEEEEE;
+}
+
 #ship_to_countries{
 	margin-left:10px;
 	font-size:16px;
 	font-weight:normal;
-}
-
-#guest-checkout .shipping_address{
-	margin-top:10px;
 }
 
 #loading_details{
@@ -1944,10 +1956,39 @@ a.button:active, input.button:active {
 	padding:10px;
 }
 
-/** Form Templates **/
+#guest_shipping_address{
+	margin-top: 15px;
+	float:none;
+}
+
+.checkout_form_submit{
+	margin-top:15px;
+	margin-left: 50px;
+	clear:both;
+}
+
+.checkout_method .method_content{
+	text-align: right;
+}
+
+/**
+ * 3. Automated Form Templates 
+ **/
+
 /* Address Table */
 table.form_address input, table.form_address select{
 	width: 300px;
+}
+
+/* Single Column */
+table.form_single_column{
+	width: 100%;
+}
+
+table.form_single_column input,
+table.form_single_column select{
+	width: 100%;
+	margin-top:5px;
 }
 
 /** table_set */

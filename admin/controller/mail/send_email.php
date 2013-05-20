@@ -8,41 +8,13 @@ class ControllerMailSendEmail extends Controller {
       
       $this->document->setTitle($this->_('heading_title'));
       
-      if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-         $mail = $_POST;
-         
-         $this->mail->init();
-         
-         $this->mail->setSender($mail['sender']);
-         $this->mail->setFrom($mail['from']);
-         $this->mail->setTo($mail['to']);
-         $this->mail->setCopyTo($mail['cc']);
-         $this->mail->setBlindCopyTo($mail['bcc']);
-         
-         $this->mail->setSubject(html_entity_decode($mail['subject'], ENT_QUOTES, 'UTF-8'));
-         
-         $message = html_entity_decode($mail['message'], ENT_QUOTES, 'UTF-8');
-         
-         if($mail['allow_html']){
-            $this->mail->setHtml($message);
-         }
-         else{
-            $this->mail->setText($message);
-         }
-         
-         if(!empty($_FILES['attachment']) && empty($_FILES['attachment']['error'])){
-            $files = $_FILES['attachment'];
-            
-            for($i = 0; $i < count($files['name']); $i++){
-               $file_name = dirname($files['tmp_name'][$i]) . '/' . $files['name'][$i];
-               rename($files['tmp_name'][$i], $file_name);
-               $this->mail->addAttachment($file_name);
-            }
-         }
-         
-         $this->mail->send();
-         
-         $this->message->add('success', $this->_('text_success'));
+      if (($_SERVER['REQUEST_METHOD'] == 'POST')) {
+      	if(!$this->send()){
+      		$this->message->add('warning', $this->_('error_send_email'));
+			}
+			else{
+         	$this->message->add('success', $this->_('text_success'));
+			}
       }
       
       $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -87,7 +59,33 @@ class ControllerMailSendEmail extends Controller {
      
       $this->response->setOutput($this->render());
    }
-
+	
+	public function send(){
+		if(!$this->validate()){
+			return false;
+		}
+		
+		$mail = $_POST;
+		
+		if(!empty($_FILES['attachment']) && empty($_FILES['attachment']['error'])){
+         $mail['attachment'] = $_FILES['attachment'];
+      }
+		
+		if(!empty($mail['allow_html'])){
+			$mail['html'] = html_entity_decode($mail['message'], ENT_QUOTES, 'UTF-8');
+		}else{
+			$mail['text'] = htmlentities($mail['message']);
+		}
+		
+		$this->mail->init();
+		
+      if(!$this->mail->send($mail)){
+      	return false;
+		}
+		
+		return true;
+	}
+	
    public function validate() {
       if (!$this->user->hasPermission('modify', 'mail/send_email')) {
          $this->error['permission'] = $this->_('error_permission');

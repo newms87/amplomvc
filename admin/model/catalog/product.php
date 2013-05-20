@@ -758,7 +758,12 @@ class ModelCatalogProduct extends Model {
       }
 		
       //GROUP BY
-		$group_by = " GROUP BY p.product_id";
+      if($total){
+      	$group_by = '';
+		}
+		else{
+			$group_by = " GROUP BY p.product_id";
+		}
 		
 		//ORDER BY and LIMIT
 		$order_by = '';
@@ -778,8 +783,8 @@ class ModelCatalogProduct extends Model {
 				$order_by = "ORDER BY $data[sort] $order";
 			}
 			
-			$start = !empty($data['start']) ? (int)$data['start'] : 0;
-			$limit = !empty($data['limit']) ? (int)$data['limit'] : $this->config->get('config_catalog_limit');
+			$start = (!empty($data['start']) && $data['start'] >= 0) ? (int)$data['start'] : 0;
+			$limit = (!empty($data['limit']) && $data['limit'] >= 0) ? (int)$data['limit'] : $this->config->get('config_catalog_limit');
 			
 			$limit = "LIMIT $start,$limit";
 		}
@@ -1045,13 +1050,7 @@ class ModelCatalogProduct extends Model {
 	}
 	
 	public function getTotalProducts($data = array()) {
-	   unset($data['limit']);
-      unset($data['sort']);
-      unset($data['order']);
-      
-	   $query = $this->getProducts($data, 'COUNT(*) as total');
-      
-      return isset($query[0]['total']) ? $query[0]['total'] : 0;
+	   return $this->getProducts($data, '', true);
 	}	
 	
 	public function getTotalProductsByTaxClassId($tax_class_id) {

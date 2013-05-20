@@ -15,7 +15,7 @@
         <div id="tab-return">
           <table class="form">
             <tr>
-              <td><span class="required">*</span> <?= $entry_order_id; ?></td>
+              <td><span class="required"></span> <?= $entry_order_id; ?></td>
               <td><input type="text" name="order_id" value="<?= $order_id; ?>" />
                 <? if ($error_order_id) { ?>
                 <span class="error"><?= $error_order_id; ?></span>
@@ -31,28 +31,28 @@
                 <input type="hidden" name="customer_id" value="<?= $customer_id; ?>" /></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_firstname; ?></td>
+              <td><span class="required"></span> <?= $entry_firstname; ?></td>
               <td><input type="text" name="firstname" value="<?= $firstname; ?>" />
                 <? if ($error_firstname) { ?>
                 <span class="error"><?= $error_firstname; ?></span>
                 <? } ?></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_lastname; ?></td>
+              <td><span class="required"></span> <?= $entry_lastname; ?></td>
               <td><input type="text" name="lastname" value="<?= $lastname; ?>" />
                 <? if ($error_lastname) { ?>
                 <span class="error"><?= $error_lastname; ?></span>
                 <? } ?></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_email; ?></td>
+              <td><span class="required"></span> <?= $entry_email; ?></td>
               <td><input type="text" name="email" value="<?= $email; ?>" />
                 <? if ($error_email) { ?>
                 <span class="error"><?= $error_email; ?></span>
                 <?  } ?></td>
             </tr>
             <tr>
-              <td><span class="required">*</span> <?= $entry_telephone; ?></td>
+              <td><span class="required"></span> <?= $entry_telephone; ?></td>
               <td><input type="text" name="telephone" value="<?= $telephone; ?>" />
                 <? if ($error_telephone) { ?>
                 <span class="error"><?= $error_telephone; ?></span>
@@ -63,7 +63,7 @@
         <div id="tab-product">
           <table class="form">
             <tr>
-              <td><span class="required">*</span> <?= $entry_product; ?></td>
+              <td><span class="required"></span> <?= $entry_product; ?></td>
               <td><input type="text" name="product" value="<?= $product; ?>" />
                 <input type="hidden" name="product_id" value="<?= $product_id; ?>" />
                 <? if ($error_product) { ?>

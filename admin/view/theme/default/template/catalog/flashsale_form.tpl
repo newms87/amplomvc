@@ -27,16 +27,16 @@
 							<td><?= $this->builder->build('select',$designer_list,'','',array('id'=>'autofill_designer'));?><a onclick='autofill_designer_info();' class='button'><?=$button_autofill;?></a></td>
 					 </tr>
 					 <tr>
-							<td><span class="required">*</span> <?= $entry_discount; ?></td>
+							<td><span class="required"></span> <?= $entry_discount; ?></td>
 							<td><input type="text" name="discount" value="<?= $discount; ?>" size="20" />
 									<?= $this->builder->build('select',$data_discount_types, "discount_type",$discount_type); ?></td>
 					 </tr>
 					 <tr>
-							<td><span class="required">*</span> <?= $entry_name; ?></td>
+							<td><span class="required"></span> <?= $entry_name; ?></td>
 							<td><input id='flashsale_title' type="text" name="name" value="<?= $name; ?>" size="40" /></td>
 					 </tr>
 					 <tr>
-							<td><span class="required">*</span> <?= $entry_keyword; ?></td>
+							<td><span class="required"></span> <?= $entry_keyword; ?></td>
 							<td>
 								 <input id='flashsale_keyword' onfocus='generate_url_warning(this)' type="text" name="keyword" value="<?= $keyword; ?>" size="40" />
 								 <a class='gen_url' onclick='generate_url(this)'><?=$button_generate_url;?></a>
@@ -90,11 +90,11 @@
 							</td>
 						</tr>
 						<tr>
-							<td><span class="required">*</span> <?= $entry_date_start; ?></td>
+							<td><span class="required"></span> <?= $entry_date_start; ?></td>
 							<td><input type="text" class="datetime" name="date_start" value="<?= $date_start; ?>" size="20" /></td>
 						</tr>
 						<tr>
-							<td><span class="required">*</span> <?= $entry_date_end; ?></td>
+							<td><span class="required"></span> <?= $entry_date_end; ?></td>
 							<td><input type="text" class="datetime" name="date_end" value="<?= $date_end; ?>" size="20" /></td>
 						</tr>
 						<tr>

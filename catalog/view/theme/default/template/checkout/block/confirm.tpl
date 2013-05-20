@@ -1,13 +1,17 @@
-<? if (!isset($redirect)) { ?>
+<? if (!empty($redirect)) { ?>
+<script type="text/javascript">//<!--
+location = "<?= $redirect; ?>";
+//--></script>
 
-<? if ($details_only) {?>
+<? } elseif (!empty($totals_only)) { ?>
 <div class='checkout_totals'>
   <?= $block_totals;?>
 </div>
-   
+
 <div class="payment">
   <?= $payment; ?>
 </div>
+
 <? } else { ?>
 <div class="checkout-template">
   <? if(isset($block_confirm_address)){ ?>
@@ -38,7 +42,7 @@
 </div>
 
 <script type="text/javascript">//<!--
-$('body').bind('coupon_success', function(event, json){
+$('body').on('coupon_success', function(event, json){
    load_block($('#checkout_details .checkout_totals'), 'cart/block/total');
 });
 
@@ -48,27 +52,23 @@ function handle_ajax_cart_preload(action, data){
 
 var retry_count = 3;
 function handle_ajax_cart_load(action, data){
-   $('#checkout_details').load("<?= $load_details;?>",{},
-      function(){
-         if($('#checkout_details .payment').length < 1){
-            if(retry_count <= 0){
-               location = '<?= $checkout_url;?>';
-            }
-            retry_count--;
-            handle_ajax_cart_load(action, data);
+   $('#checkout_details').load("<?= $reload_totals; ?>",{}, function(){
+      if(!$('#checkout_details .payment').length){
+         if(retry_count <= 0){
+            location = "<?= $checkout_url;?>";
          }
-      });
+         
+         retry_count--;
+         
+         handle_ajax_cart_load(action, data);
+      }
+   });
 }
 //--></script>
-<? }?>
 
 <div id='loading_details' style='display:none'>
    <img src="<?= HTTP_THEME_IMAGE . 'loading.gif';?>" />
    <span class='loading_message'><?= $text_loading_details;?></span>
 </div>
 
-<? } else { ?>
-<script type="text/javascript">//<!--
-location = "<?= $redirect; ?>";
-//--></script>
 <? } ?>

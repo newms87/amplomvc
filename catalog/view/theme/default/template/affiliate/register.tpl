@@ -13,28 +13,28 @@
     <div class="content">
       <table class="form">
         <tr>
-          <td><span class="required">*</span> <?= $entry_firstname; ?></td>
+          <td><span class="required"></span> <?= $entry_firstname; ?></td>
           <td><input type="text" name="firstname" value="<?= $firstname; ?>" />
             <? if ($error_firstname) { ?>
             <span class="error"><?= $error_firstname; ?></span>
             <? } ?></td>
         </tr>
         <tr>
-          <td><span class="required">*</span> <?= $entry_lastname; ?></td>
+          <td><span class="required"></span> <?= $entry_lastname; ?></td>
           <td><input type="text" name="lastname" value="<?= $lastname; ?>" />
             <? if ($error_lastname) { ?>
             <span class="error"><?= $error_lastname; ?></span>
             <? } ?></td>
         </tr>
         <tr>
-          <td><span class="required">*</span> <?= $entry_email; ?></td>
+          <td><span class="required"></span> <?= $entry_email; ?></td>
           <td><input type="text" name="email" value="<?= $email; ?>" />
             <? if ($error_email) { ?>
             <span class="error"><?= $error_email; ?></span>
             <? } ?></td>
         </tr>
         <tr>
-          <td><span class="required">*</span> <?= $entry_telephone; ?></td>
+          <td><span class="required"></span> <?= $entry_telephone; ?></td>
           <td><input type="text" name="telephone" value="<?= $telephone; ?>" />
             <? if ($error_telephone) { ?>
             <span class="error"><?= $error_telephone; ?></span>
@@ -58,7 +58,7 @@
           <td><input type="text" name="website" value="<?= $website; ?>" /></td>
         </tr>
         <tr>
-          <td><span class="required">*</span> <?= $entry_address_1; ?></td>
+          <td><span class="required"></span> <?= $entry_address_1; ?></td>
           <td><input type="text" name="address_1" value="<?= $address_1; ?>" />
             <? if ($error_address_1) { ?>
             <span class="error"><?= $error_address_1; ?></span>
@@ -69,28 +69,28 @@
           <td><input type="text" name="address_2" value="<?= $address_2; ?>" /></td>
         </tr>
         <tr>
-          <td><span class="required">*</span> <?= $entry_city; ?></td>
+          <td><span class="required"></span> <?= $entry_city; ?></td>
           <td><input type="text" name="city" value="<?= $city; ?>" />
             <? if ($error_city) { ?>
             <span class="error"><?= $error_city; ?></span>
             <? } ?></td>
         </tr>
         <tr>
-          <td><span class="required">*</span> <?= $entry_postcode; ?></td>
+          <td><span class="required"></span> <?= $entry_postcode; ?></td>
           <td><input type="text" name="postcode" value="<?= $postcode; ?>" />
             <? if ($error_postcode) { ?>
             <span class="error"><?= $error_postcode; ?></span>
             <? } ?></td>
         </tr>
         <tr>
-          <td><span class="required">*</span> <?= $entry_country; ?></td>
+          <td><span class="required"></span> <?= $entry_country; ?></td>
           <td>
              <?= $this->builder->set_config('country_id', 'name');?>
              <?= $this->builder->build('select', $countries, "country_id", $country_id, array('class'=>"country_select"));?>
           </td>
         </tr>
         <tr>
-          <td><span class="required">*</span> <?= $entry_zone; ?></td>
+          <td><span class="required"></span> <?= $entry_zone; ?></td>
           <td><select name="zone_id" class="zone_select" zone_id="<?=$zone_id;?>"></select></td>
         </tr>
       </table>
@@ -165,14 +165,14 @@
     <div class="content">
       <table class="form">
         <tr>
-          <td><span class="required">*</span> <?= $entry_password; ?></td>
+          <td><span class="required"></span> <?= $entry_password; ?></td>
           <td><input type="password" autocomplete='off' name="password" value="<?= $password; ?>" />
             <? if ($error_password) { ?>
             <span class="error"><?= $error_password; ?></span>
             <? } ?></td>
         </tr>
         <tr>
-          <td><span class="required">*</span> <?= $entry_confirm; ?></td>
+          <td><span class="required"></span> <?= $entry_confirm; ?></td>
           <td><input type="password" autocomplete='off' name="confirm" value="<?= $confirm; ?>" />
             <? if ($error_confirm) { ?>
             <span class="error"><?= $error_confirm; ?></span>

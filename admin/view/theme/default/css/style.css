@@ -332,7 +332,8 @@ body > #container {
 	border-color: #F2DD8C;
 }
 
-.required {
+.required:after {
+	content: '*';
 	color: #FF0000;
 	font-weight: bold;
 }
@@ -570,22 +571,25 @@ a.button.designer{
 
 .pagination {
 	border-top: 1px solid #DDDDDD;
-	display: inline-block;
-	width: 100%;
 	padding-top: 6px;
+	overflow:auto;
 }
 .pagination .links {
 	float: left;
-	padding-top: 6px;
+}
+
+.pagination .links > div{
+	display: inline-block;
 }
 .pagination .links a {
+	display:inline-block;
 	border: 1px solid #DDDDDD;
 	padding: 4px 10px;
 	font-size: 12px;
 	text-decoration: none;
 	color: #A3A3A3;
 }
-.pagination .links b {
+.pagination .links .current {
 	border: 1px solid #269BC6;
 	padding: 4px 10px;
 	font-size: 12px;
@@ -594,11 +598,14 @@ a.button.designer{
 	color: #269BC6;
 	background: #FFFFFF;
 }
-.pagination .results {
+.pagination .pager_text {
 	float: right;
-	padding-top: 6px;
-	font-size: 12px;
 }
+
+.pagination .pager_nav{
+	
+}
+
 table.form {
 	width: 100%;
 	border-collapse: collapse;
@@ -1548,4 +1555,47 @@ td.mail_info label{
 /** Autocomplete **/
 .autocomplete_label{
 	padding:0;
+}
+
+/* Failed Messages */
+.failed_messages .left{
+	float:left;
+	width: 19%;
+}
+.failed_messages .right{
+	float:right;
+	width: 80%;
+	text-align:left;
+}
+
+.message_preview{
+	padding: 5px;
+	margin-bottom:10px;
+	border: 1px solid #EEE;
+}
+
+.message_preview .label{
+	display:inline-block;
+	width: 35px;
+}
+
+.message_preview .subject .label{
+	display:inline;
+}
+
+.message_preview .subject{
+	margin-top: 6px;
+	font-size: 12px;
+	font-weight:bold;
+}
+
+.message_preview .action_buttons{
+	margin-top:10px;
+	padding: 0 10px;
+}
+
+.message_preview .delete_message{
+	color:red;
+	float:right;
+	padding-top:8px;
 }

@@ -8,24 +8,24 @@
   <form action="<?= $action; ?>" method="post" enctype="multipart/form-data">
     <h2><?= $text_order; ?></h2>
     <div class="content">
-      <div class="left"><span class="required">*</span> <?= $entry_firstname; ?><br />
+      <div class="left"><span class="required"></span> <?= $entry_firstname; ?><br />
         <input type="text" name="firstname" value="<?= $firstname; ?>" class="large-field" />
         <br />
         <br />
-        <span class="required">*</span> <?= $entry_lastname; ?><br />
+        <span class="required"></span> <?= $entry_lastname; ?><br />
         <input type="text" name="lastname" value="<?= $lastname; ?>" class="large-field" />
         <br />
         <br />
-        <span class="required">*</span> <?= $entry_email; ?><br />
+        <span class="required"></span> <?= $entry_email; ?><br />
         <input type="text" name="email" value="<?= $email; ?>" class="large-field" />
         <br />
         <br />
-        <span class="required">*</span> <?= $entry_telephone; ?><br />
+        <span class="required"></span> <?= $entry_telephone; ?><br />
         <input type="text" name="telephone" value="<?= $telephone; ?>" class="large-field" />
         <br />
         <br />
       </div>
-      <div class="right"><span class="required">*</span> <?= $entry_order_id; ?><br />
+      <div class="right"><span class="required"></span> <?= $entry_order_id; ?><br />
         <input type="text" name="order_id" value="<?= $order_id; ?>" class="large-field" />
         <br />
         <br />
@@ -38,11 +38,11 @@
     <div id="return-product">
       <div class="content">
         <div class="return-product">
-          <div class="return-name"><span class="required">*</span> <b><?= $entry_product; ?></b><br />
+          <div class="return-name"><span class="required"></span> <b><?= $entry_product; ?></b><br />
             <input type="text" name="product" value="<?= $product; ?>" />
             <br />
           </div>
-          <div class="return-model"><span class="required">*</span> <b><?= $entry_model; ?></b><br />
+          <div class="return-model"><span class="required"></span> <b><?= $entry_model; ?></b><br />
             <input type="text" name="model" value="<?= $model; ?>" />
             <br />
           </div>
@@ -51,7 +51,7 @@
           </div>
         </div>
         <div class="return-detail">
-          <div class="return-reason"><span class="required">*</span> <b><?= $entry_reason; ?></b><br />
+          <div class="return-reason"><span class="required"></span> <b><?= $entry_reason; ?></b><br />
             <table>
               <? foreach ($return_reasons as $return_reason) { ?>
               <? if ($return_reason['return_reason_id'] == $return_reason_id) { ?>

@@ -1,13 +1,18 @@
 <?php 
 class ControllerCheckoutBlockConfirm extends Controller {
-   public function index($settings = array(), $details_only = false) {
+   public function index() {
+   	$this->language->load('checkout/checkout');
       $this->template->load('checkout/block/confirm');
-
 	   $this->language->load("checkout/block/confirm");
-      
-      if(!$this->cart->addOrder()){
+		
+      if(!$this->cart->validateShippingDetails() || !$this->cart->validatePaymentDetails()){
+         $this->data['redirect'] = $this->url->link('checkout/checkout');
+         $this->message->add('warning', $this->cart->get_errors());
+      }
+		elseif(!$this->cart->addOrder()){
          if($this->cart->has_error('cart')){
-            $this->data['redirect'] = $this->url->link('cart/cart');
+         	$this->message->add('warning', $this->cart->get_errorrs('cart'));
+            $this->data['redirect'] = $this->url->link('cart/cart', 'newman=1');
          }
          else{
             $this->data['redirect'] = $this->url->link('checkout/checkout');
@@ -15,15 +20,16 @@ class ControllerCheckoutBlockConfirm extends Controller {
          }
       }
       else{
-         $this->language->load('checkout/checkout');
-         
-         $this->data['details_only'] = $details_only;
-         
-         if(!$details_only){
+      	//If we are only reloading the totals section, do not include these other blocks
+         if(empty($_GET['reload_totals'])){
             $this->data['block_confirm_address'] = $this->getBlock('checkout', 'confirm_address');
             
             $this->data['block_cart'] = $this->getBlock('cart', 'cart', array('ajax_cart' => true));
          }
+			else{
+				$this->data['totals_only'] = true;
+			}
+			
          
          if($this->config->get('coupon_status')){
             $this->data['block_coupon'] = $this->getBlock('cart','coupon', array('ajax' => true));
@@ -31,7 +37,7 @@ class ControllerCheckoutBlockConfirm extends Controller {
          
          $this->data['block_totals'] = $this->getBlock('cart', 'total');
          
-         $this->data['load_details'] = $this->url->link('checkout/block/confirm/load_details');
+         $this->data['reload_totals'] = $this->url->link('checkout/block/confirm', 'reload_totals=1');
          
          $this->data['checkout_url'] = $this->url->link('checkout/checkout');
          
@@ -40,19 +46,6 @@ class ControllerCheckoutBlockConfirm extends Controller {
       
 		$this->response->setOutput($this->render());	
   	}
-   
-   public function load_details(){
-      if(!$this->cart->updateShippingQuote()){
-         $this->data['redirect'] = $this->url->link('checkout/checkout');
-         $this->message->add('warning', $this->cart->get_errors());
-      }
-      elseif(!$this->cart->verifyPaymentMethod()){
-         $this->data['redirect'] = $this->url->link('checkout/checkout');
-         $this->message->add('warning', $this->cart->get_errors());
-      }
-      
-      $this->index(array(), true);
-   }
    
    public function check_order_status(){
       $order_id = isset($_GET['order_id'])?$_GET['order_id']:0;
@@ -66,6 +59,7 @@ class ControllerCheckoutBlockConfirm extends Controller {
       else{
          $json = array();
       }
-      echo json_encode($json);
+		
+      $this->response->setOutput(json_encode($json));
    }
 }

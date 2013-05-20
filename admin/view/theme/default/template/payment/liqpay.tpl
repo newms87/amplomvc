@@ -13,14 +13,14 @@
       <form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
         <table class="form">
           <tr>
-            <td><span class="required">*</span> <?= $entry_merchant; ?></td>
+            <td><span class="required"></span> <?= $entry_merchant; ?></td>
             <td><input type="text" name="liqpay_merchant" value="<?= $liqpay_merchant; ?>" />
               <? if ($error_merchant) { ?>
               <span class="error"><?= $error_merchant; ?></span>
               <? } ?></td>
           </tr>
           <tr>
-            <td><span class="required">*</span> <?= $entry_signature; ?></td>
+            <td><span class="required"></span> <?= $entry_signature; ?></td>
             <td><input type="text" name="liqpay_signature" value="<?= $liqpay_signature; ?>" />
               <? if ($error_signature) { ?>
               <span class="error"><?= $error_signature; ?></span>

@@ -13,15 +13,15 @@
        <div id='tab-general'>
         <table class="form">
           <tr>
-            <td><span class="required">*</span> <?= $entry_username; ?></td>
+            <td><span class="required"></span> <?= $entry_username; ?></td>
             <td><input type="text" name="username" value="<?= $username; ?>" /></td>
           </tr>
           <tr>
-            <td><span class="required">*</span> <?= $entry_firstname; ?></td>
+            <td><span class="required"></span> <?= $entry_firstname; ?></td>
             <td><input type="text" name="firstname" value="<?= $firstname; ?>" /></td>
           </tr>
           <tr>
-            <td><span class="required">*</span> <?= $entry_lastname; ?></td>
+            <td><span class="required"></span> <?= $entry_lastname; ?></td>
             <td><input type="text" name="lastname" value="<?= $lastname; ?>" /></td>
           </tr>
           <tr>

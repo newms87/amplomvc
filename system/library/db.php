@@ -196,6 +196,11 @@ class DB {
 	}
 	
 	public function escape($value) {
+		if(is_resource($value) || is_object($value) || is_array($value)){
+			trigger_error("DB:escape(): Argument for value was not a a valid type! Value: " . gettype($value) . ". " . get_caller() . " >>>> " . get_caller(2));
+			exit;
+		}
+		
 		return $this->driver->escape($value);
 	}
 	

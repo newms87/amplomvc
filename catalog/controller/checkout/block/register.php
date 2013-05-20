@@ -2,71 +2,49 @@
 class ControllerCheckoutBlockRegister extends Controller {
   	public function index() {
   	   $this->language->load('checkout/checkout');
-      
   	   $this->template->load('checkout/block/register');
 		
       $this->language->format('entry_newsletter', $this->config->get('config_name'));
 		
-      $this->data['register_url'] = $this->url->link('checkout/block/register/validate', 'no_ajax=1');
+      $this->data['action_register'] = $this->url->link('checkout/block/register/validate');
       
-		//Register Form
-      $form = $this->template->get_form('register');
-      
-      $form->set_template('form/table');
-      
-      $form->fill_data_from('POST', 'SESSION');
-      
-      $this->data['form_register'] = $form->build();
-      
-      
-      //Password Form
-      $form = $this->template->get_form('password');
-      
-      $form->set_template('form/table');
-      
-      $this->data['form_password'] = $form->build();
-      
-      
-      //Address Form
-      $form = $this->template->get_form('address');
-      
-      $form->set_template('form/table');
-      
-      $form->fill_data_from('POST', 'SESSION', 'DEFAULT');
-      
-      //fill country value list
-      $countries = $this->model_localisation_country->getCountries();
-      
-      $form->set_field_value('country_id', 'values', $countries);
-      
-      //fill zone value list
-      $zones = $this->model_localisation_zone->getZonesByCountryId($form->get_field_value('country_id', 'select'));
-      
-      $form->set_field_value('zone_id', 'values', $zones);
-      
-      $this->data['form_address'] = $form->build();
-      
-      
+		//Registration Details
+		$this->form->init('register');
+		$this->form->set_template('form/single_column');
+		$this->form->show_form_tag(false);
+		$this->form->disable_fields('password', 'confirm');
+		
+		$this->data['form_register'] = $this->form->build();
+		
+		//Password Fields
+		$this->form->set_fields('password', 'confirm');
+		
+		$this->data['form_password'] = $this->form->build();
+		
+		//Address Form
+		$this->form->init('address');
+		$this->form->set_template('form/single_column');
+		$this->form->show_form_tag(false);
+		$this->form->set_field_options('country_id', $this->model_localisation_country->getCountries(), array('country_id' => 'name'));
+		$this->form->disable_fields('firstname', 'lastname', 'submit_address', 'default');
+		
+		$this->data['form_address'] = $this->form->build();
+		
+		//Terms and Conditions
       if ($this->config->get('config_account_id')) {
 			$information_info = $this->model_catalog_information->getInformation($this->config->get('config_account_id'));
 			
 			if ($information_info) {
 				$this->language->format('text_agree', $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_account_id')), $information_info['title'], $information_info['title']);
-			} else {
-				$this->language->set('text_agree', '');
+				
+				$this->data['agree_to_terms'] = true;
 			}
-		} else {
-			$this->language->set('text_agree', '');
 		}
 		
-		$this->data['shipping_required'] = $this->cart->hasShipping();
-      
 		$this->response->setOutput($this->render());		
   	}
 	
 	public function validate() {
-	   $this->template->load('checkout/block/register');
-      
 		$this->language->load('checkout/checkout');
 		
 		$json = array();
@@ -80,59 +58,53 @@ class ControllerCheckoutBlockRegister extends Controller {
          $this->message->add($this->cart->get_errors());
       }
       
-      if (!$json) {
-         //Validate Registration
-         $form = $this->template->get_form('register');
+		if($json){
+			if(!empty($_POST['async'])){
+				$this->url->redirect($this->url->link('checkout/checkout'));
+			}
+			
+			$this->response->setOutput(json_encode($json));
+			return;
+		}
+
+		//Validate the Address Form
+		$this->form->init('address');
+		
+		if(!$this->form->validate($_POST)){
+			$json['error'] = $this->form->get_errors();
+		}
+		
+		//Additional Error checking
+		$country_info = $this->model_localisation_country->getCountry($_POST['country_id']);
+		
+		if (!$country_info){
+			$json['error']['country_id'] = $this->_('error_country_id');
+		}
+		
+		//Validate Register Form
+		$this->form->init('register');
+		
+		if(!$this->form->validate($_POST)){
+			$json['error'] = $this->form->get_errors();
+		}
+		
+      if ($this->model_account_customer->getTotalCustomersByEmail($_POST['email'])) {
+         $json['error']['email'] = $this->_('error_exists');
+      }
          
-         if(!$form->validate($_POST)){
-            foreach($form->get_errors() as $field => $error){
-               $json['error'][$field] = $this->_('error_' . $field);
-            }
-         }
-         
-         if ($this->model_account_customer->getTotalCustomersByEmail($_POST['email'])) {
-            $json['error']['email'] = $this->_('error_exists');
-         }
-         
-         //Validate Password
-         $form = $this->template->get_form('password');
-         
-         if(!$form->validate($_POST)){
-            foreach($form->get_errors() as $field => $error){
-               $json['error'][$field] = $this->_('error_' . $field);
-            }
-         }
-   
-         if ($_POST['confirm'] !== $_POST['password']) {
-            $json['error']['confirm'] = $this->_('error_confirm');
-         }
-         
-         
-         //Validate Address
-         $form = $this->template->get_form('address');
-         
-         $country_info = $this->model_localisation_country->getCountry($_POST['country_id']);
-         
-         if (!$country_info || !$country_info['postcode_required']){
-            $form->set_field_value('postcode', 'validate', false);
-         }
-         
-         if(!$form->validate($_POST)){
-            foreach($form->get_errors() as $field => $error){
-               $json['error'][$field] = $this->_('error_' . $field);
-            }
-         }
-         
-			if ($this->config->get('config_account_id')) {
-				   
-				$information_info = $this->model_catalog_information->getInformation($this->config->get('config_account_id'));
-				
-				if ($information_info && !isset($_POST['agree'])) {
-					$json['error']['warning'] = sprintf($this->_('error_agree'), $information_info['title']);
-				}
+      if ($_POST['confirm'] !== $_POST['password']) {
+         $json['error']['confirm'] = $this->_('error_confirm');
+      }
+   	
+   	if ($this->config->get('config_account_id')) {
+			$information_info = $this->model_catalog_information->getInformation($this->config->get('config_account_id'));
+			
+			if ($information_info && !isset($_POST['agree'])) {
+				$json['error']['agree'] = sprintf($this->_('error_agree'), $information_info['title']);
 			}
 		}
 		
+		//If the Form is valid
 		if (!$json) {
 			$this->model_account_customer->addCustomer($_POST);
 			
@@ -152,24 +124,21 @@ class ControllerCheckoutBlockRegister extends Controller {
 				$json['redirect'] = $this->url->link('account/success');
 			}
 			
-			unset($this->session->data['guest']);
 			unset($this->session->data['shipping_method']);
-			unset($this->session->data['shipping_methods']);
 			unset($this->session->data['payment_method']);	
-			unset($this->session->data['payment_methods']);
 		}
 		
-      if(isset($_GET['no_ajax'])){
-         if(isset($json['redirect'])){
-            $this->url->redirect($json['redirect']);
-         }
-         elseif(isset($json['error'])){
-            $this->message->add('warning', $json['error']);
-         }
-         else{
-            $this->url->redirect($this->url->link('checkout/checkout'));
-         }
-      }
+      //If this is not an ajax call, redirect w/ a message
+		if(!isset($_POST['async'])){
+			if($json['error']){
+				$this->message->add('warning', $json['error']);
+			} else {
+				$this->message->add('success', $this->_('text_address_success'));
+			}
+			
+			//We redirect because we are only a block, not a full page!
+			$this->url->redirect($this->url->link('checkout/checkout'));
+		}
 
 		$this->response->setOutput(json_encode($json));	
 	}

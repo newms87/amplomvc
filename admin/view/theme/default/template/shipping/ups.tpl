@@ -13,21 +13,21 @@
       <form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
         <table class="form">
           <tr>
-            <td><span class="required">*</span> <?= $entry_key; ?></td>
+            <td><span class="required"></span> <?= $entry_key; ?></td>
             <td><input type="text" name="ups_key" value="<?= $ups_key; ?>" />
               <? if ($error_key) { ?>
               <span class="error"><?= $error_key; ?></span>
               <? } ?></td>
           </tr>
           <tr>
-            <td><span class="required">*</span> <?= $entry_username; ?></td>
+            <td><span class="required"></span> <?= $entry_username; ?></td>
             <td><input type="text" name="ups_username" value="<?= $ups_username; ?>" />
               <? if ($error_username) { ?>
               <span class="error"><?= $error_username; ?></span>
               <? } ?></td>
           </tr>
           <tr>
-            <td><span class="required">*</span> <?= $entry_password; ?></td>
+            <td><span class="required"></span> <?= $entry_password; ?></td>
             <td><input type="text" name="ups_password" value="<?= $ups_password; ?>" />
               <? if ($error_password) { ?>
               <span class="error"><?= $error_password; ?></span>
@@ -82,21 +82,21 @@
               </select></td>
           </tr>
           <tr>
-            <td><span class="required">*</span> <?= $entry_city; ?></td>
+            <td><span class="required"></span> <?= $entry_city; ?></td>
             <td><input type="text" name="ups_city" value="<?= $ups_city; ?>" />
               <? if ($error_city) { ?>
               <span class="error"><?= $error_city; ?></span>
               <? } ?></td>
           </tr>
           <tr>
-            <td><span class="required">*</span> <?= $entry_state; ?></td>
+            <td><span class="required"></span> <?= $entry_state; ?></td>
             <td><input type="text" name="ups_state" value="<?= $ups_state; ?>" maxlength="2" size="4" />
               <? if ($error_state) { ?>
               <span class="error"><?= $error_state; ?></span>
               <? } ?></td>
           </tr>
           <tr>
-            <td><span class="required">*</span> <?= $entry_country; ?></td>
+            <td><span class="required"></span> <?= $entry_country; ?></td>
             <td><input type="text" name="ups_country" value="<?= $ups_country; ?>" maxlength="2" size="4" />
               <? if ($error_country) { ?>
               <span class="error"><?= $error_country; ?></span>
@@ -679,7 +679,7 @@
               </select></td>
           </tr>
           <tr>
-            <td><span class="required">*</span> <?= $entry_dimension; ?></td>
+            <td><span class="required"></span> <?= $entry_dimension; ?></td>
             <td><input type="text" name="ups_length" value="<?= $ups_length; ?>" size="4" />
               <input type="text" name="ups_width" value="<?= $ups_width; ?>" size="4" />
               <input type="text" name="ups_height" value="<?= $ups_height; ?>" size="4" /></td>

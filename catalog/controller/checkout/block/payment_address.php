@@ -7,36 +7,17 @@ class ControllerCheckoutBlockPaymentAddress extends Controller {
 		
 		$this->data['data_addresses'] = $this->model_account_address->getAddresses();
 		
-		if(isset($this->session->data['payment_address_id'])){
-			$address_id = $this->session->data['payment_address_id'];
-		}
-		elseif($this->customer->verifyPaymentInfo()){
-			$address_id = $this->customer->getPaymentInfo('address_id');
+		if($this->cart->validatePaymentAddress()){
+			$this->data['payment_address_id'] = $this->cart->getPaymentAddressId();
 		}
 		else{
-			$address_id = false;
-		}
-		
-		$this->data['address_id'] = false;
-		
-		//verify payment address actually exists
-		if($address_id){
-			foreach($this->data['data_addresses'] as $address){
-				if($address['address_id'] == $address_id){
-					$this->data['address_id'] = $address_id;
-					break;
-				}
-			}
-			
-			if(!$this->data['address_id']){
-				unset($this->session->data['payment_address_id']);
-			}
+			$this->data['payment_address_id'] = false;
 		}
 		
 		//Build Address Form
 		$this->form->init('address');
 		$this->form->set_template('form/address');
-		$this->form->set_action($this->url->link('checkout/block/payment_address/validate'));
+		$this->form->set_action($this->url->link('checkout/block/payment_address/validate_form'));
 		$this->form->set_field_options('country_id', $this->model_localisation_country->getCountries(), array('country_id' => 'name'));
 		$this->form->set_field_options('default', $this->_('data_yes_no'));
 		
@@ -57,8 +38,9 @@ class ControllerCheckoutBlockPaymentAddress extends Controller {
 				$json['error']['warning'] = $this->_('error_address');
 			}
 			else {
-				//TODO actually validate this!
-				$this->session->data['payment_address_id'] = $_POST['address_id'];
+				if(!$this->cart->setPaymentAddress($_POST['address_id'])){
+					$json['error']['address'] = $this->cart->get_errors('payment_address');
+				}
 			}
 		}
 		
@@ -71,26 +53,23 @@ class ControllerCheckoutBlockPaymentAddress extends Controller {
 		$json = $this->validate();
 		
 		if(!$json){
-			//Validate the form (Be sure error language files are loaded! eg: checkout/checkout has errors for address.)
+			//Validate the form
 			$this->form->init('address');
 			
 			if(!$this->form->validate($_POST)){
 				$json['error'] = $this->form->get_errors();
 			}
 			
-			//Additional Error checking
-			$country_info = $this->model_localisation_country->getCountry($_POST['country_id']);
+			//Additional Form Validation here...
 			
-			if (!$country_info){
-				$json['error']['country_id'] = $this->_('error_country_id');
-			}
-					
-			if (!$json['error']) {
-				$this->session->data['payment_address_id'] = $this->model_account_address->addAddress($_POST);
-				
-				unset($this->session->data['payment_methods']);
+			
+			if (!$json) {
+				if(!$this->cart->setPaymentAddress($_POST)){
+					$json['error']['payment_address'] = $this->cart->get_errors('payment_address');
+				}
 			}
 
+			//IF this is an ajax call
 			if(!isset($_POST['async'])){
 				if($json['error']){
 					$this->message->add('warning', $json['error']);

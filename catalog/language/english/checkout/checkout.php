@@ -22,7 +22,7 @@ $_['text_shipping_method']           = 'Please select the preferred shipping met
 $_['text_payment_method']            = 'Please select the preferred payment method to use on this order.';
 $_['text_comments']                  = 'Add Comments About Your Order';
 $_['text_no_shipping_address']                  = 'Please specify a Shipping Address and the shipping methods will automatically be calculated.';
-$_['text_no_payment_address']                  = 'Please specify a Payment Address and the available payment methods will be displayed.';
+$_['text_no_payment_address']        = 'Please specify a Payment Address and the available payment methods will be displayed.';
 $_['text_address_success']              = 'You have successfully updated your Address Book!';
 
 // Column
@@ -68,16 +68,15 @@ $_['error_confirm']                  = 'Password confirmation does not match pas
 $_['error_address_1']                = 'Address 1 must be between 3 and 128 characters!';
 $_['error_city']                     = 'City must be between 2 and 128 characters!';
 $_['error_postcode']                 = 'Postcode must be between 2 and 10 characters!';
-$_['error_country_id']                  = 'Please Select a Country!';
+$_['error_country_id']               = 'Please Select a Country!';
 $_['error_zone_id']                  = 'Please Select a Region / State!';
-$_['error_country_shipping']                  = 'We do not ship to this Country';
-$_['error_zone_shipping']                     = 'We do not ship to this Region / State!';
-$_['error_agree']                    = 'Warning: You must agree to the %s!';
-$_['error_address']                  = 'Warning: You must select address!';
-$_['error_shipping_address']                  = 'Warning: You must select a Delivery Address!';
-$_['error_payment_address']                  = 'Warning: You must select a Billing Address!';
-$_['error_shipping']                 = 'Warning: Shipping method required!';
-$_['error_no_shipping_required']                 = 'Shipping is not required for you current selection';
-$_['error_no_shipping']              = 'Warning: No Shipping options are available. Please <a href="%s">contact us</a> for assistance!';
-$_['error_payment']                  = 'Warning: Payment method required!';
-$_['error_no_payment']               = 'Warning: No Payment options are available. Please <a href="%s">contact us</a> for assistance!';
+$_['error_agree']                    = 'You must agree to the %s!';
+$_['error_address']                  = 'You must select an address!';
+$_['error_shipping_address']         = 'You must select a Delivery Address!';
+$_['error_payment_address']          = 'You must select a Billing Address!';
+$_['error_shipping']                 = 'Shipping method required!';
+$_['error_no_shipping_required']     = 'Shipping is not required for you current selection';
+$_['error_payment']                  = 'Payment method required!';
+$_['error_no_payment']               = 'No Payment options are available. Please <a href="%s">contact us</a> for assistance!';
+$_['error_ajax_response']				= 'There was an error while processing your request: ';
+$_['error_same_shipping_invalid']	= 'We do not ship to the address you specified in the Billing Address';

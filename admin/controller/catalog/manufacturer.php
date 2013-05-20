@@ -144,7 +144,7 @@ class ControllerCatalogManufacturer extends Controller {
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
 		$this->pagination->text = $this->_('text_pagination');
-		$this->pagination->url = $this->url->link('catalog/manufacturer', $url . '&page={page}');
+		$this->pagination->url = $this->url->link('catalog/manufacturer', $url);
 			
 		$this->data['pagination'] = $this->pagination->render();
 
@@ -333,7 +333,6 @@ class ControllerCatalogManufacturer extends Controller {
       $manufacturer_id = isset($_POST['manufacturer_id'])?$_POST['manufacturer_id']:'';
       if(!$name)return;
       
-      $this->load->model("catalog/manufacturer");
       echo json_encode($this->model_catalog_manufacturer->generate_url($manufacturer_id,$name));
       exit;
    }

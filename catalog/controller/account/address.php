@@ -53,12 +53,10 @@ class ControllerAccountAddress extends Controller {
 	  		
 			if (isset($this->session->data['shipping_address_id']) && ($_GET['address_id'] == $this->session->data['shipping_address_id'])) {
 	  			unset($this->session->data['shipping_method']);	
-				unset($this->session->data['shipping_methods']);
 			}
 
 			if (isset($this->session->data['payment_address_id']) && ($_GET['address_id'] == $this->session->data['payment_address_id'])) {
 	  			unset($this->session->data['payment_method']);
-				unset($this->session->data['payment_methods']);
 			}
 			
 			$this->message->add('success', $this->_('text_update'));

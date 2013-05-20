@@ -442,7 +442,7 @@ class ControllerSaleAffiliate extends Controller {
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
 		$this->pagination->text = $this->_('text_pagination');
-		$this->pagination->url = $this->url->link('sale/affiliate', $url . '&page={page}');
+		$this->pagination->url = $this->url->link('sale/affiliate', $url);
 			
 		$this->data['pagination'] = $this->pagination->render();
 
@@ -946,7 +946,7 @@ class ControllerSaleAffiliate extends Controller {
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
 		$this->pagination->text = $this->_('text_pagination');
-		$this->pagination->url = $this->url->link('sale/affiliate/transaction', 'affiliate_id=' . $_GET['affiliate_id'] . '&page={page}');
+		$this->pagination->url = $this->url->link('sale/affiliate/transaction', 'affiliate_id=' . $_GET['affiliate_id']);
 			
 		$this->data['pagination'] = $this->pagination->render();
 

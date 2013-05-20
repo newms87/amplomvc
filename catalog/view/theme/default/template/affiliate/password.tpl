@@ -7,14 +7,14 @@
     <div class="content">
       <table class="form">
         <tr>
-          <td><span class="required">*</span> <?= $entry_password; ?></td>
+          <td><span class="required"></span> <?= $entry_password; ?></td>
           <td><input type="password" autocomplete='off' name="password" value="<?= $password; ?>" />
             <? if ($error_password) { ?>
             <span class="error"><?= $error_password; ?></span>
             <? } ?></td>
         </tr>
         <tr>
-          <td><span class="required">*</span> <?= $entry_confirm; ?></td>
+          <td><span class="required"></span> <?= $entry_confirm; ?></td>
           <td><input type="password" autocomplete='off' name="confirm" value="<?= $confirm; ?>" />
             <? if ($error_confirm) { ?>
             <span class="error"><?= $error_confirm; ?></span>

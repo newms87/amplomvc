@@ -13,21 +13,21 @@
       <form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
         <table class="form">
           <tr>
-            <td><span class="required">*</span> <?= $entry_username; ?></td>
+            <td><span class="required"></span> <?= $entry_username; ?></td>
             <td><input type="text" name="pp_express_username" value="<?= $pp_express_username; ?>" />
               <? if ($error_username) { ?>
               <span class="error"><?= $error_username; ?></span>
               <? } ?></td>
           </tr>
           <tr>
-            <td><span class="required">*</span> <?= $entry_password; ?></td>
+            <td><span class="required"></span> <?= $entry_password; ?></td>
             <td><input type="text" name="pp_express_password" value="<?= $pp_express_password; ?>" />
               <? if ($error_password) { ?>
               <span class="error"><?= $error_password; ?></span>
               <? } ?></td>
           </tr>
           <tr>
-            <td><span class="required">*</span> <?= $entry_signature; ?></td>
+            <td><span class="required"></span> <?= $entry_signature; ?></td>
             <td><input type="text" name="pp_express_signature" value="<?= $pp_express_signature; ?>" />
               <? if ($error_signature) { ?>
               <span class="error"><?= $error_signature; ?></span>

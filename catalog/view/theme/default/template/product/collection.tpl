@@ -18,9 +18,9 @@
 	
 	<? if (!empty($products)) { ?>
 	<div class="item-filter">
-		<div class="display">
+		<div class="list_grid_toggle">
 			<span><?= $text_display; ?></span>
-			<?= $text_grid;?> <b>/</b> <a onclick="display('list');"><?= $text_list; ?></a>
+			<a id="toggle_list" class="active"><?= $text_list; ?></a> <b>/</b> <a id="toggle_grid"><?= $text_grid;?></a>
 		</div>
 		<div class="limit">
 			<span><?= $text_limit; ?></span>
@@ -80,28 +80,29 @@ $('[name=show_limit]').change(function(){
 	location = '<?= $limit_url;?>' + '&limit=' + $(this).val();
 });
 
-function display(view) {
-	list = $('#catalog_list');
+$('.list_grid_toggle > a').click(function(){
+	if($(this).hasClass('active')) return;
 	
-	if (view == 'list') {
-		list.removeClass('grid').addClass('list');
+	view = $(this).attr('id');
+	
+	$('.list_grid_toggle a.active').removeClass('active');
+	$(this).addClass('active');
+	
+	if (view == 'toggle_list') {
+		$('#catalog_list').removeClass('grid').addClass('list');
 		
-		$('.display').html('<b><?= $text_display; ?></b> <?= $text_list; ?> <b>/</b> <a onclick="display(\'grid\');"><?= $text_grid; ?></a>');
-		
-		$.cookie('display', 'list');
+		$.cookie('display', 'list'); 
 	} else {
-		list.removeClass('list').addClass('grid');
-		
-		$('.display').html('<b><?= $text_display; ?></b> <a onclick="display(\'list\');"><?= $text_list; ?></a> <b>/</b> <?= $text_grid; ?>');
+		$('#catalog_list').removeClass('list').addClass('grid');
 		
 		$.cookie('display', 'grid');
 	}
-}
+});
 
 view = $.cookie('display');
 
 if (view) {
-	display(view);
+	$('#toggle_' + view).click();
 }
 //--></script> 
 <?= $footer; ?>

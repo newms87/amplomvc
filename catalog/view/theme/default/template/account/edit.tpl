@@ -11,21 +11,21 @@
     <div class="content">
       <table class="form">
         <tr>
-          <td><span class="required">*</span> <?= $entry_firstname; ?></td>
+          <td><span class="required"></span> <?= $entry_firstname; ?></td>
           <td><input type="text" name="firstname" value="<?= $firstname; ?>" />
             <? if ($error_firstname) { ?>
             <span class="error"><?= $error_firstname; ?></span>
             <? } ?></td>
         </tr>
         <tr>
-          <td><span class="required">*</span> <?= $entry_lastname; ?></td>
+          <td><span class="required"></span> <?= $entry_lastname; ?></td>
           <td><input type="text" name="lastname" value="<?= $lastname; ?>" />
             <? if ($error_lastname) { ?>
             <span class="error"><?= $error_lastname; ?></span>
             <? } ?></td>
         </tr>
         <tr>
-          <td><span class="required">*</span> <?= $entry_email; ?></td>
+          <td><span class="required"></span> <?= $entry_email; ?></td>
           <td><input type="text" name="email" value="<?= $email; ?>" />
             <? if ($error_email) { ?>
             <span class="error"><?= $error_email; ?></span>

@@ -1,10 +1,10 @@
 <?php
 class Mail {
-   private $config;
+   private $registry;
    
 	protected $to;
-   protected $copy_to;
-   protected $blind_copy_to;
+   protected $cc;
+   protected $bcc;
 	protected $from;
 	protected $sender;
 	protected $subject;
@@ -25,7 +25,7 @@ class Mail {
 	public $verp;
 
    public function __construct($registry){
-      $this->config = $registry->get('config');
+      $this->registry = $registry;
       
       $this->protocol  = $this->config->get('config_mail_protocol');
       $this->parameter = $this->config->get('config_mail_parameter');
@@ -38,10 +38,14 @@ class Mail {
       $this->init();
    }
    
+	public function __get($key){
+		return $this->registry->get($key);
+	}
+	
    public function init(){
       $this->to = null;
-      $this->copy_to = null;
-      $this->blind_copy_to = null;
+      $this->cc = null;
+      $this->bcc = null;
       $this->from = null;
       $this->sender = null;
       $this->subject = null;
@@ -69,18 +73,18 @@ class Mail {
    public function setCopyTo($to) {
       if (is_array($to)) {
          array_walk($to, 'trim');
-         $this->copy_to = implode(',', $to);
+         $this->cc = implode(',', $to);
       } else {
-         $this->copy_to = trim($to);
+         $this->cc = trim($to);
       }
    }
    
    public function setBlindCopyTo($to) {
       if (is_array($to)) {
          array_walk($to, 'trim');
-         $this->blind_copy_to = implode(',', $to);
+         $this->bcc = implode(',', $to);
       } else {
-         $this->blind_copy_to = trim($to);
+         $this->bcc = trim($to);
       }
    }
    
@@ -119,17 +123,61 @@ class Mail {
       }
 	}
 
-	public function send() {
+	public function send($data = null) {
+		if($data){
+			if(isset($data['sender'])){
+				$this->setSender($data['sender']);
+			}
+			
+			if(isset($data['from'])){
+	      	$this->setFrom($data['from']);
+			}
+			
+			if(isset($data['to'])){
+	      	$this->setTo($data['to']);
+			}
+			
+			if(isset($data['cc'])){
+	      	$this->setCopyTo($data['cc']);
+			}
+			
+			if(isset($data['bcc'])){
+	      	$this->setBlindCopyTo($data['bcc']);
+			}
+	      
+			if(isset($data['subject'])){
+      		$this->setSubject($data['subject']);
+			}
+      	
+	      if(!empty($data['html'])){
+	         $this->setHtml($data['html']);
+	      }elseif(!empty($data['text'])){
+	         $this->setText($data['text']);
+	      }
+      	
+			if(isset($data['attachment'])){
+		      if(!empty($_FILES['attachment']) && empty($_FILES['attachment']['error'])){
+		         $files = $_FILES['attachment'];
+		         
+		         for($i = 0; $i < count($files['name']); $i++){
+		            $file_name = dirname($files['tmp_name'][$i]) . '/' . $files['name'][$i];
+		            rename($files['tmp_name'][$i], $file_name);
+		            $this->addAttachment($file_name);
+		         }
+		      }
+			}
+		}
+		
 	   $errors = '';
 		if (!$this->to) {
-		   $msg = 'Error: E-Mail to required!';
-			trigger_error($msg);
+		   $msg = 'E-Mail To required!';
+			$this->trigger_error($msg);
          $errors .= $msg;
 		}
 
 		if (!$this->from) {
-		   $msg = 'Error: E-Mail from required!';
-			trigger_error($msg);
+		   $msg = 'E-Mail From required!';
+			$this->trigger_error($msg);
          $errors .= $msg;		
 		}
 
@@ -138,37 +186,36 @@ class Mail {
 		}
 
 		if (!$this->subject) {
-		   $msg = 'Error: E-Mail subject required!';
-			trigger_error($msg);
+		   $msg = 'E-Mail subject required!';
+			$this->trigger_error($msg);
 			$errors .= $msg;
 		}
 
 		if ((!$this->text) && (!$this->html)) {
-		   $msg = 'Error: E-Mail message required!';
-			trigger_error($msg);
+		   $msg = 'E-Mail message required!';
+			$this->trigger_error($msg);
          $errors .= $msg;
 		}
       
       if($errors){
-      	$copy_to = $this->copy_to ? "(CC: $this->copy_to)":'';
-         $blind_copy_to = $this->blind_copy_to ? "(BCC: $this->blind_copy_to)":'';
-      	$msg = "There was a problem while sending an email to $this->to $copy_to $blind_copy_to<br />\r\n<br />\r\nThe Errors were as follows below: <br />\r\n<br />\r\n$errors";
+      	$cc = $this->cc ? "(CC: $this->cc)":'';
+         $bcc = $this->bcc ? "(BCC: $this->bcc)":'';
+      	$msg = "There was a problem while sending an email to $this->to $cc $bcc<br />\r\n<br />\r\nThe Errors were as follows below: <br />\r\n<br />\r\n$errors";
          
-         list($caller) = debug_backtrace(false);
-         $msg .= " Called from $caller[file] on line $caller[line]";
+         $msg .= get_caller();
          
-      	trigger_error($msg);
+      	$this->trigger_error($msg);
 			
       	if(isset($this->config) && $this->config->get('config_email_error')){
 	         $this->to = $this->config->get('config_email_error');
-	         $this->copy_to = '';
-	         $this->blind_copy_to = '';
+	         $this->cc = '';
+	         $this->bcc = '';
 	         $this->subject = "There was a problem sending out the email!";
 	         $this->text = $msg;
          }
 			else{
-				trigger_error("Please set the Error Email Address under settings!");
-				return;
+				$this->trigger_error("Please set the Error Email Address under settings!");
+				return false;
 			}
       }
 		
@@ -184,8 +231,8 @@ class Mail {
 			$header .= 'Subject: ' . $this->subject . $this->newline;
 		}
       
-      $header .= 'Cc: ' . $this->copy_to . $this->newline;
-      $header .= 'Bcc: ' . $this->blind_copy_to . $this->newline;
+      $header .= 'Cc: ' . $this->cc . $this->newline;
+      $header .= 'Bcc: ' . $this->bcc . $this->newline;
 		$header .= 'Date: ' . date("D, d M Y H:i:s O") . $this->newline;
 		$header .= 'From: ' . '=?UTF-8?B?' . base64_encode($this->sender) . '?=' . '<' . $this->from . '>' . $this->newline;
 		$header .= 'Reply-To: ' . $this->sender . '<' . $this->from . '>' . $this->newline;
@@ -252,127 +299,56 @@ class Mail {
 			$handle = fsockopen('localhost', 25, $errno, $errstr, 3);
 			
 			if (!$handle) {
-				trigger_error('Error: ' . $errstr . ' (' . $errno . ')');
-			} else {
-				if (substr(PHP_OS, 0, 3) != 'WIN') {
-					socket_set_timeout($handle, $this->timeout, 0);
+				$this->trigger_error('' . $errstr . ' (' . $errno . ')');
+				return false;
+			}
+			
+			if (substr(PHP_OS, 0, 3) != 'WIN') {
+				socket_set_timeout($handle, $this->timeout, 0);
+			}
+
+			while ($line = fgets($handle, 515)) {
+				if (substr($line, 3, 1) == ' ') {
+					break;
 				}
+			}
+
+			if (substr($this->hostname, 0, 3) == 'tls') {
+				fputs($handle, 'STARTTLS' . $this->crlf);
 
 				while ($line = fgets($handle, 515)) {
+					$reply .= $line;
+
 					if (substr($line, 3, 1) == ' ') {
 						break;
 					}
 				}
 
-				if (substr($this->hostname, 0, 3) == 'tls') {
-					fputs($handle, 'STARTTLS' . $this->crlf);
+				if (substr($reply, 0, 3) != 220) {
+					$this->trigger_error('STARTTLS not accepted from server!');
+					return false;
+				}
+			}
 
-					while ($line = fgets($handle, 515)) {
-						$reply .= $line;
+			if (!empty($this->username)  && !empty($this->password)) {
+				fputs($handle, 'EHLO ' . getenv('SERVER_NAME') . $this->crlf);
+				
+				$reply = '';
 
-						if (substr($line, 3, 1) == ' ') {
-							break;
-						}
-					}
+				while ($line = fgets($handle, 515)) {
+					$reply .= $line;
 
-					if (substr($reply, 0, 3) != 220) {
-						trigger_error('Error: STARTTLS not accepted from server!');
-						exit();								
+					if (substr($line, 3, 1) == ' ') {
+						break;
 					}
 				}
-
-				if (!empty($this->username)  && !empty($this->password)) {
-					fputs($handle, 'EHLO ' . getenv('SERVER_NAME') . $this->crlf);
-					
-					$reply = '';
-
-					while ($line = fgets($handle, 515)) {
-						$reply .= $line;
-
-						if (substr($line, 3, 1) == ' ') {
-							break;
-						}
-					}
-					
-					if (substr($reply, 0, 3) != 250) {
-						trigger_error('Error: EHLO not accepted from server!');
-						exit();								
-					}
-
-					fputs($handle, 'AUTH LOGIN' . $this->crlf);
-
-					$reply = '';
-
-					while ($line = fgets($handle, 515)) {
-						$reply .= $line;
-
-						if (substr($line, 3, 1) == ' ') {
-							break;
-						}
-					}
-
-					if (substr($reply, 0, 3) != 334) {
-						trigger_error('Error: AUTH LOGIN not accepted from server!');
-						exit();						
-					}
-
-					fputs($handle, base64_encode($this->username) . $this->crlf);
-
-					$reply = '';
-
-					while ($line = fgets($handle, 515)) {
-						$reply .= $line;
-
-						if (substr($line, 3, 1) == ' ') {
-							break;
-						}
-					}
-
-					if (substr($reply, 0, 3) != 334) {
-						trigger_error('Error: Username not accepted from server!');
-						exit();								
-					}
-
-					fputs($handle, base64_encode($this->password) . $this->crlf);
-
-					$reply = '';
-
-					while ($line = fgets($handle, 515)) {
-						$reply .= $line;
-
-						if (substr($line, 3, 1) == ' ') {
-							break;
-						}
-					}
-
-					if (substr($reply, 0, 3) != 235) {
-						trigger_error('Error: Password not accepted from server!');
-						exit();								
-					}
-				} else {
-					fputs($handle, 'HELO ' . getenv('SERVER_NAME') . $this->crlf);
-					
-					$reply = '';
-
-					while ($line = fgets($handle, 515)) {
-						$reply .= $line;
-
-						if (substr($line, 3, 1) == ' ') {
-							break;
-						}
-					}
-
-					if (substr($reply, 0, 3) != 250) {
-						trigger_error('Error: HELO not accepted from server!');
-						exit();							
-					}
+				
+				if (substr($reply, 0, 3) != 250) {
+					$this->trigger_error('EHLO not accepted from server!');
+					return false;
 				}
 
-				if ($this->verp) {
-					fputs($handle, 'MAIL FROM: <' . $this->from . '>XVERP' . $this->crlf);
-				} else {
-					fputs($handle, 'MAIL FROM: <' . $this->from . '>' . $this->crlf);
-				}
+				fputs($handle, 'AUTH LOGIN' . $this->crlf);
 
 				$reply = '';
 
@@ -384,13 +360,104 @@ class Mail {
 					}
 				}
 
-				if (substr($reply, 0, 3) != 250) {
-					trigger_error('Error: MAIL FROM not accepted from server!');
-					exit();							
+				if (substr($reply, 0, 3) != 334) {
+					$this->trigger_error('AUTH LOGIN not accepted from server!');
+					return false;
 				}
 
-				if (!is_array($this->to)) {
-					fputs($handle, 'RCPT TO: <' . $this->to . '>' . $this->crlf);
+				fputs($handle, base64_encode($this->username) . $this->crlf);
+
+				$reply = '';
+
+				while ($line = fgets($handle, 515)) {
+					$reply .= $line;
+
+					if (substr($line, 3, 1) == ' ') {
+						break;
+					}
+				}
+
+				if (substr($reply, 0, 3) != 334) {
+					$this->trigger_error('Username not accepted from server!');
+					return false;
+				}
+
+				fputs($handle, base64_encode($this->password) . $this->crlf);
+
+				$reply = '';
+
+				while ($line = fgets($handle, 515)) {
+					$reply .= $line;
+
+					if (substr($line, 3, 1) == ' ') {
+						break;
+					}
+				}
+
+				if (substr($reply, 0, 3) != 235) {
+					$this->trigger_error('Password not accepted from server!');
+					return false;
+				}
+			} else {
+				fputs($handle, 'HELO ' . getenv('SERVER_NAME') . $this->crlf);
+				
+				$reply = '';
+
+				while ($line = fgets($handle, 515)) {
+					$reply .= $line;
+
+					if (substr($line, 3, 1) == ' ') {
+						break;
+					}
+				}
+
+				if (substr($reply, 0, 3) != 250) {
+					$this->trigger_error('HELO not accepted from server!');
+					return false;
+				}
+			}
+
+			if ($this->verp) {
+				fputs($handle, 'MAIL FROM: <' . $this->from . '>XVERP' . $this->crlf);
+			} else {
+				fputs($handle, 'MAIL FROM: <' . $this->from . '>' . $this->crlf);
+			}
+
+			$reply = '';
+
+			while ($line = fgets($handle, 515)) {
+				$reply .= $line;
+
+				if (substr($line, 3, 1) == ' ') {
+					break;
+				}
+			}
+
+			if (substr($reply, 0, 3) != 250) {
+				$this->trigger_error('MAIL FROM not accepted from server!');
+				return false;
+			}
+
+			if (!is_array($this->to)) {
+				fputs($handle, 'RCPT TO: <' . $this->to . '>' . $this->crlf);
+
+				$reply = '';
+
+				while ($line = fgets($handle, 515)) {
+					$reply .= $line;
+
+					if (substr($line, 3, 1) == ' ') {
+						break;
+					}
+				}
+
+				if ((substr($reply, 0, 3) != 250) && (substr($reply, 0, 3) != 251)) {
+					$this->trigger_error('RCPT TO not accepted from server!');
+					return false;
+				}
+			} else {
+				foreach ($this->to as $recipient) {
+					fputs($handle, 'RCPT TO: <' . $recipient . '>' . $this->crlf);
 
 					$reply = '';
 
@@ -403,101 +470,126 @@ class Mail {
 					}
 
 					if ((substr($reply, 0, 3) != 250) && (substr($reply, 0, 3) != 251)) {
-						trigger_error('Error: RCPT TO not accepted from server!');
-						exit();							
-					}
-				} else {
-					foreach ($this->to as $recipient) {
-						fputs($handle, 'RCPT TO: <' . $recipient . '>' . $this->crlf);
-
-						$reply = '';
-
-						while ($line = fgets($handle, 515)) {
-							$reply .= $line;
-
-							if (substr($line, 3, 1) == ' ') {
-								break;
-							}
-						}
-
-						if ((substr($reply, 0, 3) != 250) && (substr($reply, 0, 3) != 251)) {
-							trigger_error('Error: RCPT TO not accepted from server!');
-							exit();								
-						}
+						$this->trigger_error('RCPT TO not accepted from server!');
+						return false;
 					}
 				}
-
-				fputs($handle, 'DATA' . $this->crlf);
-
-				$reply = '';
-
-				while ($line = fgets($handle, 515)) {
-					$reply .= $line;
-
-					if (substr($line, 3, 1) == ' ') {
-						break;
-					}
-				}
-
-				if (substr($reply, 0, 3) != 354) {
-					trigger_error('Error: DATA not accepted from server!');
-					exit();						
-				}
-            	
-				// According to rfc 821 we should not send more than 1000 including the CRLF
-				$message = str_replace("\r\n", "\n",  $header . $message);
-				$message = str_replace("\r", "\n", $message);
-				
-				$lines = explode("\n", $message);
-				
-				foreach ($lines as $line) {
-					$results = str_split($line, 998);
-					
-					foreach ($results as $result) {
-						if (substr(PHP_OS, 0, 3) != 'WIN') {
-							fputs($handle, $result . $this->crlf);
-						} else {
-							fputs($handle, str_replace("\n", "\r\n", $result) . $this->crlf);
-						}							
-					}
-				}
-				
-				fputs($handle, '.' . $this->crlf);
-
-				$reply = '';
-            
-				while ($line = fgets($handle, 515)) {
-					$reply .= $line;
-               
-					if (substr($line, 3, 1) == ' ') {
-						break;
-					}
-				}
-            
-				if (substr($reply, 0, 3) != 250) {
-					trigger_error('Error: DATA not accepted from server!');
-					exit();						
-				}
-				
-				fputs($handle, 'QUIT' . $this->crlf);
-
-				$reply = '';
-
-				while ($line = fgets($handle, 515)) {
-					$reply .= $line;
-
-					if (substr($line, 3, 1) == ' ') {
-						break;
-					}
-				}
-
-				if (substr($reply, 0, 3) != 221) {
-					trigger_error('Error: QUIT not accepted from server!');
-					exit();						
-				}
-
-				fclose($handle);
 			}
+
+			fputs($handle, 'DATA' . $this->crlf);
+
+			$reply = '';
+
+			while ($line = fgets($handle, 515)) {
+				$reply .= $line;
+
+				if (substr($line, 3, 1) == ' ') {
+					break;
+				}
+			}
+
+			if (substr($reply, 0, 3) != 354) {
+				$this->trigger_error('DATA not accepted from server!');
+				return false;
+			}
+         	
+			// According to rfc 821 we should not send more than 1000 including the CRLF
+			$message = str_replace("\r\n", "\n",  $header . $message);
+			$message = str_replace("\r", "\n", $message);
+			
+			$lines = explode("\n", $message);
+			
+			foreach ($lines as $line) {
+				$results = str_split($line, 998);
+				
+				foreach ($results as $result) {
+					if (substr(PHP_OS, 0, 3) != 'WIN') {
+						fputs($handle, $result . $this->crlf);
+					} else {
+						fputs($handle, str_replace("\n", "\r\n", $result) . $this->crlf);
+					}							
+				}
+			}
+			
+			fputs($handle, '.' . $this->crlf);
+
+			$reply = '';
+         
+			while ($line = fgets($handle, 515)) {
+				$reply .= $line;
+            
+				if (substr($line, 3, 1) == ' ') {
+					break;
+				}
+			}
+         
+			if (substr($reply, 0, 3) != 250) {
+				$this->trigger_error('DATA not accepted from server!');
+				return false;
+			}
+			
+			fputs($handle, 'QUIT' . $this->crlf);
+
+			$reply = '';
+
+			while ($line = fgets($handle, 515)) {
+				$reply .= $line;
+
+				if (substr($line, 3, 1) == ' ') {
+					break;
+				}
+			}
+
+			if (substr($reply, 0, 3) != 221) {
+				$this->trigger_error('QUIT not accepted from server!');
+				return false;
+			}
+
+			fclose($handle);
 		}
+
+		return true;
 	}
+
+	private function trigger_error($msg){
+		//Hide Mail errors when ajax pages are requested
+		if(!empty($_POST['async']) && $this->config->get('config_error_display')){
+			$this->config->set('config_error_display', false);
+			trigger_error($msg);
+			$this->config->set('config_error_display', true);
+		}
+		else{
+			trigger_error($msg);
+		}
+		
+		if($this->config->get('config_error_display')){
+			$view_mail_errors = $this->url->admin('mail/error');
+			$this->message->add('warning', "There was an error while sending an email <a href=\"$view_mail_errors\">(review all mail errors)</a>: " . $msg);
+		}
+		
+		$mail_fail = array(
+			'mail' => $this,
+			'error' => $msg,
+			'to' => $this->to,
+			'cc' => $this->cc,
+			'bcc' => $this->bcc,
+			'from' => $this->from,
+			'sender' => $this->sender,
+			'subject' => $this->subject,
+			'html' => $this->html,
+			'text' => $this->text,
+			'attachment' => $this->attachments,
+			'store_id' => $this->config->get('config_store_id'),
+			'time' => time(),
+		);
+		
+		$temp = $this->registry;
+		unset($this->registry);
+		$mail_fail = serialize($mail_fail);
+		$this->registry = $temp;
+		
+		$mail_fail = $this->db->escape($mail_fail);
+		
+		$this->db->query("INSERT INTO " . DB_PREFIX . "setting SET store_id = '0', `group` = 'mail_fail', `key` = 'mail_fail', value = '$mail_fail', serialized = '1', auto_load = '0'"); 
+	} 
 }

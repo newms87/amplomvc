@@ -48,7 +48,7 @@ class ControllerAccountReturn extends Controller {
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_catalog_limit');
 		$this->pagination->text = $this->_('text_pagination');
-		$this->pagination->url = $this->url->link('account/history', 'page={page}');
+		$this->pagination->url = $this->url->link('account/history');
 		
 		$this->data['pagination'] = $this->pagination->render();
 
