@@ -29,6 +29,8 @@ class ControllerWidgetBlockSpecials extends Controller {
 						
 		foreach($products as &$product){
 			$product['thumb'] = $this->image->resize($product['image'], $width, $height);
+			
+			$product['href'] = $this->url->link('product/product', 'product_id=' . $product['product_id']);
 		}
 		
 		$this->data['products'] = $products;

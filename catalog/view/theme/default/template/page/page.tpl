@@ -1,5 +1,9 @@
 <?= $header . $column_left . $column_right ;?>
-<?= $content_top;?>
-<div id="content"><?= $content;?></div>
-<?= $content_bottom;?>
+
+<div id="content">
+	<?= $content_top;?>
+	<?= $content;?>
+	<?= $content_bottom;?>
+</div>
+
 <?= $footer;?>

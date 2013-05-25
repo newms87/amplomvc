@@ -107,19 +107,18 @@ ul{
 	min-height:1024px;
 	padding:20px 0;
 }
-#column_left ~ #content_top{
-	padding-left: 215px;
-}
-#column_left ~ #content_bottom{
-	padding-left: 215px;
+
+#content_holder{
+	min-height: 600px;
+	margin-bottom: 25px;
+	padding-top:40px;
+	position:relative;
+	overflow:visible;
 }
 
-#column_right ~ #content_top{
-	padding-right: 215px;
+#content_top{
 }
-
-#column_right ~ #content_bottom{
-	padding-right: 215px;
+#content_bottom{
 }
 
 #column_left {
@@ -130,14 +129,6 @@ ul{
 #column_right {
 	float: right;
 	width: 200px;
-}
-
-#content_holder{
-	min-height: 600px;
-	margin-bottom: 25px;
-	padding-top:40px;
-	position:relative;
-	overflow:visible;
 }
 
 #content{
@@ -151,7 +142,6 @@ ul{
 #column_right ~ #content{
 	padding-right: 215px;
 }
-
 
 /* header */
 #header{

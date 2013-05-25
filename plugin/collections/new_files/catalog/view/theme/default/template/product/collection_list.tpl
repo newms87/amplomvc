@@ -1,7 +1,7 @@
 <?= $header; ?>
 <?= $column_left; ?>
 <?= $column_right; ?>
-<div class="content collections">
+<div id="content" class="collections">
 	<?= $content_top; ?>
 	<?= $this->builder->display_breadcrumbs(); ?>
 	<h1><?= $heading_title; ?></h1>
