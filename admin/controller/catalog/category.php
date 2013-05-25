@@ -61,11 +61,11 @@ class ControllerCatalogCategory extends Controller {
 	}
 
 	private function getList() {
-      $this->template->load('catalog/category_list');
+		$this->template->load('catalog/category_list');
 
-      $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-      $this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/category'));
-      									
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/category'));
+											
 		$this->data['insert'] = $this->url->link('catalog/category/insert');
 		$this->data['delete'] = $this->url->link('catalog/category/delete');
 		
@@ -83,13 +83,13 @@ class ControllerCatalogCategory extends Controller {
 					
 			$this->data['categories'][] = array(
 				'category_id' => $result['category_id'],
-				'name'        => $result['name'],
+				'name'		=> $result['name'],
 				'sort_order'  => $result['sort_order'],
-				'selected'    => isset($_POST['selected']) && in_array($result['category_id'], $_POST['selected']),
-				'action'      => $action
+				'selected'	=> isset($_POST['selected']) && in_array($result['category_id'], $_POST['selected']),
+				'action'		=> $action
 			);
 		}
-      
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -101,11 +101,11 @@ class ControllerCatalogCategory extends Controller {
 	private function getForm() {
 		$this->template->load('catalog/category_form');
 
-	   $category_id = $this->data['category_id'] = isset($_GET['category_id'])?$_GET['category_id']:null;
+		$category_id = $this->data['category_id'] = isset($_GET['category_id'])?$_GET['category_id']:null;
 		
-      $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-      $this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/category'));
-      
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/category'));
+		
 		if (!$category_id) {
 			$this->data['action'] = $this->url->link('catalog/category/insert');
 		} else {
@@ -115,60 +115,52 @@ class ControllerCatalogCategory extends Controller {
 		$this->data['cancel'] = $this->url->link('catalog/category');
 
 		if ($category_id && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-      	$category_info = $this->model_catalog_category->getCategory($category_id);
-    	}
+			$category_info = $this->model_catalog_category->getCategory($category_id);
+		}
 		
-      //initialize the values in order of Post, Database, Default
-      $defaults = array(
-         'category_description'=>array(),
-         'parent_id'=>0,
-         'category_store'=>array(0,1,2),
-         'keyword'=>'',
-         'image'=>'',
-         'top'=>0,
-         'column'=>1,
-         'sort_order'=>0,
-         'status'=>1,
-         'category_layout'=>array()
-      );
+		//initialize the values in order of Post, Database, Default
+		$defaults = array(
+			'category_description'=>array(),
+			'parent_id'=>0,
+			'category_store'=>array(0,1,2),
+			'keyword'=>'',
+			'image'=>'',
+			'top'=>0,
+			'column'=>1,
+			'sort_order'=>0,
+			'status'=>1,
+			'category_layout'=>array(),
+		);
 
-      foreach($defaults as $d=>$value){
-         if (isset($_POST[$d])) {
-            $this->data[$d] = $_POST[$d];
-         } elseif (isset($category_info[$d])) {
-            $this->data[$d] = $category_info[$d];
-         } elseif(!$category_id) {
-            $this->data[$d] = $value;
-         }
-      }
-      
+		foreach($defaults as $d=>$value){
+			if (isset($_POST[$d])) {
+				$this->data[$d] = $_POST[$d];
+			} elseif (isset($category_info[$d])) {
+				$this->data[$d] = $category_info[$d];
+			} elseif(!$category_id) {
+				$this->data[$d] = $value;
+			}
+		}
+		
 		$this->data['languages'] = $this->model_localisation_language->getLanguages();
 
-      //Anything uninitialized at this point we know there is a category_id set, so grab the values
+		//Anything uninitialized at this point we know there is a category_id set, so grab the values
 		if(!isset($this->data['category_description'])){
-		   $this->data['category_description'] = $this->model_catalog_category->getCategoryDescriptions($category_id);
+			$this->data['category_description'] = $this->model_catalog_category->getCategoryDescriptions($category_id);
 		}
-      if(!isset($this->data['category_store'])) {
-         $this->data['category_store'] = $this->model_catalog_category->getCategoryStores($category_id);
-      }
-      if(!isset($this->data['category_layout'])){
-         $this->data['category_layout'] = $this->model_catalog_category->getCategoryLayouts($category_id);
-      }
-      
-      if (!empty($category_info) && $category_info['image'] && file_exists(DIR_IMAGE . $category_info['image'])) {
-         $this->data['thumb'] = $this->image->resize($category_info['image'], 100, 100);
-      } else {
-         $this->data['thumb'] = $this->image->resize('no_image.png', 100, 100);
-      }
-      
-      $this->data['no_image'] = $this->image->resize('no_image.png', 100, 100);
-      
-      $this->data['categories'] = array(0=>'-- None --');
+		if(!isset($this->data['category_store'])) {
+			$this->data['category_store'] = $this->model_catalog_category->getCategoryStores($category_id);
+		}
+		if(!isset($this->data['category_layout'])){
+			$this->data['category_layout'] = $this->model_catalog_category->getCategoryLayouts($category_id);
+		}
+		
+		$this->data['categories'] = array(0=>'-- None --');
 		$categories = $this->model_catalog_category->getCategories(0);
 		// Remove own id from list
 		foreach ($categories as $key => $category) {
 			if ($category['category_id'] != $category_id) {
-			   $this->data['categories'][$category['category_id']] = $category['name'];
+				$this->data['categories'][$category['category_id']] = $category['name'];
 			}
 		}
 						
@@ -184,15 +176,19 @@ class ControllerCatalogCategory extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-   public function generate_url(){
-      $name = isset($_POST['name'])?$_POST['name']:'';
-      $category_id= isset($_POST['category_id'])?$_POST['category_id']:0;
-      if(!$name)return;
-      
-      echo json_encode($this->model_catalog_category->generate_url($category_id, $name));
-      exit;
-   }
-   
+	public function generate_url(){
+		if(!empty($_POST['name'])){
+			$category_id = isset($_POST['category_id']) ? $_POST['category_id'] : 0;
+			
+			$url = $this->model_catalog_category->generate_url($category_id, $_POST['name']);
+		}
+		else{
+			$url = '';
+		}
+
+		$this->response->setOutput(json_encode($url));
+	}
+	
 	private function validateForm() {
 		if (!$this->user->hasPermission('modify', 'catalog/category')) {
 			$this->error['warning'] = $this->_('error_permission');
@@ -204,11 +200,7 @@ class ControllerCatalogCategory extends Controller {
 			}
 		}
 
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
 
 	private function validateDelete() {

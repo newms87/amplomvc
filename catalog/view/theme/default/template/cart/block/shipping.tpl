@@ -36,7 +36,7 @@
 //<!--
 $('#button-quote').live('click', function() {
    $.ajax({
-      url: 'index.php?route=cart/block/shipping/quote',
+      url: "<?= HTTP_CATALOG . "index.php?route=cart/block/shipping/quote"; ?>",
       type: 'post',
       data: $('#cart_shipping').serialize(),
       dataType: 'json',    

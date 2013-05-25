@@ -36,58 +36,58 @@
 class PHPExcel_Chart_Layout
 {
 	/**
-	 * layoutTarget
-	 *
-	 * @var string
-	 */
+	* layoutTarget
+	*
+	* @var string
+	*/
 	private $_layoutTarget = null;
 
 	/**
-	 * X Mode
-	 *
-	 * @var string
-	 */
+	* X Mode
+	*
+	* @var string
+	*/
 	private $_xMode		= null;
 
 	/**
-	 * Y Mode
-	 *
-	 * @var string
-	 */
+	* Y Mode
+	*
+	* @var string
+	*/
 	private $_yMode		= null;
 
 	/**
-	 * X-Position
-	 *
-	 * @var float
-	 */
+	* X-Position
+	*
+	* @var float
+	*/
 	private $_xPos		= null;
 
 	/**
-	 * Y-Position
-	 *
-	 * @var float
-	 */
+	* Y-Position
+	*
+	* @var float
+	*/
 	private $_yPos		= null;
 
 	/**
-	 * width
-	 *
-	 * @var float
-	 */
+	* width
+	*
+	* @var float
+	*/
 	private $_width		= null;
 
 	/**
-	 * height
-	 *
-	 * @var float
-	 */
+	* height
+	*
+	* @var float
+	*/
 	private $_height	= null;
 
 
 	/**
-	 * Create a new PHPExcel_Chart_Layout
-	 */
+	* Create a new PHPExcel_Chart_Layout
+	*/
 	public function __construct($layout=array())
 	{
 		if (isset($layout['layoutTarget']))	{ $this->_layoutTarget	= $layout['layoutTarget'];	}
@@ -100,127 +100,127 @@ class PHPExcel_Chart_Layout
 	}
 
 	/**
-	 * Get Layout Target
-	 *
-	 * @return string
-	 */
+	* Get Layout Target
+	*
+	* @return string
+	*/
 	public function getLayoutTarget() {
 		return $this->_layoutTarget;
 	}
 
 	/**
-	 * Set Layout Target
-	 *
-	 * @param Layout Target $value
-	 */
+	* Set Layout Target
+	*
+	* @param Layout Target $value
+	*/
 	public function setLayoutTarget($value) {
 		$this->_layoutTarget = $value;
 	}
 
 	/**
-	 * Get X-Mode
-	 *
-	 * @return string
-	 */
+	* Get X-Mode
+	*
+	* @return string
+	*/
 	public function getXMode() {
 		return $this->_xMode;
 	}
 
 	/**
-	 * Set X-Mode
-	 *
-	 * @param X-Mode $value
-	 */
+	* Set X-Mode
+	*
+	* @param X-Mode $value
+	*/
 	public function setXMode($value) {
 		$this->_xMode = $value;
 	}
 
 	/**
-	 * Get Y-Mode
-	 *
-	 * @return string
-	 */
+	* Get Y-Mode
+	*
+	* @return string
+	*/
 	public function getYMode() {
 		return $this->_xMode;
 	}
 
 	/**
-	 * Set Y-Mode
-	 *
-	 * @param Y-Mode $value
-	 */
+	* Set Y-Mode
+	*
+	* @param Y-Mode $value
+	*/
 	public function setYMode($value) {
 		$this->_xMode = $value;
 	}
 
 	/**
-	 * Get X-Position
-	 *
-	 * @return number
-	 */
+	* Get X-Position
+	*
+	* @return number
+	*/
 	public function getXPosition() {
 		return $this->_xPos;
 	}
 
 	/**
-	 * Set X-Position
-	 *
-	 * @param X-Position $value
-	 */
+	* Set X-Position
+	*
+	* @param X-Position $value
+	*/
 	public function setXPosition($value) {
 		$this->_xPos = $value;
 	}
 
 	/**
-	 * Get Y-Position
-	 *
-	 * @return number
-	 */
+	* Get Y-Position
+	*
+	* @return number
+	*/
 	public function getYPosition() {
 		return $this->_yPos;
 	}
 
 	/**
-	 * Set Y-Position
-	 *
-	 * @param Y-Position $value
-	 */
+	* Set Y-Position
+	*
+	* @param Y-Position $value
+	*/
 	public function setYPosition($value) {
 		$this->_yPos = $value;
 	}
 
 	/**
-	 * Get Width
-	 *
-	 * @return number
-	 */
+	* Get Width
+	*
+	* @return number
+	*/
 	public function getWidth() {
 		return $this->_width;
 	}
 
 	/**
-	 * Set Width
-	 *
-	 * @param Width $value
-	 */
+	* Set Width
+	*
+	* @param Width $value
+	*/
 	public function setWidth($value) {
 		$this->_width = $value;
 	}
 
 	/**
-	 * Get Height
-	 *
-	 * @return number
-	 */
+	* Get Height
+	*
+	* @return number
+	*/
 	public function getHeight() {
 		return $this->_height;
 	}
 
 	/**
-	 * Set Height
-	 *
-	 * @param Height $value
-	 */
+	* Set Height
+	*
+	* @param Height $value
+	*/
 	public function setHeight($value) {
 		$this->_height = $value;
 	}

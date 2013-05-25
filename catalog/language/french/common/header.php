@@ -11,3 +11,4 @@ $_['text_account']	= 'Compte';
 $_['text_checkout']	= 'Commander';
 $_['text_language']	= 'Langue';
 $_['text_currency']	= 'Devise';
+$_['text_slogan']			= "A scarf is like a piece of fine jewelry - it is an heirloom";

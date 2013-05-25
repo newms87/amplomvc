@@ -2,7 +2,7 @@
 class ModelAccountTransaction extends Model {	
 	public function getTransactions($data = array()) {
 		$sql = "SELECT * FROM `" . DB_PREFIX . "customer_transaction` WHERE customer_id = '" . (int)$this->customer->getId() . "'";
-		   
+			
 		$sort_data = array(
 			'amount',
 			'description',
@@ -39,7 +39,7 @@ class ModelAccountTransaction extends Model {
 	}	
 		
 	public function getTotalTransactions() {
-      	$query = $this->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "customer_transaction` WHERE customer_id = '" . (int)$this->customer->getId() . "'");
+			$query = $this->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "customer_transaction` WHERE customer_id = '" . (int)$this->customer->getId() . "'");
 			
 		return $query->row['total'];
 	}	

@@ -28,7 +28,7 @@ class ControllerCommonForgotten extends Controller {
 			$message .= sprintf($this->_('text_ip'), $_SERVER['REMOTE_ADDR']) . "\n\n";
 
 			$this->mail->init();
-         
+			
 			$this->mail->setTo($_POST['email']);
 			$this->mail->setFrom($this->config->get('config_email'));
 			$this->mail->setSender($this->config->get('config_name'));
@@ -53,12 +53,12 @@ class ControllerCommonForgotten extends Controller {
 		$this->data['action'] = $this->url->link('common/forgotten');
  
 		$this->data['cancel'] = $this->url->link('common/login');
-    	
+		
 		if (isset($_POST['email'])) {
-      		$this->data['email'] = $_POST['email'];
+				$this->data['email'] = $_POST['email'];
 		} else {
-      		$this->data['email'] = '';
-    	}
+				$this->data['email'] = '';
+		}
 				
 		$this->children = array(
 			'common/header',

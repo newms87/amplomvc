@@ -7,17 +7,17 @@
 class LevenbergMarquardt {
 
 	/**
-	 * Calculate the current sum-squared-error
-	 *
-	 * Chi-squared is the distribution of squared Gaussian errors,
-	 * thus the name.
-	 *
-	 * @param double[][] $x
-	 * @param double[] $a
-	 * @param double[] $y,
-	 * @param double[] $s,
-	 * @param object $f
-	 */
+	* Calculate the current sum-squared-error
+	*
+	* Chi-squared is the distribution of squared Gaussian errors,
+	* thus the name.
+	*
+	* @param double[][] $x
+	* @param double[] $a
+	* @param double[] $y,
+	* @param double[] $s,
+	* @param object $f
+	*/
 	function chiSquared($x, $a, $y, $s, $f) {
 		$npts = count($y);
 		$sum = 0.0;
@@ -33,27 +33,27 @@ class LevenbergMarquardt {
 
 
 	/**
-	 * Minimize E = sum {(y[k] - f(x[k],a)) / s[k]}^2
-	 * The individual errors are optionally scaled by s[k].
-	 * Note that LMfunc implements the value and gradient of f(x,a),
-	 * NOT the value and gradient of E with respect to a!
-	 *
-	 * @param x array of domain points, each may be multidimensional
-	 * @param y corresponding array of values
-	 * @param a the parameters/state of the model
-	 * @param vary false to indicate the corresponding a[k] is to be held fixed
-	 * @param s2 sigma^2 for point i
-	 * @param lambda blend between steepest descent (lambda high) and
-	 *	jump to bottom of quadratic (lambda zero).
-	 * 	Start with 0.001.
-	 * @param termepsilon termination accuracy (0.01)
-	 * @param maxiter	stop and return after this many iterations if not done
-	 * @param verbose	set to zero (no prints), 1, 2
-	 *
-	 * @return the new lambda for future iterations.
-	 *  Can use this and maxiter to interleave the LM descent with some other
-	 *  task, setting maxiter to something small.
-	 */
+	* Minimize E = sum {(y[k] - f(x[k],a)) / s[k]}^2
+	* The individual errors are optionally scaled by s[k].
+	* Note that LMfunc implements the value and gradient of f(x,a),
+	* NOT the value and gradient of E with respect to a!
+	*
+	* @param x array of domain points, each may be multidimensional
+	* @param y corresponding array of values
+	* @param a the parameters/state of the model
+	* @param vary false to indicate the corresponding a[k] is to be held fixed
+	* @param s2 sigma^2 for point i
+	* @param lambda blend between steepest descent (lambda high) and
+	*	jump to bottom of quadratic (lambda zero).
+	* 	Start with 0.001.
+	* @param termepsilon termination accuracy (0.01)
+	* @param maxiter	stop and return after this many iterations if not done
+	* @param verbose	set to zero (no prints), 1, 2
+	*
+	* @return the new lambda for future iterations.
+	*  Can use this and maxiter to interleave the LM descent with some other
+	*  task, setting maxiter to something small.
+	*/
 	function solve($x, $a, $y, $s, $vary, $f, $lambda, $termepsilon, $maxiter, $verbose) {
 		$npts = count($y);
 		$nparm = count($a);

@@ -3,7 +3,7 @@
 //error_reporting(E_ALL | E_STRICT); // Set E_ALL for debuging
 error_reporting(0);
 //set_time_limit(300); // just in case it too long, not recommended for production
-ini_set('max_file_uploads', 500);   // allow uploading up to 50 files at once
+ini_set('max_file_uploads', 500);	// allow uploading up to 50 files at once
 
 // needed for case insensitive search to work, due to broken UTF-8 support in PHP
 ini_set('mbstring.internal_encoding', 'UTF-8');
@@ -32,9 +32,9 @@ function debug($o) {
  * Smart logger function
  * Demonstrate how to work with elFinder event api
  *
- * @param  string   $cmd       command name
- * @param  array    $result    command result
- * @param  array    $args      command arguments from client
+ * @param  string	$cmd		command name
+ * @param  array	$result	command result
+ * @param  array	$args		command arguments from client
  * @param  elFinder $elfinder  elFinder instance
  * @return void|true
  * @author Troex Nevelin
@@ -96,18 +96,18 @@ function logger($cmd, $result, $args, $elfinder) {
 class elFinderSimpleLogger {
 	
 	/**
-	 * Log file path
-	 *
-	 * @var string
-	 **/
+	* Log file path
+	*
+	* @var string
+	**/
 	protected $file = '';
 	
 	/**
-	 * constructor
-	 *
-	 * @return void
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* constructor
+	*
+	* @return void
+	* @author Dmitry (dio) Levashov
+	**/
 	public function __construct($path) {
 		$this->file = $path;
 		$dir = dirname($path);
@@ -117,15 +117,15 @@ class elFinderSimpleLogger {
 	}
 	
 	/**
-	 * Create log record
-	 *
-	 * @param  string   $cmd       command name
-	 * @param  array    $result    command result
-	 * @param  array    $args      command arguments from client
-	 * @param  elFinder $elfinder  elFinder instance
-	 * @return void|true
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Create log record
+	*
+	* @param  string	$cmd		command name
+	* @param  array	$result	command result
+	* @param  array	$args		command arguments from client
+	* @param  elFinder $elfinder  elFinder instance
+	* @return void|true
+	* @author Dmitry (dio) Levashov
+	**/
 	public function log($cmd, $result, $args, $elfinder) {
 		$log = $cmd.' ['.date('d.m H:s')."]\n";
 		
@@ -160,12 +160,12 @@ class elFinderSimpleLogger {
 	}
 	
 	/**
-	 * Write log into file
-	 *
-	 * @param  string  $log  log record
-	 * @return void
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Write log into file
+	*
+	* @param  string  $log  log record
+	* @return void
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function write($log) {
 		
 		if (($fp = @fopen($this->file, 'a'))) {
@@ -187,9 +187,9 @@ class elFinderSimpleLogger {
  * @return bool|null
  **/
 function access($attr, $path, $data, $volume) {
-	return strpos(basename($path), '.') === 0       // if file/folder begins with '.' (dot)
-		? !($attr == 'read' || $attr == 'write')    // set read+write to false, other (locked+hidden) set to true
-		:  null;                                    // else elFinder decide it itself
+	return strpos(basename($path), '.') === 0		// if file/folder begins with '.' (dot)
+		? !($attr == 'read' || $attr == 'write')	// set read+write to false, other (locked+hidden) set to true
+		:  null;												// else elFinder decide it itself
 }
 
 /**
@@ -200,15 +200,15 @@ function access($attr, $path, $data, $volume) {
 class elFinderTestACL {
 	
 	/**
-	 * make dotfiles not readable, not writable, hidden and locked
-	 *
-	 * @param  string  $attr  attribute name (read|write|locked|hidden)
-	 * @param  string  $path  file path. Attention! This is path relative to volume root directory started with directory separator.
-	 * @param  mixed   $data  data which seted in 'accessControlData' elFinder option
-	 * @param  elFinderVolumeDriver  $volume  volume driver
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* make dotfiles not readable, not writable, hidden and locked
+	*
+	* @param  string  $attr  attribute name (read|write|locked|hidden)
+	* @param  string  $path  file path. Attention! This is path relative to volume root directory started with directory separator.
+	* @param  mixed	$data  data which seted in 'accessControlData' elFinder option
+	* @param  elFinderVolumeDriver  $volume  volume driver
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	public function fsAccess($attr, $path, $data, $volume) {
 		
 		if ($volume->name() == 'localfilesystem') {
@@ -249,12 +249,12 @@ session_start();
 
 $relpath = '';
 if(isset($_SESSION['elfinder_root_dir'])){
-   $relpath = '/'.$_SESSION['elfinder_root_dir'];
+	$relpath = '/'.$_SESSION['elfinder_root_dir'];
 }
-   
+	
 if ($filemanager == TRUE) {
 	$path_to_use = $_SERVER['DOCUMENT_ROOT'];
-    $url_path = 'http://'.$_SERVER['HTTP_HOST'];
+	$url_path = 'http://'.$_SERVER['HTTP_HOST'];
 } else if ($imagemanager == true) {
 	$path_to_use = '../../../image/data' . $relpath;
 	$url_path = HTTP_IMAGE . '/data' . $relpath;
@@ -267,7 +267,7 @@ $logger = new elFinderSimpleLogger('../files/temp/log.txt');
 
 $opts = array(
 	'locale' => 'en_US.UTF-8',
-    // Uncomment this to turn on logging
+	// Uncomment this to turn on logging
 	//'bind' => array(
 	//	'*' => 'logger'
 		// 'mkdir mkfile rename duplicate upload rm paste' => 'logger'
@@ -275,28 +275,28 @@ $opts = array(
 	'debug' => false,
 	'roots' => array(
 		array(
-			'driver'     => 'LocalFileSystem',
-			'path'       => $path_to_use,
+			'driver'	=> 'LocalFileSystem',
+			'path'		=> $path_to_use,
 			'startPath'  => $path_to_use,
-			'URL'        => $url_path,
-			// 'alias'      => 'File system',
+			'URL'		=> $url_path,
+			// 'alias'		=> 'File system',
 			'mimeDetect' => 'internal',
-			'tmbPath'    => '.tmb',
-			'utf8fix'    => true,
-			'tmbCrop'    => false,
+			'tmbPath'	=> '.tmb',
+			'utf8fix'	=> true,
+			'tmbCrop'	=> false,
 			'tmbBgColor' => 'transparent',
 			'accessControl' => 'access',
 			// 'uploadDeny' => array('application', 'text/xml')
 		),
 		// array(
-		// 	'driver'     => 'LocalFileSystem',
-		// 	'path'       => '../files2/',
-		// 	// 'URL'        => dirname($_SERVER['PHP_SELF']) . '/../files2/',
-		// 	'alias'      => 'File system',
+		// 	'driver'	=> 'LocalFileSystem',
+		// 	'path'		=> '../files2/',
+		// 	// 'URL'		=> dirname($_SERVER['PHP_SELF']) . '/../files2/',
+		// 	'alias'		=> 'File system',
 		// 	'mimeDetect' => 'internal',
-		// 	'tmbPath'    => '.tmb',
-		// 	'utf8fix'    => true,
-		// 	'tmbCrop'    => false,
+		// 	'tmbPath'	=> '.tmb',
+		// 	'utf8fix'	=> true,
+		// 	'tmbCrop'	=> false,
 		// 	'startPath'  => '../files/test',
 		// 	// 'separator' => ':',
 		// 	'attributes' => array(
@@ -356,14 +356,14 @@ $opts = array(
 		// ),
 		
 		// array(
-		// 	'driver'     => 'LocalFileSystem',
-		// 	'path'       => '../files2/',
-		// 	'URL'        => dirname($_SERVER['PHP_SELF']) . '/../files2/',
-		// 	'alias'      => 'Files',
+		// 	'driver'	=> 'LocalFileSystem',
+		// 	'path'		=> '../files2/',
+		// 	'URL'		=> dirname($_SERVER['PHP_SELF']) . '/../files2/',
+		// 	'alias'		=> 'Files',
 		// 	'mimeDetect' => 'internal',
-		// 	'tmbPath'    => '.tmb',
+		// 	'tmbPath'	=> '.tmb',
 		// 	// 'copyOverwrite' => false,
-		// 	'utf8fix'    => true,
+		// 	'utf8fix'	=> true,
 		// 	'attributes' => array(
 		// 		array(
 		// 			'pattern' => '~/\.~',
@@ -380,21 +380,21 @@ $opts = array(
 			'driver' => 'MySQL2',
 			'path' => 1,
 			// 'treeDeep' => 2,
-			'socket'          => '/opt/local/var/run/mysql5/mysqld.sock',
+			'socket'			=> '/opt/local/var/run/mysql5/mysqld.sock',
 			'user' => 'root',
 			'pass' => 'hane',
 			'db' => 'elfinder',
 			'user_id' => 1,
 			// 'accessControl' => 'access',
 			// 'separator' => ':',
-			'tmbCrop'         => true,
+			'tmbCrop'			=> true,
 			// thumbnails background color (hex #rrggbb or 'transparent')
-			'tmbBgColor'      => '#000000',
+			'tmbBgColor'		=> '#000000',
 			'files_table' => 'elfinder_file',
 			// 'imgLib' => 'imagick',
 			// 'uploadOverwrite' => false,
 			// 'copyTo' => false,
-			// 'URL'    => 'http://localhost/git/elfinder',
+			// 'URL'	=> 'http://localhost/git/elfinder',
 			'tmpPath' => '../filesdb/tmp',
 			'tmbPath' => '../filesdb/tmb',
 			'tmbURL' => dirname($_SERVER['PHP_SELF']) . '/../filesdb/tmb/',

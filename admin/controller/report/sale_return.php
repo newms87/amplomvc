@@ -1,6 +1,6 @@
 <?php
 class ControllerReportSaleReturn extends Controller {
-	public function index() {     
+	public function index() {	
 		$this->template->load('report/sale_return');
 
 		$this->load->language('report/sale_return');
@@ -65,12 +65,12 @@ class ControllerReportSaleReturn extends Controller {
 		$this->data['returns'] = array();
 		
 		$data = array(
-			'filter_date_start'	      => $filter_date_start, 
-			'filter_date_end'	      => $filter_date_end, 
-			'filter_group'            => $filter_group,
+			'filter_date_start'			=> $filter_date_start, 
+			'filter_date_end'			=> $filter_date_end, 
+			'filter_group'				=> $filter_group,
 			'filter_return_status_id' => $filter_return_status_id,
-			'start'                   => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit'                   => $this->config->get('config_admin_limit')
+			'start'						=> ($page - 1) * $this->config->get('config_admin_limit'),
+			'limit'						=> $this->config->get('config_admin_limit')
 		);
 		
 		$return_total = $this->model_report_return->getTotalReturns($data);
@@ -80,11 +80,11 @@ class ControllerReportSaleReturn extends Controller {
 		foreach ($results as $result) {
 			$this->data['returns'][] = array(
 				'date_start' => $this->tool->format_datetime($result['date_start'], $this->language->getInfo('date_format_short')),
-				'date_end'   => $this->tool->format_datetime($result['date_end'], $this->language->getInfo('date_format_short')),
-				'returns'    => $result['returns']
+				'date_end'	=> $this->tool->format_datetime($result['date_end'], $this->language->getInfo('date_format_short')),
+				'returns'	=> $result['returns']
 			);
 		}
-				 
+				
 		$this->data['return_statuses'] = $this->model_localisation_return_status->getReturnStatuses();
 
 		$this->data['groups'] = array();
@@ -131,7 +131,6 @@ class ControllerReportSaleReturn extends Controller {
 		$this->pagination->total = $return_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('report/sale_return', $url);
 			
 		$this->data['pagination'] = $this->pagination->render();
@@ -140,7 +139,7 @@ class ControllerReportSaleReturn extends Controller {
 		$this->data['filter_date_end'] = $filter_date_end;		
 		$this->data['filter_group'] = $filter_group;
 		$this->data['filter_return_status_id'] = $filter_return_status_id;
-				 
+				
 		$this->children = array(
 			'common/header',
 			'common/footer'

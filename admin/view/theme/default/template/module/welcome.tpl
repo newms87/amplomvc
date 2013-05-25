@@ -104,11 +104,11 @@
 <? foreach ($modules as $module) { ?>
 <? foreach ($languages as $language) { ?>
 CKEDITOR.replace('description-<?= $module_row; ?>-<?= $language['language_id']; ?>', {
-	filebrowserImageBrowseUrl: 'index.php?route=common/filemanager',
-	filebrowserFlashBrowseUrl: 'index.php?route=common/filemanager',
-	filebrowserUploadUrl: 'index.php?route=common/filemanager',
-	filebrowserImageUploadUrl: 'index.php?route=common/filemanager',
-	filebrowserFlashUploadUrl: 'index.php?route=common/filemanager'
+	filebrowserImageBrowseUrl: "<?= HTTP_ADMIN . "index.php?route=common/filemanager"; ?>",
+	filebrowserFlashBrowseUrl: "<?= HTTP_ADMIN . "index.php?route=common/filemanager"; ?>",
+	filebrowserUploadUrl: "<?= HTTP_ADMIN . "index.php?route=common/filemanager"; ?>",
+	filebrowserImageUploadUrl: "<?= HTTP_ADMIN . "index.php?route=common/filemanager"; ?>",
+	filebrowserFlashUploadUrl: "<?= HTTP_ADMIN . "index.php?route=common/filemanager"; ?>"
 });
 <? } ?>
 <? $module_row++; ?>
@@ -172,11 +172,11 @@ function addModule() {
 	
 	<? foreach ($languages as $language) { ?>
 	CKEDITOR.replace('description-' + module_row + '-<?= $language['language_id']; ?>', {
-		filebrowserImageBrowseUrl: 'index.php?route=common/filemanager',
-		filebrowserFlashBrowseUrl: 'index.php?route=common/filemanager',
-		filebrowserUploadUrl: 'index.php?route=common/filemanager',
-		filebrowserImageUploadUrl: 'index.php?route=common/filemanager',
-		filebrowserFlashUploadUrl: 'index.php?route=common/filemanager'
+		filebrowserImageBrowseUrl: "<?= HTTP_ADMIN . "index.php?route=common/filemanager"; ?>",
+		filebrowserFlashBrowseUrl: "<?= HTTP_ADMIN . "index.php?route=common/filemanager"; ?>",
+		filebrowserUploadUrl: "<?= HTTP_ADMIN . "index.php?route=common/filemanager"; ?>",
+		filebrowserImageUploadUrl: "<?= HTTP_ADMIN . "index.php?route=common/filemanager"; ?>",
+		filebrowserFlashUploadUrl: "<?= HTTP_ADMIN . "index.php?route=common/filemanager"; ?>"
 	});  
 	<? } ?>
 	

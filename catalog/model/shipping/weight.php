@@ -1,5 +1,5 @@
 <?php 
-class ModelShippingWeight extends Model {    
+class ModelShippingWeight extends Model {	
   	public function getQuote($address) {
 		$this->load->language('shipping/weight');
 		
@@ -40,11 +40,11 @@ class ModelShippingWeight extends Model {
 				
 				if ((string)$cost != '') { 
 					$quote_data['weight_' . $result['geo_zone_id']] = array(
-						'code'         => 'weight.weight_' . $result['geo_zone_id'],
-						'title'        => $result['name'] . '  (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class_id')) . ')',
-						'cost'         => $cost,
+						'code'			=> 'weight.weight_' . $result['geo_zone_id'],
+						'title'		=> $result['name'] . '  (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class_id')) . ')',
+						'cost'			=> $cost,
 						'tax_class_id' => $this->config->get('weight_tax_class_id'),
-						'text'         => $this->currency->format($this->tax->calculate($cost, $this->config->get('weight_tax_class_id'), $this->config->get('config_show_price_with_tax')))
+						'text'			=> $this->currency->format($this->tax->calculate($cost, $this->config->get('weight_tax_class_id'), $this->config->get('config_show_price_with_tax')))
 					);	
 				}
 			}
@@ -53,13 +53,13 @@ class ModelShippingWeight extends Model {
 		$method_data = array();
 	
 		if ($quote_data) {
-      		$method_data = array(
-        		'code'       => 'weight',
-        		'title'      => $this->_('text_title'),
-        		'quote'      => $quote_data,
+				$method_data = array(
+				'code'		=> 'weight',
+				'title'		=> $this->_('text_title'),
+				'quote'		=> $quote_data,
 				'sort_order' => $this->config->get('weight_sort_order'),
-        		'error'      => false
-      		);
+				'error'		=> false
+				);
 		}
 	
 		return $method_data;

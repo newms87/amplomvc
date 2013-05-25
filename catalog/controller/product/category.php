@@ -73,10 +73,10 @@ class ControllerProductCategory extends Controller {
 		
 		$data = array(
 			'filter_category_id' => $category_id,
-			'sort'               => $sort,
-			'order'              => $order,
-			'start'              => ($page - 1) * $limit,
-			'limit'              => $limit
+			'sort'					=> $sort,
+			'order'				=> $order,
+			'start'				=> ($page - 1) * $limit,
+			'limit'				=> $limit
 		);
 		
 		$product_total = $this->model_catalog_product->getTotalProducts($data); 
@@ -162,7 +162,6 @@ class ControllerProductCategory extends Controller {
 		$this->pagination->total = $product_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $limit;
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('product/category', 'category_id=' . $category_id . '&' . $url);
 	
 		$this->data['pagination'] = $this->pagination->render();

@@ -24,11 +24,11 @@
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 				<div id="tab-general">
 					<div id="languages" class="htabs">
-						<? foreach ($languages as $language) { ?>
+						<? foreach ($data_languages as $language) { ?>
 						<a href="#language<?= $language['language_id']; ?>"><img src="<?= HTTP_THEME_IMAGE . "flags/$language[image]"; ?>" title="<?= $language['name']; ?>" /> <?= $language['name']; ?></a>
 						<? } ?>
 					</div>
-					<? foreach ($languages as $language) { ?>
+					<? foreach ($data_languages as $language) { ?>
 					<div id="language<?= $language['language_id']; ?>">
 						<table class="form">
 							<tr>
@@ -511,7 +511,7 @@
 											<img src="<?= $product_image['thumb']; ?>" alt="<?= $product_image['image']; ?>" title="<?= $product_image['image']; ?>" id="thumb<?= $image_row; ?>" />
 											<input type="hidden" name="product_images[<?= $image_row; ?>][image]" value="<?= $product_image['image']; ?>" id="image<?= $image_row; ?>" />
 											<br />
-											<a onclick="upload_image('image<?= $image_row; ?>','thumb<?= $image_row; ?>',<?= $image_row; ?>);"><?= $text_browse; ?></a>
+											<a onclick="upload_images('image<?= $image_row; ?>','thumb<?= $image_row; ?>',<?= $image_row; ?>);"><?= $text_browse; ?></a>
 										</div>
 									</td>
 									<td class="left"><?= $product_image['image']; ?></td>
@@ -602,14 +602,14 @@ function generate_url(c){
 	name = $('input[name="product_description[1][name]"]').val();
 	if(!name)
 			alert("Please make a name for this product before generating the URL");
-	$.post('index.php?route=catalog/product/generate_url',{product_id:<?=$product_id?$product_id:0;?>,name:name},function(json){$('input[name="keyword"]').val(json);},'json');
+	$.post("<?= HTTP_ADMIN . "index.php?route=catalog/product/generate_url"; ?>",{product_id:<?= $product_id ? $product_id : 0; ?>,name:name},function(json){$('input[name="keyword"]').val(json);},'json');
 }
 function generate_model(c){
 	$(c).fadeOut(500,function(){$(c).show();});
 	name = $('input[name="product_description[1][name]"]').val();
 	if(!name)
 			alert("Please make a name for this product before generating the Model ID");
-	$.post('index.php?route=catalog/product/generate_model',{product_id:<?=$product_id?$product_id:0;?>,name:name},function(json){$('input[name="model"]').val(json);},'json');
+	$.post("<?= HTTP_ADMIN . "index.php?route=catalog/product/generate_model"; ?>",{product_id:<?=$product_id?$product_id:0;?>,name:name},function(json){$('input[name="model"]').val(json);},'json');
 }
 //--></script>
 
@@ -631,7 +631,7 @@ $('input[name=\'related\']').autocomplete({
 	delay: 0,
 	source: function(request, response) {
 		$.ajax({
-			url: 'index.php?route=catalog/product/autocomplete&filter_name=' +	encodeURIComponent(request.term),
+			url: "<?= HTTP_ADMIN . "index.php?route=catalog/product/autocomplete"; ?>" + '&filter_name=' +	encodeURIComponent(request.term),
 			dataType: 'json',
 			success: function(json) {		
 				response($.map(json, function(item) {
@@ -711,7 +711,7 @@ function attributeautocomplete(attribute_row) {
 		delay: 0,
 		source: function(request, response) {
 			$.ajax({
-				url: 'index.php?route=catalog/attribute/autocomplete&filter_name=' +	encodeURIComponent(request.term),
+				url: "<?= HTTP_ADMIN . "index.php?route=catalog/attribute/autocomplete"; ?>" + '&filter_name=' + encodeURIComponent(request.term),
 				dataType: 'json',
 				success: function(json) {	
 					response($.map(json, function(item) {
@@ -737,12 +737,12 @@ $('#attribute tbody').each(function(index, element) {
 	attributeautocomplete(index);
 });
 //--></script> 
-<script type="text/javascript"><!--	
+<script type="text/javascript">//<!--
 $('#option-add input').autocomplete({
 	delay: 0,
 	source: function(request, response) {
 		$.ajax({
-			url: 'index.php?route=catalog/option/autocomplete&filter_name=' +	encodeURIComponent(request.term),
+			url: "<?= HTTP_ADMIN . "index.php?route=catalog/option/autocomplete"; ?>" + '&filter_name=' +	encodeURIComponent(request.term),
 			dataType: 'json',
 			success: function(json) {
 				response($.map(json, function(item) {
@@ -980,21 +980,6 @@ function addImage(imageName) {
 	image_row++;
 		
 		$('#images').sortable('refresh');
-};
-
-function addSingleImage(imageName, field, thumb, rows) {
-	$.ajax({
-			url: 'index.php?route=common/filemanager/image&image=' + encodeURIComponent(imageName),
-			dataType: 'text',
-			success: function(text) {
-				$('#' + thumb).replaceWith('<img src="' + text + '" alt="" id="' + thumb + '" />');
-				if (!rows || rows == -1) {
-						$('#' + field).replaceWith('<input type="hidden" id="' + field +'" value="' + imageName + '" name="' + field + '">');
-				} else {
-						$('#' + field).replaceWith('<input type="hidden" id="' + field +'" value="' + imageName + '" name="product_images[' + rows + '][image]">');
-				}
-		}
-	});
 };
 
 $('input[name=primary_product_image]').live("change", function() { $('input[name=image]').val($(this).val()); });

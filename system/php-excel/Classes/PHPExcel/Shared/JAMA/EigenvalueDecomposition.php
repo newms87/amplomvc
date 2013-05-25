@@ -24,28 +24,28 @@
 class EigenvalueDecomposition {
 
 	/**
-	 *	Row and column dimension (square matrix).
-	 *	@var int
-	 */
+	*	Row and column dimension (square matrix).
+	*	@var int
+	*/
 	private $n;
 
 	/**
-	 *	Internal symmetry flag.
-	 *	@var int
-	 */
+	*	Internal symmetry flag.
+	*	@var int
+	*/
 	private $issymmetric;
 
 	/**
-	 *	Arrays for internal storage of eigenvalues.
-	 *	@var array
-	 */
+	*	Arrays for internal storage of eigenvalues.
+	*	@var array
+	*/
 	private $d = array();
 	private $e = array();
 
 	/**
-	 *	Array for internal storage of eigenvectors.
-	 *	@var array
-	 */
+	*	Array for internal storage of eigenvectors.
+	*	@var array
+	*/
 	private $V = array();
 
 	/**
@@ -69,10 +69,10 @@ class EigenvalueDecomposition {
 
 
 	/**
-	 *	Symmetric Householder reduction to tridiagonal form.
-	 *
-	 *	@access private
-	 */
+	*	Symmetric Householder reduction to tridiagonal form.
+	*
+	*	@access private
+	*/
 	private function tred2 () {
 		//  This is derived from the Algol procedures tred2 by
 		//  Bowdler, Martin, Reinsch, and Wilkinson, Handbook for
@@ -173,15 +173,15 @@ class EigenvalueDecomposition {
 
 
 	/**
-	 *	Symmetric tridiagonal QL algorithm.
-	 *
-	 *	This is derived from the Algol procedures tql2, by
-	 *	Bowdler, Martin, Reinsch, and Wilkinson, Handbook for
-	 *	Auto. Comp., Vol.ii-Linear Algebra, and the corresponding
-	 *	Fortran subroutine in EISPACK.
-	 *
-	 *	@access private
-	 */
+	*	Symmetric tridiagonal QL algorithm.
+	*
+	*	This is derived from the Algol procedures tql2, by
+	*	Bowdler, Martin, Reinsch, and Wilkinson, Handbook for
+	*	Auto. Comp., Vol.ii-Linear Algebra, and the corresponding
+	*	Fortran subroutine in EISPACK.
+	*
+	*	@access private
+	*/
 	private function tql2() {
 		for ($i = 1; $i < $this->n; ++$i) {
 			$this->e[$i-1] = $this->e[$i];
@@ -279,15 +279,15 @@ class EigenvalueDecomposition {
 
 
 	/**
-	 *	Nonsymmetric reduction to Hessenberg form.
-	 *
-	 *	This is derived from the Algol procedures orthes and ortran,
-	 *	by Martin and Wilkinson, Handbook for Auto. Comp.,
-	 *	Vol.ii-Linear Algebra, and the corresponding
-	 *	Fortran subroutines in EISPACK.
-	 *
-	 *	@access private
-	 */
+	*	Nonsymmetric reduction to Hessenberg form.
+	*
+	*	This is derived from the Algol procedures orthes and ortran,
+	*	by Martin and Wilkinson, Handbook for Auto. Comp.,
+	*	Vol.ii-Linear Algebra, and the corresponding
+	*	Fortran subroutines in EISPACK.
+	*
+	*	@access private
+	*/
 	private function orthes () {
 		$low  = 0;
 		$high = $this->n-1;
@@ -366,10 +366,10 @@ class EigenvalueDecomposition {
 
 
 	/**
-	 *	Performs complex division.
-	 *
-	 *	@access private
-	 */
+	*	Performs complex division.
+	*
+	*	@access private
+	*/
 	private function cdiv($xr, $xi, $yr, $yi) {
 		if (abs($yr) > abs($yi)) {
 			$r = $yi / $yr;
@@ -386,15 +386,15 @@ class EigenvalueDecomposition {
 
 
 	/**
-	 *	Nonsymmetric reduction from Hessenberg to real Schur form.
-	 *
-	 *	Code is derived from the Algol procedure hqr2,
-	 *	by Martin and Wilkinson, Handbook for Auto. Comp.,
-	 *	Vol.ii-Linear Algebra, and the corresponding
-	 *	Fortran subroutine in EISPACK.
-	 *
-	 *	@access private
-	 */
+	*	Nonsymmetric reduction from Hessenberg to real Schur form.
+	*
+	*	Code is derived from the Algol procedure hqr2,
+	*	by Martin and Wilkinson, Handbook for Auto. Comp.,
+	*	Vol.ii-Linear Algebra, and the corresponding
+	*	Fortran subroutine in EISPACK.
+	*
+	*	@access private
+	*/
 	private function hqr2 () {
 		//  Initialize
 		$nn = $this->n;
@@ -693,7 +693,7 @@ class EigenvalueDecomposition {
 				} else {
 					$this->cdiv(0.0, -$this->H[$n-1][$n], $this->H[$n-1][$n-1] - $p, $q);
 					$this->H[$n-1][$n-1] = $this->cdivr;
-					$this->H[$n-1][$n]   = $this->cdivi;
+					$this->H[$n-1][$n]	= $this->cdivi;
 				}
 				$this->H[$n][$n-1] = 0.0;
 				$this->H[$n][$n] = 1.0;
@@ -715,7 +715,7 @@ class EigenvalueDecomposition {
 						if ($this->e[$i] == 0) {
 							$this->cdiv(-$ra, -$sa, $w, $q);
 							$this->H[$i][$n-1] = $this->cdivr;
-							$this->H[$i][$n]   = $this->cdivi;
+							$this->H[$i][$n]	= $this->cdivi;
 						} else {
 							// Solve complex equations
 							$x = $this->H[$i][$i+1];
@@ -727,14 +727,14 @@ class EigenvalueDecomposition {
 							}
 							$this->cdiv($x * $r - $z * $ra + $q * $sa, $x * $s - $z * $sa - $q * $ra, $vr, $vi);
 							$this->H[$i][$n-1] = $this->cdivr;
-							$this->H[$i][$n]   = $this->cdivi;
+							$this->H[$i][$n]	= $this->cdivi;
 							if (abs($x) > (abs($z) + abs($q))) {
 								$this->H[$i+1][$n-1] = (-$ra - $w * $this->H[$i][$n-1] + $q * $this->H[$i][$n]) / $x;
 								$this->H[$i+1][$n] = (-$sa - $w * $this->H[$i][$n] - $q * $this->H[$i][$n-1]) / $x;
 							} else {
 								$this->cdiv(-$r - $y * $this->H[$i][$n-1], -$s - $y * $this->H[$i][$n], $z, $q);
 								$this->H[$i+1][$n-1] = $this->cdivr;
-								$this->H[$i+1][$n]   = $this->cdivi;
+								$this->H[$i+1][$n]	= $this->cdivi;
 							}
 						}
 						// Overflow control
@@ -742,7 +742,7 @@ class EigenvalueDecomposition {
 						if (($eps * $t) * $t > 1) {
 							for ($j = $i; $j <= $n; ++$j) {
 								$this->H[$j][$n-1] = $this->H[$j][$n-1] / $t;
-								$this->H[$j][$n]   = $this->H[$j][$n] / $t;
+								$this->H[$j][$n]	= $this->H[$j][$n] / $t;
 							}
 						}
 					} // end else
@@ -773,12 +773,12 @@ class EigenvalueDecomposition {
 
 
 	/**
-	 *	Constructor: Check for symmetry, then construct the eigenvalue decomposition
-	 *
-	 *	@access public
-	 *	@param A  Square matrix
-	 *	@return Structure to access D and V.
-	 */
+	*	Constructor: Check for symmetry, then construct the eigenvalue decomposition
+	*
+	*	@access public
+	*	@param A  Square matrix
+	*	@return Structure to access D and V.
+	*/
 	public function __construct($Arg) {
 		$this->A = $Arg->getArray();
 		$this->n = $Arg->getColumnDimension();
@@ -808,44 +808,44 @@ class EigenvalueDecomposition {
 
 
 	/**
-	 *	Return the eigenvector matrix
-	 *
-	 *	@access public
-	 *	@return V
-	 */
+	*	Return the eigenvector matrix
+	*
+	*	@access public
+	*	@return V
+	*/
 	public function getV() {
 		return new Matrix($this->V, $this->n, $this->n);
 	}
 
 
 	/**
-	 *	Return the real parts of the eigenvalues
-	 *
-	 *	@access public
-	 *	@return real(diag(D))
-	 */
+	*	Return the real parts of the eigenvalues
+	*
+	*	@access public
+	*	@return real(diag(D))
+	*/
 	public function getRealEigenvalues() {
 		return $this->d;
 	}
 
 
 	/**
-	 *	Return the imaginary parts of the eigenvalues
-	 *
-	 *	@access public
-	 *	@return imag(diag(D))
-	 */
+	*	Return the imaginary parts of the eigenvalues
+	*
+	*	@access public
+	*	@return imag(diag(D))
+	*/
 	public function getImagEigenvalues() {
 		return $this->e;
 	}
 
 
 	/**
-	 *	Return the block diagonal eigenvalue matrix
-	 *
-	 *	@access public
-	 *	@return D
-	 */
+	*	Return the block diagonal eigenvalue matrix
+	*
+	*	@access public
+	*	@return D
+	*/
 	public function getD() {
 		for ($i = 0; $i < $this->n; ++$i) {
 			$D[$i] = array_fill(0, $this->n, 0.0);

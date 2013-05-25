@@ -1,6 +1,6 @@
 <?php 
 class ControllerPaymentTwoCheckout extends Controller {
-	 
+	
 
 	public function index() {
 		$this->template->load('payment/twocheckout');
@@ -116,10 +116,6 @@ class ControllerPaymentTwoCheckout extends Controller {
 			$this->error['secret'] = $this->_('error_secret');
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

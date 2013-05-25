@@ -1,6 +1,6 @@
 <?php 
 class ControllerPaymentLiqPay extends Controller {
-	 
+	
 
 	public function index() {
 		$this->template->load('payment/liqpay');
@@ -122,10 +122,6 @@ class ControllerPaymentLiqPay extends Controller {
 			$this->error['signature'] = $this->_('error_signature');
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

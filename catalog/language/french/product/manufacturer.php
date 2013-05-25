@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']     = 'Trouver votre marque pr&eacute;f&eacute;r&eacute;e';
+$_['heading_title']	= 'Trouver votre marque pr&eacute;f&eacute;r&eacute;e';
 
 // Text
 $_['text_brand']		= 'Marque';

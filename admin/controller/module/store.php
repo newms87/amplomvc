@@ -1,8 +1,8 @@
 <?php
 class ControllerModuleStore extends Controller {
-	 
 	
-	public function index() {   
+	
+	public function index() {	
 		$this->template->load('module/store');
 
 		$this->load->language('module/store');
@@ -11,7 +11,7 @@ class ControllerModuleStore extends Controller {
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('store', $_POST);		
-					 
+					
 			$this->message->add('success', $this->_('text_success'));
 						
 			$this->url->redirect($this->url->link('extension/module'));
@@ -60,10 +60,6 @@ class ControllerModuleStore extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

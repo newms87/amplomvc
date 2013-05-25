@@ -18,11 +18,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category   PHPExcel
- * @package    PHPExcel_Writer_Excel5
+ * @category	PHPExcel
+ * @package	PHPExcel_Writer_Excel5
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version    1.7.7, 2012-05-19
+ * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+ * @version	1.7.7, 2012-05-19
  */
 
 // Original file header of PEAR::Spreadsheet_Excel_Writer_BIFFwriter (used as the base for this class):
@@ -41,75 +41,75 @@
 // *
 // *  License Information:
 // *
-// *    Spreadsheet_Excel_Writer:  A library for generating Excel Spreadsheets
-// *    Copyright (c) 2002-2003 Xavier Noguer xnoguer@rezebra.com
+// *	Spreadsheet_Excel_Writer:  A library for generating Excel Spreadsheets
+// *	Copyright (c) 2002-2003 Xavier Noguer xnoguer@rezebra.com
 // *
-// *    This library is free software; you can redistribute it and/or
-// *    modify it under the terms of the GNU Lesser General Public
-// *    License as published by the Free Software Foundation; either
-// *    version 2.1 of the License, or (at your option) any later version.
+// *	This library is free software; you can redistribute it and/or
+// *	modify it under the terms of the GNU Lesser General Public
+// *	License as published by the Free Software Foundation; either
+// *	version 2.1 of the License, or (at your option) any later version.
 // *
-// *    This library is distributed in the hope that it will be useful,
-// *    but WITHOUT ANY WARRANTY; without even the implied warranty of
-// *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// *    Lesser General Public License for more details.
+// *	This library is distributed in the hope that it will be useful,
+// *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+// *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// *	Lesser General Public License for more details.
 // *
-// *    You should have received a copy of the GNU Lesser General Public
-// *    License along with this library; if not, write to the Free Software
-// *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+// *	You should have received a copy of the GNU Lesser General Public
+// *	License along with this library; if not, write to the Free Software
+// *	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 // */
 
 
 /**
  * PHPExcel_Writer_Excel5_BIFFwriter
  *
- * @category   PHPExcel
- * @package    PHPExcel_Writer_Excel5
+ * @category	PHPExcel
+ * @package	PHPExcel_Writer_Excel5
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_Writer_Excel5_BIFFwriter
 {
 	/**
-	 * The byte order of this architecture. 0 => little endian, 1 => big endian
-	 * @var integer
-	 */
+	* The byte order of this architecture. 0 => little endian, 1 => big endian
+	* @var integer
+	*/
 	private static $_byte_order;
 
 	/**
-	 * The string containing the data of the BIFF stream
-	 * @var string
-	 */
+	* The string containing the data of the BIFF stream
+	* @var string
+	*/
 	public $_data;
 
 	/**
-	 * The size of the data in bytes. Should be the same as strlen($this->_data)
-	 * @var integer
-	 */
+	* The size of the data in bytes. Should be the same as strlen($this->_data)
+	* @var integer
+	*/
 	public $_datasize;
 
 	/**
-	 * The maximum length for a BIFF record (excluding record header and length field). See _addContinue()
-	 * @var integer
-	 * @see _addContinue()
-	 */
+	* The maximum length for a BIFF record (excluding record header and length field). See _addContinue()
+	* @var integer
+	* @see _addContinue()
+	*/
 	public $_limit	= 8224;
 
 	/**
-	 * Constructor
-	 */
+	* Constructor
+	*/
 	public function __construct()
 	{
-		$this->_data       = '';
-		$this->_datasize   = 0;
-//		$this->_limit      = 8224;
+		$this->_data		= '';
+		$this->_datasize	= 0;
+//		$this->_limit		= 8224;
 	}
 
 	/**
-	 * Determine the byte order and store it as class data to avoid
-	 * recalculating it for each call to new().
-	 *
-	 * @return int
-	 */
+	* Determine the byte order and store it as class data to avoid
+	* recalculating it for each call to new().
+	*
+	* @return int
+	*/
 	public static function getByteOrder()
 	{
 		if (!isset(self::$_byte_order)) {
@@ -117,9 +117,9 @@ class PHPExcel_Writer_Excel5_BIFFwriter
 			$teststr = pack("d", 1.2345);
 			$number  = pack("C8", 0x8D, 0x97, 0x6E, 0x12, 0x83, 0xC0, 0xF3, 0x3F);
 			if ($number == $teststr) {
-				$byte_order = 0;    // Little Endian
+				$byte_order = 0;	// Little Endian
 			} elseif ($number == strrev($teststr)){
-				$byte_order = 1;    // Big Endian
+				$byte_order = 1;	// Big Endian
 			} else {
 				// Give up. I'll fix this in a later version.
 				throw new Exception("Required floating point format not supported on this platform.");
@@ -131,11 +131,11 @@ class PHPExcel_Writer_Excel5_BIFFwriter
 	}
 
 	/**
-	 * General storage function
-	 *
-	 * @param string $data binary data to append
-	 * @access private
-	 */
+	* General storage function
+	*
+	* @param string $data binary data to append
+	* @access private
+	*/
 	function _append($data)
 	{
 		if (strlen($data) - 4 > $this->_limit) {
@@ -146,11 +146,11 @@ class PHPExcel_Writer_Excel5_BIFFwriter
 	}
 
 	/**
-	 * General storage function like _append, but returns string instead of modifying $this->_data
-	 *
-	 * @param string $data binary data to write
-	 * @return string
-	 */
+	* General storage function like _append, but returns string instead of modifying $this->_data
+	*
+	* @param string $data binary data to write
+	* @return string
+	*/
 	public function writeData($data)
 	{
 		if (strlen($data) - 4 > $this->_limit) {
@@ -162,13 +162,13 @@ class PHPExcel_Writer_Excel5_BIFFwriter
 	}
 
 	/**
-	 * Writes Excel BOF record to indicate the beginning of a stream or
-	 * sub-stream in the BIFF file.
-	 *
-	 * @param  integer $type Type of BIFF file to write: 0x0005 Workbook,
-	 *                       0x0010 Worksheet.
-	 * @access private
-	 */
+	* Writes Excel BOF record to indicate the beginning of a stream or
+	* sub-stream in the BIFF file.
+	*
+	* @param  integer $type Type of BIFF file to write: 0x0005 Workbook,
+	*							0x0010 Worksheet.
+	* @access private
+	*/
 	function _storeBof($type)
 	{
 		$record  = 0x0809;			// Record identifier	(BIFF5-BIFF8)
@@ -177,59 +177,59 @@ class PHPExcel_Writer_Excel5_BIFFwriter
 		// by inspection of real files, MS Office Excel 2007 writes the following
 		$unknown = pack("VV", 0x000100D1, 0x00000406);
 
-		$build   = 0x0DBB;			//	Excel 97
-		$year    = 0x07CC;			//	Excel 97
+		$build	= 0x0DBB;			//	Excel 97
+		$year	= 0x07CC;			//	Excel 97
 
 		$version = 0x0600;			//	BIFF8
 
-		$header  = pack("vv",   $record, $length);
-		$data    = pack("vvvv", $version, $type, $build, $year);
+		$header  = pack("vv",	$record, $length);
+		$data	= pack("vvvv", $version, $type, $build, $year);
 		$this->_append($header . $data . $unknown);
 	}
 
 	/**
-	 * Writes Excel EOF record to indicate the end of a BIFF stream.
-	 *
-	 * @access private
-	 */
+	* Writes Excel EOF record to indicate the end of a BIFF stream.
+	*
+	* @access private
+	*/
 	function _storeEof()
 	{
-		$record    = 0x000A;   // Record identifier
-		$length    = 0x0000;   // Number of bytes to follow
+		$record	= 0x000A;	// Record identifier
+		$length	= 0x0000;	// Number of bytes to follow
 
-		$header    = pack("vv", $record, $length);
+		$header	= pack("vv", $record, $length);
 		$this->_append($header);
 	}
 
 	/**
-	 * Writes Excel EOF record to indicate the end of a BIFF stream.
-	 *
-	 * @access private
-	 */
+	* Writes Excel EOF record to indicate the end of a BIFF stream.
+	*
+	* @access private
+	*/
 	public function writeEof()
 	{
-		$record    = 0x000A;   // Record identifier
-		$length    = 0x0000;   // Number of bytes to follow
-		$header    = pack("vv", $record, $length);
+		$record	= 0x000A;	// Record identifier
+		$length	= 0x0000;	// Number of bytes to follow
+		$header	= pack("vv", $record, $length);
 		return $this->writeData($header);
 	}
 
 	/**
-	 * Excel limits the size of BIFF records. In Excel 5 the limit is 2084 bytes. In
-	 * Excel 97 the limit is 8228 bytes. Records that are longer than these limits
-	 * must be split up into CONTINUE blocks.
-	 *
-	 * This function takes a long BIFF record and inserts CONTINUE records as
-	 * necessary.
-	 *
-	 * @param  string  $data The original binary data to be written
-	 * @return string        A very convenient string of continue blocks
-	 * @access private
-	 */
+	* Excel limits the size of BIFF records. In Excel 5 the limit is 2084 bytes. In
+	* Excel 97 the limit is 8228 bytes. Records that are longer than these limits
+	* must be split up into CONTINUE blocks.
+	*
+	* This function takes a long BIFF record and inserts CONTINUE records as
+	* necessary.
+	*
+	* @param  string  $data The original binary data to be written
+	* @return string		A very convenient string of continue blocks
+	* @access private
+	*/
 	function _addContinue($data)
 	{
 		$limit  = $this->_limit;
-		$record = 0x003C;         // Record identifier
+		$record = 0x003C;			// Record identifier
 
 		// The first 2080/8224 bytes remain intact. However, we have to change
 		// the length field of the record.
@@ -246,8 +246,8 @@ class PHPExcel_Writer_Excel5_BIFFwriter
 
 		// Retrieve the last chunk of data
 		$header  = pack("vv", $record, strlen($data) - $i);
-		$tmp    .= $header;
-		$tmp    .= substr($data, $i, strlen($data) - $i);
+		$tmp	.= $header;
+		$tmp	.= substr($data, $i, strlen($data) - $i);
 
 		return $tmp;
 	}

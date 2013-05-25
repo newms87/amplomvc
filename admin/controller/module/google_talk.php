@@ -1,8 +1,8 @@
 <?php
 class ControllerModuleGoogleTalk extends Controller {
-	 
 	
-	public function index() {   
+	
+	public function index() {	
 		$this->template->load('module/google_talk');
 
 		$this->load->language('module/google_talk');
@@ -70,10 +70,6 @@ class ControllerModuleGoogleTalk extends Controller {
 			$this->error['code'] = $this->_('error_code');
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

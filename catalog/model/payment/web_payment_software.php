@@ -18,13 +18,13 @@ class ModelPaymentWebPaymentSoftware extends Model {
 		$method_data = array();
 	
 		if ($status) {  
-      		$method_data = array( 
-        		'code'       => 'web_payment_software',
-        		'title'      => $this->_('text_title'),
+				$method_data = array( 
+				'code'		=> 'web_payment_software',
+				'title'		=> $this->_('text_title'),
 				'sort_order' => $this->config->get('web_payment_software_sort_order')
-      		);
-    	}
-   
-    	return $method_data;
+				);
+		}
+	
+		return $method_data;
   	}
 }

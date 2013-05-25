@@ -1,20 +1,20 @@
-<?php   
-class ControllerCommonHome extends Controller {   
+<?php	
+class ControllerCommonHome extends Controller {	
 	public function index() {
-	   
-      if($this->user->isDesigner()){
-         $this->template->load('common/home_restricted');
-      }
-      
-    	$this->load->language('common/home');
-    	
-      if($this->user->isDesigner()){
-         $this->document->setTitle($this->_('heading_title_restricted'));;
-         $this->language->set('heading_title', $this->_('heading_title_restricted'));
-      }
-      else{
-         $this->document->setTitle($this->_('heading_title'));
-      }
+		
+		if($this->user->isDesigner()){
+			$this->template->load('common/home_restricted');
+		}
+		
+		$this->load->language('common/home');
+		
+		if($this->user->isDesigner()){
+			$this->document->setTitle($this->_('heading_title_restricted'));;
+			$this->language->set('heading_title', $this->_('heading_title_restricted'));
+		}
+		else{
+			$this->document->setTitle($this->_('heading_title'));
+		}
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 
@@ -41,22 +41,22 @@ class ControllerCommonHome extends Controller {
 		);
 		
 		$results = $this->model_sale_order->getOrders($data);
-    	
-    	foreach ($results as $result) {
+		
+		foreach ($results as $result) {
 			$action = array();
-			 
+			
 			$action[] = array(
 				'text' => $this->_('text_view'),
 				'href' => $this->url->link('sale/order/info', 'order_id=' . $result['order_id'])
 			);
 					
 			$this->data['orders'][] = array(
-				'order_id'   => $result['order_id'],
-				'customer'   => $result['customer'],
-				'status'     => $result['status'],
+				'order_id'	=> $result['order_id'],
+				'customer'	=> $result['customer'],
+				'status'	=> $result['status'],
 				'date_added' => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
-				'total'      => $this->currency->format($result['total'], $result['currency_code'], $result['currency_value']),
-				'action'     => $action
+				'total'		=> $this->currency->format($result['total'], $result['currency_code'], $result['currency_value']),
+				'action'	=> $action
 			);
 		}
 
@@ -65,12 +65,12 @@ class ControllerCommonHome extends Controller {
 		}
 
 
-      $msgs = array('success','error_warning');
-      foreach($msgs as $m){
-         $this->data[$m] = isset($this->session->data[$m])?$this->session->data[$m]:'';
-         unset($this->session->data[$m]);
-      }
-      
+		$msgs = array('success','error_warning');
+		foreach($msgs as $m){
+			$this->data[$m] = isset($this->session->data[$m])?$this->session->data[$m]:'';
+			unset($this->session->data[$m]);
+		}
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

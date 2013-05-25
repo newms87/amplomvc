@@ -26,10 +26,10 @@ class ModelShippingCitylink extends Model {
   					
 				if ($data[0] >= $weight) {
 					if (isset($data[1])) {
-    					$cost = $data[1];
+						$cost = $data[1];
 					}
 					
-   					break;
+						break;
   				}
 			}
 			
@@ -37,20 +37,20 @@ class ModelShippingCitylink extends Model {
 			
 			if ((float)$cost) {
 				$quote_data['citylink'] = array(
-        			'code'         => 'citylink.citylink',
-        			'title'        => $this->_('text_title') . '  (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class_id')) . ')',
-        			'cost'         => $cost,
-        			'tax_class_id' => $this->config->get('citylink_tax_class_id'),
-					'text'         => $this->currency->format($this->tax->calculate($cost, $this->config->get('citylink_tax_class_id'), $this->config->get('config_show_price_with_tax')))
-      			);
+					'code'			=> 'citylink.citylink',
+					'title'		=> $this->_('text_title') . '  (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class_id')) . ')',
+					'cost'			=> $cost,
+					'tax_class_id' => $this->config->get('citylink_tax_class_id'),
+					'text'			=> $this->currency->format($this->tax->calculate($cost, $this->config->get('citylink_tax_class_id'), $this->config->get('config_show_price_with_tax')))
+					);
 				
-      			$method_data = array(
-        			'code'       => 'citylink',
-        			'title'      => $this->_('text_title'),
-        			'quote'      => $quote_data,
+					$method_data = array(
+					'code'		=> 'citylink',
+					'title'		=> $this->_('text_title'),
+					'quote'		=> $quote_data,
 					'sort_order' => $this->config->get('citylink_sort_order'),
-        			'error'      => false
-      			);
+					'error'		=> false
+					);
 			}
 		}
 	

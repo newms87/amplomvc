@@ -13,7 +13,7 @@
 				<div id="tab-general">
 					<div id="languages" class="htabs">
 						<? foreach ($languages as $language) { ?>
-						<a href="#language<?= $language['language_id']; ?>"><img src="<?= HTTP_THEME_IMAGE . 'flags/<?= $language['image']; ?>'; ?>" title="<?= $language['name']; ?>" /> <?= $language['name']; ?></a>
+						<a href="#language<?= $language['language_id']; ?>"><img src="<?= HTTP_THEME_IMAGE . "flags/$language[image]"; ?>" title="<?= $language['name']; ?>" /> <?= $language['name']; ?></a>
 						<? } ?>
 					</div>
 					<? foreach ($languages as $language) { ?>
@@ -61,7 +61,7 @@
 							<td><?= $entry_image; ?></td>
 							 <td>
 							 	<?= $this->builder->set_builder_template('click_image');?>
-								<?= $this->builder->image_input("image", $image, $thumb);?>
+								<?= $this->builder->image_input("image", $image);?>
 							 </td>
 						</tr>
 						<tr>
@@ -109,11 +109,7 @@
 </div>
 
 <?=$this->builder->js('ckeditor');?>
-<script type="text/javascript">//<!--
-<? foreach ($languages as $language) { ?>
-	 init_ckeditor_for('description<?=$language['language_id'];?>');
-<? } ?>
-//--></script>
+
 <script type="text/javascript">//<!--
 function generate_url_warning(field){
 	 if($('#gen_warn').length == 0)
@@ -125,7 +121,7 @@ function generate_url(c){
 	 name =$('input[name="category_description[1][name]"]').val();
 	 if(!name)
 			alert("Please make a name for this Category before generating the URL");
-	 $.post('index.php?route=catalog/category/generate_url',{category_id:<?=$category_id?$category_id:0;?>,name:name},function(json){$('input[name="keyword"]').val(json);},'json');
+	 $.post("<?= HTTP_ADMIN . "index.php?route=catalog/category/generate_url"; ?>",{category_id:<?=$category_id?$category_id:0;?>,name:name},function(json){$('input[name="keyword"]').val(json);},'json');
 }
  //--></script>
  

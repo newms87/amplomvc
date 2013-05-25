@@ -36,7 +36,7 @@ class ModelUserUserGroup extends Model {
 		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "user_group WHERE user_group_id = '" . (int)$user_group_id . "'");
 		
 		$user_group = array(
-			'name'       => $query->row['name'],
+			'name'		=> $query->row['name'],
 			'permissions' => unserialize($query->row['permission'])
 		);
 		
@@ -103,7 +103,7 @@ class ModelUserUserGroup extends Model {
 	}
 	
 	public function getTotalUserGroups() {
-      	$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "user_group");
+			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "user_group");
 		
 		return $query->row['total'];
 	}	

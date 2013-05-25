@@ -1,43 +1,43 @@
 <?php
 class ModelReportProduct extends Model {
-   
-   public function getProductViews(){
-      $query = $this->query("SELECT * FROM " . DB_PREFIX . "product_views");
-      return $query->rows;
-   }
-   
+	
+	public function getProductViews(){
+		$query = $this->query("SELECT * FROM " . DB_PREFIX . "product_views");
+		return $query->rows;
+	}
+	
 	public function getProductsViewed($data = array()) {
 		
-      $select = "pd.name, p.model, pv.product_id, pv.user_id, pv.ip_address, pv.session_id, COUNT(pv.product_id) as views";
-         
-      $limit = isset($data['limit'])?(int)$data['limit']:'';
-      
-      if($limit){
-         $start = isset($data['start'])?(int)$data['start']:0;
-   		if ($start < 0) {
-   			$start = 0;
-   		}			
-   
-   		if ($limit < 1) {
-   			$limit = 20;
-   		}
-         $limit = "LIMIT $start, $limit";	
-      }
+		$select = "pd.name, p.model, pv.product_id, pv.user_id, pv.ip_address, pv.session_id, COUNT(pv.product_id) as views";
+			
+		$limit = isset($data['limit'])?(int)$data['limit']:'';
 		
-      $sql = "SELECT $select FROM " . DB_PREFIX . "product p JOIN " . DB_PREFIX . "product_views pv ON(pv.product_id=p.product_id) LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id) WHERE pd.language_id = '" . (int)$this->config->get('config_language_id') . "' GROUP BY pv.product_id ORDER BY views DESC $limit";
-      
+		if($limit){
+			$start = isset($data['start'])?(int)$data['start']:0;
+			if ($start < 0) {
+				$start = 0;
+			}			
+	
+			if ($limit < 1) {
+				$limit = 20;
+			}
+			$limit = "LIMIT $start, $limit";	
+		}
+		
+		$sql = "SELECT $select FROM " . DB_PREFIX . "product p JOIN " . DB_PREFIX . "product_views pv ON(pv.product_id=p.product_id) LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id) WHERE pd.language_id = '" . (int)$this->config->get('config_language_id') . "' GROUP BY pv.product_id ORDER BY views DESC $limit";
+		
 		$query = $this->query($sql);
-      
-      return $query->rows;
+		
+		return $query->rows;
 	}	
 	
 	public function getTotalProductsViewed() {
-      $query = $this->query("SELECT COUNT(DISTINCT product_id) as total FROM " . DB_PREFIX . "product_views");
-      return $query->row['total'];
+		$query = $this->query("SELECT COUNT(DISTINCT product_id) as total FROM " . DB_PREFIX . "product_views");
+		return $query->row['total'];
 	}
 	
 	public function getTotalProductViews() {
-   	$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "product_views");
+		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "product_views");
 		return $query->row['total'];
 	}
 			
@@ -82,7 +82,7 @@ class ModelReportProduct extends Model {
 	}
 	
 	public function getTotalPurchased($data) {
-      	$sql = "SELECT COUNT(DISTINCT op.model) AS total FROM `" . DB_PREFIX . "order_product` op LEFT JOIN `" . DB_PREFIX . "order` o ON (op.order_id = o.order_id)";
+			$sql = "SELECT COUNT(DISTINCT op.model) AS total FROM `" . DB_PREFIX . "order_product` op LEFT JOIN `" . DB_PREFIX . "order` o ON (op.order_id = o.order_id)";
 
 		if (!is_null($data['filter_order_status_id'])) {
 			$sql .= " WHERE o.order_status_id = '" . (int)$data['filter_order_status_id'] . "'";

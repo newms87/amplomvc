@@ -114,7 +114,7 @@ class ControllerCheckoutBlockShippingAddress extends Controller {
 			}
 			
 			if(!$json && !$this->cart->validateShippingAddress($_POST)){
-				$json['error'] +=  $this->cart->get_errors('shipping_address');
+				$json['error']['shipping_address'] =  $this->cart->get_errors('shipping_address');
 			}
 			
 			if(!$json){

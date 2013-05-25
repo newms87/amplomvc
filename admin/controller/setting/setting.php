@@ -266,9 +266,9 @@ class ControllerSettingSetting extends Controller {
 			$this->error['config_email_support'] = $this->_('error_email');
 		}
 
-	 	if ((strlen($_POST['config_telephone']) < 3) || (strlen($_POST['config_telephone']) > 32)) {
+		if ((strlen($_POST['config_telephone']) < 3) || (strlen($_POST['config_telephone']) > 32)) {
 				$this->error['config_telephone'] = $this->_('error_telephone');
-	 	}
+		}
 
 		if (!$_POST['config_title']) {
 			$this->error['config_title'] = $this->_('error_title');

@@ -11,7 +11,7 @@ $('#button-confirm').bind('click', function() {
    $('#submit_payment').fadeIn(500);
 	$.ajax({ 
 		type: 'GET',
-		url: 'index.php?route=payment/cod/confirm',
+		url: "<?= HTTP_CATALOG . "index.php?route=payment/cod/confirm"; ?>",
 		success: function() {
 		   $('#submit_payment').html('<?=$text_submit_payment_done;?>');
 			location = '<?= $continue; ?>';

@@ -47,8 +47,8 @@ class ModelSaleCustomerBlacklist extends Model {
 	}
 	
 	public function getTotalCustomerBlacklists($data = array()) {
-      	$query = $this->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "customer_ip_blacklist`");
-				 
+			$query = $this->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "customer_ip_blacklist`");
+				
 		return $query->row['total'];
 	}
 }

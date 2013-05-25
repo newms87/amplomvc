@@ -8,7 +8,7 @@ $_['text_success']		= 'F&eacute;licitations, vous avez modifi&eacute; les d&eacu
 $_['text_nochex']		= '<a onclick="window.open(&#8217;https://secure.nochex.com/apply/merchant_info.aspx?partner_id=172198798&#8217;);"><img src="view/theme/default/image/payment/nochex.png" alt="NOCHEX" title="NOCHEX" style="border: 1px solid #EEEEEE;" /><br /><small>Signup</small></a>';
 $_['text_seller']		= 'Vendeur/Compte personnel';
 $_['text_merchant']		= 'Compte marchand';
-      
+		
 // Entry
 $_['entry_email']		= 'Courriel :';
 $_['entry_account']		= 'Type de compte :';

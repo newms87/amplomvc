@@ -1,26 +1,26 @@
 <?php
 //============================================================+
-// File name   : makeallttffonts.php
-// Begin       : 2008-12-07
+// File name	: makeallttffonts.php
+// Begin		: 2008-12-07
 // Last Update : 2010-08-08
 //
 // Description : Process all TTF files on current directory to 
-//               build TCPDF compatible font files.
+//					build TCPDF compatible font files.
 //
 // Author: Nicola Asuni
 //
 // (c) Copyright:
-//               Nicola Asuni
-//               Tecnick.com S.r.l.
-//               Via della Pace, 11
-//               09044 Quartucciu (CA)
-//               ITALY
-//               www.tecnick.com
-//               info@tecnick.com
+//					Nicola Asuni
+//					Tecnick.com S.r.l.
+//					Via della Pace, 11
+//					09044 Quartucciu (CA)
+//					ITALY
+//					www.tecnick.com
+//					info@tecnick.com
 //
 // License: 
-//    Copyright (C) 2004-2010  Nicola Asuni - Tecnick.com S.r.l.
-//    
+//	Copyright (C) 2004-2010  Nicola Asuni - Tecnick.com S.r.l.
+//	
 // This file is part of TCPDF software library.
 //
 // TCPDF is free software: you can redistribute it and/or modify it
@@ -65,5 +65,5 @@ while($file = readdir($handle)) {
 closedir($handle);
 
 //============================================================+
-// END OF FILE                                                 
+// END OF FILE																
 //============================================================+

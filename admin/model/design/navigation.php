@@ -99,8 +99,8 @@ class ModelDesignNavigation extends Model {
 		$this->cache->delete('navigation');
 	}
 	
-   public function deleteNavigationGroup($navigation_group_id) {
-   	$this->delete("navigation_group", $navigation_group_id);
+	public function deleteNavigationGroup($navigation_group_id) {
+		$this->delete("navigation_group", $navigation_group_id);
 		
 		$this->delete("navigation_store", array("navigation_group_id" => $navigation_group_id));
 		$this->delete("navigation", array("navigation_group_id" => $navigation_group_id));
@@ -137,12 +137,12 @@ class ModelDesignNavigation extends Model {
 	public function getNavigationGroups($data = array(), $select = '*', $total = false) {
 		//Select
 		if($total){
-         $select = 'COUNT(*) as total';
-      }
-      elseif(!$select){
-         $select = '*';
-      }
-      
+			$select = 'COUNT(*) as total';
+		}
+		elseif(!$select){
+			$select = '*';
+		}
+		
 		//From
 		$from = "FROM " . DB_PREFIX . "navigation_group ng";
 		
@@ -162,37 +162,38 @@ class ModelDesignNavigation extends Model {
 			
 			$where .= " AND ns.store_id IN (" . implode(',', $data['stores']) . ")";
 		}
-      
-      if(isset($data['status'])){
-         $where .= " AND status = '" . ($data['status'] ? 1 : 0) . "'";
-      }
-      
+		
+		if(isset($data['status'])){
+			$where .= " AND status = '" . ($data['status'] ? 1 : 0) . "'";
+		}
+		
 		//Order By & Limit
 		if(!$total){
-			$order_limit = $this->extract_order_limit_string($data);
-		}
-		else{
-			$order_limit = '';
+			$order = $this->extract_order($data);
+			$limit = $this->extract_limit($data);
+		} else {
+			$order = '';
+			$limit = '';
 		}
 		
 		//The Query
-		$query = "SELECT $select $from $where $order_limit";
-      
+		$query = "SELECT $select $from $where $order $limit";
+		
 		//Execute
 		$result = $this->query($query);
 		
 		//Process Results
-      if($total){
-         return $result->row['total'];
-      }
-      else{
-         foreach($result->rows as $key => &$row){
-            $row['links'] = $this->getNavigationGroupLinks($row['navigation_group_id']);
+		if($total){
+			return $result->row['total'];
+		}
+		else{
+			foreach($result->rows as $key => &$row){
+				$row['links'] = $this->getNavigationGroupLinks($row['navigation_group_id']);
 				$row['stores'] = $this->getNavigationGroupStores($row['navigation_group_id']);
-         }
-         
-         return $result->rows;
-      }
+			}
+			
+			return $result->rows;
+		}
 	}
 	
 	public function getNavigationLinks() {
@@ -256,7 +257,7 @@ class ModelDesignNavigation extends Model {
 	}
 	
 	public function getTotalNavigationGroups($data) {
-   	return $this->getNavigationGroups($data, '', true);
+		return $this->getNavigationGroups($data, '', true);
 	}
 
 	public function reset_admin_navigation_group(){
@@ -1364,7 +1365,19 @@ class ModelDesignNavigation extends Model {
 						'sort_order'	=> 4,
 						'status'			=> 1,
 					),
-	
+					
+					'system_localisation_countries' => array(
+						'display_name'	=> 'Countries',
+						'name'			=> 'system_localisation_countries',
+						'title'			=> '',
+						'href'			=> 'localisation/country',
+						'query'			=> '',
+						'is_route'		=> 1,
+						'parent_id'		=> 'system_localisation',
+						'sort_order'	=> 5,
+						'status'			=> 1,
+					),
+					
 					'system_localisation_geo_zones' => array(
 						'display_name'	=> 'Geo Zones',
 						'name'			=> 'system_localisation_geo_zones',
@@ -1373,7 +1386,7 @@ class ModelDesignNavigation extends Model {
 						'query'			=> '',
 						'is_route'		=> 1,
 						'parent_id'		=> 'system_localisation',
-						'sort_order'	=> 5,
+						'sort_order'	=> 6,
 						'status'			=> 1,
 					),
 	
@@ -1385,7 +1398,7 @@ class ModelDesignNavigation extends Model {
 						'query'			=> '',
 						'is_route'		=> 1,
 						'parent_id'		=> 'system_localisation',
-						'sort_order'	=> 6,
+						'sort_order'	=> 7,
 						'status'			=> 1,
 					),
 	
@@ -1397,7 +1410,7 @@ class ModelDesignNavigation extends Model {
 						'query'			=> '',
 						'is_route'		=> 1,
 						'parent_id'		=> 'system_localisation',
-						'sort_order'	=> 7,
+						'sort_order'	=> 8,
 						'status'			=> 1,
 					),
 	
@@ -1409,7 +1422,7 @@ class ModelDesignNavigation extends Model {
 						'query'			=> '',
 						'is_route'		=> 1,
 						'parent_id'		=> 'system_localisation',
-						'sort_order'	=> 8,
+						'sort_order'	=> 9,
 						'status'			=> 1,
 					),
 	
@@ -1421,21 +1434,10 @@ class ModelDesignNavigation extends Model {
 						'query'			=> '',
 						'is_route'		=> 1,
 						'parent_id'		=> 'system_localisation',
-						'sort_order'	=> 9,
+						'sort_order'	=> 10,
 						'status'			=> 1,
 					),
 	
-				'system_countries' => array(
-					'display_name'	=> 'Countries',
-					'name'			=> 'system_countries',
-					'title'			=> '',
-					'href'			=> 'localisation/country',
-					'query'			=> '',
-					'is_route'		=> 1,
-					'parent_id'		=> 'system',
-					'sort_order'	=> 10,
-					'status'			=> 1,
-				),
 	
 			'help' => array(
 				'display_name'	=> 'Help',

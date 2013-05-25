@@ -1,66 +1,118 @@
 <?= $header; ?>
 <div class="content">
-  <?= $this->builder->display_breadcrumbs();?>
-  <? if ($error_warning) { ?>
-  <div class="message_box warning"><?= $error_warning; ?></div>
-  <? } ?>
-  <div class="box">
-    <div class="heading">
-      <h1><img src="<?= HTTP_THEME_IMAGE . 'shipping.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
-      <div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a onclick="location = '<?= $cancel; ?>';" class="button"><?= $button_cancel; ?></a></div>
-    </div>
-    <div class="content">
-      <form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
-        <table class="form">
-          <tr>
-            <td><?= $entry_cost; ?></td>
-            <td><input type="text" name="flat_cost" value="<?= $flat_cost; ?>" /></td>
-          </tr>
-          <tr>
-            <td><?= $entry_tax_class; ?></td>
-            <td><select name="flat_tax_class_id">
-                  <option value="0"><?= $text_none; ?></option>
-                  <? foreach ($tax_classes as $tax_class) { ?>
-                  <? if ($tax_class['tax_class_id'] == $flat_tax_class_id) { ?>
-                  <option value="<?= $tax_class['tax_class_id']; ?>" selected="selected"><?= $tax_class['title']; ?></option>
-                  <? } else { ?>
-                  <option value="<?= $tax_class['tax_class_id']; ?>"><?= $tax_class['title']; ?></option>
-                  <? } ?>
-                  <? } ?>
-                </select></td>
-          </tr>
-          <tr>
-            <td><?= $entry_geo_zone; ?></td>
-            <td><select name="flat_geo_zone_id">
-                <option value="0"><?= $text_all_zones; ?></option>
-                <? foreach ($geo_zones as $geo_zone) { ?>
-                <? if ($geo_zone['geo_zone_id'] == $flat_geo_zone_id) { ?>
-                <option value="<?= $geo_zone['geo_zone_id']; ?>" selected="selected"><?= $geo_zone['name']; ?></option>
-                <? } else { ?>
-                <option value="<?= $geo_zone['geo_zone_id']; ?>"><?= $geo_zone['name']; ?></option>
-                <? } ?>
-                <? } ?>
-              </select></td>
-          </tr>
-          <tr>
-            <td><?= $entry_status; ?></td>
-            <td><select name="flat_status">
-                <? if ($flat_status) { ?>
-                <option value="1" selected="selected"><?= $text_enabled; ?></option>
-                <option value="0"><?= $text_disabled; ?></option>
-                <? } else { ?>
-                <option value="1"><?= $text_enabled; ?></option>
-                <option value="0" selected="selected"><?= $text_disabled; ?></option>
-                <? } ?>
-              </select></td>
-          </tr>
-          <tr>
-            <td><?= $entry_sort_order; ?></td>
-            <td><input type="text" name="flat_sort_order" value="<?= $flat_sort_order; ?>" size="1" /></td>
-          </tr>
-        </table>
-      </form>
-    </div>
-  </div>
+	<?= $this->builder->display_breadcrumbs();?>
+	<?= $this->builder->display_errors($errors); ?>
+	
+	<div class="box">
+		<div class="heading">
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'shipping.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
+			<div class="buttons">
+				<a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a>
+				<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
+			</div>
+		</div>
+		<div class="content shipping_flat">
+			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
+				<table class="form">
+					<tr>
+						<td><?= $entry_title; ?></td>
+						<td><input type="text" name="flat_title" value="<?= $flat_title; ?>" /></td>
+					</tr>
+					<tr>
+						<td><?= $entry_status; ?></td>
+						<td><?= $this->builder->build('select', $data_statuses, 'flat_status', $flat_status); ?></td>
+					</tr>
+					<tr>
+						<td><?= $entry_sort_order; ?></td>
+						<td><input type="text" name="flat_sort_order" value="<?= $flat_sort_order; ?>" size="1" /></td>
+					</tr>
+					<tr>
+						<td valign="top">
+							<?= $entry_flat_rates; ?><br /><br />
+							<a id="add_flat_rate"><?= $button_add_rate; ?></a>
+						</td>
+						<td>
+							<? $flat_rates['template_row'] = array(
+								'method' => "%method%",
+								'title' => "%title%",
+								'cost' => "%cost%",
+								'rule' => array('type' => "%rule_type%", 'value' => "%rule_value%"),
+								'tax_class_id' => "%tax_class_id%",
+								'geo_zone_id' => "%geo_zone_id%",
+							); ?>
+							
+							<div id="flat_rates">
+							<? $rate_row = 0; ?>
+							<? foreach($flat_rates as $key => $rate) { ?>
+								<? $row = $key == "template_row" ? "%rate_row%" : $rate_row; ?>
+								
+								<table class="form rate <?= $key; ?>">
+									<tr>
+										<td><?= $entry_method_title; ?></td>
+										<td>
+											<input type="hidden" name="flat_rates[<?= $row; ?>][method]" value="<?= $rate['method']; ?>" />
+											<input type="text" name="flat_rates[<?= $row; ?>][title]" value="<?= $rate['title']; ?>" />
+										</td>
+									</tr>
+									<tr>
+										<td><?= $entry_cost; ?></td>
+										<td><input type="text" name="flat_rates[<?= $row; ?>][cost]" value="<?= $rate['cost']; ?>" /></td>
+									</tr>
+									<tr>
+										<td><?= $entry_rule; ?></td>
+										<td>
+											<?= $this->builder->build('select', $data_rule_types, "flat_rates[$row][rule][type]", $rate['rule']['type']); ?>
+											<input type="text" name="flat_rates[<?= $row; ?>][rule][value]" value="<?= $rate['rule']['value']; ?>" />
+										</td>
+									</tr>
+									<tr>
+										<td><?= $entry_tax_class; ?></td>
+										<td>
+											<? $this->builder->set_config('tax_class_id', 'title'); ?>
+											<?= $this->builder->build('select', $data_tax_classes, "flat_rates[$row][tax_class_id]", $rate['tax_class_id']); ?>
+										</td>
+									</tr>
+									<tr>
+										<td><?= $entry_geo_zone; ?></td>
+										<td>
+											<? $this->builder->set_config('geo_zone_id', 'name'); ?>
+											<?= $this->builder->build('select', $data_geo_zones, "flat_rates[$row][geo_zone_id]", $rate['geo_zone_id']); ?>
+										</td>
+									</tr>
+									<tr><td colspan="2"><a class="delete" onclick="$(this).closest('.rate').remove();"><?= $button_delete; ?></a></td></tr>
+								</table>
+								<? $rate_row++; ?>
+							<? } ?>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
 </div>
-<?= $footer; ?> 
+
+<script type="text/javascript">//<!--
+var list_template = $('#flat_rates').find('.template_row');
+var flat_rate_template = list_template.html();
+list_template.remove();
+
+var rate_row = <?= $rate_row; ?>;
+
+$('#add_flat_rate').click(function(){
+	template = flat_rate_template
+		.replace(/%rate_row%/g, rate_row++)
+		.replace(/%method%/g, '')
+		.replace(/%title%/g, '')
+		.replace(/%cost%/g, '')
+		.replace(/%rule_type%/g, '')
+		.replace(/%rule_value%/g, '')
+		.replace(/%tax_class_id%/g, '')
+		.replace(/%geo_zone_id%/g, '');
+	
+	$('#flat_rates').append($('<table class="form rate" />').append(template));
+});
+//--></script>
+
+<?= $this->builder->js('errors', $errors); ?>
+<?= $footer; ?>

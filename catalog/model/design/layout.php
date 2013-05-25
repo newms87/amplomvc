@@ -1,7 +1,7 @@
 <?php
 class ModelDesignLayout extends Model {
 	private $layout_ids = array();
-   
+	
 	public function get_layout_id($route = null) {
 		if(!$route){
 			$route = !empty($_GET['route']) ? $_GET['route'] : 'common/home';

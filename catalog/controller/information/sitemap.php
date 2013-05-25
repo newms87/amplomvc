@@ -3,7 +3,7 @@ class ControllerInformationSitemap extends Controller {
 	public function index() {
 		$this->template->load('information/sitemap');
 
-    	$this->language->load('information/sitemap');
+		$this->language->load('information/sitemap');
  
 		$this->document->setTitle($this->_('heading_title')); 
 
@@ -32,39 +32,39 @@ class ControllerInformationSitemap extends Controller {
 				}
 				
 				$level_2_data[] = array(
-					'name'     => $category_2['name'],
+					'name'	=> $category_2['name'],
 					'children' => $level_3_data,
-					'href'     => $this->url->link('product/category', 'path=' . $category_1['category_id'] . '_' . $category_2['category_id'])	
+					'href'	=> $this->url->link('product/category', 'path=' . $category_1['category_id'] . '_' . $category_2['category_id'])	
 				);					
 			}
 			
 			$this->data['categories'][] = array(
-				'name'     => $category_1['name'],
+				'name'	=> $category_1['name'],
 				'children' => $level_2_data,
-				'href'     => $this->url->link('product/category', 'path=' . $category_1['category_id'])
+				'href'	=> $this->url->link('product/category', 'path=' . $category_1['category_id'])
 			);
 		}
 		
 		$this->data['special'] = $this->url->link('product/special');
 		$this->data['account'] = $this->url->link('account/account');
-    	$this->data['edit'] = $this->url->link('account/edit');
-    	$this->data['password'] = $this->url->link('account/password');
-    	$this->data['address'] = $this->url->link('account/address');
-    	$this->data['history'] = $this->url->link('account/order');
-    	$this->data['download'] = $this->url->link('account/download');
-    	$this->data['cart'] = $this->url->link('cart/cart');
-    	$this->data['checkout'] = $this->url->link('checkout/checkout');
-    	$this->data['search'] = $this->url->link('product/search');
-    	$this->data['contact'] = $this->url->link('information/contact');
+		$this->data['edit'] = $this->url->link('account/edit');
+		$this->data['password'] = $this->url->link('account/password');
+		$this->data['address'] = $this->url->link('account/address');
+		$this->data['history'] = $this->url->link('account/order');
+		$this->data['download'] = $this->url->link('account/download');
+		$this->data['cart'] = $this->url->link('cart/cart');
+		$this->data['checkout'] = $this->url->link('checkout/checkout');
+		$this->data['search'] = $this->url->link('product/search');
+		$this->data['contact'] = $this->url->link('information/contact');
 		
 		$this->data['informations'] = array();
-    	
+		
 		foreach ($this->model_catalog_information->getInformations() as $result) {
-      		$this->data['informations'][] = array(
-        		'title' => $result['title'],
-        		'href'  => $this->url->link('information/information', 'information_id=' . $result['information_id']) 
-      		);
-    	}
+				$this->data['informations'][] = array(
+				'title' => $result['title'],
+				'href'  => $this->url->link('information/information', 'information_id=' . $result['information_id']) 
+				);
+		}
 
 
 

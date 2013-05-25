@@ -165,13 +165,13 @@ class ControllerLocalisationCurrency extends Controller {
 			);
 						
 			$this->data['currencies'][] = array(
-				'currency_id'   => $result['currency_id'],
-				'title'         => $result['title'] . (($result['code'] == $this->config->get('config_currency')) ? $this->_('text_default') : null),
-				'code'          => $result['code'],
-				'value'         => $result['value'],
+				'currency_id'	=> $result['currency_id'],
+				'title'			=> $result['title'] . (($result['code'] == $this->config->get('config_currency')) ? $this->_('text_default') : null),
+				'code'			=> $result['code'],
+				'value'			=> $result['value'],
 				'date_modified' => $this->tool->format_datetime($result['date_modified'], $this->language->getInfo('date_format_short')),
-				'selected'      => isset($_POST['selected']) && in_array($result['currency_id'], $_POST['selected']),
-				'action'        => $action
+				'selected'		=> isset($_POST['selected']) && in_array($result['currency_id'], $_POST['selected']),
+				'action'		=> $action
 			);
 		}	
 	
@@ -220,7 +220,6 @@ class ControllerLocalisationCurrency extends Controller {
 		$this->pagination->total = $currency_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('localisation/currency', $url);
 			
 		$this->data['pagination'] = $this->pagination->render();
@@ -334,13 +333,13 @@ class ControllerLocalisationCurrency extends Controller {
 			$this->data['value'] = '';
 		}
 
-    	if (isset($_POST['status'])) {
-      		$this->data['status'] = $_POST['status'];
-    	} elseif (isset($currency_info)) {
+		if (isset($_POST['status'])) {
+				$this->data['status'] = $_POST['status'];
+		} elseif (isset($currency_info)) {
 			$this->data['status'] = $currency_info['status'];
 		} else {
-      		$this->data['status'] = '';
-    	}
+				$this->data['status'] = '';
+		}
 
 		$this->children = array(
 			'common/header',
@@ -397,10 +396,6 @@ class ControllerLocalisationCurrency extends Controller {
 			}					
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}	
 }

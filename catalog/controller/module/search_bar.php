@@ -1,8 +1,8 @@
 <?php  
 class ControllerModuleSearchBar extends Controller {
 	protected function index($setting) {
-	   $this->template->load('module/search_bar');
-      
+		$this->template->load('module/search_bar');
+		
 		$this->language->load('module/search_bar');
 		
 		$this->data['search_category'] = "";

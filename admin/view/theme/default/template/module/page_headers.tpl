@@ -100,7 +100,7 @@ function addModule() {
 	
 	$('#module tfoot').before(html.replace(/%modrow%/g,module_row));
 	<? foreach ($languages as $language) { ?>
-	init_ckeditor_for('page_header_'+module_row + '-<?=$language['language_id'];?>');
+	init_ckeditor_for($('#page_header_'+module_row + '-<?=$language['language_id'];?>'));
 	<? }?>
 	$('#languages-'+module_row + ' a').tabs();
 	module_row++;

@@ -16,8 +16,8 @@ class ControllerCommonContentBottom extends Controller {
 				foreach ($modules as $module) {
 					if ($module['layout_id'] == $layout_id && $module['position'] == 'content_bottom' && $module['status']) {
 						$module_data[] = array(
-							'code'       => $extension['code'],
-							'setting'    => $module,
+							'code'		=> $extension['code'],
+							'setting'	=> $module,
 							'sort_order' => $module['sort_order']
 						);				
 					}
@@ -26,10 +26,10 @@ class ControllerCommonContentBottom extends Controller {
 		}
 		
 		$sort_order = array(); 
-	  
+	
 		foreach ($module_data as $key => $value) {
-   		$sort_order[$key] = $value['sort_order'];
-    	}
+			$sort_order[$key] = $value['sort_order'];
+		}
 		
 		array_multisort($sort_order, SORT_ASC, $module_data);
 		

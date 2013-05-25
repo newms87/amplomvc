@@ -142,7 +142,7 @@ $('#button-cart, #button-buy-now').bind('click', function() {
    data = {selected: selected_options, product_id: <?= $product_id;?>, quantity: $('#quantity').val()};
    
    $.ajax({
-      url: 'index.php?route=cart/cart/add',
+      url: "<?= HTTP_CATALOG . "index.php?route=cart/cart/add"; ?>",
       type: 'post',
       data: data,
       dataType: 'json',

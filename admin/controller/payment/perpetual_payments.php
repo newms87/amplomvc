@@ -1,6 +1,6 @@
 <?php 
 class ControllerPaymentPerpetualPayments extends Controller {
-	 
+	
 
 	public function index() {
 		$this->template->load('payment/perpetual_payments');
@@ -116,10 +116,6 @@ class ControllerPaymentPerpetualPayments extends Controller {
 			$this->error['auth_pass'] = $this->_('error_auth_pass');
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

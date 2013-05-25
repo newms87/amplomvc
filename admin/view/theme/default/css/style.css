@@ -370,6 +370,7 @@ body > #container {
 	border: 1px solid #EEEEEE;
 	padding: 10px;
 	display: inline-block;
+	text-align:center;
 }
 .image img {
 	margin-bottom: 5px;
@@ -1005,6 +1006,14 @@ input.p_sortorder:active,input.p_sortorder:focus{
 	margin-left: 10px;
 }
 
+.product_retail{
+	text-decoration:line-through;
+	color: #555;
+}
+.product_special{
+	color:red;
+}
+
 /*** FEATURED PRODUCTS MODULE STYLE **/
 #product_filter{
 	list-style:none;
@@ -1521,35 +1530,64 @@ td.mail_info label{
 }
 
 /** Press / Editorial Form **/
-#press_item_list{
+#press_list{
 	margin: 0;
 	padding: 0;
 	list-style: none;
 	overflow:auto;
 }
 
-#press_item_list li > span{
+#press_list li > span{
 	float:left;
 }
 
-#press_item_list .press_url_entry{
+#press_list .press_url_entry{
 	margin-top:15px;
 }
-#press_item_list .press_url input{
+#press_list .press_url input{
 	width: 400px;
 }
 
-#press_item_list li{
+#press_list li{
 	overflow:auto;
+	margin-bottom: 10px;
 }
 
-#press_item_list li .press_description{
+#press_list li .press_description{
 	margin-left:25px;
 }
 
-#press_item_list li .button_remove{
-	margin-left:20px;
-	margin-top:100px;
+#press_list li .button_remove{
+	position:absolute;
+	top:5px;
+	right:5px;
+}
+
+#press_list .press_item{
+	position:relative;
+	padding: 5px;
+	border: 1px dashed #DDD;
+	margin-bottom: 10px;
+}
+
+#press_list .press_item label{
+	display:inline-block;
+	width: 120px;
+}
+
+#press_list .press_item input{
+	width: 300px;
+}
+
+#press_list .press_images{
+	overflow:auto;
+	margin-left: 10px;
+}
+
+#press_list .press_image{
+	float:left;
+	text-align: center;
+	margin-bottom: 10px;
 }
 
 /** Autocomplete **/
@@ -1599,3 +1637,73 @@ td.mail_info label{
 	float:right;
 	padding-top:8px;
 }
+
+/* Translations */
+.translation_box{
+	position:relative;
+	padding-right: 20px;
+	display:inline-block;
+}
+
+.language_menu{
+	position:absolute;
+	width: 16px;
+	height: 11px;
+	padding: 5px;
+	background:white;
+	top:-2px;
+	right: -30px;
+}
+
+.language_menu:hover{
+	height:auto;
+}
+
+.language_menu .language_item{
+	cursor: pointer;
+	display:none;
+	background: #D7EDE2;
+	border-radius: 5px;
+	width: 16px;
+	padding: 2px 5px;
+	margin-bottom:2px;
+}
+
+.language_menu .language_item:hover{
+	background: #B6CEED;
+}
+	
+.language_menu .language_item.active{
+	cursor: pointer;
+	display:block;
+	position:absolute;
+	top:2px;
+	left: -25px;
+	padding: 5px;
+	background: none;
+}
+
+.language_menu .language_item.active:hover{
+	background: none;
+}
+
+.language_menu:hover .language_item{
+	display:block;
+}
+
+.translation{
+	display: none;
+}
+
+/* Flat Rate Shipping */
+#flat_rates table.rate{
+	border: 1px dashed #888;
+	padding: 5px;
+}
+
+#flat_rates .delete{
+	color: red;
+	font-weight:bold
+	font-size: 14px;
+}
+

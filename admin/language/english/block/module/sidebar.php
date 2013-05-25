@@ -1,16 +1,13 @@
 <?php
 // Heading
-$_['heading_title']       = 'Sidebar Navigation';
+$_['heading_title']		= 'Sidebar Navigation';
 
 // Text
-$_['text_success']        = 'Success: You have modified the Sidebar Navigation Block!';
-
-//Buttons
-$_['button_add_network'] = "Add Network";
+$_['text_success']		= 'Success: You have modified the Sidebar Navigation Block!';
 
 // Entry
-$_['entry_social_networks']        = 'Your Social Networks:<span class="help">Include the http:// or https://</span>';
+$_['entry_attribute_group']		= 'Attribute Filter:';
+$_['entry_attribute_group_name']		= 'Display Name:';
+$_['entry_attribute_menu_name']		= 'Section Name:';
+$_['entry_page_link']			= "Page Link";
 
-// Error
-$_['error_social_network']    = 'This is an invalid Social Network';
-$_['error_network_url']    = '%s is not a valid URL. You must include the http:// or https:// protocol.';

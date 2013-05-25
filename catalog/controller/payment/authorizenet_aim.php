@@ -36,7 +36,7 @@ class ControllerPaymentAuthorizeNetAim extends Controller {
 	
 	public function send() {
 		if ($this->config->get('authorizenet_aim_server') == 'live') {
-    		$url = 'https://secure.authorize.net/gateway/transact.dll';
+			$url = 'https://secure.authorize.net/gateway/transact.dll';
 		} elseif ($this->config->get('authorizenet_aim_server') == 'test') {
 			$url = 'https://test.authorize.net/gateway/transact.dll';		
 		}	
@@ -45,7 +45,7 @@ class ControllerPaymentAuthorizeNetAim extends Controller {
 		
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 		
-        $data = array();
+		$data = array();
 
 		$data['x_login'] = $this->config->get('authorizenet_aim_login');
 		$data['x_tran_key'] = $this->config->get('authorizenet_aim_key');

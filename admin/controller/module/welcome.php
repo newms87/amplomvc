@@ -1,8 +1,8 @@
 <?php
 class ControllerModuleWelcome extends Controller {
-	 
-	 
-	public function index() {   
+	
+	
+	public function index() {	
 		$this->template->load('module/welcome');
 
 		$this->load->language('module/welcome');
@@ -56,10 +56,6 @@ class ControllerModuleWelcome extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

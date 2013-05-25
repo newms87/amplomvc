@@ -11,7 +11,7 @@ class ControllerPaymentFreeCheckout extends Controller {
 
 
 
-		$this->render();		 
+		$this->render();		
 	}
 	
 	public function confirm() {

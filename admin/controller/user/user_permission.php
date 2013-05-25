@@ -76,7 +76,7 @@ class ControllerUserUserPermission extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
-      		foreach ($_POST['selected'] as $user_group_id) {
+				foreach ($_POST['selected'] as $user_group_id) {
 				$this->model_user_user_group->deleteUserGroup($user_group_id);	
 			}
 						
@@ -110,7 +110,7 @@ class ControllerUserUserPermission extends Controller {
 		} else {
 			$sort = 'name';
 		}
-		 
+		
 		if (isset($_GET['order'])) {
 			$order = $_GET['order'];
 		} else {
@@ -166,9 +166,9 @@ class ControllerUserUserPermission extends Controller {
 		
 			$this->data['user_groups'][] = array(
 				'user_group_id' => $result['user_group_id'],
-				'name'          => $result['name'],
-				'selected'      => isset($_POST['selected']) && in_array($result['user_group_id'], $_POST['selected']),
-				'action'        => $action
+				'name'			=> $result['name'],
+				'selected'		=> isset($_POST['selected']) && in_array($result['user_group_id'], $_POST['selected']),
+				'action'		=> $action
 			);
 		}	
 	
@@ -214,7 +214,6 @@ class ControllerUserUserPermission extends Controller {
 		$this->pagination->total = $user_group_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('user/user_permission', $url);
 		
 		$this->data['pagination'] = $this->pagination->render();				
@@ -246,27 +245,27 @@ class ControllerUserUserPermission extends Controller {
 			$this->data['action'] = $this->url->link('user/user_permission/insert', $url_query);
 		}
 
-    	$this->data['cancel'] = $this->url->link('user/user_permission', $url_query);
+		$this->data['cancel'] = $this->url->link('user/user_permission', $url_query);
 
 		if ($user_group_id && $_SERVER['REQUEST_METHOD'] != 'POST') {
 			$user_group_info = $this->model_user_user_group->getUserGroup($user_group_id);
 		}
 		
 		//initialize the values in order of Post, Database, Default
-      $defaults = array(
-         'name' => '',
+		$defaults = array(
+			'name' => '',
 			'permissions' => array(),
-      );
+		);
 
-      foreach($defaults as $key => $default){
-         if (isset($_POST[$key])) {
-            $this->data[$key] = $_POST[$key];
-         } elseif (isset($user_group_info[$key])) {
-            $this->data[$key] = $user_group_info[$key];
-         } elseif(!$user_group_id) {
-            $this->data[$key] = $default;
-         }
-      }
+		foreach($defaults as $key => $default){
+			if (isset($_POST[$key])) {
+				$this->data[$key] = $_POST[$key];
+			} elseif (isset($user_group_info[$key])) {
+				$this->data[$key] = $user_group_info[$key];
+			} elseif(!$user_group_id) {
+				$this->data[$key] = $default;
+			}
+		}
 		
 		if(!isset($this->data['permissions']['access'])){
 			$this->data['permissions']['access'] = array();
@@ -295,11 +294,7 @@ class ControllerUserUserPermission extends Controller {
 			$this->error['name'] = $this->_('error_name');
 		}
 
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
 
 	private function validateDelete() {
@@ -315,10 +310,6 @@ class ControllerUserUserPermission extends Controller {
 			}
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
 }

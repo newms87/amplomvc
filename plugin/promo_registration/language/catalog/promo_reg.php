@@ -8,5 +8,5 @@ On <font color='#EC227B'>September 4th</font>, we’re launching <font color='#E
 <font color='green'>Sign up now to get our first newsletter announcement<br> AND a coupon for $10 off your first order of $50 or more.</font>";
 
 $_['text_message'] = "<h2>Congratulations! Your BettyConfidential Shop Account has been created!<br><br>".
-                     "<font color='green'>You will automatically receive $10 off your next purchase of $50 or more.<br><br></font>".
-                     "We will see you at the launch of BettyConfidential Shop on September 4!<br></h2>";
+							"<font color='green'>You will automatically receive $10 off your next purchase of $50 or more.<br><br></font>".
+							"We will see you at the launch of BettyConfidential Shop on September 4!<br></h2>";

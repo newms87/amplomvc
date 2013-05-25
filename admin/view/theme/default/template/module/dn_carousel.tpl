@@ -192,7 +192,7 @@ function set_autocomplete(selector){
 		delay: 0,
 		source: function(request, response) {
 			$.ajax({
-				url: 'index.php?route=cms/article/autocomplete&filter_title=' +  encodeURIComponent(request.term),
+				url: "<?= HTTP_ADMIN . "index.php?route=cms/article/autocomplete"; ?>" + '&filter_title=' +  encodeURIComponent(request.term),
 				dataType: 'json',
 				success: function(json) {
 					response($.map(json, function(item) {
@@ -268,7 +268,7 @@ function image_upload(field, thumb) {
 		close: function (event, ui) {
 			if ($('#' + field).attr('value')) {
 				$.ajax({
-					url: 'index.php?route=common/filemanager/image&image=' + encodeURIComponent($('#' + field).attr('value')),
+					url: "<?= HTTP_ADMIN . "index.php?route=common/filemanager/image"; ?>" + '&image=' + encodeURIComponent($('#' + field).attr('value')),
 					dataType: 'text',
 					success: function(data) {
 						$('#' + thumb).replaceWith('<img src="' + data + '" alt="" id="' + thumb + '" />');

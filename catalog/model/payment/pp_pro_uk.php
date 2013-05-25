@@ -18,13 +18,13 @@ class ModelPaymentPPProUK extends Model {
 		$method_data = array();
 	
 		if ($status) {  
-      		$method_data = array( 
-        		'code'       => 'pp_pro_uk',
-        		'title'      => $this->_('text_title'),
+				$method_data = array( 
+				'code'		=> 'pp_pro_uk',
+				'title'		=> $this->_('text_title'),
 				'sort_order' => $this->config->get('pp_pro_uk_sort_order')
-      		);
-    	}
-   
-    	return $method_data;
+				);
+		}
+	
+		return $method_data;
   	}
 }

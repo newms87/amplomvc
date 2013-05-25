@@ -1,8 +1,8 @@
 <?php
 class ControllerModuleCarousel extends Controller {
-	 
 	
-	public function index() {   
+	
+	public function index() {	
 		$this->template->load('module/carousel');
 
 		$this->load->language('module/carousel');
@@ -70,10 +70,6 @@ class ControllerModuleCarousel extends Controller {
 			}
 		}	
 				
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

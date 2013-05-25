@@ -106,7 +106,7 @@ $('#history .pagination a').live('click', function() {
 	return false;
 });			
 
-$('#history').load('index.php?route=sale/voucher/history&voucher_id=<?= $voucher_id; ?>');
+$('#history').load("<?= HTTP_ADMIN . "index.php?route=sale/voucher/history"; ?>" + '&voucher_id=<?= $voucher_id; ?>');
 //--></script>
 <? } ?>
 <script type="text/javascript"><!--

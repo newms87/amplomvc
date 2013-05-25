@@ -20,55 +20,55 @@
 class SingularValueDecomposition  {
 
 	/**
-	 *	Internal storage of U.
-	 *	@var array
-	 */
+	*	Internal storage of U.
+	*	@var array
+	*/
 	private $U = array();
 
 	/**
-	 *	Internal storage of V.
-	 *	@var array
-	 */
+	*	Internal storage of V.
+	*	@var array
+	*/
 	private $V = array();
 
 	/**
-	 *	Internal storage of singular values.
-	 *	@var array
-	 */
+	*	Internal storage of singular values.
+	*	@var array
+	*/
 	private $s = array();
 
 	/**
-	 *	Row dimension.
-	 *	@var int
-	 */
+	*	Row dimension.
+	*	@var int
+	*/
 	private $m;
 
 	/**
-	 *	Column dimension.
-	 *	@var int
-	 */
+	*	Column dimension.
+	*	@var int
+	*/
 	private $n;
 
 
 	/**
-	 *	Construct the singular value decomposition
-	 *
-	 *	Derived from LINPACK code.
-	 *
-	 *	@param $A Rectangular matrix
-	 *	@return Structure to access U, S and V.
-	 */
+	*	Construct the singular value decomposition
+	*
+	*	Derived from LINPACK code.
+	*
+	*	@param $A Rectangular matrix
+	*	@return Structure to access U, S and V.
+	*/
 	public function __construct($Arg) {
 
 		// Initialize.
 		$A = $Arg->getArrayCopy();
 		$this->m = $Arg->getRowDimension();
 		$this->n = $Arg->getColumnDimension();
-		$nu      = min($this->m, $this->n);
-		$e       = array();
-		$work    = array();
-		$wantu   = true;
-		$wantv   = true;
+		$nu		= min($this->m, $this->n);
+		$e		= array();
+		$work	= array();
+		$wantu	= true;
+		$wantv	= true;
 		$nct = min($this->m - 1, $this->n);
 		$nrt = max(0, min($this->n - 2, $this->m));
 
@@ -237,7 +237,7 @@ class SingularValueDecomposition  {
 		}
 
 		// Main iteration loop for the singular values.
-		$pp   = $p - 1;
+		$pp	= $p - 1;
 		$iter = 0;
 		$eps  = pow(2.0, -52.0);
 
@@ -249,7 +249,7 @@ class SingularValueDecomposition  {
 			// kase = 1  if s(p) and e[k-1] are negligible and k<p
 			// kase = 2  if s(k) is negligible and k<p
 			// kase = 3  if e[k-1] is negligible, k<p, and
-			//           s(k), ..., s(p) are not negligible (qr step).
+			//			s(k), ..., s(p) are not negligible (qr step).
 			// kase = 4  if e(p-1) is negligible (convergence).
 			for ($k = $p - 2; $k >= -1; --$k) {
 				if ($k == -1) {
@@ -334,13 +334,13 @@ class SingularValueDecomposition  {
 						$scale = max(max(max(max(
 									abs($this->s[$p-1]),abs($this->s[$p-2])),abs($e[$p-2])),
 									abs($this->s[$k])), abs($e[$k]));
-						$sp   = $this->s[$p-1] / $scale;
+						$sp	= $this->s[$p-1] / $scale;
 						$spm1 = $this->s[$p-2] / $scale;
 						$epm1 = $e[$p-2] / $scale;
-						$sk   = $this->s[$k] / $scale;
-						$ek   = $e[$k] / $scale;
-						$b    = (($spm1 + $sp) * ($spm1 - $sp) + $epm1 * $epm1) / 2.0;
-						$c    = ($sp * $epm1) * ($sp * $epm1);
+						$sk	= $this->s[$k] / $scale;
+						$ek	= $e[$k] / $scale;
+						$b	= (($spm1 + $sp) * ($spm1 - $sp) + $epm1 * $epm1) / 2.0;
+						$c	= ($sp * $epm1) * ($sp * $epm1);
 						$shift = 0.0;
 						if (($b != 0.0) || ($c != 0.0)) {
 							$shift = sqrt($b * $b + $c);
@@ -434,44 +434,44 @@ class SingularValueDecomposition  {
 
 
 	/**
-	 *	Return the left singular vectors
-	 *
-	 *	@access public
-	 *	@return U
-	 */
+	*	Return the left singular vectors
+	*
+	*	@access public
+	*	@return U
+	*/
 	public function getU() {
 		return new Matrix($this->U, $this->m, min($this->m + 1, $this->n));
 	}
 
 
 	/**
-	 *	Return the right singular vectors
-	 *
-	 *	@access public
-	 *	@return V
-	 */
+	*	Return the right singular vectors
+	*
+	*	@access public
+	*	@return V
+	*/
 	public function getV() {
 		return new Matrix($this->V);
 	}
 
 
 	/**
-	 *	Return the one-dimensional array of singular values
-	 *
-	 *	@access public
-	 *	@return diagonal of S.
-	 */
+	*	Return the one-dimensional array of singular values
+	*
+	*	@access public
+	*	@return diagonal of S.
+	*/
 	public function getSingularValues() {
 		return $this->s;
 	}
 
 
 	/**
-	 *	Return the diagonal matrix of singular values
-	 *
-	 *	@access public
-	 *	@return S
-	 */
+	*	Return the diagonal matrix of singular values
+	*
+	*	@access public
+	*	@return S
+	*/
 	public function getS() {
 		for ($i = 0; $i < $this->n; ++$i) {
 			for ($j = 0; $j < $this->n; ++$j) {
@@ -484,33 +484,33 @@ class SingularValueDecomposition  {
 
 
 	/**
-	 *	Two norm
-	 *
-	 *	@access public
-	 *	@return max(S)
-	 */
+	*	Two norm
+	*
+	*	@access public
+	*	@return max(S)
+	*/
 	public function norm2() {
 		return $this->s[0];
 	}
 
 
 	/**
-	 *	Two norm condition number
-	 *
-	 *	@access public
-	 *	@return max(S)/min(S)
-	 */
+	*	Two norm condition number
+	*
+	*	@access public
+	*	@return max(S)/min(S)
+	*/
 	public function cond() {
 		return $this->s[0] / $this->s[min($this->m, $this->n) - 1];
 	}
 
 
 	/**
-	 *	Effective numerical matrix rank
-	 *
-	 *	@access public
-	 *	@return Number of nonnegligible singular values.
-	 */
+	*	Effective numerical matrix rank
+	*
+	*	@access public
+	*	@return Number of nonnegligible singular values.
+	*/
 	public function rank() {
 		$eps = pow(2.0, -52.0);
 		$tol = max($this->m, $this->n) * $this->s[0] * $eps;

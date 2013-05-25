@@ -18,8 +18,8 @@ class Benchmark {
 
 
 	/**
-	 * Simple function to replicate PHP 5 behaviour
-	 */
+	* Simple function to replicate PHP 5 behaviour
+	*/
 	function microtime_float() {
 		list($usec, $sec) = explode(" ", microtime());
 

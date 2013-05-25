@@ -108,7 +108,7 @@
 </div>
 <script type="text/javascript">//<!--
 function filter() {
-	url = 'index.php?route=catalog/product';
+	url = "<?= HTTP_ADMIN . "index.php?route=catalog/product"; ?>";
 	
 	var filters = ['filter_name','filter_model','filter_price','filter_cost','filter_is_final',
 	               'filter_manufacturer_id','filter_category_id','filter_date_expires','filter_quantity','filter_status'];
@@ -133,7 +133,7 @@ $('input[name=\'filter_name\']').autocomplete({
 	delay: 0,
 	source: function(request, response) {
 		$.ajax({
-			url: 'index.php?route=catalog/product/autocomplete&filter_name=' +  encodeURIComponent(request.term),
+			url: "<?= HTTP_ADMIN . "index.php?route=catalog/product/autocomplete"; ?>" + '&filter_name=' +  encodeURIComponent(request.term),
 			dataType: 'json',
 			success: function(json) {		
 				response($.map(json, function(item) {
@@ -156,7 +156,7 @@ $('input[name=\'filter_model\']').autocomplete({
 	delay: 0,
 	source: function(request, response) {
 		$.ajax({
-			url: 'index.php?route=catalog/product/autocomplete&filter_model=' +  encodeURIComponent(request.term),
+			url: "<?= HTTP_ADMIN . "index.php?route=catalog/product/autocomplete"; ?>" + '&filter_model=' +  encodeURIComponent(request.term),
 			dataType: 'json',
 			success: function(json) {		
 				response($.map(json, function(item) {

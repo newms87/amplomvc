@@ -66,7 +66,7 @@
 //<!--
 $('#button-confirm').bind('click', function() {
 	$.ajax({
-		url: 'index.php?route=payment/pp_pro_uk/send',
+		url: "<?= HTTP_CATALOG . "index.php?route=payment/pp_pro_uk/send"; ?>",
 		type: 'post',
 		data: $('#payment :input'),
 		dataType: 'json',		

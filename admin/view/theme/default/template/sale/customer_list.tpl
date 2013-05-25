@@ -120,7 +120,7 @@
               <td class="left"><?= $customer['date_added']; ?></td>
               <td class="left">
 					<? $this->builder->set_config('store_id', 'name');?>
-					<?= $this->builder->build('select', $data_stores, "store_login", '', array('onchange' => "if(this.value !== '')window.open('index.php?route=sale/customer/login&customer_id=$customer[customer_id]&store_id=' + this.value);"));?>
+					<?= $this->builder->build('select', $data_stores, "store_login", '', array('onchange' => "if(this.value !== '')window.open("<?= HTTP_ADMIN . "index.php?route=sale/customer/login"; ?>" + '&customer_id=$customer[customer_id]&store_id=' + this.value);"));?>
 				  </td>
               <td class="right"><? foreach ($customer['action'] as $action) { ?>
                 [ <a href="<?= $action['href']; ?>"><?= $action['text']; ?></a> ]
@@ -141,7 +141,7 @@
 </div>
 <script type="text/javascript"><!--
 function filter() {
-	url = 'index.php?route=sale/customer';
+	url = "<?= HTTP_ADMIN . "index.php?route=sale/customer"; ?>";
 	
 	var filter_name = $('input[name=\'filter_name\']').attr('value');
 	

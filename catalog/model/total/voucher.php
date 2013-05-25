@@ -12,14 +12,14 @@ class ModelTotalVoucher extends Model {
 				} else {
 					$amount = $voucher_info['amount'];	
 				}				
-      			
+					
 				$total_data[] = array(
-					'code'       => 'voucher',
-        			'title'      => sprintf($this->_('text_voucher'), $this->session->data['voucher']),
-	    			'text'       => $this->currency->format(-$amount),
-        			'value'      => -$amount,
+					'code'		=> 'voucher',
+					'title'		=> sprintf($this->_('text_voucher'), $this->session->data['voucher']),
+					'text'		=> $this->currency->format(-$amount),
+					'value'		=> -$amount,
 					'sort_order' => $this->config->get('voucher_sort_order')
-      			);
+					);
 
 				$total -= $amount;
 			} 

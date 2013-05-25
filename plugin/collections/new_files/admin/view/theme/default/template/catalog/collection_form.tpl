@@ -18,6 +18,10 @@
 						<td><input type="text" name="name" size="60" value="<?= $name; ?>" /></td>
 					</tr>
 					<tr>
+						<td><span class="required"></span> <?= $entry_keyword; ?></td>
+						<td><input type="text" name="keyword" size="60" value="<?= $keyword; ?>" /></td>
+					</tr>
+					<tr>
 						<td><?= $entry_image;?></td>
 						<?= $this->builder->set_builder_template('click_image');?>
 						<td><?= $this->builder->image_input("image", $image, $thumb);?></td>
@@ -107,5 +111,7 @@ function callback_product_autocomplete(selector, data){
 	$('#product_list').append(html);
 }
 //--></script>
+
+<?= $this->builder->js('translations', $translations); ?>
 
 <?= $this->builder->js('errors', $errors);?>

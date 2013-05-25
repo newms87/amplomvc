@@ -144,10 +144,6 @@ class ControllerAccountEdit extends Controller {
 			$this->error['telephone'] = $this->_('error_telephone');
 		}
 
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
 }

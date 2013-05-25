@@ -93,7 +93,7 @@
 <script type="text/javascript"><!--
 function sendVoucher(voucher_id) {
 	$.ajax({
-		url: 'index.php?route=sale/voucher/send&voucher_id=' + voucher_id,
+		url: "<?= HTTP_ADMIN . "index.php?route=sale/voucher/send"; ?>" + '&voucher_id=' + voucher_id,
 		type: 'post',
 		dataType: 'json',
 		beforeSend: function() {

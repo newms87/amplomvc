@@ -27,7 +27,7 @@ class ControllerAccountForgotten extends Controller {
 			$message .= $password;
 
 			$this->mail->init();
-         				
+							
 			$this->mail->setTo($_POST['email']);
 			$this->mail->setFrom($this->config->get('config_email'));
 			$this->mail->setSender($this->config->get('config_name'));
@@ -79,10 +79,6 @@ class ControllerAccountForgotten extends Controller {
 			$this->error['warning'] = $this->_('error_email');
 		}
 
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
 }

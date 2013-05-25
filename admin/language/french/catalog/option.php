@@ -37,4 +37,4 @@ $_['error_permission']		= 'Attention, vous n&#8217;avez pas la permission de mod
 $_['error_name']			= 'Le <b>Nom de l&#8217;option</b> doit &ecirc;tre compos&eacute; de 3 &agrave; 128 caract&egrave;res !';
 $_['error_type']			= 'Attention, la valeur de l&#8217;option est requise !';
 $_['error_option_value']	= 'Le <b>Nom de la valeur de l&#8217;option</b> doit &ecirc;tre compos&eacute; de 3 &agrave; 128 caract&egrave;res !';
-$_['error_product']     	= 'Attention, cette option ne peut pas &ecirc;tre supprim&eacute;e car elle est actuellement affect&eacute;e &agrave; %s produits !';
+$_['error_product']		= 'Attention, cette option ne peut pas &ecirc;tre supprim&eacute;e car elle est actuellement affect&eacute;e &agrave; %s produits !';

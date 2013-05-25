@@ -1,7 +1,7 @@
 <?php 
 class ControllerPaymentFreeCheckout extends Controller {
-	 
-	 
+	
+	
 	public function index() { 
 		$this->template->load('payment/free_checkout');
 
@@ -64,10 +64,6 @@ class ControllerPaymentFreeCheckout extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 				
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

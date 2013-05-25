@@ -139,13 +139,13 @@ class ModelCatalogAttribute extends Model {
 	}
 	
 	public function getTotalAttributes() {
-      	$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "attribute");
+			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "attribute");
 		
 		return $query->row['total'];
 	}	
 	
 	public function getTotalAttributesByAttributeGroupId($attribute_group_id) {
-      	$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "attribute WHERE attribute_group_id = '" . (int)$attribute_group_id . "'");
+			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "attribute WHERE attribute_group_id = '" . (int)$attribute_group_id . "'");
 		
 		return $query->row['total'];
 	}		

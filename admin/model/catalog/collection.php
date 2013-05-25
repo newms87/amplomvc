@@ -1,14 +1,14 @@
 <?php
 class ModelCatalogCollection extends Model {
 	public function addCollection($data) {
-	   
-	   $collection_id = $this->insert('collection', $data);
-
+		
+		$collection_id = $this->insert('collection', $data);
+		
 		if (!empty($data['products'])) {
 			foreach ($data['products'] as $product) {
-			   $product['collection_id'] = $collection_id;
-            
-            $this->insert('collection_product', $product);
+				$product['collection_id'] = $collection_id;
+				
+				$this->insert('collection_product', $product);
 			}
 		}
 		
@@ -25,13 +25,21 @@ class ModelCatalogCollection extends Model {
 		
 		if (!empty($data['stores'])) {
 			foreach ($data['stores'] as $store_id) {
-			   $store_data = array(
-			   	'collection_id' => $collection_id,
-			   	'store_id' => $store_id
-			   );
+				$store_data = array(
+					'collection_id' => $collection_id,
+					'store_id' => $store_id
+				);
 				
-            $this->insert('collection_store', $store_data);
+				$this->insert('collection_store', $store_data);
 			}
+		}
+		
+		if ($data['keyword']) {
+			$this->url->set_alias($data['keyword'], 'product/collection', 'collection_id=' . (int)$collection_id);
+		}
+		
+		if(!empty($data['translations'])){
+			$this->translation->set_translations('collection', $collection_id, $data['translations']);
 		}
 		
 		$this->cache->delete('collection');
@@ -51,15 +59,15 @@ class ModelCatalogCollection extends Model {
 	}
 	
 	public function editCollection($collection_id, $data) {
-	   $this->update('collection', $data, $collection_id);
+		$this->update('collection', $data, $collection_id);
 		
 		$this->delete('collection_product', array('collection_id' => $collection_id));
 		
 		if (!empty($data['products'])) {
 			foreach ($data['products'] as $product) {
-			   $product['collection_id'] = $collection_id;
-            
-            $this->insert('collection_product', $product);
+				$product['collection_id'] = $collection_id;
+				
+				$this->insert('collection_product', $product);
 			}
 		}
 		
@@ -80,13 +88,21 @@ class ModelCatalogCollection extends Model {
 		
 		if (!empty($data['stores'])) {
 			foreach ($data['stores'] as $store_id) {
-			   $store_data = array(
-			   	'collection_id' => $collection_id,
-			   	'store_id' => $store_id
-			   );
+				$store_data = array(
+					'collection_id' => $collection_id,
+					'store_id' => $store_id
+				);
 				
-            $this->insert('collection_store', $store_data);
+				$this->insert('collection_store', $store_data);
 			}
+		}
+
+		if ($data['keyword']) {
+			$this->url->set_alias($data['keyword'], 'product/collection', 'collection_id=' . (int)$collection_id);
+		}
+		
+		if(!empty($data['translations'])){
+			$this->translation->set_translations('collection', $collection_id, $data['translations']);
 		}
 		
 		$this->cache->delete('collection');
@@ -94,7 +110,7 @@ class ModelCatalogCollection extends Model {
 	
 	//TODO: make collection append Collection name to products in this collection
 	public function filter_name($name){
-		
+		return $name;
 	}
 	
 	public function update_field($collection_id, $data){
@@ -102,43 +118,53 @@ class ModelCatalogCollection extends Model {
 	}
 	
 	public function deleteCollection($collection_id) {
-	   $this->delete('collection', $collection_id);
-      $this->delete('collection_product', array('collection_id' => $collection_id));
+		$this->delete('collection', $collection_id);
+		$this->delete('collection_product', array('collection_id' => $collection_id));
 		$this->delete('collection_category', array('collection_id' => $collection_id));
 		$this->delete('collection_store', array('collection_id' => $collection_id));
-      
+		
+		$this->url->remove_alias('product/collection', 'collection_id=' . $collection_id);
+		
+		$this->translation->delete('collection', $collection_id);
+		
 		$this->cache->delete('collection');
 	}
 	
+	public function deleteProductFromCollection($collection_id, $product_id){
+		$this->delete('collection_product', array('collection_id' => $collection_id, 'product_id' => $product_id));
+	}
+
 	public function deleteProductFromCollections($product_id){
 		$this->delete('collection_product', array('product_id' => $product_id));
 	}
 	
 	public function getCollection($collection_id) {
-		$result = $this->get('collection', '*', $collection_id);
+		$result = $this->query_row("SELECT * FROM " . DB_PREFIX . "collection WHERE collection_id = '" . (int)$collection_id . "'");
 		
-		return $result->row;
+		$result['keyword'] = $this->url->get_alias('product/collection', 'collection_id=' . (int)$collection_id);
+		
+		return $result;
 	}
 	
 	public function getCollections($data = array(), $select = null, $total = false) {
 		//Select
 		if($total){
-         $select = 'COUNT(*) as total';
-      }
-      elseif(!$select){
-         $select = '*';
-      }
-      
+			$select = 'COUNT(*) as total';
+		}
+		elseif(!$select){
+			$select = '*';
+		}
+		
 		//From
 		$from = DB_PREFIX . "collection c";
 		
 		//Where
-      $where = 'WHERE 1';
-      
-      if(isset($data['name'])){
-         $where .= " AND c.name like '%" . $this->db->escape($data['name']) . "%'";
-      }
-      
+		$where = 'WHERE 1';
+		
+		if(isset($data['name'])){
+			$where .= " AND c.name like '%" . $this->db->escape($data['name']) . "%'";
+		}
+		
 		if(!empty($data['categories'])){
 			$category_ids = is_array($data['categories']) ? $data['categories'] : array($data['categories']);
 			
@@ -152,34 +178,34 @@ class ModelCatalogCollection extends Model {
 			
 			$from .= " LEFT JOIN " . DB_PREFIX . "collection_store cs ON (c.collection_id=cs.collection_id)";
 			
-         $where['AND'][] = "cs.store_id IN (" . implode(',', $store_ids) . ")";
-      }
-      
-      if(isset($data['status'])){
-         $where .= " AND c.status = '" . ($data['status'] ? 1 : 0) . "'";
-      }
-      
+			$where['AND'][] = "cs.store_id IN (" . implode(',', $store_ids) . ")";
+		}
+		
+		if(isset($data['status'])){
+			$where .= " AND c.status = '" . ($data['status'] ? 1 : 0) . "'";
+		}
+		
 		//Order By & Limit
 		if(!$total){
-			$order_limit = $this->extract_order_limit_string($data);
-		}
-		else{
-			$order_limit = '';
+			$order = $this->extract_order($data);
+			$limit = $this->extract_limit($data);
+		} else {
+			$order = '';
+			$limit = '';
 		}
 		
 		//The Query
-		$sql = "SELECT $select FROM $from $where $order_limit";
+		$sql = "SELECT $select FROM $from $where $order $limit";
 		
 		//Execute
-      $result = $this->query($sql);
-      
+		$result = $this->query($sql);
+		
 		//Process Results
-      if($total){
-         return $result->row['total'];
-      }
-      else{
-         return $result->rows;
-      }
+		if($total){
+			return $result->row['total'];
+		}
+	
+		return $result->rows;
 	}
 	
 	public function getCollectionsForProduct($product_id){
@@ -209,6 +235,6 @@ class ModelCatalogCollection extends Model {
 	}
 	
 	public function getTotalCollections($data = array()) {
-   	return $this->getCollections($data, null, true);
+		return $this->getCollections($data, null, true);
 	}
 }

@@ -1,103 +1,103 @@
 <?php
 class Mail {
-   private $registry;
-   
+	private $registry;
+	
 	protected $to;
-   protected $cc;
-   protected $bcc;
+	protected $cc;
+	protected $bcc;
 	protected $from;
 	protected $sender;
 	protected $subject;
 	protected $text;
 	protected $html;
 	protected $attachments;
-   
+	
 	public $protocol;
-   public $parameter;
+	public $parameter;
 	public $hostname;
 	public $username;
 	public $password;
 	public $port;
 	public $timeout;
-   
+	
 	public $newline;
 	public $crlf;
 	public $verp;
 
-   public function __construct($registry){
-      $this->registry = $registry;
-      
-      $this->protocol  = $this->config->get('config_mail_protocol');
-      $this->parameter = $this->config->get('config_mail_parameter');
-      $this->hostname  = $this->config->get('config_smtp_host');
-      $this->username  = $this->config->get('config_smtp_username');
-      $this->password  = $this->config->get('config_smtp_password');
-      $this->port      = $this->config->get('config_smtp_port');
-      $this->timeout   = $this->config->get('config_smtp_timeout');
-      
-      $this->init();
-   }
-   
+	public function __construct($registry){
+		$this->registry = $registry;
+		
+		$this->protocol  = $this->config->get('config_mail_protocol');
+		$this->parameter = $this->config->get('config_mail_parameter');
+		$this->hostname  = $this->config->get('config_smtp_host');
+		$this->username  = $this->config->get('config_smtp_username');
+		$this->password  = $this->config->get('config_smtp_password');
+		$this->port		= $this->config->get('config_smtp_port');
+		$this->timeout	= $this->config->get('config_smtp_timeout');
+		
+		$this->init();
+	}
+	
 	public function __get($key){
 		return $this->registry->get($key);
 	}
 	
-   public function init(){
-      $this->to = null;
-      $this->cc = null;
-      $this->bcc = null;
-      $this->from = null;
-      $this->sender = null;
-      $this->subject = null;
-      $this->text = null;
-      $this->html = null;
-      $this->attachments = array();
-      $this->newline = "\n";
-      $this->crlf = "\r\n";
-      $this->verp = false;
-   }
-   
-   /**
-    * @param $to - Can be a single email, an array of emails or comma separated string of emails
-    */
-    
-	public function setTo($to) {
-	   if (is_array($to)) {
-	      array_walk($to, 'trim');
-         $this->to = implode(',', $to);
-      } else {
-         $this->to = trim($to);
-      }
+	public function init(){
+		$this->to = null;
+		$this->cc = null;
+		$this->bcc = null;
+		$this->from = null;
+		$this->sender = null;
+		$this->subject = null;
+		$this->text = null;
+		$this->html = null;
+		$this->attachments = array();
+		$this->newline = "\n";
+		$this->crlf = "\r\n";
+		$this->verp = false;
 	}
-   
-   public function setCopyTo($to) {
-      if (is_array($to)) {
-         array_walk($to, 'trim');
-         $this->cc = implode(',', $to);
-      } else {
-         $this->cc = trim($to);
-      }
-   }
-   
-   public function setBlindCopyTo($to) {
-      if (is_array($to)) {
-         array_walk($to, 'trim');
-         $this->bcc = implode(',', $to);
-      } else {
-         $this->bcc = trim($to);
-      }
-   }
-   
-   /**
-    * @param $from - The email address to be sent from
-    */
+	
+	/**
+	* @param $to - Can be a single email, an array of emails or comma separated string of emails
+	*/
+	
+	public function setTo($to) {
+		if (is_array($to)) {
+			array_walk($to, 'trim');
+			$this->to = implode(',', $to);
+		} else {
+			$this->to = trim($to);
+		}
+	}
+	
+	public function setCopyTo($to) {
+		if (is_array($to)) {
+			array_walk($to, 'trim');
+			$this->cc = implode(',', $to);
+		} else {
+			$this->cc = trim($to);
+		}
+	}
+	
+	public function setBlindCopyTo($to) {
+		if (is_array($to)) {
+			array_walk($to, 'trim');
+			$this->bcc = implode(',', $to);
+		} else {
+			$this->bcc = trim($to);
+		}
+	}
+	
+	/**
+	* @param $from - The email address to be sent from
+	*/
 	public function setFrom($from) {
 		$this->from = trim($from);
 	}
-   
-   /**
-    * @param $sender - The name displayed for who the email was sent from
-    */
+	
+	/**
+	* @param $sender - The name displayed for who the email was sent from
+	*/
 	public function setSender($sender) {
 		$this->sender = trim($sender);
 	}
@@ -115,12 +115,12 @@ class Mail {
 	}
 
 	public function addAttachment($filename) {
-	   if(is_array($filename)){
-         $this->attachments = array_merge($this->attachments,$filename);
-      }
-      else{
-		   $this->attachments[] = $filename;
-      }
+		if(is_array($filename)){
+			$this->attachments = array_merge($this->attachments,$filename);
+		}
+		else{
+			$this->attachments[] = $filename;
+		}
 	}
 
 	public function send($data = null) {
@@ -130,94 +130,94 @@ class Mail {
 			}
 			
 			if(isset($data['from'])){
-	      	$this->setFrom($data['from']);
+				$this->setFrom($data['from']);
 			}
 			
 			if(isset($data['to'])){
-	      	$this->setTo($data['to']);
+				$this->setTo($data['to']);
 			}
 			
 			if(isset($data['cc'])){
-	      	$this->setCopyTo($data['cc']);
+				$this->setCopyTo($data['cc']);
 			}
 			
 			if(isset($data['bcc'])){
-	      	$this->setBlindCopyTo($data['bcc']);
+				$this->setBlindCopyTo($data['bcc']);
 			}
-	      
+			
 			if(isset($data['subject'])){
-      		$this->setSubject($data['subject']);
+				$this->setSubject($data['subject']);
 			}
-      	
-	      if(!empty($data['html'])){
-	         $this->setHtml($data['html']);
-	      }elseif(!empty($data['text'])){
-	         $this->setText($data['text']);
-	      }
-      	
+			
+			if(!empty($data['html'])){
+				$this->setHtml($data['html']);
+			}elseif(!empty($data['text'])){
+				$this->setText($data['text']);
+			}
+			
 			if(isset($data['attachment'])){
-		      if(!empty($_FILES['attachment']) && empty($_FILES['attachment']['error'])){
-		         $files = $_FILES['attachment'];
-		         
-		         for($i = 0; $i < count($files['name']); $i++){
-		            $file_name = dirname($files['tmp_name'][$i]) . '/' . $files['name'][$i];
-		            rename($files['tmp_name'][$i], $file_name);
-		            $this->addAttachment($file_name);
-		         }
-		      }
+				if(!empty($_FILES['attachment']) && empty($_FILES['attachment']['error'])){
+					$files = $_FILES['attachment'];
+					
+					for($i = 0; $i < count($files['name']); $i++){
+						$file_name = dirname($files['tmp_name'][$i]) . '/' . $files['name'][$i];
+						rename($files['tmp_name'][$i], $file_name);
+						$this->addAttachment($file_name);
+					}
+				}
 			}
 		}
 		
-	   $errors = '';
+		$errors = '';
 		if (!$this->to) {
-		   $msg = 'E-Mail To required!';
+			$msg = 'E-Mail To required!';
 			$this->trigger_error($msg);
-         $errors .= $msg;
+			$errors .= $msg;
 		}
 
 		if (!$this->from) {
-		   $msg = 'E-Mail From required!';
+			$msg = 'E-Mail From required!';
 			$this->trigger_error($msg);
-         $errors .= $msg;		
+			$errors .= $msg;		
 		}
 
 		if (!$this->sender) {
-		   $this->sender = $this->from;
+			$this->sender = $this->from;
 		}
 
 		if (!$this->subject) {
-		   $msg = 'E-Mail subject required!';
+			$msg = 'E-Mail subject required!';
 			$this->trigger_error($msg);
 			$errors .= $msg;
 		}
 
 		if ((!$this->text) && (!$this->html)) {
-		   $msg = 'E-Mail message required!';
+			$msg = 'E-Mail message required!';
 			$this->trigger_error($msg);
-         $errors .= $msg;
+			$errors .= $msg;
 		}
-      
-      if($errors){
-      	$cc = $this->cc ? "(CC: $this->cc)":'';
-         $bcc = $this->bcc ? "(BCC: $this->bcc)":'';
-      	$msg = "There was a problem while sending an email to $this->to $cc $bcc<br />\r\n<br />\r\nThe Errors were as follows below: <br />\r\n<br />\r\n$errors";
-         
-         $msg .= get_caller();
-         
-      	$this->trigger_error($msg);
+		
+		if($errors){
+			$cc = $this->cc ? "(CC: $this->cc)":'';
+			$bcc = $this->bcc ? "(BCC: $this->bcc)":'';
+			$msg = "There was a problem while sending an email to $this->to $cc $bcc<br />\r\n<br />\r\nThe Errors were as follows below: <br />\r\n<br />\r\n$errors";
 			
-      	if(isset($this->config) && $this->config->get('config_email_error')){
-	         $this->to = $this->config->get('config_email_error');
-	         $this->cc = '';
-	         $this->bcc = '';
-	         $this->subject = "There was a problem sending out the email!";
-	         $this->text = $msg;
-         }
+			$msg .= get_caller();
+			
+			$this->trigger_error($msg);
+			
+			if(isset($this->config) && $this->config->get('config_email_error')){
+				$this->to = $this->config->get('config_email_error');
+				$this->cc = '';
+				$this->bcc = '';
+				$this->subject = "There was a problem sending out the email!";
+				$this->text = $msg;
+			}
 			else{
 				$this->trigger_error("Please set the Error Email Address under settings!");
 				return false;
 			}
-      }
+		}
 		
 
 		$boundary = '----=_NextPart_' . md5(time());
@@ -230,9 +230,9 @@ class Mail {
 			$header .= 'To: ' . $this->to . $this->newline;
 			$header .= 'Subject: ' . $this->subject . $this->newline;
 		}
-      
-      $header .= 'Cc: ' . $this->cc . $this->newline;
-      $header .= 'Bcc: ' . $this->bcc . $this->newline;
+		
+		$header .= 'Cc: ' . $this->cc . $this->newline;
+		$header .= 'Bcc: ' . $this->bcc . $this->newline;
 		$header .= 'Date: ' . date("D, d M Y H:i:s O") . $this->newline;
 		$header .= 'From: ' . '=?UTF-8?B?' . base64_encode($this->sender) . '?=' . '<' . $this->from . '>' . $this->newline;
 		$header .= 'Reply-To: ' . $this->sender . '<' . $this->from . '>' . $this->newline;
@@ -492,7 +492,7 @@ class Mail {
 				$this->trigger_error('DATA not accepted from server!');
 				return false;
 			}
-         	
+				
 			// According to rfc 821 we should not send more than 1000 including the CRLF
 			$message = str_replace("\r\n", "\n",  $header . $message);
 			$message = str_replace("\r", "\n", $message);
@@ -514,15 +514,15 @@ class Mail {
 			fputs($handle, '.' . $this->crlf);
 
 			$reply = '';
-         
+			
 			while ($line = fgets($handle, 515)) {
 				$reply .= $line;
-            
+				
 				if (substr($line, 3, 1) == ' ') {
 					break;
 				}
 			}
-         
+			
 			if (substr($reply, 0, 3) != 250) {
 				$this->trigger_error('DATA not accepted from server!');
 				return false;

@@ -1,16 +1,14 @@
-<?php   
+<?php	
 class ControllerExtrasBlockSocialMedia extends Controller {
-   public function index($block_data, $type = 'standard') {
-   	switch($type){
+	public function index($settings, $type = 'standard') {
+		switch($type){
 			case 'standard':
-      		$this->template->load('extras/block/my_networks');
+				$this->template->load('extras/block/my_networks');
 				break;
 			default:
 				$this->template->load('extras/block/my_networks');
 				break;
 		}
-		
-		$settings = $block_data['settings'];
 		
 		if(isset($settings['networks'])){
 			//TODO: MOVE the size settings to the block profile
@@ -27,7 +25,7 @@ class ControllerExtrasBlockSocialMedia extends Controller {
 		else{
 			return ; // we return without rendering because there is nothing to output.
 		}
-      
-      $this->render();
-   }
+		
+		$this->render();
+	}
 }

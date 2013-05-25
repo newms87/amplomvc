@@ -18,30 +18,30 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category   PHPExcel
- * @package    PHPExcel_Writer_Excel2007
+ * @category	PHPExcel
+ * @package	PHPExcel_Writer_Excel2007
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version    1.7.7, 2012-05-19
+ * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+ * @version	1.7.7, 2012-05-19
  */
 
 
 /**
  * PHPExcel_Writer_Excel2007_Comments
  *
- * @category   PHPExcel
- * @package    PHPExcel_Writer_Excel2007
+ * @category	PHPExcel
+ * @package	PHPExcel_Writer_Excel2007
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_Writer_Excel2007_Comments extends PHPExcel_Writer_Excel2007_WriterPart
 {
 	/**
-	 * Write comments to XML format
-	 *
-	 * @param 	PHPExcel_Worksheet				$pWorksheet
-	 * @return 	string 								XML Output
-	 * @throws 	Exception
-	 */
+	* Write comments to XML format
+	*
+	* @param 	PHPExcel_Worksheet				$pWorksheet
+	* @return 	string 								XML Output
+	* @throws 	Exception
+	*/
 	public function writeComments(PHPExcel_Worksheet $pWorksheet = null)
 	{
 		// Create XML writer
@@ -92,14 +92,14 @@ class PHPExcel_Writer_Excel2007_Comments extends PHPExcel_Writer_Excel2007_Write
 	}
 
 	/**
-	 * Write comment to XML format
-	 *
-	 * @param 	PHPExcel_Shared_XMLWriter		$objWriter 			XML Writer
-	 * @param	string							$pCellReference		Cell reference
-	 * @param 	PHPExcel_Comment				$pComment			Comment
-	 * @param	array							$pAuthors			Array of authors
-	 * @throws 	Exception
-	 */
+	* Write comment to XML format
+	*
+	* @param 	PHPExcel_Shared_XMLWriter		$objWriter 			XML Writer
+	* @param	string							$pCellReference		Cell reference
+	* @param 	PHPExcel_Comment				$pComment			Comment
+	* @param	array							$pAuthors			Array of authors
+	* @throws 	Exception
+	*/
 	public function _writeComment(PHPExcel_Shared_XMLWriter $objWriter = null, $pCellReference = 'A1', PHPExcel_Comment $pComment = null, $pAuthors = null)
 	{
 		// comment
@@ -116,12 +116,12 @@ class PHPExcel_Writer_Excel2007_Comments extends PHPExcel_Writer_Excel2007_Write
 	}
 
 	/**
-	 * Write VML comments to XML format
-	 *
-	 * @param 	PHPExcel_Worksheet				$pWorksheet
-	 * @return 	string 								XML Output
-	 * @throws 	Exception
-	 */
+	* Write VML comments to XML format
+	*
+	* @param 	PHPExcel_Worksheet				$pWorksheet
+	* @return 	string 								XML Output
+	* @throws 	Exception
+	*/
 	public function writeVMLComments(PHPExcel_Worksheet $pWorksheet = null)
 	{
 		// Create XML writer
@@ -188,13 +188,13 @@ class PHPExcel_Writer_Excel2007_Comments extends PHPExcel_Writer_Excel2007_Write
 	}
 
 	/**
-	 * Write VML comment to XML format
-	 *
-	 * @param 	PHPExcel_Shared_XMLWriter		$objWriter 			XML Writer
-	 * @param	string							$pCellReference		Cell reference
-	 * @param 	PHPExcel_Comment				$pComment			Comment
-	 * @throws 	Exception
-	 */
+	* Write VML comment to XML format
+	*
+	* @param 	PHPExcel_Shared_XMLWriter		$objWriter 			XML Writer
+	* @param	string							$pCellReference		Cell reference
+	* @param 	PHPExcel_Comment				$pComment			Comment
+	* @throws 	Exception
+	*/
 	public function _writeVMLComment(PHPExcel_Shared_XMLWriter $objWriter = null, $pCellReference = 'A1', PHPExcel_Comment $pComment = null)
 	{
  		// Metadata

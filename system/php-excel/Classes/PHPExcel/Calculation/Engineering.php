@@ -29,8 +29,8 @@
 /** PHPExcel root directory */
 if (!defined('PHPEXCEL_ROOT')) {
 	/**
-	 * @ignore
-	 */
+	* @ignore
+	*/
 	define('PHPEXCEL_ROOT', dirname(__FILE__) . '/../../');
 	require(PHPEXCEL_ROOT . 'PHPExcel/Autoloader.php');
 }
@@ -50,80 +50,80 @@ define('EULER', 2.71828182845904523536);
 class PHPExcel_Calculation_Engineering {
 
 	/**
-	 * Details of the Units of measure that can be used in CONVERTUOM()
-	 *
-	 * @var mixed[]
-	 */
+	* Details of the Units of measure that can be used in CONVERTUOM()
+	*
+	* @var mixed[]
+	*/
 	private static $_conversionUnits = array( 'g'		=> array(	'Group'	=> 'Mass',			'Unit Name'	=> 'Gram',						'AllowPrefix'	=> True		),
-											  'sg'		=> array(	'Group'	=> 'Mass',			'Unit Name'	=> 'Slug',						'AllowPrefix'	=> False	),
-											  'lbm'		=> array(	'Group'	=> 'Mass',			'Unit Name'	=> 'Pound mass (avoirdupois)',	'AllowPrefix'	=> False	),
-											  'u'		=> array(	'Group'	=> 'Mass',			'Unit Name'	=> 'U (atomic mass unit)',		'AllowPrefix'	=> True		),
-											  'ozm'		=> array(	'Group'	=> 'Mass',			'Unit Name'	=> 'Ounce mass (avoirdupois)',	'AllowPrefix'	=> False	),
-											  'm'		=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Meter',						'AllowPrefix'	=> True		),
-											  'mi'		=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Statute mile',				'AllowPrefix'	=> False	),
-											  'Nmi'		=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Nautical mile',				'AllowPrefix'	=> False	),
-											  'in'		=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Inch',						'AllowPrefix'	=> False	),
-											  'ft'		=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Foot',						'AllowPrefix'	=> False	),
-											  'yd'		=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Yard',						'AllowPrefix'	=> False	),
-											  'ang'		=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Angstrom',					'AllowPrefix'	=> True		),
-											  'Pica'	=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Pica (1/72 in)',			'AllowPrefix'	=> False	),
-											  'yr'		=> array(	'Group'	=> 'Time',			'Unit Name'	=> 'Year',						'AllowPrefix'	=> False	),
-											  'day'		=> array(	'Group'	=> 'Time',			'Unit Name'	=> 'Day',						'AllowPrefix'	=> False	),
-											  'hr'		=> array(	'Group'	=> 'Time',			'Unit Name'	=> 'Hour',						'AllowPrefix'	=> False	),
-											  'mn'		=> array(	'Group'	=> 'Time',			'Unit Name'	=> 'Minute',					'AllowPrefix'	=> False	),
-											  'sec'		=> array(	'Group'	=> 'Time',			'Unit Name'	=> 'Second',					'AllowPrefix'	=> True		),
-											  'Pa'		=> array(	'Group'	=> 'Pressure',		'Unit Name'	=> 'Pascal',					'AllowPrefix'	=> True		),
-											  'p'		=> array(	'Group'	=> 'Pressure',		'Unit Name'	=> 'Pascal',					'AllowPrefix'	=> True		),
-											  'atm'		=> array(	'Group'	=> 'Pressure',		'Unit Name'	=> 'Atmosphere',				'AllowPrefix'	=> True		),
-											  'at'		=> array(	'Group'	=> 'Pressure',		'Unit Name'	=> 'Atmosphere',				'AllowPrefix'	=> True		),
-											  'mmHg'	=> array(	'Group'	=> 'Pressure',		'Unit Name'	=> 'mm of Mercury',				'AllowPrefix'	=> True		),
-											  'N'		=> array(	'Group'	=> 'Force',			'Unit Name'	=> 'Newton',					'AllowPrefix'	=> True		),
-											  'dyn'		=> array(	'Group'	=> 'Force',			'Unit Name'	=> 'Dyne',						'AllowPrefix'	=> True		),
-											  'dy'		=> array(	'Group'	=> 'Force',			'Unit Name'	=> 'Dyne',						'AllowPrefix'	=> True		),
-											  'lbf'		=> array(	'Group'	=> 'Force',			'Unit Name'	=> 'Pound force',				'AllowPrefix'	=> False	),
-											  'J'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Joule',						'AllowPrefix'	=> True		),
-											  'e'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Erg',						'AllowPrefix'	=> True		),
-											  'c'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Thermodynamic calorie',		'AllowPrefix'	=> True		),
-											  'cal'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'IT calorie',				'AllowPrefix'	=> True		),
-											  'eV'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Electron volt',				'AllowPrefix'	=> True		),
-											  'ev'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Electron volt',				'AllowPrefix'	=> True		),
-											  'HPh'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Horsepower-hour',			'AllowPrefix'	=> False	),
-											  'hh'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Horsepower-hour',			'AllowPrefix'	=> False	),
-											  'Wh'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Watt-hour',					'AllowPrefix'	=> True		),
-											  'wh'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Watt-hour',					'AllowPrefix'	=> True		),
-											  'flb'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Foot-pound',				'AllowPrefix'	=> False	),
-											  'BTU'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'BTU',						'AllowPrefix'	=> False	),
-											  'btu'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'BTU',						'AllowPrefix'	=> False	),
-											  'HP'		=> array(	'Group'	=> 'Power',			'Unit Name'	=> 'Horsepower',				'AllowPrefix'	=> False	),
-											  'h'		=> array(	'Group'	=> 'Power',			'Unit Name'	=> 'Horsepower',				'AllowPrefix'	=> False	),
-											  'W'		=> array(	'Group'	=> 'Power',			'Unit Name'	=> 'Watt',						'AllowPrefix'	=> True		),
-											  'w'		=> array(	'Group'	=> 'Power',			'Unit Name'	=> 'Watt',						'AllowPrefix'	=> True		),
-											  'T'		=> array(	'Group'	=> 'Magnetism',		'Unit Name'	=> 'Tesla',						'AllowPrefix'	=> True		),
-											  'ga'		=> array(	'Group'	=> 'Magnetism',		'Unit Name'	=> 'Gauss',						'AllowPrefix'	=> True		),
-											  'C'		=> array(	'Group'	=> 'Temperature',	'Unit Name'	=> 'Celsius',					'AllowPrefix'	=> False	),
-											  'cel'		=> array(	'Group'	=> 'Temperature',	'Unit Name'	=> 'Celsius',					'AllowPrefix'	=> False	),
-											  'F'		=> array(	'Group'	=> 'Temperature',	'Unit Name'	=> 'Fahrenheit',				'AllowPrefix'	=> False	),
-											  'fah'		=> array(	'Group'	=> 'Temperature',	'Unit Name'	=> 'Fahrenheit',				'AllowPrefix'	=> False	),
-											  'K'		=> array(	'Group'	=> 'Temperature',	'Unit Name'	=> 'Kelvin',					'AllowPrefix'	=> False	),
-											  'kel'		=> array(	'Group'	=> 'Temperature',	'Unit Name'	=> 'Kelvin',					'AllowPrefix'	=> False	),
-											  'tsp'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Teaspoon',					'AllowPrefix'	=> False	),
-											  'tbs'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Tablespoon',				'AllowPrefix'	=> False	),
-											  'oz'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Fluid Ounce',				'AllowPrefix'	=> False	),
-											  'cup'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Cup',						'AllowPrefix'	=> False	),
-											  'pt'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'U.S. Pint',					'AllowPrefix'	=> False	),
-											  'us_pt'	=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'U.S. Pint',					'AllowPrefix'	=> False	),
-											  'uk_pt'	=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'U.K. Pint',					'AllowPrefix'	=> False	),
-											  'qt'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Quart',						'AllowPrefix'	=> False	),
-											  'gal'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Gallon',					'AllowPrefix'	=> False	),
-											  'l'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Litre',						'AllowPrefix'	=> True		),
-											  'lt'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Litre',						'AllowPrefix'	=> True		)
+											'sg'		=> array(	'Group'	=> 'Mass',			'Unit Name'	=> 'Slug',						'AllowPrefix'	=> False	),
+											'lbm'		=> array(	'Group'	=> 'Mass',			'Unit Name'	=> 'Pound mass (avoirdupois)',	'AllowPrefix'	=> False	),
+											'u'		=> array(	'Group'	=> 'Mass',			'Unit Name'	=> 'U (atomic mass unit)',		'AllowPrefix'	=> True		),
+											'ozm'		=> array(	'Group'	=> 'Mass',			'Unit Name'	=> 'Ounce mass (avoirdupois)',	'AllowPrefix'	=> False	),
+											'm'		=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Meter',						'AllowPrefix'	=> True		),
+											'mi'		=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Statute mile',				'AllowPrefix'	=> False	),
+											'Nmi'		=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Nautical mile',				'AllowPrefix'	=> False	),
+											'in'		=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Inch',						'AllowPrefix'	=> False	),
+											'ft'		=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Foot',						'AllowPrefix'	=> False	),
+											'yd'		=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Yard',						'AllowPrefix'	=> False	),
+											'ang'		=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Angstrom',					'AllowPrefix'	=> True		),
+											'Pica'	=> array(	'Group'	=> 'Distance',		'Unit Name'	=> 'Pica (1/72 in)',			'AllowPrefix'	=> False	),
+											'yr'		=> array(	'Group'	=> 'Time',			'Unit Name'	=> 'Year',						'AllowPrefix'	=> False	),
+											'day'		=> array(	'Group'	=> 'Time',			'Unit Name'	=> 'Day',						'AllowPrefix'	=> False	),
+											'hr'		=> array(	'Group'	=> 'Time',			'Unit Name'	=> 'Hour',						'AllowPrefix'	=> False	),
+											'mn'		=> array(	'Group'	=> 'Time',			'Unit Name'	=> 'Minute',					'AllowPrefix'	=> False	),
+											'sec'		=> array(	'Group'	=> 'Time',			'Unit Name'	=> 'Second',					'AllowPrefix'	=> True		),
+											'Pa'		=> array(	'Group'	=> 'Pressure',		'Unit Name'	=> 'Pascal',					'AllowPrefix'	=> True		),
+											'p'		=> array(	'Group'	=> 'Pressure',		'Unit Name'	=> 'Pascal',					'AllowPrefix'	=> True		),
+											'atm'		=> array(	'Group'	=> 'Pressure',		'Unit Name'	=> 'Atmosphere',				'AllowPrefix'	=> True		),
+											'at'		=> array(	'Group'	=> 'Pressure',		'Unit Name'	=> 'Atmosphere',				'AllowPrefix'	=> True		),
+											'mmHg'	=> array(	'Group'	=> 'Pressure',		'Unit Name'	=> 'mm of Mercury',				'AllowPrefix'	=> True		),
+											'N'		=> array(	'Group'	=> 'Force',			'Unit Name'	=> 'Newton',					'AllowPrefix'	=> True		),
+											'dyn'		=> array(	'Group'	=> 'Force',			'Unit Name'	=> 'Dyne',						'AllowPrefix'	=> True		),
+											'dy'		=> array(	'Group'	=> 'Force',			'Unit Name'	=> 'Dyne',						'AllowPrefix'	=> True		),
+											'lbf'		=> array(	'Group'	=> 'Force',			'Unit Name'	=> 'Pound force',				'AllowPrefix'	=> False	),
+											'J'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Joule',						'AllowPrefix'	=> True		),
+											'e'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Erg',						'AllowPrefix'	=> True		),
+											'c'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Thermodynamic calorie',		'AllowPrefix'	=> True		),
+											'cal'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'IT calorie',				'AllowPrefix'	=> True		),
+											'eV'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Electron volt',				'AllowPrefix'	=> True		),
+											'ev'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Electron volt',				'AllowPrefix'	=> True		),
+											'HPh'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Horsepower-hour',			'AllowPrefix'	=> False	),
+											'hh'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Horsepower-hour',			'AllowPrefix'	=> False	),
+											'Wh'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Watt-hour',					'AllowPrefix'	=> True		),
+											'wh'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Watt-hour',					'AllowPrefix'	=> True		),
+											'flb'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'Foot-pound',				'AllowPrefix'	=> False	),
+											'BTU'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'BTU',						'AllowPrefix'	=> False	),
+											'btu'		=> array(	'Group'	=> 'Energy',		'Unit Name'	=> 'BTU',						'AllowPrefix'	=> False	),
+											'HP'		=> array(	'Group'	=> 'Power',			'Unit Name'	=> 'Horsepower',				'AllowPrefix'	=> False	),
+											'h'		=> array(	'Group'	=> 'Power',			'Unit Name'	=> 'Horsepower',				'AllowPrefix'	=> False	),
+											'W'		=> array(	'Group'	=> 'Power',			'Unit Name'	=> 'Watt',						'AllowPrefix'	=> True		),
+											'w'		=> array(	'Group'	=> 'Power',			'Unit Name'	=> 'Watt',						'AllowPrefix'	=> True		),
+											'T'		=> array(	'Group'	=> 'Magnetism',		'Unit Name'	=> 'Tesla',						'AllowPrefix'	=> True		),
+											'ga'		=> array(	'Group'	=> 'Magnetism',		'Unit Name'	=> 'Gauss',						'AllowPrefix'	=> True		),
+											'C'		=> array(	'Group'	=> 'Temperature',	'Unit Name'	=> 'Celsius',					'AllowPrefix'	=> False	),
+											'cel'		=> array(	'Group'	=> 'Temperature',	'Unit Name'	=> 'Celsius',					'AllowPrefix'	=> False	),
+											'F'		=> array(	'Group'	=> 'Temperature',	'Unit Name'	=> 'Fahrenheit',				'AllowPrefix'	=> False	),
+											'fah'		=> array(	'Group'	=> 'Temperature',	'Unit Name'	=> 'Fahrenheit',				'AllowPrefix'	=> False	),
+											'K'		=> array(	'Group'	=> 'Temperature',	'Unit Name'	=> 'Kelvin',					'AllowPrefix'	=> False	),
+											'kel'		=> array(	'Group'	=> 'Temperature',	'Unit Name'	=> 'Kelvin',					'AllowPrefix'	=> False	),
+											'tsp'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Teaspoon',					'AllowPrefix'	=> False	),
+											'tbs'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Tablespoon',				'AllowPrefix'	=> False	),
+											'oz'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Fluid Ounce',				'AllowPrefix'	=> False	),
+											'cup'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Cup',						'AllowPrefix'	=> False	),
+											'pt'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'U.S. Pint',					'AllowPrefix'	=> False	),
+											'us_pt'	=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'U.S. Pint',					'AllowPrefix'	=> False	),
+											'uk_pt'	=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'U.K. Pint',					'AllowPrefix'	=> False	),
+											'qt'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Quart',						'AllowPrefix'	=> False	),
+											'gal'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Gallon',					'AllowPrefix'	=> False	),
+											'l'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Litre',						'AllowPrefix'	=> True		),
+											'lt'		=> array(	'Group'	=> 'Liquid',		'Unit Name'	=> 'Litre',						'AllowPrefix'	=> True		)
 											);
 
 	/**
-	 * Details of the Multiplier prefixes that can be used with Units of Measure in CONVERTUOM()
-	 *
-	 * @var mixed[]
-	 */
+	* Details of the Multiplier prefixes that can be used with Units of Measure in CONVERTUOM()
+	*
+	* @var mixed[]
+	*/
 	private static $_conversionMultipliers = array(	'Y'	=> array(	'multiplier'	=> 1E24,	'name'	=> 'yotta'	),
 													'Z'	=> array(	'multiplier'	=> 1E21,	'name'	=> 'zetta'	),
 													'E'	=> array(	'multiplier'	=> 1E18,	'name'	=> 'exa'	),
@@ -144,13 +144,13 @@ class PHPExcel_Calculation_Engineering {
 													'a'	=> array(	'multiplier'	=> 1E-18,	'name'	=> 'atto'	),
 													'z'	=> array(	'multiplier'	=> 1E-21,	'name'	=> 'zepto'	),
 													'y'	=> array(	'multiplier'	=> 1E-24,	'name'	=> 'yocto'	)
-												 );
+												);
 
 	/**
-	 * Details of the Units of measure conversion factors, organised by group
-	 *
-	 * @var mixed[]
-	 */
+	* Details of the Units of measure conversion factors, organised by group
+	*
+	* @var mixed[]
+	*/
 	private static $_unitConversions = array(	'Mass'		=> array(	'g'		=> array(	'g'		=> 1.0,
 																							'sg'	=> 6.85220500053478E-05,
 																							'lbm'	=> 2.20462291469134E-03,
@@ -686,13 +686,13 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * _parseComplex
-	 *
-	 * Parses a complex number into its real and imaginary parts, and an I or J suffix
-	 *
-	 * @param	string		$complexNumber	The complex number
-	 * @return	string[]	Indexed on "real", "imaginary" and "suffix"
-	 */
+	* _parseComplex
+	*
+	* Parses a complex number into its real and imaginary parts, and an I or J suffix
+	*
+	* @param	string		$complexNumber	The complex number
+	* @return	string[]	Indexed on "real", "imaginary" and "suffix"
+	*/
 	public static function _parseComplex($complexNumber) {
 		$workString = (string) $complexNumber;
 
@@ -734,20 +734,20 @@ class PHPExcel_Calculation_Engineering {
 		}
 
 		return array( 'real'		=> $realNumber,
-					  'imaginary'	=> $imaginary,
-					  'suffix'		=> $suffix
+					'imaginary'	=> $imaginary,
+					'suffix'		=> $suffix
 					);
 	}	//	function _parseComplex()
 
 
 	/**
-	 * _cleanComplex
-	 *
-	 * Cleans the leading characters in a complex number string
-	 *
-	 * @param	string		$complexNumber	The complex number to clean
-	 * @return	string		The "cleaned" complex number
-	 */
+	* _cleanComplex
+	*
+	* Cleans the leading characters in a complex number string
+	*
+	* @param	string		$complexNumber	The complex number to clean
+	* @return	string		The "cleaned" complex number
+	*/
 	private static function _cleanComplex($complexNumber) {
 		if ($complexNumber{0} == '+') $complexNumber = substr($complexNumber,1);
 		if ($complexNumber{0} == '0') $complexNumber = substr($complexNumber,1);
@@ -771,26 +771,26 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * BESSELI
-	 *
-	 * Returns the modified Bessel function, which is equivalent to the Bessel function evaluated for
-	 * purely imaginary arguments
-	 *
-	 * Excel Function:
-	 *		BESSELI(x,ord)
-	 *
-	 * @access	public
-	 * @category Engineering Functions
-	 * @param	float		$x		The value at which to evaluate the function.
-	 *								If x is nonnumeric, BESSELI returns the #VALUE! error value.
-	 * @param	integer		$ord	The order of the Bessel function. If n is not an integer, it is truncated.
-	 *								If $ord is nonnumeric, BESSELI returns the #VALUE! error value.
-	 *								If $ord < 0, BESSELI returns the #NUM! error value.
-	 * @return	float
-	 *
-	 * @TODO Better handling of the approximation method to support the differences between Excel/Gnumeric and Open/Libre Office
-	 *
-	 */
+	* BESSELI
+	*
+	* Returns the modified Bessel function, which is equivalent to the Bessel function evaluated for
+	* purely imaginary arguments
+	*
+	* Excel Function:
+	*		BESSELI(x,ord)
+	*
+	* @access	public
+	* @category Engineering Functions
+	* @param	float		$x		The value at which to evaluate the function.
+	*								If x is nonnumeric, BESSELI returns the #VALUE! error value.
+	* @param	integer		$ord	The order of the Bessel function. If n is not an integer, it is truncated.
+	*								If $ord is nonnumeric, BESSELI returns the #VALUE! error value.
+	*								If $ord < 0, BESSELI returns the #NUM! error value.
+	* @return	float
+	*
+	* @TODO Better handling of the approximation method to support the differences between Excel/Gnumeric and Open/Libre Office
+	*
+	*/
 	public static function BESSELI($x, $ord) {
 		$x	= (is_null($x))	? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($x);
 		$ord	= (is_null($ord))	? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($ord);
@@ -826,25 +826,25 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * BESSELJ
-	 *
-	 * Returns the Bessel function
-	 *
-	 * Excel Function:
-	 *		BESSELJ(x,ord)
-	 *
-	 * @access	public
-	 * @category Engineering Functions
-	 * @param	float		$x		The value at which to evaluate the function.
-	 *								If x is nonnumeric, BESSELJ returns the #VALUE! error value.
-	 * @param	integer		$ord	The order of the Bessel function. If n is not an integer, it is truncated.
-	 *								If $ord is nonnumeric, BESSELJ returns the #VALUE! error value.
-	 *								If $ord < 0, BESSELJ returns the #NUM! error value.
-	 * @return	float
-	 *
-	 * @TODO Better handling of the approximation method to support the differences between Excel/Gnumeric and Open/Libre Office
-	 *
-	 */
+	* BESSELJ
+	*
+	* Returns the Bessel function
+	*
+	* Excel Function:
+	*		BESSELJ(x,ord)
+	*
+	* @access	public
+	* @category Engineering Functions
+	* @param	float		$x		The value at which to evaluate the function.
+	*								If x is nonnumeric, BESSELJ returns the #VALUE! error value.
+	* @param	integer		$ord	The order of the Bessel function. If n is not an integer, it is truncated.
+	*								If $ord is nonnumeric, BESSELJ returns the #VALUE! error value.
+	*								If $ord < 0, BESSELJ returns the #NUM! error value.
+	* @return	float
+	*
+	* @TODO Better handling of the approximation method to support the differences between Excel/Gnumeric and Open/Libre Office
+	*
+	*/
 	public static function BESSELJ($x, $ord) {
 		$x	= (is_null($x))	? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($x);
 		$ord	= (is_null($ord))	? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($ord);
@@ -916,26 +916,26 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * BESSELK
-	 *
-	 * Returns the modified Bessel function, which is equivalent to the Bessel functions evaluated
-	 * for purely imaginary arguments.
-	 *
-	 * Excel Function:
-	 *		BESSELK(x,ord)
-	 *
-	 * @access	public
-	 * @category Engineering Functions
-	 * @param	float		$x		The value at which to evaluate the function.
-	 *								If x is nonnumeric, BESSELK returns the #VALUE! error value.
-	 * @param	integer		$ord	The order of the Bessel function. If n is not an integer, it is truncated.
-	 *								If $ord is nonnumeric, BESSELK returns the #VALUE! error value.
-	 *								If $ord < 0, BESSELK returns the #NUM! error value.
-	 * @return	float
-	 *
-	 * @TODO Better handling of the approximation method to support the differences between Excel/Gnumeric and Open/Libre Office
-	 *
-	 */
+	* BESSELK
+	*
+	* Returns the modified Bessel function, which is equivalent to the Bessel functions evaluated
+	* for purely imaginary arguments.
+	*
+	* Excel Function:
+	*		BESSELK(x,ord)
+	*
+	* @access	public
+	* @category Engineering Functions
+	* @param	float		$x		The value at which to evaluate the function.
+	*								If x is nonnumeric, BESSELK returns the #VALUE! error value.
+	* @param	integer		$ord	The order of the Bessel function. If n is not an integer, it is truncated.
+	*								If $ord is nonnumeric, BESSELK returns the #VALUE! error value.
+	*								If $ord < 0, BESSELK returns the #NUM! error value.
+	* @return	float
+	*
+	* @TODO Better handling of the approximation method to support the differences between Excel/Gnumeric and Open/Libre Office
+	*
+	*/
 	public static function BESSELK($x, $ord) {
 		$x		= (is_null($x))		? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($x);
 		$ord	= (is_null($ord))	? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($ord);
@@ -1006,25 +1006,25 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * BESSELY
-	 *
-	 * Returns the Bessel function, which is also called the Weber function or the Neumann function.
-	 *
-	 * Excel Function:
-	 *		BESSELY(x,ord)
-	 *
-	 * @access	public
-	 * @category Engineering Functions
-	 * @param	float		$x		The value at which to evaluate the function.
-	 *								If x is nonnumeric, BESSELK returns the #VALUE! error value.
-	 * @param	integer		$ord	The order of the Bessel function. If n is not an integer, it is truncated.
-	 *								If $ord is nonnumeric, BESSELK returns the #VALUE! error value.
-	 *								If $ord < 0, BESSELK returns the #NUM! error value.
-	 *
-	 * @TODO Better handling of the approximation method to support the differences between Excel/Gnumeric and Open/Libre Office
-	 *
-	 * @return	float
-	 */
+	* BESSELY
+	*
+	* Returns the Bessel function, which is also called the Weber function or the Neumann function.
+	*
+	* Excel Function:
+	*		BESSELY(x,ord)
+	*
+	* @access	public
+	* @category Engineering Functions
+	* @param	float		$x		The value at which to evaluate the function.
+	*								If x is nonnumeric, BESSELK returns the #VALUE! error value.
+	* @param	integer		$ord	The order of the Bessel function. If n is not an integer, it is truncated.
+	*								If $ord is nonnumeric, BESSELK returns the #VALUE! error value.
+	*								If $ord < 0, BESSELK returns the #NUM! error value.
+	*
+	* @TODO Better handling of the approximation method to support the differences between Excel/Gnumeric and Open/Libre Office
+	*
+	* @return	float
+	*/
 	public static function BESSELY($x, $ord) {
 		$x		= (is_null($x))		? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($x);
 		$ord	= (is_null($ord))	? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($ord);
@@ -1055,23 +1055,23 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * BINTODEC
-	 *
-	 * Return a binary value as decimal.
-	 *
-	 * Excel Function:
-	 *		BIN2DEC(x)
-	 *
-	 * @access	public
-	 * @category Engineering Functions
-	 * @param	string		$x		The binary number (as a string) that you want to convert. The number
-	 *								cannot contain more than 10 characters (10 bits). The most significant
-	 *								bit of number is the sign bit. The remaining 9 bits are magnitude bits.
-	 *								Negative numbers are represented using two's-complement notation.
-	 *								If number is not a valid binary number, or if number contains more than
-	 *								10 characters (10 bits), BIN2DEC returns the #NUM! error value.
-	 * @return	string
-	 */
+	* BINTODEC
+	*
+	* Return a binary value as decimal.
+	*
+	* Excel Function:
+	*		BIN2DEC(x)
+	*
+	* @access	public
+	* @category Engineering Functions
+	* @param	string		$x		The binary number (as a string) that you want to convert. The number
+	*								cannot contain more than 10 characters (10 bits). The most significant
+	*								bit of number is the sign bit. The remaining 9 bits are magnitude bits.
+	*								Negative numbers are represented using two's-complement notation.
+	*								If number is not a valid binary number, or if number contains more than
+	*								10 characters (10 bits), BIN2DEC returns the #NUM! error value.
+	* @return	string
+	*/
 	public static function BINTODEC($x) {
 		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
 
@@ -1101,29 +1101,29 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * BINTOHEX
-	 *
-	 * Return a binary value as hex.
-	 *
-	 * Excel Function:
-	 *		BIN2HEX(x[,places])
-	 *
-	 * @access	public
-	 * @category Engineering Functions
-	 * @param	string		$x		The binary number (as a string) that you want to convert. The number
-	 *								cannot contain more than 10 characters (10 bits). The most significant
-	 *								bit of number is the sign bit. The remaining 9 bits are magnitude bits.
-	 *								Negative numbers are represented using two's-complement notation.
-	 *								If number is not a valid binary number, or if number contains more than
-	 *								10 characters (10 bits), BIN2HEX returns the #NUM! error value.
-	 * @param	integer		$places	The number of characters to use. If places is omitted, BIN2HEX uses the
-	 *								minimum number of characters necessary. Places is useful for padding the
-	 *								return value with leading 0s (zeros).
-	 *								If places is not an integer, it is truncated.
-	 *								If places is nonnumeric, BIN2HEX returns the #VALUE! error value.
-	 *								If places is negative, BIN2HEX returns the #NUM! error value.
-	 * @return	string
-	 */
+	* BINTOHEX
+	*
+	* Return a binary value as hex.
+	*
+	* Excel Function:
+	*		BIN2HEX(x[,places])
+	*
+	* @access	public
+	* @category Engineering Functions
+	* @param	string		$x		The binary number (as a string) that you want to convert. The number
+	*								cannot contain more than 10 characters (10 bits). The most significant
+	*								bit of number is the sign bit. The remaining 9 bits are magnitude bits.
+	*								Negative numbers are represented using two's-complement notation.
+	*								If number is not a valid binary number, or if number contains more than
+	*								10 characters (10 bits), BIN2HEX returns the #NUM! error value.
+	* @param	integer		$places	The number of characters to use. If places is omitted, BIN2HEX uses the
+	*								minimum number of characters necessary. Places is useful for padding the
+	*								return value with leading 0s (zeros).
+	*								If places is not an integer, it is truncated.
+	*								If places is nonnumeric, BIN2HEX returns the #VALUE! error value.
+	*								If places is negative, BIN2HEX returns the #NUM! error value.
+	* @return	string
+	*/
 	public static function BINTOHEX($x, $places=NULL) {
 		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
 		$places	= PHPExcel_Calculation_Functions::flattenSingleValue($places);
@@ -1155,29 +1155,29 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * BINTOOCT
-	 *
-	 * Return a binary value as octal.
-	 *
-	 * Excel Function:
-	 *		BIN2OCT(x[,places])
-	 *
-	 * @access	public
-	 * @category Engineering Functions
-	 * @param	string		$x		The binary number (as a string) that you want to convert. The number
-	 *								cannot contain more than 10 characters (10 bits). The most significant
-	 *								bit of number is the sign bit. The remaining 9 bits are magnitude bits.
-	 *								Negative numbers are represented using two's-complement notation.
-	 *								If number is not a valid binary number, or if number contains more than
-	 *								10 characters (10 bits), BIN2OCT returns the #NUM! error value.
-	 * @param	integer		$places	The number of characters to use. If places is omitted, BIN2OCT uses the
-	 *								minimum number of characters necessary. Places is useful for padding the
-	 *								return value with leading 0s (zeros).
-	 *								If places is not an integer, it is truncated.
-	 *								If places is nonnumeric, BIN2OCT returns the #VALUE! error value.
-	 *								If places is negative, BIN2OCT returns the #NUM! error value.
-	 * @return	string
-	 */
+	* BINTOOCT
+	*
+	* Return a binary value as octal.
+	*
+	* Excel Function:
+	*		BIN2OCT(x[,places])
+	*
+	* @access	public
+	* @category Engineering Functions
+	* @param	string		$x		The binary number (as a string) that you want to convert. The number
+	*								cannot contain more than 10 characters (10 bits). The most significant
+	*								bit of number is the sign bit. The remaining 9 bits are magnitude bits.
+	*								Negative numbers are represented using two's-complement notation.
+	*								If number is not a valid binary number, or if number contains more than
+	*								10 characters (10 bits), BIN2OCT returns the #NUM! error value.
+	* @param	integer		$places	The number of characters to use. If places is omitted, BIN2OCT uses the
+	*								minimum number of characters necessary. Places is useful for padding the
+	*								return value with leading 0s (zeros).
+	*								If places is not an integer, it is truncated.
+	*								If places is nonnumeric, BIN2OCT returns the #VALUE! error value.
+	*								If places is negative, BIN2OCT returns the #NUM! error value.
+	* @return	string
+	*/
 	public static function BINTOOCT($x, $places=NULL) {
 		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
 		$places	= PHPExcel_Calculation_Functions::flattenSingleValue($places);
@@ -1209,33 +1209,33 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * DECTOBIN
-	 *
-	 * Return a decimal value as binary.
-	 *
-	 * Excel Function:
-	 *		DEC2BIN(x[,places])
-	 *
-	 * @access	public
-	 * @category Engineering Functions
-	 * @param	string		$x		The decimal integer you want to convert. If number is negative,
-	 *								valid place values are ignored and DEC2BIN returns a 10-character
-	 *								(10-bit) binary number in which the most significant bit is the sign
-	 *								bit. The remaining 9 bits are magnitude bits. Negative numbers are
-	 *								represented using two's-complement notation.
-	 *								If number < -512 or if number > 511, DEC2BIN returns the #NUM! error
-	 *								value.
-	 *								If number is nonnumeric, DEC2BIN returns the #VALUE! error value.
-	 *								If DEC2BIN requires more than places characters, it returns the #NUM!
-	 *								error value.
-	 * @param	integer		$places	The number of characters to use. If places is omitted, DEC2BIN uses
-	 *								the minimum number of characters necessary. Places is useful for
-	 *								padding the return value with leading 0s (zeros).
-	 *								If places is not an integer, it is truncated.
-	 *								If places is nonnumeric, DEC2BIN returns the #VALUE! error value.
-	 *								If places is zero or negative, DEC2BIN returns the #NUM! error value.
-	 * @return	string
-	 */
+	* DECTOBIN
+	*
+	* Return a decimal value as binary.
+	*
+	* Excel Function:
+	*		DEC2BIN(x[,places])
+	*
+	* @access	public
+	* @category Engineering Functions
+	* @param	string		$x		The decimal integer you want to convert. If number is negative,
+	*								valid place values are ignored and DEC2BIN returns a 10-character
+	*								(10-bit) binary number in which the most significant bit is the sign
+	*								bit. The remaining 9 bits are magnitude bits. Negative numbers are
+	*								represented using two's-complement notation.
+	*								If number < -512 or if number > 511, DEC2BIN returns the #NUM! error
+	*								value.
+	*								If number is nonnumeric, DEC2BIN returns the #VALUE! error value.
+	*								If DEC2BIN requires more than places characters, it returns the #NUM!
+	*								error value.
+	* @param	integer		$places	The number of characters to use. If places is omitted, DEC2BIN uses
+	*								the minimum number of characters necessary. Places is useful for
+	*								padding the return value with leading 0s (zeros).
+	*								If places is not an integer, it is truncated.
+	*								If places is nonnumeric, DEC2BIN returns the #VALUE! error value.
+	*								If places is zero or negative, DEC2BIN returns the #NUM! error value.
+	* @return	string
+	*/
 	public static function DECTOBIN($x, $places=NULL) {
 		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
 		$places	= PHPExcel_Calculation_Functions::flattenSingleValue($places);
@@ -1265,33 +1265,33 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * DECTOHEX
-	 *
-	 * Return a decimal value as hex.
-	 *
-	 * Excel Function:
-	 *		DEC2HEX(x[,places])
-	 *
-	 * @access	public
-	 * @category Engineering Functions
-	 * @param	string		$x		The decimal integer you want to convert. If number is negative,
-	 *								places is ignored and DEC2HEX returns a 10-character (40-bit)
-	 *								hexadecimal number in which the most significant bit is the sign
-	 *								bit. The remaining 39 bits are magnitude bits. Negative numbers
-	 *								are represented using two's-complement notation.
-	 *								If number < -549,755,813,888 or if number > 549,755,813,887,
-	 *								DEC2HEX returns the #NUM! error value.
-	 *								If number is nonnumeric, DEC2HEX returns the #VALUE! error value.
-	 *								If DEC2HEX requires more than places characters, it returns the
-	 *								#NUM! error value.
-	 * @param	integer		$places	The number of characters to use. If places is omitted, DEC2HEX uses
-	 *								the minimum number of characters necessary. Places is useful for
-	 *								padding the return value with leading 0s (zeros).
-	 *								If places is not an integer, it is truncated.
-	 *								If places is nonnumeric, DEC2HEX returns the #VALUE! error value.
-	 *								If places is zero or negative, DEC2HEX returns the #NUM! error value.
-	 * @return	string
-	 */
+	* DECTOHEX
+	*
+	* Return a decimal value as hex.
+	*
+	* Excel Function:
+	*		DEC2HEX(x[,places])
+	*
+	* @access	public
+	* @category Engineering Functions
+	* @param	string		$x		The decimal integer you want to convert. If number is negative,
+	*								places is ignored and DEC2HEX returns a 10-character (40-bit)
+	*								hexadecimal number in which the most significant bit is the sign
+	*								bit. The remaining 39 bits are magnitude bits. Negative numbers
+	*								are represented using two's-complement notation.
+	*								If number < -549,755,813,888 or if number > 549,755,813,887,
+	*								DEC2HEX returns the #NUM! error value.
+	*								If number is nonnumeric, DEC2HEX returns the #VALUE! error value.
+	*								If DEC2HEX requires more than places characters, it returns the
+	*								#NUM! error value.
+	* @param	integer		$places	The number of characters to use. If places is omitted, DEC2HEX uses
+	*								the minimum number of characters necessary. Places is useful for
+	*								padding the return value with leading 0s (zeros).
+	*								If places is not an integer, it is truncated.
+	*								If places is nonnumeric, DEC2HEX returns the #VALUE! error value.
+	*								If places is zero or negative, DEC2HEX returns the #NUM! error value.
+	* @return	string
+	*/
 	public static function DECTOHEX($x, $places=null) {
 		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
 		$places	= PHPExcel_Calculation_Functions::flattenSingleValue($places);
@@ -1319,33 +1319,33 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * DECTOOCT
-	 *
-	 * Return an decimal value as octal.
-	 *
-	 * Excel Function:
-	 *		DEC2OCT(x[,places])
-	 *
-	 * @access	public
-	 * @category Engineering Functions
-	 * @param	string		$x		The decimal integer you want to convert. If number is negative,
-	 *								places is ignored and DEC2OCT returns a 10-character (30-bit)
-	 *								octal number in which the most significant bit is the sign bit.
-	 *								The remaining 29 bits are magnitude bits. Negative numbers are
-	 *								represented using two's-complement notation.
-	 *								If number < -536,870,912 or if number > 536,870,911, DEC2OCT
-	 *								returns the #NUM! error value.
-	 *								If number is nonnumeric, DEC2OCT returns the #VALUE! error value.
-	 *								If DEC2OCT requires more than places characters, it returns the
-	 *								#NUM! error value.
-	 * @param	integer		$places	The number of characters to use. If places is omitted, DEC2OCT uses
-	 *								the minimum number of characters necessary. Places is useful for
-	 *								padding the return value with leading 0s (zeros).
-	 *								If places is not an integer, it is truncated.
-	 *								If places is nonnumeric, DEC2OCT returns the #VALUE! error value.
-	 *								If places is zero or negative, DEC2OCT returns the #NUM! error value.
-	 * @return	string
-	 */
+	* DECTOOCT
+	*
+	* Return an decimal value as octal.
+	*
+	* Excel Function:
+	*		DEC2OCT(x[,places])
+	*
+	* @access	public
+	* @category Engineering Functions
+	* @param	string		$x		The decimal integer you want to convert. If number is negative,
+	*								places is ignored and DEC2OCT returns a 10-character (30-bit)
+	*								octal number in which the most significant bit is the sign bit.
+	*								The remaining 29 bits are magnitude bits. Negative numbers are
+	*								represented using two's-complement notation.
+	*								If number < -536,870,912 or if number > 536,870,911, DEC2OCT
+	*								returns the #NUM! error value.
+	*								If number is nonnumeric, DEC2OCT returns the #VALUE! error value.
+	*								If DEC2OCT requires more than places characters, it returns the
+	*								#NUM! error value.
+	* @param	integer		$places	The number of characters to use. If places is omitted, DEC2OCT uses
+	*								the minimum number of characters necessary. Places is useful for
+	*								padding the return value with leading 0s (zeros).
+	*								If places is not an integer, it is truncated.
+	*								If places is nonnumeric, DEC2OCT returns the #VALUE! error value.
+	*								If places is zero or negative, DEC2OCT returns the #NUM! error value.
+	* @return	string
+	*/
 	public static function DECTOOCT($x, $places=null) {
 		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
 		$places	= PHPExcel_Calculation_Functions::flattenSingleValue($places);
@@ -1373,36 +1373,36 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * HEXTOBIN
-	 *
-	 * Return a hex value as binary.
-	 *
-	 * Excel Function:
-	 *		HEX2BIN(x[,places])
-	 *
-	 * @access	public
-	 * @category Engineering Functions
-	 * @param	string		$x			the hexadecimal number you want to convert. Number cannot
-	 *									contain more than 10 characters. The most significant bit of
-	 *									number is the sign bit (40th bit from the right). The remaining
-	 *									9 bits are magnitude bits. Negative numbers are represented
-	 *									using two's-complement notation.
-	 *									If number is negative, HEX2BIN ignores places and returns a
-	 *									10-character binary number.
-	 *									If number is negative, it cannot be less than FFFFFFFE00, and
-	 *									if number is positive, it cannot be greater than 1FF.
-	 *									If number is not a valid hexadecimal number, HEX2BIN returns
-	 *									the #NUM! error value.
-	 *									If HEX2BIN requires more than places characters, it returns
-	 *									the #NUM! error value.
-	 * @param	integer		$places		The number of characters to use. If places is omitted,
-	 *									HEX2BIN uses the minimum number of characters necessary. Places
-	 *									is useful for padding the return value with leading 0s (zeros).
-	 *									If places is not an integer, it is truncated.
-	 *									If places is nonnumeric, HEX2BIN returns the #VALUE! error value.
-	 *									If places is negative, HEX2BIN returns the #NUM! error value.
-	 * @return	string
-	 */
+	* HEXTOBIN
+	*
+	* Return a hex value as binary.
+	*
+	* Excel Function:
+	*		HEX2BIN(x[,places])
+	*
+	* @access	public
+	* @category Engineering Functions
+	* @param	string		$x			the hexadecimal number you want to convert. Number cannot
+	*									contain more than 10 characters. The most significant bit of
+	*									number is the sign bit (40th bit from the right). The remaining
+	*									9 bits are magnitude bits. Negative numbers are represented
+	*									using two's-complement notation.
+	*									If number is negative, HEX2BIN ignores places and returns a
+	*									10-character binary number.
+	*									If number is negative, it cannot be less than FFFFFFFE00, and
+	*									if number is positive, it cannot be greater than 1FF.
+	*									If number is not a valid hexadecimal number, HEX2BIN returns
+	*									the #NUM! error value.
+	*									If HEX2BIN requires more than places characters, it returns
+	*									the #NUM! error value.
+	* @param	integer		$places		The number of characters to use. If places is omitted,
+	*									HEX2BIN uses the minimum number of characters necessary. Places
+	*									is useful for padding the return value with leading 0s (zeros).
+	*									If places is not an integer, it is truncated.
+	*									If places is nonnumeric, HEX2BIN returns the #VALUE! error value.
+	*									If places is negative, HEX2BIN returns the #NUM! error value.
+	* @return	string
+	*/
 	public static function HEXTOBIN($x, $places=null) {
 		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
 		$places	= PHPExcel_Calculation_Functions::flattenSingleValue($places);
@@ -1421,24 +1421,24 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * HEXTODEC
-	 *
-	 * Return a hex value as decimal.
-	 *
-	 * Excel Function:
-	 *		HEX2DEC(x)
-	 *
-	 * @access	public
-	 * @category Engineering Functions
-	 * @param	string		$x		The hexadecimal number you want to convert. This number cannot
-	 *								contain more than 10 characters (40 bits). The most significant
-	 *								bit of number is the sign bit. The remaining 39 bits are magnitude
-	 *								bits. Negative numbers are represented using two's-complement
-	 *								notation.
-	 *								If number is not a valid hexadecimal number, HEX2DEC returns the
-	 *								#NUM! error value.
-	 * @return	string
-	 */
+	* HEXTODEC
+	*
+	* Return a hex value as decimal.
+	*
+	* Excel Function:
+	*		HEX2DEC(x)
+	*
+	* @access	public
+	* @category Engineering Functions
+	* @param	string		$x		The hexadecimal number you want to convert. This number cannot
+	*								contain more than 10 characters (40 bits). The most significant
+	*								bit of number is the sign bit. The remaining 39 bits are magnitude
+	*								bits. Negative numbers are represented using two's-complement
+	*								notation.
+	*								If number is not a valid hexadecimal number, HEX2DEC returns the
+	*								#NUM! error value.
+	* @return	string
+	*/
 	public static function HEXTODEC($x) {
 		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
 
@@ -1454,37 +1454,37 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * HEXTOOCT
-	 *
-	 * Return a hex value as octal.
-	 *
-	 * Excel Function:
-	 *		HEX2OCT(x[,places])
-	 *
-	 * @access	public
-	 * @category Engineering Functions
-	 * @param	string		$x			The hexadecimal number you want to convert. Number cannot
-	 *									contain more than 10 characters. The most significant bit of
-	 *									number is the sign bit. The remaining 39 bits are magnitude
-	 *									bits. Negative numbers are represented using two's-complement
-	 *									notation.
-	 *									If number is negative, HEX2OCT ignores places and returns a
-	 *									10-character octal number.
-	 *									If number is negative, it cannot be less than FFE0000000, and
-	 *									if number is positive, it cannot be greater than 1FFFFFFF.
-	 *									If number is not a valid hexadecimal number, HEX2OCT returns
-	 *									the #NUM! error value.
-	 *									If HEX2OCT requires more than places characters, it returns
-	 *									the #NUM! error value.
-	 * @param	integer		$places		The number of characters to use. If places is omitted, HEX2OCT
-	 *									uses the minimum number of characters necessary. Places is
-	 *									useful for padding the return value with leading 0s (zeros).
-	 *									If places is not an integer, it is truncated.
-	 *									If places is nonnumeric, HEX2OCT returns the #VALUE! error
-	 *									value.
-	 *									If places is negative, HEX2OCT returns the #NUM! error value.
-	 * @return	string
-	 */
+	* HEXTOOCT
+	*
+	* Return a hex value as octal.
+	*
+	* Excel Function:
+	*		HEX2OCT(x[,places])
+	*
+	* @access	public
+	* @category Engineering Functions
+	* @param	string		$x			The hexadecimal number you want to convert. Number cannot
+	*									contain more than 10 characters. The most significant bit of
+	*									number is the sign bit. The remaining 39 bits are magnitude
+	*									bits. Negative numbers are represented using two's-complement
+	*									notation.
+	*									If number is negative, HEX2OCT ignores places and returns a
+	*									10-character octal number.
+	*									If number is negative, it cannot be less than FFE0000000, and
+	*									if number is positive, it cannot be greater than 1FFFFFFF.
+	*									If number is not a valid hexadecimal number, HEX2OCT returns
+	*									the #NUM! error value.
+	*									If HEX2OCT requires more than places characters, it returns
+	*									the #NUM! error value.
+	* @param	integer		$places		The number of characters to use. If places is omitted, HEX2OCT
+	*									uses the minimum number of characters necessary. Places is
+	*									useful for padding the return value with leading 0s (zeros).
+	*									If places is not an integer, it is truncated.
+	*									If places is nonnumeric, HEX2OCT returns the #VALUE! error
+	*									value.
+	*									If places is negative, HEX2OCT returns the #NUM! error value.
+	* @return	string
+	*/
 	public static function HEXTOOCT($x, $places=null) {
 		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
 		$places	= PHPExcel_Calculation_Functions::flattenSingleValue($places);
@@ -1503,39 +1503,39 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * OCTTOBIN
-	 *
-	 * Return an octal value as binary.
-	 *
-	 * Excel Function:
-	 *		OCT2BIN(x[,places])
-	 *
-	 * @access	public
-	 * @category Engineering Functions
-	 * @param	string		$x			The octal number you want to convert. Number may not
-	 *									contain more than 10 characters. The most significant
-	 *									bit of number is the sign bit. The remaining 29 bits
-	 *									are magnitude bits. Negative numbers are represented
-	 *									using two's-complement notation.
-	 *									If number is negative, OCT2BIN ignores places and returns
-	 *									a 10-character binary number.
-	 *									If number is negative, it cannot be less than 7777777000,
-	 *									and if number is positive, it cannot be greater than 777.
-	 *									If number is not a valid octal number, OCT2BIN returns
-	 *									the #NUM! error value.
-	 *									If OCT2BIN requires more than places characters, it
-	 *									returns the #NUM! error value.
-	 * @param	integer		$places		The number of characters to use. If places is omitted,
-	 *									OCT2BIN uses the minimum number of characters necessary.
-	 *									Places is useful for padding the return value with
-	 *									leading 0s (zeros).
-	 *									If places is not an integer, it is truncated.
-	 *									If places is nonnumeric, OCT2BIN returns the #VALUE!
-	 *									error value.
-	 *									If places is negative, OCT2BIN returns the #NUM! error
-	 *									value.
-	 * @return	string
-	 */
+	* OCTTOBIN
+	*
+	* Return an octal value as binary.
+	*
+	* Excel Function:
+	*		OCT2BIN(x[,places])
+	*
+	* @access	public
+	* @category Engineering Functions
+	* @param	string		$x			The octal number you want to convert. Number may not
+	*									contain more than 10 characters. The most significant
+	*									bit of number is the sign bit. The remaining 29 bits
+	*									are magnitude bits. Negative numbers are represented
+	*									using two's-complement notation.
+	*									If number is negative, OCT2BIN ignores places and returns
+	*									a 10-character binary number.
+	*									If number is negative, it cannot be less than 7777777000,
+	*									and if number is positive, it cannot be greater than 777.
+	*									If number is not a valid octal number, OCT2BIN returns
+	*									the #NUM! error value.
+	*									If OCT2BIN requires more than places characters, it
+	*									returns the #NUM! error value.
+	* @param	integer		$places		The number of characters to use. If places is omitted,
+	*									OCT2BIN uses the minimum number of characters necessary.
+	*									Places is useful for padding the return value with
+	*									leading 0s (zeros).
+	*									If places is not an integer, it is truncated.
+	*									If places is nonnumeric, OCT2BIN returns the #VALUE!
+	*									error value.
+	*									If places is negative, OCT2BIN returns the #NUM! error
+	*									value.
+	* @return	string
+	*/
 	public static function OCTTOBIN($x, $places=null) {
 		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
 		$places	= PHPExcel_Calculation_Functions::flattenSingleValue($places);
@@ -1554,24 +1554,24 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * OCTTODEC
-	 *
-	 * Return an octal value as decimal.
-	 *
-	 * Excel Function:
-	 *		OCT2DEC(x)
-	 *
-	 * @access	public
-	 * @category Engineering Functions
-	 * @param	string		$x		The octal number you want to convert. Number may not contain
-	 *								more than 10 octal characters (30 bits). The most significant
-	 *								bit of number is the sign bit. The remaining 29 bits are
-	 *								magnitude bits. Negative numbers are represented using
-	 *								two's-complement notation.
-	 *								If number is not a valid octal number, OCT2DEC returns the
-	 *								#NUM! error value.
-	 * @return	string
-	 */
+	* OCTTODEC
+	*
+	* Return an octal value as decimal.
+	*
+	* Excel Function:
+	*		OCT2DEC(x)
+	*
+	* @access	public
+	* @category Engineering Functions
+	* @param	string		$x		The octal number you want to convert. Number may not contain
+	*								more than 10 octal characters (30 bits). The most significant
+	*								bit of number is the sign bit. The remaining 29 bits are
+	*								magnitude bits. Negative numbers are represented using
+	*								two's-complement notation.
+	*								If number is not a valid octal number, OCT2DEC returns the
+	*								#NUM! error value.
+	* @return	string
+	*/
 	public static function OCTTODEC($x) {
 		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
 
@@ -1587,34 +1587,34 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * OCTTOHEX
-	 *
-	 * Return an octal value as hex.
-	 *
-	 * Excel Function:
-	 *		OCT2HEX(x[,places])
-	 *
-	 * @access	public
-	 * @category Engineering Functions
-	 * @param	string		$x			The octal number you want to convert. Number may not contain
-	 *									more than 10 octal characters (30 bits). The most significant
-	 *									bit of number is the sign bit. The remaining 29 bits are
-	 *									magnitude bits. Negative numbers are represented using
-	 *									two's-complement notation.
-	 *									If number is negative, OCT2HEX ignores places and returns a
-	 *									10-character hexadecimal number.
-	 *									If number is not a valid octal number, OCT2HEX returns the
-	 *									#NUM! error value.
-	 *									If OCT2HEX requires more than places characters, it returns
-	 *									the #NUM! error value.
-	 * @param	integer		$places		The number of characters to use. If places is omitted, OCT2HEX
-	 *									uses the minimum number of characters necessary. Places is useful
-	 *									for padding the return value with leading 0s (zeros).
-	 *									If places is not an integer, it is truncated.
-	 *									If places is nonnumeric, OCT2HEX returns the #VALUE! error value.
-	 *									If places is negative, OCT2HEX returns the #NUM! error value.
-	 * @return	string
-	 */
+	* OCTTOHEX
+	*
+	* Return an octal value as hex.
+	*
+	* Excel Function:
+	*		OCT2HEX(x[,places])
+	*
+	* @access	public
+	* @category Engineering Functions
+	* @param	string		$x			The octal number you want to convert. Number may not contain
+	*									more than 10 octal characters (30 bits). The most significant
+	*									bit of number is the sign bit. The remaining 29 bits are
+	*									magnitude bits. Negative numbers are represented using
+	*									two's-complement notation.
+	*									If number is negative, OCT2HEX ignores places and returns a
+	*									10-character hexadecimal number.
+	*									If number is not a valid octal number, OCT2HEX returns the
+	*									#NUM! error value.
+	*									If OCT2HEX requires more than places characters, it returns
+	*									the #NUM! error value.
+	* @param	integer		$places		The number of characters to use. If places is omitted, OCT2HEX
+	*									uses the minimum number of characters necessary. Places is useful
+	*									for padding the return value with leading 0s (zeros).
+	*									If places is not an integer, it is truncated.
+	*									If places is nonnumeric, OCT2HEX returns the #VALUE! error value.
+	*									If places is negative, OCT2HEX returns the #NUM! error value.
+	* @return	string
+	*/
 	public static function OCTTOHEX($x, $places=null) {
 		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
 		$places	= PHPExcel_Calculation_Functions::flattenSingleValue($places);
@@ -1633,21 +1633,21 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * COMPLEX
-	 *
-	 * Converts real and imaginary coefficients into a complex number of the form x + yi or x + yj.
-	 *
-	 * Excel Function:
-	 *		COMPLEX(realNumber,imaginary[,places])
-	 *
-	 * @access	public
-	 * @category Engineering Functions
-	 * @param	float		$realNumber		The real coefficient of the complex number.
-	 * @param	float		$imaginary		The imaginary coefficient of the complex number.
-	 * @param	string		$suffix			The suffix for the imaginary component of the complex number.
-	 *										If omitted, the suffix is assumed to be "i".
-	 * @return	string
-	 */
+	* COMPLEX
+	*
+	* Converts real and imaginary coefficients into a complex number of the form x + yi or x + yj.
+	*
+	* Excel Function:
+	*		COMPLEX(realNumber,imaginary[,places])
+	*
+	* @access	public
+	* @category Engineering Functions
+	* @param	float		$realNumber		The real coefficient of the complex number.
+	* @param	float		$imaginary		The imaginary coefficient of the complex number.
+	* @param	string		$suffix			The suffix for the imaginary component of the complex number.
+	*										If omitted, the suffix is assumed to be "i".
+	* @return	string
+	*/
 	public static function COMPLEX($realNumber=0.0, $imaginary=0.0, $suffix='i') {
 		$realNumber	= (is_null($realNumber))	? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($realNumber);
 		$imaginary	= (is_null($imaginary))		? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($imaginary);
@@ -1684,19 +1684,19 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * IMAGINARY
-	 *
-	 * Returns the imaginary coefficient of a complex number in x + yi or x + yj text format.
-	 *
-	 * Excel Function:
-	 *		IMAGINARY(complexNumber)
-	 *
-	 * @access	public
-	 * @category Engineering Functions
-	 * @param	string		$complexNumber	The complex number for which you want the imaginary
-	 * 										coefficient.
-	 * @return	float
-	 */
+	* IMAGINARY
+	*
+	* Returns the imaginary coefficient of a complex number in x + yi or x + yj text format.
+	*
+	* Excel Function:
+	*		IMAGINARY(complexNumber)
+	*
+	* @access	public
+	* @category Engineering Functions
+	* @param	string		$complexNumber	The complex number for which you want the imaginary
+	* 										coefficient.
+	* @return	float
+	*/
 	public static function IMAGINARY($complexNumber) {
 		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
 
@@ -1706,18 +1706,18 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * IMREAL
-	 *
-	 * Returns the real coefficient of a complex number in x + yi or x + yj text format.
-	 *
-	 * Excel Function:
-	 *		IMREAL(complexNumber)
-	 *
-	 * @access	public
-	 * @category Engineering Functions
-	 * @param	string		$complexNumber	The complex number for which you want the real coefficient.
-	 * @return	float
-	 */
+	* IMREAL
+	*
+	* Returns the real coefficient of a complex number in x + yi or x + yj text format.
+	*
+	* Excel Function:
+	*		IMREAL(complexNumber)
+	*
+	* @access	public
+	* @category Engineering Functions
+	* @param	string		$complexNumber	The complex number for which you want the real coefficient.
+	* @return	float
+	*/
 	public static function IMREAL($complexNumber) {
 		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
 
@@ -1727,16 +1727,16 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * IMABS
-	 *
-	 * Returns the absolute value (modulus) of a complex number in x + yi or x + yj text format.
-	 *
-	 * Excel Function:
-	 *		IMABS(complexNumber)
-	 *
-	 * @param	string		$complexNumber	The complex number for which you want the absolute value.
-	 * @return	float
-	 */
+	* IMABS
+	*
+	* Returns the absolute value (modulus) of a complex number in x + yi or x + yj text format.
+	*
+	* Excel Function:
+	*		IMABS(complexNumber)
+	*
+	* @param	string		$complexNumber	The complex number for which you want the absolute value.
+	* @return	float
+	*/
 	public static function IMABS($complexNumber) {
 		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
 
@@ -1747,17 +1747,17 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * IMARGUMENT
-	 *
-	 * Returns the argument theta of a complex number, i.e. the angle in radians from the real
-	 * axis to the representation of the number in polar coordinates.
-	 *
-	 * Excel Function:
-	 *		IMARGUMENT(complexNumber)
-	 *
-	 * @param	string		$complexNumber	The complex number for which you want the argument theta.
-	 * @return	float
-	 */
+	* IMARGUMENT
+	*
+	* Returns the argument theta of a complex number, i.e. the angle in radians from the real
+	* axis to the representation of the number in polar coordinates.
+	*
+	* Excel Function:
+	*		IMARGUMENT(complexNumber)
+	*
+	* @param	string		$complexNumber	The complex number for which you want the argument theta.
+	* @return	float
+	*/
 	public static function IMARGUMENT($complexNumber) {
 		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
 
@@ -1782,16 +1782,16 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * IMCONJUGATE
-	 *
-	 * Returns the complex conjugate of a complex number in x + yi or x + yj text format.
-	 *
-	 * Excel Function:
-	 *		IMCONJUGATE(complexNumber)
-	 *
-	 * @param	string		$complexNumber	The complex number for which you want the conjugate.
-	 * @return	string
-	 */
+	* IMCONJUGATE
+	*
+	* Returns the complex conjugate of a complex number in x + yi or x + yj text format.
+	*
+	* Excel Function:
+	*		IMCONJUGATE(complexNumber)
+	*
+	* @param	string		$complexNumber	The complex number for which you want the conjugate.
+	* @return	string
+	*/
 	public static function IMCONJUGATE($complexNumber) {
 		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
 
@@ -1801,25 +1801,25 @@ class PHPExcel_Calculation_Engineering {
 			return $parsedComplex['real'];
 		} else {
 			return self::_cleanComplex( self::COMPLEX( $parsedComplex['real'],
-													   0 - $parsedComplex['imaginary'],
-													   $parsedComplex['suffix']
-													 )
-									  );
+														0 - $parsedComplex['imaginary'],
+														$parsedComplex['suffix']
+													)
+									);
 		}
 	}	//	function IMCONJUGATE()
 
 
 	/**
-	 * IMCOS
-	 *
-	 * Returns the cosine of a complex number in x + yi or x + yj text format.
-	 *
-	 * Excel Function:
-	 *		IMCOS(complexNumber)
-	 *
-	 * @param	string		$complexNumber	The complex number for which you want the cosine.
-	 * @return	string|float
-	 */
+	* IMCOS
+	*
+	* Returns the cosine of a complex number in x + yi or x + yj text format.
+	*
+	* Excel Function:
+	*		IMCOS(complexNumber)
+	*
+	* @param	string		$complexNumber	The complex number for which you want the cosine.
+	* @return	string|float
+	*/
 	public static function IMCOS($complexNumber) {
 		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
 
@@ -1834,16 +1834,16 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * IMSIN
-	 *
-	 * Returns the sine of a complex number in x + yi or x + yj text format.
-	 *
-	 * Excel Function:
-	 *		IMSIN(complexNumber)
-	 *
-	 * @param	string		$complexNumber	The complex number for which you want the sine.
-	 * @return	string|float
-	 */
+	* IMSIN
+	*
+	* Returns the sine of a complex number in x + yi or x + yj text format.
+	*
+	* Excel Function:
+	*		IMSIN(complexNumber)
+	*
+	* @param	string		$complexNumber	The complex number for which you want the sine.
+	* @return	string|float
+	*/
 	public static function IMSIN($complexNumber) {
 		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
 
@@ -1858,16 +1858,16 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * IMSQRT
-	 *
-	 * Returns the square root of a complex number in x + yi or x + yj text format.
-	 *
-	 * Excel Function:
-	 *		IMSQRT(complexNumber)
-	 *
-	 * @param	string		$complexNumber	The complex number for which you want the square root.
-	 * @return	string
-	 */
+	* IMSQRT
+	*
+	* Returns the square root of a complex number in x + yi or x + yj text format.
+	*
+	* Excel Function:
+	*		IMSQRT(complexNumber)
+	*
+	* @param	string		$complexNumber	The complex number for which you want the square root.
+	* @return	string
+	*/
 	public static function IMSQRT($complexNumber) {
 		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
 
@@ -1887,16 +1887,16 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * IMLN
-	 *
-	 * Returns the natural logarithm of a complex number in x + yi or x + yj text format.
-	 *
-	 * Excel Function:
-	 *		IMLN(complexNumber)
-	 *
-	 * @param	string		$complexNumber	The complex number for which you want the natural logarithm.
-	 * @return	string
-	 */
+	* IMLN
+	*
+	* Returns the natural logarithm of a complex number in x + yi or x + yj text format.
+	*
+	* Excel Function:
+	*		IMLN(complexNumber)
+	*
+	* @param	string		$complexNumber	The complex number for which you want the natural logarithm.
+	* @return	string
+	*/
 	public static function IMLN($complexNumber) {
 		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
 
@@ -1918,16 +1918,16 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * IMLOG10
-	 *
-	 * Returns the common logarithm (base 10) of a complex number in x + yi or x + yj text format.
-	 *
-	 * Excel Function:
-	 *		IMLOG10(complexNumber)
-	 *
-	 * @param	string		$complexNumber	The complex number for which you want the common logarithm.
-	 * @return	string
-	 */
+	* IMLOG10
+	*
+	* Returns the common logarithm (base 10) of a complex number in x + yi or x + yj text format.
+	*
+	* Excel Function:
+	*		IMLOG10(complexNumber)
+	*
+	* @param	string		$complexNumber	The complex number for which you want the common logarithm.
+	* @return	string
+	*/
 	public static function IMLOG10($complexNumber) {
 		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
 
@@ -1944,16 +1944,16 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * IMLOG2
-	 *
-	 * Returns the common logarithm (base 10) of a complex number in x + yi or x + yj text format.
-	 *
-	 * Excel Function:
-	 *		IMLOG2(complexNumber)
-	 *
-	 * @param	string		$complexNumber	The complex number for which you want the base-2 logarithm.
-	 * @return	string
-	 */
+	* IMLOG2
+	*
+	* Returns the common logarithm (base 10) of a complex number in x + yi or x + yj text format.
+	*
+	* Excel Function:
+	*		IMLOG2(complexNumber)
+	*
+	* @param	string		$complexNumber	The complex number for which you want the base-2 logarithm.
+	* @return	string
+	*/
 	public static function IMLOG2($complexNumber) {
 		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
 
@@ -1970,16 +1970,16 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * IMEXP
-	 *
-	 * Returns the exponential of a complex number in x + yi or x + yj text format.
-	 *
-	 * Excel Function:
-	 *		IMEXP(complexNumber)
-	 *
-	 * @param	string		$complexNumber	The complex number for which you want the exponential.
-	 * @return	string
-	 */
+	* IMEXP
+	*
+	* Returns the exponential of a complex number in x + yi or x + yj text format.
+	*
+	* Excel Function:
+	*		IMEXP(complexNumber)
+	*
+	* @param	string		$complexNumber	The complex number for which you want the exponential.
+	* @return	string
+	*/
 	public static function IMEXP($complexNumber) {
 		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
 
@@ -2002,17 +2002,17 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * IMPOWER
-	 *
-	 * Returns a complex number in x + yi or x + yj text format raised to a power.
-	 *
-	 * Excel Function:
-	 *		IMPOWER(complexNumber,realNumber)
-	 *
-	 * @param	string		$complexNumber	The complex number you want to raise to a power.
-	 * @param	float		$realNumber		The power to which you want to raise the complex number.
-	 * @return	string
-	 */
+	* IMPOWER
+	*
+	* Returns a complex number in x + yi or x + yj text format raised to a power.
+	*
+	* Excel Function:
+	*		IMPOWER(complexNumber,realNumber)
+	*
+	* @param	string		$complexNumber	The complex number you want to raise to a power.
+	* @param	float		$realNumber		The power to which you want to raise the complex number.
+	* @return	string
+	*/
 	public static function IMPOWER($complexNumber,$realNumber) {
 		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
 		$realNumber		= PHPExcel_Calculation_Functions::flattenSingleValue($realNumber);
@@ -2037,17 +2037,17 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * IMDIV
-	 *
-	 * Returns the quotient of two complex numbers in x + yi or x + yj text format.
-	 *
-	 * Excel Function:
-	 *		IMDIV(complexDividend,complexDivisor)
-	 *
-	 * @param	string		$complexDividend	The complex numerator or dividend.
-	 * @param	string		$complexDivisor		The complex denominator or divisor.
-	 * @return	string
-	 */
+	* IMDIV
+	*
+	* Returns the quotient of two complex numbers in x + yi or x + yj text format.
+	*
+	* Excel Function:
+	*		IMDIV(complexDividend,complexDivisor)
+	*
+	* @param	string		$complexDividend	The complex numerator or dividend.
+	* @param	string		$complexDivisor		The complex denominator or divisor.
+	* @return	string
+	*/
 	public static function IMDIV($complexDividend,$complexDivisor) {
 		$complexDividend	= PHPExcel_Calculation_Functions::flattenSingleValue($complexDividend);
 		$complexDivisor	= PHPExcel_Calculation_Functions::flattenSingleValue($complexDivisor);
@@ -2081,17 +2081,17 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * IMSUB
-	 *
-	 * Returns the difference of two complex numbers in x + yi or x + yj text format.
-	 *
-	 * Excel Function:
-	 *		IMSUB(complexNumber1,complexNumber2)
-	 *
-	 * @param	string		$complexNumber1		The complex number from which to subtract complexNumber2.
-	 * @param	string		$complexNumber2		The complex number to subtract from complexNumber1.
-	 * @return	string
-	 */
+	* IMSUB
+	*
+	* Returns the difference of two complex numbers in x + yi or x + yj text format.
+	*
+	* Excel Function:
+	*		IMSUB(complexNumber1,complexNumber2)
+	*
+	* @param	string		$complexNumber1		The complex number from which to subtract complexNumber2.
+	* @param	string		$complexNumber2		The complex number to subtract from complexNumber1.
+	* @return	string
+	*/
 	public static function IMSUB($complexNumber1,$complexNumber2) {
 		$complexNumber1	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber1);
 		$complexNumber2	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber2);
@@ -2114,16 +2114,16 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * IMSUM
-	 *
-	 * Returns the sum of two or more complex numbers in x + yi or x + yj text format.
-	 *
-	 * Excel Function:
-	 *		IMSUM(complexNumber[,complexNumber[,...]])
-	 *
-	 * @param	string		$complexNumber,...	Series of complex numbers to add
-	 * @return	string
-	 */
+	* IMSUM
+	*
+	* Returns the sum of two or more complex numbers in x + yi or x + yj text format.
+	*
+	* Excel Function:
+	*		IMSUM(complexNumber[,complexNumber[,...]])
+	*
+	* @param	string		$complexNumber,...	Series of complex numbers to add
+	* @return	string
+	*/
 	public static function IMSUM() {
 		// Return value
 		$returnValue = self::_parseComplex('0');
@@ -2150,16 +2150,16 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * IMPRODUCT
-	 *
-	 * Returns the product of two or more complex numbers in x + yi or x + yj text format.
-	 *
-	 * Excel Function:
-	 *		IMPRODUCT(complexNumber[,complexNumber[,...]])
-	 *
-	 * @param	string		$complexNumber,...	Series of complex numbers to multiply
-	 * @return	string
-	 */
+	* IMPRODUCT
+	*
+	* Returns the product of two or more complex numbers in x + yi or x + yj text format.
+	*
+	* Excel Function:
+	*		IMPRODUCT(complexNumber[,complexNumber[,...]])
+	*
+	* @param	string		$complexNumber,...	Series of complex numbers to multiply
+	* @return	string
+	*/
 	public static function IMPRODUCT() {
 		// Return value
 		$returnValue = self::_parseComplex('1');
@@ -2186,20 +2186,20 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * DELTA
-	 *
-	 * Tests whether two values are equal. Returns 1 if number1 = number2; returns 0 otherwise.
-	 * Use this function to filter a set of values. For example, by summing several DELTA
-	 * functions you calculate the count of equal pairs. This function is also known as the
-	 * Kronecker Delta function.
-	 *
-	 * Excel Function:
-	 *		DELTA(a[,b])
-	 *
-	 * @param	float		$a	The first number.
-	 * @param	float		$b	The second number. If omitted, b is assumed to be zero.
-	 * @return	int
-	 */
+	* DELTA
+	*
+	* Tests whether two values are equal. Returns 1 if number1 = number2; returns 0 otherwise.
+	* Use this function to filter a set of values. For example, by summing several DELTA
+	* functions you calculate the count of equal pairs. This function is also known as the
+	* Kronecker Delta function.
+	*
+	* Excel Function:
+	*		DELTA(a[,b])
+	*
+	* @param	float		$a	The first number.
+	* @param	float		$b	The second number. If omitted, b is assumed to be zero.
+	* @return	int
+	*/
 	public static function DELTA($a, $b=0) {
 		$a	= PHPExcel_Calculation_Functions::flattenSingleValue($a);
 		$b	= PHPExcel_Calculation_Functions::flattenSingleValue($b);
@@ -2209,20 +2209,20 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * GESTEP
-	 *
-	 * Excel Function:
-	 *		GESTEP(number[,step])
-	 *
-	 * Returns 1 if number >= step; returns 0 (zero) otherwise
-	 * Use this function to filter a set of values. For example, by summing several GESTEP
-	 * functions you calculate the count of values that exceed a threshold.
-	 *
-	 * @param	float		$number		The value to test against step.
-	 * @param	float		$step		The threshold value.
-	 *									If you omit a value for step, GESTEP uses zero.
-	 * @return	int
-	 */
+	* GESTEP
+	*
+	* Excel Function:
+	*		GESTEP(number[,step])
+	*
+	* Returns 1 if number >= step; returns 0 (zero) otherwise
+	* Use this function to filter a set of values. For example, by summing several GESTEP
+	* functions you calculate the count of values that exceed a threshold.
+	*
+	* @param	float		$number		The value to test against step.
+	* @param	float		$step		The threshold value.
+	*									If you omit a value for step, GESTEP uses zero.
+	* @return	int
+	*/
 	public static function GESTEP($number, $step=0) {
 		$number	= PHPExcel_Calculation_Functions::flattenSingleValue($number);
 		$step	= PHPExcel_Calculation_Functions::flattenSingleValue($step);
@@ -2259,18 +2259,18 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * ERF
-	 *
-	 * Returns the error function integrated between lower_limit and upper_limit
-	 *
-	 * Excel Function:
-	 *		ERF(lower[,upper])
-	 *
-	 * @param	float		$lower	lower bound for integrating ERF
-	 * @param	float		$upper	upper bound for integrating ERF.
-	 *								If omitted, ERF integrates between zero and lower_limit
-	 * @return	int
-	 */
+	* ERF
+	*
+	* Returns the error function integrated between lower_limit and upper_limit
+	*
+	* Excel Function:
+	*		ERF(lower[,upper])
+	*
+	* @param	float		$lower	lower bound for integrating ERF
+	* @param	float		$upper	upper bound for integrating ERF.
+	*								If omitted, ERF integrates between zero and lower_limit
+	* @return	int
+	*/
 	public static function ERF($lower, $upper = null) {
 		$lower	= PHPExcel_Calculation_Functions::flattenSingleValue($lower);
 		$upper	= PHPExcel_Calculation_Functions::flattenSingleValue($upper);
@@ -2326,16 +2326,16 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * ERFC
-	 *
-	 * Returns the complementary ERF function integrated between x and infinity
-	 *
-	 * Excel Function:
-	 *		ERF(x)
-	 *
-	 * @param	float		$x		The lower bound for integrating ERF
-	 * @return	int
-	 */
+	* ERFC
+	*
+	* Returns the complementary ERF function integrated between x and infinity
+	*
+	* Excel Function:
+	*		ERF(x)
+	*
+	* @param	float		$x		The lower bound for integrating ERF
+	* @return	int
+	*/
 	public static function ERFC($x) {
 		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
 
@@ -2350,10 +2350,10 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * getConversionGroups
-	 *
-	 * @return	array
-	 */
+	* getConversionGroups
+	*
+	* @return	array
+	*/
 	public static function getConversionGroups() {
 		$conversionGroups = array();
 		foreach(self::$_conversionUnits as $conversionUnit) {
@@ -2364,10 +2364,10 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * getConversionGroupUnits
-	 *
-	 * @return	array
-	 */
+	* getConversionGroupUnits
+	*
+	* @return	array
+	*/
 	public static function getConversionGroupUnits($group = NULL) {
 		$conversionGroups = array();
 		foreach(self::$_conversionUnits as $conversionUnit => $conversionGroup) {
@@ -2380,17 +2380,17 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * getConversionGroupUnitDetails
-	 *
-	 * @return	array
-	 */
+	* getConversionGroupUnitDetails
+	*
+	* @return	array
+	*/
 	public static function getConversionGroupUnitDetails($group = NULL) {
 		$conversionGroups = array();
 		foreach(self::$_conversionUnits as $conversionUnit => $conversionGroup) {
 			if ((is_null($group)) || ($conversionGroup['Group'] == $group)) {
 				$conversionGroups[$conversionGroup['Group']][] = array(	'unit'			=> $conversionUnit,
 																		'description'	=> $conversionGroup['Unit Name']
-																	  );
+																	);
 			}
 		}
 		return $conversionGroups;
@@ -2398,30 +2398,30 @@ class PHPExcel_Calculation_Engineering {
 
 
 	/**
-	 * getConversionGroups
-	 *
-	 * @return	array
-	 */
+	* getConversionGroups
+	*
+	* @return	array
+	*/
 	public static function getConversionMultipliers() {
 		return self::$_conversionMultipliers;
 	}	//	function getConversionGroups()
 
 
 	/**
-	 * CONVERTUOM
-	 *
-	 * Converts a number from one measurement system to another.
-	 * For example, CONVERT can translate a table of distances in miles to a table of distances
-	 * in kilometers.
-	 *
-	 * Excel Function:
-	 *		CONVERT(value,fromUOM,toUOM)
-	 *
-	 * @param	float		$value		The value in fromUOM to convert.
-	 * @param	string		$fromUOM	The units for value.
-	 * @param	string		$toUOM		The units for the result.
-	 * @return	float
-	 */
+	* CONVERTUOM
+	*
+	* Converts a number from one measurement system to another.
+	* For example, CONVERT can translate a table of distances in miles to a table of distances
+	* in kilometers.
+	*
+	* Excel Function:
+	*		CONVERT(value,fromUOM,toUOM)
+	*
+	* @param	float		$value		The value in fromUOM to convert.
+	* @param	string		$fromUOM	The units for value.
+	* @param	string		$toUOM		The units for the result.
+	* @return	float
+	*/
 	public static function CONVERTUOM($value, $fromUOM, $toUOM) {
 		$value		= PHPExcel_Calculation_Functions::flattenSingleValue($value);
 		$fromUOM	= PHPExcel_Calculation_Functions::flattenSingleValue($fromUOM);
@@ -2486,10 +2486,10 @@ class PHPExcel_Calculation_Engineering {
 					return $value;
 				}
 			} elseif ((($fromUOM == 'K') || ($fromUOM == 'kel')) &&
-					  (($toUOM == 'K') || ($toUOM == 'kel'))) {
+					(($toUOM == 'K') || ($toUOM == 'kel'))) {
 						return $value;
 			} elseif ((($fromUOM == 'C') || ($fromUOM == 'cel')) &&
-					  (($toUOM == 'C') || ($toUOM == 'cel'))) {
+					(($toUOM == 'C') || ($toUOM == 'cel'))) {
 					return $value;
 			}
 			if (($toUOM == 'F') || ($toUOM == 'fah')) {

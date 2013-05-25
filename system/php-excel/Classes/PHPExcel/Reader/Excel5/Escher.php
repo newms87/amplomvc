@@ -18,18 +18,18 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category   PHPExcel
- * @package    PHPExcel_Reader_Excel5
+ * @category	PHPExcel
+ * @package	PHPExcel_Reader_Excel5
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version    1.7.7, 2012-05-19
+ * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+ * @version	1.7.7, 2012-05-19
  */
 
 /**
  * PHPExcel_Reader_Excel5_Escher
  *
- * @category   PHPExcel
- * @package    PHPExcel_Reader_Excel5
+ * @category	PHPExcel
+ * @package	PHPExcel_Reader_Excel5
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_Reader_Excel5_Escher
@@ -54,48 +54,48 @@ class PHPExcel_Reader_Excel5_Escher
 	const TERTIARYOPT		= 0xF122;
 
 	/**
-	 * Escher stream data (binary)
-	 *
-	 * @var string
-	 */
+	* Escher stream data (binary)
+	*
+	* @var string
+	*/
 	private $_data;
 
 	/**
-	 * Size in bytes of the Escher stream data
-	 *
-	 * @var int
-	 */
+	* Size in bytes of the Escher stream data
+	*
+	* @var int
+	*/
 	private $_dataSize;
 
 	/**
-	 * Current position of stream pointer in Escher stream data
-	 *
-	 * @var int
-	 */
+	* Current position of stream pointer in Escher stream data
+	*
+	* @var int
+	*/
 	private $_pos;
 
 	/**
-	 * The object to be returned by the reader. Modified during load.
-	 *
-	 * @var mixed
-	 */
+	* The object to be returned by the reader. Modified during load.
+	*
+	* @var mixed
+	*/
 	private $_object;
 
 	/**
-	 * Create a new PHPExcel_Reader_Excel5_Escher instance
-	 *
-	 * @param mixed $object
-	 */
+	* Create a new PHPExcel_Reader_Excel5_Escher instance
+	*
+	* @param mixed $object
+	*/
 	public function __construct($object)
 	{
 		$this->_object = $object;
 	}
 
 	/**
-	 * Load Escher stream data. May be a partial Escher stream.
-	 *
-	 * @param string $data
-	 */
+	* Load Escher stream data. May be a partial Escher stream.
+	*
+	* @param string $data
+	*/
 	public function load($data)
 	{
 		$this->_data = $data;
@@ -138,8 +138,8 @@ class PHPExcel_Reader_Excel5_Escher
 	}
 
 	/**
-	 * Read a generic record
-	 */
+	* Read a generic record
+	*/
 	private function _readDefault()
 	{
 		// offset 0; size: 2; recVer and recInstance
@@ -159,8 +159,8 @@ class PHPExcel_Reader_Excel5_Escher
 	}
 
 	/**
-	 * Read DggContainer record (Drawing Group Container)
-	 */
+	* Read DggContainer record (Drawing Group Container)
+	*/
 	private function _readDggContainer()
 	{
 		$length = PHPExcel_Reader_Excel5::_GetInt4d($this->_data, $this->_pos + 4);
@@ -177,8 +177,8 @@ class PHPExcel_Reader_Excel5_Escher
 	}
 
 	/**
-	 * Read Dgg record (Drawing Group)
-	 */
+	* Read Dgg record (Drawing Group)
+	*/
 	private function _readDgg()
 	{
 		$length = PHPExcel_Reader_Excel5::_GetInt4d($this->_data, $this->_pos + 4);
@@ -189,8 +189,8 @@ class PHPExcel_Reader_Excel5_Escher
 	}
 
 	/**
-	 * Read BstoreContainer record (Blip Store Container)
-	 */
+	* Read BstoreContainer record (Blip Store Container)
+	*/
 	private function _readBstoreContainer()
 	{
 		$length = PHPExcel_Reader_Excel5::_GetInt4d($this->_data, $this->_pos + 4);
@@ -207,8 +207,8 @@ class PHPExcel_Reader_Excel5_Escher
 	}
 
 	/**
-	 * Read BSE record
-	 */
+	* Read BSE record
+	*/
 	private function _readBSE()
 	{
 		// offset: 0; size: 2; recVer and recInstance
@@ -273,8 +273,8 @@ class PHPExcel_Reader_Excel5_Escher
 	}
 
 	/**
-	 * Read BlipJPEG record. Holds raw JPEG image data
-	 */
+	* Read BlipJPEG record. Holds raw JPEG image data
+	*/
 	private function _readBlipJPEG()
 	{
 		// offset: 0; size: 2; recVer and recInstance
@@ -314,8 +314,8 @@ class PHPExcel_Reader_Excel5_Escher
 	}
 
 	/**
-	 * Read BlipPNG record. Holds raw PNG image data
-	 */
+	* Read BlipPNG record. Holds raw PNG image data
+	*/
 	private function _readBlipPNG()
 	{
 		// offset: 0; size: 2; recVer and recInstance
@@ -355,8 +355,8 @@ class PHPExcel_Reader_Excel5_Escher
 	}
 
 	/**
-	 * Read OPT record. This record may occur within DggContainer record or SpContainer
-	 */
+	* Read OPT record. This record may occur within DggContainer record or SpContainer
+	*/
 	private function _readOPT()
 	{
 		// offset: 0; size: 2; recVer and recInstance
@@ -374,8 +374,8 @@ class PHPExcel_Reader_Excel5_Escher
 	}
 
 	/**
-	 * Read TertiaryOPT record
-	 */
+	* Read TertiaryOPT record
+	*/
 	private function _readTertiaryOPT()
 	{
 		// offset: 0; size: 2; recVer and recInstance
@@ -391,8 +391,8 @@ class PHPExcel_Reader_Excel5_Escher
 	}
 
 	/**
-	 * Read SplitMenuColors record
-	 */
+	* Read SplitMenuColors record
+	*/
 	private function _readSplitMenuColors()
 	{
 		$length = PHPExcel_Reader_Excel5::_GetInt4d($this->_data, $this->_pos + 4);
@@ -403,8 +403,8 @@ class PHPExcel_Reader_Excel5_Escher
 	}
 
 	/**
-	 * Read DgContainer record (Drawing Container)
-	 */
+	* Read DgContainer record (Drawing Container)
+	*/
 	private function _readDgContainer()
 	{
 		$length = PHPExcel_Reader_Excel5::_GetInt4d($this->_data, $this->_pos + 4);
@@ -421,8 +421,8 @@ class PHPExcel_Reader_Excel5_Escher
 	}
 
 	/**
-	 * Read Dg record (Drawing)
-	 */
+	* Read Dg record (Drawing)
+	*/
 	private function _readDg()
 	{
 		$length = PHPExcel_Reader_Excel5::_GetInt4d($this->_data, $this->_pos + 4);
@@ -433,8 +433,8 @@ class PHPExcel_Reader_Excel5_Escher
 	}
 
 	/**
-	 * Read SpgrContainer record (Shape Group Container)
-	 */
+	* Read SpgrContainer record (Shape Group Container)
+	*/
 	private function _readSpgrContainer()
 	{
 		// context is either context DgContainer or SpgrContainer
@@ -461,8 +461,8 @@ class PHPExcel_Reader_Excel5_Escher
 	}
 
 	/**
-	 * Read SpContainer record (Shape Container)
-	 */
+	* Read SpContainer record (Shape Container)
+	*/
 	private function _readSpContainer()
 	{
 		$length = PHPExcel_Reader_Excel5::_GetInt4d($this->_data, $this->_pos + 4);
@@ -481,8 +481,8 @@ class PHPExcel_Reader_Excel5_Escher
 	}
 
 	/**
-	 * Read Spgr record (Shape Group)
-	 */
+	* Read Spgr record (Shape Group)
+	*/
 	private function _readSpgr()
 	{
 		$length = PHPExcel_Reader_Excel5::_GetInt4d($this->_data, $this->_pos + 4);
@@ -493,8 +493,8 @@ class PHPExcel_Reader_Excel5_Escher
 	}
 
 	/**
-	 * Read Sp record (Shape)
-	 */
+	* Read Sp record (Shape)
+	*/
 	private function _readSp()
 	{
 		// offset: 0; size: 2; recVer and recInstance
@@ -510,8 +510,8 @@ class PHPExcel_Reader_Excel5_Escher
 	}
 
 	/**
-	 * Read ClientTextbox record
-	 */
+	* Read ClientTextbox record
+	*/
 	private function _readClientTextbox()
 	{
 		// offset: 0; size: 2; recVer and recInstance
@@ -527,8 +527,8 @@ class PHPExcel_Reader_Excel5_Escher
 	}
 
 	/**
-	 * Read ClientAnchor record. This record holds information about where the shape is anchored in worksheet
-	 */
+	* Read ClientAnchor record. This record holds information about where the shape is anchored in worksheet
+	*/
 	private function _readClientAnchor()
 	{
 		$length = PHPExcel_Reader_Excel5::_GetInt4d($this->_data, $this->_pos + 4);
@@ -581,8 +581,8 @@ class PHPExcel_Reader_Excel5_Escher
 	}
 
 	/**
-	 * Read ClientData record
-	 */
+	* Read ClientData record
+	*/
 	private function _readClientData()
 	{
 		$length = PHPExcel_Reader_Excel5::_GetInt4d($this->_data, $this->_pos + 4);
@@ -593,11 +593,11 @@ class PHPExcel_Reader_Excel5_Escher
 	}
 
 	/**
-	 * Read OfficeArtRGFOPTE table of property-value pairs
-	 *
-	 * @param string $data Binary data
-	 * @param int $n Number of properties
-	 */
+	* Read OfficeArtRGFOPTE table of property-value pairs
+	*
+	* @param string $data Binary data
+	* @param int $n Number of properties
+	*/
 	private function _readOfficeArtRGFOPTE($data, $n) {
 
 		$splicedComplexData = substr($data, 6 * $n);

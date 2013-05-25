@@ -4,22 +4,22 @@ class ControllerAccountReturn extends Controller {
 	public function index() {
 		$this->template->load('account/return_list');
 
-    	if (!$this->customer->isLogged()) {
-      		$this->session->data['redirect'] = $this->url->link('account/return');
+		if (!$this->customer->isLogged()) {
+				$this->session->data['redirect'] = $this->url->link('account/return');
 
-	  		$this->url->redirect($this->url->link('account/login'));
-    	}
+			$this->url->redirect($this->url->link('account/login'));
+		}
  
-    	$this->language->load('account/return');
+		$this->language->load('account/return');
 
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
-      $url = $this->get_url();
-      
-      $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-      $this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-      $this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/return', $url));
-      
+		$url = $this->get_url();
+		
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
+		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/return', $url));
+		
 		if (isset($_GET['page'])) {
 			$page = $_GET['page'];
 		} else {
@@ -35,11 +35,11 @@ class ControllerAccountReturn extends Controller {
 		foreach ($results as $result) {
 			$this->data['returns'][] = array(
 				'return_id'  => $result['return_id'],
-				'order_id'   => $result['order_id'],
-				'name'       => $result['firstname'] . ' ' . $result['lastname'],
-				'status'     => $result['status'],
+				'order_id'	=> $result['order_id'],
+				'name'		=> $result['firstname'] . ' ' . $result['lastname'],
+				'status'	=> $result['status'],
 				'date_added' => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
-				'href'       => $this->url->link('account/return/info', 'return_id=' . $result['return_id'] . $url)
+				'href'		=> $this->url->link('account/return/info', 'return_id=' . $result['return_id'] . $url)
 			);
 		}
 
@@ -47,7 +47,6 @@ class ControllerAccountReturn extends Controller {
 		$this->pagination->total = $return_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_catalog_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('account/history');
 		
 		$this->data['pagination'] = $this->pagination->render();
@@ -80,12 +79,12 @@ class ControllerAccountReturn extends Controller {
 		} else {
 			$return_id = 0;
 		}
-    	
+		
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/return/info', 'return_id=' . $return_id);
 			
 			$this->url->redirect($this->url->link('account/login'));
-    	}
+		}
 		
 		$return_info = $this->model_account_return->getReturn($return_id);
 		
@@ -93,20 +92,20 @@ class ControllerAccountReturn extends Controller {
 		$this->template->load('account/return_info');
 
 			$this->document->setTitle($this->_('text_return'));
-         
-         $this->language->set('heading_title', $this->_('text_return'));
-         
-         $url = $this->get_url();
-         
-         $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-         $this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-         $this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/return', $url));
-         $this->breadcrumb->add($this->_('text_return'), $this->url->link('account/return/info', 'return_id=' . $_GET['return_id'] . $url));
-         
-         $this->data['date_ordered'] = date($this->language->getInfo('date_format_short'), strtotime($return_info['date_ordered']));
-         $this->data['date_added'] = date($this->language->getInfo('date_format_short'), strtotime($return_info['date_added']));
-         
-         
+			
+			$this->language->set('heading_title', $this->_('text_return'));
+			
+			$url = $this->get_url();
+			
+			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+			$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
+			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/return', $url));
+			$this->breadcrumb->add($this->_('text_return'), $this->url->link('account/return/info', 'return_id=' . $_GET['return_id'] . $url));
+			
+			$this->data['date_ordered'] = date($this->language->getInfo('date_format_short'), strtotime($return_info['date_ordered']));
+			$this->data['date_added'] = date($this->language->getInfo('date_format_short'), strtotime($return_info['date_added']));
+			
+			
 			$this->data['return_id'] = $return_info['return_id'];
 			$this->data['order_id'] = $return_info['order_id'];
 			$this->data['firstname'] = $return_info['firstname'];
@@ -125,13 +124,13 @@ class ControllerAccountReturn extends Controller {
 			
 			$results = $this->model_account_return->getReturnHistories($_GET['return_id']);
 			
-      		foreach ($results as $result) {
-        		$this->data['histories'][] = array(
-          			'date_added' => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
-          			'status'     => $result['status'],
-          			'comment'    => nl2br($result['comment'])
-        		);
-      		}
+				foreach ($results as $result) {
+				$this->data['histories'][] = array(
+						'date_added' => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
+						'status'	=> $result['status'],
+						'comment'	=> nl2br($result['comment'])
+				);
+				}
 			
 			$this->data['continue'] = $this->url->link('account/return', $url);
 
@@ -155,16 +154,16 @@ class ControllerAccountReturn extends Controller {
 		$this->template->load('error/not_found');
 
 			$this->document->setTitle($this->_('text_return'));
-         
-         $this->language->set('heading_title', $this->_('text_return'));
-         
-         $url = $this->get_url();
-         
-         $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-         $this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-         $this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/return'));
-         $this->breadcrumb->add($this->_('text_return'), $this->url->link('account/return/info', 'return_id=' . $return_id . $url));
-         
+			
+			$this->language->set('heading_title', $this->_('text_return'));
+			
+			$url = $this->get_url();
+			
+			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+			$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
+			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/return'));
+			$this->breadcrumb->add($this->_('text_return'), $this->url->link('account/return/info', 'return_id=' . $return_id . $url));
+			
 			$this->data['continue'] = $this->url->link('account/return');
 
 
@@ -189,21 +188,21 @@ class ControllerAccountReturn extends Controller {
 	public function insert() {
 		$this->template->load('account/return_form');
 
-	   $order_id = isset($_GET['order_id'])?$_GET['order_id']:0;
+		$order_id = isset($_GET['order_id'])?$_GET['order_id']:0;
 		$this->language->load('account/return');
 
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_account_return->addReturn($_POST);
-	  		
+			
 			$this->url->redirect($this->url->link('account/return/success'));
-    	} 
+		} 
 							
 		$this->document->setTitle($this->_('heading_title'));
-      
-      $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-      $this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-      $this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/return/insert'));
-      
+		
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
+		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/return/insert'));
+		
 		$this->data['action'] = $this->url->link('account/return/insert');
 	
 		if ($order_id) {
@@ -214,33 +213,33 @@ class ControllerAccountReturn extends Controller {
 			$product_info = $this->model_catalog_product->getProduct($_GET['product_id']);
 		}
 		
-      $defaults = array('order_id'=>'',
-                        'date_ordered'=>'',
-                        'firstname'=>$this->customer->getFirstName(),
-                        'lastname'=>$this->customer->getLastName(),
-                        'email'=>$this->customer->getEmail(),
-                        'telephone'=>$this->customer->getTelephone(),
-                        'product'=>'',
-                        'model'=>'',
-                        'quantity'=>1,
-                        'opened'=>false,
-                        'return_reason_id'=>'',
-                        'comment'=>'',
-                        'captcha'=>''
-                       );
-      
-      $force_default = array('return_reason_id','comment','captcha','quantity','opened');
-      
-      foreach($defaults as $d=>$default){
-         if (isset($_POST[$d]))
-            $this->data[$d] = $_POST[$d];
-         elseif (isset($order_info[$d]))
-            $this->data[$d] = $order_info[$d];
-         elseif(!$order_id || in_array($d,$force_default))
-            $this->data[$d] = $default;
-      }
-      
-    	if (!isset($this->data['date_ordered'])) {
+		$defaults = array('order_id'=>'',
+								'date_ordered'=>'',
+								'firstname'=>$this->customer->getFirstName(),
+								'lastname'=>$this->customer->getLastName(),
+								'email'=>$this->customer->getEmail(),
+								'telephone'=>$this->customer->getTelephone(),
+								'product'=>'',
+								'model'=>'',
+								'quantity'=>1,
+								'opened'=>false,
+								'return_reason_id'=>'',
+								'comment'=>'',
+								'captcha'=>''
+							);
+		
+		$force_default = array('return_reason_id','comment','captcha','quantity','opened');
+		
+		foreach($defaults as $d=>$default){
+			if (isset($_POST[$d]))
+				$this->data[$d] = $_POST[$d];
+			elseif (isset($order_info[$d]))
+				$this->data[$d] = $order_info[$d];
+			elseif(!$order_id || in_array($d,$force_default))
+				$this->data[$d] = $default;
+		}
+		
+		if (!isset($this->data['date_ordered'])) {
 			$this->data['date_ordered'] = isset($order_info['date_added'])?date('Y-m-d', strtotime($order_info['date_added'])):$defaults['date_ordered'];
 		}
 				
@@ -251,7 +250,7 @@ class ControllerAccountReturn extends Controller {
 		if (!isset($this->data['model'])) {
 			$this->data['model'] = isset($product_info['model'])?$product_info['model']:$defaults['model'];
 		}
-      												
+														
 		$this->data['return_reasons'] = $this->model_localisation_return_reason->getReturnReasons();
 		
 		$this->data['back'] = $this->url->link('account/account');
@@ -280,11 +279,11 @@ class ControllerAccountReturn extends Controller {
 		$this->language->load('account/return');
 
 		$this->document->setTitle($this->_('heading_title')); 
-      
-      $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-      $this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/return'));
-      
-    	$this->data['continue'] = $this->url->link('common/home');
+		
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/return'));
+		
+		$this->data['continue'] = $this->url->link('common/home');
 
 
 
@@ -305,25 +304,25 @@ class ControllerAccountReturn extends Controller {
 	}
 		
   	private function validate() {
-    	if (!$_POST['order_id']) {
-      		$this->error['order_id'] = $this->_('error_order_id');
-    	}
+		if (!$_POST['order_id']) {
+				$this->error['order_id'] = $this->_('error_order_id');
+		}
 		
 		if ((strlen($_POST['firstname']) < 1) || (strlen($_POST['firstname']) > 32)) {
-      		$this->error['firstname'] = $this->_('error_firstname');
-    	}
+				$this->error['firstname'] = $this->_('error_firstname');
+		}
 
-    	if ((strlen($_POST['lastname']) < 1) || (strlen($_POST['lastname']) > 32)) {
-      		$this->error['lastname'] = $this->_('error_lastname');
-    	}
+		if ((strlen($_POST['lastname']) < 1) || (strlen($_POST['lastname']) > 32)) {
+				$this->error['lastname'] = $this->_('error_lastname');
+		}
 
-    	if ((strlen($_POST['email']) > 96) || !preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $_POST['email'])) {
-      		$this->error['email'] = $this->_('error_email');
-    	}
+		if ((strlen($_POST['email']) > 96) || !preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $_POST['email'])) {
+				$this->error['email'] = $this->_('error_email');
+		}
 		
-    	if ((strlen($_POST['telephone']) < 3) || (strlen($_POST['telephone']) > 32)) {
-      		$this->error['telephone'] = $this->_('error_telephone');
-    	}		
+		if ((strlen($_POST['telephone']) < 3) || (strlen($_POST['telephone']) > 32)) {
+				$this->error['telephone'] = $this->_('error_telephone');
+		}		
 		
 		if ((strlen($_POST['product']) < 1) || (strlen($_POST['product']) > 255)) {
 			$this->error['product'] = $this->_('error_product');
@@ -337,15 +336,15 @@ class ControllerAccountReturn extends Controller {
 			$this->error['reason'] = $this->_('error_reason');
 		}	
 				
-    	if (empty($this->session->data['captcha']) || ($this->session->data['captcha'] != $_POST['captcha'])) {
-      		$this->error['captcha'] = $this->_('error_captcha');
-    	}
+		if (empty($this->session->data['captcha']) || ($this->session->data['captcha'] != $_POST['captcha'])) {
+				$this->error['captcha'] = $this->_('error_captcha');
+		}
 
 		if (!$this->error) {
-      		return true;
-    	} else {
-      		return false;
-    	}
+				return true;
+		} else {
+				return false;
+		}
   	}
 	
 	public function captcha() {
@@ -353,13 +352,13 @@ class ControllerAccountReturn extends Controller {
 		
 		$this->captcha->showImage();
 	}
-   
-   private function get_url($filters=null){
-      $url = '';
-      $filters = $filters?$filters:array('page');
-      foreach($filters as $f)
-         if (isset($_GET[$f]))
-            $url .= "&$f=" . $_GET[$f];
-      return $url;
-   }	
+	
+	private function get_url($filters=null){
+		$url = '';
+		$filters = $filters?$filters:array('page');
+		foreach($filters as $f)
+			if (isset($_GET[$f]))
+				$url .= "&$f=" . $_GET[$f];
+		return $url;
+	}	
 }

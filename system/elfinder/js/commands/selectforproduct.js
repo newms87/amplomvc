@@ -47,14 +47,14 @@ elFinder.prototype.commands.selectforproduct = function() {
             var valueField = getQuerystring(keyField, null);
             var valueRows = getQuerystring(keyRows, null);
 
-            if(valueField == "") {
+            if(valueField == "multiselect") {
                 parent.addImage(elfinder_root_dir + pp);
             } else if (valueField == "imagemanager") {
-				// No file needed, only file manager mode
-				exit();
+					// No file needed, only file manager mode
+					exit();
             } else if (valueField == "filemanager") {
-	    	exit();
-	    } else {
+			    	exit();
+			   } else {
                 if(valueThumb == "") {
                     parent.addSingleImage(elfinder_root_dir + pp, valueField, "thumb", valueRows);
                 } else {

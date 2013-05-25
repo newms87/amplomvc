@@ -1,6 +1,6 @@
 <?php 
 class ControllerPaymentAuthorizenetAim extends Controller {
-	 
+	
 
 	public function index() {
 		$this->template->load('payment/authorizenet_aim');
@@ -134,10 +134,6 @@ class ControllerPaymentAuthorizenetAim extends Controller {
 			$this->error['key'] = $this->_('error_key');
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

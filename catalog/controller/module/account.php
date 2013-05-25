@@ -7,7 +7,7 @@ class ControllerModuleAccount extends Controller {
 		
 		$this->data['logged'] = $this->customer->isLogged();
 		$this->data['register'] = $this->url->link('account/register');
-    	$this->data['login'] = $this->url->link('account/login');
+		$this->data['login'] = $this->url->link('account/login');
 		$this->data['logout'] = $this->url->link('account/logout');
 		$this->data['forgotten'] = $this->url->link('account/forgotten');
 		$this->data['account'] = $this->url->link('account/account');

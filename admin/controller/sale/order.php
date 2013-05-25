@@ -24,7 +24,7 @@ class ControllerSaleOrder extends Controller {
 			$this->model_sale_order->addOrder($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
-		  
+		
 			$url = '';
 			
 			if (isset($_GET['filter_order_id'])) {
@@ -66,7 +66,7 @@ class ControllerSaleOrder extends Controller {
 			$this->url->redirect($this->url->link('sale/order', $url));
 		}
 		
-    	$this->getForm();
+		$this->getForm();
   	}
 	
   	public function update() {
@@ -76,9 +76,9 @@ class ControllerSaleOrder extends Controller {
 
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_sale_order->editOrder($_GET['order_id'], $_POST);
-	  		
+			
 			$this->message->add('success', $this->_('text_success'));
-	  
+	
 			$url = '';
 
 			if (isset($_GET['filter_order_id'])) {
@@ -120,7 +120,7 @@ class ControllerSaleOrder extends Controller {
 			$this->url->redirect($this->url->link('sale/order', $url));
 		}
 		
-    	$this->getForm();
+		$this->getForm();
   	}
 	
   	public function delete() {
@@ -174,38 +174,38 @@ class ControllerSaleOrder extends Controller {
 			}
 
 			$this->url->redirect($this->url->link('sale/order', $url));
-    	}
+		}
 
-    	$this->getList();
+		$this->getList();
   	}
 
   	private function getList() {
 		$this->template->load('sale/order_list');
-  	   
-      $query_defaults = array(
-         'filter_order_id'        => null,
-         'filter_customer'        => null,
-         'filter_order_status_id' => null,
-         'filter_total'           => null,
-         'filter_date_added'      => null,
-         'filter_date_modified'   => null,
-         'sort'                   => 'o.order_id',
-         'order'                  => 'ASC',
-         'page'                   => 1
-      );
-      
-      foreach($query_defaults as $key => $default){
-   		if (isset($_GET[$key])) {
-   			$$key = $_GET[$key];
-   		} else {
-   			$$key = $default;
-   		}
-      }
+  		
+		$query_defaults = array(
+			'filter_order_id'		=> null,
+			'filter_customer'		=> null,
+			'filter_order_status_id' => null,
+			'filter_total'			=> null,
+			'filter_date_added'		=> null,
+			'filter_date_modified'	=> null,
+			'sort'						=> 'o.order_id',
+			'order'						=> 'ASC',
+			'page'						=> 1
+		);
+		
+		foreach($query_defaults as $key => $default){
+			if (isset($_GET[$key])) {
+				$$key = $_GET[$key];
+			} else {
+				$$key = $default;
+			}
+		}
 		
 		$url = $this->url->get_query(array(
-		   'filter_order_id', 'filter_customer', 'filter_order_status_id',
-		   'filter_total', 'filter_date_added', 'filter_date_modified',
-		   'sort','order','page'));
+			'filter_order_id', 'filter_customer', 'filter_order_status_id',
+			'filter_total', 'filter_date_added', 'filter_date_modified',
+			'sort','order','page'));
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('sale/order', $url));
@@ -217,23 +217,23 @@ class ControllerSaleOrder extends Controller {
 		$this->data['orders'] = array();
 
 		$data = array(
-			'filter_order_id'        => $filter_order_id,
-			'filter_customer'	       => $filter_customer,
+			'filter_order_id'		=> $filter_order_id,
+			'filter_customer'			=> $filter_customer,
 			'filter_order_status_id' => $filter_order_status_id,
-			'filter_total'           => $filter_total,
-			'filter_date_added'      => $filter_date_added,
-			'filter_date_modified'   => $filter_date_modified,
-			'sort'                   => $sort,
-			'order'                  => $order,
-			'start'                  => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit'                  => $this->config->get('config_admin_limit')
+			'filter_total'			=> $filter_total,
+			'filter_date_added'		=> $filter_date_added,
+			'filter_date_modified'	=> $filter_date_modified,
+			'sort'						=> $sort,
+			'order'						=> $order,
+			'start'						=> ($page - 1) * $this->config->get('config_admin_limit'),
+			'limit'						=> $this->config->get('config_admin_limit')
 		);
-      
+		
 		$order_total = $this->model_sale_order->getTotalOrders($data);
 
 		$results = $this->model_sale_order->getOrders($data);
 
-    	foreach ($results as $result) {
+		foreach ($results as $result) {
 			$action = array();
 						
 			$action[] = array(
@@ -249,14 +249,14 @@ class ControllerSaleOrder extends Controller {
 			}
 			
 			$this->data['orders'][] = array(
-				'order_id'      => $result['order_id'],
-				'customer'      => $result['customer'],
-				'status'        => $result['status'],
-				'total'         => $this->currency->format($result['total'], $result['currency_code'], $result['currency_value']),
-				'date_added'    => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
+				'order_id'		=> $result['order_id'],
+				'customer'		=> $result['customer'],
+				'status'		=> $result['status'],
+				'total'			=> $this->currency->format($result['total'], $result['currency_code'], $result['currency_value']),
+				'date_added'	=> $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
 				'date_modified' => date($this->language->getInfo('date_format_short'), strtotime($result['date_modified'])),
-				'selected'      => isset($_POST['selected']) && in_array($result['order_id'], $_POST['selected']),
-				'action'        => $action
+				'selected'		=> isset($_POST['selected']) && in_array($result['order_id'], $_POST['selected']),
+				'action'		=> $action
 			);
 		}
 
@@ -341,7 +341,6 @@ class ControllerSaleOrder extends Controller {
 		$this->pagination->total = $order_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('sale/order', $url);
 
 		$this->data['pagination'] = $this->pagination->render();
@@ -424,17 +423,17 @@ class ControllerSaleOrder extends Controller {
 		
 		$this->data['cancel'] = $this->url->link('sale/order', $url);
 
-    	if (isset($_GET['order_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-      		$order_info = $this->model_sale_order->getOrder($_GET['order_id']);
-    	}
+		if (isset($_GET['order_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
+				$order_info = $this->model_sale_order->getOrder($_GET['order_id']);
+		}
 			
-    	if (isset($_POST['store_id'])) {
-      		$this->data['store_id'] = $_POST['store_id'];
-    	} elseif (!empty($order_info)) { 
+		if (isset($_POST['store_id'])) {
+				$this->data['store_id'] = $_POST['store_id'];
+		} elseif (!empty($order_info)) { 
 			$this->data['store_id'] = $order_info['store_id'];
 		} else {
-      		$this->data['store_id'] = '';
-    	}
+				$this->data['store_id'] = '';
+		}
 		
 		$this->data['data_stores'] = $this->model_setting_store->getStores();
 		
@@ -464,79 +463,79 @@ class ControllerSaleOrder extends Controller {
 			$this->data['customer_group_id'] = '';
 		}
 						
-    	if (isset($_POST['firstname'])) {
-      		$this->data['firstname'] = $_POST['firstname'];
+		if (isset($_POST['firstname'])) {
+				$this->data['firstname'] = $_POST['firstname'];
 		} elseif (!empty($order_info)) { 
 			$this->data['firstname'] = $order_info['firstname'];
 		} else {
-      		$this->data['firstname'] = '';
-    	}
+				$this->data['firstname'] = '';
+		}
 
-    	if (isset($_POST['lastname'])) {
-      		$this->data['lastname'] = $_POST['lastname'];
-    	} elseif (!empty($order_info)) { 
+		if (isset($_POST['lastname'])) {
+				$this->data['lastname'] = $_POST['lastname'];
+		} elseif (!empty($order_info)) { 
 			$this->data['lastname'] = $order_info['lastname'];
 		} else {
-      		$this->data['lastname'] = '';
-    	}
+				$this->data['lastname'] = '';
+		}
 
-    	if (isset($_POST['email'])) {
-      		$this->data['email'] = $_POST['email'];
-    	} elseif (!empty($order_info)) { 
+		if (isset($_POST['email'])) {
+				$this->data['email'] = $_POST['email'];
+		} elseif (!empty($order_info)) { 
 			$this->data['email'] = $order_info['email'];
 		} else {
-      		$this->data['email'] = '';
-    	}
+				$this->data['email'] = '';
+		}
 				
-    	if (isset($_POST['telephone'])) {
-      		$this->data['telephone'] = $_POST['telephone'];
-    	} elseif (!empty($order_info)) { 
+		if (isset($_POST['telephone'])) {
+				$this->data['telephone'] = $_POST['telephone'];
+		} elseif (!empty($order_info)) { 
 			$this->data['telephone'] = $order_info['telephone'];
 		} else {
-      		$this->data['telephone'] = '';
-    	}
+				$this->data['telephone'] = '';
+		}
 		
-    	if (isset($_POST['fax'])) {
-      		$this->data['fax'] = $_POST['fax'];
-    	} elseif (!empty($order_info)) { 
+		if (isset($_POST['fax'])) {
+				$this->data['fax'] = $_POST['fax'];
+		} elseif (!empty($order_info)) { 
 			$this->data['fax'] = $order_info['fax'];
 		} else {
-      		$this->data['fax'] = '';
-    	}	
+				$this->data['fax'] = '';
+		}	
 		
 		if (isset($_POST['affiliate_id'])) {
-      		$this->data['affiliate_id'] = $_POST['affiliate_id'];
-    	} elseif (!empty($order_info)) { 
+				$this->data['affiliate_id'] = $_POST['affiliate_id'];
+		} elseif (!empty($order_info)) { 
 			$this->data['affiliate_id'] = $order_info['affiliate_id'];
 		} else {
-      		$this->data['affiliate_id'] = '';
-    	}
+				$this->data['affiliate_id'] = '';
+		}
 		
 		if (isset($_POST['affiliate'])) {
-      		$this->data['affiliate'] = $_POST['affiliate'];
-    	} elseif (!empty($order_info)) { 
+				$this->data['affiliate'] = $_POST['affiliate'];
+		} elseif (!empty($order_info)) { 
 			$this->data['affiliate'] = ($order_info['affiliate_id'] ? $order_info['affiliate_firstname'] . ' ' . $order_info['affiliate_lastname'] : '');
 		} else {
-      		$this->data['affiliate'] = '';
-    	}
+				$this->data['affiliate'] = '';
+		}
 				
 		if (isset($_POST['order_status_id'])) {
-      		$this->data['order_status_id'] = $_POST['order_status_id'];
-    	} elseif (!empty($order_info)) { 
+				$this->data['order_status_id'] = $_POST['order_status_id'];
+		} elseif (!empty($order_info)) { 
 			$this->data['order_status_id'] = $order_info['order_status_id'];
 		} else {
-      		$this->data['order_status_id'] = '';
-    	}
+				$this->data['order_status_id'] = '';
+		}
 			
 		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();	
 			
-    	if (isset($_POST['comment'])) {
-      		$this->data['comment'] = $_POST['comment'];
-    	} elseif (!empty($order_info)) { 
+		if (isset($_POST['comment'])) {
+				$this->data['comment'] = $_POST['comment'];
+		} elseif (!empty($order_info)) { 
 			$this->data['comment'] = $order_info['comment'];
 		} else {
-      		$this->data['comment'] = '';
-    	}	
+				$this->data['comment'] = '';
+		}	
 		
 		if (isset($_POST['customer_id'])) {
 			$this->data['addresses'] = $this->model_sale_customer->getAddresses($_POST['customer_id']);
@@ -546,183 +545,183 @@ class ControllerSaleOrder extends Controller {
 			$this->data['addresses'] = array();
 		}
 			
-    	if (isset($_POST['shipping_firstname'])) {
-      		$this->data['shipping_firstname'] = $_POST['shipping_firstname'];
+		if (isset($_POST['shipping_firstname'])) {
+				$this->data['shipping_firstname'] = $_POST['shipping_firstname'];
 		} elseif (!empty($order_info)) { 
 			$this->data['shipping_firstname'] = $order_info['shipping_firstname'];
 		} else {
-      		$this->data['shipping_firstname'] = '';
-    	}
+				$this->data['shipping_firstname'] = '';
+		}
 
-    	if (isset($_POST['shipping_lastname'])) {
-      		$this->data['shipping_lastname'] = $_POST['shipping_lastname'];
-    	} elseif (!empty($order_info)) { 
+		if (isset($_POST['shipping_lastname'])) {
+				$this->data['shipping_lastname'] = $_POST['shipping_lastname'];
+		} elseif (!empty($order_info)) { 
 			$this->data['shipping_lastname'] = $order_info['shipping_lastname'];
 		} else {
-      		$this->data['shipping_lastname'] = '';
-    	}
+				$this->data['shipping_lastname'] = '';
+		}
 
-    	if (isset($_POST['shipping_company'])) {
-      		$this->data['shipping_company'] = $_POST['shipping_company'];
-    	} elseif (!empty($order_info)) { 
+		if (isset($_POST['shipping_company'])) {
+				$this->data['shipping_company'] = $_POST['shipping_company'];
+		} elseif (!empty($order_info)) { 
 			$this->data['shipping_company'] = $order_info['shipping_company'];
 		} else {
-      		$this->data['shipping_company'] = '';
-    	}
+				$this->data['shipping_company'] = '';
+		}
 
-    	if (isset($_POST['shipping_address_1'])) {
-      		$this->data['shipping_address_1'] = $_POST['shipping_address_1'];
-    	} elseif (!empty($order_info)) { 
+		if (isset($_POST['shipping_address_1'])) {
+				$this->data['shipping_address_1'] = $_POST['shipping_address_1'];
+		} elseif (!empty($order_info)) { 
 			$this->data['shipping_address_1'] = $order_info['shipping_address_1'];
 		} else {
-      		$this->data['shipping_address_1'] = '';
-    	}
+				$this->data['shipping_address_1'] = '';
+		}
 
-    	if (isset($_POST['shipping_address_2'])) {
-      		$this->data['shipping_address_2'] = $_POST['shipping_address_2'];
-    	} elseif (!empty($order_info)) { 
+		if (isset($_POST['shipping_address_2'])) {
+				$this->data['shipping_address_2'] = $_POST['shipping_address_2'];
+		} elseif (!empty($order_info)) { 
 			$this->data['shipping_address_2'] = $order_info['shipping_address_2'];
 		} else {
-      		$this->data['shipping_address_2'] = '';
-    	}
+				$this->data['shipping_address_2'] = '';
+		}
 		
-    	if (isset($_POST['shipping_city'])) {
-      		$this->data['shipping_city'] = $_POST['shipping_city'];
-    	} elseif (!empty($order_info)) { 
+		if (isset($_POST['shipping_city'])) {
+				$this->data['shipping_city'] = $_POST['shipping_city'];
+		} elseif (!empty($order_info)) { 
 			$this->data['shipping_city'] = $order_info['shipping_city'];
 		} else {
-      		$this->data['shipping_city'] = '';
-    	}
+				$this->data['shipping_city'] = '';
+		}
 		
-    	if (isset($_POST['shipping_postcode'])) {
-      		$this->data['shipping_postcode'] = $_POST['shipping_postcode'];
-    	} elseif (!empty($order_info)) { 
+		if (isset($_POST['shipping_postcode'])) {
+				$this->data['shipping_postcode'] = $_POST['shipping_postcode'];
+		} elseif (!empty($order_info)) { 
 			$this->data['shipping_postcode'] = $order_info['shipping_postcode'];
 		} else {
-      		$this->data['shipping_postcode'] = '';
-    	}
+				$this->data['shipping_postcode'] = '';
+		}
 				
-    	if (isset($_POST['shipping_country_id'])) {
-      		$this->data['shipping_country_id'] = $_POST['shipping_country_id'];
-    	} elseif (!empty($order_info)) { 
+		if (isset($_POST['shipping_country_id'])) {
+				$this->data['shipping_country_id'] = $_POST['shipping_country_id'];
+		} elseif (!empty($order_info)) { 
 			$this->data['shipping_country_id'] = $order_info['shipping_country_id'];
 		} else {
-      		$this->data['shipping_country_id'] = '';
-    	}		
-	    
+				$this->data['shipping_country_id'] = '';
+		}		
+		
 		if (isset($_POST['shipping_zone_id'])) {
-      		$this->data['shipping_zone_id'] = $_POST['shipping_zone_id'];
-    	} elseif (!empty($order_info)) { 
+				$this->data['shipping_zone_id'] = $_POST['shipping_zone_id'];
+		} elseif (!empty($order_info)) { 
 			$this->data['shipping_zone_id'] = $order_info['shipping_zone_id'];
 		} else {
-      		$this->data['shipping_zone_id'] = '';
-    	}	
+				$this->data['shipping_zone_id'] = '';
+		}	
 				
-    	if (isset($_POST['payment_firstname'])) {
-      		$this->data['payment_firstname'] = $_POST['payment_firstname'];
+		if (isset($_POST['payment_firstname'])) {
+				$this->data['payment_firstname'] = $_POST['payment_firstname'];
 		} elseif (!empty($order_info)) { 
 			$this->data['payment_firstname'] = $order_info['payment_firstname'];
 		} else {
-      		$this->data['payment_firstname'] = '';
-    	}
+				$this->data['payment_firstname'] = '';
+		}
 
-    	if (isset($_POST['payment_lastname'])) {
-      		$this->data['payment_lastname'] = $_POST['payment_lastname'];
-    	} elseif (!empty($order_info)) { 
+		if (isset($_POST['payment_lastname'])) {
+				$this->data['payment_lastname'] = $_POST['payment_lastname'];
+		} elseif (!empty($order_info)) { 
 			$this->data['payment_lastname'] = $order_info['payment_lastname'];
 		} else {
-      		$this->data['payment_lastname'] = '';
-    	}
+				$this->data['payment_lastname'] = '';
+		}
 
-    	if (isset($_POST['payment_company'])) {
-      		$this->data['payment_company'] = $_POST['payment_company'];
-    	} elseif (!empty($order_info)) { 
+		if (isset($_POST['payment_company'])) {
+				$this->data['payment_company'] = $_POST['payment_company'];
+		} elseif (!empty($order_info)) { 
 			$this->data['payment_company'] = $order_info['payment_company'];
 		} else {
-      		$this->data['payment_company'] = '';
-    	}
+				$this->data['payment_company'] = '';
+		}
 
-    	if (isset($_POST['payment_address_1'])) {
-      		$this->data['payment_address_1'] = $_POST['payment_address_1'];
-    	} elseif (!empty($order_info)) { 
+		if (isset($_POST['payment_address_1'])) {
+				$this->data['payment_address_1'] = $_POST['payment_address_1'];
+		} elseif (!empty($order_info)) { 
 			$this->data['payment_address_1'] = $order_info['payment_address_1'];
 		} else {
-      		$this->data['payment_address_1'] = '';
-    	}
+				$this->data['payment_address_1'] = '';
+		}
 
-    	if (isset($_POST['payment_address_2'])) {
-      		$this->data['payment_address_2'] = $_POST['payment_address_2'];
-    	} elseif (!empty($order_info)) { 
+		if (isset($_POST['payment_address_2'])) {
+				$this->data['payment_address_2'] = $_POST['payment_address_2'];
+		} elseif (!empty($order_info)) { 
 			$this->data['payment_address_2'] = $order_info['payment_address_2'];
 		} else {
-      		$this->data['payment_address_2'] = '';
-    	}
+				$this->data['payment_address_2'] = '';
+		}
 		
-    	if (isset($_POST['payment_city'])) {
-      		$this->data['payment_city'] = $_POST['payment_city'];
-    	} elseif (!empty($order_info)) { 
+		if (isset($_POST['payment_city'])) {
+				$this->data['payment_city'] = $_POST['payment_city'];
+		} elseif (!empty($order_info)) { 
 			$this->data['payment_city'] = $order_info['payment_city'];
 		} else {
-      		$this->data['payment_city'] = '';
-    	}
+				$this->data['payment_city'] = '';
+		}
 
-    	if (isset($_POST['payment_postcode'])) {
-      		$this->data['payment_postcode'] = $_POST['payment_postcode'];
-    	} elseif (!empty($order_info)) { 
+		if (isset($_POST['payment_postcode'])) {
+				$this->data['payment_postcode'] = $_POST['payment_postcode'];
+		} elseif (!empty($order_info)) { 
 			$this->data['payment_postcode'] = $order_info['payment_postcode'];
 		} else {
-      		$this->data['payment_postcode'] = '';
-    	}
+				$this->data['payment_postcode'] = '';
+		}
 				
-    	if (isset($_POST['payment_country_id'])) {
-      		$this->data['payment_country_id'] = $_POST['payment_country_id'];
-    	} elseif (!empty($order_info)) { 
+		if (isset($_POST['payment_country_id'])) {
+				$this->data['payment_country_id'] = $_POST['payment_country_id'];
+		} elseif (!empty($order_info)) { 
 			$this->data['payment_country_id'] = $order_info['payment_country_id'];
 		} else {
-      		$this->data['payment_country_id'] = '';
-    	}		
-	    
+				$this->data['payment_country_id'] = '';
+		}		
+		
 		if (isset($_POST['payment_zone_id'])) {
-      		$this->data['payment_zone_id'] = $_POST['payment_zone_id'];
-    	} elseif (!empty($order_info)) { 
+				$this->data['payment_zone_id'] = $_POST['payment_zone_id'];
+		} elseif (!empty($order_info)) { 
 			$this->data['payment_zone_id'] = $order_info['payment_zone_id'];
 		} else {
-      		$this->data['payment_zone_id'] = '';
-    	}
+				$this->data['payment_zone_id'] = '';
+		}
 		
 		$this->data['countries'] = $this->model_localisation_country->getCountries();															
 		
-    	if (isset($_POST['shipping_method'])) {
-      		$this->data['shipping_method'] = $_POST['shipping_method'];
-    	} elseif (!empty($order_info)) { 
+		if (isset($_POST['shipping_method'])) {
+				$this->data['shipping_method'] = $_POST['shipping_method'];
+		} elseif (!empty($order_info)) { 
 			$this->data['shipping_method'] = $order_info['shipping_method'];
 		} else {
-      		$this->data['shipping_method'] = '';
-    	}	
+				$this->data['shipping_method'] = '';
+		}	
 		
-    	if (isset($_POST['shipping_code'])) {
-      		$this->data['shipping_code'] = $_POST['shipping_code'];
-    	} elseif (!empty($order_info)) { 
+		if (isset($_POST['shipping_code'])) {
+				$this->data['shipping_code'] = $_POST['shipping_code'];
+		} elseif (!empty($order_info)) { 
 			$this->data['shipping_code'] = $order_info['shipping_code'];
 		} else {
-      		$this->data['shipping_code'] = '';
-    	}
+				$this->data['shipping_code'] = '';
+		}
 						
-    	if (isset($_POST['payment_method'])) {
-      		$this->data['payment_method'] = $_POST['payment_method'];
-    	} elseif (!empty($order_info)) { 
+		if (isset($_POST['payment_method'])) {
+				$this->data['payment_method'] = $_POST['payment_method'];
+		} elseif (!empty($order_info)) { 
 			$this->data['payment_method'] = $order_info['payment_method'];
 		} else {
-      		$this->data['payment_method'] = '';
-    	}
+				$this->data['payment_method'] = '';
+		}
 		
-    	if (isset($_POST['payment_code'])) {
-      		$this->data['payment_code'] = $_POST['payment_code'];
-    	} elseif (!empty($order_info)) { 
+		if (isset($_POST['payment_code'])) {
+				$this->data['payment_code'] = $_POST['payment_code'];
+		} elseif (!empty($order_info)) { 
 			$this->data['payment_code'] = $order_info['payment_code'];
 		} else {
-      		$this->data['payment_code'] = '';
-    	}
+				$this->data['payment_code'] = '';
+		}
 	
 		if (isset($_POST['order_product'])) {
 			$order_products = $_POST['order_product'];
@@ -755,16 +754,16 @@ class ControllerSaleOrder extends Controller {
 											
 			$this->data['order_products'][] = array(
 				'order_product_id' => $order_product['order_product_id'],
-				'product_id'       => $order_product['product_id'],
-				'name'             => $order_product['name'],
-				'model'            => $order_product['model'],
-				'option'           => $order_option,
-				'download'         => $order_download,
-				'quantity'         => $order_product['quantity'],
-				'price'            => $order_product['price'],
-				'total'            => $order_product['total'],
-				'tax'              => $order_product['tax'],
-				'reward'           => $order_product['reward']
+				'product_id'		=> $order_product['product_id'],
+				'name'				=> $order_product['name'],
+				'model'				=> $order_product['model'],
+				'option'			=> $order_option,
+				'download'			=> $order_download,
+				'quantity'			=> $order_product['quantity'],
+				'price'				=> $order_product['price'],
+				'total'				=> $order_product['total'],
+				'tax'				=> $order_product['tax'],
+				'reward'			=> $order_product['reward']
 			);
 		}
 		
@@ -775,16 +774,16 @@ class ControllerSaleOrder extends Controller {
 		} else {
 			$this->data['order_vouchers'] = array();
 		}
-       
+		
 		$this->data['voucher_themes'] = $this->model_sale_voucher_theme->getVoucherThemes();
 						
 		if (isset($_POST['order_total'])) {
-      		$this->data['order_totals'] = $_POST['order_total'];
-    	} elseif (isset($_GET['order_id'])) { 
+				$this->data['order_totals'] = $_POST['order_total'];
+		} elseif (isset($_GET['order_id'])) { 
 			$this->data['order_totals'] = $this->model_sale_order->getOrderTotals($_GET['order_id']);
 		} else {
-      		$this->data['order_totals'] = array();
-    	}	
+				$this->data['order_totals'] = array();
+		}	
 		
 		$this->children = array(
 			'common/header',
@@ -795,41 +794,41 @@ class ControllerSaleOrder extends Controller {
   	}
 	
   	private function validateForm() {
-    	if (!$this->user->hasPermission('modify', 'sale/order')) {
-      		$this->error['warning'] = $this->_('error_permission');
-    	}
+		if (!$this->user->hasPermission('modify', 'sale/order')) {
+				$this->error['warning'] = $this->_('error_permission');
+		}
 
-    	if ((strlen($_POST['firstname']) < 1) || (strlen($_POST['firstname']) > 32)) {
-      		$this->error['firstname'] = $this->_('error_firstname');
-    	}
+		if ((strlen($_POST['firstname']) < 1) || (strlen($_POST['firstname']) > 32)) {
+				$this->error['firstname'] = $this->_('error_firstname');
+		}
 
-    	if ((strlen($_POST['lastname']) < 1) || (strlen($_POST['lastname']) > 32)) {
-      		$this->error['lastname'] = $this->_('error_lastname');
-    	}
+		if ((strlen($_POST['lastname']) < 1) || (strlen($_POST['lastname']) > 32)) {
+				$this->error['lastname'] = $this->_('error_lastname');
+		}
 
-    	if ((strlen($_POST['email']) > 96) || (!preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $_POST['email']))) {
-      		$this->error['email'] = $this->_('error_email');
-    	}
+		if ((strlen($_POST['email']) > 96) || (!preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $_POST['email']))) {
+				$this->error['email'] = $this->_('error_email');
+		}
 		
-    	if ((strlen($_POST['telephone']) < 3) || (strlen($_POST['telephone']) > 32)) {
-      		$this->error['telephone'] = $this->_('error_telephone');
-    	}
+		if ((strlen($_POST['telephone']) < 3) || (strlen($_POST['telephone']) > 32)) {
+				$this->error['telephone'] = $this->_('error_telephone');
+		}
 		
-    	if ((strlen($_POST['payment_firstname']) < 1) || (strlen($_POST['payment_firstname']) > 32)) {
-      		$this->error['payment_firstname'] = $this->_('error_firstname');
-    	}
+		if ((strlen($_POST['payment_firstname']) < 1) || (strlen($_POST['payment_firstname']) > 32)) {
+				$this->error['payment_firstname'] = $this->_('error_firstname');
+		}
 
-    	if ((strlen($_POST['payment_lastname']) < 1) || (strlen($_POST['payment_lastname']) > 32)) {
-      		$this->error['payment_lastname'] = $this->_('error_lastname');
-    	}
+		if ((strlen($_POST['payment_lastname']) < 1) || (strlen($_POST['payment_lastname']) > 32)) {
+				$this->error['payment_lastname'] = $this->_('error_lastname');
+		}
 
-    	if ((strlen($_POST['payment_address_1']) < 3) || (strlen($_POST['payment_address_1']) > 128)) {
-      		$this->error['payment_address_1'] = $this->_('error_address_1');
-    	}
+		if ((strlen($_POST['payment_address_1']) < 3) || (strlen($_POST['payment_address_1']) > 128)) {
+				$this->error['payment_address_1'] = $this->_('error_address_1');
+		}
 
-    	if ((strlen($_POST['payment_city']) < 3) || (strlen($_POST['payment_city']) > 128)) {
-      		$this->error['payment_city'] = $this->_('error_city');
-    	}
+		if ((strlen($_POST['payment_city']) < 3) || (strlen($_POST['payment_city']) > 128)) {
+				$this->error['payment_city'] = $this->_('error_city');
+		}
 		
 		$country_info = $this->model_localisation_country->getCountry($_POST['payment_country_id']);
 		
@@ -837,13 +836,13 @@ class ControllerSaleOrder extends Controller {
 			$this->error['payment_postcode'] = $this->_('error_postcode');
 		}
 
-    	if ($_POST['payment_country_id'] == '') {
-      		$this->error['payment_country'] = $this->_('error_country');
-    	}
+		if ($_POST['payment_country_id'] == '') {
+				$this->error['payment_country'] = $this->_('error_country');
+		}
 		
-    	if ($_POST['payment_zone_id'] == '') {
-      		$this->error['payment_zone'] = $this->_('error_zone');
-    	}	
+		if ($_POST['payment_zone_id'] == '') {
+				$this->error['payment_zone'] = $this->_('error_zone');
+		}	
 		
 		// Check if any products require shipping
 		$shipping = false;
@@ -894,23 +893,15 @@ class ControllerSaleOrder extends Controller {
 			$this->error['warning'] = $this->_('error_warning');
 		}
 		
-		if (!$this->error) {
-	  		return true;
-		} else {
-	  		return false;
-		}
-  	}    
+		return $this->error ? false : true;
+  	}	
 	
-   	private function validateDelete() {
-    	if (!$this->user->hasPermission('modify', 'sale/order')) {
+		private function validateDelete() {
+		if (!$this->user->hasPermission('modify', 'sale/order')) {
 			$this->error['warning'] = $this->_('error_permission');
-    	}
-
-		if (!$this->error) {
-	  		return true;
-		} else {
-	  		return false;
 		}
+
+		return $this->error ? false : true;
   	}
 	
 	public function info() {
@@ -1052,7 +1043,7 @@ class ControllerSaleOrder extends Controller {
 				$option_data = array();
 
 				$options = $this->model_sale_order->getOrderOptions($_GET['order_id'], $product['order_product_id']);
-            
+				
 				foreach ($options as $option) {
 					if ($option['type'] != 'file') {
 						$option_data[] = array(
@@ -1069,29 +1060,29 @@ class ControllerSaleOrder extends Controller {
 						);						
 					}
 				}
-            
+				
 				$this->data['products'][] = array(
 					'order_product_id' => $product['order_product_id'],
-					'product_id'       => $product['product_id'],
-					'name'    	 	   => $product['name'],
-					'model'    		   => $product['model'],
-					'option'   		   => $option_data,
-					'quantity'		   => $product['quantity'],
-					'price'    		   => $this->currency->format($product['price'], $order_info['currency_code'], $order_info['currency_value']),
-					'total'    		   => $this->currency->format($product['total'], $order_info['currency_code'], $order_info['currency_value']),
-					'href'     		   => $this->url->link('catalog/product/update', 'product_id=' . $product['product_id'])
+					'product_id'		=> $product['product_id'],
+					'name'				=> $product['name'],
+					'model'				=> $product['model'],
+					'option'				=> $option_data,
+					'quantity'			=> $product['quantity'],
+					'price'				=> $this->currency->format($product['price'], $order_info['currency_code'], $order_info['currency_value']),
+					'total'				=> $this->currency->format($product['total'], $order_info['currency_code'], $order_info['currency_value']),
+					'href'				=> $this->url->link('catalog/product/update', 'product_id=' . $product['product_id'])
 				);
 			}
 		
 			$this->data['vouchers'] = array();	
 			
 			$vouchers = $this->model_sale_order->getOrderVouchers($_GET['order_id']);
-			 
+			
 			foreach ($vouchers as $voucher) {
 				$this->data['vouchers'][] = array(
 					'description' => $voucher['description'],
-					'amount'      => $this->currency->format($voucher['amount'], $order_info['currency_code'], $order_info['currency_value']),
-					'href'        => $this->url->link('sale/voucher/update', 'voucher_id=' . $voucher['voucher_id'])
+					'amount'		=> $this->currency->format($voucher['amount'], $order_info['currency_code'], $order_info['currency_value']),
+					'href'		=> $this->url->link('sale/voucher/update', 'voucher_id=' . $voucher['voucher_id'])
 				);
 			}
 		
@@ -1104,7 +1095,7 @@ class ControllerSaleOrder extends Controller {
 	
 				foreach ($results as $result) {
 					$this->data['downloads'][] = array(
-						'name'      => $result['name'],
+						'name'		=> $result['name'],
 						'filename'  => $result['mask'],
 						'remaining' => $result['remaining']
 					);
@@ -1349,8 +1340,8 @@ class ControllerSaleOrder extends Controller {
 
 		$json = array();
 		
-     	if (!$this->user->hasPermission('modify', 'sale/order')) {
-      		$json['error'] = $this->_('error_permission'); 
+		if (!$this->user->hasPermission('modify', 'sale/order')) {
+				$json['error'] = $this->_('error_permission'); 
 		} elseif (isset($_GET['order_id'])) {
 			$invoice_no = $this->model_sale_order->createInvoiceNo($_GET['order_id']);
 			
@@ -1368,10 +1359,10 @@ class ControllerSaleOrder extends Controller {
 		$this->language->load('sale/order');
 		
 		$json = array();
-    	
-     	if (!$this->user->hasPermission('modify', 'sale/order')) {
-      		$json['error'] = $this->_('error_permission'); 
-    	} elseif (isset($_GET['order_id'])) {
+		
+		if (!$this->user->hasPermission('modify', 'sale/order')) {
+				$json['error'] = $this->_('error_permission'); 
+		} elseif (isset($_GET['order_id'])) {
 			$order_info = $this->model_sale_order->getOrder($_GET['order_id']);
 			
 			if ($order_info && $order_info['customer_id']) {
@@ -1394,10 +1385,10 @@ class ControllerSaleOrder extends Controller {
 		$this->language->load('sale/order');
 		
 		$json = array();
-    	
-     	if (!$this->user->hasPermission('modify', 'sale/order')) {
-      		$json['error'] = $this->_('error_permission'); 
-    	} elseif (isset($_GET['order_id'])) {
+		
+		if (!$this->user->hasPermission('modify', 'sale/order')) {
+				$json['error'] = $this->_('error_permission'); 
+		} elseif (isset($_GET['order_id'])) {
 			$order_info = $this->model_sale_order->getOrder($_GET['order_id']);
 			
 			if ($order_info && $order_info['customer_id']) {
@@ -1416,10 +1407,10 @@ class ControllerSaleOrder extends Controller {
 		$this->language->load('sale/order');
 		
 		$json = array();
-    	
-     	if (!$this->user->hasPermission('modify', 'sale/order')) {
-      		$json['error'] = $this->_('error_permission'); 
-    	} elseif (isset($_GET['order_id'])) {
+		
+		if (!$this->user->hasPermission('modify', 'sale/order')) {
+				$json['error'] = $this->_('error_permission'); 
+		} elseif (isset($_GET['order_id'])) {
 			$order_info = $this->model_sale_order->getOrder($_GET['order_id']);
 			
 			if ($order_info && $order_info['customer_id']) {
@@ -1444,10 +1435,10 @@ class ControllerSaleOrder extends Controller {
 		$this->language->load('sale/order');
 		
 		$json = array();
-    	
-     	if (!$this->user->hasPermission('modify', 'sale/order')) {
-      		$json['error'] = $this->_('error_permission'); 
-    	} elseif (isset($_GET['order_id'])) {
+		
+		if (!$this->user->hasPermission('modify', 'sale/order')) {
+				$json['error'] = $this->_('error_permission'); 
+		} elseif (isset($_GET['order_id'])) {
 			$order_info = $this->model_sale_order->getOrder($_GET['order_id']);
 			
 			if ($order_info && $order_info['customer_id']) {
@@ -1466,10 +1457,10 @@ class ControllerSaleOrder extends Controller {
 		$this->language->load('sale/order');
 		
 		$json = array();
-    	
-     	if (!$this->user->hasPermission('modify', 'sale/order')) {
-      		$json['error'] = $this->_('error_permission'); 
-    	} elseif (isset($_GET['order_id'])) {
+		
+		if (!$this->user->hasPermission('modify', 'sale/order')) {
+				$json['error'] = $this->_('error_permission'); 
+		} elseif (isset($_GET['order_id'])) {
 			$order_info = $this->model_sale_order->getOrder($_GET['order_id']);
 			
 			if ($order_info && $order_info['affiliate_id']) {
@@ -1494,10 +1485,10 @@ class ControllerSaleOrder extends Controller {
 		$this->language->load('sale/order');
 		
 		$json = array(); 
-    	
-     	if (!$this->user->hasPermission('modify', 'sale/order')) {
-      		$json['error'] = $this->_('error_permission'); 
-    	} elseif (isset($_GET['order_id'])) {
+		
+		if (!$this->user->hasPermission('modify', 'sale/order')) {
+				$json['error'] = $this->_('error_permission'); 
+		} elseif (isset($_GET['order_id'])) {
 			$order_info = $this->model_sale_order->getOrder($_GET['order_id']);
 			
 			if ($order_info && $order_info['affiliate_id']) {
@@ -1515,7 +1506,7 @@ class ControllerSaleOrder extends Controller {
 	public function history() {
 		$this->template->load('sale/order_history');
 
-    	$this->language->load('sale/order');
+		$this->language->load('sale/order');
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->user->hasPermission('modify', 'sale/order')) { 
 			$this->model_sale_order->addOrderHistory($_GET['order_id'], $_POST);
@@ -1536,15 +1527,15 @@ class ControllerSaleOrder extends Controller {
 		$this->data['histories'] = array();
 			
 		$results = $this->model_sale_order->getOrderHistories($_GET['order_id'], ($page - 1) * 10, 10);
-      		
+				
 		foreach ($results as $result) {
-        	$this->data['histories'][] = array(
-				'notify'     => $result['notify'] ? $this->_('text_yes') : $this->_('text_no'),
-				'status'     => $result['status'],
-				'comment'    => nl2br($result['comment']),
-        		'date_added' => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
-        	);
-      	}			
+			$this->data['histories'][] = array(
+				'notify'	=> $result['notify'] ? $this->_('text_yes') : $this->_('text_no'),
+				'status'	=> $result['status'],
+				'comment'	=> nl2br($result['comment']),
+				'date_added' => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
+			);
+			}			
 		
 		$history_total = $this->model_sale_order->getTotalOrderHistories($_GET['order_id']);
 			
@@ -1552,7 +1543,6 @@ class ControllerSaleOrder extends Controller {
 		$this->pagination->total = $history_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = 10; 
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('sale/order/history', 'order_id=' . $_GET['order_id']);
 			
 		$this->data['pagination'] = $this->pagination->render();
@@ -1623,7 +1613,7 @@ class ControllerSaleOrder extends Controller {
 				
 				if ((strlen($filename) < 3) || (strlen($filename) > 128)) {
 					$json['error'] = $this->_('error_filename');
-				}	  	
+				}		
 				
 				$allowed = array();
 				
@@ -1727,14 +1717,14 @@ class ControllerSaleOrder extends Controller {
 				$replace = array(
 					'firstname' => $order_info['shipping_firstname'],
 					'lastname'  => $order_info['shipping_lastname'],
-					'company'   => $order_info['shipping_company'],
+					'company'	=> $order_info['shipping_company'],
 					'address_1' => $order_info['shipping_address_1'],
 					'address_2' => $order_info['shipping_address_2'],
-					'city'      => $order_info['shipping_city'],
+					'city'		=> $order_info['shipping_city'],
 					'postcode'  => $order_info['shipping_postcode'],
-					'zone'      => $order_info['shipping_zone'],
+					'zone'		=> $order_info['shipping_zone'],
 					'zone_code' => $order_info['shipping_zone_code'],
-					'country'   => $order_info['shipping_country']
+					'country'	=> $order_info['shipping_country']
 				);
 
 				$shipping_address = str_replace(array("\r\n", "\r", "\n"), '<br />', preg_replace(array("/\s\s+/", "/\r\r+/", "/\n\n+/"), '<br />', trim(str_replace($find, $replace, $format))));
@@ -1761,14 +1751,14 @@ class ControllerSaleOrder extends Controller {
 				$replace = array(
 					'firstname' => $order_info['payment_firstname'],
 					'lastname'  => $order_info['payment_lastname'],
-					'company'   => $order_info['payment_company'],
+					'company'	=> $order_info['payment_company'],
 					'address_1' => $order_info['payment_address_1'],
 					'address_2' => $order_info['payment_address_2'],
-					'city'      => $order_info['payment_city'],
+					'city'		=> $order_info['payment_city'],
 					'postcode'  => $order_info['payment_postcode'],
-					'zone'      => $order_info['payment_zone'],
+					'zone'		=> $order_info['payment_zone'],
 					'zone_code' => $order_info['payment_zone_code'],
-					'country'   => $order_info['payment_country']
+					'country'	=> $order_info['payment_country']
 				);
 
 				$payment_address = str_replace(array("\r\n", "\r", "\n"), '<br />', preg_replace(array("/\s\s+/", "/\r\r+/", "/\n\n+/"), '<br />', trim(str_replace($find, $replace, $format))));
@@ -1796,12 +1786,12 @@ class ControllerSaleOrder extends Controller {
 					}
 
 					$product_data[] = array(
-						'name'     => $product['name'],
-						'model'    => $product['model'],
-						'option'   => $option_data,
+						'name'	=> $product['name'],
+						'model'	=> $product['model'],
+						'option'	=> $option_data,
 						'quantity' => $product['quantity'],
-						'price'    => $this->currency->format($product['price'], $order_info['currency_code'], $order_info['currency_value']),
-						'total'    => $this->currency->format($product['total'], $order_info['currency_code'], $order_info['currency_value'])
+						'price'	=> $this->currency->format($product['price'], $order_info['currency_code'], $order_info['currency_value']),
+						'total'	=> $this->currency->format($product['total'], $order_info['currency_code'], $order_info['currency_value'])
 					);
 				}
 				
@@ -1812,32 +1802,32 @@ class ControllerSaleOrder extends Controller {
 				foreach ($vouchers as $voucher) {
 					$voucher_data[] = array(
 						'description' => $voucher['description'],
-						'amount'      => $this->currency->format($voucher['amount'], $order_info['currency_code'], $order_info['currency_value'])			
+						'amount'		=> $this->currency->format($voucher['amount'], $order_info['currency_code'], $order_info['currency_value'])			
 					);
 				}
 					
 				$total_data = $this->model_sale_order->getOrderTotals($order_id);
 
 				$this->data['orders'][] = array(
-					'order_id'	       => $order_id,
-					'invoice_no'       => $invoice_no,
-					'date_added'       => date($this->language->getInfo('date_format_short'), strtotime($order_info['date_added'])),
-					'store_name'       => $order_info['store_name'],
-					'store_url'        => rtrim($order_info['store_url'], '/'),
-					'store_address'    => nl2br($store_address),
-					'store_email'      => $store_email,
+					'order_id'			=> $order_id,
+					'invoice_no'		=> $invoice_no,
+					'date_added'		=> date($this->language->getInfo('date_format_short'), strtotime($order_info['date_added'])),
+					'store_name'		=> $order_info['store_name'],
+					'store_url'		=> rtrim($order_info['store_url'], '/'),
+					'store_address'	=> nl2br($store_address),
+					'store_email'		=> $store_email,
 					'store_telephone'  => $store_telephone,
-					'store_fax'        => $store_fax,
-					'email'            => $order_info['email'],
-					'telephone'        => $order_info['telephone'],
+					'store_fax'		=> $store_fax,
+					'email'				=> $order_info['email'],
+					'telephone'		=> $order_info['telephone'],
 					'shipping_address' => $shipping_address,
 					'payment_address'  => $payment_address,
-					'payment_method'   => $order_info['payment_method'],
+					'payment_method'	=> $order_info['payment_method'],
 					'shipping_method'  => $order_info['shipping_method'],
-					'product'          => $product_data,
-					'voucher'          => $voucher_data,
-					'total'            => $total_data,
-					'comment'          => nl2br($order_info['comment'])
+					'product'			=> $product_data,
+					'voucher'			=> $voucher_data,
+					'total'				=> $total_data,
+					'comment'			=> nl2br($order_info['comment'])
 				);
 			}
 		}

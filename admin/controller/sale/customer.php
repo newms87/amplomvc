@@ -1,10 +1,10 @@
-<?php    
+<?php	
 class ControllerSaleCustomer extends Controller { 
 	
   
   	public function index() {
 		$this->load->language('sale/customer');
-		 
+		
 		$this->document->setTitle($this->_('heading_title'));
 		
 		$this->getList();
@@ -13,13 +13,13 @@ class ControllerSaleCustomer extends Controller {
   	public function insert() {
 		$this->load->language('sale/customer');
 
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-      	  	$this->model_sale_customer->addCustomer($_POST);
+				$this->model_sale_customer->addCustomer($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
-		  
+		
 			$url = '';
 
 			if (isset($_GET['filter_name'])) {
@@ -64,20 +64,20 @@ class ControllerSaleCustomer extends Controller {
 			
 			$this->url->redirect($this->url->link('sale/customer', $url));
 		}
-    	
-    	$this->getForm();
+		
+		$this->getForm();
   	} 
-   
+	
   	public function update() {
 		$this->load->language('sale/customer');
 
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_sale_customer->editCustomer($_GET['customer_id'], $_POST);
-	  		
+			
 			$this->message->add('success', $this->_('text_success'));
-	  
+	
 			$url = '';
 
 			if (isset($_GET['filter_name'])) {
@@ -122,14 +122,14 @@ class ControllerSaleCustomer extends Controller {
 			
 			$this->url->redirect($this->url->link('sale/customer', $url));
 		}
-    
-    	$this->getForm();
-  	}   
+	
+		$this->getForm();
+  	}	
 
   	public function delete() {
 		$this->load->language('sale/customer');
 
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $customer_id) {
@@ -181,14 +181,14 @@ class ControllerSaleCustomer extends Controller {
 			}
 			
 			$this->url->redirect($this->url->link('sale/customer', $url));
-    	}
-    
-    	$this->getList();
+		}
+	
+		$this->getList();
   	}  
 	
 	public function approve() {
 		$this->load->language('sale/customer');
-    	
+		
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (!$this->user->hasPermission('modify', 'sale/customer')) {
@@ -255,7 +255,7 @@ class ControllerSaleCustomer extends Controller {
 		
 		$this->getList();
 	} 
-    
+	
   	private function getList() {
 		$this->template->load('sale/customer_list');
 
@@ -371,24 +371,24 @@ class ControllerSaleCustomer extends Controller {
 		$this->data['customers'] = array();
 
 		$data = array(
-			'filter_name'              => $filter_name, 
-			'filter_email'             => $filter_email, 
+			'filter_name'				=> $filter_name, 
+			'filter_email'				=> $filter_email, 
 			'filter_customer_group_id' => $filter_customer_group_id, 
-			'filter_status'            => $filter_status, 
-			'filter_approved'          => $filter_approved, 
-			'filter_date_added'        => $filter_date_added,
-			'filter_ip'                => $filter_ip,
-			'sort'                     => $sort,
-			'order'                    => $order,
-			'start'                    => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit'                    => $this->config->get('config_admin_limit')
+			'filter_status'				=> $filter_status, 
+			'filter_approved'			=> $filter_approved, 
+			'filter_date_added'		=> $filter_date_added,
+			'filter_ip'					=> $filter_ip,
+			'sort'							=> $sort,
+			'order'						=> $order,
+			'start'						=> ($page - 1) * $this->config->get('config_admin_limit'),
+			'limit'						=> $this->config->get('config_admin_limit')
 		);
 		
 		$customer_total = $this->model_sale_customer->getTotalCustomers($data);
 	
 		$results = $this->model_sale_customer->getCustomers($data);
  
-    	foreach ($results as $result) {
+		foreach ($results as $result) {
 			$action = array();
 		
 			$action[] = array(
@@ -397,16 +397,16 @@ class ControllerSaleCustomer extends Controller {
 			);
 			
 			$this->data['customers'][] = array(
-				'customer_id'    => $result['customer_id'],
-				'name'           => $result['name'],
-				'email'          => $result['email'],
+				'customer_id'	=> $result['customer_id'],
+				'name'			=> $result['name'],
+				'email'			=> $result['email'],
 				'customer_group' => $result['customer_group'],
-				'status'         => ($result['status'] ? $this->_('text_enabled') : $this->_('text_disabled')),
-				'approved'       => ($result['approved'] ? $this->_('text_yes') : $this->_('text_no')),
-				'ip'             => $result['ip'],
-				'date_added'     => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
-				'selected'       => isset($_POST['selected']) && in_array($result['customer_id'], $_POST['selected']),
-				'action'         => $action
+				'status'			=> ($result['status'] ? $this->_('text_enabled') : $this->_('text_disabled')),
+				'approved'		=> ($result['approved'] ? $this->_('text_yes') : $this->_('text_no')),
+				'ip'				=> $result['ip'],
+				'date_added'	=> $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
+				'selected'		=> isset($_POST['selected']) && in_array($result['customer_id'], $_POST['selected']),
+				'action'			=> $action
 			);
 		}	
 					
@@ -514,7 +514,6 @@ class ControllerSaleCustomer extends Controller {
 		$this->pagination->total = $customer_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('sale/customer', $url);
 			
 		$this->data['pagination'] = $this->pagination->render();
@@ -681,87 +680,87 @@ class ControllerSaleCustomer extends Controller {
 		} else {
 			$this->data['action'] = $this->url->link('sale/customer/update', 'customer_id=' . $_GET['customer_id'] . $url);
 		}
-		  
-    	$this->data['cancel'] = $this->url->link('sale/customer', $url);
+		
+		$this->data['cancel'] = $this->url->link('sale/customer', $url);
 
-    	if (isset($_GET['customer_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-      		$customer_info = $this->model_sale_customer->getCustomer($_GET['customer_id']);
-    	}
+		if (isset($_GET['customer_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
+				$customer_info = $this->model_sale_customer->getCustomer($_GET['customer_id']);
+		}
 			
-    	if (isset($_POST['firstname'])) {
-      		$this->data['firstname'] = $_POST['firstname'];
+		if (isset($_POST['firstname'])) {
+				$this->data['firstname'] = $_POST['firstname'];
 		} elseif (!empty($customer_info)) { 
 			$this->data['firstname'] = $customer_info['firstname'];
 		} else {
-      		$this->data['firstname'] = '';
-    	}
+				$this->data['firstname'] = '';
+		}
 
-    	if (isset($_POST['lastname'])) {
-      		$this->data['lastname'] = $_POST['lastname'];
-    	} elseif (!empty($customer_info)) { 
+		if (isset($_POST['lastname'])) {
+				$this->data['lastname'] = $_POST['lastname'];
+		} elseif (!empty($customer_info)) { 
 			$this->data['lastname'] = $customer_info['lastname'];
 		} else {
-      		$this->data['lastname'] = '';
-    	}
+				$this->data['lastname'] = '';
+		}
 
-    	if (isset($_POST['email'])) {
-      		$this->data['email'] = $_POST['email'];
-    	} elseif (!empty($customer_info)) { 
+		if (isset($_POST['email'])) {
+				$this->data['email'] = $_POST['email'];
+		} elseif (!empty($customer_info)) { 
 			$this->data['email'] = $customer_info['email'];
 		} else {
-      		$this->data['email'] = '';
-    	}
+				$this->data['email'] = '';
+		}
 
-    	if (isset($_POST['telephone'])) {
-      		$this->data['telephone'] = $_POST['telephone'];
-    	} elseif (!empty($customer_info)) { 
+		if (isset($_POST['telephone'])) {
+				$this->data['telephone'] = $_POST['telephone'];
+		} elseif (!empty($customer_info)) { 
 			$this->data['telephone'] = $customer_info['telephone'];
 		} else {
-      		$this->data['telephone'] = '';
-    	}
+				$this->data['telephone'] = '';
+		}
 
-    	if (isset($_POST['fax'])) {
-      		$this->data['fax'] = $_POST['fax'];
-    	} elseif (!empty($customer_info)) { 
+		if (isset($_POST['fax'])) {
+				$this->data['fax'] = $_POST['fax'];
+		} elseif (!empty($customer_info)) { 
 			$this->data['fax'] = $customer_info['fax'];
 		} else {
-      		$this->data['fax'] = '';
-    	}
+				$this->data['fax'] = '';
+		}
 
-    	if (isset($_POST['newsletter'])) {
-      		$this->data['newsletter'] = $_POST['newsletter'];
-    	} elseif (!empty($customer_info)) { 
+		if (isset($_POST['newsletter'])) {
+				$this->data['newsletter'] = $_POST['newsletter'];
+		} elseif (!empty($customer_info)) { 
 			$this->data['newsletter'] = $customer_info['newsletter'];
 		} else {
-      		$this->data['newsletter'] = '';
-    	}
+				$this->data['newsletter'] = '';
+		}
 		
 		$this->data['customer_groups'] = $this->model_sale_customer_group->getCustomerGroups();
 
-    	if (isset($_POST['customer_group_id'])) {
-      		$this->data['customer_group_id'] = $_POST['customer_group_id'];
-    	} elseif (!empty($customer_info)) { 
+		if (isset($_POST['customer_group_id'])) {
+				$this->data['customer_group_id'] = $_POST['customer_group_id'];
+		} elseif (!empty($customer_info)) { 
 			$this->data['customer_group_id'] = $customer_info['customer_group_id'];
 		} else {
-      		$this->data['customer_group_id'] = $this->config->get('config_customer_group_id');
-    	}
+				$this->data['customer_group_id'] = $this->config->get('config_customer_group_id');
+		}
 		
-    	if (isset($_POST['status'])) {
-      		$this->data['status'] = $_POST['status'];
-    	} elseif (!empty($customer_info)) { 
+		if (isset($_POST['status'])) {
+				$this->data['status'] = $_POST['status'];
+		} elseif (!empty($customer_info)) { 
 			$this->data['status'] = $customer_info['status'];
 		} else {
-      		$this->data['status'] = 1;
-    	}
+				$this->data['status'] = 1;
+		}
 
-    	if (isset($_POST['password'])) { 
+		if (isset($_POST['password'])) { 
 			$this->data['password'] = $_POST['password'];
 		} else {
 			$this->data['password'] = '';
 		}
 		
 		if (isset($_POST['confirm'])) { 
-    		$this->data['confirm'] = $_POST['confirm'];
+			$this->data['confirm'] = $_POST['confirm'];
 		} else {
 			$this->data['confirm'] = '';
 		}
@@ -769,23 +768,23 @@ class ControllerSaleCustomer extends Controller {
 		$this->data['countries'] = $this->model_localisation_country->getCountries();
 			
 		if (isset($_POST['address'])) { 
-      		$this->data['addresses'] = $_POST['address'];
+				$this->data['addresses'] = $_POST['address'];
 		} elseif (!empty($_GET['customer_id'])) {
 			$this->data['addresses'] = $this->model_sale_customer->getAddresses($_GET['customer_id']);
 		} else {
 			$this->data['addresses'] = array();
-    	}
+		}
 
-    	if (isset($_POST['address_id'])) {
-      		$this->data['address_id'] = $_POST['address_id'];
-    	} elseif (!empty($customer_info)) { 
+		if (isset($_POST['address_id'])) {
+				$this->data['address_id'] = $_POST['address_id'];
+		} elseif (!empty($customer_info)) { 
 			$this->data['address_id'] = $customer_info['address_id'];
 		} else {
-      		$this->data['address_id'] = '';
-    	}
+				$this->data['address_id'] = '';
+		}
 		
 		$this->data['ips'] = array();
-    	
+		
 		if (!empty($customer_info)) {
 			$results = $this->model_sale_customer->getIpsByCustomerId($_GET['customer_id']);
 		
@@ -793,8 +792,8 @@ class ControllerSaleCustomer extends Controller {
 				$blacklist_total = $this->model_sale_customer->getTotalBlacklistsByIp($result['ip']);
 				
 				$this->data['ips'][] = array(
-					'ip'         => $result['ip'],
-					'total'      => $this->model_sale_customer->getTotalCustomersByIp($result['ip']),
+					'ip'			=> $result['ip'],
+					'total'		=> $this->model_sale_customer->getTotalCustomersByIp($result['ip']),
 					'date_added' => date('d/m/y', strtotime($result['date_added'])),
 					'filter_ip'  => $this->url->link('sale/customer', 'filter_ip=' . $result['ip']),
 					'blacklist'  => $blacklist_total
@@ -809,23 +808,23 @@ class ControllerSaleCustomer extends Controller {
 				
 		$this->response->setOutput($this->render());
 	}
-			 
+			
   	private function validateForm() {
-    	if (!$this->user->hasPermission('modify', 'sale/customer')) {
-      		$this->error['warning'] = $this->_('error_permission');
-    	}
+		if (!$this->user->hasPermission('modify', 'sale/customer')) {
+				$this->error['warning'] = $this->_('error_permission');
+		}
 
-    	if ((strlen($_POST['firstname']) < 1) || (strlen($_POST['firstname']) > 32)) {
-      		$this->error['firstname'] = $this->_('error_firstname');
-    	}
+		if ((strlen($_POST['firstname']) < 1) || (strlen($_POST['firstname']) > 32)) {
+				$this->error['firstname'] = $this->_('error_firstname');
+		}
 
-    	if ((strlen($_POST['lastname']) < 1) || (strlen($_POST['lastname']) > 32)) {
-      		$this->error['lastname'] = $this->_('error_lastname');
-    	}
+		if ((strlen($_POST['lastname']) < 1) || (strlen($_POST['lastname']) > 32)) {
+				$this->error['lastname'] = $this->_('error_lastname');
+		}
 
 		if ((strlen($_POST['email']) > 96) || !preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $_POST['email'])) {
-      		$this->error['email'] = $this->_('error_email');
-    	}
+				$this->error['email'] = $this->_('error_email');
+		}
 		
 		$customer_info = $this->model_sale_customer->getCustomerByEmail($_POST['email']);
 		
@@ -839,19 +838,19 @@ class ControllerSaleCustomer extends Controller {
 			}
 		}
 		
-    	if ((strlen($_POST['telephone']) < 3) || (strlen($_POST['telephone']) > 32)) {
-      		$this->error['telephone'] = $this->_('error_telephone');
-    	}
+		if ((strlen($_POST['telephone']) < 3) || (strlen($_POST['telephone']) > 32)) {
+				$this->error['telephone'] = $this->_('error_telephone');
+		}
 
-    	if ($_POST['password'] || (!isset($_GET['customer_id']))) {
-      		if ((strlen($_POST['password']) < 4) || (strlen($_POST['password']) > 20)) {
-        		$this->error['password'] = $this->_('error_password');
-      		}
+		if ($_POST['password'] || (!isset($_GET['customer_id']))) {
+				if ((strlen($_POST['password']) < 4) || (strlen($_POST['password']) > 20)) {
+				$this->error['password'] = $this->_('error_password');
+				}
 	
-	  		if ($_POST['password'] != $_POST['confirm']) {
-	    		$this->error['confirm'] = $this->_('error_confirm');
-	  		}
-    	}
+			if ($_POST['password'] != $_POST['confirm']) {
+				$this->error['confirm'] = $this->_('error_confirm');
+			}
+		}
 
 		if (isset($_POST['address'])) {
 			foreach ($_POST['address'] as $key => $value) {
@@ -891,23 +890,15 @@ class ControllerSaleCustomer extends Controller {
 			$this->error['warning'] = $this->_('error_warning');
 		}
 		
-		if (!$this->error) {
-	  		return true;
-		} else {
-	  		return false;
-		}
-  	}    
+		return $this->error ? false : true;
+  	}	
 
   	private function validateDelete() {
-    	if (!$this->user->hasPermission('modify', 'sale/customer')) {
-      		$this->error['warning'] = $this->_('error_permission');
-    	}	
-	  	 
-		if (!$this->error) {
-	  		return true;
-		} else {
-	  		return false;
-		}  
+		if (!$this->user->hasPermission('modify', 'sale/customer')) {
+				$this->error['warning'] = $this->_('error_permission');
+		}	
+		
+		return $this->error ? false : true;  
   	} 
 	
 	public function login() {
@@ -961,7 +952,7 @@ class ControllerSaleCustomer extends Controller {
 	public function transaction() {
 		$this->template->load('sale/customer_transaction');
 
-    	$this->language->load('sale/customer');
+		$this->language->load('sale/customer');
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->user->hasPermission('modify', 'sale/customer')) { 
 			$this->model_sale_customer->addTransaction($_GET['customer_id'], $_POST['description'], $_POST['amount']);
@@ -986,14 +977,14 @@ class ControllerSaleCustomer extends Controller {
 		$this->data['transactions'] = array();
 			
 		$results = $this->model_sale_customer->getTransactions($_GET['customer_id'], ($page - 1) * 10, 10);
-      		
+				
 		foreach ($results as $result) {
-        	$this->data['transactions'][] = array(
-				'amount'      => $this->currency->format($result['amount'], $this->config->get('config_currency')),
+			$this->data['transactions'][] = array(
+				'amount'		=> $this->currency->format($result['amount'], $this->config->get('config_currency')),
 				'description' => $result['description'],
-        		'date_added'  => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
-        	);
-      	}			
+				'date_added'  => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
+			);
+			}			
 		
 		$this->data['balance'] = $this->currency->format($this->model_sale_customer->getTransactionTotal($_GET['customer_id']), $this->config->get('config_currency'));
 		
@@ -1003,7 +994,6 @@ class ControllerSaleCustomer extends Controller {
 		$this->pagination->total = $transaction_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = 10; 
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('sale/customer/transaction', 'customer_id=' . $_GET['customer_id']);
 			
 		$this->data['pagination'] = $this->pagination->render();
@@ -1015,7 +1005,7 @@ class ControllerSaleCustomer extends Controller {
 	public function reward() {
 		$this->template->load('sale/customer_reward');
 
-    	$this->language->load('sale/customer');
+		$this->language->load('sale/customer');
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->user->hasPermission('modify', 'sale/customer')) { 
 			$this->model_sale_customer->addReward($_GET['customer_id'], $_POST['description'], $_POST['points']);
@@ -1040,14 +1030,14 @@ class ControllerSaleCustomer extends Controller {
 		$this->data['rewards'] = array();
 			
 		$results = $this->model_sale_customer->getRewards($_GET['customer_id'], ($page - 1) * 10, 10);
-      		
+				
 		foreach ($results as $result) {
-        	$this->data['rewards'][] = array(
-				'points'      => $result['points'],
+			$this->data['rewards'][] = array(
+				'points'		=> $result['points'],
 				'description' => $result['description'],
-        		'date_added'  => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
-        	);
-      	}			
+				'date_added'  => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
+			);
+			}			
 		
 		$this->data['balance'] = $this->model_sale_customer->getRewardTotal($_GET['customer_id']);
 		
@@ -1057,7 +1047,6 @@ class ControllerSaleCustomer extends Controller {
 		$this->pagination->total = $reward_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = 10; 
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('sale/customer/reward', 'customer_id=' . $_GET['customer_id']);
 			
 		$this->data['pagination'] = $this->pagination->render();
@@ -1108,29 +1097,29 @@ class ControllerSaleCustomer extends Controller {
 		if (isset($_GET['filter_name'])) {
 			$data = array(
 				'filter_name' => $_GET['filter_name'],
-				'start'       => 0,
-				'limit'       => 20
+				'start'		=> 0,
+				'limit'		=> 20
 			);
 		
 			$results = $this->model_sale_customer->getCustomers($data);
 			
 			foreach ($results as $result) {
 				$json[] = array(
-					'customer_id'    => $result['customer_id'], 
-					'name'           => html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8'),
+					'customer_id'	=> $result['customer_id'], 
+					'name'			=> html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8'),
 					'customer_group' => $result['customer_group'],
-					'firstname'      => $result['firstname'],
-					'lastname'       => $result['lastname'],
-					'email'          => $result['email'],
-					'telephone'      => $result['telephone'],
-					'fax'            => $result['fax'],
-					'address'        => $this->model_sale_customer->getAddresses($result['customer_id'])
+					'firstname'		=> $result['firstname'],
+					'lastname'		=> $result['lastname'],
+					'email'			=> $result['email'],
+					'telephone'		=> $result['telephone'],
+					'fax'				=> $result['fax'],
+					'address'		=> $this->model_sale_customer->getAddresses($result['customer_id'])
 				);					
 			}
 		}
 
 		$sort_order = array();
-	  
+	
 		foreach ($json as $key => $value) {
 			$sort_order[$key] = $value['name'];
 		}

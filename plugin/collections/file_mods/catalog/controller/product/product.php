@@ -6,10 +6,10 @@ class ControllerProductProduct extends Controller {
 //-----
 //<<<<<
 			$manufacturer_info = $this->model_catalog_manufacturer->getManufacturer($product_info['manufacturer_id']);
-         
+			
 			if ($manufacturer_info){
-			   $this->breadcrumb->add($manufacturer_info['name'], $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $product_info['manufacturer_id'])); 
-         }
+				$this->breadcrumb->add($manufacturer_info['name'], $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $product_info['manufacturer_id'])); 
+			}
 //-----
 //>>>>> {php}
 			$collection_info = $this->model_catalog_collection->getCollectionByProduct($product_id);
@@ -26,10 +26,10 @@ class ControllerProductProduct extends Controller {
 			}
 			else{
 				$manufacturer_info = $this->model_catalog_manufacturer->getManufacturer($product_info['manufacturer_id']);
-         
+			
 				if ($manufacturer_info){
-				   $this->breadcrumb->add($manufacturer_info['name'], $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $product_info['manufacturer_id'])); 
-	         }
+					$this->breadcrumb->add($manufacturer_info['name'], $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $product_info['manufacturer_id'])); 
+				}
 			}
 //-----
 //=====

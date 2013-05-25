@@ -79,10 +79,6 @@ class ControllerAffiliateForgotten extends Controller {
 			$this->error['warning'] = $this->_('error_email');
 		}
 
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
 }

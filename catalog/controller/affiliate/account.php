@@ -4,10 +4,10 @@ class ControllerAffiliateAccount extends Controller {
 		$this->template->load('affiliate/account');
 
 		if (!$this->affiliate->isLogged()) {
-	  		$this->session->data['redirect'] = $this->url->link('affiliate/account');
-	  
-	  		$this->url->redirect($this->url->link('affiliate/login'));
-    	} 
+			$this->session->data['redirect'] = $this->url->link('affiliate/account');
+	
+			$this->url->redirect($this->url->link('affiliate/login'));
+		} 
 	
 		$this->language->load('affiliate/account');
 
@@ -17,18 +17,18 @@ class ControllerAffiliateAccount extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 
 		if (isset($this->session->data['success'])) {
-    		$this->data['success'] = $this->session->data['success'];
+			$this->data['success'] = $this->session->data['success'];
 			
 			unset($this->session->data['success']);
 		} else {
 			$this->data['success'] = '';
 		}
 
-    	$this->data['edit'] = $this->url->link('affiliate/edit');
+		$this->data['edit'] = $this->url->link('affiliate/edit');
 		$this->data['password'] = $this->url->link('affiliate/password');
 		$this->data['payment'] = $this->url->link('affiliate/payment');
 		$this->data['tracking'] = $this->url->link('affiliate/tracking');
-    	$this->data['transaction'] = $this->url->link('affiliate/transaction');
+		$this->data['transaction'] = $this->url->link('affiliate/transaction');
 
 
 

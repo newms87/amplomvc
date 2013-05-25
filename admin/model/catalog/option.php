@@ -1,29 +1,29 @@
 <?php
 class ModelCatalogOption extends Model {
 	public function addOption($data) {
-	   
-	   $option_id = $this->insert('option', $data);
+		
+		$option_id = $this->insert('option', $data);
 		
 		
 		foreach ($data['option_description'] as $language_id => $value) {
-		   $value['language_id'] = $language_id;
-         $value['option_id']   = $option_id;
-         
-		   $this->insert('option_description', $value);
+			$value['language_id'] = $language_id;
+			$value['option_id']	= $option_id;
+			
+			$this->insert('option_description', $value);
 		}
 
 		if (isset($data['option_value'])) {
 			foreach ($data['option_value'] as $option_value) {
-			   $option_value['option_id'] = $option_id;
-            
-            $option_value_id = $this->insert('option_value', $option_value);
-            
+				$option_value['option_id'] = $option_id;
+				
+				$option_value_id = $this->insert('option_value', $option_value);
+				
 				foreach ($option_value['option_value_description'] as $language_id => $option_value_description) {
-				   $option_value_description['option_value_id'] = $option_value_id;
-               $option_value_description['language_id']     = $language_id;
-               $option_value_description['option_id']       = $option_id;
-               
-               $this->insert('option_value_description', $option_value_description);
+					$option_value_description['option_value_id'] = $option_value_id;
+					$option_value_description['language_id']	= $language_id;
+					$option_value_description['option_id']		= $option_id;
+					
+					$this->insert('option_value_description', $option_value_description);
 				}
 			}
 		}
@@ -31,50 +31,50 @@ class ModelCatalogOption extends Model {
 	}
 	
 	public function editOption($option_id, $data) {
-      $this->update('option', $data, array('option_id'=>$option_id));
-      
-      $this->delete('option_description', array('option_id'=>$option_id));
+		$this->update('option', $data, array('option_id'=>$option_id));
+		
+		$this->delete('option_description', array('option_id'=>$option_id));
 
 		foreach ($data['option_description'] as $language_id => $value) {
-         $value['language_id'] = $language_id;
-         $value['option_id']   = $option_id;
-         
-         $this->insert('option_description', $value);
-      }
-      
-      $this->delete('option_value_description', array('option_id'=>$option_id));
+			$value['language_id'] = $language_id;
+			$value['option_id']	= $option_id;
+			
+			$this->insert('option_description', $value);
+		}
+		
+		$this->delete('option_value_description', array('option_id'=>$option_id));
 		
 		if (isset($data['option_value'])) {
-         foreach ($data['option_value'] as $option_value) {
-            $option_value['option_id'] = $option_id;
-            
-            if($option_value['option_value_id']){
-               $this->update('option_value', $option_value, $option_value['option_value_id']);
-               $option_value_id = $option_value['option_value_id'];
-            }
-            else{
-               $option_value_id = $this->insert('option_value', $option_value);
-            }
-            
-            foreach ($option_value['option_value_description'] as $language_id => $option_value_description) {
-               $option_value_description['option_value_id'] = $option_value_id;
-               $option_value_description['language_id']     = $language_id;
-               $option_value_description['option_id']       = $option_id;
-               
-               $this->insert('option_value_description', $option_value_description);
-            }
-         }
-      }
-      
+			foreach ($data['option_value'] as $option_value) {
+				$option_value['option_id'] = $option_id;
+				
+				if($option_value['option_value_id']){
+					$this->update('option_value', $option_value, $option_value['option_value_id']);
+					$option_value_id = $option_value['option_value_id'];
+				}
+				else{
+					$option_value_id = $this->insert('option_value', $option_value);
+				}
+				
+				foreach ($option_value['option_value_description'] as $language_id => $option_value_description) {
+					$option_value_description['option_value_id'] = $option_value_id;
+					$option_value_description['language_id']	= $language_id;
+					$option_value_description['option_id']		= $option_id;
+					
+					$this->insert('option_value_description', $option_value_description);
+				}
+			}
+		}
+		
 		$this->cache->delete('option');
 	}
 	
 	public function deleteOption($option_id) {
-	   $this->delete('option', $option_id);
-      $this->delete('option_description', array('option_id'=>$option_id));
-	   $this->delete('option_value', array('option_id'=>$option_id));
-      $this->delete('option_value_description', array('option_id'=>$option_id));
-      
+		$this->delete('option', $option_id);
+		$this->delete('option_description', array('option_id'=>$option_id));
+		$this->delete('option_value', array('option_id'=>$option_id));
+		$this->delete('option_value_description', array('option_id'=>$option_id));
+		
 		$this->cache->delete('option');
 	}
 	
@@ -148,17 +148,17 @@ class ModelCatalogOption extends Model {
 	
 	public function getOptionValueDescriptions($option_id) {
 		$options = array(
-		   'order_by'=>'sort_order ASC'
+			'order_by'=>'sort_order ASC'
 		);
-      
+		
 		$query = $this->get('option_value','*', array('option_id'=>$option_id), $options);
-      
+		
 		foreach ($query->rows as &$option_value) {
-		   
+			
 			$description_query = $this->get('option_value_description', '*', array('option_value_id'=>$option_value['option_value_id']));			
 			
 			foreach ($description_query->rows as $description) {
-			   $option_value['option_value_description'][$description['language_id']] = $description;
+				$option_value['option_value_description'][$description['language_id']] = $description;
 			}
 		}
 		
@@ -166,7 +166,7 @@ class ModelCatalogOption extends Model {
 	}
 
 	public function getTotalOptions() {
-   	$query = $this->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "option`"); 
+		$query = $this->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "option`"); 
 		
 		return $query->row['total'];
 	}		

@@ -1,11 +1,11 @@
 <?php
 //============================================================+
-// File name   : pdf417.php
-// Version     : 1.0.003
-// Begin       : 2010-06-03
+// File name	: pdf417.php
+// Version	: 1.0.003
+// Begin		: 2010-06-03
 // Last Update : 2010-08-08
-// Author      : Nicola Asuni - Tecnick.com S.r.l - Via Della Pace, 11 - 09044 - Quartucciu (CA) - ITALY - www.tecnick.com - info@tecnick.com
-// License     : GNU-LGPL v3 (http://www.gnu.org/copyleft/lesser.html)
+// Author		: Nicola Asuni - Tecnick.com S.r.l - Via Della Pace, 11 - 09044 - Quartucciu (CA) - ITALY - www.tecnick.com - info@tecnick.com
+// License	: GNU-LGPL v3 (http://www.gnu.org/copyleft/lesser.html)
 // -------------------------------------------------------------------
 // Copyright (C) 2010-2010  Nicola Asuni - Tecnick.com S.r.l.
 //
@@ -33,13 +33,13 @@
 // PDF417 (ISO/IEC 15438:2006) is a 2-dimensional stacked bar code created by Symbol Technologies in 1991.
 // It is one of the most popular 2D codes because of its ability to be read with slightly modified handheld laser or linear CCD scanners.
 // TECHNICAL DATA / FEATURES OF PDF417:
-//		Encodable Character Set:     All 128 ASCII Characters (including extended)
-//		Code Type:                   Continuous, Multi-Row
-//		Symbol Height:               3 - 90 Rows
-//		Symbol Width:                90X - 583X
-//		Bidirectional Decoding:      Yes
+//		Encodable Character Set:	All 128 ASCII Characters (including extended)
+//		Code Type:						Continuous, Multi-Row
+//		Symbol Height:					3 - 90 Rows
+//		Symbol Width:					90X - 583X
+//		Bidirectional Decoding:		Yes
 //		Error Correction Characters: 2 - 512
-//		Maximum Data Characters:     1850 text, 2710 digits, 1108 bytes
+//		Maximum Data Characters:	1850 text, 2710 digits, 1108 bytes
 //
 //============================================================+
 
@@ -60,25 +60,25 @@
 if (!defined('PDF417DEFS')) {
 
 	/**
-	 * Indicate that definitions for this class are set
-	 */
+	* Indicate that definitions for this class are set
+	*/
 	define('PDF417DEFS', true);
 
 	// -----------------------------------------------------
 
 	/**
-	 * Row height respect X dimension of single module
-	 */
+	* Row height respect X dimension of single module
+	*/
 	define('ROWHEIGHT', 4);
 
 	/**
-	 * Horizontal quiet zone in modules
-	 */
+	* Horizontal quiet zone in modules
+	*/
 	define('QUIETH', 2);
 
 	/**
-	 * Vertical quiet zone in modules
-	 */
+	* Vertical quiet zone in modules
+	*/
 	define('QUIETV', 2);
 
 
@@ -90,41 +90,41 @@ if (!defined('PDF417DEFS')) {
 if (!class_exists('PDF417', false)) {
 
 	/**
-	 * Class to create PDF417 barcode arrays for TCPDF class.
-	 * PDF417 (ISO/IEC 15438:2006) is a 2-dimensional stacked bar code created by Symbol Technologies in 1991.
-	 * @name PDF417
-	 * @package com.tecnick.tcpdf
-	 * @abstract Class to create PDF417 barcode arrays for TCPDF class.
-	 * @author Nicola Asuni
-	 * @copyright 2010-2010 Nicola Asuni - Tecnick.com S.r.l (www.tecnick.com) Via Della Pace, 11 - 09044 - Quartucciu (CA) - ITALY - www.tecnick.com - info@tecnick.com
-	 * @link http://www.tcpdf.org
-	 * @license http://www.gnu.org/copyleft/lesser.html LGPL
-	 * @version 1.0.003
-	 */
+	* Class to create PDF417 barcode arrays for TCPDF class.
+	* PDF417 (ISO/IEC 15438:2006) is a 2-dimensional stacked bar code created by Symbol Technologies in 1991.
+	* @name PDF417
+	* @package com.tecnick.tcpdf
+	* @abstract Class to create PDF417 barcode arrays for TCPDF class.
+	* @author Nicola Asuni
+	* @copyright 2010-2010 Nicola Asuni - Tecnick.com S.r.l (www.tecnick.com) Via Della Pace, 11 - 09044 - Quartucciu (CA) - ITALY - www.tecnick.com - info@tecnick.com
+	* @link http://www.tcpdf.org
+	* @license http://www.gnu.org/copyleft/lesser.html LGPL
+	* @version 1.0.003
+	*/
 	class PDF417 {
 
 		/**
-		 * @var barcode array to be returned which is readable by TCPDF
-		 * @access protected
-		 */
+		* @var barcode array to be returned which is readable by TCPDF
+		* @access protected
+		*/
 		protected $barcode_array = array();
 
 		/**
-		 * @var start pattern
-		 * @access protected
-		 */
+		* @var start pattern
+		* @access protected
+		*/
 		protected $start_pattern = '11111111010101000';
 
 		/**
-		 * @var start pattern
-		 * @access protected
-		 */
+		* @var start pattern
+		* @access protected
+		*/
 		protected $stop_pattern = '111111101000101001';
 
 		/**
-		 * @var Text Compaction Sub-Modes (values 0xFB - 0xFF are used for submode changers)
-		 * @access protected
-		 */
+		* @var Text Compaction Sub-Modes (values 0xFB - 0xFF are used for submode changers)
+		* @access protected
+		*/
 		protected $textsubmodes = array(
 			array(0x41,0x42,0x43,0x44,0x45,0x46,0x47,0x48,0x49,0x4a,0x4b,0x4c,0x4d,0x4e,0x4f,0x50,0x51,0x52,0x53,0x54,0x55,0x56,0x57,0x58,0x59,0x5a,0x20,0xFD,0xFE,0xFF), // Alpha
 			array(0x61,0x62,0x63,0x64,0x65,0x66,0x67,0x68,0x69,0x6a,0x6b,0x6c,0x6d,0x6e,0x6f,0x70,0x71,0x72,0x73,0x74,0x75,0x76,0x77,0x78,0x79,0x7a,0x20,0xFD,0xFE,0xFF), // Lower
@@ -133,9 +133,9 @@ if (!class_exists('PDF417', false)) {
 		);
 
 		/**
-		 * @var Switching codes for Text Compaction Sub-Modes
-		 * @access protected
-		 */
+		* @var Switching codes for Text Compaction Sub-Modes
+		* @access protected
+		*/
 		protected $textlatch = array(
 			'01' => array(27), '02' => array(28), '03' => array(28,25), //
 			'10' => array(28,28), '12' => array(28), '13' => array(28,25), //
@@ -144,26 +144,26 @@ if (!class_exists('PDF417', false)) {
 		);
 
 		/**
-		 * @var clusters of codewords (0, 3, 6)<br/>
-		 * Values are hex equivalents of binary representation of bars (1 = bar, 0 = space).<br/>
-		 * The codewords numbered from 900 to 928 have special meaning, some enable to switch between modes in order to optimise the code:<ul>
-		 * <li>900 : Switch to "Text" mode</li>
-		 * <li>901 : Switch to "Byte" mode</li>
-		 * <li>902 : Switch to "Numeric" mode</li>
-		 * <li>903 - 912 : Reserved</li>
-		 * <li>913 : Switch to "Octet" only for the next codeword</li>
-		 * <li>914 - 920 : Reserved</li>
-		 * <li>921 : Initialization</li>
-		 * <li>922 : Terminator codeword for Macro PDF control block</li>
-		 * <li>923 : Sequence tag to identify the beginning of optional fields in the Macro PDF control block</li>
-		 * <li>924 : Switch to "Byte" mode (If the total number of byte is multiple of 6)</li>
-		 * <li>925 : Identifier for a user defined Extended Channel Interpretation (ECI)</li>
-		 * <li>926 : Identifier for a general purpose ECI format</li>
-		 * <li>927 : Identifier for an ECI of a character set or code page</li>
-		 * <li>928 : Macro marker codeword to indicate the beginning of a Macro PDF Control Block</li>
-		 * </ul>
-		 * @access protected
-		 */
+		* @var clusters of codewords (0, 3, 6)<br/>
+		* Values are hex equivalents of binary representation of bars (1 = bar, 0 = space).<br/>
+		* The codewords numbered from 900 to 928 have special meaning, some enable to switch between modes in order to optimise the code:<ul>
+		* <li>900 : Switch to "Text" mode</li>
+		* <li>901 : Switch to "Byte" mode</li>
+		* <li>902 : Switch to "Numeric" mode</li>
+		* <li>903 - 912 : Reserved</li>
+		* <li>913 : Switch to "Octet" only for the next codeword</li>
+		* <li>914 - 920 : Reserved</li>
+		* <li>921 : Initialization</li>
+		* <li>922 : Terminator codeword for Macro PDF control block</li>
+		* <li>923 : Sequence tag to identify the beginning of optional fields in the Macro PDF control block</li>
+		* <li>924 : Switch to "Byte" mode (If the total number of byte is multiple of 6)</li>
+		* <li>925 : Identifier for a user defined Extended Channel Interpretation (ECI)</li>
+		* <li>926 : Identifier for a general purpose ECI format</li>
+		* <li>927 : Identifier for an ECI of a character set or code page</li>
+		* <li>928 : Macro marker codeword to indicate the beginning of a Macro PDF Control Block</li>
+		* </ul>
+		* @access protected
+		*/
 		protected $clusters = array(
 			array( // cluster 0 -----------------------------------------------------------------------
 				0x1d5c0,0x1eaf0,0x1f57c,0x1d4e0,0x1ea78,0x1f53e,0x1a8c0,0x1d470,0x1a860,0x15040, //  10
@@ -258,7 +258,7 @@ if (!class_exists('PDF417', false)) {
 				0x18e64,0x18622,0x19ee4,0x18e62,0x19ee2,0x10428,0x18216,0x10c68,0x18636,0x11ce8, // 900
 				0x10c64,0x10422,0x13de8,0x11ce4,0x10c62,0x13de4,0x11ce2,0x10436,0x10c76,0x11cf6, // 910
 				0x13df6,0x1f7d4,0x1f7d2,0x1e794,0x1efb4,0x1e792,0x1efb2,0x1c714,0x1cf34,0x1c712, // 920
-				0x1df74,0x1cf32,0x1df72,0x18614,0x18e34,0x18612,0x19e74,0x18e32,0x1bef4),        // 929
+				0x1df74,0x1cf32,0x1df72,0x18614,0x18e34,0x18612,0x19e74,0x18e32,0x1bef4),		// 929
 			array( // cluster 3 -----------------------------------------------------------------------
 				0x1f560,0x1fab8,0x1ea40,0x1f530,0x1fa9c,0x1ea20,0x1f518,0x1fa8e,0x1ea10,0x1f50c, //  10
 				0x1ea08,0x1f506,0x1ea04,0x1eb60,0x1f5b8,0x1fade,0x1d640,0x1eb30,0x1f59c,0x1d620, //  20
@@ -352,7 +352,7 @@ if (!class_exists('PDF417', false)) {
 				0x106fa,0x10ebe,0x11ebc,0x11e9e,0x13eb8,0x19f5e,0x13e9c,0x13e8e,0x11e5e,0x13ede, // 900
 				0x17eb0,0x1bf5c,0x17e98,0x1bf4e,0x17e8c,0x17e86,0x13e5c,0x17edc,0x13e4e,0x17ece, // 910
 				0x17e58,0x1bf2e,0x17e4c,0x17e46,0x13e2e,0x17e6e,0x17e2c,0x17e26,0x10f5e,0x11f5c, // 920
-				0x11f4e,0x13f58,0x19fae,0x13f4c,0x13f46,0x11f2e,0x13f6e,0x13f2c,0x13f26),        // 929
+				0x11f4e,0x13f58,0x19fae,0x13f4c,0x13f46,0x11f2e,0x13f6e,0x13f2c,0x13f26),		// 929
 			array( // cluster 6 -----------------------------------------------------------------------
 				0x1abe0,0x1d5f8,0x153c0,0x1a9f0,0x1d4fc,0x151e0,0x1a8f8,0x1d47e,0x150f0,0x1a87c, //  10
 				0x15078,0x1fad0,0x15be0,0x1adf8,0x1fac8,0x159f0,0x1acfc,0x1fac4,0x158f8,0x1ac7e, //  20
@@ -446,20 +446,20 @@ if (!class_exists('PDF417', false)) {
 				0x11f64,0x10f22,0x11f62,0x10716,0x10f36,0x11f76,0x1cfd4,0x1cfd2,0x18f94,0x19fb4, // 900
 				0x18f92,0x19fb2,0x10f14,0x11f34,0x10f12,0x13f74,0x11f32,0x13f72,0x1cfca,0x18f8a, // 910
 				0x19f9a,0x10f0a,0x11f1a,0x13f3a,0x103ac,0x103a6,0x107a8,0x183d6,0x107a4,0x107a2, // 920
-				0x10396,0x107b6,0x187d4,0x187d2,0x10794,0x10fb4,0x10792,0x10fb2,0x1c7ea)         // 929
+				0x10396,0x107b6,0x187d4,0x187d2,0x10794,0x10fb4,0x10792,0x10fb2,0x1c7ea)			// 929
 		); // end of $clusters array
 
 		/**
-		 * @var Factors of the Reed-Solomon polynomial equations used for error correction; one sub array for each correction level (0-8)
-		 * @access protected
-		 */
+		* @var Factors of the Reed-Solomon polynomial equations used for error correction; one sub array for each correction level (0-8)
+		* @access protected
+		*/
 		protected $rsfactors = array(
 			array( // ECL 0 (2 factors) -------------------------------------------------------------------------------
-				0x01b,0x395),                                                                                    //   2
+				0x01b,0x395),																												//	2
 			array( // ECL 1 (4 factors) -------------------------------------------------------------------------------
-				0x20a,0x238,0x2d3,0x329),                                                                        //   4
+				0x20a,0x238,0x2d3,0x329),																								//	4
 			array( // ECL 2 (8 factors) -------------------------------------------------------------------------------
-				0x0ed,0x134,0x1b4,0x11c,0x286,0x28d,0x1ac,0x17b),                                                //   8
+				0x0ed,0x134,0x1b4,0x11c,0x286,0x28d,0x1ac,0x17b),																//	8
 			array( // ECL 3 (16 factors) ------------------------------------------------------------------------------
 				0x112,0x232,0x0e8,0x2f3,0x257,0x20c,0x321,0x084,0x127,0x074,0x1ba,0x1ac,0x127,0x02a,0x0b0,0x041),//  16
 			array( // ECL 4 (32 factors) ------------------------------------------------------------------------------
@@ -532,14 +532,14 @@ if (!class_exists('PDF417', false)) {
 		);
 
 		/**
-		 * This is the class constructor.
-		 * Creates a PDF417 object
-		 * @param string $code code to represent using PDF417
-		 * @param int $ecl error correction level (0-8); default -1 = automatic correction level
-		 * @param float $aspectratio the width to height of the symbol (excluding quiet zones)
-		 * òparam array $macro information for macro block
-		 * @access public
-		 */
+		* This is the class constructor.
+		* Creates a PDF417 object
+		* @param string $code code to represent using PDF417
+		* @param int $ecl error correction level (0-8); default -1 = automatic correction level
+		* @param float $aspectratio the width to height of the symbol (excluding quiet zones)
+		* òparam array $macro information for macro block
+		* @access public
+		*/
 		public function __construct($code, $ecl=-1, $aspectratio=2, $macro=array()) {
 			$barcode_array = array();
 			if ((is_null($code)) OR ($code == '\0') OR ($code == '')) {
@@ -735,21 +735,21 @@ if (!class_exists('PDF417', false)) {
 		}
 
 		/**
-		 * Returns a barcode array which is readable by TCPDF
-		 * @return array barcode array readable by TCPDF;
-		 * @access public
-		 */
+		* Returns a barcode array which is readable by TCPDF
+		* @return array barcode array readable by TCPDF;
+		* @access public
+		*/
 		public function getBarcodeArray() {
 			return $this->barcode_array;
 		}
 
 		/**
-		 * Returns the error correction level (0-8) to be used
-		 * @param int $ecl error correction level
-		 * @param int $numcw number of data codewords
-		 * @return int error correction level
-		 * @access protected
-		 */
+		* Returns the error correction level (0-8) to be used
+		* @param int $ecl error correction level
+		* @param int $numcw number of data codewords
+		* @return int error correction level
+		* @access protected
+		*/
 		protected function getErrorCorrectionLevel($ecl, $numcw) {
 			// get maximum correction level
 			$maxecl = 8; // starting error level
@@ -782,12 +782,12 @@ if (!class_exists('PDF417', false)) {
 		}
 
 		/**
-		 * Returns the error correction codewords
-		 * @param array $cw array of codewords including Symbol Lenght Descriptor and pad
-		 * @param int $ecl error correction level 0-8
-		 * @return array of error correction codewords
-		 * @access protected
-		 */
+		* Returns the error correction codewords
+		* @param array $cw array of codewords including Symbol Lenght Descriptor and pad
+		* @param int $ecl error correction level 0-8
+		* @return array of error correction codewords
+		* @access protected
+		*/
 		protected function getErrorCorrection($cw, $ecl) {
 			// get error correction coefficients
 			$ecc = $this->rsfactors[$ecl];
@@ -819,11 +819,11 @@ if (!class_exists('PDF417', false)) {
 		}
 
 		/**
-		 * Create array of sequences from input
-		 * @param string $code code
-		 * @return bidimensional array containing characters and classification
-		 * @access protected
-		 */
+		* Create array of sequences from input
+		* @param string $code code
+		* @return bidimensional array containing characters and classification
+		* @access protected
+		*/
 		protected function getInputSequences($code) {
 			$sequence_array = array(); // array to be returned
 			$numseq = array();
@@ -874,13 +874,13 @@ if (!class_exists('PDF417', false)) {
 		}
 
 		/**
-		 * Compact data by mode.
-		 * @param int $mode compaction mode number
-		 * @param string $code data to compact
-		 * @param boolean $addmode if true add the mode codeword at first position
-		 * @return array of codewords
-		 * @access protected
-		 */
+		* Compact data by mode.
+		* @param int $mode compaction mode number
+		* @param string $code data to compact
+		* @param boolean $addmode if true add the mode codeword at first position
+		* @return array of codewords
+		* @access protected
+		*/
 		protected function getCompaction($mode, $code, $addmode=true) {
 			$cw = array(); // array of codewords to return
 			switch($mode) {

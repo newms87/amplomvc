@@ -39,39 +39,39 @@ require_once PHPEXCEL_ROOT . 'PHPExcel/Shared/PDF/tcpdf.php';
  */
 class PHPExcel_Writer_PDF extends PHPExcel_Writer_HTML implements PHPExcel_Writer_IWriter {
 	/**
-	 * Temporary storage directory
-	 *
-	 * @var string
-	 */
+	* Temporary storage directory
+	*
+	* @var string
+	*/
 	private $_tempDir = '';
 
 	/**
-	 * Font
-	 *
-	 * @var string
-	 */
+	* Font
+	*
+	* @var string
+	*/
 	private $_font = 'freesans';
 
 	/**
-	 * Orientation (Over-ride)
-	 *
-	 * @var string
-	 */
+	* Orientation (Over-ride)
+	*
+	* @var string
+	*/
 	private $_orientation	= null;
 
 	/**
-	 * Paper size (Over-ride)
-	 *
-	 * @var int
-	 */
+	* Paper size (Over-ride)
+	*
+	* @var int
+	*/
 	private $_paperSize	= null;
 
 
 	/**
-	 * Paper Sizes xRef List
-	 *
-	 * @var array
-	 */
+	* Paper Sizes xRef List
+	*
+	* @var array
+	*/
 	private static $_paperSizes = array(
 		//	Excel Paper Size													TCPDF Paper Size
 		PHPExcel_Worksheet_PageSetup::PAPERSIZE_LETTER							=> 'LETTER',				//	(8.5 in. by 11 in.)
@@ -143,10 +143,10 @@ class PHPExcel_Writer_PDF extends PHPExcel_Writer_HTML implements PHPExcel_Write
 	);
 
 	/**
-	 * Create a new PHPExcel_Writer_PDF
-	 *
-	 * @param 	PHPExcel	$phpExcel	PHPExcel object
-	 */
+	* Create a new PHPExcel_Writer_PDF
+	*
+	* @param 	PHPExcel	$phpExcel	PHPExcel object
+	*/
 	public function __construct(PHPExcel $phpExcel) {
 		parent::__construct($phpExcel);
 		$this->setUseInlineCss(true);
@@ -154,65 +154,65 @@ class PHPExcel_Writer_PDF extends PHPExcel_Writer_HTML implements PHPExcel_Write
 	}
 
 	/**
-	 * Set font. Examples:
-	 *   'arialunicid0-chinese-simplified'
-	 *   'arialunicid0-chinese-traditional'
-	 *   'arialunicid0-korean'
-	 *   'arialunicid0-japanese'
-	 *
-	 * @param	string	$fontName
-	 */
+	* Set font. Examples:
+	*	'arialunicid0-chinese-simplified'
+	*	'arialunicid0-chinese-traditional'
+	*	'arialunicid0-korean'
+	*	'arialunicid0-japanese'
+	*
+	* @param	string	$fontName
+	*/
 	public function setFont($fontName) {
 		$this->_font = $fontName;
 		return $this;
 	}
 
-    /**
-     * Get Paper Size
-     *
-     * @return int
-     */
-    public function getPaperSize() {
-    	return $this->_paperSize;
-    }
-
-    /**
-     * Set Paper Size
-     *
-     * @param int $pValue
-     * @return PHPExcel_Writer_PDF
-     */
-    public function setPaperSize($pValue = PHPExcel_Worksheet_PageSetup::PAPERSIZE_LETTER) {
-    	$this->_paperSize = $pValue;
-    	return $this;
-    }
-
-    /**
-     * Get Orientation
-     *
-     * @return string
-     */
-    public function getOrientation() {
-    	return $this->_orientation;
-    }
-
-    /**
-     * Set Orientation
-     *
-     * @param string $pValue
-     * @return PHPExcel_Writer_PDF
-     */
-    public function setOrientation($pValue = PHPExcel_Worksheet_PageSetup::ORIENTATION_DEFAULT) {
-    	$this->_orientation = $pValue;
-    	return $this;
-    }
+	/**
+	* Get Paper Size
+	*
+	* @return int
+	*/
+	public function getPaperSize() {
+		return $this->_paperSize;
+	}
 
 	/**
-	 * Save PHPExcel to file
-	 *
-	 * @param 	string 		$pFilename    Filename for the saved file
-	 * @throws 	Exception
-	 */
+	* Set Paper Size
+	*
+	* @param int $pValue
+	* @return PHPExcel_Writer_PDF
+	*/
+	public function setPaperSize($pValue = PHPExcel_Worksheet_PageSetup::PAPERSIZE_LETTER) {
+		$this->_paperSize = $pValue;
+		return $this;
+	}
+
+	/**
+	* Get Orientation
+	*
+	* @return string
+	*/
+	public function getOrientation() {
+		return $this->_orientation;
+	}
+
+	/**
+	* Set Orientation
+	*
+	* @param string $pValue
+	* @return PHPExcel_Writer_PDF
+	*/
+	public function setOrientation($pValue = PHPExcel_Worksheet_PageSetup::ORIENTATION_DEFAULT) {
+		$this->_orientation = $pValue;
+		return $this;
+	}
+
+	/**
+	* Save PHPExcel to file
+	*
+	* @param 	string 		$pFilename	Filename for the saved file
+	* @throws 	Exception
+	*/
 	public function save($pFilename = null) {
 		// garbage collect
 		$this->_phpExcel->garbageCollect();
@@ -302,21 +302,21 @@ class PHPExcel_Writer_PDF extends PHPExcel_Writer_HTML implements PHPExcel_Write
 	}
 
 	/**
-	 * Get temporary storage directory
-	 *
-	 * @return string
-	 */
+	* Get temporary storage directory
+	*
+	* @return string
+	*/
 	public function getTempDir() {
 		return $this->_tempDir;
 	}
 
 	/**
-	 * Set temporary storage directory
-	 *
-	 * @param 	string	$pValue		Temporary storage directory
-	 * @throws 	Exception	Exception when directory does not exist
-	 * @return PHPExcel_Writer_PDF
-	 */
+	* Set temporary storage directory
+	*
+	* @param 	string	$pValue		Temporary storage directory
+	* @throws 	Exception	Exception when directory does not exist
+	* @return PHPExcel_Writer_PDF
+	*/
 	public function setTempDir($pValue = '') {
 		if (is_dir($pValue)) {
 			$this->_tempDir = $pValue;

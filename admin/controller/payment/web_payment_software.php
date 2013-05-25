@@ -1,6 +1,6 @@
 <?php 
 class ControllerPaymentWebPaymentSoftware extends Controller {
-	 
+	
 
 	public function index() {
 		$this->template->load('payment/web_payment_software');
@@ -122,10 +122,6 @@ class ControllerPaymentWebPaymentSoftware extends Controller {
 			$this->error['key'] = $this->_('error_key');
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

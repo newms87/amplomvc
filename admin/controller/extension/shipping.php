@@ -4,7 +4,7 @@ class ControllerExtensionShipping extends Controller {
 		$this->template->load('extension/shipping');
 
 		$this->load->language('extension/shipping');
-		 
+		
 		$this->document->setTitle($this->_('heading_title')); 
   		
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -50,10 +50,10 @@ class ControllerExtensionShipping extends Controller {
 				}
 										
 				$this->data['extensions'][] = array(
-					'name'       => $this->_('heading_title'),
-					'status'     => $this->config->get($extension . '_status') ? $this->_('text_enabled') : $this->_('text_disabled'),
+					'name'		=> $this->_('heading_title'),
+					'status'	=> $this->config->get($extension . '_status') ? $this->_('text_enabled') : $this->_('text_disabled'),
 					'sort_order' => $this->config->get($extension . '_sort_order'),
-					'action'     => $action
+					'action'	=> $action
 				);
 			}
 		}

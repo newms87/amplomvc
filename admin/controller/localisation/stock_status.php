@@ -1,23 +1,23 @@
 <?php 
 class ControllerLocalisationStockStatus extends Controller {
-	 
-   
+	
+	
   	public function index() {
 		$this->load->language('localisation/stock_status');
 	
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
 		$this->getList();
   	}
-              
+				
   	public function insert() {
 		$this->load->language('localisation/stock_status');
 	
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-      		$this->model_localisation_stock_status->addStockStatus($_POST);
-		  	
+				$this->model_localisation_stock_status->addStockStatus($_POST);
+			
 			$this->message->add('success', $this->_('text_success'));
 
 			$url = '';
@@ -34,19 +34,19 @@ class ControllerLocalisationStockStatus extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 						
-      		$this->url->redirect($this->url->link('localisation/stock_status', $url));
+				$this->url->redirect($this->url->link('localisation/stock_status', $url));
 		}
 	
-    	$this->getForm();
+		$this->getForm();
   	}
 
   	public function update() {
 		$this->load->language('localisation/stock_status');
 	
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-	  		$this->model_localisation_stock_status->editStockStatus($_GET['stock_status_id'], $_POST);
+			$this->model_localisation_stock_status->editStockStatus($_GET['stock_status_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -65,21 +65,21 @@ class ControllerLocalisationStockStatus extends Controller {
 			}
 			
 			$this->url->redirect($this->url->link('localisation/stock_status', $url));
-    	}
+		}
 	
-    	$this->getForm();
+		$this->getForm();
   	}
 
   	public function delete() {
 		$this->load->language('localisation/stock_status');
 	
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $stock_status_id) {
 				$this->model_localisation_stock_status->deleteStockStatus($stock_status_id);
 			}
-			      		
+							
 			$this->message->add('success', $this->_('text_success'));
 
 			$url = '';
@@ -97,11 +97,11 @@ class ControllerLocalisationStockStatus extends Controller {
 			}
 			
 			$this->url->redirect($this->url->link('localisation/stock_status', $url));
-   		}
+			}
 	
-    	$this->getList();
+		$this->getList();
   	}
-    
+	
   	private function getList() {
 		$this->template->load('localisation/stock_status_list');
 
@@ -156,7 +156,7 @@ class ControllerLocalisationStockStatus extends Controller {
 	
 		$results = $this->model_localisation_stock_status->getStockStatuses($data);
  
-    	foreach ($results as $result) {
+		foreach ($results as $result) {
 			$action = array();
 			
 			$action[] = array(
@@ -166,9 +166,9 @@ class ControllerLocalisationStockStatus extends Controller {
 						
 			$this->data['stock_statuses'][] = array(
 				'stock_status_id' => $result['stock_status_id'],
-				'name'            => $result['name'] . (($result['stock_status_id'] == $this->config->get('config_stock_status_id')) ? $this->_('text_default') : null),
-				'selected'        => isset($_POST['selected']) && in_array($result['stock_status_id'], $_POST['selected']),
-				'action'          => $action
+				'name'				=> $result['name'] . (($result['stock_status_id'] == $this->config->get('config_stock_status_id')) ? $this->_('text_default') : null),
+				'selected'		=> isset($_POST['selected']) && in_array($result['stock_status_id'], $_POST['selected']),
+				'action'			=> $action
 			);
 		}	
 	
@@ -214,7 +214,6 @@ class ControllerLocalisationStockStatus extends Controller {
 		$this->pagination->total = $stock_status_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('localisation/stock_status', $url);
 			
 		$this->data['pagination'] = $this->pagination->render();
@@ -289,27 +288,23 @@ class ControllerLocalisationStockStatus extends Controller {
   	}
   	
 	private function validateForm() {
-    	if (!$this->user->hasPermission('modify', 'localisation/stock_status')) {
-      		$this->error['warning'] = $this->_('error_permission');
-    	}
-	
-    	foreach ($_POST['stock_status'] as $language_id => $value) {
-      		if ((strlen($value['name']) < 3) || (strlen($value['name']) > 32)) {
-        		$this->error['name'][$language_id] = $this->_('error_name');
-      		}
-    	}
-		
-		if (!$this->error) {
-	  		return true;
-		} else {
-	  		return false;
+		if (!$this->user->hasPermission('modify', 'localisation/stock_status')) {
+				$this->error['warning'] = $this->_('error_permission');
 		}
+	
+		foreach ($_POST['stock_status'] as $language_id => $value) {
+				if ((strlen($value['name']) < 3) || (strlen($value['name']) > 32)) {
+				$this->error['name'][$language_id] = $this->_('error_name');
+				}
+		}
+		
+		return $this->error ? false : true;
   	}
 
   	private function validateDelete() {
 		if (!$this->user->hasPermission('modify', 'localisation/stock_status')) {
-      		$this->error['warning'] = $this->_('error_permission');
-    	}
+				$this->error['warning'] = $this->_('error_permission');
+		}
 		
 		foreach ($_POST['selected'] as $stock_status_id) {
 			if ($this->config->get('config_stock_status_id') == $stock_status_id) {
@@ -319,14 +314,14 @@ class ControllerLocalisationStockStatus extends Controller {
 			$product_total = $this->model_catalog_product->getTotalProductsByStockStatusId($stock_status_id);
 		
 			if ($product_total) {
-	  			$this->error['warning'] = sprintf($this->_('error_product'), $product_total);	
+				$this->error['warning'] = sprintf($this->_('error_product'), $product_total);	
 			}  
-	  	}
+		}
 		
 		if (!$this->error) { 
-	  		return true;
+			return true;
 		} else {
-	  		return false;
+			return false;
 		}
-  	}	  
+  	}	
 }

@@ -18,105 +18,105 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category   PHPExcel
- * @package    PHPExcel_Style
+ * @category	PHPExcel
+ * @package	PHPExcel_Style
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version    1.7.7, 2012-05-19
+ * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+ * @version	1.7.7, 2012-05-19
  */
 
 
 /**
  * PHPExcel_Style
  *
- * @category   PHPExcel
- * @package    PHPExcel_Style
+ * @category	PHPExcel
+ * @package	PHPExcel_Style
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_Style implements PHPExcel_IComparable
 {
 	/**
-	 * Font
-	 *
-	 * @var PHPExcel_Style_Font
-	 */
+	* Font
+	*
+	* @var PHPExcel_Style_Font
+	*/
 	private $_font;
 
 	/**
-	 * Fill
-	 *
-	 * @var PHPExcel_Style_Fill
-	 */
+	* Fill
+	*
+	* @var PHPExcel_Style_Fill
+	*/
 	private $_fill;
 
 	/**
-	 * Borders
-	 *
-	 * @var PHPExcel_Style_Borders
-	 */
+	* Borders
+	*
+	* @var PHPExcel_Style_Borders
+	*/
 	private $_borders;
 
 	/**
-	 * Alignment
-	 *
-	 * @var PHPExcel_Style_Alignment
-	 */
+	* Alignment
+	*
+	* @var PHPExcel_Style_Alignment
+	*/
 	private $_alignment;
 
 	/**
-	 * Number Format
-	 *
-	 * @var PHPExcel_Style_NumberFormat
-	 */
+	* Number Format
+	*
+	* @var PHPExcel_Style_NumberFormat
+	*/
 	private $_numberFormat;
 
 	/**
-	 * Conditional styles
-	 *
-	 * @var PHPExcel_Style_Conditional[]
-	 */
+	* Conditional styles
+	*
+	* @var PHPExcel_Style_Conditional[]
+	*/
 	private $_conditionalStyles;
 
 	/**
-	 * Protection
-	 *
-	 * @var PHPExcel_Style_Protection
-	 */
+	* Protection
+	*
+	* @var PHPExcel_Style_Protection
+	*/
 	private $_protection;
 
 	/**
-	 * Style supervisor?
-	 *
-	 * @var boolean
-	 */
+	* Style supervisor?
+	*
+	* @var boolean
+	*/
 	private $_isSupervisor;
 
 	/**
-	 * Parent. Only used for style supervisor
-	 *
-	 * @var PHPExcel
-	 */
+	* Parent. Only used for style supervisor
+	*
+	* @var PHPExcel
+	*/
 	private $_parent;
 
 	/**
-	 * Index of style in collection. Only used for real style.
-	 *
-	 * @var int
-	 */
+	* Index of style in collection. Only used for real style.
+	*
+	* @var int
+	*/
 	private $_index;
 
-    /**
-     * Create a new PHPExcel_Style
-	 *
-	 * @param boolean $isSupervisor
-     */
-    public function __construct($isSupervisor = false)
-    {
-    	// Supervisor?
+	/**
+	* Create a new PHPExcel_Style
+	*
+	* @param boolean $isSupervisor
+	*/
+	public function __construct($isSupervisor = false)
+	{
+		// Supervisor?
 		$this->_isSupervisor = $isSupervisor;
 
 		// Initialise values
-    	$this->_conditionalStyles 	= array();
+		$this->_conditionalStyles 	= array();
 		$this->_font				= new PHPExcel_Style_Font($isSupervisor);
 		$this->_fill				= new PHPExcel_Style_Fill($isSupervisor);
 		$this->_borders				= new PHPExcel_Style_Borders($isSupervisor);
@@ -133,14 +133,14 @@ class PHPExcel_Style implements PHPExcel_IComparable
 			$this->_numberFormat->bindParent($this);
 			$this->_protection->bindParent($this);
 		}
-    }
+	}
 
 	/**
-	 * Bind parent. Only used for supervisor
-	 *
-	 * @param PHPExcel $parent
-	 * @return PHPExcel_Style
-	 */
+	* Bind parent. Only used for supervisor
+	*
+	* @param PHPExcel $parent
+	* @return PHPExcel_Style
+	*/
 	public function bindParent($parent)
 	{
 		$this->_parent = $parent;
@@ -148,21 +148,21 @@ class PHPExcel_Style implements PHPExcel_IComparable
 	}
 
 	/**
-	 * Is this a supervisor or a real style component?
-	 *
-	 * @return boolean
-	 */
+	* Is this a supervisor or a real style component?
+	*
+	* @return boolean
+	*/
 	public function getIsSupervisor()
 	{
 		return $this->_isSupervisor;
 	}
 
 	/**
-	 * Get the shared style component for the currently active cell in currently active sheet.
-	 * Only used for style supervisor
-	 *
-	 * @return PHPExcel_Style
-	 */
+	* Get the shared style component for the currently active cell in currently active sheet.
+	* Only used for style supervisor
+	*
+	* @return PHPExcel_Style
+	*/
 	public function getSharedComponent()
 	{
 		$activeSheet = $this->getActiveSheet();
@@ -178,86 +178,86 @@ class PHPExcel_Style implements PHPExcel_IComparable
 	}
 
 	/**
-	 * Get the currently active sheet. Only used for supervisor
-	 *
-	 * @return PHPExcel_Worksheet
-	 */
+	* Get the currently active sheet. Only used for supervisor
+	*
+	* @return PHPExcel_Worksheet
+	*/
 	public function getActiveSheet()
 	{
 		return $this->_parent->getActiveSheet();
 	}
 
 	/**
-	 * Get the currently active cell coordinate in currently active sheet.
-	 * Only used for supervisor
-	 *
-	 * @return string E.g. 'A1'
-	 */
+	* Get the currently active cell coordinate in currently active sheet.
+	* Only used for supervisor
+	*
+	* @return string E.g. 'A1'
+	*/
 	public function getSelectedCells()
 	{
 		return $this->_parent->getActiveSheet()->getSelectedCells();
 	}
 
 	/**
-	 * Get the currently active cell coordinate in currently active sheet.
-	 * Only used for supervisor
-	 *
-	 * @return string E.g. 'A1'
-	 */
+	* Get the currently active cell coordinate in currently active sheet.
+	* Only used for supervisor
+	*
+	* @return string E.g. 'A1'
+	*/
 	public function getActiveCell()
 	{
 		return $this->_parent->getActiveSheet()->getActiveCell();
 	}
 
 	/**
-	 * Get parent. Only used for style supervisor
-	 *
-	 * @return PHPExcel
-	 */
+	* Get parent. Only used for style supervisor
+	*
+	* @return PHPExcel
+	*/
 	public function getParent()
 	{
 		return $this->_parent;
 	}
 
-    /**
-     * Apply styles from array
-     *
-     * <code>
-     * $objPHPExcel->getActiveSheet()->getStyle('B2')->applyFromArray(
-     * 		array(
-     * 			'font'    => array(
-     * 				'name'      => 'Arial',
-     * 				'bold'      => true,
-     * 				'italic'    => false,
-     * 				'underline' => PHPExcel_Style_Font::UNDERLINE_DOUBLE,
-     * 				'strike'    => false,
-     * 				'color'     => array(
-     * 					'rgb' => '808080'
-     * 				)
-     * 			),
-     * 			'borders' => array(
-     * 				'bottom'     => array(
-     * 					'style' => PHPExcel_Style_Border::BORDER_DASHDOT,
-     * 					'color' => array(
-     * 						'rgb' => '808080'
-     * 					)
-     * 				),
-     * 				'top'     => array(
-     * 					'style' => PHPExcel_Style_Border::BORDER_DASHDOT,
-     * 					'color' => array(
-     * 						'rgb' => '808080'
-     * 					)
-     * 				)
-     * 			)
-     * 		)
-     * );
-     * </code>
-     *
-     * @param	array	$pStyles	Array containing style information
-     * @param 	boolean		$pAdvanced	Advanced mode for setting borders.
-     * @throws	Exception
-     * @return PHPExcel_Style
-     */
+	/**
+	* Apply styles from array
+	*
+	* <code>
+	* $objPHPExcel->getActiveSheet()->getStyle('B2')->applyFromArray(
+	* 		array(
+	* 			'font'	=> array(
+	* 				'name'		=> 'Arial',
+	* 				'bold'		=> true,
+	* 				'italic'	=> false,
+	* 				'underline' => PHPExcel_Style_Font::UNDERLINE_DOUBLE,
+	* 				'strike'	=> false,
+	* 				'color'	=> array(
+	* 					'rgb' => '808080'
+	* 				)
+	* 			),
+	* 			'borders' => array(
+	* 				'bottom'	=> array(
+	* 					'style' => PHPExcel_Style_Border::BORDER_DASHDOT,
+	* 					'color' => array(
+	* 						'rgb' => '808080'
+	* 					)
+	* 				),
+	* 				'top'	=> array(
+	* 					'style' => PHPExcel_Style_Border::BORDER_DASHDOT,
+	* 					'color' => array(
+	* 						'rgb' => '808080'
+	* 					)
+	* 				)
+	* 			)
+	* 		)
+	* );
+	* </code>
+	*
+	* @param	array	$pStyles	Array containing style information
+	* @param 	boolean		$pAdvanced	Advanced mode for setting borders.
+	* @throws	Exception
+	* @return PHPExcel_Style
+	*/
 	public function applyFromArray($pStyles = null, $pAdvanced = true) {
 		if (is_array($pStyles)) {
 			if ($this->_isSupervisor) {
@@ -532,140 +532,140 @@ class PHPExcel_Style implements PHPExcel_IComparable
 		return $this;
 	}
 
-    /**
-     * Get Fill
-     *
-     * @return PHPExcel_Style_Fill
-     */
-    public function getFill() {
+	/**
+	* Get Fill
+	*
+	* @return PHPExcel_Style_Fill
+	*/
+	public function getFill() {
 		return $this->_fill;
-    }
-
-    /**
-     * Get Font
-     *
-     * @return PHPExcel_Style_Font
-     */
-    public function getFont() {
-		return $this->_font;
-    }
+	}
 
 	/**
-	 * Set font
-	 *
-	 * @param PHPExcel_Style_Font $font
-	 * @return PHPExcel_Style
-	 */
+	* Get Font
+	*
+	* @return PHPExcel_Style_Font
+	*/
+	public function getFont() {
+		return $this->_font;
+	}
+
+	/**
+	* Set font
+	*
+	* @param PHPExcel_Style_Font $font
+	* @return PHPExcel_Style
+	*/
 	public function setFont(PHPExcel_Style_Font $font)
 	{
 		$this->_font = $font;
 		return $this;
 	}
 
-    /**
-     * Get Borders
-     *
-     * @return PHPExcel_Style_Borders
-     */
-    public function getBorders() {
+	/**
+	* Get Borders
+	*
+	* @return PHPExcel_Style_Borders
+	*/
+	public function getBorders() {
 		return $this->_borders;
-    }
+	}
 
-    /**
-     * Get Alignment
-     *
-     * @return PHPExcel_Style_Alignment
-     */
-    public function getAlignment() {
+	/**
+	* Get Alignment
+	*
+	* @return PHPExcel_Style_Alignment
+	*/
+	public function getAlignment() {
 		return $this->_alignment;
-    }
+	}
 
-    /**
-     * Get Number Format
-     *
-     * @return PHPExcel_Style_NumberFormat
-     */
-    public function getNumberFormat() {
+	/**
+	* Get Number Format
+	*
+	* @return PHPExcel_Style_NumberFormat
+	*/
+	public function getNumberFormat() {
 		return $this->_numberFormat;
-    }
+	}
 
-    /**
-     * Get Conditional Styles. Only used on supervisor.
-     *
-     * @return PHPExcel_Style_Conditional[]
-     */
-    public function getConditionalStyles() {
+	/**
+	* Get Conditional Styles. Only used on supervisor.
+	*
+	* @return PHPExcel_Style_Conditional[]
+	*/
+	public function getConditionalStyles() {
 		return $this->getActiveSheet()->getConditionalStyles($this->getActiveCell());
-    }
+	}
 
-    /**
-     * Set Conditional Styles. Only used on supervisor.
-     *
-     * @param PHPExcel_Style_Conditional[]	$pValue	Array of condtional styles
-     * @return PHPExcel_Style
-     */
-    public function setConditionalStyles($pValue = null) {
+	/**
+	* Set Conditional Styles. Only used on supervisor.
+	*
+	* @param PHPExcel_Style_Conditional[]	$pValue	Array of condtional styles
+	* @return PHPExcel_Style
+	*/
+	public function setConditionalStyles($pValue = null) {
 		if (is_array($pValue)) {
 			$this->getActiveSheet()->setConditionalStyles($this->getSelectedCells(), $pValue);
 		}
 		return $this;
-    }
-
-    /**
-     * Get Protection
-     *
-     * @return PHPExcel_Style_Protection
-     */
-    public function getProtection() {
-		return $this->_protection;
-    }
+	}
 
 	/**
-	 * Get hash code
-	 *
-	 * @return string	Hash code
-	 */
+	* Get Protection
+	*
+	* @return PHPExcel_Style_Protection
+	*/
+	public function getProtection() {
+		return $this->_protection;
+	}
+
+	/**
+	* Get hash code
+	*
+	* @return string	Hash code
+	*/
 	public function getHashCode() {
 		$hashConditionals = '';
 		foreach ($this->_conditionalStyles as $conditional) {
 			$hashConditionals .= $conditional->getHashCode();
 		}
 
-    	return md5(
-    		  $this->_fill->getHashCode()
-    		. $this->_font->getHashCode()
-    		. $this->_borders->getHashCode()
-    		. $this->_alignment->getHashCode()
-    		. $this->_numberFormat->getHashCode()
-    		. $hashConditionals
-    		. $this->_protection->getHashCode()
-    		. __CLASS__
-    	);
-    }
+		return md5(
+			$this->_fill->getHashCode()
+			. $this->_font->getHashCode()
+			. $this->_borders->getHashCode()
+			. $this->_alignment->getHashCode()
+			. $this->_numberFormat->getHashCode()
+			. $hashConditionals
+			. $this->_protection->getHashCode()
+			. __CLASS__
+		);
+	}
 
 	/**
-	 * Get own index in style collection
-	 *
-	 * @return int
-	 */
+	* Get own index in style collection
+	*
+	* @return int
+	*/
 	public function getIndex()
 	{
 		return $this->_index;
 	}
 
 	/**
-	 * Set own index in style collection
-	 *
-	 * @param int $pValue
-	 */
+	* Set own index in style collection
+	*
+	* @param int $pValue
+	*/
 	public function setIndex($pValue)
 	{
 		$this->_index = $pValue;
 	}
 
 	/**
-	 * Implement PHP __clone to create a deep clone, not just a shallow copy.
-	 */
+	* Implement PHP __clone to create a deep clone, not just a shallow copy.
+	*/
 	public function __clone() {
 		$vars = get_object_vars($this);
 		foreach ($vars as $key => $value) {

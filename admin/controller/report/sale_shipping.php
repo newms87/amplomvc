@@ -1,6 +1,6 @@
 <?php
 class ControllerReportSaleShipping extends Controller {
-	public function index() {     
+	public function index() {	
 		$this->template->load('report/sale_shipping');
 
 		$this->load->language('report/sale_shipping');
@@ -65,12 +65,12 @@ class ControllerReportSaleShipping extends Controller {
 		$this->data['orders'] = array();
 		
 		$data = array(
-			'filter_date_start'	     => $filter_date_start, 
-			'filter_date_end'	     => $filter_date_end, 
-			'filter_group'           => $filter_group,
+			'filter_date_start'		=> $filter_date_start, 
+			'filter_date_end'		=> $filter_date_end, 
+			'filter_group'			=> $filter_group,
 			'filter_order_status_id' => $filter_order_status_id,
-			'start'                  => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit'                  => $this->config->get('config_admin_limit')
+			'start'						=> ($page - 1) * $this->config->get('config_admin_limit'),
+			'limit'						=> $this->config->get('config_admin_limit')
 		);
 				
 		$order_total = $this->model_report_sale->getTotalShipping($data); 
@@ -80,13 +80,13 @@ class ControllerReportSaleShipping extends Controller {
 		foreach ($results as $result) {
 			$this->data['orders'][] = array(
 				'date_start' => $this->tool->format_datetime($result['date_start'], $this->language->getInfo('date_format_short')),
-				'date_end'   => $this->tool->format_datetime($result['date_end'], $this->language->getInfo('date_format_short')),
-				'title'      => $result['title'],
-				'orders'     => $result['orders'],
-				'total'      => $this->currency->format($result['total'], $this->config->get('config_currency'))
+				'date_end'	=> $this->tool->format_datetime($result['date_end'], $this->language->getInfo('date_format_short')),
+				'title'		=> $result['title'],
+				'orders'	=> $result['orders'],
+				'total'		=> $this->currency->format($result['total'], $this->config->get('config_currency'))
 			);
 		}
-		 
+		
 		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
 		$this->data['groups'] = array();
@@ -133,7 +133,6 @@ class ControllerReportSaleShipping extends Controller {
 		$this->pagination->total = $order_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('report/sale_shipping', $url);
 			
 		$this->data['pagination'] = $this->pagination->render();
@@ -142,7 +141,7 @@ class ControllerReportSaleShipping extends Controller {
 		$this->data['filter_date_end'] = $filter_date_end;		
 		$this->data['filter_group'] = $filter_group;
 		$this->data['filter_order_status_id'] = $filter_order_status_id;
-				 
+				
 		$this->children = array(
 			'common/header',
 			'common/footer'

@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']    = 'Development Console';
+$_['heading_title']	= 'Development Console';
 
 //Data
 $_['data_site_status'] = array(
@@ -8,10 +8,10 @@ $_['data_site_status'] = array(
 								'dev' => "Development Site",
 								'inactive' => "Inactive Site",
 							);
-							 
+							
 // Text
-$_['text_sync_site']      = 'Sync Sites';
-$_['text_sync_tables']      = 'Sync Tables';
+$_['text_sync_site']		= 'Sync Sites';
+$_['text_sync_tables']		= 'Sync Tables';
 $_['text_sync']				= 'Synchronize Sites';
 $_['text_site_management']	= 'Site Management';
 $_['text_backup_restore']	= 'Backup & Restore';
@@ -27,14 +27,14 @@ $_['column_username'] = "Username";
 $_['column_status'] = "Site Status";
 
 // Entry
-$_['entry_sync_table']    = 'Tables:';
-$_['entry_domain']    = 'Site Domain: <span class="help">(eg: www.yourdomain.com)</span>';
-$_['entry_username']    = 'Username:';
-$_['entry_password']    = 'Password:';
-$_['entry_status']    = 'Site Status:';
-$_['entry_backup']    = 'Database Backup:';
-$_['entry_restore']    = 'Restore Site From Backup:';
-$_['entry_execute_file']    = 'Execute DB Script File:';
+$_['entry_sync_table']	= 'Tables:';
+$_['entry_domain']	= 'Site Domain: <span class="help">(eg: www.yourdomain.com)</span>';
+$_['entry_username']	= 'Username:';
+$_['entry_password']	= 'Password:';
+$_['entry_status']	= 'Site Status:';
+$_['entry_backup']	= 'Database Backup:';
+$_['entry_restore']	= 'Restore Site From Backup:';
+$_['entry_execute_file']	= 'Execute DB Script File:';
 
 
 //Button

@@ -6,8 +6,8 @@ class ControllerAccountReward extends Controller {
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/reward');
 			
-	  		$this->url->redirect($this->url->link('account/login'));
-    	}		
+			$this->url->redirect($this->url->link('account/login'));
+		}		
 		
 		$this->language->load('account/reward');
 
@@ -25,7 +25,7 @@ class ControllerAccountReward extends Controller {
 		
 		$this->data['rewards'] = array();
 		
-		$data = array(				  
+		$data = array(				
 			'sort'  => 'date_added',
 			'order' => 'DESC',
 			'start' => ($page - 1) * 10,
@@ -36,13 +36,13 @@ class ControllerAccountReward extends Controller {
 	
 		$results = $this->model_account_reward->getRewards($data);
  		
-    	foreach ($results as $result) {
+		foreach ($results as $result) {
 			$this->data['rewards'][] = array(
-				'order_id'    => $result['order_id'],
-				'points'      => $result['points'],
+				'order_id'	=> $result['order_id'],
+				'points'		=> $result['points'],
 				'description' => $result['description'],
 				'date_added'  => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
-				'href'        => $this->url->link('account/order/info', 'order_id=' . $result['order_id'])
+				'href'		=> $this->url->link('account/order/info', 'order_id=' . $result['order_id'])
 			);
 		}	
 
@@ -50,7 +50,6 @@ class ControllerAccountReward extends Controller {
 		$this->pagination->total = $reward_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = 10; 
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('account/reward');
 			
 		$this->data['pagination'] = $this->pagination->render();

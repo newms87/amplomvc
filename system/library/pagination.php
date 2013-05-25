@@ -11,28 +11,28 @@ class Pagination {
 	public $url;
 	public $attrs = array();
 	
-   function __construct($registry){
-   	$this->registry = $registry;
+	function __construct($registry){
+		$this->registry = $registry;
 		
-      $this->init();
-   }
-   
+		$this->init();
+	}
+	
 	public function __get($key){
 		return $this->registry->get($key);
 	}
 	
-   public function init(){
-   	$this->template_file = $this->default_template;
-      $this->total = 0;
-      $this->page = 0;
-      $this->limit = 0;
-      $this->num_links = 10;
-      $this->url = '';
-      $this->attrs = array(
-      	'class' => 'links'
-      );
-   }
-   
+	public function init(){
+		$this->template_file = $this->default_template;
+		$this->total = 0;
+		$this->page = 0;
+		$this->limit = 0;
+		$this->num_links = 10;
+		$this->url = '';
+		$this->attrs = array(
+			'class' => 'links'
+		);
+	}
+	
 	public function render() {
 		$this->template->load($this->template_file);
 		
@@ -123,7 +123,7 @@ class Pagination {
 		
 		$insertables = array(
 			'start' => $item_start,
-			'end'	 => $item_end,
+			'end'	=> $item_end,
 			'total' => $this->total,
 			'pages' => $num_pages,
 		);

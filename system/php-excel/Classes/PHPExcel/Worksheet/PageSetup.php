@@ -18,11 +18,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category   PHPExcel
- * @package    PHPExcel_Worksheet
+ * @category	PHPExcel
+ * @package	PHPExcel_Worksheet
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version    1.7.7, 2012-05-19
+ * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+ * @version	1.7.7, 2012-05-19
  */
 
 
@@ -100,8 +100,8 @@
  * 68 = A3 extra transverse paper (322 mm by 445 mm)
  * </code>
  *
- * @category   PHPExcel
- * @package    PHPExcel_Worksheet
+ * @category	PHPExcel
+ * @package	PHPExcel_Worksheet
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_Worksheet_PageSetup
@@ -185,162 +185,162 @@ class PHPExcel_Worksheet_PageSetup
 
 
 	/**
-	 * Paper size
-	 *
-	 * @var int
-	 */
+	* Paper size
+	*
+	* @var int
+	*/
 	private $_paperSize		= PHPExcel_Worksheet_PageSetup::PAPERSIZE_LETTER;
 
 	/**
-	 * Orientation
-	 *
-	 * @var string
-	 */
+	* Orientation
+	*
+	* @var string
+	*/
 	private $_orientation	= PHPExcel_Worksheet_PageSetup::ORIENTATION_DEFAULT;
 
 	/**
-	 * Scale (Print Scale)
-	 *
-	 * Print scaling. Valid values range from 10 to 400
-	 * This setting is overridden when fitToWidth and/or fitToHeight are in use
-	 *
-	 * @var int?
-	 */
+	* Scale (Print Scale)
+	*
+	* Print scaling. Valid values range from 10 to 400
+	* This setting is overridden when fitToWidth and/or fitToHeight are in use
+	*
+	* @var int?
+	*/
 	private $_scale			= 100;
 
 	/**
-	  * Fit To Page
-	  * Whether scale or fitToWith / fitToHeight applies
-	  *
-	  * @var boolean
-	  */
+	* Fit To Page
+	* Whether scale or fitToWith / fitToHeight applies
+	*
+	* @var boolean
+	*/
 	private $_fitToPage		= FALSE;
 
 	/**
-	  * Fit To Height
-	  * Number of vertical pages to fit on
-	  *
-	  * @var int?
-	  */
+	* Fit To Height
+	* Number of vertical pages to fit on
+	*
+	* @var int?
+	*/
 	private $_fitToHeight	= 1;
 
 	/**
-	  * Fit To Width
-	  * Number of horizontal pages to fit on
-	  *
-	  * @var int?
-	  */
+	* Fit To Width
+	* Number of horizontal pages to fit on
+	*
+	* @var int?
+	*/
 	private $_fitToWidth	= 1;
 
 	/**
-	 * Columns to repeat at left
-	 *
-	 * @var array Containing start column and end column, empty array if option unset
-	 */
+	* Columns to repeat at left
+	*
+	* @var array Containing start column and end column, empty array if option unset
+	*/
 	private $_columnsToRepeatAtLeft = array('', '');
 
 	/**
-	 * Rows to repeat at top
-	 *
-	 * @var array Containing start row number and end row number, empty array if option unset
-	 */
+	* Rows to repeat at top
+	*
+	* @var array Containing start row number and end row number, empty array if option unset
+	*/
 	private $_rowsToRepeatAtTop = array(0, 0);
 
 	/**
-	 * Center page horizontally
-	 *
-	 * @var boolean
-	 */
+	* Center page horizontally
+	*
+	* @var boolean
+	*/
 	private $_horizontalCentered = FALSE;
 
 	/**
-	 * Center page vertically
-	 *
-	 * @var boolean
-	 */
+	* Center page vertically
+	*
+	* @var boolean
+	*/
 	private $_verticalCentered = FALSE;
 
 	/**
-	 * Print area
-	 *
-	 * @var string
-	 */
+	* Print area
+	*
+	* @var string
+	*/
 	private $_printArea = NULL;
 
 	/**
-	 * First page number
-	 *
-	 * @var int
-	 */
+	* First page number
+	*
+	* @var int
+	*/
 	private $_firstPageNumber = NULL;
 
-    /**
-     * Create a new PHPExcel_Worksheet_PageSetup
-     */
-    public function __construct()
-    {
-    }
-
-    /**
-     * Get Paper Size
-     *
-     * @return int
-     */
-    public function getPaperSize() {
-    	return $this->_paperSize;
-    }
-
-    /**
-     * Set Paper Size
-     *
-     * @param int $pValue
-     * @return PHPExcel_Worksheet_PageSetup
-     */
-    public function setPaperSize($pValue = PHPExcel_Worksheet_PageSetup::PAPERSIZE_LETTER) {
-    	$this->_paperSize = $pValue;
-    	return $this;
-    }
-
-    /**
-     * Get Orientation
-     *
-     * @return string
-     */
-    public function getOrientation() {
-    	return $this->_orientation;
-    }
-
-    /**
-     * Set Orientation
-     *
-     * @param string $pValue
-     * @return PHPExcel_Worksheet_PageSetup
-     */
-    public function setOrientation($pValue = PHPExcel_Worksheet_PageSetup::ORIENTATION_DEFAULT) {
-    	$this->_orientation = $pValue;
-    	return $this;
-    }
+	/**
+	* Create a new PHPExcel_Worksheet_PageSetup
+	*/
+	public function __construct()
+	{
+	}
 
 	/**
-	 * Get Scale
-	 *
-	 * @return int?
-	 */
+	* Get Paper Size
+	*
+	* @return int
+	*/
+	public function getPaperSize() {
+		return $this->_paperSize;
+	}
+
+	/**
+	* Set Paper Size
+	*
+	* @param int $pValue
+	* @return PHPExcel_Worksheet_PageSetup
+	*/
+	public function setPaperSize($pValue = PHPExcel_Worksheet_PageSetup::PAPERSIZE_LETTER) {
+		$this->_paperSize = $pValue;
+		return $this;
+	}
+
+	/**
+	* Get Orientation
+	*
+	* @return string
+	*/
+	public function getOrientation() {
+		return $this->_orientation;
+	}
+
+	/**
+	* Set Orientation
+	*
+	* @param string $pValue
+	* @return PHPExcel_Worksheet_PageSetup
+	*/
+	public function setOrientation($pValue = PHPExcel_Worksheet_PageSetup::ORIENTATION_DEFAULT) {
+		$this->_orientation = $pValue;
+		return $this;
+	}
+
+	/**
+	* Get Scale
+	*
+	* @return int?
+	*/
 	public function getScale() {
 		return $this->_scale;
 	}
 
 	/**
-	 * Set Scale
-	 *
-	 * Print scaling. Valid values range from 10 to 400
-	 * This setting is overridden when fitToWidth and/or fitToHeight are in use
-	 *
-	 * @param 	int?	$pValue
-	 * @param boolean	$pUpdate	Update fitToPage so scaling applies rather than fitToHeight / fitToWidth
-	 * @return PHPExcel_Worksheet_PageSetup
-	 * @throws 	Exception
-	 */
+	* Set Scale
+	*
+	* Print scaling. Valid values range from 10 to 400
+	* This setting is overridden when fitToWidth and/or fitToHeight are in use
+	*
+	* @param 	int?	$pValue
+	* @param boolean	$pUpdate	Update fitToPage so scaling applies rather than fitToHeight / fitToWidth
+	* @return PHPExcel_Worksheet_PageSetup
+	* @throws 	Exception
+	*/
 	public function setScale($pValue = 100, $pUpdate = true) {
 		// Microsoft Office Excel 2007 only allows setting a scale between 10 and 400 via the user interface,
 		// but it is apparently still able to handle any scale >= 0, where 0 results in 100
@@ -356,41 +356,41 @@ class PHPExcel_Worksheet_PageSetup
 	}
 
 	/**
-	 * Get Fit To Page
-	 *
-	 * @return boolean
-	 */
+	* Get Fit To Page
+	*
+	* @return boolean
+	*/
 	public function getFitToPage() {
 		return $this->_fitToPage;
 	}
 
 	/**
-	 * Set Fit To Page
-	 *
-	 * @param boolean $pValue
-	 * @return PHPExcel_Worksheet_PageSetup
-	 */
+	* Set Fit To Page
+	*
+	* @param boolean $pValue
+	* @return PHPExcel_Worksheet_PageSetup
+	*/
 	public function setFitToPage($pValue = TRUE) {
 		$this->_fitToPage = $pValue;
 		return $this;
 	}
 
 	/**
-	 * Get Fit To Height
-	 *
-	 * @return int?
-	 */
+	* Get Fit To Height
+	*
+	* @return int?
+	*/
 	public function getFitToHeight() {
 		return $this->_fitToHeight;
 	}
 
 	/**
-	 * Set Fit To Height
-	 *
-	 * @param int? $pValue
-	 * @param boolean $pUpdate Update fitToPage so it applies rather than scaling
-	 * @return PHPExcel_Worksheet_PageSetup
-	 */
+	* Set Fit To Height
+	*
+	* @param int? $pValue
+	* @param boolean $pUpdate Update fitToPage so it applies rather than scaling
+	* @return PHPExcel_Worksheet_PageSetup
+	*/
 	public function setFitToHeight($pValue = 1, $pUpdate = TRUE) {
 		$this->_fitToHeight = $pValue;
 		if ($pUpdate) {
@@ -400,21 +400,21 @@ class PHPExcel_Worksheet_PageSetup
 	}
 
 	/**
-	 * Get Fit To Width
-	 *
-	 * @return int?
-	 */
+	* Get Fit To Width
+	*
+	* @return int?
+	*/
 	public function getFitToWidth() {
 		return $this->_fitToWidth;
 	}
 
 	/**
-	 * Set Fit To Width
-	 *
-	 * @param int? $pValue
-	 * @param boolean $pUpdate Update fitToPage so it applies rather than scaling
-	 * @return PHPExcel_Worksheet_PageSetup
-	 */
+	* Set Fit To Width
+	*
+	* @param int? $pValue
+	* @param boolean $pUpdate Update fitToPage so it applies rather than scaling
+	* @return PHPExcel_Worksheet_PageSetup
+	*/
 	public function setFitToWidth($pValue = 1, $pUpdate = TRUE) {
 		$this->_fitToWidth = $pValue;
 		if ($pUpdate) {
@@ -424,10 +424,10 @@ class PHPExcel_Worksheet_PageSetup
 	}
 
 	/**
-	 * Is Columns to repeat at left set?
-	 *
-	 * @return boolean
-	 */
+	* Is Columns to repeat at left set?
+	*
+	* @return boolean
+	*/
 	public function isColumnsToRepeatAtLeftSet() {
 		if (is_array($this->_columnsToRepeatAtLeft)) {
 			if ($this->_columnsToRepeatAtLeft[0] != '' && $this->_columnsToRepeatAtLeft[1] != '') {
@@ -439,20 +439,20 @@ class PHPExcel_Worksheet_PageSetup
 	}
 
 	/**
-	 * Get Columns to repeat at left
-	 *
-	 * @return array Containing start column and end column, empty array if option unset
-	 */
+	* Get Columns to repeat at left
+	*
+	* @return array Containing start column and end column, empty array if option unset
+	*/
 	public function getColumnsToRepeatAtLeft() {
 		return $this->_columnsToRepeatAtLeft;
 	}
 
 	/**
-	 * Set Columns to repeat at left
-	 *
-	 * @param array $pValue Containing start column and end column, empty array if option unset
-	 * @return PHPExcel_Worksheet_PageSetup
-	 */
+	* Set Columns to repeat at left
+	*
+	* @param array $pValue Containing start column and end column, empty array if option unset
+	* @return PHPExcel_Worksheet_PageSetup
+	*/
 	public function setColumnsToRepeatAtLeft($pValue = null) {
 		if (is_array($pValue)) {
 			$this->_columnsToRepeatAtLeft = $pValue;
@@ -461,22 +461,22 @@ class PHPExcel_Worksheet_PageSetup
 	}
 
 	/**
-	 * Set Columns to repeat at left by start and end
-	 *
-	 * @param string $pStart
-	 * @param string $pEnd
-	 * @return PHPExcel_Worksheet_PageSetup
-	 */
+	* Set Columns to repeat at left by start and end
+	*
+	* @param string $pStart
+	* @param string $pEnd
+	* @return PHPExcel_Worksheet_PageSetup
+	*/
 	public function setColumnsToRepeatAtLeftByStartAndEnd($pStart = 'A', $pEnd = 'A') {
 		$this->_columnsToRepeatAtLeft = array($pStart, $pEnd);
 		return $this;
 	}
 
 	/**
-	 * Is Rows to repeat at top set?
-	 *
-	 * @return boolean
-	 */
+	* Is Rows to repeat at top set?
+	*
+	* @return boolean
+	*/
 	public function isRowsToRepeatAtTopSet() {
 		if (is_array($this->_rowsToRepeatAtTop)) {
 			if ($this->_rowsToRepeatAtTop[0] != 0 && $this->_rowsToRepeatAtTop[1] != 0) {
@@ -488,20 +488,20 @@ class PHPExcel_Worksheet_PageSetup
 	}
 
 	/**
-	 * Get Rows to repeat at top
-	 *
-	 * @return array Containing start column and end column, empty array if option unset
-	 */
+	* Get Rows to repeat at top
+	*
+	* @return array Containing start column and end column, empty array if option unset
+	*/
 	public function getRowsToRepeatAtTop() {
 		return $this->_rowsToRepeatAtTop;
 	}
 
 	/**
-	 * Set Rows to repeat at top
-	 *
-	 * @param array	$pValue	Containing start column and end column, empty array if option unset
-	 * @return PHPExcel_Worksheet_PageSetup
-	 */
+	* Set Rows to repeat at top
+	*
+	* @param array	$pValue	Containing start column and end column, empty array if option unset
+	* @return PHPExcel_Worksheet_PageSetup
+	*/
 	public function setRowsToRepeatAtTop($pValue = null) {
 		if (is_array($pValue)) {
 			$this->_rowsToRepeatAtTop = $pValue;
@@ -510,67 +510,67 @@ class PHPExcel_Worksheet_PageSetup
 	}
 
 	/**
-	 * Set Rows to repeat at top by start and end
-	 *
-	 * @param int $pStart
-	 * @param int $pEnd
-	 * @return PHPExcel_Worksheet_PageSetup
-	 */
+	* Set Rows to repeat at top by start and end
+	*
+	* @param int $pStart
+	* @param int $pEnd
+	* @return PHPExcel_Worksheet_PageSetup
+	*/
 	public function setRowsToRepeatAtTopByStartAndEnd($pStart = 1, $pEnd = 1) {
 		$this->_rowsToRepeatAtTop = array($pStart, $pEnd);
 		return $this;
 	}
 
 	/**
-	 * Get center page horizontally
-	 *
-	 * @return bool
-	 */
+	* Get center page horizontally
+	*
+	* @return bool
+	*/
 	public function getHorizontalCentered() {
 		return $this->_horizontalCentered;
 	}
 
 	/**
-	 * Set center page horizontally
-	 *
-	 * @param bool $value
-	 * @return PHPExcel_Worksheet_PageSetup
-	 */
+	* Set center page horizontally
+	*
+	* @param bool $value
+	* @return PHPExcel_Worksheet_PageSetup
+	*/
 	public function setHorizontalCentered($value = false) {
 		$this->_horizontalCentered = $value;
 		return $this;
 	}
 
 	/**
-	 * Get center page vertically
-	 *
-	 * @return bool
-	 */
+	* Get center page vertically
+	*
+	* @return bool
+	*/
 	public function getVerticalCentered() {
 		return $this->_verticalCentered;
 	}
 
 	/**
-	 * Set center page vertically
-	 *
-	 * @param bool $value
-	 * @return PHPExcel_Worksheet_PageSetup
-	 */
+	* Set center page vertically
+	*
+	* @param bool $value
+	* @return PHPExcel_Worksheet_PageSetup
+	*/
 	public function setVerticalCentered($value = false) {
 		$this->_verticalCentered = $value;
 		return $this;
 	}
 
 	/**
-	 *	Get print area
-	 *
-	 * @param	int		$index	Identifier for a specific print area range if several ranges have been set
-	 *							Default behaviour, or a index value of 0, will return all ranges as a comma-separated string
-	 *							Otherwise, the specific range identified by the value of $index will be returned
-	 *							Print areas are numbered from 1
-	 * @throws	Exception
-	 * @return	string
-	 */
+	*	Get print area
+	*
+	* @param	int		$index	Identifier for a specific print area range if several ranges have been set
+	*							Default behaviour, or a index value of 0, will return all ranges as a comma-separated string
+	*							Otherwise, the specific range identified by the value of $index will be returned
+	*							Print areas are numbered from 1
+	* @throws	Exception
+	* @return	string
+	*/
 	public function getPrintArea($index = 0) {
 		if ($index == 0) {
 			return $this->_printArea;
@@ -583,14 +583,14 @@ class PHPExcel_Worksheet_PageSetup
 	}
 
 	/**
-	 * Is print area set?
-	 *
-	 * @param	int		$index	Identifier for a specific print area range if several ranges have been set
-	 *							Default behaviour, or an index value of 0, will identify whether any print range is set
-	 *							Otherwise, existence of the range identified by the value of $index will be returned
-	 *							Print areas are numbered from 1
-	 * @return	boolean
-	 */
+	* Is print area set?
+	*
+	* @param	int		$index	Identifier for a specific print area range if several ranges have been set
+	*							Default behaviour, or an index value of 0, will identify whether any print range is set
+	*							Otherwise, existence of the range identified by the value of $index will be returned
+	*							Print areas are numbered from 1
+	* @return	boolean
+	*/
 	public function isPrintAreaSet($index = 0) {
 		if ($index == 0) {
 			return !is_null($this->_printArea);
@@ -600,14 +600,14 @@ class PHPExcel_Worksheet_PageSetup
 	}
 
 	/**
-	 * Clear a print area
-	 *
-	 * @param	int		$index	Identifier for a specific print area range if several ranges have been set
-	 *							Default behaviour, or an index value of 0, will clear all print ranges that are set
-	 *							Otherwise, the range identified by the value of $index will be removed from the series
-	 *							Print areas are numbered from 1
-	 * @return	PHPExcel_Worksheet_PageSetup
-	 */
+	* Clear a print area
+	*
+	* @param	int		$index	Identifier for a specific print area range if several ranges have been set
+	*							Default behaviour, or an index value of 0, will clear all print ranges that are set
+	*							Otherwise, the range identified by the value of $index will be removed from the series
+	*							Print areas are numbered from 1
+	* @return	PHPExcel_Worksheet_PageSetup
+	*/
 	public function clearPrintArea($index = 0) {
 		if ($index == 0) {
 			$this->_printArea = NULL;
@@ -619,29 +619,29 @@ class PHPExcel_Worksheet_PageSetup
 			}
 		}
 
-    	return $this;
+		return $this;
 	}
 
 	/**
-	 * Set print area. e.g. 'A1:D10' or 'A1:D10,G5:M20'
-	 *
-	 * @param	string	$value
-	 * @param	int		$index	Identifier for a specific print area range allowing several ranges to be set
-	 *							When the method is "O"verwrite, then a positive integer index will overwrite that indexed
-	 *								entry in the print areas list; a negative index value will identify which entry to
-	 *								overwrite working bacward through the print area to the list, with the last entry as -1.
-	 *								Specifying an index value of 0, will overwrite <b>all</b> existing print ranges.
-	 *							When the method is "I"nsert, then a positive index will insert after that indexed entry in
-	 *								the print areas list, while a negative index will insert before the indexed entry.
-	 *								Specifying an index value of 0, will always append the new print range at the end of the
-	 *								list.
-	 *							Print areas are numbered from 1
-	 * @param	string	$method	Determines the method used when setting multiple print areas
-	 *							Default behaviour, or the "O" method, overwrites existing print area
-	 *							The "I" method, inserts the new print area before any specified index, or at the end of the list
-	 * @return	PHPExcel_Worksheet_PageSetup
-	 * @throws	Exception
-	 */
+	* Set print area. e.g. 'A1:D10' or 'A1:D10,G5:M20'
+	*
+	* @param	string	$value
+	* @param	int		$index	Identifier for a specific print area range allowing several ranges to be set
+	*							When the method is "O"verwrite, then a positive integer index will overwrite that indexed
+	*								entry in the print areas list; a negative index value will identify which entry to
+	*								overwrite working bacward through the print area to the list, with the last entry as -1.
+	*								Specifying an index value of 0, will overwrite <b>all</b> existing print ranges.
+	*							When the method is "I"nsert, then a positive index will insert after that indexed entry in
+	*								the print areas list, while a negative index will insert before the indexed entry.
+	*								Specifying an index value of 0, will always append the new print range at the end of the
+	*								list.
+	*							Print areas are numbered from 1
+	* @param	string	$method	Determines the method used when setting multiple print areas
+	*							Default behaviour, or the "O" method, overwrites existing print area
+	*							The "I" method, inserts the new print area before any specified index, or at the end of the list
+	* @return	PHPExcel_Worksheet_PageSetup
+	* @throws	Exception
+	*/
 	public function setPrintArea($value, $index = 0, $method = self::SETPRINTRANGE_OVERWRITE) {
 		if (strpos($value,'!') !== false) {
 			throw new Exception('Cell coordinate must not specify a worksheet.');
@@ -661,7 +661,7 @@ class PHPExcel_Worksheet_PageSetup
 					$index = count($printAreas) - abs($index) + 1;
 				}
 				if (($index <= 0) || ($index > count($printAreas))) {
-		    		throw new Exception('Invalid index for setting print range.');
+					throw new Exception('Invalid index for setting print range.');
 				}
 				$printAreas[$index-1] = $value;
 				$this->_printArea = implode(',',$printAreas);
@@ -675,116 +675,116 @@ class PHPExcel_Worksheet_PageSetup
 					$index = abs($index) - 1;
 				}
 				if ($index > count($printAreas)) {
-		    		throw new Exception('Invalid index for setting print range.');
+					throw new Exception('Invalid index for setting print range.');
 				}
 				$printAreas = array_merge(array_slice($printAreas,0,$index),array($value),array_slice($printAreas,$index));
 				$this->_printArea = implode(',',$printAreas);
 			}
 		} else {
-    		throw new Exception('Invalid method for setting print range.');
+			throw new Exception('Invalid method for setting print range.');
 		}
 
-    	return $this;
+		return $this;
 	}
 
 	/**
-	 * Add a new print area (e.g. 'A1:D10' or 'A1:D10,G5:M20') to the list of print areas
-	 *
-	 * @param	string	$value
-	 * @param	int		$index	Identifier for a specific print area range allowing several ranges to be set
-	 *							A positive index will insert after that indexed entry in the print areas list, while a
-	 *								negative index will insert before the indexed entry.
-	 *								Specifying an index value of 0, will always append the new print range at the end of the
-	 *								list.
-	 *							Print areas are numbered from 1
-	 * @return	PHPExcel_Worksheet_PageSetup
-	 * @throws	Exception
-	 */
+	* Add a new print area (e.g. 'A1:D10' or 'A1:D10,G5:M20') to the list of print areas
+	*
+	* @param	string	$value
+	* @param	int		$index	Identifier for a specific print area range allowing several ranges to be set
+	*							A positive index will insert after that indexed entry in the print areas list, while a
+	*								negative index will insert before the indexed entry.
+	*								Specifying an index value of 0, will always append the new print range at the end of the
+	*								list.
+	*							Print areas are numbered from 1
+	* @return	PHPExcel_Worksheet_PageSetup
+	* @throws	Exception
+	*/
 	public function addPrintArea($value, $index = -1) {
 		return $this->setPrintArea($value, $index, self::SETPRINTRANGE_INSERT);
 	}
 
 	/**
-	 * Set print area
-	 *
-	 * @param	int		$column1	Column 1
-	 * @param	int		$row1		Row 1
-	 * @param	int		$column2	Column 2
-	 * @param	int		$row2		Row 2
-	 * @param	int		$index		Identifier for a specific print area range allowing several ranges to be set
-	 *								When the method is "O"verwrite, then a positive integer index will overwrite that indexed
-	 *									entry in the print areas list; a negative index value will identify which entry to
-	 *									overwrite working bacward through the print area to the list, with the last entry as -1.
-	 *									Specifying an index value of 0, will overwrite <b>all</b> existing print ranges.
-	 *								When the method is "I"nsert, then a positive index will insert after that indexed entry in
-	 *									the print areas list, while a negative index will insert before the indexed entry.
-	 *									Specifying an index value of 0, will always append the new print range at the end of the
-	 *									list.
-	 *								Print areas are numbered from 1
-	 * @param	string	$method		Determines the method used when setting multiple print areas
-	 *								Default behaviour, or the "O" method, overwrites existing print area
-	 *								The "I" method, inserts the new print area before any specified index, or at the end of the list
-	 * @return	PHPExcel_Worksheet_PageSetup
-	 * @throws	Exception
-	 */
-    public function setPrintAreaByColumnAndRow($column1, $row1, $column2, $row2, $index = 0, $method = self::SETPRINTRANGE_OVERWRITE)
-    {
-    	return $this->setPrintArea(PHPExcel_Cell::stringFromColumnIndex($column1) . $row1 . ':' . PHPExcel_Cell::stringFromColumnIndex($column2) . $row2, $index, $method);
-    }
-
-	/**
-	 * Add a new print area to the list of print areas
-	 *
-	 * @param	int		$column1	Start Column for the print area
-	 * @param	int		$row1		Start Row for the print area
-	 * @param	int		$column2	End Column for the print area
-	 * @param	int		$row2		End Row for the print area
-	 * @param	int		$index		Identifier for a specific print area range allowing several ranges to be set
-	 *								A positive index will insert after that indexed entry in the print areas list, while a
-	 *									negative index will insert before the indexed entry.
-	 *									Specifying an index value of 0, will always append the new print range at the end of the
-	 *									list.
-	 *								Print areas are numbered from 1
-	 * @return	PHPExcel_Worksheet_PageSetup
-	 * @throws	Exception
-	 */
-    public function addPrintAreaByColumnAndRow($column1, $row1, $column2, $row2, $index = -1)
-    {
-    	return $this->setPrintArea(PHPExcel_Cell::stringFromColumnIndex($column1) . $row1 . ':' . PHPExcel_Cell::stringFromColumnIndex($column2) . $row2, $index, self::SETPRINTRANGE_INSERT);
+	* Set print area
+	*
+	* @param	int		$column1	Column 1
+	* @param	int		$row1		Row 1
+	* @param	int		$column2	Column 2
+	* @param	int		$row2		Row 2
+	* @param	int		$index		Identifier for a specific print area range allowing several ranges to be set
+	*								When the method is "O"verwrite, then a positive integer index will overwrite that indexed
+	*									entry in the print areas list; a negative index value will identify which entry to
+	*									overwrite working bacward through the print area to the list, with the last entry as -1.
+	*									Specifying an index value of 0, will overwrite <b>all</b> existing print ranges.
+	*								When the method is "I"nsert, then a positive index will insert after that indexed entry in
+	*									the print areas list, while a negative index will insert before the indexed entry.
+	*									Specifying an index value of 0, will always append the new print range at the end of the
+	*									list.
+	*								Print areas are numbered from 1
+	* @param	string	$method		Determines the method used when setting multiple print areas
+	*								Default behaviour, or the "O" method, overwrites existing print area
+	*								The "I" method, inserts the new print area before any specified index, or at the end of the list
+	* @return	PHPExcel_Worksheet_PageSetup
+	* @throws	Exception
+	*/
+	public function setPrintAreaByColumnAndRow($column1, $row1, $column2, $row2, $index = 0, $method = self::SETPRINTRANGE_OVERWRITE)
+	{
+		return $this->setPrintArea(PHPExcel_Cell::stringFromColumnIndex($column1) . $row1 . ':' . PHPExcel_Cell::stringFromColumnIndex($column2) . $row2, $index, $method);
 	}
 
 	/**
-	 * Get first page number
-	 *
-	 * @return int
-	 */
-    public function getFirstPageNumber() {
-		return $this->_firstPageNumber;
-    }
-
-    /**
-     * Set first page number
-     *
-     * @param int $value
-     * @return PHPExcel_Worksheet_HeaderFooter
-     */
-    public function setFirstPageNumber($value = null) {
-		$this->_firstPageNumber = $value;
-		return $this;
-    }
-
-    /**
-     * Reset first page number
-     *
-     * @return PHPExcel_Worksheet_HeaderFooter
-     */
-    public function resetFirstPageNumber() {
-		return $this->setFirstPageNumber(null);
-    }
+	* Add a new print area to the list of print areas
+	*
+	* @param	int		$column1	Start Column for the print area
+	* @param	int		$row1		Start Row for the print area
+	* @param	int		$column2	End Column for the print area
+	* @param	int		$row2		End Row for the print area
+	* @param	int		$index		Identifier for a specific print area range allowing several ranges to be set
+	*								A positive index will insert after that indexed entry in the print areas list, while a
+	*									negative index will insert before the indexed entry.
+	*									Specifying an index value of 0, will always append the new print range at the end of the
+	*									list.
+	*								Print areas are numbered from 1
+	* @return	PHPExcel_Worksheet_PageSetup
+	* @throws	Exception
+	*/
+	public function addPrintAreaByColumnAndRow($column1, $row1, $column2, $row2, $index = -1)
+	{
+		return $this->setPrintArea(PHPExcel_Cell::stringFromColumnIndex($column1) . $row1 . ':' . PHPExcel_Cell::stringFromColumnIndex($column2) . $row2, $index, self::SETPRINTRANGE_INSERT);
+	}
 
 	/**
-	 * Implement PHP __clone to create a deep clone, not just a shallow copy.
-	 */
+	* Get first page number
+	*
+	* @return int
+	*/
+	public function getFirstPageNumber() {
+		return $this->_firstPageNumber;
+	}
+
+	/**
+	* Set first page number
+	*
+	* @param int $value
+	* @return PHPExcel_Worksheet_HeaderFooter
+	*/
+	public function setFirstPageNumber($value = null) {
+		$this->_firstPageNumber = $value;
+		return $this;
+	}
+
+	/**
+	* Reset first page number
+	*
+	* @return PHPExcel_Worksheet_HeaderFooter
+	*/
+	public function resetFirstPageNumber() {
+		return $this->setFirstPageNumber(null);
+	}
+
+	/**
+	* Implement PHP __clone to create a deep clone, not just a shallow copy.
+	*/
 	public function __clone() {
 		$vars = get_object_vars($this);
 		foreach ($vars as $key => $value) {

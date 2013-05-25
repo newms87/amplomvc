@@ -22,4 +22,4 @@ define('DIR_THEME', SITE_DIR . 'catalog/view/theme/');
 define('DIR_THEME_OPTION', SITE_DIR . 'catalog/view/template_option/');
 define('DIR_CONTROLLER', SITE_DIR . 'catalog/controller/');
 define('DIR_GENERATED_IMAGE', SITE_DIR . 'image/generated/');
-   
+	

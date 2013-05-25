@@ -4,7 +4,7 @@ class ControllerPaymentPPProUK extends Controller {
 		$this->template->load('payment/pp_pro_uk');
 
 		$this->language->load('payment/pp_pro_uk');
-		 
+		
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 		
 		$this->data['owner'] = $order_info['payment_firstname'] . ' ' . $order_info['payment_lastname'];
@@ -102,7 +102,7 @@ class ControllerPaymentPPProUK extends Controller {
 		$request .= '&EXPDATE=' . urlencode($_POST['cc_expire_date_month'] . substr($_POST['cc_expire_date_year'], - 2, 2));
 		$request .= '&CVV2=' . urlencode($_POST['cc_cvv2']);
 		$request .= '&CARDISSUE=' . urlencode($_POST['cc_issue']);
-		 
+		
 		if (!$this->config->get('pp_pro_uk_test')) {
 			$curl = curl_init('https://payflowpro.verisign.com/transaction');
 		} else {
@@ -126,7 +126,7 @@ class ControllerPaymentPPProUK extends Controller {
 		if (!$response) {
 			$this->error_log->write('DoDirectPayment failed: ' . curl_error($curl) . '(' . curl_errno($curl) . ')');
 		}
-		 
+		
  		$response_data = array();
  
 		parse_str($response, $response_data);

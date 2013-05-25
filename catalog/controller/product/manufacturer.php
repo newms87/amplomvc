@@ -7,9 +7,9 @@ class ControllerProductManufacturer extends Controller {
 		
 		$this->document->setTitle($this->_('heading_title'));
 		
-      $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-      $this->breadcrumb->add($this->_('text_brand'), $this->url->link('product/manufacturer'));
-      
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('text_brand'), $this->url->link('product/manufacturer'));
+		
 		$this->data['categories'] = array();
 									
 		$results = $this->model_catalog_manufacturer->getManufacturers();
@@ -52,7 +52,7 @@ class ControllerProductManufacturer extends Controller {
   	}
 	
 	public function product() {
-    	$this->language->load('product/manufacturer');
+		$this->language->load('product/manufacturer');
 		
 		if (isset($_GET['manufacturer_id'])) {
 			$manufacturer_id = $_GET['manufacturer_id'];
@@ -83,21 +83,21 @@ class ControllerProductManufacturer extends Controller {
 		} else {
 			$limit = $this->config->get('config_catalog_limit');
 		}
-      
-      $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 
 		$manufacturer_info = $this->model_catalog_manufacturer->getManufacturer($manufacturer_id);
 	
 		if ($manufacturer_info) {
-         $this->template->load('product/product_list');
+			$this->template->load('product/product_list');
 
 			$this->document->setTitle($manufacturer_info['name']);
 			
 			$url = $this->url->get_query('sort','order','page','limit');
-					   
-         $this->breadcrumb->add($manufacturer_info['name'], $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $_GET['manufacturer_id'] . $url));
-         
-      	$this->language->set('heading_title', $manufacturer_info['name']);
+						
+			$this->breadcrumb->add($manufacturer_info['name'], $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $_GET['manufacturer_id'] . $url));
+			
+			$this->language->set('heading_title', $manufacturer_info['name']);
 			/*
 			$this->language->format('text_compare', (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));
 			$this->data['compare'] = $this->url->link('product/compare');
@@ -106,10 +106,10 @@ class ControllerProductManufacturer extends Controller {
 			
 			$data = array(
 				'filter_manufacturer_id' => $manufacturer_id, 
-				'sort'                   => $sort,
-				'order'                  => $order,
-				'start'                  => ($page - 1) * $limit,
-				'limit'                  => $limit
+				'sort'						=> $sort,
+				'order'						=> $order,
+				'start'						=> ($page - 1) * $limit,
+				'limit'						=> $limit
 			);
 					
 			$product_total = $this->model_catalog_product->getTotalProducts($data);
@@ -146,19 +146,19 @@ class ControllerProductManufacturer extends Controller {
 				} else {
 					$rating = false;
 				}
-			   
-            $result['thumb'] = $image;
-            $result['description'] = substr(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8')), 0, 100) . '..';
-            $result['price'] = $price;
-            $result['special'] = $special;
-            if(!isset($result['flashsale_id'])){
-               $result['flashsale_id'] = 0;
-            } 
-            $result['tax'] = $tax;
-            $result['reviews'] = sprintf($this->_('text_reviews'), (int)$result['reviews']);
-            $result['href'] = $this->url->link('product/product', $url . '&manufacturer_id=' . $result['manufacturer_id'] . '&product_id=' . $result['product_id']);
-            
-            $this->data['products'][] = $result;
+				
+				$result['thumb'] = $image;
+				$result['description'] = substr(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8')), 0, 100) . '..';
+				$result['price'] = $price;
+				$result['special'] = $special;
+				if(!isset($result['flashsale_id'])){
+					$result['flashsale_id'] = 0;
+				} 
+				$result['tax'] = $tax;
+				$result['reviews'] = sprintf($this->_('text_reviews'), (int)$result['reviews']);
+				$result['href'] = $this->url->link('product/product', $url . '&manufacturer_id=' . $result['manufacturer_id'] . '&product_id=' . $result['product_id']);
+				
+				$this->data['products'][] = $result;
 			}
 					
 			$url = '';
@@ -285,7 +285,6 @@ class ControllerProductManufacturer extends Controller {
 			$this->pagination->total = $product_total;
 			$this->pagination->page = $page;
 			$this->pagination->limit = $limit;
-			$this->pagination->text = $this->_('text_pagination');
 			$this->pagination->url = $this->url->link('product/manufacturer/product','manufacturer_id=' . $_GET['manufacturer_id'] .  $url);
 			
 			$this->data['pagination'] = $this->pagination->render();
@@ -313,7 +312,7 @@ class ControllerProductManufacturer extends Controller {
 					
 			$this->response->setOutput($this->render());
 		} else {
-         $this->template->load('error/not_found');
+			$this->template->load('error/not_found');
 
 			$url = '';
 			
@@ -337,14 +336,14 @@ class ControllerProductManufacturer extends Controller {
 				$url .= '&limit=' . $_GET['limit'];
 			}
 			
-         $this->breadcrumb->add($this->_('text_error'), $this->url->link('product/category', $url));
-         	
+			$this->breadcrumb->add($this->_('text_error'), $this->url->link('product/category', $url));
+				
 			$this->document->setTitle($this->_('text_error'));
 
-   		$this->language->set('heading_title', $this->_('text_error'));
+			$this->language->set('heading_title', $this->_('text_error'));
 
-   		$this->data['continue'] = $this->url->link('common/home');
-         
+			$this->data['continue'] = $this->url->link('common/home');
+			
 			$this->children = array(
 				'common/column_left',
 				'common/column_right',

@@ -10,74 +10,74 @@ class Currency {
 		
 		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "currency");
 
-    	foreach ($query->rows as $result) {
-      		$this->currencies[$result['code']] = array(
-        		'currency_id'   => $result['currency_id'],
-        		'title'         => $result['title'],
-        		'symbol_left'   => $result['symbol_left'],
-        		'symbol_right'  => $result['symbol_right'],
-        		'decimal_place' => $result['decimal_place'],
-        		'value'         => $result['value']
-      		); 
-    	}
+		foreach ($query->rows as $result) {
+				$this->currencies[$result['code']] = array(
+				'currency_id'	=> $result['currency_id'],
+				'title'			=> $result['title'],
+				'symbol_left'	=> $result['symbol_left'],
+				'symbol_right'  => $result['symbol_right'],
+				'decimal_place' => $result['decimal_place'],
+				'value'			=> $result['value']
+				); 
+		}
 		
 		if (isset($_GET['currency']) && (array_key_exists($_GET['currency'], $this->currencies))) {
 			$this->set($_GET['currency']);
-    	} elseif ((isset($this->session->data['currency'])) && (array_key_exists($this->session->data['currency'], $this->currencies))) {
-      		$this->set($this->session->data['currency']);
-    	} elseif ((isset($_COOKIE['currency'])) && (array_key_exists($_COOKIE['currency'], $this->currencies))) {
-      		$this->set($_COOKIE['currency']);
-    	} else {
-      		$this->set($this->config->get('config_currency'));
-    	}
+		} elseif ((isset($this->session->data['currency'])) && (array_key_exists($this->session->data['currency'], $this->currencies))) {
+				$this->set($this->session->data['currency']);
+		} elseif ((isset($_COOKIE['currency'])) && (array_key_exists($_COOKIE['currency'], $this->currencies))) {
+				$this->set($_COOKIE['currency']);
+		} else {
+				$this->set($this->config->get('config_currency'));
+		}
   	}
 	
 	public function __get($key){
-      return $this->registry->get($key);
-   }
+		return $this->registry->get($key);
+	}
 	
   	public function set($currency) {
-    	$this->code = $currency;
+		$this->code = $currency;
 
-    	if (!isset($this->session->data['currency']) || ($this->session->data['currency'] != $currency)) {
-      		$this->session->data['currency'] = $currency;
-    	}
+		if (!isset($this->session->data['currency']) || ($this->session->data['currency'] != $currency)) {
+				$this->session->data['currency'] = $currency;
+		}
 
-    	if (!isset($_COOKIE['currency']) || ($_COOKIE['currency'] != $currency)) {
-	  		setcookie('currency', $currency, time() + 60 * 60 * 24 * 30, '/', $_SERVER['HTTP_HOST']);
-    	}
+		if (!isset($_COOKIE['currency']) || ($_COOKIE['currency'] != $currency)) {
+			setcookie('currency', $currency, time() + 60 * 60 * 24 * 30, '/', $_SERVER['HTTP_HOST']);
+		}
   	}
 
   	public function format($number, $currency = '', $value = '', $format = true, $decimal = null) {
 		if ($currency && $this->has($currency)) {
-      		$symbol_left   = $this->currencies[$currency]['symbol_left'];
-      		$symbol_right  = $this->currencies[$currency]['symbol_right'];
-      		$decimal_place = $this->currencies[$currency]['decimal_place'];
-    	} else {
-      		$symbol_left   = $this->currencies[$this->code]['symbol_left'];
-      		$symbol_right  = $this->currencies[$this->code]['symbol_right'];
-      		$decimal_place = $this->currencies[$this->code]['decimal_place'];
+				$symbol_left	= $this->currencies[$currency]['symbol_left'];
+				$symbol_right  = $this->currencies[$currency]['symbol_right'];
+				$decimal_place = $this->currencies[$currency]['decimal_place'];
+		} else {
+				$symbol_left	= $this->currencies[$this->code]['symbol_left'];
+				$symbol_right  = $this->currencies[$this->code]['symbol_right'];
+				$decimal_place = $this->currencies[$this->code]['decimal_place'];
 			
 			$currency = $this->code;
-    	}
+		}
 
-    	if ($value) {
-      		$value = $value;
-    	} else {
-      		$value = $this->currencies[$currency]['value'];
-    	}
+		if ($value) {
+				$value = $value;
+		} else {
+				$value = $this->currencies[$currency]['value'];
+		}
 
-    	if ($value) {
-      		$value = (float)$number * $value;
-    	} else {
-      		$value = $number;
-    	}
+		if ($value) {
+				$value = (float)$number * $value;
+		} else {
+				$value = $number;
+		}
 
-    	$string = '';
+		$string = '';
 
-    	if (($symbol_left) && ($format)) {
-      		$string .= $symbol_left;
-    	}
+		if (($symbol_left) && ($format)) {
+				$string .= $symbol_left;
+		}
 
 		if ($format) {
 			$decimal_point = $this->language->getInfo('decimal_point');
@@ -91,14 +91,14 @@ class Currency {
 			$thousand_point = '';
 		}
 		
-      $precision = $decimal !== null ? $decimal : (int)$decimal_place;
-    	$string .= number_format(round($value, $precision), $precision, $decimal_point, $thousand_point);
+		$precision = $decimal !== null ? $decimal : (int)$decimal_place;
+		$string .= number_format(round($value, $precision), $precision, $decimal_point, $thousand_point);
 
-    	if (($symbol_right) && ($format)) {
-      		$string .= $symbol_right;
-    	}
+		if (($symbol_right) && ($format)) {
+				$string .= $symbol_right;
+		}
 
-    	return $string;
+		return $string;
   	}
 	
   	public function convert($value, $from, $to) {
@@ -158,7 +158,7 @@ class Currency {
   	}
 	
   	public function getCode() {
-    	return $this->code;
+		return $this->code;
   	}
   
   	public function getValue($currency = '') {
@@ -170,8 +170,8 @@ class Currency {
 			return 0;
 		}
   	}
-    
+	
   	public function has($currency) {
-    	return isset($this->currencies[$currency]);
+		return isset($this->currencies[$currency]);
   	}
 }

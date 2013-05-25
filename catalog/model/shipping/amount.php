@@ -4,11 +4,11 @@ class ModelShippingAmount extends Model {
 	public function getQuote($address) {
 		$this->load->language('shipping/amount');
 		
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('amount_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
+		$valid_zone = $this->model_localisation_zone->inGeoZone($this->config->get('amount_geo_zone_id'), $address['country_id'], $address['zone_id']);
 	
 		$quote_data = array();
 	
-		if (!$this->config->get('amount_geo_zone_id') || $query->num_rows) {
+		if ($valid_zone) {
 			$cost = false;
 			$pricesets = $this->config->get('amount_priceset');
 			
@@ -116,6 +116,7 @@ class ModelShippingAmount extends Model {
 					'cost'			=> $cost,
 					'tax_class_id' => $this->config->get('amount_tax_class_id'),
 					'text'			=> $this->currency->format($cost),
+					'sort_order' 	=> 0,
 				);
 			}
 		}

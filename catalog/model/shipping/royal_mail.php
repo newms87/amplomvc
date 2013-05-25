@@ -64,16 +64,16 @@ class ModelShippingRoyalMail extends Model {
 					}		
 					
 					$quote_data['1st_class_standard'] = array(
-						'code'         => 'royal_mail.1st_class_standard',
-						'title'        => $title,
-						'cost'         => $cost,
+						'code'			=> 'royal_mail.1st_class_standard',
+						'title'		=> $title,
+						'cost'			=> $cost,
 						'tax_class_id' => $this->config->get('royal_mail_tax_class_id'),
-						'text'         => $this->currency->format($this->tax->calculate($cost, $this->config->get('royal_mail_tax_class_id'), $this->config->get('config_show_price_with_tax')))
+						'text'			=> $this->currency->format($this->tax->calculate($cost, $this->config->get('royal_mail_tax_class_id'), $this->config->get('config_show_price_with_tax')))
 					);
 				}
 			}
 			
-			// 1st Class Recorded	 
+			// 1st Class Recorded	
 			if ($this->config->get('royal_mail_1st_class_recorded_status') && $address['iso_code_2'] == 'GB') {
 				$cost = 0;
 				$insurance = 0;
@@ -118,11 +118,11 @@ class ModelShippingRoyalMail extends Model {
 					}		
 		
 					$quote_data['1st_class_recorded'] = array(
-						'code'         => 'royal_mail.1st_class_recorded',
-						'title'        => $title,
-						'cost'         => $cost,
+						'code'			=> 'royal_mail.1st_class_recorded',
+						'title'		=> $title,
+						'cost'			=> $cost,
 						'tax_class_id' => $this->config->get('royal_mail_tax_class_id'),
-						'text'         => $this->currency->format($this->tax->calculate($cost, $this->config->get('royal_mail_tax_class_id'), $this->config->get('config_show_price_with_tax')))
+						'text'			=> $this->currency->format($this->tax->calculate($cost, $this->config->get('royal_mail_tax_class_id'), $this->config->get('config_show_price_with_tax')))
 					);
 				}
 			}
@@ -153,11 +153,11 @@ class ModelShippingRoyalMail extends Model {
 					}
 					
 					$quote_data['2nd_class_standard'] = array(
-						'code'         => 'royal_mail.2nd_class_standard',
-						'title'        => $title,
-						'cost'         => $cost,
+						'code'			=> 'royal_mail.2nd_class_standard',
+						'title'		=> $title,
+						'cost'			=> $cost,
 						'tax_class_id' => $this->config->get('royal_mail_tax_class_id'),
-						'text'         => $this->currency->format($this->tax->calculate($cost, $this->config->get('royal_mail_tax_class_id'), $this->config->get('config_show_price_with_tax')))
+						'text'			=> $this->currency->format($this->tax->calculate($cost, $this->config->get('royal_mail_tax_class_id'), $this->config->get('config_show_price_with_tax')))
 					);
 				}
 			}
@@ -207,11 +207,11 @@ class ModelShippingRoyalMail extends Model {
 					}		
 					
 					$quote_data['2nd_class_recorded'] = array(
-						'code'         => 'royal_mail.2nd_class_recorded',
-						'title'        => $title,
-						'cost'         => $cost,
+						'code'			=> 'royal_mail.2nd_class_recorded',
+						'title'		=> $title,
+						'cost'			=> $cost,
 						'tax_class_id' => $this->config->get('royal_mail_tax_class_id'),
-						'text'         => $this->currency->format($this->tax->calculate($cost, $this->config->get('royal_mail_tax_class_id'), $this->config->get('config_show_price_with_tax')))
+						'text'			=> $this->currency->format($this->tax->calculate($cost, $this->config->get('royal_mail_tax_class_id'), $this->config->get('config_show_price_with_tax')))
 					);
 				}
 			}
@@ -261,11 +261,11 @@ class ModelShippingRoyalMail extends Model {
 					}		
 					
 					$quote_data['special_delivery_500'] = array(
-						'code'         => 'royal_mail.special_delivery_500',
-						'title'        => $title,
-						'cost'         => $cost,
+						'code'			=> 'royal_mail.special_delivery_500',
+						'title'		=> $title,
+						'cost'			=> $cost,
 						'tax_class_id' => $this->config->get('royal_mail_tax_class_id'),
-						'text'         => $this->currency->format($this->tax->calculate($cost, $this->config->get('royal_mail_tax_class_id'), $this->config->get('config_show_price_with_tax')))
+						'text'			=> $this->currency->format($this->tax->calculate($cost, $this->config->get('royal_mail_tax_class_id'), $this->config->get('config_show_price_with_tax')))
 					);
 				}
 			}
@@ -315,11 +315,11 @@ class ModelShippingRoyalMail extends Model {
 					}		
 					
 					$quote_data['special_delivery_1000'] = array(
-						'code'         => 'royal_mail.special_delivery_1000',
-						'title'        => $title,
-						'cost'         => $cost,
+						'code'			=> 'royal_mail.special_delivery_1000',
+						'title'		=> $title,
+						'cost'			=> $cost,
 						'tax_class_id' => $this->config->get('royal_mail_tax_class_id'),
-						'text'         => $this->currency->format($this->tax->calculate($cost, $this->config->get('royal_mail_tax_class_id'), $this->config->get('config_show_price_with_tax')))
+						'text'			=> $this->currency->format($this->tax->calculate($cost, $this->config->get('royal_mail_tax_class_id'), $this->config->get('config_show_price_with_tax')))
 					);
 				}
 			}
@@ -369,11 +369,11 @@ class ModelShippingRoyalMail extends Model {
 					}		
 					
 					$quote_data['special_delivery_2500'] = array(
-						'code'         => 'royal_mail.special_delivery_2500',
-						'title'        => $title,
-						'cost'         => $cost,
+						'code'			=> 'royal_mail.special_delivery_2500',
+						'title'		=> $title,
+						'cost'			=> $cost,
 						'tax_class_id' => $this->config->get('royal_mail_tax_class_id'),
-						'text'         => $this->currency->format($this->tax->calculate($cost, $this->config->get('royal_mail_tax_class_id'), $this->config->get('config_show_price_with_tax')))
+						'text'			=> $this->currency->format($this->tax->calculate($cost, $this->config->get('royal_mail_tax_class_id'), $this->config->get('config_show_price_with_tax')))
 					);
 				}
 			}
@@ -423,11 +423,11 @@ class ModelShippingRoyalMail extends Model {
 					}		
 									
 					$quote_data['standard_parcels'] = array(
-						'code'         => 'royal_mail.standard_parcels',
-						'title'        => $title,
-						'cost'         => $cost,
+						'code'			=> 'royal_mail.standard_parcels',
+						'title'		=> $title,
+						'cost'			=> $cost,
 						'tax_class_id' => $this->config->get('royal_mail_tax_class_id'),
-						'text'         => $this->currency->format($this->tax->calculate($cost, $this->config->get('royal_mail_tax_class_id'), $this->config->get('config_show_price_with_tax')))
+						'text'			=> $this->currency->format($this->tax->calculate($cost, $this->config->get('royal_mail_tax_class_id'), $this->config->get('config_show_price_with_tax')))
 					);
 				}
 			}
@@ -464,11 +464,11 @@ class ModelShippingRoyalMail extends Model {
 					}
 					
 					$quote_data['airmail'] = array(
-						'code'         => 'royal_mail.airmail',
-						'title'        => $title,
-						'cost'         => $cost,
+						'code'			=> 'royal_mail.airmail',
+						'title'		=> $title,
+						'cost'			=> $cost,
 						'tax_class_id' => $this->config->get('royal_mail_tax_class_id'),
-						'text'         => $this->currency->format($this->tax->calculate($cost, $this->config->get('royal_mail_tax_class_id'), $this->config->get('config_show_price_with_tax')))
+						'text'			=> $this->currency->format($this->tax->calculate($cost, $this->config->get('royal_mail_tax_class_id'), $this->config->get('config_show_price_with_tax')))
 					);
 				}
 			}
@@ -528,11 +528,11 @@ class ModelShippingRoyalMail extends Model {
 					}		
 					
 					$quote_data['international_signed'] = array(
-						'code'         => 'royal_mail.international_signed',
-						'title'        => $title,
-						'cost'         => $cost,
+						'code'			=> 'royal_mail.international_signed',
+						'title'		=> $title,
+						'cost'			=> $cost,
 						'tax_class_id' => $this->config->get('royal_mail_tax_class_id'),
-						'text'         => $this->currency->format($this->tax->calculate($cost, $this->config->get('royal_mail_tax_class_id'), $this->config->get('config_show_price_with_tax')))
+						'text'			=> $this->currency->format($this->tax->calculate($cost, $this->config->get('royal_mail_tax_class_id'), $this->config->get('config_show_price_with_tax')))
 					);
 				}
 			}
@@ -606,11 +606,11 @@ class ModelShippingRoyalMail extends Model {
 					}		
 		
 					$quote_data['airsure'] = array(
-						'code'         => 'royal_mail.airsure',
-						'title'        => $title,
-						'cost'         => $cost,
+						'code'			=> 'royal_mail.airsure',
+						'title'		=> $title,
+						'cost'			=> $cost,
 						'tax_class_id' => $this->config->get('royal_mail_tax_class_id'),
-						'text'         => $this->currency->format($this->tax->calculate($cost, $this->config->get('royal_mail_tax_class_id'), $this->config->get('config_show_price_with_tax')))
+						'text'			=> $this->currency->format($this->tax->calculate($cost, $this->config->get('royal_mail_tax_class_id'), $this->config->get('config_show_price_with_tax')))
 					);
 				}
 			}
@@ -646,11 +646,11 @@ class ModelShippingRoyalMail extends Model {
 					}		
 		
 					$quote_data['airsure'] = array(
-						'code'         => 'royal_mail.surface',
-						'title'        => $title,
-						'cost'         => $cost,
+						'code'			=> 'royal_mail.surface',
+						'title'		=> $title,
+						'cost'			=> $cost,
 						'tax_class_id' => $this->config->get('royal_mail_tax_class_id'),
-						'text'         => $this->currency->format($this->tax->calculate($cost, $this->config->get('royal_mail_tax_class_id'), $this->config->get('config_show_price_with_tax')))
+						'text'			=> $this->currency->format($this->tax->calculate($cost, $this->config->get('royal_mail_tax_class_id'), $this->config->get('config_show_price_with_tax')))
 					);
 				}
 			}
@@ -660,11 +660,11 @@ class ModelShippingRoyalMail extends Model {
 		
 		if ($quote_data) {
 			$method_data = array(
-				'code'       => 'royal_mail',
-				'title'      => $this->_('text_title'),
-				'quote'      => $quote_data,
+				'code'		=> 'royal_mail',
+				'title'		=> $this->_('text_title'),
+				'quote'		=> $quote_data,
 				'sort_order' => $this->config->get('royal_mail_sort_order'),
-				'error'      => false
+				'error'		=> false
 			);
 		}
 			

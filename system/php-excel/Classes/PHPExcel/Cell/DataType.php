@@ -18,19 +18,19 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category   PHPExcel
- * @package    PHPExcel_Cell
+ * @category	PHPExcel
+ * @package	PHPExcel_Cell
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version    1.7.7, 2012-05-19
+ * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+ * @version	1.7.7, 2012-05-19
  */
 
 
 /**
  * PHPExcel_Cell_DataType
  *
- * @category   PHPExcel
- * @package    PHPExcel_Cell
+ * @category	PHPExcel
+ * @package	PHPExcel_Cell
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_Cell_DataType
@@ -41,43 +41,43 @@ class PHPExcel_Cell_DataType
 	const TYPE_FORMULA		= 'f';
 	const TYPE_NUMERIC		= 'n';
 	const TYPE_BOOL			= 'b';
-    const TYPE_NULL			= 'null';
-    const TYPE_INLINE		= 'inlineStr';
+	const TYPE_NULL			= 'null';
+	const TYPE_INLINE		= 'inlineStr';
 	const TYPE_ERROR		= 'e';
 
 	/**
-	 * List of error codes
-	 *
-	 * @var array
-	 */
+	* List of error codes
+	*
+	* @var array
+	*/
 	private static $_errorCodes	= array('#NULL!' => 0, '#DIV/0!' => 1, '#VALUE!' => 2, '#REF!' => 3, '#NAME?' => 4, '#NUM!' => 5, '#N/A' => 6);
 
 	/**
-	 * Get list of error codes
-	 *
-	 * @return array
-	 */
+	* Get list of error codes
+	*
+	* @return array
+	*/
 	public static function getErrorCodes() {
 		return self::$_errorCodes;
 	}
 
 	/**
-	 * DataType for value
-	 *
-	 * @deprecated Replaced by PHPExcel_Cell_IValueBinder infrastructure
-	 * @param	mixed 	$pValue
-	 * @return 	int
-	 */
+	* DataType for value
+	*
+	* @deprecated Replaced by PHPExcel_Cell_IValueBinder infrastructure
+	* @param	mixed 	$pValue
+	* @return 	int
+	*/
 	public static function dataTypeForValue($pValue = null) {
 		return PHPExcel_Cell_DefaultValueBinder::dataTypeForValue($pValue);
 	}
 
 	/**
-	 * Check a string that it satisfies Excel requirements
-	 *
-	 * @param mixed Value to sanitize to an Excel string
-	 * @return mixed Sanitized value
-	 */
+	* Check a string that it satisfies Excel requirements
+	*
+	* @param mixed Value to sanitize to an Excel string
+	* @return mixed Sanitized value
+	*/
 	public static function checkString($pValue = null)
 	{
 		if ($pValue instanceof PHPExcel_RichText) {
@@ -95,11 +95,11 @@ class PHPExcel_Cell_DataType
 	}
 
 	/**
-	 * Check a value that it is a valid error code
-	 *
-	 * @param mixed Value to sanitize to an Excel error code
-	 * @return string Sanitized value
-	 */
+	* Check a value that it is a valid error code
+	*
+	* @param mixed Value to sanitize to an Excel error code
+	* @return string Sanitized value
+	*/
 	public static function checkErrorCode($pValue = null)
 	{
 		$pValue = (string)$pValue;

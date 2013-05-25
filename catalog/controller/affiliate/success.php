@@ -3,10 +3,10 @@ class ControllerAffiliateSuccess extends Controller {
 	public function index() {
 		$this->template->load('common/success');
 
-    	$this->language->load('affiliate/success');
+		$this->language->load('affiliate/success');
   
-    	$this->document->setTitle($this->_('heading_title'));
-      
+		$this->document->setTitle($this->_('heading_title'));
+		
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('text_account'), $this->url->link('affiliate/account'));
 			$this->breadcrumb->add($this->_('text_success'), $this->url->link('affiliate/success'));

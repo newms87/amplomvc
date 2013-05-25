@@ -25,33 +25,33 @@ class ControllerBlockBlock extends Controller {
 	private function getList(){
 		$this->template->load('block/list');
 
-      $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-      $this->breadcrumb->add($this->_('heading_title'), $this->url->link('block/block'));
-      
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('block/block'));
+		
 		//The Table Columns
 		$columns = array();
 
 		$columns['display_name'] = array(
-		   'type' => 'text',
-		   'display_name' => $this->_('column_display_name'),
-		   'filter' => true,
-		   'sortable' => true,
+			'type' => 'text',
+			'display_name' => $this->_('column_display_name'),
+			'filter' => true,
+			'sortable' => true,
 		);
 		
 		$columns['name'] = array(
-		   'type' => 'text',
-		   'display_name' => $this->_('column_name'),
-		   'filter' => true,
-		   'sortable' => true,
+			'type' => 'text',
+			'display_name' => $this->_('column_name'),
+			'filter' => true,
+			'sortable' => true,
 		);
 		
 		
 		$columns['status'] = array(
-		   'type' => 'select',
-		   'display_name' => $this->_('column_status'),
-		   'filter' => true,
-		   'build_data' => $this->_('data_statuses'),
-		   'sortable' => true,
+			'type' => 'select',
+			'display_name' => $this->_('column_status'),
+			'filter' => true,
+			'build_data' => $this->_('data_statuses'),
+			'sortable' => true,
 		);
 		
 		//The Sort data
@@ -68,7 +68,7 @@ class ControllerBlockBlock extends Controller {
 			$data[$key] = $$key = isset($_GET[$key]) ? $_GET[$key] : $default;
 		}
 		
-      $data['start'] = ($page - 1) * $limit;
+		$data['start'] = ($page - 1) * $limit;
 		
 		//Filter
 		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
@@ -79,29 +79,29 @@ class ControllerBlockBlock extends Controller {
 		
 		//Table Row Data
 		$block_total = $this->model_block_block->getTotalBlocks($data);
-      $blocks = $this->model_block_block->getBlocks($data);
-      
-      foreach ($blocks as &$block) {
-      	$actions = array(
+		$blocks = $this->model_block_block->getBlocks($data);
+		
+		foreach ($blocks as &$block) {
+			$actions = array(
 				'edit' => array(
-	            'text' => $this->_('text_edit'),
-	            'href' => $this->url->link('block/block', 'name=' . $block['name'])
+					'text' => $this->_('text_edit'),
+					'href' => $this->url->link('block/block', 'name=' . $block['name'])
 				),
-         );
-         
-         $block['actions'] = $actions;
-      }
-      
+			);
+			
+			$block['actions'] = $actions;
+		}
+		
 		//The table template data
 		$tt_data = array(
-		   'row_id'		=> 'name',
-		   'route'		=> 'block/block',
-		   'sort'		=> $sort,
-		   'order'		=> $order,
-		   'page'		=> $page,
-		   'sort_url'	=> $this->url->link('block/block', $this->url->get_query('filter')),
-		   'columns'	=> $columns,
-		   'data'		=> $blocks,
+			'row_id'		=> 'name',
+			'route'		=> 'block/block',
+			'sort'		=> $sort,
+			'order'		=> $order,
+			'page'		=> $page,
+			'sort_url'	=> $this->url->link('block/block', $this->url->get_query('filter')),
+			'columns'	=> $columns,
+			'data'		=> $blocks,
 		);
 		
 		$tt_data += $this->language->data;
@@ -112,31 +112,30 @@ class ControllerBlockBlock extends Controller {
 		$this->mytable->set_template_data($tt_data);
 		$this->mytable->map_attribute('filter_value', $filter_values);
 		
-      $this->data['list_view'] = $this->mytable->build();
-      
+		$this->data['list_view'] = $this->mytable->build();
+		
 		//Action Buttons
-      $this->data['insert'] = $this->url->link('block/block', 'name=new');
-      
+		$this->data['insert'] = $this->url->link('block/block', 'name=new');
+		
 		//Pagination
-      $url_query = $this->url->get_query('filter', 'sort', 'order');
-      
-      $this->pagination->init();
-      $this->pagination->total = $block_total;
-      $this->pagination->limit = $limit;
+		$url_query = $this->url->get_query('filter', 'sort', 'order');
+		
+		$this->pagination->init();
+		$this->pagination->total = $block_total;
+		$this->pagination->limit = $limit;
 		$this->pagination->page = $page;
-      $this->pagination->text = $this->_('text_pagination');
-      $this->pagination->url = $this->url->link('block/block', $url_query);
-      
-      $this->data['pagination'] = $this->pagination->render();
+		$this->pagination->url = $this->url->link('block/block', $url_query);
+		
+		$this->data['pagination'] = $this->pagination->render();
 		
 		//Template Children
-      $this->children = array(
-         'common/header',
-         'common/footer'
-      );
-      
+		$this->children = array(
+			'common/header',
+			'common/footer'
+		);
+		
 		//Render
-      $this->response->setOutput($this->render());
+		$this->response->setOutput($this->render());
 	}
 	
 	private function getForm(){
@@ -205,7 +204,7 @@ class ControllerBlockBlock extends Controller {
 		$this->data['data_stores'] = $this->model_setting_store->getStores();
 		$this->data['data_layouts'] = $this->model_design_layout->getLayouts();
 		$this->data['data_positions'] = array('' => $this->_('text_none')) + $this->theme->get_setting('data_positions');
-		 
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -220,7 +219,7 @@ class ControllerBlockBlock extends Controller {
 		$path = $_GET['name'];
 		$file = DIR_APPLICATION . 'controller/block/' . $path . '.php';
 		$class = "ControllerBlock" . preg_replace("/[^A-Z0-9]/i",'',$path);
-      $class_path = 'block/' . $path;
+		$class_path = 'block/' . $path;
 	
 		if (file_exists($file)) {
 			_require_once($file);

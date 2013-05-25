@@ -102,7 +102,7 @@ class ControllerDesignLayout extends Controller {
 	}
 
 	private function getList() {
-      $this->template->load('design/layout_list');
+		$this->template->load('design/layout_list');
 
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
@@ -141,7 +141,7 @@ class ControllerDesignLayout extends Controller {
 
 		$this->data['insert'] = $this->url->link('design/layout/insert', $url);
 		$this->data['delete'] = $this->url->link('design/layout/delete', $url);
-		 
+		
 		$this->data['layouts'] = array();
 
 		$data = array(
@@ -165,9 +165,9 @@ class ControllerDesignLayout extends Controller {
 
 			$this->data['layouts'][] = array(
 				'layout_id' => $result['layout_id'],
-				'name'      => $result['name'],
+				'name'		=> $result['name'],
 				'selected'  => isset($_POST['selected']) && in_array($result['layout_id'], $_POST['selected']),				
-				'action'    => $action
+				'action'	=> $action
 			);
 		}
 
@@ -213,7 +213,6 @@ class ControllerDesignLayout extends Controller {
 		$this->pagination->total = $layout_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('design/layout', $url);
 
 		$this->data['pagination'] = $this->pagination->render();
@@ -319,11 +318,7 @@ class ControllerDesignLayout extends Controller {
 			$this->error['name'] = $this->_('error_name');
 		}
 
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
 
 	private function validateDelete() {
@@ -355,10 +350,6 @@ class ControllerDesignLayout extends Controller {
 			}
 		}
 	
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
 }

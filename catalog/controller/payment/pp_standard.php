@@ -6,7 +6,7 @@ class ControllerPaymentPPStandard extends Controller {
 		$this->data['testmode'] = $this->config->get('pp_standard_test');
 		
 		if (!$this->config->get('pp_standard_test')) {
-    		$this->data['action'] = 'https://www.paypal.com/cgi-bin/webscr';
+			$this->data['action'] = 'https://www.paypal.com/cgi-bin/webscr';
   		} else {
 			$this->data['action'] = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
 		}
@@ -16,7 +16,7 @@ class ControllerPaymentPPStandard extends Controller {
 		if ($order_info) {
 		$this->template->load('payment/pp_standard');
 
-		   $this->data['order_id'] = $this->session->data['order_id'];
+			$this->data['order_id'] = $this->session->data['order_id'];
 			$this->data['business'] = $this->config->get('pp_standard_email');
 			$this->data['item_name'] = html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');				
 			
@@ -41,12 +41,12 @@ class ControllerPaymentPPStandard extends Controller {
 				}
 				
 				$this->data['products'][] = array(
-					'name'     => $product['name'],
-					'model'    => $product['model'],
-					'price'    => $this->currency->format($product['price'], $order_info['currency_code'], false, false),
+					'name'	=> $product['name'],
+					'model'	=> $product['model'],
+					'price'	=> $this->currency->format($product['price'], $order_info['currency_code'], false, false),
 					'quantity' => $product['quantity'],
-					'option'   => $option_data,
-					'weight'   => $product['weight']
+					'option'	=> $option_data,
+					'weight'	=> $product['weight']
 				);
 			}	
 			
@@ -56,12 +56,12 @@ class ControllerPaymentPPStandard extends Controller {
 
 			if ($total > 0) {
 				$this->data['products'][] = array(
-					'name'     => $this->_('text_total'),
-					'model'    => '',
-					'price'    => $total,
+					'name'	=> $this->_('text_total'),
+					'model'	=> '',
+					'price'	=> $total,
 					'quantity' => 1,
-					'option'   => array(),
-					'weight'   => 0
+					'option'	=> array(),
+					'weight'	=> 0
 				);	
 			} else {
 				$this->data['discount_amount_cart'] -= $total;
@@ -81,11 +81,11 @@ class ControllerPaymentPPStandard extends Controller {
 			$this->data['return'] = $this->url->link('checkout/success');
 			$this->data['notify_url'] = $this->url->link('payment/pp_standard/callback');
 			$this->data['cancel_return'] = $this->url->link('checkout/checkout');
-         $this->data['page_style'] = $this->config->get('pp_standard_page_style');
-         
+			$this->data['page_style'] = $this->config->get('pp_standard_page_style');
+			
 			$server = $this->url->is_ssl() ? HTTPS_IMAGE : HTTP_IMAGE;
 			
-         $this->data['image_url'] = $server . $this->config->get('config_logo');
+			$this->data['image_url'] = $server . $this->config->get('config_logo');
 			
 			if (!$this->config->get('pp_standard_transaction')) {
 				$this->data['paymentaction'] = 'authorization';
@@ -94,27 +94,21 @@ class ControllerPaymentPPStandard extends Controller {
 			}
 			
 			$this->data['custom'] = $this->encryption->encrypt($this->session->data['order_id']);
-		
-
-
-
-
-
-
+			
 			$this->render();
 		}
 	}
 	
 	public function callback() {
-	   if ($this->config->get('pp_standard_debug')) {
-	     $this->error_log->write('PP_STANDARD :: Callback called');
-      }
-      
+		if ($this->config->get('pp_standard_debug')) {
+			$this->error_log->write('PP_STANDARD :: Callback called');
+		}
+		
 		if (isset($_POST['custom'])) {
 			$order_id = $this->encryption->decrypt($_POST['custom']);
 		} else {
 			$order_id = 0;
-		}		
+		}
 		
 		$order_info = $this->model_checkout_order->getOrder($order_id);
 		
@@ -181,7 +175,7 @@ class ControllerPaymentPPStandard extends Controller {
 						break;
 					case 'Reversed':
 						$order_status_id = $this->config->get('pp_standard_reversed_status_id');
-						break;	 
+						break;	
 					case 'Voided':
 						$order_status_id = $this->config->get('pp_standard_voided_status_id');
 						break;								

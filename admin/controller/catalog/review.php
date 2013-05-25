@@ -156,7 +156,7 @@ class ControllerCatalogReview extends Controller {
 	
 		$results = $this->model_catalog_review->getReviews($data);
  
-    	foreach ($results as $result) {
+		foreach ($results as $result) {
 			$action = array();
 						
 			$action[] = array(
@@ -166,13 +166,13 @@ class ControllerCatalogReview extends Controller {
 						
 			$this->data['reviews'][] = array(
 				'review_id'  => $result['review_id'],
-				'name'       => $result['name'],
-				'author'     => $result['author'],
-				'rating'     => $result['rating'],
-				'status'     => ($result['status'] ? $this->_('text_enabled') : $this->_('text_disabled')),
+				'name'		=> $result['name'],
+				'author'	=> $result['author'],
+				'rating'	=> $result['rating'],
+				'status'	=> ($result['status'] ? $this->_('text_enabled') : $this->_('text_disabled')),
 				'date_added' => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
-				'selected'   => isset($_POST['selected']) && in_array($result['review_id'], $_POST['selected']),
-				'action'     => $action
+				'selected'	=> isset($_POST['selected']) && in_array($result['review_id'], $_POST['selected']),
+				'action'	=> $action
 			);
 		}	
 	
@@ -222,7 +222,6 @@ class ControllerCatalogReview extends Controller {
 		$this->pagination->total = $review_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('catalog/review', $url);
 			
 		$this->data['pagination'] = $this->pagination->render();
@@ -377,11 +376,7 @@ class ControllerCatalogReview extends Controller {
 			$this->error['rating'] = $this->_('error_rating');
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
 
 	private function validateDelete() {
@@ -389,10 +384,6 @@ class ControllerCatalogReview extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}	
 }

@@ -18,28 +18,28 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category   PHPExcel
- * @package    PHPExcel_Writer_Excel2007
+ * @category	PHPExcel
+ * @package	PHPExcel_Writer_Excel2007
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version    1.7.7, 2012-05-19
+ * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+ * @version	1.7.7, 2012-05-19
  */
 
 
 /**
  * PHPExcel_Writer_Excel2007_DocProps
  *
- * @category   PHPExcel
- * @package    PHPExcel_Writer_Excel2007
+ * @category	PHPExcel
+ * @package	PHPExcel_Writer_Excel2007
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_Writer_Excel2007_Theme extends PHPExcel_Writer_Excel2007_WriterPart
 {
 	/**
-	 * Map of Major fonts to write
-	 * @static	array of string
-	 *
-	 */
+	* Map of Major fonts to write
+	* @static	array of string
+	*
+	*/
 	private static $_majorFonts = array(
 					'Jpan' => 'ＭＳ Ｐゴシック',
 					'Hang' => '맑은 고딕',
@@ -74,10 +74,10 @@ class PHPExcel_Writer_Excel2007_Theme extends PHPExcel_Writer_Excel2007_WriterPa
 			);
 
 	/**
-	 * Map of Minor fonts to write
-	 * @static	array of string
-	 *
-	 */
+	* Map of Minor fonts to write
+	* @static	array of string
+	*
+	*/
 	private static $_minorFonts = array(
 					'Jpan' => 'ＭＳ Ｐゴシック',
 					'Hang' => '맑은 고딕',
@@ -112,10 +112,10 @@ class PHPExcel_Writer_Excel2007_Theme extends PHPExcel_Writer_Excel2007_WriterPa
 			);
 
 	/**
-	 * Map of core colours
-	 * @static	array of string
-	 *
-	 */
+	* Map of core colours
+	* @static	array of string
+	*
+	*/
 		private static $_colourScheme = array(
 					'dk2'		=> '1F497D',
 					'lt2'		=> 'EEECE1',
@@ -130,12 +130,12 @@ class PHPExcel_Writer_Excel2007_Theme extends PHPExcel_Writer_Excel2007_WriterPa
 			);
 			
 	/**
-	 * Write theme to XML format
-	 *
-	 * @param 	PHPExcel	$pPHPExcel
-	 * @return 	string 		XML Output
-	 * @throws 	Exception
-	 */
+	* Write theme to XML format
+	*
+	* @param 	PHPExcel	$pPHPExcel
+	* @return 	string 		XML Output
+	* @throws 	Exception
+	*/
 	public function writeTheme(PHPExcel $pPHPExcel = null)
 	{
 			// Create XML writer
@@ -814,14 +814,14 @@ class PHPExcel_Writer_Excel2007_Theme extends PHPExcel_Writer_Excel2007_WriterPa
 	}
 
 	/**
-	 * Write fonts to XML format
-	 *
-	 * @param 	PHPExcel_Shared_XMLWriter	$objWriter
-	 * @param 	string						$latinFont
-	 * @param 	array of string				$fontSet
-	 * @return 	string 						XML Output
-	 * @throws 	Exception
-	 */
+	* Write fonts to XML format
+	*
+	* @param 	PHPExcel_Shared_XMLWriter	$objWriter
+	* @param 	string						$latinFont
+	* @param 	array of string				$fontSet
+	* @return 	string 						XML Output
+	* @throws 	Exception
+	*/
 	private function _writeFonts($objWriter, $latinFont, $fontSet)
 	{
 		// a:latin
@@ -849,12 +849,12 @@ class PHPExcel_Writer_Excel2007_Theme extends PHPExcel_Writer_Excel2007_WriterPa
 	}
 
 	/**
-	 * Write colour scheme to XML format
-	 *
-	 * @param 	PHPExcel_Shared_XMLWriter	$objWriter
-	 * @return 	string 						XML Output
-	 * @throws 	Exception
-	 */
+	* Write colour scheme to XML format
+	*
+	* @param 	PHPExcel_Shared_XMLWriter	$objWriter
+	* @return 	string 						XML Output
+	* @throws 	Exception
+	*/
 	private function _writeColourScheme($objWriter)
 	{
 		foreach(self::$_colourScheme as $colourName => $colourValue) {

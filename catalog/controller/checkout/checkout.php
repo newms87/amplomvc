@@ -5,10 +5,10 @@ class ControllerCheckoutCheckout extends Controller {
 
 		if (!$this->cart->validate()) {
 			$this->message->add('warning', $this->cart->get_errors());
-	  		$this->url->redirect($this->url->link('cart/cart'));
-    	}
+			$this->url->redirect($this->url->link('cart/cart'));
+		}
 		
-      $this->language->load('checkout/checkout');
+		$this->language->load('checkout/checkout');
 		
 		$this->document->setTitle($this->_('heading_title')); 
 		
@@ -19,8 +19,8 @@ class ControllerCheckoutCheckout extends Controller {
 		$this->data['logged'] = $this->customer->isLogged();
 		$this->data['shipping_required'] = $this->cart->hasShipping();
 		
-      $this->language->format('error_page_load', $this->config->get('config_email'));
-      
+		$this->language->format('error_page_load', $this->config->get('config_email'));
+		
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',

@@ -39,7 +39,7 @@ class ModelLocalisationStockStatus extends Model {
 	public function getStockStatuses($data = array()) {
 		if ($data) {
 			$sql = "SELECT * FROM " . DB_PREFIX . "stock_status WHERE language_id = '" . (int)$this->config->get('config_language_id') . "'";
-      		
+				
 			$sql .= " ORDER BY name";	
 			
 			if (isset($data['order']) && ($data['order'] == 'DESC')) {
@@ -91,7 +91,7 @@ class ModelLocalisationStockStatus extends Model {
 	}
 	
 	public function getTotalStockStatuses() {
-      	$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "stock_status WHERE language_id = '" . (int)$this->config->get('config_language_id') . "'");
+			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "stock_status WHERE language_id = '" . (int)$this->config->get('config_language_id') . "'");
 		
 		return $query->row['total'];
 	}	

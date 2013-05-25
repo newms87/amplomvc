@@ -7,9 +7,9 @@
 class LMQuadTest {
 
 	/**
-	 * @param array[] $x
-	 * @param array[] $a
-	 */
+	* @param array[] $x
+	* @param array[] $a
+	*/
 	function val($x, $a) {
 		if (count($a) != 3) die ("Wrong number of elements in array a");
 		if (count($x) != 2) die ("Wrong number of elements in array x");
@@ -22,25 +22,25 @@ class LMQuadTest {
 		$sdy = $s * ($x[1] - $oy);
 
 		return ($sdx * $sdx) + ($sdy * $sdy);
-   }	//	function val()
+	}	//	function val()
 
 
 	/**
-	 * z = (p-o)'S'S(p-o)
-	 * dz/dp = 2S'S(p-o)
-	 *
-	 * z = (s*(px-ox))^2 + (s*(py-oy))^2
-	 * dz/dox = -2(s*(px-ox))*s
-	 * dz/ds = 2*s*[(px-ox)^2 + (py-oy)^2]
-	 *
-	 * z = (s*dx)^2 + (s*dy)^2
-	 * dz/ds = 2(s*dx)*dx + 2(s*dy)*dy
-	 *
-	 * @param array[] $x
-	 * @param array[] $a
-	 * @param int $a_k
-	 * @param array[] $a
-	 */
+	* z = (p-o)'S'S(p-o)
+	* dz/dp = 2S'S(p-o)
+	*
+	* z = (s*(px-ox))^2 + (s*(py-oy))^2
+	* dz/dox = -2(s*(px-ox))*s
+	* dz/ds = 2*s*[(px-ox)^2 + (py-oy)^2]
+	*
+	* z = (s*dx)^2 + (s*dy)^2
+	* dz/ds = 2(s*dx)*dx + 2(s*dy)*dy
+	*
+	* @param array[] $x
+	* @param array[] $a
+	* @param int $a_k
+	* @param array[] $a
+	*/
 	function grad($x, $a, $a_k) {
 		if (count($a) != 3) die ("Wrong number of elements in array a");
 		if (count($x) != 2) die ("Wrong number of elements in array x");
@@ -63,8 +63,8 @@ class LMQuadTest {
 
 
 	/**
-	 * @return array[] $a
-	 */
+	* @return array[] $a
+	*/
 	function initial() {
 		$a[0] = 0.05;
 		$a[1] = 0.1;
@@ -75,8 +75,8 @@ class LMQuadTest {
 
 
 	/**
-	 * @return Object[] $a
-	 */
+	* @return Object[] $a
+	*/
 	function testdata() {
 		$npts = 25;
 

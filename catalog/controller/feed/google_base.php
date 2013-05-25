@@ -4,7 +4,7 @@ class ControllerFeedGoogleBase extends Controller {
 		if ($this->config->get('google_base_status')) { 
 			$output  = '<?xml version="1.0" encoding="UTF-8" ?>';
 			$output .= '<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">';
-            $output .= '<channel>';
+				$output .= '<channel>';
 			$output .= '<title>' . $this->config->get('config_name') . '</title>'; 
 			$output .= '<description>' . $this->config->get('config_meta_description') . '</description>';
 			$output .= '<link>' . SITE_URL . '</link>';
@@ -31,18 +31,18 @@ class ControllerFeedGoogleBase extends Controller {
 
 					$supported_currencies = array('USD', 'EUR', 'GBP');
 
-                    if (in_array($this->currency->getCode(), $supported_currencies)) {
-                        $currency = $this->currency->getCode();
-                    } else {
-                        $currency = ($this->config->get('google_base_status')) ? $this->config->get('google_base_status') : 'USD';
-                    }
+						if (in_array($this->currency->getCode(), $supported_currencies)) {
+								$currency = $this->currency->getCode();
+						} else {
+								$currency = ($this->config->get('google_base_status')) ? $this->config->get('google_base_status') : 'USD';
+						}
 									
 					if ((float)$product['special']) {
-                        $output .= '<g:price>' .  $this->currency->format($this->tax->calculate($product['special'], $product['tax_class_id']), $currency, false, false) . '</g:price>';
-                    } else {
-                        $output .= '<g:price>' . $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id']), $currency, false, false) . '</g:price>';
-                    }
-			   
+								$output .= '<g:price>' .  $this->currency->format($this->tax->calculate($product['special'], $product['tax_class_id']), $currency, false, false) . '</g:price>';
+						} else {
+								$output .= '<g:price>' . $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id']), $currency, false, false) . '</g:price>';
+						}
+				
 					$categories = $this->model_catalog_product->getCategories($product['product_id']);
 					
 					foreach ($categories as $category) {
@@ -62,7 +62,7 @@ class ControllerFeedGoogleBase extends Controller {
 									}
 								}
 							}
-						 
+						
 							$output .= '<g:product_type>' . $string . '</g:product_type>';
 						}
 					}

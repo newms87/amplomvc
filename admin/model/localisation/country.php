@@ -77,7 +77,7 @@ class ModelLocalisationCountry extends Model {
 	}
 	
 	public function getTotalCountries() {
-      	$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "country");
+			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "country");
 		
 		return $query->row['total'];
 	}	

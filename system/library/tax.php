@@ -8,7 +8,7 @@ final class Tax {
 		
 		$this->store_address = array(
 			'country_id' => $this->config->get('config_country_id'),
-			'zone_id'	 => $this->config->get('config_zone_id'),
+			'zone_id'	=> $this->config->get('config_zone_id'),
 			'postcode'	=> $this->config->get('config_postcode')
 		);
   	}
@@ -64,8 +64,8 @@ final class Tax {
 		return $this->db->query_row("SELECT * FROM " . DB_PREFIX . "tax_rate WHERE tax_rate_id = '" . (int)$tax_rate_id . "'");
 	}
 	
-    public function getRates($value, $tax_class_id) {
-    	$tax_rates = array();
+	public function getRates($value, $tax_class_id) {
+		$tax_rates = array();
 		
 		if ($this->customer->isLogged()) {
 			$customer_group_id = $this->customer->getCustomerGroupId();
@@ -78,12 +78,12 @@ final class Tax {
 		}
 
 		if ($this->cart->hasPaymentAddress()) {
-		   $this->get_tax_rates($tax_rates, $tax_class_id, 'payment', $this->cart->getPaymentAddress(), $customer_group_id);
-	   }
+			$this->get_tax_rates($tax_rates, $tax_class_id, 'payment', $this->cart->getPaymentAddress(), $customer_group_id);
+		}
 		
 		if ($this->store_address) {
-		   $this->get_tax_rates($tax_rates, $tax_class_id, 'store', $this->store_address, $customer_group_id);
-	   }
+			$this->get_tax_rates($tax_rates, $tax_class_id, 'store', $this->store_address, $customer_group_id);
+		}
 		
 		
 		$tax_rate_data = array();
@@ -103,40 +103,43 @@ final class Tax {
 		
 			$tax_rate_data[$tax_rate['tax_rate_id']] = array(
 				'tax_rate_id' => $tax_rate['tax_rate_id'],
-				'name'        => $tax_rate['name'],
-				'rate'        => $tax_rate['rate'],
-				'type'        => $tax_rate['type'],
-				'amount'      => $amount
+				'name'		=> $tax_rate['name'],
+				'rate'		=> $tax_rate['rate'],
+				'type'		=> $tax_rate['type'],
+				'amount'		=> $amount
 			);
 		}
 		
 		return $tax_rate_data;
 	}
-   
-   private function get_tax_rates(&$tax_rates, $tax_class_id, $type, $address, $customer_group_id){
+	
+	private function get_tax_rates(&$tax_rates, $tax_class_id, $type, $address, $customer_group_id){
 		$query = 
-   		"SELECT tr2.tax_rate_id, tr2.name, tr2.rate, tr2.type, tr1.priority FROM " . DB_PREFIX . "tax_rule tr1" .
-         " LEFT JOIN " . DB_PREFIX . "tax_rate tr2 ON (tr1.tax_rate_id = tr2.tax_rate_id)" . 
-         " INNER JOIN " . DB_PREFIX . "tax_rate_to_customer_group tr2cg ON (tr2.tax_rate_id = tr2cg.tax_rate_id)" .
-         " LEFT JOIN " . DB_PREFIX . "zone_to_geo_zone z2gz ON (tr2.geo_zone_id = z2gz.geo_zone_id)" .
-         " LEFT JOIN " . DB_PREFIX . "geo_zone gz ON (tr2.geo_zone_id = gz.geo_zone_id)" .
-         " WHERE tr1.tax_class_id = '" . (int)$tax_class_id . "' AND tr1.based = '$type' AND tr2cg.customer_group_id = '" . (int)$customer_group_id . "'".
-         " AND z2gz.country_id = '" . (int)$address['country_id'] . "' AND (z2gz.zone_id = '0' OR z2gz.zone_id = '" . (int)$address['zone_id'] . "') ORDER BY tr1.priority ASC";
+			"SELECT tr2.tax_rate_id, tr2.name, tr2.rate, tr2.type, tr1.priority, gz.geo_zone_id FROM " . DB_PREFIX . "tax_rule tr1" .
+			" LEFT JOIN " . DB_PREFIX . "tax_rate tr2 ON (tr1.tax_rate_id = tr2.tax_rate_id)" . 
+			" INNER JOIN " . DB_PREFIX . "tax_rate_to_customer_group tr2cg ON (tr2.tax_rate_id = tr2cg.tax_rate_id)" .
+			" LEFT JOIN " . DB_PREFIX . "geo_zone gz ON (tr2.geo_zone_id = gz.geo_zone_id)" .
+			" WHERE tr1.tax_class_id = '" . (int)$tax_class_id . "' AND tr1.based = '$type' AND tr2cg.customer_group_id = '" . (int)$customer_group_id . "'".
+			" ORDER BY tr1.priority ASC";
 		
-      $result = $this->db->query($query);
-      
-      //TODO HACK TO APPLY ZONE CODES - SHOULD MOVE THIS TO A NEW TAX TOTAL LINE ITEM!
-      $county_tax = array(94022,94024,94035,94040,94041,94043,94085,94086,94087,94089,94301,94303,94304,94305,94306,94550,95002,95008,95013,95014,95020,95023,95030,95032,95033,95035,95037,95046,95050,95051,95053,95054,95070,95076,95110,95111,95112,95113,95116,95117,95118,95119,95120,95121,95122,95123,95124,95125,95126,95127,95128,95129,95130,95131,95132,95133,95134,95135,95136,95138,95139,95140,95141,95148);
+		$result = $this->db->query($query);
+		
+		//TODO HACK TO APPLY ZONE CODES - SHOULD MOVE THIS TO A NEW TAX TOTAL LINE ITEM!
+		$county_tax = array(94022,94024,94035,94040,94041,94043,94085,94086,94087,94089,94301,94303,94304,94305,94306,94550,95002,95008,95013,95014,95020,95023,95030,95032,95033,95035,95037,95046,95050,95051,95053,95054,95070,95076,95110,95111,95112,95113,95116,95117,95118,95119,95120,95121,95122,95123,95124,95125,95126,95127,95128,95129,95130,95131,95132,95133,95134,95135,95136,95138,95139,95140,95141,95148);
 
-      foreach ($result->rows as $row) {
-         if(in_array($address['postcode'],$county_tax)){
-            $row['rate'] += 1.125;
-         }
+		foreach ($result->rows as $row) {
+			if(!$this->model_localisation_zone->inGeoZone($row['geo_zone_id'], $address['country_id'], $address['zone_id'])){
+				continue;
+			}
 			
-         $tax_rates[$row['tax_rate_id']] = $row;
-      }
-   }
-   
+			if(in_array($address['postcode'],$county_tax)){
+				$row['rate'] += 1.125;
+			}
+			
+			$tax_rates[$row['tax_rate_id']] = $row;
+		}
+	}
+	
   	public function has($tax_class_id) {
 		return isset($this->taxes[$tax_class_id]);
   	}

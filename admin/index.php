@@ -44,7 +44,7 @@ $config = new Config($registry);
 
 //Setup Cache ignore list
 foreach(explode(',',$config->get('config_cache_ignore')) as $ci)
-   $cache->ignore($ci);
+	$cache->ignore($ci);
 
 
 //System Logging 
@@ -107,11 +107,11 @@ $registry->set('request', $request);
 // Url
 $url = new Url($registry, SITE_URL, $config->get('config_use_ssl') ? SITE_SSL : '');
 if($config->get('config_seo_url'))
-   $url->getSeoUrl();
+	$url->getSeoUrl();
 $registry->set('url', $url);
 
 if(!isset($_GET['route'])){
-   $_GET['route'] = 'common/home';
+	$_GET['route'] = 'common/home';
 }
 
 //Database Structure Validation
@@ -178,49 +178,49 @@ $route = '';
 $action = '';
 
 if(isset($_GET['route'])){
-   $part = explode('/', $_GET['route']);
-   
-   if (isset($part[0])) {
-      $route .= $part[0];
-   }
-   
-   if (isset($part[1])) {
-      $route .= '/' . $part[1];
-   }
+	$part = explode('/', $_GET['route']);
+	
+	if (isset($part[0])) {
+		$route .= $part[0];
+	}
+	
+	if (isset($part[1])) {
+		$route .= '/' . $part[1];
+	}
 }
 
 if(!$registry->get('user')->isLogged()){
-   $allow_access = false;
-   
-   if($route){
-      $allowed = array(
-         'common/forgotten',
-         'common/reset',
-         'common/login',
-      );
-      
-      if(!in_array($route, $allowed)){
-         $action = new Action('common/login');
-      }
-   }
+	$allow_access = false;
+	
+	if($route){
+		$allowed = array(
+			'common/forgotten',
+			'common/reset',
+			'common/login',
+		);
+		
+		if(!in_array($route, $allowed)){
+			$action = new Action('common/login');
+		}
+	}
 }
 elseif($route){
-   $ignore = array(
-      'common/home',
-      'common/login',
-      'common/logout',
-      'common/forgotten',
-      'common/reset',
-      'error/not_found',
-      'error/permission'      
-   );
-   
-   if(!in_array($route, $ignore) && !$registry->get('user')->hasPermission('access', $route)){
-      $action = new Action('error/permission');
-   }
+	$ignore = array(
+		'common/home',
+		'common/login',
+		'common/logout',
+		'common/forgotten',
+		'common/reset',
+		'error/not_found',
+		'error/permission'		
+	);
+	
+	if(!in_array($route, $ignore) && !$registry->get('user')->hasPermission('access', $route)){
+		$action = new Action('error/permission');
+	}
 }
 else{
-   $action = new Action('common/home');
+	$action = new Action('common/home');
 }
 
 if (!$action) {

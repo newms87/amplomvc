@@ -58,7 +58,7 @@
 </div>
 <script type="text/javascript"><!--
 function filter() {
-	url = 'index.php?route=report/product_purchased';
+	url = "<?= HTTP_ADMIN . "index.php?route=report/product_purchased"; ?>";
 	
 	var filter_date_start = $('input[name=\'filter_date_start\']').attr('value');
 	

@@ -1,89 +1,90 @@
 <?php
 class ModelCatalogCategory extends Model {
 	public function addCategory($data) {
-		$this->query("INSERT INTO " . DB_PREFIX . "category SET parent_id = '" . (int)$data['parent_id'] . "', `top` = '" . (isset($data['top']) ? (int)$data['top'] : 0) . "', `column` = '" . (int)$data['column'] . "', sort_order = '" . (int)$data['sort_order'] . "', status = '" . (int)$data['status'] . "', date_modified = NOW(), date_added = NOW()");
-	
-		$category_id = $this->db->getLastId();
+		$data['date_added'] = $this->tool->format_datetime();
+		$data['date_modified'] = $data['date_added'];
 		
-		if (isset($data['image'])) {
-			$this->query("UPDATE " . DB_PREFIX . "category SET image = '" . $this->db->escape(html_entity_decode($data['image'], ENT_QUOTES, 'UTF-8')) . "' WHERE category_id = '" . (int)$category_id . "'");
-		}
+		$category_id = $this->insert('category', $data);
 		
 		foreach ($data['category_description'] as $language_id => $value) {
-			$this->query("INSERT INTO " . DB_PREFIX . "category_description SET category_id = '" . (int)$category_id . "', language_id = '" . (int)$language_id . "', name = '" . $this->db->escape($value['name']) . "', meta_keyword = '" . $this->db->escape($value['meta_keyword']) . "', meta_description = '" . $this->db->escape($value['meta_description']) . "', description = '" . $this->db->escape($value['description']) . "'");
+			$value['category_id'] = $category_id;
+			$value['language_id'] = $language_id;
+			
+			$this->insert('category_description', $value);
 		}
 		
-		if (isset($data['category_store'])) {
+		if (!empty($data['category_store'])) {
 			foreach ($data['category_store'] as $store_id) {
-				$this->query("INSERT INTO " . DB_PREFIX . "category_to_store SET category_id = '" . (int)$category_id . "', store_id = '" . (int)$store_id . "'");
+				$store = array(
+					'category_id' => $category_id,
+					'store_id' => $store_id,
+				);
+				
+				$this->insert('category_to_store', $store);
 			}
 		}
 
 		if (isset($data['category_layout'])) {
 			foreach ($data['category_layout'] as $store_id => $layout) {
 				if ($layout['layout_id']) {
-					$this->query("INSERT INTO " . DB_PREFIX . "category_to_layout SET category_id = '" . (int)$category_id . "', store_id = '" . (int)$store_id . "', layout_id = '" . (int)$layout['layout_id'] . "'");
+					$layout['category_id'] = $category_id;
+					$layout['store_id'] = $store_id;
+					
+					$this->insert('category_to_layout', $layout);
 				}
 			}
 		}
-						
+		
 		if ($data['keyword']) {
-		   $url_alias = array(
-		      'keyword' => $data['keyword'],
-		      'route'   => 'product/category',
-		      'query'   => 'category_id=' . (int)$category_id,
-		      'status'  => $data['status'],
-		   );
-         
-         $this->model_setting_url_alias->addUrlAlias($url_alias);
+			$this->url->set_alias($data['keyword'], 'product/category', 'category_id=' . (int)$category_id);
 		}
 		
 		$this->cache->delete('category');
 	}
 	
 	public function editCategory($category_id, $data) {
-		$this->query("UPDATE " . DB_PREFIX . "category SET parent_id = '" . (int)$data['parent_id'] . "', `top` = '" . (isset($data['top']) ? (int)$data['top'] : 0) . "', `column` = '" . (int)$data['column'] . "', sort_order = '" . (int)$data['sort_order'] . "', status = '" . (int)$data['status'] . "', date_modified = NOW() WHERE category_id = '" . (int)$category_id . "'");
+		$data['date_modified'] = $this->tool->format_datetime();
+		
+		$this->update('category', $data, $category_id);
 
-		if (isset($data['image'])) {
-			$this->query("UPDATE " . DB_PREFIX . "category SET image = '" . $this->db->escape(html_entity_decode($data['image'], ENT_QUOTES, 'UTF-8')) . "' WHERE category_id = '" . (int)$category_id . "'");
-		}
-
-		$this->query("DELETE FROM " . DB_PREFIX . "category_description WHERE category_id = '" . (int)$category_id . "'");
-
+		$this->delete('category_description', array('category_id' => $category_id));
+		
 		foreach ($data['category_description'] as $language_id => $value) {
-			$this->query("INSERT INTO " . DB_PREFIX . "category_description SET category_id = '" . (int)$category_id . "', language_id = '" . (int)$language_id . "', name = '" . $this->db->escape($value['name']) . "', meta_keyword = '" . $this->db->escape($value['meta_keyword']) . "', meta_description = '" . $this->db->escape($value['meta_description']) . "', description = '" . $this->db->escape($value['description']) . "'");
+			$value['category_id'] = $category_id;
+			$value['language_id'] = $language_id;
+			
+			$this->insert('category_description', $value);
 		}
 		
-		$this->query("DELETE FROM " . DB_PREFIX . "category_to_store WHERE category_id = '" . (int)$category_id . "'");
+		$this->delete('category_to_store', array('category_id' => $category_id));
 		
-		if (isset($data['category_store'])) {		
+		if (!empty($data['category_store'])) {
 			foreach ($data['category_store'] as $store_id) {
-				$this->query("INSERT INTO " . DB_PREFIX . "category_to_store SET category_id = '" . (int)$category_id . "', store_id = '" . (int)$store_id . "'");
+				$store = array(
+					'category_id' => $category_id,
+					'store_id' => $store_id,
+				);
+				
+				$this->insert('category_to_store', $store);
 			}
 		}
-
-		$this->query("DELETE FROM " . DB_PREFIX . "category_to_layout WHERE category_id = '" . (int)$category_id . "'");
+		
+		$this->delete('category_to_layout', array('category_id' => $category_id));
 
 		if (isset($data['category_layout'])) {
 			foreach ($data['category_layout'] as $store_id => $layout) {
 				if ($layout['layout_id']) {
-					$this->query("INSERT INTO " . DB_PREFIX . "category_to_layout SET category_id = '" . (int)$category_id . "', store_id = '" . (int)$store_id . "', layout_id = '" . (int)$layout['layout_id'] . "'");
+					$layout['category_id'] = $category_id;
+					$layout['store_id'] = $store_id;
+					
+					$this->insert('category_to_layout', $layout);
 				}
 			}
 		}
-						
-		$this->model_setting_url_alias->deleteUrlAliasByRouteQuery('product/category', 'category_id=' . (int)$category_id);
 		
 		if ($data['keyword']) {
-         $url_alias = array(
-            'keyword' => $data['keyword'],
-            'route'   => 'product/category',
-            'query'   => 'category_id=' . (int)$category_id,
-            'status'  => $data['status'],
-         );
-         
-         $this->model_setting_url_alias->addUrlAlias($url_alias);
-      }
+			$this->url->set_alias($data['keyword'], 'product/category', 'category_id=' . (int)$category_id);
+		}
 		
 		$this->cache->delete('category');
 	}
@@ -104,13 +105,17 @@ class ModelCatalogCategory extends Model {
 			$this->deleteCategory($result['category_id']);
 		}
 		
+		$this->url->remove_alias('product/category', 'category_id=' . $category_id);
+		
 		$this->cache->delete('category');
 	} 
 
 	public function getCategory($category_id) {
-		$query = $this->query("SELECT DISTINCT *, (SELECT keyword FROM " . DB_PREFIX . "url_alias WHERE query = 'category_id=" . (int)$category_id . "') AS keyword FROM " . DB_PREFIX . "category WHERE category_id = '" . (int)$category_id . "'");
+		$result = $this->query_row("SELECT * FROM " . DB_PREFIX . "category WHERE category_id = '" . (int)$category_id . "'");
 		
-		return $query->row;
+		$result['keyword'] = $this->url->get_alias('product/category', 'category_id=' . $category_id);
+		
+		return $result;
 	} 
 	
 	public function getCategories($parent_id = 0) {
@@ -118,14 +123,14 @@ class ModelCatalogCategory extends Model {
 	
 		if (!$category_data) {
 			$category_data = array();
-		   $filter_parent = !is_null($parent_id) ? "c.parent_id = '" . (int)$parent_id . "' AND" : '';
+			$filter_parent = !is_null($parent_id) ? "c.parent_id = '" . (int)$parent_id . "' AND" : '';
 			$query = $this->query("SELECT * FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_description cd ON (c.category_id = cd.category_id) WHERE $filter_parent cd.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY c.sort_order, cd.name ASC");
 			
 			foreach ($query->rows as $result) {
 				$category_data[] = array(
 					'category_id' => $result['category_id'],
-					'name'        => $this->getPath($result['category_id'], $this->config->get('config_language_id')),
-					'status'  	  => $result['status'],
+					'name'		=> $this->getPath($result['category_id'], $this->config->get('config_language_id')),
+					'status'  	=> $result['status'],
 					'sort_order'  => $result['sort_order']
 				);
 			
@@ -138,21 +143,22 @@ class ModelCatalogCategory extends Model {
 		return $category_data;
 	}
 	
-   public function generate_url($category_id, $name){
-      $url = $this->model_setting_url_alias->format_url($name);
-      $orig = $url;
-      $count = 2;
-      
-      $url_alias = $category_id?$this->model_setting_url_alias->getUrlAliasByRouteQuery('product/category', "category_id=$category_id"):null;
-      
-      $test = $this->model_setting_url_alias->getUrlAliasByKeyword($url);
-      while(!empty($test) && $test['url_alias_id'] != $url_alias['url_alias_id']){
-         $url = $orig . '-' . $count++;
-         $test = $this->model_setting_url_alias->getUrlAliasByKeyword($url);
-      }
-      return $url;
-   }
-   
+	//TODO: need to rethink this
+	public function generate_url($category_id, $name){
+		$url = $this->model_setting_url_alias->format_url($name);
+		$orig = $url;
+		$count = 2;
+		
+		$url_alias = $category_id?$this->model_setting_url_alias->getUrlAliasByRouteQuery('product/category', "category_id=$category_id"):null;
+		
+		$test = $this->model_setting_url_alias->getUrlAliasByKeyword($url);
+		while(!empty($test) && $test['url_alias_id'] != $url_alias['url_alias_id']){
+			$url = $orig . '-' . $count++;
+			$test = $this->model_setting_url_alias->getUrlAliasByKeyword($url);
+		}
+		return $url;
+	}
+	
 	public function getPath($category_id) {
 		$query = $this->query("SELECT name, parent_id FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_description cd ON (c.category_id = cd.category_id) WHERE c.category_id = '" . (int)$category_id . "' AND cd.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY c.sort_order, cd.name ASC");
 		
@@ -170,10 +176,10 @@ class ModelCatalogCategory extends Model {
 		
 		foreach ($query->rows as $result) {
 			$category_description_data[$result['language_id']] = array(
-				'name'             => $result['name'],
-				'meta_keyword'     => $result['meta_keyword'],
+				'name'				=> $result['name'],
+				'meta_keyword'	=> $result['meta_keyword'],
 				'meta_description' => $result['meta_description'],
-				'description'      => $result['description']
+				'description'		=> $result['description']
 			);
 		}
 		
@@ -205,17 +211,11 @@ class ModelCatalogCategory extends Model {
 	}
 		
 	public function getTotalCategories() {
-      	$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "category");
+			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "category");
 		
 		return $query->row['total'];
 	}	
-		
-	public function getTotalCategoriesByImageId($image_id) {
-      	$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "category WHERE image_id = '" . (int)$image_id . "'");
-		
-		return $query->row['total'];
-	}
-
+	
 	public function getTotalCategoriesByLayoutId($layout_id) {
 		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "category_to_layout WHERE layout_id = '" . (int)$layout_id . "'");
 

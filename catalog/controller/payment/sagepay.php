@@ -6,11 +6,11 @@ class ControllerPaymentSagepay extends Controller {
 		$this->language->load('payment/sagepay');
 		
 		if ($this->config->get('sagepay_test') == 'live') {
-    		$this->data['action'] = 'https://live.sagepay.com/gateway/service/vspform-register.vsp';
+			$this->data['action'] = 'https://live.sagepay.com/gateway/service/vspform-register.vsp';
 		} elseif ($this->config->get('sagepay_test') == 'test') {
 			$this->data['action'] = 'https://test.sagepay.com/gateway/service/vspform-register.vsp';		
 		} elseif ($this->config->get('sagepay_test') == 'sim') {
-    		$this->data['action'] = 'https://test.sagepay.com/simulator/vspformgateway.asp';
+			$this->data['action'] = 'https://test.sagepay.com/simulator/vspformgateway.asp';
   		} 
 		
 		$vendor = $this->config->get('sagepay_vendor');
@@ -34,16 +34,16 @@ class ControllerPaymentSagepay extends Controller {
 		$data['VendorEMail'] = $this->config->get('config_email');  
 		
 		$data['BillingFirstnames'] = $order_info['payment_firstname'];
-        $data['BillingSurname'] = $order_info['payment_lastname'];
-        $data['BillingAddress1'] = $order_info['payment_address_1'];
+		$data['BillingSurname'] = $order_info['payment_lastname'];
+		$data['BillingAddress1'] = $order_info['payment_address_1'];
 		
 		if ($order_info['payment_address_2']) {
-        	$data['BillingAddress2'] = $order_info['payment_address_2'];
+			$data['BillingAddress2'] = $order_info['payment_address_2'];
 		}
 		
 		$data['BillingCity'] = $order_info['payment_city'];
-       	$data['BillingPostCode'] = $order_info['payment_postcode'];	
-        $data['BillingCountry'] = $order_info['payment_iso_code_2'];
+			$data['BillingPostCode'] = $order_info['payment_postcode'];	
+		$data['BillingCountry'] = $order_info['payment_iso_code_2'];
 		
 		if ($order_info['payment_iso_code_2'] == 'US') {
 			$data['BillingState'] = $order_info['payment_zone_code'];
@@ -53,16 +53,16 @@ class ControllerPaymentSagepay extends Controller {
 		
 		if ($this->cart->hasShipping()) {
 			$data['DeliveryFirstnames'] = $order_info['shipping_firstname'];
-        	$data['DeliverySurname'] = $order_info['shipping_lastname'];
-        	$data['DeliveryAddress1'] = $order_info['shipping_address_1'];
+			$data['DeliverySurname'] = $order_info['shipping_lastname'];
+			$data['DeliveryAddress1'] = $order_info['shipping_address_1'];
 		
 			if ($order_info['shipping_address_2']) {
-        		$data['DeliveryAddress2'] = $order_info['shipping_address_2'];
+				$data['DeliveryAddress2'] = $order_info['shipping_address_2'];
 			}
 		
-        	$data['DeliveryCity'] = $order_info['shipping_city'];
-        	$data['DeliveryPostCode'] = $order_info['shipping_postcode'];
-        	$data['DeliveryCountry'] = $order_info['shipping_iso_code_2'];
+			$data['DeliveryCity'] = $order_info['shipping_city'];
+			$data['DeliveryPostCode'] = $order_info['shipping_postcode'];
+			$data['DeliveryCountry'] = $order_info['shipping_iso_code_2'];
 		
 			if ($order_info['shipping_iso_code_2'] == 'US') {
 				$data['DeliveryState'] = $order_info['shipping_zone_code'];
@@ -71,16 +71,16 @@ class ControllerPaymentSagepay extends Controller {
 			$data['DeliveryPhone'] = $order_info['telephone'];
 		} else {
 			$data['DeliveryFirstnames'] = $order_info['payment_firstname'];
-        	$data['DeliverySurname'] = $order_info['payment_lastname'];
-        	$data['DeliveryAddress1'] = $order_info['payment_address_1'];
+			$data['DeliverySurname'] = $order_info['payment_lastname'];
+			$data['DeliveryAddress1'] = $order_info['payment_address_1'];
 		
 			if ($order_info['payment_address_2']) {
-        		$data['DeliveryAddress2'] = $order_info['payment_address_2'];
+				$data['DeliveryAddress2'] = $order_info['payment_address_2'];
 			}
 		
-        	$data['DeliveryCity'] = $order_info['payment_city'];
-        	$data['DeliveryPostCode'] = $order_info['payment_postcode'];
-        	$data['DeliveryCountry'] = $order_info['payment_iso_code_2'];
+			$data['DeliveryCity'] = $order_info['payment_city'];
+			$data['DeliveryPostCode'] = $order_info['payment_postcode'];
+			$data['DeliveryCountry'] = $order_info['payment_iso_code_2'];
 		
 			if ($order_info['payment_iso_code_2'] == 'US') {
 				$data['DeliveryState'] = $order_info['payment_zone_code'];
@@ -101,9 +101,9 @@ class ControllerPaymentSagepay extends Controller {
 		$this->data['vendor'] = $vendor;
 		
 		$crypt_data = array();
-   
+	
 		foreach($data as $key => $value){
-   			$crypt_data[] = $key . '=' . $value;
+				$crypt_data[] = $key . '=' . $value;
 		}
 
 		$this->data['crypt'] = base64_encode($this->simpleXor(utf8_decode(implode('&', $crypt_data)), $password));
@@ -180,7 +180,7 @@ class ControllerPaymentSagepay extends Controller {
 				$this->url->redirect($this->url->link('checkout/success'));
 			}
 		}
-	}	 
+	}	
 	
 	private function simpleXor($string, $password) {
 		$data = array();
@@ -192,7 +192,7 @@ class ControllerPaymentSagepay extends Controller {
 		$output = '';
 
 		for ($i = 0; $i < strlen($string); $i++) {
-    		$output .= chr(ord(substr($string, $i, 1)) ^ ($data[$i % strlen($password)]));
+			$output .= chr(ord(substr($string, $i, 1)) ^ ($data[$i % strlen($password)]));
 		}
 
 		return $output;		
@@ -200,19 +200,19 @@ class ControllerPaymentSagepay extends Controller {
 	
 	private function getToken($string) {
   		$tokens = array(
-   			'Status',
-    		'StatusDetail',
-    		'VendorTxCode',
-   			'VPSTxId',
-    		'TxAuthNo',
-    		'Amount',
-   			'AVSCV2', 
-    		'AddressResult', 
-    		'PostCodeResult', 
-    		'CV2Result', 
-    		'GiftAid', 
-    		'3DSecureStatus', 
-    		'CAVV',
+				'Status',
+			'StatusDetail',
+			'VendorTxCode',
+				'VPSTxId',
+			'TxAuthNo',
+			'Amount',
+				'AVSCV2', 
+			'AddressResult', 
+			'PostCodeResult', 
+			'CV2Result', 
+			'GiftAid', 
+			'3DSecureStatus', 
+			'CAVV',
 			'AddressStatus',
 			'CardType',
 			'Last4Digits',
@@ -224,11 +224,11 @@ class ControllerPaymentSagepay extends Controller {
 		$data = array();
   
   		for ($i = count($tokens) - 1; $i >= 0; $i--){
-    		$start = strpos($string, $tokens[$i]);
-    		
+			$start = strpos($string, $tokens[$i]);
+			
 			if ($start !== false) {
-     			$data[$i]['start'] = $start;
-     			$data[$i]['token'] = $tokens[$i];
+				$data[$i]['start'] = $start;
+				$data[$i]['token'] = $tokens[$i];
 			}
 		}
   
@@ -243,7 +243,7 @@ class ControllerPaymentSagepay extends Controller {
 				$length = $data[$i+1]['start'] - $data[$i]['start'] - strlen($data[$i]['token']) - 2;
 				
 				$output[$data[$i]['token']] = substr($string, $start, $length);
-			}      
+			}		
 
 		}
   

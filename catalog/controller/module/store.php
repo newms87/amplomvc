@@ -1,4 +1,4 @@
-<?php   
+<?php	
 class ControllerModuleStore extends Controller {
 	protected function index() {
 		$status = true;
@@ -18,8 +18,8 @@ class ControllerModuleStore extends Controller {
 			
 			$this->data['stores'][] = array(
 				'store_id' => 0,
-				'name'     => $this->_('text_default'),
-				'url'      => $this->url->link('common/home'),
+				'name'	=> $this->_('text_default'),
+				'url'		=> $this->url->link('common/home'),
 			);
 			
 			$results = $this->model_setting_store->getStores();
@@ -27,8 +27,8 @@ class ControllerModuleStore extends Controller {
 			foreach ($results as $result) {
 				$this->data['stores'][] = array(
 					'store_id' => $result['store_id'],
-					'name'     => $result['name'],
-					'url'      => $result['url'] . 'index.php?route=common/home'
+					'name'	=> $result['name'],
+					'url'		=> $result['url'] . 'index.php?route=common/home'
 				);
 			}
 	

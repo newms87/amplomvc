@@ -1,18 +1,18 @@
 <?php
 final class SQLite implements Database{
 	private $link;
-   private $err_msg;
+	private $err_msg;
 	
 	public function __construct($hostname, $username, $password, $database) {
 		
 		
 		if (!$this->link = sqlite_open($hostname, $username, $password)) {
-      		trigger_error('Error: Could not make a database link using ' . $username . '@' . $hostname);
-    	}
+				trigger_error('Error: Could not make a database link using ' . $username . '@' . $hostname);
+		}
 
-    	if (!mysql_select_db($database, $this->link)) {
-      		trigger_error('Error: Could not connect to database ' . $database);
-    	}
+		if (!mysql_select_db($database, $this->link)) {
+				trigger_error('Error: Could not connect to database ' . $database);
+		}
 		
 		mysql_set_charset('utf8', $this->link);
 		mysql_query("SET NAMES 'utf8'", $this->link);
@@ -20,22 +20,22 @@ final class SQLite implements Database{
 		mysql_query("SET SQL_MODE = ''", $this->link);
   	}
 	
-   public function get_error(){
-      return $this->err_msg;
-   }
-   
+	public function get_error(){
+		return $this->err_msg;
+	}
+	
   	public function query($sql) {
 		$resource = mysql_query($sql, $this->link);
 
 		if ($resource) {
 			if (is_resource($resource)) {
 				$i = 0;
-    	
+		
 				$data = array();
 		
 				while ($result = mysql_fetch_assoc($resource)) {
 					$data[$i] = $result;
-    	
+		
 					$i++;
 				}
 				
@@ -49,13 +49,13 @@ final class SQLite implements Database{
 				unset($data);
 
 				return $query;	
-    		} else {
+			} else {
 				return true;
 			}
 		} else {
-		   $this->err_msg = 'Error: ' . mysql_error($this->link) . '<br />Error No: ' . mysql_errno($this->link) . '<br />' . $sql;
-         return false;
-    	}
+			$this->err_msg = 'Error: ' . mysql_error($this->link) . '<br />Error No: ' . mysql_errno($this->link) . '<br />' . $sql;
+			return false;
+		}
   	}
 	
 	public function escape($value) {
@@ -63,15 +63,15 @@ final class SQLite implements Database{
 	}
 	
 	public function escape_html($value){
-      return mysql_real_escape_string(htmlspecialchars_decode($value), $this->link);
-   }
+		return mysql_real_escape_string(htmlspecialchars_decode($value), $this->link);
+	}
 	
   	public function countAffected() {
-    	return mysql_affected_rows($this->link);
+		return mysql_affected_rows($this->link);
   	}
 
   	public function getLastId() {
-    	return mysql_insert_id($this->link);
+		return mysql_insert_id($this->link);
   	}	
 	
 	public function __destruct() {

@@ -2,16 +2,16 @@
 class ControllerCommonHeader extends Controller {
 	protected function index() {
 		if($this->config->get('config_debug') && !empty($_SESSION['debug'])){
-        $this->message->add('warning', html_dump($_SESSION['debug'], 'Session Debug', 0, -1, false));
-        unset($_SESSION['debug']);  
-      }
+		$this->message->add('warning', html_dump($_SESSION['debug'], 'Session Debug', 0, -1, false));
+		unset($_SESSION['debug']);  
+		}
 		
-      if($this->user->isDesigner()){
-         $this->template->load('common/header_restricted');
-      }
+		if($this->user->isDesigner()){
+			$this->template->load('common/header_restricted');
+		}
 
-	   $this->data['title'] = $this->document->getTitle();
-      
+		$this->data['title'] = $this->document->getTitle();
+		
 		$this->data['base'] = $this->url->is_ssl() ? SITE_SSL : SITE_URL;
 		
 		$this->data['theme'] = $this->config->get('config_theme');
@@ -26,26 +26,26 @@ class ControllerCommonHeader extends Controller {
 		$this->document->addScript(HTTP_JS . 'jquery/tabs.js');
 		$this->document->addScript(HTTP_THEME_JS . 'common.js');
 		
-      $this->data['messages'] = $this->message->fetch();
-      
-      $this->data['direction'] = $this->language->getInfo('direction');
-      
+		$this->data['messages'] = $this->message->fetch();
+		
+		$this->data['direction'] = $this->language->getInfo('direction');
+		
   		$this->data['description'] = $this->document->getDescription();
 		$this->data['keywords'] = $this->document->getKeywords();
-      
+		
 		$this->data['canonical_link'] = $this->document->getCanonicalLink();	
-      
+		
 		$this->language->set('lang', $this->language->getInfo('code'));
 		
-      if($this->config->get('config_seo_url')){
-         $this->data['pretty_url'] = $this->url->get_pretty_url();
-      } 
+		if($this->config->get('config_seo_url')){
+			$this->data['pretty_url'] = $this->url->get_pretty_url();
+		} 
 		
 		$this->load->language('common/header');
-      
-      $this->data['admin_logo'] = $this->image->get($this->config->get('config_admin_logo'));
-         
-      
+		
+		$this->data['admin_logo'] = $this->image->get($this->config->get('config_admin_logo'));
+			
+		
 		if (!$this->user->isLogged()) {
 			$this->data['logged'] = '';
 			
@@ -54,22 +54,22 @@ class ControllerCommonHeader extends Controller {
 			$this->data['home'] = $this->url->link('common/home');
 			
 			$this->data['logged'] = $this->language->format('text_logged', $this->user->getUserName());
-	      
-         $menu_items = array();
-         if($this->user->isDesigner()){
-            $this->language->format('support',"mailto:" . $this->config->get('config_email'));
+			
+			$menu_items = array();
+			if($this->user->isDesigner()){
+				$this->language->format('support',"mailto:" . $this->config->get('config_email'));
 				$menu_items = array(
 					'product'=>'catalog/product','product_insert'=>'catalog/product/insert',
 					'home'=>'common/home',
 					'designers'=>'catalog/manufacturer',
 					'logout'=>'common/logout'
 				);
-            $this->data['user_info'] = $this->url->link('user/user/update','user_id='.$this->user->getId());
-         }
-         else{
-            $this->language->format('support', $this->config->get('config_email_support'));
-            
-            $this->data['store'] = SITE_URL;
+				$this->data['user_info'] = $this->url->link('user/user/update','user_id='.$this->user->getId());
+			}
+			else{
+				$this->language->format('support', $this->config->get('config_email_support'));
+				
+				$this->data['store'] = SITE_URL;
 				
 				//Add the Image Manager to the Main Menu if user has permissions
 				if($this->user->hasPermission('access','common/filemanager')){
@@ -86,8 +86,8 @@ class ControllerCommonHeader extends Controller {
 			$this->data['links_admin'] = $this->document->getLinks('admin');
 			
 			/*
-			 * Right Side Navigation Menu 
-			 */
+			* Right Side Navigation Menu 
+			*/
 			
 			//Store Navigation
 			$link_stores = array(

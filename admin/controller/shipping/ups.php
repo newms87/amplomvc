@@ -1,6 +1,6 @@
 <?php
 class ControllerShippingUPS extends Controller {
-	 
+	
 	
 	public function index() {
 		$this->template->load('shipping/ups');
@@ -98,7 +98,7 @@ class ControllerShippingUPS extends Controller {
 		}
 		
 		$this->data['pickups'] = array();
-		  
+		
 		$this->data['pickups'][] = array(
 			'value' => '01',
 			'text'  => $this->_('text_daily_pickup')
@@ -141,7 +141,7 @@ class ControllerShippingUPS extends Controller {
 		}
 					
 		$this->data['packages'] = array();
-		  
+		
 		$this->data['packages'][] = array(
 			'value' => '02',
 			'text'  => $this->_('text_package')
@@ -205,7 +205,7 @@ class ControllerShippingUPS extends Controller {
 		}			
 				
 		$this->data['origins'] = array();
-		  
+		
 		$this->data['origins'][] = array(
 			'value' => 'US',
 			'text'  => $this->_('text_us')
@@ -273,7 +273,7 @@ class ControllerShippingUPS extends Controller {
 		}		
 
 		$this->data['quote_types'] = array();
-		  
+		
 		$this->data['quote_types'][] = array(
 			'value' => 'residential',
 			'text'  => $this->_('text_residential')
@@ -724,10 +724,6 @@ class ControllerShippingUPS extends Controller {
 			$this->error['dimension'] = $this->_('error_dimension');
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

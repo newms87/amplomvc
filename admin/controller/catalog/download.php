@@ -1,19 +1,19 @@
 <?php  
 class ControllerCatalogDownload extends Controller {  
 	
-   
+	
   	public function index() {
 		$this->load->language('catalog/download');
 
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 	
 		$this->getList();
   	}
-  	        
+  			
   	public function insert() {
 		$this->load->language('catalog/download');
-    
-    	$this->document->setTitle($this->_('heading_title'));
+	
+		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$data = array();
@@ -30,9 +30,9 @@ class ControllerCatalogDownload extends Controller {
 			}
 
 			$this->model_catalog_download->addDownload(array_merge($_POST, $data));
-   	  		
+				
 			$this->message->add('success', $this->_('text_success'));
-	  
+	
 			$url = '';
 			
 			if (isset($_GET['sort'])) {
@@ -50,13 +50,13 @@ class ControllerCatalogDownload extends Controller {
 			$this->url->redirect($this->url->link('catalog/download', $url));
 		}
 	
-    	$this->getForm();
+		$this->getForm();
   	}
 
   	public function update() {
 		$this->load->language('catalog/download');
 
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$data = array();
@@ -73,9 +73,9 @@ class ControllerCatalogDownload extends Controller {
 			}
 			
 			$this->model_catalog_download->editDownload($_GET['download_id'], array_merge($_POST, $data));
-	  		
+			
 			$this->message->add('success', $this->_('text_success'));
-	      
+			
 			$url = '';
 			
 			if (isset($_GET['sort'])) {
@@ -93,19 +93,19 @@ class ControllerCatalogDownload extends Controller {
 			$this->url->redirect($this->url->link('catalog/download', $url));
 		}
 		
-    	$this->getForm();
+		$this->getForm();
   	}
 
   	public function delete() {
 		$this->load->language('catalog/download');
  
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
-		if (isset($_POST['selected']) && $this->validateDelete()) {	  
+		if (isset($_POST['selected']) && $this->validateDelete()) {	
 			foreach ($_POST['selected'] as $download_id) {
 			
 				$results = $this->model_catalog_download->getDownload($download_id) ;
-               
+					
 				$filename = $results['filename'];
 
 				if (file_exists(DIR_DOWNLOAD . $filename)) {
@@ -132,11 +132,11 @@ class ControllerCatalogDownload extends Controller {
 			}
 			
 			$this->url->redirect($this->url->link('catalog/download', $url));
-    	}
+		}
 
-    	$this->getList();
+		$this->getList();
   	}
-    
+	
   	private function getList() {
 		$this->template->load('catalog/download_list');
 
@@ -191,7 +191,7 @@ class ControllerCatalogDownload extends Controller {
 	
 		$results = $this->model_catalog_download->getDownloads($data);
  
-    	foreach ($results as $result) {
+		foreach ($results as $result) {
 			$action = array();
 						
 			$action[] = array(
@@ -201,10 +201,10 @@ class ControllerCatalogDownload extends Controller {
 						
 			$this->data['downloads'][] = array(
 				'download_id' => $result['download_id'],
-				'name'        => $result['name'],
-				'remaining'   => $result['remaining'],
-				'selected'    => isset($_POST['selected']) && in_array($result['download_id'], $_POST['selected']),
-				'action'      => $action
+				'name'		=> $result['name'],
+				'remaining'	=> $result['remaining'],
+				'selected'	=> isset($_POST['selected']) && in_array($result['download_id'], $_POST['selected']),
+				'action'		=> $action
 			);
 		}	
 	
@@ -251,7 +251,6 @@ class ControllerCatalogDownload extends Controller {
 		$this->pagination->total = $download_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('catalog/download', $url);
 
 		$this->data['pagination'] = $this->pagination->render();
@@ -315,18 +314,18 @@ class ControllerCatalogDownload extends Controller {
  		
 		$this->data['languages'] = $this->model_localisation_language->getLanguages();
 
-    	if (isset($_GET['download_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
+		if (isset($_GET['download_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
 			$download_info = $this->model_catalog_download->getDownload($_GET['download_id']);
-    	}
+		}
 
-    	if (isset($download_info['filename'])) {
-    		$this->data['filename'] = $download_info['filename'];
+		if (isset($download_info['filename'])) {
+			$this->data['filename'] = $download_info['filename'];
 		} else {
 			$this->data['filename'] = '';
 		}
-    	  
-    	if (isset($_GET['download_id'])) {
-    		$this->data['show_update'] = true;
+		
+		if (isset($_GET['download_id'])) {
+			$this->data['show_update'] = true;
 		} else {
 			$this->data['show_update'] = false;
  		}
@@ -337,21 +336,21 @@ class ControllerCatalogDownload extends Controller {
 			$this->data['download_description'] = $this->model_catalog_download->getDownloadDescriptions($_GET['download_id']);
 		} else {
 			$this->data['download_description'] = array();
-		}   	
+		}		
 		
 		if (isset($_POST['remaining'])) {
-      		$this->data['remaining'] = $_POST['remaining'];
-    	} elseif (!empty($download_info['remaining'])) {
-      		$this->data['remaining'] = $download_info['remaining'];
-    	} else {
-      		$this->data['remaining'] = 1;
-    	}
-    	
-    	if (isset($_POST['update'])) {
-      		$this->data['update'] = $_POST['update'];
-    	} else {
-      		$this->data['update'] = false;
-    	}
+				$this->data['remaining'] = $_POST['remaining'];
+		} elseif (!empty($download_info['remaining'])) {
+				$this->data['remaining'] = $download_info['remaining'];
+		} else {
+				$this->data['remaining'] = 1;
+		}
+		
+		if (isset($_POST['update'])) {
+				$this->data['update'] = $_POST['update'];
+		} else {
+				$this->data['update'] = false;
+		}
 
 		$this->children = array(
 			'common/header',
@@ -362,54 +361,46 @@ class ControllerCatalogDownload extends Controller {
   	}
 
   	private function validateForm() { 
-    	if (!$this->user->hasPermission('modify', 'catalog/download')) {
-      		$this->error['warning'] = $this->_('error_permission');
-    	}
+		if (!$this->user->hasPermission('modify', 'catalog/download')) {
+				$this->error['warning'] = $this->_('error_permission');
+		}
 	
-    	foreach ($_POST['download_description'] as $language_id => $value) {
-      		if ((strlen($value['name']) < 3) || (strlen($value['name']) > 64)) {
-        		$this->error['name'][$language_id] = $this->_('error_name');
-      		}
-    	}	
+		foreach ($_POST['download_description'] as $language_id => $value) {
+				if ((strlen($value['name']) < 3) || (strlen($value['name']) > 64)) {
+				$this->error['name'][$language_id] = $this->_('error_name');
+				}
+		}	
 
 		if ($_FILES['download']['name']) {
 			if ((strlen($_FILES['download']['name']) < 3) || (strlen($_FILES['download']['name']) > 128)) {
-        		$this->error['download'] = $this->_('error_filename');
-	  		}	  	
+				$this->error['download'] = $this->_('error_filename');
+			}		
 			
 			if (substr(strrchr($_FILES['download']['name'], '.'), 1) == 'php') {
-       	   		$this->error['download'] = $this->_('error_filetype');
-       		}	
+						$this->error['download'] = $this->_('error_filetype');
+				}	
 						
 			if ($_FILES['download']['error'] != UPLOAD_ERR_OK) {
 				$this->error['warning'] = $this->_('error_upload_' . $_FILES['download']['error']);
 			}
 		}
 		
-		if (!$this->error) {
-	  		return true;
-		} else {
-	  		return false;
-		}
+		return $this->error ? false : true;
   	}
 
   	private function validateDelete() {
-    	if (!$this->user->hasPermission('modify', 'catalog/download')) {
-      		$this->error['warning'] = $this->_('error_permission');
-    	}	
+		if (!$this->user->hasPermission('modify', 'catalog/download')) {
+				$this->error['warning'] = $this->_('error_permission');
+		}	
 		
 		foreach ($_POST['selected'] as $download_id) {
   			$product_total = $this->model_catalog_product->getTotalProductsByDownloadId($download_id);
-    
+	
 			if ($product_total) {
-	  			$this->error['warning'] = sprintf($this->_('error_product'), $product_total);	
+				$this->error['warning'] = sprintf($this->_('error_product'), $product_total);	
 			}	
 		}	
-			  	  	 
-		if (!$this->error) {
-	  		return true;
-		} else {
-	  		return false;
-		} 
+					
+		return $this->error ? false : true; 
   	}
 }

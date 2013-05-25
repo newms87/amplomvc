@@ -5,11 +5,11 @@ class ControllerModuleCart extends Controller {
 
 		$this->language->load('module/cart');
 		
-      	if (isset($_GET['remove'])) {
-          	$this->cart->remove($_GET['remove']);
+			if (isset($_GET['remove'])) {
+				$this->cart->remove($_GET['remove']);
 			
 			unset($this->session->data['vouchers'][$_GET['remove']]);
-      	}	
+			}	
 			
 		// Totals
 		$total_data = array();					
@@ -33,7 +33,7 @@ class ControllerModuleCart extends Controller {
 			}
 			
 			$sort_order = array(); 
-		  
+		
 			foreach ($total_data as $key => $value) {
 				$sort_order[$key] = $value['sort_order'];
 			}
@@ -64,7 +64,7 @@ class ControllerModuleCart extends Controller {
 					$value = substr($filename, 0, strrpos($filename, '.'));
 				}				
 				
-				$option_data[] = array(								   
+				$option_data[] = array(									
 					'name'  => $option['name'],
 					'value' => (strlen($value) > 20 ? substr($value, 0, 20) . '..' : $value),
 					'type'  => $option['type']
@@ -84,15 +84,15 @@ class ControllerModuleCart extends Controller {
 			}
 													
 			$this->data['products'][] = array(
-				'key'      => $product['key'],
-				'thumb'    => $image,
-				'name'     => $product['name'],
-				'model'    => $product['model'], 
-				'option'   => $option_data,
+				'key'		=> $product['key'],
+				'thumb'	=> $image,
+				'name'	=> $product['name'],
+				'model'	=> $product['model'], 
+				'option'	=> $option_data,
 				'quantity' => $product['quantity'],
-				'price'    => $price,	
-				'total'    => $total,	
-				'href'     => $this->url->link('product/product', 'product_id=' . $product['product_id'])		
+				'price'	=> $price,	
+				'total'	=> $total,	
+				'href'	=> $this->url->link('product/product', 'product_id=' . $product['product_id'])		
 			);
 		}
 		
@@ -102,9 +102,9 @@ class ControllerModuleCart extends Controller {
 		if (!empty($this->session->data['vouchers'])) {
 			foreach ($this->session->data['vouchers'] as $key => $voucher) {
 				$this->data['vouchers'][] = array(
-					'key'         => $key,
+					'key'			=> $key,
 					'description' => $voucher['description'],
-					'amount'      => $this->currency->format($voucher['amount'])
+					'amount'		=> $this->currency->format($voucher['amount'])
 				);
 			}
 		}

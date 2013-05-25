@@ -27,9 +27,9 @@ if (ini_get('register_globals')) {
 // Magic Quotes Fix
 if (ini_get('magic_quotes_gpc')) {
 	function clean($data) {
-   		if (is_array($data)) {
+			if (is_array($data)) {
   			foreach ($data as $key => $value) {
-    			$data[clean($key)] = clean($value);
+				$data[clean($key)] = clean($value);
   			}
 		} else {
   			$data = stripslashes($data);

@@ -4,7 +4,7 @@ $_['heading_title'] 		= 'Sign In With:';
 
 // Text
 $_['text_subject'] 			= 'New customer via Janrain Engage SignIn Module';
-$_['text_hello']   			= 'Hello Admin,';
+$_['text_hello']				= 'Hello Admin,';
 $_['text_message']  		= 'New customer registered via Janrain Engage SignIn Module at your site: %s';
 $_['text_customer_detail']  = 'Costomer Detail:-';
 $_['text_dash_line']  		= '-------------------------';

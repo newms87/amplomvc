@@ -18,30 +18,30 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category   PHPExcel
- * @package    PHPExcel_Writer_Excel2007
+ * @category	PHPExcel
+ * @package	PHPExcel_Writer_Excel2007
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version    1.7.7, 2012-05-19
+ * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+ * @version	1.7.7, 2012-05-19
  */
 
 
 /**
  * PHPExcel_Writer_Excel2007_Rels
  *
- * @category   PHPExcel
- * @package    PHPExcel_Writer_Excel2007
+ * @category	PHPExcel
+ * @package	PHPExcel_Writer_Excel2007
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_Writer_Excel2007_Rels extends PHPExcel_Writer_Excel2007_WriterPart
 {
 	/**
-	 * Write relationships to XML format
-	 *
-	 * @param 	PHPExcel	$pPHPExcel
-	 * @return 	string 		XML Output
-	 * @throws 	Exception
-	 */
+	* Write relationships to XML format
+	*
+	* @param 	PHPExcel	$pPHPExcel
+	* @return 	string 		XML Output
+	* @throws 	Exception
+	*/
 	public function writeRelationships(PHPExcel $pPHPExcel = null)
 	{
 		// Create XML writer
@@ -102,12 +102,12 @@ class PHPExcel_Writer_Excel2007_Rels extends PHPExcel_Writer_Excel2007_WriterPar
 	}
 
 	/**
-	 * Write workbook relationships to XML format
-	 *
-	 * @param 	PHPExcel	$pPHPExcel
-	 * @return 	string 		XML Output
-	 * @throws 	Exception
-	 */
+	* Write workbook relationships to XML format
+	*
+	* @param 	PHPExcel	$pPHPExcel
+	* @return 	string 		XML Output
+	* @throws 	Exception
+	*/
 	public function writeWorkbookRelationships(PHPExcel $pPHPExcel = null)
 	{
 		// Create XML writer
@@ -167,18 +167,18 @@ class PHPExcel_Writer_Excel2007_Rels extends PHPExcel_Writer_Excel2007_WriterPar
 	}
 
 	/**
-	 * Write worksheet relationships to XML format
-	 *
-	 * Numbering is as follows:
-	 * 	rId1 				- Drawings
-	 *  rId_hyperlink_x 	- Hyperlinks
-	 *
-	 * @param 	PHPExcel_Worksheet	$pWorksheet
-	 * @param 	int					$pWorksheetId
-	 * @param	boolean				$includeCharts	Flag indicating if we should write charts
-	 * @return 	string 				XML Output
-	 * @throws 	Exception
-	 */
+	* Write worksheet relationships to XML format
+	*
+	* Numbering is as follows:
+	* 	rId1 				- Drawings
+	*  rId_hyperlink_x 	- Hyperlinks
+	*
+	* @param 	PHPExcel_Worksheet	$pWorksheet
+	* @param 	int					$pWorksheetId
+	* @param	boolean				$includeCharts	Flag indicating if we should write charts
+	* @return 	string 				XML Output
+	* @throws 	Exception
+	*/
 	public function writeWorksheetRelationships(PHPExcel_Worksheet $pWorksheet = null, $pWorksheetId = 1, $includeCharts = FALSE)
 	{
 		// Create XML writer
@@ -280,14 +280,14 @@ class PHPExcel_Writer_Excel2007_Rels extends PHPExcel_Writer_Excel2007_WriterPar
 	}
 
 	/**
-	 * Write drawing relationships to XML format
-	 *
-	 * @param 	PHPExcel_Worksheet	$pWorksheet
-	 * @param	int					&$chartRef		Chart ID
-	 * @param	boolean				$includeCharts	Flag indicating if we should write charts
-	 * @return 	string 				XML Output
-	 * @throws 	Exception
-	 */
+	* Write drawing relationships to XML format
+	*
+	* @param 	PHPExcel_Worksheet	$pWorksheet
+	* @param	int					&$chartRef		Chart ID
+	* @param	boolean				$includeCharts	Flag indicating if we should write charts
+	* @return 	string 				XML Output
+	* @throws 	Exception
+	*/
 	public function writeDrawingRelationships(PHPExcel_Worksheet $pWorksheet = null, &$chartRef, $includeCharts = FALSE)
 	{
 		// Create XML writer
@@ -346,12 +346,12 @@ class PHPExcel_Writer_Excel2007_Rels extends PHPExcel_Writer_Excel2007_WriterPar
 	}
 
 	/**
-	 * Write header/footer drawing relationships to XML format
-	 *
-	 * @param 	PHPExcel_Worksheet			$pWorksheet
-	 * @return 	string 						XML Output
-	 * @throws 	Exception
-	 */
+	* Write header/footer drawing relationships to XML format
+	*
+	* @param 	PHPExcel_Worksheet			$pWorksheet
+	* @return 	string 						XML Output
+	* @throws 	Exception
+	*/
 	public function writeHeaderFooterDrawingRelationships(PHPExcel_Worksheet $pWorksheet = null)
 	{
 		// Create XML writer
@@ -387,15 +387,15 @@ class PHPExcel_Writer_Excel2007_Rels extends PHPExcel_Writer_Excel2007_WriterPar
 	}
 
 	/**
-	 * Write Override content type
-	 *
-	 * @param 	PHPExcel_Shared_XMLWriter 	$objWriter 		XML Writer
-	 * @param 	int							$pId			Relationship ID. rId will be prepended!
-	 * @param 	string						$pType			Relationship type
-	 * @param 	string 						$pTarget		Relationship target
-	 * @param 	string 						$pTargetMode	Relationship target mode
-	 * @throws 	Exception
-	 */
+	* Write Override content type
+	*
+	* @param 	PHPExcel_Shared_XMLWriter 	$objWriter 		XML Writer
+	* @param 	int							$pId			Relationship ID. rId will be prepended!
+	* @param 	string						$pType			Relationship type
+	* @param 	string 						$pTarget		Relationship target
+	* @param 	string 						$pTargetMode	Relationship target mode
+	* @throws 	Exception
+	*/
 	private function _writeRelationship(PHPExcel_Shared_XMLWriter $objWriter = null, $pId = 1, $pType = '', $pTarget = '', $pTargetMode = '')
 	{
 		if ($pType != '' && $pTarget != '') {

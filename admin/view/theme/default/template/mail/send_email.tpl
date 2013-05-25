@@ -48,11 +48,11 @@ $('#allow_html').change(function(){
    
    if($(this).is(':checked') && !message.hasClass('ckedit')){
       message.addClass('ckedit');
-      init_ckeditor_for('mail_message');
+      init_ckeditor_for($('#mail_message'));
    }
    else if(!$(this).is(':checked') && message.hasClass('ckedit')){
       message.removeClass('ckedit');
-      remove_ckeditor_for('mail_message');
+      remove_ckeditor_for($('#mail_message'));
    }
 }).change();
 //--></script>

@@ -48,7 +48,7 @@ class PHPExcel_Chart_Renderer_jpgraph
 										'mediumblue',		'magenta',		'sandybrown',	'cyan',
 										'firebrick1',		'forestgreen',	'deeppink4',	'darkolivegreen',
 										'goldenrod2'
-									  );
+									);
 
 	private static $_markSet = array(	'diamond'	=> MARK_DIAMOND,
 										'square'	=> MARK_SQUARE,
@@ -820,8 +820,8 @@ class PHPExcel_Chart_Renderer_jpgraph
 
 
 	/**
-	 * Create a new PHPExcel_Chart_Renderer_jpgraph
-	 */
+	* Create a new PHPExcel_Chart_Renderer_jpgraph
+	*/
 	public function __construct(PHPExcel_Chart $chart)
 	{
 		$this->_graph	= null;

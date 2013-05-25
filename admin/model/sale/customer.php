@@ -1,13 +1,13 @@
 <?php
 class ModelSaleCustomer extends Model {
 	public function addCustomer($data) {
-      	$this->query("INSERT INTO " . DB_PREFIX . "customer SET firstname = '" . $this->db->escape($data['firstname']) . "', lastname = '" . $this->db->escape($data['lastname']) . "', email = '" . $this->db->escape($data['email']) . "', telephone = '" . $this->db->escape($data['telephone']) . "', fax = '" . $this->db->escape($data['fax']) . "', newsletter = '" . (int)$data['newsletter'] . "', customer_group_id = '" . (int)$data['customer_group_id'] . "', password = '" . $this->customer->encrypt($data['password']) . "', status = '" . (int)$data['status'] . "', date_added = NOW()");
-      	
-      	$customer_id = $this->db->getLastId();
-      	
-      	if (isset($data['address'])) {		
-      		foreach ($data['address'] as $address) {	
-      			$this->query("INSERT INTO " . DB_PREFIX . "address SET customer_id = '" . (int)$customer_id . "', firstname = '" . $this->db->escape($address['firstname']) . "', lastname = '" . $this->db->escape($address['lastname']) . "', company = '" . $this->db->escape($address['company']) . "', address_1 = '" . $this->db->escape($address['address_1']) . "', address_2 = '" . $this->db->escape($address['address_2']) . "', city = '" . $this->db->escape($address['city']) . "', postcode = '" . $this->db->escape($address['postcode']) . "', country_id = '" . (int)$address['country_id'] . "', zone_id = '" . (int)$address['zone_id'] . "'");
+			$this->query("INSERT INTO " . DB_PREFIX . "customer SET firstname = '" . $this->db->escape($data['firstname']) . "', lastname = '" . $this->db->escape($data['lastname']) . "', email = '" . $this->db->escape($data['email']) . "', telephone = '" . $this->db->escape($data['telephone']) . "', fax = '" . $this->db->escape($data['fax']) . "', newsletter = '" . (int)$data['newsletter'] . "', customer_group_id = '" . (int)$data['customer_group_id'] . "', password = '" . $this->customer->encrypt($data['password']) . "', status = '" . (int)$data['status'] . "', date_added = NOW()");
+			
+			$customer_id = $this->db->getLastId();
+			
+			if (isset($data['address'])) {		
+				foreach ($data['address'] as $address) {	
+					$this->query("INSERT INTO " . DB_PREFIX . "address SET customer_id = '" . (int)$customer_id . "', firstname = '" . $this->db->escape($address['firstname']) . "', lastname = '" . $this->db->escape($address['lastname']) . "', company = '" . $this->db->escape($address['company']) . "', address_1 = '" . $this->db->escape($address['address_1']) . "', address_2 = '" . $this->db->escape($address['address_2']) . "', city = '" . $this->db->escape($address['city']) . "', postcode = '" . $this->db->escape($address['postcode']) . "', country_id = '" . (int)$address['country_id'] . "', zone_id = '" . (int)$address['zone_id'] . "'");
 				
 				if (isset($address['default'])) {
 					$address_id = $this->db->getLastId();
@@ -21,14 +21,14 @@ class ModelSaleCustomer extends Model {
 	public function editCustomer($customer_id, $data) {
 		$this->query("UPDATE " . DB_PREFIX . "customer SET firstname = '" . $this->db->escape($data['firstname']) . "', lastname = '" . $this->db->escape($data['lastname']) . "', email = '" . $this->db->escape($data['email']) . "', telephone = '" . $this->db->escape($data['telephone']) . "', fax = '" . $this->db->escape($data['fax']) . "', newsletter = '" . (int)$data['newsletter'] . "', customer_group_id = '" . (int)$data['customer_group_id'] . "', status = '" . (int)$data['status'] . "' WHERE customer_id = '" . (int)$customer_id . "'");
 	
-      	if ($data['password']) {
-        	$this->query("UPDATE " . DB_PREFIX . "customer SET password = '" . $this->customer->encrypt($data['password']) . "' WHERE customer_id = '" . (int)$customer_id . "'");
-      	}
-      	
-      	$this->query("DELETE FROM " . DB_PREFIX . "address WHERE customer_id = '" . (int)$customer_id . "'");
-      	
-      	if (isset($data['address'])) {
-      		foreach ($data['address'] as $address) {
+			if ($data['password']) {
+			$this->query("UPDATE " . DB_PREFIX . "customer SET password = '" . $this->customer->encrypt($data['password']) . "' WHERE customer_id = '" . (int)$customer_id . "'");
+			}
+			
+			$this->query("DELETE FROM " . DB_PREFIX . "address WHERE customer_id = '" . (int)$customer_id . "'");
+			
+			if (isset($data['address'])) {
+				foreach ($data['address'] as $address) {
 				if ($address['address_id']) {
 					$this->query("INSERT INTO " . DB_PREFIX . "address SET address_id = '" . $this->db->escape($address['address_id']) . "', customer_id = '" . (int)$customer_id . "', firstname = '" . $this->db->escape($address['firstname']) . "', lastname = '" . $this->db->escape($address['lastname']) . "', company = '" . $this->db->escape($address['company']) . "', address_1 = '" . $this->db->escape($address['address_1']) . "', address_2 = '" . $this->db->escape($address['address_2']) . "', city = '" . $this->db->escape($address['city']) . "', postcode = '" . $this->db->escape($address['postcode']) . "', country_id = '" . (int)$address['country_id'] . "', zone_id = '" . (int)$address['zone_id'] . "'");
 					
@@ -58,7 +58,7 @@ class ModelSaleCustomer extends Model {
 		$this->query("DELETE FROM " . DB_PREFIX . "customer_transaction WHERE customer_id = '" . (int)$customer_id . "'");
 		$this->query("DELETE FROM " . DB_PREFIX . "customer_ip WHERE customer_id = '" . (int)$customer_id . "'");
 		$this->query("DELETE FROM " . DB_PREFIX . "address WHERE customer_id = '" . (int)$customer_id . "'");
-      $this->query("DELETE FROM " . DB_PREFIX . "coupon_customer WHERE customer_id = '" . (int)$customer_id . "'");
+		$this->query("DELETE FROM " . DB_PREFIX . "coupon_customer WHERE customer_id = '" . (int)$customer_id . "'");
 	}
 	
 	public function getCustomer($customer_id) {
@@ -66,7 +66,7 @@ class ModelSaleCustomer extends Model {
 	
 		return $query->row;
 	}
-   
+	
 	public function getCustomerByEmail($email) {
 		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "customer WHERE email = '" . $this->db->escape($email) . "'");
 	
@@ -171,13 +171,13 @@ class ModelSaleCustomer extends Model {
 				$store_url = HTTP_CATALOG . 'index.php?route=account/login';
 			}
 	
-         $patterns = array('/%first_name%/','/%last_name%/','/%store_name%/', '/%store_url%/');
-         $replacements = array($customer_info['firstname'],$customer_info['lastname'],$store_name,$store_url);
-         $subject = preg_replace($patterns,$replacements, $this->config->get('mail_registration_subject'));
-         $message = preg_replace($patterns,$replacements,$this->config->get('mail_registration_message'));
-         
+			$patterns = array('/%first_name%/','/%last_name%/','/%store_name%/', '/%store_url%/');
+			$replacements = array($customer_info['firstname'],$customer_info['lastname'],$store_name,$store_url);
+			$subject = preg_replace($patterns,$replacements, $this->config->get('mail_registration_subject'));
+			$message = preg_replace($patterns,$replacements,$this->config->get('mail_registration_message'));
+			
 			$this->mail->init();
-         
+			
 			$this->mail->setTo($customer_info['email']);
 			$this->mail->setFrom($this->config->get('config_email'));
 			$this->mail->setSender($store_name);
@@ -216,22 +216,22 @@ class ModelSaleCustomer extends Model {
 			}		
 		
 			return array(
-				'address_id'     => $address_query->row['address_id'],
-				'customer_id'    => $address_query->row['customer_id'],
-				'firstname'      => $address_query->row['firstname'],
-				'lastname'       => $address_query->row['lastname'],
-				'company'        => $address_query->row['company'],
-				'address_1'      => $address_query->row['address_1'],
-				'address_2'      => $address_query->row['address_2'],
-				'postcode'       => $address_query->row['postcode'],
-				'city'           => $address_query->row['city'],
-				'zone_id'        => $address_query->row['zone_id'],
-				'zone'           => $zone,
-				'zone_code'      => $zone_code,
-				'country_id'     => $address_query->row['country_id'],
-				'country'        => $country,	
-				'iso_code_2'     => $iso_code_2,
-				'iso_code_3'     => $iso_code_3,
+				'address_id'	=> $address_query->row['address_id'],
+				'customer_id'	=> $address_query->row['customer_id'],
+				'firstname'		=> $address_query->row['firstname'],
+				'lastname'		=> $address_query->row['lastname'],
+				'company'		=> $address_query->row['company'],
+				'address_1'		=> $address_query->row['address_1'],
+				'address_2'		=> $address_query->row['address_2'],
+				'postcode'		=> $address_query->row['postcode'],
+				'city'			=> $address_query->row['city'],
+				'zone_id'		=> $address_query->row['zone_id'],
+				'zone'			=> $zone,
+				'zone_code'		=> $zone_code,
+				'country_id'	=> $address_query->row['country_id'],
+				'country'		=> $country,	
+				'iso_code_2'	=> $iso_code_2,
+				'iso_code_3'	=> $iso_code_3,
 				'address_format' => $address_format
 			);
 		}
@@ -254,7 +254,7 @@ class ModelSaleCustomer extends Model {
 	}	
 				
 	public function getTotalCustomers($data = array()) {
-      	$sql = "SELECT COUNT(*) AS total FROM " . DB_PREFIX . "customer";
+			$sql = "SELECT COUNT(*) AS total FROM " . DB_PREFIX . "customer";
 		
 		$implode = array();
 		
@@ -300,13 +300,13 @@ class ModelSaleCustomer extends Model {
 	}
 		
 	public function getTotalCustomersAwaitingApproval() {
-      	$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "customer WHERE status = '0' OR approved = '0'");
+			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "customer WHERE status = '0' OR approved = '0'");
 
 		return $query->row['total'];
 	}
 	
 	public function getTotalAddressesByCustomerId($customer_id) {
-      	$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "address WHERE customer_id = '" . (int)$customer_id . "'");
+			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "address WHERE customer_id = '" . (int)$customer_id . "'");
 		
 		return $query->row['total'];
 	}
@@ -353,7 +353,7 @@ class ModelSaleCustomer extends Model {
 			$message .= sprintf($this->_('text_transaction_total'), $this->currency->format($this->getTransactionTotal($customer_id)));
 								
 			$this->mail->init();
-         
+			
 			$this->mail->setTo($customer_info['email']);
 			$this->mail->setFrom($this->config->get('config_email'));
 			$this->mail->setSender($store_name);
@@ -415,7 +415,7 @@ class ModelSaleCustomer extends Model {
 			$message .= sprintf($this->_('text_reward_total'), $this->getRewardTotal($customer_id));
 				
 			$this->mail->init();
-         
+			
 			$this->mail->setTo($customer_info['email']);
 			$this->mail->setFrom($this->config->get('config_email'));
 			$this->mail->setSender($store_name);
@@ -474,8 +474,8 @@ class ModelSaleCustomer extends Model {
 	}
 			
 	public function getTotalBlacklistsByIp($ip) {
-      	$query = $this->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "customer_ip_blacklist` WHERE `ip` = '" . $this->db->escape($ip) . "'");
-				 
+			$query = $this->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "customer_ip_blacklist` WHERE `ip` = '" . $this->db->escape($ip) . "'");
+				
 		return $query->row['total'];
 	}	
 }

@@ -18,19 +18,19 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category   PHPExcel
- * @package    PHPExcel
+ * @category	PHPExcel
+ * @package	PHPExcel
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version    1.7.7, 2012-05-19
+ * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+ * @version	1.7.7, 2012-05-19
  */
 
 
 /**	PHPExcel root directory */
 if (!defined('PHPEXCEL_ROOT')) {
 	/**
-	 * @ignore
-	 */
+	* @ignore
+	*/
 	define('PHPEXCEL_ROOT', dirname(__FILE__) . '/../');
 	require(PHPEXCEL_ROOT . 'PHPExcel/Autoloader.php');
 }
@@ -38,31 +38,31 @@ if (!defined('PHPEXCEL_ROOT')) {
 /**
  * PHPExcel_IOFactory
  *
- * @category   PHPExcel
- * @package    PHPExcel
+ * @category	PHPExcel
+ * @package	PHPExcel
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_IOFactory
 {
 	/**
-	 * Search locations
-	 *
-	 * @var	array
-	 * @access	private
-	 * @static
-	 */
+	* Search locations
+	*
+	* @var	array
+	* @access	private
+	* @static
+	*/
 	private static $_searchLocations = array(
 		array( 'type' => 'IWriter', 'path' => 'PHPExcel/Writer/{0}.php', 'class' => 'PHPExcel_Writer_{0}' ),
 		array( 'type' => 'IReader', 'path' => 'PHPExcel/Reader/{0}.php', 'class' => 'PHPExcel_Reader_{0}' )
 	);
 
 	/**
-	 * Autoresolve classes
-	 *
-	 * @var	array
-	 * @access	private
-	 * @static
-	 */
+	* Autoresolve classes
+	*
+	* @var	array
+	* @access	private
+	* @static
+	*/
 	private static $_autoResolveClasses = array(
 		'Excel2007',
 		'Excel5',
@@ -73,30 +73,30 @@ class PHPExcel_IOFactory
 		'CSV',
 	);
 
-    /**
-     *	Private constructor for PHPExcel_IOFactory
-     */
-    private function __construct() { }
+	/**
+	*	Private constructor for PHPExcel_IOFactory
+	*/
+	private function __construct() { }
 
-    /**
-     * Get search locations
-     *
-	 * @static
-	 * @access	public
-     * @return	array
-     */
+	/**
+	* Get search locations
+	*
+	* @static
+	* @access	public
+	* @return	array
+	*/
 	public static function getSearchLocations() {
 		return self::$_searchLocations;
 	}	//	function getSearchLocations()
 
 	/**
-	 * Set search locations
-	 *
-	 * @static
-	 * @access	public
-	 * @param	array $value
-	 * @throws	Exception
-	 */
+	* Set search locations
+	*
+	* @static
+	* @access	public
+	* @param	array $value
+	* @throws	Exception
+	*/
 	public static function setSearchLocations($value) {
 		if (is_array($value)) {
 			self::$_searchLocations = $value;
@@ -106,28 +106,28 @@ class PHPExcel_IOFactory
 	}	//	function setSearchLocations()
 
 	/**
-	 * Add search location
-	 *
-	 * @static
-	 * @access	public
-	 * @param	string $type		Example: IWriter
-	 * @param	string $location	Example: PHPExcel/Writer/{0}.php
-	 * @param	string $classname 	Example: PHPExcel_Writer_{0}
-	 */
+	* Add search location
+	*
+	* @static
+	* @access	public
+	* @param	string $type		Example: IWriter
+	* @param	string $location	Example: PHPExcel/Writer/{0}.php
+	* @param	string $classname 	Example: PHPExcel_Writer_{0}
+	*/
 	public static function addSearchLocation($type = '', $location = '', $classname = '') {
 		self::$_searchLocations[] = array( 'type' => $type, 'path' => $location, 'class' => $classname );
 	}	//	function addSearchLocation()
 
 	/**
-	 * Create PHPExcel_Writer_IWriter
-	 *
-	 * @static
-	 * @access	public
-	 * @param	PHPExcel $phpExcel
-	 * @param	string  $writerType	Example: Excel2007
-	 * @return	PHPExcel_Writer_IWriter
-	 * @throws	Exception
-	 */
+	* Create PHPExcel_Writer_IWriter
+	*
+	* @static
+	* @access	public
+	* @param	PHPExcel $phpExcel
+	* @param	string  $writerType	Example: Excel2007
+	* @return	PHPExcel_Writer_IWriter
+	* @throws	Exception
+	*/
 	public static function createWriter(PHPExcel $phpExcel, $writerType = '') {
 		// Search type
 		$searchType = 'IWriter';
@@ -150,14 +150,14 @@ class PHPExcel_IOFactory
 	}	//	function createWriter()
 
 	/**
-	 * Create PHPExcel_Reader_IReader
-	 *
-	 * @static
-	 * @access	public
-	 * @param	string $readerType	Example: Excel2007
-	 * @return	PHPExcel_Reader_IReader
-	 * @throws	Exception
-	 */
+	* Create PHPExcel_Reader_IReader
+	*
+	* @static
+	* @access	public
+	* @param	string $readerType	Example: Excel2007
+	* @return	PHPExcel_Reader_IReader
+	* @throws	Exception
+	*/
 	public static function createReader($readerType = '') {
 		// Search type
 		$searchType = 'IReader';
@@ -180,28 +180,28 @@ class PHPExcel_IOFactory
 	}	//	function createReader()
 
 	/**
-	 * Loads PHPExcel from file using automatic PHPExcel_Reader_IReader resolution
-	 *
-	 * @static
-	 * @access public
-	 * @param 	string 		$pFileName
-	 * @return	PHPExcel
-	 * @throws	Exception
-	 */
+	* Loads PHPExcel from file using automatic PHPExcel_Reader_IReader resolution
+	*
+	* @static
+	* @access public
+	* @param 	string 		$pFileName
+	* @return	PHPExcel
+	* @throws	Exception
+	*/
 	public static function load($pFilename) {
 		$reader = self::createReaderForFile($pFilename);
 		return $reader->load($pFilename);
 	}	//	function load()
 
 	/**
-	 * Identify file type using automatic PHPExcel_Reader_IReader resolution
-	 *
-	 * @static
-	 * @access public
-	 * @param 	string 		$pFileName
-	 * @return	string
-	 * @throws	Exception
-	 */
+	* Identify file type using automatic PHPExcel_Reader_IReader resolution
+	*
+	* @static
+	* @access public
+	* @param 	string 		$pFileName
+	* @return	string
+	* @throws	Exception
+	*/
 	public static function identify($pFilename) {
 		$reader = self::createReaderForFile($pFilename);
 		$className = get_class($reader);
@@ -211,14 +211,14 @@ class PHPExcel_IOFactory
 	}	//	function identify()
 
 	/**
-	 * Create PHPExcel_Reader_IReader for file using automatic PHPExcel_Reader_IReader resolution
-	 *
-	 * @static
-	 * @access	public
-	 * @param 	string 		$pFileName
-	 * @return	PHPExcel_Reader_IReader
-	 * @throws	Exception
-	 */
+	* Create PHPExcel_Reader_IReader for file using automatic PHPExcel_Reader_IReader resolution
+	*
+	* @static
+	* @access	public
+	* @param 	string 		$pFileName
+	* @return	PHPExcel_Reader_IReader
+	* @throws	Exception
+	*/
 	public static function createReaderForFile($pFilename) {
 
 		// First, lucky guess by inspecting file extension

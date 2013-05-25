@@ -1,6 +1,6 @@
 <?php 
 class ControllerPaymentPPProUK extends Controller {
-	 
+	
 
 	public function index() {
 		$this->template->load('payment/pp_pro_uk');
@@ -156,10 +156,6 @@ class ControllerPaymentPPProUK extends Controller {
 			$this->error['partner'] = $this->_('error_partner');
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

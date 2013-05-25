@@ -1,6 +1,6 @@
 <?php 
 class ControllerPaymentCheque extends Controller {
-	 
+	
 
 	public function index() {
 		$this->template->load('payment/cheque');
@@ -94,10 +94,6 @@ class ControllerPaymentCheque extends Controller {
 			$this->error['payable'] = $this->_('error_payable');
 		}
 
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

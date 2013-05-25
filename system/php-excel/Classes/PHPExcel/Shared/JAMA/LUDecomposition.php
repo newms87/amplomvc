@@ -24,42 +24,42 @@ class PHPExcel_Shared_JAMA_LUDecomposition {
 	const MatrixSquareException		= "Mismatched Row dimension";
 
 	/**
-	 *	Decomposition storage
-	 *	@var array
-	 */
+	*	Decomposition storage
+	*	@var array
+	*/
 	private $LU = array();
 
 	/**
-	 *	Row dimension.
-	 *	@var int
-	 */
+	*	Row dimension.
+	*	@var int
+	*/
 	private $m;
 
 	/**
-	 *	Column dimension.
-	 *	@var int
-	 */
+	*	Column dimension.
+	*	@var int
+	*/
 	private $n;
 
 	/**
-	 *	Pivot sign.
-	 *	@var int
-	 */
+	*	Pivot sign.
+	*	@var int
+	*/
 	private $pivsign;
 
 	/**
-	 *	Internal storage of pivot vector.
-	 *	@var array
-	 */
+	*	Internal storage of pivot vector.
+	*	@var array
+	*/
 	private $piv = array();
 
 
 	/**
-	 *	LU Decomposition constructor.
-	 *
-	 *	@param $A Rectangular matrix
-	 *	@return Structure to access L, U and piv.
-	 */
+	*	LU Decomposition constructor.
+	*
+	*	@param $A Rectangular matrix
+	*	@return Structure to access L, U and piv.
+	*/
 	public function __construct($A) {
 		if ($A instanceof PHPExcel_Shared_JAMA_Matrix) {
 			// Use a "left-looking", dot-product, Crout/Doolittle algorithm.
@@ -121,10 +121,10 @@ class PHPExcel_Shared_JAMA_LUDecomposition {
 
 
 	/**
-	 *	Get lower triangular factor.
-	 *
-	 *	@return array Lower triangular factor
-	 */
+	*	Get lower triangular factor.
+	*
+	*	@return array Lower triangular factor
+	*/
 	public function getL() {
 		for ($i = 0; $i < $this->m; ++$i) {
 			for ($j = 0; $j < $this->n; ++$j) {
@@ -142,10 +142,10 @@ class PHPExcel_Shared_JAMA_LUDecomposition {
 
 
 	/**
-	 *	Get upper triangular factor.
-	 *
-	 *	@return array Upper triangular factor
-	 */
+	*	Get upper triangular factor.
+	*
+	*	@return array Upper triangular factor
+	*/
 	public function getU() {
 		for ($i = 0; $i < $this->n; ++$i) {
 			for ($j = 0; $j < $this->n; ++$j) {
@@ -161,30 +161,30 @@ class PHPExcel_Shared_JAMA_LUDecomposition {
 
 
 	/**
-	 *	Return pivot permutation vector.
-	 *
-	 *	@return array Pivot vector
-	 */
+	*	Return pivot permutation vector.
+	*
+	*	@return array Pivot vector
+	*/
 	public function getPivot() {
 		return $this->piv;
 	}	//	function getPivot()
 
 
 	/**
-	 *	Alias for getPivot
-	 *
-	 *	@see getPivot
-	 */
+	*	Alias for getPivot
+	*
+	*	@see getPivot
+	*/
 	public function getDoublePivot() {
 		return $this->getPivot();
 	}	//	function getDoublePivot()
 
 
 	/**
-	 *	Is the matrix nonsingular?
-	 *
-	 *	@return true if U, and hence A, is nonsingular.
-	 */
+	*	Is the matrix nonsingular?
+	*
+	*	@return true if U, and hence A, is nonsingular.
+	*/
 	public function isNonsingular() {
 		for ($j = 0; $j < $this->n; ++$j) {
 			if ($this->LU[$j][$j] == 0) {
@@ -196,10 +196,10 @@ class PHPExcel_Shared_JAMA_LUDecomposition {
 
 
 	/**
-	 *	Count determinants
-	 *
-	 *	@return array d matrix deterninat
-	 */
+	*	Count determinants
+	*
+	*	@return array d matrix deterninat
+	*/
 	public function det() {
 		if ($this->m == $this->n) {
 			$d = $this->pivsign;
@@ -214,13 +214,13 @@ class PHPExcel_Shared_JAMA_LUDecomposition {
 
 
 	/**
-	 *	Solve A*X = B
-	 *
-	 *	@param  $B  A Matrix with as many rows as A and any number of columns.
-	 *	@return  X so that L*U*X = B(piv,:)
-	 *	@exception  IllegalArgumentException Matrix row dimensions must agree.
-	 *	@exception  RuntimeException  Matrix is singular.
-	 */
+	*	Solve A*X = B
+	*
+	*	@param  $B  A Matrix with as many rows as A and any number of columns.
+	*	@return  X so that L*U*X = B(piv,:)
+	*	@exception  IllegalArgumentException Matrix row dimensions must agree.
+	*	@exception  RuntimeException  Matrix is singular.
+	*/
 	public function solve($B) {
 		if ($B->getRowDimension() == $this->m) {
 			if ($this->isNonsingular()) {

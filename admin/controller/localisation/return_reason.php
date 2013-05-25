@@ -1,23 +1,23 @@
 <?php 
 class ControllerLocalisationReturnReason extends Controller { 
 	
-   
+	
   	public function index() {
 		$this->load->language('localisation/return_reason');
 	
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
 		$this->getList();
   	}
-              
+				
   	public function insert() {
 		$this->load->language('localisation/return_reason');
 	
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-      		$this->model_localisation_return_reason->addReturnReason($_POST);
-		  	
+				$this->model_localisation_return_reason->addReturnReason($_POST);
+			
 			$this->message->add('success', $this->_('text_success'));
 
 			$url = '';
@@ -34,19 +34,19 @@ class ControllerLocalisationReturnReason extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 						
-      		$this->url->redirect($this->url->link('localisation/return_reason', $url));
+				$this->url->redirect($this->url->link('localisation/return_reason', $url));
 		}
 	
-    	$this->getForm();
+		$this->getForm();
   	}
 
   	public function update() {
 		$this->load->language('localisation/return_reason');
 	
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-	  		$this->model_localisation_return_reason->editReturnReason($_GET['return_reason_id'], $_POST);
+			$this->model_localisation_return_reason->editReturnReason($_GET['return_reason_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -65,21 +65,21 @@ class ControllerLocalisationReturnReason extends Controller {
 			}
 			
 			$this->url->redirect($this->url->link('localisation/return_reason', $url));
-    	}
+		}
 	
-    	$this->getForm();
+		$this->getForm();
   	}
 
   	public function delete() {
 		$this->load->language('localisation/return_reason');
 	
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $return_reason_id) {
 				$this->model_localisation_return_reason->deleteReturnReason($return_reason_id);
 			}
-			      		
+							
 			$this->message->add('success', $this->_('text_success'));
 
 			$url = '';
@@ -97,11 +97,11 @@ class ControllerLocalisationReturnReason extends Controller {
 			}
 			
 			$this->url->redirect($this->url->link('localisation/return_reason', $url));
-   		}
+			}
 	
-    	$this->getList();
+		$this->getList();
   	}
-    
+	
   	private function getList() {
 		$this->template->load('localisation/return_reason_list');
 
@@ -156,7 +156,7 @@ class ControllerLocalisationReturnReason extends Controller {
 	
 		$results = $this->model_localisation_return_reason->getReturnReasons($data);
  
-    	foreach ($results as $result) {
+		foreach ($results as $result) {
 			$action = array();
 			
 			$action[] = array(
@@ -166,9 +166,9 @@ class ControllerLocalisationReturnReason extends Controller {
 						
 			$this->data['return_reasons'][] = array(
 				'return_reason_id' => $result['return_reason_id'],
-				'name'          => $result['name'],
-				'selected'      => isset($_POST['selected']) && in_array($result['return_reason_id'], $_POST['selected']),
-				'action'        => $action
+				'name'			=> $result['name'],
+				'selected'		=> isset($_POST['selected']) && in_array($result['return_reason_id'], $_POST['selected']),
+				'action'		=> $action
 			);
 		}	
 	
@@ -214,7 +214,6 @@ class ControllerLocalisationReturnReason extends Controller {
 		$this->pagination->total = $return_reason_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('localisation/return_reason', $url);
 			
 		$this->data['pagination'] = $this->pagination->render();
@@ -289,40 +288,36 @@ class ControllerLocalisationReturnReason extends Controller {
   	}
   	
 	private function validateForm() {
-    	if (!$this->user->hasPermission('modify', 'localisation/return_reason')) {
-      		$this->error['warning'] = $this->_('error_permission');
-    	}
-	
-    	foreach ($_POST['return_reason'] as $language_id => $value) {
-      		if ((strlen($value['name']) < 3) || (strlen($value['name']) > 32)) {
-        		$this->error['name'][$language_id] = $this->_('error_name');
-      		}
-    	}
-		
-		if (!$this->error) {
-	  		return true;
-		} else {
-	  		return false;
+		if (!$this->user->hasPermission('modify', 'localisation/return_reason')) {
+				$this->error['warning'] = $this->_('error_permission');
 		}
+	
+		foreach ($_POST['return_reason'] as $language_id => $value) {
+				if ((strlen($value['name']) < 3) || (strlen($value['name']) > 32)) {
+				$this->error['name'][$language_id] = $this->_('error_name');
+				}
+		}
+		
+		return $this->error ? false : true;
   	}
 
   	private function validateDelete() {
 		if (!$this->user->hasPermission('modify', 'localisation/return_reason')) {
-      		$this->error['warning'] = $this->_('error_permission');
-    	}
+				$this->error['warning'] = $this->_('error_permission');
+		}
 		
 		foreach ($_POST['selected'] as $return_reason_id) {
 			$return_total = $this->model_sale_return->getTotalReturnsByReturnReasonId($return_reason_id);
 		
 			if ($return_total) {
-	  			$this->error['warning'] = sprintf($this->_('error_return'), $return_total);	
+				$this->error['warning'] = sprintf($this->_('error_return'), $return_total);	
 			}  
-	  	}
+		}
 		
 		if (!$this->error) { 
-	  		return true;
+			return true;
 		} else {
-	  		return false;
+			return false;
 		}
-  	}	  
+  	}	
 }

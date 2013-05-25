@@ -1,8 +1,8 @@
 <?php
 class ControllerModuleDnCarousel extends Controller {
-	 
-	 
-	public function index() {   
+	
+	
+	public function index() {	
 		$this->template->load('module/dn_carousel');
 
 		$this->load->language('module/dn_carousel');
@@ -78,10 +78,6 @@ class ControllerModuleDnCarousel extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

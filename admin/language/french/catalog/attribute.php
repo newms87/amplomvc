@@ -19,4 +19,4 @@ $_['entry_sort_order']			= 'Classement :';
 // Error
 $_['error_permission']			= 'Attention, vous n&#8217;avez pas la permission de modifier les <b>Attributs</b> !';
 $_['error_name']				= 'Le <b>Nom de l&#8217;attribut</b> doit &ecirc;tre compos&eacute; de 3 &agrave; 64 caract&egrave;res !';
-$_['error_product']     		= 'Attention, cet attribut ne peut pas &ecirc;tre supprim&eacute;e car elle est actuellement affect&eacute;e &agrave; %s produits !';
+$_['error_product']			= 'Attention, cet attribut ne peut pas &ecirc;tre supprim&eacute;e car elle est actuellement affect&eacute;e &agrave; %s produits !';

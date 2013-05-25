@@ -70,77 +70,77 @@ class ControllerDesignNavigation extends Controller {
 	}
 	
 	public function batch_update() {
-      $this->load->language('design/navigation');
+		$this->load->language('design/navigation');
 
-      $this->document->setTitle($this->_('heading_title'));
-      
-      if (isset($_POST['selected']) && isset($_GET['action'])) {
-         foreach ($_POST['selected'] as $navigation_group_id) {
-            switch($_GET['action']){
-               case 'enable':
-                  $this->model_design_navigation->editNavigationGroup($navigation_group_id, array('status' => 1));
-                  break;
-               case 'disable':
-                  $this->model_design_navigation->editNavigationGroup($navigation_group_id, array('status' => 0));
-                  break;
+		$this->document->setTitle($this->_('heading_title'));
+		
+		if (isset($_POST['selected']) && isset($_GET['action'])) {
+			foreach ($_POST['selected'] as $navigation_group_id) {
+				switch($_GET['action']){
+					case 'enable':
+						$this->model_design_navigation->editNavigationGroup($navigation_group_id, array('status' => 1));
+						break;
+					case 'disable':
+						$this->model_design_navigation->editNavigationGroup($navigation_group_id, array('status' => 0));
+						break;
 					case 'delete':
-                  $this->model_design_navigation->deleteNavigationGroup($navigation_group_id);
-                  break;
-            }
-            if($this->error)
-               break;
-         }
+						$this->model_design_navigation->deleteNavigationGroup($navigation_group_id);
+						break;
+				}
+				if($this->error)
+					break;
+			}
 			
-         if(!$this->error){
-            if(!$this->message->error_set()){
-               $this->message->add('success',$this->_('text_success'));
+			if(!$this->error){
+				if(!$this->message->error_set()){
+					$this->message->add('success',$this->_('text_success'));
 					
 					$this->url->redirect($this->url->link('design/navigation'));
-            }
-         }
-      }
+				}
+			}
+		}
 
-      $this->getList();
-   }
+		$this->getList();
+	}
 
 	private function getList() {
-      $this->template->load('design/navigation_list');
+		$this->template->load('design/navigation_list');
 
-      $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-      $this->breadcrumb->add($this->_('heading_title'), $this->url->link('design/navigation'));
-      
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('design/navigation'));
+		
 		//The Table Columns
 		$columns = array();
 		
 		$columns['name'] = array(
-		   'type' => 'text',
-		   'display_name' => $this->_('column_name'),
-		   'filter' => true,
-		   'sortable' => true,
-		   'sort_value' => 'name',
+			'type' => 'text',
+			'display_name' => $this->_('column_name'),
+			'filter' => true,
+			'sortable' => true,
+			'sort_value' => 'name',
 		);
 		
 		$stores = array('admin' => array('store_id' => 'admin', 'name' => 'Admin Panel')) + $this->model_setting_store->getStores();
 		
 		$columns['stores'] = array(
-		   'type' => 'multiselect',
-		   'display_name' => $this->_('column_stores'),
-		   'filter' => true,
-		   'build_config' => array('store_id' => 'name'),
-	   	'build_data' => $stores,
-		   'sortable' => false,
+			'type' => 'multiselect',
+			'display_name' => $this->_('column_stores'),
+			'filter' => true,
+			'build_config' => array('store_id' => 'name'),
+			'build_data' => $stores,
+			'sortable' => false,
 		);
 		
 		$columns['status'] = array(
-		   'type' => 'select',
-		   'display_name' => $this->_('column_status'),
-		   'filter' => true,
-		   'build_data' => $this->_('data_statuses'),
-		   'sortable' => true,
-		   'sort_value' => 'status',
+			'type' => 'select',
+			'display_name' => $this->_('column_status'),
+			'filter' => true,
+			'build_data' => $this->_('data_statuses'),
+			'sortable' => true,
+			'sort_value' => 'status',
 		);
 
-  	   //The Sort data
+  		//The Sort data
 		$data = array();
 		
 		$sort_defaults = array(
@@ -154,7 +154,7 @@ class ControllerDesignNavigation extends Controller {
 			$data[$key] = $$key = isset($_GET[$key]) ? $_GET[$key] : $default;
 		}
 		
-      $data['start'] = ($page - 1) * $limit;
+		$data['start'] = ($page - 1) * $limit;
 		
 		//Filter
 		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
@@ -162,19 +162,19 @@ class ControllerDesignNavigation extends Controller {
 		if($filter_values){
 			$data += $filter_values;
 		}
-      
 		
-      $navigation_groups_total = $this->model_design_navigation->getTotalNavigationGroups($data);
-      $navigation_groups = $this->model_design_navigation->getNavigationGroups($data);
-      
-      foreach ($navigation_groups as &$nav_group) {
-      	$action = array();
+		
+		$navigation_groups_total = $this->model_design_navigation->getTotalNavigationGroups($data);
+		$navigation_groups = $this->model_design_navigation->getNavigationGroups($data);
+		
+		foreach ($navigation_groups as &$nav_group) {
+			$action = array();
 			
-         $action[] = array(
-            'text' => $this->_('text_edit'),
-            'href' => $this->url->link('design/navigation/update', 'navigation_group_id=' . $nav_group['navigation_group_id']),
-         );
-         
+			$action[] = array(
+				'text' => $this->_('text_edit'),
+				'href' => $this->url->link('design/navigation/update', 'navigation_group_id=' . $nav_group['navigation_group_id']),
+			);
+			
 			if($nav_group['name'] == 'admin'){
 				$action[] = array(
 					'text' => $this->_('button_admin_nav_reset'),
@@ -183,19 +183,19 @@ class ControllerDesignNavigation extends Controller {
 				);
 			}
 			
-         $nav_group['actions'] = $action;
-      }
-      
-      //The table template data
+			$nav_group['actions'] = $action;
+		}
+		
+		//The table template data
 		$tt_data = array(
-		   'row_id'		=> 'navigation_group_id',
-		   'route'		=> 'design/navigation',
-		   'sort'		=> $sort,
-		   'order'		=> $order,
-		   'page'		=> $page,
-		   'sort_url'	=> $this->url->link('design/navigation', $this->url->get_query('filter')),
-		   'columns'	=> $columns,
-		   'data'		=> $navigation_groups,
+			'row_id'		=> 'navigation_group_id',
+			'route'		=> 'design/navigation',
+			'sort'		=> $sort,
+			'order'		=> $order,
+			'page'		=> $page,
+			'sort_url'	=> $this->url->link('design/navigation', $this->url->get_query('filter')),
+			'columns'	=> $columns,
+			'data'		=> $navigation_groups,
 		);
 		
 		$tt_data += $this->language->data;
@@ -206,16 +206,16 @@ class ControllerDesignNavigation extends Controller {
 		$this->mytable->set_template_data($tt_data);
 		$this->mytable->map_attribute('filter_value', $filter_values);
 		
-      $this->data['list_view'] = $this->mytable->build();
+		$this->data['list_view'] = $this->mytable->build();
 		
 		//Batch Actions
-      $this->data['batch_actions'] = array(
-      	'enable' => array(
-      		'label' => "Enable",
-   		),
-   		
-   		'disable' => array(
-   			'label' => "Disable",
+		$this->data['batch_actions'] = array(
+			'enable' => array(
+				'label' => "Enable",
+			),
+			
+			'disable' => array(
+				'label' => "Disable",
 			),
 			
 			'delete' => array(
@@ -224,41 +224,38 @@ class ControllerDesignNavigation extends Controller {
 		);
 		
 		$url = $this->url->get_query('filter', 'sort', 'order', 'page');
-      
-      $this->data['batch_update'] = $this->url->link('design/navigation/batch_update', $url);
-      
+		
+		$this->data['batch_update'] = $this->url->link('design/navigation/batch_update', $url);
+		
 		//Action Buttons
-      $this->data['insert'] = $this->url->link('design/navigation/insert', $url);
-      
-      $url = $this->url->get_query('filter', 'sort', 'order');
-      
-      $this->pagination->init();
-      $this->pagination->total = $navigation_groups_total;
-      $this->pagination->page = $data['page'];
-      $this->pagination->limit = $this->config->get('config_admin_limit');
-      $this->pagination->text = $this->_('text_pagination');
-      $this->pagination->url = $this->url->link('design/navigation', $url);
-         
-      $this->data['pagination'] = $this->pagination->render();
-      
-      $this->children = array(
-         'common/header',
-         'common/footer'
-      );
-      
-      $this->response->setOutput($this->render());
-   }
+		$this->data['insert'] = $this->url->link('design/navigation/insert', $url);
+		
+		$url = $this->url->get_query('filter', 'sort', 'order');
+		
+		$this->pagination->init();
+		$this->pagination->total = $navigation_groups_total;
+		$this->pagination->url = $this->url->link('design/navigation', $url);
+			
+		$this->data['pagination'] = $this->pagination->render();
+		
+		$this->children = array(
+			'common/header',
+			'common/footer'
+		);
+		
+		$this->response->setOutput($this->render());
+	}
 
 	private function getForm() {
 		$this->language->load('design/navigation');
 		
 		$this->template->load('design/navigation_form');
 
-	   $navigation_group_id = isset($_GET['navigation_group_id']) ? $_GET['navigation_group_id'] : null;
-      
-      $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-      $this->breadcrumb->add($this->_('heading_title'), $this->url->link('design/navigation'));
-      
+		$navigation_group_id = isset($_GET['navigation_group_id']) ? $_GET['navigation_group_id'] : null;
+		
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('design/navigation'));
+		
 		if (!$navigation_group_id) {
 			$this->data['action'] = $this->url->link('design/navigation/insert');
 		} else {
@@ -268,30 +265,30 @@ class ControllerDesignNavigation extends Controller {
 		$this->data['cancel'] = $this->url->link('design/navigation');
 
 		if ($navigation_group_id && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-      	$navigation_group_info = $this->model_design_navigation->getNavigationGroup($navigation_group_id);
-    	}
+			$navigation_group_info = $this->model_design_navigation->getNavigationGroup($navigation_group_id);
+		}
 		
-      //initialize the values in order of Post, Database, Default
-      $defaults = array(
-         'name' => '',
-         'links' => array(),
-         'stores' => array(0),
-         'status' => 1,
-      );
+		//initialize the values in order of Post, Database, Default
+		$defaults = array(
+			'name' => '',
+			'links' => array(),
+			'stores' => array(0),
+			'status' => 1,
+		);
 
-      foreach($defaults as $key => $default){
-         if (isset($_POST[$key])) {
-            $this->data[$key] = $_POST[$key];
-         } elseif (isset($navigation_group_info[$key])) {
-            $this->data[$key] = $navigation_group_info[$key];
-         } elseif(!$navigation_group_id) {
-            $this->data[$key] = $default;
-         }
-      }
+		foreach($defaults as $key => $default){
+			if (isset($_POST[$key])) {
+				$this->data[$key] = $_POST[$key];
+			} elseif (isset($navigation_group_info[$key])) {
+				$this->data[$key] = $navigation_group_info[$key];
+			} elseif(!$navigation_group_id) {
+				$this->data[$key] = $default;
+			}
+		}
 		
-		$admin_store = array('admin' => array('store_id' => -1, 'name' => $this->_('text_admin_panel')));
+		$admin_store = array('admin' => array('store_id' => 0, 'name' => $this->_('text_admin_panel')));
 		
-      $this->data['data_stores'] = $admin_store + $this->model_setting_store->getStores();
+		$this->data['data_stores'] = $admin_store + $this->model_setting_store->getStores();
 		
 		$this->children = array(
 			'common/header',

@@ -22,9 +22,9 @@ echo "original: ".$orig.'<br>';
 $origParts = explode('\\', $orig);
 array_shift($origParts);
 
-//                     й                 ё              Й               Ё              Ø         Å
+//							й					ё				Й					Ё				Ø			Å
 $patterns = array("\u0438\u0306", "\u0435\u0308", "\u0418\u0306", "\u0415\u0308", "\u00d8A", "\u030a");
-$replace  = array("\u0439",        "\u0451",       "\u0419",       "\u0401",       "\u00d8", "\u00c5");
+$replace  = array("\u0439",		"\u0451",		"\u0419",		"\u0401",		"\u00d8", "\u00c5");
 
 
 foreach(scandir($path) as $f) {

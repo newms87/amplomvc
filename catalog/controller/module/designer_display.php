@@ -25,9 +25,9 @@ class ControllerModuleDesignerDisplay extends Controller {
 				}
 				
 				$featured_product = $this->model_catalog_product->getProduct($designer_info['featured_product_id']);
-            
-            //product not found or not active
-            if(empty($featured_product))continue;
+				
+				//product not found or not active
+				if(empty($featured_product))continue;
 				
 				$p_images = $this->model_catalog_product->getProductImages($featured_product['product_id']);
 				$product_images = array();
@@ -47,11 +47,11 @@ class ControllerModuleDesignerDisplay extends Controller {
 				$featured_product['images'] = $product_images;
 				$this->data['designers'][] = array(
 					'manufacturer_id' => $designer_info['manufacturer_id'],
-					'image'   	 => $image,
-					'name'    	 => $designer_info['name'],
+					'image'		=> $image,
+					'name'		=> $designer_info['name'],
 					'featured_product' => $featured_product,
-					'cat_name'	 => $featured_product['cat_name'],
-					'href'    	 => $this->url->site($designer_info['keyword']),
+					'cat_name'	=> $featured_product['cat_name'],
+					'href'		=> $this->url->site($designer_info['keyword']),
 					'interview_href' => $this->url->site($designer_info['keyword'] . "/interview")
 				);
 			}

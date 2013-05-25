@@ -676,7 +676,7 @@
 <script type="text/javascript"><!--
 $('#invoice-generate').live('click', function() {
 	$.ajax({
-		url: 'index.php?route=sale/order/createinvoiceno&order_id=<?= $order_id; ?>',
+		url: "<?= HTTP_ADMIN . "index.php?route=sale/order/createinvoiceno"; ?>" + '&order_id=<?= $order_id; ?>',
 		dataType: 'json',
 		beforeSend: function() {
 			$('#invoice').after('<img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" class="loading" style="padding-left: 5px;" />');	
@@ -706,7 +706,7 @@ $('#invoice-generate').live('click', function() {
 
 $('#credit-add').live('click', function() {
 	$.ajax({
-		url: 'index.php?route=sale/order/addcredit&order_id=<?= $order_id; ?>',
+		url: "<?= HTTP_ADMIN . "index.php?route=sale/order/addcredit"; ?>" + '&order_id=<?= $order_id; ?>',
 		type: 'post',
 		dataType: 'json',
 		beforeSend: function() {
@@ -737,7 +737,7 @@ $('#credit-add').live('click', function() {
 
 $('#credit-remove').live('click', function() {
 	$.ajax({
-		url: 'index.php?route=sale/order/removecredit&order_id=<?= $order_id; ?>',
+		url: "<?= HTTP_ADMIN . "index.php?route=sale/order/removecredit"; ?>" + '&order_id=<?= $order_id; ?>',
 		type: 'post',
 		dataType: 'json',
 		beforeSend: function() {
@@ -768,7 +768,7 @@ $('#credit-remove').live('click', function() {
 
 $('#reward-add').live('click', function() {
 	$.ajax({
-		url: 'index.php?route=sale/order/addreward&order_id=<?= $order_id; ?>',
+		url: "<?= HTTP_ADMIN . "index.php?route=sale/order/addreward"; ?>" + '&order_id=<?= $order_id; ?>',
 		type: 'post',
 		dataType: 'json',
 		beforeSend: function() {
@@ -799,7 +799,7 @@ $('#reward-add').live('click', function() {
 
 $('#reward-remove').live('click', function() {
 	$.ajax({
-		url: 'index.php?route=sale/order/removereward&order_id=<?= $order_id; ?>',
+		url: "<?= HTTP_ADMIN . "index.php?route=sale/order/removereward"; ?>" + '&order_id=<?= $order_id; ?>',
 		type: 'post',
 		dataType: 'json',
 		beforeSend: function() {
@@ -830,7 +830,7 @@ $('#reward-remove').live('click', function() {
 
 $('#commission-add').live('click', function() {
 	$.ajax({
-		url: 'index.php?route=sale/order/addcommission&order_id=<?= $order_id; ?>',
+		url: "<?= HTTP_ADMIN . "index.php?route=sale/order/addcommission"; ?>" + '&order_id=<?= $order_id; ?>',
 		type: 'post',
 		dataType: 'json',
 		beforeSend: function() {
@@ -861,7 +861,7 @@ $('#commission-add').live('click', function() {
 
 $('#commission-remove').live('click', function() {
 	$.ajax({
-		url: 'index.php?route=sale/order/removecommission&order_id=<?= $order_id; ?>',
+		url: "<?= HTTP_ADMIN . "index.php?route=sale/order/removecommission"; ?>" + '&order_id=<?= $order_id; ?>',
 		type: 'post',
 		dataType: 'json',
 		beforeSend: function() {
@@ -896,11 +896,11 @@ $('#history .pagination a').live('click', function() {
 	return false;
 });			
 
-$('#history').load('index.php?route=sale/order/history&order_id=<?= $order_id; ?>');
+$('#history').load("<?= HTTP_ADMIN . "index.php?route=sale/order/history"; ?>" + '&order_id=<?= $order_id; ?>');
 
 $('#button-history').live('click', function() {
 	$.ajax({
-		url: 'index.php?route=sale/order/history&order_id=<?= $order_id; ?>',
+		url: "<?= HTTP_ADMIN . "index.php?route=sale/order/history"; ?>" + '&order_id=<?= $order_id; ?>',
 		type: 'post',
 		dataType: 'html',
 		data: 'order_status_id=' + encodeURIComponent($('select[name=\'order_status_id\']').val()) + '&notify=' + encodeURIComponent($('input[name=\'notify\']').attr('checked') ? 1 : 0) + '&append=' + encodeURIComponent($('input[name=\'append\']').attr('checked') ? 1 : 0) + '&comment=' + encodeURIComponent($('textarea[name=\'comment\']').val()),

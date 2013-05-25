@@ -46,10 +46,10 @@ class ControllerPaymentTwoCheckout extends Controller {
 		foreach ($products as $product) {
 			$this->data['products'][] = array(
 				'product_id'  => $product['product_id'],
-				'name'        => $product['name'],
+				'name'		=> $product['name'],
 				'description' => $product['name'],
-				'quantity'    => $product['quantity'],
-				'price'		  => $this->currency->format($product['price'], $order_info['currency_code'], $order_info['currency_value'], false)
+				'quantity'	=> $product['quantity'],
+				'price'		=> $this->currency->format($product['price'], $order_info['currency_code'], $order_info['currency_value'], false)
 			);
 		}
 

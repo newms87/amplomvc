@@ -1,27 +1,28 @@
 <?php
 class ControllerModuleBlockPress extends Controller {
-	protected function index($data) {
+	public function index($settings) {
 		$this->template->load('module/block/press');
 		
-	   $this->language->load('module/block/press');
-      
-		$settings = $data['settings'];
+		$this->language->load('module/block/press');
 		
 		$settings['image_width'] = 200;
 		$settings['image_height'] = 200;
 		
+		$settings['auto_size'] = true;
+		
 		foreach($settings['press_items'] as &$press){
-			if(empty($press['auto_size'])){
-				
-				$width = !empty($press['image_width']) ? $press['image_width'] : $settings['image_width'];
-				$height = !empty($press['image_height']) ? $press['image_height'] : $settings['image_height'];
-				
-				$press['thumb'] = $this->image->resize($press['image'], $width, $height);
-				
-				$press['auto_size'] = 0;
-			}
-			else{
-				$press['thumb'] = $this->image->get($press['image']);
+			if(!empty($press['images'])){
+				foreach($press['images'] as &$image){
+					if($settings['auto_size']){
+						$image = $this->image->get($image);
+					}
+					else{
+						$width = !empty($press['image_width']) ? $press['image_width'] : $settings['image_width'];
+						$height = !empty($press['image_height']) ? $press['image_height'] : $settings['image_height'];
+						
+						$image = $this->image->resize($image, $width, $height);
+					}
+				}
 			}
 			
 			$press['description'] = html_entity_decode($press['description']);

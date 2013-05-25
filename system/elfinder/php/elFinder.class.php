@@ -12,165 +12,165 @@
 class elFinder {
 	
 	/**
-	 * API version number
-	 *
-	 * @var string
-	 **/
+	* API version number
+	*
+	* @var string
+	**/
 	protected $version = '2.0';
 	
 	/**
-	 * Storages (root dirs)
-	 *
-	 * @var array
-	 **/
+	* Storages (root dirs)
+	*
+	* @var array
+	**/
 	protected $volumes = array();
 	
 	public static $netDrivers = array();
 
 	/**
-	 * Mounted volumes count
-	 * Required to create unique volume id
-	 *
-	 * @var int
-	 **/
+	* Mounted volumes count
+	* Required to create unique volume id
+	*
+	* @var int
+	**/
 	public static $volumesCnt = 1;
 	
 	/**
-	 * Default root (storage)
-	 *
-	 * @var elFinderStorageDriver
-	 **/
+	* Default root (storage)
+	*
+	* @var elFinderStorageDriver
+	**/
 	protected $default = null;
 	
 	/**
-	 * Commands and required arguments list
-	 *
-	 * @var array
-	 **/
+	* Commands and required arguments list
+	*
+	* @var array
+	**/
 	protected $commands = array(
-		'open'      => array('target' => false, 'tree' => false, 'init' => false, 'mimes' => false),
-		'ls'        => array('target' => true, 'mimes' => false),
-		'tree'      => array('target' => true),
-		'parents'   => array('target' => true),
-		'tmb'       => array('targets' => true),
-		'file'      => array('target' => true, 'download' => false),
-		'size'      => array('targets' => true),
-		'mkdir'     => array('target' => true, 'name' => true),
-		'mkfile'    => array('target' => true, 'name' => true, 'mimes' => false),
-		'rm'        => array('targets' => true),
-		'rename'    => array('target' => true, 'name' => true, 'mimes' => false),
+		'open'		=> array('target' => false, 'tree' => false, 'init' => false, 'mimes' => false),
+		'ls'		=> array('target' => true, 'mimes' => false),
+		'tree'		=> array('target' => true),
+		'parents'	=> array('target' => true),
+		'tmb'		=> array('targets' => true),
+		'file'		=> array('target' => true, 'download' => false),
+		'size'		=> array('targets' => true),
+		'mkdir'	=> array('target' => true, 'name' => true),
+		'mkfile'	=> array('target' => true, 'name' => true, 'mimes' => false),
+		'rm'		=> array('targets' => true),
+		'rename'	=> array('target' => true, 'name' => true, 'mimes' => false),
 		'duplicate' => array('targets' => true, 'suffix' => false),
-		'paste'     => array('dst' => true, 'targets' => true, 'cut' => false, 'mimes' => false),
-		'upload'    => array('target' => true, 'FILES' => true, 'mimes' => false, 'html' => false),
-		'get'       => array('target' => true),
-		'put'       => array('target' => true, 'content' => '', 'mimes' => false),
-		'archive'   => array('targets' => true, 'type' => true, 'mimes' => false),
-		'extract'   => array('target' => true, 'mimes' => false),
-		'search'    => array('q' => true, 'mimes' => false),
-		'info'      => array('targets' => true),
-		'dim'       => array('target' => true),
-		'resize'    => array('target' => true, 'width' => true, 'height' => true, 'mode' => false, 'x' => false, 'y' => false, 'degree' => false),
+		'paste'	=> array('dst' => true, 'targets' => true, 'cut' => false, 'mimes' => false),
+		'upload'	=> array('target' => true, 'FILES' => true, 'mimes' => false, 'html' => false),
+		'get'		=> array('target' => true),
+		'put'		=> array('target' => true, 'content' => '', 'mimes' => false),
+		'archive'	=> array('targets' => true, 'type' => true, 'mimes' => false),
+		'extract'	=> array('target' => true, 'mimes' => false),
+		'search'	=> array('q' => true, 'mimes' => false),
+		'info'		=> array('targets' => true),
+		'dim'		=> array('target' => true),
+		'resize'	=> array('target' => true, 'width' => true, 'height' => true, 'mode' => false, 'x' => false, 'y' => false, 'degree' => false),
 		'netmount'  => array('protocol' => true, 'host' => true, 'path' => false, 'port' => false, 'user' => true, 'pass' => true, 'alias' => false, 'options' => false)
 	);
 	
 	/**
-	 * Commands listeners
-	 *
-	 * @var array
-	 **/
+	* Commands listeners
+	*
+	* @var array
+	**/
 	protected $listeners = array();
 	
 	/**
-	 * script work time for debug
-	 *
-	 * @var string
-	 **/
+	* script work time for debug
+	*
+	* @var string
+	**/
 	protected $time = 0;
 	/**
-	 * Is elFinder init correctly?
-	 *
-	 * @var bool
-	 **/
+	* Is elFinder init correctly?
+	*
+	* @var bool
+	**/
 	protected $loaded = false;
 	/**
-	 * Send debug to client?
-	 *
-	 * @var string
-	 **/
+	* Send debug to client?
+	*
+	* @var string
+	**/
 	protected $debug = false;
 	
 	/**
-	 * undocumented class variable
-	 *
-	 * @var string
-	 **/
+	* undocumented class variable
+	*
+	* @var string
+	**/
 	protected $uploadDebug = '';
 	
 	/**
-	 * Errors from not mounted volumes
-	 *
-	 * @var array
-	 **/
+	* Errors from not mounted volumes
+	*
+	* @var array
+	**/
 	public $mountErrors = array();
 	
 	// Errors messages
-	const ERROR_UNKNOWN           = 'errUnknown';
-	const ERROR_UNKNOWN_CMD       = 'errUnknownCmd';
-	const ERROR_CONF              = 'errConf';
-	const ERROR_CONF_NO_JSON      = 'errJSON';
-	const ERROR_CONF_NO_VOL       = 'errNoVolumes';
-	const ERROR_INV_PARAMS        = 'errCmdParams';
-	const ERROR_OPEN              = 'errOpen';
-	const ERROR_DIR_NOT_FOUND     = 'errFolderNotFound';
-	const ERROR_FILE_NOT_FOUND    = 'errFileNotFound';     // 'File not found.'
+	const ERROR_UNKNOWN			= 'errUnknown';
+	const ERROR_UNKNOWN_CMD		= 'errUnknownCmd';
+	const ERROR_CONF				= 'errConf';
+	const ERROR_CONF_NO_JSON		= 'errJSON';
+	const ERROR_CONF_NO_VOL		= 'errNoVolumes';
+	const ERROR_INV_PARAMS		= 'errCmdParams';
+	const ERROR_OPEN				= 'errOpen';
+	const ERROR_DIR_NOT_FOUND	= 'errFolderNotFound';
+	const ERROR_FILE_NOT_FOUND	= 'errFileNotFound';	// 'File not found.'
 	const ERROR_TRGDIR_NOT_FOUND  = 'errTrgFolderNotFound'; // 'Target folder "$1" not found.'
-	const ERROR_NOT_DIR           = 'errNotFolder';
-	const ERROR_NOT_FILE          = 'errNotFile';
-	const ERROR_PERM_DENIED       = 'errPerm';
-	const ERROR_LOCKED            = 'errLocked';        // '"$1" is locked and can not be renamed, moved or removed.'
-	const ERROR_EXISTS            = 'errExists';        // 'File named "$1" already exists.'
-	const ERROR_INVALID_NAME      = 'errInvName';       // 'Invalid file name.'
-	const ERROR_MKDIR             = 'errMkdir';
-	const ERROR_MKFILE            = 'errMkfile';
-	const ERROR_RENAME            = 'errRename';
-	const ERROR_COPY              = 'errCopy';
-	const ERROR_MOVE              = 'errMove';
-	const ERROR_COPY_FROM         = 'errCopyFrom';
-	const ERROR_COPY_TO           = 'errCopyTo';
-	const ERROR_COPY_ITSELF       = 'errCopyInItself';
-	const ERROR_REPLACE           = 'errReplace';          // 'Unable to replace "$1".'
-	const ERROR_RM                = 'errRm';               // 'Unable to remove "$1".'
-	const ERROR_RM_SRC            = 'errRmSrc';            // 'Unable remove source file(s)'
-	const ERROR_UPLOAD            = 'errUpload';           // 'Upload error.'
-	const ERROR_UPLOAD_FILE       = 'errUploadFile';       // 'Unable to upload "$1".'
-	const ERROR_UPLOAD_NO_FILES   = 'errUploadNoFiles';    // 'No files found for upload.'
+	const ERROR_NOT_DIR			= 'errNotFolder';
+	const ERROR_NOT_FILE			= 'errNotFile';
+	const ERROR_PERM_DENIED		= 'errPerm';
+	const ERROR_LOCKED				= 'errLocked';		// '"$1" is locked and can not be renamed, moved or removed.'
+	const ERROR_EXISTS				= 'errExists';		// 'File named "$1" already exists.'
+	const ERROR_INVALID_NAME		= 'errInvName';		// 'Invalid file name.'
+	const ERROR_MKDIR				= 'errMkdir';
+	const ERROR_MKFILE				= 'errMkfile';
+	const ERROR_RENAME				= 'errRename';
+	const ERROR_COPY				= 'errCopy';
+	const ERROR_MOVE				= 'errMove';
+	const ERROR_COPY_FROM			= 'errCopyFrom';
+	const ERROR_COPY_TO			= 'errCopyTo';
+	const ERROR_COPY_ITSELF		= 'errCopyInItself';
+	const ERROR_REPLACE			= 'errReplace';			// 'Unable to replace "$1".'
+	const ERROR_RM					= 'errRm';					// 'Unable to remove "$1".'
+	const ERROR_RM_SRC				= 'errRmSrc';				// 'Unable remove source file(s)'
+	const ERROR_UPLOAD				= 'errUpload';			// 'Upload error.'
+	const ERROR_UPLOAD_FILE		= 'errUploadFile';		// 'Unable to upload "$1".'
+	const ERROR_UPLOAD_NO_FILES	= 'errUploadNoFiles';	// 'No files found for upload.'
 	const ERROR_UPLOAD_TOTAL_SIZE = 'errUploadTotalSize';  // 'Data exceeds the maximum allowed size.'
-	const ERROR_UPLOAD_FILE_SIZE  = 'errUploadFileSize';   // 'File exceeds maximum allowed size.'
-	const ERROR_UPLOAD_FILE_MIME  = 'errUploadMime';       // 'File type not allowed.'
-	const ERROR_UPLOAD_TRANSFER   = 'errUploadTransfer';   // '"$1" transfer error.'
-	// const ERROR_ACCESS_DENIED     = 'errAccess';
-	const ERROR_NOT_REPLACE       = 'errNotReplace';       // Object "$1" already exists at this location and can not be replaced with object of another type.
-	const ERROR_SAVE              = 'errSave';
-	const ERROR_EXTRACT           = 'errExtract';
-	const ERROR_ARCHIVE           = 'errArchive';
-	const ERROR_NOT_ARCHIVE       = 'errNoArchive';
-	const ERROR_ARCHIVE_TYPE      = 'errArcType';
-	const ERROR_ARC_SYMLINKS      = 'errArcSymlinks';
-	const ERROR_ARC_MAXSIZE       = 'errArcMaxSize';
-	const ERROR_RESIZE            = 'errResize';
-	const ERROR_UNSUPPORT_TYPE    = 'errUsupportType';
+	const ERROR_UPLOAD_FILE_SIZE  = 'errUploadFileSize';	// 'File exceeds maximum allowed size.'
+	const ERROR_UPLOAD_FILE_MIME  = 'errUploadMime';		// 'File type not allowed.'
+	const ERROR_UPLOAD_TRANSFER	= 'errUploadTransfer';	// '"$1" transfer error.'
+	// const ERROR_ACCESS_DENIED	= 'errAccess';
+	const ERROR_NOT_REPLACE		= 'errNotReplace';		// Object "$1" already exists at this location and can not be replaced with object of another type.
+	const ERROR_SAVE				= 'errSave';
+	const ERROR_EXTRACT			= 'errExtract';
+	const ERROR_ARCHIVE			= 'errArchive';
+	const ERROR_NOT_ARCHIVE		= 'errNoArchive';
+	const ERROR_ARCHIVE_TYPE		= 'errArcType';
+	const ERROR_ARC_SYMLINKS		= 'errArcSymlinks';
+	const ERROR_ARC_MAXSIZE		= 'errArcMaxSize';
+	const ERROR_RESIZE				= 'errResize';
+	const ERROR_UNSUPPORT_TYPE	= 'errUsupportType';
 	const ERROR_NOT_UTF8_CONTENT  = 'errNotUTF8Content';
-	const ERROR_NETMOUNT          = 'errNetMount';
+	const ERROR_NETMOUNT			= 'errNetMount';
 	const ERROR_NETMOUNT_NO_DRIVER = 'errNetMountNoDriver';
-	const ERROR_NETMOUNT_FAILED       = 'errNetMountFailed';
+	const ERROR_NETMOUNT_FAILED		= 'errNetMountFailed';
 	
 	/**
-	 * Constructor
-	 *
-	 * @param  array  elFinder and roots configurations
-	 * @return void
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Constructor
+	*
+	* @param  array  elFinder and roots configurations
+	* @return void
+	* @author Dmitry (dio) Levashov
+	**/
 	public function __construct($opts) {
 		session_start();
 
@@ -223,33 +223,33 @@ class elFinder {
 	}
 	
 	/**
-	 * Return true if fm init correctly
-	 *
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return true if fm init correctly
+	*
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	public function loaded() {
 		return $this->loaded;
 	}
 	
 	/**
-	 * Return version (api) number
-	 *
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return version (api) number
+	*
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	public function version() {
 		return $this->version;
 	}
 	
 	/**
-	 * Add handler to elFinder command
-	 *
-	 * @param  string  command name
-	 * @param  string|array  callback name or array(object, method)
-	 * @return elFinder
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Add handler to elFinder command
+	*
+	* @param  string  command name
+	* @param  string|array  callback name or array(object, method)
+	* @return elFinder
+	* @author Dmitry (dio) Levashov
+	**/
 	public function bind($cmd, $handler) {
 		$cmds = $cmd == '*'
 			? array_keys($this->commands)
@@ -272,13 +272,13 @@ class elFinder {
 	}
 	
 	/**
-	 * Remove event (command exec) handler
-	 *
-	 * @param  string  command name
-	 * @param  string|array  callback name or array(object, method)
-	 * @return elFinder
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Remove event (command exec) handler
+	*
+	* @param  string  command name
+	* @param  string|array  callback name or array(object, method)
+	* @return elFinder
+	* @author Dmitry (dio) Levashov
+	**/
 	public function unbind($cmd, $handler) {
 		if (!empty($this->listeners[$cmd])) {
 			foreach ($this->listeners[$cmd] as $i => $h) {
@@ -292,35 +292,35 @@ class elFinder {
 	}
 	
 	/**
-	 * Return true if command exists
-	 *
-	 * @param  string  command name
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return true if command exists
+	*
+	* @param  string  command name
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	public function commandExists($cmd) {
 		return $this->loaded && isset($this->commands[$cmd]) && method_exists($this, $cmd);
 	}
 	
 	/**
-	 * Return command required arguments info
-	 *
-	 * @param  string  command name
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return command required arguments info
+	*
+	* @param  string  command name
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	public function commandArgsList($cmd) {
 		return $this->commandExists($cmd) ? $this->commands[$cmd] : array();
 	}
 	
 	/**
-	 * Exec command and return result
-	 *
-	 * @param  string  $cmd  command name
-	 * @param  array   $args command arguments
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Exec command and return result
+	*
+	* @param  string  $cmd  command name
+	* @param  array	$args command arguments
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	public function exec($cmd, $args) {
 		
 		if (!$this->loaded) {
@@ -377,11 +377,11 @@ class elFinder {
 		if ($this->debug || !empty($args['debug'])) {
 			$result['debug'] = array(
 				'connector' => 'php', 
-				'phpver'    => PHP_VERSION,
-				'time'      => $this->utime() - $this->time,
-				'memory'    => (function_exists('memory_get_peak_usage') ? ceil(memory_get_peak_usage()/1024).'Kb / ' : '').ceil(memory_get_usage()/1024).'Kb / '.ini_get('memory_limit'),
-				'upload'    => $this->uploadDebug,
-				'volumes'   => array(),
+				'phpver'	=> PHP_VERSION,
+				'time'		=> $this->utime() - $this->time,
+				'memory'	=> (function_exists('memory_get_peak_usage') ? ceil(memory_get_peak_usage()/1024).'Kb / ' : '').ceil(memory_get_usage()/1024).'Kb / '.ini_get('memory_limit'),
+				'upload'	=> $this->uploadDebug,
+				'volumes'	=> array(),
 				'mountErrors' => $this->mountErrors
 				);
 			
@@ -398,12 +398,12 @@ class elFinder {
 	}
 	
 	/**
-	 * Return file real path
-	 *
-	 * @param  string  $hash  file hash
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return file real path
+	*
+	* @param  string  $hash  file hash
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	public function realpath($hash)	{
 		if (($volume = $this->volume($hash)) == false) {
 			return false;
@@ -412,36 +412,36 @@ class elFinder {
 	}
 	
 	/**
-	 * Return network volumes config.
-	 *
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 */
+	* Return network volumes config.
+	*
+	* @return array
+	* @author Dmitry (dio) Levashov
+	*/
 	protected function getNetVolumes() {
 		return isset($_SESSION['netVolumes']) && is_array($_SESSION['netVolumes']) ? $_SESSION['netVolumes'] : array();
 	}
 
 	/**
-	 * Save network volumes config.
-	 *
-	 * @param  array  $volumes  volumes config
-	 * @return void
-	 * @author Dmitry (dio) Levashov
-	 */
+	* Save network volumes config.
+	*
+	* @param  array  $volumes  volumes config
+	* @return void
+	* @author Dmitry (dio) Levashov
+	*/
 	protected function saveNetVolumes($volumes) {
 		$_SESSION['netVolumes'] = $volumes;
 	}
 
 	/***************************************************************************/
-	/*                                 commands                                */
+	/*											commands										*/
 	/***************************************************************************/
 	
 	/**
-	 * Normalize error messages
-	 *
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Normalize error messages
+	*
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	public function error() {
 		$errors = array();
 
@@ -459,8 +459,8 @@ class elFinder {
 	protected function netmount($args) {
 		$options  = array();
 		$protocol = $args['protocol'];
-		$driver   = isset(self::$netDrivers[$protocol]) ? $protocol : '';
-		$class    = 'elfindervolume'.$protocol;
+		$driver	= isset(self::$netDrivers[$protocol]) ? $protocol : '';
+		$class	= 'elfindervolume'.$protocol;
 
 		if (!$driver) {
 			return array('error' => $this->error(self::ERROR_NETMOUNT, $args['host'], self::ERROR_NETMOUNT_NO_DRIVER));
@@ -485,10 +485,10 @@ class elFinder {
 		$volume = new $class();
 
 		if ($volume->mount($options)) {
-			$netVolumes        = $this->getNetVolumes();
+			$netVolumes		= $this->getNetVolumes();
 			$options['driver'] = $driver;
-			$netVolumes[]      = $options;
-			$netVolumes        = array_unique($netVolumes);
+			$netVolumes[]		= $options;
+			$netVolumes		= array_unique($netVolumes);
 			$this->saveNetVolumes($netVolumes);
 			return array('sync' => true);
 		} else {
@@ -498,32 +498,32 @@ class elFinder {
 	}
 
 	/**
-	 * "Open" directory
-	 * Return array with following elements
-	 *  - cwd          - opened dir info
-	 *  - files        - opened dir content [and dirs tree if $args[tree]]
-	 *  - api          - api version (if $args[init])
-	 *  - uplMaxSize   - if $args[init]
-	 *  - error        - on failed
-	 *
-	 * @param  array  command arguments
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* "Open" directory
+	* Return array with following elements
+	*  - cwd			- opened dir info
+	*  - files		- opened dir content [and dirs tree if $args[tree]]
+	*  - api			- api version (if $args[init])
+	*  - uplMaxSize	- if $args[init]
+	*  - error		- on failed
+	*
+	* @param  array  command arguments
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function open($args) {
 		$target = $args['target'];
-		$init   = !empty($args['init']);
-		$tree   = !empty($args['tree']);
+		$init	= !empty($args['init']);
+		$tree	= !empty($args['tree']);
 		$volume = $this->volume($target);
-		$cwd    = $volume ? $volume->dir($target, true) : false;
-		$hash   = $init ? 'default folder' : '#'.$target;
+		$cwd	= $volume ? $volume->dir($target, true) : false;
+		$hash	= $init ? 'default folder' : '#'.$target;
 
 		// on init request we can get invalid dir hash -
 		// dir which can not be opened now, but remembered by client,
 		// so open default dir
 		if ((!$cwd || !$cwd['read']) && $init) {
 			$volume = $this->default;
-			$cwd    = $volume->dir($volume->defaultPath(), true);
+			$cwd	= $volume->dir($volume->defaultPath(), true);
 		}
 		
 		if (!$cwd) {
@@ -557,9 +557,9 @@ class elFinder {
 		}
 		
 		$result = array(
-			'cwd'     => $cwd,
+			'cwd'	=> $cwd,
 			'options' => $volume->options($cwd['hash']),
-			'files'   => $files
+			'files'	=> $files
 		);
 
 		if (!empty($args['init'])) {
@@ -572,12 +572,12 @@ class elFinder {
 	}
 	
 	/**
-	 * Return dir files names list
-	 *
-	 * @param  array  command arguments
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return dir files names list
+	*
+	* @param  array  command arguments
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function ls($args) {
 		$target = $args['target'];
 		
@@ -589,12 +589,12 @@ class elFinder {
 	}
 	
 	/**
-	 * Return subdirs for required directory
-	 *
-	 * @param  array  command arguments
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return subdirs for required directory
+	*
+	* @param  array  command arguments
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function tree($args) {
 		$target = $args['target'];
 		
@@ -607,12 +607,12 @@ class elFinder {
 	}
 	
 	/**
-	 * Return parents dir for required directory
-	 *
-	 * @param  array  command arguments
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return parents dir for required directory
+	*
+	* @param  array  command arguments
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function parents($args) {
 		$target = $args['target'];
 		
@@ -625,12 +625,12 @@ class elFinder {
 	}
 	
 	/**
-	 * Return new created thumbnails list
-	 *
-	 * @param  array  command arguments
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return new created thumbnails list
+	*
+	* @param  array  command arguments
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function tmb($args) {
 		
 		$result  = array('images' => array());
@@ -646,18 +646,18 @@ class elFinder {
 	}
 	
 	/**
-	 * Required to output file in browser when volume URL is not set 
-	 * Return array contains opened file pointer, root itself and required headers
-	 *
-	 * @param  array  command arguments
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Required to output file in browser when volume URL is not set 
+	* Return array contains opened file pointer, root itself and required headers
+	*
+	* @param  array  command arguments
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function file($args) {
-		$target   = $args['target'];
+		$target	= $args['target'];
 		$download = !empty($args['download']);
-		$h403     = 'HTTP/1.x 403 Access Denied';
-		$h404     = 'HTTP/1.x 404 Not Found';
+		$h403	= 'HTTP/1.x 403 Access Denied';
+		$h404	= 'HTTP/1.x 404 Not Found';
 
 		if (($volume = $this->volume($target)) == false) { 
 			return array('error' => 'File not found', 'header' => $h404, 'raw' => true);
@@ -700,7 +700,7 @@ class elFinder {
 		$result = array(
 			'volume'  => $volume,
 			'pointer' => $fp,
-			'info'    => $file,
+			'info'	=> $file,
 			'header'  => array(
 				'Content-Type: '.$mime, 
 				'Content-Disposition: '.$disp.'; '.$filename,
@@ -714,12 +714,12 @@ class elFinder {
 	}
 	
 	/**
-	 * Count total files size
-	 *
-	 * @param  array  command arguments
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Count total files size
+	*
+	* @param  array  command arguments
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function size($args) {
 		$size = 0;
 		
@@ -736,15 +736,15 @@ class elFinder {
 	}
 	
 	/**
-	 * Create directory
-	 *
-	 * @param  array  command arguments
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Create directory
+	*
+	* @param  array  command arguments
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function mkdir($args) {
 		$target = $args['target'];
-		$name   = $args['name'];
+		$name	= $args['name'];
 		
 		if (($volume = $this->volume($target)) == false) {
 			return array('error' => $this->error(self::ERROR_MKDIR, $name, self::ERROR_TRGDIR_NOT_FOUND, '#'.$target));
@@ -756,15 +756,15 @@ class elFinder {
 	}
 	
 	/**
-	 * Create empty file
-	 *
-	 * @param  array  command arguments
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Create empty file
+	*
+	* @param  array  command arguments
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function mkfile($args) {
 		$target = $args['target'];
-		$name   = $args['name'];
+		$name	= $args['name'];
 		
 		if (($volume = $this->volume($target)) == false) {
 			return array('error' => $this->error(self::ERROR_MKFILE, $name, self::ERROR_TRGDIR_NOT_FOUND, '#'.$target));
@@ -776,15 +776,15 @@ class elFinder {
 	}
 	
 	/**
-	 * Rename file
-	 *
-	 * @param  array  $args
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Rename file
+	*
+	* @param  array  $args
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function rename($args) {
 		$target = $args['target'];
-		$name   = $args['name'];
+		$name	= $args['name'];
 		
 		if (($volume = $this->volume($target)) == false
 		||  ($rm  = $volume->file($target)) == false) {
@@ -798,12 +798,12 @@ class elFinder {
 	}
 	
 	/**
-	 * Duplicate file - create copy with "copy %d" suffix
-	 *
-	 * @param array  $args  command arguments
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Duplicate file - create copy with "copy %d" suffix
+	*
+	* @param array  $args  command arguments
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function duplicate($args) {
 		$targets = is_array($args['targets']) ? $args['targets'] : array();
 		$result  = array('added' => array());
@@ -828,12 +828,12 @@ class elFinder {
 	}
 		
 	/**
-	 * Remove dirs/files
-	 *
-	 * @param array  command arguments
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Remove dirs/files
+	*
+	* @param array  command arguments
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function rm($args) {
 		$targets = is_array($args['targets']) ? $args['targets'] : array();
 		$result  = array('removed' => array());
@@ -853,12 +853,12 @@ class elFinder {
 	}
 	
 	/**
-	 * Save uploaded files
-	 *
-	 * @param  array
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Save uploaded files
+	*
+	* @param  array
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function upload($args) {
 		$target = $args['target'];
 		$volume = $this->volume($target);
@@ -902,17 +902,17 @@ class elFinder {
 	}
 		
 	/**
-	 * Copy/move files into new destination
-	 *
-	 * @param  array  command arguments
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Copy/move files into new destination
+	*
+	* @param  array  command arguments
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function paste($args) {
-		$dst     = $args['dst'];
+		$dst	= $args['dst'];
 		$targets = is_array($args['targets']) ? $args['targets'] : array();
-		$cut     = !empty($args['cut']);
-		$error   = $cut ? self::ERROR_MOVE : self::ERROR_COPY;
+		$cut	= !empty($args['cut']);
+		$error	= $cut ? self::ERROR_MOVE : self::ERROR_COPY;
 		$result  = array('added' => array(), 'removed' => array());
 		
 		if (($dstVolume = $this->volume($dst)) == false) {
@@ -936,12 +936,12 @@ class elFinder {
 	}
 	
 	/**
-	 * Return file content
-	 *
-	 * @param  array  $args  command arguments
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return file content
+	*
+	* @param  array  $args  command arguments
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function get($args) {
 		$target = $args['target'];
 		$volume = $this->volume($target);
@@ -964,11 +964,11 @@ class elFinder {
 	}
 	
 	/**
-	 * Save content into text file
-	 *
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Save content into text file
+	*
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function put($args) {
 		$target = $args['target'];
 		
@@ -985,13 +985,13 @@ class elFinder {
 	}
 
 	/**
-	 * Extract files from archive
-	 *
-	 * @param  array  $args  command arguments
-	 * @return array
-	 * @author Dmitry (dio) Levashov, 
-	 * @author Alexey Sukhotin
-	 **/
+	* Extract files from archive
+	*
+	* @param  array  $args  command arguments
+	* @return array
+	* @author Dmitry (dio) Levashov, 
+	* @author Alexey Sukhotin
+	**/
 	protected function extract($args) {
 		$target = $args['target'];
 		$mimes  = !empty($args['mimes']) && is_array($args['mimes']) ? $args['mimes'] : array();
@@ -1008,15 +1008,15 @@ class elFinder {
 	}
 	
 	/**
-	 * Create archive
-	 *
-	 * @param  array  $args  command arguments
-	 * @return array
-	 * @author Dmitry (dio) Levashov, 
-	 * @author Alexey Sukhotin
-	 **/
+	* Create archive
+	*
+	* @param  array  $args  command arguments
+	* @return array
+	* @author Dmitry (dio) Levashov, 
+	* @author Alexey Sukhotin
+	**/
 	protected function archive($args) {
-		$type    = $args['type'];
+		$type	= $args['type'];
 		$targets = isset($args['targets']) && is_array($args['targets']) ? $args['targets'] : array();
 	
 		if (($volume = $this->volume($targets[0])) == false) {
@@ -1029,14 +1029,14 @@ class elFinder {
 	}
 	
 	/**
-	 * Search files
-	 *
-	 * @param  array  $args  command arguments
-	 * @return array
-	 * @author Dmitry Levashov
-	 **/
+	* Search files
+	*
+	* @param  array  $args  command arguments
+	* @return array
+	* @author Dmitry Levashov
+	**/
 	protected function search($args) {
-		$q      = trim($args['q']);
+		$q		= trim($args['q']);
 		$mimes  = !empty($args['mimes']) && is_array($args['mimes']) ? $args['mimes'] : array();
 		$result = array();
 
@@ -1048,12 +1048,12 @@ class elFinder {
 	}
 	
 	/**
-	 * Return file info (used by client "places" ui)
-	 *
-	 * @param  array  $args  command arguments
-	 * @return array
-	 * @author Dmitry Levashov
-	 **/
+	* Return file info (used by client "places" ui)
+	*
+	* @param  array  $args  command arguments
+	* @return array
+	* @author Dmitry Levashov
+	**/
 	protected function info($args) {
 		$files = array();
 		
@@ -1068,12 +1068,12 @@ class elFinder {
 	}
 	
 	/**
-	 * Return image dimmensions
-	 *
-	 * @param  array  $args  command arguments
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return image dimmensions
+	*
+	* @param  array  $args  command arguments
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function dim($args) {
 		$target = $args['target'];
 		
@@ -1085,21 +1085,21 @@ class elFinder {
 	}
 	
 	/**
-	 * Resize image
-	 *
-	 * @param  array  command arguments
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 * @author Alexey Sukhotin
-	 **/
+	* Resize image
+	*
+	* @param  array  command arguments
+	* @return array
+	* @author Dmitry (dio) Levashov
+	* @author Alexey Sukhotin
+	**/
 	protected function resize($args) {
 		$target = $args['target'];
 		$width  = $args['width'];
 		$height = $args['height'];
-		$x      = (int)$args['x'];
-		$y      = (int)$args['y'];
-		$mode   = $args['mode'];
-		$bg     = null;
+		$x		= (int)$args['x'];
+		$y		= (int)$args['y'];
+		$mode	= $args['mode'];
+		$bg	= null;
 		$degree = (int)$args['degree'];
 		
 		if (($volume = $this->volume($target)) == false
@@ -1113,16 +1113,16 @@ class elFinder {
 	}
 	
 	/***************************************************************************/
-	/*                                   utils                                 */
+	/*											utils											*/
 	/***************************************************************************/
 	
 	/**
-	 * Return root - file's owner
-	 *
-	 * @param  string  file hash
-	 * @return elFinderStorageDriver
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return root - file's owner
+	*
+	* @param  string  file hash
+	* @return elFinderStorageDriver
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function volume($hash) {
 		foreach ($this->volumes as $id => $v) {
 			if (strpos(''.$hash, $id) === 0) {
@@ -1133,23 +1133,23 @@ class elFinder {
 	}
 	
 	/**
-	 * Return files info array 
-	 *
-	 * @param  array  $data  one file info or files info
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return files info array 
+	*
+	* @param  array  $data  one file info or files info
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function toArray($data) {
 		return isset($data['hash']) || !is_array($data) ? array($data) : $data;
 	}
 	
 	/**
-	 * Return fils hashes list
-	 *
-	 * @param  array  $files  files info
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return fils hashes list
+	*
+	* @param  array  $files  files info
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function hashes($files) {
 		$ret = array();
 		foreach ($files as $file) {
@@ -1159,12 +1159,12 @@ class elFinder {
 	}
 	
 	/**
-	 * Remove from files list hidden files and files with required mime types
-	 *
-	 * @param  array  $files  files info
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Remove from files list hidden files and files with required mime types
+	*
+	* @param  array  $files  files info
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function filter($files) {
 		foreach ($files as $i => $file) {
 			if (!empty($file['hidden']) || !$this->default->mimeAccepted($file['mime'])) {

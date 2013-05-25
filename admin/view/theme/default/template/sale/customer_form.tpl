@@ -331,11 +331,11 @@ $('#transaction .pagination a').live('click', function() {
 	return false;
 });			
 
-$('#transaction').load('index.php?route=sale/customer/transaction&customer_id=<?= $customer_id; ?>');
+$('#transaction').load("<?= HTTP_ADMIN . "index.php?route=sale/customer/transaction"; ?>" + '&customer_id=<?= $customer_id; ?>');
 
 function addTransaction() {
 	$.ajax({
-		url: 'index.php?route=sale/customer/transaction&customer_id=<?= $customer_id; ?>',
+		url: "<?= HTTP_ADMIN . "index.php?route=sale/customer/transaction"; ?>" + '&customer_id=<?= $customer_id; ?>',
 		type: 'post',
 		dataType: 'html',
 		data: 'description=' + encodeURIComponent($('#tab-transaction input[name=\'description\']').val()) + '&amount=' + encodeURIComponent($('#tab-transaction input[name=\'amount\']').val()),
@@ -364,11 +364,11 @@ $('#reward .pagination a').live('click', function() {
 	return false;
 });			
 
-$('#reward').load('index.php?route=sale/customer/reward&customer_id=<?= $customer_id; ?>');
+$('#reward').load("<?= HTTP_ADMIN . "index.php?route=sale/customer/reward"; ?>" + '&customer_id=<?= $customer_id; ?>');
 
 function addRewardPoints() {
 	$.ajax({
-		url: 'index.php?route=sale/customer/reward&customer_id=<?= $customer_id; ?>',
+		url: "<?= HTTP_ADMIN . "index.php?route=sale/customer/reward"; ?>" + '&customer_id=<?= $customer_id; ?>',
 		type: 'post',
 		dataType: 'html',
 		data: 'description=' + encodeURIComponent($('#tab-reward input[name=\'description\']').val()) + '&points=' + encodeURIComponent($('#tab-reward input[name=\'points\']').val()),
@@ -392,7 +392,7 @@ function addRewardPoints() {
 
 function addBlacklist(ip) {
 	$.ajax({
-		url: 'index.php?route=sale/customer/addblacklist',
+		url: "<?= HTTP_ADMIN . "index.php?route=sale/customer/addblacklist"; ?>",
 		type: 'post',
 		dataType: 'json',
 		data: 'ip=' + encodeURIComponent(ip),
@@ -424,7 +424,7 @@ function addBlacklist(ip) {
 
 function removeBlacklist(ip) {
 	$.ajax({
-		url: 'index.php?route=sale/customer/removeblacklist',
+		url: "<?= HTTP_ADMIN . "index.php?route=sale/customer/removeblacklist"; ?>",
 		type: 'post',
 		dataType: 'json',
 		data: 'ip=' + encodeURIComponent(ip),

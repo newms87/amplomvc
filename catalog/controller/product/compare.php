@@ -79,24 +79,24 @@ class ControllerProductCompare extends Controller {
 				}
 															
 				$this->data['products'][$product_id] = array(
-					'product_id'   => $product_info['product_id'],
-					'name'         => $product_info['name'],
-					'thumb'        => $image,
-					'price'        => $price,
-					'special'      => $special,
+					'product_id'	=> $product_info['product_id'],
+					'name'			=> $product_info['name'],
+					'thumb'		=> $image,
+					'price'		=> $price,
+					'special'		=> $special,
 					'description'  => substr(strip_tags(html_entity_decode($product_info['description'], ENT_QUOTES, 'UTF-8')), 0, 200) . '..',
-					'model'        => $product_info['model'],
+					'model'		=> $product_info['model'],
 					'manufacturer' => $product_info['manufacturer'],
 					'availability' => $availability,
-					'rating'       => (int)$product_info['rating'],
-					'reviews'      => sprintf($this->_('text_reviews'), (int)$product_info['reviews']),
-					'weight'       => $this->weight->format($product_info['weight'], $product_info['weight_class_id']),
-					'length'       => $this->length->format($product_info['length'], $product_info['length_class_id']),
-					'width'        => $this->length->format($product_info['width'], $product_info['length_class_id']),
-					'height'       => $this->length->format($product_info['height'], $product_info['length_class_id']),
-					'attribute'    => $attribute_data,
-					'href'         => $this->url->link('product/product', 'product_id=' . $product_id),
-					'remove'       => $this->url->link('product/compare', 'remove=' . $product_id)
+					'rating'		=> (int)$product_info['rating'],
+					'reviews'		=> sprintf($this->_('text_reviews'), (int)$product_info['reviews']),
+					'weight'		=> $this->weight->format($product_info['weight'], $product_info['weight_class_id']),
+					'length'		=> $this->length->format($product_info['length'], $product_info['length_class_id']),
+					'width'		=> $this->length->format($product_info['width'], $product_info['length_class_id']),
+					'height'		=> $this->length->format($product_info['height'], $product_info['length_class_id']),
+					'attribute'	=> $attribute_data,
+					'href'			=> $this->url->link('product/product', 'product_id=' . $product_id),
+					'remove'		=> $this->url->link('product/compare', 'remove=' . $product_id)
 				);
 				
 				foreach ($attribute_groups as $attribute_group) {
@@ -156,7 +156,7 @@ class ControllerProductCompare extends Controller {
 				
 				$this->session->data['compare'][] = $_POST['product_id'];
 			}
-			 
+			
 			$json['success'] = sprintf($this->_('text_success'), $this->url->link('product/product', 'product_id=' . $_POST['product_id']), $product_info['name'], $this->url->link('product/compare'));				
 		
 			$json['total'] = sprintf($this->_('text_compare'), (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));

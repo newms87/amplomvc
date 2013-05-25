@@ -9,12 +9,12 @@ CKEDITOR.editorConfig = function( config )
 	// config.language = 'fr';
 	// config.uiColor = '#AADC6E';
 	
-	config.filebrowserBrowseUrl = 'index.php?route=common/filemanager/ckeditor';
-	config.filebrowserImageBrowseUrl = 'index.php?route=common/filemanager/ckeditor';
-	config.filebrowserFlashBrowseUrl = 'index.php?route=common/filemanager/ckeditor';
-	config.filebrowserUploadUrl = 'index.php?route=common/filemanager/ckeditor';
-	config.filebrowserImageUploadUrl = 'index.php?route=common/filemanager/ckeditor';
-	config.filebrowserFlashUploadUrl = 'index.php?route=common/filemanager/ckeditor';
+	config.filebrowserBrowseUrl = 'admin/index.php?route=common/filemanager/ckeditor';
+	config.filebrowserImageBrowseUrl = 'admin/index.php?route=common/filemanager/ckeditor';
+	config.filebrowserFlashBrowseUrl = 'admin/index.php?route=common/filemanager/ckeditor';
+	config.filebrowserUploadUrl = 'admin/index.php?route=common/filemanager/ckeditor';
+	config.filebrowserImageUploadUrl = 'admin/index.php?route=common/filemanager/ckeditor';
+	config.filebrowserFlashUploadUrl = 'admin/index.php?route=common/filemanager/ckeditor';
 	config.filebrowserWindowWidth = '800';
 	config.filebrowserWindowHeight = '500';
 	config.resize_enabled = false;

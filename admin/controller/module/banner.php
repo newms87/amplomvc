@@ -1,8 +1,8 @@
 <?php
 class ControllerModuleBanner extends Controller {
-	 
 	
-	public function index() {   
+	
+	public function index() {	
 		$this->template->load('module/banner');
 
 		$this->load->language('module/banner');
@@ -70,10 +70,6 @@ class ControllerModuleBanner extends Controller {
 			}
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

@@ -3,7 +3,7 @@ class ControllerPaymentPerpetualPayments extends Controller {
 	protected function index() {
 		$this->template->load('payment/perpetual_payments');
 
-    	$this->language->load('payment/perpetual_payments');
+		$this->language->load('payment/perpetual_payments');
 		
 		$this->data['months'] = array();
 		
@@ -49,25 +49,25 @@ class ControllerPaymentPerpetualPayments extends Controller {
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
 		$payment_data = array(
-			'auth_id'        => $this->config->get('perpetual_payments_auth_id'),
-			'auth_pass'      => $this->config->get('perpetual_payments_auth_pass'),
-			'card_num'       => str_replace(' ', '', $_POST['cc_number']),
-			'card_cvv'       => $_POST['cc_cvv2'],
-			'card_start'     => $_POST['cc_start_date_month'] . substr($_POST['cc_start_date_year'], 2),
-			'card_expiry'    => $_POST['cc_expire_date_month'] . substr($_POST['cc_expire_date_year'], 2),
-			'cust_name'      => $order_info['payment_firstname'] . ' ' . $order_info['payment_lastname'],
-			'cust_address'   => $order_info['payment_address_1'] . ' ' . $order_info['payment_city'],
-			'cust_country'   => $order_info['payment_iso_code_2'],
-			'cust_postcode'	 => $order_info['payment_postcode'],
-			'cust_tel'	 	 => $order_info['telephone'],
-			'cust_ip'        => $_SERVER['REMOTE_ADDR'],
-			'cust_email'     => $order_info['email'],
-			'tran_ref'       => $order_info['order_id'],
-			'tran_amount'    => $this->currency->format($order_info['total'], $order_info['currency_code'], 1.00000, false),
+			'auth_id'		=> $this->config->get('perpetual_payments_auth_id'),
+			'auth_pass'		=> $this->config->get('perpetual_payments_auth_pass'),
+			'card_num'		=> str_replace(' ', '', $_POST['cc_number']),
+			'card_cvv'		=> $_POST['cc_cvv2'],
+			'card_start'	=> $_POST['cc_start_date_month'] . substr($_POST['cc_start_date_year'], 2),
+			'card_expiry'	=> $_POST['cc_expire_date_month'] . substr($_POST['cc_expire_date_year'], 2),
+			'cust_name'		=> $order_info['payment_firstname'] . ' ' . $order_info['payment_lastname'],
+			'cust_address'	=> $order_info['payment_address_1'] . ' ' . $order_info['payment_city'],
+			'cust_country'	=> $order_info['payment_iso_code_2'],
+			'cust_postcode'	=> $order_info['payment_postcode'],
+			'cust_tel'		=> $order_info['telephone'],
+			'cust_ip'		=> $_SERVER['REMOTE_ADDR'],
+			'cust_email'	=> $order_info['email'],
+			'tran_ref'		=> $order_info['order_id'],
+			'tran_amount'	=> $this->currency->format($order_info['total'], $order_info['currency_code'], 1.00000, false),
 			'tran_currency' => $order_info['currency_code'],
 			'tran_testmode' => $this->config->get('perpetual_payments_test'),
-			'tran_type'     => 'Sale',
-			'tran_class'    => 'MoTo',
+			'tran_type'	=> 'Sale',
+			'tran_class'	=> 'MoTo',
 		);
 
 		$curl = curl_init('https://secure.voice-pay.com/gateway/remote');
@@ -76,10 +76,10 @@ class ControllerPaymentPerpetualPayments extends Controller {
 		curl_setopt($curl, CURLOPT_HEADER, 0);
 		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_FORBID_REUSE, 1);
-        curl_setopt($curl, CURLOPT_FRESH_CONNECT, 1);
-        curl_setopt($curl, CURLOPT_POST, 1);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($payment_data));
+		curl_setopt($curl, CURLOPT_FORBID_REUSE, 1);
+		curl_setopt($curl, CURLOPT_FRESH_CONNECT, 1);
+		curl_setopt($curl, CURLOPT_POST, 1);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($payment_data));
 
 		$response = curl_exec($curl);
  		

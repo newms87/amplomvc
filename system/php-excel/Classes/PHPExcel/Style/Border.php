@@ -18,7 +18,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category   PHPExcel
+ * @category	PHPExcel
  * @package	PHPExcel_Style
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
@@ -29,7 +29,7 @@
 /**
  * PHPExcel_Style_Border
  *
- * @category   PHPExcel
+ * @category	PHPExcel
  * @package	PHPExcel_Style
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
@@ -52,45 +52,45 @@ class PHPExcel_Style_Border implements PHPExcel_IComparable
 	const BORDER_THIN				= 'thin';
 
 	/**
-	 * Border style
-	 *
-	 * @var string
-	 */
+	* Border style
+	*
+	* @var string
+	*/
 	private $_borderStyle	= PHPExcel_Style_Border::BORDER_NONE;
 
 	/**
-	 * Border color
-	 *
-	 * @var PHPExcel_Style_Color
-	 */
+	* Border color
+	*
+	* @var PHPExcel_Style_Color
+	*/
 	private $_color;
 
 	/**
-	 * Supervisor?
-	 *
-	 * @var boolean
-	 */
+	* Supervisor?
+	*
+	* @var boolean
+	*/
 	private $_isSupervisor;
 
 	/**
-	 * Parent. Only used for supervisor
-	 *
-	 * @var PHPExcel_Style_Borders
-	 */
+	* Parent. Only used for supervisor
+	*
+	* @var PHPExcel_Style_Borders
+	*/
 	private $_parent;
 
 	/**
-	 * Parent property name
-	 *
-	 * @var string
-	 */
+	* Parent property name
+	*
+	* @var string
+	*/
 	private $_parentPropertyName;
 
 	/**
-	 * Create a new PHPExcel_Style_Border
-	 *
-	 * @param	boolean	$isSupervisor	Flag indicating if this is a supervisor or not
-	 */
+	* Create a new PHPExcel_Style_Border
+	*
+	* @param	boolean	$isSupervisor	Flag indicating if this is a supervisor or not
+	*/
 	public function __construct($isSupervisor = false)
 	{
 		// Supervisor?
@@ -106,12 +106,12 @@ class PHPExcel_Style_Border implements PHPExcel_IComparable
 	}
 
 	/**
-	 * Bind parent. Only used for supervisor
-	 *
-	 * @param PHPExcel_Style_Borders $parent
-	 * @param string $parentPropertyName
-	 * @return PHPExcel_Style_Border
-	 */
+	* Bind parent. Only used for supervisor
+	*
+	* @param PHPExcel_Style_Borders $parent
+	* @param string $parentPropertyName
+	* @return PHPExcel_Style_Border
+	*/
 	public function bindParent($parent, $parentPropertyName)
 	{
 		$this->_parent = $parent;
@@ -120,22 +120,22 @@ class PHPExcel_Style_Border implements PHPExcel_IComparable
 	}
 
 	/**
-	 * Is this a supervisor or a real style component?
-	 *
-	 * @return boolean
-	 */
+	* Is this a supervisor or a real style component?
+	*
+	* @return boolean
+	*/
 	public function getIsSupervisor()
 	{
 		return $this->_isSupervisor;
 	}
 
 	/**
-	 * Get the shared style component for the currently active cell in currently active sheet.
-	 * Only used for style supervisor
-	 *
-	 * @return PHPExcel_Style_Border
-	 * @throws Exception
-	 */
+	* Get the shared style component for the currently active cell in currently active sheet.
+	* Only used for style supervisor
+	*
+	* @return PHPExcel_Style_Border
+	* @throws Exception
+	*/
 	public function getSharedComponent()
 	{
 		switch ($this->_parentPropertyName) {
@@ -171,43 +171,43 @@ class PHPExcel_Style_Border implements PHPExcel_IComparable
 	}
 
 	/**
-	 * Get the currently active sheet. Only used for supervisor
-	 *
-	 * @return PHPExcel_Worksheet
-	 */
+	* Get the currently active sheet. Only used for supervisor
+	*
+	* @return PHPExcel_Worksheet
+	*/
 	public function getActiveSheet()
 	{
 		return $this->_parent->getActiveSheet();
 	}
 
 	/**
-	 * Get the currently active cell coordinate in currently active sheet.
-	 * Only used for supervisor
-	 *
-	 * @return string E.g. 'A1'
-	 */
+	* Get the currently active cell coordinate in currently active sheet.
+	* Only used for supervisor
+	*
+	* @return string E.g. 'A1'
+	*/
 	public function getSelectedCells()
 	{
 		return $this->getActiveSheet()->getSelectedCells();
 	}
 
 	/**
-	 * Get the currently active cell coordinate in currently active sheet.
-	 * Only used for supervisor
-	 *
-	 * @return string E.g. 'A1'
-	 */
+	* Get the currently active cell coordinate in currently active sheet.
+	* Only used for supervisor
+	*
+	* @return string E.g. 'A1'
+	*/
 	public function getActiveCell()
 	{
 		return $this->getActiveSheet()->getActiveCell();
 	}
 
 	/**
-	 * Build style array from subcomponents
-	 *
-	 * @param array $array
-	 * @return array
-	 */
+	* Build style array from subcomponents
+	*
+	* @param array $array
+	* @return array
+	*/
 	public function getStyleArray($array)
 	{
 		switch ($this->_parentPropertyName) {
@@ -255,23 +255,23 @@ class PHPExcel_Style_Border implements PHPExcel_IComparable
 	}
 
 	/**
-	 * Apply styles from array
-	 *
-	 * <code>
-	 * $objPHPExcel->getActiveSheet()->getStyle('B2')->getBorders()->getTop()->applyFromArray(
-	 *		array(
-	 *			'style' => PHPExcel_Style_Border::BORDER_DASHDOT,
-	 *			'color' => array(
-	 *				'rgb' => '808080'
-	 *			)
-	 *		)
-	 * );
-	 * </code>
-	 *
-	 * @param	array	$pStyles	Array containing style information
-	 * @throws	Exception
-	 * @return PHPExcel_Style_Border
-	 */
+	* Apply styles from array
+	*
+	* <code>
+	* $objPHPExcel->getActiveSheet()->getStyle('B2')->getBorders()->getTop()->applyFromArray(
+	*		array(
+	*			'style' => PHPExcel_Style_Border::BORDER_DASHDOT,
+	*			'color' => array(
+	*				'rgb' => '808080'
+	*			)
+	*		)
+	* );
+	* </code>
+	*
+	* @param	array	$pStyles	Array containing style information
+	* @throws	Exception
+	* @return PHPExcel_Style_Border
+	*/
 	public function applyFromArray($pStyles = null) {
 		if (is_array($pStyles)) {
 			if ($this->_isSupervisor) {
@@ -291,10 +291,10 @@ class PHPExcel_Style_Border implements PHPExcel_IComparable
 	}
 
 	/**
-	 * Get Border style
-	 *
-	 * @return string
-	 */
+	* Get Border style
+	*
+	* @return string
+	*/
 	public function getBorderStyle() {
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getBorderStyle();
@@ -303,11 +303,11 @@ class PHPExcel_Style_Border implements PHPExcel_IComparable
 	}
 
 	/**
-	 * Set Border style
-	 *
-	 * @param string $pValue
-	 * @return PHPExcel_Style_Border
-	 */
+	* Set Border style
+	*
+	* @param string $pValue
+	* @return PHPExcel_Style_Border
+	*/
 	public function setBorderStyle($pValue = PHPExcel_Style_Border::BORDER_NONE) {
 
 		if ($pValue == '') {
@@ -323,21 +323,21 @@ class PHPExcel_Style_Border implements PHPExcel_IComparable
 	}
 
 	/**
-	 * Get Border Color
-	 *
-	 * @return PHPExcel_Style_Color
-	 */
+	* Get Border Color
+	*
+	* @return PHPExcel_Style_Color
+	*/
 	public function getColor() {
 		return $this->_color;
 	}
 
 	/**
-	 * Set Border Color
-	 *
-	 * @param	PHPExcel_Style_Color $pValue
-	 * @throws	Exception
-	 * @return PHPExcel_Style_Border
-	 */
+	* Set Border Color
+	*
+	* @param	PHPExcel_Style_Color $pValue
+	* @throws	Exception
+	* @return PHPExcel_Style_Border
+	*/
 	public function setColor(PHPExcel_Style_Color $pValue = null) {
 		// make sure parameter is a real color and not a supervisor
 		$color = $pValue->getIsSupervisor() ? $pValue->getSharedComponent() : $pValue;
@@ -352,24 +352,24 @@ class PHPExcel_Style_Border implements PHPExcel_IComparable
 	}
 
 	/**
-	 * Get hash code
-	 *
-	 * @return string	Hash code
-	 */
+	* Get hash code
+	*
+	* @return string	Hash code
+	*/
 	public function getHashCode() {
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getHashCode();
 		}
 		return md5(
-			  $this->_borderStyle
+			$this->_borderStyle
 			. $this->_color->getHashCode()
 			. __CLASS__
 		);
 	}
 
 	/**
-	 * Implement PHP __clone to create a deep clone, not just a shallow copy.
-	 */
+	* Implement PHP __clone to create a deep clone, not just a shallow copy.
+	*/
 	public function __clone() {
 		$vars = get_object_vars($this);
 		foreach ($vars as $key => $value) {

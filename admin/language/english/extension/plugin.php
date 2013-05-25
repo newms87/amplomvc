@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']    = 'Plugins';
+$_['heading_title']	= 'Plugins';
 
 //Data
 $_['call_when'] = array('before'=>"Before", 'replace'=>"Instead of", 'after'=>"After");
@@ -8,22 +8,22 @@ $_['types'] = array('controller'=>"Controller", 'model'=>"Model");
 $_['base_types'] = array('admin'=>'Admin', 'system'=>"System", 'catalog'=>"Catalog");
 
 // Column
-$_['column_name']      = 'Plugin Name';
-$_['column_action']    = 'Action';
+$_['column_name']		= 'Plugin Name';
+$_['column_action']	= 'Action';
 
-$_['entry_function']   = 'Function Name:';
-$_['entry_plugin_path']   = 'Plugin Class Path:';
-$_['entry_class_path']   = 'Path of Class to Plug Into:<span class="help">(eg: common/home, etc.)</span>';
-$_['entry_hooks']   = 'Hook Functions:';
-$_['entry_base_type']   = 'Base Folder:';
-$_['entry_route']   = 'Plugin For Route:';
-$_['entry_type']   = 'Plugin Type';
-$_['entry_status']   = 'Status';
-$_['entry_hook_method']   = 'Call Plugin Method';
-$_['entry_hook_for']   = 'Invoking';
+$_['entry_function']	= 'Function Name:';
+$_['entry_plugin_path']	= 'Plugin Class Path:';
+$_['entry_class_path']	= 'Path of Class to Plug Into:<span class="help">(eg: common/home, etc.)</span>';
+$_['entry_hooks']	= 'Hook Functions:';
+$_['entry_base_type']	= 'Base Folder:';
+$_['entry_route']	= 'Plugin For Route:';
+$_['entry_type']	= 'Plugin Type';
+$_['entry_status']	= 'Status';
+$_['entry_hook_method']	= 'Call Plugin Method';
+$_['entry_hook_for']	= 'Invoking';
 
-$_['tab_admin']        = 'Admin Plugins';
-$_['tab_catalog']        = 'Catalog Plugins';
+$_['tab_admin']		= 'Admin Plugins';
+$_['tab_catalog']		= 'Catalog Plugins';
 
 $_['button_add_plug'] = 'Add Plug';
 $_['button_add_hook'] = 'Add Hook';

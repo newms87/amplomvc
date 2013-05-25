@@ -40,12 +40,12 @@ class ModelTotalReward extends Model {
 				}
 			
 				$total_data[] = array(
-					'code'       => 'reward',
-        			'title'      => sprintf($this->_('text_reward'), $this->session->data['reward']),
-	    			'text'       => $this->currency->format(-$discount_total),
-        			'value'      => -$discount_total,
+					'code'		=> 'reward',
+					'title'		=> sprintf($this->_('text_reward'), $this->session->data['reward']),
+					'text'		=> $this->currency->format(-$discount_total),
+					'value'		=> -$discount_total,
 					'sort_order' => $this->config->get('reward_sort_order')
-      			);
+					);
 
 				$total -= $discount_total;
 			} 

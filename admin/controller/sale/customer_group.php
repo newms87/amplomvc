@@ -76,7 +76,7 @@ class ControllerSaleCustomerGroup extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
-      		foreach ($_POST['selected'] as $customer_group_id) {
+				foreach ($_POST['selected'] as $customer_group_id) {
 				$this->model_sale_customer_group->deleteCustomerGroup($customer_group_id);	
 			}
 						
@@ -110,7 +110,7 @@ class ControllerSaleCustomerGroup extends Controller {
 		} else {
 			$sort = 'name';
 		}
-		 
+		
 		if (isset($_GET['order'])) {
 			$order = $_GET['order'];
 		} else {
@@ -166,9 +166,9 @@ class ControllerSaleCustomerGroup extends Controller {
 		
 			$this->data['customer_groups'][] = array(
 				'customer_group_id' => $result['customer_group_id'],
-				'name'              => $result['name'] . (($result['customer_group_id'] == $this->config->get('config_customer_group_id')) ? $this->_('text_default') : null),
-				'selected'          => isset($_POST['selected']) && in_array($result['customer_group_id'], $_POST['selected']),
-				'action'            => $action
+				'name'				=> $result['name'] . (($result['customer_group_id'] == $this->config->get('config_customer_group_id')) ? $this->_('text_default') : null),
+				'selected'			=> isset($_POST['selected']) && in_array($result['customer_group_id'], $_POST['selected']),
+				'action'				=> $action
 			);
 		}	
 	
@@ -214,7 +214,6 @@ class ControllerSaleCustomerGroup extends Controller {
 		$this->pagination->total = $customer_group_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('sale/customer_group', $url);
 		
 		$this->data['pagination'] = $this->pagination->render();				
@@ -267,8 +266,8 @@ class ControllerSaleCustomerGroup extends Controller {
 		} else {
 			$this->data['action'] = $this->url->link('sale/customer_group/update', 'customer_group_id=' . $_GET['customer_group_id'] . $url);
 		}
-		  
-    	$this->data['cancel'] = $this->url->link('sale/customer_group', $url);
+		
+		$this->data['cancel'] = $this->url->link('sale/customer_group', $url);
 
 		if (isset($_GET['customer_group_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
 			$customer_group_info = $this->model_sale_customer_group->getCustomerGroup($_GET['customer_group_id']);
@@ -299,11 +298,7 @@ class ControllerSaleCustomerGroup extends Controller {
 			$this->error['name'] = $this->_('error_name');
 		}
 
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
 
 	private function validateDelete() {
@@ -312,8 +307,8 @@ class ControllerSaleCustomerGroup extends Controller {
 		}
 		
 		foreach ($_POST['selected'] as $customer_group_id) {
-    		if ($this->config->get('config_customer_group_id') == $customer_group_id) {
-	  			$this->error['warning'] = $this->_('error_default');	
+			if ($this->config->get('config_customer_group_id') == $customer_group_id) {
+				$this->error['warning'] = $this->_('error_default');	
 			}  
 			
 			$store_total = $this->model_setting_store->getTotalStoresByCustomerGroupId($customer_group_id);
@@ -329,10 +324,6 @@ class ControllerSaleCustomerGroup extends Controller {
 			}
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
 }

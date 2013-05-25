@@ -4,7 +4,7 @@ class ControllerExtensionFeed extends Controller {
 		$this->template->load('extension/feed');
 
 		$this->load->language('extension/feed');
-		 
+		
 		$this->document->setTitle($this->_('heading_title')); 
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -66,7 +66,7 @@ class ControllerExtensionFeed extends Controller {
 				}
 									
 				$this->data['extensions'][] = array(
-					'name'   => $this->_('heading_title'),
+					'name'	=> $this->_('heading_title'),
 					'status' => $this->config->get($extension . '_status') ? $this->_('text_enabled') : $this->_('text_disabled'),
 					'action' => $action
 				);
@@ -82,11 +82,11 @@ class ControllerExtensionFeed extends Controller {
 	}
 	
 	public function install() {
-    	if (!$this->user->hasPermission('modify', 'extension/feed')) {
-      		$this->session->data['error'] = $this->_('error_permission'); 
+		if (!$this->user->hasPermission('modify', 'extension/feed')) {
+				$this->session->data['error'] = $this->_('error_permission'); 
 			
 			$this->url->redirect($this->url->link('extension/feed'));
-    	} else {
+		} else {
 			$this->model_setting_extension->install('feed', $_GET['extension']);
 		
 			$this->model_user_user_group->addPermission($this->user->getId(), 'access', 'feed/' . $_GET['extension']);
@@ -106,11 +106,11 @@ class ControllerExtensionFeed extends Controller {
 	}
 	
 	public function uninstall() {
-    	if (!$this->user->hasPermission('modify', 'extension/feed')) {
-      		$this->session->data['error'] = $this->_('error_permission'); 
+		if (!$this->user->hasPermission('modify', 'extension/feed')) {
+				$this->session->data['error'] = $this->_('error_permission'); 
 			
 			$this->url->redirect($this->url->link('extension/feed'));
-    	} else {		
+		} else {		
 			$this->model_setting_extension->uninstall('feed', $_GET['extension']);
 		
 			$this->model_setting_setting->deleteSetting($_GET['extension']);

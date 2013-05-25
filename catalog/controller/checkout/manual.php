@@ -30,7 +30,7 @@ class ControllerCheckoutManual extends Controller {
 				$this->config->set($key, $value);
 			}
 			
-    		// Customer
+			// Customer
 			if ($_POST['customer_id']) {
 				$customer_info = $this->model_account_customer->getCustomer($_POST['customer_id']);
 
@@ -132,11 +132,11 @@ class ControllerCheckoutManual extends Controller {
 
 				foreach ($product['option'] as $option) {
 					$option_data[] = array(
-						'product_option_id'       => $option['product_option_id'],
+						'product_option_id'		=> $option['product_option_id'],
 						'product_option_value_id' => $option['product_option_value_id'],
-						'name'                    => $option['name'],
-						'value'                   => $option['option_value'],
-						'type'                    => $option['type']
+						'name'						=> $option['name'],
+						'value'						=> $option['option_value'],
+						'type'						=> $option['type']
 					);
 				}
 		
@@ -144,24 +144,24 @@ class ControllerCheckoutManual extends Controller {
 				
 				foreach ($product['download'] as $download) {
 					$download_data[] = array(
-						'name'      => $download['name'],
+						'name'		=> $download['name'],
 						'filename'  => $download['filename'],
-						'mask'      => $download['mask'],
+						'mask'		=> $download['mask'],
 						'remaining' => $download['remaining']
 					);
 				}
 								
 				$json['order_product'][] = array(
 					'product_id' => $product['product_id'],
-					'name'       => $product['name'],
-					'model'      => $product['model'], 
-					'option'     => $option_data,
-					'download'   => $download_data,
-					'quantity'   => $product['quantity'],
-					'price'      => $product['price'],	
-					'total'      => $product['total'],	
-					'tax'        => $this->tax->getTax($product['total'], $product['tax_class_id']),
-					'reward'     => $product['reward']				
+					'name'		=> $product['name'],
+					'model'		=> $product['model'], 
+					'option'	=> $option_data,
+					'download'	=> $download_data,
+					'quantity'	=> $product['quantity'],
+					'price'		=> $product['price'],	
+					'total'		=> $product['total'],	
+					'tax'		=> $this->tax->getTax($product['total'], $product['tax_class_id']),
+					'reward'	=> $product['reward']				
 				);
 			}
 
@@ -171,16 +171,16 @@ class ControllerCheckoutManual extends Controller {
 			if (isset($_POST['order_voucher'])) {
 				foreach ($_POST['order_voucher'] as $voucher) {
 					$this->session->data['vouchers'][] = array(
-						'voucher_id'       => $voucher['voucher_id'],
-						'description'      => $voucher['description'],
-						'code'             => substr(md5(rand()), 0, 7),
-						'from_name'        => $voucher['from_name'],
-						'from_email'       => $voucher['from_email'],
-						'to_name'          => $voucher['to_name'],
-						'to_email'         => $voucher['to_email'],
+						'voucher_id'		=> $voucher['voucher_id'],
+						'description'		=> $voucher['description'],
+						'code'				=> substr(md5(rand()), 0, 7),
+						'from_name'		=> $voucher['from_name'],
+						'from_email'		=> $voucher['from_email'],
+						'to_name'			=> $voucher['to_name'],
+						'to_email'			=> $voucher['to_email'],
 						'voucher_theme_id' => $voucher['voucher_theme_id'], 
-						'message'          => $voucher['message'],
-						'amount'           => $voucher['amount']    
+						'message'			=> $voucher['message'],
+						'amount'			=> $voucher['amount']	
 					);
 				}
 			}
@@ -197,7 +197,7 @@ class ControllerCheckoutManual extends Controller {
 			
 				if ((strlen($_POST['to_name']) < 1) || (strlen($_POST['to_name']) > 64)) {
 					$json['error']['vouchers']['to_name'] = $this->_('error_to_name');
-				}       
+				}		
 			
 				if ((strlen($_POST['to_email']) > 96) || !preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $_POST['to_email'])) {
 					$json['error']['vouchers']['to_email'] = $this->_('error_email');
@@ -209,31 +209,31 @@ class ControllerCheckoutManual extends Controller {
 			
 				if (!isset($json['error']['vouchers'])) { 
 					$voucher_data = array(
-						'order_id'         => 0,
-						'code'             => substr(md5(rand()), 0, 7),
-						'from_name'        => $_POST['from_name'],
-						'from_email'       => $_POST['from_email'],
-						'to_name'          => $_POST['to_name'],
-						'to_email'         => $_POST['to_email'],
+						'order_id'			=> 0,
+						'code'				=> substr(md5(rand()), 0, 7),
+						'from_name'		=> $_POST['from_name'],
+						'from_email'		=> $_POST['from_email'],
+						'to_name'			=> $_POST['to_name'],
+						'to_email'			=> $_POST['to_email'],
 						'voucher_theme_id' => $_POST['voucher_theme_id'], 
-						'message'          => $_POST['message'],
-						'amount'           => $_POST['amount'],
-						'status'           => true             
+						'message'			=> $_POST['message'],
+						'amount'			=> $_POST['amount'],
+						'status'			=> true				
 					); 
 					
 					$voucher_id = $this->model_cart_voucher->addVoucher(0, $voucher_data);  
 									
 					$this->session->data['vouchers'][] = array(
-						'voucher_id'       => $voucher_id,
-						'description'      => sprintf($this->_('text_for'), $this->currency->format($_POST['amount'], $this->config->get('config_currency')), $_POST['to_name']),
-						'code'             => substr(md5(rand()), 0, 7),
-						'from_name'        => $_POST['from_name'],
-						'from_email'       => $_POST['from_email'],
-						'to_name'          => $_POST['to_name'],
-						'to_email'         => $_POST['to_email'],
+						'voucher_id'		=> $voucher_id,
+						'description'		=> sprintf($this->_('text_for'), $this->currency->format($_POST['amount'], $this->config->get('config_currency')), $_POST['to_name']),
+						'code'				=> substr(md5(rand()), 0, 7),
+						'from_name'		=> $_POST['from_name'],
+						'from_email'		=> $_POST['from_email'],
+						'to_name'			=> $_POST['to_name'],
+						'to_email'			=> $_POST['to_email'],
 						'voucher_theme_id' => $_POST['voucher_theme_id'], 
-						'message'          => $_POST['message'],
-						'amount'           => $_POST['amount']            
+						'message'			=> $_POST['message'],
+						'amount'			=> $_POST['amount']				
 					); 
 				}
 			}
@@ -242,16 +242,16 @@ class ControllerCheckoutManual extends Controller {
 					
 			foreach ($this->session->data['vouchers'] as $voucher) {
 				$json['order_voucher'][] = array(
-					'voucher_id'       => $voucher['voucher_id'],
-					'description'      => $voucher['description'],
-					'code'             => $voucher['code'],
-					'from_name'        => $voucher['from_name'],
-					'from_email'       => $voucher['from_email'],
-					'to_name'          => $voucher['to_name'],
-					'to_email'         => $voucher['to_email'],
+					'voucher_id'		=> $voucher['voucher_id'],
+					'description'		=> $voucher['description'],
+					'code'				=> $voucher['code'],
+					'from_name'		=> $voucher['from_name'],
+					'from_email'		=> $voucher['from_email'],
+					'to_name'			=> $voucher['to_name'],
+					'to_email'			=> $voucher['to_email'],
 					'voucher_theme_id' => $voucher['voucher_theme_id'], 
-					'message'          => $voucher['message'],
-					'amount'           => $voucher['amount']    
+					'message'			=> $voucher['message'],
+					'amount'			=> $voucher['amount']	
 				);
 			}
 						
@@ -303,20 +303,20 @@ class ControllerCheckoutManual extends Controller {
 					}					
 	
 					$address_data = array(
-						'firstname'      => $_POST['shipping_firstname'],
-						'lastname'       => $_POST['shipping_lastname'],
-						'company'        => $_POST['shipping_company'],
-						'address_1'      => $_POST['shipping_address_1'],
-						'address_2'      => $_POST['shipping_address_2'],
-						'postcode'       => $_POST['shipping_postcode'],
-						'city'           => $_POST['shipping_city'],
-						'zone_id'        => $_POST['shipping_zone_id'],
-						'zone'           => $zone,
-						'zone_code'      => $code,
-						'country_id'     => $_POST['shipping_country_id'],
-						'country'        => $country,	
-						'iso_code_2'     => $iso_code_2,
-						'iso_code_3'     => $iso_code_3,
+						'firstname'		=> $_POST['shipping_firstname'],
+						'lastname'		=> $_POST['shipping_lastname'],
+						'company'		=> $_POST['shipping_company'],
+						'address_1'		=> $_POST['shipping_address_1'],
+						'address_2'		=> $_POST['shipping_address_2'],
+						'postcode'		=> $_POST['shipping_postcode'],
+						'city'			=> $_POST['shipping_city'],
+						'zone_id'		=> $_POST['shipping_zone_id'],
+						'zone'			=> $zone,
+						'zone_code'		=> $code,
+						'country_id'	=> $_POST['shipping_country_id'],
+						'country'		=> $country,	
+						'iso_code_2'	=> $iso_code_2,
+						'iso_code_3'	=> $iso_code_3,
 						'address_format' => $address_format
 					);
 					
@@ -329,17 +329,17 @@ class ControllerCheckoutManual extends Controller {
 				
 							if ($quote) {
 								$json['shipping_method'][$result['code']] = array( 
-									'title'      => $quote['title'],
-									'quote'      => $quote['quote'], 
+									'title'		=> $quote['title'],
+									'quote'		=> $quote['quote'], 
 									'sort_order' => $quote['sort_order'],
-									'error'      => $quote['error']
+									'error'		=> $quote['error']
 								);
 							}
 						}
 					}
 			
 					$sort_order = array();
-				  
+				
 					foreach ($json['shipping_method'] as $key => $value) {
 						$sort_order[$key] = $value['sort_order'];
 					}
@@ -435,7 +435,7 @@ class ControllerCheckoutManual extends Controller {
 				}
 				
 				$sort_order = array(); 
-			  
+			
 				foreach ($json['order_total'] as $key => $value) {
 					$sort_order[$key] = $value['sort_order'];
 				}
@@ -480,20 +480,20 @@ class ControllerCheckoutManual extends Controller {
 				}					
 				
 				$address_data = array(
-					'firstname'      => $_POST['payment_firstname'],
-					'lastname'       => $_POST['payment_lastname'],
-					'company'        => $_POST['payment_company'],
-					'address_1'      => $_POST['payment_address_1'],
-					'address_2'      => $_POST['payment_address_2'],
-					'postcode'       => $_POST['payment_postcode'],
-					'city'           => $_POST['payment_city'],
-					'zone_id'        => $_POST['payment_zone_id'],
-					'zone'           => $zone,
-					'zone_code'      => $code,
-					'country_id'     => $_POST['payment_country_id'],
-					'country'        => $country,	
-					'iso_code_2'     => $iso_code_2,
-					'iso_code_3'     => $iso_code_3,
+					'firstname'		=> $_POST['payment_firstname'],
+					'lastname'		=> $_POST['payment_lastname'],
+					'company'		=> $_POST['payment_company'],
+					'address_1'		=> $_POST['payment_address_1'],
+					'address_2'		=> $_POST['payment_address_2'],
+					'postcode'		=> $_POST['payment_postcode'],
+					'city'			=> $_POST['payment_city'],
+					'zone_id'		=> $_POST['payment_zone_id'],
+					'zone'			=> $zone,
+					'zone_code'		=> $code,
+					'country_id'	=> $_POST['payment_country_id'],
+					'country'		=> $country,	
+					'iso_code_2'	=> $iso_code_2,
+					'iso_code_3'	=> $iso_code_3,
 					'address_format' => $address_format
 				);
 				
@@ -511,9 +511,9 @@ class ControllerCheckoutManual extends Controller {
 						}
 					}
 				}
-							 
+							
 				$sort_order = array(); 
-			  
+			
 				foreach ($json['payment_method'] as $key => $value) {
 					$sort_order[$key] = $value['sort_order'];
 				}
@@ -552,7 +552,7 @@ class ControllerCheckoutManual extends Controller {
 			unset($this->session->data['voucher']);
 			unset($this->session->data['vouchers']);
 		} else {
-      		$json['error']['warning'] = $this->_('error_permission');
+				$json['error']['warning'] = $this->_('error_permission');
 		}
 	
 		$this->response->setOutput(json_encode($json));	

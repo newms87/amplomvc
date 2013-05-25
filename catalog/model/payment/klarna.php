@@ -49,13 +49,13 @@ class ModelPaymentPPStandard extends Model {
 		$method_data = array();
 	
 		if ($status) {  
-      		$method_data = array( 
-        		'code'       => 'klarna',
-        		'title'      => $this->_('text_title'),
+				$method_data = array( 
+				'code'		=> 'klarna',
+				'title'		=> $this->_('text_title'),
 				'sort_order' => $this->config->get('klarna_sort_order')
-      		);
-    	}
-   
-    	return $method_data;
+				);
+		}
+	
+		return $method_data;
   	}
 }

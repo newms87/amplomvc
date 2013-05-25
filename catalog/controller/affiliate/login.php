@@ -6,12 +6,12 @@ class ControllerAffiliateLogin extends Controller {
 		$this->template->load('affiliate/login');
 
 		if ($this->affiliate->isLogged()) {  
-      		$this->url->redirect($this->url->link('affiliate/account'));
-    	}
+				$this->url->redirect($this->url->link('affiliate/account'));
+		}
 	
-    	$this->language->load('affiliate/login');
+		$this->language->load('affiliate/login');
 
-    	$this->document->setTitle($this->_('heading_title')); 
+		$this->document->setTitle($this->_('heading_title')); 
 						
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['email']) && isset($_POST['password']) && $this->validate()) {
 			if (isset($_POST['redirect'])) {
@@ -35,20 +35,20 @@ class ControllerAffiliateLogin extends Controller {
 		$this->data['action'] = $this->url->link('affiliate/login');
 		$this->data['register'] = $this->url->link('affiliate/register');
 		$this->data['forgotten'] = $this->url->link('affiliate/forgotten');
-    	
+		
 		if (isset($_POST['redirect'])) {
 			$this->data['redirect'] = $_POST['redirect'];
 		} elseif (isset($this->session->data['redirect'])) {
-      		$this->data['redirect'] = $this->session->data['redirect'];
-	  		
-			unset($this->session->data['redirect']);		  	
-    	} else {
+				$this->data['redirect'] = $this->session->data['redirect'];
+			
+			unset($this->session->data['redirect']);			
+		} else {
 			$this->data['redirect'] = '';
 		}
 
 		if (isset($this->session->data['success'])) {
-    		$this->data['success'] = $this->session->data['success'];
-    
+			$this->data['success'] = $this->session->data['success'];
+	
 			unset($this->session->data['success']);
 		} else {
 			$this->data['success'] = '';
@@ -73,14 +73,14 @@ class ControllerAffiliateLogin extends Controller {
   	}
   
   	private function validate() {
-    	if (!$this->affiliate->login($_POST['email'], $_POST['password'])) {
-      		$this->error['warning'] = $this->_('error_login');
-    	}
+		if (!$this->affiliate->login($_POST['email'], $_POST['password'])) {
+				$this->error['warning'] = $this->_('error_login');
+		}
 	
-    	if (!$this->error) {
-      		return true;
-    	} else {
-      		return false;
-    	}  	
+		if (!$this->error) {
+				return true;
+		} else {
+				return false;
+		}  	
   	}
 }

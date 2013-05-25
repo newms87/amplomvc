@@ -7,33 +7,33 @@
  **/
 class elFinderConnector {
 	/**
-	 * elFinder instance
-	 *
-	 * @var elFinder
-	 **/
+	* elFinder instance
+	*
+	* @var elFinder
+	**/
 	protected $elFinder;
 	
 	/**
-	 * Options
-	 *
-	 * @var aray
-	 **/
+	* Options
+	*
+	* @var aray
+	**/
 	protected $options = array();
 	
 	/**
-	 * undocumented class variable
-	 *
-	 * @var string
-	 **/
+	* undocumented class variable
+	*
+	* @var string
+	**/
 	protected $header = 'Content-Type: application/json';
 	
 	
 	/**
-	 * Constructor
-	 *
-	 * @return void
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Constructor
+	*
+	* @return void
+	* @author Dmitry (dio) Levashov
+	**/
 	public function __construct($elFinder, $debug=false) {
 		
 		$this->elFinder = $elFinder;
@@ -43,16 +43,16 @@ class elFinderConnector {
 	}
 	
 	/**
-	 * Execute elFinder command and output result
-	 *
-	 * @return void
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Execute elFinder command and output result
+	*
+	* @return void
+	* @author Dmitry (dio) Levashov
+	**/
 	public function run() {
 		$isPost = $_SERVER["REQUEST_METHOD"] == 'POST';
-		$src    = $_SERVER["REQUEST_METHOD"] == 'POST' ? $_POST : $_GET;
-		$cmd    = isset($src['cmd']) ? $src['cmd'] : '';
-		$args   = array();
+		$src	= $_SERVER["REQUEST_METHOD"] == 'POST' ? $_POST : $_GET;
+		$cmd	= isset($src['cmd']) ? $src['cmd'] : '';
+		$args	= array();
 		
 		if (!function_exists('json_encode')) {
 			$error = $this->elFinder->error(elFinder::ERROR_CONF, elFinder::ERROR_CONF_NO_JSON);
@@ -94,12 +94,12 @@ class elFinderConnector {
 	}
 	
 	/**
-	 * Output json
-	 *
-	 * @param  array  data to output
-	 * @return void
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Output json
+	*
+	* @param  array  data to output
+	* @return void
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function output(array $data) {
 		$header = isset($data['header']) ? $data['header'] : $this->header;
 		unset($data['header']);

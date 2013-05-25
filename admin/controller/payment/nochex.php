@@ -1,6 +1,6 @@
 <?php 
 class ControllerPaymentNOCHEX extends Controller {
-	 
+	
 
 	public function index() {
 		$this->template->load('payment/nochex');
@@ -128,10 +128,6 @@ class ControllerPaymentNOCHEX extends Controller {
 			$this->error['merchant'] = $this->_('error_merchant');
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

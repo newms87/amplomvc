@@ -6,7 +6,7 @@ class ControllerPaymentKlarna extends Controller {
 		$this->data['testmode'] = $this->config->get('klarna_test');
 		
 		if (!$this->config->get('pp_standard_test')) {
-    		$this->data['action'] = 'https://www.paypal.com/cgi-bin/webscr';
+			$this->data['action'] = 'https://www.paypal.com/cgi-bin/webscr';
   		} else {
 			$this->data['action'] = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
 		}
@@ -40,12 +40,12 @@ class ControllerPaymentKlarna extends Controller {
 				}
 				
 				$this->data['products'][] = array(
-					'name'     => $product['name'],
-					'model'    => $product['model'],
-					'price'    => $this->currency->format($product['price'], $order_info['currency_code'], false, false),
+					'name'	=> $product['name'],
+					'model'	=> $product['model'],
+					'price'	=> $this->currency->format($product['price'], $order_info['currency_code'], false, false),
 					'quantity' => $product['quantity'],
-					'option'   => $option_data,
-					'weight'   => $product['weight']
+					'option'	=> $option_data,
+					'weight'	=> $product['weight']
 				);
 			}	
 			
@@ -55,12 +55,12 @@ class ControllerPaymentKlarna extends Controller {
 
 			if ($total > 0) {
 				$this->data['products'][] = array(
-					'name'     => $this->_('text_total'),
-					'model'    => '',
-					'price'    => $total,
+					'name'	=> $this->_('text_total'),
+					'model'	=> '',
+					'price'	=> $total,
 					'quantity' => 1,
-					'option'   => array(),
-					'weight'   => 0
+					'option'	=> array(),
+					'weight'	=> 0
 				);	
 			} else {
 				$this->data['discount_amount_cart'] -= $total;
@@ -171,7 +171,7 @@ class ControllerPaymentKlarna extends Controller {
 						break;
 					case 'Reversed':
 						$order_status_id = $this->config->get('pp_standard_reversed_status_id');
-						break;	 
+						break;	
 					case 'Voided':
 						$order_status_id = $this->config->get('pp_standard_voided_status_id');
 						break;								

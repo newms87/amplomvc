@@ -18,11 +18,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category   PHPExcel
- * @package    PHPExcel_Calculation
+ * @category	PHPExcel
+ * @package	PHPExcel_Calculation
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version    1.7.7, 2012-05-19
+ * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+ * @version	1.7.7, 2012-05-19
  */
 
 
@@ -36,8 +36,8 @@ PARTLY BASED ON:
 	and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
 	subject to the following conditions:
 
-	  The above copyright notice and this permission notice shall be included in all copies or substantial
-	  portions of the Software.
+	The above copyright notice and this permission notice shall be included in all copies or substantial
+	portions of the Software.
 
 	The software is provided "as is", without warranty of any kind, express or implied, including but not
 	limited to the warranties of merchantability, fitness for a particular purpose and noninfringement. In
@@ -52,8 +52,8 @@ PARTLY BASED ON:
 /**
  * PHPExcel_Calculation_FormulaParser
  *
- * @category   PHPExcel
- * @package    PHPExcel_Calculation
+ * @category	PHPExcel
+ * @package	PHPExcel_Calculation
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_Calculation_FormulaParser {
@@ -62,98 +62,98 @@ class PHPExcel_Calculation_FormulaParser {
 	const QUOTE_SINGLE  = '\'';
 	const BRACKET_CLOSE = ']';
 	const BRACKET_OPEN  = '[';
-	const BRACE_OPEN    = '{';
-	const BRACE_CLOSE   = '}';
-	const PAREN_OPEN    = '(';
-	const PAREN_CLOSE   = ')';
-	const SEMICOLON     = ';';
-	const WHITESPACE    = ' ';
-	const COMMA         = ',';
-	const ERROR_START   = '#';
+	const BRACE_OPEN	= '{';
+	const BRACE_CLOSE	= '}';
+	const PAREN_OPEN	= '(';
+	const PAREN_CLOSE	= ')';
+	const SEMICOLON	= ';';
+	const WHITESPACE	= ' ';
+	const COMMA			= ',';
+	const ERROR_START	= '#';
 
 	const OPERATORS_SN 			= "+-";
 	const OPERATORS_INFIX 		= "+-*/^&=><";
 	const OPERATORS_POSTFIX 	= "%";
 
 	/**
-	 * Formula
-	 *
-	 * @var string
-	 */
+	* Formula
+	*
+	* @var string
+	*/
 	private $_formula;
 
 	/**
-	 * Tokens
-	 *
-	 * @var PHPExcel_Calculation_FormulaToken[]
-	 */
+	* Tokens
+	*
+	* @var PHPExcel_Calculation_FormulaToken[]
+	*/
 	private $_tokens = array();
 
-    /**
-     * Create a new PHPExcel_Calculation_FormulaParser
-     *
-     * @param 	string		$pFormula	Formula to parse
-     * @throws 	Exception
-     */
-    public function __construct($pFormula = '')
-    {
-    	// Check parameters
-    	if (is_null($pFormula)) {
-    		throw new Exception("Invalid parameter passed: formula");
-    	}
+	/**
+	* Create a new PHPExcel_Calculation_FormulaParser
+	*
+	* @param 	string		$pFormula	Formula to parse
+	* @throws 	Exception
+	*/
+	public function __construct($pFormula = '')
+	{
+		// Check parameters
+		if (is_null($pFormula)) {
+			throw new Exception("Invalid parameter passed: formula");
+		}
 
-    	// Initialise values
-    	$this->_formula = trim($pFormula);
-    	// Parse!
-    	$this->_parseToTokens();
-    }
+		// Initialise values
+		$this->_formula = trim($pFormula);
+		// Parse!
+		$this->_parseToTokens();
+	}
 
-    /**
-     * Get Formula
-     *
-     * @return string
-     */
-    public function getFormula() {
-    	return $this->_formula;
-    }
+	/**
+	* Get Formula
+	*
+	* @return string
+	*/
+	public function getFormula() {
+		return $this->_formula;
+	}
 
-    /**
-     * Get Token
-     *
-     * @param 	int		$pId	Token id
-     * @return	string
-     * @throws  Exception
-     */
-    public function getToken($pId = 0) {
-    	if (isset($this->_tokens[$pId])) {
-    		return $this->_tokens[$pId];
-    	} else {
-    		throw new Exception("Token with id $pId does not exist.");
-    	}
-    }
+	/**
+	* Get Token
+	*
+	* @param 	int		$pId	Token id
+	* @return	string
+	* @throws  Exception
+	*/
+	public function getToken($pId = 0) {
+		if (isset($this->_tokens[$pId])) {
+			return $this->_tokens[$pId];
+		} else {
+			throw new Exception("Token with id $pId does not exist.");
+		}
+	}
 
-    /**
-     * Get Token count
-     *
-     * @return string
-     */
-    public function getTokenCount() {
-    	return count($this->_tokens);
-    }
+	/**
+	* Get Token count
+	*
+	* @return string
+	*/
+	public function getTokenCount() {
+		return count($this->_tokens);
+	}
 
-    /**
-     * Get Tokens
-     *
-     * @return PHPExcel_Calculation_FormulaToken[]
-     */
-    public function getTokens() {
-    	return $this->_tokens;
-    }
+	/**
+	* Get Tokens
+	*
+	* @return PHPExcel_Calculation_FormulaToken[]
+	*/
+	public function getTokens() {
+		return $this->_tokens;
+	}
 
-    /**
-     * Parse to tokens
-     */
-    private function _parseToTokens() {
+	/**
+	* Parse to tokens
+	*/
+	private function _parseToTokens() {
 		// No attempt is made to verify formulas; assumes formulas are derived from Excel, where
 		// they can only exist if valid; stack overflows/underflows sunk as nulls without exceptions.
 
@@ -453,7 +453,7 @@ class PHPExcel_Calculation_FormulaParser {
 				continue;
 			}
 
-        	// token accumulation
+			// token accumulation
 			$value .= $this->_formula{$index};
 			++$index;
 		}
@@ -495,7 +495,7 @@ class PHPExcel_Calculation_FormulaParser {
 					(($previousToken->getTokenType() == PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_FUNCTION) && ($previousToken->getTokenSubType() == PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_STOP)) ||
 					(($previousToken->getTokenType() == PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_SUBEXPRESSION) && ($previousToken->getTokenSubType() == PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_STOP)) ||
 					($previousToken->getTokenType() == PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERAND)
-				  ) ) {
+				) ) {
 				continue;
 			}
 
@@ -507,7 +507,7 @@ class PHPExcel_Calculation_FormulaParser {
 					(($nextToken->getTokenType() == PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_FUNCTION) && ($nextToken->getTokenSubType() == PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_START)) ||
 					(($nextToken->getTokenType() == PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_SUBEXPRESSION) && ($nextToken->getTokenSubType() == PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_START)) ||
 					($nextToken->getTokenType() == PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_OPERAND)
-				  ) ) {
+				) ) {
 				continue;
 			}
 
@@ -608,7 +608,7 @@ class PHPExcel_Calculation_FormulaParser {
 				}
 			}
 
-        	$this->_tokens[] = $token;
+			$this->_tokens[] = $token;
 		}
-    }
+	}
 }

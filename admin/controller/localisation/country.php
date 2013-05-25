@@ -142,7 +142,7 @@ class ControllerLocalisationCountry extends Controller {
 
 		$this->data['insert'] = $this->url->link('localisation/country/insert', $url);
 		$this->data['delete'] = $this->url->link('localisation/country/delete', $url);
-		 
+		
 		$this->data['countries'] = array();
 
 		$data = array(
@@ -166,11 +166,11 @@ class ControllerLocalisationCountry extends Controller {
 
 			$this->data['countries'][] = array(
 				'country_id' => $result['country_id'],
-				'name'       => $result['name'] . (($result['country_id'] == $this->config->get('config_country_id')) ? $this->_('text_default') : null),
+				'name'		=> $result['name'] . (($result['country_id'] == $this->config->get('config_country_id')) ? $this->_('text_default') : null),
 				'iso_code_2' => $result['iso_code_2'],
 				'iso_code_3' => $result['iso_code_3'],
-				'selected'   => isset($_POST['selected']) && in_array($result['country_id'], $_POST['selected']),				
-				'action'     => $action
+				'selected'	=> isset($_POST['selected']) && in_array($result['country_id'], $_POST['selected']),				
+				'action'	=> $action
 			);
 		}
 
@@ -218,7 +218,6 @@ class ControllerLocalisationCountry extends Controller {
 		$this->pagination->total = $country_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('localisation/country', $url);
 
 		$this->data['pagination'] = $this->pagination->render();
@@ -343,11 +342,7 @@ class ControllerLocalisationCountry extends Controller {
 			$this->error['name'] = $this->_('error_name');
 		}
 
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
 
 	private function validateDelete() {
@@ -391,10 +386,6 @@ class ControllerLocalisationCountry extends Controller {
 			}
 		}
 	
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
 }

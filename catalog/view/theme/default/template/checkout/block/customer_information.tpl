@@ -74,7 +74,7 @@ function load_info_item(info_item, route, callback){
 	
 	set_validation_status(info_item, 'loading', '<?= $text_info_loading;?>');
 	
-	info_item.find('.info_content').load('index.php?route=' + route, {},
+	info_item.find('.info_content').load("<?= HTTP_CATALOG . "index.php?route="; ?>" + route, {},
 		function(){ 
 			set_validation_status(info_item, '', '');
 			if(typeof callback == 'function'){

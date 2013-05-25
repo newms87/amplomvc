@@ -4,7 +4,7 @@ class ControllerPaymentPPExpress extends Controller {
 		$this->template->load('payment/pp_express');
 
 		if (!$this->config->get('pp_express_test')) {
-    		$this->data['action'] = 'https://www.pp_express.com/cgi-bin/webscr';
+			$this->data['action'] = 'https://www.pp_express.com/cgi-bin/webscr';
   		} else {
 			$this->data['action'] = 'https://www.sandbox.pp_express.com/cgi-bin/webscr';
 		}		

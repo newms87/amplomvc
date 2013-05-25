@@ -21,6 +21,7 @@ class ControllerProductCollection extends Controller {
 		
 		$collection_id = isset($_GET['collection_id']) ? $_GET['collection_id'] : 0;
 		$category_id = isset($_GET['category_id']) ? $_GET['category_id'] : 0;
+		$attributes = isset($_GET['attribute']) ? $_GET['attribute'] : 0;
 			
 		if($collection_id){
 			$collection_info = $this->model_catalog_collection->getCollection($collection_id);
@@ -50,11 +51,15 @@ class ControllerProductCollection extends Controller {
 			$this->data['products'] = array();
 		
 			$data = array(
-				'sort'               => $sort,
-				'order'              => $order,
-				'start'              => ($page - 1) * $limit,
-				'limit'              => $limit
+				'sort'					=> $sort,
+				'order'				=> $order,
+				'start'				=> ($page - 1) * $limit,
+				'limit'				=> $limit
 			);
+			
+			if($attributes){
+				$data['attribute'] = $attributes;
+			}
 			
 			$item_total = $this->model_catalog_collection->getTotalCollectionProducts($collection_id, $data);
 			
@@ -112,10 +117,10 @@ class ControllerProductCollection extends Controller {
 			$this->data['description'] = $this->_('text_description_all');
 			
 			$data = array(
-				'sort'               => $sort,
-				'order'              => $order,
-				'start'              => ($page - 1) * $limit,
-				'limit'              => $limit
+				'sort'	=> $sort,
+				'order'	=> $order,
+				'start'	=> ($page - 1) * $limit,
+				'limit'	=> $limit
 			);
 			
 			if($category_id){
@@ -140,7 +145,8 @@ class ControllerProductCollection extends Controller {
 			$this->data['collections'] = $collections;
 		}
 		
-		$url = $this->url->get_query('category_id', 'limit');
+		//Sort & Limit
+		$url = $this->url->get_query('category_id', 'attribute', 'limit');
 		
 		$this->data['sort_select'] = $this->url->get_query('sort', 'order');
 		$this->data['sort_url'] = $this->url->link('product/collection', 'collection_id=' . $collection_id . '&' . $url);
@@ -151,7 +157,7 @@ class ControllerProductCollection extends Controller {
 			'sort=name&order=DESC' => $this->_('text_name_desc'),
 		);
 		
-		$query = $this->url->get_query('category_id', 'sort','order');
+		$query = $this->url->get_query('category_id', 'attribute', 'sort', 'order');
 		
 		$query_collection = $collection_id ? '&collection_id=' . $collection_id : '';
 		$this->data['limit_url'] = $this->url->link('product/collection', $query . $query_collection . '&limit=');
@@ -168,13 +174,10 @@ class ControllerProductCollection extends Controller {
 		
 		$this->data['compare'] = $this->url->link('product/compare');
 		
-		$url = $this->url->get_query('sort', 'order', 'limit');
+		$url = $this->url->get_query('attribute', 'sort', 'order', 'limit');
 
 		$this->pagination->init();
 		$this->pagination->total = $item_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $limit;
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('product/collection', 'collection_id=' . $collection_id . '&' . $url);
 	
 		$this->data['pagination'] = $this->pagination->render();

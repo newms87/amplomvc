@@ -1,13 +1,13 @@
 <?php 
 class ControllerCheckoutBlockRegister extends Controller {
   	public function index() {
-  	   $this->language->load('checkout/checkout');
-  	   $this->template->load('checkout/block/register');
+  		$this->language->load('checkout/checkout');
+  		$this->template->load('checkout/block/register');
 		
-      $this->language->format('entry_newsletter', $this->config->get('config_name'));
+		$this->language->format('entry_newsletter', $this->config->get('config_name'));
 		
-      $this->data['action_register'] = $this->url->link('checkout/block/register/validate');
-      
+		$this->data['action_register'] = $this->url->link('checkout/block/register/validate');
+		
 		//Registration Details
 		$this->form->init('register');
 		$this->form->set_template('form/single_column');
@@ -31,7 +31,7 @@ class ControllerCheckoutBlockRegister extends Controller {
 		$this->data['form_address'] = $this->form->build();
 		
 		//Terms and Conditions
-      if ($this->config->get('config_account_id')) {
+		if ($this->config->get('config_account_id')) {
 			$information_info = $this->model_catalog_information->getInformation($this->config->get('config_account_id'));
 			
 			if ($information_info) {
@@ -49,15 +49,15 @@ class ControllerCheckoutBlockRegister extends Controller {
 		
 		$json = array();
 		
-      // Validate if customer is logged in.
-      if ($this->customer->isLogged()) {
-         $json['redirect'] = $this->url->link('checkout/checkout');
-      }
-      elseif(!$this->cart->validate()){
-         $json['redirect'] = $this->url->link('cart/cart');
-         $this->message->add($this->cart->get_errors());
-      }
-      
+		// Validate if customer is logged in.
+		if ($this->customer->isLogged()) {
+			$json['redirect'] = $this->url->link('checkout/checkout');
+		}
+		elseif(!$this->cart->validate()){
+			$json['redirect'] = $this->url->link('cart/cart');
+			$this->message->add($this->cart->get_errors());
+		}
+		
 		if($json){
 			if(!empty($_POST['async'])){
 				$this->url->redirect($this->url->link('checkout/checkout'));
@@ -88,15 +88,15 @@ class ControllerCheckoutBlockRegister extends Controller {
 			$json['error'] = $this->form->get_errors();
 		}
 		
-      if ($this->model_account_customer->getTotalCustomersByEmail($_POST['email'])) {
-         $json['error']['email'] = $this->_('error_exists');
-      }
-         
-      if ($_POST['confirm'] !== $_POST['password']) {
-         $json['error']['confirm'] = $this->_('error_confirm');
-      }
-   	
-   	if ($this->config->get('config_account_id')) {
+		if ($this->model_account_customer->getTotalCustomersByEmail($_POST['email'])) {
+			$json['error']['email'] = $this->_('error_exists');
+		}
+			
+		if ($_POST['confirm'] !== $_POST['password']) {
+			$json['error']['confirm'] = $this->_('error_confirm');
+		}
+		
+		if ($this->config->get('config_account_id')) {
 			$information_info = $this->model_catalog_information->getInformation($this->config->get('config_account_id'));
 			
 			if ($information_info && !isset($_POST['agree'])) {
@@ -118,8 +118,8 @@ class ControllerCheckoutBlockRegister extends Controller {
 				if (!empty($_POST['shipping_address'])) {
 					$this->session->data['shipping_address_id'] = $this->customer->getAddressId();
 				}
-            $json['redirect'] = $this->url->link('checkout/checkout');
-            
+				$json['redirect'] = $this->url->link('checkout/checkout');
+				
 			} else {
 				$json['redirect'] = $this->url->link('account/success');
 			}
@@ -128,7 +128,7 @@ class ControllerCheckoutBlockRegister extends Controller {
 			unset($this->session->data['payment_method']);	
 		}
 		
-      //If this is not an ajax call, redirect w/ a message
+		//If this is not an ajax call, redirect w/ a message
 		if(!isset($_POST['async'])){
 			if($json['error']){
 				$this->message->add('warning', $json['error']);

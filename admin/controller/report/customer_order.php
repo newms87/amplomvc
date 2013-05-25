@@ -1,6 +1,6 @@
 <?php
 class ControllerReportCustomerOrder extends Controller {
-	public function index() {     
+	public function index() {	
 		$this->template->load('report/customer_order');
 
 		$this->load->language('report/customer_order');
@@ -55,11 +55,11 @@ class ControllerReportCustomerOrder extends Controller {
 		$this->data['customers'] = array();
 		
 		$data = array(
-			'filter_date_start'	     => $filter_date_start, 
-			'filter_date_end'	     => $filter_date_end, 
+			'filter_date_start'		=> $filter_date_start, 
+			'filter_date_end'		=> $filter_date_end, 
 			'filter_order_status_id' => $filter_order_status_id,
-			'start'                  => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit'                  => $this->config->get('config_admin_limit')
+			'start'						=> ($page - 1) * $this->config->get('config_admin_limit'),
+			'limit'						=> $this->config->get('config_admin_limit')
 		);
 				
 		$customer_total = $this->model_report_customer->getTotalOrders($data); 
@@ -75,17 +75,17 @@ class ControllerReportCustomerOrder extends Controller {
 			);
 						
 			$this->data['customers'][] = array(
-				'customer'       => $result['customer'],
-				'email'          => $result['email'],
+				'customer'		=> $result['customer'],
+				'email'			=> $result['email'],
 				'customer_group' => $result['customer_group'],
-				'status'         => ($result['status'] ? $this->_('text_enabled') : $this->_('text_disabled')),
-				'orders'         => $result['orders'],
-				'products'       => $result['products'],
-				'total'          => $this->currency->format($result['total'], $this->config->get('config_currency')),
-				'action'         => $action
+				'status'			=> ($result['status'] ? $this->_('text_enabled') : $this->_('text_disabled')),
+				'orders'			=> $result['orders'],
+				'products'		=> $result['products'],
+				'total'			=> $this->currency->format($result['total'], $this->config->get('config_currency')),
+				'action'			=> $action
 			);
 		}
-		 
+		
 		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 			
 		$url = '';
@@ -106,7 +106,6 @@ class ControllerReportCustomerOrder extends Controller {
 		$this->pagination->total = $customer_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('report/customer_order', $url);
 			
 		$this->data['pagination'] = $this->pagination->render();
@@ -114,7 +113,7 @@ class ControllerReportCustomerOrder extends Controller {
 		$this->data['filter_date_start'] = $filter_date_start;
 		$this->data['filter_date_end'] = $filter_date_end;		
 		$this->data['filter_order_status_id'] = $filter_order_status_id;
-				 
+				
 		$this->children = array(
 			'common/header',
 			'common/footer'

@@ -1,6 +1,6 @@
 <?php 
 class ControllerPaymentWorldPay extends Controller {
-	 
+	
 
 	public function index() {
 		$this->template->load('payment/worldpay');
@@ -118,10 +118,6 @@ class ControllerPaymentWorldPay extends Controller {
 			$this->error['password'] = $this->_('error_password');
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

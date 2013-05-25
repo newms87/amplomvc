@@ -1,9 +1,9 @@
 <?php
 class ControllerBlockExtrasSocialMedia extends Controller {
-	 
+	
 	public function settings(&$settings) {
 		$this->load->language('block/extras/social_media');
-		   
+			
 		$this->template->load('block/extras/social_media_settings');
 
 		$thumb_width = 40;

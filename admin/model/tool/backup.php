@@ -2,11 +2,11 @@
 class ModelToolBackup extends Model {
 	public function restore($sql) {
 		foreach (explode(";\n", $sql) as $sql) {
-    		$sql = trim($sql);
-    		
+			$sql = trim($sql);
+			
 			if ($sql) {
-      			$this->query($sql);
-    		}
+					$this->query($sql);
+			}
   		}
 		
 		$this->cache->delete('*');

@@ -1,5 +1,5 @@
 <? if ($modules || $blocks) { ?>
-<div id="column-right">
+<div id="column_right">
   <? foreach ($modules as $module) { ?>
   <?= $module; ?>
   <? } ?>

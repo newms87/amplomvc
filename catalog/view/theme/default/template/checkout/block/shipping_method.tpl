@@ -20,7 +20,7 @@
 	<table class="radio">
 	<? foreach ($shipping_methods as $id => $shipping_method) { ?>
 		<tr>
-			<td colspan="3"><b><?= $shipping_method['title']; ?></b></td>
+			<td colspan="3"><b><?= $shipping_method['code_title']; ?></b></td>
 		</tr>
 		<tr class="shipping_method checkout_method highlight">
 			<td class="method_id">

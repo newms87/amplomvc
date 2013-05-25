@@ -3,9 +3,9 @@
 $_['heading_title']  = 'Resetear tu contraseña';
 
 // Text
-$_['text_reset']     = 'Resetear tu contraseña!';
+$_['text_reset']	= 'Resetear tu contraseña!';
 $_['text_password']  = 'Introducir la nueva contraseña que desees usar.';
-$_['text_success']   = 'Éxito: Tu contraseña ha sido actualizada satisfactoriamente.';
+$_['text_success']	= 'Éxito: Tu contraseña ha sido actualizada satisfactoriamente.';
 
 // Entry
 $_['entry_password'] = 'Contraseña:';

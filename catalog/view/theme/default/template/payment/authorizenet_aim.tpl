@@ -36,7 +36,7 @@
 //<!--
 $('#button-confirm').bind('click', function() {
 	$.ajax({
-		url: 'index.php?route=payment/authorizenet_aim/send',
+		url: "<?= HTTP_CATALOG . "index.php?route=payment/authorizenet_aim/send"; ?>",
 		type: 'post',
 		data: $('#payment :input'),
 		dataType: 'json',		

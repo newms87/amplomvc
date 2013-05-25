@@ -1,10 +1,10 @@
 <?php
 
 function chmodnum($chmod) {
-    $trans = array('-' => '0', 'r' => '4', 'w' => '2', 'x' => '1');
-    $chmod = substr(strtr($chmod, $trans), 1);
-    $array = str_split($chmod, 3);
-    return array_sum(str_split($array[0])) . array_sum(str_split($array[1])) . array_sum(str_split($array[2]));
+	$trans = array('-' => '0', 'r' => '4', 'w' => '2', 'x' => '1');
+	$chmod = substr(strtr($chmod, $trans), 1);
+	$array = str_split($chmod, 3);
+	return array_sum(str_split($array[0])) . array_sum(str_split($array[1])) . array_sum(str_split($array[2]));
 }
 
 elFinder::$netDrivers['ftp'] = 'FTP';
@@ -18,89 +18,89 @@ elFinder::$netDrivers['ftp'] = 'FTP';
 class elFinderVolumeFTP extends elFinderVolumeDriver {
 	
 	/**
-	 * Driver id
-	 * Must be started from letter and contains [a-z0-9]
-	 * Used as part of volume id
-	 *
-	 * @var string
-	 **/
+	* Driver id
+	* Must be started from letter and contains [a-z0-9]
+	* Used as part of volume id
+	*
+	* @var string
+	**/
 	protected $driverId = 'f';
 	
 	/**
-	 * FTP Connection Instance
-	 *
-	 * @var ftp
-	 **/
+	* FTP Connection Instance
+	*
+	* @var ftp
+	**/
 	protected $connect = null;
 	
 	/**
-	 * Directory for tmp files
-	 * If not set driver will try to use tmbDir as tmpDir
-	 *
-	 * @var string
-	 **/
+	* Directory for tmp files
+	* If not set driver will try to use tmbDir as tmpDir
+	*
+	* @var string
+	**/
 	protected $tmpPath = '';
 	
 	/**
-	 * Last FTP error message
-	 *
-	 * @var string
-	 **/
+	* Last FTP error message
+	*
+	* @var string
+	**/
 	protected $ftpError = '';
 	
 	/**
-	 * FTP server output list as ftp on linux
-	 *
-	 * @var bool
-	 **/
+	* FTP server output list as ftp on linux
+	*
+	* @var bool
+	**/
 	protected $ftpOsUnix;
 	
 	/**
-	 * Tmp folder path
-	 *
-	 * @var string
-	 **/
+	* Tmp folder path
+	*
+	* @var string
+	**/
 	protected $tmp = '';
 	
 	/**
-	 * Constructor
-	 * Extend options with required fields
-	 *
-	 * @return void
-	 * @author Dmitry (dio) Levashov
-	 * @author Cem (DiscoFever)
-	 **/
+	* Constructor
+	* Extend options with required fields
+	*
+	* @return void
+	* @author Dmitry (dio) Levashov
+	* @author Cem (DiscoFever)
+	**/
 	public function __construct() {
 		$opts = array(
-			'host'          => 'localhost',
-			'user'          => '',
-			'pass'          => '',
-			'port'          => 21,
-			'mode'        	=> 'passive',
+			'host'			=> 'localhost',
+			'user'			=> '',
+			'pass'			=> '',
+			'port'			=> 21,
+			'mode'			=> 'passive',
 			'path'			=> '/',
 			'timeout'		=> 20,
-			'owner'         => true,
-			'tmbPath'       => '',
-			'tmpPath'       => '',
-			'dirMode'       => isset($_SESSION['elfinder_dir_mode'])?$_SESSION['elfinder_dir_mode']:0755,
-			'fileMode'      => isset($_SESSION['elfinder_file_mode'])?$_SESSION['elfinder_file_mode']:0644
+			'owner'			=> true,
+			'tmbPath'		=> '',
+			'tmpPath'		=> '',
+			'dirMode'		=> isset($_SESSION['elfinder_dir_mode'])?$_SESSION['elfinder_dir_mode']:0755,
+			'fileMode'		=> isset($_SESSION['elfinder_file_mode'])?$_SESSION['elfinder_file_mode']:0644
 		);
 		$this->options = array_merge($this->options, $opts); 
 		$this->options['mimeDetect'] = 'internal';
 	}
 	
 	/*********************************************************************/
-	/*                        INIT AND CONFIGURE                         */
+	/*								INIT AND CONFIGURE								*/
 	/*********************************************************************/
 	
 	/**
-	 * Prepare FTP connection
-	 * Connect to remote server and check if credentials are correct, if so, store the connection id in $ftp_conn
-	 *
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 * @author Cem (DiscoFever)
-	 **/
+	* Prepare FTP connection
+	* Connect to remote server and check if credentials are correct, if so, store the connection id in $ftp_conn
+	*
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	* @author Cem (DiscoFever)
+	**/
 	protected function init() {
 		if (!$this->options['host'] 
 		||  !$this->options['user'] 
@@ -138,11 +138,11 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 
 
 	/**
-	 * Configure after successfull mount.
-	 *
-	 * @return void
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Configure after successfull mount.
+	*
+	* @return void
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function configure() {
 		parent::configure();
 		
@@ -171,11 +171,11 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Connect to ftp server
-	 *
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Connect to ftp server
+	*
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function connect() {
 		if (!($this->connect = ftp_connect($this->options['host'], $this->options['port'], $this->options['timeout']))) {
 			return $this->setError('Unable to connect to FTP server '.$this->options['host']);
@@ -214,27 +214,27 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	}
 	
 	/*********************************************************************/
-	/*                               FS API                              */
+	/*										FS API										*/
 	/*********************************************************************/
 
 	/**
-	 * Close opened connection
-	 *
-	 * @return void
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Close opened connection
+	*
+	* @return void
+	* @author Dmitry (dio) Levashov
+	**/
 	public function umount() {
 		$this->connect && @ftp_close($this->connect);
 	}
 
 
 	/**
-	 * Parse line from ftp_rawlist() output and return file stat (array)
-	 *
-	 * @param  string  $raw  line from ftp_rawlist() output
-	 * @return array
-	 * @author Dmitry Levashov
-	 **/
+	* Parse line from ftp_rawlist() output and return file stat (array)
+	*
+	* @param  string  $raw  line from ftp_rawlist() output
+	* @return array
+	* @author Dmitry Levashov
+	**/
 	protected function parseRaw($raw) {
 		$info = preg_split("/\s+/", $raw, 9);
 		$stat = array();
@@ -257,7 +257,7 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 			$name = $info[8];
 			
 			if (preg_match('|(.+)\-\>(.+)|', $name, $m)) {
-				$name   = trim($m[1]);
+				$name	= trim($m[1]);
 				$target = trim($m[2]);
 				if (substr($target, 0, 1) != '/') {
 					$target = $this->root.'/'.$target;
@@ -298,14 +298,14 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Parse permissions string. Return array(read => true/false, write => true/false)
-	 *
-	 * @param  string  $perm  permissions string
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Parse permissions string. Return array(read => true/false, write => true/false)
+	*
+	* @param  string  $perm  permissions string
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function parsePermissions($perm) {
-		$res   = array();
+		$res	= array();
 		$parts = array();
 		$owner = $this->options['owner'];
 		for ($i = 0, $l = strlen($perm); $i < $l; $i++) {
@@ -321,12 +321,12 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Cache dir contents
-	 *
-	 * @param  string  $path  dir path
-	 * @return void
-	 * @author Dmitry Levashov
-	 **/
+	* Cache dir contents
+	*
+	* @param  string  $path  dir path
+	* @return void
+	* @author Dmitry Levashov
+	**/
 	protected function cacheDir($path) {
 		$this->dirsCache[$path] = array();
 
@@ -342,7 +342,7 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 		}
 		foreach (ftp_rawlist($this->connect, $path) as $raw) {
 			if (($stat = $this->parseRaw($raw))) {
-				$p    = $path.'/'.$stat['name'];
+				$p	= $path.'/'.$stat['name'];
 				$stat = $this->updateCache($p, $stat);
 				if (empty($stat['hidden'])) {
 					// $files[] = $stat;
@@ -353,12 +353,12 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	}
 
 	/**
-	 * Return ftp transfer mode for file
-	 *
-	 * @param  string  $path  file path
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return ftp transfer mode for file
+	*
+	* @param  string  $path  file path
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function ftpMode($path) {
 		return strpos($this->mimetype($path), 'text/') === 0 ? FTP_ASCII : FTP_BINARY;
 	}
@@ -366,46 +366,46 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	/*********************** paths/urls *************************/
 	
 	/**
-	 * Return parent directory path
-	 *
-	 * @param  string  $path  file path
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return parent directory path
+	*
+	* @param  string  $path  file path
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function _dirname($path) {
 		return dirname($path);
 	}
 
 	/**
-	 * Return file name
-	 *
-	 * @param  string  $path  file path
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return file name
+	*
+	* @param  string  $path  file path
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function _basename($path) {
 		return basename($path);
 	}
 
 	/**
-	 * Join dir name and file name and retur full path
-	 *
-	 * @param  string  $dir
-	 * @param  string  $name
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Join dir name and file name and retur full path
+	*
+	* @param  string  $dir
+	* @param  string  $name
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function _joinPath($dir, $name) {
 		return $dir.DIRECTORY_SEPARATOR.$name;
 	}
 	
 	/**
-	 * Return normalized path, this works the same as os.path.normpath() in Python
-	 *
-	 * @param  string  $path  path
-	 * @return string
-	 * @author Troex Nevelin
-	 **/
+	* Return normalized path, this works the same as os.path.normpath() in Python
+	*
+	* @param  string  $path  path
+	* @return string
+	* @author Troex Nevelin
+	**/
 	protected function _normpath($path) {
 		if (empty($path)) {
 			$path = '.';
@@ -453,70 +453,70 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Return file path related to root dir
-	 *
-	 * @param  string  $path  file path
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return file path related to root dir
+	*
+	* @param  string  $path  file path
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function _relpath($path) {
 		return $path == $this->root ? '' : substr($path, strlen($this->root)+1);
 	}
 	
 	/**
-	 * Convert path related to root dir into real path
-	 *
-	 * @param  string  $path  file path
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Convert path related to root dir into real path
+	*
+	* @param  string  $path  file path
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function _abspath($path) {
 		return $path == $this->separator ? $this->root : $this->root.$this->separator.$path;
 	}
 	
 	/**
-	 * Return fake path started from root dir
-	 *
-	 * @param  string  $path  file path
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return fake path started from root dir
+	*
+	* @param  string  $path  file path
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function _path($path) {
 		return $this->rootName.($path == $this->root ? '' : $this->separator.$this->_relpath($path));
 	}
 	
 	/**
-	 * Return true if $path is children of $parent
-	 *
-	 * @param  string  $path    path to check
-	 * @param  string  $parent  parent path
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return true if $path is children of $parent
+	*
+	* @param  string  $path	path to check
+	* @param  string  $parent  parent path
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function _inpath($path, $parent) {
 		return $path == $parent || strpos($path, $parent.'/') === 0;
 	}
 	
 	/***************** file stat ********************/
 	/**
-	 * Return stat for given path.
-	 * Stat contains following fields:
-	 * - (int)    size    file size in b. required
-	 * - (int)    ts      file modification time in unix time. required
-	 * - (string) mime    mimetype. required for folders, others - optionally
-	 * - (bool)   read    read permissions. required
-	 * - (bool)   write   write permissions. required
-	 * - (bool)   locked  is object locked. optionally
-	 * - (bool)   hidden  is object hidden. optionally
-	 * - (string) alias   for symlinks - link target path relative to root path. optionally
-	 * - (string) target  for symlinks - link target path. optionally
-	 *
-	 * If file does not exists - returns empty array or false.
-	 *
-	 * @param  string  $path    file path 
-	 * @return array|false
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return stat for given path.
+	* Stat contains following fields:
+	* - (int)	size	file size in b. required
+	* - (int)	ts		file modification time in unix time. required
+	* - (string) mime	mimetype. required for folders, others - optionally
+	* - (bool)	read	read permissions. required
+	* - (bool)	write	write permissions. required
+	* - (bool)	locked  is object locked. optionally
+	* - (bool)	hidden  is object hidden. optionally
+	* - (string) alias	for symlinks - link target path relative to root path. optionally
+	* - (string) target  for symlinks - link target path. optionally
+	*
+	* If file does not exists - returns empty array or false.
+	*
+	* @param  string  $path	file path 
+	* @return array|false
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function _stat($path) {
 		$raw = ftp_raw($this->connect, 'MLST '.$path);
 
@@ -621,12 +621,12 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Return true if path is dir and has at least one childs directory
-	 *
-	 * @param  string  $path  dir path
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return true if path is dir and has at least one childs directory
+	*
+	* @param  string  $path  dir path
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function _subdirs($path) {
 		
 		if (preg_match('/\s|\'|\"/', $path)) {
@@ -647,14 +647,14 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Return object width and height
-	 * Ususaly used for images, but can be realize for video etc...
-	 *
-	 * @param  string  $path  file path
-	 * @param  string  $mime  file mime type
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return object width and height
+	* Ususaly used for images, but can be realize for video etc...
+	*
+	* @param  string  $path  file path
+	* @param  string  $mime  file mime type
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function _dimensions($path, $mime) {
 		return false;
 	}
@@ -662,13 +662,13 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	/******************** file/dir content *********************/
 		
 	/**
-	 * Return files list in directory.
-	 *
-	 * @param  string  $path  dir path
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 * @author Cem (DiscoFever)
-	 **/
+	* Return files list in directory.
+	*
+	* @param  string  $path  dir path
+	* @return array
+	* @author Dmitry (dio) Levashov
+	* @author Cem (DiscoFever)
+	**/
 	protected function _scandir($path) {
 		$files = array();
 
@@ -682,13 +682,13 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	}
 		
 	/**
-	 * Open file and return file pointer
-	 *
-	 * @param  string  $path  file path
-	 * @param  bool    $write open file for writing
-	 * @return resource|false
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Open file and return file pointer
+	*
+	* @param  string  $path  file path
+	* @param  bool	$write open file for writing
+	* @return resource|false
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function _fopen($path, $mode='rb') {
 		
 		if ($this->tmp) {
@@ -703,12 +703,12 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Close opened file
-	 *
-	 * @param  resource  $fp  file pointer
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Close opened file
+	*
+	* @param  resource  $fp  file pointer
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function _fclose($fp, $path='') {
 		@fclose($fp);
 		if ($path) {
@@ -719,13 +719,13 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	/********************  file/dir manipulations *************************/
 	
 	/**
-	 * Create dir and return created dir path or false on failed
-	 *
-	 * @param  string  $path  parent dir path
-	 * @param string  $name  new directory name
-	 * @return string|bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Create dir and return created dir path or false on failed
+	*
+	* @param  string  $path  parent dir path
+	* @param string  $name  new directory name
+	* @return string|bool
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function _mkdir($path, $name) {
 		if (($path = ftp_mkdir($this->connect, $path.'/'.$name)) == false) {
 			return false;
@@ -736,13 +736,13 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Create file and return it's path or false on failed
-	 *
-	 * @param  string  $path  parent dir path
-	 * @param string  $name  new file name
-	 * @return string|bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Create file and return it's path or false on failed
+	*
+	* @param  string  $path  parent dir path
+	* @param string  $name  new file name
+	* @return string|bool
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function _mkfile($path, $name) {
 		if ($this->tmp) {
 			$path = $path.'/'.$name;
@@ -755,26 +755,26 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Create symlink. FTP driver does not support symlinks.
-	 *
-	 * @param  string  $target  link target
-	 * @param  string  $path    symlink path
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Create symlink. FTP driver does not support symlinks.
+	*
+	* @param  string  $target  link target
+	* @param  string  $path	symlink path
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function _symlink($target, $path, $name) {
 		return false;
 	}
 	
 	/**
-	 * Copy file into another file
-	 *
-	 * @param  string  $source     source file path
-	 * @param  string  $targetDir  target directory path
-	 * @param  string  $name       new file name
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Copy file into another file
+	*
+	* @param  string  $source	source file path
+	* @param  string  $targetDir  target directory path
+	* @param  string  $name		new file name
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function _copy($source, $targetDir, $name) {
 		$res = false;
 		
@@ -793,52 +793,52 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Move file into another parent dir.
-	 * Return new file path or false.
-	 *
-	 * @param  string  $source  source file path
-	 * @param  string  $target  target dir path
-	 * @param  string  $name    file name
-	 * @return string|bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Move file into another parent dir.
+	* Return new file path or false.
+	*
+	* @param  string  $source  source file path
+	* @param  string  $target  target dir path
+	* @param  string  $name	file name
+	* @return string|bool
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function _move($source, $targetDir, $name) {
 		$target = $targetDir.DIRECTORY_SEPARATOR.$name;
 		return ftp_rename($this->connect, $source, $target) ? $target : false;
 	}
 		
 	/**
-	 * Remove file
-	 *
-	 * @param  string  $path  file path
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Remove file
+	*
+	* @param  string  $path  file path
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function _unlink($path) {
 		return ftp_delete($this->connect, $path);
 	}
 
 	/**
-	 * Remove dir
-	 *
-	 * @param  string  $path  dir path
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Remove dir
+	*
+	* @param  string  $path  dir path
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function _rmdir($path) {
 		return ftp_rmdir($this->connect, $path);
 	}
 	
 	/**
-	 * Create new file and write into it from file pointer.
-	 * Return new file path or false on error.
-	 *
-	 * @param  resource  $fp   file pointer
-	 * @param  string    $dir  target dir path
-	 * @param  string    $name file name
-	 * @return bool|string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Create new file and write into it from file pointer.
+	* Return new file path or false on error.
+	*
+	* @param  resource  $fp	file pointer
+	* @param  string	$dir  target dir path
+	* @param  string	$name file name
+	* @return bool|string
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function _save($fp, $dir, $name, $mime, $w, $h) {
 		$path = $dir.'/'.$name;
 		return ftp_fput($this->connect, $path, $fp, $this->ftpMode($path))
@@ -847,17 +847,17 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Get file contents
-	 *
-	 * @param  string  $path  file path
-	 * @return string|false
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Get file contents
+	*
+	* @param  string  $path  file path
+	* @return string|false
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function _getContents($path) {
 		$contents = '';
 		if (($fp = $this->_fopen($path))) {
 			while (!feof($fp)) {
-			  $contents .= fread($fp, 8192);
+			$contents .= fread($fp, 8192);
 			}
 			$this->_fclose($fp, $path);
 			return $contents;
@@ -866,13 +866,13 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Write a string to a file
-	 *
-	 * @param  string  $path     file path
-	 * @param  string  $content  new file content
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Write a string to a file
+	*
+	* @param  string  $path	file path
+	* @param  string  $content  new file content
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function _filePutContents($path, $content) {
 		$res = false;
 
@@ -892,37 +892,37 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	}
 
 	/**
-	 * Detect available archivers
-	 *
-	 * @return void
-	 **/
+	* Detect available archivers
+	*
+	* @return void
+	**/
 	protected function _checkArchivers() {
 		// die('Not yet implemented. (_checkArchivers)');
 		return array();
 	}
 
 	/**
-	 * Unpack archive
-	 *
-	 * @param  string  $path  archive path
-	 * @param  array   $arc   archiver command and arguments (same as in $this->archivers)
-	 * @return true
-	 * @return void
-	 * @author Dmitry (dio) Levashov
-	 * @author Alexey Sukhotin
-	 **/
+	* Unpack archive
+	*
+	* @param  string  $path  archive path
+	* @param  array	$arc	archiver command and arguments (same as in $this->archivers)
+	* @return true
+	* @return void
+	* @author Dmitry (dio) Levashov
+	* @author Alexey Sukhotin
+	**/
 	protected function _unpack($path, $arc) {
 		die('Not yet implemented. (_unpack)');
 		return false;
 	}
 
 	/**
-	 * Recursive symlinks search
-	 *
-	 * @param  string  $path  file/dir path
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Recursive symlinks search
+	*
+	* @param  string  $path  file/dir path
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function _findSymlinks($path) {
 		die('Not yet implemented. (_findSymlinks)');
 		if (is_link($path)) {
@@ -950,30 +950,30 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	}
 
 	/**
-	 * Extract files from archive
-	 *
-	 * @param  string  $path  archive path
-	 * @param  array   $arc   archiver command and arguments (same as in $this->archivers)
-	 * @return true
-	 * @author Dmitry (dio) Levashov, 
-	 * @author Alexey Sukhotin
-	 **/
+	* Extract files from archive
+	*
+	* @param  string  $path  archive path
+	* @param  array	$arc	archiver command and arguments (same as in $this->archivers)
+	* @return true
+	* @author Dmitry (dio) Levashov, 
+	* @author Alexey Sukhotin
+	**/
 	protected function _extract($path, $arc) {
 		die('Not yet implemented. (_extract)');
 		
 	}
 	
 	/**
-	 * Create archive and return its path
-	 *
-	 * @param  string  $dir    target dir
-	 * @param  array   $files  files names list
-	 * @param  string  $name   archive name
-	 * @param  array   $arc    archiver options
-	 * @return string|bool
-	 * @author Dmitry (dio) Levashov, 
-	 * @author Alexey Sukhotin
-	 **/
+	* Create archive and return its path
+	*
+	* @param  string  $dir	target dir
+	* @param  array	$files  files names list
+	* @param  string  $name	archive name
+	* @param  array	$arc	archiver options
+	* @return string|bool
+	* @author Dmitry (dio) Levashov, 
+	* @author Alexey Sukhotin
+	**/
 	protected function _archive($dir, $files, $name, $arc) {
 		die('Not yet implemented. (_archive)');
 		return false;

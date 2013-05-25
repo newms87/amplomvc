@@ -1,18 +1,18 @@
 <?php
 class ModelReportSale extends Model {
 	public function getOrders($data = array()) {
-	   $select = "MIN(tmp.date_added) AS date_start,". 
-		          "MAX(tmp.date_added) AS date_end,".
-		          "COUNT(tmp.order_id) AS `orders`,".
-		          "SUM(tmp.products) AS products,".
-		          "SUM(tmp.cost) AS cost,".
-		          "SUM(tmp.tax) AS tax,".
-		          "SUM(tmp.total) AS total"; 
-      
-      $total_products = "(SELECT SUM(op.quantity) FROM `" . DB_PREFIX . "order_product` op WHERE op.order_id = o.order_id GROUP BY op.order_id) AS products";
-      $total_cost = "(SELECT SUM(op.cost*op.quantity) FROM `" . DB_PREFIX . "order_product` op WHERE op.order_id = o.order_id GROUP BY op.order_id) AS cost"; 
-      $total_tax = "(SELECT SUM(ot.value) FROM `" . DB_PREFIX . "order_total` ot WHERE ot.order_id = o.order_id AND ot.code = 'tax' GROUP BY ot.order_id) AS tax";
-      
+		$select = "MIN(tmp.date_added) AS date_start,". 
+					"MAX(tmp.date_added) AS date_end,".
+					"COUNT(tmp.order_id) AS `orders`,".
+					"SUM(tmp.products) AS products,".
+					"SUM(tmp.cost) AS cost,".
+					"SUM(tmp.tax) AS tax,".
+					"SUM(tmp.total) AS total"; 
+		
+		$total_products = "(SELECT SUM(op.quantity) FROM `" . DB_PREFIX . "order_product` op WHERE op.order_id = o.order_id GROUP BY op.order_id) AS products";
+		$total_cost = "(SELECT SUM(op.cost*op.quantity) FROM `" . DB_PREFIX . "order_product` op WHERE op.order_id = o.order_id GROUP BY op.order_id) AS cost"; 
+		$total_tax = "(SELECT SUM(ot.value) FROM `" . DB_PREFIX . "order_total` ot WHERE ot.order_id = o.order_id AND ot.code = 'tax' GROUP BY ot.order_id) AS tax";
+		
 		if (!empty($data['filter_order_status_id'])) {
 			$o_where = " WHERE o.order_status_id = '" . (int)$data['filter_order_status_id'] . "'";
 		} else {
@@ -29,8 +29,8 @@ class ModelReportSale extends Model {
 		
 		$order_table = "(SELECT o.order_id, o.total, o.date_added, $total_products, $total_cost, $total_tax FROM `" . DB_PREFIX . "order` o $o_where GROUP BY o.order_id) as tmp";
 		
-      $where ='';
-      
+		$where ='';
+		
 		if (!empty($data['filter_group'])) {
 			$group = $data['filter_group'];
 		} else {
@@ -54,16 +54,16 @@ class ModelReportSale extends Model {
 		}
 		
 		$order_by = " ORDER BY tmp.date_added";
-      $order ="DESC";
+		$order ="DESC";
 		
 		$start_limit = '';
 		if(isset($data['limit'])){
-		   $limit = (int)$data['limit'];
-		   if ($limit < 1) {
-            $limit = 20;
-         }
-         
-		   $start = isset($data['start'])?(int)$data['start']:0;
+			$limit = (int)$data['limit'];
+			if ($limit < 1) {
+				$limit = 20;
+			}
+			
+			$start = isset($data['start'])?(int)$data['start']:0;
 			if ($start < 0) {
 				$start = 0;
 			}			
@@ -71,7 +71,7 @@ class ModelReportSale extends Model {
 			$start_limit = "LIMIT $start, $limit";
 		}	
 		
-      $sql = "SELECT $select FROM $order_table $where $group_by $order_by $order $start_limit";
+		$sql = "SELECT $select FROM $order_table $where $group_by $order_by $order $start_limit";
 
 		$query = $this->query($sql);
 		

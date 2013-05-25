@@ -1,7 +1,7 @@
 <?php
 class ControllerPaymentCod extends Controller {
 	protected function index() {
-      $this->template->load('payment/cod');
+		$this->template->load('payment/cod');
 
 		$this->data['continue'] = $this->url->link('checkout/success');
 

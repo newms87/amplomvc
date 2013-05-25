@@ -11,9 +11,9 @@ Source Listing:
   $files = glob("*.php");
   $files = array_merge($files, glob("util/*.php"));
   foreach ($files as $fileName) {
-    ?>
+	?>
   	<li><a href="package.php?view=<?= sha1($fileName);?>"><?= $fileName;?></a>&nbsp;-&nbsp;<?= date ("F d Y - g:i a", filemtime($fileName));?></li>
-    <?php
+	<?php
   }
   ?>
 </ul>

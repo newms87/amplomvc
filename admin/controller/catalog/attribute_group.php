@@ -1,23 +1,23 @@
 <?php 
 class ControllerCatalogAttributeGroup extends Controller { 
 	
-   
+	
   	public function index() {
 		$this->load->language('catalog/attribute_group');
 	
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
 		$this->getList();
   	}
-              
+				
   	public function insert() {
 		$this->load->language('catalog/attribute_group');
 	
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-      		$this->model_catalog_attribute_group->addAttributeGroup($_POST);
-		  	
+				$this->model_catalog_attribute_group->addAttributeGroup($_POST);
+			
 			$this->message->add('success', $this->_('text_success'));
 
 			$url = '';
@@ -34,19 +34,19 @@ class ControllerCatalogAttributeGroup extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 						
-      		$this->url->redirect($this->url->link('catalog/attribute_group', $url));
+				$this->url->redirect($this->url->link('catalog/attribute_group', $url));
 		}
 	
-    	$this->getForm();
+		$this->getForm();
   	}
 
   	public function update() {
 		$this->load->language('catalog/attribute_group');
 	
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-	  		$this->model_catalog_attribute_group->editAttributeGroup($_GET['attribute_group_id'], $_POST);
+			$this->model_catalog_attribute_group->editAttributeGroup($_GET['attribute_group_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -65,21 +65,21 @@ class ControllerCatalogAttributeGroup extends Controller {
 			}
 			
 			$this->url->redirect($this->url->link('catalog/attribute_group', $url));
-    	}
+		}
 	
-    	$this->getForm();
+		$this->getForm();
   	}
 
   	public function delete() {
 		$this->load->language('catalog/attribute_group');
 	
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $attribute_group_id) {
 				$this->model_catalog_attribute_group->deleteAttributeGroup($attribute_group_id);
 			}
-			      		
+							
 			$this->message->add('success', $this->_('text_success'));
 
 			$url = '';
@@ -97,11 +97,11 @@ class ControllerCatalogAttributeGroup extends Controller {
 			}
 			
 			$this->url->redirect($this->url->link('catalog/attribute_group', $url));
-   		}
+			}
 	
-    	$this->getList();
+		$this->getList();
   	}
-    
+	
   	private function getList() {
 		$this->template->load('catalog/attribute_group_list');
 
@@ -156,7 +156,7 @@ class ControllerCatalogAttributeGroup extends Controller {
 	
 		$results = $this->model_catalog_attribute_group->getAttributeGroups($data);
  
-    	foreach ($results as $result) {
+		foreach ($results as $result) {
 			$action = array();
 			
 			$action[] = array(
@@ -166,10 +166,10 @@ class ControllerCatalogAttributeGroup extends Controller {
 						
 			$this->data['attribute_groups'][] = array(
 				'attribute_group_id' => $result['attribute_group_id'],
-				'name'               => $result['name'],
-				'sort_order'         => $result['sort_order'],
-				'selected'           => isset($_POST['selected']) && in_array($result['attribute_group_id'], $_POST['selected']),
-				'action'             => $action
+				'name'					=> $result['name'],
+				'sort_order'			=> $result['sort_order'],
+				'selected'			=> isset($_POST['selected']) && in_array($result['attribute_group_id'], $_POST['selected']),
+				'action'				=> $action
 			);
 		}	
 	
@@ -216,7 +216,6 @@ class ControllerCatalogAttributeGroup extends Controller {
 		$this->pagination->total = $attribute_group_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('catalog/attribute_group', $url);
 			
 		$this->data['pagination'] = $this->pagination->render();
@@ -303,27 +302,23 @@ class ControllerCatalogAttributeGroup extends Controller {
   	}
   	
 	private function validateForm() {
-    	if (!$this->user->hasPermission('modify', 'catalog/attribute_group')) {
-      		$this->error['warning'] = $this->_('error_permission');
-    	}
-	
-    	foreach ($_POST['attribute_group_description'] as $language_id => $value) {
-      		if ((strlen($value['name']) < 3) || (strlen($value['name']) > 64)) {
-        		$this->error['name'][$language_id] = $this->_('error_name');
-      		}
-    	}
-		
-		if (!$this->error) {
-	  		return true;
-		} else {
-	  		return false;
+		if (!$this->user->hasPermission('modify', 'catalog/attribute_group')) {
+				$this->error['warning'] = $this->_('error_permission');
 		}
+	
+		foreach ($_POST['attribute_group_description'] as $language_id => $value) {
+				if ((strlen($value['name']) < 3) || (strlen($value['name']) > 64)) {
+				$this->error['name'][$language_id] = $this->_('error_name');
+				}
+		}
+		
+		return $this->error ? false : true;
   	}
 
   	private function validateDelete() {
 		if (!$this->user->hasPermission('modify', 'catalog/attribute_group')) {
-      		$this->error['warning'] = $this->_('error_permission');
-    	}
+				$this->error['warning'] = $this->_('error_permission');
+		}
 		
 		foreach ($_POST['selected'] as $attribute_group_id) {
 			$attribute_total = $this->model_catalog_attribute->getTotalAttributesByAttributeGroupId($attribute_group_id);
@@ -331,12 +326,12 @@ class ControllerCatalogAttributeGroup extends Controller {
 			if ($attribute_total) {
 				$this->error['warning'] = sprintf($this->_('error_attribute'), $attribute_total);
 			}
-	  	}
+		}
 		
 		if (!$this->error) { 
-	  		return true;
+			return true;
 		} else {
-	  		return false;
+			return false;
 		}
-  	}	  
+  	}	
 }

@@ -12,21 +12,21 @@ class ModelLocalisationLanguage extends Model {
 		if (!$language_data) {		
 			$language_data = array();
 			
-			$query = $this->query("SELECT * FROM " . DB_PREFIX . "language ORDER BY sort_order, name");
+			$query = $this->query("SELECT * FROM " . DB_PREFIX . "language WHERE status >= 0 ORDER BY sort_order, name");
 		
-    		foreach ($query->rows as $result) {
-      			$language_data[$result['language_id']] = array(
-        			'language_id' => $result['language_id'],
-        			'name'        => $result['name'],
-        			'code'        => $result['code'],
-					'locale'      => $result['locale'],
-					'image'       => $result['image'],
-					'directory'   => $result['directory'],
-					'filename'    => $result['filename'],
+			foreach ($query->rows as $result) {
+					$language_data[$result['language_id']] = array(
+					'language_id' => $result['language_id'],
+					'name'		=> $result['name'],
+					'code'		=> $result['code'],
+					'locale'		=> $result['locale'],
+					'image'		=> $result['image'],
+					'directory'	=> $result['directory'],
+					'filename'	=> $result['filename'],
 					'sort_order'  => $result['sort_order'],
-					'status'      => $result['status']
-      			);
-    		}	
+					'status'		=> $result['status']
+					);
+			}	
 			
 			$this->cache->set('language', $language_data);
 		}

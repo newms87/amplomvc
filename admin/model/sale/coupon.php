@@ -1,102 +1,102 @@
 <?php
 class ModelSaleCoupon extends Model {
 	public function addCoupon($data) {
-	   
-      $data['date_added'] = $this->tool->format_datetime();
-      
-	   $coupon_id = $this->insert('coupon', $data);
-   	
+		
+		$data['date_added'] = $this->tool->format_datetime();
+		
+		$coupon_id = $this->insert('coupon', $data);
+		
 		if (isset($data['coupon_products'])) {
-   		foreach ($data['coupon_products'] as $product_id) {
-   		   $values = array(
-   		      'product_id' => $product_id,
-   		      'coupon_id'  => $coupon_id
-   		     );
-   		   $this->insert('coupon_product', $values);
-   		}			
+			foreach ($data['coupon_products'] as $product_id) {
+				$values = array(
+					'product_id' => $product_id,
+					'coupon_id'  => $coupon_id
+				);
+				$this->insert('coupon_product', $values);
+			}			
 		}
-      
-      if(isset($data['coupon_categories'])){
-         foreach ($data['coupon_categories'] as $category_id) {
-            $values = array(
-               'category_id' => $category_id,
-               'coupon_id'  => $coupon_id
-              );
-            
-            $this->insert('coupon_category', $values);
-         }
-      }
-      
-      if(isset($data['coupon_customers'])){
-         foreach ($data['coupon_customers'] as $customer_id) {
-            $values = array(
-               'customer_id' => $customer_id,
-               'coupon_id'  => $coupon_id
-              );
-              
-            $this->insert('coupon_customer', $values);
-         }
-      }
+		
+		if(isset($data['coupon_categories'])){
+			foreach ($data['coupon_categories'] as $category_id) {
+				$values = array(
+					'category_id' => $category_id,
+					'coupon_id'  => $coupon_id
+				);
+				
+				$this->insert('coupon_category', $values);
+			}
+		}
+		
+		if(isset($data['coupon_customers'])){
+			foreach ($data['coupon_customers'] as $customer_id) {
+				$values = array(
+					'customer_id' => $customer_id,
+					'coupon_id'  => $coupon_id
+				);
+				
+				$this->insert('coupon_customer', $values);
+			}
+		}
 	}
 	
 	public function editCoupon($coupon_id, $data) {
-	   $this->update('coupon', $data, $coupon_id);
+		$this->update('coupon', $data, $coupon_id);
 		
-      $this->delete('coupon_product', array('coupon_id' => $coupon_id));
-      
-      if (isset($data['coupon_product'])) {
-         foreach ($data['coupon_product'] as $product_id) {
-            $values = array(
-               'product_id' => $product_id,
-               'coupon_id'  => $coupon_id
-              );
-            $this->insert('coupon_product', $values);
-         }        
-      }
-      
-      $this->delete('coupon_category', array('coupon_id' => $coupon_id));
-      
-      if(isset($data['coupon_category'])){
-         foreach ($data['coupon_category'] as $category_id) {
-            $values = array(
-               'category_id' => $category_id,
-               'coupon_id'  => $coupon_id
-              );
-            
-            $this->insert('coupon_category', $values);
-         }
-      }
-      
-      $this->delete('coupon_customer', array('coupon_id' => $coupon_id));
-      
-      if(isset($data['coupon_customer'])){
-         foreach ($data['coupon_customer'] as $customer_id) {
-            $values = array(
-               'customer_id' => $customer_id,
-               'coupon_id'  => $coupon_id
-              );
-              
-            $this->insert('coupon_customer', $values);
-         }
-      }
+		$this->delete('coupon_product', array('coupon_id' => $coupon_id));
+		
+		if (isset($data['coupon_product'])) {
+			foreach ($data['coupon_product'] as $product_id) {
+				$values = array(
+					'product_id' => $product_id,
+					'coupon_id'  => $coupon_id
+				);
+				$this->insert('coupon_product', $values);
+			}		
+		}
+		
+		$this->delete('coupon_category', array('coupon_id' => $coupon_id));
+		
+		if(isset($data['coupon_category'])){
+			foreach ($data['coupon_category'] as $category_id) {
+				$values = array(
+					'category_id' => $category_id,
+					'coupon_id'  => $coupon_id
+				);
+				
+				$this->insert('coupon_category', $values);
+			}
+		}
+		
+		$this->delete('coupon_customer', array('coupon_id' => $coupon_id));
+		
+		if(isset($data['coupon_customer'])){
+			foreach ($data['coupon_customer'] as $customer_id) {
+				$values = array(
+					'customer_id' => $customer_id,
+					'coupon_id'  => $coupon_id
+				);
+				
+				$this->insert('coupon_customer', $values);
+			}
+		}
 	}
 	
 	public function deleteCoupon($coupon_id) {
-	   $this->delete('coupon', $coupon_id);
-      $this->delete('coupon_product', array('coupon_id' => $coupon_id));
-      $this->delete('coupon_category', array('coupon_id' => $coupon_id));
-      $this->delete('coupon_customer', array('coupon_id' => $coupon_id));
-      $this->delete('coupon_history', array('coupon_id' => $coupon_id));		
+		$this->delete('coupon', $coupon_id);
+		$this->delete('coupon_product', array('coupon_id' => $coupon_id));
+		$this->delete('coupon_category', array('coupon_id' => $coupon_id));
+		$this->delete('coupon_customer', array('coupon_id' => $coupon_id));
+		$this->delete('coupon_history', array('coupon_id' => $coupon_id));		
 	}
 	
 	public function getCoupon($coupon_id) {
 		$query = $this->get('coupon', '*', $coupon_id);
-      
+		
 		return $query->row;
 	}
 
 	public function getCouponByCode($code) {
-   	$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "coupon WHERE code = '" . $this->db->escape($code) . "'");
+		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "coupon WHERE code = '" . $this->db->escape($code) . "'");
 		
 		return $query->row;
 	}
@@ -147,18 +147,18 @@ class ModelSaleCoupon extends Model {
 		return $query->rows;
 	}
 	
-   public function getCouponCategories($coupon_id){
-      $query = $this->query("SELECT category_id FROM " . DB_PREFIX . "coupon_category WHERE coupon_id = '" . (int)$coupon_id . "'");
-      return $query->rows;
-   }
-   
-   public function getCouponCustomers($coupon_id){
-      $query = $this->query("SELECT customer_id FROM " . DB_PREFIX . "coupon_customer WHERE coupon_id = '" . (int)$coupon_id . "'");
-      return $query->rows;
-   }
-   
+	public function getCouponCategories($coupon_id){
+		$query = $this->query("SELECT category_id FROM " . DB_PREFIX . "coupon_category WHERE coupon_id = '" . (int)$coupon_id . "'");
+		return $query->rows;
+	}
+	
+	public function getCouponCustomers($coupon_id){
+		$query = $this->query("SELECT customer_id FROM " . DB_PREFIX . "coupon_customer WHERE coupon_id = '" . (int)$coupon_id . "'");
+		return $query->rows;
+	}
+	
 	public function getTotalCoupons() {
-   	$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "coupon");
+		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "coupon");
 		return $query->row['total'];
 	}	
 	
@@ -168,7 +168,7 @@ class ModelSaleCoupon extends Model {
 	}
 	
 	public function getTotalCouponHistories($coupon_id) {
-	  	$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "coupon_history WHERE coupon_id = '" . (int)$coupon_id . "'");
+		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "coupon_history WHERE coupon_id = '" . (int)$coupon_id . "'");
 		return $query->row['total'];
 	}			
 }

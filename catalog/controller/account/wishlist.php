@@ -3,11 +3,11 @@ class ControllerAccountWishList extends Controller {
 	public function index() {
 		$this->template->load('account/wishlist');
 
-    	if (!$this->customer->isLogged()) {
-	  		$this->session->data['redirect'] = $this->url->link('account/wishlist');
+		if (!$this->customer->isLogged()) {
+			$this->session->data['redirect'] = $this->url->link('account/wishlist');
 
-	  		$this->url->redirect($this->url->link('account/login')); 
-    	}    	
+			$this->url->redirect($this->url->link('account/login')); 
+		}		
 		
 		$this->language->load('account/wishlist');
 		
@@ -28,7 +28,7 @@ class ControllerAccountWishList extends Controller {
 		}
 						
 		$this->document->setTitle($this->_('heading_title'));	
-      	
+			
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/wishlist'));
@@ -75,14 +75,14 @@ class ControllerAccountWishList extends Controller {
 																			
 				$this->data['products'][] = array(
 					'product_id' => $product_info['product_id'],
-					'thumb'      => $image,
-					'name'       => $product_info['name'],
-					'model'      => $product_info['model'],
-					'stock'      => $stock,
-					'price'      => $price,		
-					'special'    => $special,
-					'href'       => $this->url->link('product/product', 'product_id=' . $product_info['product_id']),
-					'remove'     => $this->url->link('account/wishlist', 'remove=' . $product_info['product_id'])
+					'thumb'		=> $image,
+					'name'		=> $product_info['name'],
+					'model'		=> $product_info['model'],
+					'stock'		=> $stock,
+					'price'		=> $price,		
+					'special'	=> $special,
+					'href'		=> $this->url->link('product/product', 'product_id=' . $product_info['product_id']),
+					'remove'	=> $this->url->link('account/wishlist', 'remove=' . $product_info['product_id'])
 				);
 			} else {
 				unset($this->session->data['wishlist'][$key]);
@@ -130,7 +130,7 @@ class ControllerAccountWishList extends Controller {
 			if (!in_array($_POST['product_id'], $this->session->data['wishlist'])) {	
 				$this->session->data['wishlist'][] = $_POST['product_id'];
 			}
-			 
+			
 			if ($this->customer->isLogged()) {			
 				$json['success'] = sprintf($this->_('text_success'), $this->url->link('product/product', 'product_id=' . $_POST['product_id']), $product_info['name'], $this->url->link('account/wishlist'));				
 			} else {

@@ -7,20 +7,20 @@ class ControllerCommonFileManager extends Controller {
 		$this->data['base'] = $this->url->is_ssl() ? SITE_SSL : SITE_URL;
 		
 		$dir = '';
-      
-      $this->data['elfinder_root_dir'] = '';
-      
-      if($this->user->isDesigner()){
-         $dir = 'user_uploads/user_' . $this->user->getUserName();
-         $this->data['elfinder_root_dir'] = 'data/user_uploads/';
-      }
-      
+		
+		$this->data['elfinder_root_dir'] = '';
+		
+		if($this->user->isDesigner()){
+			$dir = 'user_uploads/user_' . $this->user->getUserName();
+			$this->data['elfinder_root_dir'] = 'data/user_uploads/';
+		}
+		
 		_is_writable(DIR_IMAGE.'data/'.$dir, $this->config->get('config_image_dir_mode'));
-      
-      $_SESSION['elfinder_root_dir'] = $dir;
-      $_SESSION['elfinder_dir_mode'] = $this->config->get('config_image_dir_mode');
-      $_SESSION['elfinder_file_mode'] = $this->config->get('config_image_file_mode');
-      
+		
+		$_SESSION['elfinder_root_dir'] = $dir;
+		$_SESSION['elfinder_dir_mode'] = $this->config->get('config_image_dir_mode');
+		$_SESSION['elfinder_file_mode'] = $this->config->get('config_image_file_mode');
+		
 		
 		$this->response->setOutput($this->render());
 	}	
@@ -54,9 +54,9 @@ class ControllerCommonFileManager extends Controller {
 	
 	public function image() {
 		if (isset($_GET['image'])) {
-		   $width = isset($_GET['image_width']) ? (int)$_GET['image_width'] : $this->config->get('config_image_admin_thumb_width');
-         $height = isset($_GET['image_height']) ? (int)$_GET['image_height'] : $this->config->get('config_image_admin_thumb_height');
-         
+			$width = isset($_GET['image_width']) ? (int)$_GET['image_width'] : $this->config->get('config_image_admin_thumb_width');
+			$height = isset($_GET['image_height']) ? (int)$_GET['image_height'] : $this->config->get('config_image_admin_thumb_height');
+			
 			$this->response->setOutput($this->image->resize(html_entity_decode($_GET['image'], ENT_QUOTES, 'UTF-8'), $width, $height));
 		}
 	}
@@ -64,12 +64,12 @@ class ControllerCommonFileManager extends Controller {
 	public function directory() {	
 		$json = array();
 		$restricted = $this->user->isDesigner();
-      if($restricted){
-         $dir = 'user_uploads/user_' . $this->user->getUserName();
-         if(!is_dir(DIR_IMAGE . 'data/' . $dir))
-            mkdir(DIR_IMAGE . 'data/' . $dir, 0777, true);
-         $_POST['directory'] = $dir;
-      }
+		if($restricted){
+			$dir = 'user_uploads/user_' . $this->user->getUserName();
+			if(!is_dir(DIR_IMAGE . 'data/' . $dir))
+				mkdir(DIR_IMAGE . 'data/' . $dir, 0777, true);
+			$_POST['directory'] = $dir;
+		}
 		if (isset($_POST['directory'])) {
 			$directories = glob(rtrim(DIR_IMAGE . 'data/' . str_replace('../', '', $_POST['directory']), '/') . '/*', GLOB_ONLYDIR); 
 			
@@ -97,16 +97,16 @@ class ControllerCommonFileManager extends Controller {
 	public function files() {
 		$json = array();
 		
-      $restricted = $this->user->isDesigner();
-      $restrict = '';
-      if($restricted){
-         $dir = 'user_uploads/user_' . $this->user->getUserName();
-         if(!is_dir(DIR_IMAGE . 'data/' . $dir))
-            mkdir(DIR_IMAGE . 'data/' . $dir, 0777, true);
-         $restrict = !empty($_POST['directory'])?$_POST['directory']:$dir . '/';
-         $_POST['directory'] = '';
-      }
-      
+		$restricted = $this->user->isDesigner();
+		$restrict = '';
+		if($restricted){
+			$dir = 'user_uploads/user_' . $this->user->getUserName();
+			if(!is_dir(DIR_IMAGE . 'data/' . $dir))
+				mkdir(DIR_IMAGE . 'data/' . $dir, 0777, true);
+			$restrict = !empty($_POST['directory'])?$_POST['directory']:$dir . '/';
+			$_POST['directory'] = '';
+		}
+		
 		if (!empty($_POST['directory'])) {
 			$directory = DIR_IMAGE . 'data/' . str_replace('../', '', $_POST['directory']);
 		} else {
@@ -115,15 +115,15 @@ class ControllerCommonFileManager extends Controller {
 		
 		$allowed = explode(',',strtolower($this->config->get('config_upload_images_allowed')));
 		foreach($allowed as &$a)
-         $a = trim($a);
-      
+			$a = trim($a);
+		
 		$files = glob(rtrim($directory, '/') . '/*');
 		
 		if ($files) {
 			foreach ($files as $file) {
 				if (is_file($file)) {
 					$ext = strrchr($file, '.');
-               $ext = $ext?substr($ext,1):'';
+					$ext = $ext?substr($ext,1):'';
 				} else {
 					$ext = '';
 				}	
@@ -152,8 +152,8 @@ class ControllerCommonFileManager extends Controller {
 						
 					$json[] = array(
 						'filename' => basename($file),
-						'file'     => substr($file, strlen(DIR_IMAGE . 'data/')),
-						'size'     => round(substr($size, 0, strpos($size, '.') + 4), 2) . $suffix[$i]
+						'file'	=> substr($file, strlen(DIR_IMAGE . 'data/')),
+						'size'	=> round(substr($size, 0, strpos($size, '.') + 4), 2) . $suffix[$i]
 					);
 				}
 			}
@@ -169,11 +169,11 @@ class ControllerCommonFileManager extends Controller {
 		
 		if (isset($_POST['directory'])) {
 			if (isset($_POST['name']) || $_POST['name']) {
-			   $restricted = $this->user->isDesigner();
-            if($restricted && empty($this->requst->post['directory'])){
-               $_POST['directory'] = 'user_uploads/user_' . $this->user->getUserName() . '/';
-            }
-            
+				$restricted = $this->user->isDesigner();
+				if($restricted && empty($this->requst->post['directory'])){
+					$_POST['directory'] = 'user_uploads/user_' . $this->user->getUserName() . '/';
+				}
+				
 				$directory = rtrim(DIR_IMAGE . 'data/' . str_replace('../', '', $_POST['directory']), '/');
 				
 				if (!is_dir($directory)) {
@@ -191,8 +191,8 @@ class ControllerCommonFileManager extends Controller {
 		}
 		
 		if (!$this->user->hasPermission('modify', 'common/filemanager')) {
-      		$json['error'] = $this->_('error_permission');
-    	}
+				$json['error'] = $this->_('error_permission');
+		}
 		
 		if (!isset($json['error'])) {	
 			mkdir($directory . '/' . str_replace('../', '', $_POST['name']), 0777);
@@ -210,7 +210,7 @@ class ControllerCommonFileManager extends Controller {
 		
 		if (isset($_POST['path'])) {
 			$path = rtrim(DIR_IMAGE . 'data/' . str_replace('../', '', html_entity_decode($_POST['path'], ENT_QUOTES, 'UTF-8')), '/');
-			 
+			
 			if (!file_exists($path)) {
 				$json['error'] = $this->_('error_select');
 			}
@@ -223,8 +223,8 @@ class ControllerCommonFileManager extends Controller {
 		}
 		
 		if (!$this->user->hasPermission('modify', 'common/filemanager')) {
-      		$json['error'] = $this->_('error_permission');  
-    	}
+				$json['error'] = $this->_('error_permission');  
+		}
 		
 		if (!isset($json['error'])) {
 			if (is_file($path)) {
@@ -295,8 +295,8 @@ class ControllerCommonFileManager extends Controller {
 		}
 		
 		if (!$this->user->hasPermission('modify', 'common/filemanager')) {
-      		$json['error'] = $this->_('error_permission');  
-    	}
+				$json['error'] = $this->_('error_permission');  
+		}
 		
 		if (!isset($json['error'])) {
 			rename($from, $to . '/' . basename($from));
@@ -330,7 +330,7 @@ class ControllerCommonFileManager extends Controller {
 			}		
 			
 			$new_name = dirname($old_name) . '/' . str_replace('../', '', html_entity_decode($_POST['name'], ENT_QUOTES, 'UTF-8') . $ext);
-																			   
+																				
 			if (file_exists($new_name)) {
 				$json['error'] = $this->_('error_exists');
 			}			
@@ -339,8 +339,8 @@ class ControllerCommonFileManager extends Controller {
 		}
 		
 		if (!$this->user->hasPermission('modify', 'common/filemanager')) {
-      		$json['error'] = $this->_('error_permission');  
-    	}	
+				$json['error'] = $this->_('error_permission');  
+		}	
 		
 		if (!isset($json['error'])) {
 			if (is_file($old_name)) {
@@ -414,15 +414,15 @@ class ControllerCommonFileManager extends Controller {
 			}		
 			
 			$new_name = dirname($old_name) . '/' . str_replace('../', '', html_entity_decode($_POST['name'], ENT_QUOTES, 'UTF-8') . $ext);
-																			   
+																				
 			if (file_exists($new_name)) {
 				$json['error'] = $this->_('error_exists');
 			}			
 		}
 		
 		if (!$this->user->hasPermission('modify', 'common/filemanager')) {
-      		$json['error'] = $this->_('error_permission');  
-    	}
+				$json['error'] = $this->_('error_permission');  
+		}
 		
 		if (!isset($json['error'])) {
 			rename($old_name, $new_name);
@@ -445,11 +445,11 @@ class ControllerCommonFileManager extends Controller {
 				if ((strlen($filename) < 3) || (strlen($filename) > 255)) {
 					$json['error'] = $this->_('error_filename');
 				}
-			   
-            $restricted = $this->user->isDesigner();
-            if($restricted && empty($this->requst->post['directory'])){
-               $_POST['directory'] = 'user_uploads/user_' . $this->user->getUserName() . '/';
-            }
+				
+				$restricted = $this->user->isDesigner();
+				if($restricted && empty($this->requst->post['directory'])){
+					$_POST['directory'] = 'user_uploads/user_' . $this->user->getUserName() . '/';
+				}
 
 				$directory = rtrim(DIR_IMAGE . 'data/' . str_replace('../', '', $_POST['directory']), '/');
 				
@@ -461,17 +461,17 @@ class ControllerCommonFileManager extends Controller {
 					$json['error'] = $this->_('error_file_size');
 				}
 				
-            $allowed = explode(',',$this->config->get('config_upload_images_mime_types_allowed'));
-            foreach($allowed as &$a)
-               $a = trim($a);
+				$allowed = explode(',',$this->config->get('config_upload_images_mime_types_allowed'));
+				foreach($allowed as &$a)
+					$a = trim($a);
 				if (!in_array($_FILES['image']['type'], $allowed)) {
-				   $json['error'] = $this->_('error_file_type');
+					$json['error'] = $this->_('error_file_type');
 				}
 				
 				$allowed = explode(',',$this->config->get('config_upload_images_allowed'));
 				foreach($allowed as &$a)
-               $a = trim($a);
-            
+					$a = trim($a);
+				
 				if (!in_array(strtolower(substr(strrchr($filename, '.'),1)), $allowed)) {
 					$json['error'] = $this->_('error_file_type');
 				}
@@ -487,8 +487,8 @@ class ControllerCommonFileManager extends Controller {
 		}
 		
 		if (!$this->user->hasPermission('modify', 'common/filemanager')) {
-      		$json['error'] = $this->_('error_permission');  
-    	}
+				$json['error'] = $this->_('error_permission');  
+		}
 		
 		if (!isset($json['error'])) {	
 			if (@move_uploaded_file($_FILES['image']['tmp_name'], $directory . '/' . $filename)) {		

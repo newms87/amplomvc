@@ -1,8 +1,8 @@
 <?php
 class ControllerModuleSearchBar extends Controller {
-	 
 	
-	public function index() {   
+	
+	public function index() {	
 		$this->template->load('module/search_bar');
 
 		$this->load->language('module/search_bar');
@@ -54,10 +54,6 @@ class ControllerModuleSearchBar extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

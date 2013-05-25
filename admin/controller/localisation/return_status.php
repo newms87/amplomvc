@@ -1,23 +1,23 @@
 <?php 
 class ControllerLocalisationReturnStatus extends Controller { 
 	
-   
+	
   	public function index() {
 		$this->load->language('localisation/return_status');
 	
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
 		$this->getList();
   	}
-              
+				
   	public function insert() {
 		$this->load->language('localisation/return_status');
 	
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-      		$this->model_localisation_return_status->addReturnStatus($_POST);
-		  	
+				$this->model_localisation_return_status->addReturnStatus($_POST);
+			
 			$this->message->add('success', $this->_('text_success'));
 
 			$url = '';
@@ -34,19 +34,19 @@ class ControllerLocalisationReturnStatus extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 						
-      		$this->url->redirect($this->url->link('localisation/return_status', $url));
+				$this->url->redirect($this->url->link('localisation/return_status', $url));
 		}
 	
-    	$this->getForm();
+		$this->getForm();
   	}
 
   	public function update() {
 		$this->load->language('localisation/return_status');
 	
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-	  		$this->model_localisation_return_status->editReturnStatus($_GET['return_status_id'], $_POST);
+			$this->model_localisation_return_status->editReturnStatus($_GET['return_status_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -65,21 +65,21 @@ class ControllerLocalisationReturnStatus extends Controller {
 			}
 			
 			$this->url->redirect($this->url->link('localisation/return_status', $url));
-    	}
+		}
 	
-    	$this->getForm();
+		$this->getForm();
   	}
 
   	public function delete() {
 		$this->load->language('localisation/return_status');
 	
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $return_status_id) {
 				$this->model_localisation_return_status->deleteReturnStatus($return_status_id);
 			}
-			      		
+							
 			$this->message->add('success', $this->_('text_success'));
 
 			$url = '';
@@ -97,11 +97,11 @@ class ControllerLocalisationReturnStatus extends Controller {
 			}
 			
 			$this->url->redirect($this->url->link('localisation/return_status', $url));
-   		}
+			}
 	
-    	$this->getList();
+		$this->getList();
   	}
-    
+	
   	private function getList() {
 		$this->template->load('localisation/return_status_list');
 
@@ -156,7 +156,7 @@ class ControllerLocalisationReturnStatus extends Controller {
 	
 		$results = $this->model_localisation_return_status->getReturnStatuses($data);
  
-    	foreach ($results as $result) {
+		foreach ($results as $result) {
 			$action = array();
 			
 			$action[] = array(
@@ -166,9 +166,9 @@ class ControllerLocalisationReturnStatus extends Controller {
 						
 			$this->data['return_statuses'][] = array(
 				'return_status_id' => $result['return_status_id'],
-				'name'          => $result['name'] . (($result['return_status_id'] == $this->config->get('config_return_status_id')) ? $this->_('text_default') : null),
-				'selected'      => isset($_POST['selected']) && in_array($result['return_status_id'], $_POST['selected']),
-				'action'        => $action
+				'name'			=> $result['name'] . (($result['return_status_id'] == $this->config->get('config_return_status_id')) ? $this->_('text_default') : null),
+				'selected'		=> isset($_POST['selected']) && in_array($result['return_status_id'], $_POST['selected']),
+				'action'		=> $action
 			);
 		}	
 	
@@ -214,7 +214,6 @@ class ControllerLocalisationReturnStatus extends Controller {
 		$this->pagination->total = $return_status_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('localisation/return_status', $url);
 			
 		$this->data['pagination'] = $this->pagination->render();
@@ -289,50 +288,46 @@ class ControllerLocalisationReturnStatus extends Controller {
   	}
   	
 	private function validateForm() {
-    	if (!$this->user->hasPermission('modify', 'localisation/return_status')) {
-      		$this->error['warning'] = $this->_('error_permission');
-    	}
-	
-    	foreach ($_POST['return_status'] as $language_id => $value) {
-      		if ((strlen($value['name']) < 3) || (strlen($value['name']) > 32)) {
-        		$this->error['name'][$language_id] = $this->_('error_name');
-      		}
-    	}
-		
-		if (!$this->error) {
-	  		return true;
-		} else {
-	  		return false;
+		if (!$this->user->hasPermission('modify', 'localisation/return_status')) {
+				$this->error['warning'] = $this->_('error_permission');
 		}
+	
+		foreach ($_POST['return_status'] as $language_id => $value) {
+				if ((strlen($value['name']) < 3) || (strlen($value['name']) > 32)) {
+				$this->error['name'][$language_id] = $this->_('error_name');
+				}
+		}
+		
+		return $this->error ? false : true;
   	}
 
   	private function validateDelete() {
 		if (!$this->user->hasPermission('modify', 'localisation/return_status')) {
-      		$this->error['warning'] = $this->_('error_permission');
-    	}
+				$this->error['warning'] = $this->_('error_permission');
+		}
 		
 		foreach ($_POST['selected'] as $return_status_id) {
-    		if ($this->config->get('config_return_status_id') == $return_status_id) {
-	  			$this->error['warning'] = $this->_('error_default');	
+			if ($this->config->get('config_return_status_id') == $return_status_id) {
+				$this->error['warning'] = $this->_('error_default');	
 			}  
 			
 			$return_total = $this->model_sale_return->getTotalReturnsByReturnStatusId($return_status_id);
 		
 			if ($return_total) {
-	  			$this->error['warning'] = sprintf($this->_('error_return'), $return_total);	
+				$this->error['warning'] = sprintf($this->_('error_return'), $return_total);	
 			}  
 			
 			$return_total = $this->model_sale_return->getTotalReturnHistoriesByReturnStatusId($return_status_id);
 		
 			if ($return_total) {
-	  			$this->error['warning'] = sprintf($this->_('error_return'), $return_total);	
+				$this->error['warning'] = sprintf($this->_('error_return'), $return_total);	
 			}  			
-	  	}
+		}
 		
 		if (!$this->error) { 
-	  		return true;
+			return true;
 		} else {
-	  		return false;
+			return false;
 		}
-  	}	  
+  	}	
 }

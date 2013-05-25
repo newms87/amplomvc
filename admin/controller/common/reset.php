@@ -22,9 +22,9 @@ class ControllerCommonReset extends Controller {
 			
 			if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 				$this->model_user_user->editPassword($user_info['user_id'], $_POST['password']);
-	 
+	
 				$this->message->add('success', $this->_('text_success'));
-		  
+		
 				$this->url->redirect($this->url->link('common/login'));
 			}
 			
@@ -44,7 +44,7 @@ class ControllerCommonReset extends Controller {
 			}
 			
 			$this->data['action'] = $this->url->link('common/reset', 'code=' . $code);
-	 
+	
 			$this->data['cancel'] = $this->url->link('common/login');
 			
 			if (isset($_POST['password'])) {
@@ -71,18 +71,14 @@ class ControllerCommonReset extends Controller {
 	}
 
 	private function validate() {
-    	if ((strlen($_POST['password']) < 4) || (strlen($_POST['password']) > 20)) {
-      		$this->error['password'] = $this->_('error_password');
-    	}
-
-    	if ($_POST['confirm'] != $_POST['password']) {
-      		$this->error['confirm'] = $this->_('error_confirm');
-    	}  
-
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
+		if ((strlen($_POST['password']) < 4) || (strlen($_POST['password']) > 20)) {
+				$this->error['password'] = $this->_('error_password');
 		}
+
+		if ($_POST['confirm'] != $_POST['password']) {
+				$this->error['confirm'] = $this->_('error_confirm');
+		}  
+
+		return $this->error ? false : true;
 	}
 }

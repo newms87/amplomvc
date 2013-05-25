@@ -1,6 +1,6 @@
 <?php 
 class ControllerPaymentSagepayUS extends Controller {
-	 
+	
 
 	public function index() {
 		$this->template->load('payment/sagepay_us');
@@ -110,10 +110,6 @@ class ControllerPaymentSagepayUS extends Controller {
 			$this->error['merchant_key'] = $this->_('error_merchant_key');
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

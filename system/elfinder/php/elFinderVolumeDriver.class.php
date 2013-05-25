@@ -14,452 +14,452 @@
 abstract class elFinderVolumeDriver {
 	
 	/**
-	 * Driver id
-	 * Must be started from letter and contains [a-z0-9]
-	 * Used as part of volume id
-	 *
-	 * @var string
-	 **/
+	* Driver id
+	* Must be started from letter and contains [a-z0-9]
+	* Used as part of volume id
+	*
+	* @var string
+	**/
 	protected $driverId = 'a';
 	
 	/**
-	 * Volume id - used as prefix for files hashes
-	 *
-	 * @var string
-	 **/
+	* Volume id - used as prefix for files hashes
+	*
+	* @var string
+	**/
 	protected $id = '';
 	
 	/**
-	 * Flag - volume "mounted" and available
-	 *
-	 * @var bool
-	 **/
+	* Flag - volume "mounted" and available
+	*
+	* @var bool
+	**/
 	protected $mounted = false;
 	
 	/**
-	 * Root directory path
-	 *
-	 * @var string
-	 **/
+	* Root directory path
+	*
+	* @var string
+	**/
 	protected $root = '';
 	
 	/**
-	 * Root basename | alias
-	 *
-	 * @var string
-	 **/
+	* Root basename | alias
+	*
+	* @var string
+	**/
 	protected $rootName = '';
 	
 	/**
-	 * Default directory to open
-	 *
-	 * @var string
-	 **/
+	* Default directory to open
+	*
+	* @var string
+	**/
 	protected $startPath = '';
 	
 	/**
-	 * Base URL
-	 *
-	 * @var string
-	 **/
+	* Base URL
+	*
+	* @var string
+	**/
 	protected $URL = '';
 	
 	/**
-	 * Thumbnails dir path
-	 *
-	 * @var string
-	 **/
+	* Thumbnails dir path
+	*
+	* @var string
+	**/
 	protected $tmbPath = '';
 	
 	/**
-	 * Is thumbnails dir writable
-	 *
-	 * @var bool
-	 **/
+	* Is thumbnails dir writable
+	*
+	* @var bool
+	**/
 	protected $tmbPathWritable = false;
 	
 	/**
-	 * Thumbnails base URL
-	 *
-	 * @var string
-	 **/
+	* Thumbnails base URL
+	*
+	* @var string
+	**/
 	protected $tmbURL = '';
 	
 	/**
-	 * Thumbnails size in px
-	 *
-	 * @var int
-	 **/
+	* Thumbnails size in px
+	*
+	* @var int
+	**/
 	protected $tmbSize = 48;
 	
 	/**
-	 * Image manipulation lib name
-	 * auto|imagick|mogtify|gd
-	 *
-	 * @var string
-	 **/
+	* Image manipulation lib name
+	* auto|imagick|mogtify|gd
+	*
+	* @var string
+	**/
 	protected $imgLib = 'auto';
 	
 	/**
-	 * Library to crypt files name
-	 *
-	 * @var string
-	 **/
+	* Library to crypt files name
+	*
+	* @var string
+	**/
 	protected $cryptLib = '';
 	
 	/**
-	 * Archivers config
-	 *
-	 * @var array
-	 **/
+	* Archivers config
+	*
+	* @var array
+	**/
 	protected $archivers = array(
 		'create'  => array(),
 		'extract' => array()
 	);
 	
 	/**
-	 * How many subdirs levels return for tree
-	 *
-	 * @var int
-	 **/
+	* How many subdirs levels return for tree
+	*
+	* @var int
+	**/
 	protected $treeDeep = 1;
 	
 	/**
-	 * Errors from last failed action
-	 *
-	 * @var array
-	 **/
+	* Errors from last failed action
+	*
+	* @var array
+	**/
 	protected $error = array();
 	
 	/**
-	 * Today 24:00 timestamp
-	 *
-	 * @var int
-	 **/
+	* Today 24:00 timestamp
+	*
+	* @var int
+	**/
 	protected $today = 0;
 	
 	/**
-	 * Yesterday 24:00 timestamp
-	 *
-	 * @var int
-	 **/
+	* Yesterday 24:00 timestamp
+	*
+	* @var int
+	**/
 	protected $yesterday = 0;
 	
 	/**
-	 * Object configuration
-	 *
-	 * @var array
-	 **/
+	* Object configuration
+	*
+	* @var array
+	**/
 	protected $options = array(
-		'id'              => '',
+		'id'				=> '',
 		// root directory path
-		'path'            => '',
+		'path'				=> '',
 		// open this path on initial request instead of root path
-		'startPath'       => '',
+		'startPath'		=> '',
 		// how many subdirs levels return per request
-		'treeDeep'        => 1,
+		'treeDeep'		=> 1,
 		// root url, not set to disable sending URL to client (replacement for old "fileURL" option)
-		'URL'             => '',
+		'URL'				=> '',
 		// directory separator. required by client to show paths correctly
-		'separator'       => DIRECTORY_SEPARATOR,
+		'separator'		=> DIRECTORY_SEPARATOR,
 		// library to crypt/uncrypt files names (not implemented)
-		'cryptLib'        => '',
+		'cryptLib'		=> '',
 		// how to detect files mimetypes. (auto/internal/finfo/mime_content_type)
-		'mimeDetect'      => 'auto',
+		'mimeDetect'		=> 'auto',
 		// mime.types file path (for mimeDetect==internal)
-		'mimefile'        => '',
+		'mimefile'		=> '',
 		// directory for thumbnails
-		'tmbPath'         => '.tmb',
+		'tmbPath'			=> '.tmb',
 		// mode to create thumbnails dir
-		'tmbPathMode'     => 0777,
+		'tmbPathMode'	=> 0777,
 		// thumbnails dir URL. Set it if store thumbnails outside root directory
-		'tmbURL'          => '',
+		'tmbURL'			=> '',
 		// thumbnails size (px)
-		'tmbSize'         => 48,
+		'tmbSize'			=> 48,
 		// thumbnails crop (true - crop, false - scale image to fit thumbnail size)
-		'tmbCrop'         => true,
+		'tmbCrop'			=> true,
 		// thumbnails background color (hex #rrggbb or 'transparent')
-		'tmbBgColor'      => '#ffffff',
+		'tmbBgColor'		=> '#ffffff',
 		// image manipulations library
-		'imgLib'          => 'auto',
+		'imgLib'			=> 'auto',
 		// on paste file -  if true - old file will be replaced with new one, if false new file get name - original_name-number.ext
-		'copyOverwrite'   => true,
+		'copyOverwrite'	=> true,
 		// if true - join new and old directories content on paste
-		'copyJoin'        => true,
+		'copyJoin'		=> true,
 		// on upload -  if true - old file will be replaced with new one, if false new file get name - original_name-number.ext
 		'uploadOverwrite' => false,
 		// mimetypes allowed to upload
-		'uploadAllow'     => array(),
+		'uploadAllow'	=> array(),
 		// mimetypes not allowed to upload
-		'uploadDeny'      => array(),
+		'uploadDeny'		=> array(),
 		// order to proccess uploadAllow and uploadDeny options
-		'uploadOrder'     => array('deny', 'allow'),
+		'uploadOrder'	=> array('deny', 'allow'),
 		// maximum upload file size. NOTE - this is size for every uploaded files
-		'uploadMaxSize'   => 0,
+		'uploadMaxSize'	=> 0,
 		// files dates format
-		'dateFormat'      => 'j M Y H:i',
+		'dateFormat'		=> 'j M Y H:i',
 		// files time format
-		'timeFormat'      => 'H:i',
+		'timeFormat'		=> 'H:i',
 		// if true - every folder will be check for children folders, otherwise all folders will be marked as having subfolders
 		'checkSubfolders' => true,
 		// allow to copy from this volume to other ones?
-		'copyFrom'        => true,
+		'copyFrom'		=> true,
 		// allow to copy from other volumes to this one?
-		'copyTo'          => true,
+		'copyTo'			=> true,
 		// list of commands disabled on this root
-		'disabled'        => array(),
+		'disabled'		=> array(),
 		// regexp or function name to validate new file name
-		'acceptedName'    => '/^\w[\w\s\.\%\-\(\)\[\]]*$/u',
+		'acceptedName'	=> '/^\w[\w\s\.\%\-\(\)\[\]]*$/u',
 		// function/class method to control files permissions
-		'accessControl'   => null,
+		'accessControl'	=> null,
 		// some data required by access control
 		'accessControlData' => null,
 		// default permissions. not set hidden/locked here - take no effect
-		'defaults'     => array(
-			'read'   => true,
+		'defaults'	=> array(
+			'read'	=> true,
 			'write'  => true
 		),
 		// files attributes
-		'attributes'   => array(),
+		'attributes'	=> array(),
 		// Allowed archive's mimetypes to create. Leave empty for all available types.
 		'archiveMimes' => array(),
 		// Manual config for archivers. See example below. Leave empty for auto detect
-		'archivers'    => array(),
+		'archivers'	=> array(),
 		// required to fix bug on macos
-		'utf8fix'      => false,
-		 //                           й                 ё              Й               Ё              Ø         Å
+		'utf8fix'		=> false,
+		//									й					ё				Й					Ё				Ø			Å
 		'utf8patterns' => array("\u0438\u0306", "\u0435\u0308", "\u0418\u0306", "\u0415\u0308", "\u00d8A", "\u030a"),
-		'utf8replace'  => array("\u0439",        "\u0451",       "\u0419",       "\u0401",       "\u00d8", "\u00c5")
+		'utf8replace'  => array("\u0439",		"\u0451",		"\u0419",		"\u0401",		"\u00d8", "\u00c5")
 	);
 
 	/**
-	 * Defaults permissions
-	 *
-	 * @var array
-	 **/
+	* Defaults permissions
+	*
+	* @var array
+	**/
 	protected $defaults = array(
-		'read'   => true,
+		'read'	=> true,
 		'write'  => true,
 		'locked' => false,
 		'hidden' => false
 	);
 	
 	/**
-	 * Access control function/class
-	 *
-	 * @var mixed
-	 **/
+	* Access control function/class
+	*
+	* @var mixed
+	**/
 	protected $attributes = array();
 	
 	/**
-	 * Access control function/class
-	 *
-	 * @var mixed
-	 **/
+	* Access control function/class
+	*
+	* @var mixed
+	**/
 	protected $access = null;
 	
 	/**
-	 * Mime types allowed to upload
-	 *
-	 * @var array
-	 **/
+	* Mime types allowed to upload
+	*
+	* @var array
+	**/
 	protected $uploadAllow = array();
 	
 	/**
-	 * Mime types denied to upload
-	 *
-	 * @var array
-	 **/
+	* Mime types denied to upload
+	*
+	* @var array
+	**/
 	protected $uploadDeny = array();
 	
 	/**
-	 * Order to validate uploadAllow and uploadDeny
-	 *
-	 * @var array
-	 **/
+	* Order to validate uploadAllow and uploadDeny
+	*
+	* @var array
+	**/
 	protected $uploadOrder = array();
 	
 	/**
-	 * Maximum allowed upload file size.
-	 * Set as number or string with unit - "10M", "500K", "1G"
-	 *
-	 * @var int|string
-	 **/
+	* Maximum allowed upload file size.
+	* Set as number or string with unit - "10M", "500K", "1G"
+	*
+	* @var int|string
+	**/
 	protected $uploadMaxSize = 0;
 	
 	/**
-	 * Mimetype detect method
-	 *
-	 * @var string
-	 **/
+	* Mimetype detect method
+	*
+	* @var string
+	**/
 	protected $mimeDetect = 'auto';
 	
 	/**
-	 * Flag - mimetypes from externail file was loaded
-	 *
-	 * @var bool
-	 **/
+	* Flag - mimetypes from externail file was loaded
+	*
+	* @var bool
+	**/
 	private static $mimetypesLoaded = false;
 	
 	/**
-	 * Finfo object for mimeDetect == 'finfo'
-	 *
-	 * @var object
-	 **/
+	* Finfo object for mimeDetect == 'finfo'
+	*
+	* @var object
+	**/
 	protected $finfo = null;
 	
 	/**
-	 * List of disabled client's commands
-	 *
-	 * @var array
-	 **/
+	* List of disabled client's commands
+	*
+	* @var array
+	**/
 	protected $diabled = array();
 	
 	/**
-	 * default extensions/mimetypes for mimeDetect == 'internal' 
-	 *
-	 * @var array
-	 **/
+	* default extensions/mimetypes for mimeDetect == 'internal' 
+	*
+	* @var array
+	**/
 	protected static $mimetypes = array(
 		// applications
-		'ai'    => 'application/postscript',
-		'eps'   => 'application/postscript',
-		'exe'   => 'application/x-executable',
-		'doc'   => 'application/vnd.ms-word',
-		'xls'   => 'application/vnd.ms-excel',
-		'ppt'   => 'application/vnd.ms-powerpoint',
-		'pps'   => 'application/vnd.ms-powerpoint',
-		'pdf'   => 'application/pdf',
-		'xml'   => 'application/xml',
-		'odt'   => 'application/vnd.oasis.opendocument.text',
-		'swf'   => 'application/x-shockwave-flash',
+		'ai'	=> 'application/postscript',
+		'eps'	=> 'application/postscript',
+		'exe'	=> 'application/x-executable',
+		'doc'	=> 'application/vnd.ms-word',
+		'xls'	=> 'application/vnd.ms-excel',
+		'ppt'	=> 'application/vnd.ms-powerpoint',
+		'pps'	=> 'application/vnd.ms-powerpoint',
+		'pdf'	=> 'application/pdf',
+		'xml'	=> 'application/xml',
+		'odt'	=> 'application/vnd.oasis.opendocument.text',
+		'swf'	=> 'application/x-shockwave-flash',
 		'torrent' => 'application/x-bittorrent',
-		'jar'   => 'application/x-jar',
+		'jar'	=> 'application/x-jar',
 		// archives
-		'gz'    => 'application/x-gzip',
-		'tgz'   => 'application/x-gzip',
-		'bz'    => 'application/x-bzip2',
-		'bz2'   => 'application/x-bzip2',
-		'tbz'   => 'application/x-bzip2',
-		'zip'   => 'application/zip',
-		'rar'   => 'application/x-rar',
-		'tar'   => 'application/x-tar',
-		'7z'    => 'application/x-7z-compressed',
+		'gz'	=> 'application/x-gzip',
+		'tgz'	=> 'application/x-gzip',
+		'bz'	=> 'application/x-bzip2',
+		'bz2'	=> 'application/x-bzip2',
+		'tbz'	=> 'application/x-bzip2',
+		'zip'	=> 'application/zip',
+		'rar'	=> 'application/x-rar',
+		'tar'	=> 'application/x-tar',
+		'7z'	=> 'application/x-7z-compressed',
 		// texts
-		'txt'   => 'text/plain',
-		'php'   => 'text/x-php',
+		'txt'	=> 'text/plain',
+		'php'	=> 'text/x-php',
 		'html'  => 'text/html',
-		'htm'   => 'text/html',
-		'js'    => 'text/javascript',
-		'css'   => 'text/css',
-		'rtf'   => 'text/rtf',
+		'htm'	=> 'text/html',
+		'js'	=> 'text/javascript',
+		'css'	=> 'text/css',
+		'rtf'	=> 'text/rtf',
 		'rtfd'  => 'text/rtfd',
-		'py'    => 'text/x-python',
+		'py'	=> 'text/x-python',
 		'java'  => 'text/x-java-source',
-		'rb'    => 'text/x-ruby',
-		'sh'    => 'text/x-shellscript',
-		'pl'    => 'text/x-perl',
-		'xml'   => 'text/xml',
-		'sql'   => 'text/x-sql',
-		'c'     => 'text/x-csrc',
-		'h'     => 'text/x-chdr',
-		'cpp'   => 'text/x-c++src',
-		'hh'    => 'text/x-c++hdr',
-		'log'   => 'text/plain',
-		'csv'   => 'text/x-comma-separated-values',
+		'rb'	=> 'text/x-ruby',
+		'sh'	=> 'text/x-shellscript',
+		'pl'	=> 'text/x-perl',
+		'xml'	=> 'text/xml',
+		'sql'	=> 'text/x-sql',
+		'c'	=> 'text/x-csrc',
+		'h'	=> 'text/x-chdr',
+		'cpp'	=> 'text/x-c++src',
+		'hh'	=> 'text/x-c++hdr',
+		'log'	=> 'text/plain',
+		'csv'	=> 'text/x-comma-separated-values',
 		// images
-		'bmp'   => 'image/x-ms-bmp',
-		'jpg'   => 'image/jpeg',
+		'bmp'	=> 'image/x-ms-bmp',
+		'jpg'	=> 'image/jpeg',
 		'jpeg'  => 'image/jpeg',
-		'gif'   => 'image/gif',
-		'png'   => 'image/png',
-		'tif'   => 'image/tiff',
+		'gif'	=> 'image/gif',
+		'png'	=> 'image/png',
+		'tif'	=> 'image/tiff',
 		'tiff'  => 'image/tiff',
-		'tga'   => 'image/x-targa',
-		'psd'   => 'image/vnd.adobe.photoshop',
-		'ai'    => 'image/vnd.adobe.photoshop',
-		'xbm'   => 'image/xbm',
-		'pxm'   => 'image/pxm',
+		'tga'	=> 'image/x-targa',
+		'psd'	=> 'image/vnd.adobe.photoshop',
+		'ai'	=> 'image/vnd.adobe.photoshop',
+		'xbm'	=> 'image/xbm',
+		'pxm'	=> 'image/pxm',
 		//audio
-		'mp3'   => 'audio/mpeg',
-		'mid'   => 'audio/midi',
-		'ogg'   => 'audio/ogg',
-		'oga'   => 'audio/ogg',
-		'm4a'   => 'audio/x-m4a',
-		'wav'   => 'audio/wav',
-		'wma'   => 'audio/x-ms-wma',
+		'mp3'	=> 'audio/mpeg',
+		'mid'	=> 'audio/midi',
+		'ogg'	=> 'audio/ogg',
+		'oga'	=> 'audio/ogg',
+		'm4a'	=> 'audio/x-m4a',
+		'wav'	=> 'audio/wav',
+		'wma'	=> 'audio/x-ms-wma',
 		// video
-		'avi'   => 'video/x-msvideo',
-		'dv'    => 'video/x-dv',
-		'mp4'   => 'video/mp4',
+		'avi'	=> 'video/x-msvideo',
+		'dv'	=> 'video/x-dv',
+		'mp4'	=> 'video/mp4',
 		'mpeg'  => 'video/mpeg',
-		'mpg'   => 'video/mpeg',
-		'mov'   => 'video/quicktime',
-		'wm'    => 'video/x-ms-wmv',
-		'flv'   => 'video/x-flv',
-		'mkv'   => 'video/x-matroska',
+		'mpg'	=> 'video/mpeg',
+		'mov'	=> 'video/quicktime',
+		'wm'	=> 'video/x-ms-wmv',
+		'flv'	=> 'video/x-flv',
+		'mkv'	=> 'video/x-matroska',
 		'webm'  => 'video/webm',
-		'ogv'   => 'video/ogg',
-		'ogm'   => 'video/ogg'
+		'ogv'	=> 'video/ogg',
+		'ogm'	=> 'video/ogg'
 		);
 	
 	/**
-	 * Directory separator - required by client
-	 *
-	 * @var string
-	 **/
+	* Directory separator - required by client
+	*
+	* @var string
+	**/
 	protected $separator = DIRECTORY_SEPARATOR;
 	
 	/**
-	 * Mimetypes allowed to display
-	 *
-	 * @var array
-	 **/
+	* Mimetypes allowed to display
+	*
+	* @var array
+	**/
 	protected $onlyMimes = array();
 	
 	/**
-	 * Store files moved or overwrited files info
-	 *
-	 * @var array
-	 **/
+	* Store files moved or overwrited files info
+	*
+	* @var array
+	**/
 	protected $removed = array();
 	
 	/**
-	 * Cache storage
-	 *
-	 * @var array
-	 **/
+	* Cache storage
+	*
+	* @var array
+	**/
 	protected $cache = array();
 	
 	/**
-	 * Cache by folders
-	 *
-	 * @var array
-	 **/
+	* Cache by folders
+	*
+	* @var array
+	**/
 	protected $dirsCache = array();
 	
 	/*********************************************************************/
-	/*                            INITIALIZATION                         */
+	/*									INITIALIZATION								*/
 	/*********************************************************************/
 	
 	/**
-	 * Prepare driver before mount volume.
-	 * Return true if volume is ready.
-	 *
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Prepare driver before mount volume.
+	* Return true if volume is ready.
+	*
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function init() {
 		return true;
 	}	
 		
 	/**
-	 * Configure after successfull mount.
-	 * By default set thumbnails path and image manipulation library.
-	 *
-	 * @return void
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Configure after successfull mount.
+	* By default set thumbnails path and image manipulation library.
+	*
+	* @return void
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function configure() {
 		// set thumbnails path
 		$path = $this->options['tmbPath'];
@@ -493,53 +493,53 @@ abstract class elFinderVolumeDriver {
 	
 	
 	/*********************************************************************/
-	/*                              PUBLIC API                           */
+	/*										PUBLIC API									*/
 	/*********************************************************************/
 	
 	/**
-	 * Return driver id. Used as a part of volume id.
-	 *
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return driver id. Used as a part of volume id.
+	*
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	public function driverId() {
 		return $this->driverId;
 	}
 	
 	/**
-	 * Return volume id
-	 *
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return volume id
+	*
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	public function id() {
 		return $this->id;
 	}
 		
 	/**
-	 * Return debug info for client
-	 *
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return debug info for client
+	*
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	public function debug() {
 		return array(
-			'id'         => $this->id(),
-			'name'       => strtolower(substr(get_class($this), strlen('elfinderdriver'))),
+			'id'			=> $this->id(),
+			'name'		=> strtolower(substr(get_class($this), strlen('elfinderdriver'))),
 			'mimeDetect' => $this->mimeDetect,
-			'imgLib'     => $this->imgLib
+			'imgLib'	=> $this->imgLib
 		);
 	}
 	
 	/**
-	 * "Mount" volume.
-	 * Return true if volume available for read or write, 
-	 * false - otherwise
-	 *
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 * @author Alexey Sukhotin
-	 **/
+	* "Mount" volume.
+	* Return true if volume available for read or write, 
+	* false - otherwise
+	*
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	* @author Alexey Sukhotin
+	**/
 	public function mount(array $opts) {
 		if (!isset($opts['path']) || $opts['path'] === '') {
 			return $this->setError('Path undefined.');;
@@ -552,8 +552,8 @@ abstract class elFinderVolumeDriver {
 		
 		// default file attribute
 		$this->defaults = array(
-			'read'    => isset($this->options['defaults']['read'])  ? !!$this->options['defaults']['read']  : true,
-			'write'   => isset($this->options['defaults']['write']) ? !!$this->options['defaults']['write'] : true,
+			'read'	=> isset($this->options['defaults']['read'])  ? !!$this->options['defaults']['read']  : true,
+			'write'	=> isset($this->options['defaults']['write']) ? !!$this->options['defaults']['write'] : true,
 			'locked'  => false,
 			'hidden'  => false
 		);
@@ -587,7 +587,7 @@ abstract class elFinderVolumeDriver {
 			}
 		}
 		
-		$this->today     = mktime(0,0,0, date('m'), date('d'), date('Y'));
+		$this->today	= mktime(0,0,0, date('m'), date('d'), date('Y'));
 		$this->yesterday = $this->today-86400;
 		
 		// debug($this->attributes);
@@ -632,7 +632,7 @@ abstract class elFinderVolumeDriver {
 			? $this->options['disabled']
 			: array();
 		
-		$this->cryptLib   = $this->options['cryptLib'];
+		$this->cryptLib	= $this->options['cryptLib'];
 		$this->mimeDetect = $this->options['mimeDetect'];
 
 		// find available mimetype detect method
@@ -713,23 +713,23 @@ abstract class elFinderVolumeDriver {
 				}
 			}
 		} else {
-			$this->options['URL']     = '';
+			$this->options['URL']	= '';
 			$this->options['tmbURL']  = '';
 			$this->options['tmbPath'] = '';
 			// read only volume
 			array_unshift($this->attributes, array(
 				'pattern' => '/.*/',
-				'read'    => false
+				'read'	=> false
 			));
 		}
 		$this->treeDeep = $this->options['treeDeep'] > 0 ? (int)$this->options['treeDeep'] : 1;
 		$this->tmbSize  = $this->options['tmbSize'] > 0 ? (int)$this->options['tmbSize'] : 48;
-		$this->URL      = $this->options['URL'];
+		$this->URL		= $this->options['URL'];
 		if ($this->URL && preg_match("|[^/?&=]$|", $this->URL)) {
 			$this->URL .= '/';
 		}
 
-		$this->tmbURL   = !empty($this->options['tmbURL']) ? $this->options['tmbURL'] : '';
+		$this->tmbURL	= !empty($this->options['tmbURL']) ? $this->options['tmbURL'] : '';
 		if ($this->tmbURL && preg_match("|[^/?&=]$|", $this->tmbURL)) {
 			$this->tmbURL .= '/';
 		}
@@ -780,31 +780,31 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Some "unmount" stuffs - may be required by virtual fs
-	 *
-	 * @return void
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Some "unmount" stuffs - may be required by virtual fs
+	*
+	* @return void
+	* @author Dmitry (dio) Levashov
+	**/
 	public function umount() {
 	}
 	
 	/**
-	 * Return error message from last failed action
-	 *
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return error message from last failed action
+	*
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	public function error() {
 		return $this->error;
 	}
 	
 	/**
-	 * Set mimetypes allowed to display to client
-	 *
-	 * @param  array  $mimes
-	 * @return void
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Set mimetypes allowed to display to client
+	*
+	* @param  array  $mimes
+	* @return void
+	* @author Dmitry (dio) Levashov
+	**/
 	public function setMimesFilter($mimes) {
 		if (is_array($mimes)) {
 			$this->onlyMimes = $mimes;
@@ -812,40 +812,40 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Return root folder hash
-	 *
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return root folder hash
+	*
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	public function root() {
 		return $this->encode($this->root);
 	}
 	
 	/**
-	 * Return root or startPath hash
-	 *
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return root or startPath hash
+	*
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	public function defaultPath() {
 		return $this->encode($this->startPath ? $this->startPath : $this->root);
 	}
 		
 	/**
-	 * Return volume options required by client:
-	 *
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return volume options required by client:
+	*
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	public function options($hash) {
 		return array(
-			'path'          => $this->_path($this->decode($hash)),
-			'url'           => $this->URL,
-			'tmbUrl'        => $this->tmbURL,
-			'disabled'      => $this->disabled,
-			'separator'     => $this->separator,
+			'path'			=> $this->_path($this->decode($hash)),
+			'url'			=> $this->URL,
+			'tmbUrl'		=> $this->tmbURL,
+			'disabled'		=> $this->disabled,
+			'separator'	=> $this->separator,
 			'copyOverwrite' => intval($this->options['copyOverwrite']),
-			'archivers'     => array(
+			'archivers'	=> array(
 				'create'  => array_keys($this->archivers['create']),
 				'extract' => array_keys($this->archivers['extract'])
 			)
@@ -853,26 +853,26 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Return true if command disabled in options
-	 *
-	 * @param  string  $cmd  command name
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return true if command disabled in options
+	*
+	* @param  string  $cmd  command name
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	public function commandDisabled($cmd) {
 		return in_array($cmd, $this->disabled);
 	}
 	
 	/**
-	 * Return true if mime is required mimes list
-	 *
-	 * @param  string     $mime   mime type to check
-	 * @param  array      $mimes  allowed mime types list or not set to use client mimes list
-	 * @param  bool|null  $empty  what to return on empty list
-	 * @return bool|null
-	 * @author Dmitry (dio) Levashov
-	 * @author Troex Nevelin
-	 **/
+	* Return true if mime is required mimes list
+	*
+	* @param  string	$mime	mime type to check
+	* @param  array		$mimes  allowed mime types list or not set to use client mimes list
+	* @param  bool|null  $empty  what to return on empty list
+	* @return bool|null
+	* @author Dmitry (dio) Levashov
+	* @author Troex Nevelin
+	**/
 	public function mimeAccepted($mime, $mimes = array(), $empty = true) {
 		$mimes = !empty($mimes) ? $mimes : $this->onlyMimes;
 		if (empty($mimes)) {
@@ -886,90 +886,90 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Return true if voume is readable.
-	 *
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return true if voume is readable.
+	*
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	public function isReadable() {
 		$stat = $this->stat($this->root);
 		return $stat['read'];
 	}
 	
 	/**
-	 * Return true if copy from this volume allowed
-	 *
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return true if copy from this volume allowed
+	*
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	public function copyFromAllowed() {
 		return !!$this->options['copyFrom'];
 	}
 	
 	/**
-	 * Return file path related to root
-	 *
-	 * @param  string   $hash  file hash
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return file path related to root
+	*
+	* @param  string	$hash  file hash
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	public function path($hash) {
 		return $this->_path($this->decode($hash));
 	}
 	
 	/**
-	 * Return file real path if file exists
-	 *
-	 * @param  string  $hash  file hash
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return file real path if file exists
+	*
+	* @param  string  $hash  file hash
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	public function realpath($hash) {
 		$path = $this->decode($hash);
 		return $this->stat($path) ? $path : false;
 	}
 	
 	/**
-	 * Return list of moved/overwrited files
-	 *
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return list of moved/overwrited files
+	*
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	public function removed() {
 		return $this->removed;
 	}
 	
 	/**
-	 * Clean removed files list
-	 *
-	 * @return void
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Clean removed files list
+	*
+	* @return void
+	* @author Dmitry (dio) Levashov
+	**/
 	public function resetRemoved() {
 		$this->removed = array();
 	}
 	
 	/**
-	 * Return file/dir hash or first founded child hash with required attr == $val
-	 *
-	 * @param  string   $hash  file hash
-	 * @param  string   $attr  attribute name
-	 * @param  bool     $val   attribute value
-	 * @return string|false
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return file/dir hash or first founded child hash with required attr == $val
+	*
+	* @param  string	$hash  file hash
+	* @param  string	$attr  attribute name
+	* @param  bool	$val	attribute value
+	* @return string|false
+	* @author Dmitry (dio) Levashov
+	**/
 	public function closest($hash, $attr, $val) {
 		return ($path = $this->closestByAttr($this->decode($hash), $attr, $val)) ? $this->encode($path) : false;
 	}
 	
 	/**
-	 * Return file info or false on error
-	 *
-	 * @param  string   $hash      file hash
-	 * @param  bool     $realpath  add realpath field to file info
-	 * @return array|false
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return file info or false on error
+	*
+	* @param  string	$hash		file hash
+	* @param  bool	$realpath  add realpath field to file info
+	* @return array|false
+	* @author Dmitry (dio) Levashov
+	**/
 	public function file($hash) {
 		$path = $this->decode($hash);
 		
@@ -985,13 +985,13 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Return folder info
-	 *
-	 * @param  string   $hash  folder hash
-	 * @param  bool     $hidden  return hidden file info
-	 * @return array|false
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return folder info
+	*
+	* @param  string	$hash  folder hash
+	* @param  bool	$hidden  return hidden file info
+	* @return array|false
+	* @author Dmitry (dio) Levashov
+	**/
 	public function dir($hash, $resolveLink=false) {
 		if (($dir = $this->file($hash)) == false) {
 			return $this->setError(elFinder::ERROR_DIR_NOT_FOUND);
@@ -1007,12 +1007,12 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Return directory content or false on error
-	 *
-	 * @param  string   $hash   file hash
-	 * @return array|false
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return directory content or false on error
+	*
+	* @param  string	$hash	file hash
+	* @return array|false
+	* @author Dmitry (dio) Levashov
+	**/
 	public function scandir($hash) {
 		if (($dir = $this->dir($hash)) == false) {
 			return false;
@@ -1024,12 +1024,12 @@ abstract class elFinderVolumeDriver {
 	}
 
 	/**
-	 * Return dir files names list
-	 * 
-	 * @param  string  $hash   file hash
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return dir files names list
+	* 
+	* @param  string  $hash	file hash
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	public function ls($hash) {
 		if (($dir = $this->dir($hash)) == false || !$dir['read']) {
 			return false;
@@ -1048,14 +1048,14 @@ abstract class elFinderVolumeDriver {
 	}
 
 	/**
-	 * Return subfolders for required folder or false on error
-	 *
-	 * @param  string   $hash  folder hash or empty string to get tree from root folder
-	 * @param  int      $deep  subdir deep
-	 * @param  string   $exclude  dir hash which subfolders must be exluded from result, required to not get stat twice on cwd subfolders
-	 * @return array|false
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return subfolders for required folder or false on error
+	*
+	* @param  string	$hash  folder hash or empty string to get tree from root folder
+	* @param  int		$deep  subdir deep
+	* @param  string	$exclude  dir hash which subfolders must be exluded from result, required to not get stat twice on cwd subfolders
+	* @return array|false
+	* @author Dmitry (dio) Levashov
+	**/
 	public function tree($hash='', $deep=0, $exclude='') {
 		$path = $hash ? $this->decode($hash) : $this->root;
 		
@@ -1069,12 +1069,12 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Return part of dirs tree from required dir up to root dir
-	 *
-	 * @param  string  $hash  directory hash
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return part of dirs tree from required dir up to root dir
+	*
+	* @param  string  $hash  directory hash
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	public function parents($hash) {
 		if (($current = $this->dir($hash)) == false) {
 			return false;
@@ -1104,11 +1104,11 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Create thumbnail for required file and return its name of false on failed
-	 *
-	 * @return string|false
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Create thumbnail for required file and return its name of false on failed
+	*
+	* @return string|false
+	* @author Dmitry (dio) Levashov
+	**/
 	public function tmb($hash) {
 		$path = $this->decode($hash);
 		$stat = $this->stat($path);
@@ -1120,23 +1120,23 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Return file size / total directory size
-	 *
-	 * @param  string   file hash
-	 * @return int
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return file size / total directory size
+	*
+	* @param  string	file hash
+	* @return int
+	* @author Dmitry (dio) Levashov
+	**/
 	public function size($hash) {
 		return $this->countSize($this->decode($hash));
 	}
 	
 	/**
-	 * Open file for reading and return file pointer
-	 *
-	 * @param  string   file hash
-	 * @return Resource
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Open file for reading and return file pointer
+	*
+	* @param  string	file hash
+	* @return Resource
+	* @author Dmitry (dio) Levashov
+	**/
 	public function open($hash) {
 		if (($file = $this->file($hash)) == false
 		|| $file['mime'] == 'directory') {
@@ -1147,25 +1147,25 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Close file pointer
-	 *
-	 * @param  Resource  $fp   file pointer
-	 * @param  string    $hash file hash
-	 * @return void
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Close file pointer
+	*
+	* @param  Resource  $fp	file pointer
+	* @param  string	$hash file hash
+	* @return void
+	* @author Dmitry (dio) Levashov
+	**/
 	public function close($fp, $hash) {
 		$this->_fclose($fp, $this->decode($hash));
 	}
 	
 	/**
-	 * Create directory and return dir info
-	 *
-	 * @param  string   $dst  destination directory
-	 * @param  string   $name directory name
-	 * @return array|false
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Create directory and return dir info
+	*
+	* @param  string	$dst  destination directory
+	* @param  string	$name directory name
+	* @return array|false
+	* @author Dmitry (dio) Levashov
+	**/
 	public function mkdir($dst, $name) {
 		if ($this->commandDisabled('mkdir')) {
 			return $this->setError(elFinder::ERROR_PERM_DENIED);
@@ -1194,13 +1194,13 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Create empty file and return its info
-	 *
-	 * @param  string   $dst  destination directory
-	 * @param  string   $name file name
-	 * @return array|false
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Create empty file and return its info
+	*
+	* @param  string	$dst  destination directory
+	* @param  string	$name file name
+	* @return array|false
+	* @author Dmitry (dio) Levashov
+	**/
 	public function mkfile($dst, $name) {
 		if ($this->commandDisabled('mkfile')) {
 			return $this->setError(elFinder::ERROR_PERM_DENIED);
@@ -1228,13 +1228,13 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Rename file and return file info
-	 *
-	 * @param  string  $hash  file hash
-	 * @param  string  $name  new file name
-	 * @return array|false
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Rename file and return file info
+	*
+	* @param  string  $hash  file hash
+	* @param  string  $name  new file name
+	* @return array|false
+	* @author Dmitry (dio) Levashov
+	**/
 	public function rename($hash, $name) {
 		if ($this->commandDisabled('rename')) {
 			return $this->setError(elFinder::ERROR_PERM_DENIED);
@@ -1278,13 +1278,13 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Create file copy with suffix "copy number" and return its info
-	 *
-	 * @param  string   $hash    file hash
-	 * @param  string   $suffix  suffix to add to file name
-	 * @return array|false
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Create file copy with suffix "copy number" and return its info
+	*
+	* @param  string	$hash	file hash
+	* @param  string	$suffix  suffix to add to file name
+	* @return array|false
+	* @author Dmitry (dio) Levashov
+	**/
 	public function duplicate($hash, $suffix='copy') {
 		if ($this->commandDisabled('duplicate')) {
 			return $this->setError(elFinder::ERROR_COPY, '#'.$hash, elFinder::ERROR_PERM_DENIED);
@@ -1303,16 +1303,16 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Save uploaded file. 
-	 * On success return array with new file stat and with removed file hash (if existed file was replaced)
-	 *
-	 * @param  Resource $fp      file pointer
-	 * @param  string   $dst     destination folder hash
-	 * @param  string   $src     file name
-	 * @param  string   $tmpname file tmp name - required to detect mime type
-	 * @return array|false
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Save uploaded file. 
+	* On success return array with new file stat and with removed file hash (if existed file was replaced)
+	*
+	* @param  Resource $fp		file pointer
+	* @param  string	$dst	destination folder hash
+	* @param  string	$src	file name
+	* @param  string	$tmpname file tmp name - required to detect mime type
+	* @return array|false
+	* @author Dmitry (dio) Levashov
+	**/
 	public function upload($fp, $dst, $name, $tmpname) {
 		if ($this->commandDisabled('upload')) {
 			return $this->setError(elFinder::ERROR_PERM_DENIED);
@@ -1337,7 +1337,7 @@ abstract class elFinderVolumeDriver {
 
 		// logic based on http://httpd.apache.org/docs/2.2/mod/mod_authz_host.html#order
 		$allow  = $this->mimeAccepted($mime, $this->uploadAllow, null);
-		$deny   = $this->mimeAccepted($mime, $this->uploadDeny,  null);
+		$deny	= $this->mimeAccepted($mime, $this->uploadDeny,  null);
 		$upload = true; // default to allow
 		if (strtolower($this->uploadOrder[0]) == 'allow') { // array('allow', 'deny'), default is to 'deny'
 			$upload = false; // default is deny
@@ -1359,7 +1359,7 @@ abstract class elFinderVolumeDriver {
 		}
 
 		$dstpath = $this->decode($dst);
-		$test    = $this->_joinPath($dstpath, $name);
+		$test	= $this->_joinPath($dstpath, $name);
 		
 		$file = $this->stat($test);
 		$this->clearcache();
@@ -1393,15 +1393,15 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Paste files
-	 *
-	 * @param  Object  $volume  source volume
-	 * @param  string  $source  file hash
-	 * @param  string  $dst     destination dir hash
-	 * @param  bool    $rmSrc   remove source after copy?
-	 * @return array|false
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Paste files
+	*
+	* @param  Object  $volume  source volume
+	* @param  string  $source  file hash
+	* @param  string  $dst	destination dir hash
+	* @param  bool	$rmSrc	remove source after copy?
+	* @return array|false
+	* @author Dmitry (dio) Levashov
+	**/
 	public function paste($volume, $src, $dst, $rmSrc = false) {
 		$err = $rmSrc ? elFinder::ERROR_MOVE : elFinder::ERROR_COPY;
 		
@@ -1491,12 +1491,12 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Return file contents
-	 *
-	 * @param  string  $hash  file hash
-	 * @return string|false
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return file contents
+	*
+	* @param  string  $hash  file hash
+	* @return string|false
+	* @author Dmitry (dio) Levashov
+	**/
 	public function getContents($hash) {
 		$file = $this->file($hash);
 		
@@ -1516,13 +1516,13 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Put content in text file and return file info.
-	 *
-	 * @param  string  $hash     file hash
-	 * @param  string  $content  new file content
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Put content in text file and return file info.
+	*
+	* @param  string  $hash	file hash
+	* @param  string  $content  new file content
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	public function putContents($hash, $content) {
 		if ($this->commandDisabled('edit')) {
 			return $this->setError(elFinder::ERROR_PERM_DENIED);
@@ -1542,13 +1542,13 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Extract files from archive
-	 *
-	 * @param  string  $hash  archive hash
-	 * @return array|bool
-	 * @author Dmitry (dio) Levashov, 
-	 * @author Alexey Sukhotin
-	 **/
+	* Extract files from archive
+	*
+	* @param  string  $hash  archive hash
+	* @return array|bool
+	* @author Dmitry (dio) Levashov, 
+	* @author Alexey Sukhotin
+	**/
 	public function extract($hash) {
 		if ($this->commandDisabled('extract')) {
 			return $this->setError(elFinder::ERROR_PERM_DENIED);
@@ -1566,7 +1566,7 @@ abstract class elFinderVolumeDriver {
 			return $this->setError(elFinder::ERROR_NOT_ARCHIVE);
 		}
 		
-		$path   = $this->decode($hash);
+		$path	= $this->decode($hash);
 		$parent = $this->stat($this->_dirname($path));
 
 		if (!$file['read'] || !$parent['write']) {
@@ -1577,10 +1577,10 @@ abstract class elFinderVolumeDriver {
 	}
 
 	/**
-	 * Add files to archive
-	 *
-	 * @return void
-	 **/
+	* Add files to archive
+	*
+	* @return void
+	**/
 	public function archive($hashes, $mime) {
 		if ($this->commandDisabled('archive')) {
 			return $this->setError(elFinder::ERROR_PERM_DENIED);
@@ -1622,20 +1622,20 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Resize image
-	 *
-	 * @param  string   $hash    image file
-	 * @param  int      $width   new width
-	 * @param  int      $height  new height
-	 * @param  int      $x       X start poistion for crop
-	 * @param  int      $y       Y start poistion for crop
-	 * @param  string   $mode    action how to mainpulate image
-	 * @return array|false
-	 * @author Dmitry (dio) Levashov
-	 * @author Alexey Sukhotin
-	 * @author nao-pon
-	 * @author Troex Nevelin
-	 **/
+	* Resize image
+	*
+	* @param  string	$hash	image file
+	* @param  int		$width	new width
+	* @param  int		$height  new height
+	* @param  int		$x		X start poistion for crop
+	* @param  int		$y		Y start poistion for crop
+	* @param  string	$mode	action how to mainpulate image
+	* @return array|false
+	* @author Dmitry (dio) Levashov
+	* @author Alexey Sukhotin
+	* @author nao-pon
+	* @author Troex Nevelin
+	**/
 	public function resize($hash, $width, $height, $x, $y, $mode = 'resize', $bg = '', $degree = 0) {
 		if ($this->commandDisabled('resize')) {
 			return $this->setError(elFinder::ERROR_PERM_DENIED);
@@ -1686,16 +1686,16 @@ abstract class elFinderVolumeDriver {
 			return $this->stat($path);
 		}
 		
-   		return false;
+			return false;
 	}
 	
 	/**
-	 * Remove file/dir
-	 *
-	 * @param  string  $hash  file hash
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Remove file/dir
+	*
+	* @param  string  $hash  file hash
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	public function rm($hash) {
 		return $this->commandDisabled('rm')
 			? array(elFinder::ERROR_ACCESS_DENIED)
@@ -1703,24 +1703,24 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Search files
-	 *
-	 * @param  string  $q  search string
-	 * @param  array   $mimes
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Search files
+	*
+	* @param  string  $q  search string
+	* @param  array	$mimes
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	public function search($q, $mimes) {
 		return $this->doSearch($this->root, $q, $mimes);
 	}
 	
 	/**
-	 * Return image dimensions
-	 *
-	 * @param  string  $hash  file hash
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return image dimensions
+	*
+	* @param  string  $hash  file hash
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	public function dimensions($hash) {
 		if (($file = $this->file($hash)) == false) {
 			return false;
@@ -1730,12 +1730,12 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Save error message
-	 *
-	 * @param  array  error 
-	 * @return false
-	 * @author Dmitry(dio) Levashov
-	 **/
+	* Save error message
+	*
+	* @param  array  error 
+	* @return false
+	* @author Dmitry(dio) Levashov
+	**/
 	protected function setError($error) {
 		
 		$this->error = array();
@@ -1753,19 +1753,19 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/*********************************************************************/
-	/*                               FS API                              */
+	/*										FS API										*/
 	/*********************************************************************/
 	
 	/***************** paths *******************/
 	
 	/**
-	 * Encode path into hash
-	 *
-	 * @param  string  file path
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 * @author Troex Nevelin
-	 **/
+	* Encode path into hash
+	*
+	* @param  string  file path
+	* @return string
+	* @author Dmitry (dio) Levashov
+	* @author Troex Nevelin
+	**/
 	protected function encode($path) {
 		if ($path !== '') {
 
@@ -1789,13 +1789,13 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Decode path from hash
-	 *
-	 * @param  string  file hash
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 * @author Troex Nevelin
-	 **/
+	* Decode path from hash
+	*
+	* @param  string  file hash
+	* @return string
+	* @author Dmitry (dio) Levashov
+	* @author Troex Nevelin
+	**/
 	protected function decode($hash) {
 		if (strpos($hash, $this->id) === 0) {
 			// cut volume id after it was prepended in encode
@@ -1810,36 +1810,36 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Return crypted path 
-	 * Not implemented
-	 *
-	 * @param  string  path
-	 * @return mixed
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return crypted path 
+	* Not implemented
+	*
+	* @param  string  path
+	* @return mixed
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function crypt($path) {
 		return $path;
 	}
 	
 	/**
-	 * Return uncrypted path 
-	 * Not implemented
-	 *
-	 * @param  mixed  hash
-	 * @return mixed
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return uncrypted path 
+	* Not implemented
+	*
+	* @param  mixed  hash
+	* @return mixed
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function uncrypt($hash) {
 		return $hash;
 	}
 	
 	/**
-	 * Validate file name based on $this->options['acceptedName'] regexp
-	 *
-	 * @param  string  $name  file name
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Validate file name based on $this->options['acceptedName'] regexp
+	*
+	* @param  string  $name  file name
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function nameAccepted($name) {
 		if ($this->nameValidator) {
 			if (function_exists($this->nameValidator)) {
@@ -1853,13 +1853,13 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Return new unique name based on file name and suffix
-	 *
-	 * @param  string  $path    file path
-	 * @param  string  $suffix  suffix append to name
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return new unique name based on file name and suffix
+	*
+	* @param  string  $path	file path
+	* @param  string  $suffix  suffix append to name
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	public function uniqueName($dir, $name, $suffix = ' copy', $checkNum=true) {
 		$ext  = '';
 
@@ -1869,10 +1869,10 @@ abstract class elFinderVolumeDriver {
 		} 
 		
 		if ($checkNum && preg_match('/('.$suffix.')(\d*)$/i', $name, $m)) {
-			$i    = (int)$m[2];
+			$i	= (int)$m[2];
 			$name = substr($name, 0, strlen($name)-strlen($m[2]));
 		} else {
-			$i     = 1;
+			$i	= 1;
 			$name .= $suffix;
 		}
 		$max = $i+100000;
@@ -1892,14 +1892,14 @@ abstract class elFinderVolumeDriver {
 	/*********************** file stat *********************/
 	
 	/**
-	 * Check file attribute
-	 *
-	 * @param  string  $path  file path
-	 * @param  string  $name  attribute name (read|write|locked|hidden)
-	 * @param  bool    $val   attribute value returned by file system
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Check file attribute
+	*
+	* @param  string  $path  file path
+	* @param  string  $name  attribute name (read|write|locked|hidden)
+	* @param  bool	$val	attribute value returned by file system
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function attr($path, $name, $val=false) {
 		if (!isset($this->defaults[$name])) {
 			return false;
@@ -1910,9 +1910,9 @@ abstract class elFinderVolumeDriver {
 		
 		if ($this->access) {
 			if (is_array($this->access)) {
-				$obj    = $this->access[0];
+				$obj	= $this->access[0];
 				$method = $this->access[1];
-				$perm   = $obj->{$method}($name, $path, $this->options['accessControlData'], $this);
+				$perm	= $obj->{$method}($name, $path, $this->options['accessControlData'], $this);
 			} else {
 				$func = $this->access;
 				$perm = $func($name, $path, $this->options['accessControlData'], $this);
@@ -1935,12 +1935,12 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Return fileinfo 
-	 *
-	 * @param  string  $path  file cache
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return fileinfo 
+	*
+	* @param  string  $path  file cache
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function stat($path) {
 		return isset($this->cache[$path])
 			? $this->cache[$path]
@@ -1948,13 +1948,13 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Put file stat in cache and return it
-	 *
-	 * @param  string  $path   file path
-	 * @param  array   $stat   file stat
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Put file stat in cache and return it
+	*
+	* @param  string  $path	file path
+	* @param  array	$stat	file stat
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function updateCache($path, $stat) {
 		if (empty($stat) || !is_array($stat)) {
 			return $this->cache[$path] = array();
@@ -2059,12 +2059,12 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Get stat for folder content and put in cache
-	 *
-	 * @param  string  $path
-	 * @return void
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Get stat for folder content and put in cache
+	*
+	* @param  string  $path
+	* @return void
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function cacheDir($path) {
 		$this->dirsCache[$path] = array();
 
@@ -2076,22 +2076,22 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Clean cache
-	 *
-	 * @return void
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Clean cache
+	*
+	* @return void
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function clearcache() {
 		$this->cache = $this->dirsCache = array();
 	}
 	
 	/**
-	 * Return file mimetype
-	 *
-	 * @param  string  $path  file path
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return file mimetype
+	*
+	* @param  string  $path  file path
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function mimetype($path) {
 		$type = '';
 		
@@ -2121,26 +2121,26 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Detect file mimetype using "internal" method
-	 *
-	 * @param  string  $path  file path
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Detect file mimetype using "internal" method
+	*
+	* @param  string  $path  file path
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	static protected function mimetypeInternalDetect($path) {
 		$pinfo = pathinfo($path); 
-		$ext   = isset($pinfo['extension']) ? strtolower($pinfo['extension']) : '';
+		$ext	= isset($pinfo['extension']) ? strtolower($pinfo['extension']) : '';
 		return isset(elFinderVolumeDriver::$mimetypes[$ext]) ? elFinderVolumeDriver::$mimetypes[$ext] : 'unknown';
 		
 	}
 	
 	/**
-	 * Return file/total directory size
-	 *
-	 * @param  string  $path  file path
-	 * @return int
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return file/total directory size
+	*
+	* @param  string  $path  file path
+	* @return int
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function countSize($path) {
 		$stat = $this->stat($path);
 
@@ -2168,27 +2168,27 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Return true if all mimes is directory or files
-	 *
-	 * @param  string  $mime1  mimetype
-	 * @param  string  $mime2  mimetype
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return true if all mimes is directory or files
+	*
+	* @param  string  $mime1  mimetype
+	* @param  string  $mime2  mimetype
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function isSameType($mime1, $mime2) {
 		return ($mime1 == 'directory' && $mime1 == $mime2) || ($mime1 != 'directory' && $mime2 != 'directory');
 	}
 	
 	/**
-	 * If file has required attr == $val - return file path,
-	 * If dir has child with has required attr == $val - return child path
-	 *
-	 * @param  string   $path  file path
-	 * @param  string   $attr  attribute name
-	 * @param  bool     $val   attribute value
-	 * @return string|false
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* If file has required attr == $val - return file path,
+	* If dir has child with has required attr == $val - return child path
+	*
+	* @param  string	$path  file path
+	* @param  string	$attr  attribute name
+	* @param  bool	$val	attribute value
+	* @return string|false
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function closestByAttr($path, $attr, $val) {
 		$stat = $this->stat($path);
 		
@@ -2208,14 +2208,14 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Return first found children with required attr == $val
-	 *
-	 * @param  string   $path  file path
-	 * @param  string   $attr  attribute name
-	 * @param  bool     $val   attribute value
-	 * @return string|false
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return first found children with required attr == $val
+	*
+	* @param  string	$path  file path
+	* @param  string	$attr  attribute name
+	* @param  bool	$val	attribute value
+	* @return string|false
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function childsByAttr($path, $attr, $val) {
 		foreach ($this->_scandir($path) as $p) {
 			if (($_p = $this->closestByAttr($p, $attr, $val)) != false) {
@@ -2228,13 +2228,13 @@ abstract class elFinderVolumeDriver {
 	/*****************  get content *******************/
 	
 	/**
-	 * Return required dir's files info.
-	 * If onlyMimes is set - return only dirs and files of required mimes
-	 *
-	 * @param  string  $path  dir path
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return required dir's files info.
+	* If onlyMimes is set - return only dirs and files of required mimes
+	*
+	* @param  string  $path  dir path
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function getScandir($path) {
 		$files = array();
 		
@@ -2251,13 +2251,13 @@ abstract class elFinderVolumeDriver {
 	
 	
 	/**
-	 * Return subdirs tree
-	 *
-	 * @param  string  $path  parent dir path
-	 * @param  int     $deep  tree deep
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return subdirs tree
+	*
+	* @param  string  $path  parent dir path
+	* @param  int	$deep  tree deep
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function gettree($path, $deep, $exclude='') {
 		$dirs = array();
 		
@@ -2278,14 +2278,14 @@ abstract class elFinderVolumeDriver {
 	}	
 		
 	/**
-	 * Recursive files search
-	 *
-	 * @param  string  $path   dir path
-	 * @param  string  $q      search string
-	 * @param  array   $mimes
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Recursive files search
+	*
+	* @param  string  $path	dir path
+	* @param  string  $q		search string
+	* @param  array	$mimes
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function doSearch($path, $q, $mimes) {
 		$result = array();
 
@@ -2321,22 +2321,22 @@ abstract class elFinderVolumeDriver {
 	/**********************  manuipulations  ******************/
 		
 	/**
-	 * Copy file/recursive copy dir only in current volume.
-	 * Return new file path or false.
-	 *
-	 * @param  string  $src   source path
-	 * @param  string  $dst   destination dir path
-	 * @param  string  $name  new file name (optionaly)
-	 * @return string|false
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Copy file/recursive copy dir only in current volume.
+	* Return new file path or false.
+	*
+	* @param  string  $src	source path
+	* @param  string  $dst	destination dir path
+	* @param  string  $name  new file name (optionaly)
+	* @return string|false
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function copy($src, $dst, $name) {
 		$srcStat = $this->stat($src);
 		$this->clearcache();
 		
 		if (!empty($srcStat['thash'])) {
 			$target = $this->decode($srcStat['thash']);
-			$stat   = $this->stat($target);
+			$stat	= $this->stat($target);
 			$this->clearcache();
 			return $stat && $this->_symlink($target, $dst, $name)
 				? $this->_joinPath($dst, $name)
@@ -2371,15 +2371,15 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Move file
-	 * Return new file path or false.
-	 *
-	 * @param  string  $src   source path
-	 * @param  string  $dst   destination dir path
-	 * @param  string  $name  new file name 
-	 * @return string|false
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Move file
+	* Return new file path or false.
+	*
+	* @param  string  $src	source path
+	* @param  string  $dst	destination dir path
+	* @param  string  $name  new file name 
+	* @return string|false
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function move($src, $dst, $name) {
 		$stat = $this->stat($src);
 		$stat['realpath'] = $src;
@@ -2394,16 +2394,16 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Copy file from another volume.
-	 * Return new file path or false.
-	 *
-	 * @param  Object  $volume       source volume
-	 * @param  string  $src          source file hash
-	 * @param  string  $destination  destination dir path
-	 * @param  string  $name         file name
-	 * @return string|false
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Copy file from another volume.
+	* Return new file path or false.
+	*
+	* @param  Object  $volume		source volume
+	* @param  string  $src			source file hash
+	* @param  string  $destination  destination dir path
+	* @param  string  $name			file name
+	* @return string|false
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function copyFrom($volume, $src, $destination, $name) {
 		
 		if (($source = $volume->file($src)) == false) {
@@ -2456,13 +2456,13 @@ abstract class elFinderVolumeDriver {
 	}
 		
 	/**
-	 * Remove file/ recursive remove dir
-	 *
-	 * @param  string  $path   file path
-	 * @param  bool    $force  try to remove even if file locked
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Remove file/ recursive remove dir
+	*
+	* @param  string  $path	file path
+	* @param  bool	$force  try to remove even if file locked
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function remove($path, $force = false) {
 		$stat = $this->stat($path);
 		$stat['realpath'] = $path;
@@ -2504,24 +2504,24 @@ abstract class elFinderVolumeDriver {
 	/************************* thumbnails **************************/
 		
 	/**
-	 * Return thumbnail file name for required file
-	 *
-	 * @param  array  $stat  file stat
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return thumbnail file name for required file
+	*
+	* @param  array  $stat  file stat
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function tmbname($stat) {
 		return $stat['hash'].$stat['ts'].'.png';
 	}
 	
 	/**
-	 * Return thumnbnail name if exists
-	 *
-	 * @param  string  $path file path
-	 * @param  array   $stat file stat
-	 * @return string|false
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return thumnbnail name if exists
+	*
+	* @param  string  $path file path
+	* @param  array	$stat file stat
+	* @return string|false
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function gettmb($path, $stat) {
 		if ($this->tmbURL && $this->tmbPath) {
 			// file itself thumnbnail
@@ -2538,13 +2538,13 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Return true if thumnbnail for required file can be created
-	 *
-	 * @param  string  $path  thumnbnail path 
-	 * @param  array   $stat  file stat
-	 * @return string|bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return true if thumnbnail for required file can be created
+	*
+	* @param  string  $path  thumnbnail path 
+	* @param  array	$stat  file stat
+	* @return string|bool
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function canCreateTmb($path, $stat) {
 		return $this->tmbPathWritable 
 			&& strpos($path, $this->tmbPath) === false // do not create thumnbnail for thumnbnail
@@ -2554,26 +2554,26 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Return true if required file can be resized.
-	 * By default - the same as canCreateTmb
-	 *
-	 * @param  string  $path  thumnbnail path 
-	 * @param  array   $stat  file stat
-	 * @return string|bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return true if required file can be resized.
+	* By default - the same as canCreateTmb
+	*
+	* @param  string  $path  thumnbnail path 
+	* @param  array	$stat  file stat
+	* @return string|bool
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function canResize($path, $stat) {
 		return $this->canCreateTmb($path, $stat);
 	}
 	
 	/**
-	 * Create thumnbnail and return it's URL on success
-	 *
-	 * @param  string  $path  file path
-	 * @param  string  $mime  file mime type
-	 * @return string|false
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Create thumnbnail and return it's URL on success
+	*
+	* @param  string  $path  file path
+	* @param  string  $mime  file mime type
+	* @return string|false
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function createTmb($path, $stat) {
 		if (!$stat || !$this->canCreateTmb($path, $stat)) {
 			return false;
@@ -2606,19 +2606,19 @@ abstract class elFinderVolumeDriver {
   		if (($s = getimagesize($tmb)) == false) {
 			return false;
 		}
-    
-    	/* If image smaller or equal thumbnail size - just fitting to thumbnail square */
-    	if ($s[0] <= $tmbSize && $s[1]  <= $tmbSize) {
-     	   $result = $this->imgSquareFit($tmb, $tmbSize, $tmbSize, 'center', 'middle', $this->options['tmbBgColor'], 'png' );
+	
+		/* If image smaller or equal thumbnail size - just fitting to thumbnail square */
+		if ($s[0] <= $tmbSize && $s[1]  <= $tmbSize) {
+			$result = $this->imgSquareFit($tmb, $tmbSize, $tmbSize, 'center', 'middle', $this->options['tmbBgColor'], 'png' );
 
-	    } else {
+		} else {
 
-	    	if ($this->options['tmbCrop']) {
-        
-        		/* Resize and crop if image bigger than thumbnail */
-	        	if (!(($s[0] > $tmbSize && $s[1] <= $tmbSize) || ($s[0] <= $tmbSize && $s[1] > $tmbSize) ) || ($s[0] > $tmbSize && $s[1] > $tmbSize)) {
-    				$result = $this->imgResize($tmb, $tmbSize, $tmbSize, true, false, 'png');
-	        	}
+			if ($this->options['tmbCrop']) {
+		
+				/* Resize and crop if image bigger than thumbnail */
+				if (!(($s[0] > $tmbSize && $s[1] <= $tmbSize) || ($s[0] <= $tmbSize && $s[1] > $tmbSize) ) || ($s[0] > $tmbSize && $s[1] > $tmbSize)) {
+					$result = $this->imgResize($tmb, $tmbSize, $tmbSize, true, false, 'png');
+				}
 
 				if (($s = getimagesize($tmb)) != false) {
 					$x = $s[0] > $tmbSize ? intval(($s[0] - $tmbSize)/2) : 0;
@@ -2626,10 +2626,10 @@ abstract class elFinderVolumeDriver {
 					$result = $this->imgCrop($tmb, $tmbSize, $tmbSize, $x, $y, 'png');
 				}
 
-    		} else {
-        		$result = $this->imgResize($tmb, $tmbSize, $tmbSize, true, true, $this->imgLib, 'png');
-        		$result = $this->imgSquareFit($tmb, $tmbSize, $tmbSize, 'center', 'middle', $this->options['tmbBgColor'], 'png' );
-      		}
+			} else {
+				$result = $this->imgResize($tmb, $tmbSize, $tmbSize, true, true, $this->imgLib, 'png');
+				$result = $this->imgSquareFit($tmb, $tmbSize, $tmbSize, 'center', 'middle', $this->options['tmbBgColor'], 'png' );
+				}
 
 		}
 		if (!$result) {
@@ -2641,57 +2641,57 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Resize image
-	 *
-	 * @param  string   $path               image file
-	 * @param  int      $width              new width
-	 * @param  int      $height             new height
-	 * @param  bool	    $keepProportions    crop image
-	 * @param  bool	    $resizeByBiggerSide resize image based on bigger side if true
-	 * @param  string   $destformat         image destination format
-	 * @return string|false
-	 * @author Dmitry (dio) Levashov
-	 * @author Alexey Sukhotin
-	 **/
+	* Resize image
+	*
+	* @param  string	$path					image file
+	* @param  int		$width				new width
+	* @param  int		$height				new height
+	* @param  bool		$keepProportions	crop image
+	* @param  bool		$resizeByBiggerSide resize image based on bigger side if true
+	* @param  string	$destformat			image destination format
+	* @return string|false
+	* @author Dmitry (dio) Levashov
+	* @author Alexey Sukhotin
+	**/
   	protected function imgResize($path, $width, $height, $keepProportions = false, $resizeByBiggerSide = true, $destformat = null) {
 		if (($s = @getimagesize($path)) == false) {
 			return false;
 		}
 
-    	$result = false;
-    	
+		$result = false;
+		
 		list($size_w, $size_h) = array($width, $height);
-    
-    	if ($keepProportions == true) {
-           
-      		list($orig_w, $orig_h, $new_w, $new_h) = array($s[0], $s[1], $width, $height);
-        
-      		/* Calculating image scale width and height */
-      		$xscale = $orig_w / $new_w;
-      		$yscale = $orig_h / $new_h;
+	
+		if ($keepProportions == true) {
+			
+				list($orig_w, $orig_h, $new_w, $new_h) = array($s[0], $s[1], $width, $height);
+		
+				/* Calculating image scale width and height */
+				$xscale = $orig_w / $new_w;
+				$yscale = $orig_h / $new_h;
 
-      		/* Resizing by biggest side */
+				/* Resizing by biggest side */
 
 			if ($resizeByBiggerSide) {
 
-		        if ($orig_w > $orig_h) {
+				if ($orig_w > $orig_h) {
 					$size_h = $orig_h * $width / $orig_w;
 					$size_w = $width;
-        		} else {
-          			$size_w = $orig_w * $height / $orig_h;
-          			$size_h = $height;
+				} else {
+						$size_w = $orig_w * $height / $orig_h;
+						$size_h = $height;
 				}
-      
+		
 			} else {
-        		if ($orig_w > $orig_h) {
-          			$size_w = $orig_w * $height / $orig_h;
-          			$size_h = $height;
-		        } else {
+				if ($orig_w > $orig_h) {
+						$size_w = $orig_w * $height / $orig_h;
+						$size_h = $height;
+				} else {
 					$size_h = $orig_h * $width / $orig_w;
 					$size_w = $width;
 				}
 			}
-    	}
+		}
 
 		switch ($this->imgLib) {
 			case 'imagick':
@@ -2765,18 +2765,18 @@ abstract class elFinderVolumeDriver {
   	}
   
 	/**
-	 * Crop image
-	 *
-	 * @param  string   $path               image file
-	 * @param  int      $width              crop width
-	 * @param  int      $height             crop height
-	 * @param  bool	    $x                  crop left offset
-	 * @param  bool	    $y                  crop top offset
-	 * @param  string   $destformat         image destination format
-	 * @return string|false
-	 * @author Dmitry (dio) Levashov
-	 * @author Alexey Sukhotin
-	 **/
+	* Crop image
+	*
+	* @param  string	$path					image file
+	* @param  int		$width				crop width
+	* @param  int		$height				crop height
+	* @param  bool		$x						crop left offset
+	* @param  bool		$y						crop top offset
+	* @param  string	$destformat			image destination format
+	* @return string|false
+	* @author Dmitry (dio) Levashov
+	* @author Alexey Sukhotin
+	**/
   	protected function imgCrop($path, $width, $height, $x, $y, $destformat = null) {
 		if (($s = @getimagesize($path)) == false) {
 			return false;
@@ -2864,19 +2864,19 @@ abstract class elFinderVolumeDriver {
 	}
 
 	/**
-	 * Put image to square
-	 *
-	 * @param  string   $path               image file
-	 * @param  int      $width              square width
-	 * @param  int      $height             square height
-	 * @param  int	    $align              reserved
-	 * @param  int 	    $valign             reserved
-	 * @param  string   $bgcolor            square background color in #rrggbb format
-	 * @param  string   $destformat         image destination format
-	 * @return string|false
-	 * @author Dmitry (dio) Levashov
-	 * @author Alexey Sukhotin
-	 **/
+	* Put image to square
+	*
+	* @param  string	$path					image file
+	* @param  int		$width				square width
+	* @param  int		$height				square height
+	* @param  int		$align				reserved
+	* @param  int 		$valign				reserved
+	* @param  string	$bgcolor				square background color in #rrggbb format
+	* @param  string	$destformat			image destination format
+	* @return string|false
+	* @author Dmitry (dio) Levashov
+	* @author Alexey Sukhotin
+	**/
 		protected function imgSquareFit($path, $width, $height, $align = 'center', $valign = 'middle', $bgcolor = '#0000ff', $destformat = null) {
 		if (($s = @getimagesize($path)) == false) {
 			return false;
@@ -2887,7 +2887,7 @@ abstract class elFinderVolumeDriver {
 		/* Coordinates for image over square aligning */
 		$y = ceil(abs($height - $s[1]) / 2); 
 		$x = ceil(abs($width - $s[0]) / 2);
-    
+	
 		switch ($this->imgLib) {
 			case 'imagick':
 				try {
@@ -2957,16 +2957,16 @@ abstract class elFinderVolumeDriver {
 	}
 
 	/**
-	 * Rotate image
-	 *
-	 * @param  string   $path               image file
-	 * @param  int      $degree             rotete degrees
-	 * @param  string   $bgcolor            square background color in #rrggbb format
-	 * @param  string   $destformat         image destination format
-	 * @return string|false
-	 * @author nao-pon
-	 * @author Troex Nevelin
-	 **/
+	* Rotate image
+	*
+	* @param  string	$path					image file
+	* @param  int		$degree				rotete degrees
+	* @param  string	$bgcolor				square background color in #rrggbb format
+	* @param  string	$destformat			image destination format
+	* @return string|false
+	* @author nao-pon
+	* @author Troex Nevelin
+	**/
 	protected function imgRotate($path, $degree, $bgcolor = '#ffffff', $destformat = null) {
 		if (($s = @getimagesize($path)) == false) {
 			return false;
@@ -3024,21 +3024,21 @@ abstract class elFinderVolumeDriver {
 	}
 
 	/**
-	 * Execute shell command
-	 *
-	 * @param  string  $command       command line
-	 * @param  array   $output        stdout strings
-	 * @param  array   $return_var    process exit code
-	 * @param  array   $error_output  stderr strings
-	 * @return int     exit code
-	 * @author Alexey Sukhotin
-	 **/
+	* Execute shell command
+	*
+	* @param  string  $command		command line
+	* @param  array	$output		stdout strings
+	* @param  array	$return_var	process exit code
+	* @param  array	$error_output  stderr strings
+	* @return int	exit code
+	* @author Alexey Sukhotin
+	**/
 	protected function procExec($command , array &$output = null, &$return_var = -1, array &$error_output = null) {
 
 		$descriptorspec = array(
 			0 => array("pipe", "r"),  // stdin
 			1 => array("pipe", "w"),  // stdout
-			2 => array("pipe", "w")   // stderr
+			2 => array("pipe", "w")	// stderr
 		);
 
 		$process = proc_open($command, $descriptorspec, $pipes, null, null);
@@ -3065,12 +3065,12 @@ abstract class elFinderVolumeDriver {
 	}
 	
 	/**
-	 * Remove thumbnail
-	 *
-	 * @param  string  $path  file path
-	 * @return void
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Remove thumbnail
+	*
+	* @param  string  $path  file path
+	* @return void
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function rmTmb($tmb) {
 		$tmb = $this->tmbPath.DIRECTORY_SEPARATOR.$tmb;
 		file_exists($tmb) && @unlink($tmb);
@@ -3080,12 +3080,12 @@ abstract class elFinderVolumeDriver {
 	/*********************** misc *************************/
 	
 	/**
-	 * Return smart formatted date
-	 *
-	 * @param  int     $ts  file timestamp
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return smart formatted date
+	*
+	* @param  int	$ts  file timestamp
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	protected function formatDate($ts) {
 		if ($ts > $this->today) {
 			return 'Today '.date($this->options['timeFormat'], $ts);
@@ -3102,8 +3102,8 @@ abstract class elFinderVolumeDriver {
 	* Find position of first occurrence of string in a string with multibyte support
 	*
 	* @param  string  $haystack  The string being checked.
-	* @param  string  $needle    The string to find in haystack.
-	* @param  int     $offset    The search offset. If it is not specified, 0 is used.
+	* @param  string  $needle	The string to find in haystack.
+	* @param  int	$offset	The search offset. If it is not specified, 0 is used.
 	* @return int|bool
 	* @author Alexey Sukhotin
 	**/
@@ -3121,100 +3121,100 @@ abstract class elFinderVolumeDriver {
 	/*********************** paths/urls *************************/
 	
 	/**
-	 * Return parent directory path
-	 *
-	 * @param  string  $path  file path
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return parent directory path
+	*
+	* @param  string  $path  file path
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	abstract protected function _dirname($path);
 
 	/**
-	 * Return file name
-	 *
-	 * @param  string  $path  file path
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return file name
+	*
+	* @param  string  $path  file path
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	abstract protected function _basename($path);
 
 	/**
-	 * Join dir name and file name and return full path.
-	 * Some drivers (db) use int as path - so we give to concat path to driver itself
-	 *
-	 * @param  string  $dir   dir path
-	 * @param  string  $name  file name
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Join dir name and file name and return full path.
+	* Some drivers (db) use int as path - so we give to concat path to driver itself
+	*
+	* @param  string  $dir	dir path
+	* @param  string  $name  file name
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	abstract protected function _joinPath($dir, $name);
 
 	/**
-	 * Return normalized path 
-	 *
-	 * @param  string  $path  file path
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return normalized path 
+	*
+	* @param  string  $path  file path
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	abstract protected function _normpath($path);
 
 	/**
-	 * Return file path related to root dir
-	 *
-	 * @param  string  $path  file path
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return file path related to root dir
+	*
+	* @param  string  $path  file path
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	abstract protected function _relpath($path);
 	
 	/**
-	 * Convert path related to root dir into real path
-	 *
-	 * @param  string  $path  rel file path
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Convert path related to root dir into real path
+	*
+	* @param  string  $path  rel file path
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	abstract protected function _abspath($path);
 	
 	/**
-	 * Return fake path started from root dir.
-	 * Required to show path on client side.
-	 *
-	 * @param  string  $path  file path
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return fake path started from root dir.
+	* Required to show path on client side.
+	*
+	* @param  string  $path  file path
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	abstract protected function _path($path);
 	
 	/**
-	 * Return true if $path is children of $parent
-	 *
-	 * @param  string  $path    path to check
-	 * @param  string  $parent  parent path
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return true if $path is children of $parent
+	*
+	* @param  string  $path	path to check
+	* @param  string  $parent  parent path
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	abstract protected function _inpath($path, $parent);
 	
 	/**
-	 * Return stat for given path.
-	 * Stat contains following fields:
-	 * - (int)    size    file size in b. required
-	 * - (int)    ts      file modification time in unix time. required
-	 * - (string) mime    mimetype. required for folders, others - optionally
-	 * - (bool)   read    read permissions. required
-	 * - (bool)   write   write permissions. required
-	 * - (bool)   locked  is object locked. optionally
-	 * - (bool)   hidden  is object hidden. optionally
-	 * - (string) alias   for symlinks - link target path relative to root path. optionally
-	 * - (string) target  for symlinks - link target path. optionally
-	 *
-	 * If file does not exists - returns empty array or false.
-	 *
-	 * @param  string  $path    file path 
-	 * @return array|false
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return stat for given path.
+	* Stat contains following fields:
+	* - (int)	size	file size in b. required
+	* - (int)	ts		file modification time in unix time. required
+	* - (string) mime	mimetype. required for folders, others - optionally
+	* - (bool)	read	read permissions. required
+	* - (bool)	write	write permissions. required
+	* - (bool)	locked  is object locked. optionally
+	* - (bool)	hidden  is object hidden. optionally
+	* - (string) alias	for symlinks - link target path relative to root path. optionally
+	* - (string) target  for symlinks - link target path. optionally
+	*
+	* If file does not exists - returns empty array or false.
+	*
+	* @param  string  $path	file path 
+	* @return array|false
+	* @author Dmitry (dio) Levashov
+	**/
 	abstract protected function _stat($path);
 	
 
@@ -3222,192 +3222,192 @@ abstract class elFinderVolumeDriver {
 
 		
 	/**
-	 * Return true if path is dir and has at least one childs directory
-	 *
-	 * @param  string  $path  dir path
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return true if path is dir and has at least one childs directory
+	*
+	* @param  string  $path  dir path
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	abstract protected function _subdirs($path);
 	
 	/**
-	 * Return object width and height
-	 * Ususaly used for images, but can be realize for video etc...
-	 *
-	 * @param  string  $path  file path
-	 * @param  string  $mime  file mime type
-	 * @return string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return object width and height
+	* Ususaly used for images, but can be realize for video etc...
+	*
+	* @param  string  $path  file path
+	* @param  string  $mime  file mime type
+	* @return string
+	* @author Dmitry (dio) Levashov
+	**/
 	abstract protected function _dimensions($path, $mime);
 	
 	/******************** file/dir content *********************/
 
 	/**
-	 * Return files list in directory
-	 *
-	 * @param  string  $path  dir path
-	 * @return array
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Return files list in directory
+	*
+	* @param  string  $path  dir path
+	* @return array
+	* @author Dmitry (dio) Levashov
+	**/
 	abstract protected function _scandir($path);
 	
 	/**
-	 * Open file and return file pointer
-	 *
-	 * @param  string  $path  file path
-	 * @param  bool    $write open file for writing
-	 * @return resource|false
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Open file and return file pointer
+	*
+	* @param  string  $path  file path
+	* @param  bool	$write open file for writing
+	* @return resource|false
+	* @author Dmitry (dio) Levashov
+	**/
 	abstract protected function _fopen($path, $mode="rb");
 	
 	/**
-	 * Close opened file
-	 * 
-	 * @param  resource  $fp    file pointer
-	 * @param  string    $path  file path
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Close opened file
+	* 
+	* @param  resource  $fp	file pointer
+	* @param  string	$path  file path
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	abstract protected function _fclose($fp, $path='');
 	
 	/********************  file/dir manipulations *************************/
 	
 	/**
-	 * Create dir and return created dir path or false on failed
-	 *
-	 * @param  string  $path  parent dir path
-	 * @param string  $name  new directory name
-	 * @return string|bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Create dir and return created dir path or false on failed
+	*
+	* @param  string  $path  parent dir path
+	* @param string  $name  new directory name
+	* @return string|bool
+	* @author Dmitry (dio) Levashov
+	**/
 	abstract protected function _mkdir($path, $name);
 	
 	/**
-	 * Create file and return it's path or false on failed
-	 *
-	 * @param  string  $path  parent dir path
-	 * @param string  $name  new file name
-	 * @return string|bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Create file and return it's path or false on failed
+	*
+	* @param  string  $path  parent dir path
+	* @param string  $name  new file name
+	* @return string|bool
+	* @author Dmitry (dio) Levashov
+	**/
 	abstract protected function _mkfile($path, $name);
 	
 	/**
-	 * Create symlink
-	 *
-	 * @param  string  $source     file to link to
-	 * @param  string  $targetDir  folder to create link in
-	 * @param  string  $name       symlink name
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Create symlink
+	*
+	* @param  string  $source	file to link to
+	* @param  string  $targetDir  folder to create link in
+	* @param  string  $name		symlink name
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	abstract protected function _symlink($source, $targetDir, $name);
 	
 	/**
-	 * Copy file into another file (only inside one volume)
-	 *
-	 * @param  string  $source  source file path
-	 * @param  string  $target  target dir path
-	 * @param  string  $name    file name
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Copy file into another file (only inside one volume)
+	*
+	* @param  string  $source  source file path
+	* @param  string  $target  target dir path
+	* @param  string  $name	file name
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	abstract protected function _copy($source, $targetDir, $name);
 	
 	/**
-	 * Move file into another parent dir.
-	 * Return new file path or false.
-	 *
-	 * @param  string  $source  source file path
-	 * @param  string  $target  target dir path
-	 * @param  string  $name    file name
-	 * @return string|bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Move file into another parent dir.
+	* Return new file path or false.
+	*
+	* @param  string  $source  source file path
+	* @param  string  $target  target dir path
+	* @param  string  $name	file name
+	* @return string|bool
+	* @author Dmitry (dio) Levashov
+	**/
 	abstract protected function _move($source, $targetDir, $name);
 	
 	/**
-	 * Remove file
-	 *
-	 * @param  string  $path  file path
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Remove file
+	*
+	* @param  string  $path  file path
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	abstract protected function _unlink($path);
 
 	/**
-	 * Remove dir
-	 *
-	 * @param  string  $path  dir path
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Remove dir
+	*
+	* @param  string  $path  dir path
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	abstract protected function _rmdir($path);
 
 	/**
-	 * Create new file and write into it from file pointer.
-	 * Return new file path or false on error.
-	 *
-	 * @param  resource  $fp   file pointer
-	 * @param  string    $dir  target dir path
-	 * @param  string    $name file name
-	 * @return bool|string
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Create new file and write into it from file pointer.
+	* Return new file path or false on error.
+	*
+	* @param  resource  $fp	file pointer
+	* @param  string	$dir  target dir path
+	* @param  string	$name file name
+	* @return bool|string
+	* @author Dmitry (dio) Levashov
+	**/
 	abstract protected function _save($fp, $dir, $name, $mime, $w, $h);
 	
 	/**
-	 * Get file contents
-	 *
-	 * @param  string  $path  file path
-	 * @return string|false
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Get file contents
+	*
+	* @param  string  $path  file path
+	* @return string|false
+	* @author Dmitry (dio) Levashov
+	**/
 	abstract protected function _getContents($path);
 	
 	/**
-	 * Write a string to a file
-	 *
-	 * @param  string  $path     file path
-	 * @param  string  $content  new file content
-	 * @return bool
-	 * @author Dmitry (dio) Levashov
-	 **/
+	* Write a string to a file
+	*
+	* @param  string  $path	file path
+	* @param  string  $content  new file content
+	* @return bool
+	* @author Dmitry (dio) Levashov
+	**/
 	abstract protected function _filePutContents($path, $content);
 
 	/**
-	 * Extract files from archive
-	 *
-	 * @param  string  $path file path
-	 * @param  array   $arc  archiver options
-	 * @return bool
-	 * @author Dmitry (dio) Levashov, 
-	 * @author Alexey Sukhotin
-	 **/
+	* Extract files from archive
+	*
+	* @param  string  $path file path
+	* @param  array	$arc  archiver options
+	* @return bool
+	* @author Dmitry (dio) Levashov, 
+	* @author Alexey Sukhotin
+	**/
 	abstract protected function _extract($path, $arc);
 
 	/**
-	 * Create archive and return its path
-	 *
-	 * @param  string  $dir    target dir
-	 * @param  array   $files  files names list
-	 * @param  string  $name   archive name
-	 * @param  array   $arc    archiver options
-	 * @return string|bool
-	 * @author Dmitry (dio) Levashov, 
-	 * @author Alexey Sukhotin
-	 **/
+	* Create archive and return its path
+	*
+	* @param  string  $dir	target dir
+	* @param  array	$files  files names list
+	* @param  string  $name	archive name
+	* @param  array	$arc	archiver options
+	* @return string|bool
+	* @author Dmitry (dio) Levashov, 
+	* @author Alexey Sukhotin
+	**/
 	abstract protected function _archive($dir, $files, $name, $arc);
 
 	/**
-	 * Detect available archivers
-	 *
-	 * @return void
-	 * @author Dmitry (dio) Levashov, 
-	 * @author Alexey Sukhotin
-	 **/
+	* Detect available archivers
+	*
+	* @return void
+	* @author Dmitry (dio) Levashov, 
+	* @author Alexey Sukhotin
+	**/
 	abstract protected function _checkArchivers();
 	
 } // END class

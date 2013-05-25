@@ -1,8 +1,8 @@
 <?php
 class ControllerModuleRecaptcha extends Controller {
-	 
+	
 
-	public function index() {   
+	public function index() {	
 		$this->template->load('module/recaptcha');
 
 		$this->load->language('module/recaptcha');
@@ -76,10 +76,6 @@ class ControllerModuleRecaptcha extends Controller {
 			$this->error['public_key'] = $this->_('error_public_key');
 		}
 
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
 }

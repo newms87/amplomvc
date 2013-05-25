@@ -49,7 +49,7 @@ class ControllerPaymentPaymate extends Controller {
 			$order_id = 0;
 		}			
 		
-		$order_info = $this->model_checkout_order->getOrder($order_id);	 	
+		$order_info = $this->model_checkout_order->getOrder($order_id);		
 		
 		if ($order_info) {
 			$error = '';
@@ -64,7 +64,7 @@ class ControllerPaymentPaymate extends Controller {
 		} else {
 			$error = $this->_('text_unable');
 		}	
-      
+		
 		if ($error) {
 		$this->template->load('common/success');
 

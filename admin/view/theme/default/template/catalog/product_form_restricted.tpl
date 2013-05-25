@@ -324,7 +324,7 @@ $.widget('custom.catcomplete', $.ui.autocomplete, {
 <script type="text/javascript">//<!--
 function fill_shipping_return_policy(c,id){
    $(c).fadeOut(500,function(){$(c).show();});
-   $.post('index.php?route=catalog/product/fill_shipping_return_policy',{manufacturer_id:id},
+   $.post("<?= HTTP_ADMIN . "index.php?route=catalog/product/fill_shipping_return_policy"; ?>",{manufacturer_id:id},
    function(json){
       <? foreach ($languages as $language) { ?>
          remove_ckeditor_for('shipping_return<?=$language['language_id'];?>');
@@ -340,7 +340,7 @@ function generate_model(c){
    name = $('input[name="product_description[1][name]"]').val();
    if(!name)
       alert("Please make a name for this product before generating the Model ID");
-   $.post('index.php?route=catalog/product/generate_model',{name:name},function(json){$('input[name="model"]').val(json);},'json');
+   $.post("<?= HTTP_ADMIN . "index.php?route=catalog/product/generate_model"; ?>",{name:name},function(json){$('input[name="model"]').val(json);},'json');
 }
 //--></script>
 
@@ -349,7 +349,7 @@ $('#option-add input').catcomplete({
    delay: 0,
    source: function(request, response) {
       $.ajax({
-         url: 'index.php?route=catalog/option/autocomplete&filter_name=' +  encodeURIComponent(request.term),
+         url: "<?= HTTP_ADMIN . "index.php?route=catalog/option/autocomplete"; ?>" + '&filter_name=' +  encodeURIComponent(request.term),
          dataType: 'json',
          success: function(json) {
             response($.map(json, function(item) {
@@ -539,7 +539,7 @@ function addImage(imageName) {
 
 function addSingleImage(imageName, field, thumb, rows) {
    $.ajax({
-      url: 'index.php?route=common/filemanager/image&image=' + encodeURIComponent(imageName),
+      url: "<?= HTTP_ADMIN . "index.php?route=common/filemanager/image"; ?>" + '&image=' + encodeURIComponent(imageName),
       dataType: 'text',
       success: function(text) {
          $('#' + thumb).replaceWith('<img src="' + text + '" alt="" id="' + thumb + '" />');

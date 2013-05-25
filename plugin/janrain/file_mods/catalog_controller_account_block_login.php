@@ -7,10 +7,10 @@ class ControllerAccountBlockLogin extends Controller {
 //>>>>> {php} {before}
 		$this->language->plugin('janrain', 'account_block_login');
 		$janrain_settings = array('display_type'=>'popup','icon_size'=>'tiny');
-      $this->data['module_janrain'] = $this->getModule('janrain', $janrain_settings);
+		$this->data['module_janrain'] = $this->getModule('janrain', $janrain_settings);
 //-----
 //=====
-    	$this->render();
+		$this->render();
 //-----
 //=====
   	}

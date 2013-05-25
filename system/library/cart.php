@@ -533,7 +533,23 @@ class Cart {
 	}
 	
 	public function getShippingMethod(){
-		return isset($this->session->data['shipping_method']) ? $this->session->data['shipping_method'] : false;
+		if(isset($this->session->data['shipping_method'])){
+			$method = $this->session->data['shipping_method'];
+			
+			$quotes = $this->{'model_shipping_' . $method['code']}->getQuote($this->getShippingAddress());
+			
+			if(!empty($quotes)){
+				foreach($quotes as $quote){
+					if($quote['method'] == $method['method']){
+						return $method;
+					}
+				}
+			}
+		}
+		
+		unset($this->session->data['shipping_method']);
+
+		return false;
 	}
 	
 	public function getShippingMethodId(){
@@ -765,7 +781,7 @@ class Cart {
 		$this->_e('SM-4', 'shipping_method', $msg);
 		
 		if($this->hasShippingAddress()){
-      	$this->message->add('error', $msg);
+			$this->message->add('error', $msg);
 		}
 		
 		return false;

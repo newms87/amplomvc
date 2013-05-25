@@ -2,36 +2,36 @@
 final class MSSQL implements Database{
 	private $link;
 	private $err_msg;
-   
+	
 	public function __construct($hostname, $username, $password, $database) {
 		if (!$this->link = mssql_connect($hostname, $username, $password)) {
-      		exit('Error: Could not make a database connection using ' . $username . '@' . $hostname);
-    	}
+				exit('Error: Could not make a database connection using ' . $username . '@' . $hostname);
+		}
 
-    	if (!mssql_select_db($database, $this->link)) {
-      		exit('Error: Could not connect to database ' . $database);
-    	}
+		if (!mssql_select_db($database, $this->link)) {
+				exit('Error: Could not connect to database ' . $database);
+		}
 		
 		mssql_query("SET NAMES 'utf8'", $this->link);
 		mssql_query("SET CHARACTER SET utf8", $this->link);
   	}
 	
-   public function get_error(){
-      return $this->err_msg;
-   }
-   
+	public function get_error(){
+		return $this->err_msg;
+	}
+	
   	public function query($sql) {
 		$resource = mssql_query($sql, $this->link);
 
 		if ($resource) {
 			if (is_resource($resource)) {
 				$i = 0;
-    	
+		
 				$data = array();
 		
 				while ($result = mssql_fetch_assoc($resource)) {
 					$data[$i] = $result;
-    	
+		
 					$i++;
 				}
 				
@@ -45,27 +45,27 @@ final class MSSQL implements Database{
 				unset($data);
 
 				return $query;	
-    		} else {
+			} else {
 				return true;
 			}
 		} else {
-		   $this->err_msg = 'Error: ' . mssql_get_last_message($this->link) . '<br />' . $sql;
-      	return false;
-    	}
+			$this->err_msg = 'Error: ' . mssql_get_last_message($this->link) . '<br />' . $sql;
+			return false;
+		}
   	}
 	
 	public function escape($value) {
 		$unpacked = unpack('H*hex', $value);
-    	
+		
 		return '0x' . $unpacked['hex'];
 	}
 	
 	public function escape_html($value){
-      return $this->escape(htmlspecialchars_decode($value), $this->link);
-   }
+		return $this->escape(htmlspecialchars_decode($value), $this->link);
+	}
 	
   	public function countAffected() {
-    	return mssql_rows_affected($this->link);
+		return mssql_rows_affected($this->link);
   	}
 
   	public function getLastId() {

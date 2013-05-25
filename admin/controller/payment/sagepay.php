@@ -1,6 +1,6 @@
 <?php 
 class ControllerPaymentSagepay extends Controller {
-	 
+	
 
 	public function index() {
 		$this->template->load('payment/sagepay');
@@ -122,10 +122,6 @@ class ControllerPaymentSagepay extends Controller {
 			$this->error['password'] = $this->_('error_password');
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

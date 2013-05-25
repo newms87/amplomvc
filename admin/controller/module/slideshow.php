@@ -1,8 +1,8 @@
 <?php
 class ControllerModuleSlideshow extends Controller {
-	 
 	
-	public function index() {   
+	
+	public function index() {	
 		$this->template->load('module/slideshow');
 
 		$this->load->language('module/slideshow');
@@ -70,10 +70,6 @@ class ControllerModuleSlideshow extends Controller {
 			}
 		}	
 						
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

@@ -1,20 +1,20 @@
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 // +----------------------------------------------------------------------+
-// | PHP Version 4                                                        |
+// | PHP Version 4																		|
 // +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2002 The PHP Group                                |
+// | Copyright (c) 1997-2002 The PHP Group										|
 // +----------------------------------------------------------------------+
-// | This source file is subject to version 2.02 of the PHP license,      |
-// | that is bundled with this package in the file LICENSE, and is        |
-// | available at through the world-wide-web at                           |
-// | http://www.php.net/license/2_02.txt.                                 |
-// | If you did not receive a copy of the PHP license and are unable to   |
-// | obtain it through the world-wide-web, please send a note to          |
-// | license@php.net so we can mail you a copy immediately.               |
+// | This source file is subject to version 2.02 of the PHP license,		|
+// | that is bundled with this package in the file LICENSE, and is		|
+// | available at through the world-wide-web at									|
+// | http://www.php.net/license/2_02.txt.											|
+// | If you did not receive a copy of the PHP license and are unable to	|
+// | obtain it through the world-wide-web, please send a note to			|
+// | license@php.net so we can mail you a copy immediately.					|
 // +----------------------------------------------------------------------+
-// | Author: Xavier Noguer <xnoguer@php.net>                              |
-// | Based on OLE::Storage_Lite by Kawai, Takanori                        |
+// | Author: Xavier Noguer <xnoguer@php.net>										|
+// | Based on OLE::Storage_Lite by Kawai, Takanori								|
 // +----------------------------------------------------------------------+
 //
 // $Id: Root.php,v 1.9 2005/04/23 21:53:49 dufuz Exp $
@@ -23,7 +23,7 @@
 /**
 * Class for creating Root PPS's for OLE containers
 *
-* @author   Xavier Noguer <xnoguer@php.net>
+* @author	Xavier Noguer <xnoguer@php.net>
 * @category PHPExcel
 * @package  PHPExcel_Shared_OLE
 */
@@ -31,30 +31,30 @@ class PHPExcel_Shared_OLE_PPS_Root extends PHPExcel_Shared_OLE_PPS
 	{
 
 	/**
-	 * Directory for temporary files
-	 * @var string
-	 */
+	* Directory for temporary files
+	* @var string
+	*/
 	protected $_tmp_dir		= NULL;
 
 	/**
-	 * @param integer $time_1st A timestamp
-	 * @param integer $time_2nd A timestamp
-	 */
+	* @param integer $time_1st A timestamp
+	* @param integer $time_2nd A timestamp
+	*/
 	public function __construct($time_1st, $time_2nd, $raChild)
 	{
 		$this->_tempDir = PHPExcel_Shared_File::sys_get_temp_dir();
 
 		parent::__construct(
-		   null,
-		   PHPExcel_Shared_OLE::Asc2Ucs('Root Entry'),
-		   PHPExcel_Shared_OLE::OLE_PPS_TYPE_ROOT,
-		   null,
-		   null,
-		   null,
-		   $time_1st,
-		   $time_2nd,
-		   null,
-		   $raChild);
+			null,
+			PHPExcel_Shared_OLE::Asc2Ucs('Root Entry'),
+			PHPExcel_Shared_OLE::OLE_PPS_TYPE_ROOT,
+			null,
+			null,
+			null,
+			$time_1st,
+			$time_2nd,
+			null,
+			$raChild);
 	}
 
 	/**
@@ -72,12 +72,12 @@ class PHPExcel_Shared_OLE_PPS_Root extends PHPExcel_Shared_OLE_PPS
 	{
 		// Initial Setting for saving
 		$this->_BIG_BLOCK_SIZE  = pow(2,
-					  ((isset($this->_BIG_BLOCK_SIZE))? self::_adjust2($this->_BIG_BLOCK_SIZE)  : 9));
+					((isset($this->_BIG_BLOCK_SIZE))? self::_adjust2($this->_BIG_BLOCK_SIZE)  : 9));
 		$this->_SMALL_BLOCK_SIZE= pow(2,
-					  ((isset($this->_SMALL_BLOCK_SIZE))?  self::_adjust2($this->_SMALL_BLOCK_SIZE): 6));
+					((isset($this->_SMALL_BLOCK_SIZE))?  self::_adjust2($this->_SMALL_BLOCK_SIZE): 6));
 
 		if (is_resource($filename)) {
-		    $this->_FILEH_ = $filename;
+			$this->_FILEH_ = $filename;
 		} else if ($filename == '-' || $filename == '') {
 			if ($this->_tmp_dir === NULL)
 				$this->_tmp_dir = PHPExcel_Shared_File::sys_get_temp_dir();
@@ -136,7 +136,7 @@ class PHPExcel_Shared_OLE_PPS_Root extends PHPExcel_Shared_OLE_PPS
 				$raList[$i]->Size = $raList[$i]->_DataLen();
 				if ($raList[$i]->Size < PHPExcel_Shared_OLE::OLE_DATA_SIZE_SMALL) {
 					$iSBcnt += floor($raList[$i]->Size / $this->_SMALL_BLOCK_SIZE)
-								  + (($raList[$i]->Size % $this->_SMALL_BLOCK_SIZE)? 1: 0);
+								+ (($raList[$i]->Size % $this->_SMALL_BLOCK_SIZE)? 1: 0);
 				} else {
 					$iBBcnt += (floor($raList[$i]->Size / $this->_BIG_BLOCK_SIZE) +
 						(($raList[$i]->Size % $this->_BIG_BLOCK_SIZE)? 1: 0));
@@ -147,7 +147,7 @@ class PHPExcel_Shared_OLE_PPS_Root extends PHPExcel_Shared_OLE_PPS
 		$iSlCnt = floor($this->_BIG_BLOCK_SIZE / PHPExcel_Shared_OLE::OLE_LONG_INT_SIZE);
 		$iSBDcnt = floor($iSBcnt / $iSlCnt) + (($iSBcnt % $iSlCnt)? 1:0);
 		$iBBcnt +=  (floor($iSmallLen / $this->_BIG_BLOCK_SIZE) +
-					  (( $iSmallLen % $this->_BIG_BLOCK_SIZE)? 1: 0));
+					(( $iSmallLen % $this->_BIG_BLOCK_SIZE)? 1: 0));
 		$iCnt = count($raList);
 		$iBdCnt = $this->_BIG_BLOCK_SIZE / PHPExcel_Shared_OLE::OLE_PPS_SIZE;
 		$iPPScnt = (floor($iCnt/$iBdCnt) + (($iCnt % $iBdCnt)? 1: 0));
@@ -223,15 +223,15 @@ class PHPExcel_Shared_OLE_PPS_Root extends PHPExcel_Shared_OLE_PPS
 				. pack("V", $iBBcnt+$iSBDcnt) //ROOT START
 				. pack("V", 0)
 				. pack("V", 0x1000)
-				. pack("V", $iSBDcnt ? 0 : -2)                  //Small Block Depot
+				. pack("V", $iSBDcnt ? 0 : -2)						//Small Block Depot
 				. pack("V", $iSBDcnt)
-		  );
+		);
 		// Extra BDList Start, Count
 		if ($iBdCnt < $i1stBdL) {
 			fwrite($FILE,
-					pack("V", -2)      // Extra BDList Start
-					. pack("V", 0)        // Extra BDList Count
-				  );
+					pack("V", -2)		// Extra BDList Start
+					. pack("V", 0)		// Extra BDList Count
+				);
 		} else {
 			fwrite($FILE, pack("V", $iAll+$iBdCnt) . pack("V", $iBdExL));
 		}
@@ -319,7 +319,7 @@ class PHPExcel_Shared_OLE_PPS_Root extends PHPExcel_Shared_OLE_PPS
 				}
 				if ($raList[$i]->Size < PHPExcel_Shared_OLE::OLE_DATA_SIZE_SMALL) {
 					$iSmbCnt = floor($raList[$i]->Size / $this->_SMALL_BLOCK_SIZE)
-								  + (($raList[$i]->Size % $this->_SMALL_BLOCK_SIZE)? 1: 0);
+								+ (($raList[$i]->Size % $this->_SMALL_BLOCK_SIZE)? 1: 0);
 					// Add to SBD
 					$jB = $iSmbCnt - 1;
 					for ($j = 0; $j < $jB; ++$j) {

@@ -13,12 +13,12 @@ class ModelPaymentFreeCheckout extends Model {
 			
 		if ($status) {  
 			$method_data = array( 
-				'code'       => 'free_checkout',
-				'title'      => $this->_('text_title'),
+				'code'		=> 'free_checkout',
+				'title'		=> $this->_('text_title'),
 				'sort_order' => $this->config->get('free_checkout_sort_order')
 			);
 		}
 		
-    	return $method_data;
+		return $method_data;
   	}
 }

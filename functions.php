@@ -4,16 +4,16 @@ global $html_dump_count;
 $html_dump_count = 0;
 function html_dump($var, $label= "HTML Dump", $level=0, $max = -1, $print = true){
 	global $html_dump_count;
-   
-   $id = 'html_dump-' . $html_dump_count;
+	
+	$id = 'html_dump-' . $html_dump_count;
 	
 	if(!$print){
 		ob_start();
 	}
 ?>
 <a id='<?=$id;?>' class='html_dump' onclick="open_html_dump('<?=$id;?>')">
-   <span class='html_dump_label'><?=$label;?></span>
-     
+	<span class='html_dump_label'><?=$label;?></span>
+	
 <style>
 .html_dump{background:white;overflow:auto;top:0;left:0;}
 .html_dump_label{cursor:pointer; color:blue; text-decoration:underline;}
@@ -24,24 +24,24 @@ function html_dump($var, $label= "HTML Dump", $level=0, $max = -1, $print = true
 .value{background: #92ADE3;max-width:800px; word-wrap:break-word}
 </style>
 
-   <div class='dump_output' id='<?=$id;?>-output' style='display:none'>
-      <? $dump = html_dump_r($var,$level,$max);?>
-   </div>
+	<div class='dump_output' id='<?=$id;?>-output' style='display:none'>
+		<? $dump = html_dump_r($var,$level,$max);?>
+	</div>
 </a><br/>
 <?
-   if($html_dump_count == 0){
+	if($html_dump_count == 0){
 ?>
 <script type='text/javascript'>//<!--
 function open_html_dump(id){
-   var w = window.open(null, 'newwindow', 'resizable=1,scrollbars=1, width=800, height=800');
-   document.getElementById(id + '-output').setAttribute('style','display:block');
-   w.document.body.innerHTML = document.getElementById(id).innerHTML;
-   document.getElementById(id + '-output').setAttribute('style','display:none');
+	var w = window.open(null, 'newwindow', 'resizable=1,scrollbars=1, width=800, height=800');
+	document.getElementById(id + '-output').setAttribute('style','display:block');
+	w.document.body.innerHTML = document.getElementById(id).innerHTML;
+	document.getElementById(id + '-output').setAttribute('style','display:none');
 }
 //--></script>
 <?
-   }
-   $html_dump_count++;
+	}
+	$html_dump_count++;
 	
 	if(!$print){
 		$dump = ob_get_clean();
@@ -78,7 +78,7 @@ function html_dump_r($var, $level, $max){
 					$val = "NULL";
 				else
 					$val = $v;
-              
+				
 				echo "<td class='value'>$val</td>";
 			}
 			echo "</tr>";
@@ -98,6 +98,18 @@ function debug_stack($depth = 10, $offset = 0){
 	return array_slice(debug_backtrace(false), 1 + $offset, $depth);
 }
 
+if (!function_exists('array_column')) {
+	function array_column($array, $column){
+		$values = array();
+		
+		foreach($array as $row){
+			$values[] = $row[$column];
+		}
+		
+		return $values;
+	}
+}
+
 function get_caller($offset = 0){
 	$calls = debug_backtrace(false);
 	$caller = $calls[$offset + 1];
@@ -113,9 +125,9 @@ function get_caller($offset = 0){
 function _is_writable($dir, $mode = 0755){
 	if(!is_writable($dir)){
 		if(!is_dir($dir)){
-	      mkdir($dir, $mode,true);
-	      chmod($dir, $mode);
-	   }
+			mkdir($dir, $mode,true);
+			chmod($dir, $mode);
+		}
 		
 		if(!is_dir($dir)){
 			trigger_error("Do not have write permissions to create directory " . $dir . ". Please change the permissions to allow writing to this directory.");

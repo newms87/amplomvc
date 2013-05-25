@@ -32,7 +32,7 @@ class ControllerPaymentGoogleCheckout extends Controller {
 			$xml .= '			<item>';
 			$xml .= '				<merchant-item-id>' . $product['product_id'] . '</merchant-item-id>';
 			$xml .= '				<item-name>' . $name . '</item-name>'; 
-			$xml .= '				<item-description>' . substr(strip_tags($product['description']), 0, 299) . '</item-description>';   
+			$xml .= '				<item-description>' . substr(strip_tags($product['description']), 0, 299) . '</item-description>';	
 			$xml .= '				<unit-price currency="' . $this->currency->getCode() . '">' . $product['price'] . '</unit-price>';
 			$xml .= '				<quantity>' . $product['quantity'] . '</quantity>';
 			$xml .= '			</item>'; 

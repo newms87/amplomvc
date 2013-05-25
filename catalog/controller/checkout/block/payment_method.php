@@ -2,23 +2,23 @@
 class ControllerCheckoutBlockPaymentMethod extends Controller {
   	public function index() {
   		$this->language->load('checkout/checkout');
-      $this->template->load('checkout/block/payment_method');
+		$this->template->load('checkout/block/payment_method');
 		
 		if($this->cart->hasPaymentAddress()){
 			$payment_methods = $this->cart->getPaymentMethods();
-	      
-	      if (!$payment_methods) {
-			   $this->message->add('error', $this->language->format('error_no_payment', $this->url->link('information/contact')));
+			
+			if (!$payment_methods) {
+				$this->message->add('error', $this->language->format('error_no_payment', $this->url->link('information/contact')));
 			}	
-		   
-	      if ($this->cart->hasPaymentMethod()) {
+			
+			if ($this->cart->hasPaymentMethod()) {
 				$this->data['code'] = $this->cart->getPaymentMethodId();
 			} elseif(count($payment_methods) == 1){
-	         $method = current($payment_methods);
-	         $this->data['code'] = $method['code'];
-	      }
-	      else{
-	         $this->data['code'] = '';
+				$method = current($payment_methods);
+				$this->data['code'] = $method['code'];
+			}
+			else{
+				$this->data['code'] = '';
 			}
 			
 			$this->data['payment_methods'] = $payment_methods;
@@ -49,7 +49,7 @@ class ControllerCheckoutBlockPaymentMethod extends Controller {
 				$this->data[$key] = $default;
 			}
 		}
-      
+		
 		$this->data['validate_payment_method'] = $this->url->link('checkout/block/payment_method/validate');
 		
 		$this->response->setOutput($this->render());
@@ -64,13 +64,13 @@ class ControllerCheckoutBlockPaymentMethod extends Controller {
 		if ($this->cart->hasPaymentAddress()) {
 			$payment_address = $this->cart->getPaymentAddress();
 		}else{
-         $json['error']['payment_address'] = $this->_('error_payment_address');
-      }
-      
-      if(!$this->cart->validate()){
-         $json['redirect'] = $this->url->link('cart/cart');
-         $this->message->add('warning', $this->cart->get_errors());
-      }
+			$json['error']['payment_address'] = $this->_('error_payment_address');
+		}
+		
+		if(!$this->cart->validate()){
+			$json['redirect'] = $this->url->link('cart/cart');
+			$this->message->add('warning', $this->cart->get_errors());
+		}
 		
 		if (!$json) {
 			if ($this->config->get('config_checkout_id')) {
@@ -88,17 +88,17 @@ class ControllerCheckoutBlockPaymentMethod extends Controller {
 			if (!$json) {
 				//TODO: do we need any of this!? Maybe rethink set_default_payment_code()...
 				if($this->customer->isLogged()){
-               $payment_info = array(
-                  'address_id' => $this->cart->getPaymentAddressId(),
-               );
-               
-               $code = $_POST['payment_method'];
-               
-               $this->customer->edit_setting('payment_info_' . $code, $payment_info);
-               
-               $this->customer->set_default_payment_code($code);
-            }
-            
+					$payment_info = array(
+						'address_id' => $this->cart->getPaymentAddressId(),
+					);
+					
+					$code = $_POST['payment_method'];
+					
+					$this->customer->edit_setting('payment_info_' . $code, $payment_info);
+					
+					$this->customer->set_default_payment_code($code);
+				}
+				
 				$this->session->data['comment'] = strip_tags($_POST['comment']);
 			}							
 		}

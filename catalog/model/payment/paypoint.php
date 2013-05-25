@@ -18,13 +18,13 @@ class ModelPaymentPayPoint extends Model {
 		$method_data = array();
 	
 		if ($status) {  
-      		$method_data = array( 
-        		'code'       => 'paypoint',
-        		'title'      => $this->_('text_title'),
+				$method_data = array( 
+				'code'		=> 'paypoint',
+				'title'		=> $this->_('text_title'),
 				'sort_order' => $this->config->get('paypoint_sort_order')
-      		);
-    	}
-   
-    	return $method_data;
+				);
+		}
+	
+		return $method_data;
   	}
 }

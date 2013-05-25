@@ -4,7 +4,7 @@ class ControllerExtensionModule extends Controller {
 		$this->template->load('extension/module');
 
 		$this->load->language('extension/module');
-		 
+		
 		$this->document->setTitle($this->_('heading_title')); 
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -66,7 +66,7 @@ class ControllerExtensionModule extends Controller {
 				}
 												
 				$this->data['extensions'][] = array(
-					'name'   => $this->_('heading_title'),
+					'name'	=> $this->_('heading_title'),
 					'action' => $action
 				);
 			}

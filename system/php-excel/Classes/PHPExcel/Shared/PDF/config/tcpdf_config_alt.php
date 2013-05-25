@@ -1,7 +1,7 @@
 <?php
 //============================================================+
-// File name   : tcpdf_config.php
-// Begin       : 2004-06-11
+// File name	: tcpdf_config.php
+// Begin		: 2004-06-11
 // Last Update : 2010-08-19
 //
 // Description : Alternative configuration file for TCPDF.
@@ -9,13 +9,13 @@
 // Author: Nicola Asuni
 //
 // (c) Copyright:
-//               Nicola Asuni
-//               Tecnick.com s.r.l.
-//               Via Della Pace, 11
-//               09044 Quartucciu (CA)
-//               ITALY
-//               www.tecnick.com
-//               info@tecnick.com
+//					Nicola Asuni
+//					Tecnick.com s.r.l.
+//					Via Della Pace, 11
+//					09044 Quartucciu (CA)
+//					ITALY
+//					www.tecnick.com
+//					info@tecnick.com
 //============================================================+
 
 /**

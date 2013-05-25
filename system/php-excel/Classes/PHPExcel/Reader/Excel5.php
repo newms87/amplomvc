@@ -18,11 +18,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category   PHPExcel
- * @package    PHPExcel_Reader_Excel5
+ * @category	PHPExcel
+ * @package	PHPExcel_Reader_Excel5
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version    1.7.7, 2012-05-19
+ * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+ * @version	1.7.7, 2012-05-19
  */
 
 // Original file header of ParseXL (used as the base for this class):
@@ -31,37 +31,37 @@
 // trex005, and mmp11 (SourceForge.net)
 // http://sourceforge.net/projects/phpexcelreader/
 // Primary changes made by canyoncasa (dvc) for ParseXL 1.00 ...
-//	 Modelled moreso after Perl Excel Parse/Write modules
-//	 Added Parse_Excel_Spreadsheet object
-//		 Reads a whole worksheet or tab as row,column array or as
-//		 associated hash of indexed rows and named column fields
-//	 Added variables for worksheet (tab) indexes and names
-//	 Added an object call for loading individual woorksheets
-//	 Changed default indexing defaults to 0 based arrays
-//	 Fixed date/time and percent formats
-//	 Includes patches found at SourceForge...
-//		 unicode patch by nobody
-//		 unpack("d") machine depedency patch by matchy
-//		 boundsheet utf16 patch by bjaenichen
-//	 Renamed functions for shorter names
-//	 General code cleanup and rigor, including <80 column width
-//	 Included a testcase Excel file and PHP example calls
-//	 Code works for PHP 5.x
+//	Modelled moreso after Perl Excel Parse/Write modules
+//	Added Parse_Excel_Spreadsheet object
+//		Reads a whole worksheet or tab as row,column array or as
+//		associated hash of indexed rows and named column fields
+//	Added variables for worksheet (tab) indexes and names
+//	Added an object call for loading individual woorksheets
+//	Changed default indexing defaults to 0 based arrays
+//	Fixed date/time and percent formats
+//	Includes patches found at SourceForge...
+//		unicode patch by nobody
+//		unpack("d") machine depedency patch by matchy
+//		boundsheet utf16 patch by bjaenichen
+//	Renamed functions for shorter names
+//	General code cleanup and rigor, including <80 column width
+//	Included a testcase Excel file and PHP example calls
+//	Code works for PHP 5.x
 
 // Primary changes made by canyoncasa (dvc) for ParseXL 1.10 ...
 // http://sourceforge.net/tracker/index.php?func=detail&aid=1466964&group_id=99160&atid=623334
-//	 Decoding of formula conditions, results, and tokens.
-//	 Support for user-defined named cells added as an array "namedcells"
-//		 Patch code for user-defined named cells supports single cells only.
-//		 NOTE: this patch only works for BIFF8 as BIFF5-7 use a different
-//		 external sheet reference structure
+//	Decoding of formula conditions, results, and tokens.
+//	Support for user-defined named cells added as an array "namedcells"
+//		Patch code for user-defined named cells supports single cells only.
+//		NOTE: this patch only works for BIFF8 as BIFF5-7 use a different
+//		external sheet reference structure
 
 
 /** PHPExcel root directory */
 if (!defined('PHPEXCEL_ROOT')) {
 	/**
-	 * @ignore
-	 */
+	* @ignore
+	*/
 	define('PHPEXCEL_ROOT', dirname(__FILE__) . '/../../');
 	require(PHPEXCEL_ROOT . 'PHPExcel/Autoloader.php');
 }
@@ -160,264 +160,264 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read data only?
-	 * Identifies whether the Reader should only read data values for cells, and ignore any formatting information;
-	 *		or whether it should read both data and formatting
-	 *
-	 * @var	boolean
-	 */
+	* Read data only?
+	* Identifies whether the Reader should only read data values for cells, and ignore any formatting information;
+	*		or whether it should read both data and formatting
+	*
+	* @var	boolean
+	*/
 	private $_readDataOnly = false;
 
 	/**
-	 * Restrict which sheets should be loaded?
-	 * This property holds an array of worksheet names to be loaded. If null, then all worksheets will be loaded.
-	 *
-	 * @var	array of string
-	 */
+	* Restrict which sheets should be loaded?
+	* This property holds an array of worksheet names to be loaded. If null, then all worksheets will be loaded.
+	*
+	* @var	array of string
+	*/
 	private $_loadSheetsOnly = null;
 
 	/**
-	 * PHPExcel_Reader_IReadFilter instance
-	 *
-	 * @var PHPExcel_Reader_IReadFilter
-	 */
+	* PHPExcel_Reader_IReadFilter instance
+	*
+	* @var PHPExcel_Reader_IReadFilter
+	*/
 	private $_readFilter = null;
 
 	/**
-	 * Summary Information stream data.
-	 *
-	 * @var string
-	 */
+	* Summary Information stream data.
+	*
+	* @var string
+	*/
 	private $_summaryInformation;
 
 	/**
-	 * Extended Summary Information stream data.
-	 *
-	 * @var string
-	 */
+	* Extended Summary Information stream data.
+	*
+	* @var string
+	*/
 	private $_documentSummaryInformation;
 
 	/**
-	 * User-Defined Properties stream data.
-	 *
-	 * @var string
-	 */
+	* User-Defined Properties stream data.
+	*
+	* @var string
+	*/
 	private $_userDefinedProperties;
 
 	/**
-	 * Workbook stream data. (Includes workbook globals substream as well as sheet substreams)
-	 *
-	 * @var string
-	 */
+	* Workbook stream data. (Includes workbook globals substream as well as sheet substreams)
+	*
+	* @var string
+	*/
 	private $_data;
 
 	/**
-	 * Size in bytes of $this->_data
-	 *
-	 * @var int
-	 */
+	* Size in bytes of $this->_data
+	*
+	* @var int
+	*/
 	private $_dataSize;
 
 	/**
-	 * Current position in stream
-	 *
-	 * @var integer
-	 */
+	* Current position in stream
+	*
+	* @var integer
+	*/
 	private $_pos;
 
 	/**
-	 * Workbook to be returned by the reader.
-	 *
-	 * @var PHPExcel
-	 */
+	* Workbook to be returned by the reader.
+	*
+	* @var PHPExcel
+	*/
 	private $_phpExcel;
 
 	/**
-	 * Worksheet that is currently being built by the reader.
-	 *
-	 * @var PHPExcel_Worksheet
-	 */
+	* Worksheet that is currently being built by the reader.
+	*
+	* @var PHPExcel_Worksheet
+	*/
 	private $_phpSheet;
 
 	/**
-	 * BIFF version
-	 *
-	 * @var int
-	 */
+	* BIFF version
+	*
+	* @var int
+	*/
 	private $_version;
 
 	/**
-	 * Codepage set in the Excel file being read. Only important for BIFF5 (Excel 5.0 - Excel 95)
-	 * For BIFF8 (Excel 97 - Excel 2003) this will always have the value 'UTF-16LE'
-	 *
-	 * @var string
-	 */
+	* Codepage set in the Excel file being read. Only important for BIFF5 (Excel 5.0 - Excel 95)
+	* For BIFF8 (Excel 97 - Excel 2003) this will always have the value 'UTF-16LE'
+	*
+	* @var string
+	*/
 	private $_codepage;
 
 	/**
-	 * Shared formats
-	 *
-	 * @var array
-	 */
+	* Shared formats
+	*
+	* @var array
+	*/
 	private $_formats;
 
 	/**
-	 * Shared fonts
-	 *
-	 * @var array
-	 */
+	* Shared fonts
+	*
+	* @var array
+	*/
 	private $_objFonts;
 
 	/**
-	 * Color palette
-	 *
-	 * @var array
-	 */
+	* Color palette
+	*
+	* @var array
+	*/
 	private $_palette;
 
 	/**
-	 * Worksheets
-	 *
-	 * @var array
-	 */
+	* Worksheets
+	*
+	* @var array
+	*/
 	private $_sheets;
 
 	/**
-	 * External books
-	 *
-	 * @var array
-	 */
+	* External books
+	*
+	* @var array
+	*/
 	private $_externalBooks;
 
 	/**
-	 * REF structures. Only applies to BIFF8.
-	 *
-	 * @var array
-	 */
+	* REF structures. Only applies to BIFF8.
+	*
+	* @var array
+	*/
 	private $_ref;
 
 	/**
-	 * External names
-	 *
-	 * @var array
-	 */
+	* External names
+	*
+	* @var array
+	*/
 	private $_externalNames;
 
 	/**
-	 * Defined names
-	 *
-	 * @var array
-	 */
+	* Defined names
+	*
+	* @var array
+	*/
 	private $_definedname;
 
 	/**
-	 * Shared strings. Only applies to BIFF8.
-	 *
-	 * @var array
-	 */
+	* Shared strings. Only applies to BIFF8.
+	*
+	* @var array
+	*/
 	private $_sst;
 
 	/**
-	 * Panes are frozen? (in sheet currently being read). See WINDOW2 record.
-	 *
-	 * @var boolean
-	 */
+	* Panes are frozen? (in sheet currently being read). See WINDOW2 record.
+	*
+	* @var boolean
+	*/
 	private $_frozen;
 
 	/**
-	 * Fit printout to number of pages? (in sheet currently being read). See SHEETPR record.
-	 *
-	 * @var boolean
-	 */
+	* Fit printout to number of pages? (in sheet currently being read). See SHEETPR record.
+	*
+	* @var boolean
+	*/
 	private $_isFitToPages;
 
 	/**
-	 * Objects. One OBJ record contributes with one entry.
-	 *
-	 * @var array
-	 */
+	* Objects. One OBJ record contributes with one entry.
+	*
+	* @var array
+	*/
 	private $_objs;
 
 	/**
-	 * Text Objects. One TXO record corresponds with one entry.
-	 *
-	 * @var array
-	 */
+	* Text Objects. One TXO record corresponds with one entry.
+	*
+	* @var array
+	*/
 	private $_textObjects;
 
 	/**
-	 * Cell Annotations (BIFF8)
-	 *
-	 * @var array
-	 */
+	* Cell Annotations (BIFF8)
+	*
+	* @var array
+	*/
 	private $_cellNotes;
 
 	/**
-	 * The combined MSODRAWINGGROUP data
-	 *
-	 * @var string
-	 */
+	* The combined MSODRAWINGGROUP data
+	*
+	* @var string
+	*/
 	private $_drawingGroupData;
 
 	/**
-	 * The combined MSODRAWING data (per sheet)
-	 *
-	 * @var string
-	 */
+	* The combined MSODRAWING data (per sheet)
+	*
+	* @var string
+	*/
 	private $_drawingData;
 
 	/**
-	 * Keep track of XF index
-	 *
-	 * @var int
-	 */
+	* Keep track of XF index
+	*
+	* @var int
+	*/
 	private $_xfIndex;
 
 	/**
-	 * Mapping of XF index (that is a cell XF) to final index in cellXf collection
-	 *
-	 * @var array
-	 */
+	* Mapping of XF index (that is a cell XF) to final index in cellXf collection
+	*
+	* @var array
+	*/
 	private $_mapCellXfIndex;
 
 	/**
-	 * Mapping of XF index (that is a style XF) to final index in cellStyleXf collection
-	 *
-	 * @var array
-	 */
+	* Mapping of XF index (that is a style XF) to final index in cellStyleXf collection
+	*
+	* @var array
+	*/
 	private $_mapCellStyleXfIndex;
 
 	/**
-	 * The shared formulas in a sheet. One SHAREDFMLA record contributes with one value.
-	 *
-	 * @var array
-	 */
+	* The shared formulas in a sheet. One SHAREDFMLA record contributes with one value.
+	*
+	* @var array
+	*/
 	private $_sharedFormulas;
 
 	/**
-	 * The shared formula parts in a sheet. One FORMULA record contributes with one value if it
-	 * refers to a shared formula.
-	 *
-	 * @var array
-	 */
+	* The shared formula parts in a sheet. One FORMULA record contributes with one value if it
+	* refers to a shared formula.
+	*
+	* @var array
+	*/
 	private $_sharedFormulaParts;
 
 
 	/**
-	 * Create a new PHPExcel_Reader_Excel5 instance
-	 */
+	* Create a new PHPExcel_Reader_Excel5 instance
+	*/
 	public function __construct() {
 		$this->_readFilter = new PHPExcel_Reader_DefaultReadFilter();
 	}
 
 
 	/**
-	 * Read data only?
-	 *		If this is true, then the Reader will only read data values for cells, it will not read any formatting information.
-	 *		If false (the default) it will read data and formatting.
-	 *
-	 * @return	boolean
-	 */
+	* Read data only?
+	*		If this is true, then the Reader will only read data values for cells, it will not read any formatting information.
+	*		If false (the default) it will read data and formatting.
+	*
+	* @return	boolean
+	*/
 	public function getReadDataOnly()
 	{
 		return $this->_readDataOnly;
@@ -425,14 +425,14 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Set read data only
-	 *		Set to true, to advise the Reader only to read data values for cells, and to ignore any formatting information.
-	 *		Set to false (the default) to advise the Reader to read both data and formatting for cells.
-	 *
-	 * @param	boolean	$pValue
-	 *
-	 * @return	PHPExcel_Reader_Excel5
-	 */
+	* Set read data only
+	*		Set to true, to advise the Reader only to read data values for cells, and to ignore any formatting information.
+	*		Set to false (the default) to advise the Reader to read both data and formatting for cells.
+	*
+	* @param	boolean	$pValue
+	*
+	* @return	PHPExcel_Reader_Excel5
+	*/
 	public function setReadDataOnly($pValue = false)
 	{
 		$this->_readDataOnly = $pValue;
@@ -441,12 +441,12 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Get which sheets to load
-	 *		Returns either an array of worksheet names (the list of worksheets that should be loaded), or a null
-	 *			indicating that all worksheets in the workbook should be loaded.
-	 *
-	 * @return mixed
-	 */
+	* Get which sheets to load
+	*		Returns either an array of worksheet names (the list of worksheets that should be loaded), or a null
+	*			indicating that all worksheets in the workbook should be loaded.
+	*
+	* @return mixed
+	*/
 	public function getLoadSheetsOnly()
 	{
 		return $this->_loadSheetsOnly;
@@ -454,14 +454,14 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Set which sheets to load
-	 *
-	 * @param mixed $value
-	 *		This should be either an array of worksheet names to be loaded, or a string containing a single worksheet name.
-	 *		If NULL, then it tells the Reader to read all worksheets in the workbook
-	 *
-	 * @return PHPExcel_Reader_Excel5
-	 */
+	* Set which sheets to load
+	*
+	* @param mixed $value
+	*		This should be either an array of worksheet names to be loaded, or a string containing a single worksheet name.
+	*		If NULL, then it tells the Reader to read all worksheets in the workbook
+	*
+	* @return PHPExcel_Reader_Excel5
+	*/
 	public function setLoadSheetsOnly($value = null)
 	{
 		$this->_loadSheetsOnly = is_array($value) ?
@@ -471,11 +471,11 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Set all sheets to load
-	 *		Tells the Reader to load all worksheets from the workbook.
-	 *
-	 * @return	PHPExcel_Reader_Excel5
-	 */
+	* Set all sheets to load
+	*		Tells the Reader to load all worksheets from the workbook.
+	*
+	* @return	PHPExcel_Reader_Excel5
+	*/
 	public function setLoadAllSheets()
 	{
 		$this->_loadSheetsOnly = null;
@@ -484,21 +484,21 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read filter
-	 *
-	 * @return PHPExcel_Reader_IReadFilter
-	 */
+	* Read filter
+	*
+	* @return PHPExcel_Reader_IReadFilter
+	*/
 	public function getReadFilter() {
 		return $this->_readFilter;
 	}
 
 
 	/**
-	 * Set read filter
-	 *
-	 * @param PHPExcel_Reader_IReadFilter $pValue
-	 * @return PHPExcel_Reader_Excel5
-	 */
+	* Set read filter
+	*
+	* @param PHPExcel_Reader_IReadFilter $pValue
+	* @return PHPExcel_Reader_Excel5
+	*/
 	public function setReadFilter(PHPExcel_Reader_IReadFilter $pValue) {
 		$this->_readFilter = $pValue;
 		return $this;
@@ -506,12 +506,12 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Can the current PHPExcel_Reader_IReader read the file?
-	 *
-	 * @param 	string 		$pFileName
-	 * @return 	boolean
-	 * @throws Exception
-	 */
+	* Can the current PHPExcel_Reader_IReader read the file?
+	*
+	* @param 	string 		$pFileName
+	* @return 	boolean
+	* @throws Exception
+	*/
 	public function canRead($pFilename)
 	{
 		// Check if file exists
@@ -534,11 +534,11 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Reads names of the worksheets from a file, without parsing the whole file to a PHPExcel object
-	 *
-	 * @param 	string 		$pFilename
-	 * @throws 	Exception
-	 */
+	* Reads names of the worksheets from a file, without parsing the whole file to a PHPExcel object
+	*
+	* @param 	string 		$pFilename
+	* @throws 	Exception
+	*/
 	public function listWorksheetNames($pFilename)
 	{
 		// Check if file exists
@@ -583,11 +583,11 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Return worksheet info (Name, Last Column Letter, Last Column Index, Total Rows, Total Columns)
-	 *
-	 * @param   string     $pFilename
-	 * @throws   Exception
-	 */
+	* Return worksheet info (Name, Last Column Letter, Last Column Index, Total Rows, Total Columns)
+	*
+	* @param	string	$pFilename
+	* @throws	Exception
+	*/
 	public function listWorksheetInfo($pFilename)
 	{
 		// Check if file exists
@@ -604,7 +604,7 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 		$this->_dataSize = strlen($this->_data);
 
 		// initialize
-		$this->_pos    = 0;
+		$this->_pos	= 0;
 		$this->_sheets = array();
 
 		// Parse Workbook Global Substream
@@ -612,10 +612,10 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 			$code = self::_GetInt2d($this->_data, $this->_pos);
 
 			switch ($code) {
-				case self::XLS_Type_BOF:        $this->_readBof();        break;
-				case self::XLS_Type_SHEET:      $this->_readSheet();      break;
-				case self::XLS_Type_EOF:        $this->_readDefault();    break 2;
-				default:                        $this->_readDefault();    break;
+				case self::XLS_Type_BOF:		$this->_readBof();		break;
+				case self::XLS_Type_SHEET:		$this->_readSheet();		break;
+				case self::XLS_Type_EOF:		$this->_readDefault();	break 2;
+				default:								$this->_readDefault();	break;
 			}
 		}
 
@@ -660,9 +660,9 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 						$tmpInfo['totalRows'] = max($tmpInfo['totalRows'], $rowIndex);
 						$tmpInfo['lastColumnIndex'] = max($tmpInfo['lastColumnIndex'], $columnIndex);
 						break;
-					case self::XLS_Type_BOF:      $this->_readBof();          break;
-					case self::XLS_Type_EOF:      $this->_readDefault();      break 2;
-					default:                      $this->_readDefault();      break;
+					case self::XLS_Type_BOF:		$this->_readBof();			break;
+					case self::XLS_Type_EOF:		$this->_readDefault();		break 2;
+					default:							$this->_readDefault();		break;
 				}
 			}
 
@@ -677,12 +677,12 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Loads PHPExcel from file
-	 *
-	 * @param 	string 		$pFilename
-	 * @return 	PHPExcel
-	 * @throws 	Exception
-	 */
+	* Loads PHPExcel from file
+	*
+	* @param 	string 		$pFilename
+	* @return 	PHPExcel
+	* @throws 	Exception
+	*/
 	public function load($pFilename)
 	{
 		// Read the OLE file
@@ -773,10 +773,10 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 				}
 
 				// border colors
-				$top      = $objStyle->getBorders()->getTop();
-				$right    = $objStyle->getBorders()->getRight();
-				$bottom   = $objStyle->getBorders()->getBottom();
-				$left     = $objStyle->getBorders()->getLeft();
+				$top		= $objStyle->getBorders()->getTop();
+				$right	= $objStyle->getBorders()->getRight();
+				$bottom	= $objStyle->getBorders()->getBottom();
+				$left	= $objStyle->getBorders()->getLeft();
 				$diagonal = $objStyle->getBorders()->getDiagonal();
 
 				if (isset($top->colorIndex)) {
@@ -1170,10 +1170,10 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Use OLE reader to extract the relevant data streams from the OLE file
-	 *
-	 * @param string $pFilename
-	 */
+	* Use OLE reader to extract the relevant data streams from the OLE file
+	*
+	* @param string $pFilename
+	*/
 	private function _loadOLE($pFilename)
 	{
 		// OLE reader
@@ -1196,8 +1196,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read summary information
-	 */
+	* Read summary information
+	*/
 	private function _readSummaryInformation()
 	{
 		if (!isset($this->_summaryInformation)) {
@@ -1356,8 +1356,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read additional document summary information
-	 */
+	* Read additional document summary information
+	*/
 	private function _readDocumentSummaryInformation()
 	{
 		if (!isset($this->_documentSummaryInformation)) {
@@ -1515,8 +1515,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Reads a general type of BIFF record. Does nothing except for moving stream pointer forward to next record.
-	 */
+	* Reads a general type of BIFF record. Does nothing except for moving stream pointer forward to next record.
+	*/
 	private function _readDefault()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -1528,9 +1528,9 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 *	The NOTE record specifies a comment associated with a particular cell. In Excel 95 (BIFF7) and earlier versions,
-	 *		this record stores a note (cell note). This feature was significantly enhanced in Excel 97.
-	 */
+	*	The NOTE record specifies a comment associated with a particular cell. In Excel 95 (BIFF7) and earlier versions,
+	*		this record stores a note (cell note). This feature was significantly enhanced in Excel 97.
+	*/
 	private function _readNote()
 	{
 //		echo '<b>Read Cell Annotation</b><br />';
@@ -1554,9 +1554,9 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 //			echo 'Note Author=',$noteAuthor,'<hr />';
 //
 			$this->_cellNotes[$noteObjID] = array('cellRef'		=> $cellAddress,
-												  'objectID'	=> $noteObjID,
-												  'author'		=> $noteAuthor
-												 );
+												'objectID'	=> $noteObjID,
+												'author'		=> $noteAuthor
+												);
 		} else {
 			$extension = false;
 			if ($cellAddress == '$B$65536') {
@@ -1592,8 +1592,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 *	The TEXT Object record contains the text associated with a cell annotation.
-	 */
+	*	The TEXT Object record contains the text associated with a cell annotation.
+	*/
 	private function _readTextObject()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -1623,7 +1623,7 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 				'format'	=> substr($text["recordData"],$text["spliceOffsets"][1],$cbRuns),
 				'alignment'	=> $grbitOpts,
 				'rotation'	=> $rot
-			 );
+			);
 
 //		echo '<b>_readTextObject()</b><br />';
 //		var_dump($this->_textObjects[$this->textObjRef]);
@@ -1632,8 +1632,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read BOF
-	 */
+	* Read BOF
+	*/
 	private function _readBof()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -1672,16 +1672,16 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * FILEPASS
-	 *
-	 * This record is part of the File Protection Block. It
-	 * contains information about the read/write password of the
-	 * file. All record contents following this record will be
-	 * encrypted.
-	 *
-	 * --	"OpenOffice.org's Documentation of the Microsoft
-	 * 		Excel File Format"
-	 */
+	* FILEPASS
+	*
+	* This record is part of the File Protection Block. It
+	* contains information about the read/write password of the
+	* file. All record contents following this record will be
+	* encrypted.
+	*
+	* --	"OpenOffice.org's Documentation of the Microsoft
+	* 		Excel File Format"
+	*/
 	private function _readFilepass()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -1695,14 +1695,14 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * CODEPAGE
-	 *
-	 * This record stores the text encoding used to write byte
-	 * strings, stored as MS Windows code page identifier.
-	 *
-	 * --	"OpenOffice.org's Documentation of the Microsoft
-	 * 		Excel File Format"
-	 */
+	* CODEPAGE
+	*
+	* This record stores the text encoding used to write byte
+	* strings, stored as MS Windows code page identifier.
+	*
+	* --	"OpenOffice.org's Documentation of the Microsoft
+	* 		Excel File Format"
+	*/
 	private function _readCodepage()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -1719,17 +1719,17 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * DATEMODE
-	 *
-	 * This record specifies the base date for displaying date
-	 * values. All dates are stored as count of days past this
-	 * base date. In BIFF2-BIFF4 this record is part of the
-	 * Calculation Settings Block. In BIFF5-BIFF8 it is
-	 * stored in the Workbook Globals Substream.
-	 *
-	 * --	"OpenOffice.org's Documentation of the Microsoft
-	 * 		Excel File Format"
-	 */
+	* DATEMODE
+	*
+	* This record specifies the base date for displaying date
+	* values. All dates are stored as count of days past this
+	* base date. In BIFF2-BIFF4 this record is part of the
+	* Calculation Settings Block. In BIFF5-BIFF8 it is
+	* stored in the Workbook Globals Substream.
+	*
+	* --	"OpenOffice.org's Documentation of the Microsoft
+	* 		Excel File Format"
+	*/
 	private function _readDateMode()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -1747,8 +1747,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read a FONT record
-	 */
+	* Read a FONT record
+	*/
 	private function _readFont()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -1834,19 +1834,19 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * FORMAT
-	 *
-	 * This record contains information about a number format.
-	 * All FORMAT records occur together in a sequential list.
-	 *
-	 * In BIFF2-BIFF4 other records referencing a FORMAT record
-	 * contain a zero-based index into this list. From BIFF5 on
-	 * the FORMAT record contains the index itself that will be
-	 * used by other records.
-	 *
-	 * --	"OpenOffice.org's Documentation of the Microsoft
-	 * 		Excel File Format"
-	 */
+	* FORMAT
+	*
+	* This record contains information about a number format.
+	* All FORMAT records occur together in a sequential list.
+	*
+	* In BIFF2-BIFF4 other records referencing a FORMAT record
+	* contain a zero-based index into this list. From BIFF5 on
+	* the FORMAT record contains the index itself that will be
+	* used by other records.
+	*
+	* --	"OpenOffice.org's Documentation of the Microsoft
+	* 		Excel File Format"
+	*/
 	private function _readFormat()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -1872,19 +1872,19 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * XF - Extended Format
-	 *
-	 * This record contains formatting information for cells, rows, columns or styles.
-	 * According to http://support.microsoft.com/kb/147732 there are always at least 15 cell style XF
-	 * and 1 cell XF.
-	 * Inspection of Excel files generated by MS Office Excel shows that XF records 0-14 are cell style XF
-	 * and XF record 15 is a cell XF
-	 * We only read the first cell style XF and skip the remaining cell style XF records
-	 * We read all cell XF records.
-	 *
-	 * --	"OpenOffice.org's Documentation of the Microsoft
-	 * 		Excel File Format"
-	 */
+	* XF - Extended Format
+	*
+	* This record contains formatting information for cells, rows, columns or styles.
+	* According to http://support.microsoft.com/kb/147732 there are always at least 15 cell style XF
+	* and 1 cell XF.
+	* Inspection of Excel files generated by MS Office Excel shows that XF records 0-14 are cell style XF
+	* and XF record 15 is a cell XF
+	* We only read the first cell style XF and skip the remaining cell style XF records
+	* We read all cell XF records.
+	*
+	* --	"OpenOffice.org's Documentation of the Microsoft
+	* 		Excel File Format"
+	*/
 	private function _readXf()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -2166,8 +2166,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 *
-	 */
+	*
+	*/
 	private function _readXfExt()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -2343,8 +2343,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read STYLE record
-	 */
+	* Read STYLE record
+	*/
 	private function _readStyle()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -2384,8 +2384,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read PALETTE record
-	 */
+	* Read PALETTE record
+	*/
 	private function _readPalette()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -2408,17 +2408,17 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * SHEET
-	 *
-	 * This record is  located in the  Workbook Globals
-	 * Substream  and represents a sheet inside the workbook.
-	 * One SHEET record is written for each sheet. It stores the
-	 * sheet name and a stream offset to the BOF record of the
-	 * respective Sheet Substream within the Workbook Stream.
-	 *
-	 * --	"OpenOffice.org's Documentation of the Microsoft
-	 * 		Excel File Format"
-	 */
+	* SHEET
+	*
+	* This record is  located in the  Workbook Globals
+	* Substream  and represents a sheet inside the workbook.
+	* One SHEET record is written for each sheet. It stores the
+	* sheet name and a stream offset to the BOF record of the
+	* respective Sheet Substream within the Workbook Stream.
+	*
+	* --	"OpenOffice.org's Documentation of the Microsoft
+	* 		Excel File Format"
+	*/
 	private function _readSheet()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -2432,10 +2432,10 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 		// offset: 4; size: 1; sheet state
 		switch (ord($recordData{4})) {
-			case 0x00: $sheetState = PHPExcel_Worksheet::SHEETSTATE_VISIBLE;    break;
-			case 0x01: $sheetState = PHPExcel_Worksheet::SHEETSTATE_HIDDEN;     break;
+			case 0x00: $sheetState = PHPExcel_Worksheet::SHEETSTATE_VISIBLE;	break;
+			case 0x01: $sheetState = PHPExcel_Worksheet::SHEETSTATE_HIDDEN;	break;
 			case 0x02: $sheetState = PHPExcel_Worksheet::SHEETSTATE_VERYHIDDEN; break;
-			default: $sheetState = PHPExcel_Worksheet::SHEETSTATE_VISIBLE;      break;
+			default: $sheetState = PHPExcel_Worksheet::SHEETSTATE_VISIBLE;		break;
 		}
 
 		// offset: 5; size: 1; sheet type
@@ -2460,8 +2460,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read EXTERNALBOOK record
-	 */
+	* Read EXTERNALBOOK record
+	*/
 	private function _readExternalBook()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -2524,8 +2524,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read EXTERNNAME record.
-	 */
+	* Read EXTERNNAME record.
+	*/
 	private function _readExternName()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -2559,8 +2559,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read EXTERNSHEET record
-	 */
+	* Read EXTERNSHEET record
+	*/
 	private function _readExternSheet()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -2588,16 +2588,16 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * DEFINEDNAME
-	 *
-	 * This record is part of a Link Table. It contains the name
-	 * and the token array of an internal defined name. Token
-	 * arrays of defined names contain tokens with aberrant
-	 * token classes.
-	 *
-	 * --	"OpenOffice.org's Documentation of the Microsoft
-	 * 		Excel File Format"
-	 */
+	* DEFINEDNAME
+	*
+	* This record is part of a Link Table. It contains the name
+	* and the token array of an internal defined name. Token
+	* arrays of defined names contain tokens with aberrant
+	* token classes.
+	*
+	* --	"OpenOffice.org's Documentation of the Microsoft
+	* 		Excel File Format"
+	*/
 	private function _readDefinedName()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -2651,8 +2651,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read MSODRAWINGGROUP record
-	 */
+	* Read MSODRAWINGGROUP record
+	*/
 	private function _readMsoDrawingGroup()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -2666,16 +2666,16 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * SST - Shared String Table
-	 *
-	 * This record contains a list of all strings used anywhere
-	 * in the workbook. Each string occurs only once. The
-	 * workbook uses indexes into the list to reference the
-	 * strings.
-	 *
-	 * --	"OpenOffice.org's Documentation of the Microsoft
-	 * 		Excel File Format"
-	 **/
+	* SST - Shared String Table
+	*
+	* This record contains a list of all strings used anywhere
+	* in the workbook. Each string occurs only once. The
+	* workbook uses indexes into the list to reference the
+	* strings.
+	*
+	* --	"OpenOffice.org's Documentation of the Microsoft
+	* 		Excel File Format"
+	**/
 	private function _readSst()
 	{
 		// offset within (spliced) record data
@@ -2858,8 +2858,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read PRINTGRIDLINES record
-	 */
+	* Read PRINTGRIDLINES record
+	*/
 	private function _readPrintGridlines()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -2877,8 +2877,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read DEFAULTROWHEIGHT record
-	 */
+	* Read DEFAULTROWHEIGHT record
+	*/
 	private function _readDefaultRowHeight()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -2895,8 +2895,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read SHEETPR record
-	 */
+	* Read SHEETPR record
+	*/
 	private function _readSheetPr()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -2922,8 +2922,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read HORIZONTALPAGEBREAKS record
-	 */
+	* Read HORIZONTALPAGEBREAKS record
+	*/
 	private function _readHorizontalPageBreaks()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -2951,8 +2951,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read VERTICALPAGEBREAKS record
-	 */
+	* Read VERTICALPAGEBREAKS record
+	*/
 	private function _readVerticalPageBreaks()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -2979,8 +2979,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read HEADER record
-	 */
+	* Read HEADER record
+	*/
 	private function _readHeader()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -3007,8 +3007,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read FOOTER record
-	 */
+	* Read FOOTER record
+	*/
 	private function _readFooter()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -3034,8 +3034,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read HCENTER record
-	 */
+	* Read HCENTER record
+	*/
 	private function _readHcenter()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -3054,8 +3054,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read VCENTER record
-	 */
+	* Read VCENTER record
+	*/
 	private function _readVcenter()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -3074,8 +3074,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read LEFTMARGIN record
-	 */
+	* Read LEFTMARGIN record
+	*/
 	private function _readLeftMargin()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -3092,8 +3092,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read RIGHTMARGIN record
-	 */
+	* Read RIGHTMARGIN record
+	*/
 	private function _readRightMargin()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -3110,8 +3110,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read TOPMARGIN record
-	 */
+	* Read TOPMARGIN record
+	*/
 	private function _readTopMargin()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -3128,8 +3128,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read BOTTOMMARGIN record
-	 */
+	* Read BOTTOMMARGIN record
+	*/
 	private function _readBottomMargin()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -3146,8 +3146,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read PAGESETUP record
-	 */
+	* Read PAGESETUP record
+	*/
 	private function _readPageSetup()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -3203,9 +3203,9 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * PROTECT - Sheet protection (BIFF2 through BIFF8)
-	 *   if this record is omitted, then it also means no sheet protection
-	 */
+	* PROTECT - Sheet protection (BIFF2 through BIFF8)
+	*	if this record is omitted, then it also means no sheet protection
+	*/
 	private function _readProtect()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -3227,8 +3227,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * SCENPROTECT
-	 */
+	* SCENPROTECT
+	*/
 	private function _readScenProtect()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -3251,8 +3251,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * OBJECTPROTECT
-	 */
+	* OBJECTPROTECT
+	*/
 	private function _readObjectProtect()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -3275,8 +3275,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * PASSWORD - Sheet protection (hashed) password (BIFF2 through BIFF8)
-	 */
+	* PASSWORD - Sheet protection (hashed) password (BIFF2 through BIFF8)
+	*/
 	private function _readPassword()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -3294,8 +3294,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read DEFCOLWIDTH record
-	 */
+	* Read DEFCOLWIDTH record
+	*/
 	private function _readDefColWidth()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -3313,8 +3313,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read COLINFO record
-	 */
+	* Read COLINFO record
+	*/
 	private function _readColInfo()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -3365,15 +3365,15 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * ROW
-	 *
-	 * This record contains the properties of a single row in a
-	 * sheet. Rows and cells in a sheet are divided into blocks
-	 * of 32 rows.
-	 *
-	 * --	"OpenOffice.org's Documentation of the Microsoft
-	 * 		Excel File Format"
-	 */
+	* ROW
+	*
+	* This record contains the properties of a single row in a
+	* sheet. Rows and cells in a sheet are divided into blocks
+	* of 32 rows.
+	*
+	* --	"OpenOffice.org's Documentation of the Microsoft
+	* 		Excel File Format"
+	*/
 	private function _readRow()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -3434,16 +3434,16 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read RK record
-	 * This record represents a cell that contains an RK value
-	 * (encoded integer or floating-point value). If a
-	 * floating-point value cannot be encoded to an RK value,
-	 * a NUMBER record will be written. This record replaces the
-	 * record INTEGER written in BIFF2.
-	 *
-	 * --	"OpenOffice.org's Documentation of the Microsoft
-	 * 		Excel File Format"
-	 */
+	* Read RK record
+	* This record represents a cell that contains an RK value
+	* (encoded integer or floating-point value). If a
+	* floating-point value cannot be encoded to an RK value,
+	* a NUMBER record will be written. This record replaces the
+	* record INTEGER written in BIFF2.
+	*
+	* --	"OpenOffice.org's Documentation of the Microsoft
+	* 		Excel File Format"
+	*/
 	private function _readRk()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -3481,14 +3481,14 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read LABELSST record
-	 * This record represents a cell that contains a string. It
-	 * replaces the LABEL record and RSTRING record used in
-	 * BIFF2-BIFF5.
-	 *
-	 * --	"OpenOffice.org's Documentation of the Microsoft
-	 * 		Excel File Format"
-	 */
+	* Read LABELSST record
+	* This record represents a cell that contains a string. It
+	* replaces the LABEL record and RSTRING record used in
+	* BIFF2-BIFF5.
+	*
+	* --	"OpenOffice.org's Documentation of the Microsoft
+	* 		Excel File Format"
+	*/
 	private function _readLabelSst()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -3560,13 +3560,13 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read MULRK record
-	 * This record represents a cell range containing RK value
-	 * cells. All cells are located in the same row.
-	 *
-	 * --	"OpenOffice.org's Documentation of the Microsoft
-	 * 		Excel File Format"
-	 */
+	* Read MULRK record
+	* This record represents a cell range containing RK value
+	* cells. All cells are located in the same row.
+	*
+	* --	"OpenOffice.org's Documentation of the Microsoft
+	* 		Excel File Format"
+	*/
 	private function _readMulRk()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -3615,13 +3615,13 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read NUMBER record
-	 * This record represents a cell that contains a
-	 * floating-point value.
-	 *
-	 * --	"OpenOffice.org's Documentation of the Microsoft
-	 * 		Excel File Format"
-	 */
+	* Read NUMBER record
+	* This record represents a cell that contains a
+	* floating-point value.
+	*
+	* --	"OpenOffice.org's Documentation of the Microsoft
+	* 		Excel File Format"
+	*/
 	private function _readNumber()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -3657,13 +3657,13 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read FORMULA record + perhaps a following STRING record if formula result is a string
-	 * This record contains the token array and the result of a
-	 * formula cell.
-	 *
-	 * --	"OpenOffice.org's Documentation of the Microsoft
-	 * 		Excel File Format"
-	 */
+	* Read FORMULA record + perhaps a following STRING record if formula result is a string
+	* This record contains the token array and the result of a
+	* formula cell.
+	*
+	* --	"OpenOffice.org's Documentation of the Microsoft
+	* 		Excel File Format"
+	*/
 	private function _readFormula()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -3801,10 +3801,10 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read a SHAREDFMLA record. This function just stores the binary shared formula in the reader,
-	 * which usually contains relative references.
-	 * These will be used to construct the formula in each shared formula part after the sheet is read.
-	 */
+	* Read a SHAREDFMLA record. This function just stores the binary shared formula in the reader,
+	* which usually contains relative references.
+	* These will be used to construct the formula in each shared formula part after the sheet is read.
+	*/
 	private function _readSharedFmla()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -3832,12 +3832,12 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read a STRING record from current stream position and advance the stream pointer to next record
-	 * This record is used for storing result from FORMULA record when it is a string, and
-	 * it occurs directly after the FORMULA record
-	 *
-	 * @return string The string contents as UTF-8
-	 */
+	* Read a STRING record from current stream position and advance the stream pointer to next record
+	* This record is used for storing result from FORMULA record when it is a string, and
+	* it occurs directly after the FORMULA record
+	*
+	* @return string The string contents as UTF-8
+	*/
 	private function _readString()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -3859,13 +3859,13 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read BOOLERR record
-	 * This record represents a Boolean value or error value
-	 * cell.
-	 *
-	 * --	"OpenOffice.org's Documentation of the Microsoft
-	 * 		Excel File Format"
-	 */
+	* Read BOOLERR record
+	* This record represents a Boolean value or error value
+	* cell.
+	*
+	* --	"OpenOffice.org's Documentation of the Microsoft
+	* 		Excel File Format"
+	*/
 	private function _readBoolErr()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -3918,13 +3918,13 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read MULBLANK record
-	 * This record represents a cell range of empty cells. All
-	 * cells are located in the same row
-	 *
-	 * --	"OpenOffice.org's Documentation of the Microsoft
-	 * 		Excel File Format"
-	 */
+	* Read MULBLANK record
+	* This record represents a cell range of empty cells. All
+	* cells are located in the same row
+	*
+	* --	"OpenOffice.org's Documentation of the Microsoft
+	* 		Excel File Format"
+	*/
 	private function _readMulBlank()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -3958,15 +3958,15 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read LABEL record
-	 * This record represents a cell that contains a string. In
-	 * BIFF8 it is usually replaced by the LABELSST record.
-	 * Excel still uses this record, if it copies unformatted
-	 * text cells to the clipboard.
-	 *
-	 * --	"OpenOffice.org's Documentation of the Microsoft
-	 * 		Excel File Format"
-	 */
+	* Read LABEL record
+	* This record represents a cell that contains a string. In
+	* BIFF8 it is usually replaced by the LABELSST record.
+	* Excel still uses this record, if it copies unformatted
+	* text cells to the clipboard.
+	*
+	* --	"OpenOffice.org's Documentation of the Microsoft
+	* 		Excel File Format"
+	*/
 	private function _readLabel()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -4008,8 +4008,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read BLANK record
-	 */
+	* Read BLANK record
+	*/
 	private function _readBlank()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -4040,8 +4040,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read MSODRAWING record
-	 */
+	* Read MSODRAWING record
+	*/
 	private function _readMsoDrawing()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -4055,8 +4055,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read OBJ record
-	 */
+	* Read OBJ record
+	*/
 	private function _readObj()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -4100,8 +4100,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read WINDOW2 record
-	 */
+	* Read WINDOW2 record
+	*/
 	private function _readWindow2()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -4136,8 +4136,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read SCL record
-	 */
+	* Read SCL record
+	*/
 	private function _readScl()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -4158,8 +4158,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read PANE record
-	 */
+	* Read PANE record
+	*/
 	private function _readPane()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -4186,8 +4186,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read SELECTION record. There is one such record for each pane in the sheet.
-	 */
+	* Read SELECTION record. There is one such record for each pane in the sheet.
+	*/
 	private function _readSelection()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -4257,14 +4257,14 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * MERGEDCELLS
-	 *
-	 * This record contains the addresses of merged cell ranges
-	 * in the current sheet.
-	 *
-	 * --	"OpenOffice.org's Documentation of the Microsoft
-	 * 		Excel File Format"
-	 */
+	* MERGEDCELLS
+	*
+	* This record contains the addresses of merged cell ranges
+	* in the current sheet.
+	*
+	* --	"OpenOffice.org's Documentation of the Microsoft
+	* 		Excel File Format"
+	*/
 	private function _readMergedCells()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -4285,8 +4285,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read HYPERLINK record
-	 */
+	* Read HYPERLINK record
+	*/
 	private function _readHyperLink()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -4374,8 +4374,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 			case 'local':
 				// section 5.58.3: Hyperlink to local file
 				// examples:
-				//   mydoc.txt
-				//   ../../somedoc.xls#Sheet!A1
+				//	mydoc.txt
+				//	../../somedoc.xls#Sheet!A1
 
 				// offset: var; size: 16; GUI of File Moniker
 				$offset += 16;
@@ -4461,8 +4461,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read DATAVALIDATIONS record
-	 */
+	* Read DATAVALIDATIONS record
+	*/
 	private function _readDataValidations()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -4474,8 +4474,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read DATAVALIDATION record
-	 */
+	* Read DATAVALIDATION record
+	*/
 	private function _readDataValidation()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -4634,8 +4634,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read SHEETLAYOUT record. Stores sheet tab color information.
-	 */
+	* Read SHEETLAYOUT record. Stores sheet tab color information.
+	*/
 	private function _readSheetLayout()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -4674,8 +4674,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read SHEETPROTECTION record (FEATHEADR)
-	 */
+	* Read SHEETPROTECTION record (FEATHEADR)
+	*/
 	private function _readSheetProtection()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -4773,10 +4773,10 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read RANGEPROTECTION record
-	 * Reading of this record is based on Microsoft Office Excel 97-2000 Binary File Format Specification,
-	 * where it is referred to as FEAT record
-	 */
+	* Read RANGEPROTECTION record
+	* Reading of this record is based on Microsoft Office Excel 97-2000 Binary File Format Specification,
+	* where it is referred to as FEAT record
+	*/
 	private function _readRangeProtection()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -4836,8 +4836,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read IMDATA record
-	 */
+	* Read IMDATA record
+	*/
 	private function _readImData()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -4917,10 +4917,10 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read a free CONTINUE record. Free CONTINUE record may be a camouflaged MSODRAWING record
-	 * When MSODRAWING data on a sheet exceeds 8224 bytes, CONTINUE records are used instead. Undocumented.
-	 * In this case, we must treat the CONTINUE record as a MSODRAWING record
-	 */
+	* Read a free CONTINUE record. Free CONTINUE record may be a camouflaged MSODRAWING record
+	* When MSODRAWING data on a sheet exceeds 8224 bytes, CONTINUE records are used instead. Undocumented.
+	* In this case, we must treat the CONTINUE record as a MSODRAWING record
+	*/
 	private function _readContinue()
 	{
 		$length = self::_GetInt2d($this->_data, $this->_pos + 2);
@@ -4967,13 +4967,13 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Reads a record from current position in data stream and continues reading data as long as CONTINUE
-	 * records are found. Splices the record data pieces and returns the combined string as if record data
-	 * is in one piece.
-	 * Moves to next current position in data stream to start of next record different from a CONtINUE record
-	 *
-	 * @return array
-	 */
+	* Reads a record from current position in data stream and continues reading data as long as CONTINUE
+	* records are found. Splices the record data pieces and returns the combined string as if record data
+	* is in one piece.
+	* Moves to next current position in data stream to start of next record different from a CONtINUE record
+	*
+	* @return array
+	*/
 	private function _getSplicedRecordData()
 	{
 		$data = '';
@@ -5009,12 +5009,12 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Convert formula structure into human readable Excel formula like 'A3+A5*5'
-	 *
-	 * @param string $formulaStructure The complete binary data for the formula
-	 * @param string $baseCell Base cell, only needed when formula contains tRefN tokens, e.g. with shared formulas
-	 * @return string Human readable formula
-	 */
+	* Convert formula structure into human readable Excel formula like 'A3+A5*5'
+	*
+	* @param string $formulaStructure The complete binary data for the formula
+	* @param string $baseCell Base cell, only needed when formula contains tRefN tokens, e.g. with shared formulas
+	* @return string Human readable formula
+	*/
 	private function _getFormulaFromStructure($formulaStructure, $baseCell = 'A1')
 	{
 		// offset: 0; size: 2; size of the following formula data
@@ -5048,13 +5048,13 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Take formula data and additional data for formula and return human readable formula
-	 *
-	 * @param string $formulaData The binary data for the formula itself
-	 * @param string $additionalData Additional binary data going with the formula
-	 * @param string $baseCell Base cell, only needed when formula contains tRefN tokens, e.g. with shared formulas
-	 * @return string Human readable formula
-	 */
+	* Take formula data and additional data for formula and return human readable formula
+	*
+	* @param string $formulaData The binary data for the formula itself
+	* @param string $additionalData Additional binary data going with the formula
+	* @param string $baseCell Base cell, only needed when formula contains tRefN tokens, e.g. with shared formulas
+	* @return string Human readable formula
+	*/
 	private function _getFormulaFromData($formulaData,  $additionalData = '', $baseCell = 'A1')
 	{
 		// start parsing the formula data
@@ -5075,13 +5075,13 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Take array of tokens together with additional data for formula and return human readable formula
-	 *
-	 * @param array $tokens
-	 * @param array $additionalData Additional binary data going with the formula
-	 * @param string $baseCell Base cell, only needed when formula contains tRefN tokens, e.g. with shared formulas
-	 * @return string Human readable formula
-	 */
+	* Take array of tokens together with additional data for formula and return human readable formula
+	*
+	* @param array $tokens
+	* @param array $additionalData Additional binary data going with the formula
+	* @param string $baseCell Base cell, only needed when formula contains tRefN tokens, e.g. with shared formulas
+	* @return string Human readable formula
+	*/
 	private function _createFormulaFromTokens($tokens, $additionalData)
 	{
 		// empty formula?
@@ -5239,13 +5239,13 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Fetch next token from binary formula data
-	 *
-	 * @param string Formula data
-	 * @param string $baseCell Base cell, only needed when formula contains tRefN tokens, e.g. with shared formulas
-	 * @return array
-	 * @throws Exception
-	 */
+	* Fetch next token from binary formula data
+	*
+	* @param string Formula data
+	* @param string $baseCell Base cell, only needed when formula contains tRefN tokens, e.g. with shared formulas
+	* @return array
+	* @throws Exception
+	*/
 	private function _getNextToken($formulaData, $baseCell = 'A1')
 	{
 		// offset: 0; size: 1; token id
@@ -5398,8 +5398,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 			$size = 3;
 			// offset: 1; size: 2; index to built-in sheet function
 			switch (self::_GetInt2d($formulaData, 1)) {
-			case   2: $function = 'ISNA'; 			$args = 1; 	break;
-			case   3: $function = 'ISERROR'; 		$args = 1; 	break;
+			case	2: $function = 'ISNA'; 			$args = 1; 	break;
+			case	3: $function = 'ISERROR'; 		$args = 1; 	break;
 			case  10: $function = 'NA'; 			$args = 0; 	break;
 			case  15: $function = 'SIN'; 			$args = 1; 	break;
 			case  16: $function = 'COS'; 			$args = 1; 	break;
@@ -5574,14 +5574,14 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 			// offset: 2: size: 2; index to built-in sheet function
 			$index = self::_GetInt2d($formulaData, 2);
 			switch ($index) {
-			case   0: $function = 'COUNT';			break;
-			case   1: $function = 'IF';				break;
-			case   4: $function = 'SUM';			break;
-			case   5: $function = 'AVERAGE';		break;
-			case   6: $function = 'MIN';			break;
-			case   7: $function = 'MAX';			break;
-			case   8: $function = 'ROW';			break;
-			case   9: $function = 'COLUMN';			break;
+			case	0: $function = 'COUNT';			break;
+			case	1: $function = 'IF';				break;
+			case	4: $function = 'SUM';			break;
+			case	5: $function = 'AVERAGE';		break;
+			case	6: $function = 'MIN';			break;
+			case	7: $function = 'MAX';			break;
+			case	8: $function = 'ROW';			break;
+			case	9: $function = 'COLUMN';			break;
 			case  11: $function = 'NPV';			break;
 			case  12: $function = 'STDEV';			break;
 			case  13: $function = 'DOLLAR';			break;
@@ -5805,12 +5805,12 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Reads a cell address in BIFF8 e.g. 'A2' or '$A$2'
-	 * section 3.3.4
-	 *
-	 * @param string $cellAddressStructure
-	 * @return string
-	 */
+	* Reads a cell address in BIFF8 e.g. 'A2' or '$A$2'
+	* section 3.3.4
+	*
+	* @param string $cellAddressStructure
+	* @return string
+	*/
 	private function _readBIFF8CellAddress($cellAddressStructure)
 	{
 		// offset: 0; size: 2; index to row (0... 65535) (or offset (-32768... 32767))
@@ -5835,14 +5835,14 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Reads a cell address in BIFF8 for shared formulas. Uses positive and negative values for row and column
-	 * to indicate offsets from a base cell
-	 * section 3.3.4
-	 *
-	 * @param string $cellAddressStructure
-	 * @param string $baseCell Base cell, only needed when formula contains tRefN tokens, e.g. with shared formulas
-	 * @return string
-	 */
+	* Reads a cell address in BIFF8 for shared formulas. Uses positive and negative values for row and column
+	* to indicate offsets from a base cell
+	* section 3.3.4
+	*
+	* @param string $cellAddressStructure
+	* @param string $baseCell Base cell, only needed when formula contains tRefN tokens, e.g. with shared formulas
+	* @return string
+	*/
 	private function _readBIFF8CellAddressB($cellAddressStructure, $baseCell = 'A1')
 	{
 		list($baseCol, $baseRow) = PHPExcel_Cell::coordinateFromString($baseCell);
@@ -5879,14 +5879,14 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Reads a cell range address in BIFF5 e.g. 'A2:B6' or 'A1'
-	 * always fixed range
-	 * section 2.5.14
-	 *
-	 * @param string $subData
-	 * @return string
-	 * @throws Exception
-	 */
+	* Reads a cell range address in BIFF5 e.g. 'A2:B6' or 'A1'
+	* always fixed range
+	* section 2.5.14
+	*
+	* @param string $subData
+	* @return string
+	* @throws Exception
+	*/
 	private function _readBIFF5CellRangeAddressFixed($subData)
 	{
 		// offset: 0; size: 2; index to first row
@@ -5918,14 +5918,14 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Reads a cell range address in BIFF8 e.g. 'A2:B6' or 'A1'
-	 * always fixed range
-	 * section 2.5.14
-	 *
-	 * @param string $subData
-	 * @return string
-	 * @throws Exception
-	 */
+	* Reads a cell range address in BIFF8 e.g. 'A2:B6' or 'A1'
+	* always fixed range
+	* section 2.5.14
+	*
+	* @param string $subData
+	* @return string
+	* @throws Exception
+	*/
 	private function _readBIFF8CellRangeAddressFixed($subData)
 	{
 		// offset: 0; size: 2; index to first row
@@ -5957,13 +5957,13 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Reads a cell range address in BIFF8 e.g. 'A2:B6' or '$A$2:$B$6'
-	 * there are flags indicating whether column/row index is relative
-	 * section 3.3.4
-	 *
-	 * @param string $subData
-	 * @return string
-	 */
+	* Reads a cell range address in BIFF8 e.g. 'A2:B6' or '$A$2:$B$6'
+	* there are flags indicating whether column/row index is relative
+	* section 3.3.4
+	*
+	* @param string $subData
+	* @return string
+	*/
 	private function _readBIFF8CellRangeAddress($subData)
 	{
 		// todo: if cell range is just a single cell, should this funciton
@@ -6010,14 +6010,14 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Reads a cell range address in BIFF8 for shared formulas. Uses positive and negative values for row and column
-	 * to indicate offsets from a base cell
-	 * section 3.3.4
-	 *
-	 * @param string $subData
-	 * @param string $baseCell Base cell
-	 * @return string Cell range address
-	 */
+	* Reads a cell range address in BIFF8 for shared formulas. Uses positive and negative values for row and column
+	* to indicate offsets from a base cell
+	* section 3.3.4
+	*
+	* @param string $subData
+	* @param string $baseCell Base cell
+	* @return string Cell range address
+	*/
 	private function _readBIFF8CellRangeAddressB($subData, $baseCell = 'A1')
 	{
 		list($baseCol, $baseRow) = PHPExcel_Cell::coordinateFromString($baseCell);
@@ -6093,12 +6093,12 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read BIFF8 cell range address list
-	 * section 2.5.15
-	 *
-	 * @param string $subData
-	 * @return array
-	 */
+	* Read BIFF8 cell range address list
+	* section 2.5.15
+	*
+	* @param string $subData
+	* @return array
+	*/
 	private function _readBIFF8CellRangeAddressList($subData)
 	{
 		$cellRangeAddresses = array();
@@ -6121,12 +6121,12 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read BIFF5 cell range address list
-	 * section 2.5.15
-	 *
-	 * @param string $subData
-	 * @return array
-	 */
+	* Read BIFF5 cell range address list
+	* section 2.5.15
+	*
+	* @param string $subData
+	* @return array
+	*/
 	private function _readBIFF5CellRangeAddressList($subData)
 	{
 		$cellRangeAddresses = array();
@@ -6149,15 +6149,15 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Get a sheet range like Sheet1:Sheet3 from REF index
-	 * Note: If there is only one sheet in the range, one gets e.g Sheet1
-	 * It can also happen that the REF structure uses the -1 (FFFF) code to indicate deleted sheets,
-	 * in which case an exception is thrown
-	 *
-	 * @param int $index
-	 * @return string|false
-	 * @throws Exception
-	 */
+	* Get a sheet range like Sheet1:Sheet3 from REF index
+	* Note: If there is only one sheet in the range, one gets e.g Sheet1
+	* It can also happen that the REF structure uses the -1 (FFFF) code to indicate deleted sheets,
+	* in which case an exception is thrown
+	*
+	* @param int $index
+	* @return string|false
+	* @throws Exception
+	*/
 	private function _readSheetRangeByRefIndex($index)
 	{
 		if (isset($this->_ref[$index])) {
@@ -6207,13 +6207,13 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * read BIFF8 constant value array from array data
-	 * returns e.g. array('value' => '{1,2;3,4}', 'size' => 40}
-	 * section 2.5.8
-	 *
-	 * @param string $arrayData
-	 * @return array
-	 */
+	* read BIFF8 constant value array from array data
+	* returns e.g. array('value' => '{1,2;3,4}', 'size' => 40}
+	* section 2.5.8
+	*
+	* @param string $arrayData
+	* @return array
+	*/
 	private static function _readBIFF8ConstantArray($arrayData)
 	{
 		// offset: 0; size: 1; number of columns decreased by 1
@@ -6246,13 +6246,13 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * read BIFF8 constant value which may be 'Empty Value', 'Number', 'String Value', 'Boolean Value', 'Error Value'
-	 * section 2.5.7
-	 * returns e.g. array('value' => '5', 'size' => 9)
-	 *
-	 * @param string $valueData
-	 * @return array
-	 */
+	* read BIFF8 constant value which may be 'Empty Value', 'Number', 'String Value', 'Boolean Value', 'Error Value'
+	* section 2.5.7
+	* returns e.g. array('value' => '5', 'size' => 9)
+	*
+	* @param string $valueData
+	* @return array
+	*/
 	private static function _readBIFF8Constant($valueData)
 	{
 		// offset: 0; size: 1; identifier for type of constant
@@ -6297,12 +6297,12 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Extract RGB color
-	 * OpenOffice.org's Documentation of the Microsoft Excel File Format, section 2.5.4
-	 *
-	 * @param string $rgb Encoded RGB value (4 bytes)
-	 * @return array
-	 */
+	* Extract RGB color
+	* OpenOffice.org's Documentation of the Microsoft Excel File Format, section 2.5.4
+	*
+	* @param string $rgb Encoded RGB value (4 bytes)
+	* @return array
+	*/
 	private static function _readRGB($rgb)
 	{
 		// offset: 0; size 1; Red component
@@ -6322,12 +6322,12 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read byte string (8-bit string length)
-	 * OpenOffice documentation: 2.5.2
-	 *
-	 * @param string $subData
-	 * @return array
-	 */
+	* Read byte string (8-bit string length)
+	* OpenOffice documentation: 2.5.2
+	*
+	* @param string $subData
+	* @return array
+	*/
 	private function _readByteStringShort($subData)
 	{
 		// offset: 0; size: 1; length of the string (character count)
@@ -6344,12 +6344,12 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read byte string (16-bit string length)
-	 * OpenOffice documentation: 2.5.2
-	 *
-	 * @param string $subData
-	 * @return array
-	 */
+	* Read byte string (16-bit string length)
+	* OpenOffice documentation: 2.5.2
+	*
+	* @param string $subData
+	* @return array
+	*/
 	private function _readByteStringLong($subData)
 	{
 		// offset: 0; size: 2; length of the string (character count)
@@ -6367,13 +6367,13 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Extracts an Excel Unicode short string (8-bit string length)
-	 * OpenOffice documentation: 2.5.3
-	 * function will automatically find out where the Unicode string ends.
-	 *
-	 * @param string $subData
-	 * @return array
-	 */
+	* Extracts an Excel Unicode short string (8-bit string length)
+	* OpenOffice documentation: 2.5.3
+	* function will automatically find out where the Unicode string ends.
+	*
+	* @param string $subData
+	* @return array
+	*/
 	private static function _readUnicodeStringShort($subData)
 	{
 		$value = '';
@@ -6391,13 +6391,13 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Extracts an Excel Unicode long string (16-bit string length)
-	 * OpenOffice documentation: 2.5.3
-	 * this function is under construction, needs to support rich text, and Asian phonetic settings
-	 *
-	 * @param string $subData
-	 * @return array
-	 */
+	* Extracts an Excel Unicode long string (16-bit string length)
+	* OpenOffice documentation: 2.5.3
+	* this function is under construction, needs to support rich text, and Asian phonetic settings
+	*
+	* @param string $subData
+	* @return array
+	*/
 	private static function _readUnicodeStringLong($subData)
 	{
 		$value = '';
@@ -6415,14 +6415,14 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read Unicode string with no string length field, but with known character count
-	 * this function is under construction, needs to support rich text, and Asian phonetic settings
-	 * OpenOffice.org's Documentation of the Microsoft Excel File Format, section 2.5.3
-	 *
-	 * @param string $subData
-	 * @param int $characterCount
-	 * @return array
-	 */
+	* Read Unicode string with no string length field, but with known character count
+	* this function is under construction, needs to support rich text, and Asian phonetic settings
+	* OpenOffice.org's Documentation of the Microsoft Excel File Format, section 2.5.3
+	*
+	* @param string $subData
+	* @param int $characterCount
+	* @return array
+	*/
 	private static function _readUnicodeString($subData, $characterCount)
 	{
 		$value = '';
@@ -6451,12 +6451,12 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Convert UTF-8 string to string surounded by double quotes. Used for explicit string tokens in formulas.
-	 * Example:  hello"world  -->  "hello""world"
-	 *
-	 * @param string $value UTF-8 encoded string
-	 * @return string
-	 */
+	* Convert UTF-8 string to string surounded by double quotes. Used for explicit string tokens in formulas.
+	* Example:  hello"world  -->  "hello""world"
+	*
+	* @param string $value UTF-8 encoded string
+	* @return string
+	*/
 	private static function _UTF8toExcelDoubleQuoted($value)
 	{
 		return '"' . str_replace('"', '""', $value) . '"';
@@ -6464,11 +6464,11 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Reads first 8 bytes of a string and return IEEE 754 float
-	 *
-	 * @param string $data Binary string that is at least 8 bytes long
-	 * @return float
-	 */
+	* Reads first 8 bytes of a string and return IEEE 754 float
+	*
+	* @param string $data Binary string that is at least 8 bytes long
+	* @return float
+	*/
 	private static function _extractNumber($data)
 	{
 		$rknumhigh = self::_GetInt4d($data, 4);
@@ -6520,12 +6520,12 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Get UTF-8 string from (compressed or uncompressed) UTF-16 string
-	 *
-	 * @param string $string
-	 * @param bool $compressed
-	 * @return string
-	 */
+	* Get UTF-8 string from (compressed or uncompressed) UTF-16 string
+	*
+	* @param string $string
+	* @param bool $compressed
+	* @return string
+	*/
 	private static function _encodeUTF16($string, $compressed = '')
 	{
 		if ($compressed) {
@@ -6537,11 +6537,11 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Convert UTF-16 string in compressed notation to uncompressed form. Only used for BIFF8.
-	 *
-	 * @param string $string
-	 * @return string
-	 */
+	* Convert UTF-16 string in compressed notation to uncompressed form. Only used for BIFF8.
+	*
+	* @param string $string
+	* @return string
+	*/
 	private static function _uncompressByteString($string)
 	{
 		$uncompressedString = '';
@@ -6555,11 +6555,11 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Convert string to UTF-8. Only used for BIFF5.
-	 *
-	 * @param string $string
-	 * @return string
-	 */
+	* Convert string to UTF-8. Only used for BIFF5.
+	*
+	* @param string $string
+	* @return string
+	*/
 	private function _decodeCodepage($string)
 	{
 		return PHPExcel_Shared_String::ConvertEncoding($string, 'UTF-8', $this->_codepage);
@@ -6567,12 +6567,12 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read 16-bit unsigned integer
-	 *
-	 * @param string $data
-	 * @param int $pos
-	 * @return int
-	 */
+	* Read 16-bit unsigned integer
+	*
+	* @param string $data
+	* @param int $pos
+	* @return int
+	*/
 	public static function _GetInt2d($data, $pos)
 	{
 		return ord($data[$pos]) | (ord($data[$pos+1]) << 8);
@@ -6580,12 +6580,12 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read 32-bit signed integer
-	 *
-	 * @param string $data
-	 * @param int $pos
-	 * @return int
-	 */
+	* Read 32-bit signed integer
+	*
+	* @param string $data
+	* @param int $pos
+	* @return int
+	*/
 	public static function _GetInt4d($data, $pos)
 	{
 		// FIX: represent numbers correctly on 64-bit system
@@ -6603,12 +6603,12 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read color
-	 *
-	 * @param int $color Indexed color
-	 * @param array $palette Color palette
-	 * @return array RGB color value, example: array('rgb' => 'FF0000')
-	 */
+	* Read color
+	*
+	* @param int $color Indexed color
+	* @param array $palette Color palette
+	* @return array RGB color value, example: array('rgb' => 'FF0000')
+	*/
 	private static function _readColor($color,$palette,$version)
 	{
 		if ($color <= 0x07 || $color >= 0x40) {
@@ -6632,12 +6632,12 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Map border style
-	 * OpenOffice documentation: 2.5.11
-	 *
-	 * @param int $index
-	 * @return string
-	 */
+	* Map border style
+	* OpenOffice documentation: 2.5.11
+	*
+	* @param int $index
+	* @return string
+	*/
 	private static function _mapBorderStyle($index)
 	{
 		switch ($index) {
@@ -6655,18 +6655,18 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 			case 0x0B: return PHPExcel_Style_Border::BORDER_DASHDOTDOT;
 			case 0x0C: return PHPExcel_Style_Border::BORDER_MEDIUMDASHDOTDOT;
 			case 0x0D: return PHPExcel_Style_Border::BORDER_SLANTDASHDOT;
-			default:   return PHPExcel_Style_Border::BORDER_NONE;
+			default:	return PHPExcel_Style_Border::BORDER_NONE;
 		}
 	}
 
 
 	/**
-	 * Get fill pattern from index
-	 * OpenOffice documentation: 2.5.12
-	 *
-	 * @param int $index
-	 * @return string
-	 */
+	* Get fill pattern from index
+	* OpenOffice documentation: 2.5.12
+	*
+	* @param int $index
+	* @return string
+	*/
 	private static function _mapFillPattern($index)
 	{
 		switch ($index) {
@@ -6689,17 +6689,17 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 			case 0x10: return PHPExcel_Style_Fill::FILL_PATTERN_LIGHTTRELLIS;
 			case 0x11: return PHPExcel_Style_Fill::FILL_PATTERN_GRAY125;
 			case 0x12: return PHPExcel_Style_Fill::FILL_PATTERN_GRAY0625;
-			default:   return PHPExcel_Style_Fill::FILL_NONE;
+			default:	return PHPExcel_Style_Fill::FILL_NONE;
 		}
 	}
 
 
 	/**
-	 * Map error code, e.g. '#N/A'
-	 *
-	 * @param int $subData
-	 * @return string
-	 */
+	* Map error code, e.g. '#N/A'
+	*
+	* @param int $subData
+	* @return string
+	*/
 	private static function _mapErrorCode($subData)
 	{
 		switch ($subData) {
@@ -6716,11 +6716,11 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Map built-in color to RGB value
-	 *
-	 * @param int $color Indexed color
-	 * @return array
-	 */
+	* Map built-in color to RGB value
+	*
+	* @param int $color Indexed color
+	* @return array
+	*/
 	private static function _mapBuiltInColor($color)
 	{
 		switch ($color) {
@@ -6734,17 +6734,17 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 			case 0x07: return array('rgb' => '00FFFF');
 			case 0x40: return array('rgb' => '000000'); // system window text color
 			case 0x41: return array('rgb' => 'FFFFFF'); // system window background color
-			default:   return array('rgb' => '000000');
+			default:	return array('rgb' => '000000');
 		}
 	}
 
 
 	/**
-	 * Map color array from BIFF5 built-in color index
-	 *
-	 * @param int $subData
-	 * @return array
-	 */
+	* Map color array from BIFF5 built-in color index
+	*
+	* @param int $subData
+	* @return array
+	*/
 	private static function _mapColorBIFF5($subData)
 	{
 		switch ($subData) {
@@ -6804,17 +6804,17 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 			case 0x3D: return array('rgb' => '85396A');
 			case 0x3E: return array('rgb' => '4A3285');
 			case 0x3F: return array('rgb' => '424242');
-			default:   return array('rgb' => '000000');
+			default:	return array('rgb' => '000000');
 		}
 	}
 
 
 	/**
-	 * Map color array from BIFF8 built-in color index
-	 *
-	 * @param int $subData
-	 * @return array
-	 */
+	* Map color array from BIFF8 built-in color index
+	*
+	* @param int $subData
+	* @return array
+	*/
 	private static function _mapColor($subData)
 	{
 		switch ($subData) {
@@ -6874,7 +6874,7 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 			case 0x3D: return array('rgb' => '993366');
 			case 0x3E: return array('rgb' => '333399');
 			case 0x3F: return array('rgb' => '333333');
-			default:   return array('rgb' => '000000');
+			default:	return array('rgb' => '000000');
 		}
 	}
 

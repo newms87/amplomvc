@@ -43,14 +43,14 @@ class ControllerModuleCategory extends Controller {
 					
 					$children_data[] = array(
 						'category_id' => $child['category_id'],
-						'name'        => $child['name'] . ' (' . $product_total . ')',
-						'href'        => $this->url->link('product/category', 'path=' . $category['category_id'] . '_' . $child['category_id'])	
+						'name'		=> $child['name'] . ' (' . $product_total . ')',
+						'href'		=> $this->url->link('product/category', 'path=' . $category['category_id'] . '_' . $child['category_id'])	
 					);						
 				} else {
 					$children_data[] = array(
 						'category_id' => $child['category_id'],
-						'name'        => $child['name'],
-						'href'        => $this->url->link('product/category', 'path=' . $category['category_id'] . '_' . $child['category_id'])	
+						'name'		=> $child['name'],
+						'href'		=> $this->url->link('product/category', 'path=' . $category['category_id'] . '_' . $child['category_id'])	
 					);						
 				}			
 			}
@@ -65,16 +65,16 @@ class ControllerModuleCategory extends Controller {
 			
 				$this->data['categories'][] = array(
 					'category_id' => $category['category_id'],
-					'name'        => $category['name'] . ' (' . $product_total . ')',
-					'children'    => $children_data,
-					'href'        => $this->url->link('product/category', 'path=' . $category['category_id'])
+					'name'		=> $category['name'] . ' (' . $product_total . ')',
+					'children'	=> $children_data,
+					'href'		=> $this->url->link('product/category', 'path=' . $category['category_id'])
 				);				
 			} else {
 				$this->data['categories'][] = array(
 					'category_id' => $category['category_id'],
-					'name'        => $category['name'],
-					'children'    => $children_data,
-					'href'        => $this->url->link('product/category', 'path=' . $category['category_id'])
+					'name'		=> $category['name'],
+					'children'	=> $children_data,
+					'href'		=> $this->url->link('product/category', 'path=' . $category['category_id'])
 				);			
 			}
 		}

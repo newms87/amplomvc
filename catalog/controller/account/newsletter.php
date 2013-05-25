@@ -4,13 +4,13 @@ class ControllerAccountNewsletter extends Controller {
 		$this->template->load('account/newsletter');
 
 		if (!$this->customer->isLogged()) {
-	  		$this->session->data['redirect'] = $this->url->link('account/newsletter');
-	  
-	  		$this->url->redirect($this->url->link('account/login'));
-    	} 
+			$this->session->data['redirect'] = $this->url->link('account/newsletter');
+	
+			$this->url->redirect($this->url->link('account/login'));
+		} 
 		
 		$this->language->load('account/newsletter');
-    	
+		
 		$this->document->setTitle($this->_('heading_title'));
 				
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -25,7 +25,7 @@ class ControllerAccountNewsletter extends Controller {
 			$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
 			$this->breadcrumb->add($this->_('text_newsletter'), $this->url->link('account/newsletter'));
 
-    	$this->data['action'] = $this->url->link('account/newsletter');
+		$this->data['action'] = $this->url->link('account/newsletter');
 		
 		$this->data['newsletter'] = $this->customer->getNewsletter();
 		

@@ -5,117 +5,117 @@ class ControllerToolErrorLog extends Controller {
 	public function index() {
 		$this->template->load('tool/error_log');
 
-	   $this->load->language('tool/error_log');
+		$this->load->language('tool/error_log');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-      $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-      $this->breadcrumb->add($this->_('heading_title'), $this->url->link('tool/error_log'));
-      
-      $url_query = $this->url->get_query(array('filter_store'));
-      
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('tool/error_log'));
+		
+		$url_query = $this->url->get_query(array('filter_store'));
+		
 		$this->data['remove'] = $this->url->link('tool/error_log/remove',$url_query);
 		$this->data['clear'] = $this->url->link('tool/error_log/clear', $url_query);
 		
-      $defaults = array('limit'=>100,'start'=>0);
-      foreach($defaults as $key=>$default){
-         $$key = isset($_GET[$key]) ? $_GET[$key] : $default;
-      }
+		$defaults = array('limit'=>100,'start'=>0);
+		foreach($defaults as $key=>$default){
+			$$key = isset($_GET[$key]) ? $_GET[$key] : $default;
+		}
 		
-      $filters = array('filter_store'=>'');
-      
-      foreach($filters as $key=>$default){
-         $this->data[$key] = $$key = isset($_GET[$key]) ? $_GET[$key] : $default;
-      }
-      
-      if($filter_store !== ''){
-         if($filter_store == 'a'){
-            $store_name = 'Admin';
-         }
-         else{
-            $store_name = $this->model_setting_store->getStoreName((int)$filter_store);
-         }
-      }else{
-         $store_name = '';
-      }
-      
-      
-      $current = -1;
-      
-      $file = DIR_LOGS . $this->config->get('config_error_filename');
-      $log = array();
-      
+		$filters = array('filter_store'=>'');
+		
+		foreach($filters as $key=>$default){
+			$this->data[$key] = $$key = isset($_GET[$key]) ? $_GET[$key] : $default;
+		}
+		
+		if($filter_store !== ''){
+			if($filter_store == 'a'){
+				$store_name = 'Admin';
+			}
+			else{
+				$store_name = $this->model_setting_store->getStoreName((int)$filter_store);
+			}
+		}else{
+			$store_name = '';
+		}
+		
+		
+		$current = -1;
+		
+		$file = DIR_LOGS . $this->config->get('config_error_filename');
+		$log = array();
+		
 		if (file_exists($file)) {
-		   $handle = @fopen($file, "r");
-	    	if($handle){
-	      	while (($buffer = fgets($handle, 4096)) !== false && ($current < ($start+$limit))) {
-	      		$current++;
+			$handle = @fopen($file, "r");
+			if($handle){
+				while (($buffer = fgets($handle, 4096)) !== false && ($current < ($start+$limit))) {
+					$current++;
 					
-               if($current >= $start){
-               	
-                  $data = explode("\t", $buffer, 7);
-                  
+					if($current >= $start){
+						
+						$data = explode("\t", $buffer, 7);
+						
 						if(count($data) < 6 || ($store_name && $store_name != $data[4])){
 							continue;
 						}
 						
-                  $log[] = array(
-                  	'line'	=> $current,
-                  	'date'	=> $data[0],
-                  	'ip'		=> $data[1],
-                  	'uri'		=> $data[2],
-                  	'query'	=> $data[3],
-                  	'store'	=> $data[4],
-                  	'agent'	=> $data[5],
-                  	'message'=> $data[6],
-                  );
-               }
-            }
-            fclose($handle);
-         }
+						$log[] = array(
+							'line'	=> $current,
+							'date'	=> $data[0],
+							'ip'		=> $data[1],
+							'uri'		=> $data[2],
+							'query'	=> $data[3],
+							'store'	=> $data[4],
+							'agent'	=> $data[5],
+							'message'=> $data[6],
+						);
+					}
+				}
+				fclose($handle);
+			}
 		}
-      
-      $next = $start+$limit;
-      $this->data['next'] = $current >= ($start+$limit)? $this->url->link('tool/error_log', $url_query . '&start='.$next.'&limit='.$limit):'';
-      
-      $prev = $start-$limit > 0 ? $start - $limit:0;
-      $this->data['prev'] = $start>0?$this->url->link('tool/error_log', $url_query . '&start='.$prev.'&limit='.$limit):'';
-      
-      $this->data['limit'] = $limit; 
-      $this->data['log'] = $log;
-      
-      $url_query = $this->url->get_query(array('limit','start'));
 		
-      $this->data['filter_url'] = $this->url->link('tool/error_log');
-      
+		$next = $start+$limit;
+		$this->data['next'] = $current >= ($start+$limit)? $this->url->link('tool/error_log', $url_query . '&start='.$next.'&limit='.$limit):'';
+		
+		$prev = $start-$limit > 0 ? $start - $limit:0;
+		$this->data['prev'] = $start>0?$this->url->link('tool/error_log', $url_query . '&start='.$prev.'&limit='.$limit):'';
+		
+		$this->data['limit'] = $limit; 
+		$this->data['log'] = $log;
+		
+		$url_query = $this->url->get_query(array('limit','start'));
+		
+		$this->data['filter_url'] = $this->url->link('tool/error_log');
+		
 		$this->data['loading'] = $this->image->get('data/ajax-loader.gif');
-      
-      $stores = $this->model_setting_store->getStoreNames();
-      
-      $default_stores = array(
-         array('store_id'=>'','name'=>$this->_('text_select')),
-         array('store_id'=>'a','name'=>'Admin'),
-        );
-      $stores = array_merge($default_stores, $stores);
-      
-      $this->data['stores'] = $stores;
-      
-      if($filter_store !== ''){
-         $name = '';
-         foreach($stores as $store){
-            if($store['store_id'] === $filter_store){
-               $name = $store['name'];
-               break;
-            }
-         }
-         
-         $this->language->format('button_clear', $name); 
-      }
-      else{
-         $this->language->format('button_clear', 'Log');
-      }
-      
-      
+		
+		$stores = $this->model_setting_store->getStoreNames();
+		
+		$default_stores = array(
+			array('store_id'=>'','name'=>$this->_('text_select')),
+			array('store_id'=>'a','name'=>'Admin'),
+		);
+		$stores = array_merge($default_stores, $stores);
+		
+		$this->data['stores'] = $stores;
+		
+		if($filter_store !== ''){
+			$name = '';
+			foreach($stores as $store){
+				if($store['store_id'] === $filter_store){
+					$name = $store['name'];
+					break;
+				}
+			}
+			
+			$this->language->format('button_clear', $name); 
+		}
+		else{
+			$this->language->format('button_clear', 'Log');
+		}
+		
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -149,7 +149,7 @@ class ControllerToolErrorLog extends Controller {
 				}
 			}
 			
-         $this->load->language('tool/error_log');
+			$this->load->language('tool/error_log');
 			
 			$file = DIR_LOGS . $this->config->get('config_error_filename');
 			
@@ -186,41 +186,41 @@ class ControllerToolErrorLog extends Controller {
 		
 		$file = DIR_LOGS . $this->config->get('config_error_filename');
 		
-      
-      $filters = array('filter_store'=>'');
-      
-      foreach($filters as $key=>$default){
-         $this->data[$key] = $$key = isset($_GET[$key]) ? $_GET[$key] : $default;
-      }
-      
-      if($filter_store !== ''){
-         if($filter_store == 'a'){
-            $store_name = 'Admin';
-         }
-         else{
-            $store_name = $this->model_setting_store->getStoreName((int)$filter_store);
-         }
-      }else{
-         $store_name = '';
-      }
-         
-      if($store_name){
-         $file_lines = explode("\n", file_get_contents($file));
+		
+		$filters = array('filter_store'=>'');
+		
+		foreach($filters as $key=>$default){
+			$this->data[$key] = $$key = isset($_GET[$key]) ? $_GET[$key] : $default;
+		}
+		
+		if($filter_store !== ''){
+			if($filter_store == 'a'){
+				$store_name = 'Admin';
+			}
+			else{
+				$store_name = $this->model_setting_store->getStoreName((int)$filter_store);
+			}
+		}else{
+			$store_name = '';
+		}
 			
-         foreach($file_lines as $key=>$line){
-            $data = explode("\t", $line);
-            
-            if($data[4] == $store_name){
-               unset($file_lines[$key]);
-            }
-         }
-         
-         file_put_contents($file, implode("\n",$file_lines));
-      }
-      else{
-		   $handle = fopen($file, 'w+');
-         fclose($handle);
-      }
+		if($store_name){
+			$file_lines = explode("\n", file_get_contents($file));
+			
+			foreach($file_lines as $key=>$line){
+				$data = explode("\t", $line);
+				
+				if($data[4] == $store_name){
+					unset($file_lines[$key]);
+				}
+			}
+			
+			file_put_contents($file, implode("\n",$file_lines));
+		}
+		else{
+			$handle = fopen($file, 'w+');
+			fclose($handle);
+		}
 				
 		$this->message->add('success', $this->_('text_success'));
 		

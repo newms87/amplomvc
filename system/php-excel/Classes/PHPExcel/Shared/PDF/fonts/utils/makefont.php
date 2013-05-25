@@ -1,10 +1,10 @@
 <?php
 //============================================================+
-// File name   : makefont.php
-// Begin       : 2004-12-31
+// File name	: makefont.php
+// Begin		: 2004-12-31
 // Last Update : 2010-08-08
-// Version     : 1.2.006
-// License     : GNU LGPL (http://www.gnu.org/copyleft/lesser.html)
+// Version	: 1.2.006
+// License	: GNU LGPL (http://www.gnu.org/copyleft/lesser.html)
 // 	----------------------------------------------------------------------------
 // 	Copyright (C) 2008-2010  Nicola Asuni - Tecnick.com S.r.l.
 // 	
@@ -31,13 +31,13 @@
 // Authors: Nicola Asuni, Olivier Plathey, Steven Wittens
 //
 // (c) Copyright:
-//               Nicola Asuni
-//               Tecnick.com S.r.l.
-//               Via della Pace, 11
-//               09044 Quartucciu (CA)
-//               ITALY
-//               www.tecnick.com
-//               info@tecnick.com
+//					Nicola Asuni
+//					Tecnick.com S.r.l.
+//					Via della Pace, 11
+//					09044 Quartucciu (CA)
+//					ITALY
+//					www.tecnick.com
+//					info@tecnick.com
 //============================================================+
 
 /**
@@ -611,5 +611,5 @@ if (count($arg) >= 3) {
 }
 
 //============================================================+
-// END OF FILE                                                 
+// END OF FILE																
 //============================================================+

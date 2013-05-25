@@ -18,54 +18,54 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category   PHPExcel
- * @package    PHPExcel_Writer_Excel5
+ * @category	PHPExcel
+ * @package	PHPExcel_Writer_Excel5
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version    1.7.7, 2012-05-19
+ * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+ * @version	1.7.7, 2012-05-19
  */
 
 
 /**
  * PHPExcel_Shared_Escher_DggContainer_BstoreContainer
  *
- * @category   PHPExcel
- * @package    PHPExcel_Writer_Excel5
+ * @category	PHPExcel
+ * @package	PHPExcel_Writer_Excel5
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_Writer_Excel5_Escher
 {
 	/**
-	 * The object we are writing
-	 */
+	* The object we are writing
+	*/
 	private $_object;
 
 	/**
-	 * The written binary data
-	 */
+	* The written binary data
+	*/
 	private $_data;
 
 	/**
-	 * Shape offsets. Positions in binary stream where a new shape record begins
-	 *
-	 * @var array
-	 */
+	* Shape offsets. Positions in binary stream where a new shape record begins
+	*
+	* @var array
+	*/
 	private $_spOffsets;
 
 
 	/**
-	 * Constructor
-	 *
-	 * @param mixed
-	 */
+	* Constructor
+	*
+	* @param mixed
+	*/
 	public function __construct($object)
 	{
 		$this->_object = $object;
 	}
 
 	/**
-	 * Process the object to be written
-	 */
+	* Process the object to be written
+	*/
 	public function close()
 	{
 		// initialize
@@ -500,10 +500,10 @@ class PHPExcel_Writer_Excel5_Escher
 	}
 
 	/**
-	 * Gets the shape offsets
-	 *
-	 * @return array
-	 */
+	* Gets the shape offsets
+	*
+	* @return array
+	*/
 	public function getSpOffsets()
 	{
 		return $this->_spOffsets;

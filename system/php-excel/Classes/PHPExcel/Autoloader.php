@@ -18,18 +18,18 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category   PHPExcel
- * @package    PHPExcel
+ * @category	PHPExcel
+ * @package	PHPExcel
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt    LGPL
- * @version    1.7.7, 2012-05-19
+ * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+ * @version	1.7.7, 2012-05-19
  */
 
 PHPExcel_Autoloader::Register();
 PHPExcel_Shared_ZipStreamWrapper::register();
 // check mbstring.func_overload
 if (ini_get('mbstring.func_overload') & 2) {
-    throw new Exception('Multibyte function overloading in PHP must be disabled for string functions (2).');
+	throw new Exception('Multibyte function overloading in PHP must be disabled for string functions (2).');
 }
 PHPExcel_Shared_String::buildCharacterSets();
 
@@ -44,9 +44,9 @@ PHPExcel_Shared_String::buildCharacterSets();
 class PHPExcel_Autoloader
 {
 	/**
-	 * Register the Autoloader with SPL
-	 *
-	 */
+	* Register the Autoloader with SPL
+	*
+	*/
 	public static function Register() {
 		if (function_exists('__autoload')) {
 			//	Register any existing autoloader function with SPL, so we don't get any clashes
@@ -58,10 +58,10 @@ class PHPExcel_Autoloader
 
 
 	/**
-	 * Autoload a class identified by name
-	 *
-	 * @param	string	$pClassName		Name of the object to load
-	 */
+	* Autoload a class identified by name
+	*
+	* @param	string	$pClassName		Name of the object to load
+	*/
 	public static function Load($pClassName){
 		if ((class_exists($pClassName)) || (strpos($pClassName, 'PHPExcel') !== 0)) {
 			//	Either already loaded, or not a PHPExcel class request
@@ -69,8 +69,8 @@ class PHPExcel_Autoloader
 		}
 
 		$pObjectFilePath = PHPEXCEL_ROOT .
-						   str_replace('_',DIRECTORY_SEPARATOR,$pClassName) .
-						   '.php';
+							str_replace('_',DIRECTORY_SEPARATOR,$pClassName) .
+							'.php';
 
 		if ((file_exists($pObjectFilePath) === false) || (is_readable($pObjectFilePath) === false)) {
 			//	Can't load

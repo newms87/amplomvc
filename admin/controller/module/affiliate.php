@@ -1,8 +1,8 @@
 <?php
 class ControllerModuleAffiliate extends Controller {
-	 
 	
-	public function index() {   
+	
+	public function index() {	
 		$this->template->load('module/affiliate');
 
 		$this->load->language('module/affiliate');
@@ -54,10 +54,6 @@ class ControllerModuleAffiliate extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

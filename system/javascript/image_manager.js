@@ -4,8 +4,30 @@ function dqis_image_manager() {
 	
 	image_manager(query);
 };
- 
-function upload_image	(field,thumb,rows) {
+
+var image_upload_uniq_id = 0;
+
+function upload_image(context) {
+	field = context.closest('.image').find('.iu_image');
+	thumb = context.closest('.image').find('.iu_thumb');
+	
+	if(!field.attr('id')){
+		field.attr('id', 'iu_image_' + image_upload_uniq_id);
+	}
+	
+	if(!thumb.attr('id')){
+		thumb.attr('id', 'iu_thumb_' + image_upload_uniq_id);
+	}
+	
+	query = '&field=' + field.attr('id') + '&thumb=' + thumb.attr('id');
+	
+	image_manager(query);
+	
+	image_upload_uniq_id++;
+};
+
+
+function upload_images(field,thumb,rows) {
 	query = '&field=' + field + '&thumb=' + thumb;
 	
 	if(typeof rows == 'integer'){
@@ -14,6 +36,11 @@ function upload_image	(field,thumb,rows) {
 	
 	image_manager(query);
 };
+
+function clear_image(context){
+	context.find('.iu_image').val('');
+	context.find('.iu_thumb').attr('src', no_image);
+}
 
 function addSingleImage(imageName, field, thumb) {
 	field = $('#' + field);
@@ -31,6 +58,14 @@ function addSingleImage(imageName, field, thumb) {
 		success: function(text) {
 			thumb.attr('src', text);
 			field.val(imageName);
+			
+			console.log('thumb');
+			console.dir(thumb);
+			console.log(text);
+			console.dir(field);
+			console.log(imageName);
+			console.log('adding single image');
+	
 		}
 	});
 };

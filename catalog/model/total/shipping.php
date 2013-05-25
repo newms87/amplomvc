@@ -5,10 +5,10 @@ class ModelTotalShipping extends Model {
 			$shipping_method = $this->cart->getShippingMethod();
 			
 			$total_data[] = array(
-				'code'       => 'shipping',
-        		'title'      => $shipping_method['title'],
-        		'text'       => $this->currency->format($shipping_method['cost']),
-        		'value'      => $shipping_method['cost'],
+				'code'		=> 'shipping',
+				'title'		=> $shipping_method['title'],
+				'text'		=> $this->currency->format($shipping_method['cost']),
+				'value'		=> $shipping_method['cost'],
 				'sort_order' => $this->config->get('shipping_sort_order')
 			);
 

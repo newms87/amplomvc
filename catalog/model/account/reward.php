@@ -2,7 +2,7 @@
 class ModelAccountReward extends Model {	
 	public function getRewards($data = array()) {
 		$sql = "SELECT * FROM `" . DB_PREFIX . "customer_reward` WHERE customer_id = '" . (int)$this->customer->getId() . "'";
-		   
+			
 		$sort_data = array(
 			'points',
 			'description',
@@ -39,7 +39,7 @@ class ModelAccountReward extends Model {
 	}	
 		
 	public function getTotalRewards() {
-      	$query = $this->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "customer_reward` WHERE customer_id = '" . (int)$this->customer->getId() . "'");
+			$query = $this->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "customer_reward` WHERE customer_id = '" . (int)$this->customer->getId() . "'");
 			
 		return $query->row['total'];
 	}	

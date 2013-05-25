@@ -18,29 +18,29 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category   PHPExcel
- * @package    PHPExcel_Shared
+ * @category	PHPExcel
+ * @package	PHPExcel_Shared
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version    1.7.7, 2012-05-19
+ * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+ * @version	1.7.7, 2012-05-19
  */
 
 
 /**
  * PHPExcel_Shared_File
  *
- * @category   PHPExcel
- * @package    PHPExcel_Shared
+ * @category	PHPExcel
+ * @package	PHPExcel_Shared
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_Shared_File
 {
 	/**
-	  * Verify if a file exists
-	  *
-	  * @param 	string	$pFilename	Filename
-	  * @return bool
-	  */
+	* Verify if a file exists
+	*
+	* @param 	string	$pFilename	Filename
+	* @return bool
+	*/
 	public static function file_exists($pFilename) {
 		// Sick construction, but it seems that
 		// file_exists returns strange values when
@@ -65,11 +65,11 @@ class PHPExcel_Shared_File
 	}
 
 	/**
-	 * Returns canonicalized absolute pathname, also for ZIP archives
-	 *
-	 * @param string $pFilename
-	 * @return string
-	 */
+	* Returns canonicalized absolute pathname, also for ZIP archives
+	*
+	* @param string $pFilename
+	* @return string
+	*/
 	public static function realpath($pFilename) {
 		// Returnvalue
 		$returnValue = '';
@@ -99,10 +99,10 @@ class PHPExcel_Shared_File
 	}
 
 	/**
-	 * Get the systems temporary directory.
-	 *
-	 * @return string
-	 */
+	* Get the systems temporary directory.
+	*
+	* @return string
+	*/
 	public static function sys_get_temp_dir()
 	{
 		// sys_get_temp_dir is only available since PHP 5.2.1

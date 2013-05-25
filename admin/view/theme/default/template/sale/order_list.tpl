@@ -103,7 +103,7 @@
 </div>
 <script type="text/javascript"><!--
 function filter() {
-	url = 'index.php?route=sale/order';
+	url = "<?= HTTP_ADMIN . "index.php?route=sale/order"; ?>";
 	
 	var filter_order_id = $('input[name=\'filter_order_id\']').attr('value');
 	
@@ -177,7 +177,7 @@ $('input[name=\'filter_customer\']').catcomplete({
 	delay: 0,
 	source: function(request, response) {
 		$.ajax({
-			url: 'index.php?route=sale/customer/autocomplete&filter_name=' +  encodeURIComponent(request.term),
+			url: "<?= HTTP_ADMIN . "index.php?route=sale/customer/autocomplete"; ?>" + '&filter_name=' +  encodeURIComponent(request.term),
 			dataType: 'json',
 			success: function(json) {		
 				response($.map(json, function(item) {

@@ -1,8 +1,8 @@
 <?php
 class ControllerShippingPickup extends Controller {
-	 
 	
-	public function index() {   
+	
+	public function index() {	
 		$this->template->load('shipping/pickup');
 
 		$this->load->language('shipping/pickup');
@@ -64,10 +64,6 @@ class ControllerShippingPickup extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

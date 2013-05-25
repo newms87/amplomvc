@@ -166,9 +166,9 @@ class ControllerLocalisationTaxClass extends Controller {
 					
 			$this->data['tax_classes'][] = array(
 				'tax_class_id' => $result['tax_class_id'],
-				'title'        => $result['title'],
-				'selected'     => isset($_POST['selected']) && in_array($result['tax_class_id'], $_POST['selected']),
-				'action'       => $action				
+				'title'		=> $result['title'],
+				'selected'	=> isset($_POST['selected']) && in_array($result['tax_class_id'], $_POST['selected']),
+				'action'		=> $action				
 			);
 		}
 
@@ -197,7 +197,7 @@ class ControllerLocalisationTaxClass extends Controller {
 		if (isset($_GET['page'])) {
 			$url .= '&page=' . $_GET['page'];
 		}
-		 
+		
 		$this->data['sort_title'] = $this->url->link('localisation/tax_class', 'sort=title' . $url);
 		
 		$url = '';
@@ -214,7 +214,6 @@ class ControllerLocalisationTaxClass extends Controller {
 		$this->pagination->total = $tax_class_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('localisation/tax_class', $url);
 
 		$this->data['pagination'] = $this->pagination->render();
@@ -327,11 +326,7 @@ class ControllerLocalisationTaxClass extends Controller {
 			$this->error['description'] = $this->_('error_description');
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
 
 	private function validateDelete() {
@@ -347,10 +342,6 @@ class ControllerLocalisationTaxClass extends Controller {
 			}
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}	
 }

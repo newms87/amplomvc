@@ -165,15 +165,15 @@ class ControllerLocalisationTaxRate extends Controller {
 			);
 											
 			$this->data['tax_rates'][] = array(
-				'tax_rate_id'   => $result['tax_rate_id'],
-				'name'          => $result['name'],
-				'rate'          => $result['rate'],
-				'type'          => ($result['type'] == 'F' ? $this->_('text_amount') : $this->_('text_percent')),				
-				'geo_zone'      => $result['geo_zone'],
-				'date_added'    => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
+				'tax_rate_id'	=> $result['tax_rate_id'],
+				'name'			=> $result['name'],
+				'rate'			=> $result['rate'],
+				'type'			=> ($result['type'] == 'F' ? $this->_('text_amount') : $this->_('text_percent')),				
+				'geo_zone'		=> $result['geo_zone'],
+				'date_added'	=> $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
 				'date_modified' => $this->tool->format_datetime($result['date_modified'], $this->language->getInfo('date_format_short')),
-				'selected'      => isset($_POST['selected']) && in_array($result['tax_rate_id'], $_POST['selected']),
-				'action'        => $action				
+				'selected'		=> isset($_POST['selected']) && in_array($result['tax_rate_id'], $_POST['selected']),
+				'action'		=> $action				
 			);
 		}
 
@@ -202,7 +202,7 @@ class ControllerLocalisationTaxRate extends Controller {
 		if (isset($_GET['page'])) {
 			$url .= '&page=' . $_GET['page'];
 		}
-		 
+		
 		$this->data['sort_name'] = $this->url->link('localisation/tax_rate', 'sort=tr.name' . $url);
 		$this->data['sort_rate'] = $this->url->link('localisation/tax_rate', 'sort=tr.rate' . $url);
 		$this->data['sort_type'] = $this->url->link('localisation/tax_rate', 'sort=tr.type' . $url);
@@ -224,7 +224,6 @@ class ControllerLocalisationTaxRate extends Controller {
 		$this->pagination->total = $tax_rate_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('localisation/tax_rate', $url);
 
 		$this->data['pagination'] = $this->pagination->render();
@@ -355,11 +354,7 @@ class ControllerLocalisationTaxRate extends Controller {
 			$this->error['rate'] = $this->_('error_rate');
 		}
 								
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
 
 	private function validateDelete() {
@@ -375,10 +370,6 @@ class ControllerLocalisationTaxRate extends Controller {
 			}
 		}
 				
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}	
 }

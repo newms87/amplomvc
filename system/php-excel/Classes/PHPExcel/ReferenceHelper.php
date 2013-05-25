@@ -18,7 +18,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category   PHPExcel
+ * @category	PHPExcel
  * @package	PHPExcel
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
@@ -29,7 +29,7 @@
 /**
  * PHPExcel_ReferenceHelper (Singleton)
  *
- * @category   PHPExcel
+ * @category	PHPExcel
  * @package	PHPExcel
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
@@ -43,17 +43,17 @@ class PHPExcel_ReferenceHelper
 	const REFHELPER_REGEXP_COLRANGE		= '((\w*|\'[^!]*\')!)?(\$?[a-z]{1,3}):(\$?[a-z]{1,3})';
 
 	/**
-	 * Instance of this class
-	 *
-	 * @var PHPExcel_ReferenceHelper
-	 */
+	* Instance of this class
+	*
+	* @var PHPExcel_ReferenceHelper
+	*/
 	private static $_instance;
 
 	/**
-	 * Get an instance of this class
-	 *
-	 * @return PHPExcel_ReferenceHelper
-	 */
+	* Get an instance of this class
+	*
+	* @return PHPExcel_ReferenceHelper
+	*/
 	public static function getInstance() {
 		if (!isset(self::$_instance) || (self::$_instance === NULL)) {
 			self::$_instance = new PHPExcel_ReferenceHelper();
@@ -63,19 +63,19 @@ class PHPExcel_ReferenceHelper
 	}
 
 	/**
-	 * Create a new PHPExcel_ReferenceHelper
-	 */
+	* Create a new PHPExcel_ReferenceHelper
+	*/
 	protected function __construct() {
 	}
 
 	/**
-	 * Insert a new column, updating all possible related data
-	 *
-	 * @param	int	$pBefore	Insert before this one
-	 * @param	int	$pNumCols	Number of columns to insert
-	 * @param	int	$pNumRows	Number of rows to insert
-	 * @throws	Exception
-	 */
+	* Insert a new column, updating all possible related data
+	*
+	* @param	int	$pBefore	Insert before this one
+	* @param	int	$pNumCols	Number of columns to insert
+	* @param	int	$pNumRows	Number of rows to insert
+	* @throws	Exception
+	*/
 	public function insertNewBefore($pBefore = 'A1', $pNumCols = 0, $pNumRows = 0, PHPExcel_Worksheet $pSheet = null) {
 		$aCellCollection = $pSheet->getCellCollection();
 
@@ -137,8 +137,8 @@ class PHPExcel_ReferenceHelper
 				if ($cell->getDataType() == PHPExcel_Cell_DataType::TYPE_FORMULA) {
 					// Formula should be adjusted
 					$pSheet->getCell($newCoordinates)
-						   ->setValue($this->updateFormulaReferences($cell->getValue(),
-						   					$pBefore, $pNumCols, $pNumRows, $pSheet->getTitle()));
+							->setValue($this->updateFormulaReferences($cell->getValue(),
+												$pBefore, $pNumCols, $pNumRows, $pSheet->getTitle()));
 				} else {
 					// Formula should not be adjusted
 					$pSheet->getCell($newCoordinates)->setValue($cell->getValue());
@@ -355,15 +355,15 @@ class PHPExcel_ReferenceHelper
 	}
 
 	/**
-	 * Update references within formulas
-	 *
-	 * @param	string	$pFormula	Formula to update
-	 * @param	int		$pBefore	Insert before this one
-	 * @param	int		$pNumCols	Number of columns to insert
-	 * @param	int		$pNumRows	Number of rows to insert
-	 * @return	string	Updated formula
-	 * @throws	Exception
-	 */
+	* Update references within formulas
+	*
+	* @param	string	$pFormula	Formula to update
+	* @param	int		$pBefore	Insert before this one
+	* @param	int		$pNumCols	Number of columns to insert
+	* @param	int		$pNumRows	Number of rows to insert
+	* @return	string	Updated formula
+	* @throws	Exception
+	*/
 	public function updateFormulaReferences($pFormula = '', $pBefore = 'A1', $pNumCols = 0, $pNumRows = 0, $sheetName = '') {
 		//	Update cell references in the formula
 		$formulaBlocks = explode('"',$pFormula);
@@ -489,15 +489,15 @@ class PHPExcel_ReferenceHelper
 	}
 
 	/**
-	 * Update cell reference
-	 *
-	 * @param	string	$pCellRange			Cell range
-	 * @param	int		$pBefore			Insert before this one
-	 * @param	int		$pNumCols			Number of columns to increment
-	 * @param	int		$pNumRows			Number of rows to increment
-	 * @return	string	Updated cell range
-	 * @throws	Exception
-	 */
+	* Update cell reference
+	*
+	* @param	string	$pCellRange			Cell range
+	* @param	int		$pBefore			Insert before this one
+	* @param	int		$pNumCols			Number of columns to increment
+	* @param	int		$pNumRows			Number of rows to increment
+	* @return	string	Updated cell range
+	* @throws	Exception
+	*/
 	public function updateCellReference($pCellRange = 'A1', $pBefore = 'A1', $pNumCols = 0, $pNumRows = 0) {
 		// Is it in another worksheet? Will not have to update anything.
 		if (strpos($pCellRange, "!") !== false) {
@@ -516,12 +516,12 @@ class PHPExcel_ReferenceHelper
 	}
 
 	/**
-	 * Update named formulas (i.e. containing worksheet references / named ranges)
-	 *
-	 * @param PHPExcel $pPhpExcel	Object to update
-	 * @param string $oldName		Old name (name to replace)
-	 * @param string $newName		New name
-	 */
+	* Update named formulas (i.e. containing worksheet references / named ranges)
+	*
+	* @param PHPExcel $pPhpExcel	Object to update
+	* @param string $oldName		Old name (name to replace)
+	* @param string $newName		New name
+	*/
 	public function updateNamedFormulas(PHPExcel $pPhpExcel, $oldName = '', $newName = '') {
 		if ($oldName == '') {
 			return;
@@ -543,15 +543,15 @@ class PHPExcel_ReferenceHelper
 	}
 
 	/**
-	 * Update cell range
-	 *
-	 * @param	string	$pCellRange			Cell range	(e.g. 'B2:D4', 'B:C' or '2:3')
-	 * @param	int		$pBefore			Insert before this one
-	 * @param	int		$pNumCols			Number of columns to increment
-	 * @param	int		$pNumRows			Number of rows to increment
-	 * @return	string	Updated cell range
-	 * @throws	Exception
-	 */
+	* Update cell range
+	*
+	* @param	string	$pCellRange			Cell range	(e.g. 'B2:D4', 'B:C' or '2:3')
+	* @param	int		$pBefore			Insert before this one
+	* @param	int		$pNumCols			Number of columns to increment
+	* @param	int		$pNumRows			Number of rows to increment
+	* @return	string	Updated cell range
+	* @throws	Exception
+	*/
 	private function _updateCellRange($pCellRange = 'A1:A1', $pBefore = 'A1', $pNumCols = 0, $pNumRows = 0) {
 		if (strpos($pCellRange,':') !== false || strpos($pCellRange, ',') !== false) {
 			// Update range
@@ -580,15 +580,15 @@ class PHPExcel_ReferenceHelper
 	}
 
 	/**
-	 * Update single cell reference
-	 *
-	 * @param	string	$pCellReference		Single cell reference
-	 * @param	int		$pBefore			Insert before this one
-	 * @param	int		$pNumCols			Number of columns to increment
-	 * @param	int		$pNumRows			Number of rows to increment
-	 * @return	string	Updated cell reference
-	 * @throws	Exception
-	 */
+	* Update single cell reference
+	*
+	* @param	string	$pCellReference		Single cell reference
+	* @param	int		$pBefore			Insert before this one
+	* @param	int		$pNumCols			Number of columns to increment
+	* @param	int		$pNumRows			Number of rows to increment
+	* @return	string	Updated cell reference
+	* @throws	Exception
+	*/
 	private function _updateSingleCellReference($pCellReference = 'A1', $pBefore = 'A1', $pNumCols = 0, $pNumRows = 0) {
 		if (strpos($pCellReference, ':') === false && strpos($pCellReference, ',') === false) {
 			// Get coordinates of $pBefore
@@ -599,10 +599,10 @@ class PHPExcel_ReferenceHelper
 
 			// Verify which parts should be updated
 			$updateColumn = (($newColumn{0} != '$') && ($beforeColumn{0} != '$') &&
-							 PHPExcel_Cell::columnIndexFromString($newColumn) >= PHPExcel_Cell::columnIndexFromString($beforeColumn));
+							PHPExcel_Cell::columnIndexFromString($newColumn) >= PHPExcel_Cell::columnIndexFromString($beforeColumn));
 
 			$updateRow = (($newRow{0} != '$') && ($beforeRow{0} != '$') &&
-						  $newRow >= $beforeRow);
+						$newRow >= $beforeRow);
 
 			// Create new column reference
 			if ($updateColumn) {
@@ -622,10 +622,10 @@ class PHPExcel_ReferenceHelper
 	}
 
 	/**
-	 * __clone implementation. Cloning should not be allowed in a Singleton!
-	 *
-	 * @throws	Exception
-	 */
+	* __clone implementation. Cloning should not be allowed in a Singleton!
+	*
+	* @throws	Exception
+	*/
 	public final function __clone() {
 		throw new Exception("Cloning a Singleton is not allowed!");
 	}

@@ -17,7 +17,7 @@ class ControllerCommonFooter extends Controller {
 				);
 				
 				$this->document->addLink('footer', $link_info);
-	    	}
+			}
 			
 			//Contact Form Link
 			$link_contact = array(

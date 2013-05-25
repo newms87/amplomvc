@@ -7,10 +7,10 @@ final class mysqlidb implements Database{
 		$this->mysqli = new mysqli($hostname, $username, $password, $database);
 		
 		if ($this->mysqli->connect_error) {
-		    die('Connect Error (' . $mysqli->connect_errno . ') ' . $mysqli->connect_error);
+			die('Connect Error (' . $mysqli->connect_errno . ') ' . $mysqli->connect_error);
 		}
 		elseif (mysqli_connect_error()) {
-		    die('Connect Error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
+			die('Connect Error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
 		}
 		
 		$this->query("SET NAMES 'utf8'");
@@ -18,10 +18,10 @@ final class mysqlidb implements Database{
 		$this->query("SET CHARACTER_SET_CONNECTION=utf8");
 		$this->query("SET SQL_MODE = ''");
   	}
-   
-   public function get_error(){
-      return $this->err_msg;
-   }
+	
+	public function get_error(){
+		return $this->err_msg;
+	}
 		
   	public function query($sql) {
 		$result = $this->mysqli->query($sql);
@@ -42,14 +42,14 @@ final class mysqlidb implements Database{
 				$query->num_rows = count($data);
 
 				return $query;
-    		} else {
+			} else {
 				return true;
 			}
 		} else {
-		   $this->err_msg = "<strong>MySQLi Error (" . $this->mysqli->errno . "):</strong> " . $this->mysqli->error . "<br /><br />$sql";
+			$this->err_msg = "<strong>MySQLi Error (" . $this->mysqli->errno . "):</strong> " . $this->mysqli->error . "<br /><br />$sql";
 			
 			return false;
-    	}
+		}
   	}
 	
   	public function multi_query($sql) {
@@ -59,10 +59,10 @@ final class mysqlidb implements Database{
 		}
 		
 		if($this->mysqli->errno) {
-		   $this->err_msg = "<strong>MySQLi Error (" . $this->mysqli->errno . "):</strong> " . $this->mysqli->error . "<br /><br />$sql";
+			$this->err_msg = "<strong>MySQLi Error (" . $this->mysqli->errno . "):</strong> " . $this->mysqli->error . "<br /><br />$sql";
 			
 			return false;
-    	}
+		}
 		
 		return true;
   	}
@@ -88,7 +88,7 @@ final class mysqlidb implements Database{
 					$this->err_msg = "MySQLi::execute_file(): " . $buffer;
 					$has_error = true;
 				}
-   		}
+			}
 			
 			fclose($handle);
 			
@@ -142,11 +142,11 @@ final class mysqlidb implements Database{
 	}
 	
   	public function countAffected() {
-    	return $this->mysqli->affected_rows;
+		return $this->mysqli->affected_rows;
   	}
 
   	public function getLastId() {
-    	return $this->mysqli->insert_id;
+		return $this->mysqli->insert_id;
   	}
 	
 	public function __destruct() {

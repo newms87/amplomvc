@@ -148,7 +148,7 @@ var sc_security="<?= $statcounter['security']; ?>";
 </div>
 <? } ?>
 <div id="notification"></div>
-<div id="content-holder">
+<div id="content_holder">
 <?=$this->builder->display_messages($messages);?>
 <?= $above_content; ?>
 

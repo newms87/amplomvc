@@ -92,20 +92,20 @@ class ControllerPaymentSagepayDirect extends Controller {
 	
 	public function send() {
 		if ($this->config->get('sagepay_direct_test') == 'live') {
-    		$url = 'https://live.sagepay.com/gateway/service/vspdirect-register.vsp';
+			$url = 'https://live.sagepay.com/gateway/service/vspdirect-register.vsp';
 		} elseif ($this->config->get('sagepay_direct_test') == 'test') {
 			$url = 'https://test.sagepay.com/gateway/service/vspdirect-register.vsp';		
 		} elseif ($this->config->get('sagepay_direct_test') == 'sim') {
-    		$url = 'https://test.sagepay.com/Simulator/VSPDirectGateway.asp';
+			$url = 'https://test.sagepay.com/Simulator/VSPDirectGateway.asp';
   		} 		
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 		
-        $data = array();
+		$data = array();
 		
 		$data['VPSProtocol'] = '2.23';
-        $data['ReferrerID'] = 'E511AF91-E4A0-42DE-80B0-09C981A3FB61';
-        $data['Vendor'] = $this->config->get('sagepay_direct_vendor');
+		$data['ReferrerID'] = 'E511AF91-E4A0-42DE-80B0-09C981A3FB61';
+		$data['Vendor'] = $this->config->get('sagepay_direct_vendor');
 		$data['VendorTxCode'] = $this->session->data['order_id'];
 		$data['Amount'] = $this->currency->format($order_info['total'], $order_info['currency_code'], 1.00000, false);
 		$data['Currency'] = $this->currency->getCode();
@@ -124,7 +124,7 @@ class ControllerPaymentSagepayDirect extends Controller {
 		$data['BillingAddress1'] = substr($order_info['payment_address_1'], 0, 100);
 		
 		if ($order_info['payment_address_2']) {
-        	$data['BillingAddress2'] = $order_info['payment_address_2'];
+			$data['BillingAddress2'] = $order_info['payment_address_2'];
 		}
 		
 		$data['BillingCity'] = substr($order_info['payment_city'], 0, 40);
@@ -143,7 +143,7 @@ class ControllerPaymentSagepayDirect extends Controller {
 			$data['DeliveryAddress1'] = substr($order_info['shipping_address_1'], 0, 100);
 			
 			if ($order_info['shipping_address_2']) {
-        		$data['DeliveryAddress2'] = $order_info['shipping_address_2'];
+				$data['DeliveryAddress2'] = $order_info['shipping_address_2'];
 			}		
 			
 			$data['DeliveryCity'] = substr($order_info['shipping_city'], 0, 40);
@@ -158,16 +158,16 @@ class ControllerPaymentSagepayDirect extends Controller {
 			$data['DeliveryPhone'] = substr($order_info['telephone'], 0, 20);
 		} else {
 			$data['DeliveryFirstnames'] = $order_info['payment_firstname'];
-        	$data['DeliverySurname'] = $order_info['payment_lastname'];
-        	$data['DeliveryAddress1'] = $order_info['payment_address_1'];
+			$data['DeliverySurname'] = $order_info['payment_lastname'];
+			$data['DeliveryAddress1'] = $order_info['payment_address_1'];
 		
 			if ($order_info['payment_address_2']) {
-        		$data['DeliveryAddress2'] = $order_info['payment_address_2'];
+				$data['DeliveryAddress2'] = $order_info['payment_address_2'];
 			}
 		
-        	$data['DeliveryCity'] = $order_info['payment_city'];
-        	$data['DeliveryPostCode'] = $order_info['payment_postcode'];
-        	$data['DeliveryCountry'] = $order_info['payment_iso_code_2'];
+			$data['DeliveryCity'] = $order_info['payment_city'];
+			$data['DeliveryPostCode'] = $order_info['payment_postcode'];
+			$data['DeliveryCountry'] = $order_info['payment_iso_code_2'];
 		
 			if ($order_info['payment_iso_code_2'] == 'US') {
 				$data['DeliveryState'] = $order_info['payment_zone_code'];
@@ -208,7 +208,7 @@ class ControllerPaymentSagepayDirect extends Controller {
 		}
 		
 		$json = array();
-      
+		
 		if ($data['Status'] == '3DAUTH') {
 			$json['ACSURL'] = $data['ACSURL'];
 			$json['MD'] = $data['MD'];
@@ -255,7 +255,7 @@ class ControllerPaymentSagepayDirect extends Controller {
 		}
 
 		$this->response->setOutput(json_encode($json));
-	}	 
+	}	
 	
 	public function callback() {
 		if (isset($this->session->data['order_id'])) {

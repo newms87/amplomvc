@@ -8,9 +8,9 @@ class DB {
 			$driver = 'mysqlidb';
 		}
 		
-	   //the database interface
-	   _require_once(DIR_DATABASE . 'database.php');
-      
+		//the database interface
+		_require_once(DIR_DATABASE . 'database.php');
+		
 		if (file_exists(DIR_DATABASE . $driver . '.php')) {
 			_require_once(DIR_DATABASE . $driver . '.php');
 		} else {
@@ -19,76 +19,96 @@ class DB {
 				
 		$this->driver = new $driver($hostname, $username, $password, $database);
 	}
-   
-   public function get_error(){
-      return $this->driver->get_error();
-   }
-   
+	
+	public function get_error(){
+		return $this->driver->get_error();
+	}
+	
 	/**
-	 * Returns an array with 3 elements, 'row', 'rows', and 'num_rows'.
-	 * 'row' is the first row of the query
-	 * 'rows' are all of the resulting rows of the MySQL query.
-	 * 'num_rows' is the count of rows in the return result
-	 * 
-	 * @param $sql - the MySQL query string
-	 * @return mixed - An array as described above, or false on failure
-	 * 
-	 */
+	* Returns an array with 3 elements, 'row', 'rows', and 'num_rows'.
+	* 'row' is the first row of the query
+	* 'rows' are all of the resulting rows of the MySQL query.
+	* 'num_rows' is the count of rows in the return result
+	* 
+	* @param $sql - the MySQL query string
+	* @return mixed - An array as described above, or false on failure
+	* 
+	*/
 	public function query($sql) {
-  	   $resource = $this->driver->query($sql);
+  		$resource = $this->driver->query($sql);
 		
-      if(!$resource){
-      	$this->query_error();
+		if(!$resource){
+			$this->query_error();
 			
-         return false;
-      }
-      
+			return false;
+		}
+		
 		return $resource;
   	}
 	
 	/**
-	 * Returns an An associative array with the Select field as the keys
-	 * and the column data as the values for the MySQL query
-	 * 
-	 * @param $sql - the MySQL query string
-	 * @return mixed - An associative array of field => value pairs, or false on failure
-	 * 
-	 */
-	public function query_row($sql) {
-  	   $resource = $this->driver->query($sql);
+	* Returns an array of associative arrays with the Select field as the keys
+	* and the column data as the values for the MySQL query
+	* 
+	* @param $sql - the MySQL query string
+	* @return mixed - an array of associative arrays of field => value pairs, or false on failure
+	* 
+	*/
+	public function query_rows($sql) {
+  		$resource = $this->driver->query($sql);
 		
-      if(!$resource){
-      	$this->query_error();
+		if(!$resource){
+			$this->query_error();
 			
-         return false;
-      }
-      
+			return false;
+		}
+		
+		return $resource->rows;
+  	}
+	
+	/**
+	* Returns an associative array with the Select field as the keys
+	* and the column data as the values for the MySQL query
+	* 
+	* @param $sql - the MySQL query string
+	* @return mixed - An associative array of field => value pairs, or false on failure
+	* 
+	*/
+	public function query_row($sql) {
+  		$resource = $this->driver->query($sql);
+		
+		if(!$resource){
+			$this->query_error();
+			
+			return false;
+		}
+		
 		return $resource->row;
   	}
 	
 	/**
-	 * Returns the first field in the first row of the query
-	 * 
-	 * @param $sql - the MySQL query string
-	 * @return mixed - The DB table field value as an integer, float or string, or null on failure
-	 * 
-	 */
+	* Returns the first field in the first row of the query
+	* 
+	* @param $sql - the MySQL query string
+	* @return mixed - The DB table field value as an integer, float or string, or null on failure
+	* 
+	*/
   	public function query_var($sql) {
-  	   $resource = $this->driver->query($sql);
+  		$resource = $this->driver->query($sql);
 		
-      if(!$resource){
-      	$this->query_error();
+		if(!$resource){
+			$this->query_error();
 			
-         return null;
-      }
-      
+			return null;
+		}
+		
 		return current($resource->row);
   	}
 	
 	private function query_error(){
 		$stack = debug_stack();
-   	$_SESSION['debug']['call stack'] = $stack;
-      trigger_error($this->driver->get_error() . get_caller(2));
+		$_SESSION['debug']['call stack'] = $stack;
+		trigger_error($this->driver->get_error() . get_caller(2));
 		html_dump($stack, 'call stack');
 	}
 	
@@ -155,30 +175,30 @@ class DB {
 		return false;
 	}
 	
-   public function has_column($table, $column){
-      $query = $this->driver->query("SHOW COLUMNS FROM " . DB_PREFIX . "$table");
-      foreach($query->rows as $row){
-         if(strtolower($row['Field']) == strtolower($column))
-            return true;
-      }
-      return false;
-   }
-   
-   public function table_add_column($table, $column, $type, $null=true, $after=null){
-      if(!$this->has_column($table, $column)){
-         $null = $null?"NULL":"NOT NULL";
-         $after = $after?"AFTER `$after`":'';
-         
-         $this->driver->query("ALTER TABLE `" . DB_PREFIX . "$table` ADD COLUMN `$column` $type $null $after");
-      }
-   }
-   
-   public function table_drop_column($table, $column){
-      if($this->has_column($table, $column)){
-         $this->driver->query("ALTER TABLE `" . DB_PREFIX . "$table` DROP COLUMN `$column`");
-      }
-   }
-   
+	public function has_column($table, $column){
+		$query = $this->driver->query("SHOW COLUMNS FROM " . DB_PREFIX . "$table");
+		foreach($query->rows as $row){
+			if(strtolower($row['Field']) == strtolower($column))
+				return true;
+		}
+		return false;
+	}
+	
+	public function table_add_column($table, $column, $type, $null=true, $after=null){
+		if(!$this->has_column($table, $column)){
+			$null = $null?"NULL":"NOT NULL";
+			$after = $after?"AFTER `$after`":'';
+			
+			$this->driver->query("ALTER TABLE `" . DB_PREFIX . "$table` ADD COLUMN `$column` $type $null $after");
+		}
+	}
+	
+	public function table_drop_column($table, $column){
+		if($this->has_column($table, $column)){
+			$this->driver->query("ALTER TABLE `" . DB_PREFIX . "$table` DROP COLUMN `$column`");
+		}
+	}
+	
 	public function set_autoincrement($table, $value){
 		if(!$this->driver->set_autoincrement($table, $value)){
 			trigger_error($this->driver->get_error());

@@ -71,71 +71,71 @@ class PHPExcel_Chart_DataSeries
 
 
 	/**
-	 * Series Plot Type
-	 *
-	 * @var string
-	 */
+	* Series Plot Type
+	*
+	* @var string
+	*/
 	private $_plotType = null;
 
 	/**
-	 * Plot Grouping Type
-	 *
-	 * @var boolean
-	 */
+	* Plot Grouping Type
+	*
+	* @var boolean
+	*/
 	private $_plotGrouping = null;
 
 	/**
-	 * Plot Direction
-	 *
-	 * @var boolean
-	 */
+	* Plot Direction
+	*
+	* @var boolean
+	*/
 	private $_plotDirection = null;
 
 	/**
-	 * Plot Style
-	 *
-	 * @var string
-	 */
+	* Plot Style
+	*
+	* @var string
+	*/
 	private $_plotStyle = null;
 
 	/**
-	 * Order of plots in Series
-	 *
-	 * @var array of integer
-	 */
+	* Order of plots in Series
+	*
+	* @var array of integer
+	*/
 	private $_plotOrder = array();
 
 	/**
-	 * Plot Label
-	 *
-	 * @var array of PHPExcel_Chart_DataSeriesValues
-	 */
+	* Plot Label
+	*
+	* @var array of PHPExcel_Chart_DataSeriesValues
+	*/
 	private $_plotLabel = array();
 
 	/**
-	 * Plot Category
-	 *
-	 * @var array of PHPExcel_Chart_DataSeriesValues
-	 */
+	* Plot Category
+	*
+	* @var array of PHPExcel_Chart_DataSeriesValues
+	*/
 	private $_plotCategory = array();
 
 	/**
-	 * Smooth Line
-	 *
-	 * @var string
-	 */
+	* Smooth Line
+	*
+	* @var string
+	*/
 	private $_smoothLine = null;
 
 	/**
-	 * Plot Values
-	 *
-	 * @var array of PHPExcel_Chart_DataSeriesValues
-	 */
+	* Plot Values
+	*
+	* @var array of PHPExcel_Chart_DataSeriesValues
+	*/
 	private $_plotValues = array();
 
 	/**
-	 * Create a new PHPExcel_Chart_DataSeries
-	 */
+	* Create a new PHPExcel_Chart_DataSeries
+	*/
 	public function __construct($plotType = null, $plotGrouping = null, $plotOrder = array(), $plotLabel = array(), $plotCategory = array(), $plotValues = array(), $smoothLine = null, $plotStyle = null)
 	{
 		$this->_plotType = $plotType;
@@ -156,82 +156,82 @@ class PHPExcel_Chart_DataSeries
 	}
 
 	/**
-	 * Get Plot Type
-	 *
-	 * @return string
-	 */
+	* Get Plot Type
+	*
+	* @return string
+	*/
 	public function getPlotType() {
 		return $this->_plotType;
 	}
 
 	/**
-	 * Set Plot Type
-	 *
-	 * @param string $plotType
-	 */
+	* Set Plot Type
+	*
+	* @param string $plotType
+	*/
 	public function setPlotType($plotType = '') {
 		$this->_plotType = $plotType;
 	}
 
 	/**
-	 * Get Plot Grouping Type
-	 *
-	 * @return string
-	 */
+	* Get Plot Grouping Type
+	*
+	* @return string
+	*/
 	public function getPlotGrouping() {
 		return $this->_plotGrouping;
 	}
 
 	/**
-	 * Set Plot Grouping Type
-	 *
-	 * @param string $groupingType
-	 */
+	* Set Plot Grouping Type
+	*
+	* @param string $groupingType
+	*/
 	public function setPlotGrouping($groupingType = null) {
 		$this->_plotGrouping = $groupingType;
 	}
 
 	/**
-	 * Get Plot Direction
-	 *
-	 * @return string
-	 */
+	* Get Plot Direction
+	*
+	* @return string
+	*/
 	public function getPlotDirection() {
 		return $this->_plotDirection;
 	}
 
 	/**
-	 * Set Plot Direction
-	 *
-	 * @param string $plotDirection
-	 */
+	* Set Plot Direction
+	*
+	* @param string $plotDirection
+	*/
 	public function setPlotDirection($plotDirection = null) {
 		$this->_plotDirection = $plotDirection;
 	}
 
 	/**
-	 * Get Plot Order
-	 *
-	 * @return string
-	 */
+	* Get Plot Order
+	*
+	* @return string
+	*/
 	public function getPlotOrder() {
 		return $this->_plotOrder;
 	}
 
 	/**
-	 * Get Plot Labels
-	 *
-	 * @return array of PHPExcel_Chart_DataSeriesValues
-	 */
+	* Get Plot Labels
+	*
+	* @return array of PHPExcel_Chart_DataSeriesValues
+	*/
 	public function getPlotLabels() {
 		return $this->_plotLabel;
 	}
 
 	/**
-	 * Get Plot Label by Index
-	 *
-	 * @return PHPExcel_Chart_DataSeriesValues
-	 */
+	* Get Plot Label by Index
+	*
+	* @return PHPExcel_Chart_DataSeriesValues
+	*/
 	public function getPlotLabelByIndex($index) {
 		$keys = array_keys($this->_plotLabel);
 		if (in_array($index,$keys)) {
@@ -243,19 +243,19 @@ class PHPExcel_Chart_DataSeries
 	}
 
 	/**
-	 * Get Plot Categories
-	 *
-	 * @return array of PHPExcel_Chart_DataSeriesValues
-	 */
+	* Get Plot Categories
+	*
+	* @return array of PHPExcel_Chart_DataSeriesValues
+	*/
 	public function getPlotCategories() {
 		return $this->_plotCategory;
 	}
 
 	/**
-	 * Get Plot Category by Index
-	 *
-	 * @return PHPExcel_Chart_DataSeriesValues
-	 */
+	* Get Plot Category by Index
+	*
+	* @return PHPExcel_Chart_DataSeriesValues
+	*/
 	public function getPlotCategoryByIndex($index) {
 		$keys = array_keys($this->_plotCategory);
 		if (in_array($index,$keys)) {
@@ -267,37 +267,37 @@ class PHPExcel_Chart_DataSeries
 	}
 
 	/**
-	 * Get Plot Style
-	 *
-	 * @return string
-	 */
+	* Get Plot Style
+	*
+	* @return string
+	*/
 	public function getPlotStyle() {
 		return $this->_plotStyle;
 	}
 
 	/**
-	 * Set Plot Style
-	 *
-	 * @param string $plotStyle
-	 */
+	* Set Plot Style
+	*
+	* @param string $plotStyle
+	*/
 	public function setPlotStyle($plotStyle = null) {
 		$this->_plotStyle = $plotStyle;
 	}
 
 	/**
-	 * Get Plot Values
-	 *
-	 * @return array of PHPExcel_Chart_DataSeriesValues
-	 */
+	* Get Plot Values
+	*
+	* @return array of PHPExcel_Chart_DataSeriesValues
+	*/
 	public function getPlotValues() {
 		return $this->_plotValues;
 	}
 
 	/**
-	 * Get Plot Values by Index
-	 *
-	 * @return PHPExcel_Chart_DataSeriesValues
-	 */
+	* Get Plot Values by Index
+	*
+	* @return PHPExcel_Chart_DataSeriesValues
+	*/
 	public function getPlotValuesByIndex($index) {
 		$keys = array_keys($this->_plotValues);
 		if (in_array($index,$keys)) {
@@ -309,34 +309,34 @@ class PHPExcel_Chart_DataSeries
 	}
 
 	/**
-	 * Get Number of Plot Series
-	 *
-	 * @return integer
-	 */
+	* Get Number of Plot Series
+	*
+	* @return integer
+	*/
 	public function getPlotSeriesCount() {
 		return count($this->_plotValues);
 	}
 
 	/**
-	 * Get Smooth Line
-	 *
-	 * @return boolean
-	 */
+	* Get Smooth Line
+	*
+	* @return boolean
+	*/
 	public function getSmoothLine() {
 		return $this->_smoothLine;
 	}
 
 	/**
-	 * Set Smooth Line
-	 *
-	 * @param boolean $smoothLine
-	 */
+	* Set Smooth Line
+	*
+	* @param boolean $smoothLine
+	*/
 	public function setSmoothLine($smoothLine = TRUE) {
 		$this->_smoothLine = $smoothLine;
 	}
 
 	public function refresh(PHPExcel_Worksheet $worksheet) {
-	    foreach($this->_plotValues as $plotValues) {
+		foreach($this->_plotValues as $plotValues) {
 			$plotValues->refresh($worksheet);
 		}
 	}

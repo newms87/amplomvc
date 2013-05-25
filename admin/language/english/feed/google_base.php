@@ -1,13 +1,13 @@
 <?php
 // Heading
-$_['heading_title']    = 'Google Base';
+$_['heading_title']	= 'Google Base';
 
-// Text   
-$_['text_feed']        = 'Product Feeds';
-$_['text_success']     = 'Success: You have modified Google Base feed!';
+// Text	
+$_['text_feed']		= 'Product Feeds';
+$_['text_success']	= 'Success: You have modified Google Base feed!';
 
 // Entry
-$_['entry_status']     = 'Status:';
+$_['entry_status']	= 'Status:';
 $_['entry_data_feed']  = 'Data Feed Url:';
 
 // Error

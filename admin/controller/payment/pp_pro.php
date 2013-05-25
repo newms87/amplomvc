@@ -1,6 +1,6 @@
 <?php 
 class ControllerPaymentPPPro extends Controller {
-	 
+	
 
 	public function index() {
 		$this->template->load('payment/pp_pro');
@@ -138,10 +138,6 @@ class ControllerPaymentPPPro extends Controller {
 			$this->error['signature'] = $this->_('error_signature');
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

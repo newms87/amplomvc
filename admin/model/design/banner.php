@@ -93,7 +93,7 @@ class ModelDesignBanner extends Model {
 		
 		foreach ($banner_image_query->rows as $banner_image) {
 			$banner_image_description_data = array();
-			 
+			
 			$banner_image_description_query = $this->query("SELECT * FROM " . DB_PREFIX . "banner_image_description WHERE banner_image_id = '" . (int)$banner_image['banner_image_id'] . "' AND banner_id = '" . (int)$banner_id . "'");
 			
 			foreach ($banner_image_description_query->rows as $banner_image_description) {			
@@ -101,18 +101,18 @@ class ModelDesignBanner extends Model {
 			}
 		
 			$banner_image_data[] = array(
-            'banner_image_description' => $banner_image_description_data,
-            'link'                     => $banner_image['link'],
-            'image'                    => $banner_image['image'],
-            'sort_order'               => $banner_image['sort_order']
-         );
+				'banner_image_description' => $banner_image_description_data,
+				'link'							=> $banner_image['link'],
+				'image'						=> $banner_image['image'],
+				'sort_order'					=> $banner_image['sort_order']
+			);
 		}
 		
 		return $banner_image_data;
 	}
-   
+	
 	public function getTotalBanners() {
-   	$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "banner");
+		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "banner");
 		return $query->row['total'];
 	}	
 }

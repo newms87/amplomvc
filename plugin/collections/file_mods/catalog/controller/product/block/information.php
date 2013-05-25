@@ -2,7 +2,7 @@
 //=====
 class ControllerProductBlockInformation extends Controller {
 //.....
-   public function index($setting, $product_info) {
+	public function index($setting, $product_info) {
 //-----
 //>>>>> {php} {before}
 		$collection = $this->model_catalog_collection->getCollectionByProduct($product_info['product_id']);
@@ -14,7 +14,7 @@ class ControllerProductBlockInformation extends Controller {
 		}
 //-----
 //=====
-      $this->data['manufacturer'] = $product_info['manufacturer'];
+		$this->data['manufacturer'] = $product_info['manufacturer'];
 //-----
 //=====
 	}

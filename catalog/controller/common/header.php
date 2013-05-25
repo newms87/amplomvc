@@ -1,20 +1,19 @@
-<?php   
+<?php	
 class ControllerCommonHeader extends Controller {
 	protected function index() {
 		$this->template->load('common/header');
 
-	   
-	   if($this->config->get('config_debug') && isset($_SESSION['debug'])){
-        html_dump($_SESSION['debug'], 'debug');
-        unset($_SESSION['debug']);  
-      }
-      
+		
+		if($this->config->get('config_debug') && isset($_SESSION['debug'])){
+			html_dump($_SESSION['debug'], 'debug');
+			unset($_SESSION['debug']);  
+		}
+		
 		$this->data['title'] = $this->document->getTitle();
 		
 		$this->data['base'] = $this->url->is_ssl() ? $this->config->get('config_ssl') : $this->config->get('config_url');
 		
 		//Add Styles
-		$this->document->addStyle(HTTP_THEME_STYLE . 'content_style.css');
 		$this->document->addStyle(HTTP_THEME_STYLE . 'style.css');
 		$this->document->addStyle(HTTP_THEME_STYLE . 'module_styles.css');
 		$this->document->addStyle(HTTP_JS . 'jquery/ui/themes/ui-lightness/jquery-ui-1.9.2.custom.css');
@@ -33,52 +32,52 @@ class ControllerCommonHeader extends Controller {
 		
 		
 		
-      $this->data['direction'] = $this->language->getInfo('direction');
-      
+		$this->data['direction'] = $this->language->getInfo('direction');
+		
 		$this->data['description'] = $this->document->getDescription();
 		$this->data['keywords'] = $this->document->getKeywords();
 		
 		$this->data['canonical_link'] = $this->document->getCanonicalLink();
-      
+		
 		$this->data['css_styles'] = $this->document->getStyles();
 		$this->data['js_scripts'] = $this->document->getScripts();
 		
 		$this->language->set('lang', $this->language->getInfo('code'));
-      
+		
 		$this->data['google_analytics'] = html_entity_decode($this->config->get('config_google_analytics'), ENT_QUOTES, 'UTF-8');
-      $this->data['statcounter'] = $this->config->get('config_statcounter');
+		$this->data['statcounter'] = $this->config->get('config_statcounter');
 		
 		$this->language->load('common/header');
 		
-      $this->data['messages'] = $this->message->fetch();
-      
-      if($this->config->get('config_seo_url')){
-         $this->data['pretty_url'] = $this->url->get_pretty_url();
-      } 
-      
+		$this->data['messages'] = $this->message->fetch();
+		
+		if($this->config->get('config_seo_url')){
+			$this->data['pretty_url'] = $this->url->get_pretty_url();
+		} 
+		
 		$this->data['icon'] = $this->image->get($this->config->get('config_icon'));
 		
 		$this->data['name'] = $this->config->get('config_name');
 		
 		$this->data['logo'] = $this->image->get($this->config->get('config_logo'));
-      
+		
 		$this->data['page_header'] = $this->model_design_page_headers->getPageHeader();
 		
 		//Navigation
 		$this->data['links_primary'] = $this->document->getLinks('primary');
-      $this->data['links_secondary'] = $this->document->getLinks('secondary');
-      
-		 
+		$this->data['links_secondary'] = $this->document->getLinks('secondary');
+		
+		
 		$this->data['is_logged'] = $this->customer->isLogged();
 		
 		//If the customer is logged in, build the account menu
-      if($this->data['is_logged']){
-      	//The Welcome Message
-      	$link_logged = array(
-      		'name' => 'logged',
-      		'display_name' => $this->language->format('text_logged', $this->customer->getFullName()),
-      		'sort_order' => 0,
-   		);
+		if($this->data['is_logged']){
+			//The Welcome Message
+			$link_logged = array(
+				'name' => 'logged',
+				'display_name' => $this->language->format('text_logged', $this->customer->getFullName()),
+				'sort_order' => 0,
+			);
 			
 			$this->document->addLink('account', $link_logged);
 			
@@ -103,8 +102,8 @@ class ControllerCommonHeader extends Controller {
 			$this->document->addLink('account', $link_cart);
 			
 			//Include the Checkout navigation link only if there are products in the cart
-	      if($this->cart->hasProducts()){
-	      	$link_checkout= array(
+			if($this->cart->hasProducts()){
+				$link_checkout= array(
 					'name' => 'checkout',
 					'display_name' => $this->_('text_checkout'),
 					'href' => $this->url->link('checkout/checkout'),
@@ -112,7 +111,7 @@ class ControllerCommonHeader extends Controller {
 				);
 			
 				$this->document->addLink('account', $link_checkout);
-	      }
+			}
 			
 			$link_logout = array(
 				'name' => 'logout',
@@ -124,13 +123,13 @@ class ControllerCommonHeader extends Controller {
 			$this->document->addLink('account', $link_logout);
 			
 			$this->data['links_account'] = $this->document->getLinks('account');
-      }
-      else{
+		}
+		else{
 			$this->data['block_login'] = $this->getBlock('account', 'login', array('header'));
-       }
+		}
 
-      $this->data['home'] = $this->url->link('common/home');
-      
+		$this->data['home'] = $this->url->link('common/home');
+		
 		$this->data['social_networks'] = $this->getBlock('extras', 'social_media');
 		
 		$this->children = array(
@@ -140,6 +139,6 @@ class ControllerCommonHeader extends Controller {
 			'common/above_content',
 		);
 
-    	$this->render();
+		$this->render();
 	} 	
 }

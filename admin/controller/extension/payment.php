@@ -4,7 +4,7 @@ class ControllerExtensionPayment extends Controller {
 		$this->template->load('extension/payment');
 
 		$this->load->language('extension/payment');
-		 
+		
 		$this->document->setTitle($this->_('heading_title')); 
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -74,11 +74,11 @@ class ControllerExtensionPayment extends Controller {
 				}
 				
 				$this->data['extensions'][] = array(
-					'name'       => $this->_('heading_title'),
-					'link'       => $link,
-					'status'     => $this->config->get($extension . '_status') ? $this->_('text_enabled') : $this->_('text_disabled'),
+					'name'		=> $this->_('heading_title'),
+					'link'		=> $link,
+					'status'	=> $this->config->get($extension . '_status') ? $this->_('text_enabled') : $this->_('text_disabled'),
 					'sort_order' => $this->config->get($extension . '_sort_order'),
-					'action'     => $action
+					'action'	=> $action
 				);
 			}
 		}

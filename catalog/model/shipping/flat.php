@@ -1,40 +1,56 @@
 <?php
 class ModelShippingFlat extends Model {
 	function getQuote($address) {
-		$this->load->language('shipping/flat');
+		$flat_rates = $this->model_setting_setting->getSetting('shipping_flat');
 		
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('flat_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
-	
-		if (!$this->config->get('flat_geo_zone_id')) {
-			$status = true;
-		} elseif ($query->num_rows) {
-			$status = true;
-		} else {
-			$status = false;
-		}
-
-		$method_data = array();
-	
-		if ($status) {
-			$quote_data = array();
+		$quote_data = array();
+		
+		$sort_order = $flat_rates['flat_sort_order'];
+		
+		$total_products = (int)$this->cart->countProducts();
+		$total_weight = (int)$this->cart->getWeight();
+		
+		foreach($flat_rates['flat_rates'] as $rate){
+			$valid = true;
 			
-      		$quote_data['flat'] = array(
-        		'code'         => 'flat.flat',
-        		'title'        => $this->_('text_description'),
-        		'cost'         => $this->config->get('flat_cost'),
-        		'tax_class_id' => $this->config->get('flat_tax_class_id'),
-				'text'         => $this->currency->format($this->tax->calculate($this->config->get('flat_cost'), $this->config->get('flat_tax_class_id'), $this->config->get('config_show_price_with_tax')))
-      		);
-
-      		$method_data = array(
-        		'code'       => 'flat',
-        		'title'      => $this->_('text_title'),
-        		'quote'      => $quote_data,
-				'sort_order' => $this->config->get('flat_sort_order'),
-        		'error'      => false
-      		);
+			//Wrong Shipping Zone
+			if(!$this->model_localisation_zone->inGeoZone($rate['geo_zone_id'], $address['country_id'], $address['zone_id'])) continue;
+			
+			switch($rate['rule']['type']){
+				case 'item_qty':
+					list($min, $max) = explode(',', $rate['rule']['value'], 2);
+					
+					if($total_products < (int)$min || ($max && $total_products > (int)$max)){
+						$valid = false;
+					}
+					break;
+				case 'weight':
+					list($min, $max) = explode(',', $rate['rule']['value'], 2);
+					
+					if($total_weight < (int)$min || ($max && $total_weight > (int)$max)){
+						$valid = false;
+					}
+					break;
+				default:
+					break;
+			}
+			
+			if(!$valid) continue;
+			
+			$quote_data[] = array(
+				'code'			=> 'flat',
+				'code_title'	=> $flat_rates['flat_title'],
+				'method'			=> $rate['method'],
+				'title'			=> $rate['title'],
+				'cost'			=> $rate['cost'],
+				'tax_class_id' => $rate['tax_class_id'],
+				'text'			=> $this->currency->format($rate['cost']),
+				'sort_order' 	=> $sort_order,
+			);
+			
+			$sort_order += .1;
 		}
 	
-		return $method_data;
+		return $quote_data;
 	}
 }

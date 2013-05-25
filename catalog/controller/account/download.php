@@ -6,7 +6,7 @@ class ControllerAccountDownload extends Controller {
 
 			$this->url->redirect($this->url->link('account/login'));
 		}
-         		
+					
 		$this->language->load('account/download');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -54,12 +54,12 @@ class ControllerAccountDownload extends Controller {
 					}
 
 					$this->data['downloads'][] = array(
-						'order_id'   => $result['order_id'],
+						'order_id'	=> $result['order_id'],
 						'date_added' => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
-						'name'       => $result['name'],
+						'name'		=> $result['name'],
 						'remaining'  => $result['remaining'],
-						'size'       => round(substr($size, 0, strpos($size, '.') + 4), 2) . $suffix[$i],
-						'href'       => $this->url->link('account/download/download', 'order_download_id=' . $result['order_download_id'])
+						'size'		=> round(substr($size, 0, strpos($size, '.') + 4), 2) . $suffix[$i],
+						'href'		=> $this->url->link('account/download/download', 'order_download_id=' . $result['order_download_id'])
 					);
 				}
 			}
@@ -68,7 +68,6 @@ class ControllerAccountDownload extends Controller {
 			$this->pagination->total = $download_total;
 			$this->pagination->page = $page;
 			$this->pagination->limit = $this->config->get('config_catalog_limit');
-			$this->pagination->text = $this->_('text_pagination');
 			$this->pagination->url = $this->url->link('account/download');
 			
 			$this->data['pagination'] = $this->pagination->render();

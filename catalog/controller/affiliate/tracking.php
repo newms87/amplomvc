@@ -4,10 +4,10 @@ class ControllerAffiliateTracking extends Controller {
 		$this->template->load('affiliate/tracking');
 
 		if (!$this->affiliate->isLogged()) {
-	  		$this->session->data['redirect'] = $this->url->link('affiliate/tracking');
-	  
-	  		$this->url->redirect($this->url->link('affiliate/login'));
-    	} 
+			$this->session->data['redirect'] = $this->url->link('affiliate/tracking');
+	
+			$this->url->redirect($this->url->link('affiliate/login'));
+		} 
 	
 		$this->language->load('affiliate/tracking');
 
@@ -18,7 +18,7 @@ class ControllerAffiliateTracking extends Controller {
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('affiliate/tracking'));
 
 		$this->language->format('text_description', $this->config->get('config_name'));
-    	$this->data['code'] = $this->affiliate->getCode();
+		$this->data['code'] = $this->affiliate->getCode();
 		
 		$this->data['continue'] = $this->url->link('affiliate/account');
 
@@ -46,8 +46,8 @@ class ControllerAffiliateTracking extends Controller {
 		if (isset($_GET['filter_name'])) {
 			$data = array(
 				'filter_name' => $_GET['filter_name'],
-				'start'       => 0,
-				'limit'       => 20
+				'start'		=> 0,
+				'limit'		=> 20
 			);
 			
 			$results = $this->model_catalog_product->getProducts($data);

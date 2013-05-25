@@ -18,33 +18,33 @@
 class CholeskyDecomposition {
 
 	/**
-	 *	Decomposition storage
-	 *	@var array
-	 *	@access private
-	 */
+	*	Decomposition storage
+	*	@var array
+	*	@access private
+	*/
 	private $L = array();
 
 	/**
-	 *	Matrix row and column dimension
-	 *	@var int
-	 *	@access private
-	 */
+	*	Matrix row and column dimension
+	*	@var int
+	*	@access private
+	*/
 	private $m;
 
 	/**
-	 *	Symmetric positive definite flag
-	 *	@var boolean
-	 *	@access private
-	 */
+	*	Symmetric positive definite flag
+	*	@var boolean
+	*	@access private
+	*/
 	private $isspd = true;
 
 
 	/**
-	 *	CholeskyDecomposition
-	 *
-	 *	Class constructor - decomposes symmetric positive definite matrix
-	 *	@param mixed Matrix square symmetric positive definite matrix
-	 */
+	*	CholeskyDecomposition
+	*
+	*	Class constructor - decomposes symmetric positive definite matrix
+	*	@param mixed Matrix square symmetric positive definite matrix
+	*/
 	public function __construct($A = null) {
 		if ($A instanceof Matrix) {
 			$this->L = $A->getArray();
@@ -79,32 +79,32 @@ class CholeskyDecomposition {
 
 
 	/**
-	 *	Is the matrix symmetric and positive definite?
-	 *
-	 *	@return boolean
-	 */
+	*	Is the matrix symmetric and positive definite?
+	*
+	*	@return boolean
+	*/
 	public function isSPD() {
 		return $this->isspd;
 	}	//	function isSPD()
 
 
 	/**
-	 *	getL
-	 *
-	 *	Return triangular factor.
-	 *	@return Matrix Lower triangular matrix
-	 */
+	*	getL
+	*
+	*	Return triangular factor.
+	*	@return Matrix Lower triangular matrix
+	*/
 	public function getL() {
 		return new Matrix($this->L);
 	}	//	function getL()
 
 
 	/**
-	 *	Solve A*X = B
-	 *
-	 *	@param $B Row-equal matrix
-	 *	@return Matrix L * L' * X = B
-	 */
+	*	Solve A*X = B
+	*
+	*	@param $B Row-equal matrix
+	*	@return Matrix L * L' * X = B
+	*/
 	public function solve($B = null) {
 		if ($B instanceof Matrix) {
 			if ($B->getRowDimension() == $this->m) {

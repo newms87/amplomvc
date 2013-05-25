@@ -3,21 +3,21 @@ class ControllerAffiliateLogout extends Controller {
 	public function index() {
 		$this->template->load('common/success');
 
-    	if ($this->affiliate->isLogged()) {
-      		$this->affiliate->logout();
+		if ($this->affiliate->isLogged()) {
+				$this->affiliate->logout();
 			
-      		$this->url->redirect($this->url->link('affiliate/logout'));
-    	}
+				$this->url->redirect($this->url->link('affiliate/logout'));
+		}
  
-    	$this->language->load('affiliate/logout');
+		$this->language->load('affiliate/logout');
 		
 		$this->document->setTitle($this->_('heading_title'));
-      
+		
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('text_account'), $this->url->link('affiliate/account'));
 			$this->breadcrumb->add($this->_('text_logout'), $this->url->link('affiliate/logout'));
 
-    	$this->data['continue'] = $this->url->link('common/home');
+		$this->data['continue'] = $this->url->link('common/home');
 
 
 

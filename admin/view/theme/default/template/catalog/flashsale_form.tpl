@@ -128,7 +128,7 @@
 									 <td class="left"><input type="text" name="articles[<?=$row;?>][title]" value="<?=$article['title'];?>" /></td>
 									 <td class="left"><textarea class='ckedit' id='article-description-<?=$row;?>' name="articles[<?=$row;?>][description]" ><?=$article['description'];?></textarea></td>
 									 <td class="left"><input type="text" name="articles[<?=$row;?>][link]" size='60' value="<?=$article['link'];?>" /></td>
-									 <td class="left"><a onclick="remove_ckeditor_for('article-description-<?=$row;?>');$('#article-<?=$row;?>').remove();" class="button"><?=$button_remove;?></a></td>
+									 <td class="left"><a onclick="remove_ckeditor_for($('#article-description-<?=$row;?>'));$('#article-<?=$row;?>').remove();" class="button"><?=$button_remove;?></a></td>
 								</tr>
 						 </tbody>
 						 <? }?>
@@ -157,12 +157,12 @@ function generate_url(c){
 	 name =$('input[name="name"]').val();
 	 if(!name)
 			alert("Please make a name for this Flashsale before generating the URL");
-	 $.post('index.php?route=catalog/flashsale/generate_url',{flashsale_id:<?=$flashsale_id;?>,name:name},function(json){$('input[name="keyword"]').val(json);},'json');
+	 $.post("<?= HTTP_ADMIN . "index.php?route=catalog/flashsale/generate_url"; ?>",{flashsale_id:<?=$flashsale_id;?>,name:name},function(json){$('input[name="keyword"]').val(json);},'json');
 }
  //--></script>
 <script type="text/javascript"><!--
 function autofill_designer_info(){
-	 $.post('index.php?route=catalog/flashsale/get_designer_info',{designer_id:$('#autofill_designer').val()},apply_designer_info,'json');
+	 $.post("<?= HTTP_ADMIN . "index.php?route=catalog/flashsale/get_designer_info"; ?>",{designer_id:$('#autofill_designer').val()},apply_designer_info,'json');
 }
 function apply_designer_info(data){
 	 if(!data)return;
@@ -173,9 +173,9 @@ function apply_designer_info(data){
 	 $('#flashsale_title').val(data.name);
 	 $('#image').val(data.image);
 	 $('#thumb').attr('src',data.thumb);
-	 remove_ckeditor_for('flashsale_blurb');
+	 remove_ckeditor_for($('#flashsale_blurb'));
 	 $('#flashsale_blurb').val(data.description);
-	 init_ckeditor_for('flashsale_blurb');
+	 init_ckeditor_for($('#flashsale_blurb'));
 	 $('input[name="keyword"]+a.gen_url').click();
 }
 
@@ -221,11 +221,11 @@ function add_article(context){
 	 html += '			<td class="left"><input type="text" name="articles[%row%][title]" /></td>';
 	 html += '			<td class="left"><textarea id="article-description-%row%" name="articles[%row%][description]" ></textarea></td>';
 	 html += '			<td class="left"><input type="text" name="articles[%row%][link]" size="60" /></td>';
-	 html += '			<td class="left"><a onclick="remove_ckeditor_for(\'article-description-%row%\');$(\'#article-%row%\').remove();" class="button"><?=$button_remove;?></a></td>';
+	 html += '			<td class="left"><a onclick="remove_ckeditor_for($(\'#article-description-%row%\'));$(\'#article-%row%\').remove();" class="button"><?=$button_remove;?></a></td>';
 	 html += '	 </tr>';
 	 html += '</tbody>';
 	 $(context).closest('tbody').before(html.replace(/%row%/g,article_row));
-	 init_ckeditor_for('article-description-'+article_row);
+	 init_ckeditor_for($('#article-description-'+article_row));
 	 article_row++;
 } 
 //--></script>
@@ -235,7 +235,7 @@ $('input[name=\'product\']').autocomplete({
 	 delay: 0,
 	 source: function(request, response) {
 			$.ajax({
-				 url: 'index.php?route=catalog/product/autocomplete&filter_name=' +	encodeURIComponent(request.term),
+				 url: "<?= HTTP_ADMIN . "index.php?route=catalog/product/autocomplete"; ?>" + '&filter_name=' +	encodeURIComponent(request.term),
 				 dataType: 'json',
 				 success: function(json) {		 
 						response($.map(json, function(item) {

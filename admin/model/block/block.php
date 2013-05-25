@@ -23,14 +23,22 @@ class ModelBlockBlock extends Model {
 	}
 	
 	public function getBlock($name){
-		$query = $this->get('block', '*', array('name' => $name));
+		$block = $this->query_row("SELECT * FROM " . DB_PREFIX . "block WHERE `name` = '" . $this->db->escape($name) . "'");
 		
-		if($query->num_rows){
-			$query->row['settings'] = unserialize($query->row['settings']);
-			$query->row['profiles'] = unserialize($query->row['profiles']);
+		if($block){
+			$block['settings'] = unserialize($block['settings']);
+			$block['profiles'] = unserialize($block['profiles']);
+		}
+		else{
+			$block = array(
+				'name' => $name,
+				'settings' => array(),
+				'profiles' => array(),
+				'status' => 0,
+			);
 		}
 		
-		return $query->row;
+		return $block;
 	}
 	
 	public function getBlocks($data = array(), $total = false){
@@ -52,8 +60,9 @@ class ModelBlockBlock extends Model {
 			$name = preg_replace("/.*[\/\\\\]/",'',dirname($file)) . '/' . preg_replace("/.php\$/",'',basename($file));
 			$block = $this->getBlock($name);
 			
-			$this->language->load('block/' . $block['name']);
-			$block['display_name'] = $this->language->get('heading_title');
+			$block_language = $this->language->fetch('block/' . $block['name']);
+			
+			$block['display_name'] = $block_language['heading_title'];
 			
 			//filter name
 			if(!empty($data['name'])){

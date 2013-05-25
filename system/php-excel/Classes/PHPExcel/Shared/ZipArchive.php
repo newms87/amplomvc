@@ -18,11 +18,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category   PHPExcel
- * @package    PHPExcel_Shared_ZipArchive
+ * @category	PHPExcel
+ * @package	PHPExcel_Shared_ZipArchive
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version    1.7.7, 2012-05-19
+ * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+ * @version	1.7.7, 2012-05-19
  */
 
 require_once PHPEXCEL_ROOT . 'PHPExcel/Shared/PCLZip/pclzip.lib.php';
@@ -31,8 +31,8 @@ require_once PHPEXCEL_ROOT . 'PHPExcel/Shared/PCLZip/pclzip.lib.php';
 /**
  * PHPExcel_Shared_ZipArchive
  *
- * @category   PHPExcel
- * @package    PHPExcel_Shared_ZipArchive
+ * @category	PHPExcel
+ * @package	PHPExcel_Shared_ZipArchive
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_Shared_ZipArchive
@@ -44,26 +44,26 @@ class PHPExcel_Shared_ZipArchive
 
 
 	/**
-	 * Temporary storage directory
-	 *
-	 * @var string
-	 */
+	* Temporary storage directory
+	*
+	* @var string
+	*/
 	private $_tempDir;
 
 	/**
-	 * Zip Archive Stream Handle
-	 *
-	 * @var string
-	 */
+	* Zip Archive Stream Handle
+	*
+	* @var string
+	*/
 	private $_zip;
 
 
-    /**
-	 * Open a new zip archive
-	 *
-	 * @param	string	$fileName	Filename for the zip archive
-	 * @return	boolean
-     */
+	/**
+	* Open a new zip archive
+	*
+	* @param	string	$fileName	Filename for the zip archive
+	* @return	boolean
+	*/
 	public function open($fileName)
 	{
 		$this->_tempDir = PHPExcel_Shared_File::sys_get_temp_dir();
@@ -74,21 +74,21 @@ class PHPExcel_Shared_ZipArchive
 	}
 
 
-    /**
-	 * Close this zip archive
-	 *
-     */
+	/**
+	* Close this zip archive
+	*
+	*/
 	public function close()
 	{
 	}
 
 
-    /**
-	 * Add a new file to the zip archive from a string of raw data.
-	 *
-	 * @param	string	$localname		Directory/Name of the file to add to the zip archive
-	 * @param	string	$contents		String of data to add to the zip archive
-     */
+	/**
+	* Add a new file to the zip archive from a string of raw data.
+	*
+	* @param	string	$localname		Directory/Name of the file to add to the zip archive
+	* @param	string	$contents		String of data to add to the zip archive
+	*/
 	public function addFromString($localname, $contents)
 	{
 		$filenameParts = pathinfo($localname);
@@ -100,7 +100,7 @@ class PHPExcel_Shared_ZipArchive
 		$res = $this->_zip->add($this->_tempDir.'/'.$filenameParts["basename"],
 								PCLZIP_OPT_REMOVE_PATH, $this->_tempDir,
 								PCLZIP_OPT_ADD_PATH, $filenameParts["dirname"]
-							   );
+								);
 		if ($res == 0) {
 			throw new Exception("Error zipping files : " . $this->_zip->errorInfo(true));
 		}

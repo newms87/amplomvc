@@ -1,8 +1,8 @@
 <?php
 class ControllerModulespecial extends Controller {
-	 
 	
-	public function index() {   
+	
+	public function index() {	
 		$this->template->load('module/special');
 
 		$this->load->language('module/special');
@@ -70,10 +70,6 @@ class ControllerModulespecial extends Controller {
 			}
 		}	
 						
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 class ControllerPaymentMoneyBookers extends Controller {
-	 
+	
 	
 	public function index() {
 		$this->template->load('payment/moneybookers');
@@ -136,10 +136,6 @@ class ControllerPaymentMoneyBookers extends Controller {
 			$this->error['email'] = $this->_('error_email');
 		}
 				
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

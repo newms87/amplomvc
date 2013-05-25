@@ -83,7 +83,7 @@ $config = new Config($registry, $store_id);
 
 //Setup Cache ignore list
 foreach(explode(',',$config->get('config_cache_ignore')) as $ci)
-   $cache->ignore($ci);
+	$cache->ignore($ci);
 
 //System Logs
 $error_log = new Log($config->get('config_error_filename'), $config->get('config_name'));
@@ -145,11 +145,11 @@ $registry->set('message', new Message($session));
 // Url
 $url = new Url($registry, $config->get('config_url'), $config->get('config_use_ssl') ? $config->get('config_ssl') : '');
 if($config->get('config_seo_url'))
-   $url->getSeoUrl();
+	$url->getSeoUrl();
 $registry->set('url', $url);
 
 if(!isset($_GET['route'])){
-   $_GET['route'] = 'common/home';
+	$_GET['route'] = 'common/home';
 }
 
 //Images
@@ -213,12 +213,11 @@ if (!isset($session->data['language']) || $session->data['language'] != $code) {
 	$session->data['language'] = $code;
 }
 
-if (!isset($_COOKIE['language']) || $_COOKIE['language'] != $code) {	  
+if (!isset($_COOKIE['language']) || $_COOKIE['language'] != $code) {	
 	setcookie('language', $code, time() + 60 * 60 * 24 * 30, '/', $_SERVER['HTTP_HOST']);
 }			
 
 $config->set('config_language_id', $languages[$code]['language_id']);
-$config->set('config_language', $languages[$code]['code']);
 
 // Language	
 $language = new Language($languages[$code]);
@@ -249,22 +248,22 @@ $route = '';
 $action = '';
 
 if(isset($_GET['route'])){
-   $part = explode('/', $_GET['route']);
-   
-   if (isset($part[0])) {
-      $route .= $part[0];
-   }
-   
-   if (isset($part[1])) {
-      $route .= '/' . $part[1];
-   }
+	$part = explode('/', $_GET['route']);
+	
+	if (isset($part[0])) {
+		$route .= $part[0];
+	}
+	
+	if (isset($part[1])) {
+		$route .= '/' . $part[1];
+	}
 }
 
 if($config->get('config_maintenance')){
-   if((!$registry->get('user')->isLogged() || !$registry->get('user')->isAdmin()) && strpos($route, 'payment') !== 0){
-      //$action = new Action('common/maintenance');
+	if((!$registry->get('user')->isLogged() || !$registry->get('user')->isAdmin()) && strpos($route, 'payment') !== 0){
+		//$action = new Action('common/maintenance');
 		$_GET['route'] = 'common/maintenance';
-   }
+	}
 }
 elseif(!$route){
 	$_GET['route'] = 'common/home';
@@ -289,6 +288,6 @@ $controller->dispatch($action, new Action('error/not_found'));
 $response->output();
 
 //if($config->trace_execution_time){
-   
+	
 //}
 //echo 'execution time: ' . (microtime(true) - $__start);

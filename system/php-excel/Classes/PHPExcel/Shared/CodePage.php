@@ -18,31 +18,31 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category   PHPExcel
- * @package    PHPExcel_Shared
+ * @category	PHPExcel
+ * @package	PHPExcel_Shared
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version    1.7.7, 2012-05-19
+ * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+ * @version	1.7.7, 2012-05-19
  */
 
 
 /**
  * PHPExcel_Shared_CodePage
  *
- * @category   PHPExcel
- * @package    PHPExcel_Shared
+ * @category	PHPExcel
+ * @package	PHPExcel_Shared
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_Shared_CodePage
 {
 	/**
-	 * Convert Microsoft Code Page Identifier to Code Page Name which iconv
-	 * and mbstring understands
-	 *
-	 * @param int $number Microsoft Code Page Indentifier
-	 * @return string Code Page Name
-	 * @throws Exception
-	 */
+	* Convert Microsoft Code Page Identifier to Code Page Name which iconv
+	* and mbstring understands
+	*
+	* @param int $number Microsoft Code Page Indentifier
+	* @return string Code Page Name
+	* @throws Exception
+	*/
 	public static function NumberToName($codePage = '1252')
 	{
 		switch ($codePage) {

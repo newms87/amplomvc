@@ -66,7 +66,7 @@
 //<!--
 $('#button-confirm').bind('click', function() {
 	$.ajax({
-		url: 'index.php?route=payment/sagepay_direct/send',
+		url: "<?= HTTP_CATALOG . "index.php?route=payment/sagepay_direct/send"; ?>",
 		type: 'post',
 		data: $('#payment :input'),
 		dataType: 'json',		

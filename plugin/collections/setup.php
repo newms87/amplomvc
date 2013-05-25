@@ -7,7 +7,7 @@ class SetupCollections extends SetupPlugin {
 		define("COLLECTION_NAVIGATION_LINK_NAME", "catalog_collection");
 	}
 	
-   public function install(&$controller_adapters, &$db_requests){
+	public function install(&$controller_adapters, &$db_requests){
 		//Create collection table
 		$table = DB_PREFIX . "collection";
 		
@@ -37,8 +37,8 @@ CREATE TABLE IF NOT EXISTS `$table` (
   PRIMARY KEY (`collection_id`,`product_id`)
 )
 SQL;
-   	
-   	$this->db->query($sql);
+		
+		$this->db->query($sql);
 		
 		//Create collection_category table
 		$table = DB_PREFIX . "collection_category";
@@ -63,8 +63,8 @@ CREATE TABLE IF NOT EXISTS `$table` (
   PRIMARY KEY (`collection_id`,`store_id`)
 )
 SQL;
-   	
-   	$this->db->query($sql);
+		
+		$this->db->query($sql);
 		
 		//Add Collections Navigation
 		$link = array(
@@ -82,10 +82,10 @@ SQL;
 		
 		//Enable image sorting for the 'collection' table on column 'image'
 		$this->extend->enable_image_sorting('collection', 'image');
-   }
-   
-   public function uninstall($keep_data = false){
-   	$keep_data = true;
+	}
+	
+	public function uninstall($keep_data = false){
+		$keep_data = true;
 		
 		//Remove Collections Navigation
 		$this->extend->remove_navigation_link(COLLECTION_NAVIGATION_LINK_NAME);
@@ -98,7 +98,7 @@ SQL;
 		
 		//Remove data last as good practice
 		if(!$keep_data){
-	   	$table = DB_PREFIX . "collection";
+			$table = DB_PREFIX . "collection";
 			$this->db->query("DROP TABLE $table");
 			
 			$table = DB_PREFIX . "collection_product";
@@ -107,5 +107,5 @@ SQL;
 			$table = DB_PREFIX . "collection_store";
 			$this->db->query("DROP TABLE $table");
 		}
-   }
+	}
 }

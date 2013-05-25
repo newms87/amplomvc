@@ -1,8 +1,8 @@
 <?php 
 class ControllerProductSearchResults extends Controller {  
 	public function index() {
-	   $this->template->load('product/search_results');
-      
+		$this->template->load('product/search_results');
+		
 		$this->language->load('product/search_results');
 		
 		$post = $_POST;

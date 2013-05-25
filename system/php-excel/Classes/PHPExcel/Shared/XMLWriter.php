@@ -18,7 +18,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category   PHPExcel
+ * @category	PHPExcel
  * @package	PHPExcel_Shared
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
@@ -37,7 +37,7 @@ if (!defined('DEBUGMODE_ENABLED')) {
 /**
  * PHPExcel_Shared_XMLWriter
  *
- * @category   PHPExcel
+ * @category	PHPExcel
  * @package	PHPExcel_Shared
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
@@ -47,18 +47,18 @@ class PHPExcel_Shared_XMLWriter extends XMLWriter {
 	const STORAGE_DISK		= 2;
 
 	/**
-	 * Temporary filename
-	 *
-	 * @var string
-	 */
+	* Temporary filename
+	*
+	* @var string
+	*/
 	private $_tempFileName = '';
 
 	/**
-	 * Create a new PHPExcel_Shared_XMLWriter instance
-	 *
-	 * @param int		$pTemporaryStorage			Temporary storage location
-	 * @param string	$pTemporaryStorageFolder	Temporary storage folder
-	 */
+	* Create a new PHPExcel_Shared_XMLWriter instance
+	*
+	* @param int		$pTemporaryStorage			Temporary storage location
+	* @param string	$pTemporaryStorageFolder	Temporary storage folder
+	*/
 	public function __construct($pTemporaryStorage = self::STORAGE_MEMORY, $pTemporaryStorageFolder = NULL) {
 		// Open temporary storage
 		if ($pTemporaryStorage == self::STORAGE_MEMORY) {
@@ -83,8 +83,8 @@ class PHPExcel_Shared_XMLWriter extends XMLWriter {
 	}
 
 	/**
-	 * Destructor
-	 */
+	* Destructor
+	*/
 	public function __destruct() {
 		// Unlink temporary files
 		if ($this->_tempFileName != '') {
@@ -93,10 +93,10 @@ class PHPExcel_Shared_XMLWriter extends XMLWriter {
 	}
 
 	/**
-	 * Get written data
-	 *
-	 * @return $data
-	 */
+	* Get written data
+	*
+	* @return $data
+	*/
 	public function getData() {
 		if ($this->_tempFileName == '') {
 			return $this->outputMemory(true);
@@ -107,11 +107,11 @@ class PHPExcel_Shared_XMLWriter extends XMLWriter {
 	}
 
 	/**
-	 * Fallback method for writeRaw, introduced in PHP 5.2
-	 *
-	 * @param string $text
-	 * @return string
-	 */
+	* Fallback method for writeRaw, introduced in PHP 5.2
+	*
+	* @param string $text
+	* @return string
+	*/
 	public function writeRawData($text)
 	{
 		if (method_exists($this, 'writeRaw')) {

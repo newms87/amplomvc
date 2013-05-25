@@ -21,15 +21,15 @@ class PHPExcel_Shared_JAMA_QRDecomposition {
 	const MatrixRankException	= "Can only perform operation on full-rank matrix.";
 
 	/**
-	 *	Array for internal storage of decomposition.
-	 *	@var array
-	 */
+	*	Array for internal storage of decomposition.
+	*	@var array
+	*/
 	private $QR = array();
 
 	/**
-	 *	Row dimension.
-	 *	@var integer
-	 */
+	*	Row dimension.
+	*	@var integer
+	*/
 	private $m;
 
 	/**
@@ -39,18 +39,18 @@ class PHPExcel_Shared_JAMA_QRDecomposition {
 	private $n;
 
 	/**
-	 *	Array for internal storage of diagonal of R.
-	 *	@var  array
-	 */
+	*	Array for internal storage of diagonal of R.
+	*	@var  array
+	*/
 	private $Rdiag = array();
 
 
 	/**
-	 *	QR Decomposition computed by Householder reflections.
-	 *
-	 *	@param matrix $A Rectangular matrix
-	 *	@return Structure to access R and the Householder vectors and compute Q.
-	 */
+	*	QR Decomposition computed by Householder reflections.
+	*
+	*	@param matrix $A Rectangular matrix
+	*	@return Structure to access R and the Householder vectors and compute Q.
+	*/
 	public function __construct($A) {
 		if($A instanceof PHPExcel_Shared_JAMA_Matrix) {
 			// Initialize.
@@ -94,10 +94,10 @@ class PHPExcel_Shared_JAMA_QRDecomposition {
 
 
 	/**
-	 *	Is the matrix full rank?
-	 *
-	 *	@return boolean true if R, and hence A, has full rank, else false.
-	 */
+	*	Is the matrix full rank?
+	*
+	*	@return boolean true if R, and hence A, has full rank, else false.
+	*/
 	public function isFullRank() {
 		for ($j = 0; $j < $this->n; ++$j) {
 			if ($this->Rdiag[$j] == 0) {
@@ -109,10 +109,10 @@ class PHPExcel_Shared_JAMA_QRDecomposition {
 
 
 	/**
-	 *	Return the Householder vectors
-	 *
-	 *	@return Matrix Lower trapezoidal matrix whose columns define the reflections
-	 */
+	*	Return the Householder vectors
+	*
+	*	@return Matrix Lower trapezoidal matrix whose columns define the reflections
+	*/
 	public function getH() {
 		for ($i = 0; $i < $this->m; ++$i) {
 			for ($j = 0; $j < $this->n; ++$j) {
@@ -128,10 +128,10 @@ class PHPExcel_Shared_JAMA_QRDecomposition {
 
 
 	/**
-	 *	Return the upper triangular factor
-	 *
-	 *	@return Matrix upper triangular factor
-	 */
+	*	Return the upper triangular factor
+	*
+	*	@return Matrix upper triangular factor
+	*/
 	public function getR() {
 		for ($i = 0; $i < $this->n; ++$i) {
 			for ($j = 0; $j < $this->n; ++$j) {
@@ -149,10 +149,10 @@ class PHPExcel_Shared_JAMA_QRDecomposition {
 
 
 	/**
-	 *	Generate and return the (economy-sized) orthogonal factor
-	 *
-	 *	@return Matrix orthogonal factor
-	 */
+	*	Generate and return the (economy-sized) orthogonal factor
+	*
+	*	@return Matrix orthogonal factor
+	*/
 	public function getQ() {
 		for ($k = $this->n-1; $k >= 0; --$k) {
 			for ($i = 0; $i < $this->m; ++$i) {
@@ -186,11 +186,11 @@ class PHPExcel_Shared_JAMA_QRDecomposition {
 
 
 	/**
-	 *	Least squares solution of A*X = B
-	 *
-	 *	@param Matrix $B A Matrix with as many rows as A and any number of columns.
-	 *	@return Matrix Matrix that minimizes the two norm of Q*R*X-B.
-	 */
+	*	Least squares solution of A*X = B
+	*
+	*	@param Matrix $B A Matrix with as many rows as A and any number of columns.
+	*	@return Matrix Matrix that minimizes the two norm of Q*R*X-B.
+	*/
 	public function solve($B) {
 		if ($B->getRowDimension() == $this->m) {
 			if ($this->isFullRank()) {

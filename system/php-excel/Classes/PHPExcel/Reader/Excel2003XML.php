@@ -18,19 +18,19 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category   PHPExcel
- * @package    PHPExcel_Reader
+ * @category	PHPExcel
+ * @package	PHPExcel_Reader
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version    1.7.7, 2012-05-19
+ * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+ * @version	1.7.7, 2012-05-19
  */
 
 
 /** PHPExcel root directory */
 if (!defined('PHPEXCEL_ROOT')) {
 	/**
-	 * @ignore
-	 */
+	* @ignore
+	*/
 	define('PHPEXCEL_ROOT', dirname(__FILE__) . '/../../');
 	require(PHPEXCEL_ROOT . 'PHPExcel/Autoloader.php');
 }
@@ -38,72 +38,72 @@ if (!defined('PHPEXCEL_ROOT')) {
 /**
  * PHPExcel_Reader_Excel2003XML
  *
- * @category   PHPExcel
- * @package    PHPExcel_Reader
+ * @category	PHPExcel
+ * @package	PHPExcel_Reader
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_Reader_Excel2003XML implements PHPExcel_Reader_IReader
 {
 	/**
-	 * Read data only?
-	 *
-	 * @var boolean
-	 */
+	* Read data only?
+	*
+	* @var boolean
+	*/
 	private $_readDataOnly = false;
 
 	/**
-	 * Restict which sheets should be loaded?
-	 *
-	 * @var array
-	 */
+	* Restict which sheets should be loaded?
+	*
+	* @var array
+	*/
 	private $_loadSheetsOnly = null;
 
 	/**
-	 * Formats
-	 *
-	 * @var array
-	 */
+	* Formats
+	*
+	* @var array
+	*/
 	private $_styles = array();
 
 	/**
-	 * PHPExcel_Reader_IReadFilter instance
-	 *
-	 * @var PHPExcel_Reader_IReadFilter
-	 */
+	* PHPExcel_Reader_IReadFilter instance
+	*
+	* @var PHPExcel_Reader_IReadFilter
+	*/
 	private $_readFilter = null;
 
 	/**
-	 * Character set used in the file
-	 *
-	 * @var string
-	 */
+	* Character set used in the file
+	*
+	* @var string
+	*/
 	private $_charSet = 'UTF-8';
 
 
 	/**
-	 * Create a new PHPExcel_Reader_Excel2003XML
-	 */
+	* Create a new PHPExcel_Reader_Excel2003XML
+	*/
 	public function __construct() {
 		$this->_readFilter 	= new PHPExcel_Reader_DefaultReadFilter();
 	}
 
 
 	/**
-	 * Read data only?
-	 *
-	 * @return boolean
-	 */
+	* Read data only?
+	*
+	* @return boolean
+	*/
 	public function getReadDataOnly() {
 		return $this->_readDataOnly;
 	}
 
 
 	/**
-	 * Set read data only
-	 *
-	 * @param boolean $pValue
-	 * @return PHPExcel_Reader_Excel2003XML
-	 */
+	* Set read data only
+	*
+	* @param boolean $pValue
+	* @return PHPExcel_Reader_Excel2003XML
+	*/
 	public function setReadDataOnly($pValue = false) {
 		$this->_readDataOnly = $pValue;
 		return $this;
@@ -111,10 +111,10 @@ class PHPExcel_Reader_Excel2003XML implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Get which sheets to load
-	 *
-	 * @return mixed
-	 */
+	* Get which sheets to load
+	*
+	* @return mixed
+	*/
 	public function getLoadSheetsOnly()
 	{
 		return $this->_loadSheetsOnly;
@@ -122,11 +122,11 @@ class PHPExcel_Reader_Excel2003XML implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Set which sheets to load
-	 *
-	 * @param mixed $value
-	 * @return PHPExcel_Reader_Excel2003XML
-	 */
+	* Set which sheets to load
+	*
+	* @param mixed $value
+	* @return PHPExcel_Reader_Excel2003XML
+	*/
 	public function setLoadSheetsOnly($value = null)
 	{
 		$this->_loadSheetsOnly = is_array($value) ?
@@ -136,10 +136,10 @@ class PHPExcel_Reader_Excel2003XML implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Set all sheets to load
-	 *
-	 * @return PHPExcel_Reader_Excel2003XML
-	 */
+	* Set all sheets to load
+	*
+	* @return PHPExcel_Reader_Excel2003XML
+	*/
 	public function setLoadAllSheets()
 	{
 		$this->_loadSheetsOnly = null;
@@ -148,21 +148,21 @@ class PHPExcel_Reader_Excel2003XML implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Read filter
-	 *
-	 * @return PHPExcel_Reader_IReadFilter
-	 */
+	* Read filter
+	*
+	* @return PHPExcel_Reader_IReadFilter
+	*/
 	public function getReadFilter() {
 		return $this->_readFilter;
 	}
 
 
 	/**
-	 * Set read filter
-	 *
-	 * @param PHPExcel_Reader_IReadFilter $pValue
-	 * @return PHPExcel_Reader_Excel2003XML
-	 */
+	* Set read filter
+	*
+	* @param PHPExcel_Reader_IReadFilter $pValue
+	* @return PHPExcel_Reader_Excel2003XML
+	*/
 	public function setReadFilter(PHPExcel_Reader_IReadFilter $pValue) {
 		$this->_readFilter = $pValue;
 		return $this;
@@ -170,12 +170,12 @@ class PHPExcel_Reader_Excel2003XML implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Can the current PHPExcel_Reader_IReader read the file?
-	 *
-	 * @param 	string 		$pFileName
-	 * @return 	boolean
-	 * @throws Exception
-	 */
+	* Can the current PHPExcel_Reader_IReader read the file?
+	*
+	* @param 	string 		$pFileName
+	* @return 	boolean
+	* @throws Exception
+	*/
 	public function canRead($pFilename)
 	{
 
@@ -224,11 +224,11 @@ class PHPExcel_Reader_Excel2003XML implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Reads names of the worksheets from a file, without parsing the whole file to a PHPExcel object
-	 *
-	 * @param 	string 		$pFilename
-	 * @throws 	Exception
-	 */
+	* Reads names of the worksheets from a file, without parsing the whole file to a PHPExcel object
+	*
+	* @param 	string 		$pFilename
+	* @throws 	Exception
+	*/
 	public function listWorksheetNames($pFilename)
 	{
 		// Check if file exists
@@ -255,11 +255,11 @@ class PHPExcel_Reader_Excel2003XML implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Return worksheet info (Name, Last Column Letter, Last Column Index, Total Rows, Total Columns)
-	 *
-	 * @param   string     $pFilename
-	 * @throws   Exception
-	 */
+	* Return worksheet info (Name, Last Column Letter, Last Column Index, Total Rows, Total Columns)
+	*
+	* @param	string	$pFilename
+	* @throws	Exception
+	*/
 	public function listWorksheetInfo($pFilename)
 	{
 		// Check if file exists
@@ -325,13 +325,13 @@ class PHPExcel_Reader_Excel2003XML implements PHPExcel_Reader_IReader
 	}
 
 
-    /**
-	 * Loads PHPExcel from file
-	 *
-	 * @param 	string 		$pFilename
-	 * @return 	PHPExcel
-	 * @throws 	Exception
-	 */
+	/**
+	* Loads PHPExcel from file
+	*
+	* @param 	string 		$pFilename
+	* @return 	PHPExcel
+	* @throws 	Exception
+	*/
 	public function load($pFilename)
 	{
 		// Create new PHPExcel
@@ -355,10 +355,10 @@ class PHPExcel_Reader_Excel2003XML implements PHPExcel_Reader_IReader
 
 
  	/**
- 	 * pixel units to excel width units(units of 1/256th of a character width)
- 	 * @param pxs
- 	 * @return
- 	 */
+ 	* pixel units to excel width units(units of 1/256th of a character width)
+ 	* @param pxs
+ 	* @return
+ 	*/
  	private static function _pixel2WidthUnits($pxs) {
 		$UNIT_OFFSET_MAP = array(0, 36, 73, 109, 146, 182, 219);
 
@@ -369,10 +369,10 @@ class PHPExcel_Reader_Excel2003XML implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * excel width units(units of 1/256th of a character width) to pixel units
-	 * @param widthUnits
-	 * @return
-	 */
+	* excel width units(units of 1/256th of a character width) to pixel units
+	* @param widthUnits
+	* @return
+	*/
 	private static function _widthUnits2Pixel($widthUnits) {
 		$pixels = ($widthUnits / 256) * 7;
 		$offsetWidthUnits = $widthUnits % 256;
@@ -387,13 +387,13 @@ class PHPExcel_Reader_Excel2003XML implements PHPExcel_Reader_IReader
 
 
 	/**
-	 * Loads PHPExcel from file into PHPExcel instance
-	 *
-	 * @param 	string 		$pFilename
-	 * @param	PHPExcel	$objPHPExcel
-	 * @return 	PHPExcel
-	 * @throws 	Exception
-	 */
+	* Loads PHPExcel from file into PHPExcel instance
+	*
+	* @param 	string 		$pFilename
+	* @param	PHPExcel	$objPHPExcel
+	* @return 	PHPExcel
+	* @throws 	Exception
+	*/
 	public function loadIntoExisting($pFilename, PHPExcel $objPHPExcel)
 	{
 		$fromFormats	= array('\-',	'\ ');
@@ -739,8 +739,8 @@ class PHPExcel_Reader_Excel2003XML implements PHPExcel_Reader_IReader
 									const TYPE_FORMULA		= 'f';
 									const TYPE_NUMERIC		= 'n';
 									const TYPE_BOOL			= 'b';
-								    const TYPE_NULL			= 'null';
-								    const TYPE_INLINE		= 'inlineStr';
+									const TYPE_NULL			= 'null';
+									const TYPE_INLINE		= 'inlineStr';
 									const TYPE_ERROR		= 'e';
 									*/
 									case 'String' :

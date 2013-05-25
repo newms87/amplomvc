@@ -1,7 +1,7 @@
 <?php 
 class ControllerTotalSubTotal extends Controller { 
-	 
-	 
+	
+	
 	public function index() { 
 		$this->template->load('total/sub_total');
 
@@ -56,10 +56,6 @@ class ControllerTotalSubTotal extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

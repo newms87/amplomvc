@@ -69,19 +69,19 @@ class ControllerDesignBanner extends Controller {
 	private function getList() {
 		$this->template->load('design/banner_list');
 
-	   $default_urls = array('sort'=>'name','order'=>'ASC','page'=>1);
-      foreach($default_urls as $key=>$default){
-         $$key = isset($_GET[$key])?$_GET[$key]:$default;
-      }
+		$default_urls = array('sort'=>'name','order'=>'ASC','page'=>1);
+		foreach($default_urls as $key=>$default){
+			$$key = isset($_GET[$key])?$_GET[$key]:$default;
+		}
 			
 		$url = $this->get_url();
-      
-      $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-      $this->breadcrumb->add($this->_('heading_title'), $this->url->link('design/banner'));
-      
+		
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('design/banner'));
+		
 		$this->data['insert'] = $this->url->link('design/banner/insert', $url);
 		$this->data['delete'] = $this->url->link('design/banner/delete', $url);
-		 
+		
 		$this->data['banners'] = array();
 
 		$data = array(
@@ -105,10 +105,10 @@ class ControllerDesignBanner extends Controller {
 
 			$this->data['banners'][] = array(
 				'banner_id' => $result['banner_id'],
-				'name'      => $result['name'],	
-				'status'    => ($result['status'] ? $this->_('text_enabled') : $this->_('text_disabled')),				
+				'name'		=> $result['name'],	
+				'status'	=> ($result['status'] ? $this->_('text_enabled') : $this->_('text_disabled')),				
 				'selected'  => isset($_POST['selected']) && in_array($result['banner_id'], $_POST['selected']),				
-				'action'    => $action
+				'action'	=> $action
 			);
 		}
 
@@ -133,7 +133,6 @@ class ControllerDesignBanner extends Controller {
 		$this->pagination->total = $banner_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('design/banner', $url);
 
 		$this->data['pagination'] = $this->pagination->render();
@@ -152,13 +151,13 @@ class ControllerDesignBanner extends Controller {
 	private function getForm() {
 		$this->template->load('design/banner_form');
 
-	   $banner_id = isset($_GET['banner_id'])?$_GET['banner_id']:0;
+		$banner_id = isset($_GET['banner_id'])?$_GET['banner_id']:0;
 		
 		$url = $this->get_url();
-      
-      $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-      $this->breadcrumb->add($this->_('heading_title'), $this->url->link('design/banner'));
-      
+		
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('design/banner'));
+		
 		if (!$banner_id) { 
 			$this->data['action'] = $this->url->link('design/banner/insert', $url);
 		} else {
@@ -170,20 +169,20 @@ class ControllerDesignBanner extends Controller {
 		if ($banner_id && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
 			$banner_info = $this->model_design_banner->getBanner($banner_id);
 		}
-      
-      $defaults = array('name'=>'',
-                        'status'=>true
-                       );
-      
-      foreach($defaults as $d=>$value){
-         if (isset($_POST[$d])) {
-            $this->data[$d] = $_POST[$d];
-         } elseif (isset($banner_info[$d])) {
-            $this->data[$d] = $banner_info[$d];
-         } elseif(!$banner_id) {
-            $this->data[$d] = $value;
-         }
-      }
+		
+		$defaults = array('name'=>'',
+								'status'=>true
+							);
+		
+		foreach($defaults as $d=>$value){
+			if (isset($_POST[$d])) {
+				$this->data[$d] = $_POST[$d];
+			} elseif (isset($banner_info[$d])) {
+				$this->data[$d] = $banner_info[$d];
+			} elseif(!$banner_id) {
+				$this->data[$d] = $value;
+			}
+		}
 
 		$this->data['languages'] = $this->model_localisation_language->getLanguages();
 		
@@ -206,10 +205,10 @@ class ControllerDesignBanner extends Controller {
 			
 			$this->data['banner_images'][] = array(
 				'banner_image_description' => $banner_image['banner_image_description'],
-				'link'                     => $banner_image['link'],
-				'image'                    => $image,
-				'thumb'                    => $this->image->resize($image, 100, 100),
-				'sort_order'               => $banner_image['sort_order']
+				'link'							=> $banner_image['link'],
+				'image'						=> $image,
+				'thumb'						=> $this->image->resize($image, 100, 100),
+				'sort_order'					=> $banner_image['sort_order']
 			);	
 		} 
 	
@@ -242,11 +241,7 @@ class ControllerDesignBanner extends Controller {
 			}	
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
 
 	private function validateDelete() {
@@ -254,19 +249,15 @@ class ControllerDesignBanner extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 	
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
-   
-   private function get_url($filters=null){
-      $url = '';
-      $filters = $filters?$filters:array('sort', 'order', 'page');
-      foreach($filters as $f)
-         if (isset($_GET[$f]))
-            $url .= "&$f=" . $_GET[$f];
-      return $url;
-   }
+	
+	private function get_url($filters=null){
+		$url = '';
+		$filters = $filters?$filters:array('sort', 'order', 'page');
+		foreach($filters as $f)
+			if (isset($_GET[$f]))
+				$url .= "&$f=" . $_GET[$f];
+		return $url;
+	}
 }

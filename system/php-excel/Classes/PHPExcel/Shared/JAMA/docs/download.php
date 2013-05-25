@@ -13,7 +13,7 @@
 */
 
 // name and directory of package
-$pkgName   = "JAMA";
+$pkgName	= "JAMA";
 
 // root of PHP/Math build directory
 $buildDir  = substr(dirname(__FILE__), 0, -5 - strlen($pkgName));
@@ -29,7 +29,7 @@ if($_GET['op'] == "download") {
   
 	_require_once('Archive/Tar.php');  
 	
-	$tar   = new Archive_Tar($tarPath);
+	$tar	= new Archive_Tar($tarPath);
 
   // create $pkgName archive under $pkgName folder
   $files = glob("$pkgName/*.php");
@@ -38,7 +38,7 @@ if($_GET['op'] == "download") {
   $files = array_merge($files, glob("$pkgName/docs/includes/*.php"));
   $files = array_merge($files, glob("$pkgName/examples/*.php"));
   $files = array_merge($files, glob("$pkgName/tests/*.php"));  
-  $files = array_merge($files, glob("$pkgName/utils/*.php"));    
+  $files = array_merge($files, glob("$pkgName/utils/*.php"));	
   
 	$tar->create($files);
 		

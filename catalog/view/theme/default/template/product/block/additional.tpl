@@ -85,11 +85,11 @@ $('#review .pagination a').live('click', function() {
    return false;
 });         
 
-$('#review').load('index.php?route=product/product/review&product_id=<?= $product_id; ?>');
+$('#review').load("<?= HTTP_CATALOG . "index.php?route=product/product/review"; ?>" + '&product_id=<?= $product_id; ?>');
 
 $('#button-review').bind('click', function() {
    $.ajax({
-      url: 'index.php?route=product/product/write&product_id=<?= $product_id; ?>',
+      url: "<?= HTTP_CATALOG . "index.php?route=product/product/write"; ?>" + '&product_id=<?= $product_id; ?>',
       type: 'post',
       dataType: 'json',
       data: 'name=' + encodeURIComponent($('input[name=\'name\']').val()) + '&text=' + encodeURIComponent($('textarea[name=\'text\']').val()) + '&rating=' + encodeURIComponent($('input[name=\'rating\']:checked').val() ? $('input[name=\'rating\']:checked').val() : '') + '&captcha=' + encodeURIComponent($('input[name=\'captcha\']').val()),

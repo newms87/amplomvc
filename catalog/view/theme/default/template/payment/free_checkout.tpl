@@ -8,7 +8,7 @@
 $('#button-confirm').bind('click', function() {
 	$.ajax({ 
 		type: 'GET',
-		url: 'index.php?route=payment/free_checkout/confirm',
+		url: "<?= HTTP_CATALOG . "index.php?route=payment/free_checkout/confirm"; ?>",
 		success: function() {
 			location = '<?= $continue; ?>';
 		}		

@@ -1,7 +1,7 @@
 <?php 
 class ControllerTotalLowOrderFee extends Controller { 
-	 
-	 
+	
+	
 	public function index() { 
 		$this->template->load('total/low_order_fee');
 
@@ -76,10 +76,6 @@ class ControllerTotalLowOrderFee extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

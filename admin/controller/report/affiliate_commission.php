@@ -1,6 +1,6 @@
 <?php
 class ControllerReportAffiliateCommission extends Controller {
-	public function index() {     
+	public function index() {	
 		$this->template->load('report/affiliate_commission');
 
 		$this->load->language('report/affiliate_commission');
@@ -47,8 +47,8 @@ class ControllerReportAffiliateCommission extends Controller {
 		$data = array(
 			'filter_date_start'	=> $filter_date_start, 
 			'filter_date_end'	=> $filter_date_end, 
-			'start'             => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit'             => $this->config->get('config_admin_limit')
+			'start'				=> ($page - 1) * $this->config->get('config_admin_limit'),
+			'limit'				=> $this->config->get('config_admin_limit')
 		);
 		
 		$affiliate_total = $this->model_report_affiliate->getTotalCommission($data); 
@@ -65,15 +65,15 @@ class ControllerReportAffiliateCommission extends Controller {
 						
 			$this->data['affiliates'][] = array(
 				'affiliate'  => $result['affiliate'],
-				'email'      => $result['email'],
-				'status'     => ($result['status'] ? $this->_('text_enabled') : $this->_('text_disabled')),
+				'email'		=> $result['email'],
+				'status'	=> ($result['status'] ? $this->_('text_enabled') : $this->_('text_disabled')),
 				'commission' => $this->currency->format($result['commission'], $this->config->get('config_currency')),
-				'orders'     => $result['orders'],
-				'total'      => $this->currency->format($result['total'], $this->config->get('config_currency')),
-				'action'     => $action
+				'orders'	=> $result['orders'],
+				'total'		=> $this->currency->format($result['total'], $this->config->get('config_currency')),
+				'action'	=> $action
 			);
 		}
-					 
+					
 		$url = '';
 						
 		if (isset($_GET['filter_date_start'])) {
@@ -88,14 +88,13 @@ class ControllerReportAffiliateCommission extends Controller {
 		$this->pagination->total = $affiliate_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('report/affiliate_commission', $url);
 			
 		$this->data['pagination'] = $this->pagination->render();
 		
 		$this->data['filter_date_start'] = $filter_date_start;
 		$this->data['filter_date_end'] = $filter_date_end;	
-				 
+				
 		$this->children = array(
 			'common/header',
 			'common/footer'

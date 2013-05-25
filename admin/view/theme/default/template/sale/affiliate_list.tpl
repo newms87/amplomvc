@@ -115,7 +115,7 @@
 </div>
 <script type="text/javascript"><!--
 function filter() {
-	url = 'index.php?route=sale/affiliate';
+	url = "<?= HTTP_ADMIN . "index.php?route=sale/affiliate"; ?>";
 	
 	var filter_name = $('input[name=\'filter_name\']').attr('value');
 	
@@ -166,7 +166,7 @@ $('input[name=\'filter_name\']').autocomplete({
 	delay: 0,
 	source: function(request, response) {
 		$.ajax({
-			url: 'index.php?route=sale/affiliate/autocomplete&filter_name=' +  encodeURIComponent(request.term),
+			url: "<?= HTTP_ADMIN . "index.php?route=sale/affiliate/autocomplete"; ?>" + '&filter_name=' +  encodeURIComponent(request.term),
 			dataType: 'json',
 			success: function(json) {		
 				response($.map(json, function(item) {

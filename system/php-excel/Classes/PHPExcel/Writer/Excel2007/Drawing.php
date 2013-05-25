@@ -18,32 +18,32 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category   PHPExcel
- * @package    PHPExcel_Writer_Excel2007
+ * @category	PHPExcel
+ * @package	PHPExcel_Writer_Excel2007
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version    1.7.7, 2012-05-19
+ * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+ * @version	1.7.7, 2012-05-19
  */
 
 
 /**
  * PHPExcel_Writer_Excel2007_Drawing
  *
- * @category   PHPExcel
- * @package    PHPExcel_Writer_Excel2007
+ * @category	PHPExcel
+ * @package	PHPExcel_Writer_Excel2007
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_Writer_Excel2007_Drawing extends PHPExcel_Writer_Excel2007_WriterPart
 {
 	/**
-	 * Write drawings to XML format
-	 *
-	 * @param 	PHPExcel_Worksheet	$pWorksheet
-	 * @param	int					&$chartRef		Chart ID
-	 * @param	boolean				$includeCharts	Flag indicating if we should include drawing details for charts
-	 * @return 	string 				XML Output
-	 * @throws 	Exception
-	 */
+	* Write drawings to XML format
+	*
+	* @param 	PHPExcel_Worksheet	$pWorksheet
+	* @param	int					&$chartRef		Chart ID
+	* @param	boolean				$includeCharts	Flag indicating if we should include drawing details for charts
+	* @return 	string 				XML Output
+	* @throws 	Exception
+	*/
 	public function writeDrawings(PHPExcel_Worksheet $pWorksheet = null, &$chartRef, $includeCharts = FALSE)
 	{
 		// Create XML writer
@@ -90,13 +90,13 @@ class PHPExcel_Writer_Excel2007_Drawing extends PHPExcel_Writer_Excel2007_Writer
 	}
 
 	/**
-	 * Write drawings to XML format
-	 *
-	 * @param 	PHPExcel_Shared_XMLWriter	$objWriter 		XML Writer
-	 * @param 	PHPExcel_Chart				$pChart
-	 * @param 	int							$pRelationId
-	 * @throws 	Exception
-	 */
+	* Write drawings to XML format
+	*
+	* @param 	PHPExcel_Shared_XMLWriter	$objWriter 		XML Writer
+	* @param 	PHPExcel_Chart				$pChart
+	* @param 	int							$pRelationId
+	* @throws 	Exception
+	*/
 	public function _writeChart(PHPExcel_Shared_XMLWriter $objWriter = null, PHPExcel_Chart $pChart = null, $pRelationId = -1)
 	{
 		$tl = $pChart->getTopLeftPosition();
@@ -162,13 +162,13 @@ class PHPExcel_Writer_Excel2007_Drawing extends PHPExcel_Writer_Excel2007_Writer
 	}
 
 	/**
-	 * Write drawings to XML format
-	 *
-	 * @param 	PHPExcel_Shared_XMLWriter			$objWriter 		XML Writer
-	 * @param 	PHPExcel_Worksheet_BaseDrawing		$pDrawing
-	 * @param 	int									$pRelationId
-	 * @throws 	Exception
-	 */
+	* Write drawings to XML format
+	*
+	* @param 	PHPExcel_Shared_XMLWriter			$objWriter 		XML Writer
+	* @param 	PHPExcel_Worksheet_BaseDrawing		$pDrawing
+	* @param 	int									$pRelationId
+	* @throws 	Exception
+	*/
 	public function _writeDrawing(PHPExcel_Shared_XMLWriter $objWriter = null, PHPExcel_Worksheet_BaseDrawing $pDrawing = null, $pRelationId = -1)
 	{
 		if ($pRelationId >= 0) {
@@ -380,12 +380,12 @@ class PHPExcel_Writer_Excel2007_Drawing extends PHPExcel_Writer_Excel2007_Writer
 	}
 
 	/**
-	 * Write VML header/footer images to XML format
-	 *
-	 * @param 	PHPExcel_Worksheet				$pWorksheet
-	 * @return 	string 								XML Output
-	 * @throws 	Exception
-	 */
+	* Write VML header/footer images to XML format
+	*
+	* @param 	PHPExcel_Worksheet				$pWorksheet
+	* @return 	string 								XML Output
+	* @throws 	Exception
+	*/
 	public function writeVMLHeaderFooterImages(PHPExcel_Worksheet $pWorksheet = null)
 	{
 		// Create XML writer
@@ -427,8 +427,8 @@ class PHPExcel_Writer_Excel2007_Drawing extends PHPExcel_Writer_Excel2007_Writer
 			$objWriter->writeAttribute('o:spt', 				'75');
 			$objWriter->writeAttribute('o:preferrelative', 		't');
 			$objWriter->writeAttribute('path', 					'm@4@5l@4@11@9@11@9@5xe');
-			$objWriter->writeAttribute('filled',		 		'f');
-			$objWriter->writeAttribute('stroked',		 		'f');
+			$objWriter->writeAttribute('filled',				'f');
+			$objWriter->writeAttribute('stroked',				'f');
 
 				// v:stroke
 				$objWriter->startElement('v:stroke');
@@ -527,13 +527,13 @@ class PHPExcel_Writer_Excel2007_Drawing extends PHPExcel_Writer_Excel2007_Writer
 	}
 
 	/**
-	 * Write VML comment to XML format
-	 *
-	 * @param 	PHPExcel_Shared_XMLWriter		$objWriter 			XML Writer
-	 * @param	string							$pReference			Reference
-	 * @param 	PHPExcel_Worksheet_HeaderFooterDrawing	$pImage		Image
-	 * @throws 	Exception
-	 */
+	* Write VML comment to XML format
+	*
+	* @param 	PHPExcel_Shared_XMLWriter		$objWriter 			XML Writer
+	* @param	string							$pReference			Reference
+	* @param 	PHPExcel_Worksheet_HeaderFooterDrawing	$pImage		Image
+	* @throws 	Exception
+	*/
 	public function _writeVMLHeaderFooterImage(PHPExcel_Shared_XMLWriter $objWriter = null, $pReference = '', PHPExcel_Worksheet_HeaderFooterDrawing $pImage = null)
 	{
 		// Calculate object id
@@ -570,12 +570,12 @@ class PHPExcel_Writer_Excel2007_Drawing extends PHPExcel_Writer_Excel2007_Writer
 
 
 	/**
-	 * Get an array of all drawings
-	 *
-	 * @param 	PHPExcel							$pPHPExcel
-	 * @return 	PHPExcel_Worksheet_Drawing[]		All drawings in PHPExcel
-	 * @throws 	Exception
-	 */
+	* Get an array of all drawings
+	*
+	* @param 	PHPExcel							$pPHPExcel
+	* @return 	PHPExcel_Worksheet_Drawing[]		All drawings in PHPExcel
+	* @throws 	Exception
+	*/
 	public function allDrawings(PHPExcel $pPHPExcel = null)
 	{
 		// Get an array of all drawings

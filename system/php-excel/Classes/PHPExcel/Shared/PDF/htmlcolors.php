@@ -1,11 +1,11 @@
 <?php
 //============================================================+
-// File name   : htmlcolors.php
-// Version     : 1.0.007
-// Begin       : 2002-04-09
+// File name	: htmlcolors.php
+// Version	: 1.0.007
+// Begin		: 2002-04-09
 // Last Update : 2010-10-18
-// Author      : Nicola Asuni - Tecnick.com S.r.l - Via Della Pace, 11 - 09044 - Quartucciu (CA) - ITALY - www.tecnick.com - info@tecnick.com
-// License     : GNU-LGPL v3 (http://www.gnu.org/copyleft/lesser.html)
+// Author		: Nicola Asuni - Tecnick.com S.r.l - Via Della Pace, 11 - 09044 - Quartucciu (CA) - ITALY - www.tecnick.com - info@tecnick.com
+// License	: GNU-LGPL v3 (http://www.gnu.org/copyleft/lesser.html)
 // -------------------------------------------------------------------
 // Copyright (C) 2002-2010  Nicola Asuni - Tecnick.com S.r.l.
 //

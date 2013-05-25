@@ -18,19 +18,19 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category   PHPExcel
- * @package    PHPExcel_Style
+ * @category	PHPExcel
+ * @package	PHPExcel_Style
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version    1.7.7, 2012-05-19
+ * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+ * @version	1.7.7, 2012-05-19
  */
 
 
 /**
  * PHPExcel_Style_Conditional
  *
- * @category   PHPExcel
- * @package    PHPExcel_Style
+ * @category	PHPExcel
+ * @package	PHPExcel_Style
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_Style_Conditional implements PHPExcel_IComparable
@@ -56,214 +56,214 @@ class PHPExcel_Style_Conditional implements PHPExcel_IComparable
 	const OPERATOR_BETWEEN					= 'between';
 
 	/**
-	 * Condition type
-	 *
-	 * @var int
-	 */
+	* Condition type
+	*
+	* @var int
+	*/
 	private $_conditionType;
 
 	/**
-	 * Operator type
-	 *
-	 * @var int
-	 */
+	* Operator type
+	*
+	* @var int
+	*/
 	private $_operatorType;
 
 	/**
-	 * Text
-	 *
-	 * @var string
-	 */
+	* Text
+	*
+	* @var string
+	*/
 	private $_text;
 
 	/**
-	 * Condition
-	 *
-	 * @var string[]
-	 */
+	* Condition
+	*
+	* @var string[]
+	*/
 	private $_condition = array();
 
 	/**
-	 * Style
-	 *
-	 * @var PHPExcel_Style
-	 */
+	* Style
+	*
+	* @var PHPExcel_Style
+	*/
 	private $_style;
 
-    /**
-     * Create a new PHPExcel_Style_Conditional
-     */
-    public function __construct()
-    {
-    	// Initialise values
-    	$this->_conditionType		= PHPExcel_Style_Conditional::CONDITION_NONE;
-    	$this->_operatorType		= PHPExcel_Style_Conditional::OPERATOR_NONE;
-    	$this->_text    			= null;
-    	$this->_condition			= array();
-    	$this->_style				= new PHPExcel_Style();
-    }
-
-    /**
-     * Get Condition type
-     *
-     * @return string
-     */
-    public function getConditionType() {
-    	return $this->_conditionType;
-    }
-
-    /**
-     * Set Condition type
-     *
-     * @param string $pValue	PHPExcel_Style_Conditional condition type
-     * @return PHPExcel_Style_Conditional
-     */
-    public function setConditionType($pValue = PHPExcel_Style_Conditional::CONDITION_NONE) {
-    	$this->_conditionType = $pValue;
-    	return $this;
-    }
-
-    /**
-     * Get Operator type
-     *
-     * @return string
-     */
-    public function getOperatorType() {
-    	return $this->_operatorType;
-    }
-
-    /**
-     * Set Operator type
-     *
-     * @param string $pValue	PHPExcel_Style_Conditional operator type
-     * @return PHPExcel_Style_Conditional
-     */
-    public function setOperatorType($pValue = PHPExcel_Style_Conditional::OPERATOR_NONE) {
-    	$this->_operatorType = $pValue;
-    	return $this;
-    }
-
-    /**
-     * Get text
-     *
-     * @return string
-     */
-    public function getText() {
-        return $this->_text;
-    }
-
-    /**
-     * Set text
-     *
-     * @param string $value
-     * @return PHPExcel_Style_Conditional
-     */
-    public function setText($value = null) {
-           $this->_text = $value;
-           return $this;
-    }
-
-    /**
-     * Get Condition
-     *
-     * @deprecated Deprecated, use getConditions instead
-     * @return string
-     */
-    public function getCondition() {
-    	if (isset($this->_condition[0])) {
-    		return $this->_condition[0];
-    	}
-
-    	return '';
-    }
-
-    /**
-     * Set Condition
-     *
-     * @deprecated Deprecated, use setConditions instead
-     * @param string $pValue	Condition
-     * @return PHPExcel_Style_Conditional
-     */
-    public function setCondition($pValue = '') {
-    	if (!is_array($pValue))
-    		$pValue = array($pValue);
-
-    	return $this->setConditions($pValue);
-    }
-
-    /**
-     * Get Conditions
-     *
-     * @return string[]
-     */
-    public function getConditions() {
-    	return $this->_condition;
-    }
-
-    /**
-     * Set Conditions
-     *
-     * @param string[] $pValue	Condition
-     * @return PHPExcel_Style_Conditional
-     */
-    public function setConditions($pValue) {
-    	if (!is_array($pValue))
-    		$pValue = array($pValue);
-
-    	$this->_condition = $pValue;
-    	return $this;
-    }
-
-    /**
-     * Add Condition
-     *
-     * @param string $pValue	Condition
-     * @return PHPExcel_Style_Conditional
-     */
-    public function addCondition($pValue = '') {
-    	$this->_condition[] = $pValue;
-    	return $this;
-    }
-
-    /**
-     * Get Style
-     *
-     * @return PHPExcel_Style
-     */
-    public function getStyle() {
-    	return $this->_style;
-    }
-
-    /**
-     * Set Style
-     *
-     * @param 	PHPExcel_Style $pValue
-     * @throws 	Exception
-     * @return PHPExcel_Style_Conditional
-     */
-    public function setStyle(PHPExcel_Style $pValue = null) {
-   		$this->_style = $pValue;
-   		return $this;
-    }
+	/**
+	* Create a new PHPExcel_Style_Conditional
+	*/
+	public function __construct()
+	{
+		// Initialise values
+		$this->_conditionType		= PHPExcel_Style_Conditional::CONDITION_NONE;
+		$this->_operatorType		= PHPExcel_Style_Conditional::OPERATOR_NONE;
+		$this->_text				= null;
+		$this->_condition			= array();
+		$this->_style				= new PHPExcel_Style();
+	}
 
 	/**
-	 * Get hash code
-	 *
-	 * @return string	Hash code
-	 */
+	* Get Condition type
+	*
+	* @return string
+	*/
+	public function getConditionType() {
+		return $this->_conditionType;
+	}
+
+	/**
+	* Set Condition type
+	*
+	* @param string $pValue	PHPExcel_Style_Conditional condition type
+	* @return PHPExcel_Style_Conditional
+	*/
+	public function setConditionType($pValue = PHPExcel_Style_Conditional::CONDITION_NONE) {
+		$this->_conditionType = $pValue;
+		return $this;
+	}
+
+	/**
+	* Get Operator type
+	*
+	* @return string
+	*/
+	public function getOperatorType() {
+		return $this->_operatorType;
+	}
+
+	/**
+	* Set Operator type
+	*
+	* @param string $pValue	PHPExcel_Style_Conditional operator type
+	* @return PHPExcel_Style_Conditional
+	*/
+	public function setOperatorType($pValue = PHPExcel_Style_Conditional::OPERATOR_NONE) {
+		$this->_operatorType = $pValue;
+		return $this;
+	}
+
+	/**
+	* Get text
+	*
+	* @return string
+	*/
+	public function getText() {
+		return $this->_text;
+	}
+
+	/**
+	* Set text
+	*
+	* @param string $value
+	* @return PHPExcel_Style_Conditional
+	*/
+	public function setText($value = null) {
+			$this->_text = $value;
+			return $this;
+	}
+
+	/**
+	* Get Condition
+	*
+	* @deprecated Deprecated, use getConditions instead
+	* @return string
+	*/
+	public function getCondition() {
+		if (isset($this->_condition[0])) {
+			return $this->_condition[0];
+		}
+
+		return '';
+	}
+
+	/**
+	* Set Condition
+	*
+	* @deprecated Deprecated, use setConditions instead
+	* @param string $pValue	Condition
+	* @return PHPExcel_Style_Conditional
+	*/
+	public function setCondition($pValue = '') {
+		if (!is_array($pValue))
+			$pValue = array($pValue);
+
+		return $this->setConditions($pValue);
+	}
+
+	/**
+	* Get Conditions
+	*
+	* @return string[]
+	*/
+	public function getConditions() {
+		return $this->_condition;
+	}
+
+	/**
+	* Set Conditions
+	*
+	* @param string[] $pValue	Condition
+	* @return PHPExcel_Style_Conditional
+	*/
+	public function setConditions($pValue) {
+		if (!is_array($pValue))
+			$pValue = array($pValue);
+
+		$this->_condition = $pValue;
+		return $this;
+	}
+
+	/**
+	* Add Condition
+	*
+	* @param string $pValue	Condition
+	* @return PHPExcel_Style_Conditional
+	*/
+	public function addCondition($pValue = '') {
+		$this->_condition[] = $pValue;
+		return $this;
+	}
+
+	/**
+	* Get Style
+	*
+	* @return PHPExcel_Style
+	*/
+	public function getStyle() {
+		return $this->_style;
+	}
+
+	/**
+	* Set Style
+	*
+	* @param 	PHPExcel_Style $pValue
+	* @throws 	Exception
+	* @return PHPExcel_Style_Conditional
+	*/
+	public function setStyle(PHPExcel_Style $pValue = null) {
+			$this->_style = $pValue;
+			return $this;
+	}
+
+	/**
+	* Get hash code
+	*
+	* @return string	Hash code
+	*/
 	public function getHashCode() {
-    	return md5(
-    		  $this->_conditionType
-    		. $this->_operatorType
-    		. implode(';', $this->_condition)
-    		. $this->_style->getHashCode()
-    		. __CLASS__
-    	);
-    }
+		return md5(
+			$this->_conditionType
+			. $this->_operatorType
+			. implode(';', $this->_condition)
+			. $this->_style->getHashCode()
+			. __CLASS__
+		);
+	}
 
 	/**
-	 * Implement PHP __clone to create a deep clone, not just a shallow copy.
-	 */
+	* Implement PHP __clone to create a deep clone, not just a shallow copy.
+	*/
 	public function __clone() {
 		$vars = get_object_vars($this);
 		foreach ($vars as $key => $value) {

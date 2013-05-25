@@ -3,7 +3,7 @@
 $_['heading_title'] = 'Aplicar código descuento';
 
 // Text
-$_['text_coupon']   = 'Cupón(%s):';
+$_['text_coupon']	= 'Cupón(%s):';
 $_['text_success']  = 'Éxito: Tu cupón descuento ha sido aplicado!';
 
 // Entry

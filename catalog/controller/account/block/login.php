@@ -19,11 +19,11 @@ class ControllerAccountBlockLogin extends Controller {
 		$this->data['action'] = $this->url->link('account/login');
 		$this->data['register'] = $this->url->link('account/register');
 		$this->data['forgotten'] = $this->url->link('account/forgotten');
-      
+		
 		$this->data['email'] = !empty($_POST['email']) ? $_POST['email'] : '';
 		
 		$this->data['redirect'] = $this->url->here();
 		
-    	$this->render();
+		$this->render();
   	}
 }

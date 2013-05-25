@@ -61,7 +61,7 @@ class ControllerAffiliateEdit extends Controller {
 		} else {
 			$this->data['error_address_1'] = '';
 		}
-   		
+			
 		if (isset($this->error['city'])) {
 			$this->data['error_city'] = $this->error['city'];
 		} else {
@@ -133,7 +133,7 @@ class ControllerAffiliateEdit extends Controller {
 		}
 		
 		if (isset($_POST['company'])) {
-    		$this->data['company'] = $_POST['company'];
+			$this->data['company'] = $_POST['company'];
 		} elseif (!empty($affiliate_info)) {
 			$this->data['company'] = $affiliate_info['company'];		
 		} else {
@@ -141,7 +141,7 @@ class ControllerAffiliateEdit extends Controller {
 		}
 
 		if (isset($_POST['website'])) {
-    		$this->data['website'] = $_POST['website'];
+			$this->data['website'] = $_POST['website'];
 		} elseif (!empty($affiliate_info)) {
 			$this->data['website'] = $affiliate_info['website'];		
 		} else {
@@ -149,7 +149,7 @@ class ControllerAffiliateEdit extends Controller {
 		}
 				
 		if (isset($_POST['address_1'])) {
-    		$this->data['address_1'] = $_POST['address_1'];
+			$this->data['address_1'] = $_POST['address_1'];
 		} elseif (!empty($affiliate_info)) {
 			$this->data['address_1'] = $affiliate_info['address_1'];		
 		} else {
@@ -157,7 +157,7 @@ class ControllerAffiliateEdit extends Controller {
 		}
 
 		if (isset($_POST['address_2'])) {
-    		$this->data['address_2'] = $_POST['address_2'];
+			$this->data['address_2'] = $_POST['address_2'];
 		} elseif (!empty($affiliate_info)) {
 			$this->data['address_2'] = $affiliate_info['address_2'];		
 		} else {
@@ -165,7 +165,7 @@ class ControllerAffiliateEdit extends Controller {
 		}
 
 		if (isset($_POST['postcode'])) {
-    		$this->data['postcode'] = $_POST['postcode'];
+			$this->data['postcode'] = $_POST['postcode'];
 		} elseif (!empty($affiliate_info)) {
 			$this->data['postcode'] = $affiliate_info['postcode'];		
 		} else {
@@ -173,28 +173,28 @@ class ControllerAffiliateEdit extends Controller {
 		}
 		
 		if (isset($_POST['city'])) {
-    		$this->data['city'] = $_POST['city'];
+			$this->data['city'] = $_POST['city'];
 		} elseif (!empty($affiliate_info)) {
 			$this->data['city'] = $affiliate_info['city'];		
 		} else {
 			$this->data['city'] = '';
 		}
 
-    	if (isset($_POST['country_id'])) {
-      		$this->data['country_id'] = $_POST['country_id'];
+		if (isset($_POST['country_id'])) {
+				$this->data['country_id'] = $_POST['country_id'];
 		} elseif (!empty($affiliate_info)) {
 			$this->data['country_id'] = $affiliate_info['country_id'];			
 		} else {	
-      		$this->data['country_id'] = $this->config->get('config_country_id');
-    	}
+				$this->data['country_id'] = $this->config->get('config_country_id');
+		}
 
-    	if (isset($_POST['zone_id'])) {
-      		$this->data['zone_id'] = $_POST['zone_id']; 	
+		if (isset($_POST['zone_id'])) {
+				$this->data['zone_id'] = $_POST['zone_id']; 	
 		} elseif (!empty($affiliate_info)) {
 			$this->data['zone_id'] = $affiliate_info['zone_id'];		
 		} else {
-      		$this->data['zone_id'] = '';
-    	}
+				$this->data['zone_id'] = '';
+		}
 		
 		$this->data['countries'] = $this->model_localisation_country->getCountries();
 
@@ -238,13 +238,13 @@ class ControllerAffiliateEdit extends Controller {
 		if ((strlen($_POST['telephone']) < 3) || (strlen($_POST['telephone']) > 32)) {
 			$this->error['telephone'] = $this->_('error_telephone');
 		}
-    	if ((strlen($_POST['address_1']) < 3) || (strlen($_POST['address_1']) > 128)) {
-      		$this->error['address_1'] = $this->_('error_address_1');
-    	}
+		if ((strlen($_POST['address_1']) < 3) || (strlen($_POST['address_1']) > 128)) {
+				$this->error['address_1'] = $this->_('error_address_1');
+		}
 
-    	if ((strlen($_POST['city']) < 2) || (strlen($_POST['city']) > 128)) {
-      		$this->error['city'] = $this->_('error_city');
-    	}
+		if ((strlen($_POST['city']) < 2) || (strlen($_POST['city']) > 128)) {
+				$this->error['city'] = $this->_('error_city');
+		}
 		
 		$country_info = $this->model_localisation_country->getCountry($_POST['country_id']);
 		
@@ -252,18 +252,14 @@ class ControllerAffiliateEdit extends Controller {
 			$this->error['postcode'] = $this->_('error_postcode');
 		}
 
-    	if ($_POST['country_id'] == '') {
-      		$this->error['country'] = $this->_('error_country');
-    	}
-		
-    	if ($_POST['zone_id'] == '') {
-      		$this->error['zone'] = $this->_('error_zone');
-    	}
-		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
+		if ($_POST['country_id'] == '') {
+				$this->error['country'] = $this->_('error_country');
 		}
+		
+		if ($_POST['zone_id'] == '') {
+				$this->error['zone'] = $this->_('error_zone');
+		}
+		
+		return $this->error ? false : true;
 	}
 }

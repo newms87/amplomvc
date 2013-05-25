@@ -1,6 +1,6 @@
 <?php
 class ControllerLocalisationWeightClass extends Controller {
-	  
+	
  
 	public function index() {
 		$this->load->language('localisation/weight_class');
@@ -142,7 +142,7 @@ class ControllerLocalisationWeightClass extends Controller {
 
 		$this->data['insert'] = $this->url->link('localisation/weight_class/insert', $url);
 		$this->data['delete'] = $this->url->link('localisation/weight_class/delete', $url);
-		 
+		
 		$this->data['weight_classes'] = array();
 		
 		$data = array(
@@ -166,11 +166,11 @@ class ControllerLocalisationWeightClass extends Controller {
 
 			$this->data['weight_classes'][] = array(
 				'weight_class_id' => $result['weight_class_id'],
-				'title'           => $result['title'] . (($result['unit'] == $this->config->get('config_weight_class')) ? $this->_('text_default') : null),
-				'unit'            => $result['unit'],
-				'value'           => $result['value'],
-				'selected'        => isset($_POST['selected']) && in_array($result['weight_class_id'], $_POST['selected']),
-				'action'          => $action
+				'title'			=> $result['title'] . (($result['unit'] == $this->config->get('config_weight_class')) ? $this->_('text_default') : null),
+				'unit'				=> $result['unit'],
+				'value'			=> $result['value'],
+				'selected'		=> isset($_POST['selected']) && in_array($result['weight_class_id'], $_POST['selected']),
+				'action'			=> $action
 			);
 		}
 
@@ -218,7 +218,6 @@ class ControllerLocalisationWeightClass extends Controller {
 		$this->pagination->total = $weight_class_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('localisation/weight_class', $url);
 
 		$this->data['pagination'] = $this->pagination->render();
@@ -281,8 +280,8 @@ class ControllerLocalisationWeightClass extends Controller {
 		$this->data['cancel'] = $this->url->link('localisation/weight_class', $url);
 
 		if (isset($_GET['weight_class_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-      		$weight_class_info = $this->model_localisation_weight_class->getWeightClass($_GET['weight_class_id']);
-    	}
+				$weight_class_info = $this->model_localisation_weight_class->getWeightClass($_GET['weight_class_id']);
+		}
 		
 		$this->data['languages'] = $this->model_localisation_language->getLanguages();
 		
@@ -325,11 +324,7 @@ class ControllerLocalisationWeightClass extends Controller {
 			}
 		}
 
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
 
 	private function validateDelete() {
@@ -349,10 +344,6 @@ class ControllerLocalisationWeightClass extends Controller {
 			}
 		}
 
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}	
 }

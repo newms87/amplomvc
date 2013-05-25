@@ -60,7 +60,7 @@ class ControllerPaymentPaypoint extends Controller {
 		}
 		
 		$this->data['options'] = 'test_status=' . $status . ',dups=false,cb_post=false';
-	 
+	
 
 
 

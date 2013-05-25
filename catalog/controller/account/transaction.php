@@ -6,8 +6,8 @@ class ControllerAccountTransaction extends Controller {
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/transaction');
 			
-	  		$this->url->redirect($this->url->link('account/login'));
-    	}		
+			$this->url->redirect($this->url->link('account/login'));
+		}		
 		
 		$this->language->load('account/transaction');
 
@@ -27,7 +27,7 @@ class ControllerAccountTransaction extends Controller {
 		
 		$this->data['transactions'] = array();
 		
-		$data = array(				  
+		$data = array(				
 			'sort'  => 'date_added',
 			'order' => 'DESC',
 			'start' => ($page - 1) * 10,
@@ -38,9 +38,9 @@ class ControllerAccountTransaction extends Controller {
 	
 		$results = $this->model_account_transaction->getTransactions($data);
  		
-    	foreach ($results as $result) {
+		foreach ($results as $result) {
 			$this->data['transactions'][] = array(
-				'amount'      => $this->currency->format($result['amount'], $this->config->get('config_currency')),
+				'amount'		=> $this->currency->format($result['amount'], $this->config->get('config_currency')),
 				'description' => $result['description'],
 				'date_added'  => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
 			);
@@ -50,7 +50,6 @@ class ControllerAccountTransaction extends Controller {
 		$this->pagination->total = $transaction_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = 10; 
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('account/transaction');
 			
 		$this->data['pagination'] = $this->pagination->render();

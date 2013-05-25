@@ -7,11 +7,11 @@ class Response {
 	public function addHeader($header) {
 		$this->headers[] = $header;
 	}
-   
-   public function setHeader($header){
-      $this->headers = is_array($header) ? $header : array($header);
-   }
-   
+	
+	public function setHeader($header){
+		$this->headers = is_array($header) ? $header : array($header);
+	}
+	
 	public function redirect($url) {
 		header('Location: ' . $url);
 		exit;

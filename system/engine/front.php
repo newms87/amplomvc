@@ -14,14 +14,14 @@ final class Front {
 			$action = $this->execute($action);
 		}
   	}
-    
+	
 	private function execute($action) {
-	   $file = $action->getFile();
+		$file = $action->getFile();
 		$class = $action->getClass();
-      $class_path = $action->getClassPath();
+		$class_path = $action->getClassPath();
 		$method = $action->getMethod();
 		$args = $action->getArgs();
-      
+		
 		$action = '';
 
 		if (file_exists($file)) {

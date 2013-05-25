@@ -51,7 +51,7 @@ $_['entry_bank_swift_code']		= 'Code SWIFT :';
 $_['entry_bank_account_name']	= 'Nom du compte :';
 $_['entry_bank_account_number']	= 'Num&eacute;ro de compte :';
 $_['entry_amount']				= 'Montant :';
-$_['entry_description']     	= 'Description :';
+$_['entry_description']		= 'Description :';
 
 // Error
 $_['error_permission']			= 'Attention, vous n&#8217;avez pas la permission de modifier les <b>Clients</b> !';

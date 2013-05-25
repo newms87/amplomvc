@@ -3,7 +3,7 @@ class Document {
 	private $title;
 	private $description;
 	private $keywords;
-   private $canonical_link = null;
+	private $canonical_link = null;
 	private $links = array();
 	private $styles = array();
 	private $scripts = array();
@@ -36,22 +36,22 @@ class Document {
 		return $this->keywords;
 	}
 	
-   /**
-    * Canonical Links are used by search engines to determine the most appropriate version of web pages
-    * with identical (or almost, eg: different sort orders, etc.) content.
-    * 
-    * When pretty URLs are active, this will allow search results to show your pages with the pretty url version.
-    * 
-    * @param $href - the preferred url for the current page.
-    */
-   public function setCanonicalLink($href){
-      $this->canonical_link = $href;
-   }
-   
-   public function getCanonicalLink(){
-      return $this->canonical_link;
-   }
-   
+	/**
+	* Canonical Links are used by search engines to determine the most appropriate version of web pages
+	* with identical (or almost, eg: different sort orders, etc.) content.
+	* 
+	* When pretty URLs are active, this will allow search results to show your pages with the pretty url version.
+	* 
+	* @param $href - the preferred url for the current page.
+	*/
+	public function setCanonicalLink($href){
+		$this->canonical_link = $href;
+	}
+	
+	public function getCanonicalLink(){
+		return $this->canonical_link;
+	}
+	
 	public function addLink($group = 'primary', $link_info) {
 		//Declare valid link_info parameters
 		$name = null;
@@ -101,11 +101,11 @@ class Document {
 	}
 	
 	public function getLinks($group='primary') {
-	   if(isset($this->links[$group])){
-	      return $this->links[$group];
-      }
-      
-      return array();
+		if(isset($this->links[$group])){
+			return $this->links[$group];
+		}
+		
+		return array();
 	}
 
 	private function insert_link($name, &$list, $new_link, $sort_order){
@@ -156,7 +156,7 @@ class Document {
 	public function addStyle($href, $rel = 'stylesheet', $media = 'screen') {
 		$this->styles[md5($href)] = array(
 			'href'  => $href,
-			'rel'   => $rel,
+			'rel'	=> $rel,
 			'media' => $media
 		);
 	}

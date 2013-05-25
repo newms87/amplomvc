@@ -1,21 +1,21 @@
 <?php
 // Heading
-$_['heading_title']           = 'País';
+$_['heading_title']			= 'País';
 
 // Text
-$_['text_success']            = 'Éxito: has modificado paises!';
+$_['text_success']				= 'Éxito: has modificado paises!';
 
 // Column
-$_['column_name']             = 'Nombre del país';
-$_['column_iso_code_2']       = 'Código ISO (2)';
-$_['column_iso_code_3']       = 'Código ISO (3)';
-$_['column_action']           = 'Acción';
+$_['column_name']				= 'Nombre del país';
+$_['column_iso_code_2']		= 'Código ISO (2)';
+$_['column_iso_code_3']		= 'Código ISO (3)';
+$_['column_action']			= 'Acción';
 
 // Entry
-$_['entry_name']              = 'Nombre del país:';
-$_['entry_iso_code_2']        = 'Código ISO (2):';
-$_['entry_iso_code_3']        = 'Código ISO (3):';
-$_['entry_address_format']    = 'Formato dirección:<br /><span class="help">
+$_['entry_name']				= 'Nombre del país:';
+$_['entry_iso_code_2']		= 'Código ISO (2):';
+$_['entry_iso_code_3']		= 'Código ISO (3):';
+$_['entry_address_format']	= 'Formato dirección:<br /><span class="help">
 Nombre = {firstname}<br />
 Apellido/s = {lastname}<br />
 Compañía = {company}<br />
@@ -27,14 +27,14 @@ Zona = {zone}<br />
 Código zona = {zone_code}<br />
 País = {country}</span>';
 $_['entry_postcode_obligatorio'] = 'Código postal obligatorio:';
-$_['entry_status']            = 'Estado:';
+$_['entry_status']				= 'Estado:';
 
 // Error
-$_['error_permission']        = 'Cuidado: No tienes permisos para modificar paises!';
-$_['error_name']              = 'El nombre del país debe tener entre 3 y 128 carácteres!';
-$_['error_default']           = 'Cuidado: Este país no puede ser borrado ya que está actualmente asignado como el pais por defecto de la tienda!';
-$_['error_store']             = 'Cuidado: Este país no puede ser borrado ya que está actualmente asignado a %s tiendas!';
-$_['error_address']           = 'Cuidado: Este país no puede ser borrado ya que está actualmente asignado a %s entradas del libro de direcciones!';
-$_['error_affiliate']         = 'Cuidado: Este país no puede ser borrado ya que está actualmente asignado a %s afiliados!';
-$_['error_zone']              = 'Cuidado: Este país no puede ser borrado ya que está actualmente asignadoa  %s zonas!';
+$_['error_permission']		= 'Cuidado: No tienes permisos para modificar paises!';
+$_['error_name']				= 'El nombre del país debe tener entre 3 y 128 carácteres!';
+$_['error_default']			= 'Cuidado: Este país no puede ser borrado ya que está actualmente asignado como el pais por defecto de la tienda!';
+$_['error_store']				= 'Cuidado: Este país no puede ser borrado ya que está actualmente asignado a %s tiendas!';
+$_['error_address']			= 'Cuidado: Este país no puede ser borrado ya que está actualmente asignado a %s entradas del libro de direcciones!';
+$_['error_affiliate']			= 'Cuidado: Este país no puede ser borrado ya que está actualmente asignado a %s afiliados!';
+$_['error_zone']				= 'Cuidado: Este país no puede ser borrado ya que está actualmente asignadoa  %s zonas!';
 $_['error_zone_to_geo_zone']  = 'Cuidado: Este país no puede ser borrado ya que está actualmente asignado a %s zonas de geo zonas!';

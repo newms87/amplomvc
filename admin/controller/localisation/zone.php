@@ -1,6 +1,6 @@
 <?php 
 class ControllerLocalisationZone extends Controller {
-	 
+	
 
 	public function index() {
 		$this->load->language('localisation/zone');
@@ -167,10 +167,10 @@ class ControllerLocalisationZone extends Controller {
 			$this->data['zones'][] = array(
 				'zone_id'  => $result['zone_id'],
 				'country'  => $result['country'],
-				'name'     => $result['name'] . (($result['zone_id'] == $this->config->get('config_zone_id')) ? $this->_('text_default') : null),
-				'code'     => $result['code'],
+				'name'	=> $result['name'] . (($result['zone_id'] == $this->config->get('config_zone_id')) ? $this->_('text_default') : null),
+				'code'	=> $result['code'],
 				'selected' => isset($_POST['selected']) && in_array($result['zone_id'], $_POST['selected']),
-				'action'   => $action			
+				'action'	=> $action			
 			);
 		}
 	
@@ -199,7 +199,7 @@ class ControllerLocalisationZone extends Controller {
 		if (isset($_GET['page'])) {
 			$url .= '&page=' . $_GET['page'];
 		}
-		 
+		
 		$this->data['sort_country'] = $this->url->link('localisation/zone', 'sort=c.name' . $url);
 		$this->data['sort_name'] = $this->url->link('localisation/zone', 'sort=z.name' . $url);
 		$this->data['sort_code'] = $this->url->link('localisation/zone', 'sort=z.code' . $url);
@@ -218,7 +218,6 @@ class ControllerLocalisationZone extends Controller {
 		$this->pagination->total = $zone_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('localisation/zone', $url);
 
 		$this->data['pagination'] = $this->pagination->render();
@@ -271,7 +270,7 @@ class ControllerLocalisationZone extends Controller {
 		} else {
 			$this->data['action'] = $this->url->link('localisation/zone/update', 'zone_id=' . $_GET['zone_id'] . $url);
 		}
-		 
+		
 		$this->data['cancel'] = $this->url->link('localisation/zone', $url);
 
 		if (isset($_GET['zone_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
@@ -329,11 +328,7 @@ class ControllerLocalisationZone extends Controller {
 			$this->error['name'] = $this->_('error_name');
 		}
 
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
 
 	private function validateDelete() {
@@ -371,10 +366,6 @@ class ControllerLocalisationZone extends Controller {
 			}
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
 }

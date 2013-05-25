@@ -1,6 +1,6 @@
 <?php
 class ControllerLocalisationLengthClass extends Controller {
-	  
+	
  
 	public function index() {
 		$this->load->language('localisation/length_class');
@@ -142,7 +142,7 @@ class ControllerLocalisationLengthClass extends Controller {
 
 		$this->data['insert'] = $this->url->link('localisation/length_class/insert', $url);
 		$this->data['delete'] = $this->url->link('localisation/length_class/delete', $url);
-		 
+		
 		$this->data['length_classes'] = array();
 		
 		$data = array(
@@ -166,11 +166,11 @@ class ControllerLocalisationLengthClass extends Controller {
 
 			$this->data['length_classes'][] = array(
 				'length_class_id' => $result['length_class_id'],
-				'title'           => $result['title'] . (($result['unit'] == $this->config->get('config_length_class')) ? $this->_('text_default') : null),
-				'unit'            => $result['unit'],
-				'value'           => $result['value'],
-				'selected'        => isset($_POST['selected']) && in_array($result['length_class_id'], $_POST['selected']),
-				'action'          => $action
+				'title'			=> $result['title'] . (($result['unit'] == $this->config->get('config_length_class')) ? $this->_('text_default') : null),
+				'unit'				=> $result['unit'],
+				'value'			=> $result['value'],
+				'selected'		=> isset($_POST['selected']) && in_array($result['length_class_id'], $_POST['selected']),
+				'action'			=> $action
 			);
 		}
 
@@ -218,7 +218,6 @@ class ControllerLocalisationLengthClass extends Controller {
 		$this->pagination->total = $length_class_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('localisation/length_class', $url);
 
 		$this->data['pagination'] = $this->pagination->render();
@@ -281,8 +280,8 @@ class ControllerLocalisationLengthClass extends Controller {
 		$this->data['cancel'] = $this->url->link('localisation/length_class', $url);
 
 		if (isset($_GET['length_class_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-      		$length_class_info = $this->model_localisation_length_class->getLengthClass($_GET['length_class_id']);
-    	}
+				$length_class_info = $this->model_localisation_length_class->getLengthClass($_GET['length_class_id']);
+		}
 		
 		$this->data['languages'] = $this->model_localisation_language->getLanguages();
 		
@@ -325,11 +324,7 @@ class ControllerLocalisationLengthClass extends Controller {
 			}
 		}
 
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
 
 	private function validateDelete() {
@@ -349,10 +344,6 @@ class ControllerLocalisationLengthClass extends Controller {
 			}
 		}
 
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}	
 }

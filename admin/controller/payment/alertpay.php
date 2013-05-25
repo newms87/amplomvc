@@ -1,6 +1,6 @@
 <?php
 class ControllerPaymentAlertPay extends Controller {
-	 
+	
 
 	public function index() {
 		$this->template->load('payment/alertpay');
@@ -112,10 +112,6 @@ class ControllerPaymentAlertPay extends Controller {
 			$this->error['security'] = $this->_('error_security');
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

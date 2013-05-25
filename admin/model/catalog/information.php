@@ -140,7 +140,7 @@ class ModelCatalogInformation extends Model {
 
 		foreach ($query->rows as $result) {
 			$information_description_data[$result['language_id']] = array(
-				'title'       => $result['title'],
+				'title'		=> $result['title'],
 				'description' => $result['description']
 			);
 		}
@@ -173,7 +173,7 @@ class ModelCatalogInformation extends Model {
 	}
 		
 	public function getTotalInformations() {
-      	$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "information");
+			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "information");
 		
 		return $query->row['total'];
 	}	

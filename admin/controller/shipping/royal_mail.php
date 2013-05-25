@@ -1,8 +1,8 @@
 <?php
 class ControllerShippingRoyalMail extends Controller {
-	 
 	
-	public function index() {   
+	
+	public function index() {	
 		$this->template->load('shipping/royal_mail');
 
 		$this->load->language('shipping/royal_mail');
@@ -384,10 +384,6 @@ class ControllerShippingRoyalMail extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

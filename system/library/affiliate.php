@@ -25,7 +25,7 @@ class Affiliate {
 				$this->fax = $affiliate_query->row['fax'];
 				$this->code = $affiliate_query->row['code'];
 							
-      			$this->db->query("UPDATE " . DB_PREFIX . "affiliate SET ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "' WHERE affiliate_id = '" . (int)$this->session->data['affiliate_id'] . "'");
+					$this->db->query("UPDATE " . DB_PREFIX . "affiliate SET ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "' WHERE affiliate_id = '" . (int)$this->session->data['affiliate_id'] . "'");
 			} else {
 				$this->logout();
 			}
@@ -33,27 +33,27 @@ class Affiliate {
 	}
 	
 	public function __get($key){
-      return $this->registry->get($key);
-   }
+		return $this->registry->get($key);
+	}
 	
   	public function login($email, $password) {
 		$affiliate_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "affiliate WHERE email = '" . $this->db->escape($email) . "' AND password = '" . $this->db->escape(md5($password)) . "' AND status = '1' AND approved = '1'");
 		
 		if ($affiliate_query->num_rows) {
 			$this->session->data['affiliate_id'] = $affiliate_query->row['affiliate_id'];	
-		    
+			
 			$this->affiliate_id = $affiliate_query->row['affiliate_id'];
 			$this->firstname = $affiliate_query->row['firstname'];
 			$this->lastname = $affiliate_query->row['lastname'];
 			$this->email = $affiliate_query->row['email'];
 			$this->telephone = $affiliate_query->row['telephone'];
 			$this->fax = $affiliate_query->row['fax'];
-      		$this->code = $affiliate_query->row['code'];
-	  
-	  		return true;
-    	} else {
-      		return false;
-    	}
+				$this->code = $affiliate_query->row['code'];
+	
+			return true;
+		} else {
+				return false;
+		}
   	}
   
   	public function logout() {
@@ -68,13 +68,13 @@ class Affiliate {
   	}
   
   	public function isLogged() {
-    	return $this->affiliate_id;
+		return $this->affiliate_id;
   	}
 
   	public function getId() {
-    	return $this->affiliate_id;
+		return $this->affiliate_id;
   	}
-      
+		
   	public function getFirstName() {
 		return $this->firstname;
   	}

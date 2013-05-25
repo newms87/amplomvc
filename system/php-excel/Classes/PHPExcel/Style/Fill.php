@@ -18,7 +18,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category   PHPExcel
+ * @category	PHPExcel
  * @package	PHPExcel_Style
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
@@ -29,7 +29,7 @@
 /**
  * PHPExcel_Style_Fill
  *
- * @category   PHPExcel
+ * @category	PHPExcel
  * @package	PHPExcel_Style
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
@@ -59,59 +59,59 @@ class PHPExcel_Style_Fill implements PHPExcel_IComparable
 	const FILL_PATTERN_MEDIUMGRAY			= 'mediumGray';
 
 	/**
-	 * Fill type
-	 *
-	 * @var string
-	 */
+	* Fill type
+	*
+	* @var string
+	*/
 	private $_fillType	= PHPExcel_Style_Fill::FILL_NONE;
 
 	/**
-	 * Rotation
-	 *
-	 * @var double
-	 */
+	* Rotation
+	*
+	* @var double
+	*/
 	private $_rotation	= 0;
 
 	/**
-	 * Start color
-	 *
-	 * @var PHPExcel_Style_Color
-	 */
+	* Start color
+	*
+	* @var PHPExcel_Style_Color
+	*/
 	private $_startColor;
 
 	/**
-	 * End color
-	 *
-	 * @var PHPExcel_Style_Color
-	 */
+	* End color
+	*
+	* @var PHPExcel_Style_Color
+	*/
 	private $_endColor;
 
 	/**
-	 * Parent Borders
-	 *
-	 * @var _parentPropertyName string
-	 */
+	* Parent Borders
+	*
+	* @var _parentPropertyName string
+	*/
 	private $_parentPropertyName;
 
 	/**
-	 * Supervisor?
-	 *
-	 * @var boolean
-	 */
+	* Supervisor?
+	*
+	* @var boolean
+	*/
 	private $_isSupervisor;
 
 	/**
-	 * Parent. Only used for supervisor
-	 *
-	 * @var PHPExcel_Style
-	 */
+	* Parent. Only used for supervisor
+	*
+	* @var PHPExcel_Style
+	*/
 	private $_parent;
 
 	/**
-	 * Create a new PHPExcel_Style_Fill
-	 *
-	 * @param	boolean	$isSupervisor	Flag indicating if this is a supervisor or not
-	 */
+	* Create a new PHPExcel_Style_Fill
+	*
+	* @param	boolean	$isSupervisor	Flag indicating if this is a supervisor or not
+	*/
 	public function __construct($isSupervisor = false)
 	{
 		// Supervisor?
@@ -129,11 +129,11 @@ class PHPExcel_Style_Fill implements PHPExcel_IComparable
 	}
 
 	/**
-	 * Bind parent. Only used for supervisor
-	 *
-	 * @param PHPExcel_Style $parent
-	 * @return PHPExcel_Style_Fill
-	 */
+	* Bind parent. Only used for supervisor
+	*
+	* @param PHPExcel_Style $parent
+	* @return PHPExcel_Style_Fill
+	*/
 	public function bindParent($parent)
 	{
 		$this->_parent = $parent;
@@ -141,91 +141,91 @@ class PHPExcel_Style_Fill implements PHPExcel_IComparable
 	}
 
 	/**
-	 * Is this a supervisor or a real style component?
-	 *
-	 * @return boolean
-	 */
+	* Is this a supervisor or a real style component?
+	*
+	* @return boolean
+	*/
 	public function getIsSupervisor()
 	{
 		return $this->_isSupervisor;
 	}
 
 	/**
-	 * Get the shared style component for the currently active cell in currently active sheet.
-	 * Only used for style supervisor
-	 *
-	 * @return PHPExcel_Style_Fill
-	 */
+	* Get the shared style component for the currently active cell in currently active sheet.
+	* Only used for style supervisor
+	*
+	* @return PHPExcel_Style_Fill
+	*/
 	public function getSharedComponent()
 	{
 		return $this->_parent->getSharedComponent()->getFill();
 	}
 
 	/**
-	 * Get the currently active sheet. Only used for supervisor
-	 *
-	 * @return PHPExcel_Worksheet
-	 */
+	* Get the currently active sheet. Only used for supervisor
+	*
+	* @return PHPExcel_Worksheet
+	*/
 	public function getActiveSheet()
 	{
 		return $this->_parent->getActiveSheet();
 	}
 
 	/**
-	 * Get the currently active cell coordinate in currently active sheet.
-	 * Only used for supervisor
-	 *
-	 * @return string E.g. 'A1'
-	 */
+	* Get the currently active cell coordinate in currently active sheet.
+	* Only used for supervisor
+	*
+	* @return string E.g. 'A1'
+	*/
 	public function getSelectedCells()
 	{
 		return $this->getActiveSheet()->getSelectedCells();
 	}
 
 	/**
-	 * Get the currently active cell coordinate in currently active sheet.
-	 * Only used for supervisor
-	 *
-	 * @return string E.g. 'A1'
-	 */
+	* Get the currently active cell coordinate in currently active sheet.
+	* Only used for supervisor
+	*
+	* @return string E.g. 'A1'
+	*/
 	public function getActiveCell()
 	{
 		return $this->getActiveSheet()->getActiveCell();
 	}
 
 	/**
-	 * Build style array from subcomponents
-	 *
-	 * @param array $array
-	 * @return array
-	 */
+	* Build style array from subcomponents
+	*
+	* @param array $array
+	* @return array
+	*/
 	public function getStyleArray($array)
 	{
 		return array('fill' => $array);
 	}
 
 	/**
-	 * Apply styles from array
-	 *
-	 * <code>
-	 * $objPHPExcel->getActiveSheet()->getStyle('B2')->getFill()->applyFromArray(
-	 *		array(
-	 *			'type'	   => PHPExcel_Style_Fill::FILL_GRADIENT_LINEAR,
-	 *			'rotation'   => 0,
-	 *			'startcolor' => array(
-	 *				'rgb' => '000000'
-	 *			),
-	 *			'endcolor'   => array(
-	 *				'argb' => 'FFFFFFFF'
-	 *			)
-	 *		)
-	 * );
-	 * </code>
-	 *
-	 * @param	array	$pStyles	Array containing style information
-	 * @throws	Exception
-	 * @return PHPExcel_Style_Fill
-	 */
+	* Apply styles from array
+	*
+	* <code>
+	* $objPHPExcel->getActiveSheet()->getStyle('B2')->getFill()->applyFromArray(
+	*		array(
+	*			'type'		=> PHPExcel_Style_Fill::FILL_GRADIENT_LINEAR,
+	*			'rotation'	=> 0,
+	*			'startcolor' => array(
+	*				'rgb' => '000000'
+	*			),
+	*			'endcolor'	=> array(
+	*				'argb' => 'FFFFFFFF'
+	*			)
+	*		)
+	* );
+	* </code>
+	*
+	* @param	array	$pStyles	Array containing style information
+	* @throws	Exception
+	* @return PHPExcel_Style_Fill
+	*/
 	public function applyFromArray($pStyles = null) {
 		if (is_array($pStyles)) {
 			if ($this->_isSupervisor) {
@@ -254,10 +254,10 @@ class PHPExcel_Style_Fill implements PHPExcel_IComparable
 	}
 
 	/**
-	 * Get Fill Type
-	 *
-	 * @return string
-	 */
+	* Get Fill Type
+	*
+	* @return string
+	*/
 	public function getFillType() {
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getFillType();
@@ -266,11 +266,11 @@ class PHPExcel_Style_Fill implements PHPExcel_IComparable
 	}
 
 	/**
-	 * Set Fill Type
-	 *
-	 * @param string $pValue	PHPExcel_Style_Fill fill type
-	 * @return PHPExcel_Style_Fill
-	 */
+	* Set Fill Type
+	*
+	* @param string $pValue	PHPExcel_Style_Fill fill type
+	* @return PHPExcel_Style_Fill
+	*/
 	public function setFillType($pValue = PHPExcel_Style_Fill::FILL_NONE) {
 		if ($this->_isSupervisor) {
 			$styleArray = $this->getStyleArray(array('type' => $pValue));
@@ -282,10 +282,10 @@ class PHPExcel_Style_Fill implements PHPExcel_IComparable
 	}
 
 	/**
-	 * Get Rotation
-	 *
-	 * @return double
-	 */
+	* Get Rotation
+	*
+	* @return double
+	*/
 	public function getRotation() {
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getRotation();
@@ -294,11 +294,11 @@ class PHPExcel_Style_Fill implements PHPExcel_IComparable
 	}
 
 	/**
-	 * Set Rotation
-	 *
-	 * @param double $pValue
-	 * @return PHPExcel_Style_Fill
-	 */
+	* Set Rotation
+	*
+	* @param double $pValue
+	* @return PHPExcel_Style_Fill
+	*/
 	public function setRotation($pValue = 0) {
 		if ($this->_isSupervisor) {
 			$styleArray = $this->getStyleArray(array('rotation' => $pValue));
@@ -310,21 +310,21 @@ class PHPExcel_Style_Fill implements PHPExcel_IComparable
 	}
 
 	/**
-	 * Get Start Color
-	 *
-	 * @return PHPExcel_Style_Color
-	 */
+	* Get Start Color
+	*
+	* @return PHPExcel_Style_Color
+	*/
 	public function getStartColor() {
 		return $this->_startColor;
 	}
 
 	/**
-	 * Set Start Color
-	 *
-	 * @param	PHPExcel_Style_Color $pValue
-	 * @throws	Exception
-	 * @return PHPExcel_Style_Fill
-	 */
+	* Set Start Color
+	*
+	* @param	PHPExcel_Style_Color $pValue
+	* @throws	Exception
+	* @return PHPExcel_Style_Fill
+	*/
 	public function setStartColor(PHPExcel_Style_Color $pValue = null) {
 		// make sure parameter is a real color and not a supervisor
 		$color = $pValue->getIsSupervisor() ? $pValue->getSharedComponent() : $pValue;
@@ -339,21 +339,21 @@ class PHPExcel_Style_Fill implements PHPExcel_IComparable
 	}
 
 	/**
-	 * Get End Color
-	 *
-	 * @return PHPExcel_Style_Color
-	 */
+	* Get End Color
+	*
+	* @return PHPExcel_Style_Color
+	*/
 	public function getEndColor() {
 		return $this->_endColor;
 	}
 
 	/**
-	 * Set End Color
-	 *
-	 * @param	PHPExcel_Style_Color $pValue
-	 * @throws	Exception
-	 * @return PHPExcel_Style_Fill
-	 */
+	* Set End Color
+	*
+	* @param	PHPExcel_Style_Color $pValue
+	* @throws	Exception
+	* @return PHPExcel_Style_Fill
+	*/
 	public function setEndColor(PHPExcel_Style_Color $pValue = null) {
 		// make sure parameter is a real color and not a supervisor
 		$color = $pValue->getIsSupervisor() ? $pValue->getSharedComponent() : $pValue;
@@ -368,16 +368,16 @@ class PHPExcel_Style_Fill implements PHPExcel_IComparable
 	}
 
 	/**
-	 * Get hash code
-	 *
-	 * @return string	Hash code
-	 */
+	* Get hash code
+	*
+	* @return string	Hash code
+	*/
 	public function getHashCode() {
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getHashCode();
 		}
 		return md5(
-			  $this->getFillType()
+			$this->getFillType()
 			. $this->getRotation()
 			. $this->getStartColor()->getHashCode()
 			. $this->getEndColor()->getHashCode()
@@ -386,8 +386,8 @@ class PHPExcel_Style_Fill implements PHPExcel_IComparable
 	}
 
 	/**
-	 * Implement PHP __clone to create a deep clone, not just a shallow copy.
-	 */
+	* Implement PHP __clone to create a deep clone, not just a shallow copy.
+	*/
 	public function __clone() {
 		$vars = get_object_vars($this);
 		foreach ($vars as $key => $value) {

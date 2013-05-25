@@ -6,7 +6,7 @@ class ControllerCatalogInformation extends Controller {
 		$this->load->language('catalog/information');
 
 		$this->document->setTitle($this->_('heading_title'));
-		 
+		
 		$this->getList();
 	}
 
@@ -156,7 +156,7 @@ class ControllerCatalogInformation extends Controller {
 	
 		$results = $this->model_catalog_information->getInformations($data);
  
-    	foreach ($results as $result) {
+		foreach ($results as $result) {
 			$action = array();
 						
 			$action[] = array(
@@ -166,10 +166,10 @@ class ControllerCatalogInformation extends Controller {
 						
 			$this->data['informations'][] = array(
 				'information_id' => $result['information_id'],
-				'title'          => $result['title'],
-				'sort_order'     => $result['sort_order'],
-				'selected'       => isset($_POST['selected']) && in_array($result['information_id'], $_POST['selected']),
-				'action'         => $action
+				'title'			=> $result['title'],
+				'sort_order'	=> $result['sort_order'],
+				'selected'		=> isset($_POST['selected']) && in_array($result['information_id'], $_POST['selected']),
+				'action'			=> $action
 			);
 		}	
 	
@@ -216,7 +216,6 @@ class ControllerCatalogInformation extends Controller {
 		$this->pagination->total = $information_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('catalog/information', $url);
 			
 		$this->data['pagination'] = $this->pagination->render();
@@ -247,7 +246,7 @@ class ControllerCatalogInformation extends Controller {
 			$this->data['error_title'] = array();
 		}
 		
-	 	if (isset($this->error['description'])) {
+		if (isset($this->error['description'])) {
 			$this->data['error_description'] = $this->error['description'];
 		} else {
 			$this->data['error_description'] = array();
@@ -363,11 +362,7 @@ class ControllerCatalogInformation extends Controller {
 			$this->error['warning'] = $this->_('error_warning');
 		}
 			
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
 
 	private function validateDelete() {
@@ -395,10 +390,6 @@ class ControllerCatalogInformation extends Controller {
 			}
 		}
 
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
 }

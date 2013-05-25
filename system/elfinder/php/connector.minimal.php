@@ -21,19 +21,19 @@ include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinderVolumeLocalFileSyste
  * @return bool|null
  **/
 function access($attr, $path, $data, $volume) {
-	return strpos(basename($path), '.') === 0       // if file/folder begins with '.' (dot)
-		? !($attr == 'read' || $attr == 'write')    // set read+write to false, other (locked+hidden) set to true
-		:  null;                                    // else elFinder decide it itself
+	return strpos(basename($path), '.') === 0		// if file/folder begins with '.' (dot)
+		? !($attr == 'read' || $attr == 'write')	// set read+write to false, other (locked+hidden) set to true
+		:  null;												// else elFinder decide it itself
 }
 
 $opts = array(
 	// 'debug' => true,
 	'roots' => array(
 		array(
-			'driver'        => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
-			'path'          => '../files/',         // path to files (REQUIRED)
-			'URL'           => dirname($_SERVER['PHP_SELF']) . '/../files/', // URL to files (REQUIRED)
-			'accessControl' => 'access'             // disable and hide dot starting files (OPTIONAL)
+			'driver'		=> 'LocalFileSystem',	// driver for accessing file system (REQUIRED)
+			'path'			=> '../files/',			// path to files (REQUIRED)
+			'URL'			=> dirname($_SERVER['PHP_SELF']) . '/../files/', // URL to files (REQUIRED)
+			'accessControl' => 'access'				// disable and hide dot starting files (OPTIONAL)
 		)
 	)
 );

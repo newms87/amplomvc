@@ -1,6 +1,6 @@
 <?php
 class ControllerReportProductPurchased extends Controller { 
-	public function index() {   
+	public function index() {	
 		$this->template->load('report/product_purchased');
 
 		$this->load->language('report/product_purchased');
@@ -55,11 +55,11 @@ class ControllerReportProductPurchased extends Controller {
 		$this->data['products'] = array();
 		
 		$data = array(
-			'filter_date_start'	     => $filter_date_start, 
-			'filter_date_end'	     => $filter_date_end, 
+			'filter_date_start'		=> $filter_date_start, 
+			'filter_date_end'		=> $filter_date_end, 
 			'filter_order_status_id' => $filter_order_status_id,
-			'start'                  => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit'                  => $this->config->get('config_admin_limit')
+			'start'						=> ($page - 1) * $this->config->get('config_admin_limit'),
+			'limit'						=> $this->config->get('config_admin_limit')
 		);
 				
 		$product_total = $this->model_report_product->getTotalPurchased($data);
@@ -68,10 +68,10 @@ class ControllerReportProductPurchased extends Controller {
 		
 		foreach ($results as $result) {
 			$this->data['products'][] = array(
-				'name'       => $result['name'],
-				'model'      => $result['model'],
-				'quantity'   => $result['quantity'],
-				'total'      => $this->currency->format($result['total'], $this->config->get('config_currency'))
+				'name'		=> $result['name'],
+				'model'		=> $result['model'],
+				'quantity'	=> $result['quantity'],
+				'total'		=> $this->currency->format($result['total'], $this->config->get('config_currency'))
 			);
 		}
 				
@@ -95,7 +95,6 @@ class ControllerReportProductPurchased extends Controller {
 		$this->pagination->total = $product_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('report/product_purchased', $url);
 			
 		$this->data['pagination'] = $this->pagination->render();		

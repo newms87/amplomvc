@@ -1,10 +1,10 @@
-<?php    
+<?php	
 class ControllerSaleCustomerBlacklist extends Controller { 
 	
   
   	public function index() {
 		$this->load->language('sale/customer_blacklist');
-		 
+		
 		$this->document->setTitle($this->_('heading_title'));
 		
 		$this->getList();
@@ -13,13 +13,13 @@ class ControllerSaleCustomerBlacklist extends Controller {
   	public function insert() {
 		$this->load->language('sale/customer_blacklist');
 
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-      	  	$this->model_sale_customer_blacklist->addCustomerBlacklist($_POST);
+				$this->model_sale_customer_blacklist->addCustomerBlacklist($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
-		  
+		
 			$url = '';
 							
 			if (isset($_GET['sort'])) {
@@ -36,20 +36,20 @@ class ControllerSaleCustomerBlacklist extends Controller {
 			
 			$this->url->redirect($this->url->link('sale/customer_blacklist', $url));
 		}
-    	
-    	$this->getForm();
+		
+		$this->getForm();
   	} 
-   
+	
   	public function update() {
 		$this->load->language('sale/customer_blacklist');
 
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_sale_customer_blacklist->editCustomerBlacklist($_GET['customer_ip_blacklist_id'], $_POST);
-	  		
+			
 			$this->message->add('success', $this->_('text_success'));
-	  
+	
 			$url = '';
 						
 			if (isset($_GET['sort'])) {
@@ -66,14 +66,14 @@ class ControllerSaleCustomerBlacklist extends Controller {
 			
 			$this->url->redirect($this->url->link('sale/customer_blacklist', $url));
 		}
-    
-    	$this->getForm();
-  	}   
+	
+		$this->getForm();
+  	}	
 
   	public function delete() {
 		$this->load->language('sale/customer_blacklist');
 
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $customer_ip_blacklist_id) {
@@ -97,11 +97,11 @@ class ControllerSaleCustomerBlacklist extends Controller {
 			}
 			
 			$this->url->redirect($this->url->link('sale/customer_blacklist', $url));
-    	}
-    
-    	$this->getList();
+		}
+	
+		$this->getList();
   	}  
-    
+	
   	private function getList() {
 		$this->template->load('sale/customer_blacklist_list');
 
@@ -156,7 +156,7 @@ class ControllerSaleCustomerBlacklist extends Controller {
 	
 		$results = $this->model_sale_customer_blacklist->getCustomerBlacklists($data);
  
-    	foreach ($results as $result) {
+		foreach ($results as $result) {
 			$action = array();
 		
 			$action[] = array(
@@ -166,11 +166,11 @@ class ControllerSaleCustomerBlacklist extends Controller {
 			
 			$this->data['customer_blacklists'][] = array(
 				'customer_ip_blacklist_id' => $result['customer_ip_blacklist_id'],
-				'ip'                       => $result['ip'],
-				'total'                    => $result['total'],
-				'customer'                 => $this->url->link('sale/customer', 'filter_ip=' . $result['ip']),
-				'selected'                 => isset($_POST['selected']) && in_array($result['customer_ip_blacklist_id'], $_POST['selected']),
-				'action'                   => $action
+				'ip'							=> $result['ip'],
+				'total'						=> $result['total'],
+				'customer'					=> $this->url->link('sale/customer', 'filter_ip=' . $result['ip']),
+				'selected'					=> isset($_POST['selected']) && in_array($result['customer_ip_blacklist_id'], $_POST['selected']),
+				'action'						=> $action
 			);
 		}	
 					
@@ -216,7 +216,6 @@ class ControllerSaleCustomerBlacklist extends Controller {
 		$this->pagination->total = $customer_blacklist_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('sale/customer_blacklist', $url);
 			
 		$this->data['pagination'] = $this->pagination->render();
@@ -269,20 +268,20 @@ class ControllerSaleCustomerBlacklist extends Controller {
 		} else {
 			$this->data['action'] = $this->url->link('sale/customer_blacklist/update', 'customer_ip_blacklist_id=' . $_GET['customer_ip_blacklist_id'] . $url);
 		}
-		  
-    	$this->data['cancel'] = $this->url->link('sale/customer_blacklist', $url);
+		
+		$this->data['cancel'] = $this->url->link('sale/customer_blacklist', $url);
 
-    	if (isset($_GET['customer_ip_blacklist_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-      		$customer_blacklist_info = $this->model_sale_customer_blacklist->getCustomerBlacklist($_GET['customer_ip_blacklist_id']);
-    	}
+		if (isset($_GET['customer_ip_blacklist_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
+				$customer_blacklist_info = $this->model_sale_customer_blacklist->getCustomerBlacklist($_GET['customer_ip_blacklist_id']);
+		}
 			
-    	if (isset($_POST['ip'])) {
-      		$this->data['ip'] = $_POST['ip'];
+		if (isset($_POST['ip'])) {
+				$this->data['ip'] = $_POST['ip'];
 		} elseif (!empty($customer_blacklist_info)) { 
 			$this->data['ip'] = $customer_blacklist_info['ip'];
 		} else {
-      		$this->data['ip'] = '';
-    	}
+				$this->data['ip'] = '';
+		}
 		
 		$this->children = array(
 			'common/header',
@@ -291,32 +290,24 @@ class ControllerSaleCustomerBlacklist extends Controller {
 				
 		$this->response->setOutput($this->render());
 	}
-			 
+			
   	private function validateForm() {
-    	if (!$this->user->hasPermission('modify', 'sale/customer_blacklist')) {
-      		$this->error['warning'] = $this->_('error_permission');
-    	}
-
-    	if ((strlen($_POST['ip']) < 1) || (strlen($_POST['ip']) > 15)) {
-      		$this->error['ip'] = $this->_('error_ip');
-    	}
-		
-		if (!$this->error) {
-	  		return true;
-		} else {
-	  		return false;
+		if (!$this->user->hasPermission('modify', 'sale/customer_blacklist')) {
+				$this->error['warning'] = $this->_('error_permission');
 		}
-  	}    
+
+		if ((strlen($_POST['ip']) < 1) || (strlen($_POST['ip']) > 15)) {
+				$this->error['ip'] = $this->_('error_ip');
+		}
+		
+		return $this->error ? false : true;
+  	}	
 
   	private function validateDelete() {
-    	if (!$this->user->hasPermission('modify', 'sale/customer_blacklist')) {
-      		$this->error['warning'] = $this->_('error_permission');
-    	}	
-	  	 
-		if (!$this->error) {
-	  		return true;
-		} else {
-	  		return false;
-		}  
+		if (!$this->user->hasPermission('modify', 'sale/customer_blacklist')) {
+				$this->error['warning'] = $this->_('error_permission');
+		}	
+		
+		return $this->error ? false : true;  
   	} 
 }

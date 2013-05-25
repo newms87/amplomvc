@@ -125,7 +125,7 @@ $('input[name=\'category[]\']').bind('change', function() {
 	var filter_category_id = this;
 	
 	$.ajax({
-		url: 'index.php?route=catalog/product/autocomplete&filter_category_id=' +  filter_category_id.value + '&limit=10000',
+		url: "<?= HTTP_ADMIN . "index.php?route=catalog/product/autocomplete"; ?>" + '&filter_category_id=' +  filter_category_id.value + '&limit=10000',
 		dataType: 'json',
 		success: function(json) {
 			for (i = 0; i < json.length; i++) {
@@ -148,7 +148,7 @@ $('input[name=\'product\']').autocomplete({
 	delay: 0,
 	source: function(request, response) {
 		$.ajax({
-			url: 'index.php?route=catalog/product/autocomplete&filter_name=' +  encodeURIComponent(request.term),
+			url: "<?= HTTP_ADMIN . "index.php?route=catalog/product/autocomplete"; ?>" + '&filter_name=' +  encodeURIComponent(request.term),
 			dataType: 'json',
 			success: function(json) {		
 				response($.map(json, function(item) {
@@ -192,7 +192,7 @@ $('#history .pagination a').live('click', function() {
 	return false;
 });			
 
-$('#history').load('index.php?route=sale/coupon/history&coupon_id=<?= $coupon_id; ?>');
+$('#history').load("<?= HTTP_ADMIN . "index.php?route=sale/coupon/history"; ?>" + '&coupon_id=<?= $coupon_id; ?>');
 //--></script>
 <? } ?>
 <script type="text/javascript"><!--

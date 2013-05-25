@@ -13,20 +13,20 @@ class ControllerAccountVoucher extends Controller {
 			$this->session->data['vouchers'] = array();
 		}
 	
-    	if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->session->data['vouchers'][rand()] = array(
-				'description'      => sprintf($this->_('text_for'), $this->currency->format($this->currency->convert($_POST['amount'], $this->currency->getCode(), $this->config->get('config_currency'))), $_POST['to_name']),
-				'to_name'          => $_POST['to_name'],
-				'to_email'         => $_POST['to_email'],
-				'from_name'        => $_POST['from_name'],
-				'from_email'       => $_POST['from_email'],
+				'description'		=> sprintf($this->_('text_for'), $this->currency->format($this->currency->convert($_POST['amount'], $this->currency->getCode(), $this->config->get('config_currency'))), $_POST['to_name']),
+				'to_name'			=> $_POST['to_name'],
+				'to_email'			=> $_POST['to_email'],
+				'from_name'		=> $_POST['from_name'],
+				'from_email'		=> $_POST['from_email'],
 				'voucher_theme_id' => $_POST['voucher_theme_id'],
-				'message'          => $_POST['message'],
-				'amount'           => $this->currency->convert($_POST['amount'], $this->currency->getCode(), $this->config->get('config_currency'))
+				'message'			=> $_POST['message'],
+				'amount'			=> $this->currency->convert($_POST['amount'], $this->currency->getCode(), $this->config->get('config_currency'))
 			);
-	  	  	
-	  		$this->url->redirect($this->url->link('account/voucher/success'));
-    	} 		
+			
+			$this->url->redirect($this->url->link('account/voucher/success'));
+		} 		
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
@@ -108,11 +108,11 @@ class ControllerAccountVoucher extends Controller {
 			
  		$this->data['voucher_themes'] = $this->model_cart_voucher_theme->getVoucherThemes();
 
-    	if (isset($_POST['voucher_theme_id'])) {
-      		$this->data['voucher_theme_id'] = $_POST['voucher_theme_id'];
+		if (isset($_POST['voucher_theme_id'])) {
+				$this->data['voucher_theme_id'] = $_POST['voucher_theme_id'];
 		} else {
-      		$this->data['voucher_theme_id'] = '';
-    	}	
+				$this->data['voucher_theme_id'] = '';
+		}	
 					
 		if (isset($_POST['message'])) {
 			$this->data['message'] = $_POST['message'];
@@ -156,11 +156,11 @@ class ControllerAccountVoucher extends Controller {
 		$this->language->load('account/voucher');
 
 		$this->document->setTitle($this->_('heading_title')); 
-      
+		
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/voucher'));
 
-    	$this->data['continue'] = $this->url->link('cart/cart');
+		$this->data['continue'] = $this->url->link('cart/cart');
 
 
 
@@ -181,38 +181,38 @@ class ControllerAccountVoucher extends Controller {
 	}
 	
 	private function validate() {
-    	if ((strlen($_POST['to_name']) < 1) || (strlen($_POST['to_name']) > 64)) {
-      		$this->error['to_name'] = $this->_('error_to_name');
-    	}    	
+		if ((strlen($_POST['to_name']) < 1) || (strlen($_POST['to_name']) > 64)) {
+				$this->error['to_name'] = $this->_('error_to_name');
+		}		
 		
 		if ((strlen($_POST['to_email']) > 96) || !preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $_POST['to_email'])) {
-      		$this->error['to_email'] = $this->_('error_email');
-    	}
+				$this->error['to_email'] = $this->_('error_email');
+		}
 		
-    	if ((strlen($_POST['from_name']) < 1) || (strlen($_POST['from_name']) > 64)) {
-      		$this->error['from_name'] = $this->_('error_from_name');
-    	}  
+		if ((strlen($_POST['from_name']) < 1) || (strlen($_POST['from_name']) > 64)) {
+				$this->error['from_name'] = $this->_('error_from_name');
+		}  
 		
 		if ((strlen($_POST['from_email']) > 96) || !preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $_POST['from_email'])) {
-      		$this->error['from_email'] = $this->_('error_email');
-    	}
+				$this->error['from_email'] = $this->_('error_email');
+		}
 		
 		if (!isset($_POST['voucher_theme_id'])) {
-      		$this->error['theme'] = $this->_('error_theme');
-    	}
+				$this->error['theme'] = $this->_('error_theme');
+		}
 				
 		if (($_POST['amount'] < 1) || ($_POST['amount'] > 1000)) {
-      		$this->error['amount'] = sprintf($this->_('error_amount'), $this->currency->format(1, false, 1), $this->currency->format(1000, false, 1) . ' ' . $this->currency->getCode());
-    	}
+				$this->error['amount'] = sprintf($this->_('error_amount'), $this->currency->format(1, false, 1), $this->currency->format(1000, false, 1) . ' ' . $this->currency->getCode());
+		}
 				
 		if (!isset($_POST['agree'])) {
-      		$this->error['warning'] = $this->_('error_agree');
+				$this->error['warning'] = $this->_('error_agree');
 		}
 									
-    	if (!$this->error) {
-      		return true;
-    	} else {
-      		return false;
-    	}				
+		if (!$this->error) {
+				return true;
+		} else {
+				return false;
+		}				
 	}
 }

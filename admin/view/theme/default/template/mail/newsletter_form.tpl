@@ -237,7 +237,7 @@ $('#designer_select').change(function(event, first_time){
    if(typeof addSingleImage == 'function' && !first_time)
       addSingleImage(data['image'], image_field.attr('id'), thumb.attr('id'));
     
-   $.post("index.php?route=catalog/product/select", {filter: filter, select: $('#product_select').val(), fields: 'image'},
+   $.post("<?= HTTP_ADMIN . "index.php?route=catalog/product/select"; ?>", {filter: filter, select: $('#product_select').val(), fields: 'image'},
       function(json){
          $('#product_select').html(json['html']).data(json['option_data']);
          if(!first_time){

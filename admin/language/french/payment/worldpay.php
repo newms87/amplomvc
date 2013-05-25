@@ -8,7 +8,7 @@ $_['text_success']			= 'F&eacute;licitations, vous avez modifi&eacute; les d&eac
 $_['text_successful']		= 'Actif - Toujours r&eacute;ussi';
 $_['text_declined']			= 'Actif - Toujours &eacute;chou&eacute';
 $_['text_off']				= 'Inactif';
-      
+		
 // Entry
 $_['entry_merchant']		= 'N&deg; d&#8217;identifiant marchand :';
 $_['entry_password']		= 'R&eacute;ponse du mot de passe de paiement :<br /><span class="help">Le r&eacute;glage se fait dans le panneau de contr&ocirc;le WordPay.</span>';

@@ -18,42 +18,42 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category   PHPExcel
- * @package    PHPExcel_Writer_Excel5
+ * @category	PHPExcel
+ * @package	PHPExcel_Writer_Excel5
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version    1.7.7, 2012-05-19
+ * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+ * @version	1.7.7, 2012-05-19
  */
 
 
 /**
  * PHPExcel_Writer_Excel5_Font
  *
- * @category   PHPExcel
- * @package    PHPExcel_Writer_Excel5
+ * @category	PHPExcel
+ * @package	PHPExcel_Writer_Excel5
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_Writer_Excel5_Font
 {
 	/**
-	 * Color index
-	 *
-	 * @var int
-	 */
+	* Color index
+	*
+	* @var int
+	*/
 	private $_colorIndex;
 
 	/**
-	 * Font
-	 *
-	 * @var PHPExcel_Style_Font
-	 */
+	* Font
+	*
+	* @var PHPExcel_Style_Font
+	*/
 	private $_font;
 
 	/**
-	 * Constructor
-	 *
-	 * @param PHPExcel_Style_Font $font
-	 */
+	* Constructor
+	*
+	* @param PHPExcel_Style_Font $font
+	*/
 	public function __construct(PHPExcel_Style_Font $font = null)
 	{
 		$this->_colorIndex = 0x7FFF;
@@ -61,20 +61,20 @@ class PHPExcel_Writer_Excel5_Font
 	}
 
 	/**
-	 * Set the color index
-	 *
-	 * @param int $colorIndex
-	 */
+	* Set the color index
+	*
+	* @param int $colorIndex
+	*/
 	public function setColorIndex($colorIndex)
 	{
 		$this->_colorIndex = $colorIndex;
 	}
 
 	/**
-	 * Get font record data
-	 *
-	 * @return string
-	 */
+	* Get font record data
+	*
+	* @return string
+	*/
 	public function writeFont()
 	{
 		$font_outline = 0;
@@ -127,11 +127,11 @@ class PHPExcel_Writer_Excel5_Font
 	}
 
 	/**
-	 * Map to BIFF5-BIFF8 codes for bold
-	 *
-	 * @param boolean $bold
-	 * @return int
-	 */
+	* Map to BIFF5-BIFF8 codes for bold
+	*
+	* @param boolean $bold
+	* @return int
+	*/
 	private static function _mapBold($bold) {
 		if ($bold) {
 			return 0x2BC;	//	700 = Bold font weight
@@ -140,22 +140,22 @@ class PHPExcel_Writer_Excel5_Font
 	}
 
 	/**
-	 * Map of BIFF2-BIFF8 codes for underline styles
-	 * @static	array of int
-	 *
-	 */
+	* Map of BIFF2-BIFF8 codes for underline styles
+	* @static	array of int
+	*
+	*/
 	private static $_mapUnderline = array(	PHPExcel_Style_Font::UNDERLINE_NONE					=> 0x00,
 											PHPExcel_Style_Font::UNDERLINE_SINGLE				=> 0x01,
 											PHPExcel_Style_Font::UNDERLINE_DOUBLE				=> 0x02,
 											PHPExcel_Style_Font::UNDERLINE_SINGLEACCOUNTING		=> 0x21,
 											PHPExcel_Style_Font::UNDERLINE_DOUBLEACCOUNTING		=> 0x22,
-										 );
+										);
 	/**
-	 * Map underline
-	 *
-	 * @param string
-	 * @return int
-	 */
+	* Map underline
+	*
+	* @param string
+	* @return int
+	*/
 	private static function _mapUnderline($underline) {
 		if (isset(self::$_mapUnderline[$underline]))
 			return self::$_mapUnderline[$underline];

@@ -54,11 +54,11 @@ class Config {
 	}
 	
   	public function get($key) {
-    	return isset($this->data[$key]) ? $this->data[$key] : null;
+		return isset($this->data[$key]) ? $this->data[$key] : null;
   	}
 	
 	public function set($key, $value) {
-    	$this->data[$key] = $value;
+		$this->data[$key] = $value;
   	}
 	
 	private function load_store($store_id){
@@ -93,7 +93,7 @@ class Config {
 	}
 	
 	public function has($key) {
-    	return isset($this->data[$key]);
+		return isset($this->data[$key]);
   	}
 	
 	public function save($group, $key, $data, $auto_load = true){

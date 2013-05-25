@@ -1,18 +1,18 @@
 <?php
 class mytable {
-   private $file;
+	private $file;
 	private $template_data;
 	private $path;
 	private $registry;
-   
-   function __construct($registry){
-   	$this->registry = $registry;
-   }
+	
+	function __construct($registry){
+		$this->registry = $registry;
+	}
 	
 	public function __get($key){
 		return $this->registry->get($key);
 	}
-   
+	
 	public function init(){
 		$this->path = '';
 	}
@@ -25,23 +25,23 @@ class mytable {
 		$this->template_data = $template_data;
 	}
 	
-   public function set_template($file){
-      if(!preg_match("/\.tpl$/", $file)){
-         $file .= '.tpl';
-      }
-      
-      if (file_exists(DIR_THEME . $this->path . $file)) {
-         $this->file = DIR_THEME . $this->path . $file; 
-      }
-      elseif(file_exists(DIR_THEME . 'default/template/' . $file)) {
-         $this->file = DIR_THEME . 'default/template/' . $file;
-      }
-      else{
-         trigger_error("Error: Could not load form template " . DIR_THEME . $this->path . $file . "!" . get_caller(3));
-         exit();
-      }
-   }
-   
+	public function set_template($file){
+		if(!preg_match("/\.tpl$/", $file)){
+			$file .= '.tpl';
+		}
+		
+		if (file_exists(DIR_THEME . $this->path . $file)) {
+			$this->file = DIR_THEME . $this->path . $file; 
+		}
+		elseif(file_exists(DIR_THEME . 'default/template/' . $file)) {
+			$this->file = DIR_THEME . 'default/template/' . $file;
+		}
+		else{
+			trigger_error("Error: Could not load form template " . DIR_THEME . $this->path . $file . "!" . get_caller(3));
+			exit();
+		}
+	}
+	
 	public function map_attribute($attr, $values){
 		if(empty($this->template_data['columns'])){
 			trigger_error("Error: You must set the table structure with Table::set_template_data() before mapping data!" . get_caller(3));
@@ -53,69 +53,69 @@ class mytable {
 		}
 	}
 	
-   public function build(){
-     	$this->prepare();
-      
-      extract($this->template_data);
+	public function build(){
+		$this->prepare();
 		
-      //render the file
-      ob_start();
-      
-      require($this->file);
-      
-      $output = ob_get_contents();
-      
-      ob_end_clean();
-      
-      return $output;
-   }
-   
-   private function prepare(){
-      if(!$this->file || !file_exists($this->file)){
-         trigger_error("You must set the template for the form before building! " . get_caller(3));
-         exit();
-      }
-      
-      if(!isset($this->template_data)){
-         trigger_error("The table structure was not set! Please call Table::set_template_data(\$tt_data) before building! " . get_caller(3));
-         exit();
-      }
-      
-      foreach($this->template_data['columns'] as $slug => &$column){
-         
-         if(!isset($column['type'])){
-            trigger_error("Invalid table column! The type was not set for $slug! " . get_caller(3));
-            exit();
-         }
-         
-         $default_values = array(
-            'display_name' => $slug,
-            'attrs' => array(),
-            'filter' => false,
-            'type' => 'text',
-            'align' => 'center',
-            'sortable' => false,
-         );
-         
-         foreach($default_values as $key => $default){
-            if(!isset($column[$key])){
-               $column[$key] = $default;
-            }
-         }
-         
-         //additional / overridden attributes
-         foreach($column as $attr => $value){
-            if(strpos($attr, '#') === 0){
-               $column['attrs'][substr($attr,1)] = $value;
-            }
-         }
-         
-         $column['html_attrs'] = '';
-         
-         foreach($column['attrs'] as $attr => $value){
-            $column['html_attrs'] .= $attr . '="' . $value . '" ';
-         }
-         
+		extract($this->template_data);
+		
+		//render the file
+		ob_start();
+		
+		require($this->file);
+		
+		$output = ob_get_contents();
+		
+		ob_end_clean();
+		
+		return $output;
+	}
+	
+	private function prepare(){
+		if(!$this->file || !file_exists($this->file)){
+			trigger_error("You must set the template for the form before building! " . get_caller(3));
+			exit();
+		}
+		
+		if(!isset($this->template_data)){
+			trigger_error("The table structure was not set! Please call Table::set_template_data(\$tt_data) before building! " . get_caller(3));
+			exit();
+		}
+		
+		foreach($this->template_data['columns'] as $slug => &$column){
+			
+			if(!isset($column['type'])){
+				trigger_error("Invalid table column! The type was not set for $slug! " . get_caller(3));
+				exit();
+			}
+			
+			$default_values = array(
+				'display_name' => $slug,
+				'attrs' => array(),
+				'filter' => false,
+				'type' => 'text',
+				'align' => 'center',
+				'sortable' => false,
+			);
+			
+			foreach($default_values as $key => $default){
+				if(!isset($column[$key])){
+					$column[$key] = $default;
+				}
+			}
+			
+			//additional / overridden attributes
+			foreach($column as $attr => $value){
+				if(strpos($attr, '#') === 0){
+					$column['attrs'][substr($attr,1)] = $value;
+				}
+			}
+			
+			$column['html_attrs'] = '';
+			
+			foreach($column['attrs'] as $attr => $value){
+				$column['html_attrs'] .= $attr . '="' . $value . '" ';
+			}
+			
 			
 			//This sets a blank option in a dropdown by default
 			if($column['filter']){
@@ -125,15 +125,15 @@ class mytable {
 			}
 			
 			switch($column['type']){
-            case 'text':
-               break;
-            case 'multi':
-               break;
-            case 'image':
+				case 'text':
+					break;
+				case 'multi':
+					break;
+				case 'image':
 					if(!isset($column["sort_value"])){
 						$column['sort_value'] = "__image_sort__" . $slug;
 					}
-               break;
+					break;
 				case 'select':
 					if(empty($column['build_data'])){
 						trigger_error("You must specify build_data for the column $slug of type select! " . get_caller(3));
@@ -159,14 +159,14 @@ class mytable {
 					}
 					
 					break;
-            default: 
-               break;
-         }
+				default: 
+					break;
+			}
 
 			if(!isset($column["sort_value"])){
 				$column["sort_value"] = $slug;
 			}
 			
-      }
-   }
+		}
+	}
 }

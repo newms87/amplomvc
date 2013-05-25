@@ -3,9 +3,9 @@
 $_['heading_title']  = 'Cambiar contraseña';
 
 // Text
-$_['text_account']   = 'Cuenta';
+$_['text_account']	= 'Cuenta';
 $_['text_password']  = 'Tu contraseña';
-$_['text_success']   = 'Éxito: Tu contraseña ha sido actualizada satisfactoriamente.';
+$_['text_success']	= 'Éxito: Tu contraseña ha sido actualizada satisfactoriamente.';
 
 // Entry
 $_['entry_password'] = 'Contraseña:';

@@ -3,7 +3,7 @@ class ControllerProductSpecial extends Controller {
 	public function index() { 
 		$this->template->load('product/special');
 
-    	$this->language->load('product/special');
+		$this->language->load('product/special');
 		
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
@@ -16,7 +16,7 @@ class ControllerProductSpecial extends Controller {
 		} else {
 			$order = 'ASC';
 		}
-			 
+			
   		if (isset($_GET['page'])) {
 			$page = $_GET['page'];
 		} else {
@@ -28,11 +28,11 @@ class ControllerProductSpecial extends Controller {
 		} else {
 			$limit = $this->config->get('config_catalog_limit');
 		}
-				    	
+						
 		$this->document->setTitle($this->_('heading_title'));
-      
-      $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-      
+		
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		
 		$url = '';
 		
 		if (isset($_GET['sort'])) {
@@ -51,8 +51,8 @@ class ControllerProductSpecial extends Controller {
 			$url .= '&limit=' . $_GET['limit'];
 		}
 		
-      $this->breadcrumb->add($this->_('heading_title'), $this->url->link('product/special', $url));
-      
+		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('product/special', $url));
+		
 		$this->language->format('text_compare', (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));
 		$this->data['compare'] = $this->url->link('product/compare');
 		
@@ -102,15 +102,15 @@ class ControllerProductSpecial extends Controller {
 						
 			$this->data['products'][] = array(
 				'product_id'  => $result['product_id'],
-				'thumb'       => $image,
-				'name'        => $result['name'],
+				'thumb'		=> $image,
+				'name'		=> $result['name'],
 				'description' => substr(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8')), 0, 100) . '..',
-				'price'       => $price,
-				'special'     => $special,
-				'tax'         => $tax,
-				'rating'      => $result['rating'],
-				'reviews'     => sprintf($this->_('text_reviews'), (int)$result['reviews']),
-				'href'        => $this->url->link('product/product', $url . '&product_id=' . $result['product_id'])
+				'price'		=> $price,
+				'special'	=> $special,
+				'tax'			=> $tax,
+				'rating'		=> $result['rating'],
+				'reviews'	=> sprintf($this->_('text_reviews'), (int)$result['reviews']),
+				'href'		=> $this->url->link('product/product', $url . '&product_id=' . $result['product_id'])
 			);
 		}
 
@@ -238,7 +238,6 @@ class ControllerProductSpecial extends Controller {
 		$this->pagination->total = $product_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $limit;
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('product/special', $url);
 			
 		$this->data['pagination'] = $this->pagination->render();

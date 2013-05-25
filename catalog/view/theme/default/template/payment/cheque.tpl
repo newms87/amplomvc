@@ -14,7 +14,7 @@
 $('#button-confirm').bind('click', function() {
 	$.ajax({ 
 		type: 'GET',
-		url: 'index.php?route=payment/cheque/confirm',
+		url: "<?= HTTP_CATALOG . "index.php?route=payment/cheque/confirm"; ?>",
 		success: function() {
 			location = '<?= $continue; ?>';
 		}		

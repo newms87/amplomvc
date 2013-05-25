@@ -18,11 +18,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category   PHPExcel
- * @package    PHPExcel_Worksheet
+ * @category	PHPExcel
+ * @package	PHPExcel_Worksheet
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version    1.7.7, 2012-05-19
+ * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+ * @version	1.7.7, 2012-05-19
  */
 
 
@@ -31,32 +31,32 @@
  *
  * Represents a row in PHPExcel_Worksheet, used by PHPExcel_Worksheet_RowIterator
  *
- * @category   PHPExcel
- * @package    PHPExcel_Worksheet
+ * @category	PHPExcel
+ * @package	PHPExcel_Worksheet
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_Worksheet_Row
 {
 	/**
-	 * PHPExcel_Worksheet
-	 *
-	 * @var PHPExcel_Worksheet
-	 */
+	* PHPExcel_Worksheet
+	*
+	* @var PHPExcel_Worksheet
+	*/
 	private $_parent;
 
 	/**
-	 * Row index
-	 *
-	 * @var int
-	 */
+	* Row index
+	*
+	* @var int
+	*/
 	private $_rowIndex = 0;
 
 	/**
-	 * Create a new row
-	 *
-	 * @param PHPExcel_Worksheet 		$parent
-	 * @param int						$rowIndex
-	 */
+	* Create a new row
+	*
+	* @param PHPExcel_Worksheet 		$parent
+	* @param int						$rowIndex
+	*/
 	public function __construct(PHPExcel_Worksheet $parent = null, $rowIndex = 1) {
 		// Set parent and row index
 		$this->_parent 		= $parent;
@@ -64,26 +64,26 @@ class PHPExcel_Worksheet_Row
 	}
 
 	/**
-	 * Destructor
-	 */
+	* Destructor
+	*/
 	public function __destruct() {
 		unset($this->_parent);
 	}
 
 	/**
-	 * Get row index
-	 *
-	 * @return int
-	 */
+	* Get row index
+	*
+	* @return int
+	*/
 	public function getRowIndex() {
 		return $this->_rowIndex;
 	}
 
 	/**
-	 * Get cell iterator
-	 *
-	 * @return PHPExcel_Worksheet_CellIterator
-	 */
+	* Get cell iterator
+	*
+	* @return PHPExcel_Worksheet_CellIterator
+	*/
 	public function getCellIterator() {
 		return new PHPExcel_Worksheet_CellIterator($this->_parent, $this->_rowIndex);
 	}

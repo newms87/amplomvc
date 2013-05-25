@@ -3,7 +3,7 @@ class ControllerProductSearch extends Controller {
 	public function index() { 
 		$this->template->load('product/search');
 
-    	$this->language->load('product/search');
+		$this->language->load('product/search');
 		
 		if (isset($_GET['filter_name'])) {
 			$filter_name = $_GET['filter_name'];
@@ -66,8 +66,8 @@ class ControllerProductSearch extends Controller {
 		} else {
 			$this->document->setTitle($this->_('heading_title'));
 		}
-      
-      $this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 
 		$url = '';
 		
@@ -107,8 +107,8 @@ class ControllerProductSearch extends Controller {
 			$url .= '&limit=' . $_GET['limit'];
 		}
 		
-      $this->breadcrumb->add($this->_('heading_title'), $this->url->link('product/search', $url));
-      
+		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('product/search', $url));
+		
 		$this->language->format('text_compare', (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));
 		$this->data['compare'] = $this->url->link('product/compare');
 		
@@ -130,21 +130,21 @@ class ControllerProductSearch extends Controller {
 				foreach ($categories_3 as $category_3) {
 					$level_3_data[] = array(
 						'category_id' => $category_3['category_id'],
-						'name'        => $category_3['name'],
+						'name'		=> $category_3['name'],
 					);
 				}
 				
 				$level_2_data[] = array(
 					'category_id' => $category_2['category_id'],	
-					'name'        => $category_2['name'],
-					'children'    => $level_3_data
+					'name'		=> $category_2['name'],
+					'children'	=> $level_3_data
 				);					
 			}
 			
 			$this->data['categories'][] = array(
 				'category_id' => $category_1['category_id'],
-				'name'        => $category_1['name'],
-				'children'    => $level_2_data
+				'name'		=> $category_1['name'],
+				'children'	=> $level_2_data
 			);
 		}
 		
@@ -152,15 +152,15 @@ class ControllerProductSearch extends Controller {
 		
 		if (isset($_GET['filter_name']) || isset($_GET['product_tag'])) {
 			$data = array(
-				'filter_name'         => $filter_name, 
-				'product_tag'          => $filter_tag, 
+				'filter_name'			=> $filter_name, 
+				'product_tag'			=> $filter_tag, 
 				'filter_description'  => $filter_description,
 				'filter_category_id'  => $filter_category_id, 
 				'filter_sub_category' => $filter_sub_category, 
-				'sort'                => $sort,
-				'order'               => $order,
-				'start'               => ($page - 1) * $limit,
-				'limit'               => $limit
+				'sort'					=> $sort,
+				'order'					=> $order,
+				'start'					=> ($page - 1) * $limit,
+				'limit'					=> $limit
 			);
 					
 			$product_total = $this->model_catalog_product->getTotalProducts($data);
@@ -200,15 +200,15 @@ class ControllerProductSearch extends Controller {
 			
 				$this->data['products'][] = array(
 					'product_id'  => $result['product_id'],
-					'thumb'       => $image,
-					'name'        => $result['name'],
+					'thumb'		=> $image,
+					'name'		=> $result['name'],
 					'description' => substr(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8')), 0, 100) . '..',
-					'price'       => $price,
-					'special'     => $special,
-					'tax'         => $tax,
-					'rating'      => $result['rating'],
-					'reviews'     => sprintf($this->_('text_reviews'), (int)$result['reviews']),
-					'href'        => $this->url->link('product/product', $url . '&product_id=' . $result['product_id'])
+					'price'		=> $price,
+					'special'	=> $special,
+					'tax'			=> $tax,
+					'rating'		=> $result['rating'],
+					'reviews'	=> sprintf($this->_('text_reviews'), (int)$result['reviews']),
+					'href'		=> $this->url->link('product/product', $url . '&product_id=' . $result['product_id'])
 				);
 			}
 					
@@ -396,7 +396,6 @@ class ControllerProductSearch extends Controller {
 			$this->pagination->total = $product_total;
 			$this->pagination->page = $page;
 			$this->pagination->limit = $limit;
-			$this->pagination->text = $this->_('text_pagination');
 			$this->pagination->url = $this->url->link('product/search', $url);
 			
 			$this->data['pagination'] = $this->pagination->render();

@@ -1,6 +1,6 @@
 <?php
 class ControllerReportCustomerCredit extends Controller {
-	public function index() {     
+	public function index() {	
 		$this->template->load('report/customer_credit');
 
 		$this->load->language('report/customer_credit');
@@ -47,8 +47,8 @@ class ControllerReportCustomerCredit extends Controller {
 		$data = array(
 			'filter_date_start'	=> $filter_date_start, 
 			'filter_date_end'	=> $filter_date_end, 
-			'start'             => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit'             => $this->config->get('config_admin_limit')
+			'start'				=> ($page - 1) * $this->config->get('config_admin_limit'),
+			'limit'				=> $this->config->get('config_admin_limit')
 		);
 				
 		$customer_total = $this->model_report_customer->getTotalCredit($data); 
@@ -64,15 +64,15 @@ class ControllerReportCustomerCredit extends Controller {
 			);
 						
 			$this->data['customers'][] = array(
-				'customer'       => $result['customer'],
-				'email'          => $result['email'],
+				'customer'		=> $result['customer'],
+				'email'			=> $result['email'],
 				'customer_group' => $result['customer_group'],
-				'status'         => ($result['status'] ? $this->_('text_enabled') : $this->_('text_disabled')),
-				'total'          => $this->currency->format($result['total'], $this->config->get('config_currency')),
-				'action'         => $action
+				'status'			=> ($result['status'] ? $this->_('text_enabled') : $this->_('text_disabled')),
+				'total'			=> $this->currency->format($result['total'], $this->config->get('config_currency')),
+				'action'			=> $action
 			);
 		}
-		 
+		
 		$url = '';
 						
 		if (isset($_GET['filter_date_start'])) {
@@ -87,14 +87,13 @@ class ControllerReportCustomerCredit extends Controller {
 		$this->pagination->total = $customer_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('report/customer_credit', $url);
 			
 		$this->data['pagination'] = $this->pagination->render();
 		
 		$this->data['filter_date_start'] = $filter_date_start;
 		$this->data['filter_date_end'] = $filter_date_end;		
-				 
+				
 		$this->children = array(
 			'common/header',
 			'common/footer'

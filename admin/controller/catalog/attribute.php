@@ -1,23 +1,23 @@
 <?php 
 class ControllerCatalogAttribute extends Controller { 
 	
-   
+	
   	public function index() {
 		$this->load->language('catalog/attribute');
 	
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
 		$this->getList();
   	}
-              
+				
   	public function insert() {
 		$this->load->language('catalog/attribute');
 	
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-      		$this->model_catalog_attribute->addAttribute($_POST);
-		  	
+				$this->model_catalog_attribute->addAttribute($_POST);
+			
 			$this->message->add('success', $this->_('text_success'));
 
 			$url = '';
@@ -34,19 +34,19 @@ class ControllerCatalogAttribute extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 						
-      		$this->url->redirect($this->url->link('catalog/attribute', $url));
+				$this->url->redirect($this->url->link('catalog/attribute', $url));
 		}
 	
-    	$this->getForm();
+		$this->getForm();
   	}
 
   	public function update() {
 		$this->load->language('catalog/attribute');
 	
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-	  		$this->model_catalog_attribute->editAttribute($_GET['attribute_id'], $_POST);
+			$this->model_catalog_attribute->editAttribute($_GET['attribute_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -65,21 +65,21 @@ class ControllerCatalogAttribute extends Controller {
 			}
 			
 			$this->url->redirect($this->url->link('catalog/attribute', $url));
-    	}
+		}
 	
-    	$this->getForm();
+		$this->getForm();
   	}
 
   	public function delete() {
 		$this->load->language('catalog/attribute');
 	
-    	$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('heading_title'));
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $attribute_id) {
 				$this->model_catalog_attribute->deleteAttribute($attribute_id);
 			}
-			      		
+							
 			$this->message->add('success', $this->_('text_success'));
 
 			$url = '';
@@ -97,11 +97,11 @@ class ControllerCatalogAttribute extends Controller {
 			}
 			
 			$this->url->redirect($this->url->link('catalog/attribute', $url));
-   		}
+			}
 	
-    	$this->getList();
+		$this->getList();
   	}
-    
+	
   	private function getList() {
 		$this->template->load('catalog/attribute_list');
 
@@ -156,7 +156,7 @@ class ControllerCatalogAttribute extends Controller {
 	
 		$results = $this->model_catalog_attribute->getAttributes($data);
  
-    	foreach ($results as $result) {
+		foreach ($results as $result) {
 			$action = array();
 			
 			$action[] = array(
@@ -165,12 +165,12 @@ class ControllerCatalogAttribute extends Controller {
 			);
 						
 			$this->data['attributes'][] = array(
-				'attribute_id'    => $result['attribute_id'],
-				'name'            => $result['name'],
+				'attribute_id'	=> $result['attribute_id'],
+				'name'				=> $result['name'],
 				'attribute_group' => $result['attribute_group'],
-				'sort_order'      => $result['sort_order'],
-				'selected'        => isset($_POST['selected']) && in_array($result['attribute_id'], $_POST['selected']),
-				'action'          => $action
+				'sort_order'		=> $result['sort_order'],
+				'selected'		=> isset($_POST['selected']) && in_array($result['attribute_id'], $_POST['selected']),
+				'action'			=> $action
 			);
 		}	
 	
@@ -218,7 +218,6 @@ class ControllerCatalogAttribute extends Controller {
 		$this->pagination->total = $attribute_total;
 		$this->pagination->page = $page;
 		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->text = $this->_('text_pagination');
 		$this->pagination->url = $this->url->link('catalog/attribute', $url);
 			
 		$this->data['pagination'] = $this->pagination->render();
@@ -315,27 +314,23 @@ class ControllerCatalogAttribute extends Controller {
   	}
   	
 	private function validateForm() {
-    	if (!$this->user->hasPermission('modify', 'catalog/attribute')) {
-      		$this->error['warning'] = $this->_('error_permission');
-    	}
-	
-    	foreach ($_POST['attribute_description'] as $language_id => $value) {
-      		if ((strlen($value['name']) < 3) || (strlen($value['name']) > 64)) {
-        		$this->error['name'][$language_id] = $this->_('error_name');
-      		}
-    	}
-		
-		if (!$this->error) {
-	  		return true;
-		} else {
-	  		return false;
+		if (!$this->user->hasPermission('modify', 'catalog/attribute')) {
+				$this->error['warning'] = $this->_('error_permission');
 		}
+	
+		foreach ($_POST['attribute_description'] as $language_id => $value) {
+				if ((strlen($value['name']) < 3) || (strlen($value['name']) > 64)) {
+				$this->error['name'][$language_id] = $this->_('error_name');
+				}
+		}
+		
+		return $this->error ? false : true;
   	}
 
   	private function validateDelete() {
 		if (!$this->user->hasPermission('modify', 'catalog/attribute')) {
-      		$this->error['warning'] = $this->_('error_permission');
-    	}
+				$this->error['warning'] = $this->_('error_permission');
+		}
 		
 		foreach ($_POST['selected'] as $attribute_id) {
 			$product_total = $this->model_catalog_product->getTotalProductsByAttributeId($attribute_id);
@@ -343,12 +338,12 @@ class ControllerCatalogAttribute extends Controller {
 			if ($product_total) {
 				$this->error['warning'] = sprintf($this->_('error_product'), $product_total);
 			}
-	  	}
+		}
 		
 		if (!$this->error) { 
-	  		return true;
+			return true;
 		} else {
-	  		return false;
+			return false;
 		}
   	}
 	
@@ -358,8 +353,8 @@ class ControllerCatalogAttribute extends Controller {
 		if (isset($_GET['filter_name'])) {
 			$data = array(
 				'filter_name' => $_GET['filter_name'],
-				'start'       => 0,
-				'limit'       => 20
+				'start'		=> 0,
+				'limit'		=> 20
 			);
 			
 			$json = array();
@@ -368,15 +363,15 @@ class ControllerCatalogAttribute extends Controller {
 			
 			foreach ($results as $result) {
 				$json[] = array(
-					'attribute_id'    => $result['attribute_id'], 
-					'name'            => $result['name'],
+					'attribute_id'	=> $result['attribute_id'], 
+					'name'				=> $result['name'],
 					'attribute_group' => $result['attribute_group']
 				);		
 			}		
 		}
 
 		$sort_order = array();
-	  
+	
 		foreach ($json as $key => $value) {
 			$sort_order[$key] = $value['name'];
 		}
@@ -384,5 +379,5 @@ class ControllerCatalogAttribute extends Controller {
 		array_multisort($sort_order, SORT_ASC, $json);
 
 		$this->response->setOutput(json_encode($json));
-	}		  
+	}		
 }

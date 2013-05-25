@@ -18,11 +18,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category   PHPExcel
- * @package    PHPExcel_Shared
+ * @category	PHPExcel
+ * @package	PHPExcel_Shared
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version    1.7.7, 2012-05-19
+ * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+ * @version	1.7.7, 2012-05-19
  */
 
 define('IDENTIFIER_OLE', pack('CCCCCCCC', 0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1));
@@ -67,11 +67,11 @@ class PHPExcel_Shared_OLERead {
 
 
 	/**
-	 * Read the file
-	 *
-	 * @param $sFileName string Filename
-	 * @throws Exception
-	 */
+	* Read the file
+	*
+	* @param $sFileName string Filename
+	* @throws Exception
+	*/
 	public function read($sFileName)
 	{
 		// Check if file exists and is readable
@@ -112,8 +112,8 @@ class PHPExcel_Shared_OLERead {
 		}
 
 		for ($i = 0; $i < $bbdBlocks; ++$i) {
-			  $bigBlockDepotBlocks[$i] = self::_GetInt4d($this->data, $pos);
-			  $pos += 4;
+			$bigBlockDepotBlocks[$i] = self::_GetInt4d($this->data, $pos);
+			$pos += 4;
 		}
 
 		for ($j = 0; $j < $this->numExtensionBlocks; ++$j) {
@@ -169,10 +169,10 @@ class PHPExcel_Shared_OLERead {
 	}
 
 	/**
-	 * Extract binary stream data
-	 *
-	 * @return string
-	 */
+	* Extract binary stream data
+	*
+	* @return string
+	*/
 	public function getStream($stream)
 	{
 		if ($stream === NULL) {
@@ -187,7 +187,7 @@ class PHPExcel_Shared_OLERead {
 			$block = $this->props[$stream]['startBlock'];
 
 			while ($block != -2) {
-	  			$pos = $block * self::SMALL_BLOCK_SIZE;
+				$pos = $block * self::SMALL_BLOCK_SIZE;
 				$streamData .= substr($rootdata, $pos, self::SMALL_BLOCK_SIZE);
 
 				$block = $this->smallBlockChain[$block];
@@ -215,11 +215,11 @@ class PHPExcel_Shared_OLERead {
 	}
 
 	/**
-	 * Read a standard stream (by joining sectors using information from SAT)
-	 *
-	 * @param int $bl Sector ID where the stream starts
-	 * @return string Data for standard stream
-	 */
+	* Read a standard stream (by joining sectors using information from SAT)
+	*
+	* @param int $bl Sector ID where the stream starts
+	* @return string Data for standard stream
+	*/
 	private function _readData($bl)
 	{
 		$block = $bl;
@@ -231,11 +231,11 @@ class PHPExcel_Shared_OLERead {
 			$block = $this->bigBlockChain[$block];
 		}
 		return $data;
-	 }
+	}
 
 	/**
-	 * Read entries in the directory stream.
-	 */
+	* Read entries in the directory stream.
+	*/
 	private function _readPropertySets() {
 		$offset = 0;
 
@@ -293,12 +293,12 @@ class PHPExcel_Shared_OLERead {
 	}
 
 	/**
-	 * Read 4 bytes of data at specified position
-	 *
-	 * @param string $data
-	 * @param int $pos
-	 * @return int
-	 */
+	* Read 4 bytes of data at specified position
+	*
+	* @param string $data
+	* @param int $pos
+	* @return int
+	*/
 	private static function _GetInt4d($data, $pos)
 	{
 		// FIX: represent numbers correctly on 64-bit system

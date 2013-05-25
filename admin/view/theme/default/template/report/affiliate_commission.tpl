@@ -55,7 +55,7 @@
 </div>
 <script type="text/javascript"><!--
 function filter() {
-	url = 'index.php?route=report/affiliate_commission';
+	url = "<?= HTTP_ADMIN . "index.php?route=report/affiliate_commission"; ?>";
 	
 	var filter_date_start = $('input[name=\'filter_date_start\']').attr('value');
 	

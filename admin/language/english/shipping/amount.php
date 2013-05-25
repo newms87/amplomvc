@@ -1,21 +1,21 @@
 <?php
 // Heading
-$_['heading_title']    = 'Total Price';
+$_['heading_title']	= 'Total Price';
 
 //Data
-$_['priceset_types']   = array('percent'=>"Percent", 'fixed'=>"Fixed Amount");
-$_['priceset_ranges']   = array('lt'=>"<", 'lte'=>'<=', 'gt'=>">", 'gte'=>'>=', 'eq'=>'=','range'=>'range');
-$_['rule_mods']   = array('add'=>"+", 'subtract'=>'-', 'fixed'=>"=");
+$_['priceset_types']	= array('percent'=>"Percent", 'fixed'=>"Fixed Amount");
+$_['priceset_ranges']	= array('lt'=>"<", 'lte'=>'<=', 'gt'=>">", 'gte'=>'>=', 'eq'=>'=','range'=>'range');
+$_['rule_mods']	= array('add'=>"+", 'subtract'=>'-', 'fixed'=>"=");
 
 // Text
-$_['text_shipping']    = 'Shipping';
-$_['text_success']     = 'Success: You have modified total price shipping!';
+$_['text_shipping']	= 'Shipping';
+$_['text_success']	= 'Success: You have modified total price shipping!';
 
 // Entry
-$_['entry_cost']       = 'Cost:';
+$_['entry_cost']		= 'Cost:';
 $_['entry_tax_class']  = 'Tax Class:';
-$_['entry_geo_zone']   = 'Geo Zone:';
-$_['entry_status']     = 'Status:';
+$_['entry_geo_zone']	= 'Geo Zone:';
+$_['entry_status']	= 'Status:';
 $_['entry_sort_order'] = 'Sort Order:';
 $_['entry_priceset'] = "Price Sets:";
 $_['entry_priceset_range'] = "Total Price Range";

@@ -95,7 +95,7 @@ class Extend {
 			}
 		}
 		
-		$this->model_design_layout->addLayout($layout);
+		return $this->model_design_layout->addLayout($layout);
 	}
 	
 	public function remove_layout($name){
@@ -118,7 +118,7 @@ class Extend {
 		$hooks[] = array(
 			'hook_set' => $hook_set,
 			'callback' => $callback,
-			'param'	  => $param,
+			'param'	=> $param,
 			'priority' => $priority,
 		);
 		
@@ -156,7 +156,7 @@ class Extend {
 		$result = $this->db->query("SELECT $key_column, $column FROM " . DB_PREFIX . "$table");
 		
 		$sort_column = '__image_sort__' . $column;
-		 
+		
 		foreach($result->rows as $row){
 			$this->update_hsv_value($row, $column);
 			

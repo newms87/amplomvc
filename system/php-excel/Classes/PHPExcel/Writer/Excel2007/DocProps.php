@@ -18,30 +18,30 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category   PHPExcel
- * @package    PHPExcel_Writer_Excel2007
+ * @category	PHPExcel
+ * @package	PHPExcel_Writer_Excel2007
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version    1.7.7, 2012-05-19
+ * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+ * @version	1.7.7, 2012-05-19
  */
 
 
 /**
  * PHPExcel_Writer_Excel2007_DocProps
  *
- * @category   PHPExcel
- * @package    PHPExcel_Writer_Excel2007
+ * @category	PHPExcel
+ * @package	PHPExcel_Writer_Excel2007
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_Writer_Excel2007_DocProps extends PHPExcel_Writer_Excel2007_WriterPart
 {
 /**
-	 * Write docProps/app.xml to XML format
-	 *
-	 * @param 	PHPExcel	$pPHPExcel
-	 * @return 	string 		XML Output
-	 * @throws 	Exception
-	 */
+	* Write docProps/app.xml to XML format
+	*
+	* @param 	PHPExcel	$pPHPExcel
+	* @return 	string 		XML Output
+	* @throws 	Exception
+	*/
 	public function writeDocPropsApp(PHPExcel $pPHPExcel = null)
 	{
 		// Create XML writer
@@ -133,12 +133,12 @@ class PHPExcel_Writer_Excel2007_DocProps extends PHPExcel_Writer_Excel2007_Write
 	}
 
 	/**
-	 * Write docProps/core.xml to XML format
-	 *
-	 * @param 	PHPExcel	$pPHPExcel
-	 * @return 	string 		XML Output
-	 * @throws 	Exception
-	 */
+	* Write docProps/core.xml to XML format
+	*
+	* @param 	PHPExcel	$pPHPExcel
+	* @return 	string 		XML Output
+	* @throws 	Exception
+	*/
 	public function writeDocPropsCore(PHPExcel $pPHPExcel = null)
 	{
 		// Create XML writer
@@ -200,12 +200,12 @@ class PHPExcel_Writer_Excel2007_DocProps extends PHPExcel_Writer_Excel2007_Write
 	}
 
 	/**
-	 * Write docProps/custom.xml to XML format
-	 *
-	 * @param 	PHPExcel	$pPHPExcel
-	 * @return 	string 		XML Output
-	 * @throws 	Exception
-	 */
+	* Write docProps/custom.xml to XML format
+	*
+	* @param 	PHPExcel	$pPHPExcel
+	* @return 	string 		XML Output
+	* @throws 	Exception
+	*/
 	public function writeDocPropsCustom(PHPExcel $pPHPExcel = null)
 	{
 		$customPropertyList = $pPHPExcel->getProperties()->getCustomProperties();

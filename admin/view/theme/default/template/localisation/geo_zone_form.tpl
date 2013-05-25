@@ -1,30 +1,29 @@
 <?= $header; ?>
 <div class="content">
   <?= $this->builder->display_breadcrumbs();?>
-  <? if ($error_warning) { ?>
-  <div class="message_box warning"><?= $error_warning; ?></div>
-  <? } ?>
+  <?= $this->builder->display_errors(); ?>
   <div class="box">
     <div class="heading">
       <h1><img src="<?= HTTP_THEME_IMAGE . 'country.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
-      <div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a onclick="location = '<?= $cancel; ?>';" class="button"><?= $button_cancel; ?></a></div>
+      <div class="buttons">
+      	<a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a>
+      	<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
+      </div>
     </div>
     <div class="content">
       <form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
         <table class="form">
           <tr>
             <td><span class="required"></span> <?= $entry_name; ?></td>
-            <td><input type="text" name="name" value="<?= $name; ?>" />
-              <? if ($error_name) { ?>
-              <span class="error"><?= $error_name; ?></span>
-              <? } ?></td>
+            <td><input type="text" name="name" value="<?= $name; ?>" /></td>
           </tr>
           <tr>
             <td><span class="required"></span> <?= $entry_description; ?></td>
-            <td><input type="text" name="description" value="<?= $description; ?>" />
-              <? if ($error_description) { ?>
-              <span class="error"><?= $error_description; ?></span>
-              <? } ?></td>
+            <td><input type="text" name="description" value="<?= $description; ?>" /></td>
+          </tr>
+          <tr>
+          	<td><?= $entry_exclude; ?></td>
+          	<td><input type="checkbox" name="exclude" value="1" <?= $exclude ? 'checked="checked"' : ''; ?> /></td>
           </tr>
         </table>
         <br />
@@ -36,27 +35,35 @@
               <td></td>
             </tr>
           </thead>
-          <tbody>
-          <? $zone_to_geo_zone_row = 0; ?>
-          <? foreach ($zone_to_geo_zones as $zone_to_geo_zone) { ?>
-            <tr class='geozone_selector'>
+          
+          	
+          <? $zones['template_row'] = array(
+          		"country_id" => "%country_id%",
+          		"zone_id" => "%zone_id%",
+          ); ?>
+          
+          <tbody id="zone_list">
+          <? $zone_row = 0; ?>
+          <? foreach ($zones as $key => $zone) { ?>
+          	<? $row = $key == 'template_row' ? '%zone_row%' : $zone_row++; ?>
+            <tr class="geozone_selector <?= $key; ?>">
               <td class="left">
                  <? $this->builder->set_config('country_id', 'name');?>
-                 <?= $this->builder->build('select', $countries, "zone_to_geo_zone[$zone_to_geo_zone_row][country_id]", $zone_to_geo_zone['country_id'], array('class'=>'country_selector'));?>
+                 <?= $this->builder->build('select', $data_countries, "zones[$row][country_id]", $zone['country_id'], array('class'=>'country_selector'));?>
                  <a onclick="add_all_zones($(this))" style="text-decoration:none; display:block"><?= $button_add_all_zones;?></a>
               </td>
               <td class="left">
-                 <select name="zone_to_geo_zone[<?= $zone_to_geo_zone_row; ?>][zone_id]" zone_id="<?= $zone_to_geo_zone['zone_id'];?>" class='zone_selector'></select>
+                 <select name="zones[<?= $row; ?>][zone_id]" zone_id="<?= $zone['zone_id'];?>" class='zone_selector'></select>
               </td>
               <td class="left"><a onclick="$(this).closest('.geozone_selector').remove();" class="button"><?= $button_remove; ?></a></td>
             </tr>
-          <? $zone_to_geo_zone_row++; ?>
           <? } ?>
           </tbody>
+          
           <tfoot>
             <tr>
               <td colspan="2"></td>
-              <td class="left"><a onclick="addGeoZone();" class="button"><?= $button_add_geo_zone; ?></a></td>
+              <td class="left"><a onclick="addZoneRow();" class="button"><?= $button_add_geo_zone; ?></a></td>
             </tr>
           </tfoot>
         </table>
@@ -89,31 +96,36 @@ function add_all_zones(context){
       });
       
       if(add && value != zone_id && value != '0' && value){
-         addGeoZone(country_id, value);
+         addZoneRow(country_id, value);
       }
    });
 }
 //--></script>
 
 <script type="text/javascript">//<!--
-var geozone_row = <?= $zone_to_geo_zone_row; ?>;
+var temp = $('#zone_list').find('.template_row');
+var zone_template = temp.html();
+temp.remove();
 
-function addGeoZone(country_id, zone_id) {
-   zone_id = zone_id || '';
-   country_id = country_id || 0;
-   
-	html  = '<tr class="geozone_selector">';
-   <? $this->builder->set_config('country_id', 'name');?>
-	html += '  <td class="left">' + "<?= $this->builder->build('select', $countries, "zone_to_geo_zone[%geozone_row%][country_id]", '', array('class'=>'country_selector'), true);?>" + '<a onclick="add_all_zones($(this))" style="text-decoration:none;display:block;"><?= $button_add_all_zones;?></a></td>';
-	html += '  <td class="left"><select name="zone_to_geo_zone[%geozone_row%][zone_id]" class="zone_selector" zone_id="' + zone_id + '"></select></td>';
-	html += '  <td class="left"><a onclick="$(this).closest(\'.geozone_selector\').remove();" class="button"><?= $button_remove; ?></a></td>';
-	html += '</tr>';
+var zone_row = <?= $zone_row; ?>;
+
+function addZoneRow(country_id, zone_id){
+	country_id = country_id || 1;
+	zone_id = zone_id || 0;
 	
-	$('#zone-to-geo-zone tbody').append(html.replace(/%geozone_row%/g, geozone_row));
+	template = zone_template
+		.replace(/%zone_row%/g, zone_row)
+		.replace(/%country_id%/g, 0)
+		.replace(/%zone_id%/g, zone_id);
 	
-	$('.geozone_selector').last().find('.country_selector').val(country_id).trigger('change');
+	$('#zone_list').append($('<tr class="geozone_selector ' + zone_row + '" />').append(template));
 	
-	geozone_row++;
-}
-//--></script> 
+	$('.geozone_selector.' + zone_row).find('.country_selector').val(country_id+1).change().val(country_id).change();
+	
+	zone_row++;
+};
+//--></script>
+
+<?= $this->builder->js('errors', $errors); ?>
+
 <?= $footer; ?>

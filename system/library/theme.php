@@ -118,19 +118,19 @@ class Theme {
 		
 		if(!$themes){
 			$dir_themes = glob($theme_dir . '*', GLOB_ONLYDIR);
-	      
+			
 			$themes = array();
 			
-	      foreach ($dir_themes as $dir) {
-	      	$name = basename($dir);
+			foreach ($dir_themes as $dir) {
+				$name = basename($dir);
 				
 				$theme_settings_file = $theme_dir . $name . '/settings.php';
 				
-	         $themes[$name] = array(
-	         	'name' => $name,
-	         	'settings' => $this->get_theme_settings($theme_settings_file, $name),
-	      	);
-	      }
+				$themes[$name] = array(
+					'name' => $name,
+					'settings' => $this->get_theme_settings($theme_settings_file, $name),
+				);
+			}
 			
 			$this->cache->set('themes', $themes);
 		}
@@ -155,20 +155,20 @@ class Theme {
 		//Search By specified theme
 		if($theme){
 			if (file_exists(DIR_THEME . $theme . '/' . $file)) {
-	         return DIR_THEME . $theme . '/' . $file; 
-	      }
+				return DIR_THEME . $theme . '/' . $file; 
+			}
 		}
 		//Search By current theme
 		else{
 			if (file_exists(DIR_THEME . $this->theme . '/' . $file)) {
-	         return DIR_THEME . $this->theme . '/' . $file; 
-	      }
+				return DIR_THEME . $this->theme . '/' . $file; 
+			}
 			elseif (file_exists(DIR_THEME . $this->theme . '/template/' . $file)) {
-	         return DIR_THEME . $this->theme . '/template/' . $file; 
-	      }
-	      elseif(file_exists(DIR_THEME . $this->default_theme . '/template/' . $file)) {
-	         return DIR_THEME . $this->default_theme . '/template/' . $file;
-	      }
+				return DIR_THEME . $this->theme . '/template/' . $file; 
+			}
+			elseif(file_exists(DIR_THEME . $this->default_theme . '/template/' . $file)) {
+				return DIR_THEME . $this->default_theme . '/template/' . $file;
+			}
 		}
 		
 		//File not found

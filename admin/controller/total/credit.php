@@ -1,7 +1,7 @@
 <?php 
 class ControllerTotalCredit extends Controller { 
-	 
-	 
+	
+	
 	public function index() { 
 		$this->template->load('total/credit');
 
@@ -56,10 +56,6 @@ class ControllerTotalCredit extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		return $this->error ? false : true;	
 	}
 }

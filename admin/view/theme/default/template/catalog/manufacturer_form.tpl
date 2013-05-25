@@ -107,7 +107,7 @@
                    <td class="left"><input type="text" name="articles[<?=$row;?>][title]" value="<?=$article['title'];?>" /></td>
                    <td class="left"><textarea id='article-description-<?=$row;?>' class='ckedit' name="articles[<?=$row;?>][description]" ><?=$article['description'];?></textarea></td>
                    <td class="left"><input type="text" name="articles[<?=$row;?>][link]" size='60' value="<?=$article['link'];?>" /></td>
-                   <td class="left"><a onclick="remove_ckeditor_for('article-description-<?=$row;?>');$('#article-<?=$row;?>').remove();" class="button"><?=$button_remove;?></a></td>
+                   <td class="left"><a onclick="remove_ckeditor_for($('#article-description-<?=$row;?>'));$('#article-<?=$row;?>').remove();" class="button"><?=$button_remove;?></a></td>
                 </tr>
              </tbody>
              <? $row++;?>
@@ -130,11 +130,6 @@
 <?= $this->builder->js('ckeditor');?>
 
 <script type="text/javascript">//<!--
-function remove_ckeditor_for(id){
-   CKEDITOR.instances[id].destroy();
-}
-//--></script>
-<script type="text/javascript">//<!--
 function generate_url_warning(field){
    if($('#gen_warn').length == 0)
       $(field).parent().append('<span id="gen_warn" style="color:red"><?=$warning_generate_url;?></span>');
@@ -145,7 +140,7 @@ function generate_url(c){
    name =$('input[name="name"]').val();
    if(!name)
       alert("Please make a name for this Designer before generating the URL");
-   $.post('index.php?route=catalog/manufacturer/generate_url',{manufacturer_id:<?=$manufacturer_id?$manufacturer_id:0;?>,name:name},function(json){$('input[name="keyword"]').val(json);},'json');
+   $.post("<?= HTTP_ADMIN . "index.php?route=catalog/manufacturer/generate_url"; ?>",{manufacturer_id:<?=$manufacturer_id?$manufacturer_id:0;?>,name:name},function(json){$('input[name="keyword"]').val(json);},'json');
 }
  //--></script>
 <script type="text/javascript">//<!--
@@ -156,11 +151,11 @@ function add_article(context){
    html += '      <td class="left"><input type="text" name="articles[%row%][title]" /></td>';
    html += '      <td class="left"><textarea id="article-description-%row%" name="articles[%row%][description]" ></textarea></td>';
    html += '      <td class="left"><input type="text" name="articles[%row%][link]" size="60" /></td>';
-   html += '      <td class="left"><a onclick="remove_ckeditor_for(\'article-description-%row%\');$(\'#article-%row%\').remove();" class="button"><?=$button_remove;?></a></td>';
+   html += '      <td class="left"><a onclick="remove_ckeditor_for($(\'#article-description-%row%\'));$(\'#article-%row%\').remove();" class="button"><?=$button_remove;?></a></td>';
    html += '   </tr>';
    html += '</tbody>';
    $(context).closest('tbody').before(html.replace(/%row%/g,article_row));
-   init_ckeditor_for('article-description-'+article_row);
+   init_ckeditor_for($('#article-description-'+article_row));
    article_row++;
 } 
 //--></script>

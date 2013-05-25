@@ -15,57 +15,57 @@ class ModelSettingSetting extends Model {
 
 		return $data;
 	}
-   
-   public function editSettingKey($group, $key = null, $value = array(), $store_id = 0, $auto_load = true){
-      if(is_array($value) || is_object($value)){
-         $value = serialize($value);
-         $serialized = 1;
-      }
-      else{
-         $serialized = 0;
-      }
-      
-      $values = array(
-         'group' => $group,
-         'key' => $key,
-         'value' => $value,
-         'serialized' => $serialized,
-         'store_id' => $store_id,
-         'auto_load' => $auto_load ? 1 : 0
-      );
-      
-      $this->delete('setting',"`group` = '$group' AND `key` = '$key' AND store_id = '$store_id'");
-      
-      $this->insert('setting',  $values);
+	
+	public function editSettingKey($group, $key = null, $value = array(), $store_id = 0, $auto_load = true){
+		if(is_array($value) || is_object($value)){
+			$value = serialize($value);
+			$serialized = 1;
+		}
+		else{
+			$serialized = 0;
+		}
+		
+		$values = array(
+			'group' => $group,
+			'key' => $key,
+			'value' => $value,
+			'serialized' => $serialized,
+			'store_id' => $store_id,
+			'auto_load' => $auto_load ? 1 : 0
+		);
+		
+		$this->delete('setting',"`group` = '$group' AND `key` = '$key' AND store_id = '$store_id'");
+		
+		$this->insert('setting',  $values);
 		
 		$this->cache->delete('setting');
 		$this->cache->delete('store');
-   }
-   
-   public function editSetting($group, $data, $store_id = 0, $auto_load = true) {
-      $this->delete('setting',"`group` = '$group' AND store_id = '$store_id'");
-      
-      foreach ($data as $key => $value) {
-         $values = array(
-            'store_id' => $store_id,
-            'group'    => $group,
-            'key'      => $key,
-            'auto_load' => $auto_load ? 1 : 0
-         );
-         
-         if(is_array($value) || is_object($value)){
-            $values['value'] = serialize($value);
-            $values['serialized'] = 1;
-         }
-         else{
-            $values['value'] = $value;
-            $values['serialized'] = 0;
-         }
-         
-         $this->insert('setting', $values);
-      }
+	}
+	
+	public function editSetting($group, $data, $store_id = 0, $auto_load = true) {
+		$this->delete('setting',"`group` = '$group' AND store_id = '$store_id'");
+		
+		foreach ($data as $key => $value) {
+			$values = array(
+				'store_id' => $store_id,
+				'group'	=> $group,
+				'key'		=> $key,
+				'auto_load' => $auto_load ? 1 : 0
+			);
+			
+			if(is_array($value) || is_object($value)){
+				$values['value'] = serialize($value);
+				$values['serialized'] = 1;
+			}
+			else{
+				$values['value'] = $value;
+				$values['serialized'] = 0;
+			}
+			
+			$this->insert('setting', $values);
+		}
 		
 		$this->cache->delete('setting');
 		$this->cache->delete('store');
-   }
+	}
 }
