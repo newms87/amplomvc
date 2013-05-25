@@ -11,6 +11,8 @@ class pluginHandler{
 	function __construct(&$registry, $merge_registry){
 		$this->registry = &$registry;
 		
+		$this->registry->set('plugin_handler', $this);
+		
 		$this->load_plugin_file_registry();
 		
 		$this->validate_plugin_file_registry();
@@ -56,14 +58,16 @@ class pluginHandler{
 		$dev_mode = false;
 		
 		foreach($this->plugin_registry as $reg){
-			if(!is_file($reg['plugin_file'])){
-				$this->message->add('warning', "The plugin file $reg[plugin_file] was missing! The plugin $reg[name] has been uninstalled");
-				$this->url->redirect($this->url->admin('extension/plugin/uninstall', 'name=' . $reg['name'] . '&keep_data=1'));
-			}
-			
-			if(!is_file($reg['live_file'])){
-				$this->message->add('warning', "The LIVE plugin file $reg[live_file] was missing! The plugin $reg[name] has been uninstalled");
-				$this->url->redirect($this->url->admin('extension/plugin/uninstall', 'name=' . $reg['name'] . '&keep_data=1'));
+			if(!is_file($reg['plugin_file']) || !is_file($reg['live_file'])){
+				if(!defined("IS_ADMIN")){
+					$this->url->redirect($this->url->admin());
+				}
+				$missing = is_file($reg['plugin_file']) ? $reg['live_file'] : $reg['plugin_file'];
+				$this->message->add('warning', "The plugin file $missing was missing! The plugin $reg[name] has been uninstalled.");
+				
+				$this->model_setting_plugin->uninstall($reg['name']);
+				
+				$this->url->redirect($this->url->admin('extension/plugin'));
 			}
 			
 			if(filemtime($reg['plugin_file']) > (int)$reg['plugin_file_modified']){
