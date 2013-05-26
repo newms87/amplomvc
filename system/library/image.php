@@ -129,7 +129,7 @@ class Image {
 		$info = pathinfo($filename);
 		
 		//if the background is transparent and the mime type is not png or gif, change to png
-		if(!$background_color && !in_array(strtolower($info['extension']), array('png','gif'))){
+		if(!$background_color && !in_array(strtolower($info['extension']), array('png','gif', 'jpg'))){
 			$extension = 'png';
 		}
 		else{

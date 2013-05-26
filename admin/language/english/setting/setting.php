@@ -49,6 +49,7 @@ $_['entry_length_class']		= 'Length Class:';
 $_['entry_weight_class']		= 'Weight Class:';
 $_['entry_catalog_limit'] 		= 'Default Items Per Page (Catalog):<br /><span class="help">Determines how many catalog items are shown per page (products, categories, etc)</span>';
 $_['entry_admin_limit']			= 'Default Items Per Page (Admin):<br /><span class="help">Determines how many admin items are shown per page (orders, customers, etc)</span>';
+$_['entry_performance_log']		= 'Performance Logging:';
 $_['entry_cache_ignore']		= 'Cache Ignore List:<span class="help">(comma separated list)</span>';
 $_['entry_tax']					= 'Display Prices With Tax:';
 $_['entry_tax_default_id']					= 'Default Tax Class:';

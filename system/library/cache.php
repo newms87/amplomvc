@@ -16,6 +16,8 @@ class Cache {
 				$time = strstr(basename($file), '.',true);
 				
 				if ($time < time()) {
+					clearstatcache();
+					
 					if (file_exists($file)) {
 						@unlink($file);
 					}

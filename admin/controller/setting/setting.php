@@ -55,6 +55,7 @@ class ControllerSettingSetting extends Controller {
 			'config_weight_class_id',
 			'config_catalog_limit',
 			'config_admin_limit',
+			'config_performance_log',
 			'config_cache_ignore',
 			'config_show_price_with_tax',
 			'config_tax_default_id',

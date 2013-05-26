@@ -210,6 +210,10 @@
 							<td><input type="text" name="config_admin_limit" value="<?= $config_admin_limit; ?>" size="3" />
 						</tr>
 						<tr>
+							<td><?= $entry_performance_log; ?></td>
+							<td><?= $this->builder->build('select', $data_statuses, 'config_performance_log', $config_performance_log); ?></td>
+						</tr>
+						<tr>
 							 <td><?=$entry_cache_ignore;?></td>
 							 <td><textarea name='config_cache_ignore'><?=$config_cache_ignore;?></textarea></td>
 						</tr>

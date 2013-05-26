@@ -287,7 +287,16 @@ $controller->dispatch($action, new Action('error/not_found'));
 // Output
 $response->output();
 
-//if($config->trace_execution_time){
+
+if($config->get('config_performance_log')){
+	$stats = array(
+		'peak_memory' => $registry->get('tool')->bytes2str(memory_get_peak_usage(true)),
+		'count_included_files' => count(get_included_files()), 
+		'execution_time' => microtime(true) - $__start, 
+	);
 	
-//}
-//echo 'execution time: ' . (microtime(true) - $__start);
+	foreach($stats as $key => $s){
+		echo "$key = $s<br>";
+	}
+}
+
