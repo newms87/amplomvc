@@ -21,5 +21,5 @@ $_['column_total']		= 'Total';
 
 // Error
 $_['error_stock']		= '*** : ces Produits ne sont plus en stock ou disponibles dans les quantit&eacute;s souhait&eacute;es !';
-$_['error_minimum']		= 'Le montant minimum pour cette commande %s est de %s!';	
+$_['error_minimum']		= 'Le montant minimum pour cette commande %s est de %s!';
 $_['error_required']	= '%s requis !';	

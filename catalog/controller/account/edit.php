@@ -49,13 +49,13 @@ class ControllerAccountEdit extends Controller {
 			$this->data['error_email'] = $this->error['email'];
 		} else {
 			$this->data['error_email'] = '';
-		}	
+		}
 		
 		if (isset($this->error['telephone'])) {
 			$this->data['error_telephone'] = $this->error['telephone'];
 		} else {
 			$this->data['error_telephone'] = '';
-		}	
+		}
 
 		$this->data['action'] = $this->url->link('account/edit');
 
@@ -105,22 +105,16 @@ class ControllerAccountEdit extends Controller {
 
 		$this->data['back'] = $this->url->link('account/account');
 
-
-
-
-
-
-
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
 			'common/content_top',
 			'common/content_bottom',
 			'common/footer',
-			'common/header'	
+			'common/header'
 		);
 						
-		$this->response->setOutput($this->render());	
+		$this->response->setOutput($this->render());
 	}
 
 	private function validate() {
@@ -136,7 +130,7 @@ class ControllerAccountEdit extends Controller {
 			$this->error['email'] = $this->_('error_email');
 		}
 		
-		if (($this->customer->getEmail() != $_POST['email']) && $this->model_account_customer->getTotalCustomersByEmail($_POST['email'])) {
+		if (($this->customer->info('email') != $_POST['email']) && $this->model_account_customer->getTotalCustomersByEmail($_POST['email'])) {
 			$this->error['warning'] = $this->_('error_exists');
 		}
 

@@ -1,4 +1,4 @@
-<?php 
+<?php
 class SetupMail extends SetupPlugin {
 
 	public function install(&$controller_adapters, &$db_requests){

@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerCheckoutBlockRegister extends Controller {
   	public function index() {
   		$this->language->load('checkout/checkout');
@@ -41,7 +41,7 @@ class ControllerCheckoutBlockRegister extends Controller {
 			}
 		}
 		
-		$this->response->setOutput($this->render());		
+		$this->response->setOutput($this->render());
   	}
 	
 	public function validate() {
@@ -106,26 +106,22 @@ class ControllerCheckoutBlockRegister extends Controller {
 		
 		//If the Form is valid
 		if (!$json) {
+			//Add New Customer
 			$this->model_account_customer->addCustomer($_POST);
 			
-			$this->session->data['account'] = 'register';
+			//Add Customer Address
+			$address_id = $this->model_account_address->addAddress($_POST);
+				
+			$this->customer->set_setting('default_payment_address_id', $address_id);
+			$this->customer->set_setting('default_shipping_address_id', $address_id);
 			
 			if (!$this->config->get('config_customer_approval')) {
 				$this->customer->login($_POST['email'], $_POST['password']);
 				
-				$this->session->data['payment_address_id'] = $this->customer->getPaymentInfo('address_id');
-				
-				if (!empty($_POST['shipping_address'])) {
-					$this->session->data['shipping_address_id'] = $this->customer->getAddressId();
-				}
 				$json['redirect'] = $this->url->link('checkout/checkout');
-				
 			} else {
 				$json['redirect'] = $this->url->link('account/success');
 			}
-			
-			unset($this->session->data['shipping_method']);
-			unset($this->session->data['payment_method']);	
 		}
 		
 		//If this is not an ajax call, redirect w/ a message
@@ -140,6 +136,6 @@ class ControllerCheckoutBlockRegister extends Controller {
 			$this->url->redirect($this->url->link('checkout/checkout'));
 		}
 
-		$this->response->setOutput(json_encode($json));	
+		$this->response->setOutput(json_encode($json));
 	}
 }

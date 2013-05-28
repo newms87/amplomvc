@@ -20,7 +20,7 @@ class ControllerToolData extends Controller {
 			}
 	
 			$output .= '>' . $result['name'] . '</option>';
-		} 
+		}
 		
 		if (!$results) {
 			$output .= '<option value="0">' . $this->_('text_none') . '</option>';

@@ -2,7 +2,7 @@
 // Heading
 $_['heading_title']			= 'LIQPAY';
 
-// Text 
+// Text
 $_['text_payment']			= 'Paiement';
 $_['text_success']			= 'F&eacute;licitations, vous avez modifi&eacute; les d&eacute;tails du paiement <b>LIQPAY</b> avec succ&egrave;s !';
 $_['text_pay']				= 'LIQPAY';

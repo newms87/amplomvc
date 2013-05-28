@@ -1,9 +1,9 @@
 <?php
 // Heading
-$_['heading_title']	= 'Idioma';  
+$_['heading_title']	= 'Idioma';
 
 // Text
-$_['text_success']		= 'Éxito: has modificado idiomas!'; 
+$_['text_success']		= 'Éxito: has modificado idiomas!';
 
 // Column
 $_['column_name']		= 'Nombre idioma';

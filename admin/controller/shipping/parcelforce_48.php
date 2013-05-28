@@ -2,7 +2,7 @@
 class ControllerShippingParcelforce48 extends Controller {
 	
 	
-	public function index() {	
+	public function index() {
 		$this->template->load('shipping/parcelforce_48');
 
 		$this->load->language('shipping/parcelforce_48');
@@ -10,7 +10,7 @@ class ControllerShippingParcelforce48 extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('parcelforce_48', $_POST);		
+			$this->model_setting_setting->editSetting('parcelforce_48', $_POST);
 					
 			$this->message->add('success', $this->_('text_success'));
 						
@@ -36,7 +36,7 @@ class ControllerShippingParcelforce48 extends Controller {
 		} elseif ($this->config->get('parcelforce_48_rate')) {
 			$this->data['parcelforce_48_rate'] = $this->config->get('parcelforce_48_rate');
 		} else {
-			$this->data['parcelforce_48_rate'] = '10:15.99,12:19.99,14:20.99,16:21.99,18:21.99,20:21.99,22:26.99,24:30.99,26:34.99,28:38.99,30:42.99,35:52.99,40:62.99,45:72.99,50:82.99,55:92.99,60:102.99,65:112.99,70:122.99,75:132.99,80:142.99,85:152.99,90:162.99,95:172.99,100:182.99';	
+			$this->data['parcelforce_48_rate'] = '10:15.99,12:19.99,14:20.99,16:21.99,18:21.99,20:21.99,22:26.99,24:30.99,26:34.99,28:38.99,30:42.99,35:52.99,40:62.99,45:72.99,50:82.99,55:92.99,60:102.99,65:112.99,70:122.99,75:132.99,80:142.99,85:152.99,90:162.99,95:172.99,100:182.99';
 		}
 		
 		if (isset($_POST['parcelforce_48_insurance'])) {
@@ -87,7 +87,7 @@ class ControllerShippingParcelforce48 extends Controller {
 			$this->data['parcelforce_48_sort_order'] = $_POST['parcelforce_48_sort_order'];
 		} else {
 			$this->data['parcelforce_48_sort_order'] = $this->config->get('parcelforce_48_sort_order');
-		}				
+		}
 
 		$this->data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
 		
@@ -106,6 +106,6 @@ class ControllerShippingParcelforce48 extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

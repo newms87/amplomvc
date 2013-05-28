@@ -13,7 +13,7 @@ class ControllerPaymentMoneybookers extends Controller {
 		$this->data['return_url'] = $this->url->link('checkout/success');
 		$this->data['cancel_url'] = $this->url->link('checkout/checkout');
 		$this->data['status_url'] = $this->url->link('payment/moneybookers/callback');
-		$this->data['language'] = $this->session->data['language'];		
+		$this->data['language'] = $this->language->code();
 		$this->data['logo'] = HTTP_IMAGE . $this->config->get('config_logo');
 		
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
@@ -35,17 +35,11 @@ class ControllerPaymentMoneybookers extends Controller {
 		
 		foreach ($this->cart->getProducts() as $product) {
 			$products .= $product['quantity'] . ' x ' . $product['name'] . ', ';
-		}		
+		}
 		
 		$this->data['detail1_text'] = $products;
 		
 		$this->data['order_id'] = $this->encryption->encrypt($this->session->data['order_id']);
-		
-
-
-
-
-
 
 		$this->render();
 	}

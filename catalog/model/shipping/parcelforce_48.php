@@ -44,7 +44,7 @@ class ModelShippingParcelforce48 extends Model {
 						$insurance = $data[1];
 					}
 					
-						break; 
+						break;
   				}
 			}
 			
@@ -59,18 +59,18 @@ class ModelShippingParcelforce48 extends Model {
 			
 				if ($this->config->get('parcelforce_48_display_insurance') && (float)$insurance) {
 					$text .= ' (' . $this->_('text_insurance') . ' ' . $this->currency->format($insurance) . ')';
-				}		
+				}
 
 				if ($this->config->get('parcelforce_48_display_time')) {
 					$text .= ' (' . $this->_('text_time') . ')';
-				}	
+				}
 				
 					$quote_data['parcelforce_48'] = array(
 					'code'			=> 'parcelforce_48.parcelforce_48',
 					'title'		=> $text,
 					'cost'			=> $cost,
 					'tax_class_id' => $this->config->get('parcelforce_48_tax_class_id'),
-					'text'			=> $this->currency->format($this->tax->calculate($cost, $this->config->get('parcelforce_48_tax_class_id'), $this->config->get('config_show_price_with_tax')))
+					'text'			=> $this->currency->format($this->tax->calculate($cost, $this->config->get('parcelforce_48_tax_class_id')))
 					);
 
 					$method_data = array(

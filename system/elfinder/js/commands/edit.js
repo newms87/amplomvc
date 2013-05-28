@@ -1,6 +1,6 @@
 "use strict"
 /**
- * @class elFinder command "edit". 
+ * @class elFinder command "edit".
  * Edit text file in dialog window
  *
  * @author Dmitry (dio) Levashov, dio@std42.ru
@@ -18,7 +18,7 @@ elFinder.prototype.commands.edit = function() {
 		 **/
 		filter = function(files) {
 			return $.map(files, function(file) {
-				return (file.mime.indexOf('text/') === 0 || $.inArray(file.mime, mimes) !== -1) 
+				return (file.mime.indexOf('text/') === 0 || $.inArray(file.mime, mimes) !== -1)
 					&& file.mime.indexOf('text/rtf')
 					&& (!self.onlyMimes.length || $.inArray(file.mime, self.onlyMimes) !== -1)
 					&& file.read && file.write ? file : null;
@@ -50,13 +50,13 @@ elFinder.prototype.commands.edit = function() {
 					title   : file.name,
 					width   : self.options.dialogWidth || 450,
 					buttons : {},
-					close   : function() { 
+					close   : function() {
 						ta.editor && ta.editor.close(ta[0], ta.editor.instance);
-						$(this).elfinderdialog('destroy'); 
+						$(this).elfinderdialog('destroy');
 					},
-					open    : function() { 
+					open    : function() {
 						fm.disable();
-						ta.focus(); 
+						ta.focus();
 						ta[0].setSelectionRange && ta[0].setSelectionRange(0, 0);
 						ta.editor && ta.editor.load(ta[0]);
 					}
@@ -68,7 +68,7 @@ elFinder.prototype.commands.edit = function() {
 				}
 				
 				$.each(self.options.editors || [], function(i, editor) {
-					if ($.inArray(file.mime, editor.mimes || []) !== -1 
+					if ($.inArray(file.mime, editor.mimes || []) !== -1
 					&& typeof editor.load == 'function'
 					&& typeof editor.save == 'function') {
 						ta.editor = {
@@ -132,11 +132,11 @@ elFinder.prototype.commands.edit = function() {
 		edit = function(file) {
 			var hash   = file.hash,
 				opts   = fm.options,
-				dfrd   = $.Deferred(), 
+				dfrd   = $.Deferred(),
 				data   = {cmd : 'file', target : hash},
 				url    = fm.url(hash) || fm.options.url,
 				id    = 'edit-'+fm.namespace+'-'+file.hash,
-				d = fm.getUI().find('#'+id), 
+				d = fm.getUI().find('#'+id),
 				error;
 			
 			
@@ -215,7 +215,7 @@ elFinder.prototype.commands.edit = function() {
 			list.push(edit(file));
 		}
 		
-		return list.length 
+		return list.length
 			? $.when.apply(null, list)
 			: $.Deferred().reject();
 	}

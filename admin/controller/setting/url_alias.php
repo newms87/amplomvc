@@ -12,7 +12,7 @@ class ControllerSettingUrlAlias extends Controller {
   	public function insert() {
 		$this->load->language('setting/url_alias');
 
-		$this->document->setTitle($this->_('heading_title')); 
+		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$store_id = $this->model_setting_url_alias->addUrlAlias($_POST);
@@ -66,7 +66,7 @@ class ControllerSettingUrlAlias extends Controller {
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/url_alias'));
 		
 		$this->data['insert'] = $this->url->link('setting/url_alias/insert');
-		$this->data['delete'] = $this->url->link('setting/url_alias/delete');	
+		$this->data['delete'] = $this->url->link('setting/url_alias/delete');
 		
 		$url = $this->get_url(array('page'));
 		
@@ -159,7 +159,7 @@ class ControllerSettingUrlAlias extends Controller {
 		}
 		
 		if (!$this->error) {
-			return true; 
+			return true;
 		} else {
 			return false;
 		}

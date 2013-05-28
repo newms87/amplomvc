@@ -28,12 +28,12 @@
 			</div>
 		</td>
 	</tr>
-	<? /*TODO: 
-	 * 
-	 *Add block that allows user to select page (can be used for navigation and elsewhere)
-	 * 
-	 * This block will allows users to choose new custom URL, a category, a product, a page, an information page, etc..
-	 */ ?>
+	<? /*TODO:
+	*
+	*Add block that allows user to select page (can be used for navigation and elsewhere)
+	*
+	* This block will allows users to choose new custom URL, a category, a product, a page, an information page, etc..
+	*/ ?>
 	<tr>
 		<td>
 			<?= $entry_page_link; ?>

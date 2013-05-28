@@ -5,7 +5,7 @@ class ControllerCartBlockReward {
 		$this->template->load('cart/block/reward');
 
 			
-		if (isset($_POST['reward']) && $this->validateReward()) { 
+		if (isset($_POST['reward']) && $this->validateReward()) {
 			$this->session->data['reward'] = $_POST['reward'];
 				
 			$this->message->add('success', $this->_('text_reward'));
@@ -44,7 +44,7 @@ class ControllerCartBlockReward {
 			if ($product['points']) {
 				$points_total += $product['points'];
 			}
-		}  
+		}
 				
 		if (empty($_POST['reward'])) {
 			$this->error['warning'] = $this->_('error_reward');
@@ -58,6 +58,6 @@ class ControllerCartBlockReward {
 			$this->error['warning'] = sprintf($this->_('error_maximum'), $points_total);
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

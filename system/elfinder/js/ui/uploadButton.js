@@ -7,7 +7,7 @@
 $.fn.elfinderuploadbutton = function(cmd) {
 	return this.each(function() {
 		var button = $(this).elfinderbutton(cmd)
-				.unbind('click'), 
+				.unbind('click'),
 			form = $('<form/>').appendTo(button),
 			input = $('<input type="file" multiple="true"/>')
 				.change(function() {
@@ -15,7 +15,7 @@ $.fn.elfinderuploadbutton = function(cmd) {
 					if (_input.val()) {
 						cmd.exec({input : _input.remove()[0]});
 						input.clone(true).appendTo(form);
-					} 
+					}
 				});
 
 		form.append(input.clone(true));

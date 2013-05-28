@@ -3,7 +3,7 @@
  * Version: 1.5.3
  * Updated: 04/07/2012
  */
-class ControllerModuleJanrain extends Controller 
+class ControllerModuleJanrain extends Controller
 {
 	protected function index($setting)
 	{
@@ -58,7 +58,7 @@ class ControllerModuleJanrain extends Controller
 		
 		if($this->data['janrain_logged']){
 			if($this->config->get('janrain_display_after_login')){
-				$this->data['entry_janrain_welcome']= $this->_('Welcome').' '.$this->customer->getFirstName().' '.$this->customer->getLastName();
+				$this->data['entry_janrain_welcome']= $this->_('Welcome').' '.$this->customer->info('firstname').' '.$this->customer->info('lastname');
 				$this->data['logout_redirect']	= $this->url->link('account/logout');
 			}
 			else{
@@ -85,11 +85,11 @@ class ControllerModuleJanrain extends Controller
 		$janrain_token = isset($_REQUEST['token']) && $_REQUEST['token']!='' ? $_REQUEST['token'] : false;
 		
 		if($janrain_token) {
-			$post_data  = array( 
+			$post_data  = array(
 								'token'  => $janrain_token,
 								'apiKey'	=> $api_key,
-								'format' => 'json' 
-							); 
+								'format' => 'json'
+							);
 			$post_url	= 'https://rpxnow.com/api/v2/auth_info/?token='.$janrain_token.'&apiKey='.$api_key.'&format=json';
 			$curl		= curl_init();
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -102,14 +102,14 @@ class ControllerModuleJanrain extends Controller
 			curl_close($curl);
 				
 			// parse the json response into an associative array
-			$auth_info = json_decode($raw_json, true);	
+			$auth_info = json_decode($raw_json, true);
 		
 			$this->language->load('module/janrain');
 			// process the auth_info response
 			if( $auth_info['stat'] == 'ok' ) {
 				$this->parsejanrainInfo($auth_info,$raw_json);
 				$this->message->add("success",$this->_('success_janrain_auth'));
-			} 
+			}
 			else {
 				$this->message->add("warning",sprintf($this->_('error_janrain_auth'),$this->config->get('config_email'),$this->config->get('config_email')));
 				$this->url->redirect($this->url->link('account/login'));
@@ -213,7 +213,7 @@ class ControllerModuleJanrain extends Controller
 				$this->mail->setSubject($subject);
 				$this->mail->setText(html_entity_decode($message, ENT_QUOTES, 'UTF-8'));
 				$this->mail->send();
-			}		
+			}
 		}
 		
 		if( $customer_email && $customer_password ){
@@ -230,8 +230,8 @@ class ControllerModuleJanrain extends Controller
 		if($length > $maxlength) {
 			$length = $maxlength;
 		}
-		$i = 0; 
-		while($i < $length) { 
+		$i = 0;
+		while($i < $length) {
 			$char = substr($possible, mt_rand(0, $maxlength-1), 1);
 			if(!strstr($password, $char)) {
 				$password .= $char;
@@ -310,7 +310,7 @@ class ControllerModuleJanrain extends Controller
 			return $auth_username;
 		
 		if( !$this->model_module_janrain->janrainCheckUsernameExist( $auth_display_name ) )
-			return $auth_display_name;	
+			return $auth_display_name;
 		
 		if( !$this->model_module_janrain->janrainCheckUsernameExist( $firstname ) )
 			return $firstname;
@@ -325,7 +325,7 @@ class ControllerModuleJanrain extends Controller
 		
 		$customer_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "customer WHERE LOWER(email) = '" . $this->db->escape(strtolower($email)) . "' AND password = '" . $this->db->escape($password) . "' AND status = '1' $approved");
 		
-		if ($customer_query->num_rows) 
+		if ($customer_query->num_rows)
 		{
 			$this->customer->login($email, '', true);
 			
@@ -340,11 +340,11 @@ class ControllerModuleJanrain extends Controller
 			$this->address_id 	= $customer_query->row['address_id'];
 		
 			return true;
-		} 
+		}
 		return false;
   	}
   
-  	public function logout() 
+  	public function logout()
 	{
 		if(isset($this->session->data['customer_id']))
 			unset($this->session->data['customer_id']);
@@ -371,7 +371,7 @@ class ControllerModuleJanrain extends Controller
 		$this->url->redirect($redirect);
   	}
 	
-	public function generateEmailAddress( $auth_profile, $auth_provider, $auth_identifier ) 
+	public function generateEmailAddress( $auth_profile, $auth_provider, $auth_identifier )
 	{
 		$auth_profile_name = isset($auth_profile['name']) ? $auth_profile['name'] : '';
 			

@@ -13,7 +13,7 @@ class Affiliate {
   	public function __construct(&$registry) {
 		$this->registry = &$registry;
 				
-		if (isset($this->session->data['affiliate_id'])) { 
+		if (isset($this->session->data['affiliate_id'])) {
 			$affiliate_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "affiliate WHERE affiliate_id = '" . (int)$this->session->data['affiliate_id'] . "' AND status = '1'");
 			
 			if ($affiliate_query->num_rows) {
@@ -40,7 +40,7 @@ class Affiliate {
 		$affiliate_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "affiliate WHERE email = '" . $this->db->escape($email) . "' AND password = '" . $this->db->escape(md5($password)) . "' AND status = '1' AND approved = '1'");
 		
 		if ($affiliate_query->num_rows) {
-			$this->session->data['affiliate_id'] = $affiliate_query->row['affiliate_id'];	
+			$this->session->data['affiliate_id'] = $affiliate_query->row['affiliate_id'];
 			
 			$this->affiliate_id = $affiliate_query->row['affiliate_id'];
 			$this->firstname = $affiliate_query->row['firstname'];
@@ -97,5 +97,5 @@ class Affiliate {
 	
   	public function getCode() {
 		return $this->code;
-  	}	
+  	}
 }

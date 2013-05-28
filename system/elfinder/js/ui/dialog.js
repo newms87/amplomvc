@@ -78,7 +78,7 @@ $.fn.elfinderdialog = function(opts) {
 								});
 							}
 						});
-					} 
+					}
 				})
 				.bind('close', function() {
 					var dialogs = parent.find('.elfinder-dialog:visible'),
@@ -134,7 +134,7 @@ $.fn.elfinderdialog = function(opts) {
 				top  : (top > 0 ? top : 0)+'px',
 				left : parseInt((parent.width() - dialog.outerWidth())/2)+'px'
 			}
-		} 
+		}
 			
 		dialog.css(opts.position);
 
@@ -164,7 +164,7 @@ $.fn.elfinderdialog = function(opts) {
 				.hover(function(e) { $(this)[e.type == 'mouseenter' ? 'focus' : 'blur']() })
 				.focus(function() { $(this).addClass(clhover) })
 				.blur(function() { $(this).removeClass(clhover) })
-				.keydown(function(e) { 
+				.keydown(function(e) {
 					var next;
 					
 					if (e.keyCode == $.ui.keyCode.ENTER) {
@@ -184,7 +184,7 @@ $.fn.elfinderdialog = function(opts) {
 					minHeight  : opts.minHeight,
 					alsoResize : this
 				});
-		} 
+		}
 			
 		typeof(opts.create) == 'function' && $.proxy(opts.create, this)();
 			

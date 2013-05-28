@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ModelPaymentBankTransfer extends Model {
   	public function getMethod($address, $total) {
 		$this->load->language('payment/bank_transfer');
@@ -13,12 +13,12 @@ class ModelPaymentBankTransfer extends Model {
 			$status = true;
 		} else {
 			$status = false;
-		}	
+		}
 		
 		$method_data = array();
 	
-		if ($status) {  
-				$method_data = array( 
+		if ($status) {
+				$method_data = array(
 				'code'		=> 'bank_transfer',
 				'title'		=> $this->_('text_title'),
 				'sort_order' => $this->config->get('bank_transfer_sort_order')

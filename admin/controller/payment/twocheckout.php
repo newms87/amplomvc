@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerPaymentTwoCheckout extends Controller {
 	
 
@@ -10,7 +10,7 @@ class ControllerPaymentTwoCheckout extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('twocheckout', $_POST);				
+			$this->model_setting_setting->editSetting('twocheckout', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -27,13 +27,13 @@ class ControllerPaymentTwoCheckout extends Controller {
 			$this->data['error_account'] = $this->error['account'];
 		} else {
 			$this->data['error_account'] = '';
-		}	
+		}
 		
 		if (isset($this->error['secret'])) {
 			$this->data['error_secret'] = $this->error['secret'];
 		} else {
 			$this->data['error_secret'] = '';
-		}	
+		}
 		
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('text_payment'), $this->url->link('extension/payment'));
@@ -64,13 +64,13 @@ class ControllerPaymentTwoCheckout extends Controller {
 		if (isset($_POST['twocheckout_total'])) {
 			$this->data['twocheckout_total'] = $_POST['twocheckout_total'];
 		} else {
-			$this->data['twocheckout_total'] = $this->config->get('twocheckout_total'); 
-		} 
+			$this->data['twocheckout_total'] = $this->config->get('twocheckout_total');
+		}
 				
 		if (isset($_POST['twocheckout_order_status_id'])) {
 			$this->data['twocheckout_order_status_id'] = $_POST['twocheckout_order_status_id'];
 		} else {
-			$this->data['twocheckout_order_status_id'] = $this->config->get('twocheckout_order_status_id'); 
+			$this->data['twocheckout_order_status_id'] = $this->config->get('twocheckout_order_status_id');
 		}
 		
 		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
@@ -78,7 +78,7 @@ class ControllerPaymentTwoCheckout extends Controller {
 		if (isset($_POST['twocheckout_geo_zone_id'])) {
 			$this->data['twocheckout_geo_zone_id'] = $_POST['twocheckout_geo_zone_id'];
 		} else {
-			$this->data['twocheckout_geo_zone_id'] = $this->config->get('twocheckout_geo_zone_id'); 
+			$this->data['twocheckout_geo_zone_id'] = $this->config->get('twocheckout_geo_zone_id');
 		}
 		
 		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
@@ -116,6 +116,6 @@ class ControllerPaymentTwoCheckout extends Controller {
 			$this->error['secret'] = $this->_('error_secret');
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

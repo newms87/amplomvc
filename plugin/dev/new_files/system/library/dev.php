@@ -75,7 +75,7 @@ class Dev{
 			$this->message->add('warning', "Login Failed for $domain!");
 		}
 		else{
-			$this->message->add('warning', "There was an error while connecting to the server at $domain."); 
+			$this->message->add('warning', "There was an error while connecting to the server at $domain.");
 		}
 		
 		return false;

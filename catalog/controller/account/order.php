@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerAccountOrder extends Controller {
 	
 		
@@ -77,19 +77,9 @@ class ControllerAccountOrder extends Controller {
 
 		$this->pagination->init();
 		$this->pagination->total = $order_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = 10;
-		$this->pagination->url = $this->url->link('account/order');
-		
 		$this->data['pagination'] = $this->pagination->render();
 
 		$this->data['continue'] = $this->url->link('account/account');
-
-
-
-
-
-
 
 		$this->children = array(
 			'common/column_left',
@@ -97,13 +87,13 @@ class ControllerAccountOrder extends Controller {
 			'common/content_top',
 			'common/content_bottom',
 			'common/footer',
-			'common/header'	
+			'common/header'
 		);
 						
-		$this->response->setOutput($this->render());				
+		$this->response->setOutput($this->render());
 	}
 	
-	public function info() { 
+	public function info() {
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/order/info', 'order_id=' . $order_id);
 			
@@ -116,7 +106,7 @@ class ControllerAccountOrder extends Controller {
 			$order_id = $_GET['order_id'];
 		} else {
 			$order_id = 0;
-		}	
+		}
 				
 		$order_info = $this->model_account_order->getOrder($order_id);
 		
@@ -175,7 +165,7 @@ class ControllerAccountOrder extends Controller {
 					'postcode'  => $order_info['shipping_postcode'],
 					'zone'		=> $order_info['shipping_zone'],
 				'zone_code' => $order_info['shipping_zone_code'],
-					'country'	=> $order_info['shipping_country']  
+					'country'	=> $order_info['shipping_country']
 			);
 
 			$this->data['shipping_address'] = str_replace(array("\r\n", "\r", "\n"), '<br />', preg_replace(array("/\s\s+/", "/\r\r+/", "/\n\n+/"), '<br />', trim(str_replace($find, $replace, $format))));
@@ -211,7 +201,7 @@ class ControllerAccountOrder extends Controller {
 					'postcode'  => $order_info['payment_postcode'],
 					'zone'		=> $order_info['payment_zone'],
 				'zone_code' => $order_info['payment_zone_code'],
-					'country'	=> $order_info['payment_country']  
+					'country'	=> $order_info['payment_country']
 			);
 			
 			$this->data['payment_address'] = str_replace(array("\r\n", "\r", "\n"), '<br />', preg_replace(array("/\s\s+/", "/\r\r+/", "/\n\n+/"), '<br />', trim(str_replace($find, $replace, $format))));
@@ -237,7 +227,7 @@ class ControllerAccountOrder extends Controller {
 					$option_data[] = array(
 						'name'  => $option['name'],
 						'value' => (strlen($value) > 20 ? substr($value, 0, 20) . '..' : $value)
-					);					
+					);
 				}
 
 				$this->data['products'][] = array(
@@ -281,12 +271,6 @@ class ControllerAccountOrder extends Controller {
 				}
 
 				$this->data['continue'] = $this->url->link('account/order');
-		
-
-
-
-
-
 
 			$this->children = array(
 				'common/column_left',
@@ -294,10 +278,10 @@ class ControllerAccountOrder extends Controller {
 				'common/content_top',
 				'common/content_bottom',
 				'common/footer',
-				'common/header'	
+				'common/header'
 			);
 								
-			$this->response->setOutput($this->render());		
+			$this->response->setOutput($this->render());
 		} else {
 		$this->template->load('error/not_found');
 
@@ -311,12 +295,6 @@ class ControllerAccountOrder extends Controller {
 			$this->language->set('heading_title', $this->_('text_order'));
 															
 			$this->data['continue'] = $this->url->link('account/order');
-						
-
-
-
-
-
 
 			$this->children = array(
 				'common/column_left',
@@ -324,10 +302,10 @@ class ControllerAccountOrder extends Controller {
 				'common/content_top',
 				'common/content_bottom',
 				'common/footer',
-				'common/header'	
+				'common/header'
 			);
 								
-			$this->response->setOutput($this->render());				
+			$this->response->setOutput($this->render());
 		}
   	}
 }

@@ -1,8 +1,8 @@
-<?php 
-class ControllerToolTool extends Controller { 
+<?php
+class ControllerToolTool extends Controller {
 	
 	
-	public function index() {		
+	public function index() {
 		$this->template->load('tool/tool');
 
 		$this->load->language('tool/tool');

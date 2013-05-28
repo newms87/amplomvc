@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerAccountWishList extends Controller {
 	public function index() {
 		$this->template->load('account/wishlist');
@@ -6,8 +6,8 @@ class ControllerAccountWishList extends Controller {
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/wishlist');
 
-			$this->url->redirect($this->url->link('account/login')); 
-		}		
+			$this->url->redirect($this->url->link('account/login'));
+		}
 		
 		$this->language->load('account/wishlist');
 		
@@ -27,7 +27,7 @@ class ControllerAccountWishList extends Controller {
 			$this->url->redirect($this->url->link('account/wishlist'));
 		}
 						
-		$this->document->setTitle($this->_('heading_title'));	
+		$this->document->setTitle($this->_('heading_title'));
 			
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
@@ -46,7 +46,7 @@ class ControllerAccountWishList extends Controller {
 		foreach ($this->session->data['wishlist'] as $key => $product_id) {
 			$product_info = $this->model_catalog_product->getProduct($product_id);
 			
-			if ($product_info) { 
+			if ($product_info) {
 				if ($product_info['image']) {
 					$image = $this->image->resize($product_info['image'], $this->config->get('config_image_wishlist_width'), $this->config->get('config_image_wishlist_height'));
 				} else {
@@ -79,7 +79,7 @@ class ControllerAccountWishList extends Controller {
 					'name'		=> $product_info['name'],
 					'model'		=> $product_info['model'],
 					'stock'		=> $stock,
-					'price'		=> $price,		
+					'price'		=> $price,
 					'special'	=> $special,
 					'href'		=> $this->url->link('product/product', 'product_id=' . $product_info['product_id']),
 					'remove'	=> $this->url->link('account/wishlist', 'remove=' . $product_info['product_id'])
@@ -87,15 +87,9 @@ class ControllerAccountWishList extends Controller {
 			} else {
 				unset($this->session->data['wishlist'][$key]);
 			}
-		}	
+		}
 
 		$this->data['continue'] = $this->url->link('account/account');
-		
-
-
-
-
-
 
 		$this->children = array(
 			'common/column_left',
@@ -103,10 +97,10 @@ class ControllerAccountWishList extends Controller {
 			'common/content_top',
 			'common/content_bottom',
 			'common/footer',
-			'common/header'	
+			'common/header'
 		);
 							
-		$this->response->setOutput($this->render());		
+		$this->response->setOutput($this->render());
 	}
 	
 	public function add() {
@@ -127,19 +121,19 @@ class ControllerAccountWishList extends Controller {
 		$product_info = $this->model_catalog_product->getProduct($product_id);
 		
 		if ($product_info) {
-			if (!in_array($_POST['product_id'], $this->session->data['wishlist'])) {	
+			if (!in_array($_POST['product_id'], $this->session->data['wishlist'])) {
 				$this->session->data['wishlist'][] = $_POST['product_id'];
 			}
 			
-			if ($this->customer->isLogged()) {			
-				$json['success'] = sprintf($this->_('text_success'), $this->url->link('product/product', 'product_id=' . $_POST['product_id']), $product_info['name'], $this->url->link('account/wishlist'));				
+			if ($this->customer->isLogged()) {
+				$json['success'] = sprintf($this->_('text_success'), $this->url->link('product/product', 'product_id=' . $_POST['product_id']), $product_info['name'], $this->url->link('account/wishlist'));
 			} else {
-				$json['success'] = sprintf($this->_('text_login'), $this->url->link('account/login'), $this->url->link('account/register'), $this->url->link('product/product', 'product_id=' . $_POST['product_id']), $product_info['name'], $this->url->link('account/wishlist'));				
+				$json['success'] = sprintf($this->_('text_login'), $this->url->link('account/login'), $this->url->link('account/register'), $this->url->link('product/product', 'product_id=' . $_POST['product_id']), $product_info['name'], $this->url->link('account/wishlist'));
 			}
 			
 			$json['total'] = sprintf($this->_('text_wishlist'), (isset($this->session->data['wishlist']) ? count($this->session->data['wishlist']) : 0));
-		}	
+		}
 		
 		$this->response->setOutput(json_encode($json));
-	}	
+	}
 }

@@ -54,10 +54,10 @@ elFinder.prototype.commands.rm = function() {
 				text   : 'confirmRm',
 				accept : {
 					label    : 'btnRm',
-					callback : function() {  
+					callback : function() {
 						fm.lockfiles({files : files});
 						fm.request({
-							data   : {cmd  : 'rm', targets : files}, 
+							data   : {cmd  : 'rm', targets : files},
 							notify : {type : 'rm', cnt : cnt},
 							preventFail : true
 						})

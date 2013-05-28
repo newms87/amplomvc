@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerPaymentPerpetualPayments extends Controller {
 	
 
@@ -10,7 +10,7 @@ class ControllerPaymentPerpetualPayments extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('perpetual_payments', $_POST);				
+			$this->model_setting_setting->editSetting('perpetual_payments', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -64,22 +64,22 @@ class ControllerPaymentPerpetualPayments extends Controller {
 		if (isset($_POST['perpetual_payments_total'])) {
 			$this->data['perpetual_payments_total'] = $_POST['perpetual_payments_total'];
 		} else {
-			$this->data['perpetual_payments_total'] = $this->config->get('perpetual_payments_total'); 
-		} 
+			$this->data['perpetual_payments_total'] = $this->config->get('perpetual_payments_total');
+		}
 				
 		if (isset($_POST['perpetual_payments_order_status_id'])) {
 			$this->data['perpetual_payments_order_status_id'] = $_POST['perpetual_payments_order_status_id'];
 		} else {
-			$this->data['perpetual_payments_order_status_id'] = $this->config->get('perpetual_payments_order_status_id'); 
-		} 
+			$this->data['perpetual_payments_order_status_id'] = $this->config->get('perpetual_payments_order_status_id');
+		}
 
 		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 		
 		if (isset($_POST['perpetual_payments_geo_zone_id'])) {
 			$this->data['perpetual_payments_geo_zone_id'] = $_POST['perpetual_payments_geo_zone_id'];
 		} else {
-			$this->data['perpetual_payments_geo_zone_id'] = $this->config->get('perpetual_payments_geo_zone_id'); 
-		} 
+			$this->data['perpetual_payments_geo_zone_id'] = $this->config->get('perpetual_payments_geo_zone_id');
+		}
 		
 		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 		
@@ -116,6 +116,6 @@ class ControllerPaymentPerpetualPayments extends Controller {
 			$this->error['auth_pass'] = $this->_('error_auth_pass');
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

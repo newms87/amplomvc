@@ -1,4 +1,4 @@
-<?php  
+<?php
 class ControllerProductBlockRelated extends Controller {
 	
 	public function index($settings, $product_id) {
@@ -24,7 +24,7 @@ class ControllerProductBlockRelated extends Controller {
 			}
 					
 			if ((float)$product['special']) {
-				$product['special'] = $this->currency->format($this->tax->calculate($product['special'], $product['tax_class_id'], $this->config->get('config_show_price_with_tax')));
+				$product['special'] = $this->currency->format($this->tax->calculate($product['special'], $product['tax_class_id']));
 			} else {
 				$product['special'] = false;
 			}

@@ -2,7 +2,7 @@
 // Heading
 $_['heading_title']	= 'Google Sitemap';
 
-// Text 
+// Text
 $_['text_feed']		= 'Producto Feeds';
 $_['text_success']	= 'Éxito: has modificado el feed Google Sitemap!';
 

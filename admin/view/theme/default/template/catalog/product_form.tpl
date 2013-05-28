@@ -484,7 +484,7 @@
 				</div>
 				<div id="tab-image">
 					<div style="padding:6px 0;">
-						<a style="float:right;margin-right:10px;" onclick="image_manager();" class="button">File Manager</a>							
+						<a style="float:right;margin-right:10px;" onclick="image_manager();" class="button">File Manager</a>
 						<div style="clear:both;"></div>
 					</div>
 					<table id="images" class="list">
@@ -493,14 +493,14 @@
 								<td class="left"><?= $entry_image; ?></td>
 								<td class="left"><?= $entry_filename; ?></td>
 								<td class="right"><?= $entry_primary; ?></td>
-								<td class="right"><?= $entry_sort_order; ?></td>								
+								<td class="right"><?= $entry_sort_order; ?></td>
 								<td></td>
 							</tr>
 						</thead>
 						<tbody>
 							<? $image_row = 0; ?>
 							<? foreach ($product_images as $product_image) { ?>
-									<? $image_selected = false; 
+									<? $image_selected = false;
 									if($image == $product_image['image'])
 											$image_selected = true;
 									?>
@@ -524,7 +524,7 @@
 						</tbody>
 						<tfoot>
 							<tr>
-								<td colspan="3"></td>								
+								<td colspan="3"></td>
 								<td class="left"><a onclick="image_manager();" class="button">File Manager</a></td>
 							</tr>
 						</tfoot>
@@ -633,7 +633,7 @@ $('input[name=\'related\']').autocomplete({
 		$.ajax({
 			url: "<?= HTTP_ADMIN . "index.php?route=catalog/product/autocomplete"; ?>" + '&filter_name=' +	encodeURIComponent(request.term),
 			dataType: 'json',
-			success: function(json) {		
+			success: function(json) {
 				response($.map(json, function(item) {
 					return {
 						label: item.name,
@@ -643,7 +643,7 @@ $('input[name=\'related\']').autocomplete({
 			}
 		});
 		
-	}, 
+	},
 	select: function(event, ui) {
 		$('#product-related' + ui.item.value).remove();
 		
@@ -660,9 +660,9 @@ $('#product-related div img').live('click', function() {
 	$(this).parent().remove();
 	
 	$('#product-related div:odd').attr('class', 'odd');
-	$('#product-related div:even').attr('class', 'even');	
+	$('#product-related div:even').attr('class', 'even');
 });
-//--></script> 
+//--></script>
 <script type="text/javascript"><!--
 var attribute_row = <?= $attribute_row; ?>;
 
@@ -684,7 +684,7 @@ function addAttribute() {
 	attribute_row++;
 }
 
-<? //TODO: fix the autocomplete to use the catcomplete... menu items do not have data associated 
+<? //TODO: fix the autocomplete to use the catcomplete... menu items do not have data associated
 /*
 $.widget('custom.catcomplete', $.ui.autocomplete, {
 	_renderMenu: function(ul, items) {
@@ -713,7 +713,7 @@ function attributeautocomplete(attribute_row) {
 			$.ajax({
 				url: "<?= HTTP_ADMIN . "index.php?route=catalog/attribute/autocomplete"; ?>" + '&filter_name=' + encodeURIComponent(request.term),
 				dataType: 'json',
-				success: function(json) {	
+				success: function(json) {
 					response($.map(json, function(item) {
 						return {
 							category: item.attribute_group,
@@ -723,7 +723,7 @@ function attributeautocomplete(attribute_row) {
 					}));
 				}
 			});
-		}, 
+		},
 		select: function(event, ui) {
 			$('input[name=\'product_attributes[' + attribute_row + '][name]\']').attr('value', ui.item.label);
 			$('input[name=\'product_attributes[' + attribute_row + '][attribute_id]\']').attr('value', ui.item.value);
@@ -736,7 +736,7 @@ function attributeautocomplete(attribute_row) {
 $('#attribute tbody').each(function(index, element) {
 	attributeautocomplete(index);
 });
-//--></script> 
+//--></script>
 <script type="text/javascript">//<!--
 $('#option-add input').autocomplete({
 	delay: 0,
@@ -756,7 +756,7 @@ $('#option-add input').autocomplete({
 				}));
 			}
 		});
-	}, 
+	},
 	select: function(event, ui) {
 		if($('#tab-option-'+ui.item.value).length){
 				$('.dup_option_warning').remove();
@@ -791,7 +791,7 @@ $('#option-add input').autocomplete({
 		html += '	</table>';
 			
 		html += '	<table id="option-value%option_id%" class="list">';
-		html += '			<thead>'; 
+		html += '			<thead>';
 		html += '			<tr>';
 		html += '				<td class="left"><?= $entry_option_value; ?></td>';
 		html += '				<td class="right"><?= $entry_quantity; ?></td>';
@@ -827,7 +827,7 @@ $('#option-add input').autocomplete({
 	<?=$this->builder->build('select', $all_product_option_values, "product_options[%option_id%][product_option_value][%option_value_id%][restrictions][%row%][restrict_option_value_id]", '', array('class'=>'restrict_option_values'));?>
 </span>
 					
-<script type="text/javascript">//<!--		
+<script type="text/javascript">//<!--
 
 function addOptionValue(option_id, option_value_id, name) {
 	html = '	<tr>';
@@ -837,11 +837,11 @@ function addOptionValue(option_id, option_value_id, name) {
 	html += '			<input type="hidden" name="product_options[%option_id%][product_option_value][%option_value_id%][option_id]" value="%option_id%" />';
 	html += '			<input class="ov_entry_option_value_id" type="hidden" name="product_options[%option_id%][product_option_value][%option_value_id%][option_value_id]" value="%option_value_id%" />';
 	html += '		</td>';
-	html += '		<td class="right"><input type="text" name="product_options[%option_id%][product_option_value][%option_value_id%][quantity]" value="1" size="3" /></td>'; 
+	html += '		<td class="right"><input type="text" name="product_options[%option_id%][product_option_value][%option_value_id%][quantity]" value="1" size="3" /></td>';
 	html += '		<td class="left">' + "<?=$this->builder->build('select', $yes_no, "product_options[%option_id%][product_option_value][%option_value_id%][subtract]",1);?>" + '</td>';
 	html += '		<td class="right"><input type="text" name="product_options[%option_id%][product_option_value][%option_value_id%][cost]" value="0" size="5" /></td>';
 	html += '		<td class="right"><input type="text" name="product_options[%option_id%][product_option_value][%option_value_id%][price]" value="0" size="5" /></td>';
-	html += '		<td class="right"><input type="text" name="product_options[%option_id%][product_option_value][%option_value_id%][points]" value="0" size="5" /></td>';	
+	html += '		<td class="right"><input type="text" name="product_options[%option_id%][product_option_value][%option_value_id%][points]" value="0" size="5" /></td>';
 	html += '		<td class="right"><input type="text" name="product_options[%option_id%][product_option_value][%option_value_id%][weight]" value="0" size="5" /></td>';
 	html += '		<td class="center">';
 	html += '			<table class="list">';
@@ -915,19 +915,19 @@ var discount_row = <?= $discount_row; ?>;
 
 function addDiscount() {
 	html	= '<tbody id="discount-row' + discount_row + '">';
-	html += '	<tr>'; 
+	html += '	<tr>';
 		html += '		<td class="left"><select name="product_discounts[' + discount_row + '][customer_group_id]">';
 		<? foreach ($customer_groups as $customer_group) { ?>
 		html += '			<option value="<?= $customer_group['customer_group_id']; ?>"><?= $customer_group['name']; ?></option>';
 		<? } ?>
-		html += '		</select></td>';		
+		html += '		</select></td>';
 		html += '		<td class="right"><input type="text" name="product_discounts[' + discount_row + '][quantity]" value="" size="2" /></td>';
 		html += '		<td class="right"><input type="text" name="product_discounts[' + discount_row + '][priority]" value="" size="2" /></td>';
 	html += '		<td class="right"><input type="text" name="product_discounts[' + discount_row + '][price]" value="" /></td>';
 		html += '		<td class="left"><input type="text" name="product_discounts[' + discount_row + '][date_start]" value="" class="date" /></td>';
 	html += '		<td class="left"><input type="text" name="product_discounts[' + discount_row + '][date_end]" value="" class="date" /></td>';
 	html += '		<td class="left"><a onclick="$(\'#discount-row' + discount_row + '\').remove();" class="button"><?= $button_remove; ?></a></td>';
-	html += '	</tr>';	
+	html += '	</tr>';
 		html += '</tbody>';
 	
 	$('#discount tfoot').before(html);
@@ -936,18 +936,18 @@ function addDiscount() {
 	
 	discount_row++;
 }
-//--></script> 
+//--></script>
 <script type="text/javascript"><!--
 var special_row = <?= $special_row; ?>;
 
 function addSpecial() {
 	html	= '<tbody id="special-row' + special_row + '">';
-	html += '	<tr>'; 
+	html += '	<tr>';
 		html += '		<td class="left"><select name="product_specials[' + special_row + '][customer_group_id]">';
 		<? foreach ($customer_groups as $customer_group) { ?>
 		html += '			<option value="<?= $customer_group['customer_group_id']; ?>"><?= $customer_group['name']; ?></option>';
 		<? } ?>
-		html += '		</select></td>';		
+		html += '		</select></td>';
 		html += '		<td class="right"><input type="text" name="product_specials[' + special_row + '][priority]" value="" size="2" /></td>';
 	html += '		<td class="right"><input type="text" name="product_specials[' + special_row + '][price]" value="" /></td>';
 		html += '		<td class="left"><input type="text" name="product_specials[' + special_row + '][date_start]" value="" class="datetime" /></td>';
@@ -962,18 +962,18 @@ function addSpecial() {
 	
 	special_row++;
 }
-//--></script> 
+//--></script>
 
 <script type="text/javascript">//<!--
 var image_row = <?= $image_row; ?>;
-function addImage(imageName) {		
+function addImage(imageName) {
 	html = '	<tr class="imagerow" id="image-row' + image_row + '">';
 	html += '		<td class="left"><div class="image"><img width="100" src="../image/' + imageName + '" alt="' + imageName + '" title="' + imageName + '" id="thumb' + image_row + '" /><input type="hidden" name="product_images[' + image_row + '][image]" value="' + imageName + '" id="image' + image_row + '" /></div></td>';
 	html += '		<td class="left">' + imageName + '</td>';
 	html += '		<td class="right"><input type="radio" name="primary_product_image" value="' + imageName + '" /></td>';
 	html += '		<td class="right"><input class="sortOrder" type="text" name="product_images[' + image_row + '][sort_order]" value="' + (image_row + 1) + '" size="2" /></td>';
 	html += '		<td class="left"><a onclick="$(\'#image-row' + image_row	+ '\').remove();" class="button"><?= $button_remove; ?></a></td>';
-	html += '	</tr>';	
+	html += '	</tr>';
 	
 	$('#images tbody').append(html);
 	
@@ -986,7 +986,7 @@ $('input[name=primary_product_image]').live("change", function() { $('input[name
 
 $('#images').bind('sortupdate', function(event, ui) {
 	var index = 0;
-	$('#images tbody tr').each(function() {		
+	$('#images tbody tr').each(function() {
 			index += 1;
 			var so = $(this).find('.sortOrder');
 			so.val(index);
@@ -996,9 +996,9 @@ $('#images').bind('sortupdate', function(event, ui) {
 $(document).ready(function() {
 	var c = {};
 	$('#images tbody').sortable({
-		items: 'tr.imagerow', 
-		forcePlaceholderSize:true,		
-		cursor: "move", 
+		items: 'tr.imagerow',
+		forcePlaceholderSize:true,
+		cursor: "move",
 		helper: function(event) { return $('<div class="drag-row"><table></table></div>').find('table').append($(event.target).closest('tr').clone()).end(); },
 		forceHelperSize: true,
 		forcePlaceholderSize: true,
@@ -1006,15 +1006,15 @@ $(document).ready(function() {
 		scrollSensitivity: 30,
 		scrollSpeed: 30
 	});
-});		
+});
 //--></script>
 
 <?=$this->builder->js('datepicker');?>
 
 <script type="text/javascript"><!--
-$('#tabs a').tabs(); 
-$('#languages a').tabs(); 
+$('#tabs a').tabs();
+$('#languages a').tabs();
 $('#vtab-option a').not('.normal').tabs();
-//--></script> 
+//--></script>
 <?= $this->builder->js('errors', $errors);?>
 <?= $footer; ?>

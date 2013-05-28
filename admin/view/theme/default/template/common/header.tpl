@@ -33,20 +33,20 @@ window.history.pushState(url_state_object,'<?=addslashes($title);?>', '<?=isset(
 <body>
 <div id="container">
 <div id="header">
-  <div class="div1">
-    <div class="div2"><a href="<?= $home;?>" style="display:block"><img src="<?=$admin_logo;?>" title="<?= $heading_title; ?>" /></a></div>
-    <? if ($logged) { ?>
-    <div class="div3"><img src="<?= HTTP_THEME_IMAGE . 'lock.png'; ?>" alt="" id="header_secure_lock" /><?= $logged; ?></div>
-    <div class="div3" style="clear:right"><?= $support;?></div>
-    <? } ?>
-  </div>
-  <? if ($logged) { ?>
-  <div id="menu" class="links">
-	 <div class="left"><?= $this->builder->build_links($links_admin);?></div>
-  	 <div class="right"><?= $this->builder->build_links($links_right);?></div>
-  	 <div class="clear"></div>
-  </div>
-  <? } ?>
+	<div class="div1">
+		<div class="div2"><a href="<?= $home;?>" style="display:block"><img src="<?=$admin_logo;?>" title="<?= $heading_title; ?>" /></a></div>
+		<? if ($logged) { ?>
+		<div class="div3"><img src="<?= HTTP_THEME_IMAGE . 'lock.png'; ?>" alt="" id="header_secure_lock" /><?= $logged; ?></div>
+		<div class="div3" style="clear:right"><?= $support;?></div>
+		<? } ?>
+	</div>
+	<? if ($logged) { ?>
+	<div id="menu" class="links">
+	<div class="left"><?= $this->builder->build_links($links_admin);?></div>
+		<div class="right"><?= $this->builder->build_links($links_right);?></div>
+		<div class="clear"></div>
+	</div>
+	<? } ?>
 </div>
 
 <div id='content'>

@@ -12,7 +12,7 @@ class Encryption {
 	}
 	
 	function encrypt($value) {
-		if (!$this->key) { 
+		if (!$this->key) {
 			return $value;
 		}
 		
@@ -24,13 +24,13 @@ class Encryption {
 			$char = chr(ord($char) + ord($keychar));
 			
 			$output .= $char;
-		} 
+		}
 		
-		return base64_encode($output); 
+		return base64_encode($output);
 	}
 	
 	function decrypt($value) {
-		if (!$this->key) { 
+		if (!$this->key) {
 			return $value;
 		}
 		

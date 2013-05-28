@@ -16,6 +16,10 @@ class Cart {
 		if (!isset($this->session->data['cart']) || !is_array($this->session->data['cart'])) {
 			$this->session->data['cart'] = array();
 		}
+		
+		if (!isset($this->session->data['wishlist']) || !is_array($this->session->data['wishlist'])) {
+			$this->session->data['wishlist'] = array();
+		}
 	}
 	
 	public function __get($key) {
@@ -75,6 +79,224 @@ class Cart {
 		return true;
 	}
 	
+	public function get_cart(){
+		return !empty($this->session->data['cart']) ? $this->session->data['cart'] : null;
+	}
+	
+	/**
+	 * Cart Functions
+	 */
+	 
+	public function add($product_id, $quantity = 1, $options = array(), $no_json = true) {
+  		$this->no_json = $no_json;
+		
+  		$product_id = (int)$product_id;
+		
+		
+		if($this->validateProduct($product_id, $quantity, $options)){
+		if (!$options) {
+					$key = $product_id;
+		} else {
+					$key = $product_id . ':' . base64_encode(serialize($options));
+		}
+		
+			$quantity = (int)$quantity;
+			
+			if ($quantity && $quantity > 0) {
+			if (!isset($this->session->data['cart'][$key])) {
+						$this->session->data['cart'][$key] = $quantity;
+			} else {
+						$this->session->data['cart'][$key] += $quantity;
+			}
+			}
+			
+			$this->data = array();
+			return true;
+		}
+		else{
+			return false;
+		}
+  	}
+
+  	public function update($key, $qty) {
+	if ((int)$qty && ((int)$qty > 0)) {
+				$this->session->data['cart'][$key] = (int)$qty;
+	} else {
+			$this->remove($key);
+		}
+		
+		$this->data = array();
+  	}
+	
+	public function merge($cart){
+		if(is_string($cart)){
+			$cart = unserialize($cart);
+		}
+		
+		if(empty($cart)) return false;
+
+		foreach ($cart as $key => $qty) {
+			if (!empty($this->session->data['cart'][$key])) {
+				$this->session->data['cart'][$key] += $qty;
+			} else {
+				$this->session->data['cart'][$key] = $qty;
+			}
+		}
+		
+		return true;
+	}
+	
+  	public function remove($key) {
+		if (isset($this->session->data['cart'][$key])) {
+			unset($this->session->data['cart'][$key]);
+  		}
+		
+		$this->data = array();
+	}
+	
+  	public function clear() {
+		$this->data = array();
+		
+		$this->session->data['cart'] = array();
+		$this->session->data['wishlist'] = array();
+		
+		unset($this->session->data['shipping_method']);
+		unset($this->session->data['payment_method']);
+		unset($this->session->data['comment']);
+		unset($this->session->data['order_id']);
+		unset($this->session->data['coupons']);
+		unset($this->session->data['reward']);
+		unset($this->session->data['voucher']);
+		unset($this->session->data['vouchers']);
+  	}
+	
+	/**
+	 * Cart Weight
+	 */
+	 
+  	public function getWeight() {
+		$weight = 0;
+	
+		foreach ($this->getProducts() as $product) {
+			if ($product['shipping']) {
+				$weight += $this->weight->convert($product['weight'], $product['weight_class_id'], $this->config->get('config_weight_class_id'));
+			}
+		}
+	
+		return $weight;
+	}
+	
+	/**
+	 * Cart Totals
+	 */
+	 
+  	public function getSubTotal() {
+		$total = 0;
+		
+		foreach ($this->getProducts() as $product) {
+			$total += $product['total'];
+		}
+
+		return $total;
+  	}
+	
+	public function getTotals(){
+		$total_data = array();
+		$total = 0;
+		$taxes = $this->getTaxes();
+		
+		$sort_order = array();
+		
+		$results = $this->model_setting_extension->getExtensions('total');
+		
+		foreach ($results as $key => $value) {
+			$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
+		}
+		
+		array_multisort($sort_order, SORT_ASC, $results);
+		
+		foreach ($results as $result) {
+			if ($this->config->get($result['code'] . '_status')) {
+	
+				$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
+			}
+			
+			$sort_order = array();
+		
+			foreach ($total_data as $key => $value) {
+				$sort_order[$key] = $value['sort_order'];
+			}
+
+			array_multisort($sort_order, SORT_ASC, $total_data);
+		}
+
+		$values = array(
+			'data'	=> $total_data,
+			'total'		=> $total,
+			'taxes'		=> $taxes
+		);
+		
+		return $values;
+	}
+	
+	public function getTotal() {
+		$total = 0;
+		
+		foreach ($this->getProducts() as $product) {
+			$total += $this->tax->calculate($product['total'], $product['tax_class_id']);
+		}
+
+		return $total;
+  	}
+	
+	public function getTotalPoints(){
+		$points_total = 0;
+		
+		$products = $this->getProducts();
+		
+		foreach ($products as $product) {
+			$points_total += (int)$product['points'];
+		}
+		
+		return $points_total;
+	}
+	
+	/**
+	 * Taxes
+	 **/
+	
+	public function getTaxes() {
+		$tax_data = array();
+		
+		foreach ($this->getProducts() as $product) {
+			if ($product['tax_class_id']) {
+				$tax_rates = $this->tax->getRates($product['total'], $product['tax_class_id']);
+				
+				foreach ($tax_rates as $tax_rate) {
+					$amount = 0;
+					
+					if ($tax_rate['type'] == 'F') {
+						$amount = ($tax_rate['amount'] * $product['quantity']);
+					} elseif ($tax_rate['type'] == 'P') {
+						$amount = $tax_rate['amount'];
+					}
+					
+					if (!isset($tax_data[$tax_rate['tax_rate_id']])) {
+						$tax_data[$tax_rate['tax_rate_id']] = $amount;
+					} else {
+						$tax_data[$tax_rate['tax_rate_id']] += $amount;
+					}
+				}
+			}
+		}
+		
+		return $tax_data;
+  	}
+	
+	/**
+	 *  Cart Products
+	 */
+	 
 	public function getProductId($key){
 		if(!isset($this->session->data['cart'][$key])){
 			return false;
@@ -125,14 +347,14 @@ class Cart {
 					foreach ($options as $product_option_id => $option_value) {
 						$option_query = $this->db->query("SELECT po.product_option_id, po.option_id, od.name, od.display_name, o.type FROM " . DB_PREFIX . "product_option po" .
 							" LEFT JOIN `" . DB_PREFIX . "option` o ON (po.option_id = o.option_id)" .
-							" LEFT JOIN " . DB_PREFIX . "option_description od ON (o.option_id = od.option_id)" . 
+							" LEFT JOIN " . DB_PREFIX . "option_description od ON (o.option_id = od.option_id)" .
 							" WHERE po.product_option_id = '" . (int)$product_option_id . "' AND po.product_id = '" . (int)$product_id . "' AND od.language_id = '" . (int)$this->config->get('config_language_id') . "'");
 						
 						if ($option_query->num_rows) {
 							foreach ($option_value as $product_option_value) {
 								$option_value_query = $this->db->query(
-									"SELECT pov.option_value_id, ovd.name, pov.* FROM " . DB_PREFIX . "product_option_value pov" . 
-									" LEFT JOIN " . DB_PREFIX . "option_value ov ON (pov.option_value_id = ov.option_value_id)" . 
+									"SELECT pov.option_value_id, ovd.name, pov.* FROM " . DB_PREFIX . "product_option_value pov" .
+									" LEFT JOIN " . DB_PREFIX . "option_value ov ON (pov.option_value_id = ov.option_value_id)" .
 									" LEFT JOIN " . DB_PREFIX . "option_value_description ovd ON (ov.option_value_id = ovd.option_value_id)" .
 									" WHERE pov.product_option_value_id = '" . (int)$product_option_value['product_option_value_id'] . "' AND pov.product_option_id = '" . (int)$product_option_id . "' AND ovd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
 								
@@ -162,17 +384,13 @@ class Cart {
 										'price'					=> $option_value_query->row['price'],
 										'points'						=> $option_value_query->row['points'],
 										'weight'						=> $option_value_query->row['weight'],
-									);								
+									);
 								}
 							}
 						}
 					}
 
-					if ($this->customer->isLogged()) {
-						$customer_group_id = $this->customer->getCustomerGroupId();
-					} else {
-						$customer_group_id = $this->config->get('config_customer_group_id');
-					}
+					$customer_group_id = $this->customer->getCustomerGroupId();
 					
 					$cost = $product_query->row['cost'];
 					$price = $product_query->row['price'];
@@ -200,19 +418,19 @@ class Cart {
 				
 					if ($product_special_query->num_rows) {
 						$price = $product_special_query->row['price'];
-					}						
+					}
 			
 					// Reward Points
 					$product_reward_query = $this->db->query("SELECT points FROM " . DB_PREFIX . "product_reward WHERE product_id = '" . (int)$product_id . "' AND customer_group_id = '" . (int)$customer_group_id . "'");
 					
-					if ($product_reward_query->num_rows) {	
+					if ($product_reward_query->num_rows) {
 						$reward = $product_reward_query->row['points'];
 					} else {
 						$reward = 0;
 					}
 					
-					// Downloads		
-					$download_data = array();			
+					// Downloads
+					$download_data = array();
 					
 					$download_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "product_to_download p2d LEFT JOIN " . DB_PREFIX . "download d ON (p2d.download_id = d.download_id) LEFT JOIN " . DB_PREFIX . "download_description dd ON (d.download_id = dd.download_id) WHERE p2d.product_id = '" . (int)$product_id . "' AND dd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
 				
@@ -257,7 +475,7 @@ class Cart {
 						'length'		=> $product_query->row['length'],
 						'width'			=> $product_query->row['width'],
 						'height'		=> $product_query->row['height'],
-						'length_class_id' => $product_query->row['length_class_id']					
+						'length_class_id' => $product_query->row['length_class_id']
 					);
 				} else {
 					$this->remove($key);
@@ -267,172 +485,7 @@ class Cart {
 
 		return $this->data;
   	}
-		
-  	public function add($product_id, $quantity = 1, $options = array(), $no_json = true) {
-  		$this->no_json = $no_json;
-		
-  		$product_id = (int)$product_id;
-		
-		
-		if($this->validateProduct($product_id, $quantity, $options)){
-		if (!$options) {
-					$key = $product_id;
-		} else {
-					$key = $product_id . ':' . base64_encode(serialize($options));
-		}
-		
-			$quantity = (int)$quantity;
-			
-			if ($quantity && $quantity > 0) {
-			if (!isset($this->session->data['cart'][$key])) {
-						$this->session->data['cart'][$key] = $quantity;
-			} else {
-						$this->session->data['cart'][$key] += $quantity;
-			}
-			}
-			
-			$this->data = array();
-			return true;
-		}
-		else{
-			return false;
-		}
-  	}
 
-  	public function update($key, $qty) {
-	if ((int)$qty && ((int)$qty > 0)) {
-				$this->session->data['cart'][$key] = (int)$qty;
-	} else {
-			$this->remove($key);
-		}
-		
-		$this->data = array();
-  	}
-
-  	public function remove($key) {
-		if (isset($this->session->data['cart'][$key])) {
-			unset($this->session->data['cart'][$key]);
-  		}
-		
-		$this->data = array();
-	}
-	
-  	public function clear() {
-		$this->session->data['cart'] = array();
-		$this->data = array();
-  	}
-	
-  	public function getWeight() {
-		$weight = 0;
-	
-	foreach ($this->getProducts() as $product) {
-			if ($product['shipping']) {
-					$weight += $this->weight->convert($product['weight'], $product['weight_class_id'], $this->config->get('config_weight_class_id'));
-			}
-		}
-	
-		return $weight;
-	}
-	
-  	public function getSubTotal() {
-		$total = 0;
-		
-		foreach ($this->getProducts() as $product) {
-			$total += $product['total'];
-		}
-
-		return $total;
-  	}
-	
-	public function getTotals(){
-		$total_data = array();
-		$total = 0;
-		$taxes = $this->getTaxes();
-		
-		$sort_order = array(); 
-		
-		$results = $this->model_setting_extension->getExtensions('total');
-		
-		foreach ($results as $key => $value) {
-			$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
-		}
-		
-		array_multisort($sort_order, SORT_ASC, $results);
-		
-		foreach ($results as $result) {
-			if ($this->config->get($result['code'] . '_status')) {
-	
-				$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
-			}
-			
-			$sort_order = array();
-		
-			foreach ($total_data as $key => $value) {
-				$sort_order[$key] = $value['sort_order'];
-			}
-
-			array_multisort($sort_order, SORT_ASC, $total_data);		
-		}
-
-		$values = array(
-			'data'	=> $total_data,
-			'total'		=> $total,
-			'taxes'		=> $taxes
-		);
-		
-		return $values;
-	}
-	
-	public function getTaxes() {
-		$tax_data = array();
-		
-		foreach ($this->getProducts() as $product) {
-			if ($product['tax_class_id']) {
-				$tax_rates = $this->tax->getRates($product['total'], $product['tax_class_id']);
-				
-				foreach ($tax_rates as $tax_rate) {
-					$amount = 0;
-					
-					if ($tax_rate['type'] == 'F') {
-						$amount = ($tax_rate['amount'] * $product['quantity']);
-					} elseif ($tax_rate['type'] == 'P') {
-						$amount = $tax_rate['amount'];
-					}
-					
-					if (!isset($tax_data[$tax_rate['tax_rate_id']])) {
-						$tax_data[$tax_rate['tax_rate_id']] = $amount;
-					} else {
-						$tax_data[$tax_rate['tax_rate_id']] += $amount;
-					}
-				}
-			}
-		}
-		
-		return $tax_data;
-  	}
-
-  	public function getTotal() {
-		$total = 0;
-		
-		foreach ($this->getProducts() as $product) {
-			$total += $this->tax->calculate($product['total'], $product['tax_class_id'], $this->config->get('config_show_price_with_tax'));
-		}
-
-		return $total;
-  	}
-	
-	public function getTotalPoints(){
-		$points_total = 0;
-		
-		$products = $this->getProducts();
-		
-		foreach ($products as $product) {
-			$points_total += (int)$product['points'];
-		}
-		
-		return $points_total;
-	}
-	
   	public function countProducts() {
 		$product_total = 0;
 			
@@ -440,15 +493,63 @@ class Cart {
 			
 		foreach ($products as $product) {
 			$product_total += $product['quantity'];
-		}		
+		}
 					
 		return $product_total;
 	}
 	
   	public function hasProducts() {
-	return count($this->session->data['cart']);
+		return count($this->session->data['cart']);
   	}
 	
+	public function validateProduct($product_id, $quantity, $options){
+		$product_info = $this->model_catalog_product->getProduct($product_id);
+		
+		if ($product_info) {
+			$product_options = $this->model_catalog_product->getProductOptions($product_id);
+			
+			$restrictions = $this->model_catalog_product->getProductOptionValueRestrictions($product_id);
+			
+			foreach ($product_options as $product_option) {
+				if (!empty($product_option['product_option_value']) && $product_option['required']) {
+					if(empty($options[$product_option['product_option_id']])){
+						$this->error['add']['option'][$product_option['product_option_id']] = $this->language->format('error_required', $product_option['display_name']);
+						return false;
+					}
+					elseif($product_option['group_type'] == 'single' && count($options[$product_option['product_option_id']]) > 1){
+						$this->error['add']['option'][$product_option['product_option_id']] = $this->language->format('error_selected_multi', $product_option['display_name']);
+						return false;
+					}
+				}
+			}
+			
+			foreach($options as $po_id => $selected_po){
+				foreach($selected_po as $selected_pov){
+					if (isset($selected_pov['option_value_id']) && isset($restrictions[$selected_pov['option_value_id']])){
+						foreach($options as $selected_po2){
+							foreach($selected_po2 as $selected_pov2){
+								if(in_array($selected_pov2['option_value_id'], $restrictions[$selected_pov['option_value_id']])){
+									$this->error['add']['option'][$po_id] = $this->language->get('error_pov_restriction');
+									return false;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		else{
+			$this->error['add']['product_id'] = $this->language->get('error_invalid_product_id');
+			return false;
+		}
+
+		return true;
+	}
+	
+	/**
+	 * Cart Stock
+	 */
+	 
 	public function isEmpty(){
 		return !(count($this->session->data['cart']) || !empty($this->session->data['vouchers']));
 	}
@@ -463,12 +564,95 @@ class Cart {
 		
 		return true;
   	}
-  
+	
+	public function validateMinimumQuantity(){
+		$product_total = 0;
+		
+		$products = $this->getProducts();
+		
+		foreach($products as $product){
+			foreach ($products as $product_2) {
+				if ($product_2['product_id'] == $product['product_id']) {
+					$product_total += $product_2['quantity'];
+				}
+			}
+			
+			if ($product_total < $product['minimum']) {
+				$this->_e('C-3', 'cart', $this->language->format('error_product_minimum', $product['name'], $product['minimum']));
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	public function validate(){
+		if($this->isEmpty()){
+			$this->_e('C-1', 'cart', 'error_cart_empty');
+			return false;
+		}
+		
+		if(!$this->config->get('config_stock_checkout') && !$this->hasStock()){
+			return false;
+		}
+		
+		if(!$this->validateMinimumQuantity()){
+			return false;
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * Wishlist Functions
+	 */
+	 
+	public function get_wishlist(){
+		return !empty($this->session->data['wishlist']) ? $this->session->data['wishlist'] : null;
+	}
+	
+	public function merge_wishlist($wishlist){
+		if(is_string($wishlist)) {
+			$wishlist = unserialize($wishlist);
+		}
+		
+		if(empty($wishlist)) return false;
+		
+		if (!isset($this->session->data['wishlist'])) {
+			$this->session->data['wishlist'] = array();
+		}
+	
+		foreach ($wishlist as $product_id) {
+			if (!in_array($product_id, $this->session->data['wishlist'])) {
+				$this->session->data['wishlist'][] = $product_id;
+			}
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * Product Compare Functions
+	 */
+	
+	public function get_compare_list(){
+		return !empty($this->session->data['compare']) ? $this->session->data['compare'] : null;
+	}
+	
+	public function get_compare_count(){
+		return !empty($this->session->data['compare']) ? count($this->session->data['compare']) : null;
+	}
+	
+	
+	/**
+	 * Shipping & Payment API
+	 */
+	
   	public function hasShipping() {
 		foreach ($this->getProducts() as $product) {
 			if ($product['shipping']) {
 			return true;
-			}		
+			}
 		}
 		
 		return false;
@@ -478,7 +662,7 @@ class Cart {
 		foreach ($this->getProducts() as $product) {
 			if ($product['download']) {
 			return true;
-			}		
+			}
 		}
 		
 		return false;
@@ -711,7 +895,7 @@ class Cart {
 		foreach ($results as $result) {
 			if ($this->config->get($result['code'] . '_status')) {
 				
-				$method = $this->{'model_payment_' . $result['code']}->getMethod($payment_address, $totals['total']); 
+				$method = $this->{'model_payment_' . $result['code']}->getMethod($payment_address, $totals['total']);
 				
 				if ($method) {
 					$method_data[$result['code']] = $method;
@@ -738,7 +922,7 @@ class Cart {
 				$shipping_address = $this->model_account_address->getAddress($address);
 			}
 		}
-		elseif ($this->hasShippingAddress()) {				
+		elseif ($this->hasShippingAddress()) {
 			$shipping_address = $this->getShippingAddress();
 		}
 		else{
@@ -759,7 +943,7 @@ class Cart {
 		foreach ($results as $result) {
 			
 			if ($this->config->get($result['code'] . '_status')) {
-				$quotes = $this->{'model_shipping_' . $result['code']}->getQuote($shipping_address); 
+				$quotes = $this->{'model_shipping_' . $result['code']}->getQuote($shipping_address);
 				
 				if(empty($quotes)) continue;
 				
@@ -855,12 +1039,11 @@ class Cart {
 				
 				$this->cache->set('zone.allowed.' . $geo_zone_id, $allowed_geo_zones);
 			}
-		}
-		else{
-			return array();
+			
+			return $allowed_geo_zones;
 		}
 		
-		return $allowed_geo_zones;
+		return array();
 	}
 
 	public function validatePaymentAddress($address = null){
@@ -926,6 +1109,10 @@ class Cart {
 		return true;
 	}
 	
+	/**
+	 * Guest API
+	 */
+	 
 	public function saveGuestInfo($info){
 		$this->session->data['guest_info'] = $info;
 	}
@@ -933,7 +1120,23 @@ class Cart {
 	public function loadGuestInfo(){
 		return isset($this->session->data['guest_info']) ? $this->session->data['guest_info'] : null;
 	}
-		
+
+	/**
+	 * Comments
+	 */
+	
+	public function getComment(){
+		return !empty($this->session->data['comment']) ? $this->session->data['comment'] : null;
+	}
+	
+	public function setComment($comment){
+		$this->session->data['comment'] = strip_tags($comment);
+	}
+	
+	/**
+	 * Cart Order
+	 */
+	 
 	public function addOrder(){
 		if(!$this->validate()){
 			return false;
@@ -966,7 +1169,7 @@ class Cart {
 		
 		//Customer Checkout
 		if($this->customer->isLogged()){
-			$data = $this->customer->getInfo();
+			$data = $this->customer->info();
 		}
 		elseif($this->config->get('config_guest_checkout')){
 			$data['customer_id'] = 0;
@@ -1018,7 +1221,7 @@ class Cart {
 		$voucher_data = array();
 		
 		if (!empty($this->session->data['vouchers'])) {
-			$voucher_data = $this->session->data['vouchers']; 
+			$voucher_data = $this->session->data['vouchers'];
 			
 			//TODO: This is not a good way to generate unique IDs!
 			foreach ($voucher_data as &$voucher) {
@@ -1038,8 +1241,8 @@ class Cart {
 			$affiliate_info = $this->model_affiliate_affiliate->getAffiliateByCode($_COOKIE['tracking']);
 			
 			if ($affiliate_info) {
-				$data['affiliate_id'] = $affiliate_info['affiliate_id']; 
-				$data['commission'] = ($total / 100) * $affiliate_info['commission']; 
+				$data['affiliate_id'] = $affiliate_info['affiliate_id'];
+				$data['commission'] = ($total / 100) * $affiliate_info['commission'];
 			}
 		}
 		
@@ -1050,17 +1253,17 @@ class Cart {
 		$data['ip'] = $_SERVER['REMOTE_ADDR'];
 		
 		if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-			$data['forwarded_ip'] = $_SERVER['HTTP_X_FORWARDED_FOR']; 
+			$data['forwarded_ip'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
 		} elseif(!empty($_SERVER['HTTP_CLIENT_IP'])) {
 			$data['forwarded_ip'] = $_SERVER['HTTP_CLIENT_IP'];
 		}
 		
 		if (isset($_SERVER['HTTP_USER_AGENT'])) {
-			$data['user_agent'] = $_SERVER['HTTP_USER_AGENT'];  
+			$data['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
 		}
 		
 		if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-			$data['accept_language'] = $_SERVER['HTTP_ACCEPT_LANGUAGE']; 
+			$data['accept_language'] = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
 		}
 		
 		foreach($data['payment_address'] as $key => $pa){
@@ -1078,87 +1281,5 @@ class Cart {
 		$this->session->data['order_id'] = $order_id;
 		
 		return $order_id;
-	}
-	
-	public function validateProduct($product_id, $quantity, $options){
-		$product_info = $this->model_catalog_product->getProduct($product_id);
-		
-		if ($product_info) {
-			$product_options = $this->model_catalog_product->getProductOptions($product_id);
-			
-			$restrictions = $this->model_catalog_product->getProductOptionValueRestrictions($product_id);
-			
-			foreach ($product_options as $product_option) {
-				if (!empty($product_option['product_option_value']) && $product_option['required']) {
-					if(empty($options[$product_option['product_option_id']])){
-						$this->error['add']['option'][$product_option['product_option_id']] = $this->language->format('error_required', $product_option['display_name']);
-						return false;
-					}
-					elseif($product_option['group_type'] == 'single' && count($options[$product_option['product_option_id']]) > 1){
-						$this->error['add']['option'][$product_option['product_option_id']] = $this->language->format('error_selected_multi', $product_option['display_name']);
-						return false;
-					}
-				}
-			}
-			
-			foreach($options as $po_id => $selected_po){
-				foreach($selected_po as $selected_pov){
-					if (isset($selected_pov['option_value_id']) && isset($restrictions[$selected_pov['option_value_id']])){
-						foreach($options as $selected_po2){
-							foreach($selected_po2 as $selected_pov2){
-								if(in_array($selected_pov2['option_value_id'], $restrictions[$selected_pov['option_value_id']])){
-									$this->error['add']['option'][$po_id] = $this->language->get('error_pov_restriction');
-									return false;
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		else{
-			$this->error['add']['product_id'] = $this->language->get('error_invalid_product_id');
-			return false;
-		}
-
-		return true;
-	}
-
-	public function validateMinimumQuantity(){
-		$product_total = 0;
-		
-		$products = $this->getProducts();
-		
-		foreach($products as $product){
-			foreach ($products as $product_2) {
-				if ($product_2['product_id'] == $product['product_id']) {
-					$product_total += $product_2['quantity'];
-				}
-			}
-			
-			if ($product_total < $product['minimum']) {
-				$this->_e('C-3', 'cart', $this->language->format('error_product_minimum', $product['name'], $product['minimum']));
-				return false;
-			}
-		}
-		
-		return true;
-	}
-	
-	public function validate(){
-		if($this->isEmpty()){
-			$this->_e('C-1', 'cart', 'error_cart_empty');
-			return false;
-		}
-		
-		if(!$this->config->get('config_stock_checkout') && !$this->hasStock()){
-			return false;
-		}
-		
-		if(!$this->validateMinimumQuantity()){
-			return false;
-		}
-		
-		return true;
 	}
 }

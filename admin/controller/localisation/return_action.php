@@ -1,5 +1,5 @@
-<?php 
-class ControllerLocalisationReturnAction extends Controller { 
+<?php
+class ControllerLocalisationReturnAction extends Controller {
 	
 	
   	public function index() {
@@ -141,7 +141,7 @@ class ControllerLocalisationReturnAction extends Controller {
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/return_action', $url));
 
 		$this->data['insert'] = $this->url->link('localisation/return_action/insert', $url);
-		$this->data['delete'] = $this->url->link('localisation/return_action/delete', $url);	
+		$this->data['delete'] = $this->url->link('localisation/return_action/delete', $url);
 
 		$this->data['return_actions'] = array();
 
@@ -170,7 +170,7 @@ class ControllerLocalisationReturnAction extends Controller {
 				'selected'			=> isset($_POST['selected']) && in_array($result['return_action_id'], $_POST['selected']),
 				'action'			=> $action
 			);
-		}	
+		}
 	
  		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -212,10 +212,6 @@ class ControllerLocalisationReturnAction extends Controller {
 
 		$this->pagination->init();
 		$this->pagination->total = $return_action_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('localisation/return_action', $url);
-			
 		$this->data['pagination'] = $this->pagination->render();
 
 		$this->data['sort'] = $sort;
@@ -284,7 +280,7 @@ class ControllerLocalisationReturnAction extends Controller {
 			'common/footer'
 		);
 				
-		$this->response->setOutput($this->render());	
+		$this->response->setOutput($this->render());
   	}
   	
 	private function validateForm() {
@@ -310,14 +306,14 @@ class ControllerLocalisationReturnAction extends Controller {
 			$return_total = $this->model_sale_return->getTotalReturnsByReturnActionId($return_action_id);
 		
 			if ($return_total) {
-				$this->error['warning'] = sprintf($this->_('error_return'), $return_total);	
-			}  
+				$this->error['warning'] = sprintf($this->_('error_return'), $return_total);
+			}
 		}
 		
-		if (!$this->error) { 
+		if (!$this->error) {
 			return true;
 		} else {
 			return false;
 		}
-  	}	
+  	}
 }

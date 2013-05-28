@@ -1,6 +1,6 @@
-<?php 
-class ControllerProductManufacturer extends Controller {  
-	public function index() { 
+<?php
+class ControllerProductManufacturer extends Controller {
+	public function index() {
 		$this->template->load('product/manufacturer_list');
 
 		$this->language->load('product/manufacturer');
@@ -33,12 +33,6 @@ class ControllerProductManufacturer extends Controller {
 		
 		$this->data['continue'] = $this->url->link('common/home');
 
-
-
-
-
-
-
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
@@ -48,7 +42,7 @@ class ControllerProductManufacturer extends Controller {
 			'common/header'
 		);
 				
-		$this->response->setOutput($this->render());										
+		$this->response->setOutput($this->render());
   	}
 	
 	public function product() {
@@ -58,19 +52,19 @@ class ControllerProductManufacturer extends Controller {
 			$manufacturer_id = $_GET['manufacturer_id'];
 		} else {
 			$manufacturer_id = 0;
-		} 
+		}
 										
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
 		} else {
 			$sort = 'p.sort_order';
-		} 
+		}
 
 		if (isset($_GET['order'])) {
 			$order = $_GET['order'];
 		} else {
 			$order = 'ASC';
-		} 
+		}
   		
 		if (isset($_GET['page'])) {
 			$page = $_GET['page'];
@@ -105,7 +99,7 @@ class ControllerProductManufacturer extends Controller {
 			$this->data['products'] = array();
 			
 			$data = array(
-				'filter_manufacturer_id' => $manufacturer_id, 
+				'filter_manufacturer_id' => $manufacturer_id,
 				'sort'						=> $sort,
 				'order'						=> $order,
 				'start'						=> ($page - 1) * $limit,
@@ -124,22 +118,22 @@ class ControllerProductManufacturer extends Controller {
 				}
 				
 				if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-					$price = $this->currency->format($this->tax->calculate($result['price'], $result['tax_class_id'], $this->config->get('config_show_price_with_tax')));
+					$price = $this->currency->format($this->tax->calculate($result['price'], $result['tax_class_id']));
 				} else {
 					$price = false;
 				}
 				
 				if ((float)$result['special']) {
-					$special = $this->currency->format($this->tax->calculate($result['special'], $result['tax_class_id'], $this->config->get('config_show_price_with_tax')));
+					$special = $this->currency->format($this->tax->calculate($result['special'], $result['tax_class_id']));
 				} else {
 					$special = false;
-				}	
+				}
 				
 				if ($this->config->get('config_show_price_with_tax')) {
 					$tax = $this->currency->format((float)$result['special'] ? $result['special'] : $result['price']);
 				} else {
 					$tax = false;
-				}				
+				}
 				
 				if ($this->config->get('config_review_status')) {
 					$rating = (int)$result['rating'];
@@ -153,7 +147,7 @@ class ControllerProductManufacturer extends Controller {
 				$result['special'] = $special;
 				if(!isset($result['flashsale_id'])){
 					$result['flashsale_id'] = 0;
-				} 
+				}
 				$result['tax'] = $tax;
 				$result['reviews'] = sprintf($this->_('text_reviews'), (int)$result['reviews']);
 				$result['href'] = $this->url->link('product/product', $url . '&manufacturer_id=' . $result['manufacturer_id'] . '&product_id=' . $result['product_id']);
@@ -179,7 +173,7 @@ class ControllerProductManufacturer extends Controller {
 				'text'  => $this->_('text_name_asc'),
 				'value' => 'pd.name-ASC',
 				'href'  => $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $_GET['manufacturer_id'] . '&sort=pd.name&order=ASC' . $url)
-			); 
+			);
 	
 			$this->data['sorts'][] = array(
 				'text'  => $this->_('text_name_desc'),
@@ -191,20 +185,20 @@ class ControllerProductManufacturer extends Controller {
 				'text'  => $this->_('text_price_asc'),
 				'value' => 'p.price-ASC',
 				'href'  => $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $_GET['manufacturer_id'] . '&sort=p.price&order=ASC' . $url)
-			); 
+			);
 	
 			$this->data['sorts'][] = array(
 				'text'  => $this->_('text_price_desc'),
 				'value' => 'p.price-DESC',
 				'href'  => $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $_GET['manufacturer_id'] . '&sort=p.price&order=DESC' . $url)
-			); 
+			);
 			
 			if ($this->config->get('config_review_status')) {
 				$this->data['sorts'][] = array(
 					'text'  => $this->_('text_rating_desc'),
 					'value' => 'rating-DESC',
 					'href'  => $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $_GET['manufacturer_id'] . '&sort=rating&order=DESC' . $url)
-				); 
+				);
 				
 				$this->data['sorts'][] = array(
 					'text'  => $this->_('text_rating_asc'),
@@ -217,7 +211,7 @@ class ControllerProductManufacturer extends Controller {
 				'text'  => $this->_('text_model_asc'),
 				'value' => 'p.model-ASC',
 				'href'  => $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $_GET['manufacturer_id'] . '&sort=p.model&order=ASC' . $url)
-			); 
+			);
 	
 			$this->data['sorts'][] = array(
 				'text'  => $this->_('text_model_desc'),
@@ -229,7 +223,7 @@ class ControllerProductManufacturer extends Controller {
 					
 			if (isset($_GET['sort'])) {
 				$url .= '&sort=' . $_GET['sort'];
-			}	
+			}
 	
 			if (isset($_GET['order'])) {
 				$url .= '&order=' . $_GET['order'];
@@ -271,7 +265,7 @@ class ControllerProductManufacturer extends Controller {
 							
 			if (isset($_GET['sort'])) {
 				$url .= '&sort=' . $_GET['sort'];
-			}	
+			}
 	
 			if (isset($_GET['order'])) {
 				$url .= '&order=' . $_GET['order'];
@@ -283,10 +277,6 @@ class ControllerProductManufacturer extends Controller {
 					
 			$this->pagination->init();
 			$this->pagination->total = $product_total;
-			$this->pagination->page = $page;
-			$this->pagination->limit = $limit;
-			$this->pagination->url = $this->url->link('product/manufacturer/product','manufacturer_id=' . $_GET['manufacturer_id'] .  $url);
-			
 			$this->data['pagination'] = $this->pagination->render();
 			
 			$this->data['sort'] = $sort;
@@ -294,12 +284,6 @@ class ControllerProductManufacturer extends Controller {
 			$this->data['limit'] = $limit;
 			
 			$this->data['continue'] = $this->url->link('common/home');
-			
-
-
-
-
-
 
 			$this->children = array(
 				'common/column_left',
@@ -322,7 +306,7 @@ class ControllerProductManufacturer extends Controller {
 									
 			if (isset($_GET['sort'])) {
 				$url .= '&sort=' . $_GET['sort'];
-			}	
+			}
 
 			if (isset($_GET['order'])) {
 				$url .= '&order=' . $_GET['order'];

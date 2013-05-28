@@ -2,6 +2,7 @@
 final class Tax {
 	private $registry;
 	private $store_address;
+	private $show_price_with_tax;
 	
 	public function __construct($registry) {
 		$this->registry = $registry;
@@ -11,6 +12,8 @@ final class Tax {
 			'zone_id'	=> $this->config->get('config_zone_id'),
 			'postcode'	=> $this->config->get('config_postcode')
 		);
+		
+		$this->show_price_with_tax = $this->config->get('config_show_price_with_tax');
   	}
 	
 	public function __get($key){
@@ -34,23 +37,15 @@ final class Tax {
 		}
 	}
 	
-  	public function calculate($value, $tax_class_id, $calculate = null) {
-		if(is_null($calculate)){
-			$calculate = $this->config->get('config_show_price_with_tax');
-		}
+  	public function calculate($value, $tax_class_id) {
+		if(!$this->show_price_with_tax || !$tax_class_id) return $value;
 		
-		if (!$tax_class_id || !$calculate) {
-			return $value;
-		}
-		
-		$amount = $this->getTax($value, $tax_class_id);
-		
-		return $value + $amount;
+		return $value + $this->getTax($value, $tax_class_id);
   	}
 	
   	public function getTax($value, $tax_class_id) {
 		$amount = 0;
-			
+		
 		$tax_rates = $this->getRates($value, $tax_class_id);
 		
 		foreach ($tax_rates as $tax_rate) {
@@ -67,11 +62,7 @@ final class Tax {
 	public function getRates($value, $tax_class_id) {
 		$tax_rates = array();
 		
-		if ($this->customer->isLogged()) {
-			$customer_group_id = $this->customer->getCustomerGroupId();
-		} else {
-			$customer_group_id = $this->config->get('config_customer_group_id');
-		}
+		$customer_group_id = $this->customer->getCustomerGroupId();
 				
 		if ($this->cart->hasShippingAddress()) {
 			$this->get_tax_rates($tax_rates, $tax_class_id, 'shipping', $this->cart->getShippingAddress(), $customer_group_id);
@@ -114,9 +105,9 @@ final class Tax {
 	}
 	
 	private function get_tax_rates(&$tax_rates, $tax_class_id, $type, $address, $customer_group_id){
-		$query = 
+		$query =
 			"SELECT tr2.tax_rate_id, tr2.name, tr2.rate, tr2.type, tr1.priority, gz.geo_zone_id FROM " . DB_PREFIX . "tax_rule tr1" .
-			" LEFT JOIN " . DB_PREFIX . "tax_rate tr2 ON (tr1.tax_rate_id = tr2.tax_rate_id)" . 
+			" LEFT JOIN " . DB_PREFIX . "tax_rate tr2 ON (tr1.tax_rate_id = tr2.tax_rate_id)" .
 			" INNER JOIN " . DB_PREFIX . "tax_rate_to_customer_group tr2cg ON (tr2.tax_rate_id = tr2cg.tax_rate_id)" .
 			" LEFT JOIN " . DB_PREFIX . "geo_zone gz ON (tr2.geo_zone_id = gz.geo_zone_id)" .
 			" WHERE tr1.tax_class_id = '" . (int)$tax_class_id . "' AND tr1.based = '$type' AND tr2cg.customer_group_id = '" . (int)$customer_group_id . "'".

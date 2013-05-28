@@ -75,9 +75,9 @@ class ControllerCartBlockCart extends Controller{
 				}
 				
 				
-				$product['price'] = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_show_price_with_tax')));
+				$product['price'] = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id']));
 			
-				$product['total'] = $this->currency->format($this->tax->calculate($product['total'], $product['tax_class_id'], $this->config->get('config_show_price_with_tax')));
+				$product['total'] = $this->currency->format($this->tax->calculate($product['total'], $product['tax_class_id']));
 				
 				if($product['reward']){
 					$product['reward'] = sprintf($this->_('text_points'), $product['reward']);

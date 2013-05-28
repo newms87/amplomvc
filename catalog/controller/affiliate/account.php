@@ -1,5 +1,5 @@
-<?php 
-class ControllerAffiliateAccount extends Controller { 
+<?php
+class ControllerAffiliateAccount extends Controller {
 	public function index() {
 		$this->template->load('affiliate/account');
 
@@ -7,7 +7,7 @@ class ControllerAffiliateAccount extends Controller {
 			$this->session->data['redirect'] = $this->url->link('affiliate/account');
 	
 			$this->url->redirect($this->url->link('affiliate/login'));
-		} 
+		}
 	
 		$this->language->load('affiliate/account');
 
@@ -30,21 +30,15 @@ class ControllerAffiliateAccount extends Controller {
 		$this->data['tracking'] = $this->url->link('affiliate/tracking');
 		$this->data['transaction'] = $this->url->link('affiliate/transaction');
 
-
-
-
-
-
-
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
 			'common/content_top',
 			'common/content_bottom',
 			'common/footer',
-			'common/header'	
+			'common/header'
 		);
 				
-		$this->response->setOutput($this->render());		
+		$this->response->setOutput($this->render());
   	}
 }

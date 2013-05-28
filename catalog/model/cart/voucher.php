@@ -23,7 +23,7 @@ class ModelCartVoucher extends Model {
 			
 				if (!$order_voucher_query->num_rows) {
 					$status = false;
-				}				
+				}
 			}
 			
 			$voucher_history_query = $this->query("SELECT SUM(amount) AS total FROM `" . DB_PREFIX . "voucher_history` vh WHERE vh.voucher_id = '" . (int)$voucher_query->row['voucher_id'] . "' GROUP BY vh.voucher_id");
@@ -36,7 +36,7 @@ class ModelCartVoucher extends Model {
 			
 			if ($amount <= 0) {
 				$status = false;
-			}	
+			}
 		} else {
 			$status = false;
 		}
@@ -61,11 +61,16 @@ class ModelCartVoucher extends Model {
 	}
 	
 	public function confirm($order_id) {
+			
+		//TODO Implment this! Move to controller/mail/voucher.php
+		trigger_error("The voucher confirm(): has not been implemented!");
+		exit;
+		
 		$order_info = $this->model_checkout_order->getOrder($order_id);
 		
 		if ($order_info) {
 			$language = new Language($order_info['language_directory'], $this->plugin_handler);
-			$language->load($order_info['language_filename']);	
+			$language->load($order_info['language_filename']);
 			$language->load('mail/voucher');
 			
 			$voucher_query = $this->query("SELECT *, vtd.name AS theme FROM `" . DB_PREFIX . "voucher` v LEFT JOIN " . DB_PREFIX . "voucher_theme vt ON (v.voucher_theme_id = vt.voucher_theme_id) LEFT JOIN " . DB_PREFIX . "voucher_theme_description vtd ON (vt.voucher_theme_id = vtd.voucher_theme_id) AND vtd.language_id = '" . (int)$order_info['language_id'] . "' WHERE v.order_id = '" . (int)$order_id . "'");
@@ -104,8 +109,8 @@ class ModelCartVoucher extends Model {
 				$this->mail->setFrom($this->config->get('config_email'));
 				$this->mail->setSender($order_info['store_name']);
 				$this->mail->setSubject(html_entity_decode(sprintf($language->get('text_subject'), $voucher['from_name']), ENT_QUOTES, 'UTF-8'));
-				$this->mail->setHtml($html);				
-				$this->mail->send();		
+				$this->mail->setHtml($html);
+				$this->mail->send();
 			}
 		}
 	}

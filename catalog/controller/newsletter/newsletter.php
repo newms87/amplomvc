@@ -1,5 +1,5 @@
-<?php 
-class ControllerNewsletterNewsletter extends Controller { 
+<?php
+class ControllerNewsletterNewsletter extends Controller {
 
 	public function index(){
 	

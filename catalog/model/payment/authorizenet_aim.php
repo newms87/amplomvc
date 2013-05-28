@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ModelPaymentAuthorizeNetAim extends Model {
   	public function getMethod($address, $total) {
 		$this->load->language('payment/authorizenet_aim');
@@ -13,12 +13,12 @@ class ModelPaymentAuthorizeNetAim extends Model {
 			$status = true;
 		} else {
 			$status = false;
-		}	
+		}
 		
 		$method_data = array();
 	
-		if ($status) {  
-				$method_data = array( 
+		if ($status) {
+				$method_data = array(
 				'code'		=> 'authorizenet_aim',
 				'title'		=> $this->_('text_title'),
 				'sort_order' => $this->config->get('authorizenet_aim_sort_order')

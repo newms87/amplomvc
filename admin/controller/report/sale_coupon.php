@@ -1,6 +1,6 @@
 <?php
 class ControllerReportSaleCoupon extends Controller {
-	public function index() {	
+	public function index() {
 		$this->template->load('report/sale_coupon');
 
 		$this->load->language('report/sale_coupon');
@@ -45,13 +45,13 @@ class ControllerReportSaleCoupon extends Controller {
 		$this->data['coupons'] = array();
 		
 		$data = array(
-			'filter_date_start'	=> $filter_date_start, 
-			'filter_date_end'	=> $filter_date_end, 
+			'filter_date_start'	=> $filter_date_start,
+			'filter_date_end'	=> $filter_date_end,
 			'start'				=> ($page - 1) * $this->config->get('config_admin_limit'),
 			'limit'				=> $this->config->get('config_admin_limit')
 		);
 				
-		$coupon_total = $this->model_report_coupon->getTotalCoupons($data); 
+		$coupon_total = $this->model_report_coupon->getTotalCoupons($data);
 		
 		$results = $this->model_report_coupon->getCoupons($data);
 	
@@ -84,14 +84,10 @@ class ControllerReportSaleCoupon extends Controller {
 				
 		$this->pagination->init();
 		$this->pagination->total = $coupon_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('report/sale_coupon', $url);
-			
 		$this->data['pagination'] = $this->pagination->render();
 		
 		$this->data['filter_date_start'] = $filter_date_start;
-		$this->data['filter_date_end'] = $filter_date_end;	
+		$this->data['filter_date_end'] = $filter_date_end;
 				
 		$this->children = array(
 			'common/header',

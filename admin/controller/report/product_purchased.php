@@ -1,6 +1,6 @@
 <?php
-class ControllerReportProductPurchased extends Controller { 
-	public function index() {	
+class ControllerReportProductPurchased extends Controller {
+	public function index() {
 		$this->template->load('report/product_purchased');
 
 		$this->load->language('report/product_purchased');
@@ -23,7 +23,7 @@ class ControllerReportProductPurchased extends Controller {
 			$filter_order_status_id = $_GET['filter_order_status_id'];
 		} else {
 			$filter_order_status_id = 0;
-		}	
+		}
 						
 		if (isset($_GET['page'])) {
 			$page = $_GET['page'];
@@ -55,8 +55,8 @@ class ControllerReportProductPurchased extends Controller {
 		$this->data['products'] = array();
 		
 		$data = array(
-			'filter_date_start'		=> $filter_date_start, 
-			'filter_date_end'		=> $filter_date_end, 
+			'filter_date_start'		=> $filter_date_start,
+			'filter_date_end'		=> $filter_date_end,
 			'filter_order_status_id' => $filter_order_status_id,
 			'start'						=> ($page - 1) * $this->config->get('config_admin_limit'),
 			'limit'						=> $this->config->get('config_admin_limit')
@@ -93,14 +93,10 @@ class ControllerReportProductPurchased extends Controller {
 		
 		$this->pagination->init();
 		$this->pagination->total = $product_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('report/product_purchased', $url);
-			
-		$this->data['pagination'] = $this->pagination->render();		
+		$this->data['pagination'] = $this->pagination->render();
 		
 		$this->data['filter_date_start'] = $filter_date_start;
-		$this->data['filter_date_end'] = $filter_date_end;		
+		$this->data['filter_date_end'] = $filter_date_end;
 		$this->data['filter_order_status_id'] = $filter_order_status_id;
 		
 		$this->children = array(
@@ -109,5 +105,5 @@ class ControllerReportProductPurchased extends Controller {
 		);
 				
 		$this->response->setOutput($this->render());
-	}	
+	}
 }

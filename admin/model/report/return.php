@@ -1,7 +1,7 @@
 <?php
 class ModelReportReturn extends Model {
 	public function getReturns($data = array()) {
-		$sql = "SELECT MIN(r.date_added) AS date_start, MAX(r.date_added) AS date_end, COUNT(r.return_id) AS `returns` FROM `" . DB_PREFIX . "return` r"; 
+		$sql = "SELECT MIN(r.date_added) AS date_start, MAX(r.date_added) AS date_end, COUNT(r.return_id) AS `returns` FROM `" . DB_PREFIX . "return` r";
 
 		if (!empty($data['filter_return_status_id'])) {
 			$sql .= " WHERE r.return_status_id = '" . (int)$data['filter_return_status_id'] . "'";
@@ -30,31 +30,31 @@ class ModelReportReturn extends Model {
 			default:
 			case 'week':
 				$sql .= " GROUP BY WEEK(r.date_added)";
-				break;	
+				break;
 			case 'month':
 				$sql .= " GROUP BY MONTH(r.date_added)";
 				break;
 			case 'year':
 				$sql .= " GROUP BY YEAR(r.date_added)";
-				break;									
+				break;
 		}
 		
 		if (isset($data['start']) || isset($data['limit'])) {
 			if ($data['start'] < 0) {
 				$data['start'] = 0;
-			}			
+			}
 
 			if ($data['limit'] < 1) {
 				$data['limit'] = 20;
-			}	
+			}
 			
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
-		}	
+		}
 		
 		$query = $this->query($sql);
 		
 		return $query->rows;
-	}	
+	}
 	
 	public function getTotalReturns($data = array()) {
 		if (!empty($data['filter_group'])) {
@@ -70,13 +70,13 @@ class ModelReportReturn extends Model {
 			default:
 			case 'week':
 				$sql = "SELECT COUNT(DISTINCT WEEK(date_added)) AS total FROM `" . DB_PREFIX . "return`";
-				break;	
+				break;
 			case 'month':
 				$sql = "SELECT COUNT(DISTINCT MONTH(date_added)) AS total FROM `" . DB_PREFIX . "return`";
 				break;
 			case 'year':
 				$sql = "SELECT COUNT(DISTINCT YEAR(date_added)) AS total FROM `" . DB_PREFIX . "return`";
-				break;									
+				break;
 		}
 		
 		if (!empty($data['filter_return_status_id'])) {
@@ -95,6 +95,6 @@ class ModelReportReturn extends Model {
 
 		$query = $this->query($sql);
 
-		return $query->row['total'];	
-	}	
+		return $query->row['total'];
+	}
 }

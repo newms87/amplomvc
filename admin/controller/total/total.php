@@ -1,8 +1,8 @@
-<?php 
-class ControllerTotalTotal extends Controller { 
+<?php
+class ControllerTotalTotal extends Controller {
 	
 	
-	public function index() { 
+	public function index() {
 		$this->template->load('total/total');
 
 		$this->load->language('total/total');
@@ -56,6 +56,6 @@ class ControllerTotalTotal extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

@@ -13,7 +13,7 @@ class ModelSaleCoupon extends Model {
 					'coupon_id'  => $coupon_id
 				);
 				$this->insert('coupon_product', $values);
-			}			
+			}
 		}
 		
 		if(isset($data['coupon_categories'])){
@@ -51,7 +51,7 @@ class ModelSaleCoupon extends Model {
 					'coupon_id'  => $coupon_id
 				);
 				$this->insert('coupon_product', $values);
-			}		
+			}
 		}
 		
 		$this->delete('coupon_category', array('coupon_id' => $coupon_id));
@@ -86,7 +86,7 @@ class ModelSaleCoupon extends Model {
 		$this->delete('coupon_product', array('coupon_id' => $coupon_id));
 		$this->delete('coupon_category', array('coupon_id' => $coupon_id));
 		$this->delete('coupon_customer', array('coupon_id' => $coupon_id));
-		$this->delete('coupon_history', array('coupon_id' => $coupon_id));		
+		$this->delete('coupon_history', array('coupon_id' => $coupon_id));
 	}
 	
 	public function getCoupon($coupon_id) {
@@ -111,12 +111,12 @@ class ModelSaleCoupon extends Model {
 			'date_start',
 			'date_end',
 			'status'
-		);	
+		);
 			
 		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
-			$sql .= " ORDER BY " . $data['sort'];	
+			$sql .= " ORDER BY " . $data['sort'];
 		} else {
-			$sql .= " ORDER BY name";	
+			$sql .= " ORDER BY name";
 		}
 			
 		if (isset($data['order']) && ($data['order'] == 'DESC')) {
@@ -128,14 +128,14 @@ class ModelSaleCoupon extends Model {
 		if (isset($data['start']) || isset($data['limit'])) {
 			if ($data['start'] < 0) {
 				$data['start'] = 0;
-			}			
+			}
 
 			if ($data['limit'] < 1) {
 				$data['limit'] = 20;
-			}	
+			}
 			
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
-		}		
+		}
 		
 		$query = $this->query($sql);
 		
@@ -160,7 +160,7 @@ class ModelSaleCoupon extends Model {
 	public function getTotalCoupons() {
 		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "coupon");
 		return $query->row['total'];
-	}	
+	}
 	
 	public function getCouponHistories($coupon_id, $start = 0, $limit = 10) {
 		$query = $this->query("SELECT ch.order_id, CONCAT(c.firstname, ' ', c.lastname) AS customer, ch.amount, ch.date_added FROM " . DB_PREFIX . "coupon_history ch LEFT JOIN " . DB_PREFIX . "customer c ON (ch.customer_id = c.customer_id) WHERE ch.coupon_id = '" . (int)$coupon_id . "' ORDER BY ch.date_added ASC LIMIT " . (int)$start . "," . (int)$limit);
@@ -170,5 +170,5 @@ class ModelSaleCoupon extends Model {
 	public function getTotalCouponHistories($coupon_id) {
 		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "coupon_history WHERE coupon_id = '" . (int)$coupon_id . "'");
 		return $query->row['total'];
-	}			
+	}
 }

@@ -2,7 +2,7 @@
 // Heading
 $_['heading_title']		= 'Cheque / giro postal';
 
-// Text 
+// Text
 $_['text_payment']		= 'Pago';
 $_['text_success']		= 'Éxito: has modificado los detalles de pago por cheque / giro postal!';
 

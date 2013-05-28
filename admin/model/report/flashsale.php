@@ -16,12 +16,12 @@ class ModelReportFlashsale extends Model {
 			$start = isset($data['start'])?(int)$data['start']:0;
 			if ($start < 0) {
 				$start = 0;
-			}			
+			}
 	
 			if ($limit < 1) {
 				$limit = 20;
 			}
-			$limit = "LIMIT $start, $limit";	
+			$limit = "LIMIT $start, $limit";
 		}
 		
 		$sql = "SELECT $select FROM " . DB_PREFIX . "flashsale f JOIN " . DB_PREFIX . "flashsale_views fv ON(fv.flashsale_id=f.flashsale_id) GROUP BY fv.flashsale_id ORDER BY views DESC $limit";
@@ -29,7 +29,7 @@ class ModelReportFlashsale extends Model {
 		$query = $this->query($sql);
 		
 		return $query->rows;
-	}	
+	}
 	
 	public function getTotalFlashsalesViewed() {
 		$query = $this->query("SELECT COUNT(DISTINCT flashsale_id) as total FROM " . DB_PREFIX . "flashsale_views");

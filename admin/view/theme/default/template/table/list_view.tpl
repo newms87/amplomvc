@@ -1,8 +1,8 @@
 <? /*
  * Name: list_view
- * 
+ *
  * This table uses the following variables:
- * 
+ *
  * $columns => array(
  * 	'type' 			=> string (required) - Input and display type. Can be 'text', 'select', 'multiselect', 'image', 'int', 'date_range', 'time_range', 'datetime_range', 'format'.
  * 	'display_name' => string (required) - Display Name for the header of the column.
@@ -12,7 +12,7 @@
  * 	'filter_value' => mixed (optional) - Use this to override the filter value. Value is set if user has specified, otherwise the default filter value.
  * 	'build_data'	=> mixed (optoinal) - Fill data for the column. Used to display a key value as text, or with a filter depending on the 'type'.
  * 	'build_config' => array (optional) - Use this with 'build_data' to specify the array( $key => $value ) for the builder tool
- * ); 
+ * );
  */
 ?>
 <table class="list">
@@ -48,7 +48,7 @@
 				<? break;
 				
 				case 'int': ?>
-					<div class="filter_number_range"><input type="text" name="filter[<?= $slug; ?>]" value="<?= $column['filter_value']; ?>" /></div> 
+					<div class="filter_number_range"><input type="text" name="filter[<?= $slug; ?>]" value="<?= $column['filter_value']; ?>" /></div>
 				<? break;
 				case 'select':
 				case 'multiselect':

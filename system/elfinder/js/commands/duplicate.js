@@ -23,7 +23,7 @@ elFinder.prototype.commands.duplicate = function() {
 			dfrd   = $.Deferred()
 				.fail(function(error) {
 					error && fm.error(error);
-				}), 
+				}),
 			args = [];
 			
 		if (!cnt || this._disabled) {

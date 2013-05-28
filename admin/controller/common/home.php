@@ -1,5 +1,5 @@
-<?php	
-class ControllerCommonHome extends Controller {	
+<?php
+class ControllerCommonHome extends Controller {
 	public function index() {
 		
 		if($this->user->isDesigner()){
@@ -31,7 +31,7 @@ class ControllerCommonHome extends Controller {
 		$this->data['total_affiliate'] = $this->model_sale_affiliate->getTotalAffiliates();
 		$this->data['total_affiliate_approval'] = $this->model_sale_affiliate->getTotalAffiliatesAwaitingApproval();
 				
-		$this->data['orders'] = array(); 
+		$this->data['orders'] = array();
 		
 		$data = array(
 			'sort'  => 'o.date_added',
@@ -62,13 +62,6 @@ class ControllerCommonHome extends Controller {
 
 		if ($this->config->get('config_currency_auto')) {
 			$this->model_localisation_currency->updateCurrencies();
-		}
-
-
-		$msgs = array('success','error_warning');
-		foreach($msgs as $m){
-			$this->data[$m] = isset($this->session->data[$m])?$this->session->data[$m]:'';
-			unset($this->session->data[$m]);
 		}
 		
 		$this->children = array(
@@ -117,10 +110,10 @@ class ControllerCommonHome extends Controller {
 					}
 			
 					$data['xaxis'][] = array($i, date('H', mktime($i, 0, 0, date('n'), date('j'), date('Y'))));
-				}					
+				}
 				break;
 			case 'week':
-				$date_start = strtotime('-' . date('w') . ' days'); 
+				$date_start = strtotime('-' . date('w') . ' days');
 				
 				for ($i = 0; $i < 7; $i++) {
 					$date = date('Y-m-d', $date_start + ($i * 86400));
@@ -156,7 +149,7 @@ class ControllerCommonHome extends Controller {
 						$data['order']['data'][] = array($i, (int)$query->row['total']);
 					} else {
 						$data['order']['data'][] = array($i, 0);
-					}	
+					}
 				
 					$query = $this->db->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "customer WHERE DATE(date_added) = '" . $this->db->escape($date) . "' GROUP BY DAY(date_added)");
 			
@@ -164,7 +157,7 @@ class ControllerCommonHome extends Controller {
 						$data['customer']['data'][] = array($i, (int)$query->row['total']);
 					} else {
 						$data['customer']['data'][] = array($i, 0);
-					}	
+					}
 					
 					$data['xaxis'][] = array($i, date('j', strtotime($date)));
 				}
@@ -181,16 +174,16 @@ class ControllerCommonHome extends Controller {
 					
 					$query = $this->db->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "customer WHERE YEAR(date_added) = '" . date('Y') . "' AND MONTH(date_added) = '" . $i . "' GROUP BY MONTH(date_added)");
 					
-					if ($query->num_rows) { 
+					if ($query->num_rows) {
 						$data['customer']['data'][] = array($i, (int)$query->row['total']);
 					} else {
 						$data['customer']['data'][] = array($i, 0);
 					}
 					
 					$data['xaxis'][] = array($i, date('M', mktime(0, 0, 0, $i, 1, date('Y'))));
-				}			
-				break;	
-		} 
+				}
+				break;
+		}
 		
 		$this->response->setOutput(json_encode($data));
 	}

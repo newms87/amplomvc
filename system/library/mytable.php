@@ -31,7 +31,7 @@ class mytable {
 		}
 		
 		if (file_exists(DIR_THEME . $this->path . $file)) {
-			$this->file = DIR_THEME . $this->path . $file; 
+			$this->file = DIR_THEME . $this->path . $file;
 		}
 		elseif(file_exists(DIR_THEME . 'default/template/' . $file)) {
 			$this->file = DIR_THEME . 'default/template/' . $file;
@@ -159,7 +159,7 @@ class mytable {
 					}
 					
 					break;
-				default: 
+				default:
 					break;
 			}
 

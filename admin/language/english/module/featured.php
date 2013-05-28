@@ -26,6 +26,6 @@ $_['entry_display_style']		= 'Display Style:';
 $_['entry_status']		= 'Status:';
 $_['entry_sort_order']	= 'Sort Order:';
 
-// Error 
+// Error
 $_['error_permission']	= 'Warning: You do not have permission to modify module featured!';
 $_['error_image']			= 'Image width &amp; height dimensions required!';

@@ -27,14 +27,14 @@
 						<label class="date"><?= $entry_press_date; ?></label>
 						<input type="text" name="settings[press_items][<?= $row; ?>][date]" value="<?= $press['date']; ?>" /><br />
 						<label class="href"><?= $entry_press_href;?></label>
-						<input type="text" name="settings[press_items][<?= $row;?>][href]" value="<?= $press['href'];?>" /> 
+						<input type="text" name="settings[press_items][<?= $row;?>][href]" value="<?= $press['href'];?>" />
 					</div>
 					<div class="press_images">
 						<a class="add_image_item"><?= $button_add_image; ?></a>
 						<div class="press_image_list" count="<?= !empty($press['images']) ? count($press['images']) : 0; ?>">
 							
 							<? if($key === 'template_row'){
-								 $press['images']['template_row'] = '%image%';
+								$press['images']['template_row'] = '%image%';
 							}?>
 							
 							<? if(!empty($press['images'])) { ?>

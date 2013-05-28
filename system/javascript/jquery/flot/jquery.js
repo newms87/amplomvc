@@ -3918,7 +3918,7 @@ var Expr = Sizzle.selectors = {
 		},
 
 		text: function( elem ) {
-			// IE6 and 7 will map elem.type to 'text' for new HTML5 types (search, etc) 
+			// IE6 and 7 will map elem.type to 'text' for new HTML5 types (search, etc)
 			// use getAttribute instead to test this case
 			return "text" === elem.getAttribute( 'type' );
 		},
@@ -4025,21 +4025,21 @@ var Expr = Sizzle.selectors = {
 				case "only":
 				case "first":
 					while ( (node = node.previousSibling) )	 {
-						if ( node.nodeType === 1 ) { 
-							return false; 
+						if ( node.nodeType === 1 ) {
+							return false;
 						}
 					}
 
-					if ( type === "first" ) { 
-						return true; 
+					if ( type === "first" ) {
+						return true;
 					}
 
 					node = elem;
 
 				case "last":
 					while ( (node = node.nextSibling) )	 {
-						if ( node.nodeType === 1 ) { 
-							return false; 
+						if ( node.nodeType === 1 ) {
+							return false;
 						}
 					}
 
@@ -4063,7 +4063,7 @@ var Expr = Sizzle.selectors = {
 							if ( node.nodeType === 1 ) {
 								node.nodeIndex = ++count;
 							}
-						} 
+						}
 
 						parent.sizcache = doneName;
 					}
@@ -4514,7 +4514,7 @@ if ( document.querySelectorAll ) {
 			expr = expr.replace(/\=\s*([^'"\]]*)\s*\]/g, "='$1']");
 
 			if ( !Sizzle.isXML( node ) ) {
-				try { 
+				try {
 					if ( pseudoWorks || !Expr.match.PSEUDO.test( expr ) && !/!=/.test( expr ) ) {
 						return matches.call( node, expr );
 					}
@@ -4647,7 +4647,7 @@ if ( document.documentElement.contains ) {
 
 Sizzle.isXML = function( elem ) {
 	// documentElement is verified for cases where it doesn't yet exist
-	// (such as loading iframes in IE - #4833) 
+	// (such as loading iframes in IE - #4833)
 	var documentElement = (elem ? elem.ownerDocument || elem : 0).documentElement;
 
 	return documentElement ? documentElement.nodeName !== "HTML" : false;

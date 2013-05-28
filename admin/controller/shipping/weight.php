@@ -1,8 +1,8 @@
 <?php
-class ControllerShippingWeight extends Controller { 
+class ControllerShippingWeight extends Controller {
 	
 	
-	public function index() {  
+	public function index() {
 		$this->template->load('shipping/weight');
 
 		$this->load->language('shipping/weight');
@@ -10,7 +10,7 @@ class ControllerShippingWeight extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('weight', $_POST);	
+			$this->model_setting_setting->editSetting('weight', $_POST);
 
 			$this->message->add('success', $this->_('text_success'));
 									
@@ -29,7 +29,7 @@ class ControllerShippingWeight extends Controller {
 
 		$this->data['action'] = $this->url->link('shipping/weight');
 		
-		$this->data['cancel'] = $this->url->link('extension/shipping'); 
+		$this->data['cancel'] = $this->url->link('extension/shipping');
 
 		$geo_zones = $this->model_localisation_geo_zone->getGeoZones();
 		
@@ -38,13 +38,13 @@ class ControllerShippingWeight extends Controller {
 				$this->data['weight_' . $geo_zone['geo_zone_id'] . '_rate'] = $_POST['weight_' . $geo_zone['geo_zone_id'] . '_rate'];
 			} else {
 				$this->data['weight_' . $geo_zone['geo_zone_id'] . '_rate'] = $this->config->get('weight_' . $geo_zone['geo_zone_id'] . '_rate');
-			}		
+			}
 			
 			if (isset($_POST['weight_' . $geo_zone['geo_zone_id'] . '_status'])) {
 				$this->data['weight_' . $geo_zone['geo_zone_id'] . '_status'] = $_POST['weight_' . $geo_zone['geo_zone_id'] . '_status'];
 			} else {
 				$this->data['weight_' . $geo_zone['geo_zone_id'] . '_status'] = $this->config->get('weight_' . $geo_zone['geo_zone_id'] . '_status');
-			}		
+			}
 		}
 		
 		$this->data['geo_zones'] = $geo_zones;
@@ -65,7 +65,7 @@ class ControllerShippingWeight extends Controller {
 			$this->data['weight_sort_order'] = $_POST['weight_sort_order'];
 		} else {
 			$this->data['weight_sort_order'] = $this->config->get('weight_sort_order');
-		}	
+		}
 		
 		$this->data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
 
@@ -82,6 +82,6 @@ class ControllerShippingWeight extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

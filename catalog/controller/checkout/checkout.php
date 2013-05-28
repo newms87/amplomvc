@@ -1,5 +1,5 @@
-<?php  
-class ControllerCheckoutCheckout extends Controller { 
+<?php
+class ControllerCheckoutCheckout extends Controller {
 	public function index() {
 		$this->template->load('checkout/checkout');
 
@@ -10,7 +10,7 @@ class ControllerCheckoutCheckout extends Controller {
 		
 		$this->language->load('checkout/checkout');
 		
-		$this->document->setTitle($this->_('heading_title')); 
+		$this->document->setTitle($this->_('heading_title'));
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_cart'), $this->url->link('cart/cart'));
@@ -27,7 +27,7 @@ class ControllerCheckoutCheckout extends Controller {
 			'common/content_top',
 			'common/content_bottom',
 			'common/footer',
-			'common/header'	
+			'common/header'
 		);
 		
 		$this->response->setOutput($this->render());

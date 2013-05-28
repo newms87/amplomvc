@@ -1,4 +1,4 @@
-<?php  
+<?php
 class ControllerProductBlockAdditional extends Controller {
 	
 	public function index($settings, $product_info) {
@@ -35,7 +35,7 @@ class ControllerProductBlockAdditional extends Controller {
 		else{
 			$this->data['shipping_return'] = $this->_('shipping_return_policy');
 			
-			$this->data['is_default_shipping'] = true;  
+			$this->data['is_default_shipping'] = true;
 		}
 
 		$this->data['shipping_return_link'] = $this->language->format('text_view_ship_policy', $this->url->link('information/information/info','information_id=7'));

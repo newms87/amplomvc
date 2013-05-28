@@ -1,5 +1,5 @@
 <?php
-// Heading 
+// Heading
 $_['heading_title']					= 'Programme d&#8217;affiliation';
 
 // Text

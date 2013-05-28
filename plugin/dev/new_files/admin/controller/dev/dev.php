@@ -90,7 +90,7 @@ class ControllerDevDev extends Controller {
 			
 			unset($_POST);
 			
-			$this->model_setting_setting->editSetting('dev_sites', $dev_sites, null, false); 
+			$this->model_setting_setting->editSetting('dev_sites', $dev_sites, null, false);
 		}
 		
 		$this->breadcrumb->add($this->_('text_site_management'), $this->url->link('dev/dev/site_management'));
@@ -165,7 +165,7 @@ class ControllerDevDev extends Controller {
 		
 		foreach($backup_files as &$backup){
 			$backup['display_size'] = $this->tool->bytes2str($backup['size'],2);
-			$backup['display_date'] = $this->tool->format_datetime($backup['date'], 'd M, Y'); 
+			$backup['display_date'] = $this->tool->format_datetime($backup['date'], 'd M, Y');
 		}
 		
 		$this->data['data_backup_files'] = $backup_files;

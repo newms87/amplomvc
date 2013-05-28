@@ -63,12 +63,12 @@ class Table {
 	
 	/**
 	* Sets the Filter for this column used to filter rows from the database
-	* 
+	*
 	* @param $column (string) - The column to add filter data to
 	* @param $type (string) -  filter input style.  Can be: 'text', 'select', 'date_range', 'time_range', 'datetime_range'
 	* @param $data (array) - Used with 'select' type only. This is the data associative array that can be in key value pairs OR array of arrays with the config set for ID and Name keys
 	* @param $config - Used with 'select' type only. Key value pair of ID key and Name key
-	* 
+	*
 	* 		eg: $column = 'name_column'
 	* 			$type = 'select'
 	* 			$data = array( array( 'id_key' => 3, 'name_key' => 'Dan'), array( 'id_key' => 4, 'name_key' => 'Newman') )
@@ -90,7 +90,7 @@ class Table {
 	
 	/**
 	* Sets the Filter for this column used to filter rows from the database
-	* 
+	*
 	* @param $column (string) - The column to add filter data to
 	* @param $type (string) -  filter input style.  Can be: 'text', 'int', 'date', 'text_list', 'map', 'map_array', 'assoc_array', 'format', or 'image'
 	* @param $data (array) - Used with 'text_list', 'map', or 'format' types only.
@@ -99,10 +99,10 @@ class Table {
 	* 								For 'map_array' $data is an associative array used with $config. This is a pseudo type, that gets converted to a map type using the $config info.
 	* 								For 'assoc_array' $data is an array map, which maps the output of the cell data associative array. Set $config to specify the key of the cell data array that should be used.
 	* 										If $data is an array of associative arrays, you can specify $config to contain the key => value pair to convert $data to a map.
-	* 										(eg: $data = array( array('key_name' => 'value1', 'value_name' => 'value2', ...), array('key_name' => 'value3', 'value_name' => 'value4'), ...), provide $config as array('key_name' => 'value_name', 'cell_data_key' ) 
+	* 										(eg: $data = array( array('key_name' => 'value1', 'value_name' => 'value2', ...), array('key_name' => 'value3', 'value_name' => 'value4'), ...), provide $config as array('key_name' => 'value_name', 'cell_data_key' )
 	* 								For 'format' $data is the formatting style that should be used.
 	* @param $config - Used with 'select' type only. Key value pair of ID key and Name key
-	* 
+	*
 	* 		eg: $column = 'name_column'
 	* 			$type = 'text_list'
 	* 			$data = array( array( 'id_key' => 3, 'name_key' => 'Dan'), array( 'id_key' => 4, 'name_key' => 'Newman') )
@@ -113,7 +113,7 @@ class Table {
 		if($type === 'map_array'){
 			$new_data = array();
 			foreach($data as $d){
-				$new_data[$d[key($config)]] = $d[current($config)]; 
+				$new_data[$d[key($config)]] = $d[current($config)];
 			}
 			
 			$data = $new_data;
@@ -125,7 +125,7 @@ class Table {
 		if($type === 'assoc_array' && is_array(current($data))){
 			$new_data = array();
 			foreach($data as $d){
-				$new_data[$d[key($config)]] = $d[current($config)]; 
+				$new_data[$d[key($config)]] = $d[current($config)];
 			}
 			
 			$data = $new_data;
@@ -158,7 +158,7 @@ class Table {
 		}
 		
 		if (file_exists(DIR_THEME . $this->path . $file)) {
-			$this->file = DIR_THEME . $this->path . $file; 
+			$this->file = DIR_THEME . $this->path . $file;
 		}
 		elseif(file_exists(DIR_THEME . 'default/template/' . $file)) {
 			$this->file = DIR_THEME . 'default/template/' . $file;
@@ -279,7 +279,7 @@ class Table {
 					break;
 				case 'image':
 					break;
-				default: 
+				default:
 					break;
 			}
 			

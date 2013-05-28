@@ -1,7 +1,7 @@
 $.fn.tabs = function() {
 	var selector = this;
 	this.each(function() {
-		var obj = $(this); 
+		var obj = $(this);
 		
 		$(obj.attr('href')).hide();
 		

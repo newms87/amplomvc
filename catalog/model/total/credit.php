@@ -8,9 +8,9 @@ class ModelTotalCredit extends Model {
 			
 			if ((float)$balance) {
 				if ($balance > $total) {
-					$credit = $total;	
+					$credit = $total;
 				} else {
-					$credit = $balance;	
+					$credit = $balance;
 				}
 				
 				if ($credit > 0) {
@@ -32,7 +32,7 @@ class ModelTotalCredit extends Model {
 		$this->load->language('total/credit');
 		
 		if ($order_info['customer_id']) {
-			$this->query("INSERT INTO " . DB_PREFIX . "customer_transaction SET customer_id = '" . (int)$order_info['customer_id'] . "', order_id = '" . (int)$order_info['order_id'] . "', description = '" . $this->db->escape(sprintf($this->_('text_order_id'), (int)$order_info['order_id'])) . "', amount = '" . (float)$order_total['value'] . "', date_added = NOW()");				
+			$this->query("INSERT INTO " . DB_PREFIX . "customer_transaction SET customer_id = '" . (int)$order_info['customer_id'] . "', order_id = '" . (int)$order_info['order_id'] . "', description = '" . $this->db->escape(sprintf($this->_('text_order_id'), (int)$order_info['order_id'])) . "', amount = '" . (float)$order_total['value'] . "', date_added = NOW()");
 		}
-	}	
+	}
 }

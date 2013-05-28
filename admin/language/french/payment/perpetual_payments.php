@@ -2,7 +2,7 @@
 // Heading
 $_['heading_title']			= 'Perpetual Payments';
 
-// Text 
+// Text
 $_['text_payment']			= 'Paiement';
 $_['text_success']			= 'F&eacute;licitations, vous avez modifi&eacute; les d&eacute;tails du paiement <b>Perpetual Payments</b> avec succ&egrave;s !';
 
@@ -18,5 +18,5 @@ $_['entry_sort_order']		= 'Classement :';
 
 // Error
 $_['error_permission']		= 'Attention, vous n&#8217;avez pas la permission de modifier le paiement <b>Perpetual Payments</b> !';
-$_['error_auth_id']			= 'Attention, l&#8217;N&deg; d&#8217;autorisation  est requis !'; 
+$_['error_auth_id']			= 'Attention, l&#8217;N&deg; d&#8217;autorisation  est requis !';
 $_['error_auth_pass']		= 'Attention, le mot de passe de l&#8217;autorisation  est requis !'; 

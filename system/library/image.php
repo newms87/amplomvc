@@ -72,7 +72,7 @@ class Image {
 			if(function_exists('imagecreatefromjpeg'))
 			return imagecreatefromjpeg($image);
 		}
-	}	
+	}
 	
 	public function save($file, $quality = 90) {
 		//make the image cache directory if it does not exist
@@ -105,7 +105,7 @@ class Image {
 		if(!$success){
 			trigger_error("Image::save(): Failed to save image file $file!");
 		}
-	}		
+	}
 	
 	public function resize($filename, $width = 0, $height = 0, $background_color = '') {
 		if (!is_file(DIR_IMAGE . $filename)) {
@@ -170,7 +170,7 @@ class Image {
 		
 		$this->image = imagecreatetruecolor((int)$width, (int)$height);
 			
-		if (!$background_color || (isset($this->info['mime']) && $this->info['mime'] == 'image/png')) {		
+		if (!$background_color || (isset($this->info['mime']) && $this->info['mime'] == 'image/png')) {
 			imagealphablending($this->image, false);
 			imagesavealpha($this->image, true);
 			$background = imagecolorallocatealpha($this->image, 255, 255, 255, 127);
@@ -281,23 +281,23 @@ class Image {
 		}
 		
 		if (strlen($color) == 6) {
-			list($r, $g, $b) = array($color[0] . $color[1], $color[2] . $color[3], $color[4] . $color[5]);	
+			list($r, $g, $b) = array($color[0] . $color[1], $color[2] . $color[3], $color[4] . $color[5]);
 		} elseif (strlen($color) == 3) {
-			list($r, $g, $b) = array($color[0] . $color[0], $color[1] . $color[1], $color[2] . $color[2]);	
+			list($r, $g, $b) = array($color[0] . $color[0], $color[1] . $color[1], $color[2] . $color[2]);
 		} else {
 			return false;
 		}
 		
-		$r = hexdec($r); 
-		$g = hexdec($g); 
-		$b = hexdec($b);	
+		$r = hexdec($r);
+		$g = hexdec($g);
+		$b = hexdec($b);
 		
 		return array($r, $g, $b);
 	}
 	
 	/**
 	* Sorts images by color in place
-	* 
+	*
 	* @param &$data - an array with a filepath to an image file under a key
 	* @param $img_key - the key in the $data array that points to the image file path
 	* @param $type - the method to sort by. 'HSV' is default.

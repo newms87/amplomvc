@@ -1,5 +1,5 @@
-<?php  
-class ControllerCatalogDownload extends Controller {  
+<?php
+class ControllerCatalogDownload extends Controller {
 	
 	
   	public function index() {
@@ -101,7 +101,7 @@ class ControllerCatalogDownload extends Controller {
  
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (isset($_POST['selected']) && $this->validateDelete()) {	
+		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $download_id) {
 			
 				$results = $this->model_catalog_download->getDownload($download_id) ;
@@ -176,7 +176,7 @@ class ControllerCatalogDownload extends Controller {
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/download', $url));
 
 		$this->data['insert'] = $this->url->link('catalog/download/insert', $url);
-		$this->data['delete'] = $this->url->link('catalog/download/delete', $url);	
+		$this->data['delete'] = $this->url->link('catalog/download/delete', $url);
 
 		$this->data['downloads'] = array();
 
@@ -206,7 +206,7 @@ class ControllerCatalogDownload extends Controller {
 				'selected'	=> isset($_POST['selected']) && in_array($result['download_id'], $_POST['selected']),
 				'action'		=> $action
 			);
-		}	
+		}
 	
  		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -249,10 +249,6 @@ class ControllerCatalogDownload extends Controller {
 
 		$this->pagination->init();
 		$this->pagination->total = $download_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('catalog/download', $url);
-
 		$this->data['pagination'] = $this->pagination->render();
 
 		$this->data['sort'] = $sort;
@@ -336,7 +332,7 @@ class ControllerCatalogDownload extends Controller {
 			$this->data['download_description'] = $this->model_catalog_download->getDownloadDescriptions($_GET['download_id']);
 		} else {
 			$this->data['download_description'] = array();
-		}		
+		}
 		
 		if (isset($_POST['remaining'])) {
 				$this->data['remaining'] = $_POST['remaining'];
@@ -357,10 +353,10 @@ class ControllerCatalogDownload extends Controller {
 			'common/footer'
 		);
 				
-		$this->response->setOutput($this->render());	
+		$this->response->setOutput($this->render());
   	}
 
-  	private function validateForm() { 
+  	private function validateForm() {
 		if (!$this->user->hasPermission('modify', 'catalog/download')) {
 				$this->error['warning'] = $this->_('error_permission');
 		}
@@ -369,16 +365,16 @@ class ControllerCatalogDownload extends Controller {
 				if ((strlen($value['name']) < 3) || (strlen($value['name']) > 64)) {
 				$this->error['name'][$language_id] = $this->_('error_name');
 				}
-		}	
+		}
 
 		if ($_FILES['download']['name']) {
 			if ((strlen($_FILES['download']['name']) < 3) || (strlen($_FILES['download']['name']) > 128)) {
 				$this->error['download'] = $this->_('error_filename');
-			}		
+			}
 			
 			if (substr(strrchr($_FILES['download']['name'], '.'), 1) == 'php') {
 						$this->error['download'] = $this->_('error_filetype');
-				}	
+				}
 						
 			if ($_FILES['download']['error'] != UPLOAD_ERR_OK) {
 				$this->error['warning'] = $this->_('error_upload_' . $_FILES['download']['error']);
@@ -391,16 +387,16 @@ class ControllerCatalogDownload extends Controller {
   	private function validateDelete() {
 		if (!$this->user->hasPermission('modify', 'catalog/download')) {
 				$this->error['warning'] = $this->_('error_permission');
-		}	
+		}
 		
 		foreach ($_POST['selected'] as $download_id) {
   			$product_total = $this->model_catalog_product->getTotalProductsByDownloadId($download_id);
 	
 			if ($product_total) {
-				$this->error['warning'] = sprintf($this->_('error_product'), $product_total);	
-			}	
-		}	
+				$this->error['warning'] = sprintf($this->_('error_product'), $product_total);
+			}
+		}
 					
-		return $this->error ? false : true; 
+		return $this->error ? false : true;
   	}
 }

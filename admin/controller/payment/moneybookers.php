@@ -10,7 +10,7 @@ class ControllerPaymentMoneyBookers extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('moneybookers', $_POST);				
+			$this->model_setting_setting->editSetting('moneybookers', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 		
@@ -52,14 +52,14 @@ class ControllerPaymentMoneyBookers extends Controller {
 		if (isset($_POST['moneybookers_total'])) {
 			$this->data['moneybookers_total'] = $_POST['moneybookers_total'];
 		} else {
-			$this->data['moneybookers_total'] = $this->config->get('moneybookers_total'); 
-		} 
+			$this->data['moneybookers_total'] = $this->config->get('moneybookers_total');
+		}
 				
 		if (isset($_POST['moneybookers_order_status_id'])) {
 			$this->data['moneybookers_order_status_id'] = $_POST['moneybookers_order_status_id'];
 		} else {
-			$this->data['moneybookers_order_status_id'] = $this->config->get('moneybookers_order_status_id'); 
-		} 
+			$this->data['moneybookers_order_status_id'] = $this->config->get('moneybookers_order_status_id');
+		}
 
 		if (isset($_POST['moneybookers_pending_status_id'])) {
 			$this->data['moneybookers_pending_status_id'] = $_POST['moneybookers_pending_status_id'];
@@ -90,8 +90,8 @@ class ControllerPaymentMoneyBookers extends Controller {
 		if (isset($_POST['moneybookers_geo_zone_id'])) {
 			$this->data['moneybookers_geo_zone_id'] = $_POST['moneybookers_geo_zone_id'];
 		} else {
-			$this->data['moneybookers_geo_zone_id'] = $this->config->get('moneybookers_geo_zone_id'); 
-		} 	
+			$this->data['moneybookers_geo_zone_id'] = $this->config->get('moneybookers_geo_zone_id');
+		}
 		
 		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 		
@@ -136,6 +136,6 @@ class ControllerPaymentMoneyBookers extends Controller {
 			$this->error['email'] = $this->_('error_email');
 		}
 				
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

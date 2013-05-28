@@ -1,5 +1,5 @@
 <?php
-// Heading 
+// Heading
 $_['heading_title']		= 'Mi cuenta';
 
 // Text
@@ -13,7 +13,7 @@ $_['text_address']		= 'Modificar tus entradas de libro de direcciones';
 $_['text_wishlist']		= 'Modificar tu lista de deseos';
 $_['text_order']			= 'Ver tu historial de pedidos';
 $_['text_download']		= 'Descargas';
-$_['text_reward']		= 'Tus puntos recompensa'; 
-$_['text_return']		= 'Ver tus peticiones de devolución'; 
-$_['text_transaction']	= 'Tus transacciones'; 
+$_['text_reward']		= 'Tus puntos recompensa';
+$_['text_return']		= 'Ver tus peticiones de devolución';
+$_['text_transaction']	= 'Tus transacciones';
 $_['text_newsletter']	= 'Suscribir / Darse de baja del boletín de noticias';

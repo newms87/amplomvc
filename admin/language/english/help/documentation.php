@@ -210,7 +210,7 @@ $s = &$_['sections']['designer'];
 			$sss = &$ss[3]['step'];
 				$sss[0] = "These articles will be featured inline (mixed in) with the products on the Designer's page. They can be linked to anywhere on the internet.";
 				$sss[1] = "Click on 'Add Article' to add a new article to be featured.";
-				$sss[2] = "The %%Title%% for the article is only used for reference and will not be seen by our customers."; 
+				$sss[2] = "The %%Title%% for the article is only used for reference and will not be seen by our customers.";
 				$sss[3] = "The %%Description%% will be seen by our customers as this is the preview or teaser for the Article. You may use Full HTML to personalize the advertisement.";
 				$sss[4] = "The %%URL%% must be the full URL path for the article (eg. http://www.bettyconfidential.com/article-name)";
 		//B. Viewing / Modifying Designers
@@ -259,7 +259,7 @@ $s = &$_['sections']['content'];
 			$ss[3] = "%%Filter Types%%: These are the filter categories displayed in the search bar when searching for products (via the popup window). To add a %%Filter Type%% simply type in the name and hit the enter key. You can drag and drop them to order them. %!The Filter Type must be implemented before it will work! Check with the webadmin to ensure functionality.%! The 'Default' category will be highlighted and active when initially searching.";
 			$ss[4] = "%%Betty's Daily Spotlight%%: This is an autocomplete field. Type the product that is to be featured in the Spotlight. When the name appears in the dropdown, click on it to add it to the Spotlight.";
 			$ss[5] = "In the list of modules below you can specify the %%Limit%% for the number of product displayed per page (the autoscroll feature will allow the entire list to be shown displayed as the user scrolls down).";
-			$ss[6] = "%%Layout%% is the page to display it on, %%Position%% is where to display it, %%Filter Menu Position%% is where to put the category / filter menu, %%Display Style%% will always have a popup window, but you can optionally choose 'Context' to dislpay the Betty's Daily Spotlight inline with the content on that specified in the %%Layout%%.  %%Sort Order%% will determine in what order the content will appear relative to other active modules on the page."; 
+			$ss[6] = "%%Layout%% is the page to display it on, %%Position%% is where to display it, %%Filter Menu Position%% is where to put the category / filter menu, %%Display Style%% will always have a popup window, but you can optionally choose 'Context' to dislpay the Betty's Daily Spotlight inline with the content on that specified in the %%Layout%%.  %%Sort Order%% will determine in what order the content will appear relative to other active modules on the page.";
 		//B. Leaderboard / Advertised Promotions in Headers
 		$s['sub'][2]['title'] = "Leaderboard / Advertised Promotions in Headers";
 		$ss = &$s['sub'][2]['step'];

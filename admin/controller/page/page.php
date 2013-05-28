@@ -1,5 +1,5 @@
 <?php
-class ControllerPagePage extends Controller { 
+class ControllerPagePage extends Controller {
 	
 	public function index() {
 		$this->load->language('page/page');
@@ -217,8 +217,6 @@ class ControllerPagePage extends Controller {
 		
 		$this->pagination->init();
 		$this->pagination->total = $page_total;
-		$this->pagination->url = $this->url->link('page/page', $url_query);
-		
 		$this->data['pagination'] = $this->pagination->render();
 		
 		//Template Children

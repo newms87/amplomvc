@@ -23,8 +23,8 @@ if( isset($_REQUEST['view']) ) {
 	$n = array_search($hash, array_map(sha1, $files));
 	$fileName = $files[$n];
   ?>
-  <hr />  
-	Viewing: <?= $fileName;?>	
+  <hr />
+	Viewing: <?= $fileName;?>
 	<hr />
 	<?php
 	highlight_file($fileName);
@@ -32,5 +32,5 @@ if( isset($_REQUEST['view']) ) {
 	<hr />
 <?php
 }
-include_once "includes/footer.php";	
+include_once "includes/footer.php";
 

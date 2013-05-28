@@ -42,7 +42,7 @@ class Draw {
 	
 	public function set_transparent_color($color){
 		return imagecolortransparent($this->canvas, $this->get_hex_color($color));
-	}	
+	}
 	
 	public function set_background($color){
 		return imagefilledrectangle($this->canvas, 0, 0, imagesx($this->canvas)-1, imagesy($this->canvas)-1, $this->get_hex_color($color));

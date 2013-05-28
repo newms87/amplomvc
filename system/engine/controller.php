@@ -146,7 +146,7 @@ abstract class Controller {
 			$file = $this->template->get_file();
 		}
 		
-		//if there are plugins that have modified this template, 
+		//if there are plugins that have modified this template,
 		//we use the merged version of this file
 		$file = $this->plugin_handler->get_file($file);
 		

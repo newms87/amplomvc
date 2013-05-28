@@ -1,3 +1,3 @@
 <?php
-// Heading 
+// Heading
 $_['heading_title']  = 'Chat en vivo';

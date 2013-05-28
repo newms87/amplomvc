@@ -24,7 +24,7 @@ class ModelSaleCustomerGroup extends Model {
 	public function getCustomerGroups($data = array()) {
 		$sql = "SELECT * FROM " . DB_PREFIX . "customer_group";
 		
-		$sql .= " ORDER BY name";	
+		$sql .= " ORDER BY name";
 			
 		if (isset($data['order']) && ($data['order'] == 'DESC')) {
 			$sql .= " DESC";
@@ -35,11 +35,11 @@ class ModelSaleCustomerGroup extends Model {
 		if (isset($data['start']) || isset($data['limit'])) {
 			if ($data['start'] < 0) {
 				$data['start'] = 0;
-			}			
+			}
 
 			if ($data['limit'] < 1) {
 				$data['limit'] = 20;
-			}	
+			}
 			
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
 		}

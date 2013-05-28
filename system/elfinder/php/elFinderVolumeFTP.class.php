@@ -85,7 +85,7 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 			'dirMode'		=> isset($_SESSION['elfinder_dir_mode'])?$_SESSION['elfinder_dir_mode']:0755,
 			'fileMode'		=> isset($_SESSION['elfinder_file_mode'])?$_SESSION['elfinder_file_mode']:0644
 		);
-		$this->options = array_merge($this->options, $opts); 
+		$this->options = array_merge($this->options, $opts);
 		$this->options['mimeDetect'] = 'internal';
 	}
 	
@@ -102,9 +102,9 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	* @author Cem (DiscoFever)
 	**/
 	protected function init() {
-		if (!$this->options['host'] 
-		||  !$this->options['user'] 
-		||  !$this->options['pass'] 
+		if (!$this->options['host']
+		||  !$this->options['user']
+		||  !$this->options['pass']
 		||  !$this->options['port']) {
 			return $this->setError('Required options undefined.');
 		}
@@ -191,7 +191,7 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 		ftp_pasv($this->connect, $this->options['mode'] == 'passive');
 
 		// enter root folder
-		if (!ftp_chdir($this->connect, $this->root) 
+		if (!ftp_chdir($this->connect, $this->root)
 		|| $this->root != ftp_pwd($this->connect)) {
 			$this->umount();
 			return $this->setError('Unable to open root folder.');
@@ -264,7 +264,7 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 				}
 				$target = $this->_normpath($target);
 				$stat['name']  = $name;
-				if ($this->_inpath($target, $this->root) 
+				if ($this->_inpath($target, $this->root)
 				&& ($tstat = $this->stat($target))) {
 					$stat['size']  = $tstat['mime'] == 'directory' ? 0 : $info[4];
 					$stat['alias'] = $this->_relpath($target);
@@ -420,8 +420,8 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 			$initial_slashes = false;
 		}
 			
-		if (($initial_slashes) 
-		&& (strpos($path, '//') === 0) 
+		if (($initial_slashes)
+		&& (strpos($path, '//') === 0)
 		&& (strpos($path, '///') === false)) {
 			$initial_slashes = 2;
 		}
@@ -435,8 +435,8 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 				continue;
 			}
 				
-			if (($comp != '..') 
-			|| (!$initial_slashes && !$new_comps) 
+			if (($comp != '..')
+			|| (!$initial_slashes && !$new_comps)
 			|| ($new_comps && (end($new_comps) == '..'))) {
 				array_push($new_comps, $comp);
 			} elseif ($new_comps) {
@@ -513,7 +513,7 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	*
 	* If file does not exists - returns empty array or false.
 	*
-	* @param  string  $path	file path 
+	* @param  string  $path	file path
 	* @return array|false
 	* @author Dmitry (dio) Levashov
 	**/
@@ -729,7 +729,7 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	protected function _mkdir($path, $name) {
 		if (($path = ftp_mkdir($this->connect, $path.'/'.$name)) == false) {
 			return false;
-		} 
+		}
 		
 		$this->options['dirMode'] && @ftp_chmod($this->connect, $this->options['dirMode'], $path);
 		return $path;
@@ -955,7 +955,7 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	* @param  string  $path  archive path
 	* @param  array	$arc	archiver command and arguments (same as in $this->archivers)
 	* @return true
-	* @author Dmitry (dio) Levashov, 
+	* @author Dmitry (dio) Levashov,
 	* @author Alexey Sukhotin
 	**/
 	protected function _extract($path, $arc) {
@@ -971,7 +971,7 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 	* @param  string  $name	archive name
 	* @param  array	$arc	archiver options
 	* @return string|bool
-	* @author Dmitry (dio) Levashov, 
+	* @author Dmitry (dio) Levashov,
 	* @author Alexey Sukhotin
 	**/
 	protected function _archive($dir, $files, $name, $arc) {
@@ -979,4 +979,4 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 		return false;
 	}
 	
-} // END class 
+} // END class

@@ -2,7 +2,7 @@
 class ControllerModuleDnCarousel extends Controller {
 	
 	
-	public function index() {	
+	public function index() {
 		$this->template->load('module/dn_carousel');
 
 		$this->load->language('module/dn_carousel');
@@ -10,7 +10,7 @@ class ControllerModuleDnCarousel extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('dn_carousel', $_POST);		
+			$this->model_setting_setting->editSetting('dn_carousel', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 						
@@ -37,9 +37,9 @@ class ControllerModuleDnCarousel extends Controller {
 		
 		if (isset($_POST['dn_carousel_module'])) {
 			$this->data['modules'] = $_POST['dn_carousel_module'];
-		} elseif ($this->config->get('dn_carousel_module')) { 
+		} elseif ($this->config->get('dn_carousel_module')) {
 			$this->data['modules'] = $this->config->get('dn_carousel_module');
-		}	
+		}
 		
 		
 		foreach($this->data['modules'] as $mod_key=>$mod){
@@ -63,7 +63,7 @@ class ControllerModuleDnCarousel extends Controller {
 		$layouts = $this->model_design_layout->getLayouts();
 		$this->data['layouts'] = array();
 		foreach($layouts as $layout)
-			$this->data['layouts'][$layout['layout_id']] = $layout['name']; 
+			$this->data['layouts'][$layout['layout_id']] = $layout['name'];
 		
 		$this->children = array(
 			'common/header',
@@ -78,6 +78,6 @@ class ControllerModuleDnCarousel extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

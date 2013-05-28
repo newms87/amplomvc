@@ -54,7 +54,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'errMaxSize'           : 'Data exceeds the maximum allowed size.',
 			'errFileMaxSize'       : 'File exceeds maximum allowed size.',
 			'errUploadMime'        : 'File type not allowed.',
-			'errUploadTransfer'    : '"$1" transfer error.', 
+			'errUploadTransfer'    : '"$1" transfer error.',
 			'errSave'              : '"$1" mentése nem sikerült.',
 			'errCopy'              : '"$1" másolása nem sikerült.',
 			'errMove'              : '"$1" áthelyezése nem sikerült.',
@@ -93,7 +93,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'cmdupload'    : 'Feltöltés',
 			'cmdview'      : 'View',
 			
-			/*********************************** buttons ***********************************/ 
+			/*********************************** buttons ***********************************/
 			'btnClose'  : 'Bezár',
 			'btnSave'   : 'Ment',
 			'btnRm'     : 'Töröl',

@@ -46,7 +46,7 @@ final class MySQL implements Database{
 				
 				unset($data);
 
-				return $query;	
+				return $query;
 			} else {
 				return true;
 			}
@@ -74,7 +74,7 @@ final class MySQL implements Database{
 
   	public function getLastId() {
 		return mysql_insert_id($this->link);
-  	}	
+  	}
 	
 	public function __destruct() {
 		if(is_resource($this->link))

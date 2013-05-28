@@ -1,5 +1,5 @@
-<?php	
-class ControllerCatalogManufacturer extends Controller { 
+<?php
+class ControllerCatalogManufacturer extends Controller {
 	
   	public function index() {
 		$this->load->language('catalog/manufacturer');
@@ -30,7 +30,7 @@ class ControllerCatalogManufacturer extends Controller {
 		}
 	
 		$this->getForm();
-  	} 
+  	}
 	
   	public function update() {
 		$this->load->language('catalog/manufacturer');
@@ -51,7 +51,7 @@ class ControllerCatalogManufacturer extends Controller {
 		}
 	
 		$this->getForm();
-  	}	
+  	}
 
   	public function delete() {
 		$this->load->language('catalog/manufacturer');
@@ -72,7 +72,7 @@ class ControllerCatalogManufacturer extends Controller {
 		}
 	
 		$this->getList();
-  	}  
+  	}
 	
   	private function getList() {
 		$this->template->load('catalog/manufacturer_list');
@@ -87,7 +87,7 @@ class ControllerCatalogManufacturer extends Controller {
 		$url = $this->get_url();
 							
 		$this->data['insert'] = $this->url->link('catalog/manufacturer/insert', $url);
-		$this->data['delete'] = $this->url->link('catalog/manufacturer/delete', $url);	
+		$this->data['delete'] = $this->url->link('catalog/manufacturer/delete', $url);
 
 		$this->data['manufacturers'] = array();
 
@@ -127,7 +127,7 @@ class ControllerCatalogManufacturer extends Controller {
 				'selected'		=> isset($_POST['selected']) && in_array($result['manufacturer_id'], $_POST['selected']),
 				'action'			=> $action
 			);
-		}	
+		}
 		
 		$url_query = $this->url->get_query(array('page'));
 		
@@ -141,10 +141,6 @@ class ControllerCatalogManufacturer extends Controller {
 
 		$this->pagination->init();
 		$this->pagination->total = $manufacturer_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('catalog/manufacturer', $url);
-			
 		$this->data['pagination'] = $this->pagination->render();
 
 		$this->data['sort'] = $sort;
@@ -250,7 +246,7 @@ class ControllerCatalogManufacturer extends Controller {
 		);
 				
 		$this->response->setOutput($this->render());
-	}  
+	}
 	
   	private function validateForm() {
 		if (!$this->user->hasPermission('modify', 'catalog/manufacturer')) {
@@ -262,7 +258,7 @@ class ControllerCatalogManufacturer extends Controller {
 		}
 		
 		if(isset($_POST['keyword'])){
-			$keyword =$_POST['keyword']; 
+			$keyword =$_POST['keyword'];
 			if(empty($keyword) || is_null($keyword) || preg_match("/[^A-Za-z0-9-]/",$keyword) > 0)
 				$this->error['keyword'] = $this->_('error_keyword');
 		}
@@ -273,19 +269,19 @@ class ControllerCatalogManufacturer extends Controller {
 		}
 		
 		return $this->error ? false : true;
-  	}	
+  	}
 
   	private function validateDelete() {
 		if (!$this->user->hasPermission('modify', 'catalog/manufacturer')) {
 			$this->error['warning'] = $this->_('error_permission');
-		}	
+		}
 		
 		foreach ($_POST['selected'] as $manufacturer_id) {
   			$product_total = $this->model_catalog_product->getTotalProductsByManufacturerId($manufacturer_id);
 	
 			if ($product_total) {
-				$this->error['warning_product'] = sprintf($this->_('error_product'), $product_total);	
-			}	
+				$this->error['warning_product'] = sprintf($this->_('error_product'), $product_total);
+			}
 			
 			$flashsales = $this->model_catalog_flashsale->getFlashsalesByDesignerID($manufacturer_id);
 			if(!empty($flashsales))
@@ -294,7 +290,7 @@ class ControllerCatalogManufacturer extends Controller {
 			if($this->user->isDesigner() && !$this->model_catalog_manufacturer->isEditable($manufacturer_id)){
 				$this->error['warning_active'] = $this->_('warning_not_editable');
 			}
-		} 
+		}
 		
 		if($this->user->isDesigner()){
 			$this->error = array();
@@ -302,7 +298,7 @@ class ControllerCatalogManufacturer extends Controller {
 		}
 		
 		
-		return $this->error ? false : true;  
+		return $this->error ? false : true;
   	}
 
 	private function check_user_can_modify($designer_id){
@@ -356,7 +352,7 @@ class ControllerCatalogManufacturer extends Controller {
 				'manufacturer_id' => $result['manufacturer_id'],
 				'name'		=> html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8'),
 				'image'		=> $result['image'],
-			); 
+			);
 		}
 
 		$this->response->setOutput(json_encode($json));

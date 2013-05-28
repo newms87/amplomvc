@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerModuleCart extends Controller {
 	public function index() {
 		$this->template->load('module/cart');
@@ -9,14 +9,14 @@ class ControllerModuleCart extends Controller {
 				$this->cart->remove($_GET['remove']);
 			
 			unset($this->session->data['vouchers'][$_GET['remove']]);
-			}	
+			}
 			
 		// Totals
-		$total_data = array();					
+		$total_data = array();
 		$total = 0;
 		$taxes = $this->cart->getTaxes();
 		
-		$sort_order = array(); 
+		$sort_order = array();
 		
 		$results = $this->model_setting_extension->getExtensions('total');
 		
@@ -32,14 +32,14 @@ class ControllerModuleCart extends Controller {
 				$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
 			}
 			
-			$sort_order = array(); 
+			$sort_order = array();
 		
 			foreach ($total_data as $key => $value) {
 				$sort_order[$key] = $value['sort_order'];
 			}
 
-			array_multisort($sort_order, SORT_ASC, $total_data);			
-		}		
+			array_multisort($sort_order, SORT_ASC, $total_data);
+		}
 		
 		$this->data['totals'] = $total_data;
 		
@@ -57,14 +57,14 @@ class ControllerModuleCart extends Controller {
 			
 			foreach ($product['option'] as $option) {
 				if ($option['type'] != 'file') {
-					$value = $option['option_value'];	
+					$value = $option['option_value'];
 				} else {
 					$filename = $this->encryption->decrypt($option['option_value']);
 					
 					$value = substr($filename, 0, strrpos($filename, '.'));
-				}				
+				}
 				
-				$option_data[] = array(									
+				$option_data[] = array(
 					'name'  => $option['name'],
 					'value' => (strlen($value) > 20 ? substr($value, 0, 20) . '..' : $value),
 					'type'  => $option['type']
@@ -72,13 +72,13 @@ class ControllerModuleCart extends Controller {
 			}
 			
 			if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-				$price = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_show_price_with_tax')));
+				$price = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id']));
 			} else {
 				$price = false;
 			}
 
 			if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-				$total = $this->currency->format($this->tax->calculate($product['total'], $product['tax_class_id'], $this->config->get('config_show_price_with_tax')));
+				$total = $this->currency->format($this->tax->calculate($product['total'], $product['tax_class_id']));
 			} else {
 				$total = false;
 			}
@@ -87,12 +87,12 @@ class ControllerModuleCart extends Controller {
 				'key'		=> $product['key'],
 				'thumb'	=> $image,
 				'name'	=> $product['name'],
-				'model'	=> $product['model'], 
+				'model'	=> $product['model'],
 				'option'	=> $option_data,
 				'quantity' => $product['quantity'],
-				'price'	=> $price,	
-				'total'	=> $total,	
-				'href'	=> $this->url->link('product/product', 'product_id=' . $product['product_id'])		
+				'price'	=> $price,
+				'total'	=> $total,
+				'href'	=> $this->url->link('product/product', 'product_id=' . $product['product_id'])
 			);
 		}
 		
@@ -112,13 +112,7 @@ class ControllerModuleCart extends Controller {
 		$this->data['cart'] = $this->url->link('cart/cart');
 						
 		$this->data['checkout'] = $this->url->link('checkout/checkout');
-	
 
-
-
-
-
-
-		$this->response->setOutput($this->render());		
+		$this->response->setOutput($this->render());
 	}
 }

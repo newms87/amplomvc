@@ -1,5 +1,5 @@
 <?php
-class ControllerLocalisationGeoZone extends Controller { 
+class ControllerLocalisationGeoZone extends Controller {
 	
  
 	public function index() {
@@ -69,7 +69,7 @@ class ControllerLocalisationGeoZone extends Controller {
 		
 		if (isset($_GET['order'])) {
 			$order = $_GET['order'];
-		} else { 
+		} else {
 			$order = 'ASC';
 		}
 		
@@ -170,10 +170,6 @@ class ControllerLocalisationGeoZone extends Controller {
 
 		$this->pagination->init();
 		$this->pagination->total = $geo_zone_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('localisation/geo_zone', $url);
-
 		$this->data['pagination'] = $this->pagination->render();
 
 		$this->data['sort'] = $sort;

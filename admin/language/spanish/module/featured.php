@@ -18,5 +18,5 @@ $_['entry_position']		= 'Posición:';
 $_['entry_status']		= 'Estado:';
 $_['entry_sort_order']	= 'Orden de aparición:';
 
-// Error 
+// Error
 $_['error_permission']	= 'Cuidado: No tienes permisos para modificar el módulo destacados!';

@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerDesignLayout extends Controller {
 	
 	public function index() {
@@ -166,7 +166,7 @@ class ControllerDesignLayout extends Controller {
 			$this->data['layouts'][] = array(
 				'layout_id' => $result['layout_id'],
 				'name'		=> $result['name'],
-				'selected'  => isset($_POST['selected']) && in_array($result['layout_id'], $_POST['selected']),				
+				'selected'  => isset($_POST['selected']) && in_array($result['layout_id'], $_POST['selected']),
 				'action'	=> $action
 			);
 		}
@@ -211,10 +211,6 @@ class ControllerDesignLayout extends Controller {
 
 		$this->pagination->init();
 		$this->pagination->total = $layout_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('design/layout', $url);
-
 		$this->data['pagination'] = $this->pagination->render();
 		
 		$this->data['sort'] = $sort;
@@ -261,7 +257,7 @@ class ControllerDesignLayout extends Controller {
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('design/layout', $url));
 
-		if (!isset($_GET['layout_id'])) { 
+		if (!isset($_GET['layout_id'])) {
 			$this->data['action'] = $this->url->link('design/layout/insert', $url);
 		} else {
 			$this->data['action'] = $this->url->link('design/layout/update', 'layout_id=' . $_GET['layout_id'] . $url);
@@ -299,7 +295,7 @@ class ControllerDesignLayout extends Controller {
 			$this->data['layout_routes'] = $this->model_design_layout->getLayoutRoutes($_GET['layout_id']);
 		} else {
 			$this->data['layout_routes'] = array();
-		}	
+		}
 				
 		$this->children = array(
 			'common/header',

@@ -8,7 +8,7 @@ $.fn.elfindercwd = function(fm) {
 	
 	this.not('.elfinder-cwd').each(function() {
 		// fm.time('cwdLoad');
-		var 
+		var
 			list = fm.storage('view') == 'list',
 
 			undef = 'undefined',
@@ -88,7 +88,7 @@ $.fn.elfindercwd = function(fm) {
 			 *
 			 * @type String
 			 **/
-			clHover     = fm.res(c, 'hover'), 
+			clHover     = fm.res(c, 'hover'),
 
 			/**
 			 * Hover css class
@@ -175,8 +175,8 @@ $.fn.elfindercwd = function(fm) {
 			itemhtml = function(f) {
 				f.name = fm.escape(f.name);
 				return templates[list ? 'row' : 'icon']
-						.replace(/\{([a-z]+)\}/g, function(s, e) { 
-							return replacement[e] ? replacement[e](f) : (f[e] ? f[e] : ''); 
+						.replace(/\{([a-z]+)\}/g, function(s, e) {
+							return replacement[e] ? replacement[e](f) : (f[e] ? f[e] : '');
 						});
 			},
 			
@@ -193,7 +193,7 @@ $.fn.elfindercwd = function(fm) {
 			 * @param String  move direction
 			 * @param Boolean append to current selection
 			 * @return void
-			 * @rise select			
+			 * @rise select
 			 */
 			select = function(keyCode, append) {
 				var code     = $.ui.keyCode,
@@ -281,7 +281,7 @@ $.fn.elfindercwd = function(fm) {
 			 * @return void
 			 */
 			unselectAll = function() {
-				cwd.find('[id].'+clSelected).trigger(evtUnselect); 
+				cwd.find('[id].'+clSelected).trigger(evtUnselect);
 			},
 			
 			/**
@@ -332,7 +332,7 @@ $.fn.elfindercwd = function(fm) {
 			buffer = [],
 			
 			/**
-			 * Return index of elements with required hash in buffer 
+			 * Return index of elements with required hash in buffer
 			 *
 			 * @param String  file hash
 			 * @return Number
@@ -362,8 +362,8 @@ $.fn.elfindercwd = function(fm) {
 			 * @return void
 			 */
 			render = function() {
-				var html  = [],  
-					dirs  = false, 
+				var html  = [],
+					dirs  = false,
 					ltmb  = [],
 					atmb  = {},
 					last  = cwd.find('[id]:last'),
@@ -385,7 +385,7 @@ $.fn.elfindercwd = function(fm) {
 							}
 							if (f.tmb) {
 								f.tmb === 1 ? ltmb.push(f.hash) : (atmb[f.hash] = f.tmb)
-							} 
+							}
 							return itemhtml(f);
 						}
 						return null;
@@ -414,7 +414,7 @@ $.fn.elfindercwd = function(fm) {
 			 * @type Object
 			 */
 			droppable = $.extend({}, fm.droppable, {
-				over : function(e, ui) { 
+				over : function(e, ui) {
 					var hash = fm.cwd().hash;
 
 					$.each(ui.helper.data('files'), function(i, h) {
@@ -447,7 +447,7 @@ $.fn.elfindercwd = function(fm) {
 			 */
 			attachThumbnails = function(images) {
 				var url = fm.option('tmbUrl'),
-					ret = true, 
+					ret = true,
 					ndx;
 				
 				$.each(images, function(hash, tmb) {
@@ -490,7 +490,7 @@ $.fn.elfindercwd = function(fm) {
 							}
 						})
 					return;
-				} 
+				}
 
 				tmbs = tmbs = files.splice(0, tmbNum);
 				if (tmbs.length) {
@@ -514,7 +514,7 @@ $.fn.elfindercwd = function(fm) {
 			 */
 			add = function(files) {
 				var place    = list ? cwd.find('tbody') : cwd,
-					l        = files.length, 
+					l        = files.length,
 					ltmb     = [],
 					atmb     = {},
 					dirs     = false,
@@ -609,7 +609,7 @@ $.fn.elfindercwd = function(fm) {
 			 * @return void
 			 */
 			content = function(files, any) {
-				var phash = fm.cwd().hash; 
+				var phash = fm.cwd().hash;
 				// console.log(files)
 				try {
 					// to avoid problem with draggable
@@ -642,9 +642,9 @@ $.fn.elfindercwd = function(fm) {
 			cwd = $(this)
 				.addClass('ui-helper-clearfix elfinder-cwd')
 				.attr('unselectable', 'on')
-				// fix ui.selectable bugs and add shift+click support 
+				// fix ui.selectable bugs and add shift+click support
 				.delegate(fileSelector, 'click.'+fm.namespace, function(e) {
-					var p    = this.id ? $(this) : $(this).parents('[id]:first'), 
+					var p    = this.id ? $(this) : $(this).parents('[id]:first'),
 						prev = p.prevAll('.'+clSelected+':first'),
 						next = p.nextAll('.'+clSelected+':first'),
 						pl   = prev.length,
@@ -689,7 +689,7 @@ $.fn.elfindercwd = function(fm) {
 				})
 				// disable files wich removing or moving
 				.delegate(fileSelector, evtDisable, function() {
-					var $this  = $(this).removeClass(clSelected).addClass(clDisabled), 
+					var $this  = $(this).removeClass(clSelected).addClass(clDisabled),
 						target = (list ? $this : $this.children()).removeClass(clHover);
 					
 					$this.is('.'+clDroppable) && $this.droppable('disable');
@@ -698,10 +698,10 @@ $.fn.elfindercwd = function(fm) {
 				})
 				// if any files was not removed/moved - unlock its
 				.delegate(fileSelector, evtEnable, function() {
-					var $this  = $(this).removeClass(clDisabled), 
+					var $this  = $(this).removeClass(clDisabled),
 						target = list ? $this : $this.children();
 					
-					$this.is('.'+clDroppable) && $this.droppable('enable');	
+					$this.is('.'+clDroppable) && $this.droppable('enable');
 					target.is('.'+clDraggable) && target.draggable('enable');
 				})
 				.delegate(fileSelector, 'scrolltoview', function() {
@@ -755,7 +755,7 @@ $.fn.elfindercwd = function(fm) {
 				})
 				// unselect all selected files
 				.bind('unselectall', function() {
-					cwd.find('[id].'+clSelected+'').trigger(evtUnselect); 
+					cwd.find('[id].'+clSelected+'').trigger(evtUnselect);
 					trigger();
 				})
 				.bind('selectfile', function(e, id) {
@@ -893,7 +893,7 @@ $.fn.elfindercwd = function(fm) {
 
 				if (cwd.outerHeight(true) < wrapper.height()) {
 					cwd.height(wrapper.height() - (cwd.outerHeight(true) - cwd.height()) - 2);
-				} 
+				}
 			})
 			// select dragged file if no selected, disable selectable
 			.dragstart(function(e) {
@@ -920,7 +920,7 @@ $.fn.elfindercwd = function(fm) {
 			})
 			.bind('lockfiles unlockfiles', function(e) {
 				var event = e.type == 'lockfiles' ? evtDisable : evtEnable,
-					files = e.data.files || [], 
+					files = e.data.files || [],
 					l     = files.length;
 				
 				while (l--) {
@@ -934,18 +934,18 @@ $.fn.elfindercwd = function(fm) {
 				
 				cwd.trigger('unselectall');
 
-				$.each(e.data.added || [], function(i, file) { 
+				$.each(e.data.added || [], function(i, file) {
 					file && file.phash == phash && selectFile(file.hash);
 				});
 				trigger();
 			})
 			.shortcut({
-				pattern     :'ctrl+a', 
+				pattern     :'ctrl+a',
 				description : 'selectall',
-				callback    : function() { 
+				callback    : function() {
 					var sel = [], phash;
 					
-					cwd.find('[id]:not(.'+clSelected+')').trigger(evtSelect); 
+					cwd.find('[id]:not(.'+clSelected+')').trigger(evtSelect);
 					
 					if (buffer.length) {
 						phash = fm.cwd().hash;
@@ -964,7 +964,7 @@ $.fn.elfindercwd = function(fm) {
 			.shortcut({
 				pattern     : 'home',
 				description : 'selectffile',
-				callback    : function(e) { 
+				callback    : function(e) {
 					unselectAll();
 					scrollToView(cwd.find('[id]:first').trigger(evtSelect))
 					trigger();
@@ -973,7 +973,7 @@ $.fn.elfindercwd = function(fm) {
 			.shortcut({
 				pattern     : 'end',
 				description : 'selectlfile',
-				callback    : function(e) { 
+				callback    : function(e) {
 					unselectAll();
 					scrollToView(cwd.find('[id]:last').trigger(evtSelect)) ;
 					trigger();

@@ -3,7 +3,7 @@ class ControllerModuleFlashsaleSidebar extends Controller {
 	protected function index($setting) {
 		$this->template->load('module/flashsale_sidebar');
 		
-		$this->language->load('module/flashsale_sidebar'); 
+		$this->language->load('module/flashsale_sidebar');
 		
 		empty($setting['limit'])?$setting['limit']=3:'';
 		

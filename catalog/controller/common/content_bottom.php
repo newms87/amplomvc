@@ -1,4 +1,4 @@
-<?php  
+<?php
 class ControllerCommonContentBottom extends Controller {
 	public function index() {
 		$this->template->load('common/content_bottom');
@@ -7,7 +7,7 @@ class ControllerCommonContentBottom extends Controller {
 
 		$module_data = array();
 		
-		$extensions = $this->model_setting_extension->getExtensions('module');		
+		$extensions = $this->model_setting_extension->getExtensions('module');
 		
 		foreach ($extensions as $extension) {
 			$modules = $this->config->get($extension['code'] . '_module');
@@ -19,13 +19,13 @@ class ControllerCommonContentBottom extends Controller {
 							'code'		=> $extension['code'],
 							'setting'	=> $module,
 							'sort_order' => $module['sort_order']
-						);				
+						);
 					}
 				}
 			}
 		}
 		
-		$sort_order = array(); 
+		$sort_order = array();
 	
 		foreach ($module_data as $key => $value) {
 			$sort_order[$key] = $value['sort_order'];

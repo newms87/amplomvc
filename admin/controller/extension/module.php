@@ -5,7 +5,7 @@ class ControllerExtensionModule extends Controller {
 
 		$this->load->language('extension/module');
 		
-		$this->document->setTitle($this->_('heading_title')); 
+		$this->document->setTitle($this->_('heading_title'));
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('extension/module'));
@@ -82,7 +82,7 @@ class ControllerExtensionModule extends Controller {
 	
 	public function install() {
 		if (!$this->user->hasPermission('modify', 'extension/module')) {
-			$this->session->data['error'] = $this->_('error_permission'); 
+			$this->session->data['error'] = $this->_('error_permission');
 			
 			$this->url->redirect($this->url->link('extension/module'));
 		} else {
@@ -108,10 +108,10 @@ class ControllerExtensionModule extends Controller {
 		$this->language->load('extension/module');
 		
 		if (!$this->user->hasPermission('modify', 'extension/module')) {
-			$this->session->data['error'] = $this->_('error_permission'); 
+			$this->session->data['error'] = $this->_('error_permission');
 			
 			$this->url->redirect($this->url->link('extension/module'));
-		} else {		
+		} else {
 			$this->model_setting_extension->uninstall('module', $_GET['extension']);
 		
 			$this->model_setting_setting->deleteSetting($_GET['extension']);
@@ -127,7 +127,7 @@ class ControllerExtensionModule extends Controller {
 			
 			$this->message->add('success', $this->_('text_uninstalled_module'));
 		
-			$this->url->redirect($this->url->link('extension/module'));	
+			$this->url->redirect($this->url->link('extension/module'));
 		}
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-class ControllerReportSaleOrder extends Controller { 
+class ControllerReportSaleOrder extends Controller {
 	public function index() {
 		$this->template->load('report/sale_order');
 
@@ -26,8 +26,8 @@ class ControllerReportSaleOrder extends Controller {
 		$this->data['orders'] = array();
 		
 		$data = array(
-			'filter_date_start'		=> $filter_date_start, 
-			'filter_date_end'		=> $filter_date_end, 
+			'filter_date_start'		=> $filter_date_start,
+			'filter_date_end'		=> $filter_date_end,
 			'filter_group'			=> $filter_group,
 			'filter_order_status_id' => $filter_order_status_id,
 			'start'						=> ($page - 1) * $this->config->get('config_admin_limit'),
@@ -78,14 +78,10 @@ class ControllerReportSaleOrder extends Controller {
 				
 		$this->pagination->init();
 		$this->pagination->total = $order_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('report/sale_order', $url);
-			
-		$this->data['pagination'] = $this->pagination->render();		
+		$this->data['pagination'] = $this->pagination->render();
 
 		$this->data['filter_date_start'] = $filter_date_start;
-		$this->data['filter_date_end'] = $filter_date_end;		
+		$this->data['filter_date_end'] = $filter_date_end;
 		$this->data['filter_group'] = $filter_group;
 		$this->data['filter_order_status_id'] = $filter_order_status_id;
 				

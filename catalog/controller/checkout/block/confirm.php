@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerCheckoutBlockConfirm extends Controller {
 	public function index() {
 		$this->language->load('checkout/checkout');
@@ -38,7 +38,7 @@ class ControllerCheckoutBlockConfirm extends Controller {
 		if(empty($this->data['redirect'])){
 			if(!$this->cart->addOrder()){
 				if($this->cart->has_error('cart')){
-					$this->message->add('warning', $this->cart->get_errorrs('cart'));
+					$this->message->add('warning', $this->cart->get_errors('cart'));
 					$this->data['redirect'] = $this->url->link('cart/cart', 'newman=1');
 				}
 				else{
@@ -72,7 +72,7 @@ class ControllerCheckoutBlockConfirm extends Controller {
 			}
 		}
 
-		$this->response->setOutput($this->render());	
+		$this->response->setOutput($this->render());
   	}
 	
 	public function check_order_status(){

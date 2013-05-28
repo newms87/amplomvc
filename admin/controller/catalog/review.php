@@ -8,7 +8,7 @@ class ControllerCatalogReview extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		$this->getList();
-	} 
+	}
 
 	public function insert() {
 		$this->load->language('catalog/review');
@@ -70,7 +70,7 @@ class ControllerCatalogReview extends Controller {
 		$this->getForm();
 	}
 
-	public function delete() { 
+	public function delete() {
 		$this->load->language('catalog/review');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -141,7 +141,7 @@ class ControllerCatalogReview extends Controller {
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/review', $url));
 
 		$this->data['insert'] = $this->url->link('catalog/review/insert', $url);
-		$this->data['delete'] = $this->url->link('catalog/review/delete', $url);	
+		$this->data['delete'] = $this->url->link('catalog/review/delete', $url);
 
 		$this->data['reviews'] = array();
 
@@ -174,7 +174,7 @@ class ControllerCatalogReview extends Controller {
 				'selected'	=> isset($_POST['selected']) && in_array($result['review_id'], $_POST['selected']),
 				'action'	=> $action
 			);
-		}	
+		}
 	
  		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -220,10 +220,6 @@ class ControllerCatalogReview extends Controller {
 
 		$this->pagination->init();
 		$this->pagination->total = $review_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('catalog/review', $url);
-			
 		$this->data['pagination'] = $this->pagination->render();
 
 		$this->data['sort'] = $sort;
@@ -287,7 +283,7 @@ class ControllerCatalogReview extends Controller {
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/review', $url));
 
-		if (!isset($_GET['review_id'])) { 
+		if (!isset($_GET['review_id'])) {
 			$this->data['action'] = $this->url->link('catalog/review/insert', $url);
 		} else {
 			$this->data['action'] = $this->url->link('catalog/review/update', 'review_id=' . $_GET['review_id'] . $url);
@@ -385,5 +381,5 @@ class ControllerCatalogReview extends Controller {
 		}
 
 		return $this->error ? false : true;
-	}	
+	}
 }

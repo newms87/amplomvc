@@ -50,15 +50,15 @@ class ControllerCartBlockShipping extends Controller{
 	public function quote() {
 		$this->language->load('cart/block/shipping');
 		
-		$json = array();  
+		$json = array();
 		
 		if (!$this->cart->hasProducts()) {
-			$json['error']['warning'] = $this->_('error_product');				
-		}			
+			$json['error']['warning'] = $this->_('error_product');
+		}
 
 		if (!$this->cart->hasShipping()) {
-			$json['error']['warning'] = sprintf($this->_('error_no_shipping'), $this->url->link('information/contact'));				
-		}			
+			$json['error']['warning'] = sprintf($this->_('error_no_shipping'), $this->url->link('information/contact'));
+		}
 		
 		if(!$json){
 			$this->form->init('address');
@@ -75,7 +75,7 @@ class ControllerCartBlockShipping extends Controller{
 			$shipping_methods = $this->cart->getShippingMethods($_POST);
 			
 			if ($shipping_methods) {
-				$json['shipping_method'] = $shipping_methods; 
+				$json['shipping_method'] = $shipping_methods;
 			} else {
 				$json['error']['warning'] = sprintf($this->_('error_no_shipping'), $this->url->link('information/contact'));
 			}

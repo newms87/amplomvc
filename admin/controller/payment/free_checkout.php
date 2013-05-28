@@ -1,8 +1,8 @@
-<?php 
+<?php
 class ControllerPaymentFreeCheckout extends Controller {
 	
 	
-	public function index() { 
+	public function index() {
 		$this->template->load('payment/free_checkout');
 
 		$this->load->language('payment/free_checkout');
@@ -29,13 +29,13 @@ class ControllerPaymentFreeCheckout extends Controller {
 
 		$this->data['action'] = $this->url->link('payment/free_checkout');
 
-		$this->data['cancel'] = $this->url->link('extension/payment');	
+		$this->data['cancel'] = $this->url->link('extension/payment');
 				
 		if (isset($_POST['free_checkout_order_status_id'])) {
 			$this->data['free_checkout_order_status_id'] = $_POST['free_checkout_order_status_id'];
 		} else {
-			$this->data['free_checkout_order_status_id'] = $this->config->get('free_checkout_order_status_id'); 
-		} 
+			$this->data['free_checkout_order_status_id'] = $this->config->get('free_checkout_order_status_id');
+		}
 		
 		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 				
@@ -64,6 +64,6 @@ class ControllerPaymentFreeCheckout extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 				
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

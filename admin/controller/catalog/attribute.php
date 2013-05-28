@@ -1,5 +1,5 @@
-<?php 
-class ControllerCatalogAttribute extends Controller { 
+<?php
+class ControllerCatalogAttribute extends Controller {
 	
 	
   	public function index() {
@@ -141,7 +141,7 @@ class ControllerCatalogAttribute extends Controller {
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/attribute', $url));
 
 		$this->data['insert'] = $this->url->link('catalog/attribute/insert', $url);
-		$this->data['delete'] = $this->url->link('catalog/attribute/delete', $url);	
+		$this->data['delete'] = $this->url->link('catalog/attribute/delete', $url);
 
 		$this->data['attributes'] = array();
 
@@ -172,7 +172,7 @@ class ControllerCatalogAttribute extends Controller {
 				'selected'		=> isset($_POST['selected']) && in_array($result['attribute_id'], $_POST['selected']),
 				'action'			=> $action
 			);
-		}	
+		}
 	
  		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -216,10 +216,6 @@ class ControllerCatalogAttribute extends Controller {
 
 		$this->pagination->init();
 		$this->pagination->total = $attribute_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('catalog/attribute', $url);
-			
 		$this->data['pagination'] = $this->pagination->render();
 
 		$this->data['sort'] = $sort;
@@ -295,7 +291,7 @@ class ControllerCatalogAttribute extends Controller {
 			$this->data['attribute_group_id'] = '';
 		}
 		
-		$this->data['attribute_groups'] = $this->model_catalog_attribute_group->getAttributeGroups();	
+		$this->data['attribute_groups'] = $this->model_catalog_attribute_group->getAttributeGroups();
 
 		if (isset($_POST['sort_order'])) {
 			$this->data['sort_order'] = $_POST['sort_order'];
@@ -310,7 +306,7 @@ class ControllerCatalogAttribute extends Controller {
 			'common/footer'
 		);
 				
-		$this->response->setOutput($this->render());	
+		$this->response->setOutput($this->render());
   	}
   	
 	private function validateForm() {
@@ -340,7 +336,7 @@ class ControllerCatalogAttribute extends Controller {
 			}
 		}
 		
-		if (!$this->error) { 
+		if (!$this->error) {
 			return true;
 		} else {
 			return false;
@@ -363,11 +359,11 @@ class ControllerCatalogAttribute extends Controller {
 			
 			foreach ($results as $result) {
 				$json[] = array(
-					'attribute_id'	=> $result['attribute_id'], 
+					'attribute_id'	=> $result['attribute_id'],
 					'name'				=> $result['name'],
 					'attribute_group' => $result['attribute_group']
-				);		
-			}		
+				);
+			}
 		}
 
 		$sort_order = array();
@@ -379,5 +375,5 @@ class ControllerCatalogAttribute extends Controller {
 		array_multisort($sort_order, SORT_ASC, $json);
 
 		$this->response->setOutput(json_encode($json));
-	}		
+	}
 }

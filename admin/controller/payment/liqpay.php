@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerPaymentLiqPay extends Controller {
 	
 
@@ -10,7 +10,7 @@ class ControllerPaymentLiqPay extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('liqpay', $_POST);				
+			$this->model_setting_setting->editSetting('liqpay', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -23,19 +23,19 @@ class ControllerPaymentLiqPay extends Controller {
 			$this->data['error_warning'] = '';
 		}
 
-		if (isset($this->error['merchant'])) { 
+		if (isset($this->error['merchant'])) {
 			$this->data['error_merchant'] = $this->error['merchant'];
 		} else {
 			$this->data['error_merchant'] = '';
 		}
 		
-		if (isset($this->error['signature'])) { 
+		if (isset($this->error['signature'])) {
 			$this->data['error_signature'] = $this->error['signature'];
 		} else {
 			$this->data['error_signature'] = '';
 		}
 		
-		if (isset($this->error['type'])) { 
+		if (isset($this->error['type'])) {
 			$this->data['error_type'] = $this->error['type'];
 		} else {
 			$this->data['error_type'] = '';
@@ -70,22 +70,22 @@ class ControllerPaymentLiqPay extends Controller {
 		if (isset($_POST['liqpay_total'])) {
 			$this->data['liqpay_total'] = $_POST['liqpay_total'];
 		} else {
-			$this->data['liqpay_total'] = $this->config->get('liqpay_total'); 
-		} 
+			$this->data['liqpay_total'] = $this->config->get('liqpay_total');
+		}
 				
 		if (isset($_POST['liqpay_order_status_id'])) {
 			$this->data['liqpay_order_status_id'] = $_POST['liqpay_order_status_id'];
 		} else {
-			$this->data['liqpay_order_status_id'] = $this->config->get('liqpay_order_status_id'); 
-		} 
+			$this->data['liqpay_order_status_id'] = $this->config->get('liqpay_order_status_id');
+		}
 
 		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 		
 		if (isset($_POST['liqpay_geo_zone_id'])) {
 			$this->data['liqpay_geo_zone_id'] = $_POST['liqpay_geo_zone_id'];
 		} else {
-			$this->data['liqpay_geo_zone_id'] = $this->config->get('liqpay_geo_zone_id'); 
-		} 		
+			$this->data['liqpay_geo_zone_id'] = $this->config->get('liqpay_geo_zone_id');
+		}
 		
 		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 		
@@ -122,6 +122,6 @@ class ControllerPaymentLiqPay extends Controller {
 			$this->error['signature'] = $this->_('error_signature');
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

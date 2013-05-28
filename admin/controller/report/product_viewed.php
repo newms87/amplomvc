@@ -49,12 +49,12 @@ class ControllerReportProductViewed extends Controller {
 																		'ip_total'=>1,'ip_addr'=>array($pv['ip_address']),
 																		'ip_user_total'=>1
 																		);
-			} 
+			}
 		}
 		
-		$product_viewed_total = $this->model_report_product->getTotalProductsViewed($data); 
+		$product_viewed_total = $this->model_report_product->getTotalProductsViewed($data);
 		
-		$product_views_total = $this->model_report_product->getTotalProductViews(); 
+		$product_views_total = $this->model_report_product->getTotalProductViews();
 		
 		$this->data['products'] = array();
 		
@@ -74,7 +74,7 @@ class ControllerReportProductViewed extends Controller {
 				'ip_total'=> $product_views[$result['product_id']]['ip_total'],
 				'user_total'=> $product_views[$result['product_id']]['user_total'],
 				'ip_user_total'=> $product_views[$result['product_id']]['ip_user_total'],
-				'percent' => $percent . '%'			
+				'percent' => $percent . '%'
 			);
 		}
  		
@@ -84,10 +84,6 @@ class ControllerReportProductViewed extends Controller {
 						
 		$this->pagination->init();
 		$this->pagination->total = $product_viewed_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('report/product_viewed');
-			
 		$this->data['pagination'] = $this->pagination->render();
 				
 		$this->children = array(

@@ -2,8 +2,8 @@
 // Heading
 $_['heading_title']		= 'PSIGate';
 
-// Text 
-$_['text_payment']		= 'Pago'; 
+// Text
+$_['text_payment']		= 'Pago';
 $_['text_success']		= 'Éxito: has modificado los detalles de cuenta PSIGate!';
 
 // Entry

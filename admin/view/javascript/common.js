@@ -3,9 +3,9 @@ String.prototype.replaceAll = function(token, newToken, ignoreCase) {
     if((str = this.toString()) && typeof token === "string") {
         _token = ignoreCase === true? token.toLowerCase() : undefined;
         while((i = (
-            _token !== undefined? 
+            _token !== undefined?
                 str.toLowerCase().indexOf(
-                            _token, 
+                            _token,
                             i >= 0? i + newToken.length : 0
                 ) : str.indexOf(
                             token,

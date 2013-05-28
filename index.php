@@ -21,7 +21,7 @@ require_once('oc_config.php');
 //System / URL Paths
 require_once('path_config.php');
 
-/*  PRETTY LANGUAGE TESTING 
+/*  PRETTY LANGUAGE TESTING
 echo 'testing pretty language';
 require_once(DIR_SYSTEM . 'library/pretty_language.php');
 new PrettyLanguage();
@@ -53,7 +53,7 @@ $registry = new Registry();
 $loader = new Loader($registry);
 $registry->set('load', $loader);
 
-// Database 
+// Database
 $db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 $registry->set('db', $db);
 $db->query("SET time_zone='" . MYSQL_TIMEZONE . "'");
@@ -124,7 +124,7 @@ $error_handler = function($errno, $errstr, $errfile, $errline) use($error_log, $
 
 set_error_handler($error_handler);
 
-//Verify the necessary directories are writable 
+//Verify the necessary directories are writable
 _is_writable(DIR_IMAGE, $config->get('config_image_dir_mode'));
 _is_writable(DIR_IMAGE . 'cache/', $config->get('config_image_dir_mode'));
 _is_writable(DIR_DOWNLOAD, $config->get('config_default_dir_mode'));
@@ -170,59 +170,10 @@ if($query->num_rows){
 $response = new Response();
 $response->addHeader('Content-Type: text/html; charset=utf-8');
 $response->setCompression($config->get('config_compression'));
-$registry->set('response', $response); 
+$registry->set('response', $response);
 
-// Language Detection
-$languages = array();
-
-$query = $db->query("SELECT * FROM " . DB_PREFIX . "language WHERE status = '1'"); 
-
-foreach ($query->rows as $result) {
-	$languages[$result['code']] = $result;
-}
-
-$detect = '';
-
-if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) && ($_SERVER['HTTP_ACCEPT_LANGUAGE'])) { 
-	$browser_languages = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
-	
-	foreach ($browser_languages as $browser_language) {
-		foreach ($languages as $key => $value) {
-			if ($value['status']) {
-				$locale = explode(',', $value['locale']);
-
-				if (in_array($browser_language, $locale)) {
-					$detect = $key;
-				}
-			}
-		}
-	}
-}
-
-if (isset($session->data['language']) && array_key_exists($session->data['language'], $languages) && $languages[$session->data['language']]['status']) {
-	$code = $session->data['language'];
-} elseif (isset($_COOKIE['language']) && array_key_exists($_COOKIE['language'], $languages) && $languages[$_COOKIE['language']]['status']) {
-	$code = $_COOKIE['language'];
-} elseif ($detect) {
-	$code = $detect;
-} else {
-	$code = $config->get('config_language');
-}
-
-if (!isset($session->data['language']) || $session->data['language'] != $code) {
-	$session->data['language'] = $code;
-}
-
-if (!isset($_COOKIE['language']) || $_COOKIE['language'] != $code) {	
-	setcookie('language', $code, time() + 60 * 60 * 24 * 30, '/', $_SERVER['HTTP_HOST']);
-}			
-
-$config->set('config_language_id', $languages[$code]['language_id']);
-
-// Language	
-$language = new Language($languages[$code]);
-$registry->set('language', $language); 
-
+// Language
+$registry->set('language', new Language($registry));
 
 //Plugins
 $plugin_handler = new pluginHandler($registry, $merge_registry);
@@ -240,7 +191,7 @@ if (isset($_GET['tracking']) && !isset($_COOKIE['tracking'])) {
 //Theme
 $registry->set('theme', new Theme($registry));
 
-// Front Controller 
+// Front Controller
 $controller = new Front($registry);
 
 // Router
@@ -291,8 +242,8 @@ $response->output();
 if($config->get('config_performance_log')){
 	$stats = array(
 		'peak_memory' => $registry->get('tool')->bytes2str(memory_get_peak_usage(true)),
-		'count_included_files' => count(get_included_files()), 
-		'execution_time' => microtime(true) - $__start, 
+		'count_included_files' => count(get_included_files()),
+		'execution_time' => microtime(true) - $__start,
 	);
 	
 	foreach($stats as $key => $s){

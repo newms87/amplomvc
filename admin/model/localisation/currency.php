@@ -43,12 +43,12 @@ class ModelLocalisationCurrency extends Model {
 				'code',
 				'value',
 				'date_modified'
-			);	
+			);
 			
 			if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
-				$sql .= " ORDER BY " . $data['sort'];	
+				$sql .= " ORDER BY " . $data['sort'];
 			} else {
-				$sql .= " ORDER BY title";	
+				$sql .= " ORDER BY title";
 			}
 			
 			if (isset($data['order']) && ($data['order'] == 'DESC')) {
@@ -60,11 +60,11 @@ class ModelLocalisationCurrency extends Model {
 			if (isset($data['start']) || isset($data['limit'])) {
 				if ($data['start'] < 0) {
 					$data['start'] = 0;
-				}				
+				}
 
 				if ($data['limit'] < 1) {
 					$data['limit'] = 20;
-				}	
+				}
 			
 				$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
 			}
@@ -92,14 +92,14 @@ class ModelLocalisationCurrency extends Model {
 						'status'		=> $result['status'],
 						'date_modified' => $result['date_modified']
 						);
-				}	
+				}
 			
 				$this->cache->set('currency', $currency_data);
 			}
 			
-			return $currency_data;			
+			return $currency_data;
 		}
-	}	
+	}
 
 	public function updateCurrencies($force = false) {
 		if (extension_loaded('curl')) {
@@ -113,7 +113,7 @@ class ModelLocalisationCurrency extends Model {
 			
 			foreach ($query->rows as $result) {
 				$data[] = $this->config->get('config_currency') . $result['code'] . '=X';
-			}	
+			}
 			
 			$curl = curl_init();
 			

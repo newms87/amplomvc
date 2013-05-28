@@ -1,4 +1,4 @@
-<?php 
+<?php
 class SetupContactsExtend implements SetupPlugin {
 	
 	public function install($registry, &$controller_adapters, &$db_requests){

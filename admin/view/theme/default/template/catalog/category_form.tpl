@@ -53,16 +53,16 @@
 						<tr>
 							<td><?= $entry_keyword; ?></td>
 							<td>
-								 <input type="text" onfocus='generate_url_warning(this)' name="keyword" value="<?= $keyword; ?>" />
-								 <a class='gen_url' onclick='generate_url(this)'><?=$button_generate_url;?></a>
+								<input type="text" onfocus='generate_url_warning(this)' name="keyword" value="<?= $keyword; ?>" />
+								<a class='gen_url' onclick='generate_url(this)'><?=$button_generate_url;?></a>
 							</td>
 						</tr>
 						<tr>
 							<td><?= $entry_image; ?></td>
-							 <td>
-							 	<?= $this->builder->set_builder_template('click_image');?>
+							<td>
+								<?= $this->builder->set_builder_template('click_image');?>
 								<?= $this->builder->image_input("image", $image);?>
-							 </td>
+							</td>
 						</tr>
 						<tr>
 							<td><?= $entry_top; ?></td>
@@ -112,21 +112,21 @@
 
 <script type="text/javascript">//<!--
 function generate_url_warning(field){
-	 if($('#gen_warn').length == 0)
+	if($('#gen_warn').length == 0)
 			$(field).parent().append('<span id="gen_warn" style="color:red"><?=$warning_generate_url;?></span>');
 }
 function generate_url(c){
-	 $(c).fadeOut(500,function(){$(this).show();});
-	 $('#gen_warn').remove();
-	 name =$('input[name="category_description[1][name]"]').val();
-	 if(!name)
+	$(c).fadeOut(500,function(){$(this).show();});
+	$('#gen_warn').remove();
+	name =$('input[name="category_description[1][name]"]').val();
+	if(!name)
 			alert("Please make a name for this Category before generating the URL");
-	 $.post("<?= HTTP_ADMIN . "index.php?route=catalog/category/generate_url"; ?>",{category_id:<?=$category_id?$category_id:0;?>,name:name},function(json){$('input[name="keyword"]').val(json);},'json');
+	$.post("<?= HTTP_ADMIN . "index.php?route=catalog/category/generate_url"; ?>",{category_id:<?=$category_id?$category_id:0;?>,name:name},function(json){$('input[name="keyword"]').val(json);},'json');
 }
  //--></script>
  
 <script type="text/javascript">//<!--
-$('#tabs a').tabs(); 
+$('#tabs a').tabs();
 $('#languages a').tabs();
 //--></script>
 

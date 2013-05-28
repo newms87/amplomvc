@@ -1,5 +1,5 @@
 <?php
-class Cache { 
+class Cache {
 	private $expire;
 	private $ignore_list = array();
 	private $loaded = array();

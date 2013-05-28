@@ -1,7 +1,7 @@
 <?php
 class ControllerModuleFeaturedFlashsale extends Controller {
 	protected function index($setting) {
-		$this->language->load('module/featured_flashsale'); 
+		$this->language->load('module/featured_flashsale');
 		
 		empty($setting['limit'])?$setting['limit']=3:'';
 		
@@ -23,7 +23,7 @@ class ControllerModuleFeaturedFlashsale extends Controller {
 					if(!empty($item)){
 						$items[$id] = $item;
 						$items[$id]['href'] = $this->url->link('product/product','product_id='.$items[$id]['product_id']);
-					} 
+					}
 				}
 				elseif(substr($id,0,8) == "designer"){
 					$item = $this->model_catalog_manufacturer->getManufacturerAndTeaser((int)substr($id,8));
@@ -61,7 +61,7 @@ class ControllerModuleFeaturedFlashsale extends Controller {
 		else{
 			$this->template->load('module/featured_flashsale');
 			
-			$this->data['polaroid'] = $this->image->resize('data/polaroid-1.png',$size, $size*1.088); 
+			$this->data['polaroid'] = $this->image->resize('data/polaroid-1.png',$size, $size*1.088);
 		}
 		
 		$this->render();

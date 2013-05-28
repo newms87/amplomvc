@@ -1,4 +1,4 @@
-<?php	
+<?php
 class ControllerModuleStore extends Controller {
 	protected function index() {
 		$status = true;
@@ -31,12 +31,6 @@ class ControllerModuleStore extends Controller {
 					'url'		=> $result['url'] . 'index.php?route=common/home'
 				);
 			}
-	
-
-
-
-
-
 
 			$this->render();
 		}

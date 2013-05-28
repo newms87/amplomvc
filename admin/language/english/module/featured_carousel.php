@@ -24,5 +24,5 @@ $_['entry_choose_product']		= 'Choose Product:<span class="help">(autocomplete)<
 
 //Button
 $_['button_add_designer'] = "Add Designer";
-// Error 
+// Error
 $_['error_permission']	= 'Warning: You do not have permission to modify Featured Carousels!';

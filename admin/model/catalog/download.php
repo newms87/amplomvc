@@ -3,7 +3,7 @@ class ModelCatalogDownload extends Model {
 	public function addDownload($data) {
 			$this->query("INSERT INTO " . DB_PREFIX . "download SET remaining = '" . (int)$data['remaining'] . "', date_added = NOW()");
 
-			$download_id = $this->db->getLastId(); 
+			$download_id = $this->db->getLastId();
 
 			if (isset($data['download'])) {
 			$this->query("UPDATE " . DB_PREFIX . "download SET filename = '" . $this->db->escape($data['download']) . "', mask = '" . $this->db->escape($data['mask']) . "' WHERE download_id = '" . (int)$download_id . "'");
@@ -11,7 +11,7 @@ class ModelCatalogDownload extends Model {
 
 			foreach ($data['download_description'] as $language_id => $value) {
 			$this->query("INSERT INTO " . DB_PREFIX . "download_description SET download_id = '" . (int)$download_id . "', language_id = '" . (int)$language_id . "', name = '" . $this->db->escape($value['name']) . "'");
-			}	
+			}
 	}
 	
 	public function editDownload($download_id, $data) {
@@ -36,13 +36,13 @@ class ModelCatalogDownload extends Model {
 
 			foreach ($data['download_description'] as $language_id => $value) {
 			$this->query("INSERT INTO " . DB_PREFIX . "download_description SET download_id = '" . (int)$download_id . "', language_id = '" . (int)$language_id . "', name = '" . $this->db->escape($value['name']) . "'");
-			}	
+			}
 	}
 	
 	public function deleteDownload($download_id) {
 			$this->query("DELETE FROM " . DB_PREFIX . "download WHERE download_id = '" . (int)$download_id . "'");
-		$this->query("DELETE FROM " . DB_PREFIX . "download_description WHERE download_id = '" . (int)$download_id . "'");	
-	}	
+		$this->query("DELETE FROM " . DB_PREFIX . "download_description WHERE download_id = '" . (int)$download_id . "'");
+	}
 
 	public function getDownload($download_id) {
 		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "download WHERE download_id = '" . (int)$download_id . "'");
@@ -59,9 +59,9 @@ class ModelCatalogDownload extends Model {
 		);
 	
 		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
-			$sql .= " ORDER BY " . $data['sort'];	
+			$sql .= " ORDER BY " . $data['sort'];
 		} else {
-			$sql .= " ORDER BY dd.name";	
+			$sql .= " ORDER BY dd.name";
 		}
 			
 		if (isset($data['order']) && ($data['order'] == 'DESC')) {
@@ -73,11 +73,11 @@ class ModelCatalogDownload extends Model {
 		if (isset($data['start']) || isset($data['limit'])) {
 			if ($data['start'] < 0) {
 				$data['start'] = 0;
-			}			
+			}
 
 			if ($data['limit'] < 1) {
 				$data['limit'] = 20;
-			}	
+			}
 			
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
 		}
@@ -103,5 +103,5 @@ class ModelCatalogDownload extends Model {
 			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "download");
 		
 		return $query->row['total'];
-	}	
+	}
 }

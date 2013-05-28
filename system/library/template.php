@@ -151,8 +151,8 @@ class Template {
 			return $content;
 		} else {
 			trigger_error('Error: Could not load template file ' . $file . '!');
-			exit();				
-		}	
+			exit();
+		}
 	}
 	
 	public function find_file($file){

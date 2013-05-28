@@ -1,5 +1,5 @@
 <?php
-// Heading 
+// Heading
 $_['heading_title']			= 'Vos points de fid&eacute;lit&eacute;';
 
 // Column

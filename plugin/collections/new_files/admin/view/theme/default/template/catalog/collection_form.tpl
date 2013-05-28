@@ -84,7 +84,7 @@
 		</div>
 	</div>
 </div>
-<?= $footer; ?> 
+<?= $footer; ?>
 
 <?= $this->builder->js('ckeditor');?>
 

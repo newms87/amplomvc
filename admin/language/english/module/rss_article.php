@@ -25,5 +25,5 @@ $_['entry_status']		= 'Status:';
 $_['entry_sort_order']	= 'Sort Order:';
 $_['entry_designer']		= 'Specify Article:';
 
-// Error 
+// Error
 $_['error_permission']	= 'Warning: You do not have permission to modify module rss article!';

@@ -1,8 +1,8 @@
 <?php
 // Heading
-$_['heading_title']			= 'Productos'; 
+$_['heading_title']			= 'Productos';
 
-// Text  
+// Text
 $_['text_success']			= 'Éxito: Has modificado los productos!';
 $_['text_plus']				= '+';
 $_['text_minus']				= '-';
@@ -38,7 +38,7 @@ $_['entry_sku']				= 'SKU:';
 $_['entry_upc']				= 'UPC:';
 $_['entry_location']			= 'Localización:';
 $_['entry_manufacturer']	= 'Fabricante:';
-$_['entry_shipping']			= 'Requiere envío:'; 
+$_['entry_shipping']			= 'Requiere envío:';
 $_['entry_date_disponible']	= 'Fecha disponibilidad:';
 $_['entry_quantity']			= 'Cantidad:';
 $_['entry_minimum']			= 'Cantidad mínima:<br/><span class="help">Forzar una cantidad mínima en el pedido</span>';

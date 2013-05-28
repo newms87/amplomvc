@@ -1,5 +1,5 @@
-<?php  
-class ControllerCommonLogin extends Controller { 
+<?php
+class ControllerCommonLogin extends Controller {
 	
 	public function index() {
 		$this->template->load('common/login');

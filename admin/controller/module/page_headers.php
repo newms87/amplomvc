@@ -2,7 +2,7 @@
 class ControllerModulePageHeaders extends Controller {
 	
 	
-	public function index() {	
+	public function index() {
 		$this->template->load('module/page_headers');
 
 		$this->load->language('module/page_headers');
@@ -64,6 +64,6 @@ class ControllerModulePageHeaders extends Controller {
 			if(!isset($h['layouts']))
 				$this->error['layout_'.$hid] = $this->_('error_no_layouts');
 			
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

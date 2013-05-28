@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerPaymentWebPaymentSoftware extends Controller {
 	
 
@@ -10,7 +10,7 @@ class ControllerPaymentWebPaymentSoftware extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && ($this->validate())) {
-			$this->model_setting_setting->editSetting('web_payment_software', $_POST);				
+			$this->model_setting_setting->editSetting('web_payment_software', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -70,16 +70,16 @@ class ControllerPaymentWebPaymentSoftware extends Controller {
 		if (isset($_POST['web_payment_software_order_status_id'])) {
 			$this->data['web_payment_software_order_status_id'] = $_POST['web_payment_software_order_status_id'];
 		} else {
-			$this->data['web_payment_software_order_status_id'] = $this->config->get('web_payment_software_order_status_id'); 
-		} 
+			$this->data['web_payment_software_order_status_id'] = $this->config->get('web_payment_software_order_status_id');
+		}
 
 		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 		
 		if (isset($_POST['web_payment_software_geo_zone_id'])) {
 			$this->data['web_payment_software_geo_zone_id'] = $_POST['web_payment_software_geo_zone_id'];
 		} else {
-			$this->data['web_payment_software_geo_zone_id'] = $this->config->get('web_payment_software_geo_zone_id'); 
-		} 
+			$this->data['web_payment_software_geo_zone_id'] = $this->config->get('web_payment_software_geo_zone_id');
+		}
 		
 		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 		
@@ -102,8 +102,8 @@ class ControllerPaymentWebPaymentSoftware extends Controller {
 		}
 
 		$this->children = array(
-			'common/header',	
-			'common/footer'	
+			'common/header',
+			'common/footer'
 		);
 		
 		$this->response->setOutput($this->render());
@@ -122,6 +122,6 @@ class ControllerPaymentWebPaymentSoftware extends Controller {
 			$this->error['key'] = $this->_('error_key');
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

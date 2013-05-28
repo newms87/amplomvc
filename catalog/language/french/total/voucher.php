@@ -1,5 +1,5 @@
 <?php
-// Heading 
+// Heading
 $_['heading_title']	= 'Utilisation du bon de r&eacute;duction';
 
 // Text

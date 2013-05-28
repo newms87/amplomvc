@@ -16,6 +16,6 @@ $_['entry_status']		= 'Status:';
 $_['button_add_header']  = "Add Advertisement";
 $_['button_add_layout']  = "Add Layout";
 
-// Error 
+// Error
 $_['error_permission']	= 'Warning: You do not have permission to modify module Leaderboards!';
 $_['error_no_layouts']	= 'Warning: You must specify at least 1 layout for each Advertisement!';

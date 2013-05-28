@@ -1,4 +1,4 @@
-<?php  
+<?php
 class ControllerModuleSlideshow extends Controller {
 	protected function index($setting) {
 		$this->template->load('module/slideshow');
@@ -33,12 +33,6 @@ class ControllerModuleSlideshow extends Controller {
 		}
 		
 		$this->data['module'] = $module++;
-						
-
-
-
-
-
 
 		$this->render();
 	}

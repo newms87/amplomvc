@@ -1,4 +1,4 @@
-<?php 
+<?php
 class SetupCms implements SetupPlugin {
 	function install($registry, &$controller_adapters, &$db_requests){
 	

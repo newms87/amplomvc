@@ -1,5 +1,5 @@
-<?php 
-class ControllerSalesFlashsale extends Controller {  
+<?php
+class ControllerSalesFlashsale extends Controller {
 	public function index() {
 		$flashsale_id = isset($_GET['flashsale_id'])?$_GET['flashsale_id']:false;
 		
@@ -52,13 +52,13 @@ class ControllerSalesFlashsale extends Controller {
 				$article_list = $this->model_catalog_flashsale->getFlashsaleArticles($flashsale_id);
 				
 				
-				//This specifies the location of the articles by number inserted 
+				//This specifies the location of the articles by number inserted
 				$art_loc = array(
 					0=>array('from'=>1,'to'=>min(5,count($products)-1)),
 					1=>array('from'=>3,'to'=>count($products)-1),
 				);
 				
-				$count = 0; 
+				$count = 0;
 				foreach($article_list as $a){
 					$articles[$a['flashsale_article_id']] = $a;
 					$articles[$a['flashsale_article_id']]['description'] = html_entity_decode($a['description']);
@@ -169,7 +169,7 @@ class ControllerSalesFlashsale extends Controller {
 			'common/header'
 		);
 		
-		$this->response->setOutput($this->render());									
+		$this->response->setOutput($this->render());
   	}
 
 	public function ajax_countdown(){
@@ -230,12 +230,12 @@ class ControllerSalesFlashsale extends Controller {
 		else{
 			$msg = "<span class='msg_start'>Sale has Ended.</span>";
 			$class='ended';
-		} 
+		}
 		
 		$diff_end->h = $diff_end->h + ((int)$diff_end->d)*24;
 		$time = '';
 		if($type == 'letters'){
-			$h = 
+			$h =
 			$time .= "<span class='fs_num'>". sprintf('%02d',$diff_end->h) . "</span>" . $text_hour . ($diff_end->h!=1?$plural:'');
 			$time .= "<span class='fs_num'>". sprintf('%02d',$diff_end->i) . "</span>" . $text_min . ($diff_end->i!=1?$plural:'');
 			$time .= "<span class='fs_num'>". sprintf('%02d',$diff_end->s) . "</span>" . $text_sec . ($diff_end->s!=1?$plural:'');

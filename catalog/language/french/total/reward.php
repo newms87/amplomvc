@@ -1,5 +1,5 @@
 <?php
-// Heading 
+// Heading
 $_['heading_title']	= 'Utilisation des points de fidelit&eacute; (Valable %s)';
 
 // Text

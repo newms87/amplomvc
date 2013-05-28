@@ -1,8 +1,8 @@
 /**
- * AJAX Upload ( http://valums.com/ajax-upload/ ) 
+ * AJAX Upload ( http://valums.com/ajax-upload/ )
  * Copyright (c) Andris Valums
  * Licensed under the MIT license ( http://valums.com/mit-license/ )
- * Thanks to Gary Haran, David Mark, Corey Burns and others for contributions 
+ * Thanks to Gary Haran, David Mark, Corey Burns and others for contributions
  */
 (function () {
     /* global window */
@@ -12,11 +12,11 @@
      * Wrapper for FireBug's console.log
      */
     function log(){
-        if (typeof(console) != 'undefined' && typeof(console.log) == 'function'){            
+        if (typeof(console) != 'undefined' && typeof(console.log) == 'function'){
             Array.prototype.unshift.call(arguments, '[Ajax Upload]');
             console.log( Array.prototype.join.call(arguments, ' '));
         }
-    } 
+    }
 
     /**
      * Attaches event to a dom element.
@@ -34,16 +34,16 @@
 	    } else {
             throw new Error('not supported or DOM not loaded');
         }
-    }   
+    }
     
     /**
      * Attaches resize event to a window, limiting
      * number of event fired. Fires only when encounteres
      * delay of 100 after series of events.
-     * 
+     *
      * Some browsers fire event multiple times when resizing
      * http://www.quirksmode.org/dom/events/resize.html
-     * 
+     *
      * @param fn callback This refers to the passed element
      */
     function addResizeEvent(fn){
@@ -53,11 +53,11 @@
             if (timeout){
                 clearTimeout(timeout);
             }
-            timeout = setTimeout(fn, 100);                        
+            timeout = setTimeout(fn, 100);
         });
-    }    
+    }
     
-    // Needs more testing, will be rewriten for next version        
+    // Needs more testing, will be rewriten for next version
     // getOffset function copied from jQuery lib (http://jquery.com/)
     if (document.documentElement.getBoundingClientRect){
         // Get Offset using getBoundingClientRect
@@ -66,13 +66,13 @@
             var box = el.getBoundingClientRect();
             var doc = el.ownerDocument;
             var body = doc.body;
-            var docElem = doc.documentElement; // for ie 
+            var docElem = doc.documentElement; // for ie
             var clientTop = docElem.clientTop || body.clientTop || 0;
             var clientLeft = docElem.clientLeft || body.clientLeft || 0;
              
             // In Internet Explorer 7 getBoundingClientRect property is treated as physical,
-            // while others are logical. Make all logical, like in IE8.	
-            var zoom = 1;            
+            // while others are logical. Make all logical, like in IE8.
+            var zoom = 1;
             if (body.getBoundingClientRect) {
                 var bound = body.getBoundingClientRect();
                 zoom = (bound.right - bound.left) / body.clientWidth;
@@ -89,9 +89,9 @@
                 top: top,
                 left: left
             };
-        };        
+        };
     } else {
-        // Get offset adding all offsets 
+        // Get offset adding all offsets
         var getOffset = function(el){
             var top = 0, left = 0;
             do {
@@ -150,17 +150,17 @@
      * copying position and dimentions.
      * @param {Element} from
      * @param {Element} to
-     */    
+     */
     function copyLayout(from, to){
 	    var box = getBox(from);
         
         addStyles(to, {
-	        position: 'absolute',                    
+	        position: 'absolute',
 	        left : box.left + 'px',
 	        top : box.top + 'px',
 	        width : from.offsetWidth + 'px',
 	        height : from.offsetHeight + 'px'
-	    });        
+	    });
     }
 
     /**
@@ -178,20 +178,20 @@
             
     /**
      * Function generates unique id
-     * @return unique id 
+     * @return unique id
      */
     var getUID = (function(){
         var id = 0;
         return function(){
             return 'ValumsAjaxUpload' + id++;
         };
-    })();        
+    })();
  
     /**
      * Get file name from path
      * @param {String} file path to file
      * @return filename
-     */  
+     */
     function fileFromPath(file){
         return file.replace(/.*(\/|\\)/, "");
     }
@@ -200,23 +200,23 @@
      * Get file extension lowercase
      * @param {String} file name
      * @return file extenstion
-     */    
+     */
     function getExt(file){
         return (-1 !== file.indexOf('.')) ? file.replace(/.*[.]/, '') : '';
     }
 
-    function hasClass(el, name){        
-        var re = new RegExp('\\b' + name + '\\b');        
+    function hasClass(el, name){
+        var re = new RegExp('\\b' + name + '\\b');
         return re.test(el.className);
-    }    
+    }
     function addClass(el, name){
-        if ( ! hasClass(el, name)){   
+        if ( ! hasClass(el, name)){
             el.className += ' ' + name;
         }
-    }    
+    }
     function removeClass(el, name){
-        var re = new RegExp('\\b' + name + '\\b');                
-        el.className = el.className.replace(re, '');        
+        var re = new RegExp('\\b' + name + '\\b');
+        el.className = el.className.replace(re, '');
     }
     
     function removeNode(el){
@@ -226,7 +226,7 @@
     /**
      * Easy styling and uploading
      * @constructor
-     * @param button An element you want convert to 
+     * @param button An element you want convert to
      * upload button. Tested dimentions up to 500x500px
      * @param {Object} options See defaults below.
      */
@@ -243,14 +243,14 @@
             // The type of data that you're expecting back from the server.
             // html and xml are detected automatically.
             // Only useful when you are using json data as a response.
-            // Set to "json" in that case. 
+            // Set to "json" in that case.
             responseType: false,
             // Class applied to button when mouse is hovered
             hoverClass: 'hover',
             // Class applied to button when AU is disabled
-            disabledClass: 'disabled',            
+            disabledClass: 'disabled',
             // When user selects a file, useful with autoSubmit disabled
-            // You can return false to cancel upload			
+            // You can return false to cancel upload
             onChange: function(file, extension){
             },
             // Callback to fire before file is uploaded
@@ -276,19 +276,19 @@
             button = button[0];
         } else if (typeof button == "string") {
             if (/^#.*/.test(button)){
-                // If jQuery user passes #elementId don't break it					
-                button = button.slice(1);                
+                // If jQuery user passes #elementId don't break it
+                button = button.slice(1);
             }
             
             button = document.getElementById(button);
         }
         
         if ( ! button || button.nodeType !== 1){
-            throw new Error("Please make sure that you're passing a valid element"); 
+            throw new Error("Please make sure that you're passing a valid element");
         }
                 
         if ( button.nodeName.toUpperCase() == 'A'){
-            // disable link                       
+            // disable link
             addEvent(button, 'click', function(e){
                 if (e && e.preventDefault){
                     e.preventDefault();
@@ -299,15 +299,15 @@
         }
                     
         // DOM element
-        this._button = button;        
-        // DOM element                 
+        this._button = button;
+        // DOM element
         this._input = null;
         // If disabled clicking on button won't do anything
         this._disabled = false;
         
         // if the button was disabled before refresh if will remain
         // disabled in FireFox, let's fix it
-        this.enable();        
+        this.enable();
         
         this._rerouteClicks();
     };
@@ -317,20 +317,20 @@
         setData: function(data){
             this._settings.data = data;
         },
-        disable: function(){            
+        disable: function(){
             addClass(this._button, this._settings.disabledClass);
             this._disabled = true;
             
-            var nodeName = this._button.nodeName.toUpperCase();            
+            var nodeName = this._button.nodeName.toUpperCase();
             if (nodeName == 'INPUT' || nodeName == 'BUTTON'){
                 this._button.setAttribute('disabled', 'disabled');
-            }            
+            }
             
             // hide input
             if (this._input){
                 // We use visibility instead of display to fix problem with Safari 4
-                // The problem is that the value of input doesn't change if it 
-                // has display none when user selects a file           
+                // The problem is that the value of input doesn't change if it
+                // has display none when user selects a file
                 this._input.parentNode.style.visibility = 'hidden';
             }
         },
@@ -341,11 +341,11 @@
             
         },
         /**
-         * Creates invisible file input 
+         * Creates invisible file input
          * that will hover above the button
          * <div><input type='file' /></div>
          */
-        _createInput: function(){ 
+        _createInput: function(){
             var self = this;
                         
             var input = document.createElement("input");
@@ -360,17 +360,17 @@
                 'right' : 0,
                 'margin' : 0,
                 'padding' : 0,
-                'fontSize' : '480px',                
+                'fontSize' : '480px',
                 'cursor' : 'pointer'
-            });            
+            });
 
-            var div = document.createElement("div");                        
+            var div = document.createElement("div");
             addStyles(div, {
                 'display' : 'block',
                 'position' : 'absolute',
                 'overflow' : 'hidden',
                 'margin' : 0,
-                'padding' : 0,                
+                'padding' : 0,
                 'opacity' : 0,
                 // Make sure browse button is in the right side
                 // in Internet Explorer
@@ -380,26 +380,26 @@
             });
             
             // Make sure that element opacity exists.
-            // Otherwise use IE filter            
+            // Otherwise use IE filter
             if ( div.style.opacity !== "0") {
                 if (typeof(div.filters) == 'undefined'){
                     throw new Error('Opacity not supported by the browser');
                 }
                 div.style.filter = "alpha(opacity=0)";
-            }            
+            }
             
             addEvent(input, 'change', function(){
                  
-                if ( ! input || input.value === ''){                
-                    return;                
+                if ( ! input || input.value === ''){
+                    return;
                 }
                             
-                // Get filename from input, required                
-                // as some browsers have path instead of it          
+                // Get filename from input, required
+                // as some browsers have path instead of it
                 var file = fileFromPath(input.value);
                                 
                 if (false === self._settings.onChange.call(self, file, getExt(file))){
-                    self._clearInput();                
+                    self._clearInput();
                     return;
                 }
                 
@@ -407,7 +407,7 @@
                 if (self._settings.autoSubmit) {
                     self.submit();
                 }
-            });            
+            });
 
             addEvent(input, 'mouseover', function(){
                 addClass(self._button, self._settings.hoverClass);
@@ -417,11 +417,11 @@
                 removeClass(self._button, self._settings.hoverClass);
                 
                 // We use visibility instead of display to fix problem with Safari 4
-                // The problem is that the value of input doesn't change if it 
-                // has display none when user selects a file           
+                // The problem is that the value of input doesn't change if it
+                // has display none when user selects a file
                 input.parentNode.style.visibility = 'hidden';
 
-            });   
+            });
                         
 	        div.appendChild(input);
             document.body.appendChild(div);
@@ -431,11 +431,11 @@
         _clearInput : function(){
             if (!this._input){
                 return;
-            }            
+            }
                              
-            // this._input.value = ''; Doesn't work in IE6                               
+            // this._input.value = ''; Doesn't work in IE6
             removeNode(this._input.parentNode);
-            this._input = null;                                                                   
+            this._input = null;
             this._createInput();
             
             removeClass(this._button, this._settings.hoverClass);
@@ -460,7 +460,7 @@
 	                self._createInput();
                 }
                 
-                var div = self._input.parentNode;                            
+                var div = self._input.parentNode;
                 copyLayout(self._button, div);
                 div.style.visibility = 'visible';
                                 
@@ -469,7 +469,7 @@
             
             // commented because we now hide input on mouseleave
             /**
-             * When the window is resized the elements 
+             * When the window is resized the elements
              * can be misaligned if button position depends
              * on window size
              */
@@ -477,7 +477,7 @@
             //    if (self._input){
             //        copyLayout(self._button, self._input.parentNode);
             //    }
-            //});            
+            //});
                                          
         },
         /**
@@ -487,19 +487,19 @@
         _createIframe: function(){
             // We can't use getTime, because it sometimes return
             // same value in safari :(
-            var id = getUID();            
+            var id = getUID();
              
             // We can't use following code as the name attribute
             // won't be properly registered in IE6, and new window
             // on form submit will open
             // var iframe = document.createElement('iframe');
-            // iframe.setAttribute('name', id);                        
+            // iframe.setAttribute('name', id);
  
             var iframe = toElement('<iframe src="javascript:false;" name="' + id + '" />');
             // src="javascript:false; was added
-            // because it possibly removes ie6 prompt 
+            // because it possibly removes ie6 prompt
             // "This page contains both secure and nonsecure items"
-            // Anyway, it doesn't do any harm.            
+            // Anyway, it doesn't do any harm.
             iframe.setAttribute('id', id);
             
             iframe.style.display = 'none';
@@ -519,11 +519,11 @@
             // var form = document.createElement('form');
             // form.setAttribute('method', 'post');
             // form.setAttribute('enctype', 'multipart/form-data');
-            // Because in this case file won't be attached to request                    
+            // Because in this case file won't be attached to request
             var form = toElement('<form method="post" enctype="multipart/form-data"></form>');
                         
             form.setAttribute('action', settings.action);
-            form.setAttribute('target', iframe.name);                                   
+            form.setAttribute('target', iframe.name);
             form.style.display = 'none';
             document.body.appendChild(form);
             
@@ -542,18 +542,18 @@
         /**
          * Gets response from iframe and fires onComplete event when ready
          * @param iframe
-         * @param file Filename to use in onComplete callback 
+         * @param file Filename to use in onComplete callback
          */
-        _getResponse : function(iframe, file){            
+        _getResponse : function(iframe, file){
             // getting response
-            var toDeleteFlag = false, self = this, settings = this._settings;   
+            var toDeleteFlag = false, self = this, settings = this._settings;
                
-            addEvent(iframe, 'load', function(){                
+            addEvent(iframe, 'load', function(){
                 
-                if (// For Safari 
+                if (// For Safari
                     iframe.src == "javascript:'%3Chtml%3E%3C/html%3E';" ||
                     // For FF, IE
-                    iframe.src == "javascript:'<html></html>';"){                                                                        
+                    iframe.src == "javascript:'<html></html>';"){
                         // First time around, do not delete.
                         // We reload to blank page, so that reloading main page
                         // does not re-submit the post.
@@ -581,7 +581,7 @@
                 // fixing Opera 9.64
                 if (doc.body && doc.body.innerHTML == "false") {
                     // In Opera 9.64 event was fired second time
-                    // when body.innerHTML changed from false 
+                    // when body.innerHTML changed from false
                     // to server response approx. after 1 sec
                     return;
                 }
@@ -626,48 +626,48 @@
                 
                 // Fix IE mixed content issue
                 iframe.src = "javascript:'<html></html>';";
-            });            
-        },        
+            });
+        },
         /**
          * Upload file contained in this._input
          */
-        submit: function(){                        
+        submit: function(){
             var self = this, settings = this._settings;
             
-            if ( ! this._input || this._input.value === ''){                
-                return;                
+            if ( ! this._input || this._input.value === ''){
+                return;
             }
                                     
             var file = fileFromPath(this._input.value);
             
             // user returned false to cancel upload
             if (false === settings.onSubmit.call(this, file, getExt(file))){
-                this._clearInput();                
+                this._clearInput();
                 return;
             }
             
-            // sending request    
+            // sending request
             var iframe = this._createIframe();
             var form = this._createForm(iframe);
             
             // assuming following structure
             // div -> input type='file'
-            removeNode(this._input.parentNode);            
+            removeNode(this._input.parentNode);
             removeClass(self._button, self._settings.hoverClass);
                         
             form.appendChild(this._input);
                         
             form.submit();
 
-            // request set, clean up                
-            removeNode(form); form = null;                          
+            // request set, clean up
+            removeNode(form); form = null;
             removeNode(this._input); this._input = null;
             
             // Get response from iframe and fire onComplete event when ready
-            this._getResponse(iframe, file);            
+            this._getResponse(iframe, file);
 
-            // get ready for next request            
+            // get ready for next request
             this._createInput();
         }
     };
-})(); 
+})();

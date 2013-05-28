@@ -40,8 +40,8 @@ elFinder.prototype.commands.netmount = function() {
 						resizable      : false,
 						modal          : true,
 						destroyOnClose : true,
-						close          : function() { 
-							delete self.dialog; 
+						close          : function() {
+							delete self.dialog;
 							!dfrd.isResolved() && !dfrd.isRejected() && dfrd.reject();
 						},
 						buttons        : {}
@@ -77,7 +77,7 @@ elFinder.prototype.commands.netmount = function() {
 						.done(function() { dfrd.resolve(); })
 						.fail(function(error) { dfrd.reject(error); });
 
-					self.dialog.elfinderdialog('close');	
+					self.dialog.elfinderdialog('close');
 				}
 
 				opts.buttons[fm.i18n('btnCancel')] = function() {

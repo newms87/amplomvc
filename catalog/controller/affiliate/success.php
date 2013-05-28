@@ -1,5 +1,5 @@
-<?php 
-class ControllerAffiliateSuccess extends Controller {  
+<?php
+class ControllerAffiliateSuccess extends Controller {
 	public function index() {
 		$this->template->load('common/success');
 
@@ -15,21 +15,15 @@ class ControllerAffiliateSuccess extends Controller {
 		
 		$this->data['continue'] = $this->url->link('affiliate/account');
 
-
-
-
-
-
-
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
 			'common/content_top',
 			'common/content_bottom',
 			'common/footer',
-			'common/header'	
+			'common/header'
 		);
 				
-		$this->response->setOutput($this->render());				
+		$this->response->setOutput($this->render());
   	}
 }

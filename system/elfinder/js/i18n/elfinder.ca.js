@@ -54,7 +54,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'errMaxSize'           : 'Les dades excedeixen la mida màxima permesa.',
 			'errFileMaxSize'       : 'El fitxer excedeix la mida màxima permesa.',
 			'errUploadMime'        : 'El tipus de fitxer no està permès.',
-			'errUploadTransfer'    : 'S\'ha produït un error en transferir "$1".', 
+			'errUploadTransfer'    : 'S\'ha produït un error en transferir "$1".',
 			'errSave'              : 'No s\'ha pogut desar "$1".',
 			'errCopy'              : 'No s\'ha pogut copiar "$1".',
 			'errMove'              : 'No s\'ha pogut moure "$1".',
@@ -100,7 +100,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'cmdresize'    : 'Redimensiona la imatge',
 			'cmdsort'      : 'Ordena',
 			
-			/*********************************** buttons ***********************************/ 
+			/*********************************** buttons ***********************************/
 			'btnClose'  : 'Tanca',
 			'btnSave'   : 'Desa',
 			'btnRm'     : 'Suprimeix',
@@ -147,12 +147,12 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'Dec'         : 'des.',
 			
 			/******************************** sort variants ********************************/
-			'sortnameDirsFirst' : 'per nom (carpetes primer)', 
-			'sortkindDirsFirst' : 'per tipus (carpetes primer)', 
-			'sortsizeDirsFirst' : 'per mida (carpetes primer)', 
-			'sortdateDirsFirst' : 'per data (carpetes primer)', 
-			'sortname'          : 'per nom', 
-			'sortkind'          : 'per tipus', 
+			'sortnameDirsFirst' : 'per nom (carpetes primer)',
+			'sortkindDirsFirst' : 'per tipus (carpetes primer)',
+			'sortsizeDirsFirst' : 'per mida (carpetes primer)',
+			'sortdateDirsFirst' : 'per data (carpetes primer)',
+			'sortname'          : 'per nom',
+			'sortkind'          : 'per tipus',
 			'sortsize'          : 'per mida',
 			'sortdate'          : 'per data',
 			
@@ -178,7 +178,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'viewlist'        : 'Vista en llista',
 			'viewicons'       : 'Vista en icones',
 			'places'          : 'Llocs',
-			'calc'            : 'Calcula', 
+			'calc'            : 'Calcula',
 			'path'            : 'Camí',
 			'aliasfor'        : 'Àlies per',
 			'locked'          : 'Bloquejat',
@@ -189,7 +189,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'yes'             : 'sí',
 			'no'              : 'no',
 			'link'            : 'Enllaç',
-			'searcresult'     : 'Resultats de la cerca',  
+			'searcresult'     : 'Resultats de la cerca',
 			'selected'        : 'Elements seleccionats',
 			'about'           : 'Quant a',
 			'shortcuts'       : 'Dreceres',

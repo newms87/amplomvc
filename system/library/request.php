@@ -19,7 +19,7 @@ class Request {
 				
 				$data[$clean_key] = $this->clean($value);
 			}
-		} else { 
+		} else {
 			$data = htmlspecialchars(stripslashes($data), ENT_COMPAT);
 		}
 		

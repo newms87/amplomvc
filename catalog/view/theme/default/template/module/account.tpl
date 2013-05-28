@@ -1,25 +1,25 @@
 <div class="box">
-  <div class="box-heading"><?= $heading_title; ?></div>
-  <div class="box-content">
-    <ul>
-      <? if (!$logged) { ?>
-      <li><a href="<?= $login; ?>"><?= $text_login; ?></a> / <a href="<?= $register; ?>"><?= $text_register; ?></a></li>
-      <li><a href="<?= $forgotten; ?>"><?= $text_forgotten; ?></a></li>
-      <? } ?>
-      <li><a href="<?= $account; ?>"><?= $text_account; ?></a></li>
-      <? if ($logged) { ?>
-      <li><a href="<?= $edit; ?>"><?= $text_edit; ?></a></li>
-      <li><a href="<?= $password; ?>"><?= $text_password; ?></a></li>
-      <? } ?>
-      <li><a href="<?= $wishlist; ?>"><?= $text_wishlist; ?></a></li>
-      <li><a href="<?= $order; ?>"><?= $text_order; ?></a></li>
-      <li><a href="<?= $download; ?>"><?= $text_download; ?></a></li>
-      <li><a href="<?= $return; ?>"><?= $text_return; ?></a></li>
-      <li><a href="<?= $transaction; ?>"><?= $text_transaction; ?></a></li>
-      <li><a href="<?= $newsletter; ?>"><?= $text_newsletter; ?></a></li>
-      <? if ($logged) { ?>
-      <li><a href="<?= $logout; ?>"><?= $text_logout; ?></a></li>
-      <? } ?>
-    </ul>
-  </div>
+	<div class="box-heading"><?= $heading_title; ?></div>
+	<div class="box-content">
+		<ul>
+			<? if (!$logged) { ?>
+			<li><a href="<?= $login; ?>"><?= $text_login; ?></a> / <a href="<?= $register; ?>"><?= $text_register; ?></a></li>
+			<li><a href="<?= $forgotten; ?>"><?= $text_forgotten; ?></a></li>
+			<? } ?>
+			<li><a href="<?= $account; ?>"><?= $text_account; ?></a></li>
+			<? if ($logged) { ?>
+			<li><a href="<?= $edit; ?>"><?= $text_edit; ?></a></li>
+			<li><a href="<?= $password; ?>"><?= $text_password; ?></a></li>
+			<? } ?>
+			<li><a href="<?= $wishlist; ?>"><?= $text_wishlist; ?></a></li>
+			<li><a href="<?= $order; ?>"><?= $text_order; ?></a></li>
+			<li><a href="<?= $download; ?>"><?= $text_download; ?></a></li>
+			<li><a href="<?= $return; ?>"><?= $text_return; ?></a></li>
+			<li><a href="<?= $transaction; ?>"><?= $text_transaction; ?></a></li>
+			<li><a href="<?= $newsletter; ?>"><?= $text_newsletter; ?></a></li>
+			<? if ($logged) { ?>
+			<li><a href="<?= $logout; ?>"><?= $text_logout; ?></a></li>
+			<? } ?>
+		</ul>
+	</div>
 </div>

@@ -20,7 +20,7 @@ $_['entry_status']		= 'Estado:';
 $_['entry_sort_order']  = 'Orden de aparición:<br/><span class="help">Configura a -1 para esconder la lista</span>';
 $_['entry_layout']		= 'Sobreescribir diseño:';
 
-// Error 
+// Error
 $_['error_warning']	= 'Cuidado: Por favor comprueba que el formulario esté libre de errores!';
 $_['error_permission']  = 'Cuidado: No tienes permisos para modificar información!';
 $_['error_title']		= 'El título de información debe tener entre 3 y 64 carácteres!';

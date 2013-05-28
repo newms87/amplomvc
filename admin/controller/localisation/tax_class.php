@@ -7,7 +7,7 @@ class ControllerLocalisationTaxClass extends Controller {
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		$this->getList(); 
+		$this->getList();
 	}
 
 	public function insert() {
@@ -141,7 +141,7 @@ class ControllerLocalisationTaxClass extends Controller {
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/tax_class', $url));
 
 		$this->data['insert'] = $this->url->link('localisation/tax_class/insert', $url);
-		$this->data['delete'] = $this->url->link('localisation/tax_class/delete', $url);		
+		$this->data['delete'] = $this->url->link('localisation/tax_class/delete', $url);
 		
 		$this->data['tax_classes'] = array();
 		
@@ -168,7 +168,7 @@ class ControllerLocalisationTaxClass extends Controller {
 				'tax_class_id' => $result['tax_class_id'],
 				'title'		=> $result['title'],
 				'selected'	=> isset($_POST['selected']) && in_array($result['tax_class_id'], $_POST['selected']),
-				'action'		=> $action				
+				'action'		=> $action
 			);
 		}
 
@@ -212,10 +212,6 @@ class ControllerLocalisationTaxClass extends Controller {
 
 		$this->pagination->init();
 		$this->pagination->total = $tax_class_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('localisation/tax_class', $url);
-
 		$this->data['pagination'] = $this->pagination->render();
 
 		$this->data['sort'] = $sort;
@@ -343,5 +339,5 @@ class ControllerLocalisationTaxClass extends Controller {
 		}
 		
 		return $this->error ? false : true;
-	}	
+	}
 }

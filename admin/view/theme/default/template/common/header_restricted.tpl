@@ -39,48 +39,48 @@ window.history.pushState(url_state_object,'<?=$title;?>', '<?=isset($pretty_url)
 <body>
 <div id="container">
 <div id="header">
-  <div class="div1">
-    <div class="div2"><img src="<?=$admin_logo;?>" title="<?= $heading_title; ?>" onclick="location = '<?= $home; ?>'" /></div>
-    <? if ($logged) { ?>
-    <div class="div3"><img src="<?= HTTP_THEME_IMAGE . 'lock.png'; ?>" alt="" style="position: relative; top: 3px;" />&nbsp;<?= $logged; ?></div>
-    <div class="div3" style="clear:right"><?=$support;?></div>
-    <? } ?>
-  </div>
-  <? if ($logged) { ?>
-  <div id="menu">
-    <ul class="left" style="display: none;">
-      <li id="Products">
-         <a href="<?= $product; ?>" class="top"><?= $text_product; ?></a>
-         <ul>
-          <li><a href="<?= $product_insert; ?>"><?= $text_product_insert; ?></a></li>
-          <li><a href="<?= $product; ?>"><?= $text_product; ?></a></li>
-         </ul>
-      </li>
-      <li id='Designers'>
-         <a href='<?= $designers;?>' class='top'><?= $text_designer_info;?></a>
-      </li>
-      <li id='User'>
-         <a href='<?= $user_info;?>' class='top'><?= $text_user_info;?></a>
-      </li>
-    </ul>
-    <ul class='right'>
-      <li id="store"><a class="top" href="<?= $logout; ?>"><?= $text_logout; ?></a></li>
-    </ul>
-    <script type="text/javascript"><!--
+	<div class="div1">
+		<div class="div2"><img src="<?=$admin_logo;?>" title="<?= $heading_title; ?>" onclick="location = '<?= $home; ?>'" /></div>
+		<? if ($logged) { ?>
+		<div class="div3"><img src="<?= HTTP_THEME_IMAGE . 'lock.png'; ?>" alt="" style="position: relative; top: 3px;" />&nbsp;<?= $logged; ?></div>
+		<div class="div3" style="clear:right"><?=$support;?></div>
+		<? } ?>
+	</div>
+	<? if ($logged) { ?>
+	<div id="menu">
+		<ul class="left" style="display: none;">
+			<li id="Products">
+				<a href="<?= $product; ?>" class="top"><?= $text_product; ?></a>
+				<ul>
+					<li><a href="<?= $product_insert; ?>"><?= $text_product_insert; ?></a></li>
+					<li><a href="<?= $product; ?>"><?= $text_product; ?></a></li>
+				</ul>
+			</li>
+			<li id='Designers'>
+				<a href='<?= $designers;?>' class='top'><?= $text_designer_info;?></a>
+			</li>
+			<li id='User'>
+				<a href='<?= $user_info;?>' class='top'><?= $text_user_info;?></a>
+			</li>
+		</ul>
+		<ul class='right'>
+			<li id="store"><a class="top" href="<?= $logout; ?>"><?= $text_logout; ?></a></li>
+		</ul>
+		<script type="text/javascript"><!--
 $(document).ready(function() {
 	$('#menu > ul').superfish({
-		hoverClass	 : 'sfHover',
-		pathClass	 : 'overideThisToUse',
-		delay		 : 0,
-		animation	 : {height: 'show'},
-		speed		 : 'normal',
-		autoArrows   : false,
-		dropShadows  : false, 
-		disableHI	 : false, /* set to true to disable hoverIntent detection */
-		onInit		 : function(){},
+		hoverClass	: 'sfHover',
+		pathClass	: 'overideThisToUse',
+		delay		: 0,
+		animation	: {height: 'show'},
+		speed		: 'normal',
+		autoArrows	: false,
+		dropShadows	: false,
+		disableHI	: false, /* set to true to disable hoverIntent detection */
+		onInit		: function(){},
 		onBeforeShow : function(){},
-		onShow		 : function(){},
-		onHide		 : function(){}
+		onShow		: function(){},
+		onHide		: function(){}
 	});
 	
 	$('#menu > ul').css('display', 'block');
@@ -105,7 +105,7 @@ function getURLVar(urlVarName) {
 	}
 	
 	return urlVarValue;
-} 
+}
 
 $(document).ready(function() {
 	route = getURLVar('route');
@@ -124,9 +124,9 @@ $(document).ready(function() {
 		$('a[href*=\'' + url + '\']').parents('li[id]').addClass('selected');
 	}
 });
-//--></script> 
-  </div>
-  <? } ?>
+//--></script>
+	</div>
+	<? } ?>
 </div>
 
 <div id='content'>

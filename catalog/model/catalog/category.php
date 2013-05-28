@@ -13,8 +13,8 @@ class ModelCatalogCategory extends Model {
 		}
 		
 		$query = $this->query(
-				"SELECT * FROM " . DB_PREFIX . "category c " . 
-				"LEFT JOIN " . DB_PREFIX . "category_description cd ON (c.category_id = cd.category_id) " . 
+				"SELECT * FROM " . DB_PREFIX . "category c " .
+				"LEFT JOIN " . DB_PREFIX . "category_description cd ON (c.category_id = cd.category_id) " .
 				"LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c.category_id = c2s.category_id) " .
 				"WHERE $parent cd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND c2s.store_id = '" . (int)$this->config->get('config_store_id') . "'  AND c.status = '1' ORDER BY c.sort_order, LCASE(cd.name)");
 		
@@ -33,7 +33,7 @@ class ModelCatalogCategory extends Model {
 			
 			if ($children) {
 				$category_data = array_merge($children, $category_data);
-			}			
+			}
 		}
 		
 		return $category_data;
@@ -52,7 +52,7 @@ class ModelCatalogCategory extends Model {
 		
 		if(!$categories || true){
 			$dt_zero = DATETIME_ZERO;
-			$product_check = "(SELECT COUNT(*) FROM " . DB_PREFIX . "product p" . 
+			$product_check = "(SELECT COUNT(*) FROM " . DB_PREFIX . "product p" .
 								" JOIN " . DB_PREFIX . "product_to_category p2c ON (p2c.product_id=p.product_id)" .
 								" JOIN " . DB_PREFIX . "manufacturer m ON(m.manufacturer_id=p.manufacturer_id AND m.status='1' AND (m.date_expires='$dt_zero' OR m.date_expires > NOW()))" .
 								" WHERE p.status='1' AND p2c.category_id = c.category_id AND (p.date_available='$dt_zero' OR p.date_available < NOW()) AND (p.date_expires='$dt_zero' OR p.date_expires > NOW())) as num_products";

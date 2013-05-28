@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerLocalisationZone extends Controller {
 	
 
@@ -46,7 +46,7 @@ class ControllerLocalisationZone extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_zone->editZone($_GET['zone_id'], $_POST);			
+			$this->model_localisation_zone->editZone($_GET['zone_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -78,7 +78,7 @@ class ControllerLocalisationZone extends Controller {
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $zone_id) {
 				$this->model_localisation_zone->deleteZone($zone_id);
-			}			
+			}
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -170,7 +170,7 @@ class ControllerLocalisationZone extends Controller {
 				'name'	=> $result['name'] . (($result['zone_id'] == $this->config->get('config_zone_id')) ? $this->_('text_default') : null),
 				'code'	=> $result['code'],
 				'selected' => isset($_POST['selected']) && in_array($result['zone_id'], $_POST['selected']),
-				'action'	=> $action			
+				'action'	=> $action
 			);
 		}
 	
@@ -216,10 +216,6 @@ class ControllerLocalisationZone extends Controller {
 
 		$this->pagination->init();
 		$this->pagination->total = $zone_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('localisation/zone', $url);
-
 		$this->data['pagination'] = $this->pagination->render();
 		
 		$this->data['sort'] = $sort;

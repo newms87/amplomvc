@@ -1,6 +1,6 @@
 <?php
 class ControllerReportSaleShipping extends Controller {
-	public function index() {	
+	public function index() {
 		$this->template->load('report/sale_shipping');
 
 		$this->load->language('report/sale_shipping');
@@ -29,7 +29,7 @@ class ControllerReportSaleShipping extends Controller {
 			$filter_order_status_id = $_GET['filter_order_status_id'];
 		} else {
 			$filter_order_status_id = 0;
-		}	
+		}
 				
 		if (isset($_GET['page'])) {
 			$page = $_GET['page'];
@@ -49,7 +49,7 @@ class ControllerReportSaleShipping extends Controller {
 		
 		if (isset($_GET['filter_group'])) {
 			$url .= '&filter_group=' . $_GET['filter_group'];
-		}		
+		}
 
 		if (isset($_GET['filter_order_status_id'])) {
 			$url .= '&filter_order_status_id=' . $_GET['filter_order_status_id'];
@@ -65,15 +65,15 @@ class ControllerReportSaleShipping extends Controller {
 		$this->data['orders'] = array();
 		
 		$data = array(
-			'filter_date_start'		=> $filter_date_start, 
-			'filter_date_end'		=> $filter_date_end, 
+			'filter_date_start'		=> $filter_date_start,
+			'filter_date_end'		=> $filter_date_end,
 			'filter_group'			=> $filter_group,
 			'filter_order_status_id' => $filter_order_status_id,
 			'start'						=> ($page - 1) * $this->config->get('config_admin_limit'),
 			'limit'						=> $this->config->get('config_admin_limit')
 		);
 				
-		$order_total = $this->model_report_sale->getTotalShipping($data); 
+		$order_total = $this->model_report_sale->getTotalShipping($data);
 		
 		$results = $this->model_report_sale->getShipping($data);
 		
@@ -123,7 +123,7 @@ class ControllerReportSaleShipping extends Controller {
 		
 		if (isset($_GET['filter_group'])) {
 			$url .= '&filter_group=' . $_GET['filter_group'];
-		}		
+		}
 
 		if (isset($_GET['filter_order_status_id'])) {
 			$url .= '&filter_order_status_id=' . $_GET['filter_order_status_id'];
@@ -131,14 +131,10 @@ class ControllerReportSaleShipping extends Controller {
 								
 		$this->pagination->init();
 		$this->pagination->total = $order_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('report/sale_shipping', $url);
-			
 		$this->data['pagination'] = $this->pagination->render();
 		
 		$this->data['filter_date_start'] = $filter_date_start;
-		$this->data['filter_date_end'] = $filter_date_end;		
+		$this->data['filter_date_end'] = $filter_date_end;
 		$this->data['filter_group'] = $filter_group;
 		$this->data['filter_order_status_id'] = $filter_order_status_id;
 				

@@ -56,7 +56,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'errUploadTotalSize'   : 'データが許容サイズを超えています', // old name - errMaxSize
 			'errUploadFileSize'    : 'ファイルが許容サイズを超えています', //  old name - errFileMaxSize
 			'errUploadMime'        : '許可されていないファイル形式です',
-			'errUploadTransfer'    : '"$1" 転送エラーです', 
+			'errUploadTransfer'    : '"$1" 転送エラーです',
 			'errNotReplace'        : 'アイテム "$1" は、すでにこの場所にありますがアイテムのタイプが違うので置き換えることはできません', // new
 			'errReplace'           : '"$1"を置き換えることができません',
 			'errSave'              : '"$1"を保存することができません',
@@ -110,7 +110,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'cmdsort'      : 'ソート',
 			'cmdnetmount'  : 'ネットワークボリュームをマウント', // added 18.04.2012
 			
-			/*********************************** buttons ***********************************/ 
+			/*********************************** buttons ***********************************/
 			'btnClose'  : '閉じる',
 			'btnSave'   : '保存',
 			'btnRm'     : '削除',
@@ -159,12 +159,12 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'Dec'         : '12月',
 
 			/******************************** sort variants ********************************/
-			'sortnameDirsFirst' : '名前順 (フォルダ優先)', 
-			'sortkindDirsFirst' : '種類順 (フォルダ優先)', 
-			'sortsizeDirsFirst' : 'サイズ順 (フォルダ優先)', 
-			'sortdateDirsFirst' : '日付順 (フォルダ優先)', 
-			'sortname'          : '名前順', 
-			'sortkind'          : '種類順', 
+			'sortnameDirsFirst' : '名前順 (フォルダ優先)',
+			'sortkindDirsFirst' : '種類順 (フォルダ優先)',
+			'sortsizeDirsFirst' : 'サイズ順 (フォルダ優先)',
+			'sortdateDirsFirst' : '日付順 (フォルダ優先)',
+			'sortname'          : '名前順',
+			'sortkind'          : '種類順',
 			'sortsize'          : 'サイズ順',
 			'sortdate'          : '日付順',
 
@@ -190,7 +190,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'viewlist'        : 'リスト形式で見る',
 			'viewicons'       : 'アイコン形式で見る',
 			'places'          : 'Places',
-			'calc'            : '計算', 
+			'calc'            : '計算',
 			'path'            : 'パス',
 			'aliasfor'        : 'エイリアス',
 			'locked'          : 'ロックされています',
@@ -201,7 +201,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'yes'             : 'はい',
 			'no'              : 'いいえ',
 			'link'            : 'リンク',
-			'searcresult'     : '検索結果',  
+			'searcresult'     : '検索結果',
 			'selected'        : '選択されたアイテム',
 			'about'           : 'アバウト',
 			'shortcuts'       : 'ショートカット',

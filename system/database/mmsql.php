@@ -44,7 +44,7 @@ final class MSSQL implements Database{
 				
 				unset($data);
 
-				return $query;	
+				return $query;
 			} else {
 				return true;
 			}
@@ -80,7 +80,7 @@ final class MSSQL implements Database{
 		mssql_free_result($resource);
 		
 		return $last_id;
-  	}	
+  	}
 	
 	public function __destruct() {
 		mssql_close($this->link);

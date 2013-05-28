@@ -2,7 +2,7 @@
 // Heading
 $_['heading_title']	= 'Recogida en tienda';
 
-// Text 
+// Text
 $_['text_shipping']	= 'Envío';
 $_['text_success']	= 'Éxito: has modificado recogida en tienda!';
 

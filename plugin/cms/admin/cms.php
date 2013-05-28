@@ -1,4 +1,4 @@
-<?php	
+<?php
 class ControllerPluginCms extends Controller {
 	
 	public function settings(){

@@ -1,8 +1,8 @@
-<?php 
-class ControllerTotalLowOrderFee extends Controller { 
+<?php
+class ControllerTotalLowOrderFee extends Controller {
 	
 	
-	public function index() { 
+	public function index() {
 		$this->template->load('total/low_order_fee');
 
 		$this->load->language('total/low_order_fee');
@@ -76,6 +76,6 @@ class ControllerTotalLowOrderFee extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

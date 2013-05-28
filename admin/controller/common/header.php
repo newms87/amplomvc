@@ -1,9 +1,9 @@
-<?php 
+<?php
 class ControllerCommonHeader extends Controller {
 	protected function index() {
 		if($this->config->get('config_debug') && !empty($_SESSION['debug'])){
 		$this->message->add('warning', html_dump($_SESSION['debug'], 'Session Debug', 0, -1, false));
-		unset($_SESSION['debug']);  
+		unset($_SESSION['debug']);
 		}
 		
 		if($this->user->isDesigner()){
@@ -33,13 +33,13 @@ class ControllerCommonHeader extends Controller {
   		$this->data['description'] = $this->document->getDescription();
 		$this->data['keywords'] = $this->document->getKeywords();
 		
-		$this->data['canonical_link'] = $this->document->getCanonicalLink();	
+		$this->data['canonical_link'] = $this->document->getCanonicalLink();
 		
 		$this->language->set('lang', $this->language->getInfo('code'));
 		
 		if($this->config->get('config_seo_url')){
 			$this->data['pretty_url'] = $this->url->get_pretty_url();
-		} 
+		}
 		
 		$this->load->language('common/header');
 		
@@ -86,7 +86,7 @@ class ControllerCommonHeader extends Controller {
 			$this->data['links_admin'] = $this->document->getLinks('admin');
 			
 			/*
-			* Right Side Navigation Menu 
+			* Right Side Navigation Menu
 			*/
 			
 			//Store Navigation

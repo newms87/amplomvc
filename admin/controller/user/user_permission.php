@@ -70,14 +70,14 @@ class ControllerUserUserPermission extends Controller {
 		$this->getForm();
 	}
 
-	public function delete() { 
+	public function delete() {
 		$this->load->language('user/user_group');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 				foreach ($_POST['selected'] as $user_group_id) {
-				$this->model_user_user_group->deleteUserGroup($user_group_id);	
+				$this->model_user_user_group->deleteUserGroup($user_group_id);
 			}
 						
 			$this->message->add('success', $this->_('text_success'));
@@ -131,7 +131,7 @@ class ControllerUserUserPermission extends Controller {
 
 		if (isset($_GET['order'])) {
 			$url .= '&order=' . $_GET['order'];
-		}	
+		}
 	
 		if (isset($_GET['page'])) {
 			$url .= '&page=' . $_GET['page'];
@@ -141,7 +141,7 @@ class ControllerUserUserPermission extends Controller {
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('user/user_permission', $url));
 
 		$this->data['insert'] = $this->url->link('user/user_permission/insert', $url);
-		$this->data['delete'] = $this->url->link('user/user_permission/delete', $url);	
+		$this->data['delete'] = $this->url->link('user/user_permission/delete', $url);
 	
 		$this->data['user_groups'] = array();
 
@@ -162,7 +162,7 @@ class ControllerUserUserPermission extends Controller {
 			$action[] = array(
 				'text' => $this->_('text_edit'),
 				'href' => $this->url->link('user/user_permission/update', 'user_group_id=' . $result['user_group_id'] . $url)
-			);		
+			);
 		
 			$this->data['user_groups'][] = array(
 				'user_group_id' => $result['user_group_id'],
@@ -170,7 +170,7 @@ class ControllerUserUserPermission extends Controller {
 				'selected'		=> isset($_POST['selected']) && in_array($result['user_group_id'], $_POST['selected']),
 				'action'		=> $action
 			);
-		}	
+		}
 	
  		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -212,13 +212,9 @@ class ControllerUserUserPermission extends Controller {
 				
 		$this->pagination->init();
 		$this->pagination->total = $user_group_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('user/user_permission', $url);
-		
-		$this->data['pagination'] = $this->pagination->render();				
+		$this->data['pagination'] = $this->pagination->render();
 
-		$this->data['sort'] = $sort; 
+		$this->data['sort'] = $sort;
 		$this->data['order'] = $order;
 
 		$this->children = array(

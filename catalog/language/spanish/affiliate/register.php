@@ -1,5 +1,5 @@
 <?php
-// Heading 
+// Heading
 $_['heading_title']				= 'Programa de afiliados';
 
 // Text
@@ -42,7 +42,7 @@ $_['entry_bank_account_number'] = 'Número cuenta:';
 $_['entry_password']				= 'Contraseña:';
 $_['entry_confirm']				= 'Confirmar contraseña:';
 
-// Error 
+// Error
 $_['error_exists']				= 'Error: La dirección de e-mail ya está registrada!';
 $_['error_firstname']			= 'El nombre debe tener entre 1 y 32 carácteres!';
 $_['error_lastname']				= 'El apellido/s debe tener entre 1 y 32 carácteres!';

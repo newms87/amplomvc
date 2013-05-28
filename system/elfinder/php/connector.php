@@ -175,7 +175,7 @@ class elFinderSimpleLogger {
 	}
 	
 	
-} // END class 
+} // END class
 
 
 /**
@@ -220,7 +220,7 @@ class elFinderTestACL {
 		return true;
 	}
 	
-} // END class 
+} // END class
 
 $acl = new elFinderTestACL();
 
@@ -336,7 +336,7 @@ $opts = array(
 		// 			'hidden' => true,
 		// 			'locked' => false
 		// 		),
-		// 		
+		//
 		// 	)
 		// ),
 		// array(

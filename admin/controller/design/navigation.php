@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerDesignNavigation extends Controller {
 	
 	public function index() {
@@ -234,8 +234,6 @@ class ControllerDesignNavigation extends Controller {
 		
 		$this->pagination->init();
 		$this->pagination->total = $navigation_groups_total;
-		$this->pagination->url = $this->url->link('design/navigation', $url);
-			
 		$this->data['pagination'] = $this->pagination->render();
 		
 		$this->children = array(
@@ -318,7 +316,7 @@ class ControllerDesignNavigation extends Controller {
 		
 		foreach($_POST['links'] as $key => $link){
 			if(!$this->validation->text($link['display_name'], 1, 255)){
-				$link_name = !empty($link['name']) ? $link['name'] : ( !empty($link['display_name']) ? $link['display_name'] : $key ); 
+				$link_name = !empty($link['name']) ? $link['name'] : ( !empty($link['display_name']) ? $link['display_name'] : $key );
 				$this->error["links[$key][display_name]"] = $this->language->format('error_display_name', $link_name);
 			}
 		

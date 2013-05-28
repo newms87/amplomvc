@@ -1,5 +1,5 @@
-<?php 
-class ControllerMailNewsletter extends Controller { 
+<?php
+class ControllerMailNewsletter extends Controller {
 	
 	public function index() {
 		$this->load->language('mail/newsletter');
@@ -165,10 +165,6 @@ class ControllerMailNewsletter extends Controller {
 		
 		$this->pagination->init();
 		$this->pagination->total = $newsletter_total;
-		$this->pagination->page = $data['page'];
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('mail/newsletter', $url);
-			
 		$this->data['pagination'] = $this->pagination->render();
 		
 		$this->data['download_email_list'] = $this->url->link('mail/newsletter/email_list');

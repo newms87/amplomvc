@@ -63,7 +63,7 @@ class ModelToolBackup extends Model {
 						$value = str_replace('\'', '\\\'',	$value);
 						$value = str_replace('\\\n', '\n',	$value);
 						$value = str_replace('\\\r', '\r',	$value);
-						$value = str_replace('\\\t', '\t',	$value);			
+						$value = str_replace('\\\t', '\t',	$value);
 						
 						$values .= '\'' . $value . '\', ';
 					}
@@ -75,6 +75,6 @@ class ModelToolBackup extends Model {
 			}
 		}
 
-		return $output;	
+		return $output;
 	}
 }

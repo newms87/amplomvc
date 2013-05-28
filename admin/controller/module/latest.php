@@ -2,7 +2,7 @@
 class ControllerModuleLatest extends Controller {
 	
 	
-	public function index() {	
+	public function index() {
 		$this->template->load('module/latest');
 
 		$this->load->language('module/latest');
@@ -10,7 +10,7 @@ class ControllerModuleLatest extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('latest', $_POST);		
+			$this->model_setting_setting->editSetting('latest', $_POST);
 			
 			$this->cache->delete('product');
 			
@@ -43,9 +43,9 @@ class ControllerModuleLatest extends Controller {
 		
 		if (isset($_POST['latest_module'])) {
 			$this->data['modules'] = $_POST['latest_module'];
-		} elseif ($this->config->get('latest_module')) { 
+		} elseif ($this->config->get('latest_module')) {
 			$this->data['modules'] = $this->config->get('latest_module');
-		}				
+		}
 				
 		$this->data['layouts'] = $this->model_design_layout->getLayouts();
 
@@ -68,8 +68,8 @@ class ControllerModuleLatest extends Controller {
 					$this->error['image'][$key] = $this->_('error_image');
 				}
 			}
-		}		
+		}
 				
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

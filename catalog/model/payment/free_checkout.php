@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ModelPaymentFreeCheckout extends Model {
   	public function getMethod($address, $total) {
 		$this->load->language('payment/free_checkout');
@@ -11,8 +11,8 @@ class ModelPaymentFreeCheckout extends Model {
 		
 		$method_data = array();
 			
-		if ($status) {  
-			$method_data = array( 
+		if ($status) {
+			$method_data = array(
 				'code'		=> 'free_checkout',
 				'title'		=> $this->_('text_title'),
 				'sort_order' => $this->config->get('free_checkout_sort_order')

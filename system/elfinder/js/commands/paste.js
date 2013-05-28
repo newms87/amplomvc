@@ -59,7 +59,7 @@ elFinder.prototype.commands.paste = function() {
 				var dfrd      = $.Deferred(),
 					existed   = [],
 					intersect = function(files, names) {
-						var ret = [], 
+						var ret = [],
 							i   = files.length;
 
 						while (i--) {
@@ -78,7 +78,7 @@ elFinder.prototype.commands.paste = function() {
 
 						fm.confirm({
 							title  : fm.i18n(cut ? 'moveFiles' : 'copyFiles'),
-							text   : fm.i18n(['errExists', file.name, 'confirmRepl']), 
+							text   : fm.i18n(['errExists', file.name, 'confirmRepl']),
 							all    : !last,
 							accept : {
 								label    : 'btnYes',

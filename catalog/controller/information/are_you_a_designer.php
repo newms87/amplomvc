@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerInformationAreYouADesigner extends Controller {
 	
   	public function index() {
@@ -6,7 +6,7 @@ class ControllerInformationAreYouADesigner extends Controller {
 
 		$this->language->load('information/are_you_a_designer');
 
-		$this->document->setTitle($this->_('heading_title'));  
+		$this->document->setTitle($this->_('heading_title'));
 
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_catalog_designer->addDesigner($_POST);
@@ -58,10 +58,10 @@ class ControllerInformationAreYouADesigner extends Controller {
 		$this->data['telephone'] = $this->config->get('config_telephone');
 		
 		$defaults = array(
-				'firstname'=>$this->customer->getFirstName(),
-				'lastname'=>$this->customer->getLastName(),
-				'email'=>$this->customer->getEmail(),
-				'phone'=>$this->customer->getTelephone(),
+				'firstname'=>$this->customer->info('firstname'),
+				'lastname'=>$this->customer->info('lastname'),
+				'email'=>$this->customer->info('email'),
+				'phone'=>$this->customer->info('telephone'),
 				'brand'=>'',
 				'website'=>'',
 				'lookbook'=>'',
@@ -75,12 +75,6 @@ class ControllerInformationAreYouADesigner extends Controller {
 		
 		$this->data['categories'] = array_merge(array(''=>"( Select Category )"),$this->model_catalog_category->getCategories(-1));
 		$this->data['categories'][0] = 'Other';
-		
-
-
-
-
-
 
 		$this->children = array(
 			'common/column_left',
@@ -91,7 +85,7 @@ class ControllerInformationAreYouADesigner extends Controller {
 			'common/header'
 		);
 				
- 		$this->response->setOutput($this->render());		
+ 		$this->response->setOutput($this->render());
   	}
 
   	public function success() {
@@ -106,12 +100,6 @@ class ControllerInformationAreYouADesigner extends Controller {
 		
 		$this->data['continue'] = $this->url->link('common/home');
 
-
-
-
-
-
-
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
@@ -121,7 +109,7 @@ class ControllerInformationAreYouADesigner extends Controller {
 			'common/header'
 		);
 				
- 		$this->response->setOutput($this->render()); 
+ 		$this->response->setOutput($this->render());
 	}
 	
   	private function validate() {
@@ -169,12 +157,12 @@ class ControllerInformationAreYouADesigner extends Controller {
 				$this->error['captcha'] = $this->_('error_captcha');
 		}
 		
-		return $this->error ? false : true;  	
+		return $this->error ? false : true;
   	}
 
 	public function captcha() {
 		$this->session->data['captcha'] = $this->captcha->getCode();
 		
 		$this->captcha->showImage();
-	}	
+	}
 }

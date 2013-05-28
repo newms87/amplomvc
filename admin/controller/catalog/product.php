@@ -1,11 +1,11 @@
-<?php 
+<?php
 class ControllerCatalogProduct extends Controller {
 	
 	
   	public function index() {
 		$this->load->language('catalog/product');
 		
-		$this->document->setTitle($this->_('heading_title')); 
+		$this->document->setTitle($this->_('heading_title'));
 		
 		$this->getList();
   	}
@@ -13,7 +13,7 @@ class ControllerCatalogProduct extends Controller {
   	public function insert() {
 		$this->load->language('catalog/product');
 
-		$this->document->setTitle($this->_('heading_title')); 
+		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_catalog_product->addProduct($_POST);
@@ -379,8 +379,6 @@ class ControllerCatalogProduct extends Controller {
 		
 		$this->pagination->init();
 		$this->pagination->total = $product_total;
-		$this->pagination->url = $this->url->link('catalog/product', $url);
-			
 		$this->data['pagination'] = $this->pagination->render();
 		
 		//Child Templates
@@ -501,7 +499,7 @@ class ControllerCatalogProduct extends Controller {
 		$this->data['data_languages'] = $this->model_localisation_language->getLanguageList();
 		
 		
-		$thumb = ($this->data['image'] && file_exists(DIR_IMAGE . $this->data['image']))?$this->data['image']:'no_image.png'; 
+		$thumb = ($this->data['image'] && file_exists(DIR_IMAGE . $this->data['image']))?$this->data['image']:'no_image.png';
 		$this->data['thumb'] = $this->image->resize($thumb, 100, 100);
 		
 		$this->data['manufacturers'] = array(0=>$this->_('text_none'));
@@ -534,12 +532,12 @@ class ControllerCatalogProduct extends Controller {
 		
 		/**
 		* NOTE to clarify options / product options:
-		* 
+		*
 		* An option contains a set of 1 or more option_values
-		* 
+		*
 		* A product_option is associated to a product and contains product_option_values (a subset option_values from an option),
 		* A product_option_value has a reference to an option_value and contains additional data.
-		*  
+		*
 		*/
 		
 		//Get Product Options with product_option_values
@@ -688,7 +686,7 @@ class ControllerCatalogProduct extends Controller {
 		);
 				
 		$this->response->setOutput($this->render());
-  	} 
+  	}
 	
   	private function validateForm() {
   		
@@ -805,7 +803,7 @@ class ControllerCatalogProduct extends Controller {
 	
   	private function validateDelete() {
 		if (!$this->user->hasPermission('modify', 'catalog/product') && !$this->user->hasPermission('access','user/user_permission')) {
-				$this->error['warning'] = $this->_('error_permission');  
+				$this->error['warning'] = $this->_('error_permission');
 		}
 		
 		return $this->error ? false : true;
@@ -813,7 +811,7 @@ class ControllerCatalogProduct extends Controller {
   	
   	private function validateCopy() {
 		if (!$this->user->hasPermission('modify', 'catalog/product')) {
-			$this->error['warning'] = $this->_('error_permission');  
+			$this->error['warning'] = $this->_('error_permission');
 		}
 		
 		return $this->error ? false : true;
@@ -871,7 +869,7 @@ class ControllerCatalogProduct extends Controller {
 		foreach ($results as $result) {
 			$option_data = array();
 			
-			$product_options = $this->model_catalog_product->getProductOptions($result['product_id']);	
+			$product_options = $this->model_catalog_product->getProductOptions($result['product_id']);
 			
 			foreach ($product_options as $product_option) {
 				$option_value_data = array();
@@ -882,7 +880,7 @@ class ControllerCatalogProduct extends Controller {
 						'option_value_id'			=> $product_option_value['option_value_id'],
 						'name'						=> $product_option_value['name'],
 						'price'						=> (float)$product_option_value['price'] ? $this->currency->format($product_option_value['price'], $this->config->get('config_currency')) : false,
-					);	
+					);
 				}
 			
 				$option_data[] = array(
@@ -903,7 +901,7 @@ class ControllerCatalogProduct extends Controller {
 				'image'		=> $result['image'],
 				'thumb'		=> $this->image->resize($result['image'], 100,100),
 				'price'		=> $result['price']
-			);	
+			);
 		}
 
 		$this->response->setOutput(json_encode($json));

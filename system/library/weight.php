@@ -14,7 +14,7 @@ class Weight {
 				'title'			=> $result['title'],
 				'unit'				=> $result['unit'],
 				'value'			=> $result['value']
-				); 
+				);
 		}
   	}
 	
@@ -25,7 +25,7 @@ class Weight {
 		
 		if (!isset($this->weights[$from]) || !isset($this->weights[$to])) {
 			return $value;
-		} else {			
+		} else {
 			$from = $this->weights[$from]['value'];
 			$to = $this->weights[$to]['value'];
 		
@@ -47,5 +47,5 @@ class Weight {
 		} else {
 			return '';
 		}
-	}	
+	}
 }

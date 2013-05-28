@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerPaymentPaymate extends Controller {
 	protected function index() {
 		$this->template->load('payment/paymate');
@@ -12,7 +12,7 @@ class ControllerPaymentPaymate extends Controller {
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 				
 		$this->data['mid'] = $this->config->get('paymate_username');
-		$this->data['amt'] = $this->currency->format($order_info['total'], $order_info['currency_code'], $order_info['currency_value'], false); 
+		$this->data['amt'] = $this->currency->format($order_info['total'], $order_info['currency_code'], $order_info['currency_value'], false);
 		
 		$this->data['currency'] = $order_info['currency_code'];
 		$this->data['ref'] = $order_info['order_id'];
@@ -30,12 +30,6 @@ class ControllerPaymentPaymate extends Controller {
 		$this->data['regindi_pcode'] = html_entity_decode($order_info['payment_postcode'], ENT_QUOTES, 'UTF-8');
 		
 		$this->data['return'] = $this->url->link('payment/paymate/callback', 'hash=' . md5($order_info['order_id'] . $this->currency->format($order_info['total'], $order_info['currency_code'], $order_info['currency_value'], false) . $order_info['currency_code'] . $this->config->get('paymate_password')));
-		
-
-
-
-
-
 
 		$this->render();
 	}
@@ -47,9 +41,9 @@ class ControllerPaymentPaymate extends Controller {
 			$order_id = $_POST['ref'];
 		} else {
 			$order_id = 0;
-		}			
+		}
 		
-		$order_info = $this->model_checkout_order->getOrder($order_id);		
+		$order_info = $this->model_checkout_order->getOrder($order_id);
 		
 		if ($order_info) {
 			$error = '';
@@ -63,7 +57,7 @@ class ControllerPaymentPaymate extends Controller {
 			}
 		} else {
 			$error = $this->_('text_unable');
-		}	
+		}
 		
 		if ($error) {
 		$this->template->load('common/success');
@@ -78,12 +72,6 @@ class ControllerPaymentPaymate extends Controller {
 			$this->data['text_message'] = $this->language->format('text_failed_message', $error, $this->url->link('information/contact'));
 			
 			$this->data['continue'] = $this->url->link('common/home');
-			
-
-
-
-
-
 
 			$this->children = array(
 				'common/column_left',
@@ -98,7 +86,7 @@ class ControllerPaymentPaymate extends Controller {
 		} else {
 			$this->model_checkout_order->confirm($order_id, $this->config->get('paymate_order_status_id'));
 			
-			$this->url->redirect($this->url->link('checkout/success'));			
-		}		
+			$this->url->redirect($this->url->link('checkout/success'));
+		}
 	}
 }

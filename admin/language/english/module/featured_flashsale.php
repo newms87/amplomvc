@@ -20,5 +20,5 @@ $_['entry_sort_order']	= 'Sort Order:';
 $_['entry_designer']		= 'Choose Designer:';
 $_['entry_choose_product']		= 'Choose Product:<span class="help">(autocomplete)</span>';
 
-// Error 
+// Error
 $_['error_permission']	= 'Warning: You do not have permission to modify module featured!';

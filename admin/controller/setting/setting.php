@@ -14,7 +14,7 @@ class ControllerSettingSetting extends Controller {
 
 			if ($this->config->get('config_currency_auto')) {
 				$this->model_localisation_currency->updateCurrencies();
-			}	
+			}
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -49,6 +49,7 @@ class ControllerSettingSetting extends Controller {
 			'config_zone_id',
 			'config_language',
 			'config_admin_language',
+			'config_use_macro_languages' => 0,
 			'config_currency',
 			'config_currency_auto',
 			'config_length_class_id',
@@ -202,9 +203,9 @@ class ControllerSettingSetting extends Controller {
 		
 		$this->data['stock_statuses'] = $this->model_localisation_stock_status->getStockStatuses();
 		
-		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();		
+		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 		
-		$this->data['return_statuses'] = $this->model_localisation_return_status->getReturnStatuses();	
+		$this->data['return_statuses'] = $this->model_localisation_return_status->getReturnStatuses();
 		
 		$this->data['load_theme_img'] = $this->url->link('setting/setting/theme');
 		
@@ -245,7 +246,7 @@ class ControllerSettingSetting extends Controller {
 	
 		if (!$_POST['config_name']) {
 			$this->error['config_name'] = $this->_('error_name');
-		}	
+		}
 		
 		if ((strlen($_POST['config_owner']) < 3) || (strlen($_POST['config_owner']) > 64)) {
 			$this->error['config_owner'] = $this->_('error_owner');
@@ -273,11 +274,11 @@ class ControllerSettingSetting extends Controller {
 
 		if (!$_POST['config_title']) {
 			$this->error['config_title'] = $this->_('error_title');
-		}	
+		}
 		
 		if (!$_POST['config_image_admin_thumb_width'] || !$_POST['config_image_admin_thumb_height']) {
 			$this->error['image_admin_thumb'] = $this->_('error_image_admin_thumb');
-		} 
+		}
 		
 		if (!$_POST['config_image_admin_list_width'] || !$_POST['config_image_admin_list_height']) {
 			$this->error['image_admin_list'] = $this->_('error_image_admin_list');
@@ -285,19 +286,19 @@ class ControllerSettingSetting extends Controller {
 
 		if (!$_POST['config_image_category_width'] || !$_POST['config_image_category_height']) {
 			$this->error['image_category'] = $this->_('error_image_category');
-		} 
+		}
 		
 		if (!$_POST['config_image_manufacturer_width'] || !$_POST['config_image_manufacturer_height']) {
 			$this->error['image_manufacturer'] = $this->_('error_image_manufacturer');
-		} 	
+		}
 		
 		if (!$_POST['config_image_thumb_width'] || !$_POST['config_image_thumb_height']) {
 			$this->error['image_thumb'] = $this->_('error_image_thumb');
-		}	
+		}
 		
 		if (!$_POST['config_image_popup_width'] || !$_POST['config_image_popup_height']) {
 			$this->error['image_popup'] = $this->_('error_image_popup');
-		}	
+		}
 		
 		if (!$_POST['config_image_product_width'] || !$_POST['config_image_product_height']) {
 			$this->error['image_product'] = $this->_('error_image_product');
@@ -317,7 +318,7 @@ class ControllerSettingSetting extends Controller {
 		
 		if (!$_POST['config_image_wishlist_width'] || !$_POST['config_image_wishlist_height']) {
 			$this->error['image_wishlist'] = $this->_('error_image_wishlist');
-		}			
+		}
 		
 		if (!$_POST['config_image_cart_width'] || !$_POST['config_image_cart_height']) {
 			$this->error['image_cart'] = $this->_('error_image_cart');

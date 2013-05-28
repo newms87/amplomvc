@@ -2,7 +2,7 @@
 class ControllerModuleSlideshow extends Controller {
 	
 	
-	public function index() {	
+	public function index() {
 		$this->template->load('module/slideshow');
 
 		$this->load->language('module/slideshow');
@@ -10,7 +10,7 @@ class ControllerModuleSlideshow extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('slideshow', $_POST);		
+			$this->model_setting_setting->editSetting('slideshow', $_POST);
 					
 			$this->message->add('success', $this->_('text_success'));
 						
@@ -41,9 +41,9 @@ class ControllerModuleSlideshow extends Controller {
 		
 		if (isset($_POST['slideshow_module'])) {
 			$this->data['modules'] = $_POST['slideshow_module'];
-		} elseif ($this->config->get('slideshow_module')) { 
+		} elseif ($this->config->get('slideshow_module')) {
 			$this->data['modules'] = $this->config->get('slideshow_module');
-		}	
+		}
 						
 		$this->data['layouts'] = $this->model_design_layout->getLayouts();
 
@@ -66,10 +66,10 @@ class ControllerModuleSlideshow extends Controller {
 			foreach ($_POST['slideshow_module'] as $key => $value) {
 				if (!$value['width'] || !$value['height']) {
 					$this->error['dimension'][$key] = $this->_('error_dimension');
-				}				
+				}
 			}
-		}	
+		}
 						
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

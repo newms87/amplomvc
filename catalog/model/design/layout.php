@@ -13,7 +13,7 @@ class ModelDesignLayout extends Model {
 			if (substr($route, 0, 16) == 'product/category' && isset($_GET['path'])) {
 				$path = explode('_', (string)$_GET['path']);
 					
-				$layout_id = $this->model_catalog_category->getCategoryLayoutId(end($path));			
+				$layout_id = $this->model_catalog_category->getCategoryLayoutId(end($path));
 			}
 			
 			if (substr($route, 0, 15) == 'product/product' && isset($_GET['product_id'])) {

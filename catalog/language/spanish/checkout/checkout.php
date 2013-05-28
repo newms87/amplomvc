@@ -1,5 +1,5 @@
 <?php
-// Heading 
+// Heading
 $_['heading_title']						= 'Compra';
 
 // Text
@@ -59,7 +59,7 @@ $_['entry_shipping'] 					= 'Mi dirección de entrega y facturación es la misma
 // Error
 $_['error_warning']						= 'Hubo un problema en el procesamiento de tu pedido! Si el problema persiste por favor intenta seleccionar un método de pago diferente o contacta con el vendedor <a href="%s">haciendo click aquí</a>.';
 $_['error_login']						= 'Atención: El e-mail o la contraseña no son correctos.';
-$_['error_minimum']						= 'La cantidad mínima de pedido para %s es %s!';	
+$_['error_minimum']						= 'La cantidad mínima de pedido para %s es %s!';
 $_['error_login']						= 'Error: No se ha encontrado la dirección de E-Mail y/o contraseña.';
 $_['error_exists']						= 'Error: La dirección de E-Mail ya está registrada!';
 $_['error_firstname']					= 'El nombre debe tener entre 1 y 32 carácteres!';

@@ -105,26 +105,26 @@ img {
 		<a id="upload" class="button" style="background-image: url('<?= HTTP_THEME_IMAGE . "filemanager/upload.png"; ?>');"><?= $button_upload; ?></a>
 		<a id="refresh" class="button" style="background-image: url('<?= HTTP_THEME_IMAGE . "filemanager/refresh.png"; ?>');"><?= $button_refresh; ?></a>
 	</div>
-  <div id="column-left"></div>
-  <div id="column-right"></div>
+	<div id="column-left"></div>
+	<div id="column-right"></div>
 </div>
 <script type="text/javascript">//<!--
-$(document).ready(function() { 
+$(document).ready(function() {
 	$('#column-left').tree({
-		data: { 
+		data: {
 			type: 'json',
-			async: true, 
-			opts: { 
-				method: 'post', 
+			async: true,
+			opts: {
+				method: 'post',
 				url: "<?= HTTP_ADMIN . "index.php?route=common/filemanager/directory"; ?>"
-			} 
+			}
 		},
 		selected: 'top',
-		ui: {		
+		ui: {
 			theme_name: 'classic',
 			animation: 100
-		},	
-		types: { 
+		},
+		types: {
 			'default': {
 				clickable: true,
 				creatable: false,
@@ -137,26 +137,26 @@ $(document).ready(function() {
 			}
 		},
 		callback: {
-			beforedata: function(NODE, TREE_OBJ) { 
+			beforedata: function(NODE, TREE_OBJ) {
 				if (NODE == false) {
-					TREE_OBJ.settings.data.opts.static = [ 
+					TREE_OBJ.settings.data.opts.static = [
 						{
 							data: 'image',
-							attributes: { 
+							attributes: {
 								'id': 'top',
 								'directory': ''
-							}, 
+							},
 							state: 'closed'
 						}
 					];
 					
-					return { 'directory': '' } 
+					return { 'directory': '' }
 				} else {
-					TREE_OBJ.settings.data.opts.static = false;  
+					TREE_OBJ.settings.data.opts.static = false;
 					
-					return { 'directory': $(NODE).attr('directory') } 
+					return { 'directory': $(NODE).attr('directory') }
 				}
-			},		
+			},
 			onselect: function (NODE, TREE_OBJ) {
 				$.ajax({
 					url: "<?= HTTP_ADMIN . "index.php?route=common/filemanager/files"; ?>",
@@ -204,7 +204,7 @@ $(document).ready(function() {
 				});
 			}
 		}
-	});	
+	});
 	
 	$('#column-right a').live('click', function() {
 		if ($(this).attr('class') == 'selected') {
@@ -220,14 +220,14 @@ $(document).ready(function() {
 		<? if ($fckeditor) { ?>
 		window.opener.CKEDITOR.tools.callFunction(<?= $fckeditor; ?>, '<?= $directory; ?>' + $(this).find('input[name=\'image\']').attr('value'));
 		
-		self.close();	
+		self.close();
 		<? } else { ?>
 		parent.$('#<?= $field; ?>').attr('value', 'data/' + $(this).find('input[name=\'image\']').attr('value'));
 		parent.$('#dialog').dialog('close');
 		
-		parent.$('#dialog').remove();	
+		parent.$('#dialog').remove();
 		<? } ?>
-	});		
+	});
 						
 	$('#create').bind('click', function() {
 		var tree = $.tree.focused();
@@ -235,7 +235,7 @@ $(document).ready(function() {
 		if (tree.selected) {
 			$('#dialog').remove();
 			
-			html  = '<div id="dialog">';
+			html	= '<div id="dialog">';
 			html += '<?= $entry_folder; ?> <input type="text" name="name" value="" /> <input type="button" value="<?= $button_submit; ?>" />';
 			html += '</div>';
 			
@@ -275,7 +275,7 @@ $(document).ready(function() {
 	
 	$('#delete').bind('click', function() {
 		path = $('#column-right a.selected').find('input[name=\'image\']').attr('value');
-							 
+							
 		if (path) {
 			$.ajax({
 				url: "<?= HTTP_ADMIN . "index.php?route=common/filemanager/delete"; ?>",
@@ -298,7 +298,7 @@ $(document).ready(function() {
 				error: function(xhr, ajaxOptions, thrownError) {
 					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
 				}
-			});				
+			});
 		} else {
 			var tree = $.tree.focused();
 			
@@ -315,7 +315,7 @@ $(document).ready(function() {
 							tree.refresh(tree.selected);
 							
 							alert(json.success);
-						} 
+						}
 						
 						if (json.error) {
 							alert(json.error);
@@ -324,17 +324,17 @@ $(document).ready(function() {
 					error: function(xhr, ajaxOptions, thrownError) {
 						alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
 					}
-				});			
+				});
 			} else {
 				alert('<?= $error_select; ?>');
-			}			
+			}
 		}
 	});
 	
 	$('#move').bind('click', function() {
 		$('#dialog').remove();
 		
-		html  = '<div id="dialog">';
+		html	= '<div id="dialog">';
 		html += '<?= $entry_move; ?> <select name="to"></select> <input type="button" value="<?= $button_submit; ?>" />';
 		html += '</div>';
 
@@ -349,8 +349,8 @@ $(document).ready(function() {
 		
 		$('#dialog input[type=\'button\']').bind('click', function() {
 			path = $('#column-right a.selected').find('input[name=\'image\']').attr('value');
-							 
-			if (path) {																
+							
+			if (path) {
 				$.ajax({
 					url: "<?= HTTP_ADMIN . "index.php?route=common/filemanager/move"; ?>",
 					type: 'post',
@@ -392,7 +392,7 @@ $(document).ready(function() {
 							tree.refresh(tree.selected);
 							
 							alert(json.success);
-						}						
+						}
 						
 						if (json.error) {
 							alert(json.error);
@@ -401,7 +401,7 @@ $(document).ready(function() {
 					error: function(xhr, ajaxOptions, thrownError) {
 						alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
 					}
-				});				
+				});
 			}
 		});
 	});
@@ -409,7 +409,7 @@ $(document).ready(function() {
 	$('#copy').bind('click', function() {
 		$('#dialog').remove();
 		
-		html  = '<div id="dialog">';
+		html	= '<div id="dialog">';
 		html += '<?= $entry_copy; ?> <input type="text" name="name" value="" /> <input type="button" value="<?= $button_submit; ?>" />';
 		html += '</div>';
 
@@ -424,8 +424,8 @@ $(document).ready(function() {
 		
 		$('#dialog input[type=\'button\']').bind('click', function() {
 			path = $('#column-right a.selected').find('input[name=\'image\']').attr('value');
-							 
-			if (path) {																
+							
+			if (path) {
 				$.ajax({
 					url: "<?= HTTP_ADMIN . "index.php?route=common/filemanager/copy"; ?>",
 					type: 'post',
@@ -440,7 +440,7 @@ $(document).ready(function() {
 							tree.select_branch(tree.selected);
 							
 							alert(json.success);
-						}						
+						}
 						
 						if (json.error) {
 							alert(json.error);
@@ -467,7 +467,7 @@ $(document).ready(function() {
 							tree.refresh(tree.selected);
 							
 							alert(json.success);
-						} 						
+						}
 						
 						if (json.error) {
 							alert(json.error);
@@ -476,15 +476,15 @@ $(document).ready(function() {
 					error: function(xhr, ajaxOptions, thrownError) {
 						alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
 					}
-				});				
+				});
 			}
-		});	
+		});
 	});
 	
 	$('#rename').bind('click', function() {
 		$('#dialog').remove();
 		
-		html  = '<div id="dialog">';
+		html	= '<div id="dialog">';
 		html += '<?= $entry_rename; ?> <input type="text" name="name" value="" /> <input type="button" value="<?= $button_submit; ?>" />';
 		html += '</div>';
 
@@ -497,8 +497,8 @@ $(document).ready(function() {
 		
 		$('#dialog input[type=\'button\']').bind('click', function() {
 			path = $('#column-right a.selected').find('input[name=\'image\']').attr('value');
-							 
-			if (path) {		
+							
+			if (path) {
 				$.ajax({
 					url: "<?= HTTP_ADMIN . "index.php?route=common/filemanager/rename"; ?>",
 					type: 'post',
@@ -513,7 +513,7 @@ $(document).ready(function() {
 							tree.select_branch(tree.selected);
 							
 							alert(json.success);
-						} 
+						}
 						
 						if (json.error) {
 							alert(json.error);
@@ -522,11 +522,11 @@ $(document).ready(function() {
 					error: function(xhr, ajaxOptions, thrownError) {
 						alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
 					}
-				});			
+				});
 			} else {
 				var tree = $.tree.focused();
 				
-				$.ajax({ 
+				$.ajax({
 					url: "<?= HTTP_ADMIN . "index.php?route=common/filemanager/rename"; ?>",
 					type: 'post',
 					data: 'path=' + encodeURIComponent($(tree.selected).attr('directory')) + '&name=' + encodeURIComponent($('#dialog input[name=\'name\']').val()),
@@ -540,7 +540,7 @@ $(document).ready(function() {
 							tree.refresh(tree.selected);
 							
 							alert(json.success);
-						} 
+						}
 						
 						if (json.error) {
 							alert(json.error);
@@ -551,7 +551,7 @@ $(document).ready(function() {
 					}
 				});
 			}
-		});		
+		});
 	});
 	
 	new AjaxUpload('#upload', {
@@ -586,7 +586,7 @@ $(document).ready(function() {
 				alert(json.error);
 			}
 			
-			$('.loading').remove();	
+			$('.loading').remove();
 		}
 	});
 	
@@ -594,7 +594,7 @@ $(document).ready(function() {
 		var tree = $.tree.focused();
 		
 		tree.refresh(tree.selected);
-	});	
+	});
 });
 //--></script>
 </body>

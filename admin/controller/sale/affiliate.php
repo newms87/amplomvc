@@ -1,5 +1,5 @@
-<?php	
-class ControllerSaleAffiliate extends Controller { 
+<?php
+class ControllerSaleAffiliate extends Controller {
 	
   
   	public function index() {
@@ -58,7 +58,7 @@ class ControllerSaleAffiliate extends Controller {
 		}
 		
 		$this->getForm();
-  	} 
+  	}
 	
   	public function update() {
 		$this->load->language('sale/affiliate');
@@ -108,7 +108,7 @@ class ControllerSaleAffiliate extends Controller {
 		}
 	
 		$this->getForm();
-  	}	
+  	}
 
   	public function delete() {
 		$this->load->language('sale/affiliate');
@@ -138,7 +138,7 @@ class ControllerSaleAffiliate extends Controller {
 			
 			if (isset($_GET['filter_approved'])) {
 				$url .= '&filter_approved=' . $_GET['filter_approved'];
-			}		
+			}
 		
 			if (isset($_GET['filter_date_added'])) {
 				$url .= '&filter_date_added=' . $_GET['filter_date_added'];
@@ -160,7 +160,7 @@ class ControllerSaleAffiliate extends Controller {
 		}
 	
 		$this->getList();
-  	}  
+  	}
 		
 	public function approve() {
 		$this->load->language('sale/affiliate');
@@ -200,7 +200,7 @@ class ControllerSaleAffiliate extends Controller {
 			
 			if (isset($_GET['filter_approved'])) {
 				$url .= '&filter_approved=' . $_GET['filter_approved'];
-			}	
+			}
 			
 			if (isset($_GET['filter_date_added'])) {
 				$url .= '&filter_date_added=' . $_GET['filter_date_added'];
@@ -216,13 +216,13 @@ class ControllerSaleAffiliate extends Controller {
 							
 			if (isset($_GET['page'])) {
 				$url .= '&page=' . $_GET['page'];
-			}	
+			}
 		
-			$this->url->redirect($this->url->link('sale/affiliate', $url));					
+			$this->url->redirect($this->url->link('sale/affiliate', $url));
 		}
 		
 		$this->getList();
-	} 
+	}
 		
   	private function getList() {
 		$this->template->load('sale/affiliate_list');
@@ -255,12 +255,12 @@ class ControllerSaleAffiliate extends Controller {
 			$filter_date_added = $_GET['filter_date_added'];
 		} else {
 			$filter_date_added = null;
-		}	
+		}
 			
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
 		} else {
-			$sort = 'name'; 
+			$sort = 'name';
 		}
 		
 		if (isset($_GET['order'])) {
@@ -291,7 +291,7 @@ class ControllerSaleAffiliate extends Controller {
 		
 		if (isset($_GET['filter_approved'])) {
 			$url .= '&filter_approved=' . $_GET['filter_approved'];
-		}	
+		}
 			
 		if (isset($_GET['filter_date_added'])) {
 			$url .= '&filter_date_added=' . $_GET['filter_date_added'];
@@ -319,10 +319,10 @@ class ControllerSaleAffiliate extends Controller {
 		$this->data['affiliates'] = array();
 
 		$data = array(
-			'filter_name'		=> $filter_name, 
-			'filter_email'		=> $filter_email, 
-			'filter_status'	=> $filter_status, 
-			'filter_approved'	=> $filter_approved, 
+			'filter_name'		=> $filter_name,
+			'filter_email'		=> $filter_email,
+			'filter_status'	=> $filter_status,
+			'filter_approved'	=> $filter_approved,
 			'filter_date_added' => $filter_date_added,
 			'sort'				=> $sort,
 			'order'				=> $order,
@@ -353,7 +353,7 @@ class ControllerSaleAffiliate extends Controller {
 				'selected'	=> isset($_POST['selected']) && in_array($result['affiliate_id'], $_POST['selected']),
 				'action'		=> $action
 			);
-		}	
+		}
 					
 		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -385,7 +385,7 @@ class ControllerSaleAffiliate extends Controller {
 		
 		if (isset($_GET['filter_approved'])) {
 			$url .= '&filter_approved=' . $_GET['filter_approved'];
-		}	
+		}
 		
 		if (isset($_GET['filter_date_added'])) {
 			$url .= '&filter_date_added=' . $_GET['filter_date_added'];
@@ -439,10 +439,6 @@ class ControllerSaleAffiliate extends Controller {
 
 		$this->pagination->init();
 		$this->pagination->total = $affiliate_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('sale/affiliate', $url);
-			
 		$this->data['pagination'] = $this->pagination->render();
 
 		$this->data['filter_name'] = $filter_name;
@@ -565,7 +561,7 @@ class ControllerSaleAffiliate extends Controller {
 		
 		if (isset($_GET['filter_approved'])) {
 			$url .= '&filter_approved=' . $_GET['filter_approved'];
-		}	
+		}
 		
 		if (isset($_GET['filter_date_added'])) {
 			$url .= '&filter_date_added=' . $_GET['filter_date_added'];
@@ -600,7 +596,7 @@ class ControllerSaleAffiliate extends Controller {
 			
 		if (isset($_POST['firstname'])) {
 				$this->data['firstname'] = $_POST['firstname'];
-		} elseif (!empty($affiliate_info)) { 
+		} elseif (!empty($affiliate_info)) {
 			$this->data['firstname'] = $affiliate_info['firstname'];
 		} else {
 				$this->data['firstname'] = '';
@@ -608,7 +604,7 @@ class ControllerSaleAffiliate extends Controller {
 
 		if (isset($_POST['lastname'])) {
 				$this->data['lastname'] = $_POST['lastname'];
-		} elseif (!empty($affiliate_info)) { 
+		} elseif (!empty($affiliate_info)) {
 			$this->data['lastname'] = $affiliate_info['lastname'];
 		} else {
 				$this->data['lastname'] = '';
@@ -616,7 +612,7 @@ class ControllerSaleAffiliate extends Controller {
 
 		if (isset($_POST['email'])) {
 				$this->data['email'] = $_POST['email'];
-		} elseif (!empty($affiliate_info)) { 
+		} elseif (!empty($affiliate_info)) {
 			$this->data['email'] = $affiliate_info['email'];
 		} else {
 				$this->data['email'] = '';
@@ -624,7 +620,7 @@ class ControllerSaleAffiliate extends Controller {
 
 		if (isset($_POST['telephone'])) {
 				$this->data['telephone'] = $_POST['telephone'];
-		} elseif (!empty($affiliate_info)) { 
+		} elseif (!empty($affiliate_info)) {
 			$this->data['telephone'] = $affiliate_info['telephone'];
 		} else {
 				$this->data['telephone'] = '';
@@ -632,7 +628,7 @@ class ControllerSaleAffiliate extends Controller {
 
 		if (isset($_POST['fax'])) {
 				$this->data['fax'] = $_POST['fax'];
-		} elseif (!empty($affiliate_info)) { 
+		} elseif (!empty($affiliate_info)) {
 			$this->data['fax'] = $affiliate_info['fax'];
 		} else {
 				$this->data['fax'] = '';
@@ -640,7 +636,7 @@ class ControllerSaleAffiliate extends Controller {
 
 		if (isset($_POST['company'])) {
 				$this->data['company'] = $_POST['company'];
-		} elseif (!empty($affiliate_info)) { 
+		} elseif (!empty($affiliate_info)) {
 			$this->data['company'] = $affiliate_info['company'];
 		} else {
 				$this->data['company'] = '';
@@ -648,7 +644,7 @@ class ControllerSaleAffiliate extends Controller {
 		
 		if (isset($_POST['address_1'])) {
 				$this->data['address_1'] = $_POST['address_1'];
-		} elseif (!empty($affiliate_info)) { 
+		} elseif (!empty($affiliate_info)) {
 			$this->data['address_1'] = $affiliate_info['address_1'];
 		} else {
 				$this->data['address_1'] = '';
@@ -656,7 +652,7 @@ class ControllerSaleAffiliate extends Controller {
 				
 		if (isset($_POST['address_2'])) {
 				$this->data['address_2'] = $_POST['address_2'];
-		} elseif (!empty($affiliate_info)) { 
+		} elseif (!empty($affiliate_info)) {
 			$this->data['address_2'] = $affiliate_info['address_2'];
 		} else {
 				$this->data['address_2'] = '';
@@ -664,7 +660,7 @@ class ControllerSaleAffiliate extends Controller {
 
 		if (isset($_POST['city'])) {
 				$this->data['city'] = $_POST['city'];
-		} elseif (!empty($affiliate_info)) { 
+		} elseif (!empty($affiliate_info)) {
 			$this->data['city'] = $affiliate_info['city'];
 		} else {
 				$this->data['city'] = '';
@@ -672,7 +668,7 @@ class ControllerSaleAffiliate extends Controller {
 
 		if (isset($_POST['postcode'])) {
 				$this->data['postcode'] = $_POST['postcode'];
-		} elseif (!empty($affiliate_info)) { 
+		} elseif (!empty($affiliate_info)) {
 			$this->data['postcode'] = $affiliate_info['postcode'];
 		} else {
 				$this->data['postcode'] = '';
@@ -680,7 +676,7 @@ class ControllerSaleAffiliate extends Controller {
 		
 		if (isset($_POST['country_id'])) {
 				$this->data['country_id'] = $_POST['country_id'];
-		} elseif (!empty($affiliate_info)) { 
+		} elseif (!empty($affiliate_info)) {
 			$this->data['country_id'] = $affiliate_info['country_id'];
 		} else {
 				$this->data['country_id'] = '';
@@ -690,7 +686,7 @@ class ControllerSaleAffiliate extends Controller {
 				
 		if (isset($_POST['zone_id'])) {
 				$this->data['zone_id'] = $_POST['zone_id'];
-		} elseif (!empty($affiliate_info)) { 
+		} elseif (!empty($affiliate_info)) {
 			$this->data['zone_id'] = $affiliate_info['zone_id'];
 		} else {
 				$this->data['zone_id'] = '';
@@ -698,7 +694,7 @@ class ControllerSaleAffiliate extends Controller {
 
 		if (isset($_POST['code'])) {
 				$this->data['code'] = $_POST['code'];
-		} elseif (!empty($affiliate_info)) { 
+		} elseif (!empty($affiliate_info)) {
 			$this->data['code'] = $affiliate_info['code'];
 		} else {
 				$this->data['code'] = uniqid();
@@ -706,7 +702,7 @@ class ControllerSaleAffiliate extends Controller {
 		
 		if (isset($_POST['commission'])) {
 				$this->data['commission'] = $_POST['commission'];
-		} elseif (!empty($affiliate_info)) { 
+		} elseif (!empty($affiliate_info)) {
 			$this->data['commission'] = $affiliate_info['commission'];
 		} else {
 				$this->data['commission'] = $this->config->get('config_commission');
@@ -714,47 +710,47 @@ class ControllerSaleAffiliate extends Controller {
 		
 		if (isset($_POST['tax'])) {
 				$this->data['tax'] = $_POST['tax'];
-		} elseif (!empty($affiliate_info)) { 
+		} elseif (!empty($affiliate_info)) {
 			$this->data['tax'] = $affiliate_info['tax'];
 		} else {
 				$this->data['tax'] = '';
-		}		
+		}
 
 		if (isset($_POST['payment'])) {
 				$this->data['payment'] = $_POST['payment'];
-		} elseif (!empty($affiliate_info)) { 
+		} elseif (!empty($affiliate_info)) {
 			$this->data['payment'] = $affiliate_info['payment'];
 		} else {
 				$this->data['payment'] = 'cheque';
-		}	
+		}
 
 		if (isset($_POST['cheque'])) {
 				$this->data['cheque'] = $_POST['cheque'];
-		} elseif (!empty($affiliate_info)) { 
+		} elseif (!empty($affiliate_info)) {
 			$this->data['cheque'] = $affiliate_info['cheque'];
 		} else {
 				$this->data['cheque'] = '';
-		}	
+		}
 
 		if (isset($_POST['paypal'])) {
 				$this->data['paypal'] = $_POST['paypal'];
-		} elseif (!empty($affiliate_info)) { 
+		} elseif (!empty($affiliate_info)) {
 			$this->data['paypal'] = $affiliate_info['paypal'];
 		} else {
 				$this->data['paypal'] = '';
-		}	
+		}
 
 		if (isset($_POST['bank_name'])) {
 				$this->data['bank_name'] = $_POST['bank_name'];
-		} elseif (!empty($affiliate_info)) { 
+		} elseif (!empty($affiliate_info)) {
 			$this->data['bank_name'] = $affiliate_info['bank_name'];
 		} else {
 				$this->data['bank_name'] = '';
-		}	
+		}
 
 		if (isset($_POST['bank_branch_number'])) {
 				$this->data['bank_branch_number'] = $_POST['bank_branch_number'];
-		} elseif (!empty($affiliate_info)) { 
+		} elseif (!empty($affiliate_info)) {
 			$this->data['bank_branch_number'] = $affiliate_info['bank_branch_number'];
 		} else {
 				$this->data['bank_branch_number'] = '';
@@ -762,7 +758,7 @@ class ControllerSaleAffiliate extends Controller {
 
 		if (isset($_POST['bank_swift_code'])) {
 				$this->data['bank_swift_code'] = $_POST['bank_swift_code'];
-		} elseif (!empty($affiliate_info)) { 
+		} elseif (!empty($affiliate_info)) {
 			$this->data['bank_swift_code'] = $affiliate_info['bank_swift_code'];
 		} else {
 				$this->data['bank_swift_code'] = '';
@@ -770,7 +766,7 @@ class ControllerSaleAffiliate extends Controller {
 
 		if (isset($_POST['bank_account_name'])) {
 				$this->data['bank_account_name'] = $_POST['bank_account_name'];
-		} elseif (!empty($affiliate_info)) { 
+		} elseif (!empty($affiliate_info)) {
 			$this->data['bank_account_name'] = $affiliate_info['bank_account_name'];
 		} else {
 				$this->data['bank_account_name'] = '';
@@ -778,7 +774,7 @@ class ControllerSaleAffiliate extends Controller {
 
 		if (isset($_POST['bank_account_number'])) {
 				$this->data['bank_account_number'] = $_POST['bank_account_number'];
-		} elseif (!empty($affiliate_info)) { 
+		} elseif (!empty($affiliate_info)) {
 			$this->data['bank_account_number'] = $affiliate_info['bank_account_number'];
 		} else {
 				$this->data['bank_account_number'] = '';
@@ -786,19 +782,19 @@ class ControllerSaleAffiliate extends Controller {
 																												
 		if (isset($_POST['status'])) {
 				$this->data['status'] = $_POST['status'];
-		} elseif (!empty($affiliate_info)) { 
+		} elseif (!empty($affiliate_info)) {
 			$this->data['status'] = $affiliate_info['status'];
 		} else {
 				$this->data['status'] = 1;
 		}
 
-		if (isset($_POST['password'])) { 
+		if (isset($_POST['password'])) {
 			$this->data['password'] = $_POST['password'];
 		} else {
 			$this->data['password'] = '';
 		}
 		
-		if (isset($_POST['confirm'])) { 
+		if (isset($_POST['confirm'])) {
 			$this->data['confirm'] = $_POST['confirm'];
 		} else {
 			$this->data['confirm'] = '';
@@ -882,21 +878,21 @@ class ControllerSaleAffiliate extends Controller {
 		}
 					
 		return $this->error ? false : true;
-  	}	
+  	}
 
   	private function validateDelete() {
 		if (!$this->user->hasPermission('modify', 'sale/affiliate')) {
 				$this->error['warning'] = $this->_('error_permission');
-		}	
+		}
 		
-		return $this->error ? false : true;  
-  	} 
+		return $this->error ? false : true;
+  	}
 
 	public function transaction() {
 		$this->template->load('sale/affiliate_transaction');
 		$this->language->load('sale/affiliate');
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->user->hasPermission('modify', 'sale/affiliate')) { 
+		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->user->hasPermission('modify', 'sale/affiliate')) {
 			$this->model_sale_affiliate->addTransaction($_GET['affiliate_id'], $_POST['description'], $_POST['amount']);
 				
 			$this->language->set('success', $this->_('text_success'));
@@ -914,7 +910,7 @@ class ControllerSaleAffiliate extends Controller {
 			$page = $_GET['page'];
 		} else {
 			$page = 1;
-		}  
+		}
 		
 		$this->data['transactions'] = array();
 			
@@ -926,7 +922,7 @@ class ControllerSaleAffiliate extends Controller {
 				'description' => $result['description'],
 				'date_added'  => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short'))
 			);
-			}			
+			}
 		
 		$this->data['balance'] = $this->currency->format($this->model_sale_affiliate->getTransactionTotal($_GET['affiliate_id']), $this->config->get('config_currency'));
 		
@@ -934,10 +930,6 @@ class ControllerSaleAffiliate extends Controller {
 			
 		$this->pagination->init();
 		$this->pagination->total = $transaction_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('sale/affiliate/transaction', 'affiliate_id=' . $_GET['affiliate_id']);
-			
 		$this->data['pagination'] = $this->pagination->render();
 
 		
@@ -965,5 +957,5 @@ class ControllerSaleAffiliate extends Controller {
 		}
 		
 		$this->response->setOutput(json_encode($affiliate_data));
-	}		
+	}
 }

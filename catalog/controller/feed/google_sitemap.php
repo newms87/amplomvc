@@ -12,7 +12,7 @@ class ControllerFeedGoogleSitemap extends Controller {
 			$output .= '<loc>' . $this->url->link('product/product', 'product_id=' . $product['product_id']) . '</loc>';
 			$output .= '<changefreq>weekly</changefreq>';
 			$output .= '<priority>1.0</priority>';
-			$output .= '</url>';	
+			$output .= '</url>';
 		}
 		
 		$output .= $this->getCategories(0);
@@ -24,7 +24,7 @@ class ControllerFeedGoogleSitemap extends Controller {
 			$output .= '<loc>' . $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $manufacturer['manufacturer_id']) . '</loc>';
 			$output .= '<changefreq>weekly</changefreq>';
 			$output .= '<priority>0.7</priority>';
-			$output .= '</url>';	
+			$output .= '</url>';
 			
 			$products = $this->model_catalog_product->getProducts(array('filter_manufacturer_id' => $manufacturer['manufacturer_id']));
 			
@@ -33,8 +33,8 @@ class ControllerFeedGoogleSitemap extends Controller {
 				$output .= '<loc>' . $this->url->link('product/product', 'manufacturer_id=' . $manufacturer['manufacturer_id'] . '&product_id=' . $product['product_id']) . '</loc>';
 				$output .= '<changefreq>weekly</changefreq>';
 				$output .= '<priority>1.0</priority>';
-				$output .= '</url>';	
-			}			
+				$output .= '</url>';
+			}
 		}
 		
 		$informations = $this->model_catalog_information->getInformations();
@@ -44,7 +44,7 @@ class ControllerFeedGoogleSitemap extends Controller {
 			$output .= '<loc>' . $this->url->link('information/information', 'information_id=' . $information['information_id']) . '</loc>';
 			$output .= '<changefreq>weekly</changefreq>';
 			$output .= '<priority>0.5</priority>';
-			$output .= '</url>';	
+			$output .= '</url>';
 		}
 		
 		$output .= '</urlset>';
@@ -70,7 +70,7 @@ class ControllerFeedGoogleSitemap extends Controller {
 		$output .= '<loc>' . $this->url->link('product/category', 'path=' . $new_path) . '</loc>';
 		$output .= '<changefreq>weekly</changefreq>';
 		$output .= '<priority>0.7</priority>';
-		$output .= '</url>';			
+		$output .= '</url>';
 
 		$products = $this->model_catalog_product->getProducts(array('filter_category_id' => $result['category_id']));
 		
@@ -79,12 +79,12 @@ class ControllerFeedGoogleSitemap extends Controller {
 			$output .= '<loc>' . $this->url->link('product/product', 'path=' . $new_path . '&product_id=' . $product['product_id']) . '</loc>';
 			$output .= '<changefreq>weekly</changefreq>';
 			$output .= '<priority>1.0</priority>';
-			$output .= '</url>';	
-		}	
+			$output .= '</url>';
+		}
 		
 			$output .= $this->getCategories($result['category_id'], $new_path);
 	}
 
 	return $output;
-	}		
+	}
 }

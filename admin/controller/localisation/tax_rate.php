@@ -7,7 +7,7 @@ class ControllerLocalisationTaxRate extends Controller {
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		$this->getList(); 
+		$this->getList();
 	}
 
 	public function insert() {
@@ -141,7 +141,7 @@ class ControllerLocalisationTaxRate extends Controller {
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/tax_rate', $url));
 
 		$this->data['insert'] = $this->url->link('localisation/tax_rate/insert', $url);
-		$this->data['delete'] = $this->url->link('localisation/tax_rate/delete', $url);		
+		$this->data['delete'] = $this->url->link('localisation/tax_rate/delete', $url);
 		
 		$this->data['tax_rates'] = array();
 		
@@ -168,12 +168,12 @@ class ControllerLocalisationTaxRate extends Controller {
 				'tax_rate_id'	=> $result['tax_rate_id'],
 				'name'			=> $result['name'],
 				'rate'			=> $result['rate'],
-				'type'			=> ($result['type'] == 'F' ? $this->_('text_amount') : $this->_('text_percent')),				
+				'type'			=> ($result['type'] == 'F' ? $this->_('text_amount') : $this->_('text_percent')),
 				'geo_zone'		=> $result['geo_zone'],
 				'date_added'	=> $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
 				'date_modified' => $this->tool->format_datetime($result['date_modified'], $this->language->getInfo('date_format_short')),
 				'selected'		=> isset($_POST['selected']) && in_array($result['tax_rate_id'], $_POST['selected']),
-				'action'		=> $action				
+				'action'		=> $action
 			);
 		}
 
@@ -222,10 +222,6 @@ class ControllerLocalisationTaxRate extends Controller {
 
 		$this->pagination->init();
 		$this->pagination->total = $tax_rate_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('localisation/tax_rate', $url);
-
 		$this->data['pagination'] = $this->pagination->render();
 
 		$this->data['sort'] = $sort;
@@ -319,7 +315,7 @@ class ControllerLocalisationTaxRate extends Controller {
 			$this->data['tax_rate_customer_group'] = $this->model_localisation_tax_rate->getTaxRateCustomerGroups($_GET['tax_rate_id']);
 		} else {
 			$this->data['tax_rate_customer_group'] = array();
-		}	
+		}
 		
 		$this->data['customer_groups'] = $this->model_sale_customer_group->getCustomerGroups();
 						
@@ -371,5 +367,5 @@ class ControllerLocalisationTaxRate extends Controller {
 		}
 				
 		return $this->error ? false : true;
-	}	
+	}
 }

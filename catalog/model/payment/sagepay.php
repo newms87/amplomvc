@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ModelPaymentSagePay extends Model {
   	public function getMethod($address, $total) {
 		$this->load->language('payment/sagepay');
@@ -13,12 +13,12 @@ class ModelPaymentSagePay extends Model {
 			$status = true;
 		} else {
 			$status = false;
-		}	
+		}
 		
 		$method_data = array();
 	
-		if ($status) {  
-				$method_data = array( 
+		if ($status) {
+				$method_data = array(
 				'code'		=> 'sagepay',
 				'title'		=> $this->_('text_title'),
 				'sort_order' => $this->config->get('sagepay_sort_order')

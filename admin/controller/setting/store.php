@@ -13,7 +13,7 @@ class ControllerSettingStore extends Controller {
   	public function insert() {
 		$this->load->language('setting/store');
 
-		$this->document->setTitle($this->_('heading_title')); 
+		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			
@@ -79,7 +79,7 @@ class ControllerSettingStore extends Controller {
 		$this->data['admin_settings'] = $this->url->link('setting/setting');
 		
 		$this->data['insert'] = $this->url->link('setting/store/insert');
-		$this->data['delete'] = $this->url->link('setting/store/delete');	
+		$this->data['delete'] = $this->url->link('setting/store/delete');
 
 		$store_total = $this->model_setting_store->getTotalStores();
 	
@@ -94,7 +94,7 @@ class ControllerSettingStore extends Controller {
 					'href' => $this->url->link('setting/setting')
 				);
 			}
-			else{			
+			else{
 				$action[] = array(
 					'text' => $this->_('text_edit'),
 					'href' => $this->url->link('setting/store/update', 'store_id=' . $store['store_id'])
@@ -104,7 +104,7 @@ class ControllerSettingStore extends Controller {
 			$store['action'] = $action;
 			
 			if($store['store_id'] === 0){
-				$store['name'] .= $this->_('text_default'); 
+				$store['name'] .= $this->_('text_default');
 			}
 			
 			$store['selected'] = isset($_POST['selected']) && in_array($store['store_id'], $_POST['selected']);
@@ -265,7 +265,7 @@ class ControllerSettingStore extends Controller {
 		
 		if (!$this->validation->url($_POST['ssl'])) {
 			$this->error['ssl'] = $this->_('error_ssl');
-		}	
+		}
 		
 		if ((strlen($_POST['config_owner']) < 3) || (strlen($_POST['config_owner']) > 64)) {
 			$this->error['config_owner'] = $this->_('error_owner');
@@ -285,7 +285,7 @@ class ControllerSettingStore extends Controller {
 		
 		if (!$_POST['config_title']) {
 			$this->error['config_title'] = $this->_('error_title');
-		}	
+		}
 		
 		if (!$_POST['config_image_category_width'] || !$_POST['config_image_category_height']) {
 			$this->error['config_image_category_height'] = $this->_('error_image_category');
@@ -293,7 +293,7 @@ class ControllerSettingStore extends Controller {
 				
 		if (!$_POST['config_image_thumb_width'] || !$_POST['config_image_thumb_height']) {
 			$this->error['config_image_thumb_height'] = $this->_('error_image_thumb');
-		}	
+		}
 		
 		if (!$_POST['config_image_popup_width'] || !$_POST['config_image_popup_height']) {
 			$this->error['config_image_popup_height'] = $this->_('error_image_popup');
@@ -344,11 +344,11 @@ class ControllerSettingStore extends Controller {
 	
 			if ($store_total) {
 				$this->error['warning'] = sprintf($this->_('error_store'), $store_total);
-			}	
+			}
 		}
 		
 		if (!$this->error) {
-			return true; 
+			return true;
 		} else {
 			return false;
 		}

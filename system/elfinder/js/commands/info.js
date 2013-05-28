@@ -1,6 +1,6 @@
 "use strict";
 /**
- * @class elFinder command "info". 
+ * @class elFinder command "info".
  * Display dialog with file properties.
  *
  * @author Dmitry (dio) Levashov, dio@std42.ru
@@ -71,7 +71,7 @@ elFinder.prototype.commands.info = function() {
 			count = [],
 			replSpinner = function(msg) { dialog.find('.'+spclass).parent().text(msg); },
 			id = fm.namespace+'-info-'+$.map(files, function(f) { return f.hash }).join('-'),
-			dialog = fm.getUI().find('#'+id), 
+			dialog = fm.getUI().find('#'+id),
 			size, tmb, file, title, dcnt;
 			
 		if (!cnt) {
@@ -137,7 +137,7 @@ elFinder.prototype.commands.info = function() {
 			dcnt  = $.map(files, function(f) { return f.mime == 'directory' ? 1 : null }).length;
 			if (!dcnt) {
 				size = 0;
-				$.each(files, function(h, f) { 
+				$.each(files, function(h, f) {
 					var s = parseInt(f.size);
 					
 					if (s >= 0 && size >= 0) {

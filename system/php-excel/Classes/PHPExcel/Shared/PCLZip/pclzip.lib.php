@@ -68,7 +68,7 @@
 
   // ----- Optional threshold ratio for use of temporary files
   //		Pclzip sense the size of the file to add/extract and decide to
-  //		use or not temporary file. The algorythm is looking for 
+  //		use or not temporary file. The algorythm is looking for
   //		memory_limit of PHP and apply a ratio.
   //		threshold = memory_limit * ratio.
   //		Recommended values are under 0.5. Default 0.47.
@@ -996,7 +996,7 @@
   // Options :
   //	PCLZIP_OPT_BY_INDEX :
   //	PCLZIP_OPT_BY_NAME :
-  //	PCLZIP_OPT_BY_EREG : 
+  //	PCLZIP_OPT_BY_EREG :
   //	PCLZIP_OPT_BY_PREG :
   // Return Values :
   //	0 on failure,
@@ -1989,7 +1989,7 @@
   //	or a string to be added as file. For any other type of files (link, other)
   //	just ignore the item.
   //	Then prepare the information that will be stored for that file.
-  //	When its a folder, expand the folder with all the files that are in that 
+  //	When its a folder, expand the folder with all the files that are in that
   //	folder (recursively).
   // Parameters :
   // Return Values :
@@ -2455,7 +2455,7 @@
   // Function : privAddFileList()
   // Description :
   // Parameters :
-  //	$p_filedescr_list : An array containing the file description 
+  //	$p_filedescr_list : An array containing the file description
   //							or directory names to add in the zip
   //	$p_result_list : list of added files with their properties (specially the status field)
   // Return Values :
@@ -2538,7 +2538,7 @@
 		return PclZip::errorCode();
 	}
   
-	// ----- Look for a stored different filename 
+	// ----- Look for a stored different filename
 	/* TBC : Removed
 	if (isset($p_filedescr['stored_filename'])) {
 		$v_stored_filename = $p_filedescr['stored_filename'];
@@ -2650,7 +2650,7 @@
 		// ----- Look for a file
 		if ($p_filedescr['type'] == 'file') {
 		// ----- Look for using temporary file to zip
-		if ( (!isset($p_options[PCLZIP_OPT_TEMP_FILE_OFF])) 
+		if ( (!isset($p_options[PCLZIP_OPT_TEMP_FILE_OFF]))
 				&& (isset($p_options[PCLZIP_OPT_TEMP_FILE_ON])
 					|| (isset($p_options[PCLZIP_OPT_TEMP_FILE_THRESHOLD])
 						&& ($p_options[PCLZIP_OPT_TEMP_FILE_THRESHOLD] <= $p_header['size'])) ) ) {
@@ -3389,7 +3389,7 @@
 
 		// ----- Look for extract by ereg rule
 		// ereg() is deprecated with PHP 5.3
-		/* 
+		/*
 		else if (	(isset($p_options[PCLZIP_OPT_BY_EREG]))
 					&& ($p_options[PCLZIP_OPT_BY_EREG] != "")) {
 
@@ -3675,7 +3675,7 @@
 	if (isset($p_options[PCLZIP_OPT_EXTRACT_DIR_RESTRICTION])) {
 		$v_inclusion
 		= PclZipUtilPathInclusion($p_options[PCLZIP_OPT_EXTRACT_DIR_RESTRICTION],
-										$p_entry['filename']); 
+										$p_entry['filename']);
 		if ($v_inclusion == 0) {
 
 		PclZip::privErrorLog(PCLZIP_ERR_DIRECTORY_RESTRICTION,
@@ -3845,7 +3845,7 @@
 				$v_binary_data = pack('a'.$v_read_size, $v_buffer);
 				@fwrite($v_dest_file, $v_binary_data, $v_read_size);
 				*/
-				@fwrite($v_dest_file, $v_buffer, $v_read_size);				
+				@fwrite($v_dest_file, $v_buffer, $v_read_size);
 				$v_size -= $v_read_size;
 			}
 
@@ -3867,7 +3867,7 @@
 
 
 			// ----- Look for using temporary file to unzip
-			if ( (!isset($p_options[PCLZIP_OPT_TEMP_FILE_OFF])) 
+			if ( (!isset($p_options[PCLZIP_OPT_TEMP_FILE_OFF]))
 				&& (isset($p_options[PCLZIP_OPT_TEMP_FILE_ON])
 						|| (isset($p_options[PCLZIP_OPT_TEMP_FILE_THRESHOLD])
 							&& ($p_options[PCLZIP_OPT_TEMP_FILE_THRESHOLD] <= $p_entry['size'])) ) ) {
@@ -4589,9 +4589,9 @@
 
 		// -----  Add the byte
 		//$v_bytes = ($v_bytes << 8) | Ord($v_byte);
-		// Note we mask the old value down such that once shifted we can never end up with more than a 32bit number 
-		// Otherwise on systems where we have 64bit integers the check below for the magic number will fail. 
-		$v_bytes = ( ($v_bytes & 0xFFFFFF) << 8) | Ord($v_byte); 
+		// Note we mask the old value down such that once shifted we can never end up with more than a 32bit number
+		// Otherwise on systems where we have 64bit integers the check below for the magic number will fail.
+		$v_bytes = ( ($v_bytes & 0xFFFFFF) << 8) | Ord($v_byte);
 
 		// ----- Compare the bytes
 		if ($v_bytes == 0x504b0506)

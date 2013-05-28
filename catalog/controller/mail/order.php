@@ -4,38 +4,21 @@ class ControllerMailOrder extends Controller {
 	public function index($order_info){
 		$order_id = $order_info['order_id'];
 		
-		// Send out order confirmation mail
-		$language = new Language($order_info['language_directory'], $this->plugin_handler);
-		$language->load($order_info['language_filename']);
-		$language->load('mail/order');
-	
-		$subject = $language->format('text_subject', html_entity_decode($order_info['store_name'], ENT_QUOTES, 'UTF-8'), $order_id);
+		//Order Information
+		$this->data = $order_info;
 		
-		$language->format('text_greeting', html_entity_decode($order_info['store_name'], ENT_QUOTES, 'UTF-8'));
-		
-		$this->data += $language->data;
-		
-		//order information
-		$this->data['order_id'] = $order_info['order_id'];
-		$this->data['order_status'] = $order_info['order_status'];
-		$this->data['comment'] = $order_info['comment'];
-		$this->data['notify_comment'] = $order_info['notify_comment'];
-		
-		//store information
-		$this->data['logo'] = $this->image->get($this->config->get('config_logo'));	
-		$this->data['store_name'] = $order_info['store_name'];
-		$this->data['store_url'] = $order_info['store_url'];
-		$this->data['title'] = $order_info['store_name'];
+		$this->data['logo'] = $this->image->get($this->config->get('config_logo'));
 		$this->data['link'] = $order_info['store_url'] . 'index.php?route=account/order/info&order_id=' . $order_id;
+		$this->data['date_added'] = $this->tool->format_date($order_info['date_added'], $language->getInfo('date_format_short'));
 		
-		//customer information
-		$this->data['customer_id'] = $order_info['customer_id'];
-		$this->data['date_added'] = $this->tool->format_date($order_info['date_added'], $language->getInfo('date_format_short'));		
-		$this->data['payment_method'] = $order_info['payment_method'];
-		$this->data['shipping_method'] = $order_info['shipping_method'];
-		$this->data['email'] = $order_info['email'];
-		$this->data['telephone'] = $order_info['telephone'];
-		$this->data['ip'] = $order_info['ip'];
+		//Language data
+		$language = $this->language->fetch('mail/order', $order_info['language_directory']);
+		$language += $this->language->fetch($order_info['language_filename'], $order_info['language_directory']);
+		
+		$language['text_subject'] = sprintf($language['text_subject'], html_entity_decode($order_info['store_name'], ENT_QUOTES, 'UTF-8'), $order_id);
+		$language['text_greeting'] = sprintf($language['text_greeting'], html_entity_decode($order_info['store_name'], ENT_QUOTES, 'UTF-8'));
+		
+		$this->data += $language;
 		
 		//shipping address
 		if ($order_info['shipping_address_format']) {
@@ -58,7 +41,6 @@ class ControllerMailOrder extends Controller {
 		);
 	
 		$this->data['shipping_address'] = $this->tool->insertables($insertables, $format, '{', '}');
-		
 		
 		//payment address
 		if ($order_info['payment_address_format']) {
@@ -90,7 +72,6 @@ class ControllerMailOrder extends Controller {
 		
 		$this->data['order_vouchers'] = $order_info['order_vouchers'];
 		
-		
 		//Products
 		foreach ($order_info['order_products'] as &$product) {
 			$product['price'] = $this->currency->format($product['price'], $order_info['currency_code'], $order_info['currency_value']);
@@ -105,7 +86,6 @@ class ControllerMailOrder extends Controller {
 		}unset($product);
 		
 		$this->data['order_products'] = $order_info['order_products'];
-		
 		
 		//Totals
 		foreach ($order_info['order_totals'] as &$total) {
@@ -132,7 +112,7 @@ class ControllerMailOrder extends Controller {
 		$text = $this->render();
 		
 		$this->mail->init();
-			
+		
 		$this->mail->setTo($order_info['email']);
 		$this->mail->setCopyTo($this->config->get('config_email'));
 		$this->mail->setFrom($this->config->get('config_email'));

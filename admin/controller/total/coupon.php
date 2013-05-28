@@ -2,7 +2,7 @@
 class ControllerTotalCoupon extends Controller {
 	
 	
-	public function index() { 
+	public function index() {
 		$this->template->load('total/coupon');
 
 		$this->load->language('total/coupon');
@@ -56,6 +56,6 @@ class ControllerTotalCoupon extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

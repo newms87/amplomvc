@@ -22,12 +22,6 @@ class ControllerPaymentLiqPay extends Controller {
 		
 		$this->data['xml'] = base64_encode($xml);
 		$this->data['signature'] = base64_encode(sha1($this->config->get('liqpay_signature') . $xml . $this->config->get('liqpay_signature'), true));
-		
-
-
-
-
-
 
 		$this->render();
 	}
@@ -42,7 +36,7 @@ class ControllerPaymentLiqPay extends Controller {
 		$order_id = substr($xml, $posleft + 9, $posright - $posleft - 10);
 		
 		if ($signature == $_POST['signature']) {
-			$this->model_checkout_order->confirm($order_id, $this->config->get('config_order_status_id'));			
+			$this->model_checkout_order->confirm($order_id, $this->config->get('config_order_status_id'));
 		}
 	}
 }

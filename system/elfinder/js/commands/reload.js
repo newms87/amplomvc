@@ -25,8 +25,8 @@ elFinder.prototype.commands.reload = function() {
 				dfrd.always(function() { fm.notify({type : 'reload', cnt  : -1}); });
 			}, fm.notifyDelay);
 			
-		return dfrd.always(function() { 
-			clearTimeout(timeout); 
+		return dfrd.always(function() {
+			clearTimeout(timeout);
 			fm.trigger('reload');
 		});
 	}

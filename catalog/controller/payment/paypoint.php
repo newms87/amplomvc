@@ -13,7 +13,7 @@ class ControllerPaymentPaypoint extends Controller {
 			$this->data['digest'] = md5($this->session->data['order_id'] . $this->currency->format($order_info['total'], $order_info['currency_code'], $order_info['currency_value'], false) . $this->config->get('paypoint_password'));
 		} else {
 			$this->data['digest'] = '';
-		}		
+		}
 		
 		$this->data['bill_name'] = $order_info['payment_firstname'] . ' ' . $order_info['payment_lastname'];
 		$this->data['bill_addr_1'] = $order_info['payment_address_1'];
@@ -60,12 +60,6 @@ class ControllerPaymentPaypoint extends Controller {
 		}
 		
 		$this->data['options'] = 'test_status=' . $status . ',dups=false,cb_post=false';
-	
-
-
-
-
-
 
 		$this->render();
 	}
@@ -75,7 +69,7 @@ class ControllerPaymentPaypoint extends Controller {
 			$order_id = $_GET['trans_id'];
 		} else {
 			$order_id = 0;
-		}	
+		}
 		
 		$order_info = $this->model_checkout_order->getOrder($order_id);
 		
@@ -133,12 +127,6 @@ class ControllerPaymentPaypoint extends Controller {
 				$this->model_checkout_order->update_order($order_id, $this->config->get('paypoint_order_status_id'), $message, false);
 	
 				$this->data['continue'] = $this->url->link('checkout/success');
-	
-
-
-
-
-
 
 				$this->children = array(
 					'common/column_left',
@@ -154,12 +142,6 @@ class ControllerPaymentPaypoint extends Controller {
 		$this->template->load('payment/paypoint_failure');
 
 				$this->data['continue'] = $this->url->link('cart/cart');
-	
-
-
-
-
-
 
 				$this->children = array(
 					'common/column_left',

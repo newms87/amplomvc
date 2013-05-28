@@ -49,12 +49,12 @@ class ControllerReportFlashsaleViewed extends Controller {
 																		'ip_total'=>1,'ip_addr'=>array($fv['ip_address']),
 																		'ip_user_total'=>1
 																		);
-			} 
+			}
 		}
 		
-		$flashsale_viewed_total = $this->model_report_flashsale->getTotalFlashsalesViewed($data); 
+		$flashsale_viewed_total = $this->model_report_flashsale->getTotalFlashsalesViewed($data);
 		
-		$flashsale_views_total = $this->model_report_flashsale->getTotalFlashsaleViews(); 
+		$flashsale_views_total = $this->model_report_flashsale->getTotalFlashsaleViews();
 		
 		$this->data['flashsales'] = array();
 		
@@ -75,7 +75,7 @@ class ControllerReportFlashsaleViewed extends Controller {
 				'ip_total'=> $flashsale_views[$result['flashsale_id']]['ip_total'],
 				'user_total'=> $flashsale_views[$result['flashsale_id']]['user_total'],
 				'ip_user_total'=> $flashsale_views[$result['flashsale_id']]['ip_user_total'],
-				'percent' => $percent . '%'			
+				'percent' => $percent . '%'
 			);
 		}
  		
@@ -85,10 +85,6 @@ class ControllerReportFlashsaleViewed extends Controller {
 						
 		$this->pagination->init();
 		$this->pagination->total = $flashsale_viewed_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('report/flashsale_viewed');
-			
 		$this->data['pagination'] = $this->pagination->render();
 				
 		$this->children = array(

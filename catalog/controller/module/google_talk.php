@@ -1,4 +1,4 @@
-<?php  
+<?php
 class ControllerModuleGoogleTalk extends Controller {
 	protected function index() {
 		$this->template->load('module/google_talk');

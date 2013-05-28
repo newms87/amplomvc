@@ -73,13 +73,13 @@ function addSingleImage(imageName, field, thumb) {
 function image_manager(query) {
 	query = query || '';
 	
-	$('#im_dialog').remove();  
+	$('#im_dialog').remove();
 	$('#content').prepend('<div id="im_dialog"><iframe src="' + image_manager_url + query + '" frameborder="no" scrolling="auto"></iframe></div>');
 	
 	$('#im_dialog').dialog({
 		title: 'File Manager',
-		close: function (event, ui) {	
-		}, 
+		close: function (event, ui) {
+		},
 		bgiframe: false,
 		width: 800,
 		height: 620,

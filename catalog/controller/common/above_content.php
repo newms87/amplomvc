@@ -1,4 +1,4 @@
-<?php  
+<?php
 class ControllerCommonAboveContent extends Controller {
 	public function index() {
 		$this->template->load('common/above_content');
@@ -25,7 +25,7 @@ class ControllerCommonAboveContent extends Controller {
 			}
 		}
 		
-		$sort_order = array(); 
+		$sort_order = array();
 	
 		foreach ($module_data as $key => $value) {
 			$sort_order[$key] = $value['sort_order'];

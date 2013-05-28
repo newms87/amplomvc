@@ -7,7 +7,7 @@ class ControllerAccountReward extends Controller {
 			$this->session->data['redirect'] = $this->url->link('account/reward');
 			
 			$this->url->redirect($this->url->link('account/login'));
-		}		
+		}
 		
 		$this->language->load('account/reward');
 
@@ -21,11 +21,11 @@ class ControllerAccountReward extends Controller {
 			$page = $_GET['page'];
 		} else {
 			$page = 1;
-		}		
+		}
 		
 		$this->data['rewards'] = array();
 		
-		$data = array(				
+		$data = array(
 			'sort'  => 'date_added',
 			'order' => 'DESC',
 			'start' => ($page - 1) * 10,
@@ -44,25 +44,15 @@ class ControllerAccountReward extends Controller {
 				'date_added'  => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
 				'href'		=> $this->url->link('account/order/info', 'order_id=' . $result['order_id'])
 			);
-		}	
+		}
 
 		$this->pagination->init();
 		$this->pagination->total = $reward_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = 10; 
-		$this->pagination->url = $this->url->link('account/reward');
-			
 		$this->data['pagination'] = $this->pagination->render();
 		
 		$this->data['total'] = (int)$this->customer->getRewardPoints();
 		
 		$this->data['continue'] = $this->url->link('account/account');
-		
-
-
-
-
-
 
 		$this->children = array(
 			'common/column_left',
@@ -70,9 +60,9 @@ class ControllerAccountReward extends Controller {
 			'common/content_top',
 			'common/content_bottom',
 			'common/footer',
-			'common/header'	
+			'common/header'
 		);
 						
-		$this->response->setOutput($this->render());		
-	} 		
+		$this->response->setOutput($this->render());
+	}
 }

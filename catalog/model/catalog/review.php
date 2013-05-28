@@ -1,5 +1,5 @@
 <?php
-class ModelCatalogReview extends Model {		
+class ModelCatalogReview extends Model {
 	public function addReview($product_id, $data) {
 		$this->query("INSERT INTO " . DB_PREFIX . "review SET author = '" . $this->db->escape($data['name']) . "', customer_id = '" . (int)$this->customer->getId() . "', product_id = '" . (int)$product_id . "', text = '" . $this->db->escape($data['text']) . "', rating = '" . (int)$data['rating'] . "', date_added = NOW()");
 	}
@@ -18,7 +18,7 @@ class ModelCatalogReview extends Model {
 		} else {
 			return 0;
 		}
-	}	
+	}
 	
 	public function getTotalReviews() {
 		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "review r LEFT JOIN " . DB_PREFIX . "product p ON (r.product_id = p.product_id) WHERE p.date_available <= NOW() AND p.status = '1' AND r.status = '1'");

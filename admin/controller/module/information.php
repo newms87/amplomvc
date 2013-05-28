@@ -2,7 +2,7 @@
 class ControllerModuleInformation extends Controller {
 	
 	
-	public function index() {	
+	public function index() {
 		$this->template->load('module/information');
 
 		$this->load->language('module/information');
@@ -10,7 +10,7 @@ class ControllerModuleInformation extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('information', $_POST);		
+			$this->model_setting_setting->editSetting('information', $_POST);
 					
 			$this->message->add('success', $this->_('text_success'));
 						
@@ -35,9 +35,9 @@ class ControllerModuleInformation extends Controller {
 		
 		if (isset($_POST['information_module'])) {
 			$this->data['modules'] = $_POST['information_module'];
-		} elseif ($this->config->get('information_module')) { 
+		} elseif ($this->config->get('information_module')) {
 			$this->data['modules'] = $this->config->get('information_module');
-		}		
+		}
 		
 		$this->data['layouts'] = $this->model_design_layout->getLayouts();
 
@@ -54,6 +54,6 @@ class ControllerModuleInformation extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

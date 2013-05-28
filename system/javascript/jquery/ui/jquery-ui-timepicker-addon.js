@@ -3,12 +3,12 @@
 * By: Trent Richardson [http://trentrichardson.com]
 * Version 0.9.5
 * Last Modified: 05/25/2011
-* 
+*
 * Copyright 2011 Trent Richardson
 * Dual licensed under the MIT and GPL licenses.
 * http://trentrichardson.com/Impromptu/GPL-LICENSE.txt
 * http://trentrichardson.com/Impromptu/MIT-LICENSE.txt
-* 
+*
 * HERES THE CSS:
 * .ui-timepicker-div .ui-widget-header{ margin-bottom: 8px; }
 * .ui-timepicker-div dl{ text-align: left; }
@@ -180,7 +180,7 @@ $.extend(Timepicker.prototype, {
 	//########################################################################
 	_addTimePicker: function(dp_inst) {
 		var currDT = (this.$altInput && this._defaults.altFieldTimeOnly) ?
-				this.$input.val() + ' ' + this.$altInput.val() : 
+				this.$input.val() + ' ' + this.$altInput.val() :
 				this.$input.val();
 
 		this.timeDefined = this._parseTime(currDT);
@@ -222,9 +222,9 @@ $.extend(Timepicker.prototype, {
 					(treg[order.t].charAt(0).toUpperCase() == 'A') ? 'AM' : 'PM').toUpperCase();
 
 			if (order.h !== -1) {
-				if (this.ampm == 'AM' && treg[order.h] == '12') 
+				if (this.ampm == 'AM' && treg[order.h] == '12')
 					this.hour = 0; // 12am = 0 hour
-				else if (this.ampm == 'PM' && treg[order.h] != '12') 
+				else if (this.ampm == 'PM' && treg[order.h] != '12')
 					this.hour = (parseFloat(treg[order.h]) + 12).toFixed(0); // 12pm = 12 hour, any other pm = hour + 12
 				else this.hour = Number(treg[order.h]);
 			}
@@ -509,7 +509,7 @@ $.extend(Timepicker.prototype, {
 	},
 
 	//########################################################################
-	// This function tries to limit the ability to go outside the 
+	// This function tries to limit the ability to go outside the
 	// min/max date range
 	//########################################################################
 	_limitMinMaxDateTime: function(dp_inst, adjustSliders){
@@ -630,7 +630,7 @@ $.extend(Timepicker.prototype, {
 	},
     
 	//########################################################################
-	// call custom onSelect. 
+	// call custom onSelect.
 	// bind to sliders slidestop, and grid click.
 	//########################################################################
 	_onSelectHandler: function() {
@@ -745,9 +745,9 @@ $.fn.extend({
 		tmp_args = arguments;
 
 		if (typeof(o) == 'string'){
-			if(o == 'getDate') 
+			if(o == 'getDate')
 				return $.fn.datepicker.apply($(this[0]), tmp_args);
-			else 
+			else
 				return this.each(function() {
 					var $t = $(this);
 					$t.datepicker.apply($t, tmp_args);

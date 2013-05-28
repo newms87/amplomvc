@@ -75,7 +75,7 @@ function load_info_item(info_item, route, callback){
 	set_validation_status(info_item, 'loading', '<?= $text_info_loading;?>');
 	
 	info_item.find('.info_content').load("<?= HTTP_CATALOG . "index.php?route="; ?>" + route, {},
-		function(){ 
+		function(){
 			set_validation_status(info_item, '', '');
 			if(typeof callback == 'function'){
 				callback();
@@ -164,7 +164,29 @@ function validate_submit(submit){
 		ci_validate_form($('#payment_method form'));
 	}
 	else{
-		submit_checkout_item(submit);
+		$('.info_item').each(function(i,e){
+			set_validation_status($(e), 'loading', '<?= $text_info_loading;?>');
+		});
+		
+		$.get("<?= $validate_customer_checkout; ?>", {}, function(json){
+			if(json && json.length){
+				$('.info_item').each(function(i,e){
+					set_validation_status($(e), 'valid', '');
+				});
+				
+				if(json['error']){
+					for(e in json['error']){
+						ci_validate_form($('#' + e + ' form'));
+					}
+				}
+				
+				handle_validation_response($('#customer_information_box'), json);
+			}
+			else{
+				submit_checkout_item(submit);
+			}
+		}, 'json')
+		.error(handle_ajax_error);
 	}
 	
 	return false;

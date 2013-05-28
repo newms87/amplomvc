@@ -11,7 +11,7 @@
 <meta name="keywords" content="<?= $keywords; ?>" />
 <? } ?>
 <? if ($icon) { ?>
-<link rel="icon" type="image/ico" href="<?= $icon;?>"></link> 
+<link rel="icon" type="image/ico" href="<?= $icon;?>"></link>
 <link rel="shortcut icon" href="<?= $icon;?>"></link>
 <? } ?>
 <? if($canonical_link) {?>
@@ -22,7 +22,7 @@
 <link rel="<?= $style['rel']; ?>" type="text/css" href="<?= $style['href']; ?>" media="<?= $style['media']; ?>" />
 <? } ?>
 
-<? /*TODO: Do we want to do something with this? Right now useles...	
+<? /*TODO: Do we want to do something with this? Right now useles...
 <![if !IE]>
 <script type="text/javascript">//<!--
 //url_state_object = {};
@@ -105,6 +105,13 @@ var sc_security="<?= $statcounter['security']; ?>";
 				<?=$this->builder->build('select', $links_account, 'account_menu', '', array('onchange' => "window.location = $(this).val()"));?>
 			<? } ?>
 		</div>
+		
+		<? if (!$is_logged && !empty($links_guest)) { ?>
+			<div id="links_guest">
+				<?= $this->builder->build_links($links_guest); ?>
+			</div>
+		<? } ?>
+		
 		<? if(!empty($social_networks)){?>
 			<div id="header_social_networks">
 				<?= $social_networks;?>
@@ -114,7 +121,7 @@ var sc_security="<?= $statcounter['security']; ?>";
 	
 	<? if(!empty($links_secondary)){?>
 	<div id="links_secondary" class="links">
-		 <?= $this->builder->build_links($links_secondary);?>
+		<?= $this->builder->build_links($links_secondary);?>
 	</div>
 	<? }?>
 	<? if(!empty($links_primary)) { ?>

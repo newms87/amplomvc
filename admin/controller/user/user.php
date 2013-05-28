@@ -1,5 +1,5 @@
-<?php  
-class ControllerUserUser extends Controller {  
+<?php
+class ControllerUserUser extends Controller {
 	
 	
   	public function index() {
@@ -51,20 +51,20 @@ class ControllerUserUser extends Controller {
 			else{
 				$this->message->add('success', $this->_('text_success'));
 				$this->url->redirect($this->url->link('user/user', $url));
-			}  
+			}
 		}
 	
 		$this->getForm();
   	}
  
-  	public function delete() { 
+  	public function delete() {
 		$this->load->language('user/user');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 				foreach ($_POST['selected'] as $user_id) {
-				$this->model_user_user->deleteUser($user_id);	
+				$this->model_user_user->deleteUser($user_id);
 			}
 
 			if($this->user->isAdmin())
@@ -97,7 +97,7 @@ class ControllerUserUser extends Controller {
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('user/user'));
 		
 		$this->data['insert'] = $this->url->link('user/user/insert', $url);
-		$this->data['delete'] = $this->url->link('user/user/delete', $url);			
+		$this->data['delete'] = $this->url->link('user/user/delete', $url);
 			
 		$this->data['users'] = array();
 
@@ -140,10 +140,6 @@ class ControllerUserUser extends Controller {
 				
 		$this->pagination->init();
 		$this->pagination->total = $user_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('user/user', $url);
-			
 		$this->data['pagination'] = $this->pagination->render();
 								
 		$this->data['sort'] = $sort;
@@ -230,7 +226,7 @@ class ControllerUserUser extends Controller {
 			'common/footer'
 		);
 				
-		$this->response->setOutput($this->render());	
+		$this->response->setOutput($this->render());
   	}
   	
   	private function validateForm() {
@@ -288,11 +284,7 @@ class ControllerUserUser extends Controller {
 			}
 		}
 	
-		if (!$this->error) {
-				return true;
-		} else {
-				return false;
-		}
+		return $this->error ? false : true;
   	}
 
   	private function validateDelete() {
@@ -300,7 +292,7 @@ class ControllerUserUser extends Controller {
 		
 		if (!$this->user->hasPermission('modify', 'user/user')) {
 				$this->error['warning'] = $this->_('error_permission');
-		} 
+		}
 		
 		foreach ($_POST['selected'] as $user_id) {
 			if ($this->user->getId() == $user_id) {
@@ -310,7 +302,7 @@ class ControllerUserUser extends Controller {
 		
 		if (!$this->error) {
 			return true;
-		} else { 
+		} else {
 			return false;
 		}
   	}

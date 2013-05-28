@@ -44,7 +44,7 @@ class Session {
 			$this->url->redirect($this->url->link('common/home'));
 			exit();
 		}
-		elseif(!isset($this->data['session_token_saved'])){			
+		elseif(!isset($this->data['session_token_saved'])){
 			$query = $this->db->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . "session WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "'");
 			
 			if($query->row['total']){
@@ -74,7 +74,7 @@ class Session {
 		}
 		
 		$this->db->query("INSERT INTO " . DB_PREFIX . "session SET `token` = '" . $this->db->escape($this->data['token']) . "', `user_id` = '" . $this->db->escape($this->data['user_id']) . "', `data` = '" . $this->db->escape(serialize($this->data)) . "', `ip` = '" . $_SERVER['REMOTE_ADDR'] . "'");
-		$this->data['session_token_saved'] = 1; 
+		$this->data['session_token_saved'] = 1;
 	}
 	
 	public function end_token_session(){

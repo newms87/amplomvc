@@ -126,7 +126,7 @@ plugin, possibly some code could be shared.
                             newpoints.push(intery)
                             for (m = 2; m < ps; ++m)
                                 newpoints.push(points[i + m]);
-                            bottom = qy; 
+                            bottom = qy;
                         }
 
                         j += otherps;

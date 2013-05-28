@@ -2,7 +2,7 @@
 class ControllerModuleFeaturedFlashsale extends Controller {
 	
 	
-	public function index() {	
+	public function index() {
 		$this->template->load('module/featured_flashsale');
 
 		$this->load->language('module/featured_flashsale');
@@ -13,7 +13,7 @@ class ControllerModuleFeaturedFlashsale extends Controller {
 			unset($_POST['designer']);
 			unset($_POST['choose_product']);
 
-			$this->model_setting_setting->editSetting('featured_flashsale', $_POST);	
+			$this->model_setting_setting->editSetting('featured_flashsale', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -46,7 +46,7 @@ class ControllerModuleFeaturedFlashsale extends Controller {
 		$layouts = $this->model_design_layout->getLayouts();
 		$this->data['layouts'] = array();
 		foreach($layouts as $layout)
-			$this->data['layouts'][$layout['layout_id']] = $layout['name']; 
+			$this->data['layouts'][$layout['layout_id']] = $layout['name'];
 		
 		$this->children = array(
 			'common/header',
@@ -61,6 +61,6 @@ class ControllerModuleFeaturedFlashsale extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 				
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

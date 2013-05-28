@@ -3,7 +3,7 @@ class ControllerModuleDesignerSidebar extends Controller {
 	protected function index($setting) {
 		$this->template->load('module/designer_sidebar');
 		
-		$this->language->load('module/designer_sidebar'); 
+		$this->language->load('module/designer_sidebar');
 		
 		empty($setting['limit'])?$setting['limit']=3:'';
 		

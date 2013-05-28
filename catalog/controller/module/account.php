@@ -1,4 +1,4 @@
-<?php  
+<?php
 class ControllerModuleAccount extends Controller {
 	protected function index() {
 		$this->template->load('module/account');
@@ -19,12 +19,6 @@ class ControllerModuleAccount extends Controller {
 		$this->data['return'] = $this->url->link('account/return');
 		$this->data['transaction'] = $this->url->link('account/transaction');
 		$this->data['newsletter'] = $this->url->link('account/newsletter');
-
-
-
-
-
-
 
 		$this->render();
 	}

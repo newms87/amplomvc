@@ -107,7 +107,7 @@ class ModelMailNewsletter extends Model {
 		
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "customer WHERE status='1' AND newsletter = '1' $store");
 		
-		return $query->rows; 
+		return $query->rows;
 	}
 	
 	public function getTotalNewsletters($data){

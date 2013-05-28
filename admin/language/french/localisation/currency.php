@@ -1,13 +1,13 @@
 <?php
 // Heading
-$_['heading_title']			= 'Devises';  
+$_['heading_title']			= 'Devises';
 
 // Text
 $_['text_success']			= 'F&eacute;licitations, vous avez modifi&eacute; la <b>Devise</b> avec succ&egrave;s !';
 
 // Column
 $_['column_title']			= 'Titre de la devise';
-$_['column_code']			= 'Code'; 
+$_['column_code']			= 'Code';
 $_['column_value']			= 'Valeur';
 $_['column_date_modified']	= 'Derni&egrave;re actualisation';
 $_['column_action']			= 'Action';

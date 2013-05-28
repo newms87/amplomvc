@@ -29,7 +29,7 @@ class ControllerModuleDesignerSidebar extends Controller {
 			$this->data['modules'] = $_POST['designer_sidebar_module'];
 		} elseif ($this->config->get('designer_sidebar_module')) {
 			$this->data['modules'] = $this->config->get('designer_sidebar_module');
-		}		
+		}
 		
 		$this->data['layouts'] = $this->model_design_layout->getLayouts();
 		
@@ -51,6 +51,6 @@ class ControllerModuleDesignerSidebar extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 				
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

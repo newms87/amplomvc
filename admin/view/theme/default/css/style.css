@@ -167,7 +167,7 @@ label {
 }
 
 ul.link_list > li{
-	position: relative;	
+	position: relative;
 }
 
 li ul.link_list{
@@ -1002,7 +1002,7 @@ input.p_sortorder:active,input.p_sortorder:focus{
 
 
 .product_template{
-	float:left; 
+	float:left;
 	margin-left: 10px;
 }
 
@@ -1032,7 +1032,7 @@ input.p_sortorder:active,input.p_sortorder:focus{
 }
 .filter_name{
 	float:left
-} 
+}
 .filter_default{
 	float:right;
 	margin-right:20px;

@@ -1,7 +1,7 @@
 #<?php
 //=====
 class ControllerAccountBlockLogin extends Controller {
-//.....	
+//.....
 	public function index($settings, $type = 'header') {
 //-----
 //>>>>> {php} {before}

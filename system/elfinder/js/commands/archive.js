@@ -39,7 +39,7 @@ elFinder.prototype.commands.archive = function() {
 			error = ['errArchive', 'errPerm'],
 			dfrd  = $.Deferred().fail(function(error) {
 				error && fm.error(error);
-			}), 
+			}),
 			i;
 
 		if (!(this.enabled() && cnt && mimes.length && $.inArray(mime, mimes) !== -1)) {

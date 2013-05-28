@@ -29,7 +29,7 @@ $_['entry_status']		= 'Status:';
 //Button
 $_['button_create_layout']	= "[ Create Layout for this page ]";
 
-// Error 
+// Error
 $_['error_warning']	= 'Warning: Please check the form carefully for errors!';
 $_['error_permission']  = 'Warning: You do not have permission to modify Pages!';
 $_['error_title']		= 'Page Title must be between 3 and 64 characters!';

@@ -1,5 +1,5 @@
-<?php	
-class ControllerSaleCustomer extends Controller { 
+<?php
+class ControllerSaleCustomer extends Controller {
 	
   
   	public function index() {
@@ -66,7 +66,7 @@ class ControllerSaleCustomer extends Controller {
 		}
 		
 		$this->getForm();
-  	} 
+  	}
 	
   	public function update() {
 		$this->load->language('sale/customer');
@@ -124,7 +124,7 @@ class ControllerSaleCustomer extends Controller {
 		}
 	
 		$this->getForm();
-  	}	
+  	}
 
   	public function delete() {
 		$this->load->language('sale/customer');
@@ -158,7 +158,7 @@ class ControllerSaleCustomer extends Controller {
 			
 			if (isset($_GET['filter_approved'])) {
 				$url .= '&filter_approved=' . $_GET['filter_approved'];
-			}	
+			}
 				
 			if (isset($_GET['filter_ip'])) {
 				$url .= '&filter_ip=' . $_GET['filter_ip'];
@@ -184,7 +184,7 @@ class ControllerSaleCustomer extends Controller {
 		}
 	
 		$this->getList();
-  	}  
+  	}
 	
 	public function approve() {
 		$this->load->language('sale/customer');
@@ -204,9 +204,9 @@ class ControllerSaleCustomer extends Controller {
 					
 					$approved++;
 				}
-			} 
+			}
 			
-			$this->message->add('success', sprintf($this->_('text_approved'), $approved));	
+			$this->message->add('success', sprintf($this->_('text_approved'), $approved));
 			
 			$url = '';
 		
@@ -248,13 +248,13 @@ class ControllerSaleCustomer extends Controller {
 							
 			if (isset($_GET['page'])) {
 				$url .= '&page=' . $_GET['page'];
-			}	
+			}
 	
-			$this->url->redirect($this->url->link('sale/customer', $url));			
+			$this->url->redirect($this->url->link('sale/customer', $url));
 		}
 		
 		$this->getList();
-	} 
+	}
 	
   	private function getList() {
 		$this->template->load('sale/customer_list');
@@ -299,12 +299,12 @@ class ControllerSaleCustomer extends Controller {
 			$filter_date_added = $_GET['filter_date_added'];
 		} else {
 			$filter_date_added = null;
-		}		
+		}
 		
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
 		} else {
-			$sort = 'name'; 
+			$sort = 'name';
 		}
 		
 		if (isset($_GET['order'])) {
@@ -339,7 +339,7 @@ class ControllerSaleCustomer extends Controller {
 		
 		if (isset($_GET['filter_approved'])) {
 			$url .= '&filter_approved=' . $_GET['filter_approved'];
-		}	
+		}
 		
 		if (isset($_GET['filter_ip'])) {
 			$url .= '&filter_ip=' . $_GET['filter_ip'];
@@ -371,11 +371,11 @@ class ControllerSaleCustomer extends Controller {
 		$this->data['customers'] = array();
 
 		$data = array(
-			'filter_name'				=> $filter_name, 
-			'filter_email'				=> $filter_email, 
-			'filter_customer_group_id' => $filter_customer_group_id, 
-			'filter_status'				=> $filter_status, 
-			'filter_approved'			=> $filter_approved, 
+			'filter_name'				=> $filter_name,
+			'filter_email'				=> $filter_email,
+			'filter_customer_group_id' => $filter_customer_group_id,
+			'filter_status'				=> $filter_status,
+			'filter_approved'			=> $filter_approved,
 			'filter_date_added'		=> $filter_date_added,
 			'filter_ip'					=> $filter_ip,
 			'sort'							=> $sort,
@@ -408,7 +408,7 @@ class ControllerSaleCustomer extends Controller {
 				'selected'		=> isset($_POST['selected']) && in_array($result['customer_id'], $_POST['selected']),
 				'action'			=> $action
 			);
-		}	
+		}
 					
 		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -444,7 +444,7 @@ class ControllerSaleCustomer extends Controller {
 		
 		if (isset($_GET['filter_approved'])) {
 			$url .= '&filter_approved=' . $_GET['filter_approved'];
-		}	
+		}
 		
 		if (isset($_GET['filter_ip'])) {
 			$url .= '&filter_ip=' . $_GET['filter_ip'];
@@ -512,10 +512,6 @@ class ControllerSaleCustomer extends Controller {
 
 		$this->pagination->init();
 		$this->pagination->total = $customer_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('sale/customer', $url);
-			
 		$this->data['pagination'] = $this->pagination->render();
 
 		$this->data['filter_name'] = $filter_name;
@@ -654,7 +650,7 @@ class ControllerSaleCustomer extends Controller {
 		
 		if (isset($_GET['filter_approved'])) {
 			$url .= '&filter_approved=' . $_GET['filter_approved'];
-		}	
+		}
 		
 		if (isset($_GET['filter_date_added'])) {
 			$url .= '&filter_date_added=' . $_GET['filter_date_added'];
@@ -689,7 +685,7 @@ class ControllerSaleCustomer extends Controller {
 			
 		if (isset($_POST['firstname'])) {
 				$this->data['firstname'] = $_POST['firstname'];
-		} elseif (!empty($customer_info)) { 
+		} elseif (!empty($customer_info)) {
 			$this->data['firstname'] = $customer_info['firstname'];
 		} else {
 				$this->data['firstname'] = '';
@@ -697,7 +693,7 @@ class ControllerSaleCustomer extends Controller {
 
 		if (isset($_POST['lastname'])) {
 				$this->data['lastname'] = $_POST['lastname'];
-		} elseif (!empty($customer_info)) { 
+		} elseif (!empty($customer_info)) {
 			$this->data['lastname'] = $customer_info['lastname'];
 		} else {
 				$this->data['lastname'] = '';
@@ -705,7 +701,7 @@ class ControllerSaleCustomer extends Controller {
 
 		if (isset($_POST['email'])) {
 				$this->data['email'] = $_POST['email'];
-		} elseif (!empty($customer_info)) { 
+		} elseif (!empty($customer_info)) {
 			$this->data['email'] = $customer_info['email'];
 		} else {
 				$this->data['email'] = '';
@@ -713,7 +709,7 @@ class ControllerSaleCustomer extends Controller {
 
 		if (isset($_POST['telephone'])) {
 				$this->data['telephone'] = $_POST['telephone'];
-		} elseif (!empty($customer_info)) { 
+		} elseif (!empty($customer_info)) {
 			$this->data['telephone'] = $customer_info['telephone'];
 		} else {
 				$this->data['telephone'] = '';
@@ -721,7 +717,7 @@ class ControllerSaleCustomer extends Controller {
 
 		if (isset($_POST['fax'])) {
 				$this->data['fax'] = $_POST['fax'];
-		} elseif (!empty($customer_info)) { 
+		} elseif (!empty($customer_info)) {
 			$this->data['fax'] = $customer_info['fax'];
 		} else {
 				$this->data['fax'] = '';
@@ -729,7 +725,7 @@ class ControllerSaleCustomer extends Controller {
 
 		if (isset($_POST['newsletter'])) {
 				$this->data['newsletter'] = $_POST['newsletter'];
-		} elseif (!empty($customer_info)) { 
+		} elseif (!empty($customer_info)) {
 			$this->data['newsletter'] = $customer_info['newsletter'];
 		} else {
 				$this->data['newsletter'] = '';
@@ -739,7 +735,7 @@ class ControllerSaleCustomer extends Controller {
 
 		if (isset($_POST['customer_group_id'])) {
 				$this->data['customer_group_id'] = $_POST['customer_group_id'];
-		} elseif (!empty($customer_info)) { 
+		} elseif (!empty($customer_info)) {
 			$this->data['customer_group_id'] = $customer_info['customer_group_id'];
 		} else {
 				$this->data['customer_group_id'] = $this->config->get('config_customer_group_id');
@@ -747,19 +743,19 @@ class ControllerSaleCustomer extends Controller {
 		
 		if (isset($_POST['status'])) {
 				$this->data['status'] = $_POST['status'];
-		} elseif (!empty($customer_info)) { 
+		} elseif (!empty($customer_info)) {
 			$this->data['status'] = $customer_info['status'];
 		} else {
 				$this->data['status'] = 1;
 		}
 
-		if (isset($_POST['password'])) { 
+		if (isset($_POST['password'])) {
 			$this->data['password'] = $_POST['password'];
 		} else {
 			$this->data['password'] = '';
 		}
 		
-		if (isset($_POST['confirm'])) { 
+		if (isset($_POST['confirm'])) {
 			$this->data['confirm'] = $_POST['confirm'];
 		} else {
 			$this->data['confirm'] = '';
@@ -767,7 +763,7 @@ class ControllerSaleCustomer extends Controller {
 		
 		$this->data['countries'] = $this->model_localisation_country->getCountries();
 			
-		if (isset($_POST['address'])) { 
+		if (isset($_POST['address'])) {
 				$this->data['addresses'] = $_POST['address'];
 		} elseif (!empty($_GET['customer_id'])) {
 			$this->data['addresses'] = $this->model_sale_customer->getAddresses($_GET['customer_id']);
@@ -777,7 +773,7 @@ class ControllerSaleCustomer extends Controller {
 
 		if (isset($_POST['address_id'])) {
 				$this->data['address_id'] = $_POST['address_id'];
-		} elseif (!empty($customer_info)) { 
+		} elseif (!empty($customer_info)) {
 			$this->data['address_id'] = $customer_info['address_id'];
 		} else {
 				$this->data['address_id'] = '';
@@ -799,7 +795,7 @@ class ControllerSaleCustomer extends Controller {
 					'blacklist'  => $blacklist_total
 				);
 			}
-		}		
+		}
 		
 		$this->children = array(
 			'common/header',
@@ -860,7 +856,7 @@ class ControllerSaleCustomer extends Controller {
 				
 				if ((strlen($value['lastname']) < 1) || (strlen($value['lastname']) > 32)) {
 					$this->error['address_lastname'][$key] = $this->_('error_lastname');
-				}	
+				}
 				
 				if ((strlen($value['address_1']) < 3) || (strlen($value['address_1']) > 128)) {
 					$this->error['address_address_1'][$key] = $this->_('error_address_1');
@@ -868,7 +864,7 @@ class ControllerSaleCustomer extends Controller {
 			
 				if ((strlen($value['city']) < 2) || (strlen($value['city']) > 128)) {
 					$this->error['address_city'][$key] = $this->_('error_city');
-				} 
+				}
 	
 				$country_info = $this->model_localisation_country->getCountry($value['country_id']);
 						
@@ -882,7 +878,7 @@ class ControllerSaleCustomer extends Controller {
 				
 				if ($value['zone_id'] == '') {
 					$this->error['address_zone'][$key] = $this->_('error_zone');
-				}	
+				}
 			}
 		}
 		
@@ -891,15 +887,15 @@ class ControllerSaleCustomer extends Controller {
 		}
 		
 		return $this->error ? false : true;
-  	}	
+  	}
 
   	private function validateDelete() {
 		if (!$this->user->hasPermission('modify', 'sale/customer')) {
 				$this->error['warning'] = $this->_('error_permission');
-		}	
+		}
 		
-		return $this->error ? false : true;  
-  	} 
+		return $this->error ? false : true;
+  	}
 	
 	public function login() {
 		$json = array();
@@ -927,7 +923,7 @@ class ControllerSaleCustomer extends Controller {
 			
 			if ($store_info) {
 				$this->url->redirect($this->url->store($store_id, 'account/login'));
-			} else { 
+			} else {
 				$this->url->redirect($this->url->store($this->config->get('config_default_store'), 'account/login'));
 			}
 		} else {
@@ -954,7 +950,7 @@ class ControllerSaleCustomer extends Controller {
 
 		$this->language->load('sale/customer');
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->user->hasPermission('modify', 'sale/customer')) { 
+		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->user->hasPermission('modify', 'sale/customer')) {
 			$this->model_sale_customer->addTransaction($_GET['customer_id'], $_POST['description'], $_POST['amount']);
 				
 			$this->language->set('success', $this->_('text_success'));
@@ -966,13 +962,13 @@ class ControllerSaleCustomer extends Controller {
 			$this->language->set('error_warning', $this->_('error_permission'));
 		} else {
 			$this->data['error_warning'] = '';
-		}		
+		}
 		
 		if (isset($_GET['page'])) {
 			$page = $_GET['page'];
 		} else {
 			$page = 1;
-		}  
+		}
 		
 		$this->data['transactions'] = array();
 			
@@ -984,7 +980,7 @@ class ControllerSaleCustomer extends Controller {
 				'description' => $result['description'],
 				'date_added'  => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
 			);
-			}			
+			}
 		
 		$this->data['balance'] = $this->currency->format($this->model_sale_customer->getTransactionTotal($_GET['customer_id']), $this->config->get('config_currency'));
 		
@@ -992,10 +988,6 @@ class ControllerSaleCustomer extends Controller {
 			
 		$this->pagination->init();
 		$this->pagination->total = $transaction_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = 10; 
-		$this->pagination->url = $this->url->link('sale/customer/transaction', 'customer_id=' . $_GET['customer_id']);
-			
 		$this->data['pagination'] = $this->pagination->render();
 
 		
@@ -1007,7 +999,7 @@ class ControllerSaleCustomer extends Controller {
 
 		$this->language->load('sale/customer');
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->user->hasPermission('modify', 'sale/customer')) { 
+		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->user->hasPermission('modify', 'sale/customer')) {
 			$this->model_sale_customer->addReward($_GET['customer_id'], $_POST['description'], $_POST['points']);
 				
 			$this->language->set('success', $this->_('text_success'));
@@ -1019,13 +1011,13 @@ class ControllerSaleCustomer extends Controller {
 			$this->language->set('error_warning', $this->_('error_permission'));
 		} else {
 			$this->data['error_warning'] = '';
-		}	
+		}
 				
 		if (isset($_GET['page'])) {
 			$page = $_GET['page'];
 		} else {
 			$page = 1;
-		}  
+		}
 		
 		$this->data['rewards'] = array();
 			
@@ -1037,7 +1029,7 @@ class ControllerSaleCustomer extends Controller {
 				'description' => $result['description'],
 				'date_added'  => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
 			);
-			}			
+			}
 		
 		$this->data['balance'] = $this->model_sale_customer->getRewardTotal($_GET['customer_id']);
 		
@@ -1045,10 +1037,6 @@ class ControllerSaleCustomer extends Controller {
 			
 		$this->pagination->init();
 		$this->pagination->total = $reward_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = 10; 
-		$this->pagination->url = $this->url->link('sale/customer/reward', 'customer_id=' . $_GET['customer_id']);
-			
 		$this->data['pagination'] = $this->pagination->render();
 
 		
@@ -1060,7 +1048,7 @@ class ControllerSaleCustomer extends Controller {
 		
 		$json = array();
 
-		if (isset($_POST['ip'])) { 
+		if (isset($_POST['ip'])) {
 			if (!$this->user->hasPermission('modify', 'sale/customer')) {
 				$json['error'] = $this->_('error_permission');
 			} else {
@@ -1078,7 +1066,7 @@ class ControllerSaleCustomer extends Controller {
 		
 		$json = array();
 
-		if (isset($_POST['ip'])) { 
+		if (isset($_POST['ip'])) {
 			if (!$this->user->hasPermission('modify', 'sale/customer')) {
 				$json['error'] = $this->_('error_permission');
 			} else {
@@ -1105,7 +1093,7 @@ class ControllerSaleCustomer extends Controller {
 			
 			foreach ($results as $result) {
 				$json[] = array(
-					'customer_id'	=> $result['customer_id'], 
+					'customer_id'	=> $result['customer_id'],
 					'name'			=> html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8'),
 					'customer_group' => $result['customer_group'],
 					'firstname'		=> $result['firstname'],
@@ -1114,7 +1102,7 @@ class ControllerSaleCustomer extends Controller {
 					'telephone'		=> $result['telephone'],
 					'fax'				=> $result['fax'],
 					'address'		=> $this->model_sale_customer->getAddresses($result['customer_id'])
-				);					
+				);
 			}
 		}
 
@@ -1127,7 +1115,7 @@ class ControllerSaleCustomer extends Controller {
 		array_multisort($sort_order, SORT_ASC, $json);
 
 		$this->response->setOutput(json_encode($json));
-	}		
+	}
 	
 	public function address() {
 		$json = array();
@@ -1136,6 +1124,6 @@ class ControllerSaleCustomer extends Controller {
 			$json = $this->model_sale_customer->getAddress($_GET['address_id']);
 		}
 
-		$this->response->setOutput(json_encode($json));		
+		$this->response->setOutput(json_encode($json));
 	}
 }

@@ -118,13 +118,8 @@ class ControllerBlockBlock extends Controller {
 		$this->data['insert'] = $this->url->link('block/block', 'name=new');
 		
 		//Pagination
-		$url_query = $this->url->get_query('filter', 'sort', 'order');
-		
 		$this->pagination->init();
 		$this->pagination->total = $block_total;
-		$this->pagination->limit = $limit;
-		$this->pagination->page = $page;
-		$this->pagination->url = $this->url->link('block/block', $url_query);
 		
 		$this->data['pagination'] = $this->pagination->render();
 		

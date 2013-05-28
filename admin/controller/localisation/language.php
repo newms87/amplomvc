@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerLocalisationLanguage extends Controller {
 	
   
@@ -116,8 +116,8 @@ class ControllerLocalisationLanguage extends Controller {
 				'code'		=> $result['code'],
 				'sort_order'  => $result['sort_order'],
 				'selected'	=> isset($_POST['selected']) && in_array($result['language_id'], $_POST['selected']),
-				'action'		=> $action	
-			);		
+				'action'		=> $action
+			);
 		}
 		
 		$url = '';
@@ -148,10 +148,6 @@ class ControllerLocalisationLanguage extends Controller {
 				
 		$this->pagination->init();
 		$this->pagination->total = $language_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('localisation/language', $url);
-			
 		$this->data['pagination'] = $this->pagination->render();
 		
 		$this->data['sort'] = $sort;
@@ -240,8 +236,8 @@ class ControllerLocalisationLanguage extends Controller {
 			$this->error['locale'] = $this->_('error_locale');
 		}
 		
-		if (!$_POST['directory']) { 
-			$this->error['directory'] = $this->_('error_directory'); 
+		if (!$_POST['directory']) {
+			$this->error['directory'] = $this->_('error_directory');
 		}
 
 		if (!$_POST['filename']) {
@@ -258,7 +254,7 @@ class ControllerLocalisationLanguage extends Controller {
 	private function validateDelete() {
 		if (!$this->user->hasPermission('modify', 'localisation/language')) {
 			$this->error['warning'] = $this->_('error_permission');
-		} 
+		}
 		
 		foreach ($_POST['selected'] as $language_id) {
 			$language_info = $this->model_localisation_language->getLanguage($language_id);
@@ -270,7 +266,7 @@ class ControllerLocalisationLanguage extends Controller {
 				
 				if ($this->config->get('config_admin_language') == $language_info['code']) {
 					$this->error['warning'] = $this->_('error_admin');
-				}	
+				}
 			
 				$store_total = $this->model_setting_store->getTotalStoresByLanguage($language_info['code']);
 	
@@ -283,9 +279,9 @@ class ControllerLocalisationLanguage extends Controller {
 
 			if ($order_total) {
 				$this->error['warning'] = sprintf($this->_('error_order'), $order_total);
-			}		
+			}
 		}
 		
 		return $this->error ? false : true;
-	}	
+	}
 }

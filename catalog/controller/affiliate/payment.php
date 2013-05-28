@@ -36,7 +36,7 @@ class ControllerAffiliatePayment extends Controller {
 		if (isset($_POST['tax'])) {
 			$this->data['tax'] = $_POST['tax'];
 		} elseif (!empty($affiliate_info)) {
-			$this->data['tax'] = $affiliate_info['tax'];		
+			$this->data['tax'] = $affiliate_info['tax'];
 		} else {
 			$this->data['tax'] = '';
 		}
@@ -44,7 +44,7 @@ class ControllerAffiliatePayment extends Controller {
 		if (isset($_POST['payment'])) {
 			$this->data['payment'] = $_POST['payment'];
 		} elseif (!empty($affiliate_info)) {
-			$this->data['payment'] = $affiliate_info['payment'];			
+			$this->data['payment'] = $affiliate_info['payment'];
 		} else {
 			$this->data['payment'] = 'cheque';
 		}
@@ -52,7 +52,7 @@ class ControllerAffiliatePayment extends Controller {
 		if (isset($_POST['cheque'])) {
 			$this->data['cheque'] = $_POST['cheque'];
 		} elseif (!empty($affiliate_info)) {
-			$this->data['cheque'] = $affiliate_info['cheque'];			
+			$this->data['cheque'] = $affiliate_info['cheque'];
 		} else {
 			$this->data['cheque'] = '';
 		}
@@ -60,7 +60,7 @@ class ControllerAffiliatePayment extends Controller {
 		if (isset($_POST['paypal'])) {
 			$this->data['paypal'] = $_POST['paypal'];
 		} elseif (!empty($affiliate_info)) {
-			$this->data['paypal'] = $affiliate_info['paypal'];		
+			$this->data['paypal'] = $affiliate_info['paypal'];
 		} else {
 			$this->data['paypal'] = '';
 		}
@@ -68,7 +68,7 @@ class ControllerAffiliatePayment extends Controller {
 		if (isset($_POST['bank_name'])) {
 			$this->data['bank_name'] = $_POST['bank_name'];
 		} elseif (!empty($affiliate_info)) {
-			$this->data['bank_name'] = $affiliate_info['bank_name'];			
+			$this->data['bank_name'] = $affiliate_info['bank_name'];
 		} else {
 			$this->data['bank_name'] = '';
 		}
@@ -76,7 +76,7 @@ class ControllerAffiliatePayment extends Controller {
 		if (isset($_POST['bank_branch_number'])) {
 			$this->data['bank_branch_number'] = $_POST['bank_branch_number'];
 		} elseif (!empty($affiliate_info)) {
-			$this->data['bank_branch_number'] = $affiliate_info['bank_branch_number'];		
+			$this->data['bank_branch_number'] = $affiliate_info['bank_branch_number'];
 		} else {
 			$this->data['bank_branch_number'] = '';
 		}
@@ -84,7 +84,7 @@ class ControllerAffiliatePayment extends Controller {
 		if (isset($_POST['bank_swift_code'])) {
 			$this->data['bank_swift_code'] = $_POST['bank_swift_code'];
 		} elseif (!empty($affiliate_info)) {
-			$this->data['bank_swift_code'] = $affiliate_info['bank_swift_code'];			
+			$this->data['bank_swift_code'] = $affiliate_info['bank_swift_code'];
 		} else {
 			$this->data['bank_swift_code'] = '';
 		}
@@ -92,7 +92,7 @@ class ControllerAffiliatePayment extends Controller {
 		if (isset($_POST['bank_account_name'])) {
 			$this->data['bank_account_name'] = $_POST['bank_account_name'];
 		} elseif (!empty($affiliate_info)) {
-			$this->data['bank_account_name'] = $affiliate_info['bank_account_name'];		
+			$this->data['bank_account_name'] = $affiliate_info['bank_account_name'];
 		} else {
 			$this->data['bank_account_name'] = '';
 		}
@@ -100,18 +100,12 @@ class ControllerAffiliatePayment extends Controller {
 		if (isset($_POST['bank_account_number'])) {
 			$this->data['bank_account_number'] = $_POST['bank_account_number'];
 		} elseif (!empty($affiliate_info)) {
-			$this->data['bank_account_number'] = $affiliate_info['bank_account_number'];			
+			$this->data['bank_account_number'] = $affiliate_info['bank_account_number'];
 		} else {
 			$this->data['bank_account_number'] = '';
 		}
 		
 		$this->data['back'] = $this->url->link('affiliate/account');
-
-
-
-
-
-
 
 		$this->children = array(
 			'common/column_left',
@@ -119,9 +113,9 @@ class ControllerAffiliatePayment extends Controller {
 			'common/content_top',
 			'common/content_bottom',
 			'common/footer',
-			'common/header'	
+			'common/header'
 		);
 						
-		$this->response->setOutput($this->render());		
+		$this->response->setOutput($this->render());
 	}
 }

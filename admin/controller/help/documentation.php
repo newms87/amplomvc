@@ -1,7 +1,7 @@
 <?php
 class ControllerHelpDocumentation extends Controller {
 	
-	public function index() {	
+	public function index() {
 		$this->template->load('help/documentation');
 
 		$this->load->language('help/documentation');
@@ -41,7 +41,7 @@ class ControllerHelpDocumentation extends Controller {
 					foreach($matches[0] as $m)
 						$s = preg_replace("/%![^%]*%!/","<span class='important'>".preg_replace("/%!/",'',$m)."</span>",$s,1);
 				}
-			} 
+			}
 		}
 	}
 }

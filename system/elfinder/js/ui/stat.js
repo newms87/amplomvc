@@ -13,7 +13,7 @@ $.fn.elfinderstat = function(fm) {
 			titleitems = fm.i18n('items').toLowerCase(),
 			titlesel   = fm.i18n('selected'),
 			setstat    = function(files, cwd) {
-				var c = 0, 
+				var c = 0,
 					s = 0;
 
 				$.each(files, function(i, file) {

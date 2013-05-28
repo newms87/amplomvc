@@ -1,5 +1,5 @@
-<?php 
-class ControllerSaleVoucherTheme extends Controller { 
+<?php
+class ControllerSaleVoucherTheme extends Controller {
 	
 	
   	public function index() {
@@ -141,7 +141,7 @@ class ControllerSaleVoucherTheme extends Controller {
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('sale/voucher_theme', $url));
 
 		$this->data['insert'] = $this->url->link('sale/voucher_theme/insert', $url);
-		$this->data['delete'] = $this->url->link('sale/voucher_theme/delete', $url);	
+		$this->data['delete'] = $this->url->link('sale/voucher_theme/delete', $url);
 
 		$this->data['voucher_themes'] = array();
 
@@ -170,7 +170,7 @@ class ControllerSaleVoucherTheme extends Controller {
 				'selected'			=> isset($_POST['selected']) && in_array($result['voucher_theme_id'], $_POST['selected']),
 				'action'			=> $action
 			);
-		}	
+		}
 	
  		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -212,10 +212,6 @@ class ControllerSaleVoucherTheme extends Controller {
 
 		$this->pagination->init();
 		$this->pagination->total = $voucher_theme_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('sale/voucher_theme', $url);
-			
 		$this->data['pagination'] = $this->pagination->render();
 
 		$this->data['sort'] = $sort;
@@ -310,7 +306,7 @@ class ControllerSaleVoucherTheme extends Controller {
 			'common/footer'
 		);
 				
-		$this->response->setOutput($this->render());	
+		$this->response->setOutput($this->render());
   	}
   	
 	private function validateForm() {
@@ -340,14 +336,14 @@ class ControllerSaleVoucherTheme extends Controller {
 			$voucher_total = $this->model_sale_voucher->getTotalVouchersByVoucherThemeId($voucher_theme_id);
 		
 			if ($voucher_total) {
-				$this->error['warning'] = sprintf($this->_('error_voucher'), $voucher_total);	
-			}  
+				$this->error['warning'] = sprintf($this->_('error_voucher'), $voucher_total);
+			}
 		}
 		
-		if (!$this->error) { 
+		if (!$this->error) {
 			return true;
 		} else {
 			return false;
 		}
-  	}	
+  	}
 }

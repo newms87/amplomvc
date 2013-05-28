@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerPaymentNOCHEX extends Controller {
 	
 
@@ -10,7 +10,7 @@ class ControllerPaymentNOCHEX extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('nochex', $_POST);				
+			$this->model_setting_setting->editSetting('nochex', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -76,22 +76,22 @@ class ControllerPaymentNOCHEX extends Controller {
 		if (isset($_POST['nochex_total'])) {
 			$this->data['nochex_total'] = $_POST['nochex_total'];
 		} else {
-			$this->data['nochex_total'] = $this->config->get('nochex_total'); 
-		} 
+			$this->data['nochex_total'] = $this->config->get('nochex_total');
+		}
 				
 		if (isset($_POST['nochex_order_status_id'])) {
 			$this->data['nochex_order_status_id'] = $_POST['nochex_order_status_id'];
 		} else {
-			$this->data['nochex_order_status_id'] = $this->config->get('nochex_order_status_id'); 
-		} 
+			$this->data['nochex_order_status_id'] = $this->config->get('nochex_order_status_id');
+		}
 
 		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 		
 		if (isset($_POST['nochex_geo_zone_id'])) {
 			$this->data['nochex_geo_zone_id'] = $_POST['nochex_geo_zone_id'];
 		} else {
-			$this->data['nochex_geo_zone_id'] = $this->config->get('nochex_geo_zone_id'); 
-		} 
+			$this->data['nochex_geo_zone_id'] = $this->config->get('nochex_geo_zone_id');
+		}
 		
 		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 		
@@ -112,7 +112,7 @@ class ControllerPaymentNOCHEX extends Controller {
 			'common/footer'
 		);
 				
-		$this->response->setOutput($this->render());		
+		$this->response->setOutput($this->render());
 	}
 
 	private function validate() {
@@ -128,6 +128,6 @@ class ControllerPaymentNOCHEX extends Controller {
 			$this->error['merchant'] = $this->_('error_merchant');
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

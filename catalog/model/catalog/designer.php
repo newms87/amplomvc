@@ -29,10 +29,10 @@ class ModelCatalogDesigner extends Model {
 		if($description){
 		$description = "LEFT JOIN " . DB_PREFIX . "manufacturer_description md ON (m.manufacturer_id=md.manufacturer_id AND md.language_id='" .$this->config->get('config_language_id') ."')";
 		$desc_q = ", md.description";
-		} 
+		}
 				
 		$query = $this->query("SELECT m.manufacturer_id as designer_id, m.* $desc_q FROM " . DB_PREFIX . "manufacturer m $description LEFT JOIN " . DB_PREFIX . "manufacturer_to_store m2s ON (m.manufacturer_id = m2s.manufacturer_id) WHERE m.manufacturer_id = '" . (int)$designer_id . "' AND m2s.store_id = '" . (int)$this->config->get('config_store_id') . "'");
-		return $query->row;	
+		return $query->row;
 	}
 	
 	public function getDesigners($data=null) {
@@ -88,7 +88,7 @@ class ModelCatalogDesigner extends Model {
 	
 	public function hasProducts($designer_id){
 		$query = $this->query("SELECT count(product_id) as num_products FROM " . DB_PREFIX . "product WHERE manufacturer_id='$designer_id'");
-		return $query->row['num_products']; 
+		return $query->row['num_products'];
 	}
 	
 	public function getDesignerProducts($designer, $sort_by=array()){
@@ -112,7 +112,7 @@ class ModelCatalogDesigner extends Model {
 		
 		$special = "(SELECT price FROM " . DB_PREFIX . "product_special ps WHERE ps.product_id = p.product_id AND ps.customer_group_id = '$customer_group_id' AND ((ps.date_start = '" . DATETIME_ZERO . "' OR ps.date_start < NOW()) AND (ps.date_end = '". DATETIME_ZERO . "' OR ps.date_end > NOW())) ORDER BY ps.priority ASC, ps.price ASC LIMIT 1) AS special";
 		
-		$fs = "(SELECT fp.product_id, fp.flashsale_id, f.date_start, f.date_end FROM " . DB_PREFIX . "flashsale_product fp LEFT JOIN " . DB_PREFIX . "flashsale f ON(f.flashsale_id=fp.flashsale_id) WHERE f.date_start < NOW() AND f.date_end > NOW() AND f.status='1' ORDER BY fp.price ASC LIMIT 1) as fs ON (fs.product_id=p.product_id)"; 
+		$fs = "(SELECT fp.product_id, fp.flashsale_id, f.date_start, f.date_end FROM " . DB_PREFIX . "flashsale_product fp LEFT JOIN " . DB_PREFIX . "flashsale f ON(f.flashsale_id=fp.flashsale_id) WHERE f.date_start < NOW() AND f.date_end > NOW() AND f.status='1' ORDER BY fp.price ASC LIMIT 1) as fs ON (fs.product_id=p.product_id)";
 		
 		
 		$attr_section = $section?"LEFT JOIN " . DB_PREFIX . "product_attribute pa ON (pa.product_id=p.product_id AND pa.language_id='$lang_id') " .

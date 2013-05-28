@@ -216,10 +216,6 @@ class ControllerLocalisationWeightClass extends Controller {
 
 		$this->pagination->init();
 		$this->pagination->total = $weight_class_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('localisation/weight_class', $url);
-
 		$this->data['pagination'] = $this->pagination->render();
 		
 		$this->data['sort'] = $sort;
@@ -246,13 +242,13 @@ class ControllerLocalisationWeightClass extends Controller {
 			$this->data['error_title'] = $this->error['title'];
 		} else {
 			$this->data['error_title'] = array();
-		}	
+		}
 		
  		if (isset($this->error['unit'])) {
 			$this->data['error_unit'] = $this->error['unit'];
 		} else {
 			$this->data['error_unit'] = array();
-		}	
+		}
 
 		$url = '';
 
@@ -273,7 +269,7 @@ class ControllerLocalisationWeightClass extends Controller {
 
 		if (!isset($_GET['weight_class_id'])) {
 			$this->data['action'] = $this->url->link('localisation/weight_class/insert', $url);
-		} else { 
+		} else {
 			$this->data['action'] = $this->url->link('localisation/weight_class/update', 'weight_class_id=' . $_GET['weight_class_id'] . $url);
 		}
 
@@ -291,7 +287,7 @@ class ControllerLocalisationWeightClass extends Controller {
 			$this->data['weight_class_description'] = $this->model_localisation_weight_class->getWeightClassDescriptions($_GET['weight_class_id']);
 		} else {
 			$this->data['weight_class_description'] = array();
-		}	
+		}
 
 		if (isset($_POST['value'])) {
 			$this->data['value'] = $_POST['value'];
@@ -345,5 +341,5 @@ class ControllerLocalisationWeightClass extends Controller {
 		}
 
 		return $this->error ? false : true;
-	}	
+	}
 }

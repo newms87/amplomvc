@@ -115,15 +115,15 @@ $.fn.elfindertree = function(fm, opts) {
 			 * @type Object
 			 */
 			droppableopts = $.extend({}, fm.droppable, {
-				hoverClass : hover+' '+dropover, 
+				hoverClass : hover+' '+dropover,
 				// show subfolders on dropover
-				over : function() { 
+				over : function() {
 					var link = $(this);
 						if (link.is('.'+collapsed+':not(.'+expanded+')')) {
 							setTimeout(function() {
 								link.is('.'+dropover) && link.children('.'+arrow).click();
 							}, 500);
-						} 
+						}
 					}
 				}),
 			
@@ -209,7 +209,7 @@ $.fn.elfindertree = function(fm, opts) {
 					info;
 
 				while (node.length) {
-					if ((info = fm.file(fm.navId2Hash(node.children('[id]').attr('id')))) 
+					if ((info = fm.file(fm.navId2Hash(node.children('[id]').attr('id'))))
 					&& dir.name.localeCompare(info.name) < 0) {
 						return node;
 					}
@@ -250,7 +250,7 @@ $.fn.elfindertree = function(fm, opts) {
 
 				if (orphans.length && orphans.length < length) {
 					return updateTree(orphans);
-				} 
+				}
 
 				updateDroppable();
 			},
@@ -263,7 +263,7 @@ $.fn.elfindertree = function(fm, opts) {
 			 */
 			sync = function() {
 				var cwd     = fm.cwd().hash,
-					current = tree.find('#'+fm.navHash2Id(cwd)), 
+					current = tree.find('#'+fm.navHash2Id(cwd)),
 					rootNode;
 				
 				if (openRoot) {
@@ -308,7 +308,7 @@ $.fn.elfindertree = function(fm, opts) {
 			 * Check required folders for subfolders and update arrow classes
 			 *
 			 * @param  Array  folders to check
-			 * @param  String css class 
+			 * @param  String css class
 			 * @return void
 			 */
 			updateArrows = function(dirs, cls) {
@@ -334,7 +334,7 @@ $.fn.elfindertree = function(fm, opts) {
 			tree = $(this).addClass(treeclass)
 				// make dirs draggable and toggle hover class
 				.delegate('.'+navdir, 'hover', function(e) {
-					var link  = $(this), 
+					var link  = $(this),
 						enter = e.type == 'mouseenter';
 					
 					if (!link.is('.'+dropover+' ,.'+disabled)) {
@@ -376,13 +376,13 @@ $.fn.elfindertree = function(fm, opts) {
 						link.removeClass(collapsed);
 
 						fm.request({cmd : 'tree', target : fm.navId2Hash(link.attr('id'))})
-							.done(function(data) { 
-								updateTree(filter(data.tree)); 
+							.done(function(data) {
+								updateTree(filter(data.tree));
 								
 								if (stree.children().length) {
 									link.addClass(collapsed+' '+expanded);
 									stree.slideDown();
-								} 
+								}
 								sync();
 							})
 							.always(function(data) {
@@ -415,7 +415,7 @@ $.fn.elfindertree = function(fm, opts) {
 			if (dirs.length) {
 				updateTree(dirs);
 				updateArrows(dirs, loaded);
-			} 
+			}
 			sync();
 		})
 		// add new dirs
@@ -455,9 +455,9 @@ $.fn.elfindertree = function(fm, opts) {
 					tmp        = $(itemhtml(dir));
 					node.replaceWith(tmp.children('.'+navdir));
 					
-					if (dir.dirs 
-					&& (isExpanded || isLoaded) 
-					&& (node = tree.find('#'+fm.navHash2Id(dir.hash))) 
+					if (dir.dirs
+					&& (isExpanded || isLoaded)
+					&& (node = tree.find('#'+fm.navHash2Id(dir.hash)))
 					&& node.next('.'+subtree).children().length) {
 						isExpanded && node.addClass(expanded);
 						isLoaded && node.addClass(loaded);
@@ -492,7 +492,7 @@ $.fn.elfindertree = function(fm, opts) {
 		.bind('lockfiles unlockfiles', function(e) {
 			var lock = e.type == 'lockfiles',
 				act  = lock ? 'disable' : 'enable',
-				dirs = $.map(e.data.files||[], function(h) {  
+				dirs = $.map(e.data.files||[], function(h) {
 					var dir = fm.file(h);
 					return dir && dir.mime == 'directory' ? h : null;
 				})

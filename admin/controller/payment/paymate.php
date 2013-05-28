@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerPaymentPayMate extends Controller {
 	
 
@@ -10,7 +10,7 @@ class ControllerPaymentPayMate extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('paymate', $_POST);				
+			$this->model_setting_setting->editSetting('paymate', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -66,22 +66,22 @@ class ControllerPaymentPayMate extends Controller {
 		if (isset($_POST['paymate_total'])) {
 			$this->data['paymate_total'] = $_POST['paymate_total'];
 		} else {
-			$this->data['paymate_total'] = $this->config->get('paymate_total'); 
-		} 
+			$this->data['paymate_total'] = $this->config->get('paymate_total');
+		}
 				
 		if (isset($_POST['paymate_order_status_id'])) {
 			$this->data['paymate_order_status_id'] = $_POST['paymate_order_status_id'];
 		} else {
-			$this->data['paymate_order_status_id'] = $this->config->get('paymate_order_status_id'); 
-		} 
+			$this->data['paymate_order_status_id'] = $this->config->get('paymate_order_status_id');
+		}
 		
 		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
 		if (isset($_POST['paymate_geo_zone_id'])) {
 			$this->data['paymate_geo_zone_id'] = $_POST['paymate_geo_zone_id'];
 		} else {
-			$this->data['paymate_geo_zone_id'] = $this->config->get('paymate_geo_zone_id'); 
-		} 
+			$this->data['paymate_geo_zone_id'] = $this->config->get('paymate_geo_zone_id');
+		}
 		
 		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 		
@@ -118,6 +118,6 @@ class ControllerPaymentPayMate extends Controller {
 			$this->error['password'] = $this->_('error_password');
 		}
 						
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

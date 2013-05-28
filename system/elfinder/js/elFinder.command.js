@@ -68,10 +68,10 @@ elFinder.prototype.command = function(fm) {
 	this._handlers = {
 		enable  : function() { this.update(void(0), this.value); },
 		disable : function() { this.update(-1, this.value); },
-		'open reload load'    : function(e) { 
+		'open reload load'    : function(e) {
 			this._disabled = !(this.alwaysEnabled || this.fm.isCommandEnabled(this.name));
 			this.update(void(0), this.value)
-			this.change(); 
+			this.change();
 		}
 	};
 	
@@ -108,7 +108,7 @@ elFinder.prototype.command = function(fm) {
 			fm   = this.fm, i, s;
 
 		this.name      = name;
-		this.title     = fm.messages['cmd'+name] ? fm.i18n('cmd'+name) : name, 
+		this.title     = fm.messages['cmd'+name] ? fm.i18n('cmd'+name) : name,
 		this.options   = $.extend({}, this.options, opts);
 		this.listeners = [];
 
@@ -151,8 +151,8 @@ elFinder.prototype.command = function(fm) {
 	 * @param  Array|Object  command value
 	 * @return $.Deferred
 	 */
-	this.exec = function(files, opts) { 
-		return $.Deferred().reject(); 
+	this.exec = function(files, opts) {
+		return $.Deferred().reject();
 	}
 	
 	/**
@@ -227,7 +227,7 @@ elFinder.prototype.command = function(fm) {
 		var cmd, i;
 		
 		if (typeof(c) === 'function') {
-			this.listeners.push(c);			
+			this.listeners.push(c);
 		} else {
 			for (i = 0; i < this.listeners.length; i++) {
 				cmd = this.listeners[i];

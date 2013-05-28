@@ -21,13 +21,13 @@ $buildDir  = substr(dirname(__FILE__), 0, -5 - strlen($pkgName));
 // switch to PHP/Math build directory
 chdir($buildDir);
 
-$tarName = "$pkgName.tar.gz";  
+$tarName = "$pkgName.tar.gz";
 
 $tarPath = $buildDir.$pkgName."/downloads/".$tarName;
 
-if($_GET['op'] == "download") {  
+if($_GET['op'] == "download") {
   
-	_require_once('Archive/Tar.php');  
+	_require_once('Archive/Tar.php');
 	
 	$tar	= new Archive_Tar($tarPath);
 
@@ -37,8 +37,8 @@ if($_GET['op'] == "download") {
   $files = array_merge($files, glob("$pkgName/docs/*.php"));
   $files = array_merge($files, glob("$pkgName/docs/includes/*.php"));
   $files = array_merge($files, glob("$pkgName/examples/*.php"));
-  $files = array_merge($files, glob("$pkgName/tests/*.php"));  
-  $files = array_merge($files, glob("$pkgName/utils/*.php"));	
+  $files = array_merge($files, glob("$pkgName/tests/*.php"));
+  $files = array_merge($files, glob("$pkgName/utils/*.php"));
   
 	$tar->create($files);
 		
@@ -55,7 +55,7 @@ include_once "includes/header.php";
 include_once "includes/navbar.php";
 ?>
 <p>
-Download current version: 
+Download current version:
 </p>
 <ul>
  <li><a href='<?= $_SERVER['PHP_SELF']."?op=download"; ?>'><?= $tarName ?></a></li>

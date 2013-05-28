@@ -2,7 +2,7 @@
 class ControllerModuleAffiliate extends Controller {
 	
 	
-	public function index() {	
+	public function index() {
 		$this->template->load('module/affiliate');
 
 		$this->load->language('module/affiliate');
@@ -10,7 +10,7 @@ class ControllerModuleAffiliate extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('affiliate', $_POST);		
+			$this->model_setting_setting->editSetting('affiliate', $_POST);
 					
 			$this->message->add('success', $this->_('text_success'));
 						
@@ -35,9 +35,9 @@ class ControllerModuleAffiliate extends Controller {
 		
 		if (isset($_POST['affiliate_module'])) {
 			$this->data['modules'] = $_POST['affiliate_module'];
-		} elseif ($this->config->get('affiliate_module')) { 
+		} elseif ($this->config->get('affiliate_module')) {
 			$this->data['modules'] = $this->config->get('affiliate_module');
-		}	
+		}
 					
 		$this->data['layouts'] = $this->model_design_layout->getLayouts();
 		
@@ -54,6 +54,6 @@ class ControllerModuleAffiliate extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

@@ -21,56 +21,56 @@ class ControllerPaymentAuthorizeNetSim extends Controller {
 		*/
 		$data['x_login'] = $this->config->get('authorizenet_sim_merchant');
   
-		/** 
-		* 
-		* Chosen by merchant 	Can be a random number. Used in "x_fp_hash" 
-		* calculation in order to make it unique but not used otherwise. 
-		* Returned with Relay Response / Silent Post / Receipt Link. 
+		/**
+		*
+		* Chosen by merchant 	Can be a random number. Used in "x_fp_hash"
+		* calculation in order to make it unique but not used otherwise.
+		* Returned with Relay Response / Silent Post / Receipt Link.
 		* No length restriction
-		* 
+		*
 		* @var unknown_type
 		*/
 		$data['x_fp_sequence'] = $this->session->data['order_id'];
 
-		/** 
-		* 
+		/**
+		*
 		* Time in seconds since January 1, 1970. UTC, Coordinated Universal Time
 		* Requests expire after 15 minutes / 900 seconds.
-		* 
+		*
 		* @var Time in seconds since January 1, 1970. UTC
 		*/
 		$data['x_fp_timestamp'] = time();
 		
-		/** 
-		* 
+		/**
+		*
 		* Positive number
 		* Total dollar amount to be charged inclusive of freight and tax; Maximum Length 15
-		* 
+		*
 		* @var Positive number
 		*/
-		$data['x_amount'] = $this->currency->format($order_info['total'], $order_info['currency_code'], $order_info['currency_value'], false);	
+		$data['x_amount'] = $this->currency->format($order_info['total'], $order_info['currency_code'], $order_info['currency_value'], false);
 
-		/** 
-		* 
-		* HMAC-MD5  hash from the merchant's transaction key and 
-		* concatenation of the values for "x_login", "x_fp_sequence", 
-		* "x_fp_timestamp", "x_amount", and (if given) "x_currency_code" 
-		* � all separated by the  "^" character. Note that if 
-		* "x_currency_code" is not present, then a "^" character is still 
-		* added. The transaction key is generated within the payment page 
-		* configuration section of the Administration console tab, 
+		/**
+		*
+		* HMAC-MD5  hash from the merchant's transaction key and
+		* concatenation of the values for "x_login", "x_fp_sequence",
+		* "x_fp_timestamp", "x_amount", and (if given) "x_currency_code"
+		* � all separated by the  "^" character. Note that if
+		* "x_currency_code" is not present, then a "^" character is still
+		* added. The transaction key is generated within the payment page
+		* configuration section of the Administration console tab,
 		* "Keys".
 		* @var String
 		*/
-		$data['x_fp_hash'] = null; // calculated later, once all fields are populated		
+		$data['x_fp_hash'] = null; // calculated later, once all fields are populated
 
-		/** 
-		* 
+		/**
+		*
 		* PAYMENT_FORM Case-sensitive
-		* 
-		* Required in order to stay compatible with the Authorize.Net 
-		* protocol. 
-		* 
+		*
+		* Required in order to stay compatible with the Authorize.Net
+		* protocol.
+		*
 		* @var String
 		*/
 		$data['x_show_form'] = 'PAYMENT_FORM';
@@ -121,29 +121,23 @@ class ControllerPaymentAuthorizeNetSim extends Controller {
 				
 		// calculate this after all our fields are generated
 		$data['x_fp_hash'] = $this->calculateFpHash();
-		
 
-
-
-
-
-
-		$this->render();	
+		$this->render();
 	}
 	
 	
 	/** Calculates the x_fp_hash value for transaction
-	* 
-	* HMAC-MD5 keyed by the merchant's transaction key and 
-	* concatenation of the values for "x_login", "x_fp_sequence", 
-	* "x_fp_timestamp", "x_amount", and (if given) "x_currency_code" 
-	* all separated by the  "^" character. Note that if 
-	* "x_currency_code" is not present, then a "^" character is still 
-	* added. 
-	* 
-	* The transaction key is generated within the payment page 
+	*
+	* HMAC-MD5 keyed by the merchant's transaction key and
+	* concatenation of the values for "x_login", "x_fp_sequence",
+	* "x_fp_timestamp", "x_amount", and (if given) "x_currency_code"
+	* all separated by the  "^" character. Note that if
+	* "x_currency_code" is not present, then a "^" character is still
+	* added.
+	*
+	* The transaction key is generated within the payment page
 	* configuration section of the Administration console tab
-	* 
+	*
 	* @return String
 	*/
 	private function calculateFpHash() {
@@ -153,7 +147,7 @@ class ControllerPaymentAuthorizeNetSim extends Controller {
 			$data['x_fp_timestamp'] . '^' . $data['x_amount'] . '^' .
 			$data['x_currency_code'];
 		
-		$fp_hash = $this->hash->hmac_md5($code, 
+		$fp_hash = $this->hash->hmac_md5($code,
 			$this->config->get('authorizenet_sim_transaction_key') );
 	
 		return $fp_hash;
@@ -162,7 +156,7 @@ class ControllerPaymentAuthorizeNetSim extends Controller {
 	private function calculateResponseHash() {
 		$data = $_POST;
 		
-		$code = $this->config->get('authorizenet_sim_response_key') . 
+		$code = $this->config->get('authorizenet_sim_response_key') .
 			$data['x_login'] . $data['x_trans_id'] . $data['x_amount'];
 	
 		return md5($code);
@@ -202,12 +196,6 @@ class ControllerPaymentAuthorizeNetSim extends Controller {
 				}
 			}
 		}
-		
-
-
-
-
-
 
 		$this->render();
 	}

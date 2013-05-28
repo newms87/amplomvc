@@ -53,12 +53,6 @@ class ControllerAccountForgotten extends Controller {
 		$this->data['action'] = $this->url->link('account/forgotten');
  
 		$this->data['back'] = $this->url->link('account/login');
-		
-
-
-
-
-
 
 		$this->children = array(
 			'common/column_left',
@@ -66,10 +60,10 @@ class ControllerAccountForgotten extends Controller {
 			'common/content_top',
 			'common/content_bottom',
 			'common/footer',
-			'common/header'	
+			'common/header'
 		);
 								
-		$this->response->setOutput($this->render());		
+		$this->response->setOutput($this->render());
 	}
 
 	private function validate() {

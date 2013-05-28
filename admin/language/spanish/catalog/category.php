@@ -29,7 +29,7 @@ $_['entry_sort_order']		= 'Orden aparición:';
 $_['entry_status']			= 'Estado:';
 $_['entry_layout']			= 'Sobreescribir diseño:';
 
-// Error 
+// Error
 $_['error_warning']			= 'Cuidado: Por favor comprueba que el formulario esté libre de errores!';
 $_['error_permission']		= 'Cuidado: No tienes permiso para modificar las categorías!';
 $_['error_name']				= 'El nombre de la categoría debe tener entre 2 y 32 carácteres!';

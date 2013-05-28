@@ -13,7 +13,7 @@ class ControllerSettingDbRules extends Controller {
   	public function insert() {
 		$this->load->language('setting/db_rules');
 
-		$this->document->setTitle($this->_('heading_title')); 
+		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$store_id = $this->model_setting_db_rules->addDbRule($_POST);
@@ -67,7 +67,7 @@ class ControllerSettingDbRules extends Controller {
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/db_rules'));
 		
 		$this->data['insert'] = $this->url->link('setting/db_rules/insert');
-		$this->data['delete'] = $this->url->link('setting/db_rules/delete');	
+		$this->data['delete'] = $this->url->link('setting/db_rules/delete');
 		
 		$url = $this->get_url(array('page'));
 		
@@ -141,7 +141,7 @@ class ControllerSettingDbRules extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		$required = array( 
+		$required = array(
 			'table',
 			'column',
 		);

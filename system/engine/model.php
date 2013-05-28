@@ -24,10 +24,10 @@ abstract class Model {
 	
 	/**
 	* Calls a controller and returns the output
-	* 
+	*
 	* @param $route - The route (and function name) of the controller (eg. product/product OR product/product/review)
 	* @param $arg1, $arg2, $arg3... etc. Additional arguments to pass to the controller
-	* 
+	*
 	* @return mixed - usually HTML, output from the rendered controller
 	*/
 	protected function callController($route){
@@ -79,24 +79,24 @@ abstract class Model {
 	
 	/**
 	* Use to select rows from a talbe in the database
-	* 
+	*
 	* @param $table - The table to select from
 	* @param $select - The fields to select from the table
-	* @param $where - Can be an associative array, string or integer. 
+	* @param $where - Can be an associative array, string or integer.
 	*					If it is an integer it will be treated as the primary key.
 	*					If it is a string, it will be left untouched and passed as the WHERE value
 	*					If it is an associative array it will be treated as `key` = 'value' pairs combined with "AND"
-	* 
-	* @param $options - an associative array, options are 
+	*
+	* @param $options - an associative array, options are
 	*				'group_by' - An array of field names which will be combined with implode(',', $group_by),
 	*								or it can be a string to allow for any GROUP BY (and HAVING) clause
-	*				
+	*
 	*				'order_by' - An array of field names which will be combined with implode(',', $order_by),
 	*								or it can be a string to allow for any ORDER BY clause
-	*				
+	*
 	*				'limit' - An int (for limit only) or string in the format "start, limit"
-	* 
-	* @return array - the rows that were retrieved from the database 
+	*
+	* @return array - the rows that were retrieved from the database
 	*/
 	protected function get($table, $select, $where=null, $options=null){
 		if(isset($where)){
@@ -403,7 +403,7 @@ abstract class Model {
 				
 				default:
 					$value = $this->db->escape($value);
-					break; 
+					break;
 			}
 		}
 		

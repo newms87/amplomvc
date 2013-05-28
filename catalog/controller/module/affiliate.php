@@ -1,4 +1,4 @@
-<?php  
+<?php
 class ControllerModuleAffiliate extends Controller {
 	protected function index() {
 		$this->template->load('module/affiliate');
@@ -16,12 +16,6 @@ class ControllerModuleAffiliate extends Controller {
 		$this->data['payment'] = $this->url->link('affiliate/payment');
 		$this->data['tracking'] = $this->url->link('affiliate/tracking');
 		$this->data['transaction'] = $this->url->link('affiliate/transaction');
-		
-
-
-
-
-
 
 		$this->render();
 	}

@@ -10,7 +10,7 @@ elFinder.prototype.commands.extract = function() {
 		fm      = self.fm,
 		mimes   = [],
 		filter  = function(files) {
-			return $.map(files, function(file) { 
+			return $.map(files, function(file) {
 				return file.read && $.inArray(file.mime, mimes) !== -1 ? file : null
 				
 			})
@@ -34,8 +34,8 @@ elFinder.prototype.commands.extract = function() {
 	this.exec = function(hashes) {
 		var files    = this.files(hashes),
 			dfrd     = $.Deferred(),
-			cnt      = files.length, 
-			complete = cnt, 
+			cnt      = files.length,
+			complete = cnt,
 			i, file, error;
 		
 		if (!(this.enabled() && cnt && mimes.length)) {

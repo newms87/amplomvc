@@ -2,7 +2,7 @@
 class ControllerModuleGoogleTalk extends Controller {
 	
 	
-	public function index() {	
+	public function index() {
 		$this->template->load('module/google_talk');
 
 		$this->load->language('module/google_talk');
@@ -10,7 +10,7 @@ class ControllerModuleGoogleTalk extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('google_talk', $_POST);		
+			$this->model_setting_setting->editSetting('google_talk', $_POST);
 					
 			$this->message->add('success', $this->_('text_success'));
 						
@@ -41,15 +41,15 @@ class ControllerModuleGoogleTalk extends Controller {
 			$this->data['google_talk_code'] = $_POST['google_talk_code'];
 		} else {
 			$this->data['google_talk_code'] = $this->config->get('google_talk_code');
-		}	
+		}
 		
 		$this->data['modules'] = array();
 		
 		if (isset($_POST['google_talk_module'])) {
 			$this->data['modules'] = $_POST['google_talk_module'];
-		} elseif ($this->config->get('google_talk_module')) { 
+		} elseif ($this->config->get('google_talk_module')) {
 			$this->data['modules'] = $this->config->get('google_talk_module');
-		}			
+		}
 				
 		$this->data['layouts'] = $this->model_design_layout->getLayouts();
 
@@ -70,6 +70,6 @@ class ControllerModuleGoogleTalk extends Controller {
 			$this->error['code'] = $this->_('error_code');
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

@@ -1,4 +1,4 @@
-<?php  
+<?php
 class ControllerModuleCarousel extends Controller {
 	protected function index($setting) {
 		$this->template->load('module/carousel');
@@ -30,14 +30,8 @@ class ControllerModuleCarousel extends Controller {
 			}
 		}
 		
-		$this->data['module'] = $module++; 
-		
+		$this->data['module'] = $module++;
 
-
-
-
-
-
-		$this->render(); 
+		$this->render();
 	}
 }

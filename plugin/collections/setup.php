@@ -1,4 +1,4 @@
-<?php 
+<?php
 class SetupCollections extends SetupPlugin {
 	function __construct($registry){
 		parent::__construct($registry);

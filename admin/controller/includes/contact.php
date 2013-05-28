@@ -1,5 +1,5 @@
-<?php  
-class ControllerIncludesContact extends Controller {  
+<?php
+class ControllerIncludesContact extends Controller {
 	
 	public function index($args) {
 		$this->template->load('includes/contact');

@@ -75,8 +75,8 @@ class elFinderConnector {
 		
 		// collect required arguments to exec command
 		foreach ($this->elFinder->commandArgsList($cmd) as $name => $req) {
-			$arg = $name == 'FILES' 
-				? $_FILES 
+			$arg = $name == 'FILES'
+				? $_FILES
 				: (isset($src[$name]) ? $src[$name] : '');
 				
 			if (!is_array($arg)) {
@@ -130,4 +130,4 @@ class elFinderConnector {
 		
 	}
 	
-}// END class 
+}// END class

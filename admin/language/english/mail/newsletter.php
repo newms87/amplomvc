@@ -35,7 +35,7 @@ $_['column_send_date']  = "Send Date";
 //Button
 $_['button_email_list']		= 'Download Email List';
 
-// Error 
+// Error
 $_['error_permission']	= 'Warning: You do not have permission to modify module Newsletter!';
 $_['error_name']			= 'Newsletter Name must be between 1 and 32 characters!';
 $_['error_send_date']			= 'The Send Date is invalid!';

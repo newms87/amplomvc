@@ -2,7 +2,7 @@
 // Heading
 $_['heading_title']		= 'AlertPay';
 
-// Text 
+// Text
 $_['text_payment']		= 'Pago';
 $_['text_success']		= 'Éxito: Has modificado los detalles de tu cuenta AlertPay!';
 		

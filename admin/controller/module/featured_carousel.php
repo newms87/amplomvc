@@ -2,7 +2,7 @@
 class ControllerModuleFeaturedCarousel extends Controller {
 	
 	
-	public function index() {	
+	public function index() {
 		$this->template->load('module/featured_carousel');
 
 		$this->load->language('module/featured_carousel');
@@ -12,7 +12,7 @@ class ControllerModuleFeaturedCarousel extends Controller {
 		$is_post = $_SERVER['REQUEST_METHOD'] == 'POST';
 		
 		if ($is_post && $this->validate()) {
-			$this->model_setting_setting->editSetting('featured_carousel', $_POST);	
+			$this->model_setting_setting->editSetting('featured_carousel', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -75,6 +75,6 @@ class ControllerModuleFeaturedCarousel extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 				
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

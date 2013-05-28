@@ -1,5 +1,5 @@
 <?php
-// Heading 
+// Heading
 $_['heading_title']		= 'Oubli de votre mot de passe ?';
 
 // Text

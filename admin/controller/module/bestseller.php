@@ -9,7 +9,7 @@ class ControllerModuleBestSeller extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('bestseller', $_POST);		
+			$this->model_setting_setting->editSetting('bestseller', $_POST);
 			
 			$this->cache->delete('product');
 			
@@ -69,6 +69,6 @@ class ControllerModuleBestSeller extends Controller {
 			}
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

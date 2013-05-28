@@ -3,7 +3,7 @@ class ControllerModuleFeaturedCarousel extends Controller {
 	public function index($setting=null) {
 		//$this->template->load('module/featured_carousel');
 		
-		//$this->language->load('module/featured_carousel'); 
+		//$this->language->load('module/featured_carousel');
 		
 		if(!$setting){
 			$fc = $this->model_setting_setting->getSetting('featured_carousel');

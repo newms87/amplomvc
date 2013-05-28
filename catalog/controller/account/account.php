@@ -1,5 +1,5 @@
-<?php 
-class ControllerAccountAccount extends Controller { 
+<?php
+class ControllerAccountAccount extends Controller {
 	public function index() {
 		$this->template->load('account/account');
 
@@ -7,7 +7,7 @@ class ControllerAccountAccount extends Controller {
 			$this->session->data['redirect'] = $this->url->link('account/account');
 	
 			$this->url->redirect($this->url->link('account/login'));
-		} 
+		}
 		
 		$this->language->load('account/account');
 
@@ -31,12 +31,6 @@ class ControllerAccountAccount extends Controller {
 		} else {
 			$this->data['reward'] = '';
 		}
-		
-
-
-
-
-
 
 		$this->children = array(
 			'common/column_left',
@@ -44,7 +38,7 @@ class ControllerAccountAccount extends Controller {
 			'common/content_top',
 			'common/content_bottom',
 			'common/footer',
-			'common/header'		
+			'common/header'
 		);
 				
 		$this->response->setOutput($this->render());

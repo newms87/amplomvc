@@ -5,7 +5,7 @@ class ControllerExtensionFeed extends Controller {
 
 		$this->load->language('extension/feed');
 		
-		$this->document->setTitle($this->_('heading_title')); 
+		$this->document->setTitle($this->_('heading_title'));
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('extension/feed'));
@@ -83,7 +83,7 @@ class ControllerExtensionFeed extends Controller {
 	
 	public function install() {
 		if (!$this->user->hasPermission('modify', 'extension/feed')) {
-				$this->session->data['error'] = $this->_('error_permission'); 
+				$this->session->data['error'] = $this->_('error_permission');
 			
 			$this->url->redirect($this->url->link('extension/feed'));
 		} else {
@@ -101,16 +101,16 @@ class ControllerExtensionFeed extends Controller {
 				$class->install();
 			}
 		
-			$this->url->redirect($this->url->link('extension/feed'));			
+			$this->url->redirect($this->url->link('extension/feed'));
 		}
 	}
 	
 	public function uninstall() {
 		if (!$this->user->hasPermission('modify', 'extension/feed')) {
-				$this->session->data['error'] = $this->_('error_permission'); 
+				$this->session->data['error'] = $this->_('error_permission');
 			
 			$this->url->redirect($this->url->link('extension/feed'));
-		} else {		
+		} else {
 			$this->model_setting_extension->uninstall('feed', $_GET['extension']);
 		
 			$this->model_setting_setting->deleteSetting($_GET['extension']);

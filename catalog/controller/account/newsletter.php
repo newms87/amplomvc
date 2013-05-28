@@ -1,5 +1,5 @@
-<?php 
-class ControllerAccountNewsletter extends Controller {  
+<?php
+class ControllerAccountNewsletter extends Controller {
 	public function index() {
 		$this->template->load('account/newsletter');
 
@@ -7,7 +7,7 @@ class ControllerAccountNewsletter extends Controller {
 			$this->session->data['redirect'] = $this->url->link('account/newsletter');
 	
 			$this->url->redirect($this->url->link('account/login'));
-		} 
+		}
 		
 		$this->language->load('account/newsletter');
 		
@@ -27,15 +27,9 @@ class ControllerAccountNewsletter extends Controller {
 
 		$this->data['action'] = $this->url->link('account/newsletter');
 		
-		$this->data['newsletter'] = $this->customer->getNewsletter();
+		$this->data['newsletter'] = $this->customer->info('newsletter');
 		
 		$this->data['back'] = $this->url->link('account/account');
-
-
-
-
-
-
 
 		$this->children = array(
 			'common/column_left',
@@ -43,9 +37,9 @@ class ControllerAccountNewsletter extends Controller {
 			'common/content_top',
 			'common/content_bottom',
 			'common/footer',
-			'common/header'	
+			'common/header'
 		);
 						
-		$this->response->setOutput($this->render());			
+		$this->response->setOutput($this->render());
   	}
 }

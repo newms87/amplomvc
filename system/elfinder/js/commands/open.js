@@ -4,7 +4,7 @@
  * Enter folder or open files in new windows
  *
  * @author Dmitry (dio) Levashov
- **/  
+ **/
 elFinder.prototype.commands.open = function() {
 	this.alwaysEnabled = true;
 	
@@ -21,13 +21,13 @@ elFinder.prototype.commands.open = function() {
 		var sel = this.files(sel),
 			cnt = sel.length;
 		
-		return cnt == 1 
-			? 0 
+		return cnt == 1
+			? 0
 			: cnt ? ($.map(sel, function(file) { return file.mime == 'directory' ? null : file}).length == cnt ? 0 : -1) : -1
 	}
 	
 	this.exec = function(hashes) {
-		var fm    = this.fm, 
+		var fm    = this.fm,
 			dfrd  = $.Deferred().fail(function(error) { error && fm.error(error); }),
 			files = this.files(hashes),
 			cnt   = files.length,

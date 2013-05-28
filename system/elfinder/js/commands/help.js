@@ -19,7 +19,7 @@ elFinder.prototype.commands.help = function() {
 		sec     = 'ui-priority-secondary',
 		lic     = 'elfinder-help-license',
 		tab     = '<li class="ui-state-default ui-corner-top"><a href="#{id}">{title}</a></li>',
-		html    = ['<div class="ui-tabs ui-widget ui-widget-content ui-corner-all elfinder-help">', 
+		html    = ['<div class="ui-tabs ui-widget ui-widget-content ui-corner-all elfinder-help">',
 				'<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">'],
 		stpl    = '<div class="elfinder-help-shortcut"><div class="elfinder-help-shortcut-pattern">{pattern}</div> {descrip}</div>',
 		sep     = '<div class="elfinder-help-separator"/>',

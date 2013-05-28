@@ -75,7 +75,7 @@ class ModelCartCoupon extends Model {
 				$coupon = $this->getCoupon((int)$cc['coupon_id']);
 				if($coupon){
 					$this->session->data['coupons'][$coupon['code']] = $coupon;
-				} 
+				}
 			}
 		}
 	}

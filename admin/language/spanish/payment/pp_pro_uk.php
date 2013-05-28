@@ -2,7 +2,7 @@
 // Heading
 $_['heading_title']		= 'PayPal Website Payment Pro (UK)';
 
-// Text 
+// Text
 $_['text_payment']		= 'Pago';
 $_['text_success']		= 'Éxito: has modificado los detalles de cuenta PayPal Direct (UK) !';
 $_['text_pp_pro_uk']	= '<a onclick="window.open(\'https://www.paypal.com/uk/mrb/pal=W9TBB5DTD6QJW\');"><img src="view/theme/default/image/payment/paypal.png" alt="PayPal Website Payment Pro (UK)" title="PayPal Website Payment Pro (UK)" style="border: 1px solid #EEEEEE;" /></a>';
@@ -24,7 +24,7 @@ $_['entry_sort_order']	= 'Orden de aparición:';
 
 // Error
 $_['error_permission']	= 'Cuidado: No tienes permisos para modificar PayPal Website Payment Pro (UK)!';
-$_['error_vendor']		= 'Vendedor obligatorio!'; 
-$_['error_user']			= 'Usuario obligatorio!'; 
-$_['error_password']	= 'Contraseña obligatoria!'; 
-$_['error_partner']		= 'Partner obligatorio!'; 
+$_['error_vendor']		= 'Vendedor obligatorio!';
+$_['error_user']			= 'Usuario obligatorio!';
+$_['error_password']	= 'Contraseña obligatoria!';
+$_['error_partner']		= 'Partner obligatorio!';

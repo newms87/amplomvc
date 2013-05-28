@@ -8,20 +8,20 @@ class ControllerModuleFeatured extends Controller {
 		$filter_types = $this->config->get('product_filter_types');
 		
 		if(isset($_GET['sort_by'])){
-			$active_filter = $_GET['sort_by']; 
+			$active_filter = $_GET['sort_by'];
 		}
 		elseif(isset($_POST['sort_by'])){
-			$active_filter = $_POST['sort_by']; 
+			$active_filter = $_POST['sort_by'];
 		}
 		else{
 			$active_filter = $this->config->get('default_product_filter');
 		}
 		
 		if(isset($_GET['category_id'])){
-			$cat_filter = $_GET['category_id']; 
+			$cat_filter = $_GET['category_id'];
 		}
 		elseif(isset($_POST['category_id'])){
-			$cat_filter = $_POST['category_id']; 
+			$cat_filter = $_POST['category_id'];
 		}
 		else{
 			$cat_filter = 0;
@@ -154,13 +154,13 @@ class ControllerModuleFeatured extends Controller {
 			}
 
 			if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-				$price = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_show_price_with_tax')));
+				$price = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id']));
 			} else {
 				$price = false;
 			}
 				
 			if ((float)$product_info['special']) {
-				$special = $this->currency->format($this->tax->calculate($product_info['special'], $product_info['tax_class_id'], $this->config->get('config_show_price_with_tax')));
+				$special = $this->currency->format($this->tax->calculate($product_info['special'], $product_info['tax_class_id']));
 			} else {
 				$special = false;
 			}

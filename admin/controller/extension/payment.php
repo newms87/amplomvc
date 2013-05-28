@@ -5,7 +5,7 @@ class ControllerExtensionPayment extends Controller {
 
 		$this->load->language('extension/payment');
 		
-		$this->document->setTitle($this->_('heading_title')); 
+		$this->document->setTitle($this->_('heading_title'));
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('extension/payment'));
@@ -93,7 +93,7 @@ class ControllerExtensionPayment extends Controller {
 	
 	public function install() {
 		if (!$this->user->hasPermission('modify', 'extension/payment')) {
-			$this->session->data['error'] = $this->_('error_permission'); 
+			$this->session->data['error'] = $this->_('error_permission');
 			
 			$this->url->redirect($this->url->link('extension/payment'));
 		} else {
@@ -117,10 +117,10 @@ class ControllerExtensionPayment extends Controller {
 	
 	public function uninstall() {
 		if (!$this->user->hasPermission('modify', 'extension/payment')) {
-			$this->session->data['error'] = $this->_('error_permission'); 
+			$this->session->data['error'] = $this->_('error_permission');
 			
 			$this->url->redirect($this->url->link('extension/payment'));
-		} else {		
+		} else {
 			$this->model_setting_extension->uninstall('payment', $_GET['extension']);
 		
 			$this->model_setting_setting->deleteSetting($_GET['extension']);
@@ -134,7 +134,7 @@ class ControllerExtensionPayment extends Controller {
 				$class->uninstall();
 			}
 		
-			$this->url->redirect($this->url->link('extension/payment'));	
-		}			
+			$this->url->redirect($this->url->link('extension/payment'));
+		}
 	}
 }

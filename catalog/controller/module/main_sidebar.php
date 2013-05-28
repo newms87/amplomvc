@@ -1,4 +1,4 @@
-<?php  
+<?php
 class ControllerModuleMainSidebar extends Controller {
 	protected function index() {
 		$this->template->load('error/not_found');
@@ -10,11 +10,6 @@ class ControllerModuleMainSidebar extends Controller {
 			$designers[$key]['href'] = SITE_URL . $designer['keyword'];
 		
 		$this->data['designers'] = $designers;
-
-
-
-
-
 
 		$this->render();
 	}

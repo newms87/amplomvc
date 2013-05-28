@@ -21,7 +21,7 @@ $_['text_year']							= 'Este año';
 $_['text_order']						= 'Total pedidos';
 $_['text_customer']					= 'Total clientes';
 
-// Column 
+// Column
 $_['column_order']						= 'ID pedido';
 $_['column_customer']					= 'Cliente';
 $_['column_status']					= 'Estado';

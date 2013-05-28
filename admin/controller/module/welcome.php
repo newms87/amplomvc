@@ -2,7 +2,7 @@
 class ControllerModuleWelcome extends Controller {
 	
 	
-	public function index() {	
+	public function index() {
 		$this->template->load('module/welcome');
 
 		$this->load->language('module/welcome');
@@ -35,9 +35,9 @@ class ControllerModuleWelcome extends Controller {
 		
 		if (isset($_POST['welcome_module'])) {
 			$this->data['modules'] = $_POST['welcome_module'];
-		} elseif ($this->config->get('welcome_module')) { 
+		} elseif ($this->config->get('welcome_module')) {
 			$this->data['modules'] = $this->config->get('welcome_module');
-		}	
+		}
 				
 		$this->data['layouts'] = $this->model_design_layout->getLayouts();
 		
@@ -56,6 +56,6 @@ class ControllerModuleWelcome extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

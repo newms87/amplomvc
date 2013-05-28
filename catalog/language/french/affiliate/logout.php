@@ -1,5 +1,5 @@
 <?php
-// Heading 
+// Heading
 $_['heading_title']	= 'Se d&eacute;connecter du compte';
 
 // Text

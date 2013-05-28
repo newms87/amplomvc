@@ -132,19 +132,19 @@ class ModelAccountCustomer extends Model {
 		
 		if (isset($data['filter_customer_group_id']) && !is_null($data['filter_customer_group_id'])) {
 			$implode[] = "cg.customer_group_id = '" . $this->db->escape($data['filter_customer_group_id']) . "'";
-		}	
+		}
 		
 		if (isset($data['filter_status']) && !is_null($data['filter_status'])) {
 			$implode[] = "c.status = '" . (int)$data['filter_status'] . "'";
-		}	
+		}
 		
 		if (isset($data['filter_approved']) && !is_null($data['filter_approved'])) {
 			$implode[] = "c.approved = '" . (int)$data['filter_approved'] . "'";
-		}	
+		}
 			
 		if (isset($data['filter_ip']) && !is_null($data['filter_ip'])) {
 			$implode[] = "c.customer_id IN (SELECT customer_id FROM " . DB_PREFIX . "customer_ip WHERE ip = '" . $this->db->escape($data['filter_ip']) . "')";
-		}	
+		}
 				
 		if (isset($data['filter_date_added']) && !is_null($data['filter_date_added'])) {
 			$implode[] = "DATE(c.date_added) = DATE('" . $this->db->escape($data['filter_date_added']) . "')";
@@ -161,12 +161,12 @@ class ModelAccountCustomer extends Model {
 			'c.status',
 			'c.ip',
 			'c.date_added'
-		);	
+		);
 			
 		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
-			$sql .= " ORDER BY " . $data['sort'];	
+			$sql .= " ORDER BY " . $data['sort'];
 		} else {
-			$sql .= " ORDER BY name";	
+			$sql .= " ORDER BY name";
 		}
 			
 		if (isset($data['order']) && ($data['order'] == 'DESC')) {
@@ -178,18 +178,18 @@ class ModelAccountCustomer extends Model {
 		if (isset($data['start']) || isset($data['limit'])) {
 			if ($data['start'] < 0) {
 				$data['start'] = 0;
-			}			
+			}
 
 			if ($data['limit'] < 1) {
 				$data['limit'] = 20;
-			}	
+			}
 			
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
-		}		
+		}
 		
 		$query = $this->query($sql);
 		
-		return $query->rows;	
+		return $query->rows;
 	}
 		
 	public function getTotalCustomersByEmail($email) {
@@ -202,11 +202,11 @@ class ModelAccountCustomer extends Model {
 		$query = $this->query("SELECT * FROM `" . DB_PREFIX . "customer_ip` WHERE customer_id = '" . (int)$customer_id . "'");
 		
 		return $query->rows;
-	}	
+	}
 	
 	public function isBlacklisted($ip) {
 		$query = $this->query("SELECT * FROM `" . DB_PREFIX . "customer_ip_blacklist` WHERE ip = '" . $this->db->escape($ip) . "'");
 		
 		return $query->num_rows;
-	}	
+	}
 }

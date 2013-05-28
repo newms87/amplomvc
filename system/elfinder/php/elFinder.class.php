@@ -208,7 +208,7 @@ class elFinder {
 					
 					$this->volumes[$id] = $volume;
 					if (!$this->default && $volume->isReadable()) {
-						$this->default = $this->volumes[$id]; 
+						$this->default = $this->volumes[$id];
 					}
 				} else {
 					$this->mountErrors[] = 'Driver "'.$class.'" : '.implode(' ', $volume->error());
@@ -376,7 +376,7 @@ class elFinder {
 		
 		if ($this->debug || !empty($args['debug'])) {
 			$result['debug'] = array(
-				'connector' => 'php', 
+				'connector' => 'php',
 				'phpver'	=> PHP_VERSION,
 				'time'		=> $this->utime() - $this->time,
 				'memory'	=> (function_exists('memory_get_peak_usage') ? ceil(memory_get_peak_usage()/1024).'Kb / ' : '').ceil(memory_get_usage()/1024).'Kb / '.ini_get('memory_limit'),
@@ -646,7 +646,7 @@ class elFinder {
 	}
 	
 	/**
-	* Required to output file in browser when volume URL is not set 
+	* Required to output file in browser when volume URL is not set
 	* Return array contains opened file pointer, root itself and required headers
 	*
 	* @param  array  command arguments
@@ -659,7 +659,7 @@ class elFinder {
 		$h403	= 'HTTP/1.x 403 Access Denied';
 		$h404	= 'HTTP/1.x 404 Not Found';
 
-		if (($volume = $this->volume($target)) == false) { 
+		if (($volume = $this->volume($target)) == false) {
 			return array('error' => 'File not found', 'header' => $h404, 'raw' => true);
 		}
 		
@@ -679,8 +679,8 @@ class elFinder {
 			$disp = 'attachment';
 			$mime = 'application/octet-stream';
 		} else {
-			$disp  = preg_match('/^(image|text)/i', $file['mime']) || $file['mime'] == 'application/x-shockwave-flash' 
-					? 'inline' 
+			$disp  = preg_match('/^(image|text)/i', $file['mime']) || $file['mime'] == 'application/x-shockwave-flash'
+					? 'inline'
 					: 'attachment';
 			$mime = $file['mime'];
 		}
@@ -702,7 +702,7 @@ class elFinder {
 			'pointer' => $fp,
 			'info'	=> $file,
 			'header'  => array(
-				'Content-Type: '.$mime, 
+				'Content-Type: '.$mime,
 				'Content-Disposition: '.$disp.'; '.$filename,
 				'Content-Location: '.$file['name'],
 				'Content-Transfer-Encoding: binary',
@@ -874,7 +874,7 @@ class elFinder {
 		}
 		
 		foreach ($files['name'] as $i => $name) {
-			if (($error = $files['error'][$i]) > 0) {				
+			if (($error = $files['error'][$i]) > 0) {
 				$result['warning'] = $this->error(self::ERROR_UPLOAD_FILE, $name, $error == UPLOAD_ERR_INI_SIZE || $error == UPLOAD_ERR_FORM_SIZE ? self::ERROR_UPLOAD_FILE_SIZE : self::ERROR_UPLOAD_TRANSFER);
 				$this->uploadDebug = 'Upload error code: '.$error;
 				break;
@@ -989,7 +989,7 @@ class elFinder {
 	*
 	* @param  array  $args  command arguments
 	* @return array
-	* @author Dmitry (dio) Levashov, 
+	* @author Dmitry (dio) Levashov,
 	* @author Alexey Sukhotin
 	**/
 	protected function extract($args) {
@@ -1000,7 +1000,7 @@ class elFinder {
 		if (($volume = $this->volume($target)) == false
 		|| ($file = $volume->file($target)) == false) {
 			return array('error' => $this->error(self::ERROR_EXTRACT, '#'.$target, self::ERROR_FILE_NOT_FOUND));
-		}  
+		}
 
 		return ($file = $volume->extract($target))
 			? array('added' => array($file))
@@ -1012,7 +1012,7 @@ class elFinder {
 	*
 	* @param  array  $args  command arguments
 	* @return array
-	* @author Dmitry (dio) Levashov, 
+	* @author Dmitry (dio) Levashov,
 	* @author Alexey Sukhotin
 	**/
 	protected function archive($args) {
@@ -1127,13 +1127,13 @@ class elFinder {
 		foreach ($this->volumes as $id => $v) {
 			if (strpos(''.$hash, $id) === 0) {
 				return $this->volumes[$id];
-			} 
+			}
 		}
 		return false;
 	}
 	
 	/**
-	* Return files info array 
+	* Return files info array
 	*
 	* @param  array  $data  one file info or files info
 	* @return array

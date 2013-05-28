@@ -11,7 +11,7 @@ class ModelUserUser extends Model {
 		
 		if(isset($data['contact'])){
 			foreach($data['contact'] as $contact)
-				$this->model_includes_contact->addContact('user',$user_id,$contact); 
+				$this->model_includes_contact->addContact('user',$user_id,$contact);
 		}
 	}
 	
@@ -83,12 +83,12 @@ class ModelUserUser extends Model {
 			'email',
 			'status',
 			'date_added'
-		);	
+		);
 			
 		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
-			$sql .= " ORDER BY " . $data['sort'];	
+			$sql .= " ORDER BY " . $data['sort'];
 		} else {
-			$sql .= " ORDER BY username";	
+			$sql .= " ORDER BY username";
 		}
 			
 		if (isset($data['order']) && ($data['order'] == 'DESC')) {
@@ -100,11 +100,11 @@ class ModelUserUser extends Model {
 		if (isset($data['start']) || isset($data['limit'])) {
 			if ($data['start'] < 0) {
 				$data['start'] = 0;
-			}			
+			}
 			
 			if ($data['limit'] < 1) {
 				$data['limit'] = 20;
-			}	
+			}
 			
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
 		}
@@ -139,5 +139,5 @@ class ModelUserUser extends Model {
 			$query = $this->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "user` WHERE email = '" . $this->db->escape($email) . "'");
 		
 		return $query->row['total'];
-	}	
+	}
 }

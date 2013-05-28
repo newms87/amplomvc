@@ -1,7 +1,7 @@
 <?php
 class ControllerShippingFlat extends Controller {
 	
-	public function index() {	
+	public function index() {
 		$this->template->load('shipping/flat');
 
 		$this->load->language('shipping/flat');
@@ -96,6 +96,6 @@ class ControllerShippingFlat extends Controller {
 			}
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

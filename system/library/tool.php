@@ -55,7 +55,7 @@ class Tool {
 		return preg_replace($patterns, $replacements, $text);
 	}
 	
-	public function format_invoice($d){	
+	public function format_invoice($d){
 		$date_format = array();
 		return preg_match("/%.*%/",$d,$date_format)?preg_replace("/%.*%/",date(preg_replace("/%/",'',$date_format[0])), $d):$d;
 	}
@@ -111,6 +111,7 @@ class Tool {
 		return $new_array;
 	}
 	
+	
 	/**
 	* limits the number of characters in a string to the nearest word or character
 	*/
@@ -141,7 +142,7 @@ class Tool {
 	public function bytes2str($size, $decimals = 2, $unit = null){
 		$unit_sizes = array(
 			'TB' => 1024*1024*1024*1024,
-			'GB' => 1024*1024*1024,			
+			'GB' => 1024*1024*1024,
 			'MB' => 1024*1024,
 			'KB' => 1024,
 			'B' => 1,
@@ -174,19 +175,19 @@ class Tool {
 			foreach($child->attributes() as $attr=>$value)
 				if($attr == 'href')
 					$the_link = $value;
-				$return["$parent"][] = $this->parse_xml_to_array($child)?$this->parse_xml_to_array($child):($the_link?"$the_link":"$child"); 
-		} 
-		return $return; 
+				$return["$parent"][] = $this->parse_xml_to_array($child)?$this->parse_xml_to_array($child):($the_link?"$the_link":"$child");
+		}
+		return $return;
 	}
 	
 	
 	/**
 	* Retrieves files in a specified directory recursively
-	* 
+	*
 	* @param $dir - the directory to recursively search for files
 	* @param $exts - the file extensions to search for. Use false to include all file extensions.
 	* @param $return_type - can by FILELIST_STRING (for a string) or FILELIST_SPLFILEINFO (for an SPLFileInfo Object)
-	* 
+	*
 	* @return array - Each value in the array will be determined by the $return_type param.
 	*/
 	function get_files_r($dir, $exts = array('php','tpl','css','js','to'), $return_type = FILELIST_SPLFILEINFO){

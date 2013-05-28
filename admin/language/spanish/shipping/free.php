@@ -2,7 +2,7 @@
 // Heading
 $_['heading_title']	= 'Envío gratuito';
 
-// Text 
+// Text
 $_['text_shipping']	= 'Envío';
 $_['text_success']	= 'Éxito: has modificado envío gratuito!';
 

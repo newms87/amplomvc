@@ -1,6 +1,6 @@
 "use strict";
 /**
- * @class elFinder command "getfile". 
+ * @class elFinder command "getfile".
  * Return selected files info into outer callback.
  * For use elFinder with wysiwyg editors etc.
  *
@@ -53,7 +53,7 @@ elFinder.prototype.commands.getfile = function() {
 					? opts.multiple ? $.map(files, function(f) { return f.url; }) : files[0].url
 					: opts.multiple ? files : files[0];
 			},
-			req = [], 
+			req = [],
 			i, file, dim;
 
 		if (this.getstate() == -1) {

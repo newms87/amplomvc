@@ -2,7 +2,7 @@
 // Heading
 $_['heading_title']		= 'WorldPay';
 
-// Text 
+// Text
 $_['text_payment']		= 'Payment';
 $_['text_success']		= 'Success: You have modified WorldPay account details!';
 $_['text_successful']	= 'On - Always Successful';

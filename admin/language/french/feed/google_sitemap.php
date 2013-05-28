@@ -2,7 +2,7 @@
 // Heading
 $_['heading_title']		= 'Google Sitemap';
 
-// Text 
+// Text
 $_['text_feed']			= 'Flux des produits';
 $_['text_success']		= 'F&eacute;licitations, vous avez modifi&eacute; le flux <b>Google Sitemap</b> avec succ&egrave;s !';
 

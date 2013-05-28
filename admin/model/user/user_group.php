@@ -46,7 +46,7 @@ class ModelUserUserGroup extends Model {
 	public function getUserGroups($data = array()) {
 		$sql = "SELECT * FROM " . DB_PREFIX . "user_group";
 		
-		$sql .= " ORDER BY name";	
+		$sql .= " ORDER BY name";
 			
 		if (isset($data['order']) && ($data['order'] == 'DESC')) {
 			$sql .= " DESC";
@@ -57,11 +57,11 @@ class ModelUserUserGroup extends Model {
 		if (isset($data['start']) || isset($data['limit'])) {
 			if ($data['start'] < 0) {
 				$data['start'] = 0;
-			}			
+			}
 
 			if ($data['limit'] < 1) {
 				$data['limit'] = 20;
-			}	
+			}
 			
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
 		}
@@ -78,7 +78,7 @@ class ModelUserUserGroup extends Model {
 			'common/login',
 			'common/logout',
 			'common/forgotten',
-			'common/reset',			
+			'common/reset',
 			'error/not_found',
 			'error/permission',
 			'common/footer',
@@ -106,5 +106,5 @@ class ModelUserUserGroup extends Model {
 			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "user_group");
 		
 		return $query->row['total'];
-	}	
+	}
 }

@@ -2,7 +2,7 @@
 class ControllerModuleBanner extends Controller {
 	
 	
-	public function index() {	
+	public function index() {
 		$this->template->load('module/banner');
 
 		$this->load->language('module/banner');
@@ -10,7 +10,7 @@ class ControllerModuleBanner extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('banner', $_POST);		
+			$this->model_setting_setting->editSetting('banner', $_POST);
 					
 			$this->message->add('success', $this->_('text_success'));
 						
@@ -41,9 +41,9 @@ class ControllerModuleBanner extends Controller {
 		
 		if (isset($_POST['banner_module'])) {
 			$this->data['modules'] = $_POST['banner_module'];
-		} elseif ($this->config->get('banner_module')) { 
+		} elseif ($this->config->get('banner_module')) {
 			$this->data['modules'] = $this->config->get('banner_module');
-		}	
+		}
 				
 		$this->data['layouts'] = $this->model_design_layout->getLayouts();
 
@@ -66,10 +66,10 @@ class ControllerModuleBanner extends Controller {
 			foreach ($_POST['banner_module'] as $key => $value) {
 				if (!$value['width'] || !$value['height']) {
 					$this->error['dimension'][$key] = $this->_('error_dimension');
-				}			
+				}
 			}
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

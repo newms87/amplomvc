@@ -1,4 +1,4 @@
-<?php  
+<?php
 class ControllerModuleCurrency extends Controller {
 	protected function index() {
 		$this->template->load('module/currency');
@@ -20,11 +20,11 @@ class ControllerModuleCurrency extends Controller {
 		
 		$this->data['action'] = $this->url->link('module/currency');
 		
-		$this->data['currency_code'] = $this->currency->getCode(); 
+		$this->data['currency_code'] = $this->currency->getCode();
 		
 		$this->data['currencies'] = array();
 		
-		$results = $this->model_localisation_currency->getCurrencies();	
+		$results = $this->model_localisation_currency->getCurrencies();
 		
 		foreach ($results as $result) {
 			if ($result['status']) {
@@ -32,7 +32,7 @@ class ControllerModuleCurrency extends Controller {
 					'title'		=> $result['title'],
 					'code'			=> $result['code'],
 					'symbol_left'  => $result['symbol_left'],
-					'symbol_right' => $result['symbol_right']				
+					'symbol_right' => $result['symbol_right']
 				);
 			}
 		}
@@ -52,16 +52,10 @@ class ControllerModuleCurrency extends Controller {
 			
 			if ($data) {
 				$url = '&' . urldecode(http_build_query($data, '', '&'));
-			}	
+			}
 						
 			$this->data['redirect'] = $this->url->link($route, $url);
-		}	
-
-
-
-
-
-
+		}
 
 		$this->render();
 	}

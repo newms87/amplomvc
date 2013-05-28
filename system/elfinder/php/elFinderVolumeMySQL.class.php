@@ -89,8 +89,8 @@ class elFinderVolumeMySQL extends elFinderVolumeDriver {
 	protected function init() {
 		
 		if (!($this->options['host'] || $this->options['socket'])
-		||  !$this->options['user'] 
-		||  !$this->options['pass'] 
+		||  !$this->options['user']
+		||  !$this->options['pass']
 		||  !$this->options['db']
 		||  !$this->options['path']
 		||  !$this->options['files_table']) {
@@ -282,7 +282,7 @@ class elFinderVolumeMySQL extends elFinderVolumeDriver {
 			
 			default:
 				$result = $this->imgResize($img, $width, $height, false, true);
-				break;				
+				break;
 		}
 		
 		if ($result) {
@@ -323,8 +323,8 @@ class elFinderVolumeMySQL extends elFinderVolumeDriver {
 	protected function cacheDir($path) {
 		$this->dirsCache[$path] = array();
 
-		$sql = 'SELECT f.id, f.parent_id, f.name, f.size, f.mtime AS ts, f.mime, f.read, f.write, f.locked, f.hidden, f.width, f.height, IF(ch.id, 1, 0) AS dirs 
-				FROM '.$this->tbf.' AS f 
+		$sql = 'SELECT f.id, f.parent_id, f.name, f.size, f.mtime AS ts, f.mime, f.read, f.write, f.locked, f.hidden, f.width, f.height, IF(ch.id, 1, 0) AS dirs
+				FROM '.$this->tbf.' AS f
 				LEFT JOIN '.$this->tbf.' AS ch ON ch.parent_id=f.id AND ch.mime="directory"
 				WHERE f.parent_id="'.$path.'"
 				GROUP BY f.id';
@@ -336,7 +336,7 @@ class elFinderVolumeMySQL extends elFinderVolumeDriver {
 				$id = $row['id'];
 				if ($row['parent_id']) {
 					$row['phash'] = $this->encode($row['parent_id']);
-				} 
+				}
 				
 				if ($row['mime'] == 'directory') {
 					unset($row['width']);
@@ -523,13 +523,13 @@ class elFinderVolumeMySQL extends elFinderVolumeDriver {
 	*
 	* If file does not exists - returns empty array or false.
 	*
-	* @param  string  $path	file path 
+	* @param  string  $path	file path
 	* @return array|false
 	* @author Dmitry (dio) Levashov
 	**/
 	protected function _stat($path) {
 		$sql = 'SELECT f.id, f.parent_id, f.name, f.size, f.mtime AS ts, f.mime, f.read, f.write, f.locked, f.hidden, f.width, f.height, IF(ch.id, 1, 0) AS dirs
-				FROM '.$this->tbf.' AS f 
+				FROM '.$this->tbf.' AS f
 				LEFT JOIN '.$this->tbf.' AS p ON p.id=f.parent_id
 				LEFT JOIN '.$this->tbf.' AS ch ON ch.parent_id=f.id AND ch.mime="directory"
 				WHERE f.id="'.$path.'"
@@ -541,7 +541,7 @@ class elFinderVolumeMySQL extends elFinderVolumeDriver {
 			$stat = $res->fetch_assoc();
 			if ($stat['parent_id']) {
 				$stat['phash'] = $this->encode($stat['parent_id']);
-			} 
+			}
 			if ($stat['mime'] == 'directory') {
 				unset($stat['width']);
 				unset($stat['height']);
@@ -871,7 +871,7 @@ class elFinderVolumeMySQL extends elFinderVolumeDriver {
 	* @param  string  $path  archive path
 	* @param  array	$arc	archiver command and arguments (same as in $this->archivers)
 	* @return true
-	* @author Dmitry (dio) Levashov, 
+	* @author Dmitry (dio) Levashov,
 	* @author Alexey Sukhotin
 	**/
 	protected function _extract($path, $arc) {
@@ -886,11 +886,11 @@ class elFinderVolumeMySQL extends elFinderVolumeDriver {
 	* @param  string  $name	archive name
 	* @param  array	$arc	archiver options
 	* @return string|bool
-	* @author Dmitry (dio) Levashov, 
+	* @author Dmitry (dio) Levashov,
 	* @author Alexey Sukhotin
 	**/
 	protected function _archive($dir, $files, $name, $arc) {
 		return false;
 	}
 	
-} // END class 
+} // END class

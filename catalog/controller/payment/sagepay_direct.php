@@ -8,47 +8,47 @@ class ControllerPaymentSagepayDirect extends Controller {
 		$this->data['cards'] = array();
 
 		$this->data['cards'][] = array(
-			'text'  => 'Visa', 
+			'text'  => 'Visa',
 			'value' => 'VISA'
 		);
 
 		$this->data['cards'][] = array(
-			'text'  => 'MasterCard', 
+			'text'  => 'MasterCard',
 			'value' => 'MC'
 		);
 
 		$this->data['cards'][] = array(
-			'text'  => 'Visa Delta/Debit', 
+			'text'  => 'Visa Delta/Debit',
 			'value' => 'DELTA'
 		);
 		
 		$this->data['cards'][] = array(
-			'text'  => 'Solo', 
+			'text'  => 'Solo',
 			'value' => 'SOLO'
-		);	
+		);
 		
 		$this->data['cards'][] = array(
-			'text'  => 'Maestro', 
+			'text'  => 'Maestro',
 			'value' => 'MAESTRO'
 		);
 		
 		$this->data['cards'][] = array(
-			'text'  => 'Visa Electron UK Debit', 
+			'text'  => 'Visa Electron UK Debit',
 			'value' => 'UKE'
 		);
 		
 		$this->data['cards'][] = array(
-			'text'  => 'American Express', 
+			'text'  => 'American Express',
 			'value' => 'AMEX'
 		);
 		
 		$this->data['cards'][] = array(
-			'text'  => 'Diners Club', 
+			'text'  => 'Diners Club',
 			'value' => 'DC'
 		);
 		
 		$this->data['cards'][] = array(
-			'text'  => 'Japan Credit Bureau', 
+			'text'  => 'Japan Credit Bureau',
 			'value' => 'JCB'
 		);
 		
@@ -56,7 +56,7 @@ class ControllerPaymentSagepayDirect extends Controller {
 		
 		for ($i = 1; $i <= 12; $i++) {
 			$this->data['months'][] = array(
-				'text'  => strftime('%B', mktime(0, 0, 0, $i, 1, 2000)), 
+				'text'  => strftime('%B', mktime(0, 0, 0, $i, 1, 2000)),
 				'value' => sprintf('%02d', $i)
 			);
 		}
@@ -65,9 +65,9 @@ class ControllerPaymentSagepayDirect extends Controller {
 		
 		$this->data['year_valid'] = array();
 		
-		for ($i = $today['year'] - 10; $i < $today['year'] + 1; $i++) {	
+		for ($i = $today['year'] - 10; $i < $today['year'] + 1; $i++) {
 			$this->data['year_valid'][] = array(
-				'text'  => strftime('%Y', mktime(0, 0, 0, 1, 1, $i)), 
+				'text'  => strftime('%Y', mktime(0, 0, 0, 1, 1, $i)),
 				'value' => strftime('%Y', mktime(0, 0, 0, 1, 1, $i))
 			);
 		}
@@ -77,27 +77,21 @@ class ControllerPaymentSagepayDirect extends Controller {
 		for ($i = $today['year']; $i < $today['year'] + 11; $i++) {
 			$this->data['year_expire'][] = array(
 				'text'  => strftime('%Y', mktime(0, 0, 0, 1, 1, $i)),
-				'value' => strftime('%Y', mktime(0, 0, 0, 1, 1, $i)) 
+				'value' => strftime('%Y', mktime(0, 0, 0, 1, 1, $i))
 			);
 		}
-		
 
-
-
-
-
-
-		$this->render();		
+		$this->render();
 	}
 	
 	public function send() {
 		if ($this->config->get('sagepay_direct_test') == 'live') {
 			$url = 'https://live.sagepay.com/gateway/service/vspdirect-register.vsp';
 		} elseif ($this->config->get('sagepay_direct_test') == 'test') {
-			$url = 'https://test.sagepay.com/gateway/service/vspdirect-register.vsp';		
+			$url = 'https://test.sagepay.com/gateway/service/vspdirect-register.vsp';
 		} elseif ($this->config->get('sagepay_direct_test') == 'sim') {
 			$url = 'https://test.sagepay.com/Simulator/VSPDirectGateway.asp';
-  		} 		
+  		}
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 		
@@ -144,7 +138,7 @@ class ControllerPaymentSagepayDirect extends Controller {
 			
 			if ($order_info['shipping_address_2']) {
 				$data['DeliveryAddress2'] = $order_info['shipping_address_2'];
-			}		
+			}
 			
 			$data['DeliveryCity'] = substr($order_info['shipping_city'], 0, 40);
 			$data['DeliveryPostCode'] = substr($order_info['shipping_postcode'], 0, 10);
@@ -173,8 +167,8 @@ class ControllerPaymentSagepayDirect extends Controller {
 				$data['DeliveryState'] = $order_info['payment_zone_code'];
 			}
 		
-			$data['DeliveryPhone'] = $order_info['telephone'];			
-		}		
+			$data['DeliveryPhone'] = $order_info['telephone'];
+		}
 		
 		$data['CustomerEMail'] = substr($order_info['email'], 0, 255);
 		$data['Apply3DSecure'] = '0';
@@ -249,23 +243,23 @@ class ControllerPaymentSagepayDirect extends Controller {
 			
 			$this->model_checkout_order->update_order($this->session->data['order_id'], $this->config->get('sagepay_direct_order_status_id'), $message, false);
 
-			$json['success'] = $this->url->link('checkout/success'); 			
+			$json['success'] = $this->url->link('checkout/success');
 		} else {
 			$json['error'] = $data['StatusDetail'];
 		}
 
 		$this->response->setOutput(json_encode($json));
-	}	
+	}
 	
 	public function callback() {
 		if (isset($this->session->data['order_id'])) {
 			if ($this->config->get('sagepay_direct_test') == 'live') {
 				$url = 'https://live.sagepay.com/gateway/service/direct3dcallback.vsp';
 			} elseif ($this->config->get('sagepay_direct_test') == 'test') {
-				$url = 'https://test.sagepay.com/gateway/service/direct3dcallback.vsp';		
+				$url = 'https://test.sagepay.com/gateway/service/direct3dcallback.vsp';
 			} elseif ($this->config->get('sagepay_direct_test') == 'sim') {
 				$url = 'https://test.sagepay.com/Simulator/VSPDirectCallback.asp';
-			} 	
+			}
 			
 			$curl = curl_init($url);
 	
@@ -327,7 +321,7 @@ class ControllerPaymentSagepayDirect extends Controller {
 					$message .= 'CAVV: ' . $data['CAVV'] . "\n";
 				}
 				
-				$this->model_checkout_order->update_order($this->session->data['order_id'], $this->config->get('sagepay_direct_order_status_id'), $message, false);	
+				$this->model_checkout_order->update_order($this->session->data['order_id'], $this->config->get('sagepay_direct_order_status_id'), $message, false);
 				
 				$this->url->redirect($this->url->link('checkout/success'));
 			} else {

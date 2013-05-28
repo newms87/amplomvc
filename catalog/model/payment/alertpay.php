@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ModelPaymentAlertPay extends Model {
   	public function getMethod($address, $total) {
 		$this->load->language('payment/alertpay');
@@ -13,12 +13,12 @@ class ModelPaymentAlertPay extends Model {
 			$status = true;
 		} else {
 			$status = false;
-		}	
+		}
 		
 		$method_data = array();
 	
-		if ($status) {  
-				$method_data = array( 
+		if ($status) {
+				$method_data = array(
 				'code'		=> 'alertpay',
 				'title'		=> $this->_('text_title'),
 				'sort_order' => $this->config->get('alertpay_sort_order')

@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ModelPaymentPPStandard extends Model {
   	public function getMethod($address, $total) {
 		$this->load->language('payment/pp_standard');
@@ -42,7 +42,7 @@ class ModelPaymentPPStandard extends Model {
 			return array();
 		}
 					
-		$method_data = array( 
+		$method_data = array(
 			'code'		=> 'pp_standard',
 			'title'		=> '<img style="position:relative;top:-5px" src="https://www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif" border="0" alt="" /><span style="position:relative; top:-30px; margin-left:20px;"> OR pay with Credit Card via paypal.</span>',
 			'sort_order' => $this->config->get('pp_standard_sort_order'),

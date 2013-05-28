@@ -10,7 +10,7 @@ class ControllerPaymentAlertPay extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('alertpay', $_POST);				
+			$this->model_setting_setting->editSetting('alertpay', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -60,22 +60,22 @@ class ControllerPaymentAlertPay extends Controller {
 		if (isset($_POST['alertpay_total'])) {
 			$this->data['alertpay_total'] = $_POST['alertpay_total'];
 		} else {
-			$this->data['alertpay_total'] = $this->config->get('alertpay_total'); 
-		} 
+			$this->data['alertpay_total'] = $this->config->get('alertpay_total');
+		}
 				
 		if (isset($_POST['alertpay_order_status_id'])) {
 			$this->data['alertpay_order_status_id'] = $_POST['alertpay_order_status_id'];
 		} else {
-			$this->data['alertpay_order_status_id'] = $this->config->get('alertpay_order_status_id'); 
-		} 
+			$this->data['alertpay_order_status_id'] = $this->config->get('alertpay_order_status_id');
+		}
 		
 		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 		
 		if (isset($_POST['alertpay_geo_zone_id'])) {
 			$this->data['alertpay_geo_zone_id'] = $_POST['alertpay_geo_zone_id'];
 		} else {
-			$this->data['alertpay_geo_zone_id'] = $this->config->get('alertpay_geo_zone_id'); 
-		} 
+			$this->data['alertpay_geo_zone_id'] = $this->config->get('alertpay_geo_zone_id');
+		}
 
 		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 		
@@ -112,6 +112,6 @@ class ControllerPaymentAlertPay extends Controller {
 			$this->error['security'] = $this->_('error_security');
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

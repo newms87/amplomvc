@@ -23,7 +23,7 @@ class ModelCatalogCollection extends Model {
 			$select = '*';
 		}
 		
-		$from = DB_PREFIX . "collection c"; 
+		$from = DB_PREFIX . "collection c";
 		$from .= " LEFT JOIN " . DB_PREFIX . "collection_store cs ON (c.collection_id = cs.collection_id)";
 		
 		$where = "WHERE cs.store_id = '" . (int)$this->config->get('config_store_id') . "'  AND c.status = '1'";
@@ -71,7 +71,7 @@ class ModelCatalogCollection extends Model {
 			"SELECT c.*, cc.category_id FROM " . DB_PREFIX . "collection c" .
 			" LEFT JOIN " . DB_PREFIX . "collection_store cs ON (c.collection_id=cs.collection_id)" .
 			" LEFT JOIN " . DB_PREFIX . "collection_category cc ON (c.collection_id=cc.collection_id)" .
-			" LEFT JOIN " . DB_PREFIX . "collection_product cp ON (c.collection_id=cp.collection_id)" . 
+			" LEFT JOIN " . DB_PREFIX . "collection_product cp ON (c.collection_id=cp.collection_id)" .
 			" WHERE cs.store_id='$store_id' AND cp.product_id='" . (int)$product_id . "' LIMIT 1"
 		);
 		
@@ -109,7 +109,7 @@ class ModelCatalogCollection extends Model {
 		//Order By & Limit
 		if(!$total){
 			if(!empty($data['sort'])){
-				$order = (!empty($data['order']) && $data['order'] == 'DESC') ? 'DESC' : 'ASC'; 
+				$order = (!empty($data['order']) && $data['order'] == 'DESC') ? 'DESC' : 'ASC';
 				
 				$order_by = "ORDER BY $data[sort] $order";
 			}
@@ -170,9 +170,19 @@ class ModelCatalogCollection extends Model {
 		return $this->getCollectionProducts($collection_id, $data, true);
 	}
 	
+	public function hasAttributeGroup($collection_id, $attribute_group_id) {
+		$query = 
+			"SELECT COUNT(*) FROM " . DB_PREFIX . "collection_product cp" .
+			" LEFT JOIN " . DB_PREFIX . "product_attribute pa ON (cp.product_id=pa.product_id)" .
+			" LEFT JOIN " . DB_PREFIX . "attribute a ON (a.attribute_id=pa.attribute_id)" .
+			" WHERE a.attribute_group_id = '" . (int)$attribute_group_id . "' AND cp.collection_id = '" . (int)$collection_id . "' LIMIT 1";
+			
+		return $this->query_var($query);
+	}
+	
 	public function get_name($product_id){
 		$result = $this->query(
-			"SELECT cp.name FROM " . DB_PREFIX . "collection c " . 
+			"SELECT cp.name FROM " . DB_PREFIX . "collection c " .
 			"JOIN " . DB_PREFIX . "collection_product cp ON (cp.collection_id=c.collection_id) " .
 			"WHERE cp.product_id='" . (int)$product_id . "' LIMIT 1"
 		);
@@ -182,5 +192,5 @@ class ModelCatalogCollection extends Model {
 		}
 		
 		return false;
-	}	
+	}
 }

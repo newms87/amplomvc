@@ -1,4 +1,4 @@
-<?php 
+<?php
 class pluginHandler{
 	private $file_merge = null;
 	private $merge_registry = array();
@@ -303,13 +303,13 @@ class pluginHandler{
 			}
 		}
 		
-		$restrict = "(`restrict` IS NULL OR LCASE(`restrict`) IN ('$class', '$method', ''))"; 
+		$restrict = "(`restrict` IS NULL OR LCASE(`restrict`) IN ('$class', '$method', ''))";
 		
 		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "plugin_db WHERE `table` = '$table' AND `query_type` = '$query_type' AND `when` = '$when' AND $restrict");
 		
 		foreach($query->rows as $row){
 			$this->db_request($row, $data, $where);
-		} 
+		}
 	}
 	
 	private function db_request($request, &$data, &$where){

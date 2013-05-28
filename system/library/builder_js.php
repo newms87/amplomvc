@@ -1,12 +1,12 @@
-<?php 
+<?php
 
 switch($js){
 
 /**
  * load_zones
- * 
+ *
  * Loads the option values for a html select into $zone_selector, based on the current $country_selector value
- * 
+ *
  * @param $country_selector - The jQuery selector for the country select element
  * @param $zone_selector - The jQuery selector for the zone select element
  * @param $parent_selector - The jQuery selector for the common parent element of both zone/country selectors
@@ -42,7 +42,7 @@ country_selectors.live('change', function(event){
   
   zone_selector.attr('zone_id', zone_selector.val() ||  zone_selector.attr('zone_id') || zone_selector.attr('select_value') || 0);
 	
-  zone_selector.load('index.php?route=tool/data/load_zones&country_id=' + cs.val() + '<?=$allow_all;?>', 
+  zone_selector.load('index.php?route=tool/data/load_zones&country_id=' + cs.val() + '<?=$allow_all;?>',
 	function(){
 		zs = $(this).closest('<?= $parent_selector;?>').find('<?= $zone_selector;?>');
 		zs.val(zs.attr('zone_id') || 0).trigger('change');
@@ -60,8 +60,8 @@ country_selectors.each(function(i,e){
 
 /**
  * upload_image
- * 
- * Makes the function upload_image available which displays the image upload manager 
+ *
+ * Makes the function upload_image available which displays the image upload manager
  * with a callback to a image input field(s).
  */
 
@@ -78,9 +78,9 @@ var no_image = "<?= HTTP_THEME_IMAGE . "no_image.png"; ?>"
 	
 /**
  * filter_url
- * 
+ *
  * provides a filter() function that will load the specified $route and generating filter arguments in the query
- * 
+ *
  * @param $route - The route of the page to load
  * @param $filters - The list of filters to activate
  */
@@ -108,7 +108,7 @@ function filter() {
 	
 	location = url;
 }
-//--></script> 
+//--></script>
 <?	break;
 
 
@@ -146,7 +146,7 @@ for(var e in errors){
 <?php break;
 
 
-	case 'autocomplete': 
+	case 'autocomplete':
 		if(!$args || count($args) < 3){
 			trigger_error("Template JS: autocomplete: invalid arguments! Usage: \$this->builder->js('autocomplete', array(\$selector,\$label,\$value,\$callback));");
 			return '';
@@ -179,7 +179,7 @@ $('<?=$selector;?>').each(function(i,e){
 					}));
 				}
 			});
-		}, 
+		},
 		select: function(event, ui) {
 			<?= $callback;?>($(e), ui.item);
 			
@@ -187,7 +187,7 @@ $('<?=$selector;?>').each(function(i,e){
 		}
 	})
 });
-//--></script> 
+//--></script>
 <?php break;
 
 

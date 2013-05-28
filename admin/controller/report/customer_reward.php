@@ -1,6 +1,6 @@
 <?php
 class ControllerReportCustomerReward extends Controller {
-	public function index() {	
+	public function index() {
 		$this->template->load('report/customer_reward');
 
 		$this->load->language('report/customer_reward');
@@ -45,13 +45,13 @@ class ControllerReportCustomerReward extends Controller {
 		$this->data['customers'] = array();
 		
 		$data = array(
-			'filter_date_start'	=> $filter_date_start, 
-			'filter_date_end'	=> $filter_date_end, 
+			'filter_date_start'	=> $filter_date_start,
+			'filter_date_end'	=> $filter_date_end,
 			'start'				=> ($page - 1) * $this->config->get('config_admin_limit'),
 			'limit'				=> $this->config->get('config_admin_limit')
 		);
 				
-		$customer_total = $this->model_report_customer->getTotalRewardPoints($data); 
+		$customer_total = $this->model_report_customer->getTotalRewardPoints($data);
 		
 		$results = $this->model_report_customer->getRewardPoints($data);
 		
@@ -87,14 +87,10 @@ class ControllerReportCustomerReward extends Controller {
 		
 		$this->pagination->init();
 		$this->pagination->total = $customer_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('report/customer_reward', $url);
-			
 		$this->data['pagination'] = $this->pagination->render();
 		
 		$this->data['filter_date_start'] = $filter_date_start;
-		$this->data['filter_date_end'] = $filter_date_end;		
+		$this->data['filter_date_end'] = $filter_date_end;
 				
 		$this->children = array(
 			'common/header',

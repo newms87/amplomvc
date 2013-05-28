@@ -4,7 +4,7 @@
  *
  * @example
  * $('selector').elfinder({
- *   .... 
+ *   ....
  *   transport : new elFinderSupportVer1()
  * })
  *
@@ -152,7 +152,7 @@ window.elFinderSupportVer1 = function(upload) {
 	
 	this.normalize = function(cmd, data) {
 		var self = this,
-			files = {}, 
+			files = {},
 			filter = function(file) { return file && file.hash && file.name && file.mime ? file : null; },
 			phash;
 

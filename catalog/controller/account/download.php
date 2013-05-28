@@ -24,7 +24,7 @@ class ControllerAccountDownload extends Controller {
 				$page = $_GET['page'];
 			} else {
 				$page = 1;
-			}			
+			}
 	
 			$this->data['downloads'] = array();
 			
@@ -66,19 +66,9 @@ class ControllerAccountDownload extends Controller {
 		
 			$this->pagination->init();
 			$this->pagination->total = $download_total;
-			$this->pagination->page = $page;
-			$this->pagination->limit = $this->config->get('config_catalog_limit');
-			$this->pagination->url = $this->url->link('account/download');
-			
 			$this->data['pagination'] = $this->pagination->render();
 			
 			$this->data['continue'] = $this->url->link('account/account');
-
-
-
-
-
-
 
 			$this->children = array(
 				'common/column_left',
@@ -86,10 +76,10 @@ class ControllerAccountDownload extends Controller {
 				'common/content_top',
 				'common/content_bottom',
 				'common/footer',
-				'common/header'		
+				'common/header'
 			);
 							
-			$this->response->setOutput($this->render());				
+			$this->response->setOutput($this->render());
 		} else {
 		$this->template->load('error/not_found');
 
@@ -97,19 +87,13 @@ class ControllerAccountDownload extends Controller {
 
 			$this->data['continue'] = $this->url->link('account/account');
 
-
-
-
-
-
-
 			$this->children = array(
 				'common/column_left',
 				'common/column_right',
 				'common/content_top',
 				'common/content_bottom',
 				'common/footer',
-				'common/header'		
+				'common/header'
 			);
 										
 			$this->response->setOutput($this->render());

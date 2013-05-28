@@ -1,13 +1,13 @@
 <?php
 // Heading
-$_['heading_title']	= 'Language';  
+$_['heading_title']	= 'Language';
 
 //Data
 $_['data_direction']	= array('ltr'=>"Left to Right", 'rtl'=>"Right to Left");
 $_['data_statuses']		= array(-1 => 'Disabled', 0 => 'Inactive', 1 => 'Active');
 
 // Text
-$_['text_success']		= 'Success: You have modified languages!'; 
+$_['text_success']		= 'Success: You have modified languages!';
 
 // Column
 $_['column_name']		= 'Language Name';

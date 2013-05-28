@@ -2,7 +2,7 @@
 class ControllerShippingFree extends Controller {
 	
 	
-	public function index() {	
+	public function index() {
 		$this->template->load('shipping/free');
 
 		$this->load->language('shipping/free');
@@ -10,7 +10,7 @@ class ControllerShippingFree extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('free', $_POST);		
+			$this->model_setting_setting->editSetting('free', $_POST);
 					
 			$this->message->add('success', $this->_('text_success'));
 						
@@ -53,7 +53,7 @@ class ControllerShippingFree extends Controller {
 			$this->data['free_sort_order'] = $_POST['free_sort_order'];
 		} else {
 			$this->data['free_sort_order'] = $this->config->get('free_sort_order');
-		}				
+		}
 		
 		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 								
@@ -70,6 +70,6 @@ class ControllerShippingFree extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

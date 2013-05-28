@@ -2,7 +2,7 @@
 // Heading
 $_['heading_title']	= 'Google Base';
 
-// Text	
+// Text
 $_['text_feed']		= 'Feed de productos';
 $_['text_success']	= 'Éxito: has modificado el feed de Google Base!';
 

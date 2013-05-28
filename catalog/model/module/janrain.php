@@ -1,8 +1,8 @@
 <?php
-class ModelModulejanrain extends Model 
+class ModelModulejanrain extends Model
 {
 	public function janrainGetUserInfo( $provider, $identifier, $newuser_email )
-	{	
+	{
 		$check = $this->janrainCheckUser( $provider, $identifier, $newuser_email );
 		if(!$check)
 			return false;
@@ -45,7 +45,7 @@ class ModelModulejanrain extends Model
 	
 	public function janrainGetUserId( $user_id )
 	{
-		if($user_id>0) 
+		if($user_id>0)
 		{
 			$query 		= "SELECT customer_id FROM `" . DB_PREFIX . "customer` WHERE customer_id = '" . $user_id . "' LIMIT 1";
 			$res 		= $this->query( $query );
@@ -89,7 +89,7 @@ class ModelModulejanrain extends Model
 		if( !$newuser_id || !$newuser_email || !$provider || !$identifier )
 			return;
 			
-		$query = "INSERT INTO `" . DB_PREFIX . "janrain` SET 
+		$query = "INSERT INTO `" . DB_PREFIX . "janrain` SET
 					user_id='" . $newuser_id . "',
 					email='" . $newuser_email . "',
 					provider='" . $provider . "',
@@ -100,16 +100,16 @@ class ModelModulejanrain extends Model
 		$this->query( $query );
 	}
 	
-	public function addCustomer( $user_data ) 
+	public function addCustomer( $user_data )
 	{
-		$query = "INSERT INTO `" . DB_PREFIX . "customer` SET 
+		$query = "INSERT INTO `" . DB_PREFIX . "customer` SET
 					firstname  = '" . $this->db->escape($user_data['firstname']) . "',
-					lastname = '" . $this->db->escape($user_data['lastname']) . "', 
-					email = '" . $this->db->escape($user_data['email']) . "', 
-					password = '" . $this->user->encrypt($user_data['password']) . "',  
-					customer_group_id = '" . (int)$user_data['customer_group_id'] . "', 
+					lastname = '" . $this->db->escape($user_data['lastname']) . "',
+					email = '" . $this->db->escape($user_data['email']) . "',
+					password = '" . $this->user->encrypt($user_data['password']) . "',
+					customer_group_id = '" . (int)$user_data['customer_group_id'] . "',
 					status = '" . (int)$user_data['status'] . "',
-					approved  = '" . (int)$user_data['approved'] . "',  
+					approved  = '" . (int)$user_data['approved'] . "',
 					date_added = NOW()
 				";
 		
@@ -131,20 +131,20 @@ class ModelModulejanrain extends Model
 		return $customer_group_id;
 	}
 	
-	public function getUser($user_id) 
+	public function getUser($user_id)
 	{
 		$query = $this->query("SELECT * FROM `" . DB_PREFIX . "customer` WHERE customer_id = '" . (int)$user_id . "' LIMIT 1");
 	
 		return $query->row;
 	}
-	public function getCustomer($customer_id) 
+	public function getCustomer($customer_id)
 	{
 		$query = $this->query("SELECT DISTINCT * FROM ".DB_PREFIX."customer WHERE customer_id='".(int)$customer_id."' LIMIT 1");
 	
 		return $query->row;
 	}
 	
-	public function getCustomerByEmail($customer_email) 
+	public function getCustomerByEmail($customer_email)
 	{
 		$query = $this->query("SELECT DISTINCT * FROM ".DB_PREFIX."customer WHERE email='".$customer_email."' LIMIT 1");
 	
@@ -164,7 +164,7 @@ class ModelModulejanrain extends Model
 		$query 		= "SELECT customer_id  FROM `" . DB_PREFIX . "customer` WHERE username  = '" . $username . "' LIMIT 1";
 		$result		= $this->query( $query );
 		$return 	= !empty($result->row['customer_id']) && (int)$result->row['customer_id']>0 ? true : false;
-		return $return;		
+		return $return;
 	}
 
 }

@@ -2,7 +2,7 @@
 class ControllerModuleFeatured extends Controller {
 	
 	
-	public function index() {	
+	public function index() {
 		$this->template->load('module/featured');
 
 		$this->load->language('module/featured');
@@ -15,7 +15,7 @@ class ControllerModuleFeatured extends Controller {
 			foreach($settings['featured_module'] as $key=>$module)
 				$settings['featured_module'][] = array('status'=>$module['status'], 'layout_id'=>$module['layout_id'], 'sort_order'=>$module['sort_order'],'position'=>$module['filter_menu_position'],'display'=>$module['display'],'fm_id'=>$key);
 			
-			$this->model_setting_setting->editSetting('featured', $settings);		
+			$this->model_setting_setting->editSetting('featured', $settings);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -32,7 +32,7 @@ class ControllerModuleFeatured extends Controller {
 			$products = $_POST['featured_product'];
 		} else {
 			$products = $this->config->get('featured_product');
-		}	
+		}
 		
 		$this->data['featured_product'] = array();
 		
@@ -58,9 +58,9 @@ class ControllerModuleFeatured extends Controller {
 		
 		if (isset($_POST['featured_module'])) {
 			$this->data['modules'] = $_POST['featured_module'];
-		} else { 
+		} else {
 			$this->data['modules'] = $this->config->get('featured_module');
-		}		
+		}
 				
 		$this->data['layouts'] = $this->model_design_layout->getLayouts();
 
@@ -85,6 +85,6 @@ class ControllerModuleFeatured extends Controller {
 			}
 		}
 				
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

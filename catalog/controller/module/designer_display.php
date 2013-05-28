@@ -3,7 +3,7 @@ class ControllerModuleDesignerDisplay extends Controller {
 	protected function index($setting) {
 		$this->template->load('module/designer_display');
 
-		$this->language->load('module/designer_display'); 
+		$this->language->load('module/designer_display');
 
 		$this->data['designers'] = array();
 
@@ -56,12 +56,6 @@ class ControllerModuleDesignerDisplay extends Controller {
 				);
 			}
 		}
-
-
-
-
-
-
 
 		$this->render();
 	}

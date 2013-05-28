@@ -54,7 +54,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'errMaxSize'           : 'Daten überschreiten die Maximalgröße.',
 			'errFileMaxSize'       : 'Die Datei überschreitet die Maximalgröße',
 			'errUploadMime'        : 'Dateityp nicht zulässig.',
-			'errUploadTransfer'    : '"$1" Transfer Fehler.', 
+			'errUploadTransfer'    : '"$1" Transfer Fehler.',
 			'errSave'              : 'Kann "$1" nicht speichern.',
 			'errCopy'              : 'Kann "$1" nicht kopieren.',
 			'errMove'              : 'Kann "$1" nicht verschieben.',
@@ -93,7 +93,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'cmdupload'    : 'Datei hochladen',
 			'cmdview'      : 'Ansehen',
 			
-			/*********************************** buttons ***********************************/ 
+			/*********************************** buttons ***********************************/
 			'btnClose'  : 'Schließen',
 			'btnSave'   : 'Speichern',
 			'btnRm'     : 'Entfernen',
@@ -159,7 +159,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'viewlist'        : 'Spaltenansicht',
 			'viewicons'       : 'Symbolansicht',
 			'places'          : 'Orte',
-			'calc'            : 'Berechne', 
+			'calc'            : 'Berechne',
 			'path'            : 'Pfad',
 			'aliasfor'        : 'Verknüpfund zu',
 			'locked'          : 'Gesperrt',
@@ -170,7 +170,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'yes'             : 'ja',
 			'no'              : 'nein',
 			'link'            : 'Link',
-			'searcresult'     : 'Suchergebnisse',  
+			'searcresult'     : 'Suchergebnisse',
 			'selected'        : 'Objekte ausgewählt',
 			'about'           : 'über',
 			'shortcuts'       : 'Tastenkombinationen',

@@ -104,7 +104,7 @@ class ModelCatalogFlashsale extends Model {
 	/**
 	* The status of the flashsale
 	* @param $flashsale - Can be a flashsale associative array or the flashsale ID
-	* 
+	*
 	* @return string in the set: 'disabled', 'active', 'not started', 'ended'
 	*/
 	public function getStatus($flashsale){

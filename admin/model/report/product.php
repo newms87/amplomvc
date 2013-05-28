@@ -16,12 +16,12 @@ class ModelReportProduct extends Model {
 			$start = isset($data['start'])?(int)$data['start']:0;
 			if ($start < 0) {
 				$start = 0;
-			}			
+			}
 	
 			if ($limit < 1) {
 				$limit = 20;
 			}
-			$limit = "LIMIT $start, $limit";	
+			$limit = "LIMIT $start, $limit";
 		}
 		
 		$sql = "SELECT $select FROM " . DB_PREFIX . "product p JOIN " . DB_PREFIX . "product_views pv ON(pv.product_id=p.product_id) LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id) WHERE pd.language_id = '" . (int)$this->config->get('config_language_id') . "' GROUP BY pv.product_id ORDER BY views DESC $limit";
@@ -29,7 +29,7 @@ class ModelReportProduct extends Model {
 		$query = $this->query($sql);
 		
 		return $query->rows;
-	}	
+	}
 	
 	public function getTotalProductsViewed() {
 		$query = $this->query("SELECT COUNT(DISTINCT product_id) as total FROM " . DB_PREFIX . "product_views");
@@ -67,11 +67,11 @@ class ModelReportProduct extends Model {
 		if (isset($data['start']) || isset($data['limit'])) {
 			if ($data['start'] < 0) {
 				$data['start'] = 0;
-			}			
+			}
 
 			if ($data['limit'] < 1) {
 				$data['limit'] = 20;
-			}	
+			}
 			
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
 		}

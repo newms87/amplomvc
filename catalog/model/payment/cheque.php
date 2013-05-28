@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ModelPaymentCheque extends Model {
   	public function getMethod($address, $total) {
 		$this->load->language('payment/cheque');
@@ -13,12 +13,12 @@ class ModelPaymentCheque extends Model {
 			$status = true;
 		} else {
 			$status = false;
-		}	
+		}
 		
 		$method_data = array();
 	
-		if ($status) {  
-				$method_data = array( 
+		if ($status) {
+				$method_data = array(
 				'code'		=> 'cheque',
 				'title'		=> $this->_('text_title'),
 				'sort_order' => $this->config->get('cheque_sort_order')

@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ModelPaymentPPExpress extends Model {
   	public function getMethod($address, $total) {
 		$this->load->language('payment/pp_express');
@@ -13,12 +13,12 @@ class ModelPaymentPPExpress extends Model {
 			$status = true;
 		} else {
 			$status = false;
-		}	
+		}
 		
 		$method_data = array();
 	
-		if ($status) {  
-				$method_data = array( 
+		if ($status) {
+				$method_data = array(
 				'code'		=> 'pp_express',
 				'title'		=> $this->_('text_title'),
 				'sort_order' => $this->config->get('pp_express_sort_order')

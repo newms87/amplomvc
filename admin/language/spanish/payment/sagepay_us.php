@@ -2,8 +2,8 @@
 // Heading
 $_['heading_title']		= 'SagePay (US)';
 
-// Text 
-$_['text_payment']		= 'Pago'; 
+// Text
+$_['text_payment']		= 'Pago';
 $_['text_success']		= 'Éxito: has modificado SagePay detalles de cuenta!';
 
 // Entry

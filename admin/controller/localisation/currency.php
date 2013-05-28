@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerLocalisationCurrency extends Controller {
 	
  
@@ -173,7 +173,7 @@ class ControllerLocalisationCurrency extends Controller {
 				'selected'		=> isset($_POST['selected']) && in_array($result['currency_id'], $_POST['selected']),
 				'action'		=> $action
 			);
-		}	
+		}
 	
  		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -218,10 +218,6 @@ class ControllerLocalisationCurrency extends Controller {
 
 		$this->pagination->init();
 		$this->pagination->total = $currency_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('localisation/currency', $url);
-			
 		$this->data['pagination'] = $this->pagination->render();
 		
 		$this->data['sort'] = $sort;
@@ -349,10 +345,10 @@ class ControllerLocalisationCurrency extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validateForm() { 
-		if (!$this->user->hasPermission('modify', 'localisation/currency')) { 
+	private function validateForm() {
+		if (!$this->user->hasPermission('modify', 'localisation/currency')) {
 			$this->error['warning'] = $this->_('error_permission');
-		} 
+		}
 
 		if ((strlen($_POST['title']) < 3) || (strlen($_POST['title']) > 32)) {
 			$this->error['title'] = $this->_('error_title');
@@ -362,7 +358,7 @@ class ControllerLocalisationCurrency extends Controller {
 			$this->error['code'] = $this->_('error_code');
 		}
 
-		if (!$this->error) { 
+		if (!$this->error) {
 			return true;
 		} else {
 			return false;
@@ -386,16 +382,16 @@ class ControllerLocalisationCurrency extends Controller {
 	
 				if ($store_total) {
 					$this->error['warning'] = sprintf($this->_('error_store'), $store_total);
-				}					
+				}
 			}
 			
 			$order_total = $this->model_sale_order->getTotalOrdersByCurrencyId($currency_id);
 
 			if ($order_total) {
 				$this->error['warning'] = sprintf($this->_('error_order'), $order_total);
-			}					
+			}
 		}
 		
 		return $this->error ? false : true;
-	}	
+	}
 }

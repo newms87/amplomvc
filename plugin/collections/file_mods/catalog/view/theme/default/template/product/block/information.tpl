@@ -1,6 +1,6 @@
 =====
 <div class="right">
-   <div class="description">
+	<div class="description">
 -----
 <<<<<
 		<? if ($manufacturer) { ?>

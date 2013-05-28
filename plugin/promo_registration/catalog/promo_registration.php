@@ -1,4 +1,4 @@
-<?php	
+<?php
 class ControllerPlugin_Promo_registrationCatalogPromoRegistration extends Controller {
 	
 	public function promo_header(){

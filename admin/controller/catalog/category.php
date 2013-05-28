@@ -1,5 +1,5 @@
-<?php 
-class ControllerCatalogCategory extends Controller { 
+<?php
+class ControllerCatalogCategory extends Controller {
 	
  
 	public function index() {
@@ -20,7 +20,7 @@ class ControllerCatalogCategory extends Controller {
 
 			$this->message->add('success', $this->_('text_success'));
 			
-			$this->url->redirect($this->url->link('catalog/category')); 
+			$this->url->redirect($this->url->link('catalog/category'));
 		}
 
 		$this->getForm();
@@ -209,7 +209,7 @@ class ControllerCatalogCategory extends Controller {
 		}
  
 		if (!$this->error) {
-			return true; 
+			return true;
 		} else {
 			return false;
 		}

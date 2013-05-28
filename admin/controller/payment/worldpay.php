@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerPaymentWorldPay extends Controller {
 	
 
@@ -10,7 +10,7 @@ class ControllerPaymentWorldPay extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('worldpay', $_POST);				
+			$this->model_setting_setting->editSetting('worldpay', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -66,22 +66,22 @@ class ControllerPaymentWorldPay extends Controller {
 		if (isset($_POST['worldpay_total'])) {
 			$this->data['worldpay_total'] = $_POST['worldpay_total'];
 		} else {
-			$this->data['worldpay_total'] = $this->config->get('worldpay_total'); 
-		} 
+			$this->data['worldpay_total'] = $this->config->get('worldpay_total');
+		}
 				
 		if (isset($_POST['worldpay_order_status_id'])) {
 			$this->data['worldpay_order_status_id'] = $_POST['worldpay_order_status_id'];
 		} else {
-			$this->data['worldpay_order_status_id'] = $this->config->get('worldpay_order_status_id'); 
-		} 
+			$this->data['worldpay_order_status_id'] = $this->config->get('worldpay_order_status_id');
+		}
 		
 		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 		
 		if (isset($_POST['worldpay_geo_zone_id'])) {
 			$this->data['worldpay_geo_zone_id'] = $_POST['worldpay_geo_zone_id'];
 		} else {
-			$this->data['worldpay_geo_zone_id'] = $this->config->get('worldpay_geo_zone_id'); 
-		} 
+			$this->data['worldpay_geo_zone_id'] = $this->config->get('worldpay_geo_zone_id');
+		}
 
 		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 		
@@ -118,6 +118,6 @@ class ControllerPaymentWorldPay extends Controller {
 			$this->error['password'] = $this->_('error_password');
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

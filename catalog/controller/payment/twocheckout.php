@@ -36,7 +36,7 @@ class ControllerPaymentTwoCheckout extends Controller {
 			$this->data['ship_city'] = $order_info['payment_city'];
 			$this->data['ship_state'] = $order_info['payment_zone'];
 			$this->data['ship_zip'] = $order_info['payment_postcode'];
-			$this->data['ship_country'] = $order_info['payment_country'];			
+			$this->data['ship_country'] = $order_info['payment_country'];
 		}
 		
 		$this->data['products'] = array();
@@ -59,15 +59,9 @@ class ControllerPaymentTwoCheckout extends Controller {
 			$this->data['demo'] = '';
 		}
 		
-		$this->data['lang'] = $this->session->data['language'];
+		$this->data['lang'] = $this->language->code();
 
 		$this->data['return_url'] = $this->url->link('payment/twocheckout/callback');
-		
-
-
-
-
-
 
 		$this->render();
 	}
@@ -85,7 +79,7 @@ class ControllerPaymentTwoCheckout extends Controller {
 			if ($this->currency->format($order_info['total'], $order_info['currency_code'], $order_info['currency_value'], false) == $_POST['total']) {
 				$this->model_checkout_order->confirm($_POST['cart_order_id'], $this->config->get('twocheckout_order_status_id'));
 			} else {
-				$this->model_checkout_order->confirm($_POST['cart_order_id'], $this->config->get('config_order_status_id'));// Ugh. Some one've faked the sum. What should we do? Probably drop a mail to the shop owner?				
+				$this->model_checkout_order->confirm($_POST['cart_order_id'], $this->config->get('config_order_status_id'));// Ugh. Some one've faked the sum. What should we do? Probably drop a mail to the shop owner?
 			}
 			
 			// We can't use $this->url->redirect() here, because of 2CO behavior. It fetches this page
@@ -103,7 +97,7 @@ class ControllerPaymentTwoCheckout extends Controller {
 			echo '</html>' . "\n";
 			exit();
 		} else {
-			echo 'The response from 2checkout.com can\'t be parsed. Contact site administrator, please!'; 
-		}		
+			echo 'The response from 2checkout.com can\'t be parsed. Contact site administrator, please!';
+		}
 	}
 }

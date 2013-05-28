@@ -2,7 +2,7 @@
 // Heading
 $_['heading_title']			= 'Ch&egrave;que - Mandat postal';
 
-// Text 
+// Text
 $_['text_payment']			= 'Paiement';
 $_['text_success']			= 'F&eacute;licitations, vous avez modifi&eacute; les d&eacute;tails du paiement par <b>Ch&egrave;que - Mandat postal</b> avec succ&egrave;s !';
 

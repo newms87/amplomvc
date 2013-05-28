@@ -3,7 +3,7 @@ class ControllerModuleDnCarousel extends Controller {
 	protected function index($setting) {
 		$this->template->load('module/dn_carousel');
 		
-		$this->language->load('module/dn_carousel'); 
+		$this->language->load('module/dn_carousel');
 
 		if (empty($setting['limit']))
 			$setting['limit'] = 9;

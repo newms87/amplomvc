@@ -69,7 +69,7 @@ class ControllerExtensionPlugin extends Controller {
 		}
 		$plugin_name = $_GET['name'];
 		
-		$this->document->setTitle($this->_('heading_title')); 
+		$this->document->setTitle($this->_('heading_title'));
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('extension/plugin'));
@@ -83,7 +83,7 @@ class ControllerExtensionPlugin extends Controller {
 		
 		$this->data['name'] = $plugin_name;
 
-		$this->data['action'] = $this->url->link('extension/plugin/update','name='.$plugin_name); 
+		$this->data['action'] = $this->url->link('extension/plugin/update','name='.$plugin_name);
 		$this->data['cancel'] = $this->url->link('extension/plugin');
 		
 		$this->children = array(
@@ -200,6 +200,6 @@ class ControllerExtensionPlugin extends Controller {
 			
 		}
 		
-		return $this->error ? false : true;  
+		return $this->error ? false : true;
 	}
 }

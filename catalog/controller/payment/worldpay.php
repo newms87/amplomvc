@@ -25,12 +25,6 @@ class ControllerPaymentWorldPay extends Controller {
 		$this->data['telephone'] = $order_info['telephone'];
 		$this->data['email'] = $order_info['email'];
 		$this->data['test'] = $this->config->get('worldpay_test');
-		
-
-
-
-
-
 
 		$this->render();
 	}
@@ -48,7 +42,7 @@ class ControllerPaymentWorldPay extends Controller {
 		$this->language->format('text_success_wait', $this->url->link('checkout/success'));
 		$this->language->format('text_failure_wait', $this->url->link('checkout/checkout'));
 		
-		if (isset($_POST['transStatus']) && $_POST['transStatus'] == 'Y') { 
+		if (isset($_POST['transStatus']) && $_POST['transStatus'] == 'Y') {
 		$this->template->load('payment/worldpay_success');
 
 			// If returned successful but callbackPW doesn't match, set order to pendind and record reason
@@ -74,47 +68,35 @@ class ControllerPaymentWorldPay extends Controller {
 		
 			if (isset($_POST['AVS'])) {
 				$message .= 'AVS: ' . $_POST['AVS'] . "\n";
-			}	
+			}
 
 			if (isset($_POST['rawAuthCode'])) {
 				$message .= 'rawAuthCode: ' . $_POST['rawAuthCode'] . "\n";
-			}	
+			}
 
 			if (isset($_POST['authMode'])) {
 				$message .= 'authMode: ' . $_POST['authMode'] . "\n";
-			}	
+			}
 
 			if (isset($_POST['rawAuthMessage'])) {
 				$message .= 'rawAuthMessage: ' . $_POST['rawAuthMessage'] . "\n";
-			}	
+			}
 		
 			if (isset($_POST['wafMerchMessage'])) {
 				$message .= 'wafMerchMessage: ' . $_POST['wafMerchMessage'] . "\n";
-			}				
+			}
 
 			$this->model_checkout_order->update_order($_POST['cartId'], $this->config->get('worldpay_order_status_id'), $message, false);
 	
 			$this->data['continue'] = $this->url->link('checkout/success');
-			
 
-
-
-
-
-
-			$this->response->setOutput($this->render());				
+			$this->response->setOutput($this->render());
 		} else {
 		$this->template->load('payment/worldpay_failure');
 
 			$this->data['continue'] = $this->url->link('cart/cart');
-	
 
-
-
-
-
-
-			$this->response->setOutput($this->render());					
+			$this->response->setOutput($this->render());
 		}
 	}
 }

@@ -77,7 +77,7 @@ class ModelShippingAmount extends Model {
 			$fixed = false;
 			foreach($zonerules as $rule){
 				if($address['country_id'] != $rule['country_id'] || ($address['zone_id'] != $rule['zone_id'] && $rule['zone_id']!=0))
-					continue; 
+					continue;
 				switch($rule['mod']){
 					case 'add':
 						if($rule['type'] == 'fixed')

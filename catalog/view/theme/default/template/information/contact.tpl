@@ -1,37 +1,37 @@
 <?= $header; ?><?= $column_left; ?><?= $column_right; ?>
 <div id="content"><?= $content_top; ?>
-  <?= $this->builder->display_breadcrumbs();?>
-  <?= $this->builder->display_errors($errors);?>
-  <h1><?= $heading_title; ?></h1>
-  <form id='contact_form' action="<?= $action; ?>" method="post" enctype="multipart/form-data">
-  	<h3><?= $text_contact_us; ?></h3>
-  	<h3><?=$text_contact_info;?></h3>
-    <h2><?= $text_contact; ?></h2>
-    <div class="content">
-    <b><?= $entry_name; ?></b><br />
-    <input type="text" name="name" value="<?= $name; ?>" />
-    <br />
-    <br />
-    <b><?= $entry_email; ?></b><br />
-    <input type="text" name="email" value="<?= $email; ?>" />
-    <br />
-    <br />
-    <b><?= $entry_enquiry; ?></b><br />
-    <textarea name="enquiry" cols="40" rows="10" style="width: 99%;"><?= $enquiry; ?></textarea>
-    <br />
-    <br />
-    <b><?= $entry_captcha; ?></b><br />
-    <input type="text" name="captcha" value="<?= $captcha; ?>" />
-    <br />
-    <img src="<?= $captcha_url; ?>" alt="" />
-    </div>
-    <div class="buttons">
-      <div class="right"><input type="submit" value="<?= $button_submit; ?>" class="button" /></div>
-    </div>
-  </form>
-  
-  <h3>You can also follow us on:</h3>
-    <table border="0">
+	<?= $this->builder->display_breadcrumbs();?>
+	<?= $this->builder->display_errors($errors);?>
+	<h1><?= $heading_title; ?></h1>
+	<form id='contact_form' action="<?= $action; ?>" method="post" enctype="multipart/form-data">
+		<h3><?= $text_contact_us; ?></h3>
+		<h3><?=$text_contact_info;?></h3>
+		<h2><?= $text_contact; ?></h2>
+		<div class="content">
+		<b><?= $entry_name; ?></b><br />
+		<input type="text" name="name" value="<?= $name; ?>" />
+		<br />
+		<br />
+		<b><?= $entry_email; ?></b><br />
+		<input type="text" name="email" value="<?= $email; ?>" />
+		<br />
+		<br />
+		<b><?= $entry_enquiry; ?></b><br />
+		<textarea name="enquiry" cols="40" rows="10" style="width: 99%;"><?= $enquiry; ?></textarea>
+		<br />
+		<br />
+		<b><?= $entry_captcha; ?></b><br />
+		<input type="text" name="captcha" value="<?= $captcha; ?>" />
+		<br />
+		<img src="<?= $captcha_url; ?>" alt="" />
+		</div>
+		<div class="buttons">
+			<div class="right"><input type="submit" value="<?= $button_submit; ?>" class="button" /></div>
+		</div>
+	</form>
+	
+	<h3>You can also follow us on:</h3>
+		<table border="0">
 	<tbody>
 		<tr>
 		<td><a title="Members Newsletter" href="http://www.bettyconfidential.com/ci/membership.html"><img title="Members Newsletter" src="http://images.bettyconfidential.com/img/icons/email_icon_2.jpg" alt="Members Newsletter" height="51"></a></td>
@@ -54,11 +54,11 @@
 		</tr>
 	</tbody>
 	</table>
-    <div class="buttons">
-      <div class="right"><a href="<?= $continue; ?>" class="button"><?= $button_continue; ?></a></div>
-    </div>
-  
-  <?= $content_bottom; ?></div>
-  
-  <?=$this->builder->js('errors',$errors);?>
+		<div class="buttons">
+			<div class="right"><a href="<?= $continue; ?>" class="button"><?= $button_continue; ?></a></div>
+		</div>
+	
+	<?= $content_bottom; ?></div>
+	
+	<?=$this->builder->js('errors',$errors);?>
 <?= $footer; ?>

@@ -1,5 +1,5 @@
 <?php
-// Heading 
+// Heading
 $_['heading_title']		= 'Featured';
 $_['heading_title_menu']	= 'Sort By';
 $_['category_title_menu']  = "Shop By Category";

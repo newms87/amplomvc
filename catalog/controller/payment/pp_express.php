@@ -7,7 +7,7 @@ class ControllerPaymentPPExpress extends Controller {
 			$this->data['action'] = 'https://www.pp_express.com/cgi-bin/webscr';
   		} else {
 			$this->data['action'] = 'https://www.sandbox.pp_express.com/cgi-bin/webscr';
-		}		
+		}
 		
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
@@ -16,13 +16,7 @@ class ControllerPaymentPPExpress extends Controller {
 		} else {
 			$api_endpoint = 'https://api-3t.sandbox.pp.com/nvp';
 		}
-		
 
-
-
-
-
-
-		$this->render();		
+		$this->render();
 	}
 }

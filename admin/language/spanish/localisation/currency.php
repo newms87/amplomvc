@@ -1,13 +1,13 @@
 <?php
 // Heading
-$_['heading_title']		= 'Moneda';  
+$_['heading_title']		= 'Moneda';
 
 // Text
 $_['text_success']			= 'Éxito: has modificado las monedas!';
 
 // Column
 $_['column_title']			= 'Nombre moneda';
-$_['column_code']			= 'Código'; 
+$_['column_code']			= 'Código';
 $_['column_value']			= 'Valor';
 $_['column_date_modified'] = 'Última actualización';
 $_['column_action']		= 'Acción';

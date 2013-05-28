@@ -1,8 +1,8 @@
 <?php
 // Heading
-$_['heading_title']			= 'Products'; 
+$_['heading_title']			= 'Products';
 
-// Text  
+// Text
 $_['text_success']			= 'Success: You have modified products!';
 $_['text_batch_action']				= 'Batch Action:';
 $_['text_plus']				= '+';
@@ -62,7 +62,7 @@ $_['entry_upc']				= 'UPC:';
 $_['entry_is_final']			= 'Final Sale:';
 $_['entry_location']			= 'Location:';
 $_['entry_manufacturer']	= 'Designer:';
-$_['entry_shipping']			= 'Requires Shipping:'; 
+$_['entry_shipping']			= 'Requires Shipping:';
 $_['entry_date_available']	= 'Date Available:';
 $_['entry_date_expires']	= 'Date Expires:';
 $_['entry_is_final']				= 'Final Sale:';

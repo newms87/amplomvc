@@ -11,7 +11,7 @@ class ModelTotalSubTotal extends Model {
 			}
 		}
 		
-		$total_data[] = array( 
+		$total_data[] = array(
 			'code'		=> 'sub_total',
 			'title'		=> $this->_('text_sub_total'),
 			'text'		=> $this->currency->format($sub_total),

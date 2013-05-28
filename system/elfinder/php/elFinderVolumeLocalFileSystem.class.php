@@ -156,8 +156,8 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 			$initial_slashes = false;
 		}
 			
-		if (($initial_slashes) 
-		&& (strpos($path, '//') === 0) 
+		if (($initial_slashes)
+		&& (strpos($path, '//') === 0)
 		&& (strpos($path, '///') === false)) {
 			$initial_slashes = 2;
 		}
@@ -171,8 +171,8 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 				continue;
 			}
 				
-			if (($comp != '..') 
-			|| (!$initial_slashes && !$new_comps) 
+			if (($comp != '..')
+			|| (!$initial_slashes && !$new_comps)
 			|| ($new_comps && (end($new_comps) == '..'))) {
 				array_push($new_comps, $comp);
 			} elseif ($new_comps) {
@@ -252,7 +252,7 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 	*
 	* If file does not exists - returns empty array or false.
 	*
-	* @param  string  $path	file path 
+	* @param  string  $path	file path
 	* @return array|false
 	* @author Dmitry (dio) Levashov
 	**/
@@ -264,7 +264,7 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 		}
 
 		if ($path != $this->root && is_link($path)) {
-			if (($target = $this->readlink($path)) == false 
+			if (($target = $this->readlink($path)) == false
 			|| $target == $path) {
 				$stat['mime']  = 'symlink-broken';
 				$stat['read']  = false;
@@ -329,8 +329,8 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 	**/
 	protected function _dimensions($path, $mime) {
 		clearstatcache();
-		return strpos($mime, 'image') === 0 && ($s = @getimagesize($path)) !== false 
-			? $s[0].'x'.$s[1] 
+		return strpos($mime, 'image') === 0 && ($s = @getimagesize($path)) !== false
+			? $s[0].'x'.$s[1]
 			: false;
 	}
 	/******************** file/dir content *********************/
@@ -612,7 +612,7 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 		$this->procExec('unzip --help', $o, $c);
 		if ($c == 0) {
 			$arcs['extract']['application/zip'] = array('cmd' => 'unzip', 'argc' => '',  'ext' => 'zip');
-		} 
+		}
 		unset($o);
 		//exec('rar --version', $o, $c);
 		$this->procExec('rar --version', $o, $c);
@@ -721,7 +721,7 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 	* @param  string  $path  archive path
 	* @param  array	$arc	archiver command and arguments (same as in $this->archivers)
 	* @return true
-	* @author Dmitry (dio) Levashov, 
+	* @author Dmitry (dio) Levashov,
 	* @author Alexey Sukhotin
 	**/
 	protected function _extract($path, $arc) {
@@ -817,7 +817,7 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 	* @param  string  $name	archive name
 	* @param  array	$arc	archiver options
 	* @return string|bool
-	* @author Dmitry (dio) Levashov, 
+	* @author Dmitry (dio) Levashov,
 	* @author Alexey Sukhotin
 	**/
 	protected function _archive($dir, $files, $name, $arc) {
@@ -835,4 +835,4 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 		return file_exists($path) ? $path : false;
 	}
 	
-} // END class 
+} // END class

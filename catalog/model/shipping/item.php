@@ -23,7 +23,7 @@ class ModelShippingItem extends Model {
 				'title'		=> $this->_('text_description'),
 				'cost'			=> $this->config->get('item_cost') * $this->cart->countProducts(),
 					'tax_class_id' => $this->config->get('item_tax_class_id'),
-				'text'			=> $this->currency->format($this->tax->calculate($this->config->get('item_cost') * $this->cart->countProducts(), $this->config->get('item_tax_class_id'), $this->config->get('config_show_price_with_tax')))
+				'text'			=> $this->currency->format($this->tax->calculate($this->config->get('item_cost') * $this->cart->countProducts(), $this->config->get('item_tax_class_id')))
 				);
 
 				$method_data = array(

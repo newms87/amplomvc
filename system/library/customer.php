@@ -4,34 +4,16 @@ class Customer {
 	private $customer_id;
 	private $information;
 	private $payment_info;
+	private $settings;
 	
-  	public function __construct(&$registry) {
-		$this->registry = &$registry;
-				
+  	public function __construct($registry) {
+		$this->registry = $registry;
+		
 		if (isset($this->session->data['customer_id'])) {
-			$customer_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "customer WHERE customer_id = '" . (int)$this->session->data['customer_id'] . "' AND status = '1'");
+			$customer = $this->db->query_row("SELECT * FROM " . DB_PREFIX . "customer WHERE customer_id = '" . (int)$this->session->data['customer_id'] . "' AND status = '1'");
 			
-			if ($customer_query->num_rows) {
-				$this->customer_id = $customer_query->row['customer_id'];
-				
-				$this->information = $customer_query->row;
-				
-				$this->payment_info = $this->get_setting('payment_info_' . $this->information['payment_code']);
-				
-				if(!$this->payment_info){
-					$this->payment_info = array(
-						'address_id' => $this->information['address_id'],
-						'payment_code' => $this->information['payment_code'],
-					);
-				}
-				
-				$this->db->query("UPDATE " . DB_PREFIX . "customer SET cart = '" . $this->db->escape(isset($this->session->data['cart']) ? serialize($this->session->data['cart']) : '') . "', wishlist = '" . $this->db->escape(isset($this->session->data['wishlist']) ? serialize($this->session->data['wishlist']) : '') . "', ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "' WHERE customer_id = '" . (int)$this->customer_id . "'");
-			
-				$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "customer_ip WHERE customer_id = '" . (int)$this->session->data['customer_id'] . "' AND ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "'");
-				
-				if (!$query->num_rows) {
-					$this->db->query("INSERT INTO " . DB_PREFIX . "customer_ip SET customer_id = '" . (int)$this->session->data['customer_id'] . "', ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "', date_added = NOW()");
-				}
+			if (!empty($customer)) {
+				$this->set_customer($customer);
 			} else {
 				$this->logout();
 			}
@@ -42,118 +24,58 @@ class Customer {
 		return $this->registry->get($key);
 	}
 	
-	public function set_default_payment_code($code){
-		$this->db->query("UPDATE " . DB_PREFIX . "customer SET payment_code = '" . $this->db->escape($code) . "' WHERE customer_id = '$this->customer_id'");
-		
-		$this->payment_info = $this->get_setting('payment_info_' . $code);
-		
-		if(!$this->payment_info){
-			$this->payment_info = array(
-				'payment_code' => $code,
-				'address_id' => $this->information['address_id'],
-			);
-		}
-	}
-	
-	public function set_default_address_id($address_id){
-		$this->db->query("UPDATE " . DB_PREFIX . "customer SET address_id = '" . (int)$address_id . "' WHERE customer_id = '$this->customer_id'");
-		
-		$this->information['address_id'] = $address_id;
-	}
-	
-	public function edit_setting($key, $value){
-		if(!$this->customer_id){
-			return false;
-		}
-		
-		if(is_array($value) || is_object($value)){
-			$value = serialize($value);
-			$serialized = 1;
-		}
-		else{
-			$serialized = 0;
-		}
-		
-		$this->db->query("DELETE FROM " . DB_PREFIX . "customer_setting WHERE customer_id = '$this->customer_id' AND `key` = '" . $this->db->escape($key) . "'");
-		
-		$this->db->query("INSERT INTO " . DB_PREFIX . "customer_setting SET customer_id = '$this->customer_id', `key` = '" . $this->db->escape($key) . "', `value` = '" . $this->db->escape($value) . "', serialized = '$serialized'"); 
-	}
-	
-	public function get_setting($key){
-		$query = $this->db->query("SELECT value, serialized FROM " . DB_PREFIX . "customer_setting WHERE customer_id = '$this->customer_id' AND `key` = '" . $this->db->escape($key) . "' LIMIT 1");
-		
-		if($query->num_rows){
-			if($query->row['serialized']){
-				return unserialize($query->row['value']);
-			}
-				
-			return $query->row['value'];
-		}
-		
-		return null;
-	}
-	
-	public function delete_setting($key){
-		$this->db->query("DELETE FROM " . DB_PREFIX . "customer_setting WHERE customer_id = '$this->customer_id' AND `key` = '" . $this->db->escape($key) . "'");
-	}
-	
-  	public function login($email, $password, $override = false) {
-		if ($override) {
-			$customer_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "customer where LOWER(email) = '" . $this->db->escape(strtolower($email)) . "' AND status = '1'");
-		} elseif (!$this->config->get('config_customer_approval')) {
-			$customer_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "customer WHERE LOWER(email) = '" . $this->db->escape(strtolower($email)) . "' AND password = '" . $this->customer->encrypt($password) . "' AND status = '1'");
-		} else {
-			$customer_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "customer WHERE LOWER(email) = '" . $this->db->escape(strtolower($email)) . "' AND password = '" . $this->customer->encrypt($password) . "' AND status = '1' AND approved = '1'");
-		}
-		
-		if ($customer_query->num_rows) {
-			$this->session->data['customer_id'] = $customer_query->row['customer_id'];	
-			
-			if ($customer_query->row['cart'] && is_string($customer_query->row['cart'])) {
-				$cart = unserialize($customer_query->row['cart']);
-				
-				foreach ($cart as $key => $value) {
-					if (!array_key_exists($key, $this->session->data['cart'])) {
-						$this->session->data['cart'][$key] = $value;
-					} else {
-						$this->session->data['cart'][$key] += $value;
-					}
-				}
-			}
+	public function isLogged() {
+		return $this->customer_id ? true : false;
+  	}
 
-			if ($customer_query->row['wishlist'] && is_string($customer_query->row['wishlist'])) {
-				if (!isset($this->session->data['wishlist'])) {
-					$this->session->data['wishlist'] = array();
-				}
-								
-				$wishlist = unserialize($customer_query->row['wishlist']);
+  	public function getId() {
+		return $this->customer_id;
+  	}
+	
+	public function info($key = null){
+		if($key && isset($this->information[$key])){
+			return $this->information[$key];
+		}
+		
+		return $this->information;
+	}
+	
+  	public function getCustomerGroupId() {
+  		if(!empty($this->information['customer_group_id'])){
+			return $this->information['customer_group_id'];
+		}
+		
+		return (int)$this->config->get('config_customer_group_id');
+  	}
+	
+	public function login($email, $password, $override = false) {
+  		$where = "LOWER(email) = '" . $this->db->escape(strtolower($email)) . "' AND status = '1'";
+		
+		if (!$override) {
+			$where .= " AND password = '" . $this->customer->encrypt($password) . "'";
 			
-				foreach ($wishlist as $product_id) {
-					if (!in_array($product_id, $this->session->data['wishlist'])) {
-						$this->session->data['wishlist'][] = $product_id;
-					}
-				}			
+			if($this->config->get('config_customer_approval')){
+				$where .= " AND approved = '1'";
 			}
-									
-			$this->customer_id = $customer_query->row['customer_id'];
+		}
+		
+		$customer = $this->db->query_row("SELECT * FROM " . DB_PREFIX . "customer WHERE $where LIMIT 1");
+		
+		if ($customer) {
+			$this->set_customer($customer);
 			
-			$this->information = $customer_query->row;
-			
-			$this->payment_info = $this->get_setting('payment_info_' . $this->information['payment_code']);
-				
-			if(!$this->payment_info){
-				$this->payment_info = array(
-					'address_id' => $this->information['address_id'],
-					'payment_code' => $this->information['payment_code'],
-				);
+			if (!empty($customer['cart'])) {
+				$this->cart->merge($customer['cart']);
 			}
-				
-			$this->db->query("UPDATE " . DB_PREFIX . "customer SET ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "' WHERE customer_id = '" . (int)$this->customer_id . "'");
+			
+			if (!empty($customer['wishlist'])) {
+				$this->cart->merge_wishlist($customer['wishlist']);
+			}
 			
 			return true;
-		} else {
-				return false;
 		}
+	
+		return false;
   	}
   	
 	public function logout() {
@@ -168,148 +90,114 @@ class Customer {
 		//TODO: REMOVE THIS?
 		$this->message->add('notify', "Logged Out");
   	}
-  
-  	public function isLogged() {
-		return $this->customer_id;
-  	}
-
-  	public function getId() {
-		return $this->customer_id;
-  	}
 	
-	public function getInfo($key = null){
-		if($key && isset($this->information[$key])){
-			return $this->information[$key];
-		}
-		
-		return $this->information;
+	public function get_setting($key){
+		return isset($this->settings[$key]) ? $this->settings[$key] : null;
 	}
 	
-  	public function getFirstName() {
-  		if($this->information){
-			return $this->information['firstname'];
+	public function set_setting($key, $value){
+		if(!$this->customer_id) return;
+		
+		$this->db->query("DELETE FROM " . DB_PREFIX . "customer_setting WHERE customer_id = '" . $this->customer_id . "' AND `key` = '" . $this->db->escape($key) . "'");
+		
+		if(is_object($value) || is_array($value) || is_resource($value)){
+			$value = serialize($value);
+			$serialized = 1;
+		} else {
+			$serialized = 0;
 		}
 		
-		return '';
-  	}
-  
-  	public function getLastName() {
-  		if($this->information){
-			return $this->information['lastname'];
-		}
+		$this->db->query("INSERT INTO " . DB_PREFIX . "customer_setting SET customer_id = '" . $this->customer_id . "', `key` = '" . $this->db->escape($key) . "', `value` = '" . $this->db->escape($value) . "', serialized = '$serialized'");
 		
-		return '';
-  	}
-	
-	public function getFullName(){
-		if($this->information){
-			return $this->information['firstname'] . ' ' . $this->information['lastname'];
-		}
-		
-		return '';
+		$this->settings[$key] = $value;
 	}
 	
-  	public function getEmail() {
-  		if($this->information){
-			return $this->information['email'];
-		}
-		
-		return '';
-  	}
-  
-  	public function getTelephone() {
-  		if($this->information){
-			return $this->information['telephone'];
-		}
-		
-		return '';
-  	}
-  
-  	public function getFax() {
-  		if($this->information){
-			return $this->information['fax'];
-		}
-		
-		return '';
-  	}
+	public function delete_setting($key){
+		$this->db->query("DELETE FROM " . DB_PREFIX . "customer_setting WHERE customer_id = '$this->customer_id' AND `key` = '" . $this->db->escape($key) . "'");
+	}
 	
-  	public function getNewsletter() {
-  		if($this->information){
-			return $this->information['newsletter'];
+	public function get_shipping_addresses(){
+		$address_list = $this->model_account_address->getAddresses();
+		
+		$allowed_zones = $this->cart->getAllowedShippingZones();
+		
+		if(empty($allowed_zones)){
+			$addresses = $address_list;
 		}
-		
-		return '';
-  	}
-
-  	public function getCustomerGroupId() {
-  		if($this->information){
-			return $this->information['customer_group_id'];
-		}
-		
-		return '';
-  	}
-	
-  	public function getAddressId() {
-  		if($this->information){
-			return $this->information['address_id'];
-		}
-		
-		return '';
-  	}
-	
-	public function verifyDefaultAddress(){
-		if(!$this->information) return false;
-		
-		$address_id = (int)$this->information['address_id'];
-		
-		if($address_id){
-			$query = $this->db->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . "address WHERE address_id = '$address_id' AND customer_id = '$this->customer_id' LIMIT 1");
-		}
-		
-		if(!$address_id || !$query->row['total']){
-			$query = $this->db->query("SELECT address_id FROM " . DB_PREFIX . "address WHERE customer_id = '$this->customer_id' LIMIT 1");
+		else{
+			$addresses = array();
 			
-			if($query->num_rows){
-				$address_id = $query->row['address_id'];
+			foreach($address_list as $key => $address){
+				foreach($allowed_zones as $zone){
+					if((int)$address['country_id'] === (int)$zone['country_id'] && ((int)$zone['zone_id'] === 0 || (int)$address['zone_id'] === (int)$zone['zone_id'])){
+						$addresses[$address['address_id']] = $address;
+						break;
+					}
+				}
 			}
-			else{
-				$address_id = 0;
-			}
-			
-			$this->set_default_address_id($address_id);
-			
-			return $address_id;
 		}
 		
-		return true;
+		return $addresses;
 	}
 	
-	
-	public function getPaymentInfo($key = null){
-		if($key && isset($this->payment_info[$key])){
-			return $this->payment_info[$key];
-		}
-		
-		return $this->payment_info;
+	public function get_payment_addresses(){
+		return $this->model_account_address->getAddresses();
 	}
 	
   	public function getBalance() {
   		if(!$this->customer_id) return 0;
 		
-		$query = $this->db->query("SELECT SUM(amount) AS total FROM " . DB_PREFIX . "customer_transaction WHERE customer_id = '" . (int)$this->customer_id . "'");
-	
-		return $query->row['total'];
-  	}	
+		return $this->db->query_var("SELECT SUM(amount) AS total FROM " . DB_PREFIX . "customer_transaction WHERE customer_id = '" . (int)$this->customer_id . "'");
+  	}
 
   	public function getRewardPoints() {
   		if(!$this->customer_id) return 0;
   		
-		$query = $this->db->query("SELECT SUM(points) AS total FROM " . DB_PREFIX . "customer_reward WHERE customer_id = '" . (int)$this->customer_id . "'");
-	
-		return $query->row['total'];	
+		return $this->db->query_var("SELECT SUM(points) AS total FROM " . DB_PREFIX . "customer_reward WHERE customer_id = '" . (int)$this->customer_id . "'");
   	}
 	
 	public function encrypt($password){
 		return md5($password);
+	}
+	
+	private function set_customer($customer){
+		if(empty($customer)) return;
+		
+		$this->customer_id = (int)$customer['customer_id'];
+		$this->session->data['customer_id'] = $this->customer_id;
+		$this->information = $customer;
+		
+		//Load Customer Settings
+		$settings = $this->db->query_rows("SELECT * FROM " . DB_PREFIX . "customer_setting WHERE customer_id = '" . $this->customer_id . "'");
+		
+		foreach($settings as $setting){
+			if($setting['serialized']){
+				$this->settings[$setting['key']] = unserialize($setting['value']);
+			} else {
+				$this->settings[$setting['key']] = $setting['value'];
+			}
+		}
+		
+		$this->payment_info = $this->get_setting('payment_info_' . $this->information['payment_code']);
+		
+		if(!$this->payment_info){
+			$this->payment_info = array(
+				'address_id' => $this->information['address_id'],
+				'payment_code' => $this->information['payment_code'],
+			);
+		}
+			
+		$cart = $this->cart->get_cart();
+		$wishlist = $this->cart->get_wishlist();
+		
+		$this->db->query("UPDATE " . DB_PREFIX . "customer SET cart = '" . $this->db->escape(serialize($cart)) . "', wishlist = '" . $this->db->escape(serialize($wishlist)) . "', ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "' WHERE customer_id = '" . (int)$this->customer_id . "'");
+	
+		$ip_set = $this->db->query_var("SELECT COUNT(*) FROM " . DB_PREFIX . "customer_ip WHERE customer_id = '" . (int)$this->session->data['customer_id'] . "' AND ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "'");
+		
+		if (!$ip_set) {
+			$this->db->query("INSERT INTO " . DB_PREFIX . "customer_ip SET customer_id = '" . $this->customer_id . "', ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "', date_added = NOW()");
+		}
+		
+		$this->db->query("UPDATE " . DB_PREFIX . "customer SET ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "' WHERE customer_id = '" . (int)$this->customer_id . "'");
 	}
 }

@@ -80,7 +80,7 @@ class Translation {
 		}
 		
 		foreach($result->rows as $translation){
-			$query = 
+			$query =
 				"SELECT language_id, text FROM " . DB_PREFIX . "translation_text" .
 				" WHERE translation_id = '$translation[translation_id]'" .
 				" AND object_id = '" . $this->db->escape($object_id) . "'";

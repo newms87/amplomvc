@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ModelPaymentPayPoint extends Model {
   	public function getMethod($address, $total) {
 		$this->load->language('payment/paypoint');
@@ -10,15 +10,15 @@ class ModelPaymentPayPoint extends Model {
 		} elseif (!$this->config->get('paypoint_geo_zone_id')) {
 			$status = true;
 		} elseif ($query->num_rows) {
-			$status = true; 
+			$status = true;
 		} else {
 			$status = false;
-		}	
+		}
 		
 		$method_data = array();
 	
-		if ($status) {  
-				$method_data = array( 
+		if ($status) {
+				$method_data = array(
 				'code'		=> 'paypoint',
 				'title'		=> $this->_('text_title'),
 				'sort_order' => $this->config->get('paypoint_sort_order')

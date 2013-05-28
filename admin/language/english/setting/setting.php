@@ -8,7 +8,7 @@ $_['data_stock_display_types'] = array(
 		'status' => "Only show stock status",
 		-1 => "Display stock quantity available",
 		10 => "Display quantity up to 10"
-	); 
+	);
 
 // Text
 $_['text_success']				= 'Success: You have modified settings!';
@@ -43,6 +43,7 @@ $_['entry_country']				= 'Country:';
 $_['entry_zone']					= 'Region / State:';
 $_['entry_language']			= 'Language:';
 $_['entry_admin_language']	= 'Administration Language:';
+$_['entry_use_macro_languages']			= 'Use Macro Languages (experimental):<span class="help">Attempt to resolve languages by country specific macro codes</span>';
 $_['entry_currency']			= 'Currency:<br /><span class="help">Change the default currency. Clear your browser cache to see the change and reset your existing cookie.</span>';
 $_['entry_currency_auto']		= 'Auto Update Currency:<br /><span class="help">Set your store to automatically update currencies daily.</span>';
 $_['entry_length_class']		= 'Length Class:';

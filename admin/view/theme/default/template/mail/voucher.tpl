@@ -33,18 +33,18 @@ a img {
 </head>
 <body>
 <div id="container">
-  <div style="float: right; margin-left: 20px;"><a href="<?= $store_url; ?>" title="<?= $store_name; ?>"><img src="<?= $image; ?>" alt="<?= $store_name; ?>" /></a></div>
-  <div>
-    <p><?= $text_greeting; ?></p>
-    <p><?= $text_from; ?></p>
-    <? if ($message) { ?>
-    <p><?= $text_message; ?></p>
-    <p><?= $message; ?></p>
-    <? } ?>
-    <p><?= $text_redeem; ?></p>
-    <p><a href="<?= $store_url; ?>" title="<?= $store_name; ?>"><?= $store_url; ?></a></p>
-    <p><?= $text_footer; ?></p>
-  </div>
+	<div style="float: right; margin-left: 20px;"><a href="<?= $store_url; ?>" title="<?= $store_name; ?>"><img src="<?= $image; ?>" alt="<?= $store_name; ?>" /></a></div>
+	<div>
+		<p><?= $text_greeting; ?></p>
+		<p><?= $text_from; ?></p>
+		<? if ($message) { ?>
+		<p><?= $text_message; ?></p>
+		<p><?= $message; ?></p>
+		<? } ?>
+		<p><?= $text_redeem; ?></p>
+		<p><a href="<?= $store_url; ?>" title="<?= $store_name; ?>"><?= $store_url; ?></a></p>
+		<p><?= $text_footer; ?></p>
+	</div>
 </div>
 </body>
 </html>

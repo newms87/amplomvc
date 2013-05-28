@@ -1,4 +1,4 @@
-<?php  
+<?php
 class ControllerSaleCoupon extends Controller {
 	
   	public function index() {
@@ -50,7 +50,7 @@ class ControllerSaleCoupon extends Controller {
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (isset($_POST['selected']) && $this->validateDelete()) { 
+		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $coupon_id) {
 				$this->model_sale_coupon->deleteCoupon($coupon_id);
 			}
@@ -136,18 +136,14 @@ class ControllerSaleCoupon extends Controller {
 
 		$this->pagination->init();
 		$this->pagination->total = $coupon_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('sale/coupon', $url);
-			
 		$this->data['pagination'] = $this->pagination->render();
 
 		$this->data['sort'] = $sort;
 		$this->data['order'] = $order;
 		
 		$this->children = array(
-			'common/header',	
-			'common/footer'	
+			'common/header',
+			'common/footer'
 		);
 		
 		$this->response->setOutput($this->render());
@@ -244,11 +240,11 @@ class ControllerSaleCoupon extends Controller {
 		$this->data['categories'] = $this->model_catalog_category->getCategories(0);
 		
 		$this->children = array(
-			'common/header',	
-			'common/footer'	
+			'common/header',
+			'common/footer'
 		);
 		
-		$this->response->setOutput($this->render());		
+		$this->response->setOutput($this->render());
   	}
 	
   	private function validateForm() {
@@ -274,20 +270,16 @@ class ControllerSaleCoupon extends Controller {
 			}
 		}
 	
-		if (!$this->error) {
-				return true;
-		} else {
-				return false;
-		}
+		return $this->error ? false : true;
   	}
 
   	private function validateDelete() {
 		if (!$this->user->hasPermission('modify', 'sale/coupon')) {
-				$this->error['warning'] = $this->_('error_permission');  
+				$this->error['warning'] = $this->_('error_permission');
 		}
 		
 		return $this->error ? false : true;
-  	}	
+  	}
 	
 	public function history() {
 		$this->template->load('sale/coupon_history');
@@ -299,7 +291,7 @@ class ControllerSaleCoupon extends Controller {
 			$page = $_GET['page'];
 		} else {
 			$page = 1;
-		}  
+		}
 		
 		$this->data['histories'] = array();
 			
@@ -318,10 +310,6 @@ class ControllerSaleCoupon extends Controller {
 			
 		$this->pagination->init();
 		$this->pagination->total = $history_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = 10; 
-		$this->pagination->url = $this->url->link('sale/coupon/history', 'coupon_id=' . $coupon_id);
-			
 		$this->data['pagination'] = $this->pagination->render();
 		
 		
@@ -335,5 +323,5 @@ class ControllerSaleCoupon extends Controller {
 			if (isset($_GET[$f]))
 				$url .= "&$f=" . $_GET[$f];
 		return $url;
-	}		
+	}
 }

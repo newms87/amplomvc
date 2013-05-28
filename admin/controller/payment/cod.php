@@ -1,8 +1,8 @@
-<?php 
+<?php
 class ControllerPaymentCod extends Controller {
 	
 	
-	public function index() { 
+	public function index() {
 		$this->template->load('payment/cod');
 
 		$this->load->language('payment/cod');
@@ -29,27 +29,27 @@ class ControllerPaymentCod extends Controller {
 
 		$this->data['action'] = $this->url->link('payment/cod');
 
-		$this->data['cancel'] = $this->url->link('extension/payment');	
+		$this->data['cancel'] = $this->url->link('extension/payment');
 		
 		if (isset($_POST['cod_total'])) {
 			$this->data['cod_total'] = $_POST['cod_total'];
 		} else {
-			$this->data['cod_total'] = $this->config->get('cod_total'); 
+			$this->data['cod_total'] = $this->config->get('cod_total');
 		}
 				
 		if (isset($_POST['cod_order_status_id'])) {
 			$this->data['cod_order_status_id'] = $_POST['cod_order_status_id'];
 		} else {
-			$this->data['cod_order_status_id'] = $this->config->get('cod_order_status_id'); 
-		} 
+			$this->data['cod_order_status_id'] = $this->config->get('cod_order_status_id');
+		}
 		
 		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 		
 		if (isset($_POST['cod_geo_zone_id'])) {
 			$this->data['cod_geo_zone_id'] = $_POST['cod_geo_zone_id'];
 		} else {
-			$this->data['cod_geo_zone_id'] = $this->config->get('cod_geo_zone_id'); 
-		} 
+			$this->data['cod_geo_zone_id'] = $this->config->get('cod_geo_zone_id');
+		}
 		
 		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 		
@@ -78,6 +78,6 @@ class ControllerPaymentCod extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 				
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

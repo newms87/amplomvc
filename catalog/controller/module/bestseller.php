@@ -37,13 +37,13 @@ class ControllerModuleBestSeller extends Controller {
 			}
 
 			if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-				$price = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_show_price_with_tax')));
+				$price = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id']));
 			} else {
 				$price = false;
 			}
 				
 			if ((float)$product_info['special']) {
-				$special = $this->currency->format($this->tax->calculate($product_info['special'], $product_info['tax_class_id'], $this->config->get('config_show_price_with_tax')));
+				$special = $this->currency->format($this->tax->calculate($product_info['special'], $product_info['tax_class_id']));
 			} else {
 				$special = false;
 			}
@@ -59,12 +59,6 @@ class ControllerModuleBestSeller extends Controller {
 				'href'		=> $this->url->link('product/product','product_id='.$product_info['product_id'])
 			);
 		}
-
-
-
-
-
-
 
 		$this->render();
 	}

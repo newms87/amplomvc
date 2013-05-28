@@ -1,6 +1,6 @@
-<?php	
-class ControllerErrorNotFound extends Controller {	
-	public function index() { 
+<?php
+class ControllerErrorNotFound extends Controller {
+	public function index() {
 		$this->template->load('error/not_found');
 
 		$this->load->language('error/not_found');
@@ -15,6 +15,6 @@ class ControllerErrorNotFound extends Controller {
 			'common/footer'
 		);
 				
-		$this->response->setOutput($this->render());	
+		$this->response->setOutput($this->render());
   	}
 }

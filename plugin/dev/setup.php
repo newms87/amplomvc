@@ -1,4 +1,4 @@
-<?php 
+<?php
 class SetupDev extends SetupPlugin {
 	private $registry;
 	

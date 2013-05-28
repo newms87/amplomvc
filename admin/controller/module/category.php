@@ -2,7 +2,7 @@
 class ControllerModuleCategory extends Controller {
 	
 	
-	public function index() {	
+	public function index() {
 		$this->template->load('module/category');
 
 		$this->load->language('module/category');
@@ -10,7 +10,7 @@ class ControllerModuleCategory extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('category', $_POST);		
+			$this->model_setting_setting->editSetting('category', $_POST);
 					
 			$this->message->add('success', $this->_('text_success'));
 						
@@ -35,9 +35,9 @@ class ControllerModuleCategory extends Controller {
 		
 		if (isset($_POST['category_module'])) {
 			$this->data['modules'] = $_POST['category_module'];
-		} elseif ($this->config->get('category_module')) { 
+		} elseif ($this->config->get('category_module')) {
 			$this->data['modules'] = $this->config->get('category_module');
-		}	
+		}
 				
 		$this->data['layouts'] = $this->model_design_layout->getLayouts();
 
@@ -54,6 +54,6 @@ class ControllerModuleCategory extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

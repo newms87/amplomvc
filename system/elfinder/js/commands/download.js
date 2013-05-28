@@ -1,6 +1,6 @@
 "use strict";
 /**
- * @class elFinder command "download". 
+ * @class elFinder command "download".
  * Download selected files.
  * Only for new api
  *

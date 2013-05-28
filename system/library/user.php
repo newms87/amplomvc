@@ -149,5 +149,5 @@ class User {
 	
 	public function encrypt($password){
 		return md5($password);
-	}	
+	}
 }

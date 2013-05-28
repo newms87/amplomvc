@@ -2,7 +2,7 @@
 // Heading
 $_['heading_title']			= 'PayPal Website Payment Pro (UK)';
 
-// Text 
+// Text
 $_['text_payment']			= 'Paiement';
 $_['text_success']			= 'F&eacute;licitations, vous avez modifi&eacute; les d&eacute;tails du paiement <b>PayPal Website Paiement Pro (UK)</b> avec succ&egrave;s !';
 $_['text_pp_pro_uk']		= '<a onclick="window.open(&#8217;https://www.paypal.com/uk/mrb/pal=W9TBB5DTD6QJW&#8217;);"><img src="view/theme/default/image/payment/paypal.png" alt="PayPal Website Paiement Pro (UK)" title="PayPal Website Paiement Pro (UK)" style="border: 1px solid #EEEEEE;" /></a>';
@@ -24,7 +24,7 @@ $_['entry_sort_order']		= 'Classement :';
 
 // Error
 $_['error_permission']		= 'Attention, vous n&#8217;avez pas la permission de modifier le paiement <b>PayPal Website Paiement Pro (UK)</b> !';
-$_['error_vendor']			= 'Attention, le vendeur  est requis !'; 
-$_['error_user']			= 'Attention, l&#8217;utilisateur  est requis !'; 
-$_['error_password']		= 'Attention, le mot de passe  est requis !'; 
+$_['error_vendor']			= 'Attention, le vendeur  est requis !';
+$_['error_user']			= 'Attention, l&#8217;utilisateur  est requis !';
+$_['error_password']		= 'Attention, le mot de passe  est requis !';
 $_['error_partner']			= 'Attention, le partenaire  est requis !'; 

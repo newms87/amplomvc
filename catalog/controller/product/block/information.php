@@ -1,4 +1,4 @@
-<?php  
+<?php
 class ControllerProductBlockInformation extends Controller {
 	
 	public function index($setting, $product_info) {
@@ -70,7 +70,7 @@ class ControllerProductBlockInformation extends Controller {
 		}
 		
 		if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-			$this->data['price'] = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_show_price_with_tax')));
+			$this->data['price'] = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id']));
 		} else {
 			$this->data['price'] = false;
 		}
@@ -79,7 +79,7 @@ class ControllerProductBlockInformation extends Controller {
 		$this->language->format('final_sale_explanation', $this->url->link('information/information/info','information_id=7').'/#return_policy');
 		
 		if ((float)$product_info['special']) {
-			$this->data['special'] = $this->currency->format($this->tax->calculate($product_info['special'], $product_info['tax_class_id'], $this->config->get('config_show_price_with_tax')));
+			$this->data['special'] = $this->currency->format($this->tax->calculate($product_info['special'], $product_info['tax_class_id']));
 		} else {
 			$this->data['special'] = false;
 		}
@@ -92,12 +92,12 @@ class ControllerProductBlockInformation extends Controller {
 		
 		$discounts = $this->model_catalog_product->getProductDiscounts($product_info['product_id']);
 		
-		$this->data['discounts'] = array(); 
+		$this->data['discounts'] = array();
 		
 		foreach ($discounts as $discount) {
 			$this->data['discounts'][] = array(
 				'quantity' => $discount['quantity'],
-				'price'	=> $this->currency->format($this->tax->calculate($discount['price'], $product_info['tax_class_id'], $this->config->get('config_show_price_with_tax')))
+				'price'	=> $this->currency->format($this->tax->calculate($discount['price'], $product_info['tax_class_id']))
 			);
 		}
 		
@@ -115,7 +115,7 @@ class ControllerProductBlockInformation extends Controller {
 		else{
 			$this->data['shipping_return'] = $this->_('shipping_return_policy');
 			
-			$this->data['is_default_shipping'] = true;  
+			$this->data['is_default_shipping'] = true;
 		}
 		
 		$this->data['shipping_return_popup'] = $this->tool->limit_characters($this->data['shipping_return'], 90) . $this->_('text_read_more');

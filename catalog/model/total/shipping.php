@@ -17,6 +17,6 @@ class ModelTotalShipping extends Model {
 			}
 			
 			$total += $shipping_method['cost'];
-		}			
+		}
 	}
 }

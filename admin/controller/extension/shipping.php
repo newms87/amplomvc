@@ -5,7 +5,7 @@ class ControllerExtensionShipping extends Controller {
 
 		$this->load->language('extension/shipping');
 		
-		$this->document->setTitle($this->_('heading_title')); 
+		$this->document->setTitle($this->_('heading_title'));
   		
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('extension/shipping'));
@@ -68,10 +68,10 @@ class ControllerExtensionShipping extends Controller {
 	
 	public function install() {
 		if (!$this->user->hasPermission('modify', 'extension/shipping')) {
-			$this->session->data['error'] = $this->_('error_permission'); 
+			$this->session->data['error'] = $this->_('error_permission');
 			
 			$this->url->redirect($this->url->link('extension/shipping'));
-		} else {		
+		} else {
 			$this->model_setting_extension->install('shipping', $_GET['extension']);
 
 			$this->model_user_user_group->addPermission($this->user->getId(), 'access', 'shipping/' . $_GET['extension']);
@@ -92,10 +92,10 @@ class ControllerExtensionShipping extends Controller {
 	
 	public function uninstall() {
 		if (!$this->user->hasPermission('modify', 'extension/shipping')) {
-			$this->session->data['error'] = $this->_('error_permission'); 
+			$this->session->data['error'] = $this->_('error_permission');
 			
 			$this->url->redirect($this->url->link('extension/shipping'));
-		} else {		
+		} else {
 			$this->model_setting_extension->uninstall('shipping', $_GET['extension']);
 		
 			$this->model_setting_setting->deleteSetting($_GET['extension']);

@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerLocalisationCountry extends Controller {
 	
  
@@ -169,7 +169,7 @@ class ControllerLocalisationCountry extends Controller {
 				'name'		=> $result['name'] . (($result['country_id'] == $this->config->get('config_country_id')) ? $this->_('text_default') : null),
 				'iso_code_2' => $result['iso_code_2'],
 				'iso_code_3' => $result['iso_code_3'],
-				'selected'	=> isset($_POST['selected']) && in_array($result['country_id'], $_POST['selected']),				
+				'selected'	=> isset($_POST['selected']) && in_array($result['country_id'], $_POST['selected']),
 				'action'	=> $action
 			);
 		}
@@ -216,10 +216,6 @@ class ControllerLocalisationCountry extends Controller {
 
 		$this->pagination->init();
 		$this->pagination->total = $country_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('localisation/country', $url);
-
 		$this->data['pagination'] = $this->pagination->render();
 		
 		$this->data['sort'] = $sort;
@@ -265,7 +261,7 @@ class ControllerLocalisationCountry extends Controller {
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/country', $url));
 
-		if (!isset($_GET['country_id'])) { 
+		if (!isset($_GET['country_id'])) {
 			$this->data['action'] = $this->url->link('localisation/country/insert', $url);
 		} else {
 			$this->data['action'] = $this->url->link('localisation/country/update', 'country_id=' . $_GET['country_id'] . $url);

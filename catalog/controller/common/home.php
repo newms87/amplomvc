@@ -1,4 +1,4 @@
-<?php  
+<?php
 class ControllerCommonHome extends Controller {
 	public function index() {
 		$this->template->load('common/home');

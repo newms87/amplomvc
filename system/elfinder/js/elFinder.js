@@ -204,8 +204,8 @@ window.elFinder = function(node, opts) {
 			} else {
 				// remove only files from prev cwd
 				for (var i in files) {
-					if (files.hasOwnProperty(i) 
-					&& files[i].mime != 'directory' 
+					if (files.hasOwnProperty(i)
+					&& files[i].mime != 'directory'
 					&& files[i].phash == cwd
 					&& $.inArray(i, remember) === -1) {
 						delete files[i];
@@ -234,7 +234,7 @@ window.elFinder = function(node, opts) {
 				f = data[l];
 				if (f.name && f.hash && f.mime) {
 					files[f.hash] = f;
-				} 
+				}
 			}
 		},
 		
@@ -251,10 +251,10 @@ window.elFinder = function(node, opts) {
 			if (enabled) {
 
 				$.each(shortcuts, function(i, shortcut) {
-					if (shortcut.type    == e.type 
-					&& shortcut.keyCode  == code 
-					&& shortcut.shiftKey == e.shiftKey 
-					&& shortcut.ctrlKey  == ctrlKey 
+					if (shortcut.type    == e.type
+					&& shortcut.keyCode  == code
+					&& shortcut.shiftKey == e.shiftKey
+					&& shortcut.ctrlKey  == ctrlKey
 					&& shortcut.altKey   == e.altKey) {
 						e.preventDefault()
 						e.stopPropagation();
@@ -371,8 +371,8 @@ window.elFinder = function(node, opts) {
 	 **/
 	this.lang = this.i18[this.options.lang] && this.i18[this.options.lang].messages ? this.options.lang : 'en';
 	
-	i18n = this.lang == 'en' 
-		? this.i18['en'] 
+	i18n = this.lang == 'en'
+		? this.i18['en']
 		: $.extend(true, {}, this.i18['en'], this.i18[this.lang]);
 	
 	/**
@@ -431,7 +431,7 @@ window.elFinder = function(node, opts) {
 	this.getFullYear = 'get'+utc+'FullYear';
 	
 	/**
-	 * Css classes 
+	 * Css classes
 	 *
 	 * @type String
 	 **/
@@ -482,8 +482,8 @@ window.elFinder = function(node, opts) {
 			
 			self.trigger('dragstart', {target : element[0], originalEvent : e});
 			
-			hashes = element.is('.'+self.res('class', 'cwdfile')) 
-				? self.selected() 
+			hashes = element.is('.'+self.res('class', 'cwdfile'))
+				? self.selected()
 				: [self.navId2Hash(element.attr('id'))];
 			
 			helper.append(icon(files[hashes[0]].mime)).data('files', hashes);
@@ -557,7 +557,7 @@ window.elFinder = function(node, opts) {
 	
 	/**
 	 * Return root dir hash for current working directory
-	 * 
+	 *
 	 * @return String
 	 */
 	this.root = function(hash) {
@@ -582,7 +582,7 @@ window.elFinder = function(node, opts) {
 	
 	/**
 	 * Return current working directory info
-	 * 
+	 *
 	 * @return Object
 	 */
 	this.cwd = function() {
@@ -591,7 +591,7 @@ window.elFinder = function(node, opts) {
 	
 	/**
 	 * Return required cwd option
-	 * 
+	 *
 	 * @param  String  option name
 	 * @return mixed
 	 */
@@ -601,17 +601,17 @@ window.elFinder = function(node, opts) {
 	
 	/**
 	 * Return file data from current dir or tree by it's hash
-	 * 
+	 *
 	 * @param  String  file hash
 	 * @return Object
 	 */
-	this.file = function(hash) { 
-		return files[hash]; 
+	this.file = function(hash) {
+		return files[hash];
 	};
 	
 	/**
 	 * Return all cached files
-	 * 
+	 *
 	 * @return Array
 	 */
 	this.files = function() {
@@ -620,7 +620,7 @@ window.elFinder = function(node, opts) {
 	
 	/**
 	 * Return list of file parents hashes include file hash
-	 * 
+	 *
 	 * @param  String  file hash
 	 * @return Array
 	 */
@@ -636,7 +636,7 @@ window.elFinder = function(node, opts) {
 	}
 	
 	this.path2array = function(hash) {
-		var file, 
+		var file,
 			path = [];
 			
 		while (hash && (file = files[hash]) && file.hash) {
@@ -649,7 +649,7 @@ window.elFinder = function(node, opts) {
 	
 	/**
 	 * Return file path
-	 * 
+	 *
 	 * @param  Object  file
 	 * @return String
 	 */
@@ -661,7 +661,7 @@ window.elFinder = function(node, opts) {
 	
 	/**
 	 * Return file url if set
-	 * 
+	 *
 	 * @param  Object  file
 	 * @return String
 	 */
@@ -693,7 +693,7 @@ window.elFinder = function(node, opts) {
 	
 	/**
 	 * Return thumbnail url
-	 * 
+	 *
 	 * @param  String  file hash
 	 * @return String
 	 */
@@ -718,7 +718,7 @@ window.elFinder = function(node, opts) {
 	
 	/**
 	 * Return selected files info
-	 * 
+	 *
 	 * @return Array
 	 */
 	this.selectedFiles = function() {
@@ -727,7 +727,7 @@ window.elFinder = function(node, opts) {
 	
 	/**
 	 * Return true if file with required name existsin required folder
-	 * 
+	 *
 	 * @param  String  file name
 	 * @param  String  parent folder hash
 	 * @return Boolean
@@ -744,7 +744,7 @@ window.elFinder = function(node, opts) {
 	
 	/**
 	 * Valid data for required command based on rules
-	 * 
+	 *
 	 * @param  String  command name
 	 * @param  Object  cammand's data
 	 * @return Boolean
@@ -761,7 +761,7 @@ window.elFinder = function(node, opts) {
 	 * @todo
 	 * @return $.Deferred
 	 */
-	this.request = function(options) { 
+	this.request = function(options) {
 		var self     = this,
 			o        = this.options,
 			dfrd     = $.Deferred(),
@@ -779,8 +779,8 @@ window.elFinder = function(node, opts) {
 			raw      = !!options.raw,
 			// sync files on request fail
 			syncOnFail = options.syncOnFail,
-			// open notify dialog timeout		
-			timeout, 
+			// open notify dialog timeout
+			timeout,
 			// request options
 			options = $.extend({
 				url      : o.url,
@@ -792,7 +792,7 @@ window.elFinder = function(node, opts) {
 				data     : data
 			}, options.options || {}),
 			/**
-			 * Default success handler. 
+			 * Default success handler.
 			 * Call default data handlers and fire event with command name.
 			 *
 			 * @param Object  normalized response data
@@ -828,10 +828,10 @@ window.elFinder = function(node, opts) {
 					case 'abort':
 						error = xhr.quiet ? '' : ['errConnect', 'errAbort'];
 						break;
-					case 'timeout':	    
+					case 'timeout':
 						error = ['errConnect', 'errTimeout'];
 						break;
-					case 'parsererror': 
+					case 'parsererror':
 						error = ['errResponse', 'errDataNotJSON'];
 						break;
 					default:
@@ -841,7 +841,7 @@ window.elFinder = function(node, opts) {
 							error = ['errConnect', 'errNotFound'];
 						} else {
 							error = 'errConnect';
-						} 
+						}
 				}
 				
 				dfrd.reject(error, xhr, status);
@@ -899,7 +899,7 @@ window.elFinder = function(node, opts) {
 		
 		if (!cmd) {
 			return dfrd.reject('errCmdReq');
-		}	
+		}
 
 		if (syncOnFail) {
 			dfrd.fail(function(error) {
@@ -952,7 +952,7 @@ window.elFinder = function(node, opts) {
 	
 	/**
 	 * Compare current files cache with new files and return diff
-	 * 
+	 *
 	 * @param  Array  new files
 	 * @return Object
 	 */
@@ -998,13 +998,13 @@ window.elFinder = function(node, opts) {
 		
 		// parents of removed dirs mark as changed (required for tree correct work)
 		$.each(removed, function(i, hash) {
-			var file  = files[hash], 
+			var file  = files[hash],
 				phash = file.phash;
 
-			if (phash 
-			&& file.mime == 'directory' 
-			&& $.inArray(phash, removed) === -1 
-			&& raw[phash] 
+			if (phash
+			&& file.mime == 'directory'
+			&& $.inArray(phash, removed) === -1
+			&& raw[phash]
 			&& !isChanged(phash)) {
 				changed.push(raw[phash]);
 			}
@@ -1019,7 +1019,7 @@ window.elFinder = function(node, opts) {
 	
 	/**
 	 * Sync content
-	 * 
+	 *
 	 * @return jQuery.Deferred
 	 */
 	this.sync = function() {
@@ -1065,7 +1065,7 @@ window.elFinder = function(node, opts) {
 	/**
 	 * Attach listener to events
 	 * To bind to multiply events at once, separate events names by space
-	 * 
+	 *
 	 * @param  String  event(s) name(s)
 	 * @param  Object  event handler
 	 * @return elFinder
@@ -1120,11 +1120,11 @@ window.elFinder = function(node, opts) {
 			event = $.Event(event);
 
 			for (i = 0; i < handlers.length; i++) {
-				// to avoid data modifications. remember about "sharing" passing arguments in js :) 
+				// to avoid data modifications. remember about "sharing" passing arguments in js :)
 				event.data = $.extend(true, {}, data);
 
 				try {
-					if (handlers[i](event, this) === false 
+					if (handlers[i](event, this) === false
 					|| event.isDefaultPrevented()) {
 						this.debug('event-stoped', event.type);
 						break;
@@ -1142,11 +1142,11 @@ window.elFinder = function(node, opts) {
 	 * Bind keybord shortcut to keydown event
 	 *
 	 * @example
-	 *    elfinder.shortcut({ 
-	 *       pattern : 'ctrl+a', 
-	 *       description : 'Select all files', 
-	 *       callback : function(e) { ... }, 
-	 *       keypress : true|false (bind to keypress instead of keydown) 
+	 *    elfinder.shortcut({
+	 *       pattern : 'ctrl+a',
+	 *       description : 'Select all files',
+	 *       callback : function(e) { ... },
+	 *       keypress : true|false (bind to keypress instead of keydown)
 	 *    })
 	 *
 	 * @param  Object  shortcut config
@@ -1161,8 +1161,8 @@ window.elFinder = function(node, opts) {
 			for (i= 0; i < patterns.length; i++) {
 				pattern = patterns[i]
 				parts   = pattern.split('+');
-				code    = (code = parts.pop()).length == 1 
-					? code > 0 ? code : code.charCodeAt(0) 
+				code    = (code = parts.pop()).length == 1
+					? code > 0 ? code : code.charCodeAt(0)
 					: $.ui.keyCode[code];
 
 				if (code && !shortcuts[pattern]) {
@@ -1203,7 +1203,7 @@ window.elFinder = function(node, opts) {
 	 * @example
 	 *   this.clipboard([]) - clean clipboard
 	 *   this.clipboard([{...}, {...}], true) - put 2 files in clipboard and mark it as cutted
-	 * 
+	 *
 	 * @param  Array    new files hashes
 	 * @param  Boolean  cut files?
 	 * @return Array
@@ -1243,7 +1243,7 @@ window.elFinder = function(node, opts) {
 	
 	/**
 	 * Return true if command enabled
-	 * 
+	 *
 	 * @param  String  command name
 	 * @return Boolean
 	 */
@@ -1258,10 +1258,10 @@ window.elFinder = function(node, opts) {
 	 * @param  String|Array   usualy files hashes
 	 * @param  String|Array   command options
 	 * @return $.Deferred
-	 */		
+	 */
 	this.exec = function(cmd, files, opts) {
-		return this._commands[cmd] && this.isCommandEnabled(cmd) 
-			? this._commands[cmd].exec(files, opts) 
+		return this._commands[cmd] && this.isCommandEnabled(cmd)
+			? this._commands[cmd].exec(files, opts)
 			: $.Deferred().reject('No such command');
 	}
 	
@@ -1292,7 +1292,7 @@ window.elFinder = function(node, opts) {
 	
 	/**
 	 * Resize elfinder node
-	 * 
+	 *
 	 * @param  String|Number  width
 	 * @param  Number         height
 	 * @return void
@@ -1304,7 +1304,7 @@ window.elFinder = function(node, opts) {
 	
 	/**
 	 * Restore elfinder node size
-	 * 
+	 *
 	 * @return elFinder
 	 */
 	this.restoreSize = function() {
@@ -1443,7 +1443,7 @@ window.elFinder = function(node, opts) {
 		.select(function(e) {
 			selected = $.map(e.data.selected || e.data.value|| [], function(hash) { return files[hash] ? hash : null; });
 		})
-		.error(function(e) { 
+		.error(function(e) {
 			var opts  = {
 					cssClass  : 'elfinder-dialog-error',
 					title     : self.i18n(self.i18n('error')),
@@ -1477,7 +1477,7 @@ window.elFinder = function(node, opts) {
 		})
 		.remove(function(e) {
 			var removed = e.data.removed||[],
-				l       = removed.length, 
+				l       = removed.length,
 				rm      = function(hash) {
 					var file = files[hash];
 					if (file) {
@@ -1537,7 +1537,7 @@ window.elFinder = function(node, opts) {
 			callback    : function() { self.exec(self.OS == 'mac' ? 'rename' : 'open') }
 		});
 		
-	} 
+	}
 
 	/**
 	 * Loaded commands
@@ -1617,8 +1617,8 @@ window.elFinder = function(node, opts) {
 	node[0].elfinder = this;
 	
 	// make node resizable
-	this.options.resizable 
-	&& $.fn.resizable 
+	this.options.resizable
+	&& $.fn.resizable
 	&& node.resizable({
 		handles   : 'se',
 		minWidth  : 300,
@@ -1633,7 +1633,7 @@ window.elFinder = function(node, opts) {
 		height = parseInt(this.options.height);
 	}
 	
-	// update size	
+	// update size
 	self.resize(width, height);
 	
 	// attach events to document
@@ -1646,7 +1646,7 @@ window.elFinder = function(node, opts) {
 	// send initial request and start to pray >_<
 	this.trigger('init')
 		.request({
-			data        : {cmd : 'open', target : self.lastDir(), init : 1, tree : this.ui.tree ? 1 : 0}, 
+			data        : {cmd : 'open', target : self.lastDir(), init : 1, tree : this.ui.tree ? 1 : 0},
 			preventDone : true,
 			notify      : {type : 'open', cnt : 1, hideCnt : true},
 			freeze      : true
@@ -1677,24 +1677,24 @@ window.elFinder = function(node, opts) {
 
 	});
 	
-	// self.timeEnd('load'); 
+	// self.timeEnd('load');
 
 }
 
 /**
  * Prototype
- * 
+ *
  * @type  Object
  */
 elFinder.prototype = {
 	
 	res : function(type, id) {
 		return this.resources[type] && this.resources[type][id];
-	}, 
+	},
 	
 	/**
 	 * Internationalization object
-	 * 
+	 *
 	 * @type  Object
 	 */
 	i18 : {
@@ -1715,7 +1715,7 @@ elFinder.prototype = {
 	
 	/**
 	 * File mimetype to kind mapping
-	 * 
+	 *
 	 * @type  Object
 	 */
 	kinds : 	{
@@ -1805,7 +1805,7 @@ elFinder.prototype = {
 	
 	/**
 	 * Ajax request data validation rules
-	 * 
+	 *
 	 * @type  Object
 	 */
 	rules : {
@@ -1829,7 +1829,7 @@ elFinder.prototype = {
 	
 	/**
 	 * Sort types for current directory content
-	 * 
+	 *
 	 * @type  Object
 	 */
 	sorts : {
@@ -1885,7 +1885,7 @@ elFinder.prototype = {
 	
 	uploads : {
 		// upload transport using iframe
-		iframe : function(data, fm) { 
+		iframe : function(data, fm) {
 			var self   = fm ? fm : this,
 				input  = data.input,
 				dfrd   = $.Deferred()
@@ -1971,7 +1971,7 @@ elFinder.prototype = {
 			return dfrd;
 		},
 		// upload transport using XMLHttpRequest
-		xhr : function(data, fm) { 
+		xhr : function(data, fm) {
 			var self   = fm ? fm : this,
 				dfrd   = $.Deferred()
 					.fail(function(error) {
@@ -1991,7 +1991,7 @@ elFinder.prototype = {
 					}),
 				xhr         = new XMLHttpRequest(),
 				formData    = new FormData(),
-				files       = data.input ? data.input.files : data.files, 
+				files       = data.input ? data.input.files : data.files,
 				cnt         = files.length,
 				loaded      = 5,
 				notify      = false,
@@ -2168,24 +2168,24 @@ elFinder.prototype = {
 	
 	/**
 	 * Get/set last opened directory
-	 * 
+	 *
 	 * @param  String|undefined  dir hash
 	 * @return String
 	 */
-	lastDir : function(hash) { 
+	lastDir : function(hash) {
 		return this.options.rememberLastDir ? this.storage('lastdir', hash) : '';
 	},
 	
 	/**
 	 * Node for escape html entities in texts
-	 * 
+	 *
 	 * @type jQuery
 	 */
 	_node : $('<span/>'),
 	
 	/**
 	 * Replace not html-safe symbols to html entities
-	 * 
+	 *
 	 * @param  String  text to escape
 	 * @return String
 	 */
@@ -2196,13 +2196,13 @@ elFinder.prototype = {
 	/**
 	 * Cleanup ajax data.
 	 * For old api convert data into new api format
-	 * 
+	 *
 	 * @param  String  command name
 	 * @param  Object  data from backend
 	 * @return Object
 	 */
 	normalize : function(data) {
-		var filter = function(file) { 
+		var filter = function(file) {
 		
 			if (file && file.hash && file.name && file.mime) {
 				if (file.mime == 'application/x-empty') {
@@ -2211,13 +2211,13 @@ elFinder.prototype = {
 				return file;
 			}
 			return null;
-			return file && file.hash && file.name && file.mime ? file : null; 
+			return file && file.hash && file.name && file.mime ? file : null;
 		};
 		
 
 		if (data.files) {
 			data.files = $.map(data.files, filter);
-		} 
+		}
 		if (data.tree) {
 			data.tree = $.map(data.tree, filter);
 		}
@@ -2242,7 +2242,7 @@ elFinder.prototype = {
 	 * @return Number
 	 */
 	compare : function(file1, file2) {
-		var sort = this.sort, 
+		var sort = this.sort,
 			asc  = this.sortDirect == 'asc',
 			f1   = asc ? file1 : file2,
 			f2   = asc ? file2 : file1,
@@ -2259,7 +2259,7 @@ elFinder.prototype = {
 
 		// this.log(this.sortDirect)
 
-		// dir first	
+		// dir first
 		if (sort <= 4) {
 			if (d1 && !d2) {
 				return -1;
@@ -2297,11 +2297,11 @@ elFinder.prototype = {
 	},
 	
 	/**
-	 * Open notification dialog 
+	 * Open notification dialog
 	 * and append/update message for required notification type.
 	 *
 	 * @param  Object  options
-	 * @example  
+	 * @example
 	 * this.notify({
 	 *    type : 'copy',
 	 *    msg : 'Copy files', // not required for known types @see this.notifyType
@@ -2366,10 +2366,10 @@ elFinder.prototype = {
 	},
 	
 	/**
-	 * Open confirmation dialog 
+	 * Open confirmation dialog
 	 *
 	 * @param  Object  options
-	 * @example  
+	 * @example
 	 * this.confirm({
 	 *    title : 'Remove files',
 	 *    text  : 'Here is question text',
@@ -2397,7 +2397,7 @@ elFinder.prototype = {
 				resizable : false,
 				title     : this.i18n(opts.title || 'confirmReq'),
 				buttons   : {},
-				close     : function() { 
+				close     : function() {
 					!complete && opts.cancel.callback();
 					$(this).elfinderdialog('destroy');
 				}
@@ -2448,7 +2448,7 @@ elFinder.prototype = {
 	
 	/**
 	 * Create unique file name in required dir
-	 * 
+	 *
 	 * @param  String  file name
 	 * @param  String  parent dir hash
 	 * @return String
@@ -2456,7 +2456,7 @@ elFinder.prototype = {
 	uniqueName : function(prefix, phash) {
 		var i = 0, ext = '', p, name;
 		
-		prefix = this.i18n(prefix); 
+		prefix = this.i18n(prefix);
 		phash = phash || this.cwd().hash;
 
 		if ((p = prefix.indexOf('.txt')) != -1) {
@@ -2486,9 +2486,9 @@ elFinder.prototype = {
 	 **/
 	i18n : function() {
 		var self = this,
-			messages = this.messages, 
+			messages = this.messages,
 			input    = [],
-			ignore   = [], 
+			ignore   = [],
 			message = function(m) {
 				var file;
 				if (m.indexOf('#') === 0) {
@@ -2539,7 +2539,7 @@ elFinder.prototype = {
 	
 	/**
 	 * Convert mimetype into css classes
-	 * 
+	 *
 	 * @param  String  file mimetype
 	 * @return String
 	 */
@@ -2553,7 +2553,7 @@ elFinder.prototype = {
 	
 	/**
 	 * Return localized kind of file
-	 * 
+	 *
 	 * @param  Object|String  file or file mimetype
 	 * @return String
 	 */
@@ -2606,13 +2606,13 @@ elFinder.prototype = {
 	
 	/**
 	 * Return localized date
-	 * 
+	 *
 	 * @param  Object  file object
 	 * @return String
 	 */
 	formatDate : function(file, ts) {
-		var self = this, 
-			ts   = ts || file.ts, 
+		var self = this,
+			ts   = ts || file.ts,
 			i18  = self.i18,
 			date, format, output, d, dw, m, y, h, g, i, s;
 
@@ -2629,8 +2629,8 @@ elFinder.prototype = {
 			m  = date[self.getMonth]() + 1;
 			y  = date[self.getFullYear]();
 			
-			format = ts >= this.yesterday 
-				? this.fancyFormat 
+			format = ts >= this.yesterday
+				? this.fancyFormat
 				: this.dateFormat;
 
 			output = format.replace(/[a-z]/gi, function(val) {
@@ -2669,8 +2669,8 @@ elFinder.prototype = {
 	
 	/**
 	 * Return css class marks file permissions
-	 * 
-	 * @param  Object  file 
+	 *
+	 * @param  Object  file
 	 * @return String
 	 */
 	perms2class : function(o) {
@@ -2688,7 +2688,7 @@ elFinder.prototype = {
 	
 	/**
 	 * Return localized string with file permissions
-	 * 
+	 *
 	 * @param  Object  file
 	 * @return String
 	 */
@@ -2696,14 +2696,14 @@ elFinder.prototype = {
 		var p  = [];
 			
 		f.read && p.push(this.i18n('read'));
-		f.write && p.push(this.i18n('write'));	
+		f.write && p.push(this.i18n('write'));
 
 		return p.length ? p.join(' '+this.i18n('and')+' ') : this.i18n('noaccess');
 	},
 	
 	/**
 	 * Return formated file size
-	 * 
+	 *
 	 * @param  Number  file size
 	 * @return String
 	 */
@@ -2744,7 +2744,7 @@ elFinder.prototype = {
 
 		if (d == 'all' || d === true || ($.isArray(d) && $.inArray(type, d) != -1)) {
 			window.console && window.console.log && window.console.log('elfinder debug: ['+type+'] ['+this.id+']', m);
-		} 
+		}
 		return this;
 	},
 	time : function(l) { window.console && window.console.time && window.console.time(l); },

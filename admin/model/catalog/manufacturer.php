@@ -156,7 +156,7 @@ class ModelCatalogManufacturer extends Model {
 		$this->delete('user_designer', array('designer_id'=>$manufacturer_id));
 		
 		$this->cache->delete('manufacturer');
-	}	
+	}
 	
 	public function generate_vendor_id($data){
 		$n = explode(' ', strtolower($data['name']), 2);
@@ -206,7 +206,7 @@ class ModelCatalogManufacturer extends Model {
 		}
 			
 		if(isset($data['manufacturer_ids'])){
-			$where .= " AND manufacturer_id IN(" . implode(',', $data['manufacturer_ids']) . ")"; 
+			$where .= " AND manufacturer_id IN(" . implode(',', $data['manufacturer_ids']) . ")";
 		}
 		
 		if(!$total){
@@ -293,5 +293,5 @@ class ModelCatalogManufacturer extends Model {
 
 	public function getTotalManufacturers($data) {
 		return $this->getManufacturers($data, null, true);
-	}	
+	}
 }

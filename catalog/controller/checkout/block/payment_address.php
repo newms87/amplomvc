@@ -1,17 +1,16 @@
-<?php 
+<?php
 class ControllerCheckoutBlockPaymentAddress extends Controller {
 	public function index() {
 		$this->template->load('checkout/block/payment_address');
 
 		$this->language->load('checkout/checkout');
 		
-		$this->data['data_addresses'] = $this->model_account_address->getAddresses();
+		$this->data['data_addresses'] = $this->customer->get_payment_addresses();
 		
 		if($this->cart->validatePaymentAddress()){
 			$this->data['payment_address_id'] = $this->cart->getPaymentAddressId();
-		}
-		else{
-			$this->data['payment_address_id'] = false;
+		} else {
+			$this->data['payment_address_id'] = $this->customer->get_setting('default_payment_address_id');
 		}
 		
 		//Build Address Form

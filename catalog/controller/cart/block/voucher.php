@@ -6,7 +6,7 @@ class ControllerCartBlockVoucher extends Controller{
 
 		$this->language->load('cart/block/shipping');
 		
-		if (isset($_POST['voucher']) && $this->validateVoucher()) { 
+		if (isset($_POST['voucher']) && $this->validateVoucher()) {
 			$this->session->data['voucher'] = $_POST['voucher'];
 				
 			$this->message->add('success', $this->_('text_voucher'));
@@ -30,12 +30,12 @@ class ControllerCartBlockVoucher extends Controller{
 	}
 	
 	private function validateVoucher() {
-		$voucher_info = $this->model_cart_voucher->getVoucher($_POST['voucher']);		
+		$voucher_info = $this->model_cart_voucher->getVoucher($_POST['voucher']);
 		
-		if (!$voucher_info) {			
+		if (!$voucher_info) {
 			$this->error['warning'] = $this->_('error_voucher');
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

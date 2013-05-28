@@ -131,7 +131,7 @@ class Builder extends Controller{
 		elseif(is_array($errors)){
 			$html = '';
 			foreach($errors as $e){
-				$html .= $this->display_errors_r($e); 
+				$html .= $this->display_errors_r($e);
 			}
 			return $html;
 		}
@@ -231,7 +231,7 @@ class Builder extends Controller{
 	
 	/**
 	* Use this to give the builder hints on how to builder the desired html structure
-	* 
+	*
 	* @param $id - the key in the array to use as the value
 	* @param $name - the key in the array to use as the display name
 	* @param (optional) $type - How the $id keys should be treated (eg: int, string, float, etc.). If no type is set, it will try to figure it out on its own
@@ -332,7 +332,7 @@ class Builder extends Controller{
 			if(is_array($display)){
 				if(!isset($this->builder_id) || !isset($this->builder_name) || !isset($display[$this->builder_id]) || !isset($display[$this->builder_name])){
 					trigger_error("You must set the ID and Name to keys in the \$data Array using \$this->builder->set_config(\$id,\$name). " . get_caller());
-					return; 
+					return;
 				}
 				
 				$value = $display[$this->builder_id];

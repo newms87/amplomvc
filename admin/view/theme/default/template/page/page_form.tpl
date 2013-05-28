@@ -92,4 +92,4 @@ $('#create_layout').click(function(){
 
 <?= $this->builder->js('errors', $errors);?>
 
-<?= $footer; ?> 
+<?= $footer; ?>

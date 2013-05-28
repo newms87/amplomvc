@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 //TODO: This Process has been forsaken... Gotta fix at some point right?
 
@@ -9,13 +9,13 @@ class ControllerCheckoutManual extends Controller {
 		
 		$json = array();
 		
-		if ($this->user->isLogged() && $this->user->hasPermission('modify', 'sale/order')) {	
+		if ($this->user->isLogged() && $this->user->hasPermission('modify', 'sale/order')) {
 			// Reset everything
 			$this->cart->clear();
 			$this->customer->logout();
 			
 			unset($this->session->data['shipping_method']);
-			unset($this->session->data['shipping_methods']);			
+			unset($this->session->data['shipping_methods']);
 			unset($this->session->data['payment_method']);
 			unset($this->session->data['payment_methods']);
 			unset($this->session->data['coupons']);
@@ -46,17 +46,17 @@ class ControllerCheckoutManual extends Controller {
 				foreach ($_POST['order_product'] as $order_product) {
 					$product_info = $this->model_catalog_product->getProduct($order_product['product_id']);
 				
-					if ($product_info) {	
+					if ($product_info) {
 						$option_data = array();
 						
 						if (isset($order_product['order_option'])) {
 							foreach ($order_product['order_option'] as $option) {
-								if ($option['type'] == 'select' || $option['type'] == 'radio' || $option['type'] == 'image') { 
+								if ($option['type'] == 'select' || $option['type'] == 'radio' || $option['type'] == 'image') {
 									$option_data[$option['product_option_id']] = $option['product_option_value_id'];
 								} elseif ($option['type'] == 'checkbox') {
 									$option_data[$option['product_option_id']][] = $option['product_option_value_id'];
 								} elseif ($option['type'] == 'text' || $option['type'] == 'textarea' || $option['type'] == 'file' || $option['type'] == 'date' || $option['type'] == 'datetime' || $option['type'] == 'time') {
-									$option_data[$option['product_option_id']] = $option['value'];						
+									$option_data[$option['product_option_id']] = $option['value'];
 								}
 							}
 						}
@@ -79,7 +79,7 @@ class ControllerCheckoutManual extends Controller {
 					if (isset($_POST['option'])) {
 						$option = array_filter($_POST['option']);
 					} else {
-						$option = array();	
+						$option = array();
 					}
 					
 					$product_options = $this->model_catalog_product->getProductOptions($_POST['product_id']);
@@ -107,8 +107,8 @@ class ControllerCheckoutManual extends Controller {
 				$this->tax->setShippingAddress($this->config->get('config_country_id'), $this->config->get('config_zone_id'));
 			}
 			
-			$this->tax->setPaymentAddress($_POST['payment_country_id'], $_POST['payment_zone_id'], $_POST['shipping_postcode']);				
-			$this->tax->setStoreAddress($this->config->get('config_country_id'), $this->config->get('config_zone_id'));	
+			$this->tax->setPaymentAddress($_POST['payment_country_id'], $_POST['payment_zone_id'], $_POST['shipping_postcode']);
+			$this->tax->setStoreAddress($this->config->get('config_country_id'), $this->config->get('config_zone_id'));
 			
 			// Products
 			$json['order_product'] = array();
@@ -122,11 +122,11 @@ class ControllerCheckoutManual extends Controller {
 					if ($product_2['product_id'] == $product['product_id']) {
 						$product_total += $product_2['quantity'];
 					}
-				}	
+				}
 								
 				if ($product['minimum'] > $product_total) {
 					$json['error']['product']['minimum'][] = sprintf($this->_('error_minimum'), $product['name'], $product['minimum']);
-				}	
+				}
 								
 				$option_data = array();
 
@@ -154,14 +154,14 @@ class ControllerCheckoutManual extends Controller {
 				$json['order_product'][] = array(
 					'product_id' => $product['product_id'],
 					'name'		=> $product['name'],
-					'model'		=> $product['model'], 
+					'model'		=> $product['model'],
 					'option'	=> $option_data,
 					'download'	=> $download_data,
 					'quantity'	=> $product['quantity'],
-					'price'		=> $product['price'],	
-					'total'		=> $product['total'],	
+					'price'		=> $product['price'],
+					'total'		=> $product['total'],
 					'tax'		=> $this->tax->getTax($product['total'], $product['tax_class_id']),
-					'reward'	=> $product['reward']				
+					'reward'	=> $product['reward']
 				);
 			}
 
@@ -178,9 +178,9 @@ class ControllerCheckoutManual extends Controller {
 						'from_email'		=> $voucher['from_email'],
 						'to_name'			=> $voucher['to_name'],
 						'to_email'			=> $voucher['to_email'],
-						'voucher_theme_id' => $voucher['voucher_theme_id'], 
+						'voucher_theme_id' => $voucher['voucher_theme_id'],
 						'message'			=> $voucher['message'],
-						'amount'			=> $voucher['amount']	
+						'amount'			=> $voucher['amount']
 					);
 				}
 			}
@@ -189,7 +189,7 @@ class ControllerCheckoutManual extends Controller {
 			if (isset($_POST['from_name']) && isset($_POST['from_email']) && isset($_POST['to_name']) && isset($_POST['to_email']) && isset($_POST['amount'])) {
 				if ((strlen($_POST['from_name']) < 1) || (strlen($_POST['from_name']) > 64)) {
 					$json['error']['vouchers']['from_name'] = $this->_('error_from_name');
-				}  
+				}
 			
 				if ((strlen($_POST['from_email']) > 96) || !preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $_POST['from_email'])) {
 					$json['error']['vouchers']['from_email'] = $this->_('error_email');
@@ -197,7 +197,7 @@ class ControllerCheckoutManual extends Controller {
 			
 				if ((strlen($_POST['to_name']) < 1) || (strlen($_POST['to_name']) > 64)) {
 					$json['error']['vouchers']['to_name'] = $this->_('error_to_name');
-				}		
+				}
 			
 				if ((strlen($_POST['to_email']) > 96) || !preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $_POST['to_email'])) {
 					$json['error']['vouchers']['to_email'] = $this->_('error_email');
@@ -207,7 +207,7 @@ class ControllerCheckoutManual extends Controller {
 					$json['error']['vouchers']['amount'] = sprintf($this->_('error_amount'), $this->currency->format(1, false, 1), $this->currency->format(1000, false, 1) . ' ' . $this->config->get('config_currency'));
 				}
 			
-				if (!isset($json['error']['vouchers'])) { 
+				if (!isset($json['error']['vouchers'])) {
 					$voucher_data = array(
 						'order_id'			=> 0,
 						'code'				=> substr(md5(rand()), 0, 7),
@@ -215,13 +215,13 @@ class ControllerCheckoutManual extends Controller {
 						'from_email'		=> $_POST['from_email'],
 						'to_name'			=> $_POST['to_name'],
 						'to_email'			=> $_POST['to_email'],
-						'voucher_theme_id' => $_POST['voucher_theme_id'], 
+						'voucher_theme_id' => $_POST['voucher_theme_id'],
 						'message'			=> $_POST['message'],
 						'amount'			=> $_POST['amount'],
-						'status'			=> true				
-					); 
+						'status'			=> true
+					);
 					
-					$voucher_id = $this->model_cart_voucher->addVoucher(0, $voucher_data);  
+					$voucher_id = $this->model_cart_voucher->addVoucher(0, $voucher_data);
 									
 					$this->session->data['vouchers'][] = array(
 						'voucher_id'		=> $voucher_id,
@@ -231,10 +231,10 @@ class ControllerCheckoutManual extends Controller {
 						'from_email'		=> $_POST['from_email'],
 						'to_name'			=> $_POST['to_name'],
 						'to_email'			=> $_POST['to_email'],
-						'voucher_theme_id' => $_POST['voucher_theme_id'], 
+						'voucher_theme_id' => $_POST['voucher_theme_id'],
 						'message'			=> $_POST['message'],
-						'amount'			=> $_POST['amount']				
-					); 
+						'amount'			=> $_POST['amount']
+					);
 				}
 			}
 			
@@ -249,16 +249,16 @@ class ControllerCheckoutManual extends Controller {
 					'from_email'		=> $voucher['from_email'],
 					'to_name'			=> $voucher['to_name'],
 					'to_email'			=> $voucher['to_email'],
-					'voucher_theme_id' => $voucher['voucher_theme_id'], 
+					'voucher_theme_id' => $voucher['voucher_theme_id'],
 					'message'			=> $voucher['message'],
-					'amount'			=> $voucher['amount']	
+					'amount'			=> $voucher['amount']
 				);
 			}
 						
 			// Shipping
 			$json['shipping_method'] = array();
 			
-			if ($this->cart->hasShipping()) {		
+			if ($this->cart->hasShipping()) {
 				$country_info = $this->model_localisation_country->getCountry($_POST['shipping_country_id']);
 				
 				if ($country_info && $country_info['postcode_required'] && (strlen($_POST['shipping_postcode']) < 2) || (strlen($_POST['shipping_postcode']) > 10)) {
@@ -288,7 +288,7 @@ class ControllerCheckoutManual extends Controller {
 					} else {
 						$country = '';
 						$iso_code_2 = '';
-						$iso_code_3 = '';	
+						$iso_code_3 = '';
 						$address_format = '';
 					}
 				
@@ -300,7 +300,7 @@ class ControllerCheckoutManual extends Controller {
 					} else {
 						$zone = '';
 						$code = '';
-					}					
+					}
 	
 					$address_data = array(
 						'firstname'		=> $_POST['shipping_firstname'],
@@ -314,7 +314,7 @@ class ControllerCheckoutManual extends Controller {
 						'zone'			=> $zone,
 						'zone_code'		=> $code,
 						'country_id'	=> $_POST['shipping_country_id'],
-						'country'		=> $country,	
+						'country'		=> $country,
 						'iso_code_2'	=> $iso_code_2,
 						'iso_code_3'	=> $iso_code_3,
 						'address_format' => $address_format
@@ -325,12 +325,12 @@ class ControllerCheckoutManual extends Controller {
 					foreach ($results as $result) {
 						if ($this->config->get($result['code'] . '_status')) {
 							
-							$quote = $this->{'model_shipping_' . $result['code']}->getQuote($address_data); 
+							$quote = $this->{'model_shipping_' . $result['code']}->getQuote($address_data);
 				
 							if ($quote) {
-								$json['shipping_method'][$result['code']] = array( 
+								$json['shipping_method'][$result['code']] = array(
 									'title'		=> $quote['title'],
-									'quote'		=> $quote['quote'], 
+									'quote'		=> $quote['quote'],
 									'sort_order' => $quote['sort_order'],
 									'error'		=> $quote['error']
 								);
@@ -354,21 +354,21 @@ class ControllerCheckoutManual extends Controller {
 						} else {
 							$shipping = explode('.', $_POST['shipping_code']);
 							
-							if (!isset($shipping[0]) || !isset($shipping[1]) || !isset($json['shipping_method'][$shipping[0]]['quote'][$shipping[1]])) {		
+							if (!isset($shipping[0]) || !isset($shipping[1]) || !isset($json['shipping_method'][$shipping[0]]['quote'][$shipping[1]])) {
 								$json['error']['shipping_method'] = $this->_('error_shipping');
 							} else {
 								$this->session->data['shipping_method'] = $json['shipping_method'][$shipping[0]]['quote'][$shipping[1]];
-							}				
+							}
 						}
-					}					
+					}
 				}
 			}
 			
 			// Coupon
 			if (!empty($_POST['coupon'])) {
-				$coupon_info = $this->model_cart_coupon->getCoupon($_POST['coupon']);			
+				$coupon_info = $this->model_cart_coupon->getCoupon($_POST['coupon']);
 			
-				if ($coupon_info) {					
+				if ($coupon_info) {
 					$this->session->data['coupons'][$_POST['coupon']] = $coupon_info;
 				} else {
 					$json['error']['coupon'] = $this->_('error_coupon');
@@ -377,9 +377,9 @@ class ControllerCheckoutManual extends Controller {
 			
 			// Voucher
 			if (!empty($_POST['voucher'])) {
-				$voucher_info = $this->model_cart_voucher->getVoucher($_POST['voucher']);			
+				$voucher_info = $this->model_cart_voucher->getVoucher($_POST['voucher']);
 			
-				if ($voucher_info) {					
+				if ($voucher_info) {
 					$this->session->data['voucher'] = $_POST['voucher'];
 				} else {
 					$json['error']['voucher'] = $this->_('error_voucher');
@@ -401,24 +401,24 @@ class ControllerCheckoutManual extends Controller {
 						if ($product['points']) {
 							$points_total += $product['points'];
 						}
-					}				
+					}
 					
 					if ($_POST['reward'] > $points_total) {
 						$json['error']['reward'] = sprintf($this->_('error_maximum'), $points_total);
 					}
 					
-					if (!isset($json['error']['reward'])) {		
+					if (!isset($json['error']['reward'])) {
 						$this->session->data['reward'] = $_POST['reward'];
 					}
 				}
 			}
 
 			// Totals
-			$json['order_total'] = array();					
+			$json['order_total'] = array();
 			$total = 0;
 			$taxes = $this->cart->getTaxes();
 			
-			$sort_order = array(); 
+			$sort_order = array();
 			
 			$results = $this->model_setting_extension->getExtensions('total');
 			
@@ -434,13 +434,13 @@ class ControllerCheckoutManual extends Controller {
 					$this->{'model_total_' . $result['code']}->getTotal($json['order_total'], $total, $taxes);
 				}
 				
-				$sort_order = array(); 
+				$sort_order = array();
 			
 				foreach ($json['order_total'] as $key => $value) {
 					$sort_order[$key] = $value['sort_order'];
 				}
 	
-				array_multisort($sort_order, SORT_ASC, $json['order_total']);				
+				array_multisort($sort_order, SORT_ASC, $json['order_total']);
 			}
 		
 			// Payment
@@ -450,7 +450,7 @@ class ControllerCheckoutManual extends Controller {
 			
 			if ($_POST['payment_zone_id'] == '') {
 				$json['error']['payment']['zone'] = $this->_('error_zone');
-			}		
+			}
 			
 			if (!isset($json['error']['payment'])) {
 				$json['payment_methods'] = array();
@@ -465,7 +465,7 @@ class ControllerCheckoutManual extends Controller {
 				} else {
 					$country = '';
 					$iso_code_2 = '';
-					$iso_code_3 = '';	
+					$iso_code_3 = '';
 					$address_format = '';
 				}
 				
@@ -477,7 +477,7 @@ class ControllerCheckoutManual extends Controller {
 				} else {
 					$zone = '';
 					$code = '';
-				}					
+				}
 				
 				$address_data = array(
 					'firstname'		=> $_POST['payment_firstname'],
@@ -491,7 +491,7 @@ class ControllerCheckoutManual extends Controller {
 					'zone'			=> $zone,
 					'zone_code'		=> $code,
 					'country_id'	=> $_POST['payment_country_id'],
-					'country'		=> $country,	
+					'country'		=> $country,
 					'iso_code_2'	=> $iso_code_2,
 					'iso_code_3'	=> $iso_code_3,
 					'address_format' => $address_format
@@ -504,7 +504,7 @@ class ControllerCheckoutManual extends Controller {
 				foreach ($results as $result) {
 					if ($this->config->get($result['code'] . '_status')) {
 
-						$method = $this->{'model_payment_' . $result['code']}->getMethod($address_data, $total); 
+						$method = $this->{'model_payment_' . $result['code']}->getMethod($address_data, $total);
 						
 						if ($method) {
 							$json['payment_method'][$result['code']] = $method;
@@ -512,28 +512,28 @@ class ControllerCheckoutManual extends Controller {
 					}
 				}
 							
-				$sort_order = array(); 
+				$sort_order = array();
 			
 				foreach ($json['payment_method'] as $key => $value) {
 					$sort_order[$key] = $value['sort_order'];
 				}
 		
-				array_multisort($sort_order, SORT_ASC, $json['payment_method']);	
+				array_multisort($sort_order, SORT_ASC, $json['payment_method']);
 				
 				if (!$json['payment_method']) {
 					$json['error']['payment_method'] = $this->_('error_no_payment');
-				} else {			
+				} else {
 					if (!$_POST['payment_code']) {
 						$json['error']['payment_method'] = $this->_('error_payment');
 					} else {
 						if (!isset($json['payment_method'][$_POST['payment_code']])) {
 							$json['error']['payment_method'] = $this->_('error_payment');
 						}
-					}	
+					}
 				}
 			}
 			
-			if (!isset($json['error'])) { 
+			if (!isset($json['error'])) {
 				$json['success'] = $this->_('text_success');
 			} else {
 				$json['error']['warning'] = $this->_('error_warning');
@@ -555,6 +555,6 @@ class ControllerCheckoutManual extends Controller {
 				$json['error']['warning'] = $this->_('error_permission');
 		}
 	
-		$this->response->setOutput(json_encode($json));	
+		$this->response->setOutput(json_encode($json));
 	}
 }

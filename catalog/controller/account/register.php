@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerAccountRegister extends Controller {
 	
   	public function index() {
@@ -13,15 +13,12 @@ class ControllerAccountRegister extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			unset($this->session->data['guest']);
-			
 			$this->model_account_customer->addCustomer($_POST);
 
 			$this->customer->login($_POST['email'], $_POST['password']);
 			
 			$this->url->redirect($this->url->link('account/success'));
 		}
-		
 		
 		$this->language->format('text_account_already', $this->url->link('account/login'));
 		
@@ -70,10 +67,10 @@ class ControllerAccountRegister extends Controller {
 			'common/content_top',
 			'common/content_bottom',
 			'common/footer',
-			'common/header'	
+			'common/header'
 		);
 				
-		$this->response->setOutput($this->render());	
+		$this->response->setOutput($this->render());
   	}
 
   	public function validate() {
@@ -131,10 +128,6 @@ class ControllerAccountRegister extends Controller {
 			}
 		}
 		
-		if (!$this->error) {
-				return true;
-		} else {
-				return false;
-		}
+		return $this->error ? false : true;
   	}
 }

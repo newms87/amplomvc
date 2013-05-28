@@ -32,7 +32,7 @@ class ModelCatalogFlashsale extends Model {
 				);
 				
 				$this->insert('flashsale_designer', $fdata);
-			} 
+			}
 		}
 		
 		if(isset($data['articles'])){
@@ -115,7 +115,7 @@ class ModelCatalogFlashsale extends Model {
 				);
 				
 				$this->insert('flashsale_designer', $fd);
-			} 
+			}
 		}
 		
 		
@@ -184,7 +184,7 @@ class ModelCatalogFlashsale extends Model {
 		$data['priority'] = -1;
 			
 		if($query->num_rows){
-			$this->update('product_special',  $data, $query->row['product_special_id']);	
+			$this->update('product_special',  $data, $query->row['product_special_id']);
 		}
 		else{
 			$this->insert('product_special', $data);
@@ -278,7 +278,7 @@ class ModelCatalogFlashsale extends Model {
 		}
 		
 		return $query->row;
-	} 
+	}
 	
 	public function getFlashsaleDesigners($flashsale_id){
 		$results = $this->query("SELECT designer_id, m.name FROM " . DB_PREFIX . "flashsale_designer fd LEFT JOIN " . DB_PREFIX . "manufacturer m ON(fd.designer_id=m.manufacturer_id) WHERE flashsale_id='$flashsale_id'");

@@ -10,7 +10,7 @@ class ControllerModuleCron extends Controller {
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 
-			$this->model_setting_setting->editSetting('cron_tasks', $_POST);	
+			$this->model_setting_setting->editSetting('cron_tasks', $_POST);
 			
 			
 			//TODO: Implement full cron control from this code:
@@ -52,6 +52,6 @@ class ControllerModuleCron extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 				
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

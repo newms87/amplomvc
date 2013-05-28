@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']			= 'Produits'; 
+$_['heading_title']			= 'Produits';
 
 // Text
 $_['text_success']			= 'F&eacute;licitations, vous avez modifi&eacute; les <b>Produits</b> avec succ&egrave;s !';
@@ -36,7 +36,7 @@ $_['entry_sku']				= 'R&eacute;f&eacute;rence "Gestion des stocks" :';
 $_['entry_upc']				= 'Code universel des produits :<br /><span class="help">(Code-barres)</span>';
 $_['entry_location']		= 'Localisation :';
 $_['entry_manufacturer']	= 'Fabricant :';
-$_['entry_shipping']		= 'Livraison requise :'; 
+$_['entry_shipping']		= 'Livraison requise :';
 $_['entry_date_available']	= 'Date de disponibilit&eacute; :';
 $_['entry_quantity']		= 'Quantit&eacute;';
 $_['entry_minimum']			= 'Quantit&eacute; minimum :<br /><span class="help">Forcer une quantit&eacute; minimum de commande</span>';

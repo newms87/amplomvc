@@ -189,8 +189,8 @@ class Url {
 	
 	/**
 	* This determines if the browser being used is Internet Explorer and returns the version number
-	* 
-	* @return int or bool - version # of IE, or false if it is not IE 
+	*
+	* @return int or bool - version # of IE, or false if it is not IE
 	*/
 	public function is_IE(){
 		$match = null;
@@ -201,7 +201,7 @@ class Url {
 			return false;
 		}
 		else {
-			return (float)str_replace('msie ', '', strtolower($match[0])); 
+			return (float)str_replace('msie ', '', strtolower($match[0]));
 		}
 		
 	}

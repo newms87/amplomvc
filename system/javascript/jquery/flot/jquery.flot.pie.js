@@ -1,9 +1,9 @@
 /*
-Flot plugin for rendering pie charts. The plugin assumes the data is 
-coming is as a single data value for each series, and each of those 
-values is a positive value or zero (negative numbers don't make 
-any sense and will cause strange effects). The data values do 
-NOT need to be passed in as percentage values because it 
+Flot plugin for rendering pie charts. The plugin assumes the data is
+coming is as a single data value for each series, and each of those
+values is a positive value or zero (negative numbers don't make
+any sense and will cause strange effects). The data values do
+NOT need to be passed in as percentage values because it
 internally calculates the total and percentages.
 
 * Created by Brian Medendorp, June 2009
@@ -58,7 +58,7 @@ More detail and specific examples can be found in the included HTML file.
 
 */
 
-(function ($) 
+(function ($)
 {
 	function init(plot) // this is the "body" of the plugin
 	{
@@ -75,12 +75,12 @@ More detail and specific examples can be found in the included HTML file.
 		var processed = false;
 		var raw = false;
 		
-		// interactive variables	
-		var highlights = [];	
+		// interactive variables
+		var highlights = [];
 	
 		// add hook to determine if pie plugin in enabled, and then perform necessary operations
 		plot.hooks.processOptions.push(checkPieEnabled);
-		plot.hooks.bindEvents.push(bindEvents);	
+		plot.hooks.bindEvents.push(bindEvents);
 
 		// check to see if the pie plugin is enabled
 		function checkPieEnabled(plot, options)
@@ -112,7 +112,7 @@ More detail and specific examples can be found in the included HTML file.
 			
 				// add processData hook to do transformations on the data
 				plot.hooks.processDatapoints.push(processDatapoints);
-				plot.hooks.drawOverlay.push(drawOverlay);	
+				plot.hooks.drawOverlay.push(drawOverlay);
 				
 				// add draw hook
 				plot.hooks.draw.push(draw);
@@ -120,8 +120,8 @@ More detail and specific examples can be found in the included HTML file.
 		}
 	
 		// bind hoverable events
-		function bindEvents(plot, eventHolder) 		
-		{		
+		function bindEvents(plot, eventHolder)
+		{
 			var options = plot.getOptions();
 			
 			if (options.series.pie.show && options.grid.hoverable)
@@ -129,7 +129,7 @@ More detail and specific examples can be found in the included HTML file.
 				
 			if (options.series.pie.show && options.grid.clickable)
 				eventHolder.unbind('click').click(onClick);
-		}	
+		}
 		
 
 		// debugging function that prints out an object
@@ -168,10 +168,10 @@ More detail and specific examples can be found in the included HTML file.
 				if (item)
 					total += item;
 			}
-		}	
+		}
 		
-		function processDatapoints(plot, series, data, datapoints) 
-		{	
+		function processDatapoints(plot, series, data, datapoints)
+		{
 			if (!processed)
 			{
 				processed = true;
@@ -246,12 +246,12 @@ More detail and specific examples can be found in the included HTML file.
 					numCombined++;
 					if (!color)
 						color = data[i].color;
-				}				
+				}
 				else
 				{
 					newdata.push({
-						data: [[1,data[i].data[0][1]]], 
-						color: data[i].color, 
+						data: [[1,data[i].data[0][1]]],
+						color: data[i].color,
 						label: data[i].label,
 						angle: (data[i].data[0][1]*(Math.PI*2))/total,
 						percent: (data[i].data[0][1]/total*100)
@@ -260,14 +260,14 @@ More detail and specific examples can be found in the included HTML file.
 			}
 			if (numCombined>0)
 				newdata.push({
-					data: [[1,combined]], 
-					color: color, 
+					data: [[1,combined]],
+					color: color,
 					label: options.series.pie.combine.label,
 					angle: (combined*(Math.PI*2))/total,
 					percent: (combined/total*100)
 				});
 			return newdata;
-		}		
+		}
 		
 		function draw(plot, newCtx)
 		{
@@ -340,7 +340,7 @@ More detail and specific examples can be found in the included HTML file.
 					ctx.arc(0,0,radius,0,Math.PI*2,false);
 					ctx.fill();
 					radius -= i;
-				}	
+				}
 				
 				ctx.restore();
 			}
@@ -390,7 +390,7 @@ More detail and specific examples can be found in the included HTML file.
 				ctx.restore();
 				
 				function drawSlice(angle, color, fill)
-				{	
+				{
 					if (angle<=0)
 						return;
 				
@@ -480,7 +480,7 @@ More detail and specific examples can be found in the included HTML file.
 			} // end drawPie function
 		} // end draw function
 		
-		// Placed here because it needs to be accessed from multiple locations 
+		// Placed here because it needs to be accessed from multiple locations
 		function drawDonutHole(layer)
 		{
 			// draw donut hole
@@ -526,9 +526,9 @@ More detail and specific examples can be found in the included HTML file.
 				options = plot.getOptions(),
 				radius = options.series.pie.radius > 1 ? options.series.pie.radius : maxRadius * options.series.pie.radius;
 			
-			for (var i = 0; i < slices.length; ++i) 
+			for (var i = 0; i < slices.length; ++i)
 			{
-				var s = slices[i];	
+				var s = slices[i];
 				
 				if(s.pie.show)
 				{
@@ -551,7 +551,7 @@ More detail and specific examples can be found in the included HTML file.
 					}
 					else
 					{
-						// excanvas for IE doesn;t support isPointInPath, this is a workaround. 
+						// excanvas for IE doesn;t support isPointInPath, this is a workaround.
 						p1X = (radius * Math.cos(s.startAngle));
 						p1Y = (radius * Math.sin(s.startAngle));
 						p2X = (radius * Math.cos(s.startAngle+(s.angle/4)));
@@ -569,7 +569,7 @@ More detail and specific examples can be found in the included HTML file.
 						{
 							ctx.restore();
 							return {datapoint: [s.percent, s.data], dataIndex: 0, series: s, seriesIndex: i};
-						}			
+						}
 					}
 					ctx.restore();
 				}
@@ -578,28 +578,28 @@ More detail and specific examples can be found in the included HTML file.
 			return null;
 		}
 
-		function onMouseMove(e) 
+		function onMouseMove(e)
 		{
 			triggerClickHoverEvent('plothover', e);
 		}
 		
-        function onClick(e) 
+        function onClick(e)
 		{
 			triggerClickHoverEvent('plotclick', e);
         }
 
 		// trigger click or hover event (they send the same parameters so we share their code)
-		function triggerClickHoverEvent(eventname, e) 
+		function triggerClickHoverEvent(eventname, e)
 		{
 			var offset = plot.offset(),
 				canvasX = parseInt(e.pageX - offset.left),
 				canvasY =  parseInt(e.pageY - offset.top),
 				item = findNearbySlice(canvasX, canvasY);
 			
-			if (options.grid.autoHighlight) 
+			if (options.grid.autoHighlight)
 			{
 				// clear auto-highlights
-				for (var i = 0; i < highlights.length; ++i) 
+				for (var i = 0; i < highlights.length; ++i)
 				{
 					var h = highlights[i];
 					if (h.auto == eventname && !(item && h.series == item.series))
@@ -608,21 +608,21 @@ More detail and specific examples can be found in the included HTML file.
 			}
 			
 			// highlight the slice
-			if (item) 
+			if (item)
 			    highlight(item.series, eventname);
 				
 			// trigger any hover bind events
 			var pos = { pageX: e.pageX, pageY: e.pageY };
-			target.trigger(eventname, [ pos, item ]);	
+			target.trigger(eventname, [ pos, item ]);
 		}
 
-		function highlight(s, auto) 
+		function highlight(s, auto)
 		{
 			if (typeof s == "number")
 				s = series[s];
 
 			var i = indexOfHighlight(s);
-			if (i == -1) 
+			if (i == -1)
 			{
 				highlights.push({ series: s, auto: auto });
 				plot.triggerRedrawOverlay();
@@ -631,9 +631,9 @@ More detail and specific examples can be found in the included HTML file.
 				highlights[i].auto = false;
 		}
 
-		function unhighlight(s) 
+		function unhighlight(s)
 		{
-			if (s == null) 
+			if (s == null)
 			{
 				highlights = [];
 				plot.triggerRedrawOverlay();
@@ -643,16 +643,16 @@ More detail and specific examples can be found in the included HTML file.
 				s = series[s];
 
 			var i = indexOfHighlight(s);
-			if (i != -1) 
+			if (i != -1)
 			{
 				highlights.splice(i, 1);
 				plot.triggerRedrawOverlay();
 			}
 		}
 
-		function indexOfHighlight(s) 
+		function indexOfHighlight(s)
 		{
-			for (var i = 0; i < highlights.length; ++i) 
+			for (var i = 0; i < highlights.length; ++i)
 			{
 				var h = highlights[i];
 				if (h.series == s)
@@ -661,7 +661,7 @@ More detail and specific examples can be found in the included HTML file.
 			return -1;
 		}
 
-		function drawOverlay(plot, octx) 
+		function drawOverlay(plot, octx)
 		{
 			//alert(options.series.pie.radius);
 			var options = plot.getOptions();
@@ -673,14 +673,14 @@ More detail and specific examples can be found in the included HTML file.
 			octx.translate(centerLeft, centerTop);
 			octx.scale(1, options.series.pie.tilt);
 			
-			for (i = 0; i < highlights.length; ++i) 
+			for (i = 0; i < highlights.length; ++i)
 				drawHighlight(highlights[i].series);
 			
 			drawDonutHole(octx);
 
 			octx.restore();
 
-			function drawHighlight(series) 
+			function drawHighlight(series)
 			{
 				if (series.angle < 0) return;
 				
@@ -695,7 +695,7 @@ More detail and specific examples can be found in the included HTML file.
 				octx.fill();
 			}
 			
-		}	
+		}
 		
 	} // end init (plugin body)
 	

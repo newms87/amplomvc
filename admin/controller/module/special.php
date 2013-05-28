@@ -2,7 +2,7 @@
 class ControllerModulespecial extends Controller {
 	
 	
-	public function index() {	
+	public function index() {
 		$this->template->load('module/special');
 
 		$this->load->language('module/special');
@@ -10,7 +10,7 @@ class ControllerModulespecial extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('special', $_POST);		
+			$this->model_setting_setting->editSetting('special', $_POST);
 			
 			$this->cache->delete('product');
 			
@@ -43,7 +43,7 @@ class ControllerModulespecial extends Controller {
 		
 		if (isset($_POST['special_module'])) {
 			$this->data['modules'] = $_POST['special_module'];
-		} elseif ($this->config->get('special_module')) { 
+		} elseif ($this->config->get('special_module')) {
 			$this->data['modules'] = $this->config->get('special_module');
 		}
 						
@@ -68,8 +68,8 @@ class ControllerModulespecial extends Controller {
 					$this->error['image'][$key] = $this->_('error_image');
 				}
 			}
-		}	
+		}
 						
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

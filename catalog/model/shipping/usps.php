@@ -381,7 +381,7 @@ class ModelShippingUsps extends Model {
 													'title'		=> $postage->getElementsByTagName('MailService')->item(0)->nodeValue,
 													'cost'			=> $this->currency->convert($cost, 'USD', $this->config->get('config_currency')),
 													'tax_class_id' => $this->config->get('usps_tax_class_id'),
-													'text'			=> $this->currency->format($this->tax->calculate($this->currency->convert($cost, 'USD', $this->currency->getCode()), $this->config->get('usps_tax_class_id'), $this->config->get('config_show_price_with_tax')), $this->currency->getCode(), 1.0000000)
+													'text'			=> $this->currency->format($this->tax->calculate($this->currency->convert($cost, 'USD', $this->currency->getCode()), $this->config->get('usps_tax_class_id')), $this->currency->getCode(), 1.0000000)
 												);
 											}
 
@@ -393,7 +393,7 @@ class ModelShippingUsps extends Model {
 												'title'		=> $postage->getElementsByTagName('MailService')->item(0)->nodeValue,
 												'cost'			=> $this->currency->convert($cost, 'USD', $this->config->get('config_currency')),
 												'tax_class_id' => $this->config->get('usps_tax_class_id'),
-												'text'			=> $this->currency->format($this->tax->calculate($this->currency->convert($cost, 'USD', $this->currency->getCode()), $this->config->get('usps_tax_class_id'), $this->config->get('config_show_price_with_tax')), $this->currency->getCode(), 1.0000000)
+												'text'			=> $this->currency->format($this->tax->calculate($this->currency->convert($cost, 'USD', $this->currency->getCode()), $this->config->get('usps_tax_class_id')), $this->currency->getCode(), 1.0000000)
 											);
 										}
 									}
@@ -433,7 +433,7 @@ class ModelShippingUsps extends Model {
 										'title'		=> $title,
 										'cost'			=> $this->currency->convert($cost, 'USD', $this->config->get('config_currency')),
 										'tax_class_id' => $this->config->get('usps_tax_class_id'),
-										'text'			=> $this->currency->format($this->tax->calculate($this->currency->convert($cost, 'USD', $this->currency->getCode()), $this->config->get('usps_tax_class_id'), $this->config->get('config_show_price_with_tax')), $this->currency->getCode(), 1.0000000)
+										'text'			=> $this->currency->format($this->tax->calculate($this->currency->convert($cost, 'USD', $this->currency->getCode()), $this->config->get('usps_tax_class_id')), $this->currency->getCode(), 1.0000000)
 									);
 								}
 							}

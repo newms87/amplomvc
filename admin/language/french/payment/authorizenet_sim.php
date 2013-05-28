@@ -2,7 +2,7 @@
 // Heading
 $_['heading_title']			= 'Authorize.Net (AIM)';
 
-// Text 
+// Text
 $_['text_payment']			= 'Paiement';
 $_['text_success']			= 'F&eacute;licitations, vous avez modifi&eacute; les d&eacute;tails du paiement <b>Authorize.Net (AIM)</b> avec succ&egrave;s !';
 
@@ -17,7 +17,7 @@ $_['entry_geo_zone']		= 'Zone g&eacute;ographique :';
 $_['entry_status']			= '&Eacute;tat :';
 $_['entry_sort_order']		= 'Classement :';
 
-// Error 
+// Error
 $_['error_permission']		= 'Attention, vous n&#8217;avez pas la permission de modifier le paiement <b>Authorize.Net (AIM)</b> !';
 $_['error_merchant']		= 'Attention, le N&deg; d&#8217;identification marchand  est requis !';
 $_['error_key']				= 'Attention, la cl&eacute; de transaction est requise !';

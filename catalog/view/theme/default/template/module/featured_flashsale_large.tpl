@@ -1,7 +1,7 @@
 <div class="featured_flashsale">
 	<img class='fs_bg_image' src='<?= $fs_bg_image;?>' />
 	<? $c = 0;?>
-  <? foreach($blocks as $block){ $hide = $c > 2?"style='display:none'":'';?>
+	<? foreach($blocks as $block){ $hide = $c > 2?"style='display:none'":'';?>
 		<a href='<?=$block['href'];?>'>
 		<div class='fs_item item_<?=$c;?>' <?=$hide;?>>
 			<img class='fs_tac' src='<?=$fs_tac;?>' />
@@ -15,5 +15,5 @@
 			<? }?>
 		</div>
 		</a>
-  <? $c++;} ?>
+	<? $c++;} ?>
 </div>

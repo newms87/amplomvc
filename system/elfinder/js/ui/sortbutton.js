@@ -20,7 +20,7 @@ $.fn.elfindersortbutton = function(cmd) {
 				.attr('title', cmd.title)
 				.append('<span class="elfinder-button-icon elfinder-button-icon-'+cmd.name+'"/>')
 				.hover(function(e) { !button.is('.'+disabled) && button.toggleClass(hover); })
-				.click(function(e) { 
+				.click(function(e) {
 					if (!button.is('.'+disabled) && menu && cmd.variants.length > 1) {
 						// close other menus
 						menu.is(':hidden') && cmd.fm.getUI().click();
@@ -53,7 +53,7 @@ $.fn.elfindersortbutton = function(cmd) {
 			$.each(cmd.variants, function(i, variant) {
 				menu.append($('<div class="'+item+' '+(variant[0] == cmd.value ? selected : '')+' '+sort+fm.sortDirect+'"><span class="elfinder-menu-item-sort-dir"/>'+variant[1]+'</div>').data('value', variant[0]));
 			});
-		}	
+		}
 			
 		cmd.change(function() {
 

@@ -52,11 +52,11 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'errCopyTo'            : 'Copying files to volume "$1" not allowed.',
 			'errUpload'            : 'Upload error.',  // old name - errUploadCommon
 			'errUploadFile'        : 'Unable to upload "$1".', // old name - errUpload
-			'errUploadNoFiles'     : 'No files found for upload.', 
+			'errUploadNoFiles'     : 'No files found for upload.',
 			'errUploadTotalSize'   : 'Data exceeds the maximum allowed size.', // old name - errMaxSize
 			'errUploadFileSize'    : 'File exceeds maximum allowed size.', //  old name - errFileMaxSize
-			'errUploadMime'        : 'File type not allowed.', 
-			'errUploadTransfer'    : '"$1" transfer error.', 
+			'errUploadMime'        : 'File type not allowed.',
+			'errUploadTransfer'    : '"$1" transfer error.',
 			'errNotReplace'        : 'Object "$1" already exists at this location and can not be replaced by object with another type.', // new
 			'errReplace'           : 'Unable to replace "$1".',
 			'errSave'              : 'Unable to save "$1".',
@@ -108,10 +108,10 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'cmdview'      : 'View',
 			'cmdresize'    : 'Resize & Rotate',
 			'cmdsort'      : 'Sort',
-			'cmdnetmount'  : 'Mount network volume', 
+			'cmdnetmount'  : 'Mount network volume',
             'cmdselectforproduct' : 'Select Image(s)', // added 18.04.2012
 			
-			/*********************************** buttons ***********************************/ 
+			/*********************************** buttons ***********************************/
 			'btnClose'  : 'Close',
 			'btnSave'   : 'Save',
 			'btnRm'     : 'Remove',
@@ -160,12 +160,12 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'Dec'         : 'Dec',
 
 			/******************************** sort variants ********************************/
-			'sortnameDirsFirst' : 'by name (folders first)', 
-			'sortkindDirsFirst' : 'by kind (folders first)', 
-			'sortsizeDirsFirst' : 'by size (folders first)', 
-			'sortdateDirsFirst' : 'by date (folders first)', 
-			'sortname'          : 'by name', 
-			'sortkind'          : 'by kind', 
+			'sortnameDirsFirst' : 'by name (folders first)',
+			'sortkindDirsFirst' : 'by kind (folders first)',
+			'sortsizeDirsFirst' : 'by size (folders first)',
+			'sortdateDirsFirst' : 'by date (folders first)',
+			'sortname'          : 'by name',
+			'sortkind'          : 'by kind',
 			'sortsize'          : 'by size',
 			'sortdate'          : 'by date',
 
@@ -191,7 +191,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'viewlist'        : 'List view',
 			'viewicons'       : 'Icons view',
 			'places'          : 'Places',
-			'calc'            : 'Calculate', 
+			'calc'            : 'Calculate',
 			'path'            : 'Path',
 			'aliasfor'        : 'Alias for',
 			'locked'          : 'Locked',
@@ -202,7 +202,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'yes'             : 'yes',
 			'no'              : 'no',
 			'link'            : 'Link',
-			'searcresult'     : 'Search results',  
+			'searcresult'     : 'Search results',
 			'selected'        : 'selected items',
 			'about'           : 'About',
 			'shortcuts'       : 'Shortcuts',

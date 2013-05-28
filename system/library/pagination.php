@@ -8,7 +8,7 @@ class Pagination {
 	public $page;
 	public $limit;
 	public $num_links;
-	public $url;
+	public $page_url;
 	public $attrs = array();
 	
 	function __construct($registry){
@@ -27,7 +27,7 @@ class Pagination {
 		$this->page = 0;
 		$this->limit = 0;
 		$this->num_links = 10;
-		$this->url = '';
+		$this->page_url = '';
 		$this->attrs = array(
 			'class' => 'links'
 		);
@@ -38,11 +38,15 @@ class Pagination {
 		
 		$language = $this->language->fetch('widget/pagination');
 		
-		//Setup Query to add page=n 
-		if(strpos($this->url, '?') === false){
-			$this->url .= '?';
+		if(!$this->page_url){
+			$this->page_url = $this->url->link($_GET['route'], $this->url->get_query_exclude('page'));
+		}
+		
+		//Setup Query to add page=n
+		if(strpos($this->page_url, '?') === false){
+			$this->page_url .= '?';
 		} else {
-			$this->url .= '&';
+			$this->page_url .= '&';
 		}
 		
 		if($this->page){
@@ -55,7 +59,7 @@ class Pagination {
 			$this->limit = (int)$this->limit ? (int)$this->limit : 10;
 		} else {
 			$this->limit = isset($_GET['limit']) ? (int)$_GET['limit'] : $this->config->get('config_admin_limit');
-			$this->url .= 'limit=' . $this->limit . '&';
+			$this->page_url .= 'limit=' . $this->limit . '&';
 		}
 		
 		//To avoid divide by zero, we only want 1 page for no limit
@@ -91,7 +95,7 @@ class Pagination {
 		
 		if($num_pages > 1){
 			for ($i = $start; $i <= $end; $i++) {
-				$pages[$i] = $this->url . 'page=' . $i;
+				$pages[$i] = $this->page_url . 'page=' . $i;
 			}
 		}
 		
@@ -107,10 +111,10 @@ class Pagination {
 			'total'	=> $this->total,
 			'page'	=> $this->page,
 			'limit'	=> $this->limit,
-			'url_first' => $this->url . 'page=1',
-			'url_prev' => $this->url . 'page=' . ($this->page - 1),
-			'url_next' => $this->url . 'page=' . ($this->page + 1),
-			'url_last' => $this->url . 'page=' . $num_pages,
+			'url_first' => $this->page_url . 'page=1',
+			'url_prev' => $this->page_url . 'page=' . ($this->page - 1),
+			'url_next' => $this->page_url . 'page=' . ($this->page + 1),
+			'url_last' => $this->page_url . 'page=' . $num_pages,
 			'start' => $start,
 			'end' => $end,
 			'attrs' => $attrs,

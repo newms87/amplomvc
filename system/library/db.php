@@ -29,10 +29,10 @@ class DB {
 	* 'row' is the first row of the query
 	* 'rows' are all of the resulting rows of the MySQL query.
 	* 'num_rows' is the count of rows in the return result
-	* 
+	*
 	* @param $sql - the MySQL query string
 	* @return mixed - An array as described above, or false on failure
-	* 
+	*
 	*/
 	public function query($sql) {
   		$resource = $this->driver->query($sql);
@@ -49,10 +49,10 @@ class DB {
 	/**
 	* Returns an array of associative arrays with the Select field as the keys
 	* and the column data as the values for the MySQL query
-	* 
+	*
 	* @param $sql - the MySQL query string
 	* @return mixed - an array of associative arrays of field => value pairs, or false on failure
-	* 
+	*
 	*/
 	public function query_rows($sql) {
   		$resource = $this->driver->query($sql);
@@ -69,10 +69,10 @@ class DB {
 	/**
 	* Returns an associative array with the Select field as the keys
 	* and the column data as the values for the MySQL query
-	* 
+	*
 	* @param $sql - the MySQL query string
 	* @return mixed - An associative array of field => value pairs, or false on failure
-	* 
+	*
 	*/
 	public function query_row($sql) {
   		$resource = $this->driver->query($sql);
@@ -88,10 +88,10 @@ class DB {
 	
 	/**
 	* Returns the first field in the first row of the query
-	* 
+	*
 	* @param $sql - the MySQL query string
 	* @return mixed - The DB table field value as an integer, float or string, or null on failure
-	* 
+	*
 	*/
   	public function query_var($sql) {
   		$resource = $this->driver->query($sql);

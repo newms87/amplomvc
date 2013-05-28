@@ -5,7 +5,7 @@ class ControllerExtensionTotal extends Controller {
 
 		$this->load->language('extension/total');
 		
-		$this->document->setTitle($this->_('heading_title')); 
+		$this->document->setTitle($this->_('heading_title'));
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('extension/total'));
@@ -84,10 +84,10 @@ class ControllerExtensionTotal extends Controller {
 	
 	public function install() {
 		if (!$this->user->hasPermission('modify', 'extension/total')) {
-			$this->session->data['error'] = $this->_('error_permission'); 
+			$this->session->data['error'] = $this->_('error_permission');
 			
 			$this->url->redirect($this->url->link('extension/total'));
-		} else {				
+		} else {
 			$this->model_setting_extension->install('total', $_GET['extension']);
 
 			$this->model_user_user_group->addPermission($this->user->getId(), 'access', 'total/' . $_GET['extension']);
@@ -108,10 +108,10 @@ class ControllerExtensionTotal extends Controller {
 	
 	public function uninstall() {
 		if (!$this->user->hasPermission('modify', 'extension/total')) {
-			$this->session->data['error'] = $this->_('error_permission'); 
+			$this->session->data['error'] = $this->_('error_permission');
 			
 			$this->url->redirect($this->url->link('extension/total'));
-		} else {			
+		} else {
 			$this->model_setting_extension->uninstall('total', $_GET['extension']);
 		
 			$this->model_setting_setting->deleteSetting($_GET['extension']);
@@ -127,5 +127,5 @@ class ControllerExtensionTotal extends Controller {
 		
 			$this->url->redirect($this->url->link('extension/total'));
 		}
-	}	
+	}
 }

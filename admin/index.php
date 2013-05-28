@@ -10,7 +10,7 @@ require_once('config.php');
 
 include('../functions.php');
 
-// Install 
+// Install
 if (!defined('DIR_APPLICATION')) {
 	header('Location: ../install/index.php');
 	exit;
@@ -35,7 +35,7 @@ $registry->set('db', $db);
 
 // Cache
 $cache = new Cache();
-$registry->set('cache', $cache); 
+$registry->set('cache', $cache);
 
 //TODO: WE NEED TO SEPARATE OUT ADMIN CONFIG FROM FRONT END CONFIGS (and common in both front / back and front only)!!
 
@@ -47,7 +47,7 @@ foreach(explode(',',$config->get('config_cache_ignore')) as $ci)
 	$cache->ignore($ci);
 
 
-//System Logging 
+//System Logging
 $error_log = new Log($config->get('config_error_filename'), 'Admin');
 $registry->set('error_log', $error_log);
 
@@ -134,26 +134,7 @@ $response->addHeader('Content-Type: text/html; charset=utf-8');
 $registry->set('response', $response);
 
 // Language
-$languages = array();
-
-$query = $db->query("SELECT * FROM " . DB_PREFIX . "language"); 
-
-if(!$query->rows){
-	$msg = "There were no languages in the database! Please resolve this before continuing!";
-	echo "There were no languages in the database! Please resolve this before continuing!";
-	trigger_error("There were no languages in the database! Please resolve this before continuing!");
-	exit();
-}
-
-foreach ($query->rows as $result) {
-	$languages[$result['code']] = $result;
-}
-
-$config->set('config_language_id', $languages[$config->get('config_admin_language')]['language_id']);
-
-// Language	
-$language = new Language($languages[$config->get('config_admin_language')]);
-$registry->set('language', $language); 		
+$registry->set('language', new Language($registry));
 
 //Plugins
 $plugin_handler = new pluginHandler($registry, $merge_registry);
@@ -212,7 +193,7 @@ elseif($route){
 		'common/forgotten',
 		'common/reset',
 		'error/not_found',
-		'error/permission'		
+		'error/permission'
 	);
 	
 	if(!in_array($route, $ignore) && !$registry->get('user')->hasPermission('access', $route)){

@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerAffiliateRegister extends Controller {
 	
 			
@@ -19,7 +19,7 @@ class ControllerAffiliateRegister extends Controller {
 			$this->affiliate->login($_POST['email'], $_POST['password']);
 
 			$this->url->redirect($this->url->link('affiliate/success'));
-		} 
+		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('text_account'), $this->url->link('affiliate/account'));
@@ -36,13 +36,13 @@ class ControllerAffiliateRegister extends Controller {
 			$this->data['error_firstname'] = $this->error['firstname'];
 		} else {
 			$this->data['error_firstname'] = '';
-		}	
+		}
 		
 		if (isset($this->error['lastname'])) {
 			$this->data['error_lastname'] = $this->error['lastname'];
 		} else {
 			$this->data['error_lastname'] = '';
-		}		
+		}
 	
 		if (isset($this->error['email'])) {
 			$this->data['error_email'] = $this->error['email'];
@@ -168,12 +168,12 @@ class ControllerAffiliateRegister extends Controller {
 
 		if (isset($_POST['country_id'])) {
 				$this->data['country_id'] = $_POST['country_id'];
-		} else {	
+		} else {
 				$this->data['country_id'] = $this->config->get('config_country_id');
 		}
 
 		if (isset($_POST['zone_id'])) {
-				$this->data['zone_id'] = $_POST['zone_id']; 	
+				$this->data['zone_id'] = $_POST['zone_id'];
 		} else {
 				$this->data['zone_id'] = '';
 		}
@@ -264,22 +264,16 @@ class ControllerAffiliateRegister extends Controller {
 			$this->data['agree'] = false;
 		}
 
-
-
-
-
-
-
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
 			'common/content_top',
 			'common/content_bottom',
 			'common/footer',
-			'common/header'	
+			'common/header'
 		);
 				
-		$this->response->setOutput($this->render());	
+		$this->response->setOutput($this->render());
   	}
 
   	private function validate() {
@@ -341,10 +335,6 @@ class ControllerAffiliateRegister extends Controller {
 			}
 		}
 		
-		if (!$this->error) {
-				return true;
-		} else {
-				return false;
-		}
+		return $this->error ? false : true;
   	}
 }

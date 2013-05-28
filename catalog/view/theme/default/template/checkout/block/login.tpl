@@ -3,13 +3,13 @@
 	<h2><?= $text_new_customer; ?></h2>
 	<p><?= $text_checkout; ?></p>
 	<label for="register">
-		<input type="radio" name="account" value="register" id="register" <?= $account != 'guest' ? 'checked="checked"' : '';?> />
+		<input type="radio" name="account" value="register" id="register" checked="checked" />
 		<b><?= $text_register; ?></b>
 	</label>
 	<br />
 	<? if ($guest_checkout) { ?>
 	<label for="guest">
-		<input type="radio" name="account" value="guest" id="guest" <?= $account == 'guest' ? 'checked="checked"' : '';?> />
+		<input type="radio" name="account" value="guest" id="guest" />
 		<b><?= $text_guest; ?></b>
 	</label>
 	<br />

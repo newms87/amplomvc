@@ -1,5 +1,5 @@
-<?php 
-class ControllerCatalogAttributeGroup extends Controller { 
+<?php
+class ControllerCatalogAttributeGroup extends Controller {
 	
 	
   	public function index() {
@@ -141,7 +141,7 @@ class ControllerCatalogAttributeGroup extends Controller {
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/attribute_group', $url));
 
 		$this->data['insert'] = $this->url->link('catalog/attribute_group/insert', $url);
-		$this->data['delete'] = $this->url->link('catalog/attribute_group/delete', $url);	
+		$this->data['delete'] = $this->url->link('catalog/attribute_group/delete', $url);
 
 		$this->data['attribute_groups'] = array();
 
@@ -171,7 +171,7 @@ class ControllerCatalogAttributeGroup extends Controller {
 				'selected'			=> isset($_POST['selected']) && in_array($result['attribute_group_id'], $_POST['selected']),
 				'action'				=> $action
 			);
-		}	
+		}
 	
  		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -214,10 +214,6 @@ class ControllerCatalogAttributeGroup extends Controller {
 
 		$this->pagination->init();
 		$this->pagination->total = $attribute_group_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('catalog/attribute_group', $url);
-			
 		$this->data['pagination'] = $this->pagination->render();
 
 		$this->data['sort'] = $sort;
@@ -298,7 +294,7 @@ class ControllerCatalogAttributeGroup extends Controller {
 			'common/footer'
 		);
 				
-		$this->response->setOutput($this->render());	
+		$this->response->setOutput($this->render());
   	}
   	
 	private function validateForm() {
@@ -328,10 +324,10 @@ class ControllerCatalogAttributeGroup extends Controller {
 			}
 		}
 		
-		if (!$this->error) { 
+		if (!$this->error) {
 			return true;
 		} else {
 			return false;
 		}
-  	}	
+  	}
 }

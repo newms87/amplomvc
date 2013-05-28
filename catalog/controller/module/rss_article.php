@@ -3,7 +3,7 @@ class ControllerModuleRssArticle extends Controller {
 	protected function index($setting) {
 		$this->template->load('module/rss_article');
 		
-		$this->language->load('module/rss_article'); 
+		$this->language->load('module/rss_article');
 		
 		empty($setting['limit'])?$setting['limit']=3:'';
 		
@@ -26,7 +26,7 @@ class ControllerModuleRssArticle extends Controller {
 			isset($num_to_grab)?'':$num_to_grab=5;
 			isset($num_to_keep)?'':$num_to_keep=10;
 			isset($title_length)?'':$title_length=22;
-			$xml  = simplexml_load_file($rss_feed_url); 
+			$xml  = simplexml_load_file($rss_feed_url);
 			$articles = $this->tool->parse_xml_to_array($xml);
 			
 			foreach(array_slice($articles['entry'],0,$num_to_grab) as $entry){
@@ -38,7 +38,7 @@ class ControllerModuleRssArticle extends Controller {
 			
 			$rss_article['featured_articles'] = array_slice(array_merge($new_articles, $featured_articles),0,$num_to_keep);
 			$this->editRSSArticleSetting($rss_article);
-		}	
+		}
 		if(isset($_GET['redirect'])){
 			$this->data['rss_update_msg'] = "Updated RSS Feed!";
 			$this->index();

@@ -8,7 +8,7 @@ class ControllerProductBlockFlashsaleCountdown extends Controller {
 		$this->template->load('product/block/flashsale_countdown');
 		
 		//This products flashsale
-		if(!is_array($flashsale)){ 
+		if(!is_array($flashsale)){
 			$flashsale = $this->model_catalog_flashsale->getFlashsale((int)$flashsale);
 		}
 		

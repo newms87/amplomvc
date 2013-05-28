@@ -28,7 +28,7 @@ $.fn.elfinderoverlay = function(opts) {
 			o.show();
 			show();
 		}
-	} 
+	}
 	
 	if (opts == 'hide') {
 		var o    = this.eq(0),
@@ -39,7 +39,7 @@ $.fn.elfinderoverlay = function(opts) {
 			
 		if (cnt == 0 && o.is(':visible')) {
 			o.hide();
-			hide();        
+			hide();
 		}
 	}
 	

@@ -1,8 +1,8 @@
 /*!
  * Dan Newman's Carousel
- * 
+ *
  * Date: 06 / 06 / 2012
- *  
+ *
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.opensource.org/licenses/gpl-2.0.php
@@ -14,7 +14,7 @@
 	$.dn = $.dn || { };
 	
 	$.dn.carousel = {
-		options: {	
+		options: {
 			start: 1, // where should the carousel start?
 			display: 1, // how many blocks do you want display at 1 time?
 			scroll: 1, // how many blocks do you want to move at 1 time?
@@ -32,7 +32,7 @@
 			view_width: 'auto', //width of the viewport
 			view_height: 'auto', //height of the viewport
 			page_width: 'auto', //width of each page
-			page_height: 'auto', //height of each page 
+			page_height: 'auto', //height of each page
 		}
 	};
 	
@@ -153,7 +153,7 @@
 				var oNumbers = $('.pagenum', oPager);
 				oNumbers.removeClass('active');
 				$(oNumbers[iCurrent]).addClass('active');
-			}			
+			}
 		};
 		function setPager(oEvent){
 			if($(this).hasClass('pagenum')){ oSelf.move(parseInt(this.rel), true); }
@@ -184,7 +184,7 @@
 			iCurrent = bPageNum ? iDirection : iCurrent += iDirection;
 			if(iCurrent > -1 && iCurrent <= iSteps){
 				var oPosition = {};
-				oPosition[axis ? 'left' : 'top'] = -(iCurrent * (iPageSize * options.scroll));	
+				oPosition[axis ? 'left' : 'top'] = -(iCurrent * (iPageSize * options.scroll));
 				oContent.animate(oPosition,{
 					queue: false,
 					duration: options.animation ? options.duration : 0,

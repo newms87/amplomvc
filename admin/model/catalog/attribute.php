@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ModelCatalogAttribute extends Model {
 	public function addAttribute($data) {
 		$this->query("INSERT INTO " . DB_PREFIX . "attribute SET attribute_group_id = '" . (int)$data['attribute_group_id'] . "', sort_order = '" . (int)$data['sort_order'] . "'");
@@ -49,13 +49,13 @@ class ModelCatalogAttribute extends Model {
 			'ad.name',
 			'attribute_group',
 			'a.sort_order'
-		);	
+		);
 		
 		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
-			$sql .= " ORDER BY " . $data['sort'];	
+			$sql .= " ORDER BY " . $data['sort'];
 		} else {
-			$sql .= " ORDER BY attribute_group, ad.name";	
-		}	
+			$sql .= " ORDER BY attribute_group, ad.name";
+		}
 		
 		if (isset($data['order']) && ($data['order'] == 'DESC')) {
 			$sql .= " DESC";
@@ -66,14 +66,14 @@ class ModelCatalogAttribute extends Model {
 		if (isset($data['start']) || isset($data['limit'])) {
 			if ($data['start'] < 0) {
 				$data['start'] = 0;
-			}				
+			}
 
 			if ($data['limit'] < 1) {
 				$data['limit'] = 20;
-			}	
+			}
 		
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
-		}	
+		}
 		
 		$query = $this->query($sql);
 		
@@ -107,13 +107,13 @@ class ModelCatalogAttribute extends Model {
 			'ad.name',
 			'attribute_group',
 			'a.sort_order'
-		);	
+		);
 		
 		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
-			$sql .= " ORDER BY " . $data['sort'];	
+			$sql .= " ORDER BY " . $data['sort'];
 		} else {
-			$sql .= " ORDER BY ad.name";	
-		}	
+			$sql .= " ORDER BY ad.name";
+		}
 		
 		if (isset($data['order']) && ($data['order'] == 'DESC')) {
 			$sql .= " DESC";
@@ -124,14 +124,14 @@ class ModelCatalogAttribute extends Model {
 		if (isset($data['start']) || isset($data['limit'])) {
 			if ($data['start'] < 0) {
 				$data['start'] = 0;
-			}				
+			}
 
 			if ($data['limit'] < 1) {
 				$data['limit'] = 20;
-			}	
+			}
 		
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
-		}	
+		}
 		
 		$query = $this->query($sql);
 		
@@ -142,11 +142,11 @@ class ModelCatalogAttribute extends Model {
 			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "attribute");
 		
 		return $query->row['total'];
-	}	
+	}
 	
 	public function getTotalAttributesByAttributeGroupId($attribute_group_id) {
 			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "attribute WHERE attribute_group_id = '" . (int)$attribute_group_id . "'");
 		
 		return $query->row['total'];
-	}		
+	}
 }

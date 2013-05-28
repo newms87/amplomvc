@@ -1,7 +1,7 @@
 <?php
 
 $_['phone_types'] = array('cell'=>"Cell Phone",'primary'=>"Primary", "fax"=>"Fax");
-$_['contact_types'] = array('primary'=>"Primary", "customer_service"=>"Customer Service", "finance"=>"Finance", 
+$_['contact_types'] = array('primary'=>"Primary", "customer_service"=>"Customer Service", "finance"=>"Finance",
 									"shipping"=>"Shipping","returns"=>"Returns", "vendor"=>"Vendor", "legal"=>"Legal");
 
 									

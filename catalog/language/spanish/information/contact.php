@@ -2,7 +2,7 @@
 // Heading
 $_['heading_title']  = 'Contáctanos';
 
-// Text 
+// Text
 $_['text_location']  = 'Donde estamos';
 $_['text_contact']	= 'Formulario de contacto';
 $_['text_address']	= 'Dirección:';

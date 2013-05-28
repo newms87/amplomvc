@@ -1,11 +1,11 @@
-<?php 
+<?php
 class ControllerAccountAddress extends Controller {
 	
   	public function index() {
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/address');
 
-			$this->url->redirect($this->url->link('account/login')); 
+			$this->url->redirect($this->url->link('account/login'));
 		}
 	
 		$this->language->load('account/address');
@@ -19,20 +19,24 @@ class ControllerAccountAddress extends Controller {
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/address');
 
-			$this->url->redirect($this->url->link('account/login')); 
-		} 
+			$this->url->redirect($this->url->link('account/login'));
+		}
 
 		$this->language->load('account/address');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_account_address->addAddress($_POST);
+			$address_id = $this->model_account_address->addAddress($_POST);
 			
-				$this->message->add('success', $this->_('text_insert'));
+			if(!empty($_POST['default'])){
+				$this->customer->set_setting('default_shipping_address_id', $address_id);
+			}
+			
+			$this->message->add('success', $this->_('text_insert'));
 
 			$this->url->redirect($this->url->link('account/address'));
-		} 
+		}
 		
 		$this->getForm();
   	}
@@ -41,28 +45,32 @@ class ControllerAccountAddress extends Controller {
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/address');
 
-			$this->url->redirect($this->url->link('account/login')); 
-		} 
+			$this->url->redirect($this->url->link('account/login'));
+		}
 		
 		$this->language->load('account/address');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-				$this->model_account_address->editAddress($_GET['address_id'], $_POST);
+			$this->model_account_address->editAddress($_GET['address_id'], $_POST);
 			
-			if (isset($this->session->data['shipping_address_id']) && ($_GET['address_id'] == $this->session->data['shipping_address_id'])) {
-				unset($this->session->data['shipping_method']);	
+			if(!empty($_POST['default'])){
+				$this->customer->set_setting('default_shipping_address_id', $_GET['address_id']);
+			}
+			
+			if ((int)$_GET['address_id'] === $this->cart->getShippingAddressId()) {
+				$this->cart->setShippingMethod();
 			}
 
-			if (isset($this->session->data['payment_address_id']) && ($_GET['address_id'] == $this->session->data['payment_address_id'])) {
-				unset($this->session->data['payment_method']);
+			if ((int)$_GET['address_id'] === $this->cart->getPaymentAddressId()) {
+				$this->cart->setPaymentMethod();
 			}
 			
 			$this->message->add('success', $this->_('text_update'));
-	
+			
 			$this->url->redirect($this->url->link('account/address'));
-		} 
+		}
 		
 		$this->getForm();
   	}
@@ -71,26 +79,24 @@ class ControllerAccountAddress extends Controller {
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/address');
 
-			$this->url->redirect($this->url->link('account/login')); 
-		} 
+			$this->url->redirect($this->url->link('account/login'));
+		}
 			
 		$this->language->load('account/address');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (isset($_GET['address_id']) && $this->validateDelete()) {
-			$this->model_account_address->deleteAddress($_GET['address_id']);	
+			$this->model_account_address->deleteAddress($_GET['address_id']);
 
-			if (isset($this->session->data['shipping_address_id']) && ($_GET['address_id'] == $this->session->data['shipping_address_id'])) {
-				unset($this->session->data['shipping_address_id']);
-				unset($this->session->data['shipping_method']);
-				unset($this->session->data['shipping_methods']);
+			if ((int)$_GET['address_id'] === $this->cart->getShippingAddressId()) {
+				$this->cart->setShippingAddress();
+				$this->cart->setShippingMethod();
 			}
 
-			if (isset($this->session->data['payment_address_id']) && ($_GET['address_id'] == $this->session->data['payment_address_id'])) {
-				unset($this->session->data['payment_address_id']);
-				unset($this->session->data['payment_method']);
-				unset($this->session->data['payment_methods']);
+			if ((int)$_GET['address_id'] === $this->cart->getPaymentAddressId()) {
+				$this->cart->setPaymentAddress();
+				$this->cart->setPaymentMethod();
 			}
 			
 			$this->message->add('success', $this->_('text_delete'));
@@ -98,7 +104,7 @@ class ControllerAccountAddress extends Controller {
 			$this->url->redirect($this->url->link('account/address'));
 		}
 	
-		$this->getList();	
+		$this->getList();
   	}
 
   	private function getList() {
@@ -142,7 +148,7 @@ class ControllerAccountAddress extends Controller {
 					'postcode'  => $result['postcode'],
 					'zone'		=> $result['zone'],
 				'zone_code' => $result['zone_code'],
-					'country'	=> $result['country']  
+					'country'	=> $result['country']
 			);
 
 				$this->data['addresses'][] = array(
@@ -162,10 +168,10 @@ class ControllerAccountAddress extends Controller {
 			'common/content_top',
 			'common/content_bottom',
 			'common/footer',
-			'common/header'		
+			'common/header'
 		);
 						
-		$this->response->setOutput($this->render());		
+		$this->response->setOutput($this->render());
   	}
 
   	private function getForm() {
@@ -227,12 +233,12 @@ class ControllerAccountAddress extends Controller {
 			$this->data['address_2'] = $address_info['address_2'];
 		} else {
 				$this->data['address_2'] = '';
-		}	
+		}
 
 		if (isset($_POST['postcode'])) {
 				$this->data['postcode'] = $_POST['postcode'];
 		} elseif (isset($address_info)) {
-			$this->data['postcode'] = $address_info['postcode'];			
+			$this->data['postcode'] = $address_info['postcode'];
 		} else {
 				$this->data['postcode'] = '';
 		}
@@ -248,7 +254,7 @@ class ControllerAccountAddress extends Controller {
 		if (isset($_POST['country_id'])) {
 				$this->data['country_id'] = $_POST['country_id'];
 		}  elseif (isset($address_info)) {
-				$this->data['country_id'] = $address_info['country_id'];			
+				$this->data['country_id'] = $address_info['country_id'];
 		} else {
 				$this->data['country_id'] = $this->config->get('config_country_id');
 		}
@@ -256,7 +262,7 @@ class ControllerAccountAddress extends Controller {
 		if (isset($_POST['zone_id'])) {
 				$this->data['zone_id'] = $_POST['zone_id'];
 		}  elseif (isset($address_info)) {
-				$this->data['zone_id'] = $address_info['zone_id'];			
+				$this->data['zone_id'] = $address_info['zone_id'];
 		} else {
 				$this->data['zone_id'] = '';
 		}
@@ -266,7 +272,7 @@ class ControllerAccountAddress extends Controller {
 		if (isset($_POST['default'])) {
 				$this->data['default'] = $_POST['default'];
 		} elseif (isset($_GET['address_id'])) {
-				$this->data['default'] = $this->customer->getAddressId() == $_GET['address_id'];
+				$this->data['default'] = (int)$this->customer->get_setting('default_shipping_address_id') === (int)$_GET['address_id'];
 		} else {
 			$this->data['default'] = false;
 		}
@@ -279,10 +285,10 @@ class ControllerAccountAddress extends Controller {
 			'common/content_top',
 			'common/content_bottom',
 			'common/footer',
-			'common/header'		
+			'common/header'
 		);
 						
-		$this->response->setOutput($this->render());	
+		$this->response->setOutput($this->render());
   	}
 	
   	private function validateForm() {
@@ -316,11 +322,7 @@ class ControllerAccountAddress extends Controller {
 				$this->error['zone'] = $this->_('error_zone');
 		}
 		
-		if (!$this->error) {
-				return true;
-		} else {
-				return false;
-		}
+		return $this->error ? false : true;
   	}
 
   	private function validateDelete() {
@@ -328,14 +330,10 @@ class ControllerAccountAddress extends Controller {
 				$this->error['warning'] = $this->_('error_delete');
 		}
 
-		if ($this->customer->getAddressId() == $_GET['address_id']) {
+		if ($this->customer->get_setting('default_shipping_address_id') === (int)$_GET['address_id']) {
 				$this->error['warning'] = $this->_('error_default');
 		}
 
-		if (!$this->error) {
-				return true;
-		} else {
-				return false;
-		}
+		return $this->error ? false : true;
   	}
 }

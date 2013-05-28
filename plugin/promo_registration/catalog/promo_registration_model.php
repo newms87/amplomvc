@@ -1,4 +1,4 @@
-<?php	
+<?php
 class ModelPluginPromoRegistration extends Model {
 	
 	public function promo_addCustomer($data, $customer_id){

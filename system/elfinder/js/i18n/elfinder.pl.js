@@ -147,12 +147,12 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'Dec'         : 'gru',
 
 			/******************************** sort variants ********************************/
-			'sortnameDirsFirst' : 'po nazwie (foldery pierwsze)', 
-			'sortkindDirsFirst' : 'po typie (foldery pierwsze)', 
-			'sortsizeDirsFirst' : 'po rozmiarze (foldery pierwsze)', 
-			'sortdateDirsFirst' : 'po dacie (foldery pierwsze)', 
-			'sortname'          : 'po nazwie', 
-			'sortkind'          : 'po typie', 
+			'sortnameDirsFirst' : 'po nazwie (foldery pierwsze)',
+			'sortkindDirsFirst' : 'po typie (foldery pierwsze)',
+			'sortsizeDirsFirst' : 'po rozmiarze (foldery pierwsze)',
+			'sortdateDirsFirst' : 'po dacie (foldery pierwsze)',
+			'sortname'          : 'po nazwie',
+			'sortkind'          : 'po typie',
 			'sortsize'          : 'po rozmiarze',
 			'sortdate'          : 'po dacie',
 

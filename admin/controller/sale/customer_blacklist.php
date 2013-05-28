@@ -1,5 +1,5 @@
-<?php	
-class ControllerSaleCustomerBlacklist extends Controller { 
+<?php
+class ControllerSaleCustomerBlacklist extends Controller {
 	
   
   	public function index() {
@@ -38,7 +38,7 @@ class ControllerSaleCustomerBlacklist extends Controller {
 		}
 		
 		$this->getForm();
-  	} 
+  	}
 	
   	public function update() {
 		$this->load->language('sale/customer_blacklist');
@@ -68,7 +68,7 @@ class ControllerSaleCustomerBlacklist extends Controller {
 		}
 	
 		$this->getForm();
-  	}	
+  	}
 
   	public function delete() {
 		$this->load->language('sale/customer_blacklist');
@@ -100,7 +100,7 @@ class ControllerSaleCustomerBlacklist extends Controller {
 		}
 	
 		$this->getList();
-  	}  
+  	}
 	
   	private function getList() {
 		$this->template->load('sale/customer_blacklist_list');
@@ -108,7 +108,7 @@ class ControllerSaleCustomerBlacklist extends Controller {
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
 		} else {
-			$sort = 'ip'; 
+			$sort = 'ip';
 		}
 		
 		if (isset($_GET['order'])) {
@@ -172,7 +172,7 @@ class ControllerSaleCustomerBlacklist extends Controller {
 				'selected'					=> isset($_POST['selected']) && in_array($result['customer_ip_blacklist_id'], $_POST['selected']),
 				'action'						=> $action
 			);
-		}	
+		}
 					
 		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -214,10 +214,6 @@ class ControllerSaleCustomerBlacklist extends Controller {
 
 		$this->pagination->init();
 		$this->pagination->total = $customer_blacklist_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('sale/customer_blacklist', $url);
-			
 		$this->data['pagination'] = $this->pagination->render();
 				
 		$this->data['sort'] = $sort;
@@ -277,7 +273,7 @@ class ControllerSaleCustomerBlacklist extends Controller {
 			
 		if (isset($_POST['ip'])) {
 				$this->data['ip'] = $_POST['ip'];
-		} elseif (!empty($customer_blacklist_info)) { 
+		} elseif (!empty($customer_blacklist_info)) {
 			$this->data['ip'] = $customer_blacklist_info['ip'];
 		} else {
 				$this->data['ip'] = '';
@@ -301,13 +297,13 @@ class ControllerSaleCustomerBlacklist extends Controller {
 		}
 		
 		return $this->error ? false : true;
-  	}	
+  	}
 
   	private function validateDelete() {
 		if (!$this->user->hasPermission('modify', 'sale/customer_blacklist')) {
 				$this->error['warning'] = $this->_('error_permission');
-		}	
+		}
 		
-		return $this->error ? false : true;  
-  	} 
+		return $this->error ? false : true;
+  	}
 }

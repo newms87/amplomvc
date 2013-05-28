@@ -1,4 +1,4 @@
-<?php	
+<?php
 class ControllerCommonHeader extends Controller {
 	protected function index() {
 		$this->template->load('common/header');
@@ -6,7 +6,7 @@ class ControllerCommonHeader extends Controller {
 		
 		if($this->config->get('config_debug') && isset($_SESSION['debug'])){
 			html_dump($_SESSION['debug'], 'debug');
-			unset($_SESSION['debug']);  
+			unset($_SESSION['debug']);
 		}
 		
 		$this->data['title'] = $this->document->getTitle();
@@ -53,7 +53,7 @@ class ControllerCommonHeader extends Controller {
 		
 		if($this->config->get('config_seo_url')){
 			$this->data['pretty_url'] = $this->url->get_pretty_url();
-		} 
+		}
 		
 		$this->data['icon'] = $this->image->get($this->config->get('config_icon'));
 		
@@ -68,14 +68,13 @@ class ControllerCommonHeader extends Controller {
 		$this->data['links_secondary'] = $this->document->getLinks('secondary');
 		
 		
-		$this->data['is_logged'] = $this->customer->isLogged();
-		
 		//If the customer is logged in, build the account menu
-		if($this->data['is_logged']){
+		if($this->customer->isLogged()){
+			$this->data['is_logged'] = true;
 			//The Welcome Message
 			$link_logged = array(
 				'name' => 'logged',
-				'display_name' => $this->language->format('text_logged', $this->customer->getFullName()),
+				'display_name' => $this->language->format('text_logged', $this->customer->info('firstname') . ' ' . $this->customer->info('lastname')),
 				'sort_order' => 0,
 			);
 			
@@ -125,9 +124,35 @@ class ControllerCommonHeader extends Controller {
 			$this->data['links_account'] = $this->document->getLinks('account');
 		}
 		else{
+			$this->data['is_logged'] = false;
+			
 			$this->data['block_login'] = $this->getBlock('account', 'login', array('header'));
+			
+			
+			if(!$this->cart->isEmpty()){
+				$link_cart = array(
+					'name' => 'cart',
+					'display_name' => $this->_('text_shopping_cart'),
+					'href' => $this->url->link('cart/cart', "redirect=" . preg_replace('/redirect=[^&]*/','',$this->url->here())),
+					'sort_order' => 2,
+				);
+				
+				$this->document->addLink('guest', $link_cart);
+				
+				$link_checkout= array(
+					'name' => 'checkout',
+					'display_name' => $this->_('text_checkout'),
+					'href' => $this->url->link('checkout/checkout'),
+					'sort_order' => 3,
+				);
+			
+				$this->document->addLink('guest', $link_checkout);
+			}
+			
+			$this->data['links_guest'] = $this->document->getLinks('guest');
 		}
-
+		
+		
 		$this->data['home'] = $this->url->link('common/home');
 		
 		$this->data['social_networks'] = $this->getBlock('extras', 'social_media');
@@ -140,5 +165,5 @@ class ControllerCommonHeader extends Controller {
 		);
 
 		$this->render();
-	} 	
+	}
 }

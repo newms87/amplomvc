@@ -2,7 +2,7 @@
 // Heading
 $_['heading_title']			= 'AlertPay';
 
-// Text 
+// Text
 $_['text_payment']			= 'Paiement';
 $_['text_success']			= 'F&eacute;licitations, vous avez modifi&eacute; les d&eacute;tails du paiement <b>AlertPay</b> avec succ&egrave;s !';
 		

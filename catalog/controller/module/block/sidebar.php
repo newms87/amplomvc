@@ -2,8 +2,10 @@
 class ControllerModuleBlockSidebar extends Controller {
 	protected function index($settings) {
 		$this->template->load('module/block/sidebar');
-		
 		$this->language->load('module/block/sidebar');
+		
+		$collection_id = !empty($_GET['collection_id']) ? (int)$_GET['collection_id'] : false;
+		$category_id = !empty($_GET['category_id']) ? (int)$_GET['category_id'] : false;
 		
 		$main_menu = array();
 		
@@ -12,7 +14,7 @@ class ControllerModuleBlockSidebar extends Controller {
 			'href' => $this->url->link("product/collection"),
 		);
 		
-		if(empty($_GET['category_id']) && empty($_GET['collection_id'])){
+		if(!$category_id && !$collection_id){
 			$main_menu[0]['attrs'] = array('class' => 'active');
 		}
 		
@@ -22,17 +24,19 @@ class ControllerModuleBlockSidebar extends Controller {
 		
 		$this->data['main_menu'] = array(
 			'label' => $this->_('text_main_menu'),
-			'menu' => $main_menu, 
+			'menu' => $main_menu,
 		);
 		
 		//Product Attributes Filter
-		if(!empty($_GET['collection_id'])){
+		if($collection_id){
 			$current_filter = isset($_GET['attribute']) ? $_GET['attribute'] : array();
 			
 			$url_query = $this->url->get_query('collection_id', 'category_id');
 			
 			foreach($settings['attributes'] as $attribute_menu){
 				$attribute_group_id = $attribute_menu['attribute_group_id'];
+				
+				if (!$this->model_catalog_collection->hasAttributeGroup($collection_id, $attribute_group_id)) continue;
 				
 				$attribute_list = $this->model_catalog_product->getAttributeList($attribute_group_id);
 				

@@ -39,9 +39,9 @@ class Document {
 	/**
 	* Canonical Links are used by search engines to determine the most appropriate version of web pages
 	* with identical (or almost, eg: different sort orders, etc.) content.
-	* 
+	*
 	* When pretty URLs are active, this will allow search results to show your pages with the pretty url version.
-	* 
+	*
 	* @param $href - the preferred url for the current page.
 	*/
 	public function setCanonicalLink($href){
@@ -67,7 +67,7 @@ class Document {
 		extract($link_info, EXTR_IF_EXISTS);
 				
 		if(!$name){
-			trigger_error('Document::addLink(): You must provide a link name! ' . get_caller()); 
+			trigger_error('Document::addLink(): You must provide a link name! ' . get_caller());
 			return;
 		}
 		
@@ -128,7 +128,7 @@ class Document {
 				}
 				
 				if($list[$key]['children']){
-					if($this->insert_link($name, $list[$key]['children'], $new_link, $sort_order)){ 
+					if($this->insert_link($name, $list[$key]['children'], $new_link, $sort_order)){
 						return true;
 					}
 				}
@@ -163,7 +163,7 @@ class Document {
 	
 	public function getStyles() {
 		return $this->styles;
-	}	
+	}
 	
 	public function addScript($script) {
 		if(!is_file($script)){

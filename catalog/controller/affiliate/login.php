@@ -1,24 +1,24 @@
-<?php 
+<?php
 class ControllerAffiliateLogin extends Controller {
 	
 	
 	public function index() {
 		$this->template->load('affiliate/login');
 
-		if ($this->affiliate->isLogged()) {  
+		if ($this->affiliate->isLogged()) {
 				$this->url->redirect($this->url->link('affiliate/account'));
 		}
 	
 		$this->language->load('affiliate/login');
 
-		$this->document->setTitle($this->_('heading_title')); 
+		$this->document->setTitle($this->_('heading_title'));
 						
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['email']) && isset($_POST['password']) && $this->validate()) {
 			if (isset($_POST['redirect'])) {
 				$this->url->redirect(str_replace('&amp;', '&', $_POST['redirect']));
 			} else {
 				$this->url->redirect($this->url->link('affiliate/account'));
-			} 
+			}
 		}
 		
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -41,7 +41,7 @@ class ControllerAffiliateLogin extends Controller {
 		} elseif (isset($this->session->data['redirect'])) {
 				$this->data['redirect'] = $this->session->data['redirect'];
 			
-			unset($this->session->data['redirect']);			
+			unset($this->session->data['redirect']);
 		} else {
 			$this->data['redirect'] = '';
 		}
@@ -53,12 +53,6 @@ class ControllerAffiliateLogin extends Controller {
 		} else {
 			$this->data['success'] = '';
 		}
-		
-
-
-
-
-
 
 		$this->children = array(
 			'common/column_left',
@@ -66,7 +60,7 @@ class ControllerAffiliateLogin extends Controller {
 			'common/content_top',
 			'common/content_bottom',
 			'common/footer',
-			'common/header'	
+			'common/header'
 		);
 						
 		$this->response->setOutput($this->render());
@@ -77,10 +71,6 @@ class ControllerAffiliateLogin extends Controller {
 				$this->error['warning'] = $this->_('error_login');
 		}
 	
-		if (!$this->error) {
-				return true;
-		} else {
-				return false;
-		}  	
+		return $this->error ? false : true;
   	}
 }

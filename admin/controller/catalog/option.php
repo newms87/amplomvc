@@ -167,10 +167,6 @@ class ControllerCatalogOption extends Controller {
 
 		$this->pagination->init();
 		$this->pagination->total = $option_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('catalog/option', $url);
-
 		$this->data['pagination'] = $this->pagination->render();
 		
 		$this->data['sort'] = $sort;
@@ -196,7 +192,7 @@ class ControllerCatalogOption extends Controller {
 		
 		if (!$option_id) {
 			$this->data['action'] = $this->url->link('catalog/option/insert', $url);
-		} else { 
+		} else {
 			$this->data['action'] = $this->url->link('catalog/option/update', 'option_id=' . $option_id . $url);
 		}
 
@@ -229,7 +225,7 @@ class ControllerCatalogOption extends Controller {
 		}
 		
 		if (!isset($this->data['option_values'])) {
-			$option_values = $this->model_catalog_option->getOptionValueDescriptions($option_id);		
+			$option_values = $this->model_catalog_option->getOptionValueDescriptions($option_id);
 			
 			foreach ($option_values as &$option_value) {
 				if ($option_value['image'] && file_exists(DIR_IMAGE . $option_value['image'])) {
@@ -277,10 +273,10 @@ class ControllerCatalogOption extends Controller {
 			foreach ($_POST['option_value'] as $option_value_id => $option_value) {
 				foreach ($option_value['option_value_description'] as $language_id => $option_value_description) {
 					if ((strlen($option_value_description['name']) < 1) || (strlen($option_value_description['name']) > 128)) {
-						$this->error['option_value'.$option_value_id] = $this->_('error_option_value'); 
-					}					
+						$this->error['option_value'.$option_value_id] = $this->_('error_option_value');
+					}
 				}
-			}	
+			}
 		}
 
 		return $this->error ? false : true;
@@ -300,7 +296,7 @@ class ControllerCatalogOption extends Controller {
 		}
 
 		return $this->error ? false : true;
-	}	
+	}
 	
 	public function autocomplete() {
 		$json = array();
@@ -332,7 +328,7 @@ class ControllerCatalogOption extends Controller {
 						$option_value_data[] = array(
 							'option_value_id' => $option_value['option_value_id'],
 							'name'				=> html_entity_decode($option_value['name'], ENT_QUOTES, 'UTF-8'),
-							'image'			=> $image					
+							'image'			=> $image
 						);
 					}
 					
@@ -342,7 +338,7 @@ class ControllerCatalogOption extends Controller {
 						$sort_order[$key] = $value['name'];
 					}
 			
-					array_multisort($sort_order, SORT_ASC, $option_value_data);					
+					array_multisort($sort_order, SORT_ASC, $option_value_data);
 				}
 				
 				$type = '';

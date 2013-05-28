@@ -1,4 +1,4 @@
-<?php	
+<?php
 class ControllerErrorNotFound extends Controller {
 	public function index() {
 		$this->template->load('error/not_found');
@@ -16,12 +16,6 @@ class ControllerErrorNotFound extends Controller {
 		$this->response->addHeader($_SERVER['SERVER_PROTOCOL'] . '/1.1 404 Not Found');
 		
 		$this->data['continue'] = $this->url->link('common/home');
-
-
-
-
-
-
 
 		$this->children = array(
 			'common/column_left',

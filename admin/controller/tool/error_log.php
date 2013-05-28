@@ -1,5 +1,5 @@
-<?php 
-class ControllerToolErrorLog extends Controller { 
+<?php
+class ControllerToolErrorLog extends Controller {
 	
 	
 	public function index() {
@@ -81,7 +81,7 @@ class ControllerToolErrorLog extends Controller {
 		$prev = $start-$limit > 0 ? $start - $limit:0;
 		$this->data['prev'] = $start>0?$this->url->link('tool/error_log', $url_query . '&start='.$prev.'&limit='.$limit):'';
 		
-		$this->data['limit'] = $limit; 
+		$this->data['limit'] = $limit;
 		$this->data['log'] = $log;
 		
 		$url_query = $this->url->get_query(array('limit','start'));
@@ -109,7 +109,7 @@ class ControllerToolErrorLog extends Controller {
 				}
 			}
 			
-			$this->language->format('button_clear', $name); 
+			$this->language->format('button_clear', $name);
 		}
 		else{
 			$this->language->format('button_clear', 'Log');
@@ -131,7 +131,7 @@ class ControllerToolErrorLog extends Controller {
 			$msg = "No entries were selected for removal!";
 			if($get_page){
 				$this->message->add('warning', $msg);
-			}	
+			}
 			else{
 				echo $msg;
 			}

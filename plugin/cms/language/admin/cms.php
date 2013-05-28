@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 $_['entry_image_cms_category_article'] = "Article Image Size:";
 

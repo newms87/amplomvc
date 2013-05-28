@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ModelSettingSetting extends Model {
 	public function getSetting($group, $store_id = 0) {
 		$where = array(
@@ -8,7 +8,7 @@ class ModelSettingSetting extends Model {
 		
 		$query = $this->get('setting', '*',  $where);
 		
-		$data = array(); 
+		$data = array();
 		
 		foreach ($query->rows as $result) {
 			if (!$result['serialized']) {

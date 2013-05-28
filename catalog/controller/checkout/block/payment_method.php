@@ -1,4 +1,4 @@
-<?php  
+<?php
 class ControllerCheckoutBlockPaymentMethod extends Controller {
   	public function index() {
   		$this->language->load('checkout/checkout');
@@ -9,7 +9,7 @@ class ControllerCheckoutBlockPaymentMethod extends Controller {
 			
 			if (!$payment_methods) {
 				$this->message->add('error', $this->language->format('error_no_payment', $this->url->link('information/contact')));
-			}	
+			}
 			
 			if ($this->cart->hasPaymentMethod()) {
 				$this->data['code'] = $this->cart->getPaymentMethodId();
@@ -85,22 +85,9 @@ class ControllerCheckoutBlockPaymentMethod extends Controller {
 				$json['error'] = $this->cart->get_errors('payment_method');
 			}
 			
-			if (!$json) {
-				//TODO: do we need any of this!? Maybe rethink set_default_payment_code()...
-				if($this->customer->isLogged()){
-					$payment_info = array(
-						'address_id' => $this->cart->getPaymentAddressId(),
-					);
-					
-					$code = $_POST['payment_method'];
-					
-					$this->customer->edit_setting('payment_info_' . $code, $payment_info);
-					
-					$this->customer->set_default_payment_code($code);
-				}
-				
-				$this->session->data['comment'] = strip_tags($_POST['comment']);
-			}							
+			if(!$json){
+				$this->cart->setComment($_POST['comment']);
+			}
 		}
 		
 		$this->response->setOutput(json_encode($json));

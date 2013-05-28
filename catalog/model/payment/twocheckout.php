@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ModelPaymentTwoCheckout extends Model {
   	public function getMethod($address, $total) {
 		$this->load->language('payment/twocheckout');
@@ -13,12 +13,12 @@ class ModelPaymentTwoCheckout extends Model {
 			$status = true;
 		} else {
 			$status = false;
-		}	
+		}
 		
 		$method_data = array();
 	
-		if ($status) {  
-				$method_data = array( 
+		if ($status) {
+				$method_data = array(
 				'code'		=> 'twocheckout',
 				'title'		=> $this->_('text_title'),
 				'sort_order' => $this->config->get('twocheckout_sort_order')

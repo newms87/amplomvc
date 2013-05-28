@@ -2,8 +2,8 @@
 // Heading
 $_['heading_title']			= 'PSIGate';
 
-// Text 
-$_['text_payment']			= 'Paiement'; 
+// Text
+$_['text_payment']			= 'Paiement';
 $_['text_success']			= 'F&eacute;licitations, vous avez modifi&eacute; les d&eacute;tails du paiement <b>PSIGate</b> !';
 
 // Entry

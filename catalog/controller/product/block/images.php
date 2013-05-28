@@ -1,4 +1,4 @@
-<?php  
+<?php
 class ControllerProductBlockImages extends Controller {
 	
 	public function index($settings, $product_info) {

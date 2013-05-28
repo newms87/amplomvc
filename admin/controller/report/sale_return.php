@@ -1,6 +1,6 @@
 <?php
 class ControllerReportSaleReturn extends Controller {
-	public function index() {	
+	public function index() {
 		$this->template->load('report/sale_return');
 
 		$this->load->language('report/sale_return');
@@ -29,7 +29,7 @@ class ControllerReportSaleReturn extends Controller {
 			$filter_return_status_id = $_GET['filter_return_status_id'];
 		} else {
 			$filter_return_status_id = 0;
-		}	
+		}
 		
 		if (isset($_GET['page'])) {
 			$page = $_GET['page'];
@@ -49,7 +49,7 @@ class ControllerReportSaleReturn extends Controller {
 		
 		if (isset($_GET['filter_group'])) {
 			$url .= '&filter_group=' . $_GET['filter_group'];
-		}		
+		}
 
 		if (isset($_GET['filter_return_status_id'])) {
 			$url .= '&filter_return_status_id=' . $_GET['filter_return_status_id'];
@@ -65,8 +65,8 @@ class ControllerReportSaleReturn extends Controller {
 		$this->data['returns'] = array();
 		
 		$data = array(
-			'filter_date_start'			=> $filter_date_start, 
-			'filter_date_end'			=> $filter_date_end, 
+			'filter_date_start'			=> $filter_date_start,
+			'filter_date_end'			=> $filter_date_end,
 			'filter_group'				=> $filter_group,
 			'filter_return_status_id' => $filter_return_status_id,
 			'start'						=> ($page - 1) * $this->config->get('config_admin_limit'),
@@ -121,7 +121,7 @@ class ControllerReportSaleReturn extends Controller {
 		
 		if (isset($_GET['filter_group'])) {
 			$url .= '&filter_group=' . $_GET['filter_group'];
-		}		
+		}
 
 		if (isset($_GET['filter_return_status_id'])) {
 			$url .= '&filter_return_status_id=' . $_GET['filter_return_status_id'];
@@ -129,14 +129,10 @@ class ControllerReportSaleReturn extends Controller {
 				
 		$this->pagination->init();
 		$this->pagination->total = $return_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('report/sale_return', $url);
-			
 		$this->data['pagination'] = $this->pagination->render();
 		
 		$this->data['filter_date_start'] = $filter_date_start;
-		$this->data['filter_date_end'] = $filter_date_end;		
+		$this->data['filter_date_end'] = $filter_date_end;
 		$this->data['filter_group'] = $filter_group;
 		$this->data['filter_return_status_id'] = $filter_return_status_id;
 				

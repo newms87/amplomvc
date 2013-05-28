@@ -1,5 +1,5 @@
-<?php 
-class ControllerAccountSuccess extends Controller {  
+<?php
+class ControllerAccountSuccess extends Controller {
 	public function index() {
 		$this->template->load('common/success');
 
@@ -23,12 +23,6 @@ class ControllerAccountSuccess extends Controller {
 			$this->data['continue'] = $this->url->link('account/account');
 		}
 
-
-
-
-
-
-
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
@@ -38,6 +32,6 @@ class ControllerAccountSuccess extends Controller {
 			'common/header'
 		);
 						
-		$this->response->setOutput($this->render());				
+		$this->response->setOutput($this->render());
   	}
 }

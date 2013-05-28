@@ -1,5 +1,5 @@
-<?php 
-class ControllerLocalisationOrderStatus extends Controller { 
+<?php
+class ControllerLocalisationOrderStatus extends Controller {
 	
 	
   	public function index() {
@@ -141,7 +141,7 @@ class ControllerLocalisationOrderStatus extends Controller {
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/order_status', $url));
 
 		$this->data['insert'] = $this->url->link('localisation/order_status/insert', $url);
-		$this->data['delete'] = $this->url->link('localisation/order_status/delete', $url);	
+		$this->data['delete'] = $this->url->link('localisation/order_status/delete', $url);
 
 		$this->data['order_statuses'] = array();
 
@@ -170,7 +170,7 @@ class ControllerLocalisationOrderStatus extends Controller {
 				'selected'		=> isset($_POST['selected']) && in_array($result['order_status_id'], $_POST['selected']),
 				'action'			=> $action
 			);
-		}	
+		}
 	
  		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -212,10 +212,6 @@ class ControllerLocalisationOrderStatus extends Controller {
 
 		$this->pagination->init();
 		$this->pagination->total = $order_status_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('localisation/order_status', $url);
-			
 		$this->data['pagination'] = $this->pagination->render();
 
 		$this->data['sort'] = $sort;
@@ -284,7 +280,7 @@ class ControllerLocalisationOrderStatus extends Controller {
 			'common/footer'
 		);
 				
-		$this->response->setOutput($this->render());	
+		$this->response->setOutput($this->render());
   	}
   	
 	private function validateForm() {
@@ -308,12 +304,12 @@ class ControllerLocalisationOrderStatus extends Controller {
 		
 		foreach ($_POST['selected'] as $order_status_id) {
 			if ($this->config->get('config_order_status_id') == $order_status_id) {
-				$this->error['warning'] = $this->_('error_default');	
-			}  
+				$this->error['warning'] = $this->_('error_default');
+			}
 			
 			if ($this->config->get('config_download_status_id') == $order_status_id) {
-				$this->error['warning'] = $this->_('error_download');	
-			}  
+				$this->error['warning'] = $this->_('error_download');
+			}
 			
 			$store_total = $this->model_setting_store->getTotalStoresByOrderStatusId($order_status_id);
 
@@ -324,14 +320,14 @@ class ControllerLocalisationOrderStatus extends Controller {
 			$order_total = $this->model_sale_order->getTotalOrderHistoriesByOrderStatusId($order_status_id);
 		
 			if ($order_total) {
-				$this->error['warning'] = sprintf($this->_('error_order'), $order_total);	
-			}  
+				$this->error['warning'] = sprintf($this->_('error_order'), $order_total);
+			}
 		}
 		
-		if (!$this->error) { 
+		if (!$this->error) {
 			return true;
 		} else {
 			return false;
 		}
-  	}	
+  	}
 }

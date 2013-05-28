@@ -26,7 +26,7 @@
 						<? $this->builder->set_config(key($field['build_config']), current($field['build_config'])); ?>
 						<?= $this->builder->build($field['type'], $field['options'], $name, $field['value'], $field['attrs']); ?>
 					<? } elseif($field['type'] == 'select') { ?>
-						 <select name="<?= $name;?>" <?= $field['html_attrs']; ?>></select>
+						<select name="<?= $name;?>" <?= $field['html_attrs']; ?>></select>
 					<? } ?>
 					<? break;
 					

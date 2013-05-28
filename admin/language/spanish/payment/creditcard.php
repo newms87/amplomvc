@@ -2,7 +2,7 @@
 // Heading
 $_['heading_title']		= 'Credit Card';
 
-// Text 
+// Text
 $_['text_payment']		= 'Pago';
 $_['text_success']		= 'Success: You have modified Credit Card account details!';
 

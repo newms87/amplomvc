@@ -30,7 +30,7 @@ class ControllerModuleJanrain extends Controller {
 		$configs = array(
 				'janrain_api_key','janrain_application_domain','janrain_login_redir',
 				'janrain_logout_redir','janrain_display_type','janrain_display_icons',
-				);			
+				);
 		foreach($configs as $config){
 			$this->data[$config] = isset($_POST[$config])?$_POST[$config]:$this->config->get($config);
 		}
@@ -41,7 +41,7 @@ class ControllerModuleJanrain extends Controller {
 		
 		if (isset($_POST['janrain_module'])) {
 			$this->data['modules'] = $_POST['janrain_module'];
-		} elseif ($this->config->get('janrain_module')) { 
+		} elseif ($this->config->get('janrain_module')) {
 			$this->data['modules'] = $this->config->get('janrain_module');
 		}
 
@@ -60,7 +60,7 @@ class ControllerModuleJanrain extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 	
 	public function install(){
@@ -72,7 +72,7 @@ class ControllerModuleJanrain extends Controller {
 					`identifier` varchar(255) NOT NULL,
 					`register_date` datetime NOT NULL,
 					`lastvisit_date` datetime NOT NULL,
-				PRIMARY KEY (`id`) 
+				PRIMARY KEY (`id`)
 				)";
 		$this->db->query( $query );
 	}

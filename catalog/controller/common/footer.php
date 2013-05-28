@@ -1,4 +1,4 @@
-<?php  
+<?php
 class ControllerCommonFooter extends Controller {
 	protected function index() {
 		$this->template->load('common/footer');

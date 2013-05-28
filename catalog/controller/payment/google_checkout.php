@@ -4,7 +4,7 @@ class ControllerPaymentGoogleCheckout extends Controller {
 		$this->template->load('payment/google_checkout');
 
 		if (!$this->config->get('google_checkout_test')) {
-			$this->data['action'] = 'https://checkout.google.com/api/checkout/v2/checkout/Merchant/' . $this->config->get('google_checkout_merchant_id');	
+			$this->data['action'] = 'https://checkout.google.com/api/checkout/v2/checkout/Merchant/' . $this->config->get('google_checkout_merchant_id');
 		} else {
 			$this->data['action'] = 'https://sandbox.google.com/checkout/api/checkout/v2/checkout/Merchant/' . $this->config->get('google_checkout_merchant_id');
 		}
@@ -16,7 +16,7 @@ class ControllerPaymentGoogleCheckout extends Controller {
 		
 		$products = $this->cart->getProducts();
 		
-		foreach ($products as $product) { 
+		foreach ($products as $product) {
 			$option_data = array();
 			
 			foreach ($product['option'] as $option) {
@@ -31,18 +31,18 @@ class ControllerPaymentGoogleCheckout extends Controller {
 			
 			$xml .= '			<item>';
 			$xml .= '				<merchant-item-id>' . $product['product_id'] . '</merchant-item-id>';
-			$xml .= '				<item-name>' . $name . '</item-name>'; 
-			$xml .= '				<item-description>' . substr(strip_tags($product['description']), 0, 299) . '</item-description>';	
+			$xml .= '				<item-name>' . $name . '</item-name>';
+			$xml .= '				<item-description>' . substr(strip_tags($product['description']), 0, 299) . '</item-description>';
 			$xml .= '				<unit-price currency="' . $this->currency->getCode() . '">' . $product['price'] . '</unit-price>';
 			$xml .= '				<quantity>' . $product['quantity'] . '</quantity>';
-			$xml .= '			</item>'; 
+			$xml .= '			</item>';
 		}
 		
 		$xml .= '		</items>';
 		$xml .= '	</shopping-cart>';
-		$xml .= '	<checkout-flow-support>';  
+		$xml .= '	<checkout-flow-support>';
 		$xml .= '		<merchant-checkout-flow-support>';
-		$xml .= '			<merchant-calculations>'; 
+		$xml .= '			<merchant-calculations>';
 		$xml .= '				<merchant-calculations-url>' . $this->url->link('payment/google_checkout/shipping') . '</merchant-calculations-url>';
 		$xml .= '			</merchant-calculations>';
 		$xml .= '			<shipping-methods>';
@@ -79,7 +79,7 @@ class ControllerPaymentGoogleCheckout extends Controller {
 		$this->data['signature'] = base64_encode($hmac);
 		
 		if (!$this->config->get('google_checkout_test')) {
-			$this->data['button'] = 'http://checkout.google.com/checkout/buttons/checkout.gif?merchant_id=' . $this->config->get('google_checkout_merchant_id') . '&w=180&h=46&style=white&variant=text&loc=en_US';	
+			$this->data['button'] = 'http://checkout.google.com/checkout/buttons/checkout.gif?merchant_id=' . $this->config->get('google_checkout_merchant_id') . '&w=180&h=46&style=white&variant=text&loc=en_US';
 		} else {
 			$this->data['button'] = 'http://sandbox.google.com/checkout/buttons/checkout.gif?merchant_id=' . $this->config->get('google_checkout_merchant_id') . '&w=180&h=46&style=white&variant=text&loc=en_US';
 		}

@@ -165,9 +165,9 @@ elFinder.prototype.commands.resize = function() {
 
 									e.stopPropagation();
 								
-									if ((c >= 37 && c <= 40) 
-									|| c == $.ui.keyCode.BACKSPACE 
-									|| c == $.ui.keyCode.DELETE 
+									if ((c >= 37 && c <= 40)
+									|| c == $.ui.keyCode.BACKSPACE
+									|| c == $.ui.keyCode.DELETE
 									|| (c == 65 && (e.ctrlKey||e.metaKey))
 									|| c == 27) {
 										return;
@@ -634,7 +634,7 @@ elFinder.prototype.commands.resize = function() {
 	var findProperty = function (styleObject, styleArgs) {
 		var i = 0 ;
 		for( i in styleArgs) {
-	        if (typeof styleObject[styleArgs[i]] != 'undefined') 
+	        if (typeof styleObject[styleArgs[i]] != 'undefined')
 	        	return styleArgs[i];
 		}
 		styleObject[styleArgs[i]] = '';
@@ -652,12 +652,12 @@ elFinder.prototype.commands.resize = function() {
 	};
 	$.cssHooks.transform = {
 		get: function(elem, computed, extra) {
-			var name = findProperty( elem.style , 
+			var name = findProperty( elem.style ,
 				['WebkitTransform', 'MozTransform', 'OTransform' , 'msTransform' , 'transform'] );
 			return elem.style[name];
 		},
 		set: function(elem, value) {
-			var name = findProperty( elem.style , 
+			var name = findProperty( elem.style ,
 				['WebkitTransform', 'MozTransform', 'OTransform' , 'msTransform' , 'transform'] );
 			elem.style[name] = value;
 			return value;
@@ -675,7 +675,7 @@ elFinder.prototype.commands.resize = function() {
 				return  ( r && r[1])? parseInt(r[1]) : 0;
 			}
 		}
-		this.css('transform', 
+		this.css('transform',
 			this.css('transform').replace(/none|rotate\(.*?\)/, '') + 'rotate(' + parseInt(val) + 'deg)');
 		return this;
 	};
@@ -751,12 +751,12 @@ elFinder.prototype.commands.resize = function() {
 			m22 *= cosX;
 
 			element.style.filter =  (element.style.filter || '').replace(/progid:DXImageTransform\.Microsoft\.Matrix\([^)]*\)/, "" ) +
-				("progid:DXImageTransform.Microsoft.Matrix(" + 
-					 "M11=" + m11 + 
-					",M12=" + m12 + 
-					",M21=" + m21 + 
-					",M22=" + m22 + 
-					",FilterType='bilinear',sizingMethod='auto expand')") 
+				("progid:DXImageTransform.Microsoft.Matrix(" +
+					 "M11=" + m11 +
+					",M12=" + m12 +
+					",M21=" + m21 +
+					",M22=" + m22 +
+					",FilterType='bilinear',sizingMethod='auto expand')")
 				;
 
 	  		var ow = parseInt(element.style.width || element.width || 0 );

@@ -25,7 +25,7 @@ $_['text_customer']					= 'Total Customers';
 $_['text_portal_welcome']			= 'Welcome to BettyConfidential\'s Designer Portal.';
 $_['text_portal_description']		= 'Please use the navigation at the top to insert your products, update your designer\'s information, or update your account information.';
 
-// Column 
+// Column
 $_['column_order']						= 'Order ID';
 $_['column_customer']					= 'Customer';
 $_['column_status']					= 'Status';

@@ -2,7 +2,7 @@
 // Heading
 $_['heading_title']		= 'Retrait au Magasin';
 
-// Text 
+// Text
 $_['text_shipping']		= 'Livraison';
 $_['text_success']		= 'F&eacute;licitations, vous avez modifi&eacute; le <b>Retrait au Magasin</b> avec succ&egrave;s !';
 

@@ -1,10 +1,10 @@
-<?php 
+<?php
 
 /**
  * @param $product_id - Required, the product ID to generate the options template for
- * 
+ *
  * @return Product options template
- * 
+ *
  */
 class ControllerProductBlockOptions extends Controller {
 	

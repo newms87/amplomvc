@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerCatalogCollection extends Controller {
 	
 	public function index() {
@@ -243,10 +243,6 @@ class ControllerCatalogCollection extends Controller {
 		
 		$this->pagination->init();
 		$this->pagination->total = $collection_total;
-		$this->pagination->limit = $limit;
-		$this->pagination->page = $page;
-		$this->pagination->url = $this->url->link('catalog/collection', $url_query);
-		
 		$this->data['pagination'] = $this->pagination->render();
 		
 		//Template Children

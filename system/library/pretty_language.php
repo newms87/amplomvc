@@ -1,4 +1,4 @@
-<?php 
+<?php
 class PrettyLanguage{
 	function __construct(){
 		
@@ -351,7 +351,7 @@ class PrettyLanguage{
 						echo "ERROR PREG";
 						exit;
 					}
-				} 
+				}
 			}
 			$this->print_lines($orig_lines, $lines, true);
 			file_put_contents($file, implode("\n", $lines));

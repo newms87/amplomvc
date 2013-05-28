@@ -4,7 +4,7 @@ class ModelLocalisationZone extends Model {
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "zone WHERE zone_id = '" . (int)$zone_id . "' AND status = '1'");
 		
 		return $query->row;
-	}		
+	}
 	
 	public function getZoneName($zone_id) {
 		$query = $this->query("SELECT name FROM " . DB_PREFIX . "zone WHERE zone_id = '" . (int)$zone_id . "' AND status = '1'");

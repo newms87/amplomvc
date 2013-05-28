@@ -7,7 +7,7 @@
 // License	: GNU LGPL (http://www.gnu.org/copyleft/lesser.html)
 // 	----------------------------------------------------------------------------
 // 	Copyright (C) 2008-2010  Nicola Asuni - Tecnick.com S.r.l.
-// 	
+//
 // This file is part of TCPDF software library.
 //
 // TCPDF is free software: you can redistribute it and/or modify it
@@ -50,7 +50,7 @@
 */
 
 /**
- * 
+ *
  * @param string $fontfile path to font file (TTF, OTF or PFB).
  * @param string $fmfile font metrics file (UFM or AFM).
  * @param boolean $embedded Set to false to not embed the font, true otherwise (default).
@@ -611,5 +611,5 @@ if (count($arg) >= 3) {
 }
 
 //============================================================+
-// END OF FILE																
+// END OF FILE
 //============================================================+

@@ -2,7 +2,7 @@
 // Heading
 $_['heading_title']			= 'PayPal Express';
 
-// Text 
+// Text
 $_['text_payment']			= 'Paiement';
 $_['text_success']			= 'F&eacute;licitations, vous avez modifi&eacute; les d&eacute;tails du paiement <b>PayPal Express</b> avec succ&egrave;s !';
 $_['text_pp_express']		= '<a onclick="window.open(&#8217;https://www.paypal.com/fr/mrb/pal=W9TBB5DTD6QJW&#8217;);"><img src="view/theme/default/image/payment/paypal.png" alt="PayPal" title="PayPal" style="border: 1px solid #EEEEEE;" /></a>';
@@ -23,6 +23,6 @@ $_['entry_sort_order']		= 'Classement :';
 
 // Error
 $_['error_permission']		= 'Attention, vous n&#8217;avez pas la permission de modifier le paiement <b>PayPal Express</b> !';
-$_['error_username']		= 'Attention, le nom de l&#8217;utilisateur API  est requis !'; 
-$_['error_password']		= 'Attention, le mot de passe  est requis !'; 
+$_['error_username']		= 'Attention, le nom de l&#8217;utilisateur API  est requis !';
+$_['error_password']		= 'Attention, le mot de passe  est requis !';
 $_['error_signature']		= 'Attention, la signature API est requise !'; 

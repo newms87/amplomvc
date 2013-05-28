@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ModelPaymentAuthorizeNetSim extends Model {
   	public function getMethod($address, $total) {
 		$this->load->language('payment/authorizenet_sim');
@@ -13,12 +13,12 @@ class ModelPaymentAuthorizeNetSim extends Model {
 			$status = true;
 		} else {
 			$status = false;
-		}	
+		}
 		
 		$method_data = array();
 	
-		if ($status) {  
-				$method_data = array( 
+		if ($status) {
+				$method_data = array(
 				'code'		=> 'authorizenet_sim',
 				'title'		=> $this->_('text_title'),
 				'sort_order' => $this->config->get('authorizenet_sim_sort_order')

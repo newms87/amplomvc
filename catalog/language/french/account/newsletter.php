@@ -1,5 +1,5 @@
 <?php
-// Heading 
+// Heading
 $_['heading_title']		= 'Abonnement &agrave; la lettre d&#8217;information';
 
 // Text

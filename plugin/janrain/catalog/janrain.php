@@ -1,4 +1,4 @@
-<?php	
+<?php
 class ControllerPlugin_JanrainCatalogJanrain extends Controller {
 	
 	public function janrain_header(){

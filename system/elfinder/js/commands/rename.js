@@ -1,6 +1,6 @@
 "use strict";
 /**
- * @class elFinder command "rename". 
+ * @class elFinder command "rename".
  * Rename selected file.
  *
  * @author Dmitry (dio) Levashov, dio@std42.ru

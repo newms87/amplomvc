@@ -41,7 +41,7 @@ class ModelShippingCitylink extends Model {
 					'title'		=> $this->_('text_title') . '  (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class_id')) . ')',
 					'cost'			=> $cost,
 					'tax_class_id' => $this->config->get('citylink_tax_class_id'),
-					'text'			=> $this->currency->format($this->tax->calculate($cost, $this->config->get('citylink_tax_class_id'), $this->config->get('config_show_price_with_tax')))
+					'text'			=> $this->currency->format($this->tax->calculate($cost, $this->config->get('citylink_tax_class_id')))
 					);
 				
 					$method_data = array(

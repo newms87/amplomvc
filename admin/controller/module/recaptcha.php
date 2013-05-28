@@ -2,7 +2,7 @@
 class ControllerModuleRecaptcha extends Controller {
 	
 
-	public function index() {	
+	public function index() {
 		$this->template->load('module/recaptcha');
 
 		$this->load->language('module/recaptcha');

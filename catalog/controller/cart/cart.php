@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerCartCart extends Controller {
 	
 	public function index() {
@@ -27,12 +27,12 @@ class ControllerCartCart extends Controller {
 		}
 		$this->data['show_voucher'] = $this->template->option('show_voucher');
 		
-		if($this->config->get('reward_status') && $this->customer->getRewardPoints() && $this->cart->getTotalPoints() > 0){	
+		if($this->config->get('reward_status') && $this->customer->getRewardPoints() && $this->cart->getTotalPoints() > 0){
 			$this->data['block_reward'] = $this->getBlock('cart', 'reward');
 		}
 		$this->data['show_reward'] = $this->template->option('show_reward');
 		
-		if($this->config->get('shipping_status') && $this->cart->hasShipping()){  
+		if($this->config->get('shipping_status') && $this->cart->hasShipping()){
 			$this->data['block_shipping'] = $this->getBlock('cart', 'shipping');
 		}
 		$this->data['show_shipping'] = $this->template->option('show_shipping');

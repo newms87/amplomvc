@@ -1,8 +1,8 @@
 <?php
-class ControllerShippingItem extends Controller { 
+class ControllerShippingItem extends Controller {
 	
 	
-	public function index() {  
+	public function index() {
 		$this->template->load('shipping/item');
 
 		$this->load->language('shipping/item');
@@ -10,7 +10,7 @@ class ControllerShippingItem extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('item', $_POST);		
+			$this->model_setting_setting->editSetting('item', $_POST);
 
 			$this->message->add('success', $this->_('text_success'));
 									
@@ -59,7 +59,7 @@ class ControllerShippingItem extends Controller {
 			$this->data['item_sort_order'] = $_POST['item_sort_order'];
 		} else {
 			$this->data['item_sort_order'] = $this->config->get('item_sort_order');
-		}	
+		}
 		
 		$this->data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
 		
@@ -78,6 +78,6 @@ class ControllerShippingItem extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

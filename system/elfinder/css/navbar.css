@@ -33,9 +33,9 @@
 .elfinder-navbar-wrapper, .elfinder-place-wrapper { }
 
 /* folder */
-.elfinder-navbar-dir { 
-	position:relative; 
-	display:block; 
+.elfinder-navbar-dir {
+	position:relative;
+	display:block;
 	white-space:nowrap;
 	padding:3px 12px;
 	margin: 0;
@@ -95,8 +95,8 @@
 .elfinder-places .elfinder-navbar-root .elfinder-navbar-icon { background-position:0 -48px; }
 
 /* icon in active/hove/dropactive state */
-.ui-state-active           .elfinder-navbar-icon, 
-.elfinder-droppable-active .elfinder-navbar-icon, 
+.ui-state-active           .elfinder-navbar-icon,
+.elfinder-droppable-active .elfinder-navbar-icon,
 .ui-state-hover            .elfinder-navbar-icon { background-position:0 -32px; }
 
 /* subdirs tree */
@@ -108,7 +108,7 @@
 
 
 /* spinner */
-.elfinder-navbar-spinner { 
+.elfinder-navbar-spinner {
 	width:14px;
 	height:14px;
 	position:absolute;

@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerPaymentAuthorizenetAim extends Controller {
 	
 
@@ -10,7 +10,7 @@ class ControllerPaymentAuthorizenetAim extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('authorizenet_aim', $_POST);				
+			$this->model_setting_setting->editSetting('authorizenet_aim', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -82,22 +82,22 @@ class ControllerPaymentAuthorizenetAim extends Controller {
 		if (isset($_POST['authorizenet_aim_total'])) {
 			$this->data['authorizenet_aim_total'] = $_POST['authorizenet_aim_total'];
 		} else {
-			$this->data['authorizenet_aim_total'] = $this->config->get('authorizenet_aim_total'); 
-		} 
+			$this->data['authorizenet_aim_total'] = $this->config->get('authorizenet_aim_total');
+		}
 				
 		if (isset($_POST['authorizenet_aim_order_status_id'])) {
 			$this->data['authorizenet_aim_order_status_id'] = $_POST['authorizenet_aim_order_status_id'];
 		} else {
-			$this->data['authorizenet_aim_order_status_id'] = $this->config->get('authorizenet_aim_order_status_id'); 
-		} 
+			$this->data['authorizenet_aim_order_status_id'] = $this->config->get('authorizenet_aim_order_status_id');
+		}
 
 		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 		
 		if (isset($_POST['authorizenet_aim_geo_zone_id'])) {
 			$this->data['authorizenet_aim_geo_zone_id'] = $_POST['authorizenet_aim_geo_zone_id'];
 		} else {
-			$this->data['authorizenet_aim_geo_zone_id'] = $this->config->get('authorizenet_aim_geo_zone_id'); 
-		} 
+			$this->data['authorizenet_aim_geo_zone_id'] = $this->config->get('authorizenet_aim_geo_zone_id');
+		}
 		
 		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 		
@@ -134,6 +134,6 @@ class ControllerPaymentAuthorizenetAim extends Controller {
 			$this->error['key'] = $this->_('error_key');
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

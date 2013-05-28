@@ -10,7 +10,7 @@ class ControllerModuleFlashsaleSidebar extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('flashsale_sidebar', $_POST);		
+			$this->model_setting_setting->editSetting('flashsale_sidebar', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -30,7 +30,7 @@ class ControllerModuleFlashsaleSidebar extends Controller {
 			$this->data['modules'] = $_POST['flashsale_sidebar_module'];
 		} elseif ($this->config->get('flashsale_sidebar_module')) {
 			$this->data['modules'] = $this->config->get('flashsale_sidebar_module');
-		}		
+		}
 		
 		$this->data['layouts'] = $this->model_design_layout->getLayouts();
 		
@@ -52,6 +52,6 @@ class ControllerModuleFlashsaleSidebar extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 				
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

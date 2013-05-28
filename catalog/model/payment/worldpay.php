@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ModelPaymentWorldPay extends Model {
   	public function getMethod($address, $total) {
 		$this->load->language('payment/worldpay');
@@ -13,12 +13,12 @@ class ModelPaymentWorldPay extends Model {
 			$status = true;
 		} else {
 			$status = false;
-		}	
+		}
 		
 		$method_data = array();
 	
-		if ($status) {  
-				$method_data = array( 
+		if ($status) {
+				$method_data = array(
 				'code'		=> 'worldpay',
 				'title'		=> $this->_('text_title'),
 				'sort_order' => $this->config->get('worldpay_sort_order')

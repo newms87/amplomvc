@@ -1,8 +1,8 @@
-<?php 
-class ControllerToolBackup extends Controller { 
+<?php
+class ControllerToolBackup extends Controller {
 	
 	
-	public function index() {		
+	public function index() {
 		$this->template->load('tool/backup');
 
 		$this->load->language('tool/backup');
@@ -78,6 +78,6 @@ class ControllerToolBackup extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		return $this->error ? false : true;		
+		return $this->error ? false : true;
 	}
 }

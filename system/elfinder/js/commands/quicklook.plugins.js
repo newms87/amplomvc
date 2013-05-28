@@ -16,7 +16,7 @@ elFinder.prototype.commands.quicklook.plugins = [
 			
 			if (mime.indexOf('image/') === 0 && $.inArray(mime, mimes)) {
 				mimes.push(mime);
-			} 
+			}
 		});
 			
 		preview.bind('update', function(e) {
@@ -31,7 +31,7 @@ elFinder.prototype.commands.quicklook.plugins = [
 					.hide()
 					.appendTo(preview)
 					.load(function() {
-						// timeout - because of strange safari bug - 
+						// timeout - because of strange safari bug -
 						// sometimes cant get image height 0_o
 						setTimeout(function() {
 							var prop = (img.width()/img.height()).toFixed(2);
@@ -175,9 +175,9 @@ elFinder.prototype.commands.quicklook.plugins = [
 				node = $('<iframe class="elfinder-quicklook-preview-pdf"/>')
 					.hide()
 					.appendTo(preview)
-					.load(function() { 
+					.load(function() {
 						ql.hideinfo();
-						node.show(); 
+						node.show();
 					})
 					.attr('src', fm.url(file.hash));
 			}

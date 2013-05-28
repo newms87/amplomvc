@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerAccountLogin extends Controller {
 	
 	public function index() {
@@ -11,7 +11,7 @@ class ControllerAccountLogin extends Controller {
 			$customer_info = $this->model_account_customer->getCustomerByToken($_COOKIE['customer_token']);
 			
 			if ($customer_info && $this->customer->login($customer_info['email'], '', true)) {
-				$this->url->redirect($this->url->link('account/account')); 
+				$this->url->redirect($this->url->link('account/account'));
 			}
 		}
 		
@@ -24,14 +24,12 @@ class ControllerAccountLogin extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 								
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			unset($this->session->data['guest']);
-			
 			if (!empty($_POST['redirect'])) {
 				$this->url->redirect(str_replace('&amp;', '&', $_POST['redirect']));
 			} else {
 				$this->url->redirect($this->url->link('account/account'));
 			}
-		}  
+		}
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
@@ -57,7 +55,7 @@ class ControllerAccountLogin extends Controller {
 			'common/content_top',
 			'common/content_bottom',
 			'common/footer',
-			'common/header'	
+			'common/header'
 		);
 						
 		$this->response->setOutput($this->render());

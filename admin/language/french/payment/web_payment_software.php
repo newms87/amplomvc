@@ -2,7 +2,7 @@
 // Heading
 $_['heading_title']				= 'Web Payment Software';
 
-// Text 
+// Text
 $_['text_payment']				= 'Paiement';
 $_['text_success']				= 'F&eacute;licitations, vous avez modifi&eacute; les d&eacute;tails du paiement <b>Web Payment Software</b> avec succ&egrave;s !';
 $_['text_web_payment_software']	= '<a onclick="window.open(\'http://www.web-payment-software.com/\');"><img src="view/theme/default/image/payment/wps-logo.jpg" alt="Web Payment Software" title="Web Payment Software" style="border: 1px solid #EEEEEE;" /></a>';
@@ -22,7 +22,7 @@ $_['entry_geo_zone']			= 'Zone g&eacute;ographique :';
 $_['entry_status']				= '&Eacute;tat :';
 $_['entry_sort_order']			= 'Classement :';
 
-// Error 
+// Error
 $_['error_permission']			= 'Attention, vous n&#8217;avez pas la permission de modifier le paiement <b>Web Payment Software</b> !';
 $_['error_login']				= 'L&#8217;Identification marchand est requise !';
 $_['error_key']					= 'La cl&eacute; de transaction est requise !';

@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerPaymentSagepayUS extends Controller {
 	
 
@@ -10,7 +10,7 @@ class ControllerPaymentSagepayUS extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('sagepay_us', $_POST);				
+			$this->model_setting_setting->editSetting('sagepay_us', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -58,22 +58,22 @@ class ControllerPaymentSagepayUS extends Controller {
 		if (isset($_POST['sagepay_us_total'])) {
 			$this->data['sagepay_us_total'] = $_POST['sagepay_us_total'];
 		} else {
-			$this->data['sagepay_us_total'] = $this->config->get('sagepay_us_total'); 
-		} 
+			$this->data['sagepay_us_total'] = $this->config->get('sagepay_us_total');
+		}
 		
 		if (isset($_POST['sagepay_us_order_status_id'])) {
 			$this->data['sagepay_us_order_status_id'] = $_POST['sagepay_us_order_status_id'];
 		} else {
-			$this->data['sagepay_us_order_status_id'] = $this->config->get('sagepay_us_order_status_id'); 
-		} 
+			$this->data['sagepay_us_order_status_id'] = $this->config->get('sagepay_us_order_status_id');
+		}
 
 		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 		
 		if (isset($_POST['sagepay_us_geo_zone_id'])) {
 			$this->data['sagepay_us_geo_zone_id'] = $_POST['sagepay_us_geo_zone_id'];
 		} else {
-			$this->data['sagepay_us_geo_zone_id'] = $this->config->get('sagepay_us_geo_zone_id'); 
-		} 
+			$this->data['sagepay_us_geo_zone_id'] = $this->config->get('sagepay_us_geo_zone_id');
+		}
 		
 		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 		
@@ -110,6 +110,6 @@ class ControllerPaymentSagepayUS extends Controller {
 			$this->error['merchant_key'] = $this->_('error_merchant_key');
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

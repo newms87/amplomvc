@@ -1,5 +1,5 @@
-<?php 
-class ControllerDesignersDesigners extends Controller {  
+<?php
+class ControllerDesignersDesigners extends Controller {
 	public function index() {
 		$designer_id = isset($_GET['designer_id'])?$_GET['designer_id']:false;
 		
@@ -45,13 +45,13 @@ class ControllerDesignersDesigners extends Controller {
 				$article_list = $this->model_catalog_designer->getDesignerArticles($designer_id);
 				
 				
-				//This specifies the location of the articles by number inserted 
+				//This specifies the location of the articles by number inserted
 				$art_loc = array(
 					0=>array('from'=>1,'to'=>min(5,count($products)-1)),
 					1=>array('from'=>3,'to'=>count($products)-1),
 				);
 				
-				$count = 0; 
+				$count = 0;
 				foreach($article_list as $a){
 					$articles[$a['article_id']] = $a;
 					$articles[$a['article_id']]['description'] = html_entity_decode($a['description']);
@@ -168,7 +168,7 @@ class ControllerDesignersDesigners extends Controller {
 			'common/header'
 		);
 		
-		$this->response->setOutput($this->render()); 
+		$this->response->setOutput($this->render());
 	}
 
 	public function update_statuses(){

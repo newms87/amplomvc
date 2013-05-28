@@ -1,5 +1,5 @@
-<?php 
-class ControllerCatalogFlashsale extends Controller { 
+<?php
+class ControllerCatalogFlashsale extends Controller {
 	
  
 	public function index() {
@@ -18,7 +18,7 @@ class ControllerCatalogFlashsale extends Controller {
 
 			$this->message->add('success', $this->_('text_success'));
 			
-			$this->url->redirect($this->url->link('catalog/flashsale')); 
+			$this->url->redirect($this->url->link('catalog/flashsale'));
 		}
 
 		$this->getForm();
@@ -106,7 +106,7 @@ class ControllerCatalogFlashsale extends Controller {
 			else{
 				$data[$key] = $$key = $default;
 			}
-		}  
+		}
 		
 		$filter_list = array(
 			'filter'				=>'',
@@ -202,10 +202,6 @@ class ControllerCatalogFlashsale extends Controller {
 
 		$this->pagination->init();
 		$this->pagination->total = $flashsale_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('catalog/flashsale', $url);
-			
 		$this->data['pagination'] = $this->pagination->render();
 
 		$this->data['sort'] = $sort;
@@ -373,7 +369,7 @@ class ControllerCatalogFlashsale extends Controller {
 		}
  
 		if (!$this->error) {
-			return true; 
+			return true;
 		} else {
 			return false;
 		}

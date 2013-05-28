@@ -1,4 +1,4 @@
-<?php	
+<?php
 class ControllerExtrasBlockSocialMedia extends Controller {
 	public function index($settings, $type = 'standard') {
 		switch($type){

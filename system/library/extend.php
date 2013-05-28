@@ -89,7 +89,7 @@ class Extend {
 				foreach($routes as $route){
 					$layout['layout_route'][] = array(
 						'store_id' => $store['store_id'],
-						'route' => $route 
+						'route' => $route
 					);
 				}
 			}

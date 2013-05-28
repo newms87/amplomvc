@@ -67,7 +67,7 @@ $.fn.elfinderplaces = function(fm, opts) {
 							return !node.insertBefore(current);
 						}
 					});
-				} 
+				}
 				
 				dirs.push(dir.hash);
 				!node.parent().length && subtree.append(node);
@@ -102,7 +102,7 @@ $.fn.elfinderplaces = function(fm, opts) {
 						}
 					}
 				});
-			}, 
+			},
 			/**
 			 * Remove dir from places
 			 *
@@ -133,7 +133,7 @@ $.fn.elfinderplaces = function(fm, opts) {
 			 * @type jQuery
 			 **/
 			wrapper = create({
-					hash  : 'root-'+fm.namespace, 
+					hash  : 'root-'+fm.namespace,
 					name  : fm.i18n(opts.name, 'places'),
 					read  : true,
 					write : true

@@ -8,7 +8,7 @@ class ModelDesignLayout extends Model {
 				$layout_route['layout_id'] = $layout_id;
 				
 				$this->insert('layout_route', $layout_route);
-			}	
+			}
 		}
 		
 		return $layout_id;
@@ -24,7 +24,7 @@ class ModelDesignLayout extends Model {
 				$layout_route['layout_id'] = $layout_id;
 				
 				$this->insert('layout_route', $layout_route);
-			}	
+			}
 		}
 	}
 	
@@ -121,5 +121,5 @@ class ModelDesignLayout extends Model {
 		
 	public function getTotalLayouts($data = array()) {
 		return $this->getLayouts($data, null, true);
-	}	
+	}
 }

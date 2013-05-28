@@ -1,43 +1,43 @@
 <?= $header; ?>
 <div class="content">
-  <?= $this->builder->display_breadcrumbs();?>
-  <?= $this->builder->display_errors($errors);?>
-  <div class="box">
-    <div class="heading">
-      <h1><img src="<?= HTTP_THEME_IMAGE . 'user.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
-      <div class="buttons">
-      	<a onclick="submit_navigation_form()" class="button"><?= $button_save; ?></a>
-      	<a onclick="location = '<?= $cancel; ?>';" class="button"><?= $button_cancel; ?></a>
-    	</div>
-    </div>
-    <div class="content">
-      <form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
-        <table class="form">
-          <tr>
-            <td><span class="required"></span> <?= $entry_name; ?></td>
-            <td><input type="text" name="name" value="<?= $name; ?>" /></td>
-          </tr>
-          <tr>
-            <td><span class="required"></span> <?= $entry_store; ?></td>
-            <? $this->builder->set_config('store_id', 'name');?>
-            <td><?= $this->builder->build('multiselect', $data_stores, "stores", $stores);?></td>
-          </tr>
-          <tr>
-            <td><?= $entry_status; ?></td>
-            <td><?=$this->builder->build('select',$data_statuses,'status',(int)$status);?></td>
-          </tr>
-          
-          <tr id="links_list_data">
-          	<td colspan="2">
-          		<div id='links_list' class='box'>
-		       	<div class='heading'><h3><?= $entry_links;?></h3></div>
-		       	
-		       	<div class="content">
-		       		<div class="left">
-				       	<div id='new_navigation_link'>
-				       		<div class="editable">
-				       			<input type="hidden" class="parent_id" name="links[%link_num%][parent_id]" value="0" />
-				       			<div class="link_entry_display_name">
+	<?= $this->builder->display_breadcrumbs();?>
+	<?= $this->builder->display_errors($errors);?>
+	<div class="box">
+		<div class="heading">
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'user.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
+			<div class="buttons">
+				<a onclick="submit_navigation_form()" class="button"><?= $button_save; ?></a>
+				<a onclick="location = '<?= $cancel; ?>';" class="button"><?= $button_cancel; ?></a>
+			</div>
+		</div>
+		<div class="content">
+			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
+				<table class="form">
+					<tr>
+						<td><span class="required"></span> <?= $entry_name; ?></td>
+						<td><input type="text" name="name" value="<?= $name; ?>" /></td>
+					</tr>
+					<tr>
+						<td><span class="required"></span> <?= $entry_store; ?></td>
+						<? $this->builder->set_config('store_id', 'name');?>
+						<td><?= $this->builder->build('multiselect', $data_stores, "stores", $stores);?></td>
+					</tr>
+					<tr>
+						<td><?= $entry_status; ?></td>
+						<td><?=$this->builder->build('select',$data_statuses,'status',(int)$status);?></td>
+					</tr>
+					
+					<tr id="links_list_data">
+						<td colspan="2">
+							<div id='links_list' class='box'>
+						<div class='heading'><h3><?= $entry_links;?></h3></div>
+						
+						<div class="content">
+							<div class="left">
+								<div id='new_navigation_link'>
+									<div class="editable">
+										<input type="hidden" class="parent_id" name="links[%link_num%][parent_id]" value="0" />
+										<div class="link_entry_display_name">
 										<label for="link_display_name_%link_num%"><?=$entry_link_display_name;?></label>
 										<input id='link_display_name_%link_num%' type="text" name="links[%link_num%][display_name]" onkeyup="update_display_name($(this));" value="" />
 									</div>
@@ -71,8 +71,8 @@
 							</div>
 						</div>
 						<div class="right">
-				       	<ul id='sorted_links'>
-			       		<? $max_link = 0;?>
+								<ul id='sorted_links'>
+								<? $max_link = 0;?>
 							<? foreach($links as $link_num => $link){ ?>
 								<? if(isset($link['navigation_id'])) $link_num = $link['navigation_id']; ?>
 								<? $max_link = max($max_link, $link_num);?>
@@ -116,19 +116,19 @@
 								</li>
 							<? } ?>
 							<? $max_link++;?>
-				       	</ul>
-				       </div>
-		       	 </div>
-		       </div>
-          	</td>
-          </tr>
-        </table>
-       </div>
-      </form>
-    </div>
-  </div>
+								</ul>
+							</div>
+						</div>
+					</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			</form>
+		</div>
+	</div>
 </div>
-<?= $footer; ?> 
+<?= $footer; ?>
 
 <script type="text/javascript">//<!--
 $(document).ready(function(){
@@ -197,7 +197,7 @@ function build_link_tree(ul, parent_id){
 	if(!ul.children().length) return;
 	
 	ul.children().each(function(i,e){
-		$(e).children('.link_info').children('.editable').children('.parent_id').val(parent_id);		
+		$(e).children('.link_info').children('.editable').children('.parent_id').val(parent_id);
 		build_link_tree($(e).children('ul'), $(e).attr('link_id'));
 	});
 }

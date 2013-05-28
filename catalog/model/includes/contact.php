@@ -49,6 +49,6 @@ class ModelIncludesContact extends Model {
 				$p['number'] = preg_replace("/[^\d]/","",$p['number']);
 			}
 		}
-		return $phone; 
+		return $phone;
 	}
 }

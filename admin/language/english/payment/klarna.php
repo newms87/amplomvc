@@ -15,7 +15,7 @@ $_['entry_server']		= 'Server:';
 $_['entry_test']			= 'Test Mode:';
 $_['entry_invoice']		= 'Invoice:<br /><span class="help">Do you want to enable invoice auto activate?</span>';
 $_['entry_invoice_delay'] = 'Invoice Delay:<br /><span class="help">When auto activating delay sending the invoice for x days.</span>';
-$_['entry_total']			= 'Total:<br /><span class="help">The checkout total the order must reach before this payment method becomes active.</span>';		
+$_['entry_total']			= 'Total:<br /><span class="help">The checkout total the order must reach before this payment method becomes active.</span>';
 $_['entry_order_status']  = 'Order Status:';
 $_['entry_status']		= 'Status:';
 $_['entry_sort_order']	= 'Sort Order:';

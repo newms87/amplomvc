@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerPaymentSagepayDirect extends Controller {
 	
 
@@ -10,7 +10,7 @@ class ControllerPaymentSagepayDirect extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('sagepay_direct', $_POST);				
+			$this->model_setting_setting->editSetting('sagepay_direct', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -65,22 +65,22 @@ class ControllerPaymentSagepayDirect extends Controller {
 		if (isset($_POST['sagepay_direct_total'])) {
 			$this->data['sagepay_direct_total'] = $_POST['sagepay_direct_total'];
 		} else {
-			$this->data['sagepay_direct_total'] = $this->config->get('sagepay_direct_total'); 
-		} 
+			$this->data['sagepay_direct_total'] = $this->config->get('sagepay_direct_total');
+		}
 				
 		if (isset($_POST['sagepay_direct_order_status_id'])) {
 			$this->data['sagepay_direct_order_status_id'] = $_POST['sagepay_direct_order_status_id'];
 		} else {
-			$this->data['sagepay_direct_order_status_id'] = $this->config->get('sagepay_direct_order_status_id'); 
-		} 
+			$this->data['sagepay_direct_order_status_id'] = $this->config->get('sagepay_direct_order_status_id');
+		}
 
 		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 		
 		if (isset($_POST['sagepay_direct_geo_zone_id'])) {
 			$this->data['sagepay_direct_geo_zone_id'] = $_POST['sagepay_direct_geo_zone_id'];
 		} else {
-			$this->data['sagepay_direct_geo_zone_id'] = $this->config->get('sagepay_direct_geo_zone_id'); 
-		} 
+			$this->data['sagepay_direct_geo_zone_id'] = $this->config->get('sagepay_direct_geo_zone_id');
+		}
 		
 		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 		
@@ -113,6 +113,6 @@ class ControllerPaymentSagepayDirect extends Controller {
 			$this->error['vendor'] = $this->_('error_vendor');
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

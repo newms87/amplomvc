@@ -20,7 +20,7 @@ $.fn.elfinderbutton = function(cmd) {
 				.attr('title', cmd.title)
 				.append('<span class="elfinder-button-icon elfinder-button-icon-'+cmd.name+'"/>')
 				.hover(function(e) { !button.is('.'+disabled) && button[e.type == 'mouseleave' ? 'removeClass' : 'addClass'](hover) /**button.toggleClass(hover);*/ })
-				.click(function(e) { 
+				.click(function(e) {
 					if (!button.is('.'+disabled)) {
 						if (menu && cmd.variants.length > 1) {
 							// close other menus
@@ -61,7 +61,7 @@ $.fn.elfinderbutton = function(cmd) {
 					menu.append($('<div class="'+item+'">'+variant[1]+'</div>').data('value', variant[0]).addClass(variant[0] == cmd.value ? selected : ''));
 				});
 			});
-		}	
+		}
 			
 		cmd.change(function() {
 			if (cmd.disabled()) {

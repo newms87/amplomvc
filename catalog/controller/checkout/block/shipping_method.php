@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerCheckoutBlockShippingMethod extends Controller {
   	public function index() {
   		$this->language->load('checkout/checkout');
@@ -42,12 +42,12 @@ class ControllerCheckoutBlockShippingMethod extends Controller {
 	public function validate() {
 		$this->language->load('checkout/checkout');
 		
-		$json = array();		
+		$json = array();
 		
 		// Validate cart contents
 		if (!$this->cart->validate()) {
 			$this->message->add('warning', $this->cart->get_errors());
-			$json['redirect'] = $this->url->link('cart/cart');				
+			$json['redirect'] = $this->url->link('cart/cart');
 		}
 		elseif (!$this->cart->hasShipping()) {
 			$this->message->add('warning', $this->_('error_no_shipping_required'));
@@ -61,9 +61,9 @@ class ControllerCheckoutBlockShippingMethod extends Controller {
 				if(!$this->cart->setShippingMethod($_POST['shipping_method'])){
 					$json['error']['shipping_method'] = $this->cart->get_errors('shipping_method');
 				}
-			}							
+			}
 		}
-		
-		$this->response->setOutput(json_encode($json));	
+
+		$this->response->setOutput(json_encode($json));
 	}
 }

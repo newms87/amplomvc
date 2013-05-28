@@ -1,6 +1,6 @@
-<?php 
-class ControllerProductSpecial extends Controller { 	
-	public function index() { 
+<?php
+class ControllerProductSpecial extends Controller {
+	public function index() {
 		$this->template->load('product/special');
 
 		$this->language->load('product/special');
@@ -37,7 +37,7 @@ class ControllerProductSpecial extends Controller {
 		
 		if (isset($_GET['sort'])) {
 			$url .= '&sort=' . $_GET['sort'];
-		}	
+		}
 
 		if (isset($_GET['order'])) {
 			$url .= '&order=' . $_GET['order'];
@@ -45,7 +45,7 @@ class ControllerProductSpecial extends Controller {
 				
 		if (isset($_GET['page'])) {
 			$url .= '&page=' . $_GET['page'];
-		}	
+		}
 		
 		if (isset($_GET['limit'])) {
 			$url .= '&limit=' . $_GET['limit'];
@@ -77,22 +77,22 @@ class ControllerProductSpecial extends Controller {
 			}
 			
 			if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-				$price = $this->currency->format($this->tax->calculate($result['price'], $result['tax_class_id'], $this->config->get('config_show_price_with_tax')));
+				$price = $this->currency->format($this->tax->calculate($result['price'], $result['tax_class_id']));
 			} else {
 				$price = false;
 			}
 			
 			if ((float)$result['special']) {
-				$special = $this->currency->format($this->tax->calculate($result['special'], $result['tax_class_id'], $this->config->get('config_show_price_with_tax')));
+				$special = $this->currency->format($this->tax->calculate($result['special'], $result['tax_class_id']));
 			} else {
 				$special = false;
-			}	
+			}
 			
 			if ($this->config->get('config_show_price_with_tax')) {
 				$tax = $this->currency->format((float)$result['special'] ? $result['special'] : $result['price']);
 			} else {
 				$tax = false;
-			}				
+			}
 			
 			if ($this->config->get('config_review_status')) {
 				$rating = (int)$result['rating'];
@@ -132,32 +132,32 @@ class ControllerProductSpecial extends Controller {
 			'text'  => $this->_('text_name_asc'),
 			'value' => 'pd.name-ASC',
 			'href'  => $this->url->link('product/special', 'sort=pd.name&order=ASC' . $url)
-		); 
+		);
 
 		$this->data['sorts'][] = array(
 			'text'  => $this->_('text_name_desc'),
 			'value' => 'pd.name-DESC',
 			'href'  => $this->url->link('product/special', 'sort=pd.name&order=DESC' . $url)
-		);  
+		);
 
 		$this->data['sorts'][] = array(
 			'text'  => $this->_('text_price_asc'),
 			'value' => 'ps.price-ASC',
 			'href'  => $this->url->link('product/special', 'sort=ps.price&order=ASC' . $url)
-		); 
+		);
 
 		$this->data['sorts'][] = array(
 			'text'  => $this->_('text_price_desc'),
 			'value' => 'ps.price-DESC',
 			'href'  => $this->url->link('product/special', 'sort=ps.price&order=DESC' . $url)
-		); 
+		);
 		
-		if ($this->config->get('config_review_status')) {	
+		if ($this->config->get('config_review_status')) {
 			$this->data['sorts'][] = array(
 				'text'  => $this->_('text_rating_desc'),
 				'value' => 'rating-DESC',
 				'href'  => $this->url->link('product/special', 'sort=rating&order=DESC' . $url)
-			); 
+			);
 				
 			$this->data['sorts'][] = array(
 				'text'  => $this->_('text_rating_asc'),
@@ -170,7 +170,7 @@ class ControllerProductSpecial extends Controller {
 				'text'  => $this->_('text_model_asc'),
 				'value' => 'p.model-ASC',
 				'href'  => $this->url->link('product/special', 'sort=p.model&order=ASC' . $url)
-		); 
+		);
 
 		$this->data['sorts'][] = array(
 			'text'  => $this->_('text_model_desc'),
@@ -182,7 +182,7 @@ class ControllerProductSpecial extends Controller {
 
 		if (isset($_GET['sort'])) {
 			$url .= '&sort=' . $_GET['sort'];
-		}	
+		}
 
 		if (isset($_GET['order'])) {
 			$url .= '&order=' . $_GET['order'];
@@ -224,7 +224,7 @@ class ControllerProductSpecial extends Controller {
 
 		if (isset($_GET['sort'])) {
 			$url .= '&sort=' . $_GET['sort'];
-		}	
+		}
 
 		if (isset($_GET['order'])) {
 			$url .= '&order=' . $_GET['order'];
@@ -236,21 +236,11 @@ class ControllerProductSpecial extends Controller {
 						
 		$this->pagination->init();
 		$this->pagination->total = $product_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $limit;
-		$this->pagination->url = $this->url->link('product/special', $url);
-			
 		$this->data['pagination'] = $this->pagination->render();
 			
 		$this->data['sort'] = $sort;
 		$this->data['order'] = $order;
 		$this->data['limit'] = $limit;
-
-
-
-
-
-
 
 		$this->children = array(
 			'common/column_left',
@@ -261,6 +251,6 @@ class ControllerProductSpecial extends Controller {
 			'common/header'
 		);
 	
-		$this->response->setOutput($this->render());			
+		$this->response->setOutput($this->render());
   	}
 }

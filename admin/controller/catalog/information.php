@@ -1,5 +1,5 @@
 <?php
-class ControllerCatalogInformation extends Controller { 
+class ControllerCatalogInformation extends Controller {
 	
 
 	public function index() {
@@ -141,7 +141,7 @@ class ControllerCatalogInformation extends Controller {
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/information', $url));
 
 		$this->data['insert'] = $this->url->link('catalog/information/insert', $url);
-		$this->data['delete'] = $this->url->link('catalog/information/delete', $url);	
+		$this->data['delete'] = $this->url->link('catalog/information/delete', $url);
 
 		$this->data['informations'] = array();
 
@@ -171,7 +171,7 @@ class ControllerCatalogInformation extends Controller {
 				'selected'		=> isset($_POST['selected']) && in_array($result['information_id'], $_POST['selected']),
 				'action'			=> $action
 			);
-		}	
+		}
 	
  		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -214,10 +214,6 @@ class ControllerCatalogInformation extends Controller {
 
 		$this->pagination->init();
 		$this->pagination->total = $information_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('catalog/information', $url);
-			
 		$this->data['pagination'] = $this->pagination->render();
 
 		$this->data['sort'] = $sort;
@@ -307,7 +303,7 @@ class ControllerCatalogInformation extends Controller {
 			$this->data['information_store'] = $this->model_catalog_information->getInformationStores($_GET['information_id']);
 		} else {
 			$this->data['information_store'] = array(0);
-		}		
+		}
 		
 		if (isset($_POST['keyword'])) {
 			$this->data['keyword'] = $_POST['keyword'];

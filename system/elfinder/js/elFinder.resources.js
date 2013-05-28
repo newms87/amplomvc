@@ -40,9 +40,9 @@ elFinder.prototype.resources = {
 	mimes : {
 		text : [
 			'application/x-empty',
-			'application/javascript', 
-			'application/xhtml+xml', 
-			'audio/x-mp3-playlist', 
+			'application/javascript',
+			'application/xhtml+xml',
+			'audio/x-mp3-playlist',
 			'application/x-web-config',
 			'application/docbook+xml',
 			'application/x-php',
@@ -111,7 +111,7 @@ elFinder.prototype.resources = {
 							fm.lockfiles({files : [id]});
 
 							fm.request({
-									data        : {cmd : cmd, name : name, target : phash}, 
+									data        : {cmd : cmd, name : name, target : phash},
 									notify      : {type : cmd, cnt : 1},
 									preventFail : true,
 									syncOnFail  : true

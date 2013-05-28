@@ -1,5 +1,5 @@
 <?php
-class ModelCheckoutOrder extends Model {	
+class ModelCheckoutOrder extends Model {
 	public function addOrder($data) {
 		//TODO Move this to plugin
 		if(!isset($data['customer_id'])){
@@ -49,7 +49,7 @@ class ModelCheckoutOrder extends Model {
 			$total['order_id'] = $order_id;
 			
 			$this->insert('order_total', $total);
-		}	
+		}
 
 		return $order_id;
 	}
@@ -65,7 +65,7 @@ class ModelCheckoutOrder extends Model {
 				$shipping_iso_code_3 = $country_query->row['iso_code_3'];
 			} else {
 				$shipping_iso_code_2 = '';
-				$shipping_iso_code_3 = '';				
+				$shipping_iso_code_3 = '';
 			}
 			
 			$zone_query = $this->query("SELECT * FROM `" . DB_PREFIX . "zone` WHERE zone_id = '" . (int)$order_query->row['shipping_zone_id'] . "'");
@@ -83,7 +83,7 @@ class ModelCheckoutOrder extends Model {
 				$payment_iso_code_3 = $country_query->row['iso_code_3'];
 			} else {
 				$payment_iso_code_2 = '';
-				$payment_iso_code_3 = '';				
+				$payment_iso_code_3 = '';
 			}
 			
 			$zone_query = $this->query("SELECT * FROM `" . DB_PREFIX . "zone` WHERE zone_id = '" . (int)$order_query->row['payment_zone_id'] . "'");
@@ -121,9 +121,9 @@ class ModelCheckoutOrder extends Model {
 			return array_merge($order_query->row, $additional_info);
 			
 		} else {
-			return false;	
+			return false;
 		}
-	}	
+	}
 	
 	public function getOrderStatus($order_id){
 		$query = $this->query("SELECT o.order_status_id, os.name FROM " . DB_PREFIX . "order o LEFT JOIN " . DB_PREFIX . "order_status os ON (o.order_status_id=os.order_status_id) WHERE o.order_id = '" . (int)$order_id . "' AND os.language_id = o.language_id");
@@ -215,8 +215,8 @@ class ModelCheckoutOrder extends Model {
 			foreach ($order_options as $option) {
 				$this->query("UPDATE " . DB_PREFIX . "product_option_value SET quantity = (quantity - " . (int)$product['quantity'] . ") WHERE product_option_value_id = '" . (int)$option['product_option_value_id'] . "' AND subtract = '1'");
 					
-				$this->query("UPDATE " . DB_PREFIX . "product_option_value_restriction SET quantity = (quantity - " . (int) $product['quantity'] . ")" . 
-					" WHERE option_value_id = '" . ($pov_to_ov[$option['product_option_value_id']]) . "' AND restrict_option_value_id IN (" . implode(',', $pov_to_ov) . ")"); 
+				$this->query("UPDATE " . DB_PREFIX . "product_option_value_restriction SET quantity = (quantity - " . (int) $product['quantity'] . ")" .
+					" WHERE option_value_id = '" . ($pov_to_ov[$option['product_option_value_id']]) . "' AND restrict_option_value_id IN (" . implode(',', $pov_to_ov) . ")");
 			}
 			
 			//Add Product Options to product data
@@ -243,14 +243,13 @@ class ModelCheckoutOrder extends Model {
 		
 		$order_info['order_vouchers'] = $order_voucher_query->rows;
 		
-		
 		// Send out any gift voucher mails
-		if ($this->config->get('config_complete_status_id') == $order_status_id) {
+		if (!empty($order_info['order_vouchers']) && $this->config->get('config_complete_status_id') == $order_status_id) {
 			$this->model_cart_voucher->confirm($order_id);
 		}
 		
 				
-		// Order Totals			
+		// Order Totals
 		$order_total_query = $this->query("SELECT * FROM `" . DB_PREFIX . "order_total` WHERE order_id = '" . (int)$order_id . "' ORDER BY sort_order ASC");
 		
 		foreach ($order_total_query->rows as $order_total) {
@@ -297,7 +296,7 @@ class ModelCheckoutOrder extends Model {
 				}
 				$v['contact'] = $query->row;
 			}
-			else{					
+			else{
 				$v['contact'] = array('street_1' => $this->config->get('config_address'));
 			}
 			
@@ -597,6 +596,11 @@ class ModelCheckoutOrder extends Model {
 	
 	
 	public function update_order($order_id, $order_status_id, $comment = '', $notify = false) {
+		
+		//TODO Remove this once we have fixed issues here...
+		trigger_error("Order::update_order() called! This has not been tested / properly implemented yet!");
+		
+		
 		$order_info = $this->getOrder($order_id);
 
 		if ($order_info && $order_info['order_status_id']) {
@@ -607,7 +611,7 @@ class ModelCheckoutOrder extends Model {
 				if ($risk_score > $this->config->get('config_fraud_score')) {
 					$order_status_id = $this->config->get('config_fraud_status_id');
 				}
-			}			
+			}
 
 			// Blacklist
 			$status = false;
@@ -628,45 +632,46 @@ class ModelCheckoutOrder extends Model {
 			
 			if ($status) {
 				$order_status_id = $this->config->get('config_order_status_id');
-			}		
+			}
 						
 			$this->query("UPDATE `" . DB_PREFIX . "order` SET order_status_id = '" . (int)$order_status_id . "', date_modified = NOW() WHERE order_id = '" . (int)$order_id . "'");
 		
 			$this->query("INSERT INTO " . DB_PREFIX . "order_history SET order_id = '" . (int)$order_id . "', order_status_id = '" . (int)$order_status_id . "', notify = '" . (int)$notify . "', comment = '" . $this->db->escape($comment) . "', date_added = NOW()");
 	
 			// Send out any gift voucher mails
-			if ($this->config->get('config_complete_status_id') == $order_status_id) {
+			//TODO : Need to impement voucher confirm first!
+			if (false || $this->config->get('config_complete_status_id') == $order_status_id) {
 				$this->model_cart_voucher->confirm($order_id);
-			}	
-	
-			if ($notify) {
-				$language = new Language($order_info['language_directory'], $this->plugin_handler);
-				$language->load($order_info['language_filename']);
-				$language->load('mail/order');
+			}
 			
-				$subject = sprintf($language->get('text_update_subject'), html_entity_decode($order_info['store_name'], ENT_QUOTES, 'UTF-8'), $order_id);
+			//TODO: Move this to mail/order controller
+			if ($notify) {
+				$language = $this->language->fetch('mail/order', $order_info['language_directory']);
+				$language += $this->language->fetch($order_info['language_filename'], $order_info['language_directory']);
+				
+				$subject = sprintf($language['text_update_subject'], html_entity_decode($order_info['store_name'], ENT_QUOTES, 'UTF-8'), $order_id);
 	
-				$message  = $language->get('text_update_order') . ' ' . $order_id . "\n";
-				$message .= $language->get('text_update_date_added') . ' ' . $this->tool->format_datetime($order_info['date_added'], $language->get('date_format_short')) . "\n\n";
+				$message  = $language['text_update_order'] . ' ' . $order_id . "\n";
+				$message .= $language['text_update_date_added'] . ' ' . $this->tool->format_datetime($order_info['date_added'], $language['date_format_short']) . "\n\n";
 				
 				$order_status_query = $this->query("SELECT * FROM " . DB_PREFIX . "order_status WHERE order_status_id = '" . (int)$order_status_id . "' AND language_id = '" . (int)$order_info['language_id'] . "'");
 				
 				if ($order_status_query->num_rows) {
-					$message .= $language->get('text_update_order_status') . "\n\n";
-					$message .= $order_status_query->row['name'] . "\n\n";					
+					$message .= $language['text_update_order_status'] . "\n\n";
+					$message .= $order_status_query->row['name'] . "\n\n";
 				}
 				
 				if ($order_info['customer_id']) {
-					$message .= $language->get('text_update_link') . "\n";
+					$message .= $language['text_update_link'] . "\n";
 					$message .= $order_info['store_url'] . 'index.php?route=account/order/info&order_id=' . $order_id . "\n\n";
 				}
 				
-				if ($comment) { 
-					$message .= $language->get('text_update_comment') . "\n\n";
+				if ($comment) {
+					$message .= $language['text_update_comment'] . "\n\n";
 					$message .= $comment . "\n\n";
 				}
 					
-				$message .= $language->get('text_update_footer');
+				$message .= $language['text_update_footer'];
 
 				$this->mail->init();
 								

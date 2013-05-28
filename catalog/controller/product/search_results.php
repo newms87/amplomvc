@@ -1,5 +1,5 @@
-<?php 
-class ControllerProductSearchResults extends Controller {  
+<?php
+class ControllerProductSearchResults extends Controller {
 	public function index() {
 		$this->template->load('product/search_results');
 		
@@ -9,14 +9,14 @@ class ControllerProductSearchResults extends Controller {
 		if(!isset($post['action']) || $post['action'] != 'betty_search'){
 			echo $this->_('no_search');
 			exit;
-		} 
+		}
 		
 		$this->data['search_category'] = "";
 		$this->data['search_country'] = "";
 		$this->data['search_color'] = '';
 
 		$search_query = array();
-		foreach($post as $key=>$p){	
+		foreach($post as $key=>$p){
 			if(!empty($p) && preg_match('/^search_/',$key))
 				$search_query[preg_replace('/search_/','',$key)] = $p;
 		}
@@ -31,7 +31,7 @@ class ControllerProductSearchResults extends Controller {
 			$results[$key]['description'] = htmlspecialchars_decode($r['description']);
 		}
 
-		$this->data['results'] = $results; 
+		$this->data['results'] = $results;
 		
 		$this->response->setOutput($this->render());
   	}

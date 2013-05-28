@@ -216,10 +216,6 @@ class ControllerLocalisationLengthClass extends Controller {
 
 		$this->pagination->init();
 		$this->pagination->total = $length_class_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('localisation/length_class', $url);
-
 		$this->data['pagination'] = $this->pagination->render();
 		
 		$this->data['sort'] = $sort;
@@ -291,7 +287,7 @@ class ControllerLocalisationLengthClass extends Controller {
 			$this->data['length_class_description'] = $this->model_localisation_length_class->getLengthClassDescriptions($_GET['length_class_id']);
 		} else {
 			$this->data['length_class_description'] = array();
-		}	
+		}
 		
 		if (isset($_POST['value'])) {
 			$this->data['value'] = $_POST['value'];
@@ -299,7 +295,7 @@ class ControllerLocalisationLengthClass extends Controller {
 			$this->data['value'] = $length_class_info['value'];
 		} else {
 			$this->data['value'] = '';
-		}			
+		}
 
 		$this->children = array(
 			'common/header',
@@ -345,5 +341,5 @@ class ControllerLocalisationLengthClass extends Controller {
 		}
 
 		return $this->error ? false : true;
-	}	
+	}
 }

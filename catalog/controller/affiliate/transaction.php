@@ -7,7 +7,7 @@ class ControllerAffiliateTransaction extends Controller {
 			$this->session->data['redirect'] = $this->url->link('affiliate/transaction');
 			
 			$this->url->redirect($this->url->link('affiliate/login'));
-		}		
+		}
 		
 		$this->language->load('affiliate/transaction');
 
@@ -23,11 +23,11 @@ class ControllerAffiliateTransaction extends Controller {
 			$page = $_GET['page'];
 		} else {
 			$page = 1;
-		}		
+		}
 		
 		$this->data['transactions'] = array();
 		
-		$data = array(				
+		$data = array(
 			'sort'  => 't.date_added',
 			'order' => 'DESC',
 			'start' => ($page - 1) * 10,
@@ -44,25 +44,15 @@ class ControllerAffiliateTransaction extends Controller {
 				'description' => $result['description'],
 				'date_added'  => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
 			);
-		}	
+		}
 
 		$this->pagination->init();
 		$this->pagination->total = $transaction_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = 10; 
-		$this->pagination->url = $this->url->link('affiliate/transaction');
-			
 		$this->data['pagination'] = $this->pagination->render();
 		
 		$this->data['balance'] = $this->currency->format($this->model_affiliate_transaction->getBalance());
 		
 		$this->data['continue'] = $this->url->link('affiliate/account');
-
-
-
-
-
-
 
 		$this->children = array(
 			'common/column_left',
@@ -70,9 +60,9 @@ class ControllerAffiliateTransaction extends Controller {
 			'common/content_top',
 			'common/content_bottom',
 			'common/footer',
-			'common/header'	
+			'common/header'
 		);
 						
-		$this->response->setOutput($this->render());		
-	} 		
+		$this->response->setOutput($this->render());
+	}
 }

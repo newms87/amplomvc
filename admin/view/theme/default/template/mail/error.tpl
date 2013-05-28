@@ -56,7 +56,7 @@
 								<input type="submit" class="button" name="resend_message" value="<?= $button_resend; ?>" />
 								<a class="edit_message"><?= $button_edit; ?></a>
 								<a class="delete_message"><?= $button_delete; ?></a>
-							</div> 
+							</div>
 						</form>
 					</div>
 					<? } ?>

@@ -95,12 +95,12 @@ class ModelCatalogOption extends Model {
 			'od.name',
 			'o.type',
 			'o.sort_order'
-		);	
+		);
 		
 		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
-			$sql .= " ORDER BY " . $data['sort'];	
+			$sql .= " ORDER BY " . $data['sort'];
 		} else {
-			$sql .= " ORDER BY od.name";	
+			$sql .= " ORDER BY od.name";
 		}
 		
 		if (isset($data['order']) && ($data['order'] == 'DESC')) {
@@ -112,14 +112,14 @@ class ModelCatalogOption extends Model {
 		if (isset($data['start']) || isset($data['limit'])) {
 			if ($data['start'] < 0) {
 				$data['start'] = 0;
-			}					
+			}
 
 			if ($data['limit'] < 1) {
 				$data['limit'] = 20;
-			}	
+			}
 		
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
-		}	
+		}
 		
 		$query = $this->query($sql);
 
@@ -155,7 +155,7 @@ class ModelCatalogOption extends Model {
 		
 		foreach ($query->rows as &$option_value) {
 			
-			$description_query = $this->get('option_value_description', '*', array('option_value_id'=>$option_value['option_value_id']));			
+			$description_query = $this->get('option_value_description', '*', array('option_value_id'=>$option_value['option_value_id']));
 			
 			foreach ($description_query->rows as $description) {
 				$option_value['option_value_description'][$description['language_id']] = $description;
@@ -166,8 +166,8 @@ class ModelCatalogOption extends Model {
 	}
 
 	public function getTotalOptions() {
-		$query = $this->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "option`"); 
+		$query = $this->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "option`");
 		
 		return $query->row['total'];
-	}		
+	}
 }

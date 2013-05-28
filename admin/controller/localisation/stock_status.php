@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerLocalisationStockStatus extends Controller {
 	
 	
@@ -141,7 +141,7 @@ class ControllerLocalisationStockStatus extends Controller {
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/stock_status', $url));
 
 		$this->data['insert'] = $this->url->link('localisation/stock_status/insert', $url);
-		$this->data['delete'] = $this->url->link('localisation/stock_status/delete', $url);	
+		$this->data['delete'] = $this->url->link('localisation/stock_status/delete', $url);
 
 		$this->data['stock_statuses'] = array();
 
@@ -170,7 +170,7 @@ class ControllerLocalisationStockStatus extends Controller {
 				'selected'		=> isset($_POST['selected']) && in_array($result['stock_status_id'], $_POST['selected']),
 				'action'			=> $action
 			);
-		}	
+		}
 	
  		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -212,10 +212,6 @@ class ControllerLocalisationStockStatus extends Controller {
 
 		$this->pagination->init();
 		$this->pagination->total = $stock_status_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_admin_limit');
-		$this->pagination->url = $this->url->link('localisation/stock_status', $url);
-			
 		$this->data['pagination'] = $this->pagination->render();
 
 		$this->data['sort'] = $sort;
@@ -284,7 +280,7 @@ class ControllerLocalisationStockStatus extends Controller {
 			'common/footer'
 		);
 				
-		$this->response->setOutput($this->render());	
+		$this->response->setOutput($this->render());
   	}
   	
 	private function validateForm() {
@@ -314,14 +310,14 @@ class ControllerLocalisationStockStatus extends Controller {
 			$product_total = $this->model_catalog_product->getTotalProductsByStockStatusId($stock_status_id);
 		
 			if ($product_total) {
-				$this->error['warning'] = sprintf($this->_('error_product'), $product_total);	
-			}  
+				$this->error['warning'] = sprintf($this->_('error_product'), $product_total);
+			}
 		}
 		
-		if (!$this->error) { 
+		if (!$this->error) {
 			return true;
 		} else {
 			return false;
 		}
-  	}	
+  	}
 }

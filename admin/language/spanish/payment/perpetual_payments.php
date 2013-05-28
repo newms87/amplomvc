@@ -2,7 +2,7 @@
 // Heading
 $_['heading_title']		= 'Perpetual Payments';
 
-// Text 
+// Text
 $_['text_payment']		= 'Pago';
 $_['text_success']		= 'Éxito: has modificado los detalles de cuenta Perpetual Payments!';
 
@@ -18,5 +18,5 @@ $_['entry_sort_order']	= 'Orden de aparición:';
 
 // Error
 $_['error_permission']	= 'Cuidado: No tienes permisos para modificar Perpetual Payments!';
-$_['error_auth_id']		= 'ID autorización obligatorio!'; 
-$_['error_auth_pass']	= 'Contraseña autorización obligatoria!'; 
+$_['error_auth_id']		= 'ID autorización obligatorio!';
+$_['error_auth_pass']	= 'Contraseña autorización obligatoria!';

@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ModelPaymentMoneybookers extends Model {
   	public function getMethod($address, $total) {
 		$this->load->language('payment/moneybookers');
@@ -13,12 +13,12 @@ class ModelPaymentMoneybookers extends Model {
 			$status = true;
 		} else {
 			$status = false;
-		}	
+		}
 		
 		$method_data = array();
 	
-		if ($status) {  
-				$method_data = array( 
+		if ($status) {
+				$method_data = array(
 				'code'		=> 'moneybookers',
 				'title'		=> $this->_('text_title'),
 				'sort_order' => $this->config->get('moneybookers_sort_order')

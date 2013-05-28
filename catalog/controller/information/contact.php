@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerInformationContact extends Controller {
 	
   	public function index() {
@@ -6,7 +6,7 @@ class ControllerInformationContact extends Controller {
 
 		$this->language->load('information/contact');
 
-		$this->document->setTitle($this->_('heading_title'));  
+		$this->document->setTitle($this->_('heading_title'));
 	
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->mail->init();
@@ -36,20 +36,14 @@ class ControllerInformationContact extends Controller {
 		$this->data['telephone'] = $this->config->get('config_telephone');
 		$this->data['fax'] = $this->config->get('config_fax');
 		
-		$defaults = array('name'=>$this->customer->getFirstName(),
-								'email'=>$this->customer->getEmail(),
+		$defaults = array('name'=>$this->customer->info('firstname'),
+								'email'=>$this->customer->info('email'),
 								'enquiry'=>'',
 								'captcha'=>''
 							);
 		foreach($defaults as $key=>$default){
 			$this->data[$key] = isset($_POST[$key])?$_POST[$key]:$default;
 		}
-		
-
-
-
-
-
 
 		$this->children = array(
 			'common/column_left',
@@ -60,7 +54,7 @@ class ControllerInformationContact extends Controller {
 			'common/header'
 		);
 				
- 		$this->response->setOutput($this->render());		
+ 		$this->response->setOutput($this->render());
   	}
 
   	public function success() {
@@ -75,12 +69,6 @@ class ControllerInformationContact extends Controller {
 		
 		$this->data['continue'] = $this->url->link('common/home');
 
-
-
-
-
-
-
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
@@ -90,7 +78,7 @@ class ControllerInformationContact extends Controller {
 			'common/header'
 		);
 				
- 		$this->response->setOutput($this->render()); 
+ 		$this->response->setOutput($this->render());
 	}
 	
   	private function validate() {
@@ -110,12 +98,12 @@ class ControllerInformationContact extends Controller {
 				$this->error['captcha'] = $this->_('error_captcha');
 		}
 		
-		return $this->error ? false : true;  	
+		return $this->error ? false : true;
   	}
 
 	public function captcha() {
 		$this->session->data['captcha'] = $this->captcha->getCode();
 		
 		$this->captcha->showImage();
-	}	
+	}
 }

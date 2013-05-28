@@ -2,7 +2,7 @@
 class ControllerModuleRssArticle extends Controller {
 	
 	
-	public function index() {	
+	public function index() {
 		$this->template->load('module/rss_article');
 
 		$this->load->language('module/rss_article');
@@ -11,7 +11,7 @@ class ControllerModuleRssArticle extends Controller {
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 
-			$this->model_setting_setting->editSetting('rss_article', $_POST);	
+			$this->model_setting_setting->editSetting('rss_article', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -43,7 +43,7 @@ class ControllerModuleRssArticle extends Controller {
 		$layouts = $this->model_design_layout->getLayouts();
 		$this->data['layouts'] = array();
 		foreach($layouts as $layout)
-			$this->data['layouts'][$layout['layout_id']] = $layout['name']; 
+			$this->data['layouts'][$layout['layout_id']] = $layout['name'];
 		
 		$this->children = array(
 			'common/header',
@@ -62,7 +62,7 @@ class ControllerModuleRssArticle extends Controller {
 			isset($num_to_grab)?'':$num_to_grab=5;
 			isset($num_to_keep)?'':$num_to_keep=10;
 			isset($title_length)?'':$title_length=22;
-			$xml  = simplexml_load_file($rss_feed_url); 
+			$xml  = simplexml_load_file($rss_feed_url);
 			$articles = $this->tool->parse_xml_to_array($xml);
 			
 		foreach(array_slice($articles['entry'],0,$num_to_grab) as $entry){
@@ -80,7 +80,7 @@ class ControllerModuleRssArticle extends Controller {
 			}
 			echo "Updated RSS Feed!";
 			exit;
-		}	
+		}
 		
 	}
 	
@@ -89,6 +89,6 @@ class ControllerModuleRssArticle extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 				
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

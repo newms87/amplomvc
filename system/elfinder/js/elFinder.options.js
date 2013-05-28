@@ -41,7 +41,7 @@ elFinder.prototype._options = {
 	 *      // upload ...
 	 *      return dfrd;
 	 *    }
-	 *    
+	 *
 	 *  }
 	 **/
 	transport : {},
@@ -109,8 +109,8 @@ elFinder.prototype._options = {
 	 * @type Array
 	 */
 	commands : [
-		'open', 'reload', 'home', 'up', 'back', 'forward', 'getfile', 'quicklook', 
-		'download', 'rm', 'duplicate', 'rename', 'mkdir', 'mkfile', 'upload', 'copy', 
+		'open', 'reload', 'home', 'up', 'back', 'forward', 'getfile', 'quicklook',
+		'download', 'rm', 'duplicate', 'rename', 'mkdir', 'mkfile', 'upload', 'copy',
 		'cut', 'paste', 'edit', 'search', 'info', 'view', 'help', 'resize', 'sort', 'netmount'
 	],
 	
@@ -151,7 +151,7 @@ elFinder.prototype._options = {
 				// 	 * files mimetypes allowed to edit in current wysisyg
 				// 	 * @type  Array
 				// 	 */
-				// 	mimes : ['text/html'], 
+				// 	mimes : ['text/html'],
 				// 	/**
 				// 	 * Called when "edit" dialog loaded.
 				// 	 * Place to init wysisyg.
@@ -179,7 +179,7 @@ elFinder.prototype._options = {
 				// 	 * @return void
 				// 	 */
 				// 	save : function(textarea, editor) {}
-				// 
+				//
 				// }
 			]
 		},
@@ -286,7 +286,7 @@ elFinder.prototype._options = {
 	sortDirect : 'asc',
 	
 	/**
-	 * If true - elFinder will formating dates itself, 
+	 * If true - elFinder will formating dates itself,
 	 * otherwise - backend date will be used.
 	 *
 	 * @type Boolean

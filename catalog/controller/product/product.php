@@ -1,4 +1,4 @@
-<?php  
+<?php
 class ControllerProductProduct extends Controller {
 	
 	public function index() {
@@ -21,7 +21,7 @@ class ControllerProductProduct extends Controller {
 			$manufacturer_info = $this->model_catalog_manufacturer->getManufacturer($product_info['manufacturer_id']);
 			
 			if ($manufacturer_info){
-				$this->breadcrumb->add($manufacturer_info['name'], $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $product_info['manufacturer_id'])); 
+				$this->breadcrumb->add($manufacturer_info['name'], $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $product_info['manufacturer_id']));
 			}
 	
 			if (isset($product_info['flashsale_id'])) {
@@ -65,7 +65,7 @@ class ControllerProductProduct extends Controller {
 			//Find the related products
 			$this->data['block_product_related'] = $this->getBlock('product', 'related', array($product_id));
 			
-			//The Tags associated with this product		
+			//The Tags associated with this product
 			$tags = $this->model_catalog_product->getProductTags($product_info['product_id']);
 			
 			foreach ($tags as &$tag) {
@@ -106,7 +106,7 @@ class ControllerProductProduct extends Controller {
 			$page = $_GET['page'];
 		} else {
 			$page = 1;
-		}  
+		}
 		
 		$this->data['reviews'] = array();
 		
@@ -122,21 +122,11 @@ class ControllerProductProduct extends Controller {
 				'reviews'	=> sprintf($this->_('text_reviews'), (int)$review_total),
 				'date_added' => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
 			);
-			}			
+			}
 			
 		$this->pagination->init();
 		$this->pagination->total = $review_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = 5; 
-		$this->pagination->url = $this->url->link('product/product/review', 'product_id=' . $_GET['product_id']);
-			
 		$this->data['pagination'] = $this->pagination->render();
-		
-
-
-
-
-
 
 		$this->response->setOutput($this->render());
 	}
@@ -189,7 +179,7 @@ class ControllerProductProduct extends Controller {
 			
 			if ((strlen($filename) < 3) || (strlen($filename) > 128)) {
 				$json['error'] = $this->_('error_filename');
-			}		
+			}
 			
 			$allowed = array();
 			
@@ -201,7 +191,7 @@ class ControllerProductProduct extends Controller {
 			
 			if (!in_array(substr(strrchr($filename, '.'), 1), $allowed)) {
 				$json['error'] = $this->_('error_filetype');
-				}	
+				}
 						
 			if ($_FILES['file']['error'] != UPLOAD_ERR_OK) {
 				$json['error'] = $this->_('error_upload_' . $_FILES['file']['error']);
@@ -221,8 +211,8 @@ class ControllerProductProduct extends Controller {
 			}
 						
 			$json['success'] = $this->_('text_upload');
-		}	
+		}
 		
-		$this->response->setOutput(json_encode($json));		
+		$this->response->setOutput(json_encode($json));
 	}
 }

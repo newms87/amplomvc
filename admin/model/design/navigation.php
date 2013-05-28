@@ -200,7 +200,7 @@ class ModelDesignNavigation extends Model {
 		$nav_groups = $this->cache->get('navigation_groups.admin');
 		
 		if(!$nav_groups){
-			$query = "SELECT ng.* FROM " . DB_PREFIX . "navigation_group ng"; 
+			$query = "SELECT ng.* FROM " . DB_PREFIX . "navigation_group ng";
 			$query .= " LEFT JOIN " . DB_PREFIX . "navigation_store ns ON (ng.navigation_group_id=ns.navigation_group_id)";
 			$query .= " WHERE ng.status='1' AND ns.store_id='0'";
 			
@@ -1474,7 +1474,7 @@ class ModelDesignNavigation extends Model {
 			'name' => 'admin',
 			'status' => 1,
 			'stores' => array(-1),
-			'links' => $links 
+			'links' => $links
 		);
 		
 		$this->addNavigationGroup($data);

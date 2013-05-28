@@ -2,7 +2,7 @@
 class ControllerModuleStore extends Controller {
 	
 	
-	public function index() {	
+	public function index() {
 		$this->template->load('module/store');
 
 		$this->load->language('module/store');
@@ -10,7 +10,7 @@ class ControllerModuleStore extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('store', $_POST);		
+			$this->model_setting_setting->editSetting('store', $_POST);
 					
 			$this->message->add('success', $this->_('text_success'));
 						
@@ -35,13 +35,13 @@ class ControllerModuleStore extends Controller {
 			$this->data['store_admin'] = $_POST['store_admin'];
 		} else {
 			$this->data['store_admin'] = $this->config->get('store_admin');
-		}	
+		}
 			
 		$this->data['modules'] = array();
 		
 		if (isset($_POST['store_module'])) {
 			$this->data['modules'] = $_POST['store_module'];
-		} elseif ($this->config->get('store_module')) { 
+		} elseif ($this->config->get('store_module')) {
 			$this->data['modules'] = $this->config->get('store_module');
 		}
 		
@@ -60,6 +60,6 @@ class ControllerModuleStore extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

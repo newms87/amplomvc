@@ -2,7 +2,7 @@
 class ControllerModuleMainSidebar extends Controller {
 	
 	
-	public function index() {	
+	public function index() {
 		$this->template->load('module/main_sidebar');
 
 		$this->load->language('module/main_sidebar');
@@ -10,7 +10,7 @@ class ControllerModuleMainSidebar extends Controller {
 		$this->document->setTitle('Main Sidebar');
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('main_sidebar', $_POST);		
+			$this->model_setting_setting->editSetting('main_sidebar', $_POST);
 					
 			$this->message->add('success', $this->_('text_success'));
 						
@@ -35,9 +35,9 @@ class ControllerModuleMainSidebar extends Controller {
 		
 		if (isset($_POST['main_sidebar_module'])) {
 			$this->data['modules'] = $_POST['main_sidebar_module'];
-		} elseif ($this->config->get('main_sidebar_module')) { 
+		} elseif ($this->config->get('main_sidebar_module')) {
 			$this->data['modules'] = $this->config->get('main_sidebar_module');
-		}	
+		}
 					
 		$this->data['layouts'] = $this->model_design_layout->getLayouts();
 		
@@ -54,6 +54,6 @@ class ControllerModuleMainSidebar extends Controller {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

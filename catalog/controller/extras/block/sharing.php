@@ -1,4 +1,4 @@
-<?php	
+<?php
 class ControllerExtrasBlockSharing extends Controller {
 		
 	public function index() {

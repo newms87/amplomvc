@@ -5,13 +5,7 @@ class ControllerPaymentFreeCheckout extends Controller {
 
 		$this->data['continue'] = $this->url->link('checkout/success');
 
-
-
-
-
-
-
-		$this->render();		
+		$this->render();
 	}
 	
 	public function confirm() {

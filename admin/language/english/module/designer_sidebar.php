@@ -15,5 +15,5 @@ $_['entry_position']		= 'Position:';
 $_['entry_status']		= 'Status:';
 $_['entry_sort_order']	= 'Sort Order:';
 
-// Error 
+// Error
 $_['error_permission']	= 'Warning: You do not have permission to modify the designer sidebar module!';

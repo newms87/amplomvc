@@ -1,5 +1,5 @@
 <?php
-// Heading  
+// Heading
 $_['heading_title']	= 'Cesta';
 
 // Text
@@ -40,12 +40,12 @@ $_['entry_postcode']			= 'Código Postal:';
 
 // Error
 $_['error_stock']	= 'Los productos marcados con *** no están disponibles en la cantidad deseada o están fuera de stock!';
-$_['error_minimum']	= 'La cantidad mínima de pedido para %s es %s!';	
-$_['error_required']  = '%s obligatorio!';	
-$_['error_product']			= 'Atención: No hay productos en su cesta!';	
+$_['error_minimum']	= 'La cantidad mínima de pedido para %s es %s!';
+$_['error_required']  = '%s obligatorio!';
+$_['error_product']			= 'Atención: No hay productos en su cesta!';
 $_['error_coupon']			= 'Atención: El cupón es inválido, caducado o se ha llegado a su límite de usos!';
 $_['error_voucher']			= 'Atención: El cupón regalo es inválido o ha sido usado anteriormente!';
-$_['error_reward']			= 'Atención: Por favor entra la cantidad de puntos recompensa que quieres utilitzar!';	
+$_['error_reward']			= 'Atención: Por favor entra la cantidad de puntos recompensa que quieres utilitzar!';
 $_['error_points']			= 'Atención: No tiene %s puntos recompensa!';
 $_['error_maximum']			= 'Atención: La cantidad máxima de puntos que puede usar es %s!';
 $_['error_postcode']			= 'El código postal debe tener entre 2 y 10 carácteres!';

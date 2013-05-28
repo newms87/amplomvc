@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerCheckoutBlockGuestInformation extends Controller {
   	public function index() {
 		$this->language->load('checkout/checkout');
@@ -56,13 +56,13 @@ class ControllerCheckoutBlockGuestInformation extends Controller {
 		
 		if ($this->customer->isLogged()) {
 			$json['redirect'] = $this->url->link('checkout/checkout');
-		} 			
+		}
 		elseif ((!$this->cart->hasProducts() && empty($this->session->data['vouchers'])) || (!$this->cart->hasStock() && !$this->config->get('config_stock_checkout'))) {
-			$json['redirect'] = $this->url->link('cart/cart');		
+			$json['redirect'] = $this->url->link('cart/cart');
 		}
 		elseif (!$this->config->get('config_guest_checkout') || $this->cart->hasDownload()) {
 			$json['redirect'] = $this->url->link('cart/cart');
-		} 
+		}
 		
 		//Redirect if set
 		if($json){

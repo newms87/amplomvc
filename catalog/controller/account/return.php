@@ -1,5 +1,5 @@
-<?php 
-class ControllerAccountReturn extends Controller { 
+<?php
+class ControllerAccountReturn extends Controller {
 	
 	public function index() {
 		$this->template->load('account/return_list');
@@ -45,19 +45,9 @@ class ControllerAccountReturn extends Controller {
 
 		$this->pagination->init();
 		$this->pagination->total = $return_total;
-		$this->pagination->page = $page;
-		$this->pagination->limit = $this->config->get('config_catalog_limit');
-		$this->pagination->url = $this->url->link('account/history');
-		
 		$this->data['pagination'] = $this->pagination->render();
 
 		$this->data['continue'] = $this->url->link('account/account');
-		
-
-
-
-
-
 
 		$this->children = array(
 			'common/column_left',
@@ -68,7 +58,7 @@ class ControllerAccountReturn extends Controller {
 			'common/header'
 		);
 						
-		$this->response->setOutput($this->render());				
+		$this->response->setOutput($this->render());
 	}
 	
 	public function info() {
@@ -111,7 +101,7 @@ class ControllerAccountReturn extends Controller {
 			$this->data['firstname'] = $return_info['firstname'];
 			$this->data['lastname'] = $return_info['lastname'];
 			$this->data['email'] = $return_info['email'];
-			$this->data['telephone'] = $return_info['telephone'];						
+			$this->data['telephone'] = $return_info['telephone'];
 			$this->data['product'] = $return_info['product'];
 			$this->data['model'] = $return_info['model'];
 			$this->data['quantity'] = $return_info['quantity'];
@@ -134,22 +124,16 @@ class ControllerAccountReturn extends Controller {
 			
 			$this->data['continue'] = $this->url->link('account/return', $url);
 
-
-
-
-
-
-
 			$this->children = array(
 				'common/column_left',
 				'common/column_right',
 				'common/content_top',
 				'common/content_bottom',
 				'common/footer',
-				'common/header'	
+				'common/header'
 			);
 									
-			$this->response->setOutput($this->render());		
+			$this->response->setOutput($this->render());
 		} else {
 		$this->template->load('error/not_found');
 
@@ -166,22 +150,16 @@ class ControllerAccountReturn extends Controller {
 			
 			$this->data['continue'] = $this->url->link('account/return');
 
-
-
-
-
-
-
 			$this->children = array(
 				'common/column_left',
 				'common/column_right',
 				'common/content_top',
 				'common/content_bottom',
 				'common/footer',
-				'common/header'	
+				'common/header'
 			);
 						
-			$this->response->setOutput($this->render());			
+			$this->response->setOutput($this->render());
 		}
 	}
 		
@@ -195,7 +173,7 @@ class ControllerAccountReturn extends Controller {
 			$this->model_account_return->addReturn($_POST);
 			
 			$this->url->redirect($this->url->link('account/return/success'));
-		} 
+		}
 							
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -215,10 +193,10 @@ class ControllerAccountReturn extends Controller {
 		
 		$defaults = array('order_id'=>'',
 								'date_ordered'=>'',
-								'firstname'=>$this->customer->getFirstName(),
-								'lastname'=>$this->customer->getLastName(),
-								'email'=>$this->customer->getEmail(),
-								'telephone'=>$this->customer->getTelephone(),
+								'firstname'=>$this->customer->info('firstname'),
+								'lastname'=>$this->customer->info('lastname'),
+								'email'=>$this->customer->info('email'),
+								'telephone'=>$this->customer->info('telephone'),
 								'product'=>'',
 								'model'=>'',
 								'quantity'=>1,
@@ -254,12 +232,6 @@ class ControllerAccountReturn extends Controller {
 		$this->data['return_reasons'] = $this->model_localisation_return_reason->getReturnReasons();
 		
 		$this->data['back'] = $this->url->link('account/account');
-				
-
-
-
-
-
 
 		$this->children = array(
 			'common/column_left',
@@ -267,10 +239,10 @@ class ControllerAccountReturn extends Controller {
 			'common/content_top',
 			'common/content_bottom',
 			'common/footer',
-			'common/header'	
+			'common/header'
 		);
 				
-		$this->response->setOutput($this->render());		
+		$this->response->setOutput($this->render());
   	}
 	
   	public function success() {
@@ -278,18 +250,12 @@ class ControllerAccountReturn extends Controller {
 
 		$this->language->load('account/return');
 
-		$this->document->setTitle($this->_('heading_title')); 
+		$this->document->setTitle($this->_('heading_title'));
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/return'));
 		
 		$this->data['continue'] = $this->url->link('common/home');
-
-
-
-
-
-
 
 		$this->children = array(
 			'common/column_left',
@@ -297,10 +263,10 @@ class ControllerAccountReturn extends Controller {
 			'common/content_top',
 			'common/content_bottom',
 			'common/footer',
-			'common/header'	
+			'common/header'
 		);
 				
- 		$this->response->setOutput($this->render()); 
+ 		$this->response->setOutput($this->render());
 	}
 		
   	private function validate() {
@@ -322,29 +288,25 @@ class ControllerAccountReturn extends Controller {
 		
 		if ((strlen($_POST['telephone']) < 3) || (strlen($_POST['telephone']) > 32)) {
 				$this->error['telephone'] = $this->_('error_telephone');
-		}		
+		}
 		
 		if ((strlen($_POST['product']) < 1) || (strlen($_POST['product']) > 255)) {
 			$this->error['product'] = $this->_('error_product');
-		}	
+		}
 		
 		if ((strlen($_POST['model']) < 1) || (strlen($_POST['model']) > 64)) {
 			$this->error['model'] = $this->_('error_model');
-		}							
+		}
 
 		if (empty($_POST['return_reason_id'])) {
 			$this->error['reason'] = $this->_('error_reason');
-		}	
+		}
 				
 		if (empty($this->session->data['captcha']) || ($this->session->data['captcha'] != $_POST['captcha'])) {
 				$this->error['captcha'] = $this->_('error_captcha');
 		}
 
-		if (!$this->error) {
-				return true;
-		} else {
-				return false;
-		}
+		return $this->error ? false : true;
   	}
 	
 	public function captcha() {
@@ -360,5 +322,5 @@ class ControllerAccountReturn extends Controller {
 			if (isset($_GET[$f]))
 				$url .= "&$f=" . $_GET[$f];
 		return $url;
-	}	
+	}
 }

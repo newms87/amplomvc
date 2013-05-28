@@ -2,7 +2,7 @@
 // Heading
 $_['heading_title']		= 'PayPal Express';
 
-// Text 
+// Text
 $_['text_payment']		= 'Pago';
 $_['text_success']		= 'Éxito: has modificado los  detalles de cuenta de PayPal Express Checkout!';
 $_['text_pp_express']	= '<a onclick="window.open(\'https://www.paypal.com/uk/mrb/pal=W9TBB5DTD6QJW\');"><img src="view/theme/default/image/payment/paypal.png" alt="PayPal" title="PayPal" style="border: 1px solid #EEEEEE;" /></a>';
@@ -23,6 +23,6 @@ $_['entry_sort_order']	= 'Orden de aparición:';
 
 // Error
 $_['error_permission']	= 'Cuidado: No tienes permisos para modificar payment PayPal Express Checkout!';
-$_['error_username']	= 'Usuario API  obligatorio!'; 
-$_['error_password']	= 'Contraseña API  obligatoria!'; 
-$_['error_signature']	= 'Firma API  obligatoria!'; 
+$_['error_username']	= 'Usuario API  obligatorio!';
+$_['error_password']	= 'Contraseña API  obligatoria!';
+$_['error_signature']	= 'Firma API  obligatoria!';

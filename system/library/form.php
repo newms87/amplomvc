@@ -242,7 +242,7 @@ class Form {
 			}
 			
 			if(!isset($field['required'])){
-				$field['required'] = false; 
+				$field['required'] = false;
 			}
 			
 			if(!isset($field['display_name'])){
@@ -253,7 +253,7 @@ class Form {
 				}
 				else{
 					$field['display_name'] = $display_name;
-				} 
+				}
 			}
 			
 			if(!isset($field['attrs'])){
@@ -308,7 +308,7 @@ class Form {
 							$key = key($field['build_config']);
 							$value = current($field['build_config']);
 							
-							if(!isset($first_option[$key]) || !isset($first_option[$value])){ 
+							if(!isset($first_option[$key]) || !isset($first_option[$value])){
 								$this->error = "You must specify the build config options for $name!";
 								return false;
 							}
@@ -319,7 +319,7 @@ class Form {
 				case 'checkbox':
 					break;
 					
-				default: 
+				default:
 					break;
 			}
 		}

@@ -223,7 +223,7 @@ class ModelCatalogProduct extends Model {
 						$template['theme'] = $theme;
 						$template['store_id'] = $store_id;
 						
-						$this->insert('product_template', $template); 
+						$this->insert('product_template', $template);
 					}
 				}
 			}
@@ -247,7 +247,7 @@ class ModelCatalogProduct extends Model {
 						
 		if ($data['keyword']) {
 			if(!preg_match("/^product\//",$data['keyword'])){
-				$data['keyword'] = 'product/' . $data['keyword']; 
+				$data['keyword'] = 'product/' . $data['keyword'];
 			}
 			
 			$url_alias = array(
@@ -513,7 +513,7 @@ class ModelCatalogProduct extends Model {
 						$template['theme'] = $theme;
 						$template['store_id'] = $store_id;
 						
-						$this->insert('product_template', $template); 
+						$this->insert('product_template', $template);
 					}
 				}
 			}
@@ -545,7 +545,7 @@ class ModelCatalogProduct extends Model {
 		
 		if ($data['keyword']) {
 			if(!preg_match("/^product\//",$data['keyword'])){
-				$data['keyword'] = 'product/' . $data['keyword']; 
+				$data['keyword'] = 'product/' . $data['keyword'];
 			}
 			
 			$url_alias = array(
@@ -601,9 +601,9 @@ class ModelCatalogProduct extends Model {
 			$data['status'] = 0;
 						
 			$data['product_attribute'] = $this->getProductAttributes($product_id);
-			$data['product_description'] = $this->getProductDescriptions($product_id);			
+			$data['product_description'] = $this->getProductDescriptions($product_id);
 			$data['product_discount'] = $this->getProductDiscounts($product_id);
-			$data['product_image'] = $this->getProductImages($product_id);		
+			$data['product_image'] = $this->getProductImages($product_id);
 			$data['product_option'] = $this->getProductOptions($product_id);
 			$data['product_related'] = $this->getProductRelated($product_id);
 			$data['product_reward'] = $this->getProductRewards($product_id);
@@ -790,7 +790,7 @@ class ModelCatalogProduct extends Model {
 					}
 				}
 		
-				$order = (!empty($data['order']) && $data['order'] == 'DESC') ? 'DESC' : 'ASC'; 
+				$order = (!empty($data['order']) && $data['order'] == 'DESC') ? 'DESC' : 'ASC';
 				
 				$order_by = "ORDER BY $data[sort] $order";
 			}
@@ -854,8 +854,8 @@ class ModelCatalogProduct extends Model {
 		$discount = "(SELECT price FROM " . DB_PREFIX . "product_discount pd2 WHERE pd2.product_id = p.product_id AND pd2.quantity >= '0' AND ((pd2.date_start = '0000-00-00' OR pd2.date_start < NOW()) AND (pd2.date_end = '0000-00-00' OR pd2.date_end > NOW())) ORDER BY pd2.priority ASC, pd2.price ASC LIMIT 1) AS discount";
 		$special = "(SELECT price FROM " . DB_PREFIX . "product_special ps WHERE ps.product_id = p.product_id AND ((ps.date_start = '" . DATETIME_ZERO . "' OR ps.date_start < NOW()) AND (ps.date_end = '". DATETIME_ZERO . "' OR ps.date_end > NOW())) ORDER BY ps.priority ASC, ps.price ASC LIMIT 1) AS special";
 
-		$fs_table = "(SELECT ops.flashsale_id, ops.product_id, ops.date_end, ops.price as special FROM 
-								(SELECT fp.flashsale_id, fp.product_id, ps.product_special_id, MIN(ps.price) as special FROM " . DB_PREFIX . "flashsale_product fp 
+		$fs_table = "(SELECT ops.flashsale_id, ops.product_id, ops.date_end, ops.price as special FROM
+								(SELECT fp.flashsale_id, fp.product_id, ps.product_special_id, MIN(ps.price) as special FROM " . DB_PREFIX . "flashsale_product fp
 								LEFT JOIN " . DB_PREFIX . "product_special ps ON (fp.product_id=ps.product_id) WHERE ps.date_start < NOW() AND ps.date_end > NOW() GROUP BY flashsale_id, product_id) as low_price
 								INNER JOIN " . DB_PREFIX ."product_special ops ON(low_price.flashsale_id=ops.flashsale_id AND ops.product_special_id=low_price.product_special_id AND low_price.product_id=ops.product_id AND low_price.special=ops.price) GROUP BY product_id
 								) as fs_table ON(fs_table.product_id=p.product_id)";
@@ -863,7 +863,7 @@ class ModelCatalogProduct extends Model {
 		$category = DB_PREFIX . "product_to_category p2c ON (p2c.product_id=p.product_id)";
 		$description = DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id AND pd.language_id='$lang_id')";
 		
-		$query = $this->query("SELECT DISTINCT p.*, p2c.category_id, pd.*, $special, $discount, fs_table.flashsale_id,fs_table.date_end, pd.name AS name, p.image, m.name AS manufacturer, m.keyword, m.status as manufacturer_status, p.sort_order " . 
+		$query = $this->query("SELECT DISTINCT p.*, p2c.category_id, pd.*, $special, $discount, fs_table.flashsale_id,fs_table.date_end, pd.name AS name, p.image, m.name AS manufacturer, m.keyword, m.status as manufacturer_status, p.sort_order " .
 											"FROM " . DB_PREFIX . "product p LEFT JOIN $category LEFT JOIN $description LEFT JOIN " . DB_PREFIX . "manufacturer m ON (p.manufacturer_id = m.manufacturer_id) LEFT JOIN $fs_table WHERE p.product_id='$product_id' AND p.status = '1' AND m.status='1' AND p.date_available <= NOW() LIMIT 1");
 		
 		if ($query->num_rows) {
@@ -920,7 +920,7 @@ class ModelCatalogProduct extends Model {
 				}
 				
 				$product_option['product_option_value'] = $pov_query->rows;
-		}	
+		}
 		
 		return $query->rows;
 	}
@@ -954,7 +954,7 @@ class ModelCatalogProduct extends Model {
 	public function getProductActiveSpecial($product_id){
 		$datetime_zero = DATETIME_ZERO;
 		
-		$result = $this->query("SELECT * FROM " . DB_PREFIX . "product_special WHERE product_id = '" . (int)$product_id . "' AND (date_start = '$datetime_zero' OR date_start <= NOW()) AND (date_end = '$datetime_zero' OR date_end > NOW()) ORDER BY priority, price LIMIT 1"); 
+		$result = $this->query("SELECT * FROM " . DB_PREFIX . "product_special WHERE product_id = '" . (int)$product_id . "' AND (date_start = '$datetime_zero' OR date_start <= NOW()) AND (date_end = '$datetime_zero' OR date_end > NOW()) ORDER BY priority, price LIMIT 1");
 		
 		return $result->row;
 	}
@@ -1063,7 +1063,7 @@ class ModelCatalogProduct extends Model {
 	
 	public function getTotalProducts($data = array()) {
 		return $this->getProducts($data, '', true);
-	}	
+	}
 	
 	public function getTotalProductsByTaxClassId($tax_class_id) {
 		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "product WHERE tax_class_id = '" . (int)$tax_class_id . "'");
@@ -1105,17 +1105,17 @@ class ModelCatalogProduct extends Model {
 		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "product_attribute WHERE attribute_id = '" . (int)$attribute_id . "'");
 
 		return $query->row['total'];
-	}	
+	}
 	
 	public function getTotalProductsByOptionId($option_id) {
 		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "product_option WHERE option_id = '" . (int)$option_id . "'");
 
 		return $query->row['total'];
-	}	
+	}
 	
 	public function getTotalProductsByLayoutId($layout_id) {
 		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "product_to_layout WHERE layout_id = '" . (int)$layout_id . "'");
 
 		return $query->row['total'];
-	}			
+	}
 }

@@ -178,7 +178,7 @@ class Mail {
 		if (!$this->from) {
 			$msg = 'E-Mail From required!';
 			$this->trigger_error($msg);
-			$errors .= $msg;		
+			$errors .= $msg;
 		}
 
 		if (!$this->sender) {
@@ -507,7 +507,7 @@ class Mail {
 						fputs($handle, $result . $this->crlf);
 					} else {
 						fputs($handle, str_replace("\n", "\r\n", $result) . $this->crlf);
-					}							
+					}
 				}
 			}
 			
@@ -590,6 +590,6 @@ class Mail {
 		
 		$mail_fail = $this->db->escape($mail_fail);
 		
-		$this->db->query("INSERT INTO " . DB_PREFIX . "setting SET store_id = '0', `group` = 'mail_fail', `key` = 'mail_fail', value = '$mail_fail', serialized = '1', auto_load = '0'"); 
-	} 
+		$this->db->query("INSERT INTO " . DB_PREFIX . "setting SET store_id = '0', `group` = 'mail_fail', `key` = 'mail_fail', value = '$mail_fail', serialized = '1', auto_load = '0'");
+	}
 }

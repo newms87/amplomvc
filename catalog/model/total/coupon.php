@@ -30,7 +30,7 @@ class ModelTotalCoupon extends Model {
 						if (in_array($product['product_id'], $coupon_info['product'])) {
 							$sub_total += $product['total'];
 						}
-					}					
+					}
 				}
 				
 				if ($coupon_info['type'] == 'F') {
@@ -71,9 +71,11 @@ class ModelTotalCoupon extends Model {
 					$discount_total += $discount;
 				}
 				
-				if ($coupon_info['shipping'] && isset($this->session->data['shipping_method'])) {
-					if (!empty($this->session->data['shipping_method']['tax_class_id'])) {
-						$tax_rates = $this->tax->getRates($this->session->data['shipping_method']['cost'], $this->session->data['shipping_method']['tax_class_id']);
+				if ($coupon_info['shipping'] && $this->cart->hasShippingMethod()) {
+					$shipping_method = $this->cart->getShippingMethod();
+					
+					if (!empty($shipping_method['tax_class_id'])) {
+						$tax_rates = $this->tax->getRates($shipping_method['cost'], $shipping_method['tax_class_id']);
 						
 						foreach ($tax_rates as $tax_rate) {
 							if ($tax_rate['type'] == 'P') {
@@ -82,11 +84,8 @@ class ModelTotalCoupon extends Model {
 						}
 					}
 					
-					if(isset($this->session->data['shipping_address_id'])){
-						$address = $this->model_account_address->getAddress($this->session->data['shipping_address_id']);
-					}
-					elseif(isset($this->session->data['guest']['shipping_address'])){
-						$address = $this->session->data['guest']['shipping_address'];
+					if($this->cart->hasShippingAddress()){
+						$address = $this->cart->getShippingAddress();
 					}
 					else{
 						$address = array(
@@ -96,9 +95,9 @@ class ModelTotalCoupon extends Model {
 					}
 					
 					if($this->model_localisation_zone->inGeoZone($coupon_info['shipping_geozone'], $address['country_id'], $address['zone_id'])){
-						$discount_total += $this->session->data['shipping_method']['cost'];
-					}				
-				}				
+						$discount_total += $shipping_method['cost'];
+					}
+				}
 				
 				$total_data[] = array(
 					'code'		=> 'coupon',
@@ -106,11 +105,11 @@ class ModelTotalCoupon extends Model {
 					'text'		=> $this->currency->format(-$discount_total),
 					'value'		=> -$discount_total,
 					'sort_order' => $this->config->get('coupon_sort_order')
-					);
+				);
 
 				$total -= $discount_total;
 			}
-		} 
+		}
 	}
 	
 	public function confirm($order_info, $order_total) {
@@ -119,14 +118,14 @@ class ModelTotalCoupon extends Model {
 		$start = strpos($order_total['title'], '(') + 1;
 		$end = strrpos($order_total['title'], ')');
 		
-		if ($start && $end) {  
+		if ($start && $end) {
 			$code = substr($order_total['title'], $start, $end - $start);
-		}	
+		}
 		
 		$coupon_info = $this->model_cart_coupon->getCoupon($code);
 			
 		if ($coupon_info) {
-			$this->model_cart_coupon->redeem($coupon_info['coupon_id'], $order_info['order_id'], $order_info['customer_id'], $order_total['value']);	
-		}						
+			$this->model_cart_coupon->redeem($coupon_info['coupon_id'], $order_info['order_id'], $order_info['customer_id'], $order_total['value']);
+		}
 	}
 }

@@ -7,10 +7,10 @@
 				<div class="press_item">
 					<a <?= !empty($press['href']) ? "href=\"$press[href]\"" : ''; ?> class="press_title">
 						<? if (!empty($press['description'])) { ?>
-						<span class="description"><?= $press['description']; ?></span>, 
+						<span class="description"><?= $press['description']; ?></span>,
 						<? } ?>
-						<? if(!empty($press['author'])) { ?> 
-						<span class="author"><?= $press['author']; ?></span>, 
+						<? if(!empty($press['author'])) { ?>
+						<span class="author"><?= $press['author']; ?></span>,
 						<? } ?>
 						<? if(!empty($press['date'])) { ?>
 						<span class="date"><?= $press['date']; ?></span>

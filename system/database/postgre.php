@@ -51,7 +51,7 @@ final class Postgre implements Database{
 				
 				unset($data);
 
-				return $query;	
+				return $query;
 			} else {
 				return true;
 			}
@@ -75,7 +75,7 @@ final class Postgre implements Database{
 
   	public function getLastId() {
 		return mysql_insert_id($this->link);
-  	}	
+  	}
 	
 	public function __destruct() {
 		mysql_close($this->link);

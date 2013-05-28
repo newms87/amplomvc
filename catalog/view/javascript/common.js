@@ -53,7 +53,7 @@ $(document).ready(function() {
 			
 			$(element).css('width', (columns * 143) + 'px');
 			$(element).find('ul').css('float', 'left');
-		}		
+		}
 		
 		var menu = $('#menu').offset();
 		var dropdown = $(this).parent().offset();
@@ -72,7 +72,7 @@ $(document).ready(function() {
 			
 			$('#column-right + #content').css('margin-right', '195px');
 		
-			$('.box-category ul li a.active + ul').css('display', 'block');	
+			$('.box-category ul li a.active + ul').css('display', 'block');
 		}
 		
 		if ($.browser.version <= 7) {
@@ -82,7 +82,7 @@ $(document).ready(function() {
 				
 			$('#menu > ul > li').bind('mouseout', function() {
 				$(this).removeClass('active');
-			});	
+			});
 		}
 	}
 	
@@ -115,7 +115,7 @@ function countdown(){
 		flashsales[i]['type'] = $(e).attr('type') || 'long';
 		flashsales[i]['msg_start'] = $(e).attr('msg_start') || '';
 	});
-	$.post('index.php?route=sales/flashsale/ajax_countdown', {flashsales: flashsales}, 
+	$.post('index.php?route=sales/flashsale/ajax_countdown', {flashsales: flashsales},
 		function(json){
 			if(!json)return;
 			for(var i=0;i<json.length;i++){
@@ -182,7 +182,7 @@ function update_floating_window(){
 	var b = $(window);
 	var top = b.scrollTop() + 25;
 	notify.css({top: top});
-}	
+}
 
 function addToCart(product_id, quantity) {
 	quantity = typeof(quantity) != 'undefined' ? quantity : 1;
@@ -204,7 +204,7 @@ function addToCart(product_id, quantity) {
 				show_msg('success', notify);
 				
 				$('#cart-total').html(json['total']);
-			}	
+			}
 		}
 	});
 }
@@ -219,12 +219,12 @@ function addToWishList(product_id){
 			if (json['success']) {
 				show_msg('success', json['success']);
 				$('#wishlist-total').html(json['total']);
-			}	
+			}
 		}
 	});
 }
 
-function addToCompare(product_id) { 
+function addToCompare(product_id) {
 	$.ajax({
 		url: 'index.php?route=product/compare/add',
 		type: 'post',
@@ -236,7 +236,7 @@ function addToCompare(product_id) {
 			if (json['success']) {
 				show_msg('success', notify);
 				$('#compare-total').html(json['total']);
-			}	
+			}
 		}
 	});
 }
@@ -268,7 +268,7 @@ function scroll_to(dest, duration, context){
 
 
 function submit_block(type, url, form){
-	$.post(url, form.serialize(), 
+	$.post(url, form.serialize(),
       function(json){
          if(json['error']){
             show_msg('warning', json['error']);

@@ -5,19 +5,19 @@
 <p><?= $address; ?></p>
 <p><?= $text_payment; ?></p>
 <div class="buttons">
-  <div class="right">
-    <input type="button" value="<?= $button_confirm; ?>" id="button-confirm" class="button" />
-  </div>
+	<div class="right">
+		<input type="button" value="<?= $button_confirm; ?>" id="button-confirm" class="button" />
+	</div>
 </div>
 <script type="text/javascript">
 //<!--
 $('#button-confirm').bind('click', function() {
-	$.ajax({ 
+	$.ajax({
 		type: 'GET',
 		url: "<?= HTTP_CATALOG . "index.php?route=payment/cheque/confirm"; ?>",
 		success: function() {
 			location = '<?= $continue; ?>';
-		}		
+		}
 	});
 });
-//--></script> 
+//--></script>

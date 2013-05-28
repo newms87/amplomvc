@@ -108,7 +108,7 @@ class ModelCatalogCategory extends Model {
 		$this->url->remove_alias('product/category', 'category_id=' . $category_id);
 		
 		$this->cache->delete('category');
-	} 
+	}
 
 	public function getCategory($category_id) {
 		$result = $this->query_row("SELECT * FROM " . DB_PREFIX . "category WHERE category_id = '" . (int)$category_id . "'");
@@ -116,7 +116,7 @@ class ModelCatalogCategory extends Model {
 		$result['keyword'] = $this->url->get_alias('product/category', 'category_id=' . $category_id);
 		
 		return $result;
-	} 
+	}
 	
 	public function getCategories($parent_id = 0) {
 		$category_data = $this->cache->get('category.' . (int)$this->config->get('config_language_id') . '.' . (int)$parent_id);
@@ -135,7 +135,7 @@ class ModelCatalogCategory extends Model {
 				);
 			
 				$category_data = array_merge($category_data, $this->getCategories($result['category_id']));
-			}	
+			}
 	
 			$this->cache->set('category.' . (int)$this->config->get('config_language_id') . '.' . (int)$parent_id, $category_data);
 		}
@@ -184,7 +184,7 @@ class ModelCatalogCategory extends Model {
 		}
 		
 		return $category_description_data;
-	}	
+	}
 	
 	public function getCategoryStores($category_id) {
 		$category_store_data = array();
@@ -214,11 +214,11 @@ class ModelCatalogCategory extends Model {
 			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "category");
 		
 		return $query->row['total'];
-	}	
+	}
 	
 	public function getTotalCategoriesByLayoutId($layout_id) {
 		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "category_to_layout WHERE layout_id = '" . (int)$layout_id . "'");
 
 		return $query->row['total'];
-	}		
+	}
 }

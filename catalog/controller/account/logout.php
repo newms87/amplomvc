@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerAccountLogout extends Controller {
 	public function index() {
 		$this->template->load('common/success');
@@ -26,9 +26,9 @@ class ControllerAccountLogout extends Controller {
 			'common/content_top',
 			'common/content_bottom',
 			'common/footer',
-			'common/header'	
+			'common/header'
 		);
 						
-		$this->response->setOutput($this->render());	
+		$this->response->setOutput($this->render());
   	}
 }

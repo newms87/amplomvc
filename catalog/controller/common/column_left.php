@@ -1,4 +1,4 @@
-<?php  
+<?php
 class ControllerCommonColumnLeft extends Controller {
 	public function index() {
 		$this->template->load('common/column_left');

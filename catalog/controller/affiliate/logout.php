@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerAffiliateLogout extends Controller {
 	public function index() {
 		$this->template->load('common/success');
@@ -19,21 +19,15 @@ class ControllerAffiliateLogout extends Controller {
 
 		$this->data['continue'] = $this->url->link('common/home');
 
-
-
-
-
-
-
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
 			'common/content_top',
 			'common/content_bottom',
 			'common/footer',
-			'common/header'	
+			'common/header'
 		);
 						
-		$this->response->setOutput($this->render());	
+		$this->response->setOutput($this->render());
   	}
 }

@@ -1,4 +1,4 @@
-<?php  
+<?php
 class ControllerModuleBanner extends Controller {
 	protected function index($setting) {
 		$this->template->load('module/banner');
@@ -22,12 +22,6 @@ class ControllerModuleBanner extends Controller {
 		}
 		
 		$this->data['module'] = $module++;
-				
-
-
-
-
-
 
 		$this->render();
 	}

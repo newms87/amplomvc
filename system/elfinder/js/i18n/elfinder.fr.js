@@ -54,7 +54,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'errMaxSize'           : 'Les données dépassent la taille maximale allouée.',
 			'errFileMaxSize'       : 'Le fichier dépasse la taille maximale allouée.',
 			'errUploadMime'        : 'Type de fichier non autorisé.',
-			'errUploadTransfer'    : '"$1" erreur transfert.', 
+			'errUploadTransfer'    : '"$1" erreur transfert.',
 			'errSave'              : 'Impossible de sauvegarder "$1".',
 			'errCopy'              : 'Impossible de copier "$1".',
 			'errMove'              : 'Impossible de déplacer "$1".',
@@ -98,7 +98,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'cmdresize'    : 'Redimmensionner l\'image',
 			'cmdsort'      : 'Trier',
 			
-			/*********************************** buttons ***********************************/ 
+			/*********************************** buttons ***********************************/
 			'btnClose'  : 'Fermer',
 			'btnSave'   : 'Sauvegarder',
 			'btnRm'     : 'Supprimer',
@@ -143,12 +143,12 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'Dec'         : 'Déc',
 
 			/******************************** sort variants ********************************/
-			'sortnameDirsFirst' : 'par nom (dossiers en premier)', 
-			'sortkindDirsFirst' : 'par type (dossiers en premier)', 
-			'sortsizeDirsFirst' : 'par taille (dossiers en premier)', 
-			'sortdateDirsFirst' : 'par date (dossiers en premier)', 
-			'sortname'          : 'par nom', 
-			'sortkind'          : 'par type', 
+			'sortnameDirsFirst' : 'par nom (dossiers en premier)',
+			'sortkindDirsFirst' : 'par type (dossiers en premier)',
+			'sortsizeDirsFirst' : 'par taille (dossiers en premier)',
+			'sortdateDirsFirst' : 'par date (dossiers en premier)',
+			'sortname'          : 'par nom',
+			'sortkind'          : 'par type',
 			'sortsize'          : 'par taille',
 			'sortdate'          : 'par date',
 
@@ -174,7 +174,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'viewlist'        : 'Vue listing',
 			'viewicons'       : 'Vue icônes',
 			'places'          : 'Places',
-			'calc'            : 'Calculer', 
+			'calc'            : 'Calculer',
 			'path'            : 'Chemin',
 			'aliasfor'        : 'Raccourcis pour',
 			'locked'          : 'Verrouiller',
@@ -185,7 +185,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'yes'             : 'oui',
 			'no'              : 'non',
 			'link'            : 'Lien',
-			'searcresult'     : 'Résultat de la recherche',  
+			'searcresult'     : 'Résultat de la recherche',
 			'selected'        : 'Éléments sélectionnés',
 			'about'           : 'À propos',
 			'shortcuts'       : 'Raccourcis',

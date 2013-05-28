@@ -11,11 +11,11 @@ class ModelDesignBanner extends Model {
 				
 				$banner_image_id = $this->db->getLastId();
 				
-				foreach ($banner_image['banner_image_description'] as $language_id => $banner_image_description) {				
+				foreach ($banner_image['banner_image_description'] as $language_id => $banner_image_description) {
 					$this->query("INSERT INTO " . DB_PREFIX . "banner_image_description SET banner_image_id = '" . (int)$banner_image_id . "', language_id = '" . (int)$language_id . "', banner_id = '" . (int)$banner_id . "', title = '" .  $this->db->escape($banner_image_description['title']) . "'");
 				}
 			}
-		}		
+		}
 	}
 	
 	public function editBanner($banner_id, $data) {
@@ -30,11 +30,11 @@ class ModelDesignBanner extends Model {
 				
 				$banner_image_id = $this->db->getLastId();
 				
-				foreach ($banner_image['banner_image_description'] as $language_id => $banner_image_description) {				
+				foreach ($banner_image['banner_image_description'] as $language_id => $banner_image_description) {
 					$this->query("INSERT INTO " . DB_PREFIX . "banner_image_description SET banner_image_id = '" . (int)$banner_image_id . "', language_id = '" . (int)$language_id . "', banner_id = '" . (int)$banner_id . "', title = '" .  $this->db->escape($banner_image_description['title']) . "'");
 				}
 			}
-		}			
+		}
 	}
 	
 	public function deleteBanner($banner_id) {
@@ -55,12 +55,12 @@ class ModelDesignBanner extends Model {
 		$sort_data = array(
 			'name',
 			'status'
-		);	
+		);
 		
 		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
-			$sql .= " ORDER BY " . $data['sort'];	
+			$sql .= " ORDER BY " . $data['sort'];
 		} else {
-			$sql .= " ORDER BY name";	
+			$sql .= " ORDER BY name";
 		}
 		
 		if (isset($data['order']) && ($data['order'] == 'DESC')) {
@@ -72,14 +72,14 @@ class ModelDesignBanner extends Model {
 		if (isset($data['start']) || isset($data['limit'])) {
 			if ($data['start'] < 0) {
 				$data['start'] = 0;
-			}					
+			}
 
 			if ($data['limit'] < 1) {
 				$data['limit'] = 20;
-			}	
+			}
 		
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
-		}		
+		}
 		
 		$query = $this->query($sql);
 
@@ -96,7 +96,7 @@ class ModelDesignBanner extends Model {
 			
 			$banner_image_description_query = $this->query("SELECT * FROM " . DB_PREFIX . "banner_image_description WHERE banner_image_id = '" . (int)$banner_image['banner_image_id'] . "' AND banner_id = '" . (int)$banner_id . "'");
 			
-			foreach ($banner_image_description_query->rows as $banner_image_description) {			
+			foreach ($banner_image_description_query->rows as $banner_image_description) {
 				$banner_image_description_data[$banner_image_description['language_id']] = array('title' => $banner_image_description['title']);
 			}
 		
@@ -114,5 +114,5 @@ class ModelDesignBanner extends Model {
 	public function getTotalBanners() {
 		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "banner");
 		return $query->row['total'];
-	}	
+	}
 }

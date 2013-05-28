@@ -54,7 +54,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'errMaxSize'           : 'Innholdet overgår maksimum tillatt størrelse.',
 			'errFileMaxSize'       : 'Filen vergår maksimum tillatt størrelse.',
 			'errUploadMime'        : 'Filtypen ikke tillatt.',
-			'errUploadTransfer'    : '"$1" overførings feil.', 
+			'errUploadTransfer'    : '"$1" overførings feil.',
 			'errSave'              : 'Kunne ikke lagre "$1".',
 			'errCopy'              : 'Kunne ikke kopiere "$1".',
 			'errMove'              : 'Kunne ikke flytte "$1".',
@@ -93,7 +93,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'cmdupload'    : 'Last opp filer',
 			'cmdview'      : 'Vis',
 			
-			/*********************************** buttons ***********************************/ 
+			/*********************************** buttons ***********************************/
 			'btnClose'  : 'Lukk',
 			'btnSave'   : 'Lagre',
 			'btnRm'     : 'Slett',
@@ -159,7 +159,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'viewlist'        : 'Listevisning',
 			'viewicons'       : 'Ikoner',
 			'places'          : 'Områder',
-			'calc'            : 'Beregn', 
+			'calc'            : 'Beregn',
 			'path'            : 'Bane',
 			'aliasfor'        : 'Alias for',
 			'locked'          : 'Låst',
@@ -170,7 +170,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'yes'             : 'ja',
 			'no'              : 'nei',
 			'link'            : 'Link',
-			'searcresult'     : 'Søkeresultater',  
+			'searcresult'     : 'Søkeresultater',
 			'selected'        : 'valgte filer',
 			'about'           : 'Om',
 			'shortcuts'       : 'Snarveier',

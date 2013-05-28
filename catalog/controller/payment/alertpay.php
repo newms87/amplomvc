@@ -16,12 +16,6 @@ class ControllerPaymentAlertPay extends Controller {
 		$this->data['ap_returnurl'] = $this->url->link('checkout/success');
 		$this->data['ap_cancelurl'] = $this->url->link('checkout/checkout');
 
-
-
-
-
-
-
 		$this->render();
 	}
 	

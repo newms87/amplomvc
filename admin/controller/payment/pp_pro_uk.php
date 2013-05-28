@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerPaymentPPProUK extends Controller {
 	
 
@@ -10,7 +10,7 @@ class ControllerPaymentPPProUK extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('pp_pro_uk', $_POST);				
+			$this->model_setting_setting->editSetting('pp_pro_uk', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -96,22 +96,22 @@ class ControllerPaymentPPProUK extends Controller {
 		if (isset($_POST['pp_pro_uk_total'])) {
 			$this->data['pp_pro_uk_total'] = $_POST['pp_pro_uk_total'];
 		} else {
-			$this->data['pp_pro_uk_total'] = $this->config->get('pp_pro_uk_total'); 
-		} 
+			$this->data['pp_pro_uk_total'] = $this->config->get('pp_pro_uk_total');
+		}
 				
 		if (isset($_POST['pp_pro_uk_order_status_id'])) {
 			$this->data['pp_pro_uk_order_status_id'] = $_POST['pp_pro_uk_order_status_id'];
 		} else {
-			$this->data['pp_pro_uk_order_status_id'] = $this->config->get('pp_pro_uk_order_status_id'); 
-		} 
+			$this->data['pp_pro_uk_order_status_id'] = $this->config->get('pp_pro_uk_order_status_id');
+		}
 
 		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 		
 		if (isset($_POST['pp_pro_uk_geo_zone_id'])) {
 			$this->data['pp_pro_uk_geo_zone_id'] = $_POST['pp_pro_uk_geo_zone_id'];
 		} else {
-			$this->data['pp_pro_uk_geo_zone_id'] = $this->config->get('pp_pro_uk_geo_zone_id'); 
-		} 
+			$this->data['pp_pro_uk_geo_zone_id'] = $this->config->get('pp_pro_uk_geo_zone_id');
+		}
 		
 		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 		
@@ -156,6 +156,6 @@ class ControllerPaymentPPProUK extends Controller {
 			$this->error['partner'] = $this->_('error_partner');
 		}
 		
-		return $this->error ? false : true;	
+		return $this->error ? false : true;
 	}
 }

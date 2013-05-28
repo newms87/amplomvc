@@ -1,4 +1,4 @@
-<?php 
+<?php
 class ControllerCheckoutBlockConfirmAddress extends Controller {
 	public function index($settings = array()) {
 		$this->template->load('checkout/block/confirm_address');
@@ -46,7 +46,7 @@ class ControllerCheckoutBlockConfirmAddress extends Controller {
 			$this->data['payment_address'] = $this->string_to_html($this->tool->insertables($payment_address, $format, '{', '}'));
 		}
 		
-		$this->response->setOutput($this->render()); 
+		$this->response->setOutput($this->render());
 	}
 
 	public function string_to_html($format){

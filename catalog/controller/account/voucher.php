@@ -1,5 +1,5 @@
-<?php 
-class ControllerAccountVoucher extends Controller { 
+<?php
+class ControllerAccountVoucher extends Controller {
 	
 	
 	public function index() {
@@ -26,7 +26,7 @@ class ControllerAccountVoucher extends Controller {
 			);
 			
 			$this->url->redirect($this->url->link('account/voucher/success'));
-		} 		
+		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
@@ -93,7 +93,7 @@ class ControllerAccountVoucher extends Controller {
 		if (isset($_POST['from_name'])) {
 			$this->data['from_name'] = $_POST['from_name'];
 		} elseif ($this->customer->isLogged()) {
-			$this->data['from_name'] = $this->customer->getFirstName() . ' '  . $this->customer->getLastName();
+			$this->data['from_name'] = $this->customer->info('firstname') . ' '  . $this->customer->info('lastname');
 		} else {
 			$this->data['from_name'] = '';
 		}
@@ -101,7 +101,7 @@ class ControllerAccountVoucher extends Controller {
 		if (isset($_POST['from_email'])) {
 			$this->data['from_email'] = $_POST['from_email'];
 		} elseif ($this->customer->isLogged()) {
-			$this->data['from_email'] = $this->customer->getEmail();		
+			$this->data['from_email'] = $this->customer->info('email');
 		} else {
 			$this->data['from_email'] = '';
 		}
@@ -112,13 +112,13 @@ class ControllerAccountVoucher extends Controller {
 				$this->data['voucher_theme_id'] = $_POST['voucher_theme_id'];
 		} else {
 				$this->data['voucher_theme_id'] = '';
-		}	
+		}
 					
 		if (isset($_POST['message'])) {
 			$this->data['message'] = $_POST['message'];
 		} else {
 			$this->data['message'] = '';
-		}	
+		}
 				
 		if (isset($_POST['amount'])) {
 			$this->data['amount'] = $_POST['amount'];
@@ -130,43 +130,7 @@ class ControllerAccountVoucher extends Controller {
 			$this->data['agree'] = $_POST['agree'];
 		} else {
 			$this->data['agree'] = false;
-		}	
-				
-
-
-
-
-
-
-		$this->children = array(
-			'common/column_left',
-			'common/column_right',
-			'common/content_top',
-			'common/content_bottom',
-			'common/footer',
-			'common/header'	
-		);
-				
-		$this->response->setOutput($this->render());		
-  	}
-	
-  	public function success() {
-		$this->template->load('common/success');
-
-		$this->language->load('account/voucher');
-
-		$this->document->setTitle($this->_('heading_title')); 
-		
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/voucher'));
-
-		$this->data['continue'] = $this->url->link('cart/cart');
-
-
-
-
-
-
+		}
 
 		$this->children = array(
 			'common/column_left',
@@ -177,13 +141,37 @@ class ControllerAccountVoucher extends Controller {
 			'common/header'
 		);
 				
- 		$this->response->setOutput($this->render()); 
+		$this->response->setOutput($this->render());
+  	}
+	
+  	public function success() {
+		$this->template->load('common/success');
+
+		$this->language->load('account/voucher');
+
+		$this->document->setTitle($this->_('heading_title'));
+		
+			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/voucher'));
+
+		$this->data['continue'] = $this->url->link('cart/cart');
+
+		$this->children = array(
+			'common/column_left',
+			'common/column_right',
+			'common/content_top',
+			'common/content_bottom',
+			'common/footer',
+			'common/header'
+		);
+				
+ 		$this->response->setOutput($this->render());
 	}
 	
 	private function validate() {
 		if ((strlen($_POST['to_name']) < 1) || (strlen($_POST['to_name']) > 64)) {
 				$this->error['to_name'] = $this->_('error_to_name');
-		}		
+		}
 		
 		if ((strlen($_POST['to_email']) > 96) || !preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $_POST['to_email'])) {
 				$this->error['to_email'] = $this->_('error_email');
@@ -191,7 +179,7 @@ class ControllerAccountVoucher extends Controller {
 		
 		if ((strlen($_POST['from_name']) < 1) || (strlen($_POST['from_name']) > 64)) {
 				$this->error['from_name'] = $this->_('error_from_name');
-		}  
+		}
 		
 		if ((strlen($_POST['from_email']) > 96) || !preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $_POST['from_email'])) {
 				$this->error['from_email'] = $this->_('error_email');
@@ -209,10 +197,6 @@ class ControllerAccountVoucher extends Controller {
 				$this->error['warning'] = $this->_('error_agree');
 		}
 									
-		if (!$this->error) {
-				return true;
-		} else {
-				return false;
-		}				
+		return $this->error ? false : true;
 	}
 }

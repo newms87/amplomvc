@@ -2,7 +2,7 @@
 // Heading
 $_['heading_title']  = 'Are You A Designer?';
 
-// Text 
+// Text
 $_['text_message']	= '<p>Your Request has been received! We will respond as quickly as we can!</p>';
 $_['text_message_sent'] = "You Message was sent successfully!";
 

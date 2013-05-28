@@ -32,12 +32,12 @@ class ModelLocalisationLanguage extends Model {
 				'name',
 				'code',
 				'sort_order'
-			);	
+			);
 			
 			if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
-				$sql .= " ORDER BY " . $data['sort'];	
+				$sql .= " ORDER BY " . $data['sort'];
 			} else {
-				$sql .= " ORDER BY sort_order, name";	
+				$sql .= " ORDER BY sort_order, name";
 			}
 			
 			if (isset($data['order']) && ($data['order'] == 'DESC')) {
@@ -49,11 +49,11 @@ class ModelLocalisationLanguage extends Model {
 			if (isset($data['start']) || isset($data['limit'])) {
 				if ($data['start'] < 0) {
 					$data['start'] = 0;
-				}					
+				}
 
 				if ($data['limit'] < 1) {
 					$data['limit'] = 20;
-				}	
+				}
 			
 				$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
 			}
@@ -81,12 +81,12 @@ class ModelLocalisationLanguage extends Model {
 							'sort_order'  => $result['sort_order'],
 							'status'		=> $result['status']
 						);
-				}	
+				}
 			
 				$this->cache->set('language', $language_data);
 			}
 		
-			return $language_data;			
+			return $language_data;
 		}
 	}
 	

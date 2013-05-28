@@ -1,4 +1,4 @@
-<?php  
+<?php
 class ControllerModuleInformation extends Controller {
 	protected function index() {
 		$this->template->load('module/information');
@@ -16,12 +16,6 @@ class ControllerModuleInformation extends Controller {
 
 		$this->data['contact'] = $this->url->link('information/contact');
 		$this->data['sitemap'] = $this->url->link('information/sitemap');
-		
-
-
-
-
-
 
 		$this->render();
 	}

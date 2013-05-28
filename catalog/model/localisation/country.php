@@ -10,7 +10,7 @@ class ModelLocalisationCountry extends Model {
 		$query = $this->query("SELECT name FROM " . DB_PREFIX . "country WHERE country_id = '" . (int)$country_id . "' AND status = '1'");
 		
 		return $query->num_rows?$query->row['name']:'';
-	}  
+	}
 	
 	public function getCountries() {
 		$country_data = $this->cache->get('country.status');

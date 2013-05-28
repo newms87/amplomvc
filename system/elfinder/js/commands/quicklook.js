@@ -70,8 +70,8 @@ elFinder.prototype.commands.quicklook = function() {
 				opacity : 0,
 				width   : 20,//node.width(),
 				height  : fm.view == 'list' ? 1 : 20,
-				top     : node.offset().top+'px', 
-				left    : node.offset().left+'px' 
+				top     : node.offset().top+'px',
+				left    : node.offset().left+'px'
 			}
 		},
 		/**
@@ -102,25 +102,25 @@ elFinder.prototype.commands.quicklook = function() {
 		 *
 		 * @type Number
 		 **/
-		width, 
+		width,
 		/**
 		 * Opened window height (from config)
 		 *
 		 * @type Number
 		 **/
-		height, 
+		height,
 		/**
 		 * elFinder node
 		 *
 		 * @type jQuery
 		 **/
-		parent, 
+		parent,
 		/**
 		 * elFinder current directory node
 		 *
 		 * @type jQuery
 		 **/
-		cwd, 
+		cwd,
 		title   = $('<div class="elfinder-quicklook-title"/>'),
 		icon    = $('<div/>'),
 		info    = $('<div class="elfinder-quicklook-info"/>'),//.hide(),
@@ -139,9 +139,9 @@ elFinder.prototype.commands.quicklook = function() {
 					navbar.unbind('mouseenter').unbind('mousemove');
 				} else {
 					win.data('position', {
-						left   : win.css('left'), 
-						top    : win.css('top'), 
-						width  : win.width(), 
+						left   : win.css('left'),
+						top    : win.css('top'),
+						width  : win.width(),
 						height : win.height()
 					})
 					.css({
@@ -255,7 +255,7 @@ elFinder.prototype.commands.quicklook = function() {
 		.append(self.info.hide())
 		.draggable({handle : 'div.elfinder-quicklook-titlebar'})
 		.bind('open', function(e) {
-			var win  = self.window, 
+			var win  = self.window,
 				file = self.value,
 				node;
 
@@ -327,7 +327,7 @@ elFinder.prototype.commands.quicklook = function() {
 		video : {
 			ogg  : support('video/ogg; codecs="theora"'),
 			webm : support('video/webm; codecs="vp8, vorbis"'),
-			mp4  : support('video/mp4; codecs="avc1.42E01E"') || support('video/mp4; codecs="avc1.42E01E, mp4a.40.2"') 
+			mp4  : support('video/mp4; codecs="avc1.42E01E"') || support('video/mp4; codecs="avc1.42E01E, mp4a.40.2"')
 		}
 	}
 	
@@ -357,12 +357,12 @@ elFinder.prototype.commands.quicklook = function() {
 	 * @return Object
 	 **/
 	this.init = function() {
-		var o       = this.options, 
+		var o       = this.options,
 			win     = this.window,
 			preview = this.preview,
 			i, p;
 		
-		width  = o.width  > 0 ? parseInt(o.width)  : 450;	
+		width  = o.width  > 0 ? parseInt(o.width)  : 450;
 		height = o.height > 0 ? parseInt(o.height) : 300;
 
 		fm.one('load', function() {
@@ -377,14 +377,14 @@ elFinder.prototype.commands.quicklook = function() {
 			})
 			
 			if ($.fn.resizable) {
-				win.resizable({ 
-					handles   : 'se', 
-					minWidth  : 350, 
-					minHeight : 120, 
-					resize    : function() { 
+				win.resizable({
+					handles   : 'se',
+					minWidth  : 350,
+					minHeight : 120,
+					resize    : function() {
 						// use another event to avoid recursion in fullscreen mode
 						// may be there is clever solution, but i cant find it :(
-						preview.trigger('changesize'); 
+						preview.trigger('changesize');
 					}
 				});
 			}

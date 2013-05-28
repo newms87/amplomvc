@@ -146,7 +146,7 @@ class Theme {
 				
 				if($text != 'position_' . $key){
 					$position = $text;
-				} 
+				}
 			}
 		}
 	}
@@ -155,16 +155,16 @@ class Theme {
 		//Search By specified theme
 		if($theme){
 			if (file_exists(DIR_THEME . $theme . '/' . $file)) {
-				return DIR_THEME . $theme . '/' . $file; 
+				return DIR_THEME . $theme . '/' . $file;
 			}
 		}
 		//Search By current theme
 		else{
 			if (file_exists(DIR_THEME . $this->theme . '/' . $file)) {
-				return DIR_THEME . $this->theme . '/' . $file; 
+				return DIR_THEME . $this->theme . '/' . $file;
 			}
 			elseif (file_exists(DIR_THEME . $this->theme . '/template/' . $file)) {
-				return DIR_THEME . $this->theme . '/template/' . $file; 
+				return DIR_THEME . $this->theme . '/template/' . $file;
 			}
 			elseif(file_exists(DIR_THEME . $this->default_theme . '/template/' . $file)) {
 				return DIR_THEME . $this->default_theme . '/template/' . $file;
