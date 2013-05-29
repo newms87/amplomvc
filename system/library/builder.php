@@ -1,5 +1,6 @@
 <?php
-class Builder extends Controller{
+class Builder extends Controller
+{
 	
 	protected $registry;
 	
@@ -10,15 +11,18 @@ class Builder extends Controller{
 	private $builder_template;
 
 	
-	public function __construct(&$registry) {
+	public function __construct(&$registry)
+	{
 	$this->registry = &$registry;
 	}
 	
-	public function __get($key){
+	public function __get($key)
+	{
 	return $this->registry->get($key);
 	}
 	
-	public function build_links($links, $depth = 0){
+	public function build_links($links, $depth = 0)
+	{
 		switch($depth){
 			case 0:
 				$class = "top_menu";
@@ -35,43 +39,46 @@ class Builder extends Controller{
 			
 		$zindex = count($links);
 			
-		foreach($links as $link){
+		foreach($links as $link)
+{
 			
 			$attr_list = '';
 				
-			if(!empty($link['attrs'])){
-				if(is_string($link['attrs'])){
+			if (!empty($link['attrs'])) {
+				if (is_string($link['attrs'])) {
 					$attr_list .= $link['attrs'];
 				}
-				else{
-					foreach($link['attrs'] as $key=>$value){
+				else {
+					foreach ($link['attrs'] as $key=>$value) {
 						$attr_list .= "$key=\"$value\"";
 					}
 				}
 			}
 			
-			if(!empty($link['title']) && !isset($link['attrs']['title'])){
+			if (!empty($link['title']) && !isset($link['attrs']['title'])) {
 				$attr_list .= "title=\"$link[title]\"";
 			}
 			
-			if(empty($link['display_name'])){
+			if (empty($link['display_name'])) {
 				$link['display_name'] = $link['name'];
 			}
 				
 			$children = '';
 			$sub_class = '';
-			if(!empty($link['children'])){
+			if(!empty($link['children']))
+{
 				$children = $this->build_links($link['children'], $depth+1);
 				$sub_class = 'class="has_children"';
 			}
 			
-			if(!empty($link['is_route'])){
+			if(!empty($link['is_route']))
+{
 				$query = isset($link['query']) ? $link['query'] : '';
 				$link['href'] = $this->url->link($link['href'], $query);
 			}
 			
 			$href = '';
-			if(!empty($link['href'])){
+			if (!empty($link['href'])) {
 				$href = "href=\"$link[href]\"";
 			}
 			
@@ -85,29 +92,32 @@ class Builder extends Controller{
 		return $html;
 	}
 	
-	public function display_breadcrumbs(){
+	public function display_breadcrumbs()
+	{
 		$html = "";
-		foreach ($this->breadcrumb->get() as $key => $crumb){
+		foreach ($this->breadcrumb->get() as $key => $crumb) {
 			$html .= ($key > 0 ? $crumb['separator'] : '') . "<a href='$crumb[href]'>$crumb[text]</a>";
 		}
 		
-		return "<div class='breadcrumb'>$html</div>";
+		return "<div class ='breadcrumb'>$html</div>";
 	}
 	
-	public function display_messages($messages){
+	public function display_messages($messages)
+	{
 		$html ='';
-		foreach($messages as $type=>$msgs){
-			$html .= "<div class='message_box $type'>";
+		foreach ($messages as $type=>$msgs) {
+			$html .= "<div class ='message_box $type'>";
 			$html .= "<div class='message_list'>";
-			foreach($msgs as $msg){
-				if(!empty($msg)){
+			foreach($msgs as $msg)
+{
+				if (!empty($msg)) {
 					$html .= "<div>$msg</div>";
 				}
 			}
 			$html .= "</div>";
 			
-			if($this->config->get('config_allow_close_message_box')){
-				$html .= "<span class='close' onclick=\"$(this).closest('.message_box').remove()\"></span>";
+			if ($this->config->get('config_allow_close_message_box')) {
+				$html .= "<span class ='close' onclick=\"$(this).closest('.message_box').remove()\"></span>";
 			}
 			
 			$html .= "</div>";
@@ -116,32 +126,35 @@ class Builder extends Controller{
 		return $html;
 	}
 	
-	public function display_errors($errors=false){
+	public function display_errors($errors=false)
+	{
 		if(!$errors) return '';
 		
-		return $html = "<div class='message_box warning'>" . $this->display_errors_r($errors) . "</div>";
+		return $html = "<div class ='message_box warning'>" . $this->display_errors_r($errors) . "</div>";
 	}
 		
-	public function display_errors_r($errors){
+	public function display_errors_r($errors)
+	{
 		if(!$errors) return '';
 		
-		if(is_string($errors)){
+		if (is_string($errors)) {
 			return "<div>$errors</div>";
 		}
-		elseif(is_array($errors)){
+		elseif (is_array($errors)) {
 			$html = '';
-			foreach($errors as $e){
+			foreach ($errors as $e) {
 				$html .= $this->display_errors_r($e);
 			}
 			return $html;
 		}
 	}
 	
-	public function attrs($data){
+	public function attrs($data)
+	{
 		$html = '';
 		
-		foreach($data as $key => $value){
-			if(strpos($key,'#') === 0){
+		foreach ($data as $key => $value) {
+			if (strpos($key,'#') === 0) {
 				$html .= substr($key,1) . "=\"$value\"";
 			}
 		}
@@ -149,45 +162,46 @@ class Builder extends Controller{
 		return $html;
 	}
 	
-	public function image_input($name, $image = '', $thumb = null, $no_image = null, $width = null, $height = null, $escape_quotes = false){
+	public function image_input($name, $image = '', $thumb = null, $no_image = null, $width = null, $height = null, $escape_quotes = false)
+	{
 		$text_clear = $this->language->get('text_clear');
 		$text_browse = $this->language->get('text_browse');
 		
-		if(!$width){
-			if($thumb){
-				if(is_array($thumb)){
+		if (!$width) {
+			if ($thumb) {
+				if (is_array($thumb)) {
 					$width = (int)$thumb[0];
 					$height = (int)$thumb[1];
 				}
-				elseif(is_string($thumb) && file_exists($thumb)){
+				elseif (is_string($thumb) && file_exists($thumb)) {
 					$size = getimagesize($thumb);
 					$width = $size[0];
 					$height = $size[1];
 				}
-				else{
+				else {
 					trigger_error("Error in Builder: image_input(): \$thumb must be an existing file or an array of array(\$width, \$height)");
 					return;
 				}
 			}
-			elseif(defined("IS_ADMIN")){
+			elseif (defined("IS_ADMIN")) {
 				$width = $this->config->get('config_image_admin_thumb_width');
 				$height = $this->config->get('config_image_admin_thumb_height');
 			}
-			else{
+			else {
 				$width = $this->config->get('config_image_thumb_width');
 				$height = $this->config->get('config_image_thumb_height');
 			}
 		}
 	
-		if(!$no_image){
+		if (!$no_image) {
 			$no_image = $this->image->resize('no_image.png', $width, $height);
 		}
 		
-		if(!is_file($thumb) && $image){
+		if (!is_file($thumb) && $image) {
 			$thumb = $this->image->resize($image, $width, $height);
 		}
 		
-		if(!$thumb){
+		if (!$thumb) {
 			$thumb = $no_image;
 		}
 		
@@ -197,7 +211,7 @@ class Builder extends Controller{
 		
 		switch($this->builder_template){
 			case 'browse_clear':
-				$html .= "<div class=\"image\">";
+				$html .= "<div class =\"image\">";
 				$html .= 	"<img src=\"$thumb\" alt=\"\" class=\"iu_thumb\" /><br />";
 				$html .= 	"<input type=\"hidden\" name=\"$name\" value=\"$image\" class=\"iu_image\" />";
 				$html .= 	"<a onclick=\"upload_image($(this).closest('.image'));\">$text_browse</a>&nbsp;&nbsp;|&nbsp;&nbsp;";
@@ -236,33 +250,36 @@ class Builder extends Controller{
 	* @param $name - the key in the array to use as the display name
 	* @param (optional) $type - How the $id keys should be treated (eg: int, string, float, etc.). If no type is set, it will try to figure it out on its own
 	*/
-	public function set_config($id,$name, $type=null){
+	public function set_config($id,$name, $type=null)
+	{
 	$this->builder_id = $id;
 	$this->builder_name = $name;
 	$this->builder_type = $type;
 	}
 	
-	public function set_builder_template($template){
+	public function set_builder_template($template)
+	{
 		$this->builder_template = $template;
 	}
 	
-	function build_batch_actions($form, $actions, $url){
+	function build_batch_actions($form, $actions, $url)
+	{
 		
-		foreach($actions as $key => &$action){
+		foreach ($actions as $key => &$action) {
 			$action['attrs'] = '';
 			
 			//All keys beginning with '#' are html tag attributes
-			foreach($action as $attr => $val){
-				if(strpos($attr, '#') === 0){
+			foreach ($action as $attr => $val) {
+				if (strpos($attr, '#') === 0) {
 					$action['attrs'] .= "$attr='$val' ";
 				}
 			}
 		
-			if(!isset($action['default'])){
+			if (!isset($action['default'])) {
 				$action['default'] = '';
 			}
 				
-			if(!isset($action['key'])){
+			if (!isset($action['key'])) {
 				$action['key'] = $key;
 			}
 		}
@@ -290,27 +307,28 @@ class Builder extends Controller{
 		$opt_group_active = false;
 		
 		
-		if(!is_array($data)){
+		if (!is_array($data)) {
 			$this->error_log->write("library/tpl.php::build(): data was not an array. " . gettype($data) . " was given.");
 			return;
 		}
 		
 		//build the attributes
-		if(is_array($attr_list)){
+		if (is_array($attr_list)) {
 			$attrs ='';
-			foreach($attr_list as $attr => $value){
+			foreach ($attr_list as $attr => $value) {
 				$attrs .= $escape_quotes ? $attr.'=\"'.$value.'\"' : $attr . "=\"" . $value ."\"";
 			}
 		}
-		else{
+		else {
 			$attrs = $attr_list;
 		}
 		
-			if(!is_array($select)){
+			if (!is_array($select)) {
 				$select = array($select);
 			}
 			
-			$cast_to = function($value, $type){
+			$cast_to = function ($value, $type)
+ {
 				switch($type){
 					case 'int':
 						return (int)$value;
@@ -327,10 +345,10 @@ class Builder extends Controller{
 		$options='';
 		$selected_options = ''; //for clickable list
 		
-		foreach($data as $value => $display){
+		foreach ($data as $value => $display) {
 			
-			if(is_array($display)){
-				if(!isset($this->builder_id) || !isset($this->builder_name) || !isset($display[$this->builder_id]) || !isset($display[$this->builder_name])){
+			if (is_array($display)) {
+				if (!isset($this->builder_id) || !isset($this->builder_name) || !isset($display[$this->builder_id]) || !isset($display[$this->builder_name])) {
 					trigger_error("You must set the ID and Name to keys in the \$data Array using \$this->builder->set_config(\$id,\$name). " . get_caller());
 					return;
 				}
@@ -345,23 +363,23 @@ class Builder extends Controller{
 				//otherwise try to guess the type.
 				$selected = false;
 				
-				foreach($select as $s){
-					if(is_array($s)){
+				foreach ($select as $s) {
+					if (is_array($s)) {
 						$s = $s[$this->builder_id];
 					}
 					
-					if($this->builder_type){
+					if ($this->builder_type) {
 						$value = $cast_to($value, $this->builder_type);
 						
-						if($cast_to($s, $this->builder_type) === $value){
+						if ($cast_to($s, $this->builder_type) === $value) {
 							$selected = true;
 							break;
 						}
 					}
-				else{
+				else {
 					$v = is_integer($s) ? (int)$value : $value;
 						
-					if(((is_integer($v) && $s !=='' && !is_bool($s) && !is_null($s))?(int)$s:$s) === $v){
+					if (((is_integer($v) && $s !=='' && !is_bool($s) && !is_null($s))?(int)$s:$s) === $v) {
 							$selected = true;
 							break;
 						}
@@ -371,21 +389,21 @@ class Builder extends Controller{
 			switch($type){
 				case 'select':
 					$s = $selected?"selected='true'":'';
-					if(strpos($value,'#optgroup') === 0){
-					if($opt_group_active){
+					if (strpos($value,'#optgroup') === 0) {
+					if ($opt_group_active) {
 						$options .= "</optgroup>";
 					}
 					$options .= "<optgroup label='$display'>";
 					$opt_group_active = true;
 					}
-					else{
+					else {
 					$options .= "<option value='$value' $s>$display</option>";
 					}
 					break;
 					
 				case 'radio':
 					$s = $selected?'checked="checked"':'';
-					$options .= "<span class='radio_button'><input type='radio' id='radio-$name-$value' name='$name' value='$value' $s /><label for='radio-$name-$value'>$display</label></span>";
+					$options .= "<span class ='radio_button'><input type='radio' id='radio-$name-$value' name='$name' value='$value' $s /><label for='radio-$name-$value'>$display</label></span>";
 					break;
 				
 					case 'multiselect':
@@ -394,10 +412,11 @@ class Builder extends Controller{
 						break;
 						
 				case 'clickable_list':
-					if($selected){
+					if($selected)
+{
 					$selected_options .= "<div onclick='clickable_list_remove($(this))'><span>$display</span><input type='hidden' value='$value' name='$value' /><img src='view/theme/default/image/remove.png' /></div>";
 					}
-					else{
+					else {
 					$options .= "<div onclick='clickable_list_add($(this), '$value')'><span>$display</span><img src='view/theme/default/image/add.png' /></div>";
 					}
 				default:
@@ -407,7 +426,7 @@ class Builder extends Controller{
 		
 		switch($type){
 			case 'select':
-				if($opt_group_active){
+				if ($opt_group_active) {
 					$options .= "</optgroup>";
 				}
 				return "<select name='$name' $attrs>$options</select>";
@@ -416,7 +435,7 @@ class Builder extends Controller{
 				return "<span $attrs>$options</span>";
 				
 				case 'multiselect':
-					return "<ul class='scrollbox' $attrs>$options</ul>" .
+					return "<ul class ='scrollbox' $attrs>$options</ul>" .
 							"<div class='scrollbox_buttons'>".
 								"<a class='check_all' onclick=\"$(this).parent().prev().find('input[type=checkbox]').attr('checked','checked')\">[ Check All ]</a>".
 								"<a class='uncheck_all' onclick=\"$(this).parent().prev().find('input[type=checkbox]').removeAttr('checked')\">[ Uncheck All ]</a>".
@@ -429,23 +448,25 @@ class Builder extends Controller{
 		}
 	}
 
-	function build_custom_select_dropdown($data, $option_name, $default, $select, $id='', $class=''){
+	function build_custom_select_dropdown($data, $option_name, $default, $select, $id='', $class='')
+	{
 		$options = '';
 		$selected_value = isset($default)?$default['value']:"";
 		$selected_name = isset($default)?$default['display_name']:"";
 		
-		foreach($data as $value => $display){
+		foreach ($data as $value => $display) {
 			is_array($display)?extract($display):'';
 			$display_name = is_array($display)?$display_name:$display;
 			$after = isset($after)?$after:"";
 			$before = isset($before)?$before:"";
 			$item_class = isset($item_class)?$item_class:"";
 			
-			if($select == $value){
+			if($select == $value)
+{
 				$selected_value = $value;
 				$selected_name = $display_name;
 			}
-			$options .= "<li onclick='select_menu_item(this)' class='$item_class' data='$value'>" . $before . $display_name . $after . "</li>";
+			$options .= "<li onclick='select_menu_item(this)' class ='$item_class' data='$value'>" . $before . $display_name . $after . "</li>";
 		}
 		
 		return <<<HTML
@@ -459,7 +480,8 @@ class Builder extends Controller{
 HTML;
 	}
 
-	public function js($js){
+	public function js($js)
+	{
 		static $js_loaded_files = array();
 		
 		$args = func_get_args();

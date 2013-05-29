@@ -25,7 +25,7 @@
  * @version	1.7.7, 2012-05-19
  */
 
-// Original file header of PEAR::Spreadsheet_Excel_Writer_Workbook (used as the base for this class):
+// Original file header of PEAR::Spreadsheet_Excel_Writer_Workbook (used as the base for this class ):
 // -----------------------------------------------------------------------------------------
 // /*
 // *  Module written/ported by Xavier Noguer <xnoguer@rezebra.com>
@@ -68,8 +68,7 @@
  * @package	PHPExcel_Writer_Excel5
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Writer_Excel5_Workbook extends PHPExcel_Writer_Excel5_BIFFwriter
-{
+class PHPExcel_Writer_Excel5_Workbook extends PHPExcel_Writer_Excel5_BIFFwriter{
 	/**
 	* Formula parser
 	*
@@ -191,7 +190,7 @@ class PHPExcel_Writer_Excel5_Workbook extends PHPExcel_Writer_Excel5_BIFFwriter
 
 
 	/**
-	* Class constructor
+	* class constructor
 	*
 	* @param PHPExcel	$phpExcel		The Workbook
 	* @param int		&$str_total		Total number of strings
@@ -303,7 +302,7 @@ class PHPExcel_Writer_Excel5_Workbook extends PHPExcel_Writer_Excel5_BIFFwriter
 	public function _addFont(PHPExcel_Style_Font $font)
 	{
 		$fontHashCode = $font->getHashCode();
-		if(isset($this->_addedFonts[$fontHashCode])){
+		if (isset($this->_addedFonts[$fontHashCode])) {
 			$fontIndex = $this->_addedFonts[$fontHashCode];
 		} else {
 			$countFonts = count($this->_fontWriters);
@@ -323,7 +322,8 @@ class PHPExcel_Writer_Excel5_Workbook extends PHPExcel_Writer_Excel5_BIFFwriter
 	* @param string $rgb E.g. 'FF00AA'
 	* @return int Color index
 	*/
-	private function _addColor($rgb) {
+	private function _addColor($rgb)
+	{
 		if (!isset($this->_colors[$rgb])) {
 			if (count($this->_colors) < 57) {
 				// then we add a custom color altering the palette

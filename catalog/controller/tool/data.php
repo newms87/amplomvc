@@ -1,9 +1,12 @@
 <?php
-class ControllerToolData extends Controller {
+class ControllerToolData extends Controller 
+{
 	
-	function index(){}
+	function index()
+	{}
 	
-	public function load_zones() {
+	public function load_zones()
+	{
 		if(!isset($_GET['country_id'])) return;
 		
 		$choose = isset($_GET['allow_all']) ? $this->_('text_all_zones') : $this->_('text_select');

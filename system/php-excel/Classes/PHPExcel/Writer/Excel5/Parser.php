@@ -25,7 +25,7 @@
  * @version	1.7.7, 2012-05-19
  */
 
-// Original file header of PEAR::Spreadsheet_Excel_Writer_Parser (used as the base for this class):
+// Original file header of PEAR::Spreadsheet_Excel_Writer_Parser (used as the base for this class ):
 // -----------------------------------------------------------------------------------------
 // *  Class for parsing Excel formulas
 // *
@@ -57,8 +57,7 @@
  * @package	PHPExcel_Writer_Excel5
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Writer_Excel5_Parser
-{
+class PHPExcel_Writer_Excel5_Parser{
 	/**	Constants				*/
 	// Sheet title in unquoted form
 	// Invalid sheet title characters cannot occur in the sheet title:
@@ -247,11 +246,11 @@ class PHPExcel_Writer_Excel5_Parser
 		// args:  The number of arguments that the function takes:
 		//			>=0 is a fixed number of arguments.
 		//			-1  is a variable  number of arguments.
-		// class: The reference, value or array class of the function args.
+		// class : The reference, value or array class of the function args.
 		// vol:	The function is volatile.
 		//
 		$this->_functions = array(
-			// function						ptg  args  class  vol
+			// function						ptg  args  class vol
 			'COUNT'			=> array(	0,	-1,	0,	0 ),
 			'IF'				=> array(	1,	-1,	1,	0 ),
 			'ISNA'				=> array(	2,	1,	1,	0 ),
@@ -514,7 +513,7 @@ class PHPExcel_Writer_Excel5_Parser
 	*/
 	function _convert($token)
 	{
-		if (preg_match("/\"([^\"]|\"\"){0,255}\"/", $token)) {
+		if (preg_match("/\"([^\"]|\"\") {0,255}\"/", $token)) {
 			return $this->_convertString($token);
 
 		} elseif (is_numeric($token)) {
@@ -633,14 +632,14 @@ class PHPExcel_Writer_Excel5_Parser
 	*
 	* @access private
 	* @param string	$range	An Excel range in the A1:A2
-	* @param int		$class
-	*/
+	* @param int		$class */
 	function _convertRange2d($range, $class=0)
 	{
 
 		// TODO: possible class value 0,1,2 check Formula.pm
 		// Split the range into 2 cell refs
-		if (preg_match('/^(\$)?([A-Ia-i]?[A-Za-z])(\$)?(\d+)\:(\$)?([A-Ia-i]?[A-Za-z])(\$)?(\d+)$/', $range)) {
+		if (preg_match('/^(\$)?([A-Ia-i]?[A-Za-z])(\$)?(\d+)\:(\$)?([A-Ia-i]?[A-Za-z])(\$)?(\d+)$/', $range)) 
+{
 			list($cell1, $cell2) = explode(':', $range);
 		} else {
 			// TODO: use real error codes
@@ -652,11 +651,14 @@ class PHPExcel_Writer_Excel5_Parser
 		list($row2, $col2) = $this->_cellToPackedRowcol($cell2);
 
 		// The ptg value depends on the class of the ptg.
-		if ($class == 0) {
+		if ($class == 0) 
+{
 			$ptgArea = pack("C", $this->ptg['ptgArea']);
-		} elseif ($class == 1) {
+		} elseif ($class == 1) 
+{
 			$ptgArea = pack("C", $this->ptg['ptgAreaV']);
-		} elseif ($class == 2) {
+		} elseif ($class == 2) 
+{
 			$ptgArea = pack("C", $this->ptg['ptgAreaA']);
 		} else {
 			// TODO: use real error codes
@@ -687,7 +689,8 @@ class PHPExcel_Writer_Excel5_Parser
 		list($cell1, $cell2) = explode(':', $range);
 
 		// Convert the cell references
-		if (preg_match("/^(\\$)?[A-Ia-i]?[A-Za-z](\\$)?(\d+)$/", $cell1)) {
+		if (preg_match("/^(\\$)?[A-Ia-i]?[A-Za-z](\\$)?(\d+)$/", $cell1)) 
+{
 			list($row1, $col1) = $this->_cellToPackedRowcol($cell1);
 			list($row2, $col2) = $this->_cellToPackedRowcol($cell2);
 		} else { // It's a rows range (like 26:27)
@@ -695,11 +698,14 @@ class PHPExcel_Writer_Excel5_Parser
 		}
 
 		// The ptg value depends on the class of the ptg.
-//		if ($class == 0) {
+//		if ($class == 0) 
+{
 			$ptgArea = pack("C", $this->ptg['ptgArea3d']);
-//		} elseif ($class == 1) {
+//		} elseif ($class == 1) 
+{
 //			$ptgArea = pack("C", $this->ptg['ptgArea3dV']);
-//		} elseif ($class == 2) {
+//		} elseif ($class == 2) 
+{
 //			$ptgArea = pack("C", $this->ptg['ptgArea3dA']);
 //		} else {
 //			throw new Exception("Unknown class $class");
@@ -724,11 +730,14 @@ class PHPExcel_Writer_Excel5_Parser
 		list($row, $col) = $cell_array;
 
 		// The ptg value depends on the class of the ptg.
-//		if ($class == 0) {
+//		if ($class == 0) 
+{
 //			$ptgRef = pack("C", $this->ptg['ptgRef']);
-//		} elseif ($class == 1) {
+//		} elseif ($class == 1) 
+{
 //			$ptgRef = pack("C", $this->ptg['ptgRefV']);
-//		} elseif ($class == 2) {
+//		} elseif ($class == 2) 
+{
 			$ptgRef = pack("C", $this->ptg['ptgRefA']);
 //		} else {
 //			// TODO: use real error codes
@@ -759,11 +768,14 @@ class PHPExcel_Writer_Excel5_Parser
 		list($row, $col) = $this->_cellToPackedRowcol($cell);
 
 		// The ptg value depends on the class of the ptg.
-//		if ($class == 0) {
+//		if ($class == 0) 
+{
 //			$ptgRef = pack("C", $this->ptg['ptgRef3d']);
-//		} elseif ($class == 1) {
+//		} elseif ($class == 1) 
+{
 //			$ptgRef = pack("C", $this->ptg['ptgRef3dV']);
-//		} elseif ($class == 2) {
+//		} elseif ($class == 2) 
+{
 			$ptgRef = pack("C", $this->ptg['ptgRef3dA']);
 //		} else {
 //			throw new Exception("Unknown class $class");
@@ -900,7 +912,7 @@ class PHPExcel_Writer_Excel5_Parser
 	/**
 	* Look up the index that corresponds to an external sheet name. The hash of
 	* sheet names is updated by the addworksheet() method of the
-	* PHPExcel_Writer_Excel5_Workbook class.
+	* PHPExcel_Writer_Excel5_Workbook class .
 	*
 	* @access	private
 	* @param	string	$sheet_name		Sheet name
@@ -918,7 +930,7 @@ class PHPExcel_Writer_Excel5_Parser
 	/**
 	* This method is used to update the array of sheet names. It is
 	* called by the addWorksheet() method of the
-	* PHPExcel_Writer_Excel5_Workbook class.
+	* PHPExcel_Writer_Excel5_Workbook class .
 	*
 	* @access public
 	* @see PHPExcel_Writer_Excel5_Workbook::addWorksheet()
@@ -1171,7 +1183,7 @@ class PHPExcel_Writer_Excel5_Parser
 					return $token;
 				}
 				// If it's a string (of maximum 255 characters)
-				elseif (preg_match("/\"([^\"]|\"\"){0,255}\"/",$token) and $this->_lookahead != '"' and (substr_count($token, '"')%2 == 0))
+				elseif (preg_match("/\"([^\"]|\"\") {0,255}\"/",$token) and $this->_lookahead != '"' and (substr_count($token, '"')%2 == 0))
 				{
 					return $token;
 				}
@@ -1187,7 +1199,7 @@ class PHPExcel_Writer_Excel5_Parser
 				}
 				//	It's an argument of some description (e.g. a named range),
 				//		precise nature yet to be determined
-				elseif(substr($token,-1) == ')') {
+				elseif (substr($token,-1) == ')') {
 					return $token;
 				}
 				return '';
@@ -1268,7 +1280,7 @@ class PHPExcel_Writer_Excel5_Parser
 	function _expression()
 	{
 		// If it's a string return a string node
-		if (preg_match("/\"([^\"]|\"\"){0,255}\"/", $this->_current_token)) {
+		if (preg_match("/\"([^\"]|\"\") {0,255}\"/", $this->_current_token)) {
 			$tmp = str_replace('""', '"', $this->_current_token);
 			if (($tmp == '"') || ($tmp == '')) $tmp = '""';	//	Trap for "" that has been used for an empty string
 			$result = $this->_createTree($tmp, '', '');
@@ -1429,7 +1441,7 @@ class PHPExcel_Writer_Excel5_Parser
 		// If it's a number or a percent
 		elseif (is_numeric($this->_current_token))
 		{
-			if($this->_lookahead == '%'){
+			if ($this->_lookahead == '%') {
 				$result = $this->_createTree('ptgPercent', $this->_current_token, '');
 			} else {
 				$result = $this->_createTree($this->_current_token, '', '');

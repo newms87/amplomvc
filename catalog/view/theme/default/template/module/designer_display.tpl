@@ -11,7 +11,7 @@
 				<a class='preview_link_overlay' href="<?= $designer['href']; ?>">
 					<div class='link_overlay_text'>
 						<div class='designer_name'><?= $designer['name']; ?></div>
-						<div class='featured_category_name'><?= $designer['cat_name'];?></div>
+						<div class='featured_category_name'><?= $designer['cat_name']; ?></div>
 					</div>
 					<div class='link_overlay_go'><div class='link_overlay_arrow'></div></div>
 			</a>
@@ -36,9 +36,9 @@
 								} ?>
 					</div>
 					<div class='info_links'>
-						<a href='<?= $designer['href'];?>' class='info_link_collection'><?= $entry_collection;?></a>
+						<a href='<?= $designer['href']; ?>' class='info_link_collection'><?= $entry_collection; ?></a>
 						<div class='pink_split'></div>
-						<a href='<?= $designer['interview_href'];?>' class='info_link_story'><?= $entry_story;?></a>
+						<a href='<?= $designer['interview_href']; ?>' class='info_link_story'><?= $entry_story; ?></a>
 					</div>
 				</div>
 			</div>

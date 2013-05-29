@@ -33,8 +33,7 @@
  * @package	PHPExcel_Writer_Excel5
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Writer_Excel5_Escher
-{
+class PHPExcel_Writer_Excel5_Escher{
 	/**
 	* The object we are writing
 	*/
@@ -71,7 +70,8 @@ class PHPExcel_Writer_Excel5_Escher
 		// initialize
 		$this->_data = '';
 
-		switch (get_class($this->_object)) {
+		switch (get_class ($this->_object)) 
+{
 
 		case 'PHPExcel_Shared_Escher':
 			if ($dggContainer = $this->_object->getDggContainer()) {

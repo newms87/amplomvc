@@ -1,8 +1,10 @@
 #<?php
 //=====
-class ControllerCatalogProduct extends Controller {
+class ControllerCatalogProduct extends Controller 
+{
 //.....
-	private function getList() {
+	private function getList()
+	{
 //-----
 //>>>>> {php} {before}
 		$this->language->plugin('collections', 'admin/product');
@@ -25,7 +27,8 @@ class ControllerCatalogProduct extends Controller {
 //=====
 	}
 //.....
-	private function getForm() {
+	private function getForm()
+	{
 //.....
 		$defaults = array(
 //-----
@@ -35,7 +38,7 @@ class ControllerCatalogProduct extends Controller {
 //=====
 		);
 //.....
-		if (!isset($this->data['product_category'])){
+		if (!isset($this->data['product_category'])) {
 			$this->data['product_category'] = $this->model_catalog_product->getProductCategories($product_id);
 		}
 //-----
@@ -44,7 +47,7 @@ class ControllerCatalogProduct extends Controller {
 		
 		$this->data['data_collections'] = $this->model_catalog_collection->getCollections();
 		
-		if(!isset($this->data['product_collection'])){
+		if (!isset($this->data['product_collection'])) {
 			$this->data['product_collection'] = $this->model_catalog_collection->getCollectionsForProduct($product_id);
 		}
 //-----

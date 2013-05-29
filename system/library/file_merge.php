@@ -1,56 +1,64 @@
 <?php
-class FileMerge {
+class FileMerge 
+{
 	private $merge_registry;
 	private $db;
 	private $error_msg = '';
 	
-	function __construct($db, $config){
+	function __construct($db, $config)
+	{
 		$this->db = $db;
 		$this->config = $config;
 		
 		$this->load_merge_registry();
 	}
 	
-	public function get_error(){
+	public function get_error()
+	{
 		return $this->error_msg;
 	}
 	
-	private function set_error($file, $line, $code, $msg){
-		if($file){
+	private function set_error($file, $line, $code, $msg)
+	{
+		if ($file) {
 			$msg = "Error in $file: Line $line:  ". htmlspecialchars($code) . ": " . $msg;
 		}
 		trigger_error($msg);
 		$this->error_msg[] = $msg;
 	}
 	
-	public function get_merge_registry(){
+	public function get_merge_registry()
+	{
 		return $this->merge_registry;
 	}
 	
-	public function set_merge_registry($merge_registry){
+	public function set_merge_registry($merge_registry)
+	{
 		$this->merge_registry = $merge_registry;
 	}
 	
-	public function load_merge_registry(){
+	public function load_merge_registry()
+	{
 		$this->merge_registry = array();
 		
 		$registry = $this->db->query("SELECT * FROM " . DB_PREFIX . "plugin_file_modification");
 		
-		foreach($registry->rows as $row){
+		foreach ($registry->rows as $row) {
 			$this->merge_registry[SITE_DIR . $row['original_file']][$row['name']] = $row['mod_path'];
 		}
 	}
 	
-	private function write_merge_registry(){
+	private function write_merge_registry()
+	{
 		
 		$this->db->query("TRUNCATE " . DB_PREFIX . "plugin_file_modification");
 		
 		$new_registry = '';
 		
-		foreach($this->merge_registry as $filename=>$names){
+		foreach ($this->merge_registry as $filename=>$names) {
 			$file = str_replace(SITE_DIR,'',$filename);
 			
-			foreach($names as $name=>$mod_path){
+			foreach ($names as $name=>$mod_path) {
 				$data = array(
 					'name'			=> $name,
 					'original_file' => $file,
@@ -68,49 +76,51 @@ class FileMerge {
 		$return = file_put_contents($reg_file, $new_registry);
 		chmod($reg_file, 0444);
 		
-		if($return === false){
+		if ($return === false) {
 			$this->set_error('','','',"Failed to write to $reg_file");
 		}
 		
 		return $return !== false;
 	}
 	
-	public function sync_registry_with_db(){
+	public function sync_registry_with_db()
+	{
 		$this->load_merge_registry();
  
-		if(!$this->apply_merge_registry()){
+		if (!$this->apply_merge_registry()) {
 			$msg = "Error: There was a problem remerging the file modifications. This could cause system instability. Please try to uninstall and reinstall the plugins!";
 			trigger_error($msg);
 			return false;
 		}
-		else{
+		else {
 			$this->write_merge_registry();
 			return true;
 		}
 	}
 	
-	public function apply_merge_registry(){
+	public function apply_merge_registry()
+	{
 		
 		$return = true;
 		
-		foreach($this->merge_registry as $file_path=>$names){
+		foreach ($this->merge_registry as $file_path=>$names) {
 			$working_file = $file_path;
 			$merged_file = str_replace(SITE_DIR, DIR_MERGED_FILES, $file_path);
 			
-			foreach($names as $name=>$mod_path){
+			foreach ($names as $name=>$mod_path) {
 				$mod_file = DIR_PLUGIN . $name . '/' . $mod_path;
 				
-				if($this->merge_files($working_file, $mod_file, $merged_file)){
+				if ($this->merge_files($working_file, $mod_file, $merged_file)) {
 					$working_file = $merged_file;
 				}
-				else{
+				else {
 					$this->set_error('','','',"FileMerge::apply_merge_registry(): $mod_file could  not be applied");
 					$return = false;
 				}
 			}
 		}
 		
-		if(!$this->write_merge_registry()){
+		if (!$this->write_merge_registry()) {
 			$this->set_error('','','', "FileMerge::apply_merge_registry(): Failed to write the merge registry!");
 			return false;
 		}
@@ -118,12 +128,13 @@ class FileMerge {
 		return $return;
 	}
 	
-	public function merge_files($orig_file, $mod_file, $new_file_path){
+	public function merge_files($orig_file, $mod_file, $new_file_path)
+	{
 		
-		if(!file_exists($orig_file)){
+		if (!file_exists($orig_file)) {
 			$this->set_error('','','',"Plugin file modification failed: $orig_file does not exist!");
 			return false;
-		}elseif(!file_exists($mod_file)){
+		} elseif (!file_exists($mod_file)) {
 			$this->set_error('','','',"Plugin file modification failed: $mod_file does not exist!");
 			return false;
 		}
@@ -151,28 +162,28 @@ class FileMerge {
 		
 		$io_mode = '';
 		$index = 0;
-		foreach($modifications as $line=>$mod){
+		foreach ($modifications as $line=>$mod) {
 			$line++;
-			if($io_mode != 'add'){
+			if ($io_mode != 'add') {
 				$mod = trim($mod);
 			}
 			
 			//ignore comments and empty lines (ignore whitespace when we are not adding lines)
-			if(strpos($mod, '#') === 0 || !$mod){
+			if (strpos($mod, '#') === 0 || !$mod) {
 				continue;
 			}
 			
 			
 			//End Of Block
-			if(strpos($mod, '-----') !== false && strpos($mod, '-----') < 5){
-				if($io_mode == 'seek' || $io_mode == 'remove'){
+			if (strpos($mod, '-----') !== false && strpos($mod, '-----') < 5) {
+				if ($io_mode == 'seek' || $io_mode == 'remove') {
 					$block = $this->find_block($code_block, $original, $index);
 					
-					if($block === false){
+					if ($block === false) {
 						$this->set_error($mod_file, $line, $mod, "The code block starting at this line was not found in the original file: $orig_file.!");
 						return false;
 					}
-					else{
+					else {
 						list($block_start, $block_end) = $block;
 						//echo "GOT $block_start to $block_end<br>";
 						
@@ -181,14 +192,14 @@ class FileMerge {
 							$new_file[] = $original[$i] . "\r\n";
 						}
 						
-						if($add_before){
+						if ($add_before) {
 							$new_file = array_merge($new_file, $add_before_block);
 							$add_before = false;
 							$add_before_block = array();
 						}
 						
 						//if we are seeking this block, keep the code in this block
-						if($io_mode == 'seek'){
+						if ($io_mode == 'seek') {
 							for($i=$block_start; $i<$block_end;$i++){
 								$new_file[] = $original[$i] . "\r\n";
 							}
@@ -200,27 +211,27 @@ class FileMerge {
 						$code_block = array();
 					}
 				}
-				elseif($io_mode == 'add'){
+				elseif ($io_mode == 'add') {
 					//check if comments were specified and which mode
 					//(we do this at the end of block in case we need to switch comment modes)
-					foreach(array_keys($comments) as $comm){
+					foreach (array_keys($comments) as $comm) {
 						if(strpos($mod, '{' . $comm . '}') > 0){
 							$comm_mode = $comm;
 							break;
 						}
 					}
 					
-					if($comm_mode){
+					if ($comm_mode) {
 						$c = $comments[$comm_mode][0] . "END: Added From Plugin file $mod_file " . $comments[$comm_mode][1] . "\r\n";
-						if($add_before){
+						if ($add_before) {
 							$add_before_block[] = $c;
 						}
-						else{
+						else {
 						$new_file[] = $c;
 						}
 					}
 				}
-				else{
+				else {
 					$this->set_error($mod_file, $line, $mod, "Check your syntax. The IO Mode was not set at end of code block");
 					return false;
 				}
@@ -230,8 +241,8 @@ class FileMerge {
 				continue;
 			}
 			//Remove Block Start
-			elseif(strpos($mod, '<<<<<') !== false && strpos($mod, '<<<<<') < 5){
-				if($io_mode){
+			elseif (strpos($mod, '<<<<<') !== false && strpos($mod, '<<<<<') < 5) {
+				if ($io_mode) {
 					$this->set_error($mod_file, $line, $mod, "Check your syntax. The IO Mode was in $io_mode at start of Remove Code Block.");
 					return false;
 				}
@@ -240,8 +251,8 @@ class FileMerge {
 				
 				continue;
 			}
-			elseif(strpos($mod, '>>>>>') !== false && strpos($mod, '>>>>>') < 5){
-				if($io_mode){
+			elseif (strpos($mod, '>>>>>') !== false && strpos($mod, '>>>>>') < 5) {
+				if ($io_mode) {
 					$this->set_error($mod_file, $line, $mod, "Check your syntax. The IO Mode was in $io_mode at start of Add Code Block.");
 					return false;
 				}
@@ -250,7 +261,7 @@ class FileMerge {
 				
 				//check if comments were specified and which mode
 				$comm_mode = false;
-				foreach(array_keys($comments) as $comm){
+				foreach (array_keys($comments) as $comm) {
 					if(strpos($mod, '{' . $comm . '}') > 0){
 						$comm_mode = $comm;
 						break;
@@ -263,19 +274,19 @@ class FileMerge {
 					$add_before_block = array();
 				}
 				
-				if($comm_mode){
+				if ($comm_mode) {
 					$c = $comments[$comm_mode][0] . "START: Added From Plugin file $mod_file " . $comments[$comm_mode][1] . "\r\n";
-					if($add_before){
+					if ($add_before) {
 						$add_before_block[] = $c;
 					}
-					else{
+					else {
 					$new_file[] = $c;
 					}
 				}
 				continue;
 			}
-			elseif(strpos($mod, '=====') !== false && strpos($mod, '=====') < 5){
-				if($io_mode){
+			elseif (strpos($mod, '=====') !== false && strpos($mod, '=====') < 5) {
+				if ($io_mode) {
 					$this->set_error($mod_file, $line, $mod, "Check your syntax. The IO Mode was in $io_mode at start of Seek Code Block.");
 					return false;
 				}
@@ -284,8 +295,8 @@ class FileMerge {
 				
 				continue;
 			}
-			elseif(strpos($mod, '.....') !== false && strpos($mod, '.....') < 5){
-				if($io_mode != 'seek'){
+			elseif (strpos($mod, '.....') !== false && strpos($mod, '.....') < 5) {
+				if ($io_mode != 'seek') {
 					$this->set_error($mod_file, $line, $mod, "Check your syntax. The IO Mode was in $io_mode at start of Seek Code Block.");
 					return false;
 				}
@@ -297,32 +308,32 @@ class FileMerge {
 			}
 			
 			
-			if($io_mode == 'add'){
+			if ($io_mode == 'add') {
 				//echo 'adding line at ' . $index . ' - ' . htmlspecialchars($mod) . '\'<br>';
-				if($add_before){
+				if ($add_before) {
 					$add_before_block[] = $mod . "\r\n";
 				}
-				else{
+				else {
 					$new_file[] = $mod . "\r\n";
 				}
 			}
-			elseif($io_mode == 'remove'){
+			elseif ($io_mode == 'remove') {
 				//echo 'removing block \'' . htmlspecialchars($mod) . '\'<br>';
 				
 				$code_block[] = $mod;
 			}
-			elseif($io_mode == 'seek'){
+			elseif ($io_mode == 'seek') {
 				//echo 'seeking block \'' . htmlspecialchars($mod) . '\'<br>';
 				
 				$code_block[] = $mod;
 			}
-			elseif($mod && !preg_match('/\/\/ignore/i',$mod)){
+			elseif ($mod && !preg_match('/\/\/ignore/i',$mod)) {
 				$this->set_error($mod_file, $line, $mod, "The IO Mode was not set before this line!");
 				return false;
 			}
 		}
 		
-		if($io_mode){
+		if ($io_mode) {
 			$this->set_error($mod_file, count($mod_file), '', "The IO Mode was still set at the end of the file! Be sure to end all blocks of code with '-----'");
 			return false;
 		}
@@ -334,28 +345,29 @@ class FileMerge {
 		
 		$new_file = array_merge($new_file, array_slice($original, $index));
 		
-		if(!is_dir(dirname($new_file_path))){
+		if (!is_dir(dirname($new_file_path))) {
 			$mode = octdec($this->config->get('config_plugin_dir_mode'));
 			mkdir(dirname($new_file_path), $mode, true);
 			chmod(dirname($new_file_path), $mode);
 		}
-		if(!is_file($new_file_path)){
+		if (!is_file($new_file_path)) {
 			$mode = octdec($this->config->get('config_plugin_file_mode'));
 			touch($new_file_path);
 			chmod($new_file_path, $mode);
 		}
 				
-		if( file_put_contents($new_file_path, $new_file) ){
+		if ( file_put_contents($new_file_path, $new_file) ) {
 			//echo "SUCCESSFULLY MERGED $new_file_path<Br>";
 			return true;
 		}
-		else{
+		else {
 			$this->set_error($new_file_path, 0, '', "Could not write to file!");
 			return false;
 		}
 	}
 
-	private function find_block($block, $file, $start_index){
+	private function find_block($block, $file, $start_index)
+	{
 		if(!count($block) || (count($block) > (count($file) - $start_index))) return false;
 		
 		$file_length = count($file);
@@ -363,15 +375,15 @@ class FileMerge {
 		//echo "<br><br>SEEKING BLOCK FROM $start_index<br>";
 		for($i=$start_index; $i<$file_length; $i++){
 			//echo htmlspecialchars(trim($file[$i])) . "  === compare === " . htmlspecialchars($block[0]).'<br>';;
-			if(trim($file[$i]) == $block[0]){
+			if (trim($file[$i]) == $block[0]) {
 				//echo "START: " . htmlspecialchars($block[0]) . "<br>";
 				$f_index = $i;
 				$mode = '';
-				foreach($block as $b){
+				foreach ($block as $b) {
 					if(!$b)continue;
-					while(!trim($file[$f_index])){
+					while (!trim($file[$f_index])) {
 						$f_index++;
-						if($f_index >= $file_length){
+						if ($f_index >= $file_length) {
 							//echo "EOF<BR>";
 							return false;
 						}
@@ -379,18 +391,18 @@ class FileMerge {
 					
 					//echo "BLOCK: " . htmlspecialchars($b) . " ======== " . htmlspecialchars($file[$f_index]) . "<br>";
 					//if we find a * we are in skip mode
-					if($b == '*'){
+					if ($b == '*') {
 						$mode = 'skip';
 						//echo "ENTERING SKIP MODE<BR>";
 						continue;
 					}
 					
 					//in skip mode we continue in the file until we find a match or eof
-					if($mode == 'skip'){
-						while(trim($file[$f_index]) != $b){
+					if ($mode == 'skip') {
+						while (trim($file[$f_index]) != $b) {
 							//echo "SKIPPING " . htmlspecialchars($file[$f_index]) . "<br>";
 							$f_index++;
-							if($f_index >= $file_length){
+							if ($f_index >= $file_length) {
 								//echo "EOF<BR>";
 								return false;
 							}
@@ -399,21 +411,21 @@ class FileMerge {
 						$f_index++;
 					}
 					//in regular mode, if the line does not match, this is not the correct file index
-					elseif(trim($file[$f_index]) != $b && trim($file[$f_index])){
+					elseif (trim($file[$f_index]) != $b && trim($file[$f_index])) {
 						//echo htmlspecialchars($file[$f_index]) . " !!=== " . htmlspecialchars($b) . "<br>";
 						$f_index = false;
 						break;
 					}
 					//we have a match
-					else{
+					else {
 						$f_index++;
-						if($f_index >= $file_length){
+						if ($f_index >= $file_length) {
 							//echo "EOF<BR>";
 							return false;
 						}
 					}
 				}
-				if($f_index !== false){
+				if ($f_index !== false) {
 					//echo "FOUND BLOCK AT $i ENDS $f_index<BR><BR>";
 					return array($i, $f_index);
 				}

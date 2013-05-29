@@ -1,8 +1,10 @@
 <?php
-class ControllerShippingParcelforce48 extends Controller {
+class ControllerShippingParcelforce48 extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('shipping/parcelforce_48');
 
 		$this->load->language('shipping/parcelforce_48');
@@ -65,13 +67,15 @@ class ControllerShippingParcelforce48 extends Controller {
 			$this->data['parcelforce_48_display_time'] = $this->config->get('parcelforce_48_display_time');
 		}
 		
-		if (isset($_POST['parcelforce_48_tax_class_id'])) {
-			$this->data['parcelforce_48_tax_class_id'] = $_POST['parcelforce_48_tax_class_id'];
+		if (isset($_POST['parcelforce_48_tax_class _id'])) 
+{
+			$this->data['parcelforce_48_tax_class _id'] = $_POST['parcelforce_48_tax_class_id'];
 		} else {
-			$this->data['parcelforce_48_tax_class_id'] = $this->config->get('parcelforce_48_tax_class_id');
+			$this->data['parcelforce_48_tax_class _id'] = $this->config->get('parcelforce_48_tax_class_id');
 		}
 
-		if (isset($_POST['parcelforce_48_geo_zone_id'])) {
+		if (isset($_POST['parcelforce_48_geo_zone_id'])) 
+{
 			$this->data['parcelforce_48_geo_zone_id'] = $_POST['parcelforce_48_geo_zone_id'];
 		} else {
 			$this->data['parcelforce_48_geo_zone_id'] = $this->config->get('parcelforce_48_geo_zone_id');
@@ -89,7 +93,7 @@ class ControllerShippingParcelforce48 extends Controller {
 			$this->data['parcelforce_48_sort_order'] = $this->config->get('parcelforce_48_sort_order');
 		}
 
-		$this->data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
+		$this->data['tax_class es'] = $this->model_localisation_tax_class->getTaxClasses();
 		
 		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 
@@ -101,7 +105,8 @@ class ControllerShippingParcelforce48 extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'shipping/parcelforce_48')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

@@ -1,21 +1,26 @@
 <?php
-class ModelSaleCustomerGroup extends Model {
-	public function addCustomerGroup($data) {
+class ModelSaleCustomerGroup extends Model 
+{
+	public function addCustomerGroup($data)
+	{
 		$this->query("INSERT INTO " . DB_PREFIX . "customer_group SET name = '" . $this->db->escape($data['name']) . "'");
 	}
 	
-	public function editCustomerGroup($customer_group_id, $data) {
+	public function editCustomerGroup($customer_group_id, $data)
+	{
 		$this->query("UPDATE " . DB_PREFIX . "customer_group SET name = '" . $this->db->escape($data['name']) . "' WHERE customer_group_id = '" . (int)$customer_group_id . "'");
 	}
 	
-	public function deleteCustomerGroup($customer_group_id) {
+	public function deleteCustomerGroup($customer_group_id)
+	{
 		$this->query("DELETE FROM " . DB_PREFIX . "customer_group WHERE customer_group_id = '" . (int)$customer_group_id . "'");
 		$this->query("DELETE FROM " . DB_PREFIX . "product_discount WHERE customer_group_id = '" . (int)$customer_group_id . "'");
 		$this->query("DELETE FROM " . DB_PREFIX . "product_special WHERE customer_group_id = '" . (int)$customer_group_id . "'");
 		$this->query("DELETE FROM " . DB_PREFIX . "product_reward WHERE customer_group_id = '" . (int)$customer_group_id . "'");
 	}
 	
-	public function getCustomerGroup($customer_group_id) {
+	public function getCustomerGroup($customer_group_id)
+	{
 		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "customer_group WHERE customer_group_id = '" . (int)$customer_group_id . "'");
 		
 		return $query->row;
@@ -49,7 +54,8 @@ class ModelSaleCustomerGroup extends Model {
 		return $query->rows;
 	}
 	
-	public function getTotalCustomerGroups() {
+	public function getTotalCustomerGroups()
+	{
 		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "customer_group");
 		
 		return $query->row['total'];

@@ -32,8 +32,7 @@
  * @package	PHPExcel_Reader_Excel5
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Reader_Excel5_Escher
-{
+class PHPExcel_Reader_Excel5_Escher{
 	const DGGCONTAINER		= 0xF000;
 	const BSTORECONTAINER	= 0xF001;
 	const DGCONTAINER		= 0xF002;
@@ -598,7 +597,8 @@ class PHPExcel_Reader_Excel5_Escher
 	* @param string $data Binary data
 	* @param int $n Number of properties
 	*/
-	private function _readOfficeArtRGFOPTE($data, $n) {
+	private function _readOfficeArtRGFOPTE($data, $n)
+	{
 
 		$splicedComplexData = substr($data, 6 * $n);
 

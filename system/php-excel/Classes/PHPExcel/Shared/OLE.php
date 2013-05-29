@@ -28,15 +28,14 @@
 $GLOBALS['_OLE_INSTANCES'] = array();
 
 /**
-* OLE package base class.
+* OLE package base class .
 *
 * @author	Xavier Noguer <xnoguer@php.net>
 * @author	Christian Schmidt <schmidt@php.net>
 * @category	PHPExcel
 * @package	PHPExcel_Shared_OLE
 */
-class PHPExcel_Shared_OLE
-{
+class PHPExcel_Shared_OLE{
 	const OLE_PPS_TYPE_ROOT	=		5;
 	const OLE_PPS_TYPE_DIR	=		1;
 	const OLE_PPS_TYPE_FILE	=		2;
@@ -226,7 +225,7 @@ class PHPExcel_Shared_OLE
 	* @access public
 	*/
 	private static function _readInt1($fh)
-	{
+ {
 		list(, $tmp) = unpack("c", fread($fh, 1));
 		return $tmp;
 	}
@@ -238,7 +237,7 @@ class PHPExcel_Shared_OLE
 	* @access public
 	*/
 	private static function _readInt2($fh)
-	{
+ {
 		list(, $tmp) = unpack("v", fread($fh, 2));
 		return $tmp;
 	}
@@ -250,7 +249,7 @@ class PHPExcel_Shared_OLE
 	* @access public
 	*/
 	private static function _readInt4($fh)
-	{
+ {
 		list(, $tmp) = unpack("V", fread($fh, 4));
 		return $tmp;
 	}
@@ -444,7 +443,7 @@ class PHPExcel_Shared_OLE
 	* @return string The string in Unicode
 	*/
 	public static function Asc2Ucs($ascii)
-	{
+ {
 		$rawname = '';
 		for ($i = 0; $i < strlen($ascii); ++$i) {
 			$rawname .= $ascii{$i} . "\x00";
@@ -462,7 +461,7 @@ class PHPExcel_Shared_OLE
 	* @return string The string for the OLE container
 	*/
 	public static function LocalDate2OLE($date = null)
-	{
+ {
 		if (!isset($date)) {
 			return "\x00\x00\x00\x00\x00\x00\x00\x00";
 		}
@@ -507,7 +506,7 @@ class PHPExcel_Shared_OLE
 	* @return string The timestamp corresponding to the string
 	*/
 	public static function OLE2LocalDate($string)
-	{
+ {
 		if (strlen($string) != 8) {
 			return new PEAR_Error("Expecting 8 byte string");
 		}

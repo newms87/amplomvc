@@ -1,6 +1,8 @@
 <?php
-class ControllerProductSpecial extends Controller {
-	public function index() {
+class ControllerProductSpecial extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('product/special');
 
 		$this->language->load('product/special');
@@ -77,13 +79,13 @@ class ControllerProductSpecial extends Controller {
 			}
 			
 			if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-				$price = $this->currency->format($this->tax->calculate($result['price'], $result['tax_class_id']));
+				$price = $this->currency->format($this->tax->calculate($result['price'], $result['tax_class _id']));
 			} else {
 				$price = false;
 			}
 			
 			if ((float)$result['special']) {
-				$special = $this->currency->format($this->tax->calculate($result['special'], $result['tax_class_id']));
+				$special = $this->currency->format($this->tax->calculate($result['special'], $result['tax_class _id']));
 			} else {
 				$special = false;
 			}

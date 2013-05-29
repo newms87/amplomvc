@@ -1,8 +1,10 @@
 <?php
-class ControllerPaymentAlertPay extends Controller {
+class ControllerPaymentAlertPay extends Controller 
+{
 	
 
-	public function index() {
+	public function index()
+	{
 		$this->template->load('payment/alertpay');
 
 		$this->load->language('payment/alertpay');
@@ -99,7 +101,8 @@ class ControllerPaymentAlertPay extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'payment/alertpay')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

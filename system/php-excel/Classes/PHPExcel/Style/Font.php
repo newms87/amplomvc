@@ -33,8 +33,7 @@
  * @package	PHPExcel_Style
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Style_Font implements PHPExcel_IComparable
-{
+class PHPExcel_Style_Font implements PHPExcel_IComparable{
 	/* Underline types */
 	const UNDERLINE_NONE					= 'none';
 	const UNDERLINE_DOUBLE					= 'double';
@@ -242,7 +241,8 @@ class PHPExcel_Style_Font implements PHPExcel_IComparable
 	* @throws	Exception
 	* @return PHPExcel_Style_Font
 	*/
-	public function applyFromArray($pStyles = null) {
+	public function applyFromArray($pStyles = null)
+	{
 		if (is_array($pStyles)) {
 			if ($this->_isSupervisor) {
 				$this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($this->getStyleArray($pStyles));
@@ -286,7 +286,8 @@ class PHPExcel_Style_Font implements PHPExcel_IComparable
 	*
 	* @return string
 	*/
-	public function getName() {
+	public function getName()
+	{
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getName();
 		}
@@ -299,7 +300,8 @@ class PHPExcel_Style_Font implements PHPExcel_IComparable
 	* @param string $pValue
 	* @return PHPExcel_Style_Font
 	*/
-	public function setName($pValue = 'Calibri') {
+	public function setName($pValue = 'Calibri')
+	{
   		if ($pValue == '') {
 			$pValue = 'Calibri';
 		}
@@ -317,7 +319,8 @@ class PHPExcel_Style_Font implements PHPExcel_IComparable
 	*
 	* @return double
 	*/
-	public function getSize() {
+	public function getSize()
+	{
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getSize();
 		}
@@ -330,7 +333,8 @@ class PHPExcel_Style_Font implements PHPExcel_IComparable
 	* @param double $pValue
 	* @return PHPExcel_Style_Font
 	*/
-	public function setSize($pValue = 10) {
+	public function setSize($pValue = 10)
+	{
 		if ($pValue == '') {
 			$pValue = 10;
 		}
@@ -348,7 +352,8 @@ class PHPExcel_Style_Font implements PHPExcel_IComparable
 	*
 	* @return boolean
 	*/
-	public function getBold() {
+	public function getBold()
+	{
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getBold();
 		}
@@ -361,7 +366,8 @@ class PHPExcel_Style_Font implements PHPExcel_IComparable
 	* @param boolean $pValue
 	* @return PHPExcel_Style_Font
 	*/
-	public function setBold($pValue = false) {
+	public function setBold($pValue = false)
+	{
 		if ($pValue == '') {
 			$pValue = false;
 		}
@@ -379,7 +385,8 @@ class PHPExcel_Style_Font implements PHPExcel_IComparable
 	*
 	* @return boolean
 	*/
-	public function getItalic() {
+	public function getItalic()
+	{
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getItalic();
 		}
@@ -392,7 +399,8 @@ class PHPExcel_Style_Font implements PHPExcel_IComparable
 	* @param boolean $pValue
 	* @return PHPExcel_Style_Font
 	*/
-	public function setItalic($pValue = false) {
+	public function setItalic($pValue = false)
+	{
 		if ($pValue == '') {
 			$pValue = false;
 		}
@@ -410,7 +418,8 @@ class PHPExcel_Style_Font implements PHPExcel_IComparable
 	*
 	* @return boolean
 	*/
-	public function getSuperScript() {
+	public function getSuperScript()
+	{
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getSuperScript();
 		}
@@ -423,7 +432,8 @@ class PHPExcel_Style_Font implements PHPExcel_IComparable
 	* @param boolean $pValue
 	* @return PHPExcel_Style_Font
 	*/
-	public function setSuperScript($pValue = false) {
+	public function setSuperScript($pValue = false)
+	{
 		if ($pValue == '') {
 			$pValue = false;
 		}
@@ -442,7 +452,8 @@ class PHPExcel_Style_Font implements PHPExcel_IComparable
 	*
 	* @return boolean
 	*/
-	public function getSubScript() {
+	public function getSubScript()
+	{
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getSubScript();
 		}
@@ -455,7 +466,8 @@ class PHPExcel_Style_Font implements PHPExcel_IComparable
 	* @param boolean $pValue
 	* @return PHPExcel_Style_Font
 	*/
-	public function setSubScript($pValue = false) {
+	public function setSubScript($pValue = false)
+	{
 		if ($pValue == '') {
 			$pValue = false;
 		}
@@ -474,7 +486,8 @@ class PHPExcel_Style_Font implements PHPExcel_IComparable
 	*
 	* @return string
 	*/
-	public function getUnderline() {
+	public function getUnderline()
+	{
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getUnderline();
 		}
@@ -487,7 +500,8 @@ class PHPExcel_Style_Font implements PHPExcel_IComparable
 	* @param string $pValue	PHPExcel_Style_Font underline type
 	* @return PHPExcel_Style_Font
 	*/
-	public function setUnderline($pValue = PHPExcel_Style_Font::UNDERLINE_NONE) {
+	public function setUnderline($pValue = PHPExcel_Style_Font::UNDERLINE_NONE)
+	{
 		if ($pValue == '') {
 			$pValue = PHPExcel_Style_Font::UNDERLINE_NONE;
 		}
@@ -506,7 +520,8 @@ class PHPExcel_Style_Font implements PHPExcel_IComparable
 	* @deprecated Use getStrikethrough() instead.
 	* @return boolean
 	*/
-	public function getStriketrough() {
+	public function getStriketrough()
+	{
 		return $this->getStrikethrough();
 	}
 
@@ -517,7 +532,8 @@ class PHPExcel_Style_Font implements PHPExcel_IComparable
 	* @param boolean $pValue
 	* @return PHPExcel_Style_Font
 	*/
-	public function setStriketrough($pValue = false) {
+	public function setStriketrough($pValue = false)
+	{
 		return $this->setStrikethrough($pValue);
 	}
 
@@ -526,7 +542,8 @@ class PHPExcel_Style_Font implements PHPExcel_IComparable
 	*
 	* @return boolean
 	*/
-	public function getStrikethrough() {
+	public function getStrikethrough()
+	{
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getStrikethrough();
 		}
@@ -539,7 +556,8 @@ class PHPExcel_Style_Font implements PHPExcel_IComparable
 	* @param boolean $pValue
 	* @return PHPExcel_Style_Font
 	*/
-	public function setStrikethrough($pValue = false) {
+	public function setStrikethrough($pValue = false)
+	{
 		if ($pValue == '') {
 			$pValue = false;
 		}
@@ -557,7 +575,8 @@ class PHPExcel_Style_Font implements PHPExcel_IComparable
 	*
 	* @return PHPExcel_Style_Color
 	*/
-	public function getColor() {
+	public function getColor()
+	{
 		return $this->_color;
 	}
 
@@ -568,7 +587,8 @@ class PHPExcel_Style_Font implements PHPExcel_IComparable
 	* @throws	Exception
 	* @return PHPExcel_Style_Font
 	*/
-	public function setColor(PHPExcel_Style_Color $pValue = null) {
+	public function setColor(PHPExcel_Style_Color $pValue = null)
+	{
 		// make sure parameter is a real color and not a supervisor
 		$color = $pValue->getIsSupervisor() ? $pValue->getSharedComponent() : $pValue;
 
@@ -586,7 +606,8 @@ class PHPExcel_Style_Font implements PHPExcel_IComparable
 	*
 	* @return string	Hash code
 	*/
-	public function getHashCode() {
+	public function getHashCode()
+	{
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getHashCode();
 		}
@@ -600,14 +621,15 @@ class PHPExcel_Style_Font implements PHPExcel_IComparable
 			. $this->_underline
 			. ($this->_strikethrough ? 't' : 'f')
 			. $this->_color->getHashCode()
-			. __CLASS__
+			. __class __
 		);
 	}
 
 	/**
 	* Implement PHP __clone to create a deep clone, not just a shallow copy.
 	*/
-	public function __clone() {
+	public function __clone()
+	{
 		$vars = get_object_vars($this);
 		foreach ($vars as $key => $value) {
 			if ((is_object($value)) && ($key != '_parent')) {

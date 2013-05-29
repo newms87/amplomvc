@@ -1,6 +1,8 @@
 <?php
-class ControllerPaymentPaypoint extends Controller {
-	protected function index() {
+class ControllerPaymentPaypoint extends Controller 
+{
+	protected function index()
+	{
 		$this->template->load('payment/paypoint');
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
@@ -64,7 +66,8 @@ class ControllerPaymentPaypoint extends Controller {
 		$this->render();
 	}
 
-	public function callback() {
+	public function callback()
+	{
 		if (isset($_GET['trans_id'])) {
 			$order_id = $_GET['trans_id'];
 		} else {

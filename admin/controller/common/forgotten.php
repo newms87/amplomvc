@@ -1,8 +1,10 @@
 <?php
-class ControllerCommonForgotten extends Controller {
+class ControllerCommonForgotten extends Controller 
+{
 	
 
-	public function index() {
+	public function index()
+	{
 		$this->template->load('common/forgotten');
 
 		if ($this->user->isLogged()) {
@@ -68,7 +70,8 @@ class ControllerCommonForgotten extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (empty($_POST['email'])) {
 			$this->error['email'] = $this->_('error_email');
 		} elseif (!$this->model_user_user->getTotalUsersByEmail($_POST['email'])) {

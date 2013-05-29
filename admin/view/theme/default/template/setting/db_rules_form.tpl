@@ -1,7 +1,7 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
-	<?= $this->builder->display_errors($errors);?>
+	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -20,12 +20,12 @@
 							<td><input type="text" name="column" value="<?= $column; ?>" size="40" />
 						</tr>
 						<tr>
-							<td><?= $entry_escape_type;?></td>
-							<td><?= $this->builder->build('select',$data_escape_types, 'escape_type',(int)$escape_type);?></td>
+							<td><?= $entry_escape_type; ?></td>
+							<td><?= $this->builder->build('select',$data_escape_types, 'escape_type',(int)$escape_type); ?></td>
 						</tr>
 						<tr>
-							<td><?= $entry_truncate;?></td>
-							<td><?= $this->builder->build('select',$data_yes_no, 'truncate',(int)$truncate);?></td>
+							<td><?= $entry_truncate; ?></td>
+							<td><?= $this->builder->build('select',$data_yes_no, 'truncate',(int)$truncate); ?></td>
 						</tr>
 					</table>
 				</div>
@@ -34,6 +34,6 @@
 	</div>
 </div>
 
-<?=$this->builder->js('errors',$errors);?>
+<?= $this->builder->js('errors',$errors); ?>
 
 <?= $footer; ?>

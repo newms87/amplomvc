@@ -1,6 +1,8 @@
 <?php
-class ControllerCheckoutBlockRegister extends Controller {
-  	public function index() {
+class ControllerCheckoutBlockRegister extends Controller 
+{
+  	public function index()
+  	{
   		$this->language->load('checkout/checkout');
   		$this->template->load('checkout/block/register');
 		
@@ -44,7 +46,8 @@ class ControllerCheckoutBlockRegister extends Controller {
 		$this->response->setOutput($this->render());
   	}
 	
-	public function validate() {
+	public function validate()
+	{
 		$this->language->load('checkout/checkout');
 		
 		$json = array();
@@ -53,13 +56,13 @@ class ControllerCheckoutBlockRegister extends Controller {
 		if ($this->customer->isLogged()) {
 			$json['redirect'] = $this->url->link('checkout/checkout');
 		}
-		elseif(!$this->cart->validate()){
+		elseif (!$this->cart->validate()) {
 			$json['redirect'] = $this->url->link('cart/cart');
 			$this->message->add($this->cart->get_errors());
 		}
 		
-		if($json){
-			if(!empty($_POST['async'])){
+		if ($json) {
+			if (!empty($_POST['async'])) {
 				$this->url->redirect($this->url->link('checkout/checkout'));
 			}
 			
@@ -70,21 +73,21 @@ class ControllerCheckoutBlockRegister extends Controller {
 		//Validate the Address Form
 		$this->form->init('address');
 		
-		if(!$this->form->validate($_POST)){
+		if (!$this->form->validate($_POST)) {
 			$json['error'] = $this->form->get_errors();
 		}
 		
 		//Additional Error checking
 		$country_info = $this->model_localisation_country->getCountry($_POST['country_id']);
 		
-		if (!$country_info){
+		if (!$country_info) {
 			$json['error']['country_id'] = $this->_('error_country_id');
 		}
 		
 		//Validate Register Form
 		$this->form->init('register');
 		
-		if(!$this->form->validate($_POST)){
+		if (!$this->form->validate($_POST)) {
 			$json['error'] = $this->form->get_errors();
 		}
 		
@@ -125,8 +128,8 @@ class ControllerCheckoutBlockRegister extends Controller {
 		}
 		
 		//If this is not an ajax call, redirect w/ a message
-		if(!isset($_POST['async'])){
-			if($json['error']){
+		if (!isset($_POST['async'])) {
+			if ($json['error']) {
 				$this->message->add('warning', $json['error']);
 			} else {
 				$this->message->add('success', $this->_('text_address_success'));

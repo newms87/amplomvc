@@ -33,8 +33,7 @@
  * @package	PHPExcel_Style
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Style_Fill implements PHPExcel_IComparable
-{
+class PHPExcel_Style_Fill implements PHPExcel_IComparable{
 	/* Fill types */
 	const FILL_NONE							= 'none';
 	const FILL_SOLID						= 'solid';
@@ -226,7 +225,8 @@ class PHPExcel_Style_Fill implements PHPExcel_IComparable
 	* @throws	Exception
 	* @return PHPExcel_Style_Fill
 	*/
-	public function applyFromArray($pStyles = null) {
+	public function applyFromArray($pStyles = null)
+	{
 		if (is_array($pStyles)) {
 			if ($this->_isSupervisor) {
 				$this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($this->getStyleArray($pStyles));
@@ -258,7 +258,8 @@ class PHPExcel_Style_Fill implements PHPExcel_IComparable
 	*
 	* @return string
 	*/
-	public function getFillType() {
+	public function getFillType()
+	{
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getFillType();
 		}
@@ -271,7 +272,8 @@ class PHPExcel_Style_Fill implements PHPExcel_IComparable
 	* @param string $pValue	PHPExcel_Style_Fill fill type
 	* @return PHPExcel_Style_Fill
 	*/
-	public function setFillType($pValue = PHPExcel_Style_Fill::FILL_NONE) {
+	public function setFillType($pValue = PHPExcel_Style_Fill::FILL_NONE)
+	{
 		if ($this->_isSupervisor) {
 			$styleArray = $this->getStyleArray(array('type' => $pValue));
 			$this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($styleArray);
@@ -286,7 +288,8 @@ class PHPExcel_Style_Fill implements PHPExcel_IComparable
 	*
 	* @return double
 	*/
-	public function getRotation() {
+	public function getRotation()
+	{
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getRotation();
 		}
@@ -299,7 +302,8 @@ class PHPExcel_Style_Fill implements PHPExcel_IComparable
 	* @param double $pValue
 	* @return PHPExcel_Style_Fill
 	*/
-	public function setRotation($pValue = 0) {
+	public function setRotation($pValue = 0)
+	{
 		if ($this->_isSupervisor) {
 			$styleArray = $this->getStyleArray(array('rotation' => $pValue));
 			$this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($styleArray);
@@ -314,7 +318,8 @@ class PHPExcel_Style_Fill implements PHPExcel_IComparable
 	*
 	* @return PHPExcel_Style_Color
 	*/
-	public function getStartColor() {
+	public function getStartColor()
+	{
 		return $this->_startColor;
 	}
 
@@ -325,7 +330,8 @@ class PHPExcel_Style_Fill implements PHPExcel_IComparable
 	* @throws	Exception
 	* @return PHPExcel_Style_Fill
 	*/
-	public function setStartColor(PHPExcel_Style_Color $pValue = null) {
+	public function setStartColor(PHPExcel_Style_Color $pValue = null)
+	{
 		// make sure parameter is a real color and not a supervisor
 		$color = $pValue->getIsSupervisor() ? $pValue->getSharedComponent() : $pValue;
 
@@ -343,7 +349,8 @@ class PHPExcel_Style_Fill implements PHPExcel_IComparable
 	*
 	* @return PHPExcel_Style_Color
 	*/
-	public function getEndColor() {
+	public function getEndColor()
+	{
 		return $this->_endColor;
 	}
 
@@ -354,7 +361,8 @@ class PHPExcel_Style_Fill implements PHPExcel_IComparable
 	* @throws	Exception
 	* @return PHPExcel_Style_Fill
 	*/
-	public function setEndColor(PHPExcel_Style_Color $pValue = null) {
+	public function setEndColor(PHPExcel_Style_Color $pValue = null)
+	{
 		// make sure parameter is a real color and not a supervisor
 		$color = $pValue->getIsSupervisor() ? $pValue->getSharedComponent() : $pValue;
 
@@ -372,7 +380,8 @@ class PHPExcel_Style_Fill implements PHPExcel_IComparable
 	*
 	* @return string	Hash code
 	*/
-	public function getHashCode() {
+	public function getHashCode()
+	{
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getHashCode();
 		}
@@ -381,14 +390,15 @@ class PHPExcel_Style_Fill implements PHPExcel_IComparable
 			. $this->getRotation()
 			. $this->getStartColor()->getHashCode()
 			. $this->getEndColor()->getHashCode()
-			. __CLASS__
+			. __class __
 		);
 	}
 
 	/**
 	* Implement PHP __clone to create a deep clone, not just a shallow copy.
 	*/
-	public function __clone() {
+	public function __clone()
+	{
 		$vars = get_object_vars($this);
 		foreach ($vars as $key => $value) {
 			if ((is_object($value)) && ($key != '_parent')) {

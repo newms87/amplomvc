@@ -1,7 +1,9 @@
 <?php
-class ControllerMailMessages extends Controller {
+class ControllerMailMessages extends Controller 
+{
  
-	public function index() {
+	public function index()
+	{
 		$this->load->language('mail/messages');
 		
 		$this->template->load('mail/messages');
@@ -27,14 +29,14 @@ class ControllerMailMessages extends Controller {
 			'mail_registration_message' => '',
 		);
 		
-		foreach($defaults as $key => $default){
-			if(isset($_POST[$key])){
+		foreach ($defaults as $key => $default) {
+			if (isset($_POST[$key])) {
 				$this->data[$key] = $_POST[$key];
 			}
-			elseif($this->config->get($key)){
+			elseif ($this->config->get($key)) {
 				$this->data[$key] = $this->config->get($key);
 			}
-			else{
+			else {
 				$this->data[$key] = $default;
 			}
 		}
@@ -47,7 +49,8 @@ class ControllerMailMessages extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	public function validate() {
+	public function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'mail/messages')) {
 			$this->error['permission'] = $this->_('error_permission');
 		}

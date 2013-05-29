@@ -1,8 +1,10 @@
 <?php
-class ControllerLocalisationCountry extends Controller {
+class ControllerLocalisationCountry extends Controller 
+{
 	
  
-	public function index() {
+	public function index()
+	{
 		$this->load->language('localisation/country');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -10,7 +12,8 @@ class ControllerLocalisationCountry extends Controller {
 		$this->getList();
 	}
 
-	public function insert() {
+	public function insert()
+	{
 		$this->load->language('localisation/country');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -40,7 +43,8 @@ class ControllerLocalisationCountry extends Controller {
 		$this->getForm();
 	}
 
-	public function update() {
+	public function update()
+	{
 		$this->load->language('localisation/country');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -70,7 +74,8 @@ class ControllerLocalisationCountry extends Controller {
 		$this->getForm();
 	}
  
-	public function delete() {
+	public function delete()
+	{
 		$this->load->language('localisation/country');
  
 		$this->document->setTitle($this->_('heading_title'));
@@ -102,7 +107,8 @@ class ControllerLocalisationCountry extends Controller {
 		$this->getList();
 	}
 
-	private function getList() {
+	private function getList()
+	{
 		$this->template->load('localisation/country_list');
 
 		if (isset($_GET['sort'])) {
@@ -229,7 +235,8 @@ class ControllerLocalisationCountry extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function getForm() {
+	private function getForm()
+	{
 		$this->template->load('localisation/country_form');
 
  		if (isset($this->error['warning'])) {
@@ -329,7 +336,8 @@ class ControllerLocalisationCountry extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validateForm() {
+	private function validateForm()
+	{
 		if (!$this->user->hasPermission('modify', 'localisation/country')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
@@ -341,7 +349,8 @@ class ControllerLocalisationCountry extends Controller {
 		return $this->error ? false : true;
 	}
 
-	private function validateDelete() {
+	private function validateDelete()
+	{
 		if (!$this->user->hasPermission('modify', 'localisation/country')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

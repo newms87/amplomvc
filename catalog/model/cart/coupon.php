@@ -1,6 +1,8 @@
 <?php
-class ModelCartCoupon extends Model {
-	public function getCoupon($code) {
+class ModelCartCoupon extends Model 
+{
+	public function getCoupon($code)
+	{
 		$code = $this->db->escape($code);
 		
 		$coupon_query = $this->query("SELECT * FROM " . DB_PREFIX . "coupon WHERE (LCASE(coupon_id) = LCASE('$code') OR LCASE(code) = LCASE('$code')) AND ((date_start = '0000-00-00' OR date_start <= NOW()) AND (date_end = '0000-00-00' OR date_end >= NOW())) AND status = '1'");
@@ -37,7 +39,7 @@ class ModelCartCoupon extends Model {
 		
 		if ($coupon_product_query->num_rows) {
 			
-			foreach($coupon_product_query->rows as $row){
+			foreach ($coupon_product_query->rows as $row) {
 				$coupon_products[] = $row['product_id'];
 			}
 			
@@ -61,26 +63,28 @@ class ModelCartCoupon extends Model {
 		return $coupon_query->row;
 	}
 
-	public function loadAutoCoupons(){
+	public function loadAutoCoupons()
+	{
 		$customer_id = $this->customer->getId();
 		
 		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "coupon_customer WHERE customer_id = '" . (int)$customer_id . "'");
 		
-		if($query->num_rows){
-			if(!isset($this->session->data['coupons'])){
+		if ($query->num_rows) {
+			if (!isset($this->session->data['coupons'])) {
 				$this->session->data['coupons'] = array();
 			}
 			
-			foreach($query->rows as $cc){
+			foreach ($query->rows as $cc) {
 				$coupon = $this->getCoupon((int)$cc['coupon_id']);
-				if($coupon){
+				if ($coupon) {
 					$this->session->data['coupons'][$coupon['code']] = $coupon;
 				}
 			}
 		}
 	}
 	
-	public function redeem($coupon_id, $order_id, $customer_id, $amount) {
+	public function redeem($coupon_id, $order_id, $customer_id, $amount)
+	{
 		$this->query("INSERT INTO `" . DB_PREFIX . "coupon_history` SET coupon_id = '" . (int)$coupon_id . "', order_id = '" . (int)$order_id . "', customer_id = '" . (int)$customer_id . "', amount = '" . (float)$amount . "', date_added = NOW()");
 	}
 }

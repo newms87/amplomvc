@@ -32,8 +32,7 @@
  * @package	PHPExcel_Shared_Escher
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Shared_Escher
-{
+class PHPExcel_Shared_Escher{
 	/**
 	* Drawing Group Container
 	*

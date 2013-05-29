@@ -1,6 +1,8 @@
 <?php
-class ControllerPaymentPaymate extends Controller {
-	protected function index() {
+class ControllerPaymentPaymate extends Controller 
+{
+	protected function index()
+	{
 		$this->template->load('payment/paymate');
 
 		if (!$this->config->get('paymate_test')) {
@@ -34,7 +36,8 @@ class ControllerPaymentPaymate extends Controller {
 		$this->render();
 	}
 	
-	public function callback() {
+	public function callback()
+	{
 		$this->load->language('payment/paymate');
 		
 		if (isset($_POST['ref'])) {

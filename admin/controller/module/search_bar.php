@@ -1,8 +1,10 @@
 <?php
-class ControllerModuleSearchBar extends Controller {
+class ControllerModuleSearchBar extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/search_bar');
 
 		$this->load->language('module/search_bar');
@@ -49,7 +51,8 @@ class ControllerModuleSearchBar extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/search_bar')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

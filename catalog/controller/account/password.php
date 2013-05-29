@@ -1,8 +1,10 @@
 <?php
-class ControllerAccountPassword extends Controller {
+class ControllerAccountPassword extends Controller 
+{
 	
 		
-  	public function index() {
+  	public function index()
+  	{
 		$this->template->load('account/password');
 
 		if (!$this->customer->isLogged()) {
@@ -67,7 +69,8 @@ class ControllerAccountPassword extends Controller {
 		$this->response->setOutput($this->render());
   	}
   
-  	private function validate() {
+  	private function validate()
+  	{
 		if ((strlen($_POST['password']) < 4) || (strlen($_POST['password']) > 20)) {
 				$this->error['password'] = $this->_('error_password');
 		}

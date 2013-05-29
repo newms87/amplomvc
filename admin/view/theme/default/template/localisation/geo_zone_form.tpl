@@ -1,6 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
+	<?= $this->builder->display_breadcrumbs(); ?>
 	<?= $this->builder->display_errors(); ?>
 	<div class="box">
 		<div class="heading">
@@ -49,11 +49,11 @@
 						<tr class="geozone_selector <?= $key; ?>">
 							<td class="left">
 								<? $this->builder->set_config('country_id', 'name');?>
-								<?= $this->builder->build('select', $data_countries, "zones[$row][country_id]", $zone['country_id'], array('class'=>'country_selector'));?>
-								<a onclick="add_all_zones($(this))" style="text-decoration:none; display:block"><?= $button_add_all_zones;?></a>
+								<?= $this->builder->build('select', $data_countries, "zones[$row][country_id]", $zone['country_id'], array('class'=>'country_selector')); ?>
+								<a onclick="add_all_zones($(this))" style="text-decoration:none; display:block"><?= $button_add_all_zones; ?></a>
 							</td>
 							<td class="left">
-								<select name="zones[<?= $row; ?>][zone_id]" zone_id="<?= $zone['zone_id'];?>" class='zone_selector'></select>
+								<select name="zones[<?= $row; ?>][zone_id]" zone_id="<?= $zone['zone_id']; ?>" class='zone_selector'></select>
 							</td>
 							<td class="left"><a onclick="$(this).closest('.geozone_selector').remove();" class="button"><?= $button_remove; ?></a></td>
 						</tr>
@@ -72,7 +72,7 @@
 	</div>
 </div>
 
-<?= $this->builder->js('load_zones', '.geozone_selector', '.country_selector', '.zone_selector', true);?>
+<?= $this->builder->js('load_zones', '.geozone_selector', '.country_selector', '.zone_selector', true); ?>
 
 <script type="text/javascript">//<!--
 function add_all_zones(context){

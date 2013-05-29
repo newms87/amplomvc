@@ -1,8 +1,10 @@
 <?php
-class ControllerCommonReset extends Controller {
+class ControllerCommonReset extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		if ($this->user->isLogged()) {
 			$this->url->redirect($this->url->link('common/home'));
 		}
@@ -70,7 +72,8 @@ class ControllerCommonReset extends Controller {
 		}
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if ((strlen($_POST['password']) < 4) || (strlen($_POST['password']) > 20)) {
 				$this->error['password'] = $this->_('error_password');
 		}

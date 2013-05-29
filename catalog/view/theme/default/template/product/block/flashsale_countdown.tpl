@@ -1,9 +1,9 @@
-<a href='<?=$flashsale_link;?>' class='countdown_clock_link'>
+<a href='<?= $flashsale_link; ?>' class='countdown_clock_link'>
 	<div id='product_countdown'>
-			<img src='<?=$flashsale_image;?>' />
+			<img src='<?= $flashsale_image; ?>' />
 			<span class='message'>
-				<span class='before_msg_start'><?= $text_time_left;?></span>
-				<div class='flash_countdown' id='designer-top-countdown' callback='display_sale_ended' msg_start='in' flashid='<?=$flashsale_id;?>'></div>
+				<span class='before_msg_start'><?= $text_time_left; ?></span>
+				<div class='flash_countdown' id='designer-top-countdown' callback='display_sale_ended' msg_start='in' flashid='<?= $flashsale_id; ?>'></div>
 			</span>
 	</div>
 </a>

@@ -1461,7 +1461,11 @@ a.button:active, input.button:active {
 .product-info .description .description_manufacturer a:hover{
 	color: #898989;
 }
-	
+
+.product-info .description_model{
+	margin-bottom:10px;
+}
+
 .product-info .product_blurb{
 	border-top: 1px solid #E7E7E7;
 	padding: 10px 5px 10px 5px;

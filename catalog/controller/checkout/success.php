@@ -1,6 +1,8 @@
 <?php
-class ControllerCheckoutSuccess extends Controller {
-	public function index() {
+class ControllerCheckoutSuccess extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('common/success');
 
 		if (isset($this->session->data['order_id'])) {

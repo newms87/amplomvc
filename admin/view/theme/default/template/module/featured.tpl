@@ -1,7 +1,7 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
-	<?= $this->builder->display_errors($errors);?>
+	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->builder->display_errors($errors); ?>
 <div class="box">
 	<div class="heading">
 		<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -15,19 +15,19 @@
 					<td><input type="text" id='add_product_filter' name="filter_type" value="" /></td>
 				</tr>
 				<tr>
-					<td><?= $entry_product_filter_help;?></td>
+					<td><?= $entry_product_filter_help; ?></td>
 					<td>
 						<ul id="product_filter" class="scrollbox">
 							<? foreach ($product_filter_types as $filter_id=>$filter) { ?>
-							<li class="product_filter_item" filter_id="<?=$filter_id;?>">
-								<div class='filter_name'><?= $filter;?></div>
+							<li class="product_filter_item" filter_id="<?= $filter_id; ?>">
+								<div class='filter_name'><?= $filter; ?></div>
 								<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" />
-								<div class='filter_default <?= $default_product_filter==$filter_id?'is_default':'';?>'><?= $default_product_filter==$filter_id?"default":"<a onclick=\"make_default_filter('$filter_id');\">make default</a>";?></div>
-								<input type="hidden" name="product_filter_types[<?=$filter_id;?>]" value="<?= $filter?>" />
+								<div class='filter_default <?= $default_product_filter==$filter_id?'is_default':''; ?>'><?= $default_product_filter==$filter_id?"default":"<a onclick=\"make_default_filter('$filter_id');\">make default</a>"; ?></div>
+								<input type="hidden" name="product_filter_types[<?= $filter_id; ?>]" value="<?= $filter?>" />
 							</li>
 							<? } ?>
 						</ul>
-						<input type="hidden" id='default_product_filter' name="default_product_filter" value="<?=$default_product_filter;?>" />
+						<input type="hidden" id='default_product_filter' name="default_product_filter" value="<?= $default_product_filter; ?>" />
 				</tr>
 			</table>
 			<table class="form">
@@ -123,9 +123,9 @@
 								<? } ?>
 							</select></td>
 						<td class="left">
-							<?= $this->builder->build('select',$display_styles, "featured_module[$module_row][display]",$module['display']);?>
+							<?= $this->builder->build('select',$display_styles, "featured_module[$module_row][display]",$module['display']); ?>
 							</td>
-						<td class="left"><select name="featured_module[<?= $module_row;?>][status]">
+						<td class="left"><select name="featured_module[<?= $module_row; ?>][status]">
 								<? if ($module['status']) { ?>
 								<option value="1" selected="selected"><?= $text_enabled; ?></option>
 								<option value="0"><?= $text_disabled; ?></option>
@@ -228,7 +228,7 @@ function addModule() {
 	html += '			<option value="column_right"><?= $text_column_right; ?></option>';
 	html += '		</select></td>';
 	html += '		<td class="left">';
-	html += "<?= $this->builder->build('select',$display_styles, "featured_module[%modrow%][display]", 'popup');?>".replace(/%modrow%/,module_row);
+	html += "<?= $this->builder->build('select',$display_styles, "featured_module[%modrow%][display]", 'popup'); ?>".replace(/%modrow%/,module_row);
 	html += '		</td>';
 	html += '		<td class="left"><select name="featured_module[' + module_row + '][status]">';
 		html += '			<option value="1" selected="selected"><?= $text_enabled; ?></option>';
@@ -283,5 +283,5 @@ function make_default_filter(filter_id){
 }
 //--></script>
 
-<?= $this->builder->js('errors');?>
+<?= $this->builder->js('errors'); ?>
 <?= $footer; ?>

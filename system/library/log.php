@@ -1,14 +1,17 @@
 <?php
-class Log {
+class Log 
+{
 	private $filename;
 	private $store_name;
 	
-	public function __construct($filename, $store_name = 'Default') {
+	public function __construct($filename, $store_name = 'Default')
+	{
 		$this->filename = $filename;
 		$this->store_name = $store_name;
 	}
 	
-	public function write($message) {
+	public function write($message)
+	{
 		$file = DIR_LOGS . $this->filename;
 		
 		$handle = fopen($file, 'a+');

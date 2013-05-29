@@ -1,10 +1,12 @@
 <?php
-class ControllerCheckoutBlockPaymentMethod extends Controller {
-  	public function index() {
+class ControllerCheckoutBlockPaymentMethod extends Controller 
+{
+  	public function index()
+  	{
   		$this->language->load('checkout/checkout');
 		$this->template->load('checkout/block/payment_method');
 		
-		if($this->cart->hasPaymentAddress()){
+		if ($this->cart->hasPaymentAddress()) {
 			$payment_methods = $this->cart->getPaymentMethods();
 			
 			if (!$payment_methods) {
@@ -13,17 +15,17 @@ class ControllerCheckoutBlockPaymentMethod extends Controller {
 			
 			if ($this->cart->hasPaymentMethod()) {
 				$this->data['code'] = $this->cart->getPaymentMethodId();
-			} elseif(count($payment_methods) == 1){
+			} elseif (count($payment_methods) == 1) {
 				$method = current($payment_methods);
 				$this->data['code'] = $method['code'];
 			}
-			else{
+			else {
 				$this->data['code'] = '';
 			}
 			
 			$this->data['payment_methods'] = $payment_methods;
 		}
-		else{
+		else {
 			$this->data['no_payment_address'] = true;
 		}
 		
@@ -42,10 +44,10 @@ class ControllerCheckoutBlockPaymentMethod extends Controller {
 			'agree' => '',
 		);
 		
-		foreach($session_defaults as $key => $default){
-			if(isset($this->session->data[$key])){
+		foreach ($session_defaults as $key => $default) {
+			if (isset($this->session->data[$key])) {
 				$this->data[$key] = $this->session->data[$key];
-			}else{
+			} else {
 				$this->data[$key] = $default;
 			}
 		}
@@ -55,7 +57,8 @@ class ControllerCheckoutBlockPaymentMethod extends Controller {
 		$this->response->setOutput($this->render());
   	}
 	
-	public function validate() {
+	public function validate()
+	{
 		$this->language->load('checkout/checkout');
 		
 		$json = array();
@@ -63,11 +66,11 @@ class ControllerCheckoutBlockPaymentMethod extends Controller {
 		// Validate if payment address has been set.
 		if ($this->cart->hasPaymentAddress()) {
 			$payment_address = $this->cart->getPaymentAddress();
-		}else{
+		} else {
 			$json['error']['payment_address'] = $this->_('error_payment_address');
 		}
 		
-		if(!$this->cart->validate()){
+		if (!$this->cart->validate()) {
 			$json['redirect'] = $this->url->link('cart/cart');
 			$this->message->add('warning', $this->cart->get_errors());
 		}
@@ -81,11 +84,11 @@ class ControllerCheckoutBlockPaymentMethod extends Controller {
 				}
 			}
 			
-			if(!$json && !$this->cart->setPaymentMethod($_POST['payment_method'])){
+			if (!$json && !$this->cart->setPaymentMethod($_POST['payment_method'])) {
 				$json['error'] = $this->cart->get_errors('payment_method');
 			}
 			
-			if(!$json){
+			if (!$json) {
 				$this->cart->setComment($_POST['comment']);
 			}
 		}

@@ -1,8 +1,10 @@
 <?php
-class ControllerModulespecial extends Controller {
+class ControllerModulespecial extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/special');
 
 		$this->load->language('module/special');
@@ -57,7 +59,8 @@ class ControllerModulespecial extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/special')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

@@ -1,10 +1,12 @@
 <?php
-class ControllerCommonHeader extends Controller {
-	protected function index() {
+class ControllerCommonHeader extends Controller 
+{
+	protected function index()
+	{
 		$this->template->load('common/header');
 
 		
-		if($this->config->get('config_debug') && isset($_SESSION['debug'])){
+		if ($this->config->get('config_debug') && isset($_SESSION['debug'])) {
 			html_dump($_SESSION['debug'], 'debug');
 			unset($_SESSION['debug']);
 		}
@@ -51,7 +53,7 @@ class ControllerCommonHeader extends Controller {
 		
 		$this->data['messages'] = $this->message->fetch();
 		
-		if($this->config->get('config_seo_url')){
+		if ($this->config->get('config_seo_url')) {
 			$this->data['pretty_url'] = $this->url->get_pretty_url();
 		}
 		
@@ -69,7 +71,7 @@ class ControllerCommonHeader extends Controller {
 		
 		
 		//If the customer is logged in, build the account menu
-		if($this->customer->isLogged()){
+		if ($this->customer->isLogged()) {
 			$this->data['is_logged'] = true;
 			//The Welcome Message
 			$link_logged = array(
@@ -101,7 +103,7 @@ class ControllerCommonHeader extends Controller {
 			$this->document->addLink('account', $link_cart);
 			
 			//Include the Checkout navigation link only if there are products in the cart
-			if($this->cart->hasProducts()){
+			if ($this->cart->hasProducts()) {
 				$link_checkout= array(
 					'name' => 'checkout',
 					'display_name' => $this->_('text_checkout'),
@@ -123,13 +125,13 @@ class ControllerCommonHeader extends Controller {
 			
 			$this->data['links_account'] = $this->document->getLinks('account');
 		}
-		else{
+		else {
 			$this->data['is_logged'] = false;
 			
 			$this->data['block_login'] = $this->getBlock('account', 'login', array('header'));
 			
 			
-			if(!$this->cart->isEmpty()){
+			if (!$this->cart->isEmpty()) {
 				$link_cart = array(
 					'name' => 'cart',
 					'display_name' => $this->_('text_shopping_cart'),

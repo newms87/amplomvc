@@ -1,18 +1,20 @@
 <?php
-class ControllerCommonHome extends Controller {
-	public function index() {
+class ControllerCommonHome extends Controller 
+{
+	public function index()
+	{
 		
-		if($this->user->isDesigner()){
+		if ($this->user->isDesigner()) {
 			$this->template->load('common/home_restricted');
 		}
 		
 		$this->load->language('common/home');
 		
-		if($this->user->isDesigner()){
+		if ($this->user->isDesigner()) {
 			$this->document->setTitle($this->_('heading_title_restricted'));;
 			$this->language->set('heading_title', $this->_('heading_title_restricted'));
 		}
-		else{
+		else {
 			$this->document->setTitle($this->_('heading_title'));
 		}
 		
@@ -72,7 +74,8 @@ class ControllerCommonHome extends Controller {
 		$this->response->setOutput($this->render());
   	}
 	
-	public function chart() {
+	public function chart()
+	{
 		$this->load->language('common/home');
 		
 		$data = array();

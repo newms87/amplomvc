@@ -26,7 +26,7 @@
  */
 
 
-_require_once(PHPEXCEL_ROOT . 'PHPExcel/Shared/trend/bestFitClass.php');
+_require_once(PHPEXCEL_ROOT . 'PHPExcel/Shared/trend/bestFitclass .php');
 
 
 /**
@@ -36,11 +36,10 @@ _require_once(PHPEXCEL_ROOT . 'PHPExcel/Shared/trend/bestFitClass.php');
  * @package	PHPExcel_Shared_Trend
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Linear_Best_Fit extends PHPExcel_Best_Fit
-{
+class PHPExcel_Linear_Best_Fit extends PHPExcel_Best_Fit{
 	/**
 	* Algorithm type to use for best-fit
-	* (Name of this trend class)
+	* (Name of this trend class )
 	*
 	* @var	string
 	**/
@@ -53,7 +52,8 @@ class PHPExcel_Linear_Best_Fit extends PHPExcel_Best_Fit
 	* @param	float		$xValue			X-Value
 	* @return	float						Y-Value
 	**/
-	public function getValueOfYForX($xValue) {
+	public function getValueOfYForX($xValue)
+	{
 		return $this->getIntersect() + $this->getSlope() * $xValue;
 	}	//	function getValueOfYForX()
 
@@ -64,7 +64,8 @@ class PHPExcel_Linear_Best_Fit extends PHPExcel_Best_Fit
 	* @param	float		$yValue			Y-Value
 	* @return	float						X-Value
 	**/
-	public function getValueOfXForY($yValue) {
+	public function getValueOfXForY($yValue)
+	{
 		return ($yValue - $this->getIntersect()) / $this->getSlope();
 	}	//	function getValueOfXForY()
 
@@ -75,7 +76,8 @@ class PHPExcel_Linear_Best_Fit extends PHPExcel_Best_Fit
 	* @param	int		$dp		Number of places of decimal precision to display
 	* @return	string
 	**/
-	public function getEquation($dp=0) {
+	public function getEquation($dp=0)
+	{
 		$slope = $this->getSlope($dp);
 		$intersect = $this->getIntersect($dp);
 
@@ -90,7 +92,8 @@ class PHPExcel_Linear_Best_Fit extends PHPExcel_Best_Fit
 	* @param	float[]	$xValues	The set of X-values for this regression
 	* @param	boolean	$const
 	*/
-	private function _linear_regression($yValues, $xValues, $const) {
+	private function _linear_regression($yValues, $xValues, $const)
+	{
 		$this->_leastSquareFit($yValues, $xValues,$const);
 	}	//	function _linear_regression()
 

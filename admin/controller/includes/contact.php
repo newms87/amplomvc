@@ -1,17 +1,19 @@
 <?php
-class ControllerIncludesContact extends Controller {
+class ControllerIncludesContact extends Controller 
+{
 	
-	public function index($args) {
+	public function index($args)
+	{
 		$this->template->load('includes/contact');
 
 		$this->load->language('includes/contact');
 		$id = isset($args['id'])?$args['id']:null;
 		$type = isset($args['type'])?$args['type']:'general';
 		
-		if(isset($_POST['contact'])){
+		if (isset($_POST['contact'])) {
 			$this->data['contact_info'] = $_POST['contact'];
 		}
-		elseif($id){
+		elseif ($id) {
 			$this->data['contact_info'] = $this->model_includes_contact->getContactsByType($type,$id);
 		}
 		else

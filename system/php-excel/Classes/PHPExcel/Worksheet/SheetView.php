@@ -33,8 +33,7 @@
  * @package	PHPExcel_Worksheet
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Worksheet_SheetView
-{
+class PHPExcel_Worksheet_SheetView{
 	/**
 	* ZoomScale
 	*
@@ -65,7 +64,8 @@ class PHPExcel_Worksheet_SheetView
 	*
 	* @return int
 	*/
-	public function getZoomScale() {
+	public function getZoomScale()
+	{
 		return $this->_zoomScale;
 	}
 
@@ -78,7 +78,8 @@ class PHPExcel_Worksheet_SheetView
 	* @throws 	Exception
 	* @return PHPExcel_Worksheet_SheetView
 	*/
-	public function setZoomScale($pValue = 100) {
+	public function setZoomScale($pValue = 100)
+	{
 		// Microsoft Office Excel 2007 only allows setting a scale between 10 and 400 via the user interface,
 		// but it is apparently still able to handle any scale >= 1
 		if (($pValue >= 1) || is_null($pValue)) {
@@ -94,7 +95,8 @@ class PHPExcel_Worksheet_SheetView
 	*
 	* @return int
 	*/
-	public function getZoomScaleNormal() {
+	public function getZoomScaleNormal()
+	{
 		return $this->_zoomScaleNormal;
 	}
 
@@ -107,7 +109,8 @@ class PHPExcel_Worksheet_SheetView
 	* @throws 	Exception
 	* @return PHPExcel_Worksheet_SheetView
 	*/
-	public function setZoomScaleNormal($pValue = 100) {
+	public function setZoomScaleNormal($pValue = 100)
+	{
 		if (($pValue >= 1) || is_null($pValue)) {
 			$this->_zoomScaleNormal = $pValue;
 		} else {
@@ -119,7 +122,8 @@ class PHPExcel_Worksheet_SheetView
 	/**
 	* Implement PHP __clone to create a deep clone, not just a shallow copy.
 	*/
-	public function __clone() {
+	public function __clone()
+	{
 		$vars = get_object_vars($this);
 		foreach ($vars as $key => $value) {
 			if (is_object($value)) {

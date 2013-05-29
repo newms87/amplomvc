@@ -1,7 +1,9 @@
 <?php
-class ControllerModuleBestSeller extends Controller {
+class ControllerModuleBestSeller extends Controller 
+{
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/bestseller');
 
 		$this->load->language('module/bestseller');
@@ -31,16 +33,16 @@ class ControllerModuleBestSeller extends Controller {
 			'bestseller_list' => 'bestseller_list',
 			'options'=>'bestseller_option'
 		);
-		foreach($configs as $key=>$config){
+		foreach ($configs as $key=>$config) {
 			$this->data[$key] = isset($_POST[$config])?$_POST[$config]:$this->config->get($config);
 		}
 		
-		if(!$this->data['bestseller_list']){
+		if (!$this->data['bestseller_list']) {
 			$this->data['bestseller_list'] = array();
 		}
-		else{
+		else {
 			$names = $this->model_catalog_product->getProductNames(array_keys($this->data['bestseller_list']));
-			foreach($names as $n){
+			foreach ($names as $n) {
 				$this->data['bestseller_list'][$n['product_id']] = $n['name'];
 			}
 		}
@@ -56,7 +58,8 @@ class ControllerModuleBestSeller extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/bestseller')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

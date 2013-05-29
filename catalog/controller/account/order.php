@@ -1,8 +1,10 @@
 <?php
-class ControllerAccountOrder extends Controller {
+class ControllerAccountOrder extends Controller 
+{
 	
 		
-	public function index() {
+	public function index()
+	{
 		$this->template->load('account/order_list');
 
 		if (!$this->customer->isLogged()) {
@@ -25,7 +27,7 @@ class ControllerAccountOrder extends Controller {
 							
 					$order_options = $this->model_account_order->getOrderOptions($order_id, $order_product['order_product_id']);
 					
-					foreach($order_options as $order_option){
+					foreach ($order_options as $order_option) {
 						$option_data[$order_option['product_option_id']][] = $order_option;
 					}
 					
@@ -93,7 +95,8 @@ class ControllerAccountOrder extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function info() {
+	public function info()
+	{
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/order/info', 'order_id=' . $order_id);
 			

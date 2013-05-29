@@ -23,19 +23,19 @@
 	margin-left:5px;
 }
 .janrain_icon_tiny{
-	background: url(<?= HTTPS_IMAGE;?>/data/rpx-icons16.png) no-repeat top left;
+	background: url(<?= HTTPS_IMAGE; ?>/data/rpx-icons16.png) no-repeat top left;
 	width:16px;
 	height:16px;
 }
 
 .janrain_icon_small{
-	background: url(<?= HTTPS_IMAGE;?>/data/rpx-icons16.png) no-repeat top left;
+	background: url(<?= HTTPS_IMAGE; ?>/data/rpx-icons16.png) no-repeat top left;
 	width:16px;
 	height:16px;
 }
 
 .janrain_icon_large{
-	background: url(<?= HTTPS_IMAGE;?>/data/rpx-icons30.png) no-repeat top left;
+	background: url(<?= HTTPS_IMAGE; ?>/data/rpx-icons30.png) no-repeat top left;
 	width:30px;
 	height:30px;
 }
@@ -44,7 +44,7 @@
 <? if($icon_size == 'tiny'){?>
 	<a class="janrainEngage janiainengage_a janrain_tiny" href="#" onclick="return false;">
 			<? foreach($janrain_display_icons as $icon){?>
-				<div class="janrain_icon_<?=$icon_size;?>" style="background-position:0 <?=$image_offset[$icon] * -$image_size;?>px"></div>
+				<div class="janrain_icon_<?= $icon_size; ?>" style="background-position:0 <?= $image_offset[$icon] * -$image_size; ?>px"></div>
 			<? }?>
 	</a>
 <? }else{?>
@@ -57,7 +57,7 @@
 			<? } else { ?>
 				<a class="janrainEngage janiainengage_a janrain_icon_list" href="#" onclick="return false;">
 						<? foreach($janrain_display_icons as $icon){?>
-							<div class="janrain_icon_<?=$icon_size;?>" style="background-position:0 <?=$image_offset[$icon] * -$image_size;?>px"></div>
+							<div class="janrain_icon_<?= $icon_size; ?>" style="background-position:0 <?= $image_offset[$icon] * -$image_size; ?>px"></div>
 						<? }?>
 				</a>
 			<? }?>
@@ -71,17 +71,17 @@
 	window.janrain.settings = {};
 
 	janrain.settings={};
-	janrain.settings.tokenUrl='<?= $janrain_token_url;?>';
-	janrain.settings.type='<?= $display_type=='iframe' ? 'embed' : 'modal';;?>';
-	janrain.settings.language='<?= $janrain_lang;?>';
+	janrain.settings.tokenUrl='<?= $janrain_token_url; ?>';
+	janrain.settings.type='<?= $display_type=='iframe' ? 'embed' : 'modal';; ?>';
+	janrain.settings.language='<?= $janrain_lang; ?>';
 	janrain.settings.showAttribution=false;
 	janrain.ready=true;
 
 	if(document.location.protocol === 'https:'){
-		src='https://rpxnow.com/js/lib/<?= $janrain_application_domain;?>/engage.js';
+		src='https://rpxnow.com/js/lib/<?= $janrain_application_domain; ?>/engage.js';
 	}
 	else{
-		src='http://widget-cdn.rpxnow.com/js/lib/<?= $janrain_application_domain;?>/engage.js';
+		src='http://widget-cdn.rpxnow.com/js/lib/<?= $janrain_application_domain; ?>/engage.js';
 	}
 
 	$(document).ready(function(){

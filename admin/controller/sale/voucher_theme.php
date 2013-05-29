@@ -1,8 +1,10 @@
 <?php
-class ControllerSaleVoucherTheme extends Controller {
+class ControllerSaleVoucherTheme extends Controller 
+{
 	
 	
-  	public function index() {
+  	public function index()
+  	{
 		$this->load->language('sale/voucher_theme');
 	
 		$this->document->setTitle($this->_('heading_title'));
@@ -10,7 +12,8 @@ class ControllerSaleVoucherTheme extends Controller {
 		$this->getList();
   	}
 				
-  	public function insert() {
+  	public function insert()
+  	{
 		$this->load->language('sale/voucher_theme');
 	
 		$this->document->setTitle($this->_('heading_title'));
@@ -40,7 +43,8 @@ class ControllerSaleVoucherTheme extends Controller {
 		$this->getForm();
   	}
 
-  	public function update() {
+  	public function update()
+  	{
 		$this->load->language('sale/voucher_theme');
 	
 		$this->document->setTitle($this->_('heading_title'));
@@ -70,7 +74,8 @@ class ControllerSaleVoucherTheme extends Controller {
 		$this->getForm();
   	}
 
-  	public function delete() {
+  	public function delete()
+  	{
 		$this->load->language('sale/voucher_theme');
 	
 		$this->document->setTitle($this->_('heading_title'));
@@ -102,7 +107,8 @@ class ControllerSaleVoucherTheme extends Controller {
 		$this->getList();
   	}
 	
-  	private function getList() {
+  	private function getList()
+  	{
 		$this->template->load('sale/voucher_theme_list');
 
 		if (isset($_GET['sort'])) {
@@ -225,7 +231,8 @@ class ControllerSaleVoucherTheme extends Controller {
 		$this->response->setOutput($this->render());
   	}
   
-  	private function getForm() {
+  	private function getForm()
+  	{
 		$this->template->load('sale/voucher_theme_form');
 		
  		if (isset($this->error['warning'])) {
@@ -309,7 +316,8 @@ class ControllerSaleVoucherTheme extends Controller {
 		$this->response->setOutput($this->render());
   	}
   	
-	private function validateForm() {
+	private function validateForm()
+	{
 		if (!$this->user->hasPermission('modify', 'sale/voucher_theme')) {
 				$this->error['warning'] = $this->_('error_permission');
 		}
@@ -327,7 +335,8 @@ class ControllerSaleVoucherTheme extends Controller {
 		return $this->error ? false : true;
   	}
 
-  	private function validateDelete() {
+  	private function validateDelete()
+  	{
 		if (!$this->user->hasPermission('modify', 'sale/voucher_theme')) {
 				$this->error['warning'] = $this->_('error_permission');
 		}

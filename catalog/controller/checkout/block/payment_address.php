@@ -1,13 +1,15 @@
 <?php
-class ControllerCheckoutBlockPaymentAddress extends Controller {
-	public function index() {
+class ControllerCheckoutBlockPaymentAddress extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('checkout/block/payment_address');
 
 		$this->language->load('checkout/checkout');
 		
 		$this->data['data_addresses'] = $this->customer->get_payment_addresses();
 		
-		if($this->cart->validatePaymentAddress()){
+		if ($this->cart->validatePaymentAddress()) {
 			$this->data['payment_address_id'] = $this->cart->getPaymentAddressId();
 		} else {
 			$this->data['payment_address_id'] = $this->customer->get_setting('default_payment_address_id');
@@ -27,17 +29,18 @@ class ControllerCheckoutBlockPaymentAddress extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function validate_selection(){
+	public function validate_selection()
+	{
 		$this->language->load('checkout/checkout');
 		
 		$json = $this->validate();
 		
-		if(!$json){
+		if (!$json) {
 			if (empty($_POST['address_id'])) {
 				$json['error']['warning'] = $this->_('error_address');
 			}
 			else {
-				if(!$this->cart->setPaymentAddress($_POST['address_id'])){
+				if (!$this->cart->setPaymentAddress($_POST['address_id'])) {
 					$json['error']['address'] = $this->cart->get_errors('payment_address');
 				}
 			}
@@ -46,16 +49,17 @@ class ControllerCheckoutBlockPaymentAddress extends Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 	
-	public function validate_form(){
+	public function validate_form()
+	{
 		$this->language->load('checkout/checkout');
 		
 		$json = $this->validate();
 		
-		if(!$json){
+		if (!$json) {
 			//Validate the form
 			$this->form->init('address');
 			
-			if(!$this->form->validate($_POST)){
+			if (!$this->form->validate($_POST)) {
 				$json['error'] = $this->form->get_errors();
 			}
 			
@@ -63,14 +67,14 @@ class ControllerCheckoutBlockPaymentAddress extends Controller {
 			
 			
 			if (!$json) {
-				if(!$this->cart->setPaymentAddress($_POST)){
+				if (!$this->cart->setPaymentAddress($_POST)) {
 					$json['error']['payment_address'] = $this->cart->get_errors('payment_address');
 				}
 			}
 
 			//IF this is an ajax call
-			if(!isset($_POST['async'])){
-				if($json['error']){
+			if (!isset($_POST['async'])) {
+				if ($json['error']) {
 					$this->message->add('warning', $json['error']);
 				} else {
 					$this->message->add('success', $this->_('text_address_success'));
@@ -84,14 +88,15 @@ class ControllerCheckoutBlockPaymentAddress extends Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 	
-	public function validate() {
+	public function validate()
+	{
 		$json = array();
 		
 		// Validate if customer is logged in.
 		if (!$this->customer->isLogged()) {
 			$json['redirect'] = $this->url->link('checkout/checkout');
 		}
-		elseif(!$this->cart->validate()){
+		elseif (!$this->cart->validate()) {
 			$json['redirect'] = $this->url->link('cart/cart');
 			$this->message->add($this->cart->get_errors());
 		}

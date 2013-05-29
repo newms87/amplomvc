@@ -1,6 +1,8 @@
 <?php
-class ControllerPaymentGoogleCheckout extends Controller {
-	public function index() {
+class ControllerPaymentGoogleCheckout extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('payment/google_checkout');
 
 		if (!$this->config->get('google_checkout_test')) {
@@ -87,7 +89,8 @@ class ControllerPaymentGoogleCheckout extends Controller {
 		$this->render();
 	}
 
-	public function shipping() {
+	public function shipping()
+	{
 		ob_start();
 		
 		print_r($_GET);

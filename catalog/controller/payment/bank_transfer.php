@@ -1,6 +1,8 @@
 <?php
-class ControllerPaymentBankTransfer extends Controller {
-	protected function index() {
+class ControllerPaymentBankTransfer extends Controller 
+{
+	protected function index()
+	{
 		$this->template->load('payment/bank_transfer');
 
 		$this->language->load('payment/bank_transfer');
@@ -12,7 +14,8 @@ class ControllerPaymentBankTransfer extends Controller {
 		$this->render();
 	}
 	
-	public function confirm() {
+	public function confirm()
+	{
 		$this->language->load('payment/bank_transfer');
 		
 		$comment  = $this->_('text_instruction') . "\n\n";

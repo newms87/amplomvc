@@ -33,8 +33,7 @@
  * @package	PHPExcel_Cell
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Cell_DataType
-{
+class PHPExcel_Cell_DataType{
 	/* Data types */
 	const TYPE_STRING2		= 'str';
 	const TYPE_STRING		= 's';
@@ -57,7 +56,8 @@ class PHPExcel_Cell_DataType
 	*
 	* @return array
 	*/
-	public static function getErrorCodes() {
+	public static function getErrorCodes()
+ {
 		return self::$_errorCodes;
 	}
 
@@ -68,7 +68,8 @@ class PHPExcel_Cell_DataType
 	* @param	mixed 	$pValue
 	* @return 	int
 	*/
-	public static function dataTypeForValue($pValue = null) {
+	public static function dataTypeForValue($pValue = null)
+ {
 		return PHPExcel_Cell_DefaultValueBinder::dataTypeForValue($pValue);
 	}
 
@@ -79,7 +80,7 @@ class PHPExcel_Cell_DataType
 	* @return mixed Sanitized value
 	*/
 	public static function checkString($pValue = null)
-	{
+ {
 		if ($pValue instanceof PHPExcel_RichText) {
 			// TODO: Sanitize Rich-Text string (max. character count is 32,767)
 			return $pValue;
@@ -101,7 +102,7 @@ class PHPExcel_Cell_DataType
 	* @return string Sanitized value
 	*/
 	public static function checkErrorCode($pValue = null)
-	{
+ {
 		$pValue = (string)$pValue;
 
 		if ( !array_key_exists($pValue, self::$_errorCodes) ) {

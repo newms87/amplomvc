@@ -1,8 +1,10 @@
 <?php
-class ControllerLocalisationGeoZone extends Controller {
+class ControllerLocalisationGeoZone extends Controller 
+{
 	
  
-	public function index() {
+	public function index()
+	{
 		$this->load->language('localisation/geo_zone');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -10,7 +12,8 @@ class ControllerLocalisationGeoZone extends Controller {
 		$this->getList();
 	}
 
-	public function insert() {
+	public function insert()
+	{
 		$this->load->language('localisation/geo_zone');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -26,7 +29,8 @@ class ControllerLocalisationGeoZone extends Controller {
 		$this->getForm();
 	}
 
-	public function update() {
+	public function update()
+	{
 		$this->load->language('localisation/geo_zone');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -42,7 +46,8 @@ class ControllerLocalisationGeoZone extends Controller {
 		$this->getForm();
 	}
 
-	public function delete() {
+	public function delete()
+	{
 		$this->load->language('localisation/geo_zone');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -58,7 +63,8 @@ class ControllerLocalisationGeoZone extends Controller {
 		$this->getList();
 	}
 
-	private function getList() {
+	private function getList()
+	{
 		$this->template->load('localisation/geo_zone_list');
 
 		if (isset($_GET['sort'])) {
@@ -183,7 +189,8 @@ class ControllerLocalisationGeoZone extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function getForm() {
+	private function getForm()
+	{
 		$this->template->load('localisation/geo_zone_form');
 		
 		$geo_zone_id = isset($_GET['geo_zone_id']) ? $_GET['geo_zone_id'] : 0;
@@ -212,19 +219,19 @@ class ControllerLocalisationGeoZone extends Controller {
 			'zones' => array(),
 		);
 		
-		foreach($defaults as $key => $default){
-			if(isset($_POST[$key])) {
+		foreach ($defaults as $key => $default) {
+			if (isset($_POST[$key])) {
 				$this->data[$key] = $_POST[$key];
-			} elseif(isset($geo_zone_info[$key])) {
+			} elseif (isset($geo_zone_info[$key])) {
 				$this->data[$key] = $geo_zone_info[$key];
-			} elseif(!$geo_zone_id) {
+			} elseif (!$geo_zone_id) {
 				$this->data[$key] = $default;
 			}
 		}
 		
 		$this->data['data_countries'] = $this->model_localisation_country->getCountries();
 		
-		if(!isset($this->data['zones'])){
+		if (!isset($this->data['zones'])) {
 			$this->data['zones'] = $this->model_localisation_geo_zone->getZones($geo_zone_id);
 		}
 		
@@ -236,7 +243,8 @@ class ControllerLocalisationGeoZone extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validateForm() {
+	private function validateForm()
+	{
 		if (!$this->user->hasPermission('modify', 'localisation/geo_zone')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
@@ -249,14 +257,15 @@ class ControllerLocalisationGeoZone extends Controller {
 			$this->error['description'] = $this->_('error_description');
 		}
 		
-		if(empty($_POST['exclude'])){
+		if (empty($_POST['exclude'])) {
 			$_POST['exclude'] = 0;
 		}
 		
 		return $this->error ? false : true;
 	}
 
-	private function validateDelete() {
+	private function validateDelete()
+	{
 		if (!$this->user->hasPermission('modify', 'localisation/geo_zone')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

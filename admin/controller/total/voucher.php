@@ -1,8 +1,10 @@
 <?php
-class ControllerTotalVoucher extends Controller {
+class ControllerTotalVoucher extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('total/voucher');
 
 		$this->load->language('total/voucher');
@@ -51,7 +53,8 @@ class ControllerTotalVoucher extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'total/voucher')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

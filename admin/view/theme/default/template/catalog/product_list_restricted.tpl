@@ -1,6 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
+	<?= $this->builder->display_breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'product.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -55,9 +55,9 @@
 							<td><input type="text" name="filter_name" value="<?= $filter_name; ?>" /></td>
 							<!--<td><input type="text" name="filter_model" value="<?= $filter_model; ?>" /></td>-->
 							<td align="left"><input type="text" name="filter_price" value="<?= $filter_price; ?>" size="8"/></td>
-							<td align="left"><?=$this->builder->build('select',$data_yes_no_blank,'filter_is_final',is_null($filter_is_final)?'':(int)$filter_is_final);?></td>
+							<td align="left"><?= $this->builder->build('select',$data_yes_no_blank,'filter_is_final',is_null($filter_is_final)?'':(int)$filter_is_final); ?></td>
 							<td align="right"><input type="text" name="filter_quantity" value="<?= $filter_quantity; ?>" style="text-align: right;" /></td>
-							<td><?=$this->builder->build('select', $data_statuses_blank, "filter_status", $filter_status);?></td>
+							<td><?= $this->builder->build('select', $data_statuses_blank, "filter_status", $filter_status); ?></td>
 							<td align="right"><a onclick="filter();" class="button"><?= $button_filter; ?></a></td>
 						</tr>
 						<? if ($products) { ?>
@@ -175,7 +175,7 @@ $('input[name=\'filter_model\']').autocomplete({
 	}
 });
 //--></script>
-<?=$this->builder->js('datepicker');?>
+<?= $this->builder->js('datepicker'); ?>
 <script type='text/javascript'>//<!--
 $('#update_action').change(function(){
 	$('.action_value').removeClass('active');

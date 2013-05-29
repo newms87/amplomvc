@@ -1,6 +1,8 @@
 <?php
-class ControllerAffiliateTracking extends Controller {
-	public function index() {
+class ControllerAffiliateTracking extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('affiliate/tracking');
 
 		if (!$this->affiliate->isLogged()) {
@@ -34,7 +36,8 @@ class ControllerAffiliateTracking extends Controller {
 		$this->response->setOutput($this->render());
   	}
 	
-	public function autocomplete() {
+	public function autocomplete()
+	{
 		$json = array();
 		
 		if (isset($_GET['filter_name'])) {

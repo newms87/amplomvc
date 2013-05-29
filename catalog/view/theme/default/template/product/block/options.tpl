@@ -2,25 +2,25 @@
 	<h2><?= $text_option; ?></h2>
 	<br />
 	<? foreach ($product_options as $option) { ?>
-	<div id="option-<?= $option['product_option_id']; ?>" option_id='<?=$option['product_option_id'];?>' class="option">
+	<div id="option-<?= $option['product_option_id']; ?>" option_id='<?= $option['product_option_id']; ?>' class="option">
 		<? if ($option['required']) { ?>
 		<span class="required"></span>
 		<? } ?>
 		<b><?= $option['display_name']; ?>:</b><br />
 		
-	<?=$this->builder->set_config('product_option_value_id','name');?>
+	<?= $this->builder->set_config('product_option_value_id','name'); ?>
 	
 	<? switch ($option['type']) {
 			case 'select': ?>
 				<select class='selected_option'>
 				<? foreach($option['product_option_value'] as $option_value){?>
-						<option ov="<?= $option_value['option_value_id'];?>" value="<?= $option_value['product_option_value_id'];?>"><?= $option_value['name'];?></option>
+						<option ov="<?= $option_value['option_value_id']; ?>" value="<?= $option_value['product_option_value_id']; ?>"><?= $option_value['name']; ?></option>
 				<? }?>
 				</select>
 				<? break;
 			
 			case 'radio': ?>
-			<?= $this->builder->build('radio', $option['product_option_value'],	"option[$option[product_option_id]]");?>
+			<?= $this->builder->build('radio', $option['product_option_value'],	"option[$option[product_option_id]]"); ?>
 			<? break;
 			
 			case 'checkbox': ?>
@@ -34,19 +34,19 @@
 			case 'image': ?>
 			<div class='option_image_list'>
 			<? foreach($option['product_option_value'] as $product_option_value){ ?>
-				<div class="option_image" onclick="select_me($(this));" ov="<?= $product_option_value['option_value_id'];?>" value="<?= $product_option_value['product_option_value_id'];?>" id="pov-<?= $product_option_value['product_option_value_id'];?>">
+				<div class="option_image" onclick="select_me($(this));" ov="<?= $product_option_value['option_value_id']; ?>" value="<?= $product_option_value['product_option_value_id']; ?>" id="pov-<?= $product_option_value['product_option_value_id']; ?>">
 						<div class='option_image_box'>
 							<? if($product_option_value['thumb']) {?>
-							<a href="javscript:void(0);" title="<?= $product_option_value['name']; ?>" rel="<?=$product_option_value['rel'];?>" >
-									<img src="<?= $product_option_value['thumb'];?>" />
+							<a href="javscript:void(0);" title="<?= $product_option_value['name']; ?>" rel="<?= $product_option_value['rel']; ?>" >
+									<img src="<?= $product_option_value['thumb']; ?>" />
 							</a>
 							<? } else { ?>
 								<a href="javscript:void(0);" title="<?= $product_option_value['name']; ?>">
-										<img src="<?= $option_value_no_image;?>" />
+										<img src="<?= $option_value_no_image; ?>" />
 								</a>
 							<? } ?>
 						</div>
-						<div class='option_image_name'><?=$product_option_value['name'];?></div>
+						<div class='option_image_name'><?= $product_option_value['name']; ?></div>
 				</div>
 			<? }?>
 			</div>
@@ -62,7 +62,7 @@
 
 $('#product_options input, #product_options select').change(update_option_restrictions);
 
-var restrictions = <?= json_encode($product_option_restrictions);?>;
+var restrictions = <?= json_encode($product_option_restrictions); ?>;
 function update_option_restrictions(){
 	$('#product_options [ov]').removeAttr('disabled').removeClass('disabled');
 	

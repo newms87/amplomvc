@@ -1,8 +1,8 @@
 <?= $header; ?>
 <?= $column_left; ?><?= $column_right; ?>
 <div id="content"><?= $content_top; ?>
-	<?= $this->builder->display_breadcrumbs();?>
-	<?= $this->builder->display_errors($errors);?>
+	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->builder->display_errors($errors); ?>
 	<h1><?= $heading_title; ?></h1>
 	<p><?= $text_account_already; ?></p>
 	<form action="<?= $action; ?>" method="post" enctype="multipart/form-data">
@@ -49,13 +49,13 @@
 				<tr>
 					<td><span class="required"></span> <?= $entry_country; ?></td>
 					<td>
-						<?= $this->builder->set_config('country_id', 'name');?>
-						<?= $this->builder->build('select', $countries, "country_id", $country_id, array('class'=>"country_select"));?>
+						<?= $this->builder->set_config('country_id', 'name'); ?>
+						<?= $this->builder->build('select', $countries, "country_id", $country_id, array('class'=>"country_select")); ?>
 					</td>
 				</tr>
 				<tr>
 					<td><span class="required"></span> <?= $entry_zone; ?></td>
-					<td><select name="zone_id" class="zone_select" zone_id="<?=$zone_id;?>"></select></td>
+					<td><select name="zone_id" class="zone_select" zone_id="<?= $zone_id; ?>"></select></td>
 				</tr>
 			</table>
 		</div>
@@ -112,7 +112,7 @@
 	</form>
 	<?= $content_bottom; ?></div>
 
-<?=$this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select');?>
+<?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select'); ?>
 
 <script type="text/javascript">
 //<!--
@@ -121,5 +121,5 @@ $('.colorbox').colorbox({
 	height: 560
 });
 //--></script>
-<?= $this->builder->js('errors', $errors);?>
+<?= $this->builder->js('errors', $errors); ?>
 <?= $footer; ?>

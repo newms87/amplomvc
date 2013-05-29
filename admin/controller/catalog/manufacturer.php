@@ -1,7 +1,9 @@
 <?php
-class ControllerCatalogManufacturer extends Controller {
+class ControllerCatalogManufacturer extends Controller 
+{
 	
-  	public function index() {
+  	public function index()
+  	{
 		$this->load->language('catalog/manufacturer');
 		
 		$this->document->setTitle($this->_('heading_title'));
@@ -9,7 +11,8 @@ class ControllerCatalogManufacturer extends Controller {
 		$this->getList();
   	}
   
-  	public function insert() {
+  	public function insert()
+  	{
 		$this->load->language('catalog/manufacturer');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -19,7 +22,7 @@ class ControllerCatalogManufacturer extends Controller {
 			
 			if($this->user->isAdmin())
 				$this->message->add('success', $this->_('text_success'));
-			else{
+			else {
 				$this->message->add('warning', $this->language->formt('error_portal_insert', $this->config->get('config_email')));
 				$this->message->add('success', $this->_('text_portal_insert_success'));
 			}
@@ -32,7 +35,8 @@ class ControllerCatalogManufacturer extends Controller {
 		$this->getForm();
   	}
 	
-  	public function update() {
+  	public function update()
+  	{
 		$this->load->language('catalog/manufacturer');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -53,7 +57,8 @@ class ControllerCatalogManufacturer extends Controller {
 		$this->getForm();
   	}
 
-  	public function delete() {
+  	public function delete()
+  	{
 		$this->load->language('catalog/manufacturer');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -74,7 +79,8 @@ class ControllerCatalogManufacturer extends Controller {
 		$this->getList();
   	}
 	
-  	private function getList() {
+  	private function getList()
+  	{
 		$this->template->load('catalog/manufacturer_list');
 
   		$sort_list = array('sort'=>'name','order'=>'ASC','page'=>1);
@@ -98,7 +104,7 @@ class ControllerCatalogManufacturer extends Controller {
 			'limit' => $this->config->get('config_admin_limit')
 		);
 		
-		if($this->user->isDesigner()){
+		if ($this->user->isDesigner()) {
 			$designers = $this->model_user_user->getUserDesigners($this->user->getId());
 			foreach($designers as $d)
 				$data['manufacturer_ids'][] = $d['designer_id'];
@@ -154,11 +160,12 @@ class ControllerCatalogManufacturer extends Controller {
 		$this->response->setOutput($this->render());
 	}
   
-  	private function getForm() {
-  		if($this->user->isDesigner()){
+  	private function getForm()
+  	{
+  		if ($this->user->isDesigner()) {
 			$this->template->load('catalog/manufacturer_form_restricted');
 		}
-		else{
+		else {
 			$this->template->load('catalog/manufacturer_form');
 		}
 
@@ -197,7 +204,7 @@ class ControllerCatalogManufacturer extends Controller {
 								'editable'=>1
 								);
 		
-		foreach($defaults as $d=>$value){
+		foreach ($defaults as $d=>$value) {
 			if (isset($_POST[$d]))
 				$this->data[$d] = $_POST[$d];
 			elseif (isset($manufacturer_info[$d]))
@@ -206,7 +213,7 @@ class ControllerCatalogManufacturer extends Controller {
 				$this->data[$d] = $value;
 		}
 		
-		if(!$this->data['editable']){
+		if (!$this->data['editable']) {
 			$this->language->format('text_not_editable', $this->data['name'],$this->config->get('config_email'), "Active%20Designer%20Brand%20Modification%20Request");
 		}
 		
@@ -225,7 +232,7 @@ class ControllerCatalogManufacturer extends Controller {
 		
 		$this->data['no_image'] = $this->image->resize('no_image.png', 100, 100);
 		
-		if($manufacturer_id){
+		if ($manufacturer_id) {
 			$this->data['articles'] = $this->model_catalog_manufacturer->getManufacturerArticles($manufacturer_id);
 		}
 		else
@@ -248,7 +255,8 @@ class ControllerCatalogManufacturer extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-  	private function validateForm() {
+  	private function validateForm()
+  	{
 		if (!$this->user->hasPermission('modify', 'catalog/manufacturer')) {
 				$this->error['warning'] = $this->_('error_permission');
 		}
@@ -257,13 +265,13 @@ class ControllerCatalogManufacturer extends Controller {
 				$this->error['name'] = $this->_('error_name');
 		}
 		
-		if(isset($_POST['keyword'])){
+		if (isset($_POST['keyword'])) {
 			$keyword =$_POST['keyword'];
 			if(empty($keyword) || is_null($keyword) || preg_match("/[^A-Za-z0-9-]/",$keyword) > 0)
 				$this->error['keyword'] = $this->_('error_keyword');
 		}
 		
-		if($this->user->isDesigner() && isset($_GET['manufacturer_id']) && !$this->model_catalog_manufacturer->isEditable($_GET['manufacturer_id'])){
+		if ($this->user->isDesigner() && isset($_GET['manufacturer_id']) && !$this->model_catalog_manufacturer->isEditable($_GET['manufacturer_id'])) {
 			$this->message->add('warning', $this->_('warning_not_editable'));
 			$this->url->redirect($this->url->link('catalog/manufacturer'));
 		}
@@ -271,7 +279,8 @@ class ControllerCatalogManufacturer extends Controller {
 		return $this->error ? false : true;
   	}
 
-  	private function validateDelete() {
+  	private function validateDelete()
+  	{
 		if (!$this->user->hasPermission('modify', 'catalog/manufacturer')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
@@ -287,12 +296,12 @@ class ControllerCatalogManufacturer extends Controller {
 			if(!empty($flashsales))
 				$this->error['warning_flashsale'] = $this->_('error_flashsale');
 			
-			if($this->user->isDesigner() && !$this->model_catalog_manufacturer->isEditable($manufacturer_id)){
+			if ($this->user->isDesigner() && !$this->model_catalog_manufacturer->isEditable($manufacturer_id)) {
 				$this->error['warning_active'] = $this->_('warning_not_editable');
 			}
 		}
 		
-		if($this->user->isDesigner()){
+		if ($this->user->isDesigner()) {
 			$this->error = array();
 			$this->error['warning'] = $this->language->format('error_portal_delete', $this->config->get('config_email'));
 		}
@@ -301,21 +310,23 @@ class ControllerCatalogManufacturer extends Controller {
 		return $this->error ? false : true;
   	}
 
-	private function check_user_can_modify($designer_id){
-		if($this->user->isDesigner() && $designer_id){
+	private function check_user_can_modify($designer_id)
+	{
+		if ($this->user->isDesigner() && $designer_id) {
 			$designers = $this->model_user_user->getUserDesigners($this->user->getId());
 			$found = false;
 			foreach($designers as $d)
 				if($d['designer_id'] == $designer_id)
 					$found = true;
-			if(!$found){
+			if (!$found) {
 				$this->message->add('warning', $this->_('error_invalid_designer_id'));
 				$this->url->redirect($this->url->link('catalog/manufacturer'));
 			}
 		}
 	}
 	
-	public function generate_url(){
+	public function generate_url()
+	{
 		$name = isset($_POST['name'])?$_POST['name']:'';
 		$manufacturer_id = isset($_POST['manufacturer_id'])?$_POST['manufacturer_id']:'';
 		if(!$name)return;
@@ -325,7 +336,8 @@ class ControllerCatalogManufacturer extends Controller {
 	}
 	
 	
-	public function autocomplete() {
+	public function autocomplete()
+	{
 		$filters = array(
 			'name' => null,
 			'status' => null,
@@ -335,10 +347,10 @@ class ControllerCatalogManufacturer extends Controller {
 		
 		$data = array();
 		
-		foreach($filters as $key => $default){
+		foreach ($filters as $key => $default) {
 			if (isset($_GET[$key])) {
 				$data[$key] = $_GET[$key];
-			} elseif(!is_null($default)) {
+			} elseif (!is_null($default)) {
 				$data[$key] = $default;
 			}
 		}
@@ -358,7 +370,8 @@ class ControllerCatalogManufacturer extends Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 
-	private function get_url($filters=false){
+	private function get_url($filters=false)
+	{
 		$url = '';
 		$filters = $filters?$filters:array('sort', 'order', 'page');
 		foreach($filters as $f)

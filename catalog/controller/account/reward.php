@@ -1,6 +1,8 @@
 <?php
-class ControllerAccountReward extends Controller {
-	public function index() {
+class ControllerAccountReward extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('account/reward');
 
 		if (!$this->customer->isLogged()) {

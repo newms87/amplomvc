@@ -47,7 +47,8 @@ define('EULER', 2.71828182845904523536);
  * @package		PHPExcel_Calculation
  * @copyright	Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Calculation_Engineering {
+class PHPExcel_Calculation_Engineering 
+{
 
 	/**
 	* Details of the Units of measure that can be used in CONVERTUOM()
@@ -693,7 +694,8 @@ class PHPExcel_Calculation_Engineering {
 	* @param	string		$complexNumber	The complex number
 	* @return	string[]	Indexed on "real", "imaginary" and "suffix"
 	*/
-	public static function _parseComplex($complexNumber) {
+	public static function _parseComplex($complexNumber)
+ {
 		$workString = (string) $complexNumber;
 
 		$realNumber = $imaginary = 0;
@@ -748,7 +750,8 @@ class PHPExcel_Calculation_Engineering {
 	* @param	string		$complexNumber	The complex number to clean
 	* @return	string		The "cleaned" complex number
 	*/
-	private static function _cleanComplex($complexNumber) {
+	private static function _cleanComplex($complexNumber)
+ {
 		if ($complexNumber{0} == '+') $complexNumber = substr($complexNumber,1);
 		if ($complexNumber{0} == '0') $complexNumber = substr($complexNumber,1);
 		if ($complexNumber{0} == '.') $complexNumber = '0'.$complexNumber;
@@ -757,7 +760,8 @@ class PHPExcel_Calculation_Engineering {
 	}
 
 
-	private static function _nbrConversionFormat($xVal,$places) {
+	private static function _nbrConversionFormat($xVal,$places)
+ {
 		if (!is_null($places)) {
 			if (strlen($xVal) <= $places) {
 				return substr(str_pad($xVal,$places,'0',STR_PAD_LEFT),-10);
@@ -791,7 +795,8 @@ class PHPExcel_Calculation_Engineering {
 	* @TODO Better handling of the approximation method to support the differences between Excel/Gnumeric and Open/Libre Office
 	*
 	*/
-	public static function BESSELI($x, $ord) {
+	public static function BESSELI($x, $ord)
+ {
 		$x	= (is_null($x))	? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($x);
 		$ord	= (is_null($ord))	? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($ord);
 
@@ -845,7 +850,8 @@ class PHPExcel_Calculation_Engineering {
 	* @TODO Better handling of the approximation method to support the differences between Excel/Gnumeric and Open/Libre Office
 	*
 	*/
-	public static function BESSELJ($x, $ord) {
+	public static function BESSELJ($x, $ord)
+ {
 		$x	= (is_null($x))	? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($x);
 		$ord	= (is_null($ord))	? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($ord);
 
@@ -881,7 +887,8 @@ class PHPExcel_Calculation_Engineering {
 	}	//	function BESSELJ()
 
 
-	private static function _Besselk0($fNum) {
+	private static function _Besselk0($fNum)
+ {
 		if ($fNum <= 2) {
 			$fNum2 = $fNum * 0.5;
 			$y = ($fNum2 * $fNum2);
@@ -898,7 +905,8 @@ class PHPExcel_Calculation_Engineering {
 	}	//	function _Besselk0()
 
 
-	private static function _Besselk1($fNum) {
+	private static function _Besselk1($fNum)
+ {
 		if ($fNum <= 2) {
 			$fNum2 = $fNum * 0.5;
 			$y = ($fNum2 * $fNum2);
@@ -936,7 +944,8 @@ class PHPExcel_Calculation_Engineering {
 	* @TODO Better handling of the approximation method to support the differences between Excel/Gnumeric and Open/Libre Office
 	*
 	*/
-	public static function BESSELK($x, $ord) {
+	public static function BESSELK($x, $ord)
+ {
 		$x		= (is_null($x))		? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($x);
 		$ord	= (is_null($ord))	? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($ord);
 
@@ -965,7 +974,8 @@ class PHPExcel_Calculation_Engineering {
 	}	//	function BESSELK()
 
 
-	private static function _Bessely0($fNum) {
+	private static function _Bessely0($fNum)
+ {
 		if ($fNum < 8.0) {
 			$y = ($fNum * $fNum);
 			$f1 = -2957821389.0 + $y * (7062834065.0 + $y * (-512359803.6 + $y * (10879881.29 + $y * (-86327.92757 + $y * 228.4622733))));
@@ -983,7 +993,8 @@ class PHPExcel_Calculation_Engineering {
 	}	//	function _Bessely0()
 
 
-	private static function _Bessely1($fNum) {
+	private static function _Bessely1($fNum)
+ {
 		if ($fNum < 8.0) {
 			$y = ($fNum * $fNum);
 			$f1 = $fNum * (-0.4900604943e13 + $y * (0.1275274390e13 + $y * (-0.5153438139e11 + $y * (0.7349264551e9 + $y *
@@ -1025,7 +1036,8 @@ class PHPExcel_Calculation_Engineering {
 	*
 	* @return	float
 	*/
-	public static function BESSELY($x, $ord) {
+	public static function BESSELY($x, $ord)
+ {
 		$x		= (is_null($x))		? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($x);
 		$ord	= (is_null($ord))	? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($ord);
 
@@ -1072,7 +1084,8 @@ class PHPExcel_Calculation_Engineering {
 	*								10 characters (10 bits), BIN2DEC returns the #NUM! error value.
 	* @return	string
 	*/
-	public static function BINTODEC($x) {
+	public static function BINTODEC($x)
+ {
 		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
 
 		if (is_bool($x)) {
@@ -1124,7 +1137,8 @@ class PHPExcel_Calculation_Engineering {
 	*								If places is negative, BIN2HEX returns the #NUM! error value.
 	* @return	string
 	*/
-	public static function BINTOHEX($x, $places=NULL) {
+	public static function BINTOHEX($x, $places=NULL)
+ {
 		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
 		$places	= PHPExcel_Calculation_Functions::flattenSingleValue($places);
 
@@ -1178,7 +1192,8 @@ class PHPExcel_Calculation_Engineering {
 	*								If places is negative, BIN2OCT returns the #NUM! error value.
 	* @return	string
 	*/
-	public static function BINTOOCT($x, $places=NULL) {
+	public static function BINTOOCT($x, $places=NULL)
+ {
 		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
 		$places	= PHPExcel_Calculation_Functions::flattenSingleValue($places);
 
@@ -1236,7 +1251,8 @@ class PHPExcel_Calculation_Engineering {
 	*								If places is zero or negative, DEC2BIN returns the #NUM! error value.
 	* @return	string
 	*/
-	public static function DECTOBIN($x, $places=NULL) {
+	public static function DECTOBIN($x, $places=NULL)
+ {
 		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
 		$places	= PHPExcel_Calculation_Functions::flattenSingleValue($places);
 
@@ -1292,7 +1308,8 @@ class PHPExcel_Calculation_Engineering {
 	*								If places is zero or negative, DEC2HEX returns the #NUM! error value.
 	* @return	string
 	*/
-	public static function DECTOHEX($x, $places=null) {
+	public static function DECTOHEX($x, $places=null)
+ {
 		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
 		$places	= PHPExcel_Calculation_Functions::flattenSingleValue($places);
 
@@ -1346,7 +1363,8 @@ class PHPExcel_Calculation_Engineering {
 	*								If places is zero or negative, DEC2OCT returns the #NUM! error value.
 	* @return	string
 	*/
-	public static function DECTOOCT($x, $places=null) {
+	public static function DECTOOCT($x, $places=null)
+ {
 		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
 		$places	= PHPExcel_Calculation_Functions::flattenSingleValue($places);
 
@@ -1403,7 +1421,8 @@ class PHPExcel_Calculation_Engineering {
 	*									If places is negative, HEX2BIN returns the #NUM! error value.
 	* @return	string
 	*/
-	public static function HEXTOBIN($x, $places=null) {
+	public static function HEXTOBIN($x, $places=null)
+ {
 		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
 		$places	= PHPExcel_Calculation_Functions::flattenSingleValue($places);
 
@@ -1439,7 +1458,8 @@ class PHPExcel_Calculation_Engineering {
 	*								#NUM! error value.
 	* @return	string
 	*/
-	public static function HEXTODEC($x) {
+	public static function HEXTODEC($x)
+ {
 		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
 
 		if (is_bool($x)) {
@@ -1485,7 +1505,8 @@ class PHPExcel_Calculation_Engineering {
 	*									If places is negative, HEX2OCT returns the #NUM! error value.
 	* @return	string
 	*/
-	public static function HEXTOOCT($x, $places=null) {
+	public static function HEXTOOCT($x, $places=null)
+ {
 		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
 		$places	= PHPExcel_Calculation_Functions::flattenSingleValue($places);
 
@@ -1536,7 +1557,8 @@ class PHPExcel_Calculation_Engineering {
 	*									value.
 	* @return	string
 	*/
-	public static function OCTTOBIN($x, $places=null) {
+	public static function OCTTOBIN($x, $places=null)
+ {
 		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
 		$places	= PHPExcel_Calculation_Functions::flattenSingleValue($places);
 
@@ -1572,7 +1594,8 @@ class PHPExcel_Calculation_Engineering {
 	*								#NUM! error value.
 	* @return	string
 	*/
-	public static function OCTTODEC($x) {
+	public static function OCTTODEC($x)
+ {
 		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
 
 		if (is_bool($x)) {
@@ -1615,7 +1638,8 @@ class PHPExcel_Calculation_Engineering {
 	*									If places is negative, OCT2HEX returns the #NUM! error value.
 	* @return	string
 	*/
-	public static function OCTTOHEX($x, $places=null) {
+	public static function OCTTOHEX($x, $places=null)
+ {
 		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
 		$places	= PHPExcel_Calculation_Functions::flattenSingleValue($places);
 
@@ -1648,7 +1672,8 @@ class PHPExcel_Calculation_Engineering {
 	*										If omitted, the suffix is assumed to be "i".
 	* @return	string
 	*/
-	public static function COMPLEX($realNumber=0.0, $imaginary=0.0, $suffix='i') {
+	public static function COMPLEX($realNumber=0.0, $imaginary=0.0, $suffix='i')
+ {
 		$realNumber	= (is_null($realNumber))	? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($realNumber);
 		$imaginary	= (is_null($imaginary))		? 0.0 :	PHPExcel_Calculation_Functions::flattenSingleValue($imaginary);
 		$suffix		= (is_null($suffix))		? 'i' :	PHPExcel_Calculation_Functions::flattenSingleValue($suffix);
@@ -1697,7 +1722,8 @@ class PHPExcel_Calculation_Engineering {
 	* 										coefficient.
 	* @return	float
 	*/
-	public static function IMAGINARY($complexNumber) {
+	public static function IMAGINARY($complexNumber)
+ {
 		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
 
 		$parsedComplex = self::_parseComplex($complexNumber);
@@ -1718,7 +1744,8 @@ class PHPExcel_Calculation_Engineering {
 	* @param	string		$complexNumber	The complex number for which you want the real coefficient.
 	* @return	float
 	*/
-	public static function IMREAL($complexNumber) {
+	public static function IMREAL($complexNumber)
+ {
 		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
 
 		$parsedComplex = self::_parseComplex($complexNumber);
@@ -1737,7 +1764,8 @@ class PHPExcel_Calculation_Engineering {
 	* @param	string		$complexNumber	The complex number for which you want the absolute value.
 	* @return	float
 	*/
-	public static function IMABS($complexNumber) {
+	public static function IMABS($complexNumber)
+ {
 		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
 
 		$parsedComplex = self::_parseComplex($complexNumber);
@@ -1758,7 +1786,8 @@ class PHPExcel_Calculation_Engineering {
 	* @param	string		$complexNumber	The complex number for which you want the argument theta.
 	* @return	float
 	*/
-	public static function IMARGUMENT($complexNumber) {
+	public static function IMARGUMENT($complexNumber)
+ {
 		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
 
 		$parsedComplex = self::_parseComplex($complexNumber);
@@ -1766,7 +1795,7 @@ class PHPExcel_Calculation_Engineering {
 		if ($parsedComplex['real'] == 0.0) {
 			if ($parsedComplex['imaginary'] == 0.0) {
 				return 0.0;
-			} elseif($parsedComplex['imaginary'] < 0.0) {
+			} elseif ($parsedComplex['imaginary'] < 0.0) {
 				return M_PI / -2;
 			} else {
 				return M_PI / 2;
@@ -1792,7 +1821,8 @@ class PHPExcel_Calculation_Engineering {
 	* @param	string		$complexNumber	The complex number for which you want the conjugate.
 	* @return	string
 	*/
-	public static function IMCONJUGATE($complexNumber) {
+	public static function IMCONJUGATE($complexNumber)
+ {
 		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
 
 		$parsedComplex = self::_parseComplex($complexNumber);
@@ -1820,7 +1850,8 @@ class PHPExcel_Calculation_Engineering {
 	* @param	string		$complexNumber	The complex number for which you want the cosine.
 	* @return	string|float
 	*/
-	public static function IMCOS($complexNumber) {
+	public static function IMCOS($complexNumber)
+ {
 		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
 
 		$parsedComplex = self::_parseComplex($complexNumber);
@@ -1844,7 +1875,8 @@ class PHPExcel_Calculation_Engineering {
 	* @param	string		$complexNumber	The complex number for which you want the sine.
 	* @return	string|float
 	*/
-	public static function IMSIN($complexNumber) {
+	public static function IMSIN($complexNumber)
+ {
 		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
 
 		$parsedComplex = self::_parseComplex($complexNumber);
@@ -1868,7 +1900,8 @@ class PHPExcel_Calculation_Engineering {
 	* @param	string		$complexNumber	The complex number for which you want the square root.
 	* @return	string
 	*/
-	public static function IMSQRT($complexNumber) {
+	public static function IMSQRT($complexNumber)
+ {
 		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
 
 		$parsedComplex = self::_parseComplex($complexNumber);
@@ -1897,7 +1930,8 @@ class PHPExcel_Calculation_Engineering {
 	* @param	string		$complexNumber	The complex number for which you want the natural logarithm.
 	* @return	string
 	*/
-	public static function IMLN($complexNumber) {
+	public static function IMLN($complexNumber)
+ {
 		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
 
 		$parsedComplex = self::_parseComplex($complexNumber);
@@ -1928,7 +1962,8 @@ class PHPExcel_Calculation_Engineering {
 	* @param	string		$complexNumber	The complex number for which you want the common logarithm.
 	* @return	string
 	*/
-	public static function IMLOG10($complexNumber) {
+	public static function IMLOG10($complexNumber)
+ {
 		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
 
 		$parsedComplex = self::_parseComplex($complexNumber);
@@ -1954,7 +1989,8 @@ class PHPExcel_Calculation_Engineering {
 	* @param	string		$complexNumber	The complex number for which you want the base-2 logarithm.
 	* @return	string
 	*/
-	public static function IMLOG2($complexNumber) {
+	public static function IMLOG2($complexNumber)
+ {
 		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
 
 		$parsedComplex = self::_parseComplex($complexNumber);
@@ -1980,7 +2016,8 @@ class PHPExcel_Calculation_Engineering {
 	* @param	string		$complexNumber	The complex number for which you want the exponential.
 	* @return	string
 	*/
-	public static function IMEXP($complexNumber) {
+	public static function IMEXP($complexNumber)
+ {
 		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
 
 		$parsedComplex = self::_parseComplex($complexNumber);
@@ -2013,7 +2050,8 @@ class PHPExcel_Calculation_Engineering {
 	* @param	float		$realNumber		The power to which you want to raise the complex number.
 	* @return	string
 	*/
-	public static function IMPOWER($complexNumber,$realNumber) {
+	public static function IMPOWER($complexNumber,$realNumber)
+ {
 		$complexNumber	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber);
 		$realNumber		= PHPExcel_Calculation_Functions::flattenSingleValue($realNumber);
 
@@ -2048,7 +2086,8 @@ class PHPExcel_Calculation_Engineering {
 	* @param	string		$complexDivisor		The complex denominator or divisor.
 	* @return	string
 	*/
-	public static function IMDIV($complexDividend,$complexDivisor) {
+	public static function IMDIV($complexDividend,$complexDivisor)
+ {
 		$complexDividend	= PHPExcel_Calculation_Functions::flattenSingleValue($complexDividend);
 		$complexDivisor	= PHPExcel_Calculation_Functions::flattenSingleValue($complexDivisor);
 
@@ -2092,7 +2131,8 @@ class PHPExcel_Calculation_Engineering {
 	* @param	string		$complexNumber2		The complex number to subtract from complexNumber1.
 	* @return	string
 	*/
-	public static function IMSUB($complexNumber1,$complexNumber2) {
+	public static function IMSUB($complexNumber1,$complexNumber2)
+ {
 		$complexNumber1	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber1);
 		$complexNumber2	= PHPExcel_Calculation_Functions::flattenSingleValue($complexNumber2);
 
@@ -2124,7 +2164,8 @@ class PHPExcel_Calculation_Engineering {
 	* @param	string		$complexNumber,...	Series of complex numbers to add
 	* @return	string
 	*/
-	public static function IMSUM() {
+	public static function IMSUM()
+ {
 		// Return value
 		$returnValue = self::_parseComplex('0');
 		$activeSuffix = '';
@@ -2160,7 +2201,8 @@ class PHPExcel_Calculation_Engineering {
 	* @param	string		$complexNumber,...	Series of complex numbers to multiply
 	* @return	string
 	*/
-	public static function IMPRODUCT() {
+	public static function IMPRODUCT()
+ {
 		// Return value
 		$returnValue = self::_parseComplex('1');
 		$activeSuffix = '';
@@ -2200,7 +2242,8 @@ class PHPExcel_Calculation_Engineering {
 	* @param	float		$b	The second number. If omitted, b is assumed to be zero.
 	* @return	int
 	*/
-	public static function DELTA($a, $b=0) {
+	public static function DELTA($a, $b=0)
+ {
 		$a	= PHPExcel_Calculation_Functions::flattenSingleValue($a);
 		$b	= PHPExcel_Calculation_Functions::flattenSingleValue($b);
 
@@ -2223,7 +2266,8 @@ class PHPExcel_Calculation_Engineering {
 	*									If you omit a value for step, GESTEP uses zero.
 	* @return	int
 	*/
-	public static function GESTEP($number, $step=0) {
+	public static function GESTEP($number, $step=0)
+ {
 		$number	= PHPExcel_Calculation_Functions::flattenSingleValue($number);
 		$step	= PHPExcel_Calculation_Functions::flattenSingleValue($step);
 
@@ -2236,7 +2280,8 @@ class PHPExcel_Calculation_Engineering {
 	//
 	private static $_two_sqrtpi = 1.128379167095512574;
 
-	public static function _erfVal($x) {
+	public static function _erfVal($x)
+ {
 		if (abs($x) > 2.2) {
 			return 1 - self::_erfcVal($x);
 		}
@@ -2271,7 +2316,8 @@ class PHPExcel_Calculation_Engineering {
 	*								If omitted, ERF integrates between zero and lower_limit
 	* @return	int
 	*/
-	public static function ERF($lower, $upper = null) {
+	public static function ERF($lower, $upper = null)
+ {
 		$lower	= PHPExcel_Calculation_Functions::flattenSingleValue($lower);
 		$upper	= PHPExcel_Calculation_Functions::flattenSingleValue($upper);
 
@@ -2298,7 +2344,8 @@ class PHPExcel_Calculation_Engineering {
 	//
 	private static $_one_sqrtpi = 0.564189583547756287;
 
-	private static function _erfcVal($x) {
+	private static function _erfcVal($x)
+ {
 		if (abs($x) < 2.2) {
 			return 1 - self::_erfVal($x);
 		}
@@ -2336,7 +2383,8 @@ class PHPExcel_Calculation_Engineering {
 	* @param	float		$x		The lower bound for integrating ERF
 	* @return	int
 	*/
-	public static function ERFC($x) {
+	public static function ERFC($x)
+ {
 		$x	= PHPExcel_Calculation_Functions::flattenSingleValue($x);
 
 		if (is_numeric($x)) {
@@ -2354,9 +2402,10 @@ class PHPExcel_Calculation_Engineering {
 	*
 	* @return	array
 	*/
-	public static function getConversionGroups() {
+	public static function getConversionGroups()
+ {
 		$conversionGroups = array();
-		foreach(self::$_conversionUnits as $conversionUnit) {
+		foreach (self::$_conversionUnits as $conversionUnit) {
 			$conversionGroups[] = $conversionUnit['Group'];
 		}
 		return array_merge(array_unique($conversionGroups));
@@ -2368,9 +2417,10 @@ class PHPExcel_Calculation_Engineering {
 	*
 	* @return	array
 	*/
-	public static function getConversionGroupUnits($group = NULL) {
+	public static function getConversionGroupUnits($group = NULL)
+ {
 		$conversionGroups = array();
-		foreach(self::$_conversionUnits as $conversionUnit => $conversionGroup) {
+		foreach (self::$_conversionUnits as $conversionUnit => $conversionGroup) {
 			if ((is_null($group)) || ($conversionGroup['Group'] == $group)) {
 				$conversionGroups[$conversionGroup['Group']][] = $conversionUnit;
 			}
@@ -2384,9 +2434,10 @@ class PHPExcel_Calculation_Engineering {
 	*
 	* @return	array
 	*/
-	public static function getConversionGroupUnitDetails($group = NULL) {
+	public static function getConversionGroupUnitDetails($group = NULL)
+ {
 		$conversionGroups = array();
-		foreach(self::$_conversionUnits as $conversionUnit => $conversionGroup) {
+		foreach (self::$_conversionUnits as $conversionUnit => $conversionGroup) {
 			if ((is_null($group)) || ($conversionGroup['Group'] == $group)) {
 				$conversionGroups[$conversionGroup['Group']][] = array(	'unit'			=> $conversionUnit,
 																		'description'	=> $conversionGroup['Unit Name']
@@ -2402,7 +2453,8 @@ class PHPExcel_Calculation_Engineering {
 	*
 	* @return	array
 	*/
-	public static function getConversionMultipliers() {
+	public static function getConversionMultipliers()
+ {
 		return self::$_conversionMultipliers;
 	}	//	function getConversionGroups()
 
@@ -2422,7 +2474,8 @@ class PHPExcel_Calculation_Engineering {
 	* @param	string		$toUOM		The units for the result.
 	* @return	float
 	*/
-	public static function CONVERTUOM($value, $fromUOM, $toUOM) {
+	public static function CONVERTUOM($value, $fromUOM, $toUOM)
+ {
 		$value		= PHPExcel_Calculation_Functions::flattenSingleValue($value);
 		$fromUOM	= PHPExcel_Calculation_Functions::flattenSingleValue($fromUOM);
 		$toUOM		= PHPExcel_Calculation_Functions::flattenSingleValue($toUOM);

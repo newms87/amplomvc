@@ -1,8 +1,10 @@
 <?php
-class ControllerLocalisationCurrency extends Controller {
+class ControllerLocalisationCurrency extends Controller 
+{
 	
  
-	public function index() {
+	public function index()
+	{
 		$this->load->language('localisation/currency');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -10,7 +12,8 @@ class ControllerLocalisationCurrency extends Controller {
 		$this->getList();
 	}
 
-	public function insert() {
+	public function insert()
+	{
 		$this->load->language('localisation/currency');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -40,7 +43,8 @@ class ControllerLocalisationCurrency extends Controller {
 		$this->getForm();
 	}
 
-	public function update() {
+	public function update()
+	{
 		$this->load->language('localisation/currency');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -70,7 +74,8 @@ class ControllerLocalisationCurrency extends Controller {
 		$this->getForm();
 	}
 
-	public function delete() {
+	public function delete()
+	{
 		$this->load->language('localisation/currency');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -102,7 +107,8 @@ class ControllerLocalisationCurrency extends Controller {
 		$this->getList();
 	}
 
-	private function getList() {
+	private function getList()
+	{
 		$this->template->load('localisation/currency_list');
 
 		if (isset($_GET['sort'])) {
@@ -231,7 +237,8 @@ class ControllerLocalisationCurrency extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function getForm() {
+	private function getForm()
+	{
 		$this->template->load('localisation/currency_form');
 
  		if (isset($this->error['warning'])) {
@@ -345,7 +352,8 @@ class ControllerLocalisationCurrency extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validateForm() {
+	private function validateForm()
+	{
 		if (!$this->user->hasPermission('modify', 'localisation/currency')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
@@ -365,7 +373,8 @@ class ControllerLocalisationCurrency extends Controller {
 		}
 	}
 
-	private function validateDelete() {
+	private function validateDelete()
+	{
 		if (!$this->user->hasPermission('modify', 'localisation/currency')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

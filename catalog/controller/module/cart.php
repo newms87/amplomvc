@@ -1,6 +1,8 @@
 <?php
-class ControllerModuleCart extends Controller {
-	public function index() {
+class ControllerModuleCart extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('module/cart');
 
 		$this->language->load('module/cart');
@@ -72,13 +74,13 @@ class ControllerModuleCart extends Controller {
 			}
 			
 			if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-				$price = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id']));
+				$price = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class _id']));
 			} else {
 				$price = false;
 			}
 
 			if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-				$total = $this->currency->format($this->tax->calculate($product['total'], $product['tax_class_id']));
+				$total = $this->currency->format($this->tax->calculate($product['total'], $product['tax_class _id']));
 			} else {
 				$total = false;
 			}

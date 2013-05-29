@@ -1,8 +1,10 @@
 <?php
-class ControllerTotalHandling extends Controller {
+class ControllerTotalHandling extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('total/handling');
 
 		$this->load->language('total/handling');
@@ -43,13 +45,15 @@ class ControllerTotalHandling extends Controller {
 			$this->data['handling_fee'] = $this->config->get('handling_fee');
 		}
 		
-		if (isset($_POST['handling_tax_class_id'])) {
-			$this->data['handling_tax_class_id'] = $_POST['handling_tax_class_id'];
+		if (isset($_POST['handling_tax_class _id'])) 
+{
+			$this->data['handling_tax_class _id'] = $_POST['handling_tax_class_id'];
 		} else {
-			$this->data['handling_tax_class_id'] = $this->config->get('handling_tax_class_id');
+			$this->data['handling_tax_class _id'] = $this->config->get('handling_tax_class_id');
 		}
 
-		if (isset($_POST['handling_status'])) {
+		if (isset($_POST['handling_status'])) 
+{
 			$this->data['handling_status'] = $_POST['handling_status'];
 		} else {
 			$this->data['handling_status'] = $this->config->get('handling_status');
@@ -61,7 +65,7 @@ class ControllerTotalHandling extends Controller {
 			$this->data['handling_sort_order'] = $this->config->get('handling_sort_order');
 		}
 		
-		$this->data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
+		$this->data['tax_class es'] = $this->model_localisation_tax_class->getTaxClasses();
 
 		$this->children = array(
 			'common/header',
@@ -71,7 +75,8 @@ class ControllerTotalHandling extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'total/handling')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

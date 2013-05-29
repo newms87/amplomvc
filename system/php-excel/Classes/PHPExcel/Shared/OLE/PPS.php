@@ -21,14 +21,13 @@
 
 
 /**
-* Class for creating PPS's for OLE containers
+* class for creating PPS's for OLE containers
 *
 * @author	Xavier Noguer <xnoguer@php.net>
 * @category PHPExcel
 * @package  PHPExcel_Shared_OLE
 */
-class PHPExcel_Shared_OLE_PPS
-{
+class PHPExcel_Shared_OLE_PPS{
 	/**
 	* The PPS index
 	* @var integer
@@ -201,10 +200,10 @@ class PHPExcel_Shared_OLE_PPS
 	* @return integer			The index for this PPS
 	*/
 	public static function _savePpsSetPnt(&$raList, $to_save, $depth = 0)
-	{
+ {
 		if ( !is_array($to_save) || (empty($to_save)) ) {
 			return 0xFFFFFFFF;
-		} elseif( count($to_save) == 1 ) {
+		} elseif ( count($to_save) == 1 ) {
 			$cnt = count($raList);
 			// If the first entry, it's the root... Don't clone it!
 			$raList[$cnt] = ( $depth == 0 ) ? $to_save[0] : clone $to_save[0];

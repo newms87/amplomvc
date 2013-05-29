@@ -1,6 +1,8 @@
 <?php
-class ControllerAccountNewsletter extends Controller {
-	public function index() {
+class ControllerAccountNewsletter extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('account/newsletter');
 
 		if (!$this->customer->isLogged()) {

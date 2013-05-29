@@ -4,7 +4,7 @@
 <? } ?>
 <?= $column_left; ?><?= $column_right; ?>
 <div id="content"><?= $content_top; ?>
-	<?= $this->builder->display_breadcrumbs();?>
+	<?= $this->builder->display_breadcrumbs(); ?>
 	<h1><?= $heading_title; ?></h1>
 	<h2><?= $text_my_account; ?></h2>
 	<div class="content">

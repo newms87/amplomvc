@@ -1,8 +1,10 @@
 <?php
-class ControllerModuleMainSidebar extends Controller {
+class ControllerModuleMainSidebar extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/main_sidebar');
 
 		$this->load->language('module/main_sidebar');
@@ -49,7 +51,8 @@ class ControllerModuleMainSidebar extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/main_sidebar')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

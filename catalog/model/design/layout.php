@@ -1,13 +1,15 @@
 <?php
-class ModelDesignLayout extends Model {
+class ModelDesignLayout extends Model 
+{
 	private $layout_ids = array();
 	
-	public function get_layout_id($route = null) {
-		if(!$route){
+	public function get_layout_id($route = null)
+	{
+		if (!$route) {
 			$route = !empty($_GET['route']) ? $_GET['route'] : 'common/home';
 		}
 		
-		if(!isset($this->layout_ids[$route])){
+		if (!isset($this->layout_ids[$route])) {
 			$layout_id = false;
 			
 			if (substr($route, 0, 16) == 'product/category' && isset($_GET['path'])) {
@@ -24,7 +26,7 @@ class ModelDesignLayout extends Model {
 				$layout_id = $this->model_catalog_information->getInformationLayoutId($_GET['information_id']);
 			}
 			
-			if(!$layout_id){
+			if (!$layout_id) {
 				$query = $this->query("SELECT layout_id FROM " . DB_PREFIX . "layout_route WHERE '" . $this->db->escape($route) . "' LIKE CONCAT(route, '%') AND store_id = '" . (int)$this->config->get('config_store_id') . "' ORDER BY route ASC LIMIT 1");
 				
 				if ($query->num_rows) {
@@ -32,7 +34,7 @@ class ModelDesignLayout extends Model {
 				}
 			}
 			
-			if(!$layout_id){
+			if (!$layout_id) {
 				$layout_id = $this->config->get('config_default_layout_id');
 			}
 			

@@ -1,8 +1,10 @@
 <?php
-class ControllerModuleStore extends Controller {
+class ControllerModuleStore extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/store');
 
 		$this->load->language('module/store');
@@ -55,7 +57,8 @@ class ControllerModuleStore extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/store')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

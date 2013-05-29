@@ -1,12 +1,14 @@
 <?php
-final class Action {
+final class Action 
+{
 	protected $file;
-	protected $class;
+	protected $class ;
 	protected $class_path;
 	protected $method;
 	protected $args = array();
 
-	public function __construct($route, $args = array()) {
+	public function __construct($route, $args = array()) 
+{
 		
 		$path = '';
 		
@@ -31,7 +33,7 @@ final class Action {
 			if ($file) {
 				$this->file = $file;
 				
-				$this->class_path = $path;
+				$this->class _path = $path;
 				
 				$this->class = 'Controller' . preg_replace('/[^a-zA-Z0-9]/', '', $path);
 
@@ -41,7 +43,8 @@ final class Action {
 			}
 		}
 		
-		if ($args) {
+		if ($args) 
+{
 			$this->args = $args;
 		}
 			
@@ -55,23 +58,28 @@ final class Action {
 		
 	}
 	
-	public function getFile() {
+	public function getFile()
+	{
 		return $this->file;
 	}
 	
-	public function getClass() {
-		return $this->class;
+	public function getclass()
+	{
+		return $this->class ;
 	}
 	
-	public function getClassPath(){
-		return $this->class_path;
+	public function getClassPath()
+	{
+		return $this->class _path;
 	}
 	
-	public function getMethod() {
+	public function getMethod()
+	{
 		return $this->method;
 	}
 	
-	public function getArgs() {
+	public function getArgs()
+	{
 		return $this->args;
 	}
 }

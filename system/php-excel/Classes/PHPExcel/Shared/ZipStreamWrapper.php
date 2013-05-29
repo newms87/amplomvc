@@ -33,7 +33,8 @@
  * @package	PHPExcel_Shared
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Shared_ZipStreamWrapper {
+class PHPExcel_Shared_ZipStreamWrapper 
+{
 	/**
 	* Internal ZipAcrhive
 	*
@@ -65,9 +66,10 @@ class PHPExcel_Shared_ZipStreamWrapper {
 	/**
 	* Register wrapper
 	*/
-	public static function register() {
+	public static function register()
+ {
 		@stream_wrapper_unregister("zip");
-		@stream_wrapper_register("zip", __CLASS__);
+		@stream_wrapper_register("zip", __class __);
 	}
 
 	/**
@@ -79,7 +81,8 @@ class PHPExcel_Shared_ZipStreamWrapper {
 	* @param	string  &$openedPath	absolute path of the opened stream (out parameter)
 	* @return	bool	true on success
 	*/
-	public function stream_open($path, $mode, $options, &$opened_path) {
+	public function stream_open($path, $mode, $options, &$opened_path)
+	{
 		// Check for mode
 		if ($mode{0} != 'r') {
 				throw new Exception('Mode ' . $mode . ' is not supported. Only read mode is supported.');
@@ -105,7 +108,8 @@ class PHPExcel_Shared_ZipStreamWrapper {
 	*
 	* @return  boolean
 	*/
-	public function stream_stat() {
+	public function stream_stat()
+	{
 		return $this->_archive->statName( $this->_fileNameInArchive );
 	}
 
@@ -115,7 +119,8 @@ class PHPExcel_Shared_ZipStreamWrapper {
 	* @param	int		$count	maximum number of bytes to read
 	* @return  string
 	*/
-	function stream_read($count) {
+	function stream_read($count)
+	{
 		$ret = substr($this->_data, $this->_position, $count);
 		$this->_position += strlen($ret);
 		return $ret;
@@ -127,7 +132,8 @@ class PHPExcel_Shared_ZipStreamWrapper {
 	*
 	* @return  int
 	*/
-	public function stream_tell() {
+	public function stream_tell()
+	{
 		return $this->_position;
 	}
 
@@ -136,7 +142,8 @@ class PHPExcel_Shared_ZipStreamWrapper {
 	*
 	* @return	bool
 	*/
-	public function stream_eof() {
+	public function stream_eof()
+	{
 		return $this->_position >= strlen($this->_data);
 	}
 
@@ -147,7 +154,8 @@ class PHPExcel_Shared_ZipStreamWrapper {
 	* @param	int		$whence	SEEK_SET, SEEK_CUR or SEEK_END
 	* @return	bool
 	*/
-	public function stream_seek($offset, $whence) {
+	public function stream_seek($offset, $whence)
+	{
 		switch ($whence) {
 				case SEEK_SET:
 					if ($offset < strlen($this->_data) && $offset >= 0) {

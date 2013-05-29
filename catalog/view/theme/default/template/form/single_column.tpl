@@ -1,5 +1,5 @@
 <? if($show_tag) { ?>
-<form action="<?= $action;?>" method="<?= $method;?>">
+<form action="<?= $action; ?>" method="<?= $method; ?>">
 <? }?>
 
 <table id="<?= $form_id; ?>" class='form form_single_column'>
@@ -28,7 +28,7 @@
 						<? $this->builder->set_config(key($field['build_config']), current($field['build_config'])); ?>
 						<?= $this->builder->build($field['type'], $field['options'], $field['name'], $field['value'], $field['attrs']); ?>
 					<? } elseif($field['type'] == 'select') { ?>
-						<select name="<?= $field['name'];?>" <?= $field['html_attrs']; ?> <?= !empty($field['value']) ? "select_value=\"$field[value]\"" : ''; ?>></select>
+						<select name="<?= $field['name']; ?>" <?= $field['html_attrs']; ?> <?= !empty($field['value']) ? "select_value=\"$field[value]\"" : ''; ?>></select>
 					<? } ?>
 					<? break;
 			

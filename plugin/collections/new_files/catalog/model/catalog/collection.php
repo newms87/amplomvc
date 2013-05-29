@@ -1,6 +1,8 @@
 <?php
-class ModelCatalogCollection extends Model {
-	public function getCollection($collection_id) {
+class ModelCatalogCollection extends Model 
+{
+	public function getCollection($collection_id)
+	{
 		$store_id = $this->config->get('config_store_id');
 		
 		$collection = $this->query_row(
@@ -16,10 +18,10 @@ class ModelCatalogCollection extends Model {
 	}
 	
 	public function getCollections($data = array(), $total = false) {
-		if($total){
+		if ($total) {
 			$select = 'COUNT(*) as total';
 		}
-		else{
+		else {
 			$select = '*';
 		}
 		
@@ -28,7 +30,7 @@ class ModelCatalogCollection extends Model {
 		
 		$where = "WHERE cs.store_id = '" . (int)$this->config->get('config_store_id') . "'  AND c.status = '1'";
 		
-		if(isset($data['category_id'])){
+		if (isset($data['category_id'])) {
 			$from .= " LEFT JOIN " . DB_PREFIX . "collection_category cc ON (c.collection_id=cc.collection_id)";
 			
 			$where .= " AND cc.category_id='" . (int)$data['category_id'] . "'";
@@ -38,8 +40,8 @@ class ModelCatalogCollection extends Model {
 		$order_by = '';
 		$limit = '';
 		
-		if(!$total){
-			if(!empty($data['sort'])){
+		if (!$total) {
+			if (!empty($data['sort'])) {
 				$order = (!empty($data['order']) && $data['order'] == 'DESC') ? 'DESC' : 'ASC';
 				
 				$order_by = "ORDER BY $data[sort] $order";
@@ -55,7 +57,7 @@ class ModelCatalogCollection extends Model {
 		
 		$result = $this->query($query);
 		
-		if($total){
+		if ($total) {
 			return $result->row['total'];
 		}
 		
@@ -64,7 +66,8 @@ class ModelCatalogCollection extends Model {
 		return $result->rows;
 	}
 	
-	public function getCollectionByProduct($product_id){
+	public function getCollectionByProduct($product_id)
+	{
 		$store_id = $this->config->get('config_store_id');
 		
 		$collection = $this->query_row(
@@ -84,7 +87,7 @@ class ModelCatalogCollection extends Model {
 		$order_by = '';
 		$limit = '';
 		
-		if($total){
+		if ($total) {
 			$select = "COUNT(*) as total";
 		} else {
 			$select = '*';
@@ -96,8 +99,8 @@ class ModelCatalogCollection extends Model {
 		//Where
 		$where = "WHERE collection_id='" . (int)$collection_id . "'";
 		
-		if(!empty($data['attribute'])){
-			foreach($data['attribute'] as $attribute){
+		if (!empty($data['attribute'])) {
+			foreach ($data['attribute'] as $attribute) {
 				$table_id = 'pa_' . (int)$attribute;
 				
 				$from .= " LEFT JOIN " . DB_PREFIX . "product_attribute $table_id ON ($table_id.product_id=cp.product_id)";
@@ -107,14 +110,14 @@ class ModelCatalogCollection extends Model {
 		}
 		
 		//Order By & Limit
-		if(!$total){
-			if(!empty($data['sort'])){
+		if (!$total) {
+			if (!empty($data['sort'])) {
 				$order = (!empty($data['order']) && $data['order'] == 'DESC') ? 'DESC' : 'ASC';
 				
 				$order_by = "ORDER BY $data[sort] $order";
 			}
 			
-			if(!empty($data['limit'])){
+			if (!empty($data['limit'])) {
 				$start = !empty($data['start']) ? (int)$data['start'] : 0;
 				$limit = $data['limit'] > 0 ? (int)$data['limit'] : $this->config->get('config_catalog_limit');
 				
@@ -127,14 +130,14 @@ class ModelCatalogCollection extends Model {
 		
 		$result = $this->query($query);
 		
-		if($total){
+		if ($total) {
 			return $result->row['total'];
 		}
 		
-		foreach($result->rows as $key => &$row){
+		foreach ($result->rows as $key => &$row) {
 			$product = $this->model_catalog_product->getProduct($row['product_id']);
 			
-			if($product){
+			if ($product) {
 				$row += $product;
 			} else {
 				unset($result->rows[$key]);
@@ -144,7 +147,8 @@ class ModelCatalogCollection extends Model {
 		return $result->rows;
 	}
 	
-	public function getCollectionCategories(){
+	public function getCollectionCategories()
+	{
 		$language_id = $this->config->get('config_language_id');
 		
 		$select = "cc.*, c.parent_id, cd.name";
@@ -170,7 +174,8 @@ class ModelCatalogCollection extends Model {
 		return $this->getCollectionProducts($collection_id, $data, true);
 	}
 	
-	public function hasAttributeGroup($collection_id, $attribute_group_id) {
+	public function hasAttributeGroup($collection_id, $attribute_group_id)
+	{
 		$query = 
 			"SELECT COUNT(*) FROM " . DB_PREFIX . "collection_product cp" .
 			" LEFT JOIN " . DB_PREFIX . "product_attribute pa ON (cp.product_id=pa.product_id)" .
@@ -180,14 +185,15 @@ class ModelCatalogCollection extends Model {
 		return $this->query_var($query);
 	}
 	
-	public function get_name($product_id){
+	public function get_name($product_id)
+	{
 		$result = $this->query(
 			"SELECT cp.name FROM " . DB_PREFIX . "collection c " .
 			"JOIN " . DB_PREFIX . "collection_product cp ON (cp.collection_id=c.collection_id) " .
 			"WHERE cp.product_id='" . (int)$product_id . "' LIMIT 1"
 		);
 		
-		if($result->num_rows){
+		if ($result->num_rows) {
 			return $result->row['name'];
 		}
 		

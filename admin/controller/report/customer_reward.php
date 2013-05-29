@@ -1,6 +1,8 @@
 <?php
-class ControllerReportCustomerReward extends Controller {
-	public function index() {
+class ControllerReportCustomerReward extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('report/customer_reward');
 
 		$this->load->language('report/customer_reward');

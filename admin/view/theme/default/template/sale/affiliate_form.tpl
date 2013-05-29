@@ -1,6 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
+	<?= $this->builder->display_breadcrumbs(); ?>
 	<? if ($error_warning) { ?>
 	<div class="message_box warning"><?= $error_warning; ?></div>
 	<? } ?>
@@ -82,15 +82,15 @@
 						<tr>
 							<td><span class="required"></span> <?= $entry_country; ?></td>
 							<td>
-								<?= $this->builder->set_config('country_id', 'name');?>
-								<?= $this->builder->build('select', $countries, 'country_id', $country_id);?>
+								<?= $this->builder->set_config('country_id', 'name'); ?>
+								<?= $this->builder->build('select', $countries, 'country_id', $country_id); ?>
 								<? if ($error_country) { ?>
 								<span class="error"><?= $error_country; ?></span>
 								<? } ?></td>
 						</tr>
 						<tr>
 							<td><span class="required"></span> <?= $entry_zone; ?></td>
-							<td><select zone_id='<?=$zone_id;?>' name="zone_id"></select>
+							<td><select zone_id='<?= $zone_id; ?>' name="zone_id"></select>
 								<? if ($error_zone) { ?>
 								<span class="error"><?= $error_zone; ?></span>
 								<? } ?></td>
@@ -222,7 +222,7 @@
 	</div>
 </div>
 
-<?= $this->builder->js('load_zones', 'select[name=country_id]','select[name=zone_id]');?>
+<?= $this->builder->js('load_zones', 'select[name=country_id]','select[name=zone_id]'); ?>
  
 <script type="text/javascript"><!--
 $('input[name=\'payment\']').bind('change', function() {

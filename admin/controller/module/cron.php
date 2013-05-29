@@ -1,7 +1,9 @@
 <?php
-class ControllerModuleCron extends Controller {
+class ControllerModuleCron extends Controller 
+{
 	
-	public function index() {
+	public function index()
+	{
 		$this->load->language('module/cron');
 			
 		$this->template->load('module/cron');
@@ -47,7 +49,8 @@ class ControllerModuleCron extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/cron')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

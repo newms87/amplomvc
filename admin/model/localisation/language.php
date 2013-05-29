@@ -1,24 +1,29 @@
 <?php
-class ModelLocalisationLanguage extends Model {
-	public function addLanguage($data) {
+class ModelLocalisationLanguage extends Model 
+{
+	public function addLanguage($data)
+	{
 		$language_id = $this->insert('language', $data);
 		
 		$this->cache->delete('language');
 	}
 	
-	public function editLanguage($language_id, $data) {
+	public function editLanguage($language_id, $data)
+	{
 		$this->update('language', $data, $language_id);
 				
 		$this->cache->delete('language');
 	}
 	
-	public function deleteLanguage($language_id) {
+	public function deleteLanguage($language_id)
+	{
 		$this->delete('language', $language_id);
 		
 		$this->cache->delete('language');
 	}
 	
-	public function getLanguage($language_id) {
+	public function getLanguage($language_id)
+	{
 		$query = $this->get('language', '*', (int)$language_id);
 	
 		return $query->row;
@@ -90,15 +95,16 @@ class ModelLocalisationLanguage extends Model {
 		}
 	}
 	
-	public function getLanguageList(){
+	public function getLanguageList()
+	{
 		$languages = $this->cache->get('language.list');
 		
-		if(!$languages){
+		if (!$languages) {
 			$result = $this->query("SELECT language_id, name, code, image, sort_order FROM " . DB_PREFIX . "language WHERE status >= 0 ORDER BY sort_order");
 			
 			$languages = array();
 			
-			foreach($result->rows as $row){
+			foreach ($result->rows as $row) {
 				$languages[$row['language_id']] = $row;
 			}
 			
@@ -108,7 +114,8 @@ class ModelLocalisationLanguage extends Model {
 		return $languages;
 	}
 	
-	public function getTotalLanguages() {
+	public function getTotalLanguages()
+	{
 		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "language WHERE status >= 0");
 		
 		return $query->row['total'];

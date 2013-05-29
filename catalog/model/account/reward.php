@@ -1,5 +1,6 @@
 <?php
-class ModelAccountReward extends Model {
+class ModelAccountReward extends Model 
+{
 	public function getRewards($data = array()) {
 		$sql = "SELECT * FROM `" . DB_PREFIX . "customer_reward` WHERE customer_id = '" . (int)$this->customer->getId() . "'";
 			
@@ -38,13 +39,15 @@ class ModelAccountReward extends Model {
 		return $query->rows;
 	}
 		
-	public function getTotalRewards() {
+	public function getTotalRewards()
+	{
 			$query = $this->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "customer_reward` WHERE customer_id = '" . (int)$this->customer->getId() . "'");
 			
 		return $query->row['total'];
 	}
 			
-	public function getTotalPoints() {
+	public function getTotalPoints()
+	{
 		$query = $this->query("SELECT SUM(points) AS total FROM `" . DB_PREFIX . "customer_reward` WHERE customer_id = '" . (int)$this->customer->getId() . "' GROUP BY customer_id");
 		
 		if ($query->num_rows) {

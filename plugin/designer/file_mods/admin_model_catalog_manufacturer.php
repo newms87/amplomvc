@@ -1,7 +1,9 @@
 =====
 <?php
-class ModelCatalogManufacturer extends Model {
-	public function addManufacturer($data) {
+class ModelCatalogManufacturer extends Model 
+{
+	public function addManufacturer($data)
+	{
 //-----
 //<<<<<
 				$url_alias = array(
@@ -22,7 +24,8 @@ class ModelCatalogManufacturer extends Model {
 //=====
 	}
 //.....
-	public function editManufacturer($manufacturer_id, $data) {
+	public function editManufacturer($manufacturer_id, $data)
+	{
 //.....
 				$this->model_setting_url_alias->deleteUrlAliasByRouteQuery('product/manufacturer/product', "manufacturer_id=$manufacturer_id");
 //-----
@@ -48,7 +51,8 @@ class ModelCatalogManufacturer extends Model {
 //=====
 	}
 //.....
-	public function deleteManufacturer($manufacturer_id) {
+	public function deleteManufacturer($manufacturer_id)
+	{
 //.....
 		$this->model_setting_url_alias->deleteUrlAliasByRouteQuery('product/manufacturer/product', "manufacturer_id=$manufacturer_id");
 //-----

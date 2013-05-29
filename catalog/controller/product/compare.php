@@ -1,6 +1,8 @@
 <?php
-class ControllerProductCompare extends Controller {
-	public function index() {
+class ControllerProductCompare extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('product/compare');
 
 		$this->language->load('product/compare');
@@ -49,13 +51,13 @@ class ControllerProductCompare extends Controller {
 				}
 				
 				if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-					$price = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id']));
+					$price = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class _id']));
 				} else {
 					$price = false;
 				}
 				
 				if ((float)$product_info['special']) {
-					$special = $this->currency->format($this->tax->calculate($product_info['special'], $product_info['tax_class_id']));
+					$special = $this->currency->format($this->tax->calculate($product_info['special'], $product_info['tax_class _id']));
 				} else {
 					$special = false;
 				}
@@ -90,7 +92,7 @@ class ControllerProductCompare extends Controller {
 					'availability' => $availability,
 					'rating'		=> (int)$product_info['rating'],
 					'reviews'		=> sprintf($this->_('text_reviews'), (int)$product_info['reviews']),
-					'weight'		=> $this->weight->format($product_info['weight'], $product_info['weight_class_id']),
+					'weight'		=> $this->weight->format($product_info['weight'], $product_info['weight_class _id']),
 					'length'		=> $this->length->format($product_info['length'], $product_info['length_class_id']),
 					'width'		=> $this->length->format($product_info['width'], $product_info['length_class_id']),
 					'height'		=> $this->length->format($product_info['height'], $product_info['length_class_id']),
@@ -99,7 +101,8 @@ class ControllerProductCompare extends Controller {
 					'remove'		=> $this->url->link('product/compare', 'remove=' . $product_id)
 				);
 				
-				foreach ($attribute_groups as $attribute_group) {
+				foreach ($attribute_groups as $attribute_group) 
+{
 					$this->data['attribute_groups'][$attribute_group['attribute_group_id']]['name'] = $attribute_group['name'];
 					
 					foreach ($attribute_group['attribute'] as $attribute) {
@@ -125,7 +128,8 @@ class ControllerProductCompare extends Controller {
 		$this->response->setOutput($this->render());
   	}
 	
-	public function add() {
+	public function add()
+	{
 		$this->language->load('product/compare');
 		
 		$json = array();

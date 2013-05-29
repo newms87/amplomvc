@@ -1,6 +1,8 @@
 <?php
-class ControllerPaymentPerpetualPayments extends Controller {
-	protected function index() {
+class ControllerPaymentPerpetualPayments extends Controller 
+{
+	protected function index()
+	{
 		$this->template->load('payment/perpetual_payments');
 
 		$this->language->load('payment/perpetual_payments');
@@ -37,7 +39,8 @@ class ControllerPaymentPerpetualPayments extends Controller {
 		$this->render();
 	}
 
-	public function send() {
+	public function send()
+	{
 		$this->language->load('payment/perpetual_payments');
 		
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
@@ -61,7 +64,7 @@ class ControllerPaymentPerpetualPayments extends Controller {
 			'tran_currency' => $order_info['currency_code'],
 			'tran_testmode' => $this->config->get('perpetual_payments_test'),
 			'tran_type'	=> 'Sale',
-			'tran_class'	=> 'MoTo',
+			'tran_class '	=> 'MoTo',
 		);
 
 		$curl = curl_init('https://secure.voice-pay.com/gateway/remote');
@@ -79,7 +82,8 @@ class ControllerPaymentPerpetualPayments extends Controller {
  		
 		curl_close($curl);
 		
-		if ($response) {
+		if ($response) 
+{
 			$data = explode('|', $response);
 			
 			if (isset($data[0]) && $data[0] == 'A') {

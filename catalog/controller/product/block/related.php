@@ -1,7 +1,9 @@
 <?php
-class ControllerProductBlockRelated extends Controller {
+class ControllerProductBlockRelated extends Controller 
+{
 	
-	public function index($settings, $product_id) {
+	public function index($settings, $product_id)
+	{
 		$this->template->load('product/block/related');
 		
 		//Find the related products
@@ -15,8 +17,8 @@ class ControllerProductBlockRelated extends Controller {
 			}
 			
 			if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-				if($this->config->get('config_show_price_with_tax')){
-					$product['price'] = $this->tax->calculate($product['price'], $product['tax_class_id']);
+				if ($this->config->get('config_show_price_with_tax')) {
+					$product['price'] = $this->tax->calculate($product['price'], $product['tax_class _id']);
 				}
 				$product['price'] = $this->currency->format($product['price']);
 			} else {
@@ -24,7 +26,7 @@ class ControllerProductBlockRelated extends Controller {
 			}
 					
 			if ((float)$product['special']) {
-				$product['special'] = $this->currency->format($this->tax->calculate($product['special'], $product['tax_class_id']));
+				$product['special'] = $this->currency->format($this->tax->calculate($product['special'], $product['tax_class _id']));
 			} else {
 				$product['special'] = false;
 			}

@@ -2,20 +2,22 @@
 //custom var dump
 global $html_dump_count;
 $html_dump_count = 0;
-function html_dump($var, $label= "HTML Dump", $level=0, $max = -1, $print = true){
+function html_dump($var, $label= "HTML Dump", $level=0, $max = -1, $print = true)
+{
 	global $html_dump_count;
 	
 	$id = 'html_dump-' . $html_dump_count;
 	
-	if(!$print){
+	if (!$print) {
 		ob_start();
 	}
 ?>
-<a id='<?=$id;?>' class='html_dump' onclick="open_html_dump('<?=$id;?>')">
+<a id='<?=$id;?>' class ='html_dump' onclick="open_html_dump('<?=$id;?>')">
 	<span class='html_dump_label'><?=$label;?></span>
 	
 <style>
-.html_dump{background:white;overflow:auto;top:0;left:0;}
+.html_dump
+{background:white;overflow:auto;top:0;left:0;}
 .html_dump_label{cursor:pointer; color:blue; text-decoration:underline;}
 .dump_output{margin:15px;}
 .key_value_pair{position:relative; height:20px;overflow:visible;}
@@ -24,15 +26,17 @@ function html_dump($var, $label= "HTML Dump", $level=0, $max = -1, $print = true
 .value{background: #92ADE3;max-width:800px; word-wrap:break-word}
 </style>
 
-	<div class='dump_output' id='<?=$id;?>-output' style='display:none'>
+	<div class ='dump_output' id='<?=$id;?>-output' style='display:none'>
 		<? $dump = html_dump_r($var,$level,$max);?>
 	</div>
 </a><br/>
 <?
-	if($html_dump_count == 0){
+	if($html_dump_count == 0)
+{
 ?>
 <script type='text/javascript'>//<!--
-function open_html_dump(id){
+function open_html_dump(id)
+{
 	var w = window.open(null, 'newwindow', 'resizable=1,scrollbars=1, width=800, height=800');
 	document.getElementById(id + '-output').setAttribute('style','display:block');
 	w.document.body.innerHTML = document.getElementById(id).innerHTML;
@@ -43,29 +47,32 @@ function open_html_dump(id){
 	}
 	$html_dump_count++;
 	
-	if(!$print){
+	if (!$print) {
 		$dump = ob_get_clean();
 		
 		return $dump;
 	}
 }
 
-function html_dump_r($var, $level, $max){
-	if(is_array($var) || is_object($var)){
+function html_dump_r($var, $level, $max)
+{
+	if (is_array($var) || is_object($var)) {
 		$left_offset = $level * 20 . "px";
 		$type = is_array($var)?"Array":"Object";
 		$type .= " (".count($var).")";
-		echo "<table><tr><td class='type_label' colspan='2'>$type</td></tr>";
-		foreach($var as $key=>$v){
-			echo "<tr class='key_value_pair'>";
+		echo "<table><tr><td class ='type_label' colspan='2'>$type</td></tr>";
+		foreach($var as $key=>$v)
+{
+			echo "<tr class ='key_value_pair'>";
 			echo "<td valign='top' class='key'>[$key]</td>";
 			
-			if((is_array($v) || is_object($v)) && !($max >= 0 && $level >= ($max-1))){
-				echo "<td class='value'>";
+			if((is_array($v) || is_object($v)) && !($max >= 0 && $level >= ($max-1)))
+{
+				echo "<td class ='value'>";
 				html_dump_r($v, $level+1, $max);
 				echo "</td>";
 			}
-			else{
+			else {
 				if(is_array($v))
 					$val = "Array (" . count($v) . ")";
 				elseif(is_object($v))
@@ -79,30 +86,33 @@ function html_dump_r($var, $level, $max){
 				else
 					$val = $v;
 				
-				echo "<td class='value'>$val</td>";
+				echo "<td class ='value'>$val</td>";
 			}
 			echo "</tr>";
 		}
 		echo "</table>";
 	}
-	else{
+	else {
 		htmlspecialchars(var_dump($var));
 	}
 }
 
-function html_backtrace($depth=3, $var_depth = -1, $print = true){
+function html_backtrace($depth=3, $var_depth = -1, $print = true)
+{
 	return html_dump(debug_stack($depth, 1),'call stack', 0, $var_depth, $print);
 }
 
-function debug_stack($depth = 10, $offset = 0){
+function debug_stack($depth = 10, $offset = 0)
+{
 	return array_slice(debug_backtrace(false), 1 + $offset, $depth);
 }
 
 if (!function_exists('array_column')) {
-	function array_column($array, $column){
+	function array_column($array, $column)
+	{
 		$values = array();
 		
-		foreach($array as $row){
+		foreach ($array as $row) {
 			$values[] = $row[$column];
 		}
 		
@@ -110,33 +120,35 @@ if (!function_exists('array_column')) {
 	}
 }
 
-function get_caller($offset = 0){
+function get_caller($offset = 0)
+{
 	$calls = debug_backtrace(false);
 	$caller = $calls[$offset + 1];
 
-	if(isset($caller['file'])){
+	if (isset($caller['file'])) {
 		return "Called from $caller[file] on line $caller[line]";
 	}
-	else{
+	else {
 		return "Called from $caller[class]::$caller[function]";
 	}
 }
 
-function _is_writable($dir, $mode = 0755){
-	if(!is_writable($dir)){
-		if(!is_dir($dir)){
+function _is_writable($dir, $mode = 0755)
+{
+	if (!is_writable($dir)) {
+		if (!is_dir($dir)) {
 			mkdir($dir, $mode,true);
 			chmod($dir, $mode);
 		}
 		
-		if(!is_dir($dir)){
+		if (!is_dir($dir)) {
 			trigger_error("Do not have write permissions to create directory " . $dir . ". Please change the permissions to allow writing to this directory.");
 			return false;
 		}
-		else{
+		else {
 			$t_file = $dir . uniqid('test') . '.txt';
 			touch($t_file);
-			if(!is_file($t_file)){
+			if (!is_file($t_file)) {
 				trigger_error("The write permissions on $dir are not set. Please change the permissions to allow writing to this directory");
 				return false;
 			}
@@ -148,6 +160,7 @@ function _is_writable($dir, $mode = 0755){
 }
 
 //prints to the console in javascript
-function console($msg){
+function console($msg)
+{
 	echo "<script>console.log('$msg');</script>";
 }

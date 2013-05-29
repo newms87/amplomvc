@@ -1,8 +1,10 @@
 <?php
-class ControllerPaymentBankTransfer extends Controller {
+class ControllerPaymentBankTransfer extends Controller 
+{
 	
 
-	public function index() {
+	public function index()
+	{
 		$this->template->load('payment/bank_transfer');
 
 		$this->load->language('payment/bank_transfer');
@@ -94,7 +96,8 @@ class ControllerPaymentBankTransfer extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'payment/bank_transfer')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

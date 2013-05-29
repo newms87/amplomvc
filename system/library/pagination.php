@@ -1,5 +1,6 @@
 <?php
-class Pagination {
+class Pagination 
+{
 	private $registry;
 	private $default_template = 'widget/pagination';
 	private $template_file;
@@ -11,17 +12,20 @@ class Pagination {
 	public $page_url;
 	public $attrs = array();
 	
-	function __construct($registry){
+	function __construct($registry)
+	{
 		$this->registry = $registry;
 		
 		$this->init();
 	}
 	
-	public function __get($key){
+	public function __get($key)
+	{
 		return $this->registry->get($key);
 	}
 	
-	public function init(){
+	public function init()
+	{
 		$this->template_file = $this->default_template;
 		$this->total = 0;
 		$this->page = 0;
@@ -29,33 +33,34 @@ class Pagination {
 		$this->num_links = 10;
 		$this->page_url = '';
 		$this->attrs = array(
-			'class' => 'links'
+			'class ' => 'links'
 		);
 	}
 	
-	public function render() {
+	public function render()
+	{
 		$this->template->load($this->template_file);
 		
 		$language = $this->language->fetch('widget/pagination');
 		
-		if(!$this->page_url){
+		if (!$this->page_url) {
 			$this->page_url = $this->url->link($_GET['route'], $this->url->get_query_exclude('page'));
 		}
 		
 		//Setup Query to add page=n
-		if(strpos($this->page_url, '?') === false){
+		if (strpos($this->page_url, '?') === false) {
 			$this->page_url .= '?';
 		} else {
 			$this->page_url .= '&';
 		}
 		
-		if($this->page){
+		if ($this->page) {
 			$this->page = (int)$this->page > 1 ? (int)$this->page : 1;
 		} else {
 			$this->page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 		}
 		
-		if($this->limit){
+		if ($this->limit) {
 			$this->limit = (int)$this->limit ? (int)$this->limit : 10;
 		} else {
 			$this->limit = isset($_GET['limit']) ? (int)$_GET['limit'] : $this->config->get('config_admin_limit');
@@ -63,7 +68,7 @@ class Pagination {
 		}
 		
 		//To avoid divide by zero, we only want 1 page for no limit
-		if($this->limit < 1){
+		if ($this->limit < 1) {
 			$this->limit = $this->total;
 		}
 		
@@ -73,27 +78,27 @@ class Pagination {
 			$num_before = floor(($this->num_links - 1) / 2);
 			$num_after = floor($this->num_links / 2);
 			
-			if($page + $num_after >= $num_pages){
+			if ($page + $num_after >= $num_pages) {
 				$start = $num_pages - $this->num_links;
 				$end = $num_pages;
 			}
-			elseif($page - $num_before <= 1){
+			elseif ($page - $num_before <= 1) {
 				$start = 1;
 				$end = $this->num_links;
 			}
-			else{
+			else {
 				$start = $page - $num_before;
 				$end = $page + $num_after;
 			}
 		}
-		else{
+		else {
 			$start = 1;
 			$end = $num_pages;
 		}
 		
 		$pages = array();
 		
-		if($num_pages > 1){
+		if ($num_pages > 1) {
 			for ($i = $start; $i <= $end; $i++) {
 				$pages[$i] = $this->page_url . 'page=' . $i;
 			}
@@ -101,8 +106,8 @@ class Pagination {
 		
 		$attrs = '';
 		
-		if(!empty($this->attrs)){
-			foreach($this->attrs as $attr => $value){
+		if (!empty($this->attrs)) {
+			foreach ($this->attrs as $attr => $value) {
 				$attrs .= "$attr=\"$value\" ";
 			}
 		}

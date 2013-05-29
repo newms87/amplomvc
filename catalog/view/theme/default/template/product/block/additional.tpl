@@ -15,8 +15,8 @@
 	<? }?>
 <div id="tab-shipping" class="tab-content">
 	<?= $shipping_return; ?><br />
-	<?= $is_final?$final_sale_explanation:'';?><br /><br /><br />
-	<?= $shipping_return_link;?>
+	<?= $is_final?$final_sale_explanation:''; ?><br /><br /><br />
+	<?= $shipping_return_link; ?>
 </div>
 <? if (!empty($attribute_groups)) { ?>
 <div id="tab-attribute" class="tab-content">

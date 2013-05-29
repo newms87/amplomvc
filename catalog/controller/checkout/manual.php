@@ -2,8 +2,10 @@
 
 //TODO: This Process has been forsaken... Gotta fix at some point right?
 
-class ControllerCheckoutManual extends Controller {
-	public function index() {
+class ControllerCheckoutManual extends Controller 
+{
+	public function index()
+	{
 		
 		$this->load->language('checkout/manual');
 		
@@ -160,7 +162,7 @@ class ControllerCheckoutManual extends Controller {
 					'quantity'	=> $product['quantity'],
 					'price'		=> $product['price'],
 					'total'		=> $product['total'],
-					'tax'		=> $this->tax->getTax($product['total'], $product['tax_class_id']),
+					'tax'		=> $this->tax->getTax($product['total'], $product['tax_class _id']),
 					'reward'	=> $product['reward']
 				);
 			}
@@ -168,7 +170,8 @@ class ControllerCheckoutManual extends Controller {
 			// Voucher
 			$this->session->data['vouchers'] = array();
 			
-			if (isset($_POST['order_voucher'])) {
+			if (isset($_POST['order_voucher'])) 
+{
 				foreach ($_POST['order_voucher'] as $voucher) {
 					$this->session->data['vouchers'][] = array(
 						'voucher_id'		=> $voucher['voucher_id'],

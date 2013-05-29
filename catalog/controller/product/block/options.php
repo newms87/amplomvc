@@ -6,9 +6,11 @@
  * @return Product options template
  *
  */
-class ControllerProductBlockOptions extends Controller {
+class ControllerProductBlockOptions extends Controller 
+{
 	
-	public function index($settings, $product_id) {
+	public function index($settings, $product_id)
+	{
 		$this->language->load('product/block/options');
 		
 		$this->template->load('product/block/options');
@@ -20,13 +22,13 @@ class ControllerProductBlockOptions extends Controller {
 		$product_options = $this->model_catalog_product->getProductOptions($product_id);
 		
 		//return a blank template if no options were found
-		if(!$product_options){
+		if (!$product_options) {
 			return '';
 		}
 		
 		foreach ($product_options as $key=>&$product_option) {
 				
-			if(empty($product_option['product_option_value'])){
+			if (empty($product_option['product_option_value'])) {
 				unset($product_options[$key]);
 				continue;
 			}
@@ -38,8 +40,8 @@ class ControllerProductBlockOptions extends Controller {
 					
 					if ((($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) && (float)$product_option_value['price']) {
 						
-						if($this->config->get('config_show_price_with_tax')){
-							$product_option_value['price'] = $this->tax->calculate($product_option_value['price'], $product_info['tax_class_id']);
+						if ($this->config->get('config_show_price_with_tax')) {
+							$product_option_value['price'] = $this->tax->calculate($product_option_value['price'], $product_info['tax_class _id']);
 						}
 						
 						$product_option_value['price'] = $this->currency->format($product_option_value['price']);
@@ -49,16 +51,16 @@ class ControllerProductBlockOptions extends Controller {
 					}
 					
 					$with_price = '';
-					if($product_option_value['price'] > 0){
+					if ($product_option_value['price'] > 0) {
 						$with_price = ' ' . $this->_('text_option_price_add') . $price;
 					}
-					if($product_option_value['price'] < 0){
+					if ($product_option_value['price'] < 0) {
 						$with_price = ' ' . $this->_('text_option_price_subtract') . (-1*$price);
 					}
 					
 					$product_option_value['name']  = $product_option_value['name'] . $with_price;
 					
-					if($product_option['type'] == 'image'){
+					if ($product_option['type'] == 'image') {
 						$image = $product_option_value['image'];
 						$product_option_value['thumb'] = $this->image->resize($image, $this->config->get('config_image_product_option_width'), $this->config->get('config_image_product_option_height'));
 						
@@ -81,7 +83,7 @@ class ControllerProductBlockOptions extends Controller {
 					break;
 				
 				case 'image':
-					if(!(int)$product_option['required']){
+					if (!(int)$product_option['required']) {
 						$image = $this->image->resize('data/no_image_select.png', $this->config->get('config_image_product_option_width'), $this->config->get('config_image_product_option_height'));
 						$blank_option[''] = array('option_value_id'=>'', 'product_option_value_id'=>'', 'rel'=>'', 'thumb'=>$image, 'name'=>$this->_('text_select_option'));
 					}
@@ -90,7 +92,7 @@ class ControllerProductBlockOptions extends Controller {
 				default: break;
 			}
 			
-			if($blank_option){
+			if ($blank_option) {
 				$product_option['product_option_value'] = $blank_option + $product_option['product_option_value'];
 			}
 		}

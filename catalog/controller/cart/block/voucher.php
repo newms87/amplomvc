@@ -1,7 +1,9 @@
 <?php
-class ControllerCartBlockVoucher extends Controller{
+class ControllerCartBlockVoucher extends Controller
+{
 	
-	public function index($settings = null){
+	public function index($settings = null)
+	{
 		$this->template->load('cart/block/voucher');
 
 		$this->language->load('cart/block/shipping');
@@ -20,7 +22,7 @@ class ControllerCartBlockVoucher extends Controller{
 			$this->data[$key] = $_POST[$key];
 		} elseif (isset($this->session->data[$key])) {
 			$this->data[$key] = $this->session->data[$key];
-		} else{
+		} else {
 			$this->data[$key] = $default;
 		}
 		
@@ -29,7 +31,8 @@ class ControllerCartBlockVoucher extends Controller{
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validateVoucher() {
+	private function validateVoucher()
+	{
 		$voucher_info = $this->model_cart_voucher->getVoucher($_POST['voucher']);
 		
 		if (!$voucher_info) {

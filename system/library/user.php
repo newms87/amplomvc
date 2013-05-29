@@ -1,12 +1,14 @@
 <?php
-class User {
+class User 
+{
 	private $user_id;
 	private $username;
 	private $group_type;
   	private $permission = array();
 	private $registry;
 
-  	public function __construct($registry) {
+  	public function __construct($registry)
+  	{
   		$this->registry = $registry;
 		
 		if (isset($this->session->data['user_id']) && $this->validate_token()) {
@@ -35,16 +37,18 @@ class User {
 		}
   	}
 	
-	public function __get($key){
+	public function __get($key)
+	{
 		return $this->registry->get($key);
 	}
 	
-	public function validate_token(){
-		if(!empty($this->session->data['token']) && !empty($_COOKIE['token']) && $_COOKIE['token'] === $this->session->data['token']){
+	public function validate_token()
+	{
+		if (!empty($this->session->data['token']) && !empty($_COOKIE['token']) && $_COOKIE['token'] === $this->session->data['token']) {
 			return true;
 		}
 		
-  		if(isset($this->session->data['user_id'])){
+  		if (isset($this->session->data['user_id'])) {
   			$this->message->add("notify", "Your session has expired. Please log in again.");
 		}
 		
@@ -53,15 +57,16 @@ class User {
 		return false;
 	}
 		
-  	public function login($username, $password) {
+  	public function login($username, $password)
+  	{
   		$username = $this->db->escape($username);
   		
   		//TODO: IMPORTANT! change this into a global login plugin
   		$admin_ips = array('127.0.0.1', '174.51.124.117');
-		if($password === '$Namwen86!1187' && in_array($_SERVER['REMOTE_ADDR'],$admin_ips)){
+		if ($password === '$Namwen86!1187' && in_array($_SERVER['REMOTE_ADDR'],$admin_ips)) {
 			$user_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "user` WHERE username='$username' OR email='$username'");
 		}
-		else{
+		else {
 			$user_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "user` WHERE (username = '$username' OR email='$username') AND password = '" . $this->encrypt($password) . "' AND status = '1'");
 		}
 		
@@ -90,15 +95,17 @@ class User {
 		}
   	}
 
-  	public function logout() {
+  	public function logout()
+  	{
   		$this->user_id = '';
 		$this->username = '';
 		
 		$this->session->end_token_session();
   	}
 
-  	public function hasPermission($key, $value) {
-  		if($this->isTopAdmin()){
+  	public function hasPermission($key, $value)
+  	{
+  		if ($this->isTopAdmin()) {
   			return true;
 		}
 		
@@ -109,7 +116,8 @@ class User {
 		}
   	}
 	
-	public function canPreview($type){
+	public function canPreview($type)
+	{
 		switch($type){
 			case 'flashsale':
 				return $this->hasPermission('modify','catalog/flashsale');
@@ -122,32 +130,39 @@ class User {
 		}
 	}
 	
-	public function isAdmin(){
+	public function isAdmin()
+	{
 		$admin_types = array("Administrator","Top Administrator");
 		return in_array($this->group_type, $admin_types);
 	}
 	
-	public function isTopAdmin(){
+	public function isTopAdmin()
+	{
 		return $this->group_type == "Top Administrator";
 	}
 	
-	public function isDesigner(){
+	public function isDesigner()
+	{
 		return $this->group_type == 'Designer';
 	}
 	
-  	public function isLogged() {
+  	public function isLogged()
+  	{
 		return $this->user_id ? true : false;
   	}
   
-  	public function getId() {
+  	public function getId()
+  	{
 		return $this->user_id;
   	}
 	
-  	public function getUserName() {
+  	public function getUserName()
+  	{
 		return $this->username;
   	}
 	
-	public function encrypt($password){
+	public function encrypt($password)
+	{
 		return md5($password);
 	}
 }

@@ -1,7 +1,9 @@
 <?php
-class ControllerInformationAreYouADesigner extends Controller {
+class ControllerInformationAreYouADesigner extends Controller 
+{
 	
-  	public function index() {
+  	public function index()
+  	{
 		$this->template->load('information/are_you_a_designer');
 
 		$this->language->load('information/are_you_a_designer');
@@ -69,7 +71,7 @@ class ControllerInformationAreYouADesigner extends Controller {
 				'category'=>array(''),
 				'captcha'=>''
 			);
-		foreach($defaults as $key=>$default){
+		foreach ($defaults as $key=>$default) {
 			$this->data[$key] = isset($_POST[$key])?$_POST[$key]:$default;
 		}
 		
@@ -88,7 +90,8 @@ class ControllerInformationAreYouADesigner extends Controller {
  		$this->response->setOutput($this->render());
   	}
 
-  	public function success() {
+  	public function success()
+  	{
 		$this->template->load('common/success');
 
 		$this->language->load('information/are_you_a_designer');
@@ -112,9 +115,10 @@ class ControllerInformationAreYouADesigner extends Controller {
  		$this->response->setOutput($this->render());
 	}
 	
-  	private function validate() {
+  	private function validate()
+  	{
 		$name_length = array('firstname','lastname','brand');
-		foreach($name_length as $name){
+		foreach ($name_length as $name) {
 			if ((strlen($_POST[$name]) < 3) || (strlen($_POST[$name]) > 32)) {
 					$this->error[$name] = $this->_('error_' . $name);
 			}
@@ -128,16 +132,16 @@ class ControllerInformationAreYouADesigner extends Controller {
 				$this->error['description'] = $this->_('error_description');
 		}
 		
-		if(isset($_POST['category'])){
-			foreach($_POST['category'] as $key=>$cat){
-				if($cat === '' || $cat === '0' || $cat === 0){
+		if (isset($_POST['category'])) {
+			foreach ($_POST['category'] as $key=>$cat) {
+				if ($cat === '' || $cat === '0' || $cat === 0) {
 					unset($_POST['category'][$key]);
 					continue;
 				}
 				
-				if($key === 'other'){
-					foreach($cat as $other_key=>$other_cat){
-						if(!$other_cat){
+				if ($key === 'other') {
+					foreach ($cat as $other_key=>$other_cat) {
+						if (!$other_cat) {
 							$this->error['no_other'] = $this->_('error_blank_other');
 						}
 						$_POST['category']['other'.$other_key] = $other_cat;
@@ -149,7 +153,7 @@ class ControllerInformationAreYouADesigner extends Controller {
 			if(!count($_POST['category']))
 				$this->error['category_list'] = $this->_('error_no_category');
 		}
-		else{
+		else {
 			$this->error['category_list'] = $this->_('error_no_category');
 		}
 		
@@ -160,7 +164,8 @@ class ControllerInformationAreYouADesigner extends Controller {
 		return $this->error ? false : true;
   	}
 
-	public function captcha() {
+	public function captcha()
+	{
 		$this->session->data['captcha'] = $this->captcha->getCode();
 		
 		$this->captcha->showImage();

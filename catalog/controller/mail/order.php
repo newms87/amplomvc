@@ -1,7 +1,9 @@
 <?php
-class ControllerMailOrder extends Controller {
+class ControllerMailOrder extends Controller 
+{
 		
-	public function index($order_info){
+	public function index($order_info)
+	{
 		$order_id = $order_info['order_id'];
 		
 		//Order Information
@@ -79,7 +81,7 @@ class ControllerMailOrder extends Controller {
 			$product['total'] = $this->currency->format($product['total'], $order_info['currency_code'], $order_info['currency_value']);
 			
 			foreach ($product['option'] as &$option) {
-				if(strlen($option['value']) > 22){
+				if (strlen($option['value']) > 22) {
 					$option['value'] = substr($option['value'], 0, 20) . '..';
 				}
 			}unset($option);

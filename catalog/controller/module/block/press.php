@@ -1,6 +1,8 @@
 <?php
-class ControllerModuleBlockPress extends Controller {
-	public function index($settings) {
+class ControllerModuleBlockPress extends Controller 
+{
+	public function index($settings)
+	{
 		$this->template->load('module/block/press');
 		
 		$this->language->load('module/block/press');
@@ -10,13 +12,13 @@ class ControllerModuleBlockPress extends Controller {
 		
 		$settings['auto_size'] = true;
 		
-		foreach($settings['press_items'] as &$press){
-			if(!empty($press['images'])){
-				foreach($press['images'] as &$image){
-					if($settings['auto_size']){
+		foreach ($settings['press_items'] as &$press) {
+			if (!empty($press['images'])) {
+				foreach ($press['images'] as &$image) {
+					if ($settings['auto_size']) {
 						$image = $this->image->get($image);
 					}
-					else{
+					else {
 						$width = !empty($press['image_width']) ? $press['image_width'] : $settings['image_width'];
 						$height = !empty($press['image_height']) ? $press['image_height'] : $settings['image_height'];
 						

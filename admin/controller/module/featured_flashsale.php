@@ -1,8 +1,10 @@
 <?php
-class ControllerModuleFeaturedFlashsale extends Controller {
+class ControllerModuleFeaturedFlashsale extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/featured_flashsale');
 
 		$this->load->language('module/featured_flashsale');
@@ -56,7 +58,8 @@ class ControllerModuleFeaturedFlashsale extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/featured_flashsale')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

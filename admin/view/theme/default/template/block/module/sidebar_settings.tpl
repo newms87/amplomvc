@@ -1,7 +1,7 @@
 <table class="form">
 	<tr>
 		<td>
-			<?= $entry_attribute_group;?><br />
+			<?= $entry_attribute_group; ?><br />
 			<? $this->builder->set_config("attribute_group_id", 'name'); ?>
 			<?= $this->builder->build('select', $data_attribute_groups, 'attribute_group_select'); ?>
 		</td>

@@ -21,14 +21,15 @@
 
 
 /**
-* Class for creating Root PPS's for OLE containers
+* class for creating Root PPS's for OLE containers
 *
 * @author	Xavier Noguer <xnoguer@php.net>
 * @category PHPExcel
 * @package  PHPExcel_Shared_OLE
 */
 class PHPExcel_Shared_OLE_PPS_Root extends PHPExcel_Shared_OLE_PPS
-	{
+	
+{
 
 	/**
 	* Directory for temporary files
@@ -164,7 +165,7 @@ class PHPExcel_Shared_OLE_PPS_Root extends PHPExcel_Shared_OLE_PPS
 	* @return integer
 	*/
 	private static function _adjust2($i2)
-	{
+ {
 		$iWk = log($i2)/log(2);
 		return ($iWk > floor($iWk))? floor($iWk)+1:$iWk;
 	}
@@ -271,7 +272,7 @@ class PHPExcel_Shared_OLE_PPS_Root extends PHPExcel_Shared_OLE_PPS
 					//if (isset($raList[$i]->_PPS_FILE)) {
 					//	$iLen = 0;
 					//	fseek($raList[$i]->_PPS_FILE, 0); // To The Top
-					//	while($sBuff = fread($raList[$i]->_PPS_FILE, 4096)) {
+					//	while ($sBuff = fread($raList[$i]->_PPS_FILE, 4096)) {
 					//		$iLen += strlen($sBuff);
 					//		fwrite($FILE, $sBuff);
 					//	}

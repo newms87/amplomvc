@@ -27,7 +27,7 @@ $_['entry_name']					= 'Store Name:';
 $_['entry_owner']				= 'Store Owner:';
 $_['entry_address']				= 'Address:';
 $_['entry_email']				= 'E-Mail:';
-$_['entry_email_support']		= 'Support Email:<span class="help">Please specify an email to send support requests to.</span>';
+$_['entry_email_support']		= 'Support Email:<span class ="help">Please specify an email to send support requests to.</span>';
 $_['entry_email_error']		= 'Error Email:<span class="help">Please specify an email to notify when a critical system error has occurred.</span>';
 $_['entry_telephone']			= 'Telephone:';
 $_['entry_fax']					= 'Fax:';
@@ -38,7 +38,8 @@ $_['entry_layout']				= 'Default Layout:';
 $_['entry_debug']					= 'Turn on Global Debug:<span class="help">Should be turned off for production sites.</span>';
 $_['entry_allow_close_message_box'] = "Allow Customers to Close Notification Messages?<span class='help'>These are popups that display warning, success and alert/notify messages</span>";
 $_['entry_theme']			= 'Theme:';
-$_['entry_address_format']	= 'Default Address Format: <span class="help">Insertables:<br/> {firstname}, {lastname}, {company}, {address_1}, {address_2}, {postcode}, {zone}, {zone_code}, {country}. <br/><br />Can be individually set under System > Localisation > Countries</span>';
+$_['entry_address_format']	= 'Default Address Format: <span class="help">Insertables:<br/> 
+{firstname}, {lastname}, {company}, {address_1}, {address_2}, {postcode}, {zone}, {zone_code}, {country}. <br/><br />Can be individually set under System > Localisation > Countries</span>';
 $_['entry_country']				= 'Country:';
 $_['entry_zone']					= 'Region / State:';
 $_['entry_language']			= 'Language:';

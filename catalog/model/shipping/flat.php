@@ -1,6 +1,8 @@
 <?php
-class ModelShippingFlat extends Model {
-	function getQuote($address) {
+class ModelShippingFlat extends Model 
+{
+	function getQuote($address)
+	{
 		$flat_rates = $this->model_setting_setting->getSetting('shipping_flat');
 		
 		$quote_data = array();
@@ -10,7 +12,7 @@ class ModelShippingFlat extends Model {
 		$total_products = (int)$this->cart->countProducts();
 		$total_weight = (int)$this->cart->getWeight();
 		
-		foreach($flat_rates['flat_rates'] as $rate){
+		foreach ($flat_rates['flat_rates'] as $rate) {
 			$valid = true;
 			
 			//Wrong Shipping Zone
@@ -20,14 +22,14 @@ class ModelShippingFlat extends Model {
 				case 'item_qty':
 					list($min, $max) = explode(',', $rate['rule']['value'], 2);
 					
-					if($total_products < (int)$min || ($max && $total_products > (int)$max)){
+					if ($total_products < (int)$min || ($max && $total_products > (int)$max)) {
 						$valid = false;
 					}
 					break;
 				case 'weight':
 					list($min, $max) = explode(',', $rate['rule']['value'], 2);
 					
-					if($total_weight < (int)$min || ($max && $total_weight > (int)$max)){
+					if ($total_weight < (int)$min || ($max && $total_weight > (int)$max)) {
 						$valid = false;
 					}
 					break;

@@ -1,7 +1,7 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
-	<?= $this->builder->display_errors($errors);?>
+	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'user.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -20,17 +20,17 @@
 					<tr>
 						<td><span class="required"></span> <?= $entry_store; ?></td>
 						<? $this->builder->set_config('store_id', 'name');?>
-						<td><?= $this->builder->build('multiselect', $data_stores, "stores", $stores);?></td>
+						<td><?= $this->builder->build('multiselect', $data_stores, "stores", $stores); ?></td>
 					</tr>
 					<tr>
 						<td><?= $entry_status; ?></td>
-						<td><?=$this->builder->build('select',$data_statuses,'status',(int)$status);?></td>
+						<td><?= $this->builder->build('select',$data_statuses,'status',(int)$status); ?></td>
 					</tr>
 					
 					<tr id="links_list_data">
 						<td colspan="2">
 							<div id='links_list' class='box'>
-						<div class='heading'><h3><?= $entry_links;?></h3></div>
+						<div class='heading'><h3><?= $entry_links; ?></h3></div>
 						
 						<div class="content">
 							<div class="left">
@@ -38,36 +38,36 @@
 									<div class="editable">
 										<input type="hidden" class="parent_id" name="links[%link_num%][parent_id]" value="0" />
 										<div class="link_entry_display_name">
-										<label for="link_display_name_%link_num%"><?=$entry_link_display_name;?></label>
+										<label for="link_display_name_%link_num%"><?= $entry_link_display_name; ?></label>
 										<input id='link_display_name_%link_num%' type="text" name="links[%link_num%][display_name]" onkeyup="update_display_name($(this));" value="" />
 									</div>
 									<div class="link_entry_name">
-										<label for="link_name_%link_num%"><?=$entry_link_name;?></label>
+										<label for="link_name_%link_num%"><?= $entry_link_name; ?></label>
 										<input id='link_name_%link_num%' type="text" name="links[%link_num%][name]" value="" />
 									</div>
 									<div class="link_entry_title">
-										<label for="link_title_%link_num%"><?=$entry_link_title;?></label>
+										<label for="link_title_%link_num%"><?= $entry_link_title; ?></label>
 										<input id='link_title_%link_num%' type="text" name="links[%link_num%][title]" value="" />
 									</div>
 									<div class="link_entry_href">
-										<label for="link_href_%link_num%"><?=$entry_link_href;?></label>
+										<label for="link_href_%link_num%"><?= $entry_link_href; ?></label>
 										<input id='link_href_%link_num%' type="text" class='long' name="links[%link_num%][href]" value="" />
 									</div>
 									<div class="link_entry_query">
-										<label for="link_query_%link_num%"><?=$entry_link_query;?></label>
+										<label for="link_query_%link_num%"><?= $entry_link_query; ?></label>
 										<input id='link_query_%link_num%' type="text" class='long' name="links[%link_num%][query]" value="" />
 									</div>
 									<div class="link_entry_is_route">
-										<label for="link_is_route_%link_num%"><?=$entry_link_is_route;?></label>
+										<label for="link_is_route_%link_num%"><?= $entry_link_is_route; ?></label>
 										<?= $this->builder->build('select',$data_yes_no, "links[%link_num%][is_route]", 0, array('id'=>"link_is_route_%link_num%")); ?>
 									</div>
 									<div class="link_entry_status">
-										<label for="link_status_%link_num%"><?=$entry_link_status;?></label>
+										<label for="link_status_%link_num%"><?= $entry_link_status; ?></label>
 										<?= $this->builder->build('select', $data_statuses, "links[%link_num%][status]", 1, array('id'=>"link_status_%link_num%")); ?>
 									</div>
 								</div>
 								
-								<input type="button" class="button" onclick="add_navigation_link();" value="<?= $text_add_link;?>" />
+								<input type="button" class="button" onclick="add_navigation_link();" value="<?= $text_add_link; ?>" />
 							</div>
 						</div>
 						<div class="right">
@@ -76,37 +76,37 @@
 							<? foreach($links as $link_num => $link){ ?>
 								<? if(isset($link['navigation_id'])) $link_num = $link['navigation_id']; ?>
 								<? $max_link = max($max_link, $link_num);?>
-								<li link_id='<?=$link_num;?>' parent_id="<?=$link['parent_id'];?>">
+								<li link_id='<?= $link_num; ?>' parent_id="<?= $link['parent_id']; ?>">
 									<div class="link_info">
-										<div class="link_name"><span class="display_name"><?= $link['display_name'];?></span><span class="show_link_edit" onclick="toggle_edit_link($(this))"><span class="edit_text"><?= $text_edit_link;?></span><img class="remove_link" src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" onclick="$(this).closest('li').remove();"/></span></div>
+										<div class="link_name"><span class="display_name"><?= $link['display_name']; ?></span><span class="show_link_edit" onclick="toggle_edit_link($(this))"><span class="edit_text"><?= $text_edit_link; ?></span><img class="remove_link" src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" onclick="$(this).closest('li').remove();"/></span></div>
 										<div class="editable" style="display:none">
-											<input type="hidden" class="parent_id" name="links[<?= $link_num;?>][parent_id]" value="0" />
+											<input type="hidden" class="parent_id" name="links[<?= $link_num; ?>][parent_id]" value="0" />
 											<div class="link_entry_display_name">
-												<label for="link_display_name_<?= $link_num;?>"><?=$entry_link_display_name;?></label>
-												<input id='link_display_name_<?=$link_num;?>' type="text" name="links[<?=$link_num;?>][display_name]" onkeyup="update_display_name($(this));" value="<?= $link['display_name'];?>" />
+												<label for="link_display_name_<?= $link_num; ?>"><?= $entry_link_display_name; ?></label>
+												<input id='link_display_name_<?= $link_num; ?>' type="text" name="links[<?= $link_num; ?>][display_name]" onkeyup="update_display_name($(this));" value="<?= $link['display_name']; ?>" />
 											</div>
 											<div class="link_entry_name">
-												<label for="link_name_<?= $link_num;?>"><?=$entry_link_name;?></label>
-												<input id='link_name_<?=$link_num;?>' type="text" name="links[<?=$link_num;?>][name]" value="<?= $link['name'];?>" />
+												<label for="link_name_<?= $link_num; ?>"><?= $entry_link_name; ?></label>
+												<input id='link_name_<?= $link_num; ?>' type="text" name="links[<?= $link_num; ?>][name]" value="<?= $link['name']; ?>" />
 											</div>
 											<div class="link_entry_title">
-												<label for="link_title_<?= $link_num;?>"><?=$entry_link_title;?></label>
-												<input id='link_title_<?=$link_num;?>' type="text" name="links[<?=$link_num;?>][title]" value="<?= $link['title'];?>" />
+												<label for="link_title_<?= $link_num; ?>"><?= $entry_link_title; ?></label>
+												<input id='link_title_<?= $link_num; ?>' type="text" name="links[<?= $link_num; ?>][title]" value="<?= $link['title']; ?>" />
 											</div>
 											<div class="link_entry_href">
-												<label for="link_href_<?= $link_num;?>"><?=$entry_link_href;?></label>
-												<input id='link_href_<?=$link_num;?>' type="text" name="links[<?=$link_num;?>][href]" value="<?= $link['href'];?>" />
+												<label for="link_href_<?= $link_num; ?>"><?= $entry_link_href; ?></label>
+												<input id='link_href_<?= $link_num; ?>' type="text" name="links[<?= $link_num; ?>][href]" value="<?= $link['href']; ?>" />
 											</div>
 											<div class="link_entry_query">
-												<label for="link_query_<?= $link_num;?>"><?=$entry_link_query;?></label>
-												<input id='link_query_<?= $link_num;?>' type="text" name="links[<?= $link_num;?>][query]" value="<?= $link['query'];?>" />
+												<label for="link_query_<?= $link_num; ?>"><?= $entry_link_query; ?></label>
+												<input id='link_query_<?= $link_num; ?>' type="text" name="links[<?= $link_num; ?>][query]" value="<?= $link['query']; ?>" />
 											</div>
 											<div class="link_entry_is_route">
-												<label for="link_is_route_<?= $link_num;?>"><?=$entry_link_is_route;?></label>
+												<label for="link_is_route_<?= $link_num; ?>"><?= $entry_link_is_route; ?></label>
 												<?= $this->builder->build('select', $data_yes_no, "links[$link_num][is_route]", $link['is_route'], array('id'=>"link_is_route_$link_num")); ?>
 											</div>
 											<div class="link_entry_status">
-												<label for="link_status_<?= $link_num;?>"><?=$entry_link_status;?></label>
+												<label for="link_status_<?= $link_num; ?>"><?= $entry_link_status; ?></label>
 												<?= $this->builder->build('select', $data_statuses, "links[$link_num][status]", $link['status'], array('id'=>"link_status_$link_num")); ?>
 											</div>
 										</div>
@@ -207,15 +207,15 @@ function toggle_edit_link(context){
 	
 	if(edit.hasClass('showing')){
 		edit.slideUp().removeClass('showing');
-		context.find('.edit_text').html('<?= $text_edit_link;?>');
+		context.find('.edit_text').html('<?= $text_edit_link; ?>');
 	}
 	else{
 		edit.slideDown().addClass('showing');
-		context.find('.edit_text').html('<?= $text_hide_link;?>');
+		context.find('.edit_text').html('<?= $text_hide_link; ?>');
 	}
 }
 
-var link_num = <?= $max_link;?>;
+var link_num = <?= $max_link; ?>;
 function add_navigation_link(){
 	var link_info = $('#new_navigation_link .editable').clone(true);
 	
@@ -236,7 +236,7 @@ function add_navigation_link(){
 	
 	html = '<li link_id="%link_num%">';
 	html +='	<div class="link_info">';
-	html +='		<div class="link_name"><span class="display_name">' + display_name + '</span><span class="show_link_edit" onclick="toggle_edit_link($(this))"><span class="edit_text"><?= $text_edit_link;?></span><img class="remove_link" src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" onclick="$(this).closest(\'li\');"/></span></div>';
+	html +='		<div class="link_name"><span class="display_name">' + display_name + '</span><span class="show_link_edit" onclick="toggle_edit_link($(this))"><span class="edit_text"><?= $text_edit_link; ?></span><img class="remove_link" src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" onclick="$(this).closest(\'li\');"/></span></div>';
 	html +='	</div>';
 	html += '<ul></ul>';
 	html +='</li>';
@@ -261,4 +261,4 @@ function update_display_name(context){
 	context.closest('.link_info').find('.display_name').html(context.val())
 }
 //--></script>
-<?= $this->builder->js('errors', $errors);?>
+<?= $this->builder->js('errors', $errors); ?>

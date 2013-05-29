@@ -1,8 +1,10 @@
 <?php
-class ControllerModuleWelcome extends Controller {
+class ControllerModuleWelcome extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/welcome');
 
 		$this->load->language('module/welcome');
@@ -51,7 +53,8 @@ class ControllerModuleWelcome extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/welcome')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

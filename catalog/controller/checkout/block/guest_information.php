@@ -1,6 +1,8 @@
 <?php
-class ControllerCheckoutBlockGuestInformation extends Controller {
-  	public function index() {
+class ControllerCheckoutBlockGuestInformation extends Controller 
+{
+  	public function index()
+  	{
 		$this->language->load('checkout/checkout');
 		$this->language->load('checkout/block/guest_information');
 		$this->template->load('checkout/block/guest_information');
@@ -23,18 +25,18 @@ class ControllerCheckoutBlockGuestInformation extends Controller {
 		$this->form->disable_fields('firstname','lastname','default','submit_address');
 		$this->form->set_name_format('payment_address[%name%]');
 		
-		if($this->cart->hasPaymentAddress()){
+		if ($this->cart->hasPaymentAddress()) {
 			$this->form->set_data($this->Cart->getPaymentAddress());
 		}
 		
 		$this->data['form_payment_address'] = $this->form->build();
 		
 		//Shipping
-		if($this->cart->hasShipping()){
+		if ($this->cart->hasShipping()) {
 			$this->form->enable_fields('firstname','lastname');
 			$this->form->set_name_format('shipping_address[%name%]');
 			
-			if($this->cart->hasShippingAddress()){
+			if ($this->cart->hasShippingAddress()) {
 				$this->form->set_data($this->cart->getShippingAddress());
 			}
 			
@@ -48,7 +50,8 @@ class ControllerCheckoutBlockGuestInformation extends Controller {
 		$this->response->setOutput($this->render());
   	}
 	
-	public function validate() {
+	public function validate()
+	{
 		$this->language->load('checkout/checkout');
 		$this->template->load('checkout/block/guest_information');
 		
@@ -65,22 +68,22 @@ class ControllerCheckoutBlockGuestInformation extends Controller {
 		}
 		
 		//Redirect if set
-		if($json){
-			if(!empty($_POST['async'])){
+		if ($json) {
+			if (!empty($_POST['async'])) {
 				$this->url->redirect($this->url->link('checkout/checkout'));
 			}
 		}
-		else{
+		else {
 			//Validate Guest Information
 			$this->form->init('register');
 			$this->form->set_fields('firstname', 'lastname', 'email');
 			
-			if(!$this->form->validate($_POST)){
+			if (!$this->form->validate($_POST)) {
 				$json['error'] = $this->form->get_errors();
 			}
 			
 			//Save Guest Information
-			if(!$json){
+			if (!$json) {
 				$this->cart->saveGuestInfo($_POST);
 			}
 			
@@ -91,44 +94,44 @@ class ControllerCheckoutBlockGuestInformation extends Controller {
 			$_POST['payment_address']['firstname'] = $_POST['firstname'];
 			$_POST['payment_address']['lastname'] = $_POST['lastname'];
 			
-			if(!$this->form->validate($_POST['payment_address'])){
+			if (!$this->form->validate($_POST['payment_address'])) {
 				if(!isset($json['error'])) $json['error'] = array();
 				
 				$json['error'] += $this->form->get_errors();
 			}
 			
-			if(!$json){
-				if(!$this->cart->setPaymentAddress($_POST['payment_address'])){
+			if (!$json) {
+				if (!$this->cart->setPaymentAddress($_POST['payment_address'])) {
 					$json['error']['payment_address'] = $this->cart->get_errors('payment_address');
 				}
 			}
 			
 			//Same Shipping as Billing
-			if(!empty($_POST['same_shipping_address'])){
-				if(!$this->cart->setShippingAddress($this->cart->getPaymentAddressId())){
+			if (!empty($_POST['same_shipping_address'])) {
+				if (!$this->cart->setShippingAddress($this->cart->getPaymentAddressId())) {
 					$this->error['shipping_address'] = $this->cart->get_errors('shipping_address');
 				}
 			}
-			else{
+			else {
 				//Validate Shipping Address
 				$this->form->set_name_format('shipping_address[%name%]');
 				
-				if(!$this->form->validate($_POST['shipping_address'])){
+				if (!$this->form->validate($_POST['shipping_address'])) {
 					if(!isset($json['error'])) $json['error'] = array();
 					
 					$json['error'] += $this->form->get_errors();
 				}
 				
-				if(!$json){
-					if(!$this->cart->setShippingAddress($_POST['shipping_address'])){
+				if (!$json) {
+					if (!$this->cart->setShippingAddress($_POST['shipping_address'])) {
 						$json['error']['shipping_address'] = $this->cart->get_errors('shipping_address');
 					}
 				}
 			}
 			
 			//If this is an ajax request
-			if(!isset($_POST['async'])){
-				if($json['error']){
+			if (!isset($_POST['async'])) {
+				if ($json['error']) {
 					$this->message->add('warning', $json['error']);
 				} else {
 					$this->message->add('success', $this->_('text_address_success'));

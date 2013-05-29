@@ -33,8 +33,7 @@
  * @package	PHPExcel_Style
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Style_Alignment implements PHPExcel_IComparable
-{
+class PHPExcel_Style_Alignment implements PHPExcel_IComparable{
 	/* Horizontal alignment styles */
 	const HORIZONTAL_GENERAL				= 'general';
 	const HORIZONTAL_LEFT					= 'left';
@@ -217,7 +216,8 @@ class PHPExcel_Style_Alignment implements PHPExcel_IComparable
 	* @throws	Exception
 	* @return PHPExcel_Style_Alignment
 	*/
-	public function applyFromArray($pStyles = null) {
+	public function applyFromArray($pStyles = null)
+	{
 		if (is_array($pStyles)) {
 			if ($this->_isSupervisor) {
 				$this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($this->getStyleArray($pStyles));
@@ -252,7 +252,8 @@ class PHPExcel_Style_Alignment implements PHPExcel_IComparable
 	*
 	* @return string
 	*/
-	public function getHorizontal() {
+	public function getHorizontal()
+	{
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getHorizontal();
 		}
@@ -265,7 +266,8 @@ class PHPExcel_Style_Alignment implements PHPExcel_IComparable
 	* @param string $pValue
 	* @return PHPExcel_Style_Alignment
 	*/
-	public function setHorizontal($pValue = PHPExcel_Style_Alignment::HORIZONTAL_GENERAL) {
+	public function setHorizontal($pValue = PHPExcel_Style_Alignment::HORIZONTAL_GENERAL)
+	{
 		if ($pValue == '') {
 			$pValue = PHPExcel_Style_Alignment::HORIZONTAL_GENERAL;
 		}
@@ -285,7 +287,8 @@ class PHPExcel_Style_Alignment implements PHPExcel_IComparable
 	*
 	* @return string
 	*/
-	public function getVertical() {
+	public function getVertical()
+	{
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getVertical();
 		}
@@ -298,7 +301,8 @@ class PHPExcel_Style_Alignment implements PHPExcel_IComparable
 	* @param string $pValue
 	* @return PHPExcel_Style_Alignment
 	*/
-	public function setVertical($pValue = PHPExcel_Style_Alignment::VERTICAL_BOTTOM) {
+	public function setVertical($pValue = PHPExcel_Style_Alignment::VERTICAL_BOTTOM)
+	{
 		if ($pValue == '') {
 			$pValue = PHPExcel_Style_Alignment::VERTICAL_BOTTOM;
 		}
@@ -317,7 +321,8 @@ class PHPExcel_Style_Alignment implements PHPExcel_IComparable
 	*
 	* @return int
 	*/
-	public function getTextRotation() {
+	public function getTextRotation()
+	{
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getTextRotation();
 		}
@@ -331,7 +336,8 @@ class PHPExcel_Style_Alignment implements PHPExcel_IComparable
 	* @throws Exception
 	* @return PHPExcel_Style_Alignment
 	*/
-	public function setTextRotation($pValue = 0) {
+	public function setTextRotation($pValue = 0)
+	{
 		// Excel2007 value 255 => PHPExcel value -165
 		if ($pValue == 255) {
 			$pValue = -165;
@@ -357,7 +363,8 @@ class PHPExcel_Style_Alignment implements PHPExcel_IComparable
 	*
 	* @return boolean
 	*/
-	public function getWrapText() {
+	public function getWrapText()
+	{
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getWrapText();
 		}
@@ -370,7 +377,8 @@ class PHPExcel_Style_Alignment implements PHPExcel_IComparable
 	* @param boolean $pValue
 	* @return PHPExcel_Style_Alignment
 	*/
-	public function setWrapText($pValue = false) {
+	public function setWrapText($pValue = false)
+	{
 		if ($pValue == '') {
 			$pValue = false;
 		}
@@ -388,7 +396,8 @@ class PHPExcel_Style_Alignment implements PHPExcel_IComparable
 	*
 	* @return boolean
 	*/
-	public function getShrinkToFit() {
+	public function getShrinkToFit()
+	{
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getShrinkToFit();
 		}
@@ -401,7 +410,8 @@ class PHPExcel_Style_Alignment implements PHPExcel_IComparable
 	* @param boolean $pValue
 	* @return PHPExcel_Style_Alignment
 	*/
-	public function setShrinkToFit($pValue = false) {
+	public function setShrinkToFit($pValue = false)
+	{
 		if ($pValue == '') {
 			$pValue = false;
 		}
@@ -419,7 +429,8 @@ class PHPExcel_Style_Alignment implements PHPExcel_IComparable
 	*
 	* @return int
 	*/
-	public function getIndent() {
+	public function getIndent()
+	{
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getIndent();
 		}
@@ -432,7 +443,8 @@ class PHPExcel_Style_Alignment implements PHPExcel_IComparable
 	* @param int $pValue
 	* @return PHPExcel_Style_Alignment
 	*/
-	public function setIndent($pValue = 0) {
+	public function setIndent($pValue = 0)
+	{
 		if ($pValue > 0) {
 			if ($this->getHorizontal() != self::HORIZONTAL_GENERAL && $this->getHorizontal() != self::HORIZONTAL_LEFT && $this->getHorizontal() != self::HORIZONTAL_RIGHT) {
 				$pValue = 0; // indent not supported
@@ -452,7 +464,8 @@ class PHPExcel_Style_Alignment implements PHPExcel_IComparable
 	*
 	* @return string	Hash code
 	*/
-	public function getHashCode() {
+	public function getHashCode()
+	{
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getHashCode();
 		}
@@ -463,14 +476,15 @@ class PHPExcel_Style_Alignment implements PHPExcel_IComparable
 			. ($this->_wrapText ? 't' : 'f')
 			. ($this->_shrinkToFit ? 't' : 'f')
 			. $this->_indent
-			. __CLASS__
+			. __class __
 		);
 	}
 
 	/**
 	* Implement PHP __clone to create a deep clone, not just a shallow copy.
 	*/
-	public function __clone() {
+	public function __clone()
+	{
 		$vars = get_object_vars($this);
 		foreach ($vars as $key => $value) {
 			if ((is_object($value)) && ($key != '_parent')) {

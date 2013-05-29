@@ -1,7 +1,9 @@
 <?php
-class ControllerShippingAmount extends Controller {
+class ControllerShippingAmount extends Controller 
+{
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('shipping/amount');
 
 		$this->load->language('shipping/amount');
@@ -25,9 +27,10 @@ class ControllerShippingAmount extends Controller {
 		$this->data['cancel'] = $this->url->link('extension/shipping');
 		
 		$config_values = array('amount_priceset','amount_zonerule',
-									'amount_tax_class_id','amount_geo_zone_id','amount_status','amount_sort_order'
+									'amount_tax_class _id','amount_geo_zone_id','amount_status','amount_sort_order'
 									);
-		foreach($config_values as $cv){
+		foreach($config_values as $cv)
+{
 			$this->data[$cv] = isset($_POST[$cv])?$_POST[$cv]:$this->config->get($cv);
 		}
 		
@@ -37,7 +40,7 @@ class ControllerShippingAmount extends Controller {
 		if(!is_array($this->data['amount_zonerule']))
 			$this->data['amount_zonerule'] = array();
 		
-		$this->data['tax_classes'] = array_merge(array(0=>'--- None ---'),$this->model_localisation_tax_class->getTaxClasses());
+		$this->data['tax_class es'] = array_merge(array(0=>'--- None ---'),$this->model_localisation_tax_class->getTaxClasses());
 		
 		$this->data['geo_zones'] = array_merge(array(0=>'--- None ---'),$this->model_localisation_geo_zone->getGeoZones());
 		
@@ -53,7 +56,8 @@ class ControllerShippingAmount extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'shipping/amount')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

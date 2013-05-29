@@ -1,8 +1,10 @@
 <?php
-class ControllerPaymentSagepayUS extends Controller {
+class ControllerPaymentSagepayUS extends Controller 
+{
 	
 
-	public function index() {
+	public function index()
+	{
 		$this->template->load('payment/sagepay_us');
 
 		$this->load->language('payment/sagepay_us');
@@ -97,7 +99,8 @@ class ControllerPaymentSagepayUS extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'payment/sagepay_us')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

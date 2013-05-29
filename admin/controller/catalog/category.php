@@ -1,8 +1,10 @@
 <?php
-class ControllerCatalogCategory extends Controller {
+class ControllerCatalogCategory extends Controller 
+{
 	
  
-	public function index() {
+	public function index()
+	{
 		$this->load->language('catalog/category');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -10,7 +12,8 @@ class ControllerCatalogCategory extends Controller {
 		$this->getList();
 	}
 
-	public function insert() {
+	public function insert()
+	{
 		$this->load->language('catalog/category');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -26,7 +29,8 @@ class ControllerCatalogCategory extends Controller {
 		$this->getForm();
 	}
 
-	public function update() {
+	public function update()
+	{
 		$this->load->language('catalog/category');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -42,7 +46,8 @@ class ControllerCatalogCategory extends Controller {
 		$this->getForm();
 	}
 
-	public function delete() {
+	public function delete()
+	{
 		$this->load->language('catalog/category');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -60,7 +65,8 @@ class ControllerCatalogCategory extends Controller {
 		$this->getList();
 	}
 
-	private function getList() {
+	private function getList()
+	{
 		$this->template->load('catalog/category_list');
 
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -98,7 +104,8 @@ class ControllerCatalogCategory extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function getForm() {
+	private function getForm()
+	{
 		$this->template->load('catalog/category_form');
 
 		$category_id = $this->data['category_id'] = isset($_GET['category_id'])?$_GET['category_id']:null;
@@ -132,12 +139,12 @@ class ControllerCatalogCategory extends Controller {
 			'category_layout'=>array(),
 		);
 
-		foreach($defaults as $d=>$value){
+		foreach ($defaults as $d=>$value) {
 			if (isset($_POST[$d])) {
 				$this->data[$d] = $_POST[$d];
 			} elseif (isset($category_info[$d])) {
 				$this->data[$d] = $category_info[$d];
-			} elseif(!$category_id) {
+			} elseif (!$category_id) {
 				$this->data[$d] = $value;
 			}
 		}
@@ -145,13 +152,13 @@ class ControllerCatalogCategory extends Controller {
 		$this->data['languages'] = $this->model_localisation_language->getLanguages();
 
 		//Anything uninitialized at this point we know there is a category_id set, so grab the values
-		if(!isset($this->data['category_description'])){
+		if (!isset($this->data['category_description'])) {
 			$this->data['category_description'] = $this->model_catalog_category->getCategoryDescriptions($category_id);
 		}
-		if(!isset($this->data['category_store'])) {
+		if (!isset($this->data['category_store'])) {
 			$this->data['category_store'] = $this->model_catalog_category->getCategoryStores($category_id);
 		}
-		if(!isset($this->data['category_layout'])){
+		if (!isset($this->data['category_layout'])) {
 			$this->data['category_layout'] = $this->model_catalog_category->getCategoryLayouts($category_id);
 		}
 		
@@ -176,20 +183,22 @@ class ControllerCatalogCategory extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	public function generate_url(){
-		if(!empty($_POST['name'])){
+	public function generate_url()
+	{
+		if (!empty($_POST['name'])) {
 			$category_id = isset($_POST['category_id']) ? $_POST['category_id'] : 0;
 			
 			$url = $this->model_catalog_category->generate_url($category_id, $_POST['name']);
 		}
-		else{
+		else {
 			$url = '';
 		}
 
 		$this->response->setOutput(json_encode($url));
 	}
 	
-	private function validateForm() {
+	private function validateForm()
+	{
 		if (!$this->user->hasPermission('modify', 'catalog/category')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
@@ -203,7 +212,8 @@ class ControllerCatalogCategory extends Controller {
 		return $this->error ? false : true;
 	}
 
-	private function validateDelete() {
+	private function validateDelete()
+	{
 		if (!$this->user->hasPermission('modify', 'catalog/category')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

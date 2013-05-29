@@ -1,7 +1,7 @@
 <div class="login-header">
-	<form action="<?= $action;?>" method="post" class="login-form">
+	<form action="<?= $action; ?>" method="post" class="login-form">
 		<div class="email">
-			<input type="text" value="<?= $email;?>" name="email" default="<?= $entry_email;?>" />
+			<input type="text" value="<?= $email; ?>" name="email" default="<?= $entry_email; ?>" />
 		</div>
 		<div class="password">
 			<input type="password" value="" name="password" default="*********" />

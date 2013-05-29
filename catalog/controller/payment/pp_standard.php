@@ -1,6 +1,8 @@
 <?php
-class ControllerPaymentPPStandard extends Controller {
-	protected function index() {
+class ControllerPaymentPPStandard extends Controller 
+{
+	protected function index()
+	{
 		$this->language->load('payment/pp_standard');
 		
 		$this->data['testmode'] = $this->config->get('pp_standard_test');
@@ -99,7 +101,8 @@ class ControllerPaymentPPStandard extends Controller {
 		}
 	}
 	
-	public function callback() {
+	public function callback()
+	{
 		if ($this->config->get('pp_standard_debug')) {
 			$this->error_log->write('PP_STANDARD :: Callback called');
 		}

@@ -102,15 +102,15 @@ body{
 
 <div id='bcshop_ad'>
 	<div id='bcshop_top'>
-			<a href='<?= $shop_url;?>' target="_blank">
-				<img src="<?= $shop_logo;?>" />
+			<a href='<?= $shop_url; ?>' target="_blank">
+				<img src="<?= $shop_logo; ?>" />
 			</a>
-			<div id='bcshop_become_designer'><?= $text_become_designer;?></div>
+			<div id='bcshop_become_designer'><?= $text_become_designer; ?></div>
 	</div>
 	
 	<div id='bcshop_product_list'>
 			<? foreach($products as $product){ ?>
-			<a href='<?= $product['href'];?>' class='bcshop_featured_product_clickable'	target="_blank">
+			<a href='<?= $product['href']; ?>' class='bcshop_featured_product_clickable'	target="_blank">
 				<div class="bcshop_image"><img src="<?= $product['thumb']; ?>" alt="<?= $product['name']; ?>" /></div>
 				<div class='bcshop_featured_product_info'>
 					<div class="bcshop_name"><?= $product['title']; ?></div>

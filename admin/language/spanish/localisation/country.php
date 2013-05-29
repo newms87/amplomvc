@@ -15,8 +15,9 @@ $_['column_action']			= 'Acción';
 $_['entry_name']				= 'Nombre del país:';
 $_['entry_iso_code_2']		= 'Código ISO (2):';
 $_['entry_iso_code_3']		= 'Código ISO (3):';
-$_['entry_address_format']	= 'Formato dirección:<br /><span class="help">
-Nombre = {firstname}<br />
+$_['entry_address_format']	= 'Formato dirección:<br /><span class ="help">
+Nombre = 
+{firstname}<br />
 Apellido/s = {lastname}<br />
 Compañía = {company}<br />
 Dirección 1 = {address_1}<br />

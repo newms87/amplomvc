@@ -1,8 +1,10 @@
 <?php
-class ControllerCatalogAttribute extends Controller {
+class ControllerCatalogAttribute extends Controller 
+{
 	
 	
-  	public function index() {
+  	public function index()
+  	{
 		$this->load->language('catalog/attribute');
 	
 		$this->document->setTitle($this->_('heading_title'));
@@ -10,7 +12,8 @@ class ControllerCatalogAttribute extends Controller {
 		$this->getList();
   	}
 				
-  	public function insert() {
+  	public function insert()
+  	{
 		$this->load->language('catalog/attribute');
 	
 		$this->document->setTitle($this->_('heading_title'));
@@ -40,7 +43,8 @@ class ControllerCatalogAttribute extends Controller {
 		$this->getForm();
   	}
 
-  	public function update() {
+  	public function update()
+  	{
 		$this->load->language('catalog/attribute');
 	
 		$this->document->setTitle($this->_('heading_title'));
@@ -70,7 +74,8 @@ class ControllerCatalogAttribute extends Controller {
 		$this->getForm();
   	}
 
-  	public function delete() {
+  	public function delete()
+  	{
 		$this->load->language('catalog/attribute');
 	
 		$this->document->setTitle($this->_('heading_title'));
@@ -102,7 +107,8 @@ class ControllerCatalogAttribute extends Controller {
 		$this->getList();
   	}
 	
-  	private function getList() {
+  	private function getList()
+  	{
 		$this->template->load('catalog/attribute_list');
 
 		if (isset($_GET['sort'])) {
@@ -229,7 +235,8 @@ class ControllerCatalogAttribute extends Controller {
 		$this->response->setOutput($this->render());
   	}
   
-  	private function getForm() {
+  	private function getForm()
+  	{
 		$this->template->load('catalog/attribute_form');
 
  		if (isset($this->error['warning'])) {
@@ -309,7 +316,8 @@ class ControllerCatalogAttribute extends Controller {
 		$this->response->setOutput($this->render());
   	}
   	
-	private function validateForm() {
+	private function validateForm()
+	{
 		if (!$this->user->hasPermission('modify', 'catalog/attribute')) {
 				$this->error['warning'] = $this->_('error_permission');
 		}
@@ -323,7 +331,8 @@ class ControllerCatalogAttribute extends Controller {
 		return $this->error ? false : true;
   	}
 
-  	private function validateDelete() {
+  	private function validateDelete()
+  	{
 		if (!$this->user->hasPermission('modify', 'catalog/attribute')) {
 				$this->error['warning'] = $this->_('error_permission');
 		}
@@ -343,7 +352,8 @@ class ControllerCatalogAttribute extends Controller {
 		}
   	}
 	
-	public function autocomplete() {
+	public function autocomplete()
+	{
 		$json = array();
 		
 		if (isset($_GET['filter_name'])) {

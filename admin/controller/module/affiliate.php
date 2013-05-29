@@ -1,8 +1,10 @@
 <?php
-class ControllerModuleAffiliate extends Controller {
+class ControllerModuleAffiliate extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/affiliate');
 
 		$this->load->language('module/affiliate');
@@ -49,7 +51,8 @@ class ControllerModuleAffiliate extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/affiliate')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

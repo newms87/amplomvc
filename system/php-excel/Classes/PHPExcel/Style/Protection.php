@@ -33,8 +33,7 @@
  * @package	PHPExcel_Style
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Style_Protection implements PHPExcel_IComparable
-{
+class PHPExcel_Style_Protection implements PHPExcel_IComparable{
 	/** Protection styles */
 	const PROTECTION_INHERIT		= 'inherit';
 	const PROTECTION_PROTECTED		= 'protected';
@@ -177,7 +176,8 @@ class PHPExcel_Style_Protection implements PHPExcel_IComparable
 	* @throws	Exception
 	* @return PHPExcel_Style_Protection
 	*/
-	public function applyFromArray($pStyles = null) {
+	public function applyFromArray($pStyles = null)
+	{
 		if (is_array($pStyles)) {
 			if ($this->_isSupervisor) {
 				$this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($this->getStyleArray($pStyles));
@@ -200,7 +200,8 @@ class PHPExcel_Style_Protection implements PHPExcel_IComparable
 	*
 	* @return string
 	*/
-	public function getLocked() {
+	public function getLocked()
+	{
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getLocked();
 		}
@@ -213,7 +214,8 @@ class PHPExcel_Style_Protection implements PHPExcel_IComparable
 	* @param string $pValue
 	* @return PHPExcel_Style_Protection
 	*/
-	public function setLocked($pValue = self::PROTECTION_INHERIT) {
+	public function setLocked($pValue = self::PROTECTION_INHERIT)
+	{
 		if ($this->_isSupervisor) {
 			$styleArray = $this->getStyleArray(array('locked' => $pValue));
 			$this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($styleArray);
@@ -228,7 +230,8 @@ class PHPExcel_Style_Protection implements PHPExcel_IComparable
 	*
 	* @return string
 	*/
-	public function getHidden() {
+	public function getHidden()
+	{
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getHidden();
 		}
@@ -241,7 +244,8 @@ class PHPExcel_Style_Protection implements PHPExcel_IComparable
 	* @param string $pValue
 	* @return PHPExcel_Style_Protection
 	*/
-	public function setHidden($pValue = self::PROTECTION_INHERIT) {
+	public function setHidden($pValue = self::PROTECTION_INHERIT)
+	{
 		if ($this->_isSupervisor) {
 			$styleArray = $this->getStyleArray(array('hidden' => $pValue));
 			$this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($styleArray);
@@ -256,21 +260,23 @@ class PHPExcel_Style_Protection implements PHPExcel_IComparable
 	*
 	* @return string	Hash code
 	*/
-	public function getHashCode() {
+	public function getHashCode()
+	{
 		if ($this->_isSupervisor) {
 			return $this->getSharedComponent()->getHashCode();
 		}
 		return md5(
 			$this->_locked
 			. $this->_hidden
-			. __CLASS__
+			. __class __
 		);
 	}
 
 	/**
 	* Implement PHP __clone to create a deep clone, not just a shallow copy.
 	*/
-	public function __clone() {
+	public function __clone()
+	{
 		$vars = get_object_vars($this);
 		foreach ($vars as $key => $value) {
 			if ((is_object($value)) && ($key != '_parent')) {

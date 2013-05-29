@@ -1,7 +1,9 @@
 <?php
-class ControllerPlugin_MailAdminMail extends Controller {
+class ControllerPlugin_MailAdminMail extends Controller 
+{
 	
-	public function mail_settings(){
+	public function mail_settings()
+	{
 		
 		$this->language->plugin('mail', 'admin/mail');
 
@@ -13,12 +15,13 @@ class ControllerPlugin_MailAdminMail extends Controller {
 			'mail_designer_expiring_emails','mail_designer_expiring_subject','mail_designer_expiring_message',
 		);
 		
-		foreach($configs as $c){
+		foreach ($configs as $c) {
 			$this->data[$c] = isset($_POST[$c])?$_POST[$c]:$this->config->get($c);
 		}
 	}
 	
-	public function settings_validate($return){
+	public function settings_validate($return)
+	{
 		return $this->error?false:$return;
 	}
 }

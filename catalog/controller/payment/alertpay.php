@@ -1,6 +1,8 @@
 <?php
-class ControllerPaymentAlertPay extends Controller {
-	protected function index() {
+class ControllerPaymentAlertPay extends Controller 
+{
+	protected function index()
+	{
 		$this->template->load('payment/alertpay');
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
@@ -19,7 +21,8 @@ class ControllerPaymentAlertPay extends Controller {
 		$this->render();
 	}
 	
-	public function callback() {
+	public function callback()
+	{
 		if (isset($_POST['ap_securitycode']) && ($_POST['ap_securitycode'] == $this->config->get('alertpay_security'))) {
 			$this->model_checkout_order->confirm($_POST['ap_itemcode'], $this->config->get('alertpay_order_status_id'));
 		}

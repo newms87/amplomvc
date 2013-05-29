@@ -1,8 +1,10 @@
 <?php
-class ControllerModuleGoogleTalk extends Controller {
+class ControllerModuleGoogleTalk extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/google_talk');
 
 		$this->load->language('module/google_talk');
@@ -61,7 +63,8 @@ class ControllerModuleGoogleTalk extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/google_talk')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

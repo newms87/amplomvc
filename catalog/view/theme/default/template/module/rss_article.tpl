@@ -4,7 +4,7 @@
 			<ul>
 				<? foreach ($featured_articles as $a) { ?>
 				<li>
-					<a target='_blank' href='<?=$a['url'];?>' class='article_link'><?=$a['title'];?></a>
+					<a target='_blank' href='<?= $a['url']; ?>' class='article_link'><?= $a['title']; ?></a>
 				</li>
 			<? }?>
 			</ul>

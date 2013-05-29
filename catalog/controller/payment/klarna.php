@@ -1,6 +1,8 @@
 <?php
-class ControllerPaymentKlarna extends Controller {
-	protected function index() {
+class ControllerPaymentKlarna extends Controller 
+{
+	protected function index()
+	{
 		$this->language->load('payment/klarna');
 		
 		$this->data['testmode'] = $this->config->get('klarna_test');
@@ -93,7 +95,8 @@ class ControllerPaymentKlarna extends Controller {
 		}
 	}
 	
-	public function callback() {
+	public function callback()
+	{
 		if (isset($_POST['custom'])) {
 			$order_id = $this->encryption->decrypt($_POST['custom']);
 		} else {

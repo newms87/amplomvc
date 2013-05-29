@@ -1,8 +1,10 @@
 <?php
-class ControllerSettingDbRules extends Controller {
+class ControllerSettingDbRules extends Controller 
+{
 	
 
-	public function index() {
+	public function index()
+	{
 		$this->load->language('setting/db_rules');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -10,7 +12,8 @@ class ControllerSettingDbRules extends Controller {
 		$this->getList();
 	}
 			
-  	public function insert() {
+  	public function insert()
+  	{
 		$this->load->language('setting/db_rules');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -26,7 +29,8 @@ class ControllerSettingDbRules extends Controller {
 		$this->getForm();
   	}
 
-  	public function update() {
+  	public function update()
+  	{
 		$this->load->language('setting/db_rules');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -42,7 +46,8 @@ class ControllerSettingDbRules extends Controller {
 		$this->getForm();
   	}
 
-  	public function delete() {
+  	public function delete()
+  	{
 		$this->load->language('setting/db_rules');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -60,7 +65,8 @@ class ControllerSettingDbRules extends Controller {
 		$this->getList();
   	}
 	
-	private function getList() {
+	private function getList()
+	{
 		$this->template->load('setting/db_rules_list');
 
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -93,7 +99,8 @@ class ControllerSettingDbRules extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function getForm() {
+	public function getForm()
+	{
 		$this->template->load('setting/db_rules_form');
 
 		$db_rule_id = isset($_GET['db_rule_id']) ? $_GET['db_rule_id']:null;
@@ -118,12 +125,12 @@ class ControllerSettingDbRules extends Controller {
 			'truncate'	=>''
 		);
 			
-		foreach($defaults as $d=>$value){
+		foreach ($defaults as $d=>$value) {
 			if (isset($_POST[$d])) {
 				$this->data[$d] = $_POST[$d];
 			} elseif (isset($db_rule_info[$d])) {
 				$this->data[$d] = $db_rule_info[$d];
-			} elseif(!$db_rule_id) {
+			} elseif (!$db_rule_id) {
 				$this->data[$d] = $value;
 			}
 		}
@@ -136,7 +143,8 @@ class ControllerSettingDbRules extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validateForm() {
+	private function validateForm()
+	{
 		if (!$this->user->hasPermission('modify', 'setting/db_rules')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
@@ -145,8 +153,8 @@ class ControllerSettingDbRules extends Controller {
 			'table',
 			'column',
 		);
-		foreach($required as $r){
-			if(!$_POST[$r]){
+		foreach ($required as $r) {
+			if (!$_POST[$r]) {
 				$this->error[$r] = $this->_('error_' . $r);
 			}
 		}
@@ -154,7 +162,8 @@ class ControllerSettingDbRules extends Controller {
 		return empty($this->error);
 	}
 
-	private function validateDelete() {
+	private function validateDelete()
+	{
 		if (!$this->user->hasPermission('modify', 'setting/db_rules')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
@@ -162,7 +171,8 @@ class ControllerSettingDbRules extends Controller {
 		return empty($this->error);
 	}
 	
-	private function get_url($filters=null){
+	private function get_url($filters=null)
+	{
 		$url = '';
 		$filters = $filters?$filters:array('sort', 'order', 'page');
 		foreach($filters as $f)

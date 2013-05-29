@@ -1,8 +1,10 @@
 <?php
-class ControllerModuleRecaptcha extends Controller {
+class ControllerModuleRecaptcha extends Controller 
+{
 	
 
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/recaptcha');
 
 		$this->load->language('module/recaptcha');
@@ -63,7 +65,8 @@ class ControllerModuleRecaptcha extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/recaptcha')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

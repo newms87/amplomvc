@@ -1,13 +1,15 @@
 <?php
-class ControllerCommonFooter extends Controller {
-	protected function index() {
+class ControllerCommonFooter extends Controller 
+{
+	protected function index()
+	{
 		$this->template->load('common/footer');
 
 		$this->language->load('common/footer');
 		
 		$this->data['links_footer'] = $this->document->getLinks('footer');
 		
-		if(!$this->data['links_footer']){
+		if (!$this->data['links_footer']) {
 			//All the informational links
 			foreach ($this->model_catalog_information->getInformations() as $result) {
 				$link_info = array(

@@ -1,6 +1,6 @@
 <?= $header; ?><?= $column_left; ?><?= $column_right; ?>
 <div id='content'>
-	<?= $this->builder->display_breadcrumbs();?>
+	<?= $this->builder->display_breadcrumbs(); ?>
 	<?= $content_top; ?>
 	
 	<h1><?= $heading_title; ?></h1>
@@ -10,21 +10,21 @@
 		
 		<div class="product_video">
 				<div class="left">
-				<?= $product_video;?>
+				<?= $product_video; ?>
 				</div>
-				<div class="right"><?= $description;?></div>
+				<div class="right"><?= $description; ?></div>
 		</div>
 		<div class="product_video_helper">
-				<?= $text_video_helper;?>
+				<?= $text_video_helper; ?>
 		</div>
 		
 		<div class="description">
 		<? if (isset($manufacturer) && $manufacturer) { ?>
-				<div class="description_manufacturer"><span><?= $text_more_from_designer; ?></span><a href='<?= $manufacturer_url;?>' class='manufacturer_link'><?= $manufacturer;?></a><span style="margin-left:7px"><?= $text_on_store;?></span></div>
+				<div class="description_manufacturer"><span><?= $text_more_from_designer; ?></span><a href='<?= $manufacturer_url; ?>' class='manufacturer_link'><?= $manufacturer; ?></a><span style="margin-left:7px"><?= $text_on_store; ?></span></div>
 		<? } ?>
 		
 		<? if(isset($block_sharing)) { ?>
-				<?= $block_sharing;?>
+				<?= $block_sharing; ?>
 		<? } ?>
 		</div>
 	</div>
@@ -32,7 +32,7 @@
 	<? if ($tags) { ?>
 	<div class="tags"><b><?= $text_tags; ?></b>
 		<? foreach($tags as $i => $tag) {?>
-		<a href="<?= $tags[$i]['href']; ?>"><?= $tags[$i]['tag']; ?></a> <?= $i == (count($tags) -1) ? '':',';?>
+		<a href="<?= $tags[$i]['href']; ?>"><?= $tags[$i]['tag']; ?></a> <?= $i == (count($tags) -1) ? '':','; ?>
 		<? } ?>
 	</div>
 	<? } ?>

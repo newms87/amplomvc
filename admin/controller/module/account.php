@@ -1,8 +1,10 @@
 <?php
-class ControllerModuleAccount extends Controller {
+class ControllerModuleAccount extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/account');
 
 		$this->load->language('module/account');
@@ -49,7 +51,8 @@ class ControllerModuleAccount extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/account')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

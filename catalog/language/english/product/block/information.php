@@ -1,6 +1,6 @@
 <?php
 $_['text_manufacturer'] = 'See More from ';
-$_['text_model']		= 'Product Code:';
+$_['text_model']		= 'Style Number:';
 $_['text_reward']		= 'Reward Points:';
 $_['text_stock']		= 'Availability:';
 $_['text_more_stock']	= "More than %d available";

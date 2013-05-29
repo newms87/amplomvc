@@ -1,6 +1,8 @@
 <?php
-class ModelSaleVoucherTheme extends Model {
-	public function addVoucherTheme($data) {
+class ModelSaleVoucherTheme extends Model 
+{
+	public function addVoucherTheme($data)
+	{
 		$this->query("INSERT INTO " . DB_PREFIX . "voucher_theme SET image = '" . $this->db->escape(html_entity_decode($data['image'], ENT_QUOTES, 'UTF-8')) . "'");
 		
 		$voucher_theme_id = $this->db->getLastId();
@@ -12,7 +14,8 @@ class ModelSaleVoucherTheme extends Model {
 		$this->cache->delete('voucher_theme');
 	}
 
-	public function editVoucherTheme($voucher_theme_id, $data) {
+	public function editVoucherTheme($voucher_theme_id, $data)
+	{
 		$this->query("UPDATE " . DB_PREFIX . "voucher_theme SET image = '" . $this->db->escape(html_entity_decode($data['image'], ENT_QUOTES, 'UTF-8')) . "' WHERE voucher_theme_id = '" . (int)$voucher_theme_id . "'");
 		
 		$this->query("DELETE FROM " . DB_PREFIX . "voucher_theme_description WHERE voucher_theme_id = '" . (int)$voucher_theme_id . "'");
@@ -24,14 +27,16 @@ class ModelSaleVoucherTheme extends Model {
 		$this->cache->delete('voucher_theme');
 	}
 	
-	public function deleteVoucherTheme($voucher_theme_id) {
+	public function deleteVoucherTheme($voucher_theme_id)
+	{
 		$this->query("DELETE FROM " . DB_PREFIX . "voucher_theme WHERE voucher_theme_id = '" . (int)$voucher_theme_id . "'");
 		$this->query("DELETE FROM " . DB_PREFIX . "voucher_theme_description WHERE voucher_theme_id = '" . (int)$voucher_theme_id . "'");
 	
 		$this->cache->delete('voucher_theme');
 	}
 		
-	public function getVoucherTheme($voucher_theme_id) {
+	public function getVoucherTheme($voucher_theme_id)
+	{
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "voucher_theme vt LEFT JOIN " . DB_PREFIX . "voucher_theme_description vtd ON (vt.voucher_theme_id = vtd.voucher_theme_id) WHERE vt.voucher_theme_id = '" . (int)$voucher_theme_id . "' AND vtd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
 		
 		return $query->row;
@@ -77,7 +82,8 @@ class ModelSaleVoucherTheme extends Model {
 		}
 	}
 	
-	public function getVoucherThemeDescriptions($voucher_theme_id) {
+	public function getVoucherThemeDescriptions($voucher_theme_id)
+	{
 		$voucher_theme_data = array();
 		
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "voucher_theme_description WHERE voucher_theme_id = '" . (int)$voucher_theme_id . "'");
@@ -89,7 +95,8 @@ class ModelSaleVoucherTheme extends Model {
 		return $voucher_theme_data;
 	}
 	
-	public function getTotalVoucherThemes() {
+	public function getTotalVoucherThemes()
+	{
 			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "voucher_theme");
 		
 		return $query->row['total'];

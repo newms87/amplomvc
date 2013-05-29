@@ -1,6 +1,8 @@
 <?php
-class ControllerReportProductPurchased extends Controller {
-	public function index() {
+class ControllerReportProductPurchased extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('report/product_purchased');
 
 		$this->load->language('report/product_purchased');

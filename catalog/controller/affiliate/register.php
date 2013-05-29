@@ -1,8 +1,10 @@
 <?php
-class ControllerAffiliateRegister extends Controller {
+class ControllerAffiliateRegister extends Controller 
+{
 	
 			
-  	public function index() {
+  	public function index()
+  	{
 		$this->template->load('affiliate/register');
 
 		if ($this->affiliate->isLogged()) {
@@ -276,7 +278,8 @@ class ControllerAffiliateRegister extends Controller {
 		$this->response->setOutput($this->render());
   	}
 
-  	private function validate() {
+  	private function validate()
+  	{
 		if ((strlen($_POST['firstname']) < 1) || (strlen($_POST['firstname']) > 32)) {
 				$this->error['firstname'] = $this->_('error_firstname');
 		}

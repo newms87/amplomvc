@@ -1,8 +1,10 @@
 <?php
-class ControllerShippingPickup extends Controller {
+class ControllerShippingPickup extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('shipping/pickup');
 
 		$this->load->language('shipping/pickup');
@@ -59,7 +61,8 @@ class ControllerShippingPickup extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'shipping/pickup')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

@@ -1,3 +1,3 @@
 >>>>>
-<?= $text_janrain_login . ' ' . $module_janrain;?>
+<?= $text_janrain_login . ' ' . $module_janrain; ?>
 -----

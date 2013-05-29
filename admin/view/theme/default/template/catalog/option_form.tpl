@@ -1,7 +1,7 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
-	<?= $this->builder->display_errors($errors);?>
+	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'information.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -30,7 +30,7 @@
 					</tr>
 					<tr>
 						<td><?= $entry_type; ?></td>
-						<td><?=$this->builder->build('select', $data_option_types, "type", $type);?></td>
+						<td><?= $this->builder->build('select', $data_option_types, "type", $type); ?></td>
 					</tr>
 					<tr>
 						<td><?= $entry_sort_order; ?></td>
@@ -118,7 +118,7 @@ function addOptionValue() {
 }
 //--></script>
 
-<?=$this->builder->js('errors',$errors);?>
+<?= $this->builder->js('errors',$errors); ?>
 
 <script type="text/javascript">//<!--
 var option_value_row = <?= $option_value_row; ?>;

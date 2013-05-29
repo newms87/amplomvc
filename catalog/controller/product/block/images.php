@@ -1,7 +1,9 @@
 <?php
-class ControllerProductBlockImages extends Controller {
+class ControllerProductBlockImages extends Controller 
+{
 	
-	public function index($settings, $product_info) {
+	public function index($settings, $product_info)
+	{
 		$this->language->load('product/block/images');
 		
 		$this->template->load('product/block/images');

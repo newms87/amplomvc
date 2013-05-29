@@ -1,6 +1,8 @@
 <?php
-class ControllerProductManufacturer extends Controller {
-	public function index() {
+class ControllerProductManufacturer extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('product/manufacturer_list');
 
 		$this->language->load('product/manufacturer');
@@ -45,7 +47,8 @@ class ControllerProductManufacturer extends Controller {
 		$this->response->setOutput($this->render());
   	}
 	
-	public function product() {
+	public function product()
+	{
 		$this->language->load('product/manufacturer');
 		
 		if (isset($_GET['manufacturer_id'])) {
@@ -118,13 +121,13 @@ class ControllerProductManufacturer extends Controller {
 				}
 				
 				if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-					$price = $this->currency->format($this->tax->calculate($result['price'], $result['tax_class_id']));
+					$price = $this->currency->format($this->tax->calculate($result['price'], $result['tax_class _id']));
 				} else {
 					$price = false;
 				}
 				
 				if ((float)$result['special']) {
-					$special = $this->currency->format($this->tax->calculate($result['special'], $result['tax_class_id']));
+					$special = $this->currency->format($this->tax->calculate($result['special'], $result['tax_class _id']));
 				} else {
 					$special = false;
 				}
@@ -145,7 +148,7 @@ class ControllerProductManufacturer extends Controller {
 				$result['description'] = substr(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8')), 0, 100) . '..';
 				$result['price'] = $price;
 				$result['special'] = $special;
-				if(!isset($result['flashsale_id'])){
+				if (!isset($result['flashsale_id'])) {
 					$result['flashsale_id'] = 0;
 				}
 				$result['tax'] = $tax;

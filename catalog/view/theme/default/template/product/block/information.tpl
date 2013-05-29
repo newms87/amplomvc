@@ -1,10 +1,10 @@
 <div class="right">
 	<div class="description">
 		<? if ($manufacturer) { ?>
-		<div class="description_manufacturer"><span><?= $text_manufacturer; ?></span><a href='<?= $manufacturer_url;?>' class='manufacturer_link'><?= $manufacturer;?></a></div>
+		<div class="description_manufacturer"><span><?= $text_manufacturer; ?></span><a href='<?= $manufacturer_url; ?>' class='manufacturer_link'><?= $manufacturer; ?></a></div>
 		<? } ?>
 		<? if($display_model) {?>
-		<div class="description_model"><span><?= $text_model; ?></span><span><?= $model;?></span></div>
+		<div class="description_model"><span><?= $text_model; ?></span><span><?= $model; ?></span></div>
 		<? } ?>
 		
 		<? if ($price && $is_active) { ?>
@@ -16,10 +16,10 @@
 		<span class="special"><?= $special; ?></span><span class="retail"><?= $price; ?> retail</span>
 		<? } ?>
 		<? if($is_final){?>
-				<div class='extra_info_block'><span class='final_sale'></span><span class='help_icon'>?<span class='help_icon_popup'><?=$final_sale_explanation;?></span></span></div>
+				<div class='extra_info_block'><span class='final_sale'></span><span class='help_icon'>?<span class='help_icon_popup'><?= $final_sale_explanation; ?></span></span></div>
 		<? }?>
 		<? if(!$is_default_shipping){?>
-				<div class='extra_info_block'><span class='not_default_shipping'></span><span class='help_icon'>?<span class='help_icon_popup'><?=$shipping_return_popup;?></span></span></div>
+			<div class='extra_info_block'><span class='not_default_shipping'></span><span class='help_icon'>?<span class='help_icon_popup'><?= $shipping_return_popup; ?></span></span></div>
 		<? }?>
 		<br style='clear:both' />
 		<? if ($tax) { ?>
@@ -46,14 +46,14 @@
 		<div class="description_stock"><span><?= $text_stock; ?></span><span><?= $stock; ?></span></div>
 		<? } ?>
 		<? if($blurb) { ?>
-		<div class="product_blurb"><?=$blurb;?></div>
+		<div class="product_blurb"><?= $blurb; ?></div>
 		<? } ?>
 	</div>
 	
 	<? if($is_active){?>
 	<div class="cart">
 		<? if(isset($block_product_options)) {?>
-			<?= $block_product_options;?>
+			<?= $block_product_options; ?>
 		<? }?>
 	<div style="clear:both"></div>
 		<div id='product_submit_box'>
@@ -67,14 +67,14 @@
 						<input type="button" value="<?= $button_buy_now; ?>" id="button-buy-now" class="button" />
 						<input type="button" value="<?= $button_cart; ?>" id="button-cart" class="button" />
 					</span>
-					<span id='processing_product' style='display:none'><?= $text_processing;?></span>
+					<span id='processing_product' style='display:none'><?= $text_processing; ?></span>
 			</div>
 		</div>
 		<div id='or_text'><?= $text_or; ?></div>
 			<div id='cart_additional_buttons' >
 				<!-- <a onclick="addToWishList('<?= $product_id; ?>');"><?= $button_wishlist; ?></a> -->
-				<a href='<?=$checkout_link;?>'><?=$button_checkout;?></a>
-				<a href='<?=$continue_shopping_link;?>'><?=$button_shopping;?></a>
+				<a href='<?= $checkout_link; ?>'><?= $button_checkout; ?></a>
+				<a href='<?= $continue_shopping_link; ?>'><?= $button_shopping; ?></a>
 			</div>
 		<? if ($minimum > 1) { ?>
 		<div class="minimum"><?= $text_minimum; ?></div>
@@ -84,18 +84,18 @@
 	<? if ($review_status) { ?>
 	<div class="review">
 		<div>
-				<img src="<?= HTTP_THEME_IMAGE . "stars-$rating.png"; ?>" alt="<?= $reviews;?>" />
-				<a onclick="$('a[href=\'#tab-review\']').trigger('click');"><?= $reviews;?></a>
-				<a onclick="$('a[href=\'#tab-review\']').trigger('click');"><?= $text_write;?></a>
+				<img src="<?= HTTP_THEME_IMAGE . "stars-$rating.png"; ?>" alt="<?= $reviews; ?>" />
+				<a onclick="$('a[href=\'#tab-review\']').trigger('click');"><?= $reviews; ?></a>
+				<a onclick="$('a[href=\'#tab-review\']').trigger('click');"><?= $text_write; ?></a>
 		</div>
 	</div>
 	<? } ?>
 	
-	<?= $block_sharing;?>
+	<?= $block_sharing; ?>
 	
 	<? if(!$is_active){?>
-			<div id='product_inactive'><?=$text_inactive;?></div>
-			<?=$block_product_suggestions;?>
+			<div id='product_inactive'><?= $text_inactive; ?></div>
+			<?= $block_product_suggestions; ?>
 	<? }?>
 </div>
 
@@ -139,7 +139,7 @@ $('#button-cart, #button-buy-now').bind('click', function() {
 			selected_options[$(opt_e).attr('option_id')] = options;
 	});
 	
-	data = {selected: selected_options, product_id: <?= $product_id;?>, quantity: $('#quantity').val()};
+	data = {selected: selected_options, product_id: <?= $product_id; ?>, quantity: $('#quantity').val()};
 	
 	$.ajax({
 			url: "<?= HTTP_CATALOG . "index.php?route=cart/cart/add"; ?>",
@@ -165,7 +165,7 @@ $('#button-cart, #button-buy-now').bind('click', function() {
 				if (json['success']) {
 						if(buynow){
 							buynow = 'redirect';
-							window.location = '<?=$checkout_link;?>';
+							window.location = '<?= $checkout_link; ?>';
 						}
 						else{
 							show_msg('success', json['success']);
@@ -179,7 +179,7 @@ $('#button-cart, #button-buy-now').bind('click', function() {
 				}
 				
 				if(status != 'success'){
-						show_msg('warning', '<?= $error_add_to_cart;?>');
+						show_msg('warning', '<?= $error_add_to_cart; ?>');
 				}
 			}
 	});

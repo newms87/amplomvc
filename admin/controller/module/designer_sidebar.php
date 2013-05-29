@@ -1,7 +1,9 @@
 <?php
-class ControllerModuleDesignerSidebar extends Controller {
+class ControllerModuleDesignerSidebar extends Controller 
+{
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/designer_sidebar');
 
 		$this->load->language('module/designer_sidebar');
@@ -46,7 +48,8 @@ class ControllerModuleDesignerSidebar extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/designer_sidebar')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

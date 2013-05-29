@@ -25,7 +25,7 @@
  * @version	1.7.7, 2012-05-19
  */
 
-// Original file header of ParseXL (used as the base for this class):
+// Original file header of ParseXL (used as the base for this class ):
 // --------------------------------------------------------------------------------
 // Adapted from Excel_Spreadsheet_Reader developed by users bizon153,
 // trex005, and mmp11 (SourceForge.net)
@@ -58,7 +58,8 @@
 
 
 /** PHPExcel root directory */
-if (!defined('PHPEXCEL_ROOT')) {
+if (!defined('PHPEXCEL_ROOT')) 
+{
 	/**
 	* @ignore
 	*/
@@ -69,14 +70,14 @@ if (!defined('PHPEXCEL_ROOT')) {
 /**
  * PHPExcel_Reader_Excel5
  *
- * This class uses {@link http://sourceforge.net/projects/phpexcelreader/parseXL}
+ * This class uses 
+{@link http://sourceforge.net/projects/phpexcelreader/parseXL}
  *
  * @category	PHPExcel
  * @package		PHPExcel_Reader_Excel5
  * @copyright	Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
-{
+class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader{
 	// ParseXL definitions
 	const XLS_BIFF8						= 0x0600;
 	const XLS_BIFF7						= 0x0500;
@@ -406,7 +407,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 	/**
 	* Create a new PHPExcel_Reader_Excel5 instance
 	*/
-	public function __construct() {
+	public function __construct()
+	{
 		$this->_readFilter = new PHPExcel_Reader_DefaultReadFilter();
 	}
 
@@ -488,7 +490,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 	*
 	* @return PHPExcel_Reader_IReadFilter
 	*/
-	public function getReadFilter() {
+	public function getReadFilter()
+	{
 		return $this->_readFilter;
 	}
 
@@ -499,7 +502,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 	* @param PHPExcel_Reader_IReadFilter $pValue
 	* @return PHPExcel_Reader_Excel5
 	*/
-	public function setReadFilter(PHPExcel_Reader_IReadFilter $pValue) {
+	public function setReadFilter(PHPExcel_Reader_IReadFilter $pValue)
+	{
 		$this->_readFilter = $pValue;
 		return $this;
 	}
@@ -1054,7 +1058,7 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 			}
 
 			if (!empty($this->_cellNotes)) {
-				foreach($this->_cellNotes as $note => $noteDetails) {
+				foreach ($this->_cellNotes as $note => $noteDetails) {
 //					echo '<b>Cell annotation ',$note,'</b><br />';
 //					var_dump($noteDetails);
 //					echo '<br />';
@@ -1228,7 +1232,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 		// offset: ($secOffset+8); size: var
 		// loop through property decarations and properties
-		for ($i = 0; $i < $countProperties; ++$i) {
+		for ($i = 0; $i < $countProperties; ++$i) 
+{
 
 			// offset: ($secOffset+8) + (8 * $i); size: 4; property ID
 			$id = self::_GetInt4d($this->_summaryInformation, ($secOffset+8) + (8 * $i));
@@ -1392,7 +1397,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 		//	offset: ($secOffset+8);	size: var
 		//	loop through property decarations and properties
-		for ($i = 0; $i < $countProperties; ++$i) {
+		for ($i = 0; $i < $countProperties; ++$i) 
+{
 //			echo 'Property ',$i,'<br />';
 			//	offset: ($secOffset+8) + (8 * $i);	size: 4;	property ID
 			$id = self::_GetInt4d($this->_documentSummaryInformation, ($secOffset+8) + (8 * $i));
@@ -2593,7 +2599,7 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 	* This record is part of a Link Table. It contains the name
 	* and the token array of an internal defined name. Token
 	* arrays of defined names contain tokens with aberrant
-	* token classes.
+	* token class es.
 	*
 	* --	"OpenOffice.org's Documentation of the Microsoft
 	* 		Excel File Format"
@@ -6215,7 +6221,7 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 	* @return array
 	*/
 	private static function _readBIFF8ConstantArray($arrayData)
-	{
+ {
 		// offset: 0; size: 1; number of columns decreased by 1
 		$nc = ord($arrayData[0]);
 
@@ -6254,7 +6260,7 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 	* @return array
 	*/
 	private static function _readBIFF8Constant($valueData)
-	{
+ {
 		// offset: 0; size: 1; identifier for type of constant
 		$identifier = ord($valueData[0]);
 
@@ -6304,7 +6310,7 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 	* @return array
 	*/
 	private static function _readRGB($rgb)
-	{
+ {
 		// offset: 0; size 1; Red component
 		$r = ord($rgb{0});
 
@@ -6375,7 +6381,7 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 	* @return array
 	*/
 	private static function _readUnicodeStringShort($subData)
-	{
+ {
 		$value = '';
 
 		// offset: 0: size: 1; length of the string (character count)
@@ -6399,7 +6405,7 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 	* @return array
 	*/
 	private static function _readUnicodeStringLong($subData)
-	{
+ {
 		$value = '';
 
 		// offset: 0: size: 2; length of the string (character count)
@@ -6424,7 +6430,7 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 	* @return array
 	*/
 	private static function _readUnicodeString($subData, $characterCount)
-	{
+ {
 		$value = '';
 
 		// offset: 0: size: 1; option flags
@@ -6458,7 +6464,7 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 	* @return string
 	*/
 	private static function _UTF8toExcelDoubleQuoted($value)
-	{
+ {
 		return '"' . str_replace('"', '""', $value) . '"';
 	}
 
@@ -6470,7 +6476,7 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 	* @return float
 	*/
 	private static function _extractNumber($data)
-	{
+ {
 		$rknumhigh = self::_GetInt4d($data, 4);
 		$rknumlow = self::_GetInt4d($data, 0);
 		$sign = ($rknumhigh & 0x80000000) >> 31;
@@ -6494,7 +6500,7 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 
 
 	private static function _GetIEEE754($rknum)
-	{
+ {
 		if (($rknum & 0x02) != 0) {
 			$value = $rknum >> 2;
 		} else {
@@ -6527,7 +6533,7 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 	* @return string
 	*/
 	private static function _encodeUTF16($string, $compressed = '')
-	{
+ {
 		if ($compressed) {
 			$string = self::_uncompressByteString($string);
  		}
@@ -6543,7 +6549,7 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 	* @return string
 	*/
 	private static function _uncompressByteString($string)
-	{
+ {
 		$uncompressedString = '';
 		$strLen = strlen($string);
 		for ($i = 0; $i < $strLen; ++$i) {
@@ -6574,7 +6580,7 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 	* @return int
 	*/
 	public static function _GetInt2d($data, $pos)
-	{
+ {
 		return ord($data[$pos]) | (ord($data[$pos+1]) << 8);
 	}
 
@@ -6587,7 +6593,7 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 	* @return int
 	*/
 	public static function _GetInt4d($data, $pos)
-	{
+ {
 		// FIX: represent numbers correctly on 64-bit system
 		// http://sourceforge.net/tracker/index.php?func=detail&aid=1487372&group_id=99160&atid=623334
 		// Hacked by Andreas Rehm 2006 to ensure correct result of the <<24 block on 32 and 64bit systems
@@ -6610,7 +6616,7 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 	* @return array RGB color value, example: array('rgb' => 'FF0000')
 	*/
 	private static function _readColor($color,$palette,$version)
-	{
+ {
 		if ($color <= 0x07 || $color >= 0x40) {
 			// special built-in color
 			return self::_mapBuiltInColor($color);
@@ -6639,7 +6645,7 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 	* @return string
 	*/
 	private static function _mapBorderStyle($index)
-	{
+ {
 		switch ($index) {
 			case 0x00: return PHPExcel_Style_Border::BORDER_NONE;
 			case 0x01: return PHPExcel_Style_Border::BORDER_THIN;
@@ -6668,7 +6674,7 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 	* @return string
 	*/
 	private static function _mapFillPattern($index)
-	{
+ {
 		switch ($index) {
 			case 0x00: return PHPExcel_Style_Fill::FILL_NONE;
 			case 0x01: return PHPExcel_Style_Fill::FILL_SOLID;
@@ -6701,7 +6707,7 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 	* @return string
 	*/
 	private static function _mapErrorCode($subData)
-	{
+ {
 		switch ($subData) {
 			case 0x00: return '#NULL!';		break;
 			case 0x07: return '#DIV/0!';	break;
@@ -6722,7 +6728,7 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 	* @return array
 	*/
 	private static function _mapBuiltInColor($color)
-	{
+ {
 		switch ($color) {
 			case 0x00: return array('rgb' => '000000');
 			case 0x01: return array('rgb' => 'FFFFFF');
@@ -6746,7 +6752,7 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 	* @return array
 	*/
 	private static function _mapColorBIFF5($subData)
-	{
+ {
 		switch ($subData) {
 			case 0x08: return array('rgb' => '000000');
 			case 0x09: return array('rgb' => 'FFFFFF');
@@ -6816,7 +6822,7 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 	* @return array
 	*/
 	private static function _mapColor($subData)
-	{
+ {
 		switch ($subData) {
 			case 0x08: return array('rgb' => '000000');
 			case 0x09: return array('rgb' => 'FFFFFF');
@@ -6879,7 +6885,8 @@ class PHPExcel_Reader_Excel5 implements PHPExcel_Reader_IReader
 	}
 
 
-	private function _parseRichText($is = '') {
+	private function _parseRichText($is = '')
+	{
 		$value = new PHPExcel_RichText();
 
 		$value->createText($is);

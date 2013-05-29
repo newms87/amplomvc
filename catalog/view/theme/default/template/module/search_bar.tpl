@@ -47,7 +47,7 @@
 			if(typeof sr.data('width') == 'undefined' || sr.data('width') === null)
 				sr.data('width',sr.width());
 			if(show){
-				$.post('<?= $results_url;?>',args.form.serialize(),function(data){$('#search_results').html(data);});
+				$.post('<?= $results_url; ?>',args.form.serialize(),function(data){$('#search_results').html(data);});
 			sr.css({width:0}).show().animate({width:sr.data('width')}, {duration: 500, complete: function(){sr.data('showing',true);$(this).children('#search_content').fadeIn(500);}});
 				var close = $("<div id='search_close' style='width: 2000px; height:2000px; background: rgba(0,0,0,.2);z-index:5000;position:absolute;top:0;left:0;'></div>");
 				close.click(toggleShowSearch);

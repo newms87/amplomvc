@@ -1,7 +1,9 @@
 <?php
-class ControllerDesignNavigation extends Controller {
+class ControllerDesignNavigation extends Controller 
+{
 	
-	public function index() {
+	public function index()
+	{
 		$this->load->language('design/navigation');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -9,7 +11,8 @@ class ControllerDesignNavigation extends Controller {
 		$this->getList();
 	}
 
-	public function insert() {
+	public function insert()
+	{
 		$this->load->language('design/navigation');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -21,12 +24,13 @@ class ControllerDesignNavigation extends Controller {
 			
 			$this->url->redirect($this->url->link('design/navigation'));
 		}
-		else{
+		else {
 			$this->getForm();
 		}
 	}
 
-	public function update() {
+	public function update()
+	{
 		$this->load->language('design/navigation');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -38,12 +42,13 @@ class ControllerDesignNavigation extends Controller {
 			
 			$this->url->redirect($this->url->link('design/navigation'));
 		}
-		else{
+		else {
 			$this->getForm();
 		}
 	}
  
-	public function delete() {
+	public function delete()
+	{
 		$this->load->language('design/navigation');
  
 		$this->document->setTitle($this->_('heading_title'));
@@ -61,7 +66,8 @@ class ControllerDesignNavigation extends Controller {
 		$this->getList();
 	}
 	
-	public function reset_admin_navigation(){
+	public function reset_admin_navigation()
+	{
 		$this->model_design_navigation->reset_admin_navigation_group();
 		
 		$this->message->add("notify", "Admin Navigation Group has been reset!");
@@ -69,7 +75,8 @@ class ControllerDesignNavigation extends Controller {
 		$this->url->redirect($this->url->link("design/navigation"));
 	}
 	
-	public function batch_update() {
+	public function batch_update()
+	{
 		$this->load->language('design/navigation');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -91,8 +98,8 @@ class ControllerDesignNavigation extends Controller {
 					break;
 			}
 			
-			if(!$this->error){
-				if(!$this->message->error_set()){
+			if (!$this->error) {
+				if (!$this->message->error_set()) {
 					$this->message->add('success',$this->_('text_success'));
 					
 					$this->url->redirect($this->url->link('design/navigation'));
@@ -103,7 +110,8 @@ class ControllerDesignNavigation extends Controller {
 		$this->getList();
 	}
 
-	private function getList() {
+	private function getList()
+	{
 		$this->template->load('design/navigation_list');
 
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -150,7 +158,7 @@ class ControllerDesignNavigation extends Controller {
 			'page' => 1,
 		);
 		
-		foreach($sort_defaults as $key => $default){
+		foreach ($sort_defaults as $key => $default) {
 			$data[$key] = $$key = isset($_GET[$key]) ? $_GET[$key] : $default;
 		}
 		
@@ -159,7 +167,7 @@ class ControllerDesignNavigation extends Controller {
 		//Filter
 		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
 		
-		if($filter_values){
+		if ($filter_values) {
 			$data += $filter_values;
 		}
 		
@@ -175,11 +183,11 @@ class ControllerDesignNavigation extends Controller {
 				'href' => $this->url->link('design/navigation/update', 'navigation_group_id=' . $nav_group['navigation_group_id']),
 			);
 			
-			if($nav_group['name'] == 'admin'){
+			if ($nav_group['name'] == 'admin') {
 				$action[] = array(
 					'text' => $this->_('button_admin_nav_reset'),
 					'href' => $this->url->link('design/navigation/reset_admin_navigation'),
-					'#class' => 'reset',
+					'#class ' => 'reset',
 				);
 			}
 			
@@ -244,7 +252,8 @@ class ControllerDesignNavigation extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function getForm() {
+	private function getForm()
+	{
 		$this->language->load('design/navigation');
 		
 		$this->template->load('design/navigation_form');
@@ -274,12 +283,12 @@ class ControllerDesignNavigation extends Controller {
 			'status' => 1,
 		);
 
-		foreach($defaults as $key => $default){
+		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
 				$this->data[$key] = $_POST[$key];
 			} elseif (isset($navigation_group_info[$key])) {
 				$this->data[$key] = $navigation_group_info[$key];
-			} elseif(!$navigation_group_id) {
+			} elseif (!$navigation_group_id) {
 				$this->data[$key] = $default;
 			}
 		}
@@ -296,35 +305,36 @@ class ControllerDesignNavigation extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validateForm() {
+	private function validateForm()
+	{
 		if (!$this->user->hasPermission('modify', 'design/navigation')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
 		$navigation_group_id = isset($_GET['navigation_group_id']) ? (int)$_GET['navigation_group_id'] : 0;
 		
-		if(!isset($_POST['stores'])){
+		if (!isset($_POST['stores'])) {
 			$_POST['stores'] = array('');
 		}
 		
-		if(!$this->validation->text($_POST['name'], 3, 64)){
+		if (!$this->validation->text($_POST['name'], 3, 64)) {
 			$this->error['name'] = $this->_('error_name');
 		}
 		
 		//unset the fake link
 		unset($_POST['links']['%link_num%']);
 		
-		foreach($_POST['links'] as $key => $link){
-			if(!$this->validation->text($link['display_name'], 1, 255)){
+		foreach ($_POST['links'] as $key => $link) {
+			if (!$this->validation->text($link['display_name'], 1, 255)) {
 				$link_name = !empty($link['name']) ? $link['name'] : ( !empty($link['display_name']) ? $link['display_name'] : $key );
 				$this->error["links[$key][display_name]"] = $this->language->format('error_display_name', $link_name);
 			}
 		
 			//If name already exists in database, append _n to the name
-			if(empty($link['name'])){
+			if (empty($link['name'])) {
 				$name = $this->tool->get_slug($link['display_name']);
 			}
-			else{
+			else {
 				$name = $this->db->escape($this->tool->get_slug($link['name']));
 			}
 			
@@ -343,7 +353,8 @@ class ControllerDesignNavigation extends Controller {
 		return $this->error ? false : true;
 	}
 
-	private function validateDelete() {
+	private function validateDelete()
+	{
 		if (!$this->user->hasPermission('modify', 'design/navigation')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

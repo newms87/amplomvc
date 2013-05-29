@@ -1,6 +1,8 @@
 <?php
-class ControllerFeedGoogleBase extends Controller {
-	public function index() {
+class ControllerFeedGoogleBase extends Controller 
+{
+	public function index()
+	{
 		if ($this->config->get('google_base_status')) {
 			$output  = '<?xml version="1.0" encoding="UTF-8" ?>';
 			$output .= '<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">';
@@ -38,14 +40,15 @@ class ControllerFeedGoogleBase extends Controller {
 						}
 									
 					if ((float)$product['special']) {
-								$output .= '<g:price>' .  $this->currency->format($this->tax->calculate($product['special'], $product['tax_class_id']), $currency, false, false) . '</g:price>';
+								$output .= '<g:price>' .  $this->currency->format($this->tax->calculate($product['special'], $product['tax_class _id']), $currency, false, false) . '</g:price>';
 						} else {
-								$output .= '<g:price>' . $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id']), $currency, false, false) . '</g:price>';
+								$output .= '<g:price>' . $this->currency->format($this->tax->calculate($product['price'], $product['tax_class _id']), $currency, false, false) . '</g:price>';
 						}
 				
 					$categories = $this->model_catalog_product->getCategories($product['product_id']);
 					
-					foreach ($categories as $category) {
+					foreach ($categories as $category) 
+{
 						$path = $this->getPath($category['category_id']);
 						
 						if ($path) {
@@ -69,7 +72,7 @@ class ControllerFeedGoogleBase extends Controller {
 					
 					$output .= '<g:quantity>' . $product['quantity'] . '</g:quantity>';
 					$output .= '<g:upc>' . $product['upc'] . '</g:upc>';
-					$output .= '<g:weight>' . $this->weight->format($product['weight'], $product['weight_class_id']) . '</g:weight>';
+					$output .= '<g:weight>' . $this->weight->format($product['weight'], $product['weight_class _id']) . '</g:weight>';
 					$output .= '<g:availability>' . ($product['quantity'] ? 'in stock' : 'out of stock') . '</g:availability>';
 					$output .= '</item>';
 				}
@@ -83,7 +86,8 @@ class ControllerFeedGoogleBase extends Controller {
 		}
 	}
 	
-	protected function getPath($parent_id, $current_path = '') {
+	protected function getPath($parent_id, $current_path = '')
+	{
 		$category_info = $this->model_catalog_category->getCategory($parent_id);
 	
 		if ($category_info) {

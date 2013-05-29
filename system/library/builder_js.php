@@ -12,7 +12,7 @@ switch($js){
  * @param $parent_selector - The jQuery selector for the common parent element of both zone/country selectors
  */
 	case 'load_zones':
-		if(count($args) < 3 || count($args) > 4){
+		if (count($args) < 3 || count($args) > 4) {
 			trigger_error("Template JS: load_zones: accepts 3 or 4 arguments! Usage: \$this->builder->js('load_zones', \$parent_selector,\$country_selector,\$zone_selector[,\$allow_all]);");
 			return '';
 		}
@@ -25,10 +25,11 @@ switch($js){
 <script type="text/javascript">//<!--
 country_selectors = $('<?= $parent_selector;?>').find('<?= $country_selector;?>');
 
-country_selectors.live('change', function(event){
+country_selectors.live('change', function (event)
+ {
   cs = $(this);
   
-  if(!$(this).is('select')){
+  if (!$(this).is('select')) {
 	cs = cs.find('<?= $country_selector;?>');
   }
 
@@ -43,15 +44,17 @@ country_selectors.live('change', function(event){
   zone_selector.attr('zone_id', zone_selector.val() ||  zone_selector.attr('zone_id') || zone_selector.attr('select_value') || 0);
 	
   zone_selector.load('index.php?route=tool/data/load_zones&country_id=' + cs.val() + '<?=$allow_all;?>',
-	function(){
+	function ()
+	{
 		zs = $(this).closest('<?= $parent_selector;?>').find('<?= $zone_selector;?>');
 		zs.val(zs.attr('zone_id') || 0).trigger('change');
 	});
 });
 
-country_selectors.each(function(i,e){
+country_selectors.each(function (i,e)
+{
 	zs = $(e).closest('<?= $parent_selector;?>').find('<?=$zone_selector;?>');
-	if(zs.children().length < 1 || !zs.val()){
+	if (zs.children().length < 1 || !zs.val()) {
 		$(e).trigger('change', $(e));
 	}
 });
@@ -66,7 +69,7 @@ country_selectors.each(function(i,e){
  */
 
 	case 'image_manager': ?>
-<? if(!isset($js_loaded_files['image_manager'])) { ?>
+<? if (!isset($js_loaded_files['image_manager'])) { ?>
 <script type="text/javascript">//<!--
 var image_manager_url = "<?= HTTP_ROOT . "index.php?route=common/filemanager"; ?>";
 var no_image = "<?= HTTP_THEME_IMAGE . "no_image.png"; ?>"
@@ -85,7 +88,7 @@ var no_image = "<?= HTTP_THEME_IMAGE . "no_image.png"; ?>"
  * @param $filters - The list of filters to activate
  */
 	case 'filter_url':
-		if(count($args) < 2 || count($args) > 3){
+		if (count($args) < 2 || count($args) > 3) {
 			trigger_error("Template JS: filter_url: excepts exactly 1 argument! Usage: \$this->builder->js('filter_url', selector, route, query='');");
 			return '';
 		}
@@ -97,12 +100,13 @@ var no_image = "<?= HTTP_THEME_IMAGE . "no_image.png"; ?>"
 		$sort_query = $this->url->get_query("sort","order","page");
 	?>
 <script type="text/javascript">//<!--
-function filter() {
+function filter()
+{
 	url = '<?= HTTP_ROOT; ?>index.php?route=<?= $url . '&' . $sort_query . ($query ? '&'.$query : '');?>';
 	
 	filter_list = $('<?= $selector;?> [name]').not('[value=""]');
 	
-	if(filter_list.length){
+	if (filter_list.length) {
 		url += '&' + filter_list.serialize();
 	}
 	
@@ -113,7 +117,7 @@ function filter() {
 
 
 	case 'datepicker': ?>
-<? if(!isset($js_loaded_files['datepicker'])) {?>
+<? if (!isset($js_loaded_files['datepicker'])) {?>
 <script type="text/javascript" src="<?= HTTP_JS . 'jquery/ui/jquery-ui-timepicker-addon.js'; ?>"></script>
 <script type="text/javascript">//<!--
 $('.date').datepicker({dateFormat: 'yy-mm-dd'});
@@ -139,7 +143,7 @@ for(var e in errors){
 		context = $('#'+e);
 	if(!context.length)
 		context = $(e);
-	context.after("<span class='error'>"+errors[e]+"</span");
+	context.after("<span class ='error'>"+errors[e]+"</span");
 }
 //--></script>
 
@@ -147,7 +151,8 @@ for(var e in errors){
 
 
 	case 'autocomplete':
-		if(!$args || count($args) < 3){
+		if(!$args || count($args) < 3)
+{
 			trigger_error("Template JS: autocomplete: invalid arguments! Usage: \$this->builder->js('autocomplete', array(\$selector,\$label,\$value,\$callback));");
 			return '';
 		}
@@ -159,10 +164,12 @@ for(var e in errors){
 		$sort_query = $this->url->get_query("sort","limit");
 	?>
 <script type="text/javascript">//<!--
-$('<?=$selector;?>').each(function(i,e){
+$('<?=$selector;?>').each(function (i,e)
+{
 	$(e).autocomplete({
 		delay: 0,
-		source: function(request, response) {
+		source: function (request, response)
+ {
 			filter = {};
 			filter[$('<?= $selector; ?>').attr('filter')] = request.term;
 			
@@ -170,8 +177,10 @@ $('<?=$selector;?>').each(function(i,e){
 				url: '<?= HTTP_ROOT; ?>index.php?route=' + $(e).attr('route') + '&<?= $sort_query; ?>',
 				dataType: 'json',
 				data: {filter: filter},
-				success: function(json) {
-					response($.map(json, function(item) {
+				success: function (json)
+ {
+					response($.map(json, function (item)
+ {
 						item['label'] = item.<?= $label;?>;
 						item['value'] = item.<?= $value;?>;
 						
@@ -180,7 +189,8 @@ $('<?=$selector;?>').each(function(i,e){
 				}
 			});
 		},
-		select: function(event, ui) {
+		select: function (event, ui)
+ {
 			<?= $callback;?>($(e), ui.item);
 			
 			return false;
@@ -192,14 +202,16 @@ $('<?=$selector;?>').each(function(i,e){
 
 
 	case 'ckeditor': ?>
-<? if(!isset($js_loaded_files['ckeditor'])) { ?>
+<? if (!isset($js_loaded_files['ckeditor'])) { ?>
 <script type="text/javascript" src="<?= HTTP_JS .'ckeditor/ckeditor.js'; ?>"></script>
 <script type="text/javascript">//<!--
 var ckedit_index = 0;
 
-function init_ckeditor_for(context){
-	context.each(function(i,e){
-		if(!$(e).attr('id')){
+function init_ckeditor_for(context)
+{
+	context.each(function (i,e)
+{
+		if (!$(e).attr('id')) {
 			$(e).attr('id', 'ckedit_' + ckedit_index++);
 		}
 		
@@ -216,8 +228,10 @@ function init_ckeditor_for(context){
 
 init_ckeditor_for($('.ckedit').not('.template'));
 
-function remove_ckeditor_for(context){
-	context.each(function(i,e){
+function remove_ckeditor_for(context)
+{
+	context.each(function (i,e)
+{
 		CKEDITOR.instances[$(e).attr('id')].destroy();
 	});
 }
@@ -233,19 +247,21 @@ function remove_ckeditor_for(context){
 		$translations = json_encode($args[0]); ?>
 		
 <div id="language_menu_template">
-	<div class="language_menu">
-	<? foreach($languages as $language) { ?>
-		<div class="language_item <?= $language['language_id'] == $default_language ? 'active' : ''; ?>" title="<?= $language['name']; ?>" lang_id="<?= $language['language_id']; ?>"><img alt="<?= $language['name']; ?>" src="<?= HTTP_THEME_IMAGE . "flags/$language[image]"; ?>" /></div>
+	<div class ="language_menu">
+	<? foreach($languages as $language) 
+{ ?>
+		<div class ="language_item <?= $language['language_id'] == $default_language ? 'active' : ''; ?>" title="<?= $language['name']; ?>" lang_id="<?= $language['language_id']; ?>"><img alt="<?= $language['name']; ?>" src="<?= HTTP_THEME_IMAGE . "flags/$language[image]"; ?>" /></div>
 	<? } ?>
 	</div>
 </div>
 
 <script type="text/javascript">//<!--
-$('.language_menu .language_item').click(function(){
+$('.language_menu .language_item').click(function ()
+{
 	lang_id = $(this).attr('lang_id');
 	$('.translation').hide();
 	$('.translation.' + lang_id).show();
-	$('.language_menu .language_item.active').removeClass('active');
+	$('.language_menu .language_item.active').removeclass ('active');
 	$('.language_menu [lang_id=' + lang_id +']').addClass('active');
 });
 
@@ -255,54 +271,59 @@ $('#language_menu_template').remove();
 var translations = <?= $translations; ?>;
 var default_language = "<?= $default_language ?>";
 
-for(var t in translations){
+for(var t in translations)
+{
 	context = $('[name="'+t+'"]');
 	
-	if(!context.length){
+	if (!context.length) {
 		context = $(t);
 	}
 	
 	if(!context.length) break;
 	
-	box = $('<div class="translation_box" />');
+	box = $('<div class ="translation_box" />');
 	
 	context.before(box);
 	
 	box.append(context);
 	
-	for(var lang in translations[t]){
+	for(var lang in translations[t])
+{
 		t_name = "translations[" + t + "][" + lang + "]";
 		t_input = context.clone();
 		t_input.attr('name', t_name);
 		t_input.val(translations[t][lang]);
 		
-		if(t_input.hasClass('ckedit')){
+		if(t_input.hasclass ('ckedit'))
+{
 			t_input.attr('id','translation_' + t + '_' + lang);
 			
-			box.append($('<div class="translation ' + lang +'" />').append(t_input));
+			box.append($('<div class ="translation ' + lang +'" />').append(t_input));
 			
-			<? if(isset($js_loaded_files['ckeditor'])) { ?>
+			<? if(isset($js_loaded_files['ckeditor'])) 
+{ ?>
 				init_ckeditor_for('translation_' + t + '_' + lang);
 			<? } ?>
 		}
-		else{
-			t_input.addClass('translation ' + lang);
+		else {
+			t_input.addclass ('translation ' + lang);
 			box.append(t_input);
 		}
 	}
 	
 	box.append(language_menu.clone(true));
 	
-	if(context.hasClass('ckedit')){
-		ckedit_box = $('<div class="translation ' + default_language + '" />');
+	if(context.hasClass('ckedit'))
+{
+		ckedit_box = $('<div class ="translation ' + default_language + '" />');
 		
 		context.before(ckedit_box);
 		ckedit_box.append(context);
 		
 		ckedit_box.show();
 	}
-	else{
-		context.addClass('translation ' + default_language);
+	else {
+		context.addclass ('translation ' + default_language);
 		context.show();
 	}
 }
@@ -313,7 +334,8 @@ for(var t in translations){
 	case 'html_entity_decode': ?>
 
 <script type="text/javascript">//<!--
-function html_entity_decode (string, quote_style) {
+function html_entity_decode(string, quote_style)
+{
 	var hash_map = {},
 		symbol = '',
 		tmp_str = '',
@@ -334,7 +356,8 @@ function html_entity_decode (string, quote_style) {
 
 	return tmp_str;
 }
-function get_html_translation_table (table, quote_style) {
+function get_html_translation_table(table, quote_style)
+{
 	var entities = {},
 		hash_map = {},
 		decimal;

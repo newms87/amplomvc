@@ -1,8 +1,10 @@
 <?php
-class ControllerPaymentNOCHEX extends Controller {
+class ControllerPaymentNOCHEX extends Controller 
+{
 	
 
-	public function index() {
+	public function index()
+	{
 		$this->template->load('payment/nochex');
 
 		$this->load->language('payment/nochex');
@@ -115,7 +117,8 @@ class ControllerPaymentNOCHEX extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'payment/nochex')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

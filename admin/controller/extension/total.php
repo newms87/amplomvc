@@ -1,6 +1,8 @@
 <?php
-class ControllerExtensionTotal extends Controller {
-	public function index() {
+class ControllerExtensionTotal extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('extension/total');
 
 		$this->load->language('extension/total');
@@ -82,7 +84,8 @@ class ControllerExtensionTotal extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function install() {
+	public function install()
+	{
 		if (!$this->user->hasPermission('modify', 'extension/total')) {
 			$this->session->data['error'] = $this->_('error_permission');
 			
@@ -98,15 +101,17 @@ class ControllerExtensionTotal extends Controller {
 			$class = 'ControllerTotal' . str_replace('_', '', $_GET['extension']);
 			$class = new $class($this->registry);
 			
-			if (method_exists($class, 'install')) {
-				$class->install();
+			if (method_exists($class, 'install')) 
+{
+				$class ->install();
 			}
 			
 			$this->url->redirect($this->url->link('extension/total'));
 		}
 	}
 	
-	public function uninstall() {
+	public function uninstall()
+	{
 		if (!$this->user->hasPermission('modify', 'extension/total')) {
 			$this->session->data['error'] = $this->_('error_permission');
 			
@@ -121,7 +126,8 @@ class ControllerExtensionTotal extends Controller {
 			$class = 'ControllerTotal' . str_replace('_', '', $_GET['extension']);
 			$class = new $class($this->registry);
 			
-			if (method_exists($class, 'uninstall')) {
+			if (method_exists($class, 'uninstall')) 
+{
 				$class->uninstall();
 			}
 		

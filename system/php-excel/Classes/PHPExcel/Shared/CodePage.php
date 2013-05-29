@@ -33,8 +33,7 @@
  * @package	PHPExcel_Shared
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Shared_CodePage
-{
+class PHPExcel_Shared_CodePage{
 	/**
 	* Convert Microsoft Code Page Identifier to Code Page Name which iconv
 	* and mbstring understands
@@ -44,7 +43,7 @@ class PHPExcel_Shared_CodePage
 	* @throws Exception
 	*/
 	public static function NumberToName($codePage = '1252')
-	{
+ {
 		switch ($codePage) {
 			case 367:	return 'ASCII';				break;	//	ASCII
 			case 437:	return 'CP437';				break;	//	OEM US

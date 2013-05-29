@@ -1,8 +1,10 @@
 <?php
-class ControllerAccountForgotten extends Controller {
+class ControllerAccountForgotten extends Controller 
+{
 	
 
-	public function index() {
+	public function index()
+	{
 		$this->template->load('account/forgotten');
 
 		if ($this->customer->isLogged()) {
@@ -66,7 +68,8 @@ class ControllerAccountForgotten extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!isset($_POST['email'])) {
 			$this->error['warning'] = $this->_('error_email');
 		} elseif (!$this->model_account_customer->getTotalCustomersByEmail($_POST['email'])) {

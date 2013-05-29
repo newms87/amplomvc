@@ -1,6 +1,8 @@
 <?php
-class ControllerPaymentSagepay extends Controller {
-	protected function index() {
+class ControllerPaymentSagepay extends Controller 
+{
+	protected function index()
+	{
 		$this->template->load('payment/sagepay');
 
 		$this->language->load('payment/sagepay');
@@ -102,7 +104,7 @@ class ControllerPaymentSagepay extends Controller {
 		
 		$crypt_data = array();
 	
-		foreach($data as $key => $value){
+		foreach ($data as $key => $value) {
 				$crypt_data[] = $key . '=' . $value;
 		}
 
@@ -111,7 +113,8 @@ class ControllerPaymentSagepay extends Controller {
 		$this->render();
 	}
 	
-	public function success() {
+	public function success()
+	{
 		if (isset($_GET['crypt'])) {
 			$string = base64_decode(str_replace(' ', '+', $_GET['crypt']));
 			$password = $this->config->get('sagepay_password');
@@ -176,7 +179,8 @@ class ControllerPaymentSagepay extends Controller {
 		}
 	}
 	
-	private function simpleXor($string, $password) {
+	private function simpleXor($string, $password)
+	{
 		$data = array();
 
 		for ($i = 0; $i < strlen($password); $i++) {
@@ -192,7 +196,8 @@ class ControllerPaymentSagepay extends Controller {
 		return $output;
 	}
 	
-	private function getToken($string) {
+	private function getToken($string)
+	{
   		$tokens = array(
 				'Status',
 			'StatusDetail',

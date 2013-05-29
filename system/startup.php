@@ -18,7 +18,7 @@ if (ini_get('register_globals')) {
 	$globals = array($_REQUEST, $_SESSION, $_SERVER, $_FILES);
 
 	foreach ($globals as $global) {
-		foreach(array_keys($global) as $key) {
+		foreach (array_keys($global) as $key) {
 			unset(${$key});
 		}
 	}
@@ -26,7 +26,8 @@ if (ini_get('register_globals')) {
 
 // Magic Quotes Fix
 if (ini_get('magic_quotes_gpc')) {
-	function clean($data) {
+	function clean($data)
+	{
 			if (is_array($data)) {
   			foreach ($data as $key => $value) {
 				$data[clean($key)] = clean($value);

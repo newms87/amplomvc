@@ -6,7 +6,7 @@
 	<? if ($images) { ?>
 	<div class="image-additional">
 		<? foreach ($images as $image) { ?>
-		<a href="javscript:void(0);" title="<?= $heading_title; ?>" rel="<?=$image['rel'];?>" ><img src="<?= $image['thumb']; ?>" title="<?= $heading_title; ?>" alt="<?= $heading_title; ?>" /></a>
+		<a href="javscript:void(0);" title="<?= $heading_title; ?>" rel="<?= $image['rel']; ?>" ><img src="<?= $image['thumb']; ?>" title="<?= $heading_title; ?>" alt="<?= $heading_title; ?>" /></a>
 		<? } ?>
 	</div>
 	<? } ?>
@@ -23,7 +23,7 @@ $(document).ready(function(){
 				return false;
 			}
 	});
-	$('.zoombox').jqzoom({zoomWidth:<?=$zoombox_width;?>,zoomHeight:<?=$zoombox_height;?>,position:'<?=$zoombox_position;?>',xOffset:<?=$zoombox_x;?>, yOffset:<?=$zoombox_y;?>,preloadText:'<?=$text_zoombox_load;?>'});
+	$('.zoombox').jqzoom({zoomWidth:<?= $zoombox_width; ?>,zoomHeight:<?= $zoombox_height; ?>,position:'<?= $zoombox_position; ?>',xOffset:<?= $zoombox_x; ?>, yOffset:<?= $zoombox_y; ?>,preloadText:'<?= $text_zoombox_load; ?>'});
 	
 	<? //TODO: Make the zoombox have option to click for popup colorbox. ;?>
 	

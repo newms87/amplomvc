@@ -34,8 +34,7 @@
  * @package		PHPExcel_CachedObjectStorage
  * @copyright	Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_CachedObjectStorageFactory
-{
+class PHPExcel_CachedObjectStorageFactory{
 	const cache_in_memory				= 'Memory';
 	const cache_in_memory_gzip			= 'MemoryGZip';
 	const cache_in_memory_serialized	= 'MemorySerialized';
@@ -131,7 +130,7 @@ class PHPExcel_CachedObjectStorageFactory
 	* @return string|NULL
 	**/
 	public static function getCacheStorageMethod()
-	{
+ {
 		if (self::$_cacheStorageMethod !== NULL) {
 			return self::$_cacheStorageMethod;
 		}
@@ -140,14 +139,14 @@ class PHPExcel_CachedObjectStorageFactory
 
 
 	/**
-	* Return the current cache storage class
-	*
+	* Return the current cache storage class *
 	* @return PHPExcel_CachedObjectStorage_ICache|NULL
 	**/
 	public static function getCacheStorageClass()
-	{
-		if (self::$_cacheStorageClass !== NULL) {
-			return self::$_cacheStorageClass;
+ {
+		if (self::$_cacheStorageclass !== NULL) 
+{
+			return self::$_cacheStorageclass ;
 		}
 		return NULL;
 	}	//	function getCacheStorageClass()
@@ -159,7 +158,7 @@ class PHPExcel_CachedObjectStorageFactory
 	* @return string[]
 	**/
 	public static function getAllCacheStorageMethods()
-	{
+ {
 		return self::$_storageMethods;
 	}	//	function getCacheStorageMethods()
 
@@ -170,11 +169,12 @@ class PHPExcel_CachedObjectStorageFactory
 	* @return string[]
 	**/
 	public static function getCacheStorageMethods()
-	{
+ {
 		$activeMethods = array();
-		foreach(self::$_storageMethods as $storageMethod) {
-			$cacheStorageClass = 'PHPExcel_CachedObjectStorage_' . $storageMethod;
-			if (call_user_func(array($cacheStorageClass, 'cacheMethodIsAvailable'))) {
+		foreach (self::$_storageMethods as $storageMethod) {
+			$cacheStorageclass = 'PHPExcel_CachedObjectStorage_' . $storageMethod;
+			if (call_user_func(array($cacheStorageClass, 'cacheMethodIsAvailable'))) 
+{
 				$activeMethods[] = $storageMethod;
 			}
 		}
@@ -186,31 +186,32 @@ class PHPExcel_CachedObjectStorageFactory
 	* Identify the cache storage method to use
 	*
 	* @param	string			$method		Name of the method to use for cell cacheing
-	* @param	array of mixed	$arguments	Additional arguments to pass to the cell caching class
-	*										when instantiating
+	* @param	array of mixed	$arguments	Additional arguments to pass to the cell caching class *										when instantiating
 	* @return boolean
 	**/
 	public static function initialize($method = self::cache_in_memory, $arguments = array())
-	{
+	
+{
 		if (!in_array($method,self::$_storageMethods)) {
 			return FALSE;
 		}
 
-		$cacheStorageClass = 'PHPExcel_CachedObjectStorage_'.$method;
+		$cacheStorageclass = 'PHPExcel_CachedObjectStorage_'.$method;
 		if (!call_user_func(array( $cacheStorageClass,
-									'cacheMethodIsAvailable'))) {
+									'cacheMethodIsAvailable'))) 
+{
 			return FALSE;
 		}
 
 		self::$_storageMethodParameters[$method] = self::$_storageMethodDefaultParameters[$method];
-		foreach($arguments as $k => $v) {
+		foreach ($arguments as $k => $v) {
 			if (isset(self::$_storageMethodParameters[$method][$k])) {
 				self::$_storageMethodParameters[$method][$k] = $v;
 			}
 		}
 
 		if (self::$_cacheStorageMethod === NULL) {
-			self::$_cacheStorageClass = 'PHPExcel_CachedObjectStorage_' . $method;
+			self::$_cacheStorageclass = 'PHPExcel_CachedObjectStorage_' . $method;
 			self::$_cacheStorageMethod = $method;
 		}
 		return TRUE;
@@ -224,17 +225,18 @@ class PHPExcel_CachedObjectStorageFactory
 	* @return	PHPExcel_CachedObjectStorage_ICache
 	**/
 	public static function getInstance(PHPExcel_Worksheet $parent)
-	{
+ {
 		$cacheMethodIsAvailable = TRUE;
 		if (self::$_cacheStorageMethod === NULL) {
 			$cacheMethodIsAvailable = self::initialize();
 		}
 
 		if ($cacheMethodIsAvailable) {
-			$instance = new self::$_cacheStorageClass( $parent,
+			$instance = new self::$_cacheStorageclass ( $parent,
 														self::$_storageMethodParameters[self::$_cacheStorageMethod]
 													);
-			if ($instance !== NULL) {
+			if ($instance !== NULL) 
+{
 				return $instance;
 			}
 		}

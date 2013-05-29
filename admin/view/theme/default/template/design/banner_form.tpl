@@ -1,7 +1,7 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
-	<?= $this->builder->display_errors($errors);?>
+	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'banner.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -16,7 +16,7 @@
 					</tr>
 					<tr>
 						<td><?= $entry_status; ?></td>
-						<td><?=$this->builder->build('select',$statuses,'status',(int)$status);?></td>
+						<td><?= $this->builder->build('select',$statuses,'status',(int)$status); ?></td>
 					</tr>
 				</table>
 				<div style="padding:6px 0;">
@@ -94,6 +94,6 @@ $(document).ready(function() {
 });
 //--></script>
 
-<?=$this->builder->js('errors',$errors);?>
+<?= $this->builder->js('errors',$errors); ?>
 
 <?= $footer; ?>

@@ -1,7 +1,9 @@
 <?php
-class ControllerAccountLogin extends Controller {
+class ControllerAccountLogin extends Controller 
+{
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('account/login');
 
 		// Login override for admin users
@@ -61,13 +63,14 @@ class ControllerAccountLogin extends Controller {
 		$this->response->setOutput($this->render());
   	}
   
-  	private function validate() {
+  	private function validate()
+  	{
 		if (!$this->customer->login($_POST['email'], $_POST['password'])) {
 				$this->error['warning'] = $this->_('error_login');
 		}
 		
 		//Verify redirect stays on our site for security purposes
-		if(isset($_POST['redirect']) && strpos($_POST['redirect'], SITE_URL) !== 0 && strpos($_POST['redirect'], SITE_SSL) !== 0){
+		if (isset($_POST['redirect']) && strpos($_POST['redirect'], SITE_URL) !== 0 && strpos($_POST['redirect'], SITE_SSL) !== 0) {
 			$this->error['warning'] = $this->_('error_redirect_domain');
 			unset($_POST['redirect']);
 		}

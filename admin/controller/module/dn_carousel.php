@@ -1,8 +1,10 @@
 <?php
-class ControllerModuleDnCarousel extends Controller {
+class ControllerModuleDnCarousel extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/dn_carousel');
 
 		$this->load->language('module/dn_carousel');
@@ -42,8 +44,8 @@ class ControllerModuleDnCarousel extends Controller {
 		}
 		
 		
-		foreach($this->data['modules'] as $mod_key=>$mod){
-			foreach($mod['data'] as $key=>$md){
+		foreach ($this->data['modules'] as $mod_key=>$mod) {
+			foreach ($mod['data'] as $key=>$md) {
 				$a = $this->model_cms_article->getArticle($md['article_id']);
 				$this->data['modules'][$mod_key]['data'][$key]['article_title'] = isset($a['title'])?$a['title']:"Article Not Found";
 				$image = $this->data['modules'][$mod_key]['data'][$key]['image'];
@@ -73,7 +75,8 @@ class ControllerModuleDnCarousel extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/dn_carousel')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

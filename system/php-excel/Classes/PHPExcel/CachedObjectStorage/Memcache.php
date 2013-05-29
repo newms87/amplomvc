@@ -33,7 +33,8 @@
  * @package	PHPExcel_CachedObjectStorage
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_CachedObjectStorage_Memcache extends PHPExcel_CachedObjectStorage_CacheBase implements PHPExcel_CachedObjectStorage_ICache {
+class PHPExcel_CachedObjectStorage_Memcache extends PHPExcel_CachedObjectStorage_CacheBase implements PHPExcel_CachedObjectStorage_ICache 
+{
 
 	/**
 	* Prefix used to uniquely identify cache data for this worksheet
@@ -64,7 +65,8 @@ class PHPExcel_CachedObjectStorage_Memcache extends PHPExcel_CachedObjectStorage
 	* @return	void
 	* @throws	Exception
 	*/
-	private function _storeData() {
+	private function _storeData()
+	{
 		if ($this->_currentCellIsDirty) {
 			$this->_currentObject->detach();
 
@@ -89,7 +91,8 @@ class PHPExcel_CachedObjectStorage_Memcache extends PHPExcel_CachedObjectStorage
 	* @return	void
 	* @throws	Exception
 	*/
-	public function addCacheData($pCoord, PHPExcel_Cell $cell) {
+	public function addCacheData($pCoord, PHPExcel_Cell $cell)
+	{
 		if (($pCoord !== $this->_currentObjectID) && ($this->_currentObjectID !== null)) {
 			$this->_storeData();
 		}
@@ -110,7 +113,8 @@ class PHPExcel_CachedObjectStorage_Memcache extends PHPExcel_CachedObjectStorage
 	* @return	void
 	* @return	boolean
 	*/
-	public function isDataSet($pCoord) {
+	public function isDataSet($pCoord)
+	{
 		//	Check if the requested entry is the current object, or exists in the cache
 		if (parent::isDataSet($pCoord)) {
 			if ($this->_currentObjectID == $pCoord) {
@@ -136,7 +140,8 @@ class PHPExcel_CachedObjectStorage_Memcache extends PHPExcel_CachedObjectStorage
 	* @throws 	Exception
 	* @return 	PHPExcel_Cell 	Cell that was found, or null if not found
 	*/
-	public function getCacheData($pCoord) {
+	public function getCacheData($pCoord)
+	{
 		if ($pCoord === $this->_currentObjectID) {
 			return $this->_currentObject;
 		}
@@ -172,7 +177,8 @@ class PHPExcel_CachedObjectStorage_Memcache extends PHPExcel_CachedObjectStorage
 	* @param	string			$pCoord		Coordinate address of the cell to delete
 	* @throws	Exception
 	*/
-	public function deleteCacheData($pCoord) {
+	public function deleteCacheData($pCoord)
+	{
 		//	Delete the entry from Memcache
 		$this->_memcache->delete($this->_cachePrefix.$pCoord.'.cache');
 
@@ -187,13 +193,14 @@ class PHPExcel_CachedObjectStorage_Memcache extends PHPExcel_CachedObjectStorage
 	* @param	PHPExcel_Worksheet	$parent		The new worksheet
 	* @return	void
 	*/
-	public function copyCellCollection(PHPExcel_Worksheet $parent) {
+	public function copyCellCollection(PHPExcel_Worksheet $parent)
+	{
 		parent::copyCellCollection($parent);
 		//	Get a new id for the new file name
 		$baseUnique = $this->_getUniqueID();
 		$newCachePrefix = substr(md5($baseUnique),0,8).'.';
 		$cacheList = $this->getCellList();
-		foreach($cacheList as $cellID) {
+		foreach ($cacheList as $cellID) {
 			if ($cellID != $this->_currentObjectID) {
 				$obj = $this->_memcache->get($this->_cachePrefix.$cellID.'.cache');
 				if ($obj === false) {
@@ -216,8 +223,9 @@ class PHPExcel_CachedObjectStorage_Memcache extends PHPExcel_CachedObjectStorage
 	*
 	* @return	void
 	*/
-	public function unsetWorksheetCells() {
-		if(!is_null($this->_currentObject)) {
+	public function unsetWorksheetCells()
+	{
+		if (!is_null($this->_currentObject)) {
 			$this->_currentObject->detach();
 			$this->_currentObject = $this->_currentObjectID = null;
 		}
@@ -238,7 +246,8 @@ class PHPExcel_CachedObjectStorage_Memcache extends PHPExcel_CachedObjectStorage
 	* @param	PHPExcel_Worksheet	$parent		The worksheet for this cell collection
 	* @param	array of mixed		$arguments	Additional initialisation arguments
 	*/
-	public function __construct(PHPExcel_Worksheet $parent, $arguments) {
+	public function __construct(PHPExcel_Worksheet $parent, $arguments)
+	{
 		$memcacheServer	= (isset($arguments['memcacheServer']))	? $arguments['memcacheServer']	: 'localhost';
 		$memcachePort	= (isset($arguments['memcachePort']))	? $arguments['memcachePort']	: 11211;
 		$cacheTime		= (isset($arguments['cacheTime']))		? $arguments['cacheTime']		: 600;
@@ -266,7 +275,8 @@ class PHPExcel_CachedObjectStorage_Memcache extends PHPExcel_CachedObjectStorage
 	* @param	integer	$port		Memcache port
 	* @throws	Exception
 	*/
-	public function failureCallback($host, $port) {
+	public function failureCallback($host, $port)
+	{
 		throw new Exception('memcache '.$host.':'.$port.' failed');
 	}
 
@@ -274,9 +284,10 @@ class PHPExcel_CachedObjectStorage_Memcache extends PHPExcel_CachedObjectStorage
 	/**
 	* Destroy this cell collection
 	*/
-	public function __destruct() {
+	public function __destruct()
+	{
 		$cacheList = $this->getCellList();
-		foreach($cacheList as $cellID) {
+		foreach ($cacheList as $cellID) {
 			$this->_memcache->delete($this->_cachePrefix.$cellID.'.cache');
 		}
 	}	//	function __destruct()
@@ -287,7 +298,8 @@ class PHPExcel_CachedObjectStorage_Memcache extends PHPExcel_CachedObjectStorage
 	*
 	* @return	boolean
 	*/
-	public static function cacheMethodIsAvailable() {
+	public static function cacheMethodIsAvailable()
+ {
 		if (!function_exists('memcache_add')) {
 			return false;
 		}

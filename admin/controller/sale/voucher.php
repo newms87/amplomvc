@@ -1,8 +1,10 @@
 <?php
-class ControllerSaleVoucher extends Controller {
+class ControllerSaleVoucher extends Controller 
+{
 	
 	
-  	public function index() {
+  	public function index()
+  	{
 		$this->load->language('sale/voucher');
 		
 		$this->document->setTitle($this->_('heading_title'));
@@ -10,7 +12,8 @@ class ControllerSaleVoucher extends Controller {
 		$this->getList();
   	}
   
-  	public function insert() {
+  	public function insert()
+  	{
 		$this->load->language('sale/voucher');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -40,7 +43,8 @@ class ControllerSaleVoucher extends Controller {
 		$this->getForm();
   	}
 
-  	public function update() {
+  	public function update()
+  	{
 		$this->load->language('sale/voucher');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -70,7 +74,8 @@ class ControllerSaleVoucher extends Controller {
 		$this->getForm();
   	}
 
-  	public function delete() {
+  	public function delete()
+  	{
 		$this->load->language('sale/voucher');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -102,7 +107,8 @@ class ControllerSaleVoucher extends Controller {
 		$this->getList();
   	}
 
-  	private function getList() {
+  	private function getList()
+  	{
 		$this->template->load('sale/voucher_list');
 
 		if (isset($_GET['sort'])) {
@@ -237,7 +243,8 @@ class ControllerSaleVoucher extends Controller {
 		$this->response->setOutput($this->render());
   	}
 
-  	private function getForm() {
+  	private function getForm()
+  	{
 		$this->template->load('sale/voucher_form');
 
 		if (isset($_GET['voucher_id'])) {
@@ -399,7 +406,8 @@ class ControllerSaleVoucher extends Controller {
 		$this->response->setOutput($this->render());
   	}
 	
-  	private function validateForm() {
+  	private function validateForm()
+  	{
 		if (!$this->user->hasPermission('modify', 'sale/voucher')) {
 				$this->error['warning'] = $this->_('error_permission');
 		}
@@ -413,7 +421,7 @@ class ControllerSaleVoucher extends Controller {
 		if ($voucher_info) {
 			if (!isset($_GET['voucher_id'])) {
 				$this->error['warning'] = $this->_('error_exists');
-			} elseif ($voucher_info['voucher_id'] != $_GET['voucher_id'])  {
+			} elseif ($voucher_info['voucher_id'] != $_GET['voucher_id']) {
 				$this->error['warning'] = $this->_('error_exists');
 			}
 		}
@@ -441,7 +449,8 @@ class ControllerSaleVoucher extends Controller {
 		return $this->error ? false : true;
   	}
 
-  	private function validateDelete() {
+  	private function validateDelete()
+  	{
 		if (!$this->user->hasPermission('modify', 'sale/voucher')) {
 				$this->error['warning'] = $this->_('error_permission');
 		}
@@ -459,7 +468,8 @@ class ControllerSaleVoucher extends Controller {
 		return $this->error ? false : true;
   	}
 	
-	public function history() {
+	public function history()
+	{
 		$this->template->load('sale/voucher_history');
 		$this->language->load('sale/voucher');
 		
@@ -492,7 +502,8 @@ class ControllerSaleVoucher extends Controller {
 		$this->response->setOutput($this->render());
   	}
 	
-	public function send() {
+	public function send()
+	{
 		$this->language->load('sale/voucher');
 		
 		$json = array();

@@ -1,6 +1,8 @@
 <?php
-class ModelCatalogAttribute extends Model {
-	public function addAttribute($data) {
+class ModelCatalogAttribute extends Model 
+{
+	public function addAttribute($data)
+	{
 		$this->query("INSERT INTO " . DB_PREFIX . "attribute SET attribute_group_id = '" . (int)$data['attribute_group_id'] . "', sort_order = '" . (int)$data['sort_order'] . "'");
 		
 		$attribute_id = $this->db->getLastId();
@@ -11,7 +13,8 @@ class ModelCatalogAttribute extends Model {
 		$this->cache->delete("attribute");
 	}
 
-	public function editAttribute($attribute_id, $data) {
+	public function editAttribute($attribute_id, $data)
+	{
 		$this->query("UPDATE " . DB_PREFIX . "attribute SET attribute_group_id = '" . (int)$data['attribute_group_id'] . "', sort_order = '" . (int)$data['sort_order'] . "' WHERE attribute_id = '" . (int)$attribute_id . "'");
 		
 		$this->query("DELETE FROM " . DB_PREFIX . "attribute_description WHERE attribute_id = '" . (int)$attribute_id . "'");
@@ -22,13 +25,15 @@ class ModelCatalogAttribute extends Model {
 		$this->cache->delete("attribute");
 	}
 	
-	public function deleteAttribute($attribute_id) {
+	public function deleteAttribute($attribute_id)
+	{
 		$this->query("DELETE FROM " . DB_PREFIX . "attribute WHERE attribute_id = '" . (int)$attribute_id . "'");
 		$this->query("DELETE FROM " . DB_PREFIX . "attribute_description WHERE attribute_id = '" . (int)$attribute_id . "'");
 		$this->cache->delete("attribute");
 	}
 		
-	public function getAttribute($attribute_id) {
+	public function getAttribute($attribute_id)
+	{
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "attribute WHERE attribute_id = '" . (int)$attribute_id . "'");
 		
 		return $query->row;
@@ -80,7 +85,8 @@ class ModelCatalogAttribute extends Model {
 		return $query->rows;
 	}
 		
-	public function getAttributeDescriptions($attribute_id) {
+	public function getAttributeDescriptions($attribute_id)
+	{
 		$attribute_data = array();
 		
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "attribute_description WHERE attribute_id = '" . (int)$attribute_id . "'");
@@ -138,13 +144,15 @@ class ModelCatalogAttribute extends Model {
 		return $query->rows;
 	}
 	
-	public function getTotalAttributes() {
+	public function getTotalAttributes()
+	{
 			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "attribute");
 		
 		return $query->row['total'];
 	}
 	
-	public function getTotalAttributesByAttributeGroupId($attribute_group_id) {
+	public function getTotalAttributesByAttributeGroupId($attribute_group_id)
+	{
 			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "attribute WHERE attribute_group_id = '" . (int)$attribute_group_id . "'");
 		
 		return $query->row['total'];

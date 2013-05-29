@@ -1,6 +1,8 @@
 <?php
-class ControllerExtensionModule extends Controller {
-	public function index() {
+class ControllerExtensionModule extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('extension/module');
 
 		$this->load->language('extension/module');
@@ -80,7 +82,8 @@ class ControllerExtensionModule extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function install() {
+	public function install()
+	{
 		if (!$this->user->hasPermission('modify', 'extension/module')) {
 			$this->session->data['error'] = $this->_('error_permission');
 			
@@ -96,15 +99,17 @@ class ControllerExtensionModule extends Controller {
 			$class = 'ControllerModule' . str_replace('_', '', $_GET['extension']);
 			$class = new $class('module' . $_GET['extension'], 	$this->registry);
 			
-			if (method_exists($class, 'install')) {
-				$class->install();
+			if (method_exists($class, 'install')) 
+{
+				$class ->install();
 			}
 			
 			$this->url->redirect($this->url->link('extension/module'));
 		}
 	}
 	
-	public function uninstall() {
+	public function uninstall()
+	{
 		$this->language->load('extension/module');
 		
 		if (!$this->user->hasPermission('modify', 'extension/module')) {
@@ -121,7 +126,8 @@ class ControllerExtensionModule extends Controller {
 			$class = 'ControllerModule' . str_replace('_', '', $_GET['extension']);
 			$class = new $class('module/' . $_GET['extension'], $this->registry);
 			
-			if (method_exists($class, 'uninstall')) {
+			if (method_exists($class, 'uninstall')) 
+{
 				$class->uninstall();
 			}
 			

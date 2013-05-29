@@ -1,7 +1,9 @@
 <?php
-class ControllerProductProduct extends Controller {
+class ControllerProductProduct extends Controller 
+{
 	
-	public function index() {
+	public function index()
+	{
 		
 		$this->language->load('product/product');
 		
@@ -20,14 +22,14 @@ class ControllerProductProduct extends Controller {
 			
 			$manufacturer_info = $this->model_catalog_manufacturer->getManufacturer($product_info['manufacturer_id']);
 			
-			if ($manufacturer_info){
+			if ($manufacturer_info) {
 				$this->breadcrumb->add($manufacturer_info['name'], $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $product_info['manufacturer_id']));
 			}
 	
 			if (isset($product_info['flashsale_id'])) {
 				$flashsale_info = $this->model_catalog_flashsale->getFlashsale($product_info['flashsale_id']);
 				
-				if ($flashsale_info){
+				if ($flashsale_info) {
 					$this->breadcrumb->add($flashsale_info['name'], $this->url->link('sales/flashsale', 'flashsale_id=' . $product_info['flashsale_id']));
 				}
 			}
@@ -41,15 +43,15 @@ class ControllerProductProduct extends Controller {
 			
 			$this->language->set('heading_title', $product_info['name']);
 			
-			if($product_info['template']){
+			if ($product_info['template']) {
 				$this->template->load('product/' . $product_info['template']);
 			}
-			else{
+			else {
 				$this->template->load('product/product');
 			}
 			
 			//Product Flashsale
-			if(isset($flashsale_info) && $flashsale_info){
+			if (isset($flashsale_info) && $flashsale_info) {
 				$this->data['block_product_flashsale_countdown'] = $this->getBlock('product', 'flashsale_countdown', array($flashsale_info));
 			}
 			
@@ -76,7 +78,7 @@ class ControllerProductProduct extends Controller {
 			
 			$this->data['tags'] = $tags;
 			
-			if($product_info['template'] == 'product_video'){
+			if ($product_info['template'] == 'product_video') {
 				$this->data['description'] = html_entity_decode($product_info['description']);
 			}
 			
@@ -97,7 +99,8 @@ class ControllerProductProduct extends Controller {
 		$this->response->setOutput($this->render());
   	}
 
-	public function review() {
+	public function review()
+	{
 		$this->template->load('product/review');
 
 		$this->language->load('product/product');
@@ -131,7 +134,8 @@ class ControllerProductProduct extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function write() {
+	public function write()
+	{
 		$this->language->load('product/product');
 		
 		$json = array();
@@ -163,13 +167,15 @@ class ControllerProductProduct extends Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 	
-	public function captcha() {
+	public function captcha()
+	{
 		$this->session->data['captcha'] = $this->captcha->getCode();
 		
 		$this->captcha->showImage();
 	}
 	
-	public function upload() {
+	public function upload()
+	{
 		$this->language->load('product/product');
 		
 		$json = array();

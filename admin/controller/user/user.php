@@ -1,8 +1,10 @@
 <?php
-class ControllerUserUser extends Controller {
+class ControllerUserUser extends Controller 
+{
 	
 	
-  	public function index() {
+  	public function index()
+  	{
 		$this->load->language('user/user');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -10,7 +12,8 @@ class ControllerUserUser extends Controller {
 		$this->getList();
   	}
 	
-  	public function insert() {
+  	public function insert()
+  	{
 		$this->load->language('user/user');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -34,7 +37,8 @@ class ControllerUserUser extends Controller {
 		$this->getForm();
   	}
 
-  	public function update() {
+  	public function update()
+  	{
 		$this->load->language('user/user');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -44,11 +48,11 @@ class ControllerUserUser extends Controller {
 			
 			$url = $this->get_url();
 			
-			if($this->user->isDesigner()){
+			if ($this->user->isDesigner()) {
 				$this->message->add('success', $this->_('text_success_portal'));
 				$this->url->redirect($this->url->link('common/home', $url));
 			}
-			else{
+			else {
 				$this->message->add('success', $this->_('text_success'));
 				$this->url->redirect($this->url->link('user/user', $url));
 			}
@@ -57,7 +61,8 @@ class ControllerUserUser extends Controller {
 		$this->getForm();
   	}
  
-  	public function delete() {
+  	public function delete()
+  	{
 		$this->load->language('user/user');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -80,8 +85,9 @@ class ControllerUserUser extends Controller {
 		$this->getList();
   	}
 
-  	private function getList() {
-  		if($this->user->isDesigner()){
+  	private function getList()
+  	{
+  		if ($this->user->isDesigner()) {
   			$this->url->redirect($this->url->link('common/home'));
 		}
 		
@@ -153,11 +159,12 @@ class ControllerUserUser extends Controller {
 		$this->response->setOutput($this->render());
   	}
 	
-	private function getForm() {
-		if($this->user->isDesigner()){
+	private function getForm()
+	{
+		if ($this->user->isDesigner()) {
 			$this->template->load('user/user_form_restricted');
 		}
-		else{
+		else {
 			$this->template->load('user/user_form');
 		}
 
@@ -169,7 +176,7 @@ class ControllerUserUser extends Controller {
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		
-		if(!$this->user->isDesigner()){
+		if (!$this->user->isDesigner()) {
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('user/user'));
 		}
 		
@@ -190,7 +197,7 @@ class ControllerUserUser extends Controller {
 								);
 		$no_fill = array('confirm','password','designers');
 		
-		foreach($data_items as $item=>$default){
+		foreach ($data_items as $item=>$default) {
 			if (isset($_POST[$item]))
 				$this->data[$item] = $_POST[$item];
 			elseif (!empty($user_info) && !in_array($item,$no_fill))
@@ -214,10 +221,10 @@ class ControllerUserUser extends Controller {
 		$this->data['contact_template'] = $this->getChild('includes/contact',array('type'=>'user', 'id'=>$user_id));
 		
 		
-		if(!$user_id){
+		if (!$user_id) {
 			$this->breadcrumb->add($this->_('text_new_user'), $this->url->link('user/user/insert'));
 		}
-		else{
+		else {
 			$this->breadcrumb->add($this->data['username'], $this->url->link('user/user/update', 'user_id=' . $user_id));
 		}
 		
@@ -229,13 +236,14 @@ class ControllerUserUser extends Controller {
 		$this->response->setOutput($this->render());
   	}
   	
-  	private function validateForm() {
+  	private function validateForm()
+  	{
   		$this->verify_user();
 		if (!$this->user->hasPermission('modify', 'user/user')) {
 				$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		if($this->user->isAdmin()){
+		if ($this->user->isAdmin()) {
 			if ((strlen($_POST['username']) < 3) || (strlen($_POST['username']) > 20)) {
 					$this->error['username'] = $this->_('error_username');
 			}
@@ -271,14 +279,14 @@ class ControllerUserUser extends Controller {
 			}
 		}
 		
-		if($this->user->isAdmin()){
+		if ($this->user->isAdmin()) {
 			//if this is a Designer user
-			if($_POST['user_group_id'] == 12){
-				if(!isset($_POST['designers'])){
+			if ($_POST['user_group_id'] == 12) {
+				if (!isset($_POST['designers'])) {
 					$this->error['no_designer'] = $this->_('error_no_designer');
 				}
 			
-				if(!isset($_POST['contact'])){
+				if (!isset($_POST['contact'])) {
 					$this->error['no_contact'] = $this->_("error_no_contact");
 				}
 			}
@@ -287,7 +295,8 @@ class ControllerUserUser extends Controller {
 		return $this->error ? false : true;
   	}
 
-  	private function validateDelete() {
+  	private function validateDelete()
+  	{
   		$this->verify_user(0);
 		
 		if (!$this->user->hasPermission('modify', 'user/user')) {
@@ -307,10 +316,11 @@ class ControllerUserUser extends Controller {
 		}
   	}
 	
-	private function verify_user($user_id = null){
-		if($this->user->isDesigner()){
+	private function verify_user($user_id = null)
+	{
+		if ($this->user->isDesigner()) {
 			$user_id = isset($user_id) ? $user_id : (isset($_GET['user_id']) ? $_GET['user_id'] : 0);
-			if($user_id != $this->user->getId()){
+			if ($user_id != $this->user->getId()) {
 				$this->message->add('warning', $this->_('error_wrong_user'));
 				$this->url->redirect($this->url->link("common/home"));
 			}

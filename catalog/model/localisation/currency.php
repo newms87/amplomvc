@@ -1,12 +1,15 @@
 <?php
-class ModelLocalisationCurrency extends Model {
-	public function getCurrencyByCode($currency) {
+class ModelLocalisationCurrency extends Model 
+{
+	public function getCurrencyByCode($currency)
+	{
 		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "currency WHERE code = '" . $this->db->escape($currency) . "'");
 	
 		return $query->row;
 	}
 	
-	public function getCurrencies() {
+	public function getCurrencies()
+	{
 		$currency_data = $this->cache->get('currency');
 
 		if (!$currency_data) {

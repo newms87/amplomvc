@@ -42,8 +42,7 @@ if (!defined('PHPEXCEL_ROOT')) {
  * @package		PHPExcel_Reader
  * @copyright	Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Reader_Gnumeric implements PHPExcel_Reader_IReader
-{
+class PHPExcel_Reader_Gnumeric implements PHPExcel_Reader_IReader{
 	/**
 	* Read data only?
 	* Identifies whether the Reader should only read data values for cells, and ignore any formatting information;
@@ -88,7 +87,8 @@ class PHPExcel_Reader_Gnumeric implements PHPExcel_Reader_IReader
 	/**
 	* Create a new PHPExcel_Reader_Gnumeric
 	*/
-	public function __construct() {
+	public function __construct()
+	{
 		$this->_readFilter 	= new PHPExcel_Reader_DefaultReadFilter();
 		$this->_referenceHelper = PHPExcel_ReferenceHelper::getInstance();
 	}
@@ -101,7 +101,8 @@ class PHPExcel_Reader_Gnumeric implements PHPExcel_Reader_IReader
 	*
 	* @return	boolean
 	*/
-	public function getReadDataOnly() {
+	public function getReadDataOnly()
+	{
 		return $this->_readDataOnly;
 	}
 
@@ -115,7 +116,8 @@ class PHPExcel_Reader_Gnumeric implements PHPExcel_Reader_IReader
 	*
 	* @return	PHPExcel_Reader_Gnumeric
 	*/
-	public function setReadDataOnly($pValue = false) {
+	public function setReadDataOnly($pValue = false)
+	{
 		$this->_readDataOnly = $pValue;
 		return $this;
 	}
@@ -169,7 +171,8 @@ class PHPExcel_Reader_Gnumeric implements PHPExcel_Reader_IReader
 	*
 	* @return PHPExcel_Reader_IReadFilter
 	*/
-	public function getReadFilter() {
+	public function getReadFilter()
+	{
 		return $this->_readFilter;
 	}
 
@@ -180,7 +183,8 @@ class PHPExcel_Reader_Gnumeric implements PHPExcel_Reader_IReader
 	* @param PHPExcel_Reader_IReadFilter $pValue
 	* @return PHPExcel_Reader_Gnumeric
 	*/
-	public function setReadFilter(PHPExcel_Reader_IReadFilter $pValue) {
+	public function setReadFilter(PHPExcel_Reader_IReadFilter $pValue)
+	{
 		$this->_readFilter = $pValue;
 		return $this;
 	}
@@ -268,7 +272,8 @@ class PHPExcel_Reader_Gnumeric implements PHPExcel_Reader_IReader
 	}
 
 
-	private function _gzfileGetContents($filename) {
+	private function _gzfileGetContents($filename)
+	{
 		$file = @gzopen($filename, 'rb');
 		if ($file !== false) {
 			$data = '';
@@ -320,7 +325,7 @@ class PHPExcel_Reader_Gnumeric implements PHPExcel_Reader_IReader
 
 		$worksheetNames = array();
 
-		foreach($gnmXML->Sheets->Sheet as $sheet) {
+		foreach ($gnmXML->Sheets->Sheet as $sheet) {
 			$worksheetNames[] = (string) $sheet->Name;
 		}
 
@@ -366,13 +371,13 @@ class PHPExcel_Reader_Gnumeric implements PHPExcel_Reader_IReader
 			$officeDocXML = $officeXML->{'document-meta'};
 			$officeDocMetaXML = $officeDocXML->meta;
 
-			foreach($officeDocMetaXML as $officePropertyData) {
+			foreach ($officeDocMetaXML as $officePropertyData) {
 
 				$officePropertyDC = array();
 				if (isset($namespacesMeta['dc'])) {
 					$officePropertyDC = $officePropertyData->children($namespacesMeta['dc']);
 				}
-				foreach($officePropertyDC as $propertyName => $propertyValue) {
+				foreach ($officePropertyDC as $propertyName => $propertyValue) {
 					$propertyValue = (string) $propertyValue;
 					switch ($propertyName) {
 						case 'title' :
@@ -399,7 +404,7 @@ class PHPExcel_Reader_Gnumeric implements PHPExcel_Reader_IReader
 				if (isset($namespacesMeta['meta'])) {
 					$officePropertyMeta = $officePropertyData->children($namespacesMeta['meta']);
 				}
-				foreach($officePropertyMeta as $propertyName => $propertyValue) {
+				foreach ($officePropertyMeta as $propertyName => $propertyValue) {
 					$attributes = $propertyValue->attributes($namespacesMeta['meta']);
 					$propertyValue = (string) $propertyValue;
 					switch ($propertyName) {
@@ -433,7 +438,7 @@ class PHPExcel_Reader_Gnumeric implements PHPExcel_Reader_IReader
 				}
 			}
 		} elseif (isset($gnmXML->Summary)) {
-			foreach($gnmXML->Summary->Item as $summaryItem) {
+			foreach ($gnmXML->Summary->Item as $summaryItem) {
 				$propertyName = $summaryItem->name;
 				$propertyValue = $summaryItem->{'val-string'};
 				switch ($propertyName) {
@@ -464,7 +469,7 @@ class PHPExcel_Reader_Gnumeric implements PHPExcel_Reader_IReader
 		}
 
 		$worksheetID = 0;
-		foreach($gnmXML->Sheets->Sheet as $sheet) {
+		foreach ($gnmXML->Sheets->Sheet as $sheet) {
 			$worksheetName = (string) $sheet->Name;
 //			echo '<b>Worksheet: ',$worksheetName,'</b><br />';
 			if ((isset($this->_loadSheetsOnly)) && (!in_array($worksheetName, $this->_loadSheetsOnly))) {
@@ -483,7 +488,7 @@ class PHPExcel_Reader_Gnumeric implements PHPExcel_Reader_IReader
 
 			if ((!$this->_readDataOnly) && (isset($sheet->PrintInformation))) {
 				if (isset($sheet->PrintInformation->Margins)) {
-					foreach($sheet->PrintInformation->Margins->children('gnm',TRUE) as $key => $margin) {
+					foreach ($sheet->PrintInformation->Margins->children('gnm',TRUE) as $key => $margin) {
 						$marginAttributes = $margin->attributes();
 						$marginSize = 72 / 100;	//	Default
 						switch($marginAttributes['PrefUnit']) {
@@ -515,7 +520,7 @@ class PHPExcel_Reader_Gnumeric implements PHPExcel_Reader_IReader
 				}
 			}
 
-			foreach($sheet->Cells->Cell as $cell) {
+			foreach ($sheet->Cells->Cell as $cell) {
 				$cellAttributes = $cell->attributes();
 				$row = (int) $cellAttributes->Row + 1;
 				$column = (int) $cellAttributes->Col;
@@ -587,7 +592,7 @@ class PHPExcel_Reader_Gnumeric implements PHPExcel_Reader_IReader
 			}
 
 			if ((!$this->_readDataOnly) && (isset($sheet->Objects))) {
-				foreach($sheet->Objects->children('gnm',TRUE) as $key => $comment) {
+				foreach ($sheet->Objects->children('gnm',TRUE) as $key => $comment) {
 					$commentAttributes = $comment->attributes();
 					//	Only comment objects are handled at the moment
 					if ($commentAttributes->Text) {
@@ -599,7 +604,7 @@ class PHPExcel_Reader_Gnumeric implements PHPExcel_Reader_IReader
 			}
 //			echo '$maxCol=',$maxCol,'; $maxRow=',$maxRow,'<br />';
 //
-			foreach($sheet->Styles->StyleRegion as $styleRegion) {
+			foreach ($sheet->Styles->StyleRegion as $styleRegion) {
 				$styleAttributes = $styleRegion->attributes();
 				if (($styleAttributes['startRow'] <= $maxRow) &&
 					($styleAttributes['startCol'] <= $maxCol)) {
@@ -813,7 +818,7 @@ class PHPExcel_Reader_Gnumeric implements PHPExcel_Reader_IReader
 				$columnAttributes = $sheet->Cols->attributes();
 				$defaultWidth = $columnAttributes['DefaultSizePts']  / 5.4;
 				$c = 0;
-				foreach($sheet->Cols->ColInfo as $columnOverride) {
+				foreach ($sheet->Cols->ColInfo as $columnOverride) {
 					$columnAttributes = $columnOverride->attributes();
 					$column = $columnAttributes['No'];
 					$columnWidth = $columnAttributes['Unit']  / 5.4;
@@ -843,7 +848,7 @@ class PHPExcel_Reader_Gnumeric implements PHPExcel_Reader_IReader
 				$defaultHeight = $rowAttributes['DefaultSizePts'];
 				$r = 0;
 
-				foreach($sheet->Rows->RowInfo as $rowOverride) {
+				foreach ($sheet->Rows->RowInfo as $rowOverride) {
 					$rowAttributes = $rowOverride->attributes();
 					$row = $rowAttributes['No'];
 					$rowHeight = $rowAttributes['Unit'];
@@ -869,7 +874,7 @@ class PHPExcel_Reader_Gnumeric implements PHPExcel_Reader_IReader
 
 			//	Handle Merged Cells in this worksheet
 			if (isset($sheet->MergedRegions)) {
-				foreach($sheet->MergedRegions->Merge as $mergeCells) {
+				foreach ($sheet->MergedRegions->Merge as $mergeCells) {
 					$objPHPExcel->getActiveSheet()->mergeCells($mergeCells);
 				}
 			}
@@ -879,7 +884,7 @@ class PHPExcel_Reader_Gnumeric implements PHPExcel_Reader_IReader
 
 		//	Loop through definedNames (global named ranges)
 		if (isset($gnmXML->Names)) {
-			foreach($gnmXML->Names->Name as $namedRange) {
+			foreach ($gnmXML->Names->Name as $namedRange) {
 				$name = (string) $namedRange->name;
 				$range = (string) $namedRange->value;
 				if (stripos($range, '#REF!') !== false) {
@@ -901,7 +906,8 @@ class PHPExcel_Reader_Gnumeric implements PHPExcel_Reader_IReader
 	}
 
 
-	private static function _parseBorderAttributes($borderAttributes) {
+	private static function _parseBorderAttributes($borderAttributes)
+ {
 		$styleArray = array();
 
 		if (isset($borderAttributes["Color"])) {
@@ -957,7 +963,8 @@ class PHPExcel_Reader_Gnumeric implements PHPExcel_Reader_IReader
 	}
 
 
-	private function _parseRichText($is = '') {
+	private function _parseRichText($is = '')
+	{
 		$value = new PHPExcel_RichText();
 
 		$value->createText($is);
@@ -966,7 +973,8 @@ class PHPExcel_Reader_Gnumeric implements PHPExcel_Reader_IReader
 	}
 
 
-	private static function _parseGnumericColour($gnmColour) {
+	private static function _parseGnumericColour($gnmColour)
+ {
 		list($gnmR,$gnmG,$gnmB) = explode(':',$gnmColour);
 		$gnmR = substr(str_pad($gnmR,4,'0',STR_PAD_RIGHT),0,2);
 		$gnmG = substr(str_pad($gnmG,4,'0',STR_PAD_RIGHT),0,2);

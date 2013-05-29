@@ -110,17 +110,17 @@ if($config->get('config_seo_url'))
 	$url->getSeoUrl();
 $registry->set('url', $url);
 
-if(!isset($_GET['route'])){
+if (!isset($_GET['route'])) {
 	$_GET['route'] = 'common/home';
 }
 
 //Database Structure Validation
 $db_last_update = $cache->get('db_last_update');
-if(!$db_last_update){
+if (!$db_last_update) {
 	$db_last_update = 0;
 }
 $query = $db->query("SHOW GLOBAL STATUS WHERE Variable_name = 'com_alter_table' AND Value > '$db_last_update'");
-if($query->num_rows){
+if ($query->num_rows) {
 	$cache->delete('model');
 	$cache->set('db_last_update', $query->row['Value']);
 }
@@ -158,7 +158,7 @@ $controller = new Front($registry);
 $route = '';
 $action = '';
 
-if(isset($_GET['route'])){
+if (isset($_GET['route'])) {
 	$part = explode('/', $_GET['route']);
 	
 	if (isset($part[0])) {
@@ -170,22 +170,22 @@ if(isset($_GET['route'])){
 	}
 }
 
-if(!$registry->get('user')->isLogged()){
+if (!$registry->get('user')->isLogged()) {
 	$allow_access = false;
 	
-	if($route){
+	if ($route) {
 		$allowed = array(
 			'common/forgotten',
 			'common/reset',
 			'common/login',
 		);
 		
-		if(!in_array($route, $allowed)){
+		if (!in_array($route, $allowed)) {
 			$action = new Action('common/login');
 		}
 	}
 }
-elseif($route){
+elseif ($route) {
 	$ignore = array(
 		'common/home',
 		'common/login',
@@ -196,11 +196,11 @@ elseif($route){
 		'error/permission'
 	);
 	
-	if(!in_array($route, $ignore) && !$registry->get('user')->hasPermission('access', $route)){
+	if (!in_array($route, $ignore) && !$registry->get('user')->hasPermission('access', $route)) {
 		$action = new Action('error/permission');
 	}
 }
-else{
+else {
 	$action = new Action('common/home');
 }
 

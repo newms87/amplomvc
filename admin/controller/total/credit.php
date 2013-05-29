@@ -1,8 +1,10 @@
 <?php
-class ControllerTotalCredit extends Controller {
+class ControllerTotalCredit extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('total/credit');
 
 		$this->load->language('total/credit');
@@ -51,7 +53,8 @@ class ControllerTotalCredit extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'total/credit')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

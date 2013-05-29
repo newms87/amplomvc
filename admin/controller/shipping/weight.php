@@ -1,8 +1,10 @@
 <?php
-class ControllerShippingWeight extends Controller {
+class ControllerShippingWeight extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('shipping/weight');
 
 		$this->load->language('shipping/weight');
@@ -49,13 +51,15 @@ class ControllerShippingWeight extends Controller {
 		
 		$this->data['geo_zones'] = $geo_zones;
 
-		if (isset($_POST['weight_tax_class_id'])) {
-			$this->data['weight_tax_class_id'] = $_POST['weight_tax_class_id'];
+		if (isset($_POST['weight_tax_class _id'])) 
+{
+			$this->data['weight_tax_class _id'] = $_POST['weight_tax_class_id'];
 		} else {
-			$this->data['weight_tax_class_id'] = $this->config->get('weight_tax_class_id');
+			$this->data['weight_tax_class _id'] = $this->config->get('weight_tax_class_id');
 		}
 		
-		if (isset($_POST['weight_status'])) {
+		if (isset($_POST['weight_status'])) 
+{
 			$this->data['weight_status'] = $_POST['weight_status'];
 		} else {
 			$this->data['weight_status'] = $this->config->get('weight_status');
@@ -67,7 +71,7 @@ class ControllerShippingWeight extends Controller {
 			$this->data['weight_sort_order'] = $this->config->get('weight_sort_order');
 		}
 		
-		$this->data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
+		$this->data['tax_class es'] = $this->model_localisation_tax_class->getTaxClasses();
 
 		$this->children = array(
 			'common/header',
@@ -77,7 +81,8 @@ class ControllerShippingWeight extends Controller {
 		$this->response->setOutput($this->render());
 	}
 		
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'shipping/weight')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

@@ -1,8 +1,10 @@
 <?php
-class ControllerPaymentAuthorizenetAim extends Controller {
+class ControllerPaymentAuthorizenetAim extends Controller 
+{
 	
 
-	public function index() {
+	public function index()
+	{
 		$this->template->load('payment/authorizenet_aim');
 
 		$this->load->language('payment/authorizenet_aim');
@@ -121,7 +123,8 @@ class ControllerPaymentAuthorizenetAim extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'payment/authorizenet_aim')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

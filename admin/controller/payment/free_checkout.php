@@ -1,8 +1,10 @@
 <?php
-class ControllerPaymentFreeCheckout extends Controller {
+class ControllerPaymentFreeCheckout extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('payment/free_checkout');
 
 		$this->load->language('payment/free_checkout');
@@ -59,7 +61,8 @@ class ControllerPaymentFreeCheckout extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'payment/free_checkout')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

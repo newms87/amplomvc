@@ -1,8 +1,10 @@
 <?php
-class ControllerPaymentPPStandard extends Controller {
+class ControllerPaymentPPStandard extends Controller 
+{
 	
 
-	public function index() {
+	public function index()
+	{
 		$this->template->load('payment/pp_standard');
 
 		$this->load->language('payment/pp_standard');
@@ -46,7 +48,7 @@ class ControllerPaymentPPStandard extends Controller {
 				'pp_standard_page_style'=>$this->config->get('pp_standard_page_style')
 			);
 		
-		foreach($defaults as $key=>$default){
+		foreach ($defaults as $key=>$default) {
 			$this->data[$key] = isset($_GET[$key])?$_GET[$key]:$default;
 		}
 		
@@ -62,7 +64,8 @@ class ControllerPaymentPPStandard extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'payment/pp_standard')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

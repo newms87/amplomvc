@@ -1,6 +1,8 @@
 <?php
-class ControllerModuleCarousel extends Controller {
-	protected function index($setting) {
+class ControllerModuleCarousel extends Controller 
+{
+	protected function index($setting)
+	{
 		$this->template->load('module/carousel');
 
 		static $module = 0;

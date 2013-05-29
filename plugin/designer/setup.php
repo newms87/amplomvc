@@ -1,10 +1,13 @@
 <?php
-class SetupDesigner implements SetupPlugin {
+class SetupDesigner implements SetupPlugin 
+{
 		
-	public function install($registry, &$controller_adapters, &$db_requests){
+	public function install($registry, &$controller_adapters, &$db_requests)
+	{
 	}
 	
-	public function update($version, $registry){
+	public function update($version, $registry)
+	{
 		switch($version){
 			case '1.53':
 			case '1.52':
@@ -14,6 +17,7 @@ class SetupDesigner implements SetupPlugin {
 		}
 	}
 	
-	public function uninstall($registry){
+	public function uninstall($registry)
+	{
 	}
 }

@@ -1,8 +1,10 @@
 <?php
-class ControllerModuleInformation extends Controller {
+class ControllerModuleInformation extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/information');
 
 		$this->load->language('module/information');
@@ -49,7 +51,8 @@ class ControllerModuleInformation extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/information')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

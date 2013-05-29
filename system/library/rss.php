@@ -1,24 +1,28 @@
 <?php
-class Rss {
+class Rss 
+{
 	private $xml;
 	private $format;
 	private $items = array();
 	
-	public function load($url, $format = 'rss'){
+	public function load($url, $format = 'rss')
+	{
 		$this->format = $format;
 		
 		$this->xml = simplexml_load_file($url);
 		
-		foreach($this->xml->channel->item as $item){
+		foreach ($this->xml->channel->item as $item) {
 			$this->items[] = $item->children();
 		}
 	}
 	
-	public function next_item(){
+	public function next_item()
+	{
 		return next($this->items);
 	}
 	
-	public function get($key){
+	public function get($key)
+	{
 		$item = current($this->items);
 		
 		$value = $item->$key;
@@ -26,7 +30,8 @@ class Rss {
 		return html_entity_decode($value, ENT_QUOTES);
 	}
 	
-	public function count(){
+	public function count()
+	{
 		return count($this->items);
 	}
 }

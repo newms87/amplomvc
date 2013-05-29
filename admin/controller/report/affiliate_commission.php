@@ -1,6 +1,8 @@
 <?php
-class ControllerReportAffiliateCommission extends Controller {
-	public function index() {
+class ControllerReportAffiliateCommission extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('report/affiliate_commission');
 
 		$this->load->language('report/affiliate_commission');

@@ -1,8 +1,10 @@
 <?php
-class ControllerPaymentMoneyBookers extends Controller {
+class ControllerPaymentMoneyBookers extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('payment/moneybookers');
 
 		$this->load->language('payment/moneybookers');
@@ -127,7 +129,8 @@ class ControllerPaymentMoneyBookers extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'payment/moneybookers')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

@@ -1,8 +1,10 @@
 <?php
-class ControllerToolErrorLog extends Controller {
+class ControllerToolErrorLog extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('tool/error_log');
 
 		$this->load->language('tool/error_log');
@@ -18,24 +20,24 @@ class ControllerToolErrorLog extends Controller {
 		$this->data['clear'] = $this->url->link('tool/error_log/clear', $url_query);
 		
 		$defaults = array('limit'=>100,'start'=>0);
-		foreach($defaults as $key=>$default){
+		foreach ($defaults as $key=>$default) {
 			$$key = isset($_GET[$key]) ? $_GET[$key] : $default;
 		}
 		
 		$filters = array('filter_store'=>'');
 		
-		foreach($filters as $key=>$default){
+		foreach ($filters as $key=>$default) {
 			$this->data[$key] = $$key = isset($_GET[$key]) ? $_GET[$key] : $default;
 		}
 		
-		if($filter_store !== ''){
-			if($filter_store == 'a'){
+		if ($filter_store !== '') {
+			if ($filter_store == 'a') {
 				$store_name = 'Admin';
 			}
-			else{
+			else {
 				$store_name = $this->model_setting_store->getStoreName((int)$filter_store);
 			}
-		}else{
+		} else {
 			$store_name = '';
 		}
 		
@@ -47,15 +49,15 @@ class ControllerToolErrorLog extends Controller {
 		
 		if (file_exists($file)) {
 			$handle = @fopen($file, "r");
-			if($handle){
+			if ($handle) {
 				while (($buffer = fgets($handle, 4096)) !== false && ($current < ($start+$limit))) {
 					$current++;
 					
-					if($current >= $start){
+					if ($current >= $start) {
 						
 						$data = explode("\t", $buffer, 7);
 						
-						if(count($data) < 6 || ($store_name && $store_name != $data[4])){
+						if (count($data) < 6 || ($store_name && $store_name != $data[4])) {
 							continue;
 						}
 						
@@ -100,10 +102,10 @@ class ControllerToolErrorLog extends Controller {
 		
 		$this->data['stores'] = $stores;
 		
-		if($filter_store !== ''){
+		if ($filter_store !== '') {
 			$name = '';
-			foreach($stores as $store){
-				if($store['store_id'] === $filter_store){
+			foreach ($stores as $store) {
+				if ($store['store_id'] === $filter_store) {
 					$name = $store['name'];
 					break;
 				}
@@ -111,7 +113,7 @@ class ControllerToolErrorLog extends Controller {
 			
 			$this->language->format('button_clear', $name);
 		}
-		else{
+		else {
 			$this->language->format('button_clear', 'Log');
 		}
 		
@@ -124,27 +126,28 @@ class ControllerToolErrorLog extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function remove($lines=null, $get_page=false){
+	public function remove($lines=null, $get_page=false)
+	{
 		$get_page = $lines !== null ? $get_page : !isset($_POST['no_page']);
 		
-		if(!isset($_POST['entries']) && $lines === null){
+		if (!isset($_POST['entries']) && $lines === null) {
 			$msg = "No entries were selected for removal!";
-			if($get_page){
+			if ($get_page) {
 				$this->message->add('warning', $msg);
 			}
-			else{
+			else {
 				echo $msg;
 			}
 		}
-		else{
+		else {
 			$entries = ($lines !== null) ? $lines : $_POST['entries'];
 			
-			if(preg_match("/[^\d\s,-]/", $entries) > 0){
+			if (preg_match("/[^\d\s,-]/", $entries) > 0) {
 				$msg = "Invalid Entries for removal: $entries. Use either ranges or integer values (eg: 3,40-50,90,100)";
-				if($get_page){
+				if ($get_page) {
 					$this->message->add('warning', $msg);
 				}
-				else{
+				else {
 					echo $msg;
 				}
 			}
@@ -155,33 +158,34 @@ class ControllerToolErrorLog extends Controller {
 			
 			$file_lines = explode("\n", file_get_contents($file));
 			
-			foreach(explode(',',$entries) as $entry){
-				if(strpos($entry,'-')){
+			foreach (explode(',',$entries) as $entry) {
+				if (strpos($entry,'-')) {
 					list($from,$to) = explode('-', $entry);
 					for($i=(int)$from; $i<=(int)$to; $i++){
 						unset($file_lines[$i]);
 					}
 				}
-				else{
+				else {
 					unset($file_lines[(int)$entry]);
 				}
 			}
 			
 			file_put_contents($file, implode("\n",$file_lines));
 			$msg = $this->_('text_success_remove');
-			if($get_page){
+			if ($get_page) {
 				$this->message->add('success', $msg);
 			}
-			else{
+			else {
 				echo $msg;
 			}
 		}
-		if($get_page){
+		if ($get_page) {
 			$this->index();
 		}
 	}
 	
-	public function clear() {
+	public function clear()
+	{
 		$this->load->language('tool/error_log');
 		
 		$file = DIR_LOGS . $this->config->get('config_error_filename');
@@ -189,35 +193,35 @@ class ControllerToolErrorLog extends Controller {
 		
 		$filters = array('filter_store'=>'');
 		
-		foreach($filters as $key=>$default){
+		foreach ($filters as $key=>$default) {
 			$this->data[$key] = $$key = isset($_GET[$key]) ? $_GET[$key] : $default;
 		}
 		
-		if($filter_store !== ''){
-			if($filter_store == 'a'){
+		if ($filter_store !== '') {
+			if ($filter_store == 'a') {
 				$store_name = 'Admin';
 			}
-			else{
+			else {
 				$store_name = $this->model_setting_store->getStoreName((int)$filter_store);
 			}
-		}else{
+		} else {
 			$store_name = '';
 		}
 			
-		if($store_name){
+		if ($store_name) {
 			$file_lines = explode("\n", file_get_contents($file));
 			
-			foreach($file_lines as $key=>$line){
+			foreach ($file_lines as $key=>$line) {
 				$data = explode("\t", $line);
 				
-				if($data[4] == $store_name){
+				if ($data[4] == $store_name) {
 					unset($file_lines[$key]);
 				}
 			}
 			
 			file_put_contents($file, implode("\n",$file_lines));
 		}
-		else{
+		else {
 			$handle = fopen($file, 'w+');
 			fclose($handle);
 		}

@@ -1,8 +1,10 @@
 <?php
-class ControllerModuleBanner extends Controller {
+class ControllerModuleBanner extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/banner');
 
 		$this->load->language('module/banner');
@@ -57,7 +59,8 @@ class ControllerModuleBanner extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/banner')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

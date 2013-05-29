@@ -1,7 +1,7 @@
 <?= $header; ?>
 <div class="content">
-<?= $this->builder->display_breadcrumbs();?>
-<?= $this->builder->display_errors($errors);?>
+<?= $this->builder->display_breadcrumbs(); ?>
+<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'order.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -16,7 +16,7 @@
 							<td class="left"><?= $entry_store; ?></td>
 							<td class="left">
 								<? $this->builder->set_config('store_id', 'name');?>
-							<?= $this->builder->build('select', $data_stores, "store_id", $store_id);?>
+							<?= $this->builder->build('select', $data_stores, "store_id", $store_id); ?>
 							</td>
 						</tr>
 						<tr>
@@ -89,13 +89,13 @@
 						<tr>
 							<td><span class="required"></span> <?= $entry_country; ?></td>
 							<td>
-								<?= $this->builder->set_config('country_id', 'name');?>
-								<?= $this->builder->build('select', $countries, "payment_country_id", $payment_country_id, array('class'=>"country_select"));?>
+								<?= $this->builder->set_config('country_id', 'name'); ?>
+								<?= $this->builder->build('select', $countries, "payment_country_id", $payment_country_id, array('class'=>"country_select")); ?>
 							</td>
 						</tr>
 						<tr>
 							<td><span class="required"></span> <?= $entry_zone; ?></td>
-							<td><select name="payment_zone_id" class="zone_select" zone_id="<?= $payment_zone_id;?>" ></select></td>
+							<td><select name="payment_zone_id" class="zone_select" zone_id="<?= $payment_zone_id; ?>" ></select></td>
 						</tr>
 					</table>
 				</div>
@@ -141,13 +141,13 @@
 						<tr>
 							<td><span class="required"></span> <?= $entry_country; ?></td>
 							<td>
-								<?= $this->builder->set_config('country_id', 'name');?>
-								<?= $this->builder->build('select', $countries, "shipping_country_id", $shipping_country_id, array('class'=>"country_select"));?>
+								<?= $this->builder->set_config('country_id', 'name'); ?>
+								<?= $this->builder->build('select', $countries, "shipping_country_id", $shipping_country_id, array('class'=>"country_select")); ?>
 							</td>
 						</tr>
 						<tr>
 							<td><span class="required"></span> <?= $entry_zone; ?></td>
-							<td><select name="shipping_zone_id" zone_id="<?= $shipping_zone_id;?>" class="zone_select"></select></td>
+							<td><select name="shipping_zone_id" zone_id="<?= $shipping_zone_id; ?>" class="zone_select"></select></td>
 						</tr>
 					</table>
 				</div>
@@ -590,7 +590,7 @@ $('select[name=\'shipping_address\']').bind('change', function() {
 });
 //--></script>
 
-<?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select');?>
+<?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select'); ?>
 
 <script type="text/javascript"><!--
 $('input[name=\'product\']').autocomplete({

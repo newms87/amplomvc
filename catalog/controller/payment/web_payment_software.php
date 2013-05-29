@@ -1,6 +1,8 @@
 <?php
-class ControllerPaymentWebPaymentSoftware extends Controller {
-	protected function index() {
+class ControllerPaymentWebPaymentSoftware extends Controller 
+{
+	protected function index()
+	{
 		$this->template->load('payment/web_payment_software');
 
 		$this->language->load('payment/web_payment_software');
@@ -28,7 +30,8 @@ class ControllerPaymentWebPaymentSoftware extends Controller {
 		$this->render();
 	}
 	
-	public function send() {
+	public function send()
+	{
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 		
 		$request  = 'MERCHANT_ID=' . urlencode($this->config->get('web_payment_software_merchant_name'));
@@ -69,7 +72,7 @@ class ControllerPaymentWebPaymentSoftware extends Controller {
 		curl_close($curl);
 		
 		//If in test mode strip results to only contain xml data
-		if($this->config->get('web_payment_software_mode') == 'test'){
+		if ($this->config->get('web_payment_software_mode') == 'test') {
 			$end_index = strpos($response, '</WebPaymentSoftwareResponse>');
 			$debug = substr($response, $end_index + 30);
 			$response = substr($response, 0, $end_index)  .'</WebPaymentSoftwareResponse>';

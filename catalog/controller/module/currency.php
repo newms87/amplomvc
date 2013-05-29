@@ -1,6 +1,8 @@
 <?php
-class ControllerModuleCurrency extends Controller {
-	protected function index() {
+class ControllerModuleCurrency extends Controller 
+{
+	protected function index()
+	{
 		$this->template->load('module/currency');
 
 		if (isset($_POST['currency_code'])) {

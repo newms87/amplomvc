@@ -1,6 +1,8 @@
 <?php
-class ControllerCommonColumnRight extends Controller {
-	public function index() {
+class ControllerCommonColumnRight extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('common/column_right');
 
 		$layout_id = $this->model_design_layout->get_layout_id();
@@ -48,7 +50,7 @@ class ControllerCommonColumnRight extends Controller {
 		
 		$this->data['blocks'] = array();
 		
-		foreach($blocks as $key => $block){
+		foreach ($blocks as $key => $block) {
 			list($context, $name) = explode('/', $key);
 			$this->data['blocks'][] = $this->getBlock($context, $name);
 		}

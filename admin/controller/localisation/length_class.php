@@ -1,28 +1,33 @@
 <?php
-class ControllerLocalisationLengthClass extends Controller {
+class ControllerLocalisationLengthClass extends Controller 
+{
 	
  
-	public function index() {
-		$this->load->language('localisation/length_class');
+	public function index()
+	{
+		$this->load->language('localisation/length_class ');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		$this->getList();
 	}
 
-	public function insert() {
-		$this->load->language('localisation/length_class');
+	public function insert()
+	{
+		$this->load->language('localisation/length_class ');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_length_class->addLengthClass($_POST);
+		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) 
+{
+			$this->model_localisation_length_class ->addLengthClass($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
 			$url = '';
 			
-			if (isset($_GET['sort'])) {
+			if (isset($_GET['sort'])) 
+{
 				$url .= '&sort=' . $_GET['sort'];
 			}
 
@@ -34,25 +39,28 @@ class ControllerLocalisationLengthClass extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->url->redirect($this->url->link('localisation/length_class', $url));
+			$this->url->redirect($this->url->link('localisation/length_class ', $url));
 		}
 
 		$this->getForm();
 	}
 
-	public function update() {
-		$this->load->language('localisation/length_class');
+	public function update()
+	{
+		$this->load->language('localisation/length_class ');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_length_class->editLengthClass($_GET['length_class_id'], $_POST);
+		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) 
+{
+			$this->model_localisation_length_class ->editLengthClass($_GET['length_class_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
 			$url = '';
 			
-			if (isset($_GET['sort'])) {
+			if (isset($_GET['sort'])) 
+{
 				$url .= '&sort=' . $_GET['sort'];
 			}
 
@@ -64,27 +72,31 @@ class ControllerLocalisationLengthClass extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->url->redirect($this->url->link('localisation/length_class', $url));
+			$this->url->redirect($this->url->link('localisation/length_class ', $url));
 		}
 
 		$this->getForm();
 	}
 
-	public function delete() {
-		$this->load->language('localisation/length_class');
+	public function delete()
+	{
+		$this->load->language('localisation/length_class ');
 
 		$this->document->setTitle($this->_('heading_title'));
  		
-		if (isset($_POST['selected']) && $this->validateDelete()) {
-			foreach ($_POST['selected'] as $length_class_id) {
-				$this->model_localisation_length_class->deleteLengthClass($length_class_id);
+		if (isset($_POST['selected']) && $this->validateDelete()) 
+{
+			foreach ($_POST['selected'] as $length_class _id) 
+{
+				$this->model_localisation_length_class ->deleteLengthClass($length_class_id);
 			}
 			
 			$this->message->add('success', $this->_('text_success'));
 			
 			$url = '';
 			
-			if (isset($_GET['sort'])) {
+			if (isset($_GET['sort'])) 
+{
 				$url .= '&sort=' . $_GET['sort'];
 			}
 
@@ -96,16 +108,18 @@ class ControllerLocalisationLengthClass extends Controller {
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->url->redirect($this->url->link('localisation/length_class', $url));
+			$this->url->redirect($this->url->link('localisation/length_class ', $url));
 		}
 
 		$this->getList();
 	}
 
-	private function getList() {
-		$this->template->load('localisation/length_class_list');
+	private function getList()
+	{
+		$this->template->load('localisation/length_class _list');
 
-		if (isset($_GET['sort'])) {
+		if (isset($_GET['sort'])) 
+{
 			$sort = $_GET['sort'];
 		} else {
 			$sort = 'title';
@@ -138,7 +152,7 @@ class ControllerLocalisationLengthClass extends Controller {
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/length_class', $url));
+			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/length_class ', $url));
 
 		$this->data['insert'] = $this->url->link('localisation/length_class/insert', $url);
 		$this->data['delete'] = $this->url->link('localisation/length_class/delete', $url);
@@ -156,12 +170,13 @@ class ControllerLocalisationLengthClass extends Controller {
 		
 		$results = $this->model_localisation_length_class->getLengthClasses($data);
 		
-		foreach ($results as $result) {
+		foreach ($results as $result) 
+{
 			$action = array();
 			
 			$action[] = array(
 				'text' => $this->_('text_edit'),
-				'href' => $this->url->link('localisation/length_class/update', 'length_class_id=' . $result['length_class_id'] . $url)
+				'href' => $this->url->link('localisation/length_class /update', 'length_class_id=' . $result['length_class_id'] . $url)
 			);
 
 			$this->data['length_classes'][] = array(
@@ -174,7 +189,8 @@ class ControllerLocalisationLengthClass extends Controller {
 			);
 		}
 
- 		if (isset($this->error['warning'])) {
+ 		if (isset($this->error['warning'])) 
+{
 			$this->data['error_warning'] = $this->error['warning'];
 		} else {
 			$this->data['error_warning'] = '';
@@ -200,13 +216,14 @@ class ControllerLocalisationLengthClass extends Controller {
 			$url .= '&page=' . $_GET['page'];
 		}
 		
-		$this->data['sort_title'] = $this->url->link('localisation/length_class', 'sort=title' . $url);
+		$this->data['sort_title'] = $this->url->link('localisation/length_class ', 'sort=title' . $url);
 		$this->data['sort_unit'] = $this->url->link('localisation/length_class', 'sort=unit' . $url);
 		$this->data['sort_value'] = $this->url->link('localisation/length_class', 'sort=value' . $url);
 		
 		$url = '';
 
-		if (isset($_GET['sort'])) {
+		if (isset($_GET['sort'])) 
+{
 			$url .= '&sort=' . $_GET['sort'];
 		}
 												
@@ -215,7 +232,7 @@ class ControllerLocalisationLengthClass extends Controller {
 		}
 
 		$this->pagination->init();
-		$this->pagination->total = $length_class_total;
+		$this->pagination->total = $length_class _total;
 		$this->data['pagination'] = $this->pagination->render();
 		
 		$this->data['sort'] = $sort;
@@ -229,10 +246,12 @@ class ControllerLocalisationLengthClass extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function getForm() {
-		$this->template->load('localisation/length_class_form');
+	private function getForm()
+	{
+		$this->template->load('localisation/length_class _form');
 
- 		if (isset($this->error['warning'])) {
+ 		if (isset($this->error['warning'])) 
+{
 			$this->data['error_warning'] = $this->error['warning'];
 		} else {
 			$this->data['error_warning'] = '';
@@ -265,34 +284,40 @@ class ControllerLocalisationLengthClass extends Controller {
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/length_class', $url));
+			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/length_class ', $url));
 
-		if (!isset($_GET['length_class_id'])) {
-			$this->data['action'] = $this->url->link('localisation/length_class/insert', $url);
+		if (!isset($_GET['length_class_id'])) 
+{
+			$this->data['action'] = $this->url->link('localisation/length_class /insert', $url);
 		} else {
-			$this->data['action'] = $this->url->link('localisation/length_class/update', 'length_class_id=' . $_GET['length_class_id'] . $url);
+			$this->data['action'] = $this->url->link('localisation/length_class /update', 'length_class_id=' . $_GET['length_class_id'] . $url);
 		}
 
 		$this->data['cancel'] = $this->url->link('localisation/length_class', $url);
 
-		if (isset($_GET['length_class_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-				$length_class_info = $this->model_localisation_length_class->getLengthClass($_GET['length_class_id']);
+		if (isset($_GET['length_class_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) 
+{
+				$length_class _info = $this->model_localisation_length_class->getLengthClass($_GET['length_class_id']);
 		}
 		
 		$this->data['languages'] = $this->model_localisation_language->getLanguages();
 		
-		if (isset($_POST['length_class_description'])) {
-			$this->data['length_class_description'] = $_POST['length_class_description'];
-		} elseif (isset($_GET['length_class_id'])) {
-			$this->data['length_class_description'] = $this->model_localisation_length_class->getLengthClassDescriptions($_GET['length_class_id']);
+		if (isset($_POST['length_class_description'])) 
+{
+			$this->data['length_class _description'] = $_POST['length_class_description'];
+		} elseif (isset($_GET['length_class_id'])) 
+{
+			$this->data['length_class _description'] = $this->model_localisation_length_class->getLengthClassDescriptions($_GET['length_class_id']);
 		} else {
-			$this->data['length_class_description'] = array();
+			$this->data['length_class _description'] = array();
 		}
 		
-		if (isset($_POST['value'])) {
+		if (isset($_POST['value'])) 
+{
 			$this->data['value'] = $_POST['value'];
-		} elseif (isset($length_class_info)) {
-			$this->data['value'] = $length_class_info['value'];
+		} elseif (isset($length_class _info)) 
+{
+			$this->data['value'] = $length_class _info['value'];
 		} else {
 			$this->data['value'] = '';
 		}
@@ -305,12 +330,15 @@ class ControllerLocalisationLengthClass extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validateForm() {
-		if (!$this->user->hasPermission('modify', 'localisation/length_class')) {
+	private function validateForm()
+	{
+		if (!$this->user->hasPermission('modify', 'localisation/length_class ')) 
+{
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
-		foreach ($_POST['length_class_description'] as $language_id => $value) {
+		foreach ($_POST['length_class _description'] as $language_id => $value) 
+{
 			if ((strlen($value['title']) < 3) || (strlen($value['title']) > 32)) {
 				$this->error['title'][$language_id] = $this->_('error_title');
 			}
@@ -323,19 +351,24 @@ class ControllerLocalisationLengthClass extends Controller {
 		return $this->error ? false : true;
 	}
 
-	private function validateDelete() {
-		if (!$this->user->hasPermission('modify', 'localisation/length_class')) {
+	private function validateDelete()
+	{
+		if (!$this->user->hasPermission('modify', 'localisation/length_class ')) 
+{
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		foreach ($_POST['selected'] as $length_class_id) {
-			if ($this->config->get('config_length_class_id') == $length_class_id) {
+		foreach ($_POST['selected'] as $length_class _id) 
+{
+			if ($this->config->get('config_length_class _id') == $length_class_id) 
+{
 				$this->error['warning'] = $this->_('error_default');
 			}
 			
-			$product_total = $this->model_catalog_product->getTotalProductsByLengthClassId($length_class_id);
+			$product_total = $this->model_catalog_product->getTotalProductsByLengthclass Id($length_class_id);
 
-			if ($product_total) {
+			if ($product_total) 
+{
 				$this->error['warning'] = sprintf($this->_('error_product'), $product_total);
 			}
 		}

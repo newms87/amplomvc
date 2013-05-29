@@ -1,6 +1,8 @@
 <?php
-class ControllerInformationInformation extends Controller {
-	public function index() {
+class ControllerInformationInformation extends Controller 
+{
+	public function index()
+	{
 		$this->language->load('information/information');
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -56,7 +58,8 @@ class ControllerInformationInformation extends Controller {
 		}
   	}
 	
-	public function info() {
+	public function info()
+	{
 		if (isset($_GET['information_id'])) {
 			$information_id = $_GET['information_id'];
 		} else {

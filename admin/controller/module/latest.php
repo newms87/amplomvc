@@ -1,8 +1,10 @@
 <?php
-class ControllerModuleLatest extends Controller {
+class ControllerModuleLatest extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/latest');
 
 		$this->load->language('module/latest');
@@ -57,7 +59,8 @@ class ControllerModuleLatest extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/latest')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

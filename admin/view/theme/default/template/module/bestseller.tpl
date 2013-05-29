@@ -1,7 +1,7 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
-	<?= $this->builder->display_errors($errors);?>
+	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->builder->display_errors($errors); ?>
 <div class="box">
 	<div class="heading">
 		<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -12,22 +12,22 @@
 			<table class="form">
 				<tbody>
 						<tr>
-							<td><?= $entry_show_add_to_cart;?></td>
-							<td><?=$this->builder->build('select',$data_yes_no,'bestseller_option[show_add_to_cart]',$options['show_add_to_cart']);?></td>
+							<td><?= $entry_show_add_to_cart; ?></td>
+							<td><?= $this->builder->build('select',$data_yes_no,'bestseller_option[show_add_to_cart]',$options['show_add_to_cart']); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_choose_product; ?></td>
 							<td><input type="text" id='product_chooser' name='filter_name' route='catalog/product/autocomplete' /></td>
 						</tr>
 						<tr>
-							<td><?=$text_product_list;?></td>
+							<td><?= $text_product_list; ?></td>
 							<td>
 							<ul id="bestseller_list" class="scrollbox">
 							<? foreach ($bestseller_list as $id=>$name) { ?>
 								<li>
-										<div class='designer_name'><?= $this->tool->limit_characters($name,50, '');?></div>
+										<div class='designer_name'><?= $this->tool->limit_characters($name,50, ''); ?></div>
 										<img onclick='$(this).parent().remove();' src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" />
-										<input type="hidden" name='bestseller_list[<?=$id;?>]' value="<?= $id;?>" />
+										<input type="hidden" name='bestseller_list[<?= $id; ?>]' value="<?= $id; ?>" />
 								</li>
 							<? } ?>
 							</ul>
@@ -53,17 +53,17 @@
 						<td class="left"><input type="text" name="bestseller_module[<?= $module_row; ?>][limit]" value="<?= $module['limit']; ?>" size="1" /></td>
 						<td class="left">
 							<input type="text" name="bestseller_module[<?= $module_row; ?>][image_width]" value="<?= $module['image_width']; ?>" size="3" />
-							<input type="text" id='image-<?=$module_row;?>' name="bestseller_module[<?= $module_row; ?>][image_height]" value="<?= $module['image_height']; ?>" size="3" />
+							<input type="text" id='image-<?= $module_row; ?>' name="bestseller_module[<?= $module_row; ?>][image_height]" value="<?= $module['image_height']; ?>" size="3" />
 						</td>
 						<td class="left">
 							<? $this->builder->set_config('layout_id','name');?>
-							<?=$this->builder->build('select',$layouts, "bestseller_module[$module_row][layout_id]", $module['layout_id']);?>
+							<?= $this->builder->build('select',$layouts, "bestseller_module[$module_row][layout_id]", $module['layout_id']); ?>
 						</td>
 						<td class="left">
-							<?=$this->builder->build('select',$data_positions, "bestseller_module[$module_row][position]", $module['position']);?>
+							<?= $this->builder->build('select',$data_positions, "bestseller_module[$module_row][position]", $module['position']); ?>
 						</td>
 						<td class="left">
-							<?=$this->builder->build('select',$data_statuses, "bestseller_module[$module_row][status]", $module['status']);?>
+							<?= $this->builder->build('select',$data_statuses, "bestseller_module[$module_row][status]", $module['status']); ?>
 						</td>
 						<td class="right"><input type="text" name="bestseller_module[<?= $module_row; ?>][sort_order]" value="<?= $module['sort_order']; ?>" size="3" /></td>
 						<td class="left"><a onclick="$('#module-row<?= $module_row; ?>').remove();" class="button"><?= $button_remove; ?></a></td>
@@ -90,9 +90,9 @@ function addModule() {
 	html += '		<td class="left"><input type="text" name="bestseller_module[' + module_row + '][limit]" value="4" size="1" /></td>';
 	html += '		<td class="left"><input type="text" name="bestseller_module[' + module_row + '][image_width]" value="174" size="3" /> <input type="text" name="bestseller_module[' + module_row + '][image_height]" value="138" size="3" /></td>';
 	<? $this->builder->set_config('layout_id','name');?>
-	html += '		<td class="left">' + "<?=$this->builder->build('select',$layouts, "bestseller_module[%modrow%][layout_id]");?>" + '</td>';
-	html += '		<td class="left">' + "<?=$this->builder->build('select',$data_positions, "bestseller_module[%modrow%][position]",'content_bottom');?>" + '</td>';
-	html += '		<td class="left">' + "<?=$this->builder->build('select',$data_statuses, "bestseller_module[%modrow%][status]",1);?>" + '</td>';
+	html += '		<td class="left">' + "<?= $this->builder->build('select',$layouts, "bestseller_module[%modrow%][layout_id]"); ?>" + '</td>';
+	html += '		<td class="left">' + "<?= $this->builder->build('select',$data_positions, "bestseller_module[%modrow%][position]",'content_bottom'); ?>" + '</td>';
+	html += '		<td class="left">' + "<?= $this->builder->build('select',$data_statuses, "bestseller_module[%modrow%][status]",1); ?>" + '</td>';
 	html += '		<td class="right"><input type="text" name="bestseller_module[' + module_row + '][sort_order]" value="" size="3" /></td>';
 	html += '		<td class="left"><a onclick="$(\'#module-row' + module_row + '\').remove();" class="button"><?= $button_remove; ?></a></td>';
 	html += '	</tr>';
@@ -104,7 +104,7 @@ function addModule() {
 }
 //--></script>
 
-<?= $this->builder->js('autocomplete', '#product_chooser','name','product_id', 'add_to_list');?>
+<?= $this->builder->js('autocomplete', '#product_chooser','name','product_id', 'add_to_list'); ?>
 
 <script type="text/javascript">//<!--
 
@@ -126,5 +126,5 @@ function add_to_list(selector, data){
 	$('#bestseller_list').append(html);
 }
 //--></script>
-<?=$this->builder->js('errors',$errors);?>
+<?= $this->builder->js('errors',$errors); ?>
 <?= $footer; ?>

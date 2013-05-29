@@ -1,6 +1,8 @@
 <?php
-class ControllerModuleAccount extends Controller {
-	protected function index() {
+class ControllerModuleAccount extends Controller 
+{
+	protected function index()
+	{
 		$this->template->load('module/account');
 
 		$this->language->load('module/account');

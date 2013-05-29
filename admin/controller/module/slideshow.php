@@ -1,8 +1,10 @@
 <?php
-class ControllerModuleSlideshow extends Controller {
+class ControllerModuleSlideshow extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/slideshow');
 
 		$this->load->language('module/slideshow');
@@ -57,7 +59,8 @@ class ControllerModuleSlideshow extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/slideshow')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

@@ -1,8 +1,10 @@
 <?php
-class ControllerAccountEdit extends Controller {
+class ControllerAccountEdit extends Controller 
+{
 	
 
-	public function index() {
+	public function index()
+	{
 		$this->template->load('account/edit');
 
 		if (!$this->customer->isLogged()) {
@@ -117,7 +119,8 @@ class ControllerAccountEdit extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if ((strlen($_POST['firstname']) < 1) || (strlen($_POST['firstname']) > 32)) {
 			$this->error['firstname'] = $this->_('error_firstname');
 		}

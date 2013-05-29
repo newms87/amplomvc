@@ -2,9 +2,11 @@
 
 require_once "../Matrix.php";
 
-class TestMatrix {
+class TestMatrix 
+{
 
-  function TestMatrix() {
+  function TestMatrix()
+  {
 
 	// define test variables
 
@@ -62,7 +64,7 @@ class TestMatrix {
 	echo "<p>Testing constructors and constructor-like methods...</p>";
 
 	$A = new Matrix($columnwise, 3);
-	if($A instanceof Matrix) {
+	if ($A instanceof Matrix) {
 		$this->try_success("Column-packed constructor...");
 	} else
 		$errorCount = $this->try_failure($errorCount, "Column-packed constructor...", "Unable to construct Matrix");
@@ -317,7 +319,8 @@ class TestMatrix {
   * @param string $s
   * @param string $e
   */
-  function try_success($s, $e = "") {
+  function try_success($s, $e = "")
+  {
 	print "> ". $s ."success<br />";
 	if ($e != "")
 		print "> Message: ". $e ."<br />";
@@ -330,7 +333,8 @@ class TestMatrix {
   * @param string $e
   * @return int incremented counter
   */
-  function try_failure($count, $s, $e="") {
+  function try_failure($count, $s, $e="")
+  {
 	print "> ". $s ."*** failure ***<br />> Message: ". $e ."<br />";
 	return ++$count;
   }
@@ -342,7 +346,8 @@ class TestMatrix {
   * @param string $e
   * @return int incremented counter
   */
-  function try_warning($count, $s, $e="") {
+  function try_warning($count, $s, $e="")
+  {
 	print "> ". $s ."*** warning ***<br />> Message: ". $e ."<br />";
 	return ++$count;
   }
@@ -352,7 +357,8 @@ class TestMatrix {
   * @param float $x
   * @param float $y
   */
-  function checkScalars($x, $y) {
+  function checkScalars($x, $y)
+  {
 	$eps = pow(2.0,-52.0);
 	if ($x == 0 & abs($y) < 10*$eps) return;
 	if ($y == 0 & abs($x) < 10*$eps) return;
@@ -367,7 +373,8 @@ class TestMatrix {
   * @param float $x[]
   * @param float $y[]
   */
-  function checkVectors($x, $y) {
+  function checkVectors($x, $y)
+  {
 	$nx = count($x);
 	$ny = count($y);
 	if ($nx == $ny)
@@ -382,7 +389,8 @@ class TestMatrix {
   * @param float $x[][]
   * @param float $y[][]
   */
-  function checkArrays($x, $y) {
+  function checkArrays($x, $y)
+  {
 	$A = new Matrix($x);
 	$B = new Matrix($y);
 	return $this->checkMatrices($A,$B);
@@ -393,7 +401,8 @@ class TestMatrix {
   * @param matrix $X
   * @param matrix $Y
   */
-  function checkMatrices($X = null, $Y = null) {
+  function checkMatrices($X = null, $Y = null)
+  {
 	if( $X == null || $Y == null )
 		return false;
 

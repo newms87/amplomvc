@@ -1,7 +1,9 @@
 <?php
-class ModelShippingAmount extends Model {
+class ModelShippingAmount extends Model 
+{
 	
-	public function getQuote($address) {
+	public function getQuote($address)
+	{
 		$this->load->language('shipping/amount');
 		
 		$valid_zone = $this->model_localisation_zone->inGeoZone($this->config->get('amount_geo_zone_id'), $address['country_id'], $address['zone_id']);
@@ -14,10 +16,10 @@ class ModelShippingAmount extends Model {
 			
 			$total_price = $this->cart->getSubTotal();
 			
-			foreach($pricesets as $set){
+			foreach ($pricesets as $set) {
 				switch($set['range']){
 					case 'range':
-						if($total_price >= $set['from'] && $total_price <= $set['to']){
+						if ($total_price >= $set['from'] && $total_price <= $set['to']) {
 							if($set['type'] == 'fixed')
 								$cost = $set['cost'];
 							else
@@ -25,7 +27,7 @@ class ModelShippingAmount extends Model {
 						}
 						break;
 					case 'lt':
-						if($total_price < $set['total']){
+						if ($total_price < $set['total']) {
 							if($set['type'] == 'fixed')
 								$cost = $set['cost'];
 							else
@@ -33,7 +35,7 @@ class ModelShippingAmount extends Model {
 						}
 						break;
 					case 'lte':
-						if($total_price <= $set['total']){
+						if ($total_price <= $set['total']) {
 							if($set['type'] == 'fixed')
 								$cost = $set['cost'];
 							else
@@ -41,7 +43,7 @@ class ModelShippingAmount extends Model {
 						}
 						break;
 					case 'gt':
-						if($total_price > $set['total']){
+						if ($total_price > $set['total']) {
 							if($set['type'] == 'fixed')
 								$cost = $set['cost'];
 							else
@@ -49,7 +51,7 @@ class ModelShippingAmount extends Model {
 						}
 						break;
 					case 'gte':
-						if($total_price >= $set['total']){
+						if ($total_price >= $set['total']) {
 							if($set['type'] == 'fixed')
 								$cost = $set['cost'];
 							else
@@ -57,7 +59,7 @@ class ModelShippingAmount extends Model {
 						}
 						break;
 					case 'eq':
-						if($total_price == $set['total']){
+						if ($total_price == $set['total']) {
 							if($set['type'] == 'fixed')
 								$cost = $set['cost'];
 							else
@@ -75,7 +77,7 @@ class ModelShippingAmount extends Model {
 			$zonerules = $this->config->get('amount_zonerule');
 			$orig_cost = $cost;
 			$fixed = false;
-			foreach($zonerules as $rule){
+			foreach ($zonerules as $rule) {
 				if($address['country_id'] != $rule['country_id'] || ($address['zone_id'] != $rule['zone_id'] && $rule['zone_id']!=0))
 					continue;
 				switch($rule['mod']){
@@ -105,7 +107,7 @@ class ModelShippingAmount extends Model {
 					break;
 			}
 			
-			if($cost !== false){
+			if ($cost !== false) {
 				$quote_data = array();
 				
 				$quote_data[] = array(

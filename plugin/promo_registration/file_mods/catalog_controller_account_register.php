@@ -1,11 +1,13 @@
 #<?php // editor friendly :)
 
 //=====
-class ControllerAccountRegister extends Controller {
+class ControllerAccountRegister extends Controller 
+{
 	
 //.....
 
-	public function validate() {
+	public function validate()
+	{
 		if ((strlen($_POST['firstname']) < 1) || (strlen($_POST['firstname']) > 32)) {
 				$this->error['firstname'] = $this->_('error_firstname');
 		}
@@ -23,10 +25,10 @@ class ControllerAccountRegister extends Controller {
 		}
 //-----
 //>>>>>php
-		if($this->config->get('config_promo_registration')){
+		if ($this->config->get('config_promo_registration')) {
 			$check = array('firstname','lastname','email','password','confirm');
 			
-			foreach($this->error as $key=>$e){
+			foreach ($this->error as $key=>$e) {
 				if(!in_array($key,$check))
 					unset($this->error[$key]);
 			}

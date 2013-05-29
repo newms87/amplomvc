@@ -1,6 +1,8 @@
 <?php
-class ControllerModuleSlideshow extends Controller {
-	protected function index($setting) {
+class ControllerModuleSlideshow extends Controller 
+{
+	protected function index($setting)
+	{
 		$this->template->load('module/slideshow');
 
 		static $module = 0;

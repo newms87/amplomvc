@@ -1,6 +1,8 @@
 <?php
-class ControllerExtrasBlockSocialMedia extends Controller {
-	public function index($settings, $type = 'standard') {
+class ControllerExtrasBlockSocialMedia extends Controller 
+{
+	public function index($settings, $type = 'standard')
+	{
 		switch($type){
 			case 'standard':
 				$this->template->load('extras/block/my_networks');
@@ -10,19 +12,19 @@ class ControllerExtrasBlockSocialMedia extends Controller {
 				break;
 		}
 		
-		if(isset($settings['networks'])){
+		if (isset($settings['networks'])) {
 			//TODO: MOVE the size settings to the block profile
-			if(!isset($settings['width'])){
+			if (!isset($settings['width'])) {
 				$settings['width'] = $settings['height'] = 25;
 			}
 			
-			foreach($settings['networks'] as &$network){
+			foreach ($settings['networks'] as &$network) {
 				$network['thumb'] = $this->image->resize($network['icon'], $settings['width'], $settings['height']);
 			}
 			
 			$this->data['networks'] = $settings['networks'];
 		}
-		else{
+		else {
 			return ; // we return without rendering because there is nothing to output.
 		}
 		

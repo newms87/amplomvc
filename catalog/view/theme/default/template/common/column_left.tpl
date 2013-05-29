@@ -5,7 +5,7 @@
 	<? } ?>
 	
 	<? foreach($blocks as $block){ ?>
-		<?= $block;?>
+		<?= $block; ?>
 	<? } ?>
 </div>
 <? } ?>

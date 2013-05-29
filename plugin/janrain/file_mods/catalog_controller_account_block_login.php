@@ -1,8 +1,10 @@
 #<?php
 //=====
-class ControllerAccountBlockLogin extends Controller {
+class ControllerAccountBlockLogin extends Controller 
+{
 //.....
-	public function index($settings, $type = 'header') {
+	public function index($settings, $type = 'header')
+	{
 //-----
 //>>>>> {php} {before}
 		$this->language->plugin('janrain', 'account_block_login');

@@ -1,8 +1,10 @@
 <?php
-class ControllerAccountVoucher extends Controller {
+class ControllerAccountVoucher extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('account/voucher');
 
 		$this->language->load('account/voucher');
@@ -144,7 +146,8 @@ class ControllerAccountVoucher extends Controller {
 		$this->response->setOutput($this->render());
   	}
 	
-  	public function success() {
+  	public function success()
+  	{
 		$this->template->load('common/success');
 
 		$this->language->load('account/voucher');
@@ -168,7 +171,8 @@ class ControllerAccountVoucher extends Controller {
  		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if ((strlen($_POST['to_name']) < 1) || (strlen($_POST['to_name']) > 64)) {
 				$this->error['to_name'] = $this->_('error_to_name');
 		}

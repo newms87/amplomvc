@@ -1,8 +1,10 @@
 //=====
 <?php
-class ControllerProductProduct extends Controller {
+class ControllerProductProduct extends Controller 
+{
 //.....
-	public function index() {
+	public function index()
+	{
 //-----
 //<<<<< {php}
 		$this->breadcrumb->add($manufacturer_info['name'], $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $product_info['manufacturer_id']));

@@ -25,7 +25,7 @@
  * @version	1.7.7, 2012-05-19
  */
 
-// Original file header of PEAR::Spreadsheet_Excel_Writer_Worksheet (used as the base for this class):
+// Original file header of PEAR::Spreadsheet_Excel_Writer_Worksheet (used as the base for this class ):
 // -----------------------------------------------------------------------------------------
 // /*
 // *  Module written/ported by Xavier Noguer <xnoguer@rezebra.com>
@@ -68,8 +68,7 @@
  * @package	PHPExcel_Writer_Excel5
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Writer_Excel5_Worksheet extends PHPExcel_Writer_Excel5_BIFFwriter
-{
+class PHPExcel_Writer_Excel5_Worksheet extends PHPExcel_Writer_Excel5_BIFFwriter{
 	/**
 	* Formula parser
 	*
@@ -646,7 +645,8 @@ class PHPExcel_Writer_Excel5_Worksheet extends PHPExcel_Writer_Excel5_BIFFwriter
 	* @param mixed	$xfIndex The XF format index for the cell
 	* @param array $arrcRun Index to Font record and characters beginning
 	*/
-	private function _writeRichTextString($row, $col, $str, $xfIndex, $arrcRun){
+	private function _writeRichTextString($row, $col, $str, $xfIndex, $arrcRun)
+	{
 		$record	= 0x00FD;					// Record identifier
 		$length	= 0x000A;					// Bytes to follow
 
@@ -1190,7 +1190,7 @@ class PHPExcel_Writer_Excel5_Worksheet extends PHPExcel_Writer_Excel5_BIFFwriter
 		$grbit		= 0x0000;				// Option flags
 		$ixfe		= $xfIndex;
 
-		if ( $height < 0 ){
+		if ( $height < 0 ) {
 			$height = null;
 		}
 
@@ -2524,7 +2524,8 @@ class PHPExcel_Writer_Excel5_Worksheet extends PHPExcel_Writer_Excel5_BIFFwriter
 	* @param resource $image The image to process
 	* @return array Array with data and properties of the bitmap
 	*/
-	function _processBitmapGd($image) {
+	function _processBitmapGd($image)
+	{
 		$width = imagesx($image);
 		$height = imagesy($image);
 
@@ -2893,7 +2894,8 @@ class PHPExcel_Writer_Excel5_Worksheet extends PHPExcel_Writer_Excel5_BIFFwriter
 	* @param string $errorCode
 	* @return int
 	*/
-	private static function _mapErrorCode($errorCode) {
+	private static function _mapErrorCode($errorCode)
+ {
 		switch ($errorCode) {
 			case '#NULL!':	return 0x00;
 			case '#DIV/0!':	return 0x07;

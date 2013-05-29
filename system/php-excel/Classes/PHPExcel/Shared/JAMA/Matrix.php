@@ -14,8 +14,7 @@ if (!defined('PHPEXCEL_ROOT')) {
 
 
 /*
- *	Matrix class
- *
+ *	Matrix class *
  *	@author Paul Meagher
  *	@author Michael Bommarito
  *	@author Lukasz Karapuda
@@ -24,7 +23,8 @@ if (!defined('PHPEXCEL_ROOT')) {
  *	@license PHP v3.0
  *	@see http://math.nist.gov/javanumerics/jama/
  */
-class PHPExcel_Shared_JAMA_Matrix {
+class PHPExcel_Shared_JAMA_Matrix 
+{
 
 
 	const PolymorphicArgumentException	= "Invalid argument pattern for polymorphic function.";
@@ -63,7 +63,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*
 	*	As PHP has no support for polymorphic constructors, we hack our own sort of polymorphism using func_num_args, func_get_arg, and gettype. In essence, we're just implementing a simple RTTI filter and calling the appropriate constructor.
 	*/
-	public function __construct() {
+	public function __construct()
+	{
 		if (func_num_args() > 0) {
 			$args = func_get_args();
 			$match = implode(",", array_map('gettype', $args));
@@ -120,7 +121,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*
 	*	@return array Matrix array
 	*/
-	public function getArray() {
+	public function getArray()
+	{
 		return $this->A;
 	}	//	function getArray()
 
@@ -130,7 +132,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*
 	*	@return int Row dimension
 	*/
-	public function getRowDimension() {
+	public function getRowDimension()
+	{
 		return $this->m;
 	}	//	function getRowDimension()
 
@@ -140,7 +143,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*
 	*	@return int Column dimension
 	*/
-	public function getColumnDimension() {
+	public function getColumnDimension()
+	{
 		return $this->n;
 	}	//	function getColumnDimension()
 
@@ -153,7 +157,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*	@param int $j Column position
 	*	@return mixed Element (int/float/double)
 	*/
-	public function get($i = null, $j = null) {
+	public function get($i = null, $j = null)
+	{
 		return $this->A[$i][$j];
 	}	//	function get()
 
@@ -168,7 +173,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*	@param int $jF Final column index
 	*	@return Matrix Submatrix
 	*/
-	public function getMatrix() {
+	public function getMatrix()
+	{
 		if (func_num_args() > 0) {
 			$args = func_get_args();
 			$match = implode(",", array_map('gettype', $args));
@@ -269,7 +275,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*	@param Matrix $B Matrix B
 	*	@return boolean
 	*/
-	public function checkMatrixDimensions($B = null) {
+	public function checkMatrixDimensions($B = null)
+	{
 		if ($B instanceof PHPExcel_Shared_JAMA_Matrix) {
 			if (($this->m == $B->getRowDimension()) && ($this->n == $B->getColumnDimension())) {
 				return true;
@@ -292,7 +299,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*	@param mixed $c Int/float/double value
 	*	@return mixed Element (int/float/double)
 	*/
-	public function set($i = null, $j = null, $c = null) {
+	public function set($i = null, $j = null, $c = null)
+	{
 		// Optimized set version just has this
 		$this->A[$i][$j] = $c;
 	}	//	function set()
@@ -306,7 +314,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*	@param int $n Column dimension
 	*	@return Matrix Identity matrix
 	*/
-	public function identity($m = null, $n = null) {
+	public function identity($m = null, $n = null)
+	{
 		return $this->diagonal($m, $n, 1);
 	}	//	function identity()
 
@@ -320,7 +329,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*	@param mixed $c Diagonal value
 	*	@return Matrix Diagonal matrix
 	*/
-	public function diagonal($m = null, $n = null, $c = 1) {
+	public function diagonal($m = null, $n = null, $c = 1)
+	{
 		$R = new PHPExcel_Shared_JAMA_Matrix($m, $n);
 		for($i = 0; $i < $m; ++$i) {
 			$R->set($i, $i, $c);
@@ -337,7 +347,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*	@param int $iF Final row index
 	*	@return Matrix Submatrix
 	*/
-	public function getMatrixByRow($i0 = null, $iF = null) {
+	public function getMatrixByRow($i0 = null, $iF = null)
+	{
 		if (is_int($i0)) {
 			if (is_int($iF)) {
 				return $this->getMatrix($i0, 0, $iF + 1, $this->n);
@@ -358,7 +369,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*	@param int $iF Final column index
 	*	@return Matrix Submatrix
 	*/
-	public function getMatrixByCol($j0 = null, $jF = null) {
+	public function getMatrixByCol($j0 = null, $jF = null)
+	{
 		if (is_int($j0)) {
 			if (is_int($jF)) {
 				return $this->getMatrix(0, $j0, $this->m, $jF + 1);
@@ -377,7 +389,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*	Tranpose matrix
 	*	@return Matrix Transposed matrix
 	*/
-	public function transpose() {
+	public function transpose()
+	{
 		$R = new PHPExcel_Shared_JAMA_Matrix($this->n, $this->m);
 		for($i = 0; $i < $this->m; ++$i) {
 			for($j = 0; $j < $this->n; ++$j) {
@@ -394,7 +407,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*	Sum of diagonal elements
 	*	@return float Sum of diagonal elements
 	*/
-	public function trace() {
+	public function trace()
+	{
 		$s = 0;
 		$n = min($this->m, $this->n);
 		for($i = 0; $i < $n; ++$i) {
@@ -410,7 +424,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*	Unary minus matrix -A
 	*	@return Matrix Unary minus matrix
 	*/
-	public function uminus() {
+	public function uminus()
+	{
 	}	//	function uminus()
 
 
@@ -421,7 +436,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*	@param mixed $B Matrix/Array
 	*	@return Matrix Sum
 	*/
-	public function plus() {
+	public function plus()
+	{
 		if (func_num_args() > 0) {
 			$args = func_get_args();
 			$match = implode(",", array_map('gettype', $args));
@@ -457,7 +473,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*	@param mixed $B Matrix/Array
 	*	@return Matrix Sum
 	*/
-	public function plusEquals() {
+	public function plusEquals()
+	{
 		if (func_num_args() > 0) {
 			$args = func_get_args();
 			$match = implode(",", array_map('gettype', $args));
@@ -507,7 +524,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*	@param mixed $B Matrix/Array
 	*	@return Matrix Sum
 	*/
-	public function minus() {
+	public function minus()
+	{
 		if (func_num_args() > 0) {
 			$args = func_get_args();
 			$match = implode(",", array_map('gettype', $args));
@@ -543,7 +561,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*	@param mixed $B Matrix/Array
 	*	@return Matrix Sum
 	*/
-	public function minusEquals() {
+	public function minusEquals()
+	{
 		if (func_num_args() > 0) {
 			$args = func_get_args();
 			$match = implode(",", array_map('gettype', $args));
@@ -594,7 +613,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*	@param mixed $B Matrix/Array
 	*	@return Matrix Matrix Cij
 	*/
-	public function arrayTimes() {
+	public function arrayTimes()
+	{
 		if (func_num_args() > 0) {
 			$args = func_get_args();
 			$match = implode(",", array_map('gettype', $args));
@@ -631,7 +651,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*	@param mixed $B Matrix/Array
 	*	@return Matrix Matrix Aij
 	*/
-	public function arrayTimesEquals() {
+	public function arrayTimesEquals()
+	{
 		if (func_num_args() > 0) {
 			$args = func_get_args();
 			$match = implode(",", array_map('gettype', $args));
@@ -682,7 +703,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*	@param Matrix $B Matrix B
 	*	@return Matrix Division result
 	*/
-	public function arrayRightDivide() {
+	public function arrayRightDivide()
+	{
 		if (func_num_args() > 0) {
 			$args = func_get_args();
 			$match = implode(",", array_map('gettype', $args));
@@ -738,7 +760,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*	@param mixed $B Matrix/Array
 	*	@return Matrix Matrix Aij
 	*/
-	public function arrayRightDivideEquals() {
+	public function arrayRightDivideEquals()
+	{
 		if (func_num_args() > 0) {
 			$args = func_get_args();
 			$match = implode(",", array_map('gettype', $args));
@@ -775,7 +798,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*	@param Matrix $B Matrix B
 	*	@return Matrix Division result
 	*/
-	public function arrayLeftDivide() {
+	public function arrayLeftDivide()
+	{
 		if (func_num_args() > 0) {
 			$args = func_get_args();
 			$match = implode(",", array_map('gettype', $args));
@@ -812,7 +836,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*	@param mixed $B Matrix/Array
 	*	@return Matrix Matrix Aij
 	*/
-	public function arrayLeftDivideEquals() {
+	public function arrayLeftDivideEquals()
+	{
 		if (func_num_args() > 0) {
 			$args = func_get_args();
 			$match = implode(",", array_map('gettype', $args));
@@ -848,7 +873,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*	@param mixed $n Matrix/Array/Scalar
 	*	@return Matrix Product
 	*/
-	public function times() {
+	public function times()
+	{
 		if (func_num_args() > 0) {
 			$args  = func_get_args();
 			$match = implode(",", array_map('gettype', $args));
@@ -939,7 +965,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*	@param mixed $B Matrix/Array
 	*	@return Matrix Sum
 	*/
-	public function power() {
+	public function power()
+	{
 		if (func_num_args() > 0) {
 			$args = func_get_args();
 			$match = implode(",", array_map('gettype', $args));
@@ -989,7 +1016,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*	@param mixed $B Matrix/Array
 	*	@return Matrix Sum
 	*/
-	public function concat() {
+	public function concat()
+	{
 		if (func_num_args() > 0) {
 			$args = func_get_args();
 			$match = implode(",", array_map('gettype', $args));
@@ -1023,7 +1051,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*	@param Matrix $B Right hand side
 	*	@return Matrix ... Solution if A is square, least squares solution otherwise
 	*/
-	public function solve($B) {
+	public function solve($B)
+	{
 		if ($this->m == $this->n) {
 			$LU = new PHPExcel_Shared_JAMA_LUDecomposition($this);
 			return $LU->solve($B);
@@ -1039,7 +1068,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*
 	*	@return Matrix ... Inverse(A) if A is square, pseudoinverse otherwise.
 	*/
-	public function inverse() {
+	public function inverse()
+	{
 		return $this->solve($this->identity($this->m, $this->m));
 	}	//	function inverse()
 
@@ -1050,7 +1080,8 @@ class PHPExcel_Shared_JAMA_Matrix {
 	*	Calculate determinant
 	*	@return float Determinant
 	*/
-	public function det() {
+	public function det()
+	{
 		$L = new PHPExcel_Shared_JAMA_LUDecomposition($this);
 		return $L->det();
 	}	//	function det()

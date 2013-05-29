@@ -1,6 +1,8 @@
 <?php
-class ModelTotalHandling extends Model {
-	public function getTotal(&$total_data, &$total, &$taxes) {
+class ModelTotalHandling extends Model 
+{
+	public function getTotal(&$total_data, &$total, &$taxes)
+	{
 		if (($this->cart->getSubTotal() < $this->config->get('handling_total')) && ($this->cart->getSubTotal() > 0)) {
 			$this->load->language('total/handling');
 			
@@ -12,10 +14,12 @@ class ModelTotalHandling extends Model {
 				'sort_order' => $this->config->get('handling_sort_order')
 			);
 
-			if ($this->config->get('handling_tax_class_id')) {
-				$tax_rates = $this->tax->getRates($this->config->get('handling_fee'), $this->config->get('handling_tax_class_id'));
+			if ($this->config->get('handling_tax_class _id')) 
+{
+				$tax_rates = $this->tax->getRates($this->config->get('handling_fee'), $this->config->get('handling_tax_class _id'));
 				
-				foreach ($tax_rates as $tax_rate) {
+				foreach ($tax_rates as $tax_rate) 
+{
 					if (!isset($taxes[$tax_rate['tax_rate_id']])) {
 						$taxes[$tax_rate['tax_rate_id']] = $tax_rate['amount'];
 					} else {

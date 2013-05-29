@@ -1,6 +1,8 @@
 <?php
-class ControllerPaymentSagepayUS extends Controller {
-	protected function index() {
+class ControllerPaymentSagepayUS extends Controller 
+{
+	protected function index()
+	{
 		$this->template->load('payment/sagepay_us');
 
 		$this->language->load('payment/sagepay_us');
@@ -28,7 +30,8 @@ class ControllerPaymentSagepayUS extends Controller {
 		$this->render();
 	}
 	
-	public function send() {
+	public function send()
+	{
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 		
 		$url = 'https://www.sagepayments.net/cgi-bin/eftbankcard.dll?transaction';

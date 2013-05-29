@@ -1,7 +1,7 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
-	<?= $this->builder->display_errors($errors);?>
+	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -38,7 +38,7 @@
 						
 						<td>
 							<? $this->builder->set_config('layout_id', 'name');?>
-							<div id="layout_select"><?= $this->builder->build('select', $data_layouts, "layout_id", $layout_id);?></div>
+							<div id="layout_select"><?= $this->builder->build('select', $data_layouts, "layout_id", $layout_id); ?></div>
 							<a id="create_layout" class="link_button"><?= $button_create_layout; ?></a>
 							<span id="create_layout_load" style="display:none"><?= $text_creating_layout; ?></span>
 						</td>
@@ -46,11 +46,11 @@
 					<tr>
 						<td><span class="required"></span> <?= $entry_store; ?></td>
 						<? $this->builder->set_config('store_id', 'name');?>
-						<td><?= $this->builder->build('multiselect', $data_stores, "stores", $stores);?></td>
+						<td><?= $this->builder->build('multiselect', $data_stores, "stores", $stores); ?></td>
 					</tr>
 					<tr>
 						<td><?= $entry_status; ?></td>
-						<td><?=$this->builder->build('select',$data_statuses,'status',(int)$status);?></td>
+						<td><?= $this->builder->build('select',$data_statuses,'status',(int)$status); ?></td>
 					</tr>
 				</table>
 			</div>
@@ -86,10 +86,10 @@ $('#create_layout').click(function(){
 });
 //--></script>
 
-<?= $this->builder->js('ckeditor');?>
+<?= $this->builder->js('ckeditor'); ?>
 
 <?= $this->builder->js('translations', $translations); ?>
 
-<?= $this->builder->js('errors', $errors);?>
+<?= $this->builder->js('errors', $errors); ?>
 
 <?= $footer; ?>

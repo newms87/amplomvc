@@ -1,8 +1,10 @@
 <?php
-class ControllerModuleCarousel extends Controller {
+class ControllerModuleCarousel extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/carousel');
 
 		$this->load->language('module/carousel');
@@ -57,7 +59,8 @@ class ControllerModuleCarousel extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/carousel')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

@@ -1,7 +1,9 @@
 <?php
-class ControllerInformationContact extends Controller {
+class ControllerInformationContact extends Controller 
+{
 	
-  	public function index() {
+  	public function index()
+  	{
 		$this->template->load('information/contact');
 
 		$this->language->load('information/contact');
@@ -41,7 +43,7 @@ class ControllerInformationContact extends Controller {
 								'enquiry'=>'',
 								'captcha'=>''
 							);
-		foreach($defaults as $key=>$default){
+		foreach ($defaults as $key=>$default) {
 			$this->data[$key] = isset($_POST[$key])?$_POST[$key]:$default;
 		}
 
@@ -57,7 +59,8 @@ class ControllerInformationContact extends Controller {
  		$this->response->setOutput($this->render());
   	}
 
-  	public function success() {
+  	public function success()
+  	{
 		$this->template->load('common/success');
 
 		$this->language->load('information/contact');
@@ -81,7 +84,8 @@ class ControllerInformationContact extends Controller {
  		$this->response->setOutput($this->render());
 	}
 	
-  	private function validate() {
+  	private function validate()
+  	{
 		if ((strlen($_POST['name']) < 3) || (strlen($_POST['name']) > 32)) {
 				$this->error['name'] = $this->_('error_name');
 		}
@@ -101,7 +105,8 @@ class ControllerInformationContact extends Controller {
 		return $this->error ? false : true;
   	}
 
-	public function captcha() {
+	public function captcha()
+	{
 		$this->session->data['captcha'] = $this->captcha->getCode();
 		
 		$this->captcha->showImage();

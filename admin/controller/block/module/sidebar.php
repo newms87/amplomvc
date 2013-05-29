@@ -1,7 +1,9 @@
 <?php
-class ControllerBlockModuleSidebar extends Controller {
+class ControllerBlockModuleSidebar extends Controller 
+{
 	
-	public function settings(&$settings) {
+	public function settings(&$settings)
+	{
 		$this->template->load('block/module/sidebar_settings');
 		
 		$this->data['settings'] = $settings;
@@ -12,7 +14,8 @@ class ControllerBlockModuleSidebar extends Controller {
 	}
 	
 	/*
-	public function profile(&$profiles) {
+	public function profile(&$profiles)
+	{
 		$this->template->load('block/module/sidebar_profile');
 
 		$this->data['profiles'] += $profiles;
@@ -23,7 +26,8 @@ class ControllerBlockModuleSidebar extends Controller {
 	}
 	*/
 	
-	public function validate() {
+	public function validate()
+	{
 		return $this->error;
 	}
 }

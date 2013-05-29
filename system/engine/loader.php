@@ -1,20 +1,25 @@
 <?php
-final class Loader {
+final class Loader 
+{
 	protected $registry;
 	
-	public function __construct(&$registry) {
+	public function __construct(&$registry)
+	{
 		$this->registry = &$registry;
 	}
 	
-	public function __get($key) {
+	public function __get($key)
+	{
 		return $this->registry->get($key);
 	}
 
-	public function __set($key, $value) {
+	public function __set($key, $value)
+	{
 		$this->registry->set($key, $value);
 	}
 	
-	public function library($library) {
+	public function library($library)
+	{
 		$library = strtolower($library);
 		
 		$file = DIR_SYSTEM . 'library/' . $library . '.php';
@@ -34,18 +39,19 @@ final class Loader {
 		}
 	}
 	
-	public function model($model) {
+	public function model($model)
+	{
 		
-		if(strpos($model,'/')){
+		if (strpos($model,'/')) {
 			$model_name = 'model_' . str_replace('/', '_', $model);
 		
-			if(is_object($this->$model_name)){
+			if (is_object($this->$model_name)) {
 				return $this->$model_name;
 			}
 			
 			$file  = DIR_APPLICATION . 'model/' . $model . '.php';
 		}
-		else{
+		else {
 			$model_name = $model;
 			
 			$model_file = substr($model, 6);
@@ -59,7 +65,7 @@ final class Loader {
 				
 				$occur = strpos($model, '_', $occur+1);
 				
-				if(!$occur){
+				if (!$occur) {
 					break;
 				}
 				
@@ -72,10 +78,11 @@ final class Loader {
 		
 		$class = 'Model' . preg_replace('/[^a-zA-Z0-9]/', '', $model);
 		
-		if (file_exists($file)) {
+		if (file_exists($file)) 
+{
 			_require_once($file);
 			
-			$model = new $class($this->registry);
+			$model = new $class ($this->registry);
 			
 			$this->registry->set($model_name, $model);
 			
@@ -87,25 +94,29 @@ final class Loader {
 		}
 	}
 	
-	public function database($driver, $hostname, $username, $password, $database, $prefix = NULL, $charset = 'UTF8') {
+	public function database($driver, $hostname, $username, $password, $database, $prefix = NULL, $charset = 'UTF8')
+	{
 		$file  = DIR_SYSTEM . 'database/' . $driver . '.php';
 		$class = 'Database' . preg_replace('/[^a-zA-Z0-9]/', '', $driver);
 		
-		if (file_exists($file)) {
+		if (file_exists($file)) 
+{
 			include_once($file);
 			
-			$this->registry->set(str_replace('/', '_', $driver), new $class());
+			$this->registry->set(str_replace('/', '_', $driver), new $class ());
 		} else {
 			trigger_error('Error: Could not load database ' . $driver . '!');
 			exit();
 		}
 	}
 	
-	public function language($language) {
+	public function language($language)
+	{
 		return $this->language->load($language);
 	}
 	
-	public function plugin_language($name, $language){
+	public function plugin_language($name, $language)
+	{
 		return $this->language->plugin($name, $language);
 	}
 }

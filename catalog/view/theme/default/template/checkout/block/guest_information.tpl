@@ -9,18 +9,18 @@
 		<div class="right payment_address">
 			<h2><?= $text_payment_address; ?></h2>
 			<div class="checkout_form">
-				<?= $form_payment_address;?>
+				<?= $form_payment_address; ?>
 			</div>
 		</div>
 		<? if(!empty($form_shipping_address)) { ?>
 		<div style="clear:both">
-			<input type="checkbox" name="same_shipping_address" value="1" id="shipping" <?= $same_shipping_address ? 'checked="checked"' : '';?> />
+			<input type="checkbox" name="same_shipping_address" value="1" id="shipping" <?= $same_shipping_address ? 'checked="checked"' : ''; ?> />
 			<label for="shipping"><?= $entry_shipping; ?></label>
 		</div>
 		<div id="guest_shipping_address" class="left shipping_address">
-			<h2><?= $text_shipping_address;?></h2>
+			<h2><?= $text_shipping_address; ?></h2>
 			<div class="checkout_form">
-				<?= $form_shipping_address;?>
+				<?= $form_shipping_address; ?>
 			</div>
 		</div>
 		<? } ?>
@@ -30,7 +30,7 @@
 	</form>
 </div>
 
-<?=$this->builder->js('load_zones', '#guest_checkout .shipping_address, #guest_checkout .payment_address', '.country_select', '.zone_select');?>
+<?= $this->builder->js('load_zones', '#guest_checkout .shipping_address, #guest_checkout .payment_address', '.country_select', '.zone_select'); ?>
 
 <script type="text/javascript">//<!--
 $('#guest_checkout input[name=same_shipping_address]').change(function(){

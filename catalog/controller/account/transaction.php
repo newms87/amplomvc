@@ -1,6 +1,8 @@
 <?php
-class ControllerAccountTransaction extends Controller {
-	public function index() {
+class ControllerAccountTransaction extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('account/transaction');
 
 		if (!$this->customer->isLogged()) {

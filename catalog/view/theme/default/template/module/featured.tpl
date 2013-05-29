@@ -1,13 +1,13 @@
 <? if($display == 'context'){ ?>
-	<?= $spotlight;?>
-	<?=$ending_soon;?>
+	<?= $spotlight; ?>
+	<?= $ending_soon; ?>
 <? }?>
 <div class="box featured_box">
 	<div id='featured_filter_results' style='display:none'></div>
 	<form id='featured_filter_form' style='display:none'>
-				<input type='hidden' id='sort_by' name='sort_by' value='<?=$sort_by;?>' />
-				<input type='hidden' id='category_id' name='category_id' value='<?=$category_id;?>' />
-				<input type='hidden' id='featured_page' name='page' value='<?=$page;?>' />
+				<input type='hidden' id='sort_by' name='sort_by' value='<?= $sort_by; ?>' />
+				<input type='hidden' id='category_id' name='category_id' value='<?= $category_id; ?>' />
+				<input type='hidden' id='featured_page' name='page' value='<?= $page; ?>' />
 	</form>
 </div>
 
@@ -75,7 +75,7 @@
 	}
 	
 	function show_search(event){
-			toggleShowSearch(event,{show:true,url:'<?= html_entity_decode($filter_url);?>', result:$('#featured_filter_results'),form:$("#featured_filter_form")});
+			toggleShowSearch(event,{show:true,url:'<?= html_entity_decode($filter_url); ?>', result:$('#featured_filter_results'),form:$("#featured_filter_form")});
 	}
 	
 	function check_scroll_bottom(event){

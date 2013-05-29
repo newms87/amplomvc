@@ -1,8 +1,10 @@
 <?php
-class ControllerPaymentPayPoint extends Controller {
+class ControllerPaymentPayPoint extends Controller 
+{
 	
 
-	public function index() {
+	public function index()
+	{
 		$this->template->load('payment/paypoint');
 
 		$this->load->language('payment/paypoint');
@@ -97,7 +99,8 @@ class ControllerPaymentPayPoint extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'payment/paypoint')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

@@ -1,7 +1,9 @@
 <?php
-class ControllerPagePage extends Controller {
+class ControllerPagePage extends Controller 
+{
 	
-	public function index() {
+	public function index()
+	{
 		$this->load->language('page/page');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -9,7 +11,8 @@ class ControllerPagePage extends Controller {
 		$this->getList();
 	}
 
-	public function insert() {
+	public function insert()
+	{
 		$this->load->language('page/page');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -17,18 +20,19 @@ class ControllerPagePage extends Controller {
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_page_page->addPage($_POST);
 			
-			if(!$this->message->error_set()){
+			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success_insert'));
 			}
 			
 			$this->getList();
 		}
-		else{
+		else {
 			$this->getForm();
 		}
 	}
 
-	public function update() {
+	public function update()
+	{
 		$this->load->language('page/page');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -36,18 +40,19 @@ class ControllerPagePage extends Controller {
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_page_page->editPage($_GET['page_id'], $_POST);
 			
-			if(!$this->message->error_set()){
+			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success_update'));
 			}
 			
 			$this->getList();
 		}
-		else{
+		else {
 			$this->getForm();
 		}
 	}
  
-	public function delete() {
+	public function delete()
+	{
 		$this->load->language('page/page');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -55,7 +60,7 @@ class ControllerPagePage extends Controller {
 		if (isset($_POST['page_id']) && $this->validateDelete()) {
 			$this->model_page_page->deletePage($_POST['page_id']);
 			
-			if(!$this->message->error_set()){
+			if (!$this->message->error_set()) {
 				$this->message->add('notify', $this->_('text_success_delete'));
 			}
 		}
@@ -63,7 +68,8 @@ class ControllerPagePage extends Controller {
 		$this->getList();
 	}
 	
-	public function batch_update() {
+	public function batch_update()
+	{
 		$this->language->load('page/page');
 		
 		if (isset($_POST['selected']) && isset($_GET['action'])) {
@@ -86,8 +92,8 @@ class ControllerPagePage extends Controller {
 					break;
 			}
 			
-			if(!$this->error){
-				if(!$this->message->error_set()){
+			if (!$this->error) {
+				if (!$this->message->error_set()) {
 					$this->message->add('success',$this->_('text_success'));
 				}
 			}
@@ -96,7 +102,8 @@ class ControllerPagePage extends Controller {
 		$this->index();
 	}
 
-	private function getList() {
+	private function getList()
+	{
 		$this->template->load('page/page_list');
 
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -139,7 +146,7 @@ class ControllerPagePage extends Controller {
 			'page' => 1,
 		);
 		
-		foreach($sort_defaults as $key => $default){
+		foreach ($sort_defaults as $key => $default) {
 			$data[$key] = isset($_GET[$key]) ? $_GET[$key] : $default;
 		}
 		
@@ -148,7 +155,7 @@ class ControllerPagePage extends Controller {
 		//Filter
 		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 		
-		if($filter){
+		if ($filter) {
 			$data += $filter;
 		}
 		
@@ -229,7 +236,8 @@ class ControllerPagePage extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function getForm() {
+	private function getForm()
+	{
 		$this->language->load('page/page');
 		
 		$this->template->load('page/page_form');
@@ -266,7 +274,7 @@ class ControllerPagePage extends Controller {
 			'translations' => array(),
 		);
 
-		foreach($defaults as $key => $default){
+		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
 				$this->data[$key] = $_POST[$key];
 			} elseif (isset($page_info[$key])) {
@@ -276,7 +284,7 @@ class ControllerPagePage extends Controller {
 			}
 		}
 		
-		if($page_id){
+		if ($page_id) {
 			$this->breadcrumb->add($this->data['name'], $this->url->link('page/page/update', 'page_id=' . $page_id));
 		} else {
 			$this->breadcrumb->add($this->_('text_new_page'), $this->url->link('page/page/insert'));
@@ -296,15 +304,16 @@ class ControllerPagePage extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function create_layout(){
-		if(!empty($_POST['name'])) {
+	public function create_layout()
+	{
+		if (!empty($_POST['name'])) {
 			$layout = array(
 				'name' => $_POST['name'],
 			);
 			
 			$result = $this->model_design_layout->getLayouts($layout);
 			
-			if(empty($result)){
+			if (empty($result)) {
 				$layout_id = $this->model_design_layout->addLayout($layout);
 			} else {
 				$result = current($result);
@@ -324,19 +333,21 @@ class ControllerPagePage extends Controller {
 		$this->response->setOutput($this->builder->build('select', $layouts, 'layout_id', $layout_id));
 	}
 	
-	private function validateForm() {
+	private function validateForm()
+	{
 		if (!$this->user->hasPermission('modify', 'page/page')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		if(!$this->validation->text($_POST['name'], 3, 64)){
+		if (!$this->validation->text($_POST['name'], 3, 64)) {
 			$this->error['name'] = $this->_('error_name');
 		}
 		
 		return $this->error ? false : true;
 	}
 
-	private function validateDelete() {
+	private function validateDelete()
+	{
 		if (!$this->user->hasPermission('modify', 'page/page')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

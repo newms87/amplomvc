@@ -1,6 +1,8 @@
 <?php
-class ControllerPaymentCheque extends Controller {
-	protected function index() {
+class ControllerPaymentCheque extends Controller 
+{
+	protected function index()
+	{
 		$this->template->load('payment/cheque');
 
 		$this->language->load('payment/cheque');
@@ -13,7 +15,8 @@ class ControllerPaymentCheque extends Controller {
 		$this->render();
 	}
 	
-	public function confirm() {
+	public function confirm()
+	{
 		$this->language->load('payment/cheque');
 		
 		$comment  = $this->_('text_payable') . "\n";

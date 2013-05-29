@@ -1,10 +1,12 @@
 <?php
-class ControllerCheckoutBlockLogin extends Controller {
-	public function index() {
+class ControllerCheckoutBlockLogin extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('checkout/block/login');
 		$this->language->load('checkout/block/login');
 		
-		if(isset($_POST['username'])){
+		if (isset($_POST['username'])) {
 			$this->validate();
 		}
 		
@@ -22,8 +24,8 @@ class ControllerCheckoutBlockLogin extends Controller {
 			'username' => '',
 		);
 		
-		foreach($defaults as $key => $default){
-			if(isset($_POST[$key])){
+		foreach ($defaults as $key => $default) {
+			if (isset($_POST[$key])) {
 				$this->data[$key] = $_POST[$key];
 			} else {
 				$this->data[$key] = $default;
@@ -37,7 +39,8 @@ class ControllerCheckoutBlockLogin extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function validate() {
+	public function validate()
+	{
 		$this->language->load('checkout/block/login');
 		
 		if ($this->customer->login($_POST['username'], $_POST['password'])) {

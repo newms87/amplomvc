@@ -1,8 +1,10 @@
 <?php
-class ControllerShippingUPS extends Controller {
+class ControllerShippingUPS extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('shipping/ups');
 
 		$this->load->language('shipping/ups');
@@ -177,10 +179,11 @@ class ControllerShippingUPS extends Controller {
 			'text'  => $this->_('text_ups_10kg_box')
 		);
 		
-		if (isset($_POST['ups_classification'])) {
-			$this->data['ups_classification'] = $_POST['ups_classification'];
+		if (isset($_POST['ups_class ification'])) 
+{
+			$this->data['ups_class ification'] = $_POST['ups_classification'];
 		} else {
-			$this->data['ups_classification'] = $this->config->get('ups_classification');
+			$this->data['ups_class ification'] = $this->config->get('ups_classification');
 		}
 						
 		$this->data['classifications'][] = array(
@@ -198,7 +201,8 @@ class ControllerShippingUPS extends Controller {
 			'text'  => '04'
 		);
 			
-		if (isset($_POST['ups_origin'])) {
+		if (isset($_POST['ups_origin'])) 
+{
 			$this->data['ups_origin'] = $_POST['ups_origin'];
 		} else {
 			$this->data['ups_origin'] = $this->config->get('ups_origin');
@@ -601,29 +605,33 @@ class ControllerShippingUPS extends Controller {
 			$this->data['ups_weight_code'] = $this->config->get('ups_weight_code');
 		}
 		
-		if (isset($_POST['ups_weight_class_id'])) {
-			$this->data['ups_weight_class_id'] = $_POST['ups_weight_class_id'];
+		if (isset($_POST['ups_weight_class _id'])) 
+{
+			$this->data['ups_weight_class _id'] = $_POST['ups_weight_class_id'];
 		} else {
-			$this->data['ups_weight_class_id'] = $this->config->get('ups_weight_class_id');
+			$this->data['ups_weight_class _id'] = $this->config->get('ups_weight_class_id');
 		}
 		
 		$this->data['weight_classes'] = $this->model_localisation_weight_class->getWeightClasses();
 		
-		if (isset($_POST['ups_length_code'])) {
+		if (isset($_POST['ups_length_code'])) 
+{
 			$this->data['ups_length_code'] = $_POST['ups_length_code'];
 		} else {
 			$this->data['ups_length_code'] = $this->config->get('ups_length_code');
 		}
 		
-		if (isset($_POST['ups_length_class'])) {
-			$this->data['ups_length_class'] = $_POST['ups_length_class'];
+		if (isset($_POST['ups_length_class '])) 
+{
+			$this->data['ups_length_class '] = $_POST['ups_length_class'];
 		} else {
-			$this->data['ups_length_class'] = $this->config->get('ups_length_class');
+			$this->data['ups_length_class '] = $this->config->get('ups_length_class');
 		}
 				
 		$this->data['length_classes'] = $this->model_localisation_length_class->getLengthClasses();
 						
-		if (isset($_POST['ups_length'])) {
+		if (isset($_POST['ups_length'])) 
+{
 			$this->data['ups_length'] = $_POST['ups_length'];
 		} else {
 			$this->data['ups_length'] = $this->config->get('ups_length');
@@ -641,15 +649,17 @@ class ControllerShippingUPS extends Controller {
 			$this->data['ups_height'] = $this->config->get('ups_height');
 		}
 								
-		if (isset($_POST['ups_tax_class_id'])) {
-			$this->data['ups_tax_class_id'] = $_POST['ups_tax_class_id'];
+		if (isset($_POST['ups_tax_class _id'])) 
+{
+			$this->data['ups_tax_class _id'] = $_POST['ups_tax_class_id'];
 		} else {
-			$this->data['ups_tax_class_id'] = $this->config->get('ups_tax_class_id');
+			$this->data['ups_tax_class _id'] = $this->config->get('ups_tax_class_id');
 		}
 		
 		$this->data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
 		
-		if (isset($_POST['ups_geo_zone_id'])) {
+		if (isset($_POST['ups_geo_zone_id'])) 
+{
 			$this->data['ups_geo_zone_id'] = $_POST['ups_geo_zone_id'];
 		} else {
 			$this->data['ups_geo_zone_id'] = $this->config->get('ups_geo_zone_id');
@@ -683,7 +693,8 @@ class ControllerShippingUPS extends Controller {
  		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'shipping/ups')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

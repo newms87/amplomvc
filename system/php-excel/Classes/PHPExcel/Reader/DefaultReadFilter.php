@@ -42,8 +42,7 @@ if (!defined('PHPEXCEL_ROOT')) {
  * @package	PHPExcel_Reader
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Reader_DefaultReadFilter implements PHPExcel_Reader_IReadFilter
-{
+class PHPExcel_Reader_DefaultReadFilter implements PHPExcel_Reader_IReadFilter{
 	/**
 	* Should this cell be read?
 	*
@@ -52,7 +51,8 @@ class PHPExcel_Reader_DefaultReadFilter implements PHPExcel_Reader_IReadFilter
 	* @param	$worksheetName	Optional worksheet name
 	* @return	boolean
 	*/
-	public function readCell($column, $row, $worksheetName = '') {
+	public function readCell($column, $row, $worksheetName = '')
+	{
 		return true;
 	}
 }

@@ -1,8 +1,10 @@
 <?php
-class ControllerLocalisationReturnReason extends Controller {
+class ControllerLocalisationReturnReason extends Controller 
+{
 	
 	
-  	public function index() {
+  	public function index()
+  	{
 		$this->load->language('localisation/return_reason');
 	
 		$this->document->setTitle($this->_('heading_title'));
@@ -10,7 +12,8 @@ class ControllerLocalisationReturnReason extends Controller {
 		$this->getList();
   	}
 				
-  	public function insert() {
+  	public function insert()
+  	{
 		$this->load->language('localisation/return_reason');
 	
 		$this->document->setTitle($this->_('heading_title'));
@@ -40,7 +43,8 @@ class ControllerLocalisationReturnReason extends Controller {
 		$this->getForm();
   	}
 
-  	public function update() {
+  	public function update()
+  	{
 		$this->load->language('localisation/return_reason');
 	
 		$this->document->setTitle($this->_('heading_title'));
@@ -70,7 +74,8 @@ class ControllerLocalisationReturnReason extends Controller {
 		$this->getForm();
   	}
 
-  	public function delete() {
+  	public function delete()
+  	{
 		$this->load->language('localisation/return_reason');
 	
 		$this->document->setTitle($this->_('heading_title'));
@@ -102,7 +107,8 @@ class ControllerLocalisationReturnReason extends Controller {
 		$this->getList();
   	}
 	
-  	private function getList() {
+  	private function getList()
+  	{
 		$this->template->load('localisation/return_reason_list');
 
 		if (isset($_GET['sort'])) {
@@ -225,7 +231,8 @@ class ControllerLocalisationReturnReason extends Controller {
 		$this->response->setOutput($this->render());
   	}
   
-  	private function getForm() {
+  	private function getForm()
+  	{
 		$this->template->load('localisation/return_reason_form');
 
  		if (isset($this->error['warning'])) {
@@ -283,7 +290,8 @@ class ControllerLocalisationReturnReason extends Controller {
 		$this->response->setOutput($this->render());
   	}
   	
-	private function validateForm() {
+	private function validateForm()
+	{
 		if (!$this->user->hasPermission('modify', 'localisation/return_reason')) {
 				$this->error['warning'] = $this->_('error_permission');
 		}
@@ -297,7 +305,8 @@ class ControllerLocalisationReturnReason extends Controller {
 		return $this->error ? false : true;
   	}
 
-  	private function validateDelete() {
+  	private function validateDelete()
+  	{
 		if (!$this->user->hasPermission('modify', 'localisation/return_reason')) {
 				$this->error['warning'] = $this->_('error_permission');
 		}

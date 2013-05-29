@@ -1,7 +1,9 @@
 <?php
-class ControllerCommonFileManager extends Controller {
+class ControllerCommonFileManager extends Controller 
+{
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('common/filemanager');
 
 		$this->data['base'] = $this->url->is_ssl() ? SITE_SSL : SITE_URL;
@@ -10,7 +12,7 @@ class ControllerCommonFileManager extends Controller {
 		
 		$this->data['elfinder_root_dir'] = '';
 		
-		if($this->user->isDesigner()){
+		if ($this->user->isDesigner()) {
 			$dir = 'user_uploads/user_' . $this->user->getUserName();
 			$this->data['elfinder_root_dir'] = 'data/user_uploads/';
 		}
@@ -25,7 +27,8 @@ class ControllerCommonFileManager extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function ckeditor(){
+	public function ckeditor()
+	{
 		$this->template->load('common/ckeditor');
 
 		$this->load->language('common/filemanager');
@@ -52,7 +55,8 @@ class ControllerCommonFileManager extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function image() {
+	public function image()
+	{
 		if (isset($_GET['image'])) {
 			$width = isset($_GET['image_width']) ? (int)$_GET['image_width'] : $this->config->get('config_image_admin_thumb_width');
 			$height = isset($_GET['image_height']) ? (int)$_GET['image_height'] : $this->config->get('config_image_admin_thumb_height');
@@ -61,10 +65,11 @@ class ControllerCommonFileManager extends Controller {
 		}
 	}
 	
-	public function directory() {
+	public function directory()
+	{
 		$json = array();
 		$restricted = $this->user->isDesigner();
-		if($restricted){
+		if ($restricted) {
 			$dir = 'user_uploads/user_' . $this->user->getUserName();
 			if(!is_dir(DIR_IMAGE . 'data/' . $dir))
 				mkdir(DIR_IMAGE . 'data/' . $dir, 0777, true);
@@ -82,7 +87,7 @@ class ControllerCommonFileManager extends Controller {
 					
 					$children = glob(rtrim($directory, '/') . '/*', GLOB_ONLYDIR);
 					
-					if ($children)  {
+					if ($children) {
 						$json[$i]['children'] = ' ';
 					}
 					
@@ -94,12 +99,13 @@ class ControllerCommonFileManager extends Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 	
-	public function files() {
+	public function files()
+	{
 		$json = array();
 		
 		$restricted = $this->user->isDesigner();
 		$restrict = '';
-		if($restricted){
+		if ($restricted) {
 			$dir = 'user_uploads/user_' . $this->user->getUserName();
 			if(!is_dir(DIR_IMAGE . 'data/' . $dir))
 				mkdir(DIR_IMAGE . 'data/' . $dir, 0777, true);
@@ -162,7 +168,8 @@ class ControllerCommonFileManager extends Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 	
-	public function create() {
+	public function create()
+	{
 		$this->load->language('common/filemanager');
 				
 		$json = array();
@@ -170,7 +177,7 @@ class ControllerCommonFileManager extends Controller {
 		if (isset($_POST['directory'])) {
 			if (isset($_POST['name']) || $_POST['name']) {
 				$restricted = $this->user->isDesigner();
-				if($restricted && empty($this->requst->post['directory'])){
+				if ($restricted && empty($this->requst->post['directory'])) {
 					$_POST['directory'] = 'user_uploads/user_' . $this->user->getUserName() . '/';
 				}
 				
@@ -203,7 +210,8 @@ class ControllerCommonFileManager extends Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 	
-	public function delete() {
+	public function delete()
+	{
 		$this->load->language('common/filemanager');
 		
 		$json = array();
@@ -239,7 +247,8 @@ class ControllerCommonFileManager extends Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 
-	protected function recursiveDelete($directory) {
+	protected function recursiveDelete($directory)
+	{
 		if (is_dir($directory)) {
 			$handle = opendir($directory);
 		}
@@ -265,7 +274,8 @@ class ControllerCommonFileManager extends Controller {
 		return true;
 	}
 
-	public function move() {
+	public function move()
+	{
 		$this->load->language('common/filemanager');
 		
 		$json = array();
@@ -307,7 +317,8 @@ class ControllerCommonFileManager extends Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 	
-	public function copy() {
+	public function copy()
+	{
 		$this->load->language('common/filemanager');
 		
 		$json = array();
@@ -355,7 +366,8 @@ class ControllerCommonFileManager extends Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 
-	function recursiveCopy($source, $destination) {
+	function recursiveCopy($source, $destination)
+	{
 		$directory = opendir($source);
 		
 		@mkdir($destination);
@@ -373,11 +385,13 @@ class ControllerCommonFileManager extends Controller {
 		closedir($directory);
 	}
 
-	public function folders() {
+	public function folders()
+	{
 		$this->response->setOutput($this->recursiveFolders(DIR_IMAGE . 'data/'));
 	}
 	
-	protected function recursiveFolders($directory) {
+	protected function recursiveFolders($directory)
+	{
 		$output = '';
 		
 		$output .= '<option value="' . substr($directory, strlen(DIR_IMAGE . 'data/')) . '">' . substr($directory, strlen(DIR_IMAGE . 'data/')) . '</option>';
@@ -391,7 +405,8 @@ class ControllerCommonFileManager extends Controller {
 		return $output;
 	}
 	
-	public function rename() {
+	public function rename()
+	{
 		$this->load->language('common/filemanager');
 		
 		$json = array();
@@ -433,7 +448,8 @@ class ControllerCommonFileManager extends Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 	
-	public function upload() {
+	public function upload()
+	{
 		$this->load->language('common/filemanager');
 		
 		$json = array();
@@ -447,7 +463,7 @@ class ControllerCommonFileManager extends Controller {
 				}
 				
 				$restricted = $this->user->isDesigner();
-				if($restricted && empty($this->requst->post['directory'])){
+				if ($restricted && empty($this->requst->post['directory'])) {
 					$_POST['directory'] = 'user_uploads/user_' . $this->user->getUserName() . '/';
 				}
 

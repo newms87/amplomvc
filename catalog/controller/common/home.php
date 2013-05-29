@@ -1,6 +1,8 @@
 <?php
-class ControllerCommonHome extends Controller {
-	public function index() {
+class ControllerCommonHome extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('common/home');
 
 		$this->document->setTitle($this->config->get('config_title'));

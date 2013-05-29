@@ -1,6 +1,8 @@
 <?php
-class ControllerReportProductViewed extends Controller {
-	public function index() {
+class ControllerReportProductViewed extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('report/product_viewed');
 
 		$this->load->language('report/product_viewed');
@@ -26,25 +28,25 @@ class ControllerReportProductViewed extends Controller {
 		$product_view_list = $this->model_report_product->getProductViews();
 		
 		$product_views = array();
-		foreach($product_view_list as $pv){
-			if(isset($product_views[$pv['product_id']])){
+		foreach ($product_view_list as $pv) {
+			if (isset($product_views[$pv['product_id']])) {
 				$id = &$product_views[$pv['product_id']];
 				$unique = false;
-				if(($pv['user_id'] == 0 || !in_array($pv['user_id'],$id['users'])) && !in_array($pv['session_id'],$id['sessions'])){
+				if (($pv['user_id'] == 0 || !in_array($pv['user_id'],$id['users'])) && !in_array($pv['session_id'],$id['sessions'])) {
 					if($pv['user_id'] != 0)
 						$id['users'][] = $pv['user_id'];
 					$id['sessions'][] = $pv['session_id'];
 					$id['user_total'] += 1;
 					$unique = true;
 				}
-				if(!in_array($pv['ip_address'],$id['ip_addr'])){
+				if (!in_array($pv['ip_address'],$id['ip_addr'])) {
 					$id['ip_addr'][] = $pv['ip_address'];
 					$id['ip_total'] += 1;
 					if($unique)
 						$id['ip_user_total'] += 1;
 				}
 			}
-			else{
+			else {
 				$product_views[$pv['product_id']] = array('user_total'=>1,'users'=>array($pv['user_id']),'sessions'=>array($pv['session_id']),
 																		'ip_total'=>1,'ip_addr'=>array($pv['ip_address']),
 																		'ip_user_total'=>1
@@ -94,7 +96,8 @@ class ControllerReportProductViewed extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function reset() {
+	public function reset()
+	{
 		$this->load->language('report/product_viewed');
 		
 		$this->model_report_product->reset();
@@ -104,7 +107,8 @@ class ControllerReportProductViewed extends Controller {
 		$this->url->redirect($this->url->link('report/product_viewed'));
 	}
 	
-	private function get_url($filters=null){
+	private function get_url($filters=null)
+	{
 		$url = '';
 		$filters = $filters?$filters:array('page');
 		foreach($filters as $f)

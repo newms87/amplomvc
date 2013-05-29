@@ -1,7 +1,9 @@
 <?php
-class ControllerMailNewsletter extends Controller {
+class ControllerMailNewsletter extends Controller 
+{
 	
-	public function index() {
+	public function index()
+	{
 		$this->load->language('mail/newsletter');
 		
 		$this->document->setTitle($this->_('heading_title'));
@@ -9,14 +11,15 @@ class ControllerMailNewsletter extends Controller {
 		$this->getList();
 	}
 
-	public function insert() {
+	public function insert()
+	{
 		$this->load->language('mail/newsletter');
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$newsletter_id = $this->model_mail_newsletter->addNewsletter($_POST);
 
-			if(!$this->message->error_set()){
+			if (!$this->message->error_set()) {
 				$this->message->add('success',$this->_('text_success'));
 			}
 			
@@ -26,7 +29,8 @@ class ControllerMailNewsletter extends Controller {
 		$this->getForm();
 	}
 
-	public function update() {
+	public function update()
+	{
 		$this->load->language('mail/newsletter');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -34,7 +38,7 @@ class ControllerMailNewsletter extends Controller {
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_mail_newsletter->editNewsletter($_GET['newsletter_id'], $_POST);
 			
-			if(!$this->message->error_set()){
+			if (!$this->message->error_set()) {
 				$this->message->add('success',$this->_('text_success'));
 			}
 		}
@@ -42,7 +46,8 @@ class ControllerMailNewsletter extends Controller {
 		$this->getForm();
 	}
 
-	public function batch_update() {
+	public function batch_update()
+	{
 		$this->load->language('mail/newsletter');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -68,7 +73,7 @@ class ControllerMailNewsletter extends Controller {
 				if($this->error)
 					break;
 			}
-			if(!$this->error){
+			if (!$this->error) {
 				$this->message->add('success', $this->_('text_success'));
 				
 				$this->url->redirect($this->url->link('mail/newsletter', $this->url->get_query()));
@@ -78,7 +83,8 @@ class ControllerMailNewsletter extends Controller {
 		$this->getList();
 	}
 
-	private function getList() {
+	private function getList()
+	{
 		$this->template->load('mail/newsletter_list');
 		$this->language->load('mail/newsletter');
 
@@ -120,7 +126,7 @@ class ControllerMailNewsletter extends Controller {
 			'page' => 1,
 		);
 		
-		foreach($sort_page as $key => $default){
+		foreach ($sort_page as $key => $default) {
 			$data[$key] = $$key = isset($_GET[$key]) ? $_GET[$key] : $default;
 		}
 		
@@ -177,7 +183,8 @@ class ControllerMailNewsletter extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function getForm() {
+	private function getForm()
+	{
 		$this->language->load('mail/newsletter');
 		
 		$this->template->load('mail/newsletter_form');
@@ -185,7 +192,7 @@ class ControllerMailNewsletter extends Controller {
 		$newsletter_id = $this->data['newsletter_id'] = isset($_GET['newsletter_id'])?$_GET['newsletter_id']:0;
 		$store_id = $this->config->get('config_default_store');
 		
-		if($newsletter_id){
+		if ($newsletter_id) {
 			$this->data['url_active'] = $this->url->store($store_id, "newsletter/newsletter", 'newsletter_id=' . $newsletter_id);
 		}
 		
@@ -218,17 +225,17 @@ class ControllerMailNewsletter extends Controller {
 			'status' => 0,
 		);
 		
-		foreach($defaults as $d=>$value){
+		foreach ($defaults as $d=>$value) {
 			if (isset($_POST[$d])) {
 				$this->data[$d] = $_POST[$d];
 			} elseif (!empty($newsletter_info[$d])) {
 				$this->data[$d] = $newsletter_info[$d];
-			} elseif(!$newsletter_id) {
+			} elseif (!$newsletter_id) {
 				$this->data[$d] = $value;
 			}
 		}
 		
-		if(empty($this->data['newsletter'])){
+		if (empty($this->data['newsletter'])) {
 			$this->data['newsletter']['featured']['designer']['designer_id'] = 0;
 			$this->data['newsletter']['featured']['designer']['name'] = 'Designer Name';
 			$this->data['newsletter']['featured']['designer']['title'] = '';
@@ -248,11 +255,11 @@ class ControllerMailNewsletter extends Controller {
 		$featured_designer = & $this->data['newsletter']['featured']['designer'];
 		$featured_product = & $this->data['newsletter']['featured']['product'];
 		
-		if(isset($featured_designer['image'])){
+		if (isset($featured_designer['image'])) {
 			$featured_designer['thumb'] = $this->image->resize($featured_designer['image'], $this->config->get('config_image_admin_thumb_width'), $this->config->get('config_image_admin_thumb_height'));
 		}
 		
-		if(isset($featured_product['image'])){
+		if (isset($featured_product['image'])) {
 			$featured_product['thumb'] = $this->image->resize($featured_product['image'], $this->config->get('config_image_admin_thumb_width'), $this->config->get('config_image_admin_thumb_height'));
 		}
 		
@@ -264,11 +271,11 @@ class ControllerMailNewsletter extends Controller {
 	
 		$this->data['data_designers'] = $this->model_catalog_manufacturer->getManufacturers($m_data, 'manufacturer_id, name, image');
 		
-		if(empty($featured_designer['designer_id'])){
+		if (empty($featured_designer['designer_id'])) {
 			array_unshift($this->data['data_designers'], $this->_('text_select'));
 			$this->data['data_designer_products'] =  array('' => $this->_('text_select'));
 		}
-		else{
+		else {
 			$this->data['data_designer_products'] =  array($featured_product['product_id'] => $featured_product['name']);
 		}
 	
@@ -282,15 +289,16 @@ class ControllerMailNewsletter extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function preview(){
+	public function preview()
+	{
 		$store_id = $this->config->get('config_default_store');
 		
 		$this->language->load('mail/newsletter');
 		
-		if($_SERVER['REQUEST_METHOD'] == 'POST'){
-			if($this->validateForm()){
+		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+			if ($this->validateForm()) {
 			}
-			else{
+			else {
 				$this->message->add('warning', $this->_('error_newsletter_preview'));
 				$this->message->add('warning', $this->error);
 				$this->url->redirect($this->url->link('error/not_found'));
@@ -298,10 +306,10 @@ class ControllerMailNewsletter extends Controller {
 			
 			$this->data = $_POST;
 		}
-		else{
+		else {
 			$newsletter_id = isset($_GET['newsletter_id'])?$_GET['newsletter_id']:0;
 			
-			if(!$newsletter_id){
+			if (!$newsletter_id) {
 				$this->message->add('warning', $this->_('error_newsletter_preview'));
 				$this->url->redirect($this->url->link('error/not_found'));
 				return;
@@ -339,14 +347,14 @@ class ControllerMailNewsletter extends Controller {
 		
 		$featured_designer['description'] = html_entity_decode($featured_designer['description'], ENT_QUOTES, 'UTF-8');
 		
-		if(!empty($featured_designer['image'])){
+		if (!empty($featured_designer['image'])) {
 			$featured_designer['thumb'] = $this->image->resize($featured_designer['image'], $featured_designer['width'],$featured_designer['height']);
 		}
 		
 		//Featured Product
 		$featured_product = & $this->data['newsletter']['featured']['product'];
 		
-		if(!empty($featured_product['image'])){
+		if (!empty($featured_product['image'])) {
 			$featured_product['thumb'] = $this->image->resize($featured_product['image'], $featured_product['width'],$featured_product['height'], '#FFFFFF');
 		}
 		
@@ -354,12 +362,12 @@ class ControllerMailNewsletter extends Controller {
 		
 		$result = $this->model_catalog_product->getProductFull($featured_product['product_id']);
 		
-		if($result){
-			if($result['special']){
+		if ($result) {
+			if ($result['special']) {
 				$result['retail'] = $result['price'];
 				$result['price'] = $result['special'];
 			}
-			else{
+			else {
 				$result['retail'] = $result['price'];
 			}
 			
@@ -371,11 +379,11 @@ class ControllerMailNewsletter extends Controller {
 		
 		
 		//The Product List
-		if(!empty($this->data['newsletter']['products'])){
-			foreach($this->data['newsletter']['products'] as $key => &$product){
+		if (!empty($this->data['newsletter']['products'])) {
+			foreach ($this->data['newsletter']['products'] as $key => &$product) {
 				$result = $this->model_catalog_product->getProductFull($product['product_id']);
 				
-				if(!$result){
+				if (!$result) {
 					unset($this->data['newsletter']['products'][$key]);
 					continue;
 				}
@@ -384,17 +392,17 @@ class ControllerMailNewsletter extends Controller {
 				
 				$result['description'] = html_entity_decode($result['description']);
 				
-				if($result['special']){
+				if ($result['special']) {
 					$result['retail'] = (int)$result['price'];
 					$result['price'] = $result['special'];
 				}
-				else{
+				else {
 					$result['retail'] = (int)$result['price'];
 				}
 				
 				$result['price'] = $this->currency->format($result['price']);
 				
-				if(!$result['image']){
+				if (!$result['image']) {
 					$result['image'] = 'no_image.png';
 				}
 
@@ -409,11 +417,11 @@ class ControllerMailNewsletter extends Controller {
 		
 		
 		//The Designer List
-		if(!empty($this->data['newsletter']['designers'])){
-			foreach($this->data['newsletter']['designers'] as &$designer){
+		if (!empty($this->data['newsletter']['designers'])) {
+			foreach ($this->data['newsletter']['designers'] as &$designer) {
 				$result = $this->model_catalog_manufacturer->getManufacturerWithDescription($designer['designer_id']);
 				
-				if(!$result){
+				if (!$result) {
 					$result['teaser'] = "This Designer is not active";
 					$result['manufacturer_id'] = 0;
 					$result['image'] = 'no_image.png';
@@ -429,13 +437,13 @@ class ControllerMailNewsletter extends Controller {
 			}
 		}unset($designer);
 
-		if(!empty($this->data['newsletter']['featured']['articles'])){
-			foreach($this->data['newsletter']['featured']['articles'] as &$article){
+		if (!empty($this->data['newsletter']['featured']['articles'])) {
+			foreach ($this->data['newsletter']['featured']['articles'] as &$article) {
 				$article['thumb'] = $this->image->resize($article['image'], 94, 155);
 			}
 		}
 		
-		if(empty($this->data['newsletter']['articles_image'])){
+		if (empty($this->data['newsletter']['articles_image'])) {
 			$this->data['newsletter']['articles_image'] = 'no_image.png';
 		}
 		
@@ -447,7 +455,8 @@ class ControllerMailNewsletter extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function email_list(){
+	public function email_list()
+	{
 		
 		$customers = $this->model_mail_newsletter->getEmailList();
 		
@@ -464,23 +473,25 @@ class ControllerMailNewsletter extends Controller {
 		$this->export->download_contents_as('csv', $file);
 	}
 	
-	private function validateForm() {
+	private function validateForm()
+	{
 		if (!$this->user->hasPermission('modify', 'mail/newsletter')) {
 			$this->error['permission'] = $this->_('error_permission');
 		}
 		
-		if(!$this->validation->text($_POST['name'],1, 32)){
+		if (!$this->validation->text($_POST['name'],1, 32)) {
 			$this->error['name'] = $this->_('error_name');
 		}
 
-		if(!$this->validation->datetime($_POST['send_date'])){
+		if (!$this->validation->datetime($_POST['send_date'])) {
 			$this->error['send_date'] = $this->_('error_send_date');
 		}
 					
 		return $this->error ? false : true;
 	}
 
-	private function validateModify() {
+	private function validateModify()
+	{
 		if (!$this->user->hasPermission('modify', 'mail/newsletter')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

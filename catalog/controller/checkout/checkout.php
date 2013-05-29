@@ -1,6 +1,8 @@
 <?php
-class ControllerCheckoutCheckout extends Controller {
-	public function index() {
+class ControllerCheckoutCheckout extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('checkout/checkout');
 
 		if (!$this->cart->validate()) {

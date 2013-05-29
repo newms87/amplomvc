@@ -1,6 +1,8 @@
 <?php
-class ControllerModuleCategory extends Controller {
-	protected function index($setting) {
+class ControllerModuleCategory extends Controller 
+{
+	protected function index($setting)
+	{
 		$this->template->load('module/category');
 
 		$this->language->load('module/category');

@@ -1,8 +1,10 @@
 <?php
-class ControllerLocalisationTaxRate extends Controller {
+class ControllerLocalisationTaxRate extends Controller 
+{
 	
  
-	public function index() {
+	public function index()
+	{
 		$this->load->language('localisation/tax_rate');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -10,7 +12,8 @@ class ControllerLocalisationTaxRate extends Controller {
 		$this->getList();
 	}
 
-	public function insert() {
+	public function insert()
+	{
 		$this->load->language('localisation/tax_rate');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -40,7 +43,8 @@ class ControllerLocalisationTaxRate extends Controller {
 		$this->getForm();
 	}
 
-	public function update() {
+	public function update()
+	{
 		$this->load->language('localisation/tax_rate');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -70,7 +74,8 @@ class ControllerLocalisationTaxRate extends Controller {
 		$this->getForm();
 	}
 
-	public function delete() {
+	public function delete()
+	{
 		$this->load->language('localisation/tax_rate');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -102,7 +107,8 @@ class ControllerLocalisationTaxRate extends Controller {
 		$this->getList();
 	}
 
-	private function getList() {
+	private function getList()
+	{
 		$this->template->load('localisation/tax_rate_list');
 
 		if (isset($_GET['sort'])) {
@@ -235,7 +241,8 @@ class ControllerLocalisationTaxRate extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function getForm() {
+	private function getForm()
+	{
 		$this->template->load('localisation/tax_rate_form');
 
  		if (isset($this->error['warning'])) {
@@ -337,7 +344,8 @@ class ControllerLocalisationTaxRate extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validateForm() {
+	private function validateForm()
+	{
 		if (!$this->user->hasPermission('modify', 'localisation/tax_rate')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
@@ -353,15 +361,17 @@ class ControllerLocalisationTaxRate extends Controller {
 		return $this->error ? false : true;
 	}
 
-	private function validateDelete() {
+	private function validateDelete()
+	{
 		if (!$this->user->hasPermission('modify', 'localisation/tax_rate')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
 		foreach ($_POST['selected'] as $tax_rate_id) {
-			$tax_rule_total = $this->model_localisation_tax_class->getTotalTaxRulesByTaxRateId($tax_rate_id);
+			$tax_rule_total = $this->model_localisation_tax_class ->getTotalTaxRulesByTaxRateId($tax_rate_id);
 
-			if ($tax_rule_total) {
+			if ($tax_rule_total) 
+{
 				$this->error['warning'] = sprintf($this->_('error_tax_rule'), $tax_rule_total);
 			}
 		}

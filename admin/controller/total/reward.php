@@ -1,8 +1,10 @@
 <?php
-class ControllerTotalReward extends Controller {
+class ControllerTotalReward extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('total/reward');
 
 		$this->load->language('total/reward');
@@ -51,7 +53,8 @@ class ControllerTotalReward extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'total/reward')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

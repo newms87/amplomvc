@@ -3,7 +3,7 @@
 	<div class="box-content">
 		<div class="box-product">
 			<? foreach ($products as $product) { ?>
-			<a href='<?= $product['href'];?>' class='featured_product_clickable'>
+			<a href='<?= $product['href']; ?>' class='featured_product_clickable'>
 				<? if ($product['thumb']) { ?>
 				<div class="image"><img src="<?= $product['thumb']; ?>" alt="<?= $product['name']; ?>" /></div>
 				<? } ?>
@@ -19,7 +19,7 @@
 					</div>
 					<? } ?>
 					<? if($product['flashsale_id']){?>
-						<div class='fs_countdown'><div id='fpop-<?=$product['product_id'];?>' class='flash_countdown' callback='end_featured_fs' type='short' flashid='<?=$product['flashsale_id'];?>'></div></div>
+						<div class='fs_countdown'><div id='fpop-<?= $product['product_id']; ?>' class='flash_countdown' callback='end_featured_fs' type='short' flashid='<?= $product['flashsale_id']; ?>'></div></div>
 					<? }?>
 				</div>
 			</a>

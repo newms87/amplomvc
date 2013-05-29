@@ -1,7 +1,9 @@
 <?php
-class ControllerAccountReturn extends Controller {
+class ControllerAccountReturn extends Controller 
+{
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('account/return_list');
 
 		if (!$this->customer->isLogged()) {
@@ -61,7 +63,8 @@ class ControllerAccountReturn extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function info() {
+	public function info()
+	{
 		$this->load->language('account/return');
 		
 		if (isset($_GET['return_id'])) {
@@ -163,7 +166,8 @@ class ControllerAccountReturn extends Controller {
 		}
 	}
 		
-	public function insert() {
+	public function insert()
+	{
 		$this->template->load('account/return_form');
 
 		$order_id = isset($_GET['order_id'])?$_GET['order_id']:0;
@@ -208,7 +212,7 @@ class ControllerAccountReturn extends Controller {
 		
 		$force_default = array('return_reason_id','comment','captcha','quantity','opened');
 		
-		foreach($defaults as $d=>$default){
+		foreach ($defaults as $d=>$default) {
 			if (isset($_POST[$d]))
 				$this->data[$d] = $_POST[$d];
 			elseif (isset($order_info[$d]))
@@ -245,7 +249,8 @@ class ControllerAccountReturn extends Controller {
 		$this->response->setOutput($this->render());
   	}
 	
-  	public function success() {
+  	public function success()
+  	{
 		$this->template->load('common/success');
 
 		$this->language->load('account/return');
@@ -269,7 +274,8 @@ class ControllerAccountReturn extends Controller {
  		$this->response->setOutput($this->render());
 	}
 		
-  	private function validate() {
+  	private function validate()
+  	{
 		if (!$_POST['order_id']) {
 				$this->error['order_id'] = $this->_('error_order_id');
 		}
@@ -309,13 +315,15 @@ class ControllerAccountReturn extends Controller {
 		return $this->error ? false : true;
   	}
 	
-	public function captcha() {
+	public function captcha()
+	{
 		$this->session->data['captcha'] = $this->captcha->getCode();
 		
 		$this->captcha->showImage();
 	}
 	
-	private function get_url($filters=null){
+	private function get_url($filters=null)
+	{
 		$url = '';
 		$filters = $filters?$filters:array('page');
 		foreach($filters as $f)

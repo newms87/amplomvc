@@ -1,8 +1,10 @@
 <?php
-class ControllerToolBackup extends Controller {
+class ControllerToolBackup extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('tool/backup');
 
 		$this->load->language('tool/backup');
@@ -58,7 +60,8 @@ class ControllerToolBackup extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function backup() {
+	public function backup()
+	{
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->response->addheader('Pragma: public');
 			$this->response->addheader('Expires: 0');
@@ -73,7 +76,8 @@ class ControllerToolBackup extends Controller {
 		}
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'tool/backup')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

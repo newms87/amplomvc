@@ -1,8 +1,10 @@
 <?php
-class ControllerShippingUsps extends Controller {
+class ControllerShippingUsps extends Controller 
+{
 	
 
-	public function index() {
+	public function index()
+	{
 		$this->template->load('shipping/usps');
 
 		$this->load->language('shipping/usps');
@@ -384,21 +386,24 @@ class ControllerShippingUsps extends Controller {
 			$this->data['usps_display_weight'] = $this->config->get('usps_display_weight');
 		}
 
-		if (isset($_POST['usps_weight_class_id'])) {
-			$this->data['usps_weight_class_id'] = $_POST['usps_weight_class_id'];
+		if (isset($_POST['usps_weight_class _id'])) 
+{
+			$this->data['usps_weight_class _id'] = $_POST['usps_weight_class_id'];
 		} else {
-			$this->data['usps_weight_class_id'] = $this->config->get('usps_weight_class_id');
+			$this->data['usps_weight_class _id'] = $this->config->get('usps_weight_class_id');
 		}
 
 		$this->data['weight_classes'] = $this->model_localisation_weight_class->getWeightClasses();
 
-		if (isset($_POST['usps_tax_class_id'])) {
-			$this->data['usps_tax_class_id'] = $_POST['usps_tax_class_id'];
+		if (isset($_POST['usps_tax_class_id'])) 
+{
+			$this->data['usps_tax_class _id'] = $_POST['usps_tax_class_id'];
 		} else {
-			$this->data['usps_tax_class_id'] = $this->config->get('usps_tax_class_id');
+			$this->data['usps_tax_class _id'] = $this->config->get('usps_tax_class_id');
 		}
 
-		if (isset($_POST['usps_geo_zone_id'])) {
+		if (isset($_POST['usps_geo_zone_id'])) 
+{
 			$this->data['usps_geo_zone_id'] = $_POST['usps_geo_zone_id'];
 		} else {
 			$this->data['usps_geo_zone_id'] = $this->config->get('usps_geo_zone_id');
@@ -422,7 +427,7 @@ class ControllerShippingUsps extends Controller {
 			$this->data['usps_sort_order'] = $this->config->get('usps_sort_order');
 		}
 
-		$this->data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
+		$this->data['tax_class es'] = $this->model_localisation_tax_class->getTaxClasses();
 
 		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 
@@ -434,7 +439,8 @@ class ControllerShippingUsps extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'shipping/usps')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

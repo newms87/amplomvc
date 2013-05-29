@@ -11,23 +11,26 @@ require_once 'Stats.php';
 
 
 /**
- * Example of use of Matrix Class, featuring magic squares.
+ * Example of use of Matrix class , featuring magic squares.
  */
-class Benchmark {
+class Benchmark 
+{
 	public $stat;
 
 
 	/**
 	* Simple function to replicate PHP 5 behaviour
 	*/
-	function microtime_float() {
+	function microtime_float()
+	{
 		list($usec, $sec) = explode(" ", microtime());
 
 		return ((float)$usec + (float)$sec);
 	}	//	function microtime_float()
 
 
-	function displayStats($times = null) {
+	function displayStats($times = null)
+	{
 		$this->stat->setData($times);
 		$stats = $this->stat->calcFull();
 
@@ -45,7 +48,8 @@ class Benchmark {
 	}	//	function displayStats()
 
 
-	function runEig($n = 4, $t = 100) {
+	function runEig($n = 4, $t = 100)
+	{
 		$times = array();
 
 		for ($i = 0; $i < $t; ++$i) {
@@ -60,7 +64,8 @@ class Benchmark {
 	}	//	function runEig()
 
 
-	function runLU($n = 4, $t = 100) {
+	function runLU($n = 4, $t = 100)
+	{
 		$times = array();
 
 		for ($i = 0; $i < $t; ++$i) {
@@ -75,7 +80,8 @@ class Benchmark {
 	}	//	function runLU()
 
 
-	function runQR($n = 4, $t = 100) {
+	function runQR($n = 4, $t = 100)
+	{
 		$times = array();
 
 		for ($i = 0; $i < $t; ++$i) {
@@ -90,7 +96,8 @@ class Benchmark {
 	}	//	function runQR()
 
 
-	function runCholesky($n = 4, $t = 100) {
+	function runCholesky($n = 4, $t = 100)
+	{
 		$times = array();
 
 		for ($i = 0; $i < $t; ++$i) {
@@ -105,7 +112,8 @@ class Benchmark {
 	}	//	function runCholesky()
 
 
-	function runSVD($n = 4, $t = 100) {
+	function runSVD($n = 4, $t = 100)
+	{
 		$times = array();
 
 		for ($i = 0; $i < $t; ++$i) {
@@ -120,7 +128,8 @@ class Benchmark {
 	}	//	function runSVD()
 
 
-	function run() {
+	function run()
+	{
 		$n = 8;
 		$t = 16;
 		$sum = 0;
@@ -156,7 +165,8 @@ class Benchmark {
 	}	//	function run()
 
 
-	public function __construct() {
+	public function __construct()
+	{
 		$this->stat = new Base();
 	}	//	function Benchmark()
 
@@ -165,7 +175,8 @@ class Benchmark {
 
 $benchmark = new Benchmark();
 
-switch($_REQUEST['decomposition']) {
+switch($_REQUEST['decomposition']) 
+{
 	case 'cholesky':
 		$m = array();
 		for ($i = 2; $i <= 8; $i *= 2) {
@@ -176,7 +187,7 @@ switch($_REQUEST['decomposition']) {
 			echo "<br />";
 		}
 		echo '<pre>';
-		foreach($m as $x => $y) {
+		foreach ($m as $x => $y) {
 			echo "$x\t" . 1000*$y . "\n";
 		}
 		echo '</pre>';
@@ -191,7 +202,7 @@ switch($_REQUEST['decomposition']) {
 			echo "<br />";
 		}
 		echo '<pre>';
-		foreach($m as $x => $y) {
+		foreach ($m as $x => $y) {
 			echo "$x\t" . 1000*$y . "\n";
 		}
 		echo '</pre>';
@@ -206,7 +217,7 @@ switch($_REQUEST['decomposition']) {
 			echo "<br />";
 		}
 		echo '<pre>';
-		foreach($m as $x => $y) {
+		foreach ($m as $x => $y) {
 			echo "$x\t" . 1000*$y . "\n";
 		}
 		echo '</pre>';
@@ -221,7 +232,7 @@ switch($_REQUEST['decomposition']) {
 			echo "<br />";
 		}
 		echo '<pre>';
-		foreach($m as $x => $y) {
+		foreach ($m as $x => $y) {
 			echo "$x\t" . 1000*$y . "\n";
 		}
 		echo '</pre>';
@@ -236,7 +247,7 @@ switch($_REQUEST['decomposition']) {
 			echo "<br />";
 		}
 		echo '<pre>';
-		foreach($m as $x => $y) {
+		foreach ($m as $x => $y) {
 			echo "$x\t" . 1000*$y . "\n";
 		}
 		echo '</pre>';

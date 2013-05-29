@@ -1,7 +1,9 @@
 <?php
-class ControllerCartBlockCart extends Controller{
+class ControllerCartBlockCart extends Controller
+{
 		
-	public function index($settings = null, $ajax_cart = true){
+	public function index($settings = null, $ajax_cart = true)
+	{
 		$this->language->load('cart/block/cart');
 		
 		if (!isset($this->session->data['vouchers'])) {
@@ -9,8 +11,8 @@ class ControllerCartBlockCart extends Controller{
 		}
 		
 		//Update Product
-		if(isset($_POST['cart_form'])){
-			if($_POST['action'] == 'update'){
+		if (isset($_POST['cart_form'])) {
+			if ($_POST['action'] == 'update') {
 				if (!empty($_POST['quantity'])) {
 					foreach ($_POST['quantity'] as $key => $value) {
 						$this->cart->update($key, $value);
@@ -19,15 +21,15 @@ class ControllerCartBlockCart extends Controller{
 					$this->message->add('success', $this->_('text_update'));
 				}
 			}
-			elseif(strpos($_POST['action'], 'remove') === 0){
+			elseif (strpos($_POST['action'], 'remove') === 0) {
 				$key = substr($_POST['action'], 6);
 		
-				if(isset($this->session->data['vouchers'][$key])){
+				if (isset($this->session->data['vouchers'][$key])) {
 					unset($this->session->data['vouchers'][$key]);
 					
 					$this->message->add('success', $this->language->format('text_remove', $this->_('text_voucher')));
 				}
-				else{
+				else {
 					$id = $this->cart->getProductId($key);
 					$name = $this->cart->getProductName($key);
 					
@@ -44,12 +46,12 @@ class ControllerCartBlockCart extends Controller{
 			
 			$this->language->format('final_sale_explanation',$this->url->link('information/information/info','information_id=7'));
 			
-			if($ajax_cart){
+			if ($ajax_cart) {
 				$this->data['action'] = $this->url->link('cart/block/cart/ajax_cart');
 				
 				$this->data['messages'] = $this->message->fetch();
 			}
-			else{
+			else {
 				$this->data['action'] = '';
 			}
 						
@@ -57,7 +59,7 @@ class ControllerCartBlockCart extends Controller{
 				$this->data['no_price_display'] = $this->language->format('text_login', $this->url->link('account/login'), $this->url->link('account/register'));
 			}
 			
-			if(!$this->cart->validate()){
+			if (!$this->cart->validate()) {
 				$this->error = $this->cart->get_errors(null, true);
 			}
 			
@@ -75,11 +77,12 @@ class ControllerCartBlockCart extends Controller{
 				}
 				
 				
-				$product['price'] = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id']));
+				$product['price'] = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class _id']));
 			
 				$product['total'] = $this->currency->format($this->tax->calculate($product['total'], $product['tax_class_id']));
 				
-				if($product['reward']){
+				if($product['reward'])
+{
 					$product['reward'] = sprintf($this->_('text_points'), $product['reward']);
 				}
 				
@@ -109,7 +112,8 @@ class ControllerCartBlockCart extends Controller{
 		}
 	}
 
-	public function ajax_cart(){
+	public function ajax_cart()
+	{
 		$this->index(array(), true);
 	}
 }

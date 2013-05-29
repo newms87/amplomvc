@@ -1,6 +1,8 @@
 <?php
-class ControllerCommonMaintenance extends Controller {
-	public function index() {
+class ControllerCommonMaintenance extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('common/maintenance');
 
 		$this->load->language('common/maintenance');

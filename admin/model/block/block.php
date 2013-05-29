@@ -1,13 +1,15 @@
 <?php
-class ModelBlockBlock extends Model {
-	public function updateBlock($name, $data){
+class ModelBlockBlock extends Model 
+{
+	public function updateBlock($name, $data)
+	{
 		$this->delete('block', array('name' => $name));
 		
-		if(isset($data['settings'])){
+		if (isset($data['settings'])) {
 			$data['settings'] = serialize($data['settings']);
 		}
 		
-		if(isset($data['profiles'])){
+		if (isset($data['profiles'])) {
 			$data['profiles'] = serialize($data['profiles']);
 		}
 		
@@ -18,18 +20,20 @@ class ModelBlockBlock extends Model {
 		$this->cache->delete('block');
 	}
 	
-	public function is_block($name){
+	public function is_block($name)
+	{
 		return is_file(SITE_DIR . 'admin/controller/block/' . $name . '.php');
 	}
 	
-	public function getBlock($name){
+	public function getBlock($name)
+	{
 		$block = $this->query_row("SELECT * FROM " . DB_PREFIX . "block WHERE `name` = '" . $this->db->escape($name) . "'");
 		
-		if($block){
+		if ($block) {
 			$block['settings'] = unserialize($block['settings']);
 			$block['profiles'] = unserialize($block['profiles']);
 		}
-		else{
+		else {
 			$block = array(
 				'name' => $name,
 				'settings' => array(),
@@ -46,7 +50,7 @@ class ModelBlockBlock extends Model {
 		
 		$this->clean_DB($block_files);
 		
-		if($total){
+		if ($total) {
 			return count($block_files);
 		}
 		
@@ -56,7 +60,7 @@ class ModelBlockBlock extends Model {
 		$blocks = array();
 		$sort_order = array();
 		
-		foreach($block_files as &$file){
+		foreach ($block_files as &$file) {
 			$name = preg_replace("/.*[\/\\\\]/",'',dirname($file)) . '/' . preg_replace("/.php\$/",'',basename($file));
 			$block = $this->getBlock($name);
 			
@@ -65,27 +69,27 @@ class ModelBlockBlock extends Model {
 			$block['display_name'] = $block_language['heading_title'];
 			
 			//filter name
-			if(!empty($data['name'])){
-				if(!preg_match("/.*$data[name].*/i", $block['name'])){
+			if (!empty($data['name'])) {
+				if (!preg_match("/.*$data[name].*/i", $block['name'])) {
 					continue;
 				}
 			}
 			
 			//filter display_name
-			if(!empty($data['display_name'])){
-				if(!preg_match("/.*$data[display_name].*/i", $block['display_name'])){
+			if (!empty($data['display_name'])) {
+				if (!preg_match("/.*$data[display_name].*/i", $block['display_name'])) {
 					continue;
 				}
 			}
 			
 			//filter status
-			if(isset($data['status'])){
-				if((bool)$data['status'] != (bool)$block['status']){
+			if (isset($data['status'])) {
+				if ((bool)$data['status'] != (bool)$block['status']) {
 					continue;
 				}
 			}
 			
-			if(!$block){
+			if (!$block) {
 				$block = array(
 					'name' => $name,
 					'display_name' => $name,
@@ -98,8 +102,8 @@ class ModelBlockBlock extends Model {
 			$blocks[] = $block;
 		}
 		
-		if(isset($data['sort'])){
-			foreach($blocks as $key => $block){
+		if (isset($data['sort'])) {
+			foreach ($blocks as $key => $block) {
 				$sort_order[$key] = $block[$data['sort']];
 			}
 			
@@ -117,16 +121,17 @@ class ModelBlockBlock extends Model {
 		return $this->getBlocks($data, true);
 	}
 	
-	public function clean_DB($valid_files){
+	public function clean_DB($valid_files)
+	{
 		$names = array();
 		
-		foreach($valid_files as &$file){
+		foreach ($valid_files as &$file) {
 			$names[] = preg_replace("/.*[\/\\\\]/",'',dirname($file)) . '/' . preg_replace("/.php\$/",'',basename($file));
 		}
 		
 		$query = $this->query("DELETE FROM " . DB_PREFIX . "block WHERE name NOT IN('" . implode("','",$names) . "')");
 		
-		if($this->countAffected()){
+		if ($this->countAffected()) {
 			$this->cache->delete('block');
 		}
 	}

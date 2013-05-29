@@ -56,7 +56,8 @@ PARTLY BASED ON:
  * @package	PHPExcel_Calculation
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Calculation_FormulaParser {
+class PHPExcel_Calculation_FormulaParser 
+{
 	/* Character constants */
 	const QUOTE_DOUBLE  = '"';
 	const QUOTE_SINGLE  = '\'';
@@ -113,7 +114,8 @@ class PHPExcel_Calculation_FormulaParser {
 	*
 	* @return string
 	*/
-	public function getFormula() {
+	public function getFormula()
+	{
 		return $this->_formula;
 	}
 
@@ -124,7 +126,8 @@ class PHPExcel_Calculation_FormulaParser {
 	* @return	string
 	* @throws  Exception
 	*/
-	public function getToken($pId = 0) {
+	public function getToken($pId = 0)
+	{
 		if (isset($this->_tokens[$pId])) {
 			return $this->_tokens[$pId];
 		} else {
@@ -137,7 +140,8 @@ class PHPExcel_Calculation_FormulaParser {
 	*
 	* @return string
 	*/
-	public function getTokenCount() {
+	public function getTokenCount()
+	{
 		return count($this->_tokens);
 	}
 
@@ -146,14 +150,16 @@ class PHPExcel_Calculation_FormulaParser {
 	*
 	* @return PHPExcel_Calculation_FormulaToken[]
 	*/
-	public function getTokens() {
+	public function getTokens()
+	{
 		return $this->_tokens;
 	}
 
 	/**
 	* Parse to tokens
 	*/
-	private function _parseToTokens() {
+	private function _parseToTokens()
+	{
 		// No attempt is made to verify formulas; assumes formulas are derived from Excel, where
 		// they can only exist if valid; stack overflows/underflows sunk as nulls without exceptions.
 
@@ -400,8 +406,8 @@ class PHPExcel_Calculation_FormulaParser {
 				continue;
 			}
 
-			// start subexpression or function
-			if ($this->_formula{$index} == PHPExcel_Calculation_FormulaParser::PAREN_OPEN) {
+			// start subexpression or function if($this->_formula{$index} == PHPExcel_Calculation_FormulaParser::PAREN_OPEN)
+ {
 				if (strlen($value) > 0) {
 					$tmp = new PHPExcel_Calculation_FormulaToken($value, PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_FUNCTION, PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_START);
 					$tokens1[] = $tmp;

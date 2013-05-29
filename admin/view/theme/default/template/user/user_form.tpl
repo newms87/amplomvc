@@ -1,7 +1,7 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
-	<?= $this->builder->display_errors($errors);?>
+	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'user.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -33,11 +33,11 @@
 						<td>
 							<? if($this->user->isTopAdmin()){?>
 									<? $this->builder->set_config('user_group_id','name');?>
-									<?=$this->builder->build('select',$user_groups, "user_group_id",(int)$user_group_id);?>
+									<?= $this->builder->build('select',$user_groups, "user_group_id",(int)$user_group_id); ?>
 							<? }else{?>
 									<? foreach($user_groups as $ug){ if($ug['user_group_id'] == $user_group_id){?>
-									<input type='hidden' name='user_group_id' value='<?=$user_group_id;?>' />
-									<div><?= $ug['name'];?></div>
+									<input type='hidden' name='user_group_id' value='<?= $user_group_id; ?>' />
+									<div><?= $ug['name']; ?></div>
 									<? }}?>
 							<? }?>
 						</td>
@@ -60,17 +60,17 @@
 									echo "<a onclick='$(this).parent().remove()'>remove</a>";
 							}?>
 							</ul>
-							<a onclick="add_designer();"><?=$button_add_designer;?></a>
+							<a onclick="add_designer();"><?= $button_add_designer; ?></a>
 						</td>
 					</tr>
 					<tr>
 						<td><?= $entry_status; ?></td>
-						<td><?=$this->builder->build('select',$statuses,'status',(int)$status);?></td>
+						<td><?= $this->builder->build('select',$statuses,'status',(int)$status); ?></td>
 					</tr>
 				</table>
 			</div>
 			<div id='tab-contact'>
-					<?= $contact_template;?>
+					<?= $contact_template; ?>
 				</div>
 			</form>
 		</div>
@@ -80,7 +80,7 @@
 
 <script type='text/javascript'><!--
 function add_designer(){
-	html = '<li>' + "<?=$this->builder->build('select',$manufacturers,'designers[]');?>" + '<a onclick="$(this).parent().remove();">remove</a></li>';
+	html = '<li>' + "<?= $this->builder->build('select',$manufacturers,'designers[]'); ?>" + '<a onclick="$(this).parent().remove();">remove</a></li>';
 	$('#designer_list').append(html);
 }
 --></script>
@@ -89,4 +89,4 @@ function add_designer(){
 $('#tabs a').tabs();
 //--></script>
 
-<?= $this->builder->js('errors', $errors);?>
+<?= $this->builder->js('errors', $errors); ?>

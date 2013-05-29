@@ -1,6 +1,8 @@
 <?php
-class ControllerReportSaleTax extends Controller {
-	public function index() {
+class ControllerReportSaleTax extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('report/sale_tax');
 
 		$this->load->language('report/sale_tax');

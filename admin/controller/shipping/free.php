@@ -1,8 +1,10 @@
 <?php
-class ControllerShippingFree extends Controller {
+class ControllerShippingFree extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('shipping/free');
 
 		$this->load->language('shipping/free');
@@ -65,7 +67,8 @@ class ControllerShippingFree extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'shipping/free')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

@@ -1,12 +1,14 @@
 <?php
-class Customer {
+class Customer 
+{
 	private $registry;
 	private $customer_id;
 	private $information;
 	private $payment_info;
 	private $settings;
 	
-  	public function __construct($registry) {
+  	public function __construct($registry)
+  	{
 		$this->registry = $registry;
 		
 		if (isset($this->session->data['customer_id'])) {
@@ -20,41 +22,47 @@ class Customer {
   		}
 	}
 	
-	public function __get($key){
+	public function __get($key)
+	{
 		return $this->registry->get($key);
 	}
 	
-	public function isLogged() {
+	public function isLogged()
+	{
 		return $this->customer_id ? true : false;
   	}
 
-  	public function getId() {
+  	public function getId()
+  	{
 		return $this->customer_id;
   	}
 	
-	public function info($key = null){
-		if($key && isset($this->information[$key])){
+	public function info($key = null)
+	{
+		if ($key && isset($this->information[$key])) {
 			return $this->information[$key];
 		}
 		
 		return $this->information;
 	}
 	
-  	public function getCustomerGroupId() {
-  		if(!empty($this->information['customer_group_id'])){
+  	public function getCustomerGroupId()
+  	{
+  		if (!empty($this->information['customer_group_id'])) {
 			return $this->information['customer_group_id'];
 		}
 		
 		return (int)$this->config->get('config_customer_group_id');
   	}
 	
-	public function login($email, $password, $override = false) {
+	public function login($email, $password, $override = false)
+	{
   		$where = "LOWER(email) = '" . $this->db->escape(strtolower($email)) . "' AND status = '1'";
 		
 		if (!$override) {
 			$where .= " AND password = '" . $this->customer->encrypt($password) . "'";
 			
-			if($this->config->get('config_customer_approval')){
+			if ($this->config->get('config_customer_approval')) {
 				$where .= " AND approved = '1'";
 			}
 		}
@@ -78,7 +86,8 @@ class Customer {
 		return false;
   	}
   	
-	public function logout() {
+	public function logout()
+	{
 		$this->db->query("UPDATE " . DB_PREFIX . "customer SET cart = '" . $this->db->escape(isset($this->session->data['cart']) ? serialize($this->session->data['cart']) : '') . "', wishlist = '" . $this->db->escape(isset($this->session->data['wishlist']) ? serialize($this->session->data['wishlist']) : '') . "' WHERE customer_id = '" . (int)$this->customer_id . "'");
 		
 		$this->session->end();
@@ -91,16 +100,18 @@ class Customer {
 		$this->message->add('notify', "Logged Out");
   	}
 	
-	public function get_setting($key){
+	public function get_setting($key)
+	{
 		return isset($this->settings[$key]) ? $this->settings[$key] : null;
 	}
 	
-	public function set_setting($key, $value){
+	public function set_setting($key, $value)
+	{
 		if(!$this->customer_id) return;
 		
 		$this->db->query("DELETE FROM " . DB_PREFIX . "customer_setting WHERE customer_id = '" . $this->customer_id . "' AND `key` = '" . $this->db->escape($key) . "'");
 		
-		if(is_object($value) || is_array($value) || is_resource($value)){
+		if (is_object($value) || is_array($value) || is_resource($value)) {
 			$value = serialize($value);
 			$serialized = 1;
 		} else {
@@ -112,24 +123,26 @@ class Customer {
 		$this->settings[$key] = $value;
 	}
 	
-	public function delete_setting($key){
+	public function delete_setting($key)
+	{
 		$this->db->query("DELETE FROM " . DB_PREFIX . "customer_setting WHERE customer_id = '$this->customer_id' AND `key` = '" . $this->db->escape($key) . "'");
 	}
 	
-	public function get_shipping_addresses(){
+	public function get_shipping_addresses()
+	{
 		$address_list = $this->model_account_address->getAddresses();
 		
 		$allowed_zones = $this->cart->getAllowedShippingZones();
 		
-		if(empty($allowed_zones)){
+		if (empty($allowed_zones)) {
 			$addresses = $address_list;
 		}
-		else{
+		else {
 			$addresses = array();
 			
-			foreach($address_list as $key => $address){
-				foreach($allowed_zones as $zone){
-					if((int)$address['country_id'] === (int)$zone['country_id'] && ((int)$zone['zone_id'] === 0 || (int)$address['zone_id'] === (int)$zone['zone_id'])){
+			foreach ($address_list as $key => $address) {
+				foreach ($allowed_zones as $zone) {
+					if ((int)$address['country_id'] === (int)$zone['country_id'] && ((int)$zone['zone_id'] === 0 || (int)$address['zone_id'] === (int)$zone['zone_id'])) {
 						$addresses[$address['address_id']] = $address;
 						break;
 					}
@@ -140,27 +153,32 @@ class Customer {
 		return $addresses;
 	}
 	
-	public function get_payment_addresses(){
+	public function get_payment_addresses()
+	{
 		return $this->model_account_address->getAddresses();
 	}
 	
-  	public function getBalance() {
+  	public function getBalance()
+  	{
   		if(!$this->customer_id) return 0;
 		
 		return $this->db->query_var("SELECT SUM(amount) AS total FROM " . DB_PREFIX . "customer_transaction WHERE customer_id = '" . (int)$this->customer_id . "'");
   	}
 
-  	public function getRewardPoints() {
+  	public function getRewardPoints()
+  	{
   		if(!$this->customer_id) return 0;
   		
 		return $this->db->query_var("SELECT SUM(points) AS total FROM " . DB_PREFIX . "customer_reward WHERE customer_id = '" . (int)$this->customer_id . "'");
   	}
 	
-	public function encrypt($password){
+	public function encrypt($password)
+	{
 		return md5($password);
 	}
 	
-	private function set_customer($customer){
+	private function set_customer($customer)
+	{
 		if(empty($customer)) return;
 		
 		$this->customer_id = (int)$customer['customer_id'];
@@ -170,8 +188,8 @@ class Customer {
 		//Load Customer Settings
 		$settings = $this->db->query_rows("SELECT * FROM " . DB_PREFIX . "customer_setting WHERE customer_id = '" . $this->customer_id . "'");
 		
-		foreach($settings as $setting){
-			if($setting['serialized']){
+		foreach ($settings as $setting) {
+			if ($setting['serialized']) {
 				$this->settings[$setting['key']] = unserialize($setting['value']);
 			} else {
 				$this->settings[$setting['key']] = $setting['value'];
@@ -180,7 +198,7 @@ class Customer {
 		
 		$this->payment_info = $this->get_setting('payment_info_' . $this->information['payment_code']);
 		
-		if(!$this->payment_info){
+		if (!$this->payment_info) {
 			$this->payment_info = array(
 				'address_id' => $this->information['address_id'],
 				'payment_code' => $this->information['payment_code'],

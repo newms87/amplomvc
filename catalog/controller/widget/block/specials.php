@@ -1,6 +1,8 @@
 <?php
-class ControllerWidgetBlockSpecials extends Controller {
-	public function index($settings) {
+class ControllerWidgetBlockSpecials extends Controller 
+{
+	public function index($settings)
+	{
 		$this->template->load('widget/block/specials');
 		$this->language->load('widget/block/specials');
 		

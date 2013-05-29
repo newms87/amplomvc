@@ -1,7 +1,9 @@
 <?php
-class ControllerSettingSetting extends Controller {
+class ControllerSettingSetting extends Controller 
+{
  
-	public function index() {
+	public function index()
+	{
 		$this->template->load('setting/setting');
 
 		$this->load->language('setting/setting');
@@ -52,7 +54,7 @@ class ControllerSettingSetting extends Controller {
 			'config_use_macro_languages' => 0,
 			'config_currency',
 			'config_currency_auto',
-			'config_length_class_id',
+			'config_length_class _id',
 			'config_weight_class_id',
 			'config_catalog_limit',
 			'config_admin_limit',
@@ -152,15 +154,16 @@ class ControllerSettingSetting extends Controller {
 			'config_plugin_dir_mode'=>755,
 		);
 
-		foreach($defaults as $key=>$default){
+		foreach($defaults as $key=>$default)
+{
 			$k = is_integer($key)?$default:$key;
-			if(isset($_POST[$k])){
+			if (isset($_POST[$k])) {
 				$this->data[$k] = $_POST[$k];
 			}
-			elseif($this->config->get($k)){
+			elseif ($this->config->get($k)) {
 				$this->data[$k] = $this->config->get($k);
 			}
-			else{
+			else {
 				$this->data[$k] = is_integer($key)?'':$default;
 			}
 		}
@@ -175,7 +178,7 @@ class ControllerSettingSetting extends Controller {
 		);
 		
 		//convert octals in strings back to regular integers
-		foreach($octals as $oct){
+		foreach ($octals as $oct) {
 			$this->data[$oct] = intval($this->data[$oct]);
 		}
 
@@ -191,7 +194,7 @@ class ControllerSettingSetting extends Controller {
 						
 		$this->data['currencies'] = $this->model_localisation_currency->getCurrencies();
 		
-		$this->data['length_classes'] = $this->model_localisation_length_class->getLengthClasses();
+		$this->data['length_class es'] = $this->model_localisation_length_class->getLengthClasses();
 		
 		$this->data['weight_classes'] = $this->model_localisation_weight_class->getWeightClasses();
 		
@@ -217,8 +220,9 @@ class ControllerSettingSetting extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function theme() {
-		if(empty($_GET['theme'])){
+	public function theme()
+	{
+		if (empty($_GET['theme'])) {
 			$this->response->setOutput('No Theme Requested.');
 			return false;
 		}
@@ -228,18 +232,19 @@ class ControllerSettingSetting extends Controller {
 		$width = 300; //$this->config->get('config_image_admin_thumb_width');
 		$height = 300; //$this->config->get('config_image_admin_thumb_height');
 		
-		if($image){
+		if ($image) {
 			$image = $this->image->resize($image, $width, $height);
 		}
 		
-		if(!$image){
+		if (!$image) {
 			$image = $this->image->resize('no_image', $width, $height);
 		}
 		
-		$this->response->setOutput("<img src=\"$image\" class=\"theme_preview\" />");
+		$this->response->setOutput("<img src=\"$image\" class =\"theme_preview\" />");
 	}
 	
-	public function validate() {
+	public function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'setting/setting')) {
 			$this->error['permission'] = $this->_('error_permission');
 		}
@@ -256,15 +261,15 @@ class ControllerSettingSetting extends Controller {
 			$this->error['config_address'] = $this->_('error_address');
 		}
 		
-		if(!$this->validation->email($_POST['config_email'])){
+		if (!$this->validation->email($_POST['config_email'])) {
 			$this->error['config_email'] = $this->_('error_email');
 		}
 		
-		if(!$this->validation->email($_POST['config_email_error'])){
+		if (!$this->validation->email($_POST['config_email_error'])) {
 			$this->error['config_email_error'] = $this->_('error_email');
 		}
 		
-		if(!$this->validation->email($_POST['config_email_support'])){
+		if (!$this->validation->email($_POST['config_email_support'])) {
 			$this->error['config_email_support'] = $this->_('error_email');
 		}
 
@@ -341,8 +346,8 @@ class ControllerSettingSetting extends Controller {
 			'config_image_file_mode','config_image_dir_mode',
 			'config_plugin_file_mode','config_plugin_dir_mode'
 		);
-		foreach($octals as $oct){
-			if ($_POST[$oct]){
+		foreach ($octals as $oct) {
+			if ($_POST[$oct]) {
 				$oct_val = $_POST[$oct];
 				$_POST[$oct] = '0' . "$oct_val";
 			}

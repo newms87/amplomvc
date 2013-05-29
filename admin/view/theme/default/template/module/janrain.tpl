@@ -7,7 +7,7 @@ table#janrain_table .janrain_img{ margin:0 0 3px 10px;vertical-align:middle;}
 .janrain_label_desc{font-family:Tahoma;font-size:11px;padding-top:5px;display:block;font-weight:normal;}
 
 .janrain-icon-small{
-	background: url(<?=$image_url;?>) no-repeat top left;
+	background: url(<?= $image_url; ?>) no-repeat top left;
 	width:16px;
 	height:16px;
 }
@@ -25,8 +25,8 @@ table#janrain_table .janrain_img{ margin:0 0 3px 10px;vertical-align:middle;}
 </style>
 
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
-	<?= $this->builder->display_errors($errors);?>
+	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->builder->display_errors($errors); ?>
 <div class="box">
 	<div class="heading">
 		<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt="" /><?= $heading_title; ?></h1>
@@ -36,33 +36,33 @@ table#janrain_table .janrain_img{ margin:0 0 3px 10px;vertical-align:middle;}
 		<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 			<table class="form" id="janrain_table">
 				<tr>
-					<td>*<?= $entry_application_domain;?></td>
-					<td valign="top"><input style="width:350px;" type="text" name="janrain_application_domain" value="<?= $janrain_application_domain; ?>" /><br /><span class="janrain_label_desc"><?= $entry_application_domain_desc;?></span></td>
+					<td>*<?= $entry_application_domain; ?></td>
+					<td valign="top"><input style="width:350px;" type="text" name="janrain_application_domain" value="<?= $janrain_application_domain; ?>" /><br /><span class="janrain_label_desc"><?= $entry_application_domain_desc; ?></span></td>
 				</tr>
 		<tr>
-					<td>*<?= $entry_api_key;?></td>
-					<td valign="top"><input style="width:350px;" type="text" name="janrain_api_key" value="<?= $janrain_api_key; ?>" /><br /><span class="janrain_label_desc"><?= $entry_api_key_desc;?></span></td>
+					<td>*<?= $entry_api_key; ?></td>
+					<td valign="top"><input style="width:350px;" type="text" name="janrain_api_key" value="<?= $janrain_api_key; ?>" /><br /><span class="janrain_label_desc"><?= $entry_api_key_desc; ?></span></td>
 				</tr>
 		<tr>
-				<td><?= $entry_display_icons;?></td>
+				<td><?= $entry_display_icons; ?></td>
 				<td valign="top">
 						<div	class='display_icon_list'>
 						<? foreach($display_icons as $key=>$icon){ ?>
 							<div class='display_icon_label'>
-									<input id='icon-<?=$key;?>' type='checkbox' name="janrain_display_icons[]" value="<?=$key;?>" <?= $janrain_display_icons?(in_array($key,$janrain_display_icons)?'checked="checked"':''):'';?> />
-									<label for='icon-<?=$key;?>'><div class='janrain-icon-small' style='background-position:0 <?=$image_offset[$key]*-16;?>px'></div>&nbsp;<?=$icon;?></label>
+									<input id='icon-<?= $key; ?>' type='checkbox' name="janrain_display_icons[]" value="<?= $key; ?>" <?= $janrain_display_icons?(in_array($key,$janrain_display_icons)?'checked="checked"':''):'';?> />
+									<label for='icon-<?= $key; ?>'><div class='janrain-icon-small' style='background-position:0 <?= $image_offset[$key]*-16; ?>px'></div>&nbsp;<?= $icon; ?></label>
 							</div>
 						<? }?>
 						</div>
 				</td>
 			</tr>
 		<tr>
-					<td><?= $entry_login_redir;?></td>
-					<td valign="top"><input style="width:350px;" type="text" name="janrain_login_redir" value="<?= $janrain_login_redir; ?>" /><br /><span class="janrain_label_desc"><?= $entry_login_redir_desc;?></span></td>
+					<td><?= $entry_login_redir; ?></td>
+					<td valign="top"><input style="width:350px;" type="text" name="janrain_login_redir" value="<?= $janrain_login_redir; ?>" /><br /><span class="janrain_label_desc"><?= $entry_login_redir_desc; ?></span></td>
 				</tr>
 		<tr>
-					<td><?= $entry_logout_redir;?></td>
-					<td valign="top"><input style="width:350px;" type="text" name="janrain_logout_redir" value="<?= $janrain_logout_redir; ?>" /><br /><span class="janrain_label_desc"><?= $entry_logout_redir_desc;?></span></td>
+					<td><?= $entry_logout_redir; ?></td>
+					<td valign="top"><input style="width:350px;" type="text" name="janrain_logout_redir" value="<?= $janrain_logout_redir; ?>" /><br /><span class="janrain_label_desc"><?= $entry_logout_redir_desc; ?></span></td>
 				</tr>
 	</table>
 	<table id="module" class="list">
@@ -83,19 +83,19 @@ table#janrain_table .janrain_img{ margin:0 0 3px 10px;vertical-align:middle;}
 					<tr>
 						<td class="center">
 							<? $this->builder->set_config('layout_id','name');?>
-							<?=$this->builder->build('select',$layouts, "janrain_module[$module_row][layout_id]", $module['layout_id']);?>
+							<?= $this->builder->build('select',$layouts, "janrain_module[$module_row][layout_id]", $module['layout_id']); ?>
 						</td>
 				<td class="center">
-					<?=$this->builder->build('select',$display_types,"janrain_module[$module_row][display_type]", $module['display_type']);?>
+					<?= $this->builder->build('select',$display_types,"janrain_module[$module_row][display_type]", $module['display_type']); ?>
 				</td>
 				<td class="center">
-							<?=$this->builder->build('select',$icon_sizes,"janrain_module[$module_row][icon_size]", $module['icon_size']);?>
+							<?= $this->builder->build('select',$icon_sizes,"janrain_module[$module_row][icon_size]", $module['icon_size']); ?>
 						</td>
 				<td class="center">
-							<?=$this->builder->build('select',$positions,"janrain_module[$module_row][position]", $module['position']);?>
+							<?= $this->builder->build('select',$positions,"janrain_module[$module_row][position]", $module['position']); ?>
 						</td>
 						<td class="center">
-							<?=$this->builder->build('select',$statuses,"janrain_module[$module_row][status]", (int)$module['status']);?>
+							<?= $this->builder->build('select',$statuses,"janrain_module[$module_row][status]", (int)$module['status']); ?>
 						</td>
 						<td class="center"><input type="text" name="janrain_module[<?= $module_row; ?>][sort_order]" value="<?= $module['sort_order']; ?>" size="3" /></td>
 						<td class="left"><a onclick="$('#module-row<?= $module_row; ?>').remove();" class="button"><span><?= $button_remove; ?></span></a></td>
@@ -120,11 +120,11 @@ function addModule() {
 	html	= '<tbody id="module-row%modrow%">';
 	html += '	<tr>';
 		<? $this->builder->set_config('layout_id','name');?>
-	html += '		<td class="center">' + "<?=$this->builder->build('select',$layouts, "janrain_module[%modrow%][layout_id]");?>" + '</td>';
-	html += '		<td class="center">' + "<?=$this->builder->build('select',$display_types,"janrain_module[%modrow%][display_type]");?>" + '</td>';
-	html += '		<td class="center">' + "<?=$this->builder->build('select',$icon_sizes,"janrain_module[%modrow%][icon_size]");?>" + '</td>';
-	html += '		<td class="center">' + "<?=$this->builder->build('select',$positions,"janrain_module[%modrow%][position]");?>" + '</td>';
-	html += '		<td class="center">' + "<?=$this->builder->build('select',$statuses,"janrain_module[%modrow%][status]");?>" + '</td>';
+	html += '		<td class="center">' + "<?= $this->builder->build('select',$layouts, "janrain_module[%modrow%][layout_id]"); ?>" + '</td>';
+	html += '		<td class="center">' + "<?= $this->builder->build('select',$display_types,"janrain_module[%modrow%][display_type]"); ?>" + '</td>';
+	html += '		<td class="center">' + "<?= $this->builder->build('select',$icon_sizes,"janrain_module[%modrow%][icon_size]"); ?>" + '</td>';
+	html += '		<td class="center">' + "<?= $this->builder->build('select',$positions,"janrain_module[%modrow%][position]"); ?>" + '</td>';
+	html += '		<td class="center">' + "<?= $this->builder->build('select',$statuses,"janrain_module[%modrow%][status]"); ?>" + '</td>';
 	html += '		<td class="center"><input type="text" name="janrain_module[%modrow%][sort_order]" value="" size="3" /></td>';
 	html += '		<td class="left"><a onclick="$(\'#module-row%modrow%\').remove();" class="button"><span><?= $button_remove; ?></span></a></td>';
 	html += '	</tr>';

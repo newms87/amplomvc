@@ -1,6 +1,6 @@
 <?= $header; ?>
 <div class="content">
-<?= $this->builder->display_breadcrumbs();?>
+<?= $this->builder->display_breadcrumbs(); ?>
 <? if ($error_warning) { ?>
 <div class="message_box warning"><?= $error_warning; ?></div>
 <? } ?>
@@ -37,13 +37,11 @@
 						<td class="left">
 							<?= $this->builder->build('select',
 								array("content_top"=>$text_content_top, "content_bottom"=>$text_content_bottom, "column_left"=>$text_column_left, "column_right"=>$text_column_right),
-					"main_sidebar_module[$module_row][position]", $module['position']);
-				?>
+					"main_sidebar_module[$module_row][position]", $module['position']); ?>
 						</td>
 						<td class="left">
 							<?= $this->builder->build('select',
-					array("1"=>"Enabled", "0"=>"Disabled"),"main_sidebar_module[$module_row][status]",$module['status']);
-				?>
+					array("1"=>"Enabled", "0"=>"Disabled"),"main_sidebar_module[$module_row][status]",$module['status']); ?>
 			</td>
 						<td class="right"><input type="text" name="main_sidebar_module[<?= $module_row; ?>][sort_order]" value="<?= $module['sort_order']; ?>" size="3" /></td>
 						<td class="left"><a onclick="$('#module-row<?= $module_row; ?>').remove();" class="button"><?= $button_remove; ?></a></td>

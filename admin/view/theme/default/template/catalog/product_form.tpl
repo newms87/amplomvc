@@ -1,7 +1,7 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
-	<?= $this->builder->display_errors($errors);?>
+	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'product.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -69,17 +69,17 @@
 							<td><span class="required"></span> <?= $entry_model; ?></td>
 							<td>
 								<input type="text" name="model" value="<?= $model; ?>" />
-								<a class='gen_url' onclick='generate_model(this)'><?=$button_generate_model;?></a>
+								<a class='gen_url' onclick='generate_model(this)'><?= $button_generate_model; ?></a>
 							</td>
 						</tr>
 						<tr>
 							<td><span class="required"></span><?= $entry_keyword; ?></td>
 							<td>
 								<input type="text" onfocus='generate_url_warning(this)' name="keyword" value="<?= $keyword; ?>" />
-								<a class='gen_url' onclick='generate_url(this)'><?=$button_generate_url;?></a>
+								<a class='gen_url' onclick='generate_url(this)'><?= $button_generate_url; ?></a>
 							</td>
 						</tr>
-						<input type='hidden' name='sku' value='<?=$sku;?>'/>
+						<input type='hidden' name='sku' value='<?= $sku; ?>'/>
 					<!-- <tr>
 							<td><?= $entry_sku; ?></td>
 							<td><input type="text" name="sku" value="<?= $sku; ?>" /></td>
@@ -103,13 +103,13 @@
 						</tr>
 						<tr>
 							<td><?= $entry_is_final; ?></td>
-							<td><?= $this->builder->build('select',$yes_no,'is_final',(int)$is_final);?></td>
+							<td><?= $this->builder->build('select',$yes_no,'is_final',(int)$is_final); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_tax_class; ?></td>
 							<td>
 								<? $this->builder->set_config('tax_class_id','title');?>
-								<?=$this->builder->build('select',$tax_classes,'tax_class_id',$tax_class_id);?>
+								<?= $this->builder->build('select',$tax_classes,'tax_class_id',$tax_class_id); ?>
 							</td>
 						</tr>
 						<tr>
@@ -123,15 +123,15 @@
 						<tr>
 							<td><?= $entry_subtract; ?></td>
 							<td>
-									<?=$this->builder->build('select', $yes_no, "subtract", (int)$subtract);?>
-									<input type='hidden' name='stock_status_id' value='<?=$stock_status_id;?>' />
+									<?= $this->builder->build('select', $yes_no, "subtract", (int)$subtract); ?>
+									<input type='hidden' name='stock_status_id' value='<?= $stock_status_id; ?>' />
 								</td>
 						</tr>
 						<tr>
 							<td><?= $entry_image; ?></td>
 							<td>
 								<?= $this->builder->set_builder_template('click_image'); ?>
-								<?= $this->builder->image_input("image", $image);?>
+								<?= $this->builder->image_input("image", $image); ?>
 							</td>
 						</tr>
 						<tr>
@@ -144,11 +144,11 @@
 						</tr>
 						<tr>
 							<td><?= $entry_status; ?></td>
-							<td><?= $this->builder->build('select',$statuses,"status",$status);?></td>
+							<td><?= $this->builder->build('select',$statuses,"status",$status); ?></td>
 						</tr>
 						<tr>
-							<td><?=$entry_editable;?></td>
-							<td><?= $this->builder->build('select',$yes_no, 'editable',$editable);?></td>
+							<td><?= $entry_editable; ?></td>
+							<td><?= $this->builder->build('select',$yes_no, 'editable',$editable); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_sort_order; ?></td>
@@ -160,7 +160,7 @@
 					<table class="form">
 						<tr>
 							<td><?= $entry_shipping; ?></td>
-							<td><?= $this->builder->build('radio', $yes_no, "shipping", (int)$shipping);?></td>
+							<td><?= $this->builder->build('radio', $yes_no, "shipping", (int)$shipping); ?></td>
 						</tr>
 					</table>
 					<table class="form" id="shipping_details">
@@ -204,22 +204,22 @@
 					<table class="form">
 						<tr>
 							<td><?= $entry_manufacturer; ?></td>
-							<td><?=$this->builder->build('select',$manufacturers,'manufacturer_id',(int)$manufacturer_id);?></td>
+							<td><?= $this->builder->build('select',$manufacturers,'manufacturer_id',(int)$manufacturer_id); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_category; ?></td>
 							<? $this->builder->set_config('category_id', 'name');?>
-							<td><?= $this->builder->build('multiselect', $data_categories, "product_category", $product_category);?></td>
+							<td><?= $this->builder->build('multiselect', $data_categories, "product_category", $product_category); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_store; ?></td>
 							<? $this->builder->set_config('store_id', 'name');?>
-							<td><?= $this->builder->build('multiselect', $data_stores, "product_store", $product_store);?></td>
+							<td><?= $this->builder->build('multiselect', $data_stores, "product_store", $product_store); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_download; ?></td>
 							<? $this->builder->set_config('download_id', 'name');?>
-							<td><?= $this->builder->build('multiselect', $data_downloads, "product_download", $product_download);?></td>
+							<td><?= $this->builder->build('multiselect', $data_downloads, "product_download", $product_download); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_related; ?></td>
@@ -283,7 +283,7 @@
 							<input value="" style="width: 130px;" />
 							<img src="<?= HTTP_THEME_IMAGE . 'add.png'; ?>" alt="<?= $button_add_option; ?>" title="<?= $button_add_option; ?>" />
 						</span>
-						<div class='help'><?= $text_option_help;?></div>
+						<div class='help'><?= $text_option_help; ?></div>
 					</div>
 					<? foreach ($product_options as $product_option) { ?>
 						<? $option_id = $product_option['option_id'];?>
@@ -295,19 +295,19 @@
 						<table class="form">
 							<tr>
 								<td><?= $entry_required; ?></td>
-								<td><?=$this->builder->build('select', $data_yes_no, "product_options[$option_id][required]", (int)$product_option['required']);?></td>
+								<td><?= $this->builder->build('select', $data_yes_no, "product_options[$option_id][required]", (int)$product_option['required']); ?></td>
 							</tr>
 							<tr>
 								<td><?= $entry_sort_order; ?></td>
-								<td><input type="text" name="product_options[<?= $option_id;?>][sort_order]" value="<?= $product_option['sort_order'];?>" /></td>
+								<td><input type="text" name="product_options[<?= $option_id; ?>][sort_order]" value="<?= $product_option['sort_order']; ?>" /></td>
 							</tr>
 							<tr>
-								<td><?= $entry_option_value_list;?></td>
+								<td><?= $entry_option_value_list; ?></td>
 								<td>
 										<div class='scrollbox option_value_list clickable'>
 										<? foreach($unused_option_values[$option_id] as $ov) {?>
-												<div onclick="addOptionValue(<?= $option_id;?>,<?=$ov['option_value_id'];?>,'<?= addslashes($ov['name']);?>'); $(this).remove();" >
-													<span class='po_label'><?=$ov['name'];?></span>
+												<div onclick="addOptionValue(<?= $option_id; ?>,<?= $ov['option_value_id']; ?>,'<?= addslashes($ov['name']); ?>'); $(this).remove();" >
+													<span class='po_label'><?= $ov['name']; ?></span>
 													<img src="<?= HTTP_THEME_IMAGE . "add.png"; ?>" />
 												</div>
 										<? }?>
@@ -325,7 +325,7 @@
 									<td class="right"><?= $entry_price; ?></td>
 									<td class="right"><?= $entry_option_points; ?></td>
 									<td class="right"><?= $entry_weight; ?></td>
-									<td class="center"><?= $entry_option_value_restriction;?></td>
+									<td class="center"><?= $entry_option_value_restriction; ?></td>
 									<td></td>
 								</tr>
 							</thead>
@@ -334,14 +334,14 @@
 								<? $option_value_id = $product_option_value['option_value_id'];?>
 								<tr>
 									<td class="left">
-										<span class='option_value_label'><?=$product_option_value['name'];?></span>
-										<input class="ov_entry_name" type="hidden" name="product_options[<?= $option_id;?>][product_option_value][<?= $option_value_id;?>][name]" value="<?= $product_option_value['name']; ?>" />
-										<input type="hidden" name="product_options[<?= $option_id;?>][product_option_value][<?= $option_value_id;?>][option_id]" value="<?= $option_id; ?>" />
-										<input class="ov_entry_option_value_id" type="hidden" name="product_options[<?= $option_id;?>][product_option_value][<?= $option_value_id;?>][option_value_id]" value="<?= $option_value_id; ?>" />
+										<span class='option_value_label'><?= $product_option_value['name']; ?></span>
+										<input class="ov_entry_name" type="hidden" name="product_options[<?= $option_id; ?>][product_option_value][<?= $option_value_id; ?>][name]" value="<?= $product_option_value['name']; ?>" />
+										<input type="hidden" name="product_options[<?= $option_id; ?>][product_option_value][<?= $option_value_id; ?>][option_id]" value="<?= $option_id; ?>" />
+										<input class="ov_entry_option_value_id" type="hidden" name="product_options[<?= $option_id; ?>][product_option_value][<?= $option_value_id; ?>][option_value_id]" value="<?= $option_value_id; ?>" />
 									</td>
 									<td class="right"><input type="text" name="product_options[<?= $option_id; ?>][product_option_value][<?= $option_value_id; ?>][quantity]" value="<?= $product_option_value['quantity']; ?>" size="3" /></td>
 									<td class="left">
-										<?=$this->builder->build('select', $data_yes_no, "product_options[$option_id][product_option_value][$option_value_id][subtract]", (int)$product_option_value['subtract']);?>
+										<?= $this->builder->build('select', $data_yes_no, "product_options[$option_id][product_option_value][$option_value_id][subtract]", (int)$product_option_value['subtract']); ?>
 									</td>
 									<td class="right">
 										<input type="text" name="product_options[<?= $option_id; ?>][product_option_value][<?= $option_value_id; ?>][cost]" value="<?= $product_option_value['cost']; ?>" size="5" />
@@ -359,8 +359,8 @@
 										<table class='list'>
 												<thead>
 													<tr>
-															<td class="center"><?=$entry_restriction_option_value;?></td>
-															<td class="center"><?=$entry_restriction_quantity;?></td>
+															<td class="center"><?= $entry_restriction_option_value; ?></td>
+															<td class="center"><?= $entry_restriction_quantity; ?></td>
 															<td></td>
 													</tr>
 												</thead>
@@ -368,9 +368,9 @@
 													<? if(isset($product_option_value['restrictions'])){?>
 													<? foreach($product_option_value['restrictions'] as $row=>$restriction){?>
 													<tr>
-															<?=$this->builder->set_config('option_value_id', 'name');?>
-															<td class="center"><?=$this->builder->build('select', $all_product_option_values, "product_options[$option_id][product_option_value][$option_value_id][restrictions][$row][restrict_option_value_id]", $restriction['restrict_option_value_id'], array('class'=>'restrict_option_values'));?></td>
-															<td class="center"><input type="text" size='3' name="product_options[<?= $option_id; ?>][product_option_value][<?= $option_value_id; ?>][restrictions][<?=$row;?>][quantity]" value="<?=$restriction['quantity'];?>" /></td>
+															<?= $this->builder->set_config('option_value_id', 'name'); ?>
+															<td class="center"><?= $this->builder->build('select', $all_product_option_values, "product_options[$option_id][product_option_value][$option_value_id][restrictions][$row][restrict_option_value_id]", $restriction['restrict_option_value_id'], array('class'=>'restrict_option_values')); ?></td>
+															<td class="center"><input type="text" size='3' name="product_options[<?= $option_id; ?>][product_option_value][<?= $option_value_id; ?>][restrictions][<?= $row; ?>][quantity]" value="<?= $restriction['quantity']; ?>" /></td>
 															<td class="center"><a onclick="$(this).closest('tr').remove()" class="button_remove"></a></td>
 													</tr>
 													<? }?>
@@ -379,13 +379,13 @@
 												<tfoot>
 													<tr>
 															<td colspan='2'></td>
-															<td class="center"><a onclick="add_restriction_value($(this), <?=$option_id;?>, <?=$option_value_id;?>)" class="button_add"></a></td>
+															<td class="center"><a onclick="add_restriction_value($(this), <?= $option_id; ?>, <?= $option_value_id; ?>)" class="button_add"></a></td>
 													</tr>
 												</tfoot>
 										</table>
 									</td>
 									<td class="left">
-										<a onclick="remove_option_value($(this), <?=$option_id;?>, <?=$option_value_id;?>, '<?= addslashes($product_option_value['name']);?>');" class="button"><?= $button_remove; ?></a>
+										<a onclick="remove_option_value($(this), <?= $option_id; ?>, <?= $option_value_id; ?>, '<?= addslashes($product_option_value['name']); ?>');" class="button"><?= $button_remove; ?></a>
 									</td>
 								</tr>
 							<? } ?>
@@ -455,7 +455,7 @@
 						<tbody id="special-row<?= $special_row; ?>">
 							<tr>
 								<td class="left">
-									<input type='hidden' name='product_specials[<?=$special_row;?>][flashsale_id]' value='<?= $product_special['flashsale_id'];?>' />
+									<input type='hidden' name='product_specials[<?= $special_row; ?>][flashsale_id]' value='<?= $product_special['flashsale_id']; ?>' />
 									<select name="product_specials[<?= $special_row; ?>][customer_group_id]">
 										<? foreach ($customer_groups as $customer_group) { ?>
 										<? if ($customer_group['customer_group_id'] == $product_special['customer_group_id']) { ?>
@@ -515,7 +515,7 @@
 										</div>
 									</td>
 									<td class="left"><?= $product_image['image']; ?></td>
-									<td class="right"><input type="radio" name="primary_product_image" <?= $image_selected ? 'checked=checked':'';?> value="<?= $product_image['image']; ?>" /></td>
+									<td class="right"><input type="radio" name="primary_product_image" <?= $image_selected ? 'checked=checked':''; ?> value="<?= $product_image['image']; ?>" /></td>
 									<td class="right"><input class="sortOrder" type="text" name="product_images[<?= $image_row; ?>][sort_order]" value="<?= $product_image['sort_order']; ?>" size="2" /></td>
 									<td class="left"><a onclick="$('#image-row<?= $image_row; ?>').remove();" class="button"><?= $button_remove; ?></a></td>
 								</tr>
@@ -569,13 +569,13 @@
 								<td class="left"><?= $store['name']; ?></td>
 								<td class="left">
 									<? $this->builder->set_config('layout_id', 'name');?>
-									<?= $this->builder->build('select', $layouts, "product_layout[$store[store_id]][layout_id]", isset($product_layout[$store['store_id']]) ? $product_layout[$store['store_id']] : '');?>
+									<?= $this->builder->build('select', $layouts, "product_layout[$store[store_id]][layout_id]", isset($product_layout[$store['store_id']]) ? $product_layout[$store['store_id']] : ''); ?>
 								</td>
 								<td class="left">
 									<? foreach ($templates as $theme => $template) {?>
 									<label class="product_template">
-										<div><?= $theme;?></div>
-										<?= $this->builder->build('select', $template, "product_template[$store[store_id]][$theme][template]", isset($product_template[$store['store_id']][$theme]['template']) ? $product_template[$store['store_id']][$theme]['template'] : '') ;?>
+										<div><?= $theme; ?></div>
+										<?= $this->builder->build('select', $template, "product_template[$store[store_id]][$theme][template]", isset($product_template[$store['store_id']][$theme]['template']) ? $product_template[$store['store_id']][$theme]['template'] : '') ; ?>
 									</label>
 									<? } ?>
 								</td>
@@ -589,12 +589,12 @@
 	</div>
 </div>
 
-<?= $this->builder->js('ckeditor');?>
+<?= $this->builder->js('ckeditor'); ?>
 
 <script type="text/javascript">//<!--
 function generate_url_warning(field){
 	if($('#gen_warn').length == 0)
-			$(field).parent().append('<span id="gen_warn" style="color:red"><?=$warning_generate_url;?></span>');
+			$(field).parent().append('<span id="gen_warn" style="color:red"><?= $warning_generate_url; ?></span>');
 }
 function generate_url(c){
 	$(c).fadeOut(500,function(){$(c).show();});
@@ -609,7 +609,7 @@ function generate_model(c){
 	name = $('input[name="product_description[1][name]"]').val();
 	if(!name)
 			alert("Please make a name for this product before generating the Model ID");
-	$.post("<?= HTTP_ADMIN . "index.php?route=catalog/product/generate_model"; ?>",{product_id:<?=$product_id?$product_id:0;?>,name:name},function(json){$('input[name="model"]').val(json);},'json');
+	$.post("<?= HTTP_ADMIN . "index.php?route=catalog/product/generate_model"; ?>",{product_id:<?= $product_id?$product_id:0; ?>,name:name},function(json){$('input[name="model"]').val(json);},'json');
 }
 //--></script>
 
@@ -772,14 +772,14 @@ $('#option-add input').autocomplete({
 		html += '	<table class="form">';
 		html += '		<tr>';
 		html += '			<td><?= $entry_required; ?></td>';
-		html += '				<td>' + "<?=$this->builder->build('select', $yes_no, "product_options[%option_id%][required]", 1);?>" + '</td>';
+		html += '				<td>' + "<?= $this->builder->build('select', $yes_no, "product_options[%option_id%][required]", 1); ?>" + '</td>';
 		html += '		</tr>';
 		html += '		<tr>';
 			html += '				<td><?= $entry_sort_order; ?></td>';
 			html += '				<td><input type="text" name="product_options[%option_id%][sort_order]" value="" /></td>';
 			html += '		</tr>';
 		html += '		<tr>';
-			html += '				<td><?= $entry_option_value_list;?></td>';
+			html += '				<td><?= $entry_option_value_list; ?></td>';
 			html += '				<td>';
 			html += '						<div class="scrollbox option_value_list clickable">';
 			for(i=0; i< ui.item.option_value.length; i++){
@@ -823,8 +823,8 @@ $('#option-add input').autocomplete({
 //--></script>
 
 <span id='all_product_option_values' style='display:none'>
-	<?=$this->builder->set_config('option_value_id', 'name');?>
-	<?=$this->builder->build('select', $all_product_option_values, "product_options[%option_id%][product_option_value][%option_value_id%][restrictions][%row%][restrict_option_value_id]", '', array('class'=>'restrict_option_values'));?>
+	<?= $this->builder->set_config('option_value_id', 'name'); ?>
+	<?= $this->builder->build('select', $all_product_option_values, "product_options[%option_id%][product_option_value][%option_value_id%][restrictions][%row%][restrict_option_value_id]", '', array('class'=>'restrict_option_values')); ?>
 </span>
 					
 <script type="text/javascript">//<!--
@@ -838,7 +838,7 @@ function addOptionValue(option_id, option_value_id, name) {
 	html += '			<input class="ov_entry_option_value_id" type="hidden" name="product_options[%option_id%][product_option_value][%option_value_id%][option_value_id]" value="%option_value_id%" />';
 	html += '		</td>';
 	html += '		<td class="right"><input type="text" name="product_options[%option_id%][product_option_value][%option_value_id%][quantity]" value="1" size="3" /></td>';
-	html += '		<td class="left">' + "<?=$this->builder->build('select', $yes_no, "product_options[%option_id%][product_option_value][%option_value_id%][subtract]",1);?>" + '</td>';
+	html += '		<td class="left">' + "<?= $this->builder->build('select', $yes_no, "product_options[%option_id%][product_option_value][%option_value_id%][subtract]",1); ?>" + '</td>';
 	html += '		<td class="right"><input type="text" name="product_options[%option_id%][product_option_value][%option_value_id%][cost]" value="0" size="5" /></td>';
 	html += '		<td class="right"><input type="text" name="product_options[%option_id%][product_option_value][%option_value_id%][price]" value="0" size="5" /></td>';
 	html += '		<td class="right"><input type="text" name="product_options[%option_id%][product_option_value][%option_value_id%][points]" value="0" size="5" /></td>';
@@ -847,8 +847,8 @@ function addOptionValue(option_id, option_value_id, name) {
 	html += '			<table class="list">';
 	html += '				<thead>';
 	html += '						<tr>';
-	html += '							<td class="center"><?=$entry_restriction_option_value;?></td>';
-	html += '							<td class="center"><?=$entry_restriction_quantity;?></td>';
+	html += '							<td class="center"><?= $entry_restriction_option_value; ?></td>';
+	html += '							<td class="center"><?= $entry_restriction_quantity; ?></td>';
 	html += '							<td></td>';
 	html += '						</tr>';
 	html += '				</thead>';
@@ -895,7 +895,7 @@ var restrict_row = 0;
 
 function add_restriction_value(context, option_id, option_value_id){
 	html =	'<tr>';
-				<?=$this->builder->set_config('product_option_value_id', 'name');?>
+				<?= $this->builder->set_config('product_option_value_id', 'name'); ?>
 	html += '	<td class="center">' + $('#all_product_option_values').html() + '</td>';
 	html += '	<td class="center"><input type="text" size="3" name="product_options[%option_id%][product_option_value][%option_value_id%][restrictions][%row%][quantity]" value="1" /></td>';
 	html += '	<td class="center"><a onclick="$(this).closest(\'tr\').remove()" class="button_remove"></a></td>';
@@ -1009,12 +1009,12 @@ $(document).ready(function() {
 });
 //--></script>
 
-<?=$this->builder->js('datepicker');?>
+<?= $this->builder->js('datepicker'); ?>
 
 <script type="text/javascript"><!--
 $('#tabs a').tabs();
 $('#languages a').tabs();
 $('#vtab-option a').not('.normal').tabs();
 //--></script>
-<?= $this->builder->js('errors', $errors);?>
+<?= $this->builder->js('errors', $errors); ?>
 <?= $footer; ?>

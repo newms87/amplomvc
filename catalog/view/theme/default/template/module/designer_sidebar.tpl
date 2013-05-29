@@ -4,11 +4,11 @@
 			<ul>
 				<? foreach ($designers as $fs) { ?>
 				<li>
-					<a href='<?=$fs['href'];?>' class='designer_menu_link'><?=$fs['name'];?></a>
+					<a href='<?= $fs['href']; ?>' class='designer_menu_link'><?= $fs['name']; ?></a>
 				</li>
 			<? }?>
 				<li>
-						<a href='<?=$view_all_designers;?>' class='designer_menu_link'><?=$text_view_all_designers;?></a>
+						<a href='<?= $view_all_designers; ?>' class='designer_menu_link'><?= $text_view_all_designers; ?></a>
 				</li>
 			</ul>
 	</div>

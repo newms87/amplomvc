@@ -1,13 +1,15 @@
 <?php
-class ModelPaymentPPStandard extends Model {
-  	public function getMethod($address, $total) {
+class ModelPaymentPPStandard extends Model 
+{
+  	public function getMethod($address, $total)
+  	{
 		$this->load->language('payment/pp_standard');
 		
-		if($this->config->get('pp_standard_total') > $total){
+		if ($this->config->get('pp_standard_total') > $total) {
 			return array();
 		}
 		
-		if(!$this->model_localisation_zone->inGeoZone($this->config->get('pp_standard_geo_zone_id'), $address['country_id'], $address['zone_id'])){
+		if (!$this->model_localisation_zone->inGeoZone($this->config->get('pp_standard_geo_zone_id'), $address['country_id'], $address['zone_id'])) {
 			return array();
 		}
 

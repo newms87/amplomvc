@@ -1,8 +1,10 @@
 <?php
-class ControllerSaleReturn extends Controller {
+class ControllerSaleReturn extends Controller 
+{
 	
 	
-  	public function index() {
+  	public function index()
+  	{
 		$this->load->language('sale/return');
 		
 		$this->document->setTitle($this->_('heading_title'));
@@ -10,7 +12,8 @@ class ControllerSaleReturn extends Controller {
 		$this->getList();
   	}
   
-  	public function insert() {
+  	public function insert()
+  	{
 		$this->load->language('sale/return');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -72,7 +75,8 @@ class ControllerSaleReturn extends Controller {
 		$this->getForm();
   	}
 	
-  	public function update() {
+  	public function update()
+  	{
 		$this->load->language('sale/return');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -134,7 +138,8 @@ class ControllerSaleReturn extends Controller {
 		$this->getForm();
   	}
 
-  	public function delete() {
+  	public function delete()
+  	{
 		$this->load->language('sale/return');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -198,7 +203,8 @@ class ControllerSaleReturn extends Controller {
 		$this->getList();
   	}
 	
-  	private function getList() {
+  	private function getList()
+  	{
 		$this->template->load('sale/return_list');
 
 		if (isset($_GET['filter_return_id'])) {
@@ -506,7 +512,8 @@ class ControllerSaleReturn extends Controller {
 		$this->response->setOutput($this->render());
   	}
   
-  	private function getForm() {
+  	private function getForm()
+  	{
 		$this->template->load('sale/return_form');
 
 		if (isset($this->error['warning'])) {
@@ -768,7 +775,8 @@ class ControllerSaleReturn extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function info() {
+	public function info()
+	{
 		if (isset($_GET['return_id'])) {
 			$return_id = $_GET['return_id'];
 		} else {
@@ -917,7 +925,8 @@ class ControllerSaleReturn extends Controller {
 		}
 	}
 		
-  	private function validateForm() {
+  	private function validateForm()
+  	{
 		if (!$this->user->hasPermission('modify', 'sale/return')) {
 				$this->error['warning'] = $this->_('error_permission');
 		}
@@ -957,7 +966,8 @@ class ControllerSaleReturn extends Controller {
 		return $this->error ? false : true;
   	}
 
-  	private function validateDelete() {
+  	private function validateDelete()
+  	{
 		if (!$this->user->hasPermission('modify', 'sale/return')) {
 				$this->error['warning'] = $this->_('error_permission');
 		}
@@ -965,7 +975,8 @@ class ControllerSaleReturn extends Controller {
 		return $this->error ? false : true;
   	}
 	
-	public function action() {
+	public function action()
+	{
 		$this->language->load('sale/return');
 		
 		$json = array();
@@ -987,7 +998,8 @@ class ControllerSaleReturn extends Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 		
-	public function history() {
+	public function history()
+	{
 		$this->template->load('sale/return_history');
 
 		$this->language->load('sale/return');

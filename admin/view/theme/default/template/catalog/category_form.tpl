@@ -1,7 +1,7 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
-	<?= $this->builder->display_errors($errors);?>
+	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'category.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -43,30 +43,30 @@
 					<table class="form">
 						<tr>
 							<td><?= $entry_parent; ?></td>
-							<td><?=$this->builder->build('select',$categories, 'parent_id', (int)$parent_id);?></td>
+							<td><?= $this->builder->build('select',$categories, 'parent_id', (int)$parent_id); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_store; ?></td>
 							<? $this->builder->set_config('store_id', 'name');?>
-							<td><?= $this->builder->build('multiselect', $data_stores, "category_store", $category_store);?></td>
+							<td><?= $this->builder->build('multiselect', $data_stores, "category_store", $category_store); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_keyword; ?></td>
 							<td>
 								<input type="text" onfocus='generate_url_warning(this)' name="keyword" value="<?= $keyword; ?>" />
-								<a class='gen_url' onclick='generate_url(this)'><?=$button_generate_url;?></a>
+								<a class='gen_url' onclick='generate_url(this)'><?= $button_generate_url; ?></a>
 							</td>
 						</tr>
 						<tr>
 							<td><?= $entry_image; ?></td>
 							<td>
-								<?= $this->builder->set_builder_template('click_image');?>
-								<?= $this->builder->image_input("image", $image);?>
+								<?= $this->builder->set_builder_template('click_image'); ?>
+								<?= $this->builder->image_input("image", $image); ?>
 							</td>
 						</tr>
 						<tr>
 							<td><?= $entry_top; ?></td>
-							<td><input type="checkbox" name="top" value="1" <?=$top?'checked="checked"':'';?> /></td>
+							<td><input type="checkbox" name="top" value="1" <?= $top?'checked="checked"':''; ?> /></td>
 						</tr>
 						<tr>
 							<td><?= $entry_column; ?></td>
@@ -78,7 +78,7 @@
 						</tr>
 						<tr>
 							<td><?= $entry_status; ?></td>
-							<td><?=$this->builder->build('select',$statuses, 'status', (int)$status);?></td>
+							<td><?= $this->builder->build('select',$statuses, 'status', (int)$status); ?></td>
 						</tr>
 					</table>
 				</div>
@@ -96,7 +96,7 @@
 								<td class="left"><?= $store['name']; ?></td>
 								<td class="left">
 									<? $this->builder->set_config('layout_id', 'name');?>
-									<?=$this->builder->build('select',$data_layouts, "category_layout[$store[store_id]][layout_id]", isset($category_layout[$store['store_id']])?(int)$category_layout[$store['store_id']]:'');?>
+									<?= $this->builder->build('select',$data_layouts, "category_layout[$store[store_id]][layout_id]", isset($category_layout[$store['store_id']])?(int)$category_layout[$store['store_id']]:''); ?>
 								</td>
 							</tr>
 						</tbody>
@@ -108,12 +108,12 @@
 	</div>
 </div>
 
-<?=$this->builder->js('ckeditor');?>
+<?= $this->builder->js('ckeditor'); ?>
 
 <script type="text/javascript">//<!--
 function generate_url_warning(field){
 	if($('#gen_warn').length == 0)
-			$(field).parent().append('<span id="gen_warn" style="color:red"><?=$warning_generate_url;?></span>');
+			$(field).parent().append('<span id="gen_warn" style="color:red"><?= $warning_generate_url; ?></span>');
 }
 function generate_url(c){
 	$(c).fadeOut(500,function(){$(this).show();});
@@ -121,7 +121,7 @@ function generate_url(c){
 	name =$('input[name="category_description[1][name]"]').val();
 	if(!name)
 			alert("Please make a name for this Category before generating the URL");
-	$.post("<?= HTTP_ADMIN . "index.php?route=catalog/category/generate_url"; ?>",{category_id:<?=$category_id?$category_id:0;?>,name:name},function(json){$('input[name="keyword"]').val(json);},'json');
+	$.post("<?= HTTP_ADMIN . "index.php?route=catalog/category/generate_url"; ?>",{category_id:<?= $category_id?$category_id:0; ?>,name:name},function(json){$('input[name="keyword"]').val(json);},'json');
 }
  //--></script>
  
@@ -130,5 +130,5 @@ $('#tabs a').tabs();
 $('#languages a').tabs();
 //--></script>
 
-<?=$this->builder->js('errors',$errors);?>
+<?= $this->builder->js('errors',$errors); ?>
 <?= $footer; ?>

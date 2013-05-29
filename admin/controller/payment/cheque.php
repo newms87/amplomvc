@@ -1,8 +1,10 @@
 <?php
-class ControllerPaymentCheque extends Controller {
+class ControllerPaymentCheque extends Controller 
+{
 	
 
-	public function index() {
+	public function index()
+	{
 		$this->template->load('payment/cheque');
 
 		$this->load->language('payment/cheque');
@@ -85,7 +87,8 @@ class ControllerPaymentCheque extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'payment/cheque')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

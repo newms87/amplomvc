@@ -1,16 +1,16 @@
-<form id="cart_shipping" action="<?= $action;?>" class="content">
+<form id="cart_shipping" action="<?= $action; ?>" class="content">
 	<p><?= $text_shipping_detail; ?></p>
 	<table>
 		<tr>
 			<td><span class="required"></span> <?= $entry_country; ?></td>
 			<td>
 				<? $this->builder->set_config('country_id', 'name');?>
-				<?= $this->builder->build('select', $countries, "country_id", $country_id, array('class'=>'country_select'));?>
+				<?= $this->builder->build('select', $countries, "country_id", $country_id, array('class'=>'country_select')); ?>
 			</td>
 		</tr>
 		<tr>
 			<td><span class="required"></span> <?= $entry_zone; ?></td>
-			<td><select name="zone_id" class="zone_select" zone_id="<?= $zone_id;?>"></select></td>
+			<td><select name="zone_id" class="zone_select" zone_id="<?= $zone_id; ?>"></select></td>
 		</tr>
 		<tr>
 			<td><span class="required"></span> <?= $entry_postcode; ?></td>
@@ -25,12 +25,12 @@
 	<form action="<?= $apply_shipping; ?>" method="post" enctype="multipart/form-data">
 			<table class="radio"></table>
 			<input type="hidden" name="next" value="shipping" />
-			<input type="hidden" name="redirect" value="<?= $redirect;?>" />
+			<input type="hidden" name="redirect" value="<?= $redirect; ?>" />
 			<input type="submit" value="<?= $button_shipping; ?>" class="button" />
 	</form>
 </div>
 
-<?= $this->builder->js('load_zones', '#cart_shipping', '.country_select','.zone_select');?>
+<?= $this->builder->js('load_zones', '#cart_shipping', '.country_select','.zone_select'); ?>
 
 <script type="text/javascript">
 //<!--

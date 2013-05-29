@@ -1,7 +1,7 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
-	<?= $this->builder->display_errors($errors);?>
+	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -67,22 +67,22 @@
 					<table class="form">
 						<tr>
 							<td class='mail_info'>
-								<label for='mail_sender'><?=$entry_mail_sender;?></label>
+								<label for='mail_sender'><?= $entry_mail_sender; ?></label>
 								<input id='mail_sender' type='text' name='sender' value='' size='40' />
-								<label for='mail_from'><span class='required'></span><?=$entry_mail_from;?></label>
+								<label for='mail_from'><span class='required'></span><?= $entry_mail_from; ?></label>
 								<input id='mail_from' type='text' name='from' value='' size='100' />
-								<label for='mail_to'><span class='required'></span><?=$entry_mail_to;?></label>
+								<label for='mail_to'><span class='required'></span><?= $entry_mail_to; ?></label>
 								<input id='mail_to' type='text' name='to' value='' size='100' />
-								<label for='mail_cc'><?=$entry_mail_cc;?></label>
+								<label for='mail_cc'><?= $entry_mail_cc; ?></label>
 								<input id='mail_cc' type='text' name='cc' value='' size='100' />
-								<label for='mail_bcc'><?=$entry_mail_bcc;?></label>
+								<label for='mail_bcc'><?= $entry_mail_bcc; ?></label>
 								<input id='mail_bcc' type='text' name='bcc' value='' size='100' />
-								<label for='mail_subject'><span class='required'></span><?=$entry_mail_subject;?></label>
+								<label for='mail_subject'><span class='required'></span><?= $entry_mail_subject; ?></label>
 								<input id='mail_subject' type='text' name='subject' value='' size='100'/>
-								<label for='mail_message'><span class='required'></span><?=$entry_mail_message;?></label>
+								<label for='mail_message'><span class='required'></span><?= $entry_mail_message; ?></label>
 								<textarea id='mail_message' rows='15' cols='120' name='message'></textarea>
-								<label for="allow_html"><input type="checkbox" checked="checked" name='allow_html' id='allow_html' /><?= $entry_allow_html;?></label>
-								<label for='mail_attachment'><?=$entry_mail_attachment;?></label>
+								<label for="allow_html"><input type="checkbox" checked="checked" name='allow_html' id='allow_html' /><?= $entry_allow_html; ?></label>
+								<label for='mail_attachment'><?= $entry_mail_attachment; ?></label>
 								<input id='mail_attachment' type='file' multiple name='attachment[]' value='' size='100' />
 							</td>
 						</tr>
@@ -93,7 +93,7 @@
 	</div>
 </div>
 
-<?= $this->builder->js('ckeditor');?>
+<?= $this->builder->js('ckeditor'); ?>
 
 <script type="text/javascript">//<!--
 $('a.edit_message').click(function(){
@@ -133,6 +133,6 @@ else if(!$(this).is(':checked') && message.hasClass('ckedit')){
 }).change();
 //--></script>
 
-<?=$this->builder->js('errors',$errors);?>
+<?= $this->builder->js('errors',$errors); ?>
 
 <?= $footer; ?>

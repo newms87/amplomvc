@@ -7,19 +7,19 @@
 			<? if($this->template->option('require_' . $name)) { ;?>
 			<span class="required"></span>
 			<? }?>
-			<span class='form_entry'><?= ${'entry_' . $name};?></span>
+			<span class='form_entry'><?= ${'entry_' . $name}; ?></span>
 		</td>
 		<td>
 			<? switch($field['#type']) {
 				case 'text': ?>
-				<input type="text" name="<?= $name;?>" value="<?= $value;?>" class="large-field" />
+				<input type="text" name="<?= $name; ?>" value="<?= $value; ?>" class="large-field" />
 					<? break;
 				case 'select': ?>
 					<? if(isset($field['values']) && $field['values']) {?>
 						<? $this->builder->set_config($field['id'], $field['name']); ?>
 						<?= $this->builder->build('select', $field['values'], $name, $value, array('class'=>'large-field')); ?>
 					<? } else { ?>
-						<select name="<?= $name;?>" class="large-field"</select>
+						<select name="<?= $name; ?>" class="large-field"</select>
 					<? } ?>
 					<? break;
 				default: break;

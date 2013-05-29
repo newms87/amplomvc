@@ -1,11 +1,11 @@
 <?= $header; ?><?= $column_left; ?><?= $column_right; ?>
 <div id="content"><?= $content_top; ?>
-	<?= $this->builder->display_breadcrumbs();?>
-	<?= $this->builder->display_errors($errors);?>
+	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->builder->display_errors($errors); ?>
 	<h1><?= $heading_title; ?></h1>
 	<form id='contact_form' action="<?= $action; ?>" method="post" enctype="multipart/form-data">
 		<h3><?= $text_contact_us; ?></h3>
-		<h3><?=$text_contact_info;?></h3>
+		<h3><?= $text_contact_info; ?></h3>
 		<h2><?= $text_contact; ?></h2>
 		<div class="content">
 		<b><?= $entry_name; ?></b><br />
@@ -60,5 +60,5 @@
 	
 	<?= $content_bottom; ?></div>
 	
-	<?=$this->builder->js('errors',$errors);?>
+	<?= $this->builder->js('errors',$errors); ?>
 <?= $footer; ?>

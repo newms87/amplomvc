@@ -1,7 +1,9 @@
 <?php
-class ControllerDesignLayout extends Controller {
+class ControllerDesignLayout extends Controller 
+{
 	
-	public function index() {
+	public function index()
+	{
 		$this->load->language('design/layout');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -9,7 +11,8 @@ class ControllerDesignLayout extends Controller {
 		$this->getList();
 	}
 
-	public function insert() {
+	public function insert()
+	{
 		$this->load->language('design/layout');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -39,7 +42,8 @@ class ControllerDesignLayout extends Controller {
 		$this->getForm();
 	}
 
-	public function update() {
+	public function update()
+	{
 		$this->load->language('design/layout');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -69,7 +73,8 @@ class ControllerDesignLayout extends Controller {
 		$this->getForm();
 	}
  
-	public function delete() {
+	public function delete()
+	{
 		$this->load->language('design/layout');
  
 		$this->document->setTitle($this->_('heading_title'));
@@ -101,7 +106,8 @@ class ControllerDesignLayout extends Controller {
 		$this->getList();
 	}
 
-	private function getList() {
+	private function getList()
+	{
 		$this->template->load('design/layout_list');
 
 		if (isset($_GET['sort'])) {
@@ -224,7 +230,8 @@ class ControllerDesignLayout extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function getForm() {
+	private function getForm()
+	{
 		$this->template->load('design/layout_form');
 
 		$this->data['languages'] = $this->model_localisation_language->getLanguages();
@@ -305,7 +312,8 @@ class ControllerDesignLayout extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validateForm() {
+	private function validateForm()
+	{
 		if (!$this->user->hasPermission('modify', 'design/layout')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
@@ -317,7 +325,8 @@ class ControllerDesignLayout extends Controller {
 		return $this->error ? false : true;
 	}
 
-	private function validateDelete() {
+	private function validateDelete()
+	{
 		if (!$this->user->hasPermission('modify', 'design/layout')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

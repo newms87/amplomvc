@@ -1,7 +1,9 @@
 <?php
-class ControllerAccountRegister extends Controller {
+class ControllerAccountRegister extends Controller 
+{
 	
-  	public function index() {
+  	public function index()
+  	{
   		$this->template->load('account/register');
 		
 		if ($this->customer->isLogged()) {
@@ -45,7 +47,7 @@ class ControllerAccountRegister extends Controller {
 			'agree'=>false
 		);
 		
-		foreach($defaults as $key=>$default){
+		foreach ($defaults as $key=>$default) {
 			$this->data[$key] = isset($_POST[$key])?$_POST[$key]:$default;
 		}
 		
@@ -73,7 +75,8 @@ class ControllerAccountRegister extends Controller {
 		$this->response->setOutput($this->render());
   	}
 
-  	public function validate() {
+  	public function validate()
+  	{
 		if ((strlen($_POST['firstname']) < 1) || (strlen($_POST['firstname']) > 32)) {
 				$this->error['firstname'] = $this->_('error_firstname');
 		}

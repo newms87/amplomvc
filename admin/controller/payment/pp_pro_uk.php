@@ -1,8 +1,10 @@
 <?php
-class ControllerPaymentPPProUK extends Controller {
+class ControllerPaymentPPProUK extends Controller 
+{
 	
 
-	public function index() {
+	public function index()
+	{
 		$this->template->load('payment/pp_pro_uk');
 
 		$this->load->language('payment/pp_pro_uk');
@@ -135,7 +137,8 @@ class ControllerPaymentPPProUK extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'payment/pp_pro_uk')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

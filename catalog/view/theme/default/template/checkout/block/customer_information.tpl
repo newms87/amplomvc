@@ -1,36 +1,36 @@
 <div id="customer_information_box">
 	<? if(!empty($guest_checkout)) { ?>
 		<div id='guest_information' class='info_item' route='checkout/block/guest_information'>
-			<div class='info_content'><?= $block_guest_information;?></div>
+			<div class='info_content'><?= $block_guest_information; ?></div>
 			<div class='validation_status'></div>
 		</div>
 	<? } else { ?>
 		<? if(!empty($block_shipping_address)) {?>
 			<div id='shipping_address' class='info_item' route='checkout/block/shipping_address'>
-				<h2 class='info_heading'><?= $text_shipping_information;?></h2>
-				<div class='info_content'><?= $block_shipping_address;?></div>
+				<h2 class='info_heading'><?= $text_shipping_information; ?></h2>
+				<div class='info_content'><?= $block_shipping_address; ?></div>
 				<div class='validation_status'></div>
 			</div>
 		<? }?>
 		
 		<div id='payment_address' class='info_item' route='checkout/block/payment_address'>
-			<h2 class='info_heading'><?= $text_payment_address;?></h2>
-			<div class='info_content'><?= $block_payment_address;?></div>
+			<h2 class='info_heading'><?= $text_payment_address; ?></h2>
+			<div class='info_content'><?= $block_payment_address; ?></div>
 			<div class='validation_status'></div>
 		</div>
 	<? }?>
 	
 	<? if(!empty($block_shipping_method)) {?>
 		<div id='shipping_method' class='info_item' route='checkout/block/shipping_method'>
-			<h2 class='info_heading'><?= !empty($guest_checkout) ? $text_shipping_method : '';?></h2>
-			<div class='info_content'><?= $block_shipping_method;?></div>
+			<h2 class='info_heading'><?= !empty($guest_checkout) ? $text_shipping_method : ''; ?></h2>
+			<div class='info_content'><?= $block_shipping_method; ?></div>
 			<div class='validation_status'></div>
 		</div>
 	<? }?>
 	
 	<div id='payment_method' class='info_item' route='checkout/block/payment_method'>
-		<h2 class='info_heading'><?= $text_payment_method;?></h2>
-		<div class='info_content'><?= $block_payment_method;?></div>
+		<h2 class='info_heading'><?= $text_payment_method; ?></h2>
+		<div class='info_content'><?= $block_payment_method; ?></div>
 		<div class='validation_status'></div>
 	</div>
 	
@@ -60,7 +60,7 @@ function set_validation_status(info_item, status, msg){
 }
 
 function info_page_loading(info_item){
-	set_validation_status(info_item, 'validating', "<?= $text_info_validating;?> <img src='<?= HTTP_THEME_IMAGE . 'loading.gif';?>' alt='' />");
+	set_validation_status(info_item, 'validating', "<?= $text_info_validating; ?> <img src='<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>' alt='' />");
 }
 
 function info_page_received(info_item){
@@ -72,7 +72,7 @@ function load_info_item(info_item, route, callback){
 	
 	route = route || info_item.attr('route');
 	
-	set_validation_status(info_item, 'loading', '<?= $text_info_loading;?>');
+	set_validation_status(info_item, 'loading', '<?= $text_info_loading; ?>');
 	
 	info_item.find('.info_content').load("<?= HTTP_CATALOG . "index.php?route="; ?>" + route, {},
 		function(){
@@ -95,7 +95,7 @@ function ci_validate_form(form, reload){
 		info_item = form.closest('.info_item');
 		
 		if (!json || json['error']) {
-			set_validation_status(info_item, 'invalid', '<?= $text_info_error;?>');
+			set_validation_status(info_item, 'invalid', '<?= $text_info_error; ?>');
 			
 		} else {
 			set_validation_status(info_item, 'valid', '');
@@ -165,7 +165,7 @@ function validate_submit(submit){
 	}
 	else{
 		$('.info_item').each(function(i,e){
-			set_validation_status($(e), 'loading', '<?= $text_info_loading;?>');
+			set_validation_status($(e), 'loading', '<?= $text_info_loading; ?>');
 		});
 		
 		$.get("<?= $validate_customer_checkout; ?>", {}, function(json){

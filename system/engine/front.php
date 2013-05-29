@@ -1,13 +1,16 @@
 <?php
-final class Front {
+final class Front 
+{
 	protected $registry;
 	protected $error;
 	
-	public function __construct(&$registry) {
+	public function __construct(&$registry)
+	{
 		$this->registry = &$registry;
 	}
 	
-  	public function dispatch($action, $error) {
+  	public function dispatch($action, $error)
+  	{
 		$this->error = $error;
 		
 		while ($action) {
@@ -15,7 +18,8 @@ final class Front {
 		}
   	}
 	
-	private function execute($action) {
+	private function execute($action)
+	{
 		$file = $action->getFile();
 		$class = $action->getClass();
 		$class_path = $action->getClassPath();
@@ -24,12 +28,14 @@ final class Front {
 		
 		$action = '';
 
-		if (file_exists($file)) {
+		if (file_exists($file)) 
+{
 			_require_once($file);
 
-			$controller = new $class($class_path, $this->registry);
+			$controller = new $class ($class_path, $this->registry);
 			
-			if (is_callable(array($controller, $method))) {
+			if (is_callable(array($controller, $method))) 
+{
 				$action = call_user_func_array(array($controller, $method), $args);
 			} else {
 				$action = $this->error;

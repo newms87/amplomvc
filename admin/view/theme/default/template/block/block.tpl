@@ -1,7 +1,7 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
-	<?= $this->builder->display_errors($errors);?>
+	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -12,8 +12,8 @@
 		</div>
 		<div class="content">
 			<div id="tabs" class="htabs">
-				<a href="#tab-settings"><?= $tab_settings;?></a>
-				<a href="#tab-profile"><?= $tab_profile;?></a>
+				<a href="#tab-settings"><?= $tab_settings; ?></a>
+				<a href="#tab-profile"><?= $tab_profile; ?></a>
 			</div>
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 				
@@ -21,12 +21,12 @@
 					<table class="form">
 						<? if(!empty($extend_settings)){ ?>
 						<tr>
-							<td colspan="2" style="border:none;padding: 0;"><?= $extend_settings;?></td>
+							<td colspan="2" style="border:none;padding: 0;"><?= $extend_settings; ?></td>
 						</tr>
 						<? } ?>
 						<tr>
-							<td><?= $entry_block_status;?></td>
-							<td><?= $this->builder->build('select', $data_statuses, "status", $status);?></td>
+							<td><?= $entry_block_status; ?></td>
+							<td><?= $this->builder->build('select', $data_statuses, "status", $status); ?></td>
 						</tr>
 					</table>
 				</div>
@@ -49,7 +49,7 @@
 
 <div id="profile_tab_template" style="display:none">
 	<a href="#tab-profile-%pid%" id="profile-%pid%">
-			<span><?= $tab_profile. ' %pid%';?></span>
+			<span><?= $tab_profile. ' %pid%'; ?></span>
 			<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" alt="" onclick="$('.vtabs a:first').trigger('click'); $('#profile-%pid%').remove(); $('#tab-profile-%pid%').remove(); return false;" />
 		</a>
 </div>
@@ -61,32 +61,32 @@
 				<td><?= $entry_store; ?></td>
 				<td>
 					<? $this->builder->set_config("store_id", "name");?>
-					<?= $this->builder->build('multiselect', $data_stores, "profiles[%pid%][store_ids]");?>
+					<?= $this->builder->build('multiselect', $data_stores, "profiles[%pid%][store_ids]"); ?>
 				</td>
 			</tr>
 			<tr>
 				<td><?= $entry_layout; ?></td>
 				<td>
 					<? $this->builder->set_config("layout_id", "name");?>
-					<?= $this->builder->build('multiselect', $data_layouts, "profiles[%pid%][layout_ids]");?>
+					<?= $this->builder->build('multiselect', $data_layouts, "profiles[%pid%][layout_ids]"); ?>
 				</td>
 			</tr>
 			<tr>
 				<td><?= $entry_position; ?></td>
 				<td>
-					<?= $this->builder->build('select', $data_positions, "profiles[%pid%][position]");?>
+					<?= $this->builder->build('select', $data_positions, "profiles[%pid%][position]"); ?>
 				</td>
 			</tr>
 			<tr>
 				<td><?= $entry_profile_status; ?></td>
 				<td>
-					<?= $this->builder->build('select', $data_statuses, "profiles[%pid%][status]");?>
+					<?= $this->builder->build('select', $data_statuses, "profiles[%pid%][status]"); ?>
 				</td>
 			</tr>
 		</table>
 		<? if(!empty($extend_profile)) {?>
 		<div class="extend_profile">
-			<?= $extend_profile;?>
+			<?= $extend_profile; ?>
 		</div>
 		<? } ?>
 	</div>
@@ -98,7 +98,7 @@ var profile_id = 0;
 <? foreach($profiles as $profile){ ?>
 	data = {}
 	<? foreach($profile as $key => $data) {?>
-	data['<?= $key;?>'] = <?=json_encode($data);?>;
+	data['<?= $key; ?>'] = <?= json_encode($data); ?>;
 	<? } ?>
 	
 	addProfile(data);
@@ -166,5 +166,5 @@ function fill_data_as(type, context, name, value){
 <script type="text/javascript">//<!--
 $('#tabs a').tabs();
 //--></script>
-<?= $this->builder->js('errors', $errors);?>
+<?= $this->builder->js('errors', $errors); ?>
 <?= $footer; ?>

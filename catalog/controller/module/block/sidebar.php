@@ -1,6 +1,8 @@
 <?php
-class ControllerModuleBlockSidebar extends Controller {
-	protected function index($settings) {
+class ControllerModuleBlockSidebar extends Controller 
+{
+	protected function index($settings)
+	{
 		$this->template->load('module/block/sidebar');
 		$this->language->load('module/block/sidebar');
 		
@@ -14,8 +16,8 @@ class ControllerModuleBlockSidebar extends Controller {
 			'href' => $this->url->link("product/collection"),
 		);
 		
-		if(!$category_id && !$collection_id){
-			$main_menu[0]['attrs'] = array('class' => 'active');
+		if (!$category_id && !$collection_id) {
+			$main_menu[0]['attrs'] = array('class ' => 'active');
 		}
 		
 		$collections = $this->model_catalog_collection->getCollectionCategories();
@@ -28,12 +30,13 @@ class ControllerModuleBlockSidebar extends Controller {
 		);
 		
 		//Product Attributes Filter
-		if($collection_id){
+		if($collection_id)
+{
 			$current_filter = isset($_GET['attribute']) ? $_GET['attribute'] : array();
 			
 			$url_query = $this->url->get_query('collection_id', 'category_id');
 			
-			foreach($settings['attributes'] as $attribute_menu){
+			foreach ($settings['attributes'] as $attribute_menu) {
 				$attribute_group_id = $attribute_menu['attribute_group_id'];
 				
 				if (!$this->model_catalog_collection->hasAttributeGroup($collection_id, $attribute_group_id)) continue;
@@ -44,7 +47,7 @@ class ControllerModuleBlockSidebar extends Controller {
 				$active_filter = isset($current_filter[$attribute_group_id]) ? $current_filter[$attribute_group_id] : false;
 				
 				//Setup attribute menu items
-				foreach($attribute_list as &$attribute){
+				foreach ($attribute_list as &$attribute) {
 					//Build Attribute Query
 					$attribute_filter = $current_filter;
 					$attribute_filter[$attribute_group_id] = $attribute['attribute_id'];
@@ -52,8 +55,8 @@ class ControllerModuleBlockSidebar extends Controller {
 				
 					$attribute['href'] = $this->url->link('product/collection', $url_query . '&' . $attribute_query);
 	
-					if($active_filter == $attribute['attribute_id']){
-						$attribute['attrs'] = array('class' => 'active');
+					if ($active_filter == $attribute['attribute_id']) {
+						$attribute['attrs'] = array('class ' => 'active');
 					}
 				}
 				
@@ -93,28 +96,30 @@ class ControllerModuleBlockSidebar extends Controller {
 		$this->render();
 	}
 
-	private function build_collection_menu($collections){
+	private function build_collection_menu($collections)
+	{
 		$category_id = !empty($_GET['category_id']) ? $_GET['category_id'] : false;
 		
 		$collection_menu = array();
 		$parents = array();
 		
 		//NOTE: This is only a 2 level menu
-		foreach($collections as $collection){
+		foreach ($collections as $collection) {
 			
 			$menu_item = array(
 				'name' => $collection['name'],
 				'href' => $this->url->link('product/collection', 'category_id=' . $collection['category_id']),
 			);
 			
-			if($collection['category_id'] == $category_id){
-				$menu_item['attrs'] = array('class' => 'active');
+			if ($collection['category_id'] == $category_id) {
+				$menu_item['attrs'] = array('class ' => 'active');
 			}
 			
-			if((int)$collection['parent_id'] == 0){
+			if((int)$collection['parent_id'] == 0)
+{
 				$parents[$collection['category_id']] = $menu_item;
 			}
-			else{
+			else {
 				$parents[$collection['parent_id']]['children'][] = $menu_item;
 			}
 		}

@@ -1,14 +1,16 @@
 <?php
-class ControllerProductBlockFlashsaleCountdown extends Controller {
+class ControllerProductBlockFlashsaleCountdown extends Controller 
+{
 
-	public function index($settings, $flashsale){
+	public function index($settings, $flashsale)
+	{
 		
 		$this->language->load('product/block/flashsale_countdown');
 		
 		$this->template->load('product/block/flashsale_countdown');
 		
 		//This products flashsale
-		if(!is_array($flashsale)){
+		if (!is_array($flashsale)) {
 			$flashsale = $this->model_catalog_flashsale->getFlashsale((int)$flashsale);
 		}
 		

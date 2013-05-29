@@ -1,8 +1,10 @@
 <?php
-class ControllerAffiliatePayment extends Controller {
+class ControllerAffiliatePayment extends Controller 
+{
 	
 
-	public function index() {
+	public function index()
+	{
 		$this->template->load('affiliate/payment');
 
 		if (!$this->affiliate->isLogged()) {

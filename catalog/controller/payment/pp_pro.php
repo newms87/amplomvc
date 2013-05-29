@@ -1,6 +1,8 @@
 <?php
-class ControllerPaymentPPPro extends Controller {
-	protected function index() {
+class ControllerPaymentPPPro extends Controller 
+{
+	protected function index()
+	{
 		$this->template->load('payment/pp_pro');
 
 		$this->language->load('payment/pp_pro');
@@ -69,7 +71,8 @@ class ControllerPaymentPPPro extends Controller {
 		$this->render();
 	}
 
-	public function send() {
+	public function send()
+	{
 		if (!$this->config->get('pp_pro_transaction')) {
 			$payment_type = 'Authorization';
 		} else {

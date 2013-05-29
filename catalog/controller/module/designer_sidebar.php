@@ -1,6 +1,8 @@
 <?php
-class ControllerModuleDesignerSidebar extends Controller {
-	protected function index($setting) {
+class ControllerModuleDesignerSidebar extends Controller 
+{
+	protected function index($setting)
+	{
 		$this->template->load('module/designer_sidebar');
 		
 		$this->language->load('module/designer_sidebar');

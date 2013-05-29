@@ -1,8 +1,10 @@
 <?php
-class ControllerPaymentWebPaymentSoftware extends Controller {
+class ControllerPaymentWebPaymentSoftware extends Controller 
+{
 	
 
-	public function index() {
+	public function index()
+	{
 		$this->template->load('payment/web_payment_software');
 
 		$this->load->language('payment/web_payment_software');
@@ -109,7 +111,8 @@ class ControllerPaymentWebPaymentSoftware extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'payment/web_payment_software')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

@@ -1,8 +1,10 @@
 <?php
-class ControllerModuleCategory extends Controller {
+class ControllerModuleCategory extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/category');
 
 		$this->load->language('module/category');
@@ -49,7 +51,8 @@ class ControllerModuleCategory extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/category')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

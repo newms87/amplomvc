@@ -1,5 +1,6 @@
 <?php
-class ControllerCheckoutBlockConfirmAddress extends Controller {
+class ControllerCheckoutBlockConfirmAddress extends Controller 
+{
 	public function index($settings = array()) {
 		$this->template->load('checkout/block/confirm_address');
 
@@ -8,20 +9,20 @@ class ControllerCheckoutBlockConfirmAddress extends Controller {
 		$shipping_address = '';
 		$payment_address = '';
 		
-		if($this->cart->hasShipping() && $this->cart->hasShippingAddress()){
+		if ($this->cart->hasShipping() && $this->cart->hasShippingAddress()) {
 			$shipping_address = $this->cart->getShippingAddress();
 		}
 		
-		if($this->cart->hasPaymentAddress()){
+		if ($this->cart->hasPaymentAddress()) {
 			$payment_address = $this->cart->getPaymentAddress();
 		}
 		
 		//Format Shipping Addresses
-		if($shipping_address){
-			if($shipping_address['address_format']){
+		if ($shipping_address) {
+			if ($shipping_address['address_format']) {
 				$format = $shipping_address['address_format'];
 			}
-			else{
+			else {
 				$format = $this->config->get('config_address_format');
 			}
 			
@@ -32,12 +33,12 @@ class ControllerCheckoutBlockConfirmAddress extends Controller {
 		
 		
 		//Format Payment Address
-		if($payment_address){
+		if ($payment_address) {
 			
-			if($payment_address['address_format']){
+			if ($payment_address['address_format']) {
 				$format = $payment_address['address_format'];
 			}
-			else{
+			else {
 				$format = $this->config->get('config_address_format');
 			}
 			
@@ -49,7 +50,8 @@ class ControllerCheckoutBlockConfirmAddress extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	public function string_to_html($format){
+	public function string_to_html($format)
+	{
 		return preg_replace("/<br[^>]*>\s*<br[^>]*>/","<br>", nl2br($format));
 	}
 }

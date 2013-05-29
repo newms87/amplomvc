@@ -1,8 +1,10 @@
 <?php
-class ControllerPaymentPerpetualPayments extends Controller {
+class ControllerPaymentPerpetualPayments extends Controller 
+{
 	
 
-	public function index() {
+	public function index()
+	{
 		$this->template->load('payment/perpetual_payments');
 
 		$this->load->language('payment/perpetual_payments');
@@ -103,7 +105,8 @@ class ControllerPaymentPerpetualPayments extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'payment/perpetual_payments')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

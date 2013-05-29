@@ -1,6 +1,8 @@
 <?php
-class ControllerAccountWishList extends Controller {
-	public function index() {
+class ControllerAccountWishList extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('account/wishlist');
 
 		if (!$this->customer->isLogged()) {
@@ -62,13 +64,13 @@ class ControllerAccountWishList extends Controller {
 				}
 							
 				if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-					$price = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id']));
+					$price = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class _id']));
 				} else {
 					$price = false;
 				}
 				
 				if ((float)$product_info['special']) {
-					$special = $this->currency->format($this->tax->calculate($product_info['special'], $product_info['tax_class_id']));
+					$special = $this->currency->format($this->tax->calculate($product_info['special'], $product_info['tax_class _id']));
 				} else {
 					$special = false;
 				}
@@ -103,7 +105,8 @@ class ControllerAccountWishList extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function add() {
+	public function add()
+	{
 		$this->language->load('account/wishlist');
 		
 		$json = array();

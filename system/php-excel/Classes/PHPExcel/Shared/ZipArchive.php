@@ -35,8 +35,7 @@ require_once PHPEXCEL_ROOT . 'PHPExcel/Shared/PCLZip/pclzip.lib.php';
  * @package	PHPExcel_Shared_ZipArchive
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Shared_ZipArchive
-{
+class PHPExcel_Shared_ZipArchive{
 
 	/**	constants */
 	const OVERWRITE		= 'OVERWRITE';

@@ -1,12 +1,14 @@
 <?php
-class ControllerCommonHeader extends Controller {
-	protected function index() {
-		if($this->config->get('config_debug') && !empty($_SESSION['debug'])){
+class ControllerCommonHeader extends Controller 
+{
+	protected function index()
+	{
+		if ($this->config->get('config_debug') && !empty($_SESSION['debug'])) {
 		$this->message->add('warning', html_dump($_SESSION['debug'], 'Session Debug', 0, -1, false));
 		unset($_SESSION['debug']);
 		}
 		
-		if($this->user->isDesigner()){
+		if ($this->user->isDesigner()) {
 			$this->template->load('common/header_restricted');
 		}
 
@@ -37,7 +39,7 @@ class ControllerCommonHeader extends Controller {
 		
 		$this->language->set('lang', $this->language->getInfo('code'));
 		
-		if($this->config->get('config_seo_url')){
+		if ($this->config->get('config_seo_url')) {
 			$this->data['pretty_url'] = $this->url->get_pretty_url();
 		}
 		
@@ -56,7 +58,7 @@ class ControllerCommonHeader extends Controller {
 			$this->data['logged'] = $this->language->format('text_logged', $this->user->getUserName());
 			
 			$menu_items = array();
-			if($this->user->isDesigner()){
+			if ($this->user->isDesigner()) {
 				$this->language->format('support',"mailto:" . $this->config->get('config_email'));
 				$menu_items = array(
 					'product'=>'catalog/product','product_insert'=>'catalog/product/insert',
@@ -66,13 +68,13 @@ class ControllerCommonHeader extends Controller {
 				);
 				$this->data['user_info'] = $this->url->link('user/user/update','user_id='.$this->user->getId());
 			}
-			else{
+			else {
 				$this->language->format('support', $this->config->get('config_email_support'));
 				
 				$this->data['store'] = SITE_URL;
 				
 				//Add the Image Manager to the Main Menu if user has permissions
-				if($this->user->hasPermission('access','common/filemanager')){
+				if ($this->user->hasPermission('access','common/filemanager')) {
 					$link_image_manager = array(
 						'name' => $this->_('text_image_manager'),
 						'sort_order' => 3,
@@ -100,7 +102,7 @@ class ControllerCommonHeader extends Controller {
 			//Link to all of the stores under the stores top level navigation
 			$stores = $this->model_setting_store->getStores();
 			
-			foreach($stores as $store){
+			foreach ($stores as $store) {
 				$link_store = array(
 					'name' => 'store_' . $store['store_id'],
 					'display_name' => $store['name'],
@@ -132,7 +134,7 @@ class ControllerCommonHeader extends Controller {
 		//Failed Email Messages warnings
 		$failed_count = $this->model_mail_error->total_failed_messages();
 		
-		if($failed_count){
+		if ($failed_count) {
 			$view_mail_errors = $this->url->admin('mail/error');
 			$this->message->add('warning', "There are <strong>$failed_count</strong> failed email messages! <a href=\"$view_mail_errors\">(view errors)</a>");
 		}

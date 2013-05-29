@@ -6,7 +6,7 @@
 	<form action="<?= $validate_selection; ?>" method="post">
 		<select name="address_id" onchange="ci_validate_form($(this).closest('form'))" style="width: 100%; margin-bottom: 15px;" size="5">
 			<? foreach ($data_addresses as $address) { ?>
-				<option value="<?= $address['address_id']; ?>" <?= $address['address_id'] == $payment_address_id ? 'selected="selected"' : '';?>><?= $address['firstname']; ?> <?= $address['lastname']; ?>, <?= $address['address_1']; ?>, <?= $address['city']; ?>, <?= $address['zone']; ?>, <?= $address['country']; ?></option>
+				<option value="<?= $address['address_id']; ?>" <?= $address['address_id'] == $payment_address_id ? 'selected="selected"' : ''; ?>><?= $address['firstname']; ?> <?= $address['lastname']; ?>, <?= $address['address_1']; ?>, <?= $address['city']; ?>, <?= $address['zone']; ?>, <?= $address['country']; ?></option>
 			<? } ?>
 		</select>
 		<noscript>
@@ -21,7 +21,7 @@
 	<label for="payment-address-new"><?= $text_address_new; ?></label>
 </p>
 <div id="payment_new" class="address_form" <?= $data_addresses ? 'style="display: none;"' : ''; ?>>
-	<?= $form_payment_address;?>
+	<?= $form_payment_address; ?>
 </div>
 
 <script type="text/javascript">//<!--

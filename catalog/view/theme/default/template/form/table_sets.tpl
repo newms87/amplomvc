@@ -1,4 +1,4 @@
-<form action="<?= $action;?>" method="<?= $method;?>">
+<form action="<?= $action; ?>" method="<?= $method; ?>">
 
 <? $columns = array();
 	
@@ -9,14 +9,14 @@
 	$col_width = (99 * (1 / $max_column)) . '%';
 	
 	foreach($columns as $column){ ?>
-<table class='form table_set_template' style="width:<?= $col_width;?>">
+<table class='form table_set_template' style="width:<?= $col_width; ?>">
 	<? foreach($column as $field){
 		if(empty($field)) continue;
 	?>
 	<tr>
 		<td>
 		<? if(isset($field['content_before'])) { ?>
-			<?= $field['content_before'];?>
+			<?= $field['content_before']; ?>
 		<? } ?>
 		
 		<? if(!in_array($field['type'], array('image','button', 'submit'))){ ?>
@@ -24,14 +24,14 @@
 				<? if($field['required']) { ;?>
 				<span class="required"></span>
 				<? }?>
-				<span class='form_entry'><?= $field['display_name'];?></span>
+				<span class='form_entry'><?= $field['display_name']; ?></span>
 			</div>
 		<? }?>
 			<? switch($field['type']) {
 					
 				case 'text':
 				case 'password': ?>
-				<input type="<?= $field['type'];?>" name="<?= $field['name'];?>" value="<?= $field['select'];?>" <?= $field['html_attrs'];?> />
+				<input type="<?= $field['type']; ?>" name="<?= $field['name']; ?>" value="<?= $field['select']; ?>" <?= $field['html_attrs']; ?> />
 					<? break;
 					
 				case 'select':
@@ -50,14 +50,14 @@
 				case 'button':
 				case 'submit':
 				case 'image': ?>
-					<input type="<?= $field['type'];?>" name="<?= $field['name'];?>" value="<?= $field['display_name'];?>" <?= $field['html_attrs'];?> />
+					<input type="<?= $field['type']; ?>" name="<?= $field['name']; ?>" value="<?= $field['display_name']; ?>" <?= $field['html_attrs']; ?> />
 					<? break;
 					
 				default: break;
 			} ?>
 			
 			<? if(isset($field['content_after'])){ ?>
-				<?= $field['content_after'];?>
+				<?= $field['content_after']; ?>
 			<? } ?>
 		</td>
 	</tr>

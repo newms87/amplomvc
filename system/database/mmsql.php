@@ -1,9 +1,11 @@
 <?php
-final class MSSQL implements Database{
+final class MSSQL implements Database
+{
 	private $link;
 	private $err_msg;
 	
-	public function __construct($hostname, $username, $password, $database) {
+	public function __construct($hostname, $username, $password, $database)
+	{
 		if (!$this->link = mssql_connect($hostname, $username, $password)) {
 				exit('Error: Could not make a database connection using ' . $username . '@' . $hostname);
 		}
@@ -16,11 +18,13 @@ final class MSSQL implements Database{
 		mssql_query("SET CHARACTER SET utf8", $this->link);
   	}
 	
-	public function get_error(){
+	public function get_error()
+	{
 		return $this->err_msg;
 	}
 	
-  	public function query($sql) {
+  	public function query($sql)
+  	{
 		$resource = mssql_query($sql, $this->link);
 
 		if ($resource) {
@@ -37,7 +41,7 @@ final class MSSQL implements Database{
 				
 				mssql_free_result($resource);
 				
-				$query = new stdClass();
+				$query = new stdclass ();
 				$query->row = isset($data[0]) ? $data[0] : array();
 				$query->rows = $data;
 				$query->num_rows = $i;
@@ -54,21 +58,25 @@ final class MSSQL implements Database{
 		}
   	}
 	
-	public function escape($value) {
+	public function escape($value)
+	{
 		$unpacked = unpack('H*hex', $value);
 		
 		return '0x' . $unpacked['hex'];
 	}
 	
-	public function escape_html($value){
+	public function escape_html($value)
+	{
 		return $this->escape(htmlspecialchars_decode($value), $this->link);
 	}
 	
-  	public function countAffected() {
+  	public function countAffected()
+  	{
 		return mssql_rows_affected($this->link);
   	}
 
-  	public function getLastId() {
+  	public function getLastId()
+  	{
 		$last_id = false;
 		
 		$resource = mssql_query("SELECT @@identity AS id", $this->link);
@@ -82,7 +90,8 @@ final class MSSQL implements Database{
 		return $last_id;
   	}
 	
-	public function __destruct() {
+	public function __destruct()
+	{
 		mssql_close($this->link);
 	}
 }

@@ -4,7 +4,7 @@
 		<div id='sidebar_menu_links'>
 			<div class="sidebar_main">
 				<!--<div class="label"><?= $main_menu['label']; ?></div>-->
-					<div class="links"><?= $this->builder->build_links($main_menu['menu']);?></div>
+					<div class="links"><?= $this->builder->build_links($main_menu['menu']); ?></div>
 				</div>
 				
 				<div class="sidebar_additional">

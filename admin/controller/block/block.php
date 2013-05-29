@@ -1,15 +1,17 @@
 <?php
-class ControllerBlockBlock extends Controller {
+class ControllerBlockBlock extends Controller 
+{
 	private $block_controller;
 	
-	public function index() {
+	public function index()
+	{
 		$this->load->language('block/block');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if(isset($_GET['name'])){
+		if (isset($_GET['name'])) {
 				
-			if(!$this->model_block_block->is_block($_GET['name'])){
+			if (!$this->model_block_block->is_block($_GET['name'])) {
 				$this->message->add('warning', $this->_('error_unknown_block'));
 				
 				$this->url->redirect($this->url->link('block/block'));
@@ -17,12 +19,13 @@ class ControllerBlockBlock extends Controller {
 			
 			$this->getForm();
 		}
-		else{
+		else {
 			$this->getList();
 		}
 	}
 	
-	private function getList(){
+	private function getList()
+	{
 		$this->template->load('block/list');
 
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -64,7 +67,7 @@ class ControllerBlockBlock extends Controller {
 			'page' => 1,
 		);
 		
-		foreach($sort_defaults as $key => $default){
+		foreach ($sort_defaults as $key => $default) {
 			$data[$key] = $$key = isset($_GET[$key]) ? $_GET[$key] : $default;
 		}
 		
@@ -73,7 +76,7 @@ class ControllerBlockBlock extends Controller {
 		//Filter
 		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
 		
-		if($filter_values){
+		if ($filter_values) {
 			$data += $filter_values;
 		}
 		
@@ -133,7 +136,8 @@ class ControllerBlockBlock extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function getForm(){
+	private function getForm()
+	{
 		$this->template->load('block/block');
 		
 		$name = $_GET['name'];
@@ -162,17 +166,17 @@ class ControllerBlockBlock extends Controller {
 		} else {
 			$block = $this->model_block_block->getBlock($name);
 			
-			if(!empty($block)){
+			if (!empty($block)) {
 				$this->data['profiles'] = $block['profiles'];
 				$this->data['settings'] = $block['settings'];
 			}
 		}
 		
-		if(empty($this->data['settings'])){
+		if (empty($this->data['settings'])) {
 			$this->data['settings'] = array();
 		}
 		
-		if(empty($this->data['profiles'])){
+		if (empty($this->data['profiles'])) {
 			$this->data['profiles'] = array();
 		}
 		
@@ -181,14 +185,14 @@ class ControllerBlockBlock extends Controller {
 			'status' => 1,
 		);
 		
-		foreach($defaults as $key => $default){
-			if(isset($_POST[$key])){
+		foreach ($defaults as $key => $default) {
+			if (isset($_POST[$key])) {
 				$this->data[$key] = $_POST[$key];
 			}
-			elseif(isset($block[$key])){
+			elseif (isset($block[$key])) {
 				$this->data[$key] = $block[$key];
 			}
-			else{
+			else {
 				$this->data[$key] = $default;
 			}
 		}
@@ -208,7 +212,8 @@ class ControllerBlockBlock extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function load_block_controller(){
+	private function load_block_controller()
+	{
 		if($this->block_controller) return;
 		
 		$path = $_GET['name'];
@@ -216,33 +221,36 @@ class ControllerBlockBlock extends Controller {
 		$class = "ControllerBlock" . preg_replace("/[^A-Z0-9]/i",'',$path);
 		$class_path = 'block/' . $path;
 	
-		if (file_exists($file)) {
+		if (file_exists($file)) 
+{
 			_require_once($file);
 
-			$this->block_controller = new $class($class_path, $this->registry);
+			$this->block_controller = new $class ($class_path, $this->registry);
 		} else {
 			trigger_error('Error: Could not load block controller ' . $path . '!');
 			exit();
 		}
 	}
 	
-	private function load_block_data(){
+	private function load_block_data()
+	{
 		$this->load_block_controller();
 		
 		$method = 'settings';
-		if(method_exists($this->block_controller, $method)){
+		if (method_exists($this->block_controller, $method)) {
 			$this->block_controller->$method($this->data['settings']);
 			$this->data['extend_settings'] = $this->block_controller->output;
 		}
 		
 		$method = 'profile';
-		if(method_exists($this->block_controller, $method)){
+		if (method_exists($this->block_controller, $method)) {
 			$this->block_controller->$method($this->data['profiles']);
 			$this->data['extend_profile'] = $this->block_controller->output;
 		}
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'block/block')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
@@ -252,12 +260,13 @@ class ControllerBlockBlock extends Controller {
 		return $this->error ? false : true;
 	}
 	
-	private function validate_block_data(){
+	private function validate_block_data()
+	{
 		$this->load_block_controller();
 		
 		$method = 'validate';
 		
-		if(method_exists($this->block_controller, $method)){
+		if (method_exists($this->block_controller, $method)) {
 			$this->error += $this->block_controller->$method();
 		}
 	}

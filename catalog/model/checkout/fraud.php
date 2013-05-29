@@ -1,6 +1,8 @@
 <?php
-class ModelCheckoutFraud extends Model {
-	public function getFraudScore($data) {
+class ModelCheckoutFraud extends Model 
+{
+	public function getFraudScore($data)
+	{
 		$risk_score = 0;
 		
 		$fraud_info = $this->getFraud($data['order_id']);
@@ -382,7 +384,8 @@ class ModelCheckoutFraud extends Model {
 		return $risk_score;
 	}
 		
-	public function getFraud($order_id) {
+	public function getFraud($order_id)
+	{
 		$query = $this->query("SELECT * FROM `" . DB_PREFIX . "order_fraud` WHERE order_id = '" . (int)$order_id . "'");
 	
 		return $query->row;

@@ -1,9 +1,11 @@
 <?php
-final class SQLite implements Database{
+final class SQLite implements Database
+{
 	private $link;
 	private $err_msg;
 	
-	public function __construct($hostname, $username, $password, $database) {
+	public function __construct($hostname, $username, $password, $database)
+	{
 		
 		
 		if (!$this->link = sqlite_open($hostname, $username, $password)) {
@@ -20,11 +22,13 @@ final class SQLite implements Database{
 		mysql_query("SET SQL_MODE = ''", $this->link);
   	}
 	
-	public function get_error(){
+	public function get_error()
+	{
 		return $this->err_msg;
 	}
 	
-  	public function query($sql) {
+  	public function query($sql)
+  	{
 		$resource = mysql_query($sql, $this->link);
 
 		if ($resource) {
@@ -41,7 +45,7 @@ final class SQLite implements Database{
 				
 				mysql_free_result($resource);
 				
-				$query = new stdClass();
+				$query = new stdclass ();
 				$query->row = isset($data[0]) ? $data[0] : array();
 				$query->rows = $data;
 				$query->num_rows = $i;
@@ -58,23 +62,28 @@ final class SQLite implements Database{
 		}
   	}
 	
-	public function escape($value) {
+	public function escape($value)
+	{
 		return mysql_real_escape_string($value, $this->link);
 	}
 	
-	public function escape_html($value){
+	public function escape_html($value)
+	{
 		return mysql_real_escape_string(htmlspecialchars_decode($value), $this->link);
 	}
 	
-  	public function countAffected() {
+  	public function countAffected()
+  	{
 		return mysql_affected_rows($this->link);
   	}
 
-  	public function getLastId() {
+  	public function getLastId()
+  	{
 		return mysql_insert_id($this->link);
   	}
 	
-	public function __destruct() {
+	public function __destruct()
+	{
 		mysql_close($this->link);
 	}
 }

@@ -1,6 +1,8 @@
 <?php
-class ControllerPaymentSagepayDirect extends Controller {
-	protected function index() {
+class ControllerPaymentSagepayDirect extends Controller 
+{
+	protected function index()
+	{
 		$this->template->load('payment/sagepay_direct');
 
 		$this->language->load('payment/sagepay_direct');
@@ -84,7 +86,8 @@ class ControllerPaymentSagepayDirect extends Controller {
 		$this->render();
 	}
 	
-	public function send() {
+	public function send()
+	{
 		if ($this->config->get('sagepay_direct_test') == 'live') {
 			$url = 'https://live.sagepay.com/gateway/service/vspdirect-register.vsp';
 		} elseif ($this->config->get('sagepay_direct_test') == 'test') {
@@ -251,7 +254,8 @@ class ControllerPaymentSagepayDirect extends Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 	
-	public function callback() {
+	public function callback()
+	{
 		if (isset($this->session->data['order_id'])) {
 			if ($this->config->get('sagepay_direct_test') == 'live') {
 				$url = 'https://live.sagepay.com/gateway/service/direct3dcallback.vsp';

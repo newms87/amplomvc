@@ -1,6 +1,8 @@
 <?php
-class ModelTotalVoucher extends Model {
-	public function getTotal(&$total_data, &$total, &$taxes) {
+class ModelTotalVoucher extends Model 
+{
+	public function getTotal(&$total_data, &$total, &$taxes)
+	{
 		if (isset($this->session->data['voucher'])) {
 			$this->load->language('total/voucher');
 			
@@ -26,7 +28,8 @@ class ModelTotalVoucher extends Model {
 		}
 	}
 	
-	public function confirm($order_info, $order_total) {
+	public function confirm($order_info, $order_total)
+	{
 		$code = '';
 		
 		$start = strpos($order_total['title'], '(') + 1;

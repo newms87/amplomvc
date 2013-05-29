@@ -1,6 +1,8 @@
 <?php
-class ControllerReportSaleOrder extends Controller {
-	public function index() {
+class ControllerReportSaleOrder extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('report/sale_order');
 
 		$this->load->language('report/sale_order');
@@ -14,7 +16,7 @@ class ControllerReportSaleOrder extends Controller {
 				'filter_order_status_id'=>5,
 				'page'=>1,
 			);
-		foreach($query_defaults as $key=>$default){
+		foreach ($query_defaults as $key=>$default) {
 			$$key = isset($_GET[$key])?$_GET[$key]:$default;
 		}
 		
@@ -93,7 +95,8 @@ class ControllerReportSaleOrder extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function get_url($filters=null){
+	private function get_url($filters=null)
+	{
 		$url = '';
 		$filters = $filters?$filters:array('filter_date_start','filter_date_end','filter_group','filter_order_status_id','page');
 		foreach($filters as $f)

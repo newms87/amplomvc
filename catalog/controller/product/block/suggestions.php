@@ -1,16 +1,18 @@
 <?php
-class ControllerProductBlockSuggestions extends Controller {
+class ControllerProductBlockSuggestions extends Controller 
+{
 	
 	/**
 	* @param - $product_info - an array of product information
 	* @param $limit - The maximum number of suggested products to show
 	*/
-	public function index($settings, $product_info, $limit = null) {
+	public function index($settings, $product_info, $limit = null)
+	{
 		$this->language->load('product/block/suggestions');
 		
 		$this->template->load('product/block/suggestions');
 		
-		if(!$limit){
+		if (!$limit) {
 			$limit = $settings['limit'];
 		}
 		
@@ -29,13 +31,13 @@ class ControllerProductBlockSuggestions extends Controller {
 			}
 	
 			if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-				$price = $this->currency->format($this->tax->calculate($p['price'], $p['tax_class_id']));
+				$price = $this->currency->format($this->tax->calculate($p['price'], $p['tax_class _id']));
 			} else {
 				$price = false;
 			}
 				
 			if ((float)$p['special']) {
-				$special = $this->currency->format($this->tax->calculate($p['special'], $p['tax_class_id']));
+				$special = $this->currency->format($this->tax->calculate($p['special'], $p['tax_class _id']));
 			} else {
 				$special = false;
 			}

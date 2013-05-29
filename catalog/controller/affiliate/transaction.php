@@ -1,6 +1,8 @@
 <?php
-class ControllerAffiliateTransaction extends Controller {
-	public function index() {
+class ControllerAffiliateTransaction extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('affiliate/transaction');
 
 		if (!$this->affiliate->isLogged()) {

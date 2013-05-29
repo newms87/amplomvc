@@ -1,25 +1,31 @@
 <?php
-class ModelSaleVoucher extends Model {
-	public function addVoucher($data) {
+class ModelSaleVoucher extends Model 
+{
+	public function addVoucher($data)
+	{
 			$this->query("INSERT INTO " . DB_PREFIX . "voucher SET code = '" . $this->db->escape($data['code']) . "', from_name = '" . $this->db->escape($data['from_name']) . "', from_email = '" . $this->db->escape($data['from_email']) . "', to_name = '" . $this->db->escape($data['to_name']) . "', to_email = '" . $this->db->escape($data['to_email']) . "', voucher_theme_id = '" . (int)$data['voucher_theme_id'] . "', message = '" . $this->db->escape($data['message']) . "', amount = '" . (float)$data['amount'] . "', status = '" . (int)$data['status'] . "', date_added = NOW()");
 	}
 	
-	public function editVoucher($voucher_id, $data) {
+	public function editVoucher($voucher_id, $data)
+	{
 			$this->query("UPDATE " . DB_PREFIX . "voucher SET code = '" . $this->db->escape($data['code']) . "', from_name = '" . $this->db->escape($data['from_name']) . "', from_email = '" . $this->db->escape($data['from_email']) . "', to_name = '" . $this->db->escape($data['to_name']) . "', to_email = '" . $this->db->escape($data['to_email']) . "', voucher_theme_id = '" . (int)$data['voucher_theme_id'] . "', message = '" . $this->db->escape($data['message']) . "', amount = '" . (float)$data['amount'] . "', status = '" . (int)$data['status'] . "' WHERE voucher_id = '" . (int)$voucher_id . "'");
 	}
 	
-	public function deleteVoucher($voucher_id) {
+	public function deleteVoucher($voucher_id)
+	{
 			$this->query("DELETE FROM " . DB_PREFIX . "voucher WHERE voucher_id = '" . (int)$voucher_id . "'");
 		$this->query("DELETE FROM " . DB_PREFIX . "voucher_history WHERE voucher_id = '" . (int)$voucher_id . "'");
 	}
 	
-	public function getVoucher($voucher_id) {
+	public function getVoucher($voucher_id)
+	{
 			$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "voucher WHERE voucher_id = '" . (int)$voucher_id . "'");
 		
 		return $query->row;
 	}
 
-	public function getVoucherByCode($code) {
+	public function getVoucherByCode($code)
+	{
 			$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "voucher WHERE code = '" . $this->db->escape($code) . "'");
 		
 		return $query->row;
@@ -69,7 +75,8 @@ class ModelSaleVoucher extends Model {
 		return $query->rows;
 	}
 		
-	public function sendVoucher($voucher_id) {
+	public function sendVoucher($voucher_id)
+	{
 		$voucher_info = $this->getVoucher($voucher_id);
 		
 		if ($voucher_info) {
@@ -120,7 +127,7 @@ class ModelSaleVoucher extends Model {
 				$this->mail->send();
 			
 			// If voucher does not belong to an order
-			}  else {
+			} else {
 				$this->language->load('mail/voucher');
 				
 				$template = new Template($this->registry);
@@ -157,25 +164,29 @@ class ModelSaleVoucher extends Model {
 		}
 	}
 			
-	public function getTotalVouchers() {
+	public function getTotalVouchers()
+	{
 			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "voucher");
 		
 		return $query->row['total'];
 	}
 	
-	public function getTotalVouchersByVoucherThemeId($voucher_theme_id) {
+	public function getTotalVouchersByVoucherThemeId($voucher_theme_id)
+	{
 			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "voucher WHERE voucher_theme_id = '" . (int)$voucher_theme_id . "'");
 		
 		return $query->row['total'];
 	}
 	
-	public function getVoucherHistories($voucher_id, $start = 0, $limit = 10) {
+	public function getVoucherHistories($voucher_id, $start = 0, $limit = 10)
+	{
 		$query = $this->query("SELECT vh.order_id, CONCAT(o.firstname, ' ', o.lastname) AS customer, vh.amount, vh.date_added FROM " . DB_PREFIX . "voucher_history vh LEFT JOIN `" . DB_PREFIX . "order` o ON (vh.order_id = o.order_id) WHERE vh.voucher_id = '" . (int)$voucher_id . "' ORDER BY vh.date_added ASC LIMIT " . (int)$start . "," . (int)$limit);
 
 		return $query->rows;
 	}
 	
-	public function getTotalVoucherHistories($voucher_id) {
+	public function getTotalVoucherHistories($voucher_id)
+	{
 		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "voucher_history WHERE voucher_id = '" . (int)$voucher_id . "'");
 
 		return $query->row['total'];

@@ -33,8 +33,7 @@
  * @package	PHPExcel_Writer_Excel2007
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Writer_Excel2007_DocProps extends PHPExcel_Writer_Excel2007_WriterPart
-{
+class PHPExcel_Writer_Excel2007_DocProps extends PHPExcel_Writer_Excel2007_WriterPart{
 /**
 	* Write docProps/app.xml to XML format
 	*
@@ -230,7 +229,7 @@ class PHPExcel_Writer_Excel2007_DocProps extends PHPExcel_Writer_Excel2007_Write
 			$objWriter->writeAttribute('xmlns:vt', 'http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes');
 
 
-			foreach($customPropertyList as $key => $customProperty) {
+			foreach ($customPropertyList as $key => $customProperty) {
 				$propertyValue = $pPHPExcel->getProperties()->getCustomPropertyValue($customProperty);
 				$propertyType = $pPHPExcel->getProperties()->getCustomPropertyType($customProperty);
 

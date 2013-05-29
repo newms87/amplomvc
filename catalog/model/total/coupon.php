@@ -1,23 +1,25 @@
 <?php
-class ModelTotalCoupon extends Model {
-	public function getTotal(&$total_data, &$total, &$taxes) {
+class ModelTotalCoupon extends Model 
+{
+	public function getTotal(&$total_data, &$total, &$taxes)
+	{
 		$this->load->language('total/coupon');
 		
 		$this->model_cart_coupon->loadAutoCoupons();
 		
 		$coupon_list = array();
 		
-		if(isset($this->session->data['coupons'])){
-			foreach($this->session->data['coupons'] as $code=>$coupon){
+		if (isset($this->session->data['coupons'])) {
+			foreach ($this->session->data['coupons'] as $code=>$coupon) {
 				$coupon_info = $this->model_cart_coupon->getCoupon($code);
-				if($coupon_info){
+				if ($coupon_info) {
 					$coupon_list[$code] = $coupon_info;
 				}
 			}
 		}
 		
 		if ($coupon_list) {
-			foreach($coupon_list as $coupon_info){
+			foreach ($coupon_list as $coupon_info) {
 				$discount_total = 0;
 				
 				if (!$coupon_info['product']) {
@@ -57,10 +59,12 @@ class ModelTotalCoupon extends Model {
 							$discount = $product['total'] / 100 * $coupon_info['discount'];
 						}
 				
-						if ($product['tax_class_id']) {
-							$tax_rates = $this->tax->getRates($product['total'] - ($product['total'] - $discount), $product['tax_class_id']);
+						if ($product['tax_class _id']) 
+{
+							$tax_rates = $this->tax->getRates($product['total'] - ($product['total'] - $discount), $product['tax_class _id']);
 							
-							foreach ($tax_rates as $tax_rate) {
+							foreach ($tax_rates as $tax_rate) 
+{
 								if ($tax_rate['type'] == 'P') {
 									$taxes[$tax_rate['tax_rate_id']] -= $tax_rate['amount'];
 								}
@@ -74,27 +78,29 @@ class ModelTotalCoupon extends Model {
 				if ($coupon_info['shipping'] && $this->cart->hasShippingMethod()) {
 					$shipping_method = $this->cart->getShippingMethod();
 					
-					if (!empty($shipping_method['tax_class_id'])) {
-						$tax_rates = $this->tax->getRates($shipping_method['cost'], $shipping_method['tax_class_id']);
+					if (!empty($shipping_method['tax_class _id'])) 
+{
+						$tax_rates = $this->tax->getRates($shipping_method['cost'], $shipping_method['tax_class _id']);
 						
-						foreach ($tax_rates as $tax_rate) {
+						foreach ($tax_rates as $tax_rate) 
+{
 							if ($tax_rate['type'] == 'P') {
 								$taxes[$tax_rate['tax_rate_id']] -= $tax_rate['amount'];
 							}
 						}
 					}
 					
-					if($this->cart->hasShippingAddress()){
+					if ($this->cart->hasShippingAddress()) {
 						$address = $this->cart->getShippingAddress();
 					}
-					else{
+					else {
 						$address = array(
 							'zone_id'	=> 0,
 							'country_id' => 0,
 						);
 					}
 					
-					if($this->model_localisation_zone->inGeoZone($coupon_info['shipping_geozone'], $address['country_id'], $address['zone_id'])){
+					if ($this->model_localisation_zone->inGeoZone($coupon_info['shipping_geozone'], $address['country_id'], $address['zone_id'])) {
 						$discount_total += $shipping_method['cost'];
 					}
 				}
@@ -112,7 +118,8 @@ class ModelTotalCoupon extends Model {
 		}
 	}
 	
-	public function confirm($order_info, $order_total) {
+	public function confirm($order_info, $order_total)
+	{
 		$code = '';
 		
 		$start = strpos($order_total['title'], '(') + 1;

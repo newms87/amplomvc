@@ -1,6 +1,8 @@
 <?php
-class ControllerPaymentMoneybookers extends Controller {
-	protected function index() {
+class ControllerPaymentMoneybookers extends Controller 
+{
+	protected function index()
+	{
 		$this->template->load('payment/moneybookers');
 
 		$this->language->load('payment/moneybookers');
@@ -44,7 +46,8 @@ class ControllerPaymentMoneybookers extends Controller {
 		$this->render();
 	}
 	
-	public function callback() {
+	public function callback()
+	{
 		if (isset($_POST['order_id'])) {
 			$order_id = $this->encryption->decrypt($_POST['order_id']);
 		} else {

@@ -1,7 +1,9 @@
 <?php
-class ControllerAccountBlockLogin extends Controller {
+class ControllerAccountBlockLogin extends Controller 
+{
 	
-	public function index($settings, $type = 'header') {
+	public function index($settings, $type = 'header')
+	{
 		$this->language->load('account/block/login');
 		
 		switch($type){

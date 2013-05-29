@@ -1,6 +1,8 @@
 <?php
-class ModelShippingParcelforce48 extends Model {
-	function getQuote($address) {
+class ModelShippingParcelforce48 extends Model 
+{
+	function getQuote($address)
+	{
 		$this->load->language('shipping/parcelforce_48');
 		
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('parcelforce_48_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
@@ -54,10 +56,11 @@ class ModelShippingParcelforce48 extends Model {
 				$text = $this->_('text_description');
 			
 				if ($this->config->get('parcelforce_48_display_weight')) {
-					$text .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class_id')) . ')';
+					$text .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class _id')) . ')';
 				}
 			
-				if ($this->config->get('parcelforce_48_display_insurance') && (float)$insurance) {
+				if ($this->config->get('parcelforce_48_display_insurance') && (float)$insurance) 
+{
 					$text .= ' (' . $this->_('text_insurance') . ' ' . $this->currency->format($insurance) . ')';
 				}
 

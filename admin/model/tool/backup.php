@@ -1,6 +1,8 @@
 <?php
-class ModelToolBackup extends Model {
-	public function restore($sql) {
+class ModelToolBackup extends Model 
+{
+	public function restore($sql)
+	{
 		foreach (explode(";\n", $sql) as $sql) {
 			$sql = trim($sql);
 			
@@ -12,7 +14,8 @@ class ModelToolBackup extends Model {
 		$this->cache->delete('*');
 	}
 	
-	public function getTables() {
+	public function getTables()
+	{
 		$table_data = array();
 		
 		$query = $this->query("SHOW TABLES FROM `" . DB_DATABASE . "`");
@@ -28,7 +31,8 @@ class ModelToolBackup extends Model {
 		return $table_data;
 	}
 	
-	public function backup($tables) {
+	public function backup($tables)
+	{
 		$output = '';
 
 		foreach ($tables as $table) {

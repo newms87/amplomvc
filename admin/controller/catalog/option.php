@@ -1,8 +1,10 @@
 <?php
-class ControllerCatalogOption extends Controller {
+class ControllerCatalogOption extends Controller 
+{
 	
  
-	public function index() {
+	public function index()
+	{
 		$this->load->language('catalog/option');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -10,7 +12,8 @@ class ControllerCatalogOption extends Controller {
 		$this->getList();
 	}
 
-	public function insert() {
+	public function insert()
+	{
 		$this->load->language('catalog/option');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -41,7 +44,8 @@ class ControllerCatalogOption extends Controller {
 		$this->getForm();
 	}
 
-	public function update() {
+	public function update()
+	{
 		$this->load->language('catalog/option');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -72,7 +76,8 @@ class ControllerCatalogOption extends Controller {
 		$this->getForm();
 	}
 
-	public function delete() {
+	public function delete()
+	{
 		$this->load->language('catalog/option');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -102,11 +107,12 @@ class ControllerCatalogOption extends Controller {
 		$this->getList();
 	}
 
-	private function getList() {
+	private function getList()
+	{
 		$this->template->load('catalog/option_list');
 
 		$defaults = array('sort'=>'od.name','order'=>'ASC','page'=>1);
-		foreach($defaults as $key=>$default){
+		foreach ($defaults as $key=>$default) {
 			$$key = isset($_GET[$key])?$_GET[$key]:$default;
 		}
 			
@@ -180,7 +186,8 @@ class ControllerCatalogOption extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function getForm() {
+	private function getForm()
+	{
 		$this->template->load('catalog/option_form');
 
 		$option_id = isset($_GET['option_id'])?$_GET['option_id']:false;
@@ -210,12 +217,12 @@ class ControllerCatalogOption extends Controller {
 			'sort_order'=>'',
 			'option_values'=>array()
 		);
-		foreach($defaults as $d=>$value){
+		foreach ($defaults as $d=>$value) {
 			if (isset($_POST[$d])) {
 				$this->data[$d] = $_POST[$d];
 			} elseif (isset($option_info[$d])) {
 				$this->data[$d] = $option_info[$d];
-			} elseif(!$option_id) {
+			} elseif (!$option_id) {
 				$this->data[$d] = $value;
 			}
 		}
@@ -252,7 +259,8 @@ class ControllerCatalogOption extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validateForm() {
+	private function validateForm()
+	{
 		if (!$this->user->hasPermission('modify', 'catalog/option')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
@@ -269,7 +277,7 @@ class ControllerCatalogOption extends Controller {
 		if (!isset($_POST['option_value'])) {
 			$this->error['warning'] = $this->_('error_type');
 		}
-		else{
+		else {
 			foreach ($_POST['option_value'] as $option_value_id => $option_value) {
 				foreach ($option_value['option_value_description'] as $language_id => $option_value_description) {
 					if ((strlen($option_value_description['name']) < 1) || (strlen($option_value_description['name']) > 128)) {
@@ -282,7 +290,8 @@ class ControllerCatalogOption extends Controller {
 		return $this->error ? false : true;
 	}
 
-	private function validateDelete() {
+	private function validateDelete()
+	{
 		if (!$this->user->hasPermission('modify', 'catalog/option')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
@@ -298,7 +307,8 @@ class ControllerCatalogOption extends Controller {
 		return $this->error ? false : true;
 	}
 	
-	public function autocomplete() {
+	public function autocomplete()
+	{
 		$json = array();
 		
 		if (isset($_GET['filter_name'])) {
@@ -380,7 +390,8 @@ class ControllerCatalogOption extends Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 	
-	private function get_url(){
+	private function get_url()
+	{
 		$url = '';
 		$filters = array('sort', 'order', 'page');
 		foreach($filters as $f)

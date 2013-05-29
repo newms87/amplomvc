@@ -1,6 +1,8 @@
 <?php
-class ControllerPaymentWorldPay extends Controller {
-	protected function index() {
+class ControllerPaymentWorldPay extends Controller 
+{
+	protected function index()
+	{
 		$this->template->load('payment/worldpay');
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
@@ -29,7 +31,8 @@ class ControllerPaymentWorldPay extends Controller {
 		$this->render();
 	}
 	
-	public function callback() {
+	public function callback()
+	{
 		$this->language->load('payment/worldpay');
 	
 		$this->data['title'] = $this->language->format('heading_title', $this->config->get('config_name'));

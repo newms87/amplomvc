@@ -1,8 +1,10 @@
 <?php
-class ControllerPaymentLiqPay extends Controller {
+class ControllerPaymentLiqPay extends Controller 
+{
 	
 
-	public function index() {
+	public function index()
+	{
 		$this->template->load('payment/liqpay');
 
 		$this->load->language('payment/liqpay');
@@ -109,7 +111,8 @@ class ControllerPaymentLiqPay extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'payment/liqpay')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

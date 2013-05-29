@@ -1,8 +1,10 @@
 <?php
-class ControllerAffiliateForgotten extends Controller {
+class ControllerAffiliateForgotten extends Controller 
+{
 	
 
-	public function index() {
+	public function index()
+	{
 		$this->template->load('affiliate/forgotten');
 
 		if ($this->affiliate->isLogged()) {
@@ -66,7 +68,8 @@ class ControllerAffiliateForgotten extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!isset($_POST['email'])) {
 			$this->error['warning'] = $this->_('error_email');
 		} elseif (!$this->model_affiliate_affiliate->getTotalAffiliatesByEmail($_POST['email'])) {

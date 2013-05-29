@@ -1,8 +1,10 @@
 <?php
-class ControllerSaleOrder extends Controller {
+class ControllerSaleOrder extends Controller 
+{
 	
 
-  	public function index() {
+  	public function index()
+  	{
 		$this->load->language('sale/order');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -10,7 +12,8 @@ class ControllerSaleOrder extends Controller {
 		$this->getList();
   	}
 	
-  	public function insert() {
+  	public function insert()
+  	{
 		$this->load->language('sale/order');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -69,7 +72,8 @@ class ControllerSaleOrder extends Controller {
 		$this->getForm();
   	}
 	
-  	public function update() {
+  	public function update()
+  	{
 		$this->load->language('sale/order');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -123,7 +127,8 @@ class ControllerSaleOrder extends Controller {
 		$this->getForm();
   	}
 	
-  	public function delete() {
+  	public function delete()
+  	{
 		$this->load->language('sale/order');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -179,7 +184,8 @@ class ControllerSaleOrder extends Controller {
 		$this->getList();
   	}
 
-  	private function getList() {
+  	private function getList()
+  	{
 		$this->template->load('sale/order_list');
   		
 		$query_defaults = array(
@@ -194,7 +200,7 @@ class ControllerSaleOrder extends Controller {
 			'page'						=> 1
 		);
 		
-		foreach($query_defaults as $key => $default){
+		foreach ($query_defaults as $key => $default) {
 			if (isset($_GET[$key])) {
 				$$key = $_GET[$key];
 			} else {
@@ -361,7 +367,8 @@ class ControllerSaleOrder extends Controller {
 		$this->response->setOutput($this->render());
   	}
 
-  	public function getForm() {
+  	public function getForm()
+  	{
 		$this->template->load('sale/order_form');
 
 		if (isset($_GET['order_id'])) {
@@ -789,7 +796,8 @@ class ControllerSaleOrder extends Controller {
 		$this->response->setOutput($this->render());
   	}
 	
-  	private function validateForm() {
+  	private function validateForm()
+  	{
 		if (!$this->user->hasPermission('modify', 'sale/order')) {
 				$this->error['warning'] = $this->_('error_permission');
 		}
@@ -892,7 +900,8 @@ class ControllerSaleOrder extends Controller {
 		return $this->error ? false : true;
   	}
 	
-		private function validateDelete() {
+		private function validateDelete()
+		{
 		if (!$this->user->hasPermission('modify', 'sale/order')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
@@ -900,7 +909,8 @@ class ControllerSaleOrder extends Controller {
 		return $this->error ? false : true;
   	}
 	
-	public function info() {
+	public function info()
+	{
 		if (isset($_GET['order_id'])) {
 			$order_id = $_GET['order_id'];
 		} else {
@@ -1331,7 +1341,8 @@ class ControllerSaleOrder extends Controller {
 		}
 	}
 
-	public function createInvoiceNo() {
+	public function createInvoiceNo()
+	{
 		$this->language->load('sale/order');
 
 		$json = array();
@@ -1351,7 +1362,8 @@ class ControllerSaleOrder extends Controller {
 		$this->response->setOutput(json_encode($json));
   	}
 
-	public function addCredit() {
+	public function addCredit()
+	{
 		$this->language->load('sale/order');
 		
 		$json = array();
@@ -1377,7 +1389,8 @@ class ControllerSaleOrder extends Controller {
 		$this->response->setOutput(json_encode($json));
   	}
 	
-	public function removeCredit() {
+	public function removeCredit()
+	{
 		$this->language->load('sale/order');
 		
 		$json = array();
@@ -1399,7 +1412,8 @@ class ControllerSaleOrder extends Controller {
 		$this->response->setOutput(json_encode($json));
   	}
 				
-	public function addReward() {
+	public function addReward()
+	{
 		$this->language->load('sale/order');
 		
 		$json = array();
@@ -1427,7 +1441,8 @@ class ControllerSaleOrder extends Controller {
 		$this->response->setOutput(json_encode($json));
   	}
 	
-	public function removeReward() {
+	public function removeReward()
+	{
 		$this->language->load('sale/order');
 		
 		$json = array();
@@ -1449,7 +1464,8 @@ class ControllerSaleOrder extends Controller {
 		$this->response->setOutput(json_encode($json));
   	}
 		
-	public function addCommission() {
+	public function addCommission()
+	{
 		$this->language->load('sale/order');
 		
 		$json = array();
@@ -1477,7 +1493,8 @@ class ControllerSaleOrder extends Controller {
 		$this->response->setOutput(json_encode($json));
   	}
 	
-	public function removeCommission() {
+	public function removeCommission()
+	{
 		$this->language->load('sale/order');
 		
 		$json = array();
@@ -1499,7 +1516,8 @@ class ControllerSaleOrder extends Controller {
 		$this->response->setOutput(json_encode($json));
   	}
 
-	public function history() {
+	public function history()
+	{
 		
 		//TODO: implement this
 		echo "This page has not yet been ipmlemented!";
@@ -1548,7 +1566,8 @@ class ControllerSaleOrder extends Controller {
 		$this->response->setOutput($this->render());
   	}
 	
-	public function download() {
+	public function download()
+	{
 		if (isset($_GET['order_option_id'])) {
 			$order_option_id = $_GET['order_option_id'];
 		} else {
@@ -1599,7 +1618,8 @@ class ControllerSaleOrder extends Controller {
 		}
 	}
 
-	public function upload() {
+	public function upload()
+	{
 		$this->language->load('sale/order');
 		
 		$json = array();
@@ -1647,7 +1667,8 @@ class ControllerSaleOrder extends Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 			
-  	public function invoice() {
+  	public function invoice()
+  	{
 		$this->template->load('sale/order_invoice');
 
 		$this->load->language('sale/order');

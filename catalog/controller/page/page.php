@@ -1,13 +1,15 @@
 <?php
-class ControllerPagePage extends Controller {
-	public function index() {
+class ControllerPagePage extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('page/page');
 		
 		$page_id = !empty($_GET['page_id']) ? $_GET['page_id'] : 0;
 		
 		$page = $this->model_page_page->getPage($page_id);
 		
-		if(!$page){
+		if (!$page) {
 			$this->url->redirect("error/not_found");
 		}
 		

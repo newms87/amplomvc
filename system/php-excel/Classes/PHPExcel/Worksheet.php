@@ -33,8 +33,7 @@
  * @package	PHPExcel_Worksheet
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Worksheet implements PHPExcel_IComparable
-{
+class PHPExcel_Worksheet implements PHPExcel_IComparable{
 	/* Break types */
 	const BREAK_NONE	= 0;
 	const BREAK_ROW		= 1;
@@ -374,7 +373,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	*	typically so that the worksheet object can be unset
 	*
 	*/
-	public function disconnectCells() {
+	public function disconnectCells()
+	{
 		$this->_cellCollection->unsetWorksheetCells();
 		$this->_cellCollection = null;
 
@@ -387,7 +387,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	*
 	* @return PHPExcel_CachedObjectStorage_xxx
 	*/
-	public function getCellCacheController() {
+	public function getCellCacheController()
+	{
 		return $this->_cellCollection;
 	}	//	function getCellCacheController()
 
@@ -398,7 +399,7 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	* @return array
 	*/
 	public static function getInvalidCharacters()
-	{
+ {
 		return self::$_invalidCharacters;
 	}
 
@@ -410,7 +411,7 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	* @throws Exception
 	*/
 	private static function _checkSheetTitle($pValue)
-	{
+ {
 		// Some of the printable ASCII characters are invalid:  * : / \ ? [ ]
 		if (str_replace(self::$_invalidCharacters, '', $pValue) !== $pValue) {
 			throw new Exception('Invalid character found in sheet title');
@@ -578,7 +579,7 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	public function getChartNames()
 	{
 		$chartNames = array();
-		foreach($this->_chartCollection as $chart) {
+		foreach ($this->_chartCollection as $chart) {
 			$chartNames[] = $chart->getName();
 		}
 		return $chartNames;
@@ -597,7 +598,7 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 		if ($chartCount == 0) {
 			return false;
 		}
-		foreach($this->_chartCollection as $index => $chart) {
+		foreach ($this->_chartCollection as $index => $chart) {
 			if ($chart->getName() == $chartName) {
 				return $this->_chartCollection[$index];
 			}
@@ -732,7 +733,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	*
 	* @return PHPExcel
 	*/
-	public function getParent() {
+	public function getParent()
+	{
 		return $this->_parent;
 	}
 
@@ -742,7 +744,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	* @param PHPExcel $parent
 	* @return PHPExcel_Worksheet
 	*/
-	public function rebindParent(PHPExcel $parent) {
+	public function rebindParent(PHPExcel $parent)
+	{
 		$namedRanges = $this->_parent->getNamedRanges();
 		foreach ($namedRanges as $namedRange) {
 			$parent->addNamedRange($namedRange);
@@ -832,7 +835,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	*
 	* @return string Sheet state (visible, hidden, veryHidden)
 	*/
-	public function getSheetState() {
+	public function getSheetState()
+	{
 		return $this->_sheetState;
 	}
 
@@ -842,7 +846,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	* @param string $value Sheet state (visible, hidden, veryHidden)
 	* @return PHPExcel_Worksheet
 	*/
-	public function setSheetState($value = PHPExcel_Worksheet::SHEETSTATE_VISIBLE) {
+	public function setSheetState($value = PHPExcel_Worksheet::SHEETSTATE_VISIBLE)
+	{
 		$this->_sheetState = $value;
 		return $this;
 	}
@@ -1510,7 +1515,7 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	*/
 	public function duplicateConditionalStyle(array $pCellStyle = null, $pRange = '')
 	{
-		foreach($pCellStyle as $cellStyle) {
+		foreach ($pCellStyle as $cellStyle) {
 			if (!is_a($cellStyle,'PHPExcel_Style_Conditional')) {
 				throw new Exception('Style is not a conditional style');
 			}
@@ -1949,7 +1954,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	* @throws	Exception
 	* @return PHPExcel_Worksheet
 	*/
-	public function insertNewRowBefore($pBefore = 1, $pNumRows = 1) {
+	public function insertNewRowBefore($pBefore = 1, $pNumRows = 1)
+	{
 		if ($pBefore >= 1) {
 			$objReferenceHelper = PHPExcel_ReferenceHelper::getInstance();
 			$objReferenceHelper->insertNewBefore('A' . $pBefore, 0, $pNumRows, $this);
@@ -1967,7 +1973,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	* @throws	Exception
 	* @return PHPExcel_Worksheet
 	*/
-	public function insertNewColumnBefore($pBefore = 'A', $pNumCols = 1) {
+	public function insertNewColumnBefore($pBefore = 'A', $pNumCols = 1)
+	{
 		if (!is_numeric($pBefore)) {
 			$objReferenceHelper = PHPExcel_ReferenceHelper::getInstance();
 			$objReferenceHelper->insertNewBefore($pBefore . '1', $pNumCols, 0, $this);
@@ -1985,7 +1992,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	* @throws	Exception
 	* @return PHPExcel_Worksheet
 	*/
-	public function insertNewColumnBeforeByIndex($pBefore = 0, $pNumCols = 1) {
+	public function insertNewColumnBeforeByIndex($pBefore = 0, $pNumCols = 1)
+	{
 		if ($pBefore >= 0) {
 			return $this->insertNewColumnBefore(PHPExcel_Cell::stringFromColumnIndex($pBefore), $pNumCols);
 		} else {
@@ -2001,7 +2009,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	* @throws	Exception
 	* @return PHPExcel_Worksheet
 	*/
-	public function removeRow($pRow = 1, $pNumRows = 1) {
+	public function removeRow($pRow = 1, $pNumRows = 1)
+	{
 		if ($pRow >= 1) {
 			$objReferenceHelper = PHPExcel_ReferenceHelper::getInstance();
 			$objReferenceHelper->insertNewBefore('A' . ($pRow + $pNumRows), 0, -$pNumRows, $this);
@@ -2019,7 +2028,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	* @throws	Exception
 	* @return PHPExcel_Worksheet
 	*/
-	public function removeColumn($pColumn = 'A', $pNumCols = 1) {
+	public function removeColumn($pColumn = 'A', $pNumCols = 1)
+	{
 		if (!is_numeric($pColumn)) {
 			$pColumn = PHPExcel_Cell::stringFromColumnIndex(PHPExcel_Cell::columnIndexFromString($pColumn) - 1 + $pNumCols);
 			$objReferenceHelper = PHPExcel_ReferenceHelper::getInstance();
@@ -2038,7 +2048,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	* @throws	Exception
 	* @return PHPExcel_Worksheet
 	*/
-	public function removeColumnByIndex($pColumn = 0, $pNumCols = 1) {
+	public function removeColumnByIndex($pColumn = 0, $pNumCols = 1)
+	{
 		if ($pColumn >= 0) {
 			return $this->removeColumn(PHPExcel_Cell::stringFromColumnIndex($pColumn), $pNumCols);
 		} else {
@@ -2051,7 +2062,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	*
 	* @return boolean
 	*/
-	public function getShowGridlines() {
+	public function getShowGridlines()
+	{
 		return $this->_showGridlines;
 	}
 
@@ -2061,7 +2073,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	* @param boolean $pValue	Show gridlines (true/false)
 	* @return PHPExcel_Worksheet
 	*/
-	public function setShowGridlines($pValue = false) {
+	public function setShowGridlines($pValue = false)
+	{
 		$this->_showGridlines = $pValue;
 		return $this;
 	}
@@ -2071,7 +2084,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	*
 	* @return boolean
 	*/
-	public function getPrintGridlines() {
+	public function getPrintGridlines()
+	{
 		return $this->_printGridlines;
 	}
 
@@ -2081,7 +2095,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	* @param boolean $pValue Print gridlines (true/false)
 	* @return PHPExcel_Worksheet
 	*/
-	public function setPrintGridlines($pValue = false) {
+	public function setPrintGridlines($pValue = false)
+	{
 		$this->_printGridlines = $pValue;
 		return $this;
 	}
@@ -2091,7 +2106,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	*
 	* @return boolean
 	*/
-	public function getShowRowColHeaders() {
+	public function getShowRowColHeaders()
+	{
 		return $this->_showRowColHeaders;
 	}
 
@@ -2101,7 +2117,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	* @param boolean $pValue Show row and column headers (true/false)
 	* @return PHPExcel_Worksheet
 	*/
-	public function setShowRowColHeaders($pValue = false) {
+	public function setShowRowColHeaders($pValue = false)
+	{
 		$this->_showRowColHeaders = $pValue;
 		return $this;
 	}
@@ -2111,7 +2128,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	*
 	* @return boolean
 	*/
-	public function getShowSummaryBelow() {
+	public function getShowSummaryBelow()
+	{
 		return $this->_showSummaryBelow;
 	}
 
@@ -2121,7 +2139,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	* @param boolean $pValue	Show summary below (true/false)
 	* @return PHPExcel_Worksheet
 	*/
-	public function setShowSummaryBelow($pValue = true) {
+	public function setShowSummaryBelow($pValue = true)
+	{
 		$this->_showSummaryBelow = $pValue;
 		return $this;
 	}
@@ -2131,7 +2150,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	*
 	* @return boolean
 	*/
-	public function getShowSummaryRight() {
+	public function getShowSummaryRight()
+	{
 		return $this->_showSummaryRight;
 	}
 
@@ -2141,7 +2161,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	* @param boolean $pValue	Show summary right (true/false)
 	* @return PHPExcel_Worksheet
 	*/
-	public function setShowSummaryRight($pValue = true) {
+	public function setShowSummaryRight($pValue = true)
+	{
 		$this->_showSummaryRight = $pValue;
 		return $this;
 	}
@@ -2306,7 +2327,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	*
 	* @return boolean
 	*/
-	public function getRightToLeft() {
+	public function getRightToLeft()
+	{
 		return $this->_rightToLeft;
 	}
 
@@ -2316,7 +2338,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	* @param	boolean	$value	Right-to-left true/false
 	* @return PHPExcel_Worksheet
 	*/
-	public function setRightToLeft($value = false) {
+	public function setRightToLeft($value = false)
+	{
 		$this->_rightToLeft = $value;
 		return $this;
 	}
@@ -2331,7 +2354,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	* @throws Exception
 	* @return PHPExcel_Worksheet
 	*/
-	public function fromArray($source = null, $nullValue = null, $startCell = 'A1', $strictNullComparison = false) {
+	public function fromArray($source = null, $nullValue = null, $startCell = 'A1', $strictNullComparison = false)
+	{
 		if (is_array($source)) {
 			//	Convert a 1-D array to 2-D (for ease of looping)
 			if (!is_array(end($source))) {
@@ -2344,7 +2368,7 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 			// Loop through $source
 			foreach ($source as $rowData) {
 				$currentColumn = $startColumn;
-				foreach($rowData as $cellValue) {
+				foreach ($rowData as $cellValue) {
 					if ($strictNullComparison) {
 						if ($cellValue !== $nullValue) {
 							// Set cell value
@@ -2377,7 +2401,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	*											True - Return rows and columns indexed by their actual row and column IDs
 	* @return array
 	*/
-	public function rangeToArray($pRange = 'A1', $nullValue = null, $calculateFormulas = true, $formatData = true, $returnCellRef = false) {
+	public function rangeToArray($pRange = 'A1', $nullValue = null, $calculateFormulas = true, $formatData = true, $returnCellRef = false)
+	{
 		// Returnvalue
 		$returnValue = array();
 
@@ -2446,7 +2471,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	* @return array
 	* @throws Exception
 	*/
-	public function namedRangeToArray($pNamedRange = '', $nullValue = null, $calculateFormulas = true, $formatData = true, $returnCellRef = false) {
+	public function namedRangeToArray($pNamedRange = '', $nullValue = null, $calculateFormulas = true, $formatData = true, $returnCellRef = false)
+	{
 		$namedRange = PHPExcel_NamedRange::resolveRange($pNamedRange, $this);
 		if ($namedRange !== NULL) {
 			$pWorkSheet = $namedRange->getWorksheet();
@@ -2470,7 +2496,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	*											True - Return rows and columns indexed by their actual row and column IDs
 	* @return array
 	*/
-	public function toArray($nullValue = null, $calculateFormulas = true, $formatData = true, $returnCellRef = false) {
+	public function toArray($nullValue = null, $calculateFormulas = true, $formatData = true, $returnCellRef = false)
+	{
 		// Garbage collect...
 		$this->garbageCollect();
 
@@ -2488,7 +2515,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	* @param  integer									$startRow	The row number at which to start iterating
 	* @return PHPExcel_Worksheet_RowIterator
 	*/
-	public function getRowIterator($startRow = 1) {
+	public function getRowIterator($startRow = 1)
+	{
 		return new PHPExcel_Worksheet_RowIterator($this,$startRow);
 	}
 
@@ -2497,7 +2525,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	*
 	* @return PHPExcel_Worksheet
 	*/
-	public function garbageCollect() {
+	public function garbageCollect()
+	{
 		// Build a reference table from images
 //		$imageCoordinates = array();
 //		$iterator = $this->getDrawingCollection()->getIterator();
@@ -2539,12 +2568,13 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	*
 	* @return string	Hash code
 	*/
-	public function getHashCode() {
+	public function getHashCode()
+	{
 		if ($this->_dirty) {
 			$this->_hash = md5( $this->_title .
 								$this->_autoFilter .
 								($this->_protection->isProtectionEnabled() ? 't' : 'f') .
-								__CLASS__
+								__class __
 							);
 			$this->_dirty = false;
 		}
@@ -2561,7 +2591,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	* @param bool $returnRange	Return range? (see example)
 	* @return mixed
 	*/
-	public static function extractSheetTitle($pRange, $returnRange = false) {
+	public static function extractSheetTitle($pRange, $returnRange = false)
+ {
 		// Sheet title included?
 		if (($sep = strpos($pRange, '!')) === false) {
 			return '';
@@ -2692,7 +2723,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	* @param	string	$range
 	* @return	string	Adjusted range value
 	*/
-	public function shrinkRangeToFit($range) {
+	public function shrinkRangeToFit($range)
+	{
 		$maxCol = $this->getHighestColumn();
 		$maxRow = $this->getHighestRow();
 		$maxCol = PHPExcel_Cell::columnIndexFromString($maxCol);
@@ -2755,7 +2787,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	*
 	* @return PHPExcel_Worksheet
 	*/
-	public function copy() {
+	public function copy()
+	{
 		$copied = clone $this;
 
 		return $copied;
@@ -2764,7 +2797,8 @@ class PHPExcel_Worksheet implements PHPExcel_IComparable
 	/**
 	* Implement PHP __clone to create a deep clone, not just a shallow copy.
 	*/
-	public function __clone() {
+	public function __clone()
+	{
 		foreach ($this as $key => $val) {
 			if ($key == '_parent') {
 				continue;

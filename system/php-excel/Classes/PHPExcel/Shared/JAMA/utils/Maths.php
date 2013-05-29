@@ -11,7 +11,8 @@
  *
  *	r = sqrt(a^2 + b^2) without under/overflow.
  */
-function hypo($a, $b) {
+function hypo($a, $b)
+{
 	if (abs($a) > abs($b)) {
 		$r = $b / $a;
 		$r = abs($a) * sqrt(1 + $r * $r);
@@ -29,7 +30,8 @@ function hypo($a, $b) {
  *	Mike Bommarito's version.
  *	Compute n-dimensional hyotheneuse.
  *
-function hypot() {
+function hypot()
+{
 	$s = 0;
 	foreach (func_get_args() as $d) {
 		if (is_numeric($d)) {

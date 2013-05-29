@@ -1,19 +1,19 @@
 <?= $header; ?><?= $column_left; ?><?= $column_right; ?>
 <div id="content" style='padding-top:0'><?= $content_top; ?>
-	<?= $this->builder->display_breadcrumbs();?>
+	<?= $this->builder->display_breadcrumbs(); ?>
 	<h1><?= $heading_title; ?></h1>
 	<? $step = 1;?>
 	<div id='checkout_process' class="checkout">
 		<div id="login" class='checkout_item' route='checkout/block/login'>
-			<div class="checkout-heading"><?= $text_step . ' ' . $step++;?>. <?= $text_checkout_option; ?></div>
+			<div class="checkout-heading"><?= $text_step . ' ' . $step++; ?>. <?= $text_checkout_option; ?></div>
 			<div class="checkout-content"></div>
 		</div>
 		<div id="customer_information" class='checkout_item' route='checkout/block/customer_information'>
-			<div class="checkout-heading"><?= $text_step . ' ' . $step++;?>. <?= $text_checkout_information; ?></div>
+			<div class="checkout-heading"><?= $text_step . ' ' . $step++; ?>. <?= $text_checkout_information; ?></div>
 			<div class="checkout-content"></div>
 		</div>
 		<div id="confirm" class='checkout_item' route='checkout/block/confirm'>
-			<div class="checkout-heading"><?= $text_step . ' ' . $step++;?>. <?= $text_checkout_confirm; ?></div>
+			<div class="checkout-heading"><?= $text_step . ' ' . $step++; ?>. <?= $text_checkout_confirm; ?></div>
 			<div class="checkout-content"></div>
 		</div>
 	</div>

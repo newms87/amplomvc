@@ -1,15 +1,18 @@
 <?php
-class ControllerCatalogFlashsale extends Controller {
+class ControllerCatalogFlashsale extends Controller 
+{
 	
  
-	public function index() {
+	public function index()
+	{
 		$this->load->language('catalog/flashsale');
 		$this->document->setTitle($this->_('heading_title'));
 		
 		$this->getList();
 	}
 
-	public function insert() {
+	public function insert()
+	{
 		$this->load->language('catalog/flashsale');
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -24,7 +27,8 @@ class ControllerCatalogFlashsale extends Controller {
 		$this->getForm();
 	}
 
-	public function update() {
+	public function update()
+	{
 		$this->load->language('catalog/flashsale');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -40,7 +44,8 @@ class ControllerCatalogFlashsale extends Controller {
 		$this->getForm();
 	}
 
-	public function delete() {
+	public function delete()
+	{
 		$this->load->language('catalog/flashsale');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -57,7 +62,8 @@ class ControllerCatalogFlashsale extends Controller {
 
 		$this->getList();
 	}
-	public function list_update() {
+	public function list_update()
+	{
 		$this->load->language('catalog/flashsale');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -78,7 +84,7 @@ class ControllerCatalogFlashsale extends Controller {
 				if($this->error)
 					break;
 			}
-			if(!$this->error){
+			if (!$this->error) {
 				$this->message->add('success', $this->_('text_success'));
 				
 				$this->url->redirect($this->url->link('catalog/flashsale', $this->url->get_query()));
@@ -88,7 +94,8 @@ class ControllerCatalogFlashsale extends Controller {
 		$this->getList();
 	}
 
-	private function getList() {
+	private function getList()
+	{
 		$this->template->load('catalog/flashsale_list');
 
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -99,11 +106,11 @@ class ControllerCatalogFlashsale extends Controller {
 			'order' =>'ASC',
 			'page'  =>1
 		);
-		foreach($sort_list as $key=>$default){
-			if(isset($_GET[$key])){
+		foreach ($sort_list as $key=>$default) {
+			if (isset($_GET[$key])) {
 				$data[$key] = $$key = $_GET[$key];
 			}
-			else{
+			else {
 				$data[$key] = $$key = $default;
 			}
 		}
@@ -120,12 +127,12 @@ class ControllerCatalogFlashsale extends Controller {
 		
 		$filter_set = isset($_GET['filter']);
 		
-		foreach($filter_list as $key=>$default){
+		foreach ($filter_list as $key=>$default) {
 			$d_key = str_replace("filter_",'', $key);
-			if(isset($_GET[$key])){
+			if (isset($_GET[$key])) {
 				$data[$d_key] = $this->data[$key] = $this->url->decodeURIcomponent($_GET[$key]);
 			}
-			else{
+			else {
 				$data[$d_key] = $this->data[$key] = $filter_set ? '' : $default;
 			}
 		}
@@ -194,7 +201,7 @@ class ControllerCatalogFlashsale extends Controller {
 			'date_end'=>'date_end',
 			'status'=>'status'
 		);
-		foreach($sort_by as $key=>$s){
+		foreach ($sort_by as $key=>$s) {
 			$this->data['sort_'.$s] = $this->url->link('catalog/flashsale', 'sort=' . $key . '&' . $url);
 		}
 		
@@ -215,7 +222,8 @@ class ControllerCatalogFlashsale extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function getForm() {
+	private function getForm()
+	{
 		$this->template->load('catalog/flashsale_form');
 
 		$flashsale_id = $this->data['flashsale_id'] = isset($_GET['flashsale_id'])?$_GET['flashsale_id']:0;
@@ -248,7 +256,7 @@ class ControllerCatalogFlashsale extends Controller {
 			$this->data['action'] = $this->url->link('catalog/flashsale/update', 'flashsale_id=' . $flashsale_id);
 		}
 		
-		if($flashsale_id){
+		if ($flashsale_id) {
 			$this->data['preview'] = $this->url->store($this->config->get('config_default_store'), 'sales/flashsale', 'flashsale_id=' . $flashsale_id . '&preview_flashsale=1');
 		}
 		
@@ -289,7 +297,7 @@ class ControllerCatalogFlashsale extends Controller {
 		);
 
 		
-		foreach($defaults as $d=>$value){
+		foreach ($defaults as $d=>$value) {
 			if (isset($_POST[$d])) {
 				$this->data[$d] = $_POST[$d];
 			} elseif (!empty($flashsale_info)) {
@@ -308,7 +316,8 @@ class ControllerCatalogFlashsale extends Controller {
 	}
 
 
-	function get_designer_info(){
+	function get_designer_info()
+	{
 		if(!isset($_POST['designer_id']) || !$_POST['designer_id'])return;
 		$designer_id = $_POST['designer_id'];
 		$designer = $this->model_catalog_manufacturer->getManufacturer($designer_id);
@@ -330,7 +339,8 @@ class ControllerCatalogFlashsale extends Controller {
 		exit;
 	}
 	
-	public function generate_url(){
+	public function generate_url()
+	{
 		$name = isset($_POST['name'])?$_POST['name']:'';
 		$flashsale_id= isset($_POST['flashsale_id'])?$_POST['flashsale_id']:0;
 		if(!$name)return;
@@ -339,7 +349,8 @@ class ControllerCatalogFlashsale extends Controller {
 		exit;
 	}
 	
-	private function validateForm() {
+	private function validateForm()
+	{
 		if (!$this->user->hasPermission('modify', 'catalog/flashsale')) {
 			$this->error['permission'] = $this->_('error_permission');
 		}
@@ -356,14 +367,15 @@ class ControllerCatalogFlashsale extends Controller {
 			$this->error['date_end'] = $this->_('error_date');
 		
 		$sort_order = 0;
-		foreach($_POST['products'] as &$product){
+		foreach ($_POST['products'] as &$product) {
 			$product['sort_order'] = $sort_order++;
 		}
 		
 		return $this->error ? false : true;
 	}
 
-	private function validateModify() {
+	private function validateModify()
+	{
 		if (!$this->user->hasPermission('modify', 'catalog/flashsale')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

@@ -3,8 +3,7 @@
  * Version: 1.5.3
  * Updated: 04/07/2012
  */
-class ControllerModuleJanrain extends Controller
-{
+class ControllerModuleJanrain extends Controller{
 	protected function index($setting)
 	{
 		$this->language->load('module/janrain');
@@ -15,10 +14,10 @@ class ControllerModuleJanrain extends Controller
 		$this->data['janrain_application_domain'] = $this->config->get('janrain_application_domain');
 		
 		// Login Redirection URL
-		if(isset($setting['login_redir'])){
+		if (isset($setting['login_redir'])) {
 			$login_redir = $setting['login_redir'];
 		}
-		elseif($this->config->get('janrain_login_redir')){
+		elseif ($this->config->get('janrain_login_redir')) {
 			$login_redir = $this->config->get('janrain_login_redir');
 		}
 		else {
@@ -56,21 +55,21 @@ class ControllerModuleJanrain extends Controller
 		$this->data['janrain_token_url']	= $this->url->link('module/janrain/janrain_auth');;
 		$this->data['janrain_error']		= '';
 		
-		if($this->data['janrain_logged']){
-			if($this->config->get('janrain_display_after_login')){
+		if ($this->data['janrain_logged']) {
+			if ($this->config->get('janrain_display_after_login')) {
 				$this->data['entry_janrain_welcome']= $this->_('Welcome').' '.$this->customer->info('firstname').' '.$this->customer->info('lastname');
 				$this->data['logout_redirect']	= $this->url->link('account/logout');
 			}
-			else{
+			else {
 				return;
 			}
 		}
-		else{
+		else {
 		
-			if( $this->data['display_type'] == 'popup' ) {
+			if ( $this->data['display_type'] == 'popup' ) {
 				$this->data['janrain_post_token_url'] = $janrain_site .'openid/v2/signin?token_url='. $this->data['janrain_token_url'].'&amplanguage_preference='.$this->data['janrain_lang'];
 			}
-			else{
+			else {
 				$this->data['janrain_post_token_url'] = $janrain_site .'openid/embed?token_url='. urlencode($this->data['janrain_token_url']).'&amplanguage_preference='.$this->data['janrain_lang'];
 			}
 		}
@@ -78,13 +77,14 @@ class ControllerModuleJanrain extends Controller
 		$this->render();
 	}
 
-	function janrain_auth(){
+	function janrain_auth()
+	{
 		// Janrain Engage API key
 		$api_key = $this->config->get('janrain_api_key');
 		
 		$janrain_token = isset($_REQUEST['token']) && $_REQUEST['token']!='' ? $_REQUEST['token'] : false;
 		
-		if($janrain_token) {
+		if ($janrain_token) {
 			$post_data  = array(
 								'token'  => $janrain_token,
 								'apiKey'	=> $api_key,
@@ -106,7 +106,7 @@ class ControllerModuleJanrain extends Controller
 		
 			$this->language->load('module/janrain');
 			// process the auth_info response
-			if( $auth_info['stat'] == 'ok' ) {
+			if ( $auth_info['stat'] == 'ok' ) {
 				$this->parsejanrainInfo($auth_info,$raw_json);
 				$this->message->add("success",$this->_('success_janrain_auth'));
 			}
@@ -117,10 +117,10 @@ class ControllerModuleJanrain extends Controller
 		}
 	
 		// Login Redirection URL
-		if(isset($_SESSION['janrain_login_redir'])){
+		if (isset($_SESSION['janrain_login_redir'])) {
 			$login_redir = $_SESSION['janrain_login_redir'];
 		}
-		elseif($this->config->get('janrain_login_redir')){
+		elseif ($this->config->get('janrain_login_redir')) {
 			$login_redir = $this->config->get('janrain_login_redir');
 		}
 		else {
@@ -151,8 +151,7 @@ class ControllerModuleJanrain extends Controller
 		{
 			$this->model_module_janrain->janrainUpdateUser( $janrain_user['customer_id'], $janrain_user['email'], $auth_provider, $auth_identifier );
 		}
-		else
-		{
+		else {
 			$auth_profile_name = isset($auth_profile['name']) ? $auth_profile['name'] : '';
 			
 			$auth_username 		= isset($auth_profile_name['preferredUsername']) && $auth_profile_name['preferredUsername'] ? $auth_profile_name['preferredUsername'] : '';
@@ -216,7 +215,7 @@ class ControllerModuleJanrain extends Controller
 			}
 		}
 		
-		if( $customer_email && $customer_password ){
+		if ( $customer_email && $customer_password ) {
 			$this->login($customer_email, $customer_password);
 		}
 	}
@@ -227,13 +226,13 @@ class ControllerModuleJanrain extends Controller
 		$possible 	= "123467890abcdfghjkmnpqrtvwxyzABCDFGHJKLMNPQRTVWXYZ";
 		$maxlength 	= strlen($possible);
 	
-		if($length > $maxlength) {
+		if ($length > $maxlength) {
 			$length = $maxlength;
 		}
 		$i = 0;
-		while($i < $length) {
+		while ($i < $length) {
 			$char = substr($possible, mt_rand(0, $maxlength-1), 1);
-			if(!strstr($password, $char)) {
+			if (!strstr($password, $char)) {
 				$password .= $char;
 				$i++;
 			}
@@ -320,7 +319,8 @@ class ControllerModuleJanrain extends Controller
 			return $username;
 	}
 	
-	public function login($email, $password){
+	public function login($email, $password)
+	{
 		$approved = $this->config->get('config_customer_approval') ? "AND approved = '1'" : '';
 		
 		$customer_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "customer WHERE LOWER(email) = '" . $this->db->escape(strtolower($email)) . "' AND password = '" . $this->db->escape($password) . "' AND status = '1' $approved");
@@ -345,7 +345,7 @@ class ControllerModuleJanrain extends Controller
   	}
   
   	public function logout()
-	{
+  	{
 		if(isset($this->session->data['customer_id']))
 			unset($this->session->data['customer_id']);
 
@@ -361,7 +361,7 @@ class ControllerModuleJanrain extends Controller
 		
 		session_destroy();
 		
-		if($this->config->get('janrain_logout_redir')){
+		if ($this->config->get('janrain_logout_redir')) {
 			$redirect = $this->config->get('janrain_logout_redir');
 		}
 		else {
@@ -399,8 +399,7 @@ class ControllerModuleJanrain extends Controller
 			preg_match("/[^\.\/]+\.[^\.\/]+$/", $matches[2], $matches);
 			$email			.= isset($matches[0]) && $matches[0] ? '@'.$matches[0] : '@yoursite.com';
 		}
-		else
-		{
+		else {
 			$email			.= '@yoursite.com';
 		}
 		$email = str_replace( ' ', '_', $email );

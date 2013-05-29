@@ -1,6 +1,8 @@
 <?php
-class ControllerModuleSearchBar extends Controller {
-	protected function index($setting) {
+class ControllerModuleSearchBar extends Controller 
+{
+	protected function index($setting)
+	{
 		$this->template->load('module/search_bar');
 		
 		$this->language->load('module/search_bar');
@@ -10,11 +12,11 @@ class ControllerModuleSearchBar extends Controller {
 		$this->data['search_color'] = '';
 		$this->data['search_style'] = '';
 		$post = $_POST;
-		if(isset($post['action']) && $post['action'] == 'betty_search'){
-			if(isset($post['search_general'])){
+		if (isset($post['action']) && $post['action'] == 'betty_search') {
+			if (isset($post['search_general'])) {
 				$this->data['search_general'] = $post['search_general'] == 'SEARCH HERE' ? '':$post['search_general'];
 			}
-			else{
+			else {
 				$this->data['search_category'] = $post['search_category'];
 				$this->data['search_country'] = $post['search_country'];
 				$this->data['search_color'] = $post['search_color'];
@@ -23,7 +25,7 @@ class ControllerModuleSearchBar extends Controller {
 		}
 		$this->data['categories'] = array("0"=>array("display_name"=>"CATEGORY"));
 		$categories = $this->model_catalog_category->getAllCategories(false);
-		foreach($categories as $cat){
+		foreach ($categories as $cat) {
 			$this->data['categories'][$cat['category_id']] = array("display_name"=>$cat['name'], "item_class"=> "parent");
 			foreach($cat['children'] as $child)
 				$$this->data['categories'][$child['category_id']] = array("display_name"=>$child['name'], "item_class"=> "child");

@@ -1,33 +1,39 @@
 <?php
 
-abstract class Controller {
+abstract class Controller 
+{
 	protected $registry;
-	protected $class_path;
+	protected $class _path;
 	protected $children = array();
 	public $output;
 	public $template;
 	public $data = array();
 	public $error = array();
 	
-	public function __construct($class_path, &$registry) {
+	public function __construct($class_path, &$registry)
+	{
 		$this->registry = &$registry;
 		
-		if($class_path){
-			$this->class_path = $class_path;
+		if($class _path)
+{
+			$this->class _path = $class_path;
 			
 			$this->template = new Template($registry);
 		}
 	}
 	
-	public function __get($key) {
+	public function __get($key)
+	{
 		return $this->registry->get($key);
 	}
 	
-	public function __set($key, $value) {
+	public function __set($key, $value)
+	{
 		$this->registry->set($key, $value);
 	}
 	
-	public function _($key){
+	public function _($key)
+	{
 		return $this->language->get($key);
 	}
 
@@ -38,14 +44,15 @@ abstract class Controller {
 	protected function getBlock($context, $name, $args = array()){
 		$block = $context . '/block/' . $name;
 		
-		if(!is_array($args)){
-			trigger_error('Error: In Controller ' . get_class($this) . ' while retreiving block ' . $block . ' - $args passed to Controller::getBlock() must be an array of parameters to be passed to the block method');
+		if (!is_array($args)) {
+			trigger_error('Error: In Controller ' . get_class ($this) . ' while retreiving block ' . $block . ' - $args passed to Controller::getBlock() must be an array of parameters to be passed to the block method');
 			exit();
 		}
 		
 		$params = array('settings' => $this->model_block_block->getBlockSettings($context . '/' . $name));
 		
-		foreach($args as $a){
+		foreach($args as $a)
+{
 			$params[] = $a;
 		}
 		
@@ -55,10 +62,11 @@ abstract class Controller {
 		$class_path = $action->getClassPath();
 		$method = $action->getMethod();
 		
-		if (file_exists($file)) {
+		if (file_exists($file)) 
+{
 			_require_once($file);
 
-			$controller = new $class($class_path, $this->registry);
+			$controller = new $class ($class_path, $this->registry);
 
 			call_user_func_array(array($controller, $method), $params);
 			
@@ -71,8 +79,8 @@ abstract class Controller {
 	protected function getModule($name, $settings = array()){
 		$module = 'module/' . $name;
 		
-		if(!is_array($settings)){
-			trigger_error('Error: ' . get_class($this) . '::getModule(): $settings must be an array! Usage $this->getModule(\'module_name\', array($setting1, $setting2, ...))');
+		if (!is_array($settings)) {
+			trigger_error('Error: ' . get_class ($this) . '::getModule(): $settings must be an array! Usage $this->getModule(\'module_name\', array($setting1, $setting2, ...))');
 			echo get_caller(2);
 			exit();
 		}
@@ -83,10 +91,11 @@ abstract class Controller {
 		$class_path = $action->getClassPath();
 		$method = $action->getMethod();
 		
-		if (file_exists($file)) {
+		if (file_exists($file)) 
+{
 			_require_once($file);
 
-			$controller = new $class($class_path, $this->registry);
+			$controller = new $class ($class_path, $this->registry);
 
 			call_user_func_array(array($controller, $method), array($settings));
 			
@@ -104,10 +113,11 @@ abstract class Controller {
 		$class_path = $action->getClassPath();
 		$method = $action->getMethod();
 	
-		if (file_exists($file)) {
+		if (file_exists($file)) 
+{
 			_require_once($file);
 
-			$controller = new $class($class_path, $this->registry);
+			$controller = new $class ($class_path, $this->registry);
 			
 			$controller->$method($args);
 			
@@ -118,13 +128,14 @@ abstract class Controller {
 		}
 	}
 	
-	protected function render() {
+	protected function render()
+	{
 		$this->plugin_handler->call_controller_adapter($this);
 		
 		//Build Errors
 		$this->data['errors'] = array();
-		if($this->error){
-			foreach($this->error as $e=>$msg){
+		if ($this->error) {
+			foreach ($this->error as $e=>$msg) {
 				$this->data['errors'][$e] = $msg;
 			}
 		}
@@ -141,7 +152,7 @@ abstract class Controller {
 		//Render View
 		$file = $this->template->get_file();
 		
-		if(!$file){
+		if (!$file) {
 			$this->template->load($this->class_path);
 			$file = $this->template->get_file();
 		}

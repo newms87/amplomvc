@@ -1,6 +1,8 @@
 <?php
-class ControllerModuleBestSeller extends Controller {
-	protected function index($setting) {
+class ControllerModuleBestSeller extends Controller 
+{
+	protected function index($setting)
+	{
 		$this->template->load('module/bestseller');
 
 		$this->language->load('module/bestseller');
@@ -10,22 +12,22 @@ class ControllerModuleBestSeller extends Controller {
 		
 		$featured = $this->config->get('bestseller_list');
 		
-		if(is_array($featured) && !empty($featured)){
+		if (is_array($featured) && !empty($featured)) {
 			$data = array(
 				'product_ids' => array_keys($featured)
 			);
 			
 			$featured = $this->model_catalog_product->getProducts($data);
 		}
-		else{
+		else {
 			$featured = array();
 		}
 		
-		if($setting['limit'] - count($featured) > 0){
+		if ($setting['limit'] - count($featured) > 0) {
 			$products = $this->model_catalog_product->getBestSellerProducts($setting['limit'] - count($featured));
 			$products = array_merge($featured, $products);
 		}
-		else{
+		else {
 			$products = $featured;
 		}
 		
@@ -37,13 +39,13 @@ class ControllerModuleBestSeller extends Controller {
 			}
 
 			if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-				$price = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id']));
+				$price = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class _id']));
 			} else {
 				$price = false;
 			}
 				
 			if ((float)$product_info['special']) {
-				$special = $this->currency->format($this->tax->calculate($product_info['special'], $product_info['tax_class_id']));
+				$special = $this->currency->format($this->tax->calculate($product_info['special'], $product_info['tax_class _id']));
 			} else {
 				$special = false;
 			}

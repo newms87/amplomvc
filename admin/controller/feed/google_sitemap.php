@@ -1,8 +1,10 @@
 <?php
-class ControllerFeedGoogleSitemap extends Controller {
+class ControllerFeedGoogleSitemap extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('feed/google_sitemap');
 
 		$this->load->language('feed/google_sitemap');
@@ -47,7 +49,8 @@ class ControllerFeedGoogleSitemap extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'feed/google_sitemap')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

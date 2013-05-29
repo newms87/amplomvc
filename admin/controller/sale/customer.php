@@ -1,8 +1,10 @@
 <?php
-class ControllerSaleCustomer extends Controller {
+class ControllerSaleCustomer extends Controller 
+{
 	
   
-  	public function index() {
+  	public function index()
+  	{
 		$this->load->language('sale/customer');
 		
 		$this->document->setTitle($this->_('heading_title'));
@@ -10,7 +12,8 @@ class ControllerSaleCustomer extends Controller {
 		$this->getList();
   	}
   
-  	public function insert() {
+  	public function insert()
+  	{
 		$this->load->language('sale/customer');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -68,7 +71,8 @@ class ControllerSaleCustomer extends Controller {
 		$this->getForm();
   	}
 	
-  	public function update() {
+  	public function update()
+  	{
 		$this->load->language('sale/customer');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -126,7 +130,8 @@ class ControllerSaleCustomer extends Controller {
 		$this->getForm();
   	}
 
-  	public function delete() {
+  	public function delete()
+  	{
 		$this->load->language('sale/customer');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -186,7 +191,8 @@ class ControllerSaleCustomer extends Controller {
 		$this->getList();
   	}
 	
-	public function approve() {
+	public function approve()
+	{
 		$this->load->language('sale/customer');
 		
 		$this->document->setTitle($this->_('heading_title'));
@@ -256,7 +262,8 @@ class ControllerSaleCustomer extends Controller {
 		$this->getList();
 	}
 	
-  	private function getList() {
+  	private function getList()
+  	{
 		$this->template->load('sale/customer_list');
 
 		if (isset($_GET['filter_name'])) {
@@ -537,7 +544,8 @@ class ControllerSaleCustomer extends Controller {
 		$this->response->setOutput($this->render());
   	}
   
-  	private function getForm() {
+  	private function getForm()
+  	{
 		$this->template->load('sale/customer_form');
 
 		if (isset($_GET['customer_id'])) {
@@ -805,7 +813,8 @@ class ControllerSaleCustomer extends Controller {
 		$this->response->setOutput($this->render());
 	}
 			
-  	private function validateForm() {
+  	private function validateForm()
+  	{
 		if (!$this->user->hasPermission('modify', 'sale/customer')) {
 				$this->error['warning'] = $this->_('error_permission');
 		}
@@ -889,7 +898,8 @@ class ControllerSaleCustomer extends Controller {
 		return $this->error ? false : true;
   	}
 
-  	private function validateDelete() {
+  	private function validateDelete()
+  	{
 		if (!$this->user->hasPermission('modify', 'sale/customer')) {
 				$this->error['warning'] = $this->_('error_permission');
 		}
@@ -897,7 +907,8 @@ class ControllerSaleCustomer extends Controller {
 		return $this->error ? false : true;
   	}
 	
-	public function login() {
+	public function login()
+	{
 		$json = array();
 		
 		if (isset($_GET['customer_id'])) {
@@ -945,7 +956,8 @@ class ControllerSaleCustomer extends Controller {
 		}
 	}
 
-	public function transaction() {
+	public function transaction()
+	{
 		$this->template->load('sale/customer_transaction');
 
 		$this->language->load('sale/customer');
@@ -994,7 +1006,8 @@ class ControllerSaleCustomer extends Controller {
 		$this->response->setOutput($this->render());
 	}
 			
-	public function reward() {
+	public function reward()
+	{
 		$this->template->load('sale/customer_reward');
 
 		$this->language->load('sale/customer');
@@ -1043,7 +1056,8 @@ class ControllerSaleCustomer extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function addblacklist() {
+	public function addblacklist()
+	{
 		$this->language->load('sale/customer');
 		
 		$json = array();
@@ -1061,7 +1075,8 @@ class ControllerSaleCustomer extends Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 	
-	public function removeblacklist() {
+	public function removeblacklist()
+	{
 		$this->language->load('sale/customer');
 		
 		$json = array();
@@ -1079,7 +1094,8 @@ class ControllerSaleCustomer extends Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 
-	public function autocomplete() {
+	public function autocomplete()
+	{
 		$json = array();
 		
 		if (isset($_GET['filter_name'])) {
@@ -1117,7 +1133,8 @@ class ControllerSaleCustomer extends Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 	
-	public function address() {
+	public function address()
+	{
 		$json = array();
 		
 		if (!empty($_GET['address_id'])) {

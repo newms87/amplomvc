@@ -1,17 +1,17 @@
 <div class="item-filter">
 			<div class="list_grid_toggle">
 				<span><?= $text_display; ?></span>
-				<a id="toggle_list"><?= $text_list; ?></a> <b>/</b> <a id="toggle_grid" class="active"><?= $text_grid;?></a>
+				<a id="toggle_list"><?= $text_list; ?></a> <b>/</b> <a id="toggle_grid" class="active"><?= $text_grid; ?></a>
 			</div>
 			<div class="limit">
 				<span><?= $text_limit; ?></span>
 				<? foreach($limits as $value => $limit_text){ ?>
-					<a <?= $value == $limit ? "class='selected'" : "href=\"" . $limit_url . $value . "\"";?>><?= $limit_text; ?></a>
+					<a <?= $value == $limit ? "class='selected'" : "href=\"" . $limit_url . $value . "\""; ?>><?= $limit_text; ?></a>
 				<? } ?>
 			</div>
 			<div class="sort">
 				<span class="sort_text"><?= $text_sort; ?></span>
-				<?= $this->builder->build('select', $sorts, 'sort_list', $sort_select);?>
+				<?= $this->builder->build('select', $sorts, 'sort_list', $sort_select); ?>
 			</div>
 		</div>
 		<div id="catalog_list" class='grid'>

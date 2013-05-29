@@ -33,8 +33,7 @@
  * @package	PHPExcel
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_NamedRange
-{
+class PHPExcel_NamedRange{
 	/**
 	* Range name
 	*
@@ -100,7 +99,8 @@ class PHPExcel_NamedRange
 	*
 	* @return string
 	*/
-	public function getName() {
+	public function getName()
+	{
 		return $this->_name;
 	}
 
@@ -110,7 +110,8 @@ class PHPExcel_NamedRange
 	* @param string $value
 	* @return PHPExcel_NamedRange
 	*/
-	public function setName($value = null) {
+	public function setName($value = null)
+	{
 		if ($value !== NULL) {
 			// Old title
 			$oldTitle = $this->_name;
@@ -137,7 +138,8 @@ class PHPExcel_NamedRange
 	*
 	* @return PHPExcel_Worksheet
 	*/
-	public function getWorksheet() {
+	public function getWorksheet()
+	{
 		return $this->_worksheet;
 	}
 
@@ -147,7 +149,8 @@ class PHPExcel_NamedRange
 	* @param PHPExcel_Worksheet $value
 	* @return PHPExcel_NamedRange
 	*/
-	public function setWorksheet(PHPExcel_Worksheet $value = null) {
+	public function setWorksheet(PHPExcel_Worksheet $value = null)
+	{
 		if ($value !== NULL) {
 			$this->_worksheet = $value;
 		}
@@ -159,7 +162,8 @@ class PHPExcel_NamedRange
 	*
 	* @return string
 	*/
-	public function getRange() {
+	public function getRange()
+	{
 		return $this->_range;
 	}
 
@@ -169,7 +173,8 @@ class PHPExcel_NamedRange
 	* @param string $value
 	* @return PHPExcel_NamedRange
 	*/
-	public function setRange($value = null) {
+	public function setRange($value = null)
+	{
 		if ($value !== NULL) {
 			$this->_range = $value;
 		}
@@ -181,7 +186,8 @@ class PHPExcel_NamedRange
 	*
 	* @return bool
 	*/
-	public function getLocalOnly() {
+	public function getLocalOnly()
+	{
 		return $this->_localOnly;
 	}
 
@@ -191,7 +197,8 @@ class PHPExcel_NamedRange
 	* @param bool $value
 	* @return PHPExcel_NamedRange
 	*/
-	public function setLocalOnly($value = false) {
+	public function setLocalOnly($value = false)
+	{
 		$this->_localOnly = $value;
 		$this->_scope = $value ? $this->_worksheet : null;
 		return $this;
@@ -202,7 +209,8 @@ class PHPExcel_NamedRange
 	*
 	* @return PHPExcel_Worksheet|null
 	*/
-	public function getScope() {
+	public function getScope()
+	{
 		return $this->_scope;
 	}
 
@@ -212,7 +220,8 @@ class PHPExcel_NamedRange
 	* @param PHPExcel_Worksheet|null $value
 	* @return PHPExcel_NamedRange
 	*/
-	public function setScope(PHPExcel_Worksheet $value = null) {
+	public function setScope(PHPExcel_Worksheet $value = null)
+	{
 		$this->_scope = $value;
 		$this->_localOnly = ($value == null) ? false : true;
 		return $this;
@@ -225,14 +234,16 @@ class PHPExcel_NamedRange
 	* @param PHPExcel_Worksheet|null $pSheet Scope. Use null for global scope
 	* @return PHPExcel_NamedRange
 	*/
-	public static function resolveRange($pNamedRange = '', PHPExcel_Worksheet $pSheet) {
+	public static function resolveRange($pNamedRange = '', PHPExcel_Worksheet $pSheet)
+ {
 		return $pSheet->getParent()->getNamedRange($pNamedRange, $pSheet);
 	}
 
 	/**
 	* Implement PHP __clone to create a deep clone, not just a shallow copy.
 	*/
-	public function __clone() {
+	public function __clone()
+	{
 		$vars = get_object_vars($this);
 		foreach ($vars as $key => $value) {
 			if (is_object($value)) {

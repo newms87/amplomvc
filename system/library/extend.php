@@ -1,16 +1,20 @@
 <?php
-class Extend {
+class Extend 
+{
 	private $registry;
 	
-	function __construct($registry){
+	function __construct($registry)
+	{
 		$this->registry = $registry;
 	}
 	
-	public function __get($key){
+	public function __get($key)
+	{
 		return $this->registry->get($key);
 	}
 	
-	public function add_navigation_link($link, $parent = '', $group = 'admin'){
+	public function add_navigation_link($link, $parent = '', $group = 'admin')
+	{
 		$defaults = array(
 			'title' => '',
 			'href' => '',
@@ -21,57 +25,59 @@ class Extend {
 			'status' => 1,
 		);
 		
-		foreach($defaults as $key => $default){
-			if(!isset($link[$key])){
+		foreach ($defaults as $key => $default) {
+			if (!isset($link[$key])) {
 				$link[$key] = $default;
 			}
 		}
 		
-		if(empty($link['display_name'])){
+		if (empty($link['display_name'])) {
 			$this->message->add("warning", "Extend::add_navigation_link(): You must specify the display_name when adding a new navigation link!");
 			
 			return false;
 		}
 		
-		if(!$link['name']){
+		if (!$link['name']) {
 			$link['name'] = $this->tool->get_slug($link['display_name']);
 		}
 		
-		if(!$link['parent_id'] && $parent){
+		if (!$link['parent_id'] && $parent) {
 			$result = $this->db->query("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE name ='" . $this->db->escape($parent) . "'");
 			
-			if($result->num_rows){
+			if ($result->num_rows) {
 				$link['parent_id'] = $result->row['navigation_id'];
 			}
 		}
 		
 		$result = $this->db->query("SELECT navigation_group_id FROM " . DB_PREFIX . "navigation_group WHERE name = '" . $this->db->escape($group) . "'");
 		
-		if($result->num_rows){
+		if ($result->num_rows) {
 			$this->model_design_navigation->addNavigationLink($result->row['navigation_group_id'], $link);
 		}
 		
 		return true;
 	}
 	
-	public function remove_navigation_link($name){
-		$result = $this->db->query("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE name = '" . $this->db->escape($name) . "'");
+	public function remove_navigation_link($name)
+	{
+		$links = $this->db->query_rows("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE name = '" . $this->db->escape($name) . "'");
+		echo "SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE name = '" . $this->db->escape($name) . "'";exit;
 		
-		if($result->num_rows){
-			foreach($result->rows as $row){
-				$this->model_design_navigation->deleteNavigationLink($row['navigation_id']);
-			}
+	
+		foreach ($links as $link) {
+			echo "removing $link[navigation_id]<br>";
+			$this->model_design_navigation->deleteNavigationLink($link['navigation_id']);
 		}
 	}
 	
 	public function add_layout($name, $routes = array(), $data = array()){
-		if(!is_array($routes)){
+		if (!is_array($routes)) {
 			$routes = array($routes);
 		}
 		
-		$query = $this->db->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . "layout WHERE name='$name'");
+		$exists = $this->db->query_var("SELECT COUNT(*) as total FROM " . DB_PREFIX . "layout WHERE name='$name'");
 		
-		if($query->row['total']){
+		if ($exists) {
 			$this->message->add("warning", "Error while adding $name to layout! Duplicate name exists!");
 			return false;
 		}
@@ -82,11 +88,11 @@ class Extend {
 		
 		$layout += $data;
 		
-		if(!empty($routes)){
+		if (!empty($routes)) {
 			$stores = $this->model_setting_store->getStores();
 			
-			foreach($stores as $store){
-				foreach($routes as $route){
+			foreach ($stores as $store) {
+				foreach ($routes as $route) {
 					$layout['layout_route'][] = array(
 						'store_id' => $store['store_id'],
 						'route' => $route
@@ -98,20 +104,23 @@ class Extend {
 		return $this->model_design_layout->addLayout($layout);
 	}
 	
-	public function remove_layout($name){
+	//TODO: This should remove based on a unique ID not the name... 
+	public function remove_layout($name)
+	{
 		$result = $this->db->query("SELECT layout_id FROM " . DB_PREFIX . "layout WHERE name='" . $this->db->escape($name) . "' LIMIT 1");
 		
-		if($result->num_rows){
+		if ($result->num_rows) {
 			$this->model_design_layout->deleteLayout($result->row['layout_id']);
 		}
 	}
 	
-	public function add_db_hook($hook_set, $action, $table, $callback, $param = null, $priority = 0){
+	public function add_db_hook($hook_set, $action, $table, $callback, $param = null, $priority = 0)
+	{
 		$config_id = 'db_hook_' . $action . '_' . $table;
 		
 		$hooks = $this->config->get($config_id);
 		
-		if(!is_array($hooks)){
+		if (!is_array($hooks)) {
 			$hooks = array();
 		}
 		
@@ -125,17 +134,18 @@ class Extend {
 		$this->config->save('db_hook', $config_id, $hooks);
 	}
 	
-	public function remove_db_hook($hook_set){
+	public function remove_db_hook($hook_set)
+	{
 		$db_hooks = $this->config->get_group('db_hook');
 		
-		foreach($db_hooks as $hook_key => $hook){
-			foreach($hook as $h_key => $h){
-				if($h['hook_set'] == $hook_set){
+		foreach ($db_hooks as $hook_key => $hook) {
+			foreach ($hook as $h_key => $h) {
+				if ($h['hook_set'] == $hook_set) {
 					unset($db_hooks[$hook_key][$h_key]);
 				}
 			}
 			
-			if(empty($db_hooks[$hook_key])){
+			if (empty($db_hooks[$hook_key])) {
 				unset($db_hooks[$hook_key]);
 			}
 		}
@@ -143,7 +153,8 @@ class Extend {
 		$this->config->save_group('db_hook', $db_hooks);
 	}
 	
-	public function enable_image_sorting($table, $column){
+	public function enable_image_sorting($table, $column)
+	{
 		$hook_set = '__image_sort__' . $table . '_' . $column;
 		
 		$this->add_db_hook($hook_set, 'insert', $table, array('Extend' => 'update_hsv_value'), $column);
@@ -157,14 +168,15 @@ class Extend {
 		
 		$sort_column = '__image_sort__' . $column;
 		
-		foreach($result->rows as $row){
+		foreach ($result->rows as $row) {
 			$this->update_hsv_value($row, $column);
 			
 			$this->db->query("UPDATE " . DB_PREFIX . "$table SET `$sort_column` = '$row[$sort_column]' WHERE `$key_column` = '$row[$key_column]'");
 		}
 	}
 	
-	public function disable_image_sorting($table, $column){
+	public function disable_image_sorting($table, $column)
+	{
 		$hook_set = '__image_sort__' . $table . '_' . $column;
 		
 		$this->remove_db_hook($hook_set);
@@ -172,7 +184,8 @@ class Extend {
 		$this->db->table_drop_column($table, '__image_sort__' . $column);
 	}
 	
-	public function update_hsv_value(&$data, $column){
+	public function update_hsv_value(&$data, $column)
+	{
 		if(!isset($data[$column])) return;
 		
 		$colors = $this->image->get_dominant_color($data[$column]);

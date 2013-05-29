@@ -1,8 +1,10 @@
 <?php
-class ControllerModuleFeatured extends Controller {
+class ControllerModuleFeatured extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/featured');
 
 		$this->load->language('module/featured');
@@ -36,7 +38,7 @@ class ControllerModuleFeatured extends Controller {
 		
 		$this->data['featured_product'] = array();
 		
-		if(!empty($products)){
+		if (!empty($products)) {
 			foreach ($products as $product_id) {
 				$product_info = $this->model_catalog_product->getProduct($product_id);
 				
@@ -72,7 +74,8 @@ class ControllerModuleFeatured extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/featured')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

@@ -1,7 +1,9 @@
 <?php
-class ControllerAccountAddress extends Controller {
+class ControllerAccountAddress extends Controller 
+{
 	
-  	public function index() {
+  	public function index()
+  	{
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/address');
 
@@ -15,7 +17,8 @@ class ControllerAccountAddress extends Controller {
 		$this->getList();
   	}
 
-  	public function insert() {
+  	public function insert()
+  	{
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/address');
 
@@ -29,7 +32,7 @@ class ControllerAccountAddress extends Controller {
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$address_id = $this->model_account_address->addAddress($_POST);
 			
-			if(!empty($_POST['default'])){
+			if (!empty($_POST['default'])) {
 				$this->customer->set_setting('default_shipping_address_id', $address_id);
 			}
 			
@@ -41,7 +44,8 @@ class ControllerAccountAddress extends Controller {
 		$this->getForm();
   	}
 
-  	public function update() {
+  	public function update()
+  	{
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/address');
 
@@ -55,7 +59,7 @@ class ControllerAccountAddress extends Controller {
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_account_address->editAddress($_GET['address_id'], $_POST);
 			
-			if(!empty($_POST['default'])){
+			if (!empty($_POST['default'])) {
 				$this->customer->set_setting('default_shipping_address_id', $_GET['address_id']);
 			}
 			
@@ -75,7 +79,8 @@ class ControllerAccountAddress extends Controller {
 		$this->getForm();
   	}
 
-  	public function delete() {
+  	public function delete()
+  	{
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/address');
 
@@ -107,7 +112,8 @@ class ControllerAccountAddress extends Controller {
 		$this->getList();
   	}
 
-  	private function getList() {
+  	private function getList()
+  	{
 		$this->template->load('account/address_list');
 
   		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -174,7 +180,8 @@ class ControllerAccountAddress extends Controller {
 		$this->response->setOutput($this->render());
   	}
 
-  	private function getForm() {
+  	private function getForm()
+  	{
 		$this->template->load('account/address_form');
 
   		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -253,7 +260,7 @@ class ControllerAccountAddress extends Controller {
 
 		if (isset($_POST['country_id'])) {
 				$this->data['country_id'] = $_POST['country_id'];
-		}  elseif (isset($address_info)) {
+		} elseif (isset($address_info)) {
 				$this->data['country_id'] = $address_info['country_id'];
 		} else {
 				$this->data['country_id'] = $this->config->get('config_country_id');
@@ -261,7 +268,7 @@ class ControllerAccountAddress extends Controller {
 
 		if (isset($_POST['zone_id'])) {
 				$this->data['zone_id'] = $_POST['zone_id'];
-		}  elseif (isset($address_info)) {
+		} elseif (isset($address_info)) {
 				$this->data['zone_id'] = $address_info['zone_id'];
 		} else {
 				$this->data['zone_id'] = '';
@@ -291,7 +298,8 @@ class ControllerAccountAddress extends Controller {
 		$this->response->setOutput($this->render());
   	}
 	
-  	private function validateForm() {
+  	private function validateForm()
+  	{
 		if ((strlen($_POST['firstname']) < 1) || (strlen($_POST['firstname']) > 32)) {
 				$this->error['firstname'] = $this->_('error_firstname');
 		}
@@ -325,7 +333,8 @@ class ControllerAccountAddress extends Controller {
 		return $this->error ? false : true;
   	}
 
-  	private function validateDelete() {
+  	private function validateDelete()
+  	{
 		if ($this->model_account_address->getTotalAddresses() == 1) {
 				$this->error['warning'] = $this->_('error_delete');
 		}

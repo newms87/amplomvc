@@ -1,6 +1,8 @@
 <?php
-class ControllerModuleLatest extends Controller {
-	protected function index($setting) {
+class ControllerModuleLatest extends Controller 
+{
+	protected function index($setting)
+	{
 		$this->template->load('module/latest');
 
 		$this->language->load('module/latest');
@@ -24,13 +26,13 @@ class ControllerModuleLatest extends Controller {
 			}
 						
 			if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-				$price = $this->currency->format($this->tax->calculate($result['price'], $result['tax_class_id']));
+				$price = $this->currency->format($this->tax->calculate($result['price'], $result['tax_class _id']));
 			} else {
 				$price = false;
 			}
 					
 			if ((float)$result['special']) {
-				$special = $this->currency->format($this->tax->calculate($result['special'], $result['tax_class_id']));
+				$special = $this->currency->format($this->tax->calculate($result['special'], $result['tax_class _id']));
 			} else {
 				$special = false;
 			}

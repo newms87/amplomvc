@@ -1,6 +1,8 @@
 <?php
-class ControllerExtensionShipping extends Controller {
-	public function index() {
+class ControllerExtensionShipping extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('extension/shipping');
 
 		$this->load->language('extension/shipping');
@@ -66,7 +68,8 @@ class ControllerExtensionShipping extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function install() {
+	public function install()
+	{
 		if (!$this->user->hasPermission('modify', 'extension/shipping')) {
 			$this->session->data['error'] = $this->_('error_permission');
 			
@@ -82,15 +85,17 @@ class ControllerExtensionShipping extends Controller {
 			$class = 'ControllerShipping' . str_replace('_', '', $_GET['extension']);
 			$class = new $class($this->registry);
 			
-			if (method_exists($class, 'install')) {
-				$class->install();
+			if (method_exists($class, 'install')) 
+{
+				$class ->install();
 			}
 			
 			$this->url->redirect($this->url->link('extension/shipping'));
 		}
 	}
 	
-	public function uninstall() {
+	public function uninstall()
+	{
 		if (!$this->user->hasPermission('modify', 'extension/shipping')) {
 			$this->session->data['error'] = $this->_('error_permission');
 			
@@ -105,7 +110,8 @@ class ControllerExtensionShipping extends Controller {
 			$class = 'ControllerShipping' . str_replace('_', '', $_GET['extension']);
 			$class = new $class($this->registry);
 			
-			if (method_exists($class, 'uninstall')) {
+			if (method_exists($class, 'uninstall')) 
+{
 				$class->uninstall();
 			}
 		

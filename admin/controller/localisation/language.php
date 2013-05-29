@@ -1,8 +1,10 @@
 <?php
-class ControllerLocalisationLanguage extends Controller {
+class ControllerLocalisationLanguage extends Controller 
+{
 	
   
-	public function index() {
+	public function index()
+	{
 		$this->load->language('localisation/language');
 		
 		$this->document->setTitle($this->_('heading_title'));
@@ -10,7 +12,8 @@ class ControllerLocalisationLanguage extends Controller {
 		$this->getList();
 	}
 
-	public function insert() {
+	public function insert()
+	{
 		$this->load->language('localisation/language');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -22,12 +25,13 @@ class ControllerLocalisationLanguage extends Controller {
 
 			$this->getList();
 		}
-		else{
+		else {
 			$this->getForm();
 		}
 	}
 
-	public function update() {
+	public function update()
+	{
 		$this->load->language('localisation/language');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -39,12 +43,13 @@ class ControllerLocalisationLanguage extends Controller {
 
 			$this->getList();
 		}
-		else{
+		else {
 			$this->getForm();
 		}
 	}
 
-	public function delete() {
+	public function delete()
+	{
 		$this->load->language('localisation/language');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -60,7 +65,8 @@ class ControllerLocalisationLanguage extends Controller {
 		$this->getList();
 	}
 
-	private function getList() {
+	private function getList()
+	{
 		$this->template->load('localisation/language_list');
 
 		if (isset($_GET['sort'])) {
@@ -161,7 +167,8 @@ class ControllerLocalisationLanguage extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function getForm() {
+	private function getForm()
+	{
 		$this->template->load('localisation/language_form');
 
 		$language_id = isset($_GET['language_id']) ? $_GET['language_id'] : false;
@@ -201,12 +208,12 @@ class ControllerLocalisationLanguage extends Controller {
 			'status' => 1
 		);
 		
-		foreach($defaults as $d=>$value){
+		foreach ($defaults as $d=>$value) {
 			if (isset($_POST[$d])) {
 				$this->data[$d] = $_POST[$d];
 			} elseif (isset($language_info[$d])) {
 				$this->data[$d] = $language_info[$d];
-			} elseif(!$language_id) {
+			} elseif (!$language_id) {
 				$this->data[$d] = $value;
 			}
 		}
@@ -219,7 +226,8 @@ class ControllerLocalisationLanguage extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validateForm() {
+	private function validateForm()
+	{
 		if (!$this->user->hasPermission('modify', 'localisation/language')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
@@ -251,7 +259,8 @@ class ControllerLocalisationLanguage extends Controller {
 		return $this->error ? false : true;
 	}
 
-	private function validateDelete() {
+	private function validateDelete()
+	{
 		if (!$this->user->hasPermission('modify', 'localisation/language')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

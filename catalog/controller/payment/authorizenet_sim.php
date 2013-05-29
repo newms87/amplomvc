@@ -1,6 +1,8 @@
 <?php
-class ControllerPaymentAuthorizeNetSim extends Controller {
-	protected function index() {
+class ControllerPaymentAuthorizeNetSim extends Controller 
+{
+	protected function index()
+	{
 		$this->template->load('payment/authorizenet_sim_index');
 
 		$this->data['action'] = $this->config->get('authorizenet_sim_url');
@@ -140,7 +142,8 @@ class ControllerPaymentAuthorizeNetSim extends Controller {
 	*
 	* @return String
 	*/
-	private function calculateFpHash() {
+	private function calculateFpHash()
+	{
 		$data = $this->data;
 		
 		$code = $data['x_login'] . '^' . $data['x_fp_sequence'] . '^' .
@@ -153,7 +156,8 @@ class ControllerPaymentAuthorizeNetSim extends Controller {
 		return $fp_hash;
 	}
 
-	private function calculateResponseHash() {
+	private function calculateResponseHash()
+	{
 		$data = $_POST;
 		
 		$code = $this->config->get('authorizenet_sim_response_key') .
@@ -162,7 +166,8 @@ class ControllerPaymentAuthorizeNetSim extends Controller {
 		return md5($code);
 	}
 	
-	public function callback() {
+	public function callback()
+	{
 		$this->template->load('payment/authorizenet_sim_callback');
 
 		//Transaction_Approved

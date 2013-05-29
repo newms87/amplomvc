@@ -1,6 +1,8 @@
 <?php
-class ControllerPaymentPPProUK extends Controller {
-	protected function index() {
+class ControllerPaymentPPProUK extends Controller 
+{
+	protected function index()
+	{
 		$this->template->load('payment/pp_pro_uk');
 
 		$this->language->load('payment/pp_pro_uk');
@@ -63,7 +65,8 @@ class ControllerPaymentPPProUK extends Controller {
 		$this->render();
 	}
 
-	public function send() {
+	public function send()
+	{
 		$this->language->load('payment/pp_pro_uk');
 		
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);

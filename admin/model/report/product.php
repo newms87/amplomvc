@@ -1,7 +1,9 @@
 <?php
-class ModelReportProduct extends Model {
+class ModelReportProduct extends Model 
+{
 	
-	public function getProductViews(){
+	public function getProductViews()
+	{
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "product_views");
 		return $query->rows;
 	}
@@ -12,7 +14,7 @@ class ModelReportProduct extends Model {
 			
 		$limit = isset($data['limit'])?(int)$data['limit']:'';
 		
-		if($limit){
+		if ($limit) {
 			$start = isset($data['start'])?(int)$data['start']:0;
 			if ($start < 0) {
 				$start = 0;
@@ -31,17 +33,20 @@ class ModelReportProduct extends Model {
 		return $query->rows;
 	}
 	
-	public function getTotalProductsViewed() {
+	public function getTotalProductsViewed()
+	{
 		$query = $this->query("SELECT COUNT(DISTINCT product_id) as total FROM " . DB_PREFIX . "product_views");
 		return $query->row['total'];
 	}
 	
-	public function getTotalProductViews() {
+	public function getTotalProductViews()
+	{
 		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "product_views");
 		return $query->row['total'];
 	}
 			
-	public function reset() {
+	public function reset()
+	{
 		$this->query("DELETE FROM ". DB_PREFIX . "product_views");
 	}
 	
@@ -81,7 +86,8 @@ class ModelReportProduct extends Model {
 		return $query->rows;
 	}
 	
-	public function getTotalPurchased($data) {
+	public function getTotalPurchased($data)
+	{
 			$sql = "SELECT COUNT(DISTINCT op.model) AS total FROM `" . DB_PREFIX . "order_product` op LEFT JOIN `" . DB_PREFIX . "order` o ON (op.order_id = o.order_id)";
 
 		if (!is_null($data['filter_order_status_id'])) {

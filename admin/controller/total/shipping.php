@@ -1,8 +1,10 @@
 <?php
-class ControllerTotalShipping extends Controller {
+class ControllerTotalShipping extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('total/shipping');
 
 		$this->load->language('total/shipping');
@@ -57,7 +59,8 @@ class ControllerTotalShipping extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'total/shipping')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

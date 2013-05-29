@@ -1,8 +1,10 @@
 <?php
-class ControllerModulePageHeaders extends Controller {
+class ControllerModulePageHeaders extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/page_headers');
 
 		$this->load->language('module/page_headers');
@@ -36,8 +38,8 @@ class ControllerModulePageHeaders extends Controller {
 		$this->data['languages'] = $this->model_localisation_language->getLanguages();
 		
 		//Hide the langugages that are not set
-		foreach($this->data['headers'] as $hid=>&$h){
-			foreach($h['page_header'] as $lang_id=>$ph){
+		foreach ($this->data['headers'] as $hid=>&$h) {
+			foreach ($h['page_header'] as $lang_id=>$ph) {
 				$found = false;
 				foreach($this->data['languages'] as $l)
 					if($l['language_id'] == $lang_id)
@@ -55,7 +57,8 @@ class ControllerModulePageHeaders extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/page_headers')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

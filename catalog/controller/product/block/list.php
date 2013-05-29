@@ -1,7 +1,9 @@
 <?php
-class ControllerProductBlockList extends Controller {
+class ControllerProductBlockList extends Controller 
+{
 	
-	public function index($setting, $data, $template = 'product/list', $process_data = true) {
+	public function index($setting, $data, $template = 'product/list', $process_data = true)
+	{
 		$this->template->load($template);
 		$this->language->load('product/block/list');
 		
@@ -10,17 +12,18 @@ class ControllerProductBlockList extends Controller {
 		$this->data['show_price_tax'] = $this->config->get('config_show_price_with_tax');
 		$this->data['review_status'] = $this->config->get('config_review_status');
 		
-		if($process_data){
+		if ($process_data) {
 			foreach ($data as &$item) {
 				$item['thumb'] = $this->image->resize($item['image'], $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height'));
 				
-				if(($this->config->get('config_customer_price') ? $this->customer->isLogged() : true)){
+				if (($this->config->get('config_customer_price') ? $this->customer->isLogged() : true)) {
 					if (!empty($item['price'])) {
-						$item['price'] = $this->currency->format($this->tax->calculate($item['price'], $item['tax_class_id']));
+						$item['price'] = $this->currency->format($this->tax->calculate($item['price'], $item['tax_class _id']));
 					}
 					
-					if(!empty($item['special'])){
-						$item['special'] = $this->currency->format($this->tax->calculate($item['special'], $item['tax_class_id']));
+					if(!empty($item['special']))
+{
+						$item['special'] = $this->currency->format($this->tax->calculate($item['special'], $item['tax_class _id']));
 					}
 				} else {
 					$item['price'] = false;

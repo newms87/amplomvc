@@ -1,7 +1,9 @@
 <?php
-class ControllerModuleJanrain extends Controller {
+class ControllerModuleJanrain extends Controller 
+{
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/janrain');
 
 		$this->load->language('module/janrain');
@@ -31,7 +33,7 @@ class ControllerModuleJanrain extends Controller {
 				'janrain_api_key','janrain_application_domain','janrain_login_redir',
 				'janrain_logout_redir','janrain_display_type','janrain_display_icons',
 				);
-		foreach($configs as $config){
+		foreach ($configs as $config) {
 			$this->data[$config] = isset($_POST[$config])?$_POST[$config]:$this->config->get($config);
 		}
 		
@@ -55,7 +57,8 @@ class ControllerModuleJanrain extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/janrain')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
@@ -63,7 +66,8 @@ class ControllerModuleJanrain extends Controller {
 		return $this->error ? false : true;
 	}
 	
-	public function install(){
+	public function install()
+	{
 		$query = "CREATE TABLE IF NOT EXISTS ".DB_PREFIX."janrain (
 					`id` int(11) NOT NULL AUTO_INCREMENT,
 					`user_id` int(11) NOT NULL,
@@ -77,7 +81,8 @@ class ControllerModuleJanrain extends Controller {
 		$this->db->query( $query );
 	}
 	
-	public function uninstall(){
+	public function uninstall()
+	{
 		$this->db->query("DROP TABLE IF EXISTS " . DB_PREFIX . "janrain");
 	}
 }

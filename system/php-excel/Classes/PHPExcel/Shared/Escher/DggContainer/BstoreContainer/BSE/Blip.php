@@ -32,8 +32,7 @@
  * @package	PHPExcel_Shared_Escher
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Shared_Escher_DggContainer_BstoreContainer_BSE_Blip
-{
+class PHPExcel_Shared_Escher_DggContainer_BstoreContainer_BSE_Blip{
 	/**
 	* The parent BSE
 	*

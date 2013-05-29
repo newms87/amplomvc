@@ -1,17 +1,20 @@
 <?php
-class Encryption {
+class Encryption 
+{
 	private $key;
 	
-	function __construct($registry) {
-		if(is_string($registry) || is_int($registry)){
+	function __construct($registry)
+	{
+		if (is_string($registry) || is_int($registry)) {
 		$this->key = $registry;
 		}
-		else{
+		else {
 			$this->key = $registry->get('config')->get('config_encryption');
 		}
 	}
 	
-	function encrypt($value) {
+	function encrypt($value)
+	{
 		if (!$this->key) {
 			return $value;
 		}
@@ -29,7 +32,8 @@ class Encryption {
 		return base64_encode($output);
 	}
 	
-	function decrypt($value) {
+	function decrypt($value)
+	{
 		if (!$this->key) {
 			return $value;
 		}

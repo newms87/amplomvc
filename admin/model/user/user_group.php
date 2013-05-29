@@ -1,22 +1,27 @@
 <?php
-class ModelUserUserGroup extends Model {
-	public function addUserGroup($data) {
+class ModelUserUserGroup extends Model 
+{
+	public function addUserGroup($data)
+	{
 		$data['permission'] = !empty($data['permissions']) ? serialize($data['permissions']) : '';
 		
 		$this->insert('user_group', $data);
 	}
 	
-	public function editUserGroup($user_group_id, $data) {
+	public function editUserGroup($user_group_id, $data)
+	{
 		$data['permission'] = !empty($data['permissions']) ? serialize($data['permissions']) : '';
 		
 		$this->update('user_group', $data, $user_group_id);
 	}
 	
-	public function deleteUserGroup($user_group_id) {
+	public function deleteUserGroup($user_group_id)
+	{
 		$this->delete('user_group', $user_group_id);
 	}
 
-	public function addPermission($user_id, $type, $page) {
+	public function addPermission($user_id, $type, $page)
+	{
 		$user_query = $this->query("SELECT DISTINCT user_group_id FROM " . DB_PREFIX . "user WHERE user_id = '" . (int)$user_id . "'");
 		
 		if ($user_query->num_rows) {
@@ -32,7 +37,8 @@ class ModelUserUserGroup extends Model {
 		}
 	}
 	
-	public function getUserGroup($user_group_id) {
+	public function getUserGroup($user_group_id)
+	{
 		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "user_group WHERE user_group_id = '" . (int)$user_group_id . "'");
 		
 		$user_group = array(
@@ -71,7 +77,8 @@ class ModelUserUserGroup extends Model {
 		return $query->rows;
 	}
 	
-	public function get_controller_list(){
+	public function get_controller_list()
+	{
 		$ignore = array(
 			'common/home',
 			'common/startup',
@@ -102,7 +109,8 @@ class ModelUserUserGroup extends Model {
 		return $permissions;
 	}
 	
-	public function getTotalUserGroups() {
+	public function getTotalUserGroups()
+	{
 			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "user_group");
 		
 		return $query->row['total'];

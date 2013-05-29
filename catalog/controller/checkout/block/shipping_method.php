@@ -1,17 +1,19 @@
 <?php
-class ControllerCheckoutBlockShippingMethod extends Controller {
-  	public function index() {
+class ControllerCheckoutBlockShippingMethod extends Controller 
+{
+  	public function index()
+  	{
   		$this->language->load('checkout/checkout');
 		$this->template->load('checkout/block/shipping_method');
 		
-		if(isset($_POST['shipping_method'])){
+		if (isset($_POST['shipping_method'])) {
 			$this->validate();
 		}
 		
-		if($this->cart->hasShippingAddress()){
+		if ($this->cart->hasShippingAddress()) {
 			$shipping_methods = $this->cart->getShippingMethods();
 			
-			if(!empty($shipping_methods)){
+			if (!empty($shipping_methods)) {
 				$this->data['shipping_methods'] = $shipping_methods;
 				
 				$shipping_method_id = '';
@@ -30,7 +32,7 @@ class ControllerCheckoutBlockShippingMethod extends Controller {
 				$this->data['allowed_shipping_zones'] = $this->cart->getAllowedShippingZones();
 			}
 		}
-		else{
+		else {
 			$this->data['no_shipping_address'] = true;
 		}
 			
@@ -39,7 +41,8 @@ class ControllerCheckoutBlockShippingMethod extends Controller {
 		$this->response->setOutput($this->render());
   	}
 	
-	public function validate() {
+	public function validate()
+	{
 		$this->language->load('checkout/checkout');
 		
 		$json = array();
@@ -58,7 +61,7 @@ class ControllerCheckoutBlockShippingMethod extends Controller {
 			if (!isset($_POST['shipping_method'])) {
 				$json['error']['warning'] = $this->_('error_shipping_method');
 			} else {
-				if(!$this->cart->setShippingMethod($_POST['shipping_method'])){
+				if (!$this->cart->setShippingMethod($_POST['shipping_method'])) {
 					$json['error']['shipping_method'] = $this->cart->get_errors('shipping_method');
 				}
 			}

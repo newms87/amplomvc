@@ -1,6 +1,8 @@
 <?php
-class ControllerModuleDesignerDisplay extends Controller {
-	protected function index($setting) {
+class ControllerModuleDesignerDisplay extends Controller 
+{
+	protected function index($setting)
+	{
 		$this->template->load('module/designer_display');
 
 		$this->language->load('module/designer_display');
@@ -32,14 +34,14 @@ class ControllerModuleDesignerDisplay extends Controller {
 				$p_images = $this->model_catalog_product->getProductImages($featured_product['product_id']);
 				$product_images = array();
 				if(isset($p_images))
-					foreach($p_images as $pi){
+					foreach ($p_images as $pi) {
 						$product_images[] = $this->image->resize($pi['image'], $setting['image_width'], $setting['image_height']);
 					}
 				
-				if($featured_product['special'] && $featured_product['special'] > 0){
+				if ($featured_product['special'] && $featured_product['special'] > 0) {
 					$featured_product['sale_price'] = '$' . number_format($featured_product['special'],2);
 				}
-				else{
+				else {
 					$featured_product['sale_price'] = null;
 				}
 				$featured_product['price'] = '$' . number_format($featured_product['price'],2);

@@ -32,8 +32,7 @@
  * @package	PHPExcel_Shared_Escher
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Shared_Escher_DggContainer_BstoreContainer
-{
+class PHPExcel_Shared_Escher_DggContainer_BstoreContainer{
 	/**
 	* BLIP Store Entries. Each of them holds one BLIP (Big Large Image or Picture)
 	*

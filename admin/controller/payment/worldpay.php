@@ -1,8 +1,10 @@
 <?php
-class ControllerPaymentWorldPay extends Controller {
+class ControllerPaymentWorldPay extends Controller 
+{
 	
 
-	public function index() {
+	public function index()
+	{
 		$this->template->load('payment/worldpay');
 
 		$this->load->language('payment/worldpay');
@@ -105,7 +107,8 @@ class ControllerPaymentWorldPay extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'payment/worldpay')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

@@ -1,11 +1,13 @@
 <?php
-class ControllerModuleFeaturedCarousel extends Controller {
-	public function index($setting=null) {
+class ControllerModuleFeaturedCarousel extends Controller 
+{
+	public function index($setting=null)
+	{
 		//$this->template->load('module/featured_carousel');
 		
 		//$this->language->load('module/featured_carousel');
 		
-		if(!$setting){
+		if (!$setting) {
 			$fc = $this->model_setting_setting->getSetting('featured_carousel');
 			$products = $fc['featured_carousel_list'];
 		}
@@ -13,11 +15,11 @@ class ControllerModuleFeaturedCarousel extends Controller {
 		empty($setting['limit'])?$setting['limit']=3:'';
 		
 		$product_list = array();
-		foreach($products as $product_id=>$item){
+		foreach ($products as $product_id=>$item) {
 			$product = $this->model_catalog_product->getProduct($product_id);
 			//$flashsale = $this->model_catalog_product->getProductFlashsale($product_id);
 			
-			if($product){
+			if ($product) {
 				$product_list[] = array(
 					'product_id' => $product_id,
 					'title'		=> $item['name'],
@@ -35,7 +37,8 @@ class ControllerModuleFeaturedCarousel extends Controller {
 		$this->render();
 	}
 
-	public function cron(){
+	public function cron()
+	{
 		$featured_carousel = $this->model_setting_setting->getSetting('featured_carousel');
 		
 		$flashsales = $this->model_catalog_flashsale->getFlashsales('', 'fs.date_end DESC');
@@ -46,12 +49,12 @@ class ControllerModuleFeaturedCarousel extends Controller {
 		$products = array();
 		$exclude_list = $default_exclude;
 		
-		if($flashsales){
+		if ($flashsales) {
 			$flashsale = current($flashsales);
 			
 			$query = $this->db->query("SELECT p.product_id, pd.name, p.image FROM " . DB_PREFIX . "flashsale_product fp LEFT JOIN " . DB_PREFIX . "product p ON(p.product_id = fp.product_id) LEFT JOIN " . DB_PREFIX . "product_description pd ON (pd.product_id = p.product_id) WHERE fp.flashsale_id = '$flashsale[flashsale_id]' LIMIT 1");
 			
-			if($query->num_rows){
+			if ($query->num_rows) {
 				$products[$query->row['product_id']] = $query->row;
 				$exclude_list[] = $query->row['product_id'];
 			}
@@ -59,14 +62,14 @@ class ControllerModuleFeaturedCarousel extends Controller {
 		
 		$limit = isset($featured_carousel['featued_carousel_limit']) ? $featured_carousel['featued_carousel_limit'] : 6;
 		
-		if(count($products) < $limit){
+		if (count($products) < $limit) {
 			$limit -= count($products);
 			
 			$exclude = !empty($exclude_list) ? "WHERE product_id NOT IN (" . implode(',', $exclude_list) . ")" : '';
 			
 			$query = $this->db->query("SELECT p.product_id, pd.name, p.image FROM (SELECT * FROM " . DB_PREFIX . "product $exclude ORDER BY RAND()) as p LEFT JOIN " . DB_PREFIX . "product_description pd ON (pd.product_id = p.product_id) LEFT JOIN " . DB_PREFIX . "manufacturer m ON (m.manufacturer_id = p.manufacturer_id) WHERE m.status = '1' AND p.status = '1' GROUP BY p.manufacturer_id ORDER BY RAND() LIMIT $limit");
 			
-			foreach($query->rows as $row){
+			foreach ($query->rows as $row) {
 				$products[$row['product_id']] = $row;
 			}
 		}
@@ -77,11 +80,11 @@ class ControllerModuleFeaturedCarousel extends Controller {
 		$products = array();
 		$exclude_list = $default_exclude;
 		
-		if($flashsales){
-			foreach($flashsales as $flashsale){
+		if ($flashsales) {
+			foreach ($flashsales as $flashsale) {
 				$query = $this->db->query("SELECT p.product_id, pd.name, p.image FROM " . DB_PREFIX . "flashsale_product fp LEFT JOIN " . DB_PREFIX . "product p ON(p.product_id = fp.product_id) LEFT JOIN " . DB_PREFIX . "product_description pd ON (pd.product_id = p.product_id) WHERE fp.flashsale_id = '$flashsale[flashsale_id]' LIMIT 1");
 				
-				if($query->num_rows){
+				if ($query->num_rows) {
 					$products[$query->row['product_id']] = $query->row;
 					$exclude_list[] = $query->row['product_id'];
 				}
@@ -90,14 +93,14 @@ class ControllerModuleFeaturedCarousel extends Controller {
 		
 		$limit = isset($featured_carousel['featued_product_limit']) ? $featured_carousel['featued_product_limit'] : 12;
 		
-		if(count($products) < $limit){
+		if (count($products) < $limit) {
 			$limit -= count($products);
 			
 			$exclude = !empty($exclude_list) ? "WHERE product_id NOT IN (" . implode(',', $exclude_list) . ")" : '';
 			
 			$query = $this->db->query("SELECT p.product_id, pd.name, p.image FROM (SELECT * FROM " . DB_PREFIX . "product $exclude ORDER BY RAND()) as p LEFT JOIN " . DB_PREFIX . "product_description pd ON (pd.product_id = p.product_id) LEFT JOIN " . DB_PREFIX . "manufacturer m ON (m.manufacturer_id = p.manufacturer_id) WHERE m.status = '1' AND p.status = '1' GROUP BY p.manufacturer_id ORDER BY RAND() LIMIT $limit");
 			
-			foreach($query->rows as $row){
+			foreach ($query->rows as $row) {
 				$products[$row['product_id']] = $row;
 			}
 		}

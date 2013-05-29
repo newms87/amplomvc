@@ -1,6 +1,8 @@
 <?php
-class ModelTotalCredit extends Model {
-	public function getTotal(&$total_data, &$total, &$taxes) {
+class ModelTotalCredit extends Model 
+{
+	public function getTotal(&$total_data, &$total, &$taxes)
+	{
 		if ($this->config->get('credit_status')) {
 			$this->load->language('total/credit');
 		
@@ -28,7 +30,8 @@ class ModelTotalCredit extends Model {
 		}
 	}
 	
-	public function confirm($order_info, $order_total) {
+	public function confirm($order_info, $order_total)
+	{
 		$this->load->language('total/credit');
 		
 		if ($order_info['customer_id']) {

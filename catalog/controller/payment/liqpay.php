@@ -1,6 +1,8 @@
 <?php
-class ControllerPaymentLiqPay extends Controller {
-	protected function index() {
+class ControllerPaymentLiqPay extends Controller 
+{
+	protected function index()
+	{
 		$this->template->load('payment/liqpay');
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
@@ -26,7 +28,8 @@ class ControllerPaymentLiqPay extends Controller {
 		$this->render();
 	}
 
-	public function callback() {
+	public function callback()
+	{
 		$xml = base64_decode($_POST['operation_xml']);
 		$signature = base64_encode(sha1($this->config->get('liqpay_signature') . $xml . $this->config->get('liqpay_signature'), true));
 		

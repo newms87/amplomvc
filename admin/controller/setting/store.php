@@ -1,8 +1,10 @@
 <?php
-class ControllerSettingStore extends Controller {
+class ControllerSettingStore extends Controller 
+{
 	
 
-	public function index() {
+	public function index()
+	{
 		$this->load->language('setting/store');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -10,7 +12,8 @@ class ControllerSettingStore extends Controller {
 		$this->getList();
 	}
 			
-  	public function insert() {
+  	public function insert()
+  	{
 		$this->load->language('setting/store');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -29,7 +32,8 @@ class ControllerSettingStore extends Controller {
 		$this->getForm();
   	}
 
-  	public function update() {
+  	public function update()
+  	{
 		$this->load->language('setting/store');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -48,7 +52,8 @@ class ControllerSettingStore extends Controller {
 		$this->getForm();
   	}
 
-  	public function delete() {
+  	public function delete()
+  	{
 		$this->load->language('setting/store');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -68,7 +73,8 @@ class ControllerSettingStore extends Controller {
 		$this->getList();
   	}
 	
-	private function getList() {
+	private function getList()
+	{
 		$this->template->load('setting/store_list');
 
 		$url = $this->url->get_query('page');
@@ -88,13 +94,13 @@ class ControllerSettingStore extends Controller {
 		foreach ($stores as &$store) {
 			$action = array();
 			
-			if($store['store_id'] === 0){
+			if ($store['store_id'] === 0) {
 				$action[] = array(
 					'text' => $this->_('text_edit'),
 					'href' => $this->url->link('setting/setting')
 				);
 			}
-			else{
+			else {
 				$action[] = array(
 					'text' => $this->_('text_edit'),
 					'href' => $this->url->link('setting/store/update', 'store_id=' . $store['store_id'])
@@ -103,7 +109,7 @@ class ControllerSettingStore extends Controller {
 			
 			$store['action'] = $action;
 			
-			if($store['store_id'] === 0){
+			if ($store['store_id'] === 0) {
 				$store['name'] .= $this->_('text_default');
 			}
 			
@@ -120,7 +126,8 @@ class ControllerSettingStore extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function getForm() {
+	public function getForm()
+	{
 		$this->template->load('setting/store_form');
 
 		$store_id = isset($_GET['store_id']) ? $_GET['store_id'] : 0;
@@ -139,7 +146,7 @@ class ControllerSettingStore extends Controller {
 		if (isset($_GET['store_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
 			$store = $this->model_setting_store->getStore($store_id);
 			
-			if(!$store){
+			if (!$store) {
 				$this->message->add('warning', $this->_('error_store_invalid'));
 				$this->url->redirect($this->url->link('setting/store'));
 			}
@@ -147,7 +154,7 @@ class ControllerSettingStore extends Controller {
 			
 			$store_config = $this->model_setting_setting->getSetting('config', $store_id);
 			
-			if(empty($store_config)){
+			if (empty($store_config)) {
 				$store_config = $this->model_setting_setting->getSetting('config', 0);
 				echo "grabbing default values";
 				html_dump($store_config, 'store_info');
@@ -180,6 +187,7 @@ class ControllerSettingStore extends Controller {
 			'config_tax_customer'=>'',
 			'config_customer_group_id'=>'',
 			'config_customer_price'=>'',
+			'config_show_product_model' => 1,
 			'config_customer_approval'=>'',
 			'config_guest_checkout'=>'',
 			'config_account_id'=>'',
@@ -210,7 +218,8 @@ class ControllerSettingStore extends Controller {
 			'config_image_cart_height'=>80,
 			'config_use_ssl'=>''
 		);
-		foreach($defaults as $key => $default){
+		
+		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
 				$this->data[$key] = $_POST[$key];
 			} elseif (isset($store_info[$key])) {
@@ -250,7 +259,8 @@ class ControllerSettingStore extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validateForm() {
+	private function validateForm()
+	{
 		if (!$this->user->hasPermission('modify', 'setting/store')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
@@ -330,7 +340,8 @@ class ControllerSettingStore extends Controller {
 		return $this->error ? false : true;
 	}
 
-	private function validateDelete() {
+	private function validateDelete()
+	{
 		if (!$this->user->hasPermission('modify', 'setting/store')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

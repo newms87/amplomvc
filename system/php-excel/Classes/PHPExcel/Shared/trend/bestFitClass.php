@@ -33,8 +33,7 @@
  * @package	PHPExcel_Shared_Trend
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Best_Fit
-{
+class PHPExcel_Best_Fit{
 	/**
 	* Indicator flag for a calculation error
 	*
@@ -113,12 +112,14 @@ class PHPExcel_Best_Fit
 	protected $_Yoffset				= 0;
 
 
-	public function getError() {
+	public function getError()
+	{
 		return $this->_error;
 	}	//	function getBestFitType()
 
 
-	public function getBestFitType() {
+	public function getBestFitType()
+	{
 		return $this->_bestFitType;
 	}	//	function getBestFitType()
 
@@ -129,7 +130,8 @@ class PHPExcel_Best_Fit
 	* @param	float		$xValue			X-Value
 	* @return	float						Y-Value
 	*/
-	public function getValueOfYForX($xValue) {
+	public function getValueOfYForX($xValue)
+	{
 		return False;
 	}	//	function getValueOfYForX()
 
@@ -140,7 +142,8 @@ class PHPExcel_Best_Fit
 	* @param	float		$yValue			Y-Value
 	* @return	float						X-Value
 	*/
-	public function getValueOfXForY($yValue) {
+	public function getValueOfXForY($yValue)
+	{
 		return False;
 	}	//	function getValueOfXForY()
 
@@ -150,7 +153,8 @@ class PHPExcel_Best_Fit
 	*
 	* @return	float[]				X-Values
 	*/
-	public function getXValues() {
+	public function getXValues()
+	{
 		return $this->_xValues;
 	}	//	function getValueOfXForY()
 
@@ -161,7 +165,8 @@ class PHPExcel_Best_Fit
 	* @param	int		$dp		Number of places of decimal precision to display
 	* @return	string
 	*/
-	public function getEquation($dp=0) {
+	public function getEquation($dp=0)
+	{
 		return False;
 	}	//	function getEquation()
 
@@ -172,7 +177,8 @@ class PHPExcel_Best_Fit
 	* @param	int		$dp		Number of places of decimal precision to display
 	* @return	string
 	*/
-	public function getSlope($dp=0) {
+	public function getSlope($dp=0)
+	{
 		if ($dp != 0) {
 			return round($this->_slope,$dp);
 		}
@@ -186,7 +192,8 @@ class PHPExcel_Best_Fit
 	* @param	int		$dp		Number of places of decimal precision to display
 	* @return	string
 	*/
-	public function getSlopeSE($dp=0) {
+	public function getSlopeSE($dp=0)
+	{
 		if ($dp != 0) {
 			return round($this->_slopeSE,$dp);
 		}
@@ -200,7 +207,8 @@ class PHPExcel_Best_Fit
 	* @param	int		$dp		Number of places of decimal precision to display
 	* @return	string
 	*/
-	public function getIntersect($dp=0) {
+	public function getIntersect($dp=0)
+	{
 		if ($dp != 0) {
 			return round($this->_intersect,$dp);
 		}
@@ -214,7 +222,8 @@ class PHPExcel_Best_Fit
 	* @param	int		$dp		Number of places of decimal precision to display
 	* @return	string
 	*/
-	public function getIntersectSE($dp=0) {
+	public function getIntersectSE($dp=0)
+	{
 		if ($dp != 0) {
 			return round($this->_intersectSE,$dp);
 		}
@@ -228,7 +237,8 @@ class PHPExcel_Best_Fit
 	* @param	int		$dp		Number of places of decimal precision to return
 	* @return	float
 	*/
-	public function getGoodnessOfFit($dp=0) {
+	public function getGoodnessOfFit($dp=0)
+	{
 		if ($dp != 0) {
 			return round($this->_goodnessOfFit,$dp);
 		}
@@ -236,7 +246,8 @@ class PHPExcel_Best_Fit
 	}	//	function getGoodnessOfFit()
 
 
-	public function getGoodnessOfFitPercent($dp=0) {
+	public function getGoodnessOfFitPercent($dp=0)
+	{
 		if ($dp != 0) {
 			return round($this->_goodnessOfFit * 100,$dp);
 		}
@@ -250,7 +261,8 @@ class PHPExcel_Best_Fit
 	* @param	int		$dp		Number of places of decimal precision to return
 	* @return	float
 	*/
-	public function getStdevOfResiduals($dp=0) {
+	public function getStdevOfResiduals($dp=0)
+	{
 		if ($dp != 0) {
 			return round($this->_stdevOfResiduals,$dp);
 		}
@@ -258,7 +270,8 @@ class PHPExcel_Best_Fit
 	}	//	function getStdevOfResiduals()
 
 
-	public function getSSRegression($dp=0) {
+	public function getSSRegression($dp=0)
+	{
 		if ($dp != 0) {
 			return round($this->_SSRegression,$dp);
 		}
@@ -266,7 +279,8 @@ class PHPExcel_Best_Fit
 	}	//	function getSSRegression()
 
 
-	public function getSSResiduals($dp=0) {
+	public function getSSResiduals($dp=0)
+	{
 		if ($dp != 0) {
 			return round($this->_SSResiduals,$dp);
 		}
@@ -274,7 +288,8 @@ class PHPExcel_Best_Fit
 	}	//	function getSSResiduals()
 
 
-	public function getDFResiduals($dp=0) {
+	public function getDFResiduals($dp=0)
+	{
 		if ($dp != 0) {
 			return round($this->_DFResiduals,$dp);
 		}
@@ -282,7 +297,8 @@ class PHPExcel_Best_Fit
 	}	//	function getDFResiduals()
 
 
-	public function getF($dp=0) {
+	public function getF($dp=0)
+	{
 		if ($dp != 0) {
 			return round($this->_F,$dp);
 		}
@@ -290,7 +306,8 @@ class PHPExcel_Best_Fit
 	}	//	function getF()
 
 
-	public function getCovariance($dp=0) {
+	public function getCovariance($dp=0)
+	{
 		if ($dp != 0) {
 			return round($this->_covariance,$dp);
 		}
@@ -298,7 +315,8 @@ class PHPExcel_Best_Fit
 	}	//	function getCovariance()
 
 
-	public function getCorrelation($dp=0) {
+	public function getCorrelation($dp=0)
+	{
 		if ($dp != 0) {
 			return round($this->_correlation,$dp);
 		}
@@ -306,14 +324,16 @@ class PHPExcel_Best_Fit
 	}	//	function getCorrelation()
 
 
-	public function getYBestFitValues() {
+	public function getYBestFitValues()
+	{
 		return $this->_yBestFitValues;
 	}	//	function getYBestFitValues()
 
 
-	protected function _calculateGoodnessOfFit($sumX,$sumY,$sumX2,$sumY2,$sumXY,$meanX,$meanY, $const) {
+	protected function _calculateGoodnessOfFit($sumX,$sumY,$sumX2,$sumY2,$sumXY,$meanX,$meanY, $const)
+	{
 		$SSres = $SScov = $SScor = $SStot = $SSsex = 0.0;
-		foreach($this->_xValues as $xKey => $xValue) {
+		foreach ($this->_xValues as $xKey => $xValue) {
 			$bestFitY = $this->_yBestFitValues[$xKey] = $this->getValueOfYForX($xValue);
 
 			$SSres += ($this->_yValues[$xKey] - $bestFitY) * ($this->_yValues[$xKey] - $bestFitY);
@@ -365,7 +385,8 @@ class PHPExcel_Best_Fit
 	}	//	function _calculateGoodnessOfFit()
 
 
-	protected function _leastSquareFit($yValues, $xValues, $const) {
+	protected function _leastSquareFit($yValues, $xValues, $const)
+	{
 		// calculate sums
 		$x_sum = array_sum($xValues);
 		$y_sum = array_sum($yValues);

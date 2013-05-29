@@ -1,10 +1,12 @@
 <?php
-class Cache {
+class Cache 
+{
 	private $expire;
 	private $ignore_list = array();
 	private $loaded = array();
 	
-  	public function __construct() {
+  	public function __construct()
+  	{
   		$this->expire = CACHE_FILE_EXPIRATION;
 		
 		_is_writable(DIR_CACHE);
@@ -26,20 +28,22 @@ class Cache {
 		}
   	}
 	
-	public function get_cache_time($key){
-		if(!isset($this->loaded[$key])){
+	public function get_cache_time($key)
+	{
+		if (!isset($this->loaded[$key])) {
 			$this->get($key);
 		}
 		
 		return (int) preg_replace(array('/\..*$/','/.*\//'),'',$this->loaded[$key]['file']) - $this->expire;
 	}
 	
-	public function get($key) {
-		if(isset($this->loaded[$key])){
+	public function get($key)
+	{
+		if (isset($this->loaded[$key])) {
 			return $this->loaded[$key]['data'];
 		}
 		
-		foreach($this->ignore_list as $ignore){
+		foreach ($this->ignore_list as $ignore) {
 			if(preg_match("/^$ignore/", $key) > 0) return;
 		}
 		
@@ -53,8 +57,9 @@ class Cache {
 		}
 	}
 
-  	public function set($key, $value) {
-  		foreach($this->ignore_list as $ignore){
+  	public function set($key, $value)
+  	{
+  		foreach ($this->ignore_list as $ignore) {
   			if(preg_match("/^$ignore/", $key) > 0) return;
 		}
 		
@@ -69,7 +74,8 @@ class Cache {
 		fclose($handle);
   	}
 	
-  	public function delete($key) {
+  	public function delete($key)
+  	{
 		$files = glob(DIR_CACHE . '*.' . preg_replace('/[^A-Z0-9\._-]/i', '', $key) . '*.cache');
 		if ($files) {
 			foreach ($files as $file) {
@@ -82,7 +88,8 @@ class Cache {
 		$this->loaded = array();
   	}
 	
-	public function ignore($key){
+	public function ignore($key)
+	{
 		$key = trim($key);
 		if($key)
 			$this->ignore_list[$key] = $key;

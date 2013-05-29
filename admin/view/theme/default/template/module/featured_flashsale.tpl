@@ -1,7 +1,7 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
-	<?= $this->builder->display_errors($errors);?>
+	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->builder->display_errors($errors); ?>
 <div class="box">
 	<div class="heading">
 		<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -11,7 +11,7 @@
 		<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 			<table class="form">
 				<tr>
-					<td><?= $entry_designer;?></td>
+					<td><?= $entry_designer; ?></td>
 					<td><?= $this->builder->build('select',$designers, 'designer',null,array('id'=>'designer_list')); ?><a onclick='add_selected_designer();' class='button designer'>Add Designer</a></td>
 				</tr>
 				<tr>
@@ -19,14 +19,14 @@
 					<td><input type="text" name="choose_product" value="" /></td>
 				</tr>
 				<tr>
-					<td><?=$text_designer_help;?></td>
+					<td><?= $text_designer_help; ?></td>
 					<td>
 						<ul id="featured_list" class="scrollbox">
 						<? foreach ($featured_list as $id=>$name) { ?>
 							<li>
-									<div class='designer_name'><?= $this->tool->limit_characters($name,50, '');?></div>
+									<div class='designer_name'><?= $this->tool->limit_characters($name,50, ''); ?></div>
 									<img onclick='$(this).parent().remove();' src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" />
-									<input type="hidden" name='featured_list[<?=$id;?>]' value="<?= $name;?>" />
+									<input type="hidden" name='featured_list[<?= $id; ?>]' value="<?= $name; ?>" />
 							</li>
 						<? } ?>
 						</ul>
@@ -51,10 +51,10 @@
 					<tr>
 					<td class="left"><input type="text" name="featured_flashsale_module[<?= $module_row; ?>][limit]" value="<?= $module['limit']; ?>" size="1" maxlength='2' /></td>
 					<td class="left"><input type="text" name="featured_flashsale_module[<?= $module_row; ?>][size]" value="<?= $module['size']; ?>" size="1" maxlength='3' /></td>
-					<td class='left'><?= $this->builder->build('select',$styles, "featured_flashsale_module[$module_row][style]", $module['style']);?></td>
-						<td class='left'><?= $this->builder->build('select',$layouts, "featured_flashsale_module[$module_row][layout_id]", (int)$module['layout_id']);?></td>
-				<td class='left'><?= $this->builder->build('select',$positions, "featured_flashsale_module[$module_row][position]", $module['position']);?></td>
-						<td class="left"><?= $this->builder->build('select',$statuses, "featured_flashsale_module[$module_row][status]", (int)$module['status']);?></td>
+					<td class='left'><?= $this->builder->build('select',$styles, "featured_flashsale_module[$module_row][style]", $module['style']); ?></td>
+						<td class='left'><?= $this->builder->build('select',$layouts, "featured_flashsale_module[$module_row][layout_id]", (int)$module['layout_id']); ?></td>
+				<td class='left'><?= $this->builder->build('select',$positions, "featured_flashsale_module[$module_row][position]", $module['position']); ?></td>
+						<td class="left"><?= $this->builder->build('select',$statuses, "featured_flashsale_module[$module_row][status]", (int)$module['status']); ?></td>
 						<td class="right"><input type="text" name="featured_flashsale_module[<?= $module_row; ?>][sort_order]" value="<?= $module['sort_order']; ?>" size="3" /></td>
 						<td class="left"><a onclick="$('#module-row<?= $module_row; ?>').remove();" class="button"><?= $button_remove; ?></a></td>
 					</tr>
@@ -79,7 +79,7 @@ $(document).ready(function(){
 --></script>
 
 <script type="text/javascript">//<!--
-designer_list = <?= json_encode($designers);?>;
+designer_list = <?= json_encode($designers); ?>;
 function add_selected_designer(){
 	id = $('#designer_list').val();
 	add_to_list('designer'+id,designer_list[id]);
@@ -104,10 +104,10 @@ function addModule() {
 	html += '	<tr>';
 	html += '		<td class="left"><input type="text" name="featured_flashsale_module[%modrow%][limit]" value="5" size="1" maxlength="2" /></td>';
 	html += '		<td class="left"><input type="text" name="featured_flashsale_module[%modrow%][size]" value="260" size="1" maxlength="3" /></td>';
-	html += '		<td class="left">' + "<?= $this->builder->build('select',$styles, 'featured_flashsale_module[%modrow%][style]');?>" +'</td>';
-	html += '		<td class="left">' + "<?= $this->builder->build('select',$layouts,'featured_flashsale_module[%modrow%][layout_id]');?>" + '</td>';
-	html += '		<td class="left">' + "<?= $this->builder->build('select',$positions,'featured_flashsale_module[%modrow%][position]','content_top');?>" + '</td>';
-	html += '		<td class="left">' + "<?= $this->builder->build('select',$statuses,'featured_flashsale_module[%modrow%][status]',1);?>" + '</td>';
+	html += '		<td class="left">' + "<?= $this->builder->build('select',$styles, 'featured_flashsale_module[%modrow%][style]'); ?>" +'</td>';
+	html += '		<td class="left">' + "<?= $this->builder->build('select',$layouts,'featured_flashsale_module[%modrow%][layout_id]'); ?>" + '</td>';
+	html += '		<td class="left">' + "<?= $this->builder->build('select',$positions,'featured_flashsale_module[%modrow%][position]','content_top'); ?>" + '</td>';
+	html += '		<td class="left">' + "<?= $this->builder->build('select',$statuses,'featured_flashsale_module[%modrow%][status]',1); ?>" + '</td>';
 	html += '		<td class="right"><input type="text" name="featured_flashsale_module[%modrow%][sort_order]" value="0" size="3" /></td>';
 	html += '		<td class="left"><a onclick="$(\'#module-row%modrow%\').remove();" class="button"><?= $button_remove; ?></a></td>';
 	html += '	</tr>';

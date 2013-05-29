@@ -1,6 +1,8 @@
 <?php
-class ControllerPaymentTwoCheckout extends Controller {
-	protected function index() {
+class ControllerPaymentTwoCheckout extends Controller 
+{
+	protected function index()
+	{
 		$this->template->load('payment/twocheckout');
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
@@ -66,7 +68,8 @@ class ControllerPaymentTwoCheckout extends Controller {
 		$this->render();
 	}
 	
-	public function callback() {
+	public function callback()
+	{
 		$order_info = $this->model_checkout_order->getOrder($_POST['cart_order_id']);
 		
 		if (!$this->config->get('twocheckout_test')) {

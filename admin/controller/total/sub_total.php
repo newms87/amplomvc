@@ -1,8 +1,10 @@
 <?php
-class ControllerTotalSubTotal extends Controller {
+class ControllerTotalSubTotal extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('total/sub_total');
 
 		$this->load->language('total/sub_total');
@@ -51,7 +53,8 @@ class ControllerTotalSubTotal extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'total/sub_total')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

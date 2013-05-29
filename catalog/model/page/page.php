@@ -1,6 +1,8 @@
 <?php
-class ModelPagePage extends Model{
-	public function getPage($page_id){
+class ModelPagePage extends Model
+{
+	public function getPage($page_id)
+	{
 		$store_id = $this->config->get('config_store_id');
 		
 		$query =

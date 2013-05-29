@@ -5,7 +5,7 @@ location = "<?= $redirect; ?>";
 
 <? } elseif (!empty($totals_only)) { ?>
 <div class='checkout_totals'>
-	<?= $block_totals;?>
+	<?= $block_totals; ?>
 </div>
 
 <div class="payment">
@@ -15,24 +15,24 @@ location = "<?= $redirect; ?>";
 <? } else { ?>
 <div class="checkout-template">
 	<? if(isset($block_confirm_address)){ ?>
-		<?= $block_confirm_address;?>
+		<?= $block_confirm_address; ?>
 	<? } ?>
 	
 	<? if(isset($block_cart)) { ?>
 	<div class='checkout_cart'>
-		<?= $block_cart;?>
+		<?= $block_cart; ?>
 	</div>
 	<? }?>
 	
 	<? if(isset($block_coupon)) { ?>
 	<div class='checkout_coupon'>
-		<?= $block_coupon;?>
+		<?= $block_coupon; ?>
 	</div>
 	<? }?>
 	
 	<div id='checkout_details'>
 		<div class='checkout_totals'>
-				<?= $block_totals;?>
+				<?= $block_totals; ?>
 		</div>
 			
 		<div class="payment">
@@ -55,7 +55,7 @@ function handle_ajax_cart_load(action, data){
 	$('#checkout_details').load("<?= $reload_totals; ?>",{}, function(){
 			if(!$('#checkout_details .payment').length){
 				if(retry_count <= 0){
-						location = "<?= $checkout_url;?>";
+						location = "<?= $checkout_url; ?>";
 				}
 				
 				retry_count--;
@@ -67,8 +67,8 @@ function handle_ajax_cart_load(action, data){
 //--></script>
 
 <div id='loading_details' style='display:none'>
-	<img src="<?= HTTP_THEME_IMAGE . 'loading.gif';?>" />
-	<span class='loading_message'><?= $text_loading_details;?></span>
+	<img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" />
+	<span class='loading_message'><?= $text_loading_details; ?></span>
 </div>
 
 <? } ?>

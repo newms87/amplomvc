@@ -1,6 +1,8 @@
 <?php
-class ModelSaleOrder extends Model {
-	public function addOrder($data) {
+class ModelSaleOrder extends Model 
+{
+	public function addOrder($data)
+	{
 		$store_info = $this->model_setting_store->getStore($data['store_id']);
 		
 		if ($store_info) {
@@ -113,7 +115,8 @@ class ModelSaleOrder extends Model {
 		$this->query("UPDATE `" . DB_PREFIX . "order` SET total = '" . (float)$total . "' WHERE order_id = '" . (int)$order_id . "'");
 	}
 	
-	public function editOrder($order_id, $data) {
+	public function editOrder($order_id, $data)
+	{
 		$country_info = $this->model_localisation_country->getCountry($data['shipping_country_id']);
 		
 		if ($country_info) {
@@ -202,13 +205,14 @@ class ModelSaleOrder extends Model {
 		$this->query("UPDATE `" . DB_PREFIX . "order` SET total = '" . (float)$total . "' WHERE order_id = '" . (int)$order_id . "'");
 	}
 	
-	public function deleteOrder($order_id) {
+	public function deleteOrder($order_id)
+	{
 		$order_query = $this->query("SELECT * FROM `" . DB_PREFIX . "order` WHERE order_status_id > '0' AND order_id = '" . (int)$order_id . "'");
 
 		if ($order_query->num_rows) {
 			$product_query = $this->query("SELECT * FROM " . DB_PREFIX . "order_product WHERE order_id = '" . (int)$order_id . "'");
 
-			foreach($product_query->rows as $product) {
+			foreach ($product_query->rows as $product) {
 				$this->query("UPDATE `" . DB_PREFIX . "product` SET quantity = (quantity + " . (int)$product['quantity'] . ") WHERE product_id = '" . (int)$product['product_id'] . "' AND subtract = '1'");
 
 				$option_query = $this->query("SELECT * FROM " . DB_PREFIX . "order_option WHERE order_id = '" . (int)$order_id . "' AND order_product_id = '" . (int)$product['order_product_id'] . "'");
@@ -232,7 +236,8 @@ class ModelSaleOrder extends Model {
 		$this->query("DELETE FROM " . DB_PREFIX . "affiliate_transaction WHERE order_id = '" . (int)$order_id . "'");
 	}
 
-	public function getOrder($order_id) {
+	public function getOrder($order_id)
+	{
 		$order_query = $this->query("SELECT *, (SELECT CONCAT(c.firstname, ' ', c.lastname) FROM " . DB_PREFIX . "customer c WHERE c.customer_id = o.customer_id) AS customer FROM `" . DB_PREFIX . "order` o WHERE o.order_id = '" . (int)$order_id . "'");
 
 		if ($order_query->num_rows) {
@@ -447,43 +452,50 @@ class ModelSaleOrder extends Model {
 		return $query->rows;
 	}
 	
-	public function getOrderProducts($order_id) {
+	public function getOrderProducts($order_id)
+	{
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "order_product WHERE order_id = '" . (int)$order_id . "'");
 		
 		return $query->rows;
 	}
 	
-	public function getOrderOption($order_id, $order_option_id) {
+	public function getOrderOption($order_id, $order_option_id)
+	{
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "order_option WHERE order_id = '" . (int)$order_id . "' AND order_option_id = '" . (int)$order_option_id . "'");
 
 		return $query->row;
 	}
 	
-	public function getOrderOptions($order_id, $order_product_id) {
+	public function getOrderOptions($order_id, $order_product_id)
+	{
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "order_option WHERE order_id = '" . (int)$order_id . "' AND order_product_id = '" . (int)$order_product_id . "'");
 
 		return $query->rows;
 	}
 
-	public function getOrderDownloads($order_id, $order_product_id) {
+	public function getOrderDownloads($order_id, $order_product_id)
+	{
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "order_download WHERE order_id = '" . (int)$order_id . "' AND order_product_id = '" . (int)$order_product_id . "'");
 
 		return $query->rows;
 	}
 	
-	public function getOrderVouchers($order_id) {
+	public function getOrderVouchers($order_id)
+	{
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "order_voucher WHERE order_id = '" . (int)$order_id . "'");
 		
 		return $query->rows;
 	}
 	
-	public function getOrderVoucherByVoucherId($voucher_id) {
+	public function getOrderVoucherByVoucherId($voucher_id)
+	{
 			$query = $this->query("SELECT * FROM `" . DB_PREFIX . "order_voucher` WHERE voucher_id = '" . (int)$voucher_id . "'");
 
 		return $query->row;
 	}
 				
-	public function getOrderTotals($order_id) {
+	public function getOrderTotals($order_id)
+	{
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "order_total WHERE order_id = '" . (int)$order_id . "' ORDER BY sort_order");
 
 		return $query->rows;
@@ -519,43 +531,50 @@ class ModelSaleOrder extends Model {
 		return $query->row['total'];
 	}
 
-	public function getTotalOrdersByStoreId($store_id) {
+	public function getTotalOrdersByStoreId($store_id)
+	{
 			$query = $this->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "order` WHERE store_id = '" . (int)$store_id . "'");
 
 		return $query->row['total'];
 	}
 
-	public function getTotalOrdersByOrderStatusId($order_status_id) {
+	public function getTotalOrdersByOrderStatusId($order_status_id)
+	{
 			$query = $this->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "order` WHERE order_status_id = '" . (int)$order_status_id . "' AND order_status_id > '0'");
 
 		return $query->row['total'];
 	}
 
-	public function getTotalOrdersByLanguageId($language_id) {
+	public function getTotalOrdersByLanguageId($language_id)
+	{
 			$query = $this->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "order` WHERE language_id = '" . (int)$language_id . "' AND order_status_id > '0'");
 
 		return $query->row['total'];
 	}
 
-	public function getTotalOrdersByCurrencyId($currency_id) {
+	public function getTotalOrdersByCurrencyId($currency_id)
+	{
 			$query = $this->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "order` WHERE currency_id = '" . (int)$currency_id . "' AND order_status_id > '0'");
 
 		return $query->row['total'];
 	}
 	
-	public function getTotalSales() {
+	public function getTotalSales()
+	{
 			$query = $this->query("SELECT SUM(total) AS total FROM `" . DB_PREFIX . "order` WHERE order_status_id > '0'");
 
 		return $query->row['total'];
 	}
 
-	public function getTotalSalesByYear($year) {
+	public function getTotalSalesByYear($year)
+	{
 			$query = $this->query("SELECT SUM(total) AS total FROM `" . DB_PREFIX . "order` WHERE order_status_id > '0' AND YEAR(date_added) = '" . (int)$year . "'");
 
 		return $query->row['total'];
 	}
 
-	public function createInvoiceNo($order_id) {
+	public function createInvoiceNo($order_id)
+	{
 		$order_info = $this->getOrder($_GET['order_id']);
 			
 		if ($order_info && !$order_info['invoice_no']) {
@@ -573,7 +592,8 @@ class ModelSaleOrder extends Model {
 		}
 	}
 	
-	public function addOrderHistory($order_id, $data) {
+	public function addOrderHistory($order_id, $data)
+	{
 			
 		//TODO Implement This!
 		trigger_error("ERROR: This has not been implemented for this system!");
@@ -637,25 +657,29 @@ class ModelSaleOrder extends Model {
 		}
 	}
 		
-	public function getOrderHistories($order_id, $start = 0, $limit = 10) {
+	public function getOrderHistories($order_id, $start = 0, $limit = 10)
+	{
 		$query = $this->query("SELECT oh.date_added, os.name AS status, oh.comment, oh.notify FROM " . DB_PREFIX . "order_history oh LEFT JOIN " . DB_PREFIX . "order_status os ON oh.order_status_id = os.order_status_id WHERE oh.order_id = '" . (int)$order_id . "' AND os.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY oh.date_added ASC LIMIT " . (int)$start . "," . (int)$limit);
 
 		return $query->rows;
 	}
 	
-	public function getTotalOrderHistories($order_id) {
+	public function getTotalOrderHistories($order_id)
+	{
 		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "order_history WHERE order_id = '" . (int)$order_id . "'");
 
 		return $query->row['total'];
 	}
 		
-	public function getTotalOrderHistoriesByOrderStatusId($order_status_id) {
+	public function getTotalOrderHistoriesByOrderStatusId($order_status_id)
+	{
 		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "order_history WHERE order_status_id = '" . (int)$order_status_id . "'");
 
 		return $query->row['total'];
 	}
 	
-	public function getEmailsByProductsOrdered($products, $start, $end) {
+	public function getEmailsByProductsOrdered($products, $start, $end)
+	{
 		$implode = array();
 		
 		foreach ($products as $product_id) {
@@ -667,7 +691,8 @@ class ModelSaleOrder extends Model {
 		return $query->rows;
 	}
 	
-	public function getTotalEmailsByProductsOrdered($products) {
+	public function getTotalEmailsByProductsOrdered($products)
+	{
 		$implode = array();
 		
 		foreach ($products as $product_id) {

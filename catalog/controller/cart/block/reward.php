@@ -1,7 +1,9 @@
 <?php
-class ControllerCartBlockReward {
+class ControllerCartBlockReward 
+{
 	
-	public function index($settings = null){
+	public function index($settings = null)
+	{
 		$this->template->load('cart/block/reward');
 
 			
@@ -19,7 +21,7 @@ class ControllerCartBlockReward {
 			$this->data[$key] = $_POST[$key];
 		} elseif (isset($this->session->data[$key])) {
 			$this->data[$key] = $this->session->data[$key];
-		} else{
+		} else {
 			$this->data[$key] = $default;
 		}
 		
@@ -35,7 +37,8 @@ class ControllerCartBlockReward {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validateReward() {
+	private function validateReward()
+	{
 		$points = $this->customer->getRewardPoints();
 		
 		$points_total = 0;

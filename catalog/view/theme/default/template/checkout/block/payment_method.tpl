@@ -1,5 +1,5 @@
 <? if(isset($no_payment_address)) {?>
-	<h2><?= $text_no_payment_address;?></h2>
+	<h2><?= $text_no_payment_address; ?></h2>
 	
 <? } elseif(!empty($payment_methods)) { ?>
 <form action="<?= $validate_payment_method; ?>" method="post">
@@ -8,7 +8,7 @@
 		<? foreach ($payment_methods as $payment_method) { ?>
 		<tr class="payment_method checkout_method highlight">
 			<td class="method_id">
-				<input type="radio" name="payment_method" value="<?= $payment_method['code']; ?>" id="<?= $payment_method['code']; ?>" <?= $payment_method['code'] == $code ? 'checked="checked"' : '';?> />
+				<input type="radio" name="payment_method" value="<?= $payment_method['code']; ?>" id="<?= $payment_method['code']; ?>" <?= $payment_method['code'] == $code ? 'checked="checked"' : ''; ?> />
 			</td>
 			<td class="method_title"><label for="<?= $payment_method['code']; ?>"><?= $payment_method['title']; ?></label></td>
 		</tr>
@@ -25,7 +25,7 @@
 	<div class="buttons">
 		<div class="right">
 			<span><?= $text_agree; ?></span>
-			<input type="checkbox" name="agree" value="1" <?= $agree ? 'checked="checked"' : '';?> />
+			<input type="checkbox" name="agree" value="1" <?= $agree ? 'checked="checked"' : ''; ?> />
 		</div>
 	</div>
 	<? } ?>
