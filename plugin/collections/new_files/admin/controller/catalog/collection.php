@@ -1,7 +1,10 @@
 <?php
-class ControllerCatalogCollection extends Controller {
+class ControllerCatalogCollection extends Controller 
+{
 	
-	public function index() {
+	//changes
+	public function index()
+	{
 		$this->load->language('catalog/collection');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -9,7 +12,8 @@ class ControllerCatalogCollection extends Controller {
 		$this->getList();
 	}
 
-	public function insert() {
+	public function insert()
+	{
 		$this->load->language('catalog/collection');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -17,7 +21,7 @@ class ControllerCatalogCollection extends Controller {
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_catalog_collection->addCollection($_POST);
 			
-			if(!$this->message->error_set()){
+			if (!$this->message->error_set()) {
 				$this->message->add('success',$this->_('text_success'));
 			}
 			
@@ -25,12 +29,13 @@ class ControllerCatalogCollection extends Controller {
 			
 			$this->getList();
 		}
-		else{
+		else {
 			$this->getForm();
 		}
 	}
 
-	public function update() {
+	public function update()
+	{
 		$this->load->language('catalog/collection');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -38,7 +43,7 @@ class ControllerCatalogCollection extends Controller {
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_catalog_collection->editCollection($_GET['collection_id'], $_POST);
 
-			if(!$this->message->error_set()){
+			if (!$this->message->error_set()) {
 				$this->message->add('success',$this->_('text_success'));
 			}
 			
@@ -46,12 +51,13 @@ class ControllerCatalogCollection extends Controller {
 			
 			$this->getList();
 		}
-		else{
+		else {
 			$this->getForm();
 		}
 	}
  
-	public function delete() {
+	public function delete()
+	{
 		$this->load->language('catalog/collection');
  
 		$this->document->setTitle($this->_('heading_title'));
@@ -59,7 +65,7 @@ class ControllerCatalogCollection extends Controller {
 		if (!empty($_GET['collection_id']) && $this->validateDelete()) {
 			$this->model_catalog_collection->deleteCollection($_GET['collection_id']);
 			
-			if(!$this->message->error_set()){
+			if (!$this->message->error_set()) {
 				$this->message->add('success',$this->_('text_success'));
 			}
 		}
@@ -67,7 +73,8 @@ class ControllerCatalogCollection extends Controller {
 		$this->getList();
 	}
 	
-	public function batch_update() {
+	public function batch_update()
+	{
 		$this->language->load('catalog/collection');
 		
 		if (isset($_POST['selected']) && isset($_GET['action'])) {
@@ -90,8 +97,8 @@ class ControllerCatalogCollection extends Controller {
 					break;
 			}
 			
-			if(!$this->error){
-				if(!$this->message->error_set()){
+			if (!$this->error) {
+				if (!$this->message->error_set()) {
 					$this->message->add('success',$this->_('text_success'));
 				}
 			}
@@ -100,7 +107,8 @@ class ControllerCatalogCollection extends Controller {
 		$this->index();
 	}
 
-	private function getList() {
+	private function getList()
+	{
 		$this->template->load('catalog/collection_list');
 
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -160,7 +168,7 @@ class ControllerCatalogCollection extends Controller {
 			'page' => 1,
 		);
 		
-		foreach($sort_defaults as $key => $default){
+		foreach ($sort_defaults as $key => $default) {
 			$data[$key] = $$key = isset($_GET[$key]) ? $_GET[$key] : $default;
 		}
 		
@@ -169,7 +177,7 @@ class ControllerCatalogCollection extends Controller {
 		//Filter
 		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
 		
-		if($filter_values){
+		if ($filter_values) {
 			$data += $filter_values;
 		}
 		
@@ -255,7 +263,8 @@ class ControllerCatalogCollection extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function getForm() {
+	private function getForm()
+	{
 		$this->language->load('catalog/collection');
 		
 		$this->template->load('catalog/collection_form');
@@ -296,12 +305,12 @@ class ControllerCatalogCollection extends Controller {
 			'sort_order' => 0,
 		);
 
-		foreach($defaults as $key => $default){
+		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
 				$this->data[$key] = $_POST[$key];
 			} elseif (isset($collection_info[$key])) {
 				$this->data[$key] = $collection_info[$key];
-			} elseif(!$collection_id) {
+			} elseif (!$collection_id) {
 				$this->data[$key] = $default;
 			}
 		}
@@ -330,12 +339,13 @@ class ControllerCatalogCollection extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validateForm() {
+	private function validateForm()
+	{
 		if (!$this->user->hasPermission('modify', 'catalog/collection')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		if(!isset($_POST['stores'])){
+		if (!isset($_POST['stores'])) {
 			$_POST['stores'] = array('');
 		}
 		
@@ -345,7 +355,7 @@ class ControllerCatalogCollection extends Controller {
 		
 		$query = $this->db->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . "collection WHERE name = '$name' AND collection_id != $collection_id");
 	
-		if($query->row['total']){
+		if ($query->row['total']) {
 			$this->error['name'] = $this->language->format('error_duplicate_name', $name);
 		}
 		
@@ -353,8 +363,8 @@ class ControllerCatalogCollection extends Controller {
 			$this->error['name'] = $this->_('error_name');
 		}
 		
-		if(!$this->error){
-			if(empty($_POST['keyword'])){
+		if (!$this->error) {
+			if (empty($_POST['keyword'])) {
 				$_POST['keyword'] = $this->tool->get_slug($name);
 			} else {
 				$_POST['keyword'] = $this->tool->get_slug($_POST['keyword']);
@@ -364,7 +374,8 @@ class ControllerCatalogCollection extends Controller {
 		return $this->error ? false : true;
 	}
 
-	private function validateDelete() {
+	private function validateDelete()
+	{
 		if (!$this->user->hasPermission('modify', 'catalog/collection')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
