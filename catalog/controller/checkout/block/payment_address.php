@@ -1,5 +1,5 @@
 <?php
-class ControllerCheckoutBlockPaymentAddress extends Controller 
+class Catalog_Controller_Checkout_Block_PaymentAddress extends Controller 
 {
 	public function index()
 	{
@@ -19,7 +19,7 @@ class ControllerCheckoutBlockPaymentAddress extends Controller
 		$this->form->init('address');
 		$this->form->set_template('form/address');
 		$this->form->set_action($this->url->link('checkout/block/payment_address/validate_form'));
-		$this->form->set_field_options('country_id', $this->model_localisation_country->getCountries(), array('country_id' => 'name'));
+		$this->form->set_field_options('country_id', $this->Model_Localisation_Country->getCountries(), array('country_id' => 'name'));
 		$this->form->set_field_options('default', $this->_('data_yes_no'));
 		
 		$this->data['form_payment_address'] = $this->form->build();

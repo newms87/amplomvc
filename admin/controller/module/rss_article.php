@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleRssArticle extends Controller 
+class Admin_Controller_Module_RssArticle extends Controller 
 {
 	
 	
@@ -13,7 +13,7 @@ class ControllerModuleRssArticle extends Controller
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 
-			$this->model_setting_setting->editSetting('rss_article', $_POST);
+			$this->Model_Setting_Setting->editSetting('rss_article', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -30,7 +30,7 @@ class ControllerModuleRssArticle extends Controller
 		if (isset($_POST['rss_article'])) {
 			$ff = $_POST['rss_article'];
 		} else {
-			$ff = $this->model_setting_setting->getSetting('rss_article');
+			$ff = $this->Model_Setting_Setting->getSetting('rss_article');
 		}
 		
 		$this->data['featured_articles'] = isset($ff['featured_articles'])?$ff['featured_articles']:array();
@@ -42,7 +42,7 @@ class ControllerModuleRssArticle extends Controller
 		$this->data['modules'] = isset($ff['rss_article_module'])?$ff['rss_article_module']:array();;
 		
 		
-		$layouts = $this->model_design_layout->getLayouts();
+		$layouts = $this->Model_Design_Layout->getLayouts();
 		$this->data['layouts'] = array();
 		foreach($layouts as $layout)
 			$this->data['layouts'][$layout['layout_id']] = $layout['name'];
@@ -57,7 +57,7 @@ class ControllerModuleRssArticle extends Controller
 	
 	public function update()
 	{
-		$rss_article = $this->model_setting_setting->getSetting('rss_article');
+		$rss_article = $this->Model_Setting_Setting->getSetting('rss_article');
 		
 		if (!empty($rss_article['rss_feed_url'])) {
 			extract($rss_article);
@@ -75,7 +75,7 @@ class ControllerModuleRssArticle extends Controller
 				$new_articles[] = array('title'=>htmlentities($title, ENT_QUOTES), 'url'=>$entry['link'][0]);
 			}
 			$rss_article['featured_articles'] = array_slice(array_merge($new_articles, $featured_articles),0,$num_to_keep);;
-			$this->model_setting_setting->editSetting('rss_article',$rss_article);
+			$this->Model_Setting_Setting->editSetting('rss_article',$rss_article);
 			
 			if (isset($_GET['redirect'])) {
 				$this->message->add('success', "Successfully Updated the RSS Feed!");

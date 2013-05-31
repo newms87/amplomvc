@@ -1,5 +1,5 @@
 <?php
-class ModelLocalisationWeightClass extends Model 
+class Admin_Model_Localisation_WeightClass extends Model 
 {
 	public function addWeightclass($data)
 	{
@@ -48,8 +48,7 @@ class ModelLocalisationWeightClass extends Model
 				'value'
 			);
 			
-			if (isset($data['sort']) && in_array($data['sort'], $sort_data)) 
-{
+			if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
 				$sql .= " ORDER BY " . $data['sort'];
 			} else {
 				$sql .= " ORDER BY title";
@@ -79,8 +78,7 @@ class ModelLocalisationWeightClass extends Model
 		} else {
 			$weight_class _data = $this->cache->get('weight_class.' . (int)$this->config->get('config_language_id'));
 
-			if (!$weight_class_data) 
-{
+			if (!$weight_class_data) {
 				$query = $this->query("SELECT * FROM " . DB_PREFIX . "weight_class wc LEFT JOIN " . DB_PREFIX . "weight_class_description wcd ON (wc.weight_class_id = wcd.weight_class_id) WHERE wcd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
 	
 				$weight_class_data = $query->rows;

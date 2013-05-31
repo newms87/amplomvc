@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleFlashsaleSidebar extends Controller 
+class Catalog_Controller_Module_FlashsaleSidebar extends Controller 
 {
 	protected function index($setting)
 	{
@@ -11,7 +11,7 @@ class ControllerModuleFlashsaleSidebar extends Controller
 		
 		$filter = 'date_start < NOW() AND date_end > NOW()';
 		$sort = 'name ASC';
-		$flashsales = $this->model_catalog_flashsale->getFlashsales($filter, $sort, $setting['limit']);
+		$flashsales = $this->Model_Catalog_Flashsale->getFlashsales($filter, $sort, $setting['limit']);
 		
 		$flashsales = is_array($flashsales)?$flashsales: array();
 		

@@ -64,8 +64,7 @@ class PHPExcel_Autoloader{
 	*/
 	public static function Load($pClassName)
  {
-		if ((class _exists($pClassName)) || (strpos($pClassName, 'PHPExcel') !== 0)) 
-{
+		if ((class _exists($pClassName)) || (strpos($pClassName, 'PHPExcel') !== 0)) {
 			//	Either already loaded, or not a PHPExcel class request
 			return FALSE;
 		}
@@ -74,8 +73,7 @@ class PHPExcel_Autoloader{
 							str_replace('_',DIRECTORY_SEPARATOR,$pClassName) .
 							'.php';
 
-		if ((file_exists($pObjectFilePath) === false) || (is_readable($pObjectFilePath) === false)) 
-{
+		if ((file_exists($pObjectFilePath) === false) || (is_readable($pObjectFilePath) === false)) {
 			//	Can't load
 			return FALSE;
 		}

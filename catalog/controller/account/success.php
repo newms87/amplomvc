@@ -1,5 +1,5 @@
 <?php
-class ControllerAccountSuccess extends Controller 
+class Catalog_Controller_Account_Success extends Controller 
 {
 	public function index()
 	{

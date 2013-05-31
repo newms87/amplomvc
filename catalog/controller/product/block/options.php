@@ -6,7 +6,7 @@
  * @return Product options template
  *
  */
-class ControllerProductBlockOptions extends Controller 
+class Catalog_Controller_Product_Block_Options extends Controller 
 {
 	
 	public function index($settings, $product_id)
@@ -19,7 +19,7 @@ class ControllerProductBlockOptions extends Controller
 		$image_width = $this->config->get('config_image_product_option_width');
 		$image_height = $this->config->get('config_image_product_option_height');
 		
-		$product_options = $this->model_catalog_product->getProductOptions($product_id);
+		$product_options = $this->Model_Catalog_Product->getProductOptions($product_id);
 		
 		//return a blank template if no options were found
 		if (!$product_options) {
@@ -101,7 +101,7 @@ class ControllerProductBlockOptions extends Controller
 		
 		$this->data['product_options'] = $product_options;
 		
-		$this->data['product_option_restrictions'] = $this->model_catalog_product->getProductOptionValueRestrictions($product_id);
+		$this->data['product_option_restrictions'] = $this->Model_Catalog_Product->getProductOptionValueRestrictions($product_id);
 		
 		$this->children = array();
 		

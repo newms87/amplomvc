@@ -1,5 +1,5 @@
 <?php
-class ModelCatalogFlashsale extends Model 
+class Catalog_Model_Catalog_Flashsale extends Model 
 {
 	public function updateViewed($flashsale_id)
 	{
@@ -102,7 +102,7 @@ class ModelCatalogFlashsale extends Model
 		$query = $this->query("SELECT m.manufacturer_id, m.status FROM " . DB_PREFIX . "flashsale_designer fd LEFT JOIN " . DB_PREFIX . "manufacturer m ON(m.manufacturer_id=fd.designer_id) WHERE fd.flashsale_id='" . (int)$flashsale_id . "'");
 		foreach ($query->rows as $row) {
 			if (!(int)$row['status']) {
-				$this->model_catalog_designer->setDesignerStatus($row['manufacturer_id'], 1);
+				$this->Model_Catalog_Designer->setDesignerStatus($row['manufacturer_id'], 1);
 			}
 		}
 	}

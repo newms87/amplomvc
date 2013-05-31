@@ -1,5 +1,5 @@
 <?php
-class ControllerFeedGoogleSitemap extends Controller 
+class Catalog_Controller_Feed_GoogleSitemap extends Controller 
 {
 	public function index()
 	{
@@ -7,7 +7,7 @@ class ControllerFeedGoogleSitemap extends Controller
 		$output  = '<?xml version="1.0" encoding="UTF-8"?>';
 		$output .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 		
-		$products = $this->model_catalog_product->getProducts();
+		$products = $this->Model_Catalog_Product->getProducts();
 		
 		foreach ($products as $product) {
 			$output .= '<url>';
@@ -19,7 +19,7 @@ class ControllerFeedGoogleSitemap extends Controller
 		
 		$output .= $this->getCategories(0);
 		
-		$manufacturers = $this->model_catalog_manufacturer->getManufacturers();
+		$manufacturers = $this->Model_Catalog_Manufacturer->getManufacturers();
 		
 		foreach ($manufacturers as $manufacturer) {
 			$output .= '<url>';
@@ -28,7 +28,7 @@ class ControllerFeedGoogleSitemap extends Controller
 			$output .= '<priority>0.7</priority>';
 			$output .= '</url>';
 			
-			$products = $this->model_catalog_product->getProducts(array('filter_manufacturer_id' => $manufacturer['manufacturer_id']));
+			$products = $this->Model_Catalog_Product->getProducts(array('filter_manufacturer_id' => $manufacturer['manufacturer_id']));
 			
 			foreach ($products as $product) {
 				$output .= '<url>';
@@ -39,7 +39,7 @@ class ControllerFeedGoogleSitemap extends Controller
 			}
 		}
 		
-		$informations = $this->model_catalog_information->getInformations();
+		$informations = $this->Model_Catalog_Information->getInformations();
 		
 		foreach ($informations as $information) {
 			$output .= '<url>';
@@ -60,7 +60,7 @@ class ControllerFeedGoogleSitemap extends Controller
 	{
 	$output = '';
 	
-	$results = $this->model_catalog_category->getCategories($parent_id);
+	$results = $this->Model_Catalog_Category->getCategories($parent_id);
 	
 	foreach ($results as $result) {
 		if (!$current_path) {
@@ -75,7 +75,7 @@ class ControllerFeedGoogleSitemap extends Controller
 		$output .= '<priority>0.7</priority>';
 		$output .= '</url>';
 
-		$products = $this->model_catalog_product->getProducts(array('filter_category_id' => $result['category_id']));
+		$products = $this->Model_Catalog_Product->getProducts(array('filter_category_id' => $result['category_id']));
 		
 		foreach ($products as $product) {
 			$output .= '<url>';

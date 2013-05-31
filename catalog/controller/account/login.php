@@ -1,5 +1,5 @@
 <?php
-class ControllerAccountLogin extends Controller 
+class Catalog_Controller_Account_Login extends Controller 
 {
 	
 	public function index()
@@ -10,7 +10,7 @@ class ControllerAccountLogin extends Controller
 		if (!empty($_COOKIE['customer_token'])) {
 			$this->customer->logout();
 			
-			$customer_info = $this->model_account_customer->getCustomerByToken($_COOKIE['customer_token']);
+			$customer_info = $this->Model_Account_Customer->getCustomerByToken($_COOKIE['customer_token']);
 			
 			if ($customer_info && $this->customer->login($customer_info['email'], '', true)) {
 				$this->url->redirect($this->url->link('account/account'));

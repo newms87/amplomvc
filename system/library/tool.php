@@ -46,8 +46,7 @@ class Tool
 	
 	public function error_info()
 	{
-		list(,,$caller) = debug_backtrace(false);
-		return "<span style='font-weight:bold; color:#E72727'>$caller[file] on line $caller[line]: </span>";
+		return "<span style='font-weight:bold; color:#E72727'>" . get_caller(2). " </span>";
 	}
 	
 	public function insertables($insertables, $text, $start = '%', $end = '%')

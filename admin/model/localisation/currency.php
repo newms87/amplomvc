@@ -1,5 +1,5 @@
 <?php
-class ModelLocalisationCurrency extends Model 
+class Admin_Model_Localisation_Currency extends Model 
 {
 	public function addCurrency($data)
 	{

@@ -1,5 +1,5 @@
 <?php
-class ControllerToolErrorLog extends Controller 
+class Admin_Controller_Tool_ErrorLog extends Controller 
 {
 	
 	
@@ -35,7 +35,7 @@ class ControllerToolErrorLog extends Controller
 				$store_name = 'Admin';
 			}
 			else {
-				$store_name = $this->model_setting_store->getStoreName((int)$filter_store);
+				$store_name = $this->Model_Setting_Store->getStoreName((int)$filter_store);
 			}
 		} else {
 			$store_name = '';
@@ -92,7 +92,7 @@ class ControllerToolErrorLog extends Controller
 		
 		$this->data['loading'] = $this->image->get('data/ajax-loader.gif');
 		
-		$stores = $this->model_setting_store->getStoreNames();
+		$stores = $this->Model_Setting_Store->getStoreNames();
 		
 		$default_stores = array(
 			array('store_id'=>'','name'=>$this->_('text_select')),
@@ -202,7 +202,7 @@ class ControllerToolErrorLog extends Controller
 				$store_name = 'Admin';
 			}
 			else {
-				$store_name = $this->model_setting_store->getStoreName((int)$filter_store);
+				$store_name = $this->Model_Setting_Store->getStoreName((int)$filter_store);
 			}
 		} else {
 			$store_name = '';

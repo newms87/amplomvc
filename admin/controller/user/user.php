@@ -1,5 +1,5 @@
 <?php
-class ControllerUserUser extends Controller 
+class Admin_Controller_User_User extends Controller 
 {
 	
 	
@@ -19,7 +19,7 @@ class ControllerUserUser extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_user_user->addUser($_POST);
+			$this->Model_User_User->addUser($_POST);
 			
 			if($this->user->isAdmin())
 				$this->message->add('success', $this->_('text_success'));
@@ -44,7 +44,7 @@ class ControllerUserUser extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_user_user->editUser($_GET['user_id'], $_POST);
+			$this->Model_User_User->editUser($_GET['user_id'], $_POST);
 			
 			$url = $this->get_url();
 			
@@ -69,7 +69,7 @@ class ControllerUserUser extends Controller
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 				foreach ($_POST['selected'] as $user_id) {
-				$this->model_user_user->deleteUser($user_id);
+				$this->Model_User_User->deleteUser($user_id);
 			}
 
 			if($this->user->isAdmin())
@@ -114,9 +114,9 @@ class ControllerUserUser extends Controller
 			'limit' => $this->config->get('config_admin_limit')
 		);
 		
-		$user_total = $this->model_user_user->getTotalUsers();
+		$user_total = $this->Model_User_User->getTotalUsers();
 		
-		$results = $this->model_user_user->getUsers($data);
+		$results = $this->Model_User_User->getUsers($data);
 		
 		foreach ($results as &$result) {
 			$action = array();
@@ -189,7 +189,7 @@ class ControllerUserUser extends Controller
 		$this->data['cancel'] = $this->url->link('user/user', $url);
 
 		if ($user_id && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-			$user_info = $this->model_user_user->getUser($user_id);
+			$user_info = $this->Model_User_User->getUser($user_id);
 		}
 		
 		$data_items = array('username'=>'','password'=>'','confirm'=>'','firstname'=>'','lastname'=>'',
@@ -208,15 +208,15 @@ class ControllerUserUser extends Controller
 		
 		if (!empty($user_info) && !isset($_POST['designers'])) {
 			$this->data['designers'] = array();
-			foreach($this->model_user_user->getUserDesigners($user_id) as $d)
+			foreach($this->Model_User_User->getUserDesigners($user_id) as $d)
 			$this->data['designers'][] = $d['designer_id'];
 		}
 		
-		$manufacturers = $this->model_catalog_manufacturer->getManufacturers();
+		$manufacturers = $this->Model_Catalog_Manufacturer->getManufacturers();
 		foreach($manufacturers as $m)
 			$this->data['manufacturers'][$m['manufacturer_id']] = $m['name'];
 		
-		$this->data['user_groups'] = $this->model_user_user_group->getUserGroups();
+		$this->data['user_groups'] = $this->Model_User_UserGroup->getUserGroups();
 		
 		$this->data['contact_template'] = $this->getChild('includes/contact',array('type'=>'user', 'id'=>$user_id));
 		
@@ -248,7 +248,7 @@ class ControllerUserUser extends Controller
 					$this->error['username'] = $this->_('error_username');
 			}
 
-			$user_info = $this->model_user_user->getUserByUsername($_POST['username']);
+			$user_info = $this->Model_User_User->getUserByUsername($_POST['username']);
 			
 			if (!isset($_GET['user_id'])) {
 				if ($user_info) {

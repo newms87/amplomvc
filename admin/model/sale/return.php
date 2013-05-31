@@ -1,5 +1,5 @@
 <?php
-class ModelSaleReturn extends Model 
+class Admin_Model_Sale_Return extends Model 
 {
 	public function addReturn($data)
 	{

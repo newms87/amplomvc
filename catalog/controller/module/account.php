@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleAccount extends Controller 
+class Catalog_Controller_Module_Account extends Controller 
 {
 	protected function index()
 	{

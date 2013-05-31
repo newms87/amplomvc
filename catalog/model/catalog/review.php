@@ -1,5 +1,5 @@
 <?php
-class ModelCatalogReview extends Model 
+class Catalog_Model_Catalog_Review extends Model 
 {
 	public function addReview($product_id, $data)
 	{

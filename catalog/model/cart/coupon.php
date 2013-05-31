@@ -1,5 +1,5 @@
 <?php
-class ModelCartCoupon extends Model 
+class Catalog_Model_Cart_Coupon extends Model 
 {
 	public function getCoupon($code)
 	{

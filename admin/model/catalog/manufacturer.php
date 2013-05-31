@@ -1,5 +1,5 @@
 <?php
-class ModelCatalogManufacturer extends Model 
+class Admin_Model_Catalog_Manufacturer extends Model 
 {
 	public function addManufacturer($data)
 	{
@@ -11,7 +11,7 @@ class ModelCatalogManufacturer extends Model
 			$data['articles'] = null;
 			$data['date_active'] = date_create();
 			$data['date_expires'] = date_add(new DateTime(), date_interval_create_from_date_string('30 days'));
-			$data['keyword'] = $this->model_setting_url_alias->format_url($data['name']);
+			$data['keyword'] = $this->Model_Setting_UrlAlias->format_url($data['name']);
 			$data['editable'] = 1;
 		}
 		
@@ -63,7 +63,7 @@ class ModelCatalogManufacturer extends Model
 				'status' => $data['status'],
 			);
 			
-			$this->model_setting_url_alias->addUrlAlias($url_alias);
+			$this->Model_Setting_UrlAlias->addUrlAlias($url_alias);
 		}
 		
 		if ($this->user->isDesigner()) {
@@ -131,7 +131,7 @@ class ModelCatalogManufacturer extends Model
 				}
 			}
 			
-			$this->model_setting_url_alias->deleteUrlAliasByRouteQuery('product/manufacturer/product', "manufacturer_id=$manufacturer_id");
+			$this->Model_Setting_UrlAlias->deleteUrlAliasByRouteQuery('product/manufacturer/product', "manufacturer_id=$manufacturer_id");
 			
 			if ($data['keyword']) {
 				$url_alias = array(
@@ -141,7 +141,7 @@ class ModelCatalogManufacturer extends Model
 					'status' => $data['status'],
 				);
 			
-				$this->model_setting_url_alias->addUrlAlias($url_alias);
+				$this->Model_Setting_UrlAlias->addUrlAlias($url_alias);
 			}
 		}
 
@@ -155,7 +155,7 @@ class ModelCatalogManufacturer extends Model
 		$this->delete('manufacturer_description', array('manufacturer_id'=>$manufacturer_id));
 		$this->delete('manufacturer_to_store', array('manufacturer_id'=>$manufacturer_id));
 		
-		$this->model_setting_url_alias->deleteUrlAliasByRouteQuery('product/manufacturer/product', "manufacturer_id=$manufacturer_id");
+		$this->Model_Setting_UrlAlias->deleteUrlAliasByRouteQuery('product/manufacturer/product', "manufacturer_id=$manufacturer_id");
 		
 		$this->delete('user_designer', array('designer_id'=>$manufacturer_id));
 		
@@ -172,16 +172,16 @@ class ModelCatalogManufacturer extends Model
 	
 	public function generate_url($manufacturer_id, $name)
 	{
-		$url = $this->model_setting_url_alias->format_url($name);
+		$url = $this->Model_Setting_UrlAlias->format_url($name);
 		$orig = $url;
 		$count = 2;
 		
-		$url_alias = $manufacturer_id?$this->model_setting_url_alias->getUrlAliasByRouteQuery('product/manufacturer/product', "manufacturer_id=$manufacturer_id"):null;
+		$url_alias = $manufacturer_id?$this->Model_Setting_UrlAlias->getUrlAliasByRouteQuery('product/manufacturer/product', "manufacturer_id=$manufacturer_id"):null;
 		
-		$test = $this->model_setting_url_alias->getUrlAliasByKeyword($url);
+		$test = $this->Model_Setting_UrlAlias->getUrlAliasByKeyword($url);
 		while (!empty($test) && $test['url_alias_id'] != $url_alias['url_alias_id']) {
 			$url = $orig . '-' . $count++;
-			$test = $this->model_setting_url_alias->getUrlAliasByKeyword($url);
+			$test = $this->Model_Setting_UrlAlias->getUrlAliasByKeyword($url);
 		}
 		return $url;
 	}

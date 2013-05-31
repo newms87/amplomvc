@@ -1,5 +1,5 @@
 <?php
-class ModelShippingUsps extends Model 
+class Catalog_Model_Shipping_Usps extends Model 
 {
 	public function getQuote($address)
 	{
@@ -28,8 +28,7 @@ class ModelShippingUsps extends Model
 
 			$postcode = str_replace(' ', '', $address['postcode']);
 
-			if ($address['iso_code_2'] == 'US') 
-{
+			if ($address['iso_code_2'] == 'US') {
 				$xml  = '<RateV4Request USERID="' . $this->config->get('usps_user_id') . '">';
 				$xml .= '	<Package ID="1">';
 				$xml .=	'		<Service>ALL</Service>';
@@ -353,8 +352,7 @@ class ModelShippingUsps extends Model
 						'First-Class Mail Postcards'
 					);
 
-					if ($rate_response || $intl_rate_response) 
-{
+					if ($rate_response || $intl_rate_response) {
 						if ($address['iso_code_2'] == 'US') {
 							$allowed = array(0, 1, 2, 3, 4, 5, 6, 7, 12, 13, 16, 17, 18, 19, 22, 23, 25, 27, 28);
 
@@ -366,23 +364,19 @@ class ModelShippingUsps extends Model
 								foreach ($postages as $postage) {
 									$class id = $postage->getAttribute('CLASSID');
 
-									if (in_array($classid, $allowed)) 
-{
-										if ($class id == '0') 
-{
+									if (in_array($classid, $allowed)) {
+										if ($class id == '0') {
 											$mailservice = $postage->getElementsByTagName('MailService')->item(0)->nodeValue;
 
 											foreach ($firstclass es as $k => $firstclass)  
 {
-												if ($firstclass == $mailservice) 
-{
+												if ($firstclass == $mailservice) {
 													$class id = $classid . $k;
 													break;
 												}
 											}
 
-											if (($this->config->get('usps_domestic_' . $classid))) 
-{
+											if (($this->config->get('usps_domestic_' . $classid))) {
 												$cost = $postage->getElementsByTagName('Rate')->item(0)->nodeValue;
 
 												$quote_data[$class id] = array(

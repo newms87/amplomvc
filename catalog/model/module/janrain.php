@@ -1,5 +1,5 @@
 <?php
-class ModelModulejanrain extends Model{
+class Catalog_Model_Module_Janrain extends Model{
 	public function janrainGetUserInfo( $provider, $identifier, $newuser_email )
 	{
 		$check = $this->janrainCheckUser( $provider, $identifier, $newuser_email );

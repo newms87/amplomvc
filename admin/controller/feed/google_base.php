@@ -1,5 +1,5 @@
 <?php
-class ControllerFeedGoogleBase extends Controller 
+class Admin_Controller_Feed_GoogleBase extends Controller 
 {
 	
 	
@@ -12,7 +12,7 @@ class ControllerFeedGoogleBase extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('google_base', $_POST);
+			$this->Model_Setting_Setting->editSetting('google_base', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 

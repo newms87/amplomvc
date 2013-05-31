@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleLatest extends Controller 
+class Admin_Controller_Module_Latest extends Controller 
 {
 	
 	
@@ -12,7 +12,7 @@ class ControllerModuleLatest extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('latest', $_POST);
+			$this->Model_Setting_Setting->editSetting('latest', $_POST);
 			
 			$this->cache->delete('product');
 			
@@ -49,7 +49,7 @@ class ControllerModuleLatest extends Controller
 			$this->data['modules'] = $this->config->get('latest_module');
 		}
 				
-		$this->data['layouts'] = $this->model_design_layout->getLayouts();
+		$this->data['layouts'] = $this->Model_Design_Layout->getLayouts();
 
 		$this->children = array(
 			'common/header',

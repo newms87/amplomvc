@@ -1,5 +1,5 @@
 <?php
-class ModelCatalogFlashsale extends Model 
+class Admin_Model_Catalog_Flashsale extends Model 
 {
 	public function addFlashsale($data)
 	{
@@ -53,7 +53,7 @@ class ModelCatalogFlashsale extends Model
 				'status'  =>$data['status']
 			);
 			
-			$this->model_setting_url_alias->addUrlAlias($url_alias);
+			$this->Model_Setting_UrlAlias->addUrlAlias($url_alias);
 		}
 		
 		if ($data['extend_flashsale']) {
@@ -143,7 +143,7 @@ class ModelCatalogFlashsale extends Model
 			'query' => 'flashsale_id=' . $flashsale_id
 		);
 		
-		$this->model_setting_url_alias->deleteUrlAliasByRouteQuery('sales/flashsale', 'flashsale_id=' . (int)$flashsale_id);
+		$this->Model_Setting_UrlAlias->deleteUrlAliasByRouteQuery('sales/flashsale', 'flashsale_id=' . (int)$flashsale_id);
 		
 		if ($data['keyword']) {
 			$url_alias = array(
@@ -153,7 +153,7 @@ class ModelCatalogFlashsale extends Model
 				'status'=>$data['status']
 			);
 			
-			$this->model_setting_url_alias->addUrlAlias($url_alias);
+			$this->Model_Setting_UrlAlias->addUrlAlias($url_alias);
 		}
 
 		if ($data['extend_flashsale']) {
@@ -172,7 +172,7 @@ class ModelCatalogFlashsale extends Model
 		
 		$this->delete('product_special', array('flashsale_id'=>$flashsale_id));
 		
-		$this->model_setting_url_alias->deleteUrlAliasByRouteQuery('sales/flashsale', 'flashsale_id=' . (int)$flashsale_id);
+		$this->Model_Setting_UrlAlias->deleteUrlAliasByRouteQuery('sales/flashsale', 'flashsale_id=' . (int)$flashsale_id);
 		
 		$this->cache->delete('flashsale');
 	}
@@ -218,21 +218,21 @@ class ModelCatalogFlashsale extends Model
 	
 	public function generate_url($flashsale_id,$name)
 	{
-		$url = 'sale/'.$this->model_setting_url_alias->format_url($name);
+		$url = 'sale/'.$this->Model_Setting_UrlAlias->format_url($name);
 		$orig = $url;
 		$count = 2;
 		
 		if ($flashsale_id) {
-			$url_alias = $this->model_setting_url_alias->getUrlAliasByRouteQuery('sales/flashsale', "flashsale_id=$flashsale_id");
+			$url_alias = $this->Model_Setting_UrlAlias->getUrlAliasByRouteQuery('sales/flashsale', "flashsale_id=$flashsale_id");
 		}
 		else {
 			$url_alias = null;
 		}
 		
-		$test = $this->model_setting_url_alias->getUrlAliasByKeyword($url);
+		$test = $this->Model_Setting_UrlAlias->getUrlAliasByKeyword($url);
 		while (!empty($test) && $test['url_alias_id'] != $url_alias['url_alias_id']) {
 			$url = $orig . '-' . $count++;
-			$test = $this->model_setting_url_alias->getUrlAliasByKeyword($url);
+			$test = $this->Model_Setting_UrlAlias->getUrlAliasByKeyword($url);
 		}
 		return $url;
 	}
@@ -256,7 +256,7 @@ class ModelCatalogFlashsale extends Model
 			
 			$products = array();
 			foreach ($results->rows as $key=>$product) {
-				$p = $this->model_catalog_product->getProduct($product['product_id']);
+				$p = $this->Model_Catalog_Product->getProduct($product['product_id']);
 				if(!$p)continue;
 				$products[$key] = $p;
 				$products[$key]['orig_price'] = $products[$key]['price'];
@@ -402,10 +402,10 @@ class ModelCatalogFlashsale extends Model
 			}
 		}
 		
-		$url_alias = $this->model_setting_url_alias->getUrlAliasByRouteQuery('sales/flashsale', 'flashsale_id='.$flashsale_id);
+		$url_alias = $this->Model_Setting_UrlAlias->getUrlAliasByRouteQuery('sales/flashsale', 'flashsale_id='.$flashsale_id);
 		
 		if (isset($url_alias['url_alias_id'])) {
-			$this->model_setting_url_alias->editUrlAlias($url_alias['url_alias_id'],array('status'=>$status));
+			$this->Model_Setting_UrlAlias->editUrlAlias($url_alias['url_alias_id'],array('status'=>$status));
 		}
 		
 		$this->cache->delete('flashsale');

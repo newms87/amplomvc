@@ -1,5 +1,5 @@
 <?php
-class ControllerPaymentFreeCheckout extends Controller 
+class Admin_Controller_Payment_FreeCheckout extends Controller 
 {
 	
 	
@@ -12,7 +12,7 @@ class ControllerPaymentFreeCheckout extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('free_checkout', $_POST);
+			$this->Model_Setting_Setting->editSetting('free_checkout', $_POST);
 
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -39,7 +39,7 @@ class ControllerPaymentFreeCheckout extends Controller
 			$this->data['free_checkout_order_status_id'] = $this->config->get('free_checkout_order_status_id');
 		}
 		
-		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
 				
 		if (isset($_POST['free_checkout_status'])) {
 			$this->data['free_checkout_status'] = $_POST['free_checkout_status'];

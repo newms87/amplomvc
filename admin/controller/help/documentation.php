@@ -1,5 +1,5 @@
 <?php
-class ControllerHelpDocumentation extends Controller 
+class Admin_Controller_Help_Documentation extends Controller 
 {
 	
 	public function index()
@@ -40,8 +40,7 @@ class ControllerHelpDocumentation extends Controller
 					foreach($matches[0] as $m)
 						$s = preg_replace("/%%[^%]*%%/","<span class ='n'>".preg_replace("/%%/",'',$m)."</span>",$s,1);
 				}
-				if(preg_match_all("/%![^%]*%!/",$s,$matches))
-{
+				if (preg_match_all("/%![^%]*%!/",$s,$matches)) {
 					foreach($matches[0] as $m)
 						$s = preg_replace("/%![^%]*%!/","<span class='important'>".preg_replace("/%!/",'',$m)."</span>",$s,1);
 				}

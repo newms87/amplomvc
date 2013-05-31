@@ -1,5 +1,5 @@
 <?php
-class ModelPaymentPayPoint extends Model 
+class Catalog_Model_Payment_Paypoint extends Model 
 {
   	public function getMethod($address, $total)
   	{

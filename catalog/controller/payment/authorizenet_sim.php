@@ -1,5 +1,5 @@
 <?php
-class ControllerPaymentAuthorizeNetSim extends Controller 
+class Catalog_Controller_Payment_AuthorizenetSim extends Controller 
 {
 	protected function index()
 	{
@@ -7,7 +7,7 @@ class ControllerPaymentAuthorizeNetSim extends Controller
 
 		$this->data['action'] = $this->config->get('authorizenet_sim_url');
 		
-		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
+		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
 		
 		$data =& $this->data;
 			
@@ -191,13 +191,13 @@ class ControllerPaymentAuthorizeNetSim extends Controller
 		
 		if ($data['hash_match'] ) {
 			$order_id = $data['order_id'];
-			$order_info = $this->model_checkout_order->getOrder($order_id);
+			$order_info = $this->Model_Checkout_Order->getOrder($order_id);
 			
 			if ($order_info) {
 				if ($data['x_response_code'] == '1') {
-					$this->model_checkout_order->confirm($order_id, $this->config->get('authorizenet_sim_order_status_id'));
+					$this->Model_Checkout_Order->confirm($order_id, $this->config->get('authorizenet_sim_order_status_id'));
 				} else {
-					$this->model_checkout_order->confirm($order_id, $this->config->get('config_order_status_id') );
+					$this->Model_Checkout_Order->confirm($order_id, $this->config->get('config_order_status_id') );
 				}
 			}
 		}

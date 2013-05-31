@@ -1,5 +1,5 @@
 <?php
-class ControllerShippingFlat extends Controller 
+class Admin_Controller_Shipping_Flat extends Controller 
 {
 	
 	public function index()
@@ -11,7 +11,7 @@ class ControllerShippingFlat extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('shipping_flat', $_POST);
+			$this->Model_Setting_Setting->editSetting('shipping_flat', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -25,7 +25,7 @@ class ControllerShippingFlat extends Controller
 		$this->data['action'] = $this->url->link('shipping/flat');
 		$this->data['cancel'] = $this->url->link('extension/shipping');
 		
-		$flat_info = $this->model_setting_setting->getSetting('shipping_flat');
+		$flat_info = $this->Model_Setting_Setting->getSetting('shipping_flat');
 		
 		$defaults = array(
 			'flat_title' => '',
@@ -44,9 +44,9 @@ class ControllerShippingFlat extends Controller
 			}
 		}
 		
-		$this->data['data_tax_class es'] = $this->model_localisation_tax_class->getTaxClasses();
+		$this->data['data_tax_class es'] = $this->Model_Localisation_TaxClass->getTaxClasses();
 		
-		$this->data['data_geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$this->data['data_geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 								
 		$this->children = array(
 			'common/header',

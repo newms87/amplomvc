@@ -18,7 +18,7 @@ class ControllerProductCollection extends Controller
 		
 		//Display Single Collection Template
 		if ($collection_id) {
-			$collection_info = $this->model_catalog_collection->getCollection($collection_id);
+			$collection_info = $this->Model_Catalog_Collection->getCollection($collection_id);
 		
 			if (!$collection_info) {
 				$this->url->redirect($this->url->link('product/collection'), 302);
@@ -31,7 +31,7 @@ class ControllerProductCollection extends Controller
 			$this->document->setKeywords($collection_info['meta_keywords']);
 			
 			if ($collection_info['category_id']) {
-				$this->breadcrumb->add($this->model_catalog_category->getCategoryName($collection_info['category_id']), $this->url->link('product/collection', 'category_id=' . $collection_info['category_id']));
+				$this->breadcrumb->add($this->Model_Catalog_Category->getCategoryName($collection_info['category_id']), $this->url->link('product/collection', 'category_id=' . $collection_info['category_id']));
 			}
 			
 			$this->breadcrumb->add($collection_info['name'], $this->url->link('product/collection', 'collection_id=' . $collection_id));
@@ -46,8 +46,8 @@ class ControllerProductCollection extends Controller
 				$sort_filter['attribute'] = $attributes;
 			}
 			
-			$item_total = $this->model_catalog_collection->getTotalCollectionProducts($collection_id, $sort_filter);
-			$products = $this->model_catalog_collection->getCollectionProducts($collection_id, $sort_filter);
+			$item_total = $this->Model_Catalog_Collection->getTotalCollectionProducts($collection_id, $sort_filter);
+			$products = $this->Model_Catalog_Collection->getCollectionProducts($collection_id, $sort_filter);
 			
 			if (!empty($products)) {
 				$params = array(
@@ -75,11 +75,11 @@ class ControllerProductCollection extends Controller
 			if ($category_id) {
 				$sort_filter['category_id'] = $category_id;
 				
-				$this->breadcrumb->add($this->model_catalog_category->getCategoryName($category_id), $this->url->link('product/collection', 'category_id=' . $category_id));
+				$this->breadcrumb->add($this->Model_Catalog_Category->getCategoryName($category_id), $this->url->link('product/collection', 'category_id=' . $category_id));
 			}
 			
-			$item_total = $this->model_catalog_collection->getTotalCollections($sort_filter);
-			$collections = $this->model_catalog_collection->getCollections($sort_filter);
+			$item_total = $this->Model_Catalog_Collection->getTotalCollections($sort_filter);
+			$collections = $this->Model_Catalog_Collection->getCollections($sort_filter);
 			
 			foreach ($collections as &$collection) {
 				$collection['thumb'] = $this->image->resize($collection['image'], $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height'));

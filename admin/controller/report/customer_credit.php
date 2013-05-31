@@ -1,5 +1,5 @@
 <?php
-class ControllerReportCustomerCredit extends Controller 
+class Admin_Controller_Report_CustomerCredit extends Controller 
 {
 	public function index()
 	{
@@ -53,9 +53,9 @@ class ControllerReportCustomerCredit extends Controller
 			'limit'				=> $this->config->get('config_admin_limit')
 		);
 				
-		$customer_total = $this->model_report_customer->getTotalCredit($data);
+		$customer_total = $this->Model_Report_Customer->getTotalCredit($data);
 		
-		$results = $this->model_report_customer->getCredit($data);
+		$results = $this->Model_Report_Customer->getCredit($data);
 		
 		foreach ($results as $result) {
 			$action = array();

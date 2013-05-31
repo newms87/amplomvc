@@ -1,5 +1,5 @@
 <?php
-class ControllerAffiliateForgotten extends Controller 
+class Catalog_Controller_Affiliate_Forgotten extends Controller 
 {
 	
 
@@ -20,7 +20,7 @@ class ControllerAffiliateForgotten extends Controller
 			
 			$password = substr(md5(rand()), 0, 7);
 			
-			$this->model_affiliate_affiliate->editPassword($_POST['email'], $password);
+			$this->Model_Affiliate_Affiliate->editPassword($_POST['email'], $password);
 			
 			$subject = sprintf($this->_('text_subject'), $this->config->get('config_name'));
 			
@@ -72,7 +72,7 @@ class ControllerAffiliateForgotten extends Controller
 	{
 		if (!isset($_POST['email'])) {
 			$this->error['warning'] = $this->_('error_email');
-		} elseif (!$this->model_affiliate_affiliate->getTotalAffiliatesByEmail($_POST['email'])) {
+		} elseif (!$this->Model_Affiliate_Affiliate->getTotalAffiliatesByEmail($_POST['email'])) {
 			$this->error['warning'] = $this->_('error_email');
 		}
 

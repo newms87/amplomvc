@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleMagazineAd extends Controller 
+class Catalog_Controller_Module_MagazineAd extends Controller 
 {
 	
 	public function index($setting=null)
@@ -9,7 +9,7 @@ class ControllerModuleMagazineAd extends Controller
 		$this->template->load('module/magazine_ad');
 		
 		if (!$setting) {
-			$setting = $this->model_setting_setting->getSetting('featured_carousel');
+			$setting = $this->Model_Setting_Setting->getSetting('featured_carousel');
 			$products = $setting['featured_product_list'];
 		}
 		else {
@@ -28,7 +28,7 @@ class ControllerModuleMagazineAd extends Controller
 		$this->data['products'] = array();
 		
 		foreach ($products as $product_id=>$item) {
-			$product = $this->model_catalog_product->getProduct($product_id);
+			$product = $this->Model_Catalog_Product->getProduct($product_id);
 			
 			if ($product) {
 				$product['title'] = $item['name'];

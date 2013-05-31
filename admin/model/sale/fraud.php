@@ -1,5 +1,5 @@
 <?php
-class ModelSaleFraud extends Model 
+class Admin_Model_Sale_Fraud extends Model 
 {
 	public function getFraud($order_id)
 	{

@@ -1,5 +1,5 @@
 <?php
-class ModelCatalogManufacturer extends Model 
+class Catalog_Model_Catalog_Manufacturer extends Model 
 {
 	public function getManufacturer($manufacturer_id)
 	{

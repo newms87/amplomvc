@@ -1,5 +1,5 @@
 <?php
-class ModelDesignTemplate extends Model 
+class Admin_Model_Design_Template extends Model 
 {
 	public function getTemplatesFor($view, $with_blanks = false)
 	{

@@ -1,5 +1,5 @@
 <?php
-class ControllerShippingAmount extends Controller 
+class Admin_Controller_Shipping_Amount extends Controller 
 {
 	
 	public function index()
@@ -11,7 +11,7 @@ class ControllerShippingAmount extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('amount', $_POST);
+			$this->Model_Setting_Setting->editSetting('amount', $_POST);
 					
 			$this->message->add('success', $this->_('text_success'));
 						
@@ -40,13 +40,13 @@ class ControllerShippingAmount extends Controller
 		if(!is_array($this->data['amount_zonerule']))
 			$this->data['amount_zonerule'] = array();
 		
-		$this->data['tax_class es'] = array_merge(array(0=>'--- None ---'),$this->model_localisation_tax_class->getTaxClasses());
+		$this->data['tax_class es'] = array_merge(array(0=>'--- None ---'),$this->Model_Localisation_TaxClass->getTaxClasses());
 		
-		$this->data['geo_zones'] = array_merge(array(0=>'--- None ---'),$this->model_localisation_geo_zone->getGeoZones());
+		$this->data['geo_zones'] = array_merge(array(0=>'--- None ---'),$this->Model_Localisation_GeoZone->getGeoZones());
 		
 		//set default to USA
 		$this->data['default_country'] = 223;
-		$this->data['countries'] = $this->model_localisation_country->getCountries();
+		$this->data['countries'] = $this->Model_Localisation_Country->getCountries();
 		
 		$this->children = array(
 			'common/header',

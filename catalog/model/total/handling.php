@@ -1,5 +1,5 @@
 <?php
-class ModelTotalHandling extends Model 
+class Catalog_Model_Total_Handling extends Model 
 {
 	public function getTotal(&$total_data, &$total, &$taxes)
 	{
@@ -14,8 +14,7 @@ class ModelTotalHandling extends Model
 				'sort_order' => $this->config->get('handling_sort_order')
 			);
 
-			if ($this->config->get('handling_tax_class _id')) 
-{
+			if ($this->config->get('handling_tax_class _id')) {
 				$tax_rates = $this->tax->getRates($this->config->get('handling_fee'), $this->config->get('handling_tax_class _id'));
 				
 				foreach ($tax_rates as $tax_rate) 

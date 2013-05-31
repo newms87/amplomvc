@@ -1,5 +1,5 @@
 <?php
-class ModelPaymentAlertPay extends Model 
+class Catalog_Model_Payment_Alertpay extends Model 
 {
   	public function getMethod($address, $total)
   	{

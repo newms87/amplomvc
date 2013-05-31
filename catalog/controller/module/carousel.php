@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleCarousel extends Controller 
+class Catalog_Controller_Module_Carousel extends Controller 
 {
 	protected function index($setting)
 	{
@@ -20,7 +20,7 @@ class ControllerModuleCarousel extends Controller
 				
 		$this->data['banners'] = array();
 		
-		$results = $this->model_design_banner->getBanner($setting['banner_id']);
+		$results = $this->Model_Design_Banner->getBanner($setting['banner_id']);
 		
 		foreach ($results as $result) {
 			if (file_exists(DIR_IMAGE . $result['image'])) {

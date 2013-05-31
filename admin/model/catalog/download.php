@@ -1,5 +1,5 @@
 <?php
-class ModelCatalogDownload extends Model 
+class Admin_Model_Catalog_Download extends Model 
 {
 	public function addDownload($data)
 	{

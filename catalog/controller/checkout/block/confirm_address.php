@@ -1,5 +1,5 @@
 <?php
-class ControllerCheckoutBlockConfirmAddress extends Controller 
+class Catalog_Controller_Checkout_Block_ConfirmAddress extends Controller 
 {
 	public function index($settings = array()) {
 		$this->template->load('checkout/block/confirm_address');

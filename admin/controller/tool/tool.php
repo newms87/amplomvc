@@ -1,5 +1,5 @@
 <?php
-class ControllerToolTool extends Controller 
+class Admin_Controller_Tool_Tool extends Controller 
 {
 	
 	

@@ -1,5 +1,5 @@
 <?php
-class ControllerAccountWishList extends Controller 
+class Catalog_Controller_Account_Wishlist extends Controller 
 {
 	public function index()
 	{
@@ -46,7 +46,7 @@ class ControllerAccountWishList extends Controller
 		$this->data['products'] = array();
 	
 		foreach ($this->session->data['wishlist'] as $key => $product_id) {
-			$product_info = $this->model_catalog_product->getProduct($product_id);
+			$product_info = $this->Model_Catalog_Product->getProduct($product_id);
 			
 			if ($product_info) {
 				if ($product_info['image']) {
@@ -121,7 +121,7 @@ class ControllerAccountWishList extends Controller
 			$product_id = 0;
 		}
 		
-		$product_info = $this->model_catalog_product->getProduct($product_id);
+		$product_info = $this->Model_Catalog_Product->getProduct($product_id);
 		
 		if ($product_info) {
 			if (!in_array($_POST['product_id'], $this->session->data['wishlist'])) {

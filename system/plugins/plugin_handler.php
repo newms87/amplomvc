@@ -130,7 +130,7 @@ class pluginHandler
 			$missing = is_file($plugin_file) ? $live_file : $plugin_file;
 			$this->message->add('warning', "The plugin file $missing was missing! The plugin $name has been uninstalled.");
 			
-			$this->model_setting_plugin->uninstall($name);
+			$this->Model_Setting_Plugin->uninstall($name);
 			
 			$this->url->redirect($this->url->admin('extension/plugin'));
 		}
@@ -366,8 +366,7 @@ class pluginHandler
 	{
 		$class = strtolower(get_class($controller));
 		
-		if(isset($this->controller_adapters[$class]))
-{
+		if (isset($this->controller_adapters[$class])) {
 			foreach($this->controller_adapters[$class ] as $adapter)
 {
 				$file = DIR_PLUGIN . $adapter['name'] . '/' . $adapter['plugin_file'] . '.php';
@@ -401,8 +400,7 @@ class pluginHandler
 		
 		$method = '';
 		
-		if($function)
-{
+		if ($function) {
 			if (is_string($function)) {
 				$method = $class . '::' . $this->db->escape(strtolower($function));
 			}
@@ -433,8 +431,7 @@ class pluginHandler
 		
 		$class = "ModelPlugin" . preg_replace("/[_-]/",'',$request['name']);
 		
-		if(method_exists($class, $request['callback']))
-{
+		if (method_exists($class, $request['callback'])) {
 			$args = array();
 			if($data) $args[] = &$data;
 			if($where) $args[] = &$where;

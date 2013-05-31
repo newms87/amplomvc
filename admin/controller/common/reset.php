@@ -1,7 +1,7 @@
 <?php
-class ControllerCommonReset extends Controller 
+class Admin_Controller_Common_Reset extends Controller 
 {
-	
+	//TODO: Probably dont need this anymore...
 	
 	public function index()
 	{
@@ -15,7 +15,7 @@ class ControllerCommonReset extends Controller
 			$code = '';
 		}
 		
-		$user_info = $this->model_user_user->getUserByCode($code);
+		$user_info = $this->Model_User_User->getUserByCode($code);
 		
 		if ($user_info) {
 		$this->template->load('common/reset');
@@ -23,7 +23,7 @@ class ControllerCommonReset extends Controller
 			$this->load->language('common/reset');
 			
 			if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-				$this->model_user_user->editPassword($user_info['user_id'], $_POST['password']);
+				$this->Model_User_User->editPassword($user_info['user_id'], $_POST['password']);
 	
 				$this->message->add('success', $this->_('text_success'));
 		
@@ -68,7 +68,10 @@ class ControllerCommonReset extends Controller
 									
 			$this->response->setOutput($this->render());
 		} else {
-			return $this->forward('common/login');
+			//TODO: need to fix this...$this->forward is deprecated and removed
+			trigger_error("This has not been implemented. How do we handle the reset here?");
+			exit;
+			//return $this->forward('common/login');
 		}
 	}
 

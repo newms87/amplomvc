@@ -1,5 +1,5 @@
 <?php
-class ControllerAccountVoucher extends Controller 
+class Catalog_Controller_Account_Voucher extends Controller 
 {
 	
 	
@@ -108,7 +108,7 @@ class ControllerAccountVoucher extends Controller
 			$this->data['from_email'] = '';
 		}
 			
- 		$this->data['voucher_themes'] = $this->model_cart_voucher_theme->getVoucherThemes();
+ 		$this->data['voucher_themes'] = $this->Model_Cart_VoucherTheme->getVoucherThemes();
 
 		if (isset($_POST['voucher_theme_id'])) {
 				$this->data['voucher_theme_id'] = $_POST['voucher_theme_id'];

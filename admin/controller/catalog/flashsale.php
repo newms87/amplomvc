@@ -1,5 +1,5 @@
 <?php
-class ControllerCatalogFlashsale extends Controller 
+class Admin_Controller_Catalog_Flashsale extends Controller 
 {
 	
  
@@ -17,7 +17,7 @@ class ControllerCatalogFlashsale extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_catalog_flashsale->addFlashsale($_POST);
+			$this->Model_Catalog_Flashsale->addFlashsale($_POST);
 
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -34,7 +34,7 @@ class ControllerCatalogFlashsale extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_catalog_flashsale->editFlashsale($_GET['flashsale_id'], $_POST);
+			$this->Model_Catalog_Flashsale->editFlashsale($_GET['flashsale_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -52,7 +52,7 @@ class ControllerCatalogFlashsale extends Controller
 		
 		if (isset($_POST['selected']) && $this->validateModify()) {
 			foreach ($_POST['selected'] as $flashsale_id) {
-				$this->model_catalog_flashsale->deleteFlashsale($flashsale_id);
+				$this->Model_Catalog_Flashsale->deleteFlashsale($flashsale_id);
 			}
 
 			$this->message->add('success', $this->_('text_success'));
@@ -72,10 +72,10 @@ class ControllerCatalogFlashsale extends Controller
 			foreach ($_POST['selected'] as $flashsale_id) {
 				switch($_GET['action']){
 					case 'enable':
-						$this->model_catalog_flashsale->updateStatus($flashsale_id, 1);
+						$this->Model_Catalog_Flashsale->updateStatus($flashsale_id, 1);
 						break;
 					case 'disable':
-						$this->model_catalog_flashsale->updateStatus($flashsale_id, 0);
+						$this->Model_Catalog_Flashsale->updateStatus($flashsale_id, 0);
 						break;
 					default:
 						$this->error['warning'] = "Invalid Action Selected!";
@@ -149,8 +149,8 @@ class ControllerCatalogFlashsale extends Controller
 		$data['limit'] = $this->config->get('config_admin_limit');
 		$data['start'] = ($data['page'] - 1) * $data['limit'];
 		
-		$flashsale_total = $this->model_catalog_flashsale->getTotalFlashsales($data);
-		$results = $this->model_catalog_flashsale->getFlashsales($data);
+		$flashsale_total = $this->Model_Catalog_Flashsale->getTotalFlashsales($data);
+		$results = $this->Model_Catalog_Flashsale->getFlashsales($data);
 		
 		foreach ($results as $result) {
 			$action = array(
@@ -160,14 +160,14 @@ class ControllerCatalogFlashsale extends Controller
 			
 			$discount = $result['discount_type']=='percent'?"-$result[discount]%":"-".$this->currency->format($result['discount']);
 			
-			$url_alias = $this->model_setting_url_alias->getUrlAliasByRouteQuery('sales/flashsale', 'flashsale_id='.$result['flashsale_id']);
+			$url_alias = $this->Model_Setting_UrlAlias->getUrlAliasByRouteQuery('sales/flashsale', 'flashsale_id='.$result['flashsale_id']);
 			
 			$this->data['flashsales'][] = array(
 				'flashsale_id' => $result['flashsale_id'],
 				'name'		=> $result['name'],
 				'keyword'		=> isset($url_alias['keyword'])?$url_alias['keyword']:'(NO URL)',
 				'image'		=> $this->image->resize($result['image'],80,80),
-				'designers'	=> $this->model_catalog_flashsale->getFlashsaleDesigners($result['flashsale_id']),
+				'designers'	=> $this->Model_Catalog_Flashsale->getFlashsaleDesigners($result['flashsale_id']),
 				'discount'		=> $discount,
 				'date_start'		=> $result['date_start'],
 				'date_end'		=> $result['date_end'],
@@ -228,17 +228,17 @@ class ControllerCatalogFlashsale extends Controller
 
 		$flashsale_id = $this->data['flashsale_id'] = isset($_GET['flashsale_id'])?$_GET['flashsale_id']:0;
 		
-		$manufacturers = $this->model_catalog_manufacturer->getManufacturers();
+		$manufacturers = $this->Model_Catalog_Manufacturer->getManufacturers();
 		$this->data['designer_list'] = array(0=>'(Select)');
 		foreach($manufacturers as $m)
 			$this->data['designer_list'][$m['manufacturer_id']] = $m['name'];
 		
 		$this->data['autofill_url'] = $this->url->link('catalog/flashsale/get_designer_info');
 		
-		$cgs = $this->model_sale_customer_group->getCustomerGroups();
+		$cgs = $this->Model_Sale_CustomerGroup->getCustomerGroups();
 		
 		$this->data['section_attrs'] = array(0=>'( None )');
-		$attrs = $this->model_catalog_attribute_group->getAttributeGroups();
+		$attrs = $this->Model_Catalog_AttributeGroup->getAttributeGroups();
 		foreach($attrs as $a)
 			$this->data['section_attrs'][$a['attribute_group_id']] = $a['name'];
 		
@@ -264,7 +264,7 @@ class ControllerCatalogFlashsale extends Controller
 
 		$flashsale_info = null;
 		if ($flashsale_id && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-				$flashsale_info = $this->model_catalog_flashsale->getFlashsale($flashsale_id);
+				$flashsale_info = $this->Model_Catalog_Flashsale->getFlashsale($flashsale_id);
 		}
 		
 		if (!empty($flashsale_info) && $flashsale_info['image'] && file_exists(DIR_IMAGE . $flashsale_info['image'])) {
@@ -320,13 +320,13 @@ class ControllerCatalogFlashsale extends Controller
 	{
 		if(!isset($_POST['designer_id']) || !$_POST['designer_id'])return;
 		$designer_id = $_POST['designer_id'];
-		$designer = $this->model_catalog_manufacturer->getManufacturer($designer_id);
-		$description = $this->model_catalog_manufacturer->getManufacturerDescription($designer_id);
+		$designer = $this->Model_Catalog_Manufacturer->getManufacturer($designer_id);
+		$description = $this->Model_Catalog_Manufacturer->getManufacturerDescription($designer_id);
 		
 		$p_data = array(
 			'filter_manufacturer_id' => $designer_id
 		);
-		$products = $this->model_catalog_product->getProducts($p_data);
+		$products = $this->Model_Catalog_Product->getProducts($p_data);
 		
 		$designer_info = array('designer_id'=>$designer_id,
 									'products'=>$products,
@@ -345,7 +345,7 @@ class ControllerCatalogFlashsale extends Controller
 		$flashsale_id= isset($_POST['flashsale_id'])?$_POST['flashsale_id']:0;
 		if(!$name)return;
 		
-		echo json_encode($this->model_catalog_flashsale->generate_url($flashsale_id,$name));
+		echo json_encode($this->Model_Catalog_Flashsale->generate_url($flashsale_id,$name));
 		exit;
 	}
 	

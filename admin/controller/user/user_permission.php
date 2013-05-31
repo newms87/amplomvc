@@ -1,5 +1,5 @@
 <?php
-class ControllerUserUserPermission extends Controller 
+class Admin_Controller_User_UserPermission extends Controller 
 {
 	
  
@@ -19,7 +19,7 @@ class ControllerUserUserPermission extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_user_user_group->addUserGroup($_POST);
+			$this->Model_User_UserGroup->addUserGroup($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -50,7 +50,7 @@ class ControllerUserUserPermission extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_user_user_group->editUserGroup($_GET['user_group_id'], $_POST);
+			$this->Model_User_UserGroup->editUserGroup($_GET['user_group_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -82,7 +82,7 @@ class ControllerUserUserPermission extends Controller
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 				foreach ($_POST['selected'] as $user_group_id) {
-				$this->model_user_user_group->deleteUserGroup($user_group_id);
+				$this->Model_User_UserGroup->deleteUserGroup($user_group_id);
 			}
 						
 			$this->message->add('success', $this->_('text_success'));
@@ -158,9 +158,9 @@ class ControllerUserUserPermission extends Controller
 			'limit' => $this->config->get('config_admin_limit')
 		);
 		
-		$user_group_total = $this->model_user_user_group->getTotalUserGroups();
+		$user_group_total = $this->Model_User_UserGroup->getTotalUserGroups();
 		
-		$results = $this->model_user_user_group->getUserGroups($data);
+		$results = $this->Model_User_UserGroup->getUserGroups($data);
 
 		foreach ($results as $result) {
 			$action = array();
@@ -251,7 +251,7 @@ class ControllerUserUserPermission extends Controller
 		$this->data['cancel'] = $this->url->link('user/user_permission', $url_query);
 
 		if ($user_group_id && $_SERVER['REQUEST_METHOD'] != 'POST') {
-			$user_group_info = $this->model_user_user_group->getUserGroup($user_group_id);
+			$user_group_info = $this->Model_User_UserGroup->getUserGroup($user_group_id);
 		}
 		
 		//initialize the values in order of Post, Database, Default
@@ -278,7 +278,7 @@ class ControllerUserUserPermission extends Controller
 			$this->data['permissions']['modify'] = array();
 		}
 		
-		$this->data['data_controllers'] = $this->model_user_user_group->get_controller_list();
+		$this->data['data_controllers'] = $this->Model_User_UserGroup->get_controller_list();
 		
 		$this->children = array(
 			'common/header',
@@ -308,7 +308,7 @@ class ControllerUserUserPermission extends Controller
 		}
 		
 		foreach ($_POST['selected'] as $user_group_id) {
-			$user_total = $this->model_user_user->getTotalUsersByGroupId($user_group_id);
+			$user_total = $this->Model_User_User->getTotalUsersByGroupId($user_group_id);
 
 			if ($user_total) {
 				$this->error['warning'] = sprintf($this->_('error_user'), $user_total);

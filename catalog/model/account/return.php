@@ -1,5 +1,5 @@
 <?php
-class ModelAccountReturn extends Model 
+class Catalog_Model_Account_Return extends Model 
 {
 	public function addReturn($data)
 	{

@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleFlashsaleSidebar extends Controller 
+class Admin_Controller_Module_FlashsaleSidebar extends Controller 
 {
 	
 	
@@ -12,7 +12,7 @@ class ControllerModuleFlashsaleSidebar extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('flashsale_sidebar', $_POST);
+			$this->Model_Setting_Setting->editSetting('flashsale_sidebar', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -34,7 +34,7 @@ class ControllerModuleFlashsaleSidebar extends Controller
 			$this->data['modules'] = $this->config->get('flashsale_sidebar_module');
 		}
 		
-		$this->data['layouts'] = $this->model_design_layout->getLayouts();
+		$this->data['layouts'] = $this->Model_Design_Layout->getLayouts();
 		
 		$this->data['positions'] = array(
 			'column_left'=>$this->_('text_column_left'),

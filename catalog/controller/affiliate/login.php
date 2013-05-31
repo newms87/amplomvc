@@ -1,5 +1,5 @@
 <?php
-class ControllerAffiliateLogin extends Controller 
+class Catalog_Controller_Affiliate_Login extends Controller 
 {
 	
 	

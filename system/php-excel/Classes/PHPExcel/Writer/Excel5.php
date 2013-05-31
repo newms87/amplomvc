@@ -561,8 +561,7 @@ class PHPExcel_Writer_Excel5 implements PHPExcel_Writer_IWriter{
 		$dataSection_NumProps++;
 
 		// GKPIDDSI_CATEGORY : Category
-		if($this->_phpExcel->getProperties()->getCategory())
-{
+		if ($this->_phpExcel->getProperties()->getCategory()) {
 			$dataProp = $this->_phpExcel->getProperties()->getCategory();
 			$dataProp = 'Test result file';
 			$dataSection[] = array('summary'=> array('pack' => 'V', 'data' => 0x02),
@@ -764,8 +763,7 @@ class PHPExcel_Writer_Excel5 implements PHPExcel_Writer_IWriter{
 		$dataSection_NumProps++;
 
 		//	Title
-		if($this->_phpExcel->getProperties()->getTitle())
-{
+		if ($this->_phpExcel->getProperties()->getTitle()) {
 			$dataProp = $this->_phpExcel->getProperties()->getTitle();
 			$dataSection[] = array('summary'=> array('pack' => 'V', 'data' => 0x02),
 									'offset' => array('pack' => 'V'),

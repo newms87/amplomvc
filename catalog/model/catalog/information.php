@@ -1,5 +1,5 @@
 <?php
-class ModelCatalogInformation extends Model 
+class Catalog_Model_Catalog_Information extends Model 
 {
 	public function getInformation($information_id)
 	{

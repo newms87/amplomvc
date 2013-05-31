@@ -1,5 +1,5 @@
 <?php
-class ControllerCatalogInformation extends Controller 
+class Admin_Controller_Catalog_Information extends Controller 
 {
 	
 
@@ -19,7 +19,7 @@ class ControllerCatalogInformation extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_catalog_information->addInformation($_POST);
+			$this->Model_Catalog_Information->addInformation($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -50,7 +50,7 @@ class ControllerCatalogInformation extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_catalog_information->editInformation($_GET['information_id'], $_POST);
+			$this->Model_Catalog_Information->editInformation($_GET['information_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -82,7 +82,7 @@ class ControllerCatalogInformation extends Controller
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $information_id) {
-				$this->model_catalog_information->deleteInformation($information_id);
+				$this->Model_Catalog_Information->deleteInformation($information_id);
 			}
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -158,9 +158,9 @@ class ControllerCatalogInformation extends Controller
 			'limit' => $this->config->get('config_admin_limit')
 		);
 		
-		$information_total = $this->model_catalog_information->getTotalInformations();
+		$information_total = $this->Model_Catalog_Information->getTotalInformations();
 	
-		$results = $this->model_catalog_information->getInformations($data);
+		$results = $this->Model_Catalog_Information->getInformations($data);
  
 		foreach ($results as $result) {
 			$action = array();
@@ -281,15 +281,15 @@ class ControllerCatalogInformation extends Controller
 		$this->data['cancel'] = $this->url->link('catalog/information', $url);
 
 		if (isset($_GET['information_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-			$information_info = $this->model_catalog_information->getInformation($_GET['information_id']);
+			$information_info = $this->Model_Catalog_Information->getInformation($_GET['information_id']);
 		}
 		
-		$this->data['languages'] = $this->model_localisation_language->getLanguages();
+		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
 		
 		if (isset($_POST['information_description'])) {
 			$this->data['information_description'] = $_POST['information_description'];
 		} elseif (isset($_GET['information_id'])) {
-			$this->data['information_description'] = $this->model_catalog_information->getInformationDescriptions($_GET['information_id']);
+			$this->data['information_description'] = $this->Model_Catalog_Information->getInformationDescriptions($_GET['information_id']);
 		} else {
 			$this->data['information_description'] = array();
 		}
@@ -302,12 +302,12 @@ class ControllerCatalogInformation extends Controller
 			$this->data['status'] = 1;
 		}
 		
-		$this->data['data_stores'] = $this->model_setting_store->getStores();
+		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
 		
 		if (isset($_POST['information_store'])) {
 			$this->data['information_store'] = $_POST['information_store'];
 		} elseif (isset($_GET['information_id'])) {
-			$this->data['information_store'] = $this->model_catalog_information->getInformationStores($_GET['information_id']);
+			$this->data['information_store'] = $this->Model_Catalog_Information->getInformationStores($_GET['information_id']);
 		} else {
 			$this->data['information_store'] = array(0);
 		}
@@ -331,12 +331,12 @@ class ControllerCatalogInformation extends Controller
 		if (isset($_POST['information_layout'])) {
 			$this->data['information_layout'] = $_POST['information_layout'];
 		} elseif (isset($_GET['information_id'])) {
-			$this->data['information_layout'] = $this->model_catalog_information->getInformationLayouts($_GET['information_id']);
+			$this->data['information_layout'] = $this->Model_Catalog_Information->getInformationLayouts($_GET['information_id']);
 		} else {
 			$this->data['information_layout'] = array();
 		}
 
-		$this->data['layouts'] = $this->model_design_layout->getLayouts();
+		$this->data['layouts'] = $this->Model_Design_Layout->getLayouts();
 				
 		$this->children = array(
 			'common/header',
@@ -388,7 +388,7 @@ class ControllerCatalogInformation extends Controller
 				$this->error['warning'] = $this->_('error_affiliate');
 			}
 						
-			$store_total = $this->model_setting_store->getTotalStoresByInformationId($information_id);
+			$store_total = $this->Model_Setting_Store->getTotalStoresByInformationId($information_id);
 
 			if ($store_total) {
 				$this->error['warning'] = sprintf($this->_('error_store'), $store_total);

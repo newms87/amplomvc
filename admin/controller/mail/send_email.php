@@ -1,5 +1,5 @@
 <?php
-class ControllerMailSendEmail extends Controller 
+class Admin_Controller_Mail_SendEmail extends Controller 
 {
  
 	public function index()

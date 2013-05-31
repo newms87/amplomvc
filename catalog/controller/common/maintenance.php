@@ -1,5 +1,5 @@
 <?php
-class ControllerCommonMaintenance extends Controller 
+class Catalog_Controller_Common_Maintenance extends Controller 
 {
 	public function index()
 	{

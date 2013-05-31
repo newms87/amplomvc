@@ -1,5 +1,5 @@
 <?php
-class ControllerAffiliateLogout extends Controller 
+class Catalog_Controller_Affiliate_Logout extends Controller 
 {
 	public function index()
 	{

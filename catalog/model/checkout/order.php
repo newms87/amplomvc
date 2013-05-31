@@ -1,5 +1,5 @@
 <?php
-class ModelCheckoutOrder extends Model 
+class Catalog_Model_Checkout_Order extends Model 
 {
 	public function addOrder($data)
 	{
@@ -97,7 +97,7 @@ class ModelCheckoutOrder extends Model
 				$payment_zone_code = '';
 			}
 
-			$language_info = $this->model_localisation_language->getLanguage($order_query->row['language_id']);
+			$language_info = $this->Model_Localisation_Language->getLanguage($order_query->row['language_id']);
 			
 			if ($language_info) {
 				$language_code = $language_info['code'];
@@ -153,7 +153,7 @@ class ModelCheckoutOrder extends Model
 		
 		// Fraud Detection
 		if ($this->config->get('config_fraud_detection')) {
-			$risk_score = $this->model_checkout_fraud->getFraudScore($order_info);
+			$risk_score = $this->Model_Checkout_Fraud->getFraudScore($order_info);
 			
 			if ($risk_score > $this->config->get('config_fraud_score')) {
 				$order_status_id = $this->config->get('config_fraud_status_id');
@@ -164,17 +164,17 @@ class ModelCheckoutOrder extends Model
 		$status = false;
 		
 		if ($order_info['customer_id']) {
-			$results = $this->model_account_customer->getIps($order_info['customer_id']);
+			$results = $this->Model_Account_Customer->getIps($order_info['customer_id']);
 			
 			foreach ($results as $result) {
-				if ($this->model_account_customer->isBlacklisted($result['ip'])) {
+				if ($this->Model_Account_Customer->isBlacklisted($result['ip'])) {
 					$status = true;
 					
 					break;
 				}
 			}
 		} else {
-			$status = $this->model_account_customer->isBlacklisted($order_info['ip']);
+			$status = $this->Model_Account_Customer->isBlacklisted($order_info['ip']);
 		}
 		
 		if ($status) {
@@ -242,7 +242,7 @@ class ModelCheckoutOrder extends Model
 		$order_voucher_query = $this->query("SELECT * FROM " . DB_PREFIX . "order_voucher WHERE order_id = '" . (int)$order_id . "'");
 		
 		foreach ($order_voucher_query->rows as $order_voucher) {
-			$voucher_id = $this->model_cart_voucher->addVoucher($order_id, $order_voucher);
+			$voucher_id = $this->Model_Cart_Voucher->addVoucher($order_id, $order_voucher);
 			
 			$this->query("UPDATE " . DB_PREFIX . "order_voucher SET voucher_id = '" . (int)$voucher_id . "' WHERE order_voucher_id = '" . (int)$order_voucher['order_voucher_id'] . "'");
 		}
@@ -251,7 +251,7 @@ class ModelCheckoutOrder extends Model
 		
 		// Send out any gift voucher mails
 		if (!empty($order_info['order_vouchers']) && $this->config->get('config_complete_status_id') == $order_status_id) {
-			$this->model_cart_voucher->confirm($order_id);
+			$this->Model_Cart_Voucher->confirm($order_id);
 		}
 		
 				
@@ -275,6 +275,7 @@ class ModelCheckoutOrder extends Model
 		//Comments
 		$order_info['notify_comment'] = ($comment && $notify) ? nl2br($comment) : '';
 		
+		//TODO: we can do better than this!
 		$this->callController('mail/order', $order_info);
 		
 		
@@ -348,8 +349,7 @@ class ModelCheckoutOrder extends Model
 	{
 		_require_once(DIR_SYSTEM . 'php-excel/class es/PHPExcel/IOFactory.php');
 		
-		if(!is_dir(DIR_EXCEL_FPO . $vendor['vendor_id']))
-{
+		if (!is_dir(DIR_EXCEL_FPO . $vendor['vendor_id'])) {
 			$mode = octdec($this->config->get('config_default_dir_mode'));
 			mkdir(DIR_EXCEL_FPO . $vendor['vendor_id'], $mode, true);
 			chmod(DIR_EXCEL_FPO . $vendor['vendor_id'], $mode);
@@ -403,8 +403,8 @@ class ModelCheckoutOrder extends Model
 			if(!empty($vendor['contact']['street_2']))
 				$sheet->setCellValue(chr($col).$row++,$vendor['contact']['street_2']);
 			if (isset($vendor['contact']['city'])) {
-				$sheet->setCellValue(chr($col).$row++, $vendor['contact']['city'] . ', ' . $this->model_localisation_zone->getZoneName($vendor['contact']['zone_id']) . ' ' . $vendor['contact']['postcode']);
-				$sheet->setCellValue(chr($col).$row++, $this->model_localisation_country->getCountryName($vendor['contact']['country_id']));
+				$sheet->setCellValue(chr($col).$row++, $vendor['contact']['city'] . ', ' . $this->Model_Localisation_Zone->getZoneName($vendor['contact']['zone_id']) . ' ' . $vendor['contact']['postcode']);
+				$sheet->setCellValue(chr($col).$row++, $this->Model_Localisation_Country->getCountryName($vendor['contact']['country_id']));
 			
 				$sheet->setCellValue(chr($col).$row++, $vendor['contact']['email']);
 			}
@@ -543,7 +543,7 @@ class ModelCheckoutOrder extends Model
 											'alignment' => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
 											);
 			
-			$manufacturers = $this->model_catalog_manufacturer->getManufacturers();
+			$manufacturers = $this->Model_Catalog_Manufacturer->getManufacturers();
 			
 			$row = 17;
 			$curr_man = '';
@@ -616,7 +616,7 @@ class ModelCheckoutOrder extends Model
 		if ($order_info && $order_info['order_status_id']) {
 			// Fraud Detection
 			if ($this->config->get('config_fraud_detection')) {
-				$risk_score = $this->model_checkout_fraud->getFraudScore($order_info);
+				$risk_score = $this->Model_Checkout_Fraud->getFraudScore($order_info);
 				
 				if ($risk_score > $this->config->get('config_fraud_score')) {
 					$order_status_id = $this->config->get('config_fraud_status_id');
@@ -627,17 +627,17 @@ class ModelCheckoutOrder extends Model
 			$status = false;
 			
 			if ($order_info['customer_id']) {
-				$results = $this->model_account_customer->getIps($order_info['customer_id']);
+				$results = $this->Model_Account_Customer->getIps($order_info['customer_id']);
 				
 				foreach ($results as $result) {
-					if ($this->model_account_customer->isBlacklisted($result['ip'])) {
+					if ($this->Model_Account_Customer->isBlacklisted($result['ip'])) {
 						$status = true;
 						
 						break;
 					}
 				}
 			} else {
-				$status = $this->model_account_customer->isBlacklisted($order_info['ip']);
+				$status = $this->Model_Account_Customer->isBlacklisted($order_info['ip']);
 			}
 			
 			if ($status) {
@@ -651,7 +651,7 @@ class ModelCheckoutOrder extends Model
 			// Send out any gift voucher mails
 			//TODO : Need to impement voucher confirm first!
 			if (false || $this->config->get('config_complete_status_id') == $order_status_id) {
-				$this->model_cart_voucher->confirm($order_id);
+				$this->Model_Cart_Voucher->confirm($order_id);
 			}
 			
 			//TODO: Move this to mail/order controller

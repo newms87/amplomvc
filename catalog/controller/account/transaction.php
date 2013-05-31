@@ -1,5 +1,5 @@
 <?php
-class ControllerAccountTransaction extends Controller 
+class Catalog_Controller_Account_Transaction extends Controller 
 {
 	public function index()
 	{
@@ -36,9 +36,9 @@ class ControllerAccountTransaction extends Controller
 			'limit' => 10
 		);
 		
-		$transaction_total = $this->model_account_transaction->getTotalTransactions($data);
+		$transaction_total = $this->Model_Account_Transaction->getTotalTransactions($data);
 	
-		$results = $this->model_account_transaction->getTransactions($data);
+		$results = $this->Model_Account_Transaction->getTransactions($data);
  		
 		foreach ($results as $result) {
 			$this->data['transactions'][] = array(

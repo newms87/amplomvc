@@ -1,5 +1,5 @@
 <?php
-class ControllerCatalogOption extends Controller 
+class Admin_Controller_Catalog_Option extends Controller 
 {
 	
  
@@ -19,7 +19,7 @@ class ControllerCatalogOption extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_catalog_option->addOption($_POST);
+			$this->Model_Catalog_Option->addOption($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -51,7 +51,7 @@ class ControllerCatalogOption extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_catalog_option->editOption($_GET['option_id'], $_POST);
+			$this->Model_Catalog_Option->editOption($_GET['option_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -84,7 +84,7 @@ class ControllerCatalogOption extends Controller
  		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $option_id) {
-				$this->model_catalog_option->deleteOption($option_id);
+				$this->Model_Catalog_Option->deleteOption($option_id);
 			}
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -133,9 +133,9 @@ class ControllerCatalogOption extends Controller
 			'limit' => $this->config->get('config_admin_limit')
 		);
 		
-		$option_total = $this->model_catalog_option->getTotalOptions();
+		$option_total = $this->Model_Catalog_Option->getTotalOptions();
 		
-		$results = $this->model_catalog_option->getOptions($data);
+		$results = $this->Model_Catalog_Option->getOptions($data);
 		
 		foreach ($results as $result) {
 			$action = array();
@@ -206,10 +206,10 @@ class ControllerCatalogOption extends Controller
 		$this->data['cancel'] = $this->url->link('catalog/option', $url);
 
 		if ($option_id && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-			$option_info = $this->model_catalog_option->getOption($option_id);
+			$option_info = $this->Model_Catalog_Option->getOption($option_id);
 		}
 		
-		$this->data['languages'] = $this->model_localisation_language->getLanguages();
+		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
 		
 		$defaults = array(
 			'option_description'=>array(),
@@ -228,11 +228,11 @@ class ControllerCatalogOption extends Controller
 		}
 		
 		if (!isset($this->data['option_description'])) {
-			$this->data['option_description'] = $this->model_catalog_option->getOptionDescriptions($option_id);
+			$this->data['option_description'] = $this->Model_Catalog_Option->getOptionDescriptions($option_id);
 		}
 		
 		if (!isset($this->data['option_values'])) {
-			$option_values = $this->model_catalog_option->getOptionValueDescriptions($option_id);
+			$option_values = $this->Model_Catalog_Option->getOptionValueDescriptions($option_id);
 			
 			foreach ($option_values as &$option_value) {
 				if ($option_value['image'] && file_exists(DIR_IMAGE . $option_value['image'])) {
@@ -297,7 +297,7 @@ class ControllerCatalogOption extends Controller
 		}
 		
 		foreach ($_POST['selected'] as $option_id) {
-			$product_total = $this->model_catalog_product->getTotalProductsByOptionId($option_id);
+			$product_total = $this->Model_Catalog_Product->getTotalProductsByOptionId($option_id);
 
 			if ($product_total) {
 				$this->error['warning'] = sprintf($this->_('error_product'), $product_total);
@@ -320,13 +320,13 @@ class ControllerCatalogOption extends Controller
 				'limit'		=> 20
 			);
 			
-			$options = $this->model_catalog_option->getOptions($data);
+			$options = $this->Model_Catalog_Option->getOptions($data);
 			
 			foreach ($options as $option) {
 				$option_value_data = array();
 				
 				if ($option['type'] == 'select' || $option['type'] == 'radio' || $option['type'] == 'checkbox' || $option['type'] == 'image') {
-					$option_values = $this->model_catalog_option->getOptionValues($option['option_id']);
+					$option_values = $this->Model_Catalog_Option->getOptionValues($option['option_id']);
 					
 					foreach ($option_values as $option_value) {
 						if ($option_value['image'] && file_exists(DIR_IMAGE . $option_value['image'])) {

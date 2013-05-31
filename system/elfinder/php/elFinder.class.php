@@ -201,12 +201,10 @@ class elFinder
 		foreach ($opts['roots'] as $i => $o) {
 			$class = 'elFinderVolume'.(isset($o['driver']) ? $o['driver'] : '');
 
-			if (class_exists($class)) 
-{
+			if (class_exists($class)) {
 				$volume = new $class ();
 
-				if ($volume->mount($o)) 
-{
+				if ($volume->mount($o)) {
 					// unique volume id (ends on "_") - used as prefix to files hash
 					$id = $volume->id();
 					
@@ -478,8 +476,7 @@ class elFinder
 		$driver	= isset(self::$netDrivers[$protocol]) ? $protocol : '';
 		$class = 'elfindervolume'.$protocol;
 
-		if (!$driver) 
-{
+		if (!$driver) {
 			return array('error' => $this->error(self::ERROR_NETMOUNT, $args['host'], self::ERROR_NETMOUNT_NO_DRIVER));
 		}
 
@@ -501,8 +498,7 @@ class elFinder
 
 		$volume = new $class ();
 
-		if ($volume->mount($options)) 
-{
+		if ($volume->mount($options)) {
 			$netVolumes		= $this->getNetVolumes();
 			$options['driver'] = $driver;
 			$netVolumes[]		= $options;

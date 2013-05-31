@@ -1,5 +1,5 @@
 <?php
-class ControllerShippingFree extends Controller 
+class Admin_Controller_Shipping_Free extends Controller 
 {
 	
 	
@@ -12,7 +12,7 @@ class ControllerShippingFree extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('free', $_POST);
+			$this->Model_Setting_Setting->editSetting('free', $_POST);
 					
 			$this->message->add('success', $this->_('text_success'));
 						
@@ -57,7 +57,7 @@ class ControllerShippingFree extends Controller
 			$this->data['free_sort_order'] = $this->config->get('free_sort_order');
 		}
 		
-		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$this->data['geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 								
 		$this->children = array(
 			'common/header',

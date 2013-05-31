@@ -1,5 +1,5 @@
 <?php
-class ControllerSaleOrder extends Controller 
+class Admin_Controller_Sale_Order extends Controller 
 {
 	
 
@@ -24,7 +24,7 @@ class ControllerSaleOrder extends Controller
 			$this->url->redirect($this->url->link('common/home'));
 			
 			//TODO - we have updated the order method...
-			$this->model_sale_order->addOrder($_POST);
+			$this->Model_Sale_Order->addOrder($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 		
@@ -79,7 +79,7 @@ class ControllerSaleOrder extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_sale_order->editOrder($_GET['order_id'], $_POST);
+			$this->Model_Sale_Order->editOrder($_GET['order_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 	
@@ -135,7 +135,7 @@ class ControllerSaleOrder extends Controller
 
 		if (isset($_POST['selected']) && ($this->validateDelete())) {
 			foreach ($_POST['selected'] as $order_id) {
-				$this->model_sale_order->deleteOrder($order_id);
+				$this->Model_Sale_Order->deleteOrder($order_id);
 			}
 
 			$this->message->add('success', $this->_('text_success'));
@@ -235,9 +235,9 @@ class ControllerSaleOrder extends Controller
 			'limit'						=> $this->config->get('config_admin_limit')
 		);
 		
-		$order_total = $this->model_sale_order->getTotalOrders($data);
+		$order_total = $this->Model_Sale_Order->getTotalOrders($data);
 
-		$results = $this->model_sale_order->getOrders($data);
+		$results = $this->Model_Sale_Order->getOrders($data);
 
 		foreach ($results as $result) {
 			$action = array();
@@ -354,7 +354,7 @@ class ControllerSaleOrder extends Controller
 		$this->data['filter_date_added'] = $filter_date_added;
 		$this->data['filter_date_modified'] = $filter_date_modified;
 
-		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
 
 		$this->data['sort'] = $sort;
 		$this->data['order'] = $order;
@@ -427,7 +427,7 @@ class ControllerSaleOrder extends Controller
 		$this->data['cancel'] = $this->url->link('sale/order', $url);
 
 		if (isset($_GET['order_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-				$order_info = $this->model_sale_order->getOrder($_GET['order_id']);
+				$order_info = $this->Model_Sale_Order->getOrder($_GET['order_id']);
 		}
 			
 		if (isset($_POST['store_id'])) {
@@ -438,7 +438,7 @@ class ControllerSaleOrder extends Controller
 				$this->data['store_id'] = '';
 		}
 		
-		$this->data['data_stores'] = $this->model_setting_store->getStores();
+		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
 		
 		$this->data['store_url'] = SITE_URL;
 		
@@ -530,7 +530,7 @@ class ControllerSaleOrder extends Controller
 				$this->data['order_status_id'] = '';
 		}
 			
-		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
 			
 		if (isset($_POST['comment'])) {
 				$this->data['comment'] = $_POST['comment'];
@@ -541,9 +541,9 @@ class ControllerSaleOrder extends Controller
 		}
 		
 		if (isset($_POST['customer_id'])) {
-			$this->data['addresses'] = $this->model_sale_customer->getAddresses($_POST['customer_id']);
+			$this->data['addresses'] = $this->Model_Sale_Customer->getAddresses($_POST['customer_id']);
 		} elseif (!empty($order_info)) {
-			$this->data['addresses'] = $this->model_sale_customer->getAddresses($order_info['customer_id']);
+			$this->data['addresses'] = $this->Model_Sale_Customer->getAddresses($order_info['customer_id']);
 		} else {
 			$this->data['addresses'] = array();
 		}
@@ -692,7 +692,7 @@ class ControllerSaleOrder extends Controller
 				$this->data['payment_zone_id'] = '';
 		}
 		
-		$this->data['countries'] = $this->model_localisation_country->getCountries();
+		$this->data['countries'] = $this->Model_Localisation_Country->getCountries();
 		
 		if (isset($_POST['shipping_method'])) {
 				$this->data['shipping_method'] = $_POST['shipping_method'];
@@ -729,7 +729,7 @@ class ControllerSaleOrder extends Controller
 		if (isset($_POST['order_product'])) {
 			$order_products = $_POST['order_product'];
 		} elseif (isset($_GET['order_id'])) {
-			$order_products = $this->model_sale_order->getOrderProducts($_GET['order_id']);
+			$order_products = $this->Model_Sale_Order->getOrderProducts($_GET['order_id']);
 		} else {
 			$order_products = array();
 		}
@@ -742,7 +742,7 @@ class ControllerSaleOrder extends Controller
 			if (isset($order_product['order_option'])) {
 				$order_option = $order_product['order_option'];
 			} elseif (isset($_GET['order_id'])) {
-				$order_option = $this->model_sale_order->getOrderOptions($_GET['order_id'], $order_product['order_product_id']);
+				$order_option = $this->Model_Sale_Order->getOrderOptions($_GET['order_id'], $order_product['order_product_id']);
 			} else {
 				$order_option = array();
 			}
@@ -750,7 +750,7 @@ class ControllerSaleOrder extends Controller
 			if (isset($order_product['order_download'])) {
 				$order_download = $order_product['order_download'];
 			} elseif (isset($_GET['order_id'])) {
-				$order_download = $this->model_sale_order->getOrderDownloads($_GET['order_id'], $order_product['order_product_id']);
+				$order_download = $this->Model_Sale_Order->getOrderDownloads($_GET['order_id'], $order_product['order_product_id']);
 			} else {
 				$order_download = array();
 			}
@@ -773,17 +773,17 @@ class ControllerSaleOrder extends Controller
 		if (isset($_POST['order_voucher'])) {
 			$this->data['order_vouchers'] = $_POST['order_voucher'];
 		} elseif (isset($_GET['order_id'])) {
-			$this->data['order_vouchers'] = $this->model_sale_order->getOrderVouchers($_GET['order_id']);
+			$this->data['order_vouchers'] = $this->Model_Sale_Order->getOrderVouchers($_GET['order_id']);
 		} else {
 			$this->data['order_vouchers'] = array();
 		}
 		
-		$this->data['voucher_themes'] = $this->model_sale_voucher_theme->getVoucherThemes();
+		$this->data['voucher_themes'] = $this->Model_Sale_VoucherTheme->getVoucherThemes();
 						
 		if (isset($_POST['order_total'])) {
 				$this->data['order_totals'] = $_POST['order_total'];
 		} elseif (isset($_GET['order_id'])) {
-			$this->data['order_totals'] = $this->model_sale_order->getOrderTotals($_GET['order_id']);
+			$this->data['order_totals'] = $this->Model_Sale_Order->getOrderTotals($_GET['order_id']);
 		} else {
 				$this->data['order_totals'] = array();
 		}
@@ -834,7 +834,7 @@ class ControllerSaleOrder extends Controller
 				$this->error['payment_city'] = $this->_('error_city');
 		}
 		
-		$country_info = $this->model_localisation_country->getCountry($_POST['payment_country_id']);
+		$country_info = $this->Model_Localisation_Country->getCountry($_POST['payment_country_id']);
 		
 		if ($country_info && $country_info['postcode_required'] && (strlen($_POST['payment_postcode']) < 2) || (strlen($_POST['payment_postcode']) > 10)) {
 			$this->error['payment_postcode'] = $this->_('error_postcode');
@@ -853,7 +853,7 @@ class ControllerSaleOrder extends Controller
 		
 		if (isset($_POST['order_product'])) {
 			foreach ($_POST['order_product'] as $order_product) {
-				$product_info = $this->model_catalog_product->getProduct($order_product['product_id']);
+				$product_info = $this->Model_Catalog_Product->getProduct($order_product['product_id']);
 			
 				if ($product_info && $product_info['shipping']) {
 					$shipping = true;
@@ -878,7 +878,7 @@ class ControllerSaleOrder extends Controller
 				$this->error['shipping_city'] = $this->_('error_city');
 			}
 	
-			$country_info = $this->model_localisation_country->getCountry($_POST['shipping_country_id']);
+			$country_info = $this->Model_Localisation_Country->getCountry($_POST['shipping_country_id']);
 			
 			if ($country_info && $country_info['postcode_required'] && (strlen($_POST['shipping_postcode']) < 2) || (strlen($_POST['shipping_postcode']) > 10)) {
 				$this->error['shipping_postcode'] = $this->_('error_postcode');
@@ -917,7 +917,7 @@ class ControllerSaleOrder extends Controller
 			$order_id = 0;
 		}
 
-		$order_info = $this->model_sale_order->getOrder($order_id);
+		$order_info = $this->Model_Sale_Order->getOrder($order_id);
 
 		if ($order_info) {
 		$this->template->load('sale/order_info');
@@ -988,7 +988,7 @@ class ControllerSaleOrder extends Controller
 				$this->data['customer'] = '';
 			}
 
-			$customer_group_info = $this->model_sale_customer_group->getCustomerGroup($order_info['customer_group_id']);
+			$customer_group_info = $this->Model_Sale_CustomerGroup->getCustomerGroup($order_info['customer_group_id']);
 
 			if ($customer_group_info) {
 				$this->data['customer_group'] = $customer_group_info['name'];
@@ -1010,11 +1010,11 @@ class ControllerSaleOrder extends Controller
 				$this->data['credit'] = 0;
 			}
 			
-			$this->data['credit_total'] = $this->model_sale_customer->getTotalTransactionsByOrderId($_GET['order_id']);
+			$this->data['credit_total'] = $this->Model_Sale_Customer->getTotalTransactionsByOrderId($_GET['order_id']);
 			
 			$this->data['reward'] = $order_info['reward'];
 						
-			$this->data['reward_total'] = $this->model_sale_customer->getTotalCustomerRewardsByOrderId($_GET['order_id']);
+			$this->data['reward_total'] = $this->Model_Sale_Customer->getTotalCustomerRewardsByOrderId($_GET['order_id']);
 
 			$this->data['affiliate_firstname'] = $order_info['affiliate_firstname'];
 			$this->data['affiliate_lastname'] = $order_info['affiliate_lastname'];
@@ -1027,9 +1027,9 @@ class ControllerSaleOrder extends Controller
 			
 			$this->data['commission'] = $this->currency->format($order_info['commission'], $order_info['currency_code'], $order_info['currency_value']);
 						
-			$this->data['commission_total'] = $this->model_sale_affiliate->getTotalTransactionsByOrderId($_GET['order_id']);
+			$this->data['commission_total'] = $this->Model_Sale_Affiliate->getTotalTransactionsByOrderId($_GET['order_id']);
 
-			$order_status_info = $this->model_localisation_order_status->getOrderStatus($order_info['order_status_id']);
+			$order_status_info = $this->Model_Localisation_OrderStatus->getOrderStatus($order_info['order_status_id']);
 
 			if ($order_status_info) {
 				$this->data['order_status'] = $order_status_info['name'];
@@ -1043,12 +1043,12 @@ class ControllerSaleOrder extends Controller
 
 			$this->data['products'] = array();
 
-			$products = $this->model_sale_order->getOrderProducts($_GET['order_id']);
+			$products = $this->Model_Sale_Order->getOrderProducts($_GET['order_id']);
 
 			foreach ($products as $product) {
 				$option_data = array();
 
-				$options = $this->model_sale_order->getOrderOptions($_GET['order_id'], $product['order_product_id']);
+				$options = $this->Model_Sale_Order->getOrderOptions($_GET['order_id'], $product['order_product_id']);
 				
 				foreach ($options as $option) {
 					if ($option['type'] != 'file') {
@@ -1082,7 +1082,7 @@ class ControllerSaleOrder extends Controller
 		
 			$this->data['vouchers'] = array();
 			
-			$vouchers = $this->model_sale_order->getOrderVouchers($_GET['order_id']);
+			$vouchers = $this->Model_Sale_Order->getOrderVouchers($_GET['order_id']);
 			
 			foreach ($vouchers as $voucher) {
 				$this->data['vouchers'][] = array(
@@ -1092,12 +1092,12 @@ class ControllerSaleOrder extends Controller
 				);
 			}
 		
-			$this->data['totals'] = $this->model_sale_order->getOrderTotals($_GET['order_id']);
+			$this->data['totals'] = $this->Model_Sale_Order->getOrderTotals($_GET['order_id']);
 
 			$this->data['downloads'] = array();
 
 			foreach ($products as $product) {
-				$results = $this->model_sale_order->getOrderDownloads($_GET['order_id'], $product['order_product_id']);
+				$results = $this->Model_Sale_Order->getOrderDownloads($_GET['order_id'], $product['order_product_id']);
 	
 				foreach ($results as $result) {
 					$this->data['downloads'][] = array(
@@ -1108,12 +1108,12 @@ class ControllerSaleOrder extends Controller
 				}
 			}
 			
-			$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+			$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
 
 			$this->data['order_status_id'] = $order_info['order_status_id'];
 
 			// Fraud
-			$fraud_info = $this->model_sale_fraud->getFraud($order_info['order_id']);
+			$fraud_info = $this->Model_Sale_Fraud->getFraud($order_info['order_id']);
 			
 			if ($fraud_info) {
 				$this->data['country_match'] = $fraud_info['country_match'];
@@ -1350,7 +1350,7 @@ class ControllerSaleOrder extends Controller
 		if (!$this->user->hasPermission('modify', 'sale/order')) {
 				$json['error'] = $this->_('error_permission');
 		} elseif (isset($_GET['order_id'])) {
-			$invoice_no = $this->model_sale_order->createInvoiceNo($_GET['order_id']);
+			$invoice_no = $this->Model_Sale_Order->createInvoiceNo($_GET['order_id']);
 			
 			if ($invoice_no) {
 				$json['invoice_no'] = $invoice_no;
@@ -1371,13 +1371,13 @@ class ControllerSaleOrder extends Controller
 		if (!$this->user->hasPermission('modify', 'sale/order')) {
 				$json['error'] = $this->_('error_permission');
 		} elseif (isset($_GET['order_id'])) {
-			$order_info = $this->model_sale_order->getOrder($_GET['order_id']);
+			$order_info = $this->Model_Sale_Order->getOrder($_GET['order_id']);
 			
 			if ($order_info && $order_info['customer_id']) {
-				$credit_total = $this->model_sale_customer->getTotalTransactionsByOrderId($_GET['order_id']);
+				$credit_total = $this->Model_Sale_Customer->getTotalTransactionsByOrderId($_GET['order_id']);
 				
 				if (!$credit_total) {
-					$this->model_sale_customer->addTransaction($order_info['customer_id'], $this->_('text_order_id') . ' #' . $_GET['order_id'], $order_info['total'], $_GET['order_id']);
+					$this->Model_Sale_Customer->addTransaction($order_info['customer_id'], $this->_('text_order_id') . ' #' . $_GET['order_id'], $order_info['total'], $_GET['order_id']);
 					
 					$json['success'] = $this->_('text_credit_added');
 				} else {
@@ -1398,10 +1398,10 @@ class ControllerSaleOrder extends Controller
 		if (!$this->user->hasPermission('modify', 'sale/order')) {
 				$json['error'] = $this->_('error_permission');
 		} elseif (isset($_GET['order_id'])) {
-			$order_info = $this->model_sale_order->getOrder($_GET['order_id']);
+			$order_info = $this->Model_Sale_Order->getOrder($_GET['order_id']);
 			
 			if ($order_info && $order_info['customer_id']) {
-				$this->model_sale_customer->deleteTransaction($_GET['order_id']);
+				$this->Model_Sale_Customer->deleteTransaction($_GET['order_id']);
 					
 				$json['success'] = $this->_('text_credit_removed');
 			} else {
@@ -1421,13 +1421,13 @@ class ControllerSaleOrder extends Controller
 		if (!$this->user->hasPermission('modify', 'sale/order')) {
 				$json['error'] = $this->_('error_permission');
 		} elseif (isset($_GET['order_id'])) {
-			$order_info = $this->model_sale_order->getOrder($_GET['order_id']);
+			$order_info = $this->Model_Sale_Order->getOrder($_GET['order_id']);
 			
 			if ($order_info && $order_info['customer_id']) {
-				$reward_total = $this->model_sale_customer->getTotalCustomerRewardsByOrderId($_GET['order_id']);
+				$reward_total = $this->Model_Sale_Customer->getTotalCustomerRewardsByOrderId($_GET['order_id']);
 				
 				if (!$reward_total) {
-					$this->model_sale_customer->addReward($order_info['customer_id'], $this->_('text_order_id') . ' #' . $_GET['order_id'], $order_info['reward'], $_GET['order_id']);
+					$this->Model_Sale_Customer->addReward($order_info['customer_id'], $this->_('text_order_id') . ' #' . $_GET['order_id'], $order_info['reward'], $_GET['order_id']);
 					
 					$json['success'] = $this->_('text_reward_added');
 				} else {
@@ -1450,10 +1450,10 @@ class ControllerSaleOrder extends Controller
 		if (!$this->user->hasPermission('modify', 'sale/order')) {
 				$json['error'] = $this->_('error_permission');
 		} elseif (isset($_GET['order_id'])) {
-			$order_info = $this->model_sale_order->getOrder($_GET['order_id']);
+			$order_info = $this->Model_Sale_Order->getOrder($_GET['order_id']);
 			
 			if ($order_info && $order_info['customer_id']) {
-				$this->model_sale_customer->deleteReward($_GET['order_id']);
+				$this->Model_Sale_Customer->deleteReward($_GET['order_id']);
 				
 				$json['success'] = $this->_('text_reward_removed');
 			} else {
@@ -1473,13 +1473,13 @@ class ControllerSaleOrder extends Controller
 		if (!$this->user->hasPermission('modify', 'sale/order')) {
 				$json['error'] = $this->_('error_permission');
 		} elseif (isset($_GET['order_id'])) {
-			$order_info = $this->model_sale_order->getOrder($_GET['order_id']);
+			$order_info = $this->Model_Sale_Order->getOrder($_GET['order_id']);
 			
 			if ($order_info && $order_info['affiliate_id']) {
-				$affiliate_total = $this->model_sale_affiliate->getTotalTransactionsByOrderId($_GET['order_id']);
+				$affiliate_total = $this->Model_Sale_Affiliate->getTotalTransactionsByOrderId($_GET['order_id']);
 				
 				if (!$affiliate_total) {
-					$this->model_sale_affiliate->addTransaction($order_info['affiliate_id'], $this->_('text_order_id') . ' #' . $_GET['order_id'], $order_info['commission'], $_GET['order_id']);
+					$this->Model_Sale_Affiliate->addTransaction($order_info['affiliate_id'], $this->_('text_order_id') . ' #' . $_GET['order_id'], $order_info['commission'], $_GET['order_id']);
 					
 					$json['success'] = $this->_('text_commission_added');
 				} else {
@@ -1502,10 +1502,10 @@ class ControllerSaleOrder extends Controller
 		if (!$this->user->hasPermission('modify', 'sale/order')) {
 				$json['error'] = $this->_('error_permission');
 		} elseif (isset($_GET['order_id'])) {
-			$order_info = $this->model_sale_order->getOrder($_GET['order_id']);
+			$order_info = $this->Model_Sale_Order->getOrder($_GET['order_id']);
 			
 			if ($order_info && $order_info['affiliate_id']) {
-				$this->model_sale_affiliate->deleteTransaction($_GET['order_id']);
+				$this->Model_Sale_Affiliate->deleteTransaction($_GET['order_id']);
 				
 				$json['success'] = $this->_('text_commission_removed');
 			} else {
@@ -1528,7 +1528,7 @@ class ControllerSaleOrder extends Controller
 		$this->language->load('sale/order');
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->user->hasPermission('modify', 'sale/order')) {
-			$this->model_sale_order->addOrderHistory($_GET['order_id'], $_POST);
+			$this->Model_Sale_Order->addOrderHistory($_GET['order_id'], $_POST);
 				
 			$this->message->add('success', $this->_('text_success'));
 		}
@@ -1545,7 +1545,7 @@ class ControllerSaleOrder extends Controller
 		
 		$this->data['histories'] = array();
 			
-		$results = $this->model_sale_order->getOrderHistories($_GET['order_id'], ($page - 1) * 10, 10);
+		$results = $this->Model_Sale_Order->getOrderHistories($_GET['order_id'], ($page - 1) * 10, 10);
 				
 		foreach ($results as $result) {
 			$this->data['histories'][] = array(
@@ -1556,7 +1556,7 @@ class ControllerSaleOrder extends Controller
 			);
 			}
 		
-		$history_total = $this->model_sale_order->getTotalOrderHistories($_GET['order_id']);
+		$history_total = $this->Model_Sale_Order->getTotalOrderHistories($_GET['order_id']);
 			
 		$this->pagination->init();
 		$this->pagination->total = $history_total;
@@ -1574,7 +1574,7 @@ class ControllerSaleOrder extends Controller
 			$order_option_id = 0;
 		}
 		
-		$option_info = $this->model_sale_order->getOrderOption($_GET['order_id'], $order_option_id);
+		$option_info = $this->Model_Sale_Order->getOrderOption($_GET['order_id'], $order_option_id);
 		
 		if ($option_info && $option_info['type'] == 'file') {
 			$file = DIR_DOWNLOAD . $option_info['value'];
@@ -1690,10 +1690,10 @@ class ControllerSaleOrder extends Controller
 		}
 
 		foreach ($orders as $order_id) {
-			$order_info = $this->model_sale_order->getOrder($order_id);
+			$order_info = $this->Model_Sale_Order->getOrder($order_id);
 
 			if ($order_info) {
-				$store_info = $this->model_setting_setting->getSetting('config', $order_info['store_id']);
+				$store_info = $this->Model_Setting_Setting->getSetting('config', $order_info['store_id']);
 				
 				if ($store_info) {
 					$store_address = $store_info['config_address'];
@@ -1783,12 +1783,12 @@ class ControllerSaleOrder extends Controller
 
 				$product_data = array();
 
-				$products = $this->model_sale_order->getOrderProducts($order_id);
+				$products = $this->Model_Sale_Order->getOrderProducts($order_id);
 
 				foreach ($products as $product) {
 					$option_data = array();
 
-					$options = $this->model_sale_order->getOrderOptions($order_id, $product['order_product_id']);
+					$options = $this->Model_Sale_Order->getOrderOptions($order_id, $product['order_product_id']);
 
 					foreach ($options as $option) {
 						if ($option['type'] != 'file') {
@@ -1815,7 +1815,7 @@ class ControllerSaleOrder extends Controller
 				
 				$voucher_data = array();
 				
-				$vouchers = $this->model_sale_order->getOrderVouchers($order_id);
+				$vouchers = $this->Model_Sale_Order->getOrderVouchers($order_id);
 
 				foreach ($vouchers as $voucher) {
 					$voucher_data[] = array(
@@ -1824,7 +1824,7 @@ class ControllerSaleOrder extends Controller
 					);
 				}
 					
-				$total_data = $this->model_sale_order->getOrderTotals($order_id);
+				$total_data = $this->Model_Sale_Order->getOrderTotals($order_id);
 
 				$this->data['orders'][] = array(
 					'order_id'			=> $order_id,

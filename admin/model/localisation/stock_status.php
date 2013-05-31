@@ -1,5 +1,5 @@
 <?php
-class ModelLocalisationStockStatus extends Model 
+class Admin_Model_Localisation_StockStatus extends Model 
 {
 	public function addStockStatus($data)
 	{

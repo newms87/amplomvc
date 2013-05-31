@@ -65,14 +65,12 @@ class Builder extends Controller
 				
 			$children = '';
 			$sub_class = '';
-			if(!empty($link['children']))
-{
+			if (!empty($link['children'])) {
 				$children = $this->build_links($link['children'], $depth+1);
 				$sub_class = 'class="has_children"';
 			}
 			
-			if(!empty($link['is_route']))
-{
+			if (!empty($link['is_route'])) {
 				$query = isset($link['query']) ? $link['query'] : '';
 				$link['href'] = $this->url->link($link['href'], $query);
 			}
@@ -412,8 +410,7 @@ class Builder extends Controller
 						break;
 						
 				case 'clickable_list':
-					if($selected)
-{
+					if ($selected) {
 					$selected_options .= "<div onclick='clickable_list_remove($(this))'><span>$display</span><input type='hidden' value='$value' name='$value' /><img src='view/theme/default/image/remove.png' /></div>";
 					}
 					else {
@@ -461,8 +458,7 @@ class Builder extends Controller
 			$before = isset($before)?$before:"";
 			$item_class = isset($item_class)?$item_class:"";
 			
-			if($select == $value)
-{
+			if ($select == $value) {
 				$selected_value = $value;
 				$selected_name = $display_name;
 			}

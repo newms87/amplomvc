@@ -1,5 +1,5 @@
 <?php
-class ControllerExtrasBlockSocialMedia extends Controller 
+class Catalog_Controller_Extras_Block_SocialMedia extends Controller 
 {
 	public function index($settings, $type = 'standard')
 	{

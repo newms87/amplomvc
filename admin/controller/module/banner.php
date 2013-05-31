@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleBanner extends Controller 
+class Admin_Controller_Module_Banner extends Controller 
 {
 	
 	
@@ -12,7 +12,7 @@ class ControllerModuleBanner extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('banner', $_POST);
+			$this->Model_Setting_Setting->editSetting('banner', $_POST);
 					
 			$this->message->add('success', $this->_('text_success'));
 						
@@ -47,9 +47,9 @@ class ControllerModuleBanner extends Controller
 			$this->data['modules'] = $this->config->get('banner_module');
 		}
 				
-		$this->data['layouts'] = $this->model_design_layout->getLayouts();
+		$this->data['layouts'] = $this->Model_Design_Layout->getLayouts();
 
-		$this->data['banners'] = $this->model_design_banner->getBanners();
+		$this->data['banners'] = $this->Model_Design_Banner->getBanners();
 				
 		$this->children = array(
 			'common/header',

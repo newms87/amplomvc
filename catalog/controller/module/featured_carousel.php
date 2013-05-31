@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleFeaturedCarousel extends Controller 
+class Catalog_Controller_Module_FeaturedCarousel extends Controller 
 {
 	public function index($setting=null)
 	{
@@ -8,7 +8,7 @@ class ControllerModuleFeaturedCarousel extends Controller
 		//$this->language->load('module/featured_carousel');
 		
 		if (!$setting) {
-			$fc = $this->model_setting_setting->getSetting('featured_carousel');
+			$fc = $this->Model_Setting_Setting->getSetting('featured_carousel');
 			$products = $fc['featured_carousel_list'];
 		}
 		
@@ -16,8 +16,8 @@ class ControllerModuleFeaturedCarousel extends Controller
 		
 		$product_list = array();
 		foreach ($products as $product_id=>$item) {
-			$product = $this->model_catalog_product->getProduct($product_id);
-			//$flashsale = $this->model_catalog_product->getProductFlashsale($product_id);
+			$product = $this->Model_Catalog_Product->getProduct($product_id);
+			//$flashsale = $this->Model_Catalog_Product->getProductFlashsale($product_id);
 			
 			if ($product) {
 				$product_list[] = array(
@@ -39,9 +39,9 @@ class ControllerModuleFeaturedCarousel extends Controller
 
 	public function cron()
 	{
-		$featured_carousel = $this->model_setting_setting->getSetting('featured_carousel');
+		$featured_carousel = $this->Model_Setting_Setting->getSetting('featured_carousel');
 		
-		$flashsales = $this->model_catalog_flashsale->getFlashsales('', 'fs.date_end DESC');
+		$flashsales = $this->Model_Catalog_Flashsale->getFlashsales('', 'fs.date_end DESC');
 		
 		$default_exclude = array(370,371,373,374);
 		
@@ -107,6 +107,6 @@ class ControllerModuleFeaturedCarousel extends Controller
 		
 		$featured_carousel['featured_product_list'] = $products;
 		
-		$limit = $this->model_setting_setting->editSetting('featured_carousel', $featured_carousel);
+		$limit = $this->Model_Setting_Setting->editSetting('featured_carousel', $featured_carousel);
 	}
 }

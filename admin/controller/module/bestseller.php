@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleBestSeller extends Controller 
+class Admin_Controller_Module_Bestseller extends Controller 
 {
 	
 	public function index()
@@ -11,7 +11,7 @@ class ControllerModuleBestSeller extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('bestseller', $_POST);
+			$this->Model_Setting_Setting->editSetting('bestseller', $_POST);
 			
 			$this->cache->delete('product');
 			
@@ -41,14 +41,14 @@ class ControllerModuleBestSeller extends Controller
 			$this->data['bestseller_list'] = array();
 		}
 		else {
-			$names = $this->model_catalog_product->getProductNames(array_keys($this->data['bestseller_list']));
+			$names = $this->Model_Catalog_Product->getProductNames(array_keys($this->data['bestseller_list']));
 			foreach ($names as $n) {
 				$this->data['bestseller_list'][$n['product_id']] = $n['name'];
 			}
 		}
 		
 		
-		$this->data['layouts'] = $this->model_design_layout->getLayouts();
+		$this->data['layouts'] = $this->Model_Design_Layout->getLayouts();
 
 		$this->children = array(
 			'common/header',

@@ -1,5 +1,5 @@
 <?php
-class ControllerProductBlockAdditional extends Controller 
+class Catalog_Controller_Product_Block_Additional extends Controller 
 {
 	
 	public function index($settings, $product_info)
@@ -16,7 +16,7 @@ class ControllerProductBlockAdditional extends Controller
 		$this->data['review_status'] = $review_status;
 		
 		if ($review_status) {
-			$this->language->format('tab_review', $this->model_catalog_review->getTotalReviewsByProductId($product_info['product_id']));
+			$this->language->format('tab_review', $this->Model_Catalog_Review->getTotalReviewsByProductId($product_info['product_id']));
 			
 			$this->data['reviews'] = $this->language->format('text_reviews', (int)$product_info['reviews']);
 			
@@ -43,7 +43,7 @@ class ControllerProductBlockAdditional extends Controller
 		$this->data['shipping_return_link'] = $this->language->format('text_view_ship_policy', $this->url->link('information/information/info','information_id=7'));
 		
 		if ($this->template->option('attribute_tab')) {
-			$this->data['attribute_groups'] = $this->model_catalog_product->getProductAttributes($product_info['product_id']);
+			$this->data['attribute_groups'] = $this->Model_Catalog_Product->getProductAttributes($product_info['product_id']);
 		}
 		
 		$this->render();

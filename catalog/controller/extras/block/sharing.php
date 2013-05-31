@@ -1,5 +1,5 @@
 <?php
-class ControllerExtrasBlockSharing extends Controller 
+class Catalog_Controller_Extras_Block_Sharing extends Controller 
 {
 		
 	public function index()

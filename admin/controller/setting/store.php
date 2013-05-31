@@ -1,5 +1,5 @@
 <?php
-class ControllerSettingStore extends Controller 
+class Admin_Controller_Setting_Store extends Controller 
 {
 	
 
@@ -20,9 +20,9 @@ class ControllerSettingStore extends Controller
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			
-			$store_id = $this->model_setting_store->addStore($_POST);
+			$store_id = $this->Model_Setting_Store->addStore($_POST);
 			
-			$this->model_setting_setting->editSetting('config', $_POST, $store_id);
+			$this->Model_Setting_Setting->editSetting('config', $_POST, $store_id);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -40,9 +40,9 @@ class ControllerSettingStore extends Controller
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			
-			$this->model_setting_store->editStore($_GET['store_id'], $_POST);
+			$this->Model_Setting_Store->editStore($_GET['store_id'], $_POST);
 			
-			$this->model_setting_setting->editSetting('config', $_POST, $_GET['store_id']);
+			$this->Model_Setting_Setting->editSetting('config', $_POST, $_GET['store_id']);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -60,9 +60,9 @@ class ControllerSettingStore extends Controller
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $store_id) {
-				$this->model_setting_store->deleteStore($store_id);
+				$this->Model_Setting_Store->deleteStore($store_id);
 				
-				$this->model_setting_setting->deleteSetting('config', $store_id);
+				$this->Model_Setting_Setting->deleteSetting('config', $store_id);
 			}
 
 			$this->message->add('success', $this->_('text_success'));
@@ -87,9 +87,9 @@ class ControllerSettingStore extends Controller
 		$this->data['insert'] = $this->url->link('setting/store/insert');
 		$this->data['delete'] = $this->url->link('setting/store/delete');
 
-		$store_total = $this->model_setting_store->getTotalStores();
+		$store_total = $this->Model_Setting_Store->getTotalStores();
 	
-		$stores = $this->model_setting_store->getStores();
+		$stores = $this->Model_Setting_Store->getStores();
  
 		foreach ($stores as &$store) {
 			$action = array();
@@ -144,7 +144,7 @@ class ControllerSettingStore extends Controller
 		$this->data['cancel'] = $this->url->link('setting/store');
 	
 		if (isset($_GET['store_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-			$store = $this->model_setting_store->getStore($store_id);
+			$store = $this->Model_Setting_Store->getStore($store_id);
 			
 			if (!$store) {
 				$this->message->add('warning', $this->_('error_store_invalid'));
@@ -152,10 +152,10 @@ class ControllerSettingStore extends Controller
 			}
 			
 			
-			$store_config = $this->model_setting_setting->getSetting('config', $store_id);
+			$store_config = $this->Model_Setting_Setting->getSetting('config', $store_id);
 			
 			if (empty($store_config)) {
-				$store_config = $this->model_setting_setting->getSetting('config', 0);
+				$store_config = $this->Model_Setting_Setting->getSetting('config', 0);
 				echo "grabbing default values";
 				html_dump($store_config, 'store_info');
 			}
@@ -231,23 +231,23 @@ class ControllerSettingStore extends Controller
 		
 		$this->breadcrumb->add($this->data['name'], $this->url->link('setting/store/update', 'store_id=' . $store_id));
 		
-		$this->data['layouts'] = $this->model_design_layout->getLayouts();
+		$this->data['layouts'] = $this->Model_Design_Layout->getLayouts();
 		
 		$this->data['themes'] = $this->theme->get_themes();
 		
-		$this->data['geo_zones'] = array_merge(array(0=>"--- All Zones ---"),$this->model_localisation_geo_zone->getGeoZones());
+		$this->data['geo_zones'] = array_merge(array(0=>"--- All Zones ---"),$this->Model_Localisation_GeoZone->getGeoZones());
 		
-		$this->data['countries'] = $this->model_localisation_country->getCountries();
+		$this->data['countries'] = $this->Model_Localisation_Country->getCountries();
 		
-		$this->data['languages'] = $this->model_localisation_language->getLanguages();
+		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
 		
-		$this->data['currencies'] = $this->model_localisation_currency->getCurrencies();
+		$this->data['currencies'] = $this->Model_Localisation_Currency->getCurrencies();
 		
-		$this->data['customer_groups'] = $this->model_sale_customer_group->getCustomerGroups();
+		$this->data['customer_groups'] = $this->Model_Sale_CustomerGroup->getCustomerGroups();
 		
-		$this->data['informations'] = $this->model_catalog_information->getInformations();
+		$this->data['informations'] = $this->Model_Catalog_Information->getInformations();
 		
-		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
 		
 		$this->data['load_theme_img'] = $this->url->link('setting/setting/theme');
 		
@@ -351,7 +351,7 @@ class ControllerSettingStore extends Controller
 				$this->error['warning'] = $this->_('error_default');
 			}
 			
-			$store_total = $this->model_sale_order->getTotalOrdersByStoreId($store_id);
+			$store_total = $this->Model_Sale_Order->getTotalOrdersByStoreId($store_id);
 	
 			if ($store_total) {
 				$this->error['warning'] = sprintf($this->_('error_store'), $store_total);

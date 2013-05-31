@@ -1,5 +1,5 @@
 <?php
-class ModelCatalogProduct extends Model 
+class Catalog_Model_Catalog_Product extends Model 
 {
 	public function updateViewed($product_id)
 	{
@@ -38,8 +38,7 @@ class ModelCatalogProduct extends Model
 		$product = $this->query_row("SELECT p.*, p2c.category_id, pd.*, p2s.*, $special, fs_table.flashsale_id,fs_table.date_end, pd.name AS name, p.image, m.name AS manufacturer, m.keyword, m.status as manufacturer_status, $discount, $reward, $stock_status, $weight_class, $length_class, $rating, $reviews, $template, p.sort_order " .
 											"FROM " . DB_PREFIX . "product p LEFT JOIN $category LEFT JOIN $description JOIN $store LEFT JOIN " . DB_PREFIX . "manufacturer m ON (p.manufacturer_id = m.manufacturer_id) LEFT JOIN $fs_table WHERE p.product_id='$product_id' AND p.status = '1' AND m.status='1' AND p.date_available <= NOW()");
 		
-		if (!empty($product)) 
-{
+		if (!empty($product)) {
 			$product['price'] = ($product['discount'] ? $product['discount'] : $product['price']);
 			$product['rating'] = (int)$product['rating'];
 			$product['description'] = html_entity_decode($product['description']);
@@ -123,8 +122,7 @@ class ModelCatalogProduct extends Model
 		
 		$manufacturer = "LEFT JOIN " . DB_PREFIX . "manufacturer m ON (m.manufacturer_id=p.manufacturer_id)";
 		
-		if($limit < 0)
-{
+		if ($limit < 0) {
 			$limit = "";
 			$total = true;
 			$select = "COUNT(*) as total";

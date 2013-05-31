@@ -1,5 +1,5 @@
 <?php
-class ModelShippingWeight extends Model 
+class Catalog_Model_Shipping_Weight extends Model 
 {
   	public function getQuote($address)
   	{
@@ -54,8 +54,7 @@ class ModelShippingWeight extends Model
 		
 		$method_data = array();
 	
-		if ($quote_data) 
-{
+		if ($quote_data) {
 				$method_data = array(
 				'code'		=> 'weight',
 				'title'		=> $this->_('text_title'),

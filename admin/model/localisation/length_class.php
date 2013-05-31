@@ -1,5 +1,5 @@
 <?php
-class ModelLocalisationLengthClass extends Model 
+class Admin_Model_Localisation_LengthClass extends Model 
 {
 	public function addLengthclass($data)
 	{
@@ -48,8 +48,7 @@ class ModelLocalisationLengthClass extends Model
 				'value'
 			);
 			
-			if (isset($data['sort']) && in_array($data['sort'], $sort_data)) 
-{
+			if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
 				$sql .= " ORDER BY " . $data['sort'];
 			} else {
 				$sql .= " ORDER BY title";
@@ -79,8 +78,7 @@ class ModelLocalisationLengthClass extends Model
 		} else {
 			$length_class _data = $this->cache->get('length_class.' . (int)$this->config->get('config_language_id'));
 
-			if (!$length_class_data) 
-{
+			if (!$length_class_data) {
 				$query = $this->query("SELECT * FROM " . DB_PREFIX . "length_class lc LEFT JOIN " . DB_PREFIX . "length_class_description lcd ON (lc.length_class_id = lcd.length_class_id) WHERE lcd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
 	
 				$length_class_data = $query->rows;

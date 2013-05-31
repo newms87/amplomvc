@@ -1,5 +1,5 @@
 <?php
-class ControllerPaymentSagepay extends Controller 
+class Catalog_Controller_Payment_Sagepay extends Controller 
 {
 	protected function index()
 	{
@@ -18,7 +18,7 @@ class ControllerPaymentSagepay extends Controller
 		$vendor = $this->config->get('sagepay_vendor');
 		$password = $this->config->get('sagepay_password');
 		
-		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
+		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
 		
 		$data = array();
 		
@@ -124,7 +124,7 @@ class ControllerPaymentSagepay extends Controller
 			$data = $this->getToken($output);
 		
 			if ($data && is_array($data)) {
-				$this->model_checkout_order->confirm($_GET['order_id'], $this->config->get('config_order_status_id'));
+				$this->Model_Checkout_Order->confirm($_GET['order_id'], $this->config->get('config_order_status_id'));
 
 				$message = '';
 		
@@ -169,9 +169,9 @@ class ControllerPaymentSagepay extends Controller
 				}
 				
 				if ($data['Status'] == 'OK') {
-					$this->model_checkout_order->update_order($_GET['order_id'], $this->config->get('sagepay_order_status_id'), $message, false);
+					$this->Model_Checkout_Order->update_order($_GET['order_id'], $this->config->get('sagepay_order_status_id'), $message, false);
 				} else {
-					$this->model_checkout_order->update_order($_GET['order_id'], $this->config->get('config_order_status_id'), $message, false);
+					$this->Model_Checkout_Order->update_order($_GET['order_id'], $this->config->get('config_order_status_id'), $message, false);
 				}
 				
 				$this->url->redirect($this->url->link('checkout/success'));

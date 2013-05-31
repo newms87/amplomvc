@@ -1,5 +1,5 @@
 <?php
-class ControllerAccountReturn extends Controller 
+class Catalog_Controller_Account_Return extends Controller 
 {
 	
 	public function index()
@@ -30,9 +30,9 @@ class ControllerAccountReturn extends Controller
 		
 		$this->data['returns'] = array();
 		
-		$return_total = $this->model_account_return->getTotalReturns();
+		$return_total = $this->Model_Account_Return->getTotalReturns();
 		
-		$results = $this->model_account_return->getReturns(($page - 1) * 10, 10);
+		$results = $this->Model_Account_Return->getReturns(($page - 1) * 10, 10);
 		
 		foreach ($results as $result) {
 			$this->data['returns'][] = array(
@@ -79,7 +79,7 @@ class ControllerAccountReturn extends Controller
 			$this->url->redirect($this->url->link('account/login'));
 		}
 		
-		$return_info = $this->model_account_return->getReturn($return_id);
+		$return_info = $this->Model_Account_Return->getReturn($return_id);
 		
 		if ($return_info) {
 		$this->template->load('account/return_info');
@@ -115,7 +115,7 @@ class ControllerAccountReturn extends Controller
 						
 			$this->data['histories'] = array();
 			
-			$results = $this->model_account_return->getReturnHistories($_GET['return_id']);
+			$results = $this->Model_Account_Return->getReturnHistories($_GET['return_id']);
 			
 				foreach ($results as $result) {
 				$this->data['histories'][] = array(
@@ -174,7 +174,7 @@ class ControllerAccountReturn extends Controller
 		$this->language->load('account/return');
 
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_account_return->addReturn($_POST);
+			$this->Model_Account_Return->addReturn($_POST);
 			
 			$this->url->redirect($this->url->link('account/return/success'));
 		}
@@ -188,11 +188,11 @@ class ControllerAccountReturn extends Controller
 		$this->data['action'] = $this->url->link('account/return/insert');
 	
 		if ($order_id) {
-			$order_info = $this->model_account_order->getOrder($order_id);
+			$order_info = $this->Model_Account_Order->getOrder($order_id);
 		}
 		
 		if (isset($_GET['product_id'])) {
-			$product_info = $this->model_catalog_product->getProduct($_GET['product_id']);
+			$product_info = $this->Model_Catalog_Product->getProduct($_GET['product_id']);
 		}
 		
 		$defaults = array('order_id'=>'',
@@ -233,7 +233,7 @@ class ControllerAccountReturn extends Controller
 			$this->data['model'] = isset($product_info['model'])?$product_info['model']:$defaults['model'];
 		}
 														
-		$this->data['return_reasons'] = $this->model_localisation_return_reason->getReturnReasons();
+		$this->data['return_reasons'] = $this->Model_Localisation_ReturnReason->getReturnReasons();
 		
 		$this->data['back'] = $this->url->link('account/account');
 

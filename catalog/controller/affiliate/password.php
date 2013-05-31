@@ -1,5 +1,5 @@
 <?php
-class ControllerAffiliatePassword extends Controller 
+class Catalog_Controller_Affiliate_Password extends Controller 
 {
 	
 		
@@ -18,7 +18,7 @@ class ControllerAffiliatePassword extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 			
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_affiliate_affiliate->editPassword($this->affiliate->getEmail(), $_POST['password']);
+			$this->Model_Affiliate_Affiliate->editPassword($this->affiliate->getEmail(), $_POST['password']);
  
 				$this->message->add('success', $this->_('text_success'));
 	

@@ -148,8 +148,7 @@ class PHPExcel_IOFactory{
 {0}', $writerType, $searchLocation['path']);
 
 				$instance = new $class Name($phpExcel);
-				if ($instance !== NULL) 
-{
+				if ($instance !== NULL) {
 					return $instance;
 				}
 			}
@@ -182,8 +181,7 @@ class PHPExcel_IOFactory{
 {0}', $readerType, $searchLocation['path']);
 
 				$instance = new $class Name();
-				if ($instance !== NULL) 
-{
+				if ($instance !== NULL) {
 					return $instance;
 				}
 			}
@@ -284,8 +282,7 @@ class PHPExcel_IOFactory{
 		foreach (self::$_autoResolveClasses as $autoResolveClass) 
 {
 			$reader = self::createReader($autoResolveclass );
-			if ($reader->canRead($pFilename)) 
-{
+			if ($reader->canRead($pFilename)) {
 				return $reader;
 			}
 		}

@@ -1,5 +1,5 @@
 <?php
-class ModelTotalSubTotal extends Model 
+class Catalog_Model_Total_SubTotal extends Model 
 {
 	public function getTotal(&$total_data, &$total, &$taxes)
 	{

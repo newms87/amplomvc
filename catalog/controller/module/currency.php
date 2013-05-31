@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleCurrency extends Controller 
+class Catalog_Controller_Module_Currency extends Controller 
 {
 	protected function index()
 	{
@@ -26,7 +26,7 @@ class ControllerModuleCurrency extends Controller
 		
 		$this->data['currencies'] = array();
 		
-		$results = $this->model_localisation_currency->getCurrencies();
+		$results = $this->Model_Localisation_Currency->getCurrencies();
 		
 		foreach ($results as $result) {
 			if ($result['status']) {

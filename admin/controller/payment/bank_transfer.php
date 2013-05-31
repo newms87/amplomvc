@@ -1,5 +1,5 @@
 <?php
-class ControllerPaymentBankTransfer extends Controller 
+class Admin_Controller_Payment_BankTransfer extends Controller 
 {
 	
 
@@ -12,7 +12,7 @@ class ControllerPaymentBankTransfer extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('bank_transfer', $_POST);
+			$this->Model_Setting_Setting->editSetting('bank_transfer', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -25,7 +25,7 @@ class ControllerPaymentBankTransfer extends Controller
 			$this->data['error_warning'] = '';
 		}
 		
-		$languages = $this->model_localisation_language->getLanguages();
+		$languages = $this->Model_Localisation_Language->getLanguages();
 		
 		foreach ($languages as $language) {
 			if (isset($this->error['bank_' . $language['language_id']])) {
@@ -65,7 +65,7 @@ class ControllerPaymentBankTransfer extends Controller
 			$this->data['bank_transfer_order_status_id'] = $this->config->get('bank_transfer_order_status_id');
 		}
 		
-		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
 		
 		if (isset($_POST['bank_transfer_geo_zone_id'])) {
 			$this->data['bank_transfer_geo_zone_id'] = $_POST['bank_transfer_geo_zone_id'];
@@ -73,7 +73,7 @@ class ControllerPaymentBankTransfer extends Controller
 			$this->data['bank_transfer_geo_zone_id'] = $this->config->get('bank_transfer_geo_zone_id');
 		}
 		
-		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$this->data['geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 		
 		if (isset($_POST['bank_transfer_status'])) {
 			$this->data['bank_transfer_status'] = $_POST['bank_transfer_status'];
@@ -102,7 +102,7 @@ class ControllerPaymentBankTransfer extends Controller
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
-		$languages = $this->model_localisation_language->getLanguages();
+		$languages = $this->Model_Localisation_Language->getLanguages();
 		
 		foreach ($languages as $language) {
 			if (!$_POST['bank_transfer_bank_' . $language['language_id']]) {

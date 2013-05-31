@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleJanrain extends Controller 
+class Admin_Controller_Module_Janrain extends Controller 
 {
 	
 	public function index()
@@ -11,7 +11,7 @@ class ControllerModuleJanrain extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && ($this->validate())) {
-			$this->model_setting_setting->editSetting('janrain', $_POST);
+			$this->Model_Setting_Setting->editSetting('janrain', $_POST);
 					
 			$this->message->add('success',$this->_('text_success'));
 		}
@@ -47,7 +47,7 @@ class ControllerModuleJanrain extends Controller
 			$this->data['modules'] = $this->config->get('janrain_module');
 		}
 
-		$this->data['layouts'] = $this->model_design_layout->getLayouts();
+		$this->data['layouts'] = $this->Model_Design_Layout->getLayouts();
 
 		$this->children = array(
 			'common/header',

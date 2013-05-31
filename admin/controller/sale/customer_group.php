@@ -1,5 +1,5 @@
 <?php
-class ControllerSaleCustomerGroup extends Controller 
+class Admin_Controller_Sale_CustomerGroup extends Controller 
 {
 	
  
@@ -19,7 +19,7 @@ class ControllerSaleCustomerGroup extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_sale_customer_group->addCustomerGroup($_POST);
+			$this->Model_Sale_CustomerGroup->addCustomerGroup($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -50,7 +50,7 @@ class ControllerSaleCustomerGroup extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_sale_customer_group->editCustomerGroup($_GET['customer_group_id'], $_POST);
+			$this->Model_Sale_CustomerGroup->editCustomerGroup($_GET['customer_group_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -82,7 +82,7 @@ class ControllerSaleCustomerGroup extends Controller
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 				foreach ($_POST['selected'] as $customer_group_id) {
-				$this->model_sale_customer_group->deleteCustomerGroup($customer_group_id);
+				$this->Model_Sale_CustomerGroup->deleteCustomerGroup($customer_group_id);
 			}
 						
 			$this->message->add('success', $this->_('text_success'));
@@ -158,9 +158,9 @@ class ControllerSaleCustomerGroup extends Controller
 			'limit' => $this->config->get('config_admin_limit')
 		);
 		
-		$customer_group_total = $this->model_sale_customer_group->getTotalCustomerGroups();
+		$customer_group_total = $this->Model_Sale_CustomerGroup->getTotalCustomerGroups();
 		
-		$results = $this->model_sale_customer_group->getCustomerGroups($data);
+		$results = $this->Model_Sale_CustomerGroup->getCustomerGroups($data);
 
 		foreach ($results as $result) {
 			$action = array();
@@ -273,7 +273,7 @@ class ControllerSaleCustomerGroup extends Controller
 		$this->data['cancel'] = $this->url->link('sale/customer_group', $url);
 
 		if (isset($_GET['customer_group_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-			$customer_group_info = $this->model_sale_customer_group->getCustomerGroup($_GET['customer_group_id']);
+			$customer_group_info = $this->Model_Sale_CustomerGroup->getCustomerGroup($_GET['customer_group_id']);
 		}
 
 		if (isset($_POST['name'])) {
@@ -316,13 +316,13 @@ class ControllerSaleCustomerGroup extends Controller
 				$this->error['warning'] = $this->_('error_default');
 			}
 			
-			$store_total = $this->model_setting_store->getTotalStoresByCustomerGroupId($customer_group_id);
+			$store_total = $this->Model_Setting_Store->getTotalStoresByCustomerGroupId($customer_group_id);
 
 			if ($store_total) {
 				$this->error['warning'] = sprintf($this->_('error_store'), $store_total);
 			}
 			
-			$customer_total = $this->model_sale_customer->getTotalCustomersByCustomerGroupId($customer_group_id);
+			$customer_total = $this->Model_Sale_Customer->getTotalCustomersByCustomerGroupId($customer_group_id);
 
 			if ($customer_total) {
 				$this->error['warning'] = sprintf($this->_('error_customer'), $customer_total);

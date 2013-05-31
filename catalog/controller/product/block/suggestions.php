@@ -1,5 +1,5 @@
 <?php
-class ControllerProductBlockSuggestions extends Controller 
+class Catalog_Controller_Product_Block_Suggestions extends Controller 
 {
 	
 	/**
@@ -19,7 +19,7 @@ class ControllerProductBlockSuggestions extends Controller
 		$image_width = 174; //$settings['image_width'];
 		$image_height = 135; //$settings['image_height'];
 		
-		$suggestions = $this->model_catalog_product->getProductSuggestions($product_info, $limit);
+		$suggestions = $this->Model_Catalog_Product->getProductSuggestions($product_info, $limit);
 		
 		$this->data['suggestions'] = array();
 		

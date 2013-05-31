@@ -1,5 +1,5 @@
 <?php
-class ModelShippingUps extends Model 
+class Catalog_Model_Shipping_Ups extends Model 
 {
 	function getQuote($address)
 	{
@@ -118,8 +118,7 @@ class ModelShippingUps extends Model
 			$xml .= '		<Code>' . $this->config->get('ups_pickup') . '</Code>';
 			$xml .= '	</PickupType>';
 				
-			if ($this->config->get('ups_country') == 'US' && $this->config->get('ups_pickup') == '11') 
-{
+			if ($this->config->get('ups_country') == 'US' && $this->config->get('ups_pickup') == '11') {
 				$xml .= '	<Customerclass ification>';
 				$xml .= '		<Code>' . $this->config->get('ups_classification') . '</Code>';
 				$xml .= '	</CustomerClassification>';
@@ -141,8 +140,7 @@ class ModelShippingUps extends Model
 			$xml .= '				<CountryCode>' . $address['iso_code_2'] . '</CountryCode>';
 			$xml .= '				<PostalCode>' . $address['postcode'] . '</PostalCode>';
 			
-			if ($this->config->get('ups_quote_type') == 'residential') 
-{
+			if ($this->config->get('ups_quote_type') == 'residential') {
 				$xml .= '				<ResidentialAddressIndicator />';
 			}
 			
@@ -273,8 +271,7 @@ class ModelShippingUps extends Model
 			
 			$title = $this->_('text_title');
 			
-			if ($this->config->get('ups_display_weight')) 
-{
+			if ($this->config->get('ups_display_weight')) {
 				$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('ups_weight_class_id')) . ')';
 			}
 		

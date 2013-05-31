@@ -7,13 +7,13 @@ class ModelCatalogProduct extends Model
 	{
 //-----
 //>>>>> {php} {before}
-		$this->model_catalog_collection->deleteProductFromCollections($product_id);
+		$this->Model_Catalog_Collection->deleteProductFromCollections($product_id);
 		
 		if (isset($data['product_collection'])) {
 			$product_data = $data + current($data['product_description']);
 			
 			foreach ($data['product_collection'] as $collection_id) {
-				$this->model_catalog_collection->addProductToCollection($collection_id, $product_id, $product_data);
+				$this->Model_Catalog_Collection->addProductToCollection($collection_id, $product_id, $product_data);
 			}
 		}
 //-----
@@ -31,7 +31,7 @@ class ModelCatalogProduct extends Model
 //>>>>> {php} {before}
 		
 		if (isset($data['product_collection'])) {
-			$collection_list = $this->model_catalog_collection->getCollectionsForProduct($product_id);
+			$collection_list = $this->Model_Catalog_Collection->getCollectionsForProduct($product_id);
 			
 			$collections = array();
 			
@@ -41,7 +41,7 @@ class ModelCatalogProduct extends Model
 			
 			foreach ($collections as $collection_id) {
 				if (!in_array($collection_id, $data['product_collection'])) {
-					$this->model_catalog_collection->deleteProductFromCollection($collection['collection_id'], $product_id);
+					$this->Model_Catalog_Collection->deleteProductFromCollection($collection['collection_id'], $product_id);
 				}
 			}
 			
@@ -49,12 +49,12 @@ class ModelCatalogProduct extends Model
 				if (!in_array($collection_id, $collections)) {
 					$product_data = $data + current($data['product_description']);
 					
-					$this->model_catalog_collection->addProductToCollection($collection_id, $product_id, $product_data);
+					$this->Model_Catalog_Collection->addProductToCollection($collection_id, $product_id, $product_data);
 				}
 			}
 		}
 		else {
-			$this->model_catalog_collection->deleteProductFromCollections($product_id);
+			$this->Model_Catalog_Collection->deleteProductFromCollections($product_id);
 		}
 //-----
 //=====
@@ -68,7 +68,7 @@ class ModelCatalogProduct extends Model
 		$this->delete('product', array('product_id'=>$product_id));
 //-----
 //>>>>> {php}
-		$this->model_catalog_collection->deleteProductFromCollections($product_id);
+		$this->Model_Catalog_Collection->deleteProductFromCollections($product_id);
 //-----
 //=====
 	}

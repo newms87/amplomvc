@@ -417,7 +417,7 @@ class Url
 		
 		$this->remove_alias($route, $query, $store_id);
 		
-		$this->model_setting_url_alias->addUrlAlias($url_alias);
+		$this->Model_Setting_UrlAlias->addUrlAlias($url_alias);
 	}
 	
 	public function remove_alias($route, $query = '', $store_id = -1)
@@ -430,7 +430,7 @@ class Url
 		$result = $this->db->query($sql_query);
 		
 		foreach ($result->rows as $alias) {
-			$this->model_setting_url_alias->deleteUrlAlias($alias['url_alias_id']);
+			$this->Model_Setting_UrlAlias->deleteUrlAlias($alias['url_alias_id']);
 		}
 	}
 }

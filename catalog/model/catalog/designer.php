@@ -1,5 +1,5 @@
 <?php
-class ModelCatalogDesigner extends Model 
+class Catalog_Model_Catalog_Designer extends Model 
 {
 	
 	public function addDesigner($data)
@@ -23,7 +23,7 @@ class ModelCatalogDesigner extends Model
 		
 		$this->insert('manufacturer_description', $data);
 		
-		$this->model_includes_contact->addContact('manufacturer', $designer_id, $data);
+		$this->Model_Includes_Contact->addContact('manufacturer', $designer_id, $data);
 	}
 	
 	public function getDesigner($designer_id, $description = false)
@@ -159,8 +159,8 @@ class ModelCatalogDesigner extends Model
 		$status = $status ? 1 : 0;
 		
 		$this->query("UPDATE " . DB_PREFIX . "manufacturer SET status='$status' WHERE manufacturer_id= '" . (int)$designer_id . "'");
-		$this->model_setting_url_alias->setUrlAliasStatus('product/manufacturer/product', "manufacturer_id=$designer_id", $status);
-		$this->model_setting_url_alias->setUrlAliasStatus('designers/designers', "designer_id=$designer_id", $status);
+		$this->Model_Setting_UrlAlias->setUrlAliasStatus('product/manufacturer/product', "manufacturer_id=$designer_id", $status);
+		$this->Model_Setting_UrlAlias->setUrlAliasStatus('designers/designers', "designer_id=$designer_id", $status);
 	}
 	
 	public function activateDesigners()

@@ -1,5 +1,5 @@
 <?php
-class ControllerCatalogDownload extends Controller 
+class Admin_Controller_Catalog_Download extends Controller 
 {
 	
 	
@@ -32,7 +32,7 @@ class ControllerCatalogDownload extends Controller
 				}
 			}
 
-			$this->model_catalog_download->addDownload(array_merge($_POST, $data));
+			$this->Model_Catalog_Download->addDownload(array_merge($_POST, $data));
 				
 			$this->message->add('success', $this->_('text_success'));
 	
@@ -76,7 +76,7 @@ class ControllerCatalogDownload extends Controller
 				}
 			}
 			
-			$this->model_catalog_download->editDownload($_GET['download_id'], array_merge($_POST, $data));
+			$this->Model_Catalog_Download->editDownload($_GET['download_id'], array_merge($_POST, $data));
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -109,7 +109,7 @@ class ControllerCatalogDownload extends Controller
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $download_id) {
 			
-				$results = $this->model_catalog_download->getDownload($download_id) ;
+				$results = $this->Model_Catalog_Download->getDownload($download_id) ;
 					
 				$filename = $results['filename'];
 
@@ -117,7 +117,7 @@ class ControllerCatalogDownload extends Controller
 					@unlink(DIR_DOWNLOAD . $filename);
 				}
 			
-				$this->model_catalog_download->deleteDownload($download_id);
+				$this->Model_Catalog_Download->deleteDownload($download_id);
 			}
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -193,9 +193,9 @@ class ControllerCatalogDownload extends Controller
 			'limit' => $this->config->get('config_admin_limit')
 		);
 		
-		$download_total = $this->model_catalog_download->getTotalDownloads();
+		$download_total = $this->Model_Catalog_Download->getTotalDownloads();
 	
-		$results = $this->model_catalog_download->getDownloads($data);
+		$results = $this->Model_Catalog_Download->getDownloads($data);
  
 		foreach ($results as $result) {
 			$action = array();
@@ -315,10 +315,10 @@ class ControllerCatalogDownload extends Controller
 		
 		$this->data['cancel'] = $this->url->link('catalog/download', $url);
  		
-		$this->data['languages'] = $this->model_localisation_language->getLanguages();
+		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
 
 		if (isset($_GET['download_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-			$download_info = $this->model_catalog_download->getDownload($_GET['download_id']);
+			$download_info = $this->Model_Catalog_Download->getDownload($_GET['download_id']);
 		}
 
 		if (isset($download_info['filename'])) {
@@ -336,7 +336,7 @@ class ControllerCatalogDownload extends Controller
 		if (isset($_POST['download_description'])) {
 			$this->data['download_description'] = $_POST['download_description'];
 		} elseif (isset($_GET['download_id'])) {
-			$this->data['download_description'] = $this->model_catalog_download->getDownloadDescriptions($_GET['download_id']);
+			$this->data['download_description'] = $this->Model_Catalog_Download->getDownloadDescriptions($_GET['download_id']);
 		} else {
 			$this->data['download_description'] = array();
 		}
@@ -399,7 +399,7 @@ class ControllerCatalogDownload extends Controller
 		}
 		
 		foreach ($_POST['selected'] as $download_id) {
-  			$product_total = $this->model_catalog_product->getTotalProductsByDownloadId($download_id);
+  			$product_total = $this->Model_Catalog_Product->getTotalProductsByDownloadId($download_id);
 	
 			if ($product_total) {
 				$this->error['warning'] = sprintf($this->_('error_product'), $product_total);

@@ -1,9 +1,8 @@
 <?php
-class ControllerCommonHome extends Controller 
+class Admin_Controller_Common_Home extends Controller 
 {
 	public function index()
 	{
-		
 		if ($this->user->isDesigner()) {
 			$this->template->load('common/home_restricted');
 		}
@@ -20,18 +19,18 @@ class ControllerCommonHome extends Controller
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 
-		$this->data['total_sale'] = $this->currency->format($this->model_sale_order->getTotalSales(), $this->config->get('config_currency'));
-		$this->data['total_sale_year'] = $this->currency->format($this->model_sale_order->getTotalSalesByYear(date('Y')), $this->config->get('config_currency'));
-		$this->data['total_order'] = $this->model_sale_order->getTotalOrders();
+		$this->data['total_sale'] = $this->currency->format($this->Model_Sale_Order->getTotalSales(), $this->config->get('config_currency'));
+		$this->data['total_sale_year'] = $this->currency->format($this->Model_Sale_Order->getTotalSalesByYear(date('Y')), $this->config->get('config_currency'));
+		$this->data['total_order'] = $this->Model_Sale_Order->getTotalOrders();
 		
-		$this->data['total_customer'] = $this->model_sale_customer->getTotalCustomers();
-		$this->data['total_customer_approval'] = $this->model_sale_customer->getTotalCustomersAwaitingApproval();
+		$this->data['total_customer'] = $this->Model_Sale_Customer->getTotalCustomers();
+		$this->data['total_customer_approval'] = $this->Model_Sale_Customer->getTotalCustomersAwaitingApproval();
 		
-		$this->data['total_review'] = $this->model_catalog_review->getTotalReviews();
-		$this->data['total_review_approval'] = $this->model_catalog_review->getTotalReviewsAwaitingApproval();
+		$this->data['total_review'] = $this->Model_Catalog_Review->getTotalReviews();
+		$this->data['total_review_approval'] = $this->Model_Catalog_Review->getTotalReviewsAwaitingApproval();
 		
-		$this->data['total_affiliate'] = $this->model_sale_affiliate->getTotalAffiliates();
-		$this->data['total_affiliate_approval'] = $this->model_sale_affiliate->getTotalAffiliatesAwaitingApproval();
+		$this->data['total_affiliate'] = $this->Model_Sale_Affiliate->getTotalAffiliates();
+		$this->data['total_affiliate_approval'] = $this->Model_Sale_Affiliate->getTotalAffiliatesAwaitingApproval();
 				
 		$this->data['orders'] = array();
 		
@@ -42,7 +41,7 @@ class ControllerCommonHome extends Controller
 			'limit' => 10
 		);
 		
-		$results = $this->model_sale_order->getOrders($data);
+		$results = $this->Model_Sale_Order->getOrders($data);
 		
 		foreach ($results as $result) {
 			$action = array();
@@ -63,7 +62,7 @@ class ControllerCommonHome extends Controller
 		}
 
 		if ($this->config->get('config_currency_auto')) {
-			$this->model_localisation_currency->updateCurrencies();
+			$this->Model_Localisation_Currency->updateCurrencies();
 		}
 		
 		$this->children = array(

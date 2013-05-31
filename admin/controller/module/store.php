@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleStore extends Controller 
+class Admin_Controller_Module_Store extends Controller 
 {
 	
 	
@@ -12,7 +12,7 @@ class ControllerModuleStore extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('store', $_POST);
+			$this->Model_Setting_Setting->editSetting('store', $_POST);
 					
 			$this->message->add('success', $this->_('text_success'));
 						
@@ -47,7 +47,7 @@ class ControllerModuleStore extends Controller
 			$this->data['modules'] = $this->config->get('store_module');
 		}
 		
-		$this->data['layouts'] = $this->model_design_layout->getLayouts();
+		$this->data['layouts'] = $this->Model_Design_Layout->getLayouts();
 				
 		$this->children = array(
 			'common/header',

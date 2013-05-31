@@ -52,7 +52,7 @@ class Extend
 		$result = $this->db->query("SELECT navigation_group_id FROM " . DB_PREFIX . "navigation_group WHERE name = '" . $this->db->escape($group) . "'");
 		
 		if ($result->num_rows) {
-			$this->model_design_navigation->addNavigationLink($result->row['navigation_group_id'], $link);
+			$this->Model_Design_Navigation->addNavigationLink($result->row['navigation_group_id'], $link);
 		}
 		
 		return true;
@@ -66,7 +66,7 @@ class Extend
 	
 		foreach ($links as $link) {
 			echo "removing $link[navigation_id]<br>";
-			$this->model_design_navigation->deleteNavigationLink($link['navigation_id']);
+			$this->Model_Design_Navigation->deleteNavigationLink($link['navigation_id']);
 		}
 	}
 	
@@ -89,7 +89,7 @@ class Extend
 		$layout += $data;
 		
 		if (!empty($routes)) {
-			$stores = $this->model_setting_store->getStores();
+			$stores = $this->Model_Setting_Store->getStores();
 			
 			foreach ($stores as $store) {
 				foreach ($routes as $route) {
@@ -101,7 +101,7 @@ class Extend
 			}
 		}
 		
-		return $this->model_design_layout->addLayout($layout);
+		return $this->Model_Design_Layout->addLayout($layout);
 	}
 	
 	//TODO: This should remove based on a unique ID not the name... 
@@ -110,7 +110,7 @@ class Extend
 		$result = $this->db->query("SELECT layout_id FROM " . DB_PREFIX . "layout WHERE name='" . $this->db->escape($name) . "' LIMIT 1");
 		
 		if ($result->num_rows) {
-			$this->model_design_layout->deleteLayout($result->row['layout_id']);
+			$this->Model_Design_Layout->deleteLayout($result->row['layout_id']);
 		}
 	}
 	

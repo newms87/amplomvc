@@ -1,5 +1,5 @@
 <?php
-class ControllerDesignNavigation extends Controller 
+class Admin_Controller_Design_Navigation extends Controller 
 {
 	
 	public function index()
@@ -18,7 +18,7 @@ class ControllerDesignNavigation extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_design_navigation->addNavigationGroup($_POST);
+			$this->Model_Design_Navigation->addNavigationGroup($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -36,7 +36,7 @@ class ControllerDesignNavigation extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_design_navigation->editNavigationGroup($_GET['navigation_group_id'], $_POST);
+			$this->Model_Design_Navigation->editNavigationGroup($_GET['navigation_group_id'], $_POST);
 
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -55,7 +55,7 @@ class ControllerDesignNavigation extends Controller
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $navigation_group_id) {
-				$this->model_design_navigation->deleteNavigationGroup($navigation_group_id);
+				$this->Model_Design_Navigation->deleteNavigationGroup($navigation_group_id);
 			}
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -68,7 +68,7 @@ class ControllerDesignNavigation extends Controller
 	
 	public function reset_admin_navigation()
 	{
-		$this->model_design_navigation->reset_admin_navigation_group();
+		$this->Model_Design_Navigation->reset_admin_navigation_group();
 		
 		$this->message->add("notify", "Admin Navigation Group has been reset!");
 		
@@ -85,13 +85,13 @@ class ControllerDesignNavigation extends Controller
 			foreach ($_POST['selected'] as $navigation_group_id) {
 				switch($_GET['action']){
 					case 'enable':
-						$this->model_design_navigation->editNavigationGroup($navigation_group_id, array('status' => 1));
+						$this->Model_Design_Navigation->editNavigationGroup($navigation_group_id, array('status' => 1));
 						break;
 					case 'disable':
-						$this->model_design_navigation->editNavigationGroup($navigation_group_id, array('status' => 0));
+						$this->Model_Design_Navigation->editNavigationGroup($navigation_group_id, array('status' => 0));
 						break;
 					case 'delete':
-						$this->model_design_navigation->deleteNavigationGroup($navigation_group_id);
+						$this->Model_Design_Navigation->deleteNavigationGroup($navigation_group_id);
 						break;
 				}
 				if($this->error)
@@ -128,7 +128,7 @@ class ControllerDesignNavigation extends Controller
 			'sort_value' => 'name',
 		);
 		
-		$stores = array('admin' => array('store_id' => 'admin', 'name' => 'Admin Panel')) + $this->model_setting_store->getStores();
+		$stores = array('admin' => array('store_id' => 'admin', 'name' => 'Admin Panel')) + $this->Model_Setting_Store->getStores();
 		
 		$columns['stores'] = array(
 			'type' => 'multiselect',
@@ -172,8 +172,8 @@ class ControllerDesignNavigation extends Controller
 		}
 		
 		
-		$navigation_groups_total = $this->model_design_navigation->getTotalNavigationGroups($data);
-		$navigation_groups = $this->model_design_navigation->getNavigationGroups($data);
+		$navigation_groups_total = $this->Model_Design_Navigation->getTotalNavigationGroups($data);
+		$navigation_groups = $this->Model_Design_Navigation->getNavigationGroups($data);
 		
 		foreach ($navigation_groups as &$nav_group) {
 			$action = array();
@@ -272,7 +272,7 @@ class ControllerDesignNavigation extends Controller
 		$this->data['cancel'] = $this->url->link('design/navigation');
 
 		if ($navigation_group_id && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-			$navigation_group_info = $this->model_design_navigation->getNavigationGroup($navigation_group_id);
+			$navigation_group_info = $this->Model_Design_Navigation->getNavigationGroup($navigation_group_id);
 		}
 		
 		//initialize the values in order of Post, Database, Default
@@ -295,7 +295,7 @@ class ControllerDesignNavigation extends Controller
 		
 		$admin_store = array('admin' => array('store_id' => 0, 'name' => $this->_('text_admin_panel')));
 		
-		$this->data['data_stores'] = $admin_store + $this->model_setting_store->getStores();
+		$this->data['data_stores'] = $admin_store + $this->Model_Setting_Store->getStores();
 		
 		$this->children = array(
 			'common/header',

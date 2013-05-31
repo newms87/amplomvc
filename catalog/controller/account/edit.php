@@ -1,5 +1,5 @@
 <?php
-class ControllerAccountEdit extends Controller 
+class Catalog_Controller_Account_Edit extends Controller 
 {
 	
 
@@ -18,7 +18,7 @@ class ControllerAccountEdit extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_account_customer->editCustomer($_POST);
+			$this->Model_Account_Customer->editCustomer($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -62,7 +62,7 @@ class ControllerAccountEdit extends Controller
 		$this->data['action'] = $this->url->link('account/edit');
 
 		if ($_SERVER['REQUEST_METHOD'] != 'POST') {
-			$customer_info = $this->model_account_customer->getCustomer($this->customer->getId());
+			$customer_info = $this->Model_Account_Customer->getCustomer($this->customer->getId());
 		}
 
 		if (isset($_POST['firstname'])) {
@@ -133,7 +133,7 @@ class ControllerAccountEdit extends Controller
 			$this->error['email'] = $this->_('error_email');
 		}
 		
-		if (($this->customer->info('email') != $_POST['email']) && $this->model_account_customer->getTotalCustomersByEmail($_POST['email'])) {
+		if (($this->customer->info('email') != $_POST['email']) && $this->Model_Account_Customer->getTotalCustomersByEmail($_POST['email'])) {
 			$this->error['warning'] = $this->_('error_exists');
 		}
 

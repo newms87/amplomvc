@@ -1,5 +1,5 @@
 <?php
-class ControllerCartBlockCart extends Controller
+class Catalog_Controller_Cart_Block_Cart extends Controller
 {
 		
 	public function index($settings = null, $ajax_cart = true)
@@ -81,8 +81,7 @@ class ControllerCartBlockCart extends Controller
 			
 				$product['total'] = $this->currency->format($this->tax->calculate($product['total'], $product['tax_class_id']));
 				
-				if($product['reward'])
-{
+				if ($product['reward']) {
 					$product['reward'] = sprintf($this->_('text_points'), $product['reward']);
 				}
 				

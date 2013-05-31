@@ -1,5 +1,5 @@
 <?php
-class ControllerAccountReward extends Controller 
+class Catalog_Controller_Account_Reward extends Controller 
 {
 	public function index()
 	{
@@ -34,9 +34,9 @@ class ControllerAccountReward extends Controller
 			'limit' => 10
 		);
 		
-		$reward_total = $this->model_account_reward->getTotalRewards($data);
+		$reward_total = $this->Model_Account_Reward->getTotalRewards($data);
 	
-		$results = $this->model_account_reward->getRewards($data);
+		$results = $this->Model_Account_Reward->getRewards($data);
  		
 		foreach ($results as $result) {
 			$this->data['rewards'][] = array(

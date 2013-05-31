@@ -1,5 +1,5 @@
 <?php
-class ControllerSaleCoupon extends Controller 
+class Admin_Controller_Sale_Coupon extends Controller 
 {
 	
   	public function index()
@@ -18,7 +18,7 @@ class ControllerSaleCoupon extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_sale_coupon->addCoupon($_POST);
+			$this->Model_Sale_Coupon->addCoupon($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -37,7 +37,7 @@ class ControllerSaleCoupon extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_sale_coupon->editCoupon($_GET['coupon_id'], $_POST);
+			$this->Model_Sale_Coupon->editCoupon($_GET['coupon_id'], $_POST);
 				
 			$this->message->add('success', $this->_('text_success'));
 	
@@ -57,7 +57,7 @@ class ControllerSaleCoupon extends Controller
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $coupon_id) {
-				$this->model_sale_coupon->deleteCoupon($coupon_id);
+				$this->Model_Sale_Coupon->deleteCoupon($coupon_id);
 			}
 				
 			$this->message->add('success', $this->_('text_success'));
@@ -96,9 +96,9 @@ class ControllerSaleCoupon extends Controller
 			'limit' => $this->config->get('config_admin_limit')
 		);
 		
-		$coupon_total = $this->model_sale_coupon->getTotalCoupons();
+		$coupon_total = $this->Model_Sale_Coupon->getTotalCoupons();
 	
-		$results = $this->model_sale_coupon->getCoupons($data);
+		$results = $this->Model_Sale_Coupon->getCoupons($data);
  
 		foreach ($results as $result) {
 			$action = array();
@@ -175,7 +175,7 @@ class ControllerSaleCoupon extends Controller
 		$this->data['cancel'] = $this->url->link('sale/coupon', $url);
   		
 		if ($coupon_id && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-			$coupon_info = $this->model_sale_coupon->getCoupon($coupon_id);
+			$coupon_info = $this->Model_Sale_Coupon->getCoupon($coupon_id);
 		}
 		
 		$defaults = array(
@@ -208,29 +208,29 @@ class ControllerSaleCoupon extends Controller
 		}
 		
 		if (!isset($this->data['coupon_products'])) {
-			$products = $this->model_sale_coupon->getCouponProducts($coupon_id);
+			$products = $this->Model_Sale_Coupon->getCouponProducts($coupon_id);
 			
 			$this->data['coupon_products'] = array();
 			foreach ($products as $product) {
-				$this->data['coupon_products'][] = $this->model_catalog_product->getProduct($product['product_id']);
+				$this->data['coupon_products'][] = $this->Model_Catalog_Product->getProduct($product['product_id']);
 			}
 		}
 		
 		if (!isset($this->data['coupon_categories'])) {
-			$categories = $this->model_sale_coupon->getCouponCategories($coupon_id);
+			$categories = $this->Model_Sale_Coupon->getCouponCategories($coupon_id);
 			
 			$this->data['coupon_categories'] = array();
 			foreach ($categories as $category_id) {
-				$this->data['coupon_categories'][] = $this->model_catalog_category->getCategory($category_id);
+				$this->data['coupon_categories'][] = $this->Model_Catalog_Category->getCategory($category_id);
 			}
 		}
 		
 		if (!isset($this->data['coupon_customers'])) {
-			$customers = $this->model_sale_coupon->getCouponCustomers($coupon_id);
+			$customers = $this->Model_Sale_Coupon->getCouponCustomers($coupon_id);
 			
 			$this->data['coupon_customers'] = array();
 			foreach ($customers as $customer) {
-				$this->data['coupon_customers'][] = $this->model_sale_customer->getCustomer($customer['customer_id']);
+				$this->data['coupon_customers'][] = $this->Model_Sale_Customer->getCustomer($customer['customer_id']);
 			}
 		}
 				
@@ -242,9 +242,9 @@ class ControllerSaleCoupon extends Controller
 			$this->data['date_end'] = date('Y-m-d', strtotime($coupon_info['date_end']));
 		}
 		
-		$this->data['data_geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$this->data['data_geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 		
-		$this->data['categories'] = $this->model_catalog_category->getCategories(0);
+		$this->data['categories'] = $this->Model_Catalog_Category->getCategories(0);
 		
 		$this->children = array(
 			'common/header',
@@ -268,7 +268,7 @@ class ControllerSaleCoupon extends Controller
 				$this->error['code'] = $this->_('error_code');
 		}
 		
-		$coupon_info = $this->model_sale_coupon->getCouponByCode($_POST['code']);
+		$coupon_info = $this->Model_Sale_Coupon->getCouponByCode($_POST['code']);
 		
 		if ($coupon_info) {
 			if (!isset($_GET['coupon_id'])) {
@@ -305,7 +305,7 @@ class ControllerSaleCoupon extends Controller
 		
 		$this->data['histories'] = array();
 			
-		$results = $this->model_sale_coupon->getCouponHistories($coupon_id, ($page - 1) * 10, 10);
+		$results = $this->Model_Sale_Coupon->getCouponHistories($coupon_id, ($page - 1) * 10, 10);
 				
 		foreach ($results as $result) {
 			$this->data['histories'][] = array(
@@ -316,7 +316,7 @@ class ControllerSaleCoupon extends Controller
 			);
 		}
 		
-		$history_total = $this->model_sale_coupon->getTotalCouponHistories($coupon_id);
+		$history_total = $this->Model_Sale_Coupon->getTotalCouponHistories($coupon_id);
 			
 		$this->pagination->init();
 		$this->pagination->total = $history_total;

@@ -135,7 +135,7 @@ class ModelCatalogCollection extends Model
 		}
 		
 		foreach ($result->rows as $key => &$row) {
-			$product = $this->model_catalog_product->getProduct($row['product_id']);
+			$product = $this->Model_Catalog_Product->getProduct($row['product_id']);
 			
 			if ($product) {
 				$row += $product;

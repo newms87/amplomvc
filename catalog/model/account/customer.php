@@ -1,5 +1,5 @@
 <?php
-class ModelAccountCustomer extends Model 
+class Catalog_Model_Account_Customer extends Model 
 {
 	public function addCustomer($data)
 	{

@@ -1,5 +1,5 @@
 <?php
-class ControllerCartBlockTotal extends Controller
+class Catalog_Controller_Cart_Block_Total extends Controller
 {
 	
 	public function index($settings = null)

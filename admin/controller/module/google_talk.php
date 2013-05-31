@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleGoogleTalk extends Controller 
+class Admin_Controller_Module_GoogleTalk extends Controller 
 {
 	
 	
@@ -12,7 +12,7 @@ class ControllerModuleGoogleTalk extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('google_talk', $_POST);
+			$this->Model_Setting_Setting->editSetting('google_talk', $_POST);
 					
 			$this->message->add('success', $this->_('text_success'));
 						
@@ -53,7 +53,7 @@ class ControllerModuleGoogleTalk extends Controller
 			$this->data['modules'] = $this->config->get('google_talk_module');
 		}
 				
-		$this->data['layouts'] = $this->model_design_layout->getLayouts();
+		$this->data['layouts'] = $this->Model_Design_Layout->getLayouts();
 
 		$this->children = array(
 			'common/header',

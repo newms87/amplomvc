@@ -1,5 +1,5 @@
 <?php
-class ControllerAffiliateTransaction extends Controller 
+class Catalog_Controller_Affiliate_Transaction extends Controller 
 {
 	public function index()
 	{
@@ -36,9 +36,9 @@ class ControllerAffiliateTransaction extends Controller
 			'limit' => 10
 		);
 		
-		$transaction_total = $this->model_affiliate_transaction->getTotalTransactions($data);
+		$transaction_total = $this->Model_Affiliate_Transaction->getTotalTransactions($data);
 	
-		$results = $this->model_affiliate_transaction->getTransactions($data);
+		$results = $this->Model_Affiliate_Transaction->getTransactions($data);
  		
 		foreach ($results as $result) {
 			$this->data['transactions'][] = array(
@@ -52,7 +52,7 @@ class ControllerAffiliateTransaction extends Controller
 		$this->pagination->total = $transaction_total;
 		$this->data['pagination'] = $this->pagination->render();
 		
-		$this->data['balance'] = $this->currency->format($this->model_affiliate_transaction->getBalance());
+		$this->data['balance'] = $this->currency->format($this->Model_Affiliate_Transaction->getBalance());
 		
 		$this->data['continue'] = $this->url->link('affiliate/account');
 

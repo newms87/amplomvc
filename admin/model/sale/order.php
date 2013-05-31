@@ -1,9 +1,9 @@
 <?php
-class ModelSaleOrder extends Model 
+class Admin_Model_Sale_Order extends Model 
 {
 	public function addOrder($data)
 	{
-		$store_info = $this->model_setting_store->getStore($data['store_id']);
+		$store_info = $this->Model_Setting_Store->getStore($data['store_id']);
 		
 		if ($store_info) {
 			$store_name = $store_info['name'];
@@ -13,7 +13,7 @@ class ModelSaleOrder extends Model
 			$store_url = HTTP_CATALOG;
 		}
 		
-		$setting_info = $this->model_setting_setting->getSetting('setting', $data['store_id']);
+		$setting_info = $this->Model_Setting_Setting->getSetting('setting', $data['store_id']);
 			
 		if (isset($setting_info['invoice_prefix'])) {
 			$invoice_prefix = $setting_info['invoice_prefix'];
@@ -21,7 +21,7 @@ class ModelSaleOrder extends Model
 			$invoice_prefix = $this->tool->format_invoice($this->config->get('config_invoice_prefix'));
 		}
 		
-		$country_info = $this->model_localisation_country->getCountry($data['shipping_country_id']);
+		$country_info = $this->Model_Localisation_Country->getCountry($data['shipping_country_id']);
 		
 		if ($country_info) {
 			$shipping_country = $country_info['name'];
@@ -31,7 +31,7 @@ class ModelSaleOrder extends Model
 			$shipping_address_format = '{firstname} {lastname}' . "\n" . '{company}' . "\n" . '{address_1}' . "\n" . '{address_2}' . "\n" . '{city} {postcode}' . "\n" . '{zone}' . "\n" . '{country}';
 		}
 		
-		$zone_info = $this->model_localisation_zone->getZone($data['shipping_zone_id']);
+		$zone_info = $this->Model_Localisation_Zone->getZone($data['shipping_zone_id']);
 		
 		if ($zone_info) {
 			$shipping_zone = $zone_info['name'];
@@ -39,7 +39,7 @@ class ModelSaleOrder extends Model
 			$shipping_zone = '';
 		}
 					
-		$country_info = $this->model_localisation_country->getCountry($data['payment_country_id']);
+		$country_info = $this->Model_Localisation_Country->getCountry($data['payment_country_id']);
 		
 		if ($country_info) {
 			$payment_country = $country_info['name'];
@@ -49,7 +49,7 @@ class ModelSaleOrder extends Model
 			$payment_address_format = '{firstname} {lastname}' . "\n" . '{company}' . "\n" . '{address_1}' . "\n" . '{address_2}' . "\n" . '{city} {postcode}' . "\n" . '{zone}' . "\n" . '{country}';
 		}
 	
-		$zone_info = $this->model_localisation_zone->getZone($data['payment_zone_id']);
+		$zone_info = $this->Model_Localisation_Zone->getZone($data['payment_zone_id']);
 		
 		if ($zone_info) {
 			$payment_zone = $zone_info['name'];
@@ -57,7 +57,7 @@ class ModelSaleOrder extends Model
 			$payment_zone = '';
 		}
 
-		$currency_info = $this->model_localisation_currency->getCurrencyByCode($this->config->get('config_currency'));
+		$currency_info = $this->Model_Localisation_Currency->getCurrencyByCode($this->config->get('config_currency'));
 		
 		if ($currency_info) {
 			$currency_id = $currency_info['currency_id'];
@@ -117,7 +117,7 @@ class ModelSaleOrder extends Model
 	
 	public function editOrder($order_id, $data)
 	{
-		$country_info = $this->model_localisation_country->getCountry($data['shipping_country_id']);
+		$country_info = $this->Model_Localisation_Country->getCountry($data['shipping_country_id']);
 		
 		if ($country_info) {
 			$shipping_country = $country_info['name'];
@@ -127,7 +127,7 @@ class ModelSaleOrder extends Model
 			$shipping_address_format = '{firstname} {lastname}' . "\n" . '{company}' . "\n" . '{address_1}' . "\n" . '{address_2}' . "\n" . '{city} {postcode}' . "\n" . '{zone}' . "\n" . '{country}';
 		}
 		
-		$zone_info = $this->model_localisation_zone->getZone($data['shipping_zone_id']);
+		$zone_info = $this->Model_Localisation_Zone->getZone($data['shipping_zone_id']);
 		
 		if ($zone_info) {
 			$shipping_zone = $zone_info['name'];
@@ -135,7 +135,7 @@ class ModelSaleOrder extends Model
 			$shipping_zone = '';
 		}
 					
-		$country_info = $this->model_localisation_country->getCountry($data['payment_country_id']);
+		$country_info = $this->Model_Localisation_Country->getCountry($data['payment_country_id']);
 		
 		if ($country_info) {
 			$payment_country = $country_info['name'];
@@ -145,7 +145,7 @@ class ModelSaleOrder extends Model
 			$payment_address_format = '{firstname} {lastname}' . "\n" . '{company}' . "\n" . '{address_1}' . "\n" . '{address_2}' . "\n" . '{city} {postcode}' . "\n" . '{zone}' . "\n" . '{country}';
 		}
 	
-		$zone_info = $this->model_localisation_zone->getZone($data['payment_zone_id']);
+		$zone_info = $this->Model_Localisation_Zone->getZone($data['payment_zone_id']);
 		
 		if ($zone_info) {
 			$payment_zone = $zone_info['name'];
@@ -291,7 +291,7 @@ class ModelSaleOrder extends Model
 				$affiliate_id = 0;
 			}
 				
-			$affiliate_info = $this->model_sale_affiliate->getAffiliate($affiliate_id);
+			$affiliate_info = $this->Model_Sale_Affiliate->getAffiliate($affiliate_id);
 				
 			if ($affiliate_info) {
 				$affiliate_firstname = $affiliate_info['firstname'];
@@ -301,7 +301,7 @@ class ModelSaleOrder extends Model
 				$affiliate_lastname = '';
 			}
 
-			$language_info = $this->model_localisation_language->getLanguage($order_query->row['language_id']);
+			$language_info = $this->Model_Localisation_Language->getLanguage($order_query->row['language_id']);
 			
 			if ($language_info) {
 				$language_code = $language_info['code'];
@@ -611,7 +611,7 @@ class ModelSaleOrder extends Model
 			$results = $this->getOrderVouchers($order_id);
 			
 			foreach ($results as $result) {
-				$this->model_sale_voucher->sendVoucher($result['voucher_id']);
+				$this->Model_Sale_Voucher->sendVoucher($result['voucher_id']);
 			}
 		}
 

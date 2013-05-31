@@ -1,5 +1,5 @@
 <?php
-class ControllerAffiliateRegister extends Controller 
+class Catalog_Controller_Affiliate_Register extends Controller 
 {
 	
 			
@@ -16,7 +16,7 @@ class ControllerAffiliateRegister extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_affiliate_affiliate->addAffiliate($_POST);
+			$this->Model_Affiliate_Affiliate->addAffiliate($_POST);
 
 			$this->affiliate->login($_POST['email'], $_POST['password']);
 
@@ -180,7 +180,7 @@ class ControllerAffiliateRegister extends Controller
 				$this->data['zone_id'] = '';
 		}
 		
-		$this->data['countries'] = $this->model_localisation_country->getCountries();
+		$this->data['countries'] = $this->Model_Localisation_Country->getCountries();
 
 		if (isset($_POST['tax'])) {
 			$this->data['tax'] = $_POST['tax'];
@@ -249,7 +249,7 @@ class ControllerAffiliateRegister extends Controller
 		}
 
 		if ($this->config->get('config_affiliate_id')) {
-			$information_info = $this->model_catalog_information->getInformation($this->config->get('config_affiliate_id'));
+			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_affiliate_id'));
 			
 			if ($information_info) {
 				$this->language->format('text_agree', $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_affiliate_id')), $information_info['title'], $information_info['title']);
@@ -292,7 +292,7 @@ class ControllerAffiliateRegister extends Controller
 				$this->error['email'] = $this->_('error_email');
 		}
 
-		if ($this->model_affiliate_affiliate->getTotalAffiliatesByEmail($_POST['email'])) {
+		if ($this->Model_Affiliate_Affiliate->getTotalAffiliatesByEmail($_POST['email'])) {
 				$this->error['warning'] = $this->_('error_exists');
 		}
 		
@@ -308,7 +308,7 @@ class ControllerAffiliateRegister extends Controller
 				$this->error['city'] = $this->_('error_city');
 		}
 		
-		$country_info = $this->model_localisation_country->getCountry($_POST['country_id']);
+		$country_info = $this->Model_Localisation_Country->getCountry($_POST['country_id']);
 		
 		if ($country_info && $country_info['postcode_required'] && (strlen($_POST['postcode']) < 2) || (strlen($_POST['postcode']) > 10)) {
 			$this->error['postcode'] = $this->_('error_postcode');
@@ -331,7 +331,7 @@ class ControllerAffiliateRegister extends Controller
 		}
 		
 		if ($this->config->get('config_affiliate_id')) {
-			$information_info = $this->model_catalog_information->getInformation($this->config->get('config_affiliate_id'));
+			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_affiliate_id'));
 			
 			if ($information_info && !isset($_POST['agree'])) {
 					$this->error['warning'] = sprintf($this->_('error_agree'), $information_info['title']);

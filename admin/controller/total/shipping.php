@@ -1,5 +1,5 @@
 <?php
-class ControllerTotalShipping extends Controller 
+class Admin_Controller_Total_Shipping extends Controller 
 {
 	
 	
@@ -12,7 +12,7 @@ class ControllerTotalShipping extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && ($this->validate())) {
-			$this->model_setting_setting->editSetting('shipping', $_POST);
+			$this->Model_Setting_Setting->editSetting('shipping', $_POST);
 		
 			$this->message->add('success', $this->_('text_success'));
 			

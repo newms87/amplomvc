@@ -39,8 +39,7 @@ class Weight
 
 	public function format($value, $weight_class _id, $decimal_point = '.', $thousand_point = ',')
 	{
-		if (isset($this->weights[$weight_class _id])) 
-{
+		if (isset($this->weights[$weight_class _id])) {
 			return number_format($value, 2, $decimal_point, $thousand_point) . $this->weights[$weight_class _id]['unit'];
 		} else {
 			return number_format($value, 2, $decimal_point, $thousand_point);
@@ -49,8 +48,7 @@ class Weight
 	
 	public function getUnit($weight_class _id)
 	{
-		if (isset($this->weights[$weight_class _id])) 
-{
+		if (isset($this->weights[$weight_class _id])) {
 			return $this->weights[$weight_class _id]['unit'];
 		} else {
 			return '';

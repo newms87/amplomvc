@@ -1,5 +1,5 @@
 <?php
-class ControllerReportCustomerReward extends Controller 
+class Admin_Controller_Report_CustomerReward extends Controller 
 {
 	public function index()
 	{
@@ -53,9 +53,9 @@ class ControllerReportCustomerReward extends Controller
 			'limit'				=> $this->config->get('config_admin_limit')
 		);
 				
-		$customer_total = $this->model_report_customer->getTotalRewardPoints($data);
+		$customer_total = $this->Model_Report_Customer->getTotalRewardPoints($data);
 		
-		$results = $this->model_report_customer->getRewardPoints($data);
+		$results = $this->Model_Report_Customer->getRewardPoints($data);
 		
 		foreach ($results as $result) {
 			$action = array();

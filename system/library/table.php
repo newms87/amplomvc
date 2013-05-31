@@ -179,8 +179,7 @@ class Table
 			$this->file = DIR_THEME . 'default/template/' . $file;
 		}
 		else {
-			list(,$caller) = debug_backtrace(false);
-			trigger_error("Error: Could not load form template " . DIR_THEME . $this->path . $file . "! Called from $caller[class ]::$caller[function]().");
+			trigger_error("Error: Could not load form template " . DIR_THEME . $this->path . $file . "! " . get_caller());
 			exit();
 		}
 	}
@@ -316,8 +315,7 @@ class Table
 				
 			case 'select':
 				if (empty($column['filter_data'])) {
-					list(,,$caller) = debug_backtrace(false);
-					trigger_error("You must specify filter_data for a select filter type! Called from $caller[file] on line $caller[line].");
+					trigger_error("You must specify filter_data for a select filter type! " . get_caller(3));
 					exit();
 				}
 				break;

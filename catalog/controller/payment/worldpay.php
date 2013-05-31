@@ -1,11 +1,11 @@
 <?php
-class ControllerPaymentWorldPay extends Controller 
+class Catalog_Controller_Payment_Worldpay extends Controller 
 {
 	protected function index()
 	{
 		$this->template->load('payment/worldpay');
 
-		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
+		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
 		
 		$this->data['action'] = 'https://select.worldpay.com/wcc/purchase';
 
@@ -50,9 +50,9 @@ class ControllerPaymentWorldPay extends Controller
 
 			// If returned successful but callbackPW doesn't match, set order to pendind and record reason
 			if (isset($_POST['callbackPW']) && ($_POST['callbackPW'] == $this->config->get('worldpay_password'))) {
-				$this->model_checkout_order->confirm($_POST['cartId'], $this->config->get('worldpay_order_status_id'));
+				$this->Model_Checkout_Order->confirm($_POST['cartId'], $this->config->get('worldpay_order_status_id'));
 			} else {
-				$this->model_checkout_order->confirm($_POST['cartId'], $this->config->get('config_order_status_id'), $this->_('text_pw_mismatch'));
+				$this->Model_Checkout_Order->confirm($_POST['cartId'], $this->config->get('config_order_status_id'), $this->_('text_pw_mismatch'));
 			}
 	
 			$message = '';
@@ -89,7 +89,7 @@ class ControllerPaymentWorldPay extends Controller
 				$message .= 'wafMerchMessage: ' . $_POST['wafMerchMessage'] . "\n";
 			}
 
-			$this->model_checkout_order->update_order($_POST['cartId'], $this->config->get('worldpay_order_status_id'), $message, false);
+			$this->Model_Checkout_Order->update_order($_POST['cartId'], $this->config->get('worldpay_order_status_id'), $message, false);
 	
 			$this->data['continue'] = $this->url->link('checkout/success');
 

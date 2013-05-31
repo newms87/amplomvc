@@ -1,5 +1,5 @@
 <?php
-class ControllerMailOrder extends Controller 
+class Catalog_Controller_Mail_Order extends Controller 
 {
 		
 	public function index($order_info)

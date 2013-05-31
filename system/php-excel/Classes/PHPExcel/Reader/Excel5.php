@@ -58,8 +58,7 @@
 
 
 /** PHPExcel root directory */
-if (!defined('PHPEXCEL_ROOT')) 
-{
+if (!defined('PHPEXCEL_ROOT')) {
 	/**
 	* @ignore
 	*/

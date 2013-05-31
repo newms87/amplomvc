@@ -130,7 +130,7 @@ class Customer
 	
 	public function get_shipping_addresses()
 	{
-		$address_list = $this->model_account_address->getAddresses();
+		$address_list = $this->Model_Account_Address->getAddresses();
 		
 		$allowed_zones = $this->cart->getAllowedShippingZones();
 		
@@ -155,7 +155,7 @@ class Customer
 	
 	public function get_payment_addresses()
 	{
-		return $this->model_account_address->getAddresses();
+		return $this->Model_Account_Address->getAddresses();
 	}
 	
   	public function getBalance()

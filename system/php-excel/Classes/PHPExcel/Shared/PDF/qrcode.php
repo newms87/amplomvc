@@ -83,8 +83,7 @@
  */
 
 // definitions
-if (!defined('QRCODEDEFS')) 
-{
+if (!defined('QRCODEDEFS')) {
 
 	/**
 	* Indicate that definitions for this class are set
@@ -253,8 +252,7 @@ if (!defined('QRCODEDEFS'))
 
 // #*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#
 
-if (!class_exists('QRcode', false)) 
-{
+if (!class_exists('QRcode', false)) {
 
 	// for compatibility with PHP4
 	if (!function_exists('str_split')) {

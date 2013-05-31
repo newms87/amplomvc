@@ -1,5 +1,5 @@
 <?php
-class ModelLocalisationTaxRate extends Model 
+class Admin_Model_Localisation_TaxRate extends Model 
 {
 	public function addTaxRate($data)
 	{

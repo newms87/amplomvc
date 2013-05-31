@@ -638,8 +638,7 @@ class PHPExcel_Writer_Excel5_Parser{
 
 		// TODO: possible class value 0,1,2 check Formula.pm
 		// Split the range into 2 cell refs
-		if (preg_match('/^(\$)?([A-Ia-i]?[A-Za-z])(\$)?(\d+)\:(\$)?([A-Ia-i]?[A-Za-z])(\$)?(\d+)$/', $range)) 
-{
+		if (preg_match('/^(\$)?([A-Ia-i]?[A-Za-z])(\$)?(\d+)\:(\$)?([A-Ia-i]?[A-Za-z])(\$)?(\d+)$/', $range)) {
 			list($cell1, $cell2) = explode(':', $range);
 		} else {
 			// TODO: use real error codes
@@ -651,8 +650,7 @@ class PHPExcel_Writer_Excel5_Parser{
 		list($row2, $col2) = $this->_cellToPackedRowcol($cell2);
 
 		// The ptg value depends on the class of the ptg.
-		if ($class == 0) 
-{
+		if ($class == 0) {
 			$ptgArea = pack("C", $this->ptg['ptgArea']);
 		} elseif ($class == 1) 
 {
@@ -689,8 +687,7 @@ class PHPExcel_Writer_Excel5_Parser{
 		list($cell1, $cell2) = explode(':', $range);
 
 		// Convert the cell references
-		if (preg_match("/^(\\$)?[A-Ia-i]?[A-Za-z](\\$)?(\d+)$/", $cell1)) 
-{
+		if (preg_match("/^(\\$)?[A-Ia-i]?[A-Za-z](\\$)?(\d+)$/", $cell1)) {
 			list($row1, $col1) = $this->_cellToPackedRowcol($cell1);
 			list($row2, $col2) = $this->_cellToPackedRowcol($cell2);
 		} else { // It's a rows range (like 26:27)
@@ -698,8 +695,7 @@ class PHPExcel_Writer_Excel5_Parser{
 		}
 
 		// The ptg value depends on the class of the ptg.
-//		if ($class == 0) 
-{
+//		if ($class == 0) {
 			$ptgArea = pack("C", $this->ptg['ptgArea3d']);
 //		} elseif ($class == 1) 
 {
@@ -730,8 +726,7 @@ class PHPExcel_Writer_Excel5_Parser{
 		list($row, $col) = $cell_array;
 
 		// The ptg value depends on the class of the ptg.
-//		if ($class == 0) 
-{
+//		if ($class == 0) {
 //			$ptgRef = pack("C", $this->ptg['ptgRef']);
 //		} elseif ($class == 1) 
 {
@@ -768,8 +763,7 @@ class PHPExcel_Writer_Excel5_Parser{
 		list($row, $col) = $this->_cellToPackedRowcol($cell);
 
 		// The ptg value depends on the class of the ptg.
-//		if ($class == 0) 
-{
+//		if ($class == 0) {
 //			$ptgRef = pack("C", $this->ptg['ptgRef3d']);
 //		} elseif ($class == 1) 
 {

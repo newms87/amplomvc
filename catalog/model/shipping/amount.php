@@ -1,12 +1,12 @@
 <?php
-class ModelShippingAmount extends Model 
+class Catalog_Model_Shipping_Amount extends Model 
 {
 	
 	public function getQuote($address)
 	{
 		$this->load->language('shipping/amount');
 		
-		$valid_zone = $this->model_localisation_zone->inGeoZone($this->config->get('amount_geo_zone_id'), $address['country_id'], $address['zone_id']);
+		$valid_zone = $this->Model_Localisation_Zone->inGeoZone($this->config->get('amount_geo_zone_id'), $address['country_id'], $address['zone_id']);
 	
 		$quote_data = array();
 	

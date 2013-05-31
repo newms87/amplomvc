@@ -3,9 +3,9 @@ final class Loader
 {
 	protected $registry;
 	
-	public function __construct(&$registry)
+	public function __construct($registry)
 	{
-		$this->registry = &$registry;
+		$this->registry = $registry;
 	}
 	
 	public function __get($key)
@@ -41,55 +41,36 @@ final class Loader
 	
 	public function model($model)
 	{
-		
-		if (strpos($model,'/')) {
-			$model_name = 'model_' . str_replace('/', '_', $model);
-		
-			if (is_object($this->$model_name)) {
-				return $this->$model_name;
-			}
-			
-			$file  = DIR_APPLICATION . 'model/' . $model . '.php';
-		}
-		else {
-			$model_name = $model;
-			
-			$model_file = substr($model, 6);
-			
-			$file = DIR_APPLICATION . 'model/';
-			
-			$occur = 0;
-			
-			do{
-				$model = $model_file;
-				
-				$occur = strpos($model, '_', $occur+1);
-				
-				if (!$occur) {
-					break;
-				}
-				
-				$model[$occur] = '/';
-			}
-			while(!is_file($file . $model . '.php'));
-			
-			$file .= $model . '.php';
+		if (preg_match("/^Model_/", $model)) {
+			$model_class = (defined("IS_ADMIN") ? 'Admin_' : 'Catalog_') . $model;
+		} else {
+			$model_class = $model;
 		}
 		
-		$class = 'Model' . preg_replace('/[^a-zA-Z0-9]/', '', $model);
+		$path = str_replace("_",'/', $model_class);
 		
-		if (file_exists($file)) 
-{
+		$file = SITE_DIR . strtolower($path) . '.php';
+		
+		if (!is_file($file)) {
+			$path = preg_replace("/([A-Z]?[a-z])*([A-Z][a-z]*)\$/", '$1_$2', $path);
+			
+			$file = SITE_DIR . strtolower($path) . '.php';
+		}
+		
+		if (is_file($file)) {
 			_require_once($file);
 			
-			$model = new $class ($this->registry);
+			$class = new $model_class($this->registry);
 			
-			$this->registry->set($model_name, $model);
+			$this->registry->set($model_class, $class);
 			
-			return $model;
+			if ($model_class !== $model) {
+				$this->registry->set($model, $class);
+			}
+			
+			return $class;
 		} else {
-			list(,$caller) = debug_backtrace(false);
-			trigger_error('Error: Could not load model ' . $model . '! In ' . $caller['file'] . ' on line ' . $caller['line'] . ': ' . html_backtrace(5,-1,false));
+			trigger_error('Could not load model ' . $model . '! ' . get_caller() . html_backtrace(5,-1,false));
 			exit();
 		}
 	}
@@ -99,8 +80,7 @@ final class Loader
 		$file  = DIR_SYSTEM . 'database/' . $driver . '.php';
 		$class = 'Database' . preg_replace('/[^a-zA-Z0-9]/', '', $driver);
 		
-		if (file_exists($file)) 
-{
+		if (file_exists($file)) {
 			include_once($file);
 			
 			$this->registry->set(str_replace('/', '_', $driver), new $class ());

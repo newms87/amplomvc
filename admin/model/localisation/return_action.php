@@ -1,5 +1,5 @@
 <?php
-class ModelLocalisationReturnAction extends Model 
+class Admin_Model_Localisation_ReturnAction extends Model 
 {
 	public function addReturnAction($data)
 	{

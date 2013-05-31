@@ -1,5 +1,5 @@
 <?php
-class ControllerReportProductViewed extends Controller 
+class Admin_Controller_Report_ProductViewed extends Controller 
 {
 	public function index()
 	{
@@ -25,7 +25,7 @@ class ControllerReportProductViewed extends Controller
 			'limit' => $this->config->get('config_admin_limit')
 		);
 		
-		$product_view_list = $this->model_report_product->getProductViews();
+		$product_view_list = $this->Model_Report_Product->getProductViews();
 		
 		$product_views = array();
 		foreach ($product_view_list as $pv) {
@@ -54,13 +54,13 @@ class ControllerReportProductViewed extends Controller
 			}
 		}
 		
-		$product_viewed_total = $this->model_report_product->getTotalProductsViewed($data);
+		$product_viewed_total = $this->Model_Report_Product->getTotalProductsViewed($data);
 		
-		$product_views_total = $this->model_report_product->getTotalProductViews();
+		$product_views_total = $this->Model_Report_Product->getTotalProductViews();
 		
 		$this->data['products'] = array();
 		
-		$results = $this->model_report_product->getProductsViewed($data);
+		$results = $this->Model_Report_Product->getProductsViewed($data);
 		
 		foreach ($results as $result) {
 			if ($result['views']) {
@@ -100,7 +100,7 @@ class ControllerReportProductViewed extends Controller
 	{
 		$this->load->language('report/product_viewed');
 		
-		$this->model_report_product->reset();
+		$this->Model_Report_Product->reset();
 		
 		$this->message->add('success', $this->_('text_success'));
 		

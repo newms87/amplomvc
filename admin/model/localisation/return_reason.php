@@ -1,5 +1,5 @@
 <?php
-class ModelLocalisationReturnReason extends Model 
+class Admin_Model_Localisation_ReturnReason extends Model 
 {
 	public function addReturnReason($data)
 	{

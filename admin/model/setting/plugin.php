@@ -1,5 +1,5 @@
 <?php
-class ModelSettingPlugin extends Model 
+class Admin_Model_Setting_Plugin extends Model 
 {
 	
 	public function getInstalledPlugins()
@@ -83,7 +83,7 @@ class ModelSettingPlugin extends Model
 			$plugin['plugin_path'] = $this->db->escape($data['plugin_path']);
 			$plugin['base_type'] = $this->db->escape($data['base_type']);
 			$plugin['route'] = $this->db->escape($data['route']);
-			$plugin['class _path'] = $this->db->escape($data['class_path']);
+			$plugin['class_path'] = $this->db->escape($data['class_path']);
 			$plugin['type'] = $this->db->escape($data['type']);
 			$plugin['hooks'] = $data['hooks']?serialize($data['hooks']):'';
 			$plugin['priority'] = (int)$data['priority'];

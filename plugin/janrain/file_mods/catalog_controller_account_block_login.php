@@ -1,6 +1,6 @@
 #<?php
 //=====
-class ControllerAccountBlockLogin extends Controller 
+class Catalog_Controller_Account_Block_Login extends Controller 
 {
 //.....
 	public function index($settings, $type = 'header')

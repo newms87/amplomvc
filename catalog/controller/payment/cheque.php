@@ -1,5 +1,5 @@
 <?php
-class ControllerPaymentCheque extends Controller 
+class Catalog_Controller_Payment_Cheque extends Controller 
 {
 	protected function index()
 	{
@@ -25,6 +25,6 @@ class ControllerPaymentCheque extends Controller
 		$comment .= $this->config->get('config_address') . "\n\n";
 		$comment .= $this->_('text_payment') . "\n";
 		
-		$this->model_checkout_order->confirm($this->session->data['order_id'], $this->config->get('cheque_order_status_id'), $comment, true);
+		$this->Model_Checkout_Order->confirm($this->session->data['order_id'], $this->config->get('cheque_order_status_id'), $comment, true);
 	}
 }

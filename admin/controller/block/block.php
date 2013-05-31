@@ -1,5 +1,5 @@
 <?php
-class ControllerBlockBlock extends Controller 
+class Admin_Controller_Block_Block extends Controller 
 {
 	private $block_controller;
 	
@@ -11,7 +11,7 @@ class ControllerBlockBlock extends Controller
 		
 		if (isset($_GET['name'])) {
 				
-			if (!$this->model_block_block->is_block($_GET['name'])) {
+			if (!$this->Model_Block_Block->is_block($_GET['name'])) {
 				$this->message->add('warning', $this->_('error_unknown_block'));
 				
 				$this->url->redirect($this->url->link('block/block'));
@@ -81,8 +81,8 @@ class ControllerBlockBlock extends Controller
 		}
 		
 		//Table Row Data
-		$block_total = $this->model_block_block->getTotalBlocks($data);
-		$blocks = $this->model_block_block->getBlocks($data);
+		$block_total = $this->Model_Block_Block->getTotalBlocks($data);
+		$blocks = $this->Model_Block_Block->getBlocks($data);
 		
 		foreach ($blocks as &$block) {
 			$actions = array(
@@ -143,7 +143,7 @@ class ControllerBlockBlock extends Controller
 		$name = $_GET['name'];
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_block_block->updateBlock($name, $_POST);
+			$this->Model_Block_Block->updateBlock($name, $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -164,7 +164,7 @@ class ControllerBlockBlock extends Controller
 			$this->data['profiles'] = isset($_POST['profiles']) ? $_POST['profiles'] : array();
 			$this->data['settings'] = isset($_POST['settings']) ? $_POST['settings'] : array();
 		} else {
-			$block = $this->model_block_block->getBlock($name);
+			$block = $this->Model_Block_Block->getBlock($name);
 			
 			if (!empty($block)) {
 				$this->data['profiles'] = $block['profiles'];
@@ -200,8 +200,8 @@ class ControllerBlockBlock extends Controller
 		//Get additional Block settings and profile data (this is the plugin part)
 		$this->load_block_data();
 		
-		$this->data['data_stores'] = $this->model_setting_store->getStores();
-		$this->data['data_layouts'] = $this->model_design_layout->getLayouts();
+		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
+		$this->data['data_layouts'] = $this->Model_Design_Layout->getLayouts();
 		$this->data['data_positions'] = array('' => $this->_('text_none')) + $this->theme->get_setting('data_positions');
 		
 		$this->children = array(
@@ -221,8 +221,7 @@ class ControllerBlockBlock extends Controller
 		$class = "ControllerBlock" . preg_replace("/[^A-Z0-9]/i",'',$path);
 		$class_path = 'block/' . $path;
 	
-		if (file_exists($file)) 
-{
+		if (file_exists($file)) {
 			_require_once($file);
 
 			$this->block_controller = new $class ($class_path, $this->registry);

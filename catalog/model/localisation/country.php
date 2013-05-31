@@ -1,5 +1,5 @@
 <?php
-class ModelLocalisationCountry extends Model 
+class Catalog_Model_Localisation_Country extends Model 
 {
 	public function getCountry($country_id)
 	{

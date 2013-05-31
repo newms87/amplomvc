@@ -1,5 +1,5 @@
 <?php
-class ModelSaleCustomer extends Model 
+class Admin_Model_Sale_Customer extends Model 
 {
 	public function addCustomer($data)
 	{
@@ -169,7 +169,7 @@ class ModelSaleCustomer extends Model
 
 			$this->load->language('mail/customer');
 			
-			$store_info = $this->model_setting_store->getStore($customer_info['store_id']);
+			$store_info = $this->Model_Setting_Store->getStore($customer_info['store_id']);
 			
 			if ($store_info) {
 				$store_name = $store_info['name'];
@@ -354,7 +354,7 @@ class ModelSaleCustomer extends Model
 			$this->language->load('mail/customer');
 			
 			if ($customer_info['store_id']) {
-				$store_info = $this->model_setting_store->getStore($customer_info['store_id']);
+				$store_info = $this->Model_Setting_Store->getStore($customer_info['store_id']);
 				
 				if ($store_info) {
 					$store_name = $store_info['store_name'];
@@ -422,7 +422,7 @@ class ModelSaleCustomer extends Model
 			$this->language->load('mail/customer');
 			
 			if ($order_id) {
-				$order_info = $this->model_sale_order->getOrder($order_id);
+				$order_info = $this->Model_Sale_Order->getOrder($order_id);
 				
 				if ($order_info) {
 					$store_name = $order_info['store_name'];

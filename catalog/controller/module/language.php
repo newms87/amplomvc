@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleLanguage extends Controller 
+class Catalog_Controller_Module_Language extends Controller 
 {
 	protected function index()
 	{
@@ -8,7 +8,7 @@ class ControllerModuleLanguage extends Controller
 		
 		$this->data['action'] = $this->url->link($_GET['route'], $this->url->get_query_exclude('language_code') . '&language_code=');
 
-		$languages = $this->model_localisation_language->getLanguages();
+		$languages = $this->Model_Localisation_Language->getLanguages();
 		
 		foreach ($languages as &$language) {
 			$language['thumb'] = $this->image->resize(DIR_IMAGE . 'flags/' . $language['image'], 16, 11);

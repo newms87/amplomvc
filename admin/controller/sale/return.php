@@ -1,5 +1,5 @@
 <?php
-class ControllerSaleReturn extends Controller 
+class Admin_Controller_Sale_Return extends Controller 
 {
 	
 	
@@ -19,7 +19,7 @@ class ControllerSaleReturn extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-				$this->model_sale_return->addReturn($_POST);
+				$this->Model_Sale_Return->addReturn($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 		
@@ -82,7 +82,7 @@ class ControllerSaleReturn extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_sale_return->editReturn($_GET['return_id'], $_POST);
+			$this->Model_Sale_Return->editReturn($_GET['return_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 	
@@ -146,7 +146,7 @@ class ControllerSaleReturn extends Controller
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $return_id) {
-				$this->model_sale_return->deleteReturn($return_id);
+				$this->Model_Sale_Return->deleteReturn($return_id);
 			}
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -342,9 +342,9 @@ class ControllerSaleReturn extends Controller
 			'limit'						=> $this->config->get('config_admin_limit')
 		);
 		
-		$return_total = $this->model_sale_return->getTotalReturns($data);
+		$return_total = $this->Model_Sale_Return->getTotalReturns($data);
 	
-		$results = $this->model_sale_return->getReturns($data);
+		$results = $this->Model_Sale_Return->getReturns($data);
  
 		foreach ($results as $result) {
 			$action = array();
@@ -499,7 +499,7 @@ class ControllerSaleReturn extends Controller
 		$this->data['filter_date_added'] = $filter_date_added;
 		$this->data['filter_date_modified'] = $filter_date_modified;
 
-		$this->data['return_statuses'] = $this->model_localisation_return_status->getReturnStatuses();
+		$this->data['return_statuses'] = $this->Model_Localisation_ReturnStatus->getReturnStatuses();
 		
 		$this->data['sort'] = $sort;
 		$this->data['order'] = $order;
@@ -622,7 +622,7 @@ class ControllerSaleReturn extends Controller
 		$this->data['cancel'] = $this->url->link('sale/return', $url);
 
 		if (isset($_GET['return_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-				$return_info = $this->model_sale_return->getReturn($_GET['return_id']);
+				$return_info = $this->Model_Sale_Return->getReturn($_GET['return_id']);
 		}
 				
 		if (isset($_POST['order_id'])) {
@@ -737,7 +737,7 @@ class ControllerSaleReturn extends Controller
 			$this->data['return_reason_id'] = '';
 		}
 							
-		$this->data['return_reasons'] = $this->model_localisation_return_reason->getReturnReasons();
+		$this->data['return_reasons'] = $this->Model_Localisation_ReturnReason->getReturnReasons();
 	
 		if (isset($_POST['return_action_id'])) {
 			$this->data['return_action_id'] = $_POST['return_action_id'];
@@ -747,7 +747,7 @@ class ControllerSaleReturn extends Controller
 			$this->data['return_action_id'] = '';
 		}
 				
-		$this->data['return_actions'] = $this->model_localisation_return_action->getReturnActions();
+		$this->data['return_actions'] = $this->Model_Localisation_ReturnAction->getReturnActions();
 
 		if (isset($_POST['comment'])) {
 			$this->data['comment'] = $_POST['comment'];
@@ -765,7 +765,7 @@ class ControllerSaleReturn extends Controller
 			$this->data['return_status_id'] = '';
 		}
 		
-		$this->data['return_statuses'] = $this->model_localisation_return_status->getReturnStatuses();
+		$this->data['return_statuses'] = $this->Model_Localisation_ReturnStatus->getReturnStatuses();
 						
 		$this->children = array(
 			'common/header',
@@ -783,7 +783,7 @@ class ControllerSaleReturn extends Controller
 			$return_id = 0;
 		}
 				
-		$return_info = $this->model_sale_return->getReturn($return_id);
+		$return_info = $this->Model_Sale_Return->getReturn($return_id);
 		
 		if ($return_info) {
 		$this->template->load('sale/return_info');
@@ -845,7 +845,7 @@ class ControllerSaleReturn extends Controller
 			$this->data['return_id'] = $return_info['return_id'];
 			$this->data['order_id'] = $return_info['order_id'];
 			
-			$order_info = $this->model_sale_order->getOrder($return_info['order_id']);
+			$order_info = $this->Model_Sale_Order->getOrder($return_info['order_id']);
 			
 			if ($return_info['order_id'] && $order_info) {
 				$this->data['order'] = $this->url->link('sale/order/info', 'order_id=' . $return_info['order_id']);
@@ -867,7 +867,7 @@ class ControllerSaleReturn extends Controller
 			$this->data['email'] = $return_info['email'];
 			$this->data['telephone'] = $return_info['telephone'];
 			
-			$return_status_info = $this->model_localisation_return_status->getReturnStatus($return_info['return_status_id']);
+			$return_status_info = $this->Model_Localisation_ReturnStatus->getReturnStatus($return_info['return_status_id']);
 
 			if ($return_status_info) {
 				$this->data['return_status'] = $return_status_info['name'];
@@ -881,7 +881,7 @@ class ControllerSaleReturn extends Controller
 			$this->data['model'] = $return_info['model'];
 			$this->data['quantity'] = $return_info['quantity'];
 			
-			$return_reason_info = $this->model_localisation_return_reason->getReturnReason($return_info['return_reason_id']);
+			$return_reason_info = $this->Model_Localisation_ReturnReason->getReturnReason($return_info['return_reason_id']);
 
 			if ($return_reason_info) {
 				$this->data['return_reason'] = $return_reason_info['name'];
@@ -893,11 +893,11 @@ class ControllerSaleReturn extends Controller
 	
 			$this->data['comment'] = nl2br($return_info['comment']);
 			
-			$this->data['return_actions'] = $this->model_localisation_return_action->getReturnActions();
+			$this->data['return_actions'] = $this->Model_Localisation_ReturnAction->getReturnActions();
 			
 			$this->data['return_action_id'] = $return_info['return_action_id'];
 
-			$this->data['return_statuses'] = $this->model_localisation_return_status->getReturnStatuses();
+			$this->data['return_statuses'] = $this->Model_Localisation_ReturnStatus->getReturnStatuses();
 			
 			$this->data['return_status_id'] = $return_info['return_status_id'];
 		
@@ -991,7 +991,7 @@ class ControllerSaleReturn extends Controller
 			
 				$json['success'] = $this->_('text_success');
 				
-				$this->model_sale_return->editReturnAction($_GET['return_id'], $_POST['return_action_id']);
+				$this->Model_Sale_Return->editReturnAction($_GET['return_id'], $_POST['return_action_id']);
 			}
 		}
 		
@@ -1005,7 +1005,7 @@ class ControllerSaleReturn extends Controller
 		$this->language->load('sale/return');
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->user->hasPermission('modify', 'sale/return')) {
-			$this->model_sale_return->addReturnHistory($_GET['return_id'], $_POST);
+			$this->Model_Sale_Return->addReturnHistory($_GET['return_id'], $_POST);
 				
 			$this->language->set('success', $this->_('text_success'));
 		} else {
@@ -1026,7 +1026,7 @@ class ControllerSaleReturn extends Controller
 		
 		$this->data['histories'] = array();
 			
-		$results = $this->model_sale_return->getReturnHistories($_GET['return_id'], ($page - 1) * 10, 10);
+		$results = $this->Model_Sale_Return->getReturnHistories($_GET['return_id'], ($page - 1) * 10, 10);
 				
 		foreach ($results as $result) {
 			$this->data['histories'][] = array(
@@ -1037,7 +1037,7 @@ class ControllerSaleReturn extends Controller
 			);
 			}
 		
-		$history_total = $this->model_sale_return->getTotalReturnHistories($_GET['return_id']);
+		$history_total = $this->Model_Sale_Return->getTotalReturnHistories($_GET['return_id']);
 			
 		$this->pagination->init();
 		$this->pagination->total = $history_total;

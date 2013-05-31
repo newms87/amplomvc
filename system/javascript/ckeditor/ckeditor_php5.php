@@ -225,8 +225,7 @@ class CKEditor{
 
 		$js = $this->returnGlobalEvents();
 		if (empty($_config)) {
-			if (empty($class Name)) 
-{
+			if (empty($class Name)) {
 				$js .= "CKEDITOR.replaceAll();";
 			}
 			else {
@@ -237,8 +236,7 @@ class CKEditor{
 			$class Detection = "";
 			$js .= "CKEDITOR.replaceAll( function (textarea, config)
  {\n";
-			if (!empty($class Name)) 
-{
+			if (!empty($class Name)) {
 				$js .= "	var class Regex = new RegExp('(?:^| )' + '". $className ."' + '(?:$| )');\n";
 				$js .= "	if (!classRegex.test(textarea.className))\n";
 				$js .= "		return false;\n";
@@ -250,8 +248,7 @@ class CKEditor{
 
 		$out .= $this->script($js);
 
-		if (!$this->returnOutput) 
-{
+		if (!$this->returnOutput) {
 			print $out;
 			$out = "";
 		}

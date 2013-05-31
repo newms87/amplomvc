@@ -1,5 +1,5 @@
 <?php
-class ControllerProductBlockRelated extends Controller 
+class Catalog_Controller_Product_Block_Related extends Controller 
 {
 	
 	public function index($settings, $product_id)
@@ -7,7 +7,7 @@ class ControllerProductBlockRelated extends Controller
 		$this->template->load('product/block/related');
 		
 		//Find the related products
-		$related_products = $this->model_catalog_product->getProductRelated($product_id);
+		$related_products = $this->Model_Catalog_Product->getProductRelated($product_id);
 		
 		foreach ($related_products as &$product) {
 			if ($product['image']) {

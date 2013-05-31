@@ -1,5 +1,5 @@
 <?php
-class ModelToolBackup extends Model 
+class Admin_Model_Tool_Backup extends Model 
 {
 	public function restore($sql)
 	{

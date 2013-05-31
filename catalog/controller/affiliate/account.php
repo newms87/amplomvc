@@ -1,5 +1,5 @@
 <?php
-class ControllerAffiliateAccount extends Controller 
+class Catalog_Controller_Affiliate_Account extends Controller 
 {
 	public function index()
 	{

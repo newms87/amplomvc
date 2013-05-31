@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleRssArticle extends Controller 
+class Catalog_Controller_Module_RssArticle extends Controller 
 {
 	protected function index($setting)
 	{
@@ -21,7 +21,7 @@ class ControllerModuleRssArticle extends Controller
 	
 	public function update()
 	{
-		$rss_article = $this->model_setting_setting->getSetting('rss_article');
+		$rss_article = $this->Model_Setting_Setting->getSetting('rss_article');
 		
 		if (!empty($rss_article['rss_feed_url'])) {
 			extract($rss_article);

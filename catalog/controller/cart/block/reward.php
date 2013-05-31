@@ -1,5 +1,5 @@
 <?php
-class ControllerCartBlockReward 
+class Catalog_Controller_Cart_Block_Reward 
 {
 	
 	public function index($settings = null)

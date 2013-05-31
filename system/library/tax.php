@@ -78,13 +78,11 @@ final class Tax
 			$this->get_tax_rates($tax_rates, $tax_class _id, 'shipping', $this->cart->getShippingAddress(), $customer_group_id);
 		}
 
-		if ($this->cart->hasPaymentAddress()) 
-{
+		if ($this->cart->hasPaymentAddress()) {
 			$this->get_tax_rates($tax_rates, $tax_class _id, 'payment', $this->cart->getPaymentAddress(), $customer_group_id);
 		}
 		
-		if ($this->store_address) 
-{
+		if ($this->store_address) {
 			$this->get_tax_rates($tax_rates, $tax_class _id, 'store', $this->store_address, $customer_group_id);
 		}
 		
@@ -134,7 +132,7 @@ final class Tax
 
 		foreach ($result->rows as $row) 
 {
-			if (!$this->model_localisation_zone->inGeoZone($row['geo_zone_id'], $address['country_id'], $address['zone_id'])) {
+			if (!$this->Model_Localisation_Zone->inGeoZone($row['geo_zone_id'], $address['country_id'], $address['zone_id'])) {
 				continue;
 			}
 			

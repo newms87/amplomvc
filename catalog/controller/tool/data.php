@@ -1,5 +1,5 @@
 <?php
-class ControllerToolData extends Controller 
+class Catalog_Controller_Tool_Data extends Controller 
 {
 	
 	function index()
@@ -13,7 +13,7 @@ class ControllerToolData extends Controller
 		
 		$output = '<option value="">' . $choose . '</option>';
 		
-		$results = $this->model_localisation_zone->getZonesByCountryId($_GET['country_id']);
+		$results = $this->Model_Localisation_Zone->getZonesByCountryId($_GET['country_id']);
 		
 		foreach ($results as $result) {
 			$output .= '<option value="' . $result['zone_id'] . '"';

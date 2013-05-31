@@ -1,5 +1,5 @@
 <?php
-class ModelReportProduct extends Model 
+class Admin_Model_Report_Product extends Model 
 {
 	
 	public function getProductViews()

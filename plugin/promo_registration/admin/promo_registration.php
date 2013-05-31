@@ -11,6 +11,6 @@ class ControllerPlugin_Promo_RegistrationAdminPromoRegistration extends Controll
 			$this->data[$c] = isset($_POST[$c])?$_POST[$c]:$this->config->get($c);
 		}
 		
-		$this->data['coupons'] = $this->model_sale_coupon->getCoupons();
+		$this->data['coupons'] = $this->Model_Sale_Coupon->getCoupons();
 	}
 }

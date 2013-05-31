@@ -1,5 +1,5 @@
 <?php
-class ControllerCommonFileManager extends Controller 
+class Admin_Controller_Common_Filemanager extends Controller 
 {
 	
 	public function index()

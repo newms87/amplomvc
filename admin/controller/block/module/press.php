@@ -1,5 +1,5 @@
 <?php
-class ControllerBlockModulePress extends Controller 
+class Admin_Controller_Block_Module_Press extends Controller 
 {
 	
 	public function settings(&$settings)

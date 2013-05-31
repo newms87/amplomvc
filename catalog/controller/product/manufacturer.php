@@ -1,5 +1,5 @@
 <?php
-class ControllerProductManufacturer extends Controller 
+class Catalog_Controller_Product_Manufacturer extends Controller 
 {
 	public function index()
 	{
@@ -14,7 +14,7 @@ class ControllerProductManufacturer extends Controller
 		
 		$this->data['categories'] = array();
 									
-		$results = $this->model_catalog_manufacturer->getManufacturers();
+		$results = $this->Model_Catalog_Manufacturer->getManufacturers();
 	
 		foreach ($results as $result) {
 			if (is_numeric(substr($result['name'], 0, 1))) {
@@ -83,7 +83,7 @@ class ControllerProductManufacturer extends Controller
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 
-		$manufacturer_info = $this->model_catalog_manufacturer->getManufacturer($manufacturer_id);
+		$manufacturer_info = $this->Model_Catalog_Manufacturer->getManufacturer($manufacturer_id);
 	
 		if ($manufacturer_info) {
 			$this->template->load('product/product_list');
@@ -109,9 +109,9 @@ class ControllerProductManufacturer extends Controller
 				'limit'						=> $limit
 			);
 					
-			$product_total = $this->model_catalog_product->getTotalProducts($data);
+			$product_total = $this->Model_Catalog_Product->getTotalProducts($data);
 								
-			$results = $this->model_catalog_product->getProducts($data);
+			$results = $this->Model_Catalog_Product->getProducts($data);
 					
 			foreach ($results as $result) {
 				if ($result['image']) {

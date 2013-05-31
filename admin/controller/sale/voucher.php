@@ -1,5 +1,5 @@
 <?php
-class ControllerSaleVoucher extends Controller 
+class Admin_Controller_Sale_Voucher extends Controller 
 {
 	
 	
@@ -19,7 +19,7 @@ class ControllerSaleVoucher extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_sale_voucher->addVoucher($_POST);
+			$this->Model_Sale_Voucher->addVoucher($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -50,7 +50,7 @@ class ControllerSaleVoucher extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_sale_voucher->editVoucher($_GET['voucher_id'], $_POST);
+			$this->Model_Sale_Voucher->editVoucher($_GET['voucher_id'], $_POST);
 				
 			$this->message->add('success', $this->_('text_success'));
 	
@@ -82,7 +82,7 @@ class ControllerSaleVoucher extends Controller
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $voucher_id) {
-				$this->model_sale_voucher->deleteVoucher($voucher_id);
+				$this->Model_Sale_Voucher->deleteVoucher($voucher_id);
 			}
 				
 			$this->message->add('success', $this->_('text_success'));
@@ -158,9 +158,9 @@ class ControllerSaleVoucher extends Controller
 			'limit' => $this->config->get('config_admin_limit')
 		);
 		
-		$voucher_total = $this->model_sale_voucher->getTotalVouchers();
+		$voucher_total = $this->Model_Sale_Voucher->getTotalVouchers();
 	
-		$results = $this->model_sale_voucher->getVouchers($data);
+		$results = $this->Model_Sale_Voucher->getVouchers($data);
  
 		foreach ($results as $result) {
 			$action = array();
@@ -321,7 +321,7 @@ class ControllerSaleVoucher extends Controller
 		$this->data['cancel'] = $this->url->link('sale/voucher', $url);
   		
 		if (isset($_GET['voucher_id']) && (!$_SERVER['REQUEST_METHOD'] != 'POST')) {
-				$voucher_info = $this->model_sale_voucher->getVoucher($_GET['voucher_id']);
+				$voucher_info = $this->Model_Sale_Voucher->getVoucher($_GET['voucher_id']);
 		}
 
 		if (isset($_POST['code'])) {
@@ -364,7 +364,7 @@ class ControllerSaleVoucher extends Controller
 				$this->data['to_email'] = '';
 		}
  
- 		$this->data['voucher_themes'] = $this->model_sale_voucher_theme->getVoucherThemes();
+ 		$this->data['voucher_themes'] = $this->Model_Sale_VoucherTheme->getVoucherThemes();
 
 		if (isset($_POST['voucher_theme_id'])) {
 				$this->data['voucher_theme_id'] = $_POST['voucher_theme_id'];
@@ -416,7 +416,7 @@ class ControllerSaleVoucher extends Controller
 				$this->error['code'] = $this->_('error_code');
 		}
 		
-		$voucher_info = $this->model_sale_voucher->getVoucherByCode($_POST['code']);
+		$voucher_info = $this->Model_Sale_Voucher->getVoucherByCode($_POST['code']);
 		
 		if ($voucher_info) {
 			if (!isset($_GET['voucher_id'])) {
@@ -456,7 +456,7 @@ class ControllerSaleVoucher extends Controller
 		}
 		
 		foreach ($_POST['selected'] as $voucher_id) {
-			$order_voucher_info = $this->model_sale_order->getOrderVoucherByVoucherId($voucher_id);
+			$order_voucher_info = $this->Model_Sale_Order->getOrderVoucherByVoucherId($voucher_id);
 			
 			if ($order_voucher_info) {
 				$this->error['warning'] = sprintf($this->_('error_order'), $this->url->link('sale/order/info', 'order_id=' . $order_voucher_info['order_id']));
@@ -481,7 +481,7 @@ class ControllerSaleVoucher extends Controller
 		
 		$this->data['histories'] = array();
 			
-		$results = $this->model_sale_voucher->getVoucherHistories($_GET['voucher_id'], ($page - 1) * 10, 10);
+		$results = $this->Model_Sale_Voucher->getVoucherHistories($_GET['voucher_id'], ($page - 1) * 10, 10);
 				
 		foreach ($results as $result) {
 			$this->data['histories'][] = array(
@@ -492,7 +492,7 @@ class ControllerSaleVoucher extends Controller
 			);
 			}
 		
-		$history_total = $this->model_sale_voucher->getTotalVoucherHistories($_GET['voucher_id']);
+		$history_total = $this->Model_Sale_Voucher->getTotalVoucherHistories($_GET['voucher_id']);
 			
 		$this->pagination->init();
 		$this->pagination->total = $history_total;
@@ -511,7 +511,7 @@ class ControllerSaleVoucher extends Controller
 		if (!$this->user->hasPermission('modify', 'sale/voucher')) {
 				$json['error'] = $this->_('error_permission');
 		} elseif (isset($_GET['voucher_id'])) {
-			$this->model_sale_voucher->sendVoucher($_GET['voucher_id']);
+			$this->Model_Sale_Voucher->sendVoucher($_GET['voucher_id']);
 			
 			$json['success'] = $this->_('text_sent');
 		}

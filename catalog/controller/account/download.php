@@ -1,5 +1,5 @@
 <?php
-class ControllerAccountDownload extends Controller 
+class Catalog_Controller_Account_Download extends Controller 
 {
 	public function index()
 	{
@@ -17,7 +17,7 @@ class ControllerAccountDownload extends Controller
 			$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
 			$this->breadcrumb->add($this->_('text_downloads'), $this->url->link('account/download'));
 
-		$download_total = $this->model_account_download->getTotalDownloads();
+		$download_total = $this->Model_Account_Download->getTotalDownloads();
 		
 		if ($download_total) {
 		$this->template->load('account/download');
@@ -30,7 +30,7 @@ class ControllerAccountDownload extends Controller
 	
 			$this->data['downloads'] = array();
 			
-			$results = $this->model_account_download->getDownloads(($page - 1) * $this->config->get('config_catalog_limit'), $this->config->get('config_catalog_limit'));
+			$results = $this->Model_Account_Download->getDownloads(($page - 1) * $this->config->get('config_catalog_limit'), $this->config->get('config_catalog_limit'));
 			
 			foreach ($results as $result) {
 				if (file_exists(DIR_DOWNLOAD . $result['filename'])) {
@@ -116,7 +116,7 @@ class ControllerAccountDownload extends Controller
 			$order_download_id = 0;
 		}
 		
-		$download_info = $this->model_account_download->getDownload($order_download_id);
+		$download_info = $this->Model_Account_Download->getDownload($order_download_id);
 		
 		if ($download_info) {
 			$file = DIR_DOWNLOAD . $download_info['filename'];
@@ -135,7 +135,7 @@ class ControllerAccountDownload extends Controller
 					
 					readfile($file, 'rb');
 					
-					$this->model_account_download->updateRemaining($_GET['order_download_id']);
+					$this->Model_Account_Download->updateRemaining($_GET['order_download_id']);
 					
 					exit;
 				} else {

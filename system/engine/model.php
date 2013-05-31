@@ -38,24 +38,15 @@ abstract class Model
 	*/
 	protected function callController($route)
 	{
+		//TODO: We can probably find a better way to implement this...
+		
 		$params = func_get_args();
 		array_shift($params);
 	
 		$action = new Action($route);
-		$file = $action->getFile();
-		$class = $action->getClass();
-		$class_path = $action->getClassPath();
-		$method = $action->getMethod();
 		
-		if (file_exists($file)) 
-{
-			_require_once($file);
-
-			$controller = new $class ($class_path, $this->registry);
-
-			call_user_func_array(array($controller, $method), $params);
-			
-			return $controller->output;
+		if ($action->execute()) {
+			return $action->get_result();
 		} else {
 			trigger_error('Error: Could not load controller ' . $route. '! The file ' . $file . ' does not exist.');
 			exit();
@@ -471,14 +462,13 @@ abstract class Model
 		if ($hooks) {
 			foreach ($hooks as $hook) {
 				if (is_array($hook['callback'])) {
-					$class name = key($hook['callback']);
+					$classname = key($hook['callback']);
 					$function = current($hook['callback']);
 					
 					$class = $this->$classname;
 					
-					if(method_exists($class, $function))
-{
-						$class ->$function($data, $hook['param']);
+					if (method_exists($class, $function)) {
+						$class->$function($data, $hook['param']);
 					}
 					else {
 						trigger_error("Model::action_filter(): The following method does not exist: $class ::$function().");

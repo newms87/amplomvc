@@ -1,5 +1,5 @@
 <?php
-class ModelPaymentMoneybookers extends Model 
+class Catalog_Model_Payment_Moneybookers extends Model 
 {
   	public function getMethod($address, $total)
   	{

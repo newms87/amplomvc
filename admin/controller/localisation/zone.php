@@ -1,5 +1,5 @@
 <?php
-class ControllerLocalisationZone extends Controller 
+class Admin_Controller_Localisation_Zone extends Controller 
 {
 	
 
@@ -19,7 +19,7 @@ class ControllerLocalisationZone extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_zone->addZone($_POST);
+			$this->Model_Localisation_Zone->addZone($_POST);
 	
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -50,7 +50,7 @@ class ControllerLocalisationZone extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_zone->editZone($_GET['zone_id'], $_POST);
+			$this->Model_Localisation_Zone->editZone($_GET['zone_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -82,7 +82,7 @@ class ControllerLocalisationZone extends Controller
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $zone_id) {
-				$this->model_localisation_zone->deleteZone($zone_id);
+				$this->Model_Localisation_Zone->deleteZone($zone_id);
 			}
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -158,9 +158,9 @@ class ControllerLocalisationZone extends Controller
 			'limit' => $this->config->get('config_admin_limit')
 		);
 		
-		$zone_total = $this->model_localisation_zone->getTotalZones();
+		$zone_total = $this->Model_Localisation_Zone->getTotalZones();
 			
-		$results = $this->model_localisation_zone->getZones($data);
+		$results = $this->Model_Localisation_Zone->getZones($data);
 
 		foreach ($results as $result) {
 			$action = array();
@@ -277,7 +277,7 @@ class ControllerLocalisationZone extends Controller
 		$this->data['cancel'] = $this->url->link('localisation/zone', $url);
 
 		if (isset($_GET['zone_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-			$zone_info = $this->model_localisation_zone->getZone($_GET['zone_id']);
+			$zone_info = $this->Model_Localisation_Zone->getZone($_GET['zone_id']);
 		}
 
 		if (isset($_POST['status'])) {
@@ -312,7 +312,7 @@ class ControllerLocalisationZone extends Controller
 			$this->data['country_id'] = '';
 		}
 		
-		$this->data['countries'] = $this->model_localisation_country->getCountries();
+		$this->data['countries'] = $this->Model_Localisation_Country->getCountries();
 
 		$this->children = array(
 			'common/header',
@@ -346,25 +346,25 @@ class ControllerLocalisationZone extends Controller
 				$this->error['warning'] = $this->_('error_default');
 			}
 			
-			$store_total = $this->model_setting_store->getTotalStoresByZoneId($zone_id);
+			$store_total = $this->Model_Setting_Store->getTotalStoresByZoneId($zone_id);
 
 			if ($store_total) {
 				$this->error['warning'] = sprintf($this->_('error_store'), $store_total);
 			}
 		
-			$address_total = $this->model_sale_customer->getTotalAddressesByZoneId($zone_id);
+			$address_total = $this->Model_Sale_Customer->getTotalAddressesByZoneId($zone_id);
 
 			if ($address_total) {
 				$this->error['warning'] = sprintf($this->_('error_address'), $address_total);
 			}
 
-			$affiliate_total = $this->model_sale_affiliate->getTotalAffiliatesByZoneId($zone_id);
+			$affiliate_total = $this->Model_Sale_Affiliate->getTotalAffiliatesByZoneId($zone_id);
 
 			if ($affiliate_total) {
 				$this->error['warning'] = sprintf($this->_('error_affiliate'), $affiliate_total);
 			}
 					
-			$zone_to_geo_zone_total = $this->model_localisation_geo_zone->getTotalZoneToGeoZoneByZoneId($zone_id);
+			$zone_to_geo_zone_total = $this->Model_Localisation_GeoZone->getTotalZoneToGeoZoneByZoneId($zone_id);
 		
 			if ($zone_to_geo_zone_total) {
 				$this->error['warning'] = sprintf($this->_('error_zone_to_geo_zone'), $zone_to_geo_zone_total);

@@ -24,7 +24,7 @@ class ControllerDevDev extends Controller
 		
 		$this->document->setTitle($this->_('text_sync'));
 		
-		$dev_sites = $this->model_setting_setting->getSetting('dev_sites');
+		$dev_sites = $this->Model_Setting_Setting->getSetting('dev_sites');
 		
 		if ($_SERVER["REQUEST_METHOD"] == 'POST' && $this->validate()) {
 			if (isset($_POST['sync_site'])) {
@@ -77,7 +77,7 @@ class ControllerDevDev extends Controller
 		
 		$this->document->setTitle($this->_('text_site_management'));
 		
-		$dev_sites = $this->model_setting_setting->getSetting('dev_sites');
+		$dev_sites = $this->Model_Setting_Setting->getSetting('dev_sites');
 		
 		if ($_SERVER["REQUEST_METHOD"] == 'POST' && $this->validate()) {
 			if (isset($_POST['add_site'])) {
@@ -94,7 +94,7 @@ class ControllerDevDev extends Controller
 			
 			unset($_POST);
 			
-			$this->model_setting_setting->editSetting('dev_sites', $dev_sites, null, false);
+			$this->Model_Setting_Setting->editSetting('dev_sites', $dev_sites, null, false);
 		}
 		
 		$this->breadcrumb->add($this->_('text_site_management'), $this->url->link('dev/dev/site_management'));
@@ -166,7 +166,7 @@ class ControllerDevDev extends Controller
 				$this->data[$key] = $default;
 		}
 		
-		$backup_files = $this->model_dev_dev->getBackupFiles();
+		$backup_files = $this->Model_Dev_Dev->getBackupFiles();
 		
 		foreach ($backup_files as &$backup) {
 			$backup['display_size'] = $this->tool->bytes2str($backup['size'],2);

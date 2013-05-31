@@ -1,5 +1,5 @@
 <?php
-class ControllerExtensionFeed extends Controller 
+class Admin_Controller_Extension_Feed extends Controller 
 {
 	public function index()
 	{
@@ -28,11 +28,11 @@ class ControllerExtensionFeed extends Controller
 			$this->data['error'] = '';
 		}
 
-		$extensions = $this->model_setting_extension->getInstalled('feed');
+		$extensions = $this->Model_Setting_Extension->getInstalled('feed');
 		
 		foreach ($extensions as $key => $value) {
 			if (!file_exists(DIR_APPLICATION . 'controller/feed/' . $value . '.php')) {
-				$this->model_setting_extension->uninstall('feed', $value);
+				$this->Model_Setting_Extension->uninstall('feed', $value);
 				
 				unset($extensions[$key]);
 			}
@@ -90,18 +90,17 @@ class ControllerExtensionFeed extends Controller
 			
 			$this->url->redirect($this->url->link('extension/feed'));
 		} else {
-			$this->model_setting_extension->install('feed', $_GET['extension']);
+			$this->Model_Setting_Extension->install('feed', $_GET['extension']);
 		
-			$this->model_user_user_group->addPermission($this->user->getId(), 'access', 'feed/' . $_GET['extension']);
-			$this->model_user_user_group->addPermission($this->user->getId(), 'modify', 'feed/' . $_GET['extension']);
+			$this->Model_User_UserGroup->addPermission($this->user->getId(), 'access', 'feed/' . $_GET['extension']);
+			$this->Model_User_UserGroup->addPermission($this->user->getId(), 'modify', 'feed/' . $_GET['extension']);
 		
 			_require_once(DIR_APPLICATION . 'controller/feed/' . $_GET['extension'] . '.php');
 			
 			$class = 'ControllerFeed' . str_replace('_', '', $_GET['extension']);
 			$class = new $class($this->registry);
 			
-			if (method_exists($class, 'install')) 
-{
+			if (method_exists($class, 'install')) {
 				$class ->install();
 			}
 		
@@ -116,17 +115,16 @@ class ControllerExtensionFeed extends Controller
 			
 			$this->url->redirect($this->url->link('extension/feed'));
 		} else {
-			$this->model_setting_extension->uninstall('feed', $_GET['extension']);
+			$this->Model_Setting_Extension->uninstall('feed', $_GET['extension']);
 		
-			$this->model_setting_setting->deleteSetting($_GET['extension']);
+			$this->Model_Setting_Setting->deleteSetting($_GET['extension']);
 		
 			_require_once(DIR_APPLICATION . 'controller/feed/' . $_GET['extension'] . '.php');
 			
 			$class = 'ControllerFeed' . str_replace('_', '', $_GET['extension']);
 			$class = new $class($this->registry);
 			
-			if (method_exists($class, 'uninstall')) 
-{
+			if (method_exists($class, 'uninstall')) {
 				$class->uninstall();
 			}
 		

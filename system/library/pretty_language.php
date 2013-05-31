@@ -14,7 +14,7 @@ class PrettyLanguage
 	 * *.php
 	 * 
 	 * Fixes class spacing convention
-	 * search: class\s*([^\s\{)*\s*\{
+	 * search: class[ \t]+([^\s\{)*\s*\{
 	 * replace: class $1 \R{
 	 * 
 	 * Fixes function spacing conventions
@@ -37,9 +37,13 @@ class PrettyLanguage
 		$ext = array('php');
 		
 		
-		$files = $this->get_all_files_r(SITE_DIR . 'system/model/', $ext);
+		$files = $this->get_all_files_r(SITE_DIR . '', $ext);
 		
-		$this->class_name_convention($files);
+		//$this->smodel_call_update($files);
+		
+		//$this->class_name_convention($files);
+		
+		
 		//$files = array(SITE_DIR . 'catalog/controller/checkout/checkout.php');
 		
 	// $this->update_message_format($files);
@@ -58,23 +62,67 @@ class PrettyLanguage
 
 	}
 	
+	public function smodel_call_update($files){
+		foreach ($files as $file) {
+			$lines = explode("\n", file_get_contents($file));
+			
+			$orig_lines = $lines;
+			
+			$count = 0;
+			
+			foreach ($lines as $num => $line) {
+				$matches = null;
+				if (preg_match("/\\\$this->(model_[a-z_]*)/", $line, $matches)) {
+					$parts = explode('_', $matches[1]);
+					$rename = ucfirst($parts[0]) . '_' . ucfirst($parts[1]) . '_' . ucfirst($parts[2]);
+					
+					if(isset($parts[3])){
+						$rename .= ucfirst($parts[3]);
+					}
+					
+					$lines[$num] = str_replace($matches[1], $rename, $line);
+					
+					$count++;
+				}
+			}
+			
+			if($count > 0){
+				echo "modified $count lines in $file<br>";
+			}
+			file_put_contents($file, implode("\n", $lines));
+		}
+	}
+	
 	public function class_name_convention($files){
 		foreach ($files as $file) {
 			$lines = explode("\n", file_get_contents($file));
 			
-			$classname = str_replace('/','_',str_replace(SITE_DIR, '', dirname($file)));
+			$orig_lines = $lines;
 			
-			echo $classname;
-			continue;
-			foreach ($lines as $num => &$line) {
+			$dir_components = explode('/',str_replace(SITE_DIR, '', dirname($file)));
+			
+			foreach($dir_components as &$component) {
+				$component = ucfirst($component);
+			} unset($component);
+			
+			$file_components = explode('_', str_replace('.php','', basename($file)));
+			
+			foreach ($file_components as &$component) {
+				$component = ucfirst($component);
+			} unset($component);
+			
+			$classname = implode('_', $dir_components) . '_' . implode('',$file_components);
+			
+			foreach ($lines as $num => $line) {
 				$count = 0;
-				 
-				$line = preg_replace("/class ([a-zA-Z]*)/", $classname, $line, 1, $count);
+				
+				$replace = "class $classname";
+				$lines[$num] = preg_replace("/class [a-zA-Z_]*/", "class {$classname}", $line, 1, $count);
 				
 				if($count) break;
-				
-				echo $line;
 			}
+			
+			file_put_contents($file, implode("\n", $lines));
 		}
 	}
 	
@@ -564,7 +612,7 @@ class PrettyLanguage
 		while (($file = readdir($handle)) !== false) {
 			if($file == '.' || $file == '..')continue;
 			
-			$file_path = $dir . '/' . $file;
+			$file_path = rtrim($dir,'/') . '/' . $file;
 			
 			if (is_dir($file_path)) {
 				$files = array_merge($files, $this->get_all_files_r($file_path, $ignore,$ext, $depth+1));
@@ -585,16 +633,18 @@ class PrettyLanguage
 		return $files;
 	}
 	
-	public function print_lines($orig, $lines, $changes_only=false)
+	public function print_lines($orig, $lines, $changes_only = true, $special_chars = false)
 	{
 		foreach ($orig as $num=>$l) {
-			$l = preg_replace(array('/ /','/\t/'),array('&nbsp;','&nbsp;&nbsp;&nbsp;'), $l);
+			if($special_chars){
+				$l = preg_replace(array('/ /','/\t/'),array('&nbsp;','&nbsp;&nbsp;&nbsp;'), $l);
+			}
 			
 			if (!isset($lines[$num])) {
 				$color = '#F98888';
 			}
 			elseif ($l != $lines[$num]) {
-				echo "<div style='background: #92ADE3'>" . ($num+1) . ".  "  . htmlspecialchars($l) . "</div>";
+				echo "<div style='background: #92ADE3'>" . ($num+1) . ".  "  . ($special_chars ? htmlspecialchars($l) : $l) . "</div>";
 				$l = $lines[$num];
 				$color = '#C2E782';
 			}
@@ -602,7 +652,7 @@ class PrettyLanguage
 				if($changes_only)continue;
 				$color = '#CBCBCB';
 			}
-			echo "<div style='background: $color'>" . ($num+1) . ".  "  . htmlspecialchars($l) . "</div>";
+			echo "<div style='background: $color'>" . ($num+1) . ".  "  . ($special_chars ? htmlspecialchars($l) : $l) . "</div>";
 		}
 	}
 	

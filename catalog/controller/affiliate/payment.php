@@ -1,5 +1,5 @@
 <?php
-class ControllerAffiliatePayment extends Controller 
+class Catalog_Controller_Affiliate_Payment extends Controller 
 {
 	
 
@@ -18,7 +18,7 @@ class ControllerAffiliatePayment extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-			$this->model_affiliate_affiliate->editPayment($_POST);
+			$this->Model_Affiliate_Affiliate->editPayment($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -32,7 +32,7 @@ class ControllerAffiliatePayment extends Controller
 		$this->data['action'] = $this->url->link('affiliate/payment');
 
 		if ($_SERVER['REQUEST_METHOD'] != 'POST') {
-			$affiliate_info = $this->model_affiliate_affiliate->getAffiliate($this->affiliate->getId());
+			$affiliate_info = $this->Model_Affiliate_Affiliate->getAffiliate($this->affiliate->getId());
 		}
 
 		if (isset($_POST['tax'])) {

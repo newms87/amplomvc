@@ -1,61 +1,54 @@
 <?php
 final class Action 
 {
+	private $registry;
 	protected $file;
 	protected $class ;
 	protected $class_path;
 	protected $method;
-	protected $args = array();
+	protected $parameters = array();
+	private $output;
 
-	public function __construct($route, $args = array()) 
-{
+	public function __construct($registry, $route, $parameters = array())
+	{
+		$this->registry = $registry;
+		$this->class_path = (defined("IS_ADMIN") ? "admin/" : "catalog/") . "controller/";
+		$this->file = null;
+		$this->class = (defined("IS_ADMIN") ? "Admin_" : "Catalog_") . "Controller_";
+		$this->method = 'index'; 
 		
-		$path = '';
+		if (!empty($parameters)) {
+			$this->parameters = $parameters;
+		}
 		
 		$parts = explode('/', str_replace('../', '', (string)$route));
+		
+		$path = $this->class_path;
 		
 		foreach ($parts as $part) {
 			$path .= $part;
 			
-			if (is_dir(DIR_APPLICATION . 'controller/' . $path)) {
+			//Scan directories until we find file requested
+			if (is_dir(SITE_DIR . $path)) {
 				$path .= '/';
-				
-				array_shift($parts);
-				
-				continue;
+				$this->class_path .= $part . '/';
+				$this->class .= ucfirst($part) . '_';
 			}
-			
-			$file = '';
-			$file_path = DIR_APPLICATION . 'controller/' . str_replace('../', '', $path) . '.php';
-			if(is_file($file_path))
-				$file = $file_path;
-			
-			if ($file) {
-				$this->file = $file;
+			elseif (is_file(SITE_DIR . $path . '.php')) {
+				$this->file = SITE_DIR . $path . '.php';
 				
-				$this->class _path = $path;
+				$class_parts = explode('_', $part);
 				
-				$this->class = 'Controller' . preg_replace('/[^a-zA-Z0-9]/', '', $path);
-
-				array_shift($parts);
+				//capitalize each component of the class name
+				array_walk($class_parts, function(&$e, $i){ $e = ucfirst($e); });
 				
+				$this->class .= implode('', $class_parts);
+			}
+			else {
+				$this->method = $part;
 				break;
 			}
 		}
-		
-		if ($args) 
-{
-			$this->args = $args;
-		}
-			
-		$method = array_shift($parts);
-				
-		if ($method) {
-			$this->method = $method;
-		} else {
-			$this->method = 'index';
-		}
-		
 	}
 	
 	public function getFile()
@@ -63,14 +56,14 @@ final class Action
 		return $this->file;
 	}
 	
-	public function getclass()
+	public function getClass()
 	{
-		return $this->class ;
+		return $this->class;
 	}
 	
 	public function getClassPath()
 	{
-		return $this->class _path;
+		return $this->class_path;
 	}
 	
 	public function getMethod()
@@ -78,8 +71,34 @@ final class Action
 		return $this->method;
 	}
 	
-	public function getArgs()
+	public function getParameters()
 	{
-		return $this->args;
+		return $this->parameters;
+	}
+	
+	public function execute()
+	{
+		if (file_exists($this->file)) {
+			_require_once($this->file);
+
+			$class = $this->class;
+			
+			$controller = new $class($this->registry);
+			
+			if (is_callable(array($controller, $this->method))) {
+				call_user_func_array(array($controller, $this->method), $this->parameters);
+				
+				$this->output = $controller->output;
+				
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public function getOutput()
+	{
+		return $this->output;
 	}
 }

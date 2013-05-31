@@ -1,5 +1,5 @@
 <?php
-class ControllerTotalCoupon extends Controller 
+class Admin_Controller_Total_Coupon extends Controller 
 {
 	
 	
@@ -12,7 +12,7 @@ class ControllerTotalCoupon extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && ($this->validate())) {
-			$this->model_setting_setting->editSetting('coupon', $_POST);
+			$this->Model_Setting_Setting->editSetting('coupon', $_POST);
 		
 			$this->message->add('success', $this->_('text_success'));
 			

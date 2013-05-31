@@ -1,5 +1,5 @@
 <?php
-class ControllerBlockExtrasSocialMedia extends Controller 
+class Admin_Controller_Block_Extras_SocialMedia extends Controller 
 {
 	
 	public function settings(&$settings)

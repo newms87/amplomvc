@@ -49,8 +49,7 @@
   // 1 : PclError external library error handling. By enabling this
   //	you must ensure that you have included PclError library.
   // [2,...] : reserved for futur use
-  if (!defined('PCLZIP_ERROR_EXTERNAL')) 
-{
+  if (!defined('PCLZIP_ERROR_EXTERNAL')) {
 	define( 'PCLZIP_ERROR_EXTERNAL', 0 );
   }
 

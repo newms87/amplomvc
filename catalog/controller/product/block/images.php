@@ -1,5 +1,5 @@
 <?php
-class ControllerProductBlockImages extends Controller 
+class Catalog_Controller_Product_Block_Images extends Controller 
 {
 	
 	public function index($settings, $product_info)
@@ -18,7 +18,7 @@ class ControllerProductBlockImages extends Controller
 		
 		$this->data['images'] = array();
 		
-		$results = $this->model_catalog_product->getProductImages($product_info['product_id']);
+		$results = $this->Model_Catalog_Product->getProductImages($product_info['product_id']);
 			
 		array_unshift($results,array('image'=>$product_info['image']));
 		

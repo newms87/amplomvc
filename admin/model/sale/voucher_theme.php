@@ -1,5 +1,5 @@
 <?php
-class ModelSaleVoucherTheme extends Model 
+class Admin_Model_Sale_VoucherTheme extends Model 
 {
 	public function addVoucherTheme($data)
 	{

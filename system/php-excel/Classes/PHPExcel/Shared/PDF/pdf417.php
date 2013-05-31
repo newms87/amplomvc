@@ -57,8 +57,7 @@
  */
 
 // definitions
-if (!defined('PDF417DEFS')) 
-{
+if (!defined('PDF417DEFS')) {
 
 	/**
 	* Indicate that definitions for this class are set
@@ -88,8 +87,7 @@ if (!defined('PDF417DEFS'))
 
 // #*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#
 
-if (!class_exists('PDF417', false)) 
-{
+if (!class_exists('PDF417', false)) {
 
 	/**
 	* class to create PDF417 barcode arrays for TCPDF class.

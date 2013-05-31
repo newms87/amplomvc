@@ -1,5 +1,5 @@
 <?php
-class ModelPaymentPPStandard extends Model 
+class Catalog_Model_Payment_PpStandard extends Model 
 {
   	public function getMethod($address, $total)
   	{
@@ -9,7 +9,7 @@ class ModelPaymentPPStandard extends Model
 			return array();
 		}
 		
-		if (!$this->model_localisation_zone->inGeoZone($this->config->get('pp_standard_geo_zone_id'), $address['country_id'], $address['zone_id'])) {
+		if (!$this->Model_Localisation_Zone->inGeoZone($this->config->get('pp_standard_geo_zone_id'), $address['country_id'], $address['zone_id'])) {
 			return array();
 		}
 

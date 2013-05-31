@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleStore extends Controller 
+class Catalog_Controller_Module_Store extends Controller 
 {
 	protected function index()
 	{
@@ -24,7 +24,7 @@ class ControllerModuleStore extends Controller
 				'url'		=> $this->url->link('common/home'),
 			);
 			
-			$results = $this->model_setting_store->getStores();
+			$results = $this->Model_Setting_Store->getStores();
 			
 			foreach ($results as $result) {
 				$this->data['stores'][] = array(

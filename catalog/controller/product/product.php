@@ -1,5 +1,5 @@
 <?php
-class ControllerProductProduct extends Controller 
+class Catalog_Controller_Product_Product extends Controller 
 {
 	
 	public function index()
@@ -9,7 +9,7 @@ class ControllerProductProduct extends Controller
 		
 		$product_id = isset($_GET['product_id']) ? $_GET['product_id'] : 0;
 		
-		$product_info = $this->model_catalog_product->getProduct($product_id);
+		$product_info = $this->Model_Catalog_Product->getProduct($product_id);
 		
 		$this->data['product_info'] = $product_info;
 		
@@ -20,14 +20,14 @@ class ControllerProductProduct extends Controller
 			//Build Breadcrumbs
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			
-			$manufacturer_info = $this->model_catalog_manufacturer->getManufacturer($product_info['manufacturer_id']);
+			$manufacturer_info = $this->Model_Catalog_Manufacturer->getManufacturer($product_info['manufacturer_id']);
 			
 			if ($manufacturer_info) {
 				$this->breadcrumb->add($manufacturer_info['name'], $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $product_info['manufacturer_id']));
 			}
 	
 			if (isset($product_info['flashsale_id'])) {
-				$flashsale_info = $this->model_catalog_flashsale->getFlashsale($product_info['flashsale_id']);
+				$flashsale_info = $this->Model_Catalog_Flashsale->getFlashsale($product_info['flashsale_id']);
 				
 				if ($flashsale_info) {
 					$this->breadcrumb->add($flashsale_info['name'], $this->url->link('sales/flashsale', 'flashsale_id=' . $product_info['flashsale_id']));
@@ -68,7 +68,7 @@ class ControllerProductProduct extends Controller
 			$this->data['block_product_related'] = $this->getBlock('product', 'related', array($product_id));
 			
 			//The Tags associated with this product
-			$tags = $this->model_catalog_product->getProductTags($product_info['product_id']);
+			$tags = $this->Model_Catalog_Product->getProductTags($product_info['product_id']);
 			
 			foreach ($tags as &$tag) {
 				$tag['href'] = $this->url->link('product/search', 'filter_tag=' . $tag['tag']);
@@ -82,7 +82,7 @@ class ControllerProductProduct extends Controller
 				$this->data['description'] = html_entity_decode($product_info['description']);
 			}
 			
-			$this->model_catalog_product->updateViewed($product_info['product_id']);
+			$this->Model_Catalog_Product->updateViewed($product_info['product_id']);
 		} else {
 			$this->url->redirect($this->url->link('error/not_found'));
 		}
@@ -113,9 +113,9 @@ class ControllerProductProduct extends Controller
 		
 		$this->data['reviews'] = array();
 		
-		$review_total = $this->model_catalog_review->getTotalReviewsByProductId($_GET['product_id']);
+		$review_total = $this->Model_Catalog_Review->getTotalReviewsByProductId($_GET['product_id']);
 			
-		$results = $this->model_catalog_review->getReviewsByProductId($_GET['product_id'], ($page - 1) * 5, 5);
+		$results = $this->Model_Catalog_Review->getReviewsByProductId($_GET['product_id'], ($page - 1) * 5, 5);
 				
 		foreach ($results as $result) {
 			$this->data['reviews'][] = array(
@@ -158,7 +158,7 @@ class ControllerProductProduct extends Controller
 			}
 				
 			if (!isset($json['error'])) {
-				$this->model_catalog_review->addReview($_GET['product_id'], $_POST);
+				$this->Model_Catalog_Review->addReview($_GET['product_id'], $_POST);
 				
 				$json['success'] = $this->_('text_success');
 			}

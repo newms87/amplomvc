@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleFeaturedFlashsale extends Controller 
+class Catalog_Controller_Module_FeaturedFlashsale extends Controller 
 {
 	protected function index($setting)
 	{
@@ -9,7 +9,7 @@ class ControllerModuleFeaturedFlashsale extends Controller
 		
 		$filter = 'date_start < NOW() AND date_end > NOW()';
 		$sort = 'date_end ASC';
-		$flashsales = $this->model_catalog_flashsale->getFlashsales($filter, $sort, $setting['limit']);
+		$flashsales = $this->Model_Catalog_Flashsale->getFlashsales($filter, $sort, $setting['limit']);
 		
 		$flashsales = is_array($flashsales)?$flashsales: array();
 		
@@ -21,14 +21,14 @@ class ControllerModuleFeaturedFlashsale extends Controller
 			
 			foreach ($featured_list as $id=>$name) {
 				if (substr($id,0,7) == "product") {
-					$item = $this->model_catalog_product->getProduct((int)substr($id,7));
+					$item = $this->Model_Catalog_Product->getProduct((int)substr($id,7));
 					if (!empty($item)) {
 						$items[$id] = $item;
 						$items[$id]['href'] = $this->url->link('product/product','product_id='.$items[$id]['product_id']);
 					}
 				}
 				elseif (substr($id,0,8) == "designer") {
-					$item = $this->model_catalog_manufacturer->getManufacturerAndTeaser((int)substr($id,8));
+					$item = $this->Model_Catalog_Manufacturer->getManufacturerAndTeaser((int)substr($id,8));
 					if (!empty($item)) {
 						$items[$id] = $item;
 					}

@@ -1,5 +1,5 @@
 <?php
-class ModelShippingRoyalMail extends Model 
+class Catalog_Model_Shipping_RoyalMail extends Model 
 {
 	function getQuote($address)
 	{
@@ -22,8 +22,7 @@ class ModelShippingRoyalMail extends Model
 			$sub_total = $this->cart->getSubTotal();
 			
 			// 1st class Standard
-			if ($this->config->get('royal_mail_1st_class_standard_status') && $address['iso_code_2'] == 'GB') 
-{
+			if ($this->config->get('royal_mail_1st_class_standard_status') && $address['iso_code_2'] == 'GB') {
 				$cost = 0;
 				$insurance = 0;
 				
@@ -60,13 +59,11 @@ class ModelShippingRoyalMail extends Model
 				if ((float)$cost) {
 					$title = $this->_('text_1st_class _standard');
 					
-					if ($this->config->get('royal_mail_display_weight')) 
-{
+					if ($this->config->get('royal_mail_display_weight')) {
 						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class _id')) . ')';
 					}
 				
-					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) 
-{
+					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) {
 						$title .= ' (' . $this->_('text_insurance') . ' ' . $this->currency->format($insurance) . ')';
 					}
 					
@@ -81,8 +78,7 @@ class ModelShippingRoyalMail extends Model
 			}
 			
 			// 1st Class Recorded
-			if ($this->config->get('royal_mail_1st_class_recorded_status') && $address['iso_code_2'] == 'GB') 
-{
+			if ($this->config->get('royal_mail_1st_class_recorded_status') && $address['iso_code_2'] == 'GB') {
 				$cost = 0;
 				$insurance = 0;
 				
@@ -119,13 +115,11 @@ class ModelShippingRoyalMail extends Model
 				if ((float)$cost) {
 					$title = $this->_('text_1st_class _recorded');
 					
-					if ($this->config->get('royal_mail_display_weight')) 
-{
+					if ($this->config->get('royal_mail_display_weight')) {
 						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class _id')) . ')';
 					}
 				
-					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) 
-{
+					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) {
 						$title .= ' (' . $this->_('text_insurance') . ' ' . $this->currency->format($insurance) . ')';
 					}
 		
@@ -140,8 +134,7 @@ class ModelShippingRoyalMail extends Model
 			}
 			
 			// 2nd Class Standard
-			if ($this->config->get('royal_mail_2nd_class_standard_status') && $address['iso_code_2'] == 'GB') 
-{
+			if ($this->config->get('royal_mail_2nd_class_standard_status') && $address['iso_code_2'] == 'GB') {
 				$cost = 0;
 				
 				$rates = explode(',', $this->config->get('royal_mail_2nd_class _standard_rate'));
@@ -162,8 +155,7 @@ class ModelShippingRoyalMail extends Model
 				if ((float)$cost) {
 					$title = $this->_('text_2nd_class _standard');
 					
-					if ($this->config->get('royal_mail_display_weight')) 
-{
+					if ($this->config->get('royal_mail_display_weight')) {
 						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class _id')) . ')';
 					}
 					
@@ -178,8 +170,7 @@ class ModelShippingRoyalMail extends Model
 			}
 			
 			// 2nd Class Recorded
-			if ($this->config->get('royal_mail_2nd_class_recorded_status') && $address['iso_code_2'] == 'GB') 
-{
+			if ($this->config->get('royal_mail_2nd_class_recorded_status') && $address['iso_code_2'] == 'GB') {
 				$cost = 0;
 				$insurance = 0;
 				
@@ -215,13 +206,11 @@ class ModelShippingRoyalMail extends Model
 				if ((float)$cost) {
 					$title = $this->_('text_2nd_class _recorded');
 					
-					if ($this->config->get('royal_mail_display_weight')) 
-{
+					if ($this->config->get('royal_mail_display_weight')) {
 						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class _id')) . ')';
 					}
 				
-					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) 
-{
+					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) {
 						$title .= ' (' . $this->_('text_insurance') . ' ' . $this->currency->format($insurance) . ')';
 					}
 					
@@ -236,8 +225,7 @@ class ModelShippingRoyalMail extends Model
 			}
 			
 			// Special Delivery > 500
-			if ($this->config->get('royal_mail_special_delivery_500_status') && $address['iso_code_2'] == 'GB') 
-{
+			if ($this->config->get('royal_mail_special_delivery_500_status') && $address['iso_code_2'] == 'GB') {
 				$cost = 0;
 				$insurance = 0;
 				
@@ -276,8 +264,7 @@ class ModelShippingRoyalMail extends Model
 						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class _id')) . ')';
 					}
 				
-					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) 
-{
+					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) {
 						$title .= ' (' . $this->_('text_insurance') . ' ' . $this->currency->format($insurance) . ')';
 					}
 					
@@ -292,8 +279,7 @@ class ModelShippingRoyalMail extends Model
 			}
 						
 			// Special Delivery > 1000
-			if ($this->config->get('royal_mail_special_delivery_1000_status') && $address['iso_code_2'] == 'GB') 
-{
+			if ($this->config->get('royal_mail_special_delivery_1000_status') && $address['iso_code_2'] == 'GB') {
 				$cost = 0;
 				$insurance = 0;
 				
@@ -332,8 +318,7 @@ class ModelShippingRoyalMail extends Model
 						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class _id')) . ')';
 					}
 				
-					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) 
-{
+					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) {
 						$title .= ' (' . $this->_('text_insurance') . ' ' . $this->currency->format($insurance) . ')';
 					}
 					
@@ -348,8 +333,7 @@ class ModelShippingRoyalMail extends Model
 			}
 						
 			// Special Delivery > 2500
-			if ($this->config->get('royal_mail_special_delivery_2500_status') && $address['iso_code_2'] == 'GB') 
-{
+			if ($this->config->get('royal_mail_special_delivery_2500_status') && $address['iso_code_2'] == 'GB') {
 				$cost = 0;
 				$insurance = 0;
 				
@@ -388,8 +372,7 @@ class ModelShippingRoyalMail extends Model
 						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class _id')) . ')';
 					}
 				
-					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) 
-{
+					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) {
 						$title .= ' (' . $this->_('text_insurance') . ' ' . $this->currency->format($insurance) . ')';
 					}
 					
@@ -404,8 +387,7 @@ class ModelShippingRoyalMail extends Model
 			}
 						
 			// Standard Parcels
-			if ($this->config->get('royal_mail_standard_parcels_status') && $address['iso_code_2'] == 'GB') 
-{
+			if ($this->config->get('royal_mail_standard_parcels_status') && $address['iso_code_2'] == 'GB') {
 				$cost = 0;
 				$insurance = 0;
 				
@@ -444,8 +426,7 @@ class ModelShippingRoyalMail extends Model
 						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class _id')) . ')';
 					}
 				
-					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) 
-{
+					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) {
 						$title .= ' (' . $this->_('text_insurance') . ' ' . $this->currency->format($insurance) . ')';
 					}
 									
@@ -460,8 +441,7 @@ class ModelShippingRoyalMail extends Model
 			}
 			
 			// Airmail
-			if ($this->config->get('royal_mail_airmail_status')) 
-{
+			if ($this->config->get('royal_mail_airmail_status')) {
 				$cost = 0;
 				
 				$countries = explode(',', 'AL,AD,AM,AT,AZ,BY,BE,BA,BG,HR,CY,CZ,DK,EE,FO,FI,FR,GE,DE,GI,GR,GL,HU,IS,IE,IT,KZ,KG,LV,LI,LT,LU,MK,MT,MD,MC,NL,NO,PL,PT,RO,RU,SM,SK,SI,ES,SE,CH,TJ,TR,TM,UA,UZ,VA');
@@ -502,8 +482,7 @@ class ModelShippingRoyalMail extends Model
 			}
 			
 			// International Signed
-			if ($this->config->get('royal_mail_international_signed_status') && $address['iso_code_2'] != 'GB') 
-{
+			if ($this->config->get('royal_mail_international_signed_status') && $address['iso_code_2'] != 'GB') {
 				$cost = 0;
 				$insurance = 0;
 				
@@ -552,8 +531,7 @@ class ModelShippingRoyalMail extends Model
 						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class _id')) . ')';
 					}
 				
-					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) 
-{
+					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) {
 						$title .= ' (' . $this->_('text_insurance') . ' ' . $this->currency->format($insurance) . ')';
 					}
 					
@@ -568,8 +546,7 @@ class ModelShippingRoyalMail extends Model
 			}
 			
 			// Airsure
-			if ($this->config->get('royal_mail_airsure_status')) 
-{
+			if ($this->config->get('royal_mail_airsure_status')) {
 				$cost = 0;
 				$insurance = 0;
 				
@@ -632,8 +609,7 @@ class ModelShippingRoyalMail extends Model
 						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class _id')) . ')';
 					}
 				
-					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) 
-{
+					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) {
 						$title .= ' (' . $this->_('text_insurance') . ' ' . $this->currency->format($insurance) . ')';
 					}
 		
@@ -648,8 +624,7 @@ class ModelShippingRoyalMail extends Model
 			}
 			
 			// Surface
-			if ($this->config->get('royal_mail_surface_status')) 
-{
+			if ($this->config->get('royal_mail_surface_status')) {
 				$cost = 0;
 				$insurance = 0;
 				
@@ -674,8 +649,7 @@ class ModelShippingRoyalMail extends Model
 						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class _id')) . ')';
 					}
 				
-					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) 
-{
+					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) {
 						$title .= ' (' . $this->_('text_insurance') . ' ' . $this->currency->format($insurance) . ')';
 					}
 		
@@ -692,8 +666,7 @@ class ModelShippingRoyalMail extends Model
 		
 		$method_data = array();
 		
-		if ($quote_data) 
-{
+		if ($quote_data) {
 			$method_data = array(
 				'code'		=> 'royal_mail',
 				'title'		=> $this->_('text_title'),

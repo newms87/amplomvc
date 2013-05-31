@@ -1,5 +1,5 @@
 <?php
-class ControllerDesignBanner extends Controller 
+class Admin_Controller_Design_Banner extends Controller 
 {
 	
  
@@ -19,7 +19,7 @@ class ControllerDesignBanner extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_design_banner->addBanner($_POST);
+			$this->Model_Design_Banner->addBanner($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -38,7 +38,7 @@ class ControllerDesignBanner extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_design_banner->editBanner($_GET['banner_id'], $_POST);
+			$this->Model_Design_Banner->editBanner($_GET['banner_id'], $_POST);
 
 			$this->message->add('success', $this->_('text_success'));
 
@@ -58,7 +58,7 @@ class ControllerDesignBanner extends Controller
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $banner_id) {
-				$this->model_design_banner->deleteBanner($banner_id);
+				$this->Model_Design_Banner->deleteBanner($banner_id);
 			}
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -97,9 +97,9 @@ class ControllerDesignBanner extends Controller
 			'limit' => $this->config->get('config_admin_limit')
 		);
 		
-		$banner_total = $this->model_design_banner->getTotalBanners();
+		$banner_total = $this->Model_Design_Banner->getTotalBanners();
 		
-		$results = $this->model_design_banner->getBanners($data);
+		$results = $this->Model_Design_Banner->getBanners($data);
 		
 		foreach ($results as $result) {
 			$action = array();
@@ -170,7 +170,7 @@ class ControllerDesignBanner extends Controller
 		$this->data['cancel'] = $this->url->link('design/banner', $url);
 		
 		if ($banner_id && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-			$banner_info = $this->model_design_banner->getBanner($banner_id);
+			$banner_info = $this->Model_Design_Banner->getBanner($banner_id);
 		}
 		
 		$defaults = array('name'=>'',
@@ -187,12 +187,12 @@ class ControllerDesignBanner extends Controller
 			}
 		}
 
-		$this->data['languages'] = $this->model_localisation_language->getLanguages();
+		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
 		
 		if (isset($_POST['banner_image'])) {
 			$banner_images = $_POST['banner_image'];
 		} elseif (isset($_GET['banner_id'])) {
-			$banner_images = $this->model_design_banner->getBannerImages($_GET['banner_id']);
+			$banner_images = $this->Model_Design_Banner->getBannerImages($_GET['banner_id']);
 		} else {
 			$banner_images = array();
 		}

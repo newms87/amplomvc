@@ -1,5 +1,5 @@
 <?php
-class ControllerInformationAreYouADesigner extends Controller 
+class Catalog_Controller_Information_AreYouADesigner extends Controller 
 {
 	
   	public function index()
@@ -11,7 +11,7 @@ class ControllerInformationAreYouADesigner extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_catalog_designer->addDesigner($_POST);
+			$this->Model_Catalog_Designer->addDesigner($_POST);
 			
 			$name = $_POST['firstname'] . ' ' . $_POST['lastname'];
 			
@@ -75,7 +75,7 @@ class ControllerInformationAreYouADesigner extends Controller
 			$this->data[$key] = isset($_POST[$key])?$_POST[$key]:$default;
 		}
 		
-		$this->data['categories'] = array_merge(array(''=>"( Select Category )"),$this->model_catalog_category->getCategories(-1));
+		$this->data['categories'] = array_merge(array(''=>"( Select Category )"),$this->Model_Catalog_Category->getCategories(-1));
 		$this->data['categories'][0] = 'Other';
 
 		$this->children = array(

@@ -1,5 +1,5 @@
 <?php
-class ModelCatalogReview extends Model 
+class Admin_Model_Catalog_Review extends Model 
 {
 	public function addReview($data)
 	{

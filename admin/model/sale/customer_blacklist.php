@@ -1,5 +1,5 @@
 <?php
-class ModelSaleCustomerBlacklist extends Model 
+class Admin_Model_Sale_CustomerBlacklist extends Model 
 {
 	public function addCustomerBlacklist($data)
 	{

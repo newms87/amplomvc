@@ -1,5 +1,5 @@
 <?php
-class ControllerInformationInformation extends Controller 
+class Catalog_Controller_Information_Information extends Controller 
 {
 	public function index()
 	{
@@ -9,7 +9,7 @@ class ControllerInformationInformation extends Controller
 		
 		$information_id = isset($_GET['information_id']) ? $_GET['information_id'] : 0;
 		
-		$information_info = $this->model_catalog_information->getInformation($information_id);
+		$information_info = $this->Model_Catalog_Information->getInformation($information_id);
 		
 		if ($information_info) {
 			$this->template->load('information/information');
@@ -66,7 +66,7 @@ class ControllerInformationInformation extends Controller
 			$information_id = 0;
 		}
 		
-		$information_info = $this->model_catalog_information->getInformation($information_id);
+		$information_info = $this->Model_Catalog_Information->getInformation($information_id);
 
 		if ($information_info) {
 			$output  = '<html dir="ltr" lang="en">' . "\n";

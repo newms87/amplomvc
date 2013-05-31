@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleDesignerDisplay extends Controller 
+class Catalog_Controller_Module_DesignerDisplay extends Controller 
 {
 	protected function index($setting)
 	{
@@ -18,7 +18,7 @@ class ControllerModuleDesignerDisplay extends Controller
 		$designers = array_slice($designers, 0, (int)$setting['limit']);
 		
 		foreach ($designers as $designer_id) {
-			$designer_info = $this->model_catalog_manufacturer->getManufacturer($designer_id);
+			$designer_info = $this->Model_Catalog_Manufacturer->getManufacturer($designer_id);
 			if ($designer_info) {
 				if ($designer_info['image']) {
 					$image = $this->image->get($designer_info['image']);
@@ -26,12 +26,12 @@ class ControllerModuleDesignerDisplay extends Controller
 					$image = false;
 				}
 				
-				$featured_product = $this->model_catalog_product->getProduct($designer_info['featured_product_id']);
+				$featured_product = $this->Model_Catalog_Product->getProduct($designer_info['featured_product_id']);
 				
 				//product not found or not active
 				if(empty($featured_product))continue;
 				
-				$p_images = $this->model_catalog_product->getProductImages($featured_product['product_id']);
+				$p_images = $this->Model_Catalog_Product->getProductImages($featured_product['product_id']);
 				$product_images = array();
 				if(isset($p_images))
 					foreach ($p_images as $pi) {

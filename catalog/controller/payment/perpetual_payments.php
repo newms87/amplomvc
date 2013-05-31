@@ -1,5 +1,5 @@
 <?php
-class ControllerPaymentPerpetualPayments extends Controller 
+class Catalog_Controller_Payment_PerpetualPayments extends Controller 
 {
 	protected function index()
 	{
@@ -43,7 +43,7 @@ class ControllerPaymentPerpetualPayments extends Controller
 	{
 		$this->language->load('payment/perpetual_payments');
 		
-		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
+		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
 
 		$payment_data = array(
 			'auth_id'		=> $this->config->get('perpetual_payments_auth_id'),
@@ -82,12 +82,11 @@ class ControllerPaymentPerpetualPayments extends Controller
  		
 		curl_close($curl);
 		
-		if ($response) 
-{
+		if ($response) {
 			$data = explode('|', $response);
 			
 			if (isset($data[0]) && $data[0] == 'A') {
-				$this->model_checkout_order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
+				$this->Model_Checkout_Order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
 				
 				$message = '';
 				
@@ -107,7 +106,7 @@ class ControllerPaymentPerpetualPayments extends Controller
 					$message .= $this->_('text_authorisation') . ' ' . $data[3] . "\n";
 				}
 				
-				$this->model_checkout_order->update_order($this->session->data['order_id'], $this->config->get('perpetual_payments_order_status_id'), $message, false);
+				$this->Model_Checkout_Order->update_order($this->session->data['order_id'], $this->config->get('perpetual_payments_order_status_id'), $message, false);
 					
 				$json['success'] = $this->url->link('checkout/success');
 			} else {

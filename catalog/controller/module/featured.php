@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleFeatured extends Controller 
+class Catalog_Controller_Module_Featured extends Controller 
 {
 	protected function index($setting)
 	{
@@ -56,7 +56,7 @@ class ControllerModuleFeatured extends Controller
 			$this->data['menu_indent'] = 10;
 			
 			$this->data['categories'] = array(0=>array('category_id'=>0,'name'=>'All'), 'spotlight'=>array('category_id'=>-1,'name'=>"Betty's Daily Spotlight"));
-			foreach ($this->model_catalog_category->getAllCategories() as $cat) {
+			foreach ($this->Model_Catalog_Category->getAllCategories() as $cat) {
 				$this->data['categories'][$cat['category_id']] = $cat;
 			}
 		}
@@ -128,7 +128,7 @@ class ControllerModuleFeatured extends Controller
 			$cat_filter = 0;
 		}
 		elseif ($cat_filter) {
-			$cat = $this->model_catalog_category->getCategory($cat_filter);
+			$cat = $this->Model_Catalog_Category->getCategory($cat_filter);
 			$this->data['featured_cat'] = $cat['name'];
 			$this->data['featured_title'] = $filter_types[$active_filter];
 		}
@@ -139,10 +139,10 @@ class ControllerModuleFeatured extends Controller
 		}
 		
 		$products = array();
-		$products = $this->model_catalog_product->getFilteredProducts($active_filter,$cat_filter,$setting['limit'], $page);
+		$products = $this->Model_Catalog_Product->getFilteredProducts($active_filter,$cat_filter,$setting['limit'], $page);
 		
 		if (!$in_context) {
-			$this->data['total_products'] = $this->model_catalog_product->getFilteredProducts($active_filter,$cat_filter,-1);
+			$this->data['total_products'] = $this->Model_Catalog_Product->getFilteredProducts($active_filter,$cat_filter,-1);
 			$this->data['product_limit'] = $setting['limit'];
 			$this->data['page'] = $page;
 			$this->data['num_pages'] = ceil($this->data['total_products']/$setting['limit']);

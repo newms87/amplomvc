@@ -153,8 +153,7 @@ class Language
 		array_shift($values);
 		
 		if (!$values) {
-			list(,$caller) = debug_backtrace(false);
-			trigger_error("Language::format requires at least 2 arguments! Called from $caller[class ]::$caller[function]");
+			trigger_error("Language::format requires at least 2 arguments! " . get_caller());
 			return;
 		}
 		

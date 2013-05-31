@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleDnCarousel extends Controller 
+class Admin_Controller_Module_DnCarousel extends Controller 
 {
 	
 	
@@ -12,7 +12,7 @@ class ControllerModuleDnCarousel extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('dn_carousel', $_POST);
+			$this->Model_Setting_Setting->editSetting('dn_carousel', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 						
@@ -46,7 +46,7 @@ class ControllerModuleDnCarousel extends Controller
 		
 		foreach ($this->data['modules'] as $mod_key=>$mod) {
 			foreach ($mod['data'] as $key=>$md) {
-				$a = $this->model_cms_article->getArticle($md['article_id']);
+				$a = $this->Model_Cms_Article->getArticle($md['article_id']);
 				$this->data['modules'][$mod_key]['data'][$key]['article_title'] = isset($a['title'])?$a['title']:"Article Not Found";
 				$image = $this->data['modules'][$mod_key]['data'][$key]['image'];
 				$image = isset($image) && !empty($image) && file_exists(DIR_IMAGE . $image) ? $image:"no_image.png";
@@ -58,11 +58,11 @@ class ControllerModuleDnCarousel extends Controller
 		$this->data['no_image'] = $this->image->resize('no_image.png', 100, 100);
 		
 		
-		$this->data['languages'] = $this->model_localisation_language->getLanguages();
+		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
 		$this->data['lang_id'] = $this->config->get('config_language_id');
 
 		
-		$layouts = $this->model_design_layout->getLayouts();
+		$layouts = $this->Model_Design_Layout->getLayouts();
 		$this->data['layouts'] = array();
 		foreach($layouts as $layout)
 			$this->data['layouts'][$layout['layout_id']] = $layout['name'];

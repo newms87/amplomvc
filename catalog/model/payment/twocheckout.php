@@ -1,5 +1,5 @@
 <?php
-class ModelPaymentTwoCheckout extends Model 
+class Catalog_Model_Payment_Twocheckout extends Model 
 {
   	public function getMethod($address, $total)
   	{

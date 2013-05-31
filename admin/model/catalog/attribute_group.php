@@ -1,5 +1,5 @@
 <?php
-class ModelCatalogAttributeGroup extends Model 
+class Admin_Model_Catalog_AttributeGroup extends Model 
 {
 	public function addAttributeGroup($data)
 	{

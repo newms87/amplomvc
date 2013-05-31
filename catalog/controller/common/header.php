@@ -1,5 +1,5 @@
 <?php
-class ControllerCommonHeader extends Controller 
+class Catalog_Controller_Common_Header extends Controller 
 {
 	protected function index()
 	{
@@ -63,7 +63,7 @@ class ControllerCommonHeader extends Controller
 		
 		$this->data['logo'] = $this->image->get($this->config->get('config_logo'));
 		
-		$this->data['page_header'] = $this->model_design_page_headers->getPageHeader();
+		$this->data['page_header'] = $this->Model_Design_PageHeaders->getPageHeader();
 		
 		//Navigation
 		$this->data['links_primary'] = $this->document->getLinks('primary');

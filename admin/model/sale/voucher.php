@@ -1,5 +1,5 @@
 <?php
-class ModelSaleVoucher extends Model 
+class Admin_Model_Sale_Voucher extends Model 
 {
 	public function addVoucher($data)
 	{
@@ -86,7 +86,7 @@ class ModelSaleVoucher extends Model
 				$order_id = 0;
 			}
 			
-			$order_info = $this->model_sale_order->getOrder($order_id);
+			$order_info = $this->Model_Sale_Order->getOrder($order_id);
 			
 			// If voucher belongs to an order
 			if ($order_info) {
@@ -105,7 +105,7 @@ class ModelSaleVoucher extends Model
 				$template->data['text_redeem'] = sprintf($language->get('text_redeem'), $voucher_info['code']);
 				$template->data['text_footer'] = $language->get('text_footer');
 				
-				$voucher_theme_info = $this->model_sale_voucher_theme->getVoucherTheme($voucher_info['voucher_theme_id']);
+				$voucher_theme_info = $this->Model_Sale_VoucherTheme->getVoucherTheme($voucher_info['voucher_theme_id']);
 				
 				if ($voucher_info && file_exists(DIR_IMAGE . $voucher_theme_info['image'])) {
 					$template->data['image'] = HTTP_IMAGE . $voucher_theme_info['image'];
@@ -140,7 +140,7 @@ class ModelSaleVoucher extends Model
 				$template->data['text_redeem'] = sprintf($this->_('text_redeem'), $voucher_info['code']);
 				$template->data['text_footer'] = $this->_('text_footer');
 			
-				$voucher_theme_info = $this->model_sale_voucher_theme->getVoucherTheme($voucher_info['voucher_theme_id']);
+				$voucher_theme_info = $this->Model_Sale_VoucherTheme->getVoucherTheme($voucher_info['voucher_theme_id']);
 				
 				if ($voucher_info && file_exists(DIR_IMAGE . $voucher_theme_info['image'])) {
 					$template->data['image'] = HTTP_IMAGE . $voucher_theme_info['image'];

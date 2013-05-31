@@ -3,7 +3,7 @@
  * Version: 1.5.3
  * Updated: 04/07/2012
  */
-class ControllerModuleJanrain extends Controller{
+class Catalog_Controller_Module_Janrain extends Controller{
 	protected function index($setting)
 	{
 		$this->language->load('module/janrain');
@@ -137,7 +137,7 @@ class ControllerModuleJanrain extends Controller{
 		$auth_identifier	= strtolower($auth_profile['identifier']);
 		$auth_email			= isset($auth_profile['email']) && $auth_profile['email']!='' && $this->janrainIsValidEmail($auth_profile['email']) ? $auth_profile['email'] : NULL;
 		$auth_email			= $auth_email ? $auth_email : $this->generateEmailAddress($auth_profile,$auth_provider,$auth_identifier);
-		$janrain_user			= $this->model_module_janrain->getCustomerByEmail( $auth_email );
+		$janrain_user			= $this->Model_Module_Janrain->getCustomerByEmail( $auth_email );
 		
 		$janrain_exist_user = false;
 		if(!empty($janrain_user) && isset($janrain_user['email']) && $janrain_user['email'] != '' && isset($janrain_user['customer_id']) )
@@ -149,7 +149,7 @@ class ControllerModuleJanrain extends Controller{
 		
 		if($janrain_exist_user)
 		{
-			$this->model_module_janrain->janrainUpdateUser( $janrain_user['customer_id'], $janrain_user['email'], $auth_provider, $auth_identifier );
+			$this->Model_Module_Janrain->janrainUpdateUser( $janrain_user['customer_id'], $janrain_user['email'], $auth_provider, $auth_identifier );
 		}
 		else {
 			$auth_profile_name = isset($auth_profile['name']) ? $auth_profile['name'] : '';
@@ -165,7 +165,7 @@ class ControllerModuleJanrain extends Controller{
 							
 			$email			= $auth_email;
 			$password		= 'thejoomla';//$this->generatePassword();
-			$customer_group_id = $this->model_module_janrain->janrainGetCustomerGroupId();
+			$customer_group_id = $this->Model_Module_Janrain->janrainGetCustomerGroupId();
 			$status			= 1;
 			$approved		= 1;
 			
@@ -178,14 +178,14 @@ class ControllerModuleJanrain extends Controller{
 			$user_data['status'] 		= $status;
 			$user_data['approved'] 		= $approved;
 			
-			$user_id = (int)$this->model_module_janrain->addCustomer( $user_data );
+			$user_id = (int)$this->Model_Module_Janrain->addCustomer( $user_data );
 			
 			if($user_id>0)
 			{
-				$customer_info 		= $this->model_module_janrain->getCustomer($user_id);
+				$customer_info 		= $this->Model_Module_Janrain->getCustomer($user_id);
 				$customer_email 	= $customer_info['email'];
 				$customer_password 	= $customer_info['password'];
-				$this->model_module_janrain->janrainCreateUser( $user_id, $customer_email, $auth_provider, $auth_identifier );
+				$this->Model_Module_Janrain->janrainCreateUser( $user_id, $customer_email, $auth_provider, $auth_identifier );
 				
 				// send email to admin to notify about new customer
 				$subject = sprintf($this->_('text_subject'), SITE_SSL);
@@ -305,17 +305,17 @@ class ControllerModuleJanrain extends Controller{
 	
 	function getUniqUsername($auth_username,$auth_display_name,$firstname,$lastname)
 	{
-		if( !$this->model_module_janrain->janrainCheckUsernameExist( $auth_username ) )
+		if( !$this->Model_Module_Janrain->janrainCheckUsernameExist( $auth_username ) )
 			return $auth_username;
 		
-		if( !$this->model_module_janrain->janrainCheckUsernameExist( $auth_display_name ) )
+		if( !$this->Model_Module_Janrain->janrainCheckUsernameExist( $auth_display_name ) )
 			return $auth_display_name;
 		
-		if( !$this->model_module_janrain->janrainCheckUsernameExist( $firstname ) )
+		if( !$this->Model_Module_Janrain->janrainCheckUsernameExist( $firstname ) )
 			return $firstname;
 			
 		$username = str_replace(' ','',$firstname.$lastname);
-		if( !$this->model_module_janrain->janrainCheckUsernameExist( $username ) )
+		if( !$this->Model_Module_Janrain->janrainCheckUsernameExist( $username ) )
 			return $username;
 	}
 	

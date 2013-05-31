@@ -1,5 +1,5 @@
 <?php
-class ModelUserUser extends Model 
+class Admin_Model_User_User extends Model 
 {
 	public function addUser($data)
 	{
@@ -13,7 +13,7 @@ class ModelUserUser extends Model
 		
 		if (isset($data['contact'])) {
 			foreach($data['contact'] as $contact)
-				$this->model_includes_contact->addContact('user',$user_id,$contact);
+				$this->Model_Includes_Contact->addContact('user',$user_id,$contact);
 		}
 	}
 	
@@ -38,11 +38,11 @@ class ModelUserUser extends Model
 			}
 		}
 		
-		$this->model_includes_contact->deleteContactByType('user',$user_id);
+		$this->Model_Includes_Contact->deleteContactByType('user',$user_id);
 		
 		if (isset($data['contact'])) {
 			foreach($data['contact'] as $contact)
-				$this->model_includes_contact->addContact('user', $user_id, $contact);
+				$this->Model_Includes_Contact->addContact('user', $user_id, $contact);
 		}
 	}
 
@@ -60,7 +60,7 @@ class ModelUserUser extends Model
 	{
 		$this->query("DELETE FROM `" . DB_PREFIX . "user` WHERE user_id = '" . (int)$user_id . "'");
 		$this->query("DELETE FROM " . DB_PREFIX . "user_designer WHERE user_id='" . (int)$user_id ."'");
-		$this->model_includes_contact->deleteContactByType('user',$user_id);
+		$this->Model_Includes_Contact->deleteContactByType('user',$user_id);
 	}
 	
 	public function getUser($user_id)
@@ -131,7 +131,7 @@ class ModelUserUser extends Model
 	
 	public function getUserContactInfo($user_id)
 	{
-		return $this->model_includes_contact->getContactsByType('user',$user_id);
+		return $this->Model_Includes_Contact->getContactsByType('user',$user_id);
 	}
 
 	public function getTotalUsers()

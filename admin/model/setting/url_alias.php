@@ -1,5 +1,5 @@
 <?php
-class ModelSettingUrlAlias extends Model 
+class Admin_Model_Setting_UrlAlias extends Model 
 {
 	public function addUrlAlias($data)
 	{

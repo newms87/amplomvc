@@ -1,5 +1,5 @@
 <?php
-class ControllerReportSaleTax extends Controller 
+class Admin_Controller_Report_SaleTax extends Controller 
 {
 	public function index()
 	{
@@ -75,11 +75,11 @@ class ControllerReportSaleTax extends Controller
 			'limit'						=> $this->config->get('config_admin_limit')
 		);
 				
-		$order_total = $this->model_report_sale->getTotalTaxes($data);
+		$order_total = $this->Model_Report_Sale->getTotalTaxes($data);
 		
 		$this->data['orders'] = array();
 		
-		$results = $this->model_report_sale->getTaxes($data);
+		$results = $this->Model_Report_Sale->getTaxes($data);
 		
 		foreach ($results as $result) {
 			$this->data['orders'][] = array(
@@ -91,7 +91,7 @@ class ControllerReportSaleTax extends Controller
 			);
 		}
 		
-		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
 
 		$this->data['groups'] = array();
 

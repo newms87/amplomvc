@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleBestSeller extends Controller 
+class Catalog_Controller_Module_Bestseller extends Controller 
 {
 	protected function index($setting)
 	{
@@ -17,14 +17,14 @@ class ControllerModuleBestSeller extends Controller
 				'product_ids' => array_keys($featured)
 			);
 			
-			$featured = $this->model_catalog_product->getProducts($data);
+			$featured = $this->Model_Catalog_Product->getProducts($data);
 		}
 		else {
 			$featured = array();
 		}
 		
 		if ($setting['limit'] - count($featured) > 0) {
-			$products = $this->model_catalog_product->getBestSellerProducts($setting['limit'] - count($featured));
+			$products = $this->Model_Catalog_Product->getBestSellerProducts($setting['limit'] - count($featured));
 			$products = array_merge($featured, $products);
 		}
 		else {

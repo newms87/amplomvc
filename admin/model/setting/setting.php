@@ -1,5 +1,5 @@
 <?php
-class ModelSettingSetting extends Model 
+class Admin_Model_Setting_Setting extends Model 
 {
 	public function getSetting($group, $store_id = 0)
 	{

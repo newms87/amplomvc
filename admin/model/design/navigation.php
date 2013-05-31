@@ -1,5 +1,5 @@
 <?php
-class ModelDesignNavigation extends Model 
+class Admin_Model_Design_Navigation extends Model 
 {
 	public function addNavigationGroup($data)
 	{
@@ -1478,8 +1478,7 @@ class ModelDesignNavigation extends Model
 		
 		$result = $this->query("SELECT navigation_group_id FROM " . DB_PREFIX . "navigation_group WHERE name = 'admin'");
 		
-		if($result->num_rows)
-{
+		if ($result->num_rows) {
 			$this->deleteNavigationGroup($result->row['navigation_group_id']);
 		}
 		

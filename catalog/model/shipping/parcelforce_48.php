@@ -1,5 +1,5 @@
 <?php
-class ModelShippingParcelforce48 extends Model 
+class Catalog_Model_Shipping_Parcelforce4848 extends Model 
 {
 	function getQuote($address)
 	{
@@ -59,8 +59,7 @@ class ModelShippingParcelforce48 extends Model
 					$text .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class _id')) . ')';
 				}
 			
-				if ($this->config->get('parcelforce_48_display_insurance') && (float)$insurance) 
-{
+				if ($this->config->get('parcelforce_48_display_insurance') && (float)$insurance) {
 					$text .= ' (' . $this->_('text_insurance') . ' ' . $this->currency->format($insurance) . ')';
 				}
 

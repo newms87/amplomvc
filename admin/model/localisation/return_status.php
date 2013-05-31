@@ -1,5 +1,5 @@
 <?php
-class ModelLocalisationReturnStatus extends Model 
+class Admin_Model_Localisation_ReturnStatus extends Model 
 {
 	public function addReturnStatus($data)
 	{

@@ -1,17 +1,16 @@
 <?php
-class ControllerCommonHeader extends Controller 
+class Admin_Controller_Common_Header extends Controller 
 {
 	protected function index()
 	{
+		$this->template->load('common/header');
+		$this->language->load('common/header');
+		
 		if ($this->config->get('config_debug') && !empty($_SESSION['debug'])) {
-		$this->message->add('warning', html_dump($_SESSION['debug'], 'Session Debug', 0, -1, false));
-		unset($_SESSION['debug']);
+			$this->message->add('warning', html_dump($_SESSION['debug'], 'Session Debug', 0, -1, false));
+			unset($_SESSION['debug']);
 		}
 		
-		if ($this->user->isDesigner()) {
-			$this->template->load('common/header_restricted');
-		}
-
 		$this->data['title'] = $this->document->getTitle();
 		
 		$this->data['base'] = $this->url->is_ssl() ? SITE_SSL : SITE_URL;
@@ -43,10 +42,7 @@ class ControllerCommonHeader extends Controller
 			$this->data['pretty_url'] = $this->url->get_pretty_url();
 		}
 		
-		$this->load->language('common/header');
-		
 		$this->data['admin_logo'] = $this->image->get($this->config->get('config_admin_logo'));
-			
 		
 		if (!$this->user->isLogged()) {
 			$this->data['logged'] = '';
@@ -100,7 +96,7 @@ class ControllerCommonHeader extends Controller
 			$this->document->addLink('right', $link_stores);
 			
 			//Link to all of the stores under the stores top level navigation
-			$stores = $this->model_setting_store->getStores();
+			$stores = $this->Model_Setting_Store->getStores();
 			
 			foreach ($stores as $store) {
 				$link_store = array(
@@ -132,7 +128,7 @@ class ControllerCommonHeader extends Controller
 		
 		
 		//Failed Email Messages warnings
-		$failed_count = $this->model_mail_error->total_failed_messages();
+		$failed_count = $this->Model_Mail_Error->total_failed_messages();
 		
 		if ($failed_count) {
 			$view_mail_errors = $this->url->admin('mail/error');

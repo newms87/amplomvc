@@ -1,5 +1,5 @@
 <?php
-class ControllerFeedGoogleSitemap extends Controller 
+class Admin_Controller_Feed_GoogleSitemap extends Controller 
 {
 	
 	
@@ -12,7 +12,7 @@ class ControllerFeedGoogleSitemap extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('google_sitemap', $_POST);
+			$this->Model_Setting_Setting->editSetting('google_sitemap', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 

@@ -20,7 +20,7 @@ class ControllerAccountRegister extends Controller
 				$this->error['email'] = $this->_('error_email');
 		}
 
-		if ($this->model_account_customer->getTotalCustomersByEmail($_POST['email'])) {
+		if ($this->Model_Account_Customer->getTotalCustomersByEmail($_POST['email'])) {
 				$this->error['email'] = $this->_('error_exists');
 		}
 //-----

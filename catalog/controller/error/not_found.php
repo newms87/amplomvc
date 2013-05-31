@@ -1,5 +1,5 @@
 <?php
-class ControllerErrorNotFound extends Controller 
+class Catalog_Controller_Error_NotFound extends Controller 
 {
 	public function index()
 	{

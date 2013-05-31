@@ -1,5 +1,5 @@
 <?php
-class ControllerPaymentGoogleCheckout extends Controller 
+class Catalog_Controller_Payment_GoogleCheckout extends Controller 
 {
 	public function index()
 	{

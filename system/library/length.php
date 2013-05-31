@@ -44,8 +44,7 @@ class Length
 
 	public function format($value, $length_class _id, $decimal_point = '.', $thousand_point = ',')
 	{
-		if (isset($this->lengths[$length_class _id])) 
-{
+		if (isset($this->lengths[$length_class _id])) {
 			return number_format($value, 2, $decimal_point, $thousand_point) . $this->lengths[$length_class _id]['unit'];
 		} else {
 			return number_format($value, 2, $decimal_point, $thousand_point);

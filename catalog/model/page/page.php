@@ -1,5 +1,5 @@
 <?php
-class ModelPagePage extends Model
+class Catalog_Model_Page_Page extends Model
 {
 	public function getPage($page_id)
 	{

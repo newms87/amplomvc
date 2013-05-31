@@ -1,5 +1,5 @@
 <?php
-class ControllerDesignLayout extends Controller 
+class Admin_Controller_Design_Layout extends Controller 
 {
 	
 	public function index()
@@ -18,7 +18,7 @@ class ControllerDesignLayout extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_design_layout->addLayout($_POST);
+			$this->Model_Design_Layout->addLayout($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -49,7 +49,7 @@ class ControllerDesignLayout extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_design_layout->editLayout($_GET['layout_id'], $_POST);
+			$this->Model_Design_Layout->editLayout($_GET['layout_id'], $_POST);
 
 			$this->message->add('success', $this->_('text_success'));
 
@@ -81,7 +81,7 @@ class ControllerDesignLayout extends Controller
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $layout_id) {
-				$this->model_design_layout->deleteLayout($layout_id);
+				$this->Model_Design_Layout->deleteLayout($layout_id);
 			}
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -157,9 +157,9 @@ class ControllerDesignLayout extends Controller
 			'limit' => $this->config->get('config_admin_limit')
 		);
 		
-		$layout_total = $this->model_design_layout->getTotalLayouts();
+		$layout_total = $this->Model_Design_Layout->getTotalLayouts();
 		
-		$results = $this->model_design_layout->getLayouts($data);
+		$results = $this->Model_Design_Layout->getLayouts($data);
 		
 		foreach ($results as $result) {
 			$action = array();
@@ -234,7 +234,7 @@ class ControllerDesignLayout extends Controller
 	{
 		$this->template->load('design/layout_form');
 
-		$this->data['languages'] = $this->model_localisation_language->getLanguages();
+		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
 		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
 		} else {
@@ -273,7 +273,7 @@ class ControllerDesignLayout extends Controller
 		$this->data['cancel'] = $this->url->link('design/layout', $url);
 		
 		if (isset($_GET['layout_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-			$layout_info = $this->model_design_layout->getLayout($_GET['layout_id']);
+			$layout_info = $this->Model_Design_Layout->getLayout($_GET['layout_id']);
 		}
 
 		if (isset($_POST['name'])) {
@@ -288,18 +288,18 @@ class ControllerDesignLayout extends Controller
 		if (isset($_POST['layout_header'])) {
 			$this->data['layout_header'] = $_POST['layout_header'];
 		} elseif (isset($_GET['layout_id'])) {
-			$this->data['layout_header'] = $this->model_design_layout->getLayoutPageHeaders($_GET['layout_id']);
+			$this->data['layout_header'] = $this->Model_Design_Layout->getLayoutPageHeaders($_GET['layout_id']);
 		} else {
 			$this->data['layout_header'] = array();
 		}
 		
 		
-		$this->data['data_stores'] = $this->model_setting_store->getStores();
+		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
 		
 		if (isset($_POST['layout_route'])) {
 			$this->data['layout_routes'] = $_POST['layout_route'];
 		} elseif (isset($_GET['layout_id'])) {
-			$this->data['layout_routes'] = $this->model_design_layout->getLayoutRoutes($_GET['layout_id']);
+			$this->data['layout_routes'] = $this->Model_Design_Layout->getLayoutRoutes($_GET['layout_id']);
 		} else {
 			$this->data['layout_routes'] = array();
 		}
@@ -336,19 +336,19 @@ class ControllerDesignLayout extends Controller
 				$this->error['warning'] = $this->_('error_default');
 			}
 			
-			$product_total = $this->model_catalog_product->getTotalProductsByLayoutId($layout_id);
+			$product_total = $this->Model_Catalog_Product->getTotalProductsByLayoutId($layout_id);
 	
 			if ($product_total) {
 				$this->error['warning'] = sprintf($this->_('error_product'), $product_total);
 			}
 
-			$category_total = $this->model_catalog_category->getTotalCategoriesByLayoutId($layout_id);
+			$category_total = $this->Model_Catalog_Category->getTotalCategoriesByLayoutId($layout_id);
 	
 			if ($category_total) {
 				$this->error['warning'] = sprintf($this->_('error_category'), $category_total);
 			}
 							
-			$information_total = $this->model_catalog_information->getTotalInformationsByLayoutId($layout_id);
+			$information_total = $this->Model_Catalog_Information->getTotalInformationsByLayoutId($layout_id);
 		
 			if ($information_total) {
 				$this->error['warning'] = sprintf($this->_('error_information'), $information_total);

@@ -1,5 +1,5 @@
 <?php
-class ModelLocalisationTaxClass extends Model 
+class Admin_Model_Localisation_TaxClass extends Model 
 {
 	public function addTaxclass($data)
 	{
@@ -7,8 +7,7 @@ class ModelLocalisationTaxClass extends Model
 		
 		$tax_class_id = $this->db->getLastId();
 		
-		if (isset($data['tax_rule'])) 
-{
+		if (isset($data['tax_rule'])) {
 			foreach ($data['tax_rule'] as $tax_rule) {
 				$this->query("INSERT INTO " . DB_PREFIX . "tax_rule SET tax_class _id = '" . (int)$tax_class_id . "', tax_rate_id = '" . (int)$tax_rule['tax_rate_id'] . "', based = '" . $this->db->escape($tax_rule['based']) . "', priority = '" . (int)$tax_rule['priority'] . "'");
 			}
@@ -23,8 +22,7 @@ class ModelLocalisationTaxClass extends Model
 		
 		$this->query("DELETE FROM " . DB_PREFIX . "tax_rule WHERE tax_class_id = '" . (int)$tax_class_id . "'");
 
-		if (isset($data['tax_rule'])) 
-{
+		if (isset($data['tax_rule'])) {
 			foreach ($data['tax_rule'] as $tax_rule) {
 				$this->query("INSERT INTO " . DB_PREFIX . "tax_rule SET tax_class _id = '" . (int)$tax_class_id . "', tax_rate_id = '" . (int)$tax_rule['tax_rate_id'] . "', based = '" . $this->db->escape($tax_rule['based']) . "', priority = '" . (int)$tax_rule['priority'] . "'");
 			}
@@ -55,8 +53,7 @@ class ModelLocalisationTaxClass extends Model
 
 			$sql .= " ORDER BY title";
 			
-			if (isset($data['order']) && ($data['order'] == 'DESC')) 
-{
+			if (isset($data['order']) && ($data['order'] == 'DESC')) {
 				$sql .= " DESC";
 			} else {
 				$sql .= " ASC";
@@ -80,8 +77,7 @@ class ModelLocalisationTaxClass extends Model
 		} else {
 			$tax_class _data = $this->cache->get('tax_class');
 
-			if (!$tax_class_data) 
-{
+			if (!$tax_class_data) {
 				$query = $this->query("SELECT * FROM " . DB_PREFIX . "tax_class ");
 	
 				$tax_class_data = $query->rows;

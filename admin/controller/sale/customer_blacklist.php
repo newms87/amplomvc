@@ -1,5 +1,5 @@
 <?php
-class ControllerSaleCustomerBlacklist extends Controller 
+class Admin_Controller_Sale_CustomerBlacklist extends Controller 
 {
 	
   
@@ -19,7 +19,7 @@ class ControllerSaleCustomerBlacklist extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-				$this->model_sale_customer_blacklist->addCustomerBlacklist($_POST);
+				$this->Model_Sale_CustomerBlacklist->addCustomerBlacklist($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 		
@@ -50,7 +50,7 @@ class ControllerSaleCustomerBlacklist extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_sale_customer_blacklist->editCustomerBlacklist($_GET['customer_ip_blacklist_id'], $_POST);
+			$this->Model_Sale_CustomerBlacklist->editCustomerBlacklist($_GET['customer_ip_blacklist_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 	
@@ -82,7 +82,7 @@ class ControllerSaleCustomerBlacklist extends Controller
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $customer_ip_blacklist_id) {
-				$this->model_sale_customer_blacklist->deleteCustomerBlacklist($customer_ip_blacklist_id);
+				$this->Model_Sale_CustomerBlacklist->deleteCustomerBlacklist($customer_ip_blacklist_id);
 			}
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -158,9 +158,9 @@ class ControllerSaleCustomerBlacklist extends Controller
 			'limit' => $this->config->get('config_admin_limit')
 		);
 		
-		$customer_blacklist_total = $this->model_sale_customer_blacklist->getTotalCustomerBlacklists($data);
+		$customer_blacklist_total = $this->Model_Sale_CustomerBlacklist->getTotalCustomerBlacklists($data);
 	
-		$results = $this->model_sale_customer_blacklist->getCustomerBlacklists($data);
+		$results = $this->Model_Sale_CustomerBlacklist->getCustomerBlacklists($data);
  
 		foreach ($results as $result) {
 			$action = array();
@@ -275,7 +275,7 @@ class ControllerSaleCustomerBlacklist extends Controller
 		$this->data['cancel'] = $this->url->link('sale/customer_blacklist', $url);
 
 		if (isset($_GET['customer_ip_blacklist_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-				$customer_blacklist_info = $this->model_sale_customer_blacklist->getCustomerBlacklist($_GET['customer_ip_blacklist_id']);
+				$customer_blacklist_info = $this->Model_Sale_CustomerBlacklist->getCustomerBlacklist($_GET['customer_ip_blacklist_id']);
 		}
 			
 		if (isset($_POST['ip'])) {

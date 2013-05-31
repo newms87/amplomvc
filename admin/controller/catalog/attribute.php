@@ -1,5 +1,5 @@
 <?php
-class ControllerCatalogAttribute extends Controller 
+class Admin_Controller_Catalog_Attribute extends Controller 
 {
 	
 	
@@ -19,7 +19,7 @@ class ControllerCatalogAttribute extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-				$this->model_catalog_attribute->addAttribute($_POST);
+				$this->Model_Catalog_Attribute->addAttribute($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -50,7 +50,7 @@ class ControllerCatalogAttribute extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_catalog_attribute->editAttribute($_GET['attribute_id'], $_POST);
+			$this->Model_Catalog_Attribute->editAttribute($_GET['attribute_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -82,7 +82,7 @@ class ControllerCatalogAttribute extends Controller
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $attribute_id) {
-				$this->model_catalog_attribute->deleteAttribute($attribute_id);
+				$this->Model_Catalog_Attribute->deleteAttribute($attribute_id);
 			}
 							
 			$this->message->add('success', $this->_('text_success'));
@@ -158,9 +158,9 @@ class ControllerCatalogAttribute extends Controller
 			'limit' => $this->config->get('config_admin_limit')
 		);
 		
-		$attribute_total = $this->model_catalog_attribute->getTotalAttributes();
+		$attribute_total = $this->Model_Catalog_Attribute->getTotalAttributes();
 	
-		$results = $this->model_catalog_attribute->getAttributes($data);
+		$results = $this->Model_Catalog_Attribute->getAttributes($data);
  
 		foreach ($results as $result) {
 			$action = array();
@@ -277,15 +277,15 @@ class ControllerCatalogAttribute extends Controller
 		$this->data['cancel'] = $this->url->link('catalog/attribute', $url);
 
 		if (isset($_GET['attribute_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-			$attribute_info = $this->model_catalog_attribute->getAttribute($_GET['attribute_id']);
+			$attribute_info = $this->Model_Catalog_Attribute->getAttribute($_GET['attribute_id']);
 		}
 				
-		$this->data['languages'] = $this->model_localisation_language->getLanguages();
+		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
 		
 		if (isset($_POST['attribute_description'])) {
 			$this->data['attribute_description'] = $_POST['attribute_description'];
 		} elseif (isset($_GET['attribute_id'])) {
-			$this->data['attribute_description'] = $this->model_catalog_attribute->getAttributeDescriptions($_GET['attribute_id']);
+			$this->data['attribute_description'] = $this->Model_Catalog_Attribute->getAttributeDescriptions($_GET['attribute_id']);
 		} else {
 			$this->data['attribute_description'] = array();
 		}
@@ -298,7 +298,7 @@ class ControllerCatalogAttribute extends Controller
 			$this->data['attribute_group_id'] = '';
 		}
 		
-		$this->data['attribute_groups'] = $this->model_catalog_attribute_group->getAttributeGroups();
+		$this->data['attribute_groups'] = $this->Model_Catalog_AttributeGroup->getAttributeGroups();
 
 		if (isset($_POST['sort_order'])) {
 			$this->data['sort_order'] = $_POST['sort_order'];
@@ -338,7 +338,7 @@ class ControllerCatalogAttribute extends Controller
 		}
 		
 		foreach ($_POST['selected'] as $attribute_id) {
-			$product_total = $this->model_catalog_product->getTotalProductsByAttributeId($attribute_id);
+			$product_total = $this->Model_Catalog_Product->getTotalProductsByAttributeId($attribute_id);
 
 			if ($product_total) {
 				$this->error['warning'] = sprintf($this->_('error_product'), $product_total);
@@ -365,7 +365,7 @@ class ControllerCatalogAttribute extends Controller
 			
 			$json = array();
 			
-			$results = $this->model_catalog_attribute->getAttributes($data);
+			$results = $this->Model_Catalog_Attribute->getAttributes($data);
 			
 			foreach ($results as $result) {
 				$json[] = array(

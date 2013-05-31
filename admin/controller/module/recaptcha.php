@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleRecaptcha extends Controller 
+class Admin_Controller_Module_Recaptcha extends Controller 
 {
 	
 
@@ -12,7 +12,7 @@ class ControllerModuleRecaptcha extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('recaptcha', $_POST);
+			$this->Model_Setting_Setting->editSetting('recaptcha', $_POST);
 
 			$this->message->add('success', $this->_('text_success'));
 

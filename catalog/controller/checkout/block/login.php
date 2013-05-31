@@ -1,5 +1,5 @@
 <?php
-class ControllerCheckoutBlockLogin extends Controller 
+class Catalog_Controller_Checkout_Block_Login extends Controller 
 {
 	public function index()
 	{

@@ -1,5 +1,5 @@
 <?php
-class ControllerErrorPermission extends Controller 
+class Admin_Controller_Error_Permission extends Controller 
 {
 	public function index()
 	{

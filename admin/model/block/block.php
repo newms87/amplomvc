@@ -1,5 +1,5 @@
 <?php
-class ModelBlockBlock extends Model 
+class Admin_Model_Block_Block extends Model 
 {
 	public function updateBlock($name, $data)
 	{

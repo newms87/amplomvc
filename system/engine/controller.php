@@ -3,23 +3,17 @@
 abstract class Controller 
 {
 	protected $registry;
-	protected $class _path;
 	protected $children = array();
 	public $output;
 	public $template;
 	public $data = array();
 	public $error = array();
 	
-	public function __construct($class_path, &$registry)
+	public function __construct($registry)
 	{
-		$this->registry = &$registry;
+		$this->registry = $registry;
 		
-		if($class _path)
-{
-			$this->class _path = $class_path;
-			
-			$this->template = new Template($registry);
-		}
+		$this->template = new Template($registry);
 	}
 	
 	public function __get($key)
@@ -37,10 +31,7 @@ abstract class Controller
 		return $this->language->get($key);
 	}
 
-	protected function forward($route, $args = array()) {
-		return new Action($route, $args);
-	}
-	
+	//TODO: move this to block plugin!
 	protected function getBlock($context, $name, $args = array()){
 		$block = $context . '/block/' . $name;
 		
@@ -49,33 +40,22 @@ abstract class Controller
 			exit();
 		}
 		
-		$params = array('settings' => $this->model_block_block->getBlockSettings($context . '/' . $name));
+		$params = array('settings' => $this->Model_Block_Block->getBlockSettings($context . '/' . $name));
 		
-		foreach($args as $a)
-{
+		foreach ($args as $a) {
 			$params[] = $a;
 		}
 		
-		$action = new Action($block);
-		$file = $action->getFile();
-		$class = $action->getClass();
-		$class_path = $action->getClassPath();
-		$method = $action->getMethod();
+		$action = new Action($this->registry, $block, $params);
 		
-		if (file_exists($file)) 
-{
-			_require_once($file);
-
-			$controller = new $class ($class_path, $this->registry);
-
-			call_user_func_array(array($controller, $method), $params);
-			
-			return $controller->output;
+		if ($action->execute()) {
+			return $action->getOutput();
 		} else {
 			trigger_error('Error: Could not load block ' . $block . '! The file was missing.');
 		}
 	}
-
+	
+	//TODO: Get rid of Modules!!
 	protected function getModule($name, $settings = array()){
 		$module = 'module/' . $name;
 		
@@ -91,8 +71,7 @@ abstract class Controller
 		$class_path = $action->getClassPath();
 		$method = $action->getMethod();
 		
-		if (file_exists($file)) 
-{
+		if (file_exists($file)) {
 			_require_once($file);
 
 			$controller = new $class ($class_path, $this->registry);
@@ -101,29 +80,18 @@ abstract class Controller
 			
 			return $controller->output;
 		} else {
-			trigger_error('Error: Could not load module ' . $module . '! The file was missing at ' . $file);
+			trigger_error('Could not load module ' . $module . '! The file was missing at ' . $file);
 			exit();
 		}
 	}
 	
-	protected function getChild($child, $args = array()) {
-		$action = new Action($child, $args);
-		$file = $action->getFile();
-		$class = $action->getClass();
-		$class_path = $action->getClassPath();
-		$method = $action->getMethod();
-	
-		if (file_exists($file)) 
-{
-			_require_once($file);
-
-			$controller = new $class ($class_path, $this->registry);
-			
-			$controller->$method($args);
-			
-			return $controller->output;
+	protected function getChild($child, $parameters = array()) {
+		$action = new Action($this->registry, $child, $parameters);
+		
+		if ($action->execute()) {
+			return $action->getOutput();
 		} else {
-			trigger_error('Error: Could not load controller ' . $child . '!');
+			trigger_error('Could not load controller ' . $child . '!');
 			exit();
 		}
 	}
@@ -148,14 +116,17 @@ abstract class Controller
 			$this->data[basename($child)] = $this->getChild($child);
 		}
 		
-
 		//Render View
 		$file = $this->template->get_file();
 		
-		if (!$file) {
-			$this->template->load($this->class_path);
-			$file = $this->template->get_file();
+		if (!is_file($file)) {
+			trigger_error("Controller::render(): The template $file could not be found. Unable to render! " . get_caller());
+			exit;
 		}
+		
+		//TODO: Do we want plugins to modify templates in this way!?
+		// The plugins can only modify for default template... does this make sense? just use a new template?
+		// Maybe the plugin template overrides the default template (when requested by plugin)? 
 		
 		//if there are plugins that have modified this template,
 		//we use the merged version of this file

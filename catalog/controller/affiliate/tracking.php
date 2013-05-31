@@ -1,5 +1,5 @@
 <?php
-class ControllerAffiliateTracking extends Controller 
+class Catalog_Controller_Affiliate_Tracking extends Controller 
 {
 	public function index()
 	{
@@ -47,7 +47,7 @@ class ControllerAffiliateTracking extends Controller
 				'limit'		=> 20
 			);
 			
-			$results = $this->model_catalog_product->getProducts($data);
+			$results = $this->Model_Catalog_Product->getProducts($data);
 			
 			foreach ($results as $result) {
 				$json[] = array(

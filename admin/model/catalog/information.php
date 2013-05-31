@@ -1,5 +1,5 @@
 <?php
-class ModelCatalogInformation extends Model 
+class Admin_Model_Catalog_Information extends Model 
 {
 	public function addInformation($data)
 	{

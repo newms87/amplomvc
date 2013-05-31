@@ -7,7 +7,7 @@ class ControllerProductBlockInformation extends Controller
 	{
 //-----
 //>>>>> {php} {before}
-		$collection = $this->model_catalog_collection->getCollectionByProduct($product_info['product_id']);
+		$collection = $this->Model_Catalog_Collection->getCollectionByProduct($product_info['product_id']);
 		if ($collection) {
 			$this->language->plugin('collections', 'catalog/product');
 			$collection['href'] = $this->url->link("product/collection", "collection_id=" . $collection['collection_id']);

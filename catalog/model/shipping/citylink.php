@@ -1,5 +1,5 @@
 <?php
-class ModelShippingCitylink extends Model 
+class Catalog_Model_Shipping_Citylink extends Model 
 {
 	function getQuote($address)
 	{

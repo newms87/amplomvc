@@ -1,5 +1,5 @@
 <?php
-class ControllerSettingDbRules extends Controller 
+class Admin_Controller_Setting_DbRules extends Controller 
 {
 	
 
@@ -19,7 +19,7 @@ class ControllerSettingDbRules extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$store_id = $this->model_setting_db_rules->addDbRule($_POST);
+			$store_id = $this->Model_Setting_DbRules->addDbRule($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -36,7 +36,7 @@ class ControllerSettingDbRules extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_setting_db_rules->editDbRule($_GET['db_rule_id'], $_POST);
+			$this->Model_Setting_DbRules->editDbRule($_GET['db_rule_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -54,7 +54,7 @@ class ControllerSettingDbRules extends Controller
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $db_rule_id) {
-				$this->model_setting_db_rules->deleteDbRule($db_rule_id);
+				$this->Model_Setting_DbRules->deleteDbRule($db_rule_id);
 			}
 
 			$this->message->add('success', $this->_('text_success'));
@@ -77,7 +77,7 @@ class ControllerSettingDbRules extends Controller
 		
 		$url = $this->get_url(array('page'));
 		
-		$db_rules = $this->model_setting_db_rules->getDbRules();
+		$db_rules = $this->Model_Setting_DbRules->getDbRules();
  
 		foreach ($db_rules as &$db_rule) {
 			$action = array(
@@ -116,7 +116,7 @@ class ControllerSettingDbRules extends Controller
 				
 		$this->data['cancel'] = $this->url->link('setting/db_rules');
 		
-		$db_rule_info = $db_rule_id ? $this->model_setting_db_rules->getDbRule($db_rule_id) : null;
+		$db_rule_info = $db_rule_id ? $this->Model_Setting_DbRules->getDbRule($db_rule_id) : null;
 		
 		$defaults = array(
 			'table'		=>'',

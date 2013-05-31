@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleSpecial extends Controller 
+class Catalog_Controller_Module_Special extends Controller 
 {
 	protected function index($setting)
 	{
@@ -16,7 +16,7 @@ class ControllerModuleSpecial extends Controller
 			'limit' => $setting['limit']
 		);
 
-		$results = $this->model_catalog_product->getProductSpecials($data);
+		$results = $this->Model_Catalog_Product->getProductSpecials($data);
 
 		foreach ($results as $result) {
 			if ($result['image']) {

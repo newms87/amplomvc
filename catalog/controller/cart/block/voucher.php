@@ -1,5 +1,5 @@
 <?php
-class ControllerCartBlockVoucher extends Controller
+class Catalog_Controller_Cart_Block_Voucher extends Controller
 {
 	
 	public function index($settings = null)
@@ -33,7 +33,7 @@ class ControllerCartBlockVoucher extends Controller
 	
 	private function validateVoucher()
 	{
-		$voucher_info = $this->model_cart_voucher->getVoucher($_POST['voucher']);
+		$voucher_info = $this->Model_Cart_Voucher->getVoucher($_POST['voucher']);
 		
 		if (!$voucher_info) {
 			$this->error['warning'] = $this->_('error_voucher');

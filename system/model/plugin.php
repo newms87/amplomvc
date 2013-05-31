@@ -1,5 +1,5 @@
 <?php
-class SystemModelPlugin extends Model{	
+class System_Model_Plugin extends Model{	
 	public function installPlugin($plugin)
 	{
 		$this->delete('plugin', array('name'=>$name));

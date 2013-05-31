@@ -1,15 +1,15 @@
 <?php
-class ControllerCommonAboveContent extends Controller 
+class Catalog_Controller_Common_AboveContent extends Controller 
 {
 	public function index()
 	{
 		$this->template->load('common/above_content');
 
-		$layout_id = $this->model_design_layout->get_layout_id();
+		$layout_id = $this->Model_Design_Layout->get_layout_id();
 
 		$module_data = array();
 		
-		$extensions = $this->model_setting_extension->getExtensions('module');
+		$extensions = $this->Model_Setting_Extension->getExtensions('module');
 		
 		foreach ($extensions as $extension) {
 			$modules = $this->config->get($extension['code'] . '_module');
@@ -46,7 +46,7 @@ class ControllerCommonAboveContent extends Controller
 		}
 		
 		//Load Blocks associated with this position
-		$blocks = $this->model_block_block->getBlocksForPosition('above_content');
+		$blocks = $this->Model_Block_Block->getBlocksForPosition('above_content');
 		
 		$this->data['blocks'] = array();
 		

@@ -1,5 +1,5 @@
 <?php
-class ControllerExtensionTotal extends Controller 
+class Admin_Controller_Extension_Total extends Controller 
 {
 	public function index()
 	{
@@ -28,11 +28,11 @@ class ControllerExtensionTotal extends Controller
 			$this->data['error'] = '';
 		}
 
-		$extensions = $this->model_setting_extension->getInstalled('total');
+		$extensions = $this->Model_Setting_Extension->getInstalled('total');
 		
 		foreach ($extensions as $key => $value) {
 			if (!file_exists(DIR_APPLICATION . 'controller/total/' . $value . '.php')) {
-				$this->model_setting_extension->uninstall('total', $value);
+				$this->Model_Setting_Extension->uninstall('total', $value);
 				
 				unset($extensions[$key]);
 			}
@@ -91,18 +91,17 @@ class ControllerExtensionTotal extends Controller
 			
 			$this->url->redirect($this->url->link('extension/total'));
 		} else {
-			$this->model_setting_extension->install('total', $_GET['extension']);
+			$this->Model_Setting_Extension->install('total', $_GET['extension']);
 
-			$this->model_user_user_group->addPermission($this->user->getId(), 'access', 'total/' . $_GET['extension']);
-			$this->model_user_user_group->addPermission($this->user->getId(), 'modify', 'total/' . $_GET['extension']);
+			$this->Model_User_UserGroup->addPermission($this->user->getId(), 'access', 'total/' . $_GET['extension']);
+			$this->Model_User_UserGroup->addPermission($this->user->getId(), 'modify', 'total/' . $_GET['extension']);
 
 			_require_once(DIR_APPLICATION . 'controller/total/' . $_GET['extension'] . '.php');
 			
 			$class = 'ControllerTotal' . str_replace('_', '', $_GET['extension']);
 			$class = new $class($this->registry);
 			
-			if (method_exists($class, 'install')) 
-{
+			if (method_exists($class, 'install')) {
 				$class ->install();
 			}
 			
@@ -117,17 +116,16 @@ class ControllerExtensionTotal extends Controller
 			
 			$this->url->redirect($this->url->link('extension/total'));
 		} else {
-			$this->model_setting_extension->uninstall('total', $_GET['extension']);
+			$this->Model_Setting_Extension->uninstall('total', $_GET['extension']);
 		
-			$this->model_setting_setting->deleteSetting($_GET['extension']);
+			$this->Model_Setting_Setting->deleteSetting($_GET['extension']);
 		
 			_require_once(DIR_APPLICATION . 'controller/total/' . $_GET['extension'] . '.php');
 			
 			$class = 'ControllerTotal' . str_replace('_', '', $_GET['extension']);
 			$class = new $class($this->registry);
 			
-			if (method_exists($class, 'uninstall')) 
-{
+			if (method_exists($class, 'uninstall')) {
 				$class->uninstall();
 			}
 		

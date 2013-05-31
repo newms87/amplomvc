@@ -107,12 +107,12 @@ class Config
 	
 	public function save($group, $key, $data, $auto_load = true)
 	{
-		$this->model_setting_setting->editSettingKey($group, $key, $data, $this->store_id, $auto_load);
+		$this->Model_Setting_Setting->editSettingKey($group, $key, $data, $this->store_id, $auto_load);
 	}
 	
 	public function save_group($group, $data, $auto_load = true)
 	{
-		$this->model_setting_setting->editSetting($group, $data, $this->store_id, $auto_load);
+		$this->Model_Setting_Setting->editSetting($group, $data, $this->store_id, $auto_load);
 	}
 	
 	private function load_site_config()
@@ -140,7 +140,7 @@ class Config
 		
 		if (!$default_exists) {
 			$this->db->set_autoincrement('store', 0);
-			$this->model_setting_store->addStore($this->site_config['default_store']);
+			$this->Model_Setting_Store->addStore($this->site_config['default_store']);
 		}
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-class ModelPagePage extends Model 
+class Admin_Model_Page_Page extends Model 
 {
 	public function addPage($data)
 	{

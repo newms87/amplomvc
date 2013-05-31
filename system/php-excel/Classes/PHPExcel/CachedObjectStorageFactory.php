@@ -144,8 +144,7 @@ class PHPExcel_CachedObjectStorageFactory{
 	**/
 	public static function getCacheStorageClass()
  {
-		if (self::$_cacheStorageclass !== NULL) 
-{
+		if (self::$_cacheStorageclass !== NULL) {
 			return self::$_cacheStorageclass ;
 		}
 		return NULL;
@@ -173,8 +172,7 @@ class PHPExcel_CachedObjectStorageFactory{
 		$activeMethods = array();
 		foreach (self::$_storageMethods as $storageMethod) {
 			$cacheStorageclass = 'PHPExcel_CachedObjectStorage_' . $storageMethod;
-			if (call_user_func(array($cacheStorageClass, 'cacheMethodIsAvailable'))) 
-{
+			if (call_user_func(array($cacheStorageClass, 'cacheMethodIsAvailable'))) {
 				$activeMethods[] = $storageMethod;
 			}
 		}
@@ -235,8 +233,7 @@ class PHPExcel_CachedObjectStorageFactory{
 			$instance = new self::$_cacheStorageclass ( $parent,
 														self::$_storageMethodParameters[self::$_cacheStorageMethod]
 													);
-			if ($instance !== NULL) 
-{
+			if ($instance !== NULL) {
 				return $instance;
 			}
 		}

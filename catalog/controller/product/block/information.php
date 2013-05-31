@@ -1,5 +1,5 @@
 <?php
-class ControllerProductBlockInformation extends Controller 
+class Catalog_Controller_Product_Block_Information extends Controller 
 {
 	
 	public function index($setting, $product_info)
@@ -92,7 +92,7 @@ class ControllerProductBlockInformation extends Controller
 			$this->data['tax'] = false;
 		}
 		
-		$discounts = $this->model_catalog_product->getProductDiscounts($product_info['product_id']);
+		$discounts = $this->Model_Catalog_Product->getProductDiscounts($product_info['product_id']);
 		
 		$this->data['discounts'] = array();
 		
@@ -109,8 +109,7 @@ class ControllerProductBlockInformation extends Controller
 		
 		$this->language->format('error_add_to_cart', $this->config->get('config_email'));
 		
-		if($product_info['shipping_return'])
-{
+		if ($product_info['shipping_return']) {
 			$this->data['shipping_return'] = html_entity_decode($product_info['shipping_return'], ENT_QUOTES, 'UTF-8');
 			
 			$this->data['is_default_shipping'] = trim(strip_tags($this->data['shipping_return'])) == trim($this->_('shipping_return_policy'));

@@ -1,5 +1,5 @@
 <?php
-class ControllerAccountLogout extends Controller 
+class Catalog_Controller_Account_Logout extends Controller 
 {
 	public function index()
 	{

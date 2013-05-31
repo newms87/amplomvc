@@ -59,9 +59,11 @@ class Template
 				$this->cache->delete('template' . $this->name);
 			}
 			
-			trigger_error('Error: Could not load template ' . $file_name . '.tpl!');
-			exit();
+			trigger_error('Template::set_file(): Could not find file ' . $file_name . '.tpl! ' . get_caller());
+			return false;
 		}
+		
+		return true;
 	}
 	
 	public function set_data($data)
@@ -80,8 +82,7 @@ class Template
 			return $this->tables[$table];
 		}
 		else {
-			list(,$caller) = debug_backtrace(false);
-			trigger_error("The table $table does not exist in the template $this->name! Called from $caller[class ]::$caller[function]().");
+			trigger_error("The table $table does not exist in the template $this->name! " . get_caller());
 			exit();
 		}
 	}
@@ -97,8 +98,7 @@ class Template
 			return $this->forms[$form];
 		}
 		else {
-			list(,$caller) = debug_backtrace(false);
-			trigger_error("The form $form does not exist in the template $this->name! Called from $caller[class ]::$caller[function]().");
+			trigger_error("The form $form does not exist in the template $this->name! " . get_caller());
 			exit();
 		}
 	}
@@ -124,13 +124,16 @@ class Template
 	}
 	
 	public function load($name, $data = array()){
-		if($this->name == $name) return;
+		if ($this->name == $name) return;
 		
 		$this->name = $name;
 		
 		$this->data = $data;
 	
-		$this->set_file($this->name);
+		if (!$this->set_file($this->name)) {
+			trigger_error("Unable to load template! " . get_caller());
+			exit();
+		}
 	}
 	
 	public function render()

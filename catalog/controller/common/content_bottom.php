@@ -1,15 +1,15 @@
 <?php
-class ControllerCommonContentBottom extends Controller 
+class Catalog_Controller_Common_ContentBottom extends Controller 
 {
 	public function index()
 	{
 		$this->template->load('common/content_bottom');
 
-		$layout_id = $this->model_design_layout->get_layout_id();
+		$layout_id = $this->Model_Design_Layout->get_layout_id();
 
 		$module_data = array();
 		
-		$extensions = $this->model_setting_extension->getExtensions('module');
+		$extensions = $this->Model_Setting_Extension->getExtensions('module');
 		
 		foreach ($extensions as $extension) {
 			$modules = $this->config->get($extension['code'] . '_module');
@@ -46,7 +46,7 @@ class ControllerCommonContentBottom extends Controller
 		}
 
 		//Load Blocks associated with this position
-		$blocks = $this->model_block_block->getBlocksForPosition('content_bottom');
+		$blocks = $this->Model_Block_Block->getBlocksForPosition('content_bottom');
 		
 		$this->data['blocks'] = array();
 		

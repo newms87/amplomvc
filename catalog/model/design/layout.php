@@ -1,5 +1,5 @@
 <?php
-class ModelDesignLayout extends Model 
+class Catalog_Model_Design_Layout extends Model 
 {
 	private $layout_ids = array();
 	
@@ -15,15 +15,15 @@ class ModelDesignLayout extends Model
 			if (substr($route, 0, 16) == 'product/category' && isset($_GET['path'])) {
 				$path = explode('_', (string)$_GET['path']);
 					
-				$layout_id = $this->model_catalog_category->getCategoryLayoutId(end($path));
+				$layout_id = $this->Model_Catalog_Category->getCategoryLayoutId(end($path));
 			}
 			
 			if (substr($route, 0, 15) == 'product/product' && isset($_GET['product_id'])) {
-				$layout_id = $this->model_catalog_product->getProductLayoutId($_GET['product_id']);
+				$layout_id = $this->Model_Catalog_Product->getProductLayoutId($_GET['product_id']);
 			}
 			
 			if (substr($route, 0, 23) == 'information/information' && isset($_GET['information_id'])) {
-				$layout_id = $this->model_catalog_information->getInformationLayoutId($_GET['information_id']);
+				$layout_id = $this->Model_Catalog_Information->getInformationLayoutId($_GET['information_id']);
 			}
 			
 			if (!$layout_id) {

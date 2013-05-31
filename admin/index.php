@@ -153,63 +153,10 @@ $config->run_site_config();
 
 // Front Controller
 $controller = new Front($registry);
-
-//Router
-$route = '';
-$action = '';
-
-if (isset($_GET['route'])) {
-	$part = explode('/', $_GET['route']);
-	
-	if (isset($part[0])) {
-		$route .= $part[0];
-	}
-	
-	if (isset($part[1])) {
-		$route .= '/' . $part[1];
-	}
-}
-
-if (!$registry->get('user')->isLogged()) {
-	$allow_access = false;
-	
-	if ($route) {
-		$allowed = array(
-			'common/forgotten',
-			'common/reset',
-			'common/login',
-		);
-		
-		if (!in_array($route, $allowed)) {
-			$action = new Action('common/login');
-		}
-	}
-}
-elseif ($route) {
-	$ignore = array(
-		'common/home',
-		'common/login',
-		'common/logout',
-		'common/forgotten',
-		'common/reset',
-		'error/not_found',
-		'error/permission'
-	);
-	
-	if (!in_array($route, $ignore) && !$registry->get('user')->hasPermission('access', $route)) {
-		$action = new Action('error/permission');
-	}
-}
-else {
-	$action = new Action('common/home');
-}
-
-if (!$action) {
-	$action = new Action($_GET['route']);
-}
+$controller->routeAdmin();
 
 // Dispatch
-$controller->dispatch($action, new Action('error/not_found'));
+$controller->dispatch();
 
 // Output
 $response->output();

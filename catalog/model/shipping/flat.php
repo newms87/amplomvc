@@ -1,9 +1,9 @@
 <?php
-class ModelShippingFlat extends Model 
+class Catalog_Model_Shipping_Flat extends Model 
 {
 	function getQuote($address)
 	{
-		$flat_rates = $this->model_setting_setting->getSetting('shipping_flat');
+		$flat_rates = $this->Model_Setting_Setting->getSetting('shipping_flat');
 		
 		$quote_data = array();
 		
@@ -16,7 +16,7 @@ class ModelShippingFlat extends Model
 			$valid = true;
 			
 			//Wrong Shipping Zone
-			if(!$this->model_localisation_zone->inGeoZone($rate['geo_zone_id'], $address['country_id'], $address['zone_id'])) continue;
+			if(!$this->Model_Localisation_Zone->inGeoZone($rate['geo_zone_id'], $address['country_id'], $address['zone_id'])) continue;
 			
 			switch($rate['rule']['type']){
 				case 'item_qty':

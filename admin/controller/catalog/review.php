@@ -1,5 +1,5 @@
 <?php
-class ControllerCatalogReview extends Controller 
+class Admin_Controller_Catalog_Review extends Controller 
 {
 	
  
@@ -19,7 +19,7 @@ class ControllerCatalogReview extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_catalog_review->addReview($_POST);
+			$this->Model_Catalog_Review->addReview($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -50,7 +50,7 @@ class ControllerCatalogReview extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_catalog_review->editReview($_GET['review_id'], $_POST);
+			$this->Model_Catalog_Review->editReview($_GET['review_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -82,7 +82,7 @@ class ControllerCatalogReview extends Controller
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $review_id) {
-				$this->model_catalog_review->deleteReview($review_id);
+				$this->Model_Catalog_Review->deleteReview($review_id);
 			}
 
 			$this->message->add('success', $this->_('text_success'));
@@ -158,9 +158,9 @@ class ControllerCatalogReview extends Controller
 			'limit' => $this->config->get('config_admin_limit')
 		);
 		
-		$review_total = $this->model_catalog_review->getTotalReviews();
+		$review_total = $this->Model_Catalog_Review->getTotalReviews();
 	
-		$results = $this->model_catalog_review->getReviews($data);
+		$results = $this->Model_Catalog_Review->getReviews($data);
  
 		foreach ($results as $result) {
 			$action = array();
@@ -299,7 +299,7 @@ class ControllerCatalogReview extends Controller
 		$this->data['cancel'] = $this->url->link('catalog/review', $url);
 
 		if (isset($_GET['review_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-			$review_info = $this->model_catalog_review->getReview($_GET['review_id']);
+			$review_info = $this->Model_Catalog_Review->getReview($_GET['review_id']);
 		}
 			
 		if (isset($_POST['product_id'])) {

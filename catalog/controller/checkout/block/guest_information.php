@@ -1,5 +1,5 @@
 <?php
-class ControllerCheckoutBlockGuestInformation extends Controller 
+class Catalog_Controller_Checkout_Block_GuestInformation extends Controller 
 {
   	public function index()
   	{
@@ -21,7 +21,7 @@ class ControllerCheckoutBlockGuestInformation extends Controller
 		$this->form->init('address');
 		$this->form->set_template('form/single_column');
 		$this->form->show_form_tag(false);
-		$this->form->set_field_options('country_id', $this->model_localisation_country->getCountries(), array('country_id' => 'name'));
+		$this->form->set_field_options('country_id', $this->Model_Localisation_Country->getCountries(), array('country_id' => 'name'));
 		$this->form->disable_fields('firstname','lastname','default','submit_address');
 		$this->form->set_name_format('payment_address[%name%]');
 		

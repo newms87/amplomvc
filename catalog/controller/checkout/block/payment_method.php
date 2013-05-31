@@ -1,5 +1,5 @@
 <?php
-class ControllerCheckoutBlockPaymentMethod extends Controller 
+class Catalog_Controller_Checkout_Block_PaymentMethod extends Controller 
 {
   	public function index()
   	{
@@ -30,7 +30,7 @@ class ControllerCheckoutBlockPaymentMethod extends Controller
 		}
 		
 		if ($this->config->get('config_checkout_id')) {
-			$information_info = $this->model_catalog_information->getInformation($this->config->get('config_checkout_id'));
+			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_checkout_id'));
 			
 			if ($information_info) {
 				$this->language->format('text_agree', $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_checkout_id')), $information_info['title'], $information_info['title']);
@@ -77,7 +77,7 @@ class ControllerCheckoutBlockPaymentMethod extends Controller
 		
 		if (!$json) {
 			if ($this->config->get('config_checkout_id')) {
-				$information_info = $this->model_catalog_information->getInformation($this->config->get('config_checkout_id'));
+				$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_checkout_id'));
 				
 				if ($information_info && empty($_POST['agree'])) {
 					$json['error']['agree'] = sprintf($this->_('error_agree'), $information_info['title']);

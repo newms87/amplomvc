@@ -1,5 +1,5 @@
 <?php
-class ModelCatalogCategory extends Model 
+class Admin_Model_Catalog_Category extends Model 
 {
 	public function addCategory($data)
 	{
@@ -99,7 +99,7 @@ class ModelCatalogCategory extends Model
 		$this->delete('category_to_store', array('category_id'=>$category_id));
 		$this->delete('category_to_layout', array('category_id'=>$category_id));
 		
-		$this->model_setting_url_alias->deleteUrlAliasByRouteQuery('product/category', "category_id=" . (int)$category_id . "'");
+		$this->Model_Setting_UrlAlias->deleteUrlAliasByRouteQuery('product/category', "category_id=" . (int)$category_id . "'");
 		
 		$this->delete('product_to_category', array('category_id'=>$category_id));
 		
@@ -152,16 +152,16 @@ class ModelCatalogCategory extends Model
 	//TODO: need to rethink this
 	public function generate_url($category_id, $name)
 	{
-		$url = $this->model_setting_url_alias->format_url($name);
+		$url = $this->Model_Setting_UrlAlias->format_url($name);
 		$orig = $url;
 		$count = 2;
 		
-		$url_alias = $category_id?$this->model_setting_url_alias->getUrlAliasByRouteQuery('product/category', "category_id=$category_id"):null;
+		$url_alias = $category_id?$this->Model_Setting_UrlAlias->getUrlAliasByRouteQuery('product/category', "category_id=$category_id"):null;
 		
-		$test = $this->model_setting_url_alias->getUrlAliasByKeyword($url);
+		$test = $this->Model_Setting_UrlAlias->getUrlAliasByKeyword($url);
 		while (!empty($test) && $test['url_alias_id'] != $url_alias['url_alias_id']) {
 			$url = $orig . '-' . $count++;
-			$test = $this->model_setting_url_alias->getUrlAliasByKeyword($url);
+			$test = $this->Model_Setting_UrlAlias->getUrlAliasByKeyword($url);
 		}
 		return $url;
 	}

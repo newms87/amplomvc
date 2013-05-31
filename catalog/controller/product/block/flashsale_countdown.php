@@ -1,5 +1,5 @@
 <?php
-class ControllerProductBlockFlashsaleCountdown extends Controller 
+class Catalog_Controller_Product_Block_FlashsaleCountdown extends Controller 
 {
 
 	public function index($settings, $flashsale)
@@ -11,7 +11,7 @@ class ControllerProductBlockFlashsaleCountdown extends Controller
 		
 		//This products flashsale
 		if (!is_array($flashsale)) {
-			$flashsale = $this->model_catalog_flashsale->getFlashsale((int)$flashsale);
+			$flashsale = $this->Model_Catalog_Flashsale->getFlashsale((int)$flashsale);
 		}
 		
 		$this->data['flashsale_id'] = $flashsale['flashsale_id'];

@@ -191,37 +191,6 @@ if (isset($_GET['tracking']) && !isset($_COOKIE['tracking'])) {
 //Theme
 $registry->set('theme', new Theme($registry));
 
-// Front Controller
-$controller = new Front($registry);
-
-// Router
-$route = '';
-$action = '';
-
-if (isset($_GET['route'])) {
-	$part = explode('/', $_GET['route']);
-	
-	if (isset($part[0])) {
-		$route .= $part[0];
-	}
-	
-	if (isset($part[1])) {
-		$route .= '/' . $part[1];
-	}
-}
-
-if ($config->get('config_maintenance')) {
-	if ((!$registry->get('user')->isLogged() || !$registry->get('user')->isAdmin()) && strpos($route, 'payment') !== 0) {
-		//$action = new Action('common/maintenance');
-		$_GET['route'] = 'common/maintenance';
-	}
-}
-elseif (!$route) {
-	$_GET['route'] = 'common/home';
-}
-
-$action = new Action($_GET['route']);
-
 //Resolve Layout ID
 $layout_query = $db->query("SELECT layout_id FROM " . DB_PREFIX . "layout_route WHERE '" . $db->escape($_GET['route']) . "' LIKE CONCAT(route, '%') AND store_id = '" . $config->get('config_store_id') . "' ORDER BY route ASC LIMIT 1");
 
@@ -231,9 +200,12 @@ if ($layout_query->num_rows) {
 	$config->set('config_layout_id', 0);
 }
 
+// Front Controller
+$controller = new Front($registry);
+$controller->routeFront();
 
 // Dispatch
-$controller->dispatch($action, new Action('error/not_found'));
+$controller->dispatch();
 
 // Output
 $response->output();

@@ -1,5 +1,5 @@
 <?php
-class ControllerPaymentPPStandard extends Controller 
+class Admin_Controller_Payment_PpStandard extends Controller 
 {
 	
 
@@ -12,7 +12,7 @@ class ControllerPaymentPPStandard extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('pp_standard', $_POST);
+			$this->Model_Setting_Setting->editSetting('pp_standard', $_POST);
 
 			$this->message->add('success', $this->_('text_success'));
 
@@ -52,9 +52,9 @@ class ControllerPaymentPPStandard extends Controller
 			$this->data[$key] = isset($_GET[$key])?$_GET[$key]:$default;
 		}
 		
-		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
 		
-		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$this->data['geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 
 		$this->children = array(
 			'common/header',

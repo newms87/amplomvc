@@ -1,5 +1,5 @@
 <?php
-class ControllerCartBlockShipping extends Controller
+class Catalog_Controller_Cart_Block_Shipping extends Controller
 {
 	
 	public function index($settings = null)
@@ -44,7 +44,7 @@ class ControllerCartBlockShipping extends Controller
 		
 		$this->data['redirect'] = $this->url->here();
 		
-		$this->data['countries'] = $this->model_localisation_country->getCountries();
+		$this->data['countries'] = $this->Model_Localisation_Country->getCountries();
 		
 		$this->response->setOutput($this->render());
 	}

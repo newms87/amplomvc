@@ -1,5 +1,5 @@
 <?php
-class ModelLocalisationLanguage extends Model 
+class Admin_Model_Localisation_Language extends Model 
 {
 	public function addLanguage($data)
 	{

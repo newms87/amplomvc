@@ -1,5 +1,5 @@
 <?php
-class ControllerTotalLowOrderFee extends Controller 
+class Admin_Controller_Total_LowOrderFee extends Controller 
 {
 	
 	
@@ -12,7 +12,7 @@ class ControllerTotalLowOrderFee extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && ($this->validate())) {
-			$this->model_setting_setting->editSetting('low_order_fee', $_POST);
+			$this->Model_Setting_Setting->editSetting('low_order_fee', $_POST);
 		
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -45,15 +45,13 @@ class ControllerTotalLowOrderFee extends Controller
 			$this->data['low_order_fee_fee'] = $this->config->get('low_order_fee_fee');
 		}
 
-		if (isset($_POST['low_order_fee_tax_class _id'])) 
-{
+		if (isset($_POST['low_order_fee_tax_class _id'])) {
 			$this->data['low_order_fee_tax_class _id'] = $_POST['low_order_fee_tax_class_id'];
 		} else {
 			$this->data['low_order_fee_tax_class _id'] = $this->config->get('low_order_fee_tax_class_id');
 		}
 		
-		if (isset($_POST['low_order_fee_status'])) 
-{
+		if (isset($_POST['low_order_fee_status'])) {
 			$this->data['low_order_fee_status'] = $_POST['low_order_fee_status'];
 		} else {
 			$this->data['low_order_fee_status'] = $this->config->get('low_order_fee_status');
@@ -65,7 +63,7 @@ class ControllerTotalLowOrderFee extends Controller
 			$this->data['low_order_fee_sort_order'] = $this->config->get('low_order_fee_sort_order');
 		}
 		
-		$this->data['tax_class es'] = $this->model_localisation_tax_class->getTaxClasses();
+		$this->data['tax_class es'] = $this->Model_Localisation_TaxClass->getTaxClasses();
 
 		$this->children = array(
 			'common/header',

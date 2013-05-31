@@ -32,7 +32,7 @@ class ControllerProductProduct extends Controller
 //-----
 //=====
 		//The Tags associated with this product
-		$tags = $this->model_catalog_product->getProductTags($product_info['product_id']);
+		$tags = $this->Model_Catalog_Product->getProductTags($product_info['product_id']);
 //-----
 //=====
 	}

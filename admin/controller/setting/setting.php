@@ -1,5 +1,5 @@
 <?php
-class ControllerSettingSetting extends Controller 
+class Admin_Controller_Setting_Setting extends Controller 
 {
  
 	public function index()
@@ -12,10 +12,10 @@ class ControllerSettingSetting extends Controller
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			
-			$this->model_setting_setting->editSetting('config', $_POST);
+			$this->Model_Setting_Setting->editSetting('config', $_POST);
 
 			if ($this->config->get('config_currency_auto')) {
-				$this->model_localisation_currency->updateCurrencies();
+				$this->Model_Localisation_Currency->updateCurrencies();
 			}
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -182,33 +182,33 @@ class ControllerSettingSetting extends Controller
 			$this->data[$oct] = intval($this->data[$oct]);
 		}
 
-		$this->data['data_layouts'] = $this->model_design_layout->getLayouts();
+		$this->data['data_layouts'] = $this->Model_Design_Layout->getLayouts();
 		
 		$this->data['themes'] = $this->theme->get_themes();
 		
-		$this->data['stores'] = $this->model_setting_store->getStores();
+		$this->data['stores'] = $this->Model_Setting_Store->getStores();
 		
-		$this->data['countries'] = $this->model_localisation_country->getCountries();
+		$this->data['countries'] = $this->Model_Localisation_Country->getCountries();
 
-		$this->data['languages'] = $this->model_localisation_language->getLanguages();
+		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
 						
-		$this->data['currencies'] = $this->model_localisation_currency->getCurrencies();
+		$this->data['currencies'] = $this->Model_Localisation_Currency->getCurrencies();
 		
-		$this->data['length_class es'] = $this->model_localisation_length_class->getLengthClasses();
+		$this->data['length_class es'] = $this->Model_Localisation_LengthClass->getLengthClasses();
 		
-		$this->data['weight_classes'] = $this->model_localisation_weight_class->getWeightClasses();
+		$this->data['weight_classes'] = $this->Model_Localisation_WeightClass->getWeightClasses();
 		
-		$this->data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
+		$this->data['tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
 						
-		$this->data['customer_groups'] = $this->model_sale_customer_group->getCustomerGroups();
+		$this->data['customer_groups'] = $this->Model_Sale_CustomerGroup->getCustomerGroups();
 		
-		$this->data['informations'] = $this->model_catalog_information->getInformations();
+		$this->data['informations'] = $this->Model_Catalog_Information->getInformations();
 		
-		$this->data['stock_statuses'] = $this->model_localisation_stock_status->getStockStatuses();
+		$this->data['stock_statuses'] = $this->Model_Localisation_StockStatus->getStockStatuses();
 		
-		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
 		
-		$this->data['return_statuses'] = $this->model_localisation_return_status->getReturnStatuses();
+		$this->data['return_statuses'] = $this->Model_Localisation_ReturnStatus->getReturnStatuses();
 		
 		$this->data['load_theme_img'] = $this->url->link('setting/setting/theme');
 		

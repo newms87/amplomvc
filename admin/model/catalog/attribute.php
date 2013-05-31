@@ -1,5 +1,5 @@
 <?php
-class ModelCatalogAttribute extends Model 
+class Admin_Model_Catalog_Attribute extends Model 
 {
 	public function addAttribute($data)
 	{

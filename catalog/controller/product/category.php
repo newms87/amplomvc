@@ -1,5 +1,5 @@
 <?php
-class ControllerProductCategory extends Controller 
+class Catalog_Controller_Product_Category extends Controller 
 {
 	public function index()
 	{
@@ -13,12 +13,12 @@ class ControllerProductCategory extends Controller
 		
 		$this->sort->load_query_defaults($sort_filter, 'sort_order', 'ASC');
 		
-		$product_total = $this->model_catalog_product->getTotalProducts($sort_filter);
-		$products = $this->model_catalog_product->getProducts($sort_filter);
+		$product_total = $this->Model_Catalog_Product->getTotalProducts($sort_filter);
+		$products = $this->Model_Catalog_Product->getProducts($sort_filter);
 		
 		$category_id = !empty($_GET['category_id']) ? (int)$_GET['category_id'] : 0;
 		
-		$category_info = $this->model_catalog_category->getCategory($category_id);
+		$category_info = $this->Model_Catalog_Category->getCategory($category_id);
 		
 		if ($category_info) {
 			$this->document->setTitle($category_info['name']);
@@ -48,7 +48,7 @@ class ControllerProductCategory extends Controller
 		
 		$this->data['categories'] = array();
 		
-		$results = $this->model_catalog_category->getCategories($category_id);
+		$results = $this->Model_Catalog_Category->getCategories($category_id);
 		
 		foreach ($results as $result) {
 			$data = array(
@@ -56,7 +56,7 @@ class ControllerProductCategory extends Controller
 				'filter_sub_category' => true
 			);
 			
-			$product_total = $this->model_catalog_product->getTotalProducts($data);
+			$product_total = $this->Model_Catalog_Product->getTotalProducts($data);
 			
 			$this->data['categories'][] = array(
 				'name'  => $result['name'] . ' (' . $product_total . ')',
@@ -66,8 +66,8 @@ class ControllerProductCategory extends Controller
 		
 		$sort_filter['category_id'] = $category_id;
 		
-		$product_total = $this->model_catalog_product->getTotalProducts($sort_filter);
-		$products = $this->model_catalog_product->getProducts($sort_filter);
+		$product_total = $this->Model_Catalog_Product->getTotalProducts($sort_filter);
+		$products = $this->Model_Catalog_Product->getProducts($sort_filter);
 		
 		$params = array(
 			'data' => $products,

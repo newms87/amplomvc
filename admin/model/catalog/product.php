@@ -1,5 +1,5 @@
 <?php
-class ModelCatalogProduct extends Model 
+class Admin_Model_Catalog_Product extends Model 
 {
 	public function addProduct($data)
 	{
@@ -260,7 +260,7 @@ class ModelCatalogProduct extends Model
 				'status'=>$data['status'],
 			);
 			
-			$this->model_setting_url_alias->addUrlAlias($url_alias);
+			$this->Model_Setting_UrlAlias->addUrlAlias($url_alias);
 		}
 		
 		$this->cache->delete('product');
@@ -546,7 +546,7 @@ class ModelCatalogProduct extends Model
 		
 		
 		//Product URL Alias
-		$this->model_setting_url_alias->deleteUrlAliasByRouteQuery('product/product', 'product_id=' . (int)$product_id);
+		$this->Model_Setting_UrlAlias->deleteUrlAliasByRouteQuery('product/product', 'product_id=' . (int)$product_id);
 		
 		if ($data['keyword']) {
 			if (!preg_match("/^product\//",$data['keyword'])) {
@@ -560,7 +560,7 @@ class ModelCatalogProduct extends Model
 				'status'=>$data['status'],
 			);
 			
-			$this->model_setting_url_alias->addUrlAlias($url_alias);
+			$this->Model_Setting_UrlAlias->addUrlAlias($url_alias);
 		}
 		
 		$this->cache->delete('product');
@@ -568,23 +568,23 @@ class ModelCatalogProduct extends Model
 	
 	public function generate_url($product_id, $name)
 	{
-		$url = 'product/'.$this->model_setting_url_alias->format_url($name);
+		$url = 'product/'.$this->Model_Setting_UrlAlias->format_url($name);
 		$orig = $url;
 		$count = 2;
 		
-		$url_alias = $product_id?$this->model_setting_url_alias->getUrlAliasByRouteQuery('product/product', "product_id=$product_id"):null;
+		$url_alias = $product_id?$this->Model_Setting_UrlAlias->getUrlAliasByRouteQuery('product/product', "product_id=$product_id"):null;
 		
-		$test = $this->model_setting_url_alias->getUrlAliasByKeyword($url);
+		$test = $this->Model_Setting_UrlAlias->getUrlAliasByKeyword($url);
 		while (!empty($test) && $test['url_alias_id'] != $url_alias['url_alias_id']) {
 			$url = $orig . '-' . $count++;
-			$test = $this->model_setting_url_alias->getUrlAliasByKeyword($url);
+			$test = $this->Model_Setting_UrlAlias->getUrlAliasByKeyword($url);
 		}
 		return $url;
 	}
 	
 	public function generate_model($name)
 	{
-		$model = strtoupper($this->model_setting_url_alias->format_url($name));
+		$model = strtoupper($this->Model_Setting_UrlAlias->format_url($name));
 		$orig = $model;
 		$count = 2;
 		$test = $this->query("SELECT COUNT(*) as count FROM " . DB_PREFIX ."product WHERE model='$model'");
@@ -653,7 +653,7 @@ class ModelCatalogProduct extends Model
 		$this->delete('product_to_store', array('product_id'=>$product_id));
 		$this->delete('review', array('product_id'=>$product_id));
 		
-		$this->model_setting_url_alias->deleteUrlAliasByRouteQuery('product/product', 'product_id=' . (int)$product_id);
+		$this->Model_Setting_UrlAlias->deleteUrlAliasByRouteQuery('product/product', 'product_id=' . (int)$product_id);
 		
 		$this->cache->delete('product');
 	}
@@ -663,7 +663,7 @@ class ModelCatalogProduct extends Model
 		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "product p LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id) WHERE p.product_id = '" . (int)$product_id . "' AND pd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
 		
 		if ($query->num_rows) {
-			$url_alias = $this->model_setting_url_alias->getUrlAliasByRouteQuery('product/product', "product_id=" . (int)$product_id);
+			$url_alias = $this->Model_Setting_UrlAlias->getUrlAliasByRouteQuery('product/product', "product_id=" . (int)$product_id);
 			$query->row['keyword'] = $url_alias ? $url_alias['keyword']:'';
 		}
 			
@@ -843,9 +843,9 @@ class ModelCatalogProduct extends Model
 	{
 		$this->query("UPDATE " . DB_PREFIX . "product SET `$name`='$value' WHERE product_id='$product_id'");
 		if ($name == 'status') {
-			$url_alias = $this->model_setting_url_alias->getUrlAliasByRouteQuery('product/product', "product_id=$product_id");
+			$url_alias = $this->Model_Setting_UrlAlias->getUrlAliasByRouteQuery('product/product', "product_id=$product_id");
 			if (!empty($url_alias)) {
-				$this->model_setting_url_alias->editUrlAlias($url_alias['url_alias_id'],array('status'=>$value));
+				$this->Model_Setting_UrlAlias->editUrlAlias($url_alias['url_alias_id'],array('status'=>$value));
 			}
 		}
 			

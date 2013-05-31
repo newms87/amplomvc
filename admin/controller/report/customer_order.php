@@ -1,5 +1,5 @@
 <?php
-class ControllerReportCustomerOrder extends Controller 
+class Admin_Controller_Report_CustomerOrder extends Controller 
 {
 	public function index()
 	{
@@ -64,9 +64,9 @@ class ControllerReportCustomerOrder extends Controller
 			'limit'						=> $this->config->get('config_admin_limit')
 		);
 				
-		$customer_total = $this->model_report_customer->getTotalOrders($data);
+		$customer_total = $this->Model_Report_Customer->getTotalOrders($data);
 		
-		$results = $this->model_report_customer->getOrders($data);
+		$results = $this->Model_Report_Customer->getOrders($data);
 		
 		foreach ($results as $result) {
 			$action = array();
@@ -88,7 +88,7 @@ class ControllerReportCustomerOrder extends Controller
 			);
 		}
 		
-		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
 			
 		$url = '';
 						

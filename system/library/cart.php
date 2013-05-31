@@ -222,7 +222,7 @@ class Cart
 		
 		$sort_order = array();
 		
-		$results = $this->model_setting_extension->getExtensions('total');
+		$results = $this->Model_Setting_Extension->getExtensions('total');
 		
 		foreach ($results as $key => $value) {
 			$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
@@ -287,8 +287,7 @@ class Cart
 		$tax_data = array();
 		
 		foreach ($this->getProducts() as $product) {
-			if ($product['tax_class _id']) 
-{
+			if ($product['tax_class _id']) {
 				$tax_rates = $this->tax->getRates($product['total'], $product['tax_class _id']);
 				
 				foreach ($tax_rates as $tax_rate) 
@@ -339,7 +338,7 @@ class Cart
 		
 		$product_id = $product[0];
 		
-		return $this->model_catalog_product->getProductName($product_id);
+		return $this->Model_Catalog_Product->getProductName($product_id);
 	}
 	
 	public function getProducts()
@@ -529,12 +528,12 @@ class Cart
 	
 	public function validateProduct($product_id, $quantity, $options)
 	{
-		$product_info = $this->model_catalog_product->getProduct($product_id);
+		$product_info = $this->Model_Catalog_Product->getProduct($product_id);
 		
 		if ($product_info) {
-			$product_options = $this->model_catalog_product->getProductOptions($product_id);
+			$product_options = $this->Model_Catalog_Product->getProductOptions($product_id);
 			
-			$restrictions = $this->model_catalog_product->getProductOptionValueRestrictions($product_id);
+			$restrictions = $this->Model_Catalog_Product->getProductOptionValueRestrictions($product_id);
 			
 			foreach ($product_options as $product_option) {
 				if (!empty($product_option['product_option_value']) && $product_option['required']) {
@@ -737,7 +736,7 @@ class Cart
 	public function getPaymentAddress()
 	{
 		if (isset($this->session->data['payment_address_id'])) {
-			return $this->model_account_address->getAddress($this->session->data['payment_address_id']);
+			return $this->Model_Account_Address->getAddress($this->session->data['payment_address_id']);
 		}
 
 		return false;
@@ -746,7 +745,7 @@ class Cart
 	public function getShippingAddress()
 	{
 		if (isset($this->session->data['shipping_address_id'])) {
-			return $this->model_account_address->getAddress($this->session->data['shipping_address_id']);
+			return $this->Model_Account_Address->getAddress($this->session->data['shipping_address_id']);
 		}
 
 		return false;
@@ -800,7 +799,7 @@ class Cart
 			return true;
 		}
 		elseif (is_array($address)) {
-			$address_id = $this->model_account_address->addAddress($address);
+			$address_id = $this->Model_Account_Address->addAddress($address);
 			
 			if (!$address_id) {
 				$this->_e('PA-10', 'payment_address', 'error_payment_address_details');
@@ -834,7 +833,7 @@ class Cart
 			return true;
 		}
 		elseif (is_array($address)) {
-			$address_id = $this->model_account_address->addAddress($address);
+			$address_id = $this->Model_Account_Address->addAddress($address);
 			
 			if (!$address_id) {
 				$this->_e('SA-10', 'shipping_address', 'error_shipping_address_details');
@@ -929,10 +928,10 @@ class Cart
 				$payment_address = $address;
 			}
 			else {
-				$payment_address = $this->model_account_address->getAddress($address);
+				$payment_address = $this->Model_Account_Address->getAddress($address);
 			}
 		} elseif (isset($this->session->data['payment_address_id'])) {
-			$payment_address = $this->model_account_address->getAddress($this->session->data['payment_address_id']);
+			$payment_address = $this->Model_Account_Address->getAddress($this->session->data['payment_address_id']);
 		}
 		else {
 			$payment_address = 0;
@@ -943,7 +942,7 @@ class Cart
 		// Payment Methods
 		$method_data = array();
 		
-		$results = $this->model_setting_extension->getExtensions('payment');
+		$results = $this->Model_Setting_Extension->getExtensions('payment');
 
 		foreach ($results as $result) {
 			if ($this->config->get($result['code'] . '_status')) {
@@ -974,7 +973,7 @@ class Cart
 				$shipping_address = $address;
 			}
 			else {
-				$shipping_address = $this->model_account_address->getAddress($address);
+				$shipping_address = $this->Model_Account_Address->getAddress($address);
 			}
 		}
 		elseif ($this->hasShippingAddress()) {
@@ -991,7 +990,7 @@ class Cart
 		}
 		
 		//Find Available Shipping Methods
-		$results = $this->model_setting_extension->getExtensions('shipping');
+		$results = $this->Model_Setting_Extension->getExtensions('shipping');
 		
 		$methods = array();
 		
@@ -1070,7 +1069,7 @@ class Cart
 	public function isAllowedShippingZone($shipping_address)
 	{
 		if (!empty($shipping_address['country_id']) && !empty($shipping_address['zone_id'])) {
-			return $this->model_localisation_zone->inGeoZone($this->config->get('config_allowed_shipping_zone'), $shipping_address['country_id'], $shipping_address['zone_id']);
+			return $this->Model_Localisation_Zone->inGeoZone($this->config->get('config_allowed_shipping_zone'), $shipping_address['country_id'], $shipping_address['zone_id']);
 		}
 		
 		return false;
@@ -1086,10 +1085,10 @@ class Cart
 			if (!$allowed_geo_zones) {
 				$allowed_geo_zones = array();
 				
-				$zones = $this->model_localisation_zone->getZonesByGeoZone($geo_zone_id);
+				$zones = $this->Model_Localisation_Zone->getZonesByGeoZone($geo_zone_id);
 				
 				foreach ($zones as $zone) {
-					$country = $this->model_localisation_country->getCountry($zone['country_id']);
+					$country = $this->Model_Localisation_Country->getCountry($zone['country_id']);
 					
 					$allowed_geo_zones[] = array(
 						'country' => $country,
@@ -1287,8 +1286,7 @@ class Cart
 		// Gift Voucher
 		$voucher_data = array();
 		
-		if (!empty($this->session->data['vouchers'])) 
-{
+		if (!empty($this->session->data['vouchers'])) {
 			$voucher_data = $this->session->data['vouchers'];
 			
 			//TODO: This is not a good way to generate unique IDs!
@@ -1306,7 +1304,7 @@ class Cart
 		$data['commission'] = 0;
 		
 		if (isset($_COOKIE['tracking'])) {
-			$affiliate_info = $this->model_affiliate_affiliate->getAffiliateByCode($_COOKIE['tracking']);
+			$affiliate_info = $this->Model_Affiliate_Affiliate->getAffiliateByCode($_COOKIE['tracking']);
 			
 			if ($affiliate_info) {
 				$data['affiliate_id'] = $affiliate_info['affiliate_id'];
@@ -1344,7 +1342,7 @@ class Cart
 			}
 		}
 		
-		$order_id = $this->model_checkout_order->addOrder($data);
+		$order_id = $this->Model_Checkout_Order->addOrder($data);
 		
 		$this->session->data['order_id'] = $order_id;
 		

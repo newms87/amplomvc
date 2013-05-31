@@ -1,5 +1,5 @@
 <?php
-class ControllerPagePage extends Controller 
+class Catalog_Controller_Page_Page extends Controller 
 {
 	public function index()
 	{
@@ -7,7 +7,7 @@ class ControllerPagePage extends Controller
 		
 		$page_id = !empty($_GET['page_id']) ? $_GET['page_id'] : 0;
 		
-		$page = $this->model_page_page->getPage($page_id);
+		$page = $this->Model_Page_Page->getPage($page_id);
 		
 		if (!$page) {
 			$this->url->redirect("error/not_found");

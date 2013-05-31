@@ -1,5 +1,5 @@
 <?php
-class ControllerCheckoutBlockConfirm extends Controller 
+class Catalog_Controller_Checkout_Block_Confirm extends Controller 
 {
 	public function index()
 	{
@@ -82,7 +82,7 @@ class ControllerCheckoutBlockConfirm extends Controller
 		$order_id = isset($_GET['order_id'])?$_GET['order_id']:0;
 		if(!$order_id)return;
 		
-		$status = $this->model_checkout_order->getOrderStatus($order_id);
+		$status = $this->Model_Checkout_Order->getOrderStatus($order_id);
 		
 		if ($status) {
 			$json = array('status'=>$status, 'redirect'=>$this->url->link('checkout/success'));

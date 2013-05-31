@@ -1,5 +1,5 @@
 <?php
-class ControllerPaymentSagepayDirect extends Controller 
+class Catalog_Controller_Payment_SagepayDirect extends Controller 
 {
 	protected function index()
 	{
@@ -96,7 +96,7 @@ class ControllerPaymentSagepayDirect extends Controller
 			$url = 'https://test.sagepay.com/Simulator/VSPDirectGateway.asp';
   		}
 
-		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
+		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
 		
 		$data = array();
 		
@@ -212,7 +212,7 @@ class ControllerPaymentSagepayDirect extends Controller
 			$json['PaReq'] = $data['PAReq'];
 			$json['TermUrl'] = $this->url->link('payment/sagepay_direct/callback');
 		} elseif ($data['Status'] == 'OK' || $data['Status'] == 'AUTHENTICATED' || $data['Status'] == 'REGISTERED') {
-			$this->model_checkout_order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
+			$this->Model_Checkout_Order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
 			
 			$message = '';
 			
@@ -244,7 +244,7 @@ class ControllerPaymentSagepayDirect extends Controller
 				$message .= 'CAVV: ' . $data['CAVV'] . "\n";
 			}
 			
-			$this->model_checkout_order->update_order($this->session->data['order_id'], $this->config->get('sagepay_direct_order_status_id'), $message, false);
+			$this->Model_Checkout_Order->update_order($this->session->data['order_id'], $this->config->get('sagepay_direct_order_status_id'), $message, false);
 
 			$json['success'] = $this->url->link('checkout/success');
 		} else {
@@ -293,7 +293,7 @@ class ControllerPaymentSagepayDirect extends Controller
 			}
 			
 			if ($data['Status'] == 'OK' || $data['Status'] == 'AUTHENTICATED' || $data['Status'] == 'REGISTERED') {
-				$this->model_checkout_order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
+				$this->Model_Checkout_Order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
 				
 				$message = '';
 				
@@ -325,7 +325,7 @@ class ControllerPaymentSagepayDirect extends Controller
 					$message .= 'CAVV: ' . $data['CAVV'] . "\n";
 				}
 				
-				$this->model_checkout_order->update_order($this->session->data['order_id'], $this->config->get('sagepay_direct_order_status_id'), $message, false);
+				$this->Model_Checkout_Order->update_order($this->session->data['order_id'], $this->config->get('sagepay_direct_order_status_id'), $message, false);
 				
 				$this->url->redirect($this->url->link('checkout/success'));
 			} else {

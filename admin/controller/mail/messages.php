@@ -1,5 +1,5 @@
 <?php
-class ControllerMailMessages extends Controller 
+class Admin_Controller_Mail_Messages extends Controller 
 {
  
 	public function index()
@@ -12,7 +12,7 @@ class ControllerMailMessages extends Controller
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			
-			$this->model_setting_setting->editSetting('mail_messages', $_POST);
+			$this->Model_Setting_Setting->editSetting('mail_messages', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 		}

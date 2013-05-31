@@ -1,5 +1,5 @@
 <?php
-class ControllerMailError extends Controller 
+class Admin_Controller_Mail_Error extends Controller 
 {
  
 	public function index()
@@ -14,7 +14,7 @@ class ControllerMailError extends Controller
 		
 		$this->data['cancel'] = $this->url->link('common/home');
 		
-		$messages = $this->model_mail_error->getFailedMessages();
+		$messages = $this->Model_Mail_Error->getFailedMessages();
 		
 		$this->data['messages'] = $messages;
 		
@@ -47,7 +47,7 @@ class ControllerMailError extends Controller
 			
 			$this->mail->init();
 			
-			$this->model_mail_error->deleteFailedMessage($mail['mail_fail_id']);
+			$this->Model_Mail_Error->deleteFailedMessage($mail['mail_fail_id']);
 			
 			if ($this->mail->send($mail)) {
 				$this->message->add('success', 'text_message_sent');
@@ -61,7 +61,7 @@ class ControllerMailError extends Controller
 	{
 		if(!isset($_POST['mail_fail_id'])) return;
 		
-		$this->model_mail_error->deleteFailedMessage($_POST['mail_fail_id']);
+		$this->Model_Mail_Error->deleteFailedMessage($_POST['mail_fail_id']);
 	}
 	
 	public function validate()

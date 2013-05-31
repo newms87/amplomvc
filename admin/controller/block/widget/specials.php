@@ -1,5 +1,5 @@
 <?php
-class ControllerBlockWidgetSpecials extends Controller 
+class Admin_Controller_Block_Widget_Specials extends Controller 
 {
 	
 	/*

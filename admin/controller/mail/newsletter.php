@@ -1,5 +1,5 @@
 <?php
-class ControllerMailNewsletter extends Controller 
+class Admin_Controller_Mail_Newsletter extends Controller 
 {
 	
 	public function index()
@@ -17,7 +17,7 @@ class ControllerMailNewsletter extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$newsletter_id = $this->model_mail_newsletter->addNewsletter($_POST);
+			$newsletter_id = $this->Model_Mail_Newsletter->addNewsletter($_POST);
 
 			if (!$this->message->error_set()) {
 				$this->message->add('success',$this->_('text_success'));
@@ -36,7 +36,7 @@ class ControllerMailNewsletter extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_mail_newsletter->editNewsletter($_GET['newsletter_id'], $_POST);
+			$this->Model_Mail_Newsletter->editNewsletter($_GET['newsletter_id'], $_POST);
 			
 			if (!$this->message->error_set()) {
 				$this->message->add('success',$this->_('text_success'));
@@ -56,16 +56,16 @@ class ControllerMailNewsletter extends Controller
 			foreach ($_POST['selected'] as $newsletter_id) {
 				switch($_GET['action']){
 					case 'enable':
-						$this->model_mail_newsletter->editNewsletter($newsletter_id, array('status' => 1));
+						$this->Model_Mail_Newsletter->editNewsletter($newsletter_id, array('status' => 1));
 						break;
 					case 'disable':
-						$this->model_mail_newsletter->editNewsletter($newsletter_id, array('status' => 0));
+						$this->Model_Mail_Newsletter->editNewsletter($newsletter_id, array('status' => 0));
 						break;
 					case 'copy':
-						$this->model_mail_newsletter->copyNewsletter($newsletter_id);
+						$this->Model_Mail_Newsletter->copyNewsletter($newsletter_id);
 						break;
 					case 'delete':
-						$this->model_mail_newsletter->deleteNewsletter($newsletter_id);
+						$this->Model_Mail_Newsletter->deleteNewsletter($newsletter_id);
 					default:
 						$this->error['warning'] = "Invalid Action Selected!";
 						break;
@@ -136,8 +136,8 @@ class ControllerMailNewsletter extends Controller
 		
 		$data += $filter_values;
 		
-		$newsletter_total = $this->model_mail_newsletter->getTotalNewsletters($data);
-		$results = $this->model_mail_newsletter->getNewsletters($data);
+		$newsletter_total = $this->Model_Mail_Newsletter->getTotalNewsletters($data);
+		$results = $this->Model_Mail_Newsletter->getNewsletters($data);
 		
 		$newsletters = array();
 		
@@ -215,7 +215,7 @@ class ControllerMailNewsletter extends Controller
 		
 		//The Data
 		if ($newsletter_id && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-			$newsletter_info = $this->model_mail_newsletter->getNewsletter($newsletter_id);
+			$newsletter_info = $this->Model_Mail_Newsletter->getNewsletter($newsletter_id);
 		}
 		
 		$defaults = array(
@@ -269,7 +269,7 @@ class ControllerMailNewsletter extends Controller
 			'order' => 'ASC',
 		);
 	
-		$this->data['data_designers'] = $this->model_catalog_manufacturer->getManufacturers($m_data, 'manufacturer_id, name, image');
+		$this->data['data_designers'] = $this->Model_Catalog_Manufacturer->getManufacturers($m_data, 'manufacturer_id, name, image');
 		
 		if (empty($featured_designer['designer_id'])) {
 			array_unshift($this->data['data_designers'], $this->_('text_select'));
@@ -315,7 +315,7 @@ class ControllerMailNewsletter extends Controller
 				return;
 			}
 			
-			$newsletter_info = $this->model_mail_newsletter->getNewsletter($newsletter_id);
+			$newsletter_info = $this->Model_Mail_Newsletter->getNewsletter($newsletter_id);
 			
 			$this->data += $newsletter_info;
 		}
@@ -360,7 +360,7 @@ class ControllerMailNewsletter extends Controller
 		
 		$featured_product['href'] = $this->url->store($store_id, 'product/product', 'product_id=' . $featured_product['product_id']);
 		
-		$result = $this->model_catalog_product->getProductFull($featured_product['product_id']);
+		$result = $this->Model_Catalog_Product->getProductFull($featured_product['product_id']);
 		
 		if ($result) {
 			if ($result['special']) {
@@ -381,7 +381,7 @@ class ControllerMailNewsletter extends Controller
 		//The Product List
 		if (!empty($this->data['newsletter']['products'])) {
 			foreach ($this->data['newsletter']['products'] as $key => &$product) {
-				$result = $this->model_catalog_product->getProductFull($product['product_id']);
+				$result = $this->Model_Catalog_Product->getProductFull($product['product_id']);
 				
 				if (!$result) {
 					unset($this->data['newsletter']['products'][$key]);
@@ -419,7 +419,7 @@ class ControllerMailNewsletter extends Controller
 		//The Designer List
 		if (!empty($this->data['newsletter']['designers'])) {
 			foreach ($this->data['newsletter']['designers'] as &$designer) {
-				$result = $this->model_catalog_manufacturer->getManufacturerWithDescription($designer['designer_id']);
+				$result = $this->Model_Catalog_Manufacturer->getManufacturerWithDescription($designer['designer_id']);
 				
 				if (!$result) {
 					$result['teaser'] = "This Designer is not active";
@@ -458,7 +458,7 @@ class ControllerMailNewsletter extends Controller
 	public function email_list()
 	{
 		
-		$customers = $this->model_mail_newsletter->getEmailList();
+		$customers = $this->Model_Mail_Newsletter->getEmailList();
 		
 		$columns = array(
 			'firstname' => "First Name",

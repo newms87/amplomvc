@@ -1,9 +1,9 @@
 <?php
-class ControllerCronCron extends Controller 
+class Catalog_Controller_Cron_Cron extends Controller 
 {
 	function index()
 	{
-		$tasks = $this->model_setting_setting->getSetting('cron_tasks');
+		$tasks = $this->Model_Setting_Setting->getSetting('cron_tasks');
 		
 		echo "Running Cron - " . $this->tool->format_datetime() . "<br><br>";
 		foreach ($tasks['tasks'] as $task) {

@@ -1,5 +1,5 @@
 <?php
-class ControllerCatalogCategory extends Controller 
+class Admin_Controller_Catalog_Category extends Controller 
 {
 	
  
@@ -19,7 +19,7 @@ class ControllerCatalogCategory extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_catalog_category->addCategory($_POST);
+			$this->Model_Catalog_Category->addCategory($_POST);
 
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -36,7 +36,7 @@ class ControllerCatalogCategory extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_catalog_category->editCategory($_GET['category_id'], $_POST);
+			$this->Model_Catalog_Category->editCategory($_GET['category_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -54,7 +54,7 @@ class ControllerCatalogCategory extends Controller
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $category_id) {
-				$this->model_catalog_category->deleteCategory($category_id);
+				$this->Model_Catalog_Category->deleteCategory($category_id);
 			}
 
 			$this->message->add('success', $this->_('text_success'));
@@ -77,7 +77,7 @@ class ControllerCatalogCategory extends Controller
 		
 		$this->data['categories'] = array();
 		
-		$results = $this->model_catalog_category->getCategories(0);
+		$results = $this->Model_Catalog_Category->getCategories(0);
 
 		foreach ($results as $result) {
 			$action = array();
@@ -122,7 +122,7 @@ class ControllerCatalogCategory extends Controller
 		$this->data['cancel'] = $this->url->link('catalog/category');
 
 		if ($category_id && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-			$category_info = $this->model_catalog_category->getCategory($category_id);
+			$category_info = $this->Model_Catalog_Category->getCategory($category_id);
 		}
 		
 		//initialize the values in order of Post, Database, Default
@@ -149,21 +149,21 @@ class ControllerCatalogCategory extends Controller
 			}
 		}
 		
-		$this->data['languages'] = $this->model_localisation_language->getLanguages();
+		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
 
 		//Anything uninitialized at this point we know there is a category_id set, so grab the values
 		if (!isset($this->data['category_description'])) {
-			$this->data['category_description'] = $this->model_catalog_category->getCategoryDescriptions($category_id);
+			$this->data['category_description'] = $this->Model_Catalog_Category->getCategoryDescriptions($category_id);
 		}
 		if (!isset($this->data['category_store'])) {
-			$this->data['category_store'] = $this->model_catalog_category->getCategoryStores($category_id);
+			$this->data['category_store'] = $this->Model_Catalog_Category->getCategoryStores($category_id);
 		}
 		if (!isset($this->data['category_layout'])) {
-			$this->data['category_layout'] = $this->model_catalog_category->getCategoryLayouts($category_id);
+			$this->data['category_layout'] = $this->Model_Catalog_Category->getCategoryLayouts($category_id);
 		}
 		
 		$this->data['categories'] = array(0=>'-- None --');
-		$categories = $this->model_catalog_category->getCategories(0);
+		$categories = $this->Model_Catalog_Category->getCategories(0);
 		// Remove own id from list
 		foreach ($categories as $key => $category) {
 			if ($category['category_id'] != $category_id) {
@@ -171,9 +171,9 @@ class ControllerCatalogCategory extends Controller
 			}
 		}
 						
-		$this->data['data_stores'] = $this->model_setting_store->getStores();
+		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
 		
-		$this->data['data_layouts'] = array('' => '') + $this->model_design_layout->getLayouts();
+		$this->data['data_layouts'] = array('' => '') + $this->Model_Design_Layout->getLayouts();
 		
 		$this->children = array(
 			'common/header',
@@ -188,7 +188,7 @@ class ControllerCatalogCategory extends Controller
 		if (!empty($_POST['name'])) {
 			$category_id = isset($_POST['category_id']) ? $_POST['category_id'] : 0;
 			
-			$url = $this->model_catalog_category->generate_url($category_id, $_POST['name']);
+			$url = $this->Model_Catalog_Category->generate_url($category_id, $_POST['name']);
 		}
 		else {
 			$url = '';

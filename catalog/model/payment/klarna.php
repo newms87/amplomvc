@@ -1,5 +1,5 @@
 <?php
-class ModelPaymentPPStandard extends Model 
+class Catalog_Model_Payment_Klarna extends Model 
 {
   	public function getMethod($address, $total)
   	{

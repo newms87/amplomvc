@@ -1024,8 +1024,7 @@ class PHPExcel_Writer_HTML implements PHPExcel_Writer_IWriter
 					$cssClass = 'column' . $colNum;
 				} else {
 					$cssclass = array();
-					if (isset($this->_cssStyles['table.sheet' . $sheetIndex . ' td.column' . $colNum])) 
-{
+					if (isset($this->_cssStyles['table.sheet' . $sheetIndex . ' td.column' . $colNum])) {
 						$this->_cssStyles['table.sheet' . $sheetIndex . ' td.column' . $colNum];
 					}
 				}
@@ -1099,8 +1098,7 @@ class PHPExcel_Writer_HTML implements PHPExcel_Writer_IWriter
 					$cellData = nl2br($cellData);
 
 					// Extend CSS class ?
-					if (!$this->_useInlineCss) 
-{
+					if (!$this->_useInlineCss) {
 						$cssclass .= ' style' . $cell->getXfIndex();
 						$cssClass .= ' ' . $cell->getDataType();
 					} else {
@@ -1120,8 +1118,7 @@ class PHPExcel_Writer_HTML implements PHPExcel_Writer_IWriter
 				}
 
 				// Hyperlink?
-				if ($pSheet->hyperlinkExists($coordinate) && !$pSheet->getHyperlink($coordinate)->isInternal()) 
-{
+				if ($pSheet->hyperlinkExists($coordinate) && !$pSheet->getHyperlink($coordinate)->isInternal()) {
 					$cellData = '<a href="' . htmlspecialchars($pSheet->getHyperlink($coordinate)->getUrl()) . '" title="' . htmlspecialchars($pSheet->getHyperlink($coordinate)->getTooltip()) . '">' . $cellData . '</a>';
 				}
 
@@ -1160,8 +1157,7 @@ class PHPExcel_Writer_HTML implements PHPExcel_Writer_IWriter
 
 							// We must also explicitly write the height of the <td> element because TCPDF
 							// does not recognize e.g. <tr style="height:50pt">
-							if (isset($this->_cssStyles['table.sheet' . $sheetIndex . ' tr.row' . $pRow]['height'])) 
-{
+							if (isset($this->_cssStyles['table.sheet' . $sheetIndex . ' tr.row' . $pRow]['height'])) {
 								$height = $this->_cssStyles['table.sheet' . $sheetIndex . ' tr.row' . $pRow]['height'];
 								$cssclass ['height'] = $height;
 							}
@@ -1169,8 +1165,7 @@ class PHPExcel_Writer_HTML implements PHPExcel_Writer_IWriter
 
 							$html .= ' style="' . $this->_assembleCSS($cssClass) . '"';
 						}
-						if ($colSpan > 1) 
-{
+						if ($colSpan > 1) {
 							$html .= ' colspan="' . $colSpan . '"';
 						}
 						if ($rowSpan > 1) {

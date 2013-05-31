@@ -1,5 +1,5 @@
 <?php
-class ControllerExtensionShipping extends Controller 
+class Admin_Controller_Extension_Shipping extends Controller 
 {
 	public function index()
 	{
@@ -12,11 +12,11 @@ class ControllerExtensionShipping extends Controller
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('extension/shipping'));
 
-		$extensions = $this->model_setting_extension->getInstalled('shipping');
+		$extensions = $this->Model_Setting_Extension->getInstalled('shipping');
 		
 		foreach ($extensions as $key => $value) {
 			if (!file_exists(DIR_APPLICATION . 'controller/shipping/' . $value . '.php')) {
-				$this->model_setting_extension->uninstall('shipping', $value);
+				$this->Model_Setting_Extension->uninstall('shipping', $value);
 				
 				unset($extensions[$key]);
 			}
@@ -75,18 +75,17 @@ class ControllerExtensionShipping extends Controller
 			
 			$this->url->redirect($this->url->link('extension/shipping'));
 		} else {
-			$this->model_setting_extension->install('shipping', $_GET['extension']);
+			$this->Model_Setting_Extension->install('shipping', $_GET['extension']);
 
-			$this->model_user_user_group->addPermission($this->user->getId(), 'access', 'shipping/' . $_GET['extension']);
-			$this->model_user_user_group->addPermission($this->user->getId(), 'modify', 'shipping/' . $_GET['extension']);
+			$this->Model_User_UserGroup->addPermission($this->user->getId(), 'access', 'shipping/' . $_GET['extension']);
+			$this->Model_User_UserGroup->addPermission($this->user->getId(), 'modify', 'shipping/' . $_GET['extension']);
 
 			_require_once(DIR_APPLICATION . 'controller/shipping/' . $_GET['extension'] . '.php');
 			
 			$class = 'ControllerShipping' . str_replace('_', '', $_GET['extension']);
 			$class = new $class($this->registry);
 			
-			if (method_exists($class, 'install')) 
-{
+			if (method_exists($class, 'install')) {
 				$class ->install();
 			}
 			
@@ -101,17 +100,16 @@ class ControllerExtensionShipping extends Controller
 			
 			$this->url->redirect($this->url->link('extension/shipping'));
 		} else {
-			$this->model_setting_extension->uninstall('shipping', $_GET['extension']);
+			$this->Model_Setting_Extension->uninstall('shipping', $_GET['extension']);
 		
-			$this->model_setting_setting->deleteSetting($_GET['extension']);
+			$this->Model_Setting_Setting->deleteSetting($_GET['extension']);
 		
 			_require_once(DIR_APPLICATION . 'controller/shipping/' . $_GET['extension'] . '.php');
 			
 			$class = 'ControllerShipping' . str_replace('_', '', $_GET['extension']);
 			$class = new $class($this->registry);
 			
-			if (method_exists($class, 'uninstall')) 
-{
+			if (method_exists($class, 'uninstall')) {
 				$class->uninstall();
 			}
 		

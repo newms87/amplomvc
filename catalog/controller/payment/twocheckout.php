@@ -1,11 +1,11 @@
 <?php
-class ControllerPaymentTwoCheckout extends Controller 
+class Catalog_Controller_Payment_Twocheckout extends Controller 
 {
 	protected function index()
 	{
 		$this->template->load('payment/twocheckout');
 
-		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
+		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
 		
 		$this->data['action'] = 'https://www.2checkout.com/checkout/spurchase';
 
@@ -70,7 +70,7 @@ class ControllerPaymentTwoCheckout extends Controller
 	
 	public function callback()
 	{
-		$order_info = $this->model_checkout_order->getOrder($_POST['cart_order_id']);
+		$order_info = $this->Model_Checkout_Order->getOrder($_POST['cart_order_id']);
 		
 		if (!$this->config->get('twocheckout_test')) {
 			$order_number = $_POST['order_number'];
@@ -80,9 +80,9 @@ class ControllerPaymentTwoCheckout extends Controller
 		
 		if (strtoupper(md5($this->config->get('twocheckout_secret') . $this->config->get('twocheckout_account') . $order_number . $_POST['total'])) == $_POST['key']) {
 			if ($this->currency->format($order_info['total'], $order_info['currency_code'], $order_info['currency_value'], false) == $_POST['total']) {
-				$this->model_checkout_order->confirm($_POST['cart_order_id'], $this->config->get('twocheckout_order_status_id'));
+				$this->Model_Checkout_Order->confirm($_POST['cart_order_id'], $this->config->get('twocheckout_order_status_id'));
 			} else {
-				$this->model_checkout_order->confirm($_POST['cart_order_id'], $this->config->get('config_order_status_id'));// Ugh. Some one've faked the sum. What should we do? Probably drop a mail to the shop owner?
+				$this->Model_Checkout_Order->confirm($_POST['cart_order_id'], $this->config->get('config_order_status_id'));// Ugh. Some one've faked the sum. What should we do? Probably drop a mail to the shop owner?
 			}
 			
 			// We can't use $this->url->redirect() here, because of 2CO behavior. It fetches this page

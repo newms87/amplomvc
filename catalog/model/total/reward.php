@@ -1,5 +1,5 @@
 <?php
-class ModelTotalReward extends Model 
+class Catalog_Model_Total_Reward extends Model 
 {
 	public function getTotal(&$total_data, &$total, &$taxes)
 	{
@@ -27,8 +27,7 @@ class ModelTotalReward extends Model
 					if ($product['points']) {
 						$discount = $product['total'] * ($this->session->data['reward'] / $points_total);
 						
-						if ($product['tax_class _id']) 
-{
+						if ($product['tax_class _id']) {
 							$tax_rates = $this->tax->getRates($discount, $product['tax_class _id']);
 							
 							foreach ($tax_rates as $tax_rate) 

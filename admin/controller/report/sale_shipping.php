@@ -1,5 +1,5 @@
 <?php
-class ControllerReportSaleShipping extends Controller 
+class Admin_Controller_Report_SaleShipping extends Controller 
 {
 	public function index()
 	{
@@ -75,9 +75,9 @@ class ControllerReportSaleShipping extends Controller
 			'limit'						=> $this->config->get('config_admin_limit')
 		);
 				
-		$order_total = $this->model_report_sale->getTotalShipping($data);
+		$order_total = $this->Model_Report_Sale->getTotalShipping($data);
 		
-		$results = $this->model_report_sale->getShipping($data);
+		$results = $this->Model_Report_Sale->getShipping($data);
 		
 		foreach ($results as $result) {
 			$this->data['orders'][] = array(
@@ -89,7 +89,7 @@ class ControllerReportSaleShipping extends Controller
 			);
 		}
 		
-		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
 
 		$this->data['groups'] = array();
 

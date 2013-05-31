@@ -31,8 +31,7 @@ function html_dump($var, $label= "HTML Dump", $level=0, $max = -1, $print = true
 	</div>
 </a><br/>
 <?
-	if($html_dump_count == 0)
-{
+	if ($html_dump_count == 0) {
 ?>
 <script type='text/javascript'>//<!--
 function open_html_dump(id)
@@ -66,8 +65,7 @@ function html_dump_r($var, $level, $max)
 			echo "<tr class ='key_value_pair'>";
 			echo "<td valign='top' class='key'>[$key]</td>";
 			
-			if((is_array($v) || is_object($v)) && !($max >= 0 && $level >= ($max-1)))
-{
+			if ((is_array($v) || is_object($v)) && !($max >= 0 && $level >= ($max-1))) {
 				echo "<td class ='value'>";
 				html_dump_r($v, $level+1, $max);
 				echo "</td>";

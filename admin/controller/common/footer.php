@@ -1,5 +1,5 @@
 <?php
-class ControllerCommonFooter extends Controller 
+class Admin_Controller_Common_Footer extends Controller 
 {
 	protected function index()
 	{

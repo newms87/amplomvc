@@ -1,5 +1,5 @@
 <?php
-class ControllerProductSearchResults extends Controller 
+class Catalog_Controller_Product_SearchResults extends Controller 
 {
 	public function index()
 	{
@@ -23,7 +23,7 @@ class ControllerProductSearchResults extends Controller
 				$search_query[preg_replace('/search_/','',$key)] = $p;
 		}
 		
-		$results = $this->model_catalog_product->getProductSearchResults($search_query);
+		$results = $this->Model_Catalog_Product->getProductSearchResults($search_query);
 		
 		foreach ($results as $key=>$r) {
 			$results[$key]['image'] =  $this->image->resize($r['image'], 130, 130);

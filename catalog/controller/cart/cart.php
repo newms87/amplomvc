@@ -1,5 +1,5 @@
 <?php
-class ControllerCartCart extends Controller 
+class Catalog_Controller_Cart_Cart extends Controller 
 {
 	
 	public function index()
@@ -19,8 +19,7 @@ class ControllerCartCart extends Controller
 			$this->data['weight'] = $this->weight->format($this->cart->getWeight(), $this->config->get('config_weight_class _id'), $this->language->getInfo('decimal_point'), $this->language->getInfo('thousand_point'));
 		}
 		
-		if($this->config->get('coupon_status'))
-{
+		if ($this->config->get('coupon_status')) {
 			$this->data['block_coupon'] = $this->getBlock('cart','coupon');
 		}
 		$this->data['show_coupon'] = $this->template->option('show_coupon');
@@ -81,7 +80,7 @@ class ControllerCartCart extends Controller
 			$json = array();
 			
 			if (!$this->cart->has_error('add')) {
-				$name = $this->model_catalog_product->getProductName($product_id);
+				$name = $this->Model_Catalog_Product->getProductName($product_id);
 				
 				$redirect = urlencode($this->url->link('product/product', 'product_id=' . $product_id));
 				

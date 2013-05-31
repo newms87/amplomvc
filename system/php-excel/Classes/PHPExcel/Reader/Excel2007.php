@@ -242,8 +242,7 @@ class PHPExcel_Reader_Excel2007 implements PHPExcel_Reader_IReader{
 		}
 
 		// Check if zip class exists
-		if (!class_exists('ZipArchive')) 
-{
+		if (!class_exists('ZipArchive')) {
 			throw new Exception("ZipArchive library is not enabled");
 		}
 

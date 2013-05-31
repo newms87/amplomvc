@@ -151,8 +151,7 @@ for(var e in errors){
 
 
 	case 'autocomplete':
-		if(!$args || count($args) < 3)
-{
+		if (!$args || count($args) < 3) {
 			trigger_error("Template JS: autocomplete: invalid arguments! Usage: \$this->builder->js('autocomplete', array(\$selector,\$label,\$value,\$callback));");
 			return '';
 		}
@@ -241,7 +240,7 @@ function remove_ckeditor_for(context)
 
 	case 'translations':
 		if(empty($args[0])) return "";
-		$languages = $this->model_localisation_language->getLanguageList();
+		$languages = $this->Model_Localisation_Language->getLanguageList();
 		$default_language = $this->config->get('config_language_id');
 		
 		$translations = json_encode($args[0]); ?>
@@ -294,14 +293,12 @@ for(var t in translations)
 		t_input.attr('name', t_name);
 		t_input.val(translations[t][lang]);
 		
-		if(t_input.hasclass ('ckedit'))
-{
+		if (t_input.hasclass ('ckedit')) {
 			t_input.attr('id','translation_' + t + '_' + lang);
 			
 			box.append($('<div class ="translation ' + lang +'" />').append(t_input));
 			
-			<? if(isset($js_loaded_files['ckeditor'])) 
-{ ?>
+			<? if (isset($js_loaded_files['ckeditor'])) { ?>
 				init_ckeditor_for('translation_' + t + '_' + lang);
 			<? } ?>
 		}
@@ -313,8 +310,7 @@ for(var t in translations)
 	
 	box.append(language_menu.clone(true));
 	
-	if(context.hasClass('ckedit'))
-{
+	if (context.hasClass('ckedit')) {
 		ckedit_box = $('<div class ="translation ' + default_language + '" />');
 		
 		context.before(ckedit_box);

@@ -6,8 +6,7 @@ class DB
 	public function __construct($driver, $hostname, $username, $password, $database)
 	{
 		//We cannot redeclare the mysqli class so mysqli is an alias for our wrapper class msyqlidb
-		if($driver == 'mysqli')
-{
+		if ($driver == 'mysqli') {
 			$driver = 'mysqlidb';
 		}
 		

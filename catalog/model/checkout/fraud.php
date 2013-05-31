@@ -1,5 +1,5 @@
 <?php
-class ModelCheckoutFraud extends Model 
+class Catalog_Model_Checkout_Fraud extends Model 
 {
 	public function getFraudScore($data)
 	{

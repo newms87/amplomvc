@@ -1,5 +1,5 @@
 <?php
-class ModelSettingStore extends Model 
+class Admin_Model_Setting_Store extends Model 
 {
 	public function addStore($data)
 	{

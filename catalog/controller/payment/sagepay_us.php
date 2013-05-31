@@ -1,5 +1,5 @@
 <?php
-class ControllerPaymentSagepayUS extends Controller 
+class Catalog_Controller_Payment_SagepayUs extends Controller 
 {
 	protected function index()
 	{
@@ -32,7 +32,7 @@ class ControllerPaymentSagepayUS extends Controller
 	
 	public function send()
 	{
-		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
+		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
 		
 		$url = 'https://www.sagepayments.net/cgi-bin/eftbankcard.dll?transaction';
 		
@@ -65,7 +65,7 @@ class ControllerPaymentSagepayUS extends Controller
 		$json = array();
 															
 		if ($response[1] == 'A') {
-			$this->model_checkout_order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
+			$this->Model_Checkout_Order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
 
 			$message  = 'Approval Indicator: ' . $response[1] . "\n";
 			$message .= 'Approval/Error Code: ' . substr($response, 2, 6) . "\n";
@@ -77,7 +77,7 @@ class ControllerPaymentSagepayUS extends Controller
 			$message .= 'Reference: ' . substr($response, 46, 10) . "\n";
 			$message .= 'Order Number: ' . substr($response, strpos($response, chr(28)) + 1, strrpos($response, chr(28) - 1)) . "\n";
 			
-			$this->model_checkout_order->update_order($this->session->data['order_id'], $this->config->get('sagepay_us_order_status_id'), $message, false);
+			$this->Model_Checkout_Order->update_order($this->session->data['order_id'], $this->config->get('sagepay_us_order_status_id'), $message, false);
 
 			$json['success'] = $this->url->link('checkout/success');
 		} else {

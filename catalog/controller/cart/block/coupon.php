@@ -1,5 +1,5 @@
 <?php
-class ControllerCartBlockCoupon extends Controller
+class Catalog_Controller_Cart_Block_Coupon extends Controller
 {
 	
 	public function index($settings = null, $ajax = false)
@@ -25,7 +25,7 @@ class ControllerCartBlockCoupon extends Controller
 	{
 		$this->language->load('cart/cart');
 		
-		$coupon_info = $this->model_cart_coupon->getCoupon($_POST['coupon_code']);
+		$coupon_info = $this->Model_Cart_Coupon->getCoupon($_POST['coupon_code']);
 		
 		if (!$coupon_info) {
 			$this->message->add('warning', $this->_('error_coupon'));
@@ -41,7 +41,7 @@ class ControllerCartBlockCoupon extends Controller
 	{
 		$this->language->load('cart/block/coupon');
 		
-		$coupon_info = $this->model_cart_coupon->getCoupon($_POST['coupon_code']);
+		$coupon_info = $this->Model_Cart_Coupon->getCoupon($_POST['coupon_code']);
 		
 		if (!$coupon_info) {
 			$json['error'] = $this->_('error_coupon');

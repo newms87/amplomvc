@@ -240,8 +240,7 @@ class PHPExcel_Writer_Excel2007 implements PHPExcel_Writer_IWriter{
 			$zipOverWrite = $ro->getConstant('OVERWRITE');
 			$zipCreate = $ro->getConstant('CREATE');
 
-			if (file_exists($pFilename)) 
-{
+			if (file_exists($pFilename)) {
 				unlink($pFilename);
 			}
 			// Try opening the ZIP file

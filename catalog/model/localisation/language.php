@@ -1,5 +1,5 @@
 <?php
-class ModelLocalisationLanguage extends Model 
+class Catalog_Model_Localisation_Language extends Model 
 {
 	public function getLanguage($language_id)
 	{

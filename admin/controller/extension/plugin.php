@@ -1,5 +1,5 @@
 <?php
-class ControllerExtensionPlugin extends Controller 
+class Admin_Controller_Extension_Plugin extends Controller 
 {
 	
 	public function index()
@@ -18,7 +18,7 @@ class ControllerExtensionPlugin extends Controller
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('extension/plugin'));
 		
-		$plugins = $this->model_setting_plugin->getInstalledPlugins();
+		$plugins = $this->Model_Setting_Plugin->getInstalledPlugins();
 		
 		$installed_plugins = array_keys($plugins);
 		
@@ -82,7 +82,7 @@ class ControllerExtensionPlugin extends Controller
 			$this->data['plugin_data'] = $_POST['plugin_data'];
 		}
 		else {
-			$this->data['plugin_data'] = $this->model_setting_plugin->getPluginData($plugin_name);
+			$this->data['plugin_data'] = $this->Model_Setting_Plugin->getPluginData($plugin_name);
 		}
 		
 		$this->data['name'] = $plugin_name;
@@ -112,7 +112,7 @@ class ControllerExtensionPlugin extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_setting_plugin->updatePlugin($_GET['name'], $_POST['plugin_data']);
+			$this->Model_Setting_Plugin->updatePlugin($_GET['name'], $_POST['plugin_data']);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -124,8 +124,6 @@ class ControllerExtensionPlugin extends Controller
 	
 	public function install()
 	{
-		$this->language->load("extension/plugin");
-		
 		if (isset($_GET['name'])) {
 			$this->plugin->install($_GET['name']);
 		}
@@ -155,13 +153,11 @@ class ControllerExtensionPlugin extends Controller
 			$user_class = 'Setup'.preg_replace("/[^A-Z0-9]/i", "",$name);
 			$user_class = new $user_class($this->registry);
 			
-			if(method_exists($user_class, 'uninstall'))
-{
+			if (method_exists($user_class, 'uninstall')) {
 				$data = $user_class ->uninstall($keep_data);
 			}
 			
-			if($this->model_setting_plugin->uninstall($name, $data))
-{
+			if ($this->Model_Setting_Plugin->uninstall($name, $data)) {
 				$this->message->add('success', "Successfully uninstalled $name!");
 			}
 		}

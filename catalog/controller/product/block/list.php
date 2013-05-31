@@ -1,5 +1,5 @@
 <?php
-class ControllerProductBlockList extends Controller 
+class Catalog_Controller_Product_Block_List extends Controller 
 {
 	
 	public function index($setting, $data, $template = 'product/list', $process_data = true)
@@ -21,8 +21,7 @@ class ControllerProductBlockList extends Controller
 						$item['price'] = $this->currency->format($this->tax->calculate($item['price'], $item['tax_class _id']));
 					}
 					
-					if(!empty($item['special']))
-{
+					if (!empty($item['special'])) {
 						$item['special'] = $this->currency->format($this->tax->calculate($item['special'], $item['tax_class _id']));
 					}
 				} else {

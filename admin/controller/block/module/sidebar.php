@@ -1,5 +1,5 @@
 <?php
-class ControllerBlockModuleSidebar extends Controller 
+class Admin_Controller_Block_Module_Sidebar extends Controller 
 {
 	
 	public function settings(&$settings)
@@ -8,7 +8,7 @@ class ControllerBlockModuleSidebar extends Controller
 		
 		$this->data['settings'] = $settings;
 		
-		$this->data['data_attribute_groups'] = array('' => $this->_('text_none')) + $this->model_catalog_attribute_group->getAttributeGroups();
+		$this->data['data_attribute_groups'] = array('' => $this->_('text_none')) + $this->Model_Catalog_AttributeGroup->getAttributeGroups();
 		
 		$this->render();
 	}

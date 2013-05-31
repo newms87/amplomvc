@@ -1,5 +1,5 @@
 <?php
-class ModelLocalisationZone extends Model 
+class Catalog_Model_Localisation_Zone extends Model 
 {
 	public function getZone($zone_id)
 	{

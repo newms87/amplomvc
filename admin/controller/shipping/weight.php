@@ -1,5 +1,5 @@
 <?php
-class ControllerShippingWeight extends Controller 
+class Admin_Controller_Shipping_Weight extends Controller 
 {
 	
 	
@@ -12,7 +12,7 @@ class ControllerShippingWeight extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('weight', $_POST);
+			$this->Model_Setting_Setting->editSetting('weight', $_POST);
 
 			$this->message->add('success', $this->_('text_success'));
 									
@@ -33,7 +33,7 @@ class ControllerShippingWeight extends Controller
 		
 		$this->data['cancel'] = $this->url->link('extension/shipping');
 
-		$geo_zones = $this->model_localisation_geo_zone->getGeoZones();
+		$geo_zones = $this->Model_Localisation_GeoZone->getGeoZones();
 		
 		foreach ($geo_zones as $geo_zone) {
 			if (isset($_POST['weight_' . $geo_zone['geo_zone_id'] . '_rate'])) {
@@ -51,15 +51,13 @@ class ControllerShippingWeight extends Controller
 		
 		$this->data['geo_zones'] = $geo_zones;
 
-		if (isset($_POST['weight_tax_class _id'])) 
-{
+		if (isset($_POST['weight_tax_class _id'])) {
 			$this->data['weight_tax_class _id'] = $_POST['weight_tax_class_id'];
 		} else {
 			$this->data['weight_tax_class _id'] = $this->config->get('weight_tax_class_id');
 		}
 		
-		if (isset($_POST['weight_status'])) 
-{
+		if (isset($_POST['weight_status'])) {
 			$this->data['weight_status'] = $_POST['weight_status'];
 		} else {
 			$this->data['weight_status'] = $this->config->get('weight_status');
@@ -71,7 +69,7 @@ class ControllerShippingWeight extends Controller
 			$this->data['weight_sort_order'] = $this->config->get('weight_sort_order');
 		}
 		
-		$this->data['tax_class es'] = $this->model_localisation_tax_class->getTaxClasses();
+		$this->data['tax_class es'] = $this->Model_Localisation_TaxClass->getTaxClasses();
 
 		$this->children = array(
 			'common/header',

@@ -1,5 +1,5 @@
 <?php
-class ControllerPaymentPPPro extends Controller 
+class Admin_Controller_Payment_PpPro extends Controller 
 {
 	
 
@@ -12,7 +12,7 @@ class ControllerPaymentPPPro extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('pp_pro', $_POST);
+			$this->Model_Setting_Setting->editSetting('pp_pro', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -93,7 +93,7 @@ class ControllerPaymentPPPro extends Controller
 			$this->data['pp_pro_order_status_id'] = $this->config->get('pp_pro_order_status_id');
 		}
 
-		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
 		
 		if (isset($_POST['pp_pro_geo_zone_id'])) {
 			$this->data['pp_pro_geo_zone_id'] = $_POST['pp_pro_geo_zone_id'];
@@ -101,7 +101,7 @@ class ControllerPaymentPPPro extends Controller
 			$this->data['pp_pro_geo_zone_id'] = $this->config->get('pp_pro_geo_zone_id');
 		}
 		
-		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$this->data['geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 		
 		if (isset($_POST['pp_pro_status'])) {
 			$this->data['pp_pro_status'] = $_POST['pp_pro_status'];

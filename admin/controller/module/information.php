@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleInformation extends Controller 
+class Admin_Controller_Module_Information extends Controller 
 {
 	
 	
@@ -12,7 +12,7 @@ class ControllerModuleInformation extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('information', $_POST);
+			$this->Model_Setting_Setting->editSetting('information', $_POST);
 					
 			$this->message->add('success', $this->_('text_success'));
 						
@@ -41,7 +41,7 @@ class ControllerModuleInformation extends Controller
 			$this->data['modules'] = $this->config->get('information_module');
 		}
 		
-		$this->data['layouts'] = $this->model_design_layout->getLayouts();
+		$this->data['layouts'] = $this->Model_Design_Layout->getLayouts();
 
 		$this->children = array(
 			'common/header',

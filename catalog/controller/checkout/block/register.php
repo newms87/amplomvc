@@ -1,5 +1,5 @@
 <?php
-class ControllerCheckoutBlockRegister extends Controller 
+class Catalog_Controller_Checkout_Block_Register extends Controller 
 {
   	public function index()
   	{
@@ -27,14 +27,14 @@ class ControllerCheckoutBlockRegister extends Controller
 		$this->form->init('address');
 		$this->form->set_template('form/single_column');
 		$this->form->show_form_tag(false);
-		$this->form->set_field_options('country_id', $this->model_localisation_country->getCountries(), array('country_id' => 'name'));
+		$this->form->set_field_options('country_id', $this->Model_Localisation_Country->getCountries(), array('country_id' => 'name'));
 		$this->form->disable_fields('firstname', 'lastname', 'submit_address', 'default');
 		
 		$this->data['form_address'] = $this->form->build();
 		
 		//Terms and Conditions
 		if ($this->config->get('config_account_id')) {
-			$information_info = $this->model_catalog_information->getInformation($this->config->get('config_account_id'));
+			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_account_id'));
 			
 			if ($information_info) {
 				$this->language->format('text_agree', $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_account_id')), $information_info['title'], $information_info['title']);
@@ -78,7 +78,7 @@ class ControllerCheckoutBlockRegister extends Controller
 		}
 		
 		//Additional Error checking
-		$country_info = $this->model_localisation_country->getCountry($_POST['country_id']);
+		$country_info = $this->Model_Localisation_Country->getCountry($_POST['country_id']);
 		
 		if (!$country_info) {
 			$json['error']['country_id'] = $this->_('error_country_id');
@@ -91,7 +91,7 @@ class ControllerCheckoutBlockRegister extends Controller
 			$json['error'] = $this->form->get_errors();
 		}
 		
-		if ($this->model_account_customer->getTotalCustomersByEmail($_POST['email'])) {
+		if ($this->Model_Account_Customer->getTotalCustomersByEmail($_POST['email'])) {
 			$json['error']['email'] = $this->_('error_exists');
 		}
 			
@@ -100,7 +100,7 @@ class ControllerCheckoutBlockRegister extends Controller
 		}
 		
 		if ($this->config->get('config_account_id')) {
-			$information_info = $this->model_catalog_information->getInformation($this->config->get('config_account_id'));
+			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_account_id'));
 			
 			if ($information_info && !isset($_POST['agree'])) {
 				$json['error']['agree'] = sprintf($this->_('error_agree'), $information_info['title']);
@@ -110,10 +110,10 @@ class ControllerCheckoutBlockRegister extends Controller
 		//If the Form is valid
 		if (!$json) {
 			//Add New Customer
-			$this->model_account_customer->addCustomer($_POST);
+			$this->Model_Account_Customer->addCustomer($_POST);
 			
 			//Add Customer Address
-			$address_id = $this->model_account_address->addAddress($_POST);
+			$address_id = $this->Model_Account_Address->addAddress($_POST);
 				
 			$this->customer->set_setting('default_payment_address_id', $address_id);
 			$this->customer->set_setting('default_shipping_address_id', $address_id);

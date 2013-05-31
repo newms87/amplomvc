@@ -1,5 +1,5 @@
 <?php
-class ModelPaymentSagePayUS extends Model 
+class Catalog_Model_Payment_SagepayUs extends Model 
 {
   	public function getMethod($address, $total)
   	{

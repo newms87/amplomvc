@@ -1,5 +1,5 @@
 <?php
-class ControllerPaymentCod extends Controller 
+class Catalog_Controller_Payment_Cod extends Controller 
 {
 	protected function index()
 	{
@@ -12,6 +12,6 @@ class ControllerPaymentCod extends Controller
 	
 	public function confirm()
 	{
-		$this->model_checkout_order->confirm($this->session->data['order_id'], $this->config->get('cod_order_status_id'));
+		$this->Model_Checkout_Order->confirm($this->session->data['order_id'], $this->config->get('cod_order_status_id'));
 	}
 }

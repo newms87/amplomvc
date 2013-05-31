@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleDesignerSidebar extends Controller 
+class Admin_Controller_Module_DesignerSidebar extends Controller 
 {
 	
 	public function index()
@@ -11,7 +11,7 @@ class ControllerModuleDesignerSidebar extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('designer_sidebar', $_POST);
+			$this->Model_Setting_Setting->editSetting('designer_sidebar', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -33,7 +33,7 @@ class ControllerModuleDesignerSidebar extends Controller
 			$this->data['modules'] = $this->config->get('designer_sidebar_module');
 		}
 		
-		$this->data['layouts'] = $this->model_design_layout->getLayouts();
+		$this->data['layouts'] = $this->Model_Design_Layout->getLayouts();
 		
 		$this->data['positions'] = array(
 			'column_left' => $this->_('text_column_left'),

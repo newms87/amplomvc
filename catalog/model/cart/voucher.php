@@ -1,5 +1,5 @@
 <?php
-class ModelCartVoucher extends Model 
+class Catalog_Model_Cart_Voucher extends Model 
 {
 	public function addVoucher($order_id, $data)
 	{
@@ -70,7 +70,7 @@ class ModelCartVoucher extends Model
 		trigger_error("The voucher confirm(): has not been implemented!");
 		exit;
 		
-		$order_info = $this->model_checkout_order->getOrder($order_id);
+		$order_info = $this->Model_Checkout_Order->getOrder($order_id);
 		
 		if ($order_info) {
 			$language = new Language($order_info['language_directory'], $this->plugin_handler);

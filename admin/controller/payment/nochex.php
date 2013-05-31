@@ -1,5 +1,5 @@
 <?php
-class ControllerPaymentNOCHEX extends Controller 
+class Admin_Controller_Payment_Nochex extends Controller 
 {
 	
 
@@ -12,7 +12,7 @@ class ControllerPaymentNOCHEX extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('nochex', $_POST);
+			$this->Model_Setting_Setting->editSetting('nochex', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -87,7 +87,7 @@ class ControllerPaymentNOCHEX extends Controller
 			$this->data['nochex_order_status_id'] = $this->config->get('nochex_order_status_id');
 		}
 
-		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
 		
 		if (isset($_POST['nochex_geo_zone_id'])) {
 			$this->data['nochex_geo_zone_id'] = $_POST['nochex_geo_zone_id'];
@@ -95,7 +95,7 @@ class ControllerPaymentNOCHEX extends Controller
 			$this->data['nochex_geo_zone_id'] = $this->config->get('nochex_geo_zone_id');
 		}
 		
-		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$this->data['geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 		
 		if (isset($_POST['nochex_status'])) {
 			$this->data['nochex_status'] = $_POST['nochex_status'];

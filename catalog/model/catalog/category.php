@@ -1,5 +1,5 @@
 <?php
-class ModelCatalogCategory extends Model 
+class Catalog_Model_Catalog_Category extends Model 
 {
 	public function getCategory($category_id)
 	{

@@ -1,5 +1,5 @@
 <?php
-class ControllerDesignersDesigners extends Controller 
+class Catalog_Controller_Designers_Designers extends Controller 
 {
 	public function index()
 	{
@@ -14,7 +14,7 @@ class ControllerDesignersDesigners extends Controller
 			
 			$this->data['designer_id'] = $designer_id;
 			
-			$designer = $this->model_catalog_designer->getDesigner($designer_id,true);
+			$designer = $this->Model_Catalog_Designer->getDesigner($designer_id,true);
 			
 			if (!$designer) {
 				$this->url->redirect($this->url->link('designers/designers'), 302);
@@ -26,7 +26,7 @@ class ControllerDesignersDesigners extends Controller
 				
 			$this->data['d_sort_by'] = $d_sort_by = isset($_GET['d_sort_by'])?$_GET['d_sort_by']:null;
 
-			$products = $this->model_catalog_designer->getDesignerProducts($designer, $d_sort_by);
+			$products = $this->Model_Catalog_Designer->getDesignerProducts($designer, $d_sort_by);
 			
 			if (!$products) {
 				$this->language->set('heading_title', $designer['name']);
@@ -44,7 +44,7 @@ class ControllerDesignersDesigners extends Controller
 				
 				$article_insert = array();
 				$articles = array();
-				$article_list = $this->model_catalog_designer->getDesignerArticles($designer_id);
+				$article_list = $this->Model_Catalog_Designer->getDesignerArticles($designer_id);
 				
 				
 				//This specifies the location of the articles by number inserted
@@ -112,7 +112,7 @@ class ControllerDesignersDesigners extends Controller
 				$this->data['designer_image'] = $this->image->resize($image, $this->config->get('config_image_manufacturer_width'),$this->config->get('config_image_manufacturer_height'));
 				
 
-				$flashsale_id = $this->model_catalog_designer->is_flashsale_page($designer_id);
+				$flashsale_id = $this->Model_Catalog_Designer->is_flashsale_page($designer_id);
 				if ($flashsale_id) {
 					$this->data['flashsale_id'] = $flashsale_id;
 					$this->data['flashsale_clock'] = $this->image->get('data/clock.png');
@@ -134,7 +134,7 @@ class ControllerDesignersDesigners extends Controller
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('designers/designers'));
 								
-			$designers = $this->model_catalog_designer->getDesigners();
+			$designers = $this->Model_Catalog_Designer->getDesigners();
 			if (empty($designers)) {
 				$this->data['continue'] = $this->url->link('common/home');
 				$this->language->set('heading_title', $this->_('no_designers_heading'));
@@ -145,10 +145,10 @@ class ControllerDesignersDesigners extends Controller
 				$this->data['fs_tac'] = $this->image->resize('data/pink_tac.png', 36,52);
 
 				foreach ($designers as $key=>&$d) {
-					if ($this->model_catalog_designer->hasProducts($d['designer_id'])) {
+					if ($this->Model_Catalog_Designer->hasProducts($d['designer_id'])) {
 						$d['image'] =$this->image->resize( (isset($d['image'])?$d['image']:"no_image.png") ,196,206);
 						$d['href'] = $this->url->site($d['keyword']);
-						$d['flashsale'] = $this->model_catalog_designer->is_flashsale_page($d['designer_id'], true);
+						$d['flashsale'] = $this->Model_Catalog_Designer->is_flashsale_page($d['designer_id'], true);
 					}
 					else {
 						unset($designers[$key]);
@@ -177,8 +177,8 @@ class ControllerDesignersDesigners extends Controller
 	public function update_statuses()
 	{
 		echo "Finding Designers to Activate and Expired Designers...<br>";
-		$activated_designers = $this->model_catalog_designer->activateDesigners();
-		$expired_designers = $this->model_catalog_designer->expireDesigners();
+		$activated_designers = $this->Model_Catalog_Designer->activateDesigners();
+		$expired_designers = $this->Model_Catalog_Designer->expireDesigners();
 		
 		if ($activated_designers || $expired_designers) {
 			$this->mail->init();
@@ -245,7 +245,7 @@ class ControllerDesignersDesigners extends Controller
 	public function notify_expiring()
 	{
 		echo "Finding Designers Expiring Soon...<br>";
-		$designers = $this->model_catalog_designer->getExpiringSoon();
+		$designers = $this->Model_Catalog_Designer->getExpiringSoon();
 		$this->mail->init();
 		
 		$this->mail->setFrom($this->config->get('config_email'));

@@ -1,5 +1,5 @@
 <?php
-class ControllerPaymentPPProUK extends Controller 
+class Catalog_Controller_Payment_PpProUk extends Controller 
 {
 	protected function index()
 	{
@@ -7,7 +7,7 @@ class ControllerPaymentPPProUK extends Controller
 
 		$this->language->load('payment/pp_pro_uk');
 		
-		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
+		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
 		
 		$this->data['owner'] = $order_info['payment_firstname'] . ' ' . $order_info['payment_lastname'];
 		
@@ -69,7 +69,7 @@ class ControllerPaymentPPProUK extends Controller
 	{
 		$this->language->load('payment/pp_pro_uk');
 		
-		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
+		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
 				
 		if (!$this->config->get('pp_pro_uk_transaction')) {
 			$payment_type = 'A';
@@ -131,7 +131,7 @@ class ControllerPaymentPPProUK extends Controller
 		$json = array();
 
 		if ($response_data['RESULT'] == '0') {
-			$this->model_checkout_order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
+			$this->Model_Checkout_Order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
 			
 			$message = '';
 			
@@ -147,7 +147,7 @@ class ControllerPaymentPPProUK extends Controller
 				$message .= 'TRANSACTIONID: ' . $response_data['TRANSACTIONID'] . "\n";
 			}
 			
-			$this->model_checkout_order->update_order($this->session->data['order_id'], $this->config->get('pp_pro_uk_order_status_id'), $message, false);
+			$this->Model_Checkout_Order->update_order($this->session->data['order_id'], $this->config->get('pp_pro_uk_order_status_id'), $message, false);
 		
 			$json['success'] = $this->url->link('checkout/success');
 		} else {

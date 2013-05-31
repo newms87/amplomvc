@@ -1,5 +1,5 @@
 <?php
-class ControllerSettingUrlAlias extends Controller 
+class Admin_Controller_Setting_UrlAlias extends Controller 
 {
 
 	public function index()
@@ -18,7 +18,7 @@ class ControllerSettingUrlAlias extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$store_id = $this->model_setting_url_alias->addUrlAlias($_POST);
+			$store_id = $this->Model_Setting_UrlAlias->addUrlAlias($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -35,7 +35,7 @@ class ControllerSettingUrlAlias extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_setting_url_alias->editUrlAlias($_GET['url_alias_id'], $_POST);
+			$this->Model_Setting_UrlAlias->editUrlAlias($_GET['url_alias_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -53,7 +53,7 @@ class ControllerSettingUrlAlias extends Controller
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $url_alias_id) {
-				$this->model_setting_url_alias->deleteUrlAlias($url_alias_id);
+				$this->Model_Setting_UrlAlias->deleteUrlAlias($url_alias_id);
 			}
 
 			$this->message->add('success', $this->_('text_success'));
@@ -76,7 +76,7 @@ class ControllerSettingUrlAlias extends Controller
 		
 		$url = $this->get_url(array('page'));
 		
-		$aliases = $this->model_setting_url_alias->getUrlAliases();
+		$aliases = $this->Model_Setting_UrlAlias->getUrlAliases();
  
 		foreach ($aliases as &$alias) {
 			$alias['action'] = array(
@@ -89,7 +89,7 @@ class ControllerSettingUrlAlias extends Controller
 		
 		$this->data['aliases'] = $aliases;
 		
-		$this->data['data_stores'] = $this->model_setting_store->getStores();
+		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
 	
 		$this->children = array(
 			'common/header',
@@ -116,7 +116,7 @@ class ControllerSettingUrlAlias extends Controller
 				
 		$this->data['cancel'] = $this->url->link('setting/url_alias');
 		
-		$alias_info = $url_alias_id ? $this->model_setting_url_alias->getUrlAlias($url_alias_id) : null;
+		$alias_info = $url_alias_id ? $this->Model_Setting_UrlAlias->getUrlAlias($url_alias_id) : null;
 		
 		$defaults = array(
 			'keyword'	=>'',

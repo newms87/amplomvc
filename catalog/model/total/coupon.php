@@ -1,17 +1,17 @@
 <?php
-class ModelTotalCoupon extends Model 
+class Catalog_Model_Total_Coupon extends Model 
 {
 	public function getTotal(&$total_data, &$total, &$taxes)
 	{
 		$this->load->language('total/coupon');
 		
-		$this->model_cart_coupon->loadAutoCoupons();
+		$this->Model_Cart_Coupon->loadAutoCoupons();
 		
 		$coupon_list = array();
 		
 		if (isset($this->session->data['coupons'])) {
 			foreach ($this->session->data['coupons'] as $code=>$coupon) {
-				$coupon_info = $this->model_cart_coupon->getCoupon($code);
+				$coupon_info = $this->Model_Cart_Coupon->getCoupon($code);
 				if ($coupon_info) {
 					$coupon_list[$code] = $coupon_info;
 				}
@@ -59,8 +59,7 @@ class ModelTotalCoupon extends Model
 							$discount = $product['total'] / 100 * $coupon_info['discount'];
 						}
 				
-						if ($product['tax_class _id']) 
-{
+						if ($product['tax_class _id']) {
 							$tax_rates = $this->tax->getRates($product['total'] - ($product['total'] - $discount), $product['tax_class _id']);
 							
 							foreach ($tax_rates as $tax_rate) 
@@ -78,8 +77,7 @@ class ModelTotalCoupon extends Model
 				if ($coupon_info['shipping'] && $this->cart->hasShippingMethod()) {
 					$shipping_method = $this->cart->getShippingMethod();
 					
-					if (!empty($shipping_method['tax_class _id'])) 
-{
+					if (!empty($shipping_method['tax_class _id'])) {
 						$tax_rates = $this->tax->getRates($shipping_method['cost'], $shipping_method['tax_class _id']);
 						
 						foreach ($tax_rates as $tax_rate) 
@@ -100,7 +98,7 @@ class ModelTotalCoupon extends Model
 						);
 					}
 					
-					if ($this->model_localisation_zone->inGeoZone($coupon_info['shipping_geozone'], $address['country_id'], $address['zone_id'])) {
+					if ($this->Model_Localisation_Zone->inGeoZone($coupon_info['shipping_geozone'], $address['country_id'], $address['zone_id'])) {
 						$discount_total += $shipping_method['cost'];
 					}
 				}
@@ -129,10 +127,10 @@ class ModelTotalCoupon extends Model
 			$code = substr($order_total['title'], $start, $end - $start);
 		}
 		
-		$coupon_info = $this->model_cart_coupon->getCoupon($code);
+		$coupon_info = $this->Model_Cart_Coupon->getCoupon($code);
 			
 		if ($coupon_info) {
-			$this->model_cart_coupon->redeem($coupon_info['coupon_id'], $order_info['order_id'], $order_info['customer_id'], $order_total['value']);
+			$this->Model_Cart_Coupon->redeem($coupon_info['coupon_id'], $order_info['order_id'], $order_info['customer_id'], $order_total['value']);
 		}
 	}
 }

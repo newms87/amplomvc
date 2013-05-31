@@ -1,5 +1,5 @@
 <?php
-class ControllerPaymentBankTransfer extends Controller 
+class Catalog_Controller_Payment_BankTransfer extends Controller 
 {
 	protected function index()
 	{
@@ -22,6 +22,6 @@ class ControllerPaymentBankTransfer extends Controller
 		$comment .= $this->config->get('bank_transfer_bank_' . $this->config->get('config_language_id')) . "\n\n";
 		$comment .= $this->_('text_payment');
 		
-		$this->model_checkout_order->confirm($this->session->data['order_id'], $this->config->get('bank_transfer_order_status_id'), $comment, true);
+		$this->Model_Checkout_Order->confirm($this->session->data['order_id'], $this->config->get('bank_transfer_order_status_id'), $comment, true);
 	}
 }

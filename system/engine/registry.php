@@ -8,7 +8,7 @@ final class Registry
 		if (isset($this->data[$key])) {
 			return $this->data[$key];
 		}
-		elseif (strpos($key,'model_') === 0) {
+		elseif (preg_match("/^(Model_|System_|Admin_|Catalog_)/", $key)) {
 			return $this->data['load']->model($key);
 		}
 		else {

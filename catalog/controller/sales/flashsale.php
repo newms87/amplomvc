@@ -1,5 +1,5 @@
 <?php
-class ControllerSalesFlashsale extends Controller 
+class Catalog_Controller_Sales_Flashsale extends Controller 
 {
 	public function index()
 	{
@@ -12,13 +12,13 @@ class ControllerSalesFlashsale extends Controller
 		if ($flashsale_id) {
 			$this->template->load('sales/flashsale');
 			
-			$flashsale = $this->model_catalog_flashsale->getFlashsale($flashsale_id);
+			$flashsale = $this->Model_Catalog_Flashsale->getFlashsale($flashsale_id);
 			
-			if(!$flashsale || $this->model_catalog_flashsale->getStatus($flashsale) != 'active')
+			if(!$flashsale || $this->Model_Catalog_Flashsale->getStatus($flashsale) != 'active')
 				$this->url->redirect($this->url->link('sales/flashsale'), 302);
 			
 			if ( ! (isset($_GET['preview_flashsale']) && $this->user->canPreview('flashsale')) ) {
-				$this->model_catalog_flashsale->updateViewed($flashsale_id);
+				$this->Model_Catalog_Flashsale->updateViewed($flashsale_id);
 			}
 			
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -33,8 +33,8 @@ class ControllerSalesFlashsale extends Controller
 			
 			
 			//OPTIONAL VERSION WHERE FLASHSALE PAGE REMAINS SHOWING FLASHSALE OVER
-			if ($this->model_catalog_flashsale->getStatus($flashsale) != 'active') {
-				$designers = $this->model_catalog_flashsale->getFlashsaleDesigners($flashsale_id);
+			if ($this->Model_Catalog_Flashsale->getStatus($flashsale) != 'active') {
+				$designers = $this->Model_Catalog_Flashsale->getFlashsaleDesigners($flashsale_id);
 				foreach($designers as &$d)
 					$d['href'] = $this->url->site($d['keyword']);
 				$this->data['designers'] = $designers;
@@ -45,13 +45,13 @@ class ControllerSalesFlashsale extends Controller
 			else {
 				$this->data['the_page'] = $_SERVER['REQUEST_URI'];
 				
-				$this->model_catalog_flashsale->activateFlashsaleDesigners($flashsale_id);
+				$this->Model_Catalog_Flashsale->activateFlashsaleDesigners($flashsale_id);
 				
-				$products = $this->model_catalog_flashsale->getFlashsaleProducts($flashsale, $d_sort_by);
+				$products = $this->Model_Catalog_Flashsale->getFlashsaleProducts($flashsale, $d_sort_by);
 				
 				$article_insert = array();
 				$articles = array();
-				$article_list = $this->model_catalog_flashsale->getFlashsaleArticles($flashsale_id);
+				$article_list = $this->Model_Catalog_Flashsale->getFlashsaleArticles($flashsale_id);
 				
 				
 				//This specifies the location of the articles by number inserted
@@ -137,7 +137,7 @@ class ControllerSalesFlashsale extends Controller
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('sales/flashsale'));
 								
-			$flashsales = $this->model_catalog_flashsale->getFlashsales();
+			$flashsales = $this->Model_Catalog_Flashsale->getFlashsales();
 			
 			if (empty($flashsales)) {
 				$this->data['continue'] = $this->url->link('common/home');
@@ -191,7 +191,7 @@ class ControllerSalesFlashsale extends Controller
 	{
 		$msg_start = trim((string)$msg_start);
 		if (is_integer($flashsale)) {
-			$flashsale = $this->model_catalog_flashsale->getFlashsale($flashsale);
+			$flashsale = $this->Model_Catalog_Flashsale->getFlashsale($flashsale);
 		}
 		
 		//problem finding flashsale or no flashsale specified
@@ -228,8 +228,7 @@ class ControllerSalesFlashsale extends Controller
 			$diff_end->i = $diff_start->i;
 			$diff_end->s = $diff_start->s;
 		}
-		else if(!$diff_end->invert)
-{
+		else if (!$diff_end->invert) {
 			$msg = "<span class ='msg_start'>" . (($msg_start && !empty($msg_start))?$msg_start:"Ends in ")."</span>";
 			$class='normal';
 		}
@@ -240,8 +239,7 @@ class ControllerSalesFlashsale extends Controller
 		
 		$diff_end->h = $diff_end->h + ((int)$diff_end->d)*24;
 		$time = '';
-		if($type == 'letters')
-{
+		if ($type == 'letters') {
 			$h =
 			$time .= "<span class ='fs_num'>". sprintf('%02d',$diff_end->h) . "</span>" . $text_hour . ($diff_end->h!=1?$plural:'');
 			$time .= "<span class='fs_num'>". sprintf('%02d',$diff_end->i) . "</span>" . $text_min . ($diff_end->i!=1?$plural:'');

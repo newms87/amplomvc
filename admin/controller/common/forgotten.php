@@ -1,5 +1,5 @@
 <?php
-class ControllerCommonForgotten extends Controller 
+class Admin_Controller_Common_Forgotten extends Controller 
 {
 	
 
@@ -20,7 +20,7 @@ class ControllerCommonForgotten extends Controller
 			
 			$code = md5(rand());
 			
-			$this->model_user_user->editCode($_POST['email'], $code);
+			$this->Model_User_User->editCode($_POST['email'], $code);
 			
 			$subject = sprintf($this->_('text_subject'), $this->config->get('config_name'));
 			
@@ -74,7 +74,7 @@ class ControllerCommonForgotten extends Controller
 	{
 		if (empty($_POST['email'])) {
 			$this->error['email'] = $this->_('error_email');
-		} elseif (!$this->model_user_user->getTotalUsersByEmail($_POST['email'])) {
+		} elseif (!$this->Model_User_User->getTotalUsersByEmail($_POST['email'])) {
 			$this->error['email'] = $this->_('error_email');
 		}
 

@@ -1,5 +1,5 @@
 <?php
-class ControllerWidgetBlockSpecials extends Controller 
+class Catalog_Controller_Widget_Block_Specials extends Controller 
 {
 	public function index($settings)
 	{
@@ -12,8 +12,8 @@ class ControllerWidgetBlockSpecials extends Controller
 		
 		$this->sort->load_query_defaults($sort_filter, 'price', 'ASC');
 		
-		$product_total = $this->model_catalog_product->getTotalProducts($sort_filter);
-		$products = $this->model_catalog_product->getProducts($sort_filter);
+		$product_total = $this->Model_Catalog_Product->getTotalProducts($sort_filter);
+		$products = $this->Model_Catalog_Product->getProducts($sort_filter);
 		
 		if (!empty($products)) {
 			$params = array(

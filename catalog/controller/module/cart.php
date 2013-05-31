@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleCart extends Controller 
+class Catalog_Controller_Module_Cart extends Controller 
 {
 	public function index()
 	{
@@ -20,7 +20,7 @@ class ControllerModuleCart extends Controller
 		
 		$sort_order = array();
 		
-		$results = $this->model_setting_extension->getExtensions('total');
+		$results = $this->Model_Setting_Extension->getExtensions('total');
 		
 		foreach ($results as $key => $value) {
 			$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');

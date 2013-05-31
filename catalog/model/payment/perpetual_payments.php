@@ -1,5 +1,5 @@
 <?php
-class ModelPaymentPerpetualPayments extends Model 
+class Catalog_Model_Payment_PerpetualPayments extends Model 
 {
   	public function getMethod($address, $total)
   	{

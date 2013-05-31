@@ -1,5 +1,5 @@
 <?php
-class ControllerReportAffiliateCommission extends Controller 
+class Admin_Controller_Report_AffiliateCommission extends Controller 
 {
 	public function index()
 	{
@@ -53,9 +53,9 @@ class ControllerReportAffiliateCommission extends Controller
 			'limit'				=> $this->config->get('config_admin_limit')
 		);
 		
-		$affiliate_total = $this->model_report_affiliate->getTotalCommission($data);
+		$affiliate_total = $this->Model_Report_Affiliate->getTotalCommission($data);
 		
-		$results = $this->model_report_affiliate->getCommission($data);
+		$results = $this->Model_Report_Affiliate->getCommission($data);
 		
 		foreach ($results as $result) {
 			$action = array();

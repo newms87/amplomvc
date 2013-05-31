@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleBlockSidebar extends Controller 
+class Catalog_Controller_Module_Block_Sidebar extends Controller 
 {
 	protected function index($settings)
 	{
@@ -20,7 +20,7 @@ class ControllerModuleBlockSidebar extends Controller
 			$main_menu[0]['attrs'] = array('class ' => 'active');
 		}
 		
-		$collections = $this->model_catalog_collection->getCollectionCategories();
+		$collections = $this->Model_Catalog_Collection->getCollectionCategories();
 		
 		$main_menu += $this->build_collection_menu($collections);
 		
@@ -30,8 +30,7 @@ class ControllerModuleBlockSidebar extends Controller
 		);
 		
 		//Product Attributes Filter
-		if($collection_id)
-{
+		if ($collection_id) {
 			$current_filter = isset($_GET['attribute']) ? $_GET['attribute'] : array();
 			
 			$url_query = $this->url->get_query('collection_id', 'category_id');
@@ -39,9 +38,9 @@ class ControllerModuleBlockSidebar extends Controller
 			foreach ($settings['attributes'] as $attribute_menu) {
 				$attribute_group_id = $attribute_menu['attribute_group_id'];
 				
-				if (!$this->model_catalog_collection->hasAttributeGroup($collection_id, $attribute_group_id)) continue;
+				if (!$this->Model_Catalog_Collection->hasAttributeGroup($collection_id, $attribute_group_id)) continue;
 				
-				$attribute_list = $this->model_catalog_product->getAttributeList($attribute_group_id);
+				$attribute_list = $this->Model_Catalog_Product->getAttributeList($attribute_group_id);
 				
 				//The active attribute_id for this group
 				$active_filter = isset($current_filter[$attribute_group_id]) ? $current_filter[$attribute_group_id] : false;
@@ -115,8 +114,7 @@ class ControllerModuleBlockSidebar extends Controller
 				$menu_item['attrs'] = array('class ' => 'active');
 			}
 			
-			if((int)$collection['parent_id'] == 0)
-{
+			if ((int)$collection['parent_id'] == 0) {
 				$parents[$collection['category_id']] = $menu_item;
 			}
 			else {

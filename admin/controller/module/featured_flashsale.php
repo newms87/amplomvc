@@ -1,5 +1,5 @@
 <?php
-class ControllerModuleFeaturedFlashsale extends Controller 
+class Admin_Controller_Module_FeaturedFlashsale extends Controller 
 {
 	
 	
@@ -15,7 +15,7 @@ class ControllerModuleFeaturedFlashsale extends Controller
 			unset($_POST['designer']);
 			unset($_POST['choose_product']);
 
-			$this->model_setting_setting->editSetting('featured_flashsale', $_POST);
+			$this->Model_Setting_Setting->editSetting('featured_flashsale', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -32,7 +32,7 @@ class ControllerModuleFeaturedFlashsale extends Controller
 		if (isset($_POST['featured_flashsale'])) {
 			$ff = $_POST['featured_flashsale'];
 		} else {
-			$ff = $this->model_setting_setting->getSetting('featured_flashsale');
+			$ff = $this->Model_Setting_Setting->getSetting('featured_flashsale');
 		}
 		
 		$this->data['featured_list'] = isset($ff['featured_list'])?$ff['featured_list']:array();
@@ -40,12 +40,12 @@ class ControllerModuleFeaturedFlashsale extends Controller
 		$this->data['modules'] = isset($ff['featured_flashsale_module'])?$ff['featured_flashsale_module']:array();
 		
 		
-		$designers = $this->model_catalog_manufacturer->getManufacturers();
+		$designers = $this->Model_Catalog_Manufacturer->getManufacturers();
 
 		foreach($designers as $d)
 			$this->data['designers'][$d['manufacturer_id']] = $d['name'];
 		
-		$layouts = $this->model_design_layout->getLayouts();
+		$layouts = $this->Model_Design_Layout->getLayouts();
 		$this->data['layouts'] = array();
 		foreach($layouts as $layout)
 			$this->data['layouts'][$layout['layout_id']] = $layout['name'];

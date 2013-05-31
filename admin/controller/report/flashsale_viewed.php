@@ -1,5 +1,5 @@
 <?php
-class ControllerReportFlashsaleViewed extends Controller 
+class Admin_Controller_Report_FlashsaleViewed extends Controller 
 {
 	public function index()
 	{
@@ -25,7 +25,7 @@ class ControllerReportFlashsaleViewed extends Controller
 			'limit' => $this->config->get('config_admin_limit')
 		);
 		
-		$flashsale_view_list = $this->model_report_flashsale->getFlashsaleViews();
+		$flashsale_view_list = $this->Model_Report_Flashsale->getFlashsaleViews();
 		
 		$flashsale_views = array();
 		foreach ($flashsale_view_list as $fv) {
@@ -54,13 +54,13 @@ class ControllerReportFlashsaleViewed extends Controller
 			}
 		}
 		
-		$flashsale_viewed_total = $this->model_report_flashsale->getTotalFlashsalesViewed($data);
+		$flashsale_viewed_total = $this->Model_Report_Flashsale->getTotalFlashsalesViewed($data);
 		
-		$flashsale_views_total = $this->model_report_flashsale->getTotalFlashsaleViews();
+		$flashsale_views_total = $this->Model_Report_Flashsale->getTotalFlashsaleViews();
 		
 		$this->data['flashsales'] = array();
 		
-		$results = $this->model_report_flashsale->getFlashsalesViewed($data);
+		$results = $this->Model_Report_Flashsale->getFlashsalesViewed($data);
 		
 		foreach ($results as $result) {
 			if ($result['views']) {
@@ -101,7 +101,7 @@ class ControllerReportFlashsaleViewed extends Controller
 	{
 		$this->load->language('report/flashsale_viewed');
 		
-		$this->model_report_flashsale->reset();
+		$this->Model_Report_Flashsale->reset();
 		
 		$this->message->add('success', $this->_('text_success'));
 		

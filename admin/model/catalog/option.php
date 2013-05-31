@@ -1,5 +1,5 @@
 <?php
-class ModelCatalogOption extends Model 
+class Admin_Model_Catalog_Option extends Model 
 {
 	public function addOption($data)
 	{

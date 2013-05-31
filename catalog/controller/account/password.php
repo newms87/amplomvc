@@ -1,5 +1,5 @@
 <?php
-class ControllerAccountPassword extends Controller 
+class Catalog_Controller_Account_Password extends Controller 
 {
 	
 		
@@ -18,7 +18,7 @@ class ControllerAccountPassword extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 			
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_account_customer->editPassword($this->customer->info('email'), $_POST['password']);
+			$this->Model_Account_Customer->editPassword($this->customer->info('email'), $_POST['password']);
  
 				$this->message->add('success', $this->_('text_success'));
 	

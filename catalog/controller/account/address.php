@@ -1,5 +1,5 @@
 <?php
-class ControllerAccountAddress extends Controller 
+class Catalog_Controller_Account_Address extends Controller 
 {
 	
   	public function index()
@@ -30,7 +30,7 @@ class ControllerAccountAddress extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$address_id = $this->model_account_address->addAddress($_POST);
+			$address_id = $this->Model_Account_Address->addAddress($_POST);
 			
 			if (!empty($_POST['default'])) {
 				$this->customer->set_setting('default_shipping_address_id', $address_id);
@@ -57,7 +57,7 @@ class ControllerAccountAddress extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_account_address->editAddress($_GET['address_id'], $_POST);
+			$this->Model_Account_Address->editAddress($_GET['address_id'], $_POST);
 			
 			if (!empty($_POST['default'])) {
 				$this->customer->set_setting('default_shipping_address_id', $_GET['address_id']);
@@ -92,7 +92,7 @@ class ControllerAccountAddress extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (isset($_GET['address_id']) && $this->validateDelete()) {
-			$this->model_account_address->deleteAddress($_GET['address_id']);
+			$this->Model_Account_Address->deleteAddress($_GET['address_id']);
 
 			if ((int)$_GET['address_id'] === $this->cart->getShippingAddressId()) {
 				$this->cart->setShippingAddress();
@@ -122,7 +122,7 @@ class ControllerAccountAddress extends Controller
 		
 		$this->data['addresses'] = array();
 		
-		$results = $this->model_account_address->getAddresses();
+		$results = $this->Model_Account_Address->getAddresses();
 
 		foreach ($results as $result) {
 			if ($result['address_format']) {
@@ -199,7 +199,7 @@ class ControllerAccountAddress extends Controller
 		}
 		
 		if (isset($_GET['address_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-			$address_info = $this->model_account_address->getAddress($_GET['address_id']);
+			$address_info = $this->Model_Account_Address->getAddress($_GET['address_id']);
 		}
 	
 		if (isset($_POST['firstname'])) {
@@ -274,7 +274,7 @@ class ControllerAccountAddress extends Controller
 				$this->data['zone_id'] = '';
 		}
 		
-		$this->data['countries'] = $this->model_localisation_country->getCountries();
+		$this->data['countries'] = $this->Model_Localisation_Country->getCountries();
 
 		if (isset($_POST['default'])) {
 				$this->data['default'] = $_POST['default'];
@@ -316,7 +316,7 @@ class ControllerAccountAddress extends Controller
 				$this->error['city'] = $this->_('error_city');
 		}
 		
-		$country_info = $this->model_localisation_country->getCountry($_POST['country_id']);
+		$country_info = $this->Model_Localisation_Country->getCountry($_POST['country_id']);
 		
 		if ($country_info && $country_info['postcode_required'] && (strlen($_POST['postcode']) < 2) || (strlen($_POST['postcode']) > 10)) {
 			$this->error['postcode'] = $this->_('error_postcode');
@@ -335,7 +335,7 @@ class ControllerAccountAddress extends Controller
 
   	private function validateDelete()
   	{
-		if ($this->model_account_address->getTotalAddresses() == 1) {
+		if ($this->Model_Account_Address->getTotalAddresses() == 1) {
 				$this->error['warning'] = $this->_('error_delete');
 		}
 

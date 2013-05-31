@@ -1,6 +1,7 @@
 <?php
 class Document 
 {
+	private $registry;
 	private $title;
 	private $description;
 	private $keywords;
@@ -11,7 +12,13 @@ class Document
 	
 	function __construct($registry)
 	{
-		$this->links = $registry->get('model_design_navigation')->getNavigationLinks();
+		$this->registry = $registry;
+		$this->links = $this->Model_Design_Navigation->getNavigationLinks();
+	}
+	
+	public function __get($key)
+	{
+		return $this->registry->get($key);
 	}
 	
 	public function setTitle($title)

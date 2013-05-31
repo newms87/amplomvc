@@ -1,5 +1,5 @@
 <?php
-class ControllerSaleAffiliate extends Controller 
+class Admin_Controller_Sale_Affiliate extends Controller 
 {
 	
   
@@ -19,7 +19,7 @@ class ControllerSaleAffiliate extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-				$this->model_sale_affiliate->addAffiliate($_POST);
+				$this->Model_Sale_Affiliate->addAffiliate($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 		
@@ -70,7 +70,7 @@ class ControllerSaleAffiliate extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_sale_affiliate->editAffiliate($_GET['affiliate_id'], $_POST);
+			$this->Model_Sale_Affiliate->editAffiliate($_GET['affiliate_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 	
@@ -122,7 +122,7 @@ class ControllerSaleAffiliate extends Controller
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $affiliate_id) {
-				$this->model_sale_affiliate->deleteAffiliate($affiliate_id);
+				$this->Model_Sale_Affiliate->deleteAffiliate($affiliate_id);
 			}
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -179,10 +179,10 @@ class ControllerSaleAffiliate extends Controller
 			$approved = 0;
 			
 			foreach ($_POST['selected'] as $affiliate_id) {
-				$affiliate_info = $this->model_sale_affiliate->getAffiliate($affiliate_id);
+				$affiliate_info = $this->Model_Sale_Affiliate->getAffiliate($affiliate_id);
 				
 				if ($affiliate_info && !$affiliate_info['approved']) {
-					$this->model_sale_affiliate->approve($affiliate_id);
+					$this->Model_Sale_Affiliate->approve($affiliate_id);
 				
 					$approved++;
 				}
@@ -337,9 +337,9 @@ class ControllerSaleAffiliate extends Controller
 			'limit'				=> $this->config->get('config_admin_limit')
 		);
 		
-		$affiliate_total = $this->model_sale_affiliate->getTotalAffiliates($data);
+		$affiliate_total = $this->Model_Sale_Affiliate->getTotalAffiliates($data);
 	
-		$results = $this->model_sale_affiliate->getAffiliates($data);
+		$results = $this->Model_Sale_Affiliate->getAffiliates($data);
  
 		foreach ($results as $result) {
 			$action = array();
@@ -599,7 +599,7 @@ class ControllerSaleAffiliate extends Controller
 		$this->data['cancel'] = $this->url->link('sale/affiliate', $url);
 
 		if (isset($_GET['affiliate_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-				$affiliate_info = $this->model_sale_affiliate->getAffiliate($_GET['affiliate_id']);
+				$affiliate_info = $this->Model_Sale_Affiliate->getAffiliate($_GET['affiliate_id']);
 		}
 			
 		if (isset($_POST['firstname'])) {
@@ -690,7 +690,7 @@ class ControllerSaleAffiliate extends Controller
 				$this->data['country_id'] = '';
 		}
 		
-		$this->data['countries'] = $this->model_localisation_country->getCountries();
+		$this->data['countries'] = $this->Model_Localisation_Country->getCountries();
 				
 		if (isset($_POST['zone_id'])) {
 				$this->data['zone_id'] = $_POST['zone_id'];
@@ -834,7 +834,7 @@ class ControllerSaleAffiliate extends Controller
 				$this->error['email'] = $this->_('error_email');
 		}
 		
-		$affiliate_info = $this->model_sale_affiliate->getAffiliateByEmail($_POST['email']);
+		$affiliate_info = $this->Model_Sale_Affiliate->getAffiliateByEmail($_POST['email']);
 		
 		if (!isset($_GET['affiliate_id'])) {
 			if ($affiliate_info) {
@@ -868,7 +868,7 @@ class ControllerSaleAffiliate extends Controller
 				$this->error['city'] = $this->_('error_city');
 		}
 		
-		$country_info = $this->model_localisation_country->getCountry($_POST['country_id']);
+		$country_info = $this->Model_Localisation_Country->getCountry($_POST['country_id']);
 		
 		if ($country_info && $country_info['postcode_required'] && (strlen($_POST['postcode']) < 2) || (strlen($_POST['postcode']) > 10)) {
 			$this->error['postcode'] = $this->_('error_postcode');
@@ -904,7 +904,7 @@ class ControllerSaleAffiliate extends Controller
 		$this->language->load('sale/affiliate');
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->user->hasPermission('modify', 'sale/affiliate')) {
-			$this->model_sale_affiliate->addTransaction($_GET['affiliate_id'], $_POST['description'], $_POST['amount']);
+			$this->Model_Sale_Affiliate->addTransaction($_GET['affiliate_id'], $_POST['description'], $_POST['amount']);
 				
 			$this->language->set('success', $this->_('text_success'));
 		} else {
@@ -925,7 +925,7 @@ class ControllerSaleAffiliate extends Controller
 		
 		$this->data['transactions'] = array();
 			
-		$results = $this->model_sale_affiliate->getTransactions($_GET['affiliate_id'], ($page - 1) * 10, 10);
+		$results = $this->Model_Sale_Affiliate->getTransactions($_GET['affiliate_id'], ($page - 1) * 10, 10);
 				
 		foreach ($results as $result) {
 			$this->data['transactions'][] = array(
@@ -935,9 +935,9 @@ class ControllerSaleAffiliate extends Controller
 			);
 			}
 		
-		$this->data['balance'] = $this->currency->format($this->model_sale_affiliate->getTransactionTotal($_GET['affiliate_id']), $this->config->get('config_currency'));
+		$this->data['balance'] = $this->currency->format($this->Model_Sale_Affiliate->getTransactionTotal($_GET['affiliate_id']), $this->config->get('config_currency'));
 		
-		$transaction_total = $this->model_sale_affiliate->getTotalTransactions($_GET['affiliate_id']);
+		$transaction_total = $this->Model_Sale_Affiliate->getTotalTransactions($_GET['affiliate_id']);
 			
 		$this->pagination->init();
 		$this->pagination->total = $transaction_total;
@@ -958,7 +958,7 @@ class ControllerSaleAffiliate extends Controller
 				'limit'		=> 20
 			);
 		
-			$results = $this->model_sale_affiliate->getAffiliates($data);
+			$results = $this->Model_Sale_Affiliate->getAffiliates($data);
 			
 			foreach ($results as $result) {
 				$affiliate_data[] = array(

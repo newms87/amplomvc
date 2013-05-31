@@ -1,5 +1,5 @@
 <?php
-class ModelSettingExtension extends Model 
+class Admin_Model_Setting_Extension extends Model 
 {
 	public function getInstalled($type)
 	{

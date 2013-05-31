@@ -8189,8 +8189,7 @@ class TCPDF
 			$this->Error('Don\'t alter the locale before including class file');
 		}
 		//Check for decimal separator
-		if (sprintf('%.1F', 1.0) != '1.0') 
-{
+		if (sprintf('%.1F', 1.0) != '1.0') {
 			setlocale(LC_NUMERIC, 'C');
 		}
 	}
@@ -11536,8 +11535,7 @@ class TCPDF
 			// remove class parent (i.e.: color.red)
 			$color = substr($color, ($dotpos + 1));
 		}
-		if (strlen($color) == 0) 
-{
+		if (strlen($color) == 0) {
 			return false;
 		}
 		// RGB ARRAY
@@ -17669,13 +17667,11 @@ class TCPDF
 		$valid = false; // value to be returned
 		$tag = $dom[$key]['value'];
 		$class = array();
-		if (isset($dom[$key]['attribute']['class']) AND !empty($dom[$key]['attribute']['class'])) 
-{
+		if (isset($dom[$key]['attribute']['class']) AND !empty($dom[$key]['attribute']['class'])) {
 			$class = explode(' ', strtolower($dom[$key]['attribute']['class']));
 		}
 		$id = '';
-		if (isset($dom[$key]['attribute']['id']) AND !empty($dom[$key]['attribute']['id'])) 
-{
+		if (isset($dom[$key]['attribute']['id']) AND !empty($dom[$key]['attribute']['id'])) {
 			$id = strtolower($dom[$key]['attribute']['id']);
 		}
 		$selector = preg_replace('/([\>\+\~\s]{1})([\.]{1})([^\>\+\~\s]*)/si', '\\1*.\\3', $selector);
@@ -17694,8 +17690,7 @@ class TCPDF
 					// check if matches class , id, attribute, pseudo-class or pseudo-element
 					switch ($attrib
 {0}) {
-						case '.': { // class if (in_array(substr($attrib, 1), $class)) 
-{
+						case '.': { // class if (in_array(substr($attrib, 1), $class)) {
 								$valid = true;
 							}
 							break;

@@ -1,13 +1,10 @@
 <?php
 class Plugin{
 	private $registry;
-	private $model_plugin;
 	
 	function __construct($registry)
 	{
 		$this->registry = $registry;
-		
-		$this->model_plugin = new ModelPlugin($registry);
 	}
 	
 	public function __get($key)
@@ -46,7 +43,7 @@ class Plugin{
 				
 				$user_class ->install($controller_adapters, $db_requests);
 				
-				if ($this->system_model_plugin->install($name, $controller_adapters, $db_requests)) {
+				if ($this->System_Model_Plugin->install($name, $controller_adapters, $db_requests)) {
 					$this->message->add('success',sprintf($this->_("success_install"),$name));
 				}
 			}

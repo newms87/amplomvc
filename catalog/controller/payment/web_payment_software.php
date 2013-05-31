@@ -1,5 +1,5 @@
 <?php
-class ControllerPaymentWebPaymentSoftware extends Controller 
+class Catalog_Controller_Payment_WebPaymentSoftware extends Controller 
 {
 	protected function index()
 	{
@@ -32,7 +32,7 @@ class ControllerPaymentWebPaymentSoftware extends Controller
 	
 	public function send()
 	{
-		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
+		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
 		
 		$request  = 'MERCHANT_ID=' . urlencode($this->config->get('web_payment_software_merchant_name'));
 		$request .= '&MERCHANT_KEY=' . urlencode($this->config->get('web_payment_software_merchant_key'));
@@ -86,7 +86,7 @@ class ControllerPaymentWebPaymentSoftware extends Controller
 		
 		//If successful log transaction in opencart system
 		if ('00' === (string)$xml->response_code) {
-			$this->model_checkout_order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
+			$this->Model_Checkout_Order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
 			
 			$message = '';
 			
@@ -126,7 +126,7 @@ class ControllerPaymentWebPaymentSoftware extends Controller
 				$message .= (string)$xml->response_text . "\n";
 			}
 			
-			$this->model_checkout_order->update_order($this->session->data['order_id'], $this->config->get('web_payment_software_order_status_id'), $message, false);
+			$this->Model_Checkout_Order->update_order($this->session->data['order_id'], $this->config->get('web_payment_software_order_status_id'), $message, false);
 			
 			$json['success'] = $this->url->link('checkout/success');
 		} else {
