@@ -42,11 +42,10 @@ class Image {
 					'mime'	=> $info['mime']
 			);
 			
-			//increase the maximum memory limit from the settings
-			$max = isset($this->config)?$this->config->get('config_image_max_mem'):'2G';
-			ini_set('memory_limit',$max);
-			
+			echo 'creating...';
 			$this->image = $this->create($file);
+			echo 'created!';
+			exit;
 		} else {
 			$this->log->write("Error: Could not load image $file!");
 		}
@@ -62,15 +61,27 @@ class Image {
 	private function create($image) {
 		$mime = $this->info['mime'];
 		
+		$shutdown = function($image_class){
+			$max = ini_get('memory_limit');
+			$max_mem = $this->tool->bytes2str(memory_get_peak_usage(true));
+			trigger_error("Server Max Memory limit reached: $max_mem");
+		};
+		
+		register_shutdown_function($shutdown, $this);
+		
+		//increase the maximum memory limit from the settings
+		$max = isset($this->config)?$this->config->get('config_image_max_mem'):'2G';
+		ini_set('memory_limit',$max);
+		
 		if ($mime == 'image/gif') {
 			if(function_exists('imagecreatefromgif'))
-			return imagecreatefromgif($image);
+			return @imagecreatefromgif($image);
 		} elseif ($mime == 'image/png') {
 			if(function_exists('imagecreatefrompng'))
-			return imagecreatefrompng($image);
+			return @imagecreatefrompng($image);
 		} elseif ($mime == 'image/jpeg') {
 			if(function_exists('imagecreatefromjpeg'))
-			return imagecreatefromjpeg($image);
+			return @imagecreatefromjpeg($image);
 		}
 	}
 	
