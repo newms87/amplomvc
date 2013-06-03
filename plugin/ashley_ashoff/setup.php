@@ -1,5 +1,5 @@
 <?php
-class _Setup extends PluginSetup 
+class AshleyAshoff_Setup extends PluginSetup 
 {
 	public function install()
 	{
