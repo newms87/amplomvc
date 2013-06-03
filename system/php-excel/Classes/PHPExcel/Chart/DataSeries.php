@@ -33,7 +33,8 @@
  * @package		PHPExcel_Chart
  * @copyright	Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Chart_DataSeries{
+class PHPExcel_Chart_DataSeries
+{
 
 	const TYPE_BARCHART			= 'barChart';
 	const TYPE_BARCHART_3D		= 'bar3DChart';
@@ -159,8 +160,7 @@ class PHPExcel_Chart_DataSeries{
 	*
 	* @return string
 	*/
-	public function getPlotType()
-	{
+	public function getPlotType() {
 		return $this->_plotType;
 	}
 
@@ -169,8 +169,7 @@ class PHPExcel_Chart_DataSeries{
 	*
 	* @param string $plotType
 	*/
-	public function setPlotType($plotType = '')
-	{
+	public function setPlotType($plotType = '') {
 		$this->_plotType = $plotType;
 	}
 
@@ -179,8 +178,7 @@ class PHPExcel_Chart_DataSeries{
 	*
 	* @return string
 	*/
-	public function getPlotGrouping()
-	{
+	public function getPlotGrouping() {
 		return $this->_plotGrouping;
 	}
 
@@ -189,8 +187,7 @@ class PHPExcel_Chart_DataSeries{
 	*
 	* @param string $groupingType
 	*/
-	public function setPlotGrouping($groupingType = null)
-	{
+	public function setPlotGrouping($groupingType = null) {
 		$this->_plotGrouping = $groupingType;
 	}
 
@@ -199,8 +196,7 @@ class PHPExcel_Chart_DataSeries{
 	*
 	* @return string
 	*/
-	public function getPlotDirection()
-	{
+	public function getPlotDirection() {
 		return $this->_plotDirection;
 	}
 
@@ -209,8 +205,7 @@ class PHPExcel_Chart_DataSeries{
 	*
 	* @param string $plotDirection
 	*/
-	public function setPlotDirection($plotDirection = null)
-	{
+	public function setPlotDirection($plotDirection = null) {
 		$this->_plotDirection = $plotDirection;
 	}
 
@@ -219,8 +214,7 @@ class PHPExcel_Chart_DataSeries{
 	*
 	* @return string
 	*/
-	public function getPlotOrder()
-	{
+	public function getPlotOrder() {
 		return $this->_plotOrder;
 	}
 
@@ -229,8 +223,7 @@ class PHPExcel_Chart_DataSeries{
 	*
 	* @return array of PHPExcel_Chart_DataSeriesValues
 	*/
-	public function getPlotLabels()
-	{
+	public function getPlotLabels() {
 		return $this->_plotLabel;
 	}
 
@@ -239,12 +232,11 @@ class PHPExcel_Chart_DataSeries{
 	*
 	* @return PHPExcel_Chart_DataSeriesValues
 	*/
-	public function getPlotLabelByIndex($index)
-	{
+	public function getPlotLabelByIndex($index) {
 		$keys = array_keys($this->_plotLabel);
 		if (in_array($index,$keys)) {
 			return $this->_plotLabel[$index];
-		} elseif (isset($keys[$index])) {
+		} elseif(isset($keys[$index])) {
 			return $this->_plotLabel[$keys[$index]];
 		}
 		return false;
@@ -255,8 +247,7 @@ class PHPExcel_Chart_DataSeries{
 	*
 	* @return array of PHPExcel_Chart_DataSeriesValues
 	*/
-	public function getPlotCategories()
-	{
+	public function getPlotCategories() {
 		return $this->_plotCategory;
 	}
 
@@ -265,12 +256,11 @@ class PHPExcel_Chart_DataSeries{
 	*
 	* @return PHPExcel_Chart_DataSeriesValues
 	*/
-	public function getPlotCategoryByIndex($index)
-	{
+	public function getPlotCategoryByIndex($index) {
 		$keys = array_keys($this->_plotCategory);
 		if (in_array($index,$keys)) {
 			return $this->_plotCategory[$index];
-		} elseif (isset($keys[$index])) {
+		} elseif(isset($keys[$index])) {
 			return $this->_plotCategory[$keys[$index]];
 		}
 		return false;
@@ -281,8 +271,7 @@ class PHPExcel_Chart_DataSeries{
 	*
 	* @return string
 	*/
-	public function getPlotStyle()
-	{
+	public function getPlotStyle() {
 		return $this->_plotStyle;
 	}
 
@@ -291,8 +280,7 @@ class PHPExcel_Chart_DataSeries{
 	*
 	* @param string $plotStyle
 	*/
-	public function setPlotStyle($plotStyle = null)
-	{
+	public function setPlotStyle($plotStyle = null) {
 		$this->_plotStyle = $plotStyle;
 	}
 
@@ -301,8 +289,7 @@ class PHPExcel_Chart_DataSeries{
 	*
 	* @return array of PHPExcel_Chart_DataSeriesValues
 	*/
-	public function getPlotValues()
-	{
+	public function getPlotValues() {
 		return $this->_plotValues;
 	}
 
@@ -311,12 +298,11 @@ class PHPExcel_Chart_DataSeries{
 	*
 	* @return PHPExcel_Chart_DataSeriesValues
 	*/
-	public function getPlotValuesByIndex($index)
-	{
+	public function getPlotValuesByIndex($index) {
 		$keys = array_keys($this->_plotValues);
 		if (in_array($index,$keys)) {
 			return $this->_plotValues[$index];
-		} elseif (isset($keys[$index])) {
+		} elseif(isset($keys[$index])) {
 			return $this->_plotValues[$keys[$index]];
 		}
 		return false;
@@ -327,8 +313,7 @@ class PHPExcel_Chart_DataSeries{
 	*
 	* @return integer
 	*/
-	public function getPlotSeriesCount()
-	{
+	public function getPlotSeriesCount() {
 		return count($this->_plotValues);
 	}
 
@@ -337,8 +322,7 @@ class PHPExcel_Chart_DataSeries{
 	*
 	* @return boolean
 	*/
-	public function getSmoothLine()
-	{
+	public function getSmoothLine() {
 		return $this->_smoothLine;
 	}
 
@@ -347,14 +331,12 @@ class PHPExcel_Chart_DataSeries{
 	*
 	* @param boolean $smoothLine
 	*/
-	public function setSmoothLine($smoothLine = TRUE)
-	{
+	public function setSmoothLine($smoothLine = TRUE) {
 		$this->_smoothLine = $smoothLine;
 	}
 
-	public function refresh(PHPExcel_Worksheet $worksheet)
-	{
-		foreach ($this->_plotValues as $plotValues) {
+	public function refresh(PHPExcel_Worksheet $worksheet) {
+		foreach($this->_plotValues as $plotValues) {
 			$plotValues->refresh($worksheet);
 		}
 	}

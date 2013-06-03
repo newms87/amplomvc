@@ -1,5 +1,5 @@
 <?php
-class SetupDev extends SetupPlugin 
+class Dev_Setup extends PluginSetup 
 {
 	private $registry;
 	
@@ -10,7 +10,7 @@ class SetupDev extends SetupPlugin
 		define("DEV_NAVIGATION_LINK_NAME", 'system_development');
 	}
 	
-	public function install(&$controller_adapters, &$db_requests)
+	public function install()
 	{
 		$link = array(
 			'display_name' => "Development",

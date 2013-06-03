@@ -51,8 +51,7 @@ class Catalog_Controller_Common_ColumnRight extends Controller
 		$this->data['blocks'] = array();
 		
 		foreach ($blocks as $key => $block) {
-			list($context, $name) = explode('/', $key);
-			$this->data['blocks'][] = $this->getBlock($context, $name);
+			$this->data['blocks'][] = $this->getBlock($key);
 		}
 		
 		$this->render();

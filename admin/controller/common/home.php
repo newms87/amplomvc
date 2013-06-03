@@ -3,10 +3,7 @@ class Admin_Controller_Common_Home extends Controller
 {
 	public function index()
 	{
-		if ($this->user->isDesigner()) {
-			$this->template->load('common/home_restricted');
-		}
-		
+		$this->template->load('common/home');
 		$this->load->language('common/home');
 		
 		if ($this->user->isDesigner()) {

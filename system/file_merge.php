@@ -25,12 +25,33 @@ if ($entries) {
 
 function _require_once($file)
 {
+	global $registry;
+	static $plugin_registry = false;
+	static $plugin = null;
+	
+	//Validate Plugin files
+	if (!$plugin_registry) {
+		if ($registry && $registry->has('plugin')) {
+			$plugin = $registry->get("plugin");
+			$plugin_registry = $plugin->getPluginRegistry();
+		}
+	} else {
+		if (isset($plugin_registry[$file])) {
+			if (!$plugin->syncPluginFileWithLive($plugin_registry[$file])) {
+				$plugin->requestDevelopmentMode();
+			}
+		}
+	}
+	
 	global $merge_registry;
 	if (isset($merge_registry[$file])) {
 		$count = 0;
+		
 		$file = str_replace(SITE_DIR, DIR_MERGED_FILES, $file, $count);
-		if($count == 0)
+		
+		if($count == 0){
 			$file = DIR_MERGED_FILES . $file;
+		}
 	}
 	
 	require_once($file);

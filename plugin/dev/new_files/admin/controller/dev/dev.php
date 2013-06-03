@@ -1,10 +1,9 @@
 <?php
-class ControllerDevDev extends Controller 
+class Admin_Controller_Dev_Dev extends Controller 
 {
 	public function index()
 	{
 		$this->template->load('dev/dev');
-		
 		$this->language->load('dev/dev');
 		
 		$this->document->setTitle($this->_('heading_title'));

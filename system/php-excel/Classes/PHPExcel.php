@@ -40,7 +40,8 @@ if (!defined('PHPEXCEL_ROOT')) {
  * @package	PHPExcel
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel{
+class PHPExcel
+{
 	/**
 	* Document properties
 	*
@@ -131,9 +132,8 @@ class PHPExcel{
 	*	typically so that the PHPExcel object can be unset
 	*
 	*/
-	public function disconnectWorksheets()
-	{
-		foreach ($this->_workSheetCollection as $k => &$worksheet) {
+	public function disconnectWorksheets() {
+		foreach($this->_workSheetCollection as $k => &$worksheet) {
 			$worksheet->disconnectCells();
 			$this->_workSheetCollection[$k] = null;
 		}
@@ -215,7 +215,7 @@ class PHPExcel{
 	*/
 	public function addSheet(PHPExcel_Worksheet $pSheet = null, $iSheetIndex = null)
 	{
-		if ($iSheetIndex === NULL) {
+		if($iSheetIndex === NULL) {
 				$this->_workSheetCollection[] = $pSheet;
 		} else {
 				// Insert the sheet at the requested index
@@ -419,8 +419,7 @@ class PHPExcel{
 	* @throws Exception
 	* @return PHPExcel_Worksheet
 	*/
-	public function addExternalSheet(PHPExcel_Worksheet $pSheet, $iSheetIndex = null)
-	{
+	public function addExternalSheet(PHPExcel_Worksheet $pSheet, $iSheetIndex = null) {
 		if ($this->getSheetByName($pSheet->getTitle()) !== NULL) {
 			throw new Exception("Workbook already contains a worksheet named '{$pSheet->getTitle()}'. Rename the external sheet first.");
 		}
@@ -450,8 +449,7 @@ class PHPExcel{
 	*
 	* @return PHPExcel_NamedRange[]
 	*/
-	public function getNamedRanges()
-	{
+	public function getNamedRanges() {
 		return $this->_namedRanges;
 	}
 
@@ -461,8 +459,7 @@ class PHPExcel{
 	* @param PHPExcel_NamedRange $namedRange
 	* @return PHPExcel
 	*/
-	public function addNamedRange(PHPExcel_NamedRange $namedRange)
-	{
+	public function addNamedRange(PHPExcel_NamedRange $namedRange) {
 		if ($namedRange->getScope() == null) {
 			// global scope
 			$this->_namedRanges[$namedRange->getName()] = $namedRange;
@@ -480,8 +477,7 @@ class PHPExcel{
 	* @param PHPExcel_Worksheet|null $pSheet Scope. Use null for global scope
 	* @return PHPExcel_NamedRange|null
 	*/
-	public function getNamedRange($namedRange, PHPExcel_Worksheet $pSheet = null)
-	{
+	public function getNamedRange($namedRange, PHPExcel_Worksheet $pSheet = null) {
 		$returnValue = null;
 
 		if ($namedRange != '' && ($namedRange !== NULL)) {
@@ -506,8 +502,7 @@ class PHPExcel{
 	* @param  PHPExcel_Worksheet|null  $pSheet  Scope: use null for global scope.
 	* @return PHPExcel
 	*/
-	public function removeNamedRange($namedRange, PHPExcel_Worksheet $pSheet = null)
-	{
+	public function removeNamedRange($namedRange, PHPExcel_Worksheet $pSheet = null) {
 		if ($pSheet === NULL) {
 			if (isset($this->_namedRanges[$namedRange])) {
 				unset($this->_namedRanges[$namedRange]);
@@ -525,8 +520,7 @@ class PHPExcel{
 	*
 	* @return PHPExcel_WorksheetIterator
 	*/
-	public function getWorksheetIterator()
-	{
+	public function getWorksheetIterator() {
 		return new PHPExcel_WorksheetIterator($this);
 	}
 
@@ -535,8 +529,7 @@ class PHPExcel{
 	*
 	* @return PHPExcel
 	*/
-	public function copy()
-	{
+	public function copy() {
 		$copied = clone $this;
 
 		$worksheetCount = count($this->_workSheetCollection);
@@ -551,9 +544,8 @@ class PHPExcel{
 	/**
 	* Implement PHP __clone to create a deep clone, not just a shallow copy.
 	*/
-	public function __clone()
-	{
-		foreach ($this as $key => $val) {
+	public function __clone() {
+		foreach($this as $key => $val) {
 			if (is_object($val) || (is_array($val))) {
 				$this->{$key} = unserialize(serialize($val));
 			}

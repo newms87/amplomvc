@@ -33,7 +33,8 @@
  * @package	PHPExcel_Cell
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Cell_DataValidation{
+class PHPExcel_Cell_DataValidation
+{
 	/* Data validation types */
 	const TYPE_NONE			= 'none';
 	const TYPE_CUSTOM		= 'custom';
@@ -178,8 +179,7 @@ class PHPExcel_Cell_DataValidation{
 	*
 	* @return string
 	*/
-	public function getFormula1()
-	{
+	public function getFormula1() {
 		return $this->_formula1;
 	}
 
@@ -189,8 +189,7 @@ class PHPExcel_Cell_DataValidation{
 	* @param	string	$value
 	* @return PHPExcel_Cell_DataValidation
 	*/
-	public function setFormula1($value = '')
-	{
+	public function setFormula1($value = '') {
 		$this->_formula1 = $value;
 		return $this;
 	}
@@ -200,8 +199,7 @@ class PHPExcel_Cell_DataValidation{
 	*
 	* @return string
 	*/
-	public function getFormula2()
-	{
+	public function getFormula2() {
 		return $this->_formula2;
 	}
 
@@ -211,8 +209,7 @@ class PHPExcel_Cell_DataValidation{
 	* @param	string	$value
 	* @return PHPExcel_Cell_DataValidation
 	*/
-	public function setFormula2($value = '')
-	{
+	public function setFormula2($value = '') {
 		$this->_formula2 = $value;
 		return $this;
 	}
@@ -222,8 +219,7 @@ class PHPExcel_Cell_DataValidation{
 	*
 	* @return string
 	*/
-	public function getType()
-	{
+	public function getType() {
 		return $this->_type;
 	}
 
@@ -233,8 +229,7 @@ class PHPExcel_Cell_DataValidation{
 	* @param	string	$value
 	* @return PHPExcel_Cell_DataValidation
 	*/
-	public function setType($value = PHPExcel_Cell_DataValidation::TYPE_NONE)
-	{
+	public function setType($value = PHPExcel_Cell_DataValidation::TYPE_NONE) {
 		$this->_type = $value;
 		return $this;
 	}
@@ -244,8 +239,7 @@ class PHPExcel_Cell_DataValidation{
 	*
 	* @return string
 	*/
-	public function getErrorStyle()
-	{
+	public function getErrorStyle() {
 		return $this->_errorStyle;
 	}
 
@@ -255,8 +249,7 @@ class PHPExcel_Cell_DataValidation{
 	* @param	string	$value
 	* @return PHPExcel_Cell_DataValidation
 	*/
-	public function setErrorStyle($value = PHPExcel_Cell_DataValidation::STYLE_STOP)
-	{
+	public function setErrorStyle($value = PHPExcel_Cell_DataValidation::STYLE_STOP) {
 		$this->_errorStyle = $value;
 		return $this;
 	}
@@ -266,8 +259,7 @@ class PHPExcel_Cell_DataValidation{
 	*
 	* @return string
 	*/
-	public function getOperator()
-	{
+	public function getOperator() {
 		return $this->_operator;
 	}
 
@@ -277,8 +269,7 @@ class PHPExcel_Cell_DataValidation{
 	* @param	string	$value
 	* @return PHPExcel_Cell_DataValidation
 	*/
-	public function setOperator($value = '')
-	{
+	public function setOperator($value = '') {
 		$this->_operator = $value;
 		return $this;
 	}
@@ -288,8 +279,7 @@ class PHPExcel_Cell_DataValidation{
 	*
 	* @return boolean
 	*/
-	public function getAllowBlank()
-	{
+	public function getAllowBlank() {
 		return $this->_allowBlank;
 	}
 
@@ -299,8 +289,7 @@ class PHPExcel_Cell_DataValidation{
 	* @param	boolean	$value
 	* @return PHPExcel_Cell_DataValidation
 	*/
-	public function setAllowBlank($value = false)
-	{
+	public function setAllowBlank($value = false) {
 		$this->_allowBlank = $value;
 		return $this;
 	}
@@ -310,8 +299,7 @@ class PHPExcel_Cell_DataValidation{
 	*
 	* @return boolean
 	*/
-	public function getShowDropDown()
-	{
+	public function getShowDropDown() {
 		return $this->_showDropDown;
 	}
 
@@ -321,8 +309,7 @@ class PHPExcel_Cell_DataValidation{
 	* @param	boolean	$value
 	* @return PHPExcel_Cell_DataValidation
 	*/
-	public function setShowDropDown($value = false)
-	{
+	public function setShowDropDown($value = false) {
 		$this->_showDropDown = $value;
 		return $this;
 	}
@@ -332,8 +319,7 @@ class PHPExcel_Cell_DataValidation{
 	*
 	* @return boolean
 	*/
-	public function getShowInputMessage()
-	{
+	public function getShowInputMessage() {
 		return $this->_showInputMessage;
 	}
 
@@ -343,8 +329,7 @@ class PHPExcel_Cell_DataValidation{
 	* @param	boolean	$value
 	* @return PHPExcel_Cell_DataValidation
 	*/
-	public function setShowInputMessage($value = false)
-	{
+	public function setShowInputMessage($value = false) {
 		$this->_showInputMessage = $value;
 		return $this;
 	}
@@ -354,8 +339,7 @@ class PHPExcel_Cell_DataValidation{
 	*
 	* @return boolean
 	*/
-	public function getShowErrorMessage()
-	{
+	public function getShowErrorMessage() {
 		return $this->_showErrorMessage;
 	}
 
@@ -365,8 +349,7 @@ class PHPExcel_Cell_DataValidation{
 	* @param	boolean	$value
 	* @return PHPExcel_Cell_DataValidation
 	*/
-	public function setShowErrorMessage($value = false)
-	{
+	public function setShowErrorMessage($value = false) {
 		$this->_showErrorMessage = $value;
 		return $this;
 	}
@@ -376,8 +359,7 @@ class PHPExcel_Cell_DataValidation{
 	*
 	* @return string
 	*/
-	public function getErrorTitle()
-	{
+	public function getErrorTitle() {
 		return $this->_errorTitle;
 	}
 
@@ -387,8 +369,7 @@ class PHPExcel_Cell_DataValidation{
 	* @param	string	$value
 	* @return PHPExcel_Cell_DataValidation
 	*/
-	public function setErrorTitle($value = '')
-	{
+	public function setErrorTitle($value = '') {
 		$this->_errorTitle = $value;
 		return $this;
 	}
@@ -398,8 +379,7 @@ class PHPExcel_Cell_DataValidation{
 	*
 	* @return string
 	*/
-	public function getError()
-	{
+	public function getError() {
 		return $this->_error;
 	}
 
@@ -409,8 +389,7 @@ class PHPExcel_Cell_DataValidation{
 	* @param	string	$value
 	* @return PHPExcel_Cell_DataValidation
 	*/
-	public function setError($value = '')
-	{
+	public function setError($value = '') {
 		$this->_error = $value;
 		return $this;
 	}
@@ -420,8 +399,7 @@ class PHPExcel_Cell_DataValidation{
 	*
 	* @return string
 	*/
-	public function getPromptTitle()
-	{
+	public function getPromptTitle() {
 		return $this->_promptTitle;
 	}
 
@@ -431,8 +409,7 @@ class PHPExcel_Cell_DataValidation{
 	* @param	string	$value
 	* @return PHPExcel_Cell_DataValidation
 	*/
-	public function setPromptTitle($value = '')
-	{
+	public function setPromptTitle($value = '') {
 		$this->_promptTitle = $value;
 		return $this;
 	}
@@ -442,8 +419,7 @@ class PHPExcel_Cell_DataValidation{
 	*
 	* @return string
 	*/
-	public function getPrompt()
-	{
+	public function getPrompt() {
 		return $this->_prompt;
 	}
 
@@ -453,8 +429,7 @@ class PHPExcel_Cell_DataValidation{
 	* @param	string	$value
 	* @return PHPExcel_Cell_DataValidation
 	*/
-	public function setPrompt($value = '')
-	{
+	public function setPrompt($value = '') {
 		$this->_prompt = $value;
 		return $this;
 	}
@@ -464,8 +439,7 @@ class PHPExcel_Cell_DataValidation{
 	*
 	* @return string	Hash code
 	*/
-	public function getHashCode()
-	{
+	public function getHashCode() {
 		return md5(
 			$this->_formula1
 			. $this->_formula2
@@ -480,15 +454,14 @@ class PHPExcel_Cell_DataValidation{
 			. $this->_error
 			. $this->_promptTitle
 			. $this->_prompt
-			. __class __
+			. __CLASS__
 		);
 	}
 
 	/**
 	* Implement PHP __clone to create a deep clone, not just a shallow copy.
 	*/
-	public function __clone()
-	{
+	public function __clone() {
 		$vars = get_object_vars($this);
 		foreach ($vars as $key => $value) {
 			if (is_object($value)) {

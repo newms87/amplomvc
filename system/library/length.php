@@ -8,11 +8,11 @@ class Length
 		$this->db = $registry->get('db');
 		$this->config = $registry->get('config');
 
-		$length_class _query = $this->db->query("SELECT * FROM " . DB_PREFIX . "length_class mc LEFT JOIN " . DB_PREFIX . "length_class_description mcd ON (mc.length_class_id = mcd.length_class_id) WHERE mcd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
+		$length_class_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "length_class mc LEFT JOIN " . DB_PREFIX . "length_class_description mcd ON (mc.length_class_id = mcd.length_class_id) WHERE mcd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
 	
 		foreach ($length_class_query->rows as $result) 
 {
-				$this->lengths[$result['length_class _id']] = array(
+				$this->lengths[$result['length_class_id']] = array(
 				'length_class_id' => $result['length_class_id'],
 				'title'			=> $result['title'],
 				'unit'				=> $result['unit'],
@@ -42,10 +42,10 @@ class Length
 			return $value * ($to / $from);
   	}
 
-	public function format($value, $length_class _id, $decimal_point = '.', $thousand_point = ',')
+	public function format($value, $length_class_id, $decimal_point = '.', $thousand_point = ',')
 	{
-		if (isset($this->lengths[$length_class _id])) {
-			return number_format($value, 2, $decimal_point, $thousand_point) . $this->lengths[$length_class _id]['unit'];
+		if (isset($this->lengths[$length_class_id])) {
+			return number_format($value, 2, $decimal_point, $thousand_point) . $this->lengths[$length_class_id]['unit'];
 		} else {
 			return number_format($value, 2, $decimal_point, $thousand_point);
 		}

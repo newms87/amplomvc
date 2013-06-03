@@ -142,7 +142,7 @@ class Admin_Controller_Block_Block extends Controller
 		
 		$name = $_GET['name'];
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+		if (($_SERVER['REQUEST_METHOD'] === 'POST') && $this->validate()) {
 			$this->Model_Block_Block->updateBlock($name, $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -157,10 +157,9 @@ class Admin_Controller_Block_Block extends Controller
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('block/block','name=' . $name));
 
 		$this->data['action'] = $this->url->link('block/block','name=' . $name);
-		
 		$this->data['cancel'] = $this->url->link('block/block');
 
-		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			$this->data['profiles'] = isset($_POST['profiles']) ? $_POST['profiles'] : array();
 			$this->data['settings'] = isset($_POST['settings']) ? $_POST['settings'] : array();
 		} else {
@@ -169,17 +168,11 @@ class Admin_Controller_Block_Block extends Controller
 			if (!empty($block)) {
 				$this->data['profiles'] = $block['profiles'];
 				$this->data['settings'] = $block['settings'];
+			} else {
+				$this->data['settings'] = array();
+				$this->data['profiles'] = array();
 			}
 		}
-		
-		if (empty($this->data['settings'])) {
-			$this->data['settings'] = array();
-		}
-		
-		if (empty($this->data['profiles'])) {
-			$this->data['profiles'] = array();
-		}
-		
 		
 		$defaults = array(
 			'status' => 1,
@@ -188,20 +181,30 @@ class Admin_Controller_Block_Block extends Controller
 		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
 				$this->data[$key] = $_POST[$key];
-			}
-			elseif (isset($block[$key])) {
+			} elseif (isset($block[$key])) {
 				$this->data[$key] = $block[$key];
-			}
-			else {
+			} else {
 				$this->data[$key] = $default;
 			}
 		}
 		
 		//Get additional Block settings and profile data (this is the plugin part)
-		$this->load_block_data();
+		$this->loadBlockData();
 		
-		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
-		$this->data['data_layouts'] = $this->Model_Design_Layout->getLayouts();
+		$sort_store = array(
+			'sort' => 'name',
+			'order' => 'ASC',
+		);
+		
+		$this->data['data_stores'] = $this->Model_Setting_Store->getStores($sort_store);
+		
+		$sort_layout = array(
+			'sort' => 'name',
+			'order' => 'ASC',
+		);
+		
+		$this->data['data_layouts'] = $this->Model_Design_Layout->getLayouts($sort_layout);
+		
 		$this->data['data_positions'] = array('' => $this->_('text_none')) + $this->theme->get_setting('data_positions');
 		
 		$this->children = array(
@@ -212,38 +215,28 @@ class Admin_Controller_Block_Block extends Controller
 		$this->response->setOutput($this->render());
 	}
 	
-	private function load_block_controller()
+	private function loadBlockController()
 	{
-		if($this->block_controller) return;
+		if($this->block_controller || empty($_GET['name'])) return;
 		
 		$path = $_GET['name'];
-		$file = DIR_APPLICATION . 'controller/block/' . $path . '.php';
-		$class = "ControllerBlock" . preg_replace("/[^A-Z0-9]/i",'',$path);
-		$class_path = 'block/' . $path;
-	
-		if (file_exists($file)) {
-			_require_once($file);
-
-			$this->block_controller = new $class ($class_path, $this->registry);
-		} else {
-			trigger_error('Error: Could not load block controller ' . $path . '!');
-			exit();
-		}
+		
+		$action = new Action($this->registry, 'block/' . $path);
+		
+		$this->block_controller = $action->getController();
 	}
 	
-	private function load_block_data()
+	private function loadBlockData()
 	{
-		$this->load_block_controller();
+		$this->loadBlockController();
 		
-		$method = 'settings';
-		if (method_exists($this->block_controller, $method)) {
-			$this->block_controller->$method($this->data['settings']);
+		if (method_exists($this->block_controller, 'settings')) {
+			$this->block_controller->settings($this->data['settings']);
 			$this->data['extend_settings'] = $this->block_controller->output;
 		}
-		
-		$method = 'profile';
-		if (method_exists($this->block_controller, $method)) {
-			$this->block_controller->$method($this->data['profiles']);
+				
+		if (method_exists($this->block_controller, 'profile')) {
+			$this->block_controller->profile($this->data['profiles']);
 			$this->data['extend_profile'] = $this->block_controller->output;
 		}
 	}
@@ -261,12 +254,10 @@ class Admin_Controller_Block_Block extends Controller
 	
 	private function validate_block_data()
 	{
-		$this->load_block_controller();
+		$this->loadBlockController();
 		
-		$method = 'validate';
-		
-		if (method_exists($this->block_controller, $method)) {
-			$this->error += $this->block_controller->$method();
+		if (method_exists($this->block_controller, 'validate')) {
+			$this->error += $this->block_controller->validate();
 		}
 	}
 }

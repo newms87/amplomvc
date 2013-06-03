@@ -33,7 +33,8 @@
  * @package	PHPExcel_Writer_Excel2007
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Writer_Excel2007_Worksheet extends PHPExcel_Writer_Excel2007_WriterPart{
+class PHPExcel_Writer_Excel2007_Worksheet extends PHPExcel_Writer_Excel2007_WriterPart
+{
 	/**
 	* Write worksheet to XML format
 	*
@@ -344,7 +345,7 @@ class PHPExcel_Writer_Excel2007_Worksheet extends PHPExcel_Writer_Excel2007_Writ
 	private function _writeCols(PHPExcel_Shared_XMLWriter $objWriter = null, PHPExcel_Worksheet $pSheet = null)
 	{
 		// cols
-		if (count($pSheet->getColumnDimensions()) > 0) {
+		if (count($pSheet->getColumnDimensions()) > 0)  {
 			$objWriter->startElement('cols');
 
 				$pSheet->calculateColumnWidths();
@@ -890,7 +891,7 @@ class PHPExcel_Writer_Excel2007_Worksheet extends PHPExcel_Writer_Excel2007_Writ
 				}
 
 				$currentRow = 0;
-				while ($currentRow++ < $highestRow) {
+				while($currentRow++ < $highestRow) {
 					// Get row dimension
 					$rowDimension = $pSheet->getRowDimension($currentRow);
 
@@ -937,7 +938,7 @@ class PHPExcel_Writer_Excel2007_Worksheet extends PHPExcel_Writer_Excel2007_Writ
 
 						// Write cells
 						if (isset($cellsByRow[$currentRow])) {
-							foreach ($cellsByRow[$currentRow] as $cellAddress) {
+							foreach($cellsByRow[$currentRow] as $cellAddress) {
 								// Write cell
 								$this->_writeCell($objWriter, $pSheet, $cellAddress, $pStringTable, $aFlippedStringTable);
 							}
@@ -1029,7 +1030,7 @@ class PHPExcel_Writer_Excel2007_Worksheet extends PHPExcel_Writer_Excel2007_Writ
 						break;
 					case 'f':			// Formula
 						$attributes = $pCell->getFormulaAttributes();
-						if ($attributes['t'] == 'array') {
+						if($attributes['t'] == 'array') {
 							$objWriter->startElement('f');
 							$objWriter->writeAttribute('t', 'array');
 							$objWriter->writeAttribute('ref', $pCellAddress);

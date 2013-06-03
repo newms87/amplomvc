@@ -54,7 +54,7 @@ class Admin_Controller_Setting_Setting extends Controller
 			'config_use_macro_languages' => 0,
 			'config_currency',
 			'config_currency_auto',
-			'config_length_class _id',
+			'config_length_class_id',
 			'config_weight_class_id',
 			'config_catalog_limit',
 			'config_admin_limit',
@@ -194,7 +194,7 @@ class Admin_Controller_Setting_Setting extends Controller
 						
 		$this->data['currencies'] = $this->Model_Localisation_Currency->getCurrencies();
 		
-		$this->data['length_class es'] = $this->Model_Localisation_LengthClass->getLengthClasses();
+		$this->data['length_classes'] = $this->Model_Localisation_LengthClass->getLengthClasses();
 		
 		$this->data['weight_classes'] = $this->Model_Localisation_WeightClass->getWeightClasses();
 		

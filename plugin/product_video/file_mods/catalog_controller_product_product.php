@@ -1,6 +1,6 @@
 //=====
 <?php
-class ControllerProductProduct extends Controller 
+class _CatalogControllerProductProduct extends Controller 
 {
 	
 	public function index()
@@ -16,7 +16,7 @@ class ControllerProductProduct extends Controller
 			$this->data['manufacturer_url'] = $this->url->link('designers/designers', 'designer_id=' . $product_info['manufacturer_id']);
 			
 			if ($this->config->get('config_share_status')) {
-				$this->data['block_sharing'] = $this->getBlock('extras', 'sharing');
+				$this->data['block_sharing'] = $this->getBlock('extras/sharing');
 			}
 		}
 		else {
@@ -24,7 +24,7 @@ class ControllerProductProduct extends Controller
 //=====
 		//Product Flashsale
 		if (isset($flashsale_info) && $flashsale_info) {
-			$this->data['block_product_flashsale_countdown'] = $this->getBlock('product', 'flashsale_countdown', array($flashsale_info));
+			$this->data['block_product_flashsale_countdown'] = $this->getBlock('product/flashsale_countdown', array('flashsale_info' => $flashsale_info));
 		}
 //-----
 //>>>>> {before} {php}

@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Payment_PpStandard extends Controller 
 {
-	protected function index()
+	public function index()
 	{
 		$this->language->load('payment/pp_standard');
 		

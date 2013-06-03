@@ -32,21 +32,24 @@ abstract class Controller
 	}
 
 	//TODO: move this to block plugin!
-	protected function getBlock($context, $name, $args = array()){
-		$block = $context . '/block/' . $name;
+	protected function getBlock($path, $args = array())
+	{
+		$block = 'block/' . $path;
 		
 		if (!is_array($args)) {
-			trigger_error('Error: In Controller ' . get_class ($this) . ' while retreiving block ' . $block . ' - $args passed to Controller::getBlock() must be an array of parameters to be passed to the block method');
+			trigger_error('Error: In Controller ' . get_class($this) . ' while retreiving block ' . $block . ' - $args passed to Controller::getBlock() must be an array of parameters to be passed to the block method. ' . get_caller());
 			exit();
 		}
 		
-		$params = array('settings' => $this->Model_Block_Block->getBlockSettings($context . '/' . $name));
+		$block_settings = $this->Model_Block_Block->getBlockSettings($path);
 		
-		foreach ($args as $a) {
-			$params[] = $a;
+		$settings = $args;
+		
+		if (!empty($block_settings)) {
+			$settings += $block_settings;
 		}
 		
-		$action = new Action($this->registry, $block, $params);
+		$action = new Action($this->registry, $block, array('settings' => $settings));
 		
 		if ($action->execute()) {
 			return $action->getOutput();
@@ -56,11 +59,15 @@ abstract class Controller
 	}
 	
 	//TODO: Get rid of Modules!!
-	protected function getModule($name, $settings = array()){
+	protected function getModule($name, $settings = array())
+	{
+		trigger_error("Modules have been deprecated! Move to Plugins...");
+		exit;
+		
 		$module = 'module/' . $name;
 		
 		if (!is_array($settings)) {
-			trigger_error('Error: ' . get_class ($this) . '::getModule(): $settings must be an array! Usage $this->getModule(\'module_name\', array($setting1, $setting2, ...))');
+			trigger_error('Error: ' . get_class($this) . '::getModule(): $settings must be an array! Usage $this->getModule(\'module_name\', array($setting1, $setting2, ...))');
 			echo get_caller(2);
 			exit();
 		}
@@ -74,7 +81,7 @@ abstract class Controller
 		if (file_exists($file)) {
 			_require_once($file);
 
-			$controller = new $class ($class_path, $this->registry);
+			$controller = new $class($class_path, $this->registry);
 
 			call_user_func_array(array($controller, $method), array($settings));
 			
@@ -97,9 +104,7 @@ abstract class Controller
 	}
 	
 	protected function render()
-	{
-		$this->plugin_handler->call_controller_adapter($this);
-		
+	{	
 		//Build Errors
 		$this->data['errors'] = array();
 		if ($this->error) {
@@ -116,33 +121,9 @@ abstract class Controller
 			$this->data[basename($child)] = $this->getChild($child);
 		}
 		
-		//Render View
-		$file = $this->template->get_file();
+		$this->template->set_data($this->data);
 		
-		if (!is_file($file)) {
-			trigger_error("Controller::render(): The template $file could not be found. Unable to render! " . get_caller());
-			exit;
-		}
-		
-		//TODO: Do we want plugins to modify templates in this way!?
-		// The plugins can only modify for default template... does this make sense? just use a new template?
-		// Maybe the plugin template overrides the default template (when requested by plugin)? 
-		
-		//if there are plugins that have modified this template,
-		//we use the merged version of this file
-		$file = $this->plugin_handler->get_file($file);
-		
-		//extract the data so it is accessible in the template file
-		extract($this->data);
-		
-		//render the file
-		ob_start();
-		
-  		require($file);
-		
-  		$this->output = ob_get_contents();
-			
-		ob_end_clean();
+		$this->output = $this->template->render();
 		
 		return $this->output;
 	}

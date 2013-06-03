@@ -1,7 +1,7 @@
 <?php
-class SetupAshleyAshoff extends SetupPlugin 
+class _Setup extends PluginSetup 
 {
-	public function install(&$controller_adapters, &$db_requests)
+	public function install()
 	{
 	}
 	

@@ -27,7 +27,7 @@ $patterns = array("\u0438\u0306", "\u0435\u0308", "\u0418\u0306", "\u0415\u0308"
 $replace  = array("\u0439",		"\u0451",		"\u0419",		"\u0401",		"\u00d8", "\u00c5");
 
 
-foreach (scandir($path) as $f) {
+foreach(scandir($path) as $f) {
 	if ($f != '.' && $f != '..' && substr($f, 0, 1) != '.') {
 		
 		// echo mb_detect_encoding($f);

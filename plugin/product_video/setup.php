@@ -1,5 +1,5 @@
 <?php
-class SetupProductVideo implements SetupPlugin 
+class _Setup implements PluginSetup 
 {
 
 	public function install($registry, &$controller_adapters, &$db_requests)

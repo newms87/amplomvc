@@ -44,7 +44,7 @@ class Admin_Controller_Shipping_Flat extends Controller
 			}
 		}
 		
-		$this->data['data_tax_class es'] = $this->Model_Localisation_TaxClass->getTaxClasses();
+		$this->data['data_tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
 		
 		$this->data['data_geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 								

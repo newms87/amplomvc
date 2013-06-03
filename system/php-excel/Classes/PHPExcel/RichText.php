@@ -33,7 +33,8 @@
  * @package	PHPExcel_RichText
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_RichText implements PHPExcel_IComparable{
+class PHPExcel_RichText implements PHPExcel_IComparable
+{
 	/**
 	* Rich text elements
 	*
@@ -131,8 +132,7 @@ class PHPExcel_RichText implements PHPExcel_IComparable{
 	*
 	* @return string
 	*/
-	public function __toString()
-	{
+	public function __toString() {
 		return $this->getPlainText();
 	}
 
@@ -168,8 +168,7 @@ class PHPExcel_RichText implements PHPExcel_IComparable{
 	*
 	* @return string	Hash code
 	*/
-	public function getHashCode()
-	{
+	public function getHashCode() {
 		$hashElements = '';
 		foreach ($this->_richTextElements as $element) {
 			$hashElements .= $element->getHashCode();
@@ -177,15 +176,14 @@ class PHPExcel_RichText implements PHPExcel_IComparable{
 
 		return md5(
 			$hashElements
-			. __class __
+			. __CLASS__
 		);
 	}
 
 	/**
 	* Implement PHP __clone to create a deep clone, not just a shallow copy.
 	*/
-	public function __clone()
-	{
+	public function __clone() {
 		$vars = get_object_vars($this);
 		foreach ($vars as $key => $value) {
 			if (is_object($value)) {

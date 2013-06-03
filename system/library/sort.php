@@ -25,7 +25,7 @@ class Sort
 			0 => 'all'
 		);
 		
-		$this->language_data = $this->language->fetch('library/sort');
+		$this->language_data = $this->language->system_fetch('sort');
 	}
 	
 	public function __get($key)
@@ -64,7 +64,7 @@ class Sort
 	public function render_sort($sorts)
 	{
 		if (!$this->sort_template) {
-			$template = 'widget/sort';
+			$template = 'block/widget/sort';
 		}
 		
 		$template_file = $this->template->find_file($template);
@@ -105,7 +105,7 @@ class Sort
 	public function render_limit($limits = null)
 	{
 		if (!$this->limit_template) {
-			$template = 'widget/limit';
+			$template = 'block/widget/limit';
 		}
 		
 		$template_file = $this->template->find_file($template);

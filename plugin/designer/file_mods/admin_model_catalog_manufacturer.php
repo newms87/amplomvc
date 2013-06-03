@@ -1,6 +1,6 @@
 =====
 <?php
-class ModelCatalogManufacturer extends Model 
+class _AdminModelCatalogManufacturer extends Model 
 {
 	public function addManufacturer($data)
 	{

@@ -160,14 +160,58 @@ class Language
 		return $this->data[$key] = vsprintf($this->orig_data[$key],$values);
 	}
 	
+	public function system($filename)
+	{
+		$file = DIR_SYSTEM . 'language/' . $this->directory . '/' . $filename . '.php';
+		
+		if (!is_file($file)) {
+			$file = DIR_SYSTEM . 'language/' . $this->default . '/' . $filename . '.php';
+			
+			if (!is_file($file)) {
+				trigger_error('Could not load system language file ' . $filename . '!');
+				
+				return null;
+			}
+		}
+		
+		$_ = array();
+		
+		require($file);
+		
+		$this->data = $_ + $this->data;
+		
+		return $this->data;
+	}
+	
+	public function system_fetch($filename, $directory = null)
+	{
+		$directory = !empty($directory) ? $directory : $this->directory;
+		
+		$file = DIR_SYSTEM . 'language/' . $directory . '/' . $filename . '.php';
+		
+		if (!file_exists($file)) {
+			$file = DIR_SYSTEM . 'language/' . $this->default . '/' . $filename . '.php';
+			
+			if (!file_exists($file)) {
+				trigger_error("The langauge file was not found for $filename in $directory! " . get_caller());
+				exit();
+			}
+		}
+		
+		$_ = array();
+		
+		require($file);
+		
+		return $_;
+	}
+	
 	public function plugin($name, $filename)
 	{
-		
 		$file = DIR_PLUGIN . $name . '/language/' . $filename . '.php';
 		
 		if (!file_exists($file)) {
 			if (!file_exists($file)) {
-				trigger_error('Error: Could not load plugin language for plugin ' . $name . ': ' . $filename . '!');
+				trigger_error('The plugin language file was not found for the plugin ' . $name . ': ' . $filename . '!');
 			}
 		}
 		
@@ -271,8 +315,7 @@ class Language
 			}
 			else {
 				//Resolve 2 letter language code
-				uasort($alpha2, function ($a,$b)
- { return $a > $b; } );
+				uasort($alpha2, function ($a,$b){ return $a > $b; } );
 				
 				foreach ($alpha2 as $code => $q) {
 					if (isset($languages[$code])) {
@@ -281,8 +324,7 @@ class Language
 				}
 				
 				//Resolve 3 letter language code
-				uasort($alpha3, function ($a,$b)
- { return $a > $b; } );
+				uasort($alpha3, function ($a,$b){ return $a > $b; } );
 				
 				foreach ($alpha3 as $code => $q) {
 					if (isset($languages[$code])) {

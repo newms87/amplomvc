@@ -2,7 +2,7 @@
 class Pagination 
 {
 	private $registry;
-	private $default_template = 'widget/pagination';
+	private $default_template = 'block/widget/pagination';
 	private $template_file;
 	
 	public $total;
@@ -33,7 +33,7 @@ class Pagination
 		$this->num_links = 10;
 		$this->page_url = '';
 		$this->attrs = array(
-			'class ' => 'links'
+			'class' => 'links'
 		);
 	}
 	
@@ -41,7 +41,7 @@ class Pagination
 	{
 		$this->template->load($this->template_file);
 		
-		$language = $this->language->fetch('widget/pagination');
+		$language = $this->language->fetch('block/widget/pagination');
 		
 		if (!$this->page_url) {
 			$this->page_url = $this->url->link($_GET['route'], $this->url->get_query_exclude('page'));

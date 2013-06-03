@@ -332,10 +332,12 @@ body > #container {
 	border-color: #F2DD8C;
 }
 
-.required:after {
+.required:before {
 	content: '*';
 	color: #FF0000;
 	font-weight: bold;
+	position:relative;
+	left: -3px;
 }
 .error {
 	margin-top: 3px;
@@ -1707,3 +1709,46 @@ td.mail_info label{
 	font-size: 14px;
 }
 
+/* Janrain Signin */
+#janrain_table tr td{
+	vertical-align:top;
+}
+#janrain_table a{
+	text-decoration:none;
+	color:#1111CC;
+}
+#janrain_table a:hover{
+	text-decoration:underline;
+}
+#janrain_table .janrain_img{
+	margin:0 0 3px 10px;vertical-align:middle;
+}
+
+#janrain_table input[type=text]{
+	width: 350px;
+}
+
+.janrain_label_desc{
+	font-family:Tahoma, Arial, sans-serif;
+	font-size:11px;
+	padding-top:5px;
+	display:block;
+	font-weight:normal;
+}
+
+.janrain-icon-small{
+	width:16px;
+	height:16px;
+	margin-right:3px;
+}
+
+.display_icon_list{
+	max-width: 600px;
+}
+.display_icon_label{
+	float:left;
+	margin-bottom:10px;
+}
+.display_icon_label div, .display_icon_label label, .display_icon_label input{
+	float:left;
+}

@@ -13,7 +13,7 @@ ini_set('mbstring.func_overload', 2);
 require_once('../../../oc_config.php');
 require_once('../../../path_config.php');
 
-include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinderConnector.class .php';
+include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinderConnector.class.php';
 include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinder.class.php';
 include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinderVolumeDriver.class.php';
 include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinderVolumeLocalFileSystem.class.php';
@@ -23,8 +23,7 @@ include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinderVolumeLocalFileSyste
 //set default timezone
 date_default_timezone_set('UTC');
 
-function debug($o)
-{
+function debug($o) {
 	echo '<pre>';
 	print_r($o);
 }
@@ -40,8 +39,7 @@ function debug($o)
  * @return void|true
  * @author Troex Nevelin
  **/
-function logger($cmd, $result, $args, $elfinder)
-{
+function logger($cmd, $result, $args, $elfinder) {
 
 	
 	$log = sprintf("[%s] %s: %s \n", date('r'), strtoupper($cmd), var_export($result, true));
@@ -95,8 +93,7 @@ function logger($cmd, $result, $args, $elfinder)
  * @package elFinder
  * @author Dmitry (dio) Levashov
  **/
-class elFinderSimpleLogger 
-{
+class elFinderSimpleLogger {
 	
 	/**
 	* Log file path
@@ -111,8 +108,7 @@ class elFinderSimpleLogger
 	* @return void
 	* @author Dmitry (dio) Levashov
 	**/
-	public function __construct($path)
-	{
+	public function __construct($path) {
 		$this->file = $path;
 		$dir = dirname($path);
 		if (!is_dir($dir)) {
@@ -130,8 +126,7 @@ class elFinderSimpleLogger
 	* @return void|true
 	* @author Dmitry (dio) Levashov
 	**/
-	public function log($cmd, $result, $args, $elfinder)
-	{
+	public function log($cmd, $result, $args, $elfinder) {
 		$log = $cmd.' ['.date('d.m H:s')."]\n";
 		
 		if (!empty($result['error'])) {
@@ -171,8 +166,7 @@ class elFinderSimpleLogger
 	* @return void
 	* @author Dmitry (dio) Levashov
 	**/
-	protected function write($log)
-	{
+	protected function write($log) {
 		
 		if (($fp = @fopen($this->file, 'a'))) {
 			fwrite($fp, $log."\n");
@@ -181,7 +175,10 @@ class elFinderSimpleLogger
 	}
 	
 	
-} // END class /**
+} // END class
+
+
+/**
  * Simple function to demonstrate how to control file access using "accessControl" callback.
  * This method will disable accessing files/folders starting from  '.' (dot)
  *
@@ -189,19 +186,18 @@ class elFinderSimpleLogger
  * @param  string  $path  file path relative to volume root directory started with directory separator
  * @return bool|null
  **/
-function access($attr, $path, $data, $volume)
-{
+function access($attr, $path, $data, $volume) {
 	return strpos(basename($path), '.') === 0		// if file/folder begins with '.' (dot)
 		? !($attr == 'read' || $attr == 'write')	// set read+write to false, other (locked+hidden) set to true
 		:  null;												// else elFinder decide it itself
 }
 
 /**
- * Access control example class *
+ * Access control example class
+ *
  * @author Dmitry (dio) Levashov
  **/
-class elFinderTestACL 
-{
+class elFinderTestACL {
 	
 	/**
 	* make dotfiles not readable, not writable, hidden and locked
@@ -213,8 +209,7 @@ class elFinderTestACL
 	* @return bool
 	* @author Dmitry (dio) Levashov
 	**/
-	public function fsAccess($attr, $path, $data, $volume)
-	{
+	public function fsAccess($attr, $path, $data, $volume) {
 		
 		if ($volume->name() == 'localfilesystem') {
 			return strpos(basename($path), '.') === 0
@@ -225,10 +220,11 @@ class elFinderTestACL
 		return true;
 	}
 	
-} // END class $acl = new elFinderTestACL();
+} // END class
 
-function validName($name)
-{
+$acl = new elFinderTestACL();
+
+function validName($name) {
 	return strpos($name, '.') !== 0;
 }
 
@@ -252,7 +248,7 @@ session_name("cross-store-session");
 session_start();
 
 $relpath = '';
-if (isset($_SESSION['elfinder_root_dir'])) {
+if(isset($_SESSION['elfinder_root_dir'])){
 	$relpath = '/'.$_SESSION['elfinder_root_dir'];
 }
 	

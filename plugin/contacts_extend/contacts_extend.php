@@ -1,5 +1,5 @@
 <?php
-class ModelPluginContactsExtend extends Model 
+class _ContactsExtend extends Model 
 {
 	
 	public function extend_lookbook(&$data)

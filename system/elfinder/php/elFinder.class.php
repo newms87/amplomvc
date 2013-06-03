@@ -2,15 +2,14 @@
 
 /**
  * elFinder - file manager for web.
- * Core class .
+ * Core class.
  *
  * @package elfinder
  * @author Dmitry (dio) Levashov
  * @author Troex Nevelin
  * @author Alexey Sukhotin
  **/
-class elFinder 
-{
+class elFinder {
 	
 	/**
 	* API version number
@@ -172,8 +171,7 @@ class elFinder
 	* @return void
 	* @author Dmitry (dio) Levashov
 	**/
-	public function __construct($opts)
-	{
+	public function __construct($opts) {
 		session_start();
 
 		$this->time  = $this->utime();
@@ -202,7 +200,7 @@ class elFinder
 			$class = 'elFinderVolume'.(isset($o['driver']) ? $o['driver'] : '');
 
 			if (class_exists($class)) {
-				$volume = new $class ();
+				$volume = new $class();
 
 				if ($volume->mount($o)) {
 					// unique volume id (ends on "_") - used as prefix to files hash
@@ -213,10 +211,10 @@ class elFinder
 						$this->default = $this->volumes[$id];
 					}
 				} else {
-					$this->mountErrors[] = 'Driver "'.$class .'" : '.implode(' ', $volume->error());
+					$this->mountErrors[] = 'Driver "'.$class.'" : '.implode(' ', $volume->error());
 				}
 			} else {
-				$this->mountErrors[] = 'Driver "'.$class .'" does not exists';
+				$this->mountErrors[] = 'Driver "'.$class.'" does not exists';
 			}
 		}
 
@@ -230,8 +228,7 @@ class elFinder
 	* @return bool
 	* @author Dmitry (dio) Levashov
 	**/
-	public function loaded()
-	{
+	public function loaded() {
 		return $this->loaded;
 	}
 	
@@ -241,8 +238,7 @@ class elFinder
 	* @return string
 	* @author Dmitry (dio) Levashov
 	**/
-	public function version()
-	{
+	public function version() {
 		return $this->version;
 	}
 	
@@ -254,8 +250,7 @@ class elFinder
 	* @return elFinder
 	* @author Dmitry (dio) Levashov
 	**/
-	public function bind($cmd, $handler)
-	{
+	public function bind($cmd, $handler) {
 		$cmds = $cmd == '*'
 			? array_keys($this->commands)
 			: array_map('trim', explode(' ', $cmd));
@@ -284,8 +279,7 @@ class elFinder
 	* @return elFinder
 	* @author Dmitry (dio) Levashov
 	**/
-	public function unbind($cmd, $handler)
-	{
+	public function unbind($cmd, $handler) {
 		if (!empty($this->listeners[$cmd])) {
 			foreach ($this->listeners[$cmd] as $i => $h) {
 				if ($h === $handler) {
@@ -304,8 +298,7 @@ class elFinder
 	* @return bool
 	* @author Dmitry (dio) Levashov
 	**/
-	public function commandExists($cmd)
-	{
+	public function commandExists($cmd) {
 		return $this->loaded && isset($this->commands[$cmd]) && method_exists($this, $cmd);
 	}
 	
@@ -316,8 +309,7 @@ class elFinder
 	* @return array
 	* @author Dmitry (dio) Levashov
 	**/
-	public function commandArgsList($cmd)
-	{
+	public function commandArgsList($cmd) {
 		return $this->commandExists($cmd) ? $this->commands[$cmd] : array();
 	}
 	
@@ -329,8 +321,7 @@ class elFinder
 	* @return array
 	* @author Dmitry (dio) Levashov
 	**/
-	public function exec($cmd, $args)
-	{
+	public function exec($cmd, $args) {
 		
 		if (!$this->loaded) {
 			return array('error' => $this->error(self::ERROR_CONF, self::ERROR_CONF_NO_VOL));
@@ -413,8 +404,7 @@ class elFinder
 	* @return string
 	* @author Dmitry (dio) Levashov
 	**/
-	public function realpath($hash)
-	{
+	public function realpath($hash)	{
 		if (($volume = $this->volume($hash)) == false) {
 			return false;
 		}
@@ -427,8 +417,7 @@ class elFinder
 	* @return array
 	* @author Dmitry (dio) Levashov
 	*/
-	protected function getNetVolumes()
-	{
+	protected function getNetVolumes() {
 		return isset($_SESSION['netVolumes']) && is_array($_SESSION['netVolumes']) ? $_SESSION['netVolumes'] : array();
 	}
 
@@ -439,8 +428,7 @@ class elFinder
 	* @return void
 	* @author Dmitry (dio) Levashov
 	*/
-	protected function saveNetVolumes($volumes)
-	{
+	protected function saveNetVolumes($volumes) {
 		$_SESSION['netVolumes'] = $volumes;
 	}
 
@@ -454,8 +442,7 @@ class elFinder
 	* @return array
 	* @author Dmitry (dio) Levashov
 	**/
-	public function error()
-	{
+	public function error() {
 		$errors = array();
 
 		foreach (func_get_args() as $msg) {
@@ -469,12 +456,11 @@ class elFinder
 		return count($errors) ? $errors : array(self::ERROR_UNKNOWN);
 	}
 	
-	protected function netmount($args)
-	{
+	protected function netmount($args) {
 		$options  = array();
 		$protocol = $args['protocol'];
 		$driver	= isset(self::$netDrivers[$protocol]) ? $protocol : '';
-		$class = 'elfindervolume'.$protocol;
+		$class	= 'elfindervolume'.$protocol;
 
 		if (!$driver) {
 			return array('error' => $this->error(self::ERROR_NETMOUNT, $args['host'], self::ERROR_NETMOUNT_NO_DRIVER));
@@ -496,7 +482,7 @@ class elFinder
 			}
 		}
 
-		$volume = new $class ();
+		$volume = new $class();
 
 		if ($volume->mount($options)) {
 			$netVolumes		= $this->getNetVolumes();
@@ -524,8 +510,7 @@ class elFinder
 	* @return array
 	* @author Dmitry (dio) Levashov
 	**/
-	protected function open($args)
-	{
+	protected function open($args) {
 		$target = $args['target'];
 		$init	= !empty($args['init']);
 		$tree	= !empty($args['tree']);
@@ -593,8 +578,7 @@ class elFinder
 	* @return array
 	* @author Dmitry (dio) Levashov
 	**/
-	protected function ls($args)
-	{
+	protected function ls($args) {
 		$target = $args['target'];
 		
 		if (($volume = $this->volume($target)) == false
@@ -611,8 +595,7 @@ class elFinder
 	* @return array
 	* @author Dmitry (dio) Levashov
 	**/
-	protected function tree($args)
-	{
+	protected function tree($args) {
 		$target = $args['target'];
 		
 		if (($volume = $this->volume($target)) == false
@@ -630,8 +613,7 @@ class elFinder
 	* @return array
 	* @author Dmitry (dio) Levashov
 	**/
-	protected function parents($args)
-	{
+	protected function parents($args) {
 		$target = $args['target'];
 		
 		if (($volume = $this->volume($target)) == false
@@ -649,8 +631,7 @@ class elFinder
 	* @return array
 	* @author Dmitry (dio) Levashov
 	**/
-	protected function tmb($args)
-	{
+	protected function tmb($args) {
 		
 		$result  = array('images' => array());
 		$targets = $args['targets'];
@@ -672,8 +653,7 @@ class elFinder
 	* @return array
 	* @author Dmitry (dio) Levashov
 	**/
-	protected function file($args)
-	{
+	protected function file($args) {
 		$target	= $args['target'];
 		$download = !empty($args['download']);
 		$h403	= 'HTTP/1.x 403 Access Denied';
@@ -740,8 +720,7 @@ class elFinder
 	* @return array
 	* @author Dmitry (dio) Levashov
 	**/
-	protected function size($args)
-	{
+	protected function size($args) {
 		$size = 0;
 		
 		foreach ($args['targets'] as $target) {
@@ -763,8 +742,7 @@ class elFinder
 	* @return array
 	* @author Dmitry (dio) Levashov
 	**/
-	protected function mkdir($args)
-	{
+	protected function mkdir($args) {
 		$target = $args['target'];
 		$name	= $args['name'];
 		
@@ -784,8 +762,7 @@ class elFinder
 	* @return array
 	* @author Dmitry (dio) Levashov
 	**/
-	protected function mkfile($args)
-	{
+	protected function mkfile($args) {
 		$target = $args['target'];
 		$name	= $args['name'];
 		
@@ -805,8 +782,7 @@ class elFinder
 	* @return array
 	* @author Dmitry (dio) Levashov
 	**/
-	protected function rename($args)
-	{
+	protected function rename($args) {
 		$target = $args['target'];
 		$name	= $args['name'];
 		
@@ -828,8 +804,7 @@ class elFinder
 	* @return array
 	* @author Dmitry (dio) Levashov
 	**/
-	protected function duplicate($args)
-	{
+	protected function duplicate($args) {
 		$targets = is_array($args['targets']) ? $args['targets'] : array();
 		$result  = array('added' => array());
 		$suffix  = empty($args['suffix']) ? 'copy' : $args['suffix'];
@@ -859,8 +834,7 @@ class elFinder
 	* @return array
 	* @author Dmitry (dio) Levashov
 	**/
-	protected function rm($args)
-	{
+	protected function rm($args) {
 		$targets = is_array($args['targets']) ? $args['targets'] : array();
 		$result  = array('removed' => array());
 		
@@ -885,8 +859,7 @@ class elFinder
 	* @return array
 	* @author Dmitry (dio) Levashov
 	**/
-	protected function upload($args)
-	{
+	protected function upload($args) {
 		$target = $args['target'];
 		$volume = $this->volume($target);
 		$files  = isset($args['FILES']['upload']) && is_array($args['FILES']['upload']) ? $args['FILES']['upload'] : array();
@@ -935,8 +908,7 @@ class elFinder
 	* @return array
 	* @author Dmitry (dio) Levashov
 	**/
-	protected function paste($args)
-	{
+	protected function paste($args) {
 		$dst	= $args['dst'];
 		$targets = is_array($args['targets']) ? $args['targets'] : array();
 		$cut	= !empty($args['cut']);
@@ -970,8 +942,7 @@ class elFinder
 	* @return array
 	* @author Dmitry (dio) Levashov
 	**/
-	protected function get($args)
-	{
+	protected function get($args) {
 		$target = $args['target'];
 		$volume = $this->volume($target);
 		
@@ -998,8 +969,7 @@ class elFinder
 	* @return array
 	* @author Dmitry (dio) Levashov
 	**/
-	protected function put($args)
-	{
+	protected function put($args) {
 		$target = $args['target'];
 		
 		if (($volume = $this->volume($target)) == false
@@ -1022,8 +992,7 @@ class elFinder
 	* @author Dmitry (dio) Levashov,
 	* @author Alexey Sukhotin
 	**/
-	protected function extract($args)
-	{
+	protected function extract($args) {
 		$target = $args['target'];
 		$mimes  = !empty($args['mimes']) && is_array($args['mimes']) ? $args['mimes'] : array();
 		$error  = array(self::ERROR_EXTRACT, '#'.$target);
@@ -1046,8 +1015,7 @@ class elFinder
 	* @author Dmitry (dio) Levashov,
 	* @author Alexey Sukhotin
 	**/
-	protected function archive($args)
-	{
+	protected function archive($args) {
 		$type	= $args['type'];
 		$targets = isset($args['targets']) && is_array($args['targets']) ? $args['targets'] : array();
 	
@@ -1067,8 +1035,7 @@ class elFinder
 	* @return array
 	* @author Dmitry Levashov
 	**/
-	protected function search($args)
-	{
+	protected function search($args) {
 		$q		= trim($args['q']);
 		$mimes  = !empty($args['mimes']) && is_array($args['mimes']) ? $args['mimes'] : array();
 		$result = array();
@@ -1087,8 +1054,7 @@ class elFinder
 	* @return array
 	* @author Dmitry Levashov
 	**/
-	protected function info($args)
-	{
+	protected function info($args) {
 		$files = array();
 		
 		foreach ($args['targets'] as $hash) {
@@ -1108,8 +1074,7 @@ class elFinder
 	* @return array
 	* @author Dmitry (dio) Levashov
 	**/
-	protected function dim($args)
-	{
+	protected function dim($args) {
 		$target = $args['target'];
 		
 		if (($volume = $this->volume($target)) != false) {
@@ -1127,8 +1092,7 @@ class elFinder
 	* @author Dmitry (dio) Levashov
 	* @author Alexey Sukhotin
 	**/
-	protected function resize($args)
-	{
+	protected function resize($args) {
 		$target = $args['target'];
 		$width  = $args['width'];
 		$height = $args['height'];
@@ -1159,8 +1123,7 @@ class elFinder
 	* @return elFinderStorageDriver
 	* @author Dmitry (dio) Levashov
 	**/
-	protected function volume($hash)
-	{
+	protected function volume($hash) {
 		foreach ($this->volumes as $id => $v) {
 			if (strpos(''.$hash, $id) === 0) {
 				return $this->volumes[$id];
@@ -1176,8 +1139,7 @@ class elFinder
 	* @return array
 	* @author Dmitry (dio) Levashov
 	**/
-	protected function toArray($data)
-	{
+	protected function toArray($data) {
 		return isset($data['hash']) || !is_array($data) ? array($data) : $data;
 	}
 	
@@ -1188,8 +1150,7 @@ class elFinder
 	* @return array
 	* @author Dmitry (dio) Levashov
 	**/
-	protected function hashes($files)
-	{
+	protected function hashes($files) {
 		$ret = array();
 		foreach ($files as $file) {
 			$ret[] = $file['hash'];
@@ -1204,8 +1165,7 @@ class elFinder
 	* @return array
 	* @author Dmitry (dio) Levashov
 	**/
-	protected function filter($files)
-	{
+	protected function filter($files) {
 		foreach ($files as $i => $file) {
 			if (!empty($file['hidden']) || !$this->default->mimeAccepted($file['mime'])) {
 				unset($files[$i]);
@@ -1214,8 +1174,7 @@ class elFinder
 		return array_merge($files, array());
 	}
 	
-	protected function utime()
-	{
+	protected function utime() {
 		$time = explode(" ", microtime());
 		return (double)$time[1] + (double)$time[0];
 	}

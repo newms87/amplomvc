@@ -33,7 +33,8 @@
  * @package	PHPExcel_Writer_Excel5
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Writer_Excel5_Font{
+class PHPExcel_Writer_Excel5_Font
+{
 	/**
 	* Color index
 	*
@@ -131,8 +132,7 @@ class PHPExcel_Writer_Excel5_Font{
 	* @param boolean $bold
 	* @return int
 	*/
-	private static function _mapBold($bold)
- {
+	private static function _mapBold($bold) {
 		if ($bold) {
 			return 0x2BC;	//	700 = Bold font weight
 		}
@@ -156,8 +156,7 @@ class PHPExcel_Writer_Excel5_Font{
 	* @param string
 	* @return int
 	*/
-	private static function _mapUnderline($underline)
- {
+	private static function _mapUnderline($underline) {
 		if (isset(self::$_mapUnderline[$underline]))
 			return self::$_mapUnderline[$underline];
 		return 0x00;

@@ -1,5 +1,5 @@
 <?php
-class SetupCollections extends SetupPlugin 
+class Collections_Setup extends PluginSetup 
 {
 	function __construct($registry)
 	{
@@ -9,7 +9,7 @@ class SetupCollections extends SetupPlugin
 		define("COLLECTION_NAVIGATION_LINK_NAME", "catalog_collection");
 	}
 	
-	public function install(&$controller_adapters, &$db_requests)
+	public function install()
 	{
 		//Create collection table
 		$table = DB_PREFIX . "collection";

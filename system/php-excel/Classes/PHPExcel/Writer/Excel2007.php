@@ -33,7 +33,8 @@
  * @package	PHPExcel_Writer_Excel2007
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Writer_Excel2007 implements PHPExcel_Writer_IWriter{
+class PHPExcel_Writer_Excel2007 implements PHPExcel_Writer_IWriter
+{
 	/**
 	* Write charts that are defined in the workbook?
 	* Identifies whether the Writer should write definitions for any charts that exist in the PHPExcel object;
@@ -158,9 +159,8 @@ class PHPExcel_Writer_Excel2007 implements PHPExcel_Writer_IWriter{
 
 		//	Initialise writer parts
 		//		and Assign their parent IWriters
-		foreach ($writerPartsArray as $writer => $class ) 
-{
-			$this->_writerParts[$writer] = new $class ($this);
+		foreach ($writerPartsArray as $writer => $class) {
+			$this->_writerParts[$writer] = new $class($this);
 		}
 
 		$hashTablesArray = array( '_stylesConditionalHashTable',	'_fillHashTable',		'_fontHashTable',
@@ -168,8 +168,7 @@ class PHPExcel_Writer_Excel2007 implements PHPExcel_Writer_IWriter{
 								);
 
 		// Set HashTable variables
-		foreach ($hashTablesArray as $tableName) 
-{
+		foreach ($hashTablesArray as $tableName) {
 			$this->$tableName 	= new PHPExcel_HashTable();
 		}
 	}
@@ -180,8 +179,7 @@ class PHPExcel_Writer_Excel2007 implements PHPExcel_Writer_IWriter{
 	* @param 	string 	$pPartName		Writer part name
 	* @return 	PHPExcel_Writer_Excel2007_WriterPart
 	*/
-	public function getWriterPart($pPartName = '')
-	{
+	public function getWriterPart($pPartName = '') {
 		if ($pPartName != '' && isset($this->_writerParts[strtolower($pPartName)])) {
 			return $this->_writerParts[strtolower($pPartName)];
 		} else {
@@ -232,10 +230,11 @@ class PHPExcel_Writer_Excel2007 implements PHPExcel_Writer_IWriter{
 			$this->_drawingHashTable->addFromSource( 			$this->getWriterPart('Drawing')->allDrawings($this->_spreadSheet) 		);
 
 			// Create new ZIP file and open it for writing
-			$zipclass = PHPExcel_Settings::getZipClass();
+			$zipClass = PHPExcel_Settings::getZipClass();
 			$objZip = new $zipClass();
 
-			//	Retrieve OVERWRITE and CREATE constants from the instantiated zip class //	This method of accessing constant values from a dynamic class should work with all appropriate versions of PHP
+			//	Retrieve OVERWRITE and CREATE constants from the instantiated zip class
+			//	This method of accessing constant values from a dynamic class should work with all appropriate versions of PHP
 			$ro = new ReflectionObject($objZip);
 			$zipOverWrite = $ro->getConstant('OVERWRITE');
 			$zipCreate = $ro->getConstant('CREATE');
@@ -284,7 +283,7 @@ class PHPExcel_Writer_Excel2007 implements PHPExcel_Writer_IWriter{
 				if ($this->_includeCharts) {
 					$charts = $this->_spreadSheet->getSheet($i)->getChartCollection();
 					if (count($charts) > 0) {
-						foreach ($charts as $chart) {
+						foreach($charts as $chart) {
 							$objZip->addFromString('xl/charts/chart' . ($chartCount + 1) . '.xml', $this->getWriterPart('Chart')->writeChart($chart));
 							$chartCount++;
 						}
@@ -397,8 +396,7 @@ class PHPExcel_Writer_Excel2007 implements PHPExcel_Writer_IWriter{
 	* @return PHPExcel
 	* @throws Exception
 	*/
-	public function getPHPExcel()
-	{
+	public function getPHPExcel() {
 		if ($this->_spreadSheet !== null) {
 			return $this->_spreadSheet;
 		} else {
@@ -413,8 +411,7 @@ class PHPExcel_Writer_Excel2007 implements PHPExcel_Writer_IWriter{
 	* @throws	Exception
 	* @return PHPExcel_Writer_Excel2007
 	*/
-	public function setPHPExcel(PHPExcel $pPHPExcel = null)
-	{
+	public function setPHPExcel(PHPExcel $pPHPExcel = null) {
 		$this->_spreadSheet = $pPHPExcel;
 		return $this;
 	}
@@ -424,8 +421,7 @@ class PHPExcel_Writer_Excel2007 implements PHPExcel_Writer_IWriter{
 	*
 	* @return string[]
 	*/
-	public function getStringTable()
-	{
+	public function getStringTable() {
 		return $this->_stringTable;
 	}
 
@@ -434,8 +430,7 @@ class PHPExcel_Writer_Excel2007 implements PHPExcel_Writer_IWriter{
 	*
 	* @return PHPExcel_HashTable
 	*/
-	public function getStylesConditionalHashTable()
-	{
+	public function getStylesConditionalHashTable() {
 		return $this->_stylesConditionalHashTable;
 	}
 
@@ -444,8 +439,7 @@ class PHPExcel_Writer_Excel2007 implements PHPExcel_Writer_IWriter{
 	*
 	* @return PHPExcel_HashTable
 	*/
-	public function getFillHashTable()
-	{
+	public function getFillHashTable() {
 		return $this->_fillHashTable;
 	}
 
@@ -454,8 +448,7 @@ class PHPExcel_Writer_Excel2007 implements PHPExcel_Writer_IWriter{
 	*
 	* @return PHPExcel_HashTable
 	*/
-	public function getFontHashTable()
-	{
+	public function getFontHashTable() {
 		return $this->_fontHashTable;
 	}
 
@@ -464,8 +457,7 @@ class PHPExcel_Writer_Excel2007 implements PHPExcel_Writer_IWriter{
 	*
 	* @return PHPExcel_HashTable
 	*/
-	public function getBordersHashTable()
-	{
+	public function getBordersHashTable() {
 		return $this->_bordersHashTable;
 	}
 
@@ -474,8 +466,7 @@ class PHPExcel_Writer_Excel2007 implements PHPExcel_Writer_IWriter{
 	*
 	* @return PHPExcel_HashTable
 	*/
-	public function getNumFmtHashTable()
-	{
+	public function getNumFmtHashTable() {
 		return $this->_numFmtHashTable;
 	}
 
@@ -484,8 +475,7 @@ class PHPExcel_Writer_Excel2007 implements PHPExcel_Writer_IWriter{
 	*
 	* @return PHPExcel_HashTable
 	*/
-	public function getDrawingHashTable()
-	{
+	public function getDrawingHashTable() {
 		return $this->_drawingHashTable;
 	}
 
@@ -496,8 +486,7 @@ class PHPExcel_Writer_Excel2007 implements PHPExcel_Writer_IWriter{
 	*
 	* @return	boolean
 	*/
-	public function getIncludeCharts()
-	{
+	public function getIncludeCharts() {
 		return $this->_includeCharts;
 	}
 
@@ -510,8 +499,7 @@ class PHPExcel_Writer_Excel2007 implements PHPExcel_Writer_IWriter{
 	*
 	* @return	PHPExcel_Writer_Excel2007
 	*/
-	public function setIncludeCharts($pValue = false)
-	{
+	public function setIncludeCharts($pValue = false) {
 		$this->_includeCharts = (boolean) $pValue;
 		return $this;
 	}
@@ -521,8 +509,7 @@ class PHPExcel_Writer_Excel2007 implements PHPExcel_Writer_IWriter{
 	*
 	* @return boolean
 	*/
-	public function getPreCalculateFormulas()
-	{
+	public function getPreCalculateFormulas() {
 		return $this->_preCalculateFormulas;
 	}
 
@@ -531,8 +518,7 @@ class PHPExcel_Writer_Excel2007 implements PHPExcel_Writer_IWriter{
 	*
 	* @param boolean $pValue	Pre-Calculate Formulas?
 	*/
-	public function setPreCalculateFormulas($pValue = true)
-	{
+	public function setPreCalculateFormulas($pValue = true) {
 		$this->_preCalculateFormulas = $pValue;
 	}
 
@@ -541,8 +527,7 @@ class PHPExcel_Writer_Excel2007 implements PHPExcel_Writer_IWriter{
 	*
 	* @return boolean
 	*/
-	public function getOffice2003Compatibility()
-	{
+	public function getOffice2003Compatibility() {
 		return $this->_office2003compatibility;
 	}
 
@@ -552,8 +537,7 @@ class PHPExcel_Writer_Excel2007 implements PHPExcel_Writer_IWriter{
 	* @param boolean $pValue	Office2003 compatibility?
 	* @return PHPExcel_Writer_Excel2007
 	*/
-	public function setOffice2003Compatibility($pValue = false)
-	{
+	public function setOffice2003Compatibility($pValue = false) {
 		$this->_office2003compatibility = $pValue;
 		return $this;
 	}
@@ -563,8 +547,7 @@ class PHPExcel_Writer_Excel2007 implements PHPExcel_Writer_IWriter{
 	*
 	* @return boolean
 	*/
-	public function getUseDiskCaching()
-	{
+	public function getUseDiskCaching() {
 		return $this->_useDiskCaching;
 	}
 
@@ -576,8 +559,7 @@ class PHPExcel_Writer_Excel2007 implements PHPExcel_Writer_IWriter{
 	* @throws	Exception	Exception when directory does not exist
 	* @return PHPExcel_Writer_Excel2007
 	*/
-	public function setUseDiskCaching($pValue = false, $pDirectory = null)
-	{
+	public function setUseDiskCaching($pValue = false, $pDirectory = null) {
 		$this->_useDiskCaching = $pValue;
 
 		if ($pDirectory !== NULL) {
@@ -595,8 +577,7 @@ class PHPExcel_Writer_Excel2007 implements PHPExcel_Writer_IWriter{
 	*
 	* @return string
 	*/
-	public function getDiskCachingDirectory()
-	{
+	public function getDiskCachingDirectory() {
 		return $this->_diskCachingDirectory;
 	}
 }

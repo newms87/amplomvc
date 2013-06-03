@@ -1342,7 +1342,7 @@ class Admin_Model_Design_Navigation extends Model
 						'status'			=> 1,
 					),
 	
-						'system_localisation_taxes_tax_class es' => array(
+						'system_localisation_taxes_tax_classes' => array(
 							'display_name'	=> 'Tax Classes',
 							'name'			=> 'system_localisation_taxes_tax_classes',
 							'title'			=> '',

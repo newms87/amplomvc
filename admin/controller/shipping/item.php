@@ -39,10 +39,10 @@ class Admin_Controller_Shipping_Item extends Controller
 			$this->data['item_cost'] = $this->config->get('item_cost');
 		}
 
-		if (isset($_POST['item_tax_class _id'])) {
-			$this->data['item_tax_class _id'] = $_POST['item_tax_class_id'];
+		if (isset($_POST['item_tax_class_id'])) {
+			$this->data['item_tax_class_id'] = $_POST['item_tax_class_id'];
 		} else {
-			$this->data['item_tax_class _id'] = $this->config->get('item_tax_class_id');
+			$this->data['item_tax_class_id'] = $this->config->get('item_tax_class_id');
 		}
 				
 		if (isset($_POST['item_geo_zone_id'])) {
@@ -63,7 +63,7 @@ class Admin_Controller_Shipping_Item extends Controller
 			$this->data['item_sort_order'] = $this->config->get('item_sort_order');
 		}
 		
-		$this->data['tax_class es'] = $this->Model_Localisation_TaxClass->getTaxClasses();
+		$this->data['tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
 		
 		$this->data['geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 

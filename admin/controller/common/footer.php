@@ -1,7 +1,7 @@
 <?php
 class Admin_Controller_Common_Footer extends Controller 
 {
-	protected function index()
+	public function index()
 	{
 		$this->template->load('common/footer');
 

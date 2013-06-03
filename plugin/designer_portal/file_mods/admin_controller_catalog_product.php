@@ -1,6 +1,6 @@
 //=====
 <?php
-class ControllerCatalogProduct extends Controller 
+class _AdminControllerCatalogProduct extends Controller 
 {
 //.....
 	public function insert()

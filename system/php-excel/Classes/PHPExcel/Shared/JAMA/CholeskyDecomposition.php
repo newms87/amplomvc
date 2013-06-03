@@ -2,7 +2,8 @@
 /**
  *	@package JAMA
  *
- *	Cholesky decomposition class *
+ *	Cholesky decomposition class
+ *
  *	For a symmetric, positive definite matrix A, the Cholesky decomposition
  *	is an lower triangular matrix L so that A = L*L'.
  *
@@ -14,8 +15,7 @@
  *	@author Michael Bommarito
  *	@version 1.2
  */
-class CholeskyDecomposition 
-{
+class CholeskyDecomposition {
 
 	/**
 	*	Decomposition storage
@@ -42,11 +42,10 @@ class CholeskyDecomposition
 	/**
 	*	CholeskyDecomposition
 	*
-	*	class constructor - decomposes symmetric positive definite matrix
+	*	Class constructor - decomposes symmetric positive definite matrix
 	*	@param mixed Matrix square symmetric positive definite matrix
 	*/
-	public function __construct($A = null)
-	{
+	public function __construct($A = null) {
 		if ($A instanceof Matrix) {
 			$this->L = $A->getArray();
 			$this->m = $A->getRowDimension();
@@ -84,8 +83,7 @@ class CholeskyDecomposition
 	*
 	*	@return boolean
 	*/
-	public function isSPD()
-	{
+	public function isSPD() {
 		return $this->isspd;
 	}	//	function isSPD()
 
@@ -96,8 +94,7 @@ class CholeskyDecomposition
 	*	Return triangular factor.
 	*	@return Matrix Lower triangular matrix
 	*/
-	public function getL()
-	{
+	public function getL() {
 		return new Matrix($this->L);
 	}	//	function getL()
 
@@ -108,8 +105,7 @@ class CholeskyDecomposition
 	*	@param $B Row-equal matrix
 	*	@return Matrix L * L' * X = B
 	*/
-	public function solve($B = null)
-	{
+	public function solve($B = null) {
 		if ($B instanceof Matrix) {
 			if ($B->getRowDimension() == $this->m) {
 				if ($this->isspd) {

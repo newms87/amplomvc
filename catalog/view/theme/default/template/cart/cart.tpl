@@ -87,7 +87,7 @@
 <? }?>
 
 function handle_ajax_cart_load(action, data){
-	load_block($('#cart_block_total'), 'cart/block/total');
+	load_block($('#cart_block_total'), 'block/cart/total');
 }
 //--></script>
 

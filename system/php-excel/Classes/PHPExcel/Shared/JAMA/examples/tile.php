@@ -19,8 +19,7 @@ include "../Matrix.php";
 * @return Matrix
 */
 
-function tile(&$X, $rowWise, $colWise)
-{
+function tile(&$X, $rowWise, $colWise){
 
   $xArray = $X->getArray();
   print_r($xArray);
@@ -31,7 +30,7 @@ function tile(&$X, $rowWise, $colWise)
   $m = $X->getRowDimension();
   $n = $X->getColumnDimension();
 
-  if ( $rowWise<1 || $colWise<1 ) {
+  if( $rowWise<1 || $colWise<1 ){
 	die("tile : Array index is out-of-bound.");
   }
 
@@ -50,7 +49,7 @@ function tile(&$X, $rowWise, $colWise)
 
 		// reset the column-index to zero to avoid reference to out-of-bound index in xArray[][]
 
-		if ($countColumn == $n) { $countColumn = 0; }
+		if($countColumn == $n) { $countColumn = 0; }
 
 	} // end for
 
@@ -58,7 +57,7 @@ function tile(&$X, $rowWise, $colWise)
 
 	// reset the row-index to zero to avoid reference to out-of-bound index in xArray[][]
 
-	if ($countRow == $m) { $countRow = 0; }
+	if($countRow == $m) { $countRow = 0; }
 
 	$result[$i] = $holder;
 

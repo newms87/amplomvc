@@ -33,7 +33,8 @@
  * @package	PHPExcel_Cell
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Cell{
+class PHPExcel_Cell
+{
 	/**
 	* Value binder to use
 	*
@@ -103,19 +104,16 @@ class PHPExcel_Cell{
 	*
 	* @return void
 	**/
-	public function notifyCacheController()
-	{
+	public function notifyCacheController() {
 		$this->_parent->getCellCacheController()->updateCacheData($this);
 		return $this;
 	}
 
-	public function detach()
-	{
+	public function detach() {
 		$this->_parent = null;
 	}
 
-	public function attach($parent)
-	{
+	public function attach($parent) {
 		$this->_parent = $parent;
 	}
 
@@ -460,8 +458,7 @@ class PHPExcel_Cell{
 	*
 	* @return PHPExcel_Worksheet
 	*/
-	public function getParent()
-	{
+	public function getParent() {
 		return $this->_parent;
 	}
 
@@ -471,8 +468,7 @@ class PHPExcel_Cell{
 	* @param PHPExcel_Worksheet $parent
 	* @return PHPExcel_Cell
 	*/
-	public function rebindParent(PHPExcel_Worksheet $parent)
-	{
+	public function rebindParent(PHPExcel_Worksheet $parent) {
 		$this->_parent = $parent;
 
 		return $this->notifyCacheController();
@@ -506,7 +502,7 @@ class PHPExcel_Cell{
 	* @throws	Exception
 	*/
 	public static function coordinateFromString($pCoordinateString = 'A1')
- {
+	{
 		if (preg_match("/^([$]?[A-Z]{1,3})([$]?\d{1,7})$/", $pCoordinateString, $matches)) {
 			return array($matches[1],$matches[2]);
 		} elseif ((strpos($pCoordinateString,':') !== false) || (strpos($pCoordinateString,',') !== false)) {
@@ -526,7 +522,7 @@ class PHPExcel_Cell{
 	* @throws	Exception
 	*/
 	public static function absoluteReference($pCoordinateString = 'A1')
- {
+	{
 		if (strpos($pCoordinateString,':') === false && strpos($pCoordinateString,',') === false) {
 			// Create absolute coordinate
 			if (ctype_digit($pCoordinateString)) {
@@ -548,7 +544,7 @@ class PHPExcel_Cell{
 	* @throws	Exception
 	*/
 	public static function absoluteCoordinate($pCoordinateString = 'A1')
- {
+	{
 		if (strpos($pCoordinateString,':') === false && strpos($pCoordinateString,',') === false) {
 			// Create absolute coordinate
 			$worksheet = '';
@@ -575,7 +571,7 @@ class PHPExcel_Cell{
 	* @return	array	Array containg one or more arrays containing one or two coordinate strings
 	*/
 	public static function splitRange($pRange = 'A1:A1')
- {
+	{
 		$exploded = explode(',', $pRange);
 		$counter = count($exploded);
 		for ($i = 0; $i < $counter; ++$i) {
@@ -592,7 +588,7 @@ class PHPExcel_Cell{
 	* @throws	Exception
 	*/
 	public static function buildRange($pRange)
- {
+	{
 		// Verify range
 		if (!is_array($pRange) || empty($pRange) || !is_array($pRange[0])) {
 			throw new Exception('Range does not contain any information.');
@@ -616,7 +612,7 @@ class PHPExcel_Cell{
 	* @return	array	Range coordinates (Start Cell, End Cell) where Start Cell and End Cell are arrays (Column Number, Row Number)
 	*/
 	public static function rangeBoundaries($pRange = 'A1:A1')
- {
+	{
 		// Uppercase coordinate
 		$pRange = strtoupper($pRange);
 
@@ -645,7 +641,7 @@ class PHPExcel_Cell{
 	* @return	array	Range dimension (width, height)
 	*/
 	public static function rangeDimension($pRange = 'A1:A1')
- {
+	{
 		// Calculate range outer borders
 		list($rangeStart,$rangeEnd) = PHPExcel_Cell::rangeBoundaries($pRange);
 
@@ -659,7 +655,7 @@ class PHPExcel_Cell{
 	* @return	array	Range boundaries (staring Column, starting Row, Final Column, Final Row)
 	*/
 	public static function getRangeBoundaries($pRange = 'A1:A1')
- {
+	{
 		// Uppercase coordinate
 		$pRange = strtoupper($pRange);
 
@@ -681,7 +677,7 @@ class PHPExcel_Cell{
 	* @throws	Exception
 	*/
 	public static function columnIndexFromString($pString = 'A')
- {
+	{
 		//	Using a lookup cache adds a slight memory overhead, but boosts speed
 		//	caching using a static within the method is faster than a class static,
 		//		though it's additional memory overhead
@@ -702,8 +698,7 @@ class PHPExcel_Cell{
 
 		//	We also use the language construct isset() rather than the more costly strlen() function to match the length of $pString
 		//		for improved performance
-		if (isset($pString
-{0})) {
+		if (isset($pString{0})) {
 			if (!isset($pString{1})) {
 				$_indexCache[$pString] = $_columnLookup[$pString];
 				return $_indexCache[$pString];
@@ -725,7 +720,7 @@ class PHPExcel_Cell{
 	* @return string
 	*/
 	public static function stringFromColumnIndex($pColumnIndex = 0)
- {
+	{
 		//	Using a lookup cache adds a slight memory overhead, but boosts speed
 		//	caching using a static within the method is faster than a class static,
 		//		though it's additional memory overhead
@@ -753,8 +748,7 @@ class PHPExcel_Cell{
 	* @param	string	$pRange		Range (e.g. A1 or A1:A10 or A1:A10 A100:A1000)
 	* @return	array	Array containing single cell references
 	*/
-	public static function extractAllCellReferencesInRange($pRange = 'A1')
- {
+	public static function extractAllCellReferencesInRange($pRange = 'A1') {
 		// Returnvalue
 		$returnValue = array();
 
@@ -769,7 +763,7 @@ class PHPExcel_Cell{
 
 			// Range...
 			$ranges = PHPExcel_Cell::splitRange($cellBlock);
-			foreach ($ranges as $range) {
+			foreach($ranges as $range) {
 				// Single cell?
 				if (!isset($range[1])) {
 					$returnValue[] = $range[0];
@@ -810,7 +804,7 @@ class PHPExcel_Cell{
 	* @return	int		Result of comparison (always -1 or 1, never zero!)
 	*/
 	public static function compareCells(PHPExcel_Cell $a, PHPExcel_Cell $b)
- {
+	{
 		if ($a->_row < $b->_row) {
 			return -1;
 		} elseif ($a->_row > $b->_row) {
@@ -827,8 +821,7 @@ class PHPExcel_Cell{
 	*
 	* @return PHPExcel_Cell_IValueBinder
 	*/
-	public static function getValueBinder()
- {
+	public static function getValueBinder() {
 		if (self::$_valueBinder === NULL) {
 			self::$_valueBinder = new PHPExcel_Cell_DefaultValueBinder();
 		}
@@ -842,8 +835,7 @@ class PHPExcel_Cell{
 	* @param PHPExcel_Cell_IValueBinder $binder
 	* @throws Exception
 	*/
-	public static function setValueBinder(PHPExcel_Cell_IValueBinder $binder = null)
- {
+	public static function setValueBinder(PHPExcel_Cell_IValueBinder $binder = null) {
 		if ($binder === NULL) {
 			throw new Exception("A PHPExcel_Cell_IValueBinder is required for PHPExcel to function correctly.");
 		}
@@ -854,8 +846,7 @@ class PHPExcel_Cell{
 	/**
 	* Implement PHP __clone to create a deep clone, not just a shallow copy.
 	*/
-	public function __clone()
-	{
+	public function __clone() {
 		$vars = get_object_vars($this);
 		foreach ($vars as $key => $value) {
 			if ((is_object($value)) && ($key != '_parent')) {

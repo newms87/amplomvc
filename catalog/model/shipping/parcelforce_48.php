@@ -56,7 +56,7 @@ class Catalog_Model_Shipping_Parcelforce4848 extends Model
 				$text = $this->_('text_description');
 			
 				if ($this->config->get('parcelforce_48_display_weight')) {
-					$text .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class _id')) . ')';
+					$text .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class_id')) . ')';
 				}
 			
 				if ($this->config->get('parcelforce_48_display_insurance') && (float)$insurance) {

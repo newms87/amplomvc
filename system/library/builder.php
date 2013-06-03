@@ -9,20 +9,87 @@ class Builder extends Controller
 	private $builder_type;
 	
 	private $builder_template;
-
+	
+	private $highest_match = 0;
 	
 	public function __construct(&$registry)
 	{
-	$this->registry = &$registry;
+		$this->registry = &$registry;
 	}
 	
 	public function __get($key)
 	{
-	return $this->registry->get($key);
+		return $this->registry->get($key);
+	}
+	
+	public function &find_active_page(&$links, &$active_link = null)
+	{
+		$current_page = parse_url($this->url->get_pretty_url());
+		
+		$query_vars = null;
+		parse_str($this->url->get_query(), $query_vars);
+		$current_page['query'] = $query_vars;
+		
+		foreach ($links as $key => &$link) {
+			if (!empty($link['is_route'])) {
+				$query = isset($link['query']) ? $link['query'] : '';
+				$link['href'] = $this->url->link($link['href'], $query);
+			} elseif(!preg_match("/^https?:\/\//", $link['href'])) {
+				$link['href'] = $this->url->site($link['href']);
+			}
+			
+			$components = str_replace('&amp;', '&', parse_url($link['href']));
+			
+			if ($current_page['scheme'] == $components['scheme']
+				&& $current_page['path'] == $components['path']) {
+				if (!empty($components['query'])) {
+					$query_vars = null;
+					parse_str($components['query'], $query_vars);
+					
+					$matches = 0;
+					
+					foreach ($query_vars as $key => $value) {
+						if (isset($current_page['query'][$key])) {
+							if($current_page['query'][$key] === $value) {
+								$matches++;
+							}
+						}
+					}
+					
+					if ($matches >= count($query_vars) && $matches > $this->highest_match) {
+						$this->highest_match = $matches;
+						$active_link = &$link;
+					}
+				} elseif(!$active_link) {
+					$active_link = &$link;
+				}
+			}
+			
+			if (!empty($link['children'])) {
+				$active_link = & $this->find_active_page($link['children'], $active_link);
+			}
+			
+		} unset($link);
+		
+		return $active_link;
 	}
 	
 	public function build_links($links, $depth = 0)
 	{
+		if ($depth === 0) {
+			$this->highest_match = 0;
+			
+			$active_link = & $this->find_active_page($links);
+			
+			if ($active_link) {
+				if (!empty($active_link['attrs']['class'])) {
+					$active_link['attrs']['class'] .= ' active';
+				} else {
+					$active_link['attrs']['class'] = 'active';
+				}
+			}
+		}
+		
 		switch($depth){
 			case 0:
 				$class = "top_menu";
@@ -39,8 +106,30 @@ class Builder extends Controller
 			
 		$zindex = count($links);
 			
-		foreach($links as $link)
-{
+		foreach ($links as $link) {
+			if (!empty($link['title']) && !isset($link['attrs']['title'])) {
+				$link['attrs']['title'] = $link['title'];
+			}
+			
+			if (empty($link['display_name'])) {
+				$link['display_name'] = $link['name'];
+			}
+				
+			$children = '';
+			
+			if (!empty($link['children'])) {
+				$children = $this->build_links($link['children'], $depth+1);
+				if (!empty($link['attrs']['class'])) {
+					$link['attrs']['class'] .= ' has_children';
+				} else {
+					$link['attrs']['class'] = 'has_children';
+				}
+			}
+			
+			$href = '';
+			if (!empty($link['href'])) {
+				$href = "href=\"$link[href]\"";
+			}
 			
 			$attr_list = '';
 				
@@ -55,32 +144,7 @@ class Builder extends Controller
 				}
 			}
 			
-			if (!empty($link['title']) && !isset($link['attrs']['title'])) {
-				$attr_list .= "title=\"$link[title]\"";
-			}
-			
-			if (empty($link['display_name'])) {
-				$link['display_name'] = $link['name'];
-			}
-				
-			$children = '';
-			$sub_class = '';
-			if (!empty($link['children'])) {
-				$children = $this->build_links($link['children'], $depth+1);
-				$sub_class = 'class="has_children"';
-			}
-			
-			if (!empty($link['is_route'])) {
-				$query = isset($link['query']) ? $link['query'] : '';
-				$link['href'] = $this->url->link($link['href'], $query);
-			}
-			
-			$href = '';
-			if (!empty($link['href'])) {
-				$href = "href=\"$link[href]\"";
-			}
-			
-			$html .= "<li $sub_class style=\"z-index:$zindex\"><a $href $attr_list>$link[display_name]</a>$children</li>";
+			$html .= "<li $attr_list style=\"z-index:$zindex\"><a $href class=\"menu_link\">$link[display_name]</a>$children</li>";
 				
 			$zindex--;
 		}
@@ -293,7 +357,7 @@ class Builder extends Controller
 		//Load Batch Action template
 		$template = new Template($this->registry);
 		
-		$template->load('widget/batch_action');
+		$template->load('block/widget/batch_action');
 		$template->set_data($data);
 		
 		return $template->render();

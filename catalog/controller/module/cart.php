@@ -4,14 +4,13 @@ class Catalog_Controller_Module_Cart extends Controller
 	public function index()
 	{
 		$this->template->load('module/cart');
-
 		$this->language->load('module/cart');
 		
-			if (isset($_GET['remove'])) {
-				$this->cart->remove($_GET['remove']);
-			
+		if (isset($_GET['remove'])) {
+			$this->cart->remove($_GET['remove']);
+		
 			unset($this->session->data['vouchers'][$_GET['remove']]);
-			}
+		}
 			
 		// Totals
 		$total_data = array();
@@ -30,8 +29,8 @@ class Catalog_Controller_Module_Cart extends Controller
 		
 		foreach ($results as $result) {
 			if ($this->config->get($result['code'] . '_status')) {
-	
-				$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
+				$classname = 'Model_Total_' . preg_replace_callback("/_([a-z])/i", function($matches){return strtoupper($matches[1]);}, ucfirst($result['code'])); 
+				$this->$classname->getTotal($total_data, $total, $taxes);
 			}
 			
 			$sort_order = array();
@@ -74,13 +73,13 @@ class Catalog_Controller_Module_Cart extends Controller
 			}
 			
 			if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-				$price = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class _id']));
+				$price = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id']));
 			} else {
 				$price = false;
 			}
 
 			if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-				$total = $this->currency->format($this->tax->calculate($product['total'], $product['tax_class _id']));
+				$total = $this->currency->format($this->tax->calculate($product['total'], $product['tax_class_id']));
 			} else {
 				$total = false;
 			}

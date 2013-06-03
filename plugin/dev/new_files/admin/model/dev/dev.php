@@ -1,5 +1,5 @@
 <?php
-class ModelDevDev extends Model 
+class Admin_Model_Dev_Dev extends Model 
 {
 	
 	public function getBackupFiles()

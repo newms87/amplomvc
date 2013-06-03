@@ -356,7 +356,7 @@ class Form
 
 	public function validate($data)
 	{
-		$this->language->load('system/form');
+		$this->language->system('form');
 		
 		//For Each Field Validate the data, set $this->error if invalid
 		foreach ($this->fields as $field_name => $field) {

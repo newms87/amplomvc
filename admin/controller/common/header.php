@@ -1,7 +1,7 @@
 <?php
 class Admin_Controller_Common_Header extends Controller 
 {
-	protected function index()
+	public function index()
 	{
 		$this->template->load('common/header');
 		$this->language->load('common/header');

@@ -59,8 +59,8 @@ class Catalog_Model_Total_Coupon extends Model
 							$discount = $product['total'] / 100 * $coupon_info['discount'];
 						}
 				
-						if ($product['tax_class _id']) {
-							$tax_rates = $this->tax->getRates($product['total'] - ($product['total'] - $discount), $product['tax_class _id']);
+						if ($product['tax_class_id']) {
+							$tax_rates = $this->tax->getRates($product['total'] - ($product['total'] - $discount), $product['tax_class_id']);
 							
 							foreach ($tax_rates as $tax_rate) 
 {
@@ -77,8 +77,8 @@ class Catalog_Model_Total_Coupon extends Model
 				if ($coupon_info['shipping'] && $this->cart->hasShippingMethod()) {
 					$shipping_method = $this->cart->getShippingMethod();
 					
-					if (!empty($shipping_method['tax_class _id'])) {
-						$tax_rates = $this->tax->getRates($shipping_method['cost'], $shipping_method['tax_class _id']);
+					if (!empty($shipping_method['tax_class_id'])) {
+						$tax_rates = $this->tax->getRates($shipping_method['cost'], $shipping_method['tax_class_id']);
 						
 						foreach ($tax_rates as $tax_rate) 
 {

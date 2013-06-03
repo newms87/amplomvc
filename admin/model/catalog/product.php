@@ -17,7 +17,7 @@ class Admin_Model_Catalog_Product extends Model
 			$data['points'] = 0;
 			$data['editable'] = 1;
 			$data['status'] = 0;
-			$data['tax_class _id'] = $this->config->get('config_tax_default_id');
+			$data['tax_class_id'] = $this->config->get('config_tax_default_id');
 			$data['product_store'] = array(0,1,2);
 			
 			if(!$data['model'])
@@ -280,7 +280,7 @@ class Admin_Model_Catalog_Product extends Model
 			
 			$values = array();
 			
-			$allowed = array('model','image','manufacturer_id', 'weight', 'weight_class _id', 'length','width','height','length_class_id');
+			$allowed = array('model','image','manufacturer_id', 'weight', 'weight_class_id', 'length','width','height','length_class_id');
 			
 			foreach(array_keys($data) as $key)
 {
@@ -1097,9 +1097,9 @@ class Admin_Model_Catalog_Product extends Model
 		return $this->getProducts($data, '', true);
 	}
 	
-	public function getTotalProductsByTaxclass Id($tax_class_id) 
+	public function getTotalProductsByTaxClassId($tax_class_id) 
 {
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "product WHERE tax_class _id = '" . (int)$tax_class_id . "'");
+		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "product WHERE tax_class_id = '" . (int)$tax_class_id . "'");
 
 		return $query->row['total'];
 	}
@@ -1111,16 +1111,16 @@ class Admin_Model_Catalog_Product extends Model
 		return $query->row['total'];
 	}
 	
-	public function getTotalProductsByWeightclass Id($weight_class_id) 
+	public function getTotalProductsByWeightClassId($weight_class_id) 
 {
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "product WHERE weight_class _id = '" . (int)$weight_class_id . "'");
+		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "product WHERE weight_class_id = '" . (int)$weight_class_id . "'");
 
 		return $query->row['total'];
 	}
 	
 	public function getTotalProductsByLengthClassId($length_class_id)
 	{
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "product WHERE length_class _id = '" . (int)$length_class_id . "'");
+		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "product WHERE length_class_id = '" . (int)$length_class_id . "'");
 
 		return $query->row['total'];
 	}

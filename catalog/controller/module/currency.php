@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Module_Currency extends Controller 
 {
-	protected function index()
+	public function index()
 	{
 		$this->template->load('module/currency');
 

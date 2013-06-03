@@ -45,10 +45,10 @@ class Admin_Controller_Total_LowOrderFee extends Controller
 			$this->data['low_order_fee_fee'] = $this->config->get('low_order_fee_fee');
 		}
 
-		if (isset($_POST['low_order_fee_tax_class _id'])) {
-			$this->data['low_order_fee_tax_class _id'] = $_POST['low_order_fee_tax_class_id'];
+		if (isset($_POST['low_order_fee_tax_class_id'])) {
+			$this->data['low_order_fee_tax_class_id'] = $_POST['low_order_fee_tax_class_id'];
 		} else {
-			$this->data['low_order_fee_tax_class _id'] = $this->config->get('low_order_fee_tax_class_id');
+			$this->data['low_order_fee_tax_class_id'] = $this->config->get('low_order_fee_tax_class_id');
 		}
 		
 		if (isset($_POST['low_order_fee_status'])) {
@@ -63,7 +63,7 @@ class Admin_Controller_Total_LowOrderFee extends Controller
 			$this->data['low_order_fee_sort_order'] = $this->config->get('low_order_fee_sort_order');
 		}
 		
-		$this->data['tax_class es'] = $this->Model_Localisation_TaxClass->getTaxClasses();
+		$this->data['tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
 
 		$this->children = array(
 			'common/header',

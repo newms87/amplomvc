@@ -162,13 +162,13 @@ var sc_security="<?= $statcounter['security']; ?>";
 <script type="text/javascript">//<!--
 $('#links_primary .top_menu > li').hover(top_menu_hoverin, top_menu_hoverout);
 function top_menu_hoverin(){
-	$(this).addClass('active')
+	$(this).addClass('hover')
 	if($(this).find('ul').children().length){
 		$(this).append("<div class='submenu_arrow'></div>");
 	}
 }
 function top_menu_hoverout(){
-	$(this).removeClass('active')
+	$(this).removeClass('hover')
 		.find('.submenu_arrow').remove();
 }
 //--></script>

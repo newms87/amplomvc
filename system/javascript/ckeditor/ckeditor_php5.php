@@ -200,7 +200,7 @@ class CKEditor{
 	/**
 	* Replace all &lt;textarea&gt; elements available in the document with editor instances.
 	*
-	* @param $class Name (string) If set, replace all textareas with class className in the page.
+	* @param $className (string) If set, replace all textareas with class className in the page.
 	*
 	* Example 1: replace all &lt;textarea&gt; elements in the page.
 	* @code
@@ -225,18 +225,18 @@ class CKEditor{
 
 		$js = $this->returnGlobalEvents();
 		if (empty($_config)) {
-			if (empty($class Name)) {
+			if (empty($className)) {
 				$js .= "CKEDITOR.replaceAll();";
 			}
 			else {
-				$js .= "CKEDITOR.replaceAll('".$class Name."');";
+				$js .= "CKEDITOR.replaceAll('".$className."');";
 			}
 		}
 		else {
-			$class Detection = "";
+			$classDetection = "";
 			$js .= "CKEDITOR.replaceAll( function (textarea, config)
  {\n";
-			if (!empty($class Name)) {
+			if (!empty($className)) {
 				$js .= "	var class Regex = new RegExp('(?:^| )' + '". $className ."' + '(?:$| )');\n";
 				$js .= "	if (!classRegex.test(textarea.className))\n";
 				$js .= "		return false;\n";

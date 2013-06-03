@@ -64,7 +64,7 @@ $('#submit_pp_button input').click(function(){$('#processing_payment').fadeIn(50
 
 function check_order_update(){
 	$.ajax({
-			url: "<?= HTTP_CATALOG . "index.php?route=checkout/block/confirm/check_order_status"; ?>" + '&order_id=<?= $order_id; ?>',
+			url: "<?= HTTP_CATALOG . "index.php?route=block/checkout/confirm/check_order_status"; ?>" + '&order_id=<?= $order_id; ?>',
 			dataType: 'json',
 			success: function(json){
 				if(json['redirect']){

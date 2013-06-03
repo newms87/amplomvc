@@ -33,7 +33,8 @@
  * @package	PHPExcel_Writer_Excel2007
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Writer_Excel2007_Rels extends PHPExcel_Writer_Excel2007_WriterPart{
+class PHPExcel_Writer_Excel2007_Rels extends PHPExcel_Writer_Excel2007_WriterPart
+{
 	/**
 	* Write relationships to XML format
 	*
@@ -217,7 +218,7 @@ class PHPExcel_Writer_Excel2007_Rels extends PHPExcel_Writer_Excel2007_WriterPar
 //			$charts = $pWorksheet->getChartCollection();
 //			echo 'Chart Rels: ' , count($charts) , '<br />';
 //			if (count($charts) > 0) {
-//				foreach ($charts as $chart) {
+//				foreach($charts as $chart) {
 //					$this->_writeRelationship(
 //						$objWriter,
 //						++$d,

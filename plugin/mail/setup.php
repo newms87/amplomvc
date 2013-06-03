@@ -1,10 +1,10 @@
 <?php
-class SetupMail extends SetupPlugin 
+class Mail_Setup extends PluginSetup 
 {
 
-	public function install(&$controller_adapters, &$db_requests)
+	public function install()
 	{
-		
+		//TODO: Need to find a good way to adapt to the controller!
 		$controller_adapters[] = array(
 			'for' 			=> 'mail/messages',
 			'admin'			=> true,
@@ -13,19 +13,9 @@ class SetupMail extends SetupPlugin
 			'priority'		=> 0
 		);
 	}
-	
-	public function update($version)
+		
+	public function uninstall($keep_data = true)
 	{
-		switch($version){
-			case '1.53':
-			case '1.52':
-			case '1.51':
-			default:
-				break;
-		}
-	}
-	
-	public function uninstall($registry)
-	{
+		//Nothing to do
 	}
 }

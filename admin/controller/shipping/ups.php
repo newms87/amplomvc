@@ -179,10 +179,10 @@ class Admin_Controller_Shipping_Ups extends Controller
 			'text'  => $this->_('text_ups_10kg_box')
 		);
 		
-		if (isset($_POST['ups_class ification'])) {
-			$this->data['ups_class ification'] = $_POST['ups_classification'];
+		if (isset($_POST['ups_classification'])) {
+			$this->data['ups_classification'] = $_POST['ups_classification'];
 		} else {
-			$this->data['ups_class ification'] = $this->config->get('ups_classification');
+			$this->data['ups_classification'] = $this->config->get('ups_classification');
 		}
 						
 		$this->data['classifications'][] = array(
@@ -603,10 +603,10 @@ class Admin_Controller_Shipping_Ups extends Controller
 			$this->data['ups_weight_code'] = $this->config->get('ups_weight_code');
 		}
 		
-		if (isset($_POST['ups_weight_class _id'])) {
-			$this->data['ups_weight_class _id'] = $_POST['ups_weight_class_id'];
+		if (isset($_POST['ups_weight_class_id'])) {
+			$this->data['ups_weight_class_id'] = $_POST['ups_weight_class_id'];
 		} else {
-			$this->data['ups_weight_class _id'] = $this->config->get('ups_weight_class_id');
+			$this->data['ups_weight_class_id'] = $this->config->get('ups_weight_class_id');
 		}
 		
 		$this->data['weight_classes'] = $this->Model_Localisation_WeightClass->getWeightClasses();
@@ -617,10 +617,10 @@ class Admin_Controller_Shipping_Ups extends Controller
 			$this->data['ups_length_code'] = $this->config->get('ups_length_code');
 		}
 		
-		if (isset($_POST['ups_length_class '])) {
-			$this->data['ups_length_class '] = $_POST['ups_length_class'];
+		if (isset($_POST['ups_length_class'])) {
+			$this->data['ups_length_class'] = $_POST['ups_length_class'];
 		} else {
-			$this->data['ups_length_class '] = $this->config->get('ups_length_class');
+			$this->data['ups_length_class'] = $this->config->get('ups_length_class');
 		}
 				
 		$this->data['length_classes'] = $this->Model_Localisation_LengthClass->getLengthClasses();
@@ -643,10 +643,10 @@ class Admin_Controller_Shipping_Ups extends Controller
 			$this->data['ups_height'] = $this->config->get('ups_height');
 		}
 								
-		if (isset($_POST['ups_tax_class _id'])) {
-			$this->data['ups_tax_class _id'] = $_POST['ups_tax_class_id'];
+		if (isset($_POST['ups_tax_class_id'])) {
+			$this->data['ups_tax_class_id'] = $_POST['ups_tax_class_id'];
 		} else {
-			$this->data['ups_tax_class _id'] = $this->config->get('ups_tax_class_id');
+			$this->data['ups_tax_class_id'] = $this->config->get('ups_tax_class_id');
 		}
 		
 		$this->data['tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();

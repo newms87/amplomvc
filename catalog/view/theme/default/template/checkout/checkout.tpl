@@ -4,15 +4,15 @@
 	<h1><?= $heading_title; ?></h1>
 	<? $step = 1;?>
 	<div id='checkout_process' class="checkout">
-		<div id="login" class='checkout_item' route='checkout/block/login'>
+		<div id="login" class='checkout_item' route='block/checkout/login'>
 			<div class="checkout-heading"><?= $text_step . ' ' . $step++; ?>. <?= $text_checkout_option; ?></div>
 			<div class="checkout-content"></div>
 		</div>
-		<div id="customer_information" class='checkout_item' route='checkout/block/customer_information'>
+		<div id="customer_information" class='checkout_item' route='block/checkout/customer_information'>
 			<div class="checkout-heading"><?= $text_step . ' ' . $step++; ?>. <?= $text_checkout_information; ?></div>
 			<div class="checkout-content"></div>
 		</div>
-		<div id="confirm" class='checkout_item' route='checkout/block/confirm'>
+		<div id="confirm" class='checkout_item' route='block/checkout/confirm'>
 			<div class="checkout-heading"><?= $text_step . ' ' . $step++; ?>. <?= $text_checkout_confirm; ?></div>
 			<div class="checkout-content"></div>
 		</div>
@@ -93,7 +93,7 @@ function submit_checkout_item(context){
 	id = context.attr('id');
 	
 	if(id && id == 'button-account' && $('[name=account]:checked').val() == 'register'){
-			load_checkout_item('customer_information', 'checkout/block/register');
+			load_checkout_item('customer_information', 'block/checkout/register');
 			return;
 	}
 	

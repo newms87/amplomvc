@@ -4,8 +4,7 @@ class Admin_Controller_Block_Module_Press extends Controller
 	
 	public function settings(&$settings)
 	{
-		$this->load->language('block/module/press');
-			
+		$this->language->load('block/module/press');
 		$this->template->load('block/module/press_settings');
 
 		if (!isset($settings['press_items'])) {

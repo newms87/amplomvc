@@ -1,5 +1,5 @@
 <?php
-class Dev
+class System_Library_Dev
 {
 	private $registry;
 	

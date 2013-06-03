@@ -1,6 +1,6 @@
 #<?php
 //=====
-class ControllerCatalogProduct extends Controller 
+class Admin_Controller_Catalog_Product extends Controller 
 {
 //.....
 	private function getList()

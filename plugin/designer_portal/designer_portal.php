@@ -1,5 +1,5 @@
 <?php
-class ControllerPlugin_DesignerPortalDesignerPortal extends Controller 
+class _DesignerPortal extends Controller 
 {
 	
 	public function are_you_designer_link()

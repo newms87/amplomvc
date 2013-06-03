@@ -14,8 +14,8 @@ class Catalog_Model_Total_Handling extends Model
 				'sort_order' => $this->config->get('handling_sort_order')
 			);
 
-			if ($this->config->get('handling_tax_class _id')) {
-				$tax_rates = $this->tax->getRates($this->config->get('handling_fee'), $this->config->get('handling_tax_class _id'));
+			if ($this->config->get('handling_tax_class_id')) {
+				$tax_rates = $this->tax->getRates($this->config->get('handling_fee'), $this->config->get('handling_tax_class_id'));
 				
 				foreach ($tax_rates as $tax_rate) 
 {

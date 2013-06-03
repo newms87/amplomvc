@@ -18,11 +18,9 @@ require_once "../Matrix.php";
  * @param x[] float
  * @param y[] float
  */
-class LagrangeInterpolation 
-{
+class LagrangeInterpolation {
 
-	public function findPolynomialFactors($x, $y)
-	{
+	public function findPolynomialFactors($x, $y) {
 		$n = count($x);
 
 		$data = array();  // double[n][n];
@@ -56,7 +54,6 @@ $li = new LagrangeInterpolation;
 $f = $li->findPolynomialFactors($x, $y);
 
 
-for ($i = 0; $i < 3; ++$i) 
-{
+for ($i = 0; $i < 3; ++$i) {
 	echo $f[$i]."<br />";
 }

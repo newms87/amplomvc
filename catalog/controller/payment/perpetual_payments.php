@@ -64,7 +64,7 @@ class Catalog_Controller_Payment_PerpetualPayments extends Controller
 			'tran_currency' => $order_info['currency_code'],
 			'tran_testmode' => $this->config->get('perpetual_payments_test'),
 			'tran_type'	=> 'Sale',
-			'tran_class '	=> 'MoTo',
+			'tran_class'	=> 'MoTo',
 		);
 
 		$curl = curl_init('https://secure.voice-pay.com/gateway/remote');

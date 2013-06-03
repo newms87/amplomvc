@@ -40,7 +40,7 @@ final class mysqlidb implements Database
 				
 				$result->free();
 				
-				$query = new stdclass ();
+				$query = new stdclass();
 				$query->row = isset($data[0]) ? $data[0] : array();
 				$query->rows = $data;
 				$query->num_rows = count($data);

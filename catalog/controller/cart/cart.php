@@ -13,33 +13,33 @@ class Catalog_Controller_Cart_Cart extends Controller
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('cart/cart'));
 		
-		$this->data['block_cart'] = $this->getBlock('cart', 'cart');
+		$this->data['block_cart'] = $this->getBlock('cart/cart');
 		
 		if ($this->template->option('show_cart_weight')) {
-			$this->data['weight'] = $this->weight->format($this->cart->getWeight(), $this->config->get('config_weight_class _id'), $this->language->getInfo('decimal_point'), $this->language->getInfo('thousand_point'));
+			$this->data['weight'] = $this->weight->format($this->cart->getWeight(), $this->config->get('config_weight_class_id'), $this->language->getInfo('decimal_point'), $this->language->getInfo('thousand_point'));
 		}
 		
 		if ($this->config->get('coupon_status')) {
-			$this->data['block_coupon'] = $this->getBlock('cart','coupon');
+			$this->data['block_coupon'] = $this->getBlock('cart/coupon');
 		}
 		$this->data['show_coupon'] = $this->template->option('show_coupon');
 		
 		if ($this->config->get('voucher_status')) {
-			$this->data['block_voucher'] = $this->getBlock('cart', 'voucher');
+			$this->data['block_voucher'] = $this->getBlock('cart/voucher');
 		}
 		$this->data['show_voucher'] = $this->template->option('show_voucher');
 		
 		if ($this->config->get('reward_status') && $this->customer->getRewardPoints() && $this->cart->getTotalPoints() > 0) {
-			$this->data['block_reward'] = $this->getBlock('cart', 'reward');
+			$this->data['block_reward'] = $this->getBlock('cart/reward');
 		}
 		$this->data['show_reward'] = $this->template->option('show_reward');
 		
 		if ($this->config->get('shipping_status') && $this->cart->hasShipping()) {
-			$this->data['block_shipping'] = $this->getBlock('cart', 'shipping');
+			$this->data['block_shipping'] = $this->getBlock('cart/shipping');
 		}
 		$this->data['show_shipping'] = $this->template->option('show_shipping');
 		
-		$this->data['block_total'] = $this->getBlock('cart', 'total');
+		$this->data['block_total'] = $this->getBlock('cart/total');
 		
 		if (isset($_GET['redirect']) && preg_match("/route=cart\/cart/",$_GET['redirect']) == 0) {
 			$this->data['continue'] = urldecode($_GET['redirect']);

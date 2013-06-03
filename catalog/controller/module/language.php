@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Module_Language extends Controller 
 {
-	protected function index()
+	public function index()
 	{
 		$this->template->load('module/language');
 		$this->language->load('module/language');

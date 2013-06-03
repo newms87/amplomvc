@@ -33,7 +33,8 @@
  * @package	PHPExcel_Style
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Style_NumberFormat implements PHPExcel_IComparable{
+class PHPExcel_Style_NumberFormat implements PHPExcel_IComparable
+{
 	/* Pre-defined formats */
 	const FORMAT_GENERAL					= 'General';
 
@@ -314,7 +315,7 @@ class PHPExcel_Style_NumberFormat implements PHPExcel_IComparable{
 	* Fill built-in format codes
 	*/
 	private static function fillBuiltInFormatCodes()
- {
+	{
 		// Built-in format codes
 		if (is_null(self::$_builtInFormats)) {
 			self::$_builtInFormats = array();
@@ -382,7 +383,7 @@ class PHPExcel_Style_NumberFormat implements PHPExcel_IComparable{
 	* @return	string
 	*/
 	public static function builtInFormatCode($pIndex)
- {
+	{
 		// Clean parameter
 		$pIndex = intval($pIndex);
 
@@ -404,7 +405,7 @@ class PHPExcel_Style_NumberFormat implements PHPExcel_IComparable{
 	* @return	int|boolean
 	*/
 	public static function builtInFormatCodeIndex($formatCode)
- {
+	{
 		// Ensure built-in format codes are available
 		self::fillBuiltInFormatCodes();
 
@@ -429,7 +430,7 @@ class PHPExcel_Style_NumberFormat implements PHPExcel_IComparable{
 		return md5(
 			$this->_formatCode
 			. $this->_builtInFormatCode
-			. __class __
+			. __CLASS__
 		);
 	}
 
@@ -515,7 +516,7 @@ class PHPExcel_Style_NumberFormat implements PHPExcel_IComparable{
 	* @return string	Formatted string
 	*/
 	public static function toFormattedString($value = '', $format = '', $callBack = null)
- {
+	{
 		// For now we do not treat strings although section 4 of a format code affects strings
 		if (!is_numeric($value)) return $value;
 
@@ -718,8 +719,8 @@ class PHPExcel_Style_NumberFormat implements PHPExcel_IComparable{
 			}
 		}
 
-		// Additional formatting provided by callback function if($callBack !== null)
- {
+		// Additional formatting provided by callback function
+		if ($callBack !== null) {
 			list($writerInstance, $function) = $callBack;
 			$value = $writerInstance->$function($value, $formatColor);
 		}

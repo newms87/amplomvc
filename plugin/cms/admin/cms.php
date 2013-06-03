@@ -1,5 +1,5 @@
 <?php
-class ControllerPluginCms extends Controller 
+class Admin_Cms extends Controller 
 {
 	
 	public function settings()

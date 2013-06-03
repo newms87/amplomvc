@@ -41,8 +41,7 @@ if (!defined('DEBUGMODE_ENABLED')) {
  * @package	PHPExcel_Shared
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Shared_XMLWriter extends XMLWriter 
-{
+class PHPExcel_Shared_XMLWriter extends XMLWriter {
 	/** Temporary storage method */
 	const STORAGE_MEMORY	= 1;
 	const STORAGE_DISK		= 2;
@@ -60,8 +59,7 @@ class PHPExcel_Shared_XMLWriter extends XMLWriter
 	* @param int		$pTemporaryStorage			Temporary storage location
 	* @param string	$pTemporaryStorageFolder	Temporary storage folder
 	*/
-	public function __construct($pTemporaryStorage = self::STORAGE_MEMORY, $pTemporaryStorageFolder = NULL)
-	{
+	public function __construct($pTemporaryStorage = self::STORAGE_MEMORY, $pTemporaryStorageFolder = NULL) {
 		// Open temporary storage
 		if ($pTemporaryStorage == self::STORAGE_MEMORY) {
 			$this->openMemory();
@@ -87,8 +85,7 @@ class PHPExcel_Shared_XMLWriter extends XMLWriter
 	/**
 	* Destructor
 	*/
-	public function __destruct()
-	{
+	public function __destruct() {
 		// Unlink temporary files
 		if ($this->_tempFileName != '') {
 			@unlink($this->_tempFileName);
@@ -100,8 +97,7 @@ class PHPExcel_Shared_XMLWriter extends XMLWriter
 	*
 	* @return $data
 	*/
-	public function getData()
-	{
+	public function getData() {
 		if ($this->_tempFileName == '') {
 			return $this->outputMemory(true);
 		} else {

@@ -1,23 +1,11 @@
 <?php
-class SetupDesigner implements SetupPlugin 
+class _Setup implements PluginSetup 
 {
-		
-	public function install($registry, &$controller_adapters, &$db_requests)
+	public function install()
 	{
 	}
 	
-	public function update($version, $registry)
-	{
-		switch($version){
-			case '1.53':
-			case '1.52':
-			case '1.51':
-			default:
-				break;
-		}
-	}
-	
-	public function uninstall($registry)
+	public function uninstall($keep_data = true)
 	{
 	}
 }

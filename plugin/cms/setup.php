@@ -1,9 +1,10 @@
 <?php
-class SetupCms implements SetupPlugin 
+class _Setup implements PluginSetup 
 {
-	function install($registry, &$controller_adapters, &$db_requests)
+	function install()
 	{
-	
+		trigger_error("This is not implemented!");
+		exit;
 		$hooks = array(
 			'settings_validate' => array('when'=>'after', 'callback'=>'validate')
 		);
@@ -12,7 +13,7 @@ class SetupCms implements SetupPlugin
 			'plugin_path'  =>'admin/cms',
 			'base_type'	=>'admin',
 			'type'			=>'controller',
-			'class _path'	=>'setting/setting',
+			'class_path'	=>'setting/setting',
 			'route'		=>'setting/setting',
 			'hooks'		=>$hooks,
 			'on_render'	=>'settings',
@@ -24,7 +25,7 @@ class SetupCms implements SetupPlugin
 		);
 	}
 	
-	function update($version, $registry)
+	function update($version)
 	{
 		switch($version){
 			case '1.53':
@@ -35,7 +36,7 @@ class SetupCms implements SetupPlugin
 		}
 	}
 	
-	function uninstall($registry)
+	function uninstall()
 	{
 	}
 }

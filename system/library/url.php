@@ -35,13 +35,12 @@ class Url
 	
 	public function here()
 	{
-		$protocol = $this->is_ssl() ? 'https://':'http://';
-		return $protocol . $_SERVER['SERVER_NAME'] . preg_replace('/&amp;/','%26',$_SERVER['REQUEST_URI']);
+		return $this->link($_GET['route'], $this->get_query_exclude('route','_route_'));
 	}
 	
 	public function reload_page()
 	{
-		header("Location: http://" . $_SERVER['SERVER_NAME'] . str_replace('&amp;','&',$_SERVER['REQUEST_URI']));
+		header("Location: " . $this->here());
 		exit;
 	}
 	

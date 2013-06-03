@@ -1,5 +1,5 @@
 <?php
-class ControllerPlugin_MailAdminMail extends Controller 
+class Admin_Mail extends Controller 
 {
 	
 	public function mail_settings()

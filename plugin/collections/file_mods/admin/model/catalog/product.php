@@ -1,6 +1,6 @@
 #<?php
 //=====
-class ModelCatalogProduct extends Model 
+class Admin_Model_Catalog_Product extends Model 
 {
 //.....
 	public function addProduct($data)

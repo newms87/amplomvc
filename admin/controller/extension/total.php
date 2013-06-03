@@ -102,7 +102,7 @@ class Admin_Controller_Extension_Total extends Controller
 			$class = new $class($this->registry);
 			
 			if (method_exists($class, 'install')) {
-				$class ->install();
+				$class->install();
 			}
 			
 			$this->url->redirect($this->url->link('extension/total'));

@@ -42,7 +42,8 @@ if (!defined('PHPEXCEL_ROOT')) {
  * @package	PHPExcel_Reader
  * @copyright	Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Reader_Excel2007 implements PHPExcel_Reader_IReader{
+class PHPExcel_Reader_Excel2007 implements PHPExcel_Reader_IReader
+{
 	/**
 	* Read data only?
 	* Identifies whether the Reader should only read data values for cells, and ignore any formatting information;
@@ -93,8 +94,7 @@ class PHPExcel_Reader_Excel2007 implements PHPExcel_Reader_IReader{
 	/**
 	* Create a new PHPExcel_Reader_Excel2007 instance
 	*/
-	public function __construct()
-	{
+	public function __construct() {
 		$this->_readFilter = new PHPExcel_Reader_DefaultReadFilter();
 		$this->_referenceHelper = PHPExcel_ReferenceHelper::getInstance();
 	}
@@ -107,8 +107,7 @@ class PHPExcel_Reader_Excel2007 implements PHPExcel_Reader_IReader{
 	*
 	* @return	boolean
 	*/
-	public function getReadDataOnly()
-	{
+	public function getReadDataOnly() {
 		return $this->_readDataOnly;
 	}
 
@@ -122,8 +121,7 @@ class PHPExcel_Reader_Excel2007 implements PHPExcel_Reader_IReader{
 	*
 	* @return	PHPExcel_Reader_Excel2007
 	*/
-	public function setReadDataOnly($pValue = false)
-	{
+	public function setReadDataOnly($pValue = false) {
 		$this->_readDataOnly = $pValue;
 		return $this;
 	}
@@ -137,8 +135,7 @@ class PHPExcel_Reader_Excel2007 implements PHPExcel_Reader_IReader{
 	*
 	* @return	boolean
 	*/
-	public function getIncludeCharts()
-	{
+	public function getIncludeCharts() {
 		return $this->_includeCharts;
 	}
 
@@ -153,8 +150,7 @@ class PHPExcel_Reader_Excel2007 implements PHPExcel_Reader_IReader{
 	*
 	* @return	PHPExcel_Reader_Excel2007
 	*/
-	public function setIncludeCharts($pValue = false)
-	{
+	public function setIncludeCharts($pValue = false) {
 		$this->_includeCharts = (boolean) $pValue;
 		return $this;
 	}
@@ -208,8 +204,7 @@ class PHPExcel_Reader_Excel2007 implements PHPExcel_Reader_IReader{
 	*
 	* @return PHPExcel_Reader_IReadFilter
 	*/
-	public function getReadFilter()
-	{
+	public function getReadFilter() {
 		return $this->_readFilter;
 	}
 
@@ -220,8 +215,7 @@ class PHPExcel_Reader_Excel2007 implements PHPExcel_Reader_IReader{
 	* @param PHPExcel_Reader_IReadFilter $pValue
 	* @return PHPExcel_Reader_Excel2007
 	*/
-	public function setReadFilter(PHPExcel_Reader_IReadFilter $pValue)
-	{
+	public function setReadFilter(PHPExcel_Reader_IReadFilter $pValue) {
 		$this->_readFilter = $pValue;
 		return $this;
 	}
@@ -346,8 +340,7 @@ class PHPExcel_Reader_Excel2007 implements PHPExcel_Reader_IReader{
 	}
 
 
-	private static function _castToBool($c)
- {
+	private static function _castToBool($c) {
 //		echo 'Initial Cast to Boolean<br />';
 		$value = isset($c->v) ? (string) $c->v : null;
 		if ($value == '0') {
@@ -361,22 +354,19 @@ class PHPExcel_Reader_Excel2007 implements PHPExcel_Reader_IReader{
 	}	//	function _castToBool()
 
 
-	private static function _castToError($c)
- {
+	private static function _castToError($c) {
 //		echo 'Initial Cast to Error<br />';
 		return isset($c->v) ? (string) $c->v : null;;
 	}	//	function _castToError()
 
 
-	private static function _castToString($c)
- {
+	private static function _castToString($c) {
 //		echo 'Initial Cast to String<br />';
 		return isset($c->v) ? (string) $c->v : null;;
 	}	//	function _castToString()
 
 
-	private function _castToFormula($c,$r,&$cellDataType,&$value,&$calculatedValue,&$sharedFormulas,$castBaseType)
-	{
+	private function _castToFormula($c,$r,&$cellDataType,&$value,&$calculatedValue,&$sharedFormulas,$castBaseType) {
 //		echo '<font color="darkgreen">Formula</font><br />';
 //		echo '$c->f is '.$c->f.'<br />';
 		$cellDataType 		= 'f';
@@ -1206,7 +1196,7 @@ class PHPExcel_Reader_Excel2007 implements PHPExcel_Reader_IReader{
 									// Uppercase coordinate
 									$range = strtoupper($dataValidation["sqref"]);
 									$rangeSet = explode(' ',$range);
-									foreach ($rangeSet as $range) {
+									foreach($rangeSet as $range) {
 										$stRange = $docSheet->shrinkRangeToFit($range);
 
 										// Extract all cell references in $range
@@ -1518,7 +1508,7 @@ class PHPExcel_Reader_Excel2007 implements PHPExcel_Reader_IReader{
 														$shadow->setAlpha(self::array_item($outerShdw->srgbClr->alpha->attributes(), "val") / 1000);
 													}
 													$objDrawing->setWorksheet($docSheet);
-												} elseif ($this->_includeCharts) {
+												} elseif($this->_includeCharts) {
 													$fromCoordinate	= PHPExcel_Cell::stringFromColumnIndex((string) $twoCellAnchor->from->col) . ($twoCellAnchor->from->row + 1);
 													$fromOffsetX	= PHPExcel_Shared_Drawing::EMUToPixels($twoCellAnchor->from->colOff);
 													$fromOffsetY	= PHPExcel_Shared_Drawing::EMUToPixels($twoCellAnchor->from->rowOff);
@@ -1594,7 +1584,7 @@ class PHPExcel_Reader_Excel2007 implements PHPExcel_Reader_IReader{
 											case '_xlnm.Print_Area':
 												$rangeSets = explode(',', $extractedRange);		// FIXME: what if sheetname contains comma?
 												$newRangeSets = array();
-												foreach ($rangeSets as $rangeSet) {
+												foreach($rangeSets as $rangeSet) {
 													$range = explode('!', $rangeSet);	// FIXME: what if sheetname contains exclamation mark?
 													$rangeSet = isset($range[1]) ? $range[1] : $range[0];
 													$newRangeSets[] = str_replace('$', '', $rangeSet);
@@ -1742,8 +1732,7 @@ class PHPExcel_Reader_Excel2007 implements PHPExcel_Reader_IReader{
 	}
 
 
-	private static function _readColor($color, $background=false)
- {
+	private static function _readColor($color, $background=false) {
 		if (isset($color["rgb"])) {
 			return (string)$color["rgb"];
 		} else if (isset($color["indexed"])) {
@@ -1766,8 +1755,7 @@ class PHPExcel_Reader_Excel2007 implements PHPExcel_Reader_IReader{
 	}
 
 
-	private static function _readStyle($docStyle, $style)
- {
+	private static function _readStyle($docStyle, $style) {
 		// format code
 		if (isset($style->numFmt)) {
 			$docStyle->getNumberFormat()->setFormatCode($style->numFmt);
@@ -1809,7 +1797,7 @@ class PHPExcel_Reader_Excel2007 implements PHPExcel_Reader_IReader{
 		if (isset($style->fill)) {
 			if ($style->fill->gradientFill) {
 				$gradientFill = $style->fill->gradientFill[0];
-				if (!empty($gradientFill["type"])) {
+				if(!empty($gradientFill["type"])) {
 					$docStyle->getFill()->setFillType((string) $gradientFill["type"]);
 				}
 				$docStyle->getFill()->setRotation(floatval($gradientFill["degree"]));
@@ -1895,8 +1883,7 @@ class PHPExcel_Reader_Excel2007 implements PHPExcel_Reader_IReader{
 	}
 
 
-	private static function _readBorder($docBorder, $eleBorder)
- {
+	private static function _readBorder($docBorder, $eleBorder) {
 		if (isset($eleBorder["style"])) {
 			$docBorder->setBorderStyle((string) $eleBorder["style"]);
 		}
@@ -1906,8 +1893,7 @@ class PHPExcel_Reader_Excel2007 implements PHPExcel_Reader_IReader{
 	}
 
 
-	private function _parseRichText($is = null)
-	{
+	private function _parseRichText($is = null) {
 		$value = new PHPExcel_RichText();
 
 		if (isset($is->t)) {
@@ -1970,20 +1956,17 @@ class PHPExcel_Reader_Excel2007 implements PHPExcel_Reader_IReader{
 	}
 
 
-	private static function array_item($array, $key = 0)
- {
+	private static function array_item($array, $key = 0) {
 		return (isset($array[$key]) ? $array[$key] : null);
 	}
 
 
-	private static function dir_add($base, $add)
- {
+	private static function dir_add($base, $add) {
 		return preg_replace('~[^/]+/\.\./~', '', dirname($base) . "/$add");
 	}
 
 
-	private static function toCSSArray($style)
- {
+	private static function toCSSArray($style) {
 		$style = str_replace(array("\r","\n"), "", $style);
 
 		$temp = explode(';', $style);

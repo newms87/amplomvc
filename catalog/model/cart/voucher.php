@@ -73,7 +73,7 @@ class Catalog_Model_Cart_Voucher extends Model
 		$order_info = $this->Model_Checkout_Order->getOrder($order_id);
 		
 		if ($order_info) {
-			$language = new Language($order_info['language_directory'], $this->plugin_handler);
+			$language = new Language($this->registry, $order_info['language_directory']);
 			$language->load($order_info['language_filename']);
 			$language->load('mail/voucher');
 			

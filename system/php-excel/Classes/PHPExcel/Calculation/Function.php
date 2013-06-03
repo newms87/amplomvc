@@ -33,8 +33,7 @@
  * @package	PHPExcel_Calculation
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Calculation_Function 
-{
+class PHPExcel_Calculation_Function {
 	/* Function categories */
 	const CATEGORY_CUBE						= 'Cube';
 	const CATEGORY_DATABASE					= 'Database';
@@ -94,8 +93,7 @@ class PHPExcel_Calculation_Function
 	*
 	* @return string
 	*/
-	public function getCategory()
-	{
+	public function getCategory() {
 		return $this->_category;
 	}
 
@@ -105,8 +103,7 @@ class PHPExcel_Calculation_Function
 	* @param 	string		$value
 	* @throws 	Exception
 	*/
-	public function setCategory($value = null)
-	{
+	public function setCategory($value = null) {
 		if (!is_null($value)) {
 			$this->_category = $value;
 		} else {
@@ -119,8 +116,7 @@ class PHPExcel_Calculation_Function
 	*
 	* @return string
 	*/
-	public function getExcelName()
-	{
+	public function getExcelName() {
 		return $this->_excelName;
 	}
 
@@ -129,8 +125,7 @@ class PHPExcel_Calculation_Function
 	*
 	* @param string	$value
 	*/
-	public function setExcelName($value)
-	{
+	public function setExcelName($value) {
 		$this->_excelName = $value;
 	}
 
@@ -139,8 +134,7 @@ class PHPExcel_Calculation_Function
 	*
 	* @return string
 	*/
-	public function getPHPExcelName()
-	{
+	public function getPHPExcelName() {
 		return $this->_phpExcelName;
 	}
 
@@ -149,8 +143,7 @@ class PHPExcel_Calculation_Function
 	*
 	* @param string	$value
 	*/
-	public function setPHPExcelName($value)
-	{
+	public function setPHPExcelName($value) {
 		$this->_phpExcelName = $value;
 	}
 }

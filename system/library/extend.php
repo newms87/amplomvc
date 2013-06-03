@@ -61,11 +61,8 @@ class Extend
 	public function remove_navigation_link($name)
 	{
 		$links = $this->db->query_rows("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE name = '" . $this->db->escape($name) . "'");
-		echo "SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE name = '" . $this->db->escape($name) . "'";exit;
 		
-	
 		foreach ($links as $link) {
-			echo "removing $link[navigation_id]<br>";
 			$this->Model_Design_Navigation->deleteNavigationLink($link['navigation_id']);
 		}
 	}

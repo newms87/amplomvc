@@ -1,43 +1,65 @@
 <?php
 class FileMerge 
 {
+	private $registry;
 	private $merge_registry;
-	private $db;
 	private $error_msg = '';
+	//This tracks plugins that have issues and have been uninstalled while applying registry changes
+	private $uninstall = array();
 	
-	function __construct($db, $config)
+	function __construct($registry)
 	{
-		$this->db = $db;
-		$this->config = $config;
+		global $merge_registry;
+		$this->merge_registry = $merge_registry;
 		
-		$this->load_merge_registry();
+		$this->registry = $registry;
+		
+		$this->loadMergeRegistry();
+		
+		$this->validateMergeRegistry();
 	}
 	
-	public function get_error()
+	public function __get($key)
+	{
+		return $this->registry->get($key);
+	}
+	
+	public function getError()
 	{
 		return $this->error_msg;
 	}
 	
-	private function set_error($file, $line, $code, $msg)
+	private function setError($file, $line, $code, $msg)
 	{
 		if ($file) {
 			$msg = "Error in $file: Line $line:  ". htmlspecialchars($code) . ": " . $msg;
 		}
-		trigger_error($msg);
+		//trigger_error($msg);
 		$this->error_msg[] = $msg;
 	}
 	
-	public function get_merge_registry()
+	public function getFile($file)
 	{
-		return $this->merge_registry;
+		if (isset($this->merge_registry[$file])) {
+			return str_replace(SITE_DIR, DIR_MERGED_FILES, $file);
+		}
+		
+		return $file;
 	}
 	
-	public function set_merge_registry($merge_registry)
+	public function addFile($file_path, $name, $mod_path)
 	{
-		$this->merge_registry = $merge_registry;
+		$this->merge_registry[SITE_DIR . $file_path][$name] = $mod_path;
 	}
 	
-	public function load_merge_registry()
+	public function addFiles($name, $files)
+	{		
+		foreach ($files as $file_path => $mod_path) {
+			$this->addFile($file_path, $name, $mod_path);
+		}
+	}
+	
+	public function loadMergeRegistry()
 	{
 		$this->merge_registry = array();
 		
@@ -48,9 +70,8 @@ class FileMerge
 		}
 	}
 	
-	private function write_merge_registry()
+	private function writeMergeRegistry()
 	{
-		
 		$this->db->query("TRUNCATE " . DB_PREFIX . "plugin_file_modification");
 		
 		$new_registry = '';
@@ -73,69 +94,166 @@ class FileMerge
 		
 		$reg_file = DIR_MERGED_FILES . 'registry.txt';
 		chmod($reg_file, 0777);
-		$return = file_put_contents($reg_file, $new_registry);
+		$success = file_put_contents($reg_file, $new_registry);
 		chmod($reg_file, 0444);
 		
-		if ($return === false) {
-			$this->set_error('','','',"Failed to write to $reg_file");
+		if ($success === false) {
+			$this->message->add('warning', "Failed to write to $reg_file");
 		}
 		
-		return $return !== false;
+		return $success !== false;
 	}
 	
-	public function sync_registry_with_db()
+	public function syncRegistryWithDb()
 	{
-		$this->load_merge_registry();
+		$this->loadMergeRegistry();
  
-		if (!$this->apply_merge_registry()) {
+		if (!$this->applyMergeRegistry()) {
 			$msg = "Error: There was a problem remerging the file modifications. This could cause system instability. Please try to uninstall and reinstall the plugins!";
 			trigger_error($msg);
 			return false;
 		}
 		else {
-			$this->write_merge_registry();
+			$this->writeMergeRegistry();
 			return true;
 		}
 	}
 	
-	public function apply_merge_registry()
+	public function applyMergeRegistry()
 	{
-		
 		$return = true;
 		
-		foreach ($this->merge_registry as $file_path=>$names) {
+		foreach ($this->merge_registry as $file_path => $names) {
 			$working_file = $file_path;
 			$merged_file = str_replace(SITE_DIR, DIR_MERGED_FILES, $file_path);
 			
-			foreach ($names as $name=>$mod_path) {
+			foreach ($names as $name => $mod_path) {
+				if (isset($this->uninstall[$name])) {
+					unset($this->merge_registry[$file_path][$name]);
+					echo 'skipping ' . $name . '<BR>'; continue; 
+				}
+				
 				$mod_file = DIR_PLUGIN . $name . '/' . $mod_path;
 				
-				if ($this->merge_files($working_file, $mod_file, $merged_file)) {
+				if ($this->mergeFiles($working_file, $mod_file, $merged_file)) {
 					$working_file = $merged_file;
-				}
-				else {
-					$this->set_error('','','',"FileMerge::apply_merge_registry(): $mod_file could  not be applied");
+				} else {
+					$this->message->add('warning', $this->getError());
 					$return = false;
+					
+					$this->uninstall[$name] = true;
+					unset($this->merge_registry[$file_path][$name]);
+					//$this->plugin->uninstall($name);
 				}
 			}
 		}
-		
-		if (!$this->write_merge_registry()) {
-			$this->set_error('','','', "FileMerge::apply_merge_registry(): Failed to write the merge registry!");
+
+		if (!$this->writeMergeRegistry()) {
 			return false;
 		}
+		
+		$this->cleanMergedDirectory();
 		
 		return $return;
 	}
 	
-	public function merge_files($orig_file, $mod_file, $new_file_path)
+	public function cleanMergedDirectory()
 	{
+		$files = $this->tool->get_files_r(DIR_MERGED_FILES, array('php', 'tpl'));
 		
+		$merged_files = array();
+		foreach (array_keys($this->merge_registry) as $m_file) {
+			$merged_files[] = strtolower(str_replace(SITE_DIR, DIR_MERGED_FILES, $m_file));
+		}
+		
+		foreach ($files as $file) {
+			if (!in_array(strtolower(str_replace('\\', '/', $file)), $merged_files)) {
+				if (file_exists($file)) {
+					unlink($file);
+					
+					$dir = dirname($file);
+					
+					while (strpos($dir, SITE_DIR) === 0 && is_dir($dir) && count(scandir($dir)) <= 2) {
+						if (!rmdir($dir)) {
+							break;
+						}
+						$dir = dirname($dir);
+					}
+				}
+			}
+		}
+	}
+	
+	private function validateMergeRegistry()
+	{
+		$valid = true;
+		foreach ($this->merge_registry as $file_path => $names) {
+			if (!is_file($file_path)) {
+				$valid = false;
+				unset($this->merge_registry[$file_path]);
+				continue;
+			}
+			
+			$merged_file = str_replace(SITE_DIR, DIR_MERGED_FILES, $file_path);
+			
+			if (!is_file($merged_file)) {
+				$valid = false;
+				continue;
+			}
+			
+			if (filemtime($file_path) > filemtime($merged_file)) {
+				if ($this->config->get('config_debug')) {
+					$this->message->add('notify', "The merged file was out of date with the file $file_path. It has been updated");
+				}
+				
+				$valid = false;
+			}
+			
+			foreach ($names as $name => $mod_path) {
+				$plugin_file = DIR_PLUGIN . $name . '/' . $mod_path;
+				
+				if (!is_file($plugin_file)) {
+					unset($this->merge_registry[$file_path][$name]);
+					
+					$msg = "The $name plugin is missing the file $plugin_file! This may cause system instability. The plugin $name has been uninstalled.";
+					$this->plugin->uninstall($name);
+					$this->message->add('warning', $msg);
+					trigger_error($msg);
+					
+					$valid = false;
+					
+					continue;
+				}
+				
+				if (!is_file($plugin_file) || filemtime($plugin_file) > filemtime($merged_file)) {
+					if ($this->config->get('config_debug')) {
+						$this->message->add('notify', "The merged file was out of date with the file $plugin_file. It has been updated");
+					}
+					$valid = false;
+				}
+			}
+			
+		}
+		
+		if (!$valid) {
+			if ($this->applyMergeRegistry()) {
+				$this->url->reload_page();
+			}
+			else {
+				$msg = 'There was a problem validating the plugin merge file registry. The problem could not be fixed! Please validate the plugins!';
+				trigger_error($msg);
+				$this->message->add('warning', $msg);
+			}
+		}
+	}
+
+	public function mergeFiles($orig_file, $mod_file, $new_file_path)
+	{
 		if (!file_exists($orig_file)) {
-			$this->set_error('','','',"Plugin file modification failed: $orig_file does not exist!");
+			$this->setError('','','',"Plugin file modification failed: $orig_file does not exist!");
 			return false;
 		} elseif (!file_exists($mod_file)) {
-			$this->set_error('','','',"Plugin file modification failed: $mod_file does not exist!");
+			$this->setError('','','',"Plugin file modification failed: $mod_file does not exist!");
 			return false;
 		}
 		
@@ -177,10 +295,10 @@ class FileMerge
 			//End Of Block
 			if (strpos($mod, '-----') !== false && strpos($mod, '-----') < 5) {
 				if ($io_mode == 'seek' || $io_mode == 'remove') {
-					$block = $this->find_block($code_block, $original, $index);
+					$block = $this->findBlock($code_block, $original, $index);
 					
 					if ($block === false) {
-						$this->set_error($mod_file, $line, $mod, "The code block starting at this line was not found in the original file: $orig_file.!");
+						$this->setError(SITE_DIR . $mod_file, $line, $mod, "The code block starting at this line was not found in the original file: " . SITE_DIR . "$orig_file.!");
 						return false;
 					}
 					else {
@@ -232,7 +350,7 @@ class FileMerge
 					}
 				}
 				else {
-					$this->set_error($mod_file, $line, $mod, "Check your syntax. The IO Mode was not set at end of code block");
+					$this->setError($mod_file, $line, $mod, "Check your syntax. The IO Mode was not set at end of code block");
 					return false;
 				}
 				
@@ -243,7 +361,7 @@ class FileMerge
 			//Remove Block Start
 			elseif (strpos($mod, '<<<<<') !== false && strpos($mod, '<<<<<') < 5) {
 				if ($io_mode) {
-					$this->set_error($mod_file, $line, $mod, "Check your syntax. The IO Mode was in $io_mode at start of Remove Code Block.");
+					$this->setError($mod_file, $line, $mod, "Check your syntax. The IO Mode was in $io_mode at start of Remove Code Block.");
 					return false;
 				}
 				
@@ -253,7 +371,7 @@ class FileMerge
 			}
 			elseif (strpos($mod, '>>>>>') !== false && strpos($mod, '>>>>>') < 5) {
 				if ($io_mode) {
-					$this->set_error($mod_file, $line, $mod, "Check your syntax. The IO Mode was in $io_mode at start of Add Code Block.");
+					$this->setError($mod_file, $line, $mod, "Check your syntax. The IO Mode was in $io_mode at start of Add Code Block.");
 					return false;
 				}
 				
@@ -287,7 +405,7 @@ class FileMerge
 			}
 			elseif (strpos($mod, '=====') !== false && strpos($mod, '=====') < 5) {
 				if ($io_mode) {
-					$this->set_error($mod_file, $line, $mod, "Check your syntax. The IO Mode was in $io_mode at start of Seek Code Block.");
+					$this->setError($mod_file, $line, $mod, "Check your syntax. The IO Mode was in $io_mode at start of Seek Code Block.");
 					return false;
 				}
 				
@@ -297,7 +415,7 @@ class FileMerge
 			}
 			elseif (strpos($mod, '.....') !== false && strpos($mod, '.....') < 5) {
 				if ($io_mode != 'seek') {
-					$this->set_error($mod_file, $line, $mod, "Check your syntax. The IO Mode was in $io_mode at start of Seek Code Block.");
+					$this->setError($mod_file, $line, $mod, "Check your syntax. The IO Mode was in $io_mode at start of Seek Code Block.");
 					return false;
 				}
 				
@@ -328,13 +446,13 @@ class FileMerge
 				$code_block[] = $mod;
 			}
 			elseif ($mod && !preg_match('/\/\/ignore/i',$mod)) {
-				$this->set_error($mod_file, $line, $mod, "The IO Mode was not set before this line!");
+				$this->setError($mod_file, $line, $mod, "The IO Mode was not set before this line!");
 				return false;
 			}
 		}
 		
 		if ($io_mode) {
-			$this->set_error($mod_file, count($mod_file), '', "The IO Mode was still set at the end of the file! Be sure to end all blocks of code with '-----'");
+			$this->setError($mod_file, count($mod_file), '', "The IO Mode was still set at the end of the file! Be sure to end all blocks of code with '-----'");
 			return false;
 		}
 		
@@ -357,16 +475,15 @@ class FileMerge
 		}
 				
 		if ( file_put_contents($new_file_path, $new_file) ) {
-			//echo "SUCCESSFULLY MERGED $new_file_path<Br>";
 			return true;
 		}
 		else {
-			$this->set_error($new_file_path, 0, '', "Could not write to file!");
+			$this->setError($new_file_path, 0, '', "Could not write to file!");
 			return false;
 		}
 	}
 
-	private function find_block($block, $file, $start_index)
+	private function findBlock($block, $file, $start_index)
 	{
 		if(!count($block) || (count($block) > (count($file) - $start_index))) return false;
 		
@@ -434,5 +551,4 @@ class FileMerge
 		
 		return false;
 	}
-	
 }

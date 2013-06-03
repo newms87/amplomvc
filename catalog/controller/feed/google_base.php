@@ -40,9 +40,9 @@ class Catalog_Controller_Feed_GoogleBase extends Controller
 						}
 									
 					if ((float)$product['special']) {
-								$output .= '<g:price>' .  $this->currency->format($this->tax->calculate($product['special'], $product['tax_class _id']), $currency, false, false) . '</g:price>';
+								$output .= '<g:price>' .  $this->currency->format($this->tax->calculate($product['special'], $product['tax_class_id']), $currency, false, false) . '</g:price>';
 						} else {
-								$output .= '<g:price>' . $this->currency->format($this->tax->calculate($product['price'], $product['tax_class _id']), $currency, false, false) . '</g:price>';
+								$output .= '<g:price>' . $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id']), $currency, false, false) . '</g:price>';
 						}
 				
 					$categories = $this->Model_Catalog_Product->getCategories($product['product_id']);
@@ -72,7 +72,7 @@ class Catalog_Controller_Feed_GoogleBase extends Controller
 					
 					$output .= '<g:quantity>' . $product['quantity'] . '</g:quantity>';
 					$output .= '<g:upc>' . $product['upc'] . '</g:upc>';
-					$output .= '<g:weight>' . $this->weight->format($product['weight'], $product['weight_class _id']) . '</g:weight>';
+					$output .= '<g:weight>' . $this->weight->format($product['weight'], $product['weight_class_id']) . '</g:weight>';
 					$output .= '<g:availability>' . ($product['quantity'] ? 'in stock' : 'out of stock') . '</g:availability>';
 					$output .= '</item>';
 				}

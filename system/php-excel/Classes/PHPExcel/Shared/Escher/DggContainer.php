@@ -32,7 +32,8 @@
  * @package	PHPExcel_Shared_Escher
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Shared_Escher_DggContainer{
+class PHPExcel_Shared_Escher_DggContainer
+{
 	/**
 	* Maximum shape index of all shapes in all drawings increased by one
 	*

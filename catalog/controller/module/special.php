@@ -26,13 +26,13 @@ class Catalog_Controller_Module_Special extends Controller
 			}
 
 			if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-				$price = $this->currency->format($this->tax->calculate($result['price'], $result['tax_class _id']));
+				$price = $this->currency->format($this->tax->calculate($result['price'], $result['tax_class_id']));
 			} else {
 				$price = false;
 			}
 					
 			if ((float)$result['special']) {
-				$special = $this->currency->format($this->tax->calculate($result['special'], $result['tax_class _id']));
+				$special = $this->currency->format($this->tax->calculate($result['special'], $result['tax_class_id']));
 			} else {
 				$special = false;
 			}

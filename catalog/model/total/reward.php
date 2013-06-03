@@ -27,8 +27,8 @@ class Catalog_Model_Total_Reward extends Model
 					if ($product['points']) {
 						$discount = $product['total'] * ($this->session->data['reward'] / $points_total);
 						
-						if ($product['tax_class _id']) {
-							$tax_rates = $this->tax->getRates($discount, $product['tax_class _id']);
+						if ($product['tax_class_id']) {
+							$tax_rates = $this->tax->getRates($discount, $product['tax_class_id']);
 							
 							foreach ($tax_rates as $tax_rate) 
 {

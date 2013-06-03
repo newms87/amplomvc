@@ -33,7 +33,8 @@
  * @package		PHPExcel_Chart
  * @copyright	Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Chart_Layout{
+class PHPExcel_Chart_Layout
+{
 	/**
 	* layoutTarget
 	*
@@ -89,13 +90,13 @@ class PHPExcel_Chart_Layout{
 	*/
 	public function __construct($layout=array())
 	{
-		if (isset($layout['layoutTarget'])) { $this->_layoutTarget	= $layout['layoutTarget'];	}
-		if (isset($layout['xMode'])) { $this->_xMode			= $layout['xMode'];			}
-		if (isset($layout['yMode'])) { $this->_yMode			= $layout['yMode'];			}
-		if (isset($layout['x'])) { $this->_xPos			= (float) $layout['x'];		}
-		if (isset($layout['y'])) { $this->_yPos			= (float) $layout['y'];		}
-		if (isset($layout['w'])) { $this->_width			= (float) $layout['w'];		}
-		if (isset($layout['h'])) { $this->_height		= (float) $layout['h'];		}
+		if (isset($layout['layoutTarget']))	{ $this->_layoutTarget	= $layout['layoutTarget'];	}
+		if (isset($layout['xMode']))		{ $this->_xMode			= $layout['xMode'];			}
+		if (isset($layout['yMode']))		{ $this->_yMode			= $layout['yMode'];			}
+		if (isset($layout['x']))			{ $this->_xPos			= (float) $layout['x'];		}
+		if (isset($layout['y']))			{ $this->_yPos			= (float) $layout['y'];		}
+		if (isset($layout['w']))			{ $this->_width			= (float) $layout['w'];		}
+		if (isset($layout['h']))			{ $this->_height		= (float) $layout['h'];		}
 	}
 
 	/**
@@ -103,8 +104,7 @@ class PHPExcel_Chart_Layout{
 	*
 	* @return string
 	*/
-	public function getLayoutTarget()
-	{
+	public function getLayoutTarget() {
 		return $this->_layoutTarget;
 	}
 
@@ -113,8 +113,7 @@ class PHPExcel_Chart_Layout{
 	*
 	* @param Layout Target $value
 	*/
-	public function setLayoutTarget($value)
-	{
+	public function setLayoutTarget($value) {
 		$this->_layoutTarget = $value;
 	}
 
@@ -123,8 +122,7 @@ class PHPExcel_Chart_Layout{
 	*
 	* @return string
 	*/
-	public function getXMode()
-	{
+	public function getXMode() {
 		return $this->_xMode;
 	}
 
@@ -133,8 +131,7 @@ class PHPExcel_Chart_Layout{
 	*
 	* @param X-Mode $value
 	*/
-	public function setXMode($value)
-	{
+	public function setXMode($value) {
 		$this->_xMode = $value;
 	}
 
@@ -143,8 +140,7 @@ class PHPExcel_Chart_Layout{
 	*
 	* @return string
 	*/
-	public function getYMode()
-	{
+	public function getYMode() {
 		return $this->_xMode;
 	}
 
@@ -153,8 +149,7 @@ class PHPExcel_Chart_Layout{
 	*
 	* @param Y-Mode $value
 	*/
-	public function setYMode($value)
-	{
+	public function setYMode($value) {
 		$this->_xMode = $value;
 	}
 
@@ -163,8 +158,7 @@ class PHPExcel_Chart_Layout{
 	*
 	* @return number
 	*/
-	public function getXPosition()
-	{
+	public function getXPosition() {
 		return $this->_xPos;
 	}
 
@@ -173,8 +167,7 @@ class PHPExcel_Chart_Layout{
 	*
 	* @param X-Position $value
 	*/
-	public function setXPosition($value)
-	{
+	public function setXPosition($value) {
 		$this->_xPos = $value;
 	}
 
@@ -183,8 +176,7 @@ class PHPExcel_Chart_Layout{
 	*
 	* @return number
 	*/
-	public function getYPosition()
-	{
+	public function getYPosition() {
 		return $this->_yPos;
 	}
 
@@ -193,8 +185,7 @@ class PHPExcel_Chart_Layout{
 	*
 	* @param Y-Position $value
 	*/
-	public function setYPosition($value)
-	{
+	public function setYPosition($value) {
 		$this->_yPos = $value;
 	}
 
@@ -203,8 +194,7 @@ class PHPExcel_Chart_Layout{
 	*
 	* @return number
 	*/
-	public function getWidth()
-	{
+	public function getWidth() {
 		return $this->_width;
 	}
 
@@ -213,8 +203,7 @@ class PHPExcel_Chart_Layout{
 	*
 	* @param Width $value
 	*/
-	public function setWidth($value)
-	{
+	public function setWidth($value) {
 		$this->_width = $value;
 	}
 
@@ -223,8 +212,7 @@ class PHPExcel_Chart_Layout{
 	*
 	* @return number
 	*/
-	public function getHeight()
-	{
+	public function getHeight() {
 		return $this->_height;
 	}
 
@@ -233,8 +221,7 @@ class PHPExcel_Chart_Layout{
 	*
 	* @param Height $value
 	*/
-	public function setHeight($value)
-	{
+	public function setHeight($value) {
 		$this->_height = $value;
 	}
 

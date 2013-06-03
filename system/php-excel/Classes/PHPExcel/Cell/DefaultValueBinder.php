@@ -43,7 +43,8 @@ if (!defined('PHPEXCEL_ROOT')) {
  * @package	PHPExcel_Cell
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Cell_DefaultValueBinder implements PHPExcel_Cell_IValueBinder{
+class PHPExcel_Cell_DefaultValueBinder implements PHPExcel_Cell_IValueBinder
+{
 	/**
 	* Bind value to a cell
 	*
@@ -71,8 +72,7 @@ class PHPExcel_Cell_DefaultValueBinder implements PHPExcel_Cell_IValueBinder{
 	* @param	mixed 	$pValue
 	* @return 	int
 	*/
-	public static function dataTypeForValue($pValue = null)
- {
+	public static function dataTypeForValue($pValue = null) {
 		// Match the value against a few data types
 		if (is_null($pValue)) {
 			return PHPExcel_Cell_DataType::TYPE_NULL;

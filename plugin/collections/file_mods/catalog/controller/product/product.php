@@ -1,6 +1,6 @@
 #<?php
 //=====
-class ControllerProductProduct extends Controller 
+class Catalog_Controller_Product_Product extends Controller 
 {
 //.....
 	public function index()
@@ -15,6 +15,8 @@ class ControllerProductProduct extends Controller
 //-----
 //>>>>> {php}
 			$collection_info = $this->Model_Catalog_Collection->getCollectionByProduct($product_id);
+			
+			$product_info['collection'] = $collection_info;
 			
 			if ($collection_info) {
 				$this->language->plugin('collections', 'catalog/product');

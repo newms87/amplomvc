@@ -21,15 +21,14 @@
 
 
 /**
-* class for creating File PPS's for OLE containers
+* Class for creating File PPS's for OLE containers
 *
 * @author	Xavier Noguer <xnoguer@php.net>
 * @category PHPExcel
 * @package  PHPExcel_Shared_OLE
 */
 class PHPExcel_Shared_OLE_PPS_File extends PHPExcel_Shared_OLE_PPS
-	
-{
+	{
 	/**
 	* The constructor
 	*

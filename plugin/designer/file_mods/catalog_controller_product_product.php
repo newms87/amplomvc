@@ -1,6 +1,6 @@
 //=====
 <?php
-class ControllerProductProduct extends Controller 
+class _CatalogControllerProductProduct extends Controller 
 {
 //.....
 	public function index()

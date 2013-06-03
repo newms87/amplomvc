@@ -103,7 +103,7 @@ class Catalog_Model_Catalog_Product extends Model
 		
 		
 		//select fields
-		$select = "p.product_id, p.model, p.price, pd.name, p.image, p.is_final, p.tax_class _id";
+		$select = "p.product_id, p.model, p.price, pd.name, p.image, p.is_final, p.tax_class_id";
 		
 		$store = DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id AND p2s.store_id='$store_id')";
 		$product_description = DB_PREFIX . "product_description pd ON (p.product_id=pd.product_id AND pd.language_id='$lang_id')";
@@ -207,7 +207,7 @@ class Catalog_Model_Catalog_Product extends Model
 		
 		//Has an active special (or sorting by price)
 		if (!empty($data['has_special']) || $data['sort'] === 'price') {
-			$from .= " LEFT JOIN (SELECT product_id, MIN(price) as special FROM oc_product_special GROUP BY product_id) spec ON (spec.product_id = p.product_id)";
+			$from .= " LEFT JOIN (SELECT product_id, MIN(price) as special FROM oc_product_special WHERE date_start <= NOW() AND date_end > NOW() GROUP BY product_id) spec ON (spec.product_id = p.product_id)";
 			
 			if (!empty($data['has_special'])) {
 				$where .= " AND spec.special IS NOT NULL";

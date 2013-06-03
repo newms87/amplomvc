@@ -33,7 +33,8 @@
  * @package	PHPExcel_Writer_Excel2007
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Writer_Excel2007_Theme extends PHPExcel_Writer_Excel2007_WriterPart{
+class PHPExcel_Writer_Excel2007_Theme extends PHPExcel_Writer_Excel2007_WriterPart
+{
 	/**
 	* Map of Major fonts to write
 	* @static	array of string
@@ -838,7 +839,7 @@ class PHPExcel_Writer_Excel2007_Theme extends PHPExcel_Writer_Excel2007_WriterPa
 		$objWriter->writeAttribute('typeface', '');
 		$objWriter->endElement();
 
-		foreach ($fontSet as $fontScript => $typeface) {
+		foreach($fontSet as $fontScript => $typeface) {
 			$objWriter->startElement('a:font');
 				$objWriter->writeAttribute('script', $fontScript);
 				$objWriter->writeAttribute('typeface', $typeface);
@@ -856,7 +857,7 @@ class PHPExcel_Writer_Excel2007_Theme extends PHPExcel_Writer_Excel2007_WriterPa
 	*/
 	private function _writeColourScheme($objWriter)
 	{
-		foreach (self::$_colourScheme as $colourName => $colourValue) {
+		foreach(self::$_colourScheme as $colourName => $colourValue) {
 			$objWriter->startElement('a:'.$colourName);
 
 				$objWriter->startElement('a:srgbClr');

@@ -32,7 +32,8 @@
  * @package	PHPExcel_Shared_Escher
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Shared_Escher_DggContainer_BstoreContainer_BSE{
+class PHPExcel_Shared_Escher_DggContainer_BstoreContainer_BSE
+{
 	const BLIPTYPE_ERROR	= 0x00;
 	const BLIPTYPE_UNKNOWN	= 0x01;
 	const BLIPTYPE_EMF		= 0x02;

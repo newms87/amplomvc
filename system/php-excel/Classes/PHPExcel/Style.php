@@ -33,7 +33,8 @@
  * @package	PHPExcel_Style
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Style implements PHPExcel_IComparable{
+class PHPExcel_Style implements PHPExcel_IComparable
+{
 	/**
 	* Font
 	*
@@ -257,8 +258,7 @@ class PHPExcel_Style implements PHPExcel_IComparable{
 	* @throws	Exception
 	* @return PHPExcel_Style
 	*/
-	public function applyFromArray($pStyles = null, $pAdvanced = true)
-	{
+	public function applyFromArray($pStyles = null, $pAdvanced = true) {
 		if (is_array($pStyles)) {
 			if ($this->_isSupervisor) {
 
@@ -537,8 +537,7 @@ class PHPExcel_Style implements PHPExcel_IComparable{
 	*
 	* @return PHPExcel_Style_Fill
 	*/
-	public function getFill()
-	{
+	public function getFill() {
 		return $this->_fill;
 	}
 
@@ -547,8 +546,7 @@ class PHPExcel_Style implements PHPExcel_IComparable{
 	*
 	* @return PHPExcel_Style_Font
 	*/
-	public function getFont()
-	{
+	public function getFont() {
 		return $this->_font;
 	}
 
@@ -569,8 +567,7 @@ class PHPExcel_Style implements PHPExcel_IComparable{
 	*
 	* @return PHPExcel_Style_Borders
 	*/
-	public function getBorders()
-	{
+	public function getBorders() {
 		return $this->_borders;
 	}
 
@@ -579,8 +576,7 @@ class PHPExcel_Style implements PHPExcel_IComparable{
 	*
 	* @return PHPExcel_Style_Alignment
 	*/
-	public function getAlignment()
-	{
+	public function getAlignment() {
 		return $this->_alignment;
 	}
 
@@ -589,8 +585,7 @@ class PHPExcel_Style implements PHPExcel_IComparable{
 	*
 	* @return PHPExcel_Style_NumberFormat
 	*/
-	public function getNumberFormat()
-	{
+	public function getNumberFormat() {
 		return $this->_numberFormat;
 	}
 
@@ -599,8 +594,7 @@ class PHPExcel_Style implements PHPExcel_IComparable{
 	*
 	* @return PHPExcel_Style_Conditional[]
 	*/
-	public function getConditionalStyles()
-	{
+	public function getConditionalStyles() {
 		return $this->getActiveSheet()->getConditionalStyles($this->getActiveCell());
 	}
 
@@ -610,8 +604,7 @@ class PHPExcel_Style implements PHPExcel_IComparable{
 	* @param PHPExcel_Style_Conditional[]	$pValue	Array of condtional styles
 	* @return PHPExcel_Style
 	*/
-	public function setConditionalStyles($pValue = null)
-	{
+	public function setConditionalStyles($pValue = null) {
 		if (is_array($pValue)) {
 			$this->getActiveSheet()->setConditionalStyles($this->getSelectedCells(), $pValue);
 		}
@@ -623,8 +616,7 @@ class PHPExcel_Style implements PHPExcel_IComparable{
 	*
 	* @return PHPExcel_Style_Protection
 	*/
-	public function getProtection()
-	{
+	public function getProtection() {
 		return $this->_protection;
 	}
 
@@ -633,8 +625,7 @@ class PHPExcel_Style implements PHPExcel_IComparable{
 	*
 	* @return string	Hash code
 	*/
-	public function getHashCode()
-	{
+	public function getHashCode() {
 		$hashConditionals = '';
 		foreach ($this->_conditionalStyles as $conditional) {
 			$hashConditionals .= $conditional->getHashCode();
@@ -648,7 +639,7 @@ class PHPExcel_Style implements PHPExcel_IComparable{
 			. $this->_numberFormat->getHashCode()
 			. $hashConditionals
 			. $this->_protection->getHashCode()
-			. __class __
+			. __CLASS__
 		);
 	}
 
@@ -675,8 +666,7 @@ class PHPExcel_Style implements PHPExcel_IComparable{
 	/**
 	* Implement PHP __clone to create a deep clone, not just a shallow copy.
 	*/
-	public function __clone()
-	{
+	public function __clone() {
 		$vars = get_object_vars($this);
 		foreach ($vars as $key => $value) {
 			if ((is_object($value)) && ($key != '_parent')) {

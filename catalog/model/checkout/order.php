@@ -347,7 +347,7 @@ class Catalog_Model_Checkout_Order extends Model
 
 	public function generate_excel_order_invoice($vendor, $order_info)
 	{
-		_require_once(DIR_SYSTEM . 'php-excel/class es/PHPExcel/IOFactory.php');
+		_require_once(DIR_SYSTEM . 'php-excel/classes/PHPExcel/IOFactory.php');
 		
 		if (!is_dir(DIR_EXCEL_FPO . $vendor['vendor_id'])) {
 			$mode = octdec($this->config->get('config_default_dir_mode'));

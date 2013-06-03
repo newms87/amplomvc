@@ -37,7 +37,7 @@ class PrettyLanguage
 		$ext = array('php');
 		
 		
-		$files = $this->get_all_files_r(SITE_DIR . '', $ext);
+		$files = $this->get_all_files_r(SITE_DIR . 'catalog/controller/block/', $ext);
 		
 		//$this->smodel_call_update($files);
 		
@@ -101,25 +101,33 @@ class PrettyLanguage
 			
 			$dir_components = explode('/',str_replace(SITE_DIR, '', dirname($file)));
 			
-			foreach($dir_components as &$component) {
-				$component = ucfirst($component);
-			} unset($component);
+			if($dir_components[0] == 'plugin'){
+				array_shift($dir_components);
+				while (!in_array(current($dir_components), array("", "catalog", "admin", "system"))) {
+					array_shift($dir_components);
+				}
+			}
 			
-			$file_components = explode('_', str_replace('.php','', basename($file)));
+			array_walk($dir_components, function(&$e, $index){
+				 $e = ucfirst($e);
+				 $e = preg_replace_callback("/_([a-z])/", function($matches){return strtoupper($matches[1]);}, $e);
+			});
 			
-			foreach ($file_components as &$component) {
-				$component = ucfirst($component);
-			} unset($component);
+			$file_component = ucfirst(str_replace('.php','', basename($file)));
+			$file_component = preg_replace_callback("/_([a-z])/", function($matches){return strtoupper($matches[1]);}, $file_component);
 			
-			$classname = implode('_', $dir_components) . '_' . implode('',$file_components);
+			$classname = implode('_', $dir_components) . '_' . $file_component;
 			
 			foreach ($lines as $num => $line) {
 				$count = 0;
 				
 				$replace = "class $classname";
-				$lines[$num] = preg_replace("/class [a-zA-Z_]*/", "class {$classname}", $line, 1, $count);
+				$lines[$num] = preg_replace("/class [A-Z0-9_\\\\\/]*/i", "class {$classname}", $line, 1, $count);
 				
-				if($count) break;
+				if($count){
+					echo "&lt;&lt;&lt;$line<br />&gt;&gt;&gt;$lines[$num]<br>";
+					break;
+				 }
 			}
 			
 			file_put_contents($file, implode("\n", $lines));

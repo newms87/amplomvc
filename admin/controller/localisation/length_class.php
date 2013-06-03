@@ -5,7 +5,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
  
 	public function index()
 	{
-		$this->load->language('localisation/length_class ');
+		$this->load->language('localisation/length_class');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -14,12 +14,12 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 
 	public function insert()
 	{
-		$this->load->language('localisation/length_class ');
+		$this->load->language('localisation/length_class');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->Model_Localisation_LengthClass ->addLengthClass($_POST);
+			$this->Model_Localisation_Lengthclass->addLengthClass($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -37,7 +37,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->url->redirect($this->url->link('localisation/length_class ', $url));
+			$this->url->redirect($this->url->link('localisation/length_class', $url));
 		}
 
 		$this->getForm();
@@ -45,12 +45,12 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 
 	public function update()
 	{
-		$this->load->language('localisation/length_class ');
+		$this->load->language('localisation/length_class');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->Model_Localisation_LengthClass ->editLengthClass($_GET['length_class_id'], $_POST);
+			$this->Model_Localisation_Lengthclass->editLengthClass($_GET['length_class_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -68,7 +68,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->url->redirect($this->url->link('localisation/length_class ', $url));
+			$this->url->redirect($this->url->link('localisation/length_class', $url));
 		}
 
 		$this->getForm();
@@ -76,14 +76,14 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 
 	public function delete()
 	{
-		$this->load->language('localisation/length_class ');
+		$this->load->language('localisation/length_class');
 
 		$this->document->setTitle($this->_('heading_title'));
  		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
-			foreach ($_POST['selected'] as $length_class _id) 
+			foreach ($_POST['selected'] as $length_class_id) 
 {
-				$this->Model_Localisation_LengthClass ->deleteLengthClass($length_class_id);
+				$this->Model_Localisation_Lengthclass->deleteLengthClass($length_class_id);
 			}
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -102,7 +102,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 			
-			$this->url->redirect($this->url->link('localisation/length_class ', $url));
+			$this->url->redirect($this->url->link('localisation/length_class', $url));
 		}
 
 		$this->getList();
@@ -110,7 +110,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 
 	private function getList()
 	{
-		$this->template->load('localisation/length_class _list');
+		$this->template->load('localisation/length_class_list');
 
 		if (isset($_GET['sort'])) {
 			$sort = $_GET['sort'];
@@ -145,7 +145,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/length_class ', $url));
+			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/length_class', $url));
 
 		$this->data['insert'] = $this->url->link('localisation/length_class/insert', $url);
 		$this->data['delete'] = $this->url->link('localisation/length_class/delete', $url);
@@ -169,7 +169,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 			
 			$action[] = array(
 				'text' => $this->_('text_edit'),
-				'href' => $this->url->link('localisation/length_class /update', 'length_class_id=' . $result['length_class_id'] . $url)
+				'href' => $this->url->link('localisation/length_class/update', 'length_class_id=' . $result['length_class_id'] . $url)
 			);
 
 			$this->data['length_classes'][] = array(
@@ -208,7 +208,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 			$url .= '&page=' . $_GET['page'];
 		}
 		
-		$this->data['sort_title'] = $this->url->link('localisation/length_class ', 'sort=title' . $url);
+		$this->data['sort_title'] = $this->url->link('localisation/length_class', 'sort=title' . $url);
 		$this->data['sort_unit'] = $this->url->link('localisation/length_class', 'sort=unit' . $url);
 		$this->data['sort_value'] = $this->url->link('localisation/length_class', 'sort=value' . $url);
 		
@@ -223,7 +223,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 		}
 
 		$this->pagination->init();
-		$this->pagination->total = $length_class _total;
+		$this->pagination->total = $length_class_total;
 		$this->data['pagination'] = $this->pagination->render();
 		
 		$this->data['sort'] = $sort;
@@ -239,7 +239,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 
 	private function getForm()
 	{
-		$this->template->load('localisation/length_class _form');
+		$this->template->load('localisation/length_class_form');
 
  		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -274,36 +274,36 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/length_class ', $url));
+			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/length_class', $url));
 
 		if (!isset($_GET['length_class_id'])) {
-			$this->data['action'] = $this->url->link('localisation/length_class /insert', $url);
+			$this->data['action'] = $this->url->link('localisation/length_class/insert', $url);
 		} else {
-			$this->data['action'] = $this->url->link('localisation/length_class /update', 'length_class_id=' . $_GET['length_class_id'] . $url);
+			$this->data['action'] = $this->url->link('localisation/length_class/update', 'length_class_id=' . $_GET['length_class_id'] . $url);
 		}
 
 		$this->data['cancel'] = $this->url->link('localisation/length_class', $url);
 
 		if (isset($_GET['length_class_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-				$length_class _info = $this->Model_Localisation_LengthClass->getLengthClass($_GET['length_class_id']);
+				$length_class_info = $this->Model_Localisation_LengthClass->getLengthClass($_GET['length_class_id']);
 		}
 		
 		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
 		
 		if (isset($_POST['length_class_description'])) {
-			$this->data['length_class _description'] = $_POST['length_class_description'];
+			$this->data['length_class_description'] = $_POST['length_class_description'];
 		} elseif (isset($_GET['length_class_id'])) 
 {
-			$this->data['length_class _description'] = $this->Model_Localisation_LengthClass->getLengthClassDescriptions($_GET['length_class_id']);
+			$this->data['length_class_description'] = $this->Model_Localisation_LengthClass->getLengthClassDescriptions($_GET['length_class_id']);
 		} else {
-			$this->data['length_class _description'] = array();
+			$this->data['length_class_description'] = array();
 		}
 		
 		if (isset($_POST['value'])) {
 			$this->data['value'] = $_POST['value'];
-		} elseif (isset($length_class _info)) 
+		} elseif (isset($length_class_info)) 
 {
-			$this->data['value'] = $length_class _info['value'];
+			$this->data['value'] = $length_class_info['value'];
 		} else {
 			$this->data['value'] = '';
 		}
@@ -318,11 +318,11 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'localisation/length_class ')) {
+		if (!$this->user->hasPermission('modify', 'localisation/length_class')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
-		foreach ($_POST['length_class _description'] as $language_id => $value) 
+		foreach ($_POST['length_class_description'] as $language_id => $value) 
 {
 			if ((strlen($value['title']) < 3) || (strlen($value['title']) > 32)) {
 				$this->error['title'][$language_id] = $this->_('error_title');
@@ -338,17 +338,17 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'localisation/length_class ')) {
+		if (!$this->user->hasPermission('modify', 'localisation/length_class')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		foreach ($_POST['selected'] as $length_class _id) 
+		foreach ($_POST['selected'] as $length_class_id) 
 {
-			if ($this->config->get('config_length_class _id') == $length_class_id) {
+			if ($this->config->get('config_length_class_id') == $length_class_id) {
 				$this->error['warning'] = $this->_('error_default');
 			}
 			
-			$product_total = $this->Model_Catalog_Product->getTotalProductsByLengthclass Id($length_class_id);
+			$product_total = $this->Model_Catalog_Product->getTotalProductsByLengthClassId($length_class_id);
 
 			if ($product_total) {
 				$this->error['warning'] = sprintf($this->_('error_product'), $product_total);

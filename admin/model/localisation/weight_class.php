@@ -9,7 +9,7 @@ class Admin_Model_Localisation_WeightClass extends Model
 		
 		foreach ($data['weight_class_description'] as $language_id => $value) 
 {
-			$this->query("INSERT INTO " . DB_PREFIX . "weight_class _description SET weight_class_id = '" . (int)$weight_class_id . "', language_id = '" . (int)$language_id . "', title = '" . $this->db->escape($value['title']) . "', unit = '" . $this->db->escape($value['unit']) . "'");
+			$this->query("INSERT INTO " . DB_PREFIX . "weight_class_description SET weight_class_id = '" . (int)$weight_class_id . "', language_id = '" . (int)$language_id . "', title = '" . $this->db->escape($value['title']) . "', unit = '" . $this->db->escape($value['unit']) . "'");
 		}
 		
 		$this->cache->delete('weight_class');
@@ -23,7 +23,7 @@ class Admin_Model_Localisation_WeightClass extends Model
 
 		foreach ($data['weight_class_description'] as $language_id => $value) 
 {
-			$this->query("INSERT INTO " . DB_PREFIX . "weight_class _description SET weight_class_id = '" . (int)$weight_class_id . "', language_id = '" . (int)$language_id . "', title = '" . $this->db->escape($value['title']) . "', unit = '" . $this->db->escape($value['unit']) . "'");
+			$this->query("INSERT INTO " . DB_PREFIX . "weight_class_description SET weight_class_id = '" . (int)$weight_class_id . "', language_id = '" . (int)$language_id . "', title = '" . $this->db->escape($value['title']) . "', unit = '" . $this->db->escape($value['unit']) . "'");
 		}
 		
 		$this->cache->delete('weight_class');
@@ -76,7 +76,7 @@ class Admin_Model_Localisation_WeightClass extends Model
 	
 			return $query->rows;
 		} else {
-			$weight_class _data = $this->cache->get('weight_class.' . (int)$this->config->get('config_language_id'));
+			$weight_class_data = $this->cache->get('weight_class.' . (int)$this->config->get('config_language_id'));
 
 			if (!$weight_class_data) {
 				$query = $this->query("SELECT * FROM " . DB_PREFIX . "weight_class wc LEFT JOIN " . DB_PREFIX . "weight_class_description wcd ON (wc.weight_class_id = wcd.weight_class_id) WHERE wcd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
@@ -99,20 +99,20 @@ class Admin_Model_Localisation_WeightClass extends Model
 
 	public function getWeightClassDescriptionByUnit($unit)
 	{
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "weight_class _description WHERE unit = '" . $this->db->escape($unit) . "' AND language_id = '" . (int)$this->config->get('config_language_id') . "'");
+		$query = $this->query("SELECT * FROM " . DB_PREFIX . "weight_class_description WHERE unit = '" . $this->db->escape($unit) . "' AND language_id = '" . (int)$this->config->get('config_language_id') . "'");
 		
 		return $query->row;
 	}
 	
 	public function getWeightClassDescriptions($weight_class_id)
 	{
-		$weight_class _data = array();
+		$weight_class_data = array();
 		
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "weight_class_description WHERE weight_class_id = '" . (int)$weight_class_id . "'");
 				
 		foreach ($query->rows as $result) 
 {
-			$weight_class _data[$result['language_id']] = array(
+			$weight_class_data[$result['language_id']] = array(
 				'title' => $result['title'],
 				'unit'  => $result['unit']
 			);

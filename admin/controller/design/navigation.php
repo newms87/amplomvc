@@ -187,7 +187,7 @@ class Admin_Controller_Design_Navigation extends Controller
 				$action[] = array(
 					'text' => $this->_('button_admin_nav_reset'),
 					'href' => $this->url->link('design/navigation/reset_admin_navigation'),
-					'#class ' => 'reset',
+					'#class' => 'reset',
 				);
 			}
 			

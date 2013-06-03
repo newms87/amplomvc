@@ -1,12 +1,10 @@
 <?php
-class SetupContactsExtend implements SetupPlugin 
+class _Setup implements PluginSetup 
 {
 	
-	public function install($registry, &$controller_adapters, &$db_requests)
+	public function install()
 	{
-		$db = $registry->get('db');
-		
-		$db->table_add_column('contact', 'lookbook', 'VARCHAR(255)', true);
+		$this->db->table_add_column('contact', 'lookbook', 'VARCHAR(255)', true);
 	
 		$db_requests[] = array(
 				'table'		=> 'contact',
@@ -26,7 +24,7 @@ class SetupContactsExtend implements SetupPlugin
 			);
 	}
 	
-	public function update($version, $registry)
+	public function update($version)
 	{
 		switch($version){
 			case '1.53':
@@ -37,10 +35,8 @@ class SetupContactsExtend implements SetupPlugin
 		}
 	}
 	
-	public function uninstall($registry)
+	public function uninstall($keep_data = true)
 	{
-		$db = $registry->get('db');
-		
-		$db->table_drop_column('contact', 'lookbook');
+		$this->db->table_drop_column('contact', 'lookbook');
 	}
 }

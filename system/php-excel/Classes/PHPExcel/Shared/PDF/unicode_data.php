@@ -53,8 +53,7 @@
 * @link http://www.tcpdf.org
 * @license http://www.gnu.org/copyleft/lesser.html LGPL
 */
-class TCPDF_UNICODE_DATA 
-{
+class TCPDF_UNICODE_DATA {
 
 /**
  * @var Unicode code for Left-to-Right Mark

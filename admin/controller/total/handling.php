@@ -45,10 +45,10 @@ class Admin_Controller_Total_Handling extends Controller
 			$this->data['handling_fee'] = $this->config->get('handling_fee');
 		}
 		
-		if (isset($_POST['handling_tax_class _id'])) {
-			$this->data['handling_tax_class _id'] = $_POST['handling_tax_class_id'];
+		if (isset($_POST['handling_tax_class_id'])) {
+			$this->data['handling_tax_class_id'] = $_POST['handling_tax_class_id'];
 		} else {
-			$this->data['handling_tax_class _id'] = $this->config->get('handling_tax_class_id');
+			$this->data['handling_tax_class_id'] = $this->config->get('handling_tax_class_id');
 		}
 
 		if (isset($_POST['handling_status'])) {
@@ -63,7 +63,7 @@ class Admin_Controller_Total_Handling extends Controller
 			$this->data['handling_sort_order'] = $this->config->get('handling_sort_order');
 		}
 		
-		$this->data['tax_class es'] = $this->Model_Localisation_TaxClass->getTaxClasses();
+		$this->data['tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
 
 		$this->children = array(
 			'common/header',

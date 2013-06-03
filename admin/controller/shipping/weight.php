@@ -51,10 +51,10 @@ class Admin_Controller_Shipping_Weight extends Controller
 		
 		$this->data['geo_zones'] = $geo_zones;
 
-		if (isset($_POST['weight_tax_class _id'])) {
-			$this->data['weight_tax_class _id'] = $_POST['weight_tax_class_id'];
+		if (isset($_POST['weight_tax_class_id'])) {
+			$this->data['weight_tax_class_id'] = $_POST['weight_tax_class_id'];
 		} else {
-			$this->data['weight_tax_class _id'] = $this->config->get('weight_tax_class_id');
+			$this->data['weight_tax_class_id'] = $this->config->get('weight_tax_class_id');
 		}
 		
 		if (isset($_POST['weight_status'])) {
@@ -69,7 +69,7 @@ class Admin_Controller_Shipping_Weight extends Controller
 			$this->data['weight_sort_order'] = $this->config->get('weight_sort_order');
 		}
 		
-		$this->data['tax_class es'] = $this->Model_Localisation_TaxClass->getTaxClasses();
+		$this->data['tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
 
 		$this->children = array(
 			'common/header',

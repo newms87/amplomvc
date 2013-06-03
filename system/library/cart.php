@@ -13,7 +13,7 @@ class Cart
   	{
   		$this->registry = &$registry;
 
-		$this->language->load('system/cart');
+		$this->language->system('cart');
 		
 		if (!isset($this->session->data['cart']) || !is_array($this->session->data['cart'])) {
 			$this->session->data['cart'] = array();
@@ -192,7 +192,7 @@ class Cart
 	
 		foreach ($this->getProducts() as $product) {
 			if ($product['shipping']) {
-				$weight += $this->weight->convert($product['weight'], $product['weight_class _id'], $this->config->get('config_weight_class_id'));
+				$weight += $this->weight->convert($product['weight'], $product['weight_class_id'], $this->config->get('config_weight_class_id'));
 			}
 		}
 	
@@ -222,8 +222,10 @@ class Cart
 		
 		$sort_order = array();
 		
+		//TODO: We can do better than this, getExtensions should only return active totals
 		$results = $this->Model_Setting_Extension->getExtensions('total');
 		
+		//TODO: why sort_order was kept in config vs with extension data is beyond me...
 		foreach ($results as $key => $value) {
 			$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
 		}
@@ -232,8 +234,9 @@ class Cart
 		
 		foreach ($results as $result) {
 			if ($this->config->get($result['code'] . '_status')) {
-	
-				$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
+				$classname = "Model_Total_" . $this->tool->format_classname($result['code']);
+				
+				$this->$classname->getTotal($total_data, $total, $taxes);
 			}
 			
 			$sort_order = array();
@@ -259,7 +262,7 @@ class Cart
 		$total = 0;
 		
 		foreach ($this->getProducts() as $product) {
-			$total += $this->tax->calculate($product['total'], $product['tax_class _id']);
+			$total += $this->tax->calculate($product['total'], $product['tax_class_id']);
 		}
 
 		return $total;
@@ -287,8 +290,8 @@ class Cart
 		$tax_data = array();
 		
 		foreach ($this->getProducts() as $product) {
-			if ($product['tax_class _id']) {
-				$tax_rates = $this->tax->getRates($product['total'], $product['tax_class _id']);
+			if ($product['tax_class_id']) {
+				$tax_rates = $this->tax->getRates($product['total'], $product['tax_class_id']);
 				
 				foreach ($tax_rates as $tax_rate) 
 {
@@ -491,7 +494,7 @@ class Cart
 						'total'			=> ($price + $option_price) * $quantity,
 						'reward'		=> $reward * $quantity,
 						'points'		=> ($product_query->row['points'] ? ($product_query->row['points'] + $option_points) * $quantity : 0),
-						'tax_class _id'=> $product_query->row['tax_class_id'],
+						'tax_class_id'=> $product_query->row['tax_class_id'],
 						'weight'		=> ($product_query->row['weight'] + $option_weight) * $quantity,
 						'weight_class_id' => $product_query->row['weight_class_id'],
 						'length'		=> $product_query->row['length'],
@@ -766,7 +769,8 @@ class Cart
 		if (isset($this->session->data['shipping_method'])) {
 			$method = $this->session->data['shipping_method'];
 			
-			$quotes = $this->{'model_shipping_' . $method['code']}->getQuote($this->getShippingAddress());
+			$classname = "Model_Shipping_" . $this->tool->format_classname($method['code']);
+			$quotes = $this->$classname->getQuote($this->getShippingAddress());
 			
 			if (!empty($quotes)) {
 				foreach ($quotes as $quote) {
@@ -943,11 +947,13 @@ class Cart
 		$method_data = array();
 		
 		$results = $this->Model_Setting_Extension->getExtensions('payment');
-
+		
+		//TODO: Fix this along with totals and shipping...
 		foreach ($results as $result) {
 			if ($this->config->get($result['code'] . '_status')) {
+				$classname = "Model_Payment_" . $this->tool->format_classname($result['code']);
 				
-				$method = $this->{'model_payment_' . $result['code']}->getMethod($payment_address, $totals['total']);
+				$method = $this->$classname->getMethod($payment_address, $totals['total']);
 				
 				if ($method) {
 					$method_data[$result['code']] = $method;
@@ -995,9 +1001,10 @@ class Cart
 		$methods = array();
 		
 		foreach ($results as $result) {
-			
+			//TODO: Fix this along with Pyament and Totals
 			if ($this->config->get($result['code'] . '_status')) {
-				$quotes = $this->{'model_shipping_' . $result['code']}->getQuote($shipping_address);
+				$classname = "Model_Shipping_" . $this->tool->format_classname($result['code']);
+				$quotes = $this->$classname->getQuote($shipping_address);
 				
 				if(empty($quotes)) continue;
 				
@@ -1280,7 +1287,7 @@ class Cart
 		$product_data = $this->getProducts();
 		
 		foreach ($product_data as &$product) {
-			$product['tax'] = $this->tax->getTax($product['total'], $product['tax_class _id']);
+			$product['tax'] = $this->tax->getTax($product['total'], $product['tax_class_id']);
 		}unset($product);
 		
 		// Gift Voucher

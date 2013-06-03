@@ -25,7 +25,7 @@
  * @version	1.7.7, 2012-05-19
  */
 
-// Original file header of PEAR::Spreadsheet_Excel_Writer_BIFFwriter (used as the base for this class ):
+// Original file header of PEAR::Spreadsheet_Excel_Writer_BIFFwriter (used as the base for this class):
 // -----------------------------------------------------------------------------------------
 // *  Module written/ported by Xavier Noguer <xnoguer@rezebra.com>
 // *
@@ -67,7 +67,8 @@
  * @package	PHPExcel_Writer_Excel5
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Writer_Excel5_BIFFwriter{
+class PHPExcel_Writer_Excel5_BIFFwriter
+{
 	/**
 	* The byte order of this architecture. 0 => little endian, 1 => big endian
 	* @var integer
@@ -110,14 +111,14 @@ class PHPExcel_Writer_Excel5_BIFFwriter{
 	* @return int
 	*/
 	public static function getByteOrder()
- {
+	{
 		if (!isset(self::$_byte_order)) {
 			// Check if "pack" gives the required IEEE 64bit float
 			$teststr = pack("d", 1.2345);
 			$number  = pack("C8", 0x8D, 0x97, 0x6E, 0x12, 0x83, 0xC0, 0xF3, 0x3F);
 			if ($number == $teststr) {
 				$byte_order = 0;	// Little Endian
-			} elseif ($number == strrev($teststr)) {
+			} elseif ($number == strrev($teststr)){
 				$byte_order = 1;	// Big Endian
 			} else {
 				// Give up. I'll fix this in a later version.

@@ -1,10 +1,9 @@
 <?php
 class Catalog_Controller_Common_Header extends Controller 
 {
-	protected function index()
+	public function index()
 	{
 		$this->template->load('common/header');
-
 		
 		if ($this->config->get('config_debug') && isset($_SESSION['debug'])) {
 			html_dump($_SESSION['debug'], 'debug');
@@ -128,7 +127,7 @@ class Catalog_Controller_Common_Header extends Controller
 		else {
 			$this->data['is_logged'] = false;
 			
-			$this->data['block_login'] = $this->getBlock('account', 'login', array('header'));
+			$this->data['block_login'] = $this->getBlock('account/login', array('type' => 'header'));
 			
 			
 			if (!$this->cart->isEmpty()) {
@@ -157,7 +156,7 @@ class Catalog_Controller_Common_Header extends Controller
 		
 		$this->data['home'] = $this->url->link('common/home');
 		
-		$this->data['social_networks'] = $this->getBlock('extras', 'social_media');
+		$this->data['social_networks'] = $this->getBlock('extras/social_media');
 		
 		$this->children = array(
 			'module/language',

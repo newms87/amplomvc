@@ -9,7 +9,7 @@ class Admin_Model_Localisation_TaxClass extends Model
 		
 		if (isset($data['tax_rule'])) {
 			foreach ($data['tax_rule'] as $tax_rule) {
-				$this->query("INSERT INTO " . DB_PREFIX . "tax_rule SET tax_class _id = '" . (int)$tax_class_id . "', tax_rate_id = '" . (int)$tax_rule['tax_rate_id'] . "', based = '" . $this->db->escape($tax_rule['based']) . "', priority = '" . (int)$tax_rule['priority'] . "'");
+				$this->query("INSERT INTO " . DB_PREFIX . "tax_rule SET tax_class_id = '" . (int)$tax_class_id . "', tax_rate_id = '" . (int)$tax_rule['tax_rate_id'] . "', based = '" . $this->db->escape($tax_rule['based']) . "', priority = '" . (int)$tax_rule['priority'] . "'");
 			}
 		}
 		
@@ -24,7 +24,7 @@ class Admin_Model_Localisation_TaxClass extends Model
 
 		if (isset($data['tax_rule'])) {
 			foreach ($data['tax_rule'] as $tax_rule) {
-				$this->query("INSERT INTO " . DB_PREFIX . "tax_rule SET tax_class _id = '" . (int)$tax_class_id . "', tax_rate_id = '" . (int)$tax_rule['tax_rate_id'] . "', based = '" . $this->db->escape($tax_rule['based']) . "', priority = '" . (int)$tax_rule['priority'] . "'");
+				$this->query("INSERT INTO " . DB_PREFIX . "tax_rule SET tax_class_id = '" . (int)$tax_class_id . "', tax_rate_id = '" . (int)$tax_rule['tax_rate_id'] . "', based = '" . $this->db->escape($tax_rule['based']) . "', priority = '" . (int)$tax_rule['priority'] . "'");
 			}
 		}
 		
@@ -75,7 +75,7 @@ class Admin_Model_Localisation_TaxClass extends Model
 		
 			return $query->rows;
 		} else {
-			$tax_class _data = $this->cache->get('tax_class');
+			$tax_class_data = $this->cache->get('tax_class');
 
 			if (!$tax_class_data) {
 				$query = $this->query("SELECT * FROM " . DB_PREFIX . "tax_class ");
@@ -98,7 +98,7 @@ class Admin_Model_Localisation_TaxClass extends Model
 	
 	public function getTaxRules($tax_class_id)
 	{
-			$query = $this->query("SELECT * FROM " . DB_PREFIX . "tax_rule WHERE tax_class _id = '" . (int)$tax_class_id . "'");
+			$query = $this->query("SELECT * FROM " . DB_PREFIX . "tax_rule WHERE tax_class_id = '" . (int)$tax_class_id . "'");
 		
 		return $query->rows;
 	}

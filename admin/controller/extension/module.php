@@ -100,7 +100,7 @@ class Admin_Controller_Extension_Module extends Controller
 			$class = new $class('module' . $_GET['extension'], 	$this->registry);
 			
 			if (method_exists($class, 'install')) {
-				$class ->install();
+				$class->install();
 			}
 			
 			$this->url->redirect($this->url->link('extension/module'));

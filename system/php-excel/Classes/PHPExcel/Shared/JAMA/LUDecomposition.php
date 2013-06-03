@@ -18,8 +18,7 @@
  *	@version 1.1
  *	@license PHP v3.0
  */
-class PHPExcel_Shared_JAMA_LUDecomposition 
-{
+class PHPExcel_Shared_JAMA_LUDecomposition {
 
 	const MatrixSingularException	= "Can only perform operation on singular matrix.";
 	const MatrixSquareException		= "Mismatched Row dimension";
@@ -61,8 +60,7 @@ class PHPExcel_Shared_JAMA_LUDecomposition
 	*	@param $A Rectangular matrix
 	*	@return Structure to access L, U and piv.
 	*/
-	public function __construct($A)
-	{
+	public function __construct($A) {
 		if ($A instanceof PHPExcel_Shared_JAMA_Matrix) {
 			// Use a "left-looking", dot-product, Crout/Doolittle algorithm.
 			$this->LU = $A->getArray();
@@ -127,8 +125,7 @@ class PHPExcel_Shared_JAMA_LUDecomposition
 	*
 	*	@return array Lower triangular factor
 	*/
-	public function getL()
-	{
+	public function getL() {
 		for ($i = 0; $i < $this->m; ++$i) {
 			for ($j = 0; $j < $this->n; ++$j) {
 				if ($i > $j) {
@@ -149,8 +146,7 @@ class PHPExcel_Shared_JAMA_LUDecomposition
 	*
 	*	@return array Upper triangular factor
 	*/
-	public function getU()
-	{
+	public function getU() {
 		for ($i = 0; $i < $this->n; ++$i) {
 			for ($j = 0; $j < $this->n; ++$j) {
 				if ($i <= $j) {
@@ -169,8 +165,7 @@ class PHPExcel_Shared_JAMA_LUDecomposition
 	*
 	*	@return array Pivot vector
 	*/
-	public function getPivot()
-	{
+	public function getPivot() {
 		return $this->piv;
 	}	//	function getPivot()
 
@@ -180,8 +175,7 @@ class PHPExcel_Shared_JAMA_LUDecomposition
 	*
 	*	@see getPivot
 	*/
-	public function getDoublePivot()
-	{
+	public function getDoublePivot() {
 		return $this->getPivot();
 	}	//	function getDoublePivot()
 
@@ -191,8 +185,7 @@ class PHPExcel_Shared_JAMA_LUDecomposition
 	*
 	*	@return true if U, and hence A, is nonsingular.
 	*/
-	public function isNonsingular()
-	{
+	public function isNonsingular() {
 		for ($j = 0; $j < $this->n; ++$j) {
 			if ($this->LU[$j][$j] == 0) {
 				return false;
@@ -207,8 +200,7 @@ class PHPExcel_Shared_JAMA_LUDecomposition
 	*
 	*	@return array d matrix deterninat
 	*/
-	public function det()
-	{
+	public function det() {
 		if ($this->m == $this->n) {
 			$d = $this->pivsign;
 			for ($j = 0; $j < $this->n; ++$j) {
@@ -229,8 +221,7 @@ class PHPExcel_Shared_JAMA_LUDecomposition
 	*	@exception  IllegalArgumentException Matrix row dimensions must agree.
 	*	@exception  RuntimeException  Matrix is singular.
 	*/
-	public function solve($B)
-	{
+	public function solve($B) {
 		if ($B->getRowDimension() == $this->m) {
 			if ($this->isNonsingular()) {
 				// Copy right hand side with pivoting

@@ -51,13 +51,13 @@ class Catalog_Controller_Product_Compare extends Controller
 				}
 				
 				if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-					$price = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class _id']));
+					$price = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id']));
 				} else {
 					$price = false;
 				}
 				
 				if ((float)$product_info['special']) {
-					$special = $this->currency->format($this->tax->calculate($product_info['special'], $product_info['tax_class _id']));
+					$special = $this->currency->format($this->tax->calculate($product_info['special'], $product_info['tax_class_id']));
 				} else {
 					$special = false;
 				}
@@ -92,7 +92,7 @@ class Catalog_Controller_Product_Compare extends Controller
 					'availability' => $availability,
 					'rating'		=> (int)$product_info['rating'],
 					'reviews'		=> sprintf($this->_('text_reviews'), (int)$product_info['reviews']),
-					'weight'		=> $this->weight->format($product_info['weight'], $product_info['weight_class _id']),
+					'weight'		=> $this->weight->format($product_info['weight'], $product_info['weight_class_id']),
 					'length'		=> $this->length->format($product_info['length'], $product_info['length_class_id']),
 					'width'		=> $this->length->format($product_info['width'], $product_info['length_class_id']),
 					'height'		=> $this->length->format($product_info['height'], $product_info['length_class_id']),

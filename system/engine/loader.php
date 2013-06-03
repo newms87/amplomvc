@@ -27,14 +27,16 @@ final class Loader
 		if (file_exists($file)) {
 			_require_once($file);
 			
-			$class = new $library($this->registry);
+			$classname = preg_replace("/[^A-Z0-9]/i", '', $library);
+			
+			$class = new $classname($this->registry);
 			
 			$this->registry->set($library, $class);
 			
 			return $class;
 			
 		} else {
-			trigger_error('Could not load library ' . $library . '! ' . get_caller(3), E_USER_WARNING);
+			trigger_error('Could not load library ' . $library . '!<br>' . get_caller(1) . '<br>' . get_caller(2) . '<Br>' .  get_caller(3) . '<br>', E_USER_WARNING);
 			return null;
 		}
 	}
@@ -47,15 +49,14 @@ final class Loader
 			$model_class = $model;
 		}
 		
-		$path = str_replace("_",'/', $model_class);
+		$path = explode("_",$model_class);
 		
-		$file = SITE_DIR . strtolower($path) . '.php';
+		array_walk($path, function(&$e, $index){
+			$e = preg_replace("/([a-z])([A-Z])/", "\$1_\$2", $e);
+			$e = strtolower($e);
+		});
 		
-		if (!is_file($file)) {
-			$path = preg_replace("/([A-Z]?[a-z])*([A-Z][a-z]*)\$/", '$1_$2', $path);
-			
-			$file = SITE_DIR . strtolower($path) . '.php';
-		}
+		$file = SITE_DIR . implode('/', $path) . '.php';
 		
 		if (is_file($file)) {
 			_require_once($file);
@@ -83,7 +84,7 @@ final class Loader
 		if (file_exists($file)) {
 			include_once($file);
 			
-			$this->registry->set(str_replace('/', '_', $driver), new $class ());
+			$this->registry->set(str_replace('/', '_', $driver), new $class());
 		} else {
 			trigger_error('Error: Could not load database ' . $driver . '!');
 			exit();

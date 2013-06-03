@@ -1,5 +1,5 @@
 <?php
-class ControllerPluginCms extends Controller 
+class Catalog_Cms extends Controller 
 {
 	public function index()
 	{

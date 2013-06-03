@@ -1,5 +1,5 @@
 <?php
-class ModelPluginPromoRegistration extends Model 
+class Catalog_PromoRegistrationModel extends Model 
 {
 	
 	public function promo_addCustomer($data, $customer_id)

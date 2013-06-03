@@ -128,41 +128,18 @@ class Admin_Controller_Extension_Plugin extends Controller
 			$this->plugin->install($_GET['name']);
 		}
 		
-		$this->index();
+		$this->url->redirect($this->url->link('extension/plugin'));
 	}
 	
 	public function uninstall()
 	{
-		$this->cache->delete('model');
-		$this->cache->delete('lang_ext');
-		
-		$this->language->load("extension/plugin");
-		
-		$name = isset($_GET['name']) ? $_GET['name'] : '';
-		$keep_data = isset($_GET['keep_data']) ? $_GET['keep_data'] : true;
-		
-		$setup_file = DIR_PLUGIN . $name . '/setup.php';
-		
-		if (!is_file($setup_file)) {
-			$this->message->add("warning",sprintf($this->_('error_uninstall_file'),$setup_file, $name));
-		}
-		else {
-			_require_once(DIR_SYSTEM . 'plugins/setupplugin.php');
-			_require_once($setup_file);
+		if (isset($_GET['name'])) {
+			$keep_data = isset($_GET['keep_data']) ? $_GET['keep_data'] : true;
 			
-			$user_class = 'Setup'.preg_replace("/[^A-Z0-9]/i", "",$name);
-			$user_class = new $user_class($this->registry);
-			
-			if (method_exists($user_class, 'uninstall')) {
-				$data = $user_class ->uninstall($keep_data);
-			}
-			
-			if ($this->Model_Setting_Plugin->uninstall($name, $data)) {
-				$this->message->add('success', "Successfully uninstalled $name!");
-			}
+			$this->plugin->uninstall($_GET['name'], $keep_data);
 		}
 		
-		$this->index();
+		$this->url->redirect($this->url->link('extension/plugin'));
 	}
 	
 	private function validateForm()

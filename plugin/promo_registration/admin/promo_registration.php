@@ -1,5 +1,5 @@
 <?php
-class ControllerPlugin_Promo_RegistrationAdminPromoRegistration extends Controller 
+class Admin_PromoRegistration extends Controller 
 {
 	
 	public function settings()

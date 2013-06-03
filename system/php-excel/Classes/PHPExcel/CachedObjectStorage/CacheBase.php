@@ -33,8 +33,7 @@
  * @package	PHPExcel_CachedObjectStorage
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_CachedObjectStorage_CacheBase 
-{
+class PHPExcel_CachedObjectStorage_CacheBase {
 
 	/**
 	* Parent worksheet
@@ -79,8 +78,7 @@ class PHPExcel_CachedObjectStorage_CacheBase
 	*
 	* @param	PHPExcel_Worksheet	$parent		The worksheet for this cell collection
 	*/
-	public function __construct(PHPExcel_Worksheet $parent)
-	{
+	public function __construct(PHPExcel_Worksheet $parent) {
 		//	Set our parent worksheet.
 		//	This is maintained within the cache controller to facilitate re-attaching it to PHPExcel_Cell objects when
 		//		they are woken from a serialized state
@@ -94,8 +92,7 @@ class PHPExcel_CachedObjectStorage_CacheBase
 	* @param	string		$pCoord		Coordinate address of the cell to check
 	* @return	boolean
 	*/
-	public function isDataSet($pCoord)
-	{
+	public function isDataSet($pCoord) {
 		if ($pCoord === $this->_currentObjectID) {
 			return true;
 		}
@@ -111,8 +108,7 @@ class PHPExcel_CachedObjectStorage_CacheBase
 	* @return	void
 	* @throws	Exception
 	*/
-	public function updateCacheData(PHPExcel_Cell $cell)
-	{
+	public function updateCacheData(PHPExcel_Cell $cell) {
 		return $this->addCacheData($cell->getCoordinate(),$cell);
 	}	//	function updateCacheData()
 
@@ -123,8 +119,7 @@ class PHPExcel_CachedObjectStorage_CacheBase
 	* @param	string			$pCoord		Coordinate address of the cell to delete
 	* @throws	Exception
 	*/
-	public function deleteCacheData($pCoord)
-	{
+	public function deleteCacheData($pCoord) {
 		if ($pCoord === $this->_currentObjectID) {
 			$this->_currentObject->detach();
 			$this->_currentObjectID = $this->_currentObject = null;
@@ -143,8 +138,7 @@ class PHPExcel_CachedObjectStorage_CacheBase
 	*
 	* @return	array of string
 	*/
-	public function getCellList()
-	{
+	public function getCellList() {
 		return array_keys($this->_cellCache);
 	}	//	function getCellList()
 
@@ -154,8 +148,7 @@ class PHPExcel_CachedObjectStorage_CacheBase
 	*
 	* @return	void
 	*/
-	public function getSortedCellList()
-	{
+	public function getSortedCellList() {
 		$sortKeys = array();
 		foreach ($this->getCellList() as $coord) {
 			list($column,$row) = sscanf($coord,'%[A-Z]%d');
@@ -222,8 +215,7 @@ class PHPExcel_CachedObjectStorage_CacheBase
 	*
 	* @return string Unique Reference
 	*/
-	protected function _getUniqueID()
-	{
+	protected function _getUniqueID() {
 		if (function_exists('posix_getpid')) {
 			$baseUnique = posix_getpid();
 		} else {
@@ -238,8 +230,7 @@ class PHPExcel_CachedObjectStorage_CacheBase
 	* @param	PHPExcel_Worksheet	$parent		The new worksheet
 	* @return	void
 	*/
-	public function copyCellCollection(PHPExcel_Worksheet $parent)
-	{
+	public function copyCellCollection(PHPExcel_Worksheet $parent) {
 		$this->_parent = $parent;
 		if (($this->_currentObject !== NULL) && (is_object($this->_currentObject))) {
 			$this->_currentObject->attach($parent);
@@ -253,8 +244,7 @@ class PHPExcel_CachedObjectStorage_CacheBase
 	*
 	* @return	boolean
 	*/
-	public static function cacheMethodIsAvailable()
- {
+	public static function cacheMethodIsAvailable() {
 		return true;
 	}
 

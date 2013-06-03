@@ -386,18 +386,18 @@ class Admin_Controller_Shipping_Usps extends Controller
 			$this->data['usps_display_weight'] = $this->config->get('usps_display_weight');
 		}
 
-		if (isset($_POST['usps_weight_class _id'])) {
-			$this->data['usps_weight_class _id'] = $_POST['usps_weight_class_id'];
+		if (isset($_POST['usps_weight_class_id'])) {
+			$this->data['usps_weight_class_id'] = $_POST['usps_weight_class_id'];
 		} else {
-			$this->data['usps_weight_class _id'] = $this->config->get('usps_weight_class_id');
+			$this->data['usps_weight_class_id'] = $this->config->get('usps_weight_class_id');
 		}
 
 		$this->data['weight_classes'] = $this->Model_Localisation_WeightClass->getWeightClasses();
 
 		if (isset($_POST['usps_tax_class_id'])) {
-			$this->data['usps_tax_class _id'] = $_POST['usps_tax_class_id'];
+			$this->data['usps_tax_class_id'] = $_POST['usps_tax_class_id'];
 		} else {
-			$this->data['usps_tax_class _id'] = $this->config->get('usps_tax_class_id');
+			$this->data['usps_tax_class_id'] = $this->config->get('usps_tax_class_id');
 		}
 
 		if (isset($_POST['usps_geo_zone_id'])) {
@@ -424,7 +424,7 @@ class Admin_Controller_Shipping_Usps extends Controller
 			$this->data['usps_sort_order'] = $this->config->get('usps_sort_order');
 		}
 
-		$this->data['tax_class es'] = $this->Model_Localisation_TaxClass->getTaxClasses();
+		$this->data['tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
 
 		$this->data['geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 

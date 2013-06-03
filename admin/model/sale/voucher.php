@@ -90,7 +90,7 @@ class Admin_Model_Sale_Voucher extends Model
 			
 			// If voucher belongs to an order
 			if ($order_info) {
-				$language = new Language($order_info['language_directory'], $this->plugin_handler);
+				$language = new Language($this->registry, $order_info['language_directory']);
 				$language->load($order_info['language_filename']);
 				$language->load('mail/voucher');
 				

@@ -33,8 +33,7 @@
  * @package	PHPExcel_CachedObjectStorage
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_CachedObjectStorage_SQLite3 extends PHPExcel_CachedObjectStorage_CacheBase implements PHPExcel_CachedObjectStorage_ICache 
-{
+class PHPExcel_CachedObjectStorage_SQLite3 extends PHPExcel_CachedObjectStorage_CacheBase implements PHPExcel_CachedObjectStorage_ICache {
 
 	/**
 	* Database table name
@@ -57,8 +56,7 @@ class PHPExcel_CachedObjectStorage_SQLite3 extends PHPExcel_CachedObjectStorage_
 	* @return	void
 	* @throws	Exception
 	*/
-	private function _storeData()
-	{
+	private function _storeData() {
 		if ($this->_currentCellIsDirty) {
 			$this->_currentObject->detach();
 
@@ -82,8 +80,7 @@ class PHPExcel_CachedObjectStorage_SQLite3 extends PHPExcel_CachedObjectStorage_
 	* @return	void
 	* @throws	Exception
 	*/
-	public function addCacheData($pCoord, PHPExcel_Cell $cell)
-	{
+	public function addCacheData($pCoord, PHPExcel_Cell $cell) {
 		if (($pCoord !== $this->_currentObjectID) && ($this->_currentObjectID !== null)) {
 			$this->_storeData();
 		}
@@ -103,8 +100,7 @@ class PHPExcel_CachedObjectStorage_SQLite3 extends PHPExcel_CachedObjectStorage_
 	* @throws 	Exception
 	* @return 	PHPExcel_Cell 	Cell that was found, or null if not found
 	*/
-	public function getCacheData($pCoord)
-	{
+	public function getCacheData($pCoord) {
 		if ($pCoord === $this->_currentObjectID) {
 			return $this->_currentObject;
 		}
@@ -137,8 +133,7 @@ class PHPExcel_CachedObjectStorage_SQLite3 extends PHPExcel_CachedObjectStorage_
 	* @param	string		$pCoord		Coordinate address of the cell to check
 	* @return	boolean
 	*/
-	public function isDataSet($pCoord)
-	{
+	public function isDataSet($pCoord) {
 		if ($pCoord === $this->_currentObjectID) {
 			return true;
 		}
@@ -162,8 +157,7 @@ class PHPExcel_CachedObjectStorage_SQLite3 extends PHPExcel_CachedObjectStorage_
 	* @param	string			$pCoord		Coordinate address of the cell to delete
 	* @throws	Exception
 	*/
-	public function deleteCacheData($pCoord)
-	{
+	public function deleteCacheData($pCoord) {
 		if ($pCoord === $this->_currentObjectID) {
 			$this->_currentObject->detach();
 			$this->_currentObjectID = $this->_currentObject = null;
@@ -184,8 +178,7 @@ class PHPExcel_CachedObjectStorage_SQLite3 extends PHPExcel_CachedObjectStorage_
 	*
 	* @return	array of string
 	*/
-	public function getCellList()
-	{
+	public function getCellList() {
 		$query = "SELECT id FROM kvp_".$this->_TableName;
 		$cellIdsResult = $this->_DBHandle->query($query);
 		if ($cellIdsResult === false)
@@ -206,8 +199,7 @@ class PHPExcel_CachedObjectStorage_SQLite3 extends PHPExcel_CachedObjectStorage_
 	* @param	PHPExcel_Worksheet	$parent		The new worksheet
 	* @return	void
 	*/
-	public function copyCellCollection(PHPExcel_Worksheet $parent)
-	{
+	public function copyCellCollection(PHPExcel_Worksheet $parent) {
 		//	Get a new id for the new table name
 		$tableName = str_replace('.','_',$this->_getUniqueID());
 		if (!$this->_DBHandle->exec('CREATE TABLE kvp_'.$tableName.' (id VARCHAR(12) PRIMARY KEY, value BLOB)
@@ -224,9 +216,8 @@ class PHPExcel_CachedObjectStorage_SQLite3 extends PHPExcel_CachedObjectStorage_
 	*
 	* @return	void
 	*/
-	public function unsetWorksheetCells()
-	{
-		if (!is_null($this->_currentObject)) {
+	public function unsetWorksheetCells() {
+		if(!is_null($this->_currentObject)) {
 			$this->_currentObject->detach();
 			$this->_currentObject = $this->_currentObjectID = null;
 		}
@@ -243,8 +234,7 @@ class PHPExcel_CachedObjectStorage_SQLite3 extends PHPExcel_CachedObjectStorage_
 	*
 	* @param	PHPExcel_Worksheet	$parent		The worksheet for this cell collection
 	*/
-	public function __construct(PHPExcel_Worksheet $parent)
-	{
+	public function __construct(PHPExcel_Worksheet $parent) {
 		parent::__construct($parent);
 		if (is_null($this->_DBHandle)) {
 			$this->_TableName = str_replace('.','_',$this->_getUniqueID());
@@ -262,8 +252,7 @@ class PHPExcel_CachedObjectStorage_SQLite3 extends PHPExcel_CachedObjectStorage_
 	/**
 	* Destroy this cell collection
 	*/
-	public function __destruct()
-	{
+	public function __destruct() {
 		if (!is_null($this->_DBHandle)) {
 			$this->_DBHandle->close();
 		}
@@ -277,9 +266,8 @@ class PHPExcel_CachedObjectStorage_SQLite3 extends PHPExcel_CachedObjectStorage_
 	*
 	* @return	boolean
 	*/
-	public static function cacheMethodIsAvailable()
- {
-		if (!class _exists('SQLite3')) {
+	public static function cacheMethodIsAvailable() {
+		if (!class_exists('SQLite3')) {
 			return false;
 		}
 

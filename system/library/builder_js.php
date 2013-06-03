@@ -260,7 +260,7 @@ $('.language_menu .language_item').click(function ()
 	lang_id = $(this).attr('lang_id');
 	$('.translation').hide();
 	$('.translation.' + lang_id).show();
-	$('.language_menu .language_item.active').removeclass ('active');
+	$('.language_menu .language_item.active').removeclass('active');
 	$('.language_menu [lang_id=' + lang_id +']').addClass('active');
 });
 
@@ -293,7 +293,7 @@ for(var t in translations)
 		t_input.attr('name', t_name);
 		t_input.val(translations[t][lang]);
 		
-		if (t_input.hasclass ('ckedit')) {
+		if (t_input.hasclass('ckedit')) {
 			t_input.attr('id','translation_' + t + '_' + lang);
 			
 			box.append($('<div class ="translation ' + lang +'" />').append(t_input));
@@ -303,7 +303,7 @@ for(var t in translations)
 			<? } ?>
 		}
 		else {
-			t_input.addclass ('translation ' + lang);
+			t_input.addclass('translation ' + lang);
 			box.append(t_input);
 		}
 	}
@@ -319,7 +319,7 @@ for(var t in translations)
 		ckedit_box.show();
 	}
 	else {
-		context.addclass ('translation ' + default_language);
+		context.addclass('translation ' + default_language);
 		context.show();
 	}
 }

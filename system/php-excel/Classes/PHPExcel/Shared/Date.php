@@ -34,7 +34,8 @@
  * @package	PHPExcel_Shared
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Shared_Date{
+class PHPExcel_Shared_Date
+{
 	/** constants */
 	const CALENDAR_WINDOWS_1900 = 1900;		//	Base date of 1st Jan 1900 = 1.0
 	const CALENDAR_MAC_1904 = 1904;			//	Base date of 2nd Jan 1904 = 1.0
@@ -83,8 +84,7 @@ class PHPExcel_Shared_Date{
 	* @param	integer	$baseDate			Excel base date
 	* @return	boolean						Success or failure
 	*/
-	public static function setExcelCalendar($baseDate)
- {
+	public static function setExcelCalendar($baseDate) {
 		if (($baseDate == self::CALENDAR_WINDOWS_1900) ||
 			($baseDate == self::CALENDAR_MAC_1904)) {
 			self::$ExcelBaseDate = $baseDate;
@@ -99,8 +99,7 @@ class PHPExcel_Shared_Date{
 	*
 	* @return	integer	$baseDate			Excel base date
 	*/
-	public static function getExcelCalendar()
- {
+	public static function getExcelCalendar() {
 		return self::$ExcelBaseDate;
 	}	//	function getExcelCalendar()
 
@@ -111,8 +110,7 @@ class PHPExcel_Shared_Date{
 	* @param	long	$dateValue		Excel date/time value
 	* @return	long					PHP serialized date/time
 	*/
-	public static function ExcelToPHP($dateValue = 0)
- {
+	public static function ExcelToPHP($dateValue = 0) {
 		if (self::$ExcelBaseDate == self::CALENDAR_WINDOWS_1900) {
 			$myExcelBaseDate = 25569;
 			//	Adjust for the spurious 29-Feb-1900 (Day 60)
@@ -148,8 +146,7 @@ class PHPExcel_Shared_Date{
 	* @param	long	$dateValue		Excel date/time value
 	* @return	long					PHP date/time object
 	*/
-	public static function ExcelToPHPObject($dateValue = 0)
- {
+	public static function ExcelToPHPObject($dateValue = 0) {
 		$dateTime = self::ExcelToPHP($dateValue);
 		$days = floor($dateTime / 86400);
 		$time = round((($dateTime / 86400) - $days) * 86400);
@@ -171,8 +168,7 @@ class PHPExcel_Shared_Date{
 	* @return	mixed					Excel date/time value
 	*										or boolean False on failure
 	*/
-	public static function PHPToExcel($dateValue = 0)
- {
+	public static function PHPToExcel($dateValue = 0) {
 		$saveTimeZone = date_default_timezone_get();
 		date_default_timezone_set('UTC');
 		$retValue = False;
@@ -202,8 +198,7 @@ class PHPExcel_Shared_Date{
 	* @param	long	$seconds
 	* @return  long				Excel date/time value
 	*/
-	public static function FormattedPHPToExcel($year, $month, $day, $hours=0, $minutes=0, $seconds=0)
- {
+	public static function FormattedPHPToExcel($year, $month, $day, $hours=0, $minutes=0, $seconds=0) {
 		if (self::$ExcelBaseDate == self::CALENDAR_WINDOWS_1900) {
 			//
 			//	Fudge factor for the erroneous fact that the year 1900 is treated as a Leap Year in MS Excel
@@ -242,8 +237,7 @@ class PHPExcel_Shared_Date{
 	* @param	PHPExcel_Cell	$pCell
 	* @return	boolean
 	*/
-	public static function isDateTime(PHPExcel_Cell $pCell)
- {
+	public static function isDateTime(PHPExcel_Cell $pCell) {
 		return self::isDateTimeFormat($pCell->getParent()->getStyle($pCell->getCoordinate())->getNumberFormat());
 	}	//	function isDateTime()
 
@@ -254,8 +248,7 @@ class PHPExcel_Shared_Date{
 	* @param	PHPExcel_Style_NumberFormat	$pFormat
 	* @return	boolean
 	*/
-	public static function isDateTimeFormat(PHPExcel_Style_NumberFormat $pFormat)
- {
+	public static function isDateTimeFormat(PHPExcel_Style_NumberFormat $pFormat) {
 		return self::isDateTimeFormatCode($pFormat->getFormatCode());
 	}	//	function isDateTimeFormat()
 
@@ -268,8 +261,7 @@ class PHPExcel_Shared_Date{
 	* @param	string	$pFormatCode
 	* @return	boolean
 	*/
-	public static function isDateTimeFormatCode($pFormatCode = '')
- {
+	public static function isDateTimeFormatCode($pFormatCode = '') {
 		// Switch on formatcode
 		switch ($pFormatCode) {
 			case PHPExcel_Style_NumberFormat::FORMAT_DATE_YYYYMMDD:
@@ -307,7 +299,7 @@ class PHPExcel_Shared_Date{
 			//		we don't want to test for any of our characters within the quoted blocks
 			if (strpos($pFormatCode,'"') !== false) {
 				$i = false;
-				foreach (explode('"',$pFormatCode) as $subVal) {
+				foreach(explode('"',$pFormatCode) as $subVal) {
 					//	Only test in alternate array entries (the non-quoted blocks)
 					if (($i = !$i) && (preg_match('/(^|\])[^\[]*['.self::$possibleDateFormatCharacters.']/i',$subVal))) {
 						return true;
@@ -329,8 +321,7 @@ class PHPExcel_Shared_Date{
 	* @param	string	$dateValue		Examples: '2009-12-31', '2009-12-31 15:59', '2009-12-31 15:59:10'
 	* @return	float|false		Excel date/time serial value
 	*/
-	public static function stringToExcel($dateValue = '')
- {
+	public static function stringToExcel($dateValue = '') {
 		if (strlen($dateValue) < 2)
 			return false;
 		if (!preg_match('/^(\d{1,4}[ \.\/\-][A-Z]{3,9}([ \.\/\-]\d{1,4})?|[A-Z]{3,9}[ \.\/\-]\d{1,4}([ \.\/\-]\d{1,4})?|\d{1,4}[ \.\/\-]\d{1,4}([ \.\/\-]\d{1,4})?)( \d{1,2}:\d{1,2}(:\d{1,2})?)?$/iu', $dateValue))

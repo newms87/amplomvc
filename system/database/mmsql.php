@@ -41,7 +41,7 @@ final class MSSQL implements Database
 				
 				mssql_free_result($resource);
 				
-				$query = new stdclass ();
+				$query = new stdclass();
 				$query->row = isset($data[0]) ? $data[0] : array();
 				$query->rows = $data;
 				$query->num_rows = $i;

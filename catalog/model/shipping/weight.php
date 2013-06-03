@@ -43,7 +43,7 @@ class Catalog_Model_Shipping_Weight extends Model
 				if ((string)$cost != '') {
 					$quote_data['weight_' . $result['geo_zone_id']] = array(
 						'code'			=> 'weight.weight_' . $result['geo_zone_id'],
-						'title'		=> $result['name'] . '  (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class _id')) . ')',
+						'title'		=> $result['name'] . '  (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class_id')) . ')',
 						'cost'			=> $cost,
 						'tax_class_id' => $this->config->get('weight_tax_class_id'),
 						'text'			=> $this->currency->format($this->tax->calculate($cost, $this->config->get('weight_tax_class_id')))

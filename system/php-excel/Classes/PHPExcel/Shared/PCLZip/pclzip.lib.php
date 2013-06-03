@@ -45,7 +45,7 @@
   }
 
   // ----- Error configuration
-  // 0 : PclZip class integrated error handling
+  // 0 : PclZip Class integrated error handling
   // 1 : PclError external library error handling. By enabling this
   //	you must ensure that you have included PclError library.
   // [2,...] : reserved for futur use
@@ -174,7 +174,7 @@
   */
 
   // --------------------------------------------------------------------------------
-  // class : PclZip
+  // Class : PclZip
   // Description :
   //	PclZip is the class that represent a Zip archive.
   //	The public methods allow the manipulation of the archive.
@@ -188,8 +188,7 @@
   //	properties() : List the properties of the archive
   // --------------------------------------------------------------------------------
   class PclZip
-  
-{
+  {
 	// ----- Filename of the zip file
 	var $zipname = '';
 
@@ -1168,9 +1167,8 @@
 	$this->privErrorReset();
 
 	// ----- Look if the $p_archive is a PclZip object
-	if ((is_object($p_archive)) && (get_class ($p_archive) == 'pclzip'))
-	
-{
+	if ((is_object($p_archive)) && (get_class($p_archive) == 'pclzip'))
+	{
 
 		// ----- Duplicate the archive
 		$v_result = $this->privDuplicate($p_archive->zipname);
@@ -1194,7 +1192,8 @@
 	}
 
 	// ----- Invalid variable
-	else {
+	else
+	{
 		// ----- Error log
 		PclZip::privErrorLog(PCLZIP_ERR_INVALID_PARAMETER, "Invalid variable type p_archive_to_add");
 		$v_result = PCLZIP_ERR_INVALID_PARAMETER;
@@ -1232,9 +1231,8 @@
 	}
 
 	// ----- Look if the $p_archive_to_add is a PclZip object
-	if ((is_object($p_archive_to_add)) && (get_class ($p_archive_to_add) == 'pclzip'))
-	
-{
+	if ((is_object($p_archive_to_add)) && (get_class($p_archive_to_add) == 'pclzip'))
+	{
 
 		// ----- Merge the archive
 		$v_result = $this->privMerge($p_archive_to_add);
@@ -1252,7 +1250,8 @@
 	}
 
 	// ----- Invalid variable
-	else {
+	else
+	{
 		// ----- Error log
 		PclZip::privErrorLog(PCLZIP_ERR_INVALID_PARAMETER, "Invalid variable type p_archive_to_add");
 		$v_result = PCLZIP_ERR_INVALID_PARAMETER;
@@ -4352,7 +4351,8 @@
 		$p_header['mtime'] = @mktime($v_hour, $v_minute, $v_seconde, $v_month, $v_day, $v_year);
 
 	}
-	else {
+	else
+	{
 		$p_header['mtime'] = time();
 	}
 
@@ -4454,7 +4454,8 @@
 		$p_header['mtime'] = @mktime($v_hour, $v_minute, $v_seconde, $v_month, $v_day, $v_year);
 
 	}
-	else {
+	else
+	{
 		$p_header['mtime'] = time();
 	}
 
@@ -4816,7 +4817,8 @@
 		{
 		unset($v_header_list[$v_nb_extracted]);
 		}
-		else {
+		else
+		{
 		$v_nb_extracted++;
 		}
 	}
@@ -5382,7 +5384,8 @@
   // --------------------------------------------------------------------------------
 
   }
-  // End of class // --------------------------------------------------------------------------------
+  // End of class
+  // --------------------------------------------------------------------------------
 
   // --------------------------------------------------------------------------------
   // Function : PclZipUtilPathReduction()
@@ -5507,7 +5510,7 @@
 		}
 
 		// ----- Compare the items
-		if (($v_list_dir[$i] != $v_list_path[$j]) && ($v_list_dir[$i] != '') && ( $v_list_path[$j] != '')) {
+		if (($v_list_dir[$i] != $v_list_path[$j]) && ($v_list_dir[$i] != '') && ( $v_list_path[$j] != ''))  {
 		$v_result = 0;
 		}
 

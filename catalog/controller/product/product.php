@@ -4,7 +4,6 @@ class Catalog_Controller_Product_Product extends Controller
 	
 	public function index()
 	{
-		
 		$this->language->load('product/product');
 		
 		$product_id = isset($_GET['product_id']) ? $_GET['product_id'] : 0;
@@ -33,6 +32,8 @@ class Catalog_Controller_Product_Product extends Controller
 					$this->breadcrumb->add($flashsale_info['name'], $this->url->link('sales/flashsale', 'flashsale_id=' . $product_info['flashsale_id']));
 				}
 			}
+			
+			$product_info['category'] = $this->Model_Catalog_Category->getCategory($product_info['category_id']);
 
 			$this->breadcrumb->add($product_info['name'], $this->url->link('product/product', 'product_id=' . $product_info['product_id']));
 			
@@ -50,22 +51,17 @@ class Catalog_Controller_Product_Product extends Controller
 				$this->template->load('product/product');
 			}
 			
-			//Product Flashsale
-			if (isset($flashsale_info) && $flashsale_info) {
-				$this->data['block_product_flashsale_countdown'] = $this->getBlock('product', 'flashsale_countdown', array($flashsale_info));
-			}
-			
 			//Product Images
-			$this->data['block_product_images'] = $this->getBlock('product', 'images', array($product_info));
+			$this->data['block_product_images'] = $this->getBlock('product/images', array('product_info' => $product_info));
 			
 			//Product Information
-			$this->data['block_product_information'] = $this->getBlock('product', 'information', array($product_info));
+			$this->data['block_product_information'] = $this->getBlock('product/information', array('product_info' => $product_info));
 			
 			//Additional Information
-			$this->data['block_product_additional'] = $this->getBlock('product', 'additional', array($product_info));
+			$this->data['block_product_additional'] = $this->getBlock('product/additional', array('product_info' => $product_info));
 			
 			//Find the related products
-			$this->data['block_product_related'] = $this->getBlock('product', 'related', array($product_id));
+			$this->data['block_product_related'] = $this->getBlock('product/related', array('product_id' => $product_id));
 			
 			//The Tags associated with this product
 			$tags = $this->Model_Catalog_Product->getProductTags($product_info['product_id']);

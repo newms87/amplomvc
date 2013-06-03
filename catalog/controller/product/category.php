@@ -71,10 +71,10 @@ class Catalog_Controller_Product_Category extends Controller
 		
 		$params = array(
 			'data' => $products,
-			'template' => 'product/block/product_list',
+			'template' => 'block/product/product_list',
 		);
 		
-		$this->data['block_product_list'] = $this->getBlock('product', 'list', $params);
+		$this->data['block_product_list'] = $this->getBlock('product/list', $params);
 		
 		//Sorting
 		$this->data['sorts'] = array(

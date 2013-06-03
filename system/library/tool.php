@@ -33,6 +33,16 @@ class Tool
 		return $slug;
 	}
 	
+	public function format_classname($component)
+	{
+		$parts = explode('_', $component);
+				
+		//capitalize each component of the class name
+		array_walk($parts, function(&$e, $i){ $e = ucfirst($e); });
+		
+		return implode('', $parts);
+	}
+	
 	public function name_format($format, $data)
 	{
 		$formatted_data = array();

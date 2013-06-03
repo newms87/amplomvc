@@ -18,7 +18,7 @@ class Catalog_Model_Shipping_Ups extends Model
 		$method_data = array();
 		
 		if ($status) {
-			$weight = $this->weight->convert($this->cart->getWeight(), $this->config->get('config_weight_class _id'), $this->config->get('ups_weight_class_id'));
+			$weight = $this->weight->convert($this->cart->getWeight(), $this->config->get('config_weight_class_id'), $this->config->get('ups_weight_class_id'));
 			
 			$weight = ($weight < 0.1 ? 0.1 : $weight);
 			
@@ -119,7 +119,7 @@ class Catalog_Model_Shipping_Ups extends Model
 			$xml .= '	</PickupType>';
 				
 			if ($this->config->get('ups_country') == 'US' && $this->config->get('ups_pickup') == '11') {
-				$xml .= '	<Customerclass ification>';
+				$xml .= '	<CustomerClassification>';
 				$xml .= '		<Code>' . $this->config->get('ups_classification') . '</Code>';
 				$xml .= '	</CustomerClassification>';
 			}
@@ -261,7 +261,7 @@ class Catalog_Model_Shipping_Ups extends Model
 								'code'			=> 'ups.' . $code,
 								'title'		=> $service_code[$this->config->get('ups_origin')][$code],
 								'cost'			=> $this->currency->convert($cost, $currency, $this->config->get('config_currency')),
-								'tax_class _id' => $this->config->get('ups_tax_class_id'),
+								'tax_class_id' => $this->config->get('ups_tax_class_id'),
 								'text'			=> $this->currency->format($this->tax->calculate($this->currency->convert($cost, $currency, $this->currency->getCode()), $this->config->get('ups_tax_class_id')), $this->currency->getCode(), 1.0000000)
 							);
 						}

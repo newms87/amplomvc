@@ -368,7 +368,7 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 		}
 		
 		foreach ($_POST['selected'] as $tax_rate_id) {
-			$tax_rule_total = $this->Model_Localisation_TaxClass ->getTotalTaxRulesByTaxRateId($tax_rate_id);
+			$tax_rule_total = $this->Model_Localisation_Taxclass->getTotalTaxRulesByTaxRateId($tax_rate_id);
 
 			if ($tax_rule_total) {
 				$this->error['warning'] = sprintf($this->_('error_tax_rule'), $tax_rule_total);

@@ -12,16 +12,15 @@ if (isset($_GET['phpinfo'])) {
 	exit;
 }
 
-//DN CUSTOM FUNCTIONS
-include('functions.php');
-
 // Configuration
 require_once('oc_config.php');
 
 //System / URL Paths
 require_once('path_config.php');
 
-/*  PRETTY LANGUAGE TESTING */
+require_once(DIR_SYSTEM . 'functions.php');
+
+/*  PRETTY LANGUAGE TESTING 
 echo 'testing pretty language<br /><br />';
 require_once(DIR_SYSTEM . 'library/pretty_language.php');
 new PrettyLanguage();
@@ -80,10 +79,12 @@ $store_id = $store ? (int)$store['store_id'] : null;
 
 // Config
 $config = new Config($registry, $store_id);
+$registry->set('config', $config);
 
 //Setup Cache ignore list
-foreach(explode(',',$config->get('config_cache_ignore')) as $ci)
+foreach (explode(',',$config->get('config_cache_ignore')) as $ci) {
 	$cache->ignore($ci);
+}
 
 //System Logs
 $error_log = new Log($config->get('config_error_filename'), $config->get('config_name'));
@@ -132,15 +133,10 @@ _is_writable(DIR_LOGS, $config->get('config_default_dir_mode'));
 
 
 // Request
-$request = new Request();
-$registry->set('request', $request);
+$registry->set('request', new Request());
 
 // Session
-$session = new Session($registry);
-$registry->set('session', $session);
-
-//Messages
-$registry->set('message', new Message($session));
+$registry->set('session', new Session($registry));
 
 // Url
 $url = new Url($registry, $config->get('config_url'), $config->get('config_use_ssl') ? $config->get('config_ssl') : '');
@@ -176,8 +172,7 @@ $registry->set('response', $response);
 $registry->set('language', new Language($registry));
 
 //Plugins
-$plugin_handler = new pluginHandler($registry, $merge_registry);
-$registry->set('plugin_handler', $plugin_handler);
+$registry->set('plugin', new Plugin($registry));
 
 // Document
 $document = new Document($registry);

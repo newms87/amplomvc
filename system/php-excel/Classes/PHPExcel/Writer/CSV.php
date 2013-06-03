@@ -33,8 +33,7 @@
  * @package	PHPExcel_Writer
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Writer_CSV implements PHPExcel_Writer_IWriter 
-{
+class PHPExcel_Writer_CSV implements PHPExcel_Writer_IWriter {
 	/**
 	* PHPExcel object
 	*
@@ -89,8 +88,7 @@ class PHPExcel_Writer_CSV implements PHPExcel_Writer_IWriter
 	*
 	* @param	PHPExcel	$phpExcel	PHPExcel object
 	*/
-	public function __construct(PHPExcel $phpExcel)
-	{
+	public function __construct(PHPExcel $phpExcel) {
 		$this->_phpExcel	= $phpExcel;
 	}
 
@@ -100,8 +98,7 @@ class PHPExcel_Writer_CSV implements PHPExcel_Writer_IWriter
 	* @param	string		$pFilename
 	* @throws	Exception
 	*/
-	public function save($pFilename = null)
-	{
+	public function save($pFilename = null) {
 		// Fetch sheet
 		$sheet = $this->_phpExcel->getSheet($this->_sheetIndex);
 
@@ -145,8 +142,7 @@ class PHPExcel_Writer_CSV implements PHPExcel_Writer_IWriter
 	*
 	* @return string
 	*/
-	public function getDelimiter()
-	{
+	public function getDelimiter() {
 		return $this->_delimiter;
 	}
 
@@ -156,8 +152,7 @@ class PHPExcel_Writer_CSV implements PHPExcel_Writer_IWriter
 	* @param	string	$pValue		Delimiter, defaults to ,
 	* @return PHPExcel_Writer_CSV
 	*/
-	public function setDelimiter($pValue = ',')
-	{
+	public function setDelimiter($pValue = ',') {
 		$this->_delimiter = $pValue;
 		return $this;
 	}
@@ -167,8 +162,7 @@ class PHPExcel_Writer_CSV implements PHPExcel_Writer_IWriter
 	*
 	* @return string
 	*/
-	public function getEnclosure()
-	{
+	public function getEnclosure() {
 		return $this->_enclosure;
 	}
 
@@ -178,8 +172,7 @@ class PHPExcel_Writer_CSV implements PHPExcel_Writer_IWriter
 	* @param	string	$pValue		Enclosure, defaults to "
 	* @return PHPExcel_Writer_CSV
 	*/
-	public function setEnclosure($pValue = '"')
-	{
+	public function setEnclosure($pValue = '"') {
 		if ($pValue == '') {
 			$pValue = null;
 		}
@@ -192,8 +185,7 @@ class PHPExcel_Writer_CSV implements PHPExcel_Writer_IWriter
 	*
 	* @return string
 	*/
-	public function getLineEnding()
-	{
+	public function getLineEnding() {
 		return $this->_lineEnding;
 	}
 
@@ -203,8 +195,7 @@ class PHPExcel_Writer_CSV implements PHPExcel_Writer_IWriter
 	* @param	string	$pValue		Line ending, defaults to OS line ending (PHP_EOL)
 	* @return PHPExcel_Writer_CSV
 	*/
-	public function setLineEnding($pValue = PHP_EOL)
-	{
+	public function setLineEnding($pValue = PHP_EOL) {
 		$this->_lineEnding = $pValue;
 		return $this;
 	}
@@ -214,8 +205,7 @@ class PHPExcel_Writer_CSV implements PHPExcel_Writer_IWriter
 	*
 	* @return boolean
 	*/
-	public function getUseBOM()
-	{
+	public function getUseBOM() {
 		return $this->_useBOM;
 	}
 
@@ -225,8 +215,7 @@ class PHPExcel_Writer_CSV implements PHPExcel_Writer_IWriter
 	* @param	boolean	$pValue		Use UTF-8 byte-order mark? Defaults to false
 	* @return PHPExcel_Writer_CSV
 	*/
-	public function setUseBOM($pValue = false)
-	{
+	public function setUseBOM($pValue = false) {
 		$this->_useBOM = $pValue;
 		return $this;
 	}
@@ -236,8 +225,7 @@ class PHPExcel_Writer_CSV implements PHPExcel_Writer_IWriter
 	*
 	* @return int
 	*/
-	public function getSheetIndex()
-	{
+	public function getSheetIndex() {
 		return $this->_sheetIndex;
 	}
 
@@ -247,8 +235,7 @@ class PHPExcel_Writer_CSV implements PHPExcel_Writer_IWriter
 	* @param	int		$pValue		Sheet index
 	* @return PHPExcel_Writer_CSV
 	*/
-	public function setSheetIndex($pValue = 0)
-	{
+	public function setSheetIndex($pValue = 0) {
 		$this->_sheetIndex = $pValue;
 		return $this;
 	}
@@ -260,8 +247,7 @@ class PHPExcel_Writer_CSV implements PHPExcel_Writer_IWriter
 	* @param	array	$pValues		Array containing values in a row
 	* @throws	Exception
 	*/
-	private function _writeLine($pFileHandle = null, $pValues = null)
-	{
+	private function _writeLine($pFileHandle = null, $pValues = null) {
 		if (is_array($pValues)) {
 			// No leading delimiter
 			$writeDelimiter = false;
@@ -299,8 +285,7 @@ class PHPExcel_Writer_CSV implements PHPExcel_Writer_IWriter
 	*
 	* @return boolean
 	*/
-	public function getPreCalculateFormulas()
-	{
+	public function getPreCalculateFormulas() {
 		return $this->_preCalculateFormulas;
 	}
 
@@ -310,8 +295,7 @@ class PHPExcel_Writer_CSV implements PHPExcel_Writer_IWriter
 	* @param boolean $pValue	Pre-Calculate Formulas?
 	* @return PHPExcel_Writer_CSV
 	*/
-	public function setPreCalculateFormulas($pValue = true)
-	{
+	public function setPreCalculateFormulas($pValue = true) {
 		$this->_preCalculateFormulas = $pValue;
 		return $this;
 	}

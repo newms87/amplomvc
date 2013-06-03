@@ -471,7 +471,7 @@ abstract class Model
 						$class->$function($data, $hook['param']);
 					}
 					else {
-						trigger_error("Model::action_filter(): The following method does not exist: $class ::$function().");
+						trigger_error("Model::action_filter(): The following method does not exist: $class::$function().");
 					}
 				}
 				else {

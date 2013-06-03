@@ -33,8 +33,7 @@
  * @package	PHPExcel_CachedObjectStorage
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_CachedObjectStorage_MemorySerialized extends PHPExcel_CachedObjectStorage_CacheBase implements PHPExcel_CachedObjectStorage_ICache 
-{
+class PHPExcel_CachedObjectStorage_MemorySerialized extends PHPExcel_CachedObjectStorage_CacheBase implements PHPExcel_CachedObjectStorage_ICache {
 
 	/**
 	* Store cell data in cache for the current cell object if it's "dirty",
@@ -43,8 +42,7 @@ class PHPExcel_CachedObjectStorage_MemorySerialized extends PHPExcel_CachedObjec
 	* @return	void
 	* @throws	Exception
 	*/
-	private function _storeData()
-	{
+	private function _storeData() {
 		if ($this->_currentCellIsDirty) {
 			$this->_currentObject->detach();
 
@@ -63,8 +61,7 @@ class PHPExcel_CachedObjectStorage_MemorySerialized extends PHPExcel_CachedObjec
 	* @return	void
 	* @throws	Exception
 	*/
-	public function addCacheData($pCoord, PHPExcel_Cell $cell)
-	{
+	public function addCacheData($pCoord, PHPExcel_Cell $cell) {
 		if (($pCoord !== $this->_currentObjectID) && ($this->_currentObjectID !== null)) {
 			$this->_storeData();
 		}
@@ -84,8 +81,7 @@ class PHPExcel_CachedObjectStorage_MemorySerialized extends PHPExcel_CachedObjec
 	* @throws 	Exception
 	* @return 	PHPExcel_Cell 	Cell that was found, or null if not found
 	*/
-	public function getCacheData($pCoord)
-	{
+	public function getCacheData($pCoord) {
 		if ($pCoord === $this->_currentObjectID) {
 			return $this->_currentObject;
 		}
@@ -113,9 +109,8 @@ class PHPExcel_CachedObjectStorage_MemorySerialized extends PHPExcel_CachedObjec
 	*
 	* @return	void
 	*/
-	public function unsetWorksheetCells()
-	{
-		if (!is_null($this->_currentObject)) {
+	public function unsetWorksheetCells() {
+		if(!is_null($this->_currentObject)) {
 			$this->_currentObject->detach();
 			$this->_currentObject = $this->_currentObjectID = null;
 		}

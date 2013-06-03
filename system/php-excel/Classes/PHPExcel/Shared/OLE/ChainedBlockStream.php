@@ -35,7 +35,8 @@
  * @category	PHPExcel
  * @package	PHPExcel_Shared_OLE
  */
-class PHPExcel_Shared_OLE_ChainedBlockStream{
+class PHPExcel_Shared_OLE_ChainedBlockStream
+{
 	/**
 	* The OLE container of the file that is being read.
 	* @var OLE

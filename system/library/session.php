@@ -3,13 +3,13 @@ class Session
 {
 	public $data = array();
 	
-	private $db;
+	private $registry;
 	
 	private $name = "cross-store-session";
 			
   	public function __construct($registry)
   	{
-  		$this->db = $registry->get('db');
+  		$this->registry = $registry;
 				
 		if (!session_id()) {
 			ini_set('session.use_cookies', 'On');
@@ -47,13 +47,18 @@ class Session
 			exit();
 		}
 		elseif (!isset($this->data['session_token_saved'])) {
-			$query = $this->db->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . "session WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "'");
+			$ip_session_exists = $this->db->query_var("SELECT COUNT(*) as total FROM " . DB_PREFIX . "session WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "'");
 			
-			if ($query->row['total']) {
+			if ($ip_session_exists) {
 				$this->db->query("DELETE FROM " . DB_PREFIX . "session WHERE `ip` = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "'");
 				$this->data['messages']['warning'][] = "You must enable cookies to login to the admin portal!";
 			}
 		}
+	}
+
+	public function __get($key)
+	{
+		return $this->registry->get($key);
 	}
 	
 	public function load_token_session($token)

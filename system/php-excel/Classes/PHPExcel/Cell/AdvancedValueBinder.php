@@ -43,7 +43,8 @@ if (!defined('PHPEXCEL_ROOT')) {
  * @package	PHPExcel_Cell
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Cell_AdvancedValueBinder extends PHPExcel_Cell_DefaultValueBinder implements PHPExcel_Cell_IValueBinder{
+class PHPExcel_Cell_AdvancedValueBinder extends PHPExcel_Cell_DefaultValueBinder implements PHPExcel_Cell_IValueBinder
+{
 	/**
 	* Bind value to a cell
 	*
@@ -67,7 +68,7 @@ class PHPExcel_Cell_AdvancedValueBinder extends PHPExcel_Cell_DefaultValueBinder
 			if ($value == PHPExcel_Calculation::getTRUE()) {
 				$cell->setValueExplicit( True, PHPExcel_Cell_DataType::TYPE_BOOL);
 				return true;
-			} elseif ($value == PHPExcel_Calculation::getFALSE()) {
+			} elseif($value == PHPExcel_Calculation::getFALSE()) {
 				$cell->setValueExplicit( False, PHPExcel_Cell_DataType::TYPE_BOOL);
 				return true;
 			}

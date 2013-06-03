@@ -27,7 +27,7 @@ class Admin_Controller_Shipping_Amount extends Controller
 		$this->data['cancel'] = $this->url->link('extension/shipping');
 		
 		$config_values = array('amount_priceset','amount_zonerule',
-									'amount_tax_class _id','amount_geo_zone_id','amount_status','amount_sort_order'
+									'amount_tax_class_id','amount_geo_zone_id','amount_status','amount_sort_order'
 									);
 		foreach($config_values as $cv)
 {
@@ -40,7 +40,7 @@ class Admin_Controller_Shipping_Amount extends Controller
 		if(!is_array($this->data['amount_zonerule']))
 			$this->data['amount_zonerule'] = array();
 		
-		$this->data['tax_class es'] = array_merge(array(0=>'--- None ---'),$this->Model_Localisation_TaxClass->getTaxClasses());
+		$this->data['tax_classes'] = array_merge(array(0=>'--- None ---'),$this->Model_Localisation_TaxClass->getTaxClasses());
 		
 		$this->data['geo_zones'] = array_merge(array(0=>'--- None ---'),$this->Model_Localisation_GeoZone->getGeoZones());
 		

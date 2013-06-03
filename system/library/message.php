@@ -1,16 +1,21 @@
 <?php
 class Message 
 {
-	private $session;
+	private $registry;
 	
-	function __construct($session)
+	function __construct($registry)
 	{
-		$this->session = $session;
+		$this->registry = $registry;
+		
 		if (!isset($this->session->data['messages'])) {
 			$this->session->data['messages'] = array();
 		}
 	}
 	
+	public function __get($key)
+	{
+		return $this->registry->get($key);
+	}
 	
 	public function add($type, $message)
 	{

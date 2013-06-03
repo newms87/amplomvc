@@ -33,7 +33,8 @@
  * @package	PHPExcel_Worksheet
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Worksheet_PageMargins{
+class PHPExcel_Worksheet_PageMargins
+{
 	/**
 	* Left
 	*
@@ -88,8 +89,7 @@ class PHPExcel_Worksheet_PageMargins{
 	*
 	* @return double
 	*/
-	public function getLeft()
-	{
+	public function getLeft() {
 		return $this->_left;
 	}
 
@@ -99,8 +99,7 @@ class PHPExcel_Worksheet_PageMargins{
 	* @param double $pValue
 	* @return PHPExcel_Worksheet_PageMargins
 	*/
-	public function setLeft($pValue)
-	{
+	public function setLeft($pValue) {
 		$this->_left = $pValue;
 		return $this;
 	}
@@ -110,8 +109,7 @@ class PHPExcel_Worksheet_PageMargins{
 	*
 	* @return double
 	*/
-	public function getRight()
-	{
+	public function getRight() {
 		return $this->_right;
 	}
 
@@ -121,8 +119,7 @@ class PHPExcel_Worksheet_PageMargins{
 	* @param double $pValue
 	* @return PHPExcel_Worksheet_PageMargins
 	*/
-	public function setRight($pValue)
-	{
+	public function setRight($pValue) {
 		$this->_right = $pValue;
 		return $this;
 	}
@@ -132,8 +129,7 @@ class PHPExcel_Worksheet_PageMargins{
 	*
 	* @return double
 	*/
-	public function getTop()
-	{
+	public function getTop() {
 		return $this->_top;
 	}
 
@@ -143,8 +139,7 @@ class PHPExcel_Worksheet_PageMargins{
 	* @param double $pValue
 	* @return PHPExcel_Worksheet_PageMargins
 	*/
-	public function setTop($pValue)
-	{
+	public function setTop($pValue) {
 		$this->_top = $pValue;
 		return $this;
 	}
@@ -154,8 +149,7 @@ class PHPExcel_Worksheet_PageMargins{
 	*
 	* @return double
 	*/
-	public function getBottom()
-	{
+	public function getBottom() {
 		return $this->_bottom;
 	}
 
@@ -165,8 +159,7 @@ class PHPExcel_Worksheet_PageMargins{
 	* @param double $pValue
 	* @return PHPExcel_Worksheet_PageMargins
 	*/
-	public function setBottom($pValue)
-	{
+	public function setBottom($pValue) {
 		$this->_bottom = $pValue;
 		return $this;
 	}
@@ -176,8 +169,7 @@ class PHPExcel_Worksheet_PageMargins{
 	*
 	* @return double
 	*/
-	public function getHeader()
-	{
+	public function getHeader() {
 		return $this->_header;
 	}
 
@@ -187,8 +179,7 @@ class PHPExcel_Worksheet_PageMargins{
 	* @param double $pValue
 	* @return PHPExcel_Worksheet_PageMargins
 	*/
-	public function setHeader($pValue)
-	{
+	public function setHeader($pValue) {
 		$this->_header = $pValue;
 		return $this;
 	}
@@ -198,8 +189,7 @@ class PHPExcel_Worksheet_PageMargins{
 	*
 	* @return double
 	*/
-	public function getFooter()
-	{
+	public function getFooter() {
 		return $this->_footer;
 	}
 
@@ -209,8 +199,7 @@ class PHPExcel_Worksheet_PageMargins{
 	* @param double $pValue
 	* @return PHPExcel_Worksheet_PageMargins
 	*/
-	public function setFooter($pValue)
-	{
+	public function setFooter($pValue) {
 		$this->_footer = $pValue;
 		return $this;
 	}
@@ -218,8 +207,7 @@ class PHPExcel_Worksheet_PageMargins{
 	/**
 	* Implement PHP __clone to create a deep clone, not just a shallow copy.
 	*/
-	public function __clone()
-	{
+	public function __clone() {
 		$vars = get_object_vars($this);
 		foreach ($vars as $key => $value) {
 			if (is_object($value)) {

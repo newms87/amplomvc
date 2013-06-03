@@ -35,7 +35,8 @@
  * @package	PHPExcel_Worksheet
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Worksheet_RowIterator implements Iterator{
+class PHPExcel_Worksheet_RowIterator implements Iterator
+{
 	/**
 	* PHPExcel_Worksheet to iterate
 	*
@@ -64,8 +65,7 @@ class PHPExcel_Worksheet_RowIterator implements Iterator{
 	* @param	PHPExcel_Worksheet	$subject	The worksheet to iterate over
 	* @param	integer				$startRow	The row number at which to start iterating
 	*/
-	public function __construct(PHPExcel_Worksheet $subject = null, $startRow = 1)
-	{
+	public function __construct(PHPExcel_Worksheet $subject = null, $startRow = 1) {
 		// Set subject
 		$this->_subject = $subject;
 		$this->resetStart($startRow);
@@ -74,8 +74,7 @@ class PHPExcel_Worksheet_RowIterator implements Iterator{
 	/**
 	* Destructor
 	*/
-	public function __destruct()
-	{
+	public function __destruct() {
 		unset($this->_subject);
 	}
 
@@ -84,8 +83,7 @@ class PHPExcel_Worksheet_RowIterator implements Iterator{
 	*
 	* @param integer	$startRow	The row number at which to start iterating
 	*/
-	public function resetStart($startRow = 1)
-	{
+	public function resetStart($startRow = 1) {
 		$this->_startRow = $startRow;
 		$this->seek($startRow);
 	}
@@ -95,16 +93,14 @@ class PHPExcel_Worksheet_RowIterator implements Iterator{
 	*
 	* @param integer	$row	The row number to set the current pointer at
 	*/
-	public function seek($row = 1)
-	{
+	public function seek($row = 1) {
 		$this->_position = $row;
 	}
 
 	/**
 	* Rewind the iterator to the starting row
 	*/
-	public function rewind()
-	{
+	public function rewind() {
 		$this->_position = $this->_startRow;
 	}
 
@@ -113,8 +109,7 @@ class PHPExcel_Worksheet_RowIterator implements Iterator{
 	*
 	* @return PHPExcel_Worksheet_Row
 	*/
-	public function current()
-	{
+	public function current() {
 		return new PHPExcel_Worksheet_Row($this->_subject, $this->_position);
 	}
 
@@ -123,24 +118,21 @@ class PHPExcel_Worksheet_RowIterator implements Iterator{
 	*
 	* @return int
 	*/
-	public function key()
-	{
+	public function key() {
 		return $this->_position;
 	}
 
 	/**
 	* Set the iterator to its next value
 	*/
-	public function next()
-	{
+	public function next() {
 		++$this->_position;
 	}
 
 	/**
 	* Set the iterator to its previous value
 	*/
-	public function prev()
-	{
+	public function prev() {
 		if ($this->_position > 1)
 			--$this->_position;
 	}
@@ -150,8 +142,7 @@ class PHPExcel_Worksheet_RowIterator implements Iterator{
 	*
 	* @return boolean
 	*/
-	public function valid()
-	{
+	public function valid() {
 		return $this->_position <= $this->_subject->getHighestRow();
 	}
 }

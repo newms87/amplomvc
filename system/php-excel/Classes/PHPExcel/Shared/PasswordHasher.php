@@ -33,7 +33,8 @@
  * @package	PHPExcel_Shared
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Shared_PasswordHasher{
+class PHPExcel_Shared_PasswordHasher
+{
 	/**
 	* Create a password hash from a given string.
 	*
@@ -44,8 +45,7 @@ class PHPExcel_Shared_PasswordHasher{
 	* @param 	string	$pPassword	Password to hash
 	* @return 	string				Hashed password
 	*/
-	public static function hashPassword($pPassword = '')
- {
+	public static function hashPassword($pPassword = '') {
 		$password = 0x0000;
 		$i		= 1;		// char position
 

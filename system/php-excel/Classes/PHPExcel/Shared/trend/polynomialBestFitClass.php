@@ -26,7 +26,7 @@
  */
 
 
-require_once PHPEXCEL_ROOT . 'PHPExcel/Shared/trend/bestFitclass .php';
+require_once PHPEXCEL_ROOT . 'PHPExcel/Shared/trend/bestFitClass.php';
 require_once PHPEXCEL_ROOT . 'PHPExcel/Shared/JAMA/Matrix.php';
 
 
@@ -37,10 +37,11 @@ require_once PHPEXCEL_ROOT . 'PHPExcel/Shared/JAMA/Matrix.php';
  * @package	PHPExcel_Shared_Trend
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Polynomial_Best_Fit extends PHPExcel_Best_Fit{
+class PHPExcel_Polynomial_Best_Fit extends PHPExcel_Best_Fit
+{
 	/**
 	* Algorithm type to use for best-fit
-	* (Name of this trend class )
+	* (Name of this trend class)
 	*
 	* @var	string
 	**/
@@ -60,8 +61,7 @@ class PHPExcel_Polynomial_Best_Fit extends PHPExcel_Best_Fit{
 	*
 	* @return	int
 	**/
-	public function getOrder()
-	{
+	public function getOrder() {
 		return $this->_order;
 	}	//	function getOrder()
 
@@ -72,11 +72,10 @@ class PHPExcel_Polynomial_Best_Fit extends PHPExcel_Best_Fit{
 	* @param	float		$xValue			X-Value
 	* @return	float						Y-Value
 	**/
-	public function getValueOfYForX($xValue)
-	{
+	public function getValueOfYForX($xValue) {
 		$retVal = $this->getIntersect();
 		$slope = $this->getSlope();
-		foreach ($slope as $key => $value) {
+		foreach($slope as $key => $value) {
 			if ($value != 0.0) {
 				$retVal += $value * pow($xValue, $key + 1);
 			}
@@ -91,8 +90,7 @@ class PHPExcel_Polynomial_Best_Fit extends PHPExcel_Best_Fit{
 	* @param	float		$yValue			Y-Value
 	* @return	float						X-Value
 	**/
-	public function getValueOfXForY($yValue)
-	{
+	public function getValueOfXForY($yValue) {
 		return ($yValue - $this->getIntersect()) / $this->getSlope();
 	}	//	function getValueOfXForY()
 
@@ -103,13 +101,12 @@ class PHPExcel_Polynomial_Best_Fit extends PHPExcel_Best_Fit{
 	* @param	int		$dp		Number of places of decimal precision to display
 	* @return	string
 	**/
-	public function getEquation($dp=0)
-	{
+	public function getEquation($dp=0) {
 		$slope = $this->getSlope($dp);
 		$intersect = $this->getIntersect($dp);
 
 		$equation = 'Y = '.$intersect;
-		foreach ($slope as $key => $value) {
+		foreach($slope as $key => $value) {
 			if ($value != 0.0) {
 				$equation .= ' + '.$value.' * X';
 				if ($key > 0) {
@@ -127,11 +124,10 @@ class PHPExcel_Polynomial_Best_Fit extends PHPExcel_Best_Fit{
 	* @param	int		$dp		Number of places of decimal precision to display
 	* @return	string
 	**/
-	public function getSlope($dp=0)
-	{
+	public function getSlope($dp=0) {
 		if ($dp != 0) {
 			$coefficients = array();
-			foreach ($this->_slope as $coefficient) {
+			foreach($this->_slope as $coefficient) {
 				$coefficients[] = round($coefficient,$dp);
 			}
 			return $coefficients;
@@ -140,8 +136,7 @@ class PHPExcel_Polynomial_Best_Fit extends PHPExcel_Best_Fit{
 	}	//	function getSlope()
 
 
-	public function getCoefficients($dp=0)
-	{
+	public function getCoefficients($dp=0) {
 		return array_merge(array($this->getIntersect($dp)),$this->getSlope($dp));
 	}	//	function getCoefficients()
 
@@ -154,8 +149,7 @@ class PHPExcel_Polynomial_Best_Fit extends PHPExcel_Best_Fit{
 	* @param	float[]		$xValues	The set of X-values for this regression
 	* @param	boolean		$const
 	*/
-	private function _polynomial_regression($order, $yValues, $xValues, $const)
-	{
+	private function _polynomial_regression($order, $yValues, $xValues, $const) {
 		// calculate sums
 		$x_sum = array_sum($xValues);
 		$y_sum = array_sum($yValues);
@@ -198,7 +192,7 @@ class PHPExcel_Polynomial_Best_Fit extends PHPExcel_Best_Fit{
 		$this->_slope = $coefficients;
 
 		$this->_calculateGoodnessOfFit($x_sum,$y_sum,$xx_sum,$yy_sum,$xy_sum);
-		foreach ($this->_xValues as $xKey => $xValue) {
+		foreach($this->_xValues as $xKey => $xValue) {
 			$this->_yBestFitValues[$xKey] = $this->getValueOfYForX($xValue);
 		}
 	}	//	function _polynomial_regression()

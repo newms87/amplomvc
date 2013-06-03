@@ -1,7 +1,7 @@
 #<?php // editor friendly :)
 
 //=====
-class ControllerAccountRegister extends Controller 
+class _CatalogControllerAccountRegister extends Controller 
 {
 	
 //.....

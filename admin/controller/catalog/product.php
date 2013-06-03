@@ -437,7 +437,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			'price'=>'',
 			'cost'=>'',
 			'is_final'=>0,
-			'tax_class _id'=>$this->config->get('config_tax_default_id'),
+			'tax_class_id'=>$this->config->get('config_tax_default_id'),
 			'date_available'=>date_format(new DateTime(),"Y-m-d H:i:s"),
 			'date_expires'=>'',
 			'editable' => 1,
@@ -522,7 +522,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			$this->data['manufacturers'][$man['manufacturer_id']] = $man['name'];
 		}
 		
-		$this->data['tax_class es'] = array_merge(array(0=>'--- None ---'),$this->Model_Localisation_TaxClass->getTaxClasses());
+		$this->data['tax_classes'] = array_merge(array(0=>'--- None ---'),$this->Model_Localisation_TaxClass->getTaxClasses());
 	
 		$this->data['stock_statuses'] = $this->Model_Localisation_StockStatus->getStockStatuses();
 		

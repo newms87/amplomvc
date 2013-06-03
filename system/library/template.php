@@ -17,7 +17,7 @@ class Template
 	
 	private $template_data;
 	
-	function __construct(&$registry)
+	function __construct($registry)
 	{
 		$this->registry = $registry;
 	}
@@ -138,12 +138,25 @@ class Template
 	
 	public function render()
 	{
-		if (file_exists($this->file)) {
+		if (!$this->file) {
+			trigger_error("No template was set!<br />" . get_caller() . "<br />" . get_caller(1));
+			exit();
+		}
+		
+		if (is_file($this->file)) {
+			//TODO: Do we want plugins to modify templates in this way!?
+			// The plugins can only modify for default template... does this make sense? just use a new template?
+			// Maybe the plugin template overrides the default template (when requested by plugin)? 
+			
+			//if there are plugins that have modified this template,
+			//we use the merged version of this file
+			$file = $this->plugin->getFile($this->file);
+		
 			extract($this->data);
 			
 			ob_start();
 			
-			include($this->file);
+			include($file);
 			
 			return ob_get_clean();
 		}

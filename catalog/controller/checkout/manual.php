@@ -162,7 +162,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 					'quantity'	=> $product['quantity'],
 					'price'		=> $product['price'],
 					'total'		=> $product['total'],
-					'tax'		=> $this->tax->getTax($product['total'], $product['tax_class _id']),
+					'tax'		=> $this->tax->getTax($product['total'], $product['tax_class_id']),
 					'reward'	=> $product['reward']
 				);
 			}

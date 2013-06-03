@@ -4,8 +4,7 @@
 
 // http://www.idiom.com/~zilla/Computer/Javanumeric/LM.java
 
-class LevenbergMarquardt 
-{
+class LevenbergMarquardt {
 
 	/**
 	* Calculate the current sum-squared-error
@@ -19,8 +18,7 @@ class LevenbergMarquardt
 	* @param double[] $s,
 	* @param object $f
 	*/
-	function chiSquared($x, $a, $y, $s, $f)
-	{
+	function chiSquared($x, $a, $y, $s, $f) {
 		$npts = count($y);
 		$sum = 0.0;
 
@@ -56,8 +54,7 @@ class LevenbergMarquardt
 	*  Can use this and maxiter to interleave the LM descent with some other
 	*  task, setting maxiter to something small.
 	*/
-	function solve($x, $a, $y, $s, $vary, $f, $lambda, $termepsilon, $maxiter, $verbose)
-	{
+	function solve($x, $a, $y, $s, $vary, $f, $lambda, $termepsilon, $maxiter, $verbose) {
 		$npts = count($y);
 		$nparm = count($a);
 
