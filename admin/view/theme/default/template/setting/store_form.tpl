@@ -1,7 +1,7 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
-	<?= $this->builder->display_errors($errors);?>
+	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt="" /> <?= $name; ?></h1>
@@ -60,7 +60,7 @@
 							<td><?= $entry_theme; ?></td>
 							<td>
 									<? $this->builder->set_config('name', 'name'); ?>
-									<?= $this->builder->build('select', $themes, 'config_theme', $config_theme);?>
+									<?= $this->builder->build('select', $themes, 'config_theme', $config_theme); ?>
 							</td>
 						</tr>
 						<tr>
@@ -86,13 +86,13 @@
 						<tr>
 							<td><?= $entry_country; ?></td>
 							<td>
-								<?= $this->builder->set_config('country_id', 'name');?>
-								<?= $this->builder->build('select', $countries, "config_country_id", $config_country_id, array('class'=>"country_select"));?>
+								<?= $this->builder->set_config('country_id', 'name'); ?>
+								<?= $this->builder->build('select', $countries, "config_country_id", $config_country_id, array('class'=>"country_select")); ?>
 							</td>
 						</tr>
 						<tr>
 							<td><?= $entry_zone; ?></td>
-							<td><select name="config_zone_id" class="zone_select" zone_id="<?=$config_zone_id;?>"></select></td>
+							<td><select name="config_zone_id" class="zone_select" zone_id="<?= $config_zone_id; ?>"></select></td>
 						</tr>
 						<tr>
 							<td><?= $entry_language; ?></td>
@@ -130,7 +130,7 @@
 							<td><?= $entry_allowed_shipping_zone; ?></td>
 							<td>
 								<? $this->builder->set_config('geo_zone_id','name');?>
-								<?=$this->builder->build('select',$geo_zones, "config_allowed_shipping_zone", (int)$config_allowed_shipping_zone);?>
+								<?= $this->builder->build('select',$geo_zones, "config_allowed_shipping_zone", (int)$config_allowed_shipping_zone); ?>
 							</td>
 						</tr>
 						<tr>
@@ -162,6 +162,10 @@
 									<option value="payment"><?= $text_payment; ?></option>
 									<? } ?>
 								</select></td>
+						</tr>
+						<tr>
+							<td><?= $entry_show_product_model; ?></td>
+							<td><?= $this->builder->build('radio', $data_yes_no, 'config_show_product_model', $config_show_product_model); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_tax_customer; ?></td>
@@ -262,7 +266,7 @@
 						<tr>
 							<td><?= $entry_stock_display; ?></td>
 							<td>
-								<?= $this->builder->build('radio', $data_stock_display_types, "config_stock_display", $config_stock_display, array('class'=>'display_stock_radio'));?>
+								<?= $this->builder->build('radio', $data_stock_display_types, "config_stock_display", $config_stock_display, array('class'=>'display_stock_radio')); ?>
 							</td>
 						</tr>
 						<tr>
@@ -312,15 +316,15 @@
 						<tr>
 							<td><?= $entry_logo; ?></td>
 							<td>
-								<?= $this->builder->set_builder_template('click_image');?>
-						<?= $this->builder->image_input("config_logo", $config_logo);?>
+								<?= $this->builder->set_builder_template('click_image'); ?>
+						<?= $this->builder->image_input("config_logo", $config_logo); ?>
 							</td>
 						</tr>
 						<tr>
 							<td><?= $entry_icon; ?></td>
 							<td>
-									<?= $this->builder->set_builder_template('click_image');?>
-						<?= $this->builder->image_input("config_icon", $config_icon);?>
+									<?= $this->builder->set_builder_template('click_image'); ?>
+						<?= $this->builder->image_input("config_icon", $config_icon); ?>
 							</td>
 						</tr>
 						<tr>
@@ -408,10 +412,10 @@ $('[name=config_theme]').change(function(){
 }).change();
 //--></script>
 
-<?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select');?>
+<?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select'); ?>
 
 <script type="text/javascript">//<!--
 $('#tabs a').tabs();
 //--></script>
-<?=$this->builder->js('errors',$errors);?>
+<?= $this->builder->js('errors',$errors); ?>
 <?= $footer; ?>

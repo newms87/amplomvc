@@ -1,6 +1,8 @@
 <?php
-class ControllerReportSaleReturn extends Controller {
-	public function index() {
+class Admin_Controller_Report_SaleReturn extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('report/sale_return');
 
 		$this->load->language('report/sale_return');
@@ -73,9 +75,9 @@ class ControllerReportSaleReturn extends Controller {
 			'limit'						=> $this->config->get('config_admin_limit')
 		);
 		
-		$return_total = $this->model_report_return->getTotalReturns($data);
+		$return_total = $this->Model_Report_Return->getTotalReturns($data);
 		
-		$results = $this->model_report_return->getReturns($data);
+		$results = $this->Model_Report_Return->getReturns($data);
 		
 		foreach ($results as $result) {
 			$this->data['returns'][] = array(
@@ -85,7 +87,7 @@ class ControllerReportSaleReturn extends Controller {
 			);
 		}
 				
-		$this->data['return_statuses'] = $this->model_localisation_return_status->getReturnStatuses();
+		$this->data['return_statuses'] = $this->Model_Localisation_ReturnStatus->getReturnStatuses();
 
 		$this->data['groups'] = array();
 

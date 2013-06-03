@@ -8,7 +8,7 @@ define('DATETIME_ZERO','0000-00-00 00:00:00');
 // Configuration
 require_once('config.php');
 
-include('../functions.php');
+require_once(DIR_SYSTEM . 'functions.php');
 
 // Install
 if (!defined('DIR_APPLICATION')) {
@@ -41,10 +41,12 @@ $registry->set('cache', $cache);
 
 //config is self assigning to registry in order to use immediately!
 $config = new Config($registry);
+$registry->set('config', $config);
 
 //Setup Cache ignore list
-foreach(explode(',',$config->get('config_cache_ignore')) as $ci)
+foreach (explode(',',$config->get('config_cache_ignore')) as $ci) {
 	$cache->ignore($ci);
+}
 
 
 //System Logging
@@ -93,16 +95,11 @@ _is_writable(DIR_DOWNLOAD, $config->get('config_default_dir_mode'));
 _is_writable(DIR_LOGS, $config->get('config_default_dir_mode'));
 
 
-// Session
-$session = new Session($registry);
-$registry->set('session', $session);
-
-//Messages
-$registry->set('message', new Message($session));
-
 // Request
-$request = new Request();
-$registry->set('request', $request);
+$registry->set('request', new Request());
+
+// Session
+$registry->set('session', new Session($registry));
 
 // Url
 $url = new Url($registry, SITE_URL, $config->get('config_use_ssl') ? SITE_SSL : '');
@@ -110,19 +107,18 @@ if($config->get('config_seo_url'))
 	$url->getSeoUrl();
 $registry->set('url', $url);
 
-if(!isset($_GET['route'])){
+if (!isset($_GET['route'])) {
 	$_GET['route'] = 'common/home';
 }
 
 //Database Structure Validation
-$db_last_update = $cache->get('db_last_update');
-if(!$db_last_update){
-	$db_last_update = 0;
-}
-$query = $db->query("SHOW GLOBAL STATUS WHERE Variable_name = 'com_alter_table' AND Value > '$db_last_update'");
-if($query->num_rows){
+$db_last_update = (int)$cache->get('db_last_update');
+
+$row = $db->query_row("SHOW GLOBAL STATUS WHERE Variable_name = 'com_alter_table' AND Value > '$db_last_update'");
+
+if ($row) {
 	$cache->delete('model');
-	$cache->set('db_last_update', $query->row['Value']);
+	$cache->set('db_last_update', $row['Value']);
 }
 
 //Images
@@ -137,8 +133,7 @@ $registry->set('response', $response);
 $registry->set('language', new Language($registry));
 
 //Plugins
-$plugin_handler = new pluginHandler($registry, $merge_registry);
-$registry->set('plugin_handler', $plugin_handler);
+$registry->set('plugin', new Plugin($registry, $merge_registry));
 
 // Document
 $document = new Document($registry);
@@ -153,63 +148,10 @@ $config->run_site_config();
 
 // Front Controller
 $controller = new Front($registry);
-
-//Router
-$route = '';
-$action = '';
-
-if(isset($_GET['route'])){
-	$part = explode('/', $_GET['route']);
-	
-	if (isset($part[0])) {
-		$route .= $part[0];
-	}
-	
-	if (isset($part[1])) {
-		$route .= '/' . $part[1];
-	}
-}
-
-if(!$registry->get('user')->isLogged()){
-	$allow_access = false;
-	
-	if($route){
-		$allowed = array(
-			'common/forgotten',
-			'common/reset',
-			'common/login',
-		);
-		
-		if(!in_array($route, $allowed)){
-			$action = new Action('common/login');
-		}
-	}
-}
-elseif($route){
-	$ignore = array(
-		'common/home',
-		'common/login',
-		'common/logout',
-		'common/forgotten',
-		'common/reset',
-		'error/not_found',
-		'error/permission'
-	);
-	
-	if(!in_array($route, $ignore) && !$registry->get('user')->hasPermission('access', $route)){
-		$action = new Action('error/permission');
-	}
-}
-else{
-	$action = new Action('common/home');
-}
-
-if (!$action) {
-	$action = new Action($_GET['route']);
-}
+$controller->routeAdmin();
 
 // Dispatch
-$controller->dispatch($action, new Action('error/not_found'));
+$controller->dispatch();
 
 // Output
 $response->output();

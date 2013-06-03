@@ -1,7 +1,9 @@
 <?php
-class ControllerCartCart extends Controller {
+class Catalog_Controller_Cart_Cart extends Controller 
+{
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('cart/cart');
 		
 		$this->language->load('cart/cart');
@@ -11,38 +13,38 @@ class ControllerCartCart extends Controller {
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('cart/cart'));
 		
-		$this->data['block_cart'] = $this->getBlock('cart', 'cart');
+		$this->data['block_cart'] = $this->getBlock('cart/cart');
 		
 		if ($this->template->option('show_cart_weight')) {
 			$this->data['weight'] = $this->weight->format($this->cart->getWeight(), $this->config->get('config_weight_class_id'), $this->language->getInfo('decimal_point'), $this->language->getInfo('thousand_point'));
 		}
 		
-		if($this->config->get('coupon_status')){
-			$this->data['block_coupon'] = $this->getBlock('cart','coupon');
+		if ($this->config->get('coupon_status')) {
+			$this->data['block_coupon'] = $this->getBlock('cart/coupon');
 		}
 		$this->data['show_coupon'] = $this->template->option('show_coupon');
 		
-		if($this->config->get('voucher_status')){
-			$this->data['block_voucher'] = $this->getBlock('cart', 'voucher');
+		if ($this->config->get('voucher_status')) {
+			$this->data['block_voucher'] = $this->getBlock('cart/voucher');
 		}
 		$this->data['show_voucher'] = $this->template->option('show_voucher');
 		
-		if($this->config->get('reward_status') && $this->customer->getRewardPoints() && $this->cart->getTotalPoints() > 0){
-			$this->data['block_reward'] = $this->getBlock('cart', 'reward');
+		if ($this->config->get('reward_status') && $this->customer->getRewardPoints() && $this->cart->getTotalPoints() > 0) {
+			$this->data['block_reward'] = $this->getBlock('cart/reward');
 		}
 		$this->data['show_reward'] = $this->template->option('show_reward');
 		
-		if($this->config->get('shipping_status') && $this->cart->hasShipping()){
-			$this->data['block_shipping'] = $this->getBlock('cart', 'shipping');
+		if ($this->config->get('shipping_status') && $this->cart->hasShipping()) {
+			$this->data['block_shipping'] = $this->getBlock('cart/shipping');
 		}
 		$this->data['show_shipping'] = $this->template->option('show_shipping');
 		
-		$this->data['block_total'] = $this->getBlock('cart', 'total');
+		$this->data['block_total'] = $this->getBlock('cart/total');
 		
-		if(isset($_GET['redirect']) && preg_match("/route=cart\/cart/",$_GET['redirect']) == 0){
+		if (isset($_GET['redirect']) && preg_match("/route=cart\/cart/",$_GET['redirect']) == 0) {
 			$this->data['continue'] = urldecode($_GET['redirect']);
 		}
-		else{
+		else {
 			$this->data['continue'] = $this->url->link('common/home');
 		}
 								
@@ -60,7 +62,8 @@ class ControllerCartCart extends Controller {
 		$this->response->setOutput($this->render());
   	}
 								
-	public function add() {
+	public function add()
+	{
 		$this->language->load('cart/cart');
 		
 		$product_id = isset($_POST['product_id']) ? $_POST['product_id'] : 0;
@@ -70,14 +73,14 @@ class ControllerCartCart extends Controller {
 		
 		$this->cart->add($product_id, $quantity, $options, $load_page);
 		
-		if($load_page){
+		if ($load_page) {
 			$this->index();
 		}
-		else{
+		else {
 			$json = array();
 			
 			if (!$this->cart->has_error('add')) {
-				$name = $this->model_catalog_product->getProductName($product_id);
+				$name = $this->Model_Catalog_Product->getProductName($product_id);
 				
 				$redirect = urlencode($this->url->link('product/product', 'product_id=' . $product_id));
 				

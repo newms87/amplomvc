@@ -1,6 +1,8 @@
 <?php
-class ModelShippingUsps extends Model {
-	public function getQuote($address) {
+class Catalog_Model_Shipping_Usps extends Model 
+{
+	public function getQuote($address)
+	{
 		$this->load->language('shipping/usps');
 
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('usps_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
@@ -360,15 +362,16 @@ class ModelShippingUsps extends Model {
 
 							if ($postages->length) {
 								foreach ($postages as $postage) {
-									$classid = $postage->getAttribute('CLASSID');
+									$ClassId = $postage->getAttribute('CLASSID');
 
 									if (in_array($classid, $allowed)) {
-										if ($classid == '0') {
+										if ($ClassId == '0') {
 											$mailservice = $postage->getElementsByTagName('MailService')->item(0)->nodeValue;
 
-											foreach ($firstclasses as $k => $firstclass)  {
+											foreach ($firstclasses as $k => $firstclass)  
+{
 												if ($firstclass == $mailservice) {
-													$classid = $classid . $k;
+													$ClassId = $classid . $k;
 													break;
 												}
 											}
@@ -376,7 +379,7 @@ class ModelShippingUsps extends Model {
 											if (($this->config->get('usps_domestic_' . $classid))) {
 												$cost = $postage->getElementsByTagName('Rate')->item(0)->nodeValue;
 
-												$quote_data[$classid] = array(
+												$quote_data[$ClassId] = array(
 													'code'			=> 'usps.' . $classid,
 													'title'		=> $postage->getElementsByTagName('MailService')->item(0)->nodeValue,
 													'cost'			=> $this->currency->convert($cost, 'USD', $this->config->get('config_currency')),
@@ -385,10 +388,11 @@ class ModelShippingUsps extends Model {
 												);
 											}
 
-										} elseif ($this->config->get('usps_domestic_' . $classid)) {
+										} elseif ($this->config->get('usps_domestic_' . $classid)) 
+{
 											$cost = $postage->getElementsByTagName('Rate')->item(0)->nodeValue;
 
-											$quote_data[$classid] = array(
+											$quote_data[$ClassId] = array(
 												'code'			=> 'usps.' . $classid,
 												'title'		=> $postage->getElementsByTagName('MailService')->item(0)->nodeValue,
 												'cost'			=> $this->currency->convert($cost, 'USD', $this->config->get('config_currency')),
@@ -438,7 +442,8 @@ class ModelShippingUsps extends Model {
 								}
 							}
 						}
-					} elseif ($error) {
+					} elseif ($error) 
+{
 						$method_data = array(
 							'code'		=> 'usps',
 							'title'		=> $this->_('text_title'),

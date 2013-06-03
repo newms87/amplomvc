@@ -1,13 +1,15 @@
 <?php
-class ControllerCommonColumnRight extends Controller {
-	public function index() {
+class Catalog_Controller_Common_ColumnRight extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('common/column_right');
 
-		$layout_id = $this->model_design_layout->get_layout_id();
+		$layout_id = $this->Model_Design_Layout->get_layout_id();
 
 		$module_data = array();
 		
-		$extensions = $this->model_setting_extension->getExtensions('module');
+		$extensions = $this->Model_Setting_Extension->getExtensions('module');
 		
 		foreach ($extensions as $extension) {
 			$modules = $this->config->get($extension['code'] . '_module');
@@ -44,13 +46,12 @@ class ControllerCommonColumnRight extends Controller {
 		}
 		
 		//Load Blocks associated with this position
-		$blocks = $this->model_block_block->getBlocksForPosition('column_right');
+		$blocks = $this->Model_Block_Block->getBlocksForPosition('column_right');
 		
 		$this->data['blocks'] = array();
 		
-		foreach($blocks as $key => $block){
-			list($context, $name) = explode('/', $key);
-			$this->data['blocks'][] = $this->getBlock($context, $name);
+		foreach ($blocks as $key => $block) {
+			$this->data['blocks'][] = $this->getBlock($key);
 		}
 		
 		$this->render();

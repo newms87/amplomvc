@@ -1,10 +1,12 @@
 <?php
-class ModelTotalVoucher extends Model {
-	public function getTotal(&$total_data, &$total, &$taxes) {
+class Catalog_Model_Total_Voucher extends Model 
+{
+	public function getTotal(&$total_data, &$total, &$taxes)
+	{
 		if (isset($this->session->data['voucher'])) {
 			$this->load->language('total/voucher');
 			
-			$voucher_info = $this->model_cart_voucher->getVoucher($this->session->data['voucher']);
+			$voucher_info = $this->Model_Cart_Voucher->getVoucher($this->session->data['voucher']);
 			
 			if ($voucher_info) {
 				if ($voucher_info['amount'] > $total) {
@@ -26,7 +28,8 @@ class ModelTotalVoucher extends Model {
 		}
 	}
 	
-	public function confirm($order_info, $order_total) {
+	public function confirm($order_info, $order_total)
+	{
 		$code = '';
 		
 		$start = strpos($order_total['title'], '(') + 1;
@@ -36,10 +39,10 @@ class ModelTotalVoucher extends Model {
 			$code = substr($order_total['title'], $start, $end - $start);
 		}
 		
-		$voucher_info = $this->model_cart_voucher->getVoucher($code);
+		$voucher_info = $this->Model_Cart_Voucher->getVoucher($code);
 		
 		if ($voucher_info) {
-			$this->model_cart_voucher->redeem($voucher_info['voucher_id'], $order_info['order_id'], $order_total['value']);
+			$this->Model_Cart_Voucher->redeem($voucher_info['voucher_id'], $order_info['order_id'], $order_total['value']);
 		}
 	}
 }

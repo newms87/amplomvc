@@ -1,6 +1,8 @@
 <?php
-class ModelSettingSetting extends Model {
-	public function getSetting($group, $store_id = 0) {
+class Admin_Model_Setting_Setting extends Model 
+{
+	public function getSetting($group, $store_id = 0)
+	{
 		$where = array(
 			'store_id'  => $store_id,
 			'group'	=> $group,
@@ -21,7 +23,8 @@ class ModelSettingSetting extends Model {
 		return $data;
 	}
 	
-	public function editSetting($group, $data, $store_id = 0, $auto_load = true) {
+	public function editSetting($group, $data, $store_id = 0, $auto_load = true)
+	{
 		$this->deleteSetting($group, $store_id);
 
 		foreach ($data as $key => $value) {
@@ -32,11 +35,11 @@ class ModelSettingSetting extends Model {
 				'auto_load' => $auto_load ? 1 : 0
 			);
 			
-			if(is_array($value) || is_object($value)){
+			if (is_array($value) || is_object($value)) {
 				$values['value'] = serialize($value);
 				$values['serialized'] = 1;
 			}
-			else{
+			else {
 				$values['value'] = $value;
 				$values['serialized'] = 0;
 			}
@@ -46,11 +49,11 @@ class ModelSettingSetting extends Model {
 	}
 	
 	public function editSettingKey($group, $key = null, $value = array(), $store_id = 0, $auto_load = true){
-		if(is_array($value) || is_object($value)){
+		if (is_array($value) || is_object($value)) {
 			$value = serialize($value);
 			$serialized = 1;
 		}
-		else{
+		else {
 			$serialized = 0;
 		}
 		
@@ -71,7 +74,8 @@ class ModelSettingSetting extends Model {
 		$this->cache->delete('store');
 	}
 	
-	public function deleteSetting($group, $store_id = 0) {
+	public function deleteSetting($group, $store_id = 0)
+	{
 		$values = array(
 		'store_id'=>$store_id,
 		'group'=>$group

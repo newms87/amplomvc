@@ -1,10 +1,12 @@
 <?php
-class DB {
+class DB 
+{
 	private $driver;
 	
-	public function __construct($driver, $hostname, $username, $password, $database) {
+	public function __construct($driver, $hostname, $username, $password, $database)
+	{
 		//We cannot redeclare the mysqli class so mysqli is an alias for our wrapper class msyqlidb
-		if($driver == 'mysqli'){
+		if ($driver == 'mysqli') {
 			$driver = 'mysqlidb';
 		}
 		
@@ -20,7 +22,8 @@ class DB {
 		$this->driver = new $driver($hostname, $username, $password, $database);
 	}
 	
-	public function get_error(){
+	public function get_error()
+	{
 		return $this->driver->get_error();
 	}
 	
@@ -34,10 +37,11 @@ class DB {
 	* @return mixed - An array as described above, or false on failure
 	*
 	*/
-	public function query($sql) {
+	public function query($sql)
+	{
   		$resource = $this->driver->query($sql);
 		
-		if(!$resource){
+		if (!$resource) {
 			$this->query_error();
 			
 			return false;
@@ -54,10 +58,11 @@ class DB {
 	* @return mixed - an array of associative arrays of field => value pairs, or false on failure
 	*
 	*/
-	public function query_rows($sql) {
+	public function query_rows($sql)
+	{
   		$resource = $this->driver->query($sql);
 		
-		if(!$resource){
+		if (!$resource) {
 			$this->query_error();
 			
 			return false;
@@ -74,10 +79,11 @@ class DB {
 	* @return mixed - An associative array of field => value pairs, or false on failure
 	*
 	*/
-	public function query_row($sql) {
+	public function query_row($sql)
+	{
   		$resource = $this->driver->query($sql);
 		
-		if(!$resource){
+		if (!$resource) {
 			$this->query_error();
 			
 			return false;
@@ -93,10 +99,11 @@ class DB {
 	* @return mixed - The DB table field value as an integer, float or string, or null on failure
 	*
 	*/
-  	public function query_var($sql) {
+  	public function query_var($sql)
+  	{
   		$resource = $this->driver->query($sql);
 		
-		if(!$resource){
+		if (!$resource) {
 			$this->query_error();
 			
 			return null;
@@ -105,28 +112,30 @@ class DB {
 		return current($resource->row);
   	}
 	
-	private function query_error(){
+	private function query_error()
+	{
 		$stack = debug_stack();
 		$_SESSION['debug']['call stack'] = $stack;
 		trigger_error($this->driver->get_error() . get_caller(2));
 		html_dump($stack, 'call stack');
 	}
 	
-	public function execute_file($file){
+	public function execute_file($file)
+	{
 		$result = $this->driver->execute_file($file);
 		
-		if(!is_null($result)){
+		if (!is_null($result)) {
 			return $result;
 		}
 		
 		$sql = file_get_contents($file);
 		
-		if(!$sql){
+		if (!$sql) {
 			trigger_error("DB::execute_file(): Error opening file $file.");
 			return false;
 		}
 		
-		if(!$this->driver->multi_query($sql)){
+		if (!$this->driver->multi_query($sql)) {
 			trigger_error($this->get_error());
 			
 			return false;
@@ -135,10 +144,11 @@ class DB {
 		return true;
 	}
 	
-	public function dump($file, $tables = ''){
+	public function dump($file, $tables = '')
+	{
 		_is_writable(dirname($file));
 		
-		if($this->driver->dump($file, $tables)){
+		if ($this->driver->dump($file, $tables)) {
 			return true;
 		}
 		
@@ -147,45 +157,50 @@ class DB {
 		return false;
 	}
 	
-	public function get_tables(){
+	public function get_tables()
+	{
 		$result = $this->driver->query("SHOW TABLES");
 		
 		$tables = array();
 		
-		foreach($result->rows as $row){
+		foreach ($result->rows as $row) {
 			$tables[current($row)] = current($row);
 		}
 		
 		return $tables;
 	}
 	
-	public function count_tables(){
+	public function count_tables()
+	{
 		$result = $this->driver->query("SHOW TABLES");
 		
 		return $result->num_rows;
 	}
 	
-	public function get_key_column($table){
+	public function get_key_column($table)
+	{
 		$result = $this->driver->query("SHOW KEYS FROM " . DB_PREFIX . "$table WHERE Key_name = 'PRIMARY'");
 		
-		if($result->num_rows){
+		if ($result->num_rows) {
 			return $result->row['Column_name'];
 		}
 		
 		return false;
 	}
 	
-	public function has_column($table, $column){
+	public function has_column($table, $column)
+	{
 		$query = $this->driver->query("SHOW COLUMNS FROM " . DB_PREFIX . "$table");
-		foreach($query->rows as $row){
+		foreach ($query->rows as $row) {
 			if(strtolower($row['Field']) == strtolower($column))
 				return true;
 		}
 		return false;
 	}
 	
-	public function table_add_column($table, $column, $type, $null=true, $after=null){
-		if(!$this->has_column($table, $column)){
+	public function table_add_column($table, $column, $type, $null=true, $after=null)
+	{
+		if (!$this->has_column($table, $column)) {
 			$null = $null?"NULL":"NOT NULL";
 			$after = $after?"AFTER `$after`":'';
 			
@@ -193,30 +208,34 @@ class DB {
 		}
 	}
 	
-	public function table_drop_column($table, $column){
-		if($this->has_column($table, $column)){
+	public function table_drop_column($table, $column)
+	{
+		if ($this->has_column($table, $column)) {
 			$this->driver->query("ALTER TABLE `" . DB_PREFIX . "$table` DROP COLUMN `$column`");
 		}
 	}
 	
-	public function set_autoincrement($table, $value){
-		if(!$this->driver->set_autoincrement($table, $value)){
+	public function set_autoincrement($table, $value)
+	{
+		if (!$this->driver->set_autoincrement($table, $value)) {
 			trigger_error($this->driver->get_error());
 		}
 	}
 	
-	public function get_insert_string($data){
+	public function get_insert_string($data)
+	{
 		$str = array();
 		
-		foreach($data as $key => $value){
+		foreach ($data as $key => $value) {
 			$str[] = "`$key`='$value'";
 		}
 		
 		return implode(',', $str);
 	}
 	
-	public function escape($value) {
-		if(is_resource($value) || is_object($value) || is_array($value)){
+	public function escape($value)
+	{
+		if (is_resource($value) || is_object($value) || is_array($value)) {
 			trigger_error("DB:escape(): Argument for value was not a a valid type! Value: " . gettype($value) . ". " . get_caller() . " >>>> " . get_caller(2));
 			exit;
 		}
@@ -224,15 +243,18 @@ class DB {
 		return $this->driver->escape($value);
 	}
 	
-	public function escape_html($value){
+	public function escape_html($value)
+	{
 		return $this->driver->escape_html($value);
 	}
 	
-  	public function countAffected() {
+  	public function countAffected()
+  	{
 		return $this->driver->countAffected();
   	}
 
-  	public function getLastId() {
+  	public function getLastId()
+  	{
 		return $this->driver->getLastId();
   	}
 }

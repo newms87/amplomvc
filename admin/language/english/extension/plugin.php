@@ -34,14 +34,9 @@ $_['text_success'] = "You have successfully updated the plugins!";
 $_['text_install'] = "Install Plugin";
 $_['text_uninstall'] = "Uninstall";
 
-$_['success_install'] = "%s was successfully installed!";
-
 // Error
 $_['error_permission'] = 'Warning: You do not have permission to modify plugins!';
 $_['error_no_plugin'] = 'Warning: There was no plugin found.';
 $_['error_plug_into'] = 'You must specify the "Plugin For" for each plug.';
 $_['error_plugin_method'] = 'The function %s does not exist in the class %s.';
 $_['error_class_path'] = 'The Class File %s does not exist.';
-$_['error_install_function'] = "There was a problem installing %s. The plugin setup file did not contain an install() function!";
-$_['error_install_file'] = "The plugin setup file was not found at %s. Please make a setup.php file in the root of the %s plugin directory!";
-$_['error_uninstall_file'] = "The plugin setup file was not found at %s. Please make a setup.php file in the root of the %s plugin directory!";

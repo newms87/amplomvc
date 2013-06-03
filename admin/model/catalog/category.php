@@ -1,6 +1,8 @@
 <?php
-class ModelCatalogCategory extends Model {
-	public function addCategory($data) {
+class Admin_Model_Catalog_Category extends Model 
+{
+	public function addCategory($data)
+	{
 		$data['date_added'] = $this->tool->format_datetime();
 		$data['date_modified'] = $data['date_added'];
 		
@@ -42,7 +44,8 @@ class ModelCatalogCategory extends Model {
 		$this->cache->delete('category');
 	}
 	
-	public function editCategory($category_id, $data) {
+	public function editCategory($category_id, $data)
+	{
 		$data['date_modified'] = $this->tool->format_datetime();
 		
 		$this->update('category', $data, $category_id);
@@ -89,13 +92,14 @@ class ModelCatalogCategory extends Model {
 		$this->cache->delete('category');
 	}
 	
-	public function deleteCategory($category_id) {
+	public function deleteCategory($category_id)
+	{
 		$this->delete('category', $category_id);
 		$this->delete('category_description', array('category_id'=>$category_id));
 		$this->delete('category_to_store', array('category_id'=>$category_id));
 		$this->delete('category_to_layout', array('category_id'=>$category_id));
 		
-		$this->model_setting_url_alias->deleteUrlAliasByRouteQuery('product/category', "category_id=" . (int)$category_id . "'");
+		$this->Model_Setting_UrlAlias->deleteUrlAliasByRouteQuery('product/category', "category_id=" . (int)$category_id . "'");
 		
 		$this->delete('product_to_category', array('category_id'=>$category_id));
 		
@@ -110,7 +114,8 @@ class ModelCatalogCategory extends Model {
 		$this->cache->delete('category');
 	}
 
-	public function getCategory($category_id) {
+	public function getCategory($category_id)
+	{
 		$result = $this->query_row("SELECT * FROM " . DB_PREFIX . "category WHERE category_id = '" . (int)$category_id . "'");
 		
 		$result['keyword'] = $this->url->get_alias('product/category', 'category_id=' . $category_id);
@@ -118,7 +123,8 @@ class ModelCatalogCategory extends Model {
 		return $result;
 	}
 	
-	public function getCategories($parent_id = 0) {
+	public function getCategories($parent_id = 0)
+	{
 		$category_data = $this->cache->get('category.' . (int)$this->config->get('config_language_id') . '.' . (int)$parent_id);
 	
 		if (!$category_data) {
@@ -144,22 +150,24 @@ class ModelCatalogCategory extends Model {
 	}
 	
 	//TODO: need to rethink this
-	public function generate_url($category_id, $name){
-		$url = $this->model_setting_url_alias->format_url($name);
+	public function generate_url($category_id, $name)
+	{
+		$url = $this->Model_Setting_UrlAlias->format_url($name);
 		$orig = $url;
 		$count = 2;
 		
-		$url_alias = $category_id?$this->model_setting_url_alias->getUrlAliasByRouteQuery('product/category', "category_id=$category_id"):null;
+		$url_alias = $category_id?$this->Model_Setting_UrlAlias->getUrlAliasByRouteQuery('product/category', "category_id=$category_id"):null;
 		
-		$test = $this->model_setting_url_alias->getUrlAliasByKeyword($url);
-		while(!empty($test) && $test['url_alias_id'] != $url_alias['url_alias_id']){
+		$test = $this->Model_Setting_UrlAlias->getUrlAliasByKeyword($url);
+		while (!empty($test) && $test['url_alias_id'] != $url_alias['url_alias_id']) {
 			$url = $orig . '-' . $count++;
-			$test = $this->model_setting_url_alias->getUrlAliasByKeyword($url);
+			$test = $this->Model_Setting_UrlAlias->getUrlAliasByKeyword($url);
 		}
 		return $url;
 	}
 	
-	public function getPath($category_id) {
+	public function getPath($category_id)
+	{
 		$query = $this->query("SELECT name, parent_id FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_description cd ON (c.category_id = cd.category_id) WHERE c.category_id = '" . (int)$category_id . "' AND cd.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY c.sort_order, cd.name ASC");
 		
 		if ($query->row['parent_id']) {
@@ -169,7 +177,8 @@ class ModelCatalogCategory extends Model {
 		}
 	}
 	
-	public function getCategoryDescriptions($category_id) {
+	public function getCategoryDescriptions($category_id)
+	{
 		$category_description_data = array();
 		
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "category_description WHERE category_id = '" . (int)$category_id . "'");
@@ -186,7 +195,8 @@ class ModelCatalogCategory extends Model {
 		return $category_description_data;
 	}
 	
-	public function getCategoryStores($category_id) {
+	public function getCategoryStores($category_id)
+	{
 		$category_store_data = array();
 		
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "category_to_store WHERE category_id = '" . (int)$category_id . "'");
@@ -198,7 +208,8 @@ class ModelCatalogCategory extends Model {
 		return $category_store_data;
 	}
 
-	public function getCategoryLayouts($category_id) {
+	public function getCategoryLayouts($category_id)
+	{
 		$category_layout_data = array();
 		
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "category_to_layout WHERE category_id = '" . (int)$category_id . "'");
@@ -210,13 +221,15 @@ class ModelCatalogCategory extends Model {
 		return $category_layout_data;
 	}
 		
-	public function getTotalCategories() {
+	public function getTotalCategories()
+	{
 			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "category");
 		
 		return $query->row['total'];
 	}
 	
-	public function getTotalCategoriesByLayoutId($layout_id) {
+	public function getTotalCategoriesByLayoutId($layout_id)
+	{
 		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "category_to_layout WHERE layout_id = '" . (int)$layout_id . "'");
 
 		return $query->row['total'];

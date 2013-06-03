@@ -1,6 +1,8 @@
 <?php
-class ControllerProductCollection extends Controller {
-	public function index() {
+class Catalog_Controller_Product_Collection extends Controller 
+{
+	public function index()
+	{
 		$this->language->load('product/collection');
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -15,8 +17,8 @@ class ControllerProductCollection extends Controller {
 		$this->sort->load_query_defaults($sort_filter, 'sort_order', 'ASC');
 		
 		//Display Single Collection Template
-		if($collection_id){
-			$collection_info = $this->model_catalog_collection->getCollection($collection_id);
+		if ($collection_id) {
+			$collection_info = $this->Model_Catalog_Collection->getCollection($collection_id);
 		
 			if (!$collection_info) {
 				$this->url->redirect($this->url->link('product/collection'), 302);
@@ -28,8 +30,8 @@ class ControllerProductCollection extends Controller {
 			$this->document->setDescription($collection_info['meta_description']);
 			$this->document->setKeywords($collection_info['meta_keywords']);
 			
-			if($collection_info['category_id']){
-				$this->breadcrumb->add($this->model_catalog_category->getCategoryName($collection_info['category_id']), $this->url->link('product/collection', 'category_id=' . $collection_info['category_id']));
+			if ($collection_info['category_id']) {
+				$this->breadcrumb->add($this->Model_Catalog_Category->getCategoryName($collection_info['category_id']), $this->url->link('product/collection', 'category_id=' . $collection_info['category_id']));
 			}
 			
 			$this->breadcrumb->add($collection_info['name'], $this->url->link('product/collection', 'collection_id=' . $collection_id));
@@ -40,24 +42,24 @@ class ControllerProductCollection extends Controller {
 			
 			$this->data['description'] = html_entity_decode($collection_info['description'], ENT_QUOTES, 'UTF-8');
 		
-			if($attributes){
+			if ($attributes) {
 				$sort_filter['attribute'] = $attributes;
 			}
 			
-			$item_total = $this->model_catalog_collection->getTotalCollectionProducts($collection_id, $sort_filter);
-			$products = $this->model_catalog_collection->getCollectionProducts($collection_id, $sort_filter);
+			$item_total = $this->Model_Catalog_Collection->getTotalCollectionProducts($collection_id, $sort_filter);
+			$products = $this->Model_Catalog_Collection->getCollectionProducts($collection_id, $sort_filter);
 			
 			if (!empty($products)) {
 				$params = array(
 					'data' => $products,
-					'template' => 'product/block/product_list'
+					'template' => 'block/product/product_list'
 				);
 				
-				$this->data['block_product_list'] = $this->getBlock('product','list', $params);
+				$this->data['block_product_list'] = $this->getBlock('product/list', $params);
 			}
 		}
 		//Display Multi Collection Template
-		else{
+		else {
 			$this->document->setTitle($this->_('text_title_all'));
 			$this->document->setDescription($this->_('text_description_all'));
 			$this->document->setKeywords($this->_('text_metakeyword_all'));
@@ -70,16 +72,16 @@ class ControllerProductCollection extends Controller {
 			
 			$this->data['description'] = $this->_('text_description_all');
 			
-			if($category_id){
+			if ($category_id) {
 				$sort_filter['category_id'] = $category_id;
 				
-				$this->breadcrumb->add($this->model_catalog_category->getCategoryName($category_id), $this->url->link('product/collection', 'category_id=' . $category_id));
+				$this->breadcrumb->add($this->Model_Catalog_Category->getCategoryName($category_id), $this->url->link('product/collection', 'category_id=' . $category_id));
 			}
 			
-			$item_total = $this->model_catalog_collection->getTotalCollections($sort_filter);
-			$collections = $this->model_catalog_collection->getCollections($sort_filter);
+			$item_total = $this->Model_Catalog_Collection->getTotalCollections($sort_filter);
+			$collections = $this->Model_Catalog_Collection->getCollections($sort_filter);
 			
-			foreach($collections as &$collection){
+			foreach ($collections as &$collection) {
 				$collection['thumb'] = $this->image->resize($collection['image'], $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height'));
 				
 				$collection['href'] = $this->url->link("product/collection", 'collection_id=' . $collection['collection_id']);
@@ -92,10 +94,10 @@ class ControllerProductCollection extends Controller {
 			if (!empty($collections)) {
 				$params = array(
 					'data' => $collections,
-					'template' => 'product/block/product_list'
+					'template' => 'block/product/product_list'
 				);
 				
-				$this->data['block_collection_list'] = $this->getBlock('product','list', $params);
+				$this->data['block_collection_list'] = $this->getBlock('product/list', $params);
 			}
 		}
 		

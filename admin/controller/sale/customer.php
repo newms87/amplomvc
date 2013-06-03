@@ -1,8 +1,10 @@
 <?php
-class ControllerSaleCustomer extends Controller {
+class Admin_Controller_Sale_Customer extends Controller 
+{
 	
   
-  	public function index() {
+  	public function index()
+  	{
 		$this->load->language('sale/customer');
 		
 		$this->document->setTitle($this->_('heading_title'));
@@ -10,13 +12,14 @@ class ControllerSaleCustomer extends Controller {
 		$this->getList();
   	}
   
-  	public function insert() {
+  	public function insert()
+  	{
 		$this->load->language('sale/customer');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-				$this->model_sale_customer->addCustomer($_POST);
+				$this->Model_Sale_Customer->addCustomer($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 		
@@ -68,13 +71,14 @@ class ControllerSaleCustomer extends Controller {
 		$this->getForm();
   	}
 	
-  	public function update() {
+  	public function update()
+  	{
 		$this->load->language('sale/customer');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_sale_customer->editCustomer($_GET['customer_id'], $_POST);
+			$this->Model_Sale_Customer->editCustomer($_GET['customer_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 	
@@ -126,14 +130,15 @@ class ControllerSaleCustomer extends Controller {
 		$this->getForm();
   	}
 
-  	public function delete() {
+  	public function delete()
+  	{
 		$this->load->language('sale/customer');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $customer_id) {
-				$this->model_sale_customer->deleteCustomer($customer_id);
+				$this->Model_Sale_Customer->deleteCustomer($customer_id);
 			}
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -186,7 +191,8 @@ class ControllerSaleCustomer extends Controller {
 		$this->getList();
   	}
 	
-	public function approve() {
+	public function approve()
+	{
 		$this->load->language('sale/customer');
 		
 		$this->document->setTitle($this->_('heading_title'));
@@ -197,10 +203,10 @@ class ControllerSaleCustomer extends Controller {
 			$approved = 0;
 			
 			foreach ($_POST['selected'] as $customer_id) {
-				$customer_info = $this->model_sale_customer->getCustomer($customer_id);
+				$customer_info = $this->Model_Sale_Customer->getCustomer($customer_id);
 				
 				if ($customer_info && !$customer_info['approved']) {
-					$this->model_sale_customer->approve($customer_id);
+					$this->Model_Sale_Customer->approve($customer_id);
 					
 					$approved++;
 				}
@@ -256,7 +262,8 @@ class ControllerSaleCustomer extends Controller {
 		$this->getList();
 	}
 	
-  	private function getList() {
+  	private function getList()
+  	{
 		$this->template->load('sale/customer_list');
 
 		if (isset($_GET['filter_name'])) {
@@ -384,9 +391,9 @@ class ControllerSaleCustomer extends Controller {
 			'limit'						=> $this->config->get('config_admin_limit')
 		);
 		
-		$customer_total = $this->model_sale_customer->getTotalCustomers($data);
+		$customer_total = $this->Model_Sale_Customer->getTotalCustomers($data);
 	
-		$results = $this->model_sale_customer->getCustomers($data);
+		$results = $this->Model_Sale_Customer->getCustomers($data);
  
 		foreach ($results as $result) {
 			$action = array();
@@ -522,9 +529,9 @@ class ControllerSaleCustomer extends Controller {
 		$this->data['filter_ip'] = $filter_ip;
 		$this->data['filter_date_added'] = $filter_date_added;
 		
-		$this->data['customer_groups'] = $this->model_sale_customer_group->getCustomerGroups();
+		$this->data['customer_groups'] = $this->Model_Sale_CustomerGroup->getCustomerGroups();
 
-		$this->data['data_stores'] = array('' => $this->_('text_select')) + $this->model_setting_store->getStores();
+		$this->data['data_stores'] = array('' => $this->_('text_select')) + $this->Model_Setting_Store->getStores();
 				
 		$this->data['sort'] = $sort;
 		$this->data['order'] = $order;
@@ -537,7 +544,8 @@ class ControllerSaleCustomer extends Controller {
 		$this->response->setOutput($this->render());
   	}
   
-  	private function getForm() {
+  	private function getForm()
+  	{
 		$this->template->load('sale/customer_form');
 
 		if (isset($_GET['customer_id'])) {
@@ -680,7 +688,7 @@ class ControllerSaleCustomer extends Controller {
 		$this->data['cancel'] = $this->url->link('sale/customer', $url);
 
 		if (isset($_GET['customer_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-				$customer_info = $this->model_sale_customer->getCustomer($_GET['customer_id']);
+				$customer_info = $this->Model_Sale_Customer->getCustomer($_GET['customer_id']);
 		}
 			
 		if (isset($_POST['firstname'])) {
@@ -731,7 +739,7 @@ class ControllerSaleCustomer extends Controller {
 				$this->data['newsletter'] = '';
 		}
 		
-		$this->data['customer_groups'] = $this->model_sale_customer_group->getCustomerGroups();
+		$this->data['customer_groups'] = $this->Model_Sale_CustomerGroup->getCustomerGroups();
 
 		if (isset($_POST['customer_group_id'])) {
 				$this->data['customer_group_id'] = $_POST['customer_group_id'];
@@ -761,12 +769,12 @@ class ControllerSaleCustomer extends Controller {
 			$this->data['confirm'] = '';
 		}
 		
-		$this->data['countries'] = $this->model_localisation_country->getCountries();
+		$this->data['countries'] = $this->Model_Localisation_Country->getCountries();
 			
 		if (isset($_POST['address'])) {
 				$this->data['addresses'] = $_POST['address'];
 		} elseif (!empty($_GET['customer_id'])) {
-			$this->data['addresses'] = $this->model_sale_customer->getAddresses($_GET['customer_id']);
+			$this->data['addresses'] = $this->Model_Sale_Customer->getAddresses($_GET['customer_id']);
 		} else {
 			$this->data['addresses'] = array();
 		}
@@ -782,14 +790,14 @@ class ControllerSaleCustomer extends Controller {
 		$this->data['ips'] = array();
 		
 		if (!empty($customer_info)) {
-			$results = $this->model_sale_customer->getIpsByCustomerId($_GET['customer_id']);
+			$results = $this->Model_Sale_Customer->getIpsByCustomerId($_GET['customer_id']);
 		
 			foreach ($results as $result) {
-				$blacklist_total = $this->model_sale_customer->getTotalBlacklistsByIp($result['ip']);
+				$blacklist_total = $this->Model_Sale_Customer->getTotalBlacklistsByIp($result['ip']);
 				
 				$this->data['ips'][] = array(
 					'ip'			=> $result['ip'],
-					'total'		=> $this->model_sale_customer->getTotalCustomersByIp($result['ip']),
+					'total'		=> $this->Model_Sale_Customer->getTotalCustomersByIp($result['ip']),
 					'date_added' => date('d/m/y', strtotime($result['date_added'])),
 					'filter_ip'  => $this->url->link('sale/customer', 'filter_ip=' . $result['ip']),
 					'blacklist'  => $blacklist_total
@@ -805,7 +813,8 @@ class ControllerSaleCustomer extends Controller {
 		$this->response->setOutput($this->render());
 	}
 			
-  	private function validateForm() {
+  	private function validateForm()
+  	{
 		if (!$this->user->hasPermission('modify', 'sale/customer')) {
 				$this->error['warning'] = $this->_('error_permission');
 		}
@@ -822,7 +831,7 @@ class ControllerSaleCustomer extends Controller {
 				$this->error['email'] = $this->_('error_email');
 		}
 		
-		$customer_info = $this->model_sale_customer->getCustomerByEmail($_POST['email']);
+		$customer_info = $this->Model_Sale_Customer->getCustomerByEmail($_POST['email']);
 		
 		if (!isset($_GET['customer_id'])) {
 			if ($customer_info) {
@@ -866,7 +875,7 @@ class ControllerSaleCustomer extends Controller {
 					$this->error['address_city'][$key] = $this->_('error_city');
 				}
 	
-				$country_info = $this->model_localisation_country->getCountry($value['country_id']);
+				$country_info = $this->Model_Localisation_Country->getCountry($value['country_id']);
 						
 				if ($country_info && $country_info['postcode_required'] && (strlen($value['postcode']) < 2) || (strlen($value['postcode']) > 10)) {
 					$this->error['address_postcode'][$key] = $this->_('error_postcode');
@@ -889,7 +898,8 @@ class ControllerSaleCustomer extends Controller {
 		return $this->error ? false : true;
   	}
 
-  	private function validateDelete() {
+  	private function validateDelete()
+  	{
 		if (!$this->user->hasPermission('modify', 'sale/customer')) {
 				$this->error['warning'] = $this->_('error_permission');
 		}
@@ -897,7 +907,8 @@ class ControllerSaleCustomer extends Controller {
 		return $this->error ? false : true;
   	}
 	
-	public function login() {
+	public function login()
+	{
 		$json = array();
 		
 		if (isset($_GET['customer_id'])) {
@@ -906,12 +917,12 @@ class ControllerSaleCustomer extends Controller {
 			$customer_id = 0;
 		}
 		
-		$customer_info = $this->model_sale_customer->getCustomer($customer_id);
+		$customer_info = $this->Model_Sale_Customer->getCustomer($customer_id);
 				
 		if ($customer_info) {
 			$token = md5(mt_rand());
 			
-			$this->model_sale_customer->editToken($customer_id, $token);
+			$this->Model_Sale_Customer->editToken($customer_id, $token);
 			
 			if (isset($_GET['store_id'])) {
 				$store_id = $_GET['store_id'];
@@ -919,7 +930,7 @@ class ControllerSaleCustomer extends Controller {
 				$store_id = 0;
 			}
 			
-			$store_info = $this->model_setting_store->getStore($store_id);
+			$store_info = $this->Model_Setting_Store->getStore($store_id);
 			
 			if ($store_info) {
 				$this->url->redirect($this->url->store($store_id, 'account/login'));
@@ -945,13 +956,14 @@ class ControllerSaleCustomer extends Controller {
 		}
 	}
 
-	public function transaction() {
+	public function transaction()
+	{
 		$this->template->load('sale/customer_transaction');
 
 		$this->language->load('sale/customer');
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->user->hasPermission('modify', 'sale/customer')) {
-			$this->model_sale_customer->addTransaction($_GET['customer_id'], $_POST['description'], $_POST['amount']);
+			$this->Model_Sale_Customer->addTransaction($_GET['customer_id'], $_POST['description'], $_POST['amount']);
 				
 			$this->language->set('success', $this->_('text_success'));
 		} else {
@@ -972,7 +984,7 @@ class ControllerSaleCustomer extends Controller {
 		
 		$this->data['transactions'] = array();
 			
-		$results = $this->model_sale_customer->getTransactions($_GET['customer_id'], ($page - 1) * 10, 10);
+		$results = $this->Model_Sale_Customer->getTransactions($_GET['customer_id'], ($page - 1) * 10, 10);
 				
 		foreach ($results as $result) {
 			$this->data['transactions'][] = array(
@@ -982,9 +994,9 @@ class ControllerSaleCustomer extends Controller {
 			);
 			}
 		
-		$this->data['balance'] = $this->currency->format($this->model_sale_customer->getTransactionTotal($_GET['customer_id']), $this->config->get('config_currency'));
+		$this->data['balance'] = $this->currency->format($this->Model_Sale_Customer->getTransactionTotal($_GET['customer_id']), $this->config->get('config_currency'));
 		
-		$transaction_total = $this->model_sale_customer->getTotalTransactions($_GET['customer_id']);
+		$transaction_total = $this->Model_Sale_Customer->getTotalTransactions($_GET['customer_id']);
 			
 		$this->pagination->init();
 		$this->pagination->total = $transaction_total;
@@ -994,13 +1006,14 @@ class ControllerSaleCustomer extends Controller {
 		$this->response->setOutput($this->render());
 	}
 			
-	public function reward() {
+	public function reward()
+	{
 		$this->template->load('sale/customer_reward');
 
 		$this->language->load('sale/customer');
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->user->hasPermission('modify', 'sale/customer')) {
-			$this->model_sale_customer->addReward($_GET['customer_id'], $_POST['description'], $_POST['points']);
+			$this->Model_Sale_Customer->addReward($_GET['customer_id'], $_POST['description'], $_POST['points']);
 				
 			$this->language->set('success', $this->_('text_success'));
 		} else {
@@ -1021,7 +1034,7 @@ class ControllerSaleCustomer extends Controller {
 		
 		$this->data['rewards'] = array();
 			
-		$results = $this->model_sale_customer->getRewards($_GET['customer_id'], ($page - 1) * 10, 10);
+		$results = $this->Model_Sale_Customer->getRewards($_GET['customer_id'], ($page - 1) * 10, 10);
 				
 		foreach ($results as $result) {
 			$this->data['rewards'][] = array(
@@ -1031,9 +1044,9 @@ class ControllerSaleCustomer extends Controller {
 			);
 			}
 		
-		$this->data['balance'] = $this->model_sale_customer->getRewardTotal($_GET['customer_id']);
+		$this->data['balance'] = $this->Model_Sale_Customer->getRewardTotal($_GET['customer_id']);
 		
-		$reward_total = $this->model_sale_customer->getTotalRewards($_GET['customer_id']);
+		$reward_total = $this->Model_Sale_Customer->getTotalRewards($_GET['customer_id']);
 			
 		$this->pagination->init();
 		$this->pagination->total = $reward_total;
@@ -1043,7 +1056,8 @@ class ControllerSaleCustomer extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function addblacklist() {
+	public function addblacklist()
+	{
 		$this->language->load('sale/customer');
 		
 		$json = array();
@@ -1052,7 +1066,7 @@ class ControllerSaleCustomer extends Controller {
 			if (!$this->user->hasPermission('modify', 'sale/customer')) {
 				$json['error'] = $this->_('error_permission');
 			} else {
-				$this->model_sale_customer->addBlacklist($_POST['ip']);
+				$this->Model_Sale_Customer->addBlacklist($_POST['ip']);
 				
 				$json['success'] = $this->_('text_success');
 			}
@@ -1061,7 +1075,8 @@ class ControllerSaleCustomer extends Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 	
-	public function removeblacklist() {
+	public function removeblacklist()
+	{
 		$this->language->load('sale/customer');
 		
 		$json = array();
@@ -1070,7 +1085,7 @@ class ControllerSaleCustomer extends Controller {
 			if (!$this->user->hasPermission('modify', 'sale/customer')) {
 				$json['error'] = $this->_('error_permission');
 			} else {
-				$this->model_sale_customer->deleteBlacklist($_POST['ip']);
+				$this->Model_Sale_Customer->deleteBlacklist($_POST['ip']);
 				
 				$json['success'] = $this->_('text_success');
 			}
@@ -1079,7 +1094,8 @@ class ControllerSaleCustomer extends Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 
-	public function autocomplete() {
+	public function autocomplete()
+	{
 		$json = array();
 		
 		if (isset($_GET['filter_name'])) {
@@ -1089,7 +1105,7 @@ class ControllerSaleCustomer extends Controller {
 				'limit'		=> 20
 			);
 		
-			$results = $this->model_sale_customer->getCustomers($data);
+			$results = $this->Model_Sale_Customer->getCustomers($data);
 			
 			foreach ($results as $result) {
 				$json[] = array(
@@ -1101,7 +1117,7 @@ class ControllerSaleCustomer extends Controller {
 					'email'			=> $result['email'],
 					'telephone'		=> $result['telephone'],
 					'fax'				=> $result['fax'],
-					'address'		=> $this->model_sale_customer->getAddresses($result['customer_id'])
+					'address'		=> $this->Model_Sale_Customer->getAddresses($result['customer_id'])
 				);
 			}
 		}
@@ -1117,11 +1133,12 @@ class ControllerSaleCustomer extends Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 	
-	public function address() {
+	public function address()
+	{
 		$json = array();
 		
 		if (!empty($_GET['address_id'])) {
-			$json = $this->model_sale_customer->getAddress($_GET['address_id']);
+			$json = $this->Model_Sale_Customer->getAddress($_GET['address_id']);
 		}
 
 		$this->response->setOutput(json_encode($json));

@@ -1,6 +1,8 @@
 <?php
-class ModelTotalTax extends Model {
-	public function getTotal(&$total_data, &$total, &$taxes) {
+class Catalog_Model_Total_Tax extends Model 
+{
+	public function getTotal(&$total_data, &$total, &$taxes)
+	{
 		foreach ($taxes as $key => $value) {
 			if ($value > 0) {
 				

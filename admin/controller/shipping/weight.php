@@ -1,8 +1,10 @@
 <?php
-class ControllerShippingWeight extends Controller {
+class Admin_Controller_Shipping_Weight extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('shipping/weight');
 
 		$this->load->language('shipping/weight');
@@ -10,7 +12,7 @@ class ControllerShippingWeight extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('weight', $_POST);
+			$this->Model_Setting_Setting->editSetting('weight', $_POST);
 
 			$this->message->add('success', $this->_('text_success'));
 									
@@ -31,7 +33,7 @@ class ControllerShippingWeight extends Controller {
 		
 		$this->data['cancel'] = $this->url->link('extension/shipping');
 
-		$geo_zones = $this->model_localisation_geo_zone->getGeoZones();
+		$geo_zones = $this->Model_Localisation_GeoZone->getGeoZones();
 		
 		foreach ($geo_zones as $geo_zone) {
 			if (isset($_POST['weight_' . $geo_zone['geo_zone_id'] . '_rate'])) {
@@ -67,7 +69,7 @@ class ControllerShippingWeight extends Controller {
 			$this->data['weight_sort_order'] = $this->config->get('weight_sort_order');
 		}
 		
-		$this->data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
+		$this->data['tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
 
 		$this->children = array(
 			'common/header',
@@ -77,7 +79,8 @@ class ControllerShippingWeight extends Controller {
 		$this->response->setOutput($this->render());
 	}
 		
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'shipping/weight')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

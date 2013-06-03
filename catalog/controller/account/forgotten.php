@@ -1,8 +1,10 @@
 <?php
-class ControllerAccountForgotten extends Controller {
+class Catalog_Controller_Account_Forgotten extends Controller 
+{
 	
 
-	public function index() {
+	public function index()
+	{
 		$this->template->load('account/forgotten');
 
 		if ($this->customer->isLogged()) {
@@ -18,7 +20,7 @@ class ControllerAccountForgotten extends Controller {
 			
 			$password = substr(md5(rand()), 0, 7);
 			
-			$this->model_account_customer->editPassword($_POST['email'], $password);
+			$this->Model_Account_Customer->editPassword($_POST['email'], $password);
 			
 			$subject = sprintf($this->_('text_subject'), $this->config->get('config_name'));
 			
@@ -66,10 +68,11 @@ class ControllerAccountForgotten extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!isset($_POST['email'])) {
 			$this->error['warning'] = $this->_('error_email');
-		} elseif (!$this->model_account_customer->getTotalCustomersByEmail($_POST['email'])) {
+		} elseif (!$this->Model_Account_Customer->getTotalCustomersByEmail($_POST['email'])) {
 			$this->error['warning'] = $this->_('error_email');
 		}
 

@@ -1,18 +1,22 @@
 <?php
-class Captcha {
+class Captcha 
+{
 	protected $code;
 	protected $width = 35;
 	protected $height = 150;
 
-	function __construct() {
+	function __construct()
+	{
 		$this->code = substr(sha1(mt_rand()), 17, 6);
 	}
 
-	function getCode(){
+	function getCode()
+	{
 		return $this->code;
 	}
 
-	function showImage() {
+	function showImage()
+	{
 		$image = imagecreatetruecolor($this->height, $this->width);
 
 		$width = imagesx($image);

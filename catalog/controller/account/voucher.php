@@ -1,8 +1,10 @@
 <?php
-class ControllerAccountVoucher extends Controller {
+class Catalog_Controller_Account_Voucher extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('account/voucher');
 
 		$this->language->load('account/voucher');
@@ -106,7 +108,7 @@ class ControllerAccountVoucher extends Controller {
 			$this->data['from_email'] = '';
 		}
 			
- 		$this->data['voucher_themes'] = $this->model_cart_voucher_theme->getVoucherThemes();
+ 		$this->data['voucher_themes'] = $this->Model_Cart_VoucherTheme->getVoucherThemes();
 
 		if (isset($_POST['voucher_theme_id'])) {
 				$this->data['voucher_theme_id'] = $_POST['voucher_theme_id'];
@@ -144,7 +146,8 @@ class ControllerAccountVoucher extends Controller {
 		$this->response->setOutput($this->render());
   	}
 	
-  	public function success() {
+  	public function success()
+  	{
 		$this->template->load('common/success');
 
 		$this->language->load('account/voucher');
@@ -168,7 +171,8 @@ class ControllerAccountVoucher extends Controller {
  		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if ((strlen($_POST['to_name']) < 1) || (strlen($_POST['to_name']) > 64)) {
 				$this->error['to_name'] = $this->_('error_to_name');
 		}

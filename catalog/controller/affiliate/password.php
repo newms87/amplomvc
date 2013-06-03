@@ -1,8 +1,10 @@
 <?php
-class ControllerAffiliatePassword extends Controller {
+class Catalog_Controller_Affiliate_Password extends Controller 
+{
 	
 		
-  	public function index() {
+  	public function index()
+  	{
 		$this->template->load('affiliate/password');
 
 		if (!$this->affiliate->isLogged()) {
@@ -16,7 +18,7 @@ class ControllerAffiliatePassword extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 			
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_affiliate_affiliate->editPassword($this->affiliate->getEmail(), $_POST['password']);
+			$this->Model_Affiliate_Affiliate->editPassword($this->affiliate->getEmail(), $_POST['password']);
  
 				$this->message->add('success', $this->_('text_success'));
 	
@@ -67,7 +69,8 @@ class ControllerAffiliatePassword extends Controller {
 		$this->response->setOutput($this->render());
   	}
   
-  	private function validate() {
+  	private function validate()
+  	{
 		if ((strlen($_POST['password']) < 4) || (strlen($_POST['password']) > 20)) {
 				$this->error['password'] = $this->_('error_password');
 		}

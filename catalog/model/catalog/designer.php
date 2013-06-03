@@ -1,7 +1,9 @@
 <?php
-class ModelCatalogDesigner extends Model {
+class Catalog_Model_Catalog_Designer extends Model 
+{
 	
-	public function addDesigner($data){
+	public function addDesigner($data)
+	{
 		$data['name'] = $data['brand'];
 		$data['keyword'] = isset($data['keyword'])?$data['keyword']:'';
 		$data['image'] = isset($data['image'])?$data['image']:'';
@@ -21,12 +23,13 @@ class ModelCatalogDesigner extends Model {
 		
 		$this->insert('manufacturer_description', $data);
 		
-		$this->model_includes_contact->addContact('manufacturer', $designer_id, $data);
+		$this->Model_Includes_Contact->addContact('manufacturer', $designer_id, $data);
 	}
 	
-	public function getDesigner($designer_id, $description = false) {
+	public function getDesigner($designer_id, $description = false)
+	{
 		$desc_q = '';
-		if($description){
+		if ($description) {
 		$description = "LEFT JOIN " . DB_PREFIX . "manufacturer_description md ON (m.manufacturer_id=md.manufacturer_id AND md.language_id='" .$this->config->get('config_language_id') ."')";
 		$desc_q = ", md.description";
 		}
@@ -35,24 +38,25 @@ class ModelCatalogDesigner extends Model {
 		return $query->row;
 	}
 	
-	public function getDesigners($data=null) {
-		if($data){
+	public function getDesigners($data=null)
+	{
+		if ($data) {
 			$designer_data = array();
 			
 			$sort = $order = '';
-			if(isset($data['sort'])){
+			if (isset($data['sort'])) {
 				$sort ='ORDER BY ' . $data['sort'];
 				
-				if(isset($data['order'])){
+				if (isset($data['order'])) {
 					$order = $data['order'] == 'DESC'?'DESC':'ASC';
 				}
-				else{
+				else {
 					$order = 'ASC';
 				}
 			}
 			
 			$start_limit = '';
-			if(isset($data['limit'])){
+			if (isset($data['limit'])) {
 				$limit = (int)$data['limit'];
 				if($limit < 1)
 					$limit = 20;
@@ -71,7 +75,7 @@ class ModelCatalogDesigner extends Model {
 			
 			$designer_data = $query->rows;
 		}
-		else{
+		else {
 			$designer_data = $this->cache->get('manufacturer.' . (int)$this->config->get('config_store_id'));
 		
 			if (!$designer_data) {
@@ -86,7 +90,8 @@ class ModelCatalogDesigner extends Model {
 		return $designer_data;
 	}
 	
-	public function hasProducts($designer_id){
+	public function hasProducts($designer_id)
+	{
 		$query = $this->query("SELECT count(product_id) as num_products FROM " . DB_PREFIX . "product WHERE manufacturer_id='$designer_id'");
 		return $query->row['num_products'];
 	}
@@ -95,12 +100,12 @@ class ModelCatalogDesigner extends Model {
 		if(is_integer($designer))
 			$designer = $this->getDesigner($designer);
 		$section = isset($designer['section_attr'])?$designer['section_attr']:0;
-		if(empty($sort_by)){
+		if (empty($sort_by)) {
 			$sort_by = array();
 			if($section)
 				$sort_by[] ='ad.name ASC';
 			$sort_by[] = 'p.sort_order ASC';
-		}else if(is_string($sort_by)){
+		} else if (is_string($sort_by)) {
 			$sort_by = array($sort_by);
 		}
 		
@@ -132,7 +137,7 @@ class ModelCatalogDesigner extends Model {
 		$results = $this->query("SELECT $select FROM " . DB_PREFIX . "product p LEFT JOIN $fs $product_info $attr_section WHERE p.manufacturer_id='$designer[designer_id]' AND p.status='1' $sort_by");
 		
 		foreach($results->rows as &$product)
-			if(!isset($product['section_id'])){
+			if (!isset($product['section_id'])) {
 				$product['section_id'] = 0;
 				$product['section_name'] = '';
 				$product['section_attr'] = $section;
@@ -143,46 +148,52 @@ class ModelCatalogDesigner extends Model {
 		return false;
 	}
 	
-	public function getDesignerArticles($designer_id){
+	public function getDesignerArticles($designer_id)
+	{
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "manufacturer_article WHERE manufacturer_id='$designer_id'");
 		return $query->num_rows?$query->rows:array();
 	}
 
-	public function setDesignerStatus($designer_id, $status){
+	public function setDesignerStatus($designer_id, $status)
+	{
 		$status = $status ? 1 : 0;
 		
 		$this->query("UPDATE " . DB_PREFIX . "manufacturer SET status='$status' WHERE manufacturer_id= '" . (int)$designer_id . "'");
-		$this->model_setting_url_alias->setUrlAliasStatus('product/manufacturer/product', "manufacturer_id=$designer_id", $status);
-		$this->model_setting_url_alias->setUrlAliasStatus('designers/designers', "designer_id=$designer_id", $status);
+		$this->Model_Setting_UrlAlias->setUrlAliasStatus('product/manufacturer/product', "manufacturer_id=$designer_id", $status);
+		$this->Model_Setting_UrlAlias->setUrlAliasStatus('designers/designers', "designer_id=$designer_id", $status);
 	}
 	
-	public function activateDesigners(){
+	public function activateDesigners()
+	{
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "manufacturer WHERE status='0' AND date_active <= NOW() AND date_active != '"  . DATETIME_ZERO . "' AND (date_expires > NOW() OR date_expires = '" . DATETIME_ZERO . "')");
 		
-		foreach($query->rows as $row){
+		foreach ($query->rows as $row) {
 			$this->setDesignerStatus($row['manufacturer_id'], 1);
 		}
 		
 		return $query->rows;
 	}
 	
-	public function expireDesigners(){
+	public function expireDesigners()
+	{
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "manufacturer WHERE status='1' AND date_expires < NOW() AND date_expires != '" . DATETIME_ZERO . "'");
 		
-		foreach($query->rows as $row){
+		foreach ($query->rows as $row) {
 			$this->setDesignerStatus($row['manufacturer_id'], 0);
 		}
 		
 		return $query->rows;
 	}
 	
-	public function getExpiringSoon($days=5){
+	public function getExpiringSoon($days=5)
+	{
 		$min_days = $days-1;
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "manufacturer WHERE DATE_ADD(CURDATE(),INTERVAL $days DAY) >= date_expires AND date_expires > DATE_ADD(CURDATE(),INTERVAL $min_days DAY)");
 		return $query->rows;
 	}
 	
-	public function is_flashsale_page($designer_id, $with_info=false){
+	public function is_flashsale_page($designer_id, $with_info=false)
+	{
 		$select = $with_info?"f.*":"fd.flashsale_id";
 		$query = $this->query("SELECT $select FROM " . DB_PREFIX . "flashsale_designer fd LEFT JOIN " . DB_PREFIX . "flashsale f ON(fd.flashsale_id=f.flashsale_id) WHERE fd.designer_id='$designer_id' AND f.status='1' AND f.date_start < NOW() AND f.date_end > NOW()");
 		return $query->num_rows>0?($with_info?$query->row:$query->row['flashsale_id']):false;

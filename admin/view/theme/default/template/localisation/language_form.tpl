@@ -1,6 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?=$this->builder->display_breadcrumbs();?>
+	<?= $this->builder->display_breadcrumbs(); ?>
 	
 	<div class="box">
 		<div class="heading">
@@ -40,7 +40,7 @@
 					</tr>
 					<tr>
 						<td><span class="required"></span> <?= $entry_direction; ?></td>
-						<td><?=$this->builder->build('select', $data_direction, "direction", $direction);?></td>
+						<td><?= $this->builder->build('select', $data_direction, "direction", $direction); ?></td>
 					</tr>
 					<tr>
 						<td><span class="required"></span> <?= $entry_decimal_point; ?></td>
@@ -64,7 +64,7 @@
 					</tr>
 					<tr>
 						<td><?= $entry_status; ?></td>
-						<td><?=$this->builder->build('select', $data_statuses, "status", (int)$status);?></td>
+						<td><?= $this->builder->build('select', $data_statuses, "status", (int)$status); ?></td>
 					</tr>
 					<tr>
 						<td><?= $entry_sort_order; ?></td>

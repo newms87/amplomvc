@@ -1,10 +1,12 @@
 <?php
-class ModelDesignNavigation extends Model {
-	public function addNavigationGroup($data) {
+class Admin_Model_Design_Navigation extends Model 
+{
+	public function addNavigationGroup($data)
+	{
 		$navigation_group_id = $this->insert("navigation_group", $data);
 		
 		//Add Stores
-		foreach($data['stores'] as $store_id){
+		foreach ($data['stores'] as $store_id) {
 			$store_data = array(
 				'navigation_group_id' => $navigation_group_id,
 				'store_id' => $store_id
@@ -17,22 +19,22 @@ class ModelDesignNavigation extends Model {
 		$parent = array();
 		$sort_index = 0;
 		
-		foreach($data['links'] as $link_id => $link){
+		foreach ($data['links'] as $link_id => $link) {
 			$link['navigation_group_id'] = $navigation_group_id;
 			
-			if(empty($link['sort_order'])){
+			if (empty($link['sort_order'])) {
 				$link['sort_order'] = $sort_index++;
 			}
 			
-			if($link['parent_id']){
-				if(!isset($parent[$link['parent_id']])){
+			if ($link['parent_id']) {
+				if (!isset($parent[$link['parent_id']])) {
 					$msg = "ModelDesignNavigation::addNavigationGroup(): There was an error resolving the parent_id, $link[parent_id]!";
 					trigger_error($msg);
 					$this->mail->send_error_email($msg);
 					
 					$this->add_message('error', "There was an error saving Navigation group to the database! The Web Admin has been notified. Please try again later");
 				}
-				else{
+				else {
 					$link['parent_id'] = $parent[$link['parent_id']];
 				}
 			}
@@ -45,14 +47,15 @@ class ModelDesignNavigation extends Model {
 		$this->cache->delete('navigation');
 	}
 	
-	public function editNavigationGroup($navigation_group_id, $data) {
+	public function editNavigationGroup($navigation_group_id, $data)
+	{
 		$this->update("navigation_group", $data, $navigation_group_id);
 		
 		//Update Stores
-		if(isset($data['stores'])){
+		if (isset($data['stores'])) {
 			$this->delete("navigation_store", array("navigation_group_id" => $navigation_group_id));
 			
-			foreach($data['stores'] as $store_id){
+			foreach ($data['stores'] as $store_id) {
 				$store_data = array(
 					'navigation_group_id' => $navigation_group_id,
 					'store_id' => $store_id
@@ -64,28 +67,28 @@ class ModelDesignNavigation extends Model {
 		
 		
 		//Update Links
-		if(isset($data['links'])){
+		if (isset($data['links'])) {
 			$this->delete("navigation", array("navigation_group_id" => $navigation_group_id));
 			
 			$parent = array();
 			$sort_index = 0;
 			
-			foreach($data['links'] as $link_id => $link){
+			foreach ($data['links'] as $link_id => $link) {
 				$link['navigation_group_id'] = $navigation_group_id;
 				
-				if(empty($link['sort_order'])){
+				if (empty($link['sort_order'])) {
 					$link['sort_order'] = $sort_index++;
 				}
 
-				if($link['parent_id']){
-					if(!isset($parent[$link['parent_id']])){
+				if ($link['parent_id']) {
+					if (!isset($parent[$link['parent_id']])) {
 						$msg = "ModelDesignNavigation::addNavigationGroup(): There was an error resolving the parent_id!";
 						trigger_error($msg);
 						$this->mail->send_error_email($msg);
 						
 						$this->add_message('error', "There was an error saving Navigation group to the database! The Web Admin has been notified. Please try again later");
 					}
-					else{
+					else {
 						$link['parent_id'] = $parent[$link['parent_id']];
 					}
 				}
@@ -99,7 +102,8 @@ class ModelDesignNavigation extends Model {
 		$this->cache->delete('navigation');
 	}
 	
-	public function deleteNavigationGroup($navigation_group_id) {
+	public function deleteNavigationGroup($navigation_group_id)
+	{
 		$this->delete("navigation_group", $navigation_group_id);
 		
 		$this->delete("navigation_store", array("navigation_group_id" => $navigation_group_id));
@@ -108,7 +112,8 @@ class ModelDesignNavigation extends Model {
 		$this->cache->delete('navigation');
 	}
 	
-	public function addNavigationLink($navigation_group_id, $link){
+	public function addNavigationLink($navigation_group_id, $link)
+	{
 		$link['navigation_group_id'] = $navigation_group_id;
 		
 		$this->insert("navigation", $link);
@@ -116,13 +121,15 @@ class ModelDesignNavigation extends Model {
 		$this->cache->delete('navigation');
 	}
 	
-	public function deleteNavigationLink($navigation_id){
+	public function deleteNavigationLink($navigation_id)
+	{
 		$this->delete("navigation", $navigation_id);
 		
 		$this->cache->delete('navigation');
 	}
 	
-	public function getNavigationGroup($navigation_group_id) {
+	public function getNavigationGroup($navigation_group_id)
+	{
 		$query = $this->get("navigation_group", '*', $navigation_group_id);
 		
 		$nav_group = $query->row;
@@ -136,10 +143,10 @@ class ModelDesignNavigation extends Model {
 	
 	public function getNavigationGroups($data = array(), $select = '*', $total = false) {
 		//Select
-		if($total){
+		if ($total) {
 			$select = 'COUNT(*) as total';
 		}
-		elseif(!$select){
+		elseif (!$select) {
 			$select = '*';
 		}
 		
@@ -149,26 +156,26 @@ class ModelDesignNavigation extends Model {
 		//Where
 		$where = "WHERE 1";
 		
-		if(!empty($data['name'])){
+		if (!empty($data['name'])) {
 			$where .= " AND name like '%" . $this->db->escape($data['name']) . "%'";
 		}
 		
-		if(isset($data['stores'])){
+		if (isset($data['stores'])) {
 			$from .= " LEFT JOIN " . DB_PREFIX . "navigation_store ns ON (ns.navigation_group_id=ng.navigation_group_id)";
 			
-			if(!is_array($data['stores'])){
+			if (!is_array($data['stores'])) {
 				$data['stores'] = array((int)$data['stores']);
 			}
 			
 			$where .= " AND ns.store_id IN (" . implode(',', $data['stores']) . ")";
 		}
 		
-		if(isset($data['status'])){
+		if (isset($data['status'])) {
 			$where .= " AND status = '" . ($data['status'] ? 1 : 0) . "'";
 		}
 		
 		//Order By & Limit
-		if(!$total){
+		if (!$total) {
 			$order = $this->extract_order($data);
 			$limit = $this->extract_limit($data);
 		} else {
@@ -183,11 +190,11 @@ class ModelDesignNavigation extends Model {
 		$result = $this->query($query);
 		
 		//Process Results
-		if($total){
+		if ($total) {
 			return $result->row['total'];
 		}
-		else{
-			foreach($result->rows as $key => &$row){
+		else {
+			foreach ($result->rows as $key => &$row) {
 				$row['links'] = $this->getNavigationGroupLinks($row['navigation_group_id']);
 				$row['stores'] = $this->getNavigationGroupStores($row['navigation_group_id']);
 			}
@@ -196,10 +203,11 @@ class ModelDesignNavigation extends Model {
 		}
 	}
 	
-	public function getNavigationLinks() {
+	public function getNavigationLinks()
+	{
 		$nav_groups = $this->cache->get('navigation_groups.admin');
 		
-		if(!$nav_groups){
+		if (!$nav_groups) {
 			$query = "SELECT ng.* FROM " . DB_PREFIX . "navigation_group ng";
 			$query .= " LEFT JOIN " . DB_PREFIX . "navigation_store ns ON (ng.navigation_group_id=ns.navigation_group_id)";
 			$query .= " WHERE ng.status='1' AND ns.store_id='0'";
@@ -208,22 +216,22 @@ class ModelDesignNavigation extends Model {
 			
 			$nav_groups = array();
 			
-			foreach($query->rows as &$group){
+			foreach ($query->rows as &$group) {
 				$nav_group_links = $this->getNavigationGroupLinks($group['navigation_group_id']);
 				
 				$parent_ref = array();
 				
-				foreach($nav_group_links as $key => &$link){
-					if(!empty($parent_ref[$link['navigation_id']]['children'])){
+				foreach ($nav_group_links as $key => &$link) {
+					if (!empty($parent_ref[$link['navigation_id']]['children'])) {
 						$link['children'] = &$parent_ref[$link['navigation_id']]['children'];
 					}
-					else{
+					else {
 						$link['children'] = array();
 					}
 					
 					$parent_ref[$link['navigation_id']] = &$link;
 					
-					if($link['parent_id']){
+					if ($link['parent_id']) {
 						$parent_ref[$link['parent_id']]['children'][] = &$link;
 						unset($nav_group_links[$key]);
 					}
@@ -238,29 +246,33 @@ class ModelDesignNavigation extends Model {
 		return $nav_groups;
 	}
 	
-	public function getNavigationGroupLinks($navigation_group_id){
+	public function getNavigationGroupLinks($navigation_group_id)
+	{
 		$result = $this->query("SELECT * FROM " . DB_PREFIX . "navigation WHERE navigation_group_id = '" . (int)$navigation_group_id . "' ORDER BY sort_order ASC");
 		
 		return $result->rows;
 	}
 	
-	public function getNavigationGroupStores($navigation_group_id){
+	public function getNavigationGroupStores($navigation_group_id)
+	{
 		$query = $this->get("navigation_store", '*', array("navigation_group_id" => $navigation_group_id));
 		
 		$stores = array();
 		
-		foreach($query->rows as $row){
+		foreach ($query->rows as $row) {
 			$stores[] = $row['store_id'];
 		}
 		
 		return $stores;
 	}
 	
-	public function getTotalNavigationGroups($data) {
+	public function getTotalNavigationGroups($data)
+	{
 		return $this->getNavigationGroups($data, '', true);
 	}
 
-	public function reset_admin_navigation_group(){
+	public function reset_admin_navigation_group()
+	{
 		$links = array(
 			'home' => array(
 				'display_name'	=> 'Home',
@@ -1466,7 +1478,7 @@ class ModelDesignNavigation extends Model {
 		
 		$result = $this->query("SELECT navigation_group_id FROM " . DB_PREFIX . "navigation_group WHERE name = 'admin'");
 		
-		if($result->num_rows){
+		if ($result->num_rows) {
 			$this->deleteNavigationGroup($result->row['navigation_group_id']);
 		}
 		

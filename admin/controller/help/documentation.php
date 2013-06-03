@@ -1,7 +1,9 @@
 <?php
-class ControllerHelpDocumentation extends Controller {
+class Admin_Controller_Help_Documentation extends Controller 
+{
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('help/documentation');
 
 		$this->load->language('help/documentation');
@@ -23,21 +25,22 @@ class ControllerHelpDocumentation extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	function replace_tokens(&$section){
-		foreach($section as &$s){
+	function replace_tokens(&$section)
+	{
+		foreach ($section as &$s) {
 			$matches=null;
 			if(is_array($s))
 				$this->replace_tokens($s);
-			else{
-				if(preg_match_all("/%@[^%]*%@/",$s,$matches)){
+			else {
+				if (preg_match_all("/%@[^%]*%@/",$s,$matches)) {
 					foreach($matches[0] as $m)
 						$s = preg_replace("/%@[^%]*%@/",$this->url->link(preg_replace("/%@/",'',$m)),$s,1);
 				}
-				if(preg_match_all("/%%[^%]*%%/",$s,$matches)){
+				if (preg_match_all("/%%[^%]*%%/",$s,$matches)) {
 					foreach($matches[0] as $m)
-						$s = preg_replace("/%%[^%]*%%/","<span class='n'>".preg_replace("/%%/",'',$m)."</span>",$s,1);
+						$s = preg_replace("/%%[^%]*%%/","<span class ='n'>".preg_replace("/%%/",'',$m)."</span>",$s,1);
 				}
-				if(preg_match_all("/%![^%]*%!/",$s,$matches)){
+				if (preg_match_all("/%![^%]*%!/",$s,$matches)) {
 					foreach($matches[0] as $m)
 						$s = preg_replace("/%![^%]*%!/","<span class='important'>".preg_replace("/%!/",'',$m)."</span>",$s,1);
 				}

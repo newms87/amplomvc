@@ -1,8 +1,10 @@
 <?php
-class ControllerShippingPickup extends Controller {
+class Admin_Controller_Shipping_Pickup extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('shipping/pickup');
 
 		$this->load->language('shipping/pickup');
@@ -10,7 +12,7 @@ class ControllerShippingPickup extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('pickup', $_POST);
+			$this->Model_Setting_Setting->editSetting('pickup', $_POST);
 					
 			$this->message->add('success', $this->_('text_success'));
 						
@@ -49,7 +51,7 @@ class ControllerShippingPickup extends Controller {
 			$this->data['pickup_sort_order'] = $this->config->get('pickup_sort_order');
 		}
 		
-		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$this->data['geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 						
 		$this->children = array(
 			'common/header',
@@ -59,7 +61,8 @@ class ControllerShippingPickup extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'shipping/pickup')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

@@ -1,8 +1,10 @@
 <?php
-class ControllerShippingItem extends Controller {
+class Admin_Controller_Shipping_Item extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('shipping/item');
 
 		$this->load->language('shipping/item');
@@ -10,7 +12,7 @@ class ControllerShippingItem extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('item', $_POST);
+			$this->Model_Setting_Setting->editSetting('item', $_POST);
 
 			$this->message->add('success', $this->_('text_success'));
 									
@@ -61,9 +63,9 @@ class ControllerShippingItem extends Controller {
 			$this->data['item_sort_order'] = $this->config->get('item_sort_order');
 		}
 		
-		$this->data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
+		$this->data['tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
 		
-		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$this->data['geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 
 		$this->children = array(
 			'common/header',
@@ -73,7 +75,8 @@ class ControllerShippingItem extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'shipping/item')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

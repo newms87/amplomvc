@@ -1,6 +1,7 @@
 <?php
 if (!function_exists('json_encode')) {
-	function json_encode($data) {
+	function json_encode($data)
+	{
 		switch (gettype($data)) {
 			case 'boolean':
 				return $data ? 'true' : 'false';
@@ -83,7 +84,8 @@ if (!function_exists('json_encode')) {
 }
 
 if (!function_exists('json_decode')) {
-	function json_decode($json, $assoc = false) {
+	function json_decode($json, $assoc = false)
+	{
 		$match = '/".*?(?<!\\\\)"/';
 
 		$string = preg_replace($match, '', $json);

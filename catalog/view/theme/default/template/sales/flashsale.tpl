@@ -1,16 +1,16 @@
-<?= $header .$column_left .$column_right;?>
+<?= $header .$column_left .$column_right; ?>
 <div id='content'>
-	<?= $this->builder->display_breadcrumbs();?>
+	<?= $this->builder->display_breadcrumbs(); ?>
 	<div id='designer_heading'>
 		<div class='left'>
-				<img src='<?=$flashsale_image;?>' />
+				<img src='<?= $flashsale_image; ?>' />
 		</div>
 		<div class='right'>
 				<? if($flashsale_id){?>
-				<a href='<?=$flashsale_link;?>' class='countdown_clock_link'><div id='designer_countdown'><img src='<?=$flashsale_clock;?>' /><span class='message'><span class='before_msg_start'>sale ends</span><div class='flash_countdown' id='designer-top-countdown' type='letters' callback='display_sale_ended' msg_start='in' flashid='<?=$flashsale_id;?>'></div></span></div></a>
+				<a href='<?= $flashsale_link; ?>' class='countdown_clock_link'><div id='designer_countdown'><img src='<?= $flashsale_clock; ?>' /><span class='message'><span class='before_msg_start'>sale ends</span><div class='flash_countdown' id='designer-top-countdown' type='letters' callback='display_sale_ended' msg_start='in' flashid='<?= $flashsale_id; ?>'></div></span></div></a>
 				<? }?>
-				<h1><?= $heading_title;?></h1>
-				<div class='description'><?=$description;?></div>
+				<h1><?= $heading_title; ?></h1>
+				<div class='description'><?= $description; ?></div>
 				<? if($share_status) {?>
 				<div id='share_block'>
 					<div class="share">
@@ -24,7 +24,7 @@
 							</div>
 							<script type="text/javascript">//<!--
 							$(document).ready(function(){
-									$('.addthis_button_tumblr').append("<img src='<?= HTTPS_IMAGE . 'data/tumblr_pill.png';?>' />");
+									$('.addthis_button_tumblr').append("<img src='<?= HTTPS_IMAGE . 'data/tumblr_pill.png'; ?>' />");
 									$.getScript("http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4febc0f66808d769");
 							});
 							//--></script>
@@ -34,16 +34,16 @@
 				<? }?>
 		</div>
 	</div>
-	<?= $content_top;?>
+	<?= $content_top; ?>
 <? if(!isset($section_products)){?>
-	<div class="content"><?= $no_product_text;?></div>
+	<div class="content"><?= $no_product_text; ?></div>
 	<div class="buttons">
 			<div class="right"><a href="<?= $continue; ?>" class="button"><?= $button_continue; ?></a></div>
 	</div>
 <? }else{?>
 	<div id='sort_product'>
-			<?= $this->builder->build('select',$sort_list,'sort', $d_sort_by, array('onchange'=>"update_sort_url()"));?>
-			<a h='<?=$sort_url;?>' id='sort_go' class='button'>Go</a>
+			<?= $this->builder->build('select',$sort_list,'sort', $d_sort_by, array('onchange'=>"update_sort_url()")); ?>
+			<a h='<?= $sort_url; ?>' id='sort_go' class='button'>Go</a>
 	</div>
 	<ul id='section_nav'>
 			<?
@@ -59,45 +59,45 @@
 			<? //Display empty product sections at top for when sorting and filtering
 						//we can still display section headings
 			if(count($section['products'])==0){?>
-			<div id='section-<?=$section_id;?>' class='product_section hide_on_all'>
-				<div class='product_section_title'><?=$section['section_name'];?></div>
+			<div id='section-<?= $section_id; ?>' class='product_section hide_on_all'>
+				<div class='product_section_title'><?= $section['section_name']; ?></div>
 			</div>
-			<script type='text/javascript'>$('#section-0').before($('#section-<?= $section_id;?>'));</script>
+			<script type='text/javascript'>$('#section-0').before($('#section-<?= $section_id; ?>'));</script>
 			<? continue; }?>
 			
-			<div id='section-<?=$section_id;?>' class='product_section'>
+			<div id='section-<?= $section_id; ?>' class='product_section'>
 			<? if($section_id!=0){?>
-				<div class='product_section_title'><?=$section['section_name'];?></div>
+				<div class='product_section_title'><?= $section['section_name']; ?></div>
 			<? }?>
 			
 			<? foreach($section['products'] as $product){?>
 				<? if(isset($product['article_id'])){ ?>
 						<? extract($product);?>
-						<a class='designer_article_details' href='<?=$link;?>' target='_blank' type='<?= $section_id;?>'>
-							<img class='open_quote' src='<?=$open_quote;?>' />
+						<a class='designer_article_details' href='<?= $link; ?>' target='_blank' type='<?= $section_id; ?>'>
+							<img class='open_quote' src='<?= $open_quote; ?>' />
 							
 							<div class='designer_article'>
-									<div class='designer_article_blurb'><?=$description;?><span class='read_more'>read more</span></div>
+									<div class='designer_article_blurb'><?= $description; ?><span class='read_more'>read more</span></div>
 							</div>
-							<img class='close_quote' src='<?=$close_quote;?>' />
+							<img class='close_quote' src='<?= $close_quote; ?>' />
 							<div style='clear:both'></div>
 						</a>
 				<? } else {?>
 				<? extract($product);?>
-				<a class='product_details' href='<?=$href;?>' type='<?= $product['section_id'];?>'>
+				<a class='product_details' href='<?= $href; ?>' type='<?= $product['section_id']; ?>'>
 						<div class='product_images'>
-							<img src='<?=$thumb;?>' alt='<?=$name;?>' />
+							<img src='<?= $thumb; ?>' alt='<?= $name; ?>' />
 						</div>
 						<div class='product_info'>
-							<div class='product_info_title'><?=$name;?></div>
+							<div class='product_info_title'><?= $name; ?></div>
 							<? if($special){?>
-									<div class='product_info_price'><?=$special;?></div>
-									<div class='product_info_orig_price'><?=$price;?> retail</div>
+									<div class='product_info_price'><?= $special; ?></div>
+									<div class='product_info_orig_price'><?= $price; ?> retail</div>
 							<? }else{?>
-									<div class='product_info_price'><?=$price;?></div>
+									<div class='product_info_price'><?= $price; ?></div>
 							<? }?>
 							<? if(isset($flashsale_id) && $flashsale_id > 0){?>
-									<div class='fs_countdown'><div class='flash_countdown' id='designer-prod-<?=$product_id;?>' callback='end_product_sale' flashid='<?=$flashsale_id;?>'></div></div>
+									<div class='fs_countdown'><div class='flash_countdown' id='designer-prod-<?= $product_id; ?>' callback='end_product_sale' flashid='<?= $flashsale_id; ?>'></div></div>
 							<? }?>
 						</div>
 						<div style='clear:both'></div>
@@ -121,7 +121,7 @@
 //<!--
 $(document).ready(function(){
 	update_sort_url();
-	show_section(<?= $filter;?>);
+	show_section(<?= $filter; ?>);
 });
 function update_sort_url(){
 	filter = $('#section_nav .active').attr('filter') || false;
@@ -166,4 +166,4 @@ function display_sale_ended(context, op){
 }
 --></script>
 
-<?= $footer;?>
+<?= $footer; ?>

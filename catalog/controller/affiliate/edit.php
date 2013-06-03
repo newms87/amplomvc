@@ -1,8 +1,10 @@
 <?php
-class ControllerAffiliateEdit extends Controller {
+class Catalog_Controller_Affiliate_Edit extends Controller 
+{
 	
 
-	public function index() {
+	public function index()
+	{
 		$this->template->load('affiliate/edit');
 
 		if (!$this->affiliate->isLogged()) {
@@ -16,7 +18,7 @@ class ControllerAffiliateEdit extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_affiliate_affiliate->editAffiliate($_POST);
+			$this->Model_Affiliate_Affiliate->editAffiliate($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -89,7 +91,7 @@ class ControllerAffiliateEdit extends Controller {
 		$this->data['action'] = $this->url->link('affiliate/edit');
 
 		if ($_SERVER['REQUEST_METHOD'] != 'POST') {
-			$affiliate_info = $this->model_affiliate_affiliate->getAffiliate($this->affiliate->getId());
+			$affiliate_info = $this->Model_Affiliate_Affiliate->getAffiliate($this->affiliate->getId());
 		}
 
 		if (isset($_POST['firstname'])) {
@@ -196,7 +198,7 @@ class ControllerAffiliateEdit extends Controller {
 				$this->data['zone_id'] = '';
 		}
 		
-		$this->data['countries'] = $this->model_localisation_country->getCountries();
+		$this->data['countries'] = $this->Model_Localisation_Country->getCountries();
 
 		$this->data['back'] = $this->url->link('affiliate/account');
 
@@ -212,7 +214,8 @@ class ControllerAffiliateEdit extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if ((strlen($_POST['firstname']) < 1) || (strlen($_POST['firstname']) > 32)) {
 			$this->error['firstname'] = $this->_('error_firstname');
 		}
@@ -225,7 +228,7 @@ class ControllerAffiliateEdit extends Controller {
 			$this->error['email'] = $this->_('error_email');
 		}
 		
-		if (($this->affiliate->getEmail() != $_POST['email']) && $this->model_affiliate_affiliate->getTotalAffiliatesByEmail($_POST['email'])) {
+		if (($this->affiliate->getEmail() != $_POST['email']) && $this->Model_Affiliate_Affiliate->getTotalAffiliatesByEmail($_POST['email'])) {
 			$this->error['warning'] = $this->_('error_exists');
 		}
 
@@ -240,7 +243,7 @@ class ControllerAffiliateEdit extends Controller {
 				$this->error['city'] = $this->_('error_city');
 		}
 		
-		$country_info = $this->model_localisation_country->getCountry($_POST['country_id']);
+		$country_info = $this->Model_Localisation_Country->getCountry($_POST['country_id']);
 		
 		if ($country_info && $country_info['postcode_required'] && (strlen($_POST['postcode']) < 2) || (strlen($_POST['postcode']) > 10)) {
 			$this->error['postcode'] = $this->_('error_postcode');

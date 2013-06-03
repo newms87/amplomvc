@@ -1,6 +1,8 @@
 <?php
-class ControllerModuleDesignerSidebar extends Controller {
-	protected function index($setting) {
+class Catalog_Controller_Module_DesignerSidebar extends Controller 
+{
+	protected function index($setting)
+	{
 		$this->template->load('module/designer_sidebar');
 		
 		$this->language->load('module/designer_sidebar');
@@ -12,7 +14,7 @@ class ControllerModuleDesignerSidebar extends Controller {
 				'order'=>'ASC',
 				'limit'=>$setting['limit']
 			);
-		$designers = $this->model_catalog_designer->getDesigners($data);
+		$designers = $this->Model_Catalog_Designer->getDesigners($data);
 		
 		$designers = is_array($designers)?$designers: array();
 		

@@ -1,7 +1,7 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
-	<?= $this->builder->display_errors($errors);?>
+	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'customer.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -26,7 +26,7 @@
 						</tr>
 						<tr>
 							<td><?= $entry_type; ?></td>
-							<td><?=$this->builder->build('select',$data_types, 'type', $type);?></td>
+							<td><?= $this->builder->build('select',$data_types, 'type', $type); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_discount; ?></td>
@@ -38,15 +38,15 @@
 						</tr>
 						<tr>
 							<td><?= $entry_logged; ?></td>
-							<td><?=$this->builder->build('radio',$yes_no,'logged',(int)$logged);?></td>
+							<td><?= $this->builder->build('radio',$yes_no,'logged',(int)$logged); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_shipping; ?></td>
 							<td>
-								<div><?=$this->builder->build('radio',$yes_no,'shipping',(int)$shipping, array('onclick'=>"if($(this).find(':checked').val() == '1')$('#coupon_ship_geozone').show(); else $('#coupon_ship_geozone').hide();"));?></div>
-								<div <?= (int)$shipping ? '' : "style='display:none'";?> id='coupon_ship_geozone'>
+								<div><?= $this->builder->build('radio',$yes_no,'shipping',(int)$shipping, array('onclick'=>"if($(this).find(':checked').val() == '1')$('#coupon_ship_geozone').show(); else $('#coupon_ship_geozone').hide();")); ?></div>
+								<div <?= (int)$shipping ? '' : "style='display:none'"; ?> id='coupon_ship_geozone'>
 										<? $this->builder->set_config('geo_zone_id', 'name');?>
-										<?= $this->builder->build('select', $data_geo_zones, 'shipping_geozone', (int)$shipping_geozone);?>
+										<?= $this->builder->build('select', $data_geo_zones, 'shipping_geozone', (int)$shipping_geozone); ?>
 								</div>
 							</td>
 						</tr>
@@ -54,8 +54,8 @@
 							<td><?= $entry_coupon_customer; ?></td>
 							<td>
 									<? foreach($coupon_customers as $cc){?>
-										<div><?=$cc['lastname'] . ', ' . $cc['firstname'] . ' - ' . $cc['email'];?></div>
-										<input type='hidden' name='coupon_customers[]' value='<?=$cc['customer_id'];?>' />
+										<div><?= $cc['lastname'] . ', ' . $cc['firstname'] . ' - ' . $cc['email']; ?></div>
+										<input type='hidden' name='coupon_customers[]' value='<?= $cc['customer_id']; ?>' />
 									<? }?>
 							</td>
 						</tr>
@@ -107,7 +107,7 @@
 						</tr>
 						<tr>
 							<td><?= $entry_status; ?></td>
-							<td><?=$this->builder->build('select',$statuses,'status',$status);?></td>
+							<td><?= $this->builder->build('select',$statuses,'status',$status); ?></td>
 						</tr>
 					</table>
 				</div>
@@ -182,7 +182,7 @@ $('#coupon-product div img').live('click', function() {
 });
 //--></script>
 
-<?= $this->builder->js('datepicker');?>
+<?= $this->builder->js('datepicker'); ?>
 
 <? if ($coupon_id) { ?>
 <script type="text/javascript"><!--
@@ -199,5 +199,5 @@ $('#history').load("<?= HTTP_ADMIN . "index.php?route=sale/coupon/history"; ?>" 
 $('#tabs a').tabs();
 //--></script>
 
-<?= $this->builder->js('errors', $errors);?>
+<?= $this->builder->js('errors', $errors); ?>
 <?= $footer; ?>

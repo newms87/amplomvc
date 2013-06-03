@@ -1,5 +1,6 @@
 <?php
-class Mail {
+class Mail 
+{
 	private $registry;
 	
 	protected $to;
@@ -24,7 +25,8 @@ class Mail {
 	public $crlf;
 	public $verp;
 
-	public function __construct($registry){
+	public function __construct($registry)
+	{
 		$this->registry = $registry;
 		
 		$this->protocol  = $this->config->get('config_mail_protocol');
@@ -38,11 +40,13 @@ class Mail {
 		$this->init();
 	}
 	
-	public function __get($key){
+	public function __get($key)
+	{
 		return $this->registry->get($key);
 	}
 	
-	public function init(){
+	public function init()
+	{
 		$this->to = null;
 		$this->cc = null;
 		$this->bcc = null;
@@ -61,7 +65,8 @@ class Mail {
 	* @param $to - Can be a single email, an array of emails or comma separated string of emails
 	*/
 	
-	public function setTo($to) {
+	public function setTo($to)
+	{
 		if (is_array($to)) {
 			array_walk($to, 'trim');
 			$this->to = implode(',', $to);
@@ -70,7 +75,8 @@ class Mail {
 		}
 	}
 	
-	public function setCopyTo($to) {
+	public function setCopyTo($to)
+	{
 		if (is_array($to)) {
 			array_walk($to, 'trim');
 			$this->cc = implode(',', $to);
@@ -79,7 +85,8 @@ class Mail {
 		}
 	}
 	
-	public function setBlindCopyTo($to) {
+	public function setBlindCopyTo($to)
+	{
 		if (is_array($to)) {
 			array_walk($to, 'trim');
 			$this->bcc = implode(',', $to);
@@ -91,72 +98,79 @@ class Mail {
 	/**
 	* @param $from - The email address to be sent from
 	*/
-	public function setFrom($from) {
+	public function setFrom($from)
+	{
 		$this->from = trim($from);
 	}
 	
 	/**
 	* @param $sender - The name displayed for who the email was sent from
 	*/
-	public function setSender($sender) {
+	public function setSender($sender)
+	{
 		$this->sender = trim($sender);
 	}
 
-	public function setSubject($subject) {
+	public function setSubject($subject)
+	{
 		$this->subject = trim($subject);
 	}
 
-	public function setText($text) {
+	public function setText($text)
+	{
 		$this->text = $text;
 	}
 
-	public function setHtml($html) {
+	public function setHtml($html)
+	{
 		$this->html = $html;
 	}
 
-	public function addAttachment($filename) {
-		if(is_array($filename)){
+	public function addAttachment($filename)
+	{
+		if (is_array($filename)) {
 			$this->attachments = array_merge($this->attachments,$filename);
 		}
-		else{
+		else {
 			$this->attachments[] = $filename;
 		}
 	}
 
-	public function send($data = null) {
-		if($data){
-			if(isset($data['sender'])){
+	public function send($data = null)
+	{
+		if ($data) {
+			if (isset($data['sender'])) {
 				$this->setSender($data['sender']);
 			}
 			
-			if(isset($data['from'])){
+			if (isset($data['from'])) {
 				$this->setFrom($data['from']);
 			}
 			
-			if(isset($data['to'])){
+			if (isset($data['to'])) {
 				$this->setTo($data['to']);
 			}
 			
-			if(isset($data['cc'])){
+			if (isset($data['cc'])) {
 				$this->setCopyTo($data['cc']);
 			}
 			
-			if(isset($data['bcc'])){
+			if (isset($data['bcc'])) {
 				$this->setBlindCopyTo($data['bcc']);
 			}
 			
-			if(isset($data['subject'])){
+			if (isset($data['subject'])) {
 				$this->setSubject($data['subject']);
 			}
 			
-			if(!empty($data['html'])){
+			if (!empty($data['html'])) {
 				$this->setHtml($data['html']);
-			}elseif(!empty($data['text'])){
+			} elseif (!empty($data['text'])) {
 				$this->setText($data['text']);
 			}
 			
-			if(isset($data['attachment'])){
-				if(!empty($_FILES['attachment']) && empty($_FILES['attachment']['error'])){
+			if (isset($data['attachment'])) {
+				if (!empty($_FILES['attachment']) && empty($_FILES['attachment']['error'])) {
 					$files = $_FILES['attachment'];
 					
 					for($i = 0; $i < count($files['name']); $i++){
@@ -197,7 +211,7 @@ class Mail {
 			$errors .= $msg;
 		}
 		
-		if($errors){
+		if ($errors) {
 			$cc = $this->cc ? "(CC: $this->cc)":'';
 			$bcc = $this->bcc ? "(BCC: $this->bcc)":'';
 			$msg = "There was a problem while sending an email to $this->to $cc $bcc<br />\r\n<br />\r\nThe Errors were as follows below: <br />\r\n<br />\r\n$errors";
@@ -206,14 +220,14 @@ class Mail {
 			
 			$this->trigger_error($msg);
 			
-			if(isset($this->config) && $this->config->get('config_email_error')){
+			if (isset($this->config) && $this->config->get('config_email_error')) {
 				$this->to = $this->config->get('config_email_error');
 				$this->cc = '';
 				$this->bcc = '';
 				$this->subject = "There was a problem sending out the email!";
 				$this->text = $msg;
 			}
-			else{
+			else {
 				$this->trigger_error("Please set the Error Email Address under settings!");
 				return false;
 			}
@@ -551,18 +565,19 @@ class Mail {
 		return true;
 	}
 
-	private function trigger_error($msg){
+	private function trigger_error($msg)
+	{
 		//Hide Mail errors when ajax pages are requested
-		if(!empty($_POST['async']) && $this->config->get('config_error_display')){
+		if (!empty($_POST['async']) && $this->config->get('config_error_display')) {
 			$this->config->set('config_error_display', false);
 			trigger_error($msg);
 			$this->config->set('config_error_display', true);
 		}
-		else{
+		else {
 			trigger_error($msg);
 		}
 		
-		if($this->config->get('config_error_display')){
+		if ($this->config->get('config_error_display')) {
 			$view_mail_errors = $this->url->admin('mail/error');
 			$this->message->add('warning', "There was an error while sending an email <a href=\"$view_mail_errors\">(review all mail errors)</a>: " . $msg);
 		}

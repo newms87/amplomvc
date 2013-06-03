@@ -1,7 +1,9 @@
 <?php
-class ControllerModuleBestSeller extends Controller {
+class Admin_Controller_Module_Bestseller extends Controller 
+{
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/bestseller');
 
 		$this->load->language('module/bestseller');
@@ -9,7 +11,7 @@ class ControllerModuleBestSeller extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('bestseller', $_POST);
+			$this->Model_Setting_Setting->editSetting('bestseller', $_POST);
 			
 			$this->cache->delete('product');
 			
@@ -31,22 +33,22 @@ class ControllerModuleBestSeller extends Controller {
 			'bestseller_list' => 'bestseller_list',
 			'options'=>'bestseller_option'
 		);
-		foreach($configs as $key=>$config){
+		foreach ($configs as $key=>$config) {
 			$this->data[$key] = isset($_POST[$config])?$_POST[$config]:$this->config->get($config);
 		}
 		
-		if(!$this->data['bestseller_list']){
+		if (!$this->data['bestseller_list']) {
 			$this->data['bestseller_list'] = array();
 		}
-		else{
-			$names = $this->model_catalog_product->getProductNames(array_keys($this->data['bestseller_list']));
-			foreach($names as $n){
+		else {
+			$names = $this->Model_Catalog_Product->getProductNames(array_keys($this->data['bestseller_list']));
+			foreach ($names as $n) {
 				$this->data['bestseller_list'][$n['product_id']] = $n['name'];
 			}
 		}
 		
 		
-		$this->data['layouts'] = $this->model_design_layout->getLayouts();
+		$this->data['layouts'] = $this->Model_Design_Layout->getLayouts();
 
 		$this->children = array(
 			'common/header',
@@ -56,7 +58,8 @@ class ControllerModuleBestSeller extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/bestseller')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

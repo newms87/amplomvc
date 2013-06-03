@@ -1,8 +1,10 @@
 <?php
-class ControllerAffiliateLogin extends Controller {
+class Catalog_Controller_Affiliate_Login extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('affiliate/login');
 
 		if ($this->affiliate->isLogged()) {
@@ -66,7 +68,8 @@ class ControllerAffiliateLogin extends Controller {
 		$this->response->setOutput($this->render());
   	}
   
-  	private function validate() {
+  	private function validate()
+  	{
 		if (!$this->affiliate->login($_POST['email'], $_POST['password'])) {
 				$this->error['warning'] = $this->_('error_login');
 		}

@@ -1,8 +1,10 @@
 <?php
-class ControllerAccountPassword extends Controller {
+class Catalog_Controller_Account_Password extends Controller 
+{
 	
 		
-  	public function index() {
+  	public function index()
+  	{
 		$this->template->load('account/password');
 
 		if (!$this->customer->isLogged()) {
@@ -16,7 +18,7 @@ class ControllerAccountPassword extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 			
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_account_customer->editPassword($this->customer->info('email'), $_POST['password']);
+			$this->Model_Account_Customer->editPassword($this->customer->info('email'), $_POST['password']);
  
 				$this->message->add('success', $this->_('text_success'));
 	
@@ -67,7 +69,8 @@ class ControllerAccountPassword extends Controller {
 		$this->response->setOutput($this->render());
   	}
   
-  	private function validate() {
+  	private function validate()
+  	{
 		if ((strlen($_POST['password']) < 4) || (strlen($_POST['password']) > 20)) {
 				$this->error['password'] = $this->_('error_password');
 		}

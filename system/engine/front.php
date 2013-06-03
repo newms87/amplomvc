@@ -1,47 +1,106 @@
 <?php
-final class Front {
+final class Front 
+{
 	protected $registry;
-	protected $error;
+	private $error_route = 'error/not_found';
+	private $route;
 	
-	public function __construct(&$registry) {
-		$this->registry = &$registry;
+	public function __construct($registry)
+	{
+		$this->registry = $registry;
 	}
 	
-  	public function dispatch($action, $error) {
-		$this->error = $error;
+	public function __get($key)
+	{
+		return $this->registry->get($key);
+	}
+	
+	public function setErrorRoute($route)
+	{
+		$this->error_route = $route;
+	}
+	
+	public function setRoute($route)
+	{
+		$this->route = $route;
+	}
+	
+	public function getRoute()
+	{
+		return $this->route;
+	}
+	
+	public function routeAdmin()
+	{
+		$this->route = !empty($_GET['route']) ? $_GET['route'] : 'common/home';
 		
-		while ($action) {
-			$action = $this->execute($action);
+		if (!$this->user->isLogged()) {
+			$allowed = array(
+				'common/forgotten',
+				'common/reset',
+				'common/login',
+			);
+			
+			if (!$this->isInRoutes($allowed)) {
+				$this->route = 'common/login';
+			}
+		}
+		else {
+			$ignore = array(
+				'common/home',
+				'common/login',
+				'common/logout',
+				'common/forgotten',
+				'common/reset',
+				'error/not_found',
+				'error/permission'
+			);
+			
+			if (!$this->isInRoutes($ignore)) {
+				$parts = explode('/', $this->route);
+			
+				if (!isset($parts[0]) || !isset($parts[1])) {
+					$this->route = 'common/home';
+				}
+				elseif (!$this->user->hasPermission('access', $parts[0] . '/' . $parts[1])) {
+					$this->route = 'error/permission';
+				}
+			}
+		}
+	}
+	
+	public function routeFront()
+	{
+		$this->route = !empty($_GET['route']) ? $_GET['route'] : 'common/home';
+		
+		//Do not show maintenance page if user is an admin
+		// or if the route is a a request by a payment provider (IPN from Paypal, etc.)
+		if ($this->config->get('config_maintenance') && !$this->user->isAdmin() && strpos($this->route, 'payment') !== 0 ) {
+			$this->route = 'common/maintenance';
+		}
+	}
+	
+	public function isInRoutes($routes)
+	{
+		foreach($routes as $route) {
+			if(strpos($this->route, $route) === 0){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+  	public function dispatch()
+  	{
+  		$action = new Action($this->registry, $this->route);
+		
+		if (!$action->execute()) {
+			$action = new Action($this->registry, $this->error_route);
+			
+			if (!$action->execute()) {
+				trigger_error("Front::dispatch(): There is a problem with the system. Unable to execute any actions!");
+			}
 		}
   	}
-	
-	private function execute($action) {
-		$file = $action->getFile();
-		$class = $action->getClass();
-		$class_path = $action->getClassPath();
-		$method = $action->getMethod();
-		$args = $action->getArgs();
-		
-		$action = '';
-
-		if (file_exists($file)) {
-			_require_once($file);
-
-			$controller = new $class($class_path, $this->registry);
-			
-			if (is_callable(array($controller, $method))) {
-				$action = call_user_func_array(array($controller, $method), $args);
-			} else {
-				$action = $this->error;
-			
-				$this->error = '';
-			}
-		} else {
-			$action = $this->error;
-			
-			$this->error = '';
-		}
-		
-		return $action;
-	}
 }

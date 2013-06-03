@@ -1,21 +1,25 @@
 <?php
-class ModelCatalogFlashsale extends Model {
-	public function updateViewed($flashsale_id) {
+class Catalog_Model_Catalog_Flashsale extends Model 
+{
+	public function updateViewed($flashsale_id)
+	{
 		$user_id = $this->customer->getId();
 		$this->query("INSERT INTO " . DB_PREFIX . "flashsale_views SET flashsale_id = '" . (int)$flashsale_id . "', user_id = '" . (int)$user_id . "', session_id = '" . session_id() . "', ip_address = '" . $_SERVER['REMOTE_ADDR'] . "', date = NOW()");
 	}
 		
-	public function getFlashsale($flashsale_id) {
-		if(isset($_GET['preview_flashsale']) && $this->user->canPreview('flashsale')){
+	public function getFlashsale($flashsale_id)
+	{
+		if (isset($_GET['preview_flashsale']) && $this->user->canPreview('flashsale')) {
 			$query = $this->query("SELECT fs.* FROM " . DB_PREFIX . "flashsale fs WHERE fs.flashsale_id='$flashsale_id'");
 		}
-		else{
+		else {
 			$query = $this->query("SELECT fs.* FROM " . DB_PREFIX . "flashsale fs WHERE fs.flashsale_id='$flashsale_id' AND fs.status='1'");
 		}
 		return $query->num_rows?$query->row:false;
 	}
 	
-	public function getFlashsales($filter = '', $sort ='fs.date_end', $limit = '') {
+	public function getFlashsales($filter = '', $sort ='fs.date_end', $limit = '')
+	{
 		$filter = empty($filter)?'':"AND $filter";
 		$sort = empty($sort)?'':"ORDER BY $sort";
 		$limit = empty($limit)?'':"LIMIT $limit";
@@ -30,12 +34,12 @@ class ModelCatalogFlashsale extends Model {
 		
 		$section = isset($flashsale['section_attr'])?$flashsale['section_attr']:0;
 		
-		if(empty($sort_by)){
+		if (empty($sort_by)) {
 			$sort_by = array();
 			if($section)
 				$sort_by[] ='ad.name ASC';
 			$sort_by[] = 'p.sort_order ASC';
-		}else if(is_string($sort_by))
+		} else if(is_string($sort_by))
 			$sort_by = array($sort_by);
 		
 		$lang_id = (int)$this->config->get('config_language_id');
@@ -62,17 +66,17 @@ class ModelCatalogFlashsale extends Model {
 		
 		$sort_by = "ORDER BY " . implode(', ',$sort_by);
 		
-		if(isset($_GET['preview_flashsale']) && $this->user->canPreview('flashsale')){
+		if (isset($_GET['preview_flashsale']) && $this->user->canPreview('flashsale')) {
 			$p_status = '';
 		}
-		else{
+		else {
 			$p_status = "AND p.status='1'";
 		}
 		
 		$results = $this->query("SELECT $select FROM " . DB_PREFIX . "product p $flashsale_product $product_info $attr_section WHERE fp.flashsale_id='$flashsale[flashsale_id]' $p_status $sort_by");
 		
 		foreach($results->rows as &$product)
-			if(!isset($product['section_id'])){
+			if (!isset($product['section_id'])) {
 				$product['section_id'] = 0;
 				$product['section_name'] = '';
 				$product['section_attr'] = $section;
@@ -83,20 +87,22 @@ class ModelCatalogFlashsale extends Model {
 		return array();
 	}
 	
-	public function getFlashsaleArticles($flashsale_id){
+	public function getFlashsaleArticles($flashsale_id)
+	{
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "flashsale_article WHERE flashsale_id='$flashsale_id'");
 		return $query->num_rows?$query->rows:array();
 	}
 	
-	public function activateFlashsaleDesigners($flashsale_id){
-		if(isset($_GET['preview_flashsale']) && $this->user->canPreview('flashsale')){
+	public function activateFlashsaleDesigners($flashsale_id)
+	{
+		if (isset($_GET['preview_flashsale']) && $this->user->canPreview('flashsale')) {
 			return;
 		}
 		
 		$query = $this->query("SELECT m.manufacturer_id, m.status FROM " . DB_PREFIX . "flashsale_designer fd LEFT JOIN " . DB_PREFIX . "manufacturer m ON(m.manufacturer_id=fd.designer_id) WHERE fd.flashsale_id='" . (int)$flashsale_id . "'");
-		foreach($query->rows as $row){
-			if(!(int)$row['status']){
-				$this->model_catalog_designer->setDesignerStatus($row['manufacturer_id'], 1);
+		foreach ($query->rows as $row) {
+			if (!(int)$row['status']) {
+				$this->Model_Catalog_Designer->setDesignerStatus($row['manufacturer_id'], 1);
 			}
 		}
 	}
@@ -107,12 +113,13 @@ class ModelCatalogFlashsale extends Model {
 	*
 	* @return string in the set: 'disabled', 'active', 'not started', 'ended'
 	*/
-	public function getStatus($flashsale){
-		if(isset($_GET['preview_flashsale']) && $this->user->canPreview('flashsale')){
+	public function getStatus($flashsale)
+	{
+		if (isset($_GET['preview_flashsale']) && $this->user->canPreview('flashsale')) {
 			return 'active';
 		}
 		
-		if(is_integer($flashsale)){
+		if (is_integer($flashsale)) {
 			$query = $this->get('flashsale', 'date_start, date_end', array("flashsale_id"=>$flashsale));
 			$flashsale = $query->row;
 		}
@@ -128,7 +135,8 @@ class ModelCatalogFlashsale extends Model {
 			return 'active';
 	}
 	
-	public function getFlashsaleDesigners($flashsale_id){
+	public function getFlashsaleDesigners($flashsale_id)
+	{
 		$query = $this->query("SELECT fp.product_id, p.manufacturer_id, m.name, m.keyword FROM " . DB_PREFIX . "flashsale_product fp LEFT JOIN " . DB_PREFIX . "product p ON (p.product_id=fp.product_id) LEFT JOIN " . DB_PREFIX . "manufacturer m ON (p.manufacturer_id=m.manufacturer_id) WHERE fp.flashsale_id='$flashsale_id' AND m.status='1' GROUP BY m.manufacturer_id");
 		return $query->rows;
 	}

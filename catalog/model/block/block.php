@@ -1,25 +1,28 @@
 <?php
-class ModelBlockBlock extends Model {
+class Catalog_Model_Block_Block extends Model 
+{
 	private $blocks;
 	
-	function __construct(&$registry){
+	function __construct(&$registry)
+	{
 		parent::__construct($registry);
 		
 		$this->loadBlocks();
 	}
 	
-	public function getBlockSettings($name) {
-		if(!isset($this->blocks[$name]['settings'])){
+	public function getBlockSettings($name)
+	{
+		if (!isset($this->blocks[$name]['settings'])) {
 			$block = $this->cache->get("block.$name");
 			
-			if(!$block){
+			if (!$block) {
 				$block = $this->query_row("SELECT * FROM " . DB_PREFIX . "block WHERE status = '1' AND `name` = '" . $this->db->escape($name) . "'");
 				
-				if(!empty($block)){
+				if (!empty($block)) {
 					$block['profiles'] = unserialize($block['profiles']);
 					$block['settings'] = unserialize($block['settings']);
 				}
-				else{
+				else {
 					$block['profiles'] = null;
 					$block['settings'] = null;
 				}
@@ -36,24 +39,25 @@ class ModelBlockBlock extends Model {
 		return $this->blocks[$name]['settings'];
 	}
 	
-	private function loadBlocks(){
+	private function loadBlocks()
+	{
 		$store_id = $this->config->get('config_store_id');
 		$layout_id = $this->config->get('config_layout_id');
 		
 		$blocks = $this->cache->get("blocks.$store_id.$layout_id");
 		
-		if(!$blocks){
+		if (!$blocks) {
 			$results = $this->query("SELECT * FROM " . DB_PREFIX . "block WHERE status = '1'");
 			
 			$blocks = array('position' => array());
 			
-			foreach($results->rows as $row){
+			foreach ($results->rows as $row) {
 				$row['settings'] = unserialize($row['settings']);
 				$row['profiles'] = unserialize($row['profiles']);
 				
-				if(!empty($row['profiles'])){
-					foreach($row['profiles'] as $profile){
-						if(in_array($layout_id, $profile['layout_ids']) && in_array($store_id, $profile['store_ids'])){
+				if (!empty($row['profiles'])) {
+					foreach ($row['profiles'] as $profile) {
+						if (in_array($layout_id, $profile['layout_ids']) && in_array($store_id, $profile['store_ids'])) {
 							$blocks[$row['name']] = array(
 								'profile' => $profile,
 								'settings' => $row['settings'],
@@ -71,8 +75,9 @@ class ModelBlockBlock extends Model {
 		$this->blocks = $blocks;
 	}
 	
-	public function getBlocksForPosition($position){
-		if(isset($this->blocks['position'][$position])){
+	public function getBlocksForPosition($position)
+	{
+		if (isset($this->blocks['position'][$position])) {
 			return $this->blocks['position'][$position];
 		}
 

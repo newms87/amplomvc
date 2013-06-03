@@ -1,6 +1,8 @@
 <?php
-class ModelAccountAddress extends Model {
-	public function addAddress($data) {
+class Catalog_Model_Account_Address extends Model 
+{
+	public function addAddress($data)
+	{
 		$data['customer_id'] = $this->customer->getId();
 		
 		$match_data = $data;
@@ -8,7 +10,7 @@ class ModelAccountAddress extends Model {
 		
 		$existing = $this->address_exists($match_data);
 		
-		if($existing){
+		if ($existing) {
 			return $existing;
 		}
 		
@@ -17,15 +19,18 @@ class ModelAccountAddress extends Model {
 		return $address_id;
 	}
 	
-	public function editAddress($address_id, $data) {
+	public function editAddress($address_id, $data)
+	{
 		$this->update('address', $data, array('address_id'=>$address_id, 'customer_id'=>$this->customer->getId()));
 	}
 	
-	public function deleteAddress($address_id) {
+	public function deleteAddress($address_id)
+	{
 		$this->delete('address', array('address_id'=>$address_id, 'customer_id'=>$this->customer->getId()));
 	}
 	
-	private function is_valid_address($address){
+	private function is_valid_address($address)
+	{
 		if(!trim($address['firstname'].$address['lastname']))return false;
 		if(!trim($address['address_1']))return false;
 		if(!trim($address['city']))return false;
@@ -34,23 +39,25 @@ class ModelAccountAddress extends Model {
 		return true;
 	}
 	
-	public function address_exists($data){
+	public function address_exists($data)
+	{
 		$query = $this->get('address', 'address_id', $data);
 		
-		if($query->num_rows){
+		if ($query->num_rows) {
 			return $query->row['address_id'];
 		}
 
 		return false;
 	}
 	
-	public function getAddress($address_id) {
+	public function getAddress($address_id)
+	{
 		$address = $this->query_row("SELECT DISTINCT * FROM " . DB_PREFIX . "address WHERE address_id = '" . (int)$address_id . "' AND customer_id = '" . (int)$this->customer->getId() . "' LIMIT 1");
 		
 		if ($address) {
 			$this->get_address_localisation($address);
 			
-			if($this->is_valid_address($address)){
+			if ($this->is_valid_address($address)) {
 				return $address;
 			}
 			
@@ -60,7 +67,8 @@ class ModelAccountAddress extends Model {
 		return false;
 	}
 	
-	public function getAddresses() {
+	public function getAddresses()
+	{
 		$address_list = $this->query_rows("SELECT * FROM " . DB_PREFIX . "address WHERE customer_id = '" . (int)$this->customer->getId() . "'");
 		
 		$addresses = array();
@@ -68,7 +76,7 @@ class ModelAccountAddress extends Model {
 		foreach ($address_list as $address) {
 			$this->get_address_localisation($address);
 			
-			if($this->is_valid_address($address)){
+			if ($this->is_valid_address($address)) {
 				$addresses[] = $address;
 			} else {
 				$this->delete( 'address', array('address_id' => $address['address_id'], 'customer_id' => $this->customer->getId()) );
@@ -83,7 +91,8 @@ class ModelAccountAddress extends Model {
 	 *
 	 * @param &$address - the address array with the country_id and zone_id keys set.
 	 */
-	private function get_address_localisation(&$address){
+	private function get_address_localisation(&$address)
+	{
 		$country = $this->query_row("SELECT * FROM `" . DB_PREFIX . "country` WHERE country_id = '" . (int)$address['country_id'] . "'");
 		
 		if ($country) {
@@ -118,7 +127,8 @@ class ModelAccountAddress extends Model {
 		);
 	}
 	
-	public function getTotalAddresses() {
+	public function getTotalAddresses()
+	{
 		return $this->query_var("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "address WHERE customer_id = '" . (int)$this->customer->getId() . "'");
 	}
 }

@@ -1,7 +1,9 @@
 <?php
-class ControllerSettingUrlAlias extends Controller {
+class Admin_Controller_Setting_UrlAlias extends Controller 
+{
 
-	public function index() {
+	public function index()
+	{
 		$this->load->language('setting/url_alias');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -9,13 +11,14 @@ class ControllerSettingUrlAlias extends Controller {
 		$this->getList();
 	}
 			
-  	public function insert() {
+  	public function insert()
+  	{
 		$this->load->language('setting/url_alias');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$store_id = $this->model_setting_url_alias->addUrlAlias($_POST);
+			$store_id = $this->Model_Setting_UrlAlias->addUrlAlias($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -25,13 +28,14 @@ class ControllerSettingUrlAlias extends Controller {
 		$this->getForm();
   	}
 
-  	public function update() {
+  	public function update()
+  	{
 		$this->load->language('setting/url_alias');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_setting_url_alias->editUrlAlias($_GET['url_alias_id'], $_POST);
+			$this->Model_Setting_UrlAlias->editUrlAlias($_GET['url_alias_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -41,14 +45,15 @@ class ControllerSettingUrlAlias extends Controller {
 		$this->getForm();
   	}
 
-  	public function delete() {
+  	public function delete()
+  	{
 		$this->load->language('setting/url_alias');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $url_alias_id) {
-				$this->model_setting_url_alias->deleteUrlAlias($url_alias_id);
+				$this->Model_Setting_UrlAlias->deleteUrlAlias($url_alias_id);
 			}
 
 			$this->message->add('success', $this->_('text_success'));
@@ -59,7 +64,8 @@ class ControllerSettingUrlAlias extends Controller {
 		$this->getList();
   	}
 	
-	private function getList() {
+	private function getList()
+	{
 		$this->template->load('setting/url_alias_list');
 
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -70,7 +76,7 @@ class ControllerSettingUrlAlias extends Controller {
 		
 		$url = $this->get_url(array('page'));
 		
-		$aliases = $this->model_setting_url_alias->getUrlAliases();
+		$aliases = $this->Model_Setting_UrlAlias->getUrlAliases();
  
 		foreach ($aliases as &$alias) {
 			$alias['action'] = array(
@@ -83,7 +89,7 @@ class ControllerSettingUrlAlias extends Controller {
 		
 		$this->data['aliases'] = $aliases;
 		
-		$this->data['data_stores'] = $this->model_setting_store->getStores();
+		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
 	
 		$this->children = array(
 			'common/header',
@@ -93,7 +99,8 @@ class ControllerSettingUrlAlias extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function getForm() {
+	public function getForm()
+	{
 		$this->template->load('setting/url_alias_form');
 
 		$url_alias_id = isset($_GET['url_alias_id']) ? $_GET['url_alias_id']:null;
@@ -109,7 +116,7 @@ class ControllerSettingUrlAlias extends Controller {
 				
 		$this->data['cancel'] = $this->url->link('setting/url_alias');
 		
-		$alias_info = $url_alias_id ? $this->model_setting_url_alias->getUrlAlias($url_alias_id) : null;
+		$alias_info = $url_alias_id ? $this->Model_Setting_UrlAlias->getUrlAlias($url_alias_id) : null;
 		
 		$defaults = array(
 			'keyword'	=>'',
@@ -120,12 +127,12 @@ class ControllerSettingUrlAlias extends Controller {
 			'status'	=>'',
 		);
 			
-		foreach($defaults as $d=>$value){
+		foreach ($defaults as $d=>$value) {
 			if (isset($_POST[$d])) {
 				$this->data[$d] = $_POST[$d];
 			} elseif (isset($alias_info[$d])) {
 				$this->data[$d] = $alias_info[$d];
-			} elseif(!$url_alias_id) {
+			} elseif (!$url_alias_id) {
 				$this->data[$d] = $value;
 			}
 		}
@@ -138,22 +145,24 @@ class ControllerSettingUrlAlias extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validateForm() {
+	private function validateForm()
+	{
 		if (!$this->user->hasPermission('modify', 'setting/url_alias')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		if(!$_POST['keyword']){
+		if (!$_POST['keyword']) {
 			$this->error['keyword'];
 		}
-		if(!$_POST['query']){
+		if (!$_POST['query']) {
 			$this->error['query'];
 		}
 		
 		return $this->error ? false : true;
 	}
 
-	private function validateDelete() {
+	private function validateDelete()
+	{
 		if (!$this->user->hasPermission('modify', 'setting/url_alias')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
@@ -165,7 +174,8 @@ class ControllerSettingUrlAlias extends Controller {
 		}
 	}
 	
-	private function get_url($filters=null){
+	private function get_url($filters=null)
+	{
 		$url = '';
 		$filters = $filters?$filters:array('sort', 'order', 'page');
 		foreach($filters as $f)

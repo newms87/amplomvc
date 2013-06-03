@@ -1,8 +1,10 @@
 <?php
-class ControllerTotalVoucher extends Controller {
+class Admin_Controller_Total_Voucher extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('total/voucher');
 
 		$this->load->language('total/voucher');
@@ -10,7 +12,7 @@ class ControllerTotalVoucher extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && ($this->validate())) {
-			$this->model_setting_setting->editSetting('voucher', $_POST);
+			$this->Model_Setting_Setting->editSetting('voucher', $_POST);
 		
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -51,7 +53,8 @@ class ControllerTotalVoucher extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'total/voucher')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

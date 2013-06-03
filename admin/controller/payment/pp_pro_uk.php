@@ -1,8 +1,10 @@
 <?php
-class ControllerPaymentPPProUK extends Controller {
+class Admin_Controller_Payment_PpProUk extends Controller 
+{
 	
 
-	public function index() {
+	public function index()
+	{
 		$this->template->load('payment/pp_pro_uk');
 
 		$this->load->language('payment/pp_pro_uk');
@@ -10,7 +12,7 @@ class ControllerPaymentPPProUK extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('pp_pro_uk', $_POST);
+			$this->Model_Setting_Setting->editSetting('pp_pro_uk', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -105,7 +107,7 @@ class ControllerPaymentPPProUK extends Controller {
 			$this->data['pp_pro_uk_order_status_id'] = $this->config->get('pp_pro_uk_order_status_id');
 		}
 
-		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
 		
 		if (isset($_POST['pp_pro_uk_geo_zone_id'])) {
 			$this->data['pp_pro_uk_geo_zone_id'] = $_POST['pp_pro_uk_geo_zone_id'];
@@ -113,7 +115,7 @@ class ControllerPaymentPPProUK extends Controller {
 			$this->data['pp_pro_uk_geo_zone_id'] = $this->config->get('pp_pro_uk_geo_zone_id');
 		}
 		
-		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$this->data['geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 		
 		if (isset($_POST['pp_pro_uk_status'])) {
 			$this->data['pp_pro_uk_status'] = $_POST['pp_pro_uk_status'];
@@ -135,7 +137,8 @@ class ControllerPaymentPPProUK extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'payment/pp_pro_uk')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

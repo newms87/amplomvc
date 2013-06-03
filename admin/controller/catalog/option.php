@@ -1,8 +1,10 @@
 <?php
-class ControllerCatalogOption extends Controller {
+class Admin_Controller_Catalog_Option extends Controller 
+{
 	
  
-	public function index() {
+	public function index()
+	{
 		$this->load->language('catalog/option');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -10,13 +12,14 @@ class ControllerCatalogOption extends Controller {
 		$this->getList();
 	}
 
-	public function insert() {
+	public function insert()
+	{
 		$this->load->language('catalog/option');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_catalog_option->addOption($_POST);
+			$this->Model_Catalog_Option->addOption($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -41,13 +44,14 @@ class ControllerCatalogOption extends Controller {
 		$this->getForm();
 	}
 
-	public function update() {
+	public function update()
+	{
 		$this->load->language('catalog/option');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_catalog_option->editOption($_GET['option_id'], $_POST);
+			$this->Model_Catalog_Option->editOption($_GET['option_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -72,14 +76,15 @@ class ControllerCatalogOption extends Controller {
 		$this->getForm();
 	}
 
-	public function delete() {
+	public function delete()
+	{
 		$this->load->language('catalog/option');
 
 		$this->document->setTitle($this->_('heading_title'));
  		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $option_id) {
-				$this->model_catalog_option->deleteOption($option_id);
+				$this->Model_Catalog_Option->deleteOption($option_id);
 			}
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -102,11 +107,12 @@ class ControllerCatalogOption extends Controller {
 		$this->getList();
 	}
 
-	private function getList() {
+	private function getList()
+	{
 		$this->template->load('catalog/option_list');
 
 		$defaults = array('sort'=>'od.name','order'=>'ASC','page'=>1);
-		foreach($defaults as $key=>$default){
+		foreach ($defaults as $key=>$default) {
 			$$key = isset($_GET[$key])?$_GET[$key]:$default;
 		}
 			
@@ -127,9 +133,9 @@ class ControllerCatalogOption extends Controller {
 			'limit' => $this->config->get('config_admin_limit')
 		);
 		
-		$option_total = $this->model_catalog_option->getTotalOptions();
+		$option_total = $this->Model_Catalog_Option->getTotalOptions();
 		
-		$results = $this->model_catalog_option->getOptions($data);
+		$results = $this->Model_Catalog_Option->getOptions($data);
 		
 		foreach ($results as $result) {
 			$action = array();
@@ -180,7 +186,8 @@ class ControllerCatalogOption extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function getForm() {
+	private function getForm()
+	{
 		$this->template->load('catalog/option_form');
 
 		$option_id = isset($_GET['option_id'])?$_GET['option_id']:false;
@@ -199,10 +206,10 @@ class ControllerCatalogOption extends Controller {
 		$this->data['cancel'] = $this->url->link('catalog/option', $url);
 
 		if ($option_id && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-			$option_info = $this->model_catalog_option->getOption($option_id);
+			$option_info = $this->Model_Catalog_Option->getOption($option_id);
 		}
 		
-		$this->data['languages'] = $this->model_localisation_language->getLanguages();
+		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
 		
 		$defaults = array(
 			'option_description'=>array(),
@@ -210,22 +217,22 @@ class ControllerCatalogOption extends Controller {
 			'sort_order'=>'',
 			'option_values'=>array()
 		);
-		foreach($defaults as $d=>$value){
+		foreach ($defaults as $d=>$value) {
 			if (isset($_POST[$d])) {
 				$this->data[$d] = $_POST[$d];
 			} elseif (isset($option_info[$d])) {
 				$this->data[$d] = $option_info[$d];
-			} elseif(!$option_id) {
+			} elseif (!$option_id) {
 				$this->data[$d] = $value;
 			}
 		}
 		
 		if (!isset($this->data['option_description'])) {
-			$this->data['option_description'] = $this->model_catalog_option->getOptionDescriptions($option_id);
+			$this->data['option_description'] = $this->Model_Catalog_Option->getOptionDescriptions($option_id);
 		}
 		
 		if (!isset($this->data['option_values'])) {
-			$option_values = $this->model_catalog_option->getOptionValueDescriptions($option_id);
+			$option_values = $this->Model_Catalog_Option->getOptionValueDescriptions($option_id);
 			
 			foreach ($option_values as &$option_value) {
 				if ($option_value['image'] && file_exists(DIR_IMAGE . $option_value['image'])) {
@@ -252,7 +259,8 @@ class ControllerCatalogOption extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validateForm() {
+	private function validateForm()
+	{
 		if (!$this->user->hasPermission('modify', 'catalog/option')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
@@ -269,7 +277,7 @@ class ControllerCatalogOption extends Controller {
 		if (!isset($_POST['option_value'])) {
 			$this->error['warning'] = $this->_('error_type');
 		}
-		else{
+		else {
 			foreach ($_POST['option_value'] as $option_value_id => $option_value) {
 				foreach ($option_value['option_value_description'] as $language_id => $option_value_description) {
 					if ((strlen($option_value_description['name']) < 1) || (strlen($option_value_description['name']) > 128)) {
@@ -282,13 +290,14 @@ class ControllerCatalogOption extends Controller {
 		return $this->error ? false : true;
 	}
 
-	private function validateDelete() {
+	private function validateDelete()
+	{
 		if (!$this->user->hasPermission('modify', 'catalog/option')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
 		foreach ($_POST['selected'] as $option_id) {
-			$product_total = $this->model_catalog_product->getTotalProductsByOptionId($option_id);
+			$product_total = $this->Model_Catalog_Product->getTotalProductsByOptionId($option_id);
 
 			if ($product_total) {
 				$this->error['warning'] = sprintf($this->_('error_product'), $product_total);
@@ -298,7 +307,8 @@ class ControllerCatalogOption extends Controller {
 		return $this->error ? false : true;
 	}
 	
-	public function autocomplete() {
+	public function autocomplete()
+	{
 		$json = array();
 		
 		if (isset($_GET['filter_name'])) {
@@ -310,13 +320,13 @@ class ControllerCatalogOption extends Controller {
 				'limit'		=> 20
 			);
 			
-			$options = $this->model_catalog_option->getOptions($data);
+			$options = $this->Model_Catalog_Option->getOptions($data);
 			
 			foreach ($options as $option) {
 				$option_value_data = array();
 				
 				if ($option['type'] == 'select' || $option['type'] == 'radio' || $option['type'] == 'checkbox' || $option['type'] == 'image') {
-					$option_values = $this->model_catalog_option->getOptionValues($option['option_id']);
+					$option_values = $this->Model_Catalog_Option->getOptionValues($option['option_id']);
 					
 					foreach ($option_values as $option_value) {
 						if ($option_value['image'] && file_exists(DIR_IMAGE . $option_value['image'])) {
@@ -380,7 +390,8 @@ class ControllerCatalogOption extends Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 	
-	private function get_url(){
+	private function get_url()
+	{
 		$url = '';
 		$filters = array('sort', 'order', 'page');
 		foreach($filters as $f)

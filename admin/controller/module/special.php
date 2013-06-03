@@ -1,8 +1,10 @@
 <?php
-class ControllerModulespecial extends Controller {
+class Admin_Controller_Module_Special extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/special');
 
 		$this->load->language('module/special');
@@ -10,7 +12,7 @@ class ControllerModulespecial extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('special', $_POST);
+			$this->Model_Setting_Setting->editSetting('special', $_POST);
 			
 			$this->cache->delete('product');
 			
@@ -47,7 +49,7 @@ class ControllerModulespecial extends Controller {
 			$this->data['modules'] = $this->config->get('special_module');
 		}
 						
-		$this->data['layouts'] = $this->model_design_layout->getLayouts();
+		$this->data['layouts'] = $this->Model_Design_Layout->getLayouts();
 
 		$this->children = array(
 			'common/header',
@@ -57,7 +59,8 @@ class ControllerModulespecial extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/special')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

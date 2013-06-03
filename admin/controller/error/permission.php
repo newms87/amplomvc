@@ -1,6 +1,8 @@
 <?php
-class ControllerErrorPermission extends Controller {
-	public function index() {
+class Admin_Controller_Error_Permission extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('error/permission');
 
 		$this->load->language('error/permission');

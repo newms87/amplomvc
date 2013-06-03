@@ -1,22 +1,24 @@
 <?php
-class ControllerSalesFlashsale extends Controller {
-	public function index() {
+class Catalog_Controller_Sales_Flashsale extends Controller 
+{
+	public function index()
+	{
 		$flashsale_id = isset($_GET['flashsale_id'])?$_GET['flashsale_id']:false;
 		
 		$this->language->load("sales/flashsale");
 		
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if($flashsale_id){
+		if ($flashsale_id) {
 			$this->template->load('sales/flashsale');
 			
-			$flashsale = $this->model_catalog_flashsale->getFlashsale($flashsale_id);
+			$flashsale = $this->Model_Catalog_Flashsale->getFlashsale($flashsale_id);
 			
-			if(!$flashsale || $this->model_catalog_flashsale->getStatus($flashsale) != 'active')
+			if(!$flashsale || $this->Model_Catalog_Flashsale->getStatus($flashsale) != 'active')
 				$this->url->redirect($this->url->link('sales/flashsale'), 302);
 			
-			if( ! (isset($_GET['preview_flashsale']) && $this->user->canPreview('flashsale')) ){
-				$this->model_catalog_flashsale->updateViewed($flashsale_id);
+			if ( ! (isset($_GET['preview_flashsale']) && $this->user->canPreview('flashsale')) ) {
+				$this->Model_Catalog_Flashsale->updateViewed($flashsale_id);
 			}
 			
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -31,8 +33,8 @@ class ControllerSalesFlashsale extends Controller {
 			
 			
 			//OPTIONAL VERSION WHERE FLASHSALE PAGE REMAINS SHOWING FLASHSALE OVER
-			if($this->model_catalog_flashsale->getStatus($flashsale) != 'active'){
-				$designers = $this->model_catalog_flashsale->getFlashsaleDesigners($flashsale_id);
+			if ($this->Model_Catalog_Flashsale->getStatus($flashsale) != 'active') {
+				$designers = $this->Model_Catalog_Flashsale->getFlashsaleDesigners($flashsale_id);
 				foreach($designers as &$d)
 					$d['href'] = $this->url->site($d['keyword']);
 				$this->data['designers'] = $designers;
@@ -40,16 +42,16 @@ class ControllerSalesFlashsale extends Controller {
 				$this->language->set('sale_over_text', $this->_('flashsale_over_text'));
 				$this->data['continue'] = $this->url->link('common/home');
 			}
-			else{
+			else {
 				$this->data['the_page'] = $_SERVER['REQUEST_URI'];
 				
-				$this->model_catalog_flashsale->activateFlashsaleDesigners($flashsale_id);
+				$this->Model_Catalog_Flashsale->activateFlashsaleDesigners($flashsale_id);
 				
-				$products = $this->model_catalog_flashsale->getFlashsaleProducts($flashsale, $d_sort_by);
+				$products = $this->Model_Catalog_Flashsale->getFlashsaleProducts($flashsale, $d_sort_by);
 				
 				$article_insert = array();
 				$articles = array();
-				$article_list = $this->model_catalog_flashsale->getFlashsaleArticles($flashsale_id);
+				$article_list = $this->Model_Catalog_Flashsale->getFlashsaleArticles($flashsale_id);
 				
 				
 				//This specifies the location of the articles by number inserted
@@ -59,7 +61,7 @@ class ControllerSalesFlashsale extends Controller {
 				);
 				
 				$count = 0;
-				foreach($article_list as $a){
+				foreach ($article_list as $a) {
 					$articles[$a['flashsale_article_id']] = $a;
 					$articles[$a['flashsale_article_id']]['description'] = html_entity_decode($a['description']);
 					
@@ -76,8 +78,8 @@ class ControllerSalesFlashsale extends Controller {
 				$sect_id = 0;
 				
 				$count = 0;
-				foreach($products as $p){
-					if($sect_id !== (int)$p['section_id']){
+				foreach ($products as $p) {
+					if ($sect_id !== (int)$p['section_id']) {
 						//if we are sorting by something, do not add products to different sections,
 						//just jumble them together under the 0=>'All' section.
 						if(!$d_sort_by)
@@ -87,7 +89,7 @@ class ControllerSalesFlashsale extends Controller {
 					}
 					
 					//insert articles between products at the specified random location
-					if(array_key_exists($count,$article_insert)){
+					if (array_key_exists($count,$article_insert)) {
 						$sections[$sect_id]['products']['article-'.$count] = $articles[$article_insert[$count]];
 						unset($article_insert[$count]);
 					}
@@ -102,10 +104,11 @@ class ControllerSalesFlashsale extends Controller {
 					$sections[$sect_id]['products'][$p['product_id']]['thumb'] = $this->image->resize($p['image'],$this->config->get('config_image_category_width'),$this->config->get('config_image_category_height'));
 				}
 				
-				while(!empty($article_insert)){
+				while (!empty($article_insert)) {
 					$sections[$sect_id]['products'][] = $articles[array_pop($article_insert)];
 				}
-				uasort($sections,function($a,$b){if($a=='All'||$a>$b)return 1;});
+				uasort($sections,function ($a,$b)
+{if($a=='All'||$a>$b)return 1;});
 				$this->data['section_products'] = $sections;
 				
 				$this->data['open_quote'] = $this->image->get('data/open_quote.png');
@@ -128,18 +131,18 @@ class ControllerSalesFlashsale extends Controller {
 				$this->data['share_status'] = $this->config->get('config_share_status');
 			}
 		}
-		else{
+		else {
 			$this->template->load('sales/flashsales');
 			
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('sales/flashsale'));
 								
-			$flashsales = $this->model_catalog_flashsale->getFlashsales();
+			$flashsales = $this->Model_Catalog_Flashsale->getFlashsales();
 			
-			if(empty($flashsales)){
+			if (empty($flashsales)) {
 				$this->data['continue'] = $this->url->link('common/home');
 			}
-			else{
+			else {
 				$this->language->set('flashsale_heading', $this->_('heading_title'));
 				$this->data['polaroids'] = array(
 							$this->image->resize('data/polaroid-1.png', 260,283),
@@ -149,7 +152,7 @@ class ControllerSalesFlashsale extends Controller {
 				$this->data['polaroid_3_back'] = $this->image->get('polaroid-3-back.png');
 				$this->data['fs_tac'] = $this->image->resize('data/pink_tac.png', 36,52);
 
-				foreach($flashsales as &$fs){
+				foreach ($flashsales as &$fs) {
 					$fs['image'] =$this->image->resize( (isset($fs['image'])?$fs['image']:"no_image.png") ,196,196);
 					$fs['href'] = $this->url->site($fs['keyword']);
 				}
@@ -172,21 +175,23 @@ class ControllerSalesFlashsale extends Controller {
 		$this->response->setOutput($this->render());
   	}
 
-	public function ajax_countdown(){
+	public function ajax_countdown()
+	{
 		if(!isset($_POST['flashsales']))return;
 		
 		$flashsales = array();
-		foreach($_POST['flashsales'] as $fs){
+		foreach ($_POST['flashsales'] as $fs) {
 			$flashsales[] = array('id'=>$fs['id'],'countdown'=>$this->countdown((int)$fs['flash_id'],isset($fs['type'])?$fs['type']:null, isset($fs['msg_start'])?$fs['msg_start']:null));
 		}
 		echo json_encode($flashsales);
 		exit;
 	}
 	
-	public function countdown($flashsale=null, $type='long', $msg_start=false){
+	public function countdown($flashsale=null, $type='long', $msg_start=false)
+	{
 		$msg_start = trim((string)$msg_start);
-		if(is_integer($flashsale)){
-			$flashsale = $this->model_catalog_flashsale->getFlashsale($flashsale);
+		if (is_integer($flashsale)) {
+			$flashsale = $this->Model_Catalog_Flashsale->getFlashsale($flashsale);
 		}
 		
 		//problem finding flashsale or no flashsale specified
@@ -215,37 +220,37 @@ class ControllerSalesFlashsale extends Controller {
 				$plural = 's';
 		}
 		
-		if(!$diff_start->invert){
-			$msg = "<span class='msg_start'>" . (($msg_start && !empty($msg_start))?$msg_start:"Sale starts in ") . "</span>";
+		if (!$diff_start->invert) {
+			$msg = "<span class ='msg_start'>" . (($msg_start && !empty($msg_start))?$msg_start:"Sale starts in ") . "</span>";
 			$class='start_soon';
 			$diff_end->d = -$diff_start->d;
 			$diff_end->h = -$diff_start->h;
 			$diff_end->i = $diff_start->i;
 			$diff_end->s = $diff_start->s;
 		}
-		else if(!$diff_end->invert){
-			$msg = "<span class='msg_start'>" . (($msg_start && !empty($msg_start))?$msg_start:"Ends in ")."</span>";
+		else if (!$diff_end->invert) {
+			$msg = "<span class ='msg_start'>" . (($msg_start && !empty($msg_start))?$msg_start:"Ends in ")."</span>";
 			$class='normal';
 		}
-		else{
-			$msg = "<span class='msg_start'>Sale has Ended.</span>";
+		else {
+			$msg = "<span class ='msg_start'>Sale has Ended.</span>";
 			$class='ended';
 		}
 		
 		$diff_end->h = $diff_end->h + ((int)$diff_end->d)*24;
 		$time = '';
-		if($type == 'letters'){
+		if ($type == 'letters') {
 			$h =
-			$time .= "<span class='fs_num'>". sprintf('%02d',$diff_end->h) . "</span>" . $text_hour . ($diff_end->h!=1?$plural:'');
+			$time .= "<span class ='fs_num'>". sprintf('%02d',$diff_end->h) . "</span>" . $text_hour . ($diff_end->h!=1?$plural:'');
 			$time .= "<span class='fs_num'>". sprintf('%02d',$diff_end->i) . "</span>" . $text_min . ($diff_end->i!=1?$plural:'');
 			$time .= "<span class='fs_num'>". sprintf('%02d',$diff_end->s) . "</span>" . $text_sec . ($diff_end->s!=1?$plural:'');
 		}
-		else{
-			if($diff_end->h > 0){
-				$time .= "<span class='fs_num'>$diff_end->h</span>" . $text_hour . ($diff_end->h!=1?$plural:'');
+		else {
+			if ($diff_end->h > 0) {
+				$time .= "<span class ='fs_num'>$diff_end->h</span>" . $text_hour . ($diff_end->h!=1?$plural:'');
 				$time .= "<span class='fs_num'>$diff_end->i</span>" . $text_min . ($diff_end->i!=1?$plural:'');
 			}
-			else{
+			else {
 				$time .= "<span class='fs_num'>$diff_end->i</span>" . $text_min . ($diff_end->i!=1?$plural:'');
 				$time .= "<span class='fs_num'>$diff_end->s</span>" . $text_sec . ($diff_end->s!=1?$plural:'');
 				$class='ending_soon';

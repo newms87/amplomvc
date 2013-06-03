@@ -1,9 +1,9 @@
 <?= $header; ?>
-<?= $this->builder->display_errors($errors);?>
+<?= $this->builder->display_errors($errors); ?>
 
 <?= $column_left; ?><?= $column_right; ?>
 <div id="content">
-	<?= $this->builder->display_breadcrumbs();?>
+	<?= $this->builder->display_breadcrumbs(); ?>
 	<h1><?= $heading_title; ?></h1>
 	<?= $content_top; ?>
 	<?= $text_message; ?>

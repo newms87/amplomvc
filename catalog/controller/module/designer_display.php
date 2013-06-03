@@ -1,6 +1,8 @@
 <?php
-class ControllerModuleDesignerDisplay extends Controller {
-	protected function index($setting) {
+class Catalog_Controller_Module_DesignerDisplay extends Controller 
+{
+	protected function index($setting)
+	{
 		$this->template->load('module/designer_display');
 
 		$this->language->load('module/designer_display');
@@ -16,7 +18,7 @@ class ControllerModuleDesignerDisplay extends Controller {
 		$designers = array_slice($designers, 0, (int)$setting['limit']);
 		
 		foreach ($designers as $designer_id) {
-			$designer_info = $this->model_catalog_manufacturer->getManufacturer($designer_id);
+			$designer_info = $this->Model_Catalog_Manufacturer->getManufacturer($designer_id);
 			if ($designer_info) {
 				if ($designer_info['image']) {
 					$image = $this->image->get($designer_info['image']);
@@ -24,22 +26,22 @@ class ControllerModuleDesignerDisplay extends Controller {
 					$image = false;
 				}
 				
-				$featured_product = $this->model_catalog_product->getProduct($designer_info['featured_product_id']);
+				$featured_product = $this->Model_Catalog_Product->getProduct($designer_info['featured_product_id']);
 				
 				//product not found or not active
 				if(empty($featured_product))continue;
 				
-				$p_images = $this->model_catalog_product->getProductImages($featured_product['product_id']);
+				$p_images = $this->Model_Catalog_Product->getProductImages($featured_product['product_id']);
 				$product_images = array();
 				if(isset($p_images))
-					foreach($p_images as $pi){
+					foreach ($p_images as $pi) {
 						$product_images[] = $this->image->resize($pi['image'], $setting['image_width'], $setting['image_height']);
 					}
 				
-				if($featured_product['special'] && $featured_product['special'] > 0){
+				if ($featured_product['special'] && $featured_product['special'] > 0) {
 					$featured_product['sale_price'] = '$' . number_format($featured_product['special'],2);
 				}
-				else{
+				else {
 					$featured_product['sale_price'] = null;
 				}
 				$featured_product['price'] = '$' . number_format($featured_product['price'],2);

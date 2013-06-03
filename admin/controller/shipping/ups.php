@@ -1,8 +1,10 @@
 <?php
-class ControllerShippingUPS extends Controller {
+class Admin_Controller_Shipping_Ups extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('shipping/ups');
 
 		$this->load->language('shipping/ups');
@@ -10,7 +12,7 @@ class ControllerShippingUPS extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('ups', $_POST);
+			$this->Model_Setting_Setting->editSetting('ups', $_POST);
 					
 			$this->message->add('success', $this->_('text_success'));
 						
@@ -607,7 +609,7 @@ class ControllerShippingUPS extends Controller {
 			$this->data['ups_weight_class_id'] = $this->config->get('ups_weight_class_id');
 		}
 		
-		$this->data['weight_classes'] = $this->model_localisation_weight_class->getWeightClasses();
+		$this->data['weight_classes'] = $this->Model_Localisation_WeightClass->getWeightClasses();
 		
 		if (isset($_POST['ups_length_code'])) {
 			$this->data['ups_length_code'] = $_POST['ups_length_code'];
@@ -621,7 +623,7 @@ class ControllerShippingUPS extends Controller {
 			$this->data['ups_length_class'] = $this->config->get('ups_length_class');
 		}
 				
-		$this->data['length_classes'] = $this->model_localisation_length_class->getLengthClasses();
+		$this->data['length_classes'] = $this->Model_Localisation_LengthClass->getLengthClasses();
 						
 		if (isset($_POST['ups_length'])) {
 			$this->data['ups_length'] = $_POST['ups_length'];
@@ -647,7 +649,7 @@ class ControllerShippingUPS extends Controller {
 			$this->data['ups_tax_class_id'] = $this->config->get('ups_tax_class_id');
 		}
 		
-		$this->data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
+		$this->data['tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
 		
 		if (isset($_POST['ups_geo_zone_id'])) {
 			$this->data['ups_geo_zone_id'] = $_POST['ups_geo_zone_id'];
@@ -655,7 +657,7 @@ class ControllerShippingUPS extends Controller {
 			$this->data['ups_geo_zone_id'] = $this->config->get('ups_geo_zone_id');
 		}
 		
-		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$this->data['geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 		
 		if (isset($_POST['ups_status'])) {
 			$this->data['ups_status'] = $_POST['ups_status'];
@@ -683,7 +685,8 @@ class ControllerShippingUPS extends Controller {
  		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'shipping/ups')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

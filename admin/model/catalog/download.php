@@ -1,6 +1,8 @@
 <?php
-class ModelCatalogDownload extends Model {
-	public function addDownload($data) {
+class Admin_Model_Catalog_Download extends Model 
+{
+	public function addDownload($data)
+	{
 			$this->query("INSERT INTO " . DB_PREFIX . "download SET remaining = '" . (int)$data['remaining'] . "', date_added = NOW()");
 
 			$download_id = $this->db->getLastId();
@@ -14,7 +16,8 @@ class ModelCatalogDownload extends Model {
 			}
 	}
 	
-	public function editDownload($download_id, $data) {
+	public function editDownload($download_id, $data)
+	{
 		$query = $this->query("SELECT filename from " . DB_PREFIX . "download WHERE download_id = '" . (int)$download_id . "'");
 		
 		$old_filename = $query->row['filename'];
@@ -39,12 +42,14 @@ class ModelCatalogDownload extends Model {
 			}
 	}
 	
-	public function deleteDownload($download_id) {
+	public function deleteDownload($download_id)
+	{
 			$this->query("DELETE FROM " . DB_PREFIX . "download WHERE download_id = '" . (int)$download_id . "'");
 		$this->query("DELETE FROM " . DB_PREFIX . "download_description WHERE download_id = '" . (int)$download_id . "'");
 	}
 
-	public function getDownload($download_id) {
+	public function getDownload($download_id)
+	{
 		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "download WHERE download_id = '" . (int)$download_id . "'");
 		
 		return $query->row;
@@ -87,7 +92,8 @@ class ModelCatalogDownload extends Model {
 		return $query->rows;
 	}
 	
-	public function getDownloadDescriptions($download_id) {
+	public function getDownloadDescriptions($download_id)
+	{
 		$download_description_data = array();
 		
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "download_description WHERE download_id = '" . (int)$download_id . "'");
@@ -99,7 +105,8 @@ class ModelCatalogDownload extends Model {
 		return $download_description_data;
 	}
 	
-	public function getTotalDownloads() {
+	public function getTotalDownloads()
+	{
 			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "download");
 		
 		return $query->row['total'];

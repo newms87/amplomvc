@@ -1,7 +1,9 @@
 <?php
-class ControllerShippingAmount extends Controller {
+class Admin_Controller_Shipping_Amount extends Controller 
+{
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('shipping/amount');
 
 		$this->load->language('shipping/amount');
@@ -9,7 +11,7 @@ class ControllerShippingAmount extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('amount', $_POST);
+			$this->Model_Setting_Setting->editSetting('amount', $_POST);
 					
 			$this->message->add('success', $this->_('text_success'));
 						
@@ -27,7 +29,8 @@ class ControllerShippingAmount extends Controller {
 		$config_values = array('amount_priceset','amount_zonerule',
 									'amount_tax_class_id','amount_geo_zone_id','amount_status','amount_sort_order'
 									);
-		foreach($config_values as $cv){
+		foreach($config_values as $cv)
+{
 			$this->data[$cv] = isset($_POST[$cv])?$_POST[$cv]:$this->config->get($cv);
 		}
 		
@@ -37,13 +40,13 @@ class ControllerShippingAmount extends Controller {
 		if(!is_array($this->data['amount_zonerule']))
 			$this->data['amount_zonerule'] = array();
 		
-		$this->data['tax_classes'] = array_merge(array(0=>'--- None ---'),$this->model_localisation_tax_class->getTaxClasses());
+		$this->data['tax_classes'] = array_merge(array(0=>'--- None ---'),$this->Model_Localisation_TaxClass->getTaxClasses());
 		
-		$this->data['geo_zones'] = array_merge(array(0=>'--- None ---'),$this->model_localisation_geo_zone->getGeoZones());
+		$this->data['geo_zones'] = array_merge(array(0=>'--- None ---'),$this->Model_Localisation_GeoZone->getGeoZones());
 		
 		//set default to USA
 		$this->data['default_country'] = 223;
-		$this->data['countries'] = $this->model_localisation_country->getCountries();
+		$this->data['countries'] = $this->Model_Localisation_Country->getCountries();
 		
 		$this->children = array(
 			'common/header',
@@ -53,7 +56,8 @@ class ControllerShippingAmount extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'shipping/amount')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

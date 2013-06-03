@@ -1,7 +1,7 @@
 <?php
 $merge_file = DIR_MERGED_FILES . 'registry.txt';
-if(!file_exists($merge_file)){
-	if(!is_dir(DIR_MERGED_FILES)){
+if (!file_exists($merge_file)) {
+	if (!is_dir(DIR_MERGED_FILES)) {
 		mkdir(DIR_MERGED_FILES, DEFAULT_PLUGIN_DIR_MODE, true);
 	}
 	touch($merge_file);
@@ -12,10 +12,10 @@ $merge_registry = array();
 
 $entries = file_get_contents($merge_file);
 
-if($entries){
+if ($entries) {
 	$entries = explode("\n", $entries);
 
-	foreach($entries as $entry){
+	foreach ($entries as $entry) {
 		if(!($entry = trim($entry)))continue;
 		
 		list($filename, $name, $mod_path) = explode(',',$entry);
@@ -23,13 +23,35 @@ if($entries){
 	}
 }
 
-function _require_once($file){
+function _require_once($file)
+{
+	global $registry;
+	static $plugin_registry = false;
+	static $plugin = null;
+	
+	//Validate Plugin files
+	if (!$plugin_registry) {
+		if ($registry && $registry->has('plugin')) {
+			$plugin = $registry->get("plugin");
+			$plugin_registry = $plugin->getPluginRegistry();
+		}
+	} else {
+		if (isset($plugin_registry[$file])) {
+			if (!$plugin->syncPluginFileWithLive($plugin_registry[$file])) {
+				$plugin->requestDevelopmentMode();
+			}
+		}
+	}
+	
 	global $merge_registry;
-	if(isset($merge_registry[$file])){
+	if (isset($merge_registry[$file])) {
 		$count = 0;
+		
 		$file = str_replace(SITE_DIR, DIR_MERGED_FILES, $file, $count);
-		if($count == 0)
+		
+		if($count == 0){
 			$file = DIR_MERGED_FILES . $file;
+		}
 	}
 	
 	require_once($file);

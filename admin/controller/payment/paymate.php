@@ -1,8 +1,10 @@
 <?php
-class ControllerPaymentPayMate extends Controller {
+class Admin_Controller_Payment_Paymate extends Controller 
+{
 	
 
-	public function index() {
+	public function index()
+	{
 		$this->template->load('payment/paymate');
 
 		$this->load->language('payment/paymate');
@@ -10,7 +12,7 @@ class ControllerPaymentPayMate extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('paymate', $_POST);
+			$this->Model_Setting_Setting->editSetting('paymate', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -75,7 +77,7 @@ class ControllerPaymentPayMate extends Controller {
 			$this->data['paymate_order_status_id'] = $this->config->get('paymate_order_status_id');
 		}
 		
-		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
 
 		if (isset($_POST['paymate_geo_zone_id'])) {
 			$this->data['paymate_geo_zone_id'] = $_POST['paymate_geo_zone_id'];
@@ -83,7 +85,7 @@ class ControllerPaymentPayMate extends Controller {
 			$this->data['paymate_geo_zone_id'] = $this->config->get('paymate_geo_zone_id');
 		}
 		
-		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$this->data['geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 		
 		if (isset($_POST['paymate_status'])) {
 			$this->data['paymate_status'] = $_POST['paymate_status'];
@@ -105,7 +107,8 @@ class ControllerPaymentPayMate extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'payment/paymate')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

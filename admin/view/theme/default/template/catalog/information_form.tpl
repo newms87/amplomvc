@@ -1,6 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
+	<?= $this->builder->display_breadcrumbs(); ?>
 	<? if ($error_warning) { ?>
 	<div class="message_box warning"><?= $error_warning; ?></div>
 	<? } ?>
@@ -44,7 +44,7 @@
 						<tr>
 							<td><?= $entry_store; ?></td>
 							<? $this->builder->set_config('store_id', 'name');?>
-							<td><?= $this->builder->build('multiselect', $data_stores, "information_store", $information_store);?></td>
+							<td><?= $this->builder->build('multiselect', $data_stores, "information_store", $information_store); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_keyword; ?></td>
@@ -115,7 +115,7 @@
 	</div>
 </div>
 
-<?= $this->builder->js('ckeditor');?>
+<?= $this->builder->js('ckeditor'); ?>
  
 <script type="text/javascript"><!--
 $('#tabs a').tabs();

@@ -1,6 +1,8 @@
 <?php
-class ControllerModuleWelcome extends Controller {
-	protected function index($setting) {
+class Catalog_Controller_Module_Welcome extends Controller 
+{
+	protected function index($setting)
+	{
 		$this->template->load('module/welcome');
 
 		$this->language->load('module/welcome');

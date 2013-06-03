@@ -7,13 +7,10 @@ define('DATETIME_ZERO','0000-00-00 00:00:00');
 
 $__start = microtime(true);
 
-if(isset($_GET['phpinfo'])){
+if (isset($_GET['phpinfo'])) {
 	phpinfo();
 	exit;
 }
-
-//DN CUSTOM FUNCTIONS
-include('functions.php');
 
 // Configuration
 require_once('oc_config.php');
@@ -21,11 +18,13 @@ require_once('oc_config.php');
 //System / URL Paths
 require_once('path_config.php');
 
-/*  PRETTY LANGUAGE TESTING
-echo 'testing pretty language';
+require_once(DIR_SYSTEM . 'functions.php');
+
+/*  PRETTY LANGUAGE TESTING 
+echo 'testing pretty language<br /><br />';
 require_once(DIR_SYSTEM . 'library/pretty_language.php');
 new PrettyLanguage();
-echo 'pretty_language_done';
+echo '<br /><br />pretty_language_done';
 exit;
 //*/
 
@@ -63,11 +62,11 @@ $cache = new Cache($registry);
 $registry->set('cache', $cache);
 
 //Resolve Store ID
-if(!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off'){
+if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
 	$scheme = 'https://';
 	$field = 'ssl';
 }
-else{
+else {
 	$scheme = 'http://';
 	$field = 'url';
 }
@@ -80,10 +79,12 @@ $store_id = $store ? (int)$store['store_id'] : null;
 
 // Config
 $config = new Config($registry, $store_id);
+$registry->set('config', $config);
 
 //Setup Cache ignore list
-foreach(explode(',',$config->get('config_cache_ignore')) as $ci)
+foreach (explode(',',$config->get('config_cache_ignore')) as $ci) {
 	$cache->ignore($ci);
+}
 
 //System Logs
 $error_log = new Log($config->get('config_error_filename'), $config->get('config_name'));
@@ -132,15 +133,10 @@ _is_writable(DIR_LOGS, $config->get('config_default_dir_mode'));
 
 
 // Request
-$request = new Request();
-$registry->set('request', $request);
+$registry->set('request', new Request());
 
 // Session
-$session = new Session($registry);
-$registry->set('session', $session);
-
-//Messages
-$registry->set('message', new Message($session));
+$registry->set('session', new Session($registry));
 
 // Url
 $url = new Url($registry, $config->get('config_url'), $config->get('config_use_ssl') ? $config->get('config_ssl') : '');
@@ -148,7 +144,7 @@ if($config->get('config_seo_url'))
 	$url->getSeoUrl();
 $registry->set('url', $url);
 
-if(!isset($_GET['route'])){
+if (!isset($_GET['route'])) {
 	$_GET['route'] = 'common/home';
 }
 
@@ -157,11 +153,11 @@ $registry->set('image', new Image($registry));
 
 //Database Structure Validation
 $db_last_update = $cache->get('db_last_update');
-if(!$db_last_update){
+if (!$db_last_update) {
 	$db_last_update = 0;
 }
 $query = $db->query("SHOW GLOBAL STATUS WHERE Variable_name = 'com_alter_table' AND Value > '$db_last_update'");
-if($query->num_rows){
+if ($query->num_rows) {
 	$cache->delete('model');
 	$cache->set('db_last_update', $query->row['Value']);
 }
@@ -176,8 +172,7 @@ $registry->set('response', $response);
 $registry->set('language', new Language($registry));
 
 //Plugins
-$plugin_handler = new pluginHandler($registry, $merge_registry);
-$registry->set('plugin_handler', $plugin_handler);
+$registry->set('plugin', new Plugin($registry));
 
 // Document
 $document = new Document($registry);
@@ -191,62 +186,34 @@ if (isset($_GET['tracking']) && !isset($_COOKIE['tracking'])) {
 //Theme
 $registry->set('theme', new Theme($registry));
 
-// Front Controller
-$controller = new Front($registry);
-
-// Router
-$route = '';
-$action = '';
-
-if(isset($_GET['route'])){
-	$part = explode('/', $_GET['route']);
-	
-	if (isset($part[0])) {
-		$route .= $part[0];
-	}
-	
-	if (isset($part[1])) {
-		$route .= '/' . $part[1];
-	}
-}
-
-if($config->get('config_maintenance')){
-	if((!$registry->get('user')->isLogged() || !$registry->get('user')->isAdmin()) && strpos($route, 'payment') !== 0){
-		//$action = new Action('common/maintenance');
-		$_GET['route'] = 'common/maintenance';
-	}
-}
-elseif(!$route){
-	$_GET['route'] = 'common/home';
-}
-
-$action = new Action($_GET['route']);
-
 //Resolve Layout ID
 $layout_query = $db->query("SELECT layout_id FROM " . DB_PREFIX . "layout_route WHERE '" . $db->escape($_GET['route']) . "' LIKE CONCAT(route, '%') AND store_id = '" . $config->get('config_store_id') . "' ORDER BY route ASC LIMIT 1");
 
-if($layout_query->num_rows){
+if ($layout_query->num_rows) {
 	$config->set('config_layout_id', $layout_query->row['layout_id']);
-}else{
+} else {
 	$config->set('config_layout_id', 0);
 }
 
+// Front Controller
+$controller = new Front($registry);
+$controller->routeFront();
 
 // Dispatch
-$controller->dispatch($action, new Action('error/not_found'));
+$controller->dispatch();
 
 // Output
 $response->output();
 
 
-if($config->get('config_performance_log')){
+if ($config->get('config_performance_log')) {
 	$stats = array(
 		'peak_memory' => $registry->get('tool')->bytes2str(memory_get_peak_usage(true)),
 		'count_included_files' => count(get_included_files()),
 		'execution_time' => microtime(true) - $__start,
 	);
 	
-	foreach($stats as $key => $s){
+	foreach ($stats as $key => $s) {
 		echo "$key = $s<br>";
 	}
 }

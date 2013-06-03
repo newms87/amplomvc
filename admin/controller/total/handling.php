@@ -1,8 +1,10 @@
 <?php
-class ControllerTotalHandling extends Controller {
+class Admin_Controller_Total_Handling extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('total/handling');
 
 		$this->load->language('total/handling');
@@ -10,7 +12,7 @@ class ControllerTotalHandling extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && ($this->validate())) {
-			$this->model_setting_setting->editSetting('handling', $_POST);
+			$this->Model_Setting_Setting->editSetting('handling', $_POST);
 		
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -61,7 +63,7 @@ class ControllerTotalHandling extends Controller {
 			$this->data['handling_sort_order'] = $this->config->get('handling_sort_order');
 		}
 		
-		$this->data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
+		$this->data['tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
 
 		$this->children = array(
 			'common/header',
@@ -71,7 +73,8 @@ class ControllerTotalHandling extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'total/handling')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

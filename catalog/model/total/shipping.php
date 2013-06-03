@@ -1,6 +1,8 @@
 <?php
-class ModelTotalShipping extends Model {
-	public function getTotal(&$total_data, &$total, &$taxes) {
+class Catalog_Model_Total_Shipping extends Model 
+{
+	public function getTotal(&$total_data, &$total, &$taxes)
+	{
 		if ($this->cart->hasShipping() && $this->cart->hasShippingMethod()) {
 			$shipping_method = $this->cart->getShippingMethod();
 			

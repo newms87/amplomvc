@@ -1,8 +1,10 @@
 <?php
-class ControllerTotalLowOrderFee extends Controller {
+class Admin_Controller_Total_LowOrderFee extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('total/low_order_fee');
 
 		$this->load->language('total/low_order_fee');
@@ -10,7 +12,7 @@ class ControllerTotalLowOrderFee extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && ($this->validate())) {
-			$this->model_setting_setting->editSetting('low_order_fee', $_POST);
+			$this->Model_Setting_Setting->editSetting('low_order_fee', $_POST);
 		
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -61,7 +63,7 @@ class ControllerTotalLowOrderFee extends Controller {
 			$this->data['low_order_fee_sort_order'] = $this->config->get('low_order_fee_sort_order');
 		}
 		
-		$this->data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
+		$this->data['tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
 
 		$this->children = array(
 			'common/header',
@@ -71,7 +73,8 @@ class ControllerTotalLowOrderFee extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'total/low_order_fee')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

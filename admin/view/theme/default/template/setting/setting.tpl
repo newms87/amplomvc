@@ -1,7 +1,7 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
-	<?= $this->builder->display_errors($errors);?>
+	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -73,7 +73,7 @@
 							<td><?= $entry_theme; ?></td>
 							<td>
 									<? $this->builder->set_config('name', 'name'); ?>
-									<?= $this->builder->build('select', $themes, 'config_theme', $config_theme);?>
+									<?= $this->builder->build('select', $themes, 'config_theme', $config_theme); ?>
 							</td>
 						</tr>
 						<tr>
@@ -90,26 +90,26 @@
 						<tr>
 							<td><?= $entry_layout; ?></td>
 							<? $this->builder->set_config('layout_id', 'name');?>
-							<td><?= $this->builder->build('select', $data_layouts, 'config_default_layout_id', $config_default_layout_id);?></td>
+							<td><?= $this->builder->build('select', $data_layouts, 'config_default_layout_id', $config_default_layout_id); ?></td>
 						</tr>
 					</table>
 				</div>
 				<div id="tab-local">
 					<table class="form">
 						<tr>
-							<td><?= $entry_address_format;?></td>
-							<td><textarea name="config_address_format" cols="40" rows="5"><?= $config_address_format;?></textarea></td>
+							<td><?= $entry_address_format; ?></td>
+							<td><textarea name="config_address_format" cols="40" rows="5"><?= $config_address_format; ?></textarea></td>
 						</tr>
 						<tr>
 							<td><?= $entry_country; ?></td>
 							<td>
-								<?= $this->builder->set_config('country_id', 'name');?>
-								<?= $this->builder->build('select', $countries, "config_country_id", $config_country_id, array('class'=>"country_select"));?>
+								<?= $this->builder->set_config('country_id', 'name'); ?>
+								<?= $this->builder->build('select', $countries, "config_country_id", $config_country_id, array('class'=>"country_select")); ?>
 							</td>
 						</tr>
 						<tr>
 							<td><?= $entry_zone; ?></td>
-							<td><select name="config_zone_id" class="zone_select" zone_id="<?= $config_zone_id;?>"></select></td>
+							<td><select name="config_zone_id" class="zone_select" zone_id="<?= $config_zone_id; ?>"></select></td>
 						</tr>
 						<tr>
 							<td><?= $entry_language; ?></td>
@@ -136,7 +136,7 @@
 								</select></td>
 						</tr>
 						<tr>
-							<td><?= $entry_use_macro_languages;?></td>
+							<td><?= $entry_use_macro_languages; ?></td>
 							<td><?= $this->builder->build('select', $data_yes_no, 'config_use_macro_languages', $config_use_macro_languages); ?></td>
 						</tr>
 						<tr>
@@ -195,7 +195,7 @@
 					<table class="form">
 						<tr>
 							<td><span class="required"></span> <?= $entry_breadcrumb_display; ?></td>
-							<td><?= $this->builder->build('select', $yes_no, "config_breadcrumb_display", $config_breadcrumb_display);?></td>
+							<td><?= $this->builder->build('select', $yes_no, "config_breadcrumb_display", $config_breadcrumb_display); ?></td>
 						</tr>
 						<tr>
 							<td><span class="required"></span> <?= $entry_breadcrumb_separator; ?></td>
@@ -218,12 +218,12 @@
 							<td><?= $this->builder->build('select', $data_statuses, 'config_performance_log', $config_performance_log); ?></td>
 						</tr>
 						<tr>
-							<td><?=$entry_cache_ignore;?></td>
-							<td><textarea name='config_cache_ignore'><?=$config_cache_ignore;?></textarea></td>
+							<td><?= $entry_cache_ignore; ?></td>
+							<td><textarea name='config_cache_ignore'><?= $config_cache_ignore; ?></textarea></td>
 						</tr>
 						<tr>
-							<td><?=$entry_allow_close_message_box;?></td>
-							<td><?= $this->builder->build('select', $yes_no, 'config_allow_close_message_box', $config_allow_close_message_box);?></td>
+							<td><?= $entry_allow_close_message_box; ?></td>
+							<td><?= $this->builder->build('select', $yes_no, 'config_allow_close_message_box', $config_allow_close_message_box); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_tax; ?></td>
@@ -240,10 +240,10 @@
 								<? } ?></td>
 						</tr>
 						<tr>
-							<td><?=$entry_tax_default_id;?></td>
+							<td><?= $entry_tax_default_id; ?></td>
 							<td>
 									<? $this->builder->set_config('tax_class_id','title');?>
-									<?=$this->builder->build('select',$tax_classes,'config_tax_default_id',$config_tax_default_id);?>
+									<?= $this->builder->build('select',$tax_classes,'config_tax_default_id',$config_tax_default_id); ?>
 							</td>
 						</tr>
 						<tr>
@@ -386,7 +386,7 @@
 						<tr>
 							<td><?= $entry_stock_display; ?></td>
 							<td>
-								<?= $this->builder->build('radio', $data_stock_display_types, "config_stock_display", $config_stock_display, array('class'=>'display_stock_radio'));?>
+								<?= $this->builder->build('radio', $data_stock_display_types, "config_stock_display", $config_stock_display, array('class'=>'display_stock_radio')); ?>
 							</td>
 						</tr>
 						<tr>
@@ -540,22 +540,22 @@
 						<tr>
 							<td><?= $entry_logo; ?></td>
 							<td>
-								<?= $this->builder->set_builder_template('click_image');?>
-								<?= $this->builder->image_input("config_logo", $config_logo);?>
+								<?= $this->builder->set_builder_template('click_image'); ?>
+								<?= $this->builder->image_input("config_logo", $config_logo); ?>
 							</td>
 						</tr>
 						<tr>
 							<td><?= $entry_admin_logo; ?></td>
 							<td>
-								<?= $this->builder->set_builder_template('click_image');?>
-								<?= $this->builder->image_input("config_admin_logo", $config_admin_logo);?>
+								<?= $this->builder->set_builder_template('click_image'); ?>
+								<?= $this->builder->image_input("config_admin_logo", $config_admin_logo); ?>
 							</td>
 						</tr>
 						<tr>
 						<td><?= $entry_icon; ?></td>
 							<td>
-								<?= $this->builder->set_builder_template('click_image');?>
-								<?= $this->builder->image_input("config_icon", $config_icon);?>
+								<?= $this->builder->set_builder_template('click_image'); ?>
+								<?= $this->builder->image_input("config_icon", $config_icon); ?>
 							</td>
 						</tr>
 						<tr>
@@ -758,7 +758,7 @@
 								<td>
 										<table class='mode_explanation'>
 												<tbody>
-													<tr><?=$text_mode_explanation;?></tr>
+													<tr><?= $text_mode_explanation; ?></tr>
 													<tr><th>#</th><th>Permission</th><th>rwx</th></tr>
 													<tr><td>7</td><td>full</td><td>111</td></tr>
 													<tr><td>6</td><td>read and write</td><td>110</td></tr>
@@ -773,30 +773,30 @@
 									</td>
 							</tr>
 							<tr>
-								<td><?=$entry_default_modes;?></td>
+								<td><?= $entry_default_modes; ?></td>
 								<td>
-										<label for='default_file_mode'><?=$entry_default_file_mode;?></label>
-										<input id='default_file_mode' type='text' size='3' maxlength='3' name='config_default_file_mode' value="<?= $config_default_file_mode;?>" />
-										<label for='default_dir_mode'><?=$entry_default_dir_mode;?></label>
-										<input id='default_dir_mode' type='text' size='3' maxlength='3' name='config_default_dir_mode' value="<?= $config_default_dir_mode;?>" />
+										<label for='default_file_mode'><?= $entry_default_file_mode; ?></label>
+										<input id='default_file_mode' type='text' size='3' maxlength='3' name='config_default_file_mode' value="<?= $config_default_file_mode; ?>" />
+										<label for='default_dir_mode'><?= $entry_default_dir_mode; ?></label>
+										<input id='default_dir_mode' type='text' size='3' maxlength='3' name='config_default_dir_mode' value="<?= $config_default_dir_mode; ?>" />
 								</td>
 							</tr>
 							<tr>
-								<td><?=$entry_image_modes;?></td>
+								<td><?= $entry_image_modes; ?></td>
 								<td>
-										<label for='image_file_mode'><?=$entry_image_file_mode;?></label>
-										<input id='image_file_mode' type='text' size='3' maxlength='3' name='config_image_file_mode' value="<?= $config_image_file_mode;?>" />
-										<label for='_dir_mode'><?=$entry_image_dir_mode;?></label>
-										<input id='image_dir_mode' type='text' size='3' maxlength='3' name='config_image_dir_mode' value="<?= $config_image_dir_mode;?>" />
+										<label for='image_file_mode'><?= $entry_image_file_mode; ?></label>
+										<input id='image_file_mode' type='text' size='3' maxlength='3' name='config_image_file_mode' value="<?= $config_image_file_mode; ?>" />
+										<label for='_dir_mode'><?= $entry_image_dir_mode; ?></label>
+										<input id='image_dir_mode' type='text' size='3' maxlength='3' name='config_image_dir_mode' value="<?= $config_image_dir_mode; ?>" />
 								</td>
 							</tr>
 							<tr>
-								<td><?=$entry_plugin_modes;?></td>
+								<td><?= $entry_plugin_modes; ?></td>
 								<td>
-										<label for='plugin_file_mode'><?=$entry_plugin_file_mode;?></label>
-										<input id='plugin_file_mode' type='text' size='3' maxlength='3' name='config_plugin_file_mode' value="<?= $config_plugin_file_mode;?>" />
-										<label for='_dir_mode'><?=$entry_plugin_dir_mode;?></label>
-										<input id='plugin_dir_mode' type='text' size='3' maxlength='3' name='config_plugin_dir_mode' value="<?= $config_plugin_dir_mode;?>" />
+										<label for='plugin_file_mode'><?= $entry_plugin_file_mode; ?></label>
+										<input id='plugin_file_mode' type='text' size='3' maxlength='3' name='config_plugin_file_mode' value="<?= $config_plugin_file_mode; ?>" />
+										<label for='_dir_mode'><?= $entry_plugin_dir_mode; ?></label>
+										<input id='plugin_dir_mode' type='text' size='3' maxlength='3' name='config_plugin_dir_mode' value="<?= $config_plugin_dir_mode; ?>" />
 								</td>
 							</tr>
 					</table>
@@ -804,12 +804,12 @@
 				<div id="tab-server">
 					<table class="form">
 						<tr>
-							<td><?= $entry_debug;?></td>
-							<td><?=$this->builder->build('select',$yes_no,'config_debug',(int)$config_debug);?></td>
+							<td><?= $entry_debug; ?></td>
+							<td><?= $this->builder->build('select',$yes_no,'config_debug',(int)$config_debug); ?></td>
 						</tr>
 						<tr>
-							<td><?= $entry_debug_send_emails;?></td>
-							<td><?=$this->builder->build('select',$yes_no,'config_debug_send_emails',(int)$config_debug_send_emails);?></td>
+							<td><?= $entry_debug_send_emails; ?></td>
+							<td><?= $this->builder->build('select',$yes_no,'config_debug_send_emails',(int)$config_debug_send_emails); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_use_ssl; ?></td>
@@ -922,14 +922,14 @@ $('[name=config_theme]').change(function(){
 	$('#theme').load('<?= $load_theme_img; ?>' + '&theme=' + $(this).val());
 }).change();
 //--></script>
-<?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select');?>
+<?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select'); ?>
 
-<?= $this->builder->js('ckeditor');?>
+<?= $this->builder->js('ckeditor'); ?>
 
 <script type="text/javascript">//<!--
 $('#tabs a').tabs();
 //--></script>
 
-<?=$this->builder->js('errors',$errors);?>
+<?= $this->builder->js('errors',$errors); ?>
 
 <?= $footer; ?>

@@ -1,6 +1,8 @@
 <?php
-class ControllerAffiliateAccount extends Controller {
-	public function index() {
+class Catalog_Controller_Affiliate_Account extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('affiliate/account');
 
 		if (!$this->affiliate->isLogged()) {

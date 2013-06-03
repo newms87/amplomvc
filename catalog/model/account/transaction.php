@@ -1,5 +1,6 @@
 <?php
-class ModelAccountTransaction extends Model {
+class Catalog_Model_Account_Transaction extends Model 
+{
 	public function getTransactions($data = array()) {
 		$sql = "SELECT * FROM `" . DB_PREFIX . "customer_transaction` WHERE customer_id = '" . (int)$this->customer->getId() . "'";
 			
@@ -38,13 +39,15 @@ class ModelAccountTransaction extends Model {
 		return $query->rows;
 	}
 		
-	public function getTotalTransactions() {
+	public function getTotalTransactions()
+	{
 			$query = $this->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "customer_transaction` WHERE customer_id = '" . (int)$this->customer->getId() . "'");
 			
 		return $query->row['total'];
 	}
 			
-	public function getTotalAmount() {
+	public function getTotalAmount()
+	{
 		$query = $this->query("SELECT SUM(amount) AS total FROM `" . DB_PREFIX . "customer_transaction` WHERE customer_id = '" . (int)$this->customer->getId() . "' GROUP BY customer_id");
 		
 		if ($query->num_rows) {

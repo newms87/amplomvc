@@ -25,7 +25,7 @@
 				<ul>
 					<? foreach ($menu_items as $key=>$item) { ?>
 					<li>
-							<a filter='sort_by' value='<?=$key;?>' class='featured_menu_link <?=$key==$selected?'active':'';?>'><?=$item;?></a>
+							<a filter='sort_by' value='<?= $key; ?>' class='featured_menu_link <?= $key==$selected?'active':''; ?>'><?= $item; ?></a>
 					</li>
 				<? }?>
 				</ul>

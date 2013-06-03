@@ -1,8 +1,10 @@
 <?php
-class ControllerLocalisationLanguage extends Controller {
+class Admin_Controller_Localisation_Language extends Controller 
+{
 	
   
-	public function index() {
+	public function index()
+	{
 		$this->load->language('localisation/language');
 		
 		$this->document->setTitle($this->_('heading_title'));
@@ -10,48 +12,51 @@ class ControllerLocalisationLanguage extends Controller {
 		$this->getList();
 	}
 
-	public function insert() {
+	public function insert()
+	{
 		$this->load->language('localisation/language');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_language->addLanguage($_POST);
+			$this->Model_Localisation_Language->addLanguage($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
 			$this->getList();
 		}
-		else{
+		else {
 			$this->getForm();
 		}
 	}
 
-	public function update() {
+	public function update()
+	{
 		$this->load->language('localisation/language');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_language->editLanguage($_GET['language_id'], $_POST);
+			$this->Model_Localisation_Language->editLanguage($_GET['language_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
 			$this->getList();
 		}
-		else{
+		else {
 			$this->getForm();
 		}
 	}
 
-	public function delete() {
+	public function delete()
+	{
 		$this->load->language('localisation/language');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $language_id) {
-				$this->model_localisation_language->deleteLanguage($language_id);
+				$this->Model_Localisation_Language->deleteLanguage($language_id);
 			}
 
 			$this->message->add('success', $this->_('text_success'));
@@ -60,7 +65,8 @@ class ControllerLocalisationLanguage extends Controller {
 		$this->getList();
 	}
 
-	private function getList() {
+	private function getList()
+	{
 		$this->template->load('localisation/language_list');
 
 		if (isset($_GET['sort'])) {
@@ -98,9 +104,9 @@ class ControllerLocalisationLanguage extends Controller {
 			'limit' => $this->config->get('config_admin_limit')
 		);
 		
-		$language_total = $this->model_localisation_language->getTotalLanguages();
+		$language_total = $this->Model_Localisation_Language->getTotalLanguages();
 		
-		$results = $this->model_localisation_language->getLanguages($data);
+		$results = $this->Model_Localisation_Language->getLanguages($data);
 
 		foreach ($results as $result) {
 			$action = array();
@@ -161,7 +167,8 @@ class ControllerLocalisationLanguage extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function getForm() {
+	private function getForm()
+	{
 		$this->template->load('localisation/language_form');
 
 		$language_id = isset($_GET['language_id']) ? $_GET['language_id'] : false;
@@ -180,7 +187,7 @@ class ControllerLocalisationLanguage extends Controller {
 		$this->data['cancel'] = $this->url->link('localisation/language', $url);
 
 		if ($language_id && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-			$language_info = $this->model_localisation_language->getLanguage($language_id);
+			$language_info = $this->Model_Localisation_Language->getLanguage($language_id);
 		}
 		
 		$defaults = array(
@@ -201,12 +208,12 @@ class ControllerLocalisationLanguage extends Controller {
 			'status' => 1
 		);
 		
-		foreach($defaults as $d=>$value){
+		foreach ($defaults as $d=>$value) {
 			if (isset($_POST[$d])) {
 				$this->data[$d] = $_POST[$d];
 			} elseif (isset($language_info[$d])) {
 				$this->data[$d] = $language_info[$d];
-			} elseif(!$language_id) {
+			} elseif (!$language_id) {
 				$this->data[$d] = $value;
 			}
 		}
@@ -219,7 +226,8 @@ class ControllerLocalisationLanguage extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validateForm() {
+	private function validateForm()
+	{
 		if (!$this->user->hasPermission('modify', 'localisation/language')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
@@ -251,13 +259,14 @@ class ControllerLocalisationLanguage extends Controller {
 		return $this->error ? false : true;
 	}
 
-	private function validateDelete() {
+	private function validateDelete()
+	{
 		if (!$this->user->hasPermission('modify', 'localisation/language')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
 		foreach ($_POST['selected'] as $language_id) {
-			$language_info = $this->model_localisation_language->getLanguage($language_id);
+			$language_info = $this->Model_Localisation_Language->getLanguage($language_id);
 
 			if ($language_info) {
 				if ($this->config->get('config_language') == $language_info['code']) {
@@ -268,14 +277,14 @@ class ControllerLocalisationLanguage extends Controller {
 					$this->error['warning'] = $this->_('error_admin');
 				}
 			
-				$store_total = $this->model_setting_store->getTotalStoresByLanguage($language_info['code']);
+				$store_total = $this->Model_Setting_Store->getTotalStoresByLanguage($language_info['code']);
 	
 				if ($store_total) {
 					$this->error['warning'] = sprintf($this->_('error_store'), $store_total);
 				}
 			}
 				
-			$order_total = $this->model_sale_order->getTotalOrdersByLanguageId($language_id);
+			$order_total = $this->Model_Sale_Order->getTotalOrdersByLanguageId($language_id);
 
 			if ($order_total) {
 				$this->error['warning'] = sprintf($this->_('error_order'), $order_total);

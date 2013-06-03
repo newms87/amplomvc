@@ -1,8 +1,10 @@
 <?php
-class ControllerModuleWelcome extends Controller {
+class Admin_Controller_Module_Welcome extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/welcome');
 
 		$this->load->language('module/welcome');
@@ -10,7 +12,7 @@ class ControllerModuleWelcome extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('welcome', $_POST);
+			$this->Model_Setting_Setting->editSetting('welcome', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 						
@@ -39,9 +41,9 @@ class ControllerModuleWelcome extends Controller {
 			$this->data['modules'] = $this->config->get('welcome_module');
 		}
 				
-		$this->data['layouts'] = $this->model_design_layout->getLayouts();
+		$this->data['layouts'] = $this->Model_Design_Layout->getLayouts();
 		
-		$this->data['languages'] = $this->model_localisation_language->getLanguages();
+		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
 
 		$this->children = array(
 			'common/header',
@@ -51,7 +53,8 @@ class ControllerModuleWelcome extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/welcome')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

@@ -1,8 +1,10 @@
 <?php
-class ControllerCatalogReview extends Controller {
+class Admin_Controller_Catalog_Review extends Controller 
+{
 	
  
-	public function index() {
+	public function index()
+	{
 		$this->load->language('catalog/review');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -10,13 +12,14 @@ class ControllerCatalogReview extends Controller {
 		$this->getList();
 	}
 
-	public function insert() {
+	public function insert()
+	{
 		$this->load->language('catalog/review');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_catalog_review->addReview($_POST);
+			$this->Model_Catalog_Review->addReview($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -40,13 +43,14 @@ class ControllerCatalogReview extends Controller {
 		$this->getForm();
 	}
 
-	public function update() {
+	public function update()
+	{
 		$this->load->language('catalog/review');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_catalog_review->editReview($_GET['review_id'], $_POST);
+			$this->Model_Catalog_Review->editReview($_GET['review_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -70,14 +74,15 @@ class ControllerCatalogReview extends Controller {
 		$this->getForm();
 	}
 
-	public function delete() {
+	public function delete()
+	{
 		$this->load->language('catalog/review');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $review_id) {
-				$this->model_catalog_review->deleteReview($review_id);
+				$this->Model_Catalog_Review->deleteReview($review_id);
 			}
 
 			$this->message->add('success', $this->_('text_success'));
@@ -102,7 +107,8 @@ class ControllerCatalogReview extends Controller {
 		$this->getList();
 	}
 
-	private function getList() {
+	private function getList()
+	{
 		$this->template->load('catalog/review_list');
 
 		if (isset($_GET['sort'])) {
@@ -152,9 +158,9 @@ class ControllerCatalogReview extends Controller {
 			'limit' => $this->config->get('config_admin_limit')
 		);
 		
-		$review_total = $this->model_catalog_review->getTotalReviews();
+		$review_total = $this->Model_Catalog_Review->getTotalReviews();
 	
-		$results = $this->model_catalog_review->getReviews($data);
+		$results = $this->Model_Catalog_Review->getReviews($data);
  
 		foreach ($results as $result) {
 			$action = array();
@@ -233,7 +239,8 @@ class ControllerCatalogReview extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function getForm() {
+	private function getForm()
+	{
 		$this->template->load('catalog/review_form');
 
  		if (isset($this->error['warning'])) {
@@ -292,7 +299,7 @@ class ControllerCatalogReview extends Controller {
 		$this->data['cancel'] = $this->url->link('catalog/review', $url);
 
 		if (isset($_GET['review_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-			$review_info = $this->model_catalog_review->getReview($_GET['review_id']);
+			$review_info = $this->Model_Catalog_Review->getReview($_GET['review_id']);
 		}
 			
 		if (isset($_POST['product_id'])) {
@@ -351,7 +358,8 @@ class ControllerCatalogReview extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validateForm() {
+	private function validateForm()
+	{
 		if (!$this->user->hasPermission('modify', 'catalog/review')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
@@ -375,7 +383,8 @@ class ControllerCatalogReview extends Controller {
 		return $this->error ? false : true;
 	}
 
-	private function validateDelete() {
+	private function validateDelete()
+	{
 		if (!$this->user->hasPermission('modify', 'catalog/review')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

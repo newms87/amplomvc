@@ -1,5 +1,6 @@
 <?php
-class ModelReportSale extends Model {
+class Admin_Model_Report_Sale extends Model 
+{
 	public function getOrders($data = array()) {
 		$select = "MIN(tmp.date_added) AS date_start,".
 					"MAX(tmp.date_added) AS date_end,".
@@ -57,7 +58,7 @@ class ModelReportSale extends Model {
 		$order ="DESC";
 		
 		$start_limit = '';
-		if(isset($data['limit'])){
+		if (isset($data['limit'])) {
 			$limit = (int)$data['limit'];
 			if ($limit < 1) {
 				$limit = 20;

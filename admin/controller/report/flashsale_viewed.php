@@ -1,6 +1,8 @@
 <?php
-class ControllerReportFlashsaleViewed extends Controller {
-	public function index() {
+class Admin_Controller_Report_FlashsaleViewed extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('report/flashsale_viewed');
 
 		$this->load->language('report/flashsale_viewed');
@@ -23,28 +25,28 @@ class ControllerReportFlashsaleViewed extends Controller {
 			'limit' => $this->config->get('config_admin_limit')
 		);
 		
-		$flashsale_view_list = $this->model_report_flashsale->getFlashsaleViews();
+		$flashsale_view_list = $this->Model_Report_Flashsale->getFlashsaleViews();
 		
 		$flashsale_views = array();
-		foreach($flashsale_view_list as $fv){
-			if(isset($flashsale_views[$fv['flashsale_id']])){
+		foreach ($flashsale_view_list as $fv) {
+			if (isset($flashsale_views[$fv['flashsale_id']])) {
 				$id = &$flashsale_views[$fv['flashsale_id']];
 				$unique = false;
-				if(($fv['user_id'] == 0 || !in_array($fv['user_id'],$id['users'])) && !in_array($fv['session_id'],$id['sessions'])){
+				if (($fv['user_id'] == 0 || !in_array($fv['user_id'],$id['users'])) && !in_array($fv['session_id'],$id['sessions'])) {
 					if($fv['user_id'] != 0)
 						$id['users'][] = $fv['user_id'];
 					$id['sessions'][] = $fv['session_id'];
 					$id['user_total'] += 1;
 					$unique = true;
 				}
-				if(!in_array($fv['ip_address'],$id['ip_addr'])){
+				if (!in_array($fv['ip_address'],$id['ip_addr'])) {
 					$id['ip_addr'][] = $fv['ip_address'];
 					$id['ip_total'] += 1;
 					if($unique)
 						$id['ip_user_total'] += 1;
 				}
 			}
-			else{
+			else {
 				$flashsale_views[$fv['flashsale_id']] = array('user_total'=>1,'users'=>array($fv['user_id']),'sessions'=>array($fv['session_id']),
 																		'ip_total'=>1,'ip_addr'=>array($fv['ip_address']),
 																		'ip_user_total'=>1
@@ -52,13 +54,13 @@ class ControllerReportFlashsaleViewed extends Controller {
 			}
 		}
 		
-		$flashsale_viewed_total = $this->model_report_flashsale->getTotalFlashsalesViewed($data);
+		$flashsale_viewed_total = $this->Model_Report_Flashsale->getTotalFlashsalesViewed($data);
 		
-		$flashsale_views_total = $this->model_report_flashsale->getTotalFlashsaleViews();
+		$flashsale_views_total = $this->Model_Report_Flashsale->getTotalFlashsaleViews();
 		
 		$this->data['flashsales'] = array();
 		
-		$results = $this->model_report_flashsale->getFlashsalesViewed($data);
+		$results = $this->Model_Report_Flashsale->getFlashsalesViewed($data);
 		
 		foreach ($results as $result) {
 			if ($result['views']) {
@@ -95,17 +97,19 @@ class ControllerReportFlashsaleViewed extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function reset() {
+	public function reset()
+	{
 		$this->load->language('report/flashsale_viewed');
 		
-		$this->model_report_flashsale->reset();
+		$this->Model_Report_Flashsale->reset();
 		
 		$this->message->add('success', $this->_('text_success'));
 		
 		$this->url->redirect($this->url->link('report/flashsale_viewed'));
 	}
 	
-	private function get_url($filters=null){
+	private function get_url($filters=null)
+	{
 		$url = '';
 		$filters = $filters?$filters:array('page');
 		foreach($filters as $f)

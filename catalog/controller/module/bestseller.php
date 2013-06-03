@@ -1,6 +1,8 @@
 <?php
-class ControllerModuleBestSeller extends Controller {
-	protected function index($setting) {
+class Catalog_Controller_Module_Bestseller extends Controller 
+{
+	protected function index($setting)
+	{
 		$this->template->load('module/bestseller');
 
 		$this->language->load('module/bestseller');
@@ -10,22 +12,22 @@ class ControllerModuleBestSeller extends Controller {
 		
 		$featured = $this->config->get('bestseller_list');
 		
-		if(is_array($featured) && !empty($featured)){
+		if (is_array($featured) && !empty($featured)) {
 			$data = array(
 				'product_ids' => array_keys($featured)
 			);
 			
-			$featured = $this->model_catalog_product->getProducts($data);
+			$featured = $this->Model_Catalog_Product->getProducts($data);
 		}
-		else{
+		else {
 			$featured = array();
 		}
 		
-		if($setting['limit'] - count($featured) > 0){
-			$products = $this->model_catalog_product->getBestSellerProducts($setting['limit'] - count($featured));
+		if ($setting['limit'] - count($featured) > 0) {
+			$products = $this->Model_Catalog_Product->getBestSellerProducts($setting['limit'] - count($featured));
 			$products = array_merge($featured, $products);
 		}
-		else{
+		else {
 			$products = $featured;
 		}
 		

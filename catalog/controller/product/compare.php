@@ -1,6 +1,8 @@
 <?php
-class ControllerProductCompare extends Controller {
-	public function index() {
+class Catalog_Controller_Product_Compare extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('product/compare');
 
 		$this->language->load('product/compare');
@@ -39,7 +41,7 @@ class ControllerProductCompare extends Controller {
 		$this->data['attribute_groups'] = array();
 
 		foreach ($this->session->data['compare'] as $key => $product_id) {
-			$product_info = $this->model_catalog_product->getProduct($product_id);
+			$product_info = $this->Model_Catalog_Product->getProduct($product_id);
 			
 			if ($product_info) {
 				if ($product_info['image']) {
@@ -70,7 +72,7 @@ class ControllerProductCompare extends Controller {
 				
 				$attribute_data = array();
 				
-				$attribute_groups = $this->model_catalog_product->getProductAttributes($product_id);
+				$attribute_groups = $this->Model_Catalog_Product->getProductAttributes($product_id);
 				
 				foreach ($attribute_groups as $attribute_group) {
 					foreach ($attribute_group['attribute'] as $attribute) {
@@ -99,7 +101,8 @@ class ControllerProductCompare extends Controller {
 					'remove'		=> $this->url->link('product/compare', 'remove=' . $product_id)
 				);
 				
-				foreach ($attribute_groups as $attribute_group) {
+				foreach ($attribute_groups as $attribute_group) 
+{
 					$this->data['attribute_groups'][$attribute_group['attribute_group_id']]['name'] = $attribute_group['name'];
 					
 					foreach ($attribute_group['attribute'] as $attribute) {
@@ -125,7 +128,8 @@ class ControllerProductCompare extends Controller {
 		$this->response->setOutput($this->render());
   	}
 	
-	public function add() {
+	public function add()
+	{
 		$this->language->load('product/compare');
 		
 		$json = array();
@@ -140,7 +144,7 @@ class ControllerProductCompare extends Controller {
 			$product_id = 0;
 		}
 		
-		$product_info = $this->model_catalog_product->getProduct($product_id);
+		$product_info = $this->Model_Catalog_Product->getProduct($product_id);
 		
 		if ($product_info) {
 			if (!in_array($_POST['product_id'], $this->session->data['compare'])) {

@@ -1,14 +1,16 @@
 <?php
-class ControllerAccountLogin extends Controller {
+class Catalog_Controller_Account_Login extends Controller 
+{
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('account/login');
 
 		// Login override for admin users
 		if (!empty($_COOKIE['customer_token'])) {
 			$this->customer->logout();
 			
-			$customer_info = $this->model_account_customer->getCustomerByToken($_COOKIE['customer_token']);
+			$customer_info = $this->Model_Account_Customer->getCustomerByToken($_COOKIE['customer_token']);
 			
 			if ($customer_info && $this->customer->login($customer_info['email'], '', true)) {
 				$this->url->redirect($this->url->link('account/account'));
@@ -61,13 +63,14 @@ class ControllerAccountLogin extends Controller {
 		$this->response->setOutput($this->render());
   	}
   
-  	private function validate() {
+  	private function validate()
+  	{
 		if (!$this->customer->login($_POST['email'], $_POST['password'])) {
 				$this->error['warning'] = $this->_('error_login');
 		}
 		
 		//Verify redirect stays on our site for security purposes
-		if(isset($_POST['redirect']) && strpos($_POST['redirect'], SITE_URL) !== 0 && strpos($_POST['redirect'], SITE_SSL) !== 0){
+		if (isset($_POST['redirect']) && strpos($_POST['redirect'], SITE_URL) !== 0 && strpos($_POST['redirect'], SITE_SSL) !== 0) {
 			$this->error['warning'] = $this->_('error_redirect_domain');
 			unset($_POST['redirect']);
 		}

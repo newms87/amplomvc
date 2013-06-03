@@ -1,7 +1,7 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
-	<?= $this->builder->display_errors($errors);?>
+	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -27,7 +27,7 @@
 						<? foreach ($aliases as $alias) { ?>
 						<tr>
 							<td style="text-align: center;">
-								<input type="checkbox" name="selected[]" value="<?= $alias['url_alias_id']; ?>" <?= $alias['selected']?"checked='checked'":"";?> />
+								<input type="checkbox" name="selected[]" value="<?= $alias['url_alias_id']; ?>" <?= $alias['selected']?"checked='checked'":""; ?> />
 							</td>
 							<td class="left"><?= $alias['keyword']; ?></td>
 							<td class="left"><?= $alias['route']; ?></td>

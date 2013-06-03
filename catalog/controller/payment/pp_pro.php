@@ -1,6 +1,8 @@
 <?php
-class ControllerPaymentPPPro extends Controller {
-	protected function index() {
+class Catalog_Controller_Payment_PpPro extends Controller 
+{
+	protected function index()
+	{
 		$this->template->load('payment/pp_pro');
 
 		$this->language->load('payment/pp_pro');
@@ -69,14 +71,15 @@ class ControllerPaymentPPPro extends Controller {
 		$this->render();
 	}
 
-	public function send() {
+	public function send()
+	{
 		if (!$this->config->get('pp_pro_transaction')) {
 			$payment_type = 'Authorization';
 		} else {
 			$payment_type = 'Sale';
 		}
 		
-		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
+		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
 		
 		$request  = 'METHOD=DoDirectPayment';
 		$request .= '&VERSION=51.0';
@@ -154,7 +157,7 @@ class ControllerPaymentPPPro extends Controller {
 		$json = array();
 		
 		if (($response_data['ACK'] == 'Success') || ($response_data['ACK'] == 'SuccessWithWarning')) {
-			$this->model_checkout_order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
+			$this->Model_Checkout_Order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
 			
 			$message = '';
 			
@@ -170,7 +173,7 @@ class ControllerPaymentPPPro extends Controller {
 				$message .= 'TRANSACTIONID: ' . $response_data['TRANSACTIONID'] . "\n";
 			}
 			
-			$this->model_checkout_order->update_order($this->session->data['order_id'], $this->config->get('pp_pro_order_status_id'), $message, false);
+			$this->Model_Checkout_Order->update_order($this->session->data['order_id'], $this->config->get('pp_pro_order_status_id'), $message, false);
 		
 			$json['success'] = $this->url->link('checkout/success');
 		} else {

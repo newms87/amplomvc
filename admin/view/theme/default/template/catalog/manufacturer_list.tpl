@@ -1,6 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
+	<?= $this->builder->display_breadcrumbs(); ?>
 	<? if($errors){?>
 		<div class="message_box warning">
 		<? $br=false; foreach($errors as $e){ echo ($br?'<br>':'') . $e; $br=true;}?>
@@ -18,22 +18,22 @@
 						<tr>
 							<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);" /></td>
 							<td class="left">
-								<a href="<?= $sort_name;?>" <?= $sort=='name'?'class="'.strtolower($order).'"':'';?>><?= $column_name; ?></a>
+								<a href="<?= $sort_name; ?>" <?= $sort=='name'?'class="'.strtolower($order).'"':''; ?>><?= $column_name; ?></a>
 							</td>
 							<td class="left">
-								<a href="<?= $sort_vendor_id;?>" <?= $sort=='vendor_id'?'class="'.strtolower($order).'"':'';?>><?= $column_vendor_id; ?></a>
+								<a href="<?= $sort_vendor_id; ?>" <?= $sort=='vendor_id'?'class="'.strtolower($order).'"':''; ?>><?= $column_vendor_id; ?></a>
 							</td>
 							<td class="left">
-								<a href="<?= $sort_date_active;?>" <?= $sort=='date_active'?'class="'.strtolower($order).'"':'';?>><?= $column_date_active; ?></a>
+								<a href="<?= $sort_date_active; ?>" <?= $sort=='date_active'?'class="'.strtolower($order).'"':''; ?>><?= $column_date_active; ?></a>
 							</td>
 							<td class="left">
-								<a href="<?= $sort_date_expires;?>" <?= $sort=='date_expires'?'class="'.strtolower($order).'"':'';?>><?= $column_date_expires; ?></a>
+								<a href="<?= $sort_date_expires; ?>" <?= $sort=='date_expires'?'class="'.strtolower($order).'"':''; ?>><?= $column_date_expires; ?></a>
 							</td>
 							<td class="left">
-								<a href="<?= $sort_status;?>" <?= $sort=='status'?'class="'.strtolower($order).'"':'';?>><?= $column_status; ?></a>
+								<a href="<?= $sort_status; ?>" <?= $sort=='status'?'class="'.strtolower($order).'"':''; ?>><?= $column_status; ?></a>
 							</td>
 							<td class="left">
-								<a href="<?= $sort_sort_order;?>" <?= $sort=='sort_order'?'class="'.strtolower($order).'"':'';?>><?= $column_sort_order; ?></a>
+								<a href="<?= $sort_sort_order; ?>" <?= $sort=='sort_order'?'class="'.strtolower($order).'"':''; ?>><?= $column_sort_order; ?></a>
 							</td>
 							<td class="right"><?= $column_action; ?></td>
 						</tr>

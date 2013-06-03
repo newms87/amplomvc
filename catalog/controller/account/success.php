@@ -1,6 +1,8 @@
 <?php
-class ControllerAccountSuccess extends Controller {
-	public function index() {
+class Catalog_Controller_Account_Success extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('common/success');
 
 		$this->language->load('account/success');

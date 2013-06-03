@@ -1,6 +1,8 @@
 <?php
-class ModelAccountCustomer extends Model {
-	public function addCustomer($data) {
+class Catalog_Model_Account_Customer extends Model 
+{
+	public function addCustomer($data)
+	{
 		
 		//Add New Customer
 		$data['store_id']		= $this->config->get('config_store_id');
@@ -9,14 +11,14 @@ class ModelAccountCustomer extends Model {
 		$data['password']		= $this->customer->encrypt($data['password']);
 		$data['status']				= 1;
 		
-		if(!isset($data['newsletter'])){
+		if (!isset($data['newsletter'])) {
 			$data['newsletter'] = 0;
 		}
 		
-		if($this->config->get('config_customer_approval')) {
+		if ($this->config->get('config_customer_approval')) {
 			$data['approved'] = 1;
 		}
-		else{
+		else {
 			$data['approved'] = 0;
 		}
 		
@@ -70,20 +72,22 @@ class ModelAccountCustomer extends Model {
 		return $data['customer_id'];
 	}
 	
-	public function editCustomer($data) {
+	public function editCustomer($data)
+	{
 		$where = array(
 			'customer_id' => $this->customer->getId()
 		);
 	
 		//we do not allow editing the password here ( must be done via $this->editPassword() )
-		if(isset($data['password'])){
+		if (isset($data['password'])) {
 			unset($data['password']);
 		}
 	
 		$this->update('customer', $data, $where);
 	}
 
-	public function editPassword($email, $password) {
+	public function editPassword($email, $password)
+	{
 		$data = array(
 			'password' => $this->customer->encrypt($password)
 		);
@@ -91,7 +95,8 @@ class ModelAccountCustomer extends Model {
 		$this->update('customer', $data, array('email' => $email));
 	}
 
-	public function editNewsletter($newsletter) {
+	public function editNewsletter($newsletter)
+	{
 		$data = array(
 			'newsletter' => $newsletter
 		);
@@ -103,13 +108,15 @@ class ModelAccountCustomer extends Model {
 		$this->update('customer', $data, $where);
 	}
 					
-	public function getCustomer($customer_id) {
+	public function getCustomer($customer_id)
+	{
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "customer WHERE customer_id = '" . (int)$customer_id . "'");
 		
 		return $query->row;
 	}
 	
-	public function getCustomerByToken($token) {
+	public function getCustomerByToken($token)
+	{
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "customer WHERE token = '" . $this->db->escape($token) . "' AND token != ''");
 		
 		$this->query("UPDATE " . DB_PREFIX . "customer SET token = ''");
@@ -192,19 +199,22 @@ class ModelAccountCustomer extends Model {
 		return $query->rows;
 	}
 		
-	public function getTotalCustomersByEmail($email) {
+	public function getTotalCustomersByEmail($email)
+	{
 		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "customer WHERE email = '" . $this->db->escape($email) . "'");
 		
 		return $query->row['total'];
 	}
 	
-	public function getIps($customer_id) {
+	public function getIps($customer_id)
+	{
 		$query = $this->query("SELECT * FROM `" . DB_PREFIX . "customer_ip` WHERE customer_id = '" . (int)$customer_id . "'");
 		
 		return $query->rows;
 	}
 	
-	public function isBlacklisted($ip) {
+	public function isBlacklisted($ip)
+	{
 		$query = $this->query("SELECT * FROM `" . DB_PREFIX . "customer_ip_blacklist` WHERE ip = '" . $this->db->escape($ip) . "'");
 		
 		return $query->num_rows;

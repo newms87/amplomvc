@@ -35,8 +35,7 @@
  * @package	PHPExcel_Worksheet
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Worksheet_CellIterator implements Iterator
-{
+class PHPExcel_Worksheet_CellIterator implements Iterator{
 	/**
 	* PHPExcel_Worksheet to iterate
 	*
@@ -71,7 +70,8 @@ class PHPExcel_Worksheet_CellIterator implements Iterator
 	* @param PHPExcel_Worksheet 		$subject
 	* @param int						$rowIndex
 	*/
-	public function __construct(PHPExcel_Worksheet $subject = null, $rowIndex = 1) {
+	public function __construct(PHPExcel_Worksheet $subject = null, $rowIndex = 1)
+	{
 		// Set subject and row index
 		$this->_subject 	= $subject;
 		$this->_rowIndex 	= $rowIndex;
@@ -80,14 +80,16 @@ class PHPExcel_Worksheet_CellIterator implements Iterator
 	/**
 	* Destructor
 	*/
-	public function __destruct() {
+	public function __destruct()
+	{
 		unset($this->_subject);
 	}
 
 	/**
 	* Rewind iterator
 	*/
-	public function rewind() {
+	public function rewind()
+	{
 		$this->_position = 0;
 	}
 
@@ -96,7 +98,8 @@ class PHPExcel_Worksheet_CellIterator implements Iterator
 	*
 	* @return PHPExcel_Cell
 	*/
-	public function current() {
+	public function current()
+	{
 		return $this->_subject->getCellByColumnAndRow($this->_position, $this->_rowIndex);
 	}
 
@@ -105,14 +108,16 @@ class PHPExcel_Worksheet_CellIterator implements Iterator
 	*
 	* @return int
 	*/
-	public function key() {
+	public function key()
+	{
 		return $this->_position;
 	}
 
 	/**
 	* Next value
 	*/
-	public function next() {
+	public function next()
+	{
 		++$this->_position;
 	}
 
@@ -121,7 +126,8 @@ class PHPExcel_Worksheet_CellIterator implements Iterator
 	*
 	* @return boolean
 	*/
-	public function valid() {
+	public function valid()
+	{
 		// columnIndexFromString() returns an index based at one,
 		// treat it as a count when comparing it to the base zero
 		// position.
@@ -146,7 +152,8 @@ class PHPExcel_Worksheet_CellIterator implements Iterator
 	*
 	* @return boolean
 	*/
-	public function getIterateOnlyExistingCells() {
+	public function getIterateOnlyExistingCells()
+	{
 		return $this->_onlyExistingCells;
 	}
 
@@ -155,7 +162,8 @@ class PHPExcel_Worksheet_CellIterator implements Iterator
 	*
 	* @param	boolean		$value
 	*/
-	public function setIterateOnlyExistingCells($value = true) {
+	public function setIterateOnlyExistingCells($value = true)
+	{
 		$this->_onlyExistingCells = $value;
 	}
 }

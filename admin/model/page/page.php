@@ -1,6 +1,8 @@
 <?php
-class ModelPagePage extends Model {
-	public function addPage($data) {
+class Admin_Model_Page_Page extends Model 
+{
+	public function addPage($data)
+	{
 		
 		$page_id = $this->insert('page', $data);
 		
@@ -19,14 +21,15 @@ class ModelPagePage extends Model {
 			$this->url->set_alias($data['keyword'], 'page/page', 'page_id=' . (int)$page_id);
 		}
 		
-		if(!empty($data['translations'])){
+		if (!empty($data['translations'])) {
 			$this->translation->set_translations('page', $page_id, $data['translations']);
 		}
 		
 		$this->cache->delete('page');
 	}
 	
-	public function editPage($page_id, $data) {
+	public function editPage($page_id, $data)
+	{
 		$this->update('page', $data, $page_id);
 		
 		$this->delete('page_store', array('page_id' => $page_id));
@@ -46,25 +49,28 @@ class ModelPagePage extends Model {
 			$this->url->set_alias($data['keyword'], 'page/page', 'page_id=' . (int)$page_id);
 		}
 		
-		if(!empty($data['translations'])){
+		if (!empty($data['translations'])) {
 			$this->translation->set_translations('page', $page_id, $data['translations']);
 		}
 		
 		$this->cache->delete('page');
 	}
 	
-	public function update_field($page_id, $data){
+	public function update_field($page_id, $data)
+	{
 		$this->update('page', $data, $page_id);
 	}
 	
-	public function copyPage($page_id){
+	public function copyPage($page_id)
+	{
 		$page = $this->getPage($page_id);
 		$page['stores'] = $this->getPageStores($page_id);
 		
 		$this->addPage($page);
 	}
 	
-	public function deletePage($page_id) {
+	public function deletePage($page_id)
+	{
 		$this->delete('page', $page_id);
 		$this->delete('page_store', array('page_id' => $page_id));
 		
@@ -75,7 +81,8 @@ class ModelPagePage extends Model {
 		$this->cache->delete('page');
 	}
 	
-	public function getPage($page_id) {
+	public function getPage($page_id)
+	{
 		$result = $this->query_row("SELECT * FROM " . DB_PREFIX . "page WHERE page_id = '" . (int)$page_id . "'");
 		
 		$result['keyword'] = $this->url->get_alias('page/page', 'page_id=' . (int)$page_id);
@@ -95,10 +102,10 @@ class ModelPagePage extends Model {
 	
 	public function getPages($data = array(), $select = null, $total = false) {
 		//Select
-		if($total){
+		if ($total) {
 			$select = 'COUNT(*) as total';
 		}
-		elseif(!$select){
+		elseif (!$select) {
 			$select = '*';
 		}
 		
@@ -108,11 +115,11 @@ class ModelPagePage extends Model {
 		//Where
 		$where = 'WHERE 1';
 		
-		if(isset($data['name'])){
+		if (isset($data['name'])) {
 			$where .= " AND c.name like '%" . $this->db->escape($data['name']) . "%'";
 		}
 		
-		if(!empty($data['stores'])){
+		if (!empty($data['stores'])) {
 			$store_ids = is_array($data['stores']) ? $data['stores'] : array($data['stores']);
 			
 			$from .= " LEFT JOIN " . DB_PREFIX . "page_store cs ON (c.page_id=cs.page_id)";
@@ -120,12 +127,12 @@ class ModelPagePage extends Model {
 			$where .= " AND cs.store_id IN (" . implode(',', $store_ids) . ")";
 		}
 		
-		if(isset($data['status'])){
+		if (isset($data['status'])) {
 			$where .= " AND c.status = '" . ($data['status'] ? 1 : 0) . "'";
 		}
 		
 		//Order By & Limit
-		if(!$total){
+		if (!$total) {
 			$order = $this->extract_order($data);
 			$limit = $this->extract_limit($data);
 		} else {
@@ -140,14 +147,15 @@ class ModelPagePage extends Model {
 		$result = $this->query($sql);
 		
 		//Process Results
-		if($total){
+		if ($total) {
 			return $result->row['total'];
 		}
 	
 		return $result->rows;
 	}
 	
-	public function getPageStores($page_id) {
+	public function getPageStores($page_id)
+	{
 		return $this->query_rows("SELECT * FROM " . DB_PREFIX . "page_store WHERE page_id = '" . (int)$page_id . "'");
 	}
 	

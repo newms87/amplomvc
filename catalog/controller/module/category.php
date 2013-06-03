@@ -1,6 +1,8 @@
 <?php
-class ControllerModuleCategory extends Controller {
-	protected function index($setting) {
+class Catalog_Controller_Module_Category extends Controller 
+{
+	protected function index($setting)
+	{
 		$this->template->load('module/category');
 
 		$this->language->load('module/category');
@@ -25,12 +27,12 @@ class ControllerModuleCategory extends Controller {
 							
 		$this->data['categories'] = array();
 					
-		$categories = $this->model_catalog_category->getCategories(0);
+		$categories = $this->Model_Catalog_Category->getCategories(0);
 		
 		foreach ($categories as $category) {
 			$children_data = array();
 			
-			$children = $this->model_catalog_category->getCategories($category['category_id']);
+			$children = $this->Model_Catalog_Category->getCategories($category['category_id']);
 			
 			foreach ($children as $child) {
 				$data = array(
@@ -39,7 +41,7 @@ class ControllerModuleCategory extends Controller {
 				);
 					
 				if ($setting['count']) {
-					$product_total = $this->model_catalog_product->getTotalProducts($data);
+					$product_total = $this->Model_Catalog_Product->getTotalProducts($data);
 					
 					$children_data[] = array(
 						'category_id' => $child['category_id'],
@@ -61,7 +63,7 @@ class ControllerModuleCategory extends Controller {
 			);
 			
 			if ($setting['count']) {
-				$product_total = $this->model_catalog_product->getTotalProducts($data);
+				$product_total = $this->Model_Catalog_Product->getTotalProducts($data);
 			
 				$this->data['categories'][] = array(
 					'category_id' => $category['category_id'],

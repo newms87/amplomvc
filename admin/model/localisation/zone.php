@@ -1,24 +1,29 @@
 <?php
-class ModelLocalisationZone extends Model {
-	public function addZone($data) {
+class Admin_Model_Localisation_Zone extends Model 
+{
+	public function addZone($data)
+	{
 		$this->query("INSERT INTO " . DB_PREFIX . "zone SET status = '" . (int)$data['status'] . "', name = '" . $this->db->escape($data['name']) . "', code = '" . $this->db->escape($data['code']) . "', country_id = '" . (int)$data['country_id'] . "'");
 			
 		$this->cache->delete('zone');
 	}
 	
-	public function editZone($zone_id, $data) {
+	public function editZone($zone_id, $data)
+	{
 		$this->query("UPDATE " . DB_PREFIX . "zone SET status = '" . (int)$data['status'] . "', name = '" . $this->db->escape($data['name']) . "', code = '" . $this->db->escape($data['code']) . "', country_id = '" . (int)$data['country_id'] . "' WHERE zone_id = '" . (int)$zone_id . "'");
 
 		$this->cache->delete('zone');
 	}
 	
-	public function deleteZone($zone_id) {
+	public function deleteZone($zone_id)
+	{
 		$this->query("DELETE FROM " . DB_PREFIX . "zone WHERE zone_id = '" . (int)$zone_id . "'");
 
 		$this->cache->delete('zone');
 	}
 	
-	public function getZone($zone_id) {
+	public function getZone($zone_id)
+	{
 		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "zone WHERE zone_id = '" . (int)$zone_id . "'");
 		
 		return $query->row;
@@ -62,7 +67,8 @@ class ModelLocalisationZone extends Model {
 		return $query->rows;
 	}
 	
-	public function getZonesByCountryId($country_id) {
+	public function getZonesByCountryId($country_id)
+	{
 		$zone_data = $this->cache->get('zone.' . (int)$country_id);
 	
 		if (!$zone_data) {
@@ -76,13 +82,15 @@ class ModelLocalisationZone extends Model {
 		return $zone_data;
 	}
 	
-	public function getTotalZones() {
+	public function getTotalZones()
+	{
 			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "zone");
 		
 		return $query->row['total'];
 	}
 				
-	public function getTotalZonesByCountryId($country_id) {
+	public function getTotalZonesByCountryId($country_id)
+	{
 		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "zone WHERE country_id = '" . (int)$country_id . "'");
 	
 		return $query->row['total'];

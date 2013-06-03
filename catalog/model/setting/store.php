@@ -1,5 +1,6 @@
 <?php
-class ModelSettingStore extends Model {
+class Catalog_Model_Setting_Store extends Model 
+{
 	public function getStores($data = array()) {
 		$store_data = $this->cache->get('store');
 	

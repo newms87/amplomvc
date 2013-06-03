@@ -1,8 +1,10 @@
 <?php
-class ControllerLocalisationReturnAction extends Controller {
+class Admin_Controller_Localisation_ReturnAction extends Controller 
+{
 	
 	
-  	public function index() {
+  	public function index()
+  	{
 		$this->load->language('localisation/return_action');
 	
 		$this->document->setTitle($this->_('heading_title'));
@@ -10,13 +12,14 @@ class ControllerLocalisationReturnAction extends Controller {
 		$this->getList();
   	}
 				
-  	public function insert() {
+  	public function insert()
+  	{
 		$this->load->language('localisation/return_action');
 	
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-				$this->model_localisation_return_action->addReturnAction($_POST);
+				$this->Model_Localisation_ReturnAction->addReturnAction($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -40,13 +43,14 @@ class ControllerLocalisationReturnAction extends Controller {
 		$this->getForm();
   	}
 
-  	public function update() {
+  	public function update()
+  	{
 		$this->load->language('localisation/return_action');
 	
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_return_action->editReturnAction($_GET['return_action_id'], $_POST);
+			$this->Model_Localisation_ReturnAction->editReturnAction($_GET['return_action_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -70,14 +74,15 @@ class ControllerLocalisationReturnAction extends Controller {
 		$this->getForm();
   	}
 
-  	public function delete() {
+  	public function delete()
+  	{
 		$this->load->language('localisation/return_action');
 	
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $return_action_id) {
-				$this->model_localisation_return_action->deleteReturnAction($return_action_id);
+				$this->Model_Localisation_ReturnAction->deleteReturnAction($return_action_id);
 			}
 							
 			$this->message->add('success', $this->_('text_success'));
@@ -102,7 +107,8 @@ class ControllerLocalisationReturnAction extends Controller {
 		$this->getList();
   	}
 	
-  	private function getList() {
+  	private function getList()
+  	{
 		$this->template->load('localisation/return_action_list');
 
 		if (isset($_GET['sort'])) {
@@ -152,9 +158,9 @@ class ControllerLocalisationReturnAction extends Controller {
 			'limit' => $this->config->get('config_admin_limit')
 		);
 		
-		$return_action_total = $this->model_localisation_return_action->getTotalReturnActions();
+		$return_action_total = $this->Model_Localisation_ReturnAction->getTotalReturnActions();
 	
-		$results = $this->model_localisation_return_action->getReturnActions($data);
+		$results = $this->Model_Localisation_ReturnAction->getReturnActions($data);
  
 		foreach ($results as $result) {
 			$action = array();
@@ -225,7 +231,8 @@ class ControllerLocalisationReturnAction extends Controller {
 		$this->response->setOutput($this->render());
   	}
   
-  	private function getForm() {
+  	private function getForm()
+  	{
 		$this->template->load('localisation/return_action_form');
 
  		if (isset($this->error['warning'])) {
@@ -265,12 +272,12 @@ class ControllerLocalisationReturnAction extends Controller {
 			
 		$this->data['cancel'] = $this->url->link('localisation/return_action', $url);
 		
-		$this->data['languages'] = $this->model_localisation_language->getLanguages();
+		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
 		
 		if (isset($_POST['return_action'])) {
 			$this->data['return_action'] = $_POST['return_action'];
 		} elseif (isset($_GET['return_action_id'])) {
-			$this->data['return_action'] = $this->model_localisation_return_action->getReturnActionDescriptions($_GET['return_action_id']);
+			$this->data['return_action'] = $this->Model_Localisation_ReturnAction->getReturnActionDescriptions($_GET['return_action_id']);
 		} else {
 			$this->data['return_action'] = array();
 		}
@@ -283,7 +290,8 @@ class ControllerLocalisationReturnAction extends Controller {
 		$this->response->setOutput($this->render());
   	}
   	
-	private function validateForm() {
+	private function validateForm()
+	{
 		if (!$this->user->hasPermission('modify', 'localisation/return_action')) {
 				$this->error['warning'] = $this->_('error_permission');
 		}
@@ -297,13 +305,14 @@ class ControllerLocalisationReturnAction extends Controller {
 		return $this->error ? false : true;
   	}
 
-  	private function validateDelete() {
+  	private function validateDelete()
+  	{
 		if (!$this->user->hasPermission('modify', 'localisation/return_action')) {
 				$this->error['warning'] = $this->_('error_permission');
 		}
 		
 		foreach ($_POST['selected'] as $return_action_id) {
-			$return_total = $this->model_sale_return->getTotalReturnsByReturnActionId($return_action_id);
+			$return_total = $this->Model_Sale_Return->getTotalReturnsByReturnActionId($return_action_id);
 		
 			if ($return_total) {
 				$this->error['warning'] = sprintf($this->_('error_return'), $return_total);

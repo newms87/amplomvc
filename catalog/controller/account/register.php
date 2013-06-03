@@ -1,7 +1,9 @@
 <?php
-class ControllerAccountRegister extends Controller {
+class Catalog_Controller_Account_Register extends Controller 
+{
 	
-  	public function index() {
+  	public function index()
+  	{
   		$this->template->load('account/register');
 		
 		if ($this->customer->isLogged()) {
@@ -13,7 +15,7 @@ class ControllerAccountRegister extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_account_customer->addCustomer($_POST);
+			$this->Model_Account_Customer->addCustomer($_POST);
 
 			$this->customer->login($_POST['email'], $_POST['password']);
 			
@@ -45,16 +47,16 @@ class ControllerAccountRegister extends Controller {
 			'agree'=>false
 		);
 		
-		foreach($defaults as $key=>$default){
+		foreach ($defaults as $key=>$default) {
 			$this->data[$key] = isset($_POST[$key])?$_POST[$key]:$default;
 		}
 		
-		$this->data['countries'] = $this->model_localisation_country->getCountries();
+		$this->data['countries'] = $this->Model_Localisation_Country->getCountries();
 		
 		$this->data['text_agree'] = '';
 		
 		if ($this->config->get('config_account_id')) {
-			$information_info = $this->model_catalog_information->getInformation($this->config->get('config_account_id'));
+			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_account_id'));
 			
 			if ($information_info) {
 				$this->language->format('text_agree', $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_account_id')), $information_info['title'], $information_info['title']);
@@ -73,7 +75,8 @@ class ControllerAccountRegister extends Controller {
 		$this->response->setOutput($this->render());
   	}
 
-  	public function validate() {
+  	public function validate()
+  	{
 		if ((strlen($_POST['firstname']) < 1) || (strlen($_POST['firstname']) > 32)) {
 				$this->error['firstname'] = $this->_('error_firstname');
 		}
@@ -86,7 +89,7 @@ class ControllerAccountRegister extends Controller {
 				$this->error['email'] = $this->_('error_email');
 		}
 
-		if ($this->model_account_customer->getTotalCustomersByEmail($_POST['email'])) {
+		if ($this->Model_Account_Customer->getTotalCustomersByEmail($_POST['email'])) {
 				$this->error['email'] = $this->_('error_exists');
 		}
 		
@@ -98,7 +101,7 @@ class ControllerAccountRegister extends Controller {
 				$this->error['city'] = $this->_('error_city');
 		}
 
-		$country_info = $this->model_localisation_country->getCountry($_POST['country_id']);
+		$country_info = $this->Model_Localisation_Country->getCountry($_POST['country_id']);
 		
 		if ($country_info && $country_info['postcode_required'] && (strlen($_POST['postcode']) < 2) || (strlen($_POST['postcode']) > 10)) {
 			$this->error['postcode'] = $this->_('error_postcode');
@@ -121,7 +124,7 @@ class ControllerAccountRegister extends Controller {
 		}
 		
 		if ($this->config->get('config_account_id')) {
-			$information_info = $this->model_catalog_information->getInformation($this->config->get('config_account_id'));
+			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_account_id'));
 			
 			if ($information_info && !isset($_POST['agree'])) {
 					$this->error['warning'] = sprintf($this->_('error_agree'), $information_info['title']);

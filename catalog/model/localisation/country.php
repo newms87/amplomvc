@@ -1,18 +1,22 @@
 <?php
-class ModelLocalisationCountry extends Model {
-	public function getCountry($country_id) {
+class Catalog_Model_Localisation_Country extends Model 
+{
+	public function getCountry($country_id)
+	{
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "country WHERE country_id = '" . (int)$country_id . "' AND status = '1'");
 		
 		return $query->row;
 	}
 	
-	public function getCountryName($country_id) {
+	public function getCountryName($country_id)
+	{
 		$query = $this->query("SELECT name FROM " . DB_PREFIX . "country WHERE country_id = '" . (int)$country_id . "' AND status = '1'");
 		
 		return $query->num_rows?$query->row['name']:'';
 	}
 	
-	public function getCountries() {
+	public function getCountries()
+	{
 		$country_data = $this->cache->get('country.status');
 		
 		if (!$country_data) {

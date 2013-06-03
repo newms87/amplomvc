@@ -1,6 +1,8 @@
 <?php
-class ControllerExtensionFeed extends Controller {
-	public function index() {
+class Admin_Controller_Extension_Feed extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('extension/feed');
 
 		$this->load->language('extension/feed');
@@ -26,11 +28,11 @@ class ControllerExtensionFeed extends Controller {
 			$this->data['error'] = '';
 		}
 
-		$extensions = $this->model_setting_extension->getInstalled('feed');
+		$extensions = $this->Model_Setting_Extension->getInstalled('feed');
 		
 		foreach ($extensions as $key => $value) {
 			if (!file_exists(DIR_APPLICATION . 'controller/feed/' . $value . '.php')) {
-				$this->model_setting_extension->uninstall('feed', $value);
+				$this->Model_Setting_Extension->uninstall('feed', $value);
 				
 				unset($extensions[$key]);
 			}
@@ -81,16 +83,17 @@ class ControllerExtensionFeed extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function install() {
+	public function install()
+	{
 		if (!$this->user->hasPermission('modify', 'extension/feed')) {
 				$this->session->data['error'] = $this->_('error_permission');
 			
 			$this->url->redirect($this->url->link('extension/feed'));
 		} else {
-			$this->model_setting_extension->install('feed', $_GET['extension']);
+			$this->Model_Setting_Extension->install('feed', $_GET['extension']);
 		
-			$this->model_user_user_group->addPermission($this->user->getId(), 'access', 'feed/' . $_GET['extension']);
-			$this->model_user_user_group->addPermission($this->user->getId(), 'modify', 'feed/' . $_GET['extension']);
+			$this->Model_User_UserGroup->addPermission($this->user->getId(), 'access', 'feed/' . $_GET['extension']);
+			$this->Model_User_UserGroup->addPermission($this->user->getId(), 'modify', 'feed/' . $_GET['extension']);
 		
 			_require_once(DIR_APPLICATION . 'controller/feed/' . $_GET['extension'] . '.php');
 			
@@ -105,15 +108,16 @@ class ControllerExtensionFeed extends Controller {
 		}
 	}
 	
-	public function uninstall() {
+	public function uninstall()
+	{
 		if (!$this->user->hasPermission('modify', 'extension/feed')) {
 				$this->session->data['error'] = $this->_('error_permission');
 			
 			$this->url->redirect($this->url->link('extension/feed'));
 		} else {
-			$this->model_setting_extension->uninstall('feed', $_GET['extension']);
+			$this->Model_Setting_Extension->uninstall('feed', $_GET['extension']);
 		
-			$this->model_setting_setting->deleteSetting($_GET['extension']);
+			$this->Model_Setting_Setting->deleteSetting($_GET['extension']);
 		
 			_require_once(DIR_APPLICATION . 'controller/feed/' . $_GET['extension'] . '.php');
 			

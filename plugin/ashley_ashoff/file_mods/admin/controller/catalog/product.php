@@ -1,8 +1,10 @@
 #<?php
 //=====
-class ControllerCatalogProduct extends Controller {
+class Admin_Controller_Catalog_Product extends Controller 
+{
 //.....
-	private function getForm() {
+	private function getForm()
+	{
 //.....
 		$defaults = array(
 //-----

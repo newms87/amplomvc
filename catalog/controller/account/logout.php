@@ -1,6 +1,8 @@
 <?php
-class ControllerAccountLogout extends Controller {
-	public function index() {
+class Catalog_Controller_Account_Logout extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('common/success');
 
 		if ($this->customer->isLogged()) {

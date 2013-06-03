@@ -1,49 +1,53 @@
 //=====
 <?php
-class ControllerCatalogProduct extends Controller {
+class _AdminControllerCatalogProduct extends Controller 
+{
 //.....
-	public function insert() {
+	public function insert()
+	{
 //-----
 //>>>>> {php}
-		if($this->user->isDesigner() && $_SERVER['REQUEST_METHOD'] == 'POST'){
+		if ($this->user->isDesigner() && $_SERVER['REQUEST_METHOD'] == 'POST') {
 			$pd = reset($_POST['product_description']);
-			$_POST['keyword'] = $this->model_catalog_product->generate_url(false, $pd['name']);
+			$_POST['keyword'] = $this->Model_Catalog_Product->generate_url(false, $pd['name']);
 		}
 //-----
 //=====
 	}
 //.....
-	public function update() {
+	public function update()
+	{
 //-----
 //>>>>> {php}
-		if($this->user->isDesigner() && $_SERVER['REQUEST_METHOD'] == 'POST'){
+		if ($this->user->isDesigner() && $_SERVER['REQUEST_METHOD'] == 'POST') {
 			$pd = reset($_POST['product_description']);
-			$_POST['keyword'] = $this->model_catalog_product->generate_url(false, $pd['name']);
+			$_POST['keyword'] = $this->Model_Catalog_Product->generate_url(false, $pd['name']);
 		}
 //-----
 //=====
 	}
 //.....
-	private function getList() {
+	private function getList()
+	{
 //-----
 //<<<<<
 		$this->template->load('catalog/product_list');
 //-----
 //>>>>> {php}
-		if($this->user->isDesigner()){
+		if ($this->user->isDesigner()) {
 			$this->template->load('catalog/product_list_restricted');
 		}
-		else{
+		else {
 			$this->template->load('catalog/product_list');
 		}
 //-----
 //>>>>> {before} {php}
-		if($this->user->isDesigner()){
-			$designers =$this->model_user_user->getUserDesigners($this->user->getId());
+		if ($this->user->isDesigner()) {
+			$designers =$this->Model_User_User->getUserDesigners($this->user->getId());
 			
 			$data['filter_manufacturer_id'] = array();
 			
-			foreach($designers as $d){
+			foreach ($designers as $d) {
 				$data['filter_manufacturer_id'][] = $d['designer_id'];
 			}
 		}
@@ -53,27 +57,27 @@ class ControllerCatalogProduct extends Controller {
 //-----
 //=====
 		$this->data['category_list'] = array(''=>'');
-		foreach($this->model_catalog_category->getCategories(null) as $cat){
+		foreach ($this->Model_Catalog_Category->getCategories(null) as $cat) {
 			$this->data['category_list'][$cat['category_id']] = $cat['name'];
 		}
 //-----
 //>>>>>
 		$restrict_list = array();
 		
-		if($this->user->isDesigner()){
-			$r_list = $this->model_user_user->getUserDesigners($this->user->getId());
+		if ($this->user->isDesigner()) {
+			$r_list = $this->Model_User_User->getUserDesigners($this->user->getId());
 			
-			foreach($r_list as $r){
+			foreach ($r_list as $r) {
 				$restrict_list[] = $r['designer_id'];
 			}
 			
-			if(empty($restrict_list)){
+			if (empty($restrict_list)) {
 				$restrict_list = array(0);
 			}
 		}
 //-----
 //=====
-		foreach($manufacturers as $manufacturer){
+		foreach ($manufacturers as $manufacturer) {
 //-----
 //>>>>> {php}
 			if(!empty($restrict_list) && !in_array($manufacturer['manufacturer_id'],$restrict_list))continue;
@@ -83,16 +87,17 @@ class ControllerCatalogProduct extends Controller {
 //.....
 	}
 //.....
-	private function getForm() {
+	private function getForm()
+	{
 //-----
 //<<<<<
 		$this->template->load('catalog/product_form');
 //-----
 //>>>>> {php}
-		if($this->user->isDesigner()){
+		if ($this->user->isDesigner()) {
 			$this->template->load('catalog/product_form_restricted');
 		}
-		else{
+		else {
 			$this->template->load('catalog/product_form');
 		}
 //-----
@@ -100,19 +105,19 @@ class ControllerCatalogProduct extends Controller {
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/product'));
 //-----
 //>>>>> {php}
-		if($this->user->isDesigner()){
+		if ($this->user->isDesigner()) {
 			$this->language->set('entry_model', $this->_("entry_model_designer"));
 			$this->language->set('entry_shipping_ret', $this->language->format('entry_shipping_ret_designer',$this->url->link('catalog/manufacturer')));
 		}
 //-----
 //=====
 		if ($product_id && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-			$product_info = $this->model_catalog_product->getProduct($product_id);
+			$product_info = $this->Model_Catalog_Product->getProduct($product_id);
 		}
 //-----
 //>>>>> {php}
-		elseif($product_id){
-			$_POST['editable'] = $this->model_catalog_product->isEditable($product_id);
+		elseif ($product_id) {
+			$_POST['editable'] = $this->Model_Catalog_Product->isEditable($product_id);
 		}
 //-----
 //=====
@@ -124,7 +129,7 @@ class ControllerCatalogProduct extends Controller {
 //=====
 			);
 //.....
-		foreach($defaults as $d=>$default){
+		foreach ($defaults as $d=>$default) {
 			if (isset($_POST[$d]))
 				$this->data[$d] = $_POST[$d];
 			elseif (isset($product_info[$d]))
@@ -134,16 +139,16 @@ class ControllerCatalogProduct extends Controller {
 		}
 //-----
 //>>>>> {php}
-		if(!$this->data['editable']){
+		if (!$this->data['editable']) {
 			$this->language->format('text_not_editable',$this->data['model'],"Active%20Product%20Modification%20Request");
 		}
 //-----
 //<<<<<
-		if(!isset($this->data['date_available'])){
+		if (!isset($this->data['date_available'])) {
 //-----
 		} //ignore
 //>>>>> {php}
-		if(!isset($this->data['date_available']) && !$this->user->isDesigner()){
+		if (!isset($this->data['date_available']) && !$this->user->isDesigner()) {
 //-----
 		} //ignore
 //<<<<<
@@ -152,24 +157,24 @@ class ControllerCatalogProduct extends Controller {
 //>>>>> {php}
 		$restrict_list = array();
 		
-		if($this->user->isDesigner()){
+		if ($this->user->isDesigner()) {
 			$this->data['manufacturers'] = array();
 			
-			$r_list = $this->model_user_user->getUserDesigners($this->user->getId());
+			$r_list = $this->Model_User_User->getUserDesigners($this->user->getId());
 			
-			foreach($r_list as $r){
+			foreach ($r_list as $r) {
 				$restrict_list[] = $r['designer_id'];
 			}
-			if(empty($restrict_list)){
+			if (empty($restrict_list)) {
 				$restrict_list = array(0);
 			}
 		}
-		else{
+		else {
 			$this->data['manufacturers'] = array(0=>$this->_('text_none'));
 		}
 //-----
 //=====
-		foreach($manufacturers as $man){
+		foreach ($manufacturers as $man) {
 //-----
 //>>>>> {php}
 			if(!empty($restrict_list) && !in_array($man['manufacturer_id'],$restrict_list))continue;
@@ -180,10 +185,11 @@ class ControllerCatalogProduct extends Controller {
 	}
 //.....
 	
-	private function validateForm() {
+	private function validateForm()
+	{
 //-----
 //>>>>> {php}
-		if($this->user->isDesigner() && isset($_GET['product_id']) && !$this->model_catalog_product->isEditable($_GET['product_id'])){
+		if ($this->user->isDesigner() && isset($_GET['product_id']) && !$this->Model_Catalog_Product->isEditable($_GET['product_id'])) {
 			$this->session->data['warning'] = $this->_('warning_not_editable');
 			$this->url->redirect($this->url->link('catalog/product'));
 		}
@@ -195,7 +201,7 @@ class ControllerCatalogProduct extends Controller {
 			$this->error['model'] = $this->_('error_model');
 //-----
 //>>>>> {php}
-			if(!$this->user->isDesigner()){
+			if (!$this->user->isDesigner()) {
 				$this->error['model'] = $this->_('error_model');
 			}
 //-----
@@ -204,10 +210,11 @@ class ControllerCatalogProduct extends Controller {
 //.....
 	}
 //.....
-	private function validateDelete() {
+	private function validateDelete()
+	{
 //-----
 //>>>>> {php}
-		if($this->user->isDesigner() && !$this->model_catalog_product->isEditable($_GET['product_id'])){
+		if ($this->user->isDesigner() && !$this->Model_Catalog_Product->isEditable($_GET['product_id'])) {
 			$this->session->data['warning'] = $this->_('warning_not_editable');
 			$this->url->redirect($this->url->link('catalog/product'));
 		}

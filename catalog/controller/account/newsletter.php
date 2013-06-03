@@ -1,6 +1,8 @@
 <?php
-class ControllerAccountNewsletter extends Controller {
-	public function index() {
+class Catalog_Controller_Account_Newsletter extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('account/newsletter');
 
 		if (!$this->customer->isLogged()) {
@@ -14,7 +16,7 @@ class ControllerAccountNewsletter extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 				
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-			$this->model_account_customer->editNewsletter($_POST['newsletter']);
+			$this->Model_Account_Customer->editNewsletter($_POST['newsletter']);
 			
 			$this->message->add('success', $this->_('text_success'));
 			

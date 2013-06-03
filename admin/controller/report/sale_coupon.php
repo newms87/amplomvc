@@ -1,6 +1,8 @@
 <?php
-class ControllerReportSaleCoupon extends Controller {
-	public function index() {
+class Admin_Controller_Report_SaleCoupon extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('report/sale_coupon');
 
 		$this->load->language('report/sale_coupon');
@@ -51,9 +53,9 @@ class ControllerReportSaleCoupon extends Controller {
 			'limit'				=> $this->config->get('config_admin_limit')
 		);
 				
-		$coupon_total = $this->model_report_coupon->getTotalCoupons($data);
+		$coupon_total = $this->Model_Report_Coupon->getTotalCoupons($data);
 		
-		$results = $this->model_report_coupon->getCoupons($data);
+		$results = $this->Model_Report_Coupon->getCoupons($data);
 	
 		foreach ($results as $result) {
 			$action = array();

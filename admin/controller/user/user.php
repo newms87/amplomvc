@@ -1,8 +1,10 @@
 <?php
-class ControllerUserUser extends Controller {
+class Admin_Controller_User_User extends Controller 
+{
 	
 	
-  	public function index() {
+  	public function index()
+  	{
 		$this->load->language('user/user');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -10,13 +12,14 @@ class ControllerUserUser extends Controller {
 		$this->getList();
   	}
 	
-  	public function insert() {
+  	public function insert()
+  	{
 		$this->load->language('user/user');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_user_user->addUser($_POST);
+			$this->Model_User_User->addUser($_POST);
 			
 			if($this->user->isAdmin())
 				$this->message->add('success', $this->_('text_success'));
@@ -34,21 +37,22 @@ class ControllerUserUser extends Controller {
 		$this->getForm();
   	}
 
-  	public function update() {
+  	public function update()
+  	{
 		$this->load->language('user/user');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_user_user->editUser($_GET['user_id'], $_POST);
+			$this->Model_User_User->editUser($_GET['user_id'], $_POST);
 			
 			$url = $this->get_url();
 			
-			if($this->user->isDesigner()){
+			if ($this->user->isDesigner()) {
 				$this->message->add('success', $this->_('text_success_portal'));
 				$this->url->redirect($this->url->link('common/home', $url));
 			}
-			else{
+			else {
 				$this->message->add('success', $this->_('text_success'));
 				$this->url->redirect($this->url->link('user/user', $url));
 			}
@@ -57,14 +61,15 @@ class ControllerUserUser extends Controller {
 		$this->getForm();
   	}
  
-  	public function delete() {
+  	public function delete()
+  	{
 		$this->load->language('user/user');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 				foreach ($_POST['selected'] as $user_id) {
-				$this->model_user_user->deleteUser($user_id);
+				$this->Model_User_User->deleteUser($user_id);
 			}
 
 			if($this->user->isAdmin())
@@ -80,8 +85,9 @@ class ControllerUserUser extends Controller {
 		$this->getList();
   	}
 
-  	private function getList() {
-  		if($this->user->isDesigner()){
+  	private function getList()
+  	{
+  		if ($this->user->isDesigner()) {
   			$this->url->redirect($this->url->link('common/home'));
 		}
 		
@@ -108,9 +114,9 @@ class ControllerUserUser extends Controller {
 			'limit' => $this->config->get('config_admin_limit')
 		);
 		
-		$user_total = $this->model_user_user->getTotalUsers();
+		$user_total = $this->Model_User_User->getTotalUsers();
 		
-		$results = $this->model_user_user->getUsers($data);
+		$results = $this->Model_User_User->getUsers($data);
 		
 		foreach ($results as &$result) {
 			$action = array();
@@ -153,11 +159,12 @@ class ControllerUserUser extends Controller {
 		$this->response->setOutput($this->render());
   	}
 	
-	private function getForm() {
-		if($this->user->isDesigner()){
+	private function getForm()
+	{
+		if ($this->user->isDesigner()) {
 			$this->template->load('user/user_form_restricted');
 		}
-		else{
+		else {
 			$this->template->load('user/user_form');
 		}
 
@@ -169,7 +176,7 @@ class ControllerUserUser extends Controller {
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		
-		if(!$this->user->isDesigner()){
+		if (!$this->user->isDesigner()) {
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('user/user'));
 		}
 		
@@ -182,7 +189,7 @@ class ControllerUserUser extends Controller {
 		$this->data['cancel'] = $this->url->link('user/user', $url);
 
 		if ($user_id && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-			$user_info = $this->model_user_user->getUser($user_id);
+			$user_info = $this->Model_User_User->getUser($user_id);
 		}
 		
 		$data_items = array('username'=>'','password'=>'','confirm'=>'','firstname'=>'','lastname'=>'',
@@ -190,7 +197,7 @@ class ControllerUserUser extends Controller {
 								);
 		$no_fill = array('confirm','password','designers');
 		
-		foreach($data_items as $item=>$default){
+		foreach ($data_items as $item=>$default) {
 			if (isset($_POST[$item]))
 				$this->data[$item] = $_POST[$item];
 			elseif (!empty($user_info) && !in_array($item,$no_fill))
@@ -201,23 +208,23 @@ class ControllerUserUser extends Controller {
 		
 		if (!empty($user_info) && !isset($_POST['designers'])) {
 			$this->data['designers'] = array();
-			foreach($this->model_user_user->getUserDesigners($user_id) as $d)
+			foreach($this->Model_User_User->getUserDesigners($user_id) as $d)
 			$this->data['designers'][] = $d['designer_id'];
 		}
 		
-		$manufacturers = $this->model_catalog_manufacturer->getManufacturers();
+		$manufacturers = $this->Model_Catalog_Manufacturer->getManufacturers();
 		foreach($manufacturers as $m)
 			$this->data['manufacturers'][$m['manufacturer_id']] = $m['name'];
 		
-		$this->data['user_groups'] = $this->model_user_user_group->getUserGroups();
+		$this->data['user_groups'] = $this->Model_User_UserGroup->getUserGroups();
 		
 		$this->data['contact_template'] = $this->getChild('includes/contact',array('type'=>'user', 'id'=>$user_id));
 		
 		
-		if(!$user_id){
+		if (!$user_id) {
 			$this->breadcrumb->add($this->_('text_new_user'), $this->url->link('user/user/insert'));
 		}
-		else{
+		else {
 			$this->breadcrumb->add($this->data['username'], $this->url->link('user/user/update', 'user_id=' . $user_id));
 		}
 		
@@ -229,18 +236,19 @@ class ControllerUserUser extends Controller {
 		$this->response->setOutput($this->render());
   	}
   	
-  	private function validateForm() {
+  	private function validateForm()
+  	{
   		$this->verify_user();
 		if (!$this->user->hasPermission('modify', 'user/user')) {
 				$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		if($this->user->isAdmin()){
+		if ($this->user->isAdmin()) {
 			if ((strlen($_POST['username']) < 3) || (strlen($_POST['username']) > 20)) {
 					$this->error['username'] = $this->_('error_username');
 			}
 
-			$user_info = $this->model_user_user->getUserByUsername($_POST['username']);
+			$user_info = $this->Model_User_User->getUserByUsername($_POST['username']);
 			
 			if (!isset($_GET['user_id'])) {
 				if ($user_info) {
@@ -271,14 +279,14 @@ class ControllerUserUser extends Controller {
 			}
 		}
 		
-		if($this->user->isAdmin()){
+		if ($this->user->isAdmin()) {
 			//if this is a Designer user
-			if($_POST['user_group_id'] == 12){
-				if(!isset($_POST['designers'])){
+			if ($_POST['user_group_id'] == 12) {
+				if (!isset($_POST['designers'])) {
 					$this->error['no_designer'] = $this->_('error_no_designer');
 				}
 			
-				if(!isset($_POST['contact'])){
+				if (!isset($_POST['contact'])) {
 					$this->error['no_contact'] = $this->_("error_no_contact");
 				}
 			}
@@ -287,7 +295,8 @@ class ControllerUserUser extends Controller {
 		return $this->error ? false : true;
   	}
 
-  	private function validateDelete() {
+  	private function validateDelete()
+  	{
   		$this->verify_user(0);
 		
 		if (!$this->user->hasPermission('modify', 'user/user')) {
@@ -307,10 +316,11 @@ class ControllerUserUser extends Controller {
 		}
   	}
 	
-	private function verify_user($user_id = null){
-		if($this->user->isDesigner()){
+	private function verify_user($user_id = null)
+	{
+		if ($this->user->isDesigner()) {
 			$user_id = isset($user_id) ? $user_id : (isset($_GET['user_id']) ? $_GET['user_id'] : 0);
-			if($user_id != $this->user->getId()){
+			if ($user_id != $this->user->getId()) {
 				$this->message->add('warning', $this->_('error_wrong_user'));
 				$this->url->redirect($this->url->link("common/home"));
 			}

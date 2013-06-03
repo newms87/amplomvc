@@ -231,4 +231,4 @@ class PHPExcel_Shared_JAMA_QRDecomposition {
 		}
 	}	//	function solve()
 
-}	//	PHPExcel_Shared_JAMA_class QRDecomposition
+}	//	PHPExcel_Shared_JAMA_QRDecomposition

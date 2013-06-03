@@ -1,8 +1,10 @@
 <?php
-class ControllerModuleMainSidebar extends Controller {
+class Admin_Controller_Module_MainSidebar extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/main_sidebar');
 
 		$this->load->language('module/main_sidebar');
@@ -10,7 +12,7 @@ class ControllerModuleMainSidebar extends Controller {
 		$this->document->setTitle('Main Sidebar');
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('main_sidebar', $_POST);
+			$this->Model_Setting_Setting->editSetting('main_sidebar', $_POST);
 					
 			$this->message->add('success', $this->_('text_success'));
 						
@@ -39,7 +41,7 @@ class ControllerModuleMainSidebar extends Controller {
 			$this->data['modules'] = $this->config->get('main_sidebar_module');
 		}
 					
-		$this->data['layouts'] = $this->model_design_layout->getLayouts();
+		$this->data['layouts'] = $this->Model_Design_Layout->getLayouts();
 		
 		$this->children = array(
 			'common/header',
@@ -49,7 +51,8 @@ class ControllerModuleMainSidebar extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/main_sidebar')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

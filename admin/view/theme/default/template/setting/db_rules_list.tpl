@@ -1,7 +1,7 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
-	<?= $this->builder->display_errors($errors);?>
+	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -28,7 +28,7 @@
 						<? foreach ($db_rules as $db_rule) { ?>
 						<tr>
 							<td style="text-align: center;">
-								<input type="checkbox" name="selected[]" value="<?= $db_rule['db_rule_id']; ?>" <?= $db_rule['selected']?"checked='checked'":"";?> />
+								<input type="checkbox" name="selected[]" value="<?= $db_rule['db_rule_id']; ?>" <?= $db_rule['selected']?"checked='checked'":""; ?> />
 							</td>
 							<td class="left"><?= $db_rule['table']; ?></td>
 							<td class="left"><?= $db_rule['column']; ?></td>

@@ -1,8 +1,10 @@
 <?php
-class ControllerBlockWidgetSpecials extends Controller {
+class Admin_Controller_Block_Widget_Specials extends Controller 
+{
 	
 	/*
-	public function settings(&$settings) {
+	public function settings(&$settings)
+	{
 		$this->template->load('block/widget/specials_settings');
 		
 		$this->data['settings'] = $settings;
@@ -13,7 +15,8 @@ class ControllerBlockWidgetSpecials extends Controller {
 	}
 	*/
 	
-	public function validate() {
+	public function validate()
+	{
 		return $this->error;
 	}
 }

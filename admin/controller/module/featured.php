@@ -1,8 +1,10 @@
 <?php
-class ControllerModuleFeatured extends Controller {
+class Admin_Controller_Module_Featured extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/featured');
 
 		$this->load->language('module/featured');
@@ -15,7 +17,7 @@ class ControllerModuleFeatured extends Controller {
 			foreach($settings['featured_module'] as $key=>$module)
 				$settings['featured_module'][] = array('status'=>$module['status'], 'layout_id'=>$module['layout_id'], 'sort_order'=>$module['sort_order'],'position'=>$module['filter_menu_position'],'display'=>$module['display'],'fm_id'=>$key);
 			
-			$this->model_setting_setting->editSetting('featured', $settings);
+			$this->Model_Setting_Setting->editSetting('featured', $settings);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -36,9 +38,9 @@ class ControllerModuleFeatured extends Controller {
 		
 		$this->data['featured_product'] = array();
 		
-		if(!empty($products)){
+		if (!empty($products)) {
 			foreach ($products as $product_id) {
-				$product_info = $this->model_catalog_product->getProduct($product_id);
+				$product_info = $this->Model_Catalog_Product->getProduct($product_id);
 				
 				if ($product_info) {
 					$this->data['featured_product'][] = array(
@@ -62,7 +64,7 @@ class ControllerModuleFeatured extends Controller {
 			$this->data['modules'] = $this->config->get('featured_module');
 		}
 				
-		$this->data['layouts'] = $this->model_design_layout->getLayouts();
+		$this->data['layouts'] = $this->Model_Design_Layout->getLayouts();
 
 		$this->children = array(
 			'common/header',
@@ -72,7 +74,8 @@ class ControllerModuleFeatured extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/featured')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

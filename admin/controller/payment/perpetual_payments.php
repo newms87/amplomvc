@@ -1,8 +1,10 @@
 <?php
-class ControllerPaymentPerpetualPayments extends Controller {
+class Admin_Controller_Payment_PerpetualPayments extends Controller 
+{
 	
 
-	public function index() {
+	public function index()
+	{
 		$this->template->load('payment/perpetual_payments');
 
 		$this->load->language('payment/perpetual_payments');
@@ -10,7 +12,7 @@ class ControllerPaymentPerpetualPayments extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('perpetual_payments', $_POST);
+			$this->Model_Setting_Setting->editSetting('perpetual_payments', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -73,7 +75,7 @@ class ControllerPaymentPerpetualPayments extends Controller {
 			$this->data['perpetual_payments_order_status_id'] = $this->config->get('perpetual_payments_order_status_id');
 		}
 
-		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
 		
 		if (isset($_POST['perpetual_payments_geo_zone_id'])) {
 			$this->data['perpetual_payments_geo_zone_id'] = $_POST['perpetual_payments_geo_zone_id'];
@@ -81,7 +83,7 @@ class ControllerPaymentPerpetualPayments extends Controller {
 			$this->data['perpetual_payments_geo_zone_id'] = $this->config->get('perpetual_payments_geo_zone_id');
 		}
 		
-		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$this->data['geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 		
 		if (isset($_POST['perpetual_payments_status'])) {
 			$this->data['perpetual_payments_status'] = $_POST['perpetual_payments_status'];
@@ -103,7 +105,8 @@ class ControllerPaymentPerpetualPayments extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'payment/perpetual_payments')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

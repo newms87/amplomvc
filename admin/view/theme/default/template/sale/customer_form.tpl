@@ -1,6 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
+	<?= $this->builder->display_breadcrumbs(); ?>
 	<? if ($error_warning) { ?>
 	<div class="message_box warning"><?= $error_warning; ?></div>
 	<? } ?>
@@ -159,15 +159,15 @@
 							<tr>
 								<td><span class="required"></span> <?= $entry_country; ?></td>
 								<td>
-									<?= $this->builder->set_config('country_id', 'name');?>
-									<?= $this->builder->build('select', $countries, "address[$address_row][country_id]", $address['country_id'], array('class'=>'country_select'));?>
+									<?= $this->builder->set_config('country_id', 'name'); ?>
+									<?= $this->builder->build('select', $countries, "address[$address_row][country_id]", $address['country_id'], array('class'=>'country_select')); ?>
 									<? if (isset($error_address_country[$address_row])) { ?>
 									<span class="error"><?= $error_address_country[$address_row]; ?></span>
 									<? } ?></td>
 							</tr>
 							<tr>
 								<td><span class="required"></span> <?= $entry_zone; ?></td>
-								<td><select name="address[<?= $address_row; ?>][zone_id]" zone_id="<?= $address['zone_id'];?>" class="zone_select"></select>
+								<td><select name="address[<?= $address_row; ?>][zone_id]" zone_id="<?= $address['zone_id']; ?>" class="zone_select"></select>
 									<? if (isset($error_address_zone[$address_row])) { ?>
 									<span class="error"><?= $error_address_zone[$address_row]; ?></span>
 									<? } ?></td>
@@ -322,7 +322,7 @@ function addAddress() {
 }
 //--></script>
 
-<?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select');?>
+<?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select'); ?>
 
 <script type="text/javascript"><!--
 $('#transaction .pagination a').live('click', function() {

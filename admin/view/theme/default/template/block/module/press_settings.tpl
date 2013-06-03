@@ -1,8 +1,8 @@
 <table class="form">
 	<tr>
 		<td>
-			<?= $entry_press_items;?>
-			<a class="add_press_item"><?= $button_add_press_item;?></a>
+			<?= $entry_press_items; ?>
+			<a class="add_press_item"><?= $button_add_press_item; ?></a>
 		</td>
 		<td>
 			<ul id="press_list" count="<?= count($press_items); ?>">
@@ -26,8 +26,8 @@
 						<input type="text" name="settings[press_items][<?= $row; ?>][author]" value="<?= $press['author']; ?>" /><br />
 						<label class="date"><?= $entry_press_date; ?></label>
 						<input type="text" name="settings[press_items][<?= $row; ?>][date]" value="<?= $press['date']; ?>" /><br />
-						<label class="href"><?= $entry_press_href;?></label>
-						<input type="text" name="settings[press_items][<?= $row;?>][href]" value="<?= $press['href'];?>" />
+						<label class="href"><?= $entry_press_href; ?></label>
+						<input type="text" name="settings[press_items][<?= $row; ?>][href]" value="<?= $press['href']; ?>" />
 					</div>
 					<div class="press_images">
 						<a class="add_image_item"><?= $button_add_image; ?></a>
@@ -53,7 +53,7 @@
 					</div>
 					<!--
 					<span class="press_description">
-						<textarea class="<?= $key === 'template_row' ? 'template' : ''; ?>" name="settings[press_items][<?= $row;?>][description]"><?= $press['description'];?></textarea
+						<textarea class="<?= $key === 'template_row' ? 'template' : ''; ?>" name="settings[press_items][<?= $row; ?>][description]"><?= $press['description']; ?></textarea
 					</span>
 					-->
 					<div class='button_remove' onclick="$(this).closest('.press_item').remove()"></div>
@@ -65,7 +65,7 @@
 	</tr>
 </table>
 
-<?= $this->builder->js('ckeditor');?>
+<?= $this->builder->js('ckeditor'); ?>
 
 <script type="text/javascript">//<!--
 var image_tmp = $('#press_list .press_image_list .template_row');

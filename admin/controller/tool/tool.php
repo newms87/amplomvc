@@ -1,8 +1,10 @@
 <?php
-class ControllerToolTool extends Controller {
+class Admin_Controller_Tool_Tool extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('tool/tool');
 
 		$this->load->language('tool/tool');
@@ -20,7 +22,7 @@ class ControllerToolTool extends Controller {
 			'cache_tables' => ''
 		);
 	
-	foreach($defaults as $key=>$default){
+	foreach ($defaults as $key=>$default) {
 		if(isset($_POST[$key]))
 			$this->data[$key] = $_POST[$key];
 		else
@@ -36,7 +38,8 @@ class ControllerToolTool extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function clear_cache() {
+	public function clear_cache()
+	{
 		$this->language->load('tool/tool');
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['cache_tables']) && $this->validate()) {
@@ -51,7 +54,8 @@ class ControllerToolTool extends Controller {
 		$this->index();
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'tool/tool')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

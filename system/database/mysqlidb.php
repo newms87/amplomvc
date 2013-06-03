@@ -1,9 +1,11 @@
 <?php
-final class mysqlidb implements Database{
+final class mysqlidb implements Database
+{
 	private $mysqli;
 	private $err_msg;
 	
-	public function __construct($hostname, $username, $password, $database) {
+	public function __construct($hostname, $username, $password, $database)
+	{
 		$this->mysqli = new mysqli($hostname, $username, $password, $database);
 		
 		if ($this->mysqli->connect_error) {
@@ -19,24 +21,26 @@ final class mysqlidb implements Database{
 		$this->query("SET SQL_MODE = ''");
   	}
 	
-	public function get_error(){
+	public function get_error()
+	{
 		return $this->err_msg;
 	}
 		
-  	public function query($sql) {
+  	public function query($sql)
+  	{
 		$result = $this->mysqli->query($sql);
 
 		if ($result) {
 			if (is_object($result)) {
 				$data = array();
 		
-				while ($row = $result->fetch_assoc()){
+				while ($row = $result->fetch_assoc()) {
 					$data[] = $row;
 				}
 				
 				$result->free();
 				
-				$query = new stdClass();
+				$query = new stdclass();
 				$query->row = isset($data[0]) ? $data[0] : array();
 				$query->rows = $data;
 				$query->num_rows = count($data);
@@ -52,13 +56,14 @@ final class mysqlidb implements Database{
 		}
   	}
 	
-  	public function multi_query($sql) {
+  	public function multi_query($sql)
+  	{
 		$this->mysqli->multi_query($sql);
 		
-		while ($this->mysqli->more_results() && $this->mysqli->next_result()){
+		while ($this->mysqli->more_results() && $this->mysqli->next_result()) {
 		}
 		
-		if($this->mysqli->errno) {
+		if ($this->mysqli->errno) {
 			$this->err_msg = "<strong>MySQLi Error (" . $this->mysqli->errno . "):</strong> " . $this->mysqli->error . "<br /><br />$sql";
 			
 			return false;
@@ -67,7 +72,8 @@ final class mysqlidb implements Database{
 		return true;
   	}
 		
-	public function execute_file($file){
+	public function execute_file($file)
+	{
 		$mysql = defined("DB_MYSQL_FILE") ? DB_MYSQL_FILE : 'mysql';
 		
 		$file = escapeshellarg($file);
@@ -78,13 +84,13 @@ final class mysqlidb implements Database{
 		
 		shell_exec($cmd . ' 2> ' . $error_file);
 		
-		if(filesize($error_file) > 1){
+		if (filesize($error_file) > 1) {
 			$has_error = false;
 			
 			$handle = fopen($error_file, 'r');
 			
 			while (($buffer = fgets($handle, 4096)) !== false) {
-				if(strpos($buffer, 'ERROR') !== false){
+				if (strpos($buffer, 'ERROR') !== false) {
 					$this->err_msg = "MySQLi::execute_file(): " . $buffer;
 					$has_error = true;
 				}
@@ -96,7 +102,7 @@ final class mysqlidb implements Database{
 			
 			if($has_error) return false;
 			
-			if(!defined("DB_MYSQL_FILE") ||  !is_file(DB_MYSQL_FILE)){
+			if (!defined("DB_MYSQL_FILE") ||  !is_file(DB_MYSQL_FILE)) {
 				trigger_error("You must define DB_MYSQL_FILE to contain the file and path to mysql (mysql.exe on windows) for execute_file()!");
 				return null;
 			}
@@ -105,13 +111,14 @@ final class mysqlidb implements Database{
 		return true;
 	}
 	
-	public function dump($file, $tables = null){
+	public function dump($file, $tables = null)
+	{
 		$mysqldump = defined("DB_MYSQLDUMP_FILE") ? DB_MYSQLDUMP_FILE : 'mysqldump';
 		
-		if(!empty($tables)){
+		if (!empty($tables)) {
 			$tables = implode(' ', $tables);
 		}
-		else{
+		else {
 			$tables = '';
 		}
 		
@@ -119,8 +126,8 @@ final class mysqlidb implements Database{
 		
 		$cmd = "\"$mysqldump\" --user=\"" . DB_USERNAME . "\" --password=\"" . DB_PASSWORD . "\" --host=\"" . DB_HOSTNAME . "\" " . DB_DATABASE . " $tables > $file";
 		
-		if(shell_exec($cmd . ' | echo 1') === null){
-			if(!defined("DB_MYSQLDUMP_FILE") ||  !is_file(DB_MYSQLDUMP_FILE)){
+		if (shell_exec($cmd . ' | echo 1') === null) {
+			if (!defined("DB_MYSQLDUMP_FILE") ||  !is_file(DB_MYSQLDUMP_FILE)) {
 				trigger_error("You must define DB_MYSQLDUMP_FILE to contain the file and path to mysqldump (mysqldump.exe on windows) for dump!");
 				return false;
 			}
@@ -129,27 +136,33 @@ final class mysqlidb implements Database{
 		return true;
 	}
 	
-	public function set_autoincrement($table, $value){
+	public function set_autoincrement($table, $value)
+	{
 		return $this->query("ALTER TABLE " . DB_PREFIX . "$table AUTO_INCREMENT=" . (int)$value . "");
 	}
 	
-	public function escape($value) {
+	public function escape($value)
+	{
 		return $this->mysqli->real_escape_string($value);
 	}
 	
-	public function escape_html($value){
+	public function escape_html($value)
+	{
 		return $this->mysqli->real_escape_string(htmlspecialchars_decode($value));
 	}
 	
-  	public function countAffected() {
+  	public function countAffected()
+  	{
 		return $this->mysqli->affected_rows;
   	}
 
-  	public function getLastId() {
+  	public function getLastId()
+  	{
 		return $this->mysqli->insert_id;
   	}
 	
-	public function __destruct() {
+	public function __destruct()
+	{
 		$this->mysqli->close();
 	}
 }

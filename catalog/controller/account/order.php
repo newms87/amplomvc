@@ -1,8 +1,10 @@
 <?php
-class ControllerAccountOrder extends Controller {
+class Catalog_Controller_Account_Order extends Controller 
+{
 	
 		
-	public function index() {
+	public function index()
+	{
 		$this->template->load('account/order_list');
 
 		if (!$this->customer->isLogged()) {
@@ -15,17 +17,17 @@ class ControllerAccountOrder extends Controller {
 		
 		$order_id = isset($_GET['order_id']) ? $_GET['order_id'] : false;
 		if ($order_id) {
-			$order_info = $this->model_account_order->getOrder($order_id);
+			$order_info = $this->Model_Account_Order->getOrder($order_id);
 			
 			if ($order_info) {
-				$order_products = $this->model_account_order->getOrderProducts($order_id);
+				$order_products = $this->Model_Account_Order->getOrderProducts($order_id);
 						
 				foreach ($order_products as $order_product) {
 					$option_data = array();
 							
-					$order_options = $this->model_account_order->getOrderOptions($order_id, $order_product['order_product_id']);
+					$order_options = $this->Model_Account_Order->getOrderOptions($order_id, $order_product['order_product_id']);
 					
-					foreach($order_options as $order_option){
+					foreach ($order_options as $order_option) {
 						$option_data[$order_option['product_option_id']][] = $order_option;
 					}
 					
@@ -55,13 +57,13 @@ class ControllerAccountOrder extends Controller {
 		
 		$this->data['orders'] = array();
 		
-		$order_total = $this->model_account_order->getTotalOrders();
+		$order_total = $this->Model_Account_Order->getTotalOrders();
 		
-		$results = $this->model_account_order->getOrders(($page - 1) * 10, 10);
+		$results = $this->Model_Account_Order->getOrders(($page - 1) * 10, 10);
 		
 		foreach ($results as $result) {
-			$product_total = $this->model_account_order->getTotalOrderProductsByOrderId($result['order_id']);
-			$voucher_total = $this->model_account_order->getTotalOrderVouchersByOrderId($result['order_id']);
+			$product_total = $this->Model_Account_Order->getTotalOrderProductsByOrderId($result['order_id']);
+			$voucher_total = $this->Model_Account_Order->getTotalOrderVouchersByOrderId($result['order_id']);
 
 			$this->data['orders'][] = array(
 				'order_id'	=> $result['order_id'],
@@ -93,7 +95,8 @@ class ControllerAccountOrder extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function info() {
+	public function info()
+	{
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/order/info', 'order_id=' . $order_id);
 			
@@ -108,7 +111,7 @@ class ControllerAccountOrder extends Controller {
 			$order_id = 0;
 		}
 				
-		$order_info = $this->model_account_order->getOrder($order_id);
+		$order_info = $this->Model_Account_Order->getOrder($order_id);
 		
 		if ($order_info) {
 		$this->template->load('account/order_info');
@@ -210,12 +213,12 @@ class ControllerAccountOrder extends Controller {
 			
 			$this->data['products'] = array();
 			
-			$products = $this->model_account_order->getOrderProducts($_GET['order_id']);
+			$products = $this->Model_Account_Order->getOrderProducts($_GET['order_id']);
 
 				foreach ($products as $product) {
 				$option_data = array();
 				
-				$options = $this->model_account_order->getOrderOptions($_GET['order_id'], $product['order_product_id']);
+				$options = $this->Model_Account_Order->getOrderOptions($_GET['order_id'], $product['order_product_id']);
 
 					foreach ($options as $option) {
 						if ($option['type'] != 'file') {
@@ -245,7 +248,7 @@ class ControllerAccountOrder extends Controller {
 			// Voucher
 			$this->data['vouchers'] = array();
 			
-			$vouchers = $this->model_account_order->getOrderVouchers($_GET['order_id']);
+			$vouchers = $this->Model_Account_Order->getOrderVouchers($_GET['order_id']);
 			
 			foreach ($vouchers as $voucher) {
 				$this->data['vouchers'][] = array(
@@ -254,13 +257,13 @@ class ControllerAccountOrder extends Controller {
 				);
 			}
 			
-				$this->data['totals'] = $this->model_account_order->getOrderTotals($_GET['order_id']);
+				$this->data['totals'] = $this->Model_Account_Order->getOrderTotals($_GET['order_id']);
 			
 			$this->data['comment'] = nl2br($order_info['comment']);
 			
 			$this->data['histories'] = array();
 
-			$results = $this->model_account_order->getOrderHistories($_GET['order_id']);
+			$results = $this->Model_Account_Order->getOrderHistories($_GET['order_id']);
 
 				foreach ($results as $result) {
 				$this->data['histories'][] = array(

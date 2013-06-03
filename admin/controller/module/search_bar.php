@@ -1,8 +1,10 @@
 <?php
-class ControllerModuleSearchBar extends Controller {
+class Admin_Controller_Module_SearchBar extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/search_bar');
 
 		$this->load->language('module/search_bar');
@@ -10,7 +12,7 @@ class ControllerModuleSearchBar extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('search_bar', $_POST);
+			$this->Model_Setting_Setting->editSetting('search_bar', $_POST);
 					
 			$this->message->add('success', $this->_('text_success'));
 						
@@ -39,7 +41,7 @@ class ControllerModuleSearchBar extends Controller {
 			$this->data['modules'] = $this->config->get('search_bar_module');
 		}
 				
-		$this->data['layouts'] = $this->model_design_layout->getLayouts();
+		$this->data['layouts'] = $this->Model_Design_Layout->getLayouts();
 
 		$this->children = array(
 			'common/header',
@@ -49,7 +51,8 @@ class ControllerModuleSearchBar extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/search_bar')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

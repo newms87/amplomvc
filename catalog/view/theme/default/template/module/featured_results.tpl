@@ -1,12 +1,12 @@
 <? if(!$products_only){?>
 <div class="box featured_box" style='overflow:auto;'>
-	<div class="box-heading"><div class='featured_title'><span class='featured_title_first'><?=$featured_title[0];?></span><?= substr($featured_title,1); ?></div><div class='capistrano'><?=$featured_cat;?></div></div>
+	<div class="box-heading"><div class='featured_title'><span class='featured_title_first'><?= $featured_title[0]; ?></span><?= substr($featured_title,1); ?></div><div class='capistrano'><?= $featured_cat; ?></div></div>
 	<div class="box-content">
 		<div class="box-product">
 <? }?>
 
 			<? foreach ($products as $product) { ?>
-			<a href='<?= $product['href'];?>' class='featured_product_clickable'>
+			<a href='<?= $product['href']; ?>' class='featured_product_clickable'>
 				<? if ($product['thumb']) { ?>
 				<div class="image"><img src="<?= $product['thumb']; ?>" alt="<?= $product['name']; ?>" /></div>
 				<? } ?>
@@ -22,7 +22,7 @@
 					</div>
 					<? } ?>
 					<? if($product['flashsale_id']){?>
-						<div class='fs_countdown'><div id='fpop-<?=$product['product_id'];?>' class='flash_countdown' callback='end_featured_fs' type='short' flashid='<?=$product['flashsale_id'];?>'></div></div>
+						<div class='fs_countdown'><div id='fpop-<?= $product['product_id']; ?>' class='flash_countdown' callback='end_featured_fs' type='short' flashid='<?= $product['flashsale_id']; ?>'></div></div>
 					<? }?>
 				</div>
 				<? if($product['is_final']){?>
@@ -38,9 +38,9 @@
 </div>
 <? if(!$in_context){?>
 	<? if(count($products) < $total_products){?>
-		<div class='load_more_products' pages='<?= $num_pages;?>'>
-			<span><?=$text_scroll_more;?></span>
-			<img src='<?=$ajax_loader;?>' />
+		<div class='load_more_products' pages='<?= $num_pages; ?>'>
+			<span><?= $text_scroll_more; ?></span>
+			<img src='<?= $ajax_loader; ?>' />
 		</div>
 		<? }?>
  

@@ -1,15 +1,16 @@
 <?php
-class ControllerModuleCart extends Controller {
-	public function index() {
+class Catalog_Controller_Module_Cart extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('module/cart');
-
 		$this->language->load('module/cart');
 		
-			if (isset($_GET['remove'])) {
-				$this->cart->remove($_GET['remove']);
-			
+		if (isset($_GET['remove'])) {
+			$this->cart->remove($_GET['remove']);
+		
 			unset($this->session->data['vouchers'][$_GET['remove']]);
-			}
+		}
 			
 		// Totals
 		$total_data = array();
@@ -18,7 +19,7 @@ class ControllerModuleCart extends Controller {
 		
 		$sort_order = array();
 		
-		$results = $this->model_setting_extension->getExtensions('total');
+		$results = $this->Model_Setting_Extension->getExtensions('total');
 		
 		foreach ($results as $key => $value) {
 			$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
@@ -28,8 +29,8 @@ class ControllerModuleCart extends Controller {
 		
 		foreach ($results as $result) {
 			if ($this->config->get($result['code'] . '_status')) {
-	
-				$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
+				$classname = 'Model_Total_' . preg_replace_callback("/_([a-z])/i", function($matches){return strtoupper($matches[1]);}, ucfirst($result['code'])); 
+				$this->$classname->getTotal($total_data, $total, $taxes);
 			}
 			
 			$sort_order = array();

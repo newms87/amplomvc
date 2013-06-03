@@ -1,12 +1,14 @@
 <?php
-class ModelCatalogFlashsale extends Model {
-	public function addFlashsale($data) {
+class Admin_Model_Catalog_Flashsale extends Model 
+{
+	public function addFlashsale($data)
+	{
 		if(!isset($data['image']))
 			$data['image'] = '';
 		
 		$flashsale_id = $this->insert('flashsale', $data);
 		
-		foreach($data['products'] as $product_id=>$product){
+		foreach ($data['products'] as $product_id=>$product) {
 			$product['flashsale_id'] = $flashsale_id;
 			$product['product_id']	= $product_id;
 			
@@ -24,8 +26,8 @@ class ModelCatalogFlashsale extends Model {
 			$this->updateFlashsaleSpecial($values);
 		}
 		
-		if(isset($data['designers'])){
-			foreach($data['designers'] as $designer_id){
+		if (isset($data['designers'])) {
+			foreach ($data['designers'] as $designer_id) {
 				$fdata = array(
 					'designer_id' => $designer_id,
 					'flashsale_id' => $flashsale_id
@@ -35,15 +37,15 @@ class ModelCatalogFlashsale extends Model {
 			}
 		}
 		
-		if(isset($data['articles'])){
-			foreach($data['articles'] as $article){
+		if (isset($data['articles'])) {
+			foreach ($data['articles'] as $article) {
 				$article['flashsale_id'] = $flashsale_id;
 				
 				$this->insert('flashsale_article', $article);
 			}
 		}
 		
-		if($data['keyword']){
+		if ($data['keyword']) {
 			$url_alias = array(
 				'route'	=>'sales/flashsale',
 				'query'	=>"flashsale_id=" . (int)$flashsale_id,
@@ -51,17 +53,18 @@ class ModelCatalogFlashsale extends Model {
 				'status'  =>$data['status']
 			);
 			
-			$this->model_setting_url_alias->addUrlAlias($url_alias);
+			$this->Model_Setting_UrlAlias->addUrlAlias($url_alias);
 		}
 		
-		if($data['extend_flashsale']){
+		if ($data['extend_flashsale']) {
 			$this->extend_flashsale_price($flashsale_id);
 		}
 		
 		$this->cache->delete('flashsale');
 	}
 	
-	public function editFlashsale($flashsale_id, $data) {
+	public function editFlashsale($flashsale_id, $data)
+	{
 		if(!isset($data['image']))
 			$data['image'] = '';
 		
@@ -81,7 +84,7 @@ class ModelCatalogFlashsale extends Model {
 		
 		$this->delete('flashsale_product', $where);
 		
-		foreach($data['products'] as $product_id=>$product){
+		foreach ($data['products'] as $product_id=>$product) {
 			$product['flashsale_id'] = $flashsale_id;
 			$product['product_id'] = $product_id;
 			
@@ -107,8 +110,8 @@ class ModelCatalogFlashsale extends Model {
 		
 		$this->delete('flashsale_designer', $where);
 		
-		if(isset($data['designers'])){
-			foreach($data['designers'] as $designer_id){
+		if (isset($data['designers'])) {
+			foreach ($data['designers'] as $designer_id) {
 				$fd = array(
 					'designer_id'  => $designer_id,
 					'flashsale_id' => $flashsale_id
@@ -126,8 +129,8 @@ class ModelCatalogFlashsale extends Model {
 		
 		$this->delete('flashsale_article', $where);
 		
-		if(isset($data['articles'])){
-			foreach($data['articles'] as $article){
+		if (isset($data['articles'])) {
+			foreach ($data['articles'] as $article) {
 				$article['flashsale_id'] = $flashsale_id;
 				
 				$this->insert('flashsale_article', $article);
@@ -140,9 +143,9 @@ class ModelCatalogFlashsale extends Model {
 			'query' => 'flashsale_id=' . $flashsale_id
 		);
 		
-		$this->model_setting_url_alias->deleteUrlAliasByRouteQuery('sales/flashsale', 'flashsale_id=' . (int)$flashsale_id);
+		$this->Model_Setting_UrlAlias->deleteUrlAliasByRouteQuery('sales/flashsale', 'flashsale_id=' . (int)$flashsale_id);
 		
-		if($data['keyword']){
+		if ($data['keyword']) {
 			$url_alias = array(
 				'route'	=>'sales/flashsale',
 				'query'=>'flashsale_id=' . (int)$flashsale_id,
@@ -150,17 +153,18 @@ class ModelCatalogFlashsale extends Model {
 				'status'=>$data['status']
 			);
 			
-			$this->model_setting_url_alias->addUrlAlias($url_alias);
+			$this->Model_Setting_UrlAlias->addUrlAlias($url_alias);
 		}
 
-		if($data['extend_flashsale']){
+		if ($data['extend_flashsale']) {
 			$this->extend_flashsale_price($flashsale_id);
 		}
 		
 		$this->cache->delete('flashsale');
 	}
 	
-	public function deleteFlashsale($flashsale_id) {
+	public function deleteFlashsale($flashsale_id)
+	{
 		$this->delete('flashsale', $flashsale_id);
 		$this->delete('flashsale_product', array('flashsale_id'=>$flashsale_id));
 		$this->delete('flashsale_article', array('flashsale_id'=>$flashsale_id));
@@ -168,12 +172,13 @@ class ModelCatalogFlashsale extends Model {
 		
 		$this->delete('product_special', array('flashsale_id'=>$flashsale_id));
 		
-		$this->model_setting_url_alias->deleteUrlAliasByRouteQuery('sales/flashsale', 'flashsale_id=' . (int)$flashsale_id);
+		$this->Model_Setting_UrlAlias->deleteUrlAliasByRouteQuery('sales/flashsale', 'flashsale_id=' . (int)$flashsale_id);
 		
 		$this->cache->delete('flashsale');
 	}
 	
-	private function updateFlashsaleSpecial($data){
+	private function updateFlashsaleSpecial($data)
+	{
 		$where = array(
 			'product_id'	=> $data['product_id'],
 			'flashsale_id' => $data['flashsale_id']
@@ -183,18 +188,19 @@ class ModelCatalogFlashsale extends Model {
 		
 		$data['priority'] = -1;
 			
-		if($query->num_rows){
+		if ($query->num_rows) {
 			$this->update('product_special',  $data, $query->row['product_special_id']);
 		}
-		else{
+		else {
 			$this->insert('product_special', $data);
 		}
 		$this->cache->delete('product');
 	}
 	
-	private function extend_flashsale_price($flashsale_id){
+	private function extend_flashsale_price($flashsale_id)
+	{
 		$query = $this->query("SELECT date_expires FROM " . DB_PREFIX . "flashsale_designer fd LEFT JOIN " . DB_PREFIX . "manufacturer m ON (fd.designer_id = m.manufacturer_id) WHERE flashsale_id = '" . (int)$flashsale_id . "' LIMIT 1");
-		if(!$query->num_rows){
+		if (!$query->num_rows) {
 			$this->message->add("warning", "While extending product(s) flashsale price, Flashsale ID $flashsale_id was not associated with a designer.");
 			return;
 		}
@@ -210,30 +216,32 @@ class ModelCatalogFlashsale extends Model {
 		$this->update('product_special', $values, $where);
 	}
 	
-	public function generate_url($flashsale_id,$name){
-		$url = 'sale/'.$this->model_setting_url_alias->format_url($name);
+	public function generate_url($flashsale_id,$name)
+	{
+		$url = 'sale/'.$this->Model_Setting_UrlAlias->format_url($name);
 		$orig = $url;
 		$count = 2;
 		
-		if($flashsale_id){
-			$url_alias = $this->model_setting_url_alias->getUrlAliasByRouteQuery('sales/flashsale', "flashsale_id=$flashsale_id");
+		if ($flashsale_id) {
+			$url_alias = $this->Model_Setting_UrlAlias->getUrlAliasByRouteQuery('sales/flashsale', "flashsale_id=$flashsale_id");
 		}
-		else{
+		else {
 			$url_alias = null;
 		}
 		
-		$test = $this->model_setting_url_alias->getUrlAliasByKeyword($url);
-		while(!empty($test) && $test['url_alias_id'] != $url_alias['url_alias_id']){
+		$test = $this->Model_Setting_UrlAlias->getUrlAliasByKeyword($url);
+		while (!empty($test) && $test['url_alias_id'] != $url_alias['url_alias_id']) {
 			$url = $orig . '-' . $count++;
-			$test = $this->model_setting_url_alias->getUrlAliasByKeyword($url);
+			$test = $this->Model_Setting_UrlAlias->getUrlAliasByKeyword($url);
 		}
 		return $url;
 	}
 	
-	public function getFlashsale($flashsale_id) {
+	public function getFlashsale($flashsale_id)
+	{
 		$query = $this->get('flashsale', '*', $flashsale_id);
 		
-		if($query->num_rows){
+		if ($query->num_rows) {
 			$query->row['blurb'] = html_entity_decode($query->row['blurb']);
 			
 			$where = array(
@@ -247,8 +255,8 @@ class ModelCatalogFlashsale extends Model {
 			$results = $this->get('flashsale_product', '*', $where, $options);
 			
 			$products = array();
-			foreach($results->rows as $key=>$product){
-				$p = $this->model_catalog_product->getProduct($product['product_id']);
+			foreach ($results->rows as $key=>$product) {
+				$p = $this->Model_Catalog_Product->getProduct($product['product_id']);
 				if(!$p)continue;
 				$products[$key] = $p;
 				$products[$key]['orig_price'] = $products[$key]['price'];
@@ -267,7 +275,7 @@ class ModelCatalogFlashsale extends Model {
 			$results = $this->get('flashsale_article', '*',  $where);
 			
 			$articles = array();
-			foreach($results->rows as $key=>$row){
+			foreach ($results->rows as $key=>$row) {
 				$articles[$key] = $row;
 				$articles[$key]['description'] = html_entity_decode($row['description']);
 			}
@@ -280,7 +288,8 @@ class ModelCatalogFlashsale extends Model {
 		return $query->row;
 	}
 	
-	public function getFlashsaleDesigners($flashsale_id){
+	public function getFlashsaleDesigners($flashsale_id)
+	{
 		$results = $this->query("SELECT designer_id, m.name FROM " . DB_PREFIX . "flashsale_designer fd LEFT JOIN " . DB_PREFIX . "manufacturer m ON(fd.designer_id=m.manufacturer_id) WHERE flashsale_id='$flashsale_id'");
 		return $results->num_rows?$results->rows:array();
 	}
@@ -290,29 +299,29 @@ class ModelCatalogFlashsale extends Model {
 		
 		$where = '';
 		
-		if(!empty($data)){
-			if(isset($data['name']) && $data['name']){
+		if (!empty($data)) {
+			if (isset($data['name']) && $data['name']) {
 				$where .= ($where ? ' AND ':'') . "LCASE(`name`) like '%" . $this->db->escape(strtolower($data['name'])) . "%'";
 			}
 			
-			if(isset($data['date_end']) && $data['date_end']){
+			if (isset($data['date_end']) && $data['date_end']) {
 				$where .= ($where ? ' AND ':'') . "`date_end`" . $this->db->escape($data['date_end_prefix']) . "'" . $this->tool->format_datetime($data['date_end']) . "'";
 			}
-			if(isset($data['date_start']) && $data['date_start']){
+			if (isset($data['date_start']) && $data['date_start']) {
 				$where .= ($where ? ' AND ':'') . "`date_start`" . $this->db->escape($data['date_start_prefix']) . "'" . $this->tool->format_datetime($data['date_start']) . "'";
 			}
 			
-			if(isset($data['status']) && $data['status'] !== ''){
+			if (isset($data['status']) && $data['status'] !== '') {
 				$where .= ($where ? ' AND ':'') . "`status`='" . (int)$data['status'] . "'";
 			}
 			
-			if(!$total){
-				if(!empty($data['sort'])){
+			if (!$total) {
+				if (!empty($data['sort'])) {
 					$order = (isset($data['order'])?$data['order']:'ASC');
 					$options['order_by'] = $data['sort'] . ' ' . $order;
 				}
 				
-				if(!empty($data['limit'])){
+				if (!empty($data['limit'])) {
 					$start = isset($data['start']) ? $data['start']:0;
 					$options['limit'] = "$start, $data[limit]";
 				}
@@ -327,7 +336,8 @@ class ModelCatalogFlashsale extends Model {
 		return $total ? $query->row['total'] : $query->rows;
 	}
 	
-	public function getFlashsalesByDesignerID($designer_id){
+	public function getFlashsalesByDesignerID($designer_id)
+	{
 		$where = array(
 			'designer_id' => $designer_id
 		);
@@ -337,7 +347,8 @@ class ModelCatalogFlashsale extends Model {
 		return $query->rows;
 	}
 	
-	public function getFlashsaleByKeyword($keyword){
+	public function getFlashsaleByKeyword($keyword)
+	{
 		$where = array(
 			'keyword' => $keyword
 		);
@@ -351,11 +362,13 @@ class ModelCatalogFlashsale extends Model {
 		return $query->row;
 	}
 	
-	public function getTotalFlashsales($data){
+	public function getTotalFlashsales($data)
+	{
 		return $this->getFlashsales($data, true);
 	}
 	
-	public function updateStatus($flashsale_id, $status){
+	public function updateStatus($flashsale_id, $status)
+	{
 		$values = array(
 		'status'=>(int)$status
 		);
@@ -366,16 +379,16 @@ class ModelCatalogFlashsale extends Model {
 		
 		$this->update('flashsale', $values, $where);
 		
-		if((int)$status == 0){
+		if ((int)$status == 0) {
 			$where = array(
 			'flashsale_id' => $flashsale_id
 		);
 		
 			$this->delete('product_special', $where);
 		}
-		else{
+		else {
 			$fs_info = $this->getFlashsale($flashsale_id);
-			foreach($fs_info['products'] as $p){
+			foreach ($fs_info['products'] as $p) {
 				$values = array(
 					'product_id'		=> $p['product_id'],
 					'flashsale_id'		=> $flashsale_id,
@@ -389,10 +402,10 @@ class ModelCatalogFlashsale extends Model {
 			}
 		}
 		
-		$url_alias = $this->model_setting_url_alias->getUrlAliasByRouteQuery('sales/flashsale', 'flashsale_id='.$flashsale_id);
+		$url_alias = $this->Model_Setting_UrlAlias->getUrlAliasByRouteQuery('sales/flashsale', 'flashsale_id='.$flashsale_id);
 		
-		if(isset($url_alias['url_alias_id'])){
-			$this->model_setting_url_alias->editUrlAlias($url_alias['url_alias_id'],array('status'=>$status));
+		if (isset($url_alias['url_alias_id'])) {
+			$this->Model_Setting_UrlAlias->editUrlAlias($url_alias['url_alias_id'],array('status'=>$status));
 		}
 		
 		$this->cache->delete('flashsale');

@@ -1,8 +1,11 @@
 <?php
-class ControllerToolBackup extends Controller {
+class Admin_Controller_Tool_Backup extends Controller 
+{
 	
+	//TODO: Probably dont need this anymore...
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('tool/backup');
 
 		$this->load->language('tool/backup');
@@ -17,7 +20,7 @@ class ControllerToolBackup extends Controller {
 			}
 			
 			if ($content) {
-				$this->model_tool_backup->restore($content);
+				$this->Model_Tool_Backup->restore($content);
 				
 				$this->message->add('success', $this->_('text_success'));
 				
@@ -48,7 +51,7 @@ class ControllerToolBackup extends Controller {
 
 		$this->data['backup'] = $this->url->link('tool/backup/backup');
 
-		$this->data['tables'] = $this->model_tool_backup->getTables();
+		$this->data['tables'] = $this->Model_Tool_Backup->getTables();
 
 		$this->children = array(
 			'common/header',
@@ -58,7 +61,8 @@ class ControllerToolBackup extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function backup() {
+	public function backup()
+	{
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->response->addheader('Pragma: public');
 			$this->response->addheader('Expires: 0');
@@ -67,13 +71,17 @@ class ControllerToolBackup extends Controller {
 			$this->response->addheader('Content-Disposition: attachment; filename=backup.sql');
 			$this->response->addheader('Content-Transfer-Encoding: binary');
 			
-			$this->response->setOutput($this->model_tool_backup->backup($_POST['backup']));
+			$this->response->setOutput($this->Model_Tool_Backup->backup($_POST['backup']));
 		} else {
-			return $this->forward('error/permission');
+			//TODO if we do not remove this, lets change how we handle this...
+			//return $this->forward('error/permission');
+			trigger_error("Unable to backup server. User could not be verified");
+			exit;
 		}
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'tool/backup')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

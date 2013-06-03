@@ -1,6 +1,8 @@
 <?php
-class ControllerModuleSlideshow extends Controller {
-	protected function index($setting) {
+class Catalog_Controller_Module_Slideshow extends Controller 
+{
+	protected function index($setting)
+	{
 		$this->template->load('module/slideshow');
 
 		static $module = 0;
@@ -19,7 +21,7 @@ class ControllerModuleSlideshow extends Controller {
 		$this->data['banners'] = array();
 		
 		if (isset($setting['banner_id'])) {
-			$results = $this->model_design_banner->getBanner($setting['banner_id']);
+			$results = $this->Model_Design_Banner->getBanner($setting['banner_id']);
 			
 			foreach ($results as $result) {
 				if (file_exists(DIR_IMAGE . $result['image'])) {

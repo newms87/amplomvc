@@ -1,5 +1,6 @@
 <?php
-class Image {
+class Image 
+{
 	
 	private $registry;
 	private $file;
@@ -7,29 +8,33 @@ class Image {
 	private $info;
 	private $dir_mode;
 	
-	public function __construct($registry, $file = null) {
+	public function __construct($registry, $file = null)
+	{
 		$this->registry = $registry;
 		
-		if($file){
+		if ($file) {
 			$this->set_image($file);
 		}
 		
 		$this->dir_mode = $this->config->get('config_image_dir_mode');
 	}
 	
-	public function __get($key){
+	public function __get($key)
+	{
 		return $this->registry->get($key);
 	}
 	
-	public function get($filename){
-		if(!is_file(DIR_IMAGE . $filename)){
+	public function get($filename)
+	{
+		if (!is_file(DIR_IMAGE . $filename)) {
 			return is_file($filename) ? $filename : '';
 		}
 		
 		return ($this->url->is_ssl() ? HTTPS_IMAGE : HTTP_IMAGE) . $filename;
 	}
 	
-	public function set_image($file){
+	public function set_image($file)
+	{
 		if (is_file($file)) {
 			$this->file = $file;
 
@@ -51,14 +56,16 @@ class Image {
 		}
 	}
 	
-	public function unset_image(){
+	public function unset_image()
+	{
 		imagedestroy($this->image);
 		$this->image = null;
 		$this->file = null;
 		$this->info = null;
 	}
 	
-	private function create($image) {
+	private function create($image)
+	{
 		$mime = $this->info['mime'];
 		
 		$shutdown = function($image_class){
@@ -85,7 +92,8 @@ class Image {
 		}
 	}
 	
-	public function save($file, $quality = 90) {
+	public function save($file, $quality = 90)
+	{
 		//make the image cache directory if it does not exist
 		$file_dir = dirname($file);
 		
@@ -104,27 +112,28 @@ class Image {
 		if (is_resource($this->image)) {
 			if ($extension == 'jpeg' || $extension == 'jpg') {
 				$success = imagejpeg($this->image, $file, $quality);
-			} elseif($extension == 'png') {
+			} elseif ($extension == 'png') {
 				$success = imagepng($this->image, $file, 0);
-			} elseif($extension == 'gif') {
+			} elseif ($extension == 'gif') {
 				$success = imagegif($this->image, $file);
 			}
 			
 			$this->unset_image();
 		}
 		
-		if(!$success){
+		if (!$success) {
 			trigger_error("Image::save(): Failed to save image file $file!");
 		}
 	}
 	
-	public function resize($filename, $width = 0, $height = 0, $background_color = '') {
+	public function resize($filename, $width = 0, $height = 0, $background_color = '')
+	{
 		if (!is_file(DIR_IMAGE . $filename)) {
 			//If the file exists but not in the image directory, move it to the image directory and continue
-			if(is_string($filename) && is_file($filename)){
+			if (is_string($filename) && is_file($filename)) {
 				$copy_file = 'data/' . str_replace(SITE_DIR, '', $filename);
 				
-				if(!is_file(DIR_IMAGE . $copy_file)){
+				if (!is_file(DIR_IMAGE . $copy_file)) {
 					_is_writable(DIR_IMAGE . dirname($copy_file));
 					
 					copy($filename, DIR_IMAGE . $copy_file);
@@ -132,7 +141,7 @@ class Image {
 				
 				$filename = $copy_file;
 			}
-			else{
+			else {
 				return '';
 			}
 		}
@@ -140,10 +149,10 @@ class Image {
 		$info = pathinfo($filename);
 		
 		//if the background is transparent and the mime type is not png or gif, change to png
-		if(!$background_color && !in_array(strtolower($info['extension']), array('png','gif', 'jpg'))){
+		if (!$background_color && !in_array(strtolower($info['extension']), array('png','gif', 'jpg'))) {
 			$extension = 'png';
 		}
-		else{
+		else {
 			$extension = $info['extension'];
 		}
 		
@@ -187,10 +196,10 @@ class Image {
 			$background = imagecolorallocatealpha($this->image, 255, 255, 255, 127);
 			imagecolortransparent($this->image, $background);
 		} else {
-			if($background_color){
+			if ($background_color) {
 				$background = $this->heximagecolorallocate($background_color);
 			}
-			else{
+			else {
 				$background = imagecolorallocate($this->image, 255, 255, 255);
 			}
 		}
@@ -208,7 +217,8 @@ class Image {
 		return $this->get($new_image_path);
 	}
 	
-	public function watermark($file, $position = 'bottomright') {
+	public function watermark($file, $position = 'bottomright')
+	{
 		$watermark = $this->create($file);
 		
 		$watermark_width = imagesx($watermark);
@@ -238,7 +248,8 @@ class Image {
 		imagedestroy($watermark);
 	}
 	
-	public function crop($top_x, $top_y, $bottom_x, $bottom_y) {
+	public function crop($top_x, $top_y, $bottom_x, $bottom_y)
+	{
 		$image_old = $this->image;
 		$this->image = imagecreatetruecolor($bottom_x - $top_x, $bottom_y - $top_y);
 		
@@ -249,7 +260,8 @@ class Image {
 		$this->info['height'] = $bottom_y - $top_y;
 	}
 	
-	public function rotate($degree, $color = 'FFFFFF') {
+	public function rotate($degree, $color = 'FFFFFF')
+	{
 		$rgb = $this->html2rgb($color);
 		
 		$this->image = imagerotate($this->image, $degree, imagecolorallocate($this->image, $rgb[0], $rgb[1], $rgb[2]));
@@ -258,17 +270,20 @@ class Image {
 		$this->info['height'] = imagesy($this->image);
 	}
 		
-	private function filter($filter) {
+	private function filter($filter)
+	{
 		imagefilter($this->image, $filter);
 	}
 				
-	private function text($text, $x = 0, $y = 0, $size = 5, $color = '000000') {
+	private function text($text, $x = 0, $y = 0, $size = 5, $color = '000000')
+	{
 		$rgb = $this->html2rgb($color);
 		
 		imagestring($this->image, $size, $x, $y, $text, imagecolorallocate($this->image, $rgb[0], $rgb[1], $rgb[2]));
 	}
 	
-	private function merge($file, $x = 0, $y = 0, $opacity = 100) {
+	private function merge($file, $x = 0, $y = 0, $opacity = 100)
+	{
 		$merge = $this->create($file);
 
 		$merge_width = imagesx($image);
@@ -277,8 +292,9 @@ class Image {
 		imagecopymerge($this->image, $merge, $x, $y, 0, 0, $merge_width, $merge_height, $opacity);
 	}
 	
-	public function heximagecolorallocate($hex){
-		if(!$hex || strpos($hex, '#') !== 0 || strlen($hex) !== 7 || preg_match("/[^A-F0-9]/i",substr($hex,1)) > 0){
+	public function heximagecolorallocate($hex)
+	{
+		if (!$hex || strpos($hex, '#') !== 0 || strlen($hex) !== 7 || preg_match("/[^A-F0-9]/i",substr($hex,1)) > 0) {
 			trigger_error("ERROR in Draw library: set_text_color(\$color): \$color must be in hex format #FFFFFF");
 			return;
 		}
@@ -286,7 +302,8 @@ class Image {
 		return imagecolorallocate($this->image, (int)hexdec($hex[1].$hex[2]), (int)hexdec($hex[3].$hex[4]), (int)hexdec($hex[5].$hex[6]));
 	}
 	
-	private function html2rgb($color) {
+	private function html2rgb($color)
+	{
 		if ($color[0] == '#') {
 			$color = substr($color, 1);
 		}
@@ -314,10 +331,11 @@ class Image {
 	* @param $type - the method to sort by. 'HSV' is default.
 	*/
 	
-	public function sort(&$data, $img_key, $type = 'HSV'){
+	public function sort(&$data, $img_key, $type = 'HSV')
+	{
 		$img_hsv = array();
 		
-		foreach($data as $key => &$d){
+		foreach ($data as $key => &$d) {
 			$colors = $this->get_dominant_color($d[$img_key]);
 			$d['hsv'] = $this->RGB_to_HSV($colors['r'], $colors['g'], $colors['b']);
 			$hsv_sort[$key] = $d['hsv'];
@@ -326,7 +344,8 @@ class Image {
 		array_multisort($hsv_sort, SORT_ASC, $data);
 	}
 	
-	public function get_dominant_color($image){
+	public function get_dominant_color($image)
+	{
 		if (!is_file($image)) {
 			$image = DIR_IMAGE . $image;
 		}
@@ -371,7 +390,7 @@ class Image {
 		
 		$total = $colors['r'] + $colors['g'] + $colors['b'];
 		
-		foreach($colors as $key => $c){
+		foreach ($colors as $key => $c) {
 			$colors[$key] = 100 * ($c / $total);
 		}
 		
@@ -401,7 +420,7 @@ class Image {
 		//	attempting to calculate it would cause division by zero (see
 		//	below), so most applications simply substitute a Hue of zero.
 		// Saturation will always be zero in this case, see below for details.
-		if ($chroma == 0){
+		if ($chroma == 0) {
 			return array('H' => 0, 'S' => 0, 'V' => $computedV);
 		}
 	

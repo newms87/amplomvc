@@ -1,6 +1,8 @@
 <?php
-class ControllerPaymentPaymate extends Controller {
-	protected function index() {
+class Catalog_Controller_Payment_Paymate extends Controller 
+{
+	protected function index()
+	{
 		$this->template->load('payment/paymate');
 
 		if (!$this->config->get('paymate_test')) {
@@ -9,7 +11,7 @@ class ControllerPaymentPaymate extends Controller {
 			$this->data['action'] = 'https://www.paymate.com.au/PayMate/TestExpressPayment';
 		}
 		
-		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
+		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
 				
 		$this->data['mid'] = $this->config->get('paymate_username');
 		$this->data['amt'] = $this->currency->format($order_info['total'], $order_info['currency_code'], $order_info['currency_value'], false);
@@ -34,7 +36,8 @@ class ControllerPaymentPaymate extends Controller {
 		$this->render();
 	}
 	
-	public function callback() {
+	public function callback()
+	{
 		$this->load->language('payment/paymate');
 		
 		if (isset($_POST['ref'])) {
@@ -43,7 +46,7 @@ class ControllerPaymentPaymate extends Controller {
 			$order_id = 0;
 		}
 		
-		$order_info = $this->model_checkout_order->getOrder($order_id);
+		$order_info = $this->Model_Checkout_Order->getOrder($order_id);
 		
 		if ($order_info) {
 			$error = '';
@@ -84,7 +87,7 @@ class ControllerPaymentPaymate extends Controller {
 			
 			$this->response->setOutput($this->render());
 		} else {
-			$this->model_checkout_order->confirm($order_id, $this->config->get('paymate_order_status_id'));
+			$this->Model_Checkout_Order->confirm($order_id, $this->config->get('paymate_order_status_id'));
 			
 			$this->url->redirect($this->url->link('checkout/success'));
 		}

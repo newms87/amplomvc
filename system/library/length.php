@@ -1,14 +1,17 @@
 <?php
-class Length {
+class Length 
+{
 	private $lengths = array();
 	
-	public function __construct($registry) {
+	public function __construct($registry)
+	{
 		$this->db = $registry->get('db');
 		$this->config = $registry->get('config');
 
 		$length_class_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "length_class mc LEFT JOIN " . DB_PREFIX . "length_class_description mcd ON (mc.length_class_id = mcd.length_class_id) WHERE mcd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
 	
-		foreach ($length_class_query->rows as $result) {
+		foreach ($length_class_query->rows as $result) 
+{
 				$this->lengths[$result['length_class_id']] = array(
 				'length_class_id' => $result['length_class_id'],
 				'title'			=> $result['title'],
@@ -18,7 +21,8 @@ class Length {
 		}
   	}
 	
-  	public function convert($value, $from, $to) {
+  	public function convert($value, $from, $to)
+  	{
 		if ($from == $to) {
 				return $value;
 		}
@@ -38,7 +42,8 @@ class Length {
 			return $value * ($to / $from);
   	}
 
-	public function format($value, $length_class_id, $decimal_point = '.', $thousand_point = ',') {
+	public function format($value, $length_class_id, $decimal_point = '.', $thousand_point = ',')
+	{
 		if (isset($this->lengths[$length_class_id])) {
 			return number_format($value, 2, $decimal_point, $thousand_point) . $this->lengths[$length_class_id]['unit'];
 		} else {

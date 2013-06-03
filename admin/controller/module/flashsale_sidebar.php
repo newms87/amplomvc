@@ -1,8 +1,10 @@
 <?php
-class ControllerModuleFlashsaleSidebar extends Controller {
+class Admin_Controller_Module_FlashsaleSidebar extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/flashsale_sidebar');
 
 		$this->load->language('module/flashsale_sidebar');
@@ -10,7 +12,7 @@ class ControllerModuleFlashsaleSidebar extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('flashsale_sidebar', $_POST);
+			$this->Model_Setting_Setting->editSetting('flashsale_sidebar', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -32,7 +34,7 @@ class ControllerModuleFlashsaleSidebar extends Controller {
 			$this->data['modules'] = $this->config->get('flashsale_sidebar_module');
 		}
 		
-		$this->data['layouts'] = $this->model_design_layout->getLayouts();
+		$this->data['layouts'] = $this->Model_Design_Layout->getLayouts();
 		
 		$this->data['positions'] = array(
 			'column_left'=>$this->_('text_column_left'),
@@ -47,7 +49,8 @@ class ControllerModuleFlashsaleSidebar extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/flashsale_sidebar')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

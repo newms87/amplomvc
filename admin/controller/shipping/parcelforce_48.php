@@ -1,8 +1,10 @@
 <?php
-class ControllerShippingParcelforce48 extends Controller {
+class Admin_Controller_Shipping_Parcelforce4848_Controller_Shipping_Parcelforce4848 extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('shipping/parcelforce_48');
 
 		$this->load->language('shipping/parcelforce_48');
@@ -10,7 +12,7 @@ class ControllerShippingParcelforce48 extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('parcelforce_48', $_POST);
+			$this->Model_Setting_Setting->editSetting('parcelforce_48', $_POST);
 					
 			$this->message->add('success', $this->_('text_success'));
 						
@@ -89,9 +91,9 @@ class ControllerShippingParcelforce48 extends Controller {
 			$this->data['parcelforce_48_sort_order'] = $this->config->get('parcelforce_48_sort_order');
 		}
 
-		$this->data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
+		$this->data['tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
 		
-		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$this->data['geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 
 		$this->children = array(
 			'common/header',
@@ -101,7 +103,8 @@ class ControllerShippingParcelforce48 extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'shipping/parcelforce_48')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

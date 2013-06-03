@@ -1,11 +1,13 @@
 <?php
-class ControllerPaymentAuthorizeNetSim extends Controller {
-	protected function index() {
+class Catalog_Controller_Payment_AuthorizenetSim extends Controller 
+{
+	protected function index()
+	{
 		$this->template->load('payment/authorizenet_sim_index');
 
 		$this->data['action'] = $this->config->get('authorizenet_sim_url');
 		
-		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
+		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
 		
 		$data =& $this->data;
 			
@@ -140,7 +142,8 @@ class ControllerPaymentAuthorizeNetSim extends Controller {
 	*
 	* @return String
 	*/
-	private function calculateFpHash() {
+	private function calculateFpHash()
+	{
 		$data = $this->data;
 		
 		$code = $data['x_login'] . '^' . $data['x_fp_sequence'] . '^' .
@@ -153,7 +156,8 @@ class ControllerPaymentAuthorizeNetSim extends Controller {
 		return $fp_hash;
 	}
 
-	private function calculateResponseHash() {
+	private function calculateResponseHash()
+	{
 		$data = $_POST;
 		
 		$code = $this->config->get('authorizenet_sim_response_key') .
@@ -162,7 +166,8 @@ class ControllerPaymentAuthorizeNetSim extends Controller {
 		return md5($code);
 	}
 	
-	public function callback() {
+	public function callback()
+	{
 		$this->template->load('payment/authorizenet_sim_callback');
 
 		//Transaction_Approved
@@ -186,13 +191,13 @@ class ControllerPaymentAuthorizeNetSim extends Controller {
 		
 		if ($data['hash_match'] ) {
 			$order_id = $data['order_id'];
-			$order_info = $this->model_checkout_order->getOrder($order_id);
+			$order_info = $this->Model_Checkout_Order->getOrder($order_id);
 			
 			if ($order_info) {
 				if ($data['x_response_code'] == '1') {
-					$this->model_checkout_order->confirm($order_id, $this->config->get('authorizenet_sim_order_status_id'));
+					$this->Model_Checkout_Order->confirm($order_id, $this->config->get('authorizenet_sim_order_status_id'));
 				} else {
-					$this->model_checkout_order->confirm($order_id, $this->config->get('config_order_status_id') );
+					$this->Model_Checkout_Order->confirm($order_id, $this->config->get('config_order_status_id') );
 				}
 			}
 		}

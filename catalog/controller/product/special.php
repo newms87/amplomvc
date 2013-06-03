@@ -1,6 +1,8 @@
 <?php
-class ControllerProductSpecial extends Controller {
-	public function index() {
+class Catalog_Controller_Product_Special extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('product/special');
 
 		$this->language->load('product/special');
@@ -65,9 +67,9 @@ class ControllerProductSpecial extends Controller {
 			'limit' => $limit
 		);
 			
-		$product_total = $this->model_catalog_product->getTotalProductSpecials($data);
+		$product_total = $this->Model_Catalog_Product->getTotalProductSpecials($data);
 			
-		$results = $this->model_catalog_product->getProductSpecials($data);
+		$results = $this->Model_Catalog_Product->getProductSpecials($data);
 			
 		foreach ($results as $result) {
 			if ($result['image']) {

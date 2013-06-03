@@ -1,12 +1,12 @@
 <?= $header; ?>
 <div class="content">
-	<?=$this->builder->display_breadcrumbs();?>
+	<?= $this->builder->display_breadcrumbs(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
 			<div class="batch_actions">
-				Batch Action: <?= $this->builder->build('select',$update_actions, 'action','',array('id'=>'update_action'));?>
-				<a class="button" onclick="$('#form').attr('action', '<?=$list_update;?>'.replace(/%action%/,$('#update_action').val())).submit();" >Go</a>
+				Batch Action: <?= $this->builder->build('select',$update_actions, 'action','',array('id'=>'update_action')); ?>
+				<a class="button" onclick="$('#form').attr('action', '<?= $list_update; ?>'.replace(/%action%/,$('#update_action').val())).submit();" >Go</a>
 		</div>
 			<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a onclick="$('form').submit();" class="button"><?= $button_delete; ?></a></div>
 		</div>
@@ -38,20 +38,20 @@
 							<td></td>
 							<td></td>
 							<td align="left">
-								<?=$this->builder->build('select', $data_prefixes, 'date_start_prefix', $date_start_prefix);?>
+								<?= $this->builder->build('select', $data_prefixes, 'date_start_prefix', $date_start_prefix); ?>
 								<input type="text" name="filter_date_start" value="<?= $filter_date_start; ?>" class='datetime' size="8"/>
 							</td>
 							<td align="left">
-								<?=$this->builder->build('select', $data_prefixes, 'date_end_prefix', $date_end_prefix);?>
+								<?= $this->builder->build('select', $data_prefixes, 'date_end_prefix', $date_end_prefix); ?>
 								<input type="text" name="filter_date_end" value="<?= $filter_date_end; ?>" class='datetime' size="8"/>
 							</td>
-							<td><?=$this->builder->build('select', $data_statuses_blank, "filter_status", $filter_status);?></td>
+							<td><?= $this->builder->build('select', $data_statuses_blank, "filter_status", $filter_status); ?></td>
 							<td align="right"><a onclick="filter();" class="button"><?= $button_filter; ?></a></td>
 						</tr>
 						<? if ($flashsales) { ?>
 						<? foreach ($flashsales as $fs) { ?>
 						<tr>
-							<td style="text-align: center;"><input type="checkbox" name="selected[]" value="<?= $fs['flashsale_id']; ?>" <?= $fs['selected']?"checked='checked'":"";?> /></td>
+							<td style="text-align: center;"><input type="checkbox" name="selected[]" value="<?= $fs['flashsale_id']; ?>" <?= $fs['selected']?"checked='checked'":""; ?> /></td>
 							<td class="right">[ <a href="<?= $fs['action']['href']; ?>"><?= $fs['action']['text']; ?></a> ]</td>
 							<td class="left"><?= $fs['name']; ?></td>
 							<td class="left"><?= $fs['keyword']; ?></td>
@@ -60,7 +60,7 @@
 							<td class="left"><?= $fs['discount']; ?></td>
 							<td class="left"><?= $fs['date_start']; ?></td>
 							<td class="left"><?= $fs['date_end']; ?></td>
-							<td class="left"><?= $statuses[(int)$fs['status']];?></td>
+							<td class="left"><?= $statuses[(int)$fs['status']]; ?></td>
 							<td class="right">[ <a href="<?= $fs['action']['href']; ?>"><?= $fs['action']['text']; ?></a> ]</td>
 						</tr>
 						<? } ?>
@@ -77,8 +77,8 @@
 	</div>
 </div>
 
-<?=$this->builder->js('filter_url', '#filter_list', 'catalog/flashsale');?>
+<?= $this->builder->js('filter_url', '#filter_list', 'catalog/flashsale'); ?>
 
-<?=$this->builder->js('datepicker');?>
+<?= $this->builder->js('datepicker'); ?>
 
 <?= $footer; ?> 

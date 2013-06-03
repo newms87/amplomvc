@@ -1,13 +1,15 @@
 <?php
-class ControllerInformationInformation extends Controller {
-	public function index() {
+class Catalog_Controller_Information_Information extends Controller 
+{
+	public function index()
+	{
 		$this->language->load('information/information');
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		
 		$information_id = isset($_GET['information_id']) ? $_GET['information_id'] : 0;
 		
-		$information_info = $this->model_catalog_information->getInformation($information_id);
+		$information_info = $this->Model_Catalog_Information->getInformation($information_id);
 		
 		if ($information_info) {
 			$this->template->load('information/information');
@@ -56,14 +58,15 @@ class ControllerInformationInformation extends Controller {
 		}
   	}
 	
-	public function info() {
+	public function info()
+	{
 		if (isset($_GET['information_id'])) {
 			$information_id = $_GET['information_id'];
 		} else {
 			$information_id = 0;
 		}
 		
-		$information_info = $this->model_catalog_information->getInformation($information_id);
+		$information_info = $this->Model_Catalog_Information->getInformation($information_id);
 
 		if ($information_info) {
 			$output  = '<html dir="ltr" lang="en">' . "\n";

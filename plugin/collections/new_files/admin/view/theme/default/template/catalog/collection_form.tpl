@@ -1,7 +1,7 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
-	<?= $this->builder->display_errors($errors);?>
+	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'user.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -22,9 +22,9 @@
 						<td><input type="text" name="keyword" size="60" value="<?= $keyword; ?>" /></td>
 					</tr>
 					<tr>
-						<td><?= $entry_image;?></td>
-						<?= $this->builder->set_builder_template('click_image');?>
-						<td><?= $this->builder->image_input("image", $image, $thumb);?></td>
+						<td><?= $entry_image; ?></td>
+						<?= $this->builder->set_builder_template('click_image'); ?>
+						<td><?= $this->builder->image_input("image", $image, $thumb); ?></td>
 					</tr>
 					<tr>
 						<td><?= $entry_meta_keywords; ?></td>
@@ -42,7 +42,7 @@
 						<td>
 							<div><?= $entry_product; ?></div>
 							<div><input type="text" id='product_list_autocomplete' filter="pd.name" route="catalog/product/autocomplete" /></div>
-							<div><?= $text_autocomplete;?></div>
+							<div><?= $text_autocomplete; ?></div>
 						</td>
 						<td>
 							<ol id="product_list" class="scrollbox editable_list">
@@ -50,8 +50,8 @@
 								<? foreach ($products as $product) { ?>
 								<li>
 									<div class='editable_label'>
-											<input type="hidden" class='ac_item_id' name="products[<?=$product['product_id'];?>][product_id]" value="<?= $product['product_id'];?>" />
-											<input type="text" size="60" name="products[<?= $product['product_id'];?>][name]" value="<?= $product['name'];?>" />
+											<input type="hidden" class='ac_item_id' name="products[<?= $product['product_id']; ?>][product_id]" value="<?= $product['product_id']; ?>" />
+											<input type="text" size="60" name="products[<?= $product['product_id']; ?>][name]" value="<?= $product['name']; ?>" />
 									</div>
 									<img onclick="$(this).parent().remove()" src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" />
 								</li>
@@ -63,20 +63,20 @@
 					<tr>
 						<td><span class="required"></span> <?= $entry_category; ?></td>
 						<? $this->builder->set_config('category_id', 'name');?>
-						<td><?= $this->builder->build('multiselect', $data_categories, "categories", $categories);?></td>
+						<td><?= $this->builder->build('multiselect', $data_categories, "categories", $categories); ?></td>
 					</tr>
 					<tr>
 						<td><span class="required"></span> <?= $entry_store; ?></td>
 						<? $this->builder->set_config('store_id', 'name');?>
-						<td><?= $this->builder->build('multiselect', $data_stores, "stores", $stores);?></td>
+						<td><?= $this->builder->build('multiselect', $data_stores, "stores", $stores); ?></td>
 					</tr>
 					<tr>
 						<td><?= $entry_status; ?></td>
-						<td><?=$this->builder->build('select',$data_statuses,'status',(int)$status);?></td>
+						<td><?= $this->builder->build('select',$data_statuses,'status',(int)$status); ?></td>
 					</tr>
 					<tr>
 						<td><?= $entry_sort_order; ?></td>
-						<td><input type="text" name="sort_order" size="1" value="<?= $sort_order;?>" /></td>
+						<td><input type="text" name="sort_order" size="1" value="<?= $sort_order; ?>" /></td>
 					</tr>
 				</table>
 			</div>
@@ -86,9 +86,9 @@
 </div>
 <?= $footer; ?>
 
-<?= $this->builder->js('ckeditor');?>
+<?= $this->builder->js('ckeditor'); ?>
 
-<?= $this->builder->js('autocomplete', '#product_list_autocomplete', 'name', 'product_id', 'callback_product_autocomplete');?>
+<?= $this->builder->js('autocomplete', '#product_list_autocomplete', 'name', 'product_id', 'callback_product_autocomplete'); ?>
 
 <script type="text/javascript">//<!--
 $(document).ready(function(){
@@ -114,4 +114,4 @@ function callback_product_autocomplete(selector, data){
 
 <?= $this->builder->js('translations', $translations); ?>
 
-<?= $this->builder->js('errors', $errors);?>
+<?= $this->builder->js('errors', $errors); ?>

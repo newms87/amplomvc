@@ -1,6 +1,8 @@
 <?php
-class ControllerModuleLatest extends Controller {
-	protected function index($setting) {
+class Catalog_Controller_Module_Latest extends Controller 
+{
+	protected function index($setting)
+	{
 		$this->template->load('module/latest');
 
 		$this->language->load('module/latest');
@@ -14,7 +16,7 @@ class ControllerModuleLatest extends Controller {
 			'limit' => $setting['limit']
 		);
 
-		$results = $this->model_catalog_product->getProducts($data);
+		$results = $this->Model_Catalog_Product->getProducts($data);
 
 		foreach ($results as $result) {
 			if ($result['image']) {

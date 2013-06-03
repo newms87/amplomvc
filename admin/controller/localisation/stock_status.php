@@ -1,8 +1,10 @@
 <?php
-class ControllerLocalisationStockStatus extends Controller {
+class Admin_Controller_Localisation_StockStatus extends Controller 
+{
 	
 	
-  	public function index() {
+  	public function index()
+  	{
 		$this->load->language('localisation/stock_status');
 	
 		$this->document->setTitle($this->_('heading_title'));
@@ -10,13 +12,14 @@ class ControllerLocalisationStockStatus extends Controller {
 		$this->getList();
   	}
 				
-  	public function insert() {
+  	public function insert()
+  	{
 		$this->load->language('localisation/stock_status');
 	
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-				$this->model_localisation_stock_status->addStockStatus($_POST);
+				$this->Model_Localisation_StockStatus->addStockStatus($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -40,13 +43,14 @@ class ControllerLocalisationStockStatus extends Controller {
 		$this->getForm();
   	}
 
-  	public function update() {
+  	public function update()
+  	{
 		$this->load->language('localisation/stock_status');
 	
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_stock_status->editStockStatus($_GET['stock_status_id'], $_POST);
+			$this->Model_Localisation_StockStatus->editStockStatus($_GET['stock_status_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -70,14 +74,15 @@ class ControllerLocalisationStockStatus extends Controller {
 		$this->getForm();
   	}
 
-  	public function delete() {
+  	public function delete()
+  	{
 		$this->load->language('localisation/stock_status');
 	
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $stock_status_id) {
-				$this->model_localisation_stock_status->deleteStockStatus($stock_status_id);
+				$this->Model_Localisation_StockStatus->deleteStockStatus($stock_status_id);
 			}
 							
 			$this->message->add('success', $this->_('text_success'));
@@ -102,7 +107,8 @@ class ControllerLocalisationStockStatus extends Controller {
 		$this->getList();
   	}
 	
-  	private function getList() {
+  	private function getList()
+  	{
 		$this->template->load('localisation/stock_status_list');
 
 		if (isset($_GET['sort'])) {
@@ -152,9 +158,9 @@ class ControllerLocalisationStockStatus extends Controller {
 			'limit' => $this->config->get('config_admin_limit')
 		);
 		
-		$stock_status_total = $this->model_localisation_stock_status->getTotalStockStatuses();
+		$stock_status_total = $this->Model_Localisation_StockStatus->getTotalStockStatuses();
 	
-		$results = $this->model_localisation_stock_status->getStockStatuses($data);
+		$results = $this->Model_Localisation_StockStatus->getStockStatuses($data);
  
 		foreach ($results as $result) {
 			$action = array();
@@ -225,7 +231,8 @@ class ControllerLocalisationStockStatus extends Controller {
 		$this->response->setOutput($this->render());
   	}
   
-  	private function getForm() {
+  	private function getForm()
+  	{
 		$this->template->load('localisation/stock_status_form');
 
  		if (isset($this->error['warning'])) {
@@ -265,12 +272,12 @@ class ControllerLocalisationStockStatus extends Controller {
 			
 		$this->data['cancel'] = $this->url->link('localisation/stock_status', $url);
 		
-		$this->data['languages'] = $this->model_localisation_language->getLanguages();
+		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
 		
 		if (isset($_POST['stock_status'])) {
 			$this->data['stock_status'] = $_POST['stock_status'];
 		} elseif (isset($_GET['stock_status_id'])) {
-			$this->data['stock_status'] = $this->model_localisation_stock_status->getStockStatusDescriptions($_GET['stock_status_id']);
+			$this->data['stock_status'] = $this->Model_Localisation_StockStatus->getStockStatusDescriptions($_GET['stock_status_id']);
 		} else {
 			$this->data['stock_status'] = array();
 		}
@@ -283,7 +290,8 @@ class ControllerLocalisationStockStatus extends Controller {
 		$this->response->setOutput($this->render());
   	}
   	
-	private function validateForm() {
+	private function validateForm()
+	{
 		if (!$this->user->hasPermission('modify', 'localisation/stock_status')) {
 				$this->error['warning'] = $this->_('error_permission');
 		}
@@ -297,7 +305,8 @@ class ControllerLocalisationStockStatus extends Controller {
 		return $this->error ? false : true;
   	}
 
-  	private function validateDelete() {
+  	private function validateDelete()
+  	{
 		if (!$this->user->hasPermission('modify', 'localisation/stock_status')) {
 				$this->error['warning'] = $this->_('error_permission');
 		}
@@ -307,7 +316,7 @@ class ControllerLocalisationStockStatus extends Controller {
 				$this->error['warning'] = $this->_('error_default');
 			}
 						
-			$product_total = $this->model_catalog_product->getTotalProductsByStockStatusId($stock_status_id);
+			$product_total = $this->Model_Catalog_Product->getTotalProductsByStockStatusId($stock_status_id);
 		
 			if ($product_total) {
 				$this->error['warning'] = sprintf($this->_('error_product'), $product_total);

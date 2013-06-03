@@ -11,7 +11,7 @@
 <meta name="keywords" content="<?= $keywords; ?>" />
 <? } ?>
 <? if($canonical_link) {?>
-<link href="<?= $canonical_link;?>" rel="canonical" />
+<link href="<?= $canonical_link; ?>" rel="canonical" />
 <? }?>
 <link rel="stylesheet" type="text/css" href="view/stylesheet/stylesheet.css" />
 <? foreach ($css_styles as $style) { ?>
@@ -27,7 +27,7 @@
 <![if !IE]>
 <script type="text/javascript">//<!--
 url_state_object = {};
-window.history.pushState(url_state_object,'<?=$title;?>', '<?=isset($pretty_url) ? $pretty_url : '';?>');
+window.history.pushState(url_state_object,'<?= $title; ?>', '<?= isset($pretty_url) ? $pretty_url : ''; ?>');
 //--></script>
 <![endif]>
 
@@ -40,10 +40,10 @@ window.history.pushState(url_state_object,'<?=$title;?>', '<?=isset($pretty_url)
 <div id="container">
 <div id="header">
 	<div class="div1">
-		<div class="div2"><img src="<?=$admin_logo;?>" title="<?= $heading_title; ?>" onclick="location = '<?= $home; ?>'" /></div>
+		<div class="div2"><img src="<?= $admin_logo; ?>" title="<?= $heading_title; ?>" onclick="location = '<?= $home; ?>'" /></div>
 		<? if ($logged) { ?>
 		<div class="div3"><img src="<?= HTTP_THEME_IMAGE . 'lock.png'; ?>" alt="" style="position: relative; top: 3px;" />&nbsp;<?= $logged; ?></div>
-		<div class="div3" style="clear:right"><?=$support;?></div>
+		<div class="div3" style="clear:right"><?= $support; ?></div>
 		<? } ?>
 	</div>
 	<? if ($logged) { ?>
@@ -57,10 +57,10 @@ window.history.pushState(url_state_object,'<?=$title;?>', '<?=isset($pretty_url)
 				</ul>
 			</li>
 			<li id='Designers'>
-				<a href='<?= $designers;?>' class='top'><?= $text_designer_info;?></a>
+				<a href='<?= $designers; ?>' class='top'><?= $text_designer_info; ?></a>
 			</li>
 			<li id='User'>
-				<a href='<?= $user_info;?>' class='top'><?= $text_user_info;?></a>
+				<a href='<?= $user_info; ?>' class='top'><?= $text_user_info; ?></a>
 			</li>
 		</ul>
 		<ul class='right'>
@@ -130,4 +130,4 @@ $(document).ready(function() {
 </div>
 
 <div id='content'>
-<?=$this->builder->display_messages($messages);?>
+<?= $this->builder->display_messages($messages); ?>

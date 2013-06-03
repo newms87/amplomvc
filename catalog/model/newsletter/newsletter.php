@@ -1,9 +1,11 @@
 <?php
-class ModelNewsletterNewsletter extends Model {
-	public function getNewsletter($newsletter_id){
+class Catalog_Model_Newsletter_Newsletter extends Model 
+{
+	public function getNewsletter($newsletter_id)
+	{
 		$query = $this->get('newsletter', '*', $newsletter_id);
 		
-		if($query->num_rows){
+		if ($query->num_rows) {
 			$query->row['newsletter'] = unserialize($query->row['data']);
 			
 			unset($query->row['data']);

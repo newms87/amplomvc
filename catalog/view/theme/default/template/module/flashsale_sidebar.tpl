@@ -4,7 +4,7 @@
 			<ul>
 				<? foreach ($flashsales as $fs) { ?>
 				<li>
-					<a href='<?=$fs['href'];?>' class='flashsale_menu_link'><?=$fs['name'];?></a>
+					<a href='<?= $fs['href']; ?>' class='flashsale_menu_link'><?= $fs['name']; ?></a>
 				</li>
 			<? }?>
 			</ul>

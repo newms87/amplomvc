@@ -1,8 +1,10 @@
 <?php
-class ControllerModulePageHeaders extends Controller {
+class Admin_Controller_Module_PageHeaders extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('module/page_headers');
 
 		$this->load->language('module/page_headers');
@@ -10,7 +12,7 @@ class ControllerModulePageHeaders extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_design_layout->setLayoutPageHeaders($_POST);
+			$this->Model_Design_Layout->setLayoutPageHeaders($_POST);
 			$this->message->add('success', $this->_('text_success'));
 			$this->url->redirect($this->url->link('module/page_headers'));
 		}
@@ -25,19 +27,19 @@ class ControllerModulePageHeaders extends Controller {
 		if (isset($_POST['page_headers'])) {
 			$this->data['headers'] = $_POST['page_headers'];
 		} else {
-			$this->data['headers'] = $this->model_design_layout->getAllPageHeaders();
+			$this->data['headers'] = $this->Model_Design_Layout->getAllPageHeaders();
 		}
 		
-		$layouts = $this->model_design_layout->getLayouts();
+		$layouts = $this->Model_Design_Layout->getLayouts();
 		$this->data['layouts'] = array();
 		foreach($layouts as $layout)
 			$this->data['layouts'][$layout['layout_id']] = $layout['name'];
 		
-		$this->data['languages'] = $this->model_localisation_language->getLanguages();
+		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
 		
 		//Hide the langugages that are not set
-		foreach($this->data['headers'] as $hid=>&$h){
-			foreach($h['page_header'] as $lang_id=>$ph){
+		foreach ($this->data['headers'] as $hid=>&$h) {
+			foreach ($h['page_header'] as $lang_id=>$ph) {
 				$found = false;
 				foreach($this->data['languages'] as $l)
 					if($l['language_id'] == $lang_id)
@@ -55,7 +57,8 @@ class ControllerModulePageHeaders extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/page_headers')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

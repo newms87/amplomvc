@@ -22,12 +22,11 @@
 					<? } ?>
 			</div>
 				<div class='product_right'>
-					<div class='description'><?= $description;?></div>
+					<div class='description'><?= $description; ?></div>
 					<div class="price">
 						<?= isset($special)?
 					"<div class='product_info_orig_price'>$price</div><div class='product_info_price_text'>On Sale!</div><div class='product_info_price'>$special</div>":
-					"<div class='product_info_price' style='margin-top:10px;'>$price</div>";
-				?>
+					"<div class='product_info_price' style='margin-top:10px;'>$price</div>"; ?>
 					</div>
 				</div>
 			</div>

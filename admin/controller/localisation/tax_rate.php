@@ -1,8 +1,10 @@
 <?php
-class ControllerLocalisationTaxRate extends Controller {
+class Admin_Controller_Localisation_TaxRate extends Controller 
+{
 	
  
-	public function index() {
+	public function index()
+	{
 		$this->load->language('localisation/tax_rate');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -10,13 +12,14 @@ class ControllerLocalisationTaxRate extends Controller {
 		$this->getList();
 	}
 
-	public function insert() {
+	public function insert()
+	{
 		$this->load->language('localisation/tax_rate');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_tax_rate->addTaxRate($_POST);
+			$this->Model_Localisation_TaxRate->addTaxRate($_POST);
 
 			$this->message->add('success', $this->_('text_success'));
 
@@ -40,13 +43,14 @@ class ControllerLocalisationTaxRate extends Controller {
 		$this->getForm();
 	}
 
-	public function update() {
+	public function update()
+	{
 		$this->load->language('localisation/tax_rate');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_tax_rate->editTaxRate($_GET['tax_rate_id'], $_POST);
+			$this->Model_Localisation_TaxRate->editTaxRate($_GET['tax_rate_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -70,14 +74,15 @@ class ControllerLocalisationTaxRate extends Controller {
 		$this->getForm();
 	}
 
-	public function delete() {
+	public function delete()
+	{
 		$this->load->language('localisation/tax_rate');
 
 		$this->document->setTitle($this->_('heading_title'));
  		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $tax_rate_id) {
-				$this->model_localisation_tax_rate->deleteTaxRate($tax_rate_id);
+				$this->Model_Localisation_TaxRate->deleteTaxRate($tax_rate_id);
 			}
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -102,7 +107,8 @@ class ControllerLocalisationTaxRate extends Controller {
 		$this->getList();
 	}
 
-	private function getList() {
+	private function getList()
+	{
 		$this->template->load('localisation/tax_rate_list');
 
 		if (isset($_GET['sort'])) {
@@ -152,9 +158,9 @@ class ControllerLocalisationTaxRate extends Controller {
 			'limit' => $this->config->get('config_admin_limit')
 		);
 		
-		$tax_rate_total = $this->model_localisation_tax_rate->getTotalTaxRates();
+		$tax_rate_total = $this->Model_Localisation_TaxRate->getTotalTaxRates();
 
-		$results = $this->model_localisation_tax_rate->getTaxRates($data);
+		$results = $this->Model_Localisation_TaxRate->getTaxRates($data);
 
 		foreach ($results as $result) {
 			$action = array();
@@ -235,7 +241,8 @@ class ControllerLocalisationTaxRate extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function getForm() {
+	private function getForm()
+	{
 		$this->template->load('localisation/tax_rate_form');
 
  		if (isset($this->error['warning'])) {
@@ -282,7 +289,7 @@ class ControllerLocalisationTaxRate extends Controller {
 		$this->data['cancel'] = $this->url->link('localisation/tax_rate', $url);
 
 		if (isset($_GET['tax_rate_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-			$tax_rate_info = $this->model_localisation_tax_rate->getTaxRate($_GET['tax_rate_id']);
+			$tax_rate_info = $this->Model_Localisation_TaxRate->getTaxRate($_GET['tax_rate_id']);
 		}
 
 		if (isset($_POST['name'])) {
@@ -312,12 +319,12 @@ class ControllerLocalisationTaxRate extends Controller {
 		if (isset($_POST['tax_rate_customer_group'])) {
 			$this->data['tax_rate_customer_group'] = $_POST['tax_rate_customer_group'];
 		} elseif (!empty($tax_rate_info)) {
-			$this->data['tax_rate_customer_group'] = $this->model_localisation_tax_rate->getTaxRateCustomerGroups($_GET['tax_rate_id']);
+			$this->data['tax_rate_customer_group'] = $this->Model_Localisation_TaxRate->getTaxRateCustomerGroups($_GET['tax_rate_id']);
 		} else {
 			$this->data['tax_rate_customer_group'] = array();
 		}
 		
-		$this->data['customer_groups'] = $this->model_sale_customer_group->getCustomerGroups();
+		$this->data['customer_groups'] = $this->Model_Sale_CustomerGroup->getCustomerGroups();
 						
 		if (isset($_POST['geo_zone_id'])) {
 			$this->data['geo_zone_id'] = $_POST['geo_zone_id'];
@@ -327,7 +334,7 @@ class ControllerLocalisationTaxRate extends Controller {
 			$this->data['geo_zone_id'] = '';
 		}
 				
-		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$this->data['geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 				
 		$this->children = array(
 			'common/header',
@@ -337,7 +344,8 @@ class ControllerLocalisationTaxRate extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validateForm() {
+	private function validateForm()
+	{
 		if (!$this->user->hasPermission('modify', 'localisation/tax_rate')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
@@ -353,13 +361,14 @@ class ControllerLocalisationTaxRate extends Controller {
 		return $this->error ? false : true;
 	}
 
-	private function validateDelete() {
+	private function validateDelete()
+	{
 		if (!$this->user->hasPermission('modify', 'localisation/tax_rate')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
 		foreach ($_POST['selected'] as $tax_rate_id) {
-			$tax_rule_total = $this->model_localisation_tax_class->getTotalTaxRulesByTaxRateId($tax_rate_id);
+			$tax_rule_total = $this->Model_Localisation_Taxclass->getTotalTaxRulesByTaxRateId($tax_rate_id);
 
 			if ($tax_rule_total) {
 				$this->error['warning'] = sprintf($this->_('error_tax_rule'), $tax_rule_total);

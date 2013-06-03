@@ -1,7 +1,9 @@
 <?php
-class ModelReportFlashsale extends Model {
+class Admin_Model_Report_Flashsale extends Model 
+{
 	
-	public function getFlashsaleViews(){
+	public function getFlashsaleViews()
+	{
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "flashsale_views");
 		return $query->rows;
 	}
@@ -12,7 +14,7 @@ class ModelReportFlashsale extends Model {
 			
 		$limit = isset($data['limit'])?(int)$data['limit']:'';
 		
-		if($limit){
+		if ($limit) {
 			$start = isset($data['start'])?(int)$data['start']:0;
 			if ($start < 0) {
 				$start = 0;
@@ -31,17 +33,20 @@ class ModelReportFlashsale extends Model {
 		return $query->rows;
 	}
 	
-	public function getTotalFlashsalesViewed() {
+	public function getTotalFlashsalesViewed()
+	{
 		$query = $this->query("SELECT COUNT(DISTINCT flashsale_id) as total FROM " . DB_PREFIX . "flashsale_views");
 		return $query->row['total'];
 	}
 	
-	public function getTotalFlashsaleViews() {
+	public function getTotalFlashsaleViews()
+	{
 		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "flashsale_views");
 		return $query->row['total'];
 	}
 			
-	public function reset() {
+	public function reset()
+	{
 		$this->query("DELETE FROM ". DB_PREFIX . "flashsale_views");
 	}
 }

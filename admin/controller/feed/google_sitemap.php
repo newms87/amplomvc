@@ -1,8 +1,10 @@
 <?php
-class ControllerFeedGoogleSitemap extends Controller {
+class Admin_Controller_Feed_GoogleSitemap extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('feed/google_sitemap');
 
 		$this->load->language('feed/google_sitemap');
@@ -10,7 +12,7 @@ class ControllerFeedGoogleSitemap extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('google_sitemap', $_POST);
+			$this->Model_Setting_Setting->editSetting('google_sitemap', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -47,7 +49,8 @@ class ControllerFeedGoogleSitemap extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'feed/google_sitemap')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

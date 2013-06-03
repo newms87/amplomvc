@@ -1,6 +1,8 @@
 <?php
-class ModelLocalisationReturnStatus extends Model {
-	public function addReturnStatus($data) {
+class Admin_Model_Localisation_ReturnStatus extends Model 
+{
+	public function addReturnStatus($data)
+	{
 		foreach ($data['return_status'] as $language_id => $value) {
 			if (isset($return_status_id)) {
 				$this->query("INSERT INTO " . DB_PREFIX . "return_status SET return_status_id = '" . (int)$return_status_id . "', language_id = '" . (int)$language_id . "', name = '" . $this->db->escape($value['name']) . "'");
@@ -14,7 +16,8 @@ class ModelLocalisationReturnStatus extends Model {
 		$this->cache->delete('return_status');
 	}
 
-	public function editReturnStatus($return_status_id, $data) {
+	public function editReturnStatus($return_status_id, $data)
+	{
 		$this->query("DELETE FROM " . DB_PREFIX . "return_status WHERE return_status_id = '" . (int)$return_status_id . "'");
 
 		foreach ($data['return_status'] as $language_id => $value) {
@@ -24,13 +27,15 @@ class ModelLocalisationReturnStatus extends Model {
 		$this->cache->delete('return_status');
 	}
 	
-	public function deleteReturnStatus($return_status_id) {
+	public function deleteReturnStatus($return_status_id)
+	{
 		$this->query("DELETE FROM " . DB_PREFIX . "return_status WHERE return_status_id = '" . (int)$return_status_id . "'");
 	
 		$this->cache->delete('return_status');
 	}
 		
-	public function getReturnStatus($return_status_id) {
+	public function getReturnStatus($return_status_id)
+	{
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "return_status WHERE return_status_id = '" . (int)$return_status_id . "' AND language_id = '" . (int)$this->config->get('config_language_id') . "'");
 		
 		return $query->row;
@@ -78,7 +83,8 @@ class ModelLocalisationReturnStatus extends Model {
 		}
 	}
 	
-	public function getReturnStatusDescriptions($return_status_id) {
+	public function getReturnStatusDescriptions($return_status_id)
+	{
 		$return_status_data = array();
 		
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "return_status WHERE return_status_id = '" . (int)$return_status_id . "'");
@@ -90,7 +96,8 @@ class ModelLocalisationReturnStatus extends Model {
 		return $return_status_data;
 	}
 	
-	public function getTotalReturnStatuses() {
+	public function getTotalReturnStatuses()
+	{
 			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "return_status WHERE language_id = '" . (int)$this->config->get('config_language_id') . "'");
 		
 		return $query->row['total'];

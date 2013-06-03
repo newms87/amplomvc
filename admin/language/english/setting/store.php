@@ -59,6 +59,7 @@ $_['entry_stock_display']		= 'Display Stock:<br /><span class="help">Display sto
 $_['entry_stock_checkout']	= 'Stock Checkout:<br /><span class="help">Allow customers to still checkout if the products they are ordering are not in stock.</span>';
 $_['entry_order_status']		= 'Order Status:<br /><span class="help">Set the default order status when an order is processed.</span>';
 $_['entry_cart_weight']		= 'Display Weight on Cart Page:';
+$_['entry_show_product_model'] = "Display Model # on product page:";
 $_['entry_logo']					= 'Store Logo:';
 $_['entry_icon']					= 'Icon:<br /><span class="help">The icon should be a PNG that is 16px x 16px.</span>';
 $_['entry_image_category']	= 'Category Image Size:';

@@ -1,6 +1,8 @@
 <?php
-class ControllerReportSaleOrder extends Controller {
-	public function index() {
+class Admin_Controller_Report_SaleOrder extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('report/sale_order');
 
 		$this->load->language('report/sale_order');
@@ -14,7 +16,7 @@ class ControllerReportSaleOrder extends Controller {
 				'filter_order_status_id'=>5,
 				'page'=>1,
 			);
-		foreach($query_defaults as $key=>$default){
+		foreach ($query_defaults as $key=>$default) {
 			$$key = isset($_GET[$key])?$_GET[$key]:$default;
 		}
 		
@@ -34,9 +36,9 @@ class ControllerReportSaleOrder extends Controller {
 			'limit'						=> $this->config->get('config_admin_limit')
 		);
 		
-		$order_total = $this->model_report_sale->getTotalOrders($data);
+		$order_total = $this->Model_Report_Sale->getTotalOrders($data);
 		
-		$results = $this->model_report_sale->getOrders($data);
+		$results = $this->Model_Report_Sale->getOrders($data);
 		
 		foreach ($results as $result) {
 			$this->data['orders'][] = array(
@@ -50,7 +52,7 @@ class ControllerReportSaleOrder extends Controller {
 			);
 		}
 		
-		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
 
 		$this->data['groups'] = array();
 
@@ -93,7 +95,8 @@ class ControllerReportSaleOrder extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function get_url($filters=null){
+	private function get_url($filters=null)
+	{
 		$url = '';
 		$filters = $filters?$filters:array('filter_date_start','filter_date_end','filter_group','filter_order_status_id','page');
 		foreach($filters as $f)

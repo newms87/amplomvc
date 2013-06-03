@@ -1,13 +1,13 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
-	<?= $this->builder->display_errors($errors);?>
+	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
 			<div class="buttons">
 				<? if(isset($preview)){?>
-						<a href="<?=$preview;?>" target="_blank" class="button"><?= $button_preview; ?></a>
+						<a href="<?= $preview; ?>" target="_blank" class="button"><?= $button_preview; ?></a>
 				<? }?>
 				<a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a>
 				<a onclick="location = '<?= $cancel; ?>';" class="button"><?= $button_cancel; ?></a>
@@ -19,12 +19,12 @@
 				<div id="tab-general">
 					<table class="form">
 					<tr>
-							<td><?=$entry_extend_flashsale;?></td>
-							<td><?=$this->builder->build('select',$yes_no,'extend_flashsale',(int)$extend_flashsale);?></td>
+							<td><?= $entry_extend_flashsale; ?></td>
+							<td><?= $this->builder->build('select',$yes_no,'extend_flashsale',(int)$extend_flashsale); ?></td>
 					</tr>
 					<tr>
 							<td><?= $entry_designer; ?></td>
-							<td><?= $this->builder->build('select',$designer_list,'','',array('id'=>'autofill_designer'));?><a onclick='autofill_designer_info();' class='button'><?=$button_autofill;?></a></td>
+							<td><?= $this->builder->build('select',$designer_list,'','',array('id'=>'autofill_designer')); ?><a onclick='autofill_designer_info();' class='button'><?= $button_autofill; ?></a></td>
 					</tr>
 					<tr>
 							<td><span class="required"></span> <?= $entry_discount; ?></td>
@@ -39,7 +39,7 @@
 							<td><span class="required"></span> <?= $entry_keyword; ?></td>
 							<td>
 								<input id='flashsale_keyword' onfocus='generate_url_warning(this)' type="text" name="keyword" value="<?= $keyword; ?>" size="40" />
-								<a class='gen_url' onclick='generate_url(this)'><?=$button_generate_url;?></a>
+								<a class='gen_url' onclick='generate_url(this)'><?= $button_generate_url; ?></a>
 							</td>
 					</tr>
 					<tr>
@@ -51,7 +51,7 @@
 									echo "<a onclick='$(this).parent().remove()'>remove</a>";
 							}?>
 							</ul>
-							<a onclick="add_designer();"><?=$button_add_designer;?></a>
+							<a onclick="add_designer();"><?= $button_add_designer; ?></a>
 						</td>
 					</tr>
 					<tr>
@@ -60,7 +60,7 @@
 					</tr>
 					<tr>
 							<td><?= $entry_blurb; ?></td>
-							<td><textarea id='flashsale_blurb' class='ckedit' name="blurb"><?=$blurb;?></textarea></td>
+							<td><textarea id='flashsale_blurb' class='ckedit' name="blurb"><?= $blurb; ?></textarea></td>
 					</tr>
 					<tr>
 						<td><?= $entry_product; ?></td>
@@ -73,20 +73,20 @@
 								<? foreach ($products as $product) { ?>
 										<li id="featured-product<?= $product['product_id']; ?>">
 											<span class='p_name'><?= $product['name']; ?></span>
-											<span class='p_price'>$<input type="text" name="products[<?=$product['product_id'];?>][price]" value="<?= $product['price']; ?>" /></span>
-											<input type="hidden" name="products[<?=$product['product_id'];?>][name]" value="<?= $product['name']; ?>" />
+											<span class='p_price'>$<input type="text" name="products[<?= $product['product_id']; ?>][price]" value="<?= $product['price']; ?>" /></span>
+											<input type="hidden" name="products[<?= $product['product_id']; ?>][name]" value="<?= $product['name']; ?>" />
 											<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" onclick="$(this).parent().remove()"/>
 										</li>
 								<? } ?>
 								</ol>
-								<a style='margin-top:10px;display:block' onclick="$('#featured-product').empty();"><?=$button_clear_products;?></a>
+								<a style='margin-top:10px;display:block' onclick="$('#featured-product').empty();"><?= $button_clear_products; ?></a>
 							</td>
 					</tr>
 						<tr>
 							<td><?= $entry_image; ?></td>
 								<td>
-									<?= $this->builder->set_builder_template('click_image');?>
-									<?= $this->builder->image_input("image", $image, $thumb);?>
+									<?= $this->builder->set_builder_template('click_image'); ?>
+									<?= $this->builder->image_input("image", $image, $thumb); ?>
 							</td>
 						</tr>
 						<tr>
@@ -98,16 +98,16 @@
 							<td><input type="text" class="datetime" name="date_end" value="<?= $date_end; ?>" size="20" /></td>
 						</tr>
 						<tr>
-							<td><?= $entry_section_attr;?></td>
-							<td><?= $this->builder->build('select',$section_attrs, 'section_attr',$section_attr);?></td>
+							<td><?= $entry_section_attr; ?></td>
+							<td><?= $this->builder->build('select',$section_attrs, 'section_attr',$section_attr); ?></td>
 						</tr>
 						<tr>
-							<td><?= $entry_customer_group;?></td>
-							<td><?= $this->builder->build('select',$customer_groups,'customer_group_id',$customer_group_id);?></td>
+							<td><?= $entry_customer_group; ?></td>
+							<td><?= $this->builder->build('select',$customer_groups,'customer_group_id',$customer_group_id); ?></td>
 						</tr>
 						<tr>
-							<td><?= $entry_status;?></td>
-							<td><?= $this->builder->build('select',$statuses, 'status',(int)$status);?></td>
+							<td><?= $entry_status; ?></td>
+							<td><?= $this->builder->build('select',$statuses, 'status',(int)$status); ?></td>
 						</tr>
 					</table>
 				</div>
@@ -115,27 +115,27 @@
 					<table class='list'>
 						<thead>
 								<tr>
-									<td><?= $entry_article_title;?></td>
-									<td><?= $entry_article_description;?></td>
-									<td><?= $entry_article_link;?></td>
+									<td><?= $entry_article_title; ?></td>
+									<td><?= $entry_article_description; ?></td>
+									<td><?= $entry_article_link; ?></td>
 									<td></td>
 								</tr>
 						</thead>
 						<? if($articles)foreach($articles as $row=>$article){?>
-						<tbody id='article-<?=$row;?>'>
+						<tbody id='article-<?= $row; ?>'>
 								<tr>
-									<input type='hidden' name="articles[<?=$row;?>][article_id]" value="<?=$article['article_id'];?>" />
-									<td class="left"><input type="text" name="articles[<?=$row;?>][title]" value="<?=$article['title'];?>" /></td>
-									<td class="left"><textarea class='ckedit' id='article-description-<?=$row;?>' name="articles[<?=$row;?>][description]" ><?=$article['description'];?></textarea></td>
-									<td class="left"><input type="text" name="articles[<?=$row;?>][link]" size='60' value="<?=$article['link'];?>" /></td>
-									<td class="left"><a onclick="remove_ckeditor_for($('#article-description-<?=$row;?>'));$('#article-<?=$row;?>').remove();" class="button"><?=$button_remove;?></a></td>
+									<input type='hidden' name="articles[<?= $row; ?>][article_id]" value="<?= $article['article_id']; ?>" />
+									<td class="left"><input type="text" name="articles[<?= $row; ?>][title]" value="<?= $article['title']; ?>" /></td>
+									<td class="left"><textarea class='ckedit' id='article-description-<?= $row; ?>' name="articles[<?= $row; ?>][description]" ><?= $article['description']; ?></textarea></td>
+									<td class="left"><input type="text" name="articles[<?= $row; ?>][link]" size='60' value="<?= $article['link']; ?>" /></td>
+									<td class="left"><a onclick="remove_ckeditor_for($('#article-description-<?= $row; ?>'));$('#article-<?= $row; ?>').remove();" class="button"><?= $button_remove; ?></a></td>
 								</tr>
 						</tbody>
 						<? }?>
 							<tbody>
 								<tr>
 									<td class="left" colspan="4"></td>
-									<td class="center"><a onclick="add_article(this);" class="button"><?=$button_add_article;?></a></td>
+									<td class="center"><a onclick="add_article(this);" class="button"><?= $button_add_article; ?></a></td>
 									<td class="left" colspan="3"></td>
 								</tr>
 						</tbody>
@@ -149,7 +149,7 @@
 <script type="text/javascript">//<!--
 function generate_url_warning(field){
 	if($('#gen_warn').length == 0)
-			$(field).parent().append('<span id="gen_warn" style="color:red"><?=$warning_generate_url;?></span>');
+			$(field).parent().append('<span id="gen_warn" style="color:red"><?= $warning_generate_url; ?></span>');
 }
 function generate_url(c){
 	$(c).fadeOut(500,function(){$(this).show();});
@@ -157,7 +157,7 @@ function generate_url(c){
 	name =$('input[name="name"]').val();
 	if(!name)
 			alert("Please make a name for this Flashsale before generating the URL");
-	$.post("<?= HTTP_ADMIN . "index.php?route=catalog/flashsale/generate_url"; ?>",{flashsale_id:<?=$flashsale_id;?>,name:name},function(json){$('input[name="keyword"]').val(json);},'json');
+	$.post("<?= HTTP_ADMIN . "index.php?route=catalog/flashsale/generate_url"; ?>",{flashsale_id:<?= $flashsale_id; ?>,name:name},function(json){$('input[name="keyword"]').val(json);},'json');
 }
  //--></script>
 <script type="text/javascript"><!--
@@ -204,16 +204,16 @@ $(document).ready(function(){
 
 <script type='text/javascript'>//<!--
 function add_designer(id){
-	html = '<li>' + "<?=$this->builder->build('select',$designer_list,'designers[]');?>" + '<a onclick="$(this).parent().remove();">remove</a></li>';
+	html = '<li>' + "<?= $this->builder->build('select',$designer_list,'designers[]'); ?>" + '<a onclick="$(this).parent().remove();">remove</a></li>';
 	$('#designer_list').append(html);
 	if(id)
 			$('#designer_list li:last select').val(id);
 }
 //--></script>
 
-<?= $this->builder->js('ckeditor');?>
+<?= $this->builder->js('ckeditor'); ?>
 <script type="text/javascript">//<!--
-var article_row = <?=count($articles)+1;?>;
+var article_row = <?= count($articles)+1; ?>;
 function add_article(context){
 	html =	'<tbody id="article-%row%">';
 	html += '	<tr>';
@@ -221,7 +221,7 @@ function add_article(context){
 	html += '			<td class="left"><input type="text" name="articles[%row%][title]" /></td>';
 	html += '			<td class="left"><textarea id="article-description-%row%" name="articles[%row%][description]" ></textarea></td>';
 	html += '			<td class="left"><input type="text" name="articles[%row%][link]" size="60" /></td>';
-	html += '			<td class="left"><a onclick="remove_ckeditor_for($(\'#article-description-%row%\'));$(\'#article-%row%\').remove();" class="button"><?=$button_remove;?></a></td>';
+	html += '			<td class="left"><a onclick="remove_ckeditor_for($(\'#article-description-%row%\'));$(\'#article-%row%\').remove();" class="button"><?= $button_remove; ?></a></td>';
 	html += '	</tr>';
 	html += '</tbody>';
 	$(context).closest('tbody').before(html.replace(/%row%/g,article_row));
@@ -256,7 +256,7 @@ $('input[name=\'product\']').autocomplete({
 });
 //--></script>
 
-<?= $this->builder->js('datepicker');?>
+<?= $this->builder->js('datepicker'); ?>
 
 <script type="text/javascript">//<!--
 $('input[name="date_start"]').change(function(){
@@ -268,7 +268,7 @@ $('input[name="date_start"]').change(function(){
 });
 //--></script>
 
-<?= $this->builder->js('errors', $errors);?>
+<?= $this->builder->js('errors', $errors); ?>
 <script type="text/javascript">//<!--
 $('#tabs a').tabs();
 //--></script>

@@ -1,6 +1,8 @@
 <?php
-class ControllerPaymentBankTransfer extends Controller {
-	protected function index() {
+class Catalog_Controller_Payment_BankTransfer extends Controller 
+{
+	protected function index()
+	{
 		$this->template->load('payment/bank_transfer');
 
 		$this->language->load('payment/bank_transfer');
@@ -12,13 +14,14 @@ class ControllerPaymentBankTransfer extends Controller {
 		$this->render();
 	}
 	
-	public function confirm() {
+	public function confirm()
+	{
 		$this->language->load('payment/bank_transfer');
 		
 		$comment  = $this->_('text_instruction') . "\n\n";
 		$comment .= $this->config->get('bank_transfer_bank_' . $this->config->get('config_language_id')) . "\n\n";
 		$comment .= $this->_('text_payment');
 		
-		$this->model_checkout_order->confirm($this->session->data['order_id'], $this->config->get('bank_transfer_order_status_id'), $comment, true);
+		$this->Model_Checkout_Order->confirm($this->session->data['order_id'], $this->config->get('bank_transfer_order_status_id'), $comment, true);
 	}
 }

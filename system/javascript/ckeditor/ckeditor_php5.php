@@ -15,8 +15,7 @@
  * $CKEditor->editor("editor1", "<p>Initial value.</p>");
  * @endcode
  */
-class CKEditor
-{
+class CKEditor{
 	/**
 	* The version of %CKEditor.
 	*/
@@ -93,7 +92,8 @@ class CKEditor
 	*
 	*  @param $basePath (string) URL to the %CKEditor installation directory (optional).
 	*/
-	function __construct($basePath = null) {
+	function __construct($basePath = null)
+	{
 		if (!empty($basePath)) {
 			$this->basePath = $basePath;
 		}
@@ -122,7 +122,8 @@ class CKEditor
 	*	array( 'Source', '-', 'Bold', 'Italic', 'Underline', 'Strike' ),
 	*	array( 'Image', 'Link', 'Unlink', 'Anchor' )
 	* );
-	* $events['instanceReady'] = 'function (ev) {
+	* $events['instanceReady'] = 'function (ev)
+{
 	*	alert("Loaded: " + ev.editor.name);
 	* }';
 	* $CKEditor->editor("field1", "<p>Initial value.</p>", $config, $events);
@@ -233,9 +234,10 @@ class CKEditor
 		}
 		else {
 			$classDetection = "";
-			$js .= "CKEDITOR.replaceAll( function(textarea, config) {\n";
+			$js .= "CKEDITOR.replaceAll( function (textarea, config)
+ {\n";
 			if (!empty($className)) {
-				$js .= "	var classRegex = new RegExp('(?:^| )' + '". $className ."' + '(?:$| )');\n";
+				$js .= "	var class Regex = new RegExp('(?:^| )' + '". $className ."' + '(?:$| )');\n";
 				$js .= "	if (!classRegex.test(textarea.className))\n";
 				$js .= "		return false;\n";
 			}
@@ -263,7 +265,8 @@ class CKEditor
 	*
 	* Example usage:
 	* @code
-	* $CKEditor->addEventHandler('instanceReady', 'function (ev) {
+	* $CKEditor->addEventHandler('instanceReady', 'function (ev)
+{
 	*	alert("Loaded: " + ev.editor.name);
 	* }');
 	* @endcode
@@ -303,7 +306,8 @@ class CKEditor
 	*
 	* Example usage:
 	* @code
-	* $CKEditor->addGlobalEventHandler('dialogDefinition', 'function (ev) {
+	* $CKEditor->addGlobalEventHandler('dialogDefinition', 'function (ev)
+{
 	*	alert("Loading dialog: " + ev.data.name);
 	* }');
 	* @endcode
@@ -378,7 +382,7 @@ class CKEditor
 		}
 
 		if (!empty($_events)) {
-			foreach($_events as $eventName => $handlers) {
+			foreach ($_events as $eventName => $handlers) {
 				if (empty($handlers)) {
 					continue;
 				}
@@ -386,7 +390,8 @@ class CKEditor
 					$_config['on'][$eventName] = '@@'.$handlers[0];
 				}
 				else {
-					$_config['on'][$eventName] = '@@function (ev){';
+					$_config['on'][$eventName] = '@@function (ev)
+{';
 					foreach ($handlers as $handler => $code) {
 						$_config['on'][$eventName] .= '('.$code.')(ev);';
 					}
@@ -540,7 +545,7 @@ class CKEditor
 				return '[' . implode(',', array_map(array($this, 'jsEncode'), $val)) . ']';
 			}
 			$temp = array();
-			foreach ($val as $k => $v){
+			foreach ($val as $k => $v) {
 				$temp[] = $this->jsEncode("{$k}") . ':' . $this->jsEncode($v);
 			}
 			return '{' . implode(',', $temp) . '}';

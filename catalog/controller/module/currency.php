@@ -1,6 +1,8 @@
 <?php
-class ControllerModuleCurrency extends Controller {
-	protected function index() {
+class Catalog_Controller_Module_Currency extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('module/currency');
 
 		if (isset($_POST['currency_code'])) {
@@ -24,7 +26,7 @@ class ControllerModuleCurrency extends Controller {
 		
 		$this->data['currencies'] = array();
 		
-		$results = $this->model_localisation_currency->getCurrencies();
+		$results = $this->Model_Localisation_Currency->getCurrencies();
 		
 		foreach ($results as $result) {
 			if ($result['status']) {

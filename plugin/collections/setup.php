@@ -1,13 +1,16 @@
 <?php
-class SetupCollections extends SetupPlugin {
-	function __construct($registry){
+class Collections_Setup extends PluginSetup 
+{
+	function __construct($registry)
+	{
 		parent::__construct($registry);
 		
 		define("COLLECTION_LAYOUT_NAME", "Collections");
 		define("COLLECTION_NAVIGATION_LINK_NAME", "catalog_collection");
 	}
 	
-	public function install(&$controller_adapters, &$db_requests){
+	public function install()
+	{
 		//Create collection table
 		$table = DB_PREFIX . "collection";
 		
@@ -84,7 +87,8 @@ SQL;
 		$this->extend->enable_image_sorting('collection', 'image');
 	}
 	
-	public function uninstall($keep_data = false){
+	public function uninstall($keep_data = false)
+	{
 		$keep_data = true;
 		
 		//Remove Collections Navigation
@@ -97,7 +101,7 @@ SQL;
 		$this->extend->remove_layout(COLLECTION_LAYOUT_NAME);
 		
 		//Remove data last as good practice
-		if(!$keep_data){
+		if (!$keep_data) {
 			$table = DB_PREFIX . "collection";
 			$this->db->query("DROP TABLE $table");
 			

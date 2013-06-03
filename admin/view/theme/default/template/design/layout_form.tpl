@@ -1,6 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
+	<?= $this->builder->display_breadcrumbs(); ?>
 	<? if ($error_warning) { ?>
 	<div class="message_box warning"><?= $error_warning; ?></div>
 	<? } ?>
@@ -27,7 +27,7 @@
 				<tr>
 								<td><?= $entry_headers; ?></td>
 								<? foreach ($languages as $language) {?>
-									<td id='language<?= $language['language_id'];?>'><textarea class='ckedit' name="layout_header[<?= $language['language_id']; ?>][page_header]"><?= isset($layout_header[$language['language_id']]) ? $layout_header[$language['language_id']]['page_header'] : ''; ?></textarea></td>
+									<td id='language<?= $language['language_id']; ?>'><textarea class='ckedit' name="layout_header[<?= $language['language_id']; ?>][page_header]"><?= isset($layout_header[$language['language_id']]) ? $layout_header[$language['language_id']]['page_header'] : ''; ?></textarea></td>
 								<? } ?>
 						</tr>
 				</table>
@@ -46,7 +46,7 @@
 						<tr>
 							<td class="left">
 					<? $this->builder->set_config('store_id', 'name');?>
-					<?= $this->builder->build('select', $data_stores, "layout_route[$route_row][store_id]", $layout_route['store_id']);?>
+					<?= $this->builder->build('select', $data_stores, "layout_route[$route_row][store_id]", $layout_route['store_id']); ?>
 					</td>
 							<td class="left"><input type="text" name="layout_route[<?= $route_row; ?>][route]" value="<?= $layout_route['route']; ?>" /></td>
 							<td class="left"><a onclick="$('#route-row<?= $route_row; ?>').remove();" class="button"><?= $button_remove; ?></a></td>
@@ -67,7 +67,7 @@
 </div>
 
 
-<?= $this->builder->js('ckeditor');?>
+<?= $this->builder->js('ckeditor'); ?>
  
 <script type="text/javascript"><!--
 $('#languages a').tabs();

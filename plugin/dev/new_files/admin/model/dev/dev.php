@@ -1,13 +1,15 @@
 <?php
-class ModelDevDev extends Model {
+class Admin_Model_Dev_Dev extends Model 
+{
 	
-	public function getBackupFiles(){
+	public function getBackupFiles()
+	{
 		$file_list = $this->tool->get_files_r(DIR_DATABASE_BACKUP, array('txt', 'sql'), FILELIST_STRING);
 		
 		$files = array();
 		$sort_order = array();
 		
-		foreach($file_list as $file){
+		foreach ($file_list as $file) {
 			$files[] = array(
 				'name' => basename($file),
 				'date' => filemtime($file),

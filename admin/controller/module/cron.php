@@ -1,7 +1,9 @@
 <?php
-class ControllerModuleCron extends Controller {
+class Admin_Controller_Module_Cron extends Controller 
+{
 	
-	public function index() {
+	public function index()
+	{
 		$this->load->language('module/cron');
 			
 		$this->template->load('module/cron');
@@ -10,7 +12,7 @@ class ControllerModuleCron extends Controller {
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 
-			$this->model_setting_setting->editSetting('cron_tasks', $_POST);
+			$this->Model_Setting_Setting->editSetting('cron_tasks', $_POST);
 			
 			
 			//TODO: Implement full cron control from this code:
@@ -36,7 +38,7 @@ class ControllerModuleCron extends Controller {
 
 		$this->data['run_cron'] = $this->url->store(null, 'cron/cron');
 		
-		$info = isset($_POST['cron_tasks'])?$_POST['cron_tasks']:$this->model_setting_setting->getSetting('cron_tasks');
+		$info = isset($_POST['cron_tasks'])?$_POST['cron_tasks']:$this->Model_Setting_Setting->getSetting('cron_tasks');
 		$this->data['tasks'] = isset($info['tasks']) ? $info['tasks'] : array();
 		
 		$this->children = array(
@@ -47,7 +49,8 @@ class ControllerModuleCron extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'module/cron')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

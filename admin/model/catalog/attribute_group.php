@@ -1,6 +1,8 @@
 <?php
-class ModelCatalogAttributeGroup extends Model {
-	public function addAttributeGroup($data) {
+class Admin_Model_Catalog_AttributeGroup extends Model 
+{
+	public function addAttributeGroup($data)
+	{
 		$this->query("INSERT INTO " . DB_PREFIX . "attribute_group SET sort_order = '" . (int)$data['sort_order'] . "'");
 		
 		$attribute_group_id = $this->db->getLastId();
@@ -10,7 +12,8 @@ class ModelCatalogAttributeGroup extends Model {
 		}
 	}
 
-	public function editAttributeGroup($attribute_group_id, $data) {
+	public function editAttributeGroup($attribute_group_id, $data)
+	{
 		$this->query("UPDATE " . DB_PREFIX . "attribute_group SET sort_order = '" . (int)$data['sort_order'] . "' WHERE attribute_group_id = '" . (int)$attribute_group_id . "'");
 		
 		$this->query("DELETE FROM " . DB_PREFIX . "attribute_group_description WHERE attribute_group_id = '" . (int)$attribute_group_id . "'");
@@ -20,12 +23,14 @@ class ModelCatalogAttributeGroup extends Model {
 		}
 	}
 	
-	public function deleteAttributeGroup($attribute_group_id) {
+	public function deleteAttributeGroup($attribute_group_id)
+	{
 		$this->query("DELETE FROM " . DB_PREFIX . "attribute_group WHERE attribute_group_id = '" . (int)$attribute_group_id . "'");
 		$this->query("DELETE FROM " . DB_PREFIX . "attribute_group_description WHERE attribute_group_id = '" . (int)$attribute_group_id . "'");
 	}
 		
-	public function getAttributeGroup($attribute_group_id) {
+	public function getAttributeGroup($attribute_group_id)
+	{
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "attribute_group WHERE attribute_group_id = '" . (int)$attribute_group_id . "'");
 		
 		return $query->row;
@@ -68,7 +73,8 @@ class ModelCatalogAttributeGroup extends Model {
 		return $query->rows;
 	}
 	
-	public function getAttributeGroupDescriptions($attribute_group_id) {
+	public function getAttributeGroupDescriptions($attribute_group_id)
+	{
 		$attribute_group_data = array();
 		
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "attribute_group_description WHERE attribute_group_id = '" . (int)$attribute_group_id . "'");
@@ -80,7 +86,8 @@ class ModelCatalogAttributeGroup extends Model {
 		return $attribute_group_data;
 	}
 	
-	public function getTotalAttributeGroups() {
+	public function getTotalAttributeGroups()
+	{
 			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "attribute_group");
 		
 		return $query->row['total'];

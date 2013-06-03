@@ -18,7 +18,7 @@ if (ini_get('register_globals')) {
 	$globals = array($_REQUEST, $_SESSION, $_SERVER, $_FILES);
 
 	foreach ($globals as $global) {
-		foreach(array_keys($global) as $key) {
+		foreach (array_keys($global) as $key) {
 			unset(${$key});
 		}
 	}
@@ -26,7 +26,8 @@ if (ini_get('register_globals')) {
 
 // Magic Quotes Fix
 if (ini_get('magic_quotes_gpc')) {
-	function clean($data) {
+	function clean($data)
+	{
 			if (is_array($data)) {
   			foreach ($data as $key => $value) {
 				$data[clean($key)] = clean($value);
@@ -96,23 +97,20 @@ _require_once(DIR_SYSTEM . 'engine/loader.php');
 _require_once(DIR_SYSTEM . 'engine/model.php');
 _require_once(DIR_SYSTEM . 'engine/registry.php');
 
-//Plugins
-_require_once(DIR_SYSTEM . 'plugins/plugin_handler.php');
-
 // Common
 _require_once(DIR_SYSTEM . 'library/cache.php');
 _require_once(DIR_SYSTEM . 'library/config.php');
 _require_once(DIR_SYSTEM . 'library/db.php');
 _require_once(DIR_SYSTEM . 'library/document.php');
-_require_once(DIR_SYSTEM . 'library/form.php');
+_require_once(DIR_SYSTEM . 'library/file_merge.php');
 _require_once(DIR_SYSTEM . 'library/image.php');
 _require_once(DIR_SYSTEM . 'library/language.php');
 _require_once(DIR_SYSTEM . 'library/log.php');
-_require_once(DIR_SYSTEM . 'library/message.php');
+_require_once(DIR_SYSTEM . 'library/plugin.php');
 _require_once(DIR_SYSTEM . 'library/request.php');
 _require_once(DIR_SYSTEM . 'library/response.php');
 _require_once(DIR_SYSTEM . 'library/session.php');
-_require_once(DIR_SYSTEM . 'library/table.php');
 _require_once(DIR_SYSTEM . 'library/theme.php');
 _require_once(DIR_SYSTEM . 'library/template.php');
 _require_once(DIR_SYSTEM . 'library/url.php');
+

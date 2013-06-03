@@ -1,12 +1,13 @@
 <?php
-class ControllerBlockModulePress extends Controller {
+class Admin_Controller_Block_Module_Press extends Controller 
+{
 	
-	public function settings(&$settings) {
-		$this->load->language('block/module/press');
-			
+	public function settings(&$settings)
+	{
+		$this->language->load('block/module/press');
 		$this->template->load('block/module/press_settings');
 
-		if(!isset($settings['press_items'])){
+		if (!isset($settings['press_items'])) {
 			$this->data['press_items'] = array();
 		}
 				
@@ -17,7 +18,8 @@ class ControllerBlockModulePress extends Controller {
 	
 	/*
 	
-	public function profile(&$profiles) {
+	public function profile(&$profiles)
+	{
 		$this->load->language('block/module/press');
 		
 		$this->template->load('block/module/press_profile');
@@ -30,7 +32,8 @@ class ControllerBlockModulePress extends Controller {
 	}
 	*/
 	
-	public function validate() {
+	public function validate()
+	{
 		return $this->error;
 	}
 }

@@ -1,6 +1,8 @@
 <?php
-class ModelShippingRoyalMail extends Model {
-	function getQuote($address) {
+class Catalog_Model_Shipping_RoyalMail extends Model 
+{
+	function getQuote($address)
+	{
 		$this->load->language('shipping/royal_mail');
 		
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('royal_mail_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
@@ -19,14 +21,15 @@ class ModelShippingRoyalMail extends Model {
 			$weight = $this->cart->getWeight();
 			$sub_total = $this->cart->getSubTotal();
 			
-			// 1st Class Standard
+			// 1st class Standard
 			if ($this->config->get('royal_mail_1st_class_standard_status') && $address['iso_code_2'] == 'GB') {
 				$cost = 0;
 				$insurance = 0;
 				
 				$rates = explode(',', $this->config->get('royal_mail_1st_class_standard_rate'));
 				
-				foreach ($rates as $rate) {
+				foreach ($rates as $rate) 
+{
 					$data = explode(':', $rate);
 				
 					if ($data[0] >= $weight) {
@@ -40,7 +43,8 @@ class ModelShippingRoyalMail extends Model {
 				
 				$rates = explode(',', $this->config->get('royal_mail_1st_class_standard_insurance'));
 				
-				foreach ($rates as $rate) {
+				foreach ($rates as $rate) 
+{
 					$data = explode(':', $rate);
 				
 					if ($data[0] >= $sub_total) {
@@ -80,7 +84,8 @@ class ModelShippingRoyalMail extends Model {
 				
 				$rates = explode(',', $this->config->get('royal_mail_1st_class_recorded_rate'));
 
-				foreach ($rates as $rate) {
+				foreach ($rates as $rate) 
+{
 					$data = explode(':', $rate);
 				
 					if ($data[0] >= $weight) {
@@ -94,7 +99,8 @@ class ModelShippingRoyalMail extends Model {
 				
 				$rates = explode(',', $this->config->get('royal_mail_1st_class_recorded_insurance'));
 				
-				foreach ($rates as $rate) {
+				foreach ($rates as $rate) 
+{
 					$data = explode(':', $rate);
 				
 					if ($data[0] >= $sub_total) {
@@ -133,7 +139,8 @@ class ModelShippingRoyalMail extends Model {
 				
 				$rates = explode(',', $this->config->get('royal_mail_2nd_class_standard_rate'));
 
-				foreach ($rates as $rate) {
+				foreach ($rates as $rate) 
+{
 					$data = explode(':', $rate);
 				
 					if ($data[0] >= $weight) {
@@ -169,7 +176,8 @@ class ModelShippingRoyalMail extends Model {
 				
 				$rates = explode(',', $this->config->get('royal_mail_2nd_class_recorded_rate'));
 
-				foreach ($rates as $rate) {
+				foreach ($rates as $rate) 
+{
 					$data = explode(':', $rate);
 				
 					if ($data[0] >= $weight) {

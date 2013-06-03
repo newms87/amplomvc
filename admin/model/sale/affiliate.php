@@ -1,10 +1,13 @@
 <?php
-class ModelSaleAffiliate extends Model {
-	public function addAffiliate($data) {
+class Admin_Model_Sale_Affiliate extends Model 
+{
+	public function addAffiliate($data)
+	{
 			$this->query("INSERT INTO " . DB_PREFIX . "affiliate SET firstname = '" . $this->db->escape($data['firstname']) . "', lastname = '" . $this->db->escape($data['lastname']) . "', email = '" . $this->db->escape($data['email']) . "', telephone = '" . $this->db->escape($data['telephone']) . "', fax = '" . $this->db->escape($data['fax']) . "', password = '" . $this->user->encrypt($data['password']) . "', company = '" . $this->db->escape($data['company']) . "', address_1 = '" . $this->db->escape($data['address_1']) . "', address_2 = '" . $this->db->escape($data['address_2']) . "', city = '" . $this->db->escape($data['city']) . "', postcode = '" . $this->db->escape($data['postcode']) . "', country_id = '" . (int)$data['country_id'] . "', zone_id = '" . (int)$data['zone_id'] . "', code = '" . $this->db->escape($data['code']) . "', commission = '" . (float)$data['commission'] . "', tax = '" . $this->db->escape($data['tax']) . "', payment = '" . $this->db->escape($data['payment']) . "', cheque = '" . $this->db->escape($data['cheque']) . "', paypal = '" . $this->db->escape($data['paypal']) . "', bank_name = '" . $this->db->escape($data['bank_name']) . "', bank_branch_number = '" . $this->db->escape($data['bank_branch_number']) . "', bank_swift_code = '" . $this->db->escape($data['bank_swift_code']) . "', bank_account_name = '" . $this->db->escape($data['bank_account_name']) . "', bank_account_number = '" . $this->db->escape($data['bank_account_number']) . "', status = '" . (int)$data['status'] . "', date_added = NOW()");
 	}
 	
-	public function editAffiliate($affiliate_id, $data) {
+	public function editAffiliate($affiliate_id, $data)
+	{
 		$this->query("UPDATE " . DB_PREFIX . "affiliate SET firstname = '" . $this->db->escape($data['firstname']) . "', lastname = '" . $this->db->escape($data['lastname']) . "', email = '" . $this->db->escape($data['email']) . "', telephone = '" . $this->db->escape($data['telephone']) . "', fax = '" . $this->db->escape($data['fax']) . "', company = '" . $this->db->escape($data['company']) . "', address_1 = '" . $this->db->escape($data['address_1']) . "', address_2 = '" . $this->db->escape($data['address_2']) . "', city = '" . $this->db->escape($data['city']) . "', postcode = '" . $this->db->escape($data['postcode']) . "', country_id = '" . (int)$data['country_id'] . "', zone_id = '" . (int)$data['zone_id'] . "', code = '" . $this->db->escape($data['code']) . "', commission = '" . (float)$data['commission'] . "', tax = '" . $this->db->escape($data['tax']) . "', payment = '" . $this->db->escape($data['payment']) . "', cheque = '" . $this->db->escape($data['cheque']) . "', paypal = '" . $this->db->escape($data['paypal']) . "', bank_name = '" . $this->db->escape($data['bank_name']) . "', bank_branch_number = '" . $this->db->escape($data['bank_branch_number']) . "', bank_swift_code = '" . $this->db->escape($data['bank_swift_code']) . "', bank_account_name = '" . $this->db->escape($data['bank_account_name']) . "', bank_account_number = '" . $this->db->escape($data['bank_account_number']) . "', status = '" . (int)$data['status'] . "' WHERE affiliate_id = '" . (int)$affiliate_id . "'");
 	
 			if ($data['password']) {
@@ -12,18 +15,21 @@ class ModelSaleAffiliate extends Model {
 			}
 	}
 	
-	public function deleteAffiliate($affiliate_id) {
+	public function deleteAffiliate($affiliate_id)
+	{
 		$this->query("DELETE FROM " . DB_PREFIX . "affiliate WHERE affiliate_id = '" . (int)$affiliate_id . "'");
 		$this->query("DELETE FROM " . DB_PREFIX . "affiliate_transaction WHERE affiliate_id = '" . (int)$affiliate_id . "'");
 	}
 	
-	public function getAffiliate($affiliate_id) {
+	public function getAffiliate($affiliate_id)
+	{
 		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "affiliate WHERE affiliate_id = '" . (int)$affiliate_id . "'");
 	
 		return $query->row;
 	}
 	
-	public function getAffiliateByEmail($email) {
+	public function getAffiliateByEmail($email)
+	{
 		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "affiliate WHERE email = '" . $this->db->escape($email) . "'");
 	
 		return $query->row;
@@ -100,7 +106,8 @@ class ModelSaleAffiliate extends Model {
 		return $query->rows;
 	}
 	
-	public function approve($affiliate_id) {
+	public function approve($affiliate_id)
+	{
 		$affiliate_info = $this->getAffiliate($affiliate_id);
 			
 		if ($affiliate_info) {
@@ -126,7 +133,8 @@ class ModelSaleAffiliate extends Model {
 		}
 	}
 	
-	public function getAffiliatesByNewsletter() {
+	public function getAffiliatesByNewsletter()
+	{
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "affiliate WHERE newsletter = '1' ORDER BY firstname, lastname, email");
 	
 		return $query->rows;
@@ -166,25 +174,29 @@ class ModelSaleAffiliate extends Model {
 		return $query->row['total'];
 	}
 		
-	public function getTotalAffiliatesAwaitingApproval() {
+	public function getTotalAffiliatesAwaitingApproval()
+	{
 			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "affiliate WHERE status = '0' OR approved = '0'");
 
 		return $query->row['total'];
 	}
 	
-	public function getTotalAffiliatesByCountryId($country_id) {
+	public function getTotalAffiliatesByCountryId($country_id)
+	{
 		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "affiliate WHERE country_id = '" . (int)$country_id . "'");
 		
 		return $query->row['total'];
 	}
 	
-	public function getTotalAffiliatesByZoneId($zone_id) {
+	public function getTotalAffiliatesByZoneId($zone_id)
+	{
 		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "affiliate WHERE zone_id = '" . (int)$zone_id . "'");
 		
 		return $query->row['total'];
 	}
 		
-	public function addTransaction($affiliate_id, $description = '', $amount = '', $order_id = 0) {
+	public function addTransaction($affiliate_id, $description = '', $amount = '', $order_id = 0)
+	{
 		$affiliate_info = $this->getAffiliate($affiliate_id);
 		
 		if ($affiliate_info) {
@@ -206,29 +218,34 @@ class ModelSaleAffiliate extends Model {
 		}
 	}
 	
-	public function deleteTransaction($order_id) {
+	public function deleteTransaction($order_id)
+	{
 		$this->query("DELETE FROM " . DB_PREFIX . "affiliate_transaction WHERE order_id = '" . (int)$order_id . "'");
 	}
 	
-	public function getTransactions($affiliate_id, $start = 0, $limit = 10) {
+	public function getTransactions($affiliate_id, $start = 0, $limit = 10)
+	{
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "affiliate_transaction WHERE affiliate_id = '" . (int)$affiliate_id . "' ORDER BY date_added DESC LIMIT " . (int)$start . "," . (int)$limit);
 	
 		return $query->rows;
 	}
 
-	public function getTotalTransactions($affiliate_id) {
+	public function getTotalTransactions($affiliate_id)
+	{
 		$query = $this->query("SELECT COUNT(*) AS total  FROM " . DB_PREFIX . "affiliate_transaction WHERE affiliate_id = '" . (int)$affiliate_id . "'");
 	
 		return $query->row['total'];
 	}
 			
-	public function getTransactionTotal($affiliate_id) {
+	public function getTransactionTotal($affiliate_id)
+	{
 		$query = $this->query("SELECT SUM(amount) AS total FROM " . DB_PREFIX . "affiliate_transaction WHERE affiliate_id = '" . (int)$affiliate_id . "'");
 	
 		return $query->row['total'];
 	}
 	
-	public function getTotalTransactionsByOrderId($order_id) {
+	public function getTotalTransactionsByOrderId($order_id)
+	{
 		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "affiliate_transaction WHERE order_id = '" . (int)$order_id . "'");
 	
 		return $query->row['total'];

@@ -1,8 +1,11 @@
 <?php
-class SetupAshleyAshoff extends SetupPlugin {
-	public function install(&$controller_adapters, &$db_requests){
+class _Setup extends PluginSetup 
+{
+	public function install()
+	{
 	}
 	
-	public function uninstall($keep_data = false){
+	public function uninstall($keep_data = false)
+	{
 	}
 }

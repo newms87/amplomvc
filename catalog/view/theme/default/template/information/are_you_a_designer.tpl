@@ -1,7 +1,7 @@
 <?= $header; ?><?= $column_left; ?><?= $column_right; ?>
 <div id="content"><?= $content_top; ?>
-	<?= $this->builder->display_breadcrumbs();?>
-	<?= $this->builder->display_errors($errors);?>
+	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->builder->display_errors($errors); ?>
 	<h1><?= $heading_title; ?></h1>
 	<h3><?= $text_are_you_a_designer; ?></h3>
 	
@@ -52,10 +52,10 @@
 							} else{
 									echo $this->builder->build('select',$categories,'category[]',0, array('onchange'=>"check_for_other(this)", 'other_value'=>$cat));
 							} ?>
-							<a onclick='$(this).parent().remove()'><?=$button_remove;?></a>
+							<a onclick='$(this).parent().remove()'><?= $button_remove; ?></a>
 						</div>
 					<? }?>
-					<a onclick='add_category(this)'><?=$button_add_category;?></a>
+					<a onclick='add_category(this)'><?= $button_add_category; ?></a>
 			</div>
 			<br />
 			<br />
@@ -99,8 +99,8 @@
 function add_category(context){
 	html =	'<div class="category_item">';
 			<? $this->builder->set_config('category_id','name');?>
-	html += "	<?=$this->builder->build('select',$categories,'category[]','', array('onchange'=>"check_for_other(this)"),true);?>";
-	html += '	<a onclick="$(this).parent().remove()"><?=$button_remove;?></a>';
+	html += "	<?= $this->builder->build('select',$categories,'category[]','', array('onchange'=>"check_for_other(this)"),true); ?>";
+	html += '	<a onclick="$(this).parent().remove()"><?= $button_remove; ?></a>';
 	html += '</div>';
 	
 	$(context).before(html);
@@ -122,6 +122,6 @@ $('[other_value]').each(function(i,e){
 });
 //--></script>
 
-	<?=$this->builder->js('ckeditor');?>
-	<?=$this->builder->js('errors',$errors);?>
+	<?= $this->builder->js('ckeditor'); ?>
+	<?= $this->builder->js('errors',$errors); ?>
 <?= $footer; ?>

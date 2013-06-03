@@ -1,16 +1,18 @@
 <?php
-class ControllerModuleMagazineAd extends Controller {
+class Catalog_Controller_Module_MagazineAd extends Controller 
+{
 	
-	public function index($setting=null) {
+	public function index($setting=null)
+	{
 		$this->language->load('module/magazine_ad');
 		
 		$this->template->load('module/magazine_ad');
 		
-		if(!$setting){
-			$setting = $this->model_setting_setting->getSetting('featured_carousel');
+		if (!$setting) {
+			$setting = $this->Model_Setting_Setting->getSetting('featured_carousel');
 			$products = $setting['featured_product_list'];
 		}
-		else{
+		else {
 			$setting = array();
 			$products = array();
 		}
@@ -25,17 +27,17 @@ class ControllerModuleMagazineAd extends Controller {
 		
 		$this->data['products'] = array();
 		
-		foreach($products as $product_id=>$item){
-			$product = $this->model_catalog_product->getProduct($product_id);
+		foreach ($products as $product_id=>$item) {
+			$product = $this->Model_Catalog_Product->getProduct($product_id);
 			
-			if($product){
+			if ($product) {
 				$product['title'] = $item['name'];
 				
-				if($product['special'] && (int)$product['special'] < (int)$product['price']){
+				if ($product['special'] && (int)$product['special'] < (int)$product['price']) {
 					$product['retail'] = $this->currency->format($product['price'], '', '', true, 0);
 					$product['price'] = $this->currency->format($product['special'], '', '', true, 0);
 				}
-				else{
+				else {
 					$product['price']  = $this->currency->format($product['price'], '', '', true, 0);
 				}
 				
@@ -45,7 +47,7 @@ class ControllerModuleMagazineAd extends Controller {
 				$this->data['products'][] = $product;
 			}
 			
-			if(count($this->data['products']) >= $setting['limit']){
+			if (count($this->data['products']) >= $setting['limit']) {
 				break;
 			}
 		}

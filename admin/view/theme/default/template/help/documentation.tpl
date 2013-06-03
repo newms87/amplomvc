@@ -1,7 +1,7 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
-	<?= $this->builder->display_messages($messages);?>
+	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->builder->display_messages($messages); ?>
 <div class="box">
 	<div class="heading">
 		<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt="" /> <?= $heading_title; ?></h1>

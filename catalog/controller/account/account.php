@@ -1,6 +1,8 @@
 <?php
-class ControllerAccountAccount extends Controller {
-	public function index() {
+class Catalog_Controller_Account_Account extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('account/account');
 
 		if (!$this->customer->isLogged()) {

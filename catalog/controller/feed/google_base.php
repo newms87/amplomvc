@@ -1,6 +1,8 @@
 <?php
-class ControllerFeedGoogleBase extends Controller {
-	public function index() {
+class Catalog_Controller_Feed_GoogleBase extends Controller 
+{
+	public function index()
+	{
 		if ($this->config->get('google_base_status')) {
 			$output  = '<?xml version="1.0" encoding="UTF-8" ?>';
 			$output .= '<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">';
@@ -9,7 +11,7 @@ class ControllerFeedGoogleBase extends Controller {
 			$output .= '<description>' . $this->config->get('config_meta_description') . '</description>';
 			$output .= '<link>' . SITE_URL . '</link>';
 			
-			$products = $this->model_catalog_product->getProducts();
+			$products = $this->Model_Catalog_Product->getProducts();
 			
 			foreach ($products as $product) {
 				if ($product['description']) {
@@ -43,16 +45,17 @@ class ControllerFeedGoogleBase extends Controller {
 								$output .= '<g:price>' . $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id']), $currency, false, false) . '</g:price>';
 						}
 				
-					$categories = $this->model_catalog_product->getCategories($product['product_id']);
+					$categories = $this->Model_Catalog_Product->getCategories($product['product_id']);
 					
-					foreach ($categories as $category) {
+					foreach ($categories as $category) 
+{
 						$path = $this->getPath($category['category_id']);
 						
 						if ($path) {
 							$string = '';
 							
 							foreach (explode('_', $path) as $path_id) {
-								$category_info = $this->model_catalog_category->getCategory($path_id);
+								$category_info = $this->Model_Catalog_Category->getCategory($path_id);
 								
 								if ($category_info) {
 									if (!$string) {
@@ -83,8 +86,9 @@ class ControllerFeedGoogleBase extends Controller {
 		}
 	}
 	
-	protected function getPath($parent_id, $current_path = '') {
-		$category_info = $this->model_catalog_category->getCategory($parent_id);
+	protected function getPath($parent_id, $current_path = '')
+	{
+		$category_info = $this->Model_Catalog_Category->getCategory($parent_id);
 	
 		if ($category_info) {
 			if (!$current_path) {

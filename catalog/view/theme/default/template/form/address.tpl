@@ -1,5 +1,5 @@
 <? if($show_tag) { ?>
-<form action="<?= $action;?>" method="<?= $method;?>">
+<form action="<?= $action; ?>" method="<?= $method; ?>">
 <? }?>
 
 <table id="<?= $form_id; ?>" class='form <?= $form_name; ?>'>
@@ -26,7 +26,7 @@
 						<? $this->builder->set_config(key($field['build_config']), current($field['build_config'])); ?>
 						<?= $this->builder->build($field['type'], $field['options'], $name, $field['value'], $field['attrs']); ?>
 					<? } elseif($field['type'] == 'select') { ?>
-						<select name="<?= $name;?>" <?= $field['html_attrs']; ?>></select>
+						<select name="<?= $name; ?>" <?= $field['html_attrs']; ?>></select>
 					<? } ?>
 					<? break;
 					
@@ -57,4 +57,4 @@
 </form>
 <? } ?>
 
-<?=$this->builder->js('load_zones', "#$form_id", '.country_select', '.zone_select');?>
+<?= $this->builder->js('load_zones', "#$form_id", '.country_select', '.zone_select'); ?>

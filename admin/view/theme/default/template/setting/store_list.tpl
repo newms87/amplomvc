@@ -1,7 +1,7 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
-	<?= $this->builder->display_errors($errors);?>
+	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -29,7 +29,7 @@
 						<? foreach ($data_stores as $store) { ?>
 						<tr>
 							<td style="text-align: center;">
-								<input type="checkbox" name="selected[]" value="<?= $store['store_id']; ?>" <?= $store['selected'] ? 'checked':'';?>/>
+								<input type="checkbox" name="selected[]" value="<?= $store['store_id']; ?>" <?= $store['selected'] ? 'checked':''; ?>/>
 							</td>
 							<td class="left"><?= $store['name']; ?></td>
 							<td class="left"><?= $store['url']; ?></td>

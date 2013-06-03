@@ -2,8 +2,10 @@
 
 //TODO: This Process has been forsaken... Gotta fix at some point right?
 
-class ControllerCheckoutManual extends Controller {
-	public function index() {
+class Catalog_Controller_Checkout_Manual extends Controller 
+{
+	public function index()
+	{
 		
 		$this->load->language('checkout/manual');
 		
@@ -24,7 +26,7 @@ class ControllerCheckoutManual extends Controller {
 			unset($this->session->data['vouchers']);
 
 			// Settings
-			$settings = $this->model_setting_setting->getSetting('config', $_POST['store_id']);
+			$settings = $this->Model_Setting_Setting->getSetting('config', $_POST['store_id']);
 			
 			foreach ($settings as $key => $value) {
 				$this->config->set($key, $value);
@@ -32,7 +34,7 @@ class ControllerCheckoutManual extends Controller {
 			
 			// Customer
 			if ($_POST['customer_id']) {
-				$customer_info = $this->model_account_customer->getCustomer($_POST['customer_id']);
+				$customer_info = $this->Model_Account_Customer->getCustomer($_POST['customer_id']);
 
 				if ($customer_info) {
 					$this->customer->login($customer_info['email'], '', true);
@@ -44,7 +46,7 @@ class ControllerCheckoutManual extends Controller {
 			// Product
 			if (isset($_POST['order_product'])) {
 				foreach ($_POST['order_product'] as $order_product) {
-					$product_info = $this->model_catalog_product->getProduct($order_product['product_id']);
+					$product_info = $this->Model_Catalog_Product->getProduct($order_product['product_id']);
 				
 					if ($product_info) {
 						$option_data = array();
@@ -67,7 +69,7 @@ class ControllerCheckoutManual extends Controller {
 			}
 			
 			if (isset($_POST['product_id'])) {
-				$product_info = $this->model_catalog_product->getProduct($_POST['product_id']);
+				$product_info = $this->Model_Catalog_Product->getProduct($_POST['product_id']);
 				
 				if ($product_info) {
 					if (isset($_POST['quantity'])) {
@@ -82,7 +84,7 @@ class ControllerCheckoutManual extends Controller {
 						$option = array();
 					}
 					
-					$product_options = $this->model_catalog_product->getProductOptions($_POST['product_id']);
+					$product_options = $this->Model_Catalog_Product->getProductOptions($_POST['product_id']);
 					
 					foreach ($product_options as $product_option) {
 						if ($product_option['required'] && empty($option[$product_option['product_option_id']])) {
@@ -221,7 +223,7 @@ class ControllerCheckoutManual extends Controller {
 						'status'			=> true
 					);
 					
-					$voucher_id = $this->model_cart_voucher->addVoucher(0, $voucher_data);
+					$voucher_id = $this->Model_Cart_Voucher->addVoucher(0, $voucher_data);
 									
 					$this->session->data['vouchers'][] = array(
 						'voucher_id'		=> $voucher_id,
@@ -259,7 +261,7 @@ class ControllerCheckoutManual extends Controller {
 			$json['shipping_method'] = array();
 			
 			if ($this->cart->hasShipping()) {
-				$country_info = $this->model_localisation_country->getCountry($_POST['shipping_country_id']);
+				$country_info = $this->Model_Localisation_Country->getCountry($_POST['shipping_country_id']);
 				
 				if ($country_info && $country_info['postcode_required'] && (strlen($_POST['shipping_postcode']) < 2) || (strlen($_POST['shipping_postcode']) > 10)) {
 					$json['error']['shipping']['postcode'] = $this->_('error_postcode');
@@ -273,7 +275,7 @@ class ControllerCheckoutManual extends Controller {
 					$json['error']['shipping']['zone'] = $this->_('error_zone');
 				}
 							
-				$country_info = $this->model_localisation_country->getCountry($_POST['shipping_country_id']);
+				$country_info = $this->Model_Localisation_Country->getCountry($_POST['shipping_country_id']);
 				
 				if ($country_info && $country_info['postcode_required'] && (strlen($_POST['shipping_postcode']) < 2) || (strlen($_POST['shipping_postcode']) > 10)) {
 					$json['error']['shipping']['postcode'] = $this->_('error_postcode');
@@ -292,7 +294,7 @@ class ControllerCheckoutManual extends Controller {
 						$address_format = '';
 					}
 				
-					$zone_info = $this->model_localisation_zone->getZone($_POST['shipping_zone_id']);
+					$zone_info = $this->Model_Localisation_Zone->getZone($_POST['shipping_zone_id']);
 					
 					if ($zone_info) {
 						$zone = $zone_info['name'];
@@ -320,7 +322,7 @@ class ControllerCheckoutManual extends Controller {
 						'address_format' => $address_format
 					);
 					
-					$results = $this->model_setting_extension->getExtensions('shipping');
+					$results = $this->Model_Setting_Extension->getExtensions('shipping');
 					
 					foreach ($results as $result) {
 						if ($this->config->get($result['code'] . '_status')) {
@@ -366,7 +368,7 @@ class ControllerCheckoutManual extends Controller {
 			
 			// Coupon
 			if (!empty($_POST['coupon'])) {
-				$coupon_info = $this->model_cart_coupon->getCoupon($_POST['coupon']);
+				$coupon_info = $this->Model_Cart_Coupon->getCoupon($_POST['coupon']);
 			
 				if ($coupon_info) {
 					$this->session->data['coupons'][$_POST['coupon']] = $coupon_info;
@@ -377,7 +379,7 @@ class ControllerCheckoutManual extends Controller {
 			
 			// Voucher
 			if (!empty($_POST['voucher'])) {
-				$voucher_info = $this->model_cart_voucher->getVoucher($_POST['voucher']);
+				$voucher_info = $this->Model_Cart_Voucher->getVoucher($_POST['voucher']);
 			
 				if ($voucher_info) {
 					$this->session->data['voucher'] = $_POST['voucher'];
@@ -420,7 +422,7 @@ class ControllerCheckoutManual extends Controller {
 			
 			$sort_order = array();
 			
-			$results = $this->model_setting_extension->getExtensions('total');
+			$results = $this->Model_Setting_Extension->getExtensions('total');
 			
 			foreach ($results as $key => $value) {
 				$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
@@ -455,7 +457,7 @@ class ControllerCheckoutManual extends Controller {
 			if (!isset($json['error']['payment'])) {
 				$json['payment_methods'] = array();
 				
-				$country_info = $this->model_localisation_country->getCountry($_POST['payment_country_id']);
+				$country_info = $this->Model_Localisation_Country->getCountry($_POST['payment_country_id']);
 				
 				if ($country_info) {
 					$country = $country_info['name'];
@@ -469,7 +471,7 @@ class ControllerCheckoutManual extends Controller {
 					$address_format = '';
 				}
 				
-				$zone_info = $this->model_localisation_zone->getZone($_POST['payment_zone_id']);
+				$zone_info = $this->Model_Localisation_Zone->getZone($_POST['payment_zone_id']);
 				
 				if ($zone_info) {
 					$zone = $zone_info['name'];
@@ -499,7 +501,7 @@ class ControllerCheckoutManual extends Controller {
 				
 				$json['payment_method'] = array();
 								
-				$results = $this->model_setting_extension->getExtensions('payment');
+				$results = $this->Model_Setting_Extension->getExtensions('payment');
 		
 				foreach ($results as $result) {
 					if ($this->config->get($result['code'] . '_status')) {

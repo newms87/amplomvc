@@ -1,8 +1,8 @@
 <table class="form">
 	<tr>
 		<td>
-			<?= $entry_social_networks;?>
-			<div id="add_network" onclick="add_network()"><?= $button_add_network;?></div>
+			<?= $entry_social_networks; ?>
+			<div id="add_network" onclick="add_network()"><?= $button_add_network; ?></div>
 		</td>
 		<td>
 			<ul id="social_network_list">
@@ -10,11 +10,11 @@
 			<? foreach($networks as $network){ ?>
 				<li class="social_network">
 					<span class="social_icon">
-						<?= $this->builder->set_builder_template('click_image_small');?>
-						<?= $this->builder->image_input("settings[networks][$network_id][icon]", $network['icon'], $network['thumb'], $no_image, $thumb_width, $thumb_height);?>
+						<?= $this->builder->set_builder_template('click_image_small'); ?>
+						<?= $this->builder->image_input("settings[networks][$network_id][icon]", $network['icon'], $network['thumb'], $no_image, $thumb_width, $thumb_height); ?>
 					</span>
 					<span class="social_url">
-						<input type="text" name="settings[networks][<?= $network_id;?>][href]" value="<?= $network['href'];?>" />
+						<input type="text" name="settings[networks][<?= $network_id; ?>][href]" value="<?= $network['href']; ?>" />
 					</span>
 					<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" class='delete' onclick="$(this).parent().remove()" />
 				</li>
@@ -28,8 +28,8 @@
 <ul id="network_template" style="display:none">
 	<li class="social_network">
 		<span class="social_icon">
-			<?= $this->builder->set_builder_template('click_image_small');?>
-			<?= $this->builder->image_input("settings[networks][%net_id%][icon]", null, null, $no_image, $thumb_width, $thumb_height);?>
+			<?= $this->builder->set_builder_template('click_image_small'); ?>
+			<?= $this->builder->image_input("settings[networks][%net_id%][icon]", null, null, $no_image, $thumb_width, $thumb_height); ?>
 		</span>
 		<span class="social_url">
 			<input type="text" name="settings[networks][%net_id%][href]" value="http://www.your-network.com" />
@@ -39,7 +39,7 @@
 </ul>
 
 <script type="text/javascript">//<!--
-var network_id = <?= $network_id+1;?>;
+var network_id = <?= $network_id+1; ?>;
 
 function add_network(data){
 	html = $($('#network_template').html().replace(/%net_id%/g,network_id));

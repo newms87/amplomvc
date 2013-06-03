@@ -1,6 +1,8 @@
 <?php
-class ControllerPaymentAuthorizeNetAim extends Controller {
-	protected function index() {
+class Catalog_Controller_Payment_AuthorizenetAim extends Controller 
+{
+	protected function index()
+	{
 		$this->template->load('payment/authorizenet_aim');
 
 		$this->language->load('payment/authorizenet_aim');
@@ -28,7 +30,8 @@ class ControllerPaymentAuthorizeNetAim extends Controller {
 		$this->render();
 	}
 	
-	public function send() {
+	public function send()
+	{
 		if ($this->config->get('authorizenet_aim_server') == 'live') {
 			$url = 'https://secure.authorize.net/gateway/transact.dll';
 		} elseif ($this->config->get('authorizenet_aim_server') == 'test') {
@@ -37,7 +40,7 @@ class ControllerPaymentAuthorizeNetAim extends Controller {
 		
 		//$url = 'https://secure.networkmerchants.com/gateway/transact.dll';
 		
-		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
+		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
 		
 		$data = array();
 
@@ -109,7 +112,7 @@ class ControllerPaymentAuthorizeNetAim extends Controller {
 		
 			if ($response_data[1] == '1') {
 				if (strtoupper($response_data[38]) != strtoupper(md5($this->config->get('authorizenet_aim_hash') . $this->config->get('authorizenet_aim_login') . $response_data[6] . $this->currency->format($order_info['total'], $order_info['currency_code'], 1.00000, false)))) {
-					$this->model_checkout_order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
+					$this->Model_Checkout_Order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
 					
 					$message = '';
 					
@@ -133,7 +136,7 @@ class ControllerPaymentAuthorizeNetAim extends Controller {
 						$message .= 'Cardholder Authentication Verification Response: ' . $response_data['40'] . "\n";
 					}
 	
-					$this->model_checkout_order->update_order($this->session->data['order_id'], $this->config->get('authorizenet_aim_order_status_id'), $message, false);
+					$this->Model_Checkout_Order->update_order($this->session->data['order_id'], $this->config->get('authorizenet_aim_order_status_id'), $message, false);
 				}
 				
 				$json['success'] = $this->url->link('checkout/success');

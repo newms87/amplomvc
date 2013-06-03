@@ -1,6 +1,8 @@
 <?php
-class ControllerModuleAffiliate extends Controller {
-	protected function index() {
+class Catalog_Controller_Module_Affiliate extends Controller 
+{
+	protected function index()
+	{
 		$this->template->load('module/affiliate');
 
 		$this->language->load('module/affiliate');

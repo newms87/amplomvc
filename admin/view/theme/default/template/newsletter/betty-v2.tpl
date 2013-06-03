@@ -48,11 +48,11 @@
 																<table style="width: 400px; border-collapse: collapse;" border="0" cellpadding="0" cellspacing="0">
 																		<tbody>
 																			<tr>
-																					<td style="background: #EC227B;"><a href="<?= $newsletter['featured']['product']['href'];?>"><img style="border: 0pt none;" src="<?= $newsletter['featured']['product']['thumb'];?>" alt="<?= $newsletter['featured']['product']['name'];?>" title="<?= $newsletter['featured']['product']['name'];?>" height="280" width="400"></a></td>
+																					<td style="background: #EC227B;"><a href="<?= $newsletter['featured']['product']['href']; ?>"><img style="border: 0pt none;" src="<?= $newsletter['featured']['product']['thumb']; ?>" alt="<?= $newsletter['featured']['product']['name']; ?>" title="<?= $newsletter['featured']['product']['name']; ?>" height="280" width="400"></a></td>
 																			</tr>
 																			<tr>
 																					<td style="padding-left:10px; padding-top: 8px; padding-bottom: 8px; width:390px; background: #EC227B; color: black; font-size: 20px; font-weight:bold;	font-family: Arial, Helvetica, sans-serif;">
-																						<a href="<?= $newsletter['featured']['designer']['href'];?>" style="border: none 0pt;color:black; text-decoration: none"><img src="<?= $newsletter['featured']['designer']['name_image'];?>" style="border: none 0pt;" width="385" height="24" /></a>
+																						<a href="<?= $newsletter['featured']['designer']['href']; ?>" style="border: none 0pt;color:black; text-decoration: none"><img src="<?= $newsletter['featured']['designer']['name_image']; ?>" style="border: none 0pt;" width="385" height="24" /></a>
 																					</td>
 																			</tr>
 																		</tbody>
@@ -62,33 +62,33 @@
 																<table style="width: 395px; border-collapse: collapse;" cellpadding="0" cellspacing="0">
 																		<tbody>
 																			<tr>
-																					<td style="border-bottom:solid 1px #E8E8E8;background-color: #E8E8E8;padding-left: 10px; color: #696969; font-size: 10pt; margin-top: 0px; font-family: Arial, Helvetica, sans-serif; text-align: left; padding-right: 10px; width: 120px"><span style="text-decoration: line-through;">RETAIL: <?= $newsletter['featured']['product']['retail'];?></span></td>
-																					<td style="border-bottom:solid 1px #E8E8E8;background-color: #E8E8E8;color: #696969; font-size: 10pt; margin-top: 0px; font-family: Arial, Helvetica, sans-serif; text-align: left; width:120px"><span style="color: #D20F8C;">BETTY: <?= $newsletter['featured']['product']['price'];?></span></td>
-																					<td style="padding-top: 5px; padding-bottom: 5px; background: none repeat scroll 0% 0% #c2bcac; color: white; text-align: center; border-left: solid 1px #c2bcac; border-right: solid 1px #c2bcac; border-bottom: solid 1px #c2bcac; font-family: helvetica,arial,sans-serif; font-size: 10pt;" align="right"><?= $send_date;?></td>
+																					<td style="border-bottom:solid 1px #E8E8E8;background-color: #E8E8E8;padding-left: 10px; color: #696969; font-size: 10pt; margin-top: 0px; font-family: Arial, Helvetica, sans-serif; text-align: left; padding-right: 10px; width: 120px"><span style="text-decoration: line-through;">RETAIL: <?= $newsletter['featured']['product']['retail']; ?></span></td>
+																					<td style="border-bottom:solid 1px #E8E8E8;background-color: #E8E8E8;color: #696969; font-size: 10pt; margin-top: 0px; font-family: Arial, Helvetica, sans-serif; text-align: left; width:120px"><span style="color: #D20F8C;">BETTY: <?= $newsletter['featured']['product']['price']; ?></span></td>
+																					<td style="padding-top: 5px; padding-bottom: 5px; background: none repeat scroll 0% 0% #c2bcac; color: white; text-align: center; border-left: solid 1px #c2bcac; border-right: solid 1px #c2bcac; border-bottom: solid 1px #c2bcac; font-family: helvetica,arial,sans-serif; font-size: 10pt;" align="right"><?= $send_date; ?></td>
 																			</tr>
 																		</tbody>
 																</table>
 																<table style="width: 386px; border-collapse: collapse;" cellpadding="0" cellspacing="0">
 																		<tbody>
 																			<tr>
-																					<td style="padding-left: 10px; padding-right: 5px; padding-top: 11px; padding-bottom:9px; margin-top: 0; margin-bottom: 0;" colspan="4"><img src="<?= $newsletter['featured']['designer']['title_image'];?>" width="366" height="100" /></td>
+																					<td style="padding-left: 10px; padding-right: 5px; padding-top: 11px; padding-bottom:9px; margin-top: 0; margin-bottom: 0;" colspan="4"><img src="<?= $newsletter['featured']['designer']['title_image']; ?>" width="366" height="100" /></td>
 																			</tr>
 																			<tr>
-																					<td><a href="<?= $newsletter['featured']['designer']['href'];?>" style="border: none 0pt;" target="_blank"><img style="border: none 0pt;" title="<?= $newsletter['featured']['designer']['name'];?>" alt="<?= $newsletter['featured']['designer']['name'];?>" src="<?= $newsletter['featured']['designer']['thumb'];?>" width="<?= $newsletter['featured']['designer']['width'];?>" height="<?= $newsletter['featured']['designer']['height'];?>"/></a></td>
+																					<td><a href="<?= $newsletter['featured']['designer']['href']; ?>" style="border: none 0pt;" target="_blank"><img style="border: none 0pt;" title="<?= $newsletter['featured']['designer']['name']; ?>" alt="<?= $newsletter['featured']['designer']['name']; ?>" src="<?= $newsletter['featured']['designer']['thumb']; ?>" width="<?= $newsletter['featured']['designer']['width']; ?>" height="<?= $newsletter['featured']['designer']['height']; ?>"/></a></td>
 																					<td valign="top" style="padding-left: 10px">
 																						<table style="border-collapse: collapse;" cellpadding="0" cellspacing="0">
 																								<tr>
 																									<td valign="top"><img src="http://bettyconfidential.img-us3.com/admin/bc_shop_v2/open_quote-30x22.png" width="30px" height="22px" /></td>
 																									<td valign="top" style="width: 200px;padding-left:5px; padding-right: 5px; padding-bottom: 12px;color: #696969; font-size: 10pt;font-family: Arial, Helvetica, sans-serif;">
-																										<?= $newsletter['featured']['designer']['description'];?>
+																										<?= $newsletter['featured']['designer']['description']; ?>
 																									</td>
 																									<td valign="bottom" style="padding-right:5px; padding-bottom: 5px;"><img style="border: none 0pt;" src="http://bettyconfidential.img-us3.com/admin/bc_shop_v2/close_quote-30x22.png" width="30px" height="22px" /></td>
 																								</tr>
 																								<tr>
 																									<td></td>
 																									<td style="padding-top:10px;font-family: Arial, Helvetica, sans-serif;font-size: 9pt;">
-																											<p style="margin:0;"><a style="color: #d20f8c;text-decoration: underline;" href="<?= $newsletter['featured']['designer']['href'];?>" target="_blank">START SHOPPING</a></p>
-																											<p style="margin:0; margin-top:5px; margin-bottom:5px;"><a style="color: dimGray;text-decoration: underline;" href="<?= $newsletter['featured']['designer']['article'];?>" target="_blank">MEET THE DESIGNER</a></p>
+																											<p style="margin:0;"><a style="color: #d20f8c;text-decoration: underline;" href="<?= $newsletter['featured']['designer']['href']; ?>" target="_blank">START SHOPPING</a></p>
+																											<p style="margin:0; margin-top:5px; margin-bottom:5px;"><a style="color: dimGray;text-decoration: underline;" href="<?= $newsletter['featured']['designer']['article']; ?>" target="_blank">MEET THE DESIGNER</a></p>
 																									</td>
 																									<td></td>
 																								</tr>
@@ -119,7 +119,7 @@
 																<img style="border: none 0pt;" src="http://bettyconfidential.img-us3.com/admin/bc_shop_v2/more_sales_today-light.png" width="348px" height="66px" />
 															</td>
 															<td style="padding:0px; font-family: Arial, Helvetica, sans-serif;">
-																<a href="<?= $link_see_all_sales;?>" style="font-size: 9pt; text-decoration: underline; color: #D20F8C">SEE ALL SALES</a>
+																<a href="<?= $link_see_all_sales; ?>" style="font-size: 9pt; text-decoration: underline; color: #D20F8C">SEE ALL SALES</a>
 															</td>
 													</tr>
 												</tbody>
@@ -136,20 +136,20 @@
 																		<tbody>
 																			<tr>
 																					<td colspan="2" style="text-align: center; border-left: solid 1px #c2bcac; border-right: solid 1px #c2bcac; border-top: solid 1px #c2bcac; width: 155px; height: 121px;" valign="center">
-																						<a href="<?= $product['href'];?>">
-																								<img src="<?=$product['thumb'];?>" alt="<?=$product['name'];?>" title="<?= $product['name'];?>" style="border: 0pt none;" height="121" width="155px">
+																						<a href="<?= $product['href']; ?>">
+																								<img src="<?= $product['thumb']; ?>" alt="<?= $product['name']; ?>" title="<?= $product['name']; ?>" style="border: 0pt none;" height="121" width="155px">
 																						</a>
 																					</td>
 																			</tr>
 																			<tr>
-																					<td style="text-align: center; padding-top: 5px; padding-bottom: 5px; border-left: solid 1px #c2bcac; border-top: solid 1px #c2bcac; font-family: helvetica,arial,sans-serif; font-size: 7pt; color: dimgray;"><span style="text-decoration: line-through;">RETAIL: $<?= $product['retail'];?></span></td>
-																					<td style="text-align: center; padding-top: 5px; padding-bottom: 5px; border-left: solid 1px #c2bcac; border-right: solid 1px #c2bcac; border-top: solid 1px #c2bcac; font-family: helvetica,arial,sans-serif; font-size: 8pt; color: #D20F8C;">BETTY: <?=$product['price'];?></td>
+																					<td style="text-align: center; padding-top: 5px; padding-bottom: 5px; border-left: solid 1px #c2bcac; border-top: solid 1px #c2bcac; font-family: helvetica,arial,sans-serif; font-size: 7pt; color: dimgray;"><span style="text-decoration: line-through;">RETAIL: $<?= $product['retail']; ?></span></td>
+																					<td style="text-align: center; padding-top: 5px; padding-bottom: 5px; border-left: solid 1px #c2bcac; border-right: solid 1px #c2bcac; border-top: solid 1px #c2bcac; font-family: helvetica,arial,sans-serif; font-size: 8pt; color: #D20F8C;">BETTY: <?= $product['price']; ?></td>
 																			</tr>
 																			<tr>
-																					<td height="39" style="height:39px; text-align: center; padding-top: 5px; padding-bottom: 5px; border-left: solid 1px #c2bcac; border-right: solid 1px #c2bcac; border-top: solid 1px #c2bcac; font-family: helvetica,arial,sans-serif; font-size: 8pt; color: #696969;" colspan="2"><strong><?= $product['name'];?></strong></td>
+																					<td height="39" style="height:39px; text-align: center; padding-top: 5px; padding-bottom: 5px; border-left: solid 1px #c2bcac; border-right: solid 1px #c2bcac; border-top: solid 1px #c2bcac; font-family: helvetica,arial,sans-serif; font-size: 8pt; color: #696969;" colspan="2"><strong><?= $product['name']; ?></strong></td>
 																			</tr>
 																			<tr>
-																					<td colspan="2" style="padding-top: 5px; padding-bottom: 5px; background: none repeat scroll 0% 0% #c2bcac; color: white; text-align: center; border-left: solid 1px #c2bcac; border-right: solid 1px #c2bcac; border-bottom: solid 1px #c2bcac; font-family: helvetica,arial,sans-serif; font-size: 9pt;"><a style="color: #ffffff; text-decoration: none;" href="<?=$product['href'];?>"><strong>SHOW ME NOW!</strong></a></td>
+																					<td colspan="2" style="padding-top: 5px; padding-bottom: 5px; background: none repeat scroll 0% 0% #c2bcac; color: white; text-align: center; border-left: solid 1px #c2bcac; border-right: solid 1px #c2bcac; border-bottom: solid 1px #c2bcac; font-family: helvetica,arial,sans-serif; font-size: 9pt;"><a style="color: #ffffff; text-decoration: none;" href="<?= $product['href']; ?>"><strong>SHOW ME NOW!</strong></a></td>
 																			</tr>
 																		</tbody>
 																</table>
@@ -171,7 +171,7 @@
 										<table style="border-collapse: collapse; width: 248px; height: 473px;" valign="top" cellpadding="0" cellspacing="0">
 												<tbody>
 													<tr>
-													<td style="background-color: white; border-left: solid 1px #c2bcac; border-right: solid 1px #c2bcac; padding-bottom: 3px;" align="center"><a href="<?= $newsletter['articles_url'];?>"><img style="border: 0pt none;" src="<?= $newsletter['articles_image'];?>" alt="<? $a = current($newsletter['articles']); echo $a['title'];?>" title="<?= $a['title'];?>" height="136" width="225"></a></td>
+													<td style="background-color: white; border-left: solid 1px #c2bcac; border-right: solid 1px #c2bcac; padding-bottom: 3px;" align="center"><a href="<?= $newsletter['articles_url']; ?>"><img style="border: 0pt none;" src="<?= $newsletter['articles_image']; ?>" alt="<? $a = current($newsletter['articles']); echo $a['title'];?>" title="<?= $a['title']; ?>" height="136" width="225"></a></td>
 													</tr>
 													<!-- B's HOT LIST START -->
 													<tr>
@@ -179,7 +179,7 @@
 																<ol style="color: black; font-family: helvetica,arial,sans-serif; font-size: 13px; font-weight: bold; padding-left: 27px; width: 205px;">
 																		<? if(!empty($newsletter['articles'])) { ?>
 																		<? foreach($newsletter['articles'] as $article) {?>
-																		<li style="margin-bottom: 12px; text-align: left;"><a style="text-decoration: underline; color: #696969;" href="<?= $article['href'];?>"><span><span><?=$article['title'];?></span></span></a></li>
+																		<li style="margin-bottom: 12px; text-align: left;"><a style="text-decoration: underline; color: #696969;" href="<?= $article['href']; ?>"><span><span><?= $article['title']; ?></span></span></a></li>
 																		<? } ?>
 																		<? } ?>
 																</ol>
@@ -211,14 +211,14 @@
 									<? if(!empty($newsletter['featured']['articles'])) { ?>
 									<? foreach($newsletter['featured']['articles'] as $article) { ?>
 									<td style="font-family: helvetica,arial,sans-serif; font-size: 10pt; color: #696969; text-align: left; padding: 10px; width: 110px;" valign="top">
-										<a href="<?= $article['href'];?>">
-												<img style="border: 0pt none;" src="<?= $article['thumb'];?>" alt="<?= $article['title'];?>" title="<?= $article['title'];?>" height="155" width="94" />
+										<a href="<?= $article['href']; ?>">
+												<img style="border: 0pt none;" src="<?= $article['thumb']; ?>" alt="<?= $article['title']; ?>" title="<?= $article['title']; ?>" height="155" width="94" />
 										</a>
 									</td>
 									<td style="font-family: helvetica,arial,sans-serif; font-size: 10pt; color: #696969; text-align: left; padding: 10px; padding-left: 0px; width: 155px;" valign="top">
-										<strong><span><?=$article['title'];?></span></strong>
-										<div class="subhead" style="line-height: 18px;"><?= $article['teaser'];?></div>
-										<a style="color: #d20f8c; text-decoration: underline;" href="<?= $article['href'];?>">read more</a>
+										<strong><span><?= $article['title']; ?></span></strong>
+										<div class="subhead" style="line-height: 18px;"><?= $article['teaser']; ?></div>
+										<a style="color: #d20f8c; text-decoration: underline;" href="<?= $article['href']; ?>">read more</a>
 									</td>
 									<? } ?>
 									<? } ?>
@@ -248,16 +248,16 @@
 									<td align="center" style="padding-left:3px; padding-right:2px;padding-top:5px; padding-bottom:12px">
 										<table style="border-collapse: collapse;" border="0" cellpadding="0" cellspacing="0">
 												<tr>
-													<td><a href="<?= $designer['href'];?>"><img alt='<?= $designer['name'];?>' title='<?= $designer['name'];?>'		src="<?= $designer['thumb'];?>" width="154" height="164" style="border: 0pt none;" /></a></td>
+													<td><a href="<?= $designer['href']; ?>"><img alt='<?= $designer['name']; ?>' title='<?= $designer['name']; ?>'		src="<?= $designer['thumb']; ?>" width="154" height="164" style="border: 0pt none;" /></a></td>
 												</tr>
 												<tr>
 													<td valign="top" style="height: 60px">
 															<table style="border-collapse: collapse;" border="0" cellpadding="0" cellspacing="0">
 																<tr>
-																		<td valign="top" style="text-align:left;font-size: 10pt; font-family: Arial, Helvetica, sans-serif;padding-top:5px;"><a style="color: #000001;text-decoration: none;" href="<?= $designer['href'];?>"><?= $designer['name'];?></a></td>
+																		<td valign="top" style="text-align:left;font-size: 10pt; font-family: Arial, Helvetica, sans-serif;padding-top:5px;"><a style="color: #000001;text-decoration: none;" href="<?= $designer['href']; ?>"><?= $designer['name']; ?></a></td>
 																</tr>
 																<tr>
-																		<td valign="top" style="text-align:left;font-size:8pt; font-family: Arial, Helvetica, sans-serif;color:#EC227B"><a href="<?= $designer['href'];?>" style="text-decoration:none;color: #EC227B;"><?= $designer['teaser'];?></a></td>
+																		<td valign="top" style="text-align:left;font-size:8pt; font-family: Arial, Helvetica, sans-serif;color:#EC227B"><a href="<?= $designer['href']; ?>" style="text-decoration:none;color: #EC227B;"><?= $designer['teaser']; ?></a></td>
 																</tr>
 															</table>
 													</td>

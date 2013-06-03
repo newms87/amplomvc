@@ -1,8 +1,10 @@
 <?php
-class ControllerPaymentSagepay extends Controller {
+class Admin_Controller_Payment_Sagepay extends Controller 
+{
 	
 
-	public function index() {
+	public function index()
+	{
 		$this->template->load('payment/sagepay');
 
 		$this->load->language('payment/sagepay');
@@ -10,7 +12,7 @@ class ControllerPaymentSagepay extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('sagepay', $_POST);
+			$this->Model_Setting_Setting->editSetting('sagepay', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -79,7 +81,7 @@ class ControllerPaymentSagepay extends Controller {
 			$this->data['sagepay_order_status_id'] = $this->config->get('sagepay_order_status_id');
 		}
 
-		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
 		
 		if (isset($_POST['sagepay_geo_zone_id'])) {
 			$this->data['sagepay_geo_zone_id'] = $_POST['sagepay_geo_zone_id'];
@@ -87,7 +89,7 @@ class ControllerPaymentSagepay extends Controller {
 			$this->data['sagepay_geo_zone_id'] = $this->config->get('sagepay_geo_zone_id');
 		}
 		
-		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$this->data['geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 		
 		if (isset($_POST['sagepay_status'])) {
 			$this->data['sagepay_status'] = $_POST['sagepay_status'];
@@ -109,7 +111,8 @@ class ControllerPaymentSagepay extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'payment/sagepay')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

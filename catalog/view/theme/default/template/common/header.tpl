@@ -11,11 +11,11 @@
 <meta name="keywords" content="<?= $keywords; ?>" />
 <? } ?>
 <? if ($icon) { ?>
-<link rel="icon" type="image/ico" href="<?= $icon;?>"></link>
-<link rel="shortcut icon" href="<?= $icon;?>"></link>
+<link rel="icon" type="image/ico" href="<?= $icon; ?>"></link>
+<link rel="shortcut icon" href="<?= $icon; ?>"></link>
 <? } ?>
 <? if($canonical_link) {?>
-<link href="<?= $canonical_link;?>" rel="canonical" />
+<link href="<?= $canonical_link; ?>" rel="canonical" />
 <? }?>
 
 <? foreach ($css_styles as $style) { ?>
@@ -26,7 +26,7 @@
 <![if !IE]>
 <script type="text/javascript">//<!--
 //url_state_object = {};
-//window.history.pushState(url_state_object,'<?= addslashes($title);?>', '<?=isset($pretty_url) ? $pretty_url : '';?>');
+//window.history.pushState(url_state_object,'<?= addslashes($title); ?>', '<?= isset($pretty_url) ? $pretty_url : ''; ?>');
 //--></script>
 <![endif]>
  */ ?>
@@ -79,10 +79,10 @@ var sc_security="<?= $statcounter['security']; ?>";
 <div id='container_content'>
 <div id="header">
 	<? if ($logo) { ?>
-	<div id="logo" class="<?= $logo;?>">
+	<div id="logo" class="<?= $logo; ?>">
 		<a href="<?= $home; ?>">
 			<img src="<?= $logo; ?>" title="<?= $name; ?>" alt="<?= $name; ?>" />
-			<div id="slogan"><?= $text_slogan;?></div>
+			<div id="slogan"><?= $text_slogan; ?></div>
 		</a>
 	</div>
 	<? } ?>
@@ -96,13 +96,13 @@ var sc_security="<?= $statcounter['security']; ?>";
 		<div id="links_account">
 			<? if(!$is_logged){ ?>
 				<? if(!empty($block_login)){?>
-					<span><?= $block_login;?></span>
+					<span><?= $block_login; ?></span>
 				<? } else {?>
-					<span><?= $text_login_link;?></span>
+					<span><?= $text_login_link; ?></span>
 				<? } ?>
 			<? } else { ?>
 				<? $this->builder->set_config("href", "display_name") ;?>
-				<?=$this->builder->build('select', $links_account, 'account_menu', '', array('onchange' => "window.location = $(this).val()"));?>
+				<?= $this->builder->build('select', $links_account, 'account_menu', '', array('onchange' => "window.location = $(this).val()")); ?>
 			<? } ?>
 		</div>
 		
@@ -114,19 +114,19 @@ var sc_security="<?= $statcounter['security']; ?>";
 		
 		<? if(!empty($social_networks)){?>
 			<div id="header_social_networks">
-				<?= $social_networks;?>
+				<?= $social_networks; ?>
 			</div>
 		<? } ?>
 	</div>
 	
 	<? if(!empty($links_secondary)){?>
 	<div id="links_secondary" class="links">
-		<?= $this->builder->build_links($links_secondary);?>
+		<?= $this->builder->build_links($links_secondary); ?>
 	</div>
 	<? }?>
 	<? if(!empty($links_primary)) { ?>
 	<div id="links_primary" class="links">
-		<?= $this->builder->build_links($links_primary);?>
+		<?= $this->builder->build_links($links_primary); ?>
 	</div>
 	<? } ?>
 </div>
@@ -156,19 +156,19 @@ var sc_security="<?= $statcounter['security']; ?>";
 <? } ?>
 <div id="notification"></div>
 <div id="content_holder">
-<?=$this->builder->display_messages($messages);?>
+<?= $this->builder->display_messages($messages); ?>
 <?= $above_content; ?>
 
 <script type="text/javascript">//<!--
 $('#links_primary .top_menu > li').hover(top_menu_hoverin, top_menu_hoverout);
 function top_menu_hoverin(){
-	$(this).addClass('active')
+	$(this).addClass('hover')
 	if($(this).find('ul').children().length){
 		$(this).append("<div class='submenu_arrow'></div>");
 	}
 }
 function top_menu_hoverout(){
-	$(this).removeClass('active')
+	$(this).removeClass('hover')
 		.find('.submenu_arrow').remove();
 }
 //--></script>

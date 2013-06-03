@@ -1,8 +1,9 @@
 <?php
-class ControllerDevDev extends Controller {
-	public function index(){
+class Admin_Controller_Dev_Dev extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('dev/dev');
-		
 		$this->language->load('dev/dev');
 		
 		$this->document->setTitle($this->_('heading_title'));
@@ -14,24 +15,25 @@ class ControllerDevDev extends Controller {
 		$this->content();
 	}
 	
-	public function sync(){
+	public function sync()
+	{
 		$this->template->load('dev/sync');
 
 		$this->load->language('dev/dev');
 		
 		$this->document->setTitle($this->_('text_sync'));
 		
-		$dev_sites = $this->model_setting_setting->getSetting('dev_sites');
+		$dev_sites = $this->Model_Setting_Setting->getSetting('dev_sites');
 		
-		if($_SERVER["REQUEST_METHOD"] == 'POST' && $this->validate()){
-			if(isset($_POST['sync_site'])){
-				if(!isset($_POST['tables'])){
+		if ($_SERVER["REQUEST_METHOD"] == 'POST' && $this->validate()) {
+			if (isset($_POST['sync_site'])) {
+				if (!isset($_POST['tables'])) {
 					$this->message->add('warning', "You must select at least 1 table to sync.");
 				}
-				else{
+				else {
 					$key = array_search($_POST['domain'], $dev_sites);
-					foreach($dev_sites as $site){
-						if($_POST['domain'] == $site['domain']){
+					foreach ($dev_sites as $site) {
+						if ($_POST['domain'] == $site['domain']) {
 							$dev_sites[$key]['password'] = $_POST['password'];
 							
 							$this->dev->request_table_sync($dev_sites[$key], $_POST['tables']);
@@ -52,7 +54,7 @@ class ControllerDevDev extends Controller {
 			'domain' => '',
 		);
 
-		foreach($defaults as $key=>$default){
+		foreach ($defaults as $key=>$default) {
 			if(isset($_POST[$key]))
 				$this->data[$key] = $_POST[$key];
 			else
@@ -66,23 +68,24 @@ class ControllerDevDev extends Controller {
 		$this->content();
 	}
 	
-	public function site_management(){
+	public function site_management()
+	{
 		$this->template->load('dev/site_management');
 		
 		$this->load->language('dev/dev');
 		
 		$this->document->setTitle($this->_('text_site_management'));
 		
-		$dev_sites = $this->model_setting_setting->getSetting('dev_sites');
+		$dev_sites = $this->Model_Setting_Setting->getSetting('dev_sites');
 		
-		if($_SERVER["REQUEST_METHOD"] == 'POST' && $this->validate()){
-			if(isset($_POST['add_site'])){
+		if ($_SERVER["REQUEST_METHOD"] == 'POST' && $this->validate()) {
+			if (isset($_POST['add_site'])) {
 				unset($_POST['add_site']);
 				$dev_sites[] = $_POST;
 			}
-			elseif(isset($_POST['delete_site'])){
-				foreach($dev_sites as $key => $site){
-					if($_POST['domain'] == $site['domain']){
+			elseif (isset($_POST['delete_site'])) {
+				foreach ($dev_sites as $key => $site) {
+					if ($_POST['domain'] == $site['domain']) {
 						unset($dev_sites[$key]);
 					}
 				}
@@ -90,7 +93,7 @@ class ControllerDevDev extends Controller {
 			
 			unset($_POST);
 			
-			$this->model_setting_setting->editSetting('dev_sites', $dev_sites, null, false);
+			$this->Model_Setting_Setting->editSetting('dev_sites', $dev_sites, null, false);
 		}
 		
 		$this->breadcrumb->add($this->_('text_site_management'), $this->url->link('dev/dev/site_management'));
@@ -101,11 +104,11 @@ class ControllerDevDev extends Controller {
 			'status' => 'live',
 		);
 
-		foreach($defaults as $key=>$default){
-			if(isset($_POST[$key])){
+		foreach ($defaults as $key=>$default) {
+			if (isset($_POST[$key])) {
 				$this->data[$key] = $_POST[$key];
 			}
-			else{
+			else {
 				$this->data[$key] = $default;
 			}
 		}
@@ -115,33 +118,34 @@ class ControllerDevDev extends Controller {
 		$this->content();
 	}
 	
-	public function backup_restore(){
+	public function backup_restore()
+	{
 		$this->template->load('dev/backup_restore');
 		
 		$this->load->language('dev/dev');
 		
 		$this->document->setTitle($this->_('text_backup_restore'));
 		
-		if($_SERVER["REQUEST_METHOD"] == 'POST' && $this->validate()){
-			if(isset($_POST['site_backup'])){
+		if ($_SERVER["REQUEST_METHOD"] == 'POST' && $this->validate()) {
+			if (isset($_POST['site_backup'])) {
 				$tables = isset($_POST['tables']) ? $_POST['tables'] : null;
 				
-				if(count($tables) == $this->db->count_tables()){
+				if (count($tables) == $this->db->count_tables()) {
 					$tables = null;
 				}
 				
 				$this->dev->site_backup(null, $tables);
 			}
-			elseif(isset($_POST['site_restore'])){
+			elseif (isset($_POST['site_restore'])) {
 				$this->dev->site_restore($_POST['backup_file']);
 			}
-			elseif(isset($_POST['execute_file'])){
+			elseif (isset($_POST['execute_file'])) {
 				if (is_uploaded_file($_FILES['filename']['tmp_name'])) {
 					$filename = $_FILES['filename']['name'];
-					if($this->db->execute_file($_FILES['filename']['tmp_name'])){
+					if ($this->db->execute_file($_FILES['filename']['tmp_name'])) {
 						$this->message->add('success', "Successfully executed the contents of $filename!");
 					}
-					else{
+					else {
 						$this->message->add('warning', "There was a problem while executing $filename. " . $this->db->get_error());
 					}
 				}
@@ -154,16 +158,16 @@ class ControllerDevDev extends Controller {
 			'tables' => '',
 		);
 
-		foreach($defaults as $key=>$default){
+		foreach ($defaults as $key=>$default) {
 			if(isset($_POST[$key]))
 				$this->data[$key] = $_POST[$key];
 			else
 				$this->data[$key] = $default;
 		}
 		
-		$backup_files = $this->model_dev_dev->getBackupFiles();
+		$backup_files = $this->Model_Dev_Dev->getBackupFiles();
 		
-		foreach($backup_files as &$backup){
+		foreach ($backup_files as &$backup) {
 			$backup['display_size'] = $this->tool->bytes2str($backup['size'],2);
 			$backup['display_date'] = $this->tool->format_datetime($backup['date'], 'd M, Y');
 		}
@@ -175,7 +179,8 @@ class ControllerDevDev extends Controller {
 		$this->content();
 	}
 	
-	public function content(){
+	public function content()
+	{
 		$this->document->addStyle(HTTP_THEME_STYLE . 'dev.css');
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'), '', 0);
@@ -192,7 +197,8 @@ class ControllerDevDev extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function request_table_data() {
+	public function request_table_data()
+	{
 		$this->language->load('dev/dev');
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['tables']) && $this->validate()) {
@@ -210,7 +216,8 @@ class ControllerDevDev extends Controller {
 		exit;
 	}
 	
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'dev/dev')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

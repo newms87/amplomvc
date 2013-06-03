@@ -1,7 +1,9 @@
 <?php
-class ControllerCommonLogin extends Controller {
+class Admin_Controller_Common_Login extends Controller 
+{
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('common/login');
 
 		$this->load->language('common/login');
@@ -9,10 +11,10 @@ class ControllerCommonLogin extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		//IF user is logged in, redirect to the homepage
-		if(isset($_POST['username']) && isset($_POST['password'])){
+		if (isset($_POST['username']) && isset($_POST['password'])) {
 			$this->user->logout();
 		}
-		elseif ($this->user->isLogged()){
+		elseif ($this->user->isLogged()) {
 			$this->url->redirect($this->url->link('common/home'));
 		}
 		
@@ -20,7 +22,7 @@ class ControllerCommonLogin extends Controller {
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			if (!empty($_GET['redirect'])) {
 				$this->url->redirect(urldecode($_GET['redirect']));
-			}else{
+			} else {
 				$this->url->redirect($this->url->link('common/home'));
 			}
 		}
@@ -28,7 +30,7 @@ class ControllerCommonLogin extends Controller {
 		$this->language->format('text_lost', $this->url->store($this->config->get('config_default_store'), 'common/home'));
 		$this->language->format('text_are_you_a_designer', $this->url->store($this->config->get('config_default_store'), 'information/are_you_a_designer'));
 		
-		if(isset($this->session->data['token']) && !isset($_COOKIE['token'])){
+		if (isset($this->session->data['token']) && !isset($_COOKIE['token'])) {
 			$this->error['warning'] = $this->_('error_token');
 		}
 		
@@ -39,31 +41,31 @@ class ControllerCommonLogin extends Controller {
 			'password'=>'',
 		);
 		
-		foreach($defaults as $key=>$default){
+		foreach ($defaults as $key=>$default) {
 			$this->data[$key] = isset($_POST[$key]) ? $_POST[$key]:$default;
 		}
 		
 		//If trying to access an admin page, redirect after login
 		if (!isset($_GET['redirect'])) {
-			if(isset($_GET['route'])){
+			if (isset($_GET['route'])) {
 				$route = $_GET['route'];
 				
 				$not_allowed = array(
 					'common/login', 'common/logout'
 				);
 				
-				if(in_array($route, $not_allowed)){
+				if (in_array($route, $not_allowed)) {
 					$redirect = urlencode($this->url->link('common/home'));
 				}
-				else{
+				else {
 					$redirect = urlencode(preg_replace("/redirect=[^&#]*/",'',$this->url->here()));
 				}
 			}
-			else{
+			else {
 				$redirect = urlencode($this->url->link('common/home'));
 			}
 		}
-		else{
+		else {
 			$redirect = $_GET['redirect'];
 		}
 		
@@ -79,9 +81,10 @@ class ControllerCommonLogin extends Controller {
 		$this->response->setOutput($this->render());
   	}
 		
-	private function validate() {
+	private function validate()
+	{
 		if (isset($_POST['username']) && isset($_POST['password']) && !$this->user->login($_POST['username'], $_POST['password'])) {
-			if(!empty($_GET['response'])){
+			if (!empty($_GET['response'])) {
 				echo "FAILURE";
 				exit;
 			}
@@ -91,7 +94,7 @@ class ControllerCommonLogin extends Controller {
 			return false;
 		}
 		
-		if(!empty($_GET['response'])){
+		if (!empty($_GET['response'])) {
 			echo "SUCCESS";
 			exit;
 		}

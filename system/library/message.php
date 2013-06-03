@@ -1,36 +1,46 @@
 <?php
-class Message {
-	private $session;
+class Message 
+{
+	private $registry;
 	
-	function __construct($session){
-		$this->session = $session;
-		if(!isset($this->session->data['messages'])){
+	function __construct($registry)
+	{
+		$this->registry = $registry;
+		
+		if (!isset($this->session->data['messages'])) {
 			$this->session->data['messages'] = array();
 		}
 	}
 	
+	public function __get($key)
+	{
+		return $this->registry->get($key);
+	}
 	
-	public function add($type, $message){
-		if(is_string($message)){
+	public function add($type, $message)
+	{
+		if (is_string($message)) {
 			$this->session->data['messages'][$type][] = $message;
 		}
-		elseif(is_array($message)){
-			foreach($message as $m){
+		elseif (is_array($message)) {
+			foreach ($message as $m) {
 				$this->add($type, $m);
 			}
 		}
 	}
 	
-	public function error_set(){
+	public function error_set()
+	{
 		return isset($this->session->data['messages']['error']) || isset($this->session->data['messages']['warning']);
 	}
 	
-	public function peek($type=''){
-		if($type){
-			if(isset($this->session->data['messages'][$type])){
+	public function peek($type='')
+	{
+		if ($type) {
+			if (isset($this->session->data['messages'][$type])) {
 				return $this->session->data['messages'][$type];
 			}
-			else{
+			else {
 				return array();
 			}
 		}
@@ -38,20 +48,21 @@ class Message {
 		return $this->session->data['messages'];
 	}
 	
-	public function fetch($type=''){
-		if(!isset($this->session->data['messages'])){
+	public function fetch($type='')
+	{
+		if (!isset($this->session->data['messages'])) {
 			return array();
 		}
 		
-		if($type){
-			if(isset($this->session->data['messages'][$type])){
+		if ($type) {
+			if (isset($this->session->data['messages'][$type])) {
 				$msgs = $this->session->data['messages'][$type];
 				
 				unset($this->session->data['messages'][$type]);
 				
 				return $msgs;
 			}
-			else{
+			else {
 				return array();
 			}
 		}

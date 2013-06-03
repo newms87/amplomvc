@@ -5,7 +5,7 @@
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'lockscreen.png'; ?>" alt="" /> <?= $text_login; ?></h1>
 		</div>
 		<div class="content" style="min-height: 150px; overflow: hidden;">
-			<?=$this->builder->display_messages($messages);?>
+			<?= $this->builder->display_messages($messages); ?>
 			<form action="<?= $action ?>" method="post" enctype="multipart/form-data" id="form">
 				<table style="width: 100%;">
 					<tr>
@@ -31,9 +31,9 @@
 			</form>
 		</div>
 		<div class="content" style="min-height:80px">
-			<div class="help"><?=$text_lost;?></a>.</div>
+			<div class="help"><?= $text_lost; ?></a>.</div>
 			<br><br>
-			<div class="help"><?=$text_are_you_a_designer;?></div>
+			<div class="help"><?= $text_are_you_a_designer; ?></div>
 		</div>
 	</div>
 </div>

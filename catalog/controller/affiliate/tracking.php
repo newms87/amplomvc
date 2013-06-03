@@ -1,6 +1,8 @@
 <?php
-class ControllerAffiliateTracking extends Controller {
-	public function index() {
+class Catalog_Controller_Affiliate_Tracking extends Controller 
+{
+	public function index()
+	{
 		$this->template->load('affiliate/tracking');
 
 		if (!$this->affiliate->isLogged()) {
@@ -34,7 +36,8 @@ class ControllerAffiliateTracking extends Controller {
 		$this->response->setOutput($this->render());
   	}
 	
-	public function autocomplete() {
+	public function autocomplete()
+	{
 		$json = array();
 		
 		if (isset($_GET['filter_name'])) {
@@ -44,7 +47,7 @@ class ControllerAffiliateTracking extends Controller {
 				'limit'		=> 20
 			);
 			
-			$results = $this->model_catalog_product->getProducts($data);
+			$results = $this->Model_Catalog_Product->getProducts($data);
 			
 			foreach ($results as $result) {
 				$json[] = array(

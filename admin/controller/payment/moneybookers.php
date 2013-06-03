@@ -1,8 +1,10 @@
 <?php
-class ControllerPaymentMoneyBookers extends Controller {
+class Admin_Controller_Payment_Moneybookers extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('payment/moneybookers');
 
 		$this->load->language('payment/moneybookers');
@@ -10,7 +12,7 @@ class ControllerPaymentMoneyBookers extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('moneybookers', $_POST);
+			$this->Model_Setting_Setting->editSetting('moneybookers', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 		
@@ -85,7 +87,7 @@ class ControllerPaymentMoneyBookers extends Controller {
 			$this->data['moneybookers_chargeback_status_id'] = $this->config->get('moneybookers_chargeback_status_id');
 		}
 		
-		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
 		
 		if (isset($_POST['moneybookers_geo_zone_id'])) {
 			$this->data['moneybookers_geo_zone_id'] = $_POST['moneybookers_geo_zone_id'];
@@ -93,7 +95,7 @@ class ControllerPaymentMoneyBookers extends Controller {
 			$this->data['moneybookers_geo_zone_id'] = $this->config->get('moneybookers_geo_zone_id');
 		}
 		
-		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$this->data['geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 		
 		if (isset($_POST['moneybookers_status'])) {
 			$this->data['moneybookers_status'] = $_POST['moneybookers_status'];
@@ -127,7 +129,8 @@ class ControllerPaymentMoneyBookers extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'payment/moneybookers')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

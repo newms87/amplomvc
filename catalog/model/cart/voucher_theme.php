@@ -1,6 +1,8 @@
 <?php
-class ModelCartVoucherTheme extends Model {
-	public function getVoucherTheme($voucher_theme_id) {
+class Catalog_Model_Cart_VoucherTheme extends Model 
+{
+	public function getVoucherTheme($voucher_theme_id)
+	{
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "voucher_theme vt LEFT JOIN " . DB_PREFIX . "voucher_theme_description vtd ON (vt.voucher_theme_id = vtd.voucher_theme_id) WHERE vt.voucher_theme_id = '" . (int)$voucher_theme_id . "' AND vtd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
 		
 		return $query->row;

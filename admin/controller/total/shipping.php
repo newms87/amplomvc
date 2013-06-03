@@ -1,8 +1,10 @@
 <?php
-class ControllerTotalShipping extends Controller {
+class Admin_Controller_Total_Shipping extends Controller 
+{
 	
 	
-	public function index() {
+	public function index()
+	{
 		$this->template->load('total/shipping');
 
 		$this->load->language('total/shipping');
@@ -10,7 +12,7 @@ class ControllerTotalShipping extends Controller {
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && ($this->validate())) {
-			$this->model_setting_setting->editSetting('shipping', $_POST);
+			$this->Model_Setting_Setting->editSetting('shipping', $_POST);
 		
 			$this->message->add('success', $this->_('text_success'));
 			
@@ -57,7 +59,8 @@ class ControllerTotalShipping extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function validate() {
+	private function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'total/shipping')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

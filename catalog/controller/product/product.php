@@ -1,13 +1,14 @@
 <?php
-class ControllerProductProduct extends Controller {
+class Catalog_Controller_Product_Product extends Controller 
+{
 	
-	public function index() {
-		
+	public function index()
+	{
 		$this->language->load('product/product');
 		
 		$product_id = isset($_GET['product_id']) ? $_GET['product_id'] : 0;
 		
-		$product_info = $this->model_catalog_product->getProduct($product_id);
+		$product_info = $this->Model_Catalog_Product->getProduct($product_id);
 		
 		$this->data['product_info'] = $product_info;
 		
@@ -18,19 +19,21 @@ class ControllerProductProduct extends Controller {
 			//Build Breadcrumbs
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			
-			$manufacturer_info = $this->model_catalog_manufacturer->getManufacturer($product_info['manufacturer_id']);
+			$manufacturer_info = $this->Model_Catalog_Manufacturer->getManufacturer($product_info['manufacturer_id']);
 			
-			if ($manufacturer_info){
+			if ($manufacturer_info) {
 				$this->breadcrumb->add($manufacturer_info['name'], $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $product_info['manufacturer_id']));
 			}
 	
 			if (isset($product_info['flashsale_id'])) {
-				$flashsale_info = $this->model_catalog_flashsale->getFlashsale($product_info['flashsale_id']);
+				$flashsale_info = $this->Model_Catalog_Flashsale->getFlashsale($product_info['flashsale_id']);
 				
-				if ($flashsale_info){
+				if ($flashsale_info) {
 					$this->breadcrumb->add($flashsale_info['name'], $this->url->link('sales/flashsale', 'flashsale_id=' . $product_info['flashsale_id']));
 				}
 			}
+			
+			$product_info['category'] = $this->Model_Catalog_Category->getCategory($product_info['category_id']);
 
 			$this->breadcrumb->add($product_info['name'], $this->url->link('product/product', 'product_id=' . $product_info['product_id']));
 			
@@ -41,32 +44,27 @@ class ControllerProductProduct extends Controller {
 			
 			$this->language->set('heading_title', $product_info['name']);
 			
-			if($product_info['template']){
+			if ($product_info['template']) {
 				$this->template->load('product/' . $product_info['template']);
 			}
-			else{
+			else {
 				$this->template->load('product/product');
 			}
 			
-			//Product Flashsale
-			if(isset($flashsale_info) && $flashsale_info){
-				$this->data['block_product_flashsale_countdown'] = $this->getBlock('product', 'flashsale_countdown', array($flashsale_info));
-			}
-			
 			//Product Images
-			$this->data['block_product_images'] = $this->getBlock('product', 'images', array($product_info));
+			$this->data['block_product_images'] = $this->getBlock('product/images', array('product_info' => $product_info));
 			
 			//Product Information
-			$this->data['block_product_information'] = $this->getBlock('product', 'information', array($product_info));
+			$this->data['block_product_information'] = $this->getBlock('product/information', array('product_info' => $product_info));
 			
 			//Additional Information
-			$this->data['block_product_additional'] = $this->getBlock('product', 'additional', array($product_info));
+			$this->data['block_product_additional'] = $this->getBlock('product/additional', array('product_info' => $product_info));
 			
 			//Find the related products
-			$this->data['block_product_related'] = $this->getBlock('product', 'related', array($product_id));
+			$this->data['block_product_related'] = $this->getBlock('product/related', array('product_id' => $product_id));
 			
 			//The Tags associated with this product
-			$tags = $this->model_catalog_product->getProductTags($product_info['product_id']);
+			$tags = $this->Model_Catalog_Product->getProductTags($product_info['product_id']);
 			
 			foreach ($tags as &$tag) {
 				$tag['href'] = $this->url->link('product/search', 'filter_tag=' . $tag['tag']);
@@ -76,11 +74,11 @@ class ControllerProductProduct extends Controller {
 			
 			$this->data['tags'] = $tags;
 			
-			if($product_info['template'] == 'product_video'){
+			if ($product_info['template'] == 'product_video') {
 				$this->data['description'] = html_entity_decode($product_info['description']);
 			}
 			
-			$this->model_catalog_product->updateViewed($product_info['product_id']);
+			$this->Model_Catalog_Product->updateViewed($product_info['product_id']);
 		} else {
 			$this->url->redirect($this->url->link('error/not_found'));
 		}
@@ -97,7 +95,8 @@ class ControllerProductProduct extends Controller {
 		$this->response->setOutput($this->render());
   	}
 
-	public function review() {
+	public function review()
+	{
 		$this->template->load('product/review');
 
 		$this->language->load('product/product');
@@ -110,9 +109,9 @@ class ControllerProductProduct extends Controller {
 		
 		$this->data['reviews'] = array();
 		
-		$review_total = $this->model_catalog_review->getTotalReviewsByProductId($_GET['product_id']);
+		$review_total = $this->Model_Catalog_Review->getTotalReviewsByProductId($_GET['product_id']);
 			
-		$results = $this->model_catalog_review->getReviewsByProductId($_GET['product_id'], ($page - 1) * 5, 5);
+		$results = $this->Model_Catalog_Review->getReviewsByProductId($_GET['product_id'], ($page - 1) * 5, 5);
 				
 		foreach ($results as $result) {
 			$this->data['reviews'][] = array(
@@ -131,7 +130,8 @@ class ControllerProductProduct extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function write() {
+	public function write()
+	{
 		$this->language->load('product/product');
 		
 		$json = array();
@@ -154,7 +154,7 @@ class ControllerProductProduct extends Controller {
 			}
 				
 			if (!isset($json['error'])) {
-				$this->model_catalog_review->addReview($_GET['product_id'], $_POST);
+				$this->Model_Catalog_Review->addReview($_GET['product_id'], $_POST);
 				
 				$json['success'] = $this->_('text_success');
 			}
@@ -163,13 +163,15 @@ class ControllerProductProduct extends Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 	
-	public function captcha() {
+	public function captcha()
+	{
 		$this->session->data['captcha'] = $this->captcha->getCode();
 		
 		$this->captcha->showImage();
 	}
 	
-	public function upload() {
+	public function upload()
+	{
 		$this->language->load('product/product');
 		
 		$json = array();

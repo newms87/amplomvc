@@ -1,16 +1,20 @@
 <?php
-class ControllerPluginCms extends Controller {
-	public function index() {
+class Catalog_Cms extends Controller 
+{
+	public function index()
+	{
 		echo 'index';
 	}
 	
-	public function cms_header(){
+	public function cms_header()
+	{
 		if($this->config->get('config_store_id') != 2)return;
 		
 		$this->data['giveaway'] = $this->image->get('data/dogear_giveaway.gif');
 	}
 	
-	public function footer(){
+	public function footer()
+	{
 		echo 'footer';
 	}
 }

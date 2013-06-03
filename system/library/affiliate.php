@@ -1,5 +1,6 @@
 <?php
-class Affiliate {
+class Affiliate 
+{
 	protected $registry;
 	
 	private $affiliate_id;
@@ -10,7 +11,8 @@ class Affiliate {
 	private $fax;
 	private $code;
 	
-  	public function __construct(&$registry) {
+  	public function __construct(&$registry)
+  	{
 		$this->registry = &$registry;
 				
 		if (isset($this->session->data['affiliate_id'])) {
@@ -32,11 +34,13 @@ class Affiliate {
   		}
 	}
 	
-	public function __get($key){
+	public function __get($key)
+	{
 		return $this->registry->get($key);
 	}
 	
-  	public function login($email, $password) {
+  	public function login($email, $password)
+  	{
 		$affiliate_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "affiliate WHERE email = '" . $this->db->escape($email) . "' AND password = '" . $this->db->escape(md5($password)) . "' AND status = '1' AND approved = '1'");
 		
 		if ($affiliate_query->num_rows) {
@@ -56,7 +60,8 @@ class Affiliate {
 		}
   	}
   
-  	public function logout() {
+  	public function logout()
+  	{
 		unset($this->session->data['affiliate_id']);
 
 		$this->affiliate_id = '';
@@ -67,35 +72,43 @@ class Affiliate {
 		$this->fax = '';
   	}
   
-  	public function isLogged() {
+  	public function isLogged()
+  	{
 		return $this->affiliate_id;
   	}
 
-  	public function getId() {
+  	public function getId()
+  	{
 		return $this->affiliate_id;
   	}
 		
-  	public function getFirstName() {
+  	public function getFirstName()
+  	{
 		return $this->firstname;
   	}
   
-  	public function getLastName() {
+  	public function getLastName()
+  	{
 		return $this->lastname;
   	}
   
-  	public function getEmail() {
+  	public function getEmail()
+  	{
 		return $this->email;
   	}
   
-  	public function getTelephone() {
+  	public function getTelephone()
+  	{
 		return $this->telephone;
   	}
   
-  	public function getFax() {
+  	public function getFax()
+  	{
 		return $this->fax;
   	}
 	
-  	public function getCode() {
+  	public function getCode()
+  	{
 		return $this->code;
   	}
 }

@@ -1,7 +1,9 @@
 <?php
-class ControllerCatalogManufacturer extends Controller {
+class Admin_Controller_Catalog_Manufacturer extends Controller 
+{
 	
-  	public function index() {
+  	public function index()
+  	{
 		$this->load->language('catalog/manufacturer');
 		
 		$this->document->setTitle($this->_('heading_title'));
@@ -9,17 +11,18 @@ class ControllerCatalogManufacturer extends Controller {
 		$this->getList();
   	}
   
-  	public function insert() {
+  	public function insert()
+  	{
 		$this->load->language('catalog/manufacturer');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_catalog_manufacturer->addManufacturer($_POST);
+			$this->Model_Catalog_Manufacturer->addManufacturer($_POST);
 			
 			if($this->user->isAdmin())
 				$this->message->add('success', $this->_('text_success'));
-			else{
+			else {
 				$this->message->add('warning', $this->language->formt('error_portal_insert', $this->config->get('config_email')));
 				$this->message->add('success', $this->_('text_portal_insert_success'));
 			}
@@ -32,7 +35,8 @@ class ControllerCatalogManufacturer extends Controller {
 		$this->getForm();
   	}
 	
-  	public function update() {
+  	public function update()
+  	{
 		$this->load->language('catalog/manufacturer');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -41,7 +45,7 @@ class ControllerCatalogManufacturer extends Controller {
 			$manufacturer_id = isset($_GET['manufacturer_id'])?$_GET['manufacturer_id']:0;
 			$this->check_user_can_modify($manufacturer_id);
 		
-			$this->model_catalog_manufacturer->editManufacturer($_GET['manufacturer_id'], $_POST);
+			$this->Model_Catalog_Manufacturer->editManufacturer($_GET['manufacturer_id'], $_POST);
 
 			$this->message->add('success', $this->_('text_success'));
 
@@ -53,7 +57,8 @@ class ControllerCatalogManufacturer extends Controller {
 		$this->getForm();
   	}
 
-  	public function delete() {
+  	public function delete()
+  	{
 		$this->load->language('catalog/manufacturer');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -61,7 +66,7 @@ class ControllerCatalogManufacturer extends Controller {
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $manufacturer_id) {
 				$this->check_user_can_modify($manufacturer_id);
-				$this->model_catalog_manufacturer->deleteManufacturer($manufacturer_id);
+				$this->Model_Catalog_Manufacturer->deleteManufacturer($manufacturer_id);
 			}
 
 			$this->message->add('success', $this->_('text_success'));
@@ -74,7 +79,8 @@ class ControllerCatalogManufacturer extends Controller {
 		$this->getList();
   	}
 	
-  	private function getList() {
+  	private function getList()
+  	{
 		$this->template->load('catalog/manufacturer_list');
 
   		$sort_list = array('sort'=>'name','order'=>'ASC','page'=>1);
@@ -98,15 +104,15 @@ class ControllerCatalogManufacturer extends Controller {
 			'limit' => $this->config->get('config_admin_limit')
 		);
 		
-		if($this->user->isDesigner()){
-			$designers = $this->model_user_user->getUserDesigners($this->user->getId());
+		if ($this->user->isDesigner()) {
+			$designers = $this->Model_User_User->getUserDesigners($this->user->getId());
 			foreach($designers as $d)
 				$data['manufacturer_ids'][] = $d['designer_id'];
 		}
 		
-		$manufacturer_total = $this->model_catalog_manufacturer->getTotalManufacturers($data);
+		$manufacturer_total = $this->Model_Catalog_Manufacturer->getTotalManufacturers($data);
 		
-		$results = $this->model_catalog_manufacturer->getManufacturers($data);
+		$results = $this->Model_Catalog_Manufacturer->getManufacturers($data);
 		
 		foreach ($results as $result) {
 			$action = array();
@@ -154,11 +160,12 @@ class ControllerCatalogManufacturer extends Controller {
 		$this->response->setOutput($this->render());
 	}
   
-  	private function getForm() {
-  		if($this->user->isDesigner()){
+  	private function getForm()
+  	{
+  		if ($this->user->isDesigner()) {
 			$this->template->load('catalog/manufacturer_form_restricted');
 		}
-		else{
+		else {
 			$this->template->load('catalog/manufacturer_form');
 		}
 
@@ -181,7 +188,7 @@ class ControllerCatalogManufacturer extends Controller {
 		
 		$manufacturer_info = array();
 		if ($manufacturer_id && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-			$manufacturer_info = $this->model_catalog_manufacturer->getManufacturer($manufacturer_id);
+			$manufacturer_info = $this->Model_Catalog_Manufacturer->getManufacturer($manufacturer_id);
 		}
 		
 		$defaults = array('name'=>'',
@@ -197,7 +204,7 @@ class ControllerCatalogManufacturer extends Controller {
 								'editable'=>1
 								);
 		
-		foreach($defaults as $d=>$value){
+		foreach ($defaults as $d=>$value) {
 			if (isset($_POST[$d]))
 				$this->data[$d] = $_POST[$d];
 			elseif (isset($manufacturer_info[$d]))
@@ -206,16 +213,16 @@ class ControllerCatalogManufacturer extends Controller {
 				$this->data[$d] = $value;
 		}
 		
-		if(!$this->data['editable']){
+		if (!$this->data['editable']) {
 			$this->language->format('text_not_editable', $this->data['name'],$this->config->get('config_email'), "Active%20Designer%20Brand%20Modification%20Request");
 		}
 		
 		//Get the rest of the manufacturer information
 		if(!isset($this->data['manufacturer_store']))
-			$this->data['manufacturer_store'] = $this->model_catalog_manufacturer->getManufacturerStores($manufacturer_id);
+			$this->data['manufacturer_store'] = $this->Model_Catalog_Manufacturer->getManufacturerStores($manufacturer_id);
 		
 		if (!isset($this->data['manufacturer_description']))
-			$this->data['manufacturer_description'] = $this->model_catalog_manufacturer->getManufacturerDescriptions($manufacturer_id);
+			$this->data['manufacturer_description'] = $this->Model_Catalog_Manufacturer->getManufacturerDescriptions($manufacturer_id);
 
 		if (!empty($manufacturer_info) && $manufacturer_info['image'] && file_exists(DIR_IMAGE . $manufacturer_info['image'])) {
 			$this->data['thumb'] = $this->image->resize($manufacturer_info['image'], 100, 100);
@@ -225,20 +232,20 @@ class ControllerCatalogManufacturer extends Controller {
 		
 		$this->data['no_image'] = $this->image->resize('no_image.png', 100, 100);
 		
-		if($manufacturer_id){
-			$this->data['articles'] = $this->model_catalog_manufacturer->getManufacturerArticles($manufacturer_id);
+		if ($manufacturer_id) {
+			$this->data['articles'] = $this->Model_Catalog_Manufacturer->getManufacturerArticles($manufacturer_id);
 		}
 		else
 			$this->data['articles'] = array();
 			
 		$this->data['section_attrs'] = array(0=>'( None )');
-		$attrs = $this->model_catalog_attribute_group->getAttributeGroups();
+		$attrs = $this->Model_Catalog_AttributeGroup->getAttributeGroups();
 		foreach($attrs as $a)
 			$this->data['section_attrs'][$a['attribute_group_id']] = $a['name'];
 		
-		$this->data['languages'] = $this->model_localisation_language->getLanguages();
+		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
 		
-		$this->data['data_stores'] = $this->model_setting_store->getStores();
+		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
 		
 		$this->children = array(
 			'common/header',
@@ -248,7 +255,8 @@ class ControllerCatalogManufacturer extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-  	private function validateForm() {
+  	private function validateForm()
+  	{
 		if (!$this->user->hasPermission('modify', 'catalog/manufacturer')) {
 				$this->error['warning'] = $this->_('error_permission');
 		}
@@ -257,13 +265,13 @@ class ControllerCatalogManufacturer extends Controller {
 				$this->error['name'] = $this->_('error_name');
 		}
 		
-		if(isset($_POST['keyword'])){
+		if (isset($_POST['keyword'])) {
 			$keyword =$_POST['keyword'];
 			if(empty($keyword) || is_null($keyword) || preg_match("/[^A-Za-z0-9-]/",$keyword) > 0)
 				$this->error['keyword'] = $this->_('error_keyword');
 		}
 		
-		if($this->user->isDesigner() && isset($_GET['manufacturer_id']) && !$this->model_catalog_manufacturer->isEditable($_GET['manufacturer_id'])){
+		if ($this->user->isDesigner() && isset($_GET['manufacturer_id']) && !$this->Model_Catalog_Manufacturer->isEditable($_GET['manufacturer_id'])) {
 			$this->message->add('warning', $this->_('warning_not_editable'));
 			$this->url->redirect($this->url->link('catalog/manufacturer'));
 		}
@@ -271,28 +279,29 @@ class ControllerCatalogManufacturer extends Controller {
 		return $this->error ? false : true;
   	}
 
-  	private function validateDelete() {
+  	private function validateDelete()
+  	{
 		if (!$this->user->hasPermission('modify', 'catalog/manufacturer')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
 		foreach ($_POST['selected'] as $manufacturer_id) {
-  			$product_total = $this->model_catalog_product->getTotalProductsByManufacturerId($manufacturer_id);
+  			$product_total = $this->Model_Catalog_Product->getTotalProductsByManufacturerId($manufacturer_id);
 	
 			if ($product_total) {
 				$this->error['warning_product'] = sprintf($this->_('error_product'), $product_total);
 			}
 			
-			$flashsales = $this->model_catalog_flashsale->getFlashsalesByDesignerID($manufacturer_id);
+			$flashsales = $this->Model_Catalog_Flashsale->getFlashsalesByDesignerID($manufacturer_id);
 			if(!empty($flashsales))
 				$this->error['warning_flashsale'] = $this->_('error_flashsale');
 			
-			if($this->user->isDesigner() && !$this->model_catalog_manufacturer->isEditable($manufacturer_id)){
+			if ($this->user->isDesigner() && !$this->Model_Catalog_Manufacturer->isEditable($manufacturer_id)) {
 				$this->error['warning_active'] = $this->_('warning_not_editable');
 			}
 		}
 		
-		if($this->user->isDesigner()){
+		if ($this->user->isDesigner()) {
 			$this->error = array();
 			$this->error['warning'] = $this->language->format('error_portal_delete', $this->config->get('config_email'));
 		}
@@ -301,31 +310,34 @@ class ControllerCatalogManufacturer extends Controller {
 		return $this->error ? false : true;
   	}
 
-	private function check_user_can_modify($designer_id){
-		if($this->user->isDesigner() && $designer_id){
-			$designers = $this->model_user_user->getUserDesigners($this->user->getId());
+	private function check_user_can_modify($designer_id)
+	{
+		if ($this->user->isDesigner() && $designer_id) {
+			$designers = $this->Model_User_User->getUserDesigners($this->user->getId());
 			$found = false;
 			foreach($designers as $d)
 				if($d['designer_id'] == $designer_id)
 					$found = true;
-			if(!$found){
+			if (!$found) {
 				$this->message->add('warning', $this->_('error_invalid_designer_id'));
 				$this->url->redirect($this->url->link('catalog/manufacturer'));
 			}
 		}
 	}
 	
-	public function generate_url(){
+	public function generate_url()
+	{
 		$name = isset($_POST['name'])?$_POST['name']:'';
 		$manufacturer_id = isset($_POST['manufacturer_id'])?$_POST['manufacturer_id']:'';
 		if(!$name)return;
 		
-		echo json_encode($this->model_catalog_manufacturer->generate_url($manufacturer_id,$name));
+		echo json_encode($this->Model_Catalog_Manufacturer->generate_url($manufacturer_id,$name));
 		exit;
 	}
 	
 	
-	public function autocomplete() {
+	public function autocomplete()
+	{
 		$filters = array(
 			'name' => null,
 			'status' => null,
@@ -335,15 +347,15 @@ class ControllerCatalogManufacturer extends Controller {
 		
 		$data = array();
 		
-		foreach($filters as $key => $default){
+		foreach ($filters as $key => $default) {
 			if (isset($_GET[$key])) {
 				$data[$key] = $_GET[$key];
-			} elseif(!is_null($default)) {
+			} elseif (!is_null($default)) {
 				$data[$key] = $default;
 			}
 		}
 		
-		$results = $this->model_catalog_manufacturer->getManufacturers($data);
+		$results = $this->Model_Catalog_Manufacturer->getManufacturers($data);
 		
 		$json = array();
 		
@@ -358,7 +370,8 @@ class ControllerCatalogManufacturer extends Controller {
 		$this->response->setOutput(json_encode($json));
 	}
 
-	private function get_url($filters=false){
+	private function get_url($filters=false)
+	{
 		$url = '';
 		$filters = $filters?$filters:array('sort', 'order', 'page');
 		foreach($filters as $f)

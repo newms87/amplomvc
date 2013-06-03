@@ -1,7 +1,10 @@
 <?php
-class SetupCms implements SetupPlugin {
-	function install($registry, &$controller_adapters, &$db_requests){
-	
+class _Setup implements PluginSetup 
+{
+	function install()
+	{
+		trigger_error("This is not implemented!");
+		exit;
 		$hooks = array(
 			'settings_validate' => array('when'=>'after', 'callback'=>'validate')
 		);
@@ -22,7 +25,8 @@ class SetupCms implements SetupPlugin {
 		);
 	}
 	
-	function update($version, $registry){
+	function update($version)
+	{
 		switch($version){
 			case '1.53':
 			case '1.52':
@@ -32,6 +36,7 @@ class SetupCms implements SetupPlugin {
 		}
 	}
 	
-	function uninstall($registry){
+	function uninstall()
+	{
 	}
 }

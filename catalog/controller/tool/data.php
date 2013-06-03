@@ -1,16 +1,19 @@
 <?php
-class ControllerToolData extends Controller {
+class Catalog_Controller_Tool_Data extends Controller 
+{
 	
-	function index(){}
+	function index()
+	{}
 	
-	public function load_zones() {
+	public function load_zones()
+	{
 		if(!isset($_GET['country_id'])) return;
 		
 		$choose = isset($_GET['allow_all']) ? $this->_('text_all_zones') : $this->_('text_select');
 		
 		$output = '<option value="">' . $choose . '</option>';
 		
-		$results = $this->model_localisation_zone->getZonesByCountryId($_GET['country_id']);
+		$results = $this->Model_Localisation_Zone->getZonesByCountryId($_GET['country_id']);
 		
 		foreach ($results as $result) {
 			$output .= '<option value="' . $result['zone_id'] . '"';

@@ -1,7 +1,7 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs();?>
-	<?= $this->builder->display_errors($errors);?>
+	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->builder->display_errors($errors); ?>
 <div class="box">
 	<div class="heading">
 		<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -12,21 +12,21 @@
 			<table class="form" style="border-bottom: black 2px solid">
 				<tr>
 					<td>
-						<div><?=$entry_featured_items;?></div><br />
+						<div><?= $entry_featured_items; ?></div><br />
 						<div>
 								<input type="text" class="autocomplete" for='featured_product_list' filter='filter_name' route='catalog/product/autocomplete'/><br />
-								<?= $text_autocomplete;?>
+								<?= $text_autocomplete; ?>
 						</div>
 					</td>
 					<td>
 						<ul id="featured_product_list" class="item_list">
 						<? foreach ($featured_product_list as $id => $item) { ?>
-							<li item_id='<?=$id;?>'>
+							<li item_id='<?= $id; ?>'>
 									<div class='item_image'>
-										<?=$this->builder->image_input("featured_product_list[$id][image]", $item['image']);?>
+										<?= $this->builder->image_input("featured_product_list[$id][image]", $item['image']); ?>
 									</div>
 									<div class='item_name'>
-										<input type='text' size="50" value='<?= $item['name'];?>' name='featured_product_list[<?=$id;?>][name]' />
+										<input type='text' size="50" value='<?= $item['name']; ?>' name='featured_product_list[<?= $id; ?>][name]' />
 									</div>
 									<img class='remove' onclick='$(this).parent().remove();' width='30px' src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" />
 							</li>
@@ -37,20 +37,20 @@
 			<table class="form">
 				<tr>
 					<td>
-						<div><?=$entry_carousel_blocks;?></div><br />
+						<div><?= $entry_carousel_blocks; ?></div><br />
 						<div>
 								<input type="text" class="autocomplete" for='featured_carousel_list' filter='filter_name' route='catalog/product/autocomplete'/><br />
-								<?= $text_autocomplete;?>
+								<?= $text_autocomplete; ?>
 						</div>
 					</td>
 					<td>
 						<ul id="featured_carousel_list" class="item_list">
 						<? foreach ($featured_carousel_list as $id => $item) { ?>
-							<li item_id='<?=$id;?>'>
+							<li item_id='<?= $id; ?>'>
 									<div class='item_image'>
-										<?=$this->builder->image_input("featured_carousel_list[$id][image]", $item['image']);?>
+										<?= $this->builder->image_input("featured_carousel_list[$id][image]", $item['image']); ?>
 									</div>
-									<div class='item_name'><input type='text' size="50" value='<?= $item['name'];?>' name='featured_carousel_list[<?=$id;?>][name]' /></div>
+									<div class='item_name'><input type='text' size="50" value='<?= $item['name']; ?>' name='featured_carousel_list[<?= $id; ?>][name]' /></div>
 									<img class='remove' onclick='$(this).parent().remove();' width='30px' src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" />
 							</li>
 						<? } ?>
@@ -76,11 +76,11 @@
 					<tr>
 					<td class="left"><input type="text" name="featured_carousel_module[<?= $module_row; ?>][limit]" value="<?= $module['limit']; ?>" size="1" maxlength='2' /></td>
 					<td class="left"><input type="text" name="featured_carousel_module[<?= $module_row; ?>][size]" value="<?= $module['size']; ?>" size="1" maxlength='3' /></td>
-					<td class='left'><?= $this->builder->build('select',$data_styles, "featured_carousel_module[$module_row][style]", $module['style']);?></td>
+					<td class='left'><?= $this->builder->build('select',$data_styles, "featured_carousel_module[$module_row][style]", $module['style']); ?></td>
 							<? $this->builder->set_config('layout_id','name');?>
-						<td class='left'><?= $this->builder->build('select',$data_layouts, "featured_carousel_module[$module_row][layout_id]", (int)$module['layout_id']);?></td>
-				<td class='left'><?= $this->builder->build('select',$data_positions, "featured_carousel_module[$module_row][position]", $module['position']);?></td>
-						<td class="left"><?= $this->builder->build('select',$data_statuses, "featured_carousel_module[$module_row][status]", (int)$module['status']);?></td>
+						<td class='left'><?= $this->builder->build('select',$data_layouts, "featured_carousel_module[$module_row][layout_id]", (int)$module['layout_id']); ?></td>
+				<td class='left'><?= $this->builder->build('select',$data_positions, "featured_carousel_module[$module_row][position]", $module['position']); ?></td>
+						<td class="left"><?= $this->builder->build('select',$data_statuses, "featured_carousel_module[$module_row][status]", (int)$module['status']); ?></td>
 						<td class="right"><input type="text" name="featured_carousel_module[<?= $module_row; ?>][sort_order]" value="<?= $module['sort_order']; ?>" size="3" /></td>
 						<td class="left"><a onclick="$('#module-row<?= $module_row; ?>').remove();" class="button"><?= $button_remove; ?></a></td>
 					</tr>
@@ -105,7 +105,7 @@ $(document).ready(function(){
 --></script>
 
 <script type="text/javascript">//<!--
-designer_list = <?= json_encode($data_designers);?>;
+designer_list = <?= json_encode($data_designers); ?>;
 function add_selected_designer(){
 	id = $('#designer_list').val();
 	item = { label: designer_list[id], value: 'designer'+id };
@@ -125,7 +125,7 @@ function add_to_list(selector, data){
 	
 	html =	'<li item_id="%row_id%">';
 	html += '	<div class="item_image">'
-	html += "			<?=$this->builder->image_input("%id%[%row_id%][image]", '%image%', null, null, null, null, true);?>";
+	html += "			<?= $this->builder->image_input("%id%[%row_id%][image]", '%image%', null, null, null, null, true); ?>";
 	html += '	</div>';
 	html += '	<div class="item_name"><input type="text" size="50" value="' + data.label + '" name="%id%[%row_id%][name]" /></div>';
 	html += '	<img class="remove" onclick="$(this).parent().remove();" width="30px" src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" />';
@@ -147,11 +147,11 @@ function addModule() {
 	html += '	<tr>';
 	html += '		<td class="left"><input type="text" name="featured_carousel_module[%modrow%][limit]" value="5" size="1" maxlength="2" /></td>';
 	html += '		<td class="left"><input type="text" name="featured_carousel_module[%modrow%][size]" value="260" size="1" maxlength="3" /></td>';
-	html += '		<td class="left">' + "<?= $this->builder->build('select',$data_styles, 'featured_carousel_module[%modrow%][style]');?>" +'</td>';
+	html += '		<td class="left">' + "<?= $this->builder->build('select',$data_styles, 'featured_carousel_module[%modrow%][style]'); ?>" +'</td>';
 					<? $this->builder->set_config('layout_id','name');?>
-	html += '		<td class="left">' + "<?= $this->builder->build('select',$data_layouts,'featured_carousel_module[%modrow%][layout_id]');?>" + '</td>';
-	html += '		<td class="left">' + "<?= $this->builder->build('select',$data_positions,'featured_carousel_module[%modrow%][position]','content_top');?>" + '</td>';
-	html += '		<td class="left">' + "<?= $this->builder->build('select',$data_statuses,'featured_carousel_module[%modrow%][status]',1);?>" + '</td>';
+	html += '		<td class="left">' + "<?= $this->builder->build('select',$data_layouts,'featured_carousel_module[%modrow%][layout_id]'); ?>" + '</td>';
+	html += '		<td class="left">' + "<?= $this->builder->build('select',$data_positions,'featured_carousel_module[%modrow%][position]','content_top'); ?>" + '</td>';
+	html += '		<td class="left">' + "<?= $this->builder->build('select',$data_statuses,'featured_carousel_module[%modrow%][status]',1); ?>" + '</td>';
 	html += '		<td class="right"><input type="text" name="featured_carousel_module[%modrow%][sort_order]" value="0" size="3" /></td>';
 	html += '		<td class="left"><a onclick="$(\'#module-row%modrow%\').remove();" class="button"><?= $button_remove; ?></a></td>';
 	html += '	</tr>';
@@ -162,6 +162,6 @@ function addModule() {
 }
 //--></script>
 
-<?= $this->builder->js('autocomplete', '.autocomplete','name','product_id', 'add_to_list');?>
+<?= $this->builder->js('autocomplete', '.autocomplete','name','product_id', 'add_to_list'); ?>
 
 <?= $footer; ?>

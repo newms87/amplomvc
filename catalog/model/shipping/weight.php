@@ -1,6 +1,8 @@
 <?php
-class ModelShippingWeight extends Model {
-  	public function getQuote($address) {
+class Catalog_Model_Shipping_Weight extends Model 
+{
+  	public function getQuote($address)
+  	{
 		$this->load->language('shipping/weight');
 		
 		$quote_data = array();

@@ -1,7 +1,9 @@
 <?php
-class ControllerPagePage extends Controller {
+class Admin_Controller_Page_Page extends Controller 
+{
 	
-	public function index() {
+	public function index()
+	{
 		$this->load->language('page/page');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -9,53 +11,56 @@ class ControllerPagePage extends Controller {
 		$this->getList();
 	}
 
-	public function insert() {
+	public function insert()
+	{
 		$this->load->language('page/page');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_page_page->addPage($_POST);
+			$this->Model_Page_Page->addPage($_POST);
 			
-			if(!$this->message->error_set()){
+			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success_insert'));
 			}
 			
 			$this->getList();
 		}
-		else{
+		else {
 			$this->getForm();
 		}
 	}
 
-	public function update() {
+	public function update()
+	{
 		$this->load->language('page/page');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_page_page->editPage($_GET['page_id'], $_POST);
+			$this->Model_Page_Page->editPage($_GET['page_id'], $_POST);
 			
-			if(!$this->message->error_set()){
+			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success_update'));
 			}
 			
 			$this->getList();
 		}
-		else{
+		else {
 			$this->getForm();
 		}
 	}
  
-	public function delete() {
+	public function delete()
+	{
 		$this->load->language('page/page');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (isset($_POST['page_id']) && $this->validateDelete()) {
-			$this->model_page_page->deletePage($_POST['page_id']);
+			$this->Model_Page_Page->deletePage($_POST['page_id']);
 			
-			if(!$this->message->error_set()){
+			if (!$this->message->error_set()) {
 				$this->message->add('notify', $this->_('text_success_delete'));
 			}
 		}
@@ -63,31 +68,32 @@ class ControllerPagePage extends Controller {
 		$this->getList();
 	}
 	
-	public function batch_update() {
+	public function batch_update()
+	{
 		$this->language->load('page/page');
 		
 		if (isset($_POST['selected']) && isset($_GET['action'])) {
 			foreach ($_POST['selected'] as $page_id) {
 				switch($_GET['action']){
 					case 'enable':
-						$this->model_page_page->update_field($page_id, array('status' => 1));
+						$this->Model_Page_Page->update_field($page_id, array('status' => 1));
 						break;
 					case 'disable':
-						$this->model_page_page->update_field($page_id, array('status' => 0));
+						$this->Model_Page_Page->update_field($page_id, array('status' => 0));
 						break;
 					case 'delete':
-						$this->model_page_page->deletePage($page_id);
+						$this->Model_Page_Page->deletePage($page_id);
 						break;
 					case 'copy':
-						$this->model_page_page->copyPage($page_id);
+						$this->Model_Page_Page->copyPage($page_id);
 						break;
 				}
 				if($this->error)
 					break;
 			}
 			
-			if(!$this->error){
-				if(!$this->message->error_set()){
+			if (!$this->error) {
+				if (!$this->message->error_set()) {
 					$this->message->add('success',$this->_('text_success'));
 				}
 			}
@@ -96,7 +102,8 @@ class ControllerPagePage extends Controller {
 		$this->index();
 	}
 
-	private function getList() {
+	private function getList()
+	{
 		$this->template->load('page/page_list');
 
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -117,7 +124,7 @@ class ControllerPagePage extends Controller {
 			'display_name' => $this->_('column_store'),
 			'filter' => true,
 			'build_config' => array('store_id' => 'name'),
-			'build_data' => $this->model_setting_store->getStores(),
+			'build_data' => $this->Model_Setting_Store->getStores(),
 			'sortable' => false,
 		);
 		
@@ -139,7 +146,7 @@ class ControllerPagePage extends Controller {
 			'page' => 1,
 		);
 		
-		foreach($sort_defaults as $key => $default){
+		foreach ($sort_defaults as $key => $default) {
 			$data[$key] = isset($_GET[$key]) ? $_GET[$key] : $default;
 		}
 		
@@ -148,13 +155,13 @@ class ControllerPagePage extends Controller {
 		//Filter
 		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 		
-		if($filter){
+		if ($filter) {
 			$data += $filter;
 		}
 		
 		//Retrieve the Filtered Table row data
-		$page_total = $this->model_page_page->getTotalPages($data);
-		$pages = $this->model_page_page->getPages($data);
+		$page_total = $this->Model_Page_Page->getTotalPages($data);
+		$pages = $this->Model_Page_Page->getPages($data);
 		
 		foreach ($pages as &$page) {
 			$page['actions'] = array(
@@ -168,7 +175,7 @@ class ControllerPagePage extends Controller {
 				)
 			);
 			
-			$page['stores'] = $this->model_page_page->getPageStores($page['page_id']);
+			$page['stores'] = $this->Model_Page_Page->getPageStores($page['page_id']);
 		}unset($page);
 		
 		//The table template data
@@ -229,7 +236,8 @@ class ControllerPagePage extends Controller {
 		$this->response->setOutput($this->render());
 	}
 
-	private function getForm() {
+	private function getForm()
+	{
 		$this->language->load('page/page');
 		
 		$this->template->load('page/page_form');
@@ -248,9 +256,9 @@ class ControllerPagePage extends Controller {
 		$this->data['cancel'] = $this->url->link('page/page');
 
 		if ($page_id && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
-			$page_info = $this->model_page_page->getPage($page_id);
+			$page_info = $this->Model_Page_Page->getPage($page_id);
 			
-			$page_info['stores'] = $this->model_page_page->getPageStores($page_id);
+			$page_info['stores'] = $this->Model_Page_Page->getPageStores($page_id);
 		}
 		
 		//initialize the values in order of Post, Database, Default
@@ -266,7 +274,7 @@ class ControllerPagePage extends Controller {
 			'translations' => array(),
 		);
 
-		foreach($defaults as $key => $default){
+		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
 				$this->data[$key] = $_POST[$key];
 			} elseif (isset($page_info[$key])) {
@@ -276,15 +284,15 @@ class ControllerPagePage extends Controller {
 			}
 		}
 		
-		if($page_id){
+		if ($page_id) {
 			$this->breadcrumb->add($this->data['name'], $this->url->link('page/page/update', 'page_id=' . $page_id));
 		} else {
 			$this->breadcrumb->add($this->_('text_new_page'), $this->url->link('page/page/insert'));
 		}
 		
 		//Data
-		$this->data['data_stores'] = $this->model_setting_store->getStores();
-		$this->data['data_layouts'] = $this->model_design_layout->getLayouts();
+		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
+		$this->data['data_layouts'] = $this->Model_Design_Layout->getLayouts();
 		
 		$this->data['url_create_layout'] = $this->url->link('page/page/create_layout');
 		
@@ -296,16 +304,17 @@ class ControllerPagePage extends Controller {
 		$this->response->setOutput($this->render());
 	}
 	
-	public function create_layout(){
-		if(!empty($_POST['name'])) {
+	public function create_layout()
+	{
+		if (!empty($_POST['name'])) {
 			$layout = array(
 				'name' => $_POST['name'],
 			);
 			
-			$result = $this->model_design_layout->getLayouts($layout);
+			$result = $this->Model_Design_Layout->getLayouts($layout);
 			
-			if(empty($result)){
-				$layout_id = $this->model_design_layout->addLayout($layout);
+			if (empty($result)) {
+				$layout_id = $this->Model_Design_Layout->addLayout($layout);
 			} else {
 				$result = current($result);
 				$layout_id = $result['layout_id'];
@@ -317,26 +326,28 @@ class ControllerPagePage extends Controller {
 			'order' => "ASC",
 		);
 		
-		$layouts = $this->model_design_layout->getLayouts($data);
+		$layouts = $this->Model_Design_Layout->getLayouts($data);
 		
 		$this->builder->set_config('layout_id', 'name');
 		
 		$this->response->setOutput($this->builder->build('select', $layouts, 'layout_id', $layout_id));
 	}
 	
-	private function validateForm() {
+	private function validateForm()
+	{
 		if (!$this->user->hasPermission('modify', 'page/page')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		if(!$this->validation->text($_POST['name'], 3, 64)){
+		if (!$this->validation->text($_POST['name'], 3, 64)) {
 			$this->error['name'] = $this->_('error_name');
 		}
 		
 		return $this->error ? false : true;
 	}
 
-	private function validateDelete() {
+	private function validateDelete()
+	{
 		if (!$this->user->hasPermission('modify', 'page/page')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}

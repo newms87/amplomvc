@@ -1,14 +1,17 @@
 <?php
-class ModelCatalogCategory extends Model {
-	public function getCategory($category_id) {
+class Catalog_Model_Catalog_Category extends Model 
+{
+	public function getCategory($category_id)
+	{
 		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_description cd ON (c.category_id = cd.category_id) LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c.category_id = c2s.category_id) WHERE c.category_id = '" . (int)$category_id . "' AND cd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND c2s.store_id = '" . (int)$this->config->get('config_store_id') . "' AND c.status = '1'");
 		
 		return $query->row;
 	}
 	
-	public function getCategories($parent_id = 0) {
+	public function getCategories($parent_id = 0)
+	{
 		$parent = '';
-		if($parent_id >= 0){
+		if ($parent_id >= 0) {
 			$parent = "c.parent_id = '" . (int)$parent_id . "' AND";
 		}
 		
@@ -21,7 +24,8 @@ class ModelCatalogCategory extends Model {
 		return $query->rows;
 	}
 
-	public function getCategoriesByParentId($category_id) {
+	public function getCategoriesByParentId($category_id)
+	{
 		$category_data = array();
 		
 		$category_query = $this->query("SELECT category_id FROM " . DB_PREFIX . "category WHERE parent_id = '" . (int)$category_id . "'");
@@ -45,12 +49,13 @@ class ModelCatalogCategory extends Model {
 	* if a product was deleted (and was the last in the category) the cache will
 	* first have to expire before getting the updated category list.
 	*/
-	public function getAllCategories(){
+	public function getAllCategories()
+	{
 		$lang_id = (int)$this->config->get('config_language_id');
 		$store_id = (int)$this->config->get('config_store_id');
 		$categories = $this->cache->get("category.all.$store_id.$lang_id");
 		
-		if(!$categories || true){
+		if (!$categories || true) {
 			$dt_zero = DATETIME_ZERO;
 			$product_check = "(SELECT COUNT(*) FROM " . DB_PREFIX . "product p" .
 								" JOIN " . DB_PREFIX . "product_to_category p2c ON (p2c.product_id=p.product_id)" .
@@ -63,23 +68,23 @@ class ModelCatalogCategory extends Model {
 			if(!isset($query->rows))return null;
 			
 			//Disclude any empty
-			foreach($query->rows as $key=>$qr){
+			foreach ($query->rows as $key=>$qr) {
 				if($qr['num_products'] == 0) unset($query->rows[$key]);
 			}
 			
 			$categories = $query->rows;
-			foreach ($categories as &$cat){
-				if($cat['parent_id'] > 0){
-					foreach($categories as &$cat_parent){
-						if($cat_parent['category_id'] == $cat['parent_id']){
+			foreach ($categories as &$cat) {
+				if ($cat['parent_id'] > 0) {
+					foreach ($categories as &$cat_parent) {
+						if ($cat_parent['category_id'] == $cat['parent_id']) {
 						$cat_parent['children'][] = $cat;
 						}
 					}
 				}
 			}
 			
-			foreach($categories as $key=>$cat){
-				if($cat['parent_id'] != 0){
+			foreach ($categories as $key=>$cat) {
+				if ($cat['parent_id'] != 0) {
 					unset($categories[$key]);
 				}
 			}
@@ -89,13 +94,15 @@ class ModelCatalogCategory extends Model {
 		return $categories;
 	}
 	
-	public function getCategoryName($category_id){
+	public function getCategoryName($category_id)
+	{
 		$result = $this->query("SELECT * FROM " . DB_PREFIX . "category_description WHERE category_id='" . (int)$category_id . "'");
 		
 		return $result->row['name'];
 	}
 	
-	public function getCategoryLayoutId($category_id) {
+	public function getCategoryLayoutId($category_id)
+	{
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "category_to_layout WHERE category_id = '" . (int)$category_id . "' AND store_id = '" . (int)$this->config->get('config_store_id') . "'");
 		
 		if ($query->num_rows) {
@@ -105,7 +112,8 @@ class ModelCatalogCategory extends Model {
 		}
 	}
 					
-	public function getTotalCategoriesByCategoryId($parent_id = 0) {
+	public function getTotalCategoriesByCategoryId($parent_id = 0)
+	{
 		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c.category_id = c2s.category_id) WHERE c.parent_id = '" . (int)$parent_id . "' AND c2s.store_id = '" . (int)$this->config->get('config_store_id') . "' AND c.status = '1'");
 		
 		return $query->row['total'];

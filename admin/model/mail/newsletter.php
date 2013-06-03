@@ -1,6 +1,8 @@
 <?php
-class ModelMailNewsletter extends Model {
-	public function addNewsletter($data){
+class Admin_Model_Mail_Newsletter extends Model 
+{
+	public function addNewsletter($data)
+	{
 		
 		$data['data'] = serialize($data['newsletter']);
 		
@@ -9,33 +11,37 @@ class ModelMailNewsletter extends Model {
 		return $newsletter_id;
 	}
 	
-	public function editNewsletter($newsletter_id, $data){
+	public function editNewsletter($newsletter_id, $data)
+	{
 		
-		if(isset($data['newsletter'])){
+		if (isset($data['newsletter'])) {
 			$data['data'] = serialize($data['newsletter']);
 		}
 		
 		$this->update('newsletter', $data, $newsletter_id);
 	}
 	
-	public function copyNewsletter($newsletter_id){
+	public function copyNewsletter($newsletter_id)
+	{
 		$query = $this->get('newsletter', '*', $newsletter_id);
 		
-		if($query->num_rows){
+		if ($query->num_rows) {
 			$query->row['name'] .= ' - Copy ' . uniqid();
 			
 			$this->insert('newsletter', $query->row);
 		}
 	}
 	
-	public function deleteNewsletter($newsletter_id){
+	public function deleteNewsletter($newsletter_id)
+	{
 		$this->delete('newsletter', $newsletter_id);
 	}
 	
-	public function getNewsletter($newsletter_id){
+	public function getNewsletter($newsletter_id)
+	{
 		$query = $this->get('newsletter', '*', $newsletter_id);
 		
-		if($query->num_rows){
+		if ($query->num_rows) {
 			$query->row['newsletter'] = unserialize($query->row['data']);
 			
 			unset($query->row['data']);
@@ -47,9 +53,9 @@ class ModelMailNewsletter extends Model {
 	}
 	
 	public function getNewsletters($data = array(), $select = '*', $total = false){
-		if($total){
+		if ($total) {
 			$select = 'COUNT(*) as total';
-		} elseif(!$select) {
+		} elseif (!$select) {
 			$select = '*';
 		}
 		
@@ -57,23 +63,23 @@ class ModelMailNewsletter extends Model {
 		
 		$where = "1";
 		
-		if(isset($data['name'])){
+		if (isset($data['name'])) {
 			$where .= " AND name like '%" . $this->db->escape($data['name']) . "%'";
 		}
 		
-		if(isset($data['send_date']['start'])){
+		if (isset($data['send_date']['start'])) {
 			$where .= " AND send_date >= '" . $this->db->escape($data['send_date']['start']) . "'";
 		}
 		
-		if(isset($data['send_date']['end'])){
+		if (isset($data['send_date']['end'])) {
 			$where .= " AND send_date <= '" . $this->db->escape($data['send_date']['end']) . "'";
 		}
 		
-		if(isset($data['status'])){
+		if (isset($data['status'])) {
 			$where .= " AND status = '" . ($data['status'] ? 1 : 0) . "'";
 		}
 		
-		if(!$total){
+		if (!$total) {
 			$order = $this->extract_order($data);
 			$limit = $this->extract_limit($data);
 		} else {
@@ -85,11 +91,11 @@ class ModelMailNewsletter extends Model {
 		
 		$result = $this->query($query);
 		
-		if($total){
+		if ($total) {
 			return $result->row['total'];
 		}
 		
-		foreach($result->rows as $key => &$row){
+		foreach ($result->rows as $key => &$row) {
 			$row['newsletter'] = unserialize($row['data']);
 			unset($result->rows[$key]['data']);
 		}
@@ -97,11 +103,12 @@ class ModelMailNewsletter extends Model {
 		return $result->rows;
 	}
 	
-	public function getEmailList($store_id = null){
-		if(!is_null($store_id)){
+	public function getEmailList($store_id = null)
+	{
+		if (!is_null($store_id)) {
 			$store = "AND store_id = '" . (int)$store_id . "'";
 		}
-		else{
+		else {
 			$store = '';
 		}
 		
@@ -110,7 +117,8 @@ class ModelMailNewsletter extends Model {
 		return $query->rows;
 	}
 	
-	public function getTotalNewsletters($data){
+	public function getTotalNewsletters($data)
+	{
 		return $this->getNewsletters($data, '', true);
 	}
 }
