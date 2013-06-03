@@ -34,14 +34,13 @@ class Builder extends Controller
 			if (!empty($link['is_route'])) {
 				$query = isset($link['query']) ? $link['query'] : '';
 				$link['href'] = $this->url->link($link['href'], $query);
-			} elseif(!preg_match("/^https?:\/\//", $link['href'])) {
+			} elseif(!preg_match("/^https?:\/\//", $link['href']) && $link['href']) {
 				$link['href'] = $this->url->site($link['href']);
 			}
 			
 			$components = str_replace('&amp;', '&', parse_url($link['href']));
 			
-			if ($current_page['scheme'] == $components['scheme']
-				&& $current_page['path'] == $components['path']) {
+			if ($current_page['path'] === $components['path']) {
 				if (!empty($components['query'])) {
 					$query_vars = null;
 					parse_str($components['query'], $query_vars);

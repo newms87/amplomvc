@@ -6,11 +6,12 @@ class Catalog_Controller_Block_Widget_Janrain extends Controller
 		$this->language->load('block/widget/janrain');
 		$this->template->load('block/widget/janrain');
 		
-		$icon_size = !empty($settings['icon_size']) ? $settings['icon_size'] : 'small';
-		$login_redirect = !empty($settings['login_redirect']) ? $settings['login_redirect'] : $this->url->here();
-		$display_type = !empty($settings['display_type']) ? $settings['display_type'] : 'popup';
-		$application_domain = !empty($settings['application_domain']) ? $settings['application_domain'] : '';
-		$api_key = !empty($settings['api_key']) ? $settings['api_key'] : '';
+		$icon_size 				= !empty($settings['icon_size']) ? $settings['icon_size'] : 'small';
+		$login_redirect		= !empty($settings['login_redirect']) ? $settings['login_redirect'] : $this->url->here();
+		$display_type			= !empty($settings['display_type']) ? $settings['display_type'] : 'popup';
+		$application_domain	= !empty($settings['application_domain']) ? $settings['application_domain'] : '';
+		$api_key					= !empty($settings['api_key']) ? $settings['api_key'] : '';
+		$display_icons			= !empty($settings['display_icons']) ? $settings['display_icons'] : array();
 		
 		//We do not want to login to the logout page (as the user will be logged out)
 		$_SESSION['janrain_login_redirect'] = preg_replace("/\/logout/","/account", $login_redirect);
@@ -29,8 +30,8 @@ class Catalog_Controller_Block_Widget_Janrain extends Controller
 		
 		$this->data['image_size'] = $icon_sizes[$icon_size];
 		
-		$this->data['display_icons'] = $settings['display_icons'];
-
+		$this->data['display_icons'] = $display_icons;
+		
 		if (!empty($_REQUEST['redirect']) && $_REQUEST['redirect'] === 'logout') {
 			$this->logout();
 		}
