@@ -7,6 +7,9 @@ class Image
 	private $image;
 	private $info;
 	private $dir_mode;
+	//This is a hack to unregister the shutdown function
+	private $safe_shutdown;
+	private $shutdown_file = '';
 	
 	public function __construct($registry, $file = null)
 	{
@@ -47,10 +50,7 @@ class Image
 					'mime'	=> $info['mime']
 			);
 			
-			echo 'creating...';
 			$this->image = $this->create($file);
-			echo 'created!';
-			exit;
 		} else {
 			$this->log->write("Error: Could not load image $file!");
 		}
@@ -68,28 +68,32 @@ class Image
 	{
 		$mime = $this->info['mime'];
 		
-		$shutdown = function($image_class){
-			$max = ini_get('memory_limit');
-			$max_mem = $this->tool->bytes2str(memory_get_peak_usage(true));
-			trigger_error("Server Max Memory limit reached: $max_mem");
-		};
-		
-		register_shutdown_function($shutdown, $this);
+		if (!$this->register_safe_shutdown($image)) {
+			$this->message->add('warning', "Image Create failed on $image. The file size (" . $this->tool->bytes2str(filesize($image)) . ") is too large for your server.");
+			$this->url->redirect($this->url->here());
+		}
 		
 		//increase the maximum memory limit from the settings
 		$max = isset($this->config)?$this->config->get('config_image_max_mem'):'2G';
 		ini_set('memory_limit',$max);
 		
 		if ($mime == 'image/gif') {
-			if(function_exists('imagecreatefromgif'))
-			return @imagecreatefromgif($image);
+			if(function_exists('imagecreatefromgif')) {
+				$image = @imagecreatefromgif($image);
+			}
 		} elseif ($mime == 'image/png') {
-			if(function_exists('imagecreatefrompng'))
-			return @imagecreatefrompng($image);
+			if(function_exists('imagecreatefrompng')) {
+				$image = @imagecreatefrompng($image);
+			}
 		} elseif ($mime == 'image/jpeg') {
-			if(function_exists('imagecreatefromjpeg'))
-			return @imagecreatefromjpeg($image);
+			if(function_exists('imagecreatefromjpeg')) {
+				$image = @imagecreatefromjpeg($image);
+			}
 		}
+		
+		$this->unregister_safe_shutdown();
+		
+		return $image;
 	}
 	
 	public function save($file, $quality = 90)
@@ -177,7 +181,7 @@ class Image
 		$scale_y = $height / $this->info['height'];
 		
 		//if the image is the correct size we do not need to do anything
-		if ($scale_x === 1 && $scale_y === 1) {
+		if ($scale_x === 1 && $scale_y === 1) { 
 			return $this->get($filename);
 		}
 		
@@ -356,15 +360,27 @@ class Image
 		
 		$ext = pathinfo($image, PATHINFO_EXTENSION);
 		
+		if (!$this->register_safe_shutdown($image)) {
+			list($width, $height) = getimagesize($image);
+			$image = $this->resize($image, $width/2, $height/2);
+			echo $image . 'is new';
+			exit;
+			trigger_error("Safe shutdown limit exceeded! Cannot process image");
+			$this->unregister_safe_shutdown();
+			return array('r' => 0, 'g' => 0, 'b' => 0);
+		}
+		
 		$img = null;
 		switch(strtolower($ext)){
 			case "png":
-				$img = imagecreatefrompng($image);
+				$img = @imagecreatefrompng($image);
 				break;
 			default:
-				$img = imagecreatefromjpeg($image);
+				$img = @imagecreatefromjpeg($image);
 				break;
 		}
+		
+		$this->unregister_safe_shutdown();
 		
 		$img_width = imagesx($img);
 		$img_height = imagesy($img);
@@ -446,5 +462,44 @@ class Image
 		$computedH = 60 * $h;
 	
 		return array('H' => $computedH, 'S' => $computedS, 'V' => $computedV);
+	}
+
+	public function register_safe_shutdown($file = '')
+	{
+		//A hack to unregister the shutdown function
+		$this->safe_shutdown = memory_get_peak_usage(true);
+		$this->shutdown_file = $file;
+		
+		if ($this->safe_shutdown === null) {
+			$shutdown = function($image_class){
+				if ($this->safe_shutdown) {
+					if($this->shutdown_file) {
+						$_SESSION['image_safe_max_file_size'] = filesize($this->shutdown_file);
+						$size = $this->tool->bytes2str(filesize($this->shutdown_file));
+					} else {
+						$size = 0;
+					}
+					$max = ini_get('memory_limit');
+					$max_mem = $this->tool->bytes2str(memory_get_peak_usage(true));
+					$safe_mem = $this->tool->bytes2str($this->safe_shutdown);
+					
+					trigger_error("Server Max Memory limit reached: $max_mem / $max. Safe shutdown enabled at $safe_mem. Image File Size: $size");
+				}
+			};
+			
+			register_shutdown_function($shutdown, $this);
+		}
+		
+		if ($file && !empty($_SESSION['image_safe_max_file_size']) && $_SESSION['image_safe_max_file_size'] <= filesize($file)) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public function unregister_safe_shutdown()
+	{
+		$this->safe_shutdown = false;
+		$this->shutdown_file = '';
 	}
 }
