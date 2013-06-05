@@ -13,10 +13,6 @@
 			</div>
 		</div>
 		<div class="content">
-			<div class="limits">
-				<?= $limits; ?>
-			</div>
-			
 			<form action="" method="post" id="form">
 				<?= $list_view; ?>
 			</form>
