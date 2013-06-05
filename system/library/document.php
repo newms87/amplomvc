@@ -196,10 +196,10 @@ class Document
 			if (is_file(SITE_DIR . $script)) {
 				$script = SITE_URL . $script;
 			}
-			elseif (defined("IS_ADMIN") && is_file(SITE_DIR . 'admin/view/javascript/' . $script)) {
+			elseif ($this->config->isAdmin() && is_file(SITE_DIR . 'admin/view/javascript/' . $script)) {
 				$script = SITE_URL . 'admin/view/javascript/' . $script;
 			}
-			elseif (!defined("IS_ADMIN") && is_file(SITE_DIR . 'catalog/view/javascript/' . $script)) {
+			elseif (!$this->config->isAdmin() && is_file(SITE_DIR . 'catalog/view/javascript/' . $script)) {
 				$script = SITE_URL . 'catalog/view/javascript/' . $script;
 			}
 		}

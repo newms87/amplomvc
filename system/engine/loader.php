@@ -44,7 +44,7 @@ final class Loader
 	public function model($model)
 	{
 		if (preg_match("/^Model_/", $model)) {
-			$model_class = (defined("IS_ADMIN") ? 'Admin_' : 'Catalog_') . $model;
+			$model_class = ($this->config->isAdmin() ? 'Admin_' : 'Catalog_') . $model;
 		} else {
 			$model_class = $model;
 		}

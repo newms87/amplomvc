@@ -7,7 +7,7 @@ $_['admin_store'] = array(
 );
 
 $_['default_store'] = array(
-	'store_id' => 0,
+	'store_id' => 1,
 	'name' => 'Default Store',
 	'url' => SITE_URL,
 	'ssl' => SITE_SSL,

@@ -186,6 +186,8 @@ class Url
 	{
 		if ($store_id == $this->config->get('config_store_id')) {
 			return $ssl ? $this->config->get('config_ssl') : $this->config->get('config_url');
+		} elseif ($store_id === 0) {
+			return ($ssl ? SITE_SSL : SITE_URL) . 'admin/';
 		}
 		
 		$scheme = $ssl ? 'ssl':'url';
@@ -261,14 +263,15 @@ class Url
 		// Decode URL
 		if (isset($_GET['_route_'])) {
 			$parts = $_GET['_route_'];
-			$parts = trim($parts,'/ ');
 			
-			$parts = preg_replace("/^admin\/?/", '', $parts);
+			$parts = trim($parts,'/ ');
+			$parts = preg_replace("/^admin[\\\\\/]?/", '', $parts);
 			
 			$url_alias = $this->db->query_row("SELECT * FROM " . DB_PREFIX . "url_alias WHERE keyword = '" . $this->db->escape($parts) . "' AND status = '1' LIMIT 1");
 			
 			if ($url_alias) {
-				$this->pretty_url = $this->site($parts);
+				$url_query = $this->get_query_exclude('route','_route_');
+				$this->pretty_url = $this->store_base($url_alias['store_id']) . $parts . ($url_query ? '?' . $url_query : ''); 
 				
 				if ($url_alias['redirect']) {
 					if (!parse_url($url_alias['redirect'], PHP_URL_SCHEME)) {
@@ -278,12 +281,10 @@ class Url
 					$this->redirect($url_alias['redirect']);
 				}
 				
-				
 				if ((int)$url_alias['store_id'] != (int)$this->config->get('config_store_id') && $url_alias['store_id'] != -1) {
 					if ((int)$url_alias['store_id'] === 0) {
 						$this->redirect($this->admin($url_alias['route'], $url_alias['query']));
-					}
-					else {
+					} else {
 						$this->redirect($this->store($url_alias['store_id'], $url_alias['route'], $url_alias['query']));
 					}
 				}
@@ -400,7 +401,7 @@ class Url
 						" WHERE `route` = '" . $this->db->escape($route) . "'" .
 						" AND `query` = '" . $this->db->escape($query) . "'" .
 						" AND store_id IN ('-1', '" . (int)$store_id . "')";
-						
+		
 		return $this->db->query_var($sql_query);
 	}
 	

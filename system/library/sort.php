@@ -139,7 +139,7 @@ class Sort
 	
 	public function load_query_defaults(&$data = array(), $sort_default = 'sort_order', $order_default = 'ASC', $limit_default = null, $page_default = 1){
 		if (empty($limit_default) || (int)$limit_default < 1) {
-			$limit_default = defined("IS_ADMIN") ? $this->config->get('config_admin_limit') : $this->config->get('config_catalog_limit');
+			$limit_default = $this->config->isAdmin() ? $this->config->get('config_admin_limit') : $this->config->get('config_catalog_limit');
 		}
 		
 		$sort_defaults = array(

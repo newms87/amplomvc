@@ -246,7 +246,7 @@ class Builder extends Controller
 					return;
 				}
 			}
-			elseif (defined("IS_ADMIN")) {
+			elseif ($this->config->isAdmin()) {
 				$width = $this->config->get('config_image_admin_thumb_width');
 				$height = $this->config->get('config_image_admin_thumb_height');
 			}

@@ -61,25 +61,8 @@ $db->query("SET time_zone='" . MYSQL_TIMEZONE . "'");
 $cache = new Cache($registry);
 $registry->set('cache', $cache);
 
-//Resolve Store ID
-if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
-	$scheme = 'https://';
-	$field = 'ssl';
-}
-else {
-	$scheme = 'http://';
-	$field = 'url';
-}
-
-$url = $scheme . str_replace('www.', '', $_SERVER['HTTP_HOST']) . rtrim(dirname($_SERVER['PHP_SELF']), '/.\\') . '/';
-
-$store = $db->query_row("SELECT * FROM " . DB_PREFIX . "store WHERE `$field` = '" . $db->escape($url) . "'");
-
-$store_id = $store ? (int)$store['store_id'] : null;
-
-// Config
-$config = new Config($registry, $store_id);
-$registry->set('config', $config);
+//Config is self assigning to registry.
+$config = new Config($registry);
 
 //Setup Cache ignore list
 foreach (explode(',',$config->get('config_cache_ignore')) as $ci) {

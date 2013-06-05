@@ -190,11 +190,11 @@ li ul.link_list{
 }
 
 li.active > ul.link_list{
-	-webkit-transition: -webkit-transform 0s linear 1s,left 0s linear 1s;
-		-moz-transition: -moz-transform 0s linear 1s,left 0s linear 1s;
-		 -ms-transition: -ms-transform 0s linear 1s,left 0s linear 1s;
-		  -o-transition: -o-transform 0s linear 1s,left 0s linear 1s;
-			  transition: transform 0s linear 1s,left 0s linear 1s;
+	-webkit-transition: -webkit-transform 0s linear 1s,left 0s linear .5s;
+		-moz-transition: -moz-transform 0s linear 1s,left 0s linear .5s;
+		 -ms-transition: -ms-transform 0s linear 1s,left 0s linear .5s;
+		  -o-transition: -o-transform 0s linear 1s,left 0s linear .5s;
+			  transition: transform 0s linear 1s,left 0s linear .5s;
 }
 
 li ul.link_list li ul.link_list{

@@ -6,7 +6,7 @@ class Config
 	private $store_id;
 	private $site_config;
 	
-	public function __construct(&$registry, $store = 0)
+	public function __construct(&$registry, $store_id = null)
 	{
 		$this->registry = &$registry;
 		
@@ -15,18 +15,8 @@ class Config
 		
 		$this->load_site_config();
 		
-		//If we only have a store_id, get the store info
-		if (is_integer($store)) {
-			$store = $this->load_store($store);
-		}
-		elseif (empty($store)) {
-			//If the store is invalid, set to the deafult store (or the first store if no default)
-			$result = $this->db->query("SELECT `value` FROM " . DB_PREFIX . "setting WHERE `key` = 'config_default_store'");
-			
-			$store_id = $result->num_rows ? $result->row['value'] : 1;
-			
-			$store = $this->load_store($store_id);
-		}
+		//If we only have a store_id, get the store info	
+		$store = $this->load_store($store_id);
 		
 		$this->store_id = $store['store_id'];
 		$this->data['config_store_id'] = $store['store_id'];
@@ -66,20 +56,47 @@ class Config
 		$this->data[$key] = $value;
   	}
 	
-	private function load_store($store_id)
+	public function isAdmin()
 	{
-		$result = $this->db->query("SELECT * FROM ". DB_PREFIX . "store WHERE store_id = '" . (int)$store_id . "' LIMIT 1");
+		return defined("IS_ADMIN");
+	}
+	
+	private function load_store($store_id = null)
+	{
+		if (is_null($store_id)) {
+			//TODO: How do we handle different domains for admin? Invalid domains makes DB sync difficult...
+			if ($this->isAdmin()) {
+				return $this->site_config['admin_store'];
+			}
+			else {
+				//Resolve Store ID
+				if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
+					$scheme = 'https://';
+					$field = 'ssl';
+				}
+				else {
+					$scheme = 'http://';
+					$field = 'url';
+				}
+				
+				$url = $scheme . str_replace('www.', '', $_SERVER['HTTP_HOST']) . rtrim(dirname($_SERVER['PHP_SELF']), '/.\\') . '/';
 			
-		if ($result->num_rows) {
-			return $result->row;
+				$store = $this->db->query_row("SELECT * FROM " . DB_PREFIX . "store WHERE `$field` = '" . $this->db->escape($url) . "'");
+				
+				if (empty($store)) {
+					$store_id = $this->db->query_var("SELECT `value` FROM " . DB_PREFIX . "setting WHERE `key` = 'config_default_store'");
+					$store = $this->db->query_row("SELECT * FROM " . DB_PREFIX . "store WHERE store_id = '$store_id'");
+				}
+			}
+		} else {
+			$store = $this->db->query_row("SELECT * FROM " . DB_PREFIX . "store WHERE store_id = '$store_id'");
 		}
-		else {
-			return array(
-				'store_id' => 1,
-				'url' => SITE_URL,
-				'ssl' => SITE_SSL,
-			);
+		
+		if (!empty($store)) {
+			return $store;
 		}
+		
+		return $this->site_config['default_store'];
 	}
 		
 	public function get_group($group)
@@ -128,9 +145,13 @@ class Config
 	
 	public function run_site_config()
 	{
-		$admin_exists = $this->db->query_var("SELECT COUNT(*) as total FROM " . DB_PREFIX . "store WHERE store_id = 0");
+		$admin_store = $this->site_config['admin_store'];
+		
+		$admin_exists = $this->db->query_var("SELECT COUNT(*) as total FROM " . DB_PREFIX . "store WHERE store_id = 0 AND `url` ='" . $this->db->escape($admin_store['url']) . "' AND `ssl` = '" . $this->db->escape($admin_store['ssl']) . "'");
 		
 		if (!$admin_exists) {
+			$this->db->query("DELETE FROM " . DB_PREFIX . "store WHERE store_id = 0");
+			
 			$this->db->query("SET GLOBAL sql_mode='NO_AUTO_VALUE_ON_ZERO'");
 			$this->db->query("SET SESSION sql_mode='NO_AUTO_VALUE_ON_ZERO'");
 			$this->db->query("INSERT INTO " . DB_PREFIX . "store SET " . $this->db->get_insert_string($this->site_config['admin_store']));

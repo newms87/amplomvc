@@ -14,9 +14,9 @@ final class Action
 	{
 		$this->registry = $registry;
 		$this->route = $route;
-		$this->class_path = (defined("IS_ADMIN") ? "admin/" : "catalog/") . "controller/";
+		$this->class_path = ($this->config->isAdmin() ? "admin/" : "catalog/") . "controller/";
 		$this->file = null;
-		$this->class = (defined("IS_ADMIN") ? "Admin_" : "Catalog_") . "Controller_";
+		$this->class = ($this->config->isAdmin() ? "Admin_" : "Catalog_") . "Controller_";
 		$this->method = 'index'; 
 		
 		if (!empty($parameters)) {

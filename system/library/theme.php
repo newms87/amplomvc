@@ -21,7 +21,7 @@ class Theme
 		define('HTTP_THEME_FONT', HTTP_CONTENT . 'view/theme/' . $this->theme . '/fonts/');
 		define('HTTP_THEME_IMAGE', HTTP_CONTENT . 'view/theme/' . $this->theme . '/image/');
 		
-		if (defined("IS_ADMIN")) {
+		if ($this->config->isAdmin()) {
 			$this->settings = $this->load_admin_theme_settings();
 			$this->load_theme_language();
 		}

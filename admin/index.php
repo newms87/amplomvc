@@ -41,7 +41,6 @@ $registry->set('cache', $cache);
 
 //config is self assigning to registry in order to use immediately!
 $config = new Config($registry);
-$registry->set('config', $config);
 
 //Setup Cache ignore list
 foreach (explode(',',$config->get('config_cache_ignore')) as $ci) {
