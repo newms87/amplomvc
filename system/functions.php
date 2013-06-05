@@ -131,12 +131,13 @@ function get_caller($offset = 0)
 	}
 }
 
+//TODO: do we allow different modes?
 function _is_writable($dir, $mode = 0755)
 {
 	if (!is_writable($dir)) {
 		if (!is_dir($dir)) {
-			mkdir($dir, $mode,true);
-			chmod($dir, $mode);
+			mkdir($dir, AMPLOCART_DIR_MODE,true);
+			chmod($dir, AMPLOCART_DIR_MODE);
 		}
 		
 		if (!is_dir($dir)) {
