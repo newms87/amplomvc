@@ -59,11 +59,9 @@ class Catalog_Controller_Product_Category extends Controller
 			$sort_filter['attribute'] = $attributes;
 		}
 		
-		html_dump($sort_filter,'filter');
 		$product_total = $this->Model_Catalog_Product->getTotalProducts($sort_filter);
 		$products = $this->Model_Catalog_Product->getProducts($sort_filter);
 		
-		html_dump($products,'products');
 		$params = array(
 			'data' => $products,
 			'template' => 'block/product/product_list',
