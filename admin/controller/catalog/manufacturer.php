@@ -43,15 +43,13 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$manufacturer_id = isset($_GET['manufacturer_id'])?$_GET['manufacturer_id']:0;
-			$this->check_user_can_modify($manufacturer_id);
 		
 			$this->Model_Catalog_Manufacturer->editManufacturer($_GET['manufacturer_id'], $_POST);
-
-			$this->message->add('success', $this->_('text_success'));
-
-			$url = $this->get_url();
 			
-			$this->url->redirect($this->url->link('catalog/manufacturer', $url));
+			if (!$this->message->error_set()) {
+				$this->message->add('success', $this->_('text_success'));
+				$this->url->redirect($this->url->link('catalog/manufacturer', $this->url->get_query('sort', 'order', 'page')));
+			}
 		}
 	
 		$this->getForm();
@@ -65,7 +63,6 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
 			foreach ($_POST['selected'] as $manufacturer_id) {
-				$this->check_user_can_modify($manufacturer_id);
 				$this->Model_Catalog_Manufacturer->deleteManufacturer($manufacturer_id);
 			}
 
@@ -103,12 +100,6 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 			'start' => ($page - 1) * $this->config->get('config_admin_limit'),
 			'limit' => $this->config->get('config_admin_limit')
 		);
-		
-		if ($this->user->isDesigner()) {
-			$designers = $this->Model_User_User->getUserDesigners($this->user->getId());
-			foreach($designers as $d)
-				$data['manufacturer_ids'][] = $d['designer_id'];
-		}
 		
 		$manufacturer_total = $this->Model_Catalog_Manufacturer->getTotalManufacturers($data);
 		
@@ -170,8 +161,6 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		}
 
   		$manufacturer_id = $this->data['manufacturer_id'] = isset($_GET['manufacturer_id'])?(int)$_GET['manufacturer_id']:null;
-		
-		$this->check_user_can_modify($manufacturer_id);
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/manufacturer'));
@@ -309,21 +298,6 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		
 		return $this->error ? false : true;
   	}
-
-	private function check_user_can_modify($designer_id)
-	{
-		if ($this->user->isDesigner() && $designer_id) {
-			$designers = $this->Model_User_User->getUserDesigners($this->user->getId());
-			$found = false;
-			foreach($designers as $d)
-				if($d['designer_id'] == $designer_id)
-					$found = true;
-			if (!$found) {
-				$this->message->add('warning', $this->_('error_invalid_designer_id'));
-				$this->url->redirect($this->url->link('catalog/manufacturer'));
-			}
-		}
-	}
 	
 	public function generate_url()
 	{
@@ -368,15 +342,5 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		}
 
 		$this->response->setOutput(json_encode($json));
-	}
-
-	private function get_url($filters=false)
-	{
-		$url = '';
-		$filters = $filters?$filters:array('sort', 'order', 'page');
-		foreach($filters as $f)
-			if (isset($_GET[$f]))
-				$url .= "&$f=" . $_GET[$f];
-		return $url;
 	}
 }

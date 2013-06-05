@@ -206,12 +206,6 @@ class Admin_Controller_User_User extends Controller
 				$this->data[$item] = $default;
 		}
 		
-		if (!empty($user_info) && !isset($_POST['designers'])) {
-			$this->data['designers'] = array();
-			foreach($this->Model_User_User->getUserDesigners($user_id) as $d)
-			$this->data['designers'][] = $d['designer_id'];
-		}
-		
 		$manufacturers = $this->Model_Catalog_Manufacturer->getManufacturers();
 		foreach($manufacturers as $m)
 			$this->data['manufacturers'][$m['manufacturer_id']] = $m['name'];

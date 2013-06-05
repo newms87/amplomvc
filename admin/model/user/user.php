@@ -3,130 +3,108 @@ class Admin_Model_User_User extends Model
 {
 	public function addUser($data)
 	{
-		if($this->user->isDesigner())return;
-		$this->query("INSERT INTO `" . DB_PREFIX . "user` SET username = '" . $this->db->escape($data['username']) . "', password = '" . $this->user->encrypt($data['password']) . "', firstname = '" . $this->db->escape($data['firstname']) . "', lastname = '" . $this->db->escape($data['lastname']) . "', email = '" . $this->db->escape($data['email']) . "', user_group_id = '" . (int)$data['user_group_id'] . "', status = '" . (int)$data['status'] . "', date_added = NOW()");
-		if (isset($data['designers']) && $data['designers']) {
-			$user_id = $this->db->getLastId();
-			foreach(array_unique($data['designers']) as $designer_id)
-				$this->query("INSERT INTO " . DB_PREFIX . "user_designer SET designer_id='" . (int)$designer_id . "', user_id='$user_id'");
+		$data['date_added'] = $this->tool->format_datetime();
+		
+		if (!empty($data['password'])) {
+			$data['password'] = $this->user->encrypt($data['password']);
 		}
 		
+		$user_id = $this->insert('user', $data);
+		
 		if (isset($data['contact'])) {
-			foreach($data['contact'] as $contact)
-				$this->Model_Includes_Contact->addContact('user',$user_id,$contact);
+			foreach($data['contact'] as $contact) {
+				$this->Model_Includes_Contact->addContact('user', $user_id, $contact);
+			}
 		}
+		
+		return $user_id;
 	}
 	
 	public function editUser($user_id, $data)
 	{
-		if ($this->user->isAdmin()) {
-			$this->query("UPDATE `" . DB_PREFIX . "user` SET username = '" . $this->db->escape($data['username']) . "', firstname = '" . $this->db->escape($data['firstname']) . "', lastname = '" . $this->db->escape($data['lastname']) . "', email = '" . $this->db->escape($data['email']) . "', user_group_id = '" . (int)$data['user_group_id'] . "', status = '" . (int)$data['status'] . "' WHERE user_id = '" . (int)$user_id . "'");
-		}
-		else {
-			$this->query("UPDATE `" . DB_PREFIX . "user` SET firstname = '" . $this->db->escape($data['firstname']) . "', lastname = '" . $this->db->escape($data['lastname']) . "', email = '" . $this->db->escape($data['email']) . "' WHERE user_id = '" . (int)$user_id . "'");
+		if (!empty($data['password'])) {
+			$data['password'] = $this->user->encrypt($data['password']);
 		}
 		
-		if ($data['password']) {
-			$this->query("UPDATE `" . DB_PREFIX . "user` SET password = '" . $this->user->encrypt($data['password']) . "' WHERE user_id = '" . (int)$user_id . "'");
-		}
+		$this->update('user', $data, $user_id);
 		
-		if ($this->user->isAdmin()) {
-			$this->query("DELETE FROM " . DB_PREFIX . "user_designer WHERE user_id='" . (int)$user_id ."'");
-			if ($data['designers']) {
-				foreach(array_unique($data['designers']) as $designer_id)
-					$this->query("INSERT INTO " . DB_PREFIX . "user_designer SET designer_id='" . (int)$designer_id . "', user_id='$user_id'");
-			}
-		}
-		
-		$this->Model_Includes_Contact->deleteContactByType('user',$user_id);
+		$this->Model_Includes_Contact->deleteContactByType('user', $user_id);
 		
 		if (isset($data['contact'])) {
-			foreach($data['contact'] as $contact)
+			foreach($data['contact'] as $contact) {
 				$this->Model_Includes_Contact->addContact('user', $user_id, $contact);
+			}
 		}
 	}
 
 	public function editPassword($user_id, $password)
 	{
-		$this->query("UPDATE `" . DB_PREFIX . "user` SET password = '" . $this->user->encrypt($password) . "' WHERE user_id = '" . (int)$user_id . "'");
+		$data = array(
+			'password' => $this->user->encrypt($password),
+		);
+		
+		$this->update('user', $data, $user_id);
 	}
 
 	public function editCode($email, $code)
 	{
-		$this->query("UPDATE `" . DB_PREFIX . "user` SET code = '" . $this->db->escape($code) . "' WHERE email = '" . $this->db->escape($email) . "'");
+		$this->update('user', array('code' => $code), array('email' => $email));
 	}
 			
 	public function deleteUser($user_id)
 	{
-		$this->query("DELETE FROM `" . DB_PREFIX . "user` WHERE user_id = '" . (int)$user_id . "'");
-		$this->query("DELETE FROM " . DB_PREFIX . "user_designer WHERE user_id='" . (int)$user_id ."'");
+		$this->delete('user', $user_id);
+		
 		$this->Model_Includes_Contact->deleteContactByType('user',$user_id);
 	}
 	
 	public function getUser($user_id)
 	{
-		$query = $this->query("SELECT * FROM `" . DB_PREFIX . "user` WHERE user_id = '" . (int)$user_id . "'");
-	
-		return $query->row;
+		return $this->query_row("SELECT * FROM `" . DB_PREFIX . "user` WHERE user_id = '" . (int)$user_id . "'");
 	}
 	
 	public function getUserByUsername($username)
 	{
-		$query = $this->query("SELECT * FROM `" . DB_PREFIX . "user` WHERE username = '" . $this->db->escape($username) . "'");
-	
-		return $query->row;
+		return $this->query_row("SELECT * FROM `" . DB_PREFIX . "user` WHERE username = '" . $this->db->escape($username) . "'");
 	}
 		
 	public function getUserByCode($code)
 	{
-		$query = $this->query("SELECT * FROM `" . DB_PREFIX . "user` WHERE code = '" . $this->db->escape($code) . "' AND code != ''");
-	
-		return $query->row;
+		return $this->query_row("SELECT * FROM `" . DB_PREFIX . "user` WHERE code = '" . $this->db->escape($code) . "' AND code != ''");
 	}
 		
-	public function getUsers($data = array()) {
-		$sql = "SELECT * FROM `" . DB_PREFIX . "user`";
-			
-		$sort_data = array(
-			'username',
-			'email',
-			'status',
-			'date_added'
-		);
-			
-		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
-			$sql .= " ORDER BY " . $data['sort'];
-		} else {
-			$sql .= " ORDER BY username";
-		}
-			
-		if (isset($data['order']) && ($data['order'] == 'DESC')) {
-			$sql .= " DESC";
-		} else {
-			$sql .= " ASC";
-		}
-		
-		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
-			}
-			
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
-			}
-			
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
-		}
-			
-		$query = $this->query($sql);
-	
-		return $query->rows;
-	}
-
-	public function getUserDesigners($user_id)
+	public function getUsers($data = array(), $select = '*', $total = false)
 	{
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "user_designer WHERE user_id='$user_id'");
-		return $query->rows;
+		//Select
+		if ($total) {
+			$select = "COUNT(*) as total";
+		}
+		
+		//From
+		$from = DB_PREFIX . "user";
+		
+		//Where
+		$where = "1";
+		
+		//Order and Limit
+		if (!$total) {
+			$order = $this->extract_order($data);
+			$limit = $this->extract_limit($data);
+		} else {
+			$order = '';
+			$limit = '';
+		}
+		
+		//The Query
+		$query = "SELECT $select FROM $from WHERE $where $order $limit";
+		
+		$result = $this->query($query);
+		
+		if ($total) {
+			return $result->row['total'];
+		}
+		
+		return $result->rows;
 	}
 	
 	public function getUserContactInfo($user_id)
@@ -134,24 +112,18 @@ class Admin_Model_User_User extends Model
 		return $this->Model_Includes_Contact->getContactsByType('user',$user_id);
 	}
 
-	public function getTotalUsers()
+	public function getTotalUsers($data = array())
 	{
-			$query = $this->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "user`");
-		
-		return $query->row['total'];
+		return $this->getUsers($data, '', true);
 	}
 
 	public function getTotalUsersByGroupId($user_group_id)
 	{
-			$query = $this->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "user` WHERE user_group_id = '" . (int)$user_group_id . "'");
-		
-		return $query->row['total'];
+		return $this->query_var("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "user` WHERE user_group_id = '" . (int)$user_group_id . "'");
 	}
 	
 	public function getTotalUsersByEmail($email)
 	{
-			$query = $this->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "user` WHERE email = '" . $this->db->escape($email) . "'");
-		
-		return $query->row['total'];
+		return $this->query_var("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "user` WHERE email = '" . $this->db->escape($email) . "'");
 	}
 }
