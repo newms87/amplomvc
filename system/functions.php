@@ -121,7 +121,12 @@ if (!function_exists('array_column')) {
 function get_caller($offset = 0)
 {
 	$calls = debug_backtrace(false);
-	$caller = $calls[$offset + 1];
+	
+	if (count($calls) <= ($offset+1)) {
+		$caller = $calls[count($calls)-1];
+	} else {
+		$caller = $calls[$offset + 1];
+	}
 
 	if (isset($caller['file'])) {
 		return "Called from $caller[file] on line $caller[line]";
@@ -129,6 +134,14 @@ function get_caller($offset = 0)
 	else {
 		return "Called from $caller[class]::$caller[function]";
 	}
+}
+
+if (!defined("AMPLOCART_DIR_MODE")) {
+	define("AMPLOCART_DIR_MODE", 0755);
+}
+
+if (!defined("AMPLOCART_FILE_MODE")) {
+	define("AMPLOCART_FILE_MODE", 0755);
 }
 
 //TODO: do we allow different modes?

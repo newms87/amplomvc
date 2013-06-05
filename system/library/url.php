@@ -270,6 +270,15 @@ class Url
 			$url_alias = $this->db->query_row("SELECT * FROM " . DB_PREFIX . "url_alias WHERE keyword = '" . $this->db->escape($parts) . "' AND status = '1' LIMIT 1");
 			
 			if ($url_alias) {
+				//TODO: We need to reconsider how we handle all stores...
+				if ($url_alias['store_id'] == -1) {
+					if(!$this->config->isAdmin()) {
+						$url_alias['store_id'] = $this->config->get('config_store_id');
+					} else {
+						$this->redirect($this->store($this->config->get('default_store_id'), $url_alias['route'], $url_alias['query']));
+					}
+				}
+			
 				$url_query = $this->get_query_exclude('route','_route_');
 				$this->pretty_url = $this->store_base($url_alias['store_id']) . $parts . ($url_query ? '?' . $url_query : ''); 
 				
