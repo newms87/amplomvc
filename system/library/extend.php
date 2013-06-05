@@ -111,7 +111,7 @@ class Extend
 		}
 	}
 	
-	public function add_db_hook($hook_set, $action, $table, $callback, $param = null, $priority = 0)
+	public function add_db_hook($hook_id, $action, $table, $callback, $param = null, $priority = 0)
 	{
 		$config_id = 'db_hook_' . $action . '_' . $table;
 		
@@ -121,8 +121,15 @@ class Extend
 			$hooks = array();
 		}
 		
+		//We do not want to add multiple of the same hook!
+		foreach ($hooks as $hook) {
+			if ($hook['hook_id'] === $hook_id) {
+				return;
+			}
+		}
+		
 		$hooks[] = array(
-			'hook_set' => $hook_set,
+			'hook_id' => $hook_id,
 			'callback' => $callback,
 			'param'	=> $param,
 			'priority' => $priority,
@@ -131,13 +138,13 @@ class Extend
 		$this->config->save('db_hook', $config_id, $hooks);
 	}
 	
-	public function remove_db_hook($hook_set)
+	public function remove_db_hook($hook_id)
 	{
 		$db_hooks = $this->config->get_group('db_hook');
 		
 		foreach ($db_hooks as $hook_key => $hook) {
 			foreach ($hook as $h_key => $h) {
-				if ($h['hook_set'] == $hook_set) {
+				if ($h['hook_id'] === $hook_id) {
 					unset($db_hooks[$hook_key][$h_key]);
 				}
 			}
@@ -152,21 +159,21 @@ class Extend
 	
 	public function enable_image_sorting($table, $column)
 	{
-		$hook_set = '__image_sort__' . $table . '_' . $column;
+		$hook_id = '__image_sort__' . $table . '_' . $column;
 		
-		$this->add_db_hook($hook_set, 'insert', $table, array('Extend' => 'update_hsv_value'), $column);
-		$this->add_db_hook($hook_set, 'update', $table, array('Extend' => 'update_hsv_value'), $column);
-		
-		$this->db->table_add_column($table, '__image_sort__' . $column, 'FLOAT');
-		
-		$key_column = $this->db->get_key_column($table);
-		
-		$result = $this->db->query("SELECT $key_column, $column FROM " . DB_PREFIX . "$table");
+		$this->add_db_hook($hook_id, 'insert', $table, array('Extend' => 'update_hsv_value'), array($table, $column));
+		$this->add_db_hook($hook_id, 'update', $table, array('Extend' => 'update_hsv_value'), array($table, $column));
 		
 		$sort_column = '__image_sort__' . $column;
 		
-		foreach ($result->rows as $row) {
-			$this->update_hsv_value($row, $column);
+		$this->db->table_add_column($table, $sort_column, 'FLOAT');
+		
+		$key_column = $this->db->get_key_column($table);
+		
+		$rows = $this->db->query_rows("SELECT $key_column, $column, $sort_column FROM " . DB_PREFIX . "$table");
+		
+		foreach ($rows as $row) {
+			$this->update_hsv_value($row, $table, $column, true);
 			
 			$this->db->query("UPDATE " . DB_PREFIX . "$table SET `$sort_column` = '$row[$sort_column]' WHERE `$key_column` = '$row[$key_column]'");
 		}
@@ -174,18 +181,30 @@ class Extend
 	
 	public function disable_image_sorting($table, $column)
 	{
-		$hook_set = '__image_sort__' . $table . '_' . $column;
+		$hook_id = '__image_sort__' . $table . '_' . $column;
 		
-		$this->remove_db_hook($hook_set);
+		$this->remove_db_hook($hook_id);
 		
 		$this->db->table_drop_column($table, '__image_sort__' . $column);
 	}
 	
-	public function update_hsv_value(&$data, $column)
+	public function update_hsv_value(&$data, $table, $column, $force = false)
 	{
 		if(!isset($data[$column])) return;
 		
-		$colors = $this->image->get_dominant_color($data[$column]);
+		//If the image has not changed, do nothing.
+		if (!$force && $this->db->query_var("SELECT COUNT(*) FROM " . DB_PREFIX . "{$table} WHERE `{$column}` = '{$data[$column]}'")) {
+			return;
+		}
+		
+		$width = $this->config->get('config_image_admin_list_width');
+		$height = $this->config->get('config_image_admin_list_height');
+		
+		//Performance Optimization: Much quicker to resize (plus caching) than evaluate color or large image
+		$image = str_replace(HTTP_IMAGE, DIR_IMAGE, $this->image->resize($data[$column], $width, $height));
+		
+		$colors = $this->image->get_dominant_color($image);
+		
 		$HSV = $this->image->RGB_to_HSV($colors['r'], $colors['g'], $colors['b']);
 		$data['__image_sort__' . $column] = $HSV['H'];
 	}

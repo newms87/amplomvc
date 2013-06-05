@@ -425,6 +425,17 @@ body > #container {
 .box > .heading .buttons .button {
 	margin-left: 5px;
 }
+.box > .content .limits {
+	float: right;
+	padding: 5px 0 15px 0;
+	margin-right: 20px;
+}
+
+.box > .content .limits .selected{
+	color:black;
+	text-decoration:none;
+}
+
 .box > .content {
 	padding: 10px;
 	border-left: 1px solid #CCCCCC;

@@ -41,6 +41,7 @@ $_['warning_generate_url']	= "<br>Warning! This may cause system instability! Pl
 $_['button_generate_url']	="[Generate URL]";
 $_['button_generate_model']	="[Generate Model ID]";
 $_['button_fill_ship']		="%s";
+$_['button_add_image'] = "Add Image";
 $_['button_add_restriction_set'] = "Add Restriction Set";
 $_['button_add_restriction_value'] = "Add Value";
 
@@ -99,8 +100,6 @@ $_['entry_tag']				= 'Product Tags:<br /><span class="help">comma separated</spa
 $_['entry_reward']			= 'Reward Points:';
 $_['entry_layout']			= 'Layout Override:';
 $_['entry_template']			= 'Template Override:';
-$_['entry_primary']			= 'Primary Image:';
-$_['entry_filename']		= 'Image Filename:';
 $_['entry_editable']			= 'Editable by Designers?';
 $_['entry_option_value_list']	= 'Add Option Values';
 $_['entry_option_value_restriction']	= 'Restrictions';

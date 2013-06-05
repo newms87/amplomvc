@@ -463,15 +463,21 @@ abstract class Model
 			foreach ($hooks as $hook) {
 				if (is_array($hook['callback'])) {
 					$classname = key($hook['callback']);
-					$function = current($hook['callback']);
+					$method = current($hook['callback']);
 					
 					$class = $this->$classname;
 					
-					if (method_exists($class, $function)) {
-						$class->$function($data, $hook['param']);
+					if (method_exists($class, $method)) {
+						if (!is_array($hook['param'])) {
+							$hook['param'] = array($hook['param']);
+						}
+						
+						$params = array('__data__' => &$data) + $hook['param'];
+						
+						call_user_func_array(array($class, $method), $params);
 					}
 					else {
-						trigger_error("Model::action_filter(): The following method does not exist: $class::$function().");
+						trigger_error("Model::action_filter(): The following method does not exist: $class::$method().");
 					}
 				}
 				else {

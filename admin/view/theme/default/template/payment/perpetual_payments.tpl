@@ -13,14 +13,14 @@
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="form">
 					<tr>
-						<td><span class="required"></span> <?= $entry_auth_id; ?></td>
+						<td class="required"> <?= $entry_auth_id; ?></td>
 						<td><input type="text" name="perpetual_payments_auth_id" value="<?= $perpetual_payments_auth_id; ?>" />
 							<? if ($error_auth_id) { ?>
 							<span class="error"><?= $error_auth_id; ?></span>
 							<? } ?></td>
 					</tr>
 					<tr>
-						<td><span class="required"></span> <?= $entry_auth_pass; ?></td>
+						<td class="required"> <?= $entry_auth_pass; ?></td>
 						<td><input type="text" name="perpetual_payments_auth_pass" value="<?= $perpetual_payments_auth_pass; ?>" />
 							<? if ($error_auth_pass) { ?>
 							<span class="error"><?= $error_auth_pass; ?></span>

@@ -12,6 +12,7 @@ class Catalog_Model_Design_Layout extends Model
 		if (!isset($this->layout_ids[$route])) {
 			$layout_id = false;
 			
+			//TODO: THere is likely a better way to resolve layouts for these...Maybe get rid of this?
 			if (substr($route, 0, 16) == 'product/category' && isset($_GET['path'])) {
 				$path = explode('_', (string)$_GET['path']);
 					

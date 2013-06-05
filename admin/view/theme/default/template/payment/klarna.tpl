@@ -14,14 +14,14 @@
 				<div id="tab-general" class="page">
 					<table class="form">
 						<tr>
-							<td><span class="required"></span> <?= $entry_merchant; ?></td>
+							<td class="required"> <?= $entry_merchant; ?></td>
 							<td><input type="text" name="klarna_merchant" value="<?= $klarna_merchant; ?>" />
 								<? if ($error_merchant) { ?>
 								<span class="error"><?= $error_merchant; ?></span>
 								<? } ?></td>
 						</tr>
 						<tr>
-							<td><span class="required"></span> <?= $entry_secret; ?></td>
+							<td class="required"> <?= $entry_secret; ?></td>
 							<td><input type="text" name="klarna_secret" value="<?= $klarna_secret; ?>" />
 								<? if ($error_secret) { ?>
 								<span class="error"><?= $error_secret; ?></span>

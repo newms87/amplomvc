@@ -13,7 +13,7 @@
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="form">
 					<tr>
-						<td><span class="required"></span> <?= $entry_email; ?></td>
+						<td class="required"> <?= $entry_email; ?></td>
 						<td><input type="text" name="nochex_email" value="<?= $nochex_email; ?>" />
 							<? if ($error_email) { ?>
 							<span class="error"><?= $error_email; ?></span>
@@ -35,7 +35,7 @@
 							</select></td>
 					</tr>
 					<tr>
-						<td><span class="required"></span> <?= $entry_merchant; ?></td>
+						<td class="required"> <?= $entry_merchant; ?></td>
 						<td><input type="text" name="nochex_merchant" value="<?= $nochex_merchant; ?>" />
 							<? if ($error_merchant) { ?>
 							<span class="error"><?= $error_merchant; ?></span>

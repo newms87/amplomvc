@@ -14,11 +14,11 @@
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="form">
 					<tr>
-						<td><span class="required"></span> <?= $entry_name; ?></td>
+						<td class="required"> <?= $entry_name; ?></td>
 						<td><input type="text" name="name" value="<?= $name; ?>" /></td>
 					</tr>
 					<tr>
-						<td><span class="required"></span> <?= $entry_description; ?></td>
+						<td class="required"> <?= $entry_description; ?></td>
 						<td><input type="text" name="description" value="<?= $description; ?>" /></td>
 					</tr>
 					<tr>

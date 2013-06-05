@@ -13,7 +13,6 @@ class Admin_Controller_Catalog_Product extends Controller
   	public function insert()
   	{
 		$this->load->language('catalog/product');
-
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
@@ -21,10 +20,9 @@ class Admin_Controller_Catalog_Product extends Controller
 			
 			if (!$this->message->error_set()) {
 				$this->message->add('success',$this->_('text_success'));
+				
+				$this->url->redirect($this->url->link('catalog/product'));
 			}
-	
-			$this->getList();
-			return;
 		}
 	
 		$this->getForm();
@@ -41,10 +39,9 @@ class Admin_Controller_Catalog_Product extends Controller
 			
 			if (!$this->message->error_set()) {
 				$this->message->add('success',$this->_('text_success'));
+				
+				$this->url->redirect($this->url->link('catalog/product'));
 			}
-			
-			$this->getList();
-			return;
 		}
 
 		$this->getForm();
@@ -52,18 +49,17 @@ class Admin_Controller_Catalog_Product extends Controller
 
   	public function delete()
   	{
-  		
-		$this->load->language('catalog/product');
+  		$this->load->language('catalog/product');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (isset($_POST['selected']) && $this->validateDelete()) {
-			foreach ($_POST['selected'] as $product_id) {
-				$this->Model_Catalog_Product->deleteProduct($product_id);
-			}
+		if (!empty($_GET['product_id']) && $this->validateDelete()) {
+			$this->Model_Catalog_Product->deleteProduct($_GET['product_id']);
 
 			if (!$this->message->error_set()) {
 				$this->message->add('success',$this->_('text_success'));
+				
+				$this->url->redirect($this->url->link('catalog/product'));
 			}
 		}
 
@@ -72,17 +68,17 @@ class Admin_Controller_Catalog_Product extends Controller
 
   	public function copy()
   	{
-		$this->load->language('catalog/product');
+  		$this->load->language('catalog/product');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (isset($_POST['selected']) && $this->validateCopy()) {
-			foreach ($_POST['selected'] as $product_id) {
-				$this->Model_Catalog_Product->copyProduct($product_id);
-			}
-
+		if (!empty($_GET['product_id']) && $this->validateCopy()) {
+			$this->Model_Catalog_Product->copyProduct($_GET['product_id']);
+	
 			if (!$this->message->error_set()) {
 				$this->message->add('success',$this->_('text_success'));
+				
+				$this->url->redirect($this->url->link('catalog/product'));
 			}
 		}
 
@@ -91,10 +87,6 @@ class Admin_Controller_Catalog_Product extends Controller
 	
 	public function batch_update()
 	{
-		$this->load->language('catalog/product');
-
-		$this->document->setTitle($this->_('heading_title'));
-		
 		if (isset($_POST['selected']) && isset($_GET['action']) && $this->validateCopy()) {
 			foreach ($_POST['selected'] as $product_id) {
 				switch($_GET['action']){
@@ -122,6 +114,12 @@ class Admin_Controller_Catalog_Product extends Controller
 					case 'ship_policy':
 						$this->Model_Catalog_Product->updateProductDescriptions($product_id,'shipping_return', $_GET['action_value']);
 						break;
+					case 'copy':
+						$this->Model_Catalog_Product->copyProduct($product_id);
+						break;
+					case 'delete':
+						$this->Model_Catalog_Product->deleteProduct($product_id);
+						break;
 					default:
 						$this->error['warning'] = "Invalid Action Selected!";
 						break;
@@ -129,14 +127,15 @@ class Admin_Controller_Catalog_Product extends Controller
 				if($this->error)
 					break;
 			}
-			if (!$this->error) {
-				if (!$this->message->error_set()) {
-					$this->message->add('success',$this->_('text_success'));
-				}
+
+			if (!$this->error && !$this->message->error_set()) {
+				$this->message->add('success',$this->_('text_success'));
+				
+				$this->url->redirect($this->url->link('catalog/product'));
 			}
 		}
 
-		$this->getList();
+		$this->index();
 	}
 	
   	private function getList()
@@ -320,7 +319,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		
 		$this->data['list_view'] = $this->mytable->build();
 		
-		$categories = $this->Model_Catalog_Category->getCategories(null);
+		$categories = $this->Model_Catalog_Category->getCategories();
 		
 		//Batch actions
 		$this->data['batch_actions'] = array(
@@ -370,7 +369,15 @@ class Admin_Controller_Catalog_Product extends Controller
 				'label' => "Update Shipping / Return Policy",
 				'type' => 'ckedit',
 				'default' => $this->_('shipping_return_policy'),
-			)
+			),
+			
+			'copy' => array(
+				'label' => "Copy",
+			),
+			
+			'delete' => array(
+				'label' => "Delete",
+			),
 		);
 		
 		$url = $this->url->get_query('filter', 'sort', 'order', 'page');
@@ -401,7 +408,7 @@ class Admin_Controller_Catalog_Product extends Controller
   	{
 		$this->template->load('catalog/product_form');
 
-  		$product_id = $this->data['product_id'] = isset($_GET['product_id'])?$_GET['product_id']:false;
+  		$product_id = $this->data['product_id'] = isset($_GET['product_id']) ? $_GET['product_id'] : false;
 		
 		$url = $this->url->get_query('filter', 'sort', 'order', 'page');
 		
@@ -648,7 +655,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			$this->data['product_download'] = $this->Model_Catalog_Product->getProductDownloads($product_id);
 		}
 		
-		$this->data['data_categories'] = $this->Model_Catalog_Category->getCategories(0);
+		$this->data['data_categories'] = $this->Model_Catalog_Category->getCategories();
 		
 		if (!isset($this->data['product_category'])) {
 			$this->data['product_category'] = $this->Model_Catalog_Product->getProductCategories($product_id);
@@ -812,8 +819,8 @@ class Admin_Controller_Catalog_Product extends Controller
 	
   	private function validateDelete()
   	{
-		if (!$this->user->hasPermission('modify', 'catalog/product') && !$this->user->hasPermission('access','user/user_permission')) {
-				$this->error['warning'] = $this->_('error_permission');
+		if (!$this->user->hasPermission('modify', 'catalog/product')) {
+			$this->error['warning'] = $this->_('error_permission');
 		}
 		
 		return $this->error ? false : true;

@@ -205,6 +205,16 @@ class Catalog_Model_Catalog_Product extends Model
 			$where .= " AND p.manufacturer_id = '" . (int)$data['manufacturer_id'] . "'";
 		}
 		
+		if (!empty($data['attribute'])) {
+			foreach ($data['attribute'] as $attribute) {
+				$table_id = 'pa_' . (int)$attribute;
+				
+				$from .= " LEFT JOIN " . DB_PREFIX . "product_attribute $table_id ON ($table_id.product_id=p.product_id)";
+				
+				$where .= " AND $table_id.attribute_id = '" . (int)$attribute . "'";
+			}
+		}
+		
 		//Has an active special (or sorting by price)
 		if (!empty($data['has_special']) || $data['sort'] === 'price') {
 			$from .= " LEFT JOIN (SELECT product_id, MIN(price) as special FROM oc_product_special WHERE date_start <= NOW() AND date_end > NOW() GROUP BY product_id) spec ON (spec.product_id = p.product_id)";

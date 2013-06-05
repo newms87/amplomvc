@@ -20,7 +20,7 @@
 				<div id="tab-general">
 					<table class="form">
 						<tr>
-							<td><span class="required"></span> <?= $entry_name; ?></td>
+							<td class="required"> <?= $entry_name; ?></td>
 							<td><input type="text" name="name" value="<?= $name; ?>" size="100" /></td>
 						</tr>
 						<div id="languages" class="htabs">

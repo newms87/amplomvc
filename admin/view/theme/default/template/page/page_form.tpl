@@ -14,11 +14,11 @@
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="form">
 					<tr>
-						<td><span class="required"></span> <?= $entry_name; ?></td>
+						<td class="required"> <?= $entry_name; ?></td>
 						<td><input type="text" name="name" size="60" value="<?= $name; ?>" /></td>
 					</tr>
 					<tr>
-						<td><span class="required"></span> <?= $entry_keyword; ?></td>
+						<td class="required"> <?= $entry_keyword; ?></td>
 						<td><input type="text" name="keyword" size="60" value="<?= $keyword; ?>" /></td>
 					</tr>
 					<tr>
@@ -34,7 +34,7 @@
 						<td><textarea name="content" class="ckedit"><?= $content; ?></textarea></td>
 					</tr>
 					<tr>
-						<td><span class="required"></span> <?= $entry_layout; ?></td>
+						<td class="required"> <?= $entry_layout; ?></td>
 						
 						<td>
 							<? $this->builder->set_config('layout_id', 'name');?>
@@ -44,7 +44,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td><span class="required"></span> <?= $entry_store; ?></td>
+						<td class="required"> <?= $entry_store; ?></td>
 						<? $this->builder->set_config('store_id', 'name');?>
 						<td><?= $this->builder->build('multiselect', $data_stores, "stores", $stores); ?></td>
 					</tr>

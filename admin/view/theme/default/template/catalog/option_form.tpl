@@ -11,7 +11,7 @@
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="form">
 					<tr>
-						<td><span class="required"></span> <?= $entry_name; ?></td>
+						<td class="required"> <?= $entry_name; ?></td>
 						<td>
 							<? foreach ($languages as $language) { ?>
 								<input type="text" name="option_description[<?= $language['language_id']; ?>][name]" value="<?= isset($option_description[$language['language_id']]) ? $option_description[$language['language_id']]['name'] : ''; ?>" />
@@ -20,7 +20,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td><span class="required"></span> <?= $entry_display_name; ?></td>
+						<td class="required"> <?= $entry_display_name; ?></td>
 						<td>
 							<? foreach ($languages as $language) { ?>
 								<input type="text" name="option_description[<?= $language['language_id']; ?>][display_name]" value="<?= isset($option_description[$language['language_id']]) ? $option_description[$language['language_id']]['display_name'] : ''; ?>" />

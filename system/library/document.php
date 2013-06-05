@@ -80,6 +80,7 @@ class Document
 		$sort_order = null;
 		$parent = 0;
 		$attrs = array();
+		$target = '';
 		
 		//populate the parameters if they have been set
 		extract($link_info, EXTR_IF_EXISTS);
@@ -90,13 +91,14 @@ class Document
 		}
 		
 		$new_link = array(
-			'name' => $name,
-			'display_name'=>$display_name,
-			'href'=>$href,
-			'query' => $query,
-			'title' => $title,
-			'sort_order'=>$sort_order,
-			'attrs'=>$attrs
+			'name'			=> $name,
+			'display_name'	=>$display_name,
+			'href'			=>$href,
+			'query'			=> $query,
+			'title'			=> $title,
+			'sort_order'	=>$sort_order,
+			'attrs'			=> $attrs,
+			'target' 		=> $target,
 		);
 		
 		//If group doesn't exist, make a new group

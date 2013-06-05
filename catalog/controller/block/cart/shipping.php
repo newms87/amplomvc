@@ -4,6 +4,7 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 	
 	public function index($settings = null)
 	{
+		$this->template->load('block/cart/shipping');
 		$this->language->load('block/cart/shipping');
 		
 		if (isset($_POST['shipping_method'])) {

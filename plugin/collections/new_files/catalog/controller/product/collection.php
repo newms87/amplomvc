@@ -31,7 +31,7 @@ class Catalog_Controller_Product_Collection extends Controller
 			$this->document->setKeywords($collection_info['meta_keywords']);
 			
 			if ($collection_info['category_id']) {
-				$this->breadcrumb->add($this->Model_Catalog_Category->getCategoryName($collection_info['category_id']), $this->url->link('product/collection', 'category_id=' . $collection_info['category_id']));
+				$this->breadcrumb->add($this->Model_Catalog_Category->getCategoryName($collection_info['category_id']), $this->url->link('product/category', 'category_id=' . $collection_info['category_id']));
 			}
 			
 			$this->breadcrumb->add($collection_info['name'], $this->url->link('product/collection', 'collection_id=' . $collection_id));

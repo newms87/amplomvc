@@ -13,14 +13,14 @@
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="form">
 					<tr>
-						<td><span class="required"></span> <?= $entry_name; ?></td>
+						<td class="required"> <?= $entry_name; ?></td>
 						<td><input type="text" name="name" value="<?= $name; ?>" />
 							<? if ($error_name) { ?>
 							<span class="error"><?= $error_name; ?></span>
 							<? } ?></td>
 					</tr>
 					<tr>
-						<td><span class="required"></span> <?= $entry_rate; ?></td>
+						<td class="required"> <?= $entry_rate; ?></td>
 						<td><input type="text" name="rate" value="<?= $rate; ?>" />
 							<? if ($error_rate) { ?>
 							<span class="error"><?= $error_rate; ?></span>

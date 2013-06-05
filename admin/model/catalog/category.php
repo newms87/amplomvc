@@ -8,13 +8,6 @@ class Admin_Model_Catalog_Category extends Model
 		
 		$category_id = $this->insert('category', $data);
 		
-		foreach ($data['category_description'] as $language_id => $value) {
-			$value['category_id'] = $category_id;
-			$value['language_id'] = $language_id;
-			
-			$this->insert('category_description', $value);
-		}
-		
 		if (!empty($data['category_store'])) {
 			foreach ($data['category_store'] as $store_id) {
 				$store = array(
@@ -41,7 +34,13 @@ class Admin_Model_Catalog_Category extends Model
 			$this->url->set_alias($data['keyword'], 'product/category', 'category_id=' . (int)$category_id);
 		}
 		
+		if (!empty($data['translations'])) {
+			$this->translation->set_translations('category', $category_id, $data['translations']);
+		}
+		
 		$this->cache->delete('category');
+		
+		return $category_id;
 	}
 	
 	public function editCategory($category_id, $data)
@@ -49,15 +48,6 @@ class Admin_Model_Catalog_Category extends Model
 		$data['date_modified'] = $this->tool->format_datetime();
 		
 		$this->update('category', $data, $category_id);
-
-		$this->delete('category_description', array('category_id' => $category_id));
-		
-		foreach ($data['category_description'] as $language_id => $value) {
-			$value['category_id'] = $category_id;
-			$value['language_id'] = $language_id;
-			
-			$this->insert('category_description', $value);
-		}
 		
 		$this->delete('category_to_store', array('category_id' => $category_id));
 		
@@ -89,13 +79,16 @@ class Admin_Model_Catalog_Category extends Model
 			$this->url->set_alias($data['keyword'], 'product/category', 'category_id=' . (int)$category_id);
 		}
 		
+		if (!empty($data['translations'])) {
+			$this->translation->set_translations('category', $category_id, $data['translations']);
+		}
+		
 		$this->cache->delete('category');
 	}
 	
 	public function deleteCategory($category_id)
 	{
 		$this->delete('category', $category_id);
-		$this->delete('category_description', array('category_id'=>$category_id));
 		$this->delete('category_to_store', array('category_id'=>$category_id));
 		$this->delete('category_to_layout', array('category_id'=>$category_id));
 		
@@ -123,32 +116,61 @@ class Admin_Model_Catalog_Category extends Model
 		return $result;
 	}
 	
-	public function getCategories($parent_id = 0)
+	public function getCategories($data = array(), $select = '*', $total = false)
 	{
-		$category_data = $this->cache->get('category.' . (int)$this->config->get('config_language_id') . '.' . (int)$parent_id);
-	
-		if (!$category_data) {
-			$category_data = array();
-			$filter_parent = !is_null($parent_id) ? "c.parent_id = '" . (int)$parent_id . "' AND" : '';
-			$query = $this->query("SELECT * FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_description cd ON (c.category_id = cd.category_id) WHERE $filter_parent cd.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY c.sort_order, cd.name ASC");
-			
-			foreach ($query->rows as $result) {
-				$category_data[] = array(
-					'category_id' => $result['category_id'],
-					'name'		=> $this->getPath($result['category_id'], $this->config->get('config_language_id')),
-					'status'  	=> $result['status'],
-					'sort_order'  => $result['sort_order']
-				);
-			
-				$category_data = array_merge($category_data, $this->getCategories($result['category_id']));
-			}
-	
-			$this->cache->set('category.' . (int)$this->config->get('config_language_id') . '.' . (int)$parent_id, $category_data);
+		//Select
+		if ($total) {
+			$select = "COUNT(*) as total";
+		} elseif (empty($select)) {
+			$select = '*';
 		}
 		
-		return $category_data;
+		//From
+		$from = DB_PREFIX . "category c";
+		
+		//Where
+		$where = "1";
+		
+		if (!empty($data['category_ids'])) {
+			$where .= " AND category_id IN (" . implode(',', $data['category_ids']) . ")";
+		}
+
+		if (!empty($data['parent_ids'])) {
+			$where .= " AND parent_id IN (" . implode(',', $data['parent_ids']) . ")";
+		}
+		
+		//Order By and Limit
+		if (!$total) {
+			if (!empty($data['sort']) && strpos($data['sort'], '__image_sort__') === 0) {
+				if (!$this->db->has_column('category', $data['sort'])) {
+					$this->extend->enable_image_sorting('category', str_replace('__image_sort__', '', $data['sort']));
+				}
+			}
+			
+			$order = $this->extract_order($data);
+			$limit = $this->extract_limit($data);
+		} else {
+			$order = '';
+			$limit = '';
+		}
+		
+		//The Query
+		$query = "SELECT $select FROM $from WHERE $where $order $limit";
+		
+		$result = $this->query($query);
+		
+		if($total) {
+			return $result->row['total'];
+		}
+		
+		return $result->rows;
 	}
 	
+	public function update_field($category_id, $data)
+	{
+		$this->update('category', $data, $category_id);
+	}
+
 	//TODO: need to rethink this
 	public function generate_url($category_id, $name)
 	{
@@ -177,24 +199,6 @@ class Admin_Model_Catalog_Category extends Model
 		}
 	}
 	
-	public function getCategoryDescriptions($category_id)
-	{
-		$category_description_data = array();
-		
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "category_description WHERE category_id = '" . (int)$category_id . "'");
-		
-		foreach ($query->rows as $result) {
-			$category_description_data[$result['language_id']] = array(
-				'name'				=> $result['name'],
-				'meta_keyword'	=> $result['meta_keyword'],
-				'meta_description' => $result['meta_description'],
-				'description'		=> $result['description']
-			);
-		}
-		
-		return $category_description_data;
-	}
-	
 	public function getCategoryStores($category_id)
 	{
 		$category_store_data = array();
@@ -221,11 +225,9 @@ class Admin_Model_Catalog_Category extends Model
 		return $category_layout_data;
 	}
 		
-	public function getTotalCategories()
+	public function getTotalCategories($data = array())
 	{
-			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "category");
-		
-		return $query->row['total'];
+		return $this->getCategories($data, '', true);
 	}
 	
 	public function getTotalCategoriesByLayoutId($layout_id)

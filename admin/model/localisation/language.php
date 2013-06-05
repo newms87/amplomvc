@@ -24,75 +24,47 @@ class Admin_Model_Localisation_Language extends Model
 	
 	public function getLanguage($language_id)
 	{
-		$query = $this->get('language', '*', (int)$language_id);
-	
-		return $query->row;
+		return $this->query_row("SELECT * FROM " . DB_PREFIX . "language WHERE language_id = '" . (int)$language_id . "'");
 	}
 
-	public function getLanguages($data = array()) {
-		if ($data) {
-			$sql = "SELECT * FROM " . DB_PREFIX . "language";
-	
-			$sort_data = array(
-				'name',
-				'code',
-				'sort_order'
-			);
-			
-			if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
-				$sql .= " ORDER BY " . $data['sort'];
-			} else {
-				$sql .= " ORDER BY sort_order, name";
-			}
-			
-			if (isset($data['order']) && ($data['order'] == 'DESC')) {
-				$sql .= " DESC";
-			} else {
-				$sql .= " ASC";
-			}
-			
-			if (isset($data['start']) || isset($data['limit'])) {
-				if ($data['start'] < 0) {
-					$data['start'] = 0;
-				}
-
-				if ($data['limit'] < 1) {
-					$data['limit'] = 20;
-				}
-			
-				$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
-			}
-			
-			$query = $this->query($sql);
-	
-			return $query->rows;
-		} else {
-			$language_data = $this->cache->get('language');
-		
-			if (!$language_data) {
-				$language_data = array();
-				
-				$query = $this->query("SELECT * FROM " . DB_PREFIX . "language ORDER BY sort_order, name");
-	
-				foreach ($query->rows as $result) {
-						$language_data[$result['code']] = array(
-							'language_id' => $result['language_id'],
-							'name'		=> $result['name'],
-							'code'		=> $result['code'],
-							'locale'		=> $result['locale'],
-							'image'		=> $result['image'],
-							'directory'	=> $result['directory'],
-							'filename'	=> $result['filename'],
-							'sort_order'  => $result['sort_order'],
-							'status'		=> $result['status']
-						);
-				}
-			
-				$this->cache->set('language', $language_data);
-			}
-		
-			return $language_data;
+	public function getLanguages($data = array(), $select = '*', $total = false) {
+		if ($total) {
+			$select = "COUNT(*) as total";
+		} elseif(!$select) {
+			$select = '*';
 		}
+		
+		$from = DB_PREFIX . "language";
+		
+		$where = "1";
+		
+		if (!empty($data['status'])) {
+			if (!is_array($data['status'])) {
+				$data['status'] = array($data['status']);
+			}
+			
+			$where .= " AND status IN ('" . implode("','", $data['status']) . "')";
+		} else {
+			$where .= " AND status IN ('1', '0')";
+		}
+		
+		if (!$total) {
+			$order = $this->extract_order($data);
+			$limit = $this->extract_limit($data);
+		} else {
+			$order = '';
+			$limit = '';
+		}
+		
+		$query = "SELECT $select FROM $from WHERE $where $order $limit";
+		
+		$result = $this->query($query);
+		
+		if ($total) {
+			return $result->row['total'];
+		}
+		
+		return $result->rows;
 	}
 	
 	public function getLanguageList()
@@ -114,10 +86,8 @@ class Admin_Model_Localisation_Language extends Model
 		return $languages;
 	}
 	
-	public function getTotalLanguages()
+	public function getTotalLanguages($data = array())
 	{
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "language WHERE status >= 0");
-		
-		return $query->row['total'];
+		return $this->getLanguages($data, '', true);
 	}
 }

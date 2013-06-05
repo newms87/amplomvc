@@ -22,14 +22,14 @@
 					<div id="language<?= $language['language_id']; ?>">
 						<table class="form">
 							<tr>
-								<td><span class="required"></span> <?= $entry_title; ?></td>
+								<td class="required"> <?= $entry_title; ?></td>
 								<td><input type="text" name="information_description[<?= $language['language_id']; ?>][title]" size="100" value="<?= isset($information_description[$language['language_id']]) ? $information_description[$language['language_id']]['title'] : ''; ?>" />
 									<? if (isset($error_title[$language['language_id']])) { ?>
 									<span class="error"><?= $error_title[$language['language_id']]; ?></span>
 									<? } ?></td>
 							</tr>
 							<tr>
-								<td><span class="required"></span> <?= $entry_description; ?></td>
+								<td class="required"> <?= $entry_description; ?></td>
 								<td><textarea class='ckedit' name="information_description[<?= $language['language_id']; ?>][description]"><?= isset($information_description[$language['language_id']]) ? $information_description[$language['language_id']]['description'] : ''; ?></textarea>
 									<? if (isset($error_description[$language['language_id']])) { ?>
 									<span class="error"><?= $error_description[$language['language_id']]; ?></span>

@@ -5,50 +5,50 @@
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'category.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
-			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a onclick="location = '<?= $cancel; ?>';" class="button"><?= $button_cancel; ?></a></div>
+			<div class="buttons">
+				<a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a>
+				<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
+			</div>
 		</div>
 		<div class="content">
-			<div id="tabs" class="htabs"><a href="#tab-general"><?= $tab_general; ?></a><a href="#tab-data"><?= $tab_data; ?></a><a href="#tab-design"><?= $tab_design; ?></a></div>
+			<div id="tabs" class="htabs">
+				<a href="#tab-general"><?= $tab_general; ?></a>
+				<a href="#tab-data"><?= $tab_data; ?></a>
+				<a href="#tab-design"><?= $tab_design; ?></a>
+			</div>
+			
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 				<div id="tab-general">
-					<div id="languages" class="htabs">
-						<? foreach ($languages as $language) { ?>
-						<a href="#language<?= $language['language_id']; ?>"><img src="<?= HTTP_THEME_IMAGE . "flags/$language[image]"; ?>" title="<?= $language['name']; ?>" /> <?= $language['name']; ?></a>
-						<? } ?>
-					</div>
-					<? foreach ($languages as $language) { ?>
-					<div id="language<?= $language['language_id']; ?>">
-						<table class="form">
-							<tr>
-								<td><span class="required"></span> <?= $entry_name; ?></td>
-								<td><input type="text" name="category_description[<?= $language['language_id']; ?>][name]" size="100" value="<?= isset($category_description[$language['language_id']]) ? $category_description[$language['language_id']]['name'] : ''; ?>" /></td>
-							</tr>
-							<tr>
-								<td><?= $entry_meta_description; ?></td>
-								<td><textarea name="category_description[<?= $language['language_id']; ?>][meta_description]" cols="40" rows="5"><?= isset($category_description[$language['language_id']]) ? $category_description[$language['language_id']]['meta_description'] : ''; ?></textarea></td>
-							</tr>
-							<tr>
-								<td><?= $entry_meta_keyword; ?></td>
-								<td><textarea name="category_description[<?= $language['language_id']; ?>][meta_keyword]" cols="40" rows="5"><?= isset($category_description[$language['language_id']]) ? $category_description[$language['language_id']]['meta_keyword'] : ''; ?></textarea></td>
-							</tr>
-							<tr>
-								<td><?= $entry_description; ?></td>
-								<td><textarea name="category_description[<?= $language['language_id']; ?>][description]" id="description<?= $language['language_id']; ?>"><?= isset($category_description[$language['language_id']]) ? $category_description[$language['language_id']]['description'] : ''; ?></textarea></td>
-							</tr>
-						</table>
-					</div>
-					<? } ?>
+					<table class="form">
+						<tr>
+							<td class="required"> <?= $entry_name; ?></td>
+							<td><input type="text" name="name" size="60" value="<?= $name; ?>" /></td>
+						</tr>
+						<tr>
+							<td><?= $entry_meta_keyword; ?></td>
+							<td><textarea name="meta_keywords" rows="4" cols="60"><?= $meta_keywords; ?></textarea></td>
+						</tr>
+						<tr>
+							<td><?= $entry_meta_description; ?></td>
+							<td><textarea name="meta_description" rows="8" cols="60"><?= $meta_description; ?></textarea></td>
+						</tr>
+						<tr>
+							<td><?= $entry_description; ?></td>
+							<td><textarea class="ckedit" name="description"><?= $description; ?></textarea></td>
+						</tr>
+					</table>
 				</div>
 				<div id="tab-data">
 					<table class="form">
 						<tr>
 							<td><?= $entry_parent; ?></td>
-							<td><?= $this->builder->build('select',$categories, 'parent_id', (int)$parent_id); ?></td>
+							<? $this->builder->set_config('category_id', 'name');?>
+							<td><?= $this->builder->build('select', $data_categories, 'parent_id', (int)$parent_id); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_store; ?></td>
 							<? $this->builder->set_config('store_id', 'name');?>
-							<td><?= $this->builder->build('multiselect', $data_stores, "category_store", $category_store); ?></td>
+							<td><?= $this->builder->build('multiselect', $data_stores, "category_store", $stores); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_keyword; ?></td>
@@ -90,17 +90,18 @@
 								<td class="left"><?= $entry_layout; ?></td>
 							</tr>
 						</thead>
-						<? foreach ($data_stores as $store) { ?>
 						<tbody>
+							<? $this->builder->set_config('layout_id', 'name');?>
+							
+							<? foreach ($data_stores as $store) { ?>
 							<tr>
 								<td class="left"><?= $store['name']; ?></td>
 								<td class="left">
-									<? $this->builder->set_config('layout_id', 'name');?>
-									<?= $this->builder->build('select',$data_layouts, "category_layout[$store[store_id]][layout_id]", isset($category_layout[$store['store_id']])?(int)$category_layout[$store['store_id']]:''); ?>
+									<?= $this->builder->build('select', $data_layouts, "layouts[$store[store_id]][layout_id]", isset($layouts[$store['store_id']]) ? (int)$layouts[$store['store_id']] : ''); ?>
 								</td>
 							</tr>
+							<? } ?>
 						</tbody>
-						<? } ?>
 					</table>
 				</div>
 			</form>
@@ -118,10 +119,16 @@ function generate_url_warning(field){
 function generate_url(c){
 	$(c).fadeOut(500,function(){$(this).show();});
 	$('#gen_warn').remove();
-	name =$('input[name="category_description[1][name]"]').val();
-	if(!name)
-			alert("Please make a name for this Category before generating the URL");
-	$.post("<?= HTTP_ADMIN . "index.php?route=catalog/category/generate_url"; ?>",{category_id:<?= $category_id?$category_id:0; ?>,name:name},function(json){$('input[name="keyword"]').val(json);},'json');
+	name =$('input[name=name]').val();
+	if(!name){
+		alert("Please make a name for this Category before generating the URL");
+	}
+	url = "<?= HTTP_ADMIN . "index.php?route=catalog/category/generate_url"; ?>";
+	data = {category_id:<?= $category_id ? $category_id : 0; ?>, name: name};
+	
+	$.post(url, data, function(json){
+		$('input[name="keyword"]').val(json);
+	},'json');
 }
  //--></script>
  
@@ -131,4 +138,6 @@ $('#languages a').tabs();
 //--></script>
 
 <?= $this->builder->js('errors',$errors); ?>
+
+<?= $this->builder->js('translations', $translations); ?>
 <?= $footer; ?>

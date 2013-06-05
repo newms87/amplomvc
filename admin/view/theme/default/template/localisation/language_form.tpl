@@ -11,55 +11,55 @@
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="form">
 					<tr>
-						<td><span class="required"></span> <?= $entry_name; ?></td>
+						<td class="required"> <?= $entry_name; ?></td>
 						<td><input type="text" name="name" value="<?= $name; ?>" /></td>
 					</tr>
 					<tr>
-						<td><span class="required"></span> <?= $entry_code; ?></td>
+						<td class="required"> <?= $entry_code; ?></td>
 						<td><input type="text" name="code" value="<?= $code; ?>" /></td>
 					</tr>
 					<tr>
-						<td><span class="required"></span> <?= $entry_locale; ?></td>
+						<td class="required"> <?= $entry_locale; ?></td>
 						<td><input type="text" name="locale" value="<?= $locale; ?>" /></td>
 					</tr>
 					<tr>
-						<td><span class="required"></span> <?= $entry_datetime_format; ?></td>
+						<td class="required"> <?= $entry_datetime_format; ?></td>
 						<td><input type="text" name="datetime_format" value="<?= $datetime_format; ?>" /></td>
 					</tr>
 					<tr>
-						<td><span class="required"></span> <?= $entry_date_format_short; ?></td>
+						<td class="required"> <?= $entry_date_format_short; ?></td>
 						<td><input type="text" name="date_format_short" value="<?= $date_format_short; ?>" /></td>
 					</tr>
 					<tr>
-						<td><span class="required"></span> <?= $entry_date_format_long; ?></td>
+						<td class="required"> <?= $entry_date_format_long; ?></td>
 						<td><input type="text" name="date_format_long" value="<?= $date_format_long; ?>" /></td>
 					</tr>
 					<tr>
-						<td><span class="required"></span> <?= $entry_time_format; ?></td>
+						<td class="required"> <?= $entry_time_format; ?></td>
 						<td><input type="text" name="time_format" value="<?= $time_format; ?>" /></td>
 					</tr>
 					<tr>
-						<td><span class="required"></span> <?= $entry_direction; ?></td>
+						<td class="required"> <?= $entry_direction; ?></td>
 						<td><?= $this->builder->build('select', $data_direction, "direction", $direction); ?></td>
 					</tr>
 					<tr>
-						<td><span class="required"></span> <?= $entry_decimal_point; ?></td>
+						<td class="required"> <?= $entry_decimal_point; ?></td>
 						<td><input type="text" style='font-size:30px' size='1' name="decimal_point" value="<?= $decimal_point; ?>" /></td>
 					</tr>
 					<tr>
-						<td><span class="required"></span> <?= $entry_thousand_point; ?></td>
+						<td class="required"> <?= $entry_thousand_point; ?></td>
 						<td><input type="text" style='font-size:30px' size='1' name="thousand_point" value="<?= $thousand_point; ?>" /></td>
 					</tr>
 					<tr>
-						<td><span class="required"></span> <?= $entry_image; ?></td>
+						<td class="required"> <?= $entry_image; ?></td>
 						<td><input type="text" name="image" value="<?= $image; ?>" /></td>
 					</tr>
 					<tr>
-						<td><span class="required"></span> <?= $entry_directory; ?></td>
+						<td class="required"> <?= $entry_directory; ?></td>
 						<td><input type="text" name="directory" value="<?= $directory; ?>" /></td>
 					</tr>
 					<tr>
-						<td><span class="required"></span> <?= $entry_filename; ?></td>
+						<td class="required"> <?= $entry_filename; ?></td>
 						<td><input type="text" name="filename" value="<?= $filename; ?>" /></td>
 					</tr>
 					<tr>

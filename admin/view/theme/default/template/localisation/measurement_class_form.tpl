@@ -20,14 +20,14 @@
 				<div id="language<?= $language['language_id']; ?>">
 					<table class="form">
 						<tr>
-							<td><span class="required"></span> <?= $entry_title; ?></td>
+							<td class="required"> <?= $entry_title; ?></td>
 							<td><input type="text" name="measurement_class[<?= $language['language_id']; ?>][title]" value="<?= isset($measurement_class[$language['language_id']]) ? $measurement_class[$language['language_id']]['title'] : ''; ?>" />
 								<? if (isset($error_title[$language['language_id']])) { ?>
 								<span class="error"><?= $error_title[$language['language_id']]; ?></span>
 								<? } ?></td>
 						</tr>
 						<tr>
-							<td><span class="required"></span> <?= $entry_unit; ?></td>
+							<td class="required"> <?= $entry_unit; ?></td>
 							<td><input type="text" name="measurement_class[<?= $language['language_id']; ?>][unit]" value="<?= isset($measurement_class[$language['language_id']]) ? $measurement_class[$language['language_id']]['unit'] : ''; ?>" />
 								<? if (isset($error_unit[$language['language_id']])) { ?>
 								<span class="error"><?= $error_unit[$language['language_id']]; ?></span>

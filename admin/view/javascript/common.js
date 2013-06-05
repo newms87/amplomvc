@@ -71,7 +71,7 @@ $(document).ready(function(){
     //toggle active state for drop down menus
 	$('.link_list li').mouseover(function(){
 		if(!$(this).hasClass('active')){
-			$('.active').removeClass('active');
+			$(this).closest('.top_menu').find('.active').removeClass('active');
 			$(this).addClass('active').parents('.link_list li').addClass('active');
 		}
 	});

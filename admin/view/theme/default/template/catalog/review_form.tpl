@@ -13,7 +13,7 @@
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="form">
 					<tr>
-						<td><span class="required"></span> <?= $entry_author; ?></td>
+						<td class="required"> <?= $entry_author; ?></td>
 						<td><input type="text" name="author" value="<?= $author; ?>" />
 							<? if ($error_author) { ?>
 							<span class="error"><?= $error_author; ?></span>
@@ -28,7 +28,7 @@
 							<? } ?></td>
 					</tr>
 					<tr>
-						<td><span class="required"></span> <?= $entry_text; ?></td>
+						<td class="required"> <?= $entry_text; ?></td>
 						<td><textarea name="text" cols="60" rows="8"><?= $text; ?></textarea>
 							<? if ($error_text) { ?>
 							<span class="error"><?= $error_text; ?></span>
