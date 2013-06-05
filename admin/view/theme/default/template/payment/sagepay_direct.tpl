@@ -13,7 +13,7 @@
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="form">
 					<tr>
-						<td><span class="required"></span> <?= $entry_vendor; ?></td>
+						<td class="required"> <?= $entry_vendor; ?></td>
 						<td><input type="text" name="sagepay_direct_vendor" value="<?= $sagepay_direct_vendor; ?>" />
 							<? if ($error_vendor) { ?>
 							<span class="error"><?= $error_vendor; ?></span>

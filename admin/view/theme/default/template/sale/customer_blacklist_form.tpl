@@ -13,7 +13,7 @@
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="form">
 					<tr>
-						<td><span class="required"></span> <?= $entry_ip; ?></td>
+						<td class="required"> <?= $entry_ip; ?></td>
 						<td><input type="text" name="ip" value="<?= $ip; ?>" />
 							<? if ($error_ip) { ?>
 							<span class="error"><?= $error_ip; ?></span>

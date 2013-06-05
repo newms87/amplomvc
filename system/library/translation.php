@@ -55,7 +55,7 @@ class Translation
 		$languages = $this->cache->get('language.id_list');
 		
 		if (!$languages) {
-			$language_ids = $this->db->query("SELECT language_id FROM " . DB_PREFIX . "language WHERE status = '1'");
+			$language_ids = $this->db->query("SELECT language_id FROM " . DB_PREFIX . "language WHERE status >= '0'");
 			
 			$languages = array();
 			

@@ -27,28 +27,28 @@
 					<div id="tab-customer" class="vtabs-content">
 						<table class="form">
 							<tr>
-								<td><span class="required"></span> <?= $entry_firstname; ?></td>
+								<td class="required"> <?= $entry_firstname; ?></td>
 								<td><input type="text" name="firstname" value="<?= $firstname; ?>" />
 									<? if ($error_firstname) { ?>
 									<span class="error"><?= $error_firstname; ?></span>
 									<? } ?></td>
 							</tr>
 							<tr>
-								<td><span class="required"></span> <?= $entry_lastname; ?></td>
+								<td class="required"> <?= $entry_lastname; ?></td>
 								<td><input type="text" name="lastname" value="<?= $lastname; ?>" />
 									<? if ($error_lastname) { ?>
 									<span class="error"><?= $error_lastname; ?></span>
 									<? } ?></td>
 							</tr>
 							<tr>
-								<td><span class="required"></span> <?= $entry_email; ?></td>
+								<td class="required"> <?= $entry_email; ?></td>
 								<td><input type="text" name="email" value="<?= $email; ?>" />
 									<? if ($error_email) { ?>
 									<span class="error"><?= $error_email; ?></span>
 									<?	} ?></td>
 							</tr>
 							<tr>
-								<td><span class="required"></span> <?= $entry_telephone; ?></td>
+								<td class="required"> <?= $entry_telephone; ?></td>
 								<td><input type="text" name="telephone" value="<?= $telephone; ?>" />
 									<? if ($error_telephone) { ?>
 									<span class="error"><?= $error_telephone; ?></span>
@@ -117,14 +117,14 @@
 						<input type="hidden" name="address[<?= $address_row; ?>][address_id]" value="<?= $address['address_id']; ?>" />
 						<table class="form">
 							<tr>
-								<td><span class="required"></span> <?= $entry_firstname; ?></td>
+								<td class="required"> <?= $entry_firstname; ?></td>
 								<td><input type="text" name="address[<?= $address_row; ?>][firstname]" value="<?= $address['firstname']; ?>" />
 									<? if (isset($error_address_firstname[$address_row])) { ?>
 									<span class="error"><?= $error_address_firstname[$address_row]; ?></span>
 									<? } ?></td>
 							</tr>
 							<tr>
-								<td><span class="required"></span> <?= $entry_lastname; ?></td>
+								<td class="required"> <?= $entry_lastname; ?></td>
 								<td><input type="text" name="address[<?= $address_row; ?>][lastname]" value="<?= $address['lastname']; ?>" />
 									<? if (isset($error_address_lastname[$address_row])) { ?>
 									<span class="error"><?= $error_address_lastname[$address_row]; ?></span>
@@ -135,7 +135,7 @@
 								<td><input type="text" name="address[<?= $address_row; ?>][company]" value="<?= $address['company']; ?>" /></td>
 							</tr>
 							<tr>
-								<td><span class="required"></span> <?= $entry_address_1; ?></td>
+								<td class="required"> <?= $entry_address_1; ?></td>
 								<td><input type="text" name="address[<?= $address_row; ?>][address_1]" value="<?= $address['address_1']; ?>" />
 									<? if (isset($error_address_address_1[$address_row])) { ?>
 									<span class="error"><?= $error_address_address_1[$address_row]; ?></span>
@@ -146,18 +146,18 @@
 								<td><input type="text" name="address[<?= $address_row; ?>][address_2]" value="<?= $address['address_2']; ?>" /></td>
 							</tr>
 							<tr>
-								<td><span class="required"></span> <?= $entry_city; ?></td>
+								<td class="required"> <?= $entry_city; ?></td>
 								<td><input type="text" name="address[<?= $address_row; ?>][city]" value="<?= $address['city']; ?>" />
 									<? if (isset($error_address_city[$address_row])) { ?>
 									<span class="error"><?= $error_address_city[$address_row]; ?></span>
 									<? } ?></td>
 							</tr>
 							<tr>
-								<td><span class="required"></span> <?= $entry_postcode; ?></td>
+								<td class="required"> <?= $entry_postcode; ?></td>
 								<td><input type="text" name="address[<?= $address_row; ?>][postcode]" value="<?= $address['postcode']; ?>" /></td>
 							</tr>
 							<tr>
-								<td><span class="required"></span> <?= $entry_country; ?></td>
+								<td class="required"> <?= $entry_country; ?></td>
 								<td>
 									<?= $this->builder->set_config('country_id', 'name'); ?>
 									<?= $this->builder->build('select', $countries, "address[$address_row][country_id]", $address['country_id'], array('class'=>'country_select')); ?>
@@ -166,7 +166,7 @@
 									<? } ?></td>
 							</tr>
 							<tr>
-								<td><span class="required"></span> <?= $entry_zone; ?></td>
+								<td class="required"> <?= $entry_zone; ?></td>
 								<td><select name="address[<?= $address_row; ?>][zone_id]" zone_id="<?= $address['zone_id']; ?>" class="zone_select"></select>
 									<? if (isset($error_address_zone[$address_row])) { ?>
 									<span class="error"><?= $error_address_zone[$address_row]; ?></span>

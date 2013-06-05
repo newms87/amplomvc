@@ -206,10 +206,8 @@ $('<?=$selector;?>').each(function (i,e)
 <script type="text/javascript">//<!--
 var ckedit_index = 0;
 
-function init_ckeditor_for(context)
-{
-	context.each(function (i,e)
-{
+function init_ckeditor_for(context){
+	context.each(function (i,e){
 		if (!$(e).attr('id')) {
 			$(e).attr('id', 'ckedit_' + ckedit_index++);
 		}
@@ -239,17 +237,22 @@ function remove_ckeditor_for(context)
 <?php break;
 
 	case 'translations':
-		if(empty($args[0])) return "";
+		if (empty($args[0])) {
+			$args[0] = array();
+		}
+		
 		$languages = $this->Model_Localisation_Language->getLanguageList();
+		
 		$default_language = $this->config->get('config_language_id');
 		
 		$translations = json_encode($args[0]); ?>
 		
 <div id="language_menu_template">
 	<div class ="language_menu">
-	<? foreach($languages as $language) 
-{ ?>
-		<div class ="language_item <?= $language['language_id'] == $default_language ? 'active' : ''; ?>" title="<?= $language['name']; ?>" lang_id="<?= $language['language_id']; ?>"><img alt="<?= $language['name']; ?>" src="<?= HTTP_THEME_IMAGE . "flags/$language[image]"; ?>" /></div>
+	<? foreach($languages as $language) { ?>
+		<div class ="language_item <?= $language['language_id'] == $default_language ? 'active' : ''; ?>" title="<?= $language['name']; ?>" lang_id="<?= $language['language_id']; ?>">
+			<img alt="<?= $language['name']; ?>" src="<?= HTTP_THEME_IMAGE . "flags/$language[image]"; ?>" />
+		</div>
 	<? } ?>
 	</div>
 </div>
@@ -260,7 +263,7 @@ $('.language_menu .language_item').click(function ()
 	lang_id = $(this).attr('lang_id');
 	$('.translation').hide();
 	$('.translation.' + lang_id).show();
-	$('.language_menu .language_item.active').removeclass('active');
+	$('.language_menu .language_item.active').removeClass('active');
 	$('.language_menu [lang_id=' + lang_id +']').addClass('active');
 });
 
@@ -270,8 +273,7 @@ $('#language_menu_template').remove();
 var translations = <?= $translations; ?>;
 var default_language = "<?= $default_language ?>";
 
-for(var t in translations)
-{
+for(var t in translations){
 	context = $('[name="'+t+'"]');
 	
 	if (!context.length) {
@@ -286,24 +288,23 @@ for(var t in translations)
 	
 	box.append(context);
 	
-	for(var lang in translations[t])
-{
+	for(var lang in translations[t]){
 		t_name = "translations[" + t + "][" + lang + "]";
-		t_input = context.clone();
+		t_input = context.clone();		
 		t_input.attr('name', t_name);
 		t_input.val(translations[t][lang]);
 		
-		if (t_input.hasclass('ckedit')) {
+		if (t_input.hasClass('ckedit')) {
 			t_input.attr('id','translation_' + t + '_' + lang);
 			
 			box.append($('<div class ="translation ' + lang +'" />').append(t_input));
 			
 			<? if (isset($js_loaded_files['ckeditor'])) { ?>
-				init_ckeditor_for('translation_' + t + '_' + lang);
+				init_ckeditor_for($('#translation_' + t + '_' + lang));
 			<? } ?>
 		}
 		else {
-			t_input.addclass('translation ' + lang);
+			t_input.addClass('translation ' + lang);
 			box.append(t_input);
 		}
 	}
@@ -319,7 +320,7 @@ for(var t in translations)
 		ckedit_box.show();
 	}
 	else {
-		context.addclass('translation ' + default_language);
+		context.addClass('translation ' + default_language);
 		context.show();
 	}
 }

@@ -19,7 +19,7 @@ class Admin_Model_Setting_UrlAlias extends Model
 			$data['keyword'] = $this->format_url($data['keyword']);
 		}
 		
-		if (empty($data['store_id']) && $data['store_id'] !== 0) {
+		if (!isset($data['store_id']) || (!$data['store_id'] && $data['store_id'] !== 0)) {
 			$data['store_id'] = -1;
 		}
 		

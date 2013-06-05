@@ -12,19 +12,19 @@
 				<div id="tab-general">
 					<table class="form">
 						<tr>
-							<td><span class="required"></span> <?= $entry_keyword; ?></td>
+							<td class="required"> <?= $entry_keyword; ?></td>
 							<td><input type="text" name="keyword" value="<?= $keyword; ?>" size="40" /></td>
 						</tr>
 						<tr>
-							<td><span class="required"></span> <?= $entry_route; ?></td>
+							<td class="required"> <?= $entry_route; ?></td>
 							<td><input type="text" name="route" value="<?= $route; ?>" size="40" />
 						</tr>
 						<tr>
-							<td><span class="required"></span> <?= $entry_query; ?></td>
+							<td class="required"> <?= $entry_query; ?></td>
 							<td><input type="text" name="query" value="<?= $query; ?>" size="40" />
 						</tr>
 						<tr>
-							<td><span class="required"></span> <?= $entry_redirect; ?></td>
+							<td class="required"> <?= $entry_redirect; ?></td>
 							<td><input type="text" name="redirect" value="<?= $redirect; ?>" size="40" />
 						</tr>
 						<tr>

@@ -104,7 +104,7 @@ class Admin_Controller_Common_Header extends Controller
 					'display_name' => $store['name'],
 					'href' => $this->url->store($store['store_id'], 'common/home', ''),
 					'parent' => 'stores',
-					'attrs' => array('target'=>'_blank')
+					'target' => '_blank',
 				);
 				
 				$this->document->addLink('right', $link_store);

@@ -58,14 +58,6 @@ function addSingleImage(imageName, field, thumb) {
 		success: function(text) {
 			thumb.attr('src', text);
 			field.val(imageName);
-			
-			console.log('thumb');
-			console.dir(thumb);
-			console.log(text);
-			console.dir(field);
-			console.log(imageName);
-			console.log('adding single image');
-	
 		}
 	});
 };

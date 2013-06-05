@@ -408,7 +408,9 @@ class Admin_Model_Catalog_Product extends Model
 			$this->delete('product_attribute', array('product_id'=>$product_id));
 	
 			if (isset($data['product_attributes'])) {
-				foreach ($data['product_attributes'] as $product_attribute) {
+				$product_attributes = array_unique($data['product_attributes'], SORT_REGULAR);
+				
+				foreach ($product_attributes as $product_attribute) {
 					$product_attribute['product_id'] = $product_id;
 					$product_attribute['language_id'] = $language_id;
 					
@@ -597,38 +599,36 @@ class Admin_Model_Catalog_Product extends Model
 	
 	public function copyProduct($product_id)
 	{
-		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "product p LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id) WHERE p.product_id = '" . (int)$product_id . "' AND pd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
+		$product = $this->getProduct($product_id);
 		
-		if ($query->num_rows) {
-			$data = array();
-			
-			$data = $query->row;
-			
-			$data['keyword'] = '';
+		if (!$product) return false;
+		
+		$product['keyword'] = '';
 
-			$data['status'] = 0;
-						
-			$data['product_attribute'] = $this->getProductAttributes($product_id);
-			$data['product_description'] = $this->getProductDescriptions($product_id);
-			$data['product_discount'] = $this->getProductDiscounts($product_id);
-			$data['product_image'] = $this->getProductImages($product_id);
-			$data['product_option'] = $this->getProductOptions($product_id);
-			$data['product_related'] = $this->getProductRelated($product_id);
-			$data['product_reward'] = $this->getProductRewards($product_id);
-			$data['product_special'] = $this->getProductSpecials($product_id);
-			$data['product_tag'] = $this->getProductTags($product_id);
-			$data['product_category'] = $this->getProductCategories($product_id);
-			$data['product_download'] = $this->getProductDownloads($product_id);
-			$data['product_layout'] = $this->getProductLayouts($product_id);
-			$data['product_template'] = $this->getProductTemplates($product_id);
-			$data['product_store'] = $this->getProductStores($product_id);
-			
-			$this->addProduct($data);
-			
-			return true;
-		}
-
-		return false;
+		$product['status'] = 0;
+		
+		$product['product_attribute'] = $this->getProductAttributes($product_id);
+		$product['product_description'] = $this->getProductDescriptions($product_id);
+		$product['product_discount'] = $this->getProductDiscounts($product_id);
+		$product['product_image'] = $this->getProductImages($product_id);
+		$product['product_option'] = $this->getProductOptions($product_id);
+		$product['product_related'] = $this->getProductRelated($product_id);
+		$product['product_reward'] = $this->getProductRewards($product_id);
+		$product['product_special'] = $this->getProductSpecials($product_id);
+		$product['product_tag'] = $this->getProductTags($product_id);
+		$product['product_category'] = $this->getProductCategories($product_id);
+		$product['product_download'] = $this->getProductDownloads($product_id);
+		$product['product_layout'] = $this->getProductLayouts($product_id);
+		$product['product_template'] = $this->getProductTemplates($product_id);
+		$product['product_store'] = $this->getProductStores($product_id);
+		
+		$name_count = $this->query_var("SELECT COUNT(*) FROM " . DB_PREFIX . "product_description WHERE `name` like '$product[name]%'");
+		
+		$product['product_description'][$this->config->get('config_language_id')]['name'] .= " - Copy ($name_count)";
+		
+		$this->addProduct($product);
+		
+		return true;
 	}
 	
 	public function deleteProduct($product_id)
@@ -681,6 +681,7 @@ class Admin_Model_Catalog_Product extends Model
 			$select = 'pd.*, p.*';
 		}
 		
+		//TODO: need to change all getXXXXX queries to use pseudo names like name for p.name and manufacturer_name for m.name, etc...
 		//From
 		$from = "FROM " . DB_PREFIX . "product p";
 		$from .= " LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id=pd.product_id AND pd.language_id = '$lang_id')";
@@ -688,12 +689,12 @@ class Admin_Model_Catalog_Product extends Model
 		//Where
 		$where = "WHERE 1";
 		
-		if (isset($data['pd.name'])) {
-			$where .= " AND LCASE(pd.name) like '%" . strtolower($this->db->escape($data['pd.name'])) . "%'";
+		if (isset($data['name'])) {
+			$where .= " AND LCASE(pd.name) like '%" . strtolower($this->db->escape($data['name'])) . "%'";
 		}
 		
-		if (isset($data['p.model'])) {
-			$where .= " AND LCASE(p.model) like '%" . strtolower($this->db->escape($data['p.model'])) . "%'";
+		if (isset($data['model'])) {
+			$where .= " AND LCASE(p.model) like '%" . strtolower($this->db->escape($data['model'])) . "%'";
 		}
 		
 		if ((isset($data['sort']) && $data['sort'] == 'cp.name') || isset($data['collections'])) {

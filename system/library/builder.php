@@ -143,7 +143,9 @@ class Builder extends Controller
 				}
 			}
 			
-			$html .= "<li $attr_list style=\"z-index:$zindex\"><a $href class=\"menu_link\">$link[display_name]</a>$children</li>";
+			$target = !empty($link['target']) ? "target=\"$link[target]\"" : '';
+			
+			$html .= "<li $attr_list style=\"z-index:$zindex\"><a $href $target class=\"menu_link\">$link[display_name]</a>$children</li>";
 				
 			$zindex--;
 		}

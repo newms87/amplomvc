@@ -13,14 +13,14 @@
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="form">
 					<tr>
-						<td><span class="required"></span> <?= $entry_merchant_id; ?></td>
+						<td class="required"> <?= $entry_merchant_id; ?></td>
 						<td><input type="text" name="sagepay_us_merchant_id" value="<?= $sagepay_us_merchant_id; ?>" />
 							<? if ($error_merchant_id) { ?>
 							<span class="error"><?= $error_merchant_id; ?></span>
 							<? } ?></td>
 					</tr>
 					<tr>
-						<td><span class="required"></span> <?= $entry_merchant_key; ?></td>
+						<td class="required"> <?= $entry_merchant_key; ?></td>
 						<td><input type="text" name="sagepay_us_merchant_key" value="<?= $sagepay_us_merchant_key; ?>" />
 							<? if ($error_merchant_key) { ?>
 							<span class="error"><?= $error_merchant_key; ?></span>

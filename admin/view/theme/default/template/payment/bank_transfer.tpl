@@ -14,7 +14,7 @@
 				<table class="form">
 					<? foreach ($languages as $language) { ?>
 					<tr>
-						<td><span class="required"></span> <?= $entry_bank; ?></td>
+						<td class="required"> <?= $entry_bank; ?></td>
 						<td><textarea name="bank_transfer_bank_<?= $language['language_id']; ?>" cols="80" rows="10"><?= isset(${'bank_transfer_bank_' . $language['language_id']}) ? ${'bank_transfer_bank_' . $language['language_id']} : ''; ?></textarea>
 							<img src="<?= HTTP_THEME_IMAGE . 'flags/<?= $language['image']; ?>'; ?>" title="<?= $language['name']; ?>" style="vertical-align: top;" /><br />
 							<? if (isset(${'error_bank_' . $language['language_id']})) { ?>

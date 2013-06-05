@@ -18,12 +18,12 @@
 				<div id="tab-general">
 					<table class="form">
 						<tr>
-							<td><span class="required"></span> <?= $entry_name; ?></td>
+							<td class="required"> <?= $entry_name; ?></td>
 							<td><input type="text" name="name" value="<?= $name; ?>" size="100" />
 							</td>
 						</tr>
 						<tr>
-							<td><span class="required"></span><?= $entry_keyword; ?></td>
+							<td class="required"><?= $entry_keyword; ?></td>
 							<td>
 								<input type="text" onfocus='generate_url_warning(this)' name="keyword" value="<?= $keyword; ?>" />
 								<a class='gen_url' onclick='generate_url(this)'><?= $button_generate_url; ?></a>

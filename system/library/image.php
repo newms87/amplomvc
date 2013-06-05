@@ -398,6 +398,9 @@ class Image
 				$g = ($rgb >> 8) & 0xFF;
 				$b = $rgb & 0xFF;
 				
+				//ignore boring gray / white / black colors
+				if($r === $g && $g === $b) continue;
+				
 				$colors['r'] += $r;
 				$colors['g'] += $g;
 				$colors['b'] += $b;

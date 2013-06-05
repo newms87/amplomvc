@@ -13,14 +13,14 @@
 		<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 			<table class="form">
 				<tr>
-					<td><span class="required"></span> <?= $entry_public_key; ?></td>
+					<td class="required"> <?= $entry_public_key; ?></td>
 					<td><input name="recaptcha_public_key" value="<?= $public_key; ?>" size="56"><br />
 						<? if ($error_public_key) { ?>
 						<span class="error"><?= $error_public_key; ?></span>
 						<? } ?></td>
 				</tr>
 				<tr>
-					<td><span class="required"></span> <?= $entry_private_key; ?></td>
+					<td class="required"> <?= $entry_private_key; ?></td>
 					<td><input name="recaptcha_private_key" value="<?= $private_key; ?>" size="56"><br />
 						<? if ($error_private_key) { ?>
 						<span class="error"><?= $error_private_key; ?></span>

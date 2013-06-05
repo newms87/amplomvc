@@ -5,8 +5,6 @@ class Admin_Controller_Catalog_Collection extends Controller
 	{
 		$this->load->language('catalog/collection');
 
-		$this->document->setTitle($this->_('heading_title'));
-		
 		$this->getList();
 	}
 
@@ -14,57 +12,47 @@ class Admin_Controller_Catalog_Collection extends Controller
 	{
 		$this->load->language('catalog/collection');
 
-		$this->document->setTitle($this->_('heading_title'));
-		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->Model_Catalog_Collection->addCollection($_POST);
 			
 			if (!$this->message->error_set()) {
 				$this->message->add('success',$this->_('text_success'));
+				
+				$this->url->redirect($this->url->link('catalog/collection'));
 			}
-			
-			unset($_POST);
-			
-			$this->getList();
 		}
-		else {
-			$this->getForm();
-		}
+	
+		$this->getForm();
 	}
 
 	public function update()
 	{
 		$this->load->language('catalog/collection');
 
-		$this->document->setTitle($this->_('heading_title'));
-		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->Model_Catalog_Collection->editCollection($_GET['collection_id'], $_POST);
 
 			if (!$this->message->error_set()) {
 				$this->message->add('success',$this->_('text_success'));
+				
+				$this->url->redirect($this->url->link('catalog/collection'));
 			}
-			
-			unset($_POST);
-			
-			$this->getList();
 		}
-		else {
-			$this->getForm();
-		}
+	
+		$this->getForm();
 	}
  
 	public function delete()
 	{
 		$this->load->language('catalog/collection');
- 
-		$this->document->setTitle($this->_('heading_title'));
 		
 		if (!empty($_GET['collection_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_Collection->deleteCollection($_GET['collection_id']);
 			
 			if (!$this->message->error_set()) {
 				$this->message->add('success',$this->_('text_success'));
+				
+				$this->url->redirect($this->url->link('catalog/collection'));
 			}
 		}
 
@@ -98,15 +86,19 @@ class Admin_Controller_Catalog_Collection extends Controller
 			if (!$this->error) {
 				if (!$this->message->error_set()) {
 					$this->message->add('success',$this->_('text_success'));
+					
+					$this->url->redirect($this->url->link('catalog/collection'));
 				}
 			}
 		}
 
-		$this->index();
+		$this->getList();
 	}
 
 	private function getList()
 	{
+		$this->document->setTitle($this->_('heading_title'));
+		
 		$this->template->load('catalog/collection_list');
 
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -119,8 +111,8 @@ class Admin_Controller_Catalog_Collection extends Controller
 			'type' => 'image',
 			'display_name' => $this->_('column_image'),
 			'filter' => false,
-			'sortable' => false,
-			//'sort_value' => '__image_sort__image'
+			'sortable' => true,
+			'sort_value' => '__image_sort__image',
 		);
 		
 		$columns['name'] = array(
@@ -157,31 +149,20 @@ class Admin_Controller_Catalog_Collection extends Controller
 		);
 		
 		//The Sort data
-		$data = array();
+		$sort_filter = array();
 		
-		$sort_defaults = array(
-			'sort' => 'name',
-			'order' => 'ASC',
-			'limit' => $this->config->get('config_admin_limit'),
-			'page' => 1,
-		);
-		
-		foreach ($sort_defaults as $key => $default) {
-			$data[$key] = $$key = isset($_GET[$key]) ? $_GET[$key] : $default;
-		}
-		
-		$data['start'] = ($page - 1) * $limit;
+		$this->sort->load_query_defaults($sort_filter, 'name', 'ASC');
 		
 		//Filter
 		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
 		
 		if ($filter_values) {
-			$data += $filter_values;
+			$sort_filter += $filter_values;
 		}
 		
 		//Retrieve the Filtered Table row data
-		$collection_total = $this->Model_Catalog_Collection->getTotalCollections($data);
-		$collections = $this->Model_Catalog_Collection->getCollections($data);
+		$collection_total = $this->Model_Catalog_Collection->getTotalCollections($sort_filter);
+		$collections = $this->Model_Catalog_Collection->getCollections($sort_filter);
 		
 		foreach ($collections as &$collection) {
 			$collection['actions'] = array(
@@ -206,9 +187,9 @@ class Admin_Controller_Catalog_Collection extends Controller
 		$tt_data = array(
 			'row_id'		=> 'collection_id',
 			'route'		=> 'catalog/collection',
-			'sort'		=> $sort,
-			'order'		=> $order,
-			'page'		=> $page,
+			'sort'		=> $sort_filter['sort'],
+			'order'		=> $sort_filter['order'],
+			'page'		=> $sort_filter['page'],
 			'sort_url'	=> $this->url->link('catalog/collection', $this->url->get_query('filter')),
 			'columns'	=> $columns,
 			'data'		=> $collections,
@@ -244,11 +225,13 @@ class Admin_Controller_Catalog_Collection extends Controller
 		//Action Buttons
 		$this->data['insert'] = $this->url->link('catalog/collection/insert', $url_query);
 		
-		//Pagination
-		$url_query = $this->url->get_query('filter', 'sort', 'order');
+		//Item Limit Menu
+		$this->data['limits'] = $this->sort->render_limit();
 		
+		//Pagination
 		$this->pagination->init();
 		$this->pagination->total = $collection_total;
+		
 		$this->data['pagination'] = $this->pagination->render();
 		
 		//Template Children
@@ -263,6 +246,8 @@ class Admin_Controller_Catalog_Collection extends Controller
 
 	private function getForm()
 	{
+		$this->document->setTitle($this->_('heading_title'));
+		
 		$this->language->load('catalog/collection');
 		
 		$this->template->load('catalog/collection_form');
@@ -308,7 +293,7 @@ class Admin_Controller_Catalog_Collection extends Controller
 				$this->data[$key] = $_POST[$key];
 			} elseif (isset($collection_info[$key])) {
 				$this->data[$key] = $collection_info[$key];
-			} elseif (!$collection_id) {
+			} else {
 				$this->data[$key] = $default;
 			}
 		}

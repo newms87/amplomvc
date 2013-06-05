@@ -2,18 +2,18 @@
 	<p><?= $text_shipping_detail; ?></p>
 	<table>
 		<tr>
-			<td><span class="required"></span> <?= $entry_country; ?></td>
+			<td class="required"> <?= $entry_country; ?></td>
 			<td>
 				<? $this->builder->set_config('country_id', 'name');?>
 				<?= $this->builder->build('select', $countries, "country_id", $country_id, array('class'=>'country_select')); ?>
 			</td>
 		</tr>
 		<tr>
-			<td><span class="required"></span> <?= $entry_zone; ?></td>
+			<td class="required"> <?= $entry_zone; ?></td>
 			<td><select name="zone_id" class="zone_select" zone_id="<?= $zone_id; ?>"></select></td>
 		</tr>
 		<tr>
-			<td><span class="required"></span> <?= $entry_postcode; ?></td>
+			<td class="required"> <?= $entry_postcode; ?></td>
 			<td><input type="text" name="postcode" value="<?= $postcode; ?>" /></td>
 		</tr>
 	</table>

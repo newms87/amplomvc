@@ -3,102 +3,99 @@ class Catalog_Model_Catalog_Category extends Model
 {
 	public function getCategory($category_id)
 	{
-		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_description cd ON (c.category_id = cd.category_id) LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c.category_id = c2s.category_id) WHERE c.category_id = '" . (int)$category_id . "' AND cd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND c2s.store_id = '" . (int)$this->config->get('config_store_id') . "' AND c.status = '1'");
+		$category = $this->query_row(
+			"SELECT * FROM " . DB_PREFIX . "category c" .
+			" LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c.category_id = c2s.category_id)" .
+			" WHERE c.category_id = '" . (int)$category_id . "' AND c2s.store_id = '" . (int)$this->config->get('config_store_id') . "' AND c.status = '1'"
+		);
 		
-		return $query->row;
+		if ($category) {
+			$this->translation->translate('category', $category_id, $category);
+		}
+		
+		return $category;
 	}
 	
 	public function getCategories($parent_id = 0)
 	{
 		$parent = '';
+		
 		if ($parent_id >= 0) {
 			$parent = "c.parent_id = '" . (int)$parent_id . "' AND";
 		}
 		
-		$query = $this->query(
-				"SELECT * FROM " . DB_PREFIX . "category c " .
-				"LEFT JOIN " . DB_PREFIX . "category_description cd ON (c.category_id = cd.category_id) " .
-				"LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c.category_id = c2s.category_id) " .
-				"WHERE $parent cd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND c2s.store_id = '" . (int)$this->config->get('config_store_id') . "'  AND c.status = '1' ORDER BY c.sort_order, LCASE(cd.name)");
+		//TODO: Need vastly improved API
+		$categories = $this->query_rows(
+			"SELECT * FROM " . DB_PREFIX . "category c " .
+			"LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c.category_id = c2s.category_id) " .
+			"WHERE $parent AND c2s.store_id = '" . (int)$this->config->get('config_store_id') . "'  AND c.status = '1' ORDER BY c.sort_order, LCASE(name)"
+		);
+		
+		foreach ($categories as &$category) {
+			$this->translation->translate('category', $category['category_id'], $category);
+		}
 		
 		return $query->rows;
 	}
-
-	public function getCategoriesByParentId($category_id)
+	
+	public function getParents($category_id)
 	{
-		$category_data = array();
+		$language_id = $this->config->get('config_language_id');
 		
-		$category_query = $this->query("SELECT category_id FROM " . DB_PREFIX . "category WHERE parent_id = '" . (int)$category_id . "'");
+		$parents = $this->cache->get("category.parents.$category_id.$language_id");
 		
-		foreach ($category_query->rows as $category) {
-			$category_data[] = $category['category_id'];
+		if (!$parents) {
+			$parents = array();
 			
-			$children = $this->getCategoriesByParentId($category['category_id']);
+			$parent_id = $category_id;
 			
-			if ($children) {
-				$category_data = array_merge($children, $category_data);
+			while ($parent_id > 0) {
+				$parent = $this->query_row("SELECT * FROM " . DB_PREFIX . "category WHERE category_id = '" . (int)$parent_id . "' LIMIT 1");
+				
+				if (!$parent) {
+					break;
+				}
+				
+				$parent_id = (int)$parent['parent_id'];
+				
+				if ($parent['category_id'] == $category_id) {
+					continue;
+				} 
+				
+				if (isset($parents[$parent_id])) {
+					trigger_error("There is a circular reference for parent categories for $category_id!");
+					exit();
+				}
+				
+				$this->translation->translate('category', $parent_id, $parent);
+				
+				$parents[$parent_id] = $parent;
 			}
+			
+			$this->cache->set("category.parents.$category_id.$language_id", $parents);
 		}
 		
-		return $category_data;
+		return $parents;
 	}
 	
-	/**
-	* This retrieves all the catgegories into an array tree
-	* It does not include categories that have no products in it, however
-	* if a product was deleted (and was the last in the category) the cache will
-	* first have to expire before getting the updated category list.
-	*/
-	public function getAllCategories()
+	public function hasAttributeGroup($category_id, $attribute_group_id)
 	{
-		$lang_id = (int)$this->config->get('config_language_id');
-		$store_id = (int)$this->config->get('config_store_id');
-		$categories = $this->cache->get("category.all.$store_id.$lang_id");
-		
-		if (!$categories || true) {
-			$dt_zero = DATETIME_ZERO;
-			$product_check = "(SELECT COUNT(*) FROM " . DB_PREFIX . "product p" .
-								" JOIN " . DB_PREFIX . "product_to_category p2c ON (p2c.product_id=p.product_id)" .
-								" JOIN " . DB_PREFIX . "manufacturer m ON(m.manufacturer_id=p.manufacturer_id AND m.status='1' AND (m.date_expires='$dt_zero' OR m.date_expires > NOW()))" .
-								" WHERE p.status='1' AND p2c.category_id = c.category_id AND (p.date_available='$dt_zero' OR p.date_available < NOW()) AND (p.date_expires='$dt_zero' OR p.date_expires > NOW())) as num_products";
+		$query = 
+			"SELECT COUNT(*) FROM " . DB_PREFIX . "product_to_category pc" .
+			" LEFT JOIN " . DB_PREFIX . "product_attribute pa ON (pc.product_id=pa.product_id)" .
+			" LEFT JOIN " . DB_PREFIX . "attribute a ON (a.attribute_id=pa.attribute_id)" .
+			" WHERE a.attribute_group_id = '" . (int)$attribute_group_id . "' AND pc.category_id = '" . (int)$category_id . "' LIMIT 1";
 			
-			$query = $this->query("SELECT c.*, cd.*, $product_check FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_description cd ON (c.category_id = cd.category_id) LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c.category_id = c2s.category_id)" .
-											" WHERE c2s.store_id = '$store_id' AND cd.language_id = '$lang_id' AND c.status = '1' ORDER BY c.parent_id, LCASE(cd.name)");
-			
-			if(!isset($query->rows))return null;
-			
-			//Disclude any empty
-			foreach ($query->rows as $key=>$qr) {
-				if($qr['num_products'] == 0) unset($query->rows[$key]);
-			}
-			
-			$categories = $query->rows;
-			foreach ($categories as &$cat) {
-				if ($cat['parent_id'] > 0) {
-					foreach ($categories as &$cat_parent) {
-						if ($cat_parent['category_id'] == $cat['parent_id']) {
-						$cat_parent['children'][] = $cat;
-						}
-					}
-				}
-			}
-			
-			foreach ($categories as $key=>$cat) {
-				if ($cat['parent_id'] != 0) {
-					unset($categories[$key]);
-				}
-			}
-			
-			$this->cache->set("category.all.$store_id.$lang_id", $categories);
-		}
-		return $categories;
+		return $this->query_var($query);
 	}
 	
 	public function getCategoryName($category_id)
 	{
-		$result = $this->query("SELECT * FROM " . DB_PREFIX . "category_description WHERE category_id='" . (int)$category_id . "'");
+		$category = $this->query_row("SELECT name FROM " . DB_PREFIX . "category WHERE category_id='" . (int)$category_id . "'");
 		
-		return $result->row['name'];
+		$this->translation->translate('category', $category_id, $category);
+		
+		return $category['name'];
 	}
 	
 	public function getCategoryLayoutId($category_id)

@@ -26,7 +26,9 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 		);
 		
 		//Product Attributes Filter
-		if ($collection_id) {
+		if ($category_id || $collection_id) {
+			$route = !empty($collection_id) ? 'product/collection' : 'product/category';
+			
 			$current_filter = isset($_GET['attribute']) ? $_GET['attribute'] : array();
 			
 			$url_query = $this->url->get_query('collection_id', 'category_id');
@@ -34,7 +36,11 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 			foreach ($settings['attributes'] as $attribute_menu) {
 				$attribute_group_id = $attribute_menu['attribute_group_id'];
 				
-				if (!$this->Model_Catalog_Collection->hasAttributeGroup($collection_id, $attribute_group_id)) continue;
+				if ($collection_id) {
+					if (!$this->Model_Catalog_Collection->hasAttributeGroup($collection_id, $attribute_group_id)) continue;
+				} else {
+					if (!$this->Model_Catalog_Category->hasAttributeGroup($category_id, $attribute_group_id)) continue;
+				}
 				
 				$attribute_list = $this->Model_Catalog_Product->getAttributeList($attribute_group_id);
 				
@@ -45,7 +51,7 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 					$attribute_filter[$attribute_group_id] = $attribute['attribute_id'];
 					$attribute_query = http_build_query(array('attribute' => $attribute_filter));
 				
-					$attribute['href'] = $this->url->link('product/collection', $url_query . '&' . $attribute_query);
+					$attribute['href'] = $this->url->link($route, $url_query . '&' . $attribute_query);
 				}
 				
 				//Remove Filter for this attribute for the All menu link
@@ -55,7 +61,7 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 				
 				$menu = array(
 					'name' => $attribute_menu['group_name'],
-					'href' => $this->url->link('product/collection', $url_query . '&' . $attribute_query),
+					'href' => $this->url->link($route, $url_query . '&' . $attribute_query),
 					'children' => $attribute_list,
 				);
 				
@@ -65,7 +71,6 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 				);
 			}
 		}
-		
 		
 		//TODO: move this to admin panel once we implement!
 		$page_links = array();
@@ -95,7 +100,7 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 			
 			$menu_item = array(
 				'name' => $collection['name'],
-				'href' => $this->url->link('product/collection', 'category_id=' . $collection['category_id']),
+				'href' => $this->url->link('product/category', 'category_id=' . $collection['category_id']),
 			);
 			
 			if ((int)$collection['parent_id'] == 0) {

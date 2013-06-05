@@ -15,9 +15,16 @@ class Catalog_Controller_Block_Product_List extends Controller
 		$this->data['show_price_tax'] = $this->config->get('config_show_price_with_tax');
 		$this->data['review_status'] = $this->config->get('config_review_status');
 		
+		$image_width = $this->config->get('config_image_product_width');
+		$image_height = $this->config->get('config_image_product_height');
+		
 		if ($process_data) {
 			foreach ($data as &$item) {
-				$item['thumb'] = $this->image->resize($item['image'], $this->config->get('config_image_product_width'), $this->config->get('config_image_product_height'));
+				$item['thumb'] = $this->image->resize($item['image'], $image_width, $image_height);
+				
+				if (!$item['thumb']) {
+					$item['thumb'] = $this->image->resize('no_image.png', $image_width, $image_height);
+				}
 				
 				if (($this->config->get('config_customer_price') ? $this->customer->isLogged() : true)) {
 					if (!empty($item['price'])) {

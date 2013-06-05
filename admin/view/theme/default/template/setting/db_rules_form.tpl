@@ -12,11 +12,11 @@
 				<div id="tab-general">
 					<table class="form">
 						<tr>
-							<td><span class="required"></span> <?= $entry_table; ?></td>
+							<td class="required"> <?= $entry_table; ?></td>
 							<td><input type="text" name="table" value="<?= $table; ?>" size="40" /></td>
 						</tr>
 						<tr>
-							<td><span class="required"></span> <?= $entry_column; ?></td>
+							<td class="required"> <?= $entry_column; ?></td>
 							<td><input type="text" name="column" value="<?= $column; ?>" size="40" />
 						</tr>
 						<tr>

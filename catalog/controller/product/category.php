@@ -7,29 +7,31 @@ class Catalog_Controller_Product_Category extends Controller
 		$this->template->load('product/category');
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		
-		//Sorting / Filtering
-		$sort_filter = array();
-		
-		$this->sort->load_query_defaults($sort_filter, 'sort_order', 'ASC');
-		
-		$product_total = $this->Model_Catalog_Product->getTotalProducts($sort_filter);
-		$products = $this->Model_Catalog_Product->getProducts($sort_filter);
+		$this->breadcrumb->add($this->_('text_all_categories'), $this->url->link('product/category'));
 		
 		$category_id = !empty($_GET['category_id']) ? (int)$_GET['category_id'] : 0;
+		$attributes = isset($_GET['attribute']) ? $_GET['attribute'] : 0;
 		
 		$category_info = $this->Model_Catalog_Category->getCategory($category_id);
 		
 		if ($category_info) {
 			$this->document->setTitle($category_info['name']);
 			$this->document->setDescription($category_info['meta_description']);
-			$this->document->setKeywords($category_info['meta_keyword']);
+			$this->document->setKeywords($category_info['meta_keywords']);
 			
 			$this->language->set('heading_title', $category_info['name']);
 			
 			$this->data['thumb'] = $this->image->resize($category_info['image'], $this->config->get('config_image_category_width'), $this->config->get('config_image_category_height'));
 			
 			$this->data['description'] = html_entity_decode($category_info['description'], ENT_QUOTES, 'UTF-8');
+			
+			$parents = $this->Model_Catalog_Category->getParents($category_id);
+			
+			foreach ($parents as $parent) {
+				$this->breadcrumb->add($parent['name'], $this->url->link('product/category', 'category_id=' . $parent['category_id']));
+			}
+			
+			$this->breadcrumb->add($category_info['name'], $this->url->link('product/category', 'category_id=' . $category_id));
 		}
 		else {
 			$this->document->setTitle($this->_('text_title_all'));
@@ -43,32 +45,25 @@ class Catalog_Controller_Product_Category extends Controller
 			$this->data['description'] = $this->_('text_description_all');
 		}
 		
-		//Sub Categories
-		$url = $this->url->get_query('sort','order','limit');
+		//TODO: How do we handle sub categories....?
 		
-		$this->data['categories'] = array();
+		//Sorting / Filtering
+		$sort_filter = array();
+		$this->sort->load_query_defaults($sort_filter, 'p.sort_order', 'ASC');
 		
-		$results = $this->Model_Catalog_Category->getCategories($category_id);
-		
-		foreach ($results as $result) {
-			$data = array(
-				'filter_category_id'  => $result['category_id'],
-				'filter_sub_category' => true
-			);
-			
-			$product_total = $this->Model_Catalog_Product->getTotalProducts($data);
-			
-			$this->data['categories'][] = array(
-				'name'  => $result['name'] . ' (' . $product_total . ')',
-				'href'  => $this->url->link('product/category', 'category_id=' . $result['category_id'] . '&' . $url)
-			);
+		if ($category_id) {
+			$sort_filter['category_ids'] = array($category_id);
 		}
 		
-		$sort_filter['category_id'] = $category_id;
+		if ($attributes) {
+			$sort_filter['attribute'] = $attributes;
+		}
 		
+		html_dump($sort_filter,'filter');
 		$product_total = $this->Model_Catalog_Product->getTotalProducts($sort_filter);
 		$products = $this->Model_Catalog_Product->getProducts($sort_filter);
 		
+		html_dump($products,'products');
 		$params = array(
 			'data' => $products,
 			'template' => 'block/product/product_list',
@@ -77,7 +72,7 @@ class Catalog_Controller_Product_Category extends Controller
 		$this->data['block_product_list'] = $this->getBlock('product/list', $params);
 		
 		//Sorting
-		$this->data['sorts'] = array(
+		$sorts = array(
 			'sort=p.sort_order&order=ASC' => $this->_('text_default'),
 			'sort=pd.name&order=ASC' => $this->_('text_name_asc'),
 			'sort=pd.name&order=DESC' => $this->_('text_name_desc'),
@@ -88,8 +83,8 @@ class Catalog_Controller_Product_Category extends Controller
 		);
 		
 		if ($this->config->get('config_review_status')) {
-			$this->data['sorts']['sort=rating&order=ASC'] = $this->_('text_rating_asc');
-			$this->data['sorts']['sort=rating&order=DESC'] = $this->_('text_rating_desc');
+			$sorts['sort=rating&order=ASC'] = $this->_('text_rating_asc');
+			$sorts['sort=rating&order=DESC'] = $this->_('text_rating_desc');
 		}
 		
 		$this->data['sorts'] = $this->sort->render_sort($sorts);

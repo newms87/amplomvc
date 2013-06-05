@@ -321,11 +321,14 @@ class Admin_Controller_Catalog_Attribute extends Controller
 		if (!$this->user->hasPermission('modify', 'catalog/attribute')) {
 				$this->error['warning'] = $this->_('error_permission');
 		}
-	
+		
 		foreach ($_POST['attribute_description'] as $language_id => $value) {
-				if ((strlen($value['name']) < 3) || (strlen($value['name']) > 64)) {
+			if ((strlen($value['name']) < 3) || (strlen($value['name']) > 64)) {
 				$this->error['name'][$language_id] = $this->_('error_name');
+				if ($this->db->query_var("SELECT COUNT(*) FROM " . DB_PREFIX . "attribute_description WHERE `name` = '$value[name]' AND language_id = '$language_id'")) {
+					$this->error['name'] = $this->_error('error_name_duplicate');
 				}
+			}
 		}
 		
 		return $this->error ? false : true;

@@ -45,7 +45,12 @@ class Admin_Controller_Catalog_Product extends Controller
 //>>>>> {php}
 		$this->language->plugin('collections', 'admin/product');
 		
-		$this->data['data_collections'] = $this->Model_Catalog_Collection->getCollections();
+		$collection_sort = array(
+			'sort' => 'name',
+			'order' => 'ASC',
+		);
+		
+		$this->data['data_collections'] = $this->Model_Catalog_Collection->getCollections($collection_sort);
 		
 		if (!isset($this->data['product_collection'])) {
 			$this->data['product_collection'] = $this->Model_Catalog_Collection->getCollectionsForProduct($product_id);

@@ -104,7 +104,9 @@ class Admin_Controller_Localisation_Language extends Controller
 			'limit' => $this->config->get('config_admin_limit')
 		);
 		
-		$language_total = $this->Model_Localisation_Language->getTotalLanguages();
+		$data['status'] = array(-1,1,0);
+		
+		$language_total = $this->Model_Localisation_Language->getTotalLanguages($data);
 		
 		$results = $this->Model_Localisation_Language->getLanguages($data);
 

@@ -32,7 +32,7 @@
 					<div id="language<?= $language['language_id']; ?>">
 						<table class="form">
 							<tr>
-								<td><span class="required"></span> <?= $entry_name; ?></td>
+								<td class="required"> <?= $entry_name; ?></td>
 								<td><input type="text" name="product_description[<?= $language['language_id']; ?>][name]" size="100" value="<?= isset($product_description[$language['language_id']]) ? $product_description[$language['language_id']]['name'] : ''; ?>" /></td>
 							</tr>
 							<tr>
@@ -66,14 +66,14 @@
 				<div id="tab-data">
 					<table class="form">
 						<tr>
-							<td><span class="required"></span> <?= $entry_model; ?></td>
+							<td class="required"> <?= $entry_model; ?></td>
 							<td>
 								<input type="text" name="model" value="<?= $model; ?>" />
 								<a class='gen_url' onclick='generate_model(this)'><?= $button_generate_model; ?></a>
 							</td>
 						</tr>
 						<tr>
-							<td><span class="required"></span><?= $entry_keyword; ?></td>
+							<td class="required"><?= $entry_keyword; ?></td>
 							<td>
 								<input type="text" onfocus='generate_url_warning(this)' name="keyword" value="<?= $keyword; ?>" />
 								<a class='gen_url' onclick='generate_url(this)'><?= $button_generate_url; ?></a>
@@ -483,49 +483,38 @@
 					</table>
 				</div>
 				<div id="tab-image">
-					<div style="padding:6px 0;">
-						<a style="float:right;margin-right:10px;" onclick="image_manager();" class="button">File Manager</a>
-						<div style="clear:both;"></div>
-					</div>
+					<? //TODO: add in multiimage selector! ?>
 					<table id="images" class="list">
 						<thead>
 							<tr>
-								<td class="left"><?= $entry_image; ?></td>
-								<td class="left"><?= $entry_filename; ?></td>
-								<td class="right"><?= $entry_primary; ?></td>
-								<td class="right"><?= $entry_sort_order; ?></td>
+								<td class="center"><?= $entry_image; ?></td>
+								<td class="center"><?= $entry_sort_order; ?></td>
 								<td></td>
 							</tr>
 						</thead>
-						<tbody>
-							<? $image_row = 0; ?>
-							<? foreach ($product_images as $product_image) { ?>
-									<? $image_selected = false;
-									if($image == $product_image['image'])
-											$image_selected = true;
-									?>
+						<tbody id="product_image_list">
+							<? $product_images['template_row'] = array(
+								'image' => '%image%',
+								'thumb' => '%thumb%',
+								'sort_order' => '%sort_order%',
+							); ?>
 							
-									<tr class="imagerow" id="image-row<?= $image_row; ?>">
-									<td class="left">
-										<div class="image">
-											<img src="<?= $product_image['thumb']; ?>" alt="<?= $product_image['image']; ?>" title="<?= $product_image['image']; ?>" id="thumb<?= $image_row; ?>" />
-											<input type="hidden" name="product_images[<?= $image_row; ?>][image]" value="<?= $product_image['image']; ?>" id="image<?= $image_row; ?>" />
-											<br />
-											<a onclick="upload_images('image<?= $image_row; ?>','thumb<?= $image_row; ?>',<?= $image_row; ?>);"><?= $text_browse; ?></a>
-										</div>
+							<? $image_row = 0; ?>
+							<? foreach ($product_images as $key => $product_image) { ?>
+								<? $row = $key === 'template_row' ? '%image_row%' : $image_row++; ?>
+								<tr class="product_image <?= $key; ?>">
+									<td class="center">
+										<?= $this->builder->image_input("product_images[$row][image]", $product_image['image']); ?>
 									</td>
-									<td class="left"><?= $product_image['image']; ?></td>
-									<td class="right"><input type="radio" name="primary_product_image" <?= $image_selected ? 'checked=checked':''; ?> value="<?= $product_image['image']; ?>" /></td>
-									<td class="right"><input class="sortOrder" type="text" name="product_images[<?= $image_row; ?>][sort_order]" value="<?= $product_image['sort_order']; ?>" size="2" /></td>
-									<td class="left"><a onclick="$('#image-row<?= $image_row; ?>').remove();" class="button"><?= $button_remove; ?></a></td>
+									<td class="center"><input class="sortOrder" type="text" name="product_images[<?= $row; ?>][sort_order]" value="<?= $product_image['sort_order']; ?>" size="2" /></td>
+									<td class="left"><a onclick="$(this).closest('.product_image').remove();" class="button"><?= $button_remove; ?></a></td>
 								</tr>
-								<? $image_row++; ?>
 							<? } ?>
 						</tbody>
 						<tfoot>
 							<tr>
-								<td colspan="3"></td>
-								<td class="left"><a onclick="image_manager();" class="button">File Manager</a></td>
+								<td colspan="2"></td>
+								<td><a class="button" onclick="add_product_image_row()"><?= $button_add_image; ?></a></td>
 							</tr>
 						</tfoot>
 					</table>
@@ -590,6 +579,25 @@
 </div>
 
 <?= $this->builder->js('ckeditor'); ?>
+
+<script type="text/javascript">//<!--
+var temp = $('#product_image_list').find('.template_row');
+var image_template = temp.html();
+temp.remove();
+
+var image_row = <?= $image_row; ?>;
+
+function add_product_image_row(){
+	template = image_template
+		.replace(/%image_row%/g, image_row)
+		.replace(/%image%/g, "<?= $no_image; ?>")
+		.replace(/%sort_order%/g, $('#product_image_list').children().length);
+	
+	$('#product_image_list').append($('<tr class="product_image ' + image_row + '" />').append(template));
+	
+	image_row++;
+};
+//--></script>
 
 <script type="text/javascript">//<!--
 function generate_url_warning(field){
@@ -663,7 +671,7 @@ $('#product-related div img').live('click', function() {
 	$('#product-related div:even').attr('class', 'even');
 });
 //--></script>
-<script type="text/javascript"><!--
+<script type="text/javascript">//<!--
 var attribute_row = <?= $attribute_row; ?>;
 
 function addAttribute() {

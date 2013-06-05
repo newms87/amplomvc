@@ -181,6 +181,15 @@
  </tbody>
 </table>
 
+<script type="text/javascript">//<!--
+$("#filter_list").keydown(function(e){
+	if (e.keyCode == 13) {
+		filter();
+		return false;
+	}
+});
+//--></script>
+
 <?= $this->builder->js('filter_url', '#filter_list', $route); ?>
 
 <?= $this->builder->js('datepicker'); ?>

@@ -123,6 +123,11 @@ class Sort
 			$limits = $this->limits;
 		}
 		
+		//Set limit for pagination compatibility
+		if (empty($_GET['limit']) || $_GET['limit'] !== $limit) {
+			$_GET['limit'] = $limit;
+		}
+		
 		extract($this->language_data);
 		
 		ob_start();

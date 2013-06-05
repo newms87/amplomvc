@@ -13,14 +13,14 @@
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="form">
 					<tr>
-						<td><span class="required"></span> <?= $entry_merchant; ?></td>
+						<td class="required"> <?= $entry_merchant; ?></td>
 						<td><input type="text" name="authorizenet_merchant" value="<?= $authorizenet_merchant; ?>" />
 							<? if ($error_merchant) { ?>
 							<span class="error"><?= $error_merchant; ?></span>
 							<? } ?></td>
 					</tr>
 					<tr>
-						<td><span class="required"></span> <?= $entry_key ?></td>
+						<td class="required"> <?= $entry_key ?></td>
 						<td><input type="text" name="authorizenet_key" value="<?= $authorizenet_key; ?>" />
 							<? if ($error_key) { ?>
 							<span class="error"><?= $error_key; ?></span>

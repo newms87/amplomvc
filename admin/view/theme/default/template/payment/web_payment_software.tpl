@@ -13,14 +13,14 @@
 		<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 			<table class="form">
 				<tr>
-					<td><span class="required"></span> <?= $entry_login; ?></td>
+					<td class="required"> <?= $entry_login; ?></td>
 					<td><input type="text" name="web_payment_software_merchant_name" value="<?= $web_payment_software_merchant_name; ?>" />
 						<? if ($error_login) { ?>
 						<span class="error"><?= $error_login; ?></span>
 						<? } ?></td>
 				</tr>
 				<tr>
-					<td><span class="required"></span> <?= $entry_key; ?></td>
+					<td class="required"> <?= $entry_key; ?></td>
 					<td><input type="text" name="web_payment_software_merchant_key" value="<?= $web_payment_software_merchant_key; ?>" />
 						<? if ($error_key) { ?>
 						<span class="error"><?= $error_key; ?></span>

@@ -11,6 +11,8 @@ $_['text_clear']				= 'Clear Image';
 
 // Column
 $_['column_name']				= 'Category Name';
+$_['column_image']		= 'Image';
+$_['column_store']		= 'Stores';
 $_['column_sort_order']		= 'Sort Order';
 $_['column_action']			= 'Action';
 

@@ -2405,6 +2405,10 @@ table.form_single_column select{
 	text-decoration: none;
 }
 
+#links_footer ul.link_list.top_menu > li:hover > a{
+	padding-bottom:0;
+}
+
 #footer .links .active{
 	background: #CCC;
 }
