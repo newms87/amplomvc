@@ -363,8 +363,6 @@ class Image
 		if (!$this->register_safe_shutdown($image)) {
 			list($width, $height) = getimagesize($image);
 			$image = $this->resize($image, $width/2, $height/2);
-			echo $image . 'is new';
-			exit;
 			trigger_error("Safe shutdown limit exceeded! Cannot process image");
 			$this->unregister_safe_shutdown();
 			return array('r' => 0, 'g' => 0, 'b' => 0);
