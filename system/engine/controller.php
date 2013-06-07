@@ -104,7 +104,7 @@ abstract class Controller
 	}
 	
 	protected function render()
-	{	
+	{
 		//Build Errors
 		$this->data['errors'] = array();
 		if ($this->error) {

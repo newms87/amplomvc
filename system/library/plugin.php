@@ -48,6 +48,10 @@ class Plugin{
 	
 	public function getFile($file)
 	{
+		if (isset($this->plugin_registry[$file])) {
+			$this->syncPluginFileWithLive($this->plugin_registry[$file]);
+		}
+		
 		return $this->file_merge->getFile($file);
 	}
 	
