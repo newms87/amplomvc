@@ -87,6 +87,8 @@ class Admin_Controller_Catalog_Product extends Controller
 	
 	public function batch_update()
 	{
+		$this->load->language('catalog/product');
+		
 		if (isset($_POST['selected']) && isset($_GET['action']) && $this->validateCopy()) {
 			foreach ($_POST['selected'] as $product_id) {
 				switch($_GET['action']){
@@ -278,8 +280,6 @@ class Admin_Controller_Catalog_Product extends Controller
 			$product['thumb'] = $this->image->resize($product['image'], $this->config->get('config_image_admin_list_width'), $this->config->get('config_image_admin_list_height'));
 			
 			$product['categories'] = $this->Model_Catalog_Product->getProductCategories($product['product_id']);
-			
-			$product['collections'] = $this->Model_Catalog_Collection->getCollectionsForProduct($product['product_id']);
 			
 			$product['price'] = $this->currency->format($product['price']);
 			$product['cost'] = $this->currency->format($product['cost']);

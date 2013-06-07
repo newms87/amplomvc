@@ -442,6 +442,22 @@ class Plugin{
 		$this->cache->delete("plugin");
 	}
 	
+	public function addFileModifications($name, $file_modifications) {
+		foreach($file_modifications as $file_mod) {
+			$this->file_merge->addFile($file_mod['for'], $name, $file_mod['mod']);
+		}
+
+		$this->file_merge->applyMergeRegistry();
+	}
+	
+	public function removeFileModifications($name, $file_modifications) {
+		foreach($file_modifications as $file_mod) {
+			$this->file_merge->removeFile($file_mod['for'], $name);
+		}
+		
+		$this->file_merge->applyMergeRegistry();
+	}
+	
 	public function getFileMods($name)
 	{
 		$dir = DIR_PLUGIN . $name . '/file_mods';

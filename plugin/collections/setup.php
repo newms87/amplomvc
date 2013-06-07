@@ -89,8 +89,6 @@ SQL;
 	
 	public function uninstall($keep_data = false)
 	{
-		$keep_data = true;
-		
 		//Remove Collections Navigation
 		$this->extend->remove_navigation_link(COLLECTION_NAVIGATION_LINK_NAME);
 		

@@ -285,115 +285,7 @@ class Admin_Model_Design_Navigation extends Model
 				'sort_order'	=> 0,
 				'status'			=> 1,
 			),
-	
-			'magazine_content' => array(
-				'display_name'	=> 'Magazine Content',
-				'name'			=> 'magazine_content',
-				'title'			=> '',
-				'href'			=> '',
-				'query'			=> '',
-				'is_route'		=> 0,
-				'parent_id'		=> '',
-				'sort_order'	=> 1,
-				'status'			=> 1,
-			),
-	
-				'magazine_content_articles' => array(
-					'display_name'	=> 'Articles',
-					'name'			=> 'magazine_content_articles',
-					'title'			=> '',
-					'href'			=> 'cms/article',
-					'query'			=> '',
-					'is_route'		=> 1,
-					'parent_id'		=> 'magazine_content',
-					'sort_order'	=> 0,
-					'status'			=> 1,
-				),
-	
-				'magazine_content_rss_articles' => array(
-					'display_name'	=> 'RSS Articles',
-					'name'			=> 'magazine_content_rss_articles',
-					'title'			=> '',
-					'href'			=> 'module/rss_article',
-					'query'			=> '',
-					'is_route'		=> 1,
-					'parent_id'		=> 'magazine_content',
-					'sort_order'	=> 1,
-					'status'			=> 1,
-				),
-	
-				'magazine_content_categories' => array(
-					'display_name'	=> 'Categories',
-					'name'			=> 'magazine_content_categories',
-					'title'			=> '',
-					'href'			=> 'cms/category',
-					'query'			=> '',
-					'is_route'		=> 1,
-					'parent_id'		=> 'magazine_content',
-					'sort_order'	=> 2,
-					'status'			=> 1,
-				),
-	
-			'flashsales' => array(
-				'display_name'	=> 'Flashsales',
-				'name'			=> 'flashsales',
-				'title'			=> '',
-				'href'			=> '',
-				'query'			=> '',
-				'is_route'		=> 0,
-				'parent_id'		=> '',
-				'sort_order'	=> 2,
-				'status'			=> 1,
-			),
-	
-				'flashsales_new_flashsales' => array(
-					'display_name'	=> 'New Flashsales',
-					'name'			=> 'flashsales_new_flashsales',
-					'title'			=> '',
-					'href'			=> 'catalog/flashsale/insert',
-					'query'			=> '',
-					'is_route'		=> 1,
-					'parent_id'		=> 'flashsales',
-					'sort_order'	=> 0,
-					'status'			=> 1,
-				),
-	
-				'flashsales_flashsales' => array(
-					'display_name'	=> 'Flashsales',
-					'name'			=> 'flashsales_flashsales',
-					'title'			=> '',
-					'href'			=> 'catalog/flashsale',
-					'query'			=> '',
-					'is_route'		=> 1,
-					'parent_id'		=> 'flashsales',
-					'sort_order'	=> 1,
-					'status'			=> 1,
-				),
-	
-				'flashsales_featured_flashsales' => array(
-					'display_name'	=> 'Featured Flashsales',
-					'name'			=> 'flashsales_featured_flashsales',
-					'title'			=> '',
-					'href'			=> 'module/featured_flashsale',
-					'query'			=> '',
-					'is_route'		=> 1,
-					'parent_id'		=> 'flashsales',
-					'sort_order'	=> 2,
-					'status'			=> 1,
-				),
-	
-				'flashsales_flashsale_sidebar' => array(
-					'display_name'	=> 'Flashsale Sidebar',
-					'name'			=> 'flashsales_flashsale_sidebar',
-					'title'			=> '',
-					'href'			=> 'module/flashsale_sidebar',
-					'query'			=> '',
-					'is_route'		=> 1,
-					'parent_id'		=> 'flashsales',
-					'sort_order'	=> 3,
-					'status'			=> 1,
-				),
-	
+			
 			'content' => array(
 				'display_name'	=> 'Content',
 				'name'			=> 'content',
@@ -417,7 +309,19 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 0,
 					'status'			=> 1,
 				),
-	
+				
+				'content_pages' => array(
+					'display_name'	=> 'Pages',
+					'name'			=> 'content_pages',
+					'title'			=> '',
+					'href'			=> 'page/page',
+					'query'			=> '',
+					'is_route'		=> 1,
+					'parent_id'		=> 'content',
+					'sort_order'	=> 1,
+					'status'			=> 1,
+				),
+				
 				'content_featured_products' => array(
 					'display_name'	=> 'Featured Products',
 					'name'			=> 'content_featured_products',
@@ -426,7 +330,7 @@ class Admin_Model_Design_Navigation extends Model
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'content',
-					'sort_order'	=> 1,
+					'sort_order'	=> 2,
 					'status'			=> 1,
 				),
 	
@@ -435,18 +339,6 @@ class Admin_Model_Design_Navigation extends Model
 					'name'			=> 'content_leaderboard',
 					'title'			=> '',
 					'href'			=> 'module/page_headers',
-					'query'			=> '',
-					'is_route'		=> 1,
-					'parent_id'		=> 'content',
-					'sort_order'	=> 2,
-					'status'			=> 1,
-				),
-	
-				'content_bestsellers_list' => array(
-					'display_name'	=> 'Bestsellers List',
-					'name'			=> 'content_bestsellers_list',
-					'title'			=> '',
-					'href'			=> 'module/bestseller',
 					'query'			=> '',
 					'is_route'		=> 1,
 					'parent_id'		=> 'content',
@@ -460,21 +352,9 @@ class Admin_Model_Design_Navigation extends Model
 					'title'			=> '',
 					'href'			=> 'mail/newsletter',
 					'query'			=> '',
-					'is_route'		=> 1,
+					'is_route'		=> 4,
 					'parent_id'		=> 'content',
 					'sort_order'	=> 4,
-					'status'			=> 1,
-				),
-	
-				'content_featured_carousel' => array(
-					'display_name'	=> 'Featured Carousel',
-					'name'			=> 'content_featured_carousel',
-					'title'			=> '',
-					'href'			=> 'module/featured_carousel',
-					'query'			=> '',
-					'is_route'		=> 1,
-					'parent_id'		=> 'content',
-					'sort_order'	=> 5,
 					'status'			=> 1,
 				),
 	
@@ -1485,7 +1365,7 @@ class Admin_Model_Design_Navigation extends Model
 		$data = array(
 			'name' => 'admin',
 			'status' => 1,
-			'stores' => array(-1),
+			'stores' => array(0),
 			'links' => $links
 		);
 		
