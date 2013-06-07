@@ -76,6 +76,7 @@ $error_handler = function($errno, $errstr, $errfile, $errline) use($error_log, $
 		
 	if ($config->get('config_error_display')) {
 		echo '<b>' . $error . '</b>: ' . $errstr . ' in <b>' . $errfile . '</b> on line <b>' . $errline . '</b><br /><br />';
+		flush(); //Flush the error to block any redirects that may execute, this ensure errors are seen!
 	}
 	
 	if ($config->get('config_error_log')) {

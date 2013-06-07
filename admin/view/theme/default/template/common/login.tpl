@@ -25,7 +25,7 @@
 						<td>&nbsp;</td>
 					</tr>
 					<tr>
-						<td style="text-align: right;"><a onclick="$('#form').submit();" class="button"><?= $button_login; ?></a></td>
+						<td style="text-align: right;"><input type="submit" class="button" value="<?= $button_login; ?>" /></td>
 					</tr>
 				</table>
 			</form>

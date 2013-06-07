@@ -36,5 +36,5 @@ $_['button_generate_url']		="[Generate URL]";
 // Error
 $_['error_warning']			= 'Warning: Please check the form carefully for errors!';
 $_['error_permission']		= 'Warning: You do not have permission to modify categories!';
-$_['error_name']				= 'Category Name must be between 2 and 32 characters!';
+$_['error_name']				= 'Category Name must be between 2 and 64 characters!';
 $_['warning_generate_url']	= "<br>Warning! This may cause system instability! Please use the \'Generate URL\' button";
