@@ -54,14 +54,15 @@ class Admin_Controller_Page_Page extends Controller
 	public function delete()
 	{
 		$this->load->language('page/page');
-
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (isset($_POST['page_id']) && $this->validateDelete()) {
-			$this->Model_Page_Page->deletePage($_POST['page_id']);
+		if (isset($_GET['page_id']) && $this->validateDelete()) {
+			$this->Model_Page_Page->deletePage($_GET['page_id']);
 			
 			if (!$this->message->error_set()) {
 				$this->message->add('notify', $this->_('text_success_delete'));
+				
+				$this->url->redirect($this->url->link('page/page'));
 			}
 		}
 
