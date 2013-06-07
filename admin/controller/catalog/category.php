@@ -289,9 +289,7 @@ class Admin_Controller_Catalog_Category extends Controller
 			}
 		}
 		
-		$categories = array(0 => $this->_('text_none'));
-		
-		$categories += $this->Model_Catalog_Category->getCategories();
+		$categories = $this->Model_Catalog_Category->getCategories();
 		
 		// Remove own id from list
 		foreach ($categories as $key => $category) {
@@ -301,7 +299,7 @@ class Admin_Controller_Catalog_Category extends Controller
 			}
 		}
 		
-		$this->data['data_categories'] = $categories;
+		$this->data['data_categories'] = array(0 => $this->_('text_none')) + $categories;
 		
 		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
 		
