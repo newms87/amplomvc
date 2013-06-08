@@ -7,6 +7,18 @@ if (version_compare(phpversion(), '5.1.0', '<') == true) {
 	exit('PHP5.1+ Required');
 }
 
+//data
+define('DATETIME_ZERO','0000-00-00 00:00:00');
+
+//COOKIES
+$domain = parse_url(SITE_URL, PHP_URL_HOST);
+
+if ($domain === 'localhost') {
+	define('COOKIE_DOMAIN', '');
+} else {
+	define('COOKIE_DOMAIN', '.' . parse_url(SITE_URL, PHP_URL_HOST));
+}
+
 // Register Globals
 if (ini_get('register_globals')) {
 	ini_set('session.use_cookies', 'On');

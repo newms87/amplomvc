@@ -2,18 +2,23 @@
 // Version
 define('VERSION', '1.5.2.222');
 
-//data
-define('DATETIME_ZERO','0000-00-00 00:00:00');
+// Configuration
+if (is_file('oc_config.php')) {
+	require_once('oc_config.php');
+}
 
-$__start = microtime(true);
+// Install
+if (!defined('SITE_URL') || defined("AMPLOCART_INSTALL_USER")) {
+	define("AMPLOCART_INSTALL", true);
+	require_once('system/install/install.php');
+}
 
 if (isset($_GET['phpinfo'])) {
 	phpinfo();
 	exit;
 }
 
-// Configuration
-require_once('oc_config.php');
+$__start = microtime(true);
 
 //System / URL Paths
 require_once('path_config.php');
@@ -28,16 +33,6 @@ echo '<br /><br />pretty_language_done';
 exit;
 //*/
 
-
-// Install
-if (!defined('DIR_APPLICATION')) {
-	$install = SITE_URL . 'oc/install/index.php';
-	if(file_exists($install))
-		header('Location: ' . $install);
-	else
-		echo "Could not find installation file";
-	exit;
-}
 
 //File Merge for plugins
 require_once(DIR_SYSTEM . 'file_merge.php');

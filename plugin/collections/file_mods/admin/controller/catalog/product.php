@@ -25,6 +25,12 @@ class Admin_Controller_Catalog_Product extends Controller
 		);
 //-----
 //=====
+		$product['categories'] = $this->Model_Catalog_Product->getProductCategories($product['product_id']);
+//-----
+//>>>>>
+		$product['collections'] = $this->Model_Catalog_Collection->getCollectionsForProduct($product['product_id']);
+//-----
+//=====
 	}
 //.....
 	private function getForm()

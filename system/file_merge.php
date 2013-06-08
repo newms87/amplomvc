@@ -54,5 +54,8 @@ function _require_once($file)
 		}
 	}
 	
+	if (!is_file($file)) {
+		echo get_caller();
+	}
 	require_once($file);
 }

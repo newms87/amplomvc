@@ -48,6 +48,10 @@ class Plugin{
 	
 	public function getFile($file)
 	{
+		if (isset($this->plugin_registry[$file])) {
+			$this->syncPluginFileWithLive($this->plugin_registry[$file]);
+		}
+		
 		return $this->file_merge->getFile($file);
 	}
 	
@@ -436,6 +440,22 @@ class Plugin{
 		$this->db->query("INSERT INTO " . DB_PREFIX . "plugin_registry SET $values");
 		
 		$this->cache->delete("plugin");
+	}
+	
+	public function addFileModifications($name, $file_modifications) {
+		foreach($file_modifications as $file_mod) {
+			$this->file_merge->addFile($file_mod['for'], $name, $file_mod['mod']);
+		}
+
+		$this->file_merge->applyMergeRegistry();
+	}
+	
+	public function removeFileModifications($name, $file_modifications) {
+		foreach($file_modifications as $file_mod) {
+			$this->file_merge->removeFile($file_mod['for'], $name);
+		}
+		
+		$this->file_merge->applyMergeRegistry();
 	}
 	
 	public function getFileMods($name)

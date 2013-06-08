@@ -33,6 +33,7 @@ $_['text_success'] = "You have successfully updated the plugins!";
 
 $_['text_install'] = "Install Plugin";
 $_['text_uninstall'] = "Uninstall";
+$_['text_keep_data'] = "Do you want to keep the data associated with this plugin?";
 
 // Error
 $_['error_permission'] = 'Warning: You do not have permission to modify plugins!';

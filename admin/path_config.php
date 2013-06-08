@@ -2,16 +2,6 @@
 /**
  * THE ADMIN CONFIGURATION FILE
  */
- //This is a hack to allow config file to be found from elfinder imagemanager system (and possibly other systems)
-if (is_file('../oc_config.php')) {
-	require_once('../oc_config.php');
-}
-elseif (is_file('../../oc_config.php')) {
-	require_once('../../oc_config.php');
-}
-else {
-	require_once('../../../oc_config.php');
-}
 
 //Admin
 define("IS_ADMIN",true);

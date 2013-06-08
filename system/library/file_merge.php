@@ -47,9 +47,25 @@ class FileMerge
 		return $file;
 	}
 	
-	public function addFile($file_path, $name, $mod_path)
+	public function addFile($file, $name, $mod_path)
 	{
-		$this->merge_registry[SITE_DIR . $file_path][$name] = $mod_path;
+		if (!is_file(SITE_DIR . $file)) {
+			$msg = "File " . SITE_DIR . $file . " was not found. Unable to add to file modification registry";
+			$this->message->add('warning', $msg);
+			trigger_error($msg);
+			
+			return false;
+		}
+	
+		if (!is_file(DIR_PLUGIN . $name . '/' . $mod_path)) {
+			$msg = "Mod File " . DIR_PLUGIN . $name . '/' . $mod_path . " was not found. Unable to add to file modification registry";
+			$this->message->add('warning', $msg);
+			trigger_error($msg);
+			
+			return false;
+		}
+		
+		$this->merge_registry[SITE_DIR . $file][$name] = $mod_path;
 	}
 	
 	public function addFiles($name, $files)
@@ -57,6 +73,11 @@ class FileMerge
 		foreach ($files as $file_path => $mod_path) {
 			$this->addFile($file_path, $name, $mod_path);
 		}
+	}
+	
+	public function removeFile($file, $name)
+	{
+		unset($this->merge_registry[SITE_DIR . $file][$name]);
 	}
 	
 	public function loadMergeRegistry()
@@ -119,6 +140,8 @@ class FileMerge
 		}
 	}
 	
+	//TODO: Plugins should not be restricted to 1 Mod file per 1 original file
+	// This way we can install different features on demand for plugins
 	public function applyMergeRegistry()
 	{
 		$return = true;
@@ -130,7 +153,7 @@ class FileMerge
 			foreach ($names as $name => $mod_path) {
 				if (isset($this->uninstall[$name])) {
 					unset($this->merge_registry[$file_path][$name]);
-					echo 'skipping ' . $name . '<BR>'; continue; 
+					continue;
 				}
 				
 				$mod_file = DIR_PLUGIN . $name . '/' . $mod_path;
@@ -168,7 +191,7 @@ class FileMerge
 		
 		foreach ($files as $file) {
 			if (!in_array(strtolower(str_replace('\\', '/', $file)), $merged_files)) {
-				if (file_exists($file)) {
+				if (is_file($file)) {
 					unlink($file);
 					
 					$dir = dirname($file);
@@ -473,7 +496,7 @@ class FileMerge
 			touch($new_file_path);
 			chmod($new_file_path, $mode);
 		}
-				
+		
 		if ( file_put_contents($new_file_path, $new_file) ) {
 			return true;
 		}

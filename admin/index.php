@@ -2,19 +2,27 @@
 // Version
 define('VERSION', '1.5.2.1');
 
-//data
-define('DATETIME_ZERO','0000-00-00 00:00:00');
-
-// Configuration
-require_once('config.php');
-
-require_once(DIR_SYSTEM . 'functions.php');
+//TODO: This is a hack to allow config file to be found from elfinder imagemanager system (and possibly other systems)
+if (is_file('../oc_config.php')) {
+	require_once('../oc_config.php');
+}
+elseif (is_file('../../oc_config.php')) {
+	require_once('../../oc_config.php');
+}
+elseif (is_file('../../../oc_config.php')) {
+	require_once('../../../oc_config.php');
+}
 
 // Install
-if (!defined('DIR_APPLICATION')) {
-	header('Location: ../install/index.php');
+if (!defined('SITE_URL')) {
+	header("Location: ../index.php");
 	exit;
 }
+
+// Configuration
+require_once('path_config.php');
+
+require_once(DIR_SYSTEM . 'functions.php');
 
 //File Merge for plugins
 require_once(DIR_SYSTEM . 'file_merge.php');
@@ -76,6 +84,7 @@ $error_handler = function($errno, $errstr, $errfile, $errline) use($error_log, $
 		
 	if ($config->get('config_error_display')) {
 		echo '<b>' . $error . '</b>: ' . $errstr . ' in <b>' . $errfile . '</b> on line <b>' . $errline . '</b><br /><br />';
+		flush(); //Flush the error to block any redirects that may execute, this ensure errors are seen!
 	}
 	
 	if ($config->get('config_error_log')) {

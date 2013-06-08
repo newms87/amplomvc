@@ -143,6 +143,9 @@ class Admin_Controller_Block_Block extends Controller
 		$name = $_GET['name'];
 		
 		if (($_SERVER['REQUEST_METHOD'] === 'POST') && $this->validate()) {
+			//If plugins have additional 
+			$this->saveBlockData();
+			
 			$this->Model_Block_Block->updateBlock($name, $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -238,6 +241,19 @@ class Admin_Controller_Block_Block extends Controller
 		if (method_exists($this->block_controller, 'profile')) {
 			$this->block_controller->profile($this->data['profiles']);
 			$this->data['extend_profile'] = $this->block_controller->output;
+		}
+	}
+	
+	private function saveBlockData()
+	{
+		$this->loadBlockController();
+		
+		if (method_exists($this->block_controller, 'saveSettings')) {
+			$this->block_controller->saveSettings($_POST['settings']);
+		}
+		
+		if (method_exists($this->block_controller, 'saveProfile')) {
+			$this->block_controller->saveProfile($_POST['profiles']);
 		}
 	}
 	

@@ -134,7 +134,7 @@ class Admin_Controller_Extension_Plugin extends Controller
 	public function uninstall()
 	{
 		if (isset($_GET['name'])) {
-			$keep_data = isset($_GET['keep_data']) ? $_GET['keep_data'] : true;
+			$keep_data = isset($_GET['keep_data']) ? (int)$_GET['keep_data'] : true;
 			
 			$this->plugin->uninstall($_GET['name'], $keep_data);
 		}

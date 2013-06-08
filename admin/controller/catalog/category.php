@@ -1,8 +1,6 @@
 <?php
 class Admin_Controller_Catalog_Category extends Controller 
 {
-	
- 
 	public function index()
 	{
 		$this->load->language('catalog/category');
@@ -341,13 +339,11 @@ class Admin_Controller_Catalog_Category extends Controller
 		if (!$this->user->hasPermission('modify', 'catalog/category')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
-
-		foreach ($_POST['category_description'] as $language_id => $value) {
-			if ((strlen($value['name']) < 2) || (strlen($value['name']) > 255)) {
-				$this->error["category_description[$language_id][name]"] = $this->_('error_name');
-			}
+		
+		if (!$this->validation->text($_POST['name'], 2, 64)) {
+			$this->error['name'] = $this->_('error_name');
 		}
-
+		
 		return $this->error ? false : true;
 	}
 
@@ -357,10 +353,6 @@ class Admin_Controller_Catalog_Category extends Controller
 			$this->error['warning'] = $this->_('error_permission');
 		}
  
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true; 
 	}
 }
