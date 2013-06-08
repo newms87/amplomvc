@@ -9,6 +9,8 @@ class Plugin{
 	{
 		$this->registry = $registry;
 		
+		$this->registry->set('plugin', $this);
+		
 		$this->language->system('plugin');
 		
 		$this->loadPluginFileRegistry();

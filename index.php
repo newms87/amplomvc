@@ -149,8 +149,8 @@ $registry->set('response', $response);
 // Language
 $registry->set('language', new Language($registry));
 
-//Plugins
-$registry->set('plugin', new Plugin($registry));
+//Plugins (self assigning)
+new Plugin($registry);
 
 // Document
 $document = new Document($registry);
