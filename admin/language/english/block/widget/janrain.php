@@ -47,3 +47,4 @@ $_['entry_display_type']			= 'Display Type:';
 $_['entry_display_icons']			= 'Choose Icons to Display:';
 $_['entry_icon_size']			= 'Icon Size:';
 $_['entry_integrate_header']			= 'Integrate Janrain Login in Header:';
+
