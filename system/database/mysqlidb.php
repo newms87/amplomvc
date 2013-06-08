@@ -138,8 +138,6 @@ final class mysqlidb implements Database
 		
 		$cmd = "\"$mysqldump\" --user=\"" . $this->username . "\" --password=\"" . $this->password . "\" --host=\"" . $this->hostname . "\" $this->database $tables > $file";
 		
-		echo $cmd;
-		
 		if (shell_exec($cmd . ' | echo 1') === null) {
 			if (!defined("DB_MYSQLDUMP_FILE") ||  !is_file(DB_MYSQLDUMP_FILE)) {
 				trigger_error("You must define DB_MYSQLDUMP_FILE to contain the file and path to mysqldump (mysqldump.exe on windows) for dump!");
