@@ -88,7 +88,7 @@ final class mysqlidb implements Database
 		
 		$file = escapeshellarg($file);
 		
-		$cmd = "\"$mysql\" --max_allowed_packet=2G --user=\"" . $this->username . "\" --password=\"" . $this->password . "\" --host=\"" . $this->database . " < $file";
+		$cmd = "\"$mysql\" --max_allowed_packet=2G --user=\"" . $this->username . "\" --password=\"" . $this->password . "\" --host=\"" . $this->hostname . "\" $this->database < $file";
 		
 		$error_file = DIR_DATABASE . 'db_file_error.txt';
 		
@@ -136,7 +136,7 @@ final class mysqlidb implements Database
 		
 		$file = escapeshellarg($file);
 		
-		$cmd = "\"$mysqldump\" --user=\"" . $this->username . "\" --password=\"" . $this->password . "\" --host=\"" . $this->database . " $tables > $file";
+		$cmd = "\"$mysqldump\" --user=\"" . $this->username . "\" --password=\"" . $this->password . "\" --host=\"" . $this->hostname . "\" $this->database $tables > $file";
 		
 		if (shell_exec($cmd . ' | echo 1') === null) {
 			if (!defined("DB_MYSQLDUMP_FILE") ||  !is_file(DB_MYSQLDUMP_FILE)) {
