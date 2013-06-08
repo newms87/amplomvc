@@ -65,9 +65,10 @@ class Catalog_Controller_Block_Widget_Janrain extends Controller
 			$this->url->redirect($this->url->link('account/login'));
 		}
 		
+		$application_domain = $settings['application_domain'];
 		$api_key = $settings['api_key'];
 		
-		$janrain_token = isset($_REQUEST['token']) && $_REQUEST['token']!='' ? $_REQUEST['token'] : false;
+		$janrain_token = !empty($_REQUEST['token']) ? $_REQUEST['token'] : false;
 		
 		if ($janrain_token) {
 			$post_data  = array(
@@ -75,7 +76,8 @@ class Catalog_Controller_Block_Widget_Janrain extends Controller
 								'apiKey'	=> $api_key,
 								'format' => 'json'
 							);
-			$post_url	= 'https://rpxnow.com/api/v2/auth_info/?token='.$janrain_token.'&apiKey='.$api_key.'&format=json';
+			$post_url	= "https://{$application_domain}.rpxnow.com/api/v2/auth_info/";
+			
 			$curl		= curl_init();
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($curl, CURLOPT_URL, $post_url);
@@ -85,7 +87,7 @@ class Catalog_Controller_Block_Widget_Janrain extends Controller
 			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 			$raw_json	= curl_exec($curl);
 			curl_close($curl);
-				
+			
 			// parse the json response into an associative array
 			$auth_info = json_decode($raw_json, true);
 		
@@ -93,11 +95,11 @@ class Catalog_Controller_Block_Widget_Janrain extends Controller
 			
 			// process the auth_info response
 			if ( $auth_info['stat'] == 'ok' ) {
-				$this->parsejanrainInfo($auth_info,$raw_json);
+				$this->parseJanrainInfo($auth_info,$raw_json);
 				$this->message->add("success",$this->_('success_janrain_auth'));
 			}
 			else {
-				$this->message->add("warning",sprintf($this->_('error_janrain_auth'),$this->config->get('config_email'),$this->config->get('config_email')));
+				$this->message->add("warning",$this->language->format('error_janrain_auth',$this->config->get('config_email'),$this->config->get('config_email')));
 				$this->url->redirect($this->url->link('account/login'));
 			}
 		}
