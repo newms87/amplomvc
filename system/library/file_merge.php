@@ -237,7 +237,7 @@ class FileMerge
 				
 				if (!is_file($plugin_file)) {
 					unset($this->merge_registry[$file_path][$name]);
-					echo 'here';
+					
 					$msg = "The $name plugin is missing the file $plugin_file! This may cause system instability. The plugin $name has been uninstalled.";
 					$this->plugin->uninstall($name);
 					$this->message->add('warning', $msg);
