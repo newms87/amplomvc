@@ -494,6 +494,9 @@ input.button {
 	top:2px;
 	left:1px;
 }
+a.button:visited{
+	color: #FFFFFF;
+}
 
 .list {
 	border-collapse: collapse;
