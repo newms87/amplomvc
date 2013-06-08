@@ -4,21 +4,31 @@ final class mysqlidb implements Database
 	private $mysqli;
 	private $err_msg;
 	
+	private $hostname;
+	private $username;
+	private $password;
+	private $database;
+	
 	public function __construct($hostname, $username, $password, $database)
 	{
+		$this->hostname = $hostname;
+		$this->username = $username;
+		$this->password = $password;
+		$this->database = $database;
+		
 		$this->mysqli = new mysqli($hostname, $username, $password, $database);
 		
 		if ($this->mysqli->connect_error) {
-			die('Connect Error (' . $mysqli->connect_errno . ') ' . $mysqli->connect_error);
+			$this->err_msg = 'Connect Error (' . $mysqli->connect_errno . ') ' . $mysqli->connect_error;
+		} elseif (mysqli_connect_error()) {
+			$this->err_msg = 'Connect Error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error();
 		}
-		elseif (mysqli_connect_error()) {
-			die('Connect Error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
+		else {
+			$this->query("SET NAMES 'utf8'");
+			$this->query("SET CHARACTER SET utf8");
+			$this->query("SET CHARACTER_SET_CONNECTION=utf8");
+			$this->query("SET SQL_MODE = ''");
 		}
-		
-		$this->query("SET NAMES 'utf8'");
-		$this->query("SET CHARACTER SET utf8");
-		$this->query("SET CHARACTER_SET_CONNECTION=utf8");
-		$this->query("SET SQL_MODE = ''");
   	}
 	
 	public function get_error()
@@ -78,13 +88,13 @@ final class mysqlidb implements Database
 		
 		$file = escapeshellarg($file);
 		
-		$cmd = "\"$mysql\" --max_allowed_packet=2G --user=\"" . DB_USERNAME . "\" --password=\"" . DB_PASSWORD . "\" --host=\"" . DB_HOSTNAME . "\" " . DB_DATABASE . " < $file";
+		$cmd = "\"$mysql\" --max_allowed_packet=2G --user=\"" . $this->username . "\" --password=\"" . $this->password . "\" --host=\"" . $this->database . " < $file";
 		
-		$error_file = DIR_LOGS . 'db_file_error.txt';
+		$error_file = DIR_DATABASE . 'db_file_error.txt';
 		
-		shell_exec($cmd . ' 2> ' . $error_file);
+		$return = shell_exec($cmd . ' 2> ' . $error_file);
 		
-		if (filesize($error_file) > 1) {
+		if (is_file($error_file) && filesize($error_file) > 1) {
 			$has_error = false;
 			
 			$handle = fopen($error_file, 'r');
@@ -102,10 +112,12 @@ final class mysqlidb implements Database
 			
 			if($has_error) return false;
 			
-			if (!defined("DB_MYSQL_FILE") ||  !is_file(DB_MYSQL_FILE)) {
+			if (!defined("DB_MYSQL_FILE") || !is_file(DB_MYSQL_FILE)) {
 				trigger_error("You must define DB_MYSQL_FILE to contain the file and path to mysql (mysql.exe on windows) for execute_file()!");
 				return null;
 			}
+		} elseif ($return === null) {
+			return $return;
 		}
 		
 		return true;
@@ -124,7 +136,7 @@ final class mysqlidb implements Database
 		
 		$file = escapeshellarg($file);
 		
-		$cmd = "\"$mysqldump\" --user=\"" . DB_USERNAME . "\" --password=\"" . DB_PASSWORD . "\" --host=\"" . DB_HOSTNAME . "\" " . DB_DATABASE . " $tables > $file";
+		$cmd = "\"$mysqldump\" --user=\"" . $this->username . "\" --password=\"" . $this->password . "\" --host=\"" . $this->database . " $tables > $file";
 		
 		if (shell_exec($cmd . ' | echo 1') === null) {
 			if (!defined("DB_MYSQLDUMP_FILE") ||  !is_file(DB_MYSQLDUMP_FILE)) {
@@ -163,6 +175,6 @@ final class mysqlidb implements Database
 	
 	public function __destruct()
 	{
-		$this->mysqli->close();
+		@$this->mysqli->close();
 	}
 }

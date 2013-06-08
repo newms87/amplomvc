@@ -2,6 +2,7 @@
 class DB 
 {
 	private $driver;
+	private $error;
 	
 	public function __construct($driver, $hostname, $username, $password, $database)
 	{
@@ -11,12 +12,23 @@ class DB
 		}
 		
 		//the database interface
-		_require_once(DIR_DATABASE . 'database.php');
-		
-		if (file_exists(DIR_DATABASE . $driver . '.php')) {
-			_require_once(DIR_DATABASE . $driver . '.php');
-		} else {
-			exit('Error: Could not load database file ' . $driver . '!');
+		if (function_exists("_require_once")) {
+			_require_once(DIR_DATABASE . 'database.php');
+			
+			if (file_exists(DIR_DATABASE . $driver . '.php')) {
+				_require_once(DIR_DATABASE . $driver . '.php');
+			} else {
+				die('Error: Could not load database file ' . $driver . '!');
+			}
+		}
+		else {
+			require_once(DIR_DATABASE . 'database.php');
+			
+			if (file_exists(DIR_DATABASE . $driver . '.php')) {
+				require_once(DIR_DATABASE . $driver . '.php');
+			} else {
+				$this->error = 'Error: Could not load database file ' . $driver . '!';
+			}
 		}
 				
 		$this->driver = new $driver($hostname, $username, $password, $database);
@@ -24,7 +36,13 @@ class DB
 	
 	public function get_error()
 	{
-		return $this->driver->get_error();
+		$driver_error = $this->driver->get_error();
+		
+		if ($this->error) {
+			$driver_error = '<br>' . $this->error;
+		}
+		
+		return $driver_error;
 	}
 	
 	/**
@@ -114,10 +132,15 @@ class DB
 	
 	private function query_error()
 	{
-		$stack = debug_stack();
-		$_SESSION['debug']['call stack'] = $stack;
-		trigger_error($this->driver->get_error() . get_caller(2));
-		html_dump($stack, 'call stack');
+		if (function_exists('debug_stack') && function_exists('html_dump')) {
+			$stack = debug_stack();
+			$_SESSION['debug']['call stack'] = $stack;
+			html_dump($stack, 'call stack');
+		}
+		
+		if (function_exists('get_caller')) {
+			trigger_error($this->driver->get_error() . get_caller(2));
+		}
 	}
 	
 	public function execute_file($file)

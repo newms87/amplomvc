@@ -4,8 +4,6 @@ class Session
 	public $data = array();
 	
 	private $registry;
-	
-	private $name = "cross-store-session";
 			
   	public function __construct($registry)
   	{
@@ -15,7 +13,7 @@ class Session
 			ini_set('session.use_cookies', 'On');
 			ini_set('session.use_trans_sid', 'Off');
 			
-			session_name($this->name);
+			session_name(AMPLOCART_SESSION);
 			
 			session_set_cookie_params(0, '/', COOKIE_DOMAIN);
 			
@@ -90,7 +88,7 @@ class Session
 	{
 		$this->delete_cookie('token');
 		
-		$this->delete_cookie($this->name);
+		$this->delete_cookie(AMPLOCART_SESSION);
 		
 		$this->end();
 	}
