@@ -79,73 +79,7 @@ final class mysqlidb implements Database
 		
 		return true;
   	}
-		
-	public function execute_file($file)
-	{
-		$mysql = defined("DB_MYSQL_FILE") ? DB_MYSQL_FILE : 'mysql';
-		
-		$file = escapeshellarg($file);
-		
-		$cmd = "\"$mysql\" --max_allowed_packet=2G --user=\"" . $this->username . "\" --password=\"" . $this->password . "\" --host=\"" . $this->hostname . "\" $this->database < $file";
-		
-		$error_file = DIR_DATABASE . 'db_file_error.txt';
-		
-		$return = shell_exec($cmd . ' 2> ' . $error_file);
-		
-		if (is_file($error_file) && filesize($error_file) > 1) {
-			$has_error = false;
-			
-			$handle = fopen($error_file, 'r');
-			
-			while (($buffer = fgets($handle, 4096)) !== false) {
-				if (strpos($buffer, 'ERROR') !== false) {
-					$this->err_msg = "MySQLi::execute_file(): " . $buffer;
-					$has_error = true;
-				}
-			}
-			
-			fclose($handle);
-			
-			file_put_contents($error_file, '');
-			
-			if($has_error) return false;
-			
-			if (!defined("DB_MYSQL_FILE") || !is_file(DB_MYSQL_FILE)) {
-				trigger_error("You must define DB_MYSQL_FILE to contain the file and path to mysql (mysql.exe on windows) for execute_file()!");
-				return null;
-			}
-		} elseif ($return === null) {
-			return $return;
-		}
-		
-		return true;
-	}
-	
-	public function dump($file, $tables = null)
-	{
-		$mysqldump = defined("DB_MYSQLDUMP_FILE") ? DB_MYSQLDUMP_FILE : 'mysqldump';
-		
-		if (!empty($tables)) {
-			$tables = implode(' ', $tables);
-		}
-		else {
-			$tables = '';
-		}
-		
-		$file = escapeshellarg($file);
-		
-		$cmd = "\"$mysqldump\" --user=\"" . $this->username . "\" --password=\"" . $this->password . "\" --host=\"" . $this->hostname . "\" $this->database $tables > $file";
-		
-		if (shell_exec($cmd . ' | echo 1') === null) {
-			if (!defined("DB_MYSQLDUMP_FILE") ||  !is_file(DB_MYSQLDUMP_FILE)) {
-				trigger_error("You must define DB_MYSQLDUMP_FILE to contain the file and path to mysqldump (mysqldump.exe on windows) for dump!");
-				return false;
-			}
-		}
-		
-		return true;
-	}
-	
+
 	public function set_autoincrement($table, $value)
 	{
 		return $this->query("ALTER TABLE " . DB_PREFIX . "$table AUTO_INCREMENT=" . (int)$value . "");

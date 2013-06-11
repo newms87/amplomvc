@@ -145,39 +145,99 @@ class DB
 	
 	public function execute_file($file)
 	{
-		$result = $this->driver->execute_file($file);
+		$content = file_get_contents($file);
 		
-		if (!is_null($result)) {
-			return $result;
+		$lines = explode(";\r\n", $content);
+		
+		foreach ($lines as $line) {
+			if (!empty($line)) {
+				$this->query($line);
+			}
 		}
-		
-		$sql = file_get_contents($file);
-		
-		if (!$sql) {
-			trigger_error("DB::execute_file(): Error opening file $file.");
-			return false;
-		}
-		
-		if (!$this->driver->multi_query($sql)) {
-			trigger_error($this->get_error());
-			
-			return false;
-		}
-		
-		return true;
 	}
 	
 	public function dump($file, $tables = '')
 	{
 		_is_writable(dirname($file));
 		
-		if ($this->driver->dump($file, $tables)) {
-			return true;
+		$eol = "\r\n";
+		
+		if (!$tables) {
+			$tables = $this->query_rows("SHOW TABLES");
 		}
 		
-		trigger_error("DB::dump(): Failed to dump database tables, $table_string, to file $file");
+		$sql = '';
 		
-		return false;
+		foreach ($tables as $table) {
+			if (is_array($table)) {
+				$table = current($table);
+			}
+			
+			if (!preg_match("/^".DB_PREFIX."/", $table)) {
+				$table = DB_PREFIX . $table;
+			}
+			
+			$sql .= "DROP TABLE IF EXISTS `$table`;" . $eol;
+			$sql .= "CREATE TABLE `$table` (" . $eol;
+			
+			$columns = $this->query_rows("SHOW COLUMNS FROM `$table`");
+			
+			$primary_key = array();
+			
+			foreach ($columns as $column) {
+				if (strtoupper($column['Key']) === 'PRI') {
+					$primary_key[] = $column['Field'];
+				}
+				
+				$field = $column['Field'];
+				$type = $column['Type'];
+				$null = strtoupper($column['Null']) === 'YES' ? '' : 'NOT NULL';
+				
+				if (is_null($column['Default'])) {
+					if (!$null) {//meaning NULL is allowed
+						$default = "DEFAULT NULL";
+					} else {
+						$default = "";
+					}
+				}else {
+					$default = "DEFAULT '" . $column['Default'] . "'";
+				}
+				
+				$extra = !empty($column['Extra']) ? strtoupper($column['Extra']) : '';
+				
+				$sql .= "\t`$field` $type $null $default $extra," . $eol;
+			}
+			
+			if (!empty($primary_key)) {
+				$sql .= "\tPRIMARY KEY (`" . implode('`,`', $primary_key) . "`)" . $eol;
+			}
+			
+			$sql .= ");" . $eol . $eol;
+			
+			$rows = $this->query_rows("SELECT * FROM `$table`");
+			
+			if (!empty($rows)) {
+				$sql .= "INSERT INTO `$table` VALUES ";
+				foreach ($rows as $row) {
+					$sql .= "(";
+					foreach ($row as $key => $value) {
+						$sql .= "'" . $this->escape($value) . "',";
+					}
+					
+					$sql = rtrim($sql,',') . "),";
+				}
+				
+				$sql = rtrim($sql,',') . ";" . $eol . $eol;
+			}
+		}
+		
+		if (!file_put_contents($file, $sql)) {
+			trigger_error("DB::dump(): Failed to dump database tables, $table_string, to file $file");
+		
+			return false;
+		}
+		
+		return true;
 	}
 	
 	public function get_tables()
