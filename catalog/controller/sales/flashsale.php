@@ -107,14 +107,13 @@ class Catalog_Controller_Sales_Flashsale extends Controller
 				while (!empty($article_insert)) {
 					$sections[$sect_id]['products'][] = $articles[array_pop($article_insert)];
 				}
-				uasort($sections,function ($a,$b)
-{if($a=='All'||$a>$b)return 1;});
+				uasort($sections,function ($a,$b) {if($a=='All'||$a>$b)return 1;});
 				$this->data['section_products'] = $sections;
 				
 				$this->data['open_quote'] = $this->image->get('data/open_quote.png');
 				$this->data['close_quote'] = $this->image->get('data/close_quote.png');
 				
-				$this->data['description'] = html_entity_decode($flashsale['blurb']);
+				$this->data['description'] = html_entity_decode($flashsale['teaser']);
 				$this->data['flashsale_image'] = $this->image->resize($flashsale['image'], $this->config->get('config_image_manufacturer_width'),$this->config->get('config_image_manufacturer_height'));
 				
 				$this->data['flashsale_clock'] = $this->image->get('data/clock.png');

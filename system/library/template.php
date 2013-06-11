@@ -5,17 +5,10 @@ class Template
 	
 	public $data = array();
 	
-	private $tables  = array();
-	private $forms	= array();
-	private $blocks  = array();
-	private $options = array();
-	
 	private $name;
 	private $file;
 	
 	private $template;
-	
-	private $template_data;
 	
 	function __construct($registry)
 	{
@@ -25,16 +18,6 @@ class Template
 	public function __get($key)
 	{
 		return $this->registry->get($key);
-	}
-	
-	public function load_template_data()
-	{
-		//TODO: Need to actually load template data here... This may be the data_statuses, data_yes_no, etc...
-	}
-	
-	public function get_template_data()
-	{
-		return $this->template_data;
 	}
 	
 	public function template()
@@ -69,58 +52,6 @@ class Template
 	public function set_data($data)
 	{
 		$this->data = $data;
-	}
-	
-	public function has_table($table)
-	{
-		return isset($this->tables[$table]);
-	}
-	
-	public function get_table($table)
-	{
-		if (isset($this->tables[$table])) {
-			return $this->tables[$table];
-		}
-		else {
-			trigger_error("The table $table does not exist in the template $this->name! " . get_caller());
-			exit();
-		}
-	}
-	
-	public function has_form($form)
-	{
-		return isset($this->forms[$form]);
-	}
-	
-	public function get_form($form)
-	{
-		if (isset($this->forms[$form])) {
-			return $this->forms[$form];
-		}
-		else {
-			trigger_error("The form $form does not exist in the template $this->name! " . get_caller());
-			exit();
-		}
-	}
-	
-	public function get_block_template($block)
-	{
-		if (isset($this->blocks[$block])) {
-			return $this->blocks[$block];
-		}
-		else {
-			return $block . '.tpl';
-		}
-	}
-	
-	public function option($option, $default = false)
-	{
-		if (isset($this->options[$option])) {
-			return $this->options[$option];
-		}
-		else {
-			return $default;
-		}
 	}
 	
 	public function load($name, $data = array()){
@@ -166,31 +97,11 @@ class Template
 		}
 	}
 	
-	public function fetch($filename)
-	{
-		$file = DIR_THEME . $filename;
-	
-		if (file_exists($file)) {
-			extract($this->data);
-			
-			ob_start();
-		
-			include($file);
-		
-			$content = ob_get_contents();
-
-			ob_end_clean();
-
-			return $content;
-		} else {
-			trigger_error('Error: Could not load template file ' . $file . '!');
-			exit();
-		}
-	}
-	
 	public function find_file($file)
 	{
-		$file = preg_replace("/\\.tpl\$/", '', $file) . '.tpl';
+		if (!preg_match("/\\.tpl\$/", $file)) {
+			$file .= '.tpl';
+		}
 		
 		return $this->theme->find_file($file);
 	}

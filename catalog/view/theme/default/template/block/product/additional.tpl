@@ -10,9 +10,9 @@
 	<a href="#tab-review"><?= $tab_review; ?></a>
 	<? } ?>
 </div>
-	<? if($description){?>
+<? if($description){?>
 <div id="tab-description" class="tab-content"><?= $description; ?></div>
-	<? }?>
+<? }?>
 <div id="tab-shipping" class="tab-content">
 	<?= $shipping_return; ?><br />
 	<?= $is_final?$final_sale_explanation:''; ?><br /><br /><br />
@@ -28,7 +28,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<? foreach ($attribute_group['attribute'] as $attribute) { ?>
+			<? foreach ($attribute_group['attributes'] as $attribute) { ?>
 			<tr>
 				<td><?= $attribute['name']; ?></td>
 				<td><?= $attribute['text']; ?></td>

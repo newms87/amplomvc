@@ -480,32 +480,15 @@
 								<? } ?></td>
 						</tr>
 						<tr>
-						<td>Allow Social Sharing:</td>
-							<td><? if ($config_share_status) { ?>
-								<input type="radio" name="config_share_status" value="1" checked="checked" />
-								<?= $text_yes; ?>
-								<input type="radio" name="config_share_status" value="0" />
-								<?= $text_no; ?>
-								<? } else { ?>
-								<input type="radio" name="config_share_status" value="1" />
-								<?= $text_yes; ?>
-								<input type="radio" name="config_share_status" value="0" checked="checked" />
-								<?= $text_no; ?>
-								<? } ?></td>
+						<td><?= $entry_allow_sharing; ?></td>
+							<td><?= $this->builder->build('select', $data_yes_no, "config_share_status", $config_share_status); ?></td>
+						</tr>
+						<td><?= $entry_show_product_attributes; ?></td>
+							<td><?= $this->builder->build('select', $data_yes_no, "config_show_product_attributes", $config_show_product_attributes); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_download; ?></td>
-							<td><? if ($config_download) { ?>
-								<input type="radio" name="config_download" value="1" checked="checked" />
-								<?= $text_yes; ?>
-								<input type="radio" name="config_download" value="0" />
-								<?= $text_no; ?>
-								<? } else { ?>
-								<input type="radio" name="config_download" value="1" />
-								<?= $text_yes; ?>
-								<input type="radio" name="config_download" value="0" checked="checked" />
-								<?= $text_no; ?>
-								<? } ?></td>
+							<td><?= $this->builder->build('select', $data_yes_no, "config_download", $config_download); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_upload_allowed; ?></td>

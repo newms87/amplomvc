@@ -2,8 +2,7 @@
 //custom var dump
 global $html_dump_count;
 $html_dump_count = 0;
-function html_dump($var, $label= "HTML Dump", $level=0, $max = -1, $print = true)
-{
+function html_dump($var, $label= "HTML Dump", $level=0, $max = -1, $print = true) {
 	global $html_dump_count;
 	
 	$id = 'html_dump-' . $html_dump_count;
@@ -34,8 +33,7 @@ function html_dump($var, $label= "HTML Dump", $level=0, $max = -1, $print = true
 	if ($html_dump_count == 0) {
 ?>
 <script type='text/javascript'>//<!--
-function open_html_dump(id)
-{
+function open_html_dump(id) {
 	var w = window.open(null, 'newwindow', 'resizable=1,scrollbars=1, width=800, height=800');
 	document.getElementById(id + '-output').setAttribute('style','display:block');
 	w.document.body.innerHTML = document.getElementById(id).innerHTML;
@@ -53,15 +51,13 @@ function open_html_dump(id)
 	}
 }
 
-function html_dump_r($var, $level, $max)
-{
+function html_dump_r($var, $level, $max) {
 	if (is_array($var) || is_object($var)) {
 		$left_offset = $level * 20 . "px";
 		$type = is_array($var)?"Array":"Object";
 		$type .= " (".count($var).")";
 		echo "<table><tr><td class ='type_label' colspan='2'>$type</td></tr>";
-		foreach($var as $key=>$v)
-{
+		foreach($var as $key=>$v) {
 			echo "<tr class ='key_value_pair'>";
 			echo "<td valign='top' class='key'>[$key]</td>";
 			
@@ -95,17 +91,21 @@ function html_dump_r($var, $level, $max)
 	}
 }
 
-function html_backtrace($depth=3, $var_depth = -1, $print = true)
-{
+function html_backtrace($depth=3, $var_depth = -1, $print = true) {
 	return html_dump(debug_stack($depth, 1),'call stack', 0, $var_depth, $print);
 }
 
-function debug_stack($depth = 10, $offset = 0)
-{
+function debug_stack($depth = 10, $offset = 0) {
 	return array_slice(debug_backtrace(false), 1 + $offset, $depth);
 }
 
 if (!function_exists('array_column')) {
+	/**
+	 * Returns an array of elements from the column of an array
+	 * 
+	 * @param Array $array - An associative array of arrays
+	 * @param String $column - The key column of the $array to get elements for
+	 */
 	function array_column($array, $column)
 	{
 		$values = array();
@@ -118,8 +118,7 @@ if (!function_exists('array_column')) {
 	}
 }
 
-function get_caller($offset = 0)
-{
+function get_caller($offset = 0) {
 	$calls = debug_backtrace(false);
 	
 	if (count($calls) <= ($offset+1)) {
@@ -129,10 +128,10 @@ function get_caller($offset = 0)
 	}
 
 	if (isset($caller['file'])) {
-		return "Called from $caller[file] on line $caller[line]";
+		return "<br />Called from $caller[file] on line $caller[line]";
 	}
 	else {
-		return "Called from $caller[class]::$caller[function]";
+		return "<br />Called from $caller[class]::$caller[function]";
 	}
 }
 
@@ -145,8 +144,7 @@ if (!defined("AMPLOCART_FILE_MODE")) {
 }
 
 //TODO: do we allow different modes?
-function _is_writable($dir, $mode = 0755)
-{
+function _is_writable($dir, $mode = 0755) {
 	if (!is_writable($dir)) {
 		if (!is_dir($dir)) {
 			mkdir($dir, AMPLOCART_DIR_MODE,true);
@@ -172,7 +170,6 @@ function _is_writable($dir, $mode = 0755)
 }
 
 //prints to the console in javascript
-function console($msg)
-{
+function console($msg) {
 	echo "<script>console.log('$msg');</script>";
 }

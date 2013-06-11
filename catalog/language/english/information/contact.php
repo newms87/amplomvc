@@ -11,7 +11,7 @@ $_['text_telephone'] = 'Telephone:';
 $_['text_fax']		= 'Fax:';
 $_['text_message']	= '<p>Your enquiry has been successfully submitted!</p>';
 
-$_['text_contact_us'] = "We’re here to help! If you need assistance with your order, the site, or anything at all concerning %s, drop us an email and we’ll get right on it. Live gorgeously!";
+$_['text_contact_us'] = "We’re here to help! If you need assistance with your order, the site, or anything at all concerning %s, drop us an email and we’ll get right on it.";
 $_['text_contact_info'] = "Please use the contact form below or email us at <a href='mailto:%s'>%s</a>";
 $_['button_submit'] = "Submit Contact Request";
 

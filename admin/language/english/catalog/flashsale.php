@@ -13,7 +13,7 @@ $_['text_success']		= 'Success: You have updated the Flashsales!';
 // Entry
 $_['entry_name']			= 'Flash Sale Title:';
 $_['entry_teaser']			= 'Teaser:';
-$_['entry_blurb']			= 'Description:';
+$_['entry_teaser']			= 'Description:';
 $_['entry_product']			= 'Products:<span class="help">(autocomplete)</span>';
 $_['entry_keyword']			= 'Page URL:<br /><span class="help">Must be globally unique!<br />Used for SEO purposes.<br />(A.K.A SEO Keyword)</span>';
 $_['entry_customer_group']	= 'Customer Group:';

@@ -75,7 +75,7 @@ class Catalog_Controller_Product_Compare extends Controller
 				$attribute_groups = $this->Model_Catalog_Product->getProductAttributes($product_id);
 				
 				foreach ($attribute_groups as $attribute_group) {
-					foreach ($attribute_group['attribute'] as $attribute) {
+					foreach ($attribute_group['attributes'] as $attribute) {
 						$attribute_data[$attribute['attribute_id']] = $attribute['text'];
 					}
 				}
@@ -101,12 +101,11 @@ class Catalog_Controller_Product_Compare extends Controller
 					'remove'		=> $this->url->link('product/compare', 'remove=' . $product_id)
 				);
 				
-				foreach ($attribute_groups as $attribute_group) 
-{
+				foreach ($attribute_groups as $attribute_group) {
 					$this->data['attribute_groups'][$attribute_group['attribute_group_id']]['name'] = $attribute_group['name'];
 					
-					foreach ($attribute_group['attribute'] as $attribute) {
-						$this->data['attribute_groups'][$attribute_group['attribute_group_id']]['attribute'][$attribute['attribute_id']]['name'] = $attribute['name'];
+					foreach ($attribute_group['attributes'] as $attribute) {
+						$this->data['attribute_groups'][$attribute_group['attribute_group_id']]['attributes'][$attribute['attribute_id']]['name'] = $attribute['name'];
 					}
 				}
 			} else {

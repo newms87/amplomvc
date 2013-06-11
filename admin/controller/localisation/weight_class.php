@@ -81,8 +81,7 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 		$this->document->setTitle($this->_('heading_title'));
  		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
-			foreach ($_POST['selected'] as $weight_class_id) 
-{
+			foreach ($_POST['selected'] as $weight_class_id) {
 				$this->Model_Localisation_Weightclass->deleteWeightClass($weight_class_id);
 			}
 			
@@ -163,8 +162,7 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 		
 		$results = $this->Model_Localisation_WeightClass->getWeightClasses($data);
 		
-		foreach ($results as $result) 
-{
+		foreach ($results as $result) {
 			$action = array();
 			
 			$action[] = array(
@@ -292,8 +290,7 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 		
 		if (isset($_POST['weight_class_description'])) {
 			$this->data['weight_class_description'] = $_POST['weight_class_description'];
-		} elseif (isset($_GET['weight_class_id'])) 
-{
+		} elseif (isset($_GET['weight_class_id'])) {
 			$this->data['weight_class_description'] = $this->Model_Localisation_WeightClass->getWeightClassDescriptions($_GET['weight_class_id']);
 		} else {
 			$this->data['weight_class_description'] = array();
@@ -301,8 +298,7 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 
 		if (isset($_POST['value'])) {
 			$this->data['value'] = $_POST['value'];
-		} elseif (isset($weight_class_info)) 
-{
+		} elseif (isset($weight_class_info)) {
 			$this->data['value'] = $weight_class_info['value'];
 		} else {
 			$this->data['value'] = '';
@@ -322,8 +318,7 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
-		foreach ($_POST['weight_class_description'] as $language_id => $value) 
-{
+		foreach ($_POST['weight_class_description'] as $language_id => $value) {
 			if ((strlen($value['title']) < 3) || (strlen($value['title']) > 32)) {
 				$this->error['title'][$language_id] = $this->_('error_title');
 			}
@@ -342,8 +337,7 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		foreach ($_POST['selected'] as $weight_class_id) 
-{
+		foreach ($_POST['selected'] as $weight_class_id) {
 			if ($this->config->get('config_weight_class_id') == $weight_class_id) {
 				$this->error['warning'] = $this->_('error_default');
 			}

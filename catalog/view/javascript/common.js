@@ -165,16 +165,40 @@ function select_menu_item(item){
 	$(item).closest('select_dd').find('.current_selection').html($(item).html());
 }
 
-function show_msg(type, html){
-	$('.warning, .success, .notify').remove();
+function show_msg(type, html, append){
+	append = append || false;
+	
+	if (!append) {
+		$('.message_box, .warning, .success, .notify').remove();
+	}
+	
 	var notify = $('#notification').show();
 
-	notify.html('<div class="message_box ' + type + '" style="display: none;">' + html + '<span class="close"></span></div>');
-	$('.'+type).fadeIn('slow');
+	notify.append('<div class="message_box ' + type + '" style="display: none;">' + html + '<span class="close"></span></div>');
+	$('.message_box').fadeIn('slow');
 	notify.appendTo($('body'));
 	update_floating_window();
 	$('.message_box .close').click(function(){$(this).parent().remove();});
 	$(window).scroll(update_floating_window);
+}
+
+function show_msgs(data){
+	$('.message_box').remove();
+	
+	for (var m in data) {
+		if (typeof data[m] == 'object') {
+			msg = '';
+			
+			for (var m2 in data[m]) {
+				msg += (msg ? '<br />' : '') + data[m][m2]; 
+			}
+			
+			show_msg(m + ' ' + m2, msg, true);
+		}
+		else{
+			show_msg(m, data[m], true);
+		}
+	}
 }
 
 function update_floating_window(){

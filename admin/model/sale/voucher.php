@@ -3,76 +3,68 @@ class Admin_Model_Sale_Voucher extends Model
 {
 	public function addVoucher($data)
 	{
-			$this->query("INSERT INTO " . DB_PREFIX . "voucher SET code = '" . $this->db->escape($data['code']) . "', from_name = '" . $this->db->escape($data['from_name']) . "', from_email = '" . $this->db->escape($data['from_email']) . "', to_name = '" . $this->db->escape($data['to_name']) . "', to_email = '" . $this->db->escape($data['to_email']) . "', voucher_theme_id = '" . (int)$data['voucher_theme_id'] . "', message = '" . $this->db->escape($data['message']) . "', amount = '" . (float)$data['amount'] . "', status = '" . (int)$data['status'] . "', date_added = NOW()");
+		$data['date_added'] = $this->tool->format_datetime();
+		
+		$this->insert('voucher', $data);
 	}
 	
 	public function editVoucher($voucher_id, $data)
 	{
-			$this->query("UPDATE " . DB_PREFIX . "voucher SET code = '" . $this->db->escape($data['code']) . "', from_name = '" . $this->db->escape($data['from_name']) . "', from_email = '" . $this->db->escape($data['from_email']) . "', to_name = '" . $this->db->escape($data['to_name']) . "', to_email = '" . $this->db->escape($data['to_email']) . "', voucher_theme_id = '" . (int)$data['voucher_theme_id'] . "', message = '" . $this->db->escape($data['message']) . "', amount = '" . (float)$data['amount'] . "', status = '" . (int)$data['status'] . "' WHERE voucher_id = '" . (int)$voucher_id . "'");
+		$this->update('voucher', $data, $voucher_id);
 	}
 	
 	public function deleteVoucher($voucher_id)
 	{
-			$this->query("DELETE FROM " . DB_PREFIX . "voucher WHERE voucher_id = '" . (int)$voucher_id . "'");
-		$this->query("DELETE FROM " . DB_PREFIX . "voucher_history WHERE voucher_id = '" . (int)$voucher_id . "'");
+		$this->delete('voucher', $voucher_id);
+		$this->delete('voucher_history', array('voucher_id' => $voucher_id));
 	}
 	
 	public function getVoucher($voucher_id)
 	{
-			$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "voucher WHERE voucher_id = '" . (int)$voucher_id . "'");
-		
-		return $query->row;
+		return $this->query_row("SELECT DISTINCT * FROM " . DB_PREFIX . "voucher WHERE voucher_id = '" . (int)$voucher_id . "'");
 	}
 
 	public function getVoucherByCode($code)
 	{
-			$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "voucher WHERE code = '" . $this->db->escape($code) . "'");
-		
-		return $query->row;
+		return $this->query_row("SELECT DISTINCT * FROM " . DB_PREFIX . "voucher WHERE code = '" . $this->db->escape($code) . "'");
 	}
 		
-	public function getVouchers($data = array()) {
-		$sql = "SELECT v.voucher_id, v.code, v.from_name, v.from_email, v.to_name, v.to_email, (SELECT vtd.name FROM " . DB_PREFIX . "voucher_theme_description vtd WHERE vtd.voucher_theme_id = v.voucher_theme_id AND vtd.language_id = '" . (int)$this->config->get('config_language_id') . "') AS theme, v.amount, v.status, v.date_added FROM " . DB_PREFIX . "voucher v";
+	public function getVouchers($data = array(), $select = '*', $total = false)
+	{
+		//Select
+		if ($total) {
+			$select = "COUNT(*) as total";
+		} elseif(empty($select)) {
+			$select = '*';
+		}
 		
-		$sort_data = array(
-			'v.code',
-			'v.from_name',
-			'v.from_email',
-			'v.to_name',
-			'v.to_email',
-			'v.theme',
-			'v.amount',
-			'v.status',
-			'v.date_added'
-		);
-			
-		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
-			$sql .= " ORDER BY " . $data['sort'];
+		$select .= ",(SELECT vtd.name FROM " . DB_PREFIX . "voucher_theme_description vtd WHERE vtd.voucher_theme_id = v.voucher_theme_id AND vtd.language_id = '" . (int)$this->config->get('config_language_id') . "') AS theme";
+				
+		//From
+		$from = DB_PREFIX . "voucher v";
+		
+		//Where
+		$where = '1';
+		
+		//Order and Limit
+		if (!$total) {
+			$order = $this->extract_order($data);
+			$limit = $this->extract_limit($data);
 		} else {
-			$sql .= " ORDER BY v.date_added";
-		}
-			
-		if (isset($data['order']) && ($data['order'] == 'DESC')) {
-			$sql .= " DESC";
-		} else {
-			$sql .= " ASC";
+			$order = '';
+			$limit = '';
 		}
 		
-		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
-			}
-
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
-			}
-			
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
+		//The Query
+		$query = "SELECT $select FROM $from WHERE $where $order $limit";
+		
+		$result = $this->query($query);
+		
+		if ($total) {
+			return $result->row['total'];
 		}
 		
-		$query = $this->query($sql);
-		
-		return $query->rows;
+		return $result->rows;
 	}
 		
 	public function sendVoucher($voucher_id)
@@ -87,6 +79,7 @@ class Admin_Model_Sale_Voucher extends Model
 			}
 			
 			$order_info = $this->Model_Sale_Order->getOrder($order_id);
+			$voucher_theme_info = $this->Model_Sale_VoucherTheme->getVoucherTheme($voucher_info['voucher_theme_id']);
 			
 			// If voucher belongs to an order
 			if ($order_info) {
@@ -94,101 +87,74 @@ class Admin_Model_Sale_Voucher extends Model
 				$language->load($order_info['language_filename']);
 				$language->load('mail/voucher');
 				
-				// HTML Mail
-				$template = new Template($this->registry);
+				$data = array(
+					'title' => $language->format('text_subject', $voucher_info['from_name']),
+					'text_greeting' => $language->format('text_greeting', $this->currency->format($voucher_info['amount'], $order_info['currency_code'], $order_info['currency_value'])),
+					'text_from' => $language->format('text_from', $voucher_info['from_name']),
+					'text_message' => $language->get('text_message'),
+					'text_redeem' => $language->format('text_redeem', $voucher_info['code']),
+					'text_footer' => $language->get('text_footer'),
+					'message' => nl2br($voucher_info['message']),
+					'store_name' => $order_info['store_name'],
+					'store_url' => $order_info['store_url'],
+					'image' => $this->image->get($voucher_theme_info['image']),
+				);
 				
-				$template->data['title'] = sprintf($language->get('text_subject'), $voucher_info['from_name']);
-				
-				$template->data['text_greeting'] = sprintf($language->get('text_greeting'), $this->currency->format($voucher_info['amount'], $order_info['currency_code'], $order_info['currency_value']));
-				$template->data['text_from'] = sprintf($language->get('text_from'), $voucher_info['from_name']);
-				$template->data['text_message'] = $language->get('text_message');
-				$template->data['text_redeem'] = sprintf($language->get('text_redeem'), $voucher_info['code']);
-				$template->data['text_footer'] = $language->get('text_footer');
-				
-				$voucher_theme_info = $this->Model_Sale_VoucherTheme->getVoucherTheme($voucher_info['voucher_theme_id']);
-				
-				if ($voucher_info && file_exists(DIR_IMAGE . $voucher_theme_info['image'])) {
-					$template->data['image'] = HTTP_IMAGE . $voucher_theme_info['image'];
-				} else {
-					$template->data['image'] = '';
-				}
-				
-				$template->data['store_name'] = $order_info['store_name'];
-				$template->data['store_url'] = $order_info['store_url'];
-				$template->data['message'] = nl2br($voucher_info['message']);
-	
-				$this->mail->init();
-							
-				$this->mail->setTo($voucher_info['to_email']);
-				$this->mail->setFrom($this->config->get('config_email'));
-				$this->mail->setSender($order_info['store_name']);
-				$this->mail->setSubject(html_entity_decode(sprintf($language->get('text_subject'), $voucher_info['from_name']), ENT_QUOTES, 'UTF-8'));
-				$this->mail->setHtml($template->fetch('mail/voucher.tpl'));
-				$this->mail->send();
+				$subject = html_entity_decode($language->format('text_subject', $voucher_info['from_name']), ENT_QUOTES, 'UTF-8');
 			
 			// If voucher does not belong to an order
 			} else {
 				$this->language->load('mail/voucher');
 				
-				$template = new Template($this->registry);
+				$data = array(
+					'title' => $this->language->format('text_subject', $voucher_info['from_name']),
+					'text_greeting' => $this->language->format('text_greeting', $this->currency->format($voucher_info['amount'], $order_info['currency_code'], $order_info['currency_value'])),
+					'text_from' => $this->language->format('text_from', $voucher_info['from_name']),
+					'text_message' => $this->language->get('text_message'),
+					'text_redeem' => $this->language->format('text_redeem', $voucher_info['code']),
+					'text_footer' => $this->language->get('text_footer'),
+					'message' => nl2br($voucher_info['message']),
+					'store_name' => $order_info['store_name'],
+					'store_url' => $order_info['store_url'],
+					'image' => $this->image->get($voucher_theme_info['image']),
+				);
 				
-				$template->data['title'] = sprintf($this->_('text_subject'), $voucher_info['from_name']);
-				
-				$template->data['text_greeting'] = sprintf($this->_('text_greeting'), $this->currency->format($voucher_info['amount'], $order_info['currency_code'], $order_info['currency_value']));
-				$template->data['text_from'] = sprintf($this->_('text_from'), $voucher_info['from_name']);
-				$template->data['text_message'] = $this->_('text_message');
-				$template->data['text_redeem'] = sprintf($this->_('text_redeem'), $voucher_info['code']);
-				$template->data['text_footer'] = $this->_('text_footer');
-			
-				$voucher_theme_info = $this->Model_Sale_VoucherTheme->getVoucherTheme($voucher_info['voucher_theme_id']);
-				
-				if ($voucher_info && file_exists(DIR_IMAGE . $voucher_theme_info['image'])) {
-					$template->data['image'] = HTTP_IMAGE . $voucher_theme_info['image'];
-				} else {
-					$template->data['image'] = '';
-				}
-				
-				$template->data['store_name'] = $this->config->get('config_name');
-				$template->data['store_url'] = HTTP_CATALOG;
-				$template->data['message'] = nl2br($voucher_info['message']);
-	
-				$this->mail->init();
-							
-				$this->mail->setTo($voucher_info['to_email']);
-				$this->mail->setFrom($this->config->get('config_email'));
-				$this->mail->setSender($this->config->get('config_name'));
-				$this->mail->setSubject(html_entity_decode(sprintf($this->_('text_subject'), $voucher_info['from_name']), ENT_QUOTES, 'UTF-8'));
-				$this->mail->setHtml($template->fetch('mail/voucher.tpl'));
-				$this->mail->send();
+				$subject = html_entity_decode(sprintf($this->_('text_subject'), $voucher_info['from_name']), ENT_QUOTES, 'UTF-8');
 			}
+			
+			$template = new Template($this->registry);
+			
+			$template->set_data($data);
+			$template->load('mail/voucher');
+			
+			$this->mail->init();
+			
+			$this->mail->setTo($voucher_info['to_email']);
+			$this->mail->setFrom($this->config->get('config_email'));
+			$this->mail->setSender($order_info['store_name']);
+			$this->mail->setSubject($subject);
+			$this->mail->setHtml($template->render());
+			$this->mail->send();
 		}
 	}
 			
 	public function getTotalVouchers()
 	{
-			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "voucher");
-		
-		return $query->row['total'];
+		return $this->query_var("SELECT COUNT(*) FROM " . DB_PREFIX . "voucher");
 	}
 	
 	public function getTotalVouchersByVoucherThemeId($voucher_theme_id)
 	{
-			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "voucher WHERE voucher_theme_id = '" . (int)$voucher_theme_id . "'");
-		
-		return $query->row['total'];
+		return $this->query_var("SELECT COUNT(*) FROM " . DB_PREFIX . "voucher WHERE voucher_theme_id = '" . (int)$voucher_theme_id . "'");
 	}
 	
 	public function getVoucherHistories($voucher_id, $start = 0, $limit = 10)
 	{
-		$query = $this->query("SELECT vh.order_id, CONCAT(o.firstname, ' ', o.lastname) AS customer, vh.amount, vh.date_added FROM " . DB_PREFIX . "voucher_history vh LEFT JOIN `" . DB_PREFIX . "order` o ON (vh.order_id = o.order_id) WHERE vh.voucher_id = '" . (int)$voucher_id . "' ORDER BY vh.date_added ASC LIMIT " . (int)$start . "," . (int)$limit);
-
-		return $query->rows;
+		return $this->query_rows("SELECT vh.order_id, CONCAT(o.firstname, ' ', o.lastname) AS customer, vh.amount, vh.date_added FROM " . DB_PREFIX . "voucher_history vh LEFT JOIN `" . DB_PREFIX . "order` o ON (vh.order_id = o.order_id) WHERE vh.voucher_id = '" . (int)$voucher_id . "' ORDER BY vh.date_added ASC LIMIT " . (int)$start . "," . (int)$limit);
 	}
 	
 	public function getTotalVoucherHistories($voucher_id)
 	{
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "voucher_history WHERE voucher_id = '" . (int)$voucher_id . "'");
-
-		return $query->row['total'];
+		return $this->query_var("SELECT COUNT(*) FROM " . DB_PREFIX . "voucher_history WHERE voucher_id = '" . (int)$voucher_id . "'");
 	}
 }

@@ -90,7 +90,7 @@
 				<td class="compare-attribute" colspan="<?= count($products) + 1; ?>"><?= $attribute_group['name']; ?></td>
 			</tr>
 		</thead>
-		<? foreach ($attribute_group['attribute'] as $key => $attribute) { ?>
+		<? foreach ($attribute_group['attributes'] as $key => $attribute) { ?>
 		<tbody>
 			<tr>
 				<td><?= $attribute['name']; ?></td>

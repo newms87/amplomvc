@@ -9,7 +9,7 @@
 			<? if(isset($block['name'])){?>
 			<div class='fs_info'>
 				<div class='fs_title'><?= $block['name']; ?></div>
-				<div class='fs_blurb'><?= $block['teaser']; ?></div>
+				<div class='fs_teaser'><?= $block['teaser']; ?></div>
 				<? if(isset($block['flashsale_id'])){?><div class='fs_countdown'><div class='flash_countdown' id='ffslarge-<?= $c; ?>' flashid='<?= $block['flashsale_id']; ?>'></div></div><? }?>
 			</div>
 			<? }?>

@@ -488,27 +488,27 @@ li:hover > ul.link_list, li.hover > ul.link_list{
 	background: url(../image/submenu_arrow.png) no-repeat top left;
 }
 
-#links_account ~ #links_guest{
+#links_account ~ #links_cart{
 	margin-bottom: 10px;
 }
-#links_guest{
+#links_cart{
 	text-align: right;
 	padding-right: 15px;
 }
 
-#links_guest ul.link_list{
+#links_cart ul.link_list{
 	list-style: none;
 }
-#links_guest ul.link_list li{
+#links_cart ul.link_list li{
 	list-style: none;
 }
 
-#links_guest ul.top_menu > li{
+#links_cart ul.top_menu > li{
 	display:inline-block;
 	padding: 0 10px;
 }
 
-#links_guest ul.top_menu > li + li{
+#links_cart ul.top_menu > li + li{
 	border-left: 1px solid #DDD;
 }
 
@@ -2006,8 +2006,19 @@ a.button:active, input.button:active {
 	display:block;
 }
 
-#shipping_quote{
+.shipping_quote{
 	padding:10px;
+}
+
+#quote_full_address .form_address{
+	padding: 10px;
+}
+
+#quote_full_address .quote_address{
+	font-size: 15px;
+	font-weight: bold;
+	margin-bottom: 10px;
+	padding-left: 15px;
 }
 
 #guest_shipping_address{
@@ -2970,30 +2981,31 @@ form .set_default_address input[type="radio"]{
 	padding:10px 5px;
 	padding-bottom:0;
 	
+	filter: gray; /* FOR IE 6-9 */
+	
 	-webkit-filter: grayscale(100%);
 		-moz-filter: grayscale(100%);
 		 -ms-filter: grayscale(100%);
 		  -o-filter: grayscale(100%);
 			  filter: grayscale(100%);
-			  
-	filter: url("../svg/grayscale.svg#grayscale"); /* Firefox 10+, Firefox on Android */
-   filter: gray; /* IE6-9 */
-   
-	-webkit-transition: -webkit-filter .3s linear;
-		-moz-transition: -moz-filter .3s linear;
-		 -ms-transition: -ms-filter .3s linear;
-		  -o-transition: -o-filter .3s linear;
-			  transition: filter .3s linear;
+	
+	-webkit-transition: all .5s linear;
+		-moz-transition: all .5s linear;
+		 -ms-transition: all .5s linear;
+		  -o-transition: all .5s linear;
+			  transition: all .5s linear;
+	
+	-webkit-backface-visibility: hidden;
 }
 
 #share_block:hover, .share_block:hover{
+	filter: none;
+	
 	-webkit-filter: grayscale(0%);
 		-moz-filter: grayscale(0%);
 		 -ms-filter: grayscale(0%);
 		  -o-filter: grayscale(0%);
 			  filter: grayscale(0%);
-	
-	filter: none;
 }
 
 .share_block_loading{
@@ -3143,6 +3155,11 @@ form .set_default_address input[type="radio"]{
 
 
 /* Sidebar Navigation Block */
+.sidebar_box .box-heading{
+	border-bottom: 1px #a1a1a1 solid;
+	font-weight:normal;
+}
+
 #sidebar_menu_links .attribute_menu{
 	margin-top: 15px;
 }
@@ -3197,6 +3214,16 @@ form .set_default_address input[type="radio"]{
 
 #sidebar_menu_links .sidebar_additional{
 	margin-top: 20px;
+}
+
+/* IE Sidebar */
+.IE8 #sidebar_menu_links .top_menu > li,
+.IE9 #sidebar_menu_links .top_menu > li,
+.IE10 #sidebar_menu_links .top_menu > li{
+	position:relative;
+	left: -42px;
+	margin-left: 0;
+	padding-left: 0;
 }
 
 /* Janrain Engage Signin */

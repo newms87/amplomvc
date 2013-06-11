@@ -10,7 +10,7 @@ class _CatalogControllerProductProduct extends Controller
 		if ($product_info['template'] == 'product_video') {
 			$this->language->plugin('product_video', 'product_video');
 			
-			$this->data['product_video'] = html_entity_decode($product_info['blurb']);
+			$this->data['product_video'] = html_entity_decode($product_info['teaser']);
 			
 			$this->data['manufacturer'] = $product_info['manufacturer'];
 			$this->data['manufacturer_url'] = $this->url->link('designers/designers', 'designer_id=' . $product_info['manufacturer_id']);

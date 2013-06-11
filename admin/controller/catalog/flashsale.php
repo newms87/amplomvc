@@ -281,7 +281,7 @@ class Admin_Controller_Catalog_Flashsale extends Controller
 			'extend_flashsale'=>0,
 			'status'=>0,
 			'name'=>'',
-			'blurb'=>'',
+			'teaser'=>'',
 			'teaser'=>'',
 			'image'=>'no_image.png',
 			'keyword'=>'',

@@ -75,7 +75,7 @@ $s = &$_['sections']['product'];
 				$sss[1] = "%%Meta Tag Description%%: This is used for SEO purposes to make the product more visible in search engines.";
 				$sss[2] = "%%Meta Tag Keywords%%: This is used for SEO purposes to make the product more visible in search engines.";
 				$sss[3] = "%%Description%%: Seen on the product page under the description tab. Provides detailed information about the product.";
-				$sss[4] = "%%Product Blurb%%: This is used to personalize the product. This is seen at the top of the product page. You may use Full HTML to add creativity to the product page.";
+				$sss[4] = "%%Product teaser%%: This is used to personalize the product. This is seen at the top of the product page. You may use Full HTML to add creativity to the product page.";
 				$sss[5] = "%%Shipping / Return Policy%%: Is automatically filled with the default policy. You may customize it to match this individual items policy.";
 				$sss[5] = "%%Product Tags%%: This is used to increase the visibility from our local search engine and allows products to be related to other products on the site.";
 			//Data Tab

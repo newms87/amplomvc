@@ -11,8 +11,7 @@ class Admin_Model_Mail_Error extends Model
 		//we need to make sure mail class is loaded first!
 		$this->mail->init();
 		
-		foreach($result->rows as $row)
-{
+		foreach($result->rows as $row) {
 			if(empty($row['value'])) continue;
 
 			$msg = unserialize($row['value']);

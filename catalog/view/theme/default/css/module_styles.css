@@ -19,71 +19,9 @@ ul.dncarousel li{display: block}
 .fetured_flashsale a{
 	overflow:auto;
 }
-.fs_bg_image{
-}
-
-.fs_item{
-	position:absolute;
-	display:inline-block;
-	z-index:1;
-	
-	top:36px;
-	width:260px;
-	height:324px;
-	left:42px;
-}
-.fs_item.item_0{
-	left:55px;
-}
-.fs_item.item_1{
-	left:370px;
-}
-.fs_item.item_2{
-	left:686px;
-}
-.fs_info{
-	position:relative;
-	width:260px;
-	height:52px;
-	padding-left:3px;
-	padding-top:6px;
-}
-.featured_flashsale .fs_info .fs_countdown{
-	position:absolute;
-	bottom:0;
-}
-.fs_title{
-	font-size:16px;
-	font-weight:bold;
-	line-height:16px;
-	color: #363636;
-	max-height:32px;
-	overflow:hidden;
-}
-.fs_blurb{
-	margin-top:3px;
-	margin-bottom: 5px;
-}
-.fs_countdown{
-	font-size: 12px;
-	color:#898989;
-}
-.flash_countdown{
-	display:inline-block;
-}
-.fs_tac{
-	position:absolute;
-	right:-39px;
-	top:-30px;
-}
-
-
 
 /** featured menu sidebar **/
-.sidebar_box .box-heading{
-	border-bottom: 1px #a1a1a1 solid;
-	font-weight:normal;
-}
+
 .sidebar_box form input{
 	padding-left:0;
 }

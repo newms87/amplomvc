@@ -242,7 +242,7 @@ class Admin_Model_Catalog_Flashsale extends Model
 		$query = $this->get('flashsale', '*', $flashsale_id);
 		
 		if ($query->num_rows) {
-			$query->row['blurb'] = html_entity_decode($query->row['blurb']);
+			$query->row['teaser'] = html_entity_decode($query->row['teaser']);
 			
 			$where = array(
 			'flashsale_id' => $flashsale_id

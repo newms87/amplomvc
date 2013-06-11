@@ -5,7 +5,10 @@
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'product.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
-			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a onclick="location = '<?= $cancel; ?>';" class="button"><?= $button_cancel; ?></a></div>
+			<div class="buttons">
+				<a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a>
+				<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
+			</div>
 		</div>
 		<div class="content">
 			<div id="tabs" class="htabs">
@@ -23,45 +26,36 @@
 			</div>
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 				<div id="tab-general">
-					<div id="languages" class="htabs">
-						<? foreach ($data_languages as $language) { ?>
-						<a href="#language<?= $language['language_id']; ?>"><img src="<?= HTTP_THEME_IMAGE . "flags/$language[image]"; ?>" title="<?= $language['name']; ?>" /> <?= $language['name']; ?></a>
-						<? } ?>
-					</div>
-					<? foreach ($data_languages as $language) { ?>
-					<div id="language<?= $language['language_id']; ?>">
-						<table class="form">
-							<tr>
-								<td class="required"> <?= $entry_name; ?></td>
-								<td><input type="text" name="product_description[<?= $language['language_id']; ?>][name]" size="100" value="<?= isset($product_description[$language['language_id']]) ? $product_description[$language['language_id']]['name'] : ''; ?>" /></td>
-							</tr>
-							<tr>
-								<td><?= $entry_meta_description; ?></td>
-								<td><textarea name="product_description[<?= $language['language_id']; ?>][meta_description]" cols="40" rows="5"><?= isset($product_description[$language['language_id']]) ? $product_description[$language['language_id']]['meta_description'] : ''; ?></textarea></td>
-							</tr>
-							<tr>
-								<td><?= $entry_meta_keyword; ?></td>
-								<td><textarea name="product_description[<?= $language['language_id']; ?>][meta_keyword]" cols="40" rows="5"><?= isset($product_description[$language['language_id']]) ? $product_description[$language['language_id']]['meta_keyword'] : ''; ?></textarea></td>
-							</tr>
-							<tr>
-								<td><?= $entry_blurb; ?></td>
-								<td><textarea name="product_description[<?= $language['language_id']; ?>][blurb]" class='ckedit' id="blurb<?= $language['language_id']; ?>"><?= isset($product_description[$language['language_id']]) ? $product_description[$language['language_id']]['blurb'] : ''; ?></textarea></td>
-							</tr>
-							<tr>
-								<td><?= $entry_description; ?></td>
-								<td><textarea name="product_description[<?= $language['language_id']; ?>][description]" class='ckedit' id="description<?= $language['language_id']; ?>"><?= isset($product_description[$language['language_id']]) ? $product_description[$language['language_id']]['description'] : ''; ?></textarea></td>
-							</tr>
-							<tr>
-								<td><?= $entry_shipping_ret; ?></td>
-								<td><textarea name="product_description[<?= $language['language_id']; ?>][shipping_return]" class='ckedit' id="shipping_return<?= $language['language_id']; ?>"><?= isset($product_description[$language['language_id']]) ? $product_description[$language['language_id']]['shipping_return'] : ''; ?></textarea></td>
-							</tr>
-							<tr>
-								<td><?= $entry_tag; ?></td>
-								<td><input type="text" name="product_tag[<?= $language['language_id']; ?>]" value="<?= isset($product_tag[$language['language_id']]) ? $product_tag[$language['language_id']] : ''; ?>" size="80" /></td>
-							</tr>
-						</table>
-					</div>
-					<? } ?>
+					<table class="form">
+						<tr>
+							<td class="required"> <?= $entry_name; ?></td> 
+							<td><input type="text" name="name" size="100" value="<?= $name; ?>" /></td>
+						</tr>
+						<tr>
+							<td><?= $entry_meta_description; ?></td>
+							<td><textarea name="meta_description" cols="40" rows="5"><?= $meta_description; ?></textarea></td>
+						</tr>
+						<tr>
+							<td><?= $entry_meta_keywords; ?></td>
+							<td><textarea name="meta_keywords" cols="40" rows="5"><?= $meta_keywords; ?></textarea></td>
+						</tr>
+						<tr>
+							<td><?= $entry_teaser; ?></td>
+							<td><textarea name="teaser" class="ckedit"><?= $teaser; ?></textarea></td>
+						</tr>
+						<tr>
+							<td><?= $entry_description; ?></td>
+							<td><textarea name="description" class="ckedit"><?= $description; ?></textarea></td>
+						</tr>
+						<tr>
+							<td><?= $entry_shipping_ret; ?></td>
+							<td><textarea name="shipping_return" class="ckedit"><?= $shipping_return; ?></textarea></td>
+						</tr>
+						<tr>
+							<td><?= $entry_tag; ?></td>
+							<td><input type="text" name="product_tag" value="<?= $product_tag; ?>" size="80" /></td>
+						</tr>
+					</table>
 				</div>
 				<div id="tab-data">
 					<table class="form">
@@ -109,7 +103,7 @@
 							<td><?= $entry_tax_class; ?></td>
 							<td>
 								<? $this->builder->set_config('tax_class_id','title');?>
-								<?= $this->builder->build('select',$tax_classes,'tax_class_id',$tax_class_id); ?>
+								<?= $this->builder->build('select',$data_tax_classes,'tax_class_id',$tax_class_id); ?>
 							</td>
 						</tr>
 						<tr>
@@ -173,7 +167,7 @@
 						<tr>
 							<td><?= $entry_length; ?></td>
 							<td><select name="length_class_id">
-									<? foreach ($length_classes as $length_class) { ?>
+									<? foreach ($data_length_classes as $length_class) { ?>
 									<? if ($length_class['length_class_id'] == $length_class_id) { ?>
 									<option value="<?= $length_class['length_class_id']; ?>" selected="selected"><?= $length_class['title']; ?></option>
 									<? } else { ?>
@@ -189,7 +183,7 @@
 						<tr>
 							<td><?= $entry_weight_class; ?></td>
 							<td><select name="weight_class_id">
-									<? foreach ($weight_classes as $weight_class) { ?>
+									<? foreach ($data_weight_classes as $weight_class) { ?>
 									<? if ($weight_class['weight_class_id'] == $weight_class_id) { ?>
 									<option value="<?= $weight_class['weight_class_id']; ?>" selected="selected"><?= $weight_class['title']; ?></option>
 									<? } else { ?>
@@ -204,7 +198,8 @@
 					<table class="form">
 						<tr>
 							<td><?= $entry_manufacturer; ?></td>
-							<td><?= $this->builder->build('select',$manufacturers,'manufacturer_id',(int)$manufacturer_id); ?></td>
+							<? $this->builder->set_config('manufacturer_id', 'name'); ?>
+							<td><?= $this->builder->build('select',$data_manufacturers,'manufacturer_id',(int)$manufacturer_id); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_category; ?></td>
@@ -412,7 +407,7 @@
 						<tbody id="discount-row<?= $discount_row; ?>">
 							<tr>
 								<td class="left"><select name="product_discounts[<?= $discount_row; ?>][customer_group_id]">
-										<? foreach ($customer_groups as $customer_group) { ?>
+										<? foreach ($data_customer_groups as $customer_group) { ?>
 										<? if ($customer_group['customer_group_id'] == $product_discount['customer_group_id']) { ?>
 										<option value="<?= $customer_group['customer_group_id']; ?>" selected="selected"><?= $customer_group['name']; ?></option>
 										<? } else { ?>
@@ -457,7 +452,7 @@
 								<td class="left">
 									<input type='hidden' name='product_specials[<?= $special_row; ?>][flashsale_id]' value='<?= $product_special['flashsale_id']; ?>' />
 									<select name="product_specials[<?= $special_row; ?>][customer_group_id]">
-										<? foreach ($customer_groups as $customer_group) { ?>
+										<? foreach ($data_customer_groups as $customer_group) { ?>
 										<? if ($customer_group['customer_group_id'] == $product_special['customer_group_id']) { ?>
 										<option value="<?= $customer_group['customer_group_id']; ?>" selected="selected"><?= $customer_group['name']; ?></option>
 										<? } else { ?>
@@ -533,7 +528,7 @@
 								<td class="right"><?= $entry_reward; ?></td>
 							</tr>
 						</thead>
-						<? foreach ($customer_groups as $customer_group) { ?>
+						<? foreach ($data_customer_groups as $customer_group) { ?>
 						<tbody>
 							<tr>
 								<td class="left"><?= $customer_group['name']; ?></td>
@@ -558,10 +553,10 @@
 								<td class="left"><?= $store['name']; ?></td>
 								<td class="left">
 									<? $this->builder->set_config('layout_id', 'name');?>
-									<?= $this->builder->build('select', $layouts, "product_layout[$store[store_id]][layout_id]", isset($product_layout[$store['store_id']]) ? $product_layout[$store['store_id']] : ''); ?>
+									<?= $this->builder->build('select', $data_layouts, "product_layout[$store[store_id]][layout_id]", isset($product_layout[$store['store_id']]) ? $product_layout[$store['store_id']] : ''); ?>
 								</td>
 								<td class="left">
-									<? foreach ($templates as $theme => $template) {?>
+									<? foreach ($data_templates as $theme => $template) {?>
 									<label class="product_template">
 										<div><?= $theme; ?></div>
 										<?= $this->builder->build('select', $template, "product_template[$store[store_id]][$theme][template]", isset($product_template[$store['store_id']][$theme]['template']) ? $product_template[$store['store_id']][$theme]['template'] : '') ; ?>
@@ -607,14 +602,14 @@ function generate_url_warning(field){
 function generate_url(c){
 	$(c).fadeOut(500,function(){$(c).show();});
 	$('#gen_warn').remove();
-	name = $('input[name="product_description[1][name]"]').val();
+	name = $('input[name=name]').val();
 	if(!name)
 			alert("Please make a name for this product before generating the URL");
 	$.post("<?= HTTP_ADMIN . "index.php?route=catalog/product/generate_url"; ?>",{product_id:<?= $product_id ? $product_id : 0; ?>,name:name},function(json){$('input[name="keyword"]').val(json);},'json');
 }
 function generate_model(c){
 	$(c).fadeOut(500,function(){$(c).show();});
-	name = $('input[name="product_description[1][name]"]').val();
+	name = $('input[name=name]').val();
 	if(!name)
 			alert("Please make a name for this product before generating the Model ID");
 	$.post("<?= HTTP_ADMIN . "index.php?route=catalog/product/generate_model"; ?>",{product_id:<?= $product_id?$product_id:0; ?>,name:name},function(json){$('input[name="model"]').val(json);},'json');
@@ -719,7 +714,7 @@ function attributeautocomplete(attribute_row) {
 		delay: 0,
 		source: function(request, response) {
 			$.ajax({
-				url: "<?= HTTP_ADMIN . "index.php?route=catalog/attribute/autocomplete"; ?>" + '&filter_name=' + encodeURIComponent(request.term),
+				url: "<?= HTTP_ADMIN . "index.php?route=catalog/attribute_group/autocomplete"; ?>" + '&name=' + encodeURIComponent(request.term),
 				dataType: 'json',
 				success: function(json) {
 					response($.map(json, function(item) {
@@ -925,7 +920,7 @@ function addDiscount() {
 	html	= '<tbody id="discount-row' + discount_row + '">';
 	html += '	<tr>';
 		html += '		<td class="left"><select name="product_discounts[' + discount_row + '][customer_group_id]">';
-		<? foreach ($customer_groups as $customer_group) { ?>
+		<? foreach ($data_customer_groups as $customer_group) { ?>
 		html += '			<option value="<?= $customer_group['customer_group_id']; ?>"><?= $customer_group['name']; ?></option>';
 		<? } ?>
 		html += '		</select></td>';
@@ -952,7 +947,7 @@ function addSpecial() {
 	html	= '<tbody id="special-row' + special_row + '">';
 	html += '	<tr>';
 		html += '		<td class="left"><select name="product_specials[' + special_row + '][customer_group_id]">';
-		<? foreach ($customer_groups as $customer_group) { ?>
+		<? foreach ($data_customer_groups as $customer_group) { ?>
 		html += '			<option value="<?= $customer_group['customer_group_id']; ?>"><?= $customer_group['name']; ?></option>';
 		<? } ?>
 		html += '		</select></td>';
@@ -1019,10 +1014,13 @@ $(document).ready(function() {
 
 <?= $this->builder->js('datepicker'); ?>
 
-<script type="text/javascript"><!--
+<script type="text/javascript">//<!--
 $('#tabs a').tabs();
 $('#languages a').tabs();
 $('#vtab-option a').not('.normal').tabs();
 //--></script>
+
+<?= $this->builder->js('translations', $translations); ?>
 <?= $this->builder->js('errors', $errors); ?>
+
 <?= $footer; ?>

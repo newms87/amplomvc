@@ -140,4 +140,5 @@ $('#languages a').tabs();
 <?= $this->builder->js('errors',$errors); ?>
 
 <?= $this->builder->js('translations', $translations); ?>
+
 <?= $footer; ?>

@@ -28,8 +28,7 @@ class Catalog_Model_Shipping_RoyalMail extends Model
 				
 				$rates = explode(',', $this->config->get('royal_mail_1st_class_standard_rate'));
 				
-				foreach ($rates as $rate) 
-{
+				foreach ($rates as $rate) {
 					$data = explode(':', $rate);
 				
 					if ($data[0] >= $weight) {
@@ -43,8 +42,7 @@ class Catalog_Model_Shipping_RoyalMail extends Model
 				
 				$rates = explode(',', $this->config->get('royal_mail_1st_class_standard_insurance'));
 				
-				foreach ($rates as $rate) 
-{
+				foreach ($rates as $rate) {
 					$data = explode(':', $rate);
 				
 					if ($data[0] >= $sub_total) {
@@ -60,7 +58,7 @@ class Catalog_Model_Shipping_RoyalMail extends Model
 					$title = $this->_('text_1st_class_standard');
 					
 					if ($this->config->get('royal_mail_display_weight')) {
-						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class_id')) . ')';
+						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight) . ')';
 					}
 				
 					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) {
@@ -84,8 +82,7 @@ class Catalog_Model_Shipping_RoyalMail extends Model
 				
 				$rates = explode(',', $this->config->get('royal_mail_1st_class_recorded_rate'));
 
-				foreach ($rates as $rate) 
-{
+				foreach ($rates as $rate) {
 					$data = explode(':', $rate);
 				
 					if ($data[0] >= $weight) {
@@ -99,8 +96,7 @@ class Catalog_Model_Shipping_RoyalMail extends Model
 				
 				$rates = explode(',', $this->config->get('royal_mail_1st_class_recorded_insurance'));
 				
-				foreach ($rates as $rate) 
-{
+				foreach ($rates as $rate) {
 					$data = explode(':', $rate);
 				
 					if ($data[0] >= $sub_total) {
@@ -116,7 +112,7 @@ class Catalog_Model_Shipping_RoyalMail extends Model
 					$title = $this->_('text_1st_class_recorded');
 					
 					if ($this->config->get('royal_mail_display_weight')) {
-						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class_id')) . ')';
+						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight) . ')';
 					}
 				
 					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) {
@@ -139,8 +135,7 @@ class Catalog_Model_Shipping_RoyalMail extends Model
 				
 				$rates = explode(',', $this->config->get('royal_mail_2nd_class_standard_rate'));
 
-				foreach ($rates as $rate) 
-{
+				foreach ($rates as $rate) {
 					$data = explode(':', $rate);
 				
 					if ($data[0] >= $weight) {
@@ -156,7 +151,7 @@ class Catalog_Model_Shipping_RoyalMail extends Model
 					$title = $this->_('text_2nd_class_standard');
 					
 					if ($this->config->get('royal_mail_display_weight')) {
-						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class_id')) . ')';
+						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight) . ')';
 					}
 					
 					$quote_data['2nd_class_standard'] = array(
@@ -176,8 +171,7 @@ class Catalog_Model_Shipping_RoyalMail extends Model
 				
 				$rates = explode(',', $this->config->get('royal_mail_2nd_class_recorded_rate'));
 
-				foreach ($rates as $rate) 
-{
+				foreach ($rates as $rate) {
 					$data = explode(':', $rate);
 				
 					if ($data[0] >= $weight) {
@@ -207,7 +201,7 @@ class Catalog_Model_Shipping_RoyalMail extends Model
 					$title = $this->_('text_2nd_class_recorded');
 					
 					if ($this->config->get('royal_mail_display_weight')) {
-						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class_id')) . ')';
+						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight) . ')';
 					}
 				
 					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) {
@@ -261,7 +255,7 @@ class Catalog_Model_Shipping_RoyalMail extends Model
 					$title = $this->_('text_special_delivery_500');
 					
 					if ($this->config->get('royal_mail_display_weight')) {
-						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class_id')) . ')';
+						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight) . ')';
 					}
 				
 					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) {
@@ -315,7 +309,7 @@ class Catalog_Model_Shipping_RoyalMail extends Model
 					$title = $this->_('text_special_delivery_1000');
 					
 					if ($this->config->get('royal_mail_display_weight')) {
-						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class_id')) . ')';
+						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight) . ')';
 					}
 				
 					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) {
@@ -369,7 +363,7 @@ class Catalog_Model_Shipping_RoyalMail extends Model
 					$title = $this->_('text_special_delivery_2500');
 					
 					if ($this->config->get('royal_mail_display_weight')) {
-						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class_id')) . ')';
+						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight) . ')';
 					}
 				
 					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) {
@@ -423,7 +417,7 @@ class Catalog_Model_Shipping_RoyalMail extends Model
 					$title = $this->_('text_standard_parcels');
 					
 					if ($this->config->get('royal_mail_display_weight')) {
-						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class_id')) . ')';
+						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight) . ')';
 					}
 				
 					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) {
@@ -468,7 +462,7 @@ class Catalog_Model_Shipping_RoyalMail extends Model
 					$title = $this->_('text_airmail');
 					
 					if ($this->config->get('royal_mail_display_weight')) {
-						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class_id')) . ')';
+						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight) . ')';
 					}
 					
 					$quote_data['airmail'] = array(
@@ -528,7 +522,7 @@ class Catalog_Model_Shipping_RoyalMail extends Model
 					$title = $this->_('text_international_signed');
 					
 					if ($this->config->get('royal_mail_display_weight')) {
-						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class_id')) . ')';
+						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight) . ')';
 					}
 				
 					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) {
@@ -606,7 +600,7 @@ class Catalog_Model_Shipping_RoyalMail extends Model
 					$title = $this->_('text_airsure');
 					
 					if ($this->config->get('royal_mail_display_weight')) {
-						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class_id')) . ')';
+						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight) . ')';
 					}
 				
 					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) {
@@ -646,7 +640,7 @@ class Catalog_Model_Shipping_RoyalMail extends Model
 					$title = $this->_('text_surface');
 					
 					if ($this->config->get('royal_mail_display_weight')) {
-						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('config_weight_class_id')) . ')';
+						$title .= ' (' . $this->_('text_weight') . ' ' . $this->weight->format($weight) . ')';
 					}
 				
 					if ($this->config->get('royal_mail_display_insurance') && (float)$insurance) {

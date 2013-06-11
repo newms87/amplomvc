@@ -1,6 +1,7 @@
 <?php
 // Text
 $_['text_all_categories'] = "All Categories";
+$_['text_title_all'] = "All Categories";
 $_['text_name_all'] = "All Categories";
 $_['text_description_all'] = '';
 $_['text_refine']		= 'Refine Search';

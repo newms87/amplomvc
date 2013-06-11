@@ -30,8 +30,7 @@ class Catalog_Model_Total_Reward extends Model
 						if ($product['tax_class_id']) {
 							$tax_rates = $this->tax->getRates($discount, $product['tax_class_id']);
 							
-							foreach ($tax_rates as $tax_rate) 
-{
+							foreach ($tax_rates as $tax_rate) {
 								if ($tax_rate['type'] == 'P') {
 									$taxes[$tax_rate['tax_rate_id']] -= $tax_rate['amount'];
 								}

@@ -40,7 +40,7 @@ class Catalog_Controller_Product_Product extends Controller
 			//Setup Document
 			$this->document->setTitle($product_info['name']);
 			$this->document->setDescription($product_info['meta_description']);
-			$this->document->setKeywords($product_info['meta_keyword']);
+			$this->document->setKeywords($product_info['meta_keywords']);
 			
 			$this->language->set('heading_title', $product_info['name']);
 			

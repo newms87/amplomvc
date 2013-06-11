@@ -371,40 +371,16 @@ class Admin_Model_Design_Navigation extends Model
 			),
 	
 				'catalog_attributes' => array(
-					'display_name'	=> 'Attributes',
+					'display_name'	=> 'Attribute Groups',
 					'name'			=> 'catalog_attributes',
 					'title'			=> '',
-					'href'			=> '',
+					'href'			=> 'catalog/attribute_group',
 					'query'			=> '',
-					'is_route'		=> 0,
+					'is_route'		=> 1,
 					'parent_id'		=> 'catalog',
-					'sort_order'	=> 0,
+					'sort_order'	=> 1,
 					'status'			=> 1,
 				),
-	
-					'catalog_attributes_attributes' => array(
-						'display_name'	=> 'Attributes',
-						'name'			=> 'catalog_attributes_attributes',
-						'title'			=> '',
-						'href'			=> 'catalog/attribute',
-						'query'			=> '',
-						'is_route'		=> 1,
-						'parent_id'		=> 'catalog_attributes',
-						'sort_order'	=> 0,
-						'status'			=> 1,
-					),
-	
-					'catalog_attributes_attribute_groups' => array(
-						'display_name'	=> 'Attribute Groups',
-						'name'			=> 'catalog_attributes_attribute_groups',
-						'title'			=> '',
-						'href'			=> 'catalog/attribute_group',
-						'query'			=> '',
-						'is_route'		=> 1,
-						'parent_id'		=> 'catalog_attributes',
-						'sort_order'	=> 1,
-						'status'			=> 1,
-					),
 	
 				'catalog_options' => array(
 					'display_name'	=> 'Options',

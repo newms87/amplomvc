@@ -122,8 +122,7 @@ class CKEditor{
 	*	array( 'Source', '-', 'Bold', 'Italic', 'Underline', 'Strike' ),
 	*	array( 'Image', 'Link', 'Unlink', 'Anchor' )
 	* );
-	* $events['instanceReady'] = 'function (ev)
-{
+	* $events['instanceReady'] = 'function (ev) {
 	*	alert("Loaded: " + ev.editor.name);
 	* }';
 	* $CKEditor->editor("field1", "<p>Initial value.</p>", $config, $events);
@@ -265,8 +264,7 @@ class CKEditor{
 	*
 	* Example usage:
 	* @code
-	* $CKEditor->addEventHandler('instanceReady', 'function (ev)
-{
+	* $CKEditor->addEventHandler('instanceReady', 'function (ev) {
 	*	alert("Loaded: " + ev.editor.name);
 	* }');
 	* @endcode
@@ -306,8 +304,7 @@ class CKEditor{
 	*
 	* Example usage:
 	* @code
-	* $CKEditor->addGlobalEventHandler('dialogDefinition', 'function (ev)
-{
+	* $CKEditor->addGlobalEventHandler('dialogDefinition', 'function (ev) {
 	*	alert("Loading dialog: " + ev.data.name);
 	* }');
 	* @endcode
@@ -390,8 +387,7 @@ class CKEditor{
 					$_config['on'][$eventName] = '@@'.$handlers[0];
 				}
 				else {
-					$_config['on'][$eventName] = '@@function (ev)
-{';
+					$_config['on'][$eventName] = '@@function (ev) {';
 					foreach ($handlers as $handler => $code) {
 						$_config['on'][$eventName] .= '('.$code.')(ev);';
 					}

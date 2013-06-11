@@ -45,7 +45,7 @@ class Catalog_Controller_Block_Product_Information extends Controller
 			$this->data['block_product_suggestions'] = $this->getBlock('product/suggestions', $ps_params);
 		}
 		
-		$this->data['blurb'] = html_entity_decode($product_info['blurb'], ENT_QUOTES, 'UTF-8');
+		$this->data['teaser'] = html_entity_decode($product_info['teaser'], ENT_QUOTES, 'UTF-8');
 		
 		$this->data['model'] = $product_info['model'];
 		$this->data['reward'] = $product_info['reward'];
@@ -85,7 +85,6 @@ class Catalog_Controller_Block_Product_Information extends Controller
 		$this->language->format('final_sale_explanation', $this->url->link('information/information/info','information_id=7').'/#return_policy');
 		
 		if ((float)$product_info['special']) {
-			echo 'yesss';
 			$this->data['special'] = $this->currency->format($product_info['special'], $product_info['tax_class_id']);
 		}
 		
@@ -106,6 +105,7 @@ class Catalog_Controller_Block_Product_Information extends Controller
 		
 		$this->data['continue_shopping_link'] = $this->breadcrumb->get_prev_url();
 		
+		$this->data['view_cart_link'] = $this->url->link('cart/cart');
 		$this->data['checkout_link'] = $this->url->link('checkout/checkout');
 		
 		$this->language->format('error_add_to_cart', $this->config->get('config_email'));

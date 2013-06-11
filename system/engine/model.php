@@ -114,12 +114,7 @@ abstract class Model
 				$where = "`$primary_key` = '$where'";
 			}
 			elseif (is_array($where)) {
-				$where_escaped = $this->get_escaped_values($table, $where);
-				
-				$where = '';
-				foreach ($where_escaped as $key=>$value) {
-					$where .= ($where?' AND ':'') . "`$key`='$value'";
-				}
+				$where = $this->get_escaped_values($table, $where, ' AND ');
 			}
 		}
 	
@@ -170,12 +165,7 @@ abstract class Model
 	{
 		$this->action_filter('insert', $table, $data);
 		
-		$escaped_values = $this->get_escaped_values($table, $data, false);
-		
-		$values = '';
-		foreach ($escaped_values as $key=>$value) {
-			$values .= ($values?',':'') . "`$key`='$value'";
-		}
+		$values = $this->get_escaped_values($table, $data, ',', false);
 		
 		$success = $this->db->query("INSERT INTO " . DB_PREFIX . "$table SET $values");
 		
@@ -194,12 +184,7 @@ abstract class Model
 		
 		$table_model = $this->get_table_model($table);
 		
-		$escaped_values = $this->get_escaped_values($table, $data);
-		
-		$values = '';
-		foreach ($escaped_values as $key=>$value) {
-			$values .= ($values?',':'') . "`$key`='$value'";
-		}
+		$values = $this->get_escaped_values($table, $data, ',');
 		
 		if (is_integer($where) || (is_string($where) && !preg_match("/[^\d]/", $where))) {
 			$primary_key = $this->get_primary_key($table);
@@ -211,14 +196,7 @@ abstract class Model
 			$where = "`$primary_key` = '$where'";
 		}
 		elseif (is_array($where)) {
-			$where_escaped = $this->get_escaped_values($table, $where);
-
-			if (!empty($where_escaped)) {
-				$where = '';
-				foreach ($where_escaped as $key=>$value) {
-					$where .= ($where?' AND ':'') . "`$key`='$value'";
-				}
-			}
+			$where = $this->get_escaped_values($table, $where, ' AND ');
 		}
 		
 		if ($where) {
@@ -251,12 +229,7 @@ abstract class Model
 			$where = "`$primary_key` = '$where'";
 		}
 		elseif (is_array($where)) {
-			$where_escaped = $this->get_escaped_values($table, $where);
-		
-			$where = '';
-			foreach ($where_escaped as $key=>$value) {
-				$where .= ($where?' AND ':'') . "`$key`='$value'";
-			}
+			$where = $this->get_escaped_values($table, $where, ' AND ');
 		}
 		
 		$table = $this->db->escape($table);
@@ -367,7 +340,7 @@ abstract class Model
 		return $primary_key;
 	}
 	
-	private function get_escaped_values($table, $data, $auto_inc=true)
+	public function get_escaped_values($table, $data, $glue = false, $auto_inc = true)
 	{
 		$table_model = $this->get_table_model($table);
 		
@@ -415,6 +388,16 @@ abstract class Model
 					$value = $this->db->escape($value);
 					break;
 			}
+		}unset($value);
+		
+		if ($glue) {
+			$values = '';
+			
+			foreach ($data as $key=>$value) {
+				$values .= ($values ? $glue : '') . "`$key` = '$value'";
+			}
+			
+			return $values;
 		}
 		
 		return $data;

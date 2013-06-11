@@ -188,17 +188,6 @@ class Admin_Model_Catalog_Category extends Model
 		return $url;
 	}
 	
-	public function getPath($category_id)
-	{
-		$query = $this->query("SELECT name, parent_id FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_description cd ON (c.category_id = cd.category_id) WHERE c.category_id = '" . (int)$category_id . "' AND cd.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY c.sort_order, cd.name ASC");
-		
-		if ($query->row['parent_id']) {
-			return $this->getPath($query->row['parent_id'], $this->config->get('config_language_id')) . $this->_('text_separator') . $query->row['name'];
-		} else {
-			return $query->row['name'];
-		}
-	}
-	
 	public function getCategoryStores($category_id)
 	{
 		$category_store_data = array();

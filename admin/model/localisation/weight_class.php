@@ -7,8 +7,7 @@ class Admin_Model_Localisation_WeightClass extends Model
 		
 		$weight_class_id = $this->db->getLastId();
 		
-		foreach ($data['weight_class_description'] as $language_id => $value) 
-{
+		foreach ($data['weight_class_description'] as $language_id => $value) {
 			$this->query("INSERT INTO " . DB_PREFIX . "weight_class_description SET weight_class_id = '" . (int)$weight_class_id . "', language_id = '" . (int)$language_id . "', title = '" . $this->db->escape($value['title']) . "', unit = '" . $this->db->escape($value['unit']) . "'");
 		}
 		
@@ -21,8 +20,7 @@ class Admin_Model_Localisation_WeightClass extends Model
 
 		$this->query("DELETE FROM " . DB_PREFIX . "weight_class_description WHERE weight_class_id = '" . (int)$weight_class_id . "'");
 
-		foreach ($data['weight_class_description'] as $language_id => $value) 
-{
+		foreach ($data['weight_class_description'] as $language_id => $value) {
 			$this->query("INSERT INTO " . DB_PREFIX . "weight_class_description SET weight_class_id = '" . (int)$weight_class_id . "', language_id = '" . (int)$language_id . "', title = '" . $this->db->escape($value['title']) . "', unit = '" . $this->db->escape($value['unit']) . "'");
 		}
 		
@@ -37,8 +35,7 @@ class Admin_Model_Localisation_WeightClass extends Model
 		$this->cache->delete('weight_class');
 	}
 	
-	public function getWeightClasses($data = array()) 
-{
+	public function getWeightClasses($data = array()) {
 		if ($data) {
 			$sql = "SELECT * FROM " . DB_PREFIX . "weight_class wc LEFT JOIN " . DB_PREFIX . "weight_class_description wcd ON (wc.weight_class_id = wcd.weight_class_id) WHERE wcd.language_id = '" . (int)$this->config->get('config_language_id') . "'";
 		
@@ -110,8 +107,7 @@ class Admin_Model_Localisation_WeightClass extends Model
 		
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "weight_class_description WHERE weight_class_id = '" . (int)$weight_class_id . "'");
 				
-		foreach ($query->rows as $result) 
-{
+		foreach ($query->rows as $result) {
 			$weight_class_data[$result['language_id']] = array(
 				'title' => $result['title'],
 				'unit'  => $result['unit']

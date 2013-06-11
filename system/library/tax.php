@@ -27,8 +27,7 @@ final class Tax
 	{
 		$tax_rates = $this->tax->getRates($value, $tax_class_id);
 		
-		foreach ($tax_rates as $tax_rate) 
-{
+		foreach ($tax_rates as $tax_rate) {
 			if (!isset($taxes[$tax_rate['tax_rate_id']])) {
 				$taxes[$tax_rate['tax_rate_id']] = 0;
 			}
@@ -55,8 +54,7 @@ final class Tax
 		
 		$tax_rates = $this->getRates($value, $tax_class_id);
 		
-		foreach ($tax_rates as $tax_rate) 
-{
+		foreach ($tax_rates as $tax_rate) {
 			$amount += $tax_rate['amount'];
 		}
 				
@@ -89,8 +87,7 @@ final class Tax
 		
 		$tax_rate_data = array();
 		
-		foreach ($tax_rates as $tax_rate) 
-{
+		foreach ($tax_rates as $tax_rate) {
 			if (isset($tax_rate_data[$tax_rate['tax_rate_id']])) {
 				$amount = $tax_rate_data[$tax_rate['tax_rate_id']]['amount'];
 			} else {
@@ -130,8 +127,7 @@ final class Tax
 		//TODO HACK TO APPLY ZONE CODES - SHOULD MOVE THIS TO A NEW TAX TOTAL LINE ITEM!
 		$county_tax = array(94022,94024,94035,94040,94041,94043,94085,94086,94087,94089,94301,94303,94304,94305,94306,94550,95002,95008,95013,95014,95020,95023,95030,95032,95033,95035,95037,95046,95050,95051,95053,95054,95070,95076,95110,95111,95112,95113,95116,95117,95118,95119,95120,95121,95122,95123,95124,95125,95126,95127,95128,95129,95130,95131,95132,95133,95134,95135,95136,95138,95139,95140,95141,95148);
 
-		foreach ($result->rows as $row) 
-{
+		foreach ($result->rows as $row) {
 			if (!$this->Model_Localisation_Zone->inGeoZone($row['geo_zone_id'], $address['country_id'], $address['zone_id'])) {
 				continue;
 			}

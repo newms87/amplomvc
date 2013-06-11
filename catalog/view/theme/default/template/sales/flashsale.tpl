@@ -77,7 +77,7 @@
 							<img class='open_quote' src='<?= $open_quote; ?>' />
 							
 							<div class='designer_article'>
-									<div class='designer_article_blurb'><?= $description; ?><span class='read_more'>read more</span></div>
+									<div class='designer_article_teaser'><?= $description; ?><span class='read_more'>read more</span></div>
 							</div>
 							<img class='close_quote' src='<?= $close_quote; ?>' />
 							<div style='clear:both'></div>

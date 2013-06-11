@@ -23,8 +23,7 @@ if ($entries) {
 	}
 }
 
-function _require_once($file)
-{
+function _require_once($file) {
 	global $registry;
 	static $plugin_registry = false;
 	static $plugin = null;

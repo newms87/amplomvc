@@ -46,7 +46,7 @@ class Catalog_Controller_Block_Product_Additional extends Controller
 
 		$this->data['shipping_return_link'] = $this->language->format('text_view_ship_policy', $this->url->link('information/information/info','information_id=7'));
 		
-		if ($this->template->option('attribute_tab')) {
+		if ($this->config->get('config_show_product_attributes')) {
 			$this->data['attribute_groups'] = $this->Model_Catalog_Product->getProductAttributes($product_info['product_id']);
 		}
 		

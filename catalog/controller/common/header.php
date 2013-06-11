@@ -16,7 +16,6 @@ class Catalog_Controller_Common_Header extends Controller
 		
 		//Add Styles
 		$this->document->addStyle(HTTP_THEME_STYLE . 'style.css');
-		$this->document->addStyle(HTTP_THEME_STYLE . 'module_styles.css');
 		$this->document->addStyle(HTTP_JS . 'jquery/ui/themes/ui-lightness/jquery-ui-1.9.2.custom.css');
 		$this->document->addStyle(HTTP_JS . 'jquery/colorbox/colorbox.css');
 		
@@ -123,36 +122,34 @@ class Catalog_Controller_Common_Header extends Controller
 			$this->document->addLink('account', $link_logout);
 			
 			$this->data['links_account'] = $this->document->getLinks('account');
-		}
-		else {
+		} else {
+		
 			$this->data['is_logged'] = false;
 			
 			$this->data['block_login'] = $this->getBlock('account/login', array('type' => 'header'));
-			
-			
-			if (!$this->cart->isEmpty()) {
-				$link_cart = array(
-					'name' => 'cart',
-					'display_name' => $this->_('text_shopping_cart'),
-					'href' => $this->url->link('cart/cart', "redirect=" . preg_replace('/redirect=[^&]*/','',$this->url->here())),
-					'sort_order' => 2,
-				);
-				
-				$this->document->addLink('guest', $link_cart);
-				
-				$link_checkout= array(
-					'name' => 'checkout',
-					'display_name' => $this->_('text_checkout'),
-					'href' => $this->url->link('checkout/checkout'),
-					'sort_order' => 3,
-				);
-			
-				$this->document->addLink('guest', $link_checkout);
-			}
-			
-			$this->data['links_guest'] = $this->document->getLinks('guest');
 		}
 		
+		if (!$this->cart->isEmpty()) {
+			$link_cart = array(
+				'name' => 'cart',
+				'display_name' => $this->_('text_shopping_cart'),
+				'href' => $this->url->link('cart/cart', "redirect=" . preg_replace('/redirect=[^&]*/','',$this->url->here())),
+				'sort_order' => 2,
+			);
+			
+			$this->document->addLink('cart', $link_cart);
+			
+			$link_checkout= array(
+				'name' => 'checkout',
+				'display_name' => $this->_('text_checkout'),
+				'href' => $this->url->link('checkout/checkout'),
+				'sort_order' => 3,
+			);
+		
+			$this->document->addLink('cart', $link_checkout);
+			
+			$this->data['links_cart'] = $this->document->getLinks('cart');
+		}
 		
 		$this->data['home'] = $this->url->link('common/home');
 		

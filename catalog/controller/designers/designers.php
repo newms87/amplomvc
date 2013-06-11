@@ -100,8 +100,7 @@ class Catalog_Controller_Designers_Designers extends Controller
 				while (!empty($article_insert)) {
 					$sections[$sect_id]['products'][] = $articles[array_pop($article_insert)];
 				}
-				uasort($sections,function ($a,$b)
-{if($a=='All'||$a>$b)return 1;});
+				uasort($sections,function ($a,$b) {if($a=='All'||$a>$b)return 1;});
 				$this->data['section_products'] = $sections;
 				
 				$this->data['open_quote'] = $this->image->get('data/open_quote.png');

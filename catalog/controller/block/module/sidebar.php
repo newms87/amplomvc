@@ -37,12 +37,14 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 				$attribute_group_id = $attribute_menu['attribute_group_id'];
 				
 				if ($collection_id) {
-					if (!$this->Model_Catalog_Collection->hasAttributeGroup($collection_id, $attribute_group_id)) continue;
+					$attribute_list = $this->Model_Catalog_Collection->getAttributeList($collection_id, $attribute_group_id);
 				} else {
-					if (!$this->Model_Catalog_Category->hasAttributeGroup($category_id, $attribute_group_id)) continue;
+					$attribute_list = $this->Model_Catalog_Category->getAttributeList($category_id, $attribute_group_id);
 				}
 				
-				$attribute_list = $this->Model_Catalog_Product->getAttributeList($attribute_group_id);
+				if(empty($attribute_list)) {
+					continue;
+				}
 				
 				//Setup attribute menu items
 				foreach ($attribute_list as &$attribute) {

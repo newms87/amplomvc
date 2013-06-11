@@ -59,8 +59,8 @@
 							<td><input type="text" name="teaser" value="<?= $teaser; ?>" size="40" /></td>
 					</tr>
 					<tr>
-							<td><?= $entry_blurb; ?></td>
-							<td><textarea id='flashsale_blurb' class='ckedit' name="blurb"><?= $blurb; ?></textarea></td>
+							<td><?= $entry_teaser; ?></td>
+							<td><textarea id='flashsale_teaser' class='ckedit' name="teaser"><?= $teaser; ?></textarea></td>
 					</tr>
 					<tr>
 						<td><?= $entry_product; ?></td>
@@ -173,9 +173,9 @@ function apply_designer_info(data){
 	$('#flashsale_title').val(data.name);
 	$('#image').val(data.image);
 	$('#thumb').attr('src',data.thumb);
-	remove_ckeditor_for($('#flashsale_blurb'));
-	$('#flashsale_blurb').val(data.description);
-	init_ckeditor_for($('#flashsale_blurb'));
+	remove_ckeditor_for($('#flashsale_teaser'));
+	$('#flashsale_teaser').val(data.description);
+	init_ckeditor_for($('#flashsale_teaser'));
 	$('input[name="keyword"]+a.gen_url').click();
 }
 

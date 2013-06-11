@@ -19,9 +19,7 @@ final class mysqlidb implements Database
 		$this->mysqli = new mysqli($hostname, $username, $password, $database);
 		
 		if ($this->mysqli->connect_error) {
-			$this->err_msg = 'Connect Error (' . $mysqli->connect_errno . ') ' . $mysqli->connect_error;
-		} elseif (mysqli_connect_error()) {
-			$this->err_msg = 'Connect Error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error();
+			$this->err_msg = 'Connect Error (' . $this->mysqli->connect_errno . ') ' . $this->mysqli->connect_error;
 		}
 		else {
 			$this->query("SET NAMES 'utf8'");
@@ -175,6 +173,8 @@ final class mysqlidb implements Database
 	
 	public function __destruct()
 	{
-		@$this->mysqli->close();
+		if (!empty($this->mysqli)){
+			@$this->mysqli->close();
+		}
 	}
 }

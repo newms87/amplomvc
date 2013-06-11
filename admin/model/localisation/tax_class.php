@@ -46,8 +46,7 @@ class Admin_Model_Localisation_TaxClass extends Model
 		return $query->row;
 	}
 
-	public function getTaxClasses($data = array()) 
-{
+	public function getTaxClasses($data = array()) {
 		if ($data) {
 			$sql = "SELECT * FROM " . DB_PREFIX . "tax_class ";
 

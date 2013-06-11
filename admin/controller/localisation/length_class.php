@@ -81,8 +81,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 		$this->document->setTitle($this->_('heading_title'));
  		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
-			foreach ($_POST['selected'] as $length_class_id) 
-{
+			foreach ($_POST['selected'] as $length_class_id) {
 				$this->Model_Localisation_Lengthclass->deleteLengthClass($length_class_id);
 			}
 			
@@ -163,8 +162,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 		
 		$results = $this->Model_Localisation_LengthClass->getLengthClasses($data);
 		
-		foreach ($results as $result) 
-{
+		foreach ($results as $result) {
 			$action = array();
 			
 			$action[] = array(
@@ -292,8 +290,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 		
 		if (isset($_POST['length_class_description'])) {
 			$this->data['length_class_description'] = $_POST['length_class_description'];
-		} elseif (isset($_GET['length_class_id'])) 
-{
+		} elseif (isset($_GET['length_class_id'])) {
 			$this->data['length_class_description'] = $this->Model_Localisation_LengthClass->getLengthClassDescriptions($_GET['length_class_id']);
 		} else {
 			$this->data['length_class_description'] = array();
@@ -301,8 +298,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 		
 		if (isset($_POST['value'])) {
 			$this->data['value'] = $_POST['value'];
-		} elseif (isset($length_class_info)) 
-{
+		} elseif (isset($length_class_info)) {
 			$this->data['value'] = $length_class_info['value'];
 		} else {
 			$this->data['value'] = '';
@@ -322,8 +318,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
-		foreach ($_POST['length_class_description'] as $language_id => $value) 
-{
+		foreach ($_POST['length_class_description'] as $language_id => $value) {
 			if ((strlen($value['title']) < 3) || (strlen($value['title']) > 32)) {
 				$this->error['title'][$language_id] = $this->_('error_title');
 			}
@@ -342,8 +337,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		foreach ($_POST['selected'] as $length_class_id) 
-{
+		foreach ($_POST['selected'] as $length_class_id) {
 			if ($this->config->get('config_length_class_id') == $length_class_id) {
 				$this->error['warning'] = $this->_('error_default');
 			}

@@ -334,82 +334,91 @@ class Plugin{
 					$this->message->add("warning", "There was an error while resolving the conflict in plugin <strong>$name</strong>.<br />Attempt to overwrite the file $overwrite with $keep failed!");
 					return false;
 				}
-			}
-		}
-		//Determine if any updates are necessary or conflicts exist
-		else {
-			//If the live file for the plugin is missing, we need to regenerate it
-			if (!is_file($live_file)) {
-				$update_live = true;
-			}
-			//If the live file has been modified, we need to verify these changes should be pushed to the plugin file
-			elseif (filemtime($live_file) > $live_modified) {
-				$update_plugin = true;
-			}
-			
-			//If the plugin file has been modified, we need to update the live file
-			if (filemtime($plugin_file) > $plugin_modified) {
-				$update_live = true;
-			}
-			
-			//Live file is out of date
-			if ($update_live) {
-				//A simple update of the live file is all that is needed
-				if (!$update_plugin) {
-					if (!copy($plugin_file, $live_file)) {
-						$this->message->add("warning", "There was an error while syncing $plugin_file to $live_file for the plugin <strong>$name</strong>!");
-						return false;
-					}
-					
-					$this->message->add("notify", "The Live file $live_file for the plugin <strong>$name</strong> has been synchronized!");
-				}
-				//Both files have been modified, we have a conflict!
-				else {
-					$keep_live = $this->url->link($_GET['route'], $this->url->get_query() . '&resolve_conflict=' . urlencode($live_file));
-					$keep_plugin = $this->url->link($_GET['route'], $this->url->get_query() . '&resolve_conflict=' . urlencode($plugin_file));
-					
-					$msg = 
-						"There is a conflict with the plugin <strong>$name</strong>!<br />" .
-						" Both the Plugin file $plugin_file and the Live file $live_file have been modified.<br />" .
-						" Synchronize the files and <a href=\"$keep_plugin\">keep Plugin</a> file changes," .
-						" or <a href=\"$keep_live\">keep Live</a> file changes.";
-						
-					$this->message->add('warning', $msg);
-					
-					return false;
-				}
-			}
-			//Ask admin if changes should be pushed to plugin.
-			elseif ($update_plugin) {
-				//Developer has requested to push changes to plugin
-				if ($this->config->get('config_development_mode')) {
-					if (!copy($live_file, $plugin_file)) {
-						$this->message->add("warning", "There was an error while syncing $live_file to $plugin_file for the plugin <strong>$name</strong>!");
-						return false;
-					}
-					
-					$this->message->add("notify", "The Plugin file $plugin_file for the plugin <strong>$name</strong> has been synchronized!");
-				}
-				else {
-					$keep_live = $this->url->link($_GET['route'], $this->url->get_query() . '&resolve_conflict=' . urlencode($live_file));
-					$keep_plugin = $this->url->link($_GET['route'], $this->url->get_query() . '&resolve_conflict=' . urlencode($plugin_file));
-					
-					$msg = 
-						"The Live file $live_file has been modified for the plugin <strong>$name</strong>!<br />" .
-						" Either <a href=\"$keep_live\">update</a> the Plugin file," .
-						" or <a href=\"$keep_plugin\">revert</a> the Live file to the contents of the Plugin file.";
-						
-					$this->message->add('warning', $msg);
-					
-					return false;
-				}
-			}
-			//The files are already up to date!
-			else {
-				return true;
+				
+				$this->updatePluginFileTimestamps($name, $plugin_file, $live_file);
+				
+				$this->cleanReload();
 			}
 		}
 		
+		//If the live file for the plugin is missing, we need to regenerate it
+		if (!is_file($live_file)) {
+			$update_live = true;
+		}
+		//If the live file has been modified, we need to verify these changes should be pushed to the plugin file
+		elseif (filemtime($live_file) > $live_modified) {
+			$update_plugin = true;
+		}
+		
+		//If the plugin file has been modified, we need to update the live file
+		if (filemtime($plugin_file) > $plugin_modified) {
+			$update_live = true;
+		}
+		
+		//Live file is out of date
+		if ($update_live) {
+			//A simple update of the live file is all that is needed
+			if (!$update_plugin) {
+				if (!copy($plugin_file, $live_file)) {
+					$this->message->add("warning", "There was an error while syncing $plugin_file to $live_file for the plugin <strong>$name</strong>!");
+					return false;
+				}
+				
+				$this->message->add("notify", "The Live file $live_file for the plugin <strong>$name</strong> has been synchronized!");
+			}
+			//Both files have been modified, we have a conflict!
+			else {
+				$keep_live = $this->url->link($_GET['route'], $this->url->get_query() . '&resolve_conflict=' . urlencode($live_file));
+				$keep_plugin = $this->url->link($_GET['route'], $this->url->get_query() . '&resolve_conflict=' . urlencode($plugin_file));
+				
+				$msg = 
+					"There is a conflict with the plugin <strong>$name</strong>!<br />" .
+					" Both the Plugin file $plugin_file and the Live file $live_file have been modified.<br />" .
+					" Synchronize the files and <a href=\"$keep_plugin\">keep Plugin</a> file changes," .
+					" or <a href=\"$keep_live\">keep Live</a> file changes.";
+					
+				$this->message->add('warning', $msg);
+				
+				return false;
+			}
+		}
+		//Ask admin if changes should be pushed to plugin.
+		elseif ($update_plugin) {
+			//Developer has requested to push changes to plugin
+			if ($this->config->get('config_development_mode')) {
+				if (!copy($live_file, $plugin_file)) {
+					$this->message->add("warning", "There was an error while syncing $live_file to $plugin_file for the plugin <strong>$name</strong>!");
+					return false;
+				}
+				
+				$this->message->add("notify", "The Plugin file $plugin_file for the plugin <strong>$name</strong> has been synchronized!");
+			}
+			else {
+				$keep_live = $this->url->link($_GET['route'], $this->url->get_query() . '&resolve_conflict=' . urlencode($live_file));
+				$keep_plugin = $this->url->link($_GET['route'], $this->url->get_query() . '&resolve_conflict=' . urlencode($plugin_file));
+				
+				$msg = 
+					"The Live file $live_file has been modified for the plugin <strong>$name</strong>!<br />" .
+					" Either <a href=\"$keep_live\">update</a> the Plugin file," .
+					" or <a href=\"$keep_plugin\">revert</a> the Live file to the contents of the Plugin file.";
+					
+				$this->message->add('warning', $msg);
+				
+				return false;
+			}
+		}
+		//The files are already up to date!
+		else {
+			return true;
+		}
+		
+		$this->updatePluginFileTimestamps($name, $plugin_file, $live_file);
+		
+		return true;
+	}
+	
+	private function updatePluginFileTimestamps($name, $plugin_file, $live_file)
+	{
 		//Update plugin file data
 		$data = array(
 			'name' => $name,
@@ -423,12 +432,6 @@ class Plugin{
 		$this->setPluginRegistryEntry($data);
 		
 		$this->loadPluginFileRegistry();
-		
-		if (!empty($_GET['resolve_conflict'])) {
-			$this->cleanReload();
-		}
-		
-		return true;
 	}
 	
 	private function setPluginRegistryEntry($data)

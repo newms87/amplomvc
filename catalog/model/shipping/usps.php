@@ -388,8 +388,7 @@ class Catalog_Model_Shipping_Usps extends Model
 												);
 											}
 
-										} elseif ($this->config->get('usps_domestic_' . $classid)) 
-{
+										} elseif ($this->config->get('usps_domestic_' . $classid)) {
 											$cost = $postage->getElementsByTagName('Rate')->item(0)->nodeValue;
 
 											$quote_data[$ClassId] = array(
@@ -442,8 +441,7 @@ class Catalog_Model_Shipping_Usps extends Model
 								}
 							}
 						}
-					} elseif ($error) 
-{
+					} elseif ($error) {
 						$method_data = array(
 							'code'		=> 'usps',
 							'title'		=> $this->_('text_title'),

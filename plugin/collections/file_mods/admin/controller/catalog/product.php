@@ -36,17 +36,7 @@ class Admin_Controller_Catalog_Product extends Controller
 	private function getForm()
 	{
 //.....
-		$defaults = array(
-//-----
-//>>>>>
-		'product_collection' => array(),
-//-----
-//=====
-		);
-//.....
-		if (!isset($this->data['product_category'])) {
-			$this->data['product_category'] = $this->Model_Catalog_Product->getProductCategories($product_id);
-		}
+		$product_info['product_category'] = $this->Model_Catalog_Product->getProductCategories($product_id);
 //-----
 //>>>>> {php}
 		$this->language->plugin('collections', 'admin/product');
@@ -56,11 +46,21 @@ class Admin_Controller_Catalog_Product extends Controller
 			'order' => 'ASC',
 		);
 		
+		$product_info['product_collection'] = $this->Model_Catalog_Collection->getCollectionsForProduct($product_id);
+//-----
+//=====
+		$defaults = array(
+//-----
+//>>>>> {php}
+		'product_collection' => array(),
+//-----
+//=====
+		);
+//.....
+		$this->data['data_categories'] = $this->Model_Catalog_Category->getCategories();
+//-----
+//>>>>> {php}
 		$this->data['data_collections'] = $this->Model_Catalog_Collection->getCollections($collection_sort);
-		
-		if (!isset($this->data['product_collection'])) {
-			$this->data['product_collection'] = $this->Model_Catalog_Collection->getCollectionsForProduct($product_id);
-		}
 //-----
 //=====
   	}

@@ -93,16 +93,16 @@ class Admin_Controller_Catalog_Product extends Controller
 			foreach ($_POST['selected'] as $product_id) {
 				switch($_GET['action']){
 					case 'enable':
-						$this->Model_Catalog_Product->updateProductValue($product_id, 'status',1);
+						$this->Model_Catalog_Product->updateProduct($product_id, 'status',1);
 						break;
 					case 'disable':
-						$this->Model_Catalog_Product->updateProductValue($product_id, 'status',0);
+						$this->Model_Catalog_Product->updateProduct($product_id, 'status',0);
 						break;
 					case 'date_expires':
-						$this->Model_Catalog_Product->updateProductValue($product_id,'date_expires',$_GET['action_value']);
+						$this->Model_Catalog_Product->updateProduct($product_id,'date_expires',$_GET['action_value']);
 						break;
 					case 'is_final':
-						$this->Model_Catalog_Product->updateProductValue($product_id,'is_final',$_GET['action_value']);
+						$this->Model_Catalog_Product->updateProduct($product_id,'is_final',$_GET['action_value']);
 						break;
 					case 'add_cat':
 						$this->Model_Catalog_Product->updateProductCategory($product_id, 'add',$_GET['action_value']);
@@ -111,10 +111,10 @@ class Admin_Controller_Catalog_Product extends Controller
 						$this->Model_Catalog_Product->updateProductCategory($product_id, 'remove',$_GET['action_value']);
 						break;
 					case 'editable':
-						$this->Model_Catalog_Product->updateProductValue($product_id,'editable',$_GET['action_value']);
+						$this->Model_Catalog_Product->updateProduct($product_id,'editable',$_GET['action_value']);
 						break;
 					case 'ship_policy':
-						$this->Model_Catalog_Product->updateProductDescriptions($product_id,'shipping_return', $_GET['action_value']);
+						$this->Model_Catalog_Product->updateProduct($product_id,'shipping_return', $_GET['action_value']);
 						break;
 					case 'copy':
 						$this->Model_Catalog_Product->copyProduct($product_id);
@@ -312,12 +312,12 @@ class Admin_Controller_Catalog_Product extends Controller
 		$tt_data += $this->language->data;
 		
 		//Build the table template
-		$this->mytable->init();
-		$this->mytable->set_template('table/list_view');
-		$this->mytable->set_template_data($tt_data);
-		$this->mytable->map_attribute('filter_value', $filter_values);
+		$this->table->init();
+		$this->table->set_template('table/list_view');
+		$this->table->set_template_data($tt_data);
+		$this->table->map_attribute('filter_value', $filter_values);
 		
-		$this->data['list_view'] = $this->mytable->build();
+		$this->data['list_view'] = $this->table->render();
 		
 		$categories = $this->Model_Catalog_Category->getCategories();
 		
@@ -422,12 +422,38 @@ class Admin_Controller_Catalog_Product extends Controller
 		}
 		
 		$this->data['cancel'] = $this->url->link('catalog/product', $url);
-
+		
+		//If Post data has not been sent, Grab all the product information from the Database
 		if ($product_id && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
 			$product_info = $this->Model_Catalog_Product->getProduct($product_id);
+			
+			$product_info['date_available'] = date('Y-m-d', strtotime($product_info['date_available']));
+			
+			$product_tags = $this->Model_Catalog_Product->getProductTags($product_id);
+			$product_info['product_tag'] = $product_tags[$this->config->get('config_language_id')];
+			
+			$product_info['product_store'] = $this->Model_Catalog_Product->getProductStores($product_id);
+			$product_info['product_attributes'] = $this->Model_Catalog_Product->getProductAttributes($product_id);
+			$product_info['product_discounts'] = $this->Model_Catalog_Product->getProductDiscounts($product_id);
+			$product_info['product_specials'] = $this->Model_Catalog_Product->getProductSpecials($product_id);
+			$product_info['product_images'] = $this->Model_Catalog_Product->getProductImages($product_id);
+			$product_info['product_category'] = $this->Model_Catalog_Product->getProductCategories($product_id);
+			$product_info['product_download'] = $this->Model_Catalog_Product->getProductDownloads($product_id);
+			$product_info['product_reward'] = $this->Model_Catalog_Product->getProductRewards($product_id);
+			$product_info['product_layout'] = $this->Model_Catalog_Product->getProductLayouts($product_id);
+			$product_info['product_template'] = $this->Model_Catalog_Product->getProductTemplates($product_id);
+			
+			$product_info['product_related'] = array();
+			$products = $this->Model_Catalog_Product->getProductRelated($product_id);
+			
+			foreach ($products as $product_id) {
+				$related_info = $this->Model_Catalog_Product->getProduct($product_id);
+				
+				if ($related_info) {
+					$product_info['product_related'][] = $related_info;
+				}
+			}
 		}
-		
-		$default_english = array('shipping_return'=>$this->_('shipping_return_policy'), 'description'=>'','meta_description'=>'','meta_keyword'=>'','name'=>'','blurb'=>'');
 		
 		$defaults = array(
 			'model'=>'',
@@ -436,8 +462,13 @@ class Admin_Controller_Catalog_Product extends Controller
 			'location'=>'',
 			'keyword'=>'',
 			'product_store'=>array(0,1,2),
-			'product_description'=>array(1=>$default_english),
-			'product_tag'=>array(),
+			'name' => '',
+			'description' => '',
+			'teaser' => '',
+			'meta_keywords' => '',
+			'meta_description' => '',
+			'shipping_return' => '',
+			'product_tag' => '',
 			'image'=>'',
 			'manufacturer_id' => 0,
 			'shipping'=>1,
@@ -474,76 +505,31 @@ class Admin_Controller_Catalog_Product extends Controller
 			'product_template' => array(),
 			);
 
-		foreach($defaults as $d=>$default)
-{
-			if (isset($_POST[$d]))
-				$this->data[$d] = $_POST[$d];
-			elseif (isset($product_info[$d]))
-				$this->data[$d] = $product_info[$d];
-			elseif(!$product_id)
-				$this->data[$d] = $default;
-		}
-		
-		if (isset($this->data['keyword'])) {
-			$this->data['keyword'] = preg_replace("/^[\/]?product[\/]?/i","",$this->data['keyword']);
-		}
-		else {
-			$this->data['keyword'] = '';
-		}
-		
-		if (!isset($this->data['product_description'])) {
-			$this->data['product_description'] = $this->Model_Catalog_Product->getProductDescriptions($product_id);
-			
-			if (!empty($this->data['product_description'][$this->config->get('config_language_id')]['name'])) {
-				$this->breadcrumb->add($this->data['product_description'][$this->config->get('config_language_id')]['name'], $this->url->link('catalog/product/update', 'product_id=' . $product_id));
+		foreach($defaults as $key => $default) {
+			if (isset($_POST[$key])) {
+				$this->data[$key] = $_POST[$key];
+			} elseif (isset($product_info[$key])) {
+				$this->data[$key] = $product_info[$key];
+			} else {
+				$this->data[$key] = $default;
 			}
 		}
-		
-		if (!isset($this->data['product_store'])) {
-			$this->data['product_store'] = $this->Model_Catalog_Product->getProductStores($product_id);
-		}
-		
-		if (!isset($this->data['product_tag'])) {
-			$this->data['product_tag'] = $this->Model_Catalog_Product->getProductTags($product_id);
-		}
-		
-		if (!isset($this->data['date_available'])) {
-			$this->data['date_available'] = date('Y-m-d', strtotime($product_info['date_available']));
-		}
-		
-		$this->data['data_languages'] = $this->Model_Localisation_Language->getLanguageList();
-		
-		
-		$thumb = ($this->data['image'] && file_exists(DIR_IMAGE . $this->data['image']))?$this->data['image']:'no_image.png';
-		$this->data['thumb'] = $this->image->resize($thumb, 100, 100);
-		
-		$this->data['manufacturers'] = array(0=>$this->_('text_none'));
 		
 		$m_data = array(
 			'sort' => 'name'
 		);
 		
-		$manufacturers = $this->Model_Catalog_Manufacturer->getManufacturers($m_data);
+		$this->data['data_manufacturers'] = array('' => $this->_('text_none')) + $this->Model_Catalog_Manufacturer->getManufacturers($m_data);
 		
-		foreach ($manufacturers as $man) {
-			$this->data['manufacturers'][$man['manufacturer_id']] = $man['name'];
-		}
-		
-		$this->data['tax_classes'] = array_merge(array(0=>'--- None ---'),$this->Model_Localisation_TaxClass->getTaxClasses());
-	
-		$this->data['stock_statuses'] = $this->Model_Localisation_StockStatus->getStockStatuses();
-		
-		
-		$this->data['weight_classes'] = $this->Model_Localisation_WeightClass->getWeightClasses();
-		
-		
-		$this->data['length_classes'] = $this->Model_Localisation_LengthClass->getLengthClasses();
-		
-		//Get Product Attributes
-		if (!isset($this->data['product_attributes'])) {
-			$this->data['product_attributes'] = $this->Model_Catalog_Product->getProductAttributes($product_id);
-		}
-		
+		$this->data['data_tax_classes'] = array('' => $this->_('text_none')) + $this->Model_Localisation_TaxClass->getTaxClasses();
+		$this->data['data_weight_classes'] = $this->Model_Localisation_WeightClass->getWeightClasses();
+		$this->data['data_length_classes'] = $this->Model_Localisation_LengthClass->getLengthClasses();
+		$this->data['data_customer_groups'] = $this->Model_Sale_CustomerGroup->getCustomerGroups();
+		$this->data['data_downloads'] = $this->Model_Catalog_Download->getDownloads();
+		$this->data['data_categories'] = $this->Model_Catalog_Category->getCategories();
+		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
+		$this->data['data_layouts'] = array('' => '') +	$this->Model_Design_Layout->getLayouts();
+		$this->data['data_templates'] = $this->Model_Design_Template->getTemplatesFor('product', true);
 		
 		/**
 		* NOTE to clarify options / product options:
@@ -581,17 +567,15 @@ class Admin_Controller_Catalog_Product extends Controller
 			}
 		}
 		
-		//Ensure that the index 'product_option_value' is set for each option
-		foreach ($this->data['product_options'] as &$po) {
-			if (!isset($po['product_option_value'])) {
-				$po['product_option_value'] = array();
-			}
-		}
 		
 		//Get All option values currently assigned to this product in flat list (for option restrictions)
 		$this->data['all_product_option_values'] = array();
 		
 		foreach ($this->data['product_options'] as $key=>$product_option) {
+			if (!isset($product_option['product_option_value'])) {
+				$product_option['product_option_value'] = array();
+			}
+
 			foreach ($product_option['product_option_value'] as $product_option_value) {
 				$this->data['all_product_option_values'][$product_option_value['option_value_id']] = $product_option_value;
 			}
@@ -623,110 +607,61 @@ class Admin_Controller_Catalog_Product extends Controller
 		}
 		
 		$this->language->format('text_option_help', $this->config->get('config_email'));
-		$this->language->format('text_not_editable', $this->data['product_description'][$this->config->get('config_language_id')]['name'], $this->config->get('config_email'));
+		$this->language->format('text_not_editable', $this->data['name'], $this->config->get('config_email'));
 		
-		$this->data['customer_groups'] = $this->Model_Sale_CustomerGroup->getCustomerGroups();
+		//Translation
+		$translate_fields = array(
+			'name',
+			'description',
+			'meta_description',
+			'meta_keywords',
+			'teaser',
+			'shipping_return',
+		);
 		
-		if (!isset($this->data['product_discounts'])) {
-			$this->data['product_discounts'] = $this->Model_Catalog_Product->getProductDiscounts($product_id);
-		}
-
-		if (!isset($this->data['product_specials'])) {
-			$this->data['product_specials'] = $this->Model_Catalog_Product->getProductSpecials($product_id);
-		}
+		$this->data['translations'] = $this->translation->get_translations('product', $product_id, $translate_fields);
 		
-		if (!isset($this->data['product_images'])) {
-			$this->data['product_images'] = $this->Model_Catalog_Product->getProductImages($product_id);
-		}
+		//A hack to easily integrate product_tags translations
+		$tag_translations = $this->data['translations']['name'];
 		
-		foreach ($this->data['product_images'] as &$product_image) {
-			if (!$product_image['image'] || !file_exists(DIR_IMAGE . $product_image['image'])) {
-				$product_image['image'] = 'no_image.png';
-			}
-			
-			$product_image['thumb'] = $this->image->resize($product_image['image'], 100, 100);
+		foreach($tag_translations as $language_id => &$text) {
+			$text = isset($product_tags[$language_id]) ? $product_tags[$language_id] : '';
 		}
 		
-		$this->data['no_image'] = $this->image->resize('no_image.png', 100, 100);
-
-		$this->data['data_downloads'] = $this->Model_Catalog_Download->getDownloads();
-		
-		if (!isset($this->data['product_download'])) {
-			$this->data['product_download'] = $this->Model_Catalog_Product->getProductDownloads($product_id);
-		}
-		
-		$this->data['data_categories'] = $this->Model_Catalog_Category->getCategories();
-		
-		if (!isset($this->data['product_category'])) {
-			$this->data['product_category'] = $this->Model_Catalog_Product->getProductCategories($product_id);
-		}
-		
-		if (!isset($this->data['product_related'])) {
-			$products = $this->Model_Catalog_Product->getProductRelated($product_id);
-			$this->data['product_related'] = array();
-		
-			foreach ($products as $product_id) {
-				$related_info = $this->Model_Catalog_Product->getProduct($product_id);
-				
-				if ($related_info) {
-					$this->data['product_related'][] = array(
-						'product_id' => $related_info['product_id'],
-						'name'		=> $related_info['name']
-					);
-				}
-			}
-		}
-						
-		if (!isset($this->data['product_reward'])) {
-			$this->data['product_reward'] = $this->Model_Catalog_Product->getProductRewards($product_id);
-		}
-		
-		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
-		
-		if (!isset($this->data['product_layout'])) {
-			$this->data['product_layout'] = $this->Model_Catalog_Product->getProductLayouts($product_id);
-		}
-		
-		$this->data['layouts'] = array(0 => '') +	$this->Model_Design_Layout->getLayouts();
-		
-		if (!isset($this->data['product_template'])) {
-			$this->data['product_template'] = $this->Model_Catalog_Product->getProductTemplates($product_id);
-		}
-		
-		$this->data['templates'] = $this->Model_Design_Template->getTemplatesFor('product', true);
+		$this->data['translations']['product_tag'] = $tag_translations;
 		
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
-				
+		
 		$this->response->setOutput($this->render());
   	}
 	
   	private function validateForm()
   	{
-  		
 		if (!$this->user->hasPermission('modify', 'catalog/product')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
-
-		foreach ($_POST['product_description'] as $language_id => $value) {
-			if ((strlen($value['name']) < 1) || (strlen($value['name']) > 255)) {
-			$this->error['product_description['.$language_id.'][name]'] = $this->_('error_name');
-			}
+		
+		if (!$this->validation->text($_POST['name'], 3, 254)) {
+			$this->error['name'] = $this->_('error_name');
 		}
 		
-		if ((strlen($_POST['model']) < 1) || (strlen($_POST['model']) > 64)) {
+		if (!$this->validation->text($_POST['model'], 1, 64)) {
 			$this->error['model'] = $this->_('error_model');
 		}
-		elseif (!isset($_GET['product_id'])) {
-			$dup = $this->db->query("SELECT COUNT(*) as count FROM " . DB_PREFIX . "product WHERE model='" . $this->db->escape($_POST['model']) . "'");
-			if($dup->row['count'] > 0)
-				$this->error['model'] = $this->_('error_dup_model');
+		
+		$product_id = isset($_GET['product_id']) ? "AND product_id != '" . (int)$_GET['product_id'] . "'" : '';
+		
+		$exists = $this->db->query_var("SELECT COUNT(*) FROM " . DB_PREFIX . "product WHERE model='" . $this->db->escape($_POST['model']) . "' $product_id");
+		
+		if ($exists) {
+			$this->error['model'] = $this->_('error_dup_model');
 		}
 		
-		if ((strlen($_POST['keyword']) < 1) || (strlen($_POST['keyword']) > 255)) {
-				$this->error['keyword'] = $this->_('error_keyword');
+		if (!$this->validation->text($_POST['keyword'], 1, 255)) {
+			$this->error['keyword'] = $this->_('error_keyword');
 		}
 		
 		if (isset($_POST['product_images'])) {

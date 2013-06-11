@@ -193,12 +193,12 @@ class Admin_Controller_Page_Page extends Controller
 		$tt_data += $this->language->data;
 		
 		//Build the table template
-		$this->mytable->init();
-		$this->mytable->set_template('table/list_view');
-		$this->mytable->set_template_data($tt_data);
-		$this->mytable->map_attribute('filter_value', $filter);
+		$this->table->init();
+		$this->table->set_template('table/list_view');
+		$this->table->set_template_data($tt_data);
+		$this->table->map_attribute('filter_value', $filter);
 		
-		$this->data['list_view'] = $this->mytable->build();
+		$this->data['list_view'] = $this->table->render();
 		
 		//Batch Actions
 		$url_query = $this->url->get_query('filter', 'sort', 'order', 'page');

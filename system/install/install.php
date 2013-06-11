@@ -93,8 +93,7 @@ $db_types = array(
 require_once("system/install/install_{$template}.tpl");
 
 
-function setup_db($_)
-{
+function setup_db($_) {
 	define("SITE_DIR", str_replace('system/install','', rtrim(str_replace('\\','/',dirname(__FILE__)), '/')));
 	define("DIR_DATABASE", SITE_DIR . 'system/database/');
 	define("DB_PREFIX", $_POST['db_prefix']);
@@ -194,8 +193,7 @@ function setup_db($_)
 	return true;
 }
 
-function setup_user($_)
-{
+function setup_user($_) {
 	if ($_POST['password'] !== $_POST['confirm']) {
 		$_POST['password'] = $_POST['confirm'] = '';
 		

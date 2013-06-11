@@ -8,7 +8,7 @@ class Catalog_Model_Account_Address extends Model
 		$match_data = $data;
 		unset($match_data['address_id']);
 		
-		$existing = $this->address_exists($match_data);
+		$existing = $this->addressExists($match_data);
 		
 		if ($existing) {
 			return $existing;
@@ -29,7 +29,7 @@ class Catalog_Model_Account_Address extends Model
 		$this->delete('address', array('address_id'=>$address_id, 'customer_id'=>$this->customer->getId()));
 	}
 	
-	private function is_valid_address($address)
+	private function isValidAddress($address)
 	{
 		if(!trim($address['firstname'].$address['lastname']))return false;
 		if(!trim($address['address_1']))return false;
@@ -39,15 +39,15 @@ class Catalog_Model_Account_Address extends Model
 		return true;
 	}
 	
-	public function address_exists($data)
+	public function addressExists($data)
 	{
-		$query = $this->get('address', 'address_id', $data);
+		$where = $this->get_escaped_values('address', $data, ' AND ');
 		
-		if ($query->num_rows) {
-			return $query->row['address_id'];
+		if (empty($where)) {
+			return false;
 		}
-
-		return false;
+		
+		return $this->query_var("SELECT address_id FROM " . DB_PREFIX . "address WHERE $where");
 	}
 	
 	public function getAddress($address_id)
@@ -57,7 +57,7 @@ class Catalog_Model_Account_Address extends Model
 		if ($address) {
 			$this->get_address_localisation($address);
 			
-			if ($this->is_valid_address($address)) {
+			if ($this->isValidAddress($address)) {
 				return $address;
 			}
 			
@@ -76,7 +76,7 @@ class Catalog_Model_Account_Address extends Model
 		foreach ($address_list as $address) {
 			$this->get_address_localisation($address);
 			
-			if ($this->is_valid_address($address)) {
+			if ($this->isValidAddress($address)) {
 				$addresses[] = $address;
 			} else {
 				$this->delete( 'address', array('address_id' => $address['address_id'], 'customer_id' => $this->customer->getId()) );

@@ -48,9 +48,9 @@ $_['button_add_restriction_value'] = "Add Value";
 
 // Entry
 $_['entry_name']				= 'Product Name:';
-$_['entry_meta_keyword'] 	= 'Meta Tag Keywords:';
+$_['entry_meta_keywords'] 	= 'Meta Tag Keywords:';
 $_['entry_meta_description'] = 'Meta Tag Description:';
-$_['entry_blurb']				= 'Description:<span class="alert">Do Not Upload Pictures or Sizing Charts here!</span> <span class="help">This will show up at the top of the Product page next to the flashsale image. This can be used as a stylish description of the flashsale with images / colorful fonts / full HTML / etc.</span>';
+$_['entry_teaser']				= 'Description:<span class="alert">Do Not Upload Pictures or Sizing Charts here!</span> <span class="help">This will show up at the top of the Product page next to the flashsale image. This can be used as a stylish description of the flashsale with images / colorful fonts / full HTML / etc.</span>';
 $_['entry_shipping_ret']	= 'Shipping / Return Policy:';
 $_['entry_shipping_ret_designer']				= 'Shipping / Return Policy:<span class="help">Note: You can change your default shipping/return policy under <a target="_blank" href="%s">Designer Brand</a> and choose the Brand you want to change the policy for.';
 $_['entry_description']		= 'More Information:<span class="help">Use a bullet point list. This is displayed below the product in the "More Info" tab.</span>';

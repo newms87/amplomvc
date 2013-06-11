@@ -51,8 +51,7 @@ country_selectors.live('change', function (event)
 	});
 });
 
-country_selectors.each(function (i,e)
-{
+country_selectors.each(function (i,e) {
 	zs = $(e).closest('<?= $parent_selector;?>').find('<?=$zone_selector;?>');
 	if (zs.children().length < 1 || !zs.val()) {
 		$(e).trigger('change', $(e));
@@ -100,8 +99,7 @@ var no_image = "<?= HTTP_THEME_IMAGE . "no_image.png"; ?>"
 		$sort_query = $this->url->get_query("sort","order","page");
 	?>
 <script type="text/javascript">//<!--
-function filter()
-{
+function filter() {
 	url = '<?= HTTP_ROOT; ?>index.php?route=<?= $url . '&' . $sort_query . ($query ? '&'.$query : '');?>';
 	
 	filter_list = $('<?= $selector;?> [name]').not('[value=""]');
@@ -163,8 +161,7 @@ for(var e in errors){
 		$sort_query = $this->url->get_query("sort","limit");
 	?>
 <script type="text/javascript">//<!--
-$('<?=$selector;?>').each(function (i,e)
-{
+$('<?=$selector;?>').each(function (i,e) {
 	$(e).autocomplete({
 		delay: 0,
 		source: function (request, response)
@@ -225,10 +222,8 @@ function init_ckeditor_for(context){
 
 init_ckeditor_for($('.ckedit').not('.template'));
 
-function remove_ckeditor_for(context)
-{
-	context.each(function (i,e)
-{
+function remove_ckeditor_for(context) {
+	context.each(function (i,e) {
 		CKEDITOR.instances[$(e).attr('id')].destroy();
 	});
 }
@@ -239,6 +234,12 @@ function remove_ckeditor_for(context)
 	case 'translations':
 		if (empty($args[0])) {
 			$args[0] = array();
+		}
+		
+		if (!empty($args[1])) {
+			$name_format = $args[1];
+		} else {
+			$name_format = false;
 		}
 		
 		$languages = $this->Model_Localisation_Language->getLanguageList();
@@ -258,8 +259,7 @@ function remove_ckeditor_for(context)
 </div>
 
 <script type="text/javascript">//<!--
-$('.language_menu .language_item').click(function ()
-{
+$('.language_menu .language_item').click(function () {
 	lang_id = $(this).attr('lang_id');
 	$('.translation').hide();
 	$('.translation.' + lang_id).show();
@@ -274,7 +274,11 @@ var translations = <?= $translations; ?>;
 var default_language = "<?= $default_language ?>";
 
 for(var t in translations){
-	context = $('[name="'+t+'"]');
+	<? if ($name_format) { ?>
+		context = $('[name="<?= $name_format; ?>"]'.replace(/%name%/, t));
+	<? } else { ?>
+		context = $('[name="'+t+'"]');
+	<? } ?>
 	
 	if (!context.length) {
 		context = $(t);
@@ -289,7 +293,12 @@ for(var t in translations){
 	box.append(context);
 	
 	for(var lang in translations[t]){
-		t_name = "translations[" + t + "][" + lang + "]";
+		<? if ($name_format) { ?>
+			t_name = "<?= $name_format; ?>".replace(/%name%/,"translations][" + t + "][" + lang + "");
+		<? } else { ?>
+			t_name = "translations[" + t + "][" + lang + "]";
+		<? } ?>
+		
 		t_input = context.clone();		
 		t_input.attr('name', t_name);
 		t_input.val(translations[t][lang]);
@@ -331,8 +340,7 @@ for(var t in translations){
 	case 'html_entity_decode': ?>
 
 <script type="text/javascript">//<!--
-function html_entity_decode(string, quote_style)
-{
+function html_entity_decode(string, quote_style) {
 	var hash_map = {},
 		symbol = '',
 		tmp_str = '',
@@ -353,8 +361,7 @@ function html_entity_decode(string, quote_style)
 
 	return tmp_str;
 }
-function get_html_translation_table(table, quote_style)
-{
+function get_html_translation_table(table, quote_style) {
 	var entities = {},
 		hash_map = {},
 		decimal;

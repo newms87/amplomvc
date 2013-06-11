@@ -15,7 +15,7 @@
 						<td>
 							<? foreach ($languages as $language) { ?>
 								<input type="text" name="option_description[<?= $language['language_id']; ?>][name]" value="<?= isset($option_description[$language['language_id']]) ? $option_description[$language['language_id']]['name'] : ''; ?>" />
-								<img src="<?= HTTP_THEME_IMAGE . 'flags/<?= $language['image']; ?>'; ?>" title="<?= $language['name']; ?>" /><br />
+								<img src="<?= HTTP_THEME_IMAGE . "flags/$language[image]"; ?>" title="<?= $language['name']; ?>" /><br />
 							<? } ?>
 						</td>
 					</tr>
@@ -24,7 +24,7 @@
 						<td>
 							<? foreach ($languages as $language) { ?>
 								<input type="text" name="option_description[<?= $language['language_id']; ?>][display_name]" value="<?= isset($option_description[$language['language_id']]) ? $option_description[$language['language_id']]['display_name'] : ''; ?>" />
-								<img src="<?= HTTP_THEME_IMAGE . 'flags/<?= $language['image']; ?>'; ?>" title="<?= $language['name']; ?>" /><br />
+								<img src="<?= HTTP_THEME_IMAGE . "flags/$language[image]"; ?>" title="<?= $language['name']; ?>" /><br />
 							<? } ?>
 						</td>
 					</tr>
@@ -58,7 +58,7 @@
 										<input type="hidden" name="option_value[<?= $option_value_row; ?>][option_value_id]" value="<?= $option_value['option_value_id']; ?>" />
 										<? foreach ($languages as $language) { ?>
 										<input type="text" name="option_value[<?= $option_value_row; ?>][option_value_description][<?= $language['language_id']; ?>][name]" value="<?= isset($option_value['option_value_description'][$language['language_id']]) ? $option_value['option_value_description'][$language['language_id']]['name'] : ''; ?>" />
-										<img src="<?= HTTP_THEME_IMAGE . 'flags/<?= $language['image']; ?>'; ?>" title="<?= $language['name']; ?>" /><br />
+										<img src="<?= HTTP_THEME_IMAGE . "flags/$language[image]"; ?>" title="<?= $language['name']; ?>" /><br />
 										<? if (isset($error_option_value[$option_value_row][$language['language_id']])) { ?>
 										<span class="error"><?= $error_option_value[$option_value_row][$language['language_id']]; ?></span>
 										<? } ?>
@@ -100,7 +100,7 @@ function addOptionValue() {
 	html = '<tr class="optionvaluerow" id="option-value-row' + option_value_row + '">';
 	html += '<td class="left"><input type="hidden" name="option_value[' + option_value_row + '][option_value_id]" value="" />';
 	<? foreach ($languages as $language) { ?>
-	html += '<input type="text" name="option_value[' + option_value_row + '][option_value_description][<?= $language['language_id']; ?>][name]" value="" /> <img src="<?= HTTP_THEME_IMAGE . 'flags/<?= $language['image']; ?>'; ?>" title="<?= $language['name']; ?>" /><br />';
+	html += '<input type="text" name="option_value[' + option_value_row + '][option_value_description][<?= $language['language_id']; ?>][name]" value="" /> <img src="<?= HTTP_THEME_IMAGE . "flags/$language[image]"; ?>" title="<?= $language['name']; ?>" /><br />';
 	<? } ?>
 	html += '</td>';
 	html += '<td class="left"><div class="image"><img src="<?= $no_image; ?>" alt="" id="thumb' + option_value_row + '" /><input type="hidden" name="option_value[' + option_value_row + '][image]" value="" id="image' + option_value_row + '" /><br />';
@@ -126,7 +126,7 @@ function addImage(imageName) {
 	html = '<tr class="optionvaluerow" id="option-value-row' + option_value_row + '">';
 	html += '<td class="left"><input type="hidden" name="option_value[' + option_value_row + '][option_value_id]" value="" />';
 	<? foreach ($languages as $language) { ?>
-		html += '<input type="text" name="option_value[' + option_value_row + '][option_value_description][<?= $language['language_id']; ?>][name]" value="" /> <img src="<?= HTTP_THEME_IMAGE . 'flags/<?= $language['image']; ?>'; ?>" title="<?= $language['name']; ?>" /><br />';
+		html += '<input type="text" name="option_value[' + option_value_row + '][option_value_description][<?= $language['language_id']; ?>][name]" value="" /> <img src="<?= HTTP_THEME_IMAGE . "flags/$language[image]"; ?>" title="<?= $language['name']; ?>" /><br />';
 	<? } ?>
 	html += '</td>';
 	html += '<td class="left"><div class="image"><img width="100" src="../image/' + imageName + '" alt="' + imageName + '" title="' + imageName + '" id="thumb' + option_value_row + '" /><input type="hidden" name="option_value[' + option_value_row + '][image]" value="' + imageName + '" id="image' + option_value_row + '" /><br /><a onclick="upload_images(\'image<?= $option_value_row; ?>\', \'thumb<?= $option_value_row; ?>\',<?= $option_value_row ?>);"><?= $text_browse; ?></a>&nbsp;&nbsp;|&nbsp;&nbsp;<a onclick="$(\'#thumb' + option_value_row + '\').attr(\'src\', \'<?= $no_image; ?>\'); $(\'#image' + option_value_row + '\').attr(\'value\', \'\');"><?= $text_clear; ?></a></div></td>';

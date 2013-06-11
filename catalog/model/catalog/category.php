@@ -31,9 +31,7 @@ class Catalog_Model_Catalog_Category extends Model
 			"WHERE $parent AND c2s.store_id = '" . (int)$this->config->get('config_store_id') . "'  AND c.status = '1' ORDER BY c.sort_order, LCASE(name)"
 		);
 		
-		foreach ($categories as &$category) {
-			$this->translation->translate('category', $category['category_id'], $category);
-		}
+		$this->translation->translate_all('category', 'category_id', $category);
 		
 		return $query->rows;
 	}
@@ -87,6 +85,29 @@ class Catalog_Model_Catalog_Category extends Model
 			" WHERE a.attribute_group_id = '" . (int)$attribute_group_id . "' AND pc.category_id = '" . (int)$category_id . "' LIMIT 1";
 			
 		return $this->query_var($query);
+	}
+	
+	public function getAttributeList($category_id, $attribute_group_id)
+	{
+		$language_id = $this->config->get('config_language_id');
+		
+		$attributes = $this->cache->get("category.attribute.list.$category_id.$attribute_group_id.$language_id");
+		
+		if (!$attributes) {
+			$query =
+				"SELECT a.* FROM " . DB_PREFIX . "attribute a" .
+				" LEFT JOIN " . DB_PREFIX . "product_attribute pa ON (pa.attribute_id=a.attribute_id)" .
+				" LEFT JOIN " . DB_PREFIX . "product_to_category p2c ON (p2c.product_id=pa.product_id)" .
+				" WHERE a.attribute_group_id = '$attribute_group_id' AND p2c.category_id = '" . (int)$category_id . "' GROUP BY a.attribute_id ORDER BY name";
+			
+			$attributes = $this->query_rows($query);
+			
+			$this->translation->translate('attribute', 'attribute_id', $attribute);
+			
+			$this->cache->set("category.attribute.list.$category_id.$attribute_group_id.$language_id",$attributes);
+		}
+		
+		return $attributes;
 	}
 	
 	public function getCategoryName($category_id)

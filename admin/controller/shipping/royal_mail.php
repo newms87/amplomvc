@@ -36,8 +36,7 @@ class Admin_Controller_Shipping_RoyalMail extends Controller
 		// 1st class Standard
 		if (isset($_POST['royal_mail_1st_class_standard_rate'])) {
 			$this->data['royal_mail_1st_class_standard_rate'] = $_POST['royal_mail_1st_class_standard_rate'];
-		} elseif ($this->config->has('royal_mail_1st_class_standard_rate')) 
-{
+		} elseif ($this->config->has('royal_mail_1st_class_standard_rate')) {
 			$this->data['royal_mail_1st_class_standard_rate'] = $this->config->get('royal_mail_1st_class_standard_rate');
 		} else {
 			$this->data['royal_mail_1st_class_standard_rate'] = '.1:1.58,.25:1.96,.5:2.48,.75:3.05,1:3.71,1.25:4.90,1.5:5.66,1.75:6.42,2:7.18,4:8.95,6:12.00,8:15.05,10:18.10';
@@ -45,8 +44,7 @@ class Admin_Controller_Shipping_RoyalMail extends Controller
 		
 		if (isset($_POST['royal_mail_1st_class_standard_insurance'])) {
 			$this->data['royal_mail_1st_class_standard_insurance'] = $_POST['royal_mail_1st_class_standard_insurance'];
-		} elseif ($this->config->has('royal_mail_1st_class_standard_insurance')) 
-{
+		} elseif ($this->config->has('royal_mail_1st_class_standard_insurance')) {
 			$this->data['royal_mail_1st_class_standard_insurance'] = $this->config->get('royal_mail_1st_class_standard_insurance');
 		} else {
 			$this->data['royal_mail_1st_class_standard_insurance'] = '39:0,100:1,250:2.25,500:3.5';
@@ -61,8 +59,7 @@ class Admin_Controller_Shipping_RoyalMail extends Controller
 		// 1st Class Recorded
 		if (isset($_POST['royal_mail_1st_class_recorded_rate'])) {
 			$this->data['royal_mail_1st_class_recorded_rate'] = $_POST['royal_mail_1st_class_recorded_rate'];
-		} elseif ($this->config->has('royal_mail_1st_class_recorded_rate')) 
-{
+		} elseif ($this->config->has('royal_mail_1st_class_recorded_rate')) {
 			$this->data['royal_mail_1st_class_recorded_rate'] = $this->config->get('royal_mail_1st_class_recorded_rate');
 		} else {
 			$this->data['royal_mail_1st_class_recorded_rate'] = '.1:2.35,.25:2.73,.5:3.25,.75:3.82,1:4.86,1.25:5.67,1.5:6.43,1.75:7.19,2:7.95,4:9.72,6:12.77,8:15.82,10:18.87';
@@ -70,8 +67,7 @@ class Admin_Controller_Shipping_RoyalMail extends Controller
 		
 		if (isset($_POST['royal_mail_1st_class_recorded_insurance'])) {
 			$this->data['royal_mail_1st_class_recorded_insurance'] = $_POST['royal_mail_1st_class_recorded_insurance'];
-		} elseif ($this->config->has('royal_mail_1st_class_recorded_insurance')) 
-{
+		} elseif ($this->config->has('royal_mail_1st_class_recorded_insurance')) {
 			$this->data['royal_mail_1st_class_recorded_insurance'] = $this->config->get('royal_mail_1st_class_recorded_insurance');
 		} else {
 			$this->data['royal_mail_1st_class_recorded_insurance'] = '39:46,100:46,250:46,500:46';
@@ -86,8 +82,7 @@ class Admin_Controller_Shipping_RoyalMail extends Controller
 		// 2nd Class Standard
 		if (isset($_POST['royal_mail_2nd_class_standard_rate'])) {
 			$this->data['royal_mail_2nd_class_standard_rate'] = $_POST['royal_mail_2nd_class_standard_rate'];
-		} elseif ($this->config->has('royal_mail_2nd_class_standard_rate')) 
-{
+		} elseif ($this->config->has('royal_mail_2nd_class_standard_rate')) {
 			$this->data['royal_mail_2nd_class_standard_rate'] = $this->config->get('royal_mail_2nd_class_standard_rate');
 		} else {
 			$this->data['royal_mail_2nd_class_standard_rate'] = '.1:1.33,.25:1.72,.5:2.16,.75:2.61,1:3.15';
@@ -102,8 +97,7 @@ class Admin_Controller_Shipping_RoyalMail extends Controller
 		// 2nd Class Recorded
 		if (isset($_POST['royal_mail_2nd_class_recorded_rate'])) {
 			$this->data['royal_mail_2nd_class_recorded_rate'] = $_POST['royal_mail_2nd_class_recorded_rate'];
-		} elseif ($this->config->has('royal_mail_2nd_class_recorded_rate')) 
-{
+		} elseif ($this->config->has('royal_mail_2nd_class_recorded_rate')) {
 			$this->data['royal_mail_2nd_class_recorded_rate'] = $this->config->get('royal_mail_2nd_class_recorded_rate');
 		} else {
 			$this->data['royal_mail_2nd_class_recorded_rate'] = '.1:2.10,.25:2.49,.5:2.93,.75:3.38,1:3.92';
@@ -111,8 +105,7 @@ class Admin_Controller_Shipping_RoyalMail extends Controller
 		
 		if (isset($_POST['royal_mail_2nd_class_recorded_insurance'])) {
 			$this->data['royal_mail_2nd_class_recorded_insurance'] = $_POST['royal_mail_2nd_class_recorded_insurance'];
-		} elseif ($this->config->has('royal_mail_2nd_class_recorded_insurance')) 
-{
+		} elseif ($this->config->has('royal_mail_2nd_class_recorded_insurance')) {
 			$this->data['royal_mail_2nd_class_recorded_insurance'] = $this->config->get('royal_mail_2nd_class_recorded_insurance');
 		} else {
 			$this->data['royal_mail_2nd_class_recorded_insurance'] = '39:46,100:46,250:46,500:46';

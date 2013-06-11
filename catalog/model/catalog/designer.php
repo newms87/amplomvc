@@ -119,10 +119,14 @@ class Catalog_Model_Catalog_Designer extends Model
 		
 		$fs = "(SELECT fp.product_id, fp.flashsale_id, f.date_start, f.date_end FROM " . DB_PREFIX . "flashsale_product fp LEFT JOIN " . DB_PREFIX . "flashsale f ON(f.flashsale_id=fp.flashsale_id) WHERE f.date_start < NOW() AND f.date_end > NOW() AND f.status='1' ORDER BY fp.price ASC LIMIT 1) as fs ON (fs.product_id=p.product_id)";
 		
-		
-		$attr_section = $section?"LEFT JOIN " . DB_PREFIX . "product_attribute pa ON (pa.product_id=p.product_id AND pa.language_id='$lang_id') " .
-							"JOIN " . DB_PREFIX . "attribute a ON (a.attribute_id=pa.attribute_id AND a.attribute_group_id='$section') " .
-							"LEFT JOIN " . DB_PREFIX . "attribute_description ad ON (a.attribute_id=ad.attribute_id AND ad.language_id='$lang_id')":'';
+		if ($section) {
+			$attr_section = 
+				"LEFT JOIN " . DB_PREFIX . "product_attribute pa ON (pa.product_id=p.product_id AND pa.language_id='$lang_id') " .
+				"JOIN " . DB_PREFIX . "attribute a ON (a.attribute_id=pa.attribute_id AND a.attribute_group_id='$section') " .
+				"LEFT JOIN " . DB_PREFIX . "attribute_description ad ON (a.attribute_id=ad.attribute_id AND ad.language_id='$lang_id')";
+		} else {
+			$attr_section = '';
+		}
 		
 		$select = "p.*, $special, fs.flashsale_id, fs.date_start, fs.date_end, pd.name";
 		if($section)

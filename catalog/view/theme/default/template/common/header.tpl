@@ -35,9 +35,21 @@
 <script type="text/javascript" src="<?= $script; ?>"></script>
 <? } ?>
 
-<!--[if lt IE 10]>
-<link rel="stylesheet" type="text/css" href="<?= HTTP_THEME_STYLE . "ie_style.css"; ?>" />
-<![endif]-->
+<script type="text/javascript">//<!--
+if (Function('/*@cc_on return document.documentMode===10@*/')()){
+    document.documentElement.className+=' IE10';
+}
+else if (Function('/*@cc_on return document.documentMode===9@*/')()){
+    document.documentElement.className+=' IE9';
+}
+else if (Function('/*@cc_on return document.documentMode===8@*/')()){
+    document.documentElement.className+=' IE8';
+}
+else if (Function('/*@cc_on return document.documentMode===7@*/')()){
+    document.documentElement.className+=' IE7';
+}
+//--></script>
+
 <!--[if IE 9]>
 <link rel="stylesheet" type="text/css" href="<?= HTTP_THEME_STYLE . "ie9.css"; ?>" />
 <![endif]-->
@@ -62,8 +74,10 @@ var sc_project="<?= $statcounter['project']; ?>";
 var sc_invisible=1;
 var sc_security="<?= $statcounter['security']; ?>";
 
+$(document).ready(function(){
+	$.getScript('http://www.statcounter.com/counter/counter.js');
+});
 //--></script>
-<script type="text/javascript" src="http://www.statcounter.com/counter/counter.js"></script>
 <noscript>
 	<div class="statcounter">
 		<a title="tumblr tracker" href="http://statcounter.com/tumblr/" target="_blank">
@@ -106,9 +120,9 @@ var sc_security="<?= $statcounter['security']; ?>";
 			<? } ?>
 		</div>
 		
-		<? if (!$is_logged && !empty($links_guest)) { ?>
-			<div id="links_guest">
-				<?= $this->builder->build_links($links_guest); ?>
+		<? if (!empty($links_cart)) { ?>
+			<div id="links_cart">
+				<?= $this->builder->build_links($links_cart); ?>
 			</div>
 		<? } ?>
 		

@@ -154,7 +154,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 		
 		$table->set_table_data($newsletters);
 		
-		$this->data['newsletter_view'] = $table->build();
+		$this->data['newsletter_view'] = $table->render();
 		
 		
 		$url = $this->url->get_query('filter', 'sort', 'order', 'page');
@@ -360,7 +360,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 		
 		$featured_product['href'] = $this->url->store($store_id, 'product/product', 'product_id=' . $featured_product['product_id']);
 		
-		$result = $this->Model_Catalog_Product->getProductFull($featured_product['product_id']);
+		$result = $this->Catalog_Model_Catalog_Product->getProduct($featured_product['product_id']);
 		
 		if ($result) {
 			if ($result['special']) {
@@ -381,7 +381,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 		//The Product List
 		if (!empty($this->data['newsletter']['products'])) {
 			foreach ($this->data['newsletter']['products'] as $key => &$product) {
-				$result = $this->Model_Catalog_Product->getProductFull($product['product_id']);
+				$result = $this->Catalog_Model_Catalog_Product->getProduct($product['product_id']);
 				
 				if (!$result) {
 					unset($this->data['newsletter']['products'][$key]);

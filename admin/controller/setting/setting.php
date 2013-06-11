@@ -86,6 +86,7 @@ class Admin_Controller_Setting_Setting extends Controller
 			'config_return_status_id',
 			'config_review_status',
 			'config_share_status',
+			'config_show_product_attributes',
 			'config_download',
 			'config_upload_allowed',
 			'config_upload_images_allowed',
@@ -154,8 +155,7 @@ class Admin_Controller_Setting_Setting extends Controller
 			'config_plugin_dir_mode'=>755,
 		);
 
-		foreach($defaults as $key=>$default)
-{
+		foreach($defaults as $key=>$default) {
 			$k = is_integer($key)?$default:$key;
 			if (isset($_POST[$k])) {
 				$this->data[$k] = $_POST[$k];

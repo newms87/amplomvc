@@ -65,7 +65,6 @@ class Catalog_Model_Cart_Voucher extends Model
 	
 	public function confirm($order_id)
 	{
-			
 		//TODO Implment this! Move to controller/mail/voucher.php
 		trigger_error("The voucher confirm(): has not been implemented!");
 		exit;
@@ -106,7 +105,7 @@ class Catalog_Model_Cart_Voucher extends Model
 				} else {
 					$html = $template->fetch('default/template/mail/voucher.tpl');
 				}
-					
+				
 				$this->mail->init();
 				
 				$this->mail->setTo($voucher['to_email']);

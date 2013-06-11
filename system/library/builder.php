@@ -171,8 +171,7 @@ class Builder extends Controller
 		foreach ($messages as $type=>$msgs) {
 			$html .= "<div class ='message_box $type'>";
 			$html .= "<div class='message_list'>";
-			foreach($msgs as $msg)
-{
+			foreach($msgs as $msg) {
 				if (!empty($msg)) {
 					$html .= "<div>$msg</div>";
 				}

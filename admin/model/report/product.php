@@ -1,53 +1,44 @@
 <?php
 class Admin_Model_Report_Product extends Model 
 {
-	
 	public function getProductViews()
 	{
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "product_views");
-		return $query->rows;
+		return $this->query_rows("SELECT * FROM " . DB_PREFIX . "product_views");
 	}
 	
 	public function getProductsViewed($data = array()) {
+		//Select
+		$select = "p.name, p.model, pv.product_id, pv.user_id, pv.ip_address, pv.session_id, COUNT(pv.product_id) as views";
 		
-		$select = "pd.name, p.model, pv.product_id, pv.user_id, pv.ip_address, pv.session_id, COUNT(pv.product_id) as views";
-			
-		$limit = isset($data['limit'])?(int)$data['limit']:'';
+		//From
+		$from = DB_PREFIX . "product p JOIN " .
+				  DB_PREFIX . "product_views pv ON(pv.product_id=p.product_id)";
+				  
+		$order = $this->extract_order();
+		$limit = $this->extract_limit();
 		
-		if ($limit) {
-			$start = isset($data['start'])?(int)$data['start']:0;
-			if ($start < 0) {
-				$start = 0;
-			}
-	
-			if ($limit < 1) {
-				$limit = 20;
-			}
-			$limit = "LIMIT $start, $limit";
-		}
+		$query = "SELECT $select FROM $from GROUP BY pv.product_id ORDER BY views DESC $limit";
 		
-		$sql = "SELECT $select FROM " . DB_PREFIX . "product p JOIN " . DB_PREFIX . "product_views pv ON(pv.product_id=p.product_id) LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id) WHERE pd.language_id = '" . (int)$this->config->get('config_language_id') . "' GROUP BY pv.product_id ORDER BY views DESC $limit";
+		$products = $this->query_rows($query);
 		
-		$query = $this->query($sql);
-		
-		return $query->rows;
+		$this->translation->translate('product', 'product_id', $products);
+		 
+		return $products;
 	}
 	
 	public function getTotalProductsViewed()
 	{
-		$query = $this->query("SELECT COUNT(DISTINCT product_id) as total FROM " . DB_PREFIX . "product_views");
-		return $query->row['total'];
+		return $this->query_var("SELECT COUNT(DISTINCT product_id) as total FROM " . DB_PREFIX . "product_views");
 	}
 	
 	public function getTotalProductViews()
 	{
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "product_views");
-		return $query->row['total'];
+		return $this->query_var("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "product_views");
 	}
 			
 	public function reset()
 	{
-		$this->query("DELETE FROM ". DB_PREFIX . "product_views");
+		$this->query("TRUNCATE ". DB_PREFIX . "product_views");
 	}
 	
 	public function getPurchased($data = array()) {

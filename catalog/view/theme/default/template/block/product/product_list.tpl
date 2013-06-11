@@ -1,6 +1,6 @@
 <div id="list_grid_toggle">
 	<span><?= $text_display; ?></span>
-	<a id="toggle_list" class="active"><?= $text_list; ?></a> <b>/</b> <a id="toggle_grid"><?= $text_grid; ?></a>
+	<a id="toggle_list"><?= $text_list; ?></a> <b>/</b> <a class="active" id="toggle_grid"><?= $text_grid; ?></a>
 </div>
 
 <div id="catalog_list" class='grid'>

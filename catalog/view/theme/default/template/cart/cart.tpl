@@ -17,7 +17,7 @@
 		
 		<div id='cart_actions'>
 			<h2><?= $text_next; ?></h2>
-		<? if(isset($block_coupon)){ ?>
+		<? if(!empty($block_coupon)){ ?>
 			<div>
 					<a id='text_block_coupon' onclick="$('#toggle_block_coupon').slideToggle();"><?= $text_use_coupon; ?></a>
 					<div id='toggle_block_coupon' class='content'>
@@ -26,7 +26,7 @@
 			</div>
 		<? }?>
 		
-		<? if(isset($block_voucher)){ ?>
+		<? if(!empty($block_voucher)){ ?>
 			<div>
 					<a id='text_block_voucher' onclick="$('#toggle_block_voucher').slideToggle();"><?= $text_use_voucher; ?></a>
 					<div id='toggle_block_voucher' class='content'>
@@ -35,7 +35,7 @@
 			</div>
 		<? }?>
 		
-		<? if(isset($block_reward)){ ?>
+		<? if(!empty($block_reward)){ ?>
 			<div>
 					<a id='text_block_reward' onclick="$('#toggle_block_reward').slideToggle();"><?= $text_use_reward; ?></a>
 					<div id='toggle_block_reward' class='content'>
@@ -44,7 +44,7 @@
 			</div>
 		<? }?>
 		
-		<? if(isset($block_shipping)){ ?>
+		<? if(!empty($block_shipping)){ ?>
 			<div>
 					<a id='text_block_shipping' onclick="$('#toggle_block_shipping').slideToggle();"><?= $text_use_shipping; ?></a>
 					<div id='toggle_block_shipping' class='content'>
@@ -72,17 +72,18 @@
 </div>
 <?= $footer; ?>
 
+<? //We use javascript to hide for no script compatibility ?>
 <script type="text/javascript">//<!--
-<? if(!$show_coupon) {?>
+<? if(!empty($block_coupon)) {?>
 	$('#toggle_block_coupon').hide();
 <? }?>
-<? if(!$show_voucher) {?>
+<? if(!empty($block_voucher)) {?>
 	$('#toggle_block_voucher').hide();
 <? }?>
-<? if(!$show_reward) {?>
+<? if(!empty($block_reward)) {?>
 	$('#toggle_block_reward').hide();
 <? }?>
-<? if(!$show_shipping) {?>
+<? if(!empty($block_shipping)) {?>
 	$('#toggle_block_shipping').hide();
 <? }?>
 

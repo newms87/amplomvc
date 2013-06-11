@@ -43,19 +43,6 @@ CREATE TABLE `{$db_prefix}customer_ip_blacklist` (
 SQL;
 
 $_[] = <<<SQL
-DROP TABLE IF EXISTS `{$db_prefix}attribute_description`;
-SQL;
-
-$_[] = <<<SQL
-CREATE TABLE `{$db_prefix}attribute_description` (
-  `attribute_id` int(11) NOT NULL,
-  `language_id` int(11) NOT NULL,
-  `name` varchar(64) COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`attribute_id`,`language_id`)
-)
-SQL;
-
-$_[] = <<<SQL
 DROP TABLE IF EXISTS `{$db_prefix}banner`;
 SQL;
 
@@ -648,25 +635,6 @@ CREATE TABLE `{$db_prefix}tax_rule` (
   `based` varchar(10) COLLATE utf8_bin NOT NULL,
   `priority` int(5) NOT NULL DEFAULT '1',
   PRIMARY KEY (`tax_rule_id`)
-)
-SQL;
-
-$_[] = <<<SQL
-DROP TABLE IF EXISTS `{$db_prefix}product_description`;
-SQL;
-
-$_[] = <<<SQL
-CREATE TABLE `{$db_prefix}product_description` (
-  `product_id` int(11) NOT NULL,
-  `language_id` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8_bin NOT NULL,
-  `description` text COLLATE utf8_bin NOT NULL,
-  `meta_description` varchar(255) COLLATE utf8_bin NOT NULL,
-  `meta_keyword` varchar(255) COLLATE utf8_bin NOT NULL,
-  `blurb` text COLLATE utf8_bin NOT NULL,
-  `shipping_return` text COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`product_id`,`language_id`),
-  KEY `name` (`name`)
 )
 SQL;
 
@@ -1837,19 +1805,6 @@ CREATE TABLE `{$db_prefix}newsletter` (
   `data` text NOT NULL,
   `status` int(10) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`newsletter_id`)
-)
-SQL;
-
-$_[] = <<<SQL
-DROP TABLE IF EXISTS `{$db_prefix}attribute_group_description`;
-SQL;
-
-$_[] = <<<SQL
-CREATE TABLE `{$db_prefix}attribute_group_description` (
-  `attribute_group_id` int(11) NOT NULL,
-  `language_id` int(11) NOT NULL,
-  `name` varchar(64) COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`attribute_group_id`,`language_id`)
 )
 SQL;
 

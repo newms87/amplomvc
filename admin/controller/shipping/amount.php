@@ -29,8 +29,7 @@ class Admin_Controller_Shipping_Amount extends Controller
 		$config_values = array('amount_priceset','amount_zonerule',
 									'amount_tax_class_id','amount_geo_zone_id','amount_status','amount_sort_order'
 									);
-		foreach($config_values as $cv)
-{
+		foreach($config_values as $cv) {
 			$this->data[$cv] = isset($_POST[$cv])?$_POST[$cv]:$this->config->get($cv);
 		}
 		

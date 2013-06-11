@@ -47,8 +47,7 @@ class Catalog_Controller_Feed_GoogleBase extends Controller
 				
 					$categories = $this->Model_Catalog_Product->getCategories($product['product_id']);
 					
-					foreach ($categories as $category) 
-{
+					foreach ($categories as $category) {
 						$path = $this->getPath($category['category_id']);
 						
 						if ($path) {
