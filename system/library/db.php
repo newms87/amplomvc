@@ -210,6 +210,8 @@ class DB
 			
 			if (!empty($primary_key)) {
 				$sql .= "\tPRIMARY KEY (`" . implode('`,`', $primary_key) . "`)" . $eol;
+			} else {
+				$sql = preg_replace("/,$eol\$/", '', $sql);
 			}
 			
 			$sql .= ");" . $eol . $eol;
