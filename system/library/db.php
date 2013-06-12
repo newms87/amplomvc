@@ -60,7 +60,7 @@ class DB
   		$resource = $this->driver->query($sql);
 		
 		if (!$resource) {
-			$this->query_error();
+			$this->query_error($sql);
 			
 			return false;
 		}
@@ -81,7 +81,7 @@ class DB
   		$resource = $this->driver->query($sql);
 		
 		if (!$resource) {
-			$this->query_error();
+			$this->query_error($sql);
 			
 			return false;
 		}
@@ -102,7 +102,7 @@ class DB
   		$resource = $this->driver->query($sql);
 		
 		if (!$resource) {
-			$this->query_error();
+			$this->query_error($sql);
 			
 			return false;
 		}
@@ -122,7 +122,7 @@ class DB
   		$resource = $this->driver->query($sql);
 		
 		if (!$resource) {
-			$this->query_error();
+			$this->query_error($sql);
 			
 			return null;
 		}
@@ -130,16 +130,17 @@ class DB
 		return current($resource->row);
   	}
 	
-	private function query_error()
+	private function query_error($sql = '')
 	{
 		if (function_exists('debug_stack') && function_exists('html_dump')) {
 			$stack = debug_stack();
 			$_SESSION['debug']['call stack'] = $stack;
 			html_dump($stack, 'call stack');
+			echo '<br /><br />' . $sql;
 		}
 		
 		if (function_exists('get_caller')) {
-			trigger_error($this->driver->get_error() . get_caller(2));
+			trigger_error($this->driver->get_error() . get_caller(1) . get_caller(2));
 		}
 	}
 	
@@ -150,10 +151,16 @@ class DB
 		$lines = explode(";\r\n", $content);
 		
 		foreach ($lines as $line) {
-			if (!empty($line)) {
+			if (!empty($line) && is_string($line) && trim($line)) {
 				$this->query($line);
 			}
 		}
+		
+		if ($this->get_error()) {
+			return false;
+		}
+		
+		return true;
 	}
 	
 	public function dump($file, $tables = '')
@@ -236,6 +243,10 @@ class DB
 		if (!file_put_contents($file, $sql)) {
 			trigger_error("DB::dump(): Failed to dump database tables, $table_string, to file $file");
 		
+			return false;
+		}
+		
+		if ($this->get_error()) {
 			return false;
 		}
 		

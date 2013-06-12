@@ -77,8 +77,6 @@ class Catalog_Controller_Product_Product extends Controller
 			if ($product_info['template'] == 'product_video') {
 				$this->data['description'] = html_entity_decode($product_info['description']);
 			}
-			
-			$this->Model_Catalog_Product->updateViewed($product_info['product_id']);
 		} else {
 			$this->url->redirect($this->url->link('error/not_found'));
 		}

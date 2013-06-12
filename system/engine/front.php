@@ -93,6 +93,13 @@ final class Front
 	
   	public function dispatch()
   	{
+  		//Page Views tracking
+  		$route = $this->db->escape($this->route);
+		$query = $this->url->get_query_exclude('route', '_route_');
+		$store_id = (int)$this->config->get('config_store_id');
+		
+  		$this->db->query("INSERT INTO oc_view_count SET route = '$route', query = '$query', store_id = '$store_id', count = 1 ON DUPLICATE KEY UPDATE count = count + 1");
+		
   		$action = new Action($this->registry, $this->route);
 		
 		if (!$action->execute()) {

@@ -1,19 +1,6 @@
 <?php
 class Catalog_Model_Catalog_Product extends Model 
 {
-	public function updateViewed($product_id)
-	{
-		$data = array(
-			'user_id' => $this->customer->getId(),
-			'product_id' => $product_id,
-			'session_id' => session_id(),
-			'ip_address' => $_SERVER["REMOTE_ADDR"],
-			'date' => $this->tool->format_datetime(),
-		);
-		
-		$this->insert('product_views', $data);
-	}
-	
 	public function getProduct($product_id)
 	{
 		$product_id = (int)$product_id;
@@ -32,7 +19,7 @@ class Catalog_Model_Catalog_Product extends Model
 			}
 		}
 		
-		if (!$product || true) {
+		if (!$product) {
 			$discount = "(SELECT price FROM " . DB_PREFIX . "product_discount pdc WHERE pdc.product_id = p.product_id AND pdc.customer_group_id ='$customer_group_id' AND pdc.quantity >= '0' AND ((pdc.date_start = '0000-00-00' OR pdc.date_start < NOW()) AND (pdc.date_end = '0000-00-00' OR pdc.date_end > NOW())) ORDER BY pdc.priority ASC, pdc.price ASC LIMIT 1) AS discount";
 			$special = "(SELECT price FROM " . DB_PREFIX . "product_special ps WHERE ps.product_id = p.product_id AND ps.customer_group_id = '$customer_group_id' AND ((ps.date_start = '" . DATETIME_ZERO . "' OR ps.date_start < NOW()) AND (ps.date_end = '". DATETIME_ZERO . "' OR ps.date_end > NOW())) ORDER BY ps.priority ASC, ps.price ASC LIMIT 1) AS special";
 			$reward = "(SELECT points FROM " . DB_PREFIX . "product_reward pr WHERE pr.product_id = p.product_id AND pr.customer_group_id = '$customer_group_id') AS reward";
