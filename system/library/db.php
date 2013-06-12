@@ -207,7 +207,7 @@ class DB
 						$default = "";
 					}
 				}else {
-					$default = "DEFAULT '" . $column['Default'] . "'";
+					$default = "DEFAULT '" . $this->escape(trim($column['Default'],"'\"")) . "'";
 				}
 				
 				$extra = !empty($column['Extra']) ? strtoupper($column['Extra']) : '';
