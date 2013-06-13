@@ -95,7 +95,7 @@ class Admin_Controller_Extension_Feed extends Controller
 			$this->Model_User_UserGroup->addPermission($this->user->getId(), 'access', 'feed/' . $_GET['extension']);
 			$this->Model_User_UserGroup->addPermission($this->user->getId(), 'modify', 'feed/' . $_GET['extension']);
 		
-			_require_once(DIR_APPLICATION . 'controller/feed/' . $_GET['extension'] . '.php');
+			_require(DIR_APPLICATION . 'controller/feed/' . $_GET['extension'] . '.php');
 			
 			$class = 'ControllerFeed' . str_replace('_', '', $_GET['extension']);
 			$class = new $class($this->registry);
@@ -119,7 +119,7 @@ class Admin_Controller_Extension_Feed extends Controller
 		
 			$this->Model_Setting_Setting->deleteSetting($_GET['extension']);
 		
-			_require_once(DIR_APPLICATION . 'controller/feed/' . $_GET['extension'] . '.php');
+			_require(DIR_APPLICATION . 'controller/feed/' . $_GET['extension'] . '.php');
 			
 			$class = 'ControllerFeed' . str_replace('_', '', $_GET['extension']);
 			$class = new $class($this->registry);

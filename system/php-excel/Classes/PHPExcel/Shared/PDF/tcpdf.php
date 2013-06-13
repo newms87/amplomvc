@@ -141,7 +141,7 @@
  * main configuration file
  * (define the K_TCPDF_EXTERNAL_CONFIG constant to skip this file)
  */
-_require_once(dirname(__FILE__).'/config/tcpdf_config.php');
+_require(dirname(__FILE__).'/config/tcpdf_config.php');
 
 /**
  * define default PDF document producer
@@ -1758,7 +1758,7 @@ class TCPDF {
 		}
 		require(dirname(__FILE__).'/htmlcolors.php');
 		$this->webcolor = $webcolor;
-		_require_once(dirname(__FILE__).'/unicode_data.php');
+		_require(dirname(__FILE__).'/unicode_data.php');
 		$this->unicode = new TCPDF_UNICODE_DATA();
 		$this->font_obj_ids = array();
 		$this->page_obj_id = array();
@@ -16593,7 +16593,7 @@ class TCPDF {
 		if ($this->empty_string(trim($code))) {
 			return;
 		}
-		_require_once(dirname(__FILE__).'/barcodes.php');
+		_require(dirname(__FILE__).'/barcodes.php');
 		// save current graphic settings
 		$gvars = $this->getGraphicVars();
 		// create new barcode object
@@ -16964,7 +16964,7 @@ class TCPDF {
 		if ($this->empty_string(trim($code))) {
 			return;
 		}
-		_require_once(dirname(__FILE__).'/2dbarcodes.php');
+		_require(dirname(__FILE__).'/2dbarcodes.php');
 		// save current graphic settings
 		$gvars = $this->getGraphicVars();
 		// create new barcode object

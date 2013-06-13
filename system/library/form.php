@@ -240,7 +240,8 @@ class Form
 		//render the file
 		ob_start();
 		
-		require($this->template_file);
+		$file = $this->plugin->getFile($this->template_file);
+		require($file);
 		
 		return ob_get_clean();
 	}

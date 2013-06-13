@@ -80,7 +80,7 @@ class Admin_Controller_Extension_Shipping extends Controller
 			$this->Model_User_UserGroup->addPermission($this->user->getId(), 'access', 'shipping/' . $_GET['extension']);
 			$this->Model_User_UserGroup->addPermission($this->user->getId(), 'modify', 'shipping/' . $_GET['extension']);
 
-			_require_once(DIR_APPLICATION . 'controller/shipping/' . $_GET['extension'] . '.php');
+			_require(DIR_APPLICATION . 'controller/shipping/' . $_GET['extension'] . '.php');
 			
 			$class = 'ControllerShipping' . str_replace('_', '', $_GET['extension']);
 			$class = new $class($this->registry);
@@ -104,7 +104,7 @@ class Admin_Controller_Extension_Shipping extends Controller
 		
 			$this->Model_Setting_Setting->deleteSetting($_GET['extension']);
 		
-			_require_once(DIR_APPLICATION . 'controller/shipping/' . $_GET['extension'] . '.php');
+			_require(DIR_APPLICATION . 'controller/shipping/' . $_GET['extension'] . '.php');
 			
 			$class = 'ControllerShipping' . str_replace('_', '', $_GET['extension']);
 			$class = new $class($this->registry);

@@ -25,7 +25,7 @@ final class Loader
 		$file = DIR_SYSTEM . 'library/' . $library . '.php';
 		
 		if (file_exists($file)) {
-			_require_once($file);
+			_require($file);
 			
 			$classname = preg_replace("/[^A-Z0-9]/i", '', $library);
 			
@@ -59,7 +59,7 @@ final class Loader
 		$file = SITE_DIR . implode('/', $path) . '.php';
 		
 		if (is_file($file)) {
-			_require_once($file);
+			_require($file);
 			
 			$class = new $model_class($this->registry);
 			

@@ -79,7 +79,7 @@ abstract class Controller
 		$method = $action->getMethod();
 		
 		if (file_exists($file)) {
-			_require_once($file);
+			_require($file);
 
 			$controller = new $class($class_path, $this->registry);
 

@@ -81,7 +81,7 @@ final class Action
 	public function getController()
 	{
 		if (is_file($this->file)) {
-			_require_once($this->file);
+			_require($this->file);
 			
 			$class = $this->class;
 			

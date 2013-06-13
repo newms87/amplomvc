@@ -68,8 +68,8 @@ class Plugin{
 				return false;
 			}
 			
-			_require_once(DIR_SYSTEM . 'plugins/plugin_setup.php');
-			_require_once($setup_file);
+			_require(DIR_SYSTEM . 'plugins/plugin_setup.php');
+			_require($setup_file);
 			
 			$user_class = preg_replace("/[^A-Z0-9]/i", "",$name) . '_Setup';
 			

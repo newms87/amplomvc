@@ -96,9 +96,7 @@ class Language
 		
 		$this->set_latest_modified_file(filemtime($file));
 		
-		$_ = array();
-		
-		require($file);
+		$_ = _require($file, false);
 		
 		$this->data = $_ + $this->data;
 		
@@ -122,9 +120,7 @@ class Language
 			}
 		}
 		
-		$_ = array();
-		
-		include($file);
+		$_ = _require($file, false);
 		
 		return $_;
 	}
@@ -174,9 +170,7 @@ class Language
 			}
 		}
 		
-		$_ = array();
-		
-		require($file);
+		$_ = _require($file, false);
 		
 		$this->data = $_ + $this->data;
 		
@@ -198,9 +192,7 @@ class Language
 			}
 		}
 		
-		$_ = array();
-		
-		require($file);
+		$_ = _require($file, false);
 		
 		return $_;
 	}
@@ -215,9 +207,7 @@ class Language
 			}
 		}
 		
-		$_ = array();
-		
-		require($file);
+		$_ = _require($file, false);
 		
 		$this->data = $_ + $this->data;
 		

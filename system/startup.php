@@ -99,30 +99,30 @@ if (is_dir(dirname(DIR_APPLICATION) . '/install')) {
 }
 
 // Helper
-_require_once(DIR_SYSTEM . 'helper/json.php');
+_require(DIR_SYSTEM . 'helper/json.php');
 
 // Engine
-_require_once(DIR_SYSTEM . 'engine/action.php');
-_require_once(DIR_SYSTEM . 'engine/controller.php');
-_require_once(DIR_SYSTEM . 'engine/front.php');
-_require_once(DIR_SYSTEM . 'engine/loader.php');
-_require_once(DIR_SYSTEM . 'engine/model.php');
-_require_once(DIR_SYSTEM . 'engine/registry.php');
+_require(DIR_SYSTEM . 'engine/action.php');
+_require(DIR_SYSTEM . 'engine/controller.php');
+_require(DIR_SYSTEM . 'engine/front.php');
+_require(DIR_SYSTEM . 'engine/loader.php');
+_require(DIR_SYSTEM . 'engine/model.php');
+_require(DIR_SYSTEM . 'engine/registry.php');
 
 // Common
-_require_once(DIR_SYSTEM . 'library/cache.php');
-_require_once(DIR_SYSTEM . 'library/config.php');
-_require_once(DIR_SYSTEM . 'library/db.php');
-_require_once(DIR_SYSTEM . 'library/document.php');
-_require_once(DIR_SYSTEM . 'library/file_merge.php');
-_require_once(DIR_SYSTEM . 'library/image.php');
-_require_once(DIR_SYSTEM . 'library/language.php');
-_require_once(DIR_SYSTEM . 'library/log.php');
-_require_once(DIR_SYSTEM . 'library/plugin.php');
-_require_once(DIR_SYSTEM . 'library/request.php');
-_require_once(DIR_SYSTEM . 'library/response.php');
-_require_once(DIR_SYSTEM . 'library/session.php');
-_require_once(DIR_SYSTEM . 'library/theme.php');
-_require_once(DIR_SYSTEM . 'library/template.php');
-_require_once(DIR_SYSTEM . 'library/url.php');
+_require(DIR_SYSTEM . 'library/cache.php');
+_require(DIR_SYSTEM . 'library/config.php');
+_require(DIR_SYSTEM . 'library/db.php');
+_require(DIR_SYSTEM . 'library/document.php');
+_require(DIR_SYSTEM . 'library/file_merge.php');
+_require(DIR_SYSTEM . 'library/image.php');
+_require(DIR_SYSTEM . 'library/language.php');
+_require(DIR_SYSTEM . 'library/log.php');
+_require(DIR_SYSTEM . 'library/plugin.php');
+_require(DIR_SYSTEM . 'library/request.php');
+_require(DIR_SYSTEM . 'library/response.php');
+_require(DIR_SYSTEM . 'library/session.php');
+_require(DIR_SYSTEM . 'library/theme.php');
+_require(DIR_SYSTEM . 'library/template.php');
+_require(DIR_SYSTEM . 'library/url.php');
 

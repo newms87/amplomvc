@@ -67,10 +67,12 @@ class Table
 		
 		extract($this->template_data);
 		
+		$file = $this->plugin->getFile($this->file);
+		
 		//render the file
 		ob_start();
 		
-		require($this->file);
+		require($file);
 		
 		return ob_get_clean();
 	}

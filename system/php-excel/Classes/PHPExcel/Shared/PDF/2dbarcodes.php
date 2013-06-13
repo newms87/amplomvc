@@ -93,7 +93,7 @@ class TCPDF2DBarcode {
 		$qrtype = strtoupper($mode[0]);
 		switch ($qrtype) {
 			case 'QRCODE': { // QR-CODE
-				_require_once(dirname(__FILE__).'/qrcode.php');
+				_require(dirname(__FILE__).'/qrcode.php');
 				if (!isset($mode[1]) OR (!in_array($mode[1],array('L','M','Q','H')))) {
 					$mode[1] = 'L'; // Ddefault: Low error correction
 				}
@@ -102,7 +102,7 @@ class TCPDF2DBarcode {
 				break;
 			}
 			case 'PDF417': { // PDF417 (ISO/IEC 15438:2006)
-				_require_once(dirname(__FILE__).'/pdf417.php');
+				_require(dirname(__FILE__).'/pdf417.php');
 				if (!isset($mode[1]) OR ($mode[1] === '')) {
 					$aspectratio = 2; // default aspect ratio (width / height)
 				} else {

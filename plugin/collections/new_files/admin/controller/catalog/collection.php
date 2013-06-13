@@ -127,7 +127,7 @@ class Admin_Controller_Catalog_Collection extends Controller
 			'display_name' => $this->_('column_category'),
 			'filter' => true,
 			'build_config' => array('category_id' => 'name'),
-			'build_data' => $this->Model_Catalog_Category->getCategories(),
+			'build_data' => $this->Model_Catalog_Category->getCategoriesWithParents(),
 			'sortable' => false,
 		);
 		
@@ -301,7 +301,7 @@ class Admin_Controller_Catalog_Collection extends Controller
 		//Image
 		$this->data['thumb'] = $this->image->resize($this->data['image'], $this->config->get('config_image_admin_width'), $this->config->get('config_image_admin_height'));
 		
-		$this->data['data_categories'] = $this->Model_Catalog_Category->getCategories();
+		$this->data['data_categories'] = $this->Model_Catalog_Category->getCategoriesWithParents();
 		
 		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
 		

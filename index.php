@@ -38,7 +38,7 @@ exit;
 require_once(DIR_SYSTEM . 'file_merge.php');
 
 // System Bootstrap
-_require_once(DIR_SYSTEM . 'startup.php');
+_require(DIR_SYSTEM . 'startup.php');
 
 // Registry
 $registry = new Registry();

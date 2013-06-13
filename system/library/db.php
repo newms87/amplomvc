@@ -13,10 +13,10 @@ class DB
 		
 		//the database interface
 		if (function_exists("_require_once")) {
-			_require_once(DIR_DATABASE . 'database.php');
+			_require(DIR_DATABASE . 'database.php');
 			
 			if (file_exists(DIR_DATABASE . $driver . '.php')) {
-				_require_once(DIR_DATABASE . $driver . '.php');
+				_require(DIR_DATABASE . $driver . '.php');
 			} else {
 				die('Error: Could not load database file ' . $driver . '!');
 			}

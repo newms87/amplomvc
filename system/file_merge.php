@@ -23,7 +23,7 @@ if ($entries) {
 	}
 }
 
-function _require_once($file) {
+function _require($file, $once = true, $_ = array()) {
 	global $registry;
 	static $plugin_registry = false;
 	static $plugin = null;
@@ -56,5 +56,12 @@ function _require_once($file) {
 	if (!is_file($file)) {
 		echo get_caller();
 	}
-	require_once($file);
+	
+	if ($once) {
+		require_once($file);
+	} else {
+		require($file);
+	}
+	
+	return $_;
 }
