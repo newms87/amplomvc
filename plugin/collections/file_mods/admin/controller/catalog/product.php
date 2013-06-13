@@ -57,7 +57,7 @@ class Admin_Controller_Catalog_Product extends Controller
 //=====
 		);
 //.....
-		$this->data['data_categories'] = $this->Model_Catalog_Category->getCategories();
+		$this->data['data_categories'] = $this->Model_Catalog_Category->getCategoriesWithParents();
 //-----
 //>>>>> {php}
 		$this->data['data_collections'] = $this->Model_Catalog_Collection->getCollections($collection_sort);
