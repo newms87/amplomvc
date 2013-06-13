@@ -479,19 +479,6 @@ CREATE TABLE `{$db_prefix}voucher_theme_description` (
 SQL;
 
 $_[] = <<<SQL
-DROP TABLE IF EXISTS `{$db_prefix}download_description`;
-SQL;
-
-$_[] = <<<SQL
-CREATE TABLE `{$db_prefix}download_description` (
-  `download_id` int(11) NOT NULL,
-  `language_id` int(11) NOT NULL,
-  `name` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '',
-  PRIMARY KEY (`download_id`,`language_id`)
-)
-SQL;
-
-$_[] = <<<SQL
 DROP TABLE IF EXISTS `{$db_prefix}product_attribute`;
 SQL;
 

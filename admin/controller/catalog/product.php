@@ -148,6 +148,8 @@ class Admin_Controller_Catalog_Product extends Controller
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/product'));
 		
+		$categories = $this->Model_Catalog_Category->getCategoriesWithParents();
+		
 		//The Table Columns
 		$columns = array();
 		
@@ -196,7 +198,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			'display_name' => $this->_('column_category'),
 			'filter' => true,
 			'build_config' => array('category_id' => 'name'),
-			'build_data' => $this->Model_Catalog_Category->getCategories(),
+			'build_data' => $categories,
 			'sortable' => false,
 		);
 		
@@ -318,8 +320,6 @@ class Admin_Controller_Catalog_Product extends Controller
 		$this->table->map_attribute('filter_value', $filter_values);
 		
 		$this->data['list_view'] = $this->table->render();
-		
-		$categories = $this->Model_Catalog_Category->getCategories();
 		
 		//Batch actions
 		$this->data['batch_actions'] = array(
@@ -526,7 +526,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		$this->data['data_length_classes'] = $this->Model_Localisation_LengthClass->getLengthClasses();
 		$this->data['data_customer_groups'] = $this->Model_Sale_CustomerGroup->getCustomerGroups();
 		$this->data['data_downloads'] = $this->Model_Catalog_Download->getDownloads();
-		$this->data['data_categories'] = $this->Model_Catalog_Category->getCategories();
+		$this->data['data_categories'] = $this->Model_Catalog_Category->getCategoriesWithParents();
 		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
 		$this->data['data_layouts'] = array('' => '') +	$this->Model_Design_Layout->getLayouts();
 		$this->data['data_templates'] = $this->Model_Design_Template->getTemplatesFor('product', true);

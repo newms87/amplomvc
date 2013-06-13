@@ -3,112 +3,90 @@ class Admin_Model_Catalog_Download extends Model
 {
 	public function addDownload($data)
 	{
-			$this->query("INSERT INTO " . DB_PREFIX . "download SET remaining = '" . (int)$data['remaining'] . "', date_added = NOW()");
-
-			$download_id = $this->db->getLastId();
-
-			if (isset($data['download'])) {
-			$this->query("UPDATE " . DB_PREFIX . "download SET filename = '" . $this->db->escape($data['download']) . "', mask = '" . $this->db->escape($data['mask']) . "' WHERE download_id = '" . (int)$download_id . "'");
-			}
-
-			foreach ($data['download_description'] as $language_id => $value) {
-			$this->query("INSERT INTO " . DB_PREFIX . "download_description SET download_id = '" . (int)$download_id . "', language_id = '" . (int)$language_id . "', name = '" . $this->db->escape($value['name']) . "'");
-			}
+		$data['date_added'] = $this->tool->format_datetime();
+		
+		if (!empty($data['download'])) {
+			$data['filename'] = $data['download'];
+		}
+		
+		$download_id = $this->insert('download', $data);
+		
+		if (!empty($data['translations'])) {
+			$this->translation->set_translations('download', $download_id, $data['translations']);
+		}
 	}
 	
 	public function editDownload($download_id, $data)
 	{
-		$query = $this->query("SELECT filename from " . DB_PREFIX . "download WHERE download_id = '" . (int)$download_id . "'");
+		$old_download = $this->query("SELECT * FROM " . DB_PREFIX . "download WHERE download_id = '" . (int)$download_id . "'");
 		
-		$old_filename = $query->row['filename'];
+		if (!empty($data['download'])) {
+			$data['filename'] = $data['download'];
+		}
 		
-		$this->query("UPDATE " . DB_PREFIX . "download SET remaining = '" . (int)$data['remaining'] . "' WHERE download_id = '" . (int)$download_id . "'");
+		$download_id = $this->update('download', $data, $download_id);
+		
+		if (!empty($data['translations'])) {
+			$this->translation->set_translations('download', $download_id, $data['translations']);
+		}
+		
+		//Update Download file for already purchased downloads
+		if (isset($data['update'])) {
+			$old_filename = $this->db->escape($old_download['filename']);
+			$old_remaining = (int)$old_download['remaining'];
+			$new_remaining = (int)$data['remaining'];
 			
-		if (isset($data['download'])) {
-			$this->query("UPDATE " . DB_PREFIX . "download SET filename = '" . $this->db->escape($data['download']) . "', mask = '" . $this->db->escape($data['mask']) . "' WHERE download_id = '" . (int)$download_id . "'");
-			
-			if (isset($data['update'])) {
-					$query = $this->query("SELECT * from " . DB_PREFIX . "download WHERE download_id = '" . (int)$download_id . "'");
-						
-					$this->query("UPDATE " . DB_PREFIX . "order_download SET remaining = '" . (int)$query->row['remaining'] . "', `filename` = '" . $this->db->escape($query->row['filename']) . "', mask = '" . $this->db->escape($query->row['mask']) . "' WHERE `filename` = '" . $this->db->escape($old_filename) . "'");
-				}
-			
-			}
-
-			$this->query("DELETE FROM " . DB_PREFIX . "download_description WHERE download_id = '" . (int)$download_id . "'");
-
-			foreach ($data['download_description'] as $language_id => $value) {
-			$this->query("INSERT INTO " . DB_PREFIX . "download_description SET download_id = '" . (int)$download_id . "', language_id = '" . (int)$language_id . "', name = '" . $this->db->escape($value['name']) . "'");
-			}
+			$this->query("UPDATE " . DB_PREFIX . "order_download SET remaining = $new_remaining - ($old_remaining - remaining), `filename` = '" . $this->db->escape($data['filename']) . "', mask = '" . $this->db->escape($data['mask']) . "' WHERE `filename` = '" . $this->db->escape($old_filename) . "'");
+		}
 	}
 	
 	public function deleteDownload($download_id)
 	{
-			$this->query("DELETE FROM " . DB_PREFIX . "download WHERE download_id = '" . (int)$download_id . "'");
-		$this->query("DELETE FROM " . DB_PREFIX . "download_description WHERE download_id = '" . (int)$download_id . "'");
+		$this->delete('download', $download_id);
 	}
 
 	public function getDownload($download_id)
-	{
-		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "download WHERE download_id = '" . (int)$download_id . "'");
-		
-		return $query->row;
+	{ 
+		return $this->query_row("SELECT DISTINCT * FROM " . DB_PREFIX . "download WHERE download_id = '" . (int)$download_id . "'");
 	}
 
-	public function getDownloads($data = array()) {
-		$sql = "SELECT * FROM " . DB_PREFIX . "download d LEFT JOIN " . DB_PREFIX . "download_description dd ON (d.download_id = dd.download_id) WHERE dd.language_id = '" . (int)$this->config->get('config_language_id') . "'";
-	
-		$sort_data = array(
-			'dd.name',
-			'd.remaining'
-		);
-	
-		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
-			$sql .= " ORDER BY " . $data['sort'];
+	public function getDownloads($data = array(), $select = '', $total = false) {
+		//Select
+		if ($total) {
+			$select = "COUNT(*) as total";
 		} else {
-			$sql .= " ORDER BY dd.name";
+			$select = "*";
 		}
-			
-		if (isset($data['order']) && ($data['order'] == 'DESC')) {
-			$sql .= " DESC";
+		
+		//From
+		$from = DB_PREFIX . "download d";
+		
+		//Where
+		$where = '1';
+		
+		//Order and limit
+		if (!$total) {
+			$order = $this->extract_order($data);
+			$limit = $this->extract_limit($data);
 		} else {
-			$sql .= " ASC";
+			$order = '';
+			$limit = '';
 		}
 		
-		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
-			}
-
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
-			}
-			
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
+		//The Query
+		$query = "SELECT $select FROM $from WHERE $where $order $limit";
+		
+		$result = $this->query($query);
+		
+		if ($total) {
+			return $result->row['total'];
 		}
-
-		$query = $this->query($sql);
-	
-		return $query->rows;
+		
+		return $result->rows;
 	}
 	
-	public function getDownloadDescriptions($download_id)
+	public function getTotalDownloads($data = array())
 	{
-		$download_description_data = array();
-		
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "download_description WHERE download_id = '" . (int)$download_id . "'");
-		
-		foreach ($query->rows as $result) {
-			$download_description_data[$result['language_id']] = array('name' => $result['name']);
-		}
-		
-		return $download_description_data;
-	}
-	
-	public function getTotalDownloads()
-	{
-			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "download");
-		
-		return $query->row['total'];
+		return $this->getDownloads($data, '', true);
 	}
 }

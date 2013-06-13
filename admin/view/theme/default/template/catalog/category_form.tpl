@@ -65,14 +65,6 @@
 							</td>
 						</tr>
 						<tr>
-							<td><?= $entry_top; ?></td>
-							<td><input type="checkbox" name="top" value="1" <?= $top?'checked="checked"':''; ?> /></td>
-						</tr>
-						<tr>
-							<td><?= $entry_column; ?></td>
-							<td><input type="text" name="column" value="<?= $column; ?>" size="1" /></td>
-						</tr>
-						<tr>
 							<td><?= $entry_sort_order; ?></td>
 							<td><input type="text" name="sort_order" value="<?= $sort_order; ?>" size="1" /></td>
 						</tr>

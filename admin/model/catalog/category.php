@@ -188,6 +188,63 @@ class Admin_Model_Catalog_Category extends Model
 		return $url;
 	}
 	
+	public function getCategoriesWithParents($data = array(), $select = '', $delimeter = ' > ')
+	{
+		$categories = $this->getCategories($data, $select);
+	
+		foreach ($categories as &$category) {
+			if ($category['parent_id'] > 0) {
+				$parents = $this->Model_Catalog_Category->getParents($category['category_id']);
+				
+				if (!empty($parents)) {
+					$category['name'] = implode($delimeter, array_column($parents, 'name')) . $delimeter . $category['name'];
+				}
+			}
+		}
+		
+		return $categories;
+	}
+	
+	public function getParents($category_id)
+	{
+		$language_id = $this->config->get('config_language_id');
+		
+		$parents = $this->cache->get("category.parents.$category_id.$language_id");
+		
+		if (!$parents) {
+			$parents = array();
+			
+			$parent_id = $category_id;
+			
+			while ($parent_id > 0) {
+				$parent = $this->query_row("SELECT * FROM " . DB_PREFIX . "category WHERE category_id = '" . (int)$parent_id . "' LIMIT 1");
+				
+				if (!$parent) {
+					break;
+				}
+				
+				$parent_id = (int)$parent['parent_id'];
+				
+				if ($parent['category_id'] == $category_id) {
+					continue;
+				} 
+				
+				if (isset($parents[$parent_id])) {
+					trigger_error("There is a circular reference for parent categories for $category_id!");
+					exit();
+				}
+				
+				$this->translation->translate('category', $parent_id, $parent);
+				
+				$parents[$parent_id] = $parent;
+			}
+			
+			$this->cache->set("category.parents.$category_id.$language_id", $parents);
+		}
+		
+		return $parents;
+	}
+	
 	public function getCategoryStores($category_id)
 	{
 		$category_store_data = array();

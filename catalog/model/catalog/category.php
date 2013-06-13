@@ -36,6 +36,23 @@ class Catalog_Model_Catalog_Category extends Model
 		return $query->rows;
 	}
 	
+	public function getCategoriesWithParents($parent_id = 0, $delimeter = ' > ')
+	{
+		$categories = $this->getCategories($parent_id);
+	
+		foreach ($categories as &$category) {
+			if ($category['parent_id'] > 0) {
+				$parents = $this->Model_Catalog_Category->getParents($category['category_id']);
+				
+				if (!empty($parents)) {
+					$category['name'] = implode($delimeter, array_column($parents, 'name')) . $delimeter . $category['name'];
+				}
+			}
+		}
+		
+		return $categories;
+	}
+	
 	public function getParents($category_id)
 	{
 		$language_id = $this->config->get('config_language_id');

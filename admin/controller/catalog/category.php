@@ -153,7 +153,7 @@ class Admin_Controller_Catalog_Category extends Controller
 		
 		//Retrieve the Filtered Table row data
 		$category_total = $this->Model_Catalog_Category->getTotalCategories($sort_filter);
-		$categories = $this->Model_Catalog_Category->getCategories($sort_filter);
+		$categories = $this->Model_Catalog_Category->getCategoriesWithParents($sort_filter);
 		
 		foreach ($categories as &$category) {
 			$category['actions'] = array(
@@ -269,8 +269,6 @@ class Admin_Controller_Catalog_Category extends Controller
 			'meta_description' => '',
 			'keyword'	=> '',
 			'image'		=> '',
-			'top'			=> 0,
-			'column'		=> 1,
 			'sort_order'=> 0,
 			'status'		=> 1,
 			'layouts'	=> array(),
@@ -287,7 +285,7 @@ class Admin_Controller_Catalog_Category extends Controller
 			}
 		}
 		
-		$categories = $this->Model_Catalog_Category->getCategories();
+		$categories = $this->Model_Catalog_Category->getCategoriesWithParents();
 		
 		// Remove own id from list
 		foreach ($categories as $key => $category) {
@@ -297,7 +295,7 @@ class Admin_Controller_Catalog_Category extends Controller
 			}
 		}
 		
-		$this->data['data_categories'] = array(0 => $this->_('text_none')) + $categories;
+		$this->data['data_categories'] = array_merge(array(0 => $this->_('text_none')), $categories);
 		
 		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
 		
