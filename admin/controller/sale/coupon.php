@@ -244,7 +244,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 		
 		$this->data['data_geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 		
-		$this->data['categories'] = $this->Model_Catalog_Category->getCategories();
+		$this->data['categories'] = $this->Model_Catalog_Category->getCategoriesWithParents();
 		
 		$this->children = array(
 			'common/header',
