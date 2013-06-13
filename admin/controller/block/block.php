@@ -57,6 +57,7 @@ class Admin_Controller_Block_Block extends Controller
 			'sortable' => true,
 		);
 		
+		//TODO: update to new sort / filter format
 		//The Sort data
 		$data = array();
 		
@@ -162,22 +163,13 @@ class Admin_Controller_Block_Block extends Controller
 		$this->data['action'] = $this->url->link('block/block','name=' . $name);
 		$this->data['cancel'] = $this->url->link('block/block');
 
-		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-			$this->data['profiles'] = isset($_POST['profiles']) ? $_POST['profiles'] : array();
-			$this->data['settings'] = isset($_POST['settings']) ? $_POST['settings'] : array();
-		} else {
+		if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 			$block = $this->Model_Block_Block->getBlock($name);
-			
-			if (!empty($block)) {
-				$this->data['profiles'] = $block['profiles'];
-				$this->data['settings'] = $block['settings'];
-			} else {
-				$this->data['settings'] = array();
-				$this->data['profiles'] = array();
-			}
 		}
 		
 		$defaults = array(
+			'settings' => array(),
+			'profiles' => array(),
 			'status' => 1,
 		);
 		

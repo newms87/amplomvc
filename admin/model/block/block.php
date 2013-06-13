@@ -42,6 +42,14 @@ class Admin_Model_Block_Block extends Model
 			);
 		}
 		
+		if (empty($block['settings'])) {
+			$block['settings'] = array();
+		}
+		
+		if (empty($block['profiles'])) {
+			$block['profiles'] = array();
+		}
+		
 		return $block;
 	}
 	
