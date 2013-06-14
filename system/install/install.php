@@ -115,14 +115,18 @@ function setup_db($_) {
 	
 	$contents = file_get_contents($db_sql);
 	
-	str_replace("%__TABLE_PREFIX__%", DB_PREFIX, $contents);
+	$contents = str_replace("%__TABLE_PREFIX__%", DB_PREFIX, $contents);
 	
 	$temp_file = SITE_DIR . 'system/install/temp.sql';
 	
 	file_put_contents($temp_file, $contents);
 	
-	if (!$this->db->execute_file($temp_file) || !$db->count_tables()) {
+	if (!$db->execute_file($temp_file) || !$db->count_tables()) {
 		return "There was a problem encountered while building the database. Please try again.";
+	}
+	
+	if (is_file($temp_file)) {
+		@unlink($temp_file);
 	}
 	
 	$config_template = SITE_DIR . 'system/install/config_template.php';
