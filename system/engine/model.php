@@ -238,10 +238,10 @@ abstract class Model
 			$where = "WHERE $where";
 		}
 		else {
-			$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "db_rule` WHERE `table`='$table' AND `truncate`='1'");
-			if (!$query->num_rows) {
-				$args = func_get_args();
-				$msg = "TRUNCATE $table Not allowed for this table! \$where = " . print_r(isset($args[1])?$args[1]:'',true);
+			$truncate_allowed = $this->db->query_var("SELECT COUNT(*) FROM `" . DB_PREFIX . "db_rule` WHERE `table`='$table' AND `truncate`='1'");
+			
+			if (!$truncate_allowed) {
+				$msg = "Attempt to TRUNCATE $table not allowed for this table! Please specify this in the Database Rules if you want this functionality. " . get_caller() . get_caller(1);
 				trigger_error($msg);
 				$this->message->add('warning', $msg);
 				return;
@@ -381,7 +381,7 @@ abstract class Model
 					if (!$value) {
 						$value = DATETIME_ZERO;
 					}
-					$value = $this->tool->format_datetime($value);
+					$value = $this->date->format($value);
 					break;
 				
 				default:

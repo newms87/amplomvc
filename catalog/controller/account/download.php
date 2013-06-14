@@ -57,7 +57,7 @@ class Catalog_Controller_Account_Download extends Controller
 
 					$this->data['downloads'][] = array(
 						'order_id'	=> $result['order_id'],
-						'date_added' => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
+						'date_added' => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
 						'name'		=> $result['name'],
 						'remaining'  => $result['remaining'],
 						'size'		=> round(substr($size, 0, strpos($size, '.') + 4), 2) . $suffix[$i],

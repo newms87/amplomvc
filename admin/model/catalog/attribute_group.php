@@ -68,6 +68,15 @@ class Admin_Model_Catalog_AttributeGroup extends Model
 	public function deleteAttributeGroup($attribute_group_id)
 	{
 		$this->delete('attribute_group', $attribute_group_id);
+		
+		$this->translation->delete('attribute_group', $attribute_group_id);
+		
+		$attributes = $this->query_rows("SELECT attribute_id FROM " . DB_PREFIX . "attribute WHERE attribute_group_id = '" . (int)$attribute_group_id . "'");
+		
+		foreach ($attributes as $attribute) {
+			$this->translation->delete('attribute', $attribute['attribute_id']);
+		}
+		
 		$this->delete('attribute', array('attribute_group_id' => $attribute_group_id));
 	}
 		

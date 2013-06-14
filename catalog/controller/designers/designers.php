@@ -196,7 +196,7 @@ class Catalog_Controller_Designers_Designers extends Controller
 				
 				$insertables = array(
 					'name' => $d['name'],
-					'active_date' => $this->tool->format_datetime($d['date_active'],'M d, Y H:i:s'),
+					'active_date' => $this->date->format($d['date_active'],'M d, Y H:i:s'),
 					'designer_page' => $this->url->link('designer/designer','designer_id='.$d['manufacturer_id']),
 					'admin_link' => $this->url->site('admin')
 				);
@@ -222,7 +222,7 @@ class Catalog_Controller_Designers_Designers extends Controller
 				
 				$insertables = array(
 					'name' => $d['name'],
-					'active_date' => $this->tool->format_datetime($d['date_expires'],'M d, Y H:i:s'),
+					'active_date' => $this->date->format($d['date_expires'],'M d, Y H:i:s'),
 					'designer_page' => $this->url->link('designer/designer','designer_id='.$d['manufacturer_id']),
 					'admin_link' => $this->url->site('admin')
 				);

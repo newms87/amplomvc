@@ -169,7 +169,7 @@ class Admin_Controller_Dev_Dev extends Controller
 		
 		foreach ($backup_files as &$backup) {
 			$backup['display_size'] = $this->tool->bytes2str($backup['size'],2);
-			$backup['display_date'] = $this->tool->format_datetime($backup['date'], 'd M, Y');
+			$backup['display_date'] = $this->date->format($backup['date'], 'd M, Y');
 		}
 		
 		$this->data['data_backup_files'] = $backup_files;

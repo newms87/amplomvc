@@ -3,7 +3,7 @@ class Admin_Model_User_User extends Model
 {
 	public function addUser($data)
 	{
-		$data['date_added'] = $this->tool->format_datetime();
+		$data['date_added'] = $this->date->now();
 		
 		if (!empty($data['password'])) {
 			$data['password'] = $this->user->encrypt($data['password']);

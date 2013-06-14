@@ -175,7 +175,7 @@ class Admin_Controller_Localisation_Currency extends Controller
 				'title'			=> $result['title'] . (($result['code'] == $this->config->get('config_currency')) ? $this->_('text_default') : null),
 				'code'			=> $result['code'],
 				'value'			=> $result['value'],
-				'date_modified' => $this->tool->format_datetime($result['date_modified'], $this->language->getInfo('date_format_short')),
+				'date_modified' => $this->date->format($result['date_modified'], $this->language->getInfo('date_format_short')),
 				'selected'		=> isset($_POST['selected']) && in_array($result['currency_id'], $_POST['selected']),
 				'action'		=> $action
 			);

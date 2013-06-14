@@ -297,7 +297,11 @@ class Admin_Controller_Catalog_Option extends Controller
 		}
 		
 		foreach ($_POST['selected'] as $option_id) {
-			$product_total = $this->Model_Catalog_Product->getTotalProductsByOptionId($option_id);
+			$data = array (
+				'options' => array($option_id),
+			);
+			
+			$product_total = $this->Model_Catalog_Product->getTotalProducts($data);
 
 			if ($product_total) {
 				$this->error['warning'] = sprintf($this->_('error_product'), $product_total);

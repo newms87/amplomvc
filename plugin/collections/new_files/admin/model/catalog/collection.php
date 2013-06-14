@@ -36,8 +36,8 @@ class Admin_Model_Catalog_Collection extends Model
 			}
 		}
 		
-		if ($data['keyword']) {
-			$this->url->set_alias($data['keyword'], 'product/collection', 'collection_id=' . (int)$collection_id);
+		if (!empty($data['keyword'])) {
+			$this->url->setAlias($data['keyword'], 'product/collection', 'collection_id=' . (int)$collection_id);
 		}
 		
 		if (!empty($data['translations'])) {
@@ -101,8 +101,10 @@ class Admin_Model_Catalog_Collection extends Model
 			}
 		}
 
-		if ($data['keyword']) {
-			$this->url->set_alias($data['keyword'], 'product/collection', 'collection_id=' . (int)$collection_id);
+		if (!empty($data['keyword'])) {
+			$this->url->setAlias($data['keyword'], 'product/collection', 'collection_id=' . (int)$collection_id);
+		} else {
+			$this->url->removeAlias('product/collection', 'collection_id=' . (int)$collection_id);
 		}
 		
 		if (!empty($data['translations'])) {
@@ -147,7 +149,7 @@ class Admin_Model_Catalog_Collection extends Model
 		$this->delete('collection_category', array('collection_id' => $collection_id));
 		$this->delete('collection_store', array('collection_id' => $collection_id));
 		
-		$this->url->remove_alias('product/collection', 'collection_id=' . $collection_id);
+		$this->url->removeAlias('product/collection', 'collection_id=' . $collection_id);
 		
 		$this->translation->delete('collection', $collection_id);
 		
@@ -168,7 +170,7 @@ class Admin_Model_Catalog_Collection extends Model
 	{
 		$result = $this->query_row("SELECT * FROM " . DB_PREFIX . "collection WHERE collection_id = '" . (int)$collection_id . "'");
 		
-		$result['keyword'] = $this->url->get_alias('product/collection', 'collection_id=' . (int)$collection_id);
+		$result['keyword'] = $this->url->getAlias('product/collection', 'collection_id=' . (int)$collection_id);
 		
 		return $result;
 	}

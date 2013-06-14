@@ -198,7 +198,7 @@ class Plugin{
 					$reg = $this->plugin_registry[$live_file];
 					
 					if (filemtime($reg['live_file']) > (int)$reg['live_file_modified']) {
-						$edit_date = $this->tool->format_datetime(filemtime($reg['live_file']));
+						$edit_date = $this->date->format(filemtime($reg['live_file']));
 						
 						$msg = 
 							"The Live file $live_file for the plugin <strong>$name</strong> could not be updated because it was edited on $edit_date!" .
@@ -239,7 +239,7 @@ class Plugin{
 		
 		$data = array(
 			'name' => $name,
-			'date_added' => $this->tool->format_datetime(),
+			'date_added' => $this->date->now(),
 			'live_file' => $live_file,
 			'plugin_file' => $plugin_file,
 			'live_file_modified' => time(),
@@ -422,7 +422,7 @@ class Plugin{
 		//Update plugin file data
 		$data = array(
 			'name' => $name,
-			'date_added' => $this->tool->format_datetime(),
+			'date_added' => $this->date->now(),
 			'live_file' => $live_file,
 			'plugin_file' => $plugin_file,
 			'live_file_modified' => time(),

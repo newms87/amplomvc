@@ -315,8 +315,12 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 			if ($this->config->get('config_stock_status_id') == $stock_status_id) {
 				$this->error['warning'] = $this->_('error_default');
 			}
-						
-			$product_total = $this->Model_Catalog_Product->getTotalProductsByStockStatusId($stock_status_id);
+			
+			$data = array(
+				'stock_status_id' => $stock_status_id,
+			);
+			
+			$product_total = $this->Model_Catalog_Product->getTotalProducts($data);
 		
 			if ($product_total) {
 				$this->error['warning'] = sprintf($this->_('error_product'), $product_total);

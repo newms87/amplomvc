@@ -111,23 +111,17 @@ function setup_db($_) {
 	
 	$db_prefix = DB_PREFIX;
 	
-	$_ = array();
+	$db_sql = SITE_DIR . 'system/install/db.sql';
 	
-	$db_sql = SITE_DIR . 'system/install/db.sql.php';
-	$db_data = SITE_DIR . 'system/install/db_data.sql.php';
+	$contents = file_get_contents($db_sql);
 	
-	require_once($db_sql);
-	require_once($db_data);
+	str_replace("%__TABLE_PREFIX__%", DB_PREFIX, $contents);
 	
-	foreach ($_ as $query) {
-		$db->query($query);
-		
-		if ($db->get_error()) {
-			return $db->get_error();
-		}
-	}
+	$temp_file = SITE_DIR . 'system/install/temp.sql';
 	
-	if (!$db->count_tables()) {
+	file_put_contents($temp_file, $contents);
+	
+	if (!$this->db->execute_file($temp_file) || !$db->count_tables()) {
 		return "There was a problem encountered while building the database. Please try again.";
 	}
 	

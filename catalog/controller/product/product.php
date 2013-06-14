@@ -117,7 +117,7 @@ class Catalog_Controller_Product_Product extends Controller
 				'text'		=> $result['text'],
 				'rating'	=> (int)$result['rating'],
 				'reviews'	=> sprintf($this->_('text_reviews'), (int)$review_total),
-				'date_added' => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
+				'date_added' => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
 			);
 			}
 			

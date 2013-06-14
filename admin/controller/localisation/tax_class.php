@@ -340,7 +340,11 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 		}
 		
 		foreach ($_POST['selected'] as $tax_class_id) {
-			$product_total = $this->Model_Catalog_Product->getTotalProductsByTaxClassId($tax_class_id);
+			$data = array(
+				'tax_class_id' => $tax_class_id,
+			);
+			
+			$product_total = $this->Model_Catalog_Product->getTotalProducts($data);
 
 			if ($product_total) {
 				$this->error['warning'] = sprintf($this->_('error_product'), $product_total);

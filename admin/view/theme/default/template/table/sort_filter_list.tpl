@@ -64,15 +64,15 @@
 					<? break;
 					
 					case 'date': ?>
-						<td class="<?= $col['align']; ?>"><?= $this->tool->format_datetime($data[$name], 'M d, Y'); ?></td>
+						<td class="<?= $col['align']; ?>"><?= $this->date->format($data[$name], 'M d, Y'); ?></td>
 					<? break;
 					
 					case 'datetime': ?>
-						<td class="<?= $col['align']; ?>"><?= $this->tool->format_datetime($data[$name], 'M d, Y H:i A'); ?></td>
+						<td class="<?= $col['align']; ?>"><?= $this->date->format($data[$name], 'M d, Y H:i A'); ?></td>
 					<? break;
 					
 					case 'time': ?>
-						<td class="<?= $col['align']; ?>"><?= $this->tool->format_datetime($data[$name], 'H:i A'); ?></td>
+						<td class="<?= $col['align']; ?>"><?= $this->date->format($data[$name], 'H:i A'); ?></td>
 					<? break;
 					
 					case 'map': ?>

@@ -399,7 +399,11 @@ class Admin_Controller_Catalog_Download extends Controller
 		}
 		
 		foreach ($_POST['selected'] as $download_id) {
-  			$product_total = $this->Model_Catalog_Product->getTotalProductsByDownloadId($download_id);
+			$data = array(
+				'downloads' => array($download_id),
+			);
+			
+  			$product_total = $this->Model_Catalog_Product->getTotalProducts($data);
 	
 			if ($product_total) {
 				$this->error['warning'] = sprintf($this->_('error_product'), $product_total);

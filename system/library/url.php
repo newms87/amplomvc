@@ -404,17 +404,18 @@ class Url
 		}
 	}
 	
-	public function get_alias($route, $query = '', $store_id = -1)
+	public function getAlias($route, $query = '', $store_id = -1)
 	{
-		$sql_query = "SELECT keyword FROM " . DB_PREFIX . "url_alias" .
-						" WHERE `route` = '" . $this->db->escape($route) . "'" .
-						" AND `query` = '" . $this->db->escape($query) . "'" .
-						" AND store_id IN ('-1', '" . (int)$store_id . "')";
+		$sql_query = 
+			"SELECT keyword FROM " . DB_PREFIX . "url_alias" .
+			" WHERE `route` = '" . $this->db->escape($route) . "'" .
+			" AND `query` = '" . $this->db->escape($query) . "'" .
+			" AND store_id IN ('-1', '" . (int)$store_id . "')";
 						
 		return $this->db->query_var($sql_query);
 	}
 	
-	public function set_alias($alias, $route, $query = '', $store_id = -1)
+	public function setAlias($alias, $route, $query = '', $store_id = -1)
 	{
 		$url_alias = array(
 			'keyword' => $alias,
@@ -424,17 +425,22 @@ class Url
 			'status'  => 1,
 		);
 		
-		$this->remove_alias($route, $query, $store_id);
+		$this->removeAlias($route, $query, $store_id);
 		
 		$this->Model_Setting_UrlAlias->addUrlAlias($url_alias);
 	}
 	
-	public function remove_alias($route, $query = '', $store_id = -1)
+	public function removeAlias($route, $query = '', $store_id = -1, $keyword = '')
 	{
-		$sql_query = "SELECT url_alias_id FROM " . DB_PREFIX . "url_alias" .
-						" WHERE `route` = '" . $this->db->escape($route) . "'" .
-						" AND `query` = '" . $this->db->escape($query) . "'" .
-						" AND store_id = '" . (int)$store_id . "'";
+		$sql_query = 
+			"SELECT url_alias_id FROM " . DB_PREFIX . "url_alias" .
+			" WHERE `route` = '" . $this->db->escape($route) . "'" .
+			" AND `query` = '" . $this->db->escape($query) . "'" .
+			" AND store_id = '" . (int)$store_id . "'";
+		
+		if ($keyword) {
+			$sql_query .= " AND keyword = '" . $this->db->escape($keyword) . "'";
+		}
 		
 		$result = $this->db->query($sql_query);
 		

@@ -81,8 +81,8 @@ class Admin_Controller_Report_SaleReturn extends Controller
 		
 		foreach ($results as $result) {
 			$this->data['returns'][] = array(
-				'date_start' => $this->tool->format_datetime($result['date_start'], $this->language->getInfo('date_format_short')),
-				'date_end'	=> $this->tool->format_datetime($result['date_end'], $this->language->getInfo('date_format_short')),
+				'date_start' => $this->date->format($result['date_start'], $this->language->getInfo('date_format_short')),
+				'date_end'	=> $this->date->format($result['date_end'], $this->language->getInfo('date_format_short')),
 				'returns'	=> $result['returns']
 			);
 		}

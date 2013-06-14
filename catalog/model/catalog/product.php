@@ -12,7 +12,7 @@ class Catalog_Model_Catalog_Product extends Model
 		
 		//Validate Product time constraints to allow for caching
 		if ($product) {
-			$current_datetime = $this->tool->format_datetime();
+			$current_datetime = $this->date->now();
 			
 			if ($product['date_available'] > $current_datetime || $product['date_expires'] <= $current_datetime) {
 				$product = false;

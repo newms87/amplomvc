@@ -120,7 +120,7 @@ class Admin_Controller_Catalog_Flashsale extends Controller
 			'filter_name'		=>'',
 			'filter_date_start' =>'',
 			'date_start_prefix' =>'',
-			'filter_date_end'	=>$this->tool->format_datetime(),
+			'filter_date_end'	=>$this->date->now(),
 			'date_end_prefix'	=>'>',
 			'filter_status'	=>''
 		);

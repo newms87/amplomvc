@@ -7,7 +7,7 @@ class Catalog_Model_Catalog_Review extends Model
 			'author' => $data['name'],
 			'customer_id' => $this->customer->getId(),
 			'product_id' => $product_id,
-			'date_added' => $this->tool->format_datetime(),
+			'date_added' => $this->date->now(),
 		);
 		
 		$review_id = $this->insert('review', $data);

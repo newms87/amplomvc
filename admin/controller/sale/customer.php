@@ -411,7 +411,7 @@ class Admin_Controller_Sale_Customer extends Controller
 				'status'			=> ($result['status'] ? $this->_('text_enabled') : $this->_('text_disabled')),
 				'approved'		=> ($result['approved'] ? $this->_('text_yes') : $this->_('text_no')),
 				'ip'				=> $result['ip'],
-				'date_added'	=> $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
+				'date_added'	=> $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
 				'selected'		=> isset($_POST['selected']) && in_array($result['customer_id'], $_POST['selected']),
 				'action'			=> $action
 			);
@@ -990,7 +990,7 @@ class Admin_Controller_Sale_Customer extends Controller
 			$this->data['transactions'][] = array(
 				'amount'		=> $this->currency->format($result['amount'], $this->config->get('config_currency')),
 				'description' => $result['description'],
-				'date_added'  => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
+				'date_added'  => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
 			);
 			}
 		
@@ -1040,7 +1040,7 @@ class Admin_Controller_Sale_Customer extends Controller
 			$this->data['rewards'][] = array(
 				'points'		=> $result['points'],
 				'description' => $result['description'],
-				'date_added'  => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
+				'date_added'  => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
 			);
 			}
 		

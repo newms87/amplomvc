@@ -176,8 +176,8 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 				'rate'			=> $result['rate'],
 				'type'			=> ($result['type'] == 'F' ? $this->_('text_amount') : $this->_('text_percent')),
 				'geo_zone'		=> $result['geo_zone'],
-				'date_added'	=> $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
-				'date_modified' => $this->tool->format_datetime($result['date_modified'], $this->language->getInfo('date_format_short')),
+				'date_added'	=> $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
+				'date_modified' => $this->date->format($result['date_modified'], $this->language->getInfo('date_format_short')),
 				'selected'		=> isset($_POST['selected']) && in_array($result['tax_rate_id'], $_POST['selected']),
 				'action'		=> $action
 			);

@@ -4,7 +4,7 @@ class Admin_Model_Catalog_Review extends Model
 	//TODO: Reviews should not invalidate the product!
 	public function addReview($data)
 	{
-		$data['date_added'] = $this->tool->format_datetime();
+		$data['date_added'] = $this->date->now();
 		$data['text'] = strip_tags($data['text']);
 		
 		$review_id = $this->insert('review', $data);
@@ -16,7 +16,7 @@ class Admin_Model_Catalog_Review extends Model
 	
 	public function editReview($review_id, $data)
 	{
-		$data['date_added'] = $this->tool->format_datetime();
+		$data['date_added'] = $this->date->now();
 		$data['text'] = strip_tags($data['text']);
 		
 		$this->update('review', $data, $review_id);

@@ -3,7 +3,7 @@ class Admin_Model_Sale_Voucher extends Model
 {
 	public function addVoucher($data)
 	{
-		$data['date_added'] = $this->tool->format_datetime();
+		$data['date_added'] = $this->date->now();
 		
 		$this->insert('voucher', $data);
 	}

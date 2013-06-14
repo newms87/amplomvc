@@ -3,7 +3,7 @@ class Admin_Model_Catalog_Category extends Model
 {
 	public function addCategory($data)
 	{
-		$data['date_added'] = $this->tool->format_datetime();
+		$data['date_added'] = $this->date->now();
 		$data['date_modified'] = $data['date_added'];
 		
 		$category_id = $this->insert('category', $data);
@@ -30,8 +30,8 @@ class Admin_Model_Catalog_Category extends Model
 			}
 		}
 		
-		if ($data['keyword']) {
-			$this->url->set_alias($data['keyword'], 'product/category', 'category_id=' . (int)$category_id);
+		if (!empty($data['keyword'])) {
+			$this->url->setAlias($data['keyword'], 'product/category', 'category_id=' . (int)$category_id);
 		}
 		
 		if (!empty($data['translations'])) {
@@ -45,7 +45,7 @@ class Admin_Model_Catalog_Category extends Model
 	
 	public function editCategory($category_id, $data)
 	{
-		$data['date_modified'] = $this->tool->format_datetime();
+		$data['date_modified'] = $this->date->now();
 		
 		$this->update('category', $data, $category_id);
 		
@@ -75,8 +75,10 @@ class Admin_Model_Catalog_Category extends Model
 			}
 		}
 		
-		if ($data['keyword']) {
-			$this->url->set_alias($data['keyword'], 'product/category', 'category_id=' . (int)$category_id);
+		if (!empty($data['keyword'])) {
+			$this->url->setAlias($data['keyword'], 'product/category', 'category_id=' . (int)$category_id);
+		} else {
+			$this->url->removeAlias('product/category', 'category_id=' . (int)$category_id);
 		}
 		
 		if (!empty($data['translations'])) {
@@ -92,17 +94,17 @@ class Admin_Model_Catalog_Category extends Model
 		$this->delete('category_to_store', array('category_id'=>$category_id));
 		$this->delete('category_to_layout', array('category_id'=>$category_id));
 		
-		$this->Model_Setting_UrlAlias->deleteUrlAliasByRouteQuery('product/category', "category_id=" . (int)$category_id . "'");
+		$this->url->removeAlias('product/category', 'category_id=' . (int)$category_id);
+		
+		$this->translation->delete('category', $category_id);
 		
 		$this->delete('product_to_category', array('category_id'=>$category_id));
 		
-		$query = $this->get('category', 'category_id', array('parent_id'=>$category_id));
+		$children = $this->query_rows("SELECT category_id FROM " . DB_PREFIX . "category WHERE parent_id = '" . (int)$category_id . "'");
 
-		foreach ($query->rows as $result) {
-			$this->deleteCategory($result['category_id']);
+		foreach ($children as $category) {
+			$this->deleteCategory($category['category_id']);
 		}
-		
-		$this->url->remove_alias('product/category', 'category_id=' . $category_id);
 		
 		$this->cache->delete('category');
 	}
@@ -111,7 +113,7 @@ class Admin_Model_Catalog_Category extends Model
 	{
 		$result = $this->query_row("SELECT * FROM " . DB_PREFIX . "category WHERE category_id = '" . (int)$category_id . "'");
 		
-		$result['keyword'] = $this->url->get_alias('product/category', 'category_id=' . $category_id);
+		$result['keyword'] = $this->url->getAlias('product/category', 'category_id=' . $category_id);
 		
 		return $result;
 	}

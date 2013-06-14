@@ -625,7 +625,7 @@ class Admin_Model_Sale_Order extends Model
 			$subject = sprintf($language->get('text_subject'), $order_info['store_name'], $order_id);
 
 			$message  = $language->get('text_order') . ' ' . $order_id . "\n";
-			$message .= $language->get('text_date_added') . ' ' . $this->tool->format_datetime($order_info['date_added'], $language->get('date_format_short')) . "\n\n";
+			$message .= $language->get('text_date_added') . ' ' . $this->date->format($order_info['date_added'], $language->get('date_format_short')) . "\n\n";
 			
 			$order_status_query = $this->query("SELECT * FROM " . DB_PREFIX . "order_status WHERE order_status_id = '" . (int)$data['order_status_id'] . "' AND language_id = '" . (int)$order_info['language_id'] . "'");
 				

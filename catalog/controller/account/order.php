@@ -69,7 +69,7 @@ class Catalog_Controller_Account_Order extends Controller
 				'order_id'	=> $result['order_id'],
 				'name'		=> $result['firstname'] . ' ' . $result['lastname'],
 				'status'	=> $result['status'],
-				'date_added' => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
+				'date_added' => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
 				'products'	=> ($product_total + $voucher_total),
 				'total'		=> $this->currency->format($result['total'], $result['currency_code'], $result['currency_value']),
 				'href'		=> $this->url->link('account/order/info', 'order_id=' . $result['order_id']),
@@ -267,7 +267,7 @@ class Catalog_Controller_Account_Order extends Controller
 
 				foreach ($results as $result) {
 				$this->data['histories'][] = array(
-						'date_added' => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
+						'date_added' => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
 						'status'	=> $result['status'],
 						'comment'	=> nl2br($result['comment'])
 				);

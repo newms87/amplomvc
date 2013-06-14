@@ -305,10 +305,10 @@ class Admin_Model_Catalog_Flashsale extends Model
 			}
 			
 			if (isset($data['date_end']) && $data['date_end']) {
-				$where .= ($where ? ' AND ':'') . "`date_end`" . $this->db->escape($data['date_end_prefix']) . "'" . $this->tool->format_datetime($data['date_end']) . "'";
+				$where .= ($where ? ' AND ':'') . "`date_end`" . $this->db->escape($data['date_end_prefix']) . "'" . $this->date->format($data['date_end']) . "'";
 			}
 			if (isset($data['date_start']) && $data['date_start']) {
-				$where .= ($where ? ' AND ':'') . "`date_start`" . $this->db->escape($data['date_start_prefix']) . "'" . $this->tool->format_datetime($data['date_start']) . "'";
+				$where .= ($where ? ' AND ':'') . "`date_start`" . $this->db->escape($data['date_start_prefix']) . "'" . $this->date->format($data['date_start']) . "'";
 			}
 			
 			if (isset($data['status']) && $data['status'] !== '') {

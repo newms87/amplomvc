@@ -407,6 +407,8 @@ class Image
 		
 		$total = $colors['r'] + $colors['g'] + $colors['b'];
 		
+		if (!$total) $total = 1;
+		
 		foreach ($colors as $key => $c) {
 			$colors[$key] = 100 * ($c / $total);
 		}

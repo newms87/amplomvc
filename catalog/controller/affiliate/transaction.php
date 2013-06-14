@@ -44,7 +44,7 @@ class Catalog_Controller_Affiliate_Transaction extends Controller
 			$this->data['transactions'][] = array(
 				'amount'		=> $this->currency->format($result['amount'], $this->config->get('config_currency')),
 				'description' => $result['description'],
-				'date_added'  => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
+				'date_added'  => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
 			);
 		}
 

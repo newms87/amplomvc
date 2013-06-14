@@ -14,8 +14,8 @@ class Catalog_Model_Checkout_Order extends Model
 		
 		//TODO - Remove invoice_no from DB?
 		$data['invoice_no'] = 0;
-		$data['date_added'] = $this->tool->format_datetime();
-		$data['date_modified'] = $this->tool->format_datetime();
+		$data['date_added'] = $this->date->now();
+		$data['date_modified'] = $this->date->now();
 		
 		$order_id = $this->insert('order', $data);
 		
@@ -183,7 +183,7 @@ class Catalog_Model_Checkout_Order extends Model
 		
 		$values = array(
 			'order_status_id' => $order_status_id,
-			'date_modified'	=> $this->tool->format_datetime()
+			'date_modified'	=> $this->date->now()
 		);
 		
 		$this->update('order', $values, $order_id);
@@ -193,7 +193,7 @@ class Catalog_Model_Checkout_Order extends Model
 			'order_status_id' => $order_status_id,
 			'notify'			=> 1,
 			'comment'			=> ($comment && $notify) ? $comment : '',
-			'date_added'		=> $this->tool->format_datetime()
+			'date_added'		=> $this->date->now()
 		);
 		
 		$this->insert('order_history', $values);
@@ -662,7 +662,7 @@ class Catalog_Model_Checkout_Order extends Model
 				$subject = sprintf($language['text_update_subject'], html_entity_decode($order_info['store_name'], ENT_QUOTES, 'UTF-8'), $order_id);
 	
 				$message  = $language['text_update_order'] . ' ' . $order_id . "\n";
-				$message .= $language['text_update_date_added'] . ' ' . $this->tool->format_datetime($order_info['date_added'], $language['date_format_short']) . "\n\n";
+				$message .= $language['text_update_date_added'] . ' ' . $this->date->format($order_info['date_added'], $language['date_format_short']) . "\n\n";
 				
 				$order_status_query = $this->query("SELECT * FROM " . DB_PREFIX . "order_status WHERE order_status_id = '" . (int)$order_status_id . "' AND language_id = '" . (int)$order_info['language_id'] . "'");
 				

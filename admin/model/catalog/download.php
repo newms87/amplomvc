@@ -3,7 +3,7 @@ class Admin_Model_Catalog_Download extends Model
 {
 	public function addDownload($data)
 	{
-		$data['date_added'] = $this->tool->format_datetime();
+		$data['date_added'] = $this->date->now();
 		
 		if (!empty($data['download'])) {
 			$data['filename'] = $data['download'];
@@ -43,6 +43,8 @@ class Admin_Model_Catalog_Download extends Model
 	public function deleteDownload($download_id)
 	{
 		$this->delete('download', $download_id);
+		
+		$this->translation->delete('download', $download_id);
 	}
 
 	public function getDownload($download_id)

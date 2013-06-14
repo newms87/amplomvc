@@ -11,7 +11,7 @@ class Catalog_Controller_Mail_Order extends Controller
 		
 		$this->data['logo'] = $this->image->get($this->config->get('config_logo'));
 		$this->data['link'] = $order_info['store_url'] . 'index.php?route=account/order/info&order_id=' . $order_id;
-		$this->data['date_added'] = $this->tool->format_date($order_info['date_added'], $language->getInfo('date_format_short'));
+		$this->data['date_added'] = $this->date->format($order_info['date_added'], 'short');
 		
 		//Language data
 		$language = $this->language->fetch('mail/order', $order_info['language_directory']);

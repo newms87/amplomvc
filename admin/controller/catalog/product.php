@@ -880,14 +880,4 @@ class Admin_Controller_Catalog_Product extends Controller
 		echo json_encode($this->Model_Catalog_Product->generate_model($name));
 		exit;
 	}
-
-	public function fill_shipping_return_policy()
-	{
-		$id = isset($_POST['manufacturer_id'])?$_POST['manufacturer_id']:'';
-		if(!$id)return;
-		
-		$desc = $this->Model_Catalog_Manufacturer->getManufacturerDescriptions($id);
-		echo json_encode($desc);
-		exit;
-	}
 }

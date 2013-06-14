@@ -43,7 +43,7 @@ class Catalog_Controller_Account_Reward extends Controller
 				'order_id'	=> $result['order_id'],
 				'points'		=> $result['points'],
 				'description' => $result['description'],
-				'date_added'  => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
+				'date_added'  => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
 				'href'		=> $this->url->link('account/order/info', 'order_id=' . $result['order_id'])
 			);
 		}

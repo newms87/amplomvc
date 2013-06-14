@@ -127,7 +127,7 @@ class Admin_Controller_User_User extends Controller
 			);
 			
 			$result['status']	= $result['status'] ? $this->_('text_enabled') : $this->_('text_disabled');
-			$result['date_added'] = $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short'));
+			$result['date_added'] = $this->date->format($result['date_added'], $this->language->getInfo('date_format_short'));
 			$result['selected']	= isset($_POST['selected']) && in_array($result['user_id'], $_POST['selected']);
 			$result['action']	= $action;
 		}unset($result);

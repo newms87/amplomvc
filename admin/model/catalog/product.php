@@ -3,7 +3,7 @@ class Admin_Model_Catalog_Product extends Model
 {
 	public function addProduct($data)
 	{
-		$data['date_added'] = $this->tool->format_datetime();
+		$data['date_added'] = $this->date->now();
 		
 		$product_id = $this->insert('product', $data);
 		
@@ -195,14 +195,7 @@ class Admin_Model_Catalog_Product extends Model
 				$data['keyword'] = 'product/' . $data['keyword'];
 			}
 			
-			$url_alias = array(
-				'route'=>'product/product',
-				'query'=>'product_id=' . (int)$product_id,
-				'keyword'=>$this->db->escape($data['keyword']),
-				'status'=>$data['status'],
-			);
-			
-			$this->Model_Setting_UrlAlias->addUrlAlias($url_alias);
+			$this->url->setAlias($data['keyword'], 'product/product', 'product_id=' . (int)$product_id);
 		}
 
 		if (!empty($data['translations'])) {
@@ -216,7 +209,7 @@ class Admin_Model_Catalog_Product extends Model
 	{
 		$language_id = $this->config->get('config_language_id');
 		
-		$data['date_modified'] = $this->tool->format_datetime();
+		$data['date_modified'] = $this->date->now();
 		
 		$this->update('product', $data, $product_id);
 		
@@ -449,14 +442,9 @@ class Admin_Model_Catalog_Product extends Model
 				$data['keyword'] = 'product/' . $data['keyword'];
 			}
 			
-			$url_alias = array(
-				'route'=>'product/product',
-				'query'=>'product_id=' . (int)$product_id,
-				'keyword'=>$this->db->escape($data['keyword']),
-				'status'=>$data['status'],
-			);
-			
-			$this->Model_Setting_UrlAlias->addUrlAlias($url_alias);
+			$this->url->setAlias($data['keyword'], 'product/product', 'product_id=' . (int)$product_id);
+		} else {
+			$this->url->removeAlias('product/product', 'product_id=' . (int)$product_id);
 		}
 		
 		//Translations
@@ -520,9 +508,11 @@ class Admin_Model_Catalog_Product extends Model
 		$product['product_template'] = $this->getProductTemplates($product_id);
 		$product['product_store'] = $this->getProductStores($product_id);
 		
-		$name_count = $this->query_var("SELECT COUNT(*) FROM " . DB_PREFIX . "product WHERE `name` like '$product[name]%'");
+		$name_count = $this->query_var("SELECT COUNT(*) FROM " . DB_PREFIX . "product WHERE `name` like '" . $this->db->escape($product['name']) . "%'");
 		
 		$product['name'] .= ' - Copy' . ($name_count > 1 ? "($name_count)" : '');
+		
+		$product['translations'] = $this->translation->get_translations('product', $product_id);
 		
 		$this->addProduct($product);
 		
@@ -550,7 +540,9 @@ class Admin_Model_Catalog_Product extends Model
 		$this->delete('product_to_store', array('product_id'=>$product_id));
 		$this->delete('review', array('product_id'=>$product_id));
 		
-		$this->Model_Setting_UrlAlias->deleteUrlAliasByRouteQuery('product/product', 'product_id=' . (int)$product_id);
+		$this->url->remove_alias('product/product', 'product_id=' . (int)$product_id);
+		
+		$this->translation->delete('product', $product_id);
 		
 		$this->cache->delete('product');
 	}
@@ -618,6 +610,10 @@ class Admin_Model_Catalog_Product extends Model
 		if (!empty($data['manufacturer_id'])) {
 			$where .= " AND p.manufacturer_id = '" . (int)$data['manufacturer_id'] . "'";
 		}
+		
+		if (!empty($data['manufacturers'])) {
+			$where .= " AND p.manufacturer_id IN (" . implode(",", $data['manufacturers']) . ")";
+		}
 
 		if ((isset($data['sort']) && $data['sort'] == 'manufacturer_name') || !empty($data['manufacturer_name'])) {
 			$from .= " LEFT JOIN " . DB_PREFIX . "manufacturer m ON(m.manufacturer_id=p.manufacturer_id)";
@@ -654,6 +650,22 @@ class Admin_Model_Catalog_Product extends Model
 				$where .= " AND special >= '" . (int)$data['special']['low'] . "'";
 			}
 		}
+				
+		if (!empty($data['tax_class_id'])) {
+			$where .= " AND p.tax_class_id = '" . (int)$data['tax_class_id'] . "'";
+		}
+		
+		if (!empty($data['stock_status_id'])) {
+			$where .= " AND p.stock_status_id = '" . (int)$data['stock_status_id'] . "'";
+		}
+		
+		if (!empty($data['weight_class_id'])) {
+			$where .= " AND p.weight_class_id = '" . (int)$data['weight_class_id'] . "'";
+		}
+		
+		if (!empty($data['length_class_id'])) {
+			$where .= " AND p.length_class_id = '" . (int)$data['length_class_id'] . "'";
+		}
 		
 		if (!empty($data['is_final'])) {
 			$where .= " AND p.is_final = '" . ($data['p.is_final'] ? 1 : 0) . "'";
@@ -675,6 +687,30 @@ class Admin_Model_Catalog_Product extends Model
 		
 		if (isset($data['status'])) {
 			$where .= " AND p.status = '" . ($data['status'] ? 1 : 0) . "'";
+		}
+		
+		if (!empty($data['downloads'])) {
+			$from .= " LEFT JOIN " . DB_PREFIX . "product_to_download p2dl ON (p.product_id=p2dl.product_id)";
+			
+			$where .= " AND p2dl.download_id IN (" . implode(',', $data['downloads']) . ")"; 
+		}
+		
+		if (!empty($data['attributes'])) {
+			$from .= " LEFT JOIN " . DB_PREFIX . "product_attribute pa ON (p.product_id=pa.product_id)";
+			
+			$where .= " AND pa.attribute_id IN (" . implode(',', $data['attributes']) . ")"; 
+		}
+		
+		if (!empty($data['options'])) {
+			$from .= " LEFT JOIN " . DB_PREFIX . "product_option po ON (p.product_id=po.product_id)";
+			
+			$where .= " AND po.option_id IN (" . implode(',', $data['options']) . ")"; 
+		}
+		
+		if (!empty($data['layouts'])) {
+			$from .= " LEFT JOIN " . DB_PREFIX . "product_to_layout p2l ON (p.product_id=p2l.product_id)";
+			
+			$where .= " AND p2l.layout_id IN (" . implode(',', $data['layouts']) . ")"; 
 		}
 		
 		//Group By, Order By and Limit
@@ -926,66 +962,5 @@ class Admin_Model_Catalog_Product extends Model
 	
 	public function getTotalProducts($data = array()) {
 		return $this->getProducts($data, '', true);
-	}
-	
-	public function getTotalProductsByTaxClassId($tax_class_id) {
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "product WHERE tax_class_id = '" . (int)$tax_class_id . "'");
-
-		return $query->row['total'];
-	}
-		
-	public function getTotalProductsByStockStatusId($stock_status_id)
-	{
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "product WHERE stock_status_id = '" . (int)$stock_status_id . "'");
-
-		return $query->row['total'];
-	}
-	
-	public function getTotalProductsByWeightClassId($weight_class_id) {
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "product WHERE weight_class_id = '" . (int)$weight_class_id . "'");
-
-		return $query->row['total'];
-	}
-	
-	public function getTotalProductsByLengthClassId($length_class_id)
-	{
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "product WHERE length_class_id = '" . (int)$length_class_id . "'");
-
-		return $query->row['total'];
-	}
-
-	public function getTotalProductsByDownloadId($download_id)
-	{
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "product_to_download WHERE download_id = '" . (int)$download_id . "'");
-		
-		return $query->row['total'];
-	}
-	
-	public function getTotalProductsByManufacturerId($manufacturer_id)
-	{
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "product WHERE manufacturer_id = '" . (int)$manufacturer_id . "'");
-
-		return $query->row['total'];
-	}
-	
-	public function getTotalProductsByAttributeId($attribute_id)
-	{
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "product_attribute WHERE attribute_id = '" . (int)$attribute_id . "'");
-
-		return $query->row['total'];
-	}
-	
-	public function getTotalProductsByOptionId($option_id)
-	{
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "product_option WHERE option_id = '" . (int)$option_id . "'");
-
-		return $query->row['total'];
-	}
-	
-	public function getTotalProductsByLayoutId($layout_id)
-	{
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "product_to_layout WHERE layout_id = '" . (int)$layout_id . "'");
-
-		return $query->row['total'];
 	}
 }

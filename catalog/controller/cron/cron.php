@@ -5,7 +5,7 @@ class Catalog_Controller_Cron_Cron extends Controller
 	{
 		$tasks = $this->Model_Setting_Setting->getSetting('cron_tasks');
 		
-		echo "Running Cron - " . $this->tool->format_datetime() . "<br><br>";
+		echo "Running Cron - " . $this->date->now() . "<br><br>";
 		foreach ($tasks['tasks'] as $task) {
 			if($task['status'] != '1')continue;
 			

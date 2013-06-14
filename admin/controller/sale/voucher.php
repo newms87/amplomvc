@@ -178,7 +178,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 				'theme'		=> $result['theme'],
 				'amount'	=> $this->currency->format($result['amount'], $this->config->get('config_currency')),
 				'status'	=> ($result['status'] ? $this->_('text_enabled') : $this->_('text_disabled')),
-				'date_added' => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
+				'date_added' => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
 				'selected'	=> isset($_POST['selected']) && in_array($result['voucher_id'], $_POST['selected']),
 				'action'	=> $action
 			);
@@ -488,7 +488,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 				'order_id'	=> $result['order_id'],
 				'customer'	=> $result['customer'],
 				'amount'	=> $this->currency->format($result['amount'], $this->config->get('config_currency')),
-				'date_added' => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
+				'date_added' => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
 			);
 			}
 		

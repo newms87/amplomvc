@@ -113,8 +113,8 @@ class Admin_Controller_Sale_Coupon extends Controller
 				'name'		=> $result['name'],
 				'code'		=> $result['code'],
 				'discount'	=> $result['discount'],
-				'date_start' => $this->tool->format_datetime($result['date_start'], $this->language->getInfo('date_format_short')),
-				'date_end'	=> $this->tool->format_datetime($result['date_end'], $this->language->getInfo('date_format_short')),
+				'date_start' => $this->date->format($result['date_start'], $this->language->getInfo('date_format_short')),
+				'date_end'	=> $this->date->format($result['date_end'], $this->language->getInfo('date_format_short')),
 				'status'	=> ($result['status'] ? $this->_('text_enabled') : $this->_('text_disabled')),
 				'selected'	=> isset($_POST['selected']) && in_array($result['coupon_id'], $_POST['selected']),
 				'action'	=> $action
@@ -312,7 +312,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 				'order_id'	=> $result['order_id'],
 				'customer'	=> $result['customer'],
 				'amount'	=> $result['amount'],
-				'date_added' => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
+				'date_added' => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
 			);
 		}
 		

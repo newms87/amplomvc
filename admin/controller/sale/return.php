@@ -366,7 +366,7 @@ class Admin_Controller_Sale_Return extends Controller
 				'product'		=> $result['product'],
 				'model'			=> $result['model'],
 				'status'		=> $result['status'],
-				'date_added'	=> $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
+				'date_added'	=> $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
 				'date_modified' => date($this->language->getInfo('date_format_short'), strtotime($result['date_modified'])),
 				'selected'		=> isset($_POST['selected']) && in_array($result['return_id'], $_POST['selected']),
 				'action'		=> $action
@@ -1033,7 +1033,7 @@ class Admin_Controller_Sale_Return extends Controller
 				'notify'	=> $result['notify'] ? $this->_('text_yes') : $this->_('text_no'),
 				'status'	=> $result['status'],
 				'comment'	=> nl2br($result['comment']),
-				'date_added' => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
+				'date_added' => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
 			);
 			}
 		

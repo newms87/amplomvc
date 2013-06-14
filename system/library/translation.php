@@ -72,11 +72,11 @@ class Translation
 		
 		$translations = array();
 		
-		$result = $this->db->query("SELECT translation_id, `field` FROM " . DB_PREFIX . "translation WHERE `table` = '" . $this->db->escape($table) . "'");
+		$results = $this->db->query_rows("SELECT translation_id, `field` FROM " . DB_PREFIX . "translation WHERE `table` = '" . $this->db->escape($table) . "'");
 		
 		//Identify all necessary fields
 		if (empty($fields)) {
-			$fields = array_column($result->rows, 'field');
+			$fields = array_column($results, 'field');
 		}
 		
 		//set all fields with all languages
@@ -84,15 +84,15 @@ class Translation
 			$translations[$field] = $languages;
 		}
 		
-		foreach ($result->rows as $translation) {
+		foreach ($results as $translation) {
 			$query =
 				"SELECT language_id, text FROM " . DB_PREFIX . "translation_text" .
 				" WHERE translation_id = '$translation[translation_id]'" .
 				" AND object_id = '" . $this->db->escape($object_id) . "'";
 			
-			$t_result = $this->db->query($query);
+			$t_rows = $this->db->query_rows($query);
 			
-			foreach ($t_result->rows as $row) {
+			foreach ($t_rows as $row) {
 				$translations[$translation['field']][$row['language_id']] = html_entity_decode($row['text']);
 			}
 		}

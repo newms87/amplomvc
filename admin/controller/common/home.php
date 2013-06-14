@@ -52,7 +52,7 @@ class Admin_Controller_Common_Home extends Controller
 				'order_id'	=> $result['order_id'],
 				'customer'	=> $result['customer'],
 				'status'	=> $result['status'],
-				'date_added' => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
+				'date_added' => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
 				'total'		=> $this->currency->format($result['total'], $result['currency_code'], $result['currency_value']),
 				'action'	=> $action
 			);

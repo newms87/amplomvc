@@ -3,7 +3,7 @@ class Admin_Model_Localisation_GeoZone extends Model
 {
 	public function addGeoZone($data)
 	{
-		$data['date_added'] = $this->tool->format_datetime();
+		$data['date_added'] = $this->date->now();
 		$data['date_modified'] = $data['date_added'];
 		
 		$geo_zone_id = $this->insert('geo_zone', $data);
@@ -11,7 +11,7 @@ class Admin_Model_Localisation_GeoZone extends Model
 		if (isset($data['zones'])) {
 			foreach ($data['zones'] as $zone) {
 				$zone['geo_zone_id'] = $geo_zone_id;
-				$zone['date_added'] = $this->tool->format_datetime();
+				$zone['date_added'] = $this->date->now();
 				
 				$this->insert('zone_to_geo_zone', $zone);
 			}
@@ -22,7 +22,7 @@ class Admin_Model_Localisation_GeoZone extends Model
 	
 	public function editGeoZone($geo_zone_id, $data)
 	{
-		$data['date_modified'] = $this->tool->format_datetime();
+		$data['date_modified'] = $this->date->now();
 		
 		$this->update('geo_zone', $data, $geo_zone_id);
 		
@@ -31,7 +31,7 @@ class Admin_Model_Localisation_GeoZone extends Model
 		if (isset($data['zones'])) {
 			foreach ($data['zones'] as $zone) {
 				$zone['geo_zone_id'] = $geo_zone_id;
-				$zone['date_added'] = $this->tool->format_datetime();
+				$zone['date_added'] = $this->date->now();
 				
 				$this->insert('zone_to_geo_zone', $zone);
 			}

@@ -7,8 +7,11 @@ if (version_compare(phpversion(), '5.1.0', '<') == true) {
 	exit('PHP5.1+ Required');
 }
 
-//data
+//Date Constants
 define('DATETIME_ZERO','0000-00-00 00:00:00');
+define("AC_DATE_STRING", 1);
+define("AC_DATE_OBJECT", 2);
+define("AC_DATE_TIMESTAMP", 3);
 
 //COOKIES
 $domain = parse_url(SITE_URL, PHP_URL_HOST);

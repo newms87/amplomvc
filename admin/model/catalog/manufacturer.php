@@ -3,25 +3,12 @@ class Admin_Model_Catalog_Manufacturer extends Model
 {
 	public function addManufacturer($data)
 	{
-		if ($this->user->isDesigner()) {
-			$data['sort_order'] = 0;
-			$data['section_attr'] = 0;
-			$data['status'] = 0;
-			$data['manufacturer_store'] = array(0,1,2);
-			$data['articles'] = null;
-			$data['date_active'] = date_create();
-			$data['date_expires'] = date_add(new DateTime(), date_interval_create_from_date_string('30 days'));
-			$data['keyword'] = $this->Model_Setting_UrlAlias->format_url($data['name']);
-			$data['editable'] = 1;
+		if (empty($data['date_active'])) {
+			$data['date_active'] = DATETIME_ZERO;
 		}
 		
-		
-		if (!$data['date_active']) {
-				$data['date_active'] = DATETIME_ZERO;
-		}
-		
-		if (!$data['date_expires']) {
-				$data['date_expires'] = DATETIME_ZERO;
+		if (empty($data['date_expires'])) {
+			$data['date_expires'] = DATETIME_ZERO;
 		}
 
 		$manufacturer_id = $this->insert('manufacturer', $data);
@@ -29,15 +16,8 @@ class Admin_Model_Catalog_Manufacturer extends Model
 		$vendor_id = $this->generate_vendor_id(array('id'=>$manufacturer_id,'name'=>$data['name']));
 		$this->update('manufacturer', array('vendor_id'=>$vendor_id), array('manufacturer_id'=>$manufacturer_id));
 		
-		foreach ($data['manufacturer_description'] as $language_id => $value) {
-			$value['manufacturer_id']  = $manufacturer_id;
-			$value['language_id']		= $language_id;
-			
-			$this->insert('manufacturer_description',$value);
-		}
-		
-		if (isset($data['manufacturer_store'])) {
-			foreach ($data['manufacturer_store'] as $store_id) {
+		if (isset($data['stores'])) {
+			foreach ($data['stores'] as $store_id) {
 				$store_data = array(
 					'manufacturer_id' => $manufacturer_id,
 					'store_id'		=> $store_id
@@ -47,31 +27,12 @@ class Admin_Model_Catalog_Manufacturer extends Model
 			}
 		}
 		
-		if (isset($data['articles'])) {
-			foreach ($data['articles'] as $article) {
-				$article['manufacturer_id'] = $manufacturer_id;
-				
-				$this->insert('manufacturer_article', $article);
-			}
+		if (!empty($data['keyword'])) {
+			$this->url->setAlias($data['keyword'], 'product/manufacturer', 'manufacturer_id=' . (int)$manufacturer_id);
 		}
 		
-		if ($data['keyword']) {
-			$url_alias = array(
-				'route' => 'product/manufacturer/product',
-				'query' => 'manufacturer_id=' . (int)$manufacturer_id,
-				'keyword' => $data['keyword'],
-				'status' => $data['status'],
-			);
-			
-			$this->Model_Setting_UrlAlias->addUrlAlias($url_alias);
-		}
-		
-		if ($this->user->isDesigner()) {
-			$values = array(
-				'designer_id' => $manufacturer_id,
-				'user_id'	=> $this->user->getId()
-				);
-			$this->insert('user_designer', $values);
+		if (!empty($data['translations'])) {
+			$this->translation->set_translations('manufacturer', $manufacturer_id, $data['translations']);
 		}
 		
 		$this->cache->delete('manufacturer');
@@ -87,77 +48,60 @@ class Admin_Model_Catalog_Manufacturer extends Model
 				$data['date_expires'] = DATETIME_ZERO;
 		}
 		
-		if ($this->user->isAdmin()) {
-			$this->update('manufacturer', $data, array('manufacturer_id'=>$manufacturer_id));
-		}
-		else {
-			$values = array(
-				'name' => $data['name'],
-				'image'=> $data['image'],
-			);
-			$this->update('manufacturer', $values, array('manufacturer_id'=>$manufacturer_id));
-		}
+		$this->update('manufacturer', $data, array('manufacturer_id'=>$manufacturer_id));
 		
-		$this->delete('manufacturer_description', array('manufacturer_id'=>$manufacturer_id));
-		
-		foreach ($data['manufacturer_description'] as $language_id => $value) {
-			$value['manufacturer_id'] = $manufacturer_id;
-			$value['language_id'] = $language_id;
-			
-			$this->insert('manufacturer_description', $value);
-		}
-		
-		if ($this->user->isAdmin()) {
-			$this->delete('manufacturer_to_store', array('manufacturer_id'=>$manufacturer_id));
-	
-			if (isset($data['manufacturer_store'])) {
-				foreach ($data['manufacturer_store'] as $store_id) {
-					$values = array(
-						'manufacturer_id' => $manufacturer_id,
-						'store_id'		=> $store_id
-					);
-					
-					$this->insert('manufacturer_to_store', $values);
-				}
-			}
-			
-			$this->delete('manufacturer_article', array('manufacturer_id'=>$manufacturer_id));
-			
-			if (isset($data['articles'])) {
-				foreach ($data['articles'] as $article) {
-					$article['manufacturer_id'] = $manufacturer_id;
-				
-					$this->insert('manufacturer_article', $article);
-				}
-			}
-			
-			$this->Model_Setting_UrlAlias->deleteUrlAliasByRouteQuery('product/manufacturer/product', "manufacturer_id=$manufacturer_id");
-			
-			if ($data['keyword']) {
-				$url_alias = array(
-					'route' => 'product/manufacturer/product',
-					'query' => 'manufacturer_id=' . (int)$manufacturer_id,
-					'keyword' => $data['keyword'],
-					'status' => $data['status'],
+		$this->delete('manufacturer_to_store', array('manufacturer_id'=>$manufacturer_id));
+
+		if (isset($data['stores'])) {
+			foreach ($data['stores'] as $store_id) {
+				$values = array(
+					'manufacturer_id' => $manufacturer_id,
+					'store_id'		=> $store_id
 				);
-			
-				$this->Model_Setting_UrlAlias->addUrlAlias($url_alias);
+				
+				$this->insert('manufacturer_to_store', $values);
 			}
+		}
+				
+		if (!empty($data['keyword'])) {
+			$this->url->setAlias($data['keyword'], 'product/manufacturer', 'manufacturer_id=' . (int)$manufacturer_id);
+		} else {
+			$this->url->removeAlias('product/manufacturer', 'manufacturer_id=' . (int)$manufacturer_id);
+		}
+		
+		if (!empty($data['translations'])) {
+			$this->translation->set_translations('manufacturer', $manufacturer_id, $data['translations']);
 		}
 
 		$this->cache->delete('manufacturer');
+	}
+
+	public function updateField($manufacturer_id, $data)
+	{
+		$this->insert('manufacturer', $data, $manufacturer_id);
+	}
+	
+	public function copyManufacturer($manufacturer_id)
+	{
+		$manufacturer = $this->getManufacturer($manufacturer_id);
+		
+		$manufacturer['keyword'] = '';
+		
+		$manufacturer['stores'] = $this->getManufacturerStores($manufacturer_id);
+		
+		$manufacturer['translations'] = $this->translation->get_translations('manufacturer', $manufacturer_id);
+		
+		$this->addManufacturer($manufacturer);
 	}
 	
 	public function deleteManufacturer($manufacturer_id)
 	{
 		$this->delete('manufacturer', array('manufacturer_id'=>$manufacturer_id));
-		$this->delete('manufacturer_article', array('manufacturer_id'=>$manufacturer_id));
-		$this->delete('manufacturer_description', array('manufacturer_id'=>$manufacturer_id));
 		$this->delete('manufacturer_to_store', array('manufacturer_id'=>$manufacturer_id));
 		
-		$this->Model_Setting_UrlAlias->deleteUrlAliasByRouteQuery('product/manufacturer/product', "manufacturer_id=$manufacturer_id");
+		$this->url->removeAlias('product/manufacturer', 'manufacturer_id=' . (int)$manufacturer_id);
 		
-		$this->delete('user_designer', array('designer_id'=>$manufacturer_id));
+		$this->translation->delete('manufacturer', $manufacturer_id);
 		
 		$this->cache->delete('manufacturer');
 	}
@@ -188,20 +132,21 @@ class Admin_Model_Catalog_Manufacturer extends Model
 	
 	public function getManufacturer($manufacturer_id)
 	{
-		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "manufacturer WHERE manufacturer_id = '" . (int)$manufacturer_id . "'");
-		
-		return $query->row;
+		return $this->query_row("SELECT DISTINCT * FROM " . DB_PREFIX . "manufacturer WHERE manufacturer_id = '" . (int)$manufacturer_id . "'");
 	}
 	
 	public function getManufacturers($data = array(), $select = '*', $total = false) {
+		//Select
 		if ($total) {
 			$select = 'COUNT(*) as total';
-		} elseif (!$select) {
+		} elseif (empty($select)) {
 			$select = '*';
 		}
 		
+		//From
 		$from = DB_PREFIX . "manufacturer m";
 		
+		//Where
 		$where = "1";
 		
 		if (isset($data['name'])) {
@@ -216,7 +161,14 @@ class Admin_Model_Catalog_Manufacturer extends Model
 			$where .= " AND manufacturer_id IN(" . implode(',', $data['manufacturer_ids']) . ")";
 		}
 		
+		//Order and Limit
 		if (!$total) {
+			if (!empty($data['sort']) && strpos($data['sort'], '__image_sort__') === 0) {
+				if (!$this->db->has_column('manufacturer', $data['sort'])) {
+					$this->extend->enable_image_sorting('manufacturer', str_replace('__image_sort__', '', $data['sort']));
+				}
+			}
+			
 			$order = $this->extract_order($data);
 			$limit = $this->extract_limit($data);
 		} else {
@@ -224,6 +176,7 @@ class Admin_Model_Catalog_Manufacturer extends Model
 			$limit = '';
 		}
 		
+		//The Query
 		$query = "SELECT $select FROM $from WHERE $where $order $limit";
 		
 		$result = $this->query($query);
@@ -233,57 +186,6 @@ class Admin_Model_Catalog_Manufacturer extends Model
 		}
 		
 		return $result->rows;
-	}
-	
-	public function isEditable($manufacturer_id)
-	{
-		$query = $this->query("SELECT editable FROM " . DB_PREFIX . "manufacturer WHERE manufacturer_id='$manufacturer_id'");
-		return (int)$query->row['editable'] == 1;
-	}
-	
-	public function getManufacturerDescriptions($manufacturer_id)
-	{
-		$descriptions = $this->cache->get("manufacturer.$manufacturer_id");
-		if (!$descriptions) {
-			$query = $this->query("SELECT * FROM " . DB_PREFIX . "manufacturer_description WHERE manufacturer_id='" . (int)$manufacturer_id . "'");
-			
-			$descriptions = array();
-			foreach ($query->rows as $result) {
-				$descriptions[$result['language_id']] = $result;
-			}
-			
-			$this->cache->set("manufacturer.$manufacturer_id", $descriptions);
-		}
-		
-		return $descriptions;
-	}
-	
-	public function getManufacturerWithDescription($manufacturer_id)
-	{
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "manufacturer m LEFT JOIN " . DB_PREFIX . "manufacturer_description md ON (md.manufacturer_id=m.manufacturer_id) WHERE m.manufacturer_id='" . (int)$manufacturer_id . "' AND md.language_id='" . $this->config->get('config_language_id') . "'");
-		
-		$query->row['description'] = html_entity_decode($query->row['description']);
-		$query->row['shipping_return'] = html_entity_decode($query->row['shipping_return']);
-		
-		return $query->row;
-	}
-	
-	public function getManufacturerDescription($manufacturer_id)
-	{
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "manufacturer_description WHERE manufacturer_id='" . (int)$manufacturer_id . "' AND language_id='" . $this->config->get('config_language_id') . "'");
-		return isset($query->row['description'])?html_entity_decode($query->row['description']):'';
-	}
-	
-	public function getManufacturerArticles($manufacturer_id)
-	{
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "manufacturer_article WHERE manufacturer_id='$manufacturer_id'");
-		return $query->num_rows?$query->rows:array();
-	}
-	
-	public function getManufacturerKeyword($manufacturer_id)
-	{
-		$query = $this->query("SELECT keyword FROM " . DB_PREFIX . "manufacturer WHERE manufacturer_id='$manufacturer_id'");
-		return isset($query->row['id'])? $query->row['keyword']:'';
 	}
 	
 	public function getManufacturerStores($manufacturer_id)
@@ -299,15 +201,8 @@ class Admin_Model_Catalog_Manufacturer extends Model
 		return $manufacturer_store_data;
 	}
 	
-	public function getTotalManufacturersByImageId($image_id)
-	{
-			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "manufacturer WHERE image_id = '" . (int)$image_id . "'");
-
-		return $query->row['total'];
-	}
-
 	public function getTotalManufacturers($data)
 	{
-		return $this->getManufacturers($data, null, true);
+		return $this->getManufacturers($data, '', true);
 	}
 }

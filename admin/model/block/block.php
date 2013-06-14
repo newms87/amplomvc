@@ -30,8 +30,17 @@ class Admin_Model_Block_Block extends Model
 		$block = $this->query_row("SELECT * FROM " . DB_PREFIX . "block WHERE `name` = '" . $this->db->escape($name) . "'");
 		
 		if ($block) {
-			$block['settings'] = unserialize($block['settings']);
-			$block['profiles'] = unserialize($block['profiles']);
+			if (!empty($block['settings'])) {
+				$block['settings'] = unserialize($block['settings']);
+			} else {
+				$block['settings'] = array();
+			}
+			
+			if (!empty($block['profiles'])) {
+				$block['profiles'] = unserialize($block['profiles']);
+			} else {
+				$block['profiles'] = array();
+			}
 		}
 		else {
 			$block = array(
@@ -40,14 +49,6 @@ class Admin_Model_Block_Block extends Model
 				'profiles' => array(),
 				'status' => 0,
 			);
-		}
-		
-		if (empty($block['settings'])) {
-			$block['settings'] = array();
-		}
-		
-		if (empty($block['profiles'])) {
-			$block['profiles'] = array();
 		}
 		
 		return $block;

@@ -219,8 +219,8 @@ class Admin_Controller_Mail_Newsletter extends Controller
 		}
 		
 		$defaults = array(
-			'name' => 'New Newsletter ' . $this->tool->format_date(),
-			'send_date' => $this->tool->format_datetime(),
+			'name' => 'New Newsletter ' . $this->date->format(null, 'short'),
+			'send_date' => $this->date->now(),
 			'newsletter' => array(),
 			'status' => 0,
 		);
@@ -322,7 +322,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 
 		$this->template->load('newsletter/betty-v2');
 		
-		$this->data['send_date'] = $this->tool->format_date($this->data['send_date'], 'F d, Y');
+		$this->data['send_date'] = $this->date->format($this->data['send_date'], 'F d, Y');
 		
 		//Featured Designer
 		$featured_designer = & $this->data['newsletter']['featured']['designer'];
@@ -419,7 +419,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 		//The Designer List
 		if (!empty($this->data['newsletter']['designers'])) {
 			foreach ($this->data['newsletter']['designers'] as &$designer) {
-				$result = $this->Model_Catalog_Manufacturer->getManufacturerWithDescription($designer['designer_id']);
+				$result = $this->Model_Catalog_Manufacturer->getManufacturer($designer['designer_id']);
 				
 				if (!$result) {
 					$result['teaser'] = "This Designer is not active";
@@ -468,7 +468,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 		
 		$this->export->generate_csv($columns, $customers);
 		
-		$file = "email_list_" . $this->tool->format_date(null, 'm-d-Y') . '.csv';
+		$file = "email_list_" . $this->date->format(null, 'm-d-Y') . '.csv';
 		
 		$this->export->download_contents_as('csv', $file);
 	}

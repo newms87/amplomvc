@@ -342,7 +342,11 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 				$this->error['warning'] = $this->_('error_default');
 			}
 			
-			$product_total = $this->Model_Catalog_Product->getTotalProductsByLengthClassId($length_class_id);
+			$data = array(
+				'length_class_id' => $length_class_id,
+			);
+			
+			$product_total = $this->Model_Catalog_Product->getTotalProducts($data);
 
 			if ($product_total) {
 				$this->error['warning'] = sprintf($this->_('error_product'), $product_total);

@@ -78,50 +78,6 @@ class Tool
 		return preg_match("/%.*%/",$d,$date_format)?preg_replace("/%.*%/",date(preg_replace("/%/",'',$date_format[0])), $d):$d;
 	}
 	
-	public function format_datetime($date = null, $format = '')
-	{
-		if (!$format) {
-			$format = $this->language->getInfo('datetime_format');
-		}
-		
-		if ($date) {
-			if (is_int($date)) {
-				return date($format, $date);
-			}
-			else if (is_object($date)) {
-				return $date->format($format);
-			}
-			else {
-				return date_format(date_create($date),$format);
-			}
-		}
-		else {
-			return date_format(date_create(), $format);
-		}
-	}
-	
-	public function format_date($date = null, $format = '')
-	{
-		if (!$format) {
-			$format = $this->language->getInfo('date_format_short');
-		}
-		
-		if ($date) {
-			if (is_int($date)) {
-				return date($format, $date);
-			}
-			else if (is_object($date)) {
-				return $date->format($format);
-			}
-			else {
-				return date_format(date_create($date),$format);
-			}
-		}
-		else {
-			return date_format(date_create(), $format);
-		}
-	}
-	
 	function sort_by_array($array,$order, $sort_key)
 	{
 		$new_array = array();

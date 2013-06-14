@@ -18,7 +18,7 @@ class Admin_Model_Page_Page extends Model
 		}
 		
 		if (!empty($data['keyword'])) {
-			$this->url->set_alias($data['keyword'], 'page/page', 'page_id=' . (int)$page_id);
+			$this->url->setAlias($data['keyword'], 'page/page', 'page_id=' . (int)$page_id);
 		}
 		
 		if (!empty($data['translations'])) {
@@ -45,8 +45,10 @@ class Admin_Model_Page_Page extends Model
 			}
 		}
 
-		if ($data['keyword']) {
-			$this->url->set_alias($data['keyword'], 'page/page', 'page_id=' . (int)$page_id);
+		if (!empty($data['keyword'])) {
+			$this->url->setAlias($data['keyword'], 'page/page', 'page_id=' . (int)$page_id);
+		} else {
+			$this->url->removeAlias('page/page', 'page_id=' . (int)$page_id);
 		}
 		
 		if (!empty($data['translations'])) {
@@ -74,7 +76,7 @@ class Admin_Model_Page_Page extends Model
 		$this->delete('page', $page_id);
 		$this->delete('page_store', array('page_id' => $page_id));
 		
-		$this->url->remove_alias('page/page', 'page_id=' . $page_id);
+		$this->url->removeAlias('page/page', 'page_id=' . $page_id);
 		
 		$this->translation->delete('page', $page_id);
 		
@@ -85,7 +87,7 @@ class Admin_Model_Page_Page extends Model
 	{
 		$result = $this->query_row("SELECT * FROM " . DB_PREFIX . "page WHERE page_id = '" . (int)$page_id . "'");
 		
-		$result['keyword'] = $this->url->get_alias('page/page', 'page_id=' . (int)$page_id);
+		$result['keyword'] = $this->url->getAlias('page/page', 'page_id=' . (int)$page_id);
 		
 		//Translations
 		$translate_fields = array(

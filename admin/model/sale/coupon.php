@@ -4,7 +4,7 @@ class Admin_Model_Sale_Coupon extends Model
 	public function addCoupon($data)
 	{
 		
-		$data['date_added'] = $this->tool->format_datetime();
+		$data['date_added'] = $this->date->now();
 		
 		$coupon_id = $this->insert('coupon', $data);
 		

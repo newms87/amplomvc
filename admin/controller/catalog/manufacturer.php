@@ -1,12 +1,9 @@
 <?php
 class Admin_Controller_Catalog_Manufacturer extends Controller 
 {
-	
   	public function index()
   	{
 		$this->load->language('catalog/manufacturer');
-		
-		$this->document->setTitle($this->_('heading_title'));
 		
 		$this->getList();
   	}
@@ -14,22 +11,15 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
   	public function insert()
   	{
 		$this->load->language('catalog/manufacturer');
-
-		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->Model_Catalog_Manufacturer->addManufacturer($_POST);
 			
-			if($this->user->isAdmin())
+			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
-			else {
-				$this->message->add('warning', $this->language->formt('error_portal_insert', $this->config->get('config_email')));
-				$this->message->add('success', $this->_('text_portal_insert_success'));
 			}
 			
-			$url = $this->get_url();
-			
-			$this->url->redirect($this->url->link('catalog/manufacturer', $url));
+			$this->url->redirect($this->url->link('catalog/manufacturer'));
 		}
 	
 		$this->getForm();
@@ -38,8 +28,6 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
   	public function update()
   	{
 		$this->load->language('catalog/manufacturer');
-
-		$this->document->setTitle($this->_('heading_title'));
 		
 		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$manufacturer_id = isset($_GET['manufacturer_id'])?$_GET['manufacturer_id']:0;
@@ -48,7 +36,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 			
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
-				$this->url->redirect($this->url->link('catalog/manufacturer', $this->url->get_query('sort', 'order', 'page')));
+				$this->url->redirect($this->url->link('catalog/manufacturer'));
 			}
 		}
 	
@@ -58,91 +46,221 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
   	public function delete()
   	{
 		$this->load->language('catalog/manufacturer');
-
-		$this->document->setTitle($this->_('heading_title'));
 		
-		if (isset($_POST['selected']) && $this->validateDelete()) {
-			foreach ($_POST['selected'] as $manufacturer_id) {
-				$this->Model_Catalog_Manufacturer->deleteManufacturer($manufacturer_id);
+		if (isset($_GET['manufacturer_id']) && $this->validateDelete()) {
+			$this->Model_Catalog_Manufacturer->deleteManufacturer($_GET['manufacturer_id']);
+			
+			if (!$this->message->error_set()) {
+				$this->message->add('success', $this->_('text_success'));
+				$this->url->redirect($this->url->link('catalog/manufacturer', $this->url->get_query_exclude('manufacturer_id')));
 			}
-
-			$this->message->add('success', $this->_('text_success'));
-			
-			$url = $this->get_url();
-			
-			$this->url->redirect($this->url->link('catalog/manufacturer', $url));
 		}
 	
 		$this->getList();
   	}
 	
+	public function batch_update()
+	{
+		$this->language->load('catalog/manufacturer');
+		
+		if (!empty($_POST['selected']) && isset($_GET['action'])) {
+			if ($_GET['action'] !== 'delete' || $this->validateDelete()) {
+				foreach ($_POST['selected'] as $manufacturer_id) {
+					switch($_GET['action']){
+						case 'enable':
+							$this->Model_Catalog_Manufacturer->updateField($manufacturer_id, array('status' => 1));
+							break;
+						case 'disable':
+							$this->Model_Catalog_Manufacturer->updateField($manufacturer_id, array('status' => 0));
+							break;
+						case 'delete':
+								$this->Model_Catalog_Manufacturer->deleteManufacturer($manufacturer_id);
+							break;
+						case 'copy':
+							$this->Model_Catalog_Manufacturer->copyManufacturer($manufacturer_id);
+							break;
+					}
+					
+					if ($this->error) {
+						break;
+					}
+				}
+			}
+			
+			if (!$this->error && !$this->message->error_set()) {
+				$this->message->add('success',$this->_('text_success'));
+				
+				$this->url->redirect($this->url->link('catalog/manufacturer', $this->url->get_query_exclude('action')));
+			}
+		}
+
+		$this->getList();
+	}
+	
   	private function getList()
   	{
+  		$this->document->setTitle($this->_('heading_title'));
+		
 		$this->template->load('catalog/manufacturer_list');
-
-  		$sort_list = array('sort'=>'name','order'=>'ASC','page'=>1);
-  		foreach($sort_list as $key=>$default)
-			$$key = isset($_GET[$key])?$_GET[$key]:$default;
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/manufacturer'));
-		
-		$url = $this->get_url();
-							
-		$this->data['insert'] = $this->url->link('catalog/manufacturer/insert', $url);
-		$this->data['delete'] = $this->url->link('catalog/manufacturer/delete', $url);
+		//The Table Columns
+		$columns = array();
 
-		$this->data['manufacturers'] = array();
-
-		$data = array(
-			'sort'  => $sort,
-			'order' => $order,
-			'start' => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit' => $this->config->get('config_admin_limit')
+		$columns['thumb'] = array(
+			'type' => 'image',
+			'display_name' => $this->_('column_image'),
+			'filter' => false,
+			'sortable' => true,
+			'sort_value' => '__image_sort__image',
 		);
 		
-		$manufacturer_total = $this->Model_Catalog_Manufacturer->getTotalManufacturers($data);
+		$columns['name'] = array(
+			'type' => 'text',
+			'display_name' => $this->_('column_name'),
+			'filter' => true,
+			'sortable' => true,
+		);
 		
-		$results = $this->Model_Catalog_Manufacturer->getManufacturers($data);
+		$columns['vendor_id'] = array(
+			'type' => 'text',
+			'display_name' => $this->_('column_vendor_id'),
+			'filter' => true,
+			'sortable' => true,
+		);
 		
-		foreach ($results as $result) {
-			$action = array();
-			
-			$action[] = array(
-				'text' => $this->_('text_edit'),
-				'href' => $this->url->link('catalog/manufacturer/update', 'manufacturer_id=' . $result['manufacturer_id'] . $url)
-			);
-						
-			$this->data['manufacturers'][] = array(
-				'manufacturer_id' => $result['manufacturer_id'],
-				'name'				=> $result['name'],
-				'vendor_id'		=> $result['vendor_id'],
-				'date_active'	=> $result['date_active'] == DATETIME_ZERO ? "No Activation Date" : $this->tool->format_datetime($result['date_active'],'M d, Y H:i:s'),
-				'date_expires'	=> $result['date_expires'] == DATETIME_ZERO ? "Never" : $this->tool->format_datetime($result['date_expires'],'M d, Y H:i:s'),
-				'status'			=> $result['status'],
-				'sort_order'		=> $result['sort_order'],
-				'selected'		=> isset($_POST['selected']) && in_array($result['manufacturer_id'], $_POST['selected']),
-				'action'			=> $action
-			);
+		
+		$columns['date_active'] = array(
+			'type' => 'datetime',
+			'display_name' => $this->_('column_date_active'),
+			'filter' => true,
+			'sortable' => true,
+		);
+		
+		$columns['date_expires'] = array(
+			'type' => 'datetime',
+			'display_name' => $this->_('column_date_expires'),
+			'filter' => true,
+			'sortable' => true,
+		);
+		
+		$columns['stores'] = array(
+			'type' => 'multiselect',
+			'display_name' => $this->_('column_store'),
+			'filter' => true,
+			'build_config' => array('store_id' => 'name'),
+			'build_data' => $this->Model_Setting_Store->getStores(),
+			'sortable' => false,
+		);
+		
+		$columns['status'] = array(
+			'type' => 'select',
+			'display_name' => $this->_('column_status'),
+			'filter' => true,
+			'build_data' => $this->_('data_statuses'),
+			'sortable' => true,
+		);
+		
+		//The Sort data
+		$sort_filter = array();
+		
+		$this->sort->load_query_defaults($sort_filter, 'name', 'ASC');
+		
+		//Filter
+		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
+		
+		if ($filter_values) {
+			$sort_filter += $filter_values;
 		}
 		
-		$url_query = $this->url->get_query(array('page'));
+		$manufacturer_total = $this->Model_Catalog_Manufacturer->getTotalManufacturers($sort_filter);
+		$manufacturers = $this->Model_Catalog_Manufacturer->getManufacturers($sort_filter);
 		
-		$url_query .= $order == 'ASC'? '&order=DESC':'&order=ASC';
-		
-		$sort_by = array('name'=>'name','vendor_id'=>'vendor_id','date_expires'=>'date_expires','date_active'=>'date_active', 'status'=>'status','sort_order'=>'sort_order');
-		foreach($sort_by as $key=>$s)
-			$this->data['sort_'.$s] = $this->url->link('catalog/manufacturer', 'sort=' . $key . $url);
-		
-		$url = $this->get_url(array('sort','order'));
+		foreach ($manufacturers as &$manufacturer) {
+			$manufacturer['actions'] = array(
+				'edit' => array(
+					'text' => $this->_('text_edit'),
+					'href' => $this->url->link('catalog/manufacturer/update', 'manufacturer_id=' . $manufacturer['manufacturer_id'])
+				),
+				'delete' => array(
+					'text' => $this->_('text_delete'),
+					'href' => $this->url->link('catalog/manufacturer/delete', 'manufacturer_id=' . $manufacturer['manufacturer_id'])
+				)
+			);
+			
+			if ($manufacturer['date_active'] === DATETIME_ZERO) {
+				$manufacturer['date_active'] = $this->_('text_no_date_active');
+			} else {
+				$manufacturer['date_active'] = $this->date->format($manufacturer['date_active'], 'M d, Y H:i:s');
+			}
 
+			if ($manufacturer['date_expires'] === DATETIME_ZERO) {
+				$manufacturer['date_expires'] = $this->_('text_no_date_expires');
+			} else {
+				$manufacturer['date_expires'] = $this->date->format($manufacturer['date_active'], 'M d, Y H:i:s');
+			}
+			
+			$manufacturer['thumb'] = $this->image->resize($manufacturer['image'], $this->config->get('config_image_admin_list_width'), $this->config->get('config_image_admin_list_height'));
+			
+			$manufacturer['stores'] = $this->Model_Catalog_Manufacturer->getManufacturerStores($manufacturer['manufacturer_id']);
+		} unset($manufacturer);
+		
+		//The table template data
+		$tt_data = array(
+			'row_id'		=> 'manufacturer_id',
+			'route'		=> 'catalog/manufacturer',
+			'sort'		=> $sort_filter['sort'],
+			'order'		=> $sort_filter['order'],
+			'page'		=> $sort_filter['page'],
+			'sort_url'	=> $this->url->link('catalog/manufacturer', $this->url->get_query('filter')),
+			'columns'	=> $columns,
+			'data'		=> $manufacturers,
+		);
+		
+		$tt_data += $this->language->data;
+		
+		//Build the table template
+		$this->table->init();
+		$this->table->set_template('table/list_view');
+		$this->table->set_template_data($tt_data);
+		$this->table->map_attribute('filter_value', $filter_values);
+		
+		$this->data['list_view'] = $this->table->render();
+		
+		//Batch Actions
+		$url_query = $this->url->get_query('filter', 'sort', 'order', 'page');
+		
+		$this->data['batch_actions'] = array(
+			'enable'	=> array(
+				'label' => "Enable"
+			),
+			'disable'=>	array(
+				'label' => "Disable",
+			),
+			'copy' => array(
+				'label' => "Copy",
+			),
+			'delete' => array(
+				'label' => "Delete",
+			),
+		);
+		
+		$this->data['batch_update'] = html_entity_decode($this->url->link('catalog/manufacturer/batch_update', $url_query));
+		
+		//Action buttons
+		$this->data['insert'] = $this->url->link('catalog/manufacturer/insert');
+		
+		//Item Limit Menu
+		$this->data['limits'] = $this->sort->render_limit();
+		
+		//Pagination
 		$this->pagination->init();
 		$this->pagination->total = $manufacturer_total;
+		
 		$this->data['pagination'] = $this->pagination->render();
-
-		$this->data['sort'] = $sort;
-		$this->data['order'] = $order;
-
+		
+		//Children
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -150,91 +268,67 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 				
 		$this->response->setOutput($this->render());
 	}
-  
+
   	private function getForm()
   	{
-  		if ($this->user->isDesigner()) {
-			$this->template->load('catalog/manufacturer_form_restricted');
-		}
-		else {
-			$this->template->load('catalog/manufacturer_form');
-		}
+  		$this->document->setTitle($this->_('heading_title'));
+		
+		$this->template->load('catalog/manufacturer_form');
 
-  		$manufacturer_id = $this->data['manufacturer_id'] = isset($_GET['manufacturer_id'])?(int)$_GET['manufacturer_id']:null;
+  		$manufacturer_id = $this->data['manufacturer_id'] = isset($_GET['manufacturer_id']) ? (int)$_GET['manufacturer_id'] : null;
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/manufacturer'));
 		
-		$url = $this->get_url();
-				
 		if (!$manufacturer_id) {
-			$this->data['action'] = $this->url->link('catalog/manufacturer/insert', $url);
+			$this->data['action'] = $this->url->link('catalog/manufacturer/insert');
 		} else {
-			$this->data['action'] = $this->url->link('catalog/manufacturer/update', 'manufacturer_id=' . $manufacturer_id . $url);
+			$this->data['action'] = $this->url->link('catalog/manufacturer/update', 'manufacturer_id=' . $manufacturer_id);
 		}
 		
-		$this->data['cancel'] = $this->url->link('catalog/manufacturer', $url);
+		$this->data['cancel'] = $this->url->link('catalog/manufacturer');
 		
-		$manufacturer_info = array();
-		if ($manufacturer_id && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
+		if ($manufacturer_id && $_SERVER['REQUEST_METHOD'] !== 'POST') {
 			$manufacturer_info = $this->Model_Catalog_Manufacturer->getManufacturer($manufacturer_id);
-		}
-		
-		$defaults = array('name'=>'',
-								'keyword'=>'',
-								'manufacturer_store'=>array(0,1,2),
-								'manufacturer_description'=>array(),
-								'section_attr'=>'',
-								'image'=>'',
-								'sort_order'=>0,
-								'date_active'=>date_format(date_create(),'Y-m-d H:i:s'),
-								'date_expires'=>date_format(date_add(new DateTime(), date_interval_create_from_date_string('30 days')),'Y-m-d H:i:s'),
-								'status'=>0,
-								'editable'=>1
-								);
-		
-		foreach ($defaults as $d=>$value) {
-			if (isset($_POST[$d]))
-				$this->data[$d] = $_POST[$d];
-			elseif (isset($manufacturer_info[$d]))
-				$this->data[$d] = $manufacturer_info[$d];
-			elseif(!$manufacturer_id)
-				$this->data[$d] = $value;
-		}
-		
-		if (!$this->data['editable']) {
-			$this->language->format('text_not_editable', $this->data['name'],$this->config->get('config_email'), "Active%20Designer%20Brand%20Modification%20Request");
-		}
-		
-		//Get the rest of the manufacturer information
-		if(!isset($this->data['manufacturer_store']))
-			$this->data['manufacturer_store'] = $this->Model_Catalog_Manufacturer->getManufacturerStores($manufacturer_id);
-		
-		if (!isset($this->data['manufacturer_description']))
-			$this->data['manufacturer_description'] = $this->Model_Catalog_Manufacturer->getManufacturerDescriptions($manufacturer_id);
-
-		if (!empty($manufacturer_info) && $manufacturer_info['image'] && file_exists(DIR_IMAGE . $manufacturer_info['image'])) {
-			$this->data['thumb'] = $this->image->resize($manufacturer_info['image'], 100, 100);
-		} else {
-			$this->data['thumb'] = $this->image->resize('no_image.png', 100, 100);
-		}
-		
-		$this->data['no_image'] = $this->image->resize('no_image.png', 100, 100);
-		
-		if ($manufacturer_id) {
-			$this->data['articles'] = $this->Model_Catalog_Manufacturer->getManufacturerArticles($manufacturer_id);
-		}
-		else
-			$this->data['articles'] = array();
 			
-		$this->data['section_attrs'] = array(0=>'( None )');
-		$attrs = $this->Model_Catalog_AttributeGroup->getAttributeGroups();
-		foreach($attrs as $a)
-			$this->data['section_attrs'][$a['attribute_group_id']] = $a['name'];
+			$manufacturer_info['stores'] = $this->Model_Catalog_Manufacturer->getManufacturerStores($manufacturer_id);
+		}
 		
-		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
+		$defaults = array(
+			'name' => '',
+			'keyword' => '',
+			'image' => '',
+			'date_active' => $this->date->now(),
+			'date_expires'=> $this->date->add(null, '30 days'),
+			'description' => '',
+			'teaser' => '',
+			'shipping_return' => '',
+			'stores' => array(1),
+			'sort_order' => 0,
+			'status' => 0,
+		);
+		
+		
+		foreach ($defaults as $key => $default) {
+			if (isset($_POST[$key])) {
+				$this->data[$key] = $_POST[$key];
+			} elseif (isset($manufacturer_info[$key])) {
+				$this->data[$key] = $manufacturer_info[$key];
+			} else {
+				$this->data[$key] = $default;
+			}
+		}
 		
 		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
+		
+		$translate_fields = array(
+			'name',
+			'description',
+			'teaser',
+			'shipping_return',
+		);
+		
+		$this->data['translations'] = $this->translation->get_translations('manufacturer', $manufacturer_id, $translate_fields);
 		
 		$this->children = array(
 			'common/header',
@@ -249,20 +343,15 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		if (!$this->user->hasPermission('modify', 'catalog/manufacturer')) {
 				$this->error['warning'] = $this->_('error_permission');
 		}
-
-		if ((strlen($_POST['name']) < 3) || (strlen($_POST['name']) > 64)) {
-				$this->error['name'] = $this->_('error_name');
+		
+		if (!$this->validation->text($_POST['name'], 3, 128)) {
+			$this->error['name'] = $this->_('error_name');
 		}
 		
-		if (isset($_POST['keyword'])) {
-			$keyword =$_POST['keyword'];
-			if(empty($keyword) || is_null($keyword) || preg_match("/[^A-Za-z0-9-]/",$keyword) > 0)
-				$this->error['keyword'] = $this->_('error_keyword');
-		}
-		
-		if ($this->user->isDesigner() && isset($_GET['manufacturer_id']) && !$this->Model_Catalog_Manufacturer->isEditable($_GET['manufacturer_id'])) {
-			$this->message->add('warning', $this->_('warning_not_editable'));
-			$this->url->redirect($this->url->link('catalog/manufacturer'));
+		if (!isset($_POST['keyword'])) {
+			$_POST['keyword'] = $this->tool->get_slug($_POST['name']);
+		} elseif (empty($_POST['keyword']) || preg_match("/[^A-Za-z0-9-]/", $_POST['keyword'])) {
+			$this->error['keyword'] = $this->_('error_keyword');
 		}
 		
 		return $this->error ? false : true;
@@ -274,27 +363,27 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		foreach ($_POST['selected'] as $manufacturer_id) {
-  			$product_total = $this->Model_Catalog_Product->getTotalProductsByManufacturerId($manufacturer_id);
+		$manufacturer_ids = array();
+		
+		if (isset($_POST['selected'])) {
+			$manufacturer_ids = $_POST['selected'];
+		}
+		
+		if (isset($_GET['manufacturer_id'])) {
+			$manufacturer_ids[] = $_GET['manufacturer_id'];
+		}
+
+		foreach ($manufacturer_ids as $manufacturer_id) {
+			$data = array(
+				'manufacturer_id' => $manufacturer_id,
+			);
+			
+  			$product_count = $this->Model_Catalog_Product->getTotalProducts($data);
 	
-			if ($product_total) {
-				$this->error['warning_product'] = sprintf($this->_('error_product'), $product_total);
-			}
-			
-			$flashsales = $this->Model_Catalog_Flashsale->getFlashsalesByDesignerID($manufacturer_id);
-			if(!empty($flashsales))
-				$this->error['warning_flashsale'] = $this->_('error_flashsale');
-			
-			if ($this->user->isDesigner() && !$this->Model_Catalog_Manufacturer->isEditable($manufacturer_id)) {
-				$this->error['warning_active'] = $this->_('warning_not_editable');
+			if ($product_count) {
+				$this->error['manufacturer' . $manufacturer_id] = $this->language->format('error_product', $product_count);
 			}
 		}
-		
-		if ($this->user->isDesigner()) {
-			$this->error = array();
-			$this->error['warning'] = $this->language->format('error_portal_delete', $this->config->get('config_email'));
-		}
-		
 		
 		return $this->error ? false : true;
   	}

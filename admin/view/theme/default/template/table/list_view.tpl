@@ -112,15 +112,15 @@
 					<? break;
 					
 					case 'date': ?>
-						<?= $this->tool->format_datetime($value, 'M d, Y'); ?>
+						<?= $this->date->format($value, 'M d, Y'); ?>
 					<? break;
 					
 					case 'datetime': ?>
-						<?= $this->tool->format_datetime($value, 'M d, Y H:i A'); ?>
+						<?= $this->date->format($value, 'M d, Y H:i A'); ?>
 					<? break;
 					
 					case 'time': ?>
-						<?= $this->tool->format_datetime($value, 'H:i A'); ?>
+						<?= $this->date->format($value, 'H:i A'); ?>
 					<? break;
 					
 					case 'map': ?>

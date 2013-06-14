@@ -176,7 +176,7 @@ class Admin_Controller_Catalog_Review extends Controller
 				'author'	=> $result['author'],
 				'rating'	=> $result['rating'],
 				'status'	=> ($result['status'] ? $this->_('text_enabled') : $this->_('text_disabled')),
-				'date_added' => $this->tool->format_datetime($result['date_added'], $this->language->getInfo('date_format_short')),
+				'date_added' => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
 				'selected'	=> isset($_POST['selected']) && in_array($result['review_id'], $_POST['selected']),
 				'action'	=> $action
 			);
