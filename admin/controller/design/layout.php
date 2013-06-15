@@ -17,7 +17,7 @@ class Admin_Controller_Design_Layout extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Design_Layout->addLayout($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -48,7 +48,7 @@ class Admin_Controller_Design_Layout extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Design_Layout->editLayout($_GET['layout_id'], $_POST);
 
 			$this->message->add('success', $this->_('text_success'));
@@ -272,7 +272,7 @@ class Admin_Controller_Design_Layout extends Controller
 		
 		$this->data['cancel'] = $this->url->link('design/layout', $url);
 		
-		if (isset($_GET['layout_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
+		if (isset($_GET['layout_id']) && (!$this->request->isPost())) {
 			$layout_info = $this->Model_Design_Layout->getLayout($_GET['layout_id']);
 		}
 

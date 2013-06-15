@@ -17,7 +17,7 @@ class Admin_Controller_Design_Navigation extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Design_Navigation->addNavigationGroup($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -35,7 +35,7 @@ class Admin_Controller_Design_Navigation extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Design_Navigation->editNavigationGroup($_GET['navigation_group_id'], $_POST);
 
 			$this->message->add('success', $this->_('text_success'));
@@ -271,7 +271,7 @@ class Admin_Controller_Design_Navigation extends Controller
 		
 		$this->data['cancel'] = $this->url->link('design/navigation');
 
-		if ($navigation_group_id && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
+		if ($navigation_group_id && (!$this->request->isPost())) {
 			$navigation_group_info = $this->Model_Design_Navigation->getNavigationGroup($navigation_group_id);
 		}
 		

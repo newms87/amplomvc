@@ -10,6 +10,16 @@ class Request
 		$_SERVER = $this->clean($_SERVER);
 	}
 	
+	public function isPost()
+	{
+		return $_SERVER['REQUEST_METHOD'] === 'POST';
+	}
+	
+	public function isGet()
+	{
+		return $_SERVER['REQUEST_METHOD'] === 'GET';
+	}
+	
   	public function clean($data)
   	{
 		if (is_array($data)) {

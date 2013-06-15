@@ -18,7 +18,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Localisation_Taxclass->addTaxClass($_POST);
 
 			$this->message->add('success', $this->_('text_success'));
@@ -49,7 +49,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Localisation_Taxclass->editTaxClass($_GET['tax_class_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -278,7 +278,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 		
 		$this->data['cancel'] = $this->url->link('localisation/tax_class', $url);
 
-		if (isset($_GET['tax_class_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
+		if (isset($_GET['tax_class_id']) && (!$this->request->isPost())) {
 			$tax_class_info = $this->Model_Localisation_TaxClass->getTaxClass($_GET['tax_class_id']);
 		}
 

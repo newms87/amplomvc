@@ -15,7 +15,7 @@ class Catalog_Controller_Affiliate_Register extends Controller
 		
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+		if (($this->request->isPost()) && $this->validate()) {
 			$this->Model_Affiliate_Affiliate->addAffiliate($_POST);
 
 			$this->affiliate->login($_POST['email'], $_POST['password']);

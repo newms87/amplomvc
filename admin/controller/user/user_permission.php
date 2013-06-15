@@ -18,7 +18,7 @@ class Admin_Controller_User_UserPermission extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_User_UserGroup->addUserGroup($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -49,7 +49,7 @@ class Admin_Controller_User_UserPermission extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_User_UserGroup->editUserGroup($_GET['user_group_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -250,7 +250,7 @@ class Admin_Controller_User_UserPermission extends Controller
 
 		$this->data['cancel'] = $this->url->link('user/user_permission', $url_query);
 
-		if ($user_group_id && $_SERVER['REQUEST_METHOD'] != 'POST') {
+		if ($user_group_id && !$this->request->isPost()) {
 			$user_group_info = $this->Model_User_UserGroup->getUserGroup($user_group_id);
 		}
 		

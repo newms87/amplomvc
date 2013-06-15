@@ -12,7 +12,7 @@ class Admin_Controller_Tool_Backup extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if ($_SERVER['REQUEST_METHOD'] == 'POST' && $this->validate()) {
+		if ($this->request->isPost() && $this->validate()) {
 			if (is_uploaded_file($_FILES['import']['tmp_name'])) {
 				$content = file_get_contents($_FILES['import']['tmp_name']);
 			} else {
@@ -63,7 +63,7 @@ class Admin_Controller_Tool_Backup extends Controller
 	
 	public function backup()
 	{
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+		if (($this->request->isPost()) && $this->validate()) {
 			$this->response->addheader('Pragma: public');
 			$this->response->addheader('Expires: 0');
 			$this->response->addheader('Content-Description: File Transfer');

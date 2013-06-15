@@ -12,7 +12,7 @@ class Admin_Controller_Catalog_Collection extends Controller
 	{
 		$this->load->language('catalog/collection');
 
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Catalog_Collection->addCollection($_POST);
 			
 			if (!$this->message->error_set()) {
@@ -29,7 +29,7 @@ class Admin_Controller_Catalog_Collection extends Controller
 	{
 		$this->load->language('catalog/collection');
 
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Catalog_Collection->editCollection($_GET['collection_id'], $_POST);
 
 			if (!$this->message->error_set()) {
@@ -265,7 +265,7 @@ class Admin_Controller_Catalog_Collection extends Controller
 		
 		$this->data['cancel'] = $this->url->link('catalog/collection');
 
-		if ($collection_id && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
+		if ($collection_id && (!$this->request->isPost())) {
 			$collection_info = $this->Model_Catalog_Collection->getCollection($collection_id);
 			
 			$collection_info['products'] = $this->Model_Catalog_Collection->getCollectionProducts($collection_id);

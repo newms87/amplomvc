@@ -111,7 +111,7 @@ class Admin_Controller_Extension_Plugin extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Setting_Plugin->updatePlugin($_GET['name'], $_POST['plugin_data']);
 			
 			$this->message->add('success', $this->_('text_success'));

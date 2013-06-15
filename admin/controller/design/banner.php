@@ -18,7 +18,7 @@ class Admin_Controller_Design_Banner extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Design_Banner->addBanner($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -37,7 +37,7 @@ class Admin_Controller_Design_Banner extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Design_Banner->editBanner($_GET['banner_id'], $_POST);
 
 			$this->message->add('success', $this->_('text_success'));
@@ -169,7 +169,7 @@ class Admin_Controller_Design_Banner extends Controller
 		
 		$this->data['cancel'] = $this->url->link('design/banner', $url);
 		
-		if ($banner_id && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
+		if ($banner_id && (!$this->request->isPost())) {
 			$banner_info = $this->Model_Design_Banner->getBanner($banner_id);
 		}
 		

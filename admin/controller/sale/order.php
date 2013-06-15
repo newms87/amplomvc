@@ -18,7 +18,7 @@ class Admin_Controller_Sale_Order extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			//TODO - Need to change this so it will actually work when ordering!
 			$this->message->add('warning', "This order method is not in use! sale/order/insert.");
 			$this->url->redirect($this->url->link('common/home'));
@@ -78,7 +78,7 @@ class Admin_Controller_Sale_Order extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Sale_Order->editOrder($_GET['order_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -426,7 +426,7 @@ class Admin_Controller_Sale_Order extends Controller
 		
 		$this->data['cancel'] = $this->url->link('sale/order', $url);
 
-		if (isset($_GET['order_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
+		if (isset($_GET['order_id']) && (!$this->request->isPost())) {
 				$order_info = $this->Model_Sale_Order->getOrder($_GET['order_id']);
 		}
 			
@@ -1527,13 +1527,13 @@ class Admin_Controller_Sale_Order extends Controller
 
 		$this->language->load('sale/order');
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->user->hasPermission('modify', 'sale/order')) {
+		if (($this->request->isPost()) && $this->user->hasPermission('modify', 'sale/order')) {
 			$this->Model_Sale_Order->addOrderHistory($_GET['order_id'], $_POST);
 				
 			$this->message->add('success', $this->_('text_success'));
 		}
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && !$this->user->hasPermission('modify', 'sale/order')) {
+		if (($this->request->isPost()) && !$this->user->hasPermission('modify', 'sale/order')) {
 			$this->message->add('warning', $this->_('error_permission'));
 		}
 				
@@ -1624,7 +1624,7 @@ class Admin_Controller_Sale_Order extends Controller
 		
 		$json = array();
 		
-		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+		if ($this->request->isPost()) {
 			if (!empty($_FILES['file']['name'])) {
 				$filename = html_entity_decode($_FILES['file']['name'], ENT_QUOTES, 'UTF-8');
 				

@@ -11,7 +11,7 @@ class Admin_Controller_Module_Featured extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+		if (($this->request->isPost()) && $this->validate()) {
 			$settings = $_POST;
 
 			foreach($settings['featured_module'] as $key=>$module)

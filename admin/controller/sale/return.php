@@ -18,7 +18,7 @@ class Admin_Controller_Sale_Return extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 				$this->Model_Sale_Return->addReturn($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -81,7 +81,7 @@ class Admin_Controller_Sale_Return extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Sale_Return->editReturn($_GET['return_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -621,7 +621,7 @@ class Admin_Controller_Sale_Return extends Controller
 		
 		$this->data['cancel'] = $this->url->link('sale/return', $url);
 
-		if (isset($_GET['return_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
+		if (isset($_GET['return_id']) && (!$this->request->isPost())) {
 				$return_info = $this->Model_Sale_Return->getReturn($_GET['return_id']);
 		}
 				
@@ -981,7 +981,7 @@ class Admin_Controller_Sale_Return extends Controller
 		
 		$json = array();
 		
-		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+		if ($this->request->isPost()) {
 			
 			if (!$this->user->hasPermission('modify', 'sale/return')) {
 				$json['error'] = $this->_('error_permission');
@@ -1004,7 +1004,7 @@ class Admin_Controller_Sale_Return extends Controller
 
 		$this->language->load('sale/return');
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->user->hasPermission('modify', 'sale/return')) {
+		if (($this->request->isPost()) && $this->user->hasPermission('modify', 'sale/return')) {
 			$this->Model_Sale_Return->addReturnHistory($_GET['return_id'], $_POST);
 				
 			$this->language->set('success', $this->_('text_success'));
@@ -1012,7 +1012,7 @@ class Admin_Controller_Sale_Return extends Controller
 			$this->data['success'] = '';
 		}
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && !$this->user->hasPermission('modify', 'sale/return')) {
+		if (($this->request->isPost()) && !$this->user->hasPermission('modify', 'sale/return')) {
 			$this->language->set('error_warning', $this->_('error_permission'));
 		} else {
 			$this->data['error_warning'] = '';

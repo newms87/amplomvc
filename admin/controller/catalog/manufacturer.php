@@ -12,7 +12,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
   	{
 		$this->load->language('catalog/manufacturer');
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Catalog_Manufacturer->addManufacturer($_POST);
 			
 			if (!$this->message->error_set()) {
@@ -29,7 +29,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
   	{
 		$this->load->language('catalog/manufacturer');
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$manufacturer_id = isset($_GET['manufacturer_id'])?$_GET['manufacturer_id']:0;
 		
 			$this->Model_Catalog_Manufacturer->editManufacturer($_GET['manufacturer_id'], $_POST);
@@ -288,7 +288,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		
 		$this->data['cancel'] = $this->url->link('catalog/manufacturer');
 		
-		if ($manufacturer_id && $_SERVER['REQUEST_METHOD'] !== 'POST') {
+		if ($manufacturer_id && !$this->request->isPost()) {
 			$manufacturer_info = $this->Model_Catalog_Manufacturer->getManufacturer($manufacturer_id);
 			
 			$manufacturer_info['stores'] = $this->Model_Catalog_Manufacturer->getManufacturerStores($manufacturer_id);

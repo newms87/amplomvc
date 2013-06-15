@@ -11,7 +11,7 @@ class Admin_Controller_Module_FeaturedCarousel extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		$is_post = $_SERVER['REQUEST_METHOD'] == 'POST';
+		$is_post = $this->request->isPost();
 		
 		if ($is_post && $this->validate()) {
 			$this->Model_Setting_Setting->editSetting('featured_carousel', $_POST);

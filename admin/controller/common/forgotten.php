@@ -15,7 +15,7 @@ class Admin_Controller_Common_Forgotten extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+		if (($this->request->isPost()) && $this->validate()) {
 			$this->language->load('mail/forgotten');
 			
 			$code = md5(rand());

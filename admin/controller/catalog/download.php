@@ -18,7 +18,7 @@ class Admin_Controller_Catalog_Download extends Controller
 	
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$data = array();
 			
 			if (is_uploaded_file($_FILES['download']['tmp_name'])) {
@@ -62,7 +62,7 @@ class Admin_Controller_Catalog_Download extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$data = array();
 			
 			if (is_uploaded_file($_FILES['download']['tmp_name'])) {
@@ -317,7 +317,7 @@ class Admin_Controller_Catalog_Download extends Controller
  		
 		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
 
-		if (isset($_GET['download_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
+		if (isset($_GET['download_id']) && (!$this->request->isPost())) {
 			$download_info = $this->Model_Catalog_Download->getDownload($_GET['download_id']);
 		}
 

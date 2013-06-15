@@ -29,7 +29,7 @@ class Catalog_Controller_Account_Address extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$address_id = $this->Model_Account_Address->addAddress($_POST);
 			
 			if (!empty($_POST['default'])) {
@@ -56,7 +56,7 @@ class Catalog_Controller_Account_Address extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Account_Address->editAddress($_GET['address_id'], $_POST);
 			
 			if (!empty($_POST['default'])) {
@@ -198,7 +198,7 @@ class Catalog_Controller_Account_Address extends Controller
 			$this->data['action'] = $this->url->link('account/address/update', 'address_id=' . $_GET['address_id']);
 		}
 		
-		if (isset($_GET['address_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
+		if (isset($_GET['address_id']) && (!$this->request->isPost())) {
 			$address_info = $this->Model_Account_Address->getAddress($_GET['address_id']);
 		}
 	

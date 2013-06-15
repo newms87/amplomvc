@@ -11,7 +11,7 @@ class Admin_Controller_Shipping_Parcelforce4848_Controller_Shipping_Parcelforce4
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+		if (($this->request->isPost()) && $this->validate()) {
 			$this->Model_Setting_Setting->editSetting('parcelforce_48', $_POST);
 					
 			$this->message->add('success', $this->_('text_success'));

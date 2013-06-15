@@ -18,7 +18,7 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Sale_CustomerGroup->addCustomerGroup($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -49,7 +49,7 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Sale_CustomerGroup->editCustomerGroup($_GET['customer_group_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -272,7 +272,7 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 		
 		$this->data['cancel'] = $this->url->link('sale/customer_group', $url);
 
-		if (isset($_GET['customer_group_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
+		if (isset($_GET['customer_group_id']) && (!$this->request->isPost())) {
 			$customer_group_info = $this->Model_Sale_CustomerGroup->getCustomerGroup($_GET['customer_group_id']);
 		}
 

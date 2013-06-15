@@ -17,7 +17,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Sale_Coupon->addCoupon($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -36,7 +36,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Sale_Coupon->editCoupon($_GET['coupon_id'], $_POST);
 				
 			$this->message->add('success', $this->_('text_success'));
@@ -174,7 +174,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 		
 		$this->data['cancel'] = $this->url->link('sale/coupon', $url);
   		
-		if ($coupon_id && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
+		if ($coupon_id && (!$this->request->isPost())) {
 			$coupon_info = $this->Model_Sale_Coupon->getCoupon($coupon_id);
 		}
 		

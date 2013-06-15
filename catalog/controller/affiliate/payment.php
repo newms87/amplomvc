@@ -17,7 +17,7 @@ class Catalog_Controller_Affiliate_Payment extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+		if ($this->request->isPost()) {
 			$this->Model_Affiliate_Affiliate->editPayment($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -31,7 +31,7 @@ class Catalog_Controller_Affiliate_Payment extends Controller
 
 		$this->data['action'] = $this->url->link('affiliate/payment');
 
-		if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+		if (!$this->request->isPost()) {
 			$affiliate_info = $this->Model_Affiliate_Affiliate->getAffiliate($this->affiliate->getId());
 		}
 

@@ -143,7 +143,7 @@ class Admin_Controller_Block_Block extends Controller
 		
 		$name = $_GET['name'];
 		
-		if (($_SERVER['REQUEST_METHOD'] === 'POST') && $this->validate()) {
+		if ($this->request->isPost() && $this->validate()) {
 			//If plugins have additional 
 			$this->saveBlockData();
 			
@@ -163,7 +163,7 @@ class Admin_Controller_Block_Block extends Controller
 		$this->data['action'] = $this->url->link('block/block','name=' . $name);
 		$this->data['cancel'] = $this->url->link('block/block');
 
-		if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+		if (!$this->request->isPost()) {
 			$block = $this->Model_Block_Block->getBlock($name);
 		}
 		

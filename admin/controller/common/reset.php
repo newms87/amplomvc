@@ -22,7 +22,7 @@ class Admin_Controller_Common_Reset extends Controller
 
 			$this->load->language('common/reset');
 			
-			if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+			if (($this->request->isPost()) && $this->validate()) {
 				$this->Model_User_User->editPassword($user_info['user_id'], $_POST['password']);
 	
 				$this->message->add('success', $this->_('text_success'));

@@ -19,7 +19,7 @@ class Admin_Controller_Common_Login extends Controller
 		}
 		
 		//if user is not logged in and has provided valid login credentals
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+		if (($this->request->isPost()) && $this->validate()) {
 			if (!empty($_GET['redirect'])) {
 				$this->url->redirect(urldecode($_GET['redirect']));
 			} else {

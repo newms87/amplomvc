@@ -18,7 +18,7 @@ class Admin_Controller_Localisation_Country extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Localisation_Country->addCountry($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -49,7 +49,7 @@ class Admin_Controller_Localisation_Country extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Localisation_Country->editCountry($_GET['country_id'], $_POST);
 
 			$this->message->add('success', $this->_('text_success'));
@@ -276,7 +276,7 @@ class Admin_Controller_Localisation_Country extends Controller
 		
 		$this->data['cancel'] = $this->url->link('localisation/country', $url);
 		
-		if (isset($_GET['country_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
+		if (isset($_GET['country_id']) && (!$this->request->isPost())) {
 			$country_info = $this->Model_Localisation_Country->getCountry($_GET['country_id']);
 		}
 

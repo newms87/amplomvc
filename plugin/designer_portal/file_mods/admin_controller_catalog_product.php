@@ -7,7 +7,7 @@ class _AdminControllerCatalogProduct extends Controller
 	{
 //-----
 //>>>>> {php}
-		if ($this->user->isDesigner() && $_SERVER['REQUEST_METHOD'] == 'POST') {
+		if ($this->user->isDesigner() && $this->request->isPost()) {
 			$pd = reset($_POST['product_description']);
 			$_POST['keyword'] = $this->Model_Catalog_Product->generate_url(false, $pd['name']);
 		}
@@ -19,7 +19,7 @@ class _AdminControllerCatalogProduct extends Controller
 	{
 //-----
 //>>>>> {php}
-		if ($this->user->isDesigner() && $_SERVER['REQUEST_METHOD'] == 'POST') {
+		if ($this->user->isDesigner() && $this->request->isPost()) {
 			$pd = reset($_POST['product_description']);
 			$_POST['keyword'] = $this->Model_Catalog_Product->generate_url(false, $pd['name']);
 		}
@@ -111,7 +111,7 @@ class _AdminControllerCatalogProduct extends Controller
 		}
 //-----
 //=====
-		if ($product_id && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
+		if ($product_id && (!$this->request->isPost())) {
 			$product_info = $this->Model_Catalog_Product->getProduct($product_id);
 		}
 //-----

@@ -17,7 +17,7 @@ class Admin_Controller_Page_Page extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Page_Page->addPage($_POST);
 			
 			if (!$this->message->error_set()) {
@@ -37,7 +37,7 @@ class Admin_Controller_Page_Page extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Page_Page->editPage($_GET['page_id'], $_POST);
 			
 			if (!$this->message->error_set()) {
@@ -256,7 +256,7 @@ class Admin_Controller_Page_Page extends Controller
 		
 		$this->data['cancel'] = $this->url->link('page/page');
 
-		if ($page_id && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
+		if ($page_id && (!$this->request->isPost())) {
 			$page_info = $this->Model_Page_Page->getPage($page_id);
 			
 			$page_info['stores'] = $this->Model_Page_Page->getPageStores($page_id);

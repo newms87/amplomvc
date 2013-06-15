@@ -21,6 +21,10 @@
 				<div class="title"><?= $console_backup_restore; ?></div>
 				<div class="image"><img src="<?= HTTP_THEME_IMAGE . 'dev/restore.png'; ?>" /></div>
 			</a>
+			<a class="dev_console_item" href="<?= $url_db_admin; ?>">
+				<div class="title"><?= $console_db_admin; ?></div>
+				<div class="image"><img src="<?= HTTP_THEME_IMAGE . 'dev/db_admin.png'; ?>" /></div>
+			</a>
 		</div>
 	</div>
 </div>

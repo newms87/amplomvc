@@ -11,6 +11,7 @@ class Admin_Controller_Dev_Dev extends Controller
 		$this->data['url_sync'] = $this->url->link("dev/dev/sync");
 		$this->data['url_site_management'] = $this->url->link("dev/dev/site_management");
 		$this->data['url_backup_restore'] = $this->url->link("dev/dev/backup_restore");
+		$this->data['url_db_admin'] = $this->url->link("dev/db_admin");
 		
 		$this->content();
 	}
@@ -25,7 +26,7 @@ class Admin_Controller_Dev_Dev extends Controller
 		
 		$dev_sites = $this->Model_Setting_Setting->getSetting('dev_sites');
 		
-		if ($_SERVER["REQUEST_METHOD"] == 'POST' && $this->validate()) {
+		if ($this->request->isPost() && $this->validate()) {
 			if (isset($_POST['sync_site'])) {
 				if (!isset($_POST['tables'])) {
 					$this->message->add('warning', "You must select at least 1 table to sync.");
@@ -78,7 +79,7 @@ class Admin_Controller_Dev_Dev extends Controller
 		
 		$dev_sites = $this->Model_Setting_Setting->getSetting('dev_sites');
 		
-		if ($_SERVER["REQUEST_METHOD"] == 'POST' && $this->validate()) {
+		if ($this->request->isPost() && $this->validate()) {
 			if (isset($_POST['add_site'])) {
 				unset($_POST['add_site']);
 				$dev_sites[] = $_POST;
@@ -126,7 +127,7 @@ class Admin_Controller_Dev_Dev extends Controller
 		
 		$this->document->setTitle($this->_('text_backup_restore'));
 		
-		if ($_SERVER["REQUEST_METHOD"] == 'POST' && $this->validate()) {
+		if ($this->request->isPost() && $this->validate()) {
 			if (isset($_POST['site_backup'])) {
 				$tables = isset($_POST['tables']) ? $_POST['tables'] : null;
 				
@@ -201,7 +202,7 @@ class Admin_Controller_Dev_Dev extends Controller
 	{
 		$this->language->load('dev/dev');
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['tables']) && $this->validate()) {
+		if (($this->request->isPost()) && isset($_POST['tables']) && $this->validate()) {
 			$file = DIR_DOWNLOAD . 'tempsql.sql';
 			
 			$this->db->dump($file, $_POST['tables']);

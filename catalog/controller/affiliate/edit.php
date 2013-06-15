@@ -17,7 +17,7 @@ class Catalog_Controller_Affiliate_Edit extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+		if (($this->request->isPost()) && $this->validate()) {
 			$this->Model_Affiliate_Affiliate->editAffiliate($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -90,7 +90,7 @@ class Catalog_Controller_Affiliate_Edit extends Controller
 		
 		$this->data['action'] = $this->url->link('affiliate/edit');
 
-		if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+		if (!$this->request->isPost()) {
 			$affiliate_info = $this->Model_Affiliate_Affiliate->getAffiliate($this->affiliate->getId());
 		}
 

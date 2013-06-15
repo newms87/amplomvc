@@ -18,7 +18,7 @@ class Admin_Controller_Setting_Store extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			
 			$store_id = $this->Model_Setting_Store->addStore($_POST);
 			
@@ -38,7 +38,7 @@ class Admin_Controller_Setting_Store extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			
 			$this->Model_Setting_Store->editStore($_GET['store_id'], $_POST);
 			
@@ -143,7 +143,7 @@ class Admin_Controller_Setting_Store extends Controller
 				
 		$this->data['cancel'] = $this->url->link('setting/store');
 	
-		if (isset($_GET['store_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
+		if (isset($_GET['store_id']) && (!$this->request->isPost())) {
 			$store = $this->Model_Setting_Store->getStore($store_id);
 			
 			if (!$store) {

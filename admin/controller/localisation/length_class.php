@@ -18,7 +18,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Localisation_Lengthclass->addLengthClass($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -49,7 +49,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Localisation_Lengthclass->editLengthClass($_GET['length_class_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -282,7 +282,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 
 		$this->data['cancel'] = $this->url->link('localisation/length_class', $url);
 
-		if (isset($_GET['length_class_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
+		if (isset($_GET['length_class_id']) && (!$this->request->isPost())) {
 				$length_class_info = $this->Model_Localisation_LengthClass->getLengthClass($_GET['length_class_id']);
 		}
 		

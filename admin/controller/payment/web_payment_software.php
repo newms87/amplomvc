@@ -11,7 +11,7 @@ class Admin_Controller_Payment_WebPaymentSoftware extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && ($this->validate())) {
+		if (($this->request->isPost()) && ($this->validate())) {
 			$this->Model_Setting_Setting->editSetting('web_payment_software', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));

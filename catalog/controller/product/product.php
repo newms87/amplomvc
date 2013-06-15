@@ -134,7 +134,7 @@ class Catalog_Controller_Product_Product extends Controller
 		
 		$json = array();
 		
-		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+		if ($this->request->isPost()) {
 			if ((strlen($_POST['name']) < 3) || (strlen($_POST['name']) > 25)) {
 				$json['error'] = $this->_('error_name');
 			}

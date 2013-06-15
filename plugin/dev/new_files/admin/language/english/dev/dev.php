@@ -15,11 +15,13 @@ $_['text_sync_tables']		= 'Sync Tables';
 $_['text_sync']				= 'Synchronize Sites';
 $_['text_site_management']	= 'Site Management';
 $_['text_backup_restore']	= 'Backup & Restore';
+$_['text_backup_restore']	= 'Database Administration';
 
 //Console
 $_['console_sync'] = "Synchronize Sites";
 $_['console_site_management'] = "Site Management";
 $_['console_backup_restore'] = "Site Backup & Restore";
+$_['console_db_admin'] = "DB Admin";
 
 //Column
 $_['column_domain'] = "Domain";
@@ -43,6 +45,7 @@ $_['button_sync'] = "Request Synchronization";
 $_['button_return'] = "Back To Dashboard";
 $_['button_backup'] = "Backup Database";
 $_['button_execute_file'] = "Execute File";
+$_['button_submit_query'] = "Execute Query";
 
 //Success
 $_['success_sync_table'] = 'The table %s was successfully synchronized!';

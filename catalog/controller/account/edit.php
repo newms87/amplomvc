@@ -17,7 +17,7 @@ class Catalog_Controller_Account_Edit extends Controller
 		
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+		if (($this->request->isPost()) && $this->validate()) {
 			$this->Model_Account_Customer->editCustomer($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -61,7 +61,7 @@ class Catalog_Controller_Account_Edit extends Controller
 
 		$this->data['action'] = $this->url->link('account/edit');
 
-		if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+		if (!$this->request->isPost()) {
 			$customer_info = $this->Model_Account_Customer->getCustomer($this->customer->getId());
 		}
 

@@ -10,7 +10,7 @@ class Catalog_Controller_Information_AreYouADesigner extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+		if (($this->request->isPost()) && $this->validate()) {
 			$this->Model_Catalog_Designer->addDesigner($_POST);
 			
 			$name = $_POST['firstname'] . ' ' . $_POST['lastname'];

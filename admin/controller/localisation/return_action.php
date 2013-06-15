@@ -18,7 +18,7 @@ class Admin_Controller_Localisation_ReturnAction extends Controller
 	
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 				$this->Model_Localisation_ReturnAction->addReturnAction($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -49,7 +49,7 @@ class Admin_Controller_Localisation_ReturnAction extends Controller
 	
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Localisation_ReturnAction->editReturnAction($_GET['return_action_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));

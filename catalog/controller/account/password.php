@@ -17,7 +17,7 @@ class Catalog_Controller_Account_Password extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 			
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+		if (($this->request->isPost()) && $this->validate()) {
 			$this->Model_Account_Customer->editPassword($this->customer->info('email'), $_POST['password']);
  
 				$this->message->add('success', $this->_('text_success'));

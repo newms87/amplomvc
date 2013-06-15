@@ -18,7 +18,7 @@ class Admin_Controller_Sale_Customer extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 				$this->Model_Sale_Customer->addCustomer($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -77,7 +77,7 @@ class Admin_Controller_Sale_Customer extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Sale_Customer->editCustomer($_GET['customer_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -687,7 +687,7 @@ class Admin_Controller_Sale_Customer extends Controller
 		
 		$this->data['cancel'] = $this->url->link('sale/customer', $url);
 
-		if (isset($_GET['customer_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
+		if (isset($_GET['customer_id']) && (!$this->request->isPost())) {
 				$customer_info = $this->Model_Sale_Customer->getCustomer($_GET['customer_id']);
 		}
 			
@@ -962,7 +962,7 @@ class Admin_Controller_Sale_Customer extends Controller
 
 		$this->language->load('sale/customer');
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->user->hasPermission('modify', 'sale/customer')) {
+		if (($this->request->isPost()) && $this->user->hasPermission('modify', 'sale/customer')) {
 			$this->Model_Sale_Customer->addTransaction($_GET['customer_id'], $_POST['description'], $_POST['amount']);
 				
 			$this->language->set('success', $this->_('text_success'));
@@ -970,7 +970,7 @@ class Admin_Controller_Sale_Customer extends Controller
 			$this->data['success'] = '';
 		}
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && !$this->user->hasPermission('modify', 'sale/customer')) {
+		if (($this->request->isPost()) && !$this->user->hasPermission('modify', 'sale/customer')) {
 			$this->language->set('error_warning', $this->_('error_permission'));
 		} else {
 			$this->data['error_warning'] = '';
@@ -1012,7 +1012,7 @@ class Admin_Controller_Sale_Customer extends Controller
 
 		$this->language->load('sale/customer');
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->user->hasPermission('modify', 'sale/customer')) {
+		if (($this->request->isPost()) && $this->user->hasPermission('modify', 'sale/customer')) {
 			$this->Model_Sale_Customer->addReward($_GET['customer_id'], $_POST['description'], $_POST['points']);
 				
 			$this->language->set('success', $this->_('text_success'));
@@ -1020,7 +1020,7 @@ class Admin_Controller_Sale_Customer extends Controller
 			$this->data['success'] = '';
 		}
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && !$this->user->hasPermission('modify', 'sale/customer')) {
+		if (($this->request->isPost()) && !$this->user->hasPermission('modify', 'sale/customer')) {
 			$this->language->set('error_warning', $this->_('error_permission'));
 		} else {
 			$this->data['error_warning'] = '';

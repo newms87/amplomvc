@@ -15,7 +15,7 @@ class Catalog_Controller_Affiliate_Login extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 						
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && isset($_POST['email']) && isset($_POST['password']) && $this->validate()) {
+		if (($this->request->isPost()) && isset($_POST['email']) && isset($_POST['password']) && $this->validate()) {
 			if (isset($_POST['redirect'])) {
 				$this->url->redirect(str_replace('&amp;', '&', $_POST['redirect']));
 			} else {

@@ -18,7 +18,7 @@ class Admin_Controller_User_User extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_User_User->addUser($_POST);
 			
 			if($this->user->isAdmin())
@@ -43,7 +43,7 @@ class Admin_Controller_User_User extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_User_User->editUser($_GET['user_id'], $_POST);
 			
 			$url = $this->get_url();
@@ -188,7 +188,7 @@ class Admin_Controller_User_User extends Controller
 		
 		$this->data['cancel'] = $this->url->link('user/user', $url);
 
-		if ($user_id && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
+		if ($user_id && (!$this->request->isPost())) {
 			$user_info = $this->Model_User_User->getUser($user_id);
 		}
 		

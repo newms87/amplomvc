@@ -15,7 +15,7 @@ class Catalog_Controller_Account_Voucher extends Controller
 			$this->session->data['vouchers'] = array();
 		}
 	
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+		if (($this->request->isPost()) && $this->validate()) {
 			$this->session->data['vouchers'][rand()] = array(
 				'description'		=> sprintf($this->_('text_for'), $this->currency->format($this->currency->convert($_POST['amount'], $this->currency->getCode(), $this->config->get('config_currency'))), $_POST['to_name']),
 				'to_name'			=> $_POST['to_name'],

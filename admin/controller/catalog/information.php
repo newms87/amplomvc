@@ -18,7 +18,7 @@ class Admin_Controller_Catalog_Information extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Catalog_Information->addInformation($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -49,7 +49,7 @@ class Admin_Controller_Catalog_Information extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Catalog_Information->editInformation($_GET['information_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -280,7 +280,7 @@ class Admin_Controller_Catalog_Information extends Controller
 		
 		$this->data['cancel'] = $this->url->link('catalog/information', $url);
 
-		if (isset($_GET['information_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
+		if (isset($_GET['information_id']) && (!$this->request->isPost())) {
 			$information_info = $this->Model_Catalog_Information->getInformation($_GET['information_id']);
 		}
 		

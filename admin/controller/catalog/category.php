@@ -12,7 +12,7 @@ class Admin_Controller_Catalog_Category extends Controller
 	{
 		$this->load->language('catalog/category');
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Catalog_Category->addCategory($_POST);
 			
 			if (!$this->message->error_set()) {
@@ -29,7 +29,7 @@ class Admin_Controller_Catalog_Category extends Controller
 	{
 		$this->load->language('catalog/category');
 
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Catalog_Category->editCategory($_GET['category_id'], $_POST);
 			
 			if (!$this->message->error_set()) {
@@ -253,7 +253,7 @@ class Admin_Controller_Catalog_Category extends Controller
 		
 		$this->data['cancel'] = $this->url->link('catalog/category');
 
-		if ($category_id && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
+		if ($category_id && (!$this->request->isPost())) {
 			$category_info = $this->Model_Catalog_Category->getCategory($category_id);
 			
 			$category_info['stores'] = $this->Model_Catalog_Category->getCategoryStores($category_id);

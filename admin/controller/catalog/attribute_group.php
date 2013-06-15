@@ -12,7 +12,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 	{
 		$this->load->language('catalog/attribute_group');
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Catalog_AttributeGroup->addAttributeGroup($_POST);
 			
 			if (!$this->message->error_set()) {
@@ -29,7 +29,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 	{
 		$this->load->language('catalog/attribute_group');
 
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Catalog_AttributeGroup->editAttributeGroup($_GET['attribute_group_id'], $_POST);
 			
 			if (!$this->message->error_set()) {
@@ -227,7 +227,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		
 		$this->data['cancel'] = $this->url->link('catalog/attribute_group');
 
-		if ($attribute_group_id && ($_SERVER['REQUEST_METHOD'] !== 'POST')) {
+		if ($attribute_group_id && (!$this->request->isPost())) {
 			$attribute_group_info = $this->Model_Catalog_AttributeGroup->getAttributeGroup($attribute_group_id);
 			
 			$attributes = $this->Model_Catalog_AttributeGroup->getAttributes($attribute_group_id);

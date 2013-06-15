@@ -18,7 +18,7 @@ class Admin_Controller_Catalog_Review extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Catalog_Review->addReview($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -49,7 +49,7 @@ class Admin_Controller_Catalog_Review extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+		if (($this->request->isPost()) && $this->validateForm()) {
 			$this->Model_Catalog_Review->editReview($_GET['review_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -298,7 +298,7 @@ class Admin_Controller_Catalog_Review extends Controller
 		
 		$this->data['cancel'] = $this->url->link('catalog/review', $url);
 
-		if (isset($_GET['review_id']) && ($_SERVER['REQUEST_METHOD'] != 'POST')) {
+		if (isset($_GET['review_id']) && (!$this->request->isPost())) {
 			$review_info = $this->Model_Catalog_Review->getReview($_GET['review_id']);
 		}
 			

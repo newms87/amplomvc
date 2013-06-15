@@ -14,7 +14,7 @@ class Catalog_Controller_Account_Register extends Controller
 		
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+		if (($this->request->isPost()) && $this->validate()) {
 			$this->Model_Account_Customer->addCustomer($_POST);
 
 			$this->customer->login($_POST['email'], $_POST['password']);

@@ -10,7 +10,7 @@ class Catalog_Controller_Information_Contact extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 	
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+		if (($this->request->isPost()) && $this->validate()) {
 			$this->mail->init();
 			
 			$this->mail->setTo($this->config->get('config_email'));

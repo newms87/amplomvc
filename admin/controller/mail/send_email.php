@@ -10,7 +10,7 @@ class Admin_Controller_Mail_SendEmail extends Controller
 		
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($_SERVER['REQUEST_METHOD'] == 'POST')) {
+		if (($this->request->isPost())) {
 			if (!$this->send()) {
 				$this->message->add('warning', $this->_('error_send_email'));
 			}
@@ -50,7 +50,7 @@ class Admin_Controller_Mail_SendEmail extends Controller
 			}
 		}
 		
-		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+		if ($this->request->isPost()) {
 			$this->data['allow_html'] = !isset($_POST['allow_html']) ? 0 : 1;
 		}
 		

@@ -25,7 +25,7 @@ class Catalog_Controller_Account_Login extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 								
-		if (($_SERVER['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+		if (($this->request->isPost()) && $this->validate()) {
 			if (!empty($_POST['redirect'])) {
 				$this->url->redirect(str_replace('&amp;', '&', $_POST['redirect']));
 			} else {
