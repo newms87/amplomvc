@@ -15,7 +15,7 @@ $_['text_sync_tables']		= 'Sync Tables';
 $_['text_sync']				= 'Synchronize Sites';
 $_['text_site_management']	= 'Site Management';
 $_['text_backup_restore']	= 'Backup & Restore';
-$_['text_backup_restore']	= 'Database Administration';
+$_['text_db_admin']	= 'Database Administration';
 
 //Console
 $_['console_sync'] = "Synchronize Sites";

@@ -153,9 +153,13 @@ class Sort
 			$data[$key] = isset($_GET[$key]) ? $_GET[$key] : $default;
 		}
 		
-		$data['start'] = ($data['page'] - 1) * $data['limit'];
+		if ($data['limit'] > 0) {
+			$data['start'] = ($data['page'] - 1) * $data['limit'];
+			$this->limit = $data['limit'];
+		} else {
+			$this->limit = false;
+		}
 		
-		$this->limit = $data['limit'];
 		$this->sort = $data['sort'];
 		$this->order = $data['order'];
 	}

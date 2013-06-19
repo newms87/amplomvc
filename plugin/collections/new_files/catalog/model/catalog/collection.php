@@ -17,17 +17,20 @@ class Catalog_Model_Catalog_Collection extends Model
 		return $collection;
 	}
 	
-	public function getCollections($data = array(), $total = false) {
+	public function getCollections($data = array(), $select = '', $total = false)
+	{
+		//Select
 		if ($total) {
 			$select = 'COUNT(*) as total';
-		}
-		else {
+		} elseif(empty($select)) {
 			$select = '*';
 		}
 		
+		//From
 		$from = DB_PREFIX . "collection c";
 		$from .= " LEFT JOIN " . DB_PREFIX . "collection_store cs ON (c.collection_id = cs.collection_id)";
 		
+		//Where
 		$where = "WHERE cs.store_id = '" . (int)$this->config->get('config_store_id') . "'  AND c.status = '1'";
 		
 		if (isset($data['category_id'])) {
@@ -36,24 +39,17 @@ class Catalog_Model_Catalog_Collection extends Model
 			$where .= " AND cc.category_id='" . (int)$data['category_id'] . "'";
 		}
 		
-		//ORDER BY and LIMIT
-		$order_by = '';
-		$limit = '';
-		
+		//Order and Limit
 		if (!$total) {
-			if (!empty($data['sort'])) {
-				$order = (!empty($data['order']) && $data['order'] == 'DESC') ? 'DESC' : 'ASC';
-				
-				$order_by = "ORDER BY $data[sort] $order";
-			}
-			
-			$start = !empty($data['start']) ? (int)$data['start'] : 0;
-			$limit = !empty($data['limit']) ? (int)$data['limit'] : $this->config->get('config_catalog_limit');
-			
-			$limit = "LIMIT $start,$limit";
+			$order = $this->extract_order($data);
+			$limit = $this->extract_limit($data);
+		} else {
+			$limit = '';
+			$order = '';
 		}
 		
-		$query = "SELECT $select FROM $from $where $order_by $limit";
+		//The Query
+		$query = "SELECT $select FROM $from $where $order $limit";
 		
 		$result = $this->query($query);
 		
@@ -83,13 +79,10 @@ class Catalog_Model_Catalog_Collection extends Model
 		return $collection;
 	}
 	
-	public function getCollectionProducts($collection_id, $data = array(), $total = false){
-		$order_by = '';
-		$limit = '';
-		
+	public function getCollectionProducts($collection_id, $data = array(), $select = '', $total = false){
 		if ($total) {
 			$select = "COUNT(*) as total";
-		} else {
+		} elseif (empty($select)) {
 			$select = '*';
 		}
 		
@@ -109,24 +102,17 @@ class Catalog_Model_Catalog_Collection extends Model
 			}
 		}
 		
-		//Order By & Limit
+		//Order and Limit
 		if (!$total) {
-			if (!empty($data['sort'])) {
-				$order = (!empty($data['order']) && $data['order'] == 'DESC') ? 'DESC' : 'ASC';
-				
-				$order_by = "ORDER BY $data[sort] $order";
-			}
-			
-			if (!empty($data['limit'])) {
-				$start = !empty($data['start']) ? (int)$data['start'] : 0;
-				$limit = $data['limit'] > 0 ? (int)$data['limit'] : $this->config->get('config_catalog_limit');
-				
-				$limit = "LIMIT $start,$limit";
-			}
+			$order = $this->extract_order($data);
+			$limit = $this->extract_limit($data);
+		} else {
+			$limit = '';
+			$order = '';
 		}
 		
-		
-		$query = "SELECT $select FROM $from $where $order_by $limit";
+		//The Query
+		$query = "SELECT $select FROM $from $where $order $limit";
 		
 		$result = $this->query($query);
 		
@@ -166,11 +152,11 @@ class Catalog_Model_Catalog_Collection extends Model
 	}
 	
 	public function getTotalCollections($data = array()){
-		return $this->getCollections($data, true);
+		return $this->getCollections($data, '', true);
 	}
 	
 	public function getTotalCollectionProducts($collection_id, $data = array()){
-		return $this->getCollectionProducts($collection_id, $data, true);
+		return $this->getCollectionProducts($collection_id, $data, '', true);
 	}
 	
 	public function hasAttributeGroup($collection_id, $attribute_group_id)
