@@ -18,7 +18,7 @@ class Admin_Controller_Setting_DbRules extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$store_id = $this->Model_Setting_DbRules->addDbRule($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -35,7 +35,7 @@ class Admin_Controller_Setting_DbRules extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Setting_DbRules->editDbRule($_GET['db_rule_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));

@@ -1,7 +1,6 @@
 <?php
-class Url 
+class Url extends Library
 {
-	private $registry;
 	private $url;
 	private $ssl;
 	private $is_ssl;
@@ -11,11 +10,12 @@ class Url
 	private $secure_pages = array();
 	private $store_info = array();
 	
-	public function __construct(&$registry, $url, $ssl)
+	public function __construct($registry, $url, $ssl)
 	{
+		parent::__construct($registry);
+		
 		$this->url = $url;
 		$this->ssl = $ssl;
-		$this->registry = &$registry;
 		
 		$this->is_ssl = isset($_SERVER['HTTPS']) && (($_SERVER['HTTPS'] == 'on') || ($_SERVER['HTTPS'] == '1'));
 		
@@ -26,11 +26,6 @@ class Url
 		}
 		
 		$this->ie_version = $this->is_IE();
-	}
-	
-	public function __get($key)
-	{
-		return $this->registry->get($key);
 	}
 	
 	public function here()

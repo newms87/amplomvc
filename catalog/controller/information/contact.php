@@ -10,7 +10,7 @@ class Catalog_Controller_Information_Contact extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 	
-		if (($this->request->isPost()) && $this->validate()) {
+		if ($this->request->isPost() && $this->validate()) {
 			$this->mail->init();
 			
 			$this->mail->setTo($this->config->get('config_email'));
@@ -23,8 +23,8 @@ class Catalog_Controller_Information_Contact extends Controller
 			$this->url->redirect($this->url->link('information/contact/success'));
 		}
 		
-		$this->language->format('text_contact_us', $this->config->get('config_name'));
-		$this->language->format('text_contact_info', $this->config->get('config_email'),$this->config->get('config_email'));
+		$this->_('text_contact_us', $this->config->get('config_name'));
+		$this->_('text_contact_info', $this->config->get('config_email'),$this->config->get('config_email'));
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('information/contact'));

@@ -10,7 +10,7 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 			$payment_methods = $this->cart->getPaymentMethods();
 			
 			if (!$payment_methods) {
-				$this->message->add('error', $this->language->format('error_no_payment', $this->url->link('information/contact')));
+				$this->message->add('error', $this->_('error_no_payment', $this->url->link('information/contact')));
 			}
 			
 			if ($this->cart->hasPaymentMethod()) {
@@ -33,7 +33,7 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_checkout_id'));
 			
 			if ($information_info) {
-				$this->language->format('text_agree', $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_checkout_id')), $information_info['title'], $information_info['title']);
+				$this->_('text_agree', $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_checkout_id')), $information_info['title'], $information_info['title']);
 				
 				$this->data['agree_to_payment'] = true;
 			}

@@ -1,17 +1,14 @@
 <?php
-class Breadcrumb 
+class Breadcrumb extends Library
 {
 	private $crumbs = array();
 	private $default_separator;
 	
-	function __construct($registry = '')
+	function __construct($registry)
 	{
-		if (is_string($registry)) {
-			$this->default_separator = $separator;
-		}
-		else {
-			$this->default_separator = $registry->get('config')->get('config_breadcrumb_separator');
-		}
+		parent::__construct($registry);
+		
+		$this->default_separator = $this->config->get('config_breadcrumb_separator');
 	}
 	
 	public function add($text, $href, $separator = '', $position = null)

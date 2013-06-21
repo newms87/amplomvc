@@ -111,10 +111,10 @@ class Admin_Controller_Tool_ErrorLog extends Controller
 				}
 			}
 			
-			$this->language->format('button_clear', $name);
+			$this->_('button_clear', $name);
 		}
 		else {
-			$this->language->format('button_clear', 'Log');
+			$this->_('button_clear', 'Log');
 		}
 		
 		

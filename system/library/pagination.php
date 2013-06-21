@@ -1,7 +1,6 @@
 <?php
-class Pagination 
+class Pagination extends Library
 {
-	private $registry;
 	private $default_template = 'block/widget/pagination';
 	private $template_file;
 	
@@ -14,14 +13,9 @@ class Pagination
 	
 	function __construct($registry)
 	{
-		$this->registry = $registry;
+		parent::__construct($registry);
 		
 		$this->init();
-	}
-	
-	public function __get($key)
-	{
-		return $this->registry->get($key);
 	}
 	
 	public function init()
@@ -39,6 +33,10 @@ class Pagination
 	
 	public function render()
 	{
+		if ($this->total < 1) {
+			return '';
+		}
+		
 		$this->template->load($this->template_file);
 		
 		$language = $this->language->fetch('block/widget/pagination');

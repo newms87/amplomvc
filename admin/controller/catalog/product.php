@@ -15,7 +15,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		$this->load->language('catalog/product');
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Product->addProduct($_POST);
 			
 			if (!$this->message->error_set()) {
@@ -34,7 +34,7 @@ class Admin_Controller_Catalog_Product extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Product->editProduct($_GET['product_id'], $_POST);
 			
 			if (!$this->message->error_set()) {
@@ -606,8 +606,8 @@ class Admin_Controller_Catalog_Product extends Controller
 			}
 		}
 		
-		$this->language->format('text_option_help', $this->config->get('config_email'));
-		$this->language->format('text_not_editable', $this->data['name'], $this->config->get('config_email'));
+		$this->_('text_option_help', $this->config->get('config_email'));
+		$this->_('text_not_editable', $this->data['name'], $this->config->get('config_email'));
 		
 		//Translation
 		$translate_fields = array(
@@ -679,7 +679,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			
 			foreach ($product_options as $option_id=>$product_option) {
 				if (!isset($product_option['product_option_value'])) {
-					$this->error["option-value$option_id"] = $this->language->format('error_no_option_value', $product_option['name']);
+					$this->error["option-value$option_id"] = $this->_('error_no_option_value', $product_option['name']);
 					continue;
 				}
 				
@@ -707,14 +707,14 @@ class Admin_Controller_Catalog_Product extends Controller
 						}
 						
 						if ($restrict_quantity > (int)$product_option_value['quantity']) {
-							$this->error["product_options[$option_id][product_option_value][$option_value_id][quantity]"] = $this->language->format('error_restrict_quantity', $product_option_value['quantity'], $restrict_quantity);
+							$this->error["product_options[$option_id][product_option_value][$option_value_id][quantity]"] = $this->_('error_restrict_quantity', $product_option_value['quantity'], $restrict_quantity);
 						}
 					}
 				}
 			}
 			
 			if ($po_quantity != 'INF' && min($po_quantity) < (int)$_POST['quantity']) {
-				$this->error['quantity'] = $this->language->format('error_po_quantity', $_POST['quantity'], min($po_quantity));
+				$this->error['quantity'] = $this->_('error_po_quantity', $_POST['quantity'], min($po_quantity));
 			}
 		}
 		

@@ -18,7 +18,7 @@ class Admin_Controller_Catalog_Option extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Option->addOption($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -50,7 +50,7 @@ class Admin_Controller_Catalog_Option extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Option->editOption($_GET['option_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));

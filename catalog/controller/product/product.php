@@ -13,6 +13,12 @@ class Catalog_Controller_Product_Product extends Controller
 		$this->data['product_info'] = $product_info;
 		
 		if ($product_info) {
+			//Layout Override (only if set)
+			$layout_id = $this->Model_Catalog_Product->getProductLayoutId($product_id);
+			
+			if ($layout_id) {
+				$this->config->set('config_layout_id', $layout_id);
+			}
 			
 			$this->data['product_id'] = $product_id;
 			
@@ -70,7 +76,7 @@ class Catalog_Controller_Product_Product extends Controller
 				$tag['href'] = $this->url->link('product/search', 'filter_tag=' . $tag['tag']);
 			}
 			
-			$this->language->format('text_on_store', $this->config->get('config_name'));
+			$this->_('text_on_store', $this->config->get('config_name'));
 			
 			$this->data['tags'] = $tags;
 			

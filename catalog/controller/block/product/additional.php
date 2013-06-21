@@ -20,15 +20,15 @@ class Catalog_Controller_Block_Product_Additional extends Controller
 		$this->data['review_status'] = $review_status;
 		
 		if ($review_status) {
-			$this->language->format('tab_review', $this->Model_Catalog_Review->getTotalReviewsByProductId($product_info['product_id']));
+			$this->_('tab_review', $this->Model_Catalog_Review->getTotalReviewsByProductId($product_info['product_id']));
 			
-			$this->data['reviews'] = $this->language->format('text_reviews', (int)$product_info['reviews']);
+			$this->data['reviews'] = $this->_('text_reviews', (int)$product_info['reviews']);
 			
 			$this->data['rating'] = (int)$product_info['rating'];
 		}
 		
 		$this->data['is_final'] = (int)$product_info['is_final'];
-		$this->language->format('final_sale_explanation', $this->url->link('information/information/info','information_id=7').'/#return_policy');
+		$this->_('final_sale_explanation', $this->url->link('information/information/info','information_id=7').'/#return_policy');
 			
 			
 		$this->data['description'] = html_entity_decode($product_info['description'], ENT_QUOTES, 'UTF-8');
@@ -44,7 +44,7 @@ class Catalog_Controller_Block_Product_Additional extends Controller
 			$this->data['is_default_shipping'] = true;
 		}
 
-		$this->data['shipping_return_link'] = $this->language->format('text_view_ship_policy', $this->url->link('information/information/info','information_id=7'));
+		$this->data['shipping_return_link'] = $this->_('text_view_ship_policy', $this->url->link('information/information/info','information_id=7'));
 		
 		if ($this->config->get('config_show_product_attributes')) {
 			$this->data['attribute_groups'] = $this->Model_Catalog_Product->getProductAttributes($product_info['product_id']);

@@ -18,7 +18,7 @@ class Admin_Controller_Catalog_Download extends Controller
 	
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$data = array();
 			
 			if (is_uploaded_file($_FILES['download']['tmp_name'])) {
@@ -62,7 +62,7 @@ class Admin_Controller_Catalog_Download extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$data = array();
 			
 			if (is_uploaded_file($_FILES['download']['tmp_name'])) {

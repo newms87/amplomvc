@@ -29,8 +29,8 @@ class Catalog_Controller_Block_Cart_Reward
 			
 		$points_total = $this->cart->getTotalPoints();
 		
-		$this->language->format('text_use_reward', $points);
-		$this->language->format('entry_reward', $points_total);
+		$this->_('text_use_reward', $points);
+		$this->_('entry_reward', $points_total);
 
 
 		

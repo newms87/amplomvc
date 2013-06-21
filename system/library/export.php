@@ -1,19 +1,8 @@
 <?php
-class Export 
+class Export extends Library
 {
-	private $registry;
 	private $contents = '';
-	
-	function __construct(&$registry)
-	{
-		$this->registry = &$registry;
-	}
-	
-	public function __get($key)
-	{
-		return $this->registry->get($key);
-	}
-	
+		
 	public function get_contents()
 	{
 		return $this->contents;

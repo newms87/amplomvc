@@ -10,7 +10,7 @@ class Catalog_Controller_Information_AreYouADesigner extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 
-		if (($this->request->isPost()) && $this->validate()) {
+		if ($this->request->isPost() && $this->validate()) {
 			$this->Model_Catalog_Designer->addDesigner($_POST);
 			
 			$name = $_POST['firstname'] . ' ' . $_POST['lastname'];
@@ -46,7 +46,7 @@ class Catalog_Controller_Information_AreYouADesigner extends Controller
 			$this->url->redirect($this->url->link('information/are_you_a_designer/success'));
 		}
 		
-		$this->language->format('text_are_you_a_designer', $this->config->get('config_name'));
+		$this->_('text_are_you_a_designer', $this->config->get('config_name'));
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('information/are_you_a_designer'));

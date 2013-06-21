@@ -1,15 +1,14 @@
 <?php
-class User 
+class User extends Library
 {
 	private $user_id;
 	private $username;
 	private $group_type;
   	private $permission = array();
-	private $registry;
 
   	public function __construct($registry)
   	{
-  		$this->registry = $registry;
+  		parent::__construct($registry);
 		
 		if (isset($this->session->data['user_id']) && $this->validate_token()) {
 			
@@ -36,11 +35,6 @@ class User
 			}
 		}
   	}
-	
-	public function __get($key)
-	{
-		return $this->registry->get($key);
-	}
 	
 	public function validate_token()
 	{

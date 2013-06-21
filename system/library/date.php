@@ -1,17 +1,6 @@
 <?php
-class Date {
-	private $registry;
-	
-	function __construct($registry)
-	{
-		$this->registry = $registry;
-	}
-	
-	public function __get($key)
-	{
-		return $this->registry->get($key);
-	}
-	
+class Date extends Library
+{
 	/**
 	 * Returns the current date and time
 	 * 

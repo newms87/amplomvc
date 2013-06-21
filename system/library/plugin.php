@@ -1,13 +1,12 @@
 <?php
-class Plugin{
-	private $registry;
+class Plugin extends Library{
 	private $plugins;
 	private $plugin_registry;
 	private $file_merge;
 	
 	function __construct($registry)
 	{
-		$this->registry = $registry;
+		parent::__construct($registry);
 		
 		$this->registry->set('plugin', $this);
 		
@@ -43,11 +42,6 @@ class Plugin{
 		$this->file_merge = new FileMerge($this->registry);
 	}
 	
-	public function __get($key)
-	{
-		return $this->registry->get($key);
-	}
-	
 	public function getFile($file)
 	{
 		if (isset($this->plugin_registry[$file])) {
@@ -63,7 +57,7 @@ class Plugin{
 			$setup_file = DIR_PLUGIN . $name . '/setup.php';
 			
 			if (!is_file($setup_file)) {
-				$this->message->add("warning", $this->language->format('error_setup_file', $setup_file, $name));
+				$this->message->add("warning", $this->_('error_setup_file', $setup_file, $name));
 				
 				return false;
 			}
@@ -101,7 +95,7 @@ class Plugin{
 		
 		//New Files
 		if (!$this->integrateNewFiles($name)) {
-			$this->message->add("warning", $this->language->format("error_integrate_new_files", $name));
+			$this->message->add("warning", $this->_("error_integrate_new_files", $name));
 			$this->uninstall($name);
 			return false;
 		}
@@ -110,7 +104,7 @@ class Plugin{
 		$file_mods = $this->getFileMods($name);
 		
 		if ($file_mods === false) {
-			$this->message->add("warning", $this->language->format('error_file_mod', $name));
+			$this->message->add("warning", $this->_('error_file_mod', $name));
 			$this->uninstall($name);
 			return false;
 		}
@@ -118,12 +112,12 @@ class Plugin{
 		$this->file_merge->addFiles($name, $file_mods);
 		
 		if (!$this->file_merge->applyMergeRegistry()) {
-			$this->message->add('warning', $this->language->format('error_install_merge', $name));
+			$this->message->add('warning', $this->_('error_install_merge', $name));
 			$this->uninstall($name);
 			return false;
 		}
 
-		$this->message->add('success', $this->language->format("success_install",$name));
+		$this->message->add('success', $this->_("success_install",$name));
 		
 		return true;
 	}
@@ -146,11 +140,11 @@ class Plugin{
 		
 		//Reload the merge registry
 		if (!$this->file_merge->syncRegistryWithDb()) {
-			$this->message->add('warning', $this->language->format('error_uninstall_merge', $name));
+			$this->message->add('warning', $this->_('error_uninstall_merge', $name));
 			return false;
 		}
 		
-		$this->message->add('notify', $this->language->format('success_uninstall', $name));
+		$this->message->add('notify', $this->_('success_uninstall', $name));
 		
 		return true;
 	}

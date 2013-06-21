@@ -1,7 +1,7 @@
 <? if(!$products_only){?>
 <div class="box featured_box" style='overflow:auto;'>
-	<div class="box-heading"><div class='featured_title'><span class='featured_title_first'><?= $featured_title[0]; ?></span><?= substr($featured_title,1); ?></div><div class='capistrano'><?= $featured_cat; ?></div></div>
-	<div class="box-content">
+	<div class="box_heading"><div class='featured_title'><span class='featured_title_first'><?= $featured_title[0]; ?></span><?= substr($featured_title,1); ?></div><div class='capistrano'><?= $featured_cat; ?></div></div>
+	<div class="box_content">
 		<div class="box-product">
 <? }?>
 

@@ -18,7 +18,7 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 				$this->Model_Sale_CustomerBlacklist->addCustomerBlacklist($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -49,7 +49,7 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Sale_CustomerBlacklist->editCustomerBlacklist($_GET['customer_ip_blacklist_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));

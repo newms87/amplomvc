@@ -202,7 +202,7 @@ class Admin_Controller_Dev_Dev extends Controller
 	{
 		$this->language->load('dev/dev');
 		
-		if (($this->request->isPost()) && isset($_POST['tables']) && $this->validate()) {
+		if ($this->request->isPost() && isset($_POST['tables']) && $this->validate()) {
 			$file = DIR_DOWNLOAD . 'tempsql.sql';
 			
 			$this->db->dump($file, $_POST['tables']);

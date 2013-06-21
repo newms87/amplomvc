@@ -21,7 +21,7 @@ class Catalog_Controller_Checkout_Checkout extends Controller
 		$this->data['logged'] = $this->customer->isLogged();
 		$this->data['shipping_required'] = $this->cart->hasShipping();
 		
-		$this->language->format('error_page_load', $this->config->get('config_email'));
+		$this->_('error_page_load', $this->config->get('config_email'));
 		
 		$this->children = array(
 			'common/column_left',

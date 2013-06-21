@@ -170,8 +170,8 @@ $(document).ready(function(){
 <? } ?>
 <div id="notification"></div>
 <div id="content_holder">
+
 <?= $this->builder->display_messages($messages); ?>
-<?= $above_content; ?>
 
 <script type="text/javascript">//<!--
 $('#links_primary .top_menu > li').hover(top_menu_hoverin, top_menu_hoverout);
@@ -187,3 +187,4 @@ function top_menu_hoverout(){
 }
 //--></script>
 
+<?= $above_content; ?>

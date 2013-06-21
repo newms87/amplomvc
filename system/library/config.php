@@ -1,14 +1,13 @@
 <?php
-class Config 
+class Config extends Library
 {
 	private $data = array();
-	private $registry;
 	private $store_id;
 	private $site_config;
 	
-	public function __construct(&$registry, $store_id = null)
+	public function __construct($registry, $store_id = null)
 	{
-		$this->registry = &$registry;
+		parent::__construct($registry);
 		
 		//self assigning so we can use config immediately!
 		$this->registry->set('config', $this);
@@ -39,11 +38,8 @@ class Config
 		}
 		
 		$this->data += $settings;
-	}
-	
-	public function __get($key)
-	{
-		return $this->registry->get($key);
+		
+		$this->checkForUpdates();
 	}
 	
   	public function get($key)
@@ -162,6 +158,18 @@ class Config
 		if (!$default_exists) {
 			$this->db->set_autoincrement('store', 0);
 			$this->Model_Setting_Store->addStore($this->site_config['default_store']);
+		}
+	}
+	
+	public function checkForUpdates()
+	{
+		$version = $this->get('ac_version');
+		
+		if ($version !== VERSION && $this->config->get('auto_update')) {
+			$this->language->system('config');
+			$this->message->add('notify', $this->_('notify_update', $version, VERSION));
+
+			$this->System_Update->update(VERSION);
 		}
 	}
 }

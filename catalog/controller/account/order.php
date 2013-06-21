@@ -31,7 +31,7 @@ class Catalog_Controller_Account_Order extends Controller
 						$option_data[$order_option['product_option_id']][] = $order_option;
 					}
 					
-					$this->message->add('success', $this->language->format('text_success', $order_id));
+					$this->message->add('success', $this->_('text_success', $order_id));
 					
 					$this->cart->add($order_product['product_id'], $order_product['quantity'], $option_data);
 				}
@@ -128,7 +128,7 @@ class Catalog_Controller_Account_Order extends Controller
 			
 			$this->language->set('heading_title', $this->_('text_order'));
 		
-			$this->language->format('final_sale_explanation',$this->url->link('information/information', 'information_id=7'));
+			$this->_('final_sale_explanation',$this->url->link('information/information', 'information_id=7'));
 			
 			if ($order_info['invoice_no']) {
 				$this->data['invoice_no'] = $order_info['invoice_prefix'] . $order_info['invoice_no'];

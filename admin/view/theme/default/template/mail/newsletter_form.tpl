@@ -8,7 +8,7 @@
 		<div class="buttons">
 			<a onclick="prepare_preview();$.post('<?= $preview; ?>', $('#form').serialize(), handle_preview, 'html');" class="button"><?= $button_preview; ?></a>
 			<a onclick="$('#form').submit();" class="button save_form"><?= $button_save; ?></a>
-			<a onclick="location = '<?= $cancel; ?>';" class="button"><?= $button_cancel; ?></a>
+			<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
 		</div>
 	</div>
 	<div class="content">

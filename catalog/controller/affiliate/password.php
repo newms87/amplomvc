@@ -17,7 +17,7 @@ class Catalog_Controller_Affiliate_Password extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 			
-		if (($this->request->isPost()) && $this->validate()) {
+		if ($this->request->isPost() && $this->validate()) {
 			$this->Model_Affiliate_Affiliate->editPassword($this->affiliate->getEmail(), $_POST['password']);
  
 				$this->message->add('success', $this->_('text_success'));

@@ -1,18 +1,6 @@
 <?php
-class Extend 
+class Extend extends Library
 {
-	private $registry;
-	
-	function __construct($registry)
-	{
-		$this->registry = $registry;
-	}
-	
-	public function __get($key)
-	{
-		return $this->registry->get($key);
-	}
-	
 	public function add_navigation_link($link, $parent = '', $group = 'admin')
 	{
 		$defaults = array(

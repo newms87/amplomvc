@@ -10,7 +10,7 @@
 						<a href="<?= $preview; ?>" target="_blank" class="button"><?= $button_preview; ?></a>
 				<? }?>
 				<a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a>
-				<a onclick="location = '<?= $cancel; ?>';" class="button"><?= $button_cancel; ?></a>
+				<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
 			</div>
 		</div>
 		<div class="content">

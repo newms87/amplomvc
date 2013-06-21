@@ -15,6 +15,13 @@ class Catalog_Controller_Product_Category extends Controller
 		$category_info = $this->Model_Catalog_Category->getCategory($category_id);
 		
 		if ($category_info) {
+			//Layout override (only if set)
+			$layout_id = $this->Model_Catalog_Category->getCategoryLayoutId($category_id);
+			
+			if ($layout_id) {
+				$this->config->set('config_layout_id', $layout_id);
+			}
+			
 			$this->document->setTitle($category_info['name']);
 			$this->document->setDescription($category_info['meta_description']);
 			$this->document->setKeywords($category_info['meta_keywords']);

@@ -14,7 +14,7 @@ class Catalog_Controller_Account_Register extends Controller
 		
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validate()) {
+		if ($this->request->isPost() && $this->validate()) {
 			$this->Model_Account_Customer->addCustomer($_POST);
 
 			$this->customer->login($_POST['email'], $_POST['password']);
@@ -22,7 +22,7 @@ class Catalog_Controller_Account_Register extends Controller
 			$this->url->redirect($this->url->link('account/success'));
 		}
 		
-		$this->language->format('text_account_already', $this->url->link('account/login'));
+		$this->_('text_account_already', $this->url->link('account/login'));
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
@@ -59,7 +59,7 @@ class Catalog_Controller_Account_Register extends Controller
 			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_account_id'));
 			
 			if ($information_info) {
-				$this->language->format('text_agree', $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_account_id')), $information_info['title'], $information_info['title']);
+				$this->_('text_agree', $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_account_id')), $information_info['title'], $information_info['title']);
 			}
 		}
 		

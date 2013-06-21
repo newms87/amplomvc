@@ -12,7 +12,7 @@ class Admin_Controller_Catalog_Category extends Controller
 	{
 		$this->load->language('catalog/category');
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Category->addCategory($_POST);
 			
 			if (!$this->message->error_set()) {
@@ -29,7 +29,7 @@ class Admin_Controller_Catalog_Category extends Controller
 	{
 		$this->load->language('catalog/category');
 
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Category->editCategory($_GET['category_id'], $_POST);
 			
 			if (!$this->message->error_set()) {
@@ -155,6 +155,8 @@ class Admin_Controller_Catalog_Category extends Controller
 		$category_total = $this->Model_Catalog_Category->getTotalCategories($sort_filter);
 		$categories = $this->Model_Catalog_Category->getCategoriesWithParents($sort_filter);
 		
+		$url_query = $this->url->get_query_exclude('category_id');
+		
 		foreach ($categories as &$category) {
 			$category['actions'] = array(
 				'edit' => array(
@@ -163,14 +165,14 @@ class Admin_Controller_Catalog_Category extends Controller
 				),
 				'delete' => array(
 					'text' => $this->_('text_delete'),
-					'href' => $this->url->link('catalog/category/delete', 'category_id=' . $category['category_id'])
+					'href' => $this->url->link('catalog/category/delete', 'category_id=' . $category['category_id'] . '&' . $url_query)
 				)
 			);
 			
 			$category['thumb'] = $this->image->resize($category['image'], $this->config->get('config_image_admin_list_width'), $this->config->get('config_image_admin_list_height'));
 			
 			$category['stores'] = $this->Model_Catalog_Category->getCategoryStores($category['category_id']);
-		}unset($category);
+		} unset($category);
 		
 		//The table template data
 		$tt_data = array(
@@ -195,8 +197,6 @@ class Admin_Controller_Catalog_Category extends Controller
 		$this->data['list_view'] = $this->table->render();
 		
 		//Batch Actions
-		$url_query = $this->url->get_query('filter', 'sort', 'order', 'page');
-		
 		$this->data['batch_actions'] = array(
 			'enable'	=> array(
 				'label' => "Enable"

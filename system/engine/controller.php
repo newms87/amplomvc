@@ -28,6 +28,12 @@ abstract class Controller
 	
 	public function _($key)
 	{
+		if (func_num_args() > 1) {
+			$args = func_get_args();
+			
+			return call_user_func_array(array($this->language, 'format'), $args);
+		}
+		
 		return $this->language->get($key);
 	}
 
@@ -55,40 +61,6 @@ abstract class Controller
 			return $action->getOutput();
 		} else {
 			trigger_error('Error: Could not load block ' . $block . '! The file was missing.');
-		}
-	}
-	
-	//TODO: Get rid of Modules!!
-	protected function getModule($name, $settings = array())
-	{
-		trigger_error("Modules have been deprecated! Move to Plugins...");
-		exit;
-		
-		$module = 'module/' . $name;
-		
-		if (!is_array($settings)) {
-			trigger_error('Error: ' . get_class($this) . '::getModule(): $settings must be an array! Usage $this->getModule(\'module_name\', array($setting1, $setting2, ...))');
-			echo get_caller(2);
-			exit();
-		}
-		
-		$action = new Action($module);
-		$file = $action->getFile();
-		$class = $action->getClass();
-		$class_path = $action->getClassPath();
-		$method = $action->getMethod();
-		
-		if (file_exists($file)) {
-			_require($file);
-
-			$controller = new $class($class_path, $this->registry);
-
-			call_user_func_array(array($controller, $method), array($settings));
-			
-			return $controller->output;
-		} else {
-			trigger_error('Could not load module ' . $module . '! The file was missing at ' . $file);
-			exit();
 		}
 	}
 	

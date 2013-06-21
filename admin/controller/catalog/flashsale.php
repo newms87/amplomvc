@@ -16,7 +16,7 @@ class Admin_Controller_Catalog_Flashsale extends Controller
 		$this->load->language('catalog/flashsale');
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Flashsale->addFlashsale($_POST);
 
 			$this->message->add('success', $this->_('text_success'));
@@ -33,7 +33,7 @@ class Admin_Controller_Catalog_Flashsale extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Flashsale->editFlashsale($_GET['flashsale_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));

@@ -7,7 +7,7 @@
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'shipping.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
-			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a onclick="location = '<?= $cancel; ?>';" class="button"><?= $button_cancel; ?></a></div>
+			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
 		</div>
 		<div class="content">
 			<div class="vtabs"><a href="#tab-general"><?= $tab_general; ?></a><a href="#tab-1st-class-standard"><?= $tab_1st_class_standard; ?></a><a href="#tab-1st-class-recorded"><?= $tab_1st_class_recorded; ?></a><a href="#tab-2nd-class-standard"><?= $tab_2nd_class_standard; ?></a><a href="#tab-2nd-class-recorded"><?= $tab_2nd_class_recorded; ?></a><a href="#tab-special-delivery-500"><?= $tab_special_delivery_500; ?></a><a href="#tab-special-delivery-1000"><?= $tab_special_delivery_1000; ?></a><a href="#tab-special-delivery-2500"><?= $tab_special_delivery_2500; ?></a><a href="#tab-standard-parcels"><?= $tab_standard_parcels; ?></a><a href="#tab-airmail"><?= $tab_airmail; ?></a><a href="#tab-international-signed"><?= $tab_international_signed; ?></a><a href="#tab-airsure"><?= $tab_airsure; ?></a><a href="#tab-surface"><?= $tab_surface; ?></a></div>

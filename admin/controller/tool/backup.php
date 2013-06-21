@@ -63,7 +63,7 @@ class Admin_Controller_Tool_Backup extends Controller
 	
 	public function backup()
 	{
-		if (($this->request->isPost()) && $this->validate()) {
+		if ($this->request->isPost() && $this->validate()) {
 			$this->response->addheader('Pragma: public');
 			$this->response->addheader('Expires: 0');
 			$this->response->addheader('Content-Description: File Transfer');

@@ -11,7 +11,7 @@ class Admin_Controller_Module_MainSidebar extends Controller
 
 		$this->document->setTitle('Main Sidebar');
 		
-		if (($this->request->isPost()) && $this->validate()) {
+		if ($this->request->isPost() && $this->validate()) {
 			$this->Model_Setting_Setting->editSetting('main_sidebar', $_POST);
 					
 			$this->message->add('success', $this->_('text_success'));

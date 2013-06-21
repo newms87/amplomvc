@@ -17,7 +17,7 @@ class Admin_Controller_Design_Layout extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Design_Layout->addLayout($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -48,7 +48,7 @@ class Admin_Controller_Design_Layout extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Design_Layout->editLayout($_GET['layout_id'], $_POST);
 
 			$this->message->add('success', $this->_('text_success'));
@@ -343,19 +343,19 @@ class Admin_Controller_Design_Layout extends Controller
 			$product_total = $this->Model_Catalog_Product->getTotalProducts($data);
 	
 			if ($product_total) {
-				$this->error['warning'] = sprintf($this->_('error_product'), $product_total);
+				$this->error['warning_product'] = $this->_('error_product', $product_total);
 			}
 
-			$category_total = $this->Model_Catalog_Category->getTotalCategoriesByLayoutId($layout_id);
+			$category_total = $this->Model_Catalog_Category->getTotalCategories($data);
 	
 			if ($category_total) {
-				$this->error['warning'] = sprintf($this->_('error_category'), $category_total);
+				$this->error['warning_category'] = $this->_('error_category', $category_total);
 			}
-							
-			$information_total = $this->Model_Catalog_Information->getTotalInformationsByLayoutId($layout_id);
+			
+			$information_total = $this->Model_Catalog_Information->getTotalInformations($data);
 		
 			if ($information_total) {
-				$this->error['warning'] = sprintf($this->_('error_information'), $information_total);
+				$this->error['warning_information'] = $this->_('error_information', $information_total);
 			}
 		}
 	

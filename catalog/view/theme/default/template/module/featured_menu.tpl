@@ -1,6 +1,6 @@
 <div id='featured_filter_sidebar' class="box sidebar_box">
-	<div class="box-heading"><?= $category_title; ?></div>
-	<div class="box-content">
+	<div class="box_heading"><?= $category_title; ?></div>
+	<div class="box_content">
 		<div id='menu_categories'>
 			<? function display_categories($categories, $menu_indent=10,$selected_cat=0, $level=0){
 					$m = ($level*$menu_indent) . "px";
@@ -20,8 +20,8 @@
 		</div>
 	</div>
 	<div id='sort_by_sidebar'>
-		<div class="box-heading"><?= $heading_title; ?></div>
-		<div class="box-content">
+		<div class="box_heading"><?= $heading_title; ?></div>
+		<div class="box_content">
 				<ul>
 					<? foreach ($menu_items as $key=>$item) { ?>
 					<li>

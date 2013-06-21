@@ -1,6 +1,6 @@
 <div id='press_entries' class="box">
 	<h1><?= $heading_title; ?></h1>
-	<div class="box-content">
+	<div class="box_content">
 		<ul id='press_list'>
 		<? foreach($press_list as $press){ ?>
 			<li>

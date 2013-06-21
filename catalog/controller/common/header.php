@@ -74,7 +74,7 @@ class Catalog_Controller_Common_Header extends Controller
 			//The Welcome Message
 			$link_logged = array(
 				'name' => 'logged',
-				'display_name' => $this->language->format('text_logged', $this->customer->info('firstname') . ' ' . $this->customer->info('lastname')),
+				'display_name' => $this->_('text_logged', $this->customer->info('firstname') . ' ' . $this->customer->info('lastname')),
 				'sort_order' => 0,
 			);
 			

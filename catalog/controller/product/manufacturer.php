@@ -96,7 +96,7 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 			
 			$this->language->set('heading_title', $manufacturer_info['name']);
 			/*
-			$this->language->format('text_compare', (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));
+			$this->_('text_compare', (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));
 			$this->data['compare'] = $this->url->link('product/compare');
 			*/
 			$this->data['products'] = array();

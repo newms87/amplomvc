@@ -18,7 +18,7 @@ class Admin_Controller_Sale_Return extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 				$this->Model_Sale_Return->addReturn($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -81,7 +81,7 @@ class Admin_Controller_Sale_Return extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Sale_Return->editReturn($_GET['return_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -1004,7 +1004,7 @@ class Admin_Controller_Sale_Return extends Controller
 
 		$this->language->load('sale/return');
 		
-		if (($this->request->isPost()) && $this->user->hasPermission('modify', 'sale/return')) {
+		if ($this->request->isPost() && $this->user->hasPermission('modify', 'sale/return')) {
 			$this->Model_Sale_Return->addReturnHistory($_GET['return_id'], $_POST);
 				
 			$this->language->set('success', $this->_('text_success'));
@@ -1012,7 +1012,7 @@ class Admin_Controller_Sale_Return extends Controller
 			$this->data['success'] = '';
 		}
 		
-		if (($this->request->isPost()) && !$this->user->hasPermission('modify', 'sale/return')) {
+		if ($this->request->isPost() && !$this->user->hasPermission('modify', 'sale/return')) {
 			$this->language->set('error_warning', $this->_('error_permission'));
 		} else {
 			$this->data['error_warning'] = '';

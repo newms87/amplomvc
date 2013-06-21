@@ -141,6 +141,12 @@ class Admin_Model_Catalog_Category extends Model
 			$where .= " AND parent_id IN (" . implode(',', $data['parent_ids']) . ")";
 		}
 		
+		if (!empty($data['layouts'])) {
+			$from .= " LEFT JOIN " . DB_PREFIX . "category_to_layout c2l ON (c.category_id=c2l.category_id)";
+			
+			$where .= " AND c2l.layout_id IN (" . implode(',', $data['layouts']) . ")"; 
+		}
+		
 		//Order By and Limit
 		if (!$total) {
 			if (!empty($data['sort']) && strpos($data['sort'], '__image_sort__') === 0) {
@@ -276,12 +282,5 @@ class Admin_Model_Catalog_Category extends Model
 	public function getTotalCategories($data = array())
 	{
 		return $this->getCategories($data, '', true);
-	}
-	
-	public function getTotalCategoriesByLayoutId($layout_id)
-	{
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "category_to_layout WHERE layout_id = '" . (int)$layout_id . "'");
-
-		return $query->row['total'];
 	}
 }

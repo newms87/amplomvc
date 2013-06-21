@@ -4,6 +4,9 @@
 	margin: 20px;
 }
 
+.dev_console_item .title{
+	text-align: center;
+}
 .dev_console_item .image{
 	border:none;
 }

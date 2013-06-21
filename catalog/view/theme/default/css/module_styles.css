@@ -80,12 +80,12 @@ ul.dncarousel li{display: block}
 .featured_box{
 	margin-bottom:0;
 }
-.featured_box .box-heading{
+.featured_box .box_heading{
 	color:#000000;
 	font-size:15px;
 	overflow:auto;
 }
-.featured_box .box-content{
+.featured_box .box_content{
 	padding:0;
 }
 .featured_box .featured_product_clickable{
@@ -177,11 +177,11 @@ ul.dncarousel li{display: block}
 	box-shadow: 0 4px 23px 5px rgba(237, 45, 130, 0.4), 0 2px 6px rgba(237, 45, 130, 0.3);
 }
 
-#featured_filter_results .box-heading{
+#featured_filter_results .box_heading{
 	overflow:auto;
 }
 
-#featured_filter_results .box-content{
+#featured_filter_results .box_content{
 	height:500px;
 	overflow:auto;
 }

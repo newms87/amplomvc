@@ -51,11 +51,11 @@ class Admin_Controller_Common_Header extends Controller
 		} else {
 			$this->data['home'] = $this->url->link('common/home');
 			
-			$this->data['logged'] = $this->language->format('text_logged', $this->user->getUserName());
+			$this->data['logged'] = $this->_('text_logged', $this->user->getUserName());
 			
 			$menu_items = array();
 			if ($this->user->isDesigner()) {
-				$this->language->format('support',"mailto:" . $this->config->get('config_email'));
+				$this->_('support',"mailto:" . $this->config->get('config_email'));
 				$menu_items = array(
 					'product'=>'catalog/product','product_insert'=>'catalog/product/insert',
 					'home'=>'common/home',
@@ -65,7 +65,7 @@ class Admin_Controller_Common_Header extends Controller
 				$this->data['user_info'] = $this->url->link('user/user/update','user_id='.$this->user->getId());
 			}
 			else {
-				$this->language->format('support', $this->config->get('config_email_support'));
+				$this->_('support', $this->config->get('config_email_support'));
 				
 				$this->data['store'] = SITE_URL;
 				

@@ -1,14 +1,12 @@
 <?php
-class Session 
+class Session extends Library
 {
 	public $data = array();
-	
-	private $registry;
 			
   	public function __construct($registry)
   	{
-  		$this->registry = $registry;
-				
+		parent::__construct($registry);
+		
 		if (!session_id()) {
 			ini_set('session.use_cookies', 'On');
 			ini_set('session.use_trans_sid', 'Off');
@@ -52,11 +50,6 @@ class Session
 				$this->data['messages']['warning'][] = "You must enable cookies to login to the admin portal!";
 			}
 		}
-	}
-
-	public function __get($key)
-	{
-		return $this->registry->get($key);
 	}
 	
 	public function load_token_session($token)

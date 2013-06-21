@@ -3,194 +3,204 @@ class Admin_Model_Catalog_Information extends Model
 {
 	public function addInformation($data)
 	{
-		$this->query("INSERT INTO " . DB_PREFIX . "information SET sort_order = '" . (int)$_POST['sort_order'] . "', status = '" . (int)$data['status'] . "'");
-
-		$information_id = $this->db->getLastId();
-			
-		foreach ($data['information_description'] as $language_id => $value) {
-			$this->query("INSERT INTO " . DB_PREFIX . "information_description SET information_id = '" . (int)$information_id . "', language_id = '" . (int)$language_id . "', title = '" . $this->db->escape($value['title']) . "', description = '" . $this->db->escape($value['description']) . "'");
-		}
+		$information_id = $this->insert('information', $data);
 		
-		if (isset($data['information_store'])) {
-			foreach ($data['information_store'] as $store_id) {
-				$this->query("INSERT INTO " . DB_PREFIX . "information_to_store SET information_id = '" . (int)$information_id . "', store_id = '" . (int)$store_id . "'");
+		if (!empty($data['stores'])) {
+			foreach ($data['stores'] as $store_id) {
+				$store_data = array(
+					'store_id' => $store_id,
+					'information_id' => $information_id,
+				);
+				
+				$this->insert('information_to_store', $store_data);
 			}
 		}
 
-		if (isset($data['information_layout'])) {
+		if (!empty($data['information_layout'])) {
 			foreach ($data['information_layout'] as $store_id => $layout) {
 				if ($layout) {
-					$this->query("INSERT INTO " . DB_PREFIX . "information_to_layout SET information_id = '" . (int)$information_id . "', store_id = '" . (int)$store_id . "', layout_id = '" . (int)$layout['layout_id'] . "'");
+					$layout['store_id'] = $store_id;
+					$layout['information_id'] = $information_id;
+					
+					$this->insert('information_to_layout', $layout);
 				}
 			}
 		}
-				
-		if ($data['keyword']) {
-			$this->query("INSERT INTO " . DB_PREFIX . "url_alias SET query = 'information_id=" . (int)$information_id . "', keyword = '" . $this->db->escape($data['keyword']) . "'");
+
+		if (!empty($data['keyword'])) {
+			$this->url->setAlias($data['keyword'], 'information/information', 'information_id=' . (int)$information_id);
+		}
+		
+		if (!empty($data['translations'])) {
+			$this->translation->set_translations('information', $information_id, $data['translations']);
 		}
 		
 		$this->cache->delete('information');
+		
+		return $information_id;
 	}
 	
 	public function editInformation($information_id, $data)
 	{
-		$this->query("UPDATE " . DB_PREFIX . "information SET sort_order = '" . (int)$data['sort_order'] . "', status = '" . (int)$data['status'] . "' WHERE information_id = '" . (int)$information_id . "'");
-
-		$this->query("DELETE FROM " . DB_PREFIX . "information_description WHERE information_id = '" . (int)$information_id . "'");
-					
-		foreach ($data['information_description'] as $language_id => $value) {
-			$this->query("INSERT INTO " . DB_PREFIX . "information_description SET information_id = '" . (int)$information_id . "', language_id = '" . (int)$language_id . "', title = '" . $this->db->escape($value['title']) . "', description = '" . $this->db->escape($value['description']) . "'");
-		}
-
-		$this->query("DELETE FROM " . DB_PREFIX . "information_to_store WHERE information_id = '" . (int)$information_id . "'");
+		$this->update('information', $data, $information_id);
 		
-		if (isset($data['information_store'])) {
-			foreach ($data['information_store'] as $store_id) {
-				$this->query("INSERT INTO " . DB_PREFIX . "information_to_store SET information_id = '" . (int)$information_id . "', store_id = '" . (int)$store_id . "'");
-			}
-		}
+		$this->delete('information_to_store', array('information_id' => $information_id));
 		
-		$this->query("DELETE FROM " . DB_PREFIX . "information_to_layout WHERE information_id = '" . (int)$information_id . "'");
-
-		if (isset($data['information_layout'])) {
-			foreach ($data['information_layout'] as $store_id => $layout) {
-				if ($layout['layout_id']) {
-					$this->query("INSERT INTO " . DB_PREFIX . "information_to_layout SET information_id = '" . (int)$information_id . "', store_id = '" . (int)$store_id . "', layout_id = '" . (int)$layout['layout_id'] . "'");
-				}
-			}
-		}
+		if (!empty($data['stores'])) {
+			foreach ($data['stores'] as $store_id) {
+				$store_data = array(
+					'store_id' => $store_id,
+					'information_id' => $information_id,
+				);
 				
-		$this->query("DELETE FROM " . DB_PREFIX . "url_alias WHERE query = 'information_id=" . (int)$information_id. "'");
-		
-		if ($data['keyword']) {
-			$this->query("INSERT INTO " . DB_PREFIX . "url_alias SET query = 'information_id=" . (int)$information_id . "', keyword = '" . $this->db->escape($data['keyword']) . "'");
+				$this->insert('information_to_store', $store_data);
+			}
 		}
 		
+		$this->delete('information_to_layout', array('information_id' => $information_id));
+		
+		if (!empty($data['layouts'])) {
+			foreach ($data['layouts'] as $store_id => $layout_id) {
+				$layout_data = array(
+					'layout_id' => $layout_id,
+					'store_id' => $store_id,
+					'information_id' => $information_id,
+				);
+				
+				$this->insert('information_to_layout', $layout_data);
+			}
+		}
+
+		if (!empty($data['keyword'])) {
+			$this->url->setAlias($data['keyword'], 'information/information', 'information_id=' . (int)$information_id);
+		} else {
+			$this->url->removeAlias('information/information', 'information_id=' . (int)$information_id);
+		}
+		
+		if (!empty($data['translations'])) {
+			$this->translation->set_translations('information', $information_id, $data['translations']);
+		}
+
 		$this->cache->delete('information');
+	}
+	
+	public function copyInformation($information_id)
+	{
+		$information = $this->getInformation($information_id);
+		
+		unset($information['information_id']);
+		
+		$num = $this->query_var("SELECT COUNT(*) FROM " . DB_PREFIX . "information WHERE title like '" . $information['title'] . "%'");
+		
+		$information['title'] .= " - Copy" . ($num > 1 ? ' ('.$num.')' : '');
+		
+		$information['keyword'] = '';
+		
+		$information['stores'] = $this->getInformationStores($information_id);
+		$information['layouts'] = $this->getInformationLayouts($information_id);
+		
+		$information['translations'] = $this->translation->get_translations('information', $information_id);
+		
+		$this->addInformation($information);
 	}
 	
 	public function deleteInformation($information_id)
 	{
-		$this->query("DELETE FROM " . DB_PREFIX . "information WHERE information_id = '" . (int)$information_id . "'");
-		$this->query("DELETE FROM " . DB_PREFIX . "information_description WHERE information_id = '" . (int)$information_id . "'");
-		$this->query("DELETE FROM " . DB_PREFIX . "information_to_store WHERE information_id = '" . (int)$information_id . "'");
-		$this->query("DELETE FROM " . DB_PREFIX . "information_to_layout WHERE information_id = '" . (int)$information_id . "'");
-		$this->query("DELETE FROM " . DB_PREFIX . "url_alias WHERE query = 'information_id=" . (int)$information_id . "'");
-
+		$this->delete('information', $information_id);
+		$this->delete('information_to_store', array('information_id' => $information_id));
+		$this->delete('information_to_layout', array('information_id' => $information_id));
+		
+		$this->url->removeAlias('information/information', 'information_id=' . (int)$information_id);
+		
+		$this->translation->delete('information', $information_id);
+		
 		$this->cache->delete('information');
 	}
 
 	public function getInformation($information_id)
 	{
-		$query = $this->query("SELECT DISTINCT *, (SELECT keyword FROM " . DB_PREFIX . "url_alias WHERE query = 'information_id=" . (int)$information_id . "' AND route='information/information') AS keyword FROM " . DB_PREFIX . "information WHERE information_id = '" . (int)$information_id . "'");
+		$information = $this->query_row("SELECT DISTINCT * FROM " . DB_PREFIX . "information WHERE information_id = '" . (int)$information_id . "'");
 		
-		return $query->row;
+		$information['keyword'] = $this->url->getAlias('information/information', 'information_id=' . $information_id);
+		
+		return $information;
 	}
 		
-	public function getInformations($data = array()) {
-		if ($data) {
-			$sql = "SELECT * FROM " . DB_PREFIX . "information i LEFT JOIN " . DB_PREFIX . "information_description id ON (i.information_id = id.information_id) WHERE id.language_id = '" . (int)$this->config->get('config_language_id') . "'";
+	public function getInformations($data = array(), $select = '', $total = false) {
+		//Select
+		if ($total) {
+			$select = "COUNT(*) as total";
+		} elseif (empty($select)) {
+			$select = '*';
+		}
 		
-			$sort_data = array(
-				'id.title',
-				'i.sort_order'
-			);
+		//From
+		$from = DB_PREFIX . "information i";
 		
-			if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
-				$sql .= " ORDER BY " . $data['sort'];
-			} else {
-				$sql .= " ORDER BY id.title";
-			}
-			
-			if (isset($data['order']) && ($data['order'] == 'DESC')) {
-				$sql .= " DESC";
-			} else {
-				$sql .= " ASC";
-			}
+		//Where
+		$where = "1";
 		
-			if (isset($data['start']) || isset($data['limit'])) {
-				if ($data['start'] < 0) {
-					$data['start'] = 0;
-				}
-
-				if ($data['limit'] < 1) {
-					$data['limit'] = 20;
-				}
+		if (!empty($data['title'])) {
+			$where .= " AND LCASE(title) like '%" . $this->db->escape(strtolower($data['title'])) . "%'";
+		}
+		
+		if (!empty($data['status'])) {
+			$where .= " AND status = '" . (int)$data['status'] . "'";
+		}
+		
+		if (isset($data['status'])) {
+			$where .= " AND status = '" . (int)$data['status'] . "'";
+		}
+		
+		if (!empty($data['layouts'])) {
+			$from .= " LEFT JOIN " . DB_PREFIX . "information_to_layout i2l ON (i.information_id=i2l.information_id)";
 			
-				$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
-			}
-			
-			$query = $this->query($sql);
-			
-			return $query->rows;
+			$where .= " AND i2l.layout_id IN (" . implode(',', $data['layouts']) . ")";
+		}
+		
+		//Order and Limit
+		if (!$total) {
+			$order = $this->extract_order($data);
+			$limit = $this->extract_limit($data);
 		} else {
-			$information_data = $this->cache->get('information.' . (int)$this->config->get('config_language_id'));
-		
-			if (!$information_data) {
-				$query = $this->query("SELECT * FROM " . DB_PREFIX . "information i LEFT JOIN " . DB_PREFIX . "information_description id ON (i.information_id = id.information_id) WHERE id.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY id.title");
-	
-				$information_data = $query->rows;
-			
-				$this->cache->set('information.' . (int)$this->config->get('config_language_id'), $information_data);
-			}
-	
-			return $information_data;
+			$order = '';
+			$limit = '';
 		}
-	}
-	
-	public function getInformationDescriptions($information_id)
-	{
-		$information_description_data = array();
-		
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "information_description WHERE information_id = '" . (int)$information_id . "'");
 
-		foreach ($query->rows as $result) {
-			$information_description_data[$result['language_id']] = array(
-				'title'		=> $result['title'],
-				'description' => $result['description']
-			);
+		//The Query
+		$query = "SELECT $select FROM $from WHERE $where $order $limit";
+		
+		$result = $this->query($query);
+		
+		if ($total) {
+			return $result->row['total'];
 		}
 		
-		return $information_description_data;
+		return $result->rows;
 	}
 	
 	public function getInformationStores($information_id)
 	{
-		$information_store_data = array();
+		$stores = $this->query_rows("SELECT store_id FROM " . DB_PREFIX . "information_to_store WHERE information_id = '" . (int)$information_id . "'");
 		
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "information_to_store WHERE information_id = '" . (int)$information_id . "'");
-
-		foreach ($query->rows as $result) {
-			$information_store_data[] = $result['store_id'];
-		}
-		
-		return $information_store_data;
+		return array_column($stores, 'store_id');
 	}
 
 	public function getInformationLayouts($information_id)
 	{
-		$information_layout_data = array();
+		$layout_list = $this->query_rows("SELECT store_id, layout_id FROM " . DB_PREFIX . "information_to_layout WHERE information_id = '" . (int)$information_id . "'");
 		
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "information_to_layout WHERE information_id = '" . (int)$information_id . "'");
+		$layouts = array();
 		
-		foreach ($query->rows as $result) {
-			$information_layout_data[$result['store_id']] = $result['layout_id'];
+		foreach ($layout_list as $layout) {
+			$layouts[$layout['store_id']] = $layout['layout_id'];
 		}
 		
-		return $information_layout_data;
-	}
-		
-	public function getTotalInformations()
-	{
-			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "information");
-		
-		return $query->row['total'];
+		return $layouts;
 	}
 	
-	public function getTotalInformationsByLayoutId($layout_id)
+	public function getTotalInformations($data = array())
 	{
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "information_to_layout WHERE layout_id = '" . (int)$layout_id . "'");
-
-		return $query->row['total'];
+		return $this->getInformations($data, '', true);
 	}
 }

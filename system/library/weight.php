@@ -1,11 +1,11 @@
 <?php
-class Weight 
+class Weight extends Library
 {
 	private $weights = array();
 	
 	public function __construct($registry)
 	{
-		$this->registry = $registry;
+		parent::__construct($registry);
 		
 		$weight_classes = $this->db->query_rows("SELECT * FROM " . DB_PREFIX . "weight_class wc LEFT JOIN " . DB_PREFIX . "weight_class_description wcd ON (wc.weight_class_id = wcd.weight_class_id) WHERE wcd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
 		
@@ -13,11 +13,6 @@ class Weight
 			$this->weights[$weight_class['weight_class_id']] = $weight_class;
 		}
   	}
-	
-	public function __get($key)
-	{
-		return $this->registry->get($key);
-	}
 	
   	public function convert($value, $from, $to)
   	{

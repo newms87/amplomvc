@@ -9,7 +9,7 @@
 <div class="box">
 	<div class="heading">
 		<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
-		<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a onclick="location = '<?= $cancel; ?>';" class="button"><?= $button_cancel; ?></a></div>
+		<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
 	</div>
 	<div class="content">
 		<a href='<?= $run_cron; ?>' target="_blank" class="button run_cron_button"><?= $button_run_cron; ?></a>

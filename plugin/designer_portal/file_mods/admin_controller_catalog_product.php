@@ -107,7 +107,7 @@ class _AdminControllerCatalogProduct extends Controller
 //>>>>> {php}
 		if ($this->user->isDesigner()) {
 			$this->language->set('entry_model', $this->_("entry_model_designer"));
-			$this->language->set('entry_shipping_ret', $this->language->format('entry_shipping_ret_designer',$this->url->link('catalog/manufacturer')));
+			$this->language->set('entry_shipping_ret', $this->_('entry_shipping_ret_designer',$this->url->link('catalog/manufacturer')));
 		}
 //-----
 //=====
@@ -140,7 +140,7 @@ class _AdminControllerCatalogProduct extends Controller
 //-----
 //>>>>> {php}
 		if (!$this->data['editable']) {
-			$this->language->format('text_not_editable',$this->data['model'],"Active%20Product%20Modification%20Request");
+			$this->_('text_not_editable',$this->data['model'],"Active%20Product%20Modification%20Request");
 		}
 //-----
 //<<<<<

@@ -1,9 +1,6 @@
 <?php
-class Builder extends Controller
+class Builder extends Library
 {
-	
-	protected $registry;
-	
 	private $builder_id;
 	private $builder_name;
 	private $builder_type;
@@ -11,16 +8,6 @@ class Builder extends Controller
 	private $builder_template;
 	
 	private $highest_match = 0;
-	
-	public function __construct(&$registry)
-	{
-		$this->registry = &$registry;
-	}
-	
-	public function __get($key)
-	{
-		return $this->registry->get($key);
-	}
 	
 	public function &find_active_page(&$links, &$active_link = null)
 	{

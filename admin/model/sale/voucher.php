@@ -107,11 +107,11 @@ class Admin_Model_Sale_Voucher extends Model
 				$this->language->load('mail/voucher');
 				
 				$data = array(
-					'title' => $this->language->format('text_subject', $voucher_info['from_name']),
-					'text_greeting' => $this->language->format('text_greeting', $this->currency->format($voucher_info['amount'], $order_info['currency_code'], $order_info['currency_value'])),
-					'text_from' => $this->language->format('text_from', $voucher_info['from_name']),
+					'title' => $this->_('text_subject', $voucher_info['from_name']),
+					'text_greeting' => $this->_('text_greeting', $this->currency->format($voucher_info['amount'], $order_info['currency_code'], $order_info['currency_value'])),
+					'text_from' => $this->_('text_from', $voucher_info['from_name']),
 					'text_message' => $this->language->get('text_message'),
-					'text_redeem' => $this->language->format('text_redeem', $voucher_info['code']),
+					'text_redeem' => $this->_('text_redeem', $voucher_info['code']),
 					'text_footer' => $this->language->get('text_footer'),
 					'message' => nl2br($voucher_info['message']),
 					'store_name' => $order_info['store_name'],

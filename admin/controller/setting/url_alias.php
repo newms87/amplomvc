@@ -17,7 +17,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$store_id = $this->Model_Setting_UrlAlias->addUrlAlias($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -34,7 +34,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Setting_UrlAlias->editUrlAlias($_GET['url_alias_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));

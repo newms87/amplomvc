@@ -1,18 +1,6 @@
 <?php
-class Translation 
-{
-	private $regsitry;
-	
-	function __construct($registry)
-	{
-		$this->registry = $registry;
-	}
-	
-	public function __get($key)
-	{
-		return $this->registry->get($key);
-	}
-	
+class Translation extends Library
+{	
 	public function translate($table, $object_id, &$data)
 	{
 		if($this->language->code() == $this->config->get('config_language')) return;

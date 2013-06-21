@@ -1,8 +1,5 @@
-<? if ($modules || $blocks) { ?>
-<div id="above-content">
-	<? foreach ($modules as $module) { ?>
-	<?= $module; ?>
-	<? } ?>
+<? if (!empty($blocks)) { ?>
+<div id="above_content">
 	<? foreach($blocks as $block){ ?>
 		<?= $block; ?>
 	<? } ?>

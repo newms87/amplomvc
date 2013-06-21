@@ -356,13 +356,7 @@ class Catalog_Model_Catalog_Product extends Model
 	
 	public function getProductLayoutId($product_id)
 	{
-		$result = $this->query("SELECT * FROM " . DB_PREFIX . "product_to_layout WHERE product_id = '" . (int)$product_id . "' AND store_id = '" . (int)$this->config->get('config_store_id') . "'");
-		
-		if ($result->num_rows) {
-			return $result->row['layout_id'];
-		} else {
-			return  $this->config->get('config_layout_product');
-		}
+		return $this->query_var("SELECT layout_id FROM " . DB_PREFIX . "product_to_layout WHERE product_id = '" . (int)$product_id . "' AND store_id = '" . (int)$this->config->get('config_store_id') . "'");
 	}
 	
 	public function getCategories($product_id)

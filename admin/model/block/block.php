@@ -1,6 +1,123 @@
 <?php
 class Admin_Model_Block_Block extends Model 
 {
+	public function addBlock($data)
+	{
+		$data['route'] = strtolower($data['route']);
+		
+		$eol = "\r\n";
+		
+		$language_dir = $this->language->getInfo('directory');
+		
+		$parts = explode('/', $data['route']);
+		$class_name = "Block_" . $this->tool->format_classname($parts[0]) . '_' . $this->tool->format_classname($parts[1]);
+		
+		//Admin Controller File
+		$controller_template = DIR_THEME . 'default/template/block/template/controller_template.php';
+		$controller_file = SITE_DIR . 'admin/controller/block/' . $data['route'] . '.php';
+		
+		$content = file_get_contents($controller_template);
+		
+		$insertables = array(
+			'route' => $data['route'],
+			'class_name' => "Admin_Controller_" . $class_name,
+		);
+		
+		if (empty($data['settings_file'])) {
+			$insertables['settings_start'] = '/*';
+			$insertables['settings_end'] = '*/';
+		} else {
+			$insertables['settings_start'] = '';
+			$insertables['settings_end'] = '';
+		}
+		
+		if (empty($data['profiles_file'])) {
+			$insertables['profile_start'] = '/*';
+			$insertables['profile_end'] = '*/';
+		} else {
+			$insertables['profile_start'] = '';
+			$insertables['profile_end'] = '';
+		}
+		
+		$content = $this->tool->insertables($insertables, $content);
+		
+		_is_writable(dirname($controller_file));
+		
+		file_put_contents($controller_file, $content);
+		
+		//Language file
+		$language_file = SITE_DIR . 'admin/language/' . $language_dir . '/block/' . $data['route'] . '.php';
+		
+		$content =
+			"<?php" . $eol .
+			"//Heading" . $eol .
+			"\$_['heading_title'] = \"$data[name]\";" . $eol;
+		
+		_is_writable(dirname($language_file));
+		
+		file_put_contents($language_file, $content);
+		
+		//Settings & Profiles template files
+		$profiles_file = DIR_THEME . 'default/template/block/' . $data['route'] . '_profiles.tpl';
+		$settings_file = DIR_THEME . 'default/template/block/' . $data['route'] . '_settings.tpl';
+		
+		_is_writable(dirname($profiles_file));
+		
+		if (!empty($data['profiles_file'])) {
+			touch($profiles_file);
+		}
+		
+		if (!empty($data['settings_file'])) {
+			touch($settings_file);
+		}
+		
+		
+		//Front Controller File
+		$controller_template = DIR_THEME . 'default/template/block/template/front_controller_template.php';
+		$controller_file = SITE_DIR . 'catalog/controller/block/' . $data['route'] . '.php';
+		
+		$content = file_get_contents($controller_template);
+		
+		$insertables = array(
+			'route' => $data['route'],
+			'class_name' => "Catalog_Controller_" . $class_name,
+		);
+		
+		$content = $this->tool->insertables($insertables, $content);
+		
+		_is_writable(dirname($controller_file));
+		
+		file_put_contents($controller_file, $content);
+		
+		//Front Language file
+		$language_file = SITE_DIR . 'catalog/language/' . $language_dir . '/block/' . $data['route'] . '.php';
+		
+		$content =
+			"<?php" . $eol .
+			"//Heading" . $eol .
+			"\$_['heading_title'] = \"$data[name]\";" . $eol;
+		
+		_is_writable(dirname($language_file));
+		
+		file_put_contents($language_file, $content);
+		
+		//Front Template
+		$template_template = DIR_THEME . 'default/template/block/template/template_template.tpl';
+		$template_file = SITE_DIR . 'catalog/view/theme/default/template/block/' . $data['route'] . '.tpl';
+		
+		_is_writable(dirname($template_file));
+		
+		$content = file_get_contents($template_template);
+		
+		$insertables = array(
+			'slug' => $this->tool->get_slug($data['route']),
+		);
+		
+		$content = $this->tool->insertables($insertables, $content);
+		
+		file_put_contents($template_file, $content);
+	}
+	
 	public function updateBlock($name, $data)
 	{
 		$this->delete('block', array('name' => $name));

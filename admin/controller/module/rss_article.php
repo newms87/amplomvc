@@ -11,7 +11,7 @@ class Admin_Controller_Module_RssArticle extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validate()) {
+		if ($this->request->isPost() && $this->validate()) {
 
 			$this->Model_Setting_Setting->editSetting('rss_article', $_POST);
 			

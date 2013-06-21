@@ -1,8 +1,6 @@
 <?php
-class Form 
+class Form extends Library
 {
-	private $registry;
-	
 	private $name;
 	private $show_tag;
 	private $action;
@@ -17,16 +15,6 @@ class Form
 	private $data = array();
 	
 	private $error;
-	
-	function __construct($registry)
-	{
-		$this->registry = $registry;
-	}
-	
-	public function __get($key)
-	{
-		return $this->registry->get($key);
-	}
 	
 	public function init($form)
 	{
@@ -365,7 +353,7 @@ class Form
 			
 			//Check if this field is set and if it is required
 			if (!empty($field['required']) && (!isset($data[$field_name]) || is_null($data[$field_name]) || $data[$field_name] === '')) {
-				$this->error[$field_name] = $this->language->get('error_required_' . $field_name, $this->language->format('error_required', $field_display_name));
+				$this->error[$field_name] = $this->language->get('error_required_' . $field_name, $this->_('error_required', $field_display_name));
 				continue;
 			}
 			
@@ -398,7 +386,7 @@ class Form
 			}
 			
 			if (!call_user_func_array(array($this->validation, $method), $args)) {
-				$this->error[$field_name] = $this->language->get('error_' . $field_name, $this->language->format('error_invalid_field', $field_display_name));
+				$this->error[$field_name] = $this->language->get('error_' . $field_name, $this->_('error_invalid_field', $field_display_name));
 			}
 		}
 		

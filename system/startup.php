@@ -1,4 +1,7 @@
 <?php
+// Version
+define('VERSION', '0.0.1');
+
 // Error Reporting
 error_reporting(E_ALL);
 
@@ -108,6 +111,7 @@ _require(DIR_SYSTEM . 'helper/json.php');
 _require(DIR_SYSTEM . 'engine/action.php');
 _require(DIR_SYSTEM . 'engine/controller.php');
 _require(DIR_SYSTEM . 'engine/front.php');
+_require(DIR_SYSTEM . 'engine/library.php');
 _require(DIR_SYSTEM . 'engine/loader.php');
 _require(DIR_SYSTEM . 'engine/model.php');
 _require(DIR_SYSTEM . 'engine/registry.php');

@@ -1,17 +1,15 @@
 <?php
-class Cart 
+class Cart extends Library
 {
-	protected $registry;
-	
 	private $data = array();
 	private $error = array();
 	private $error_code = null;
 	
 	private $no_json = false;
 	
-  	public function __construct(&$registry)
+  	public function __construct($registry)
   	{
-  		$this->registry = &$registry;
+  		parent::__construct($registry);
 
 		$this->language->system('cart');
 		
@@ -22,11 +20,6 @@ class Cart
 		if (!isset($this->session->data['wishlist']) || !is_array($this->session->data['wishlist'])) {
 			$this->session->data['wishlist'] = array();
 		}
-	}
-	
-	public function __get($key)
-	{
-		return $this->registry->get($key);
 	}
 	
 	public function _e($code, $type, $key)
@@ -508,11 +501,11 @@ class Cart
 			foreach ($product_options as $product_option) {
 				if (!empty($product_option['product_option_value']) && $product_option['required']) {
 					if (empty($options[$product_option['product_option_id']])) {
-						$this->error['add']['option'][$product_option['product_option_id']] = $this->language->format('error_required', $product_option['display_name']);
+						$this->error['add']['option'][$product_option['product_option_id']] = $this->_('error_required', $product_option['display_name']);
 						return false;
 					}
 					elseif ($product_option['group_type'] == 'single' && count($options[$product_option['product_option_id']]) > 1) {
-						$this->error['add']['option'][$product_option['product_option_id']] = $this->language->format('error_selected_multi', $product_option['display_name']);
+						$this->error['add']['option'][$product_option['product_option_id']] = $this->_('error_selected_multi', $product_option['display_name']);
 						return false;
 					}
 				}
@@ -554,7 +547,7 @@ class Cart
   	{
   		foreach ($this->getProducts() as $product) {
 			if (!$product['stock']) {
-				$this->_e('C-2', 'cart', $this->language->format('error_cart_stock', $this->url->link('product/product','product_id=' . $product['product_id']), $product['name']));
+				$this->_e('C-2', 'cart', $this->_('error_cart_stock', $this->url->link('product/product','product_id=' . $product['product_id']), $product['name']));
 				return false;
 			}
 		}
@@ -576,7 +569,7 @@ class Cart
 			}
 			
 			if ($product_total < $product['minimum']) {
-				$this->_e('C-3', 'cart', $this->language->format('error_product_minimum', $product['name'], $product['minimum']));
+				$this->_e('C-3', 'cart', $this->_('error_product_minimum', $product['name'], $product['minimum']));
 				return false;
 			}
 		}
@@ -929,7 +922,7 @@ class Cart
 		}
 		
 		if (!$method_data) {
-			$this->error['checkout']['payment_method'] = $this->language->format('error_payment_methods', $this->config->get('config_email'));
+			$this->error['checkout']['payment_method'] = $this->_('error_payment_methods', $this->config->get('config_email'));
 			return false;
 		}
 		
@@ -988,7 +981,7 @@ class Cart
 		
 		
 		//No Shipping Options Available!
-		$msg = $this->language->format('error_shipping_methods', $this->url->link('information/contact'));
+		$msg = $this->_('error_shipping_methods', $this->url->link('information/contact'));
 		$this->_e('SM-4', 'shipping_method', $msg);
 		
 		if ($this->hasShippingAddress()) {

@@ -18,7 +18,7 @@ class Admin_Controller_Catalog_Review extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Review->addReview($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -49,7 +49,7 @@ class Admin_Controller_Catalog_Review extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Review->editReview($_GET['review_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));

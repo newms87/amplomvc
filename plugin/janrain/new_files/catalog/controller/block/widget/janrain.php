@@ -100,7 +100,7 @@ class Catalog_Controller_Block_Widget_Janrain extends Controller
 			}
 			else {
 				$this->error_log->write("Janrain Error ({$auth_info['err']['code']}): {$auth_info['err']['msg']}");
-				$this->message->add("warning",$this->language->format('error_janrain_auth',$this->config->get('config_email'),$this->config->get('config_email')));
+				$this->message->add("warning",$this->_('error_janrain_auth',$this->config->get('config_email'),$this->config->get('config_email')));
 				$this->url->redirect($this->url->link('account/login'));
 			}
 		}

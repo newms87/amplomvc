@@ -246,6 +246,7 @@ ul > li > ul > li:hover > ul.link_list, ul > li > ul > li.active > ul.link_list{
 .menu_icons .menu_item{
 	float:left;
 	display:block;
+	margin-right: 20px;
 }
 .menu_icons .title{
 	text-align:center;
@@ -1152,6 +1153,14 @@ ul.phone_list + a{
 }
 .batch_actions .action_value.active{
 	display:inline-block;
+}
+
+.action-copy{
+	color: #9BA20B;
+}
+
+.action-copy{
+	color: #9BA20B;
 }
 
 .action-delete{

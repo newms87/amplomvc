@@ -1,19 +1,12 @@
 <?php
-class Tool 
+class Tool extends Library
 {
-	private $registry;
-	
-	public function __construct(&$registry)
+	public function __construct($registry)
 	{
-		$this->registry = &$registry;
+		parent::__construct($registry);
 		
 		define("FILELIST_STRING", 1);
 		define("FILELIST_SPLFILEINFO",2);
-	}
-	
-	public function __get($key)
-	{
-		return $this->registry->get($key);
 	}
 	
 	public function error_set()
@@ -170,7 +163,8 @@ class Tool
 	*
 	* @return array - Each value in the array will be determined by the $return_type param.
 	*/
-	function get_files_r($dir, $exts = array('php','tpl','css','js','to'), $return_type = FILELIST_SPLFILEINFO){
+	function get_files_r($dir, $exts = array('php','tpl','css','js','to'), $return_type = FILELIST_SPLFILEINFO)
+	{
 		if(!is_dir($dir)) return array();
 		
 		$dir_iterator = new RecursiveDirectoryIterator($dir);

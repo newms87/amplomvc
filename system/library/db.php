@@ -252,6 +252,11 @@ class DB
 		
 		return true;
 	}
+
+	public function has_table($table)
+	{
+		return $this->query_var("SHOW TABLES LIKE '" . DB_PREFIX . $this->escape($table) . "'") ? true : false;
+	}
 	
 	public function get_tables()
 	{

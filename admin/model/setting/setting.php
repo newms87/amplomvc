@@ -46,6 +46,9 @@ class Admin_Model_Setting_Setting extends Model
 			
 			$this->insert('setting', $values);
 		}
+		
+		$this->cache->delete('setting');
+		$this->cache->delete('store');
 	}
 	
 	public function editSettingKey($group, $key = null, $value = array(), $store_id = 0, $auto_load = true){

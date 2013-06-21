@@ -1,6 +1,6 @@
 <div class="box">
-	<div class="box-heading"><?= $heading_title; ?></div>
-	<div class="box-content">
+	<div class="box_heading"><?= $heading_title; ?></div>
+	<div class="box_content">
 		<ul>
 			<? foreach ($informations as $information) { ?>
 			<li><a href="<?= $information['href']; ?>"><?= $information['title']; ?></a></li>

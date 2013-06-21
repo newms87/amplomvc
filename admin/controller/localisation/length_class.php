@@ -18,7 +18,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Lengthclass->addLengthClass($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -49,7 +49,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Lengthclass->editLengthClass($_GET['length_class_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));

@@ -119,7 +119,7 @@ class Admin_Controller_Block_Block extends Controller
 		$this->data['list_view'] = $this->table->render();
 		
 		//Action Buttons
-		$this->data['insert'] = $this->url->link('block/block', 'name=new');
+		$this->data['insert'] = $this->url->link('block/add');
 		
 		//Pagination
 		$this->pagination->init();

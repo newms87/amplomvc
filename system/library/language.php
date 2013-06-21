@@ -1,8 +1,6 @@
 <?php
-class Language 
+class Language extends Library
 {
-	private $registry;
-	
 	private $language_id;
 	private $code;
 	private $default = 'english';
@@ -12,11 +10,13 @@ class Language
 	private $latest_modified_file = 0;
 	private $last_loaded = '';
 	
+	private $loaded_languages = array();
+	
 	public  $data = array();
  
 	public function __construct($registry, $language = null)
 	{
-		$this->registry = $registry;
+		parent::__construct($registry);
 		
 		if (empty($language)) {
 			$language = $this->resolve();
@@ -34,11 +34,6 @@ class Language
 		$this->config->set('config_language_id', $this->language_id);
 		
 		$this->load($language['filename']);
-	}
-	
-	public function __get($key)
-	{
-		return $this->registry->get($key);
 	}
 	
 	public function id()
@@ -69,12 +64,23 @@ class Language
 		}
 	}
 	
-	public function getInfo($key = null)
+	public function getInfo($key = null, $language_id = null)
 	{
-		if ($key === null) {
-			return $this->info;
+		if (!empty($language_id)) {
+			if (!isset($loaded_languages[$language_id])) {
+				$loaded_languages[$language_id] = $this->db->query_row("SELECT * FROM " . DB_PREFIX . "language WHERE language_id = '" . (int)$language_id . "'");
+			}
+			
+			if (is_null($key)) {
+				return $loaded_languages[$language_id];
+			} else {
+				return isset($loaded_languages[$language_id][$key]) ? $loaded_languages[$language_id][$key] : null;
+			}
 		}
-		else {
+		
+		if (is_null($key)) {
+			return $this->info;
+		} else {
 			return isset($this->info[$key]) ? $this->info[$key] : null;
 		}
 	}

@@ -15,7 +15,7 @@ class Catalog_Controller_Affiliate_Register extends Controller
 		
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validate()) {
+		if ($this->request->isPost() && $this->validate()) {
 			$this->Model_Affiliate_Affiliate->addAffiliate($_POST);
 
 			$this->affiliate->login($_POST['email'], $_POST['password']);
@@ -27,7 +27,7 @@ class Catalog_Controller_Affiliate_Register extends Controller
 			$this->breadcrumb->add($this->_('text_account'), $this->url->link('affiliate/account'));
 			$this->breadcrumb->add($this->_('text_register'), $this->url->link('affiliate/register'));
 
-		$this->language->format('text_account_already', $this->url->link('affiliate/login'));
+		$this->_('text_account_already', $this->url->link('affiliate/login'));
 		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
 		} else {
@@ -252,7 +252,7 @@ class Catalog_Controller_Affiliate_Register extends Controller
 			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_affiliate_id'));
 			
 			if ($information_info) {
-				$this->language->format('text_agree', $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_affiliate_id')), $information_info['title'], $information_info['title']);
+				$this->_('text_agree', $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_affiliate_id')), $information_info['title'], $information_info['title']);
 			} else {
 				$this->data['text_agree'] = '';
 			}

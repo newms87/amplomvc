@@ -320,7 +320,7 @@ input.button {
 .box {
 	margin-bottom: 20px;
 }
-.box .box-heading {
+.box .box_heading {
 	padding: 0 10px 7px 10px;
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 14px;
@@ -328,7 +328,7 @@ input.button {
 	line-height: 14px;
 	color: #636363;
 }
-.box .box-content {
+.box .box_content {
 	padding: 10px 0 10px 3px;
 }
 

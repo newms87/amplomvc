@@ -1,6 +1,6 @@
 <div class="box">
-	<div class="box-heading"><?= $heading_title; ?></div>
-	<div class="box-content">
+	<div class="box_heading"><?= $heading_title; ?></div>
+	<div class="box_content">
 		<ul>
 			<? if (!$logged) { ?>
 			<li><a href="<?= $login; ?>"><?= $text_login; ?></a> / <a href="<?= $register; ?>"><?= $text_register; ?></a></li>

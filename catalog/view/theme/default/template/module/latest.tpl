@@ -1,6 +1,6 @@
 <div class="box">
-	<div class="box-heading"><?= $heading_title; ?></div>
-	<div class="box-content">
+	<div class="box_heading"><?= $heading_title; ?></div>
+	<div class="box_content">
 		<div class="box-product">
 			<? foreach ($products as $product) { ?>
 			<div>

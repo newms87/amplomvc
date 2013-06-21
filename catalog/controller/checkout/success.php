@@ -19,9 +19,9 @@ class Catalog_Controller_Checkout_Success extends Controller
 			$this->breadcrumb->add($this->_('text_success'), $this->url->link('checkout/success'));
 
 		if ($this->customer->isLogged()) {
-			$this->data['text_message'] = $this->language->format('text_customer', $this->url->link('account/account'), $this->url->link('account/order'), $this->url->link('information/contact'), $this->config->get('config_name'));
+			$this->data['text_message'] = $this->_('text_customer', $this->url->link('account/account'), $this->url->link('account/order'), $this->url->link('information/contact'), $this->config->get('config_name'));
 		} else {
-			$this->data['text_message'] = $this->language->format('text_guest', $this->url->link('information/contact'), $this->config->get('config_name'));
+			$this->data['text_message'] = $this->_('text_guest', $this->url->link('information/contact'), $this->config->get('config_name'));
 		}
 		
 		$this->data['continue'] = $this->url->link('common/home');

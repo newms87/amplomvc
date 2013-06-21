@@ -1,13 +1,12 @@
 <?php
-final class Tax 
+final class Tax extends Library
 {
-	private $registry;
 	private $store_address;
 	private $show_price_with_tax;
 	
 	public function __construct($registry)
 	{
-		$this->registry = $registry;
+		parent::__construct($registry);
 		
 		$this->store_address = array(
 			'country_id' => $this->config->get('config_country_id'),
@@ -17,11 +16,6 @@ final class Tax
 		
 		$this->show_price_with_tax = $this->config->get('config_show_price_with_tax');
   	}
-	
-	public function __get($key)
-	{
-		return $this->registry->get($key);
-	}
 	
 	public function apply(&$taxes, $value, $tax_class_id)
 	{

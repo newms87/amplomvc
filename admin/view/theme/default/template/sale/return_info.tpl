@@ -4,7 +4,7 @@
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'customer.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
-			<div class="buttons"><a onclick="location = '<?= $cancel; ?>';" class="button"><?= $button_cancel; ?></a></div>
+			<div class="buttons"><a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
 		</div>
 		<div class="content">
 			<div class="vtabs"><a href="#tab-return"><?= $tab_return; ?></a><a href="#tab-product"><?= $tab_product; ?></a><a href="#tab-history"><?= $tab_return_history; ?></a></div>

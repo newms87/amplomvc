@@ -10,7 +10,7 @@ class Admin_Controller_Mail_SendEmail extends Controller
 		
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost())) {
+		if ($this->request->isPost()) {
 			if (!$this->send()) {
 				$this->message->add('warning', $this->_('error_send_email'));
 			}

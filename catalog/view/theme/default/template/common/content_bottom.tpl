@@ -1,8 +1,7 @@
-<div id='content_bottom'>
-<? foreach ($modules as $module) { ?>
-<?= $module; ?>
-<? } ?>
-<? foreach($blocks as $block){ ?>
-<?= $block; ?>
-<? } ?>
+<? if (!empty($blocks)) { ?>
+<div id="content_bottom">
+	<? foreach($blocks as $block){ ?>
+		<?= $block; ?>
+	<? } ?>
 </div>
+<? } ?>

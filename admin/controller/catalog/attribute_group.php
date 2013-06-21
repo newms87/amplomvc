@@ -12,7 +12,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 	{
 		$this->load->language('catalog/attribute_group');
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_AttributeGroup->addAttributeGroup($_POST);
 			
 			if (!$this->message->error_set()) {
@@ -29,7 +29,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 	{
 		$this->load->language('catalog/attribute_group');
 
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_AttributeGroup->editAttributeGroup($_GET['attribute_group_id'], $_POST);
 			
 			if (!$this->message->error_set()) {
@@ -236,7 +236,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 				$count = $this->Model_Catalog_AttributeGroup->getAttributeProductCount($attribute['attribute_id']);
 				
 				if ($count) {
-					$attribute['product_count'] = $this->language->format('text_product_count', $count);
+					$attribute['product_count'] = $this->_('text_product_count', $count);
 				}
 			}
 			
@@ -316,7 +316,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 			if ($attribute_total = $this->Model_Catalog_AttributeGroup->hasProductAssociation($attribute_group_id)) {
 				$attribute_group = $this->Model_Catalog_AttributeGroup->getAttributeGroup($attribute_group_id);
 				
-				$this->error['warning_' . $attribute_group_id] = $this->language->format('error_attribute', $attribute_group['name'], $attribute_total);
+				$this->error['warning_' . $attribute_group_id] = $this->_('error_attribute', $attribute_group['name'], $attribute_total);
 			}
 		}
 		

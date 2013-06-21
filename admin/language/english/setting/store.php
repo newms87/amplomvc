@@ -21,6 +21,7 @@ $_['text_settings_menu']		= 'Settings Menu';
 
 //Button
 $_['button_admin_settings'] = "General Settings";
+$_['button_system_update'] = "System Update";
 
 // Column
 $_['column_name']				= 'Store Name';

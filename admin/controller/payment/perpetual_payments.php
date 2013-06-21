@@ -11,7 +11,7 @@ class Admin_Controller_Payment_PerpetualPayments extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validate()) {
+		if ($this->request->isPost() && $this->validate()) {
 			$this->Model_Setting_Setting->editSetting('perpetual_payments', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));

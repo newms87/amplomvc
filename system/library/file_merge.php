@@ -1,7 +1,6 @@
 <?php
-class FileMerge 
+class FileMerge extends Library
 {
-	private $registry;
 	private $merge_registry;
 	private $error_msg = '';
 	//This tracks plugins that have issues and have been uninstalled while applying registry changes
@@ -9,19 +8,14 @@ class FileMerge
 	
 	function __construct($registry)
 	{
+		parent::__construct($registry);
+		
 		global $merge_registry;
 		$this->merge_registry = $merge_registry;
-		
-		$this->registry = $registry;
 		
 		$this->loadMergeRegistry();
 		
 		$this->validateMergeRegistry();
-	}
-	
-	public function __get($key)
-	{
-		return $this->registry->get($key);
 	}
 	
 	public function getError()

@@ -1,16 +1,13 @@
 <?php
-class Encryption 
+class Encryption extends Library
 {
 	private $key;
 	
 	function __construct($registry)
 	{
-		if (is_string($registry) || is_int($registry)) {
-		$this->key = $registry;
-		}
-		else {
-			$this->key = $registry->get('config')->get('config_encryption');
-		}
+		parent::__construct($registry);
+		
+		$this->key = $this->config->get('config_encryption');
 	}
 	
 	function encrypt($value)

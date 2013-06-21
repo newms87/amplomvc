@@ -5,7 +5,7 @@
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt="" /> <?= $name; ?></h1>
-			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a onclick="location = '<?= $cancel; ?>';" class="button"><?= $button_cancel; ?></a></div>
+			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
 		</div>
 		<div class="content">
 			<div id="tabs" class="htabs"><a href="#tab-general"><?= $tab_general; ?></a><a href="#tab-store"><?= $tab_store; ?></a><a href="#tab-local"><?= $tab_local; ?></a><a href="#tab-option"><?= $tab_option; ?></a><a href="#tab-image"><?= $tab_image; ?></a><a href="#tab-server"><?= $tab_server; ?></a></div>

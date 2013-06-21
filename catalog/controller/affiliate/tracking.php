@@ -19,7 +19,7 @@ class Catalog_Controller_Affiliate_Tracking extends Controller
 			$this->breadcrumb->add($this->_('text_account'), $this->url->link('affiliate/account'));
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('affiliate/tracking'));
 
-		$this->language->format('text_description', $this->config->get('config_name'));
+		$this->_('text_description', $this->config->get('config_name'));
 		$this->data['code'] = $this->affiliate->getCode();
 		
 		$this->data['continue'] = $this->url->link('affiliate/account');

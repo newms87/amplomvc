@@ -1,7 +1,4 @@
 <?php
-// Version
-define('VERSION', '1.5.2.222');
-
 // Configuration
 if (is_file('oc_config.php')) {
 	require_once('oc_config.php');
@@ -170,7 +167,7 @@ $layout_query = $db->query("SELECT layout_id FROM " . DB_PREFIX . "layout_route 
 if ($layout_query->num_rows) {
 	$config->set('config_layout_id', $layout_query->row['layout_id']);
 } else {
-	$config->set('config_layout_id', 0);
+	$config->set('config_layout_id', $config->get('config_default_layout_id'));
 }
 
 // Front Controller

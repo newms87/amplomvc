@@ -18,7 +18,7 @@ class Admin_Controller_Design_Banner extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Design_Banner->addBanner($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -37,7 +37,7 @@ class Admin_Controller_Design_Banner extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Design_Banner->editBanner($_GET['banner_id'], $_POST);
 
 			$this->message->add('success', $this->_('text_success'));

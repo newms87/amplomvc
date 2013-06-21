@@ -26,6 +26,7 @@ $_['text_pagination']			= 'Showing {start} to {end} of {total} ({pages} Pages)';
 $_['text_no_results']			= 'No results!';
 $_['text_separator']			= ' &gt; ';
 $_['text_edit']					= 'Edit';
+$_['text_copy']					= 'Copy';
 $_['text_delete']			= 'Delete';
 $_['text_view']					= 'View';
 $_['text_home']					= 'Home';

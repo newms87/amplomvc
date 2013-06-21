@@ -1,6 +1,6 @@
 <div class="box">
-	<div class="box-heading"><?= $heading_title; ?></div>
-	<div class="box-content" style="text-align: center;">
+	<div class="box_heading"><?= $heading_title; ?></div>
+	<div class="box_content" style="text-align: center;">
 		<p><?= $text_store; ?></p>
 		<select name="store" onchange="location = this.value">
 			<? foreach ($stores as $store) { ?>

@@ -6,7 +6,7 @@ class Catalog_Controller_Block_Checkout_Register extends Controller
   		$this->language->load('checkout/checkout');
   		$this->template->load('block/checkout/register');
 		
-		$this->language->format('entry_newsletter', $this->config->get('config_name'));
+		$this->_('entry_newsletter', $this->config->get('config_name'));
 		
 		$this->data['action_register'] = $this->url->link('block/checkout/register/validate');
 		
@@ -37,7 +37,7 @@ class Catalog_Controller_Block_Checkout_Register extends Controller
 			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_account_id'));
 			
 			if ($information_info) {
-				$this->language->format('text_agree', $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_account_id')), $information_info['title'], $information_info['title']);
+				$this->_('text_agree', $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_account_id')), $information_info['title'], $information_info['title']);
 				
 				$this->data['agree_to_terms'] = true;
 			}

@@ -19,7 +19,7 @@ class Admin_Controller_Common_Login extends Controller
 		}
 		
 		//if user is not logged in and has provided valid login credentals
-		if (($this->request->isPost()) && $this->validate()) {
+		if ($this->request->isPost() && $this->validate()) {
 			if (!empty($_GET['redirect'])) {
 				$this->url->redirect(urldecode($_GET['redirect']));
 			} else {
@@ -27,8 +27,8 @@ class Admin_Controller_Common_Login extends Controller
 			}
 		}
 		
-		$this->language->format('text_lost', $this->url->store($this->config->get('config_default_store'), 'common/home'));
-		$this->language->format('text_are_you_a_designer', $this->url->store($this->config->get('config_default_store'), 'information/are_you_a_designer'));
+		$this->_('text_lost', $this->url->store($this->config->get('config_default_store'), 'common/home'));
+		$this->_('text_are_you_a_designer', $this->url->store($this->config->get('config_default_store'), 'information/are_you_a_designer'));
 		
 		if (isset($this->session->data['token']) && !isset($_COOKIE['token'])) {
 			$this->error['warning'] = $this->_('error_token');

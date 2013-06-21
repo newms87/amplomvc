@@ -1,7 +1,6 @@
 <?php
-class Customer 
+class Customer extends Library 
 {
-	private $registry;
 	private $customer_id;
 	private $information;
 	private $payment_info;
@@ -9,7 +8,7 @@ class Customer
 	
   	public function __construct($registry)
   	{
-		$this->registry = $registry;
+		parent::__construct($registry);
 		
 		if (isset($this->session->data['customer_id'])) {
 			$customer = $this->db->query_row("SELECT * FROM " . DB_PREFIX . "customer WHERE customer_id = '" . (int)$this->session->data['customer_id'] . "' AND status = '1'");
@@ -20,11 +19,6 @@ class Customer
 				$this->logout();
 			}
   		}
-	}
-	
-	public function __get($key)
-	{
-		return $this->registry->get($key);
 	}
 	
 	public function isLogged()

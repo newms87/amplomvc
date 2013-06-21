@@ -138,13 +138,7 @@ class Catalog_Model_Catalog_Category extends Model
 	
 	public function getCategoryLayoutId($category_id)
 	{
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "category_to_layout WHERE category_id = '" . (int)$category_id . "' AND store_id = '" . (int)$this->config->get('config_store_id') . "'");
-		
-		if ($query->num_rows) {
-			return $query->row['layout_id'];
-		} else {
-			return $this->config->get('config_layout_category');
-		}
+		return $this->query_var("SELECT layout_id FROM " . DB_PREFIX . "category_to_layout WHERE category_id = '" . (int)$category_id . "' AND store_id = '" . (int)$this->config->get('config_store_id') . "'");
 	}
 					
 	public function getTotalCategoriesByCategoryId($parent_id = 0)

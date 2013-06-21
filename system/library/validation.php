@@ -1,20 +1,15 @@
 <?php
-class Validation 
+class Validation extends Library
 {
 	private $error = array();
 	
-	private $registry;
 	private $encoding;
 	
-	function __construct(&$registry)
+	function __construct($registry)
 	{
+		parent::__construct($registry);
+		
 		$this->encoding = 'UTF-8';
-		$this->registry = &$registry;
-	}
-	
-	public function __get($key)
-	{
-		return $this->registry->get($key);
 	}
 	
 	public function set_encoding($encoding)

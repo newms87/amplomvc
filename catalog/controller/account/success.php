@@ -14,9 +14,9 @@ class Catalog_Controller_Account_Success extends Controller
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/success'));
 		
 		if (!$this->config->get('config_customer_approval')) {
-			$this->language->format('text_message', $this->url->link('information/contact'));
+			$this->_('text_message', $this->url->link('information/contact'));
 		} else {
-			$this->data['text_message'] = $this->language->format('text_approval', $this->config->get('config_name'), $this->url->link('information/contact'));
+			$this->data['text_message'] = $this->_('text_approval', $this->config->get('config_name'), $this->url->link('information/contact'));
 		}
 		
 		if ($this->cart->hasProducts()) {

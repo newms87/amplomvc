@@ -15,7 +15,7 @@ class Catalog_Controller_Account_Voucher extends Controller
 			$this->session->data['vouchers'] = array();
 		}
 	
-		if (($this->request->isPost()) && $this->validate()) {
+		if ($this->request->isPost() && $this->validate()) {
 			$this->session->data['vouchers'][rand()] = array(
 				'description'		=> sprintf($this->_('text_for'), $this->currency->format($this->currency->convert($_POST['amount'], $this->currency->getCode(), $this->config->get('config_currency'))), $_POST['to_name']),
 				'to_name'			=> $_POST['to_name'],
@@ -34,7 +34,7 @@ class Catalog_Controller_Account_Voucher extends Controller
 			$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
 			$this->breadcrumb->add($this->_('text_voucher'), $this->url->link('account/voucher'));
 
-		$this->language->format('entry_amount', $this->currency->format(1, false, 1), $this->currency->format(1000, false, 1));
+		$this->_('entry_amount', $this->currency->format(1, false, 1), $this->currency->format(1000, false, 1));
 		
 		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];

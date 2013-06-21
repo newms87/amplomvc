@@ -18,7 +18,7 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Weightclass->addWeightClass($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -49,7 +49,7 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Weightclass->editWeightClass($_GET['weight_class_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));

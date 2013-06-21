@@ -18,7 +18,7 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_GeoZone->addGeoZone($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -35,7 +35,7 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_GeoZone->editGeoZone($_GET['geo_zone_id'], $_POST);
 
 			$this->message->add('success', $this->_('text_success'));

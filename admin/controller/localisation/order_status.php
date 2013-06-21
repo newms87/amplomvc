@@ -18,7 +18,7 @@ class Admin_Controller_Localisation_OrderStatus extends Controller
 	
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 				$this->Model_Localisation_OrderStatus->addOrderStatus($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -49,7 +49,7 @@ class Admin_Controller_Localisation_OrderStatus extends Controller
 	
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_OrderStatus->editOrderStatus($_GET['order_status_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));

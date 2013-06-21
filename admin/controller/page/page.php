@@ -17,7 +17,7 @@ class Admin_Controller_Page_Page extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Page_Page->addPage($_POST);
 			
 			if (!$this->message->error_set()) {
@@ -37,7 +37,7 @@ class Admin_Controller_Page_Page extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Page_Page->editPage($_GET['page_id'], $_POST);
 			
 			if (!$this->message->error_set()) {

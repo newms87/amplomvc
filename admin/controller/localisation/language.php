@@ -18,7 +18,7 @@ class Admin_Controller_Localisation_Language extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Language->addLanguage($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -36,7 +36,7 @@ class Admin_Controller_Localisation_Language extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Language->editLanguage($_GET['language_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));

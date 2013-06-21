@@ -6,61 +6,55 @@ class Admin_Controller_Design_Navigation extends Controller
 	{
 		$this->load->language('design/navigation');
 
-		$this->document->setTitle($this->_('heading_title'));
-		
 		$this->getList();
 	}
 
 	public function insert()
 	{
 		$this->load->language('design/navigation');
-
-		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Design_Navigation->addNavigationGroup($_POST);
 			
-			$this->message->add('success', $this->_('text_success'));
-			
-			$this->url->redirect($this->url->link('design/navigation'));
+			if (!$this->message->error_set()) {
+				$this->message->add('success', $this->_('text_success'));
+				
+				$this->url->redirect($this->url->link('design/navigation'));
+			}
 		}
-		else {
-			$this->getForm();
-		}
+		
+		$this->getForm();
 	}
 
 	public function update()
 	{
 		$this->load->language('design/navigation');
-
-		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Design_Navigation->editNavigationGroup($_GET['navigation_group_id'], $_POST);
 
-			$this->message->add('success', $this->_('text_success'));
-			
-			$this->url->redirect($this->url->link('design/navigation'));
+			if (!$this->message->error_set()) {
+				$this->message->add('success', $this->_('text_success'));
+				
+				$this->url->redirect($this->url->link('design/navigation'));
+			}
 		}
-		else {
-			$this->getForm();
-		}
+		
+		$this->getForm();
 	}
  
 	public function delete()
 	{
 		$this->load->language('design/navigation');
- 
-		$this->document->setTitle($this->_('heading_title'));
-		
-		if (isset($_POST['selected']) && $this->validateDelete()) {
-			foreach ($_POST['selected'] as $navigation_group_id) {
-				$this->Model_Design_Navigation->deleteNavigationGroup($navigation_group_id);
+ 		
+		if (!empty($_GET['navigation_id']) && $this->validateDelete()) {
+			$this->Model_Design_Navigation->deleteNavigationGroup($_GET['navigation_id']);
+			
+			if (!$this->message->error_set()) {
+				$this->message->add('success', $this->_('text_success'));
+				
+				$this->url->redirect($this->url->link('design/navigation'));
 			}
-			
-			$this->message->add('success', $this->_('text_success'));
-			
-			$this->url->redirect($this->url->link('design/navigation'));
 		}
 
 		$this->getList();
@@ -82,20 +76,22 @@ class Admin_Controller_Design_Navigation extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (isset($_POST['selected']) && isset($_GET['action'])) {
-			foreach ($_POST['selected'] as $navigation_group_id) {
-				switch($_GET['action']){
-					case 'enable':
-						$this->Model_Design_Navigation->editNavigationGroup($navigation_group_id, array('status' => 1));
-						break;
-					case 'disable':
-						$this->Model_Design_Navigation->editNavigationGroup($navigation_group_id, array('status' => 0));
-						break;
-					case 'delete':
-						$this->Model_Design_Navigation->deleteNavigationGroup($navigation_group_id);
+			if ($_GET['action'] !== 'delete' || $this->validateDelete()) {
+				foreach ($_POST['selected'] as $navigation_group_id) {
+					switch($_GET['action']){
+						case 'enable':
+							$this->Model_Design_Navigation->editNavigationGroup($navigation_group_id, array('status' => 1));
+							break;
+						case 'disable':
+							$this->Model_Design_Navigation->editNavigationGroup($navigation_group_id, array('status' => 0));
+							break;
+						case 'delete':
+							$this->Model_Design_Navigation->deleteNavigationGroup($navigation_group_id);
+							break;
+					}
+					if($this->error)
 						break;
 				}
-				if($this->error)
-					break;
 			}
 			
 			if (!$this->error) {
@@ -112,8 +108,10 @@ class Admin_Controller_Design_Navigation extends Controller
 
 	private function getList()
 	{
+		$this->document->setTitle($this->_('heading_title'));
+		
 		$this->template->load('design/navigation_list');
-
+		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('design/navigation'));
 		
@@ -148,59 +146,48 @@ class Admin_Controller_Design_Navigation extends Controller
 			'sort_value' => 'status',
 		);
 
-  		//The Sort data
-		$data = array();
-		
-		$sort_defaults = array(
-			'sort' => 'name',
-			'order' => 'ASC',
-			'limit' => $this->config->get('config_admin_limit'),
-			'page' => 1,
-		);
-		
-		foreach ($sort_defaults as $key => $default) {
-			$data[$key] = $$key = isset($_GET[$key]) ? $_GET[$key] : $default;
-		}
-		
-		$data['start'] = ($page - 1) * $limit;
+  		//Sorting / Filtering
+		$sort_filter = array();
+		$this->sort->load_query_defaults($sort_filter, 'name', 'ASC');
 		
 		//Filter
 		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
 		
 		if ($filter_values) {
-			$data += $filter_values;
+			$sort_filter += $filter_values;
 		}
 		
-		
-		$navigation_groups_total = $this->Model_Design_Navigation->getTotalNavigationGroups($data);
-		$navigation_groups = $this->Model_Design_Navigation->getNavigationGroups($data);
+		$navigation_groups_total = $this->Model_Design_Navigation->getTotalNavigationGroups($sort_filter);
+		$navigation_groups = $this->Model_Design_Navigation->getNavigationGroups($sort_filter);
 		
 		foreach ($navigation_groups as &$nav_group) {
-			$action = array();
-			
-			$action[] = array(
-				'text' => $this->_('text_edit'),
-				'href' => $this->url->link('design/navigation/update', 'navigation_group_id=' . $nav_group['navigation_group_id']),
+			$nav_group['actions'] = array(
+				'edit' => array(
+					'text' => $this->_('text_edit'),
+					'href' => $this->url->link('design/navigation/update', 'navigation_group_id=' . $nav_group['navigation_group_id']),
+				),
+				'delete' => array(
+					'text' => $this->_('text_delete'),
+					'href' => $this->url->link('design/navigation/delete', 'navigation_group_id=' . $nav_group['navigation_group_id']),
+				) 
 			);
 			
 			if ($nav_group['name'] == 'admin') {
-				$action[] = array(
+				$nav_group['actions']['reset'] = array(
 					'text' => $this->_('button_admin_nav_reset'),
 					'href' => $this->url->link('design/navigation/reset_admin_navigation'),
 					'#class' => 'reset',
 				);
 			}
-			
-			$nav_group['actions'] = $action;
 		}
 		
 		//The table template data
 		$tt_data = array(
 			'row_id'		=> 'navigation_group_id',
 			'route'		=> 'design/navigation',
-			'sort'		=> $sort,
-			'order'		=> $order,
-			'page'		=> $page,
+			'sort'		=> $sort_filter['sort'],
+			'order'		=> $sort_filter['order'],
+			'page'		=> $sort_filter['page'],
 			'sort_url'	=> $this->url->link('design/navigation', $this->url->get_query('filter')),
 			'columns'	=> $columns,
 			'data'		=> $navigation_groups,
@@ -236,12 +223,11 @@ class Admin_Controller_Design_Navigation extends Controller
 		$this->data['batch_update'] = $this->url->link('design/navigation/batch_update', $url);
 		
 		//Action Buttons
-		$this->data['insert'] = $this->url->link('design/navigation/insert', $url);
-		
-		$url = $this->url->get_query('filter', 'sort', 'order');
+		$this->data['insert'] = $this->url->link('design/navigation/insert');
 		
 		$this->pagination->init();
 		$this->pagination->total = $navigation_groups_total;
+		
 		$this->data['pagination'] = $this->pagination->render();
 		
 		$this->children = array(
@@ -254,7 +240,7 @@ class Admin_Controller_Design_Navigation extends Controller
 
 	private function getForm()
 	{
-		$this->language->load('design/navigation');
+		$this->document->setTitle($this->_('heading_title'));
 		
 		$this->template->load('design/navigation_form');
 
@@ -327,7 +313,7 @@ class Admin_Controller_Design_Navigation extends Controller
 		foreach ($_POST['links'] as $key => $link) {
 			if (!$this->validation->text($link['display_name'], 1, 255)) {
 				$link_name = !empty($link['name']) ? $link['name'] : ( !empty($link['display_name']) ? $link['display_name'] : $key );
-				$this->error["links[$key][display_name]"] = $this->language->format('error_display_name', $link_name);
+				$this->error["links[$key][display_name]"] = $this->_('error_display_name', $link_name);
 			}
 		
 			//If name already exists in database, append _n to the name

@@ -1,5 +1,5 @@
 <?php
-class PrettyLanguage
+class PrettyLanguage extends Library
 {
 	/**
 	 * *.tpl
@@ -470,102 +470,6 @@ class PrettyLanguage
 			file_put_contents($file, implode("\n", $lines));
 		}
 	}
-	
-	public function remove_language_gets($files)
-	{
-		foreach ($files as $file) {
-			
-			echo "<br><br><br>$file<br>";
-			
-			$lines = explode("\n", file_get_contents($file));
-			
-			$flag_delete = false;
-			$orig_lines = $lines;
-			
-			foreach ($lines as $num=>&$line) {
-				if ($flag_delete) {
-					if (!trim($line)) {
-						unset($lines[$num]);
-						continue;
-					}
-					else {
-						$flag_delete = false;
-					}
-					
-				}
-				if (strpos($line, '$this->language->get') !== false) {
-					
-					$l_data = null;
-					preg_match_all('/(\$this->data\[\'[^\']*\'\])|(sprintf)|(\$this->language->get\(\'[^\']*\'\))/', $line, $l_data);
-					
-					if (count($l_data[0]) > 3) {
-						$line .= '**NEWMAN**';
-						continue;
-					}
-					elseif (count($l_data[0]) < 2) {
-						continue;
-					}
-					
-					if (strpos($l_data[0][0], '$this->data') === false) {
-						continue;
-					}
-					
-					if (strpos($l_data[0][1], '$this->language->get') === false) {
-						if (strpos($l_data[0][1], 'sprintf') === false || count($l_data[0]) < 3) {
-							continue;
-						}
-					
-						if (strpos($l_data[0][2], '$this->language->get') === false) {
-							continue;
-						}
-						$l_pos = 2;
-					}
-					else {
-						$l_pos = 1;
-					}
-					
-					$data_name = str_replace('\']','',str_replace('$this->data[\'','', trim($l_data[0][0])));
-					
-					$lang_name = str_replace('\')','',str_replace('$this->language->get(\'','', trim($l_data[0][$l_pos])));
-					
-					//has sprintf
-					if ($l_pos == 2) {
-						$ps = null;
-						preg_match("/^\s*/",$line, $ps);
-						$after = null;
-						preg_match("/sprintf.*/", $line, $after);
-						$after = preg_replace('/sprintf[^,]*/','', $after[0]);
-						
-						$before = $data_name == $lang_name ? '':'$this->data[\'' . $data_name . '\'] = ';
-						
-						$line = ($ps?$ps[0]:'') . $before . '$this->language->format(\'' . $lang_name . '\'' . $after;
-						continue;
-					}
-					else {
-						if ($data_name == $lang_name) {
-							unset($lines[$num]);
-							$flag_delete = true;
-							continue;
-						}
-						elseif (preg_match('/\$this->data\[\'[^\']*\'\]\s*=\s*\$this->language->get\(\'[^\']*\'\);/', $line) > 0) {
-							$ps = null;
-							preg_match("/^\s*/",$line, $ps);
-							
-							$line = ($ps?$ps[0]:'') .'$this->language->set(\'' . $data_name . '\', $this->language->get(\'' . $lang_name . '\'));';
-						}
-						else {
-							$line .= "**NEWMAN**";
-						}
-					}
-					
-				}
-			}
-			
-			$this->print_lines($orig_lines, $lines, true);
-			file_put_contents($file, implode("\n", $lines));
-		}
-	}
-	
 	
 	public function update_url_links($files)
 	{

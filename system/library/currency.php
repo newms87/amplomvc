@@ -1,14 +1,12 @@
 <?php
-class Currency 
+class Currency extends Library
 {
-	protected $registry;
-	
-  	private $code;
+	private $code;
   	private $currencies = array();
   
-  	public function __construct(&$registry)
+  	public function __construct($registry)
   	{
-		$this->registry = &$registry;
+		parent::__construct($registry);
 		
 		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "currency");
 
@@ -33,11 +31,6 @@ class Currency
 				$this->set($this->config->get('config_currency'));
 		}
   	}
-	
-	public function __get($key)
-	{
-		return $this->registry->get($key);
-	}
 	
   	public function set($currency)
   	{

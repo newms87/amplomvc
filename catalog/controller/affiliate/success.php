@@ -13,7 +13,7 @@ class Catalog_Controller_Affiliate_Success extends Controller
 			$this->breadcrumb->add($this->_('text_account'), $this->url->link('affiliate/account'));
 			$this->breadcrumb->add($this->_('text_success'), $this->url->link('affiliate/success'));
 
-		$this->data['text_message'] = $this->language->format('text_approval', $this->config->get('config_name'), $this->url->link('information/contact'));
+		$this->data['text_message'] = $this->_('text_approval', $this->config->get('config_name'), $this->url->link('information/contact'));
 		
 		$this->data['continue'] = $this->url->link('affiliate/account');
 

@@ -44,7 +44,7 @@ class Catalog_Controller_Module_Cart extends Controller
 		
 		$this->data['totals'] = $total_data;
 		
-		$this->language->format('text_items', $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($total));
+		$this->_('text_items', $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($total));
 		$this->data['products'] = array();
 			
 		foreach ($this->cart->getProducts() as $product) {

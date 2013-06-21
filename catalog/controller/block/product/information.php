@@ -68,10 +68,10 @@ class Catalog_Controller_Block_Product_Information extends Controller
 				$this->language->set('stock', $this->_('text_instock'));
 			}
 			elseif ((int)$product_info['quantity'] > (int)$stock_type) {
-				$this->data['stock'] = $this->language->format('text_more_stock', (int)$stock_type);
+				$this->data['stock'] = $this->_('text_more_stock', (int)$stock_type);
 			}
 			elseif ((int)$product_info['quantity'] <= (int)$stock_type) {
-				$this->data['stock'] = $this->language->format('text_less_stock', (int)$product_info['quantity']);
+				$this->data['stock'] = $this->_('text_less_stock', (int)$product_info['quantity']);
 			}
 		}
 		
@@ -82,7 +82,7 @@ class Catalog_Controller_Block_Product_Information extends Controller
 		}
 		
 		$this->data['is_final'] = (int)$product_info['is_final'];
-		$this->language->format('final_sale_explanation', $this->url->link('information/information/info','information_id=7').'/#return_policy');
+		$this->_('final_sale_explanation', $this->url->link('information/information/info','information_id=7').'/#return_policy');
 		
 		if ((float)$product_info['special']) {
 			$this->data['special'] = $this->currency->format($product_info['special'], $product_info['tax_class_id']);
@@ -108,7 +108,7 @@ class Catalog_Controller_Block_Product_Information extends Controller
 		$this->data['view_cart_link'] = $this->url->link('cart/cart');
 		$this->data['checkout_link'] = $this->url->link('checkout/checkout');
 		
-		$this->language->format('error_add_to_cart', $this->config->get('config_email'));
+		$this->_('error_add_to_cart', $this->config->get('config_email'));
 		
 		if ($product_info['shipping_return']) {
 			$this->data['shipping_return'] = html_entity_decode($product_info['shipping_return'], ENT_QUOTES, 'UTF-8');
@@ -126,10 +126,10 @@ class Catalog_Controller_Block_Product_Information extends Controller
 		//customers must order at least 1 of this product
 		$this->data['minimum'] = $product_info['minimum'] ? $product_info['minimum'] : 1;
 		
-		$this->language->format('text_minimum', $product_info['minimum']);
+		$this->_('text_minimum', $product_info['minimum']);
 		
 		if ($review_status) {
-			$this->data['reviews'] = $this->language->format('text_reviews', (int)$product_info['reviews']);
+			$this->data['reviews'] = $this->_('text_reviews', (int)$product_info['reviews']);
 			
 			$this->data['rating'] = (int)$product_info['rating'];
 		}
@@ -138,8 +138,8 @@ class Catalog_Controller_Block_Product_Information extends Controller
 			$this->data['block_sharing'] = $this->getBlock('extras/sharing');
 		}
 		
-		$this->language->format('text_view_more', $this->url->link('product/category', 'category_id=' . $product_info['category']['category_id']), $product_info['category']['name']);
-		$this->language->format('text_keep_shopping', $this->url->link('product/category'));
+		$this->_('text_view_more', $this->url->link('product/category', 'category_id=' . $product_info['category']['category_id']), $product_info['category']['name']);
+		$this->_('text_keep_shopping', $this->url->link('product/category'));
 		
 		$this->render();
 	}

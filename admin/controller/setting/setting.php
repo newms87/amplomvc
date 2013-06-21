@@ -10,7 +10,7 @@ class Admin_Controller_Setting_Setting extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validate()) {
+		if ($this->request->isPost() && $this->validate()) {
 			
 			$this->Model_Setting_Setting->editSetting('config', $_POST);
 

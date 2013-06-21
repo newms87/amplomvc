@@ -31,7 +31,7 @@ class Catalog_Controller_Designers_Designers extends Controller
 			if (!$products) {
 				$this->language->set('heading_title', $designer['name']);
 				$this->data['continue'] = $this->url->link('common/home');
-				$this->language->format('no_product_text', $this->url->site('designers'));
+				$this->_('no_product_text', $this->url->site('designers'));
 			}
 			else {
 				$this->data['the_page'] = $_SERVER['REQUEST_URI'];

@@ -16,7 +16,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 		$this->load->language('mail/newsletter');
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$newsletter_id = $this->Model_Mail_Newsletter->addNewsletter($_POST);
 
 			if (!$this->message->error_set()) {
@@ -35,7 +35,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Mail_Newsletter->editNewsletter($_GET['newsletter_id'], $_POST);
 			
 			if (!$this->message->error_set()) {

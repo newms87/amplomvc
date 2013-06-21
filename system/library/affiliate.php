@@ -1,8 +1,6 @@
 <?php
-class Affiliate 
+class Affiliate extends Library
 {
-	protected $registry;
-	
 	private $affiliate_id;
 	private $firstname;
 	private $lastname;
@@ -11,10 +9,10 @@ class Affiliate
 	private $fax;
 	private $code;
 	
-  	public function __construct(&$registry)
+  	public function __construct($registry)
   	{
-		$this->registry = &$registry;
-				
+  		parent::__construct($registry);
+		
 		if (isset($this->session->data['affiliate_id'])) {
 			$affiliate_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "affiliate WHERE affiliate_id = '" . (int)$this->session->data['affiliate_id'] . "' AND status = '1'");
 			
@@ -32,11 +30,6 @@ class Affiliate
 				$this->logout();
 			}
   		}
-	}
-	
-	public function __get($key)
-	{
-		return $this->registry->get($key);
 	}
 	
   	public function login($email, $password)

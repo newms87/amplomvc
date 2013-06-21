@@ -19,7 +19,7 @@ class Catalog_Controller_Affiliate_Transaction extends Controller
 			$this->breadcrumb->add($this->_('text_account'), $this->url->link('affiliate/account'));
 			$this->breadcrumb->add($this->_('text_transaction'), $this->url->link('affiliate/transaction'));
 
-		$this->language->format('column_amount', $this->config->get('config_currency'));
+		$this->_('column_amount', $this->config->get('config_currency'));
 		
 		if (isset($_GET['page'])) {
 			$page = $_GET['page'];

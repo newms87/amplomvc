@@ -30,7 +30,7 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 				if (isset($this->session->data['vouchers'][$key])) {
 					unset($this->session->data['vouchers'][$key]);
 					
-					$this->message->add('success', $this->language->format('text_remove', $this->_('text_voucher')));
+					$this->message->add('success', $this->_('text_remove', $this->_('text_voucher')));
 				}
 				else {
 					$id = $this->cart->getProductId($key);
@@ -38,7 +38,7 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 					
 					$this->cart->remove($key);
 					
-					$this->message->add('success', $this->language->format('text_remove', $this->url->link('product/product', 'product_id=' . $id), $name));
+					$this->message->add('success', $this->_('text_remove', $this->url->link('product/product', 'product_id=' . $id), $name));
 				}
 			}
 			
@@ -47,7 +47,7 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 		
 		if (!$this->cart->isEmpty()) {
 			
-			$this->language->format('final_sale_explanation',$this->url->link('information/information/info','information_id=7'));
+			$this->_('final_sale_explanation',$this->url->link('information/information/info','information_id=7'));
 			
 			if ($ajax_cart) {
 				$this->data['action'] = $this->url->link('block/cart/cart/ajax_cart');
@@ -59,7 +59,7 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 			}
 						
 			if ($this->config->get('config_customer_price') && !$this->customer->isLogged()) {
-				$this->data['no_price_display'] = $this->language->format('text_login', $this->url->link('account/login'), $this->url->link('account/register'));
+				$this->data['no_price_display'] = $this->_('text_login', $this->url->link('account/login'), $this->url->link('account/register'));
 			}
 			
 			if (!$this->cart->validate()) {

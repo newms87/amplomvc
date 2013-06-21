@@ -18,7 +18,7 @@ class Admin_Controller_Sale_Order extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			//TODO - Need to change this so it will actually work when ordering!
 			$this->message->add('warning', "This order method is not in use! sale/order/insert.");
 			$this->url->redirect($this->url->link('common/home'));
@@ -78,7 +78,7 @@ class Admin_Controller_Sale_Order extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Sale_Order->editOrder($_GET['order_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -1527,13 +1527,13 @@ class Admin_Controller_Sale_Order extends Controller
 
 		$this->language->load('sale/order');
 		
-		if (($this->request->isPost()) && $this->user->hasPermission('modify', 'sale/order')) {
+		if ($this->request->isPost() && $this->user->hasPermission('modify', 'sale/order')) {
 			$this->Model_Sale_Order->addOrderHistory($_GET['order_id'], $_POST);
 				
 			$this->message->add('success', $this->_('text_success'));
 		}
 		
-		if (($this->request->isPost()) && !$this->user->hasPermission('modify', 'sale/order')) {
+		if ($this->request->isPost() && !$this->user->hasPermission('modify', 'sale/order')) {
 			$this->message->add('warning', $this->_('error_permission'));
 		}
 				

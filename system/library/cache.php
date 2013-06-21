@@ -1,12 +1,12 @@
 <?php
-class Cache 
+class Cache
 {
 	private $expire;
 	private $ignore_list = array();
 	private $loaded = array();
 	
   	public function __construct()
-  	{
+  	{	
   		$this->expire = CACHE_FILE_EXPIRATION;
 		
 		_is_writable(DIR_CACHE);

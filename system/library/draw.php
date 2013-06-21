@@ -2,11 +2,8 @@
 define("DRAW_AUTO_SIZE", 1);
 define("DRAW_WRAP_TEXT", 2);
 
-class Draw 
+class Draw extends Library
 {
-	
-	private $config;
-	
 	private $canvas_list = array();
 	private $canvas;
 	private $image_url;
@@ -21,7 +18,7 @@ class Draw
 	
 	function __construct($registry)
 	{
-		$this->config = $registry->get('config');
+		parent::__construct($registry);
 		
 		$this->font_path = $this->config->isAdmin() ? DIR_APPLICATION . "view/fonts/" : DIR_THEME . $this->config->get('config_theme') . '/fonts/';
 		

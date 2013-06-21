@@ -23,7 +23,7 @@ class Catalog_Controller_Module_MagazineAd extends Controller
 		
 		$this->data['shop_logo'] = $this->image->resize('data/BC_Shop_Logo_w-tagline_trans.png', 370, 100);
 		
-		$this->language->format('text_become_designer', str_replace($this->config->get('config_url'), "http://shop.bettyconfidential.com/", $this->url->link('information/are_you_a_designer')));
+		$this->_('text_become_designer', str_replace($this->config->get('config_url'), "http://shop.bettyconfidential.com/", $this->url->link('information/are_you_a_designer')));
 		
 		$this->data['products'] = array();
 		

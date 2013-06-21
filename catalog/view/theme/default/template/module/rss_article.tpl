@@ -1,6 +1,6 @@
 <div id='featured_articles' class="box sidebar_box">
-	<div class="box-heading"><?= $heading_title; ?></div>
-	<div class="box-content	rss_sidebar">
+	<div class="box_heading"><?= $heading_title; ?></div>
+	<div class="box_content	rss_sidebar">
 			<ul>
 				<? foreach ($featured_articles as $a) { ?>
 				<li>

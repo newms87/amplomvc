@@ -173,7 +173,7 @@ class Catalog_Controller_Account_Return extends Controller
 		$order_id = isset($_GET['order_id'])?$_GET['order_id']:0;
 		$this->language->load('account/return');
 
-		if (($this->request->isPost()) && $this->validate()) {
+		if ($this->request->isPost() && $this->validate()) {
 			$this->Model_Account_Return->addReturn($_POST);
 			
 			$this->url->redirect($this->url->link('account/return/success'));

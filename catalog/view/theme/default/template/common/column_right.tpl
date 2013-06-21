@@ -1,8 +1,5 @@
-<? if ($modules || $blocks) { ?>
+<? if (!empty($blocks)) { ?>
 <div id="column_right">
-	<? foreach ($modules as $module) { ?>
-	<?= $module; ?>
-	<? } ?>
 	<? foreach($blocks as $block){ ?>
 		<?= $block; ?>
 	<? } ?>

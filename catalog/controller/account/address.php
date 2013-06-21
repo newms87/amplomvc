@@ -29,7 +29,7 @@ class Catalog_Controller_Account_Address extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$address_id = $this->Model_Account_Address->addAddress($_POST);
 			
 			if (!empty($_POST['default'])) {
@@ -56,7 +56,7 @@ class Catalog_Controller_Account_Address extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Account_Address->editAddress($_GET['address_id'], $_POST);
 			
 			if (!empty($_POST['default'])) {

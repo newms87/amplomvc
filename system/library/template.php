@@ -1,8 +1,6 @@
 <?php
-class Template 
+class Template extends Library
 {
-	private $registry;
-	
 	public $data = array();
 	
 	private $name;
@@ -10,14 +8,9 @@ class Template
 	
 	private $template;
 	
-	function __construct($registry)
+	public function __construct($registry)
 	{
-		$this->registry = $registry;
-	}
-	
-	public function __get($key)
-	{
-		return $this->registry->get($key);
+		parent::__construct($registry);
 	}
 	
 	public function template()

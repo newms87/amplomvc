@@ -1,8 +1,6 @@
 <?php
-class Sort 
+class Sort extends Library
 {
-	private $registry;
-	
 	private $language_data;
 	private $sorts;
 	private $limits;
@@ -14,7 +12,7 @@ class Sort
 	
 	public function __construct($registry)
 	{
-		$this->registry = $registry;
+		parent::__construct($registry);
 		
 		//TODO: Move this to the admin panel
 		$this->limits = array(
@@ -26,11 +24,6 @@ class Sort
 		);
 		
 		$this->language_data = $this->language->system_fetch('sort');
-	}
-	
-	public function __get($key)
-	{
-		return $this->registry->get($key);
 	}
 	
 	public function set_language($key, $value)

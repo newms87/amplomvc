@@ -1,15 +1,14 @@
 <?php
-class Theme 
+class Theme extends Library
 {
-	private $registry;
 	private $theme;
 	private $default_theme = 'default';
 	
 	private $settings;
 	
-	public function __construct(&$registry)
+	public function __construct($registry)
 	{
-		$this->registry = &$registry;
+		parent::__construct($registry);
 		
 		$this->theme = $this->config->get('config_theme');
 		
@@ -33,11 +32,6 @@ class Theme
 			
 			$this->load_theme_language();
 		}
-	}
-	
-	public function __get($key)
-	{
-		return $this->registry->get($key);
 	}
 	
 	public function get_setting($key)

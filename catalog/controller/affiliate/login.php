@@ -15,7 +15,7 @@ class Catalog_Controller_Affiliate_Login extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 						
-		if (($this->request->isPost()) && isset($_POST['email']) && isset($_POST['password']) && $this->validate()) {
+		if ($this->request->isPost() && isset($_POST['email']) && isset($_POST['password']) && $this->validate()) {
 			if (isset($_POST['redirect'])) {
 				$this->url->redirect(str_replace('&amp;', '&', $_POST['redirect']));
 			} else {
@@ -27,7 +27,7 @@ class Catalog_Controller_Affiliate_Login extends Controller
 			$this->breadcrumb->add($this->_('text_account'), $this->url->link('affiliate/account'));
 			$this->breadcrumb->add($this->_('text_login'), $this->url->link('affiliate/login'));
 
-		$this->language->format('text_description', $this->config->get('config_name'), $this->config->get('config_name'), $this->config->get('config_commission') . '%');
+		$this->_('text_description', $this->config->get('config_name'), $this->config->get('config_name'), $this->config->get('config_commission') . '%');
 		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
 		} else {

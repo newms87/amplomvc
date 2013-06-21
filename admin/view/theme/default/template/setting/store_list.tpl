@@ -10,10 +10,14 @@
 		<div class="content">
 			<div class="menu_icons">
 				<a class="menu_item" href="<?= $admin_settings; ?>">
-				<div class="title"><?= $button_admin_settings; ?></div>
-				<div class="image"><img src="<?= HTTP_THEME_IMAGE . "admin_settings.png"; ?>"></div>
-			</a>
-		</div>
+					<div class="title"><?= $button_admin_settings; ?></div>
+					<div class="image"><img src="<?= HTTP_THEME_IMAGE . "admin_settings.png"; ?>" /></div>
+				</a>
+				<a class="menu_item" href="<?= $system_update; ?>">
+					<div class="title"><?= $button_system_update; ?></div>
+					<div class="image"><img src="<?= HTTP_THEME_IMAGE . "system_update.png"; ?>" /></div>
+				</a>
+			</div>
 			<form action="<?= $delete; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="list">
 					<thead>

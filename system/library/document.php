@@ -1,7 +1,6 @@
 <?php
-class Document 
+class Document extends Library
 {
-	private $registry;
 	private $title;
 	private $description;
 	private $keywords;
@@ -12,13 +11,9 @@ class Document
 	
 	function __construct($registry)
 	{
-		$this->registry = $registry;
+		parent::__construct($registry);
+		
 		$this->links = $this->Model_Design_Navigation->getNavigationLinks();
-	}
-	
-	public function __get($key)
-	{
-		return $this->registry->get($key);
 	}
 	
 	public function setTitle($title)

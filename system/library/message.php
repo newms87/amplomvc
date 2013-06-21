@@ -1,20 +1,13 @@
 <?php
-class Message 
+class Message extends Library
 {
-	private $registry;
-	
 	function __construct($registry)
 	{
-		$this->registry = $registry;
+		parent::__construct($registry);
 		
 		if (!isset($this->session->data['messages'])) {
 			$this->session->data['messages'] = array();
 		}
-	}
-	
-	public function __get($key)
-	{
-		return $this->registry->get($key);
 	}
 	
 	public function add($type, $message)

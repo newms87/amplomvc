@@ -10,7 +10,7 @@ class Admin_Controller_Shipping_Flat extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validate()) {
+		if ($this->request->isPost() && $this->validate()) {
 			$this->Model_Setting_Setting->editSetting('shipping_flat', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));

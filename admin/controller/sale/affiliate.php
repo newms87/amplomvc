@@ -18,7 +18,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 				$this->Model_Sale_Affiliate->addAffiliate($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -69,7 +69,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Sale_Affiliate->editAffiliate($_GET['affiliate_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
@@ -903,7 +903,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
 		$this->template->load('sale/affiliate_transaction');
 		$this->language->load('sale/affiliate');
 		
-		if (($this->request->isPost()) && $this->user->hasPermission('modify', 'sale/affiliate')) {
+		if ($this->request->isPost() && $this->user->hasPermission('modify', 'sale/affiliate')) {
 			$this->Model_Sale_Affiliate->addTransaction($_GET['affiliate_id'], $_POST['description'], $_POST['amount']);
 				
 			$this->language->set('success', $this->_('text_success'));
@@ -911,7 +911,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
 			$this->data['success'] = '';
 		}
 
-		if (($this->request->isPost()) && !$this->user->hasPermission('modify', 'sale/affiliate')) {
+		if ($this->request->isPost() && !$this->user->hasPermission('modify', 'sale/affiliate')) {
 			$this->language->set('error_warning', $this->_('error_permission'));
 		} else {
 			$this->data['error_warning'] = '';

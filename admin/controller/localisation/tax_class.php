@@ -18,7 +18,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Taxclass->addTaxClass($_POST);
 
 			$this->message->add('success', $this->_('text_success'));
@@ -49,7 +49,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Taxclass->editTaxClass($_GET['tax_class_id'], $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));

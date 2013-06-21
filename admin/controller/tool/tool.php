@@ -42,7 +42,7 @@ class Admin_Controller_Tool_Tool extends Controller
 	{
 		$this->language->load('tool/tool');
 		
-		if (($this->request->isPost()) && isset($_POST['cache_tables']) && $this->validate()) {
+		if ($this->request->isPost() && isset($_POST['cache_tables']) && $this->validate()) {
 			
 			$this->cache->delete($_POST['cache_tables']);
 			

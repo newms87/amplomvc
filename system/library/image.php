@@ -1,8 +1,6 @@
 <?php
-class Image 
+class Image extends Library
 {
-	
-	private $registry;
 	private $file;
 	private $image;
 	private $info;
@@ -13,18 +11,13 @@ class Image
 	
 	public function __construct($registry, $file = null)
 	{
-		$this->registry = $registry;
+		parent::__construct($registry);
 		
 		if ($file) {
 			$this->set_image($file);
 		}
 		
 		$this->dir_mode = $this->config->get('config_image_dir_mode');
-	}
-	
-	public function __get($key)
-	{
-		return $this->registry->get($key);
 	}
 	
 	public function get($filename)

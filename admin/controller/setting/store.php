@@ -18,7 +18,7 @@ class Admin_Controller_Setting_Store extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			
 			$store_id = $this->Model_Setting_Store->addStore($_POST);
 			
@@ -38,7 +38,7 @@ class Admin_Controller_Setting_Store extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			
 			$this->Model_Setting_Store->editStore($_GET['store_id'], $_POST);
 			
@@ -83,6 +83,7 @@ class Admin_Controller_Setting_Store extends Controller
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/store'));
 		
 		$this->data['admin_settings'] = $this->url->link('setting/setting');
+		$this->data['system_update'] = $this->url->link('setting/update');
 		
 		$this->data['insert'] = $this->url->link('setting/store/insert');
 		$this->data['delete'] = $this->url->link('setting/store/delete');

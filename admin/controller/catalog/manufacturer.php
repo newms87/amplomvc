@@ -12,7 +12,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
   	{
 		$this->load->language('catalog/manufacturer');
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Manufacturer->addManufacturer($_POST);
 			
 			if (!$this->message->error_set()) {
@@ -29,7 +29,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
   	{
 		$this->load->language('catalog/manufacturer');
 		
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$manufacturer_id = isset($_GET['manufacturer_id'])?$_GET['manufacturer_id']:0;
 		
 			$this->Model_Catalog_Manufacturer->editManufacturer($_GET['manufacturer_id'], $_POST);
@@ -381,7 +381,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
   			$product_count = $this->Model_Catalog_Product->getTotalProducts($data);
 	
 			if ($product_count) {
-				$this->error['manufacturer' . $manufacturer_id] = $this->language->format('error_product', $product_count);
+				$this->error['manufacturer' . $manufacturer_id] = $this->_('error_product', $product_count);
 			}
 		}
 		

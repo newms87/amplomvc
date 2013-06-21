@@ -11,7 +11,7 @@ class Admin_Controller_Payment_BankTransfer extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (($this->request->isPost()) && $this->validate()) {
+		if ($this->request->isPost() && $this->validate()) {
 			$this->Model_Setting_Setting->editSetting('bank_transfer', $_POST);
 			
 			$this->message->add('success', $this->_('text_success'));

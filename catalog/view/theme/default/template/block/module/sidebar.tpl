@@ -1,6 +1,6 @@
 <div id='sidebar_menu' class="box sidebar_box">
-	<div class="box-heading"><?= $heading_title; ?></div>
-	<div class="box-content">
+	<div class="box_heading"><?= $heading_title; ?></div>
+	<div class="box_content">
 		<div id='sidebar_menu_links'>
 			<div class="sidebar_main">
 				<!--<div class="label"><?= $main_menu['label']; ?></div>-->

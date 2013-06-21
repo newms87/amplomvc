@@ -72,7 +72,7 @@ class Catalog_Controller_Payment_Paymate extends Controller
 
 			$this->language->set('heading_title', $this->_('text_failed'));
 
-			$this->data['text_message'] = $this->language->format('text_failed_message', $error, $this->url->link('information/contact'));
+			$this->data['text_message'] = $this->_('text_failed_message', $error, $this->url->link('information/contact'));
 			
 			$this->data['continue'] = $this->url->link('common/home');
 

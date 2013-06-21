@@ -12,7 +12,7 @@ class Admin_Controller_Catalog_Collection extends Controller
 	{
 		$this->load->language('catalog/collection');
 
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Collection->addCollection($_POST);
 			
 			if (!$this->message->error_set()) {
@@ -29,7 +29,7 @@ class Admin_Controller_Catalog_Collection extends Controller
 	{
 		$this->load->language('catalog/collection');
 
-		if (($this->request->isPost()) && $this->validateForm()) {
+		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Collection->editCollection($_GET['collection_id'], $_POST);
 
 			if (!$this->message->error_set()) {
@@ -339,7 +339,7 @@ class Admin_Controller_Catalog_Collection extends Controller
 		$query = $this->db->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . "collection WHERE name = '$name' AND collection_id != $collection_id");
 	
 		if ($query->row['total']) {
-			$this->error['name'] = $this->language->format('error_duplicate_name', $name);
+			$this->error['name'] = $this->_('error_duplicate_name', $name);
 		}
 		
 		if (!$this->validation->text($name, 3, 63)) {

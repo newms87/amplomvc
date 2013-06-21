@@ -41,8 +41,8 @@ class Admin_Controller_Block_Widget_Janrain extends Controller
 			}
 		}
 		
-		$this->language->format('entry_login_redirect_description', SITE_URL);
-		$this->language->format('entry_logout_redirect_description', SITE_URL);
+		$this->_('entry_login_redirect_description', SITE_URL);
+		$this->_('entry_logout_redirect_description', SITE_URL);
 		
 		$this->render();
 	}

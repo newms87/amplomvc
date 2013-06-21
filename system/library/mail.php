@@ -1,8 +1,6 @@
 <?php
-class Mail 
+class Mail extends Library
 {
-	private $registry;
-	
 	protected $to;
 	protected $cc;
 	protected $bcc;
@@ -27,7 +25,7 @@ class Mail
 
 	public function __construct($registry)
 	{
-		$this->registry = $registry;
+		parent::__construct($registry);
 		
 		$this->protocol  = $this->config->get('config_mail_protocol');
 		$this->parameter = $this->config->get('config_mail_parameter');
@@ -38,11 +36,6 @@ class Mail
 		$this->timeout	= $this->config->get('config_smtp_timeout');
 		
 		$this->init();
-	}
-	
-	public function __get($key)
-	{
-		return $this->registry->get($key);
 	}
 	
 	public function init()
