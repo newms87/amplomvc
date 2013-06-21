@@ -10,3 +10,10 @@ cache
 /download
 /system/database/backups
 /plugin
+
+/catalog/view/theme/*
+!/catalog/view/theme/default
+
+/admin/view/theme/*
+!/admin/view/theme/default
+/.gitmodules
