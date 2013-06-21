@@ -243,7 +243,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		$data = array();
 		
 		$sort_defaults = array(
-			'sort' => 'pd.name',
+			'sort' => 'p.name',
 			'order' => 'ASC',
 			'limit' => $this->config->get('config_admin_limit'),
 			'page' => 1,
