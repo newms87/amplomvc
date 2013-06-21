@@ -25,8 +25,8 @@ class Catalog_Controller_Block_Widget_Specials extends Controller
 			
 			//Sort
 			$sorts = array(
-				'sort=pd.name&order=ASC' => $this->_('text_name_asc'),
-				'sort=pd.name&order=DESC' => $this->_('text_name_desc'),
+				'sort=p.name&order=ASC' => $this->_('text_name_asc'),
+				'sort=p.name&order=DESC' => $this->_('text_name_desc'),
 				'sort=price&order=ASC' => $this->_('text_price_asc'),
 				'sort=price&order=DESC' => $this->_('text_price_desc'),
 			);
