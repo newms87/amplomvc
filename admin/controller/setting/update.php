@@ -40,7 +40,7 @@ class Admin_Controller_Setting_Update extends Controller
 		
 		$defaults = array(
 			'version' => VERSION,
-			'auto_update' => 1,
+			'auto_update' => 0,
 		);
 
 		foreach($defaults as $key => $default) {

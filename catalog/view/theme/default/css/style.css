@@ -3277,3 +3277,17 @@ form .set_default_address input[type="radio"]{
 	width:30px;
 	height:30px;
 }
+
+/** YouTube and Video Page */
+.youtube_title{
+	font-size: 20px;
+	font-weight:bold;
+	margin-bottom: 10px;
+	text-align:center;
+	color: #666;
+}
+
+.youtube_embed{
+	text-align:center;
+	margin-bottom: 20px;
+}
