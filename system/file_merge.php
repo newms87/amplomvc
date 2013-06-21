@@ -24,24 +24,6 @@ if ($entries) {
 }
 
 function _require($file, $once = true, $_ = array()) {
-	global $registry;
-	static $plugin_registry = false;
-	static $plugin = null;
-	
-	//Validate Plugin files
-	if (!$plugin_registry) {
-		if ($registry && $registry->has('plugin')) {
-			$plugin = $registry->get("plugin");
-			$plugin_registry = $plugin->getPluginRegistry();
-		}
-	} else {
-		if (isset($plugin_registry[$file])) {
-			if (!$plugin->syncPluginFileWithLive($plugin_registry[$file])) {
-				$plugin->requestDevelopmentMode();
-			}
-		}
-	}
-	
 	global $merge_registry;
 	if (isset($merge_registry[$file])) {
 		$count = 0;

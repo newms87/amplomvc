@@ -1,13 +1,13 @@
 <?php
 // Version
-define('VERSION', '0.0.1');
+define('VERSION', '0.0.2');
 
 // Error Reporting
 error_reporting(E_ALL);
 
 // Check Version
-if (version_compare(phpversion(), '5.1.0', '<') == true) {
-	exit('PHP5.1+ Required');
+if (version_compare(phpversion(), '5.3.0', '<') == true) {
+	exit('PHP5.3+ Required');
 }
 
 //Date Constants
