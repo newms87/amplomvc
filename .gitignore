@@ -9,11 +9,16 @@ logs
 cache
 /download
 /system/database/backups
-/plugin
+
+/plugin/*
+!/plugin/janrain
+!/plugin/dev
+!/plugin/mail
+!/plugin/collections
+
 
 /catalog/view/theme/*
 !/catalog/view/theme/default
 
 /admin/view/theme/*
 !/admin/view/theme/default
-/.gitmodules
