@@ -282,7 +282,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 
 		$this->data['cancel'] = $this->url->link('localisation/length_class', $url);
 
-		if (isset($_GET['length_class_id']) && (!$this->request->isPost())) {
+		if (isset($_GET['length_class_id']) && !$this->request->isPost()) {
 				$length_class_info = $this->Model_Localisation_LengthClass->getLengthClass($_GET['length_class_id']);
 		}
 		

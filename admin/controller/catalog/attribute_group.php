@@ -227,7 +227,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		
 		$this->data['cancel'] = $this->url->link('catalog/attribute_group');
 
-		if ($attribute_group_id && (!$this->request->isPost())) {
+		if ($attribute_group_id && !$this->request->isPost()) {
 			$attribute_group_info = $this->Model_Catalog_AttributeGroup->getAttributeGroup($attribute_group_id);
 			
 			$attributes = $this->Model_Catalog_AttributeGroup->getAttributes($attribute_group_id);

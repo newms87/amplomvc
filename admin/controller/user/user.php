@@ -188,7 +188,7 @@ class Admin_Controller_User_User extends Controller
 		
 		$this->data['cancel'] = $this->url->link('user/user', $url);
 
-		if ($user_id && (!$this->request->isPost())) {
+		if ($user_id && !$this->request->isPost()) {
 			$user_info = $this->Model_User_User->getUser($user_id);
 		}
 		

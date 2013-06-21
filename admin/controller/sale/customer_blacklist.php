@@ -274,7 +274,7 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 		
 		$this->data['cancel'] = $this->url->link('sale/customer_blacklist', $url);
 
-		if (isset($_GET['customer_ip_blacklist_id']) && (!$this->request->isPost())) {
+		if (isset($_GET['customer_ip_blacklist_id']) && !$this->request->isPost()) {
 				$customer_blacklist_info = $this->Model_Sale_CustomerBlacklist->getCustomerBlacklist($_GET['customer_ip_blacklist_id']);
 		}
 			

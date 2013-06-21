@@ -152,13 +152,10 @@ class Admin_Controller_Setting_Store extends Controller
 				$this->url->redirect($this->url->link('setting/store'));
 			}
 			
-			
 			$store_config = $this->Model_Setting_Setting->getSetting('config', $store_id);
 			
 			if (empty($store_config)) {
 				$store_config = $this->Model_Setting_Setting->getSetting('config', 0);
-				echo "grabbing default values";
-				html_dump($store_config, 'store_info');
 			}
 			
 			$store_info = $store + $store_config;

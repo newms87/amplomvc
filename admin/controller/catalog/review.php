@@ -298,7 +298,7 @@ class Admin_Controller_Catalog_Review extends Controller
 		
 		$this->data['cancel'] = $this->url->link('catalog/review', $url);
 
-		if (isset($_GET['review_id']) && (!$this->request->isPost())) {
+		if (isset($_GET['review_id']) && !$this->request->isPost()) {
 			$review_info = $this->Model_Catalog_Review->getReview($_GET['review_id']);
 		}
 			

@@ -598,7 +598,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
 		
 		$this->data['cancel'] = $this->url->link('sale/affiliate', $url);
 
-		if (isset($_GET['affiliate_id']) && (!$this->request->isPost())) {
+		if (isset($_GET['affiliate_id']) && !$this->request->isPost()) {
 				$affiliate_info = $this->Model_Sale_Affiliate->getAffiliate($_GET['affiliate_id']);
 		}
 			

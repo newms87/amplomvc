@@ -256,7 +256,7 @@ class Admin_Controller_Page_Page extends Controller
 		
 		$this->data['cancel'] = $this->url->link('page/page');
 
-		if ($page_id && (!$this->request->isPost())) {
+		if ($page_id && !$this->request->isPost()) {
 			$page_info = $this->Model_Page_Page->getPage($page_id);
 			
 			$page_info['stores'] = $this->Model_Page_Page->getPageStores($page_id);

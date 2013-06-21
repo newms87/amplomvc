@@ -276,7 +276,7 @@ class Admin_Controller_Localisation_Country extends Controller
 		
 		$this->data['cancel'] = $this->url->link('localisation/country', $url);
 		
-		if (isset($_GET['country_id']) && (!$this->request->isPost())) {
+		if (isset($_GET['country_id']) && !$this->request->isPost()) {
 			$country_info = $this->Model_Localisation_Country->getCountry($_GET['country_id']);
 		}
 

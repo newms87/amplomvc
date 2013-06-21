@@ -205,7 +205,7 @@ class Admin_Controller_Catalog_Option extends Controller
 
 		$this->data['cancel'] = $this->url->link('catalog/option', $url);
 
-		if ($option_id && (!$this->request->isPost())) {
+		if ($option_id && !$this->request->isPost()) {
 			$option_info = $this->Model_Catalog_Option->getOption($option_id);
 		}
 		

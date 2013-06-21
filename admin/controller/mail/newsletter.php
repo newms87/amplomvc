@@ -214,7 +214,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 		
 		
 		//The Data
-		if ($newsletter_id && (!$this->request->isPost())) {
+		if ($newsletter_id && !$this->request->isPost()) {
 			$newsletter_info = $this->Model_Mail_Newsletter->getNewsletter($newsletter_id);
 		}
 		

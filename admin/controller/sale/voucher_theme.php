@@ -276,7 +276,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 			$this->data['action'] = $this->url->link('sale/voucher_theme/update', 'voucher_theme_id=' . $_GET['voucher_theme_id'] . $url);
 		}
 		
-		if (isset($_GET['voucher_theme_id']) && (!$this->request->isPost())) {
+		if (isset($_GET['voucher_theme_id']) && !$this->request->isPost()) {
 				$voucher_theme_info = $this->Model_Sale_VoucherTheme->getVoucherTheme($_GET['voucher_theme_id']);
 		}
 					

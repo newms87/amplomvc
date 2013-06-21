@@ -208,7 +208,7 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 
 		$this->data['cancel'] = $this->url->link('localisation/geo_zone', $url);
 
-		if ($geo_zone_id && (!$this->request->isPost())) {
+		if ($geo_zone_id && !$this->request->isPost()) {
 			$geo_zone_info = $this->Model_Localisation_GeoZone->getGeoZone($geo_zone_id);
 		}
 		

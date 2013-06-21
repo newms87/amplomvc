@@ -276,7 +276,7 @@ class Admin_Controller_Localisation_Zone extends Controller
 		
 		$this->data['cancel'] = $this->url->link('localisation/zone', $url);
 
-		if (isset($_GET['zone_id']) && (!$this->request->isPost())) {
+		if (isset($_GET['zone_id']) && !$this->request->isPost()) {
 			$zone_info = $this->Model_Localisation_Zone->getZone($_GET['zone_id']);
 		}
 

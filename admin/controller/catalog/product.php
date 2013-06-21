@@ -424,7 +424,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		$this->data['cancel'] = $this->url->link('catalog/product', $url);
 		
 		//If Post data has not been sent, Grab all the product information from the Database
-		if ($product_id && (!$this->request->isPost())) {
+		if ($product_id && !$this->request->isPost()) {
 			$product_info = $this->Model_Catalog_Product->getProduct($product_id);
 			
 			$product_info['date_available'] = date('Y-m-d', strtotime($product_info['date_available']));
