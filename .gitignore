@@ -1,0 +1,12 @@
+oc_config.php
+.htaccess
+/.project
+*.db
+
+/image/data
+logs
+/system/plugins/merged
+cache
+/download
+/system/database/backups
+/plugin
