@@ -265,7 +265,7 @@ class Admin_Controller_Catalog_Collection extends Controller
 		
 		$this->data['cancel'] = $this->url->link('catalog/collection');
 
-		if ($collection_id && (!$this->request->isPost())) {
+		if ($collection_id && !$this->request->isPost()) {
 			$collection_info = $this->Model_Catalog_Collection->getCollection($collection_id);
 			
 			$collection_info['products'] = $this->Model_Catalog_Collection->getCollectionProducts($collection_id);

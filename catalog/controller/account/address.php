@@ -198,7 +198,7 @@ class Catalog_Controller_Account_Address extends Controller
 			$this->data['action'] = $this->url->link('account/address/update', 'address_id=' . $_GET['address_id']);
 		}
 		
-		if (isset($_GET['address_id']) && (!$this->request->isPost())) {
+		if (isset($_GET['address_id']) && !$this->request->isPost()) {
 			$address_info = $this->Model_Account_Address->getAddress($_GET['address_id']);
 		}
 	

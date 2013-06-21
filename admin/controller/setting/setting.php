@@ -227,7 +227,7 @@ class Admin_Controller_Setting_Setting extends Controller
 			return false;
 		}
 		
-		$image = $this->theme->find_file($_GET['theme'] . '.png', $_GET['theme']);
+		$image = DIR_CATALOG . 'view/theme/' . $_GET['theme'] . '/' . $_GET['theme'] . '.png';
 		
 		$width = 300; //$this->config->get('config_image_admin_thumb_width');
 		$height = 300; //$this->config->get('config_image_admin_thumb_height');

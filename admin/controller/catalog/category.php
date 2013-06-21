@@ -253,7 +253,7 @@ class Admin_Controller_Catalog_Category extends Controller
 		
 		$this->data['cancel'] = $this->url->link('catalog/category');
 
-		if ($category_id && (!$this->request->isPost())) {
+		if ($category_id && !$this->request->isPost()) {
 			$category_info = $this->Model_Catalog_Category->getCategory($category_id);
 			
 			$category_info['stores'] = $this->Model_Catalog_Category->getCategoryStores($category_id);

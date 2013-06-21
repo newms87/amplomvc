@@ -263,7 +263,7 @@ class Admin_Controller_Catalog_Flashsale extends Controller
 		$this->data['cancel'] = $this->url->link('catalog/flashsale');
 
 		$flashsale_info = null;
-		if ($flashsale_id && (!$this->request->isPost())) {
+		if ($flashsale_id && !$this->request->isPost()) {
 				$flashsale_info = $this->Model_Catalog_Flashsale->getFlashsale($flashsale_id);
 		}
 		

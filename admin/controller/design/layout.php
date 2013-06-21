@@ -272,7 +272,7 @@ class Admin_Controller_Design_Layout extends Controller
 		
 		$this->data['cancel'] = $this->url->link('design/layout', $url);
 		
-		if (isset($_GET['layout_id']) && (!$this->request->isPost())) {
+		if (isset($_GET['layout_id']) && !$this->request->isPost()) {
 			$layout_info = $this->Model_Design_Layout->getLayout($_GET['layout_id']);
 		}
 

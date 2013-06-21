@@ -317,7 +317,7 @@ class Admin_Controller_Catalog_Download extends Controller
  		
 		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
 
-		if (isset($_GET['download_id']) && (!$this->request->isPost())) {
+		if (isset($_GET['download_id']) && !$this->request->isPost()) {
 			$download_info = $this->Model_Catalog_Download->getDownload($_GET['download_id']);
 		}
 

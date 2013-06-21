@@ -621,7 +621,7 @@ class Admin_Controller_Sale_Return extends Controller
 		
 		$this->data['cancel'] = $this->url->link('sale/return', $url);
 
-		if (isset($_GET['return_id']) && (!$this->request->isPost())) {
+		if (isset($_GET['return_id']) && !$this->request->isPost()) {
 				$return_info = $this->Model_Sale_Return->getReturn($_GET['return_id']);
 		}
 				

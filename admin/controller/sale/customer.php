@@ -687,7 +687,7 @@ class Admin_Controller_Sale_Customer extends Controller
 		
 		$this->data['cancel'] = $this->url->link('sale/customer', $url);
 
-		if (isset($_GET['customer_id']) && (!$this->request->isPost())) {
+		if (isset($_GET['customer_id']) && !$this->request->isPost()) {
 				$customer_info = $this->Model_Sale_Customer->getCustomer($_GET['customer_id']);
 		}
 			

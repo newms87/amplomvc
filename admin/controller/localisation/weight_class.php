@@ -282,7 +282,7 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 
 		$this->data['cancel'] = $this->url->link('localisation/weight_class', $url);
 
-		if (isset($_GET['weight_class_id']) && (!$this->request->isPost())) {
+		if (isset($_GET['weight_class_id']) && !$this->request->isPost()) {
 				$weight_class_info = $this->Model_Localisation_WeightClass->getWeightClass($_GET['weight_class_id']);
 		}
 		

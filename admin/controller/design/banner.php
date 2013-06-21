@@ -169,7 +169,7 @@ class Admin_Controller_Design_Banner extends Controller
 		
 		$this->data['cancel'] = $this->url->link('design/banner', $url);
 		
-		if ($banner_id && (!$this->request->isPost())) {
+		if ($banner_id && !$this->request->isPost()) {
 			$banner_info = $this->Model_Design_Banner->getBanner($banner_id);
 		}
 		

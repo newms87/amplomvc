@@ -278,7 +278,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 		
 		$this->data['cancel'] = $this->url->link('localisation/tax_class', $url);
 
-		if (isset($_GET['tax_class_id']) && (!$this->request->isPost())) {
+		if (isset($_GET['tax_class_id']) && !$this->request->isPost()) {
 			$tax_class_info = $this->Model_Localisation_TaxClass->getTaxClass($_GET['tax_class_id']);
 		}
 

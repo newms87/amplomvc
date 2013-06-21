@@ -288,7 +288,7 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 		
 		$this->data['cancel'] = $this->url->link('localisation/tax_rate', $url);
 
-		if (isset($_GET['tax_rate_id']) && (!$this->request->isPost())) {
+		if (isset($_GET['tax_rate_id']) && !$this->request->isPost()) {
 			$tax_rate_info = $this->Model_Localisation_TaxRate->getTaxRate($_GET['tax_rate_id']);
 		}
 

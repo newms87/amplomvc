@@ -188,7 +188,7 @@ class Admin_Controller_Localisation_Language extends Controller
 		
 		$this->data['cancel'] = $this->url->link('localisation/language', $url);
 
-		if ($language_id && (!$this->request->isPost())) {
+		if ($language_id && !$this->request->isPost()) {
 			$language_info = $this->Model_Localisation_Language->getLanguage($language_id);
 		}
 		

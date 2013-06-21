@@ -284,7 +284,7 @@ class Admin_Controller_Localisation_Currency extends Controller
 				
 		$this->data['cancel'] = $this->url->link('localisation/currency', $url);
 
-		if (isset($_GET['currency_id']) && (!$this->request->isPost())) {
+		if (isset($_GET['currency_id']) && !$this->request->isPost()) {
 			$currency_info = $this->Model_Localisation_Currency->getCurrency($_GET['currency_id']);
 		}
 

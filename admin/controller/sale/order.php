@@ -426,7 +426,7 @@ class Admin_Controller_Sale_Order extends Controller
 		
 		$this->data['cancel'] = $this->url->link('sale/order', $url);
 
-		if (isset($_GET['order_id']) && (!$this->request->isPost())) {
+		if (isset($_GET['order_id']) && !$this->request->isPost()) {
 				$order_info = $this->Model_Sale_Order->getOrder($_GET['order_id']);
 		}
 			

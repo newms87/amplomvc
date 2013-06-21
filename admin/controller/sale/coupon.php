@@ -174,7 +174,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 		
 		$this->data['cancel'] = $this->url->link('sale/coupon', $url);
   		
-		if ($coupon_id && (!$this->request->isPost())) {
+		if ($coupon_id && !$this->request->isPost()) {
 			$coupon_info = $this->Model_Sale_Coupon->getCoupon($coupon_id);
 		}
 		

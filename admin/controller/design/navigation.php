@@ -257,7 +257,7 @@ class Admin_Controller_Design_Navigation extends Controller
 		
 		$this->data['cancel'] = $this->url->link('design/navigation');
 
-		if ($navigation_group_id && (!$this->request->isPost())) {
+		if ($navigation_group_id && !$this->request->isPost()) {
 			$navigation_group_info = $this->Model_Design_Navigation->getNavigationGroup($navigation_group_id);
 		}
 		
