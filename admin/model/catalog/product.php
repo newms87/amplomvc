@@ -561,7 +561,8 @@ class Admin_Model_Catalog_Product extends Model
 		return $product;
 	}
 	
-	public function getProducts($data = array(), $select = '', $total = false) {
+	public function getProducts($data = array(), $select = '', $total = false)
+	{
 		$lang_id = (int)$this->config->get('config_language_id');
 		
 		//Select
@@ -584,18 +585,6 @@ class Admin_Model_Catalog_Product extends Model
 		
 		if (isset($data['model'])) {
 			$where .= " AND LCASE(p.model) like '%" . strtolower($this->db->escape($data['model'])) . "%'";
-		}
-		
-		if ((isset($data['sort']) && $data['sort'] == 'cp.name') || isset($data['collections'])) {
-			$from .= " LEFT JOIN " . DB_PREFIX . "collection_product cp ON (cp.product_id=p.product_id)";
-			
-			if (!empty($data['collections'])) {
-				if (!is_array($data['collections'])) {
-					$data['collections'] = array((int)$data['collections']);
-				}
-				
-				$where .= " AND cp.collection_id IN (" . implode(',', $data['collections']) . ")";
-			}
 		}
 		
 		if (!empty($data['categories'])) {
