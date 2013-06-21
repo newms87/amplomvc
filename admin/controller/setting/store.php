@@ -144,7 +144,7 @@ class Admin_Controller_Setting_Store extends Controller
 				
 		$this->data['cancel'] = $this->url->link('setting/store');
 	
-		if (isset($_GET['store_id']) && !$this->request->isPost()) {
+		if ($store_id && !$this->request->isPost())) {
 			$store = $this->Model_Setting_Store->getStore($store_id);
 			
 			if (!$store) {
