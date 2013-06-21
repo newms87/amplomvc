@@ -174,14 +174,14 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 			
 			$this->data['sorts'][] = array(
 				'text'  => $this->_('text_name_asc'),
-				'value' => 'pd.name-ASC',
-				'href'  => $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $_GET['manufacturer_id'] . '&sort=pd.name&order=ASC' . $url)
+				'value' => 'p.name-ASC',
+				'href'  => $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $_GET['manufacturer_id'] . '&sort=p.name&order=ASC' . $url)
 			);
 	
 			$this->data['sorts'][] = array(
 				'text'  => $this->_('text_name_desc'),
-				'value' => 'pd.name-DESC',
-				'href'  => $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $_GET['manufacturer_id'] . '&sort=pd.name&order=DESC' . $url)
+				'value' => 'p.name-DESC',
+				'href'  => $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $_GET['manufacturer_id'] . '&sort=p.name&order=DESC' . $url)
 			);
 	
 			$this->data['sorts'][] = array(

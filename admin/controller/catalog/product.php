@@ -166,7 +166,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			'display_name' => $this->_('column_name'),
 			'filter' => true,
 			'sortable' => true,
-			'sort_value' => 'pd.name',
+			'sort_value' => 'p.name',
 		);
 		
 		$columns['model'] = array(
@@ -243,7 +243,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		$data = array();
 		
 		$sort_defaults = array(
-			'sort' => 'name',
+			'sort' => 'pd.name',
 			'order' => 'ASC',
 			'limit' => $this->config->get('config_admin_limit'),
 			'page' => 1,

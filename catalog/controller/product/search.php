@@ -250,14 +250,14 @@ class Catalog_Controller_Product_Search extends Controller
 			
 			$this->data['sorts'][] = array(
 				'text'  => $this->_('text_name_asc'),
-				'value' => 'pd.name-ASC',
-				'href'  => $this->url->link('product/search', 'sort=pd.name&order=ASC' . $url)
+				'value' => 'p.name-ASC',
+				'href'  => $this->url->link('product/search', 'sort=p.name&order=ASC' . $url)
 			);
 	
 			$this->data['sorts'][] = array(
 				'text'  => $this->_('text_name_desc'),
-				'value' => 'pd.name-DESC',
-				'href'  => $this->url->link('product/search', 'sort=pd.name&order=DESC' . $url)
+				'value' => 'p.name-DESC',
+				'href'  => $this->url->link('product/search', 'sort=p.name&order=DESC' . $url)
 			);
 	
 			$this->data['sorts'][] = array(

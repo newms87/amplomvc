@@ -123,7 +123,7 @@ class Catalog_Controller_Designers_Designers extends Controller
 				$this->data['filter'] = isset($_GET['filter'])?$_GET['filter']:0;
 				
 				$this->data['sort_url'] = preg_replace("/\?.*/","",$this->data['the_page']);
-				$this->data['sort_list'] = array('pd.name ASC'=>'Sort A-Z', 'pd.name DESC'=>'Sort Z-A',
+				$this->data['sort_list'] = array('p.name ASC'=>'Sort A-Z', 'p.name DESC'=>'Sort Z-A',
 															'price ASC'=>'Lowest Price', 'price DESC'=>'Highest Price');
 															
 				$this->data['share_status'] = $this->config->get('config_share_status');

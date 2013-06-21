@@ -41,7 +41,7 @@
 					<tr>
 						<td>
 							<div><?= $entry_product; ?></div>
-							<div><input type="text" id='product_list_autocomplete' filter="pd.name" route="catalog/product/autocomplete" /></div>
+							<div><input type="text" id='product_list_autocomplete' filter="p.name" route="catalog/product/autocomplete" /></div>
 							<div><?= $text_autocomplete; ?></div>
 						</td>
 						<td>

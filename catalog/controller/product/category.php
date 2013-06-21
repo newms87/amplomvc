@@ -79,8 +79,8 @@ class Catalog_Controller_Product_Category extends Controller
 		//Sorting
 		$sorts = array(
 			'sort=p.sort_order&order=ASC' => $this->_('text_default'),
-			'sort=pd.name&order=ASC' => $this->_('text_name_asc'),
-			'sort=pd.name&order=DESC' => $this->_('text_name_desc'),
+			'sort=p.name&order=ASC' => $this->_('text_name_asc'),
+			'sort=p.name&order=DESC' => $this->_('text_name_desc'),
 			'sort=p.price&order=ASC' => $this->_('text_price_asc'),
 			'sort=p.price&order=DESC' => $this->_('text_price_desc'),
 			'sort=p.model&order=ASC' => $this->_('text_model_asc'),
