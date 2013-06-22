@@ -1427,7 +1427,13 @@ a.button:active, input.button:active {
 .product-info .image-additional a {
 	display: block;
 	margin: 0;
+	max-width: 80px;
+	min-height:74px;
 }
+.product-info .image-additional a img{
+	border: none !important;
+}
+
 .product-info .description {
 	border-top: 1px solid #E7E7E7;
 	border-bottom: 1px solid #E7E7E7;

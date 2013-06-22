@@ -183,4 +183,11 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 			curl_close($curl);
 		}
 	}
+
+	public function auto_return()
+	{
+		html_dump($_POST,'post');
+		html_dump($_GET,'get');
+		echo "you have been autoreturned!";exit;
+	}
 }
