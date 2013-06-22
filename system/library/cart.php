@@ -1313,4 +1313,27 @@ class Cart extends Library
 		
 		return $order_id;
 	}
+	
+	public function hasOrder()
+	{
+		return !empty($this->session->data['order_id']);
+	}
+	
+	public function getOrderId()
+	{
+		return !empty($this->session->data['order_id']) ? $this->session->data['order_id'] : false;
+	}
+	
+	public function getOrder($order_id = null)
+	{
+		if (!$order_id) {
+			$order_id = $this->getOrderId();
+			
+			if (!$order_id) {
+				return null;
+			}
+		}
+		
+		return $this->Model_Checkout_Order->getOrder($order_id);
+	}
 }

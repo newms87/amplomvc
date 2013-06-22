@@ -5,6 +5,8 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 	{
 		$this->language->load('payment/pp_standard');
 		
+		$this->config->load('pp_standard');
+		
 		$this->data['testmode'] = $this->config->get('pp_standard_test');
 		
 		if (!$this->config->get('pp_standard_test')) {
@@ -13,44 +15,26 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 			$this->data['action'] = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
 		}
 
-		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
+		$order_info = $this->cart->getOrder(); 
 
 		if ($order_info) {
-		$this->template->load('payment/pp_standard');
+			$this->template->load('payment/pp_standard');
 
-			$this->data['order_id'] = $this->session->data['order_id'];
+			$this->data['order_id'] = $order_info['order_id'];
 			$this->data['business'] = $this->config->get('pp_standard_email');
 			$this->data['item_name'] = html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
 			
-			$this->data['products'] = array();
+			$products = $this->cart->getProducts();
 			
-			foreach ($this->cart->getProducts() as $product) {
-				$option_data = array();
-	
-				foreach ($product['option'] as $option) {
-					if ($option['type'] != 'file') {
-						$value = $option['option_value'];
-					} else {
-						$filename = $this->encryption->decrypt($option['option_value']);
-						
-						$value = substr($filename, 0, strrpos($filename, '.'));
-					}
-										
-					$option_data[] = array(
-						'name'  => $option['name'],
-						'value' => (strlen($value) > 20 ? substr($value, 0, 20) . '..' : $value)
-					);
-				}
+			foreach ($products as &$product) {
+				foreach ($product['option'] as &$option) {
+					$option['value'] = $this->tool->limit_characters($option['option_value'], 20);
+				} unset($option);
 				
-				$this->data['products'][] = array(
-					'name'	=> $product['name'],
-					'model'	=> $product['model'],
-					'price'	=> $this->currency->format($product['price'], $order_info['currency_code'], false, false),
-					'quantity' => $product['quantity'],
-					'option'	=> $option_data,
-					'weight'	=> $product['weight']
-				);
-			}
+				$product['price'] = $this->currency->format($product['price'], $order_info['currency_code'], false, false);
+			} unset($product);
+			
+			$this->data['products'] = $products;
 			
 			$this->data['discount_amount_cart'] = 0;
 			
@@ -78,24 +62,27 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 			$this->data['zip'] = html_entity_decode($order_info['payment_postcode'], ENT_QUOTES, 'UTF-8');
 			$this->data['country'] = $order_info['payment_iso_code_2'];
 			$this->data['email'] = $order_info['email'];
-			$this->data['invoice'] = $this->session->data['order_id'] . ' - ' . html_entity_decode($order_info['payment_firstname'], ENT_QUOTES, 'UTF-8') . ' ' . html_entity_decode($order_info['payment_lastname'], ENT_QUOTES, 'UTF-8');
+			$this->data['invoice'] = $order_info['order_id'] . ' - ' . html_entity_decode($order_info['payment_firstname'], ENT_QUOTES, 'UTF-8') . ' ' . html_entity_decode($order_info['payment_lastname'], ENT_QUOTES, 'UTF-8');
 			$this->data['lc'] = $this->language->code();
-			$this->data['return'] = $this->url->link('checkout/success');
 			$this->data['notify_url'] = $this->url->link('payment/pp_standard/callback');
 			$this->data['cancel_return'] = $this->url->link('checkout/checkout');
 			$this->data['page_style'] = $this->config->get('pp_standard_page_style');
+			
+			if ($this->config->get('pp_standard_pdt_enabled_url')) {
+				echo "enabled!";
+				$this->data['return'] = $this->config->get('pp_standard_auto_return_url');
+			} else {
+				echo 'no...';
+				$this->data['return'] = $this->url->link('checkout/success');
+			}
 			
 			$server = $this->url->is_ssl() ? HTTPS_IMAGE : HTTP_IMAGE;
 			
 			$this->data['image_url'] = $server . $this->config->get('config_logo');
 			
-			if (!$this->config->get('pp_standard_transaction')) {
-				$this->data['paymentaction'] = 'authorization';
-			} else {
-				$this->data['paymentaction'] = 'sale';
-			}
+			$this->data['paymentaction'] = $this->config->get('pp_standard_transaction') ? 'sale' : 'authorization';
 			
-			$this->data['custom'] = $this->encryption->encrypt($this->session->data['order_id']);
+			$this->data['custom'] = $this->encryption->encrypt($order_info['order_id']);
 			
 			$this->render();
 		}
@@ -134,7 +121,7 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 			curl_setopt($curl, CURLOPT_HEADER, false);
 			curl_setopt($curl, CURLOPT_TIMEOUT, 30);
 			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-					
+			
 			$response = curl_exec($curl);
 			
 			if (!$response) {

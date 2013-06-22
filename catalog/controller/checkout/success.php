@@ -5,7 +5,7 @@ class Catalog_Controller_Checkout_Success extends Controller
 	{
 		$this->template->load('common/success');
 
-		if (isset($this->session->data['order_id'])) {
+		if ($this->cart->hasOrder()) {
 			$this->cart->clear();
 		}
 										
