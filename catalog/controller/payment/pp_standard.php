@@ -16,7 +16,7 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
 
 		if ($order_info) {
-		$this->template->load('payment/pp_standard');
+			$this->template->load('payment/pp_standard');
 
 			$this->data['order_id'] = $this->session->data['order_id'];
 			$this->data['business'] = $this->config->get('pp_standard_email');
@@ -195,5 +195,12 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 			
 			curl_close($curl);
 		}
+	}
+
+	public function auto_return()
+	{
+		html_dump($_POST,'post');
+		html_dump($_GET,'get');
+		echo "you have been autoreturned!";exit;
 	}
 }

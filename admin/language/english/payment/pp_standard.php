@@ -6,8 +6,12 @@ $_['heading_title']					= 'PayPal Standard';
 $_['text_payment']					= 'Payment';
 $_['text_success']					= 'Success: You have modified PayPal account details!';
 $_['text_pp_standard']				= '<a onclick="window.open(\'https://www.paypal.com/uk/mrb/pal=W9TBB5DTD6QJW\');"><img src="view/theme/default/image/payment/paypal.png" alt="PayPal" title="PayPal" style="border: 1px solid #EEEEEE;" /></a>';
-$_['text_authorization']			= 'Authorization';
-$_['text_sale']						= 'Sale';
+
+//Data
+$_['data_auth_sale']	= array(
+	0 => "Authorization",
+	1 => "Sale",
+);
 
 // Entry
 $_['entry_email']					= 'E-Mail:';
@@ -29,6 +33,9 @@ $_['entry_geo_zone']				= 'Geo Zone:';
 $_['entry_status']					= 'Status:';
 $_['entry_sort_order']				= 'Sort Order:';
 $_['entry_page_style']				= 'Page Style: <span class="help">Enter \'primary\' for the primary style set on your Paypal account, or enter the name of the style as you named it on your paypal account. Leave blank to use the default</span>';
+$_['entry_pdt_enabled']		= "PDT is enabled?<span class=\"help\">This will allow the user to be instantly returned to your site after payment.</span>";
+$_['entry_pdt_enabled_help'] = "To enabled PDT on your account you must <a target=\"_blank\" href=\"http://www.paypal.com/\">login to your paypal account</a>.<br />Go to Profile > Website payments preferences.<br />From here enable PDT and Auto Return.";
+$_['entry_auto_return_url'] = "Auto Return URL";
 
 // Error
 $_['error_permission']				= 'Warning: You do not have permission to modify payment PayPal!';

@@ -118,6 +118,25 @@ class Config extends Library
 		return isset($this->data[$key]);
   	}
 	
+	public function load($group = '', $key = '')
+	{
+		$where = '1';
+		
+		if ($group) {
+			$where .= " AND `group` = '" . $this->db->escape($group) . "'";
+		}
+		
+		if ($key) {
+			$where .= " AND `key` = '" . $this->db->escape($key) . "'";
+		}
+		
+		$settings = $this->db->query_rows("SELECT `key`, `value` FROM " . DB_PREFIX . "setting WHERE $where");
+		
+		foreach ($settings as $config) {
+			$this->data[$config['key']] = $config['value'];
+		}
+	}
+	
 	public function save($group, $key, $data, $auto_load = true)
 	{
 		$this->Model_Setting_Setting->editSettingKey($group, $key, $data, $this->store_id, $auto_load);
