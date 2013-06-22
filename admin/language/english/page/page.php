@@ -15,6 +15,9 @@ $_['column_name']		= 'Page Title';
 $_['column_store']	= 'Stores';
 $_['column_status']	= 'Status';
 $_['column_action']	= 'Action';
+$_['column_block_name'] = "Block Name";
+$_['column_block_store'] = "Store Name";
+$_['column_block_position'] = "Position";
 
 // Entry
 $_['entry_name']		= 'Page Title:';
@@ -25,9 +28,11 @@ $_['entry_keyword']	= 'SEO Keyword:<br /><span class="help">Do not use spaces in
 $_['entry_meta_keywords'] = 'Meta Keywords:';
 $_['entry_meta_description'] = 'Meta Description:';
 $_['entry_status']		= 'Status:';
+$_['entry_blocks'] = "Blocks Associated with this Page";
 
 //Button
 $_['button_create_layout']	= "[ Create Layout for this page ]";
+$_['button_add_blocks'] = "Add More Blocks";
 
 // Error
 $_['error_warning']	= 'Warning: Please check the form carefully for errors!';

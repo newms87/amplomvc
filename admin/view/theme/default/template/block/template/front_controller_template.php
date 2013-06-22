@@ -8,6 +8,8 @@ class %class_name% extends Controller
 		
 		//Your code goes here...
 		
+		$this->data = $settings;
+		
 		$this->render();
 	}
 }

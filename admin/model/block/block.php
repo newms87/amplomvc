@@ -58,7 +58,7 @@ class Admin_Model_Block_Block extends Model
 		file_put_contents($language_file, $content);
 		
 		//Settings & Profiles template files
-		$profiles_file = DIR_THEME . 'default/template/block/' . $data['route'] . '_profiles.tpl';
+		$profiles_file = DIR_THEME . 'default/template/block/' . $data['route'] . '_profile.tpl';
 		$settings_file = DIR_THEME . 'default/template/block/' . $data['route'] . '_settings.tpl';
 		
 		_is_writable(dirname($profiles_file));
@@ -101,21 +101,27 @@ class Admin_Model_Block_Block extends Model
 		
 		file_put_contents($language_file, $content);
 		
-		//Front Template
-		$template_template = DIR_THEME . 'default/template/block/template/template_template.tpl';
-		$template_file = SITE_DIR . 'catalog/view/theme/default/template/block/' . $data['route'] . '.tpl';
-		
-		_is_writable(dirname($template_file));
-		
-		$content = file_get_contents($template_template);
-		
-		$insertables = array(
-			'slug' => $this->tool->get_slug($data['route']),
-		);
-		
-		$content = $this->tool->insertables($insertables, $content);
-		
-		file_put_contents($template_file, $content);
+		if (!empty($data['themes'])) {
+			
+			//Front Template
+			$template_template = DIR_THEME . 'default/template/block/template/template_template.tpl';
+			
+			foreach ($data['themes'] as $theme) {
+				$template_file = SITE_DIR . 'catalog/view/theme/' . $theme . '/template/block/' . $data['route'] . '.tpl';
+				
+				_is_writable(dirname($template_file));
+				
+				$content = file_get_contents($template_template);
+				
+				$insertables = array(
+					'slug' => $this->tool->get_slug($data['route']),
+				);
+				
+				$content = $this->tool->insertables($insertables, $content);
+				
+				file_put_contents($template_file, $content);
+			}
+		}
 	}
 	
 	public function updateBlock($name, $data)
@@ -180,9 +186,6 @@ class Admin_Model_Block_Block extends Model
 			return count($block_files);
 		}
 		
-		$start = isset($data['start']) ? (int)$data['start'] : 0;
-		$limit = isset($data['limit']) ? $start + (int)$data['limit'] : false;
-		
 		$blocks = array();
 		$sort_order = array();
 		
@@ -215,6 +218,37 @@ class Admin_Model_Block_Block extends Model
 				}
 			}
 			
+			//Filter Layout
+			if (isset($data['layouts'])) {
+				$found = false;
+				foreach ($block['profiles'] as $profile) {
+					foreach ($profile['layout_ids'] as $layout_id) {
+						if (in_array($layout_id, $data['layouts'])) {
+							$found = true;
+							break;
+						}
+					}
+				}
+				
+				if (!$found) { continue; }
+			}
+			
+			//Filter Stores
+			if (isset($data['stores'])) {
+				$found = false;
+				
+				foreach ($block['profiles'] as $profile) {
+					foreach ($profile['store_ids'] as $store_id) {
+						if (in_array($store_id, $data['stores'])) {
+							$found = true;
+							break;
+						}
+					}
+				}
+				
+				if (!$found) { continue; }
+			}
+			
 			if (!$block) {
 				$block = array(
 					'name' => $name,
@@ -229,14 +263,18 @@ class Admin_Model_Block_Block extends Model
 		}
 		
 		if (isset($data['sort'])) {
-			foreach ($blocks as $key => $block) {
-				$sort_order[$key] = $block[$data['sort']];
-			}
-			
-			$order = (!empty($data['order']) && $data['order'] == 'ASC') ? SORT_ASC : SORT_DESC;
-			
-			array_multisort($sort_order, $order, $blocks);
+			uasort($blocks, function($a, $b) use($data) {
+				if (!empty($data['order']) && $data['order'] === 'DESC') {
+					return $a[$data['sort']] < $b[$data['sort']];
+				} else {
+					return $a[$data['sort']] > $b[$data['sort']];
+				} 
+			});
 		}
+		
+		//Limits
+		$start = isset($data['start']) ? (int)$data['start'] : 0;
+		$limit = isset($data['limit']) ? $start + (int)$data['limit'] : null;
 		
 		$blocks = array_slice($blocks, $start, $limit);
 		

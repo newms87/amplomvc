@@ -272,14 +272,6 @@ body > #container {
 	min-width: 900px;
 	padding-bottom: 128px;
 }
-
-.list .actions a{
-	text-decoration:none;
-}
-
-.list tbody tr:nth-child(even) > td{
-	background: rgba(0,0,200,.2);
-}
 	
 #footer {
 	background: #FFFFFF url('../image/footer.png') repeat-x;
@@ -499,6 +491,113 @@ a.button:visited{
 	color: #FFFFFF;
 }
 
+.add_button {
+	cursor: pointer;
+	color: #FFFFFF;
+	line-height: 12px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	
+	background: #646807; /* Old browsers */
+	background: -webkit-linear-gradient(top,  #BFDA36 0%,#646807 100%); /* Chrome10+,Safari5.1+ */
+	background: -moz-linear-gradient(top,  #BFDA36 0%, #646807 100%); /* FF3.6+ */
+	background: -o-linear-gradient(top,  #BFDA36 0%,#646807 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #BFDA36 0%,#646807 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #BFDA36 0%,#646807 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#BFDA36', endColorstr='#646807',GradientType=0 ); /* IE6-8 */
+
+	-webkit-border-radius: 7px 7px 7px 7px;
+	-moz-border-radius: 7px 7px 7px 7px;
+	-khtml-border-radius: 7px 7px 7px 7px;
+	border-radius: 7px 7px 7px 7px;
+	-webkit-box-shadow: 0px 2px 2px #DDDDDD;
+	-moz-box-shadow: 0px 2px 2px #DDDDDD;
+	box-shadow: 0px 2px 2px #DDDDDD;
+}
+
+.add_button:after{
+	content: "+";
+}
+
+.add_button.text:after{
+	content: "";
+}
+
+a.add_button {
+	display: inline-block;
+	text-decoration: none;
+	padding: 6px 12px 6px 12px;
+}
+
+.add_button:hover{
+	background: #BFDA36; /* Old browsers */
+	background: -webkit-linear-gradient(top,  #646807 0%,#BFDA36 100%); /* Chrome10+,Safari5.1+ */
+	background: -moz-linear-gradient(top,  #646807 0%, #BFDA36 100%); /* FF3.6+ */
+	background: -o-linear-gradient(top,  #646807 0%,#BFDA36 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #646807 0%,#BFDA36 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #646807 0%,#BFDA36 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#646807', endColorstr='#BFDA36',GradientType=0 ); /* IE6-8 */
+}
+
+a.add_button:visited{
+	color: #FFFFFF;
+}
+
+.delete_button {
+	cursor: pointer;
+	color: #FFFFFF;
+	line-height: 12px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	
+	background: #B11818; /* Old browsers */
+	background: -webkit-linear-gradient(top,  #F99898 0%,#B11818 100%); /* Chrome10+,Safari5.1+ */
+	background: -moz-linear-gradient(top,  #F99898 0%, #B11818 100%); /* FF3.6+ */
+	background: -o-linear-gradient(top,  #F99898 0%,#B11818 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #F99898 0%,#B11818 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #F99898 0%,#B11818 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#F99898', endColorstr='#B11818',GradientType=0 ); /* IE6-8 */
+
+	-webkit-border-radius: 7px 7px 7px 7px;
+	-moz-border-radius: 7px 7px 7px 7px;
+	-khtml-border-radius: 7px 7px 7px 7px;
+	border-radius: 7px 7px 7px 7px;
+	-webkit-box-shadow: 0px 2px 2px #DDDDDD;
+	-moz-box-shadow: 0px 2px 2px #DDDDDD;
+	box-shadow: 0px 2px 2px #DDDDDD;
+}
+
+.delete_button:after{
+	content: "X";
+}
+
+.delete_button.text:after{
+	content: "";
+}
+
+a.delete_button {
+	display: inline-block;
+	text-decoration: none;
+	padding: 6px 12px 6px 12px;
+}
+
+a.delete_button:visited{
+	color: #FFFFFF;
+	text-decoration:none;
+}
+
+.delete_button:hover{
+	background: #F99898; /* Old browsers */
+	background: -webkit-linear-gradient(top,  #B11818 0%,#F99898 100%); /* Chrome10+,Safari5.1+ */
+	background: -moz-linear-gradient(top,  #B11818 0%, #F99898 100%); /* FF3.6+ */
+	background: -o-linear-gradient(top,  #B11818 0%,#F99898 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #B11818 0%,#F99898 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #B11818 0%,#F99898 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#B11818', endColorstr='#F99898',GradientType=0 ); /* IE6-8 */
+}
+
 .list {
 	border-collapse: collapse;
 	width: 100%;
@@ -506,13 +605,14 @@ a.button:visited{
 	border-left: 1px solid #DDDDDD;
 	margin-bottom: 20px;
 }
+
 .list td {
 	border-right: 1px solid #DDDDDD;
 	border-bottom: 1px solid #DDDDDD;
 }
 .list thead td {
 	background-color: #EFEFEF;
-	padding: 0px 5px;
+	padding: 10px 10px;
 }
 .list thead td a, .list thead td {
 	text-decoration: none;
@@ -521,9 +621,19 @@ a.button:visited{
 }
 .list tbody td {
 	vertical-align: middle;
-	padding: 0px 5px;
+	padding: 5px 10px;
 	background: #FFFFFF;
 }
+
+.list tbody tr:nth-child(even) > td{
+	background: rgba(0,0,200,.2);
+}
+
+.list tfoot tr td{
+	padding: 10px 10px;
+	background: #E4EEF7;
+}
+
 .list .left {
 	text-align: left;
 	padding: 7px;
@@ -544,6 +654,10 @@ a.button:visited{
 .list .column_title > a{
 	position: relative;
 	top:-5px;
+}
+
+.list .actions a{
+	text-decoration:none;
 }
 
 .list .sortable:after{
@@ -667,18 +781,6 @@ table.form > tbody > tr > td {
 	padding: 10px;
 	color: #000000;
 	border-bottom: 1px dotted #CCCCCC;
-}
-
-table table.list{
-	margin: 10px 0;
-}
-table table.list thead tr td{
-	padding: 5px 0;
-	background: #AAA;
-}
-
-table table.list tfoot tr td{
-	padding: 5px 0;
 }
 
 .button_add{
@@ -1805,4 +1907,83 @@ td.mail_info label{
 }
 .display_icon_label div, .display_icon_label label, .display_icon_label input{
 	float:left;
+}
+
+/* Page Form */
+#assigned_block_list tbody tr td{
+	font-size: 16px;
+	font-weight:bold;
+}
+
+/* Easy List */
+.easy_list *{
+	box-sizing:border-box;
+}
+
+.easy_list{
+	list-style: none;
+}
+
+.easy_list input, .easy_list textarea{
+	border-radius: 5px;
+	padding: 1px 5px;
+}
+
+body .easy_list li input[type=text]:active,
+body .easy_list li textarea:active,
+body .easy_list li input[type=text]:focus,
+body .easy_list li textarea:focus{
+	background: #B6CEED;
+	border: 1px solid #2C3B6A;
+}
+
+.easy_list > li {
+	padding: 5px 10px;
+	border: dashed 1px #AAA;
+	margin-bottom:15px;
+	position:relative;
+}
+
+.easy_list li input,
+.easy_list li textarea{
+	margin: 0;
+	border: 1px solid transparent;
+	background: none;
+	padding: 5px 10px;
+	width: 90%;
+}
+
+.easy_list li input:hover,
+.easy_list li textarea:hover{
+	background: #BBDF8D;
+}
+
+.easy_list > li > .delete_button{
+	position: absolute;
+	top:10px;
+	right: 10px;
+}
+
+.easy_list .easy_list{
+	margin-top: 15px;
+	padding: 0 40px;
+}
+
+/* FAQ Block */
+#faq_list .faq_group input.group_title{
+	font-size: 18px;
+	font-weight:bold;
+}
+
+#faq_list .faq_question_list .question{
+	font-size: 14px;
+	font-weight:bold;
+}
+
+#faq_list .faq_item .delete_button{
+	position:absolute;
+	top: 4px;
+	left: -40px;
+	right: auto;
+	bottom: auto;
 }

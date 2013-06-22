@@ -30,27 +30,17 @@ class Admin_Model_Setting_Store extends Model
 	
 	public function getStore($store_id)
 	{
-		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "store WHERE store_id = '" . (int)$store_id . "'");
-		
-		return $query->row;
+		return $this->query_row("SELECT DISTINCT * FROM " . DB_PREFIX . "store WHERE store_id = '" . (int)$store_id . "'");
 	}
 	
 	public function getStoreName($store_id)
 	{
-		$query = $this->query("SELECT value FROM " . DB_PREFIX . "setting WHERE store_id = '" . (int)$store_id . "' AND `key`='config_name'");
-		
-		if ($query->num_rows) {
-			return $query->row['value'];
-		}
-		else {
-			return '';
-		}
+		return $this->query_var("SELECT name FROM " . DB_PREFIX . "store WHERE store_id = '" . (int)$store_id . "'");
 	}
+	
 	public function getStoreNames()
 	{
-		$query = $this->query("SELECT store_id, value as name FROM " . DB_PREFIX . "setting WHERE `key`='config_name'");
-		
-		return $query->rows;
+		return $this->query_rows("SELECT store_id, name FROM " . DB_PREFIX . "store");
 	}
 	
 	public function getStores($data = array(), $total = false) {

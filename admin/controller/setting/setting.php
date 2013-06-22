@@ -184,7 +184,7 @@ class Admin_Controller_Setting_Setting extends Controller
 
 		$this->data['data_layouts'] = $this->Model_Design_Layout->getLayouts();
 		
-		$this->data['themes'] = $this->theme->get_themes();
+		$this->data['themes'] = $this->theme->getThemes();
 		
 		$this->data['stores'] = $this->Model_Setting_Store->getStores();
 		

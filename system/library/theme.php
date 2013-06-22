@@ -74,7 +74,7 @@ class Theme extends Library
 	private function load_admin_theme_settings()
 	{
 		//We get the Themes here to validate the file modified times for caching
-		$themes = $this->get_themes();
+		$themes = $this->getThemes();
 		
 		$theme_settings_admin = $this->cache->get('theme_settings_admin');
 			
@@ -101,7 +101,7 @@ class Theme extends Library
 		return $theme_settings_admin;
 	}
 	
-	public function get_themes()
+	public function getThemes()
 	{
 		$theme_dir = DIR_CATALOG . 'view/theme/';
 		

@@ -126,7 +126,6 @@ function generate_url(c){
  
 <script type="text/javascript">//<!--
 $('#tabs a').tabs();
-$('#languages a').tabs();
 //--></script>
 
 <?= $this->builder->js('errors',$errors); ?>

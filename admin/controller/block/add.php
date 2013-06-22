@@ -41,9 +41,8 @@ class Admin_Controller_Block_Add extends Controller
 			'language_file' => true,
 			'settings_file' => true,
 			'profiles_file' => true,
+			'themes' => array('default'),
 			'front_language_file' => true,
-			'has_template' => true,
-			'template_file' => '',
 		);
 		
 		foreach ($defaults as $key => $default) {
@@ -55,6 +54,8 @@ class Admin_Controller_Block_Add extends Controller
 				$this->data[$key] = $default;
 			}
 		}
+		
+		$this->data['data_themes'] = $this->theme->getThemes();
 		
 		$this->children = array(
 			'common/header',

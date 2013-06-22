@@ -39,17 +39,10 @@
 						<td colspan="2"><h2><?= $text_front_end; ?></h2></td>
 					</tr>
 					<tr>
-						<td valign="top"><?= $entry_has_template; ?></td>
+						<td><?= $entry_theme; ?></td>
 						<td>
-							<input type="checkbox" name="has_template" value="1" <?= $has_template ? 'checked' : ''; ?> />
-							<div id="template_file_data">
-								<table class="form">
-									<tr>
-										<td><label for="template_name"><?= $entry_template_file; ?></label></td>
-										<td><input id="template_name" type="text" name="template_file" value="<?= $template_file; ?>" /></td>
-									</tr>
-								</table>
-							</div>
+							<? $this->builder->set_config('name', 'name'); ?>
+							<?= $this->builder->build('multiselect', $data_themes, 'themes', $themes); ?>
 						</td>
 					</tr>
 				</table>

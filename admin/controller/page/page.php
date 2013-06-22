@@ -271,6 +271,7 @@ class Admin_Controller_Page_Page extends Controller
 			'meta_description' => '',
 			'layout_id' => 0,
 			'stores' => array(0),
+			'blocks' => array(),
 			'status' => 1,
 			'translations' => array(),
 		);
@@ -295,7 +296,10 @@ class Admin_Controller_Page_Page extends Controller
 		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
 		$this->data['data_layouts'] = $this->Model_Design_Layout->getLayouts();
 		
+		//Urls
+		$this->data['url_blocks'] = $this->url->link('block/block');
 		$this->data['url_create_layout'] = $this->url->link('page/page/create_layout');
+		$this->data['url_load_blocks'] = $this->url->link('page/page/loadBlocks');
 		
 		$this->children = array(
 			'common/header',
@@ -332,6 +336,41 @@ class Admin_Controller_Page_Page extends Controller
 		$this->builder->set_config('layout_id', 'name');
 		
 		$this->response->setOutput($this->builder->build('select', $layouts, 'layout_id', $layout_id));
+	}
+	
+	public function loadBlocks()
+	{
+		$blocks = array();
+		
+		if (!empty($_POST['layout_id']) && !empty($_POST['stores'])) {
+			$filter = array(
+				'layouts' => array($_POST['layout_id']),
+				'stores' => $_POST['stores'],
+				'status' => 1,
+			);
+			
+			$block_list = $this->Model_Block_Block->getBlocks($filter);
+			
+			$blocks = array();
+			
+			$data_positions = $this->theme->get_setting('data_positions');
+			
+			foreach ($block_list as $block) {
+				foreach ($block['profiles'] as $profile) {
+					foreach ($profile['store_ids'] as $store_id) {
+						$blocks[] = array(
+							'name' => $block['name'],
+							'display_name' => $block['display_name'],
+							'position' => $data_positions[$profile['position']],
+							'store_id' => $store_id,
+							'store_name' => $this->Model_Setting_Store->getStoreName($store_id),
+						);
+					}
+				}
+			}
+		}
+		
+		$this->response->setOutput(json_encode($blocks));
 	}
 	
 	private function validateForm()

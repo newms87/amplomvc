@@ -231,7 +231,7 @@ class Admin_Controller_Setting_Store extends Controller
 		
 		$this->data['layouts'] = $this->Model_Design_Layout->getLayouts();
 		
-		$this->data['themes'] = $this->theme->get_themes();
+		$this->data['themes'] = $this->theme->getThemes();
 		
 		$this->data['geo_zones'] = array_merge(array(0=>"--- All Zones ---"),$this->Model_Localisation_GeoZone->getGeoZones());
 		
