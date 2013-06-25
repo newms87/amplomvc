@@ -1,6 +1,6 @@
 <?= $header; ?><?= $column_left; ?><?= $column_right; ?>
 <div id="content">
-	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $breadcrumbs; ?>
 	<?= $content_top; ?>
 	<? if(empty($flashsales)){?>
 			<h1><?= $no_sales_heading; ?></h1>

@@ -45,6 +45,8 @@ class Admin_Controller_Total_Credit extends Controller
 			$this->data['credit_sort_order'] = $this->config->get('credit_sort_order');
 		}
 																		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

@@ -53,6 +53,8 @@ class Admin_Controller_Tool_Backup extends Controller
 
 		$this->data['tables'] = $this->Model_Tool_Backup->getTables();
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

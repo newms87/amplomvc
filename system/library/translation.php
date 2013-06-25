@@ -14,10 +14,10 @@ class Translation extends Library
 			
 			$translations = array();
 			
-			$translate_list = $this->db->query_rows("SELECT translation_id, `field` FROM " . DB_PREFIX . "translation WHERE `table` = '$table'");
+			$translate_list = $this->db->queryRows("SELECT translation_id, `field` FROM " . DB_PREFIX . "translation WHERE `table` = '$table'");
 			
 			foreach ($translate_list as $row) {
-				$result = $this->db->query_row("SELECT text FROM " . DB_PREFIX . "translation_text WHERE translation_id = '$row[translation_id]' AND language_id = '$language_id' AND object_id = '" . (int)$object_id . "' AND `text` != ''");
+				$result = $this->db->queryRow("SELECT text FROM " . DB_PREFIX . "translation_text WHERE translation_id = '$row[translation_id]' AND language_id = '$language_id' AND object_id = '" . (int)$object_id . "' AND `text` != ''");
 				
 				if ($result) {
 					$translations[$row['field']] = html_entity_decode($result['text']);
@@ -60,7 +60,7 @@ class Translation extends Library
 		
 		$translations = array();
 		
-		$results = $this->db->query_rows("SELECT translation_id, `field` FROM " . DB_PREFIX . "translation WHERE `table` = '" . $this->db->escape($table) . "'");
+		$results = $this->db->queryRows("SELECT translation_id, `field` FROM " . DB_PREFIX . "translation WHERE `table` = '" . $this->db->escape($table) . "'");
 		
 		//Identify all necessary fields
 		if (empty($fields)) {
@@ -78,7 +78,7 @@ class Translation extends Library
 				" WHERE translation_id = '$translation[translation_id]'" .
 				" AND object_id = '" . $this->db->escape($object_id) . "'";
 			
-			$t_rows = $this->db->query_rows($query);
+			$t_rows = $this->db->queryRows($query);
 			
 			foreach ($t_rows as $row) {
 				$translations[$translation['field']][$row['language_id']] = html_entity_decode($row['text']);
@@ -131,7 +131,7 @@ class Translation extends Library
 	
 	public function get_translation_id($table, $field, $create = true)
 	{
-		$translation_id = $this->db->query_var("SELECT translation_id FROM " . DB_PREFIX . "translation WHERE `table` = '" . $this->db->escape($table) . "' AND `field` = '" . $this->db->escape($field) . "' LIMIT 1");
+		$translation_id = $this->db->queryVar("SELECT translation_id FROM " . DB_PREFIX . "translation WHERE `table` = '" . $this->db->escape($table) . "' AND `field` = '" . $this->db->escape($field) . "' LIMIT 1");
 		
 		if (!$translation_id && $create) {
 			$translation_id = $this->add($table, $field);

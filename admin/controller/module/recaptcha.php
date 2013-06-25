@@ -57,6 +57,8 @@ class Admin_Controller_Module_Recaptcha extends Controller
 			$this->data['public_key'] = $this->config->get('recaptcha_public_key');
 		}
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer',

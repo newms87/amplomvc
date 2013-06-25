@@ -103,6 +103,8 @@ class Admin_Controller_Payment_Sagepay extends Controller
 			$this->data['sagepay_sort_order'] = $this->config->get('sagepay_sort_order');
 		}
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

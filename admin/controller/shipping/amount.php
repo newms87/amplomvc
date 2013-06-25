@@ -47,6 +47,8 @@ class Admin_Controller_Shipping_Amount extends Controller
 		$this->data['default_country'] = 223;
 		$this->data['countries'] = $this->Model_Localisation_Country->getCountries();
 		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

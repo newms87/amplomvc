@@ -21,12 +21,12 @@ class Admin_Model_Sale_Voucher extends Model
 	
 	public function getVoucher($voucher_id)
 	{
-		return $this->query_row("SELECT DISTINCT * FROM " . DB_PREFIX . "voucher WHERE voucher_id = '" . (int)$voucher_id . "'");
+		return $this->queryRow("SELECT DISTINCT * FROM " . DB_PREFIX . "voucher WHERE voucher_id = '" . (int)$voucher_id . "'");
 	}
 
 	public function getVoucherByCode($code)
 	{
-		return $this->query_row("SELECT DISTINCT * FROM " . DB_PREFIX . "voucher WHERE code = '" . $this->db->escape($code) . "'");
+		return $this->queryRow("SELECT DISTINCT * FROM " . DB_PREFIX . "voucher WHERE code = '" . $this->db->escape($code) . "'");
 	}
 		
 	public function getVouchers($data = array(), $select = '*', $total = false)
@@ -140,21 +140,21 @@ class Admin_Model_Sale_Voucher extends Model
 			
 	public function getTotalVouchers()
 	{
-		return $this->query_var("SELECT COUNT(*) FROM " . DB_PREFIX . "voucher");
+		return $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "voucher");
 	}
 	
 	public function getTotalVouchersByVoucherThemeId($voucher_theme_id)
 	{
-		return $this->query_var("SELECT COUNT(*) FROM " . DB_PREFIX . "voucher WHERE voucher_theme_id = '" . (int)$voucher_theme_id . "'");
+		return $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "voucher WHERE voucher_theme_id = '" . (int)$voucher_theme_id . "'");
 	}
 	
 	public function getVoucherHistories($voucher_id, $start = 0, $limit = 10)
 	{
-		return $this->query_rows("SELECT vh.order_id, CONCAT(o.firstname, ' ', o.lastname) AS customer, vh.amount, vh.date_added FROM " . DB_PREFIX . "voucher_history vh LEFT JOIN `" . DB_PREFIX . "order` o ON (vh.order_id = o.order_id) WHERE vh.voucher_id = '" . (int)$voucher_id . "' ORDER BY vh.date_added ASC LIMIT " . (int)$start . "," . (int)$limit);
+		return $this->queryRows("SELECT vh.order_id, CONCAT(o.firstname, ' ', o.lastname) AS customer, vh.amount, vh.date_added FROM " . DB_PREFIX . "voucher_history vh LEFT JOIN `" . DB_PREFIX . "order` o ON (vh.order_id = o.order_id) WHERE vh.voucher_id = '" . (int)$voucher_id . "' ORDER BY vh.date_added ASC LIMIT " . (int)$start . "," . (int)$limit);
 	}
 	
 	public function getTotalVoucherHistories($voucher_id)
 	{
-		return $this->query_var("SELECT COUNT(*) FROM " . DB_PREFIX . "voucher_history WHERE voucher_id = '" . (int)$voucher_id . "'");
+		return $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "voucher_history WHERE voucher_id = '" . (int)$voucher_id . "'");
 	}
 }

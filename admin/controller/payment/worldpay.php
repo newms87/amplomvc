@@ -99,6 +99,8 @@ class Admin_Controller_Payment_Worldpay extends Controller
 			$this->data['worldpay_sort_order'] = $this->config->get('worldpay_sort_order');
 		}
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

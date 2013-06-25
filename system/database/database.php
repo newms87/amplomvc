@@ -1,13 +1,13 @@
 <?php
 interface Database{
 	
-	public function get_error();
+	public function getError();
 		
 	public function query($sql);
 		
 	public function escape($value);
 	
-	public function escape_html($value);
+	public function escapeHtml($value);
 	
 	public function countAffected();
 

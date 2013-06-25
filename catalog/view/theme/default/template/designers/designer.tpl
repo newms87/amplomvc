@@ -1,6 +1,6 @@
 <?= $header .$column_left .$column_right; ?>
 <div id='content'>
-	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $breadcrumbs; ?>
 	<?= $content_top; ?>
 <? if(!isset($section_products)){?>
 	<div class="content">

@@ -129,6 +129,8 @@ class Admin_Controller_Payment_PpProUk extends Controller
 			$this->data['pp_pro_uk_sort_order'] = $this->config->get('pp_pro_uk_sort_order');
 		}
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

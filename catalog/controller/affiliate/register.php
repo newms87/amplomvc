@@ -266,6 +266,8 @@ class Catalog_Controller_Affiliate_Register extends Controller
 			$this->data['agree'] = false;
 		}
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',

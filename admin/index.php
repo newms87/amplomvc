@@ -119,7 +119,7 @@ if (!isset($_GET['route'])) {
 //Database Structure Validation
 $db_last_update = (int)$cache->get('db_last_update');
 
-$row = $db->query_row("SHOW GLOBAL STATUS WHERE Variable_name = 'com_alter_table' AND Value > '$db_last_update'");
+$row = $db->queryRow("SHOW GLOBAL STATUS WHERE Variable_name = 'com_alter_table' AND Value > '$db_last_update'");
 
 if ($row) {
 	$cache->delete('model');

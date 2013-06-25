@@ -51,7 +51,7 @@ class Catalog_Model_Localisation_Zone extends Model
 		$query .= " LEFT JOIN " . DB_PREFIX . "geo_zone g ON(z2g.geo_zone_id=g.geo_zone_id)";
 		$query .= " WHERE z2g.geo_zone_id = '" . (int)$geo_zone_id . "' AND (($include) OR ($exclude))";
 		
-		$total = $this->query_var($query);
+		$total = $this->queryVar($query);
 		
 		return $total > 0;
 	}

@@ -1,8 +1,6 @@
 <?php
 class Admin_Controller_Setting_Store extends Controller 
 {
-	
-
 	public function index()
 	{
 		$this->load->language('setting/store');
@@ -119,6 +117,8 @@ class Admin_Controller_Setting_Store extends Controller
 		
 		$this->data['data_stores'] = $stores;
 		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -144,7 +144,7 @@ class Admin_Controller_Setting_Store extends Controller
 				
 		$this->data['cancel'] = $this->url->link('setting/store');
 	
-		if ($store_id && !$this->request->isPost())) {
+		if ($store_id && !$this->request->isPost()) {
 			$store = $this->Model_Setting_Store->getStore($store_id);
 			
 			if (!$store) {
@@ -248,6 +248,8 @@ class Admin_Controller_Setting_Store extends Controller
 		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
 		
 		$this->data['load_theme_img'] = $this->url->link('setting/setting/theme');
+		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

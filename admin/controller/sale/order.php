@@ -359,6 +359,8 @@ class Admin_Controller_Sale_Order extends Controller
 		$this->data['sort'] = $sort;
 		$this->data['order'] = $order;
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -787,6 +789,8 @@ class Admin_Controller_Sale_Order extends Controller
 		} else {
 				$this->data['order_totals'] = array();
 		}
+		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',
@@ -1317,6 +1321,8 @@ class Admin_Controller_Sale_Order extends Controller
 				$this->data['maxmind_id'] = '';
 			}
 			
+			$this->data['breadcrumbs'] = $this->breadcrumb->render();
+			
 			$this->children = array(
 				'common/header',
 				'common/footer'
@@ -1332,6 +1338,8 @@ class Admin_Controller_Sale_Order extends Controller
 				$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 				$this->breadcrumb->add($this->_('heading_title'), $this->url->link('error/not_found'));
 
+			$this->data['breadcrumbs'] = $this->breadcrumb->render();
+			
 			$this->children = array(
 				'common/header',
 				'common/footer'
@@ -1609,6 +1617,8 @@ class Admin_Controller_Sale_Order extends Controller
 				$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 				$this->breadcrumb->add($this->_('heading_title'), $this->url->link('error/not_found'));
 
+			$this->data['breadcrumbs'] = $this->breadcrumb->render();
+			
 			$this->children = array(
 				'common/header',
 				'common/footer'

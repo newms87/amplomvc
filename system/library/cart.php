@@ -351,7 +351,7 @@ class Cart extends Library
 					$options = array();
 				}
 				
-				$product = $this->db->query_row("SELECT * FROM " . DB_PREFIX . "product p WHERE p.product_id = '" . (int)$product_id . "' AND p.date_available <= NOW() AND p.status = '1'");
+				$product = $this->db->queryRow("SELECT * FROM " . DB_PREFIX . "product p WHERE p.product_id = '" . (int)$product_id . "' AND p.date_available <= NOW() AND p.status = '1'");
 				
 				if ($product) {
 					$this->translation->translate('product', $product['product_id'], $product);
@@ -412,7 +412,7 @@ class Cart extends Library
 					$customer_group_id = $this->customer->getCustomerGroupId();
 					
 					// Product Specials
-					$product_special_price = $this->db->query_var("SELECT price FROM " . DB_PREFIX . "product_special WHERE product_id = '" . (int)$product_id . "' AND customer_group_id = '" . (int)$customer_group_id . "' AND ((date_start = '" . DATETIME_ZERO . "' OR date_start <= NOW()) AND (date_end = '" . DATETIME_ZERO . "' OR date_end > NOW())) ORDER BY priority ASC, price ASC LIMIT 1");
+					$product_special_price = $this->db->queryVar("SELECT price FROM " . DB_PREFIX . "product_special WHERE product_id = '" . (int)$product_id . "' AND customer_group_id = '" . (int)$customer_group_id . "' AND ((date_start = '" . DATETIME_ZERO . "' OR date_start <= NOW()) AND (date_end = '" . DATETIME_ZERO . "' OR date_end > NOW())) ORDER BY priority ASC, price ASC LIMIT 1");
 				
 					if ($product_special_price) {
 						$product['price'] = $product_special_price;
@@ -428,7 +428,7 @@ class Cart extends Library
 							}
 						}
 						
-						$product_discount_price = $this->db->query_var("SELECT price FROM " . DB_PREFIX . "product_discount WHERE product_id = '" . (int)$product_id . "' AND customer_group_id = '" . (int)$customer_group_id . "' AND quantity <= '" . (int)$discount_quantity . "' AND ((date_start = '" . DATETIME_ZERO . "' OR date_start <= NOW()) AND (date_end = '" . DATETIME_ZERO . "' OR date_end > NOW())) ORDER BY quantity DESC, priority ASC, price ASC LIMIT 1");
+						$product_discount_price = $this->db->queryVar("SELECT price FROM " . DB_PREFIX . "product_discount WHERE product_id = '" . (int)$product_id . "' AND customer_group_id = '" . (int)$customer_group_id . "' AND quantity <= '" . (int)$discount_quantity . "' AND ((date_start = '" . DATETIME_ZERO . "' OR date_start <= NOW()) AND (date_end = '" . DATETIME_ZERO . "' OR date_end > NOW())) ORDER BY quantity DESC, priority ASC, price ASC LIMIT 1");
 						
 						if ($product_discount_price) {
 							$product['price'] = $product_discount_price;
@@ -436,10 +436,10 @@ class Cart extends Library
 					}
 			
 					// Reward Points
-					$reward = (int)$this->db->query_var("SELECT points FROM " . DB_PREFIX . "product_reward WHERE product_id = '" . (int)$product_id . "' AND customer_group_id = '" . (int)$customer_group_id . "'");
+					$reward = (int)$this->db->queryVar("SELECT points FROM " . DB_PREFIX . "product_reward WHERE product_id = '" . (int)$product_id . "' AND customer_group_id = '" . (int)$customer_group_id . "'");
 					
 					// Downloads
-					$downloads = $this->db->query_rows("SELECT * FROM " . DB_PREFIX . "product_to_download p2d LEFT JOIN " . DB_PREFIX . "download d ON (p2d.download_id = d.download_id) WHERE p2d.product_id = '" . (int)$product_id . "'");
+					$downloads = $this->db->queryRows("SELECT * FROM " . DB_PREFIX . "product_to_download p2d LEFT JOIN " . DB_PREFIX . "download d ON (p2d.download_id = d.download_id) WHERE p2d.product_id = '" . (int)$product_id . "'");
 					
 					$this->translation->translate_all('download', 'download_id', $downloads);
 					
@@ -1087,12 +1087,12 @@ class Cart extends Library
 		$country_id = !empty($address['country_id']) ? (int)$address['country_id'] : 0;
 		$zone_id = !empty($address['zone_id']) ? (int)$address['zone_id'] : 0;
 		
-		if ( ! $this->db->query_var("SELECT COUNT(*) as total FROM " . DB_PREFIX . "country WHERE country_id = '$country_id'")) {
+		if ( ! $this->db->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "country WHERE country_id = '$country_id'")) {
 			$this->_e('PA-2', 'payment_address', 'error_country_id');
 			return false;
 		}
 		
-		if ( ! $this->db->query_var("SELECT COUNT(*) as total FROM " . DB_PREFIX . "zone WHERE zone_id = '$zone_id' AND country_id = '$country_id'")) {
+		if ( ! $this->db->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "zone WHERE zone_id = '$zone_id' AND country_id = '$country_id'")) {
 			$this->_e('PA-3', 'payment_address', 'error_zone_id');
 			return false;
 		}
@@ -1117,12 +1117,12 @@ class Cart extends Library
 		$country_id = !empty($address['country_id']) ? (int)$address['country_id'] : 0;
 		$zone_id = !empty($address['zone_id']) ? (int)$address['zone_id'] : 0;
 		
-		if ( ! $this->db->query_var("SELECT COUNT(*) as total FROM " . DB_PREFIX . "country WHERE country_id = '$country_id'")) {
+		if ( ! $this->db->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "country WHERE country_id = '$country_id'")) {
 			$this->_e('SA-2', 'shipping_address', 'error_country_id');
 			return false;
 		}
 		
-		if ( ! $this->db->query_var("SELECT COUNT(*) as total FROM " . DB_PREFIX . "zone WHERE zone_id = '$zone_id' AND country_id = '$country_id'")) {
+		if ( ! $this->db->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "zone WHERE zone_id = '$zone_id' AND country_id = '$country_id'")) {
 			$this->_e('SA-3', 'shipping_address', 'error_zone_id');
 			return false;
 		}
@@ -1335,5 +1335,16 @@ class Cart extends Library
 		}
 		
 		return $this->Model_Checkout_Order->getOrder($order_id);
+	}
+	
+	public function synchronizeOrders($customer)
+	{
+		if (empty($customer) || empty($customer['customer_id']) || empty($customer['email'])) {
+			return;
+		}
+		
+		$this->db->query(
+			"UPDATE " . DB_PREFIX . "order SET customer_id = '" . (int)$customer['customer_id'] . "'" .
+			" WHERE customer_id = 0 AND email = '" . $this->db->escape($customer['email']) . "'");
 	}
 }

@@ -39,7 +39,7 @@ class Admin_Model_Catalog_AttributeGroup extends Model
 				$exists = false;
 				
 				if ((int)$attribute['attribute_id']) {
-					$exists = $this->query_var("SELECT COUNT(*) FROM " . DB_PREFIX . "attribute WHERE attribute_id = '" . (int)$attribute['attribute_id'] . "'");
+					$exists = $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "attribute WHERE attribute_id = '" . (int)$attribute['attribute_id'] . "'");
 				}
 				
 				if ($exists) {
@@ -71,7 +71,7 @@ class Admin_Model_Catalog_AttributeGroup extends Model
 		
 		$this->translation->delete('attribute_group', $attribute_group_id);
 		
-		$attributes = $this->query_rows("SELECT attribute_id FROM " . DB_PREFIX . "attribute WHERE attribute_group_id = '" . (int)$attribute_group_id . "'");
+		$attributes = $this->queryRows("SELECT attribute_id FROM " . DB_PREFIX . "attribute WHERE attribute_group_id = '" . (int)$attribute_group_id . "'");
 		
 		foreach ($attributes as $attribute) {
 			$this->translation->delete('attribute', $attribute['attribute_id']);
@@ -82,7 +82,7 @@ class Admin_Model_Catalog_AttributeGroup extends Model
 		
 	public function getAttributeGroup($attribute_group_id)
 	{
-		return $this->query_row("SELECT * FROM " . DB_PREFIX . "attribute_group WHERE attribute_group_id = '" . (int)$attribute_group_id . "'");
+		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "attribute_group WHERE attribute_group_id = '" . (int)$attribute_group_id . "'");
 	}
 	
 	public function getAttributeGroups($data = array(), $select = '*', $total = FALSE) {
@@ -141,14 +141,14 @@ class Admin_Model_Catalog_AttributeGroup extends Model
 	
 	public function getAttributes($attribute_group_id)
 	{
-		$attributes = $this->query_rows("SELECT * FROM " . DB_PREFIX . "attribute WHERE attribute_group_id = '" . (int)$attribute_group_id . "'");
+		$attributes = $this->queryRows("SELECT * FROM " . DB_PREFIX . "attribute WHERE attribute_group_id = '" . (int)$attribute_group_id . "'");
 		
 		return $attributes;
 	}
 	
 	public function getAttributeProductCount($attribute_id)
 	{
-		return $this->query_var("SELECT COUNT(*) FROM " . DB_PREFIX . "product_attribute WHERE attribute_id = '" . (int)$attribute_id . "'");
+		return $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "product_attribute WHERE attribute_id = '" . (int)$attribute_id . "'");
 	}
 	
 	public function getAttributesFilter($data = array())
@@ -172,7 +172,7 @@ class Admin_Model_Catalog_AttributeGroup extends Model
 		
 		$query = "SELECT * FROM $from WHERE $where $order $limit";
 		
-		return $this->query_rows($query);
+		return $this->queryRows($query);
 	}
 	
 	public function getTotalAttributeGroups($data = array())
@@ -182,7 +182,7 @@ class Admin_Model_Catalog_AttributeGroup extends Model
 
 	public function hasProductAssociation($attribute_group_id)
 	{
-		return $this->query_var(
+		return $this->queryVar(
 			"SELECT COUNT(*) as total FROM " . DB_PREFIX . "attribute a" .
 			" JOIN " . DB_PREFIX . "product_attribute pa ON (pa.attribute_id=a.attribute_id)" .
 			" WHERE a.attribute_group_id = '" . (int)$attribute_group_id . "'"

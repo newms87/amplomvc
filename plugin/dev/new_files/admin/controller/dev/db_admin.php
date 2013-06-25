@@ -19,7 +19,7 @@ class Admin_Controller_Dev_DbAdmin extends Controller
 		//Check for post data
 		if ($this->request->isPost() && $this->validate()) {
 			if (!empty($_POST['query'])) {
-				$results = $this->db->query_rows($_POST['query']);
+				$results = $this->db->queryRows($_POST['query']);
 				
 				$this->data['results'] = $results;
 			}
@@ -36,7 +36,9 @@ class Admin_Controller_Dev_DbAdmin extends Controller
 				$this->data[$key] = $default;
 		}
 		
-		$this->data['data_tables'] = $this->db->get_tables();
+		$this->data['data_tables'] = $this->db->getTables();
+		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

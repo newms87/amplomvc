@@ -46,7 +46,7 @@ class Dev
 			return false;
 		}
 		
-		if ($this->db->execute_file($file)) {
+		if ($this->db->executeFile($file)) {
 			$this->message->add('success', "Successfully restored $site_name from backup file $file!");
 			return true;
 		}
@@ -126,13 +126,13 @@ class Dev
 			file_put_contents($file, $response);
 			
 			//Execute the database sync file
-			if ($this->db->execute_file($file)) {
+			if ($this->db->executeFile($file)) {
 				$this->message->add('success', "Successfully synchronized the requested tables from $conn_info[domain]!");
 				
 				return true;
 			}
 			else {
-				$this->message->add('warning', $this->db->get_error());
+				$this->message->add('warning', $this->db->getError());
 			}
 		}
 		

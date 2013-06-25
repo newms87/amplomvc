@@ -30,6 +30,8 @@ class Admin_Controller_Tool_Tool extends Controller
 	}
 
 		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

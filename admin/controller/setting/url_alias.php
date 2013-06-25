@@ -91,6 +91,8 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 		
 		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
 	
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -137,6 +139,8 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 			}
 		}
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

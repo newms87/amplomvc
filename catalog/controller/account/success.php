@@ -4,7 +4,6 @@ class Catalog_Controller_Account_Success extends Controller
 	public function index()
 	{
 		$this->template->load('common/success');
-
 		$this->language->load('account/success');
   
 		$this->document->setTitle($this->_('heading_title'));
@@ -19,12 +18,10 @@ class Catalog_Controller_Account_Success extends Controller
 			$this->data['text_message'] = $this->_('text_approval', $this->config->get('config_name'), $this->url->link('information/contact'));
 		}
 		
-		if ($this->cart->hasProducts()) {
-			$this->data['continue'] = $this->url->link('cart/cart');
-		} else {
-			$this->data['continue'] = $this->url->link('account/account');
-		}
-
+		$this->data['continue'] = $this->url->link('account/account');
+		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',

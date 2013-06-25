@@ -131,7 +131,7 @@ class Admin_Model_Catalog_Collection extends Model
 		
 		unset($collection['category_id']);
 		
-		$copy_count = $this->db->query_var("SELECT COUNT(*) FROM " . DB_PREFIX . "collection WHERE `name` like '$collection[name]%'");
+		$copy_count = $this->db->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "collection WHERE `name` like '$collection[name]%'");
 		$collection['name'] .= ' - Copy (' . $copy_count . ')';
 		
 		$collection['keyword'] = '';
@@ -168,7 +168,7 @@ class Admin_Model_Catalog_Collection extends Model
 	
 	public function getCollection($collection_id)
 	{
-		$result = $this->query_row("SELECT * FROM " . DB_PREFIX . "collection WHERE collection_id = '" . (int)$collection_id . "'");
+		$result = $this->queryRow("SELECT * FROM " . DB_PREFIX . "collection WHERE collection_id = '" . (int)$collection_id . "'");
 		
 		$result['keyword'] = $this->url->getAlias('product/collection', 'collection_id=' . (int)$collection_id);
 		
@@ -250,29 +250,29 @@ class Admin_Model_Catalog_Collection extends Model
 	
 	public function getCollectionProducts($collection_id)
 	{
-		return $this->query_rows("SELECT * FROM " . DB_PREFIX . "collection_product WHERE collection_id = '" . (int)$collection_id . "'");
+		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "collection_product WHERE collection_id = '" . (int)$collection_id . "'");
 	}
 	
 	public function getCollectionCategories($collection_id)
 	{
-		return $this->query_rows("SELECT * FROM " . DB_PREFIX . "collection_category WHERE collection_id = '" . (int)$collection_id . "'");
+		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "collection_category WHERE collection_id = '" . (int)$collection_id . "'");
 	}
 	
 	public function getCollectionCategoryIds($collection_id)
 	{
-		$categories = $this->query_rows("SELECT category_id FROM " . DB_PREFIX . "collection_category WHERE collection_id = '" . (int)$collection_id . "'");
+		$categories = $this->queryRows("SELECT category_id FROM " . DB_PREFIX . "collection_category WHERE collection_id = '" . (int)$collection_id . "'");
 		
 		return array_column($categories, 'category_id');
 	}
 	
 	public function getCollectionStores($collection_id)
 	{
-		return $this->query_rows("SELECT * FROM " . DB_PREFIX . "collection_store WHERE collection_id = '" . (int)$collection_id . "'");
+		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "collection_store WHERE collection_id = '" . (int)$collection_id . "'");
 	}
 	
 	public function getCollectionStoreIds($collection_id)
 	{
-		$stores = $this->query_rows("SELECT store_id FROM " . DB_PREFIX . "collection_store WHERE collection_id = '" . (int)$collection_id . "'");
+		$stores = $this->queryRows("SELECT store_id FROM " . DB_PREFIX . "collection_store WHERE collection_id = '" . (int)$collection_id . "'");
 		
 		return array_column($stores, 'store_id');
 	}

@@ -44,6 +44,6 @@ class System_Update {
 			}
 		}
 		
-		$this->config->save('system', 'ac_version', VERSION, true);
+		$this->config->save('system', 'ac_version', VERSION);
 	}
 }

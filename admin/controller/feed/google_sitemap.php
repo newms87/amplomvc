@@ -41,6 +41,8 @@ class Admin_Controller_Feed_GoogleSitemap extends Controller
 		
 		$this->data['data_feed'] = SITE_URL . 'index.php?route=feed/google_sitemap';
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

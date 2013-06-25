@@ -11,7 +11,7 @@ class Admin_Model_Catalog_Product extends Model
 		
 		if (isset($data['product_collection'])) {
 			foreach ($data['product_collection'] as $collection_id) {
-				$this->Model_Catalog_Collection->addProductToCollection($collection_id, $product_id, $product_data);
+				$this->Model_Catalog_Collection->addProductToCollection($collection_id, $product_id, $data);
 			}
 		}
 //-----
@@ -44,7 +44,7 @@ class Admin_Model_Catalog_Product extends Model
 			
 			foreach ($data['product_collection'] as $collection_id) {
 				if (!in_array($collection_id, $collections)) {
-					$this->Model_Catalog_Collection->addProductToCollection($collection_id, $product_id, $product_data);
+					$this->Model_Catalog_Collection->addProductToCollection($collection_id, $product_id, $data);
 				}
 			}
 		}

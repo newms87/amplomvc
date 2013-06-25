@@ -3,7 +3,7 @@
 class Catalog_Model_Catalog_Product extends Model 
 {
 //.....
-	public function getProduct($product_id)
+	public function getProduct($product_id, $ignore_status = false)
 	{
 //.....
 		if ($result->num_rows) {

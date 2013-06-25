@@ -103,6 +103,8 @@ class Admin_Controller_Payment_Liqpay extends Controller
 			$this->data['liqpay_sort_order'] = $this->config->get('liqpay_sort_order');
 		}
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

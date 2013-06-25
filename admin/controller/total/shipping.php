@@ -51,6 +51,8 @@ class Admin_Controller_Total_Shipping extends Controller
 			$this->data['shipping_sort_order'] = $this->config->get('shipping_sort_order');
 		}
 																		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

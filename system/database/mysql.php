@@ -20,7 +20,7 @@ final class MySQL implements Database
 		mysql_query("SET SQL_MODE = ''", $this->link);
   	}
 	
-	public function get_error()
+	public function getError()
 	{
 		return $this->err_msg;
 	}
@@ -60,7 +60,7 @@ final class MySQL implements Database
 		}
   	}
 	
-	public function execute_file($file)
+	public function executeFile($file)
 	{
 		return false;
 	}
@@ -70,7 +70,7 @@ final class MySQL implements Database
 		return mysql_real_escape_string($value, $this->link);
 	}
 	
-	public function escape_html($value)
+	public function escapeHtml($value)
 	{
 		return mysql_real_escape_string(htmlspecialchars_decode($value), $this->link);
 	}

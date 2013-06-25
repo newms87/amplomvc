@@ -41,6 +41,8 @@ class Admin_Controller_Mail_Messages extends Controller
 			}
 		}
 		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

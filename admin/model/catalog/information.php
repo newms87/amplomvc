@@ -90,7 +90,7 @@ class Admin_Model_Catalog_Information extends Model
 		
 		unset($information['information_id']);
 		
-		$num = $this->query_var("SELECT COUNT(*) FROM " . DB_PREFIX . "information WHERE title like '" . $information['title'] . "%'");
+		$num = $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "information WHERE title like '" . $information['title'] . "%'");
 		
 		$information['title'] .= " - Copy" . ($num > 1 ? ' ('.$num.')' : '');
 		
@@ -119,7 +119,7 @@ class Admin_Model_Catalog_Information extends Model
 
 	public function getInformation($information_id)
 	{
-		$information = $this->query_row("SELECT DISTINCT * FROM " . DB_PREFIX . "information WHERE information_id = '" . (int)$information_id . "'");
+		$information = $this->queryRow("SELECT DISTINCT * FROM " . DB_PREFIX . "information WHERE information_id = '" . (int)$information_id . "'");
 		
 		$information['keyword'] = $this->url->getAlias('information/information', 'information_id=' . $information_id);
 		
@@ -181,14 +181,14 @@ class Admin_Model_Catalog_Information extends Model
 	
 	public function getInformationStores($information_id)
 	{
-		$stores = $this->query_rows("SELECT store_id FROM " . DB_PREFIX . "information_to_store WHERE information_id = '" . (int)$information_id . "'");
+		$stores = $this->queryRows("SELECT store_id FROM " . DB_PREFIX . "information_to_store WHERE information_id = '" . (int)$information_id . "'");
 		
 		return array_column($stores, 'store_id');
 	}
 
 	public function getInformationLayouts($information_id)
 	{
-		$layout_list = $this->query_rows("SELECT store_id, layout_id FROM " . DB_PREFIX . "information_to_layout WHERE information_id = '" . (int)$information_id . "'");
+		$layout_list = $this->queryRows("SELECT store_id, layout_id FROM " . DB_PREFIX . "information_to_layout WHERE information_id = '" . (int)$information_id . "'");
 		
 		$layouts = array();
 		

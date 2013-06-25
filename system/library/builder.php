@@ -13,9 +13,9 @@ class Builder extends Library
 	{
 		$current_page = parse_url($this->url->get_pretty_url());
 		
-		$query_vars = null;
-		parse_str($this->url->get_query(), $query_vars);
-		$current_page['query'] = $query_vars;
+		$queryVars = null;
+		parse_str($this->url->get_query(), $queryVars);
+		$current_page['query'] = $queryVars;
 		
 		foreach ($links as $key => &$link) {
 			if (!empty($link['is_route'])) {
@@ -29,12 +29,12 @@ class Builder extends Library
 			
 			if ($current_page['path'] === $components['path']) {
 				if (!empty($components['query'])) {
-					$query_vars = null;
-					parse_str($components['query'], $query_vars);
+					$queryVars = null;
+					parse_str($components['query'], $queryVars);
 					
 					$matches = 0;
 					
-					foreach ($query_vars as $key => $value) {
+					foreach ($queryVars as $key => $value) {
 						if (isset($current_page['query'][$key])) {
 							if($current_page['query'][$key] === $value) {
 								$matches++;
@@ -42,7 +42,7 @@ class Builder extends Library
 						}
 					}
 					
-					if ($matches >= count($query_vars) && $matches > $this->highest_match) {
+					if ($matches >= count($queryVars) && $matches > $this->highest_match) {
 						$this->highest_match = $matches;
 						$active_link = &$link;
 					}
@@ -140,16 +140,6 @@ class Builder extends Library
 		$html .= "</ul>";
 			
 		return $html;
-	}
-	
-	public function display_breadcrumbs()
-	{
-		$html = "";
-		foreach ($this->breadcrumb->get() as $key => $crumb) {
-			$html .= ($key > 0 ? $crumb['separator'] : '') . "<a href='$crumb[href]'>$crumb[text]</a>";
-		}
-		
-		return "<div class ='breadcrumb'>$html</div>";
 	}
 	
 	public function display_messages($messages)
@@ -299,11 +289,11 @@ class Builder extends Library
 	* @param $name - the key in the array to use as the display name
 	* @param (optional) $type - How the $id keys should be treated (eg: int, string, float, etc.). If no type is set, it will try to figure it out on its own
 	*/
-	public function set_config($id,$name, $type=null)
+	public function set_config($id, $name, $type=null)
 	{
-	$this->builder_id = $id;
-	$this->builder_name = $name;
-	$this->builder_type = $type;
+		$this->builder_id = $id;
+		$this->builder_name = $name;
+		$this->builder_type = $type;
 	}
 	
 	public function set_builder_template($template)
@@ -377,7 +367,7 @@ class Builder extends Library
 			}
 			
 			$cast_to = function ($value, $type)
- {
+			{
 				switch($type){
 					case 'int':
 						return (int)$value;
@@ -397,12 +387,15 @@ class Builder extends Library
 		foreach ($data as $value => $display) {
 			
 			if (is_array($display)) {
-				if (!isset($this->builder_id) || !isset($this->builder_name) || !isset($display[$this->builder_id]) || !isset($display[$this->builder_name])) {
+				if (!isset($this->builder_id) || !isset($this->builder_name) || ($this->builder_id ? !isset($display[$this->builder_id]) : false) || !isset($display[$this->builder_name])) {
 					trigger_error("You must set the ID and Name to keys in the \$data Array using \$this->builder->set_config(\$id,\$name). " . get_caller());
 					return;
 				}
 				
-				$value = $display[$this->builder_id];
+				if ($this->builder_id) {
+					$value = $display[$this->builder_id];
+				}
+				
 				$display = $display[$this->builder_name];
 			}
 			
@@ -412,19 +405,19 @@ class Builder extends Library
 				//otherwise try to guess the type.
 				$selected = false;
 				
-				foreach ($select as $s) {
-					if (is_array($s)) {
-						$s = $s[$this->builder_id];
-					}
+			foreach ($select as $s) {
+				if (is_array($s)) {
+					$s = $s[$this->builder_id];
+				}
+				
+				if ($this->builder_type) {
+					$value = $cast_to($value, $this->builder_type);
 					
-					if ($this->builder_type) {
-						$value = $cast_to($value, $this->builder_type);
-						
-						if ($cast_to($s, $this->builder_type) === $value) {
-							$selected = true;
-							break;
-						}
+					if ($cast_to($s, $this->builder_type) === $value) {
+						$selected = true;
+						break;
 					}
+				}
 				else {
 					$v = is_integer($s) ? (int)$value : $value;
 						

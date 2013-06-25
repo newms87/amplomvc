@@ -1,6 +1,6 @@
 <?= $header .$column_left .$column_right; ?>
 <div id='content'>
-	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $breadcrumbs; ?>
 	<div id='designer_heading'>
 		<div class='left'>
 				<img src='<?= $flashsale_image; ?>' />

@@ -677,6 +677,8 @@ class Admin_Controller_Shipping_Ups extends Controller
 			$this->data['ups_debug'] = $this->config->get('ups_debug');
 		}
 		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

@@ -230,6 +230,8 @@ class Admin_Controller_Design_Navigation extends Controller
 		
 		$this->data['pagination'] = $this->pagination->render();
 		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -282,6 +284,8 @@ class Admin_Controller_Design_Navigation extends Controller
 		$admin_store = array('admin' => array('store_id' => 0, 'name' => $this->_('text_admin_panel')));
 		
 		$this->data['data_stores'] = $admin_store + $this->Model_Setting_Store->getStores();
+		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

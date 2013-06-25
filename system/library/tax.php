@@ -57,7 +57,7 @@ final class Tax extends Library
 		
 	public function getRateInfo($tax_rate_id)
 	{
-		return $this->db->query_row("SELECT * FROM " . DB_PREFIX . "tax_rate WHERE tax_rate_id = '" . (int)$tax_rate_id . "'");
+		return $this->db->queryRow("SELECT * FROM " . DB_PREFIX . "tax_rate WHERE tax_rate_id = '" . (int)$tax_rate_id . "'");
 	}
 	
 	public function getRates($value, $tax_class_id)

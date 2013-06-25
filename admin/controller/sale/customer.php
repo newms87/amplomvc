@@ -536,6 +536,8 @@ class Admin_Controller_Sale_Customer extends Controller
 		$this->data['sort'] = $sort;
 		$this->data['order'] = $order;
 		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -805,6 +807,8 @@ class Admin_Controller_Sale_Customer extends Controller
 			}
 		}
 		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -947,6 +951,8 @@ class Admin_Controller_Sale_Customer extends Controller
 				$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 				$this->breadcrumb->add($this->_('heading_title'), $this->url->link('error/not_found'));
 
+			$this->data['breadcrumbs'] = $this->breadcrumb->render();
+			
 			$this->children = array(
 				'common/header',
 				'common/footer'

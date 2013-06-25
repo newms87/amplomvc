@@ -181,6 +181,8 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 		$this->data['sort'] = $sort;
 		$this->data['order'] = $order;
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -234,6 +236,8 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 		if (!isset($this->data['zones'])) {
 			$this->data['zones'] = $this->Model_Localisation_GeoZone->getZones($geo_zone_id);
 		}
+		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

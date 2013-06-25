@@ -1,6 +1,6 @@
 <?php
 // Version
-define('VERSION', '0.0.2');
+define('VERSION', '0.0.3');
 
 // Error Reporting
 error_reporting(E_ALL);

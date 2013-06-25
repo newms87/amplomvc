@@ -1,6 +1,6 @@
 <?= $header; ?><?= $column_left; ?><?= $column_right; ?>
 <div id="content"><?= $content_top; ?>
-	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $breadcrumbs; ?>
 	<h1><?= $heading_title; ?></h1>
 	<p><?= $text_total; ?><b> <?= $total; ?></b>.</p>
 	<table class="list">

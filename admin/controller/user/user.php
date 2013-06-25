@@ -151,6 +151,8 @@ class Admin_Controller_User_User extends Controller
 		$this->data['sort'] = $sort;
 		$this->data['order'] = $order;
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -221,6 +223,8 @@ class Admin_Controller_User_User extends Controller
 		else {
 			$this->breadcrumb->add($this->data['username'], $this->url->link('user/user/update', 'user_id=' . $user_id));
 		}
+		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

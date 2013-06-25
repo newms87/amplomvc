@@ -49,6 +49,8 @@ class Admin_Controller_Module_PageHeaders extends Controller
 				unset($this->data['headers'][$hid]['page_header'][$lang_id]);
 		}
 		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

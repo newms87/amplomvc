@@ -101,6 +101,8 @@ class Admin_Controller_Report_ProductPurchased extends Controller
 		$this->data['filter_date_end'] = $filter_date_end;
 		$this->data['filter_order_status_id'] = $filter_order_status_id;
 		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

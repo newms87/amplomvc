@@ -45,6 +45,8 @@ class Admin_Controller_Total_Reward extends Controller
 			$this->data['reward_sort_order'] = $this->config->get('reward_sort_order');
 		}
 																		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

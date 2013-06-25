@@ -56,6 +56,8 @@ class Catalog_Controller_Affiliate_Login extends Controller
 			$this->data['success'] = '';
 		}
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',

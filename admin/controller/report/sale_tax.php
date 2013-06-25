@@ -142,6 +142,8 @@ class Admin_Controller_Report_SaleTax extends Controller
 		$this->data['filter_group'] = $filter_group;
 		$this->data['filter_order_status_id'] = $filter_order_status_id;
 				
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

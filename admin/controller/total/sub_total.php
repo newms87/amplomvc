@@ -45,6 +45,8 @@ class Admin_Controller_Total_SubTotal extends Controller
 			$this->data['sub_total_sort_order'] = $this->config->get('sub_total_sort_order');
 		}
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

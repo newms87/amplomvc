@@ -22,6 +22,8 @@ class Admin_Controller_Mail_Error extends Controller
 		$this->data['resend_message'] = $this->url->link('mail/error/resend');
 		$this->data['delete_message'] = $this->url->link('mail/error/delete');
 		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

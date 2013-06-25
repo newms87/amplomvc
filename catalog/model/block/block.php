@@ -16,7 +16,7 @@ class Catalog_Model_Block_Block extends Model
 			$block = $this->cache->get("block.$name");
 			
 			if (!$block) {
-				$block = $this->query_row("SELECT * FROM " . DB_PREFIX . "block WHERE status = '1' AND `name` = '" . $this->db->escape($name) . "'");
+				$block = $this->queryRow("SELECT * FROM " . DB_PREFIX . "block WHERE status = '1' AND `name` = '" . $this->db->escape($name) . "'");
 				
 				if (!empty($block)) {
 					$block['profiles'] = unserialize($block['profiles']);

@@ -499,11 +499,13 @@ class Admin_Controller_Sale_Return extends Controller
 		$this->data['filter_date_added'] = $filter_date_added;
 		$this->data['filter_date_modified'] = $filter_date_modified;
 
-		$this->data['return_statuses'] = $this->Model_Localisation_ReturnStatus->getReturnStatuses();
+		$this->data['data_return_statuses'] = $this->config->load('product_return', 'return_statuses', 0);
 		
 		$this->data['sort'] = $sort;
 		$this->data['order'] = $order;
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -765,8 +767,10 @@ class Admin_Controller_Sale_Return extends Controller
 			$this->data['return_status_id'] = '';
 		}
 		
-		$this->data['return_statuses'] = $this->Model_Localisation_ReturnStatus->getReturnStatuses();
+		$this->data['data_return_statuses'] = $this->config->load('product_return', 'return_statuses', 0);
 						
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -867,14 +871,10 @@ class Admin_Controller_Sale_Return extends Controller
 			$this->data['email'] = $return_info['email'];
 			$this->data['telephone'] = $return_info['telephone'];
 			
-			$return_status_info = $this->Model_Localisation_ReturnStatus->getReturnStatus($return_info['return_status_id']);
+			$return_statuses = $this->config->load('product_return', 'return_statuses', 0);
 
-			if ($return_status_info) {
-				$this->data['return_status'] = $return_status_info['name'];
-			} else {
-				$this->data['return_status'] = '';
-			}
-						
+			$this->data['return_status'] = $return_statuses[$return_info['return_status_id']]['title'];
+			
 			$this->data['date_added'] = date($this->language->getInfo('date_format_short'), strtotime($return_info['date_added']));
 			$this->data['date_modified'] = date($this->language->getInfo('date_format_short'), strtotime($return_info['date_modified']));
 			$this->data['product'] = $return_info['product'];
@@ -897,10 +897,12 @@ class Admin_Controller_Sale_Return extends Controller
 			
 			$this->data['return_action_id'] = $return_info['return_action_id'];
 
-			$this->data['return_statuses'] = $this->Model_Localisation_ReturnStatus->getReturnStatuses();
+			$this->data['data_return_statuses'] = $return_statuses;
 			
 			$this->data['return_status_id'] = $return_info['return_status_id'];
 		
+			$this->data['breadcrumbs'] = $this->breadcrumb->render();
+			
 			$this->children = array(
 				'common/header',
 				'common/footer'
@@ -916,6 +918,8 @@ class Admin_Controller_Sale_Return extends Controller
 				$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 				$this->breadcrumb->add($this->_('heading_title'), $this->url->link('error/not_found'));
 
+			$this->data['breadcrumbs'] = $this->breadcrumb->render();
+			
 			$this->children = array(
 				'common/header',
 				'common/footer'
@@ -1025,7 +1029,7 @@ class Admin_Controller_Sale_Return extends Controller
 		}
 		
 		$this->data['histories'] = array();
-			
+		
 		$results = $this->Model_Sale_Return->getReturnHistories($_GET['return_id'], ($page - 1) * 10, 10);
 				
 		foreach ($results as $result) {

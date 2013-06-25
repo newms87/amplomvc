@@ -3,7 +3,7 @@
 	
 <?= $column_left; ?><?= $column_right; ?>
 <div id="content">
-	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $breadcrumbs; ?>
 	
 	<h1><?= $heading_title; ?></h1>
 	<?= $content_top; ?>

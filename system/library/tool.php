@@ -110,6 +110,18 @@ class Tool extends Library
 		return $short;
 	}
 	
+	public function add_template_row(&$data)
+	{
+		if (empty($data)) {
+			$data['__row__'] = array();
+		} else {
+			
+			$data['__row__'] = reset($data);
+		}
+		
+		array_walk_recursive($data['__row__'], function(&$value, $key) { $value = $key; });
+	}
+		
 	public function bytes2str($size, $decimals = 2, $unit = null)
 	{
 		$unit_sizes = array(

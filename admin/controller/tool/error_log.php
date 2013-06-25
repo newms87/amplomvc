@@ -118,6 +118,8 @@ class Admin_Controller_Tool_ErrorLog extends Controller
 		}
 		
 		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

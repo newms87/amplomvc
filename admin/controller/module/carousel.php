@@ -51,6 +51,8 @@ class Admin_Controller_Module_Carousel extends Controller
 		
 		$this->data['banners'] = $this->Model_Design_Banner->getBanners();
 						
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

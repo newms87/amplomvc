@@ -65,6 +65,8 @@ class Admin_Controller_Total_Handling extends Controller
 		
 		$this->data['tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

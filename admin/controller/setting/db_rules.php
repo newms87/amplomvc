@@ -91,6 +91,8 @@ class Admin_Controller_Setting_DbRules extends Controller
 		
 		$this->data['db_rules'] = $db_rules;
 	
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -135,6 +137,8 @@ class Admin_Controller_Setting_DbRules extends Controller
 			}
 		}
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

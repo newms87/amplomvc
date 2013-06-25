@@ -14,7 +14,7 @@ class Admin_Controller_Setting_Update extends Controller
 				$this->message->add('success', $this->_('text_success', $_POST['version']));
 			}
 			elseif (isset($_POST['auto_update'])) {
-				$this->config->save('system', 'auto_update', $_POST['auto_update'], true);
+				$this->config->save('system', 'auto_update', $_POST['auto_update']);
 				
 				if ($_POST['auto_update']) {
 					$this->message->add('success', $this->_('text_auto_update_active'));
@@ -62,6 +62,8 @@ class Admin_Controller_Setting_Update extends Controller
 		}
 
 		$this->data['data_versions'] = $versions;
+		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

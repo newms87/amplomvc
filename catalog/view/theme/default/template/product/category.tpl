@@ -2,7 +2,7 @@
 <div id="content" class="category">
 	<?= $content_top; ?>
 	
-	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $breadcrumbs; ?>
 	
 	<h1><?= $heading_title; ?></h1>
 	

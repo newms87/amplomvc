@@ -62,6 +62,8 @@ class Admin_Controller_Common_Forgotten extends Controller
 				$this->data['email'] = '';
 		}
 				
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

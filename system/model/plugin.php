@@ -21,7 +21,7 @@ class System_Model_Plugin extends Model{
 		$this->cache->delete('plugin');
 		
 		//remove files from plugin that were registered
-		$plugin_entries = $this->query_rows("SELECT * FROM " . DB_PREFIX . "plugin_registry WHERE `name` = '" . $this->db->escape($name) . "'");
+		$plugin_entries = $this->queryRows("SELECT * FROM " . DB_PREFIX . "plugin_registry WHERE `name` = '" . $this->db->escape($name) . "'");
 		
 		foreach ($plugin_entries as $entry) {
 			if (is_file($entry['live_file'])) {

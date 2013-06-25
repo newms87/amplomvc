@@ -150,7 +150,7 @@ class Admin_Model_Block_Block extends Model
 	
 	public function getBlock($name)
 	{
-		$block = $this->query_row("SELECT * FROM " . DB_PREFIX . "block WHERE `name` = '" . $this->db->escape($name) . "'");
+		$block = $this->queryRow("SELECT * FROM " . DB_PREFIX . "block WHERE `name` = '" . $this->db->escape($name) . "'");
 		
 		if ($block) {
 			if (!empty($block['settings'])) {

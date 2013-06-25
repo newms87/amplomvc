@@ -5,7 +5,7 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 	{
 		$this->language->load('payment/pp_standard');
 		
-		$this->config->load('pp_standard');
+		$this->config->loadGroup('pp_standard');
 		
 		$this->data['testmode'] = $this->config->get('pp_standard_test');
 		
@@ -68,11 +68,9 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 			$this->data['cancel_return'] = $this->url->link('checkout/checkout');
 			$this->data['page_style'] = $this->config->get('pp_standard_page_style');
 			
-			if ($this->config->get('pp_standard_pdt_enabled_url')) {
-				echo "enabled!";
-				$this->data['return'] = $this->config->get('pp_standard_auto_return_url');
+			if ($this->config->get('pp_standard_pdt_enabled')) {
+				$this->data['return'] = $this->url->link('payment/pp_standard/auto_return');
 			} else {
-				echo 'no...';
 				$this->data['return'] = $this->url->link('checkout/success');
 			}
 			
@@ -94,13 +92,13 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 			$this->error_log->write('PP_STANDARD :: Callback called');
 		}
 		
-		if (isset($_POST['custom'])) {
-			$order_id = $this->encryption->decrypt($_POST['custom']);
-		} else {
-			$order_id = 0;
+		if (empty($_POST['custom'])) {
+			return false;
 		}
 		
-		$order_info = $this->Model_Checkout_Order->getOrder($order_id);
+		$order_id = $this->encryption->decrypt($_POST['custom']);
+		
+		$order_info = $this->cart->getOrder($order_id);
 		
 		if ($order_info) {
 			$request = 'cmd=_notify-validate';
@@ -181,13 +179,60 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 			}
 			
 			curl_close($curl);
+			
+			return true;
 		}
+
+		return false;
 	}
 
 	public function auto_return()
 	{
-		html_dump($_POST,'post');
-		html_dump($_GET,'get');
-		echo "you have been autoreturned!";exit;
+		$this->language->load('payment/pp_standard');
+		
+		if (!$this->callback()) {
+			$this->message->add('warning', $this->_('error_checkout_callback', $this->config->get('config_email')));
+			
+			$order_id = $this->encryption->decrypt($_POST['custom']);
+			
+			if ($order_id) {
+				$order = $this->cart->getOrder($order_id);
+			}
+			
+			if (!$order) {
+				if (!empty($_POST['first_name'])) {
+					$name = $_POST['first_name'] . ' ' . $_POST['last_name'];
+				} else {
+					$name = $this->customer->info('firstname') . ' ' . $this->customer->info('lastname');
+				}
+
+				$email = !empty($_POST['payer_email']) ? $_POST['payer_email'] : $this->customer->info('email');
+				
+				$amount = 'Unknown Order';
+				$order_id = 'Unknown Order';
+			}
+			else {
+				$name = $order['payment_firstname'] . ' ' . $order['payment_lastname'];
+				$amount = $order['total'];
+				$email = $order['email'];
+			}
+			
+			$customer_id = !empty($order['customer_id']) ? $order['customer_id'] : $this->customer->getId();
+			
+			$subject = $this->_('error_checkout_callback_email_subject');
+			$message = $this->_('error_checkout_callback_email', $name, $order_id, $amount, $customer_id, $email);
+			
+			$this->mail->init();
+			
+			$this->mail->setTo($this->config->get('config_email'));
+			$this->mail->setFrom($this->config->get('config_email'));
+			$this->mail->setSender($this->config->get('config_name'));
+			$this->mail->setSubject($subject);
+			$this->mail->setText($message);
+			
+			$this->mail->send();
+		}
+		
+		$this->url->redirect($this->url->link('checkout/success'));
 	}
 }

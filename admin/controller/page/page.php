@@ -228,6 +228,8 @@ class Admin_Controller_Page_Page extends Controller
 		$this->data['pagination'] = $this->pagination->render();
 		
 		//Template Children
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -300,6 +302,8 @@ class Admin_Controller_Page_Page extends Controller
 		$this->data['url_blocks'] = $this->url->link('block/block');
 		$this->data['url_create_layout'] = $this->url->link('page/page/create_layout');
 		$this->data['url_load_blocks'] = $this->url->link('page/page/loadBlocks');
+		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

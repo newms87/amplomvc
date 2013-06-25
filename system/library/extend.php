@@ -48,7 +48,7 @@ class Extend extends Library
 	
 	public function remove_navigation_link($name)
 	{
-		$links = $this->db->query_rows("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE name = '" . $this->db->escape($name) . "'");
+		$links = $this->db->queryRows("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE name = '" . $this->db->escape($name) . "'");
 		
 		foreach ($links as $link) {
 			$this->Model_Design_Navigation->deleteNavigationLink($link['navigation_id']);
@@ -60,7 +60,7 @@ class Extend extends Library
 			$routes = array($routes);
 		}
 		
-		$exists = $this->db->query_var("SELECT COUNT(*) as total FROM " . DB_PREFIX . "layout WHERE name='$name'");
+		$exists = $this->db->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "layout WHERE name='$name'");
 		
 		if ($exists) {
 			$this->message->add("warning", "Error while adding $name to layout! Duplicate name exists!");
@@ -128,7 +128,7 @@ class Extend extends Library
 	
 	public function remove_db_hook($hook_id)
 	{
-		$db_hooks = $this->config->get_group('db_hook');
+		$db_hooks = $this->config->loadGroup('db_hook');
 		
 		foreach ($db_hooks as $hook_key => $hook) {
 			foreach ($hook as $h_key => $h) {
@@ -142,7 +142,7 @@ class Extend extends Library
 			}
 		}
 		
-		$this->config->save_group('db_hook', $db_hooks);
+		$this->config->saveGroup('db_hook', $db_hooks);
 	}
 	
 	public function enable_image_sorting($table, $column)
@@ -154,11 +154,11 @@ class Extend extends Library
 		
 		$sort_column = '__image_sort__' . $column;
 		
-		$this->db->table_add_column($table, $sort_column, 'FLOAT');
+		$this->db->addColumn($table, $sort_column, 'FLOAT NULL');
 		
-		$key_column = $this->db->get_key_column($table);
+		$key_column = $this->db->getKeyColumn($table);
 		
-		$rows = $this->db->query_rows("SELECT $key_column, $column, $sort_column FROM " . DB_PREFIX . "$table");
+		$rows = $this->db->queryRows("SELECT $key_column, $column, $sort_column FROM " . DB_PREFIX . "$table");
 		
 		foreach ($rows as $row) {
 			$this->update_hsv_value($row, $table, $column, true);
@@ -173,7 +173,7 @@ class Extend extends Library
 		
 		$this->remove_db_hook($hook_id);
 		
-		$this->db->table_drop_column($table, '__image_sort__' . $column);
+		$this->db->dropColumn($table, '__image_sort__' . $column);
 	}
 	
 	public function update_hsv_value(&$data, $table, $column, $force = false)
@@ -181,7 +181,7 @@ class Extend extends Library
 		if(!isset($data[$column])) return;
 		
 		//If the image has not changed, do nothing.
-		if (!$force && $this->db->query_var("SELECT COUNT(*) FROM " . DB_PREFIX . "{$table} WHERE `{$column}` = '{$data[$column]}'")) {
+		if (!$force && $this->db->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "{$table} WHERE `{$column}` = '{$data[$column]}'")) {
 			return;
 		}
 		

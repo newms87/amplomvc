@@ -57,6 +57,8 @@ class Admin_Controller_Block_Add extends Controller
 		
 		$this->data['data_themes'] = $this->theme->getThemes();
 		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

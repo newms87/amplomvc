@@ -61,6 +61,8 @@ class Admin_Controller_Common_Reset extends Controller
 				$this->data['confirm'] = '';
 			}
 			
+			$this->data['breadcrumbs'] = $this->breadcrumb->render();
+			
 			$this->children = array(
 				'common/header',
 				'common/footer'

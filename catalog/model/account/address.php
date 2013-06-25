@@ -47,12 +47,12 @@ class Catalog_Model_Account_Address extends Model
 			return false;
 		}
 		
-		return $this->query_var("SELECT address_id FROM " . DB_PREFIX . "address WHERE $where");
+		return $this->queryVar("SELECT address_id FROM " . DB_PREFIX . "address WHERE $where");
 	}
 	
 	public function getAddress($address_id)
 	{
-		$address = $this->query_row("SELECT DISTINCT * FROM " . DB_PREFIX . "address WHERE address_id = '" . (int)$address_id . "' AND customer_id = '" . (int)$this->customer->getId() . "' LIMIT 1");
+		$address = $this->queryRow("SELECT DISTINCT * FROM " . DB_PREFIX . "address WHERE address_id = '" . (int)$address_id . "' AND customer_id = '" . (int)$this->customer->getId() . "' LIMIT 1");
 		
 		if ($address) {
 			$this->get_address_localisation($address);
@@ -69,7 +69,7 @@ class Catalog_Model_Account_Address extends Model
 	
 	public function getAddresses()
 	{
-		$address_list = $this->query_rows("SELECT * FROM " . DB_PREFIX . "address WHERE customer_id = '" . (int)$this->customer->getId() . "'");
+		$address_list = $this->queryRows("SELECT * FROM " . DB_PREFIX . "address WHERE customer_id = '" . (int)$this->customer->getId() . "'");
 		
 		$addresses = array();
 		
@@ -93,7 +93,7 @@ class Catalog_Model_Account_Address extends Model
 	 */
 	private function get_address_localisation(&$address)
 	{
-		$country = $this->query_row("SELECT * FROM `" . DB_PREFIX . "country` WHERE country_id = '" . (int)$address['country_id'] . "'");
+		$country = $this->queryRow("SELECT * FROM `" . DB_PREFIX . "country` WHERE country_id = '" . (int)$address['country_id'] . "'");
 		
 		if ($country) {
 			$country_name = $country['name'];
@@ -107,7 +107,7 @@ class Catalog_Model_Account_Address extends Model
 			$address_format = '';
 		}
 		
-		$zone = $this->query_row("SELECT * FROM `" . DB_PREFIX . "zone` WHERE zone_id = '" . (int)$address['zone_id'] . "'");
+		$zone = $this->queryRow("SELECT * FROM `" . DB_PREFIX . "zone` WHERE zone_id = '" . (int)$address['zone_id'] . "'");
 		
 		if ($zone) {
 			$zone_name = $zone['name'];
@@ -129,6 +129,6 @@ class Catalog_Model_Account_Address extends Model
 	
 	public function getTotalAddresses()
 	{
-		return $this->query_var("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "address WHERE customer_id = '" . (int)$this->customer->getId() . "'");
+		return $this->queryVar("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "address WHERE customer_id = '" . (int)$this->customer->getId() . "'");
 	}
 }

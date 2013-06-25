@@ -227,6 +227,8 @@ class Admin_Controller_Localisation_Zone extends Controller
 		$this->data['sort'] = $sort;
 		$this->data['order'] = $order;
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -314,6 +316,8 @@ class Admin_Controller_Localisation_Zone extends Controller
 		
 		$this->data['countries'] = $this->Model_Localisation_Country->getCountries();
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

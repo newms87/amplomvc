@@ -223,6 +223,8 @@ class Admin_Controller_User_UserPermission extends Controller
 		$this->data['sort'] = $sort;
 		$this->data['order'] = $order;
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -279,6 +281,8 @@ class Admin_Controller_User_UserPermission extends Controller
 		}
 		
 		$this->data['data_controllers'] = $this->Model_User_UserGroup->get_controller_list();
+		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

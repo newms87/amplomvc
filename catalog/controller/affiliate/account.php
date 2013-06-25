@@ -32,6 +32,8 @@ class Catalog_Controller_Affiliate_Account extends Controller
 		$this->data['tracking'] = $this->url->link('affiliate/tracking');
 		$this->data['transaction'] = $this->url->link('affiliate/transaction');
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',

@@ -45,6 +45,8 @@ class Admin_Controller_Total_Coupon extends Controller
 			$this->data['coupon_sort_order'] = $this->config->get('coupon_sort_order');
 		}
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

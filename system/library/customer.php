@@ -11,7 +11,7 @@ class Customer extends Library
 		parent::__construct($registry);
 		
 		if (isset($this->session->data['customer_id'])) {
-			$customer = $this->db->query_row("SELECT * FROM " . DB_PREFIX . "customer WHERE customer_id = '" . (int)$this->session->data['customer_id'] . "' AND status = '1'");
+			$customer = $this->db->queryRow("SELECT * FROM " . DB_PREFIX . "customer WHERE customer_id = '" . (int)$this->session->data['customer_id'] . "' AND status = '1'");
 			
 			if (!empty($customer)) {
 				$this->set_customer($customer);
@@ -61,7 +61,7 @@ class Customer extends Library
 			}
 		}
 		
-		$customer = $this->db->query_row("SELECT * FROM " . DB_PREFIX . "customer WHERE $where LIMIT 1");
+		$customer = $this->db->queryRow("SELECT * FROM " . DB_PREFIX . "customer WHERE $where LIMIT 1");
 		
 		if ($customer) {
 			$this->set_customer($customer);
@@ -73,6 +73,8 @@ class Customer extends Library
 			if (!empty($customer['wishlist'])) {
 				$this->cart->merge_wishlist($customer['wishlist']);
 			}
+			
+			$this->cart->synchronizeOrders($customer);
 			
 			return true;
 		}
@@ -152,18 +154,27 @@ class Customer extends Library
 		return $this->Model_Account_Address->getAddresses();
 	}
 	
+	public function getOrders()
+	{
+		if ($this->isLogged()) {
+			return $this->db->queryRows("SELECT * FROM " . DB_PREFIX . "order WHERE customer_id = '" . $this->customer_id . "'");
+		}
+		
+		return false;
+	}
+	
   	public function getBalance()
   	{
   		if(!$this->customer_id) return 0;
 		
-		return $this->db->query_var("SELECT SUM(amount) AS total FROM " . DB_PREFIX . "customer_transaction WHERE customer_id = '" . (int)$this->customer_id . "'");
+		return $this->db->queryVar("SELECT SUM(amount) AS total FROM " . DB_PREFIX . "customer_transaction WHERE customer_id = '" . (int)$this->customer_id . "'");
   	}
 
   	public function getRewardPoints()
   	{
   		if(!$this->customer_id) return 0;
   		
-		return $this->db->query_var("SELECT SUM(points) AS total FROM " . DB_PREFIX . "customer_reward WHERE customer_id = '" . (int)$this->customer_id . "'");
+		return $this->db->queryVar("SELECT SUM(points) AS total FROM " . DB_PREFIX . "customer_reward WHERE customer_id = '" . (int)$this->customer_id . "'");
   	}
 	
 	public function encrypt($password)
@@ -180,7 +191,7 @@ class Customer extends Library
 		$this->information = $customer;
 		
 		//Load Customer Settings
-		$settings = $this->db->query_rows("SELECT * FROM " . DB_PREFIX . "customer_setting WHERE customer_id = '" . $this->customer_id . "'");
+		$settings = $this->db->queryRows("SELECT * FROM " . DB_PREFIX . "customer_setting WHERE customer_id = '" . $this->customer_id . "'");
 		
 		foreach ($settings as $setting) {
 			if ($setting['serialized']) {
@@ -204,7 +215,7 @@ class Customer extends Library
 		
 		$this->db->query("UPDATE " . DB_PREFIX . "customer SET cart = '" . $this->db->escape(serialize($cart)) . "', wishlist = '" . $this->db->escape(serialize($wishlist)) . "', ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "' WHERE customer_id = '" . (int)$this->customer_id . "'");
 	
-		$ip_set = $this->db->query_var("SELECT COUNT(*) FROM " . DB_PREFIX . "customer_ip WHERE customer_id = '" . (int)$this->session->data['customer_id'] . "' AND ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "'");
+		$ip_set = $this->db->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "customer_ip WHERE customer_id = '" . (int)$this->session->data['customer_id'] . "' AND ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "'");
 		
 		if (!$ip_set) {
 			$this->db->query("INSERT INTO " . DB_PREFIX . "customer_ip SET customer_id = '" . $this->customer_id . "', ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "', date_added = NOW()");

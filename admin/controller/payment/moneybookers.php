@@ -121,6 +121,8 @@ class Admin_Controller_Payment_Moneybookers extends Controller
 			$this->data['moneybookers_custnote'] = $this->config->get('moneybookers_custnote');
 		}
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

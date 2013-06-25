@@ -3,7 +3,7 @@ class Admin_Model_Report_Product extends Model
 {
 	public function getProductViews()
 	{
-		return $this->query_rows("SELECT * FROM " . DB_PREFIX . "product_views");
+		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_views");
 	}
 	
 	public function getProductsViewed($data = array()) {
@@ -19,7 +19,7 @@ class Admin_Model_Report_Product extends Model
 		
 		$query = "SELECT $select FROM $from GROUP BY pv.product_id ORDER BY views DESC $limit";
 		
-		$products = $this->query_rows($query);
+		$products = $this->queryRows($query);
 		
 		$this->translation->translate('product', 'product_id', $products);
 		 
@@ -28,12 +28,12 @@ class Admin_Model_Report_Product extends Model
 	
 	public function getTotalProductsViewed()
 	{
-		return $this->query_var("SELECT COUNT(DISTINCT product_id) as total FROM " . DB_PREFIX . "product_views");
+		return $this->queryVar("SELECT COUNT(DISTINCT product_id) as total FROM " . DB_PREFIX . "product_views");
 	}
 	
 	public function getTotalProductViews()
 	{
-		return $this->query_var("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "product_views");
+		return $this->queryVar("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "product_views");
 	}
 			
 	public function reset()

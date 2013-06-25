@@ -31,6 +31,6 @@ class Admin_Model_Mail_Error extends Model
 	
 	public function total_failed_messages()
 	{
-		return $this->db->query_var("SELECT COUNT(*) as total FROM " . DB_PREFIX . "setting WHERE `key` = 'mail_fail'");
+		return $this->db->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "setting WHERE `key` = 'mail_fail'");
 	}
 }

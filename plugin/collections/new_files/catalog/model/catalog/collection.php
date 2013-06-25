@@ -5,7 +5,7 @@ class Catalog_Model_Catalog_Collection extends Model
 	{
 		$store_id = $this->config->get('config_store_id');
 		
-		$collection = $this->query_row(
+		$collection = $this->queryRow(
 			"SELECT * FROM " . DB_PREFIX . "collection c" .
 			" LEFT JOIN " . DB_PREFIX . "collection_store cs ON (c.collection_id=cs.collection_id)" .
 			" LEFT JOIN " . DB_PREFIX . "collection_category cc ON (c.collection_id=cc.collection_id)"  .
@@ -66,7 +66,7 @@ class Catalog_Model_Catalog_Collection extends Model
 	{
 		$store_id = $this->config->get('config_store_id');
 		
-		$collection = $this->query_row(
+		$collection = $this->queryRow(
 			"SELECT c.*, cc.category_id FROM " . DB_PREFIX . "collection c" .
 			" LEFT JOIN " . DB_PREFIX . "collection_store cs ON (c.collection_id=cs.collection_id)" .
 			" LEFT JOIN " . DB_PREFIX . "collection_category cc ON (c.collection_id=cc.collection_id)" .
@@ -144,7 +144,7 @@ class Catalog_Model_Catalog_Collection extends Model
 		
 		$query = "SELECT $select FROM $from";
 		
-		$categories = $this->query_rows($query);
+		$categories = $this->queryRows($query);
 		
 		$this->translation->translate_all('category', 'category_id', $categories);
 		
@@ -167,7 +167,7 @@ class Catalog_Model_Catalog_Collection extends Model
 			" LEFT JOIN " . DB_PREFIX . "attribute a ON (a.attribute_id=pa.attribute_id)" .
 			" WHERE a.attribute_group_id = '" . (int)$attribute_group_id . "' AND cp.collection_id = '" . (int)$collection_id . "' LIMIT 1";
 			
-		return $this->query_var($query);
+		return $this->queryVar($query);
 	}
 	
 	public function getAttributeList($collection_id, $attribute_group_id)
@@ -183,7 +183,7 @@ class Catalog_Model_Catalog_Collection extends Model
 				" LEFT JOIN " . DB_PREFIX . "collection_product cp ON (cp.product_id=pa.product_id)" .
 				" WHERE a.attribute_group_id = '$attribute_group_id' AND cp.collection_id = '" . (int)$collection_id . "' GROUP BY a.attribute_id ORDER BY name";
 			
-			$attributes = $this->query_rows($query);
+			$attributes = $this->queryRows($query);
 			
 			$this->translation->translate_all('attribute', 'attribute_id', $attributes);
 			

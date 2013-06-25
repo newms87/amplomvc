@@ -18,7 +18,7 @@ final class MSSQL implements Database
 		mssql_query("SET CHARACTER SET utf8", $this->link);
   	}
 	
-	public function get_error()
+	public function getError()
 	{
 		return $this->err_msg;
 	}
@@ -65,7 +65,7 @@ final class MSSQL implements Database
 		return '0x' . $unpacked['hex'];
 	}
 	
-	public function escape_html($value)
+	public function escapeHtml($value)
 	{
 		return $this->escape(htmlspecialchars_decode($value), $this->link);
 	}

@@ -40,6 +40,8 @@ class Admin_Controller_Module_DesignerSidebar extends Controller
 			'column_right' => $this->_('text_column_right')
 			);
 		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

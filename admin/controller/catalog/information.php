@@ -239,6 +239,8 @@ class Admin_Controller_Catalog_Information extends Controller
 		$this->data['pagination'] = $this->pagination->render();
 		
 		//Dependencies
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -310,6 +312,8 @@ class Admin_Controller_Catalog_Information extends Controller
 		$this->data['translations'] = $this->translation->get_translations('information', $information_id, $translate_fields);
 		
 		//Dependencies
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

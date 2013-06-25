@@ -336,6 +336,71 @@ for(var t in translations){
 //--></script>
 
 <?php break;
+	
+	
+	case 'template_rows':
+		if (empty($args[0])) {
+			trigger_error("Builder::js('template_rows'): You must specify the list selector to apply the template row to!");
+			return;
+		}
+		
+		$list_selector = $args[0];
+		
+		$button_selector = !empty($args[1]) ? $args[1] : false;
+		$max_row = !empty($args[2]) ? $args[2] : false;
+		$template_row_defaults = !empty($args[3]) ? $args[3] : false;
+	?>
+<script type="text/javascript">//<!--
+<? if (!isset($js_loaded_files['template_rows'])) { ?>
+	var _tpl_rows = {};
+	
+function add_template_row(tpl_row)
+{
+	template = tpl_row['template'].clone(true);
+	
+	template.find('[name]').each(function(i,e){
+		t_name = $(e).attr('name').replace(/__row__/g, tpl_row['count']);
+		$(e).attr('name', t_name);
+		
+		key = $(e).val();
+		if (tpl_row['defaults']) {
+			$(e).val(tpl_row['defaults'][key]);
+		} else {
+			$(e).val('');
+		}
+	});
+	
+	template.removeClass('__row__');
+	
+	tpl_row['count'] += 1;
+	
+	tpl_row['list'].append(template);
+}
+<? } ?>
+
+var _tr_id = '<?= $list_selector; ?>';
+
+_tpl_rows[_tr_id] = {};
+
+_tpl_list = $(_tr_id);
+_tpl_rows[_tr_id]['template'] = _tpl_list.find('.__row__').clone(true);
+_tpl_list.find('.__row__').remove();
+_tpl_rows[_tr_id]['count'] = <?= (int)$max_row; ?>;
+
+if (!_tpl_rows[_tr_id]['count']) {
+	_tpl_rows[_tr_id]['count'] = _tpl_list.children().length + 1;
+}
+
+_tpl_rows[_tr_id]['list'] = _tpl_list;
+
+_tpl_rows[_tr_id]['defaults'] = <?= !empty($template_row_defaults) ? json_encode($template_row_defaults) : 0; ?>;
+
+<? if ($button_selector) { ?>
+$('<?= $button_selector; ?>').click(function(){add_template_row(_tpl_rows['<?= $list_selector; ?>'])});
+<? } ?>
+//--></script>
+<?php break;
+
 
 	case 'html_entity_decode': ?>
 

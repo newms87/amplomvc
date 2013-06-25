@@ -50,6 +50,8 @@ class Admin_Controller_Module_FeaturedFlashsale extends Controller
 		foreach($layouts as $layout)
 			$this->data['layouts'][$layout['layout_id']] = $layout['name'];
 		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

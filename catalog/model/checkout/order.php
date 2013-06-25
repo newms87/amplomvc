@@ -135,11 +135,21 @@ class Catalog_Model_Checkout_Order extends Model
 		return $query->row;
 	}
 	
+	public function getOrderProducts($order_id)
+	{
+		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "order_product WHERE order_id = '" . (int)$order_id . "'");
+	}
+	
 	public function getOrderProductOptions($order_id, $order_product_id)
 	{
 		$query = $this->get('order_option', '*', array('order_id' => $order_id, 'order_product_id' => $order_product_id));
 		
 		return $query->rows;
+	}
+	
+	public function getTotalOrderProducts($order_id)
+	{
+		return $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "order_product WHERE order_id = '" . (int)$order_id . "'");
 	}
 	
 	public function confirm($order_id, $order_status_id, $comment = '', $notify = false)
@@ -259,8 +269,10 @@ class Catalog_Model_Checkout_Order extends Model
 		$order_total_query = $this->query("SELECT * FROM `" . DB_PREFIX . "order_total` WHERE order_id = '" . (int)$order_id . "' ORDER BY sort_order ASC");
 		
 		foreach ($order_total_query->rows as $order_total) {
-			if (method_exists($this->{'model_total_' . $order_total['code']}, 'confirm')) {
-				$this->{'model_total_' . $order_total['code']}->confirm($order_info, $order_total);
+			$classname = 'Model_Total_' . $this->tool->format_classname($order_total['code']);
+			
+			if (method_exists($this->$classname, 'confirm')) {
+				$this->$classname->confirm($order_info, $order_total);
 			}
 		}
 		
@@ -277,7 +289,6 @@ class Catalog_Model_Checkout_Order extends Model
 		
 		//TODO: we can do better than this!
 		$this->callController('mail/order', $order_info);
-		
 		
 		//Generate and Email Excel Docs
 		$product_ids = array();

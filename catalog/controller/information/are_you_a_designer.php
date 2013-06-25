@@ -78,6 +78,8 @@ class Catalog_Controller_Information_AreYouADesigner extends Controller
 		$this->data['categories'] = array_merge(array(''=>"( Select Category )"),$this->Model_Catalog_Category->getCategories(-1));
 		$this->data['categories'][0] = 'Other';
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
@@ -103,6 +105,8 @@ class Catalog_Controller_Information_AreYouADesigner extends Controller
 		
 		$this->data['continue'] = $this->url->link('common/home');
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',

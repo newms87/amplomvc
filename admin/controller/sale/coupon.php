@@ -147,6 +147,8 @@ class Admin_Controller_Sale_Coupon extends Controller
 		$this->data['sort'] = $sort;
 		$this->data['order'] = $order;
 		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -245,6 +247,8 @@ class Admin_Controller_Sale_Coupon extends Controller
 		$this->data['data_geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 		
 		$this->data['categories'] = $this->Model_Catalog_Category->getCategoriesWithParents();
+		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

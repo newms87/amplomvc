@@ -3,78 +3,80 @@ class Admin_Model_Setting_Setting extends Model
 {
 	public function getSetting($group, $store_id = 0)
 	{
-		$where = array(
-			'store_id'  => $store_id,
-			'group'	=> $group,
-		);
-		
-		$query = $this->get('setting', '*',  $where);
+		$settings = $this->queryRows("SELECT * FROM " . DB_PREFIX . "setting WHERE `group` = '" . $this->db->escape($group) . "' AND store_id IN (0, " . (int)$store_id . ")");
 		
 		$data = array();
 		
-		foreach ($query->rows as $result) {
-			if (!$result['serialized']) {
-				$data[$result['key']] = $result['value'];
+		foreach ($settings as $setting) {
+			if (!$setting['serialized']) {
+				$data[$setting['key']] = $setting['value'];
 			} else {
-				$data[$result['key']] = unserialize($result['value']);
+				$data[$setting['key']] = unserialize($setting['value']);
 			}
 		}
 
 		return $data;
 	}
 	
-	public function editSetting($group, $data, $store_id = 0, $auto_load = true)
+	public function getSettingKey($group, $key, $store_id = 0)
 	{
-		$this->deleteSetting($group, $store_id);
-
-		foreach ($data as $key => $value) {
-			$values = array(
-				'store_id'  => $store_id,
-				'group'	=> $group,
-				'key'		=>$key,
-				'auto_load' => $auto_load ? 1 : 0
-			);
-			
-			if (is_array($value) || is_object($value)) {
-				$values['value'] = serialize($value);
-				$values['serialized'] = 1;
-			}
-			else {
-				$values['value'] = $value;
-				$values['serialized'] = 0;
-			}
-			
-			$this->insert('setting', $values);
+		$setting = $this->queryRow("SELECT * FROM " . DB_PREFIX . "setting WHERE `group` = '" . $this->db->escape($group) . "' AND `key` = '" . $this->db->escape($key) . "' AND store_id IN (0, " . (int)$store_id . ")");
+		
+		if ($setting) {
+			return $setting['serialized'] ? unserialize($setting['value']) : $setting['value'];
 		}
 		
-		$this->cache->delete('setting');
-		$this->cache->delete('store');
+		return null;
+	}
+	
+	public function editSetting($group, $data, $store_id = 0, $auto_load = true)
+	{
+		foreach ($data as $key => $value) {
+			$this->editSettingKey($group, $key, $value, $store_id, $auto_load);
+		}
 	}
 	
 	public function editSettingKey($group, $key = null, $value = array(), $store_id = 0, $auto_load = true){
 		if (is_array($value) || is_object($value)) {
-			$value = serialize($value);
+			$entry_value = serialize($value);
 			$serialized = 1;
-		}
-		else {
+		} else {
 			$serialized = 0;
+			$entry_value = $value;
 		}
 		
 		$values = array(
 			'group' => $group,
 			'key' => $key,
-			'value' => $value,
+			'value' => $entry_value,
 			'serialized' => $serialized,
 			'store_id' => $store_id,
-			'auto_load' => $auto_load ? 1 : 0
+			'auto_load' => $auto_load ? 1 : 0,
 		);
 		
-		$this->delete('setting',"`group` = '$group' AND `key` = '$key' AND store_id = '$store_id'");
+		$where = array(
+			'group' => $group,
+			'key' => $key,
+			'store_id' => $store_id,
+		);
 		
-		$this->insert('setting',  $values);
+		$this->delete('setting', $where);
+		
+		$setting_id = $this->insert('setting',  $values);
+		
+		if (is_array($value)) {
+			foreach ($value as $entry_key => $entry) {
+				if (is_array($entry) && !empty($entry['translations'])) {
+					$this->translation->set_translations($key, $entry_key, $entry['translations']);
+				}
+			}
+		}
 		
 		$this->cache->delete('setting');
 		$this->cache->delete('store');
+		$this->cache->delete('theme');
+		
+		return $setting_id;
 	}
 	
 	public function deleteSetting($group, $store_id = 0)

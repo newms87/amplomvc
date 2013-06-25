@@ -1,5 +1,5 @@
 <?php
-class PrettyLanguage extends Library
+class PrettyLanguage 
 {
 	/**
 	 * *.tpl
@@ -37,7 +37,9 @@ class PrettyLanguage extends Library
 		$ext = array('php');
 		
 		
-		$files = $this->get_all_files_r(SITE_DIR . 'catalog/controller/block/', $ext);
+		$files = $this->get_all_files_r(SITE_DIR . 'admin/', $ext);
+		
+		$this->render_breadcrumbs($files);
 		
 		//$this->smodel_call_update($files);
 		
@@ -60,6 +62,59 @@ class PrettyLanguage extends Library
 		
 		//$this->update_template_format($files);
 
+	}
+	
+	public function render_breadcrumbs($files){
+		foreach ($files as $file) {
+			$lines = explode("\n", file_get_contents($file));
+			
+			$orig_lines = $lines;
+			
+			$count = 0;
+			
+			$bracket_count = 0;
+			$function_bracket = null;
+			$has_bread = false;
+			
+			$new_lines = array();
+			
+			foreach ($lines as $num => $line) {
+				$bracket_count += substr_count($line, '{');
+				$bracket_count -= substr_count($line, '}');
+				
+				$matches = null;
+				
+				if ($function_bracket && $bracket_count < current($function_bracket)) {
+					$function_bracket = null;
+					$has_bread = false;
+				}
+				elseif (!$function_bracket && preg_match("/function\\s*([A-Za-z_]*)\\s*\(/", $line, $matches)) {
+					$function_bracket = array($matches[1] => $bracket_count+1);
+				}
+				elseif (!$has_bread && strpos($line, "\$this->breadcrumb->add")) {
+					$has_bread = true;
+				}
+				elseif ($has_bread && strpos($line, "\$this->data['breadcrumbs'] = \$this->breadcrumb->render();\r")) {
+					$has_bread = false;
+				}
+				elseif ($has_bread && strpos($line, "\$this->children")) {
+					$count++;
+					preg_match("/(\\s*)\\\$/", $line, $matches);
+					
+					$new_lines[] = $matches[1] . "\$this->data['breadcrumbs'] = \$this->breadcrumb->render();\r";
+					$new_lines[] = $matches[1] . "\r";
+				}
+				
+				$new_lines[] = $line;
+			}
+			
+			if($count > 0){
+				echo "modified $count lines in $file<br>";
+			}
+			
+			//$this->print_lines($orig_lines, $new_lines, false, true);
+			file_put_contents($file, implode("\n", $new_lines));
+		}
 	}
 	
 	public function smodel_call_update($files){
@@ -547,30 +602,107 @@ class PrettyLanguage extends Library
 	
 	public function print_lines($orig, $lines, $changes_only = true, $special_chars = false)
 	{
-		foreach ($orig as $num=>$l) {
-			if($special_chars){
-				$l = preg_replace(array('/ /','/\t/'),array('&nbsp;','&nbsp;&nbsp;&nbsp;'), $l);
-			}
+		$orig_i = 0;
+		$total_orig = count($orig);
+		
+		for ($new_i = 0;$new_i < count($lines);$new_i++) {
+			$l = $lines[$new_i];
 			
-			if (!isset($lines[$num])) {
-				$color = '#F98888';
-			}
-			elseif ($l != $lines[$num]) {
-				echo "<div style='background: #92ADE3'>" . ($num+1) . ".  "  . ($special_chars ? htmlspecialchars($l) : $l) . "</div>";
-				$l = $lines[$num];
+			if ($orig_i >= $total_orig) {
 				$color = '#C2E782';
 			}
+			elseif ($lines[$new_i] != $orig[$orig_i]) {
+				$in_orig = false;
+				for ($i = $orig_i; $i < count($orig); $i++) {
+					if ($lines[$new_i] == $orig[$i]) {
+						$in_orig = $i;
+						break;
+					}
+				}
+				
+				$in_new = false;
+				for ($i = $new_i; $i < count($lines); $i++) {
+					if ($orig[$orig_i] == $lines[$i]) {
+						$in_new = $i;
+						break;
+					}
+				}
+				
+				if ($in_new && $in_orig) {
+					if ($in_new < $in_orig) {
+						$in_orig = false;
+					} else {
+						$in_new = false;
+					}
+				}
+				
+				if($in_new) {
+					for ($i = $new_i; $i < $in_new; $i++) {
+						$this->pl($i+1, $lines[$i], '#C2E782', $special_chars);
+					}
+					
+					$new_i = $in_new-1;
+					
+					continue;
+				}
+				elseif($in_orig) {
+					for ($i = $orig_i; $i < $in_orig; $i++) {
+						$this->pl($i+1, $orig[$i], '#F98888', $special_chars);
+					}
+					
+					$orig_i = $in_orig;
+					$new_i++;
+					
+					continue;
+				}
+				else {
+					$orig_i++;
+					$color = '#C282E7';
+					/*
+					$changes = false;
+					for ($i = 0; $i < count($lines) - $new_i; $i++) {
+						if (!isset($orig[$orig_i+$i])) break;
+						
+						if ($orig[$orig_i+$i] == $lines[$new_i+$i]) {
+							echo "FOUND Changes!<br>";
+							$changes = $i;
+							break;
+						}
+					}
+					
+					if ($changes) {
+						for ($i = 0; $i < $changes; $i++) {
+							$this->pl($orig_i + $i + 1, $orig[$orig_i + $i], '#A232A7', $special_chars);
+							$this->pl($new_i + $i + 1, $lines[$new_i + $i], '#C282E7', $special_chars);
+						}
+						
+						$new_i += $i-1;
+						$orig_i += $i;
+						
+						continue;
+					} else {
+						$color = '#C2E782';
+					}*/
+				}
+			}
 			else {
+				$orig_i++;
 				if($changes_only)continue;
 				$color = '#CBCBCB';
 			}
-			echo "<div style='background: $color'>" . ($num+1) . ".  "  . ($special_chars ? htmlspecialchars($l) : $l) . "</div>";
+			
+			$this->pl($new_i+1, $l, $color, $special_chars);
 		}
 	}
 	
-	public function pl($num, $line)
+	public function pl($num, $line, $color, $special_chars)
 	{
+		if ($special_chars) {
+			$line = htmlspecialchars($line);
+		}
+		
 		$line = preg_replace(array('/ /','/\t/'),array('&nbsp;','&nbsp;&nbsp;&nbsp;'), $line);
-		echo "$num. " . htmlspecialchars($line) . '<br>';
+
+		echo "<div style='background: $color'>$num. $line</div>";
 	}
 }

@@ -138,6 +138,8 @@ class Admin_Controller_Report_SaleReturn extends Controller
 		$this->data['filter_group'] = $filter_group;
 		$this->data['filter_return_status_id'] = $filter_return_status_id;
 				
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

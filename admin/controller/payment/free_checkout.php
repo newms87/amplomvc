@@ -53,6 +53,8 @@ class Admin_Controller_Payment_FreeCheckout extends Controller
 			$this->data['free_checkout_sort_order'] = $this->config->get('free_checkout_sort_order');
 		}
 						
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

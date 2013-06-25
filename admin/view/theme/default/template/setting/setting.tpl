@@ -1,6 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $breadcrumbs; ?>
 	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
@@ -455,15 +455,8 @@
 						</tr>
 						<tr>
 							<td><?= $entry_return_status; ?></td>
-							<td><select name="config_return_status_id">
-									<? foreach ($return_statuses as $return_status) { ?>
-									<? if ($return_status['return_status_id'] == $config_return_status_id) { ?>
-									<option value="<?= $return_status['return_status_id']; ?>" selected="selected"><?= $return_status['name']; ?></option>
-									<? } else { ?>
-									<option value="<?= $return_status['return_status_id']; ?>"><?= $return_status['name']; ?></option>
-									<? } ?>
-									<? } ?>
-								</select></td>
+							<? $this->builder->set_config(false, 'title'); ?>
+							<td><?= $this->builder->build('select', $data_return_statuses, 'config_return_status_id', $config_return_status_id); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_review; ?></td>

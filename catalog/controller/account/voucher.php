@@ -134,6 +134,8 @@ class Catalog_Controller_Account_Voucher extends Controller
 			$this->data['agree'] = false;
 		}
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
@@ -158,6 +160,8 @@ class Catalog_Controller_Account_Voucher extends Controller
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/voucher'));
 
 		$this->data['continue'] = $this->url->link('cart/cart');
+
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 
 		$this->children = array(
 			'common/column_left',

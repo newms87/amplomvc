@@ -1,7 +1,7 @@
 <?= $header; ?>
 <?= $column_left; ?><?= $column_right; ?>
 <div id="content"><?= $content_top; ?>
-	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $breadcrumbs; ?>
 	<?= $this->builder->display_errors($errors); ?>
 	<h1><?= $heading_title; ?></h1>
 	<p><?= $text_account_already; ?></p>

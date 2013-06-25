@@ -49,6 +49,8 @@ class Admin_Controller_Module_Store extends Controller
 		
 		$this->data['layouts'] = $this->Model_Design_Layout->getLayouts();
 				
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

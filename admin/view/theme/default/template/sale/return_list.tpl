@@ -1,6 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $breadcrumbs; ?>
 	<? if ($error_warning) { ?>
 	<div class="message_box warning"><?= $error_warning; ?></div>
 	<? } ?>
@@ -69,16 +69,10 @@
 							<td><input type="text" name="filter_customer" value="<?= $filter_customer; ?>" /></td>
 							<td><input type="text" name="filter_product" value="<?= $filter_product; ?>" /></td>
 							<td><input type="text" name="filter_model" value="<?= $filter_model; ?>" /></td>
-							<td><select name="filter_return_status_id">
-									<option value="*"></option>
-									<? foreach ($return_statuses as $return_status) { ?>
-									<? if ($return_status['return_status_id'] == $filter_return_status_id) { ?>
-									<option value="<?= $return_status['return_status_id']; ?>" selected="selected"><?= $return_status['name']; ?></option>
-									<? } else { ?>
-									<option value="<?= $return_status['return_status_id']; ?>"><?= $return_status['name']; ?></option>
-									<? } ?>
-									<? } ?>
-								</select></td>
+							<td>
+								<? $this->builder->set_config(false, 'title'); ?>
+								<?= $this->builder->build('select', $data_return_statuses, 'filter_return_status_id', $filter_return_status_id); ?>
+							</td>
 							<td><input type="text" name="filter_date_added" value="<?= $filter_date_added; ?>" size="12" class="date" /></td>
 							<td><input type="text" name="filter_date_modified" value="<?= $filter_date_modified; ?>" size="12" class="date" /></td>
 							<td align="right"><a onclick="filter();" class="button"><?= $button_filter; ?></a></td>

@@ -45,6 +45,8 @@ class Admin_Controller_Module_Welcome extends Controller
 		
 		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

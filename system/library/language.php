@@ -68,7 +68,7 @@ class Language extends Library
 	{
 		if (!empty($language_id)) {
 			if (!isset($loaded_languages[$language_id])) {
-				$loaded_languages[$language_id] = $this->db->query_row("SELECT * FROM " . DB_PREFIX . "language WHERE language_id = '" . (int)$language_id . "'");
+				$loaded_languages[$language_id] = $this->db->queryRow("SELECT * FROM " . DB_PREFIX . "language WHERE language_id = '" . (int)$language_id . "'");
 			}
 			
 			if (is_null($key)) {
@@ -234,7 +234,7 @@ class Language extends Library
 		}
 		
 		if ($code) {
-			$language = $this->db->query_row("SELECT * FROM " . DB_PREFIX . "language WHERE status = '1' AND `code` = '" . $this->db->escape($code) . "' LIMIT 1");
+			$language = $this->db->queryRow("SELECT * FROM " . DB_PREFIX . "language WHERE status = '1' AND `code` = '" . $this->db->escape($code) . "' LIMIT 1");
 			
 			if ($language) {
 				return $language;
@@ -245,7 +245,7 @@ class Language extends Library
 		if ($language = $this->detect()) {
 			return $language;
 		} else {
-			$language = $this->db->query_row("SELECT * FROM " . DB_PREFIX . "language WHERE status = '1' AND `code` = '" . $this->config->get('config_language') . "' LIMIT 1");
+			$language = $this->db->queryRow("SELECT * FROM " . DB_PREFIX . "language WHERE status = '1' AND `code` = '" . $this->config->get('config_language') . "' LIMIT 1");
 			
 			if ($language) {
 				return $language;
@@ -265,7 +265,7 @@ class Language extends Library
 			$languages = $this->cache->get('language.locales');
 			
 			if (!$languages) {
-				$language_list = $this->db->query_rows("SELECT * FROM " . DB_PREFIX . "language WHERE status = '1'");
+				$language_list = $this->db->queryRows("SELECT * FROM " . DB_PREFIX . "language WHERE status = '1'");
 				
 				$languages = array();
 				

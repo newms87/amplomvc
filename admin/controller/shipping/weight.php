@@ -71,6 +71,8 @@ class Admin_Controller_Shipping_Weight extends Controller
 		
 		$this->data['tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

@@ -97,6 +97,8 @@ class Admin_Controller_Payment_Twocheckout extends Controller
 			$this->data['twocheckout_sort_order'] = $this->config->get('twocheckout_sort_order');
 		}
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

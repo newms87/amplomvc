@@ -128,6 +128,8 @@ class Admin_Controller_Block_Block extends Controller
 		$this->data['pagination'] = $this->pagination->render();
 		
 		//Template Children
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -201,6 +203,8 @@ class Admin_Controller_Block_Block extends Controller
 		$this->data['data_layouts'] = $this->Model_Design_Layout->getLayouts($sort_layout);
 		
 		$this->data['data_positions'] = array('' => $this->_('text_none')) + $this->theme->get_setting('data_positions');
+		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

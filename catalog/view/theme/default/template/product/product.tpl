@@ -1,6 +1,6 @@
 <?= $header; ?><?= $column_left; ?><?= $column_right; ?>
 <div id='content'>
-	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $breadcrumbs; ?>
 	<?= $content_top; ?>
 	
 	<h1><?= $heading_title; ?></h1>

@@ -77,15 +77,15 @@ class Config extends Library
 				
 				$url = $scheme . str_replace('www.', '', $_SERVER['HTTP_HOST']) . rtrim(dirname($_SERVER['PHP_SELF']), '/.\\') . '/';
 			
-				$store = $this->db->query_row("SELECT * FROM " . DB_PREFIX . "store WHERE `$field` = '" . $this->db->escape($url) . "'");
+				$store = $this->db->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE `$field` = '" . $this->db->escape($url) . "'");
 				
 				if (empty($store)) {
-					$store_id = $this->db->query_var("SELECT `value` FROM " . DB_PREFIX . "setting WHERE `key` = 'config_default_store'");
-					$store = $this->db->query_row("SELECT * FROM " . DB_PREFIX . "store WHERE store_id = '$store_id'");
+					$store_id = $this->db->queryVar("SELECT `value` FROM " . DB_PREFIX . "setting WHERE `key` = 'config_default_store'");
+					$store = $this->db->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE store_id = '$store_id'");
 				}
 			}
 		} else {
-			$store = $this->db->query_row("SELECT * FROM " . DB_PREFIX . "store WHERE store_id = '$store_id'");
+			$store = $this->db->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE store_id = '$store_id'");
 		}
 		
 		if (!empty($store)) {
@@ -95,19 +95,6 @@ class Config extends Library
 		return $this->site_config['default_store'];
 	}
 		
-	public function get_group($group)
-	{
-		$results = $this->db->query("SELECT * FROM " . DB_PREFIX . "setting WHERE `group` = '" . $this->db->escape($group) . "' AND (store_id='0' OR store_id='$this->store_id')");
-		
-		$group = array();
-		
-		foreach ($results->rows as $row) {
-			$group[$row['key']] = $row['serialized'] ? unserialize($row['value']) : $row['value'];
-		}
-		
-		return $group;
-	}
-	
 	public function get_all()
 	{
 		return $this->data;
@@ -118,33 +105,40 @@ class Config extends Library
 		return isset($this->data[$key]);
   	}
 	
-	public function load($group = '', $key = '')
+	public function load($group, $key, $store_id = null)
 	{
-		$where = '1';
-		
-		if ($group) {
-			$where .= " AND `group` = '" . $this->db->escape($group) . "'";
-		}
-		
-		if ($key) {
-			$where .= " AND `key` = '" . $this->db->escape($key) . "'";
-		}
-		
-		$settings = $this->db->query_rows("SELECT `key`, `value` FROM " . DB_PREFIX . "setting WHERE $where");
-		
-		foreach ($settings as $config) {
-			$this->data[$config['key']] = $config['value'];
-		}
+		return $this->Model_Setting_Setting->getSettingKey($group, $key, $store_id);
 	}
 	
-	public function save($group, $key, $data, $auto_load = true)
+	public function save($group, $key, $value, $store_id = null, $auto_load = true)
 	{
-		$this->Model_Setting_Setting->editSettingKey($group, $key, $data, $this->store_id, $auto_load);
+		if (!$store_id) {
+			$store_id = $this->store_id;
+		}
+		
+		$this->Model_Setting_Setting->editSettingKey($group, $key, $value, $store_id, $auto_load);
 	}
 	
-	public function save_group($group, $data, $auto_load = true)
+	public function loadGroup($group, $store_id = null)
 	{
-		$this->Model_Setting_Setting->editSetting($group, $data, $this->store_id, $auto_load);
+		if (!$store_id && $store_id !== 0) {
+			$store_id = $this->store_id;
+		}
+		
+		$group = $this->Model_Setting_Setting->getSetting($group, $store_id);
+		
+		$this->data += $group;
+		
+		return $group;
+	}
+	
+	public function saveGroup($group, $data, $store_id = null, $auto_load = true)
+	{
+		if (!$store_id) {
+			$store_id = $this->store_id;
+		}
+		
+		$this->Model_Setting_Setting->editSetting($group, $data, $store_id, $auto_load);
 	}
 	
 	private function load_site_config()
@@ -162,20 +156,20 @@ class Config extends Library
 	{
 		$admin_store = $this->site_config['admin_store'];
 		
-		$admin_exists = $this->db->query_var("SELECT COUNT(*) as total FROM " . DB_PREFIX . "store WHERE store_id = 0 AND `url` ='" . $this->db->escape($admin_store['url']) . "' AND `ssl` = '" . $this->db->escape($admin_store['ssl']) . "'");
+		$admin_exists = $this->db->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "store WHERE store_id = 0 AND `url` ='" . $this->db->escape($admin_store['url']) . "' AND `ssl` = '" . $this->db->escape($admin_store['ssl']) . "'");
 		
 		if (!$admin_exists) {
 			$this->db->query("DELETE FROM " . DB_PREFIX . "store WHERE store_id = 0");
 			
 			$this->db->query("SET GLOBAL sql_mode='NO_AUTO_VALUE_ON_ZERO'");
 			$this->db->query("SET SESSION sql_mode='NO_AUTO_VALUE_ON_ZERO'");
-			$this->db->query("INSERT INTO " . DB_PREFIX . "store SET " . $this->db->get_insert_string($this->site_config['admin_store']));
+			$this->db->query("INSERT INTO " . DB_PREFIX . "store SET " . $this->db->getInsertString($this->site_config['admin_store']));
 		}
 		
-		$default_exists = $this->db->query_var("SELECT COUNT(*) as total FROM " . DB_PREFIX . "store WHERE store_id > 0 LIMIT 1");
+		$default_exists = $this->db->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "store WHERE store_id > 0 LIMIT 1");
 		
 		if (!$default_exists) {
-			$this->db->set_autoincrement('store', 0);
+			$this->db->setAutoincrement('store', 0);
 			$this->Model_Setting_Store->addStore($this->site_config['default_store']);
 		}
 	}

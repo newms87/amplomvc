@@ -41,6 +41,8 @@ class Admin_Controller_Module_Cron extends Controller
 		$info = isset($_POST['cron_tasks'])?$_POST['cron_tasks']:$this->Model_Setting_Setting->getSetting('cron_tasks');
 		$this->data['tasks'] = isset($info['tasks']) ? $info['tasks'] : array();
 		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

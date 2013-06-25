@@ -175,6 +175,8 @@ class Admin_Controller_Mail_Newsletter extends Controller
 		
 		$this->data['download_email_list'] = $this->url->link('mail/newsletter/email_list');
 		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -280,6 +282,8 @@ class Admin_Controller_Mail_Newsletter extends Controller
 		}
 	
 		
+		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

@@ -1916,10 +1916,6 @@ td.mail_info label{
 }
 
 /* Easy List */
-.easy_list *{
-	box-sizing:border-box;
-}
-
 .easy_list{
 	list-style: none;
 }
@@ -1967,6 +1963,11 @@ body .easy_list li textarea:focus{
 .easy_list .easy_list{
 	margin-top: 15px;
 	padding: 0 40px;
+}
+
+.easy_list .title{
+	font-size: 16px;
+	font-weight:bold;
 }
 
 /* FAQ Block */

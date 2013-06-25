@@ -214,6 +214,8 @@ class Admin_Controller_Catalog_Flashsale extends Controller
 		$this->data['sort'] = $sort;
 		$this->data['order'] = strtolower($order);
 		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -306,6 +308,8 @@ class Admin_Controller_Catalog_Flashsale extends Controller
 				$this->data[$d] = $value;
 			}
 		}
+		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

@@ -222,6 +222,8 @@ class Admin_Controller_Design_Layout extends Controller
 		$this->data['sort'] = $sort;
 		$this->data['order'] = $order;
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -304,6 +306,8 @@ class Admin_Controller_Design_Layout extends Controller
 			$this->data['layout_routes'] = array();
 		}
 				
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

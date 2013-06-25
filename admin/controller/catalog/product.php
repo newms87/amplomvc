@@ -395,6 +395,8 @@ class Admin_Controller_Catalog_Product extends Controller
 		$this->data['pagination'] = $this->pagination->render();
 		
 		//Child Templates
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -630,6 +632,10 @@ class Admin_Controller_Catalog_Product extends Controller
 		
 		$this->data['translations']['product_tag'] = $tag_translations;
 		
+		$this->data['no_image'] = $this->image->resize('no_image.png', $this->config->get('config_image_admin_thumb_width'), $this->config->get('config_image_admin_thumb_height'));
+		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -654,7 +660,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		
 		$product_id = isset($_GET['product_id']) ? "AND product_id != '" . (int)$_GET['product_id'] . "'" : '';
 		
-		$exists = $this->db->query_var("SELECT COUNT(*) FROM " . DB_PREFIX . "product WHERE model='" . $this->db->escape($_POST['model']) . "' $product_id");
+		$exists = $this->db->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "product WHERE model='" . $this->db->escape($_POST['model']) . "' $product_id");
 		
 		if ($exists) {
 			$this->error['model'] = $this->_('error_dup_model');

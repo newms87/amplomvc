@@ -200,6 +200,8 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		
 		$this->data['pagination'] = $this->pagination->render();
 		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -274,6 +276,8 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		foreach ($this->data['attributes'] as &$attribute) {
 			$attribute['translations'] = $this->translation->get_translations('attribute', $attribute['attribute_id'], $translate_fields);
 		};
+		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

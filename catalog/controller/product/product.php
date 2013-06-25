@@ -87,6 +87,8 @@ class Catalog_Controller_Product_Product extends Controller
 			$this->url->redirect($this->url->link('error/not_found'));
 		}
 		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',

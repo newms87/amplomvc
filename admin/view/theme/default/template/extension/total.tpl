@@ -1,6 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $breadcrumbs; ?>
 	<? if ($success) { ?>
 	<div class="message_box success"><?= $success; ?></div>
 	<? } ?>

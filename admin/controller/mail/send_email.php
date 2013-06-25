@@ -54,6 +54,8 @@ class Admin_Controller_Mail_SendEmail extends Controller
 			$this->data['allow_html'] = !isset($_POST['allow_html']) ? 0 : 1;
 		}
 		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

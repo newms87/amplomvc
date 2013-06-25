@@ -261,6 +261,8 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		$this->data['pagination'] = $this->pagination->render();
 		
 		//Children
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -329,6 +331,8 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		);
 		
 		$this->data['translations'] = $this->translation->get_translations('manufacturer', $manufacturer_id, $translate_fields);
+		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

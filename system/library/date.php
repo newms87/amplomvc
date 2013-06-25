@@ -93,12 +93,15 @@ class Date extends Library
 			$format = $this->language->getInfo('datetime_format');
 		} else {
 			switch ($format) {
+				case 'date_format_short':
 				case 'short':
 					$format = $this->language->getInfo('date_format_short');
 					break;
+				case 'date_format_long':
 				case 'long':
 					$format = $this->language->getInfo('date_format_long');
 					break;
+				case 'datetime_format':
 				case 'default':
 				case 'datetime':
 					$format = $this->language->getInfo('datetime_format');

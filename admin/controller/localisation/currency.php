@@ -229,6 +229,8 @@ class Admin_Controller_Localisation_Currency extends Controller
 		$this->data['sort'] = $sort;
 		$this->data['order'] = $order;
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -344,6 +346,8 @@ class Admin_Controller_Localisation_Currency extends Controller
 				$this->data['status'] = '';
 		}
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

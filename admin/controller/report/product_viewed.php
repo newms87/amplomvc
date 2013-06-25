@@ -88,6 +88,8 @@ class Admin_Controller_Report_ProductViewed extends Controller
 		$this->pagination->total = $product_viewed_total;
 		$this->data['pagination'] = $this->pagination->render();
 				
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

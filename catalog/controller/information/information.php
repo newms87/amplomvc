@@ -31,6 +31,8 @@ class Catalog_Controller_Information_Information extends Controller
 			
 			$this->data['continue'] = isset($_GET['redirect']) ? urldecode($_GET['redirect']) : $this->url->link('common/home');
 
+			$this->data['breadcrumbs'] = $this->breadcrumb->render();
+			
 			$this->children = array(
 				'common/column_left',
 				'common/column_right',
@@ -52,6 +54,8 @@ class Catalog_Controller_Information_Information extends Controller
 
 			$this->data['continue'] = $this->url->link('common/home');
 
+			$this->data['breadcrumbs'] = $this->breadcrumb->render();
+			
 			$this->children = array(
 				'common/column_left',
 				'common/column_right',

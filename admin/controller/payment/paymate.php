@@ -99,6 +99,8 @@ class Admin_Controller_Payment_Paymate extends Controller
 			$this->data['paymate_sort_order'] = $this->config->get('paymate_sort_order');
 		}
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

@@ -67,6 +67,8 @@ class Admin_Controller_Payment_Cod extends Controller
 			$this->data['cod_sort_order'] = $this->config->get('cod_sort_order');
 		}
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

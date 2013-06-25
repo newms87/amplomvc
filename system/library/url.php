@@ -185,7 +185,7 @@ class Url extends Library
 		
 		$scheme = $ssl ? 'ssl':'url';
 		
-		$link = $this->db->query_var("SELECT $scheme as link FROM " . DB_PREFIX . "store WHERE store_id = '" . (int)$store_id . "'");
+		$link = $this->db->queryVar("SELECT $scheme as link FROM " . DB_PREFIX . "store WHERE store_id = '" . (int)$store_id . "'");
 		
 		if (!is_string($link)) {
 			trigger_error("Error in Url Library: Store did not exist! store_id = " . $store_id . '.  ' . get_caller(2));
@@ -260,7 +260,7 @@ class Url extends Library
 			
 			$parts = preg_replace("/^admin\/?/", '', $parts);
 			
-			$url_alias = $this->db->query_row("SELECT * FROM " . DB_PREFIX . "url_alias WHERE keyword = '" . $this->db->escape($parts) . "' AND status = '1' LIMIT 1");
+			$url_alias = $this->db->queryRow("SELECT * FROM " . DB_PREFIX . "url_alias WHERE keyword = '" . $this->db->escape($parts) . "' AND status = '1' LIMIT 1");
 			
 			if ($url_alias) {
 				//TODO: We need to reconsider how we handle all stores...
@@ -323,7 +323,11 @@ class Url extends Library
 			return false;
 		}
 		
-		$query = urldecode($query);
+		if (is_array($query)) {
+			$query = http_build_query($query);
+		} else {
+			$query = urldecode($query);
+		}
 		
 		if (!$store_id && $store_id !== 0) {
 			$store_id = $this->config->get('config_store_id');
@@ -343,7 +347,7 @@ class Url extends Library
 		
 		$sql = "SELECT * FROM " . DB_PREFIX . "url_alias $where ORDER BY query DESC LIMIT 1";
 		
-		$url_alias = $this->db->query_row($sql);
+		$url_alias = $this->db->queryRow($sql);
 		
 		if ($url_alias) {
 			if ($url_alias['redirect']) {
@@ -407,7 +411,7 @@ class Url extends Library
 			" AND `query` = '" . $this->db->escape($query) . "'" .
 			" AND store_id IN ('-1', '" . (int)$store_id . "')";
 						
-		return $this->db->query_var($sql_query);
+		return $this->db->queryVar($sql_query);
 	}
 	
 	public function setAlias($alias, $route, $query = '', $store_id = -1)

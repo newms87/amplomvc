@@ -83,6 +83,8 @@ class Catalog_Controller_Account_Order extends Controller
 
 		$this->data['continue'] = $this->url->link('account/account');
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
@@ -128,7 +130,7 @@ class Catalog_Controller_Account_Order extends Controller
 			
 			$this->language->set('heading_title', $this->_('text_order'));
 		
-			$this->_('final_sale_explanation',$this->url->link('information/information', 'information_id=7'));
+			$this->_('final_sale_explanation',$this->url->link('information/information/info', 'information_id=7'));
 			
 			if ($order_info['invoice_no']) {
 				$this->data['invoice_no'] = $order_info['invoice_prefix'] . $order_info['invoice_no'];
@@ -275,6 +277,8 @@ class Catalog_Controller_Account_Order extends Controller
 
 				$this->data['continue'] = $this->url->link('account/order');
 
+			$this->data['breadcrumbs'] = $this->breadcrumb->render();
+
 			$this->children = array(
 				'common/column_left',
 				'common/column_right',
@@ -298,6 +302,8 @@ class Catalog_Controller_Account_Order extends Controller
 			$this->language->set('heading_title', $this->_('text_order'));
 															
 			$this->data['continue'] = $this->url->link('account/order');
+
+			$this->data['breadcrumbs'] = $this->breadcrumb->render();
 
 			$this->children = array(
 				'common/column_left',

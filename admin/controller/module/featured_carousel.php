@@ -64,6 +64,8 @@ class Admin_Controller_Module_FeaturedCarousel extends Controller
 		
 		$this->data['no_image'] = $this->image->resize('no_image.png', 100, 100);
 		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

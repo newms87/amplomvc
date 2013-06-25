@@ -88,6 +88,8 @@ class Admin_Controller_Payment_BankTransfer extends Controller
 		}
 		
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

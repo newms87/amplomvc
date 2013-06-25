@@ -508,7 +508,7 @@ class Admin_Model_Catalog_Product extends Model
 		$product['product_template'] = $this->getProductTemplates($product_id);
 		$product['product_store'] = $this->getProductStores($product_id);
 		
-		$name_count = $this->query_var("SELECT COUNT(*) FROM " . DB_PREFIX . "product WHERE `name` like '" . $this->db->escape($product['name']) . "%'");
+		$name_count = $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "product WHERE `name` like '" . $this->db->escape($product['name']) . "%'");
 		
 		$product['name'] .= ' - Copy' . ($name_count > 1 ? "($name_count)" : '');
 		
@@ -549,7 +549,7 @@ class Admin_Model_Catalog_Product extends Model
 	
 	public function getProduct($product_id)
 	{
-		$product = $this->query_row("SELECT DISTINCT * FROM " . DB_PREFIX . "product p WHERE p.product_id = '" . (int)$product_id . "'");
+		$product = $this->queryRow("SELECT DISTINCT * FROM " . DB_PREFIX . "product p WHERE p.product_id = '" . (int)$product_id . "'");
 		
 		if ($product) {
 			$url_alias = $this->Model_Setting_UrlAlias->getUrlAliasByRouteQuery('product/product', "product_id=" . (int)$product_id);
@@ -708,7 +708,7 @@ class Admin_Model_Catalog_Product extends Model
 			
 			//enable image sorting if requested and not already installed
 			if (!empty($data['sort']) && strpos($data['sort'], '__image_sort__') === 0) {
-				if (!$this->db->has_column('product', $data['sort'])) {
+				if (!$this->db->hasColumn('product', $data['sort'])) {
 					$this->extend->enable_image_sorting('product', str_replace('__image_sort__', '', $data['sort']));
 				}
 			}
@@ -737,7 +737,7 @@ class Admin_Model_Catalog_Product extends Model
 	
 	public function isEditable($product_id)
 	{
-		return (int)$this->query_var("SELECT editable FROM " . DB_PREFIX . "product WHERE product_id='$product_id'");
+		return (int)$this->queryVar("SELECT editable FROM " . DB_PREFIX . "product WHERE product_id='$product_id'");
 	}
 
 	public function updateProductCategory($product_id, $op, $category_id)
@@ -765,7 +765,7 @@ class Admin_Model_Catalog_Product extends Model
 	
 	public function getProductAttributes($product_id)
 	{
-		$attributes = $this->query_rows("SELECT * FROM " . DB_PREFIX . "product_attribute pa LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id) WHERE pa.product_id = '" . (int)$product_id . "' GROUP BY pa.attribute_id");
+		$attributes = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_attribute pa LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id) WHERE pa.product_id = '" . (int)$product_id . "' GROUP BY pa.attribute_id");
 		
 		$this->translation->translate_all('attribute', 'attribute_id', $attributes);
 		
@@ -932,7 +932,7 @@ class Admin_Model_Catalog_Product extends Model
 	
 	public function getProductTags($product_id)
 	{
-		$product_tags = $this->query_rows("SELECT * FROM " . DB_PREFIX . "product_tag WHERE product_id = '" . (int)$product_id . "'");
+		$product_tags = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_tag WHERE product_id = '" . (int)$product_id . "'");
 		
 		$tag_data = array();
 		

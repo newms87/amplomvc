@@ -85,7 +85,7 @@ class Admin_Model_Page_Page extends Model
 	
 	public function getPage($page_id)
 	{
-		$result = $this->query_row("SELECT * FROM " . DB_PREFIX . "page WHERE page_id = '" . (int)$page_id . "'");
+		$result = $this->queryRow("SELECT * FROM " . DB_PREFIX . "page WHERE page_id = '" . (int)$page_id . "'");
 		
 		$result['keyword'] = $this->url->getAlias('page/page', 'page_id=' . (int)$page_id);
 		
@@ -158,7 +158,7 @@ class Admin_Model_Page_Page extends Model
 	
 	public function getPageStores($page_id)
 	{
-		return $this->query_rows("SELECT * FROM " . DB_PREFIX . "page_store WHERE page_id = '" . (int)$page_id . "'");
+		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "page_store WHERE page_id = '" . (int)$page_id . "'");
 	}
 	
 	public function getTotalPages($data = array()) {

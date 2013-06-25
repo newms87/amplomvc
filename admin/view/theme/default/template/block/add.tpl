@@ -1,6 +1,6 @@
 <?= $header; ?>
 <div id="add_block" class="content">
-	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $breadcrumbs; ?>
 	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">

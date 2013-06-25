@@ -33,7 +33,7 @@ class Admin_Model_Catalog_Review extends Model
 	
 	public function getReview($review_id)
 	{
-		return $this->query_row("SELECT DISTINCT *, p.name as product FROM " . DB_PREFIX . "review r LEFT JOIN " . DB_PREFIX . "product p ON (p.product_id=r.product_id) WHERE r.review_id = '" . (int)$review_id . "'");
+		return $this->queryRow("SELECT DISTINCT *, p.name as product FROM " . DB_PREFIX . "review r LEFT JOIN " . DB_PREFIX . "product p ON (p.product_id=r.product_id) WHERE r.review_id = '" . (int)$review_id . "'");
 	}
 
 	public function getReviews($data = array(), $select = '', $total = false) {
@@ -79,6 +79,6 @@ class Admin_Model_Catalog_Review extends Model
 	
 	public function getTotalReviewsAwaitingApproval()
 	{
-		return $this->query_var("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "review WHERE status = '0'");
+		return $this->queryVar("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "review WHERE status = '0'");
 	}
 }

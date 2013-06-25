@@ -109,6 +109,8 @@ class Admin_Controller_Payment_Nochex extends Controller
 			$this->data['nochex_sort_order'] = $this->config->get('nochex_sort_order');
 		}
 
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'

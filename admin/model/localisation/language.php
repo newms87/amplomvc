@@ -24,7 +24,7 @@ class Admin_Model_Localisation_Language extends Model
 	
 	public function getLanguage($language_id)
 	{
-		return $this->query_row("SELECT * FROM " . DB_PREFIX . "language WHERE language_id = '" . (int)$language_id . "'");
+		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "language WHERE language_id = '" . (int)$language_id . "'");
 	}
 
 	public function getLanguages($data = array(), $select = '*', $total = false) {

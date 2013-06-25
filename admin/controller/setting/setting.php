@@ -1,7 +1,6 @@
 <?php
 class Admin_Controller_Setting_Setting extends Controller 
 {
- 
 	public function index()
 	{
 		$this->template->load('setting/setting');
@@ -208,9 +207,11 @@ class Admin_Controller_Setting_Setting extends Controller
 		
 		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
 		
-		$this->data['return_statuses'] = $this->Model_Localisation_ReturnStatus->getReturnStatuses();
+		$this->data['data_return_statuses'] = $this->config->load('product_return', 'return_statuses', 0);
 		
 		$this->data['load_theme_img'] = $this->url->link('setting/setting/theme');
+		
+		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',
