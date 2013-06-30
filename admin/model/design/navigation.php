@@ -945,6 +945,54 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 0,
 					'status'			=> 1,
 				),
+				
+					'system_settings_returns' => array(
+							'display_name'	=> 'Returns',
+							'name'			=> 'system_settings_returns',
+							'title'			=> '',
+							'href'			=> '',
+							'query'			=> '',
+							'is_route'		=> 0,
+							'parent_id'		=> 'system_settings',
+							'sort_order'	=> 1,
+							'status'			=> 1,
+						),
+		
+							'system_settings_returns_return_reasons' => array(
+								'display_name'	=> 'Return Reasons',
+								'name'			=> 'system_settings_returns_return_reasons',
+								'title'			=> '',
+								'href'			=> 'setting/return_reason',
+								'query'			=> '',
+								'is_route'		=> 1,
+								'parent_id'		=> 'system_settings_returns',
+								'sort_order'	=> 0,
+								'status'			=> 1,
+							),
+		
+							'system_settings_returns_return_actions' => array(
+								'display_name'	=> 'Return Actions',
+								'name'			=> 'system_settings_returns_return_actions',
+								'title'			=> '',
+								'href'			=> 'setting/return_action',
+								'query'			=> '',
+								'is_route'		=> 1,
+								'parent_id'		=> 'system_settings_returns',
+								'sort_order'	=> 1,
+								'status'			=> 1,
+							),
+		
+							'system_settings_returns_return_statuses' => array(
+								'display_name'	=> 'Return Statuses',
+								'name'			=> 'system_settings_returns_return_statuses',
+								'title'			=> '',
+								'href'			=> 'setting/return_status',
+								'query'			=> '',
+								'is_route'		=> 1,
+								'parent_id'		=> 'system_settings_returns',
+								'sort_order'	=> 2,
+								'status'			=> 1,
+							),
 	
 				'system_mail' => array(
 					'display_name'	=> 'Mail',
@@ -1137,54 +1185,6 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 1,
 						'status'			=> 1,
 					),
-	
-					'system_localisation_returns' => array(
-						'display_name'	=> 'Returns',
-						'name'			=> 'system_localisation_returns',
-						'title'			=> '',
-						'href'			=> '',
-						'query'			=> '',
-						'is_route'		=> 0,
-						'parent_id'		=> 'system_localisation',
-						'sort_order'	=> 2,
-						'status'			=> 1,
-					),
-	
-						'system_localisation_returns_return_reasons' => array(
-							'display_name'	=> 'Return Reasons',
-							'name'			=> 'system_localisation_returns_return_reasons',
-							'title'			=> '',
-							'href'			=> 'localisation/return_reason',
-							'query'			=> '',
-							'is_route'		=> 1,
-							'parent_id'		=> 'system_localisation_returns',
-							'sort_order'	=> 0,
-							'status'			=> 1,
-						),
-	
-						'system_localisation_returns_return_actions' => array(
-							'display_name'	=> 'Return Actions',
-							'name'			=> 'system_localisation_returns_return_actions',
-							'title'			=> '',
-							'href'			=> 'localisation/return_action',
-							'query'			=> '',
-							'is_route'		=> 1,
-							'parent_id'		=> 'system_localisation_returns',
-							'sort_order'	=> 1,
-							'status'			=> 1,
-						),
-	
-						'system_localisation_returns_return_statuses' => array(
-							'display_name'	=> 'Return Statuses',
-							'name'			=> 'system_localisation_returns_return_statuses',
-							'title'			=> '',
-							'href'			=> 'localisation/return_status',
-							'query'			=> '',
-							'is_route'		=> 1,
-							'parent_id'		=> 'system_localisation_returns',
-							'sort_order'	=> 2,
-							'status'			=> 1,
-						),
 	
 					'system_localisation_taxes' => array(
 						'display_name'	=> 'Taxes',
