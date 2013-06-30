@@ -12,9 +12,9 @@ class Plugin extends Library{
 		
 		$this->language->system('plugin');
 		
-		$this->loadPluginFileRegistry();
-		
 		$this->file_merge = new FileMerge($this->registry);
+		
+		$this->loadPluginFileRegistry();
 	}
 	
 	public function getFile($file)
