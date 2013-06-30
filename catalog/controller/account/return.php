@@ -79,7 +79,6 @@ class Catalog_Controller_Account_Return extends Controller
 		
 		$return_info = $this->Model_Account_Return->getReturn($return_id);
 		
-		html_dump($return_info);
 		if ($return_info) {
 			$this->template->load('account/return_info');
 			$this->language->set('heading_title', $this->_('text_return'));

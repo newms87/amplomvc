@@ -95,8 +95,6 @@ class Translation extends Library
 	public function set_translations($table, $object_id, $translations)
 	{
 		if (!empty($translations) && is_array($translations)) {
-			html_dump($translations, 'translations');
-			
 			foreach ($translations as $field => $translation) {
 				foreach ($translation as $language_id => $text) {
 					$this->set($table, $field, $object_id, $language_id, $text);
