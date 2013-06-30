@@ -34,22 +34,14 @@ class Catalog_Model_Localisation_Zone extends Model
 	{
 		if(!$geo_zone_id) return true;
 		
-		$include = "g.exclude = '0'";
-		$exclude = "g.exclude = '1'";
+		$geo_zone_id = (int)$geo_zone_id;
+		$country_id = (int)$country_id;
+		$zone_id = (int)$zone_id;
 		
-		$exclude .= " AND 0 IN (SELECT COUNT(*) as total FROM " . DB_PREFIX . "zone_to_geo_zone z2g2 WHERE z2g2.geo_zone_id = z2g.geo_zone_id AND z2g2.country_id = '" . (int)$country_id . "' AND (z2g2.zone_id = '0' OR z2g2.zone_id = '" . (int)$zone_id . "') )";
+		$include = "0 NOT IN (SELECT COUNT(*) as total FROM " . DB_PREFIX . "zone_to_geo_zone z2g WHERE g.geo_zone_id = z2g.geo_zone_id AND z2g.country_id IN (0, $country_id) AND z2g.zone_id IN (0, $zone_id))";
+		$exclude = "0 IN (SELECT COUNT(*) as total FROM " . DB_PREFIX . "zone_to_geo_zone z2g2 WHERE g.geo_zone_id = z2g2.geo_zone_id AND z2g2.country_id = '$country_id' AND z2g2.zone_id IN (0, $zone_id))";
 		
-		if ($country_id) {
-			$include .= " AND (z2g.country_id = '" . (int)$country_id . "' OR z2g.country_id = '0')";
-		}
-		
-		if ($zone_id) {
-			$include .= " AND (z2g.zone_id = '" . (int)$zone_id . "' OR z2g.zone_id = '0')";
-		}
-		
-		$query = "SELECT COUNT(*) as total FROM " . DB_PREFIX . "zone_to_geo_zone z2g";
-		$query .= " LEFT JOIN " . DB_PREFIX . "geo_zone g ON(z2g.geo_zone_id=g.geo_zone_id)";
-		$query .= " WHERE z2g.geo_zone_id = '" . (int)$geo_zone_id . "' AND (($include) OR ($exclude))";
+		$query = "SELECT COUNT(*) as total FROM " . DB_PREFIX . "geo_zone g WHERE g.geo_zone_id = '$geo_zone_id' AND IF (g.exclude = '0', $include, $exclude)";
 		
 		$total = $this->queryVar($query);
 		

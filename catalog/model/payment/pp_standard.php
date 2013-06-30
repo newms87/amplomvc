@@ -12,7 +12,7 @@ class Catalog_Model_Payment_PpStandard extends Model
 		if (!$this->Model_Localisation_Zone->inGeoZone($this->config->get('pp_standard_geo_zone_id'), $address['country_id'], $address['zone_id'])) {
 			return array();
 		}
-
+		
 		$currencies = array(
 			'AUD',
 			'CAD',

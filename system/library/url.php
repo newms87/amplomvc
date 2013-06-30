@@ -30,7 +30,7 @@ class Url extends Library
 	
 	public function here()
 	{
-		return $this->link($_GET['route'], $this->get_query_exclude('route','_route_'));
+		return $this->link($_GET['route'], $this->getQueryExclude('route','_route_'));
 	}
 	
 	public function reload_page()
@@ -72,7 +72,7 @@ class Url extends Library
 		return $data;
 	}
 	
-	public function get_query()
+	public function getQuery()
 	{
 		$query = '';
 		
@@ -88,7 +88,7 @@ class Url extends Library
 				$filters[] = $a;
 			}
 			else {
-				trigger_error("Url::get_query(\$arg1, [\$arg2, ...]) - all arguments must be an array or string! " . get_caller());
+				trigger_error("Url::getQuery(\$arg1, [\$arg2, ...]) - all arguments must be an array or string! " . get_caller());
 				return '';
 			}
 		}
@@ -114,14 +114,14 @@ class Url extends Library
 		return $query;
 	}
 	
-	public function get_query_exclude()
+	public function getQueryExclude()
 	{
 		$query = '';
 		
 		$args = func_get_args();
 		
 		if (empty($args)) {
-			trigger_error("Url::get_query_exclude(): You must specify at least 1 argument to exclude! " . get_caller());
+			trigger_error("Url::getQueryExclude(): You must specify at least 1 argument to exclude! " . get_caller());
 			return '';
 		}
 		
@@ -135,7 +135,7 @@ class Url extends Library
 				$filters[] = $a;
 			}
 			else {
-				trigger_error("Url::get_query(\$arg1, [\$arg2, ...]) - all arguments must be an array or string! " . get_caller());
+				trigger_error("Url::getQuery(\$arg1, [\$arg2, ...]) - all arguments must be an array or string! " . get_caller());
 				return '';
 			}
 		}
@@ -272,7 +272,7 @@ class Url extends Library
 					}
 				}
 			
-				$url_query = $this->get_query_exclude('route','_route_');
+				$url_query = $this->getQueryExclude('route','_route_');
 				$this->pretty_url = $this->store_base($url_alias['store_id']) . $parts . ($url_query ? '?' . $url_query : ''); 
 				
 				if ($url_alias['redirect']) {

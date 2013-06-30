@@ -36,7 +36,19 @@ class Admin_Model_Setting_Setting extends Model
 		}
 	}
 	
-	public function editSettingKey($group, $key = null, $value = array(), $store_id = 0, $auto_load = true){
+	public function editSettingKey($group, $key = null, $value = array(), $store_id = 0, $auto_load = true)
+	{
+		//Handle Translations
+		if (is_array($value)) {
+			foreach ($value as $entry_key => $entry) {
+				if (is_array($entry) && isset($entry['translations'])) {
+					$this->translation->set_translations($key, $entry_key, $entry['translations']);
+					unset($value[$entry_key]['translations']);
+				}
+			}
+		}
+		
+		//Serialize if necessary
 		if (is_array($value) || is_object($value)) {
 			$entry_value = serialize($value);
 			$serialized = 1;
@@ -64,12 +76,8 @@ class Admin_Model_Setting_Setting extends Model
 		
 		$setting_id = $this->insert('setting',  $values);
 		
-		if (is_array($value)) {
-			foreach ($value as $entry_key => $entry) {
-				if (is_array($entry) && !empty($entry['translations'])) {
-					$this->translation->set_translations($key, $entry_key, $entry['translations']);
-				}
-			}
+		if (!empty($translations)) {
+			$this->translation->set_translations('setting', $setting_id, $translations);
 		}
 		
 		$this->cache->delete('setting');

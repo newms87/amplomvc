@@ -13,13 +13,7 @@ class Catalog_Controller_Block_Product_Information extends Controller
 		$this->language->load('block/product/information');
 		$this->template->load('block/product/information');
 		
-		$review_status = $this->config->get('config_review_status');
-		$share_status = $this->config->get('config_share_status');
-		
 		$this->data['product_id'] = $product_info['product_id'];
-		
-		$this->data['review_status'] = $review_status;
-		$this->data['share_status'] = $share_status;
 		
 		$this->data['manufacturer'] = $product_info['manufacturer'];
 		$this->data['manufacturer_url'] = $this->url->link('designers/designers', 'designer_id=' . $product_info['manufacturer_id']);
@@ -45,7 +39,7 @@ class Catalog_Controller_Block_Product_Information extends Controller
 			$this->data['block_product_suggestions'] = $this->getBlock('product/suggestions', $ps_params);
 		}
 		
-		$this->data['teaser'] = html_entity_decode($product_info['teaser'], ENT_QUOTES, 'UTF-8');
+		$this->data['description'] = html_entity_decode($product_info['description'], ENT_QUOTES, 'UTF-8');
 		
 		$this->data['model'] = $product_info['model'];
 		$this->data['reward'] = $product_info['reward'];
@@ -128,13 +122,13 @@ class Catalog_Controller_Block_Product_Information extends Controller
 		
 		$this->_('text_minimum', $product_info['minimum']);
 		
-		if ($review_status) {
-			$this->data['reviews'] = $this->_('text_reviews', (int)$product_info['reviews']);
-			
-			$this->data['rating'] = (int)$product_info['rating'];
+		//Product Review
+		if ($this->config->get('config_review_status')) {
+			$this->data['block_review'] = $this->getBlock('product/review');
 		}
 
-		if ($share_status) {
+		//Social Sharing
+		if ($this->config->get('config_share_status')) {
 			$this->data['block_sharing'] = $this->getBlock('extras/sharing');
 		}
 		

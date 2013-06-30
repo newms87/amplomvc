@@ -208,13 +208,14 @@ class Admin_Controller_Sale_Order extends Controller
 			}
 		}
 		
-		$url = $this->url->get_query(array(
+		$url = $this->url->getQuery(
 			'filter_order_id', 'filter_customer', 'filter_order_status_id',
 			'filter_total', 'filter_date_added', 'filter_date_modified',
-			'sort','order','page'));
+			'sort','order','page'
+		);
 
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('sale/order', $url));
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('sale/order', $url));
 
 		$this->data['invoice'] = $this->url->link('sale/order/invoice');
 		$this->data['insert'] = $this->url->link('sale/order/insert');

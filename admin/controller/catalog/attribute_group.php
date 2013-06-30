@@ -122,9 +122,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		);
 		
 		//The Sort data
-		$sort_filter = array();
-		
-		$this->sort->load_query_defaults($sort_filter, 'name', 'ASC');
+		$sort_filter = $this->sort->getQueryDefaults('name', 'ASC');
 		
 		//Filter
 		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
@@ -159,15 +157,9 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		$tt_data = array(
 			'row_id'		=> 'attribute_group_id',
 			'route'		=> 'catalog/attribute_group',
-			'sort'		=> $sort_filter['sort'],
-			'order'		=> $sort_filter['order'],
-			'page'		=> $sort_filter['page'],
-			'sort_url'	=> $this->url->link('catalog/attribute_group', $this->url->get_query('filter')),
 			'columns'	=> $columns,
 			'data'		=> $attribute_groups,
 		);
-		
-		$tt_data += $this->language->data;
 		
 		//Build the table template
 		$this->table->init();
@@ -184,7 +176,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 			),
 		);
 		
-		$url_query = $this->url->get_query('filter', 'sort', 'order', 'page');
+		$url_query = $this->url->getQuery('filter', 'sort', 'order', 'page');
 		
 		$this->data['batch_update'] = html_entity_decode($this->url->link('catalog/attribute_group/batch_update', $url_query));
 		

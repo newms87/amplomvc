@@ -28,8 +28,8 @@
 		</thead>
 		<tbody>
 			<tr>
-				<td class="left"><?= $product; ?></td>
-				<td class="left"><?= $model; ?></td>
+				<td class="left"><?= $product['name']; ?></td>
+				<td class="left"><?= $product['model']; ?></td>
 				<td class="right"><?= $quantity; ?></td>
 			</tr>
 		</tbody>

@@ -112,7 +112,7 @@ class Config extends Library
 	
 	public function save($group, $key, $value, $store_id = null, $auto_load = true)
 	{
-		if (!$store_id) {
+		if (is_null($store_id)) {
 			$store_id = $this->store_id;
 		}
 		
@@ -121,7 +121,7 @@ class Config extends Library
 	
 	public function loadGroup($group, $store_id = null)
 	{
-		if (!$store_id && $store_id !== 0) {
+		if (is_null($store_id)) {
 			$store_id = $this->store_id;
 		}
 		

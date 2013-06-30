@@ -20,6 +20,8 @@
 			<input type="submit" name="order_lookup" class="button" value="<?= $button_order_lookup; ?>" />
 		</div>
 	</form>
+	
+	<? if (!empty($return_products)) { ?>
 	<form id="return_form" action="<?= $action; ?>" method="post" enctype="multipart/form-data">
 		<div class="content">
 			<h2><?= $text_order; ?></h2>
@@ -101,7 +103,7 @@
 								<input type="hidden" name="return_products[<?= $product_id; ?>][is_final]" value="<?= $product['is_final']; ?>" />
 							</td>
 							<td class="reason">
-								<? $this->builder->set_config('return_reason_id', 'name'); ?>
+								<? $this->builder->set_config(false, 'title'); ?>
 								<?= $this->builder->build('select', $data_return_reasons, "return_products[$product_id][return_reason_id]", $product['return_reason_id']); ?>
 							</td>
 							<td class="comment"><textarea name="return_products[<?= $product_id; ?>][comment]"><?= $product['comment']; ?></textarea></td>
@@ -127,6 +129,8 @@
 			</div>
 		<? } ?>
 	</form>
+	<? }//end if ((!empty($return_products))) ?>
+	
 	<?= $content_bottom; ?>
 </div>
 

@@ -77,6 +77,6 @@ $_['error_payment_address']			= 'You must select a Billing Address!';
 $_['error_shipping']					= 'Shipping method required!';
 $_['error_no_shipping_required']	= 'Shipping is not required for you current selection';
 $_['error_payment']						= 'Payment method required!';
-$_['error_no_payment']					= 'No Payment options are available. Please <a href="%s">contact us</a> for assistance!';
+$_['error_no_payment_method']					= 'No Payment options are available. Please <a href="%s">contact us</a> for assistance!';
 $_['error_ajax_response']				= 'There was an error while processing your request: ';
 $_['error_same_shipping_invalid']	= 'We do not ship to the address you specified in the Billing Address';

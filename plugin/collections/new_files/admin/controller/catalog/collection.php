@@ -149,9 +149,7 @@ class Admin_Controller_Catalog_Collection extends Controller
 		);
 		
 		//The Sort data
-		$sort_filter = array();
-		
-		$this->sort->load_query_defaults($sort_filter, 'name', 'ASC');
+		$sort_filter = $this->sort->getQueryDefaults('name', 'ASC');
 		
 		//Filter
 		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
@@ -187,15 +185,9 @@ class Admin_Controller_Catalog_Collection extends Controller
 		$tt_data = array(
 			'row_id'		=> 'collection_id',
 			'route'		=> 'catalog/collection',
-			'sort'		=> $sort_filter['sort'],
-			'order'		=> $sort_filter['order'],
-			'page'		=> $sort_filter['page'],
-			'sort_url'	=> $this->url->link('catalog/collection', $this->url->get_query('filter')),
 			'columns'	=> $columns,
 			'data'		=> $collections,
 		);
-		
-		$tt_data += $this->language->data;
 		
 		//Build the table template
 		$this->table->init();
@@ -206,7 +198,7 @@ class Admin_Controller_Catalog_Collection extends Controller
 		$this->data['list_view'] = $this->table->render();
 		
 		//Batch Actions
-		$url_query = $this->url->get_query('filter', 'sort', 'order', 'page');
+		$url_query = $this->url->getQuery('filter', 'sort', 'order', 'page');
 		
 		$this->data['batch_actions'] = array(
 			'enable'	=> array(

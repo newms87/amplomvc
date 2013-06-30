@@ -10,5 +10,6 @@ $_['text_logged']			= '%s';
 $_['text_login_link']		= '<a href="%s">Sign In</a>';
 $_['text_account']		= 'My Account';
 $_['text_logout']		= 'Logout';
+$_['text_register']			= 'Register';
 $_['text_checkout']		= 'Checkout';
 $_['text_slogan']			= "A scarf is like a piece of fine jewelry - it is an heirloom";

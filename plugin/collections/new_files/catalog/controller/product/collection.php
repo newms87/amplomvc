@@ -12,9 +12,7 @@ class Catalog_Controller_Product_Collection extends Controller
 		$category_id = isset($_GET['category_id']) ? $_GET['category_id'] : 0;
 		$attributes = isset($_GET['attribute']) ? $_GET['attribute'] : 0;
 		
-		$sort_filter = array();
-		
-		$this->sort->load_query_defaults($sort_filter, 'sort_order', 'ASC');
+		$sort_filter = $this->sort->getQueryDefaults('sort_order', 'ASC');
 		
 		//Display Single Collection Template
 		if ($collection_id) {
@@ -38,9 +36,15 @@ class Catalog_Controller_Product_Collection extends Controller
 			
 			$this->language->set('heading_title', $collection_info['name']);
 			
-			$this->data['thumb'] = $this->image->resize($collection_info['image'], $this->config->get('config_image_collection_width'), $this->config->get('config_image_collection_height'));
+			if ($this->config->get('config_show_collection_image')) {
+				$this->data['thumb'] = $this->image->resize($collection_info['image'], $this->config->get('config_image_collection_width'), $this->config->get('config_image_collection_height'));
+			}
 			
-			$this->data['description'] = html_entity_decode($collection_info['description'], ENT_QUOTES, 'UTF-8');
+			if ($this->config->get('config_show_collection_description')) {
+				$this->data['description'] = html_entity_decode($collection_info['description'], ENT_QUOTES, 'UTF-8');
+			} else {
+				$this->data['description'] = false;
+			}
 		
 			if ($attributes) {
 				$sort_filter['attribute'] = $attributes;
@@ -70,7 +74,9 @@ class Catalog_Controller_Product_Collection extends Controller
 			
 			$this->data['thumb'] = '';
 			
-			$this->data['description'] = $this->_('text_description_all');
+			if ($this->config->get('config_show_collection_description')) {
+				$this->data['description'] = $this->_('text_description_all');
+			}
 			
 			if ($category_id) {
 				$sort_filter['category_id'] = $category_id;

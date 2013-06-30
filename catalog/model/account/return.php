@@ -35,17 +35,19 @@ class Catalog_Model_Account_Return extends Model
 		
 		$return = $this->queryRow($query);
 		
-		$return['product'] = $this->Model_Catalog_Product->getProduct($return['product_id'], true);
-		
-		$this->config->loadGroup('product_return');
+		if ($return) {
+			$return['product'] = $this->Model_Catalog_Product->getProduct($return['product_id'], true);
 			
-		$return_statuses = $this->config->get('product_return_statuses');
-		$return_reasons = $this->config->get('product_return_reasons');
-		$return_actions = $this->config->get('product_return_actions');
-		
-		$return['status'] = $return_statuses[$return['return_status_id']];
-		$return['reason'] = $return_reasons[$return['return_reason_id']];
-		$return['action'] = $return_actions[$return['return_action_id']];
+			$this->config->loadGroup('product_return');
+				
+			$return_statuses = $this->config->get('product_return_statuses');
+			$return_reasons = $this->config->get('product_return_reasons');
+			$return_actions = $this->config->get('product_return_actions');
+			
+			$return['status'] = $return_statuses[$return['return_status_id']];
+			$return['reason'] = $return_reasons[$return['return_reason_id']];
+			$return['action'] = $return_actions[$return['return_action_id']];
+		}
 		
 		return $return;
 	}

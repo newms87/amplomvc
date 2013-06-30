@@ -57,33 +57,19 @@ class Admin_Controller_Block_Block extends Controller
 			'sortable' => true,
 		);
 		
-		//TODO: update to new sort / filter format
 		//The Sort data
-		$data = array();
-		
-		$sort_defaults = array(
-			'sort' => 'name',
-			'order' => 'ASC',
-			'limit' => $this->config->get('config_admin_limit'),
-			'page' => 1,
-		);
-		
-		foreach ($sort_defaults as $key => $default) {
-			$data[$key] = $$key = isset($_GET[$key]) ? $_GET[$key] : $default;
-		}
-		
-		$data['start'] = ($page - 1) * $limit;
+		$sort_filter = $this->sort->getQueryDefaults('name', 'ASC');
 		
 		//Filter
 		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
 		
 		if ($filter_values) {
-			$data += $filter_values;
+			$sort_filter += $filter_values;
 		}
 		
 		//Table Row Data
-		$block_total = $this->Model_Block_Block->getTotalBlocks($data);
-		$blocks = $this->Model_Block_Block->getBlocks($data);
+		$block_total = $this->Model_Block_Block->getTotalBlocks($sort_filter);
+		$blocks = $this->Model_Block_Block->getBlocks($sort_filter);
 		
 		foreach ($blocks as &$block) {
 			$actions = array(
@@ -100,15 +86,9 @@ class Admin_Controller_Block_Block extends Controller
 		$tt_data = array(
 			'row_id'		=> 'name',
 			'route'		=> 'block/block',
-			'sort'		=> $sort,
-			'order'		=> $order,
-			'page'		=> $page,
-			'sort_url'	=> $this->url->link('block/block', $this->url->get_query('filter')),
 			'columns'	=> $columns,
 			'data'		=> $blocks,
 		);
-		
-		$tt_data += $this->language->data;
 		
 		//Build the table template
 		$this->table->init();
@@ -120,6 +100,9 @@ class Admin_Controller_Block_Block extends Controller
 		
 		//Action Buttons
 		$this->data['insert'] = $this->url->link('block/add');
+		
+		//Item Limit Menu
+		$this->data['limits'] = $this->sort->render_limit();
 		
 		//Pagination
 		$this->pagination->init();

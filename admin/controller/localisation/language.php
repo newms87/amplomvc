@@ -87,7 +87,7 @@ class Admin_Controller_Localisation_Language extends Controller
 			$page = 1;
 		}
 		
-		$url = $this->url->get_query('sort', 'order', 'page');
+		$url = $this->url->getQuery('sort', 'order', 'page');
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/language'));
@@ -177,7 +177,7 @@ class Admin_Controller_Localisation_Language extends Controller
 
 		$language_id = isset($_GET['language_id']) ? $_GET['language_id'] : false;
 		
- 		$url = $this->url->get_query('sort','order','page');
+ 		$url = $this->url->getQuery('sort','order','page');
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/language'));

@@ -197,7 +197,7 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 		
 		$geo_zone_id = isset($_GET['geo_zone_id']) ? $_GET['geo_zone_id'] : 0;
 		
-		$url = $this->url->get_query('sort', 'order', 'page');
+		$url = $this->url->getQuery('sort', 'order', 'page');
 
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/geo_zone', $url));

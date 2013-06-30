@@ -16,7 +16,7 @@ class Admin_Model_Catalog_Product extends Model
 		}
 //-----
 //=====
-		//Additional Product Images
+		#Additional Product Images
 		if (isset($data['product_images'])) {
 //.....
 		}
@@ -53,7 +53,7 @@ class Admin_Model_Catalog_Product extends Model
 		}
 //-----
 //=====
-		//Product Additional Images
+		#Product Additional Images
 		$this->delete('product_image', array('product_id'=>$product_id));
 //.....
 	}

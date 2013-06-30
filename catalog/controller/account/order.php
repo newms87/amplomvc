@@ -45,7 +45,7 @@ class Catalog_Controller_Account_Order extends Controller
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
 		
-		$url = $this->url->get_query('page');
+		$url = $this->url->getQuery('page');
 		
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/order', $url));
 		
@@ -123,7 +123,7 @@ class Catalog_Controller_Account_Order extends Controller
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
 			
-			$url = $this->url->get_query('page');
+			$url = $this->url->getQuery('page');
 			
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/order', $url));
 			$this->breadcrumb->add($this->_('text_order'), $this->url->link('account/order/info', 'order_id=' . $order_id . $url));

@@ -7,18 +7,17 @@
 	<?= $breadcrumbs; ?>
 	<h1><?= $heading_title; ?></h1>
 	
-	<? if ($thumb || $description) { ?>
 	<div class="header-info">
-		<? if ($thumb) { ?>
+		<? if (!empty($thumb)) { ?>
 		<div class="image">
 			<img src="<?= $thumb; ?>" alt="<?= $heading_title; ?>" />
 		</div>
 		<? } ?>
-		<? if ($description) { ?>
-			<div class="description"><?= $description; ?></div>
+		
+		<? if (!empty($description)) { ?>
+		<div class="description"><?= $description; ?></div>
 		<? } ?>
 	</div>
-	<? } ?>
 	
 	<? if (!empty($block_collection_list)) { ?>
 		<div class="item-filter">

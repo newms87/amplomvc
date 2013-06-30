@@ -910,14 +910,12 @@ class Cart extends Library
 		
 		//TODO: Fix this along with totals and shipping...
 		foreach ($results as $result) {
-			if ($this->config->get($result['code'] . '_status')) {
-				$classname = "Model_Payment_" . $this->tool->format_classname($result['code']);
-				
-				$method = $this->$classname->getMethod($payment_address, $totals['total']);
-				
-				if ($method) {
-					$method_data[$result['code']] = $method;
-				}
+			$classname = "Model_Payment_" . $this->tool->format_classname($result['code']);
+			
+			$method = $this->$classname->getMethod($payment_address, $totals['total']);
+			
+			if ($method) {
+				$method_data[$result['code']] = $method;
 			}
 		}
 		

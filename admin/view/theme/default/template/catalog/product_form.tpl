@@ -48,6 +48,10 @@
 							<td><textarea name="description" class="ckedit"><?= $description; ?></textarea></td>
 						</tr>
 						<tr>
+							<td><?= $entry_information; ?></td>
+							<td><textarea name="information" class="ckedit"><?= $information; ?></textarea></td>
+						</tr>
+						<tr>
 							<td><?= $entry_shipping_ret; ?></td>
 							<td><textarea name="shipping_return" class="ckedit"><?= $shipping_return; ?></textarea></td>
 						</tr>

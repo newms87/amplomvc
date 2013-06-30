@@ -223,7 +223,15 @@
 						</tr>
 						<tr>
 							<td><?= $entry_allow_close_message_box; ?></td>
-							<td><?= $this->builder->build('select', $yes_no, 'config_allow_close_message_box', $config_allow_close_message_box); ?></td>
+							<td><?= $this->builder->build('select', $data_yes_no, 'config_allow_close_message_box', $config_allow_close_message_box); ?></td>
+						</tr>
+						<tr>
+							<td><?= $entry_show_category_image; ?></td>
+							<td><?= $this->builder->build('select', $data_yes_no, 'config_show_category_image', $config_show_category_image); ?></td>
+						</tr>
+						<tr>
+							<td><?= $entry_show_category_description; ?></td>
+							<td><?= $this->builder->build('select', $data_yes_no, 'config_show_category_description', $config_show_category_description); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_tax; ?></td>

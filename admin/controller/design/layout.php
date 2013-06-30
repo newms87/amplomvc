@@ -1,13 +1,10 @@
 <?php
 class Admin_Controller_Design_Layout extends Controller 
 {
-	
 	public function index()
 	{
 		$this->load->language('design/layout');
 
-		$this->document->setTitle($this->_('heading_title'));
-		
 		$this->getList();
 	}
 
@@ -15,28 +12,14 @@ class Admin_Controller_Design_Layout extends Controller
 	{
 		$this->load->language('design/layout');
 
-		$this->document->setTitle($this->_('heading_title'));
-		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Design_Layout->addLayout($_POST);
 			
-			$this->message->add('success', $this->_('text_success'));
-
-			$url = '';
-			
-			if (isset($_GET['sort'])) {
-				$url .= '&sort=' . $_GET['sort'];
+			if (!$this->message->error_set()) {
+				$this->message->add('success', $this->_('text_success'));
+				
+				$this->url->redirect($this->url->link('design/layout'));
 			}
-
-			if (isset($_GET['order'])) {
-				$url .= '&order=' . $_GET['order'];
-			}
-
-			if (isset($_GET['page'])) {
-				$url .= '&page=' . $_GET['page'];
-			}
-			
-			$this->url->redirect($this->url->link('design/layout', $url));
 		}
 
 		$this->getForm();
@@ -46,28 +29,14 @@ class Admin_Controller_Design_Layout extends Controller
 	{
 		$this->load->language('design/layout');
 
-		$this->document->setTitle($this->_('heading_title'));
-		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Design_Layout->editLayout($_GET['layout_id'], $_POST);
 
-			$this->message->add('success', $this->_('text_success'));
-
-			$url = '';
-			
-			if (isset($_GET['sort'])) {
-				$url .= '&sort=' . $_GET['sort'];
+			if (!$this->message->error_set()) {
+				$this->message->add('success', $this->_('text_success'));
+				
+				$this->url->redirect($this->url->link('design/layout'));
 			}
-
-			if (isset($_GET['order'])) {
-				$url .= '&order=' . $_GET['order'];
-			}
-
-			if (isset($_GET['page'])) {
-				$url .= '&page=' . $_GET['page'];
-			}
-					
-			$this->url->redirect($this->url->link('design/layout', $url));
 		}
 
 		$this->getForm();
@@ -77,151 +46,157 @@ class Admin_Controller_Design_Layout extends Controller
 	{
 		$this->load->language('design/layout');
  
-		$this->document->setTitle($this->_('heading_title'));
-		
-		if (isset($_POST['selected']) && $this->validateDelete()) {
-			foreach ($_POST['selected'] as $layout_id) {
-				$this->Model_Design_Layout->deleteLayout($layout_id);
-			}
+		if (isset($_GET['layout_id']) && $this->validateDelete()) {
+			$this->Model_Design_Layout->deleteLayout($_GET['layout_id']);
 			
-			$this->message->add('success', $this->_('text_success'));
-
-			$url = '';
-			
-			if (isset($_GET['sort'])) {
-				$url .= '&sort=' . $_GET['sort'];
+			if (!$this->message->error_set()) {
+				$this->message->add('success', $this->_('text_success'));
+				
+				$this->url->redirect($this->url->link('design/layout'));
 			}
-
-			if (isset($_GET['order'])) {
-				$url .= '&order=' . $_GET['order'];
-			}
-
-			if (isset($_GET['page'])) {
-				$url .= '&page=' . $_GET['page'];
-			}
-
-			$this->url->redirect($this->url->link('design/layout', $url));
 		}
 
 		$this->getList();
 	}
+	
+	public function batch_update()
+	{
+		$this->language->load('catalog/category');
+		
+		if (!empty($_POST['selected']) && isset($_GET['action'])) {
+			foreach ($_POST['selected'] as $category_id) {
+				switch($_GET['action']){
+					case 'enable':
+						$this->Model_Catalog_Category->updateField($category_id, array('status' => 1));
+						break;
+					case 'disable':
+						$this->Model_Catalog_Category->updateField($category_id, array('status' => 0));
+						break;
+					case 'delete':
+						$this->Model_Catalog_Category->deleteCategory($category_id);
+						break;
+					case 'copy':
+						$this->Model_Catalog_Category->copyCategory($category_id);
+						break;
+				}
+				
+				if ($this->error) {
+					break;
+				}
+			}
+			
+			if (!$this->error && !$this->message->error_set()) {
+				$this->message->add('success',$this->_('text_success'));
+				
+				$this->url->redirect($this->url->link('catalog/category', $this->url->getQueryExclude('action')));
+			}
+		}
 
+		$this->getList();
+	}
+	
 	private function getList()
 	{
 		$this->template->load('design/layout_list');
-
-		if (isset($_GET['sort'])) {
-			$sort = $_GET['sort'];
-		} else {
-			$sort = 'name';
-		}
 		
-		if (isset($_GET['order'])) {
-			$order = $_GET['order'];
-		} else {
-			$order = 'ASC';
-		}
+		$this->document->setTitle($this->_('heading_title'));
 		
-		if (isset($_GET['page'])) {
-			$page = $_GET['page'];
-		} else {
-			$page = 1;
-		}
-			
-		$url = '';
-			
-		if (isset($_GET['sort'])) {
-			$url .= '&sort=' . $_GET['sort'];
-		}
-
-		if (isset($_GET['order'])) {
-			$url .= '&order=' . $_GET['order'];
-		}
-		
-		if (isset($_GET['page'])) {
-			$url .= '&page=' . $_GET['page'];
-		}
-
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('design/layout', $url));
-
-		$this->data['insert'] = $this->url->link('design/layout/insert', $url);
-		$this->data['delete'] = $this->url->link('design/layout/delete', $url);
+		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('design/layout'));
 		
-		$this->data['layouts'] = array();
+		//The Table Columns
+		$columns = array();
 
-		$data = array(
-			'sort'  => $sort,
-			'order' => $order,
-			'start' => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit' => $this->config->get('config_admin_limit')
+		$columns['name'] = array(
+			'type' => 'text',
+			'display_name' => $this->_('column_name'),
+			'filter' => true,
+			'sortable' => true,
 		);
 		
-		$layout_total = $this->Model_Design_Layout->getTotalLayouts();
+		$columns['routes'] = array(
+			'type' => 'text',
+			'display_name' => $this->_('column_routes'),
+			'filter' => false,
+			'sortable' => false,
+		);
 		
-		$results = $this->Model_Design_Layout->getLayouts($data);
+		//The Sort data
+		$sort_filter = $this->sort->getQueryDefaults('name', 'ASC');
 		
-		foreach ($results as $result) {
-			$action = array();
+		//Filter
+		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
+		
+		if ($filter_values) {
+			$sort_filter += $filter_values;
+		}
+
+		$layout_total = $this->Model_Design_Layout->getTotalLayouts($sort_filter);
+		$layouts = $this->Model_Design_Layout->getLayouts($sort_filter);
+		
+		$url_query = $this->url->getQueryExclude('layout_id');
+		
+		foreach ($layouts as &$layout) {
+			$layout['actions'] = array(
+				'edit' => array(
+					'text' => $this->_('text_edit'),
+					'href' => $this->url->link('design/layout/update', 'layout_id=' . $layout['layout_id'])
+				),
+				'delete' => array(
+					'text' => $this->_('text_delete'),
+					'href' => $this->url->link('design/layout/delete', 'layout_id=' . $layout['layout_id'] . '&' . $url_query)
+				)
+			);
 			
-			$action[] = array(
-				'text' => $this->_('text_edit'),
-				'href' => $this->url->link('design/layout/update', 'layout_id=' . $result['layout_id'] . $url)
-			);
-
-			$this->data['layouts'][] = array(
-				'layout_id' => $result['layout_id'],
-				'name'		=> $result['name'],
-				'selected'  => isset($_POST['selected']) && in_array($result['layout_id'], $_POST['selected']),
-				'action'	=> $action
-			);
-		}
-
- 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
-		} else {
-			$this->data['error_warning'] = '';
-		}
+			$routes = $this->Model_Design_Layout->getLayoutRoutes($layout['layout_id']);
+			$layout['routes'] = implode('<br />', array_column($routes, 'route'));
+		} unset($layout);
 		
-		if (isset($this->session->data['success'])) {
-			$this->data['success'] = $this->session->data['success'];
+		//The table template data
+		$tt_data = array(
+			'row_id'		=> 'layout_id',
+			'route'		=> 'design/layout',
+			'columns'	=> $columns,
+			'data'		=> $layouts,
+		);
 		
-			unset($this->session->data['success']);
-		} else {
-			$this->data['success'] = '';
-		}
-
-		$url = '';
-
-		if ($order == 'ASC') {
-			$url .= '&order=DESC';
-		} else {
-			$url .= '&order=ASC';
-		}
-
-		if (isset($_GET['page'])) {
-			$url .= '&page=' . $_GET['page'];
-		}
+		//Build the table template
+		$this->table->init();
+		$this->table->set_template('table/list_view');
+		$this->table->set_template_data($tt_data);
+		$this->table->map_attribute('filter_value', $filter_values);
 		
-		$this->data['sort_name'] = $this->url->link('design/layout', 'sort=name' . $url);
+		$this->data['list_view'] = $this->table->render();
 		
-		$url = '';
-
-		if (isset($_GET['sort'])) {
-			$url .= '&sort=' . $_GET['sort'];
-		}
-												
-		if (isset($_GET['order'])) {
-			$url .= '&order=' . $_GET['order'];
-		}
-
+		//Batch Actions
+		$this->data['batch_actions'] = array(
+			'enable'	=> array(
+				'label' => "Enable"
+			),
+			'disable'=>	array(
+				'label' => "Disable",
+			),
+			'copy' => array(
+				'label' => "Copy",
+			),
+			'delete' => array(
+				'label' => "Delete",
+			),
+		);
+		
+		$this->data['batch_update'] = html_entity_decode($this->url->link('design/layout/batch_update', $url_query));
+		
+		//Action Buttons
+		$this->data['insert'] = $this->url->link('design/layout/insert');
+		
+		//Item Limit Menu
+		$this->data['limits'] = $this->sort->render_limit();
+		
+		//Pagination
 		$this->pagination->init();
 		$this->pagination->total = $layout_total;
 		$this->data['pagination'] = $this->pagination->render();
 		
-		$this->data['sort'] = $sort;
-		$this->data['order'] = $order;
-
 		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
@@ -235,77 +210,46 @@ class Admin_Controller_Design_Layout extends Controller
 	private function getForm()
 	{
 		$this->template->load('design/layout_form');
+		
+		$this->document->setTitle($this->_('heading_title'));
+		
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('design/layout'));
 
-		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
-		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
-		} else {
-			$this->data['error_warning'] = '';
-		}
-
- 		if (isset($this->error['name'])) {
-			$this->data['error_name'] = $this->error['name'];
-		} else {
-			$this->data['error_name'] = '';
-		}
-				
-		$url = '';
-
-		if (isset($_GET['sort'])) {
-			$url .= '&sort=' . $_GET['sort'];
-		}
-
-		if (isset($_GET['order'])) {
-			$url .= '&order=' . $_GET['order'];
+		$layout_id = isset($_GET['layout_id']) ? $_GET['layout_id'] : false;
+		
+		if ($layout_id && !$this->request->isPost()) {
+			$layout_info = $this->Model_Design_Layout->getLayout($layout_id);
+			
+			$layout_info['routes'] = $this->Model_Design_Layout->getLayoutRoutes($layout_id);
 		}
 		
-		if (isset($_GET['page'])) {
-			$url .= '&page=' . $_GET['page'];
-		}
-
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('design/layout', $url));
-
-		if (!isset($_GET['layout_id'])) {
-			$this->data['action'] = $this->url->link('design/layout/insert', $url);
-		} else {
-			$this->data['action'] = $this->url->link('design/layout/update', 'layout_id=' . $_GET['layout_id'] . $url);
-		}
+		$defaults = array(
+			'name' => '',
+			'routes' => array(),
+		);
 		
-		$this->data['cancel'] = $this->url->link('design/layout', $url);
-		
-		if (isset($_GET['layout_id']) && !$this->request->isPost()) {
-			$layout_info = $this->Model_Design_Layout->getLayout($_GET['layout_id']);
+		foreach ($defaults as $key => $default) {
+			if (isset($_POST[$key])) {
+				$this->data[$key] = $_POST[$key];
+			} elseif (isset($layout_info[$key])) {
+				$this->data[$key] = $layout_info[$key];
+			} else {
+				$this->data[$key] = $default;
+			}
 		}
-
-		if (isset($_POST['name'])) {
-			$this->data['name'] = $_POST['name'];
-		} elseif (!empty($layout_info)) {
-			$this->data['name'] = $layout_info['name'];
-		} else {
-			$this->data['name'] = '';
-		}
-		
-		
-		if (isset($_POST['layout_header'])) {
-			$this->data['layout_header'] = $_POST['layout_header'];
-		} elseif (isset($_GET['layout_id'])) {
-			$this->data['layout_header'] = $this->Model_Design_Layout->getLayoutPageHeaders($_GET['layout_id']);
-		} else {
-			$this->data['layout_header'] = array();
-		}
-		
 		
 		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
 		
-		if (isset($_POST['layout_route'])) {
-			$this->data['layout_routes'] = $_POST['layout_route'];
-		} elseif (isset($_GET['layout_id'])) {
-			$this->data['layout_routes'] = $this->Model_Design_Layout->getLayoutRoutes($_GET['layout_id']);
+		//Action Buttons
+		if ($layout_id) {
+			$this->data['action'] = $this->url->link('design/layout/update', 'layout_id=' . $layout_id);
 		} else {
-			$this->data['layout_routes'] = array();
+			$this->data['action'] = $this->url->link('design/layout/insert');
 		}
-				
+		
+		$this->data['cancel'] = $this->url->link('design/layout');
+		
 		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(

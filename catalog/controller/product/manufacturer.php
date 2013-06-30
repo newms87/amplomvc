@@ -92,7 +92,7 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 
 			$this->document->setTitle($manufacturer_info['name']);
 			
-			$url = $this->url->get_query('sort','order','page','limit');
+			$url = $this->url->getQuery('sort','order','page','limit');
 						
 			$this->breadcrumb->add($manufacturer_info['name'], $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $_GET['manufacturer_id'] . $url));
 			

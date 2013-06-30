@@ -147,8 +147,7 @@ class Admin_Controller_Design_Navigation extends Controller
 		);
 
   		//Sorting / Filtering
-		$sort_filter = array();
-		$this->sort->load_query_defaults($sort_filter, 'name', 'ASC');
+		$sort_filter = $this->sort->getQueryDefaults('name', 'ASC');
 		
 		//Filter
 		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
@@ -185,15 +184,9 @@ class Admin_Controller_Design_Navigation extends Controller
 		$tt_data = array(
 			'row_id'		=> 'navigation_group_id',
 			'route'		=> 'design/navigation',
-			'sort'		=> $sort_filter['sort'],
-			'order'		=> $sort_filter['order'],
-			'page'		=> $sort_filter['page'],
-			'sort_url'	=> $this->url->link('design/navigation', $this->url->get_query('filter')),
 			'columns'	=> $columns,
 			'data'		=> $navigation_groups,
 		);
-		
-		$tt_data += $this->language->data;
 		
 		//Build the table template
 		$this->table->init();
@@ -218,7 +211,7 @@ class Admin_Controller_Design_Navigation extends Controller
 			),
 		);
 		
-		$url = $this->url->get_query('filter', 'sort', 'order', 'page');
+		$url = $this->url->getQuery('filter', 'sort', 'order', 'page');
 		
 		$this->data['batch_update'] = $this->url->link('design/navigation/batch_update', $url);
 		

@@ -55,6 +55,7 @@ class Table extends Library
 		$this->prepare();
 		
 		extract($this->template_data);
+		extract($this->language->data);
 		
 		$file = $this->plugin->getFile($this->file);
 		
@@ -78,6 +79,14 @@ class Table extends Library
 			exit();
 		}
 		
+		//Add Sort data
+		$this->template_data += $this->sort->getSortData();
+		
+		if (empty($this->template_data['sort_url'])) {
+			$this->template_data['sort_url'] = $this->url->link($this->template_data['route'], $this->url->getQueryExclude('sort', 'order', 'page'));
+		}
+		
+		//Normalize Columns
 		foreach ($this->template_data['columns'] as $slug => &$column) {
 			
 			if (!isset($column['type'])) {

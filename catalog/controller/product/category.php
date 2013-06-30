@@ -28,9 +28,15 @@ class Catalog_Controller_Product_Category extends Controller
 			
 			$this->language->set('heading_title', $category_info['name']);
 			
-			$this->data['thumb'] = $this->image->resize($category_info['image'], $this->config->get('config_image_category_width'), $this->config->get('config_image_category_height'));
+			if ($this->config->get('config_show_category_image')) {
+				$this->data['thumb'] = $this->image->resize($category_info['image'], $this->config->get('config_image_category_width'), $this->config->get('config_image_category_height'));
+			}
 			
-			$this->data['description'] = html_entity_decode($category_info['description'], ENT_QUOTES, 'UTF-8');
+			if ($this->config->get('config_show_category_description')) {
+				$this->data['description'] = html_entity_decode($category_info['description'], ENT_QUOTES, 'UTF-8');
+			} else {
+				$this->data['description'] = false;
+			}
 			
 			$parents = $this->Model_Catalog_Category->getParents($category_id);
 			
@@ -55,8 +61,7 @@ class Catalog_Controller_Product_Category extends Controller
 		//TODO: How do we handle sub categories....?
 		
 		//Sorting / Filtering
-		$sort_filter = array();
-		$this->sort->load_query_defaults($sort_filter, 'p.sort_order', 'ASC');
+		$sort_filter = $this->sort->getQueryDefaults('p.sort_order', 'ASC');
 		
 		if ($category_id) {
 			$sort_filter['category_ids'] = array($category_id);

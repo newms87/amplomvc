@@ -10,17 +10,18 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 			$payment_methods = $this->cart->getPaymentMethods();
 			
 			if (!$payment_methods) {
-				$this->message->add('error', $this->_('error_no_payment', $this->url->link('information/contact')));
-			}
-			
-			if ($this->cart->hasPaymentMethod()) {
-				$this->data['code'] = $this->cart->getPaymentMethodId();
-			} elseif (count($payment_methods) == 1) {
-				$method = current($payment_methods);
-				$this->data['code'] = $method['code'];
+				$payment_methods = array();
 			}
 			else {
-				$this->data['code'] = '';
+				if ($this->cart->hasPaymentMethod()) {
+					$this->data['code'] = $this->cart->getPaymentMethodId();
+				} elseif (count($payment_methods) == 1) {
+					$method = current($payment_methods);
+					$this->data['code'] = $method['code'];
+				}
+				else {
+					$this->data['code'] = '';
+				}
 			}
 			
 			$this->data['payment_methods'] = $payment_methods;

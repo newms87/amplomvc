@@ -114,6 +114,7 @@ $(document).ready(function(){
 				<? } else {?>
 					<span><?= $text_login_link; ?></span>
 				<? } ?>
+				<?= $this->builder->build_links($links_account); ?>
 			<? } else { ?>
 				<? $this->builder->set_config("href", "display_name") ;?>
 				<?= $this->builder->build('select', $links_account, 'account_menu', '', array('onchange' => "window.location = $(this).val()")); ?>
@@ -144,30 +145,7 @@ $(document).ready(function(){
 	</div>
 	<? } ?>
 </div>
-<? if (isset($categories) && !empty($categories)) { ?>
-<div id="menu">
-	<ul>
-		<? foreach ($categories as $category) { ?>
-		<li><a href="<?= $category['href']; ?>"><?= $category['name']; ?></a>
-				<? if ($category['children']) { ?>
-				<div>
-					<? for ($i = 0; $i < count($category['children']);) { ?>
-					<ul>
-						<? $j = $i + ceil(count($category['children']) / $category['column']); ?>
-						<? for (; $i < $j; $i++) { ?>
-						<? if (isset($category['children'][$i])) { ?>
-						<li><a href="<?= $category['children'][$i]['href']; ?>"><?= $category['children'][$i]['name']; ?></a></li>
-						<? } ?>
-						<? } ?>
-					</ul>
-					<? } ?>
-				</div>
-				<? } ?>
-		</li>
-		<? } ?>
-	</ul>
-</div>
-<? } ?>
+
 <div id="notification"></div>
 <div id="content_holder">
 

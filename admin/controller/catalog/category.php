@@ -88,7 +88,7 @@ class Admin_Controller_Catalog_Category extends Controller
 			if (!$this->error && !$this->message->error_set()) {
 				$this->message->add('success',$this->_('text_success'));
 				
-				$this->url->redirect($this->url->link('catalog/category', $this->url->get_query_exclude('action')));
+				$this->url->redirect($this->url->link('catalog/category', $this->url->getQueryExclude('action')));
 			}
 		}
 
@@ -140,9 +140,7 @@ class Admin_Controller_Catalog_Category extends Controller
 		);
 		
 		//The Sort data
-		$sort_filter = array();
-		
-		$this->sort->load_query_defaults($sort_filter, 'name', 'ASC');
+		$sort_filter = $this->sort->getQueryDefaults('name', 'ASC');
 		
 		//Filter
 		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
@@ -155,7 +153,7 @@ class Admin_Controller_Catalog_Category extends Controller
 		$category_total = $this->Model_Catalog_Category->getTotalCategories($sort_filter);
 		$categories = $this->Model_Catalog_Category->getCategoriesWithParents($sort_filter);
 		
-		$url_query = $this->url->get_query_exclude('category_id');
+		$url_query = $this->url->getQueryExclude('category_id');
 		
 		foreach ($categories as &$category) {
 			$category['actions'] = array(
@@ -178,15 +176,9 @@ class Admin_Controller_Catalog_Category extends Controller
 		$tt_data = array(
 			'row_id'		=> 'category_id',
 			'route'		=> 'catalog/category',
-			'sort'		=> $sort_filter['sort'],
-			'order'		=> $sort_filter['order'],
-			'page'		=> $sort_filter['page'],
-			'sort_url'	=> $this->url->link('catalog/category', $this->url->get_query('filter')),
 			'columns'	=> $columns,
 			'data'		=> $categories,
 		);
-		
-		$tt_data += $this->language->data;
 		
 		//Build the table template
 		$this->table->init();
@@ -277,13 +269,13 @@ class Admin_Controller_Catalog_Category extends Controller
 			'stores'		=> array(0),
 		);
 
-		foreach ($defaults as $d => $default) {
-			if (isset($_POST[$d])) {
-				$this->data[$d] = $_POST[$d];
-			} elseif (isset($category_info[$d])) {
-				$this->data[$d] = $category_info[$d];
+		foreach ($defaults as $key => $default) {
+			if (isset($_POST[$key])) {
+				$this->data[$key] = $_POST[$key];
+			} elseif (isset($category_info[$key])) {
+				$this->data[$key] = $category_info[$key];
 			} else {
-				$this->data[$d] = $default;
+				$this->data[$key] = $default;
 			}
 		}
 		

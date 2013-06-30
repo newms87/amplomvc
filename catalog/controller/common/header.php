@@ -123,10 +123,20 @@ class Catalog_Controller_Common_Header extends Controller
 			
 			$this->data['links_account'] = $this->document->getLinks('account');
 		} else {
-		
 			$this->data['is_logged'] = false;
 			
 			$this->data['block_login'] = $this->getBlock('account/login', array('type' => 'header'));
+			
+			$link_register = array(
+				'name' => 'register',
+				'display_name' => $this->_('text_register'),
+				'href' => $this->url->link('account/register'),
+				'sort_order' => 1,
+			);
+			
+			$this->document->addLink('account', $link_register);
+			
+			$this->data['links_account'] = $this->document->getLinks('account');
 		}
 		
 		if (!$this->cart->isEmpty()) {

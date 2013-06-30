@@ -48,8 +48,8 @@
 		<? if(!empty($stock)) {?>
 		<div class="description_stock"><span><?= $text_stock; ?></span><span><?= $stock; ?></span></div>
 		<? } ?>
-		<? if($teaser) { ?>
-		<div class="product_teaser"><?= $teaser; ?></div>
+		<? if($description) { ?>
+		<div class="product_description"><?= $description; ?></div>
 		<? } ?>
 	</div>
 	
@@ -85,17 +85,14 @@
 		<? } ?>
 	</div>
 	<? }?>
-	<? if ($review_status) { ?>
-	<div class="review">
-		<div>
-			<img src="<?= HTTP_THEME_IMAGE . "stars-$rating.png"; ?>" alt="<?= $reviews; ?>" />
-			<a onclick="$('a[href=\'#tab-review\']').trigger('click');"><?= $reviews; ?></a>
-			<a onclick="$('a[href=\'#tab-review\']').trigger('click');"><?= $text_write; ?></a>
-		</div>
-	</div>
+	
+	<? if (!empty($block_review)) { ?>
+		<?= $block_review; ?>
 	<? } ?>
 	
-	<?= $block_sharing; ?>
+	<? if (!empty($block_sharing)) { ?>
+		<?= $block_sharing; ?>
+	<? } ?>
 	
 	<? if(!$is_active){?>
 		<div id='product_inactive'><?= $text_inactive; ?></div>

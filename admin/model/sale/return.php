@@ -143,7 +143,7 @@ class Admin_Model_Sale_Return extends Model
 				$subject = sprintf($this->_('text_subject'), $this->config->get('config_name'), $return_id);
 
 				$message  = $this->_('text_return_id') . ' ' . $return_id . "\n";
-				$message .= $this->_('text_date_added') . ' ' . date($this->language->getInfo('date_format_short'), strtotime($return_query->row['date_added'])) . "\n\n";
+				$message .= $this->_('text_date_added') . ' ' . $this->date->format($return_query->row['date_added'], 'short') . "\n\n";
 				$message .= $this->_('text_return_status') . "\n";
 				$message .= $return_query->row['status'] . "\n\n";
 

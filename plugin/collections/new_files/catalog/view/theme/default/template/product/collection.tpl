@@ -6,18 +6,17 @@
 	
 	<h1><?= $heading_title; ?></h1>
 	
-	<? if ($thumb || $description) { ?>
-		<div class="header-info">
-			<? if ($thumb) { ?>
-				<div class="image">
-					<img src="<?= $thumb; ?>" alt="<?= $heading_title; ?>" />
-				</div>
-			<? } ?>
-			<? if ($description) { ?>
-				<div class="description"><?= $description; ?></div>
-			<? } ?>
+	<div class="header-info">
+		<? if (!empty($thumb)) { ?>
+		<div class="image">
+			<img src="<?= $thumb; ?>" alt="<?= $heading_title; ?>" />
 		</div>
-	<? } ?>
+		<? } ?>
+		
+		<? if ($description) { ?>
+		<div class="description"><?= $description; ?></div>
+		<? } ?>
+	</div>
 	
 	<? if (!empty($block_product_list)) { ?>
 		<div class="item-filter">

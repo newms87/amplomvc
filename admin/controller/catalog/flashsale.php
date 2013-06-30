@@ -87,7 +87,7 @@ class Admin_Controller_Catalog_Flashsale extends Controller
 			if (!$this->error) {
 				$this->message->add('success', $this->_('text_success'));
 				
-				$this->url->redirect($this->url->link('catalog/flashsale', $this->url->get_query()));
+				$this->url->redirect($this->url->link('catalog/flashsale', $this->url->getQuery()));
 			}
 		}
 
@@ -177,7 +177,7 @@ class Admin_Controller_Catalog_Flashsale extends Controller
 			);
 		}
 		
-		$url = $this->url->get_query(array_merge(array_keys($sort_list), array_keys($filter_list)));
+		$url = $this->url->getQuery(array_merge(array_keys($sort_list), array_keys($filter_list)));
 		
 		$this->data['update_actions'] = array('enable'=>'Enable','disable'=>'Disable');
 		
@@ -189,7 +189,7 @@ class Admin_Controller_Catalog_Flashsale extends Controller
 		$this->data['delete'] = $this->url->link('catalog/flashsale/delete', $url);
 		
 		
-		$url = $this->url->get_query(array_merge(array('page'), array_keys($filter_list)));
+		$url = $this->url->getQuery(array_merge(array('page'), array_keys($filter_list)));
 		
 		$url .= $order == 'ASC'? '&order=DESC':'&order=ASC';
 		
@@ -205,7 +205,7 @@ class Admin_Controller_Catalog_Flashsale extends Controller
 			$this->data['sort_'.$s] = $this->url->link('catalog/flashsale', 'sort=' . $key . '&' . $url);
 		}
 		
-		$url = $this->url->get_query(array_merge(array('sort', 'order'), array_keys($filter_list)));
+		$url = $this->url->getQuery(array_merge(array('sort', 'order'), array_keys($filter_list)));
 
 		$this->pagination->init();
 		$this->pagination->total = $flashsale_total;

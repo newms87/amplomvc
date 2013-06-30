@@ -274,24 +274,26 @@ class Catalog_Model_Catalog_Product extends Model
 		$query = 
 			"SELECT ag.* FROM " . DB_PREFIX . "product_attribute pa" .
 			" LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id)" .
-			" LEFT JOIN " . DB_PREFIX . "attribute_group ag ON (a.attribute_id=ag.attribute_group_id)" .
+			" LEFT JOIN " . DB_PREFIX . "attribute_group ag ON (a.attribute_group_id=ag.attribute_group_id)" .
 			" WHERE pa.product_id = '" . (int)$product_id . "' GROUP BY ag.attribute_group_id ORDER BY ag.sort_order, ag.name";
 			
 		$attribute_groups = $this->queryRows($query);
 		
-		$this->translation->translate_all('attribute_group', 'attribute_group_id', $attribute_groups);
-		
-		foreach ($attribute_groups as &$attribute_group) {
-			$query =
-				"SELECT a.*, pa.text FROM " . DB_PREFIX . "product_attribute pa" .
-				" LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id)" .
-				" WHERE pa.product_id = '" . (int)$product_id . "' AND a.attribute_group_id = '" . (int)$attribute_group['attribute_group_id'] . "' ORDER BY a.sort_order, a.name";
+		if (!empty($attribute_groups)) {
+			$this->translation->translate_all('attribute_group', 'attribute_group_id', $attribute_groups);
 			
-			$attributes = $this->queryRows($query);
-			
-			$this->translation->translate_all('attribute', 'attribute_id', $attributes);
-			
-			$attribute_group['attributes'] = $attributes;
+			foreach ($attribute_groups as &$attribute_group) {
+				$query =
+					"SELECT a.*, pa.text FROM " . DB_PREFIX . "product_attribute pa" .
+					" LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id)" .
+					" WHERE pa.product_id = '" . (int)$product_id . "' AND a.attribute_group_id = '" . (int)$attribute_group['attribute_group_id'] . "' ORDER BY a.sort_order, a.name";
+				
+				$attributes = $this->queryRows($query);
+				
+				$this->translation->translate_all('attribute', 'attribute_id', $attributes);
+				
+				$attribute_group['attributes'] = $attributes;
+			}
 		}
 		
 		return $attribute_groups;

@@ -10,7 +10,7 @@ class Catalog_Controller_Block_Widget_Specials extends Controller
 			'has_special' => true,
 		);
 		
-		$this->sort->load_query_defaults($sort_filter, 'price', 'ASC');
+		$sort_filter += $this->sort->getQueryDefaults('price', 'ASC');
 		
 		$product_total = $this->Model_Catalog_Product->getTotalProducts($sort_filter);
 		$products = $this->Model_Catalog_Product->getProducts($sort_filter);

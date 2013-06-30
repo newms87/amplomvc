@@ -35,4 +35,6 @@
 $('#add_comment div').click(function(){$('#add_comment textarea').slideToggle()});
 //--></script>
 
-<? } ?> 
+<? } else { ?>
+	<h2><?= $error_no_payment_method; ?></h2>
+<? } ?>

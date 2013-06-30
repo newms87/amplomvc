@@ -96,7 +96,7 @@
 					</tr>
 					<tr>
 						<td><?= $entry_status; ?></td>
-						<td><?= $this->builder->build('select', $data_statuses, 'pp_standard_status', $pp_standard_status); ?></td>
+						<td><?= $this->builder->build('select', $data_statuses, 'status', $status); ?></td>
 					</tr>
 					<tr>
 						<td><?= $entry_sort_order; ?></td>

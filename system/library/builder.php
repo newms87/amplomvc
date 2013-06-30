@@ -14,7 +14,7 @@ class Builder extends Library
 		$current_page = parse_url($this->url->get_pretty_url());
 		
 		$queryVars = null;
-		parse_str($this->url->get_query(), $queryVars);
+		parse_str($this->url->getQuery(), $queryVars);
 		$current_page['query'] = $queryVars;
 		
 		foreach ($links as $key => &$link) {

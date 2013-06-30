@@ -96,7 +96,7 @@ var no_image = "<?= HTTP_THEME_IMAGE . "no_image.png"; ?>"
 		$url = $args[1];
 		$query = isset($args[2]) ? $args[2] : '';
 		
-		$sort_query = $this->url->get_query("sort","order","page");
+		$sort_query = $this->url->getQuery("sort","order","page");
 	?>
 <script type="text/javascript">//<!--
 function filter() {
@@ -158,7 +158,7 @@ for(var e in errors){
 		$value = $args[2];
 		$callback = $args[3];
 		
-		$sort_query = $this->url->get_query("sort","limit");
+		$sort_query = $this->url->getQuery("sort","limit");
 	?>
 <script type="text/javascript">//<!--
 $('<?=$selector;?>').each(function (i,e) {

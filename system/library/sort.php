@@ -7,6 +7,8 @@ class Sort extends Library
 	private $limit;
 	private $sort;
 	private $order;
+	private $page;
+	private $data = array();
 	private $sort_template;
 	private $limit_template;
 	
@@ -31,6 +33,11 @@ class Sort extends Library
 		$this->language_data[$key] = $value;
 	}
 	
+	public function getSortData()
+	{
+		return $this->data;
+	}
+	
 	public function get_sorts()
 	{
 		return $this->sorts;
@@ -43,7 +50,7 @@ class Sort extends Library
 	
 	public function get_sort_url()
 	{
-		$sort_url = $this->url->link($_GET['route'], $this->url->get_query_exclude('sort', 'order', 'page'));
+		$sort_url = $this->url->link($_GET['route'], $this->url->getQueryExclude('sort', 'order', 'page'));
 		$sort_url .= strpos($sort_url, '?') === false ? '?' : '&';
 		
 		return $sort_url;
@@ -108,7 +115,7 @@ class Sort extends Library
 			return;
 		}
 		
-		$limit_url = $this->url->link($_GET['route'], $this->url->get_query_exclude('limit','page') . '&limit=');
+		$limit_url = $this->url->link($_GET['route'], $this->url->getQueryExclude('limit','page') . '&limit=');
 		
 		$limit = $this->limit;
 		
@@ -130,10 +137,12 @@ class Sort extends Library
 		return ob_get_clean();
 	}
 	
-	public function load_query_defaults(&$data = array(), $sort_default = 'sort_order', $order_default = 'ASC', $limit_default = null, $page_default = 1){
+	public function getQueryDefaults($sort_default = 'sort_order', $order_default = 'ASC', $limit_default = null, $page_default = 1){
 		if (empty($limit_default) || (int)$limit_default < 1) {
 			$limit_default = $this->config->isAdmin() ? $this->config->get('config_admin_limit') : $this->config->get('config_catalog_limit');
 		}
+		
+		$data = array();
 		
 		$sort_defaults = array(
 			'sort' => $sort_default,
@@ -155,5 +164,10 @@ class Sort extends Library
 		
 		$this->sort = $data['sort'];
 		$this->order = $data['order'];
+		$this->page = $data['page'];
+		
+		$this->data = $data;
+		
+		return $data;
 	}
 }

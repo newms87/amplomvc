@@ -10,7 +10,7 @@ $_['data_stock_display_types'] = array(
 		10 => "Display quantity up to 10"
 	);
 
-// Text
+//Text
 $_['text_success']				= 'Success: You have modified settings!';
 $_['text_image_manager']		= 'Image Manager';
 $_['text_browse']				= 'Browse Files';
@@ -22,7 +22,7 @@ $_['text_smtp']					= 'SMTP';
 $_['text_mode_explanation']  = "The file permissions are set user (owner), group, others == ugo == 755 == user has full, group has read & write, others have read & write permissions.";
 $_['text_settings']		= 'Settings';
 
-// Entry
+//Entry
 $_['entry_name']					= 'Store Name:';
 $_['entry_owner']				= 'Store Owner:';
 $_['entry_address']				= 'Address:';
@@ -52,6 +52,8 @@ $_['entry_weight_class']		= 'Weight Class:';
 $_['entry_catalog_limit'] 		= 'Default Items Per Page (Catalog):<br /><span class="help">Determines how many catalog items are shown per page (products, categories, etc)</span>';
 $_['entry_admin_limit']			= 'Default Items Per Page (Admin):<br /><span class="help">Determines how many admin items are shown per page (orders, customers, etc)</span>';
 $_['entry_performance_log']		= 'Performance Logging:';
+$_['entry_show_category_image'] = "Show Category Image:";
+$_['entry_show_category_description'] = "Show Category Description:";
 $_['entry_cache_ignore']		= 'Cache Ignore List:<span class="help">(comma separated list)</span>';
 $_['entry_tax']					= 'Display Prices With Tax:';
 $_['entry_tax_default_id']					= 'Default Tax Class:';
@@ -152,7 +154,7 @@ $_['entry_plugin_dir_mode'] = "Plugin Directory Permissions";
 $_['tab_mail_msgs']			= 'Mail Messages';
 $_['tab_file_permissions']			= 'File Permissions';
 
-// Error
+//Error
 $_['error_warning']				= 'Warning: Please check the form carefully for errors!';
 $_['error_permission']			= 'Warning: You do not have permission to modify settings!';
 $_['error_name']					= 'Store Name must be between 3 and 32 characters!';

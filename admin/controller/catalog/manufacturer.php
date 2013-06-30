@@ -52,7 +52,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 			
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
-				$this->url->redirect($this->url->link('catalog/manufacturer', $this->url->get_query_exclude('manufacturer_id')));
+				$this->url->redirect($this->url->link('catalog/manufacturer', $this->url->getQueryExclude('manufacturer_id')));
 			}
 		}
 	
@@ -90,7 +90,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 			if (!$this->error && !$this->message->error_set()) {
 				$this->message->add('success',$this->_('text_success'));
 				
-				$this->url->redirect($this->url->link('catalog/manufacturer', $this->url->get_query_exclude('action')));
+				$this->url->redirect($this->url->link('catalog/manufacturer', $this->url->getQueryExclude('action')));
 			}
 		}
 
@@ -163,9 +163,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		);
 		
 		//The Sort data
-		$sort_filter = array();
-		
-		$this->sort->load_query_defaults($sort_filter, 'name', 'ASC');
+		$sort_filter = $this->sort->getQueryDefaults('name', 'ASC');
 		
 		//Filter
 		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
@@ -210,15 +208,9 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		$tt_data = array(
 			'row_id'		=> 'manufacturer_id',
 			'route'		=> 'catalog/manufacturer',
-			'sort'		=> $sort_filter['sort'],
-			'order'		=> $sort_filter['order'],
-			'page'		=> $sort_filter['page'],
-			'sort_url'	=> $this->url->link('catalog/manufacturer', $this->url->get_query('filter')),
 			'columns'	=> $columns,
 			'data'		=> $manufacturers,
 		);
-		
-		$tt_data += $this->language->data;
 		
 		//Build the table template
 		$this->table->init();
@@ -229,7 +221,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		$this->data['list_view'] = $this->table->render();
 		
 		//Batch Actions
-		$url_query = $this->url->get_query('filter', 'sort', 'order', 'page');
+		$url_query = $this->url->getQuery('filter', 'sort', 'order', 'page');
 		
 		$this->data['batch_actions'] = array(
 			'enable'	=> array(

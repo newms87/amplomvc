@@ -33,7 +33,11 @@ class Translation extends Library
 	public function translate_all($table, $object_key, &$data)
 	{
 		foreach ($data as $key => $item) {
-			$this->translate($table, $item[$object_key], $data[$key]);
+			if ($object_key) {
+				$this->translate($table, $item[$object_key], $data[$key]);
+			} else {
+				$this->translate($table, $key, $data[$key]);
+			}
 		}
 	}
 	
@@ -90,7 +94,9 @@ class Translation extends Library
 	
 	public function set_translations($table, $object_id, $translations)
 	{
-		if (!empty($translations)) {
+		if (!empty($translations) && is_array($translations)) {
+			html_dump($translations, 'translations');
+			
 			foreach ($translations as $field => $translation) {
 				foreach ($translation as $language_id => $text) {
 					$this->set($table, $field, $object_id, $language_id, $text);

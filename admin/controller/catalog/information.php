@@ -52,7 +52,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 				
-				$this->url->redirect($this->url->link('catalog/information', $this->url->get_query_exclude('information_id')));
+				$this->url->redirect($this->url->link('catalog/information', $this->url->getQueryExclude('information_id')));
 			}
 		}
 
@@ -69,7 +69,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 				
-				$this->url->redirect($this->url->link('catalog/information', $this->url->get_query_exclude('information_id')));
+				$this->url->redirect($this->url->link('catalog/information', $this->url->getQueryExclude('information_id')));
 			}
 		}
 
@@ -107,7 +107,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			if (!$this->error && !$this->message->error_set()) {
 				$this->message->add('success',$this->_('text_success'));
 				
-				$this->url->redirect($this->url->link('catalog/information', $this->url->get_query_exclude('action')));
+				$this->url->redirect($this->url->link('catalog/information', $this->url->getQueryExclude('action')));
 			}
 		}
 
@@ -151,9 +151,7 @@ class Admin_Controller_Catalog_Information extends Controller
 		);
 		
 		//The Sort data
-		$sort_filter = array();
-		
-		$this->sort->load_query_defaults($sort_filter, 'title', 'ASC');
+		$sort_filter = $this->sort->getQueryDefaults('title', 'ASC');
 		
 		//Filter
 		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
@@ -165,7 +163,7 @@ class Admin_Controller_Catalog_Information extends Controller
 		$information_total = $this->Model_Catalog_Information->getTotalInformations($sort_filter);
 		$informations = $this->Model_Catalog_Information->getInformations($sort_filter);
  		
-		$url_query = $this->url->get_query_exclude('information_id');
+		$url_query = $this->url->getQueryExclude('information_id');
 		
 		foreach ($informations as &$information) {
 			$information['actions'] = array(
@@ -190,15 +188,9 @@ class Admin_Controller_Catalog_Information extends Controller
 		$tt_data = array(
 			'row_id'		=> 'information_id',
 			'route'		=> 'catalog/information',
-			'sort'		=> $sort_filter['sort'],
-			'order'		=> $sort_filter['order'],
-			'page'		=> $sort_filter['page'],
-			'sort_url'	=> $this->url->link('catalog/information', $this->url->get_query('filter')),
 			'columns'	=> $columns,
 			'data'		=> $informations,
 		);
-		
-		$tt_data += $this->language->data;
 		
 		//Build the table template
 		$this->table->init();

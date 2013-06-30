@@ -31,7 +31,7 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 			
 			$current_filter = isset($_GET['attribute']) ? $_GET['attribute'] : array();
 			
-			$url_query = $this->url->get_query('collection_id', 'category_id');
+			$url_query = $this->url->getQuery('collection_id', 'category_id');
 			
 			foreach ($settings['attributes'] as $attribute_menu) {
 				$attribute_group_id = $attribute_menu['attribute_group_id'];

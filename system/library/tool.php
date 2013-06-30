@@ -115,11 +115,14 @@ class Tool extends Library
 		if (empty($data)) {
 			$data['__row__'] = array();
 		} else {
-			
 			$data['__row__'] = reset($data);
 		}
 		
-		array_walk_recursive($data['__row__'], function(&$value, $key) { $value = $key; });
+		if (is_array($data['__row__'])) {
+			array_walk_recursive($data['__row__'], function(&$value, $key) { $value = $key; });
+		} else {
+			$data['__row__'] = '';
+		}
 	}
 		
 	public function bytes2str($size, $decimals = 2, $unit = null)

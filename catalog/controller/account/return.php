@@ -19,8 +19,7 @@ class Catalog_Controller_Account_Return extends Controller
 		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/return'));
 		
-		$sort_filter = array();
-		$this->sort->load_query_defaults($sort_filter, 'date_added', 'ASC');
+		$sort_filter = $this->sort->getQueryDefaults('date_added', 'ASC');
 		
 		$return_total = $this->Model_Account_Return->getTotalReturns($sort_filter);
 		$returns = $this->Model_Account_Return->getReturns($sort_filter);
@@ -58,29 +57,33 @@ class Catalog_Controller_Account_Return extends Controller
 	{
 		$this->load->language('account/return');
 		
-		$return_id = isset($_GET['return_id']) ? $_GET['return_id'] : 0;
-		
 		if (!$this->customer->isLogged()) {
-			$query = http_build_query(array('redirect' => $this->url->link('account/return/info', 'return_id=' . $return_id)));
+			$query = array(
+				'redirect' => $this->url->link('account/return/info', 'return_id=' . $return_id)
+			);
 			
 			$this->url->redirect($this->url->link('account/login', $query));
 		}
 		
+		$return_id = isset($_GET['return_id']) ? $_GET['return_id'] : 0;
+		
+		$this->document->setTitle($this->_('text_return'));
+		
+		$url_query = $this->url->getQuery('page');
+		
+		//Breadcrumbs	
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
+		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/return', $url_query));
+		$this->breadcrumb->add($this->_('text_return'), $this->url->link('account/return/info', 'return_id=' . $return_id . '&' . $url_query));
+		
 		$return_info = $this->Model_Account_Return->getReturn($return_id);
 		
+		html_dump($return_info);
 		if ($return_info) {
 			$this->template->load('account/return_info');
-
-			$this->document->setTitle($this->_('text_return'));
-			
 			$this->language->set('heading_title', $this->_('text_return'));
 			
-			$url_query = $this->url->get_query('page');
-			
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/return', $url_query));
-			$this->breadcrumb->add($this->_('text_return'), $this->url->link('account/return/info', 'return_id=' . $return_id . '&' . $url_query));
 			
 			$return_info['comment'] = nl2br($return_info['comment']);
 			$return_info['opened'] = $return_info['opened'] ? $this->_('text_yes') : $this->_('text_no');
@@ -115,15 +118,8 @@ class Catalog_Controller_Account_Return extends Controller
 			$this->response->setOutput($this->render());
 		} else {
 			$this->template->load('error/not_found');
-
-			$this->document->setTitle($this->_('text_return'));
 			
 			$this->language->set('heading_title', $this->_('text_return'));
-			
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/return'));
-			$this->breadcrumb->add($this->_('text_return'), $this->url->link('account/return/info', 'return_id=' . $return_id . $this->url->get_query('page')));
 			
 			$this->data['continue'] = $this->url->link('account/return');
 
@@ -137,7 +133,7 @@ class Catalog_Controller_Account_Return extends Controller
 				'common/footer',
 				'common/header'
 			);
-						
+			
 			$this->response->setOutput($this->render());
 		}
 	}
@@ -196,38 +192,42 @@ class Catalog_Controller_Account_Return extends Controller
 		
 		$this->data['action'] = $this->url->link('account/return/insert');
 		
-		//TODO: Need to allow guests to return products??
 		$customer_orders = $this->customer->getOrders();
 		
-		if (!$order_id && !empty($customer_orders)) {
-			$customer_order = current($customer_orders);
-			$order_id = $customer_order['order_id'];
-		}
-		
-		if ($order_id && !$this->request->isPost()) {
-			if ($order_lookup) {
+		if ($order_lookup) {
+			//If order does not belong to this customer, lookup the order info
+			if (!empty($customer_orders) && !in_array($order_id, array_column($customer_orders, 'order_id'))) {
 				$order_info = $this->Model_Account_Order->getOrder($order_id, false);
-			} else {
-				$order_info = $this->Model_Account_Order->getOrder($order_id);
-			}
-			
-			//If this is not an order this customer made, 
-			if (((int)$this->customer->getId() !== (int)$order_info['customer_id'])) {
-				//If we are doing an order lookup and the email matches the one on the order
-				if ($order_lookup && !empty($_GET['email']) && $_GET['email'] === $order_info['email']) {
-				} else {
+				
+				//If the lookup email does not match the order email, customer may not view this order
+				if (empty($_GET['email']) || $_GET['email'] !== $order_info['email']) {
 					$this->message->add('warning', $this->_('error_invalid_order_id', $order_id));
 					$this->url->redirect($this->url->link('account/return/insert'));
 				}
-			} elseif ($order_lookup) {
-				//The order lookup found an order associated to the current customer, revert to regular product return
-				$this->message->add('success', $this->_('text_order_lookup_found'));
+			}
+			//This order belongs to this customer, so they may request an exchange
+			else {
 				$order_lookup = false;
 			}
-			
+		}
+		
+		if (empty($order_info)) {
+			if ($order_id) {
+				foreach ($customer_orders as $order) {
+					if ((int)$order['order_id'] === (int)$order_id) {
+						$order_info = $order;
+						break;
+					}
+				} 
+			} else {
+				$order_info = reset($customer_orders);
+			}
+		}
+		
+		if ($order_info && !$this->request->isPost()) {
 			$order_info['date_ordered'] = $this->date->format($order_info['date_added']);
 			
-			$order_products = $this->Model_Checkout_Order->getOrderProducts($order_id);
+			$order_products = $this->Model_Checkout_Order->getOrderProducts($order_info['order_id']);
 			
 			foreach ($order_products as $key => &$product) {
 				$product_info = $this->Model_Catalog_Product->getProductInfo($product['product_id']);
@@ -260,13 +260,13 @@ class Catalog_Controller_Account_Return extends Controller
 			'captcha' => '',
 		);
 		
-		foreach ($defaults as $d=>$default) {
-			if (isset($_POST[$d])) {
-				$this->data[$d] = $_POST[$d];
-			} elseif (isset($order_info[$d])) {
-				$this->data[$d] = $order_info[$d];
+		foreach ($defaults as $key => $default) {
+			if (isset($_POST[$key])) {
+				$this->data[$key] = $_POST[$key];
+			} elseif (isset($order_info[$key])) {
+				$this->data[$key] = $order_info[$key];
 			} else {
-				$this->data[$d] = $default;
+				$this->data[$key] = $default;
 			}
 		}
 		
@@ -281,7 +281,7 @@ class Catalog_Controller_Account_Return extends Controller
 		$this->data['customer_orders'] = $customer_orders;
 		
 		$this->data['date_ordered_display'] = $this->date->format($this->data['date_ordered'], $this->language->getInfo('date_format_short'));
-		$this->data['data_return_reasons'] = array('' => $this->_('text_select_reason')) + $this->Model_Localisation_ReturnReason->getReturnReasons();
+		$this->data['data_return_reasons'] = $this->config->load('product_return', 'return_reasons');
 		
 		$this->data['back'] = $this->url->link('account/account');
 		$this->data['return_product_url'] = $this->url->link('account/return/insert');

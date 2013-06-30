@@ -183,14 +183,9 @@ class Admin_Controller_Page_Page extends Controller
 		$tt_data = array(
 			'row_id'		=> 'page_id',
 			'route'		=> 'page/page',
-			'sort'		=> $data['sort'],
-			'order'		=> $data['order'],
-			'sort_url'	=> $this->url->link('page/page', $this->url->get_query('filter')),
 			'columns'	=> $columns,
 			'data'		=> $pages,
 		);
-		
-		$tt_data += $this->language->data;
 		
 		//Build the table template
 		$this->table->init();
@@ -201,7 +196,7 @@ class Admin_Controller_Page_Page extends Controller
 		$this->data['list_view'] = $this->table->render();
 		
 		//Batch Actions
-		$url_query = $this->url->get_query('filter', 'sort', 'order', 'page');
+		$url_query = $this->url->getQuery('filter', 'sort', 'order', 'page');
 		
 		$this->data['batch_actions'] = array(
 			'enable'	=> array(
@@ -221,7 +216,7 @@ class Admin_Controller_Page_Page extends Controller
 		$this->data['insert'] = $this->url->link('page/page/insert', $url_query);
 		
 		//Pagination
-		$url_query = $this->url->get_query('filter', 'sort', 'order');
+		$url_query = $this->url->getQuery('filter', 'sort', 'order');
 		
 		$this->pagination->init();
 		$this->pagination->total = $page_total;

@@ -18,7 +18,7 @@ $_['entry_captcha']	= 'Enter the code in the box below:';
 
 // Tabs
 $_['tab_review']		= 'Reviews (%s)';
-$_['tab_description']	= 'More Info';
+$_['tab_information']	= 'More Info';
 $_['tab_shipping']	= 'Shipping / Returns';
 $_['tab_attribute']	= 'Additional Information';
 $_['tab_related']		= 'Related Products'; 

@@ -10,8 +10,13 @@
 		<div class="image"><a href="<?= $product['href']; ?>"><img src="<?= $product['thumb']; ?>" title="<?= $product['name']; ?>" alt="<?= $product['name']; ?>" /></a></div>
 		<? } ?>
 		<div class="item_text">
-			<div class="name"><a href="<?= $product['href']; ?>"><?= $product['name']; ?></a></div>
-			<div class="description"><?= $product['description']; ?></div>
+			<div class="name">
+				<a href="<?= $product['href']; ?>"><?= $product['name']; ?></a>
+			</div>
+			
+			<? if (!empty($product['teaser'])) { ?>
+				<div class="teaser"><?= $product['teaser']; ?></div>
+			<? } ?>
 		</div>
 		<? if (!empty($product['price'])) { ?>
 			<div class="price">

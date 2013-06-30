@@ -1,7 +1,6 @@
 <?php
 class Catalog_Controller_Block_Product_Additional extends Controller 
 {
-	
 	public function index($settings)
 	{
 		$product_info = !empty($settings['product_info']) ? $settings['product_info'] : null;
@@ -15,23 +14,11 @@ class Catalog_Controller_Block_Product_Additional extends Controller
 		
 		$this->data['product_id'] = $product_info['product_id'];
 		
-		$review_status = $this->config->get('config_review_status');
-		
-		$this->data['review_status'] = $review_status;
-		
-		if ($review_status) {
-			$this->_('tab_review', $this->Model_Catalog_Review->getTotalReviewsByProductId($product_info['product_id']));
-			
-			$this->data['reviews'] = $this->_('text_reviews', (int)$product_info['reviews']);
-			
-			$this->data['rating'] = (int)$product_info['rating'];
-		}
 		
 		$this->data['is_final'] = (int)$product_info['is_final'];
 		$this->_('final_sale_explanation', $this->url->link('information/information/info','information_id=7').'/#return_policy');
-			
-			
-		$this->data['description'] = html_entity_decode($product_info['description'], ENT_QUOTES, 'UTF-8');
+		
+		$this->data['information'] = html_entity_decode($product_info['information'], ENT_QUOTES, 'UTF-8');
 		
 		if ($product_info['shipping_return']) {
 			$this->data['shipping_return'] = html_entity_decode($product_info['shipping_return'], ENT_QUOTES, 'UTF-8');

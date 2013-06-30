@@ -1,7 +1,6 @@
 <?php
 class Catalog_Controller_Product_Product extends Controller 
 {
-	
 	public function index()
 	{
 		$this->language->load('product/product');
@@ -29,14 +28,6 @@ class Catalog_Controller_Product_Product extends Controller
 			
 			if ($manufacturer_info) {
 				$this->breadcrumb->add($manufacturer_info['name'], $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $product_info['manufacturer_id']));
-			}
-	
-			if (isset($product_info['flashsale_id'])) {
-				$flashsale_info = $this->Model_Catalog_Flashsale->getFlashsale($product_info['flashsale_id']);
-				
-				if ($flashsale_info) {
-					$this->breadcrumb->add($flashsale_info['name'], $this->url->link('sales/flashsale', 'flashsale_id=' . $product_info['flashsale_id']));
-				}
 			}
 			
 			$product_info['category'] = $this->Model_Catalog_Category->getCategory($product_info['category_id']);
@@ -99,128 +90,5 @@ class Catalog_Controller_Product_Product extends Controller
 		);
 					
 		$this->response->setOutput($this->render());
-  	}
-
-	public function review()
-	{
-		$this->template->load('product/review');
-
-		$this->language->load('product/product');
-
-		if (isset($_GET['page'])) {
-			$page = $_GET['page'];
-		} else {
-			$page = 1;
-		}
-		
-		$this->data['reviews'] = array();
-		
-		$review_total = $this->Model_Catalog_Review->getTotalReviewsByProductId($_GET['product_id']);
-			
-		$results = $this->Model_Catalog_Review->getReviewsByProductId($_GET['product_id'], ($page - 1) * 5, 5);
-				
-		foreach ($results as $result) {
-			$this->data['reviews'][] = array(
-				'author'	=> $result['author'],
-				'text'		=> $result['text'],
-				'rating'	=> (int)$result['rating'],
-				'reviews'	=> sprintf($this->_('text_reviews'), (int)$review_total),
-				'date_added' => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
-			);
-			}
-			
-		$this->pagination->init();
-		$this->pagination->total = $review_total;
-		$this->data['pagination'] = $this->pagination->render();
-
-		$this->response->setOutput($this->render());
-	}
-	
-	public function write()
-	{
-		$this->language->load('product/product');
-		
-		$json = array();
-		
-		if ($this->request->isPost()) {
-			if ((strlen($_POST['name']) < 3) || (strlen($_POST['name']) > 25)) {
-				$json['error'] = $this->_('error_name');
-			}
-			
-			if ((strlen($_POST['text']) < 25) || (strlen($_POST['text']) > 1000)) {
-				$json['error'] = $this->_('error_text');
-			}
-	
-			if (!$_POST['rating']) {
-				$json['error'] = $this->_('error_rating');
-			}
-	
-			if (empty($this->session->data['captcha']) || ($this->session->data['captcha'] != $_POST['captcha'])) {
-				$json['error'] = $this->_('error_captcha');
-			}
-				
-			if (!isset($json['error'])) {
-				$this->Model_Catalog_Review->addReview($_GET['product_id'], $_POST);
-				
-				$json['success'] = $this->_('text_success');
-			}
-		}
-		
-		$this->response->setOutput(json_encode($json));
-	}
-	
-	public function captcha()
-	{
-		$this->session->data['captcha'] = $this->captcha->getCode();
-		
-		$this->captcha->showImage();
-	}
-	
-	public function upload()
-	{
-		$this->language->load('product/product');
-		
-		$json = array();
-		
-		if (!empty($_FILES['file']['name'])) {
-			$filename = basename(html_entity_decode($_FILES['file']['name'], ENT_QUOTES, 'UTF-8'));
-			
-			if ((strlen($filename) < 3) || (strlen($filename) > 128)) {
-				$json['error'] = $this->_('error_filename');
-			}
-			
-			$allowed = array();
-			
-			$filetypes = explode(',', $this->config->get('config_upload_allowed'));
-			
-			foreach ($filetypes as $filetype) {
-				$allowed[] = trim($filetype);
-			}
-			
-			if (!in_array(substr(strrchr($filename, '.'), 1), $allowed)) {
-				$json['error'] = $this->_('error_filetype');
-				}
-						
-			if ($_FILES['file']['error'] != UPLOAD_ERR_OK) {
-				$json['error'] = $this->_('error_upload_' . $_FILES['file']['error']);
-			}
-		} else {
-			$json['error'] = $this->_('error_upload');
-		}
-		
-		if (!$json) {
-			if (is_uploaded_file($_FILES['file']['tmp_name']) && file_exists($_FILES['file']['tmp_name'])) {
-				$file = basename($filename) . '.' . md5(rand());
-				
-				// Hide the uploaded file name so people can not link to it directly.
-				$json['file'] = $this->encryption->encrypt($file);
-				
-				move_uploaded_file($_FILES['file']['tmp_name'], DIR_DOWNLOAD . $file);
-			}
-						
-			$json['success'] = $this->_('text_upload');
-		}
-		
-		$this->response->setOutput(json_encode($json));
 	}
 }

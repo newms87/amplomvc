@@ -75,7 +75,7 @@ class Admin_Controller_Setting_Store extends Controller
 	{
 		$this->template->load('setting/store_list');
 
-		$url = $this->url->get_query('page');
+		$url = $this->url->getQuery('page');
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/store'));

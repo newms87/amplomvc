@@ -309,9 +309,6 @@ class DB
 	public function changeColumn($table, $column, $new_column = null, $options = '')
 	{
 		if ($this->hasColumn($table, $column)) {
-			$null = $null ? "NULL" : "NOT NULL";
-			$after = $after ? "AFTER `$after`" : '';
-			
 			if (!$new_column) {
 				$new_column = $column;
 			} elseif ($this->hasColumn($table, $new_column)) {

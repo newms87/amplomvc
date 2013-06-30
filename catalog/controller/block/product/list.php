@@ -47,7 +47,9 @@ class Catalog_Controller_Block_Product_List extends Controller
 					$item['reviews'] = sprintf($this->_('text_reviews'), (int)$item['reviews']);
 				}
 				
-				$item['description'] = substr(strip_tags(html_entity_decode($item['description'], ENT_QUOTES, 'UTF-8')), 0, 100) . '..';
+				if (!empty($item['teaser'])) {
+					$item['teaser'] = $this->tool->limit_characters(html_entity_decode($item['teaser'], ENT_QUOTES, 'UTF-8'), 100);
+				}
 				
 				if (empty($item['href'])) {
 					$item['href'] = $this->url->link('product/product', 'product_id=' . $item['product_id']);

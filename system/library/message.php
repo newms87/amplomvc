@@ -16,9 +16,9 @@ class Message extends Library
 			$this->session->data['messages'][$type][] = $message;
 		}
 		elseif (is_array($message)) {
-			foreach ($message as $m) {
-				$this->add($type, $m);
-			}
+			array_walk_recursive($message, function($value, $key, $type) {
+				$_SESSION['messages'][$type][] = $value;
+			}, $type);
 		}
 	}
 	
@@ -27,7 +27,7 @@ class Message extends Library
 		return isset($this->session->data['messages']['error']) || isset($this->session->data['messages']['warning']);
 	}
 	
-	public function peek($type='')
+	public function peek($type = null)
 	{
 		if ($type) {
 			if (isset($this->session->data['messages'][$type])) {
