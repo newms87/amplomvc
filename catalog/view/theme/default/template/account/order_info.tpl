@@ -10,17 +10,21 @@
 		</thead>
 		<tbody>
 			<tr>
-				<td class="left" style="width: 50%;"><? if ($invoice_no) { ?>
+				<td class="left half">
+					<? if (!empty($invoice_no)) { ?>
 					<b><?= $text_invoice_no; ?></b> <?= $invoice_no; ?><br />
 					<? } ?>
 					<b><?= $text_order_id; ?></b> #<?= $order_id; ?><br />
-					<b><?= $text_date_added; ?></b> <?= $date_added; ?></td>
-				<td class="left" style="width: 50%;"><? if ($payment_method) { ?>
+					<b><?= $text_date_added; ?></b> <?= $date_added; ?>
+				</td>
+				<td class="left half">
+					<? if ($payment_method) { ?>
 					<b><?= $text_payment_method; ?></b> <?= $payment_method; ?><br />
 					<? } ?>
 					<? if ($shipping_method) { ?>
 					<b><?= $text_shipping_method; ?></b> <?= $shipping_method; ?>
-					<? } ?></td>
+					<? } ?>
+				</td>
 			</tr>
 		</tbody>
 	</table>

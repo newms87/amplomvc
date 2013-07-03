@@ -1,8 +1,6 @@
 <?php
 class Catalog_Controller_Account_Order extends Controller 
 {
-	
-		
 	public function index()
 	{
 		$this->template->load('account/order_list');
@@ -107,16 +105,12 @@ class Catalog_Controller_Account_Order extends Controller
 			
 		$this->language->load('account/order');
 		
-		if (isset($_GET['order_id'])) {
-			$order_id = $_GET['order_id'];
-		} else {
-			$order_id = 0;
-		}
-				
+		$order_id = isset($_GET['order_id']) ? $_GET['order_id'] : 0;
+		
 		$order_info = $this->Model_Account_Order->getOrder($order_id);
 		
 		if ($order_info) {
-		$this->template->load('account/order_info');
+			$this->template->load('account/order_info');
 
 			$this->document->setTitle($this->_('text_order'));
 			
@@ -130,152 +124,93 @@ class Catalog_Controller_Account_Order extends Controller
 			
 			$this->language->set('heading_title', $this->_('text_order'));
 		
-			$this->_('final_sale_explanation',$this->url->link('information/information/info', 'information_id=7'));
+			$this->_('final_sale_explanation', $this->url->link('information/information/info', 'information_id=7'));
 			
 			if ($order_info['invoice_no']) {
 				$this->data['invoice_no'] = $order_info['invoice_prefix'] . $order_info['invoice_no'];
-			} else {
-				$this->data['invoice_no'] = '';
 			}
 			
-			$this->data['order_id'] = $_GET['order_id'];
-			$this->data['date_added'] = date($this->language->getInfo('date_format_short'), strtotime($order_info['date_added']));
+			$this->data['order_id'] = $order_id;
+			$this->data['date_added'] = $this->date->format($order_info['date_added'], 'short');
 			
-			if ($order_info['shipping_address_format']) {
-					$format = $order_info['shipping_address_format'];
-			} else {
-				$format = '{firstname} {lastname}' . "\n" . '{company}' . "\n" . '{address_1}' . "\n" . '{address_2}' . "\n" . '{city} {postcode}' . "\n" . '{zone}' . "\n" . '{country}';
-			}
-		
-			$find = array(
-				'{firstname}',
-				'{lastname}',
-				'{company}',
-					'{address_1}',
-					'{address_2}',
-				'{city}',
-					'{postcode}',
-					'{zone}',
-				'{zone_code}',
-					'{country}'
-			);
-	
-			$replace = array(
+			$shipping_address = array(
 				'firstname' => $order_info['shipping_firstname'],
 				'lastname'  => $order_info['shipping_lastname'],
 				'company'	=> $order_info['shipping_company'],
-					'address_1' => $order_info['shipping_address_1'],
-					'address_2' => $order_info['shipping_address_2'],
-					'city'		=> $order_info['shipping_city'],
-					'postcode'  => $order_info['shipping_postcode'],
-					'zone'		=> $order_info['shipping_zone'],
+				'address_1' => $order_info['shipping_address_1'],
+				'address_2' => $order_info['shipping_address_2'],
+				'city'		=> $order_info['shipping_city'],
+				'postcode'  => $order_info['shipping_postcode'],
+				'zone'		=> $order_info['shipping_zone'],
 				'zone_code' => $order_info['shipping_zone_code'],
-					'country'	=> $order_info['shipping_country']
+				'country'	=> $order_info['shipping_country'],
+				'country_id'=> $order_info['shipping_country_id'],
 			);
 
-			$this->data['shipping_address'] = str_replace(array("\r\n", "\r", "\n"), '<br />', preg_replace(array("/\s\s+/", "/\r\r+/", "/\n\n+/"), '<br />', trim(str_replace($find, $replace, $format))));
-
-			$this->data['shipping_method'] = $order_info['shipping_method'];
-
-			if ($order_info['payment_address_format']) {
-					$format = $order_info['payment_address_format'];
-			} else {
-				$format = '{firstname} {lastname}' . "\n" . '{company}' . "\n" . '{address_1}' . "\n" . '{address_2}' . "\n" . '{city} {postcode}' . "\n" . '{zone}' . "\n" . '{country}';
-			}
-		
-			$find = array(
-				'{firstname}',
-				'{lastname}',
-				'{company}',
-					'{address_1}',
-					'{address_2}',
-				'{city}',
-					'{postcode}',
-					'{zone}',
-				'{zone_code}',
-					'{country}'
-			);
-	
-			$replace = array(
+			$this->data['shipping_address'] = $this->tool->formatAddress($shipping_address);
+			
+			$payment_address = array(
 				'firstname' => $order_info['payment_firstname'],
 				'lastname'  => $order_info['payment_lastname'],
 				'company'	=> $order_info['payment_company'],
-					'address_1' => $order_info['payment_address_1'],
-					'address_2' => $order_info['payment_address_2'],
-					'city'		=> $order_info['payment_city'],
-					'postcode'  => $order_info['payment_postcode'],
-					'zone'		=> $order_info['payment_zone'],
+				'address_1' => $order_info['payment_address_1'],
+				'address_2' => $order_info['payment_address_2'],
+				'city'		=> $order_info['payment_city'],
+				'postcode'  => $order_info['payment_postcode'],
+				'zone'		=> $order_info['payment_zone'],
 				'zone_code' => $order_info['payment_zone_code'],
-					'country'	=> $order_info['payment_country']
+				'country'	=> $order_info['payment_country'],
+				'country_id'=> $order_info['payment_country_id'],
 			);
 			
-			$this->data['payment_address'] = str_replace(array("\r\n", "\r", "\n"), '<br />', preg_replace(array("/\s\s+/", "/\r\r+/", "/\n\n+/"), '<br />', trim(str_replace($find, $replace, $format))));
-
-				$this->data['payment_method'] = $order_info['payment_method'];
+			$this->data['payment_address'] = $this->tool->formatAddress($payment_address);
 			
-			$this->data['products'] = array();
+			$this->data['shipping_method'] = $this->cart->getShippingMethodTitle($order_info['shipping_code'] . '__' . $order_info['shipping_method']);
+			$this->data['payment_method'] = $this->cart->getPaymentMethodTitle($order_info['payment_method']);
 			
-			$products = $this->Model_Account_Order->getOrderProducts($_GET['order_id']);
+			//Order Products
+			$products = $this->Model_Account_Order->getOrderProducts($order_id);
 
-				foreach ($products as $product) {
-				$option_data = array();
+			foreach ($products as &$product) {
+				$options = $this->Model_Account_Order->getOrderOptions($order_id, $product['order_product_id']);
+
+				foreach ($options as &$option) {
+					$option['value'] = $this->tool->limit_characters($option['value'], 20);
+				} unset($option);
 				
-				$options = $this->Model_Account_Order->getOrderOptions($_GET['order_id'], $product['order_product_id']);
-
-					foreach ($options as $option) {
-						if ($option['type'] != 'file') {
-						$value = $option['value'];
-					} else {
-						$value = substr($option['value'], 0, strrpos($option['value'], '.'));
-					}
-					
-					$option_data[] = array(
-						'name'  => $option['name'],
-						'value' => (strlen($value) > 20 ? substr($value, 0, 20) . '..' : $value)
-					);
-				}
-
-				$this->data['products'][] = array(
-						'name'	=> $product['name'],
-						'model'	=> $product['model'],
-						'is_final' => (int)$product['is_final'],
-						'option'	=> $option_data,
-						'quantity' => $product['quantity'],
-						'price'	=> $this->currency->format($product['price'], $order_info['currency_code'], $order_info['currency_value']),
-					'total'	=> $this->currency->format($product['total'], $order_info['currency_code'], $order_info['currency_value']),
-					'return'	=> $this->url->link('account/return/insert', 'order_id=' . $order_info['order_id'] . '&product_id=' . $product['product_id'])
-				);
-				}
-
-			// Voucher
-			$this->data['vouchers'] = array();
+				$product['is_final'] = (int)$product['is_final'];
+				$product['option'] = $options;
+				$product['price'] = $this->currency->format($product['price'], $order_info['currency_code'], $order_info['currency_value']);
+				$product['total'] = $this->currency->format($product['total'], $order_info['currency_code'], $order_info['currency_value']);
+				$product['return'] = $this->url->link('account/return/insert', 'order_id=' . $order_info['order_id'] . '&product_id=' . $product['product_id']);
+			} unset($product);
 			
-			$vouchers = $this->Model_Account_Order->getOrderVouchers($_GET['order_id']);
+			$this->data['products'] = $products;
 			
-			foreach ($vouchers as $voucher) {
-				$this->data['vouchers'][] = array(
-					'description' => $voucher['description'],
-					'amount'		=> $this->currency->format($voucher['amount'], $order_info['currency_code'], $order_info['currency_value'])
-				);
-			}
+			//Voucher
+			$vouchers = $this->Model_Account_Order->getOrderVouchers($order_id);
 			
-				$this->data['totals'] = $this->Model_Account_Order->getOrderTotals($_GET['order_id']);
+			foreach ($vouchers as &$voucher) {
+				$voucher['amount'] = $this->currency->format($voucher['amount'], $order_info['currency_code'], $order_info['currency_value']);
+			} unset($voucher);
+
+			$this->data['vouchers'] = $vouchers;
+			
+			$this->data['totals'] = $this->Model_Account_Order->getOrderTotals($order_id);
 			
 			$this->data['comment'] = nl2br($order_info['comment']);
 			
-			$this->data['histories'] = array();
+			//History
+			$histories = $this->Model_Account_Order->getOrderHistories($order_id);
 
-			$results = $this->Model_Account_Order->getOrderHistories($_GET['order_id']);
+			foreach ($histories as &$history) {
+				$history['date_added'] = $this->date->format($history['date_added'], 'short');
+				$history['comment'] = nl2br($history['comment']);
+			} unset($history);
 
-				foreach ($results as $result) {
-				$this->data['histories'][] = array(
-						'date_added' => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
-						'status'	=> $result['status'],
-						'comment'	=> nl2br($result['comment'])
-				);
-				}
-
-				$this->data['continue'] = $this->url->link('account/order');
+			$this->data['histories'] = $histories;
+			
+			$this->data['continue'] = $this->url->link('account/order');
 
 			$this->data['breadcrumbs'] = $this->breadcrumb->render();
 
@@ -290,7 +225,7 @@ class Catalog_Controller_Account_Order extends Controller
 								
 			$this->response->setOutput($this->render());
 		} else {
-		$this->template->load('error/not_found');
+			$this->template->load('error/not_found');
 
 			$this->document->setTitle($this->_('text_order'));
 			
@@ -313,7 +248,7 @@ class Catalog_Controller_Account_Order extends Controller
 				'common/footer',
 				'common/header'
 			);
-								
+			
 			$this->response->setOutput($this->render());
 		}
   	}

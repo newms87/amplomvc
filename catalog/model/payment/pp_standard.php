@@ -37,7 +37,7 @@ class Catalog_Model_Payment_PpStandard extends Model
 			'PHP',
 			'TWD',
 			'THB',
-			'TRY'
+			'TRY',
 		);
 		
 		if (!in_array(strtoupper($this->currency->getCode()), $currencies)) {
@@ -52,4 +52,9 @@ class Catalog_Model_Payment_PpStandard extends Model
 
 		return $method_data;
   	}
+
+	public function getTitle()
+	{
+		return '<img src="https://www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif" border="0" alt="" />';
+	}
 }

@@ -6,10 +6,7 @@ class Catalog_Controller_Module_Currency extends Controller
 		$this->template->load('module/currency');
 
 		if (isset($_POST['currency_code'])) {
-				$this->currency->set($_POST['currency_code']);
-			
-			unset($this->session->data['shipping_method']);
-			unset($this->session->data['shipping_methods']);
+			$this->currency->set($_POST['currency_code']);
 			
 			if (isset($_POST['redirect'])) {
 				$this->url->redirect($_POST['redirect']);

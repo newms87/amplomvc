@@ -165,8 +165,10 @@ class Cart extends Library
 		$this->session->data['cart'] = array();
 		$this->session->data['wishlist'] = array();
 		
-		unset($this->session->data['shipping_method']);
-		unset($this->session->data['payment_method']);
+		unset($this->session->data['shipping_address_id']);
+		unset($this->session->data['payment_address_id']);
+		unset($this->session->data['shipping_method_id']);
+		unset($this->session->data['payment_method_id']);
 		unset($this->session->data['comment']);
 		unset($this->session->data['order_id']);
 		unset($this->session->data['coupons']);
@@ -671,29 +673,9 @@ class Cart extends Library
 		return !empty($this->session->data['payment_address_id']);
 	}
 	
-	public function hasShippingAddress()
-	{
-		return !empty($this->session->data['shipping_address_id']);
-	}
-
-	public function hasPaymentMethod()
-	{
-		return !empty($this->session->data['payment_method']);
-	}
-	
-	public function hasShippingMethod()
-	{
-		return !empty($this->session->data['shipping_method']);
-	}
-	
 	public function getPaymentAddressId()
 	{
 		return isset($this->session->data['payment_address_id']) ? $this->session->data['payment_address_id'] : false;
-	}
-	
-	public function getShippingAddressId()
-	{
-		return isset($this->session->data['shipping_address_id']) ? $this->session->data['shipping_address_id'] : false;
 	}
 	
 	public function getPaymentAddress()
@@ -702,56 +684,6 @@ class Cart extends Library
 			return $this->Model_Account_Address->getAddress($this->session->data['payment_address_id']);
 		}
 
-		return false;
-	}
-	
-	public function getShippingAddress()
-	{
-		if (isset($this->session->data['shipping_address_id'])) {
-			return $this->Model_Account_Address->getAddress($this->session->data['shipping_address_id']);
-		}
-
-		return false;
-	}
-	
-	public function getPaymentMethod()
-	{
-		return isset($this->session->data['payment_method']) ? $this->session->data['payment_method'] : false;
-	}
-	
-	public function getPaymentMethodId()
-	{
-		return isset($this->session->data['payment_method']) ? $this->session->data['payment_method']['code'] : false;
-	}
-	
-	public function getShippingMethod()
-	{
-		if (isset($this->session->data['shipping_method'])) {
-			$method = $this->session->data['shipping_method'];
-			
-			$classname = "Model_Shipping_" . $this->tool->format_classname($method['code']);
-			$quotes = $this->$classname->getQuote($this->getShippingAddress());
-			
-			if (!empty($quotes)) {
-				foreach ($quotes as $quote) {
-					if ($quote['method'] == $method['method']) {
-						return $method;
-					}
-				}
-			}
-		}
-		
-		unset($this->session->data['shipping_method']);
-
-		return false;
-	}
-	
-	public function getShippingMethodId()
-	{
-		if (isset($this->session->data['shipping_method'])) {
-			return $this->session->data['shipping_method']['code'] . '_' . $this->session->data['shipping_method']['method'];
-		}
-		
 		return false;
 	}
 	
@@ -789,6 +721,27 @@ class Cart extends Library
 		return true;
 	}
 	
+	/** Shipping Address Operations **/
+	
+	public function hasShippingAddress()
+	{
+		return !empty($this->session->data['shipping_address_id']);
+	}
+	
+	public function getShippingAddressId()
+	{
+		return isset($this->session->data['shipping_address_id']) ? $this->session->data['shipping_address_id'] : false;
+	}
+	
+	public function getShippingAddress()
+	{
+		if (isset($this->session->data['shipping_address_id'])) {
+			return $this->Model_Account_Address->getAddress($this->session->data['shipping_address_id']);
+		}
+
+		return false;
+	}
+	
 	public function setShippingAddress($address = null)
 	{
 		if (empty($address)) {
@@ -823,10 +776,92 @@ class Cart extends Library
 		return true;
 	}
 	
+	//TODO: Move this to System_Extension_Payment controller...
+	/** Payment Method Operations **/
+	
+	public function hasPaymentMethod()
+	{
+		return !empty($this->session->data['payment_method_id']);
+	}
+	
+	public function getPaymentMethodId()
+	{
+		if (isset($this->session->data['payment_method_id'])) {
+			return $this->session->data['payment_method_id'];
+		}
+		
+		return false;
+	}
+	
+	public function getPaymentMethod($payment_method_id = null, $payment_address = null, $totals = null)
+	{
+		if (!$payment_method_id) {
+			$payment_method_id = $this->getPaymentMethodId();
+		}
+
+		if ($payment_method_id) {
+			if (!empty($payment_address)) {
+				if (!is_array($payment_address)) {
+					$payment_address = $this->Model_Account_Address->getAddress($payment_address);
+				}
+			} else {
+				$payment_address = $this->getPaymentAddress();
+			}
+		
+			if (!$totals) {
+				$totals = $this->cart->getTotals();
+			}
+			
+			$classname = "Model_Payment_" . $this->tool->format_classname($payment_method_id);
+			
+			$method = $this->$classname->getMethod($payment_address, $totals['total']);
+			
+			if ($method) {
+				return $method;
+			}
+		}
+		
+		return false;
+	}
+	
+	public function getPaymentMethodTitle($payment_method_id = null)
+	{
+		$classname = "Model_Payment_" . $this->tool->format_classname($payment_method_id);
+		
+		return $this->$classname->getTitle();
+		
+		return false;
+	}
+
+	public function getPaymentMethods($payment_address = null)
+	{
+		// Payment Methods
+		$methods = array();
+		
+		$results = $this->Model_Setting_Extension->getExtensions('payment');
+		
+		foreach ($results as $result) {
+			$method = $this->getPaymentMethod($result['code'], $payment_address);
+			
+			if ($method) {
+				$methods[$result['code']] = $method;
+			}
+		}
+		
+		if (!$methods) {
+			$this->error['checkout']['payment_method'] = $this->_('error_payment_methods', $this->config->get('config_email'));
+			return false;
+		}
+		
+		uasort($methods, function ($a,$b){ return $a['sort_order'] > $b['sort_order']; });
+		
+		return $methods;
+	}
+	
 	public function setPaymentMethod($method = null)
 	{
 		if (!$method) {
-			unset($this->session->data['payment_method']);
+			unset($this->session->data['payment_method_id']);
 		}
 		else {
 			$payment_methods = $this->getPaymentMethods();
@@ -837,21 +872,137 @@ class Cart extends Library
 					return false;
 				}
 				
-				$method = $payment_methods[$method];
+				$payment_method_id = $payment_methods[$method]['code'];
 			}
 			else {
-				$key = $method['code'];
-				
-				if (!isset($payment_methods[$key])) {
+				if (!isset($payment_methods[$method['code']])) {
 					$this->_e('PM-1b', 'payment_method', 'error_payment_method');
 					return false;
 				}
+				
+				$payment_method_id = $method['code'];
 			}
 			
-			$this->session->data['payment_method'] = $method;
+			$this->session->data['payment_method_id'] = $payment_method_id;
 		}
 		
 		return true;
+	}
+	
+	//TODO: Move this to System_Extension_Shipping controller...
+	/** Shipping Method Operations **/
+	
+	public function hasShippingMethod()
+	{
+		return !empty($this->session->data['shipping_method_id']);
+	}
+	
+	public function getShippingMethodId()
+	{
+		if (isset($this->session->data['shipping_method_id'])) {
+			return $this->session->data['shipping_method_id'];
+		}
+		
+		return false;
+	}
+	
+	public function getShippingMethod($shipping_method_id = null, $shipping_address = null)
+	{
+		if (!$shipping_method_id) {
+			$shipping_method_id = $this->getShippingMethodId();
+		}
+
+		if ($shipping_method_id) {
+			//Invalid Shipping method ID
+			if (!strpos($shipping_method_id, '__')) {
+				$code = $shipping_method_id;
+				$method = false;
+			} else {
+				list($code, $method) = explode("__", $shipping_method_id, 2);
+			}
+			
+			if (!empty($shipping_address)) {
+				if (!is_array($shipping_address)) {
+					$shipping_address = $this->Model_Account_Address->getAddress($shipping_address);
+				}
+			}
+			elseif ($this->hasShippingAddress()) {
+				$shipping_address = $this->getShippingAddress();
+			}
+			else {
+				$this->_e('SM-2', 'shipping_method', 'error_shipping_address');
+				return false;
+			}
+		
+			if (!$this->isAllowedShippingZone($shipping_address)) {
+				$this->_e('SM-3', 'shipping_method', 'error_shipping_zone');
+				return false;
+			}
+
+			$classname = "Model_Shipping_" . $this->tool->format_classname($code);
+			$quotes = $this->$classname->getQuote($shipping_address);
+			
+			if (!empty($quotes)) {
+				if (!$method) {
+					return $quotes;
+				}
+				
+				foreach ($quotes as $quote) {
+					if ($quote['method'] === $method) {
+						return $quote;
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	public function getShippingMethods($shipping_address = null)
+	{
+		//Find Available Shipping Methods
+		$results = $this->Model_Setting_Extension->getExtensions('shipping');
+		
+		$methods = array();
+		
+		foreach ($results as $result) {
+			$quotes = $this->getShippingMethod($result['code'], $shipping_address);
+			
+			if (!empty($quotes)) {
+				foreach ($quotes as $quote) {
+					$methods[$quote['code'] . '__' . $quote['method']] = $quote;
+				}
+			}
+		}
+		
+		if ($methods) {
+			uasort($methods, function ($a,$b){ return $a['sort_order'] > $b['sort_order']; });
+			
+			return $methods;
+		}
+		
+		//No Shipping Options Available!
+		$msg = $this->_('error_shipping_methods', $this->url->link('information/contact'));
+		$this->_e('SM-4', 'shipping_method', $msg);
+		
+		return false;
+	}
+	
+	public function getShippingMethodTitle($shipping_method_id)
+	{
+		//Invalid Shipping method ID
+		if (!strpos($shipping_method_id, '__')) {
+			$code = $shipping_method_id;
+			$method = false;
+		} else {
+			list($code, $method) = explode("__", $shipping_method_id, 2);
+		}
+		
+		$classname = "Model_Shipping_" . $this->tool->format_classname($code);
+		
+		return $this->$classname->getTitle($method);
+		
+		return false;
 	}
 	
 	public function setShippingMethod($method = null)
@@ -868,127 +1019,23 @@ class Cart extends Library
 					return false;
 				}
 				
-				$method =  $shipping_methods[$method];
+				$shipping_method_id = $method;
 			}
 			else {
-				$key = $method['code'] . '_' . $method['method'];
+				$shipping_method_id = $method['code'] . '__' . $method['method'];
 				
-				if (!isset($shipping_methods[$key])) {
+				if (!isset($shipping_methods[$shipping_method_id])) {
 					$this->_e('SM-1b', 'shipping_method', 'error_shipping_method');
 					return false;
 				}
 			}
 			
-			$this->session->data['shipping_method'] = $method;
+			$this->session->data['shipping_method_id'] = $shipping_method_id;
 		}
 		
 		return true;
 	}
 	
-	public function getPaymentMethods($address = null)
-	{
-		if (!empty($address)) {
-			if (is_array($address)) {
-				$payment_address = $address;
-			}
-			else {
-				$payment_address = $this->Model_Account_Address->getAddress($address);
-			}
-		} elseif (isset($this->session->data['payment_address_id'])) {
-			$payment_address = $this->Model_Account_Address->getAddress($this->session->data['payment_address_id']);
-		}
-		else {
-			$payment_address = 0;
-		}
-		
-		$totals = $this->cart->getTotals();
-		
-		// Payment Methods
-		$method_data = array();
-		
-		$results = $this->Model_Setting_Extension->getExtensions('payment');
-		
-		//TODO: Fix this along with totals and shipping...
-		foreach ($results as $result) {
-			$classname = "Model_Payment_" . $this->tool->format_classname($result['code']);
-			
-			$method = $this->$classname->getMethod($payment_address, $totals['total']);
-			
-			if ($method) {
-				$method_data[$result['code']] = $method;
-			}
-		}
-		
-		if (!$method_data) {
-			$this->error['checkout']['payment_method'] = $this->_('error_payment_methods', $this->config->get('config_email'));
-			return false;
-		}
-		
-		uasort($method_data, function ($a,$b){ return $a['sort_order'] > $b['sort_order']; });
-		
-		return $method_data;
-	}
-	
-	public function getShippingMethods($address = null)
-	{
-		if (!empty($address)) {
-			if (is_array($address)) {
-				$shipping_address = $address;
-			}
-			else {
-				$shipping_address = $this->Model_Account_Address->getAddress($address);
-			}
-		}
-		elseif ($this->hasShippingAddress()) {
-			$shipping_address = $this->getShippingAddress();
-		}
-		else {
-			$this->_e('SM-2', 'shipping_method', 'error_shipping_address');
-			return false;
-		}
-		
-		if (!$this->isAllowedShippingZone($shipping_address)) {
-			$this->_e('SM-3', 'shipping_method', 'error_shipping_zone');
-			return false;
-		}
-		
-		//Find Available Shipping Methods
-		$results = $this->Model_Setting_Extension->getExtensions('shipping');
-		
-		$methods = array();
-		
-		foreach ($results as $result) {
-			//TODO: Fix this along with Pyament and Totals
-			if ($this->config->get($result['code'] . '_status')) {
-				$classname = "Model_Shipping_" . $this->tool->format_classname($result['code']);
-				$quotes = $this->$classname->getQuote($shipping_address);
-				
-				if(empty($quotes)) continue;
-				
-				foreach ($quotes as $quote) {
-					$methods[$quote['code'] . '_' . $quote['method']] = $quote;
-				}
-			}
-		}
-		
-		if ($methods) {
-			uasort($methods, function ($a,$b){ return $a['sort_order'] > $b['sort_order']; });
-			
-			return $methods;
-		}
-		
-		
-		//No Shipping Options Available!
-		$msg = $this->_('error_shipping_methods', $this->url->link('information/contact'));
-		$this->_e('SM-4', 'shipping_method', $msg);
-		
-		if ($this->hasShippingAddress()) {
-			$this->message->add('error', $msg);
-		}
-		
-		return false;
-	}
-
 	public function validateShippingDetails()
 	{
 		if ($this->hasShipping()) {

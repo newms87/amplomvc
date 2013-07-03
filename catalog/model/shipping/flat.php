@@ -55,4 +55,15 @@ class Catalog_Model_Shipping_Flat extends Model
 	
 		return $quote_data;
 	}
+
+	public function getTitle($method)
+	{
+		$flat_rates = $this->Model_Setting_Setting->getSetting('shipping_flat');
+		
+		foreach ($flat_rates['flat_rates'] as $rate) {
+			if ($rate['method'] === $method) {
+				return $rate['title'];
+			}
+		}
+	}
 }
