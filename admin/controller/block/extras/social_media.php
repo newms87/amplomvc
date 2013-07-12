@@ -4,7 +4,7 @@ class Admin_Controller_Block_Extras_SocialMedia extends Controller
 	
 	public function settings(&$settings)
 	{
-		$this->load->language('block/extras/social_media');
+		$this->language->load('block/extras/social_media');
 			
 		$this->template->load('block/extras/social_media_settings');
 
@@ -32,7 +32,7 @@ class Admin_Controller_Block_Extras_SocialMedia extends Controller
 	/*
 	public function profile(&$profiles)
 	{
-		$this->load->language('block/extras/social_media');
+		$this->language->load('block/extras/social_media');
 		
 		$this->template->load('block/extras/social_media_profile');
 

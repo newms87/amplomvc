@@ -7,7 +7,7 @@ class Admin_Controller_Module_Banner extends Controller
 	{
 		$this->template->load('module/banner');
 
-		$this->load->language('module/banner');
+		$this->language->load('module/banner');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -51,8 +51,6 @@ class Admin_Controller_Module_Banner extends Controller
 
 		$this->data['banners'] = $this->Model_Design_Banner->getBanners();
 				
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

@@ -4,7 +4,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 
 	public function index()
 	{
-		$this->load->language('setting/url_alias');
+		$this->language->load('setting/url_alias');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -13,7 +13,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 			
   	public function insert()
   	{
-		$this->load->language('setting/url_alias');
+		$this->language->load('setting/url_alias');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -30,7 +30,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 
   	public function update()
   	{
-		$this->load->language('setting/url_alias');
+		$this->language->load('setting/url_alias');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -47,7 +47,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 
   	public function delete()
   	{
-		$this->load->language('setting/url_alias');
+		$this->language->load('setting/url_alias');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -91,8 +91,6 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 		
 		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
 	
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -139,8 +137,6 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 			}
 		}
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

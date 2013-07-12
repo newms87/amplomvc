@@ -7,7 +7,7 @@ class Admin_Controller_Module_MainSidebar extends Controller
 	{
 		$this->template->load('module/main_sidebar');
 
-		$this->load->language('module/main_sidebar');
+		$this->language->load('module/main_sidebar');
 
 		$this->document->setTitle('Main Sidebar');
 		
@@ -42,8 +42,6 @@ class Admin_Controller_Module_MainSidebar extends Controller
 		}
 					
 		$this->data['layouts'] = $this->Model_Design_Layout->getLayouts();
-		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

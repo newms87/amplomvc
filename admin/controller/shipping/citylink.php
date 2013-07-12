@@ -7,7 +7,7 @@ class Admin_Controller_Shipping_Citylink extends Controller
 	{
 		$this->template->load('shipping/citylink');
 
-		$this->load->language('shipping/citylink');
+		$this->language->load('shipping/citylink');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -69,8 +69,6 @@ class Admin_Controller_Shipping_Citylink extends Controller
 		
 		$this->data['geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

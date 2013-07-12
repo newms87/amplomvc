@@ -7,7 +7,7 @@ class Admin_Controller_Module_FeaturedCarousel extends Controller
 	{
 		$this->template->load('module/featured_carousel');
 
-		$this->load->language('module/featured_carousel');
+		$this->language->load('module/featured_carousel');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -63,8 +63,6 @@ class Admin_Controller_Module_FeaturedCarousel extends Controller
 		$this->data['data_layouts'] = $this->Model_Design_Layout->getLayouts();
 		
 		$this->data['no_image'] = $this->image->resize('no_image.png', 100, 100);
-		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

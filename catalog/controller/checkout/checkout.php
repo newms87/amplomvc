@@ -23,8 +23,6 @@ class Catalog_Controller_Checkout_Checkout extends Controller
 		
 		$this->_('error_page_load', $this->config->get('config_email'));
 		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',

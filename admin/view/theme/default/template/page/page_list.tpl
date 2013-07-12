@@ -1,6 +1,7 @@
 <?= $header; ?>
 <div class="content">
-	<?= $breadcrumbs; ?>
+	<?= $this->breadcrumb->render(); ?>
+	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -13,6 +14,10 @@
 			</div>
 		</div>
 		<div class="content">
+			<div class="limits">
+				<?= $limits; ?>
+			</div>
+			
 			<form action="" method="post" id="form">
 				<?= $list_view; ?>
 			</form>

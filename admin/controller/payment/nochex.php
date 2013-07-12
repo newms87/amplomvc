@@ -7,7 +7,7 @@ class Admin_Controller_Payment_Nochex extends Controller
 	{
 		$this->template->load('payment/nochex');
 
-		$this->load->language('payment/nochex');
+		$this->language->load('payment/nochex');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -109,8 +109,6 @@ class Admin_Controller_Payment_Nochex extends Controller
 			$this->data['nochex_sort_order'] = $this->config->get('nochex_sort_order');
 		}
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

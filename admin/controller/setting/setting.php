@@ -5,7 +5,7 @@ class Admin_Controller_Setting_Setting extends Controller
 	{
 		$this->template->load('setting/setting');
 
-		$this->load->language('setting/setting');
+		$this->language->load('setting/setting');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -211,8 +211,6 @@ class Admin_Controller_Setting_Setting extends Controller
 		$this->data['data_return_statuses'] = $this->config->load('product_return', 'return_statuses', 0);
 		
 		$this->data['load_theme_img'] = $this->url->link('setting/setting/theme');
-		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

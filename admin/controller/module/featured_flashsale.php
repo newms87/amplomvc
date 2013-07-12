@@ -7,7 +7,7 @@ class Admin_Controller_Module_FeaturedFlashsale extends Controller
 	{
 		$this->template->load('module/featured_flashsale');
 
-		$this->load->language('module/featured_flashsale');
+		$this->language->load('module/featured_flashsale');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -49,8 +49,6 @@ class Admin_Controller_Module_FeaturedFlashsale extends Controller
 		$this->data['layouts'] = array();
 		foreach($layouts as $layout)
 			$this->data['layouts'][$layout['layout_id']] = $layout['name'];
-		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

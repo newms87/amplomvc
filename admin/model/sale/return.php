@@ -3,8 +3,8 @@ class Admin_Model_Sale_Return extends Model
 {
 	public function addReturn($data)
 	{
-		$data['date_added'] = $this->date->format();
-		$data['date_modified'] = $this->date->format();
+		$data['date_added'] = $this->date->now();
+		$data['date_modified'] = $this->date->now();
 		
 		$return_id = $this->insert('return', $data);
 		
@@ -13,7 +13,7 @@ class Admin_Model_Sale_Return extends Model
 	
 	public function editReturn($return_id, $data)
 	{
-		$data['date_modified'] = $this->date->format();
+		$data['date_modified'] = $this->date->now();
 		
 		$this->update('return', $data, $return_id);
 	}
@@ -118,7 +118,7 @@ class Admin_Model_Sale_Return extends Model
 	{
 		$return_data = array(
 			'return_status_id' => $data['return_status_id'],
-			'date_modified' => $this->date->format(),
+			'date_modified' => $this->date->now(),
 		);
 		
 		$this->update('return', $return_data, $return_id);
@@ -129,7 +129,7 @@ class Admin_Model_Sale_Return extends Model
 			$data['notify'] = 0;
 		}
 		
-		$data['date_added'] = $this->date->format();
+		$data['date_added'] = $this->date->now();
 		
 		$return_history_id = $this->insert('return_history', $data);
 		

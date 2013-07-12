@@ -8,8 +8,8 @@ class Catalog_Model_Total_Shipping extends Model
 			
 			$total_data[] = array(
 				'code'		=> 'shipping',
+				'method_id' => $this->cart->getShippingMethodId(),
 				'title'		=> $shipping_method['title'],
-				'text'		=> $this->currency->format($shipping_method['cost']),
 				'value'		=> $shipping_method['cost'],
 				'sort_order' => $this->config->get('shipping_sort_order')
 			);

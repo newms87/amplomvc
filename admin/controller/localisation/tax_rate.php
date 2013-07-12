@@ -5,7 +5,7 @@ class Admin_Controller_Localisation_TaxRate extends Controller
  
 	public function index()
 	{
-		$this->load->language('localisation/tax_rate');
+		$this->language->load('localisation/tax_rate');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -14,7 +14,7 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 
 	public function insert()
 	{
-		$this->load->language('localisation/tax_rate');
+		$this->language->load('localisation/tax_rate');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -45,7 +45,7 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 
 	public function update()
 	{
-		$this->load->language('localisation/tax_rate');
+		$this->language->load('localisation/tax_rate');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -76,7 +76,7 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 
 	public function delete()
 	{
-		$this->load->language('localisation/tax_rate');
+		$this->language->load('localisation/tax_rate');
 
 		$this->document->setTitle($this->_('heading_title'));
  		
@@ -233,8 +233,6 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 		$this->data['sort'] = $sort;
 		$this->data['order'] = $order;
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -338,8 +336,6 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 				
 		$this->data['geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 				
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

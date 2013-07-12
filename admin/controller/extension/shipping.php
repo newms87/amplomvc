@@ -5,7 +5,7 @@ class Admin_Controller_Extension_Shipping extends Controller
 	{
 		$this->template->load('extension/shipping');
 
-		$this->load->language('extension/shipping');
+		$this->language->load('extension/shipping');
 		
 		$this->document->setTitle($this->_('heading_title'));
   		
@@ -30,7 +30,7 @@ class Admin_Controller_Extension_Shipping extends Controller
 			foreach ($files as $file) {
 				$extension = basename($file, '.php');
 				
-				$this->load->language('shipping/' . $extension);
+				$this->language->load('shipping/' . $extension);
 	
 				$action = array();
 				
@@ -60,8 +60,6 @@ class Admin_Controller_Extension_Shipping extends Controller
 			}
 		}
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

@@ -7,7 +7,7 @@ class Catalog_Controller_Payment_Nochex extends Controller
 	{
 		$this->template->load('payment/nochex');
 
-		$this->load->language('payment/nochex');
+		$this->language->load('payment/nochex');
 		
 		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
 		
@@ -70,7 +70,7 @@ class Catalog_Controller_Payment_Nochex extends Controller
 	
 	public function callback()
 	{
-		$this->load->language('payment/nochex');
+		$this->language->load('payment/nochex');
 		
 		if (isset($_GET['method']) && $_GET['method'] == 'decline') {
 			$this->session->data['error'] = $this->_('error_declined');

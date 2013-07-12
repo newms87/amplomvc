@@ -4,7 +4,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 	
 	public function index()
 	{
-		$this->load->language('mail/newsletter');
+		$this->language->load('mail/newsletter');
 		
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -13,7 +13,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 
 	public function insert()
 	{
-		$this->load->language('mail/newsletter');
+		$this->language->load('mail/newsletter');
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -31,7 +31,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 
 	public function update()
 	{
-		$this->load->language('mail/newsletter');
+		$this->language->load('mail/newsletter');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -48,7 +48,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 
 	public function batch_update()
 	{
-		$this->load->language('mail/newsletter');
+		$this->language->load('mail/newsletter');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -175,8 +175,6 @@ class Admin_Controller_Mail_Newsletter extends Controller
 		
 		$this->data['download_email_list'] = $this->url->link('mail/newsletter/email_list');
 		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -282,8 +280,6 @@ class Admin_Controller_Mail_Newsletter extends Controller
 		}
 	
 		
-		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

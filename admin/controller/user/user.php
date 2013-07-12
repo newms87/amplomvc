@@ -5,7 +5,7 @@ class Admin_Controller_User_User extends Controller
 	
   	public function index()
   	{
-		$this->load->language('user/user');
+		$this->language->load('user/user');
 
 		$this->document->setTitle($this->_('heading_title'));
 	
@@ -14,7 +14,7 @@ class Admin_Controller_User_User extends Controller
 	
   	public function insert()
   	{
-		$this->load->language('user/user');
+		$this->language->load('user/user');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -39,7 +39,7 @@ class Admin_Controller_User_User extends Controller
 
   	public function update()
   	{
-		$this->load->language('user/user');
+		$this->language->load('user/user');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -63,7 +63,7 @@ class Admin_Controller_User_User extends Controller
  
   	public function delete()
   	{
-		$this->load->language('user/user');
+		$this->language->load('user/user');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -151,8 +151,6 @@ class Admin_Controller_User_User extends Controller
 		$this->data['sort'] = $sort;
 		$this->data['order'] = $order;
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -223,8 +221,6 @@ class Admin_Controller_User_User extends Controller
 		else {
 			$this->breadcrumb->add($this->data['username'], $this->url->link('user/user/update', 'user_id=' . $user_id));
 		}
-		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

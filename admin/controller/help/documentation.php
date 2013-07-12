@@ -6,7 +6,7 @@ class Admin_Controller_Help_Documentation extends Controller
 	{
 		$this->template->load('help/documentation');
 
-		$this->load->language('help/documentation');
+		$this->language->load('help/documentation');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -16,8 +16,6 @@ class Admin_Controller_Help_Documentation extends Controller
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('help/documentation'));
-		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

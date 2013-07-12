@@ -24,7 +24,7 @@ class Admin_Model_Localisation_Zone extends Model
 	
 	public function getZone($zone_id)
 	{
-		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "zone WHERE zone_id = '" . (int)$zone_id . "'");
+		$query = $this->query("SELECT * FROM " . DB_PREFIX . "zone WHERE zone_id = '" . (int)$zone_id . "'");
 		
 		return $query->row;
 	}

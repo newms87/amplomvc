@@ -20,7 +20,7 @@
 	<tr>
 		<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);" /></td>
 		<td class="center column_title"><span><?= $column_action; ?></span></td>
-		<? foreach($columns as $column) {?>
+		<? foreach($columns as $column) { ?>
 		<td class="column_title <?= $column['align']; ?>">
 			<? if($column['sortable']) {
 				$c_order = ($sort === $column['sort_value'] && $order === 'ASC') ? 'DESC' : 'ASC';
@@ -62,8 +62,8 @@
 				case 'date':
 				case 'time':
 				case 'datetime': ?>
-					<label class="date_from"><?= $entry_date_from; ?></label><input class='<?= str_replace('_range', '', $column['type']); ?>' type="text" name="filter[<?= $slug; ?>][start]" value="<?= isset($column['value']['start']) ? $column['value']['start'] : ''; ?>" />
-					<label class="date_to"><?= $entry_date_to; ?></label><input class='<?= str_replace('_range', '', $column['type']); ?>' type="text" name="filter[<?= $slug?>][end]" value="<?= isset($column['value']['end']) ? $column['value']['end'] : ''; ?>" />
+					<label class="date_from"><?= $entry_date_from; ?></label><input class='<?= str_replace('_range', '', $column['type']); ?>' type="text" name="filter[<?= $slug; ?>][start]" value="<?= isset($column['filter_value']['start']) ? $column['filter_value']['start'] : ''; ?>" />
+					<label class="date_to"><?= $entry_date_to; ?></label><input class='<?= str_replace('_range', '', $column['type']); ?>' type="text" name="filter[<?= $slug?>][end]" value="<?= isset($column['filter_value']['end']) ? $column['filter_value']['end'] : ''; ?>" />
 				<? break;
 				
 				default: break;
@@ -75,13 +75,13 @@
 		<? } ?>
 		<td align="center"><a onclick="filter();" class="button"><?= $button_filter; ?></a></td>
 	</tr>
-	<? if(!empty($data)) { ?>
-	<? foreach ($data as $data) { ?>
+	<? if(!empty($rows)) { ?>
+	<? foreach ($rows as $row) { ?>
 	<tr>
-		<td class="center"><input type="checkbox" name="selected[]" value="<?= $data[$row_id]; ?>" <?= (isset($data['selected']) && $data['selected']) ? "checked='checked'" : ""; ?> /></td>
+		<td class="center"><input type="checkbox" name="selected[]" value="<?= $row[$row_id]; ?>" <?= (isset($row['selected']) && $row['selected']) ? "checked='checked'" : ""; ?> /></td>
 		
 		<? $quick_actions = '';
-		foreach($data['actions'] as $key => $action){
+		foreach($row['actions'] as $key => $action){
 			$action['#class'] = (isset($action['#class']) ? $action['#class'] . ' ' : '') . 'action-' . $key;
 			$quick_actions .= "[ <a href=\"$action[href]\"" . $this->builder->attrs($action) . ">$action[text]</a> ]";
 		} ?>
@@ -90,7 +90,7 @@
 			<?= $quick_actions ; ?>
 		</td>
 		<? foreach($columns as $slug => $column) {
-			if(!isset($data[$slug])){?>
+			if(!isset($row[$slug])){?>
 				<td></td>
 				<? continue;
 			}
@@ -98,11 +98,11 @@
 			<td class="<?= $column['align']; ?>">
 			<?
 			
-			$value = $data[$slug];
+			$value = $row[$slug];
 			
 			//Check if the raw string override has been set for this value
-			if(isset($data['#' . $slug])){
-				echo $data['#' . $slug];
+			if(isset($row['#' . $slug])){
+				echo $row['#' . $slug];
 			}
 			else{
 				switch($column['type']) {
@@ -112,15 +112,15 @@
 					<? break;
 					
 					case 'date': ?>
-						<?= $this->date->format($value, 'M d, Y'); ?>
+						<?= $this->date->format($value, 'short'); ?>
 					<? break;
 					
 					case 'datetime': ?>
-						<?= $this->date->format($value, 'M d, Y H:i A'); ?>
+						<?= $this->date->format($value, 'datetime_format_long'); ?>
 					<? break;
 					
 					case 'time': ?>
-						<?= $this->date->format($value, 'H:i A'); ?>
+						<?= $this->date->format($value, 'time'); ?>
 					<? break;
 					
 					case 'map': ?>
@@ -146,13 +146,13 @@
 							}
 						}
 						break;
-						
+					
 					case 'format': ?>
 						<?= sprintf($column['format'],$value); ?>
 					<? break;
 					
 					case 'image': ?>
-						<img src="<?= $data['thumb']; ?>" />
+						<img src="<?= $row['thumb']; ?>" />
 					<? break;
 					
 					case 'text_list':
@@ -190,6 +190,6 @@ $("#filter_list").keydown(function(e){
 });
 //--></script>
 
-<?= $this->builder->js('filter_url', '#filter_list', $route); ?>
+<?= $this->builder->js('filter_url', '#filter_list'); ?>
 
 <?= $this->builder->js('datepicker'); ?>

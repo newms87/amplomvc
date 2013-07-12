@@ -7,7 +7,7 @@ class Admin_Controller_Total_Coupon extends Controller
 	{
 		$this->template->load('total/coupon');
 
-		$this->load->language('total/coupon');
+		$this->language->load('total/coupon');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -45,8 +45,6 @@ class Admin_Controller_Total_Coupon extends Controller
 			$this->data['coupon_sort_order'] = $this->config->get('coupon_sort_order');
 		}
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

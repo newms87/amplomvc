@@ -7,7 +7,7 @@ class Admin_Controller_Total_LowOrderFee extends Controller
 	{
 		$this->template->load('total/low_order_fee');
 
-		$this->load->language('total/low_order_fee');
+		$this->language->load('total/low_order_fee');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -65,8 +65,6 @@ class Admin_Controller_Total_LowOrderFee extends Controller
 		
 		$this->data['tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

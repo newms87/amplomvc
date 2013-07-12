@@ -6,7 +6,7 @@ class Admin_Controller_Shipping_Amount extends Controller
 	{
 		$this->template->load('shipping/amount');
 
-		$this->load->language('shipping/amount');
+		$this->language->load('shipping/amount');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -46,8 +46,6 @@ class Admin_Controller_Shipping_Amount extends Controller
 		//set default to USA
 		$this->data['default_country'] = 223;
 		$this->data['countries'] = $this->Model_Localisation_Country->getCountries();
-		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

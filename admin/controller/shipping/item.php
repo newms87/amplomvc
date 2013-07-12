@@ -7,7 +7,7 @@ class Admin_Controller_Shipping_Item extends Controller
 	{
 		$this->template->load('shipping/item');
 
-		$this->load->language('shipping/item');
+		$this->language->load('shipping/item');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -67,8 +67,6 @@ class Admin_Controller_Shipping_Item extends Controller
 		
 		$this->data['geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

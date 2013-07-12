@@ -5,7 +5,7 @@ class Admin_Controller_User_UserPermission extends Controller
  
 	public function index()
 	{
-		$this->load->language('user/user_group');
+		$this->language->load('user/user_group');
  
 		$this->document->setTitle($this->_('heading_title'));
  		
@@ -14,7 +14,7 @@ class Admin_Controller_User_UserPermission extends Controller
 
 	public function insert()
 	{
-		$this->load->language('user/user_group');
+		$this->language->load('user/user_group');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -45,7 +45,7 @@ class Admin_Controller_User_UserPermission extends Controller
 
 	public function update()
 	{
-		$this->load->language('user/user_group');
+		$this->language->load('user/user_group');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -76,7 +76,7 @@ class Admin_Controller_User_UserPermission extends Controller
 
 	public function delete()
 	{
-		$this->load->language('user/user_group');
+		$this->language->load('user/user_group');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -223,8 +223,6 @@ class Admin_Controller_User_UserPermission extends Controller
 		$this->data['sort'] = $sort;
 		$this->data['order'] = $order;
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -281,8 +279,6 @@ class Admin_Controller_User_UserPermission extends Controller
 		}
 		
 		$this->data['data_controllers'] = $this->Model_User_UserGroup->get_controller_list();
-		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

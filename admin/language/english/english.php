@@ -12,6 +12,8 @@ $_['data_no_yes_blank'] = $_['no_yes_blank']	= array(''=>'',0=>'No',1=>'Yes');
 // Text
 $_['text_yes']					= 'Yes';
 $_['text_no']					= 'No';
+$_['text_enable']				= 'Enable';
+$_['text_disable']			= 'Disable';
 $_['text_enabled']				= 'Enabled';
 $_['text_disabled']			= 'Disabled';
 $_['text_none']					= ' --- None --- ';
@@ -25,6 +27,7 @@ $_['text_close']				= 'Close';
 $_['text_pagination']			= 'Showing {start} to {end} of {total} ({pages} Pages)';
 $_['text_no_results']			= 'No results!';
 $_['text_separator']			= ' &gt; ';
+$_['text_insert']					= 'Add';
 $_['text_edit']					= 'Edit';
 $_['text_copy']					= 'Copy';
 $_['text_delete']			= 'Delete';

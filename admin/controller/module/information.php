@@ -7,7 +7,7 @@ class Admin_Controller_Module_Information extends Controller
 	{
 		$this->template->load('module/information');
 
-		$this->load->language('module/information');
+		$this->language->load('module/information');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -43,8 +43,6 @@ class Admin_Controller_Module_Information extends Controller
 		
 		$this->data['layouts'] = $this->Model_Design_Layout->getLayouts();
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

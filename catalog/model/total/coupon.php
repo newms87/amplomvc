@@ -3,7 +3,7 @@ class Catalog_Model_Total_Coupon extends Model
 {
 	public function getTotal(&$total_data, &$total, &$taxes)
 	{
-		$this->load->language('total/coupon');
+		$this->language->load('total/coupon');
 		
 		$this->Model_Cart_Coupon->loadAutoCoupons();
 		
@@ -104,7 +104,6 @@ class Catalog_Model_Total_Coupon extends Model
 				$total_data[] = array(
 					'code'		=> 'coupon',
 					'title'		=> sprintf($this->_('text_coupon'), $coupon_info['code']),
-					'text'		=> $this->currency->format(-$discount_total),
 					'value'		=> -$discount_total,
 					'sort_order' => $this->config->get('coupon_sort_order')
 				);

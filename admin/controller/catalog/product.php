@@ -3,39 +3,26 @@ class Admin_Controller_Catalog_Product extends Controller
 {
   	public function index()
   	{
-		$this->load->language('catalog/product');
-		
-		$this->document->setTitle($this->_('heading_title'));
+		$this->language->load('catalog/product');
 		
 		$this->getList();
   	}
   
-  	public function insert()
-  	{
-		$this->load->language('catalog/product');
-		$this->document->setTitle($this->_('heading_title'));
-		
-		if ($this->request->isPost() && $this->validateForm()) {
-			$this->Model_Catalog_Product->addProduct($_POST);
-			
-			if (!$this->message->error_set()) {
-				$this->message->add('success',$this->_('text_success'));
-				
-				$this->url->redirect($this->url->link('catalog/product'));
-			}
-		}
-	
-		$this->getForm();
-  	}
-
   	public function update()
   	{
-		$this->load->language('catalog/product');
+		$this->language->load('catalog/product');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
-			$this->Model_Catalog_Product->editProduct($_GET['product_id'], $_POST);
+			//Insert
+			if (empty($_GET['product_id'])) {
+				$this->Model_Catalog_Product->addProduct($_POST);
+			}
+			//Update
+			else {
+				$this->Model_Catalog_Product->editProduct($_GET['product_id'], $_POST);
+			}
 			
 			if (!$this->message->error_set()) {
 				$this->message->add('success',$this->_('text_success'));
@@ -49,7 +36,7 @@ class Admin_Controller_Catalog_Product extends Controller
 
   	public function delete()
   	{
-  		$this->load->language('catalog/product');
+  		$this->language->load('catalog/product');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -68,7 +55,7 @@ class Admin_Controller_Catalog_Product extends Controller
 
   	public function copy()
   	{
-  		$this->load->language('catalog/product');
+  		$this->language->load('catalog/product');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -87,7 +74,7 @@ class Admin_Controller_Catalog_Product extends Controller
 	
 	public function batch_update()
 	{
-		$this->load->language('catalog/product');
+		$this->language->load('catalog/product');
 		
 		if (isset($_POST['selected']) && isset($_GET['action']) && $this->validateCopy()) {
 			foreach ($_POST['selected'] as $product_id) {
@@ -139,15 +126,19 @@ class Admin_Controller_Catalog_Product extends Controller
 	
   	private function getList()
   	{
+  		//Page Title
+  		$this->document->setTitle($this->_('heading_title'));
+		
+		//The Template
 		$this->template->load('catalog/product_list');
 		
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/product'));
 		
+		//The Table Columns
 		$categories = $this->Model_Catalog_Category->getCategoriesWithParents();
 		
-		//The Table Columns
 		$columns = array();
 		
   		$columns['thumb'] = array(
@@ -236,20 +227,14 @@ class Admin_Controller_Catalog_Product extends Controller
 			'sort_value' => 'p.status',
 		);
 
-  		//The Sort data
-		$sort_filter = $this->sort->getQueryDefaults('p.name', 'ASC');
+  		//Get Sorted / Filtered Data
+		$sort = $this->sort->getQueryDefaults('p.name', 'ASC');
+		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 		
-		//Filter
-		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
+		$product_total = $this->Model_Catalog_Product->getTotalProducts($filter);
+		$products = $this->Model_Catalog_Product->getProducts($sort + $filter);
 		
-		if ($filter_values) {
-			$sort_filter += $filter_values;
-		}
-		
-		$product_total = $this->Model_Catalog_Product->getTotalProducts($sort_filter);
-		$products = $this->Model_Catalog_Product->getProducts($sort_filter);
-		
-		$url_query = $this->url->getQuery('filter', 'sort', 'order', 'page');
+		$url_query = $this->url->getQueryExclude('product_id');
 		
 		foreach ($products as &$product) {
 			$product['actions'] = array(
@@ -278,35 +263,33 @@ class Admin_Controller_Catalog_Product extends Controller
 			}
 			
 			//The # in front of the key signifies we want to output the raw string for the value when rendering the table
-			if ($product['date_expires'] == DATETIME_ZERO) {
+			if ($product['date_expires'] === DATETIME_ZERO) {
 				$product['#date_expires'] = $this->_('text_no_expiration');
 			}
 		}
 		
-		//The table template data
+		//Build The Table
 		$tt_data = array(
 			'row_id'		=> 'product_id',
-			'route'		=> 'catalog/product',
-			'columns'	=> $columns,
-			'data'		=> $products,
 		);
 		
-		//Build the table template
 		$this->table->init();
-		$this->table->set_template('table/list_view');
-		$this->table->set_template_data($tt_data);
-		$this->table->map_attribute('filter_value', $filter_values);
+		$this->table->setTemplate('table/list_view');
+		$this->table->setColumns($columns);
+		$this->table->setRows($products);
+		$this->table->setTemplateData($tt_data);
+		$this->table->mapAttribute('filter_value', $filter);
 		
 		$this->data['list_view'] = $this->table->render();
 		
 		//Batch actions
 		$this->data['batch_actions'] = array(
 			'enable'=> array(
-				'label' => "Enable",
+				'label' => $this->_('text_enable'),
 			),
 			
 			'disable' => array(
-				'label' => "Disable",
+				'label' => $this->_('text_disable'),
 			),
 			
 			'date_expires' => array(
@@ -343,18 +326,18 @@ class Admin_Controller_Catalog_Product extends Controller
 			),
 			
 			'copy' => array(
-				'label' => "Copy",
+				'label' => $this->_('text_copy'),
 			),
 			
 			'delete' => array(
-				'label' => "Delete",
+				'label' => $this->_('text_delete'),
 			),
 		);
 		
 		$this->data['batch_update'] = $this->url->link('catalog/product/batch_update', $url_query);
 		
-		//Action Buttons
-		$this->data['insert'] = $this->url->link('catalog/product/insert');
+		//Render Limit Menu
+		$this->data['limits'] = $this->sort->render_limit();
 		
 		//Pagination
 		$this->pagination->init();
@@ -362,10 +345,10 @@ class Admin_Controller_Catalog_Product extends Controller
 		
 		$this->data['pagination'] = $this->pagination->render();
 		
-		//Render Breadcrumbs
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		//Action Buttons
+		$this->data['insert'] = $this->url->link('catalog/product/update');
 		
-		//Child Templates
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -377,24 +360,20 @@ class Admin_Controller_Catalog_Product extends Controller
 
   	private function getForm()
   	{
+  		//Page Title
+  		$this->document->setTitle($this->_('heading_title'));
+		
+  		//The Template
 		$this->template->load('catalog/product_form');
-
+		
+		//Insert or Update
   		$product_id = $this->data['product_id'] = isset($_GET['product_id']) ? $_GET['product_id'] : false;
 		
-		$url = $this->url->getQuery('filter', 'sort', 'order', 'page');
-		
+		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/product'));
 		
-		if (!$product_id) {
-			$this->data['action'] = $this->url->link('catalog/product/insert', $url);
-		} else {
-			$this->data['action'] = $this->url->link('catalog/product/update', 'product_id=' . $product_id . $url);
-		}
-		
-		$this->data['cancel'] = $this->url->link('catalog/product', $url);
-		
-		//If Post data has not been sent, Grab all the product information from the Database
+		//Load Information
 		if ($product_id && !$this->request->isPost()) {
 			$product_info = $this->Model_Catalog_Product->getProduct($product_id);
 			
@@ -426,6 +405,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			}
 		}
 		
+		//Set Values or Defaults
 		$defaults = array(
 			'model'=>'',
 			'sku'=>'',
@@ -487,6 +467,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			}
 		}
 		
+		//Additional Data
 		$m_data = array(
 			'sort' => 'name'
 		);
@@ -581,18 +562,8 @@ class Admin_Controller_Catalog_Product extends Controller
 		$this->_('text_option_help', $this->config->get('config_email'));
 		$this->_('text_not_editable', $this->data['name'], $this->config->get('config_email'));
 		
-		//Translation
-		$translate_fields = array(
-			'name',
-			'teaser',
-			'description',
-			'information',
-			'meta_description',
-			'meta_keywords',
-			'shipping_return',
-		);
-		
-		$this->data['translations'] = $this->translation->get_translations('product', $product_id, $translate_fields);
+		//Translations
+		$this->data['translations'] = $this->Model_Catalog_Product->getProductTranslations($product_id);
 		
 		//A hack to easily integrate product_tags translations
 		$tag_translations = $this->data['translations']['name'];
@@ -605,13 +576,17 @@ class Admin_Controller_Catalog_Product extends Controller
 		
 		$this->data['no_image'] = $this->image->resize('no_image.png', $this->config->get('config_image_admin_thumb_width'), $this->config->get('config_image_admin_thumb_height'));
 		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
+		//Action Buttons
+		$this->data['save'] = $this->url->link('catalog/product/update', 'product_id=' . $product_id);
+		$this->data['cancel'] = $this->url->link('catalog/product');
 		
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
 		
+		//Render
 		$this->response->setOutput($this->render());
   	}
 	

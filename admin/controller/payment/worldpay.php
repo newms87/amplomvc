@@ -7,7 +7,7 @@ class Admin_Controller_Payment_Worldpay extends Controller
 	{
 		$this->template->load('payment/worldpay');
 
-		$this->load->language('payment/worldpay');
+		$this->language->load('payment/worldpay');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -99,8 +99,6 @@ class Admin_Controller_Payment_Worldpay extends Controller
 			$this->data['worldpay_sort_order'] = $this->config->get('worldpay_sort_order');
 		}
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

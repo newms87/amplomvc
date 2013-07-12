@@ -5,7 +5,7 @@ class Admin_Controller_Report_AffiliateCommission extends Controller
 	{
 		$this->template->load('report/affiliate_commission');
 
-		$this->load->language('report/affiliate_commission');
+		$this->language->load('report/affiliate_commission');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -93,8 +93,6 @@ class Admin_Controller_Report_AffiliateCommission extends Controller
 		$this->data['filter_date_start'] = $filter_date_start;
 		$this->data['filter_date_end'] = $filter_date_end;
 				
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

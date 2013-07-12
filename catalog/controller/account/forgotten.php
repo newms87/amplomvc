@@ -1,8 +1,6 @@
 <?php
 class Catalog_Controller_Account_Forgotten extends Controller 
 {
-	
-
 	public function index()
 	{
 		$this->template->load('account/forgotten');
@@ -20,7 +18,8 @@ class Catalog_Controller_Account_Forgotten extends Controller
 			
 			$password = substr(md5(rand()), 0, 7);
 			
-			$this->Model_Account_Customer->editPassword($_POST['email'], $password);
+			$customer_id = $this->customer->emailRegistered($_POST['email']);
+			$this->customer->editPassword($customer_id, $password);
 			
 			$subject = sprintf($this->_('text_subject'), $this->config->get('config_name'));
 			
@@ -56,8 +55,6 @@ class Catalog_Controller_Account_Forgotten extends Controller
  
 		$this->data['back'] = $this->url->link('account/login');
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
@@ -74,7 +71,7 @@ class Catalog_Controller_Account_Forgotten extends Controller
 	{
 		if (!isset($_POST['email'])) {
 			$this->error['warning'] = $this->_('error_email');
-		} elseif (!$this->Model_Account_Customer->getTotalCustomersByEmail($_POST['email'])) {
+		} elseif (!$this->customer->emailRegistered($_POST['email'])) {
 			$this->error['warning'] = $this->_('error_email');
 		}
 

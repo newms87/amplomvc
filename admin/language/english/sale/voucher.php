@@ -7,6 +7,7 @@ $_['text_send']			= 'Send';
 $_['text_success']		= 'Success: You have modified vouchers!';
 $_['text_sent']			= 'Success: Gift Voucher e-mail has been sent!';
 $_['text_wait']			= 'Please Wait!';
+$_['text_voucher_list']			= 'Voucher List';
 
 // Column
 $_['column_name']		= 'Voucher Name';
@@ -35,7 +36,7 @@ $_['entry_status']		= 'Status:';
 // Error
 $_['error_permission']  = 'Warning: You do not have permission to modify vouchers!';
 $_['error_exists']		= 'Warning: Voucher code is already in use!';
-$_['error_code']		= 'Code must be between 3 and 10 characters!';
+$_['error_code']		= 'Code must be between 3 and 32 characters!';
 $_['error_to_name']	= 'Recipient\'s Name must be between 1 and 64 characters!';
 $_['error_from_name']	= 'Your Name must be between 1 and 64 characters!';
 $_['error_email']		= 'E-Mail Address does not appear to be valid!';

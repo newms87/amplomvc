@@ -7,7 +7,7 @@ class Admin_Controller_Shipping_RoyalMail extends Controller
 	{
 		$this->template->load('shipping/royal_mail');
 
-		$this->load->language('shipping/royal_mail');
+		$this->language->load('shipping/royal_mail');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -373,8 +373,6 @@ class Admin_Controller_Shipping_RoyalMail extends Controller
 		
 		$this->data['geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

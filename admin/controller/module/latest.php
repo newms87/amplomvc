@@ -7,7 +7,7 @@ class Admin_Controller_Module_Latest extends Controller
 	{
 		$this->template->load('module/latest');
 
-		$this->load->language('module/latest');
+		$this->language->load('module/latest');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -51,8 +51,6 @@ class Admin_Controller_Module_Latest extends Controller
 				
 		$this->data['layouts'] = $this->Model_Design_Layout->getLayouts();
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

@@ -27,7 +27,8 @@ class Admin_Model_Localisation_Language extends Model
 		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "language WHERE language_id = '" . (int)$language_id . "'");
 	}
 
-	public function getLanguages($data = array(), $select = '*', $total = false) {
+	public function getLanguages($data = array(), $select = '*', $total = false)
+	{
 		if ($total) {
 			$select = "COUNT(*) as total";
 		} elseif(!$select) {
@@ -65,25 +66,6 @@ class Admin_Model_Localisation_Language extends Model
 		}
 		
 		return $result->rows;
-	}
-	
-	public function getLanguageList()
-	{
-		$languages = $this->cache->get('language.list');
-		
-		if (!$languages) {
-			$result = $this->query("SELECT language_id, name, code, image, sort_order FROM " . DB_PREFIX . "language WHERE status >= 0 ORDER BY sort_order");
-			
-			$languages = array();
-			
-			foreach ($result->rows as $row) {
-				$languages[$row['language_id']] = $row;
-			}
-			
-			$this->cache->set('language.list', $languages);
-		}
-		
-		return $languages;
 	}
 	
 	public function getTotalLanguages($data = array())

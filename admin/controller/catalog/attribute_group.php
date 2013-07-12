@@ -3,14 +3,14 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 {
   	public function index()
   	{
-		$this->load->language('catalog/attribute_group');
+		$this->language->load('catalog/attribute_group');
 		
 		$this->getList();
   	}
 				
   	public function insert()
 	{
-		$this->load->language('catalog/attribute_group');
+		$this->language->load('catalog/attribute_group');
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_AttributeGroup->addAttributeGroup($_POST);
@@ -27,7 +27,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 
 	public function update()
 	{
-		$this->load->language('catalog/attribute_group');
+		$this->language->load('catalog/attribute_group');
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_AttributeGroup->editAttributeGroup($_GET['attribute_group_id'], $_POST);
@@ -44,7 +44,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 
 	public function delete()
 	{
-		$this->load->language('catalog/attribute_group');
+		$this->language->load('catalog/attribute_group');
 		
 		if (!empty($_GET['attribute_group_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_AttributeGroup->deleteAttributeGroup($_GET['attribute_group_id']);
@@ -90,10 +90,13 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 	
 	private function getList()
 	{
+		//Page Title
 		$this->document->setTitle($this->_('heading_title'));
 		
+		//The Template
 		$this->template->load('catalog/attribute_group_list');
 
+		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/attribute_group'));
 		
@@ -121,24 +124,19 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 			'sortable' => true,
 		);
 		
-		//The Sort data
-		$sort_filter = $this->sort->getQueryDefaults('name', 'ASC');
-		
-		//Filter
-		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
-		
-		if ($filter_values) {
-			$sort_filter += $filter_values;
-		}
+		//Get Sorted / Filtered Data
+		$sort = $this->sort->getQueryDefaults('name', 'ASC');
+		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 		
 		//This triggers the attribute_count to be added to the query
 		if (!isset($sort_filter['attribute_count'])) {
 			$sort_filter['attribute_count'] = true;
 		}
 		
-		//Retrieve the Filtered Table row data
-		$attribute_group_total = $this->Model_Catalog_AttributeGroup->getTotalAttributeGroups($sort_filter);
-		$attribute_groups = $this->Model_Catalog_AttributeGroup->getAttributeGroups($sort_filter);
+		$attribute_group_total = $this->Model_Catalog_AttributeGroup->getTotalAttributeGroups($filter);
+		$attribute_groups = $this->Model_Catalog_AttributeGroup->getAttributeGroups($sort + $filter);
+		
+		$url_query = $this->url->getQueryExclude('attribute_group_id');
 		
 		foreach ($attribute_groups as &$attribute_group) {
 			$attribute_group['actions'] = array(
@@ -151,40 +149,36 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 					'href' => $this->url->link('catalog/attribute_group/delete', 'attribute_group_id=' . $attribute_group['attribute_group_id'])
 				)
 			);
-		}unset($attribute_group);
+		} unset($attribute_group);
 		
-		//The table template data
+		//Build The Table
 		$tt_data = array(
-			'row_id'		=> 'attribute_group_id',
-			'route'		=> 'catalog/attribute_group',
-			'columns'	=> $columns,
-			'data'		=> $attribute_groups,
+			'row_id'		=> 'attribute_id',
 		);
 		
-		//Build the table template
 		$this->table->init();
-		$this->table->set_template('table/list_view');
-		$this->table->set_template_data($tt_data);
-		$this->table->map_attribute('filter_value', $filter_values);
+		$this->table->setTemplate('table/list_view');
+		$this->table->setColumns($columns);
+		$this->table->setRows($attribute_groups);
+		$this->table->setTemplateData($tt_data);
+		$this->table->mapAttribute('filter_value', $filter);
 		
 		$this->data['list_view'] = $this->table->render();
 		
 		//Batch Actions
 		$this->data['batch_actions'] = array(
 			'delete' => array(
-				'label' => "Delete",
+				'label' => $this->_('text_delete'),
 			),
 		);
 		
-		$url_query = $this->url->getQuery('filter', 'sort', 'order', 'page');
-		
 		$this->data['batch_update'] = html_entity_decode($this->url->link('catalog/attribute_group/batch_update', $url_query));
+		
+		//Render Limit Menu
+		$this->data['limits'] = $this->sort->render_limit();
 		
 		//Action Buttons
 		$this->data['insert'] = $this->url->link('catalog/attribute_group/insert');
-		
-		//Item Limit Menu
-		$this->data['limits'] = $this->sort->render_limit();
 		
 		//Pagination
 		$this->pagination->init();
@@ -192,13 +186,13 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		
 		$this->data['pagination'] = $this->pagination->render();
 		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
-				
+		
+		//Render
 		$this->response->setOutput($this->render());
 	}
   	
@@ -268,8 +262,6 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		foreach ($this->data['attributes'] as &$attribute) {
 			$attribute['translations'] = $this->translation->get_translations('attribute', $attribute['attribute_id'], $translate_fields);
 		};
-		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

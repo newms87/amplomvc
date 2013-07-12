@@ -93,7 +93,7 @@ abstract class Controller
 			$this->data[basename($child)] = $this->getChild($child);
 		}
 		
-		$this->template->set_data($this->data);
+		$this->template->setData($this->data);
 		
 		$this->output = $this->template->render();
 		

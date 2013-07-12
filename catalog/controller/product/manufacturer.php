@@ -35,8 +35,6 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 		
 		$this->data['continue'] = $this->url->link('common/home');
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
@@ -290,8 +288,6 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 			
 			$this->data['continue'] = $this->url->link('common/home');
 
-			$this->data['breadcrumbs'] = $this->breadcrumb->render();
-			
 			$this->children = array(
 				'common/column_left',
 				'common/column_right',
@@ -334,8 +330,6 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 			$this->language->set('heading_title', $this->_('text_error'));
 
 			$this->data['continue'] = $this->url->link('common/home');
-			
-			$this->data['breadcrumbs'] = $this->breadcrumb->render();
 			
 			$this->children = array(
 				'common/column_left',

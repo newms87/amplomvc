@@ -5,7 +5,7 @@ class Admin_Controller_Report_CustomerCredit extends Controller
 	{
 		$this->template->load('report/customer_credit');
 
-		$this->load->language('report/customer_credit');
+		$this->language->load('report/customer_credit');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -92,8 +92,6 @@ class Admin_Controller_Report_CustomerCredit extends Controller
 		$this->data['filter_date_start'] = $filter_date_start;
 		$this->data['filter_date_end'] = $filter_date_end;
 				
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

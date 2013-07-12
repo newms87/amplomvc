@@ -7,7 +7,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 	public function index()
 	{
 		
-		$this->load->language('checkout/manual');
+		$this->language->load('checkout/manual');
 		
 		$json = array();
 		
@@ -34,7 +34,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 			
 			// Customer
 			if ($_POST['customer_id']) {
-				$customer_info = $this->Model_Account_Customer->getCustomer($_POST['customer_id']);
+				$customer_info = $this->System_Model_Customer->getCustomer($_POST['customer_id']);
 
 				if ($customer_info) {
 					$this->customer->login($customer_info['email'], '', true);

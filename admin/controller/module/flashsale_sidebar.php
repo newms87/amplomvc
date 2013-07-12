@@ -7,7 +7,7 @@ class Admin_Controller_Module_FlashsaleSidebar extends Controller
 	{
 		$this->template->load('module/flashsale_sidebar');
 
-		$this->load->language('module/flashsale_sidebar');
+		$this->language->load('module/flashsale_sidebar');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -40,8 +40,6 @@ class Admin_Controller_Module_FlashsaleSidebar extends Controller
 			'column_left'=>$this->_('text_column_left'),
 			'column_right'=>$this->_('text_column_right')
 			);
-		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

@@ -1,6 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $breadcrumbs; ?>
+	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'order.png'; ?>" alt="" /> <?= $heading_title; ?></h1>

@@ -138,14 +138,14 @@ class Catalog_Model_Widget_Janrain extends Model{
 	}
 	public function getCustomer($customer_id)
 	{
-		$query = $this->query("SELECT DISTINCT * FROM ".DB_PREFIX."customer WHERE customer_id='".(int)$customer_id."' LIMIT 1");
+		$query = $this->query("SELECT * FROM ".DB_PREFIX."customer WHERE customer_id='".(int)$customer_id."' LIMIT 1");
 	
 		return $query->row;
 	}
 	
 	public function getCustomerByEmail($customer_email)
 	{
-		$query = $this->query("SELECT DISTINCT * FROM ".DB_PREFIX."customer WHERE email='".$customer_email."' LIMIT 1");
+		$query = $this->query("SELECT * FROM ".DB_PREFIX."customer WHERE email='".$customer_email."' LIMIT 1");
 	
 		return $query->row;
 	}

@@ -3,7 +3,7 @@ class Admin_Controller_Setting_Store extends Controller
 {
 	public function index()
 	{
-		$this->load->language('setting/store');
+		$this->language->load('setting/store');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -12,7 +12,7 @@ class Admin_Controller_Setting_Store extends Controller
 			
   	public function insert()
   	{
-		$this->load->language('setting/store');
+		$this->language->load('setting/store');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -32,7 +32,7 @@ class Admin_Controller_Setting_Store extends Controller
 
   	public function update()
   	{
-		$this->load->language('setting/store');
+		$this->language->load('setting/store');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -52,7 +52,7 @@ class Admin_Controller_Setting_Store extends Controller
 
   	public function delete()
   	{
-		$this->load->language('setting/store');
+		$this->language->load('setting/store');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -116,8 +116,6 @@ class Admin_Controller_Setting_Store extends Controller
 		}
 		
 		$this->data['data_stores'] = $stores;
-		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',
@@ -248,8 +246,6 @@ class Admin_Controller_Setting_Store extends Controller
 		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
 		
 		$this->data['load_theme_img'] = $this->url->link('setting/setting/theme');
-		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

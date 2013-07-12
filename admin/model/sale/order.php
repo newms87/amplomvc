@@ -616,11 +616,8 @@ class Admin_Model_Sale_Order extends Model
 		}
 
 		if ($data['notify']) {
-			//USE: $this->language->fetch(filename, directory);
-			
-			$language = new Language($this->registry, $order_info['language_directory']);
-			$language->load($order_info['language_filename']);
-			$language->load('mail/order');
+			$_l = $this->language->newInstance($order_info['language_id']);
+			$_l->load('mail/order');
 
 			$subject = sprintf($language->get('text_subject'), $order_info['store_name'], $order_id);
 

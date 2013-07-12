@@ -1,6 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $breadcrumbs; ?>
+	<?= $this->breadcrumb->render(); ?>
 	<? if ($error_warning) { ?>
 	<div class="message_box warning"><?= $error_warning; ?></div>
 	<? } ?>

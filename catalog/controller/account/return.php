@@ -39,8 +39,6 @@ class Catalog_Controller_Account_Return extends Controller
 
 		$this->data['continue'] = $this->url->link('account/account');
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
@@ -55,7 +53,7 @@ class Catalog_Controller_Account_Return extends Controller
 	
 	public function info()
 	{
-		$this->load->language('account/return');
+		$this->language->load('account/return');
 		
 		if (!$this->customer->isLogged()) {
 			$query = array(
@@ -103,8 +101,6 @@ class Catalog_Controller_Account_Return extends Controller
 		
 			$this->data['continue'] = $this->url->link('account/return', $url_query);
 
-			$this->data['breadcrumbs'] = $this->breadcrumb->render();
-
 			$this->children = array(
 				'common/column_left',
 				'common/column_right',
@@ -121,8 +117,6 @@ class Catalog_Controller_Account_Return extends Controller
 			$this->language->set('heading_title', $this->_('text_return'));
 			
 			$this->data['continue'] = $this->url->link('account/return');
-
-			$this->data['breadcrumbs'] = $this->breadcrumb->render();
 
 			$this->children = array(
 				'common/column_left',
@@ -161,7 +155,7 @@ class Catalog_Controller_Account_Return extends Controller
 				$this->mail->init();
 				
 				$this->mail->setTo($return_data['email']);
-				$this->mail->setCopyTo($this->config->get('config_email'));
+				$this->mail->setCc($this->config->get('config_email'));
 				$this->mail->setFrom($this->config->get('config_email'));
 				$this->mail->setSender($this->config->get('config_name'));
 				$this->mail->setSubject(html_entity_decode($this->_('text_mail_subject'), ENT_QUOTES, 'UTF-8'));
@@ -196,7 +190,7 @@ class Catalog_Controller_Account_Return extends Controller
 		if ($order_lookup) {
 			//If order does not belong to this customer, lookup the order info
 			if (!empty($customer_orders) && !in_array($order_id, array_column($customer_orders, 'order_id'))) {
-				$order_info = $this->Model_Account_Order->getOrder($order_id, false);
+				$order_info = $this->order->get($order_id, false);
 				
 				//If the lookup email does not match the order email, customer may not view this order
 				if (empty($_GET['email']) || $_GET['email'] !== $order_info['email']) {
@@ -292,8 +286,6 @@ class Catalog_Controller_Account_Return extends Controller
 			$this->message->add('warning', $this->_('error_customer_logged')); 
 		}
 		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
@@ -364,8 +356,6 @@ class Catalog_Controller_Account_Return extends Controller
 		$this->data['returns'] = $returns;
 		
 		$this->data['continue'] = $this->url->link('common/home');
-
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 
 		$this->children = array(
 			'common/column_left',

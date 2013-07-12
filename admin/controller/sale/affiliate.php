@@ -5,7 +5,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
   
   	public function index()
   	{
-		$this->load->language('sale/affiliate');
+		$this->language->load('sale/affiliate');
 		
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -14,7 +14,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
   
   	public function insert()
   	{
-		$this->load->language('sale/affiliate');
+		$this->language->load('sale/affiliate');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -65,7 +65,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
 	
   	public function update()
   	{
-		$this->load->language('sale/affiliate');
+		$this->language->load('sale/affiliate');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -116,7 +116,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
 
   	public function delete()
   	{
-		$this->load->language('sale/affiliate');
+		$this->language->load('sale/affiliate');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -169,7 +169,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
 		
 	public function approve()
 	{
-		$this->load->language('sale/affiliate');
+		$this->language->load('sale/affiliate');
 		
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -457,8 +457,6 @@ class Admin_Controller_Sale_Affiliate extends Controller
 		$this->data['sort'] = $sort;
 		$this->data['order'] = $order;
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -810,8 +808,6 @@ class Admin_Controller_Sale_Affiliate extends Controller
 			$this->data['confirm'] = '';
 		}
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

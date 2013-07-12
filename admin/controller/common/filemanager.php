@@ -31,7 +31,7 @@ class Admin_Controller_Common_Filemanager extends Controller
 	{
 		$this->template->load('common/ckeditor');
 
-		$this->load->language('common/filemanager');
+		$this->language->load('common/filemanager');
 		
 		$this->language->set('title', $this->_('heading_title'));
 		
@@ -170,7 +170,7 @@ class Admin_Controller_Common_Filemanager extends Controller
 	
 	public function create()
 	{
-		$this->load->language('common/filemanager');
+		$this->language->load('common/filemanager');
 				
 		$json = array();
 		
@@ -212,7 +212,7 @@ class Admin_Controller_Common_Filemanager extends Controller
 	
 	public function delete()
 	{
-		$this->load->language('common/filemanager');
+		$this->language->load('common/filemanager');
 		
 		$json = array();
 		
@@ -276,7 +276,7 @@ class Admin_Controller_Common_Filemanager extends Controller
 
 	public function move()
 	{
-		$this->load->language('common/filemanager');
+		$this->language->load('common/filemanager');
 		
 		$json = array();
 		
@@ -319,7 +319,7 @@ class Admin_Controller_Common_Filemanager extends Controller
 	
 	public function copy()
 	{
-		$this->load->language('common/filemanager');
+		$this->language->load('common/filemanager');
 		
 		$json = array();
 		
@@ -407,7 +407,7 @@ class Admin_Controller_Common_Filemanager extends Controller
 	
 	public function rename()
 	{
-		$this->load->language('common/filemanager');
+		$this->language->load('common/filemanager');
 		
 		$json = array();
 		
@@ -450,7 +450,7 @@ class Admin_Controller_Common_Filemanager extends Controller
 	
 	public function upload()
 	{
-		$this->load->language('common/filemanager');
+		$this->language->load('common/filemanager');
 		
 		$json = array();
 		

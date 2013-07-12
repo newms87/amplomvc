@@ -20,7 +20,7 @@ class Admin_Controller_Dev_Dev extends Controller
 	{
 		$this->template->load('dev/sync');
 
-		$this->load->language('dev/dev');
+		$this->language->load('dev/dev');
 		
 		$this->document->setTitle($this->_('text_sync'));
 		
@@ -73,7 +73,7 @@ class Admin_Controller_Dev_Dev extends Controller
 	{
 		$this->template->load('dev/site_management');
 		
-		$this->load->language('dev/dev');
+		$this->language->load('dev/dev');
 		
 		$this->document->setTitle($this->_('text_site_management'));
 		
@@ -123,7 +123,7 @@ class Admin_Controller_Dev_Dev extends Controller
 	{
 		$this->template->load('dev/backup_restore');
 		
-		$this->load->language('dev/dev');
+		$this->language->load('dev/dev');
 		
 		$this->document->setTitle($this->_('text_backup_restore'));
 		
@@ -189,8 +189,6 @@ class Admin_Controller_Dev_Dev extends Controller
 		
 		$this->data['return'] = $this->url->link('common/home');
 		
-		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

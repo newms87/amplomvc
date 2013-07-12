@@ -7,7 +7,7 @@ class Admin_Controller_Payment_SagepayUs extends Controller
 	{
 		$this->template->load('payment/sagepay_us');
 
-		$this->load->language('payment/sagepay_us');
+		$this->language->load('payment/sagepay_us');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -91,8 +91,6 @@ class Admin_Controller_Payment_SagepayUs extends Controller
 			$this->data['sagepay_us_sort_order'] = $this->config->get('sagepay_us_sort_order');
 		}
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

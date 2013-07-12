@@ -4,7 +4,7 @@ class Catalog_Model_Shipping_Amount extends Model
 	
 	public function getQuote($address)
 	{
-		$this->load->language('shipping/amount');
+		$this->language->load('shipping/amount');
 		
 		$valid_zone = $this->Model_Localisation_Zone->inGeoZone($this->config->get('amount_geo_zone_id'), $address['country_id'], $address['zone_id']);
 	

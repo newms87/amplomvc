@@ -7,7 +7,7 @@ class Admin_Controller_Payment_BankTransfer extends Controller
 	{
 		$this->template->load('payment/bank_transfer');
 
-		$this->load->language('payment/bank_transfer');
+		$this->language->load('payment/bank_transfer');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -88,8 +88,6 @@ class Admin_Controller_Payment_BankTransfer extends Controller
 		}
 		
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

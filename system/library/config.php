@@ -15,7 +15,7 @@ class Config extends Library
 		$this->load_site_config();
 		
 		//If we only have a store_id, get the store info	
-		$store = $this->load_store($store_id);
+		$store = $this->getStore($store_id);
 		
 		$this->store_id = $store['store_id'];
 		$this->data['config_store_id'] = $store['store_id'];
@@ -57,7 +57,7 @@ class Config extends Library
 		return defined("IS_ADMIN");
 	}
 	
-	private function load_store($store_id = null)
+	public function getStore($store_id = null)
 	{
 		if (is_null($store_id)) {
 			//TODO: How do we handle different domains for admin? Invalid domains makes DB sync difficult...

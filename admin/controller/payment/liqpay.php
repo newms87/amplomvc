@@ -7,7 +7,7 @@ class Admin_Controller_Payment_Liqpay extends Controller
 	{
 		$this->template->load('payment/liqpay');
 
-		$this->load->language('payment/liqpay');
+		$this->language->load('payment/liqpay');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -103,8 +103,6 @@ class Admin_Controller_Payment_Liqpay extends Controller
 			$this->data['liqpay_sort_order'] = $this->config->get('liqpay_sort_order');
 		}
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

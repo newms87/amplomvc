@@ -4,7 +4,7 @@ class Admin_Controller_Setting_ReturnStatus extends Controller
 	public function index()
 	{
 		$this->template->load('setting/return_status');
-		$this->load->language('setting/return_status');
+		$this->language->load('setting/return_status');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -78,8 +78,6 @@ class Admin_Controller_Setting_ReturnStatus extends Controller
 		} unset($return_status);
 
 		$this->data['return_statuses'] = $return_statuses;
-		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

@@ -5,7 +5,7 @@ class Admin_Controller_Catalog_Flashsale extends Controller
  
 	public function index()
 	{
-		$this->load->language('catalog/flashsale');
+		$this->language->load('catalog/flashsale');
 		$this->document->setTitle($this->_('heading_title'));
 		
 		$this->getList();
@@ -13,7 +13,7 @@ class Admin_Controller_Catalog_Flashsale extends Controller
 
 	public function insert()
 	{
-		$this->load->language('catalog/flashsale');
+		$this->language->load('catalog/flashsale');
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -29,7 +29,7 @@ class Admin_Controller_Catalog_Flashsale extends Controller
 
 	public function update()
 	{
-		$this->load->language('catalog/flashsale');
+		$this->language->load('catalog/flashsale');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -46,7 +46,7 @@ class Admin_Controller_Catalog_Flashsale extends Controller
 
 	public function delete()
 	{
-		$this->load->language('catalog/flashsale');
+		$this->language->load('catalog/flashsale');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -64,7 +64,7 @@ class Admin_Controller_Catalog_Flashsale extends Controller
 	}
 	public function list_update()
 	{
-		$this->load->language('catalog/flashsale');
+		$this->language->load('catalog/flashsale');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -214,8 +214,6 @@ class Admin_Controller_Catalog_Flashsale extends Controller
 		$this->data['sort'] = $sort;
 		$this->data['order'] = strtolower($order);
 		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -308,8 +306,6 @@ class Admin_Controller_Catalog_Flashsale extends Controller
 				$this->data[$d] = $value;
 			}
 		}
-		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

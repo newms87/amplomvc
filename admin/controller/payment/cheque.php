@@ -7,7 +7,7 @@ class Admin_Controller_Payment_Cheque extends Controller
 	{
 		$this->template->load('payment/cheque');
 
-		$this->load->language('payment/cheque');
+		$this->language->load('payment/cheque');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -79,8 +79,6 @@ class Admin_Controller_Payment_Cheque extends Controller
 			$this->data['cheque_sort_order'] = $this->config->get('cheque_sort_order');
 		}
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

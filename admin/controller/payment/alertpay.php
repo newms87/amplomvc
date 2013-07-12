@@ -7,7 +7,7 @@ class Admin_Controller_Payment_Alertpay extends Controller
 	{
 		$this->template->load('payment/alertpay');
 
-		$this->load->language('payment/alertpay');
+		$this->language->load('payment/alertpay');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -93,8 +93,6 @@ class Admin_Controller_Payment_Alertpay extends Controller
 			$this->data['alertpay_sort_order'] = $this->config->get('alertpay_sort_order');
 		}
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

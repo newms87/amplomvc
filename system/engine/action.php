@@ -5,27 +5,28 @@ final class Action
 	private $file;
 	private $route;
 	private $class;
-	private $class_path;
+	private $classpath;
 	private $method;
 	private $parameters = array();
 	private $output;
 
-	public function __construct($registry, $route, $parameters = array())
+	public function __construct($registry, $route, $parameters = array(), $classpath = '')
 	{
 		$this->registry = $registry;
-		$this->route = $route;
-		$this->class_path = ($this->config->isAdmin() ? "admin/" : "catalog/") . "controller/";
 		$this->file = null;
-		$this->class = ($this->config->isAdmin() ? "Admin_" : "Catalog_") . "Controller_";
-		$this->method = 'index'; 
+		$this->route = $route;
+		$this->parameters = $parameters;
+		$this->method = 'index';
 		
-		if (!empty($parameters)) {
-			$this->parameters = $parameters;
+		if (!$classpath) {
+			$this->classpath = ($this->config->isAdmin() ? "admin/" : "catalog/") . "controller/";
+		} else {
+			$this->classpath = rtrim($classpath,'/') . '/';
 		}
 		
-		$parts = explode('/', str_replace('../', '', (string)$route));
+		$parts = explode('/', str_replace('../', '', $this->classpath . $route));
 		
-		$path = $this->class_path;
+		$path = '';
 		
 		foreach ($parts as $part) {
 			$path .= $part;
@@ -33,7 +34,6 @@ final class Action
 			//Scan directories until we find file requested
 			if (is_dir(SITE_DIR . $path)) {
 				$path .= '/';
-				$this->class_path .= $part . '/';
 				$this->class .= $this->tool->format_classname($part) . '_';
 			}
 			elseif (is_file(SITE_DIR . $path . '.php')) {
@@ -41,9 +41,14 @@ final class Action
 				
 				$this->class .= $this->tool->format_classname($part);
 			}
-			else {
+			elseif ($this->file) {
 				$this->method = $part;
+				$this->classpath = str_replace('/'.$part, '', $this->classpath);
 				break;
+			}
+			else {
+				trigger_error("Unable to find Class file " . SITE_DIR . $this->classpath . $route . '.php!' . get_caller() . get_caller(1));
+				return false;
 			}
 		}
 	}
@@ -65,7 +70,7 @@ final class Action
 	
 	public function getClassPath()
 	{
-		return $this->class_path;
+		return $this->classpath;
 	}
 	
 	public function getMethod()

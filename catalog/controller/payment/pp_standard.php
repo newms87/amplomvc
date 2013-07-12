@@ -122,6 +122,7 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 			
 			$response = curl_exec($curl);
 			
+			
 			if (!$response) {
 				$this->error_log->write('PP_STANDARD :: CURL failed ' . curl_error($curl) . '(' . curl_errno($curl) . ')');
 			}
@@ -130,10 +131,12 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 				$this->error_log->write('PP_STANDARD :: IPN REQUEST: ' . $request);
 				$this->error_log->write('PP_STANDARD :: IPN RESPONSE: ' . $response);
 			}
-						
+			
+			curl_close($curl);
+			
+			$order_status_id = $this->config->get('config_order_status_id');
+					
 			if ((strcmp($response, 'VERIFIED') == 0 || strcmp($response, 'UNVERIFIED') == 0) && isset($_POST['payment_status'])) {
-				$order_status_id = $this->config->get('config_order_status_id');
-				
 				switch($_POST['payment_status']) {
 					case 'Canceled_Reversal':
 						$order_status_id = $this->config->get('pp_standard_canceled_reversal_status_id');
@@ -168,17 +171,9 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 						$order_status_id = $this->config->get('pp_standard_voided_status_id');
 						break;
 				}
-				
-				if (!$order_info['order_status_id']) {
-					$this->Model_Checkout_Order->confirm($order_id, $order_status_id);
-				} else {
-					$this->Model_Checkout_Order->update_order($order_id, $order_status_id);
-				}
-			} else {
-				$this->Model_Checkout_Order->confirm($order_id, $this->config->get('config_order_status_id'));
 			}
 			
-			curl_close($curl);
+			$this->order->update($order_id, $order_status_id);
 			
 			return true;
 		}
@@ -196,7 +191,7 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 			$order_id = $this->encryption->decrypt($_POST['custom']);
 			
 			if ($order_id) {
-				$order = $this->cart->getOrder($order_id);
+				$order = $this->order->get($order_id);
 			}
 			
 			if (!$order) {

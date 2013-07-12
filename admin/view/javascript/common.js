@@ -1,25 +1,3 @@
-String.prototype.replaceAll = function(token, newToken, ignoreCase) {
-    var str, i = -1, _token;
-    if((str = this.toString()) && typeof token === "string") {
-        _token = ignoreCase === true? token.toLowerCase() : undefined;
-        while((i = (
-            _token !== undefined?
-                str.toLowerCase().indexOf(
-                            _token,
-                            i >= 0? i + newToken.length : 0
-                ) : str.indexOf(
-                            token,
-                            i >= 0? i + newToken.length : 0
-                )
-        )) !== -1 ) {
-            str = str.substring(0, i)
-                    .concat(newToken)
-                    .concat(str.substring(i + token.length));
-        }
-    }
-return str;
-};
-
 function getQuerystring(key, defaultValue) {
 	if(defaultValue == null) defaultValue = "";
 	key = key.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
@@ -70,22 +48,40 @@ $(document).ready(function(){
     
     //toggle active state for drop down menus
 	$('.link_list li').mouseover(function(){
-		if(!$(this).hasClass('active')){
-			$(this).closest('.top_menu').find('.active').removeClass('active');
-			$(this).addClass('active').parents('.link_list li').addClass('active');
+		if(!$(this).hasClass('hover')){
+			$(this).closest('.top_menu').find('.hover').removeClass('hover');
+			$(this).addClass('hover').parents('.link_list li').addClass('hover');
 		}
 	});
 
 });
 
 function show_msg(type, html){
-	$('.messagebox').remove();
-
-	$('#content').prepend('<div class="message_box ' + type + '" style="display: none;">' + html + '<span class="close"></span></div>');
-	$('.message_box.'+type).fadeIn('slow');
-	$('.message_box .close').click(function(){$(this).parent().remove();});
+	if ($('#content .' + type).length) {
+		$('#content .' + type).append('<br />' + html);
+	} else {
+		$('#content').prepend('<div class="message_box ' + type + '" style="display: none;">' + html + '<span class="close"></span></div>');
+		$('.message_box.'+type).fadeIn('slow');
+		$('.message_box .close').click(function(){$(this).parent().remove();});
+	}
 }
 
+function show_msgs(data){
+	for (var m in data) {
+		if (typeof data[m] == 'object') {
+			msg = '';
+			
+			for (var m2 in data[m]) {
+				msg += (msg ? '<br />' : '') + data[m][m2]; 
+			}
+			
+			show_msg(m + ' ' + m2, msg, true);
+		}
+		else{
+			show_msg(m, data[m], true);
+		}
+	}
+}
 
 if(!console){
 	console = {};

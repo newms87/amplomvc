@@ -5,7 +5,7 @@ class Admin_Controller_Report_ProductPurchased extends Controller
 	{
 		$this->template->load('report/product_purchased');
 
-		$this->load->language('report/product_purchased');
+		$this->language->load('report/product_purchased');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -100,8 +100,6 @@ class Admin_Controller_Report_ProductPurchased extends Controller
 		$this->data['filter_date_start'] = $filter_date_start;
 		$this->data['filter_date_end'] = $filter_date_end;
 		$this->data['filter_order_status_id'] = $filter_order_status_id;
-		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

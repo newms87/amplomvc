@@ -4,7 +4,7 @@
 <div id="content" class="collection_list">
 	<?= $content_top; ?>
 	
-	<?= $breadcrumbs; ?>
+	<?= $this->breadcrumb->render(); ?>
 	<h1><?= $heading_title; ?></h1>
 	
 	<div class="header-info">

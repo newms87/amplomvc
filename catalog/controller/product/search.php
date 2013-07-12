@@ -408,8 +408,6 @@ class Catalog_Controller_Product_Search extends Controller
 		$this->data['order'] = $order;
 		$this->data['limit'] = $limit;
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',

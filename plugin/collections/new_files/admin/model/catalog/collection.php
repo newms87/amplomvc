@@ -260,9 +260,7 @@ class Admin_Model_Catalog_Collection extends Model
 	
 	public function getCollectionCategoryIds($collection_id)
 	{
-		$categories = $this->queryRows("SELECT category_id FROM " . DB_PREFIX . "collection_category WHERE collection_id = '" . (int)$collection_id . "'");
-		
-		return array_column($categories, 'category_id');
+		return $this->queryColumn("SELECT category_id FROM " . DB_PREFIX . "collection_category WHERE collection_id = '" . (int)$collection_id . "'");
 	}
 	
 	public function getCollectionStores($collection_id)
@@ -272,9 +270,7 @@ class Admin_Model_Catalog_Collection extends Model
 	
 	public function getCollectionStoreIds($collection_id)
 	{
-		$stores = $this->queryRows("SELECT store_id FROM " . DB_PREFIX . "collection_store WHERE collection_id = '" . (int)$collection_id . "'");
-		
-		return array_column($stores, 'store_id');
+		return $this->queryColumn("SELECT store_id FROM " . DB_PREFIX . "collection_store WHERE collection_id = '" . (int)$collection_id . "'");
 	}
 	
 	public function getTotalCollections($data = array()) {

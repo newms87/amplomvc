@@ -8,7 +8,7 @@ class Catalog_Controller_Module_Language extends Controller
 		
 		$this->data['action'] = $this->url->link($_GET['route'], $this->url->getQueryExclude('language_code') . '&language_code=');
 
-		$languages = $this->Model_Localisation_Language->getLanguages();
+		$languages = $this->language->getLanguages();
 		
 		foreach ($languages as &$language) {
 			$language['thumb'] = $this->image->resize(DIR_IMAGE . 'flags/' . $language['image'], 16, 11);

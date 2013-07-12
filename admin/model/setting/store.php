@@ -27,10 +27,9 @@ class Admin_Model_Setting_Store extends Model
 		$this->cache->delete('theme');
 	}
 	
-	
 	public function getStore($store_id)
 	{
-		return $this->queryRow("SELECT DISTINCT * FROM " . DB_PREFIX . "store WHERE store_id = '" . (int)$store_id . "'");
+		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE store_id = '" . (int)$store_id . "'");
 	}
 	
 	public function getStoreName($store_id)

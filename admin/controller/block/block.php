@@ -5,7 +5,7 @@ class Admin_Controller_Block_Block extends Controller
 	
 	public function index()
 	{
-		$this->load->language('block/block');
+		$this->language->load('block/block');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -57,19 +57,13 @@ class Admin_Controller_Block_Block extends Controller
 			'sortable' => true,
 		);
 		
-		//The Sort data
-		$sort_filter = $this->sort->getQueryDefaults('name', 'ASC');
-		
-		//Filter
-		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
-		
-		if ($filter_values) {
-			$sort_filter += $filter_values;
-		}
+		//The Sort & Filter Data
+		$sort = $this->sort->getQueryDefaults('name', 'ASC');
+		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 		
 		//Table Row Data
-		$block_total = $this->Model_Block_Block->getTotalBlocks($sort_filter);
-		$blocks = $this->Model_Block_Block->getBlocks($sort_filter);
+		$block_total = $this->Model_Block_Block->getTotalBlocks($filter);
+		$blocks = $this->Model_Block_Block->getBlocks($sort + $filter);
 		
 		foreach ($blocks as &$block) {
 			$actions = array(
@@ -82,26 +76,24 @@ class Admin_Controller_Block_Block extends Controller
 			$block['actions'] = $actions;
 		}
 		
-		//The table template data
+		//Build The Table
 		$tt_data = array(
 			'row_id'		=> 'name',
-			'route'		=> 'block/block',
-			'columns'	=> $columns,
-			'data'		=> $blocks,
 		);
 		
-		//Build the table template
 		$this->table->init();
-		$this->table->set_template('table/list_view');
-		$this->table->set_template_data($tt_data);
-		$this->table->map_attribute('filter_value', $filter_values);
+		$this->table->setTemplate('table/list_view');
+		$this->table->setColumns($columns);
+		$this->table->setRows($blocks);
+		$this->table->setTemplateData($tt_data);
+		$this->table->mapAttribute('filter_value', $filter);
 		
 		$this->data['list_view'] = $this->table->render();
 		
 		//Action Buttons
 		$this->data['insert'] = $this->url->link('block/add');
 		
-		//Item Limit Menu
+		//Render limit Menu
 		$this->data['limits'] = $this->sort->render_limit();
 		
 		//Pagination
@@ -110,9 +102,7 @@ class Admin_Controller_Block_Block extends Controller
 		
 		$this->data['pagination'] = $this->pagination->render();
 		
-		//Template Children
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -186,8 +176,6 @@ class Admin_Controller_Block_Block extends Controller
 		$this->data['data_layouts'] = $this->Model_Design_Layout->getLayouts($sort_layout);
 		
 		$this->data['data_positions'] = array('' => $this->_('text_none')) + $this->theme->get_setting('data_positions');
-		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

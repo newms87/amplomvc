@@ -52,7 +52,7 @@ class Catalog_Model_Account_Address extends Model
 	
 	public function getAddress($address_id)
 	{
-		$address = $this->queryRow("SELECT DISTINCT * FROM " . DB_PREFIX . "address WHERE address_id = '" . (int)$address_id . "' AND customer_id = '" . (int)$this->customer->getId() . "' LIMIT 1");
+		$address = $this->queryRow("SELECT * FROM " . DB_PREFIX . "address WHERE address_id = '" . (int)$address_id . "' AND customer_id = '" . (int)$this->customer->getId() . "' LIMIT 1");
 		
 		if ($address) {
 			$this->get_address_localisation($address);

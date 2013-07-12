@@ -3,7 +3,7 @@
 
 <?= $column_left; ?><?= $column_right; ?>
 <div id="content"><?= $content_top; ?>
-	<?= $breadcrumbs; ?>
+	<?= $this->breadcrumb->render(); ?>
 	<h1><?= $heading_title; ?></h1>
 	<h2><?= $text_address_book; ?></h2>
 	<? foreach ($addresses as $result) { ?>

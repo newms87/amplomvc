@@ -15,7 +15,7 @@ class Catalog_Controller_Account_Order extends Controller
 		
 		$order_id = isset($_GET['order_id']) ? $_GET['order_id'] : false;
 		if ($order_id) {
-			$order_info = $this->Model_Account_Order->getOrder($order_id);
+			$order_info = $this->order->get($order_id);
 			
 			if ($order_info) {
 				$order_products = $this->Model_Account_Order->getOrderProducts($order_id);
@@ -81,8 +81,6 @@ class Catalog_Controller_Account_Order extends Controller
 
 		$this->data['continue'] = $this->url->link('account/account');
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
@@ -107,7 +105,7 @@ class Catalog_Controller_Account_Order extends Controller
 		
 		$order_id = isset($_GET['order_id']) ? $_GET['order_id'] : 0;
 		
-		$order_info = $this->Model_Account_Order->getOrder($order_id);
+		$order_info = $this->order->get($order_id);
 		
 		if ($order_info) {
 			$this->template->load('account/order_info');
@@ -147,7 +145,7 @@ class Catalog_Controller_Account_Order extends Controller
 				'country_id'=> $order_info['shipping_country_id'],
 			);
 
-			$this->data['shipping_address'] = $this->tool->formatAddress($shipping_address);
+			$this->data['shipping_address'] = $this->address->format($shipping_address);
 			
 			$payment_address = array(
 				'firstname' => $order_info['payment_firstname'],
@@ -163,7 +161,7 @@ class Catalog_Controller_Account_Order extends Controller
 				'country_id'=> $order_info['payment_country_id'],
 			);
 			
-			$this->data['payment_address'] = $this->tool->formatAddress($payment_address);
+			$this->data['payment_address'] = $this->address->format($payment_address);
 			
 			$this->data['shipping_method'] = $this->cart->getShippingMethodTitle($order_info['shipping_code'] . '__' . $order_info['shipping_method']);
 			$this->data['payment_method'] = $this->cart->getPaymentMethodTitle($order_info['payment_method']);
@@ -212,8 +210,6 @@ class Catalog_Controller_Account_Order extends Controller
 			
 			$this->data['continue'] = $this->url->link('account/order');
 
-			$this->data['breadcrumbs'] = $this->breadcrumb->render();
-
 			$this->children = array(
 				'common/column_left',
 				'common/column_right',
@@ -237,8 +233,6 @@ class Catalog_Controller_Account_Order extends Controller
 			$this->language->set('heading_title', $this->_('text_order'));
 															
 			$this->data['continue'] = $this->url->link('account/order');
-
-			$this->data['breadcrumbs'] = $this->breadcrumb->render();
 
 			$this->children = array(
 				'common/column_left',

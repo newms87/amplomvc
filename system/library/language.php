@@ -9,17 +9,21 @@ class Language extends Library
 	private $info;
 	private $latest_modified_file = 0;
 	private $last_loaded = '';
+	private $saved_data = null;
+	private $root = DIR_LANGUAGE;
 	
 	private $loaded_languages = array();
 	
 	public  $data = array();
  
-	public function __construct($registry, $language = null)
+	public function __construct($registry, $language_id = null, $set_active_language = true)
 	{
 		parent::__construct($registry);
 		
-		if (empty($language)) {
+		if (empty($language_id)) {
 			$language = $this->resolve();
+		} else {
+			$language = $this->getInfo($language_id);
 		}
 		
 		$this->language_id = $language['language_id'];
@@ -27,25 +31,54 @@ class Language extends Library
 		$this->info = $language;
 		$this->directory = $language['directory'];
 		
-		$session->data['language_code'] = $this->code;
-		
-		$this->session->set_cookie('language_code', $this->code, 60 * 60 * 24 * 30);
-		
-		$this->config->set('config_language_id', $this->language_id);
+		if ($set_active_language) {
+			$session->data['language_code'] = $this->code;
+			
+			//Set as default language for this user for 30 days
+			$this->session->set_cookie('language_code', $this->code, 60 * 60 * 24 * 30);
+			
+			$this->config->set('config_language_id', $this->language_id);
+		}
 		
 		$this->load($language['filename']);
 	}
 	
+	public function setRoot($root)
+	{
+		$this->root = $root;
+	}
+	
 	public function id()
-	{ return $this->language_id; }
+	{
+		return $this->language_id;
+	}
 	
 	public function code()
-	{ return $this->code; }
+	{
+		return $this->code;
+	}
 	
   	public function get($key, $return_value = null)
   	{
 		return (isset($this->data[$key]) ? $this->data[$key] : ($return_value === null ? $key : $return_value));
   	}
+	
+	public function getLanguages()
+	{
+		static $all_loaded = false;
+		
+		if (!$all_loaded) {
+			$languages = $this->System_Model_Language->getLanguages();
+			
+			foreach ($languages as $language) {
+				$this->loaded_languages[$language['language_id']] = $language;
+			}
+
+			$all_loaded = true;
+		}
+		
+		return $this->loaded_languages;
+	}
 	
 	public function set($key, $value)
 	{
@@ -89,10 +122,10 @@ class Language extends Library
 	{
 		if($this->last_loaded == $filename) return;
 		
-		$file = DIR_LANGUAGE . $this->directory . '/' . $filename . '.php';
+		$file = $this->root . $this->directory . '/' . $filename . '.php';
 		
 		if (!file_exists($file)) {
-			$file = DIR_LANGUAGE . $this->default . '/' . $filename . '.php';
+			$file = $this->root . $this->default . '/' . $filename . '.php';
 			
 			if (!file_exists($file)) {
 				trigger_error('Error: Could not load language ' . $filename . '!');
@@ -111,14 +144,47 @@ class Language extends Library
 		return $this->data;
   	}
 	
+	public function loadTemporary($filename, $language_id = null)
+	{
+		if ($language_id && $language_id !== $this->language_id) {
+			$directory = $this->getInfo('directory', $language_id);
+		} else {
+			$directory = $this->directory;
+		}
+		
+		$file = $this->root . $directory . '/' . $filename . '.php';
+		
+		if (!file_exists($file)) {
+			$file = $this->root . $this->default . '/' . $filename . '.php';
+			
+			if (!file_exists($file)) {
+				trigger_error('Error: Could not load language ' . $filename . '!');
+				exit();
+			}
+		}
+		
+		$_ = _require($file, false);
+		
+		$this->saved_data = $this->data;
+		
+		$this->data = $_ + $this->data;
+		
+		return $this->data;
+  	}
+	
+	public function unloadTemporary()
+	{
+		$this->data = $this->saved_data;
+	}
+	
 	public function fetch($filename, $directory = '')
 	{
 		$directory = !empty($directory) ? $directory : $this->directory;
 		
-		$file = DIR_LANGUAGE . $directory . '/' . $filename . '.php';
+		$file = $this->root . $directory . '/' . $filename . '.php';
 		
 		if (!file_exists($file)) {
-			$file = DIR_LANGUAGE . $this->default . '/' . $filename . '.php';
+			$file = $this->root . $this->default . '/' . $filename . '.php';
 			
 			if (!file_exists($file)) {
 				trigger_error("Could not fetch language $filename in $directory! " . get_caller());
@@ -130,6 +196,7 @@ class Language extends Library
 		
 		return $_;
 	}
+	
 	
 	public function set_orig($key,$value)
 	{
@@ -278,6 +345,10 @@ class Language extends Library
 				}
 				
 				$this->cache->set('language.locales', $languages);
+			}
+			
+			foreach ($languages as $language) {
+				$this->loaded_languages[$language['language_id']] = $language;
 			}
 			
 			$browser_languages = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);

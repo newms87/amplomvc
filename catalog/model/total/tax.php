@@ -11,7 +11,6 @@ class Catalog_Model_Total_Tax extends Model
 				$total_data[] = array(
 					'code'		=> 'tax',
 					'title'		=> $tax_info['name'] . ($tax_info['type'] == 'P' ? ' @ ' . $tax_info['rate'] . '%' : ''),
-					'text'		=> $this->currency->format($value),
 					'value'		=> $value,
 					'sort_order' => $this->config->get('tax_sort_order')
 				);

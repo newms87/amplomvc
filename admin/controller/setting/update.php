@@ -63,8 +63,6 @@ class Admin_Controller_Setting_Update extends Controller
 
 		$this->data['data_versions'] = $versions;
 		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

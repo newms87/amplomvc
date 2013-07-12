@@ -132,7 +132,7 @@ class Admin_Model_Catalog_Manufacturer extends Model
 	
 	public function getManufacturer($manufacturer_id)
 	{
-		return $this->queryRow("SELECT DISTINCT * FROM " . DB_PREFIX . "manufacturer WHERE manufacturer_id = '" . (int)$manufacturer_id . "'");
+		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "manufacturer WHERE manufacturer_id = '" . (int)$manufacturer_id . "'");
 	}
 	
 	public function getManufacturers($data = array(), $select = '*', $total = false) {

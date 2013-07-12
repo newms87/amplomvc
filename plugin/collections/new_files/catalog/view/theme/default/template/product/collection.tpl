@@ -2,7 +2,7 @@
 <div id="content" class="collections">
 	<?= $content_top; ?>
 	
-	<?= $breadcrumbs; ?>
+	<?= $this->breadcrumb->render(); ?>
 	
 	<h1><?= $heading_title; ?></h1>
 	

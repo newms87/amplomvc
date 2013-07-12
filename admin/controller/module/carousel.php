@@ -7,7 +7,7 @@ class Admin_Controller_Module_Carousel extends Controller
 	{
 		$this->template->load('module/carousel');
 
-		$this->load->language('module/carousel');
+		$this->language->load('module/carousel');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -51,8 +51,6 @@ class Admin_Controller_Module_Carousel extends Controller
 		
 		$this->data['banners'] = $this->Model_Design_Banner->getBanners();
 						
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

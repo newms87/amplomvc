@@ -7,7 +7,7 @@ class Admin_Controller_Module_Account extends Controller
 	{
 		$this->template->load('module/account');
 
-		$this->load->language('module/account');
+		$this->language->load('module/account');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -43,8 +43,6 @@ class Admin_Controller_Module_Account extends Controller
 		
 		$this->data['layouts'] = $this->Model_Design_Layout->getLayouts();
 						
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

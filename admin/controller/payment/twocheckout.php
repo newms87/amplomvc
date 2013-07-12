@@ -7,7 +7,7 @@ class Admin_Controller_Payment_Twocheckout extends Controller
 	{
 		$this->template->load('payment/twocheckout');
 
-		$this->load->language('payment/twocheckout');
+		$this->language->load('payment/twocheckout');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -97,8 +97,6 @@ class Admin_Controller_Payment_Twocheckout extends Controller
 			$this->data['twocheckout_sort_order'] = $this->config->get('twocheckout_sort_order');
 		}
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

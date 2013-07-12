@@ -549,7 +549,7 @@ class Admin_Model_Catalog_Product extends Model
 	
 	public function getProduct($product_id)
 	{
-		$product = $this->queryRow("SELECT DISTINCT * FROM " . DB_PREFIX . "product p WHERE p.product_id = '" . (int)$product_id . "'");
+		$product = $this->queryRow("SELECT * FROM " . DB_PREFIX . "product p WHERE p.product_id = '" . (int)$product_id . "'");
 		
 		if ($product) {
 			$url_alias = $this->Model_Setting_UrlAlias->getUrlAliasByRouteQuery('product/product', "product_id=" . (int)$product_id);
@@ -735,6 +735,21 @@ class Admin_Model_Catalog_Product extends Model
 		return $result->rows;
 	}
 	
+	public function getProductTranslations($product_id)
+	{
+		$translate_fields = array(
+			'name',
+			'teaser',
+			'description',
+			'information',
+			'meta_description',
+			'meta_keywords',
+			'shipping_return',
+		);
+		
+		return $this->translation->get_translations('product', $product_id, $translate_fields);
+	}
+		
 	public function isEditable($product_id)
 	{
 		return (int)$this->queryVar("SELECT editable FROM " . DB_PREFIX . "product WHERE product_id='$product_id'");

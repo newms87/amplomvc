@@ -7,7 +7,7 @@ class Admin_Controller_Total_Shipping extends Controller
 	{
 		$this->template->load('total/shipping');
 
-		$this->load->language('total/shipping');
+		$this->language->load('total/shipping');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -51,8 +51,6 @@ class Admin_Controller_Total_Shipping extends Controller
 			$this->data['shipping_sort_order'] = $this->config->get('shipping_sort_order');
 		}
 																		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

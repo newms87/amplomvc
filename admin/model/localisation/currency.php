@@ -28,14 +28,14 @@ class Admin_Model_Localisation_Currency extends Model
 
 	public function getCurrency($currency_id)
 	{
-		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "currency WHERE currency_id = '" . (int)$currency_id . "'");
+		$query = $this->query("SELECT * FROM " . DB_PREFIX . "currency WHERE currency_id = '" . (int)$currency_id . "'");
 	
 		return $query->row;
 	}
 	
 	public function getCurrencyByCode($currency)
 	{
-		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "currency WHERE code = '" . $this->db->escape($currency) . "'");
+		$query = $this->query("SELECT * FROM " . DB_PREFIX . "currency WHERE code = '" . $this->db->escape($currency) . "'");
 	
 		return $query->row;
 	}

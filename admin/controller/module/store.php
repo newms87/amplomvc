@@ -7,7 +7,7 @@ class Admin_Controller_Module_Store extends Controller
 	{
 		$this->template->load('module/store');
 
-		$this->load->language('module/store');
+		$this->language->load('module/store');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -49,8 +49,6 @@ class Admin_Controller_Module_Store extends Controller
 		
 		$this->data['layouts'] = $this->Model_Design_Layout->getLayouts();
 				
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

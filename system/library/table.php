@@ -2,7 +2,11 @@
 class Table extends Library
 {
 	private $file;
-	private $template_data;
+	private $template_data = array();
+	
+	private $columns;
+	private $rows;
+	
 	private $path;
 	
 	public function init()
@@ -10,17 +14,22 @@ class Table extends Library
 		$this->path = '';
 	}
 	
-	public function set_path($path)
+	public function setColumns($columns)
 	{
-		$this->path = $path;
+		$this->columns = $columns;
 	}
 	
-	public function set_template_data($template_data)
+	public function setRows($rows)
+	{
+		$this->rows = $rows;
+	}
+	
+	public function setTemplateData($template_data)
 	{
 		$this->template_data = $template_data;
 	}
 	
-	public function set_template($file)
+	public function setTemplate($file)
 	{
 		if (!preg_match("/\.tpl$/", $file)) {
 			$file .= '.tpl';
@@ -38,14 +47,14 @@ class Table extends Library
 		}
 	}
 	
-	public function map_attribute($attr, $values)
+	public function mapAttribute($attr, $values)
 	{
-		if (empty($this->template_data['columns'])) {
-			trigger_error("Error: You must set the table structure with Table::set_template_data() before mapping data!" . get_caller(3));
+		if (empty($this->columns)) {
+			trigger_error("Error: You must set the Columns (eg: \$this->table->setColumns(\$columns); ) before mapping data!" . get_caller());
 			exit();
 		}
 		
-		foreach ($this->template_data['columns'] as $slug => &$column) {
+		foreach ($this->columns as $slug => &$column) {
 			$column[$attr] = isset($values[$slug]) ? $values[$slug] : null;
 		}
 	}
@@ -56,6 +65,9 @@ class Table extends Library
 		
 		extract($this->template_data);
 		extract($this->language->data);
+		
+		$columns = $this->columns;
+		$rows = $this->rows;
 		
 		$file = $this->plugin->getFile($this->file);
 		
@@ -74,20 +86,15 @@ class Table extends Library
 			exit();
 		}
 		
-		if (!isset($this->template_data)) {
-			trigger_error("The table structure was not set! Please call Table::set_template_data(\$tt_data) before building! " . get_caller(3));
-			exit();
-		}
-		
 		//Add Sort data
 		$this->template_data += $this->sort->getSortData();
 		
 		if (empty($this->template_data['sort_url'])) {
-			$this->template_data['sort_url'] = $this->url->link($this->template_data['route'], $this->url->getQueryExclude('sort', 'order', 'page'));
+			$this->template_data['sort_url'] = $this->url->link($_GET['route'], $this->url->getQueryExclude('sort', 'order', 'page'));
 		}
 		
 		//Normalize Columns
-		foreach ($this->template_data['columns'] as $slug => &$column) {
+		foreach ($this->columns as $slug => &$column) {
 			
 			if (!isset($column['type'])) {
 				trigger_error("Invalid table column! The type was not set for $slug! " . get_caller(3));

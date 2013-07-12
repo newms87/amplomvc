@@ -168,8 +168,6 @@ class Catalog_Controller_Account_Address extends Controller
 		$this->data['insert'] = $this->url->link('account/address/insert');
 		$this->data['back'] = $this->url->link('account/account');
 		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
@@ -287,8 +285,6 @@ class Catalog_Controller_Account_Address extends Controller
 		}
 
 		$this->data['back'] = $this->url->link('account/address');
-		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/column_left',

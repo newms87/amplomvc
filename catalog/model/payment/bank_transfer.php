@@ -3,7 +3,7 @@ class Catalog_Model_Payment_BankTransfer extends Model
 {
   	public function getMethod($address, $total)
   	{
-		$this->load->language('payment/bank_transfer');
+		$this->language->load('payment/bank_transfer');
 		
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('bank_transfer_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
 		

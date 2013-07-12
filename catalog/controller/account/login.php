@@ -1,7 +1,6 @@
 <?php
 class Catalog_Controller_Account_Login extends Controller 
 {
-	
 	public function index()
 	{
 		$this->template->load('account/login');
@@ -10,7 +9,7 @@ class Catalog_Controller_Account_Login extends Controller
 		if (!empty($_COOKIE['customer_token'])) {
 			$this->customer->logout();
 			
-			$customer_info = $this->Model_Account_Customer->getCustomerByToken($_COOKIE['customer_token']);
+			$customer_info = $this->System_Model_Customer->getCustomerByToken($_COOKIE['customer_token']);
 			
 			if ($customer_info && $this->customer->login($customer_info['email'], '', true)) {
 				$this->url->redirect($this->url->link('account/account'));
@@ -50,8 +49,6 @@ class Catalog_Controller_Account_Login extends Controller
 		} else {
 			$this->data['redirect'] = '';
 		}
-
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 
 		$this->children = array(
 			'common/column_left',

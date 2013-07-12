@@ -4,7 +4,7 @@ class Admin_Controller_Dev_DbAdmin extends Controller
 	public function index()
 	{
 		$this->template->load('dev/db_admin');
-		$this->load->language('dev/dev');
+		$this->language->load('dev/dev');
 		
 		$this->document->setTitle($this->_('text_db_admin'));
 		
@@ -37,8 +37,6 @@ class Admin_Controller_Dev_DbAdmin extends Controller
 		}
 		
 		$this->data['data_tables'] = $this->db->getTables();
-		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

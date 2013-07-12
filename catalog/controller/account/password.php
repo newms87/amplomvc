@@ -18,11 +18,12 @@ class Catalog_Controller_Account_Password extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 			
 		if ($this->request->isPost() && $this->validate()) {
-			$this->Model_Account_Customer->editPassword($this->customer->info('email'), $_POST['password']);
- 
+			$this->customer->editPassword($this->customer->getId(), $_POST['password']);
+ 			
+			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
-	
-			$this->url->redirect($this->url->link('account/account'));
+				$this->url->redirect($this->url->link('account/account'));
+			}
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -56,8 +57,6 @@ class Catalog_Controller_Account_Password extends Controller
 		}
 
 		$this->data['back'] = $this->url->link('account/account');
-
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 
 		$this->children = array(
 			'common/column_left',

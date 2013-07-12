@@ -4,12 +4,11 @@ class Catalog_Model_Total_Handling extends Model
 	public function getTotal(&$total_data, &$total, &$taxes)
 	{
 		if (($this->cart->getSubTotal() < $this->config->get('handling_total')) && ($this->cart->getSubTotal() > 0)) {
-			$this->load->language('total/handling');
+			$this->language->load('total/handling');
 			
 			$total_data[] = array(
 				'code'		=> 'handling',
 				'title'		=> $this->_('text_handling'),
-				'text'		=> $this->currency->format($this->config->get('handling_fee')),
 				'value'		=> $this->config->get('handling_fee'),
 				'sort_order' => $this->config->get('handling_sort_order')
 			);

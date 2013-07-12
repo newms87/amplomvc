@@ -3,7 +3,7 @@ class Catalog_Model_Payment_PpStandard extends Model
 {
   	public function getMethod($address, $total)
   	{
-		$this->load->language('payment/pp_standard');
+		$this->language->load('payment/pp_standard');
 		
 		if ($this->config->get('pp_standard_total') > $total) {
 			return array();

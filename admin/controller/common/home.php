@@ -4,7 +4,7 @@ class Admin_Controller_Common_Home extends Controller
 	public function index()
 	{
 		$this->template->load('common/home');
-		$this->load->language('common/home');
+		$this->language->load('common/home');
 		
 		if ($this->user->isDesigner()) {
 			$this->document->setTitle($this->_('heading_title_restricted'));;
@@ -62,8 +62,6 @@ class Admin_Controller_Common_Home extends Controller
 			$this->Model_Localisation_Currency->updateCurrencies();
 		}
 		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -74,7 +72,7 @@ class Admin_Controller_Common_Home extends Controller
 	
 	public function chart()
 	{
-		$this->load->language('common/home');
+		$this->language->load('common/home');
 		
 		$data = array();
 		

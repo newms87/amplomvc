@@ -3,30 +3,24 @@ class Catalog_Model_Localisation_Country extends Model
 {
 	public function getCountry($country_id)
 	{
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "country WHERE country_id = '" . (int)$country_id . "' AND status = '1'");
-		
-		return $query->row;
+		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "country WHERE country_id = '" . (int)$country_id . "' AND status = '1'");
 	}
 	
 	public function getCountryName($country_id)
 	{
-		$query = $this->query("SELECT name FROM " . DB_PREFIX . "country WHERE country_id = '" . (int)$country_id . "' AND status = '1'");
-		
-		return $query->num_rows?$query->row['name']:'';
+		return $this->queryVar("SELECT name FROM " . DB_PREFIX . "country WHERE country_id = '" . (int)$country_id . "' AND status = '1'");
 	}
 	
 	public function getCountries()
 	{
-		$country_data = $this->cache->get('country.status');
+		$countries = $this->cache->get('country.status');
 		
-		if (!$country_data) {
-			$query = $this->query("SELECT * FROM " . DB_PREFIX . "country WHERE status = '1' ORDER BY name ASC");
-	
-			$country_data = $query->rows;
-		
-			$this->cache->set('country.status', $country_data);
+		if (!$countries) {
+			$countries = $this->queryRows("SELECT * FROM " . DB_PREFIX . "country WHERE status = '1' ORDER BY name ASC");
+			
+			$this->cache->set('country.status', $countries);
 		}
 
-		return $country_data;
+		return $countries;
 	}
 }

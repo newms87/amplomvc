@@ -56,8 +56,6 @@ class Catalog_Controller_Affiliate_Forgotten extends Controller
  
 		$this->data['back'] = $this->url->link('affiliate/login');
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',

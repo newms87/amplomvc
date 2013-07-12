@@ -5,7 +5,7 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
  
 	public function index()
 	{
-		$this->load->language('sale/customer_group');
+		$this->language->load('sale/customer_group');
  
 		$this->document->setTitle($this->_('heading_title'));
  		
@@ -14,7 +14,7 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 
 	public function insert()
 	{
-		$this->load->language('sale/customer_group');
+		$this->language->load('sale/customer_group');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -45,7 +45,7 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 
 	public function update()
 	{
-		$this->load->language('sale/customer_group');
+		$this->language->load('sale/customer_group');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -76,7 +76,7 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 
 	public function delete()
 	{
-		$this->load->language('sale/customer_group');
+		$this->language->load('sale/customer_group');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -223,8 +223,6 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 		$this->data['sort'] = $sort;
 		$this->data['order'] = $order;
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -286,8 +284,6 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 			$this->data['name'] = '';
 		}
 	
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

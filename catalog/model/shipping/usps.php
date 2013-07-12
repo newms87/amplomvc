@@ -3,7 +3,7 @@ class Catalog_Model_Shipping_Usps extends Model
 {
 	public function getQuote($address)
 	{
-		$this->load->language('shipping/usps');
+		$this->language->load('shipping/usps');
 
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('usps_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
 

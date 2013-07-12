@@ -4,7 +4,7 @@ class Admin_Controller_Setting_ReturnReason extends Controller
 	public function index()
 	{
 		$this->template->load('setting/return_reason');
-		$this->load->language('setting/return_reason');
+		$this->language->load('setting/return_reason');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -73,8 +73,6 @@ class Admin_Controller_Setting_ReturnReason extends Controller
 		} unset($return_reason);
 
 		$this->data['return_reasons'] = $return_reasons;
-		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

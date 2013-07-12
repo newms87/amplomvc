@@ -5,7 +5,7 @@ class Admin_Controller_Sale_Return extends Controller
 	
   	public function index()
   	{
-		$this->load->language('sale/return');
+		$this->language->load('sale/return');
 		
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -14,7 +14,7 @@ class Admin_Controller_Sale_Return extends Controller
   
   	public function insert()
   	{
-		$this->load->language('sale/return');
+		$this->language->load('sale/return');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -77,7 +77,7 @@ class Admin_Controller_Sale_Return extends Controller
 	
   	public function update()
   	{
-		$this->load->language('sale/return');
+		$this->language->load('sale/return');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -140,7 +140,7 @@ class Admin_Controller_Sale_Return extends Controller
 
   	public function delete()
   	{
-		$this->load->language('sale/return');
+		$this->language->load('sale/return');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -504,8 +504,6 @@ class Admin_Controller_Sale_Return extends Controller
 		$this->data['sort'] = $sort;
 		$this->data['order'] = $order;
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -769,8 +767,6 @@ class Admin_Controller_Sale_Return extends Controller
 		
 		$this->data['data_return_statuses'] = $this->config->load('product_return', 'return_statuses', 0);
 						
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -791,7 +787,7 @@ class Admin_Controller_Sale_Return extends Controller
 		
 		if ($return_info) {
 		$this->template->load('sale/return_info');
-			$this->load->language('sale/return');
+			$this->language->load('sale/return');
 		
 			$this->document->setTitle($this->_('heading_title'));
 			
@@ -901,8 +897,6 @@ class Admin_Controller_Sale_Return extends Controller
 			
 			$this->data['return_status_id'] = $return_info['return_status_id'];
 		
-			$this->data['breadcrumbs'] = $this->breadcrumb->render();
-			
 			$this->children = array(
 				'common/header',
 				'common/footer'
@@ -911,15 +905,13 @@ class Admin_Controller_Sale_Return extends Controller
 			$this->response->setOutput($this->render());
 		} else {
 		$this->template->load('error/not_found');
-			$this->load->language('error/not_found');
+			$this->language->load('error/not_found');
 
 			$this->document->setTitle($this->_('heading_title'));
 
 				$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 				$this->breadcrumb->add($this->_('heading_title'), $this->url->link('error/not_found'));
 
-			$this->data['breadcrumbs'] = $this->breadcrumb->render();
-			
 			$this->children = array(
 				'common/header',
 				'common/footer'

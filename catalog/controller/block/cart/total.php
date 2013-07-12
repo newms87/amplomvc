@@ -1,7 +1,6 @@
 <?php
 class Catalog_Controller_Block_Cart_Total extends Controller
 {
-	
 	public function index($settings = null)
 	{
 		$this->template->load('block/cart/total');
@@ -10,6 +9,10 @@ class Catalog_Controller_Block_Cart_Total extends Controller
 		
 		if ($this->cart->hasProducts()) {
 			$totals = $this->cart->getTotals();
+			
+			foreach ($totals['data'] as &$total) {
+				$total['text'] = $this->currency->format($total['value']);
+			}
 			
 			$this->data['totals'] = $totals['data'];
 			

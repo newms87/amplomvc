@@ -7,7 +7,7 @@ class Admin_Controller_Payment_FreeCheckout extends Controller
 	{
 		$this->template->load('payment/free_checkout');
 
-		$this->load->language('payment/free_checkout');
+		$this->language->load('payment/free_checkout');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -53,8 +53,6 @@ class Admin_Controller_Payment_FreeCheckout extends Controller
 			$this->data['free_checkout_sort_order'] = $this->config->get('free_checkout_sort_order');
 		}
 						
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

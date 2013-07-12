@@ -7,55 +7,59 @@ class Builder extends Library
 	
 	private $builder_template;
 	
-	private $highest_match = 0;
-	
-	public function &find_active_page(&$links, &$active_link = null)
+	public function &find_active_link(&$links, $page, &$active_link = null, $highest_match = 0)
 	{
-		$current_page = parse_url($this->url->get_pretty_url());
-		
-		$queryVars = null;
-		parse_str($this->url->getQuery(), $queryVars);
-		$current_page['query'] = $queryVars;
-		
 		foreach ($links as $key => &$link) {
-			if (!empty($link['is_route'])) {
-				$query = isset($link['query']) ? $link['query'] : '';
-				$link['href'] = $this->url->link($link['href'], $query);
-			} elseif(!preg_match("/^https?:\/\//", $link['href']) && $link['href']) {
-				$link['href'] = $this->url->site($link['href']);
+			if (!preg_match("/^https?:\/\//", $link['href'])) {
+				if (!empty($link['is_route'])) {
+					$query = isset($link['query']) ? $link['query'] : '';
+					$link['href'] = $this->url->link($link['href'], $query);
+				} elseif($link['href']) {
+					$link['href'] = $this->url->site($link['href']);
+				}
 			}
 			
-			$components = str_replace('&amp;', '&', parse_url($link['href']));
+			$components = parse_url(str_replace('&amp;','&',$link['href']));
 			
-			if ($current_page['path'] === $components['path']) {
+			if ($page['path'] === $components['path']) {
 				if (!empty($components['query'])) {
 					$queryVars = null;
 					parse_str($components['query'], $queryVars);
 					
-					$matches = 0;
+					$num_matches = 0;
 					
 					foreach ($queryVars as $key => $value) {
-						if (isset($current_page['query'][$key])) {
-							if($current_page['query'][$key] === $value) {
-								$matches++;
-							}
+						if (isset($page['query'][$key]) && $page['query'][$key] === $value) {
+							$num_matches++;
 						}
 					}
 					
-					if ($matches >= count($queryVars) && $matches > $this->highest_match) {
-						$this->highest_match = $matches;
+					if ($num_matches >= count($queryVars) && $num_matches >= $highest_match) {
+						$highest_match = $num_matches;
 						$active_link = &$link;
 					}
-				} elseif(!$active_link) {
+				} else {
 					$active_link = &$link;
 				}
 			}
 			
 			if (!empty($link['children'])) {
-				$active_link = & $this->find_active_page($link['children'], $active_link);
+				$active_link = & $this->find_active_link($link['children'], $page, $active_link, $highest_match);
+				
+				if ($active_link) {
+					foreach ($link['children'] as $child) {
+						if (!empty($child['active'])) {
+							$link['active'] = true;
+						}
+					}
+				}
 			}
 			
 		} unset($link);
+		
+		if ($active_link) {
+			$active_link['active'] = true;
+		}
 		
 		return $active_link;
 	}
@@ -63,15 +67,16 @@ class Builder extends Library
 	public function build_links($links, $depth = 0)
 	{
 		if ($depth === 0) {
-			$this->highest_match = 0;
+			$current_page = parse_url($this->url->get_pretty_url());
 			
-			$active_link = & $this->find_active_page($links);
+			$current_page['query'] = null;
+			parse_str($this->url->getQuery(), $current_page['query']);
 			
-			if ($active_link) {
-				if (!empty($active_link['attrs']['class'])) {
-					$active_link['attrs']['class'] .= ' active';
-				} else {
-					$active_link['attrs']['class'] = 'active';
+			if (!$this->find_active_link($links, $current_page)) {
+				//If the link wasn't found, try changing the route to the index function and search for the active link again
+				if (preg_match("/^([a-z0-9_]+\/[a-z0-9_]+)\/.*/", $current_page['query']['route'])) {
+					$current_page['query']['route'] = preg_replace("/^([a-z0-9_]+\/[a-z0-9_]+)\/.*/", "\$1", $current_page['query']['route']);
+					$this->find_active_link($links, $current_page);
 				}
 			}
 		}
@@ -84,7 +89,7 @@ class Builder extends Library
 				$class = "sub_menu";
 				break;
 			default:
-				$class = "child_menu";
+				$class = "child_menu child_$depth";
 				break;
 		}
 		
@@ -117,8 +122,18 @@ class Builder extends Library
 				$href = "href=\"$link[href]\"";
 			}
 			
+			//Set active class
+			if (!empty($link['active'])) {
+				if (!empty($link['attrs']['class'])) {
+					$link['attrs']['class'] .= ' active';
+				} else {
+					$link['attrs']['class'] = 'active';
+				}
+			}
+			
+			//Build attribute list
 			$attr_list = '';
-				
+			
 			if (!empty($link['attrs'])) {
 				if (is_string($link['attrs'])) {
 					$attr_list .= $link['attrs'];
@@ -335,7 +350,7 @@ class Builder extends Library
 		$template = new Template($this->registry);
 		
 		$template->load('block/widget/batch_action');
-		$template->set_data($data);
+		$template->setData($data);
 		
 		return $template->render();
 	}

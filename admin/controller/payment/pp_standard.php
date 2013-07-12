@@ -4,7 +4,7 @@ class Admin_Controller_Payment_PpStandard extends Controller
 	public function index()
 	{
 		$this->template->load('payment/pp_standard');
-		$this->load->language('payment/pp_standard');
+		$this->language->load('payment/pp_standard');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -68,8 +68,6 @@ class Admin_Controller_Payment_PpStandard extends Controller
 		
 		$this->data['data_geo_zones'] = array(0 => $this->_('text_all_zones')) + $this->Model_Localisation_GeoZone->getGeoZones();
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

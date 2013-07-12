@@ -1,6 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $breadcrumbs; ?>
+	<?= $this->breadcrumb->render(); ?>
 	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
@@ -24,7 +24,7 @@
 				<a href="#tab-reward"><?= $tab_reward; ?></a>
 				<a href="#tab-design"><?= $tab_design; ?></a>
 			</div>
-			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
+			<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
 				<div id="tab-general">
 					<table class="form">
 						<tr>

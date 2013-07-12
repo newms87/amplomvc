@@ -1,7 +1,6 @@
 <?php
 class Catalog_Controller_Block_Cart_Voucher extends Controller
 {
-	
 	public function index($settings = null)
 	{
 		$this->template->load('block/cart/voucher');
@@ -26,14 +25,13 @@ class Catalog_Controller_Block_Cart_Voucher extends Controller
 			$this->data[$key] = $default;
 		}
 		
-
-		
+		//Render
 		$this->response->setOutput($this->render());
 	}
 	
 	private function validateVoucher()
 	{
-		$voucher_info = $this->Model_Cart_Voucher->getVoucher($_POST['voucher']);
+		$voucher_info = $this->System_Model_Voucher->getVoucherByCode($_POST['voucher']);
 		
 		if (!$voucher_info) {
 			$this->error['warning'] = $this->_('error_voucher');

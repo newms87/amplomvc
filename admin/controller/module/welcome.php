@@ -7,7 +7,7 @@ class Admin_Controller_Module_Welcome extends Controller
 	{
 		$this->template->load('module/welcome');
 
-		$this->load->language('module/welcome');
+		$this->language->load('module/welcome');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -45,8 +45,6 @@ class Admin_Controller_Module_Welcome extends Controller
 		
 		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

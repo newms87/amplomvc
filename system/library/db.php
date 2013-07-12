@@ -111,6 +111,26 @@ class DB
   	}
 	
 	/**
+	* Returns an array with each value as the first Select field of each row
+	*
+	* @param $sql - the MySQL query string
+	* @return mixed - will return an indexed array or false on failure
+	*
+	*/
+	public function queryColumn($sql)
+	{
+  		$resource = $this->driver->query($sql);
+		
+		if (!$resource) {
+			$this->queryError($sql);
+			
+			return false;
+		}
+		
+		return array_column($resource->rows, key($resource->row));
+  	}
+	
+	/**
 	* Returns the first field in the first row of the query
 	*
 	* @param $sql - the MySQL query string

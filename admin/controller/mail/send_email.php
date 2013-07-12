@@ -4,7 +4,7 @@ class Admin_Controller_Mail_SendEmail extends Controller
  
 	public function index()
 	{
-		$this->load->language('mail/send_email');
+		$this->language->load('mail/send_email');
 		
 		$this->template->load('mail/send_email');
 		
@@ -53,8 +53,6 @@ class Admin_Controller_Mail_SendEmail extends Controller
 		if ($this->request->isPost()) {
 			$this->data['allow_html'] = !isset($_POST['allow_html']) ? 0 : 1;
 		}
-		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

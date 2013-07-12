@@ -7,7 +7,7 @@ class Admin_Controller_Payment_WebPaymentSoftware extends Controller
 	{
 		$this->template->load('payment/web_payment_software');
 
-		$this->load->language('payment/web_payment_software');
+		$this->language->load('payment/web_payment_software');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -103,8 +103,6 @@ class Admin_Controller_Payment_WebPaymentSoftware extends Controller
 			$this->data['web_payment_software_sort_order'] = $this->config->get('web_payment_software_sort_order');
 		}
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

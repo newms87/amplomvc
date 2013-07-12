@@ -23,14 +23,14 @@ class Admin_Model_Sale_Affiliate extends Model
 	
 	public function getAffiliate($affiliate_id)
 	{
-		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "affiliate WHERE affiliate_id = '" . (int)$affiliate_id . "'");
+		$query = $this->query("SELECT * FROM " . DB_PREFIX . "affiliate WHERE affiliate_id = '" . (int)$affiliate_id . "'");
 	
 		return $query->row;
 	}
 	
 	public function getAffiliateByEmail($email)
 	{
-		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "affiliate WHERE email = '" . $this->db->escape($email) . "'");
+		$query = $this->query("SELECT * FROM " . DB_PREFIX . "affiliate WHERE email = '" . $this->db->escape($email) . "'");
 	
 		return $query->row;
 	}
@@ -113,7 +113,7 @@ class Admin_Model_Sale_Affiliate extends Model
 		if ($affiliate_info) {
 			$this->query("UPDATE " . DB_PREFIX . "affiliate SET approved = '1' WHERE affiliate_id = '" . (int)$affiliate_id . "'");
 			
-			$this->load->language('mail/affiliate');
+			$this->language->load('mail/affiliate');
 	
 			$message  = sprintf($this->_('text_approve_welcome'), $this->config->get('config_name')) . "\n\n";
 			$message .= $this->_('text_approve_login') . "\n";

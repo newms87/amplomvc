@@ -68,14 +68,14 @@ class Admin_Model_Sale_Customer extends Model
 	
 	public function getCustomer($customer_id)
 	{
-		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "customer WHERE customer_id = '" . (int)$customer_id . "'");
+		$query = $this->query("SELECT * FROM " . DB_PREFIX . "customer WHERE customer_id = '" . (int)$customer_id . "'");
 	
 		return $query->row;
 	}
 	
 	public function getCustomerByEmail($email)
 	{
-		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "customer WHERE email = '" . $this->db->escape($email) . "'");
+		$query = $this->query("SELECT * FROM " . DB_PREFIX . "customer WHERE email = '" . $this->db->escape($email) . "'");
 	
 		return $query->row;
 	}
@@ -167,7 +167,7 @@ class Admin_Model_Sale_Customer extends Model
 		if ($customer_info) {
 			$this->query("UPDATE " . DB_PREFIX . "customer SET approved = '1' WHERE customer_id = '" . (int)$customer_id . "'");
 
-			$this->load->language('mail/customer');
+			$this->language->load('mail/customer');
 			
 			$store_info = $this->Model_Setting_Store->getStore($customer_info['store_id']);
 			

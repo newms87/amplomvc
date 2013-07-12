@@ -9,49 +9,12 @@ class Tool extends Library
 		define("FILELIST_SPLFILEINFO",2);
 	}
 	
-	public function error_set()
-	{
-		if (isset($this->session->data['warning']) && $this->session->data['warning']) {
-			return true;
-		}
-		
-		return false;
-	}
-	
 	public function get_slug($name)
 	{
 		$slug = preg_replace("/\s/",'_', strtolower(trim($name)));
 		$slug = preg_replace("/[^a-z0-9_]/", '', $slug);
 		
 		return $slug;
-	}
-	
-	public function formatAddress($address)
-	{
-		static $address_formats = array();
-		
-		$country_id = $address['country_id'];
-		
-		if (isset($address_formats[$country_id])) {
-			$address_format = $address_formats[$country_id];
-		}
-		else {
-			$address_format = $this->db->queryVar("SELECT address_format FROM " . DB_PREFIX . "country WHERE country_id = '" . (int)$country_id . "'");
-			
-			if (empty($address_format)) {
-				$address_format = 
-					"{firstname} {lastname}\n" .
-					"{company}\n" .
-					"{address_1}\n" .
-					"{address_2}\n" .
-					"{city}, {zone} {postcode}\n" .
-					"{country}";
-			}
-			
-			$address_formats[$country_id] = $address_format;
-		}
-		
-		return preg_replace('/<br \/>\s+<br \/>/', '<br />', nl2br($this->insertables($address, $address_format, '{', '}')));
 	}
 	
 	public function format_classname($component)

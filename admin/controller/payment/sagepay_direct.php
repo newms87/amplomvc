@@ -7,7 +7,7 @@ class Admin_Controller_Payment_SagepayDirect extends Controller
 	{
 		$this->template->load('payment/sagepay_direct');
 
-		$this->load->language('payment/sagepay_direct');
+		$this->language->load('payment/sagepay_direct');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -98,8 +98,6 @@ class Admin_Controller_Payment_SagepayDirect extends Controller
 			$this->data['sagepay_direct_sort_order'] = $this->config->get('sagepay_direct_sort_order');
 		}
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

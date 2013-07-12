@@ -7,7 +7,7 @@ class Admin_Controller_Feed_GoogleSitemap extends Controller
 	{
 		$this->template->load('feed/google_sitemap');
 
-		$this->load->language('feed/google_sitemap');
+		$this->language->load('feed/google_sitemap');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -41,8 +41,6 @@ class Admin_Controller_Feed_GoogleSitemap extends Controller
 		
 		$this->data['data_feed'] = SITE_URL . 'index.php?route=feed/google_sitemap';
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

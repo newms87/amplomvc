@@ -7,7 +7,7 @@ class Admin_Controller_Total_Credit extends Controller
 	{
 		$this->template->load('total/credit');
 
-		$this->load->language('total/credit');
+		$this->language->load('total/credit');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -45,8 +45,6 @@ class Admin_Controller_Total_Credit extends Controller
 			$this->data['credit_sort_order'] = $this->config->get('credit_sort_order');
 		}
 																		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

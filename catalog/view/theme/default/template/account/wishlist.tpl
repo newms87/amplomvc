@@ -4,7 +4,7 @@
 <? } ?>
 <?= $column_left; ?><?= $column_right; ?>
 <div id="content" style='padding-top:0'><?= $content_top; ?>
-	<?= $breadcrumbs; ?>
+	<?= $this->breadcrumb->render(); ?>
 	<h1><?= $heading_title; ?></h1>
 	<? if ($products) { ?>
 	<div class="wishlist-info">

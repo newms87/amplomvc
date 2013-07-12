@@ -35,8 +35,6 @@ class Catalog_Controller_Account_Account extends Controller
 			$this->data['reward'] = '';
 		}
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',

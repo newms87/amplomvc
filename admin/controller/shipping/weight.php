@@ -7,7 +7,7 @@ class Admin_Controller_Shipping_Weight extends Controller
 	{
 		$this->template->load('shipping/weight');
 
-		$this->load->language('shipping/weight');
+		$this->language->load('shipping/weight');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -71,8 +71,6 @@ class Admin_Controller_Shipping_Weight extends Controller
 		
 		$this->data['tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

@@ -87,20 +87,19 @@ var no_image = "<?= HTTP_THEME_IMAGE . "no_image.png"; ?>"
  * @param $filters - The list of filters to activate
  */
 	case 'filter_url':
-		if (count($args) < 2 || count($args) > 3) {
-			trigger_error("Template JS: filter_url: excepts exactly 1 argument! Usage: \$this->builder->js('filter_url', selector, route, query='');");
+		if (count($args) !== 1) {
+			trigger_error("Template JS: filter_url: excepts exactly 1 argument! Usage: \$this->builder->js('filter_url', selector);");
 			return '';
 		}
 		
 		$selector = $args[0];
-		$url = $args[1];
-		$query = isset($args[2]) ? $args[2] : '';
 		
-		$sort_query = $this->url->getQuery("sort","order","page");
+		$route = $_GET['route'];
+		$sort_query = $this->url->getQueryExclude("filter");
 	?>
 <script type="text/javascript">//<!--
 function filter() {
-	url = '<?= HTTP_ROOT; ?>index.php?route=<?= $url . '&' . $sort_query . ($query ? '&'.$query : '');?>';
+	url = '<?= HTTP_ROOT . "index.php?route=$route&$sort_query"; ?>';
 	
 	filter_list = $('<?= $selector;?> [name]').not('[value=""]');
 	
@@ -242,7 +241,7 @@ function remove_ckeditor_for(context) {
 			$name_format = false;
 		}
 		
-		$languages = $this->Model_Localisation_Language->getLanguageList();
+		$languages = $this->System_Model_Language->getEnabledLanguages();
 		
 		$default_language = $this->config->get('config_language_id');
 		

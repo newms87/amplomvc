@@ -7,7 +7,7 @@ class Admin_Controller_Module_Featured extends Controller
 	{
 		$this->template->load('module/featured');
 
-		$this->load->language('module/featured');
+		$this->language->load('module/featured');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -66,8 +66,6 @@ class Admin_Controller_Module_Featured extends Controller
 				
 		$this->data['layouts'] = $this->Model_Design_Layout->getLayouts();
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

@@ -23,9 +23,9 @@ class Template extends Library
 		return $this->file;
 	}
 	
-	public function set_file($file_name)
+	public function set_file($file_name, $theme = null, $admin = null)
 	{
-		$file = $this->theme->find_file($file_name . '.tpl');
+		$file = $this->theme->find_file($file_name . '.tpl', $theme, $admin);
 		
 		if ($file) {
 			$this->file = $file;
@@ -42,19 +42,15 @@ class Template extends Library
 		return true;
 	}
 	
-	public function set_data($data)
+	public function setData($data)
 	{
 		$this->data = $data;
 	}
 	
-	public function load($name, $data = array()){
-		if ($this->name == $name) return;
-		
+	public function load($name, $theme = null, $admin = null){
 		$this->name = $name;
 		
-		$this->data = $data;
-	
-		if (!$this->set_file($this->name)) {
+		if (!$this->set_file($this->name, $theme, $admin)) {
 			trigger_error("Unable to load template! " . get_caller());
 			exit();
 		}

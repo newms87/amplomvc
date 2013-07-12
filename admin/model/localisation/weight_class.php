@@ -1,7 +1,7 @@
 <?php
 class Admin_Model_Localisation_WeightClass extends Model 
 {
-	public function addWeightclass($data)
+	public function addWeightClass($data)
 	{
 		$this->query("INSERT INTO " . DB_PREFIX . "weight_class SET value = '" . (float)$data['value'] . "'");
 		

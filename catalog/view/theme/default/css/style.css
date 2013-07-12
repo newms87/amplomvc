@@ -653,6 +653,7 @@ li:hover > ul.link_list, li.hover > ul.link_list{
 }
 
 .message_box {
+	position: relative;
 	padding: 10px 10px 10px 33px;
 	margin-bottom: 15px;
 	color: #555555;
@@ -686,17 +687,18 @@ li:hover > ul.link_list, li.hover > ul.link_list{
 }
 
 .message_box .close{
-	float: right;
+	position:absolute;
+	top: 5px;
+	right: 5px;
 	cursor: pointer;
-	background: transparent url('../image/close.png') 0px center no-repeat;
+	background: transparent url('../image/close.png') 0px 0px no-repeat;
 	background-size: 32px 16px;
 	width: 16px;
 	height: 16px;
 }
 
 .message_box .close:hover, .message_box .close:active{
-	background: transparent url('../image/close.png') -16px center no-repeat;
-	background-size: 32px 16px;
+	background-position: -16px 0px;
 }
 
 .required:before{
@@ -1718,7 +1720,7 @@ a.button:active, input.button:active {
 .wishlist-info tbody .quantity, .wishlist-info tbody .price, .wishlist-info tbody .total, .wishlist-info tbody .action {
 	text-align: right;
 }
-.wishlist-info tbody .price s {
+.wishlist-info tbody .price{
 	color: #F00;
 }
 .wishlist-info tbody .action img {
@@ -1726,7 +1728,6 @@ a.button:active, input.button:active {
 }
 .login-content {
 	margin-bottom: 20px;
-	overflow: auto;
 	float:left;
 }
 .login-content .left {

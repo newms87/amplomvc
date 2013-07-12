@@ -8,7 +8,7 @@ class Admin_Controller_Tool_Backup extends Controller
 	{
 		$this->template->load('tool/backup');
 
-		$this->load->language('tool/backup');
+		$this->language->load('tool/backup');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -53,8 +53,6 @@ class Admin_Controller_Tool_Backup extends Controller
 
 		$this->data['tables'] = $this->Model_Tool_Backup->getTables();
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

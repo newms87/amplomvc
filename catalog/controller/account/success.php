@@ -20,8 +20,6 @@ class Catalog_Controller_Account_Success extends Controller
 		
 		$this->data['continue'] = $this->url->link('account/account');
 		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',

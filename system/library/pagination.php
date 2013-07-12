@@ -137,7 +137,7 @@ class Pagination extends Library
 		
 		$language['text_pager'] = $this->tool->insertables($insertables, $language['text_pager']);
 		
-		$this->template->set_data($data + $language);
+		$this->template->setData($data + $language);
 		
 		return $this->template->render();
 	}

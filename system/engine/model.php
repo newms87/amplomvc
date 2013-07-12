@@ -81,6 +81,11 @@ abstract class Model
 		return $this->db->queryRow($sql);
 	}
 	
+	protected function queryColumn($sql)
+	{
+		return $this->db->queryColumn($sql);
+	}
+	
 	protected function queryVar($sql)
 	{
 		return $this->db->queryVar($sql);

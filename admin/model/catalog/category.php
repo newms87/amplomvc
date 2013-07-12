@@ -174,6 +174,18 @@ class Admin_Model_Catalog_Category extends Model
 		return $result->rows;
 	}
 	
+	public function getCategoryTranslations($category_id)
+	{
+		$translate_fields = array(
+			'name',
+			'meta_keywords',
+			'meta_description',
+			'description',
+		);
+		
+		return $this->translation->get_translations('category', $category_id, $translate_fields);
+	}
+		
 	public function update_field($category_id, $data)
 	{
 		$this->update('category', $data, $category_id);

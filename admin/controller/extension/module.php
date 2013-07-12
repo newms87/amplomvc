@@ -5,7 +5,7 @@ class Admin_Controller_Extension_Module extends Controller
 	{
 		$this->template->load('extension/module');
 
-		$this->load->language('extension/module');
+		$this->language->load('extension/module');
 		
 		$this->document->setTitle($this->_('heading_title'));
 
@@ -46,7 +46,7 @@ class Admin_Controller_Extension_Module extends Controller
 			foreach ($files as $file) {
 				$extension = basename($file, '.php');
 				
-				$this->load->language('module/' . $extension);
+				$this->language->load('module/' . $extension);
 	
 				$action = array();
 				
@@ -74,8 +74,6 @@ class Admin_Controller_Extension_Module extends Controller
 			}
 		}
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

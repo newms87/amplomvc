@@ -4,7 +4,7 @@ class Admin_Controller_Extension_Plugin extends Controller
 	
 	public function index()
 	{
-		$this->load->language('extension/plugin');
+		$this->language->load('extension/plugin');
 		
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -55,8 +55,6 @@ class Admin_Controller_Extension_Plugin extends Controller
 			}
 		}
 		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -92,8 +90,6 @@ class Admin_Controller_Extension_Plugin extends Controller
 		$this->data['action'] = $this->url->link('extension/plugin/update','name='.$plugin_name);
 		$this->data['cancel'] = $this->url->link('extension/plugin');
 		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -106,7 +102,7 @@ class Admin_Controller_Extension_Plugin extends Controller
 	{
 		$this->cache->delete('model');
 		
-		$this->load->language('extension/plugin');
+		$this->language->load('extension/plugin');
 
 		if (!isset($_GET['name'])) {
 			$this->message->add('warning', $this->_('error_no_plugin'));

@@ -7,7 +7,7 @@ class Admin_Controller_Shipping_Pickup extends Controller
 	{
 		$this->template->load('shipping/pickup');
 
-		$this->load->language('shipping/pickup');
+		$this->language->load('shipping/pickup');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -53,8 +53,6 @@ class Admin_Controller_Shipping_Pickup extends Controller
 		
 		$this->data['geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 						
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

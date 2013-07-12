@@ -7,7 +7,7 @@ class Admin_Controller_Shipping_Ups extends Controller
 	{
 		$this->template->load('shipping/ups');
 
-		$this->load->language('shipping/ups');
+		$this->language->load('shipping/ups');
 			
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -676,8 +676,6 @@ class Admin_Controller_Shipping_Ups extends Controller
 		} else {
 			$this->data['ups_debug'] = $this->config->get('ups_debug');
 		}
-		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

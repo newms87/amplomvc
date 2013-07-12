@@ -1,6 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $breadcrumbs; ?>
+	<?= $this->breadcrumb->render(); ?>
 	<?= $this->builder->display_messages($messages); ?>
 <div class="box">
 	<div class="heading">

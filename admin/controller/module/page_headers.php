@@ -7,7 +7,7 @@ class Admin_Controller_Module_PageHeaders extends Controller
 	{
 		$this->template->load('module/page_headers');
 
-		$this->load->language('module/page_headers');
+		$this->language->load('module/page_headers');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -48,8 +48,6 @@ class Admin_Controller_Module_PageHeaders extends Controller
 			if(!$found)
 				unset($this->data['headers'][$hid]['page_header'][$lang_id]);
 		}
-		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

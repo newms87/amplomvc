@@ -7,7 +7,7 @@ class Admin_Controller_Payment_PerpetualPayments extends Controller
 	{
 		$this->template->load('payment/perpetual_payments');
 
-		$this->load->language('payment/perpetual_payments');
+		$this->language->load('payment/perpetual_payments');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -97,8 +97,6 @@ class Admin_Controller_Payment_PerpetualPayments extends Controller
 			$this->data['perpetual_payments_sort_order'] = $this->config->get('perpetual_payments_sort_order');
 		}
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

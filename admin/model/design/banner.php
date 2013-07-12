@@ -49,7 +49,7 @@ class Admin_Model_Design_Banner extends Model
 	
 	public function getBanner($banner_id)
 	{
-		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "banner WHERE banner_id = '" . (int)$banner_id . "'");
+		$query = $this->query("SELECT * FROM " . DB_PREFIX . "banner WHERE banner_id = '" . (int)$banner_id . "'");
 		
 		return $query->row;
 	}

@@ -116,7 +116,7 @@ class Catalog_Controller_Mail_Order extends Controller
 		$this->mail->init();
 		
 		$this->mail->setTo($order_info['email']);
-		$this->mail->setCopyTo($this->config->get('config_email'));
+		$this->mail->setCc($this->config->get('config_email'));
 		$this->mail->setFrom($this->config->get('config_email'));
 		$this->mail->setSender($order_info['store_name']);
 		$this->mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));

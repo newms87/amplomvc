@@ -7,7 +7,7 @@ class Admin_Controller_Payment_PpProUk extends Controller
 	{
 		$this->template->load('payment/pp_pro_uk');
 
-		$this->load->language('payment/pp_pro_uk');
+		$this->language->load('payment/pp_pro_uk');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -129,8 +129,6 @@ class Admin_Controller_Payment_PpProUk extends Controller
 			$this->data['pp_pro_uk_sort_order'] = $this->config->get('pp_pro_uk_sort_order');
 		}
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

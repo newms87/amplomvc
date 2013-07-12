@@ -7,7 +7,7 @@ class Admin_Controller_Module_GoogleTalk extends Controller
 	{
 		$this->template->load('module/google_talk');
 
-		$this->load->language('module/google_talk');
+		$this->language->load('module/google_talk');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -55,8 +55,6 @@ class Admin_Controller_Module_GoogleTalk extends Controller
 				
 		$this->data['layouts'] = $this->Model_Design_Layout->getLayouts();
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

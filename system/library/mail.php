@@ -68,7 +68,7 @@ class Mail extends Library
 		}
 	}
 	
-	public function setCopyTo($to)
+	public function setCc($to)
 	{
 		if (is_array($to)) {
 			array_walk($to, 'trim');
@@ -78,7 +78,7 @@ class Mail extends Library
 		}
 	}
 	
-	public function setBlindCopyTo($to)
+	public function setBcc($to)
 	{
 		if (is_array($to)) {
 			array_walk($to, 'trim');
@@ -128,7 +128,24 @@ class Mail extends Library
 			$this->attachments[] = $filename;
 		}
 	}
-
+	
+	public function setTemplate($template)
+	{
+		$args = func_get_args();
+		array_shift($args);
+		
+		$action = new Action($this->registry, $template, $args, 'catalog/controller/mail');
+		
+		$this->language->setRoot(SITE_DIR . 'catalog/language/');
+		
+		if (!$action->execute()) {
+			trigger_error('Could not load Mail temlpate ' . $template . '!');
+			exit();
+		}
+		
+		$this->language->setRoot(DIR_LANGUAGE);
+	}
+	
 	public function send($data = null)
 	{
 		if ($data) {

@@ -1,6 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $breadcrumbs; ?>
+	<?= $this->breadcrumb->render(); ?>
 	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
@@ -128,7 +128,7 @@ function generate_url(c){
 $('#tabs a').tabs();
 //--></script>
 
-<?= $this->builder->js('errors',$errors); ?>
+<?= $this->builder->js('errors', $errors); ?>
 <?= $this->builder->js('translations', $translations); ?>
 
 <?= $footer; ?>

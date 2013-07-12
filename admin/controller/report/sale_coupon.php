@@ -5,7 +5,7 @@ class Admin_Controller_Report_SaleCoupon extends Controller
 	{
 		$this->template->load('report/sale_coupon');
 
-		$this->load->language('report/sale_coupon');
+		$this->language->load('report/sale_coupon');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -91,8 +91,6 @@ class Admin_Controller_Report_SaleCoupon extends Controller
 		$this->data['filter_date_start'] = $filter_date_start;
 		$this->data['filter_date_end'] = $filter_date_end;
 				
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

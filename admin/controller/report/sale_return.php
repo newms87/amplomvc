@@ -5,7 +5,7 @@ class Admin_Controller_Report_SaleReturn extends Controller
 	{
 		$this->template->load('report/sale_return');
 
-		$this->load->language('report/sale_return');
+		$this->language->load('report/sale_return');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -138,8 +138,6 @@ class Admin_Controller_Report_SaleReturn extends Controller
 		$this->data['filter_group'] = $filter_group;
 		$this->data['filter_return_status_id'] = $filter_return_status_id;
 				
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

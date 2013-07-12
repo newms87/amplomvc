@@ -170,11 +170,11 @@ class Cart extends Library
 		unset($this->session->data['shipping_method_id']);
 		unset($this->session->data['payment_method_id']);
 		unset($this->session->data['comment']);
-		unset($this->session->data['order_id']);
 		unset($this->session->data['coupons']);
 		unset($this->session->data['reward']);
-		unset($this->session->data['voucher']);
 		unset($this->session->data['vouchers']);
+		
+		$this->order->clear();
   	}
 	
 	/**
@@ -646,18 +646,7 @@ class Cart extends Library
 	 * Shipping & Payment API
 	 */
 	
-  	public function hasShipping()
-  	{
-		foreach ($this->getProducts() as $product) {
-			if ($product['shipping']) {
-			return true;
-			}
-		}
-		
-		return false;
-	}
-	
-  	public function hasDownload()
+  public function hasDownload()
   	{
 		foreach ($this->getProducts() as $product) {
 			if ($product['download']) {
@@ -722,6 +711,16 @@ class Cart extends Library
 	}
 	
 	/** Shipping Address Operations **/
+	public function hasShipping()
+  	{
+		foreach ($this->getProducts() as $product) {
+			if ($product['shipping']) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 	
 	public function hasShippingAddress()
 	{
@@ -809,7 +808,7 @@ class Cart extends Library
 			}
 		
 			if (!$totals) {
-				$totals = $this->cart->getTotals();
+				$totals = $this->getTotals();
 			}
 			
 			$classname = "Model_Payment_" . $this->tool->format_classname($payment_method_id);
@@ -1180,6 +1179,34 @@ class Cart extends Library
 		return true;
 	}
 	
+	public function hasVoucher()
+	{
+		return !empty($_SESSION['vouchers']);
+	}
+	
+	public function getVoucherIds()
+	{
+		return isset($_SESSION['vouchers']) ? $_SESSION['vouchers'] : array();
+	}
+	
+	public function getVouchers()
+	{
+		$vouchers = array();
+		
+		foreach ($this->getVoucherIds() as $voucher_id) {
+			$vouchers[] = $this->System_Model_Voucher->getVoucher($voucher_id);
+		}
+	}
+			
+	public function addVoucher($voucher_id)
+	{
+		if (!isset($_SESSION['vouchers'])) {
+			$_SESSION['vouchers'][] = $voucher_id;
+		} else {
+			$_SESSION['vouchers'] = array($voucher_id);
+		}
+	}
+	
 	/**
 	 * Guest API
 	 */
@@ -1206,190 +1233,5 @@ class Cart extends Library
 	public function setComment($comment)
 	{
 		$this->session->data['comment'] = strip_tags($comment);
-	}
-	
-	/**
-	 * Cart Order
-	 */
-	 
-	public function addOrder()
-	{
-		if (!$this->validate()) {
-			return false;
-		}
-		
-		$data = array();
-		
-		//Validate Shipping Address & Method
-		if ($this->cart->hasShipping()) {
-			if (!$this->cart->hasShippingAddress()) {
-				$this->_e('CO-1', 'checkout', 'error_shipping_address');
-				return false;
-			}
-			
-			if (!$this->cart->hasShippingMethod()) {
-				$this->_e('CO-2', 'checkout', 'error_shipping_method');
-			}
-		}
-		
-		//Validate Payment Address & Method
-		if (!$this->cart->hasPaymentAddress()) {
-			$this->_e('CO-3', 'checkout', 'error_payment_address');
-			return false;
-		}
-		
-		if (!$this->cart->hasPaymentMethod()) {
-			$this->_e('CO-3', 'checkout', 'error_payment_method');
-			return false;
-		}
-		
-		//Customer Checkout
-		if ($this->customer->isLogged()) {
-			$data = $this->customer->info();
-		}
-		elseif ($this->config->get('config_guest_checkout')) {
-			$data['customer_id'] = 0;
-			$data['customer_group_id'] = $this->config->get('config_customer_group_id');
-		}
-		//Guest checkout no allowed and customer not logged in
-		else {
-			$this->error['checkout']['guest'] = $this->language->get('error_checkout_guest');
-			return false;
-		}
-		
-		//Payment info
-		$data['payment_address']  = $this->getPaymentAddress();
-		
-		$payment_method = $this->cart->getPaymentMethod();
-		$data['payment_method'] = $payment_method['code'];
-		
-		//Shipping info
-		if ($this->cart->hasShipping()) {
-			$data['shipping_address'] = $this->getShippingAddress();
-			
-			$shipping_method = $this->getShippingMethod();
-			$data['shipping_code'] = $shipping_method['code'];
-			$data['shipping_method'] = $shipping_method['method'];
-		}
-		
-		$data['invoice_prefix'] = $this->tool->format_invoice($this->config->get('config_invoice_prefix'));
-		$data['store_id'] = $this->config->get('config_store_id');
-		$data['store_name'] = $this->config->get('config_name');
-		
-		if ($data['store_id']) {
-			$data['store_url'] = $this->config->get('config_url');
-		} else {
-			$data['store_url'] = SITE_URL;
-		}
-		
-		$totals = $this->getTotals();
-		
-		$data['total'] = $totals['total'];
-		$data['totals'] = $totals['data'];
-		
-		$product_data = $this->getProducts();
-		
-		foreach ($product_data as &$product) {
-			$product['tax'] = $this->tax->getTax($product['total'], $product['tax_class_id']);
-		}unset($product);
-		
-		// Gift Voucher
-		$voucher_data = array();
-		
-		if (!empty($this->session->data['vouchers'])) {
-			$voucher_data = $this->session->data['vouchers'];
-			
-			//TODO: This is not a good way to generate unique IDs!
-			foreach ($voucher_data as &$voucher) {
-				$voucher['code'] = substr(md5(rand()), 0, 7);
-			}
-		}
-		
-		$data['products'] = $product_data;
-		$data['vouchers'] = $voucher_data;
-		$data['comment'] = $this->session->data['comment'];
-		
-		
-		$data['affiliate_id'] = 0;
-		$data['commission'] = 0;
-		
-		if (isset($_COOKIE['tracking'])) {
-			$affiliate_info = $this->Model_Affiliate_Affiliate->getAffiliateByCode($_COOKIE['tracking']);
-			
-			if ($affiliate_info) {
-				$data['affiliate_id'] = $affiliate_info['affiliate_id'];
-				$data['commission'] = ($total / 100) * $affiliate_info['commission'];
-			}
-		}
-		
-		$data['language_id'] = $this->config->get('config_language_id');
-		$data['currency_id'] = $this->currency->getId();
-		$data['currency_code'] = $this->currency->getCode();
-		$data['currency_value'] = $this->currency->getValue($this->currency->getCode());
-		$data['ip'] = $_SERVER['REMOTE_ADDR'];
-		
-		if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-			$data['forwarded_ip'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
-		} elseif (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-			$data['forwarded_ip'] = $_SERVER['HTTP_CLIENT_IP'];
-		}
-		
-		if (isset($_SERVER['HTTP_USER_AGENT'])) {
-			$data['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
-		}
-		
-		if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-			$data['accept_language'] = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
-		}
-		
-		foreach ($data['payment_address'] as $key => $pa) {
-			$data['payment_' . $key] = $pa;
-		}
-		
-		if (!empty($data['shipping_address'])) {
-			foreach ($data['shipping_address'] as $key => $sa) {
-				$data['shipping_' . $key] = $sa;
-			}
-		}
-		
-		$order_id = $this->Model_Checkout_Order->addOrder($data);
-		
-		$this->session->data['order_id'] = $order_id;
-		
-		return $order_id;
-	}
-	
-	public function hasOrder()
-	{
-		return !empty($this->session->data['order_id']);
-	}
-	
-	public function getOrderId()
-	{
-		return !empty($this->session->data['order_id']) ? $this->session->data['order_id'] : false;
-	}
-	
-	public function getOrder($order_id = null)
-	{
-		if (!$order_id) {
-			$order_id = $this->getOrderId();
-			
-			if (!$order_id) {
-				return null;
-			}
-		}
-		
-		return $this->Model_Checkout_Order->getOrder($order_id);
-	}
-	
-	public function synchronizeOrders($customer)
-	{
-		if (empty($customer) || empty($customer['customer_id']) || empty($customer['email'])) {
-			return;
-		}
-		
-		$this->db->query(
-			"UPDATE " . DB_PREFIX . "order SET customer_id = '" . (int)$customer['customer_id'] . "'" .
-			" WHERE customer_id = 0 AND email = '" . $this->db->escape($customer['email']) . "'");
 	}
 }

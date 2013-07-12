@@ -7,7 +7,7 @@ class Admin_Controller_Module_Slideshow extends Controller
 	{
 		$this->template->load('module/slideshow');
 
-		$this->load->language('module/slideshow');
+		$this->language->load('module/slideshow');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -50,8 +50,6 @@ class Admin_Controller_Module_Slideshow extends Controller
 		$this->data['layouts'] = $this->Model_Design_Layout->getLayouts();
 
 		$this->data['banners'] = $this->Model_Design_Banner->getBanners();
-		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

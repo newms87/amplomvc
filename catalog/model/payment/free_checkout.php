@@ -3,7 +3,7 @@ class Catalog_Model_Payment_FreeCheckout extends Model
 {
   	public function getMethod($address, $total)
   	{
-		$this->load->language('payment/free_checkout');
+		$this->language->load('payment/free_checkout');
 		
 		if ($total <= 0) {
 			$status = true;

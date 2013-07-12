@@ -119,7 +119,7 @@ class Admin_Model_Catalog_Information extends Model
 
 	public function getInformation($information_id)
 	{
-		$information = $this->queryRow("SELECT DISTINCT * FROM " . DB_PREFIX . "information WHERE information_id = '" . (int)$information_id . "'");
+		$information = $this->queryRow("SELECT * FROM " . DB_PREFIX . "information WHERE information_id = '" . (int)$information_id . "'");
 		
 		$information['keyword'] = $this->url->getAlias('information/information', 'information_id=' . $information_id);
 		
@@ -181,9 +181,7 @@ class Admin_Model_Catalog_Information extends Model
 	
 	public function getInformationStores($information_id)
 	{
-		$stores = $this->queryRows("SELECT store_id FROM " . DB_PREFIX . "information_to_store WHERE information_id = '" . (int)$information_id . "'");
-		
-		return array_column($stores, 'store_id');
+		return $this->queryColumn("SELECT store_id FROM " . DB_PREFIX . "information_to_store WHERE information_id = '" . (int)$information_id . "'");
 	}
 
 	public function getInformationLayouts($information_id)

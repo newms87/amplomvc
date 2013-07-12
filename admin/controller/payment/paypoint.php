@@ -7,7 +7,7 @@ class Admin_Controller_Payment_Paypoint extends Controller
 	{
 		$this->template->load('payment/paypoint');
 
-		$this->load->language('payment/paypoint');
+		$this->language->load('payment/paypoint');
 
 		$this->document->setTitle($this->_('heading_title'));
 
@@ -91,8 +91,6 @@ class Admin_Controller_Payment_Paypoint extends Controller
 			$this->data['paypoint_sort_order'] = $this->config->get('paypoint_sort_order');
 		}
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

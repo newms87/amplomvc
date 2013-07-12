@@ -2,7 +2,7 @@
 <?= $column_left; ?><?= $column_right; ?>
 <div id="content">
 	<?= $content_top; ?>
-	<?= $breadcrumbs; ?>
+	<?= $this->breadcrumb->render(); ?>
 	<?= $this->builder->display_errors($errors); ?>
 	<h1><?= $heading_title; ?></h1>
 	<div class="description"><?= $text_description; ?></div>

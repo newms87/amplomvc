@@ -6,7 +6,7 @@ class Admin_Controller_Common_Login extends Controller
 	{
 		$this->template->load('common/login');
 
-		$this->load->language('common/login');
+		$this->language->load('common/login');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

@@ -49,8 +49,8 @@ class elFinderConnector {
 	* @author Dmitry (dio) Levashov
 	**/
 	public function run() {
-		$isPost = $this->request->isPost();
-		$src	= $this->request->isPost() ? $_POST : $_GET;
+		$isPost = $_SERVER['REQUEST_METHOD'] === 'POST';
+		$src	= $isPost ? $_POST : $_GET;
 		$cmd	= isset($src['cmd']) ? $src['cmd'] : '';
 		$args	= array();
 		

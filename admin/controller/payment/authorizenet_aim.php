@@ -7,7 +7,7 @@ class Admin_Controller_Payment_AuthorizenetAim extends Controller
 	{
 		$this->template->load('payment/authorizenet_aim');
 
-		$this->load->language('payment/authorizenet_aim');
+		$this->language->load('payment/authorizenet_aim');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -115,8 +115,6 @@ class Admin_Controller_Payment_AuthorizenetAim extends Controller
 			$this->data['authorizenet_aim_sort_order'] = $this->config->get('authorizenet_aim_sort_order');
 		}
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

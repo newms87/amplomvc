@@ -4,7 +4,7 @@ class Admin_Controller_Setting_ReturnAction extends Controller
 	public function index()
 	{
 		$this->template->load('setting/return_action');
-		$this->load->language('setting/return_action');
+		$this->language->load('setting/return_action');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -74,8 +74,6 @@ class Admin_Controller_Setting_ReturnAction extends Controller
 		} unset($return_action);
 
 		$this->data['return_actions'] = $return_actions;
-		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

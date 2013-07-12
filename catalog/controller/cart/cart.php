@@ -44,8 +44,6 @@ class Catalog_Controller_Cart_Cart extends Controller
 								
 		$this->data['checkout'] = $this->url->link('checkout/checkout');
 		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',

@@ -4,7 +4,7 @@ class Admin_Controller_Extension_Payment extends Controller
 	public function index()
 	{
 		$this->template->load('extension/payment');
-		$this->load->language('extension/payment');
+		$this->language->load('extension/payment');
 		
 		$this->document->setTitle($this->_('heading_title'));
 
@@ -45,7 +45,7 @@ class Admin_Controller_Extension_Payment extends Controller
 			foreach ($files as $file) {
 				$extension = basename($file, '.php');
 				
-				$this->load->language('payment/' . $extension);
+				$this->language->load('payment/' . $extension);
 	
 				$action = array();
 				
@@ -84,8 +84,6 @@ class Admin_Controller_Extension_Payment extends Controller
 			}
 		}
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

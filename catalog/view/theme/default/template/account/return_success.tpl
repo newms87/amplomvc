@@ -1,7 +1,7 @@
 <?= $header; ?>
 <?= $column_left; ?><?= $column_right; ?>
 <div id="content">
-	<?= $breadcrumbs; ?>
+	<?= $this->breadcrumb->render(); ?>
 	<?= $content_top; ?>
 	
 	<h1><?= $heading_title; ?></h1>

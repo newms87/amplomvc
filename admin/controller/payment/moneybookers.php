@@ -7,7 +7,7 @@ class Admin_Controller_Payment_Moneybookers extends Controller
 	{
 		$this->template->load('payment/moneybookers');
 
-		$this->load->language('payment/moneybookers');
+		$this->language->load('payment/moneybookers');
 		
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -121,8 +121,6 @@ class Admin_Controller_Payment_Moneybookers extends Controller
 			$this->data['moneybookers_custnote'] = $this->config->get('moneybookers_custnote');
 		}
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

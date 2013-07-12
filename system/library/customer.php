@@ -31,6 +31,29 @@ class Customer extends Library
 		return $this->customer_id;
   	}
 	
+	public function add($data)
+	{
+		$this->System_Model_Customer->addCustomer($data);
+	}
+	
+	public function edit($data, $customer_id = null)
+	{
+		if (!$customer_id) {
+			$customer_id = $this->customer_id;
+		}
+		
+		if (!$customer_id || empty($data)) {
+			return false;
+		}
+		
+		$this->System_Model_Customer->editCustomer($customer_id, $data);
+	}
+	
+	public function editPassword($customer_id, $password)
+	{
+		$this->System_Model_Customer->editPassword($customer_id, $password);
+	}
+	
 	public function info($key = null)
 	{
 		if ($key && isset($this->information[$key])) {
@@ -74,7 +97,7 @@ class Customer extends Library
 				$this->cart->merge_wishlist($customer['wishlist']);
 			}
 			
-			$this->cart->synchronizeOrders($customer);
+			$this->order->synchronizeOrders($customer);
 			
 			return true;
 		}
@@ -92,7 +115,7 @@ class Customer extends Library
 		
 		$this->information = array();
 		
-		//TODO: REMOVE THIS?
+		//TODO: Add as option in admin panel $this->config->get('config_logout_message');
 		$this->message->add('notify', "Logged Out");
   	}
 	
@@ -222,5 +245,27 @@ class Customer extends Library
 		}
 		
 		$this->db->query("UPDATE " . DB_PREFIX . "customer SET ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "' WHERE customer_id = '" . (int)$this->customer_id . "'");
+	}
+
+	public function emailRegistered($email)
+	{
+		return (int) $this->db->queryVar("SELECT customer_id FROM " . DB_PREFIX . "customer WHERE email = '" . $this->db->escape($email) . "'");
+	}
+
+	public function isBlacklisted($customer_id = null, $ips = array())
+	{
+		$customer_id = $customer_id ? $this->customer_id : (int)$customer_id;
+		
+		$customer_ips = $this->db->queryColumn("SELECT ip FROM " . DB_PREFIX . "customer_ip WHERE customer_id = $customer_id");
+		
+		if ($customer_ips) {
+			$ips += $customer_ips;
+		}
+		
+		if (empty($ips)) {
+			return false;
+		}
+		
+		return $this->queryVar("SELECT COUNT(*) FROM `" . DB_PREFIX . "customer_ip_blacklist` WHERE ip IN ('" . implode("','", $ips) . "')");
 	}
 }

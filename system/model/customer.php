@@ -1,9 +1,8 @@
 <?php
-class Catalog_Model_Account_Customer extends Model 
+class System_Model_Customer extends Model 
 {
 	public function addCustomer($data)
 	{
-		
 		//Add New Customer
 		$data['store_id']		= $this->config->get('config_store_id');
 		$data['customer_group_id'] = $this->config->get('config_customer_group_id');
@@ -72,40 +71,23 @@ class Catalog_Model_Account_Customer extends Model
 		return $data['customer_id'];
 	}
 	
-	public function editCustomer($data)
+	public function editCustomer($customer_id, $data)
 	{
-		$where = array(
-			'customer_id' => $this->customer->getId()
-		);
-	
 		//we do not allow editing the password here ( must be done via $this->editPassword() )
 		if (isset($data['password'])) {
 			unset($data['password']);
 		}
 	
-		$this->update('customer', $data, $where);
+		$this->update('customer', $data, $customer_id);
 	}
 
-	public function editPassword($email, $password)
+	public function editPassword($customer_id, $password)
 	{
 		$data = array(
 			'password' => $this->customer->encrypt($password)
 		);
 		
-		$this->update('customer', $data, array('email' => $email));
-	}
-
-	public function editNewsletter($newsletter)
-	{
-		$data = array(
-			'newsletter' => $newsletter
-		);
-		
-		$where = array(
-			'customer_id' => $this->customer->getId()
-		);
-		
-		$this->update('customer', $data, $where);
+		$this->update('customer', $data, $customer_id);
 	}
 					
 	public function getCustomer($customer_id)
@@ -198,25 +180,11 @@ class Catalog_Model_Account_Customer extends Model
 		
 		return $query->rows;
 	}
-		
-	public function getTotalCustomersByEmail($email)
-	{
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "customer WHERE email = '" . $this->db->escape($email) . "'");
-		
-		return $query->row['total'];
-	}
 	
 	public function getIps($customer_id)
 	{
 		$query = $this->query("SELECT * FROM `" . DB_PREFIX . "customer_ip` WHERE customer_id = '" . (int)$customer_id . "'");
 		
 		return $query->rows;
-	}
-	
-	public function isBlacklisted($ip)
-	{
-		$query = $this->query("SELECT * FROM `" . DB_PREFIX . "customer_ip_blacklist` WHERE ip = '" . $this->db->escape($ip) . "'");
-		
-		return $query->num_rows;
 	}
 }

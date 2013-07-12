@@ -7,7 +7,7 @@ class Admin_Controller_Shipping_Parcelforce4848_Controller_Shipping_Parcelforce4
 	{
 		$this->template->load('shipping/parcelforce_48');
 
-		$this->load->language('shipping/parcelforce_48');
+		$this->language->load('shipping/parcelforce_48');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -95,8 +95,6 @@ class Admin_Controller_Shipping_Parcelforce4848_Controller_Shipping_Parcelforce4
 		
 		$this->data['geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

@@ -78,7 +78,7 @@ class Admin_Model_Design_Layout extends Model
 	
 	public function getLayout($layout_id)
 	{
-		return $this->queryRow("SELECT DISTINCT * FROM " . DB_PREFIX . "layout WHERE layout_id = '" . (int)$layout_id . "'");
+		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "layout WHERE layout_id = '" . (int)$layout_id . "'");
 	}
 	
 	public function getLayouts($data = array(), $select = '*', $total = false) {

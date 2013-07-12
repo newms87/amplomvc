@@ -51,12 +51,19 @@ class Date extends Library
 	{
 		if (!$date) {
 			$date = new DateTime();
+		} elseif (is_string($date)) {
+			try {
+				$date = new DateTime($date);
+			} catch(Exception $e) {return $date;}
+			
+		}elseif (is_int($date)) {
+			$ts = $date;
+			$date = new DateTime();
+			$date->setTimestamp($ts);
 		}
 		
 		if (!empty($interval) && is_string($interval)) {
-			try {
-				$interval = new DateInterval($interval);
-			} catch(Exception $e) { $interval = null;}
+			$interval = date_interval_create_from_date_string($interval);
 		}
 		
 		if ($interval) {
@@ -100,6 +107,13 @@ class Date extends Library
 				case 'date_format_long':
 				case 'long':
 					$format = $this->language->getInfo('date_format_long');
+					break;
+				case 'time_format';
+				case'time':
+					$format = $this->language->getInfo('time_format');
+					break;
+				case 'datetime_format_long':
+					$format = $this->language->getInfo('datetime_format_long');
 					break;
 				case 'datetime_format':
 				case 'default':

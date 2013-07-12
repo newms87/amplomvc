@@ -3,10 +3,10 @@ class Catalog_Model_Total_Voucher extends Model
 {
 	public function getTotal(&$total_data, &$total, &$taxes)
 	{
-		if (isset($this->session->data['voucher'])) {
-			$this->load->language('total/voucher');
+		if ($this->cart->hasVoucher()) {
+			$this->language->load('total/voucher');
 			
-			$voucher_info = $this->Model_Cart_Voucher->getVoucher($this->session->data['voucher']);
+			$vouchers = $this->cart->getVouchers();
 			
 			if ($voucher_info) {
 				if ($voucher_info['amount'] > $total) {
@@ -14,11 +14,11 @@ class Catalog_Model_Total_Voucher extends Model
 				} else {
 					$amount = $voucher_info['amount'];
 				}
-					
+				
 				$total_data[] = array(
 					'code'		=> 'voucher',
+					'method_id' => $voucher_info['voucher_id'],
 					'title'		=> sprintf($this->_('text_voucher'), $this->session->data['voucher']),
-					'text'		=> $this->currency->format(-$amount),
 					'value'		=> -$amount,
 					'sort_order' => $this->config->get('voucher_sort_order')
 					);

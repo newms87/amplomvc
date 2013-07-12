@@ -3,31 +3,25 @@ class Catalog_Model_Localisation_Zone extends Model
 {
 	public function getZone($zone_id)
 	{
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "zone WHERE zone_id = '" . (int)$zone_id . "' AND status = '1'");
-		
-		return $query->row;
+		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "zone WHERE zone_id = '" . (int)$zone_id . "' AND status = '1'");
 	}
 	
 	public function getZoneName($zone_id)
 	{
-		$query = $this->query("SELECT name FROM " . DB_PREFIX . "zone WHERE zone_id = '" . (int)$zone_id . "' AND status = '1'");
-		
-		return $query->num_rows?$query->row['name']:'';
+		return $this->queryVar("SELECT name FROM " . DB_PREFIX . "zone WHERE zone_id = '" . (int)$zone_id . "' AND status = '1'");
 	}
 	
 	public function getZonesByCountryId($country_id)
 	{
-		$zone_data = $this->cache->get('zone.' . (int)$country_id);
+		$zones = $this->cache->get('zone.' . (int)$country_id);
 	
-		if (!$zone_data) {
-			$query = $this->query("SELECT * FROM " . DB_PREFIX . "zone WHERE country_id = '" . (int)$country_id . "' AND status = '1' ORDER BY name");
-	
-			$zone_data = $query->rows;
+		if (!$zones) {
+			$zones = $this->queryRow("SELECT * FROM " . DB_PREFIX . "zone WHERE country_id = '" . (int)$country_id . "' AND status = '1' ORDER BY name");
 			
-			$this->cache->set('zone.' . (int)$country_id, $zone_data);
+			$this->cache->set('zone.' . (int)$country_id, $zones);
 		}
 	
-		return $zone_data;
+		return $zones;
 	}
 	
 	public function inGeoZone($geo_zone_id, $country_id = 0, $zone_id = 0)
@@ -50,7 +44,6 @@ class Catalog_Model_Localisation_Zone extends Model
 	
 	public function getZonesByGeoZone($geo_zone)
 	{
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$geo_zone . "'");
-		return $query->rows;
+		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$geo_zone . "'");
 	}
 }

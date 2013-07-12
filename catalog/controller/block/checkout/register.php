@@ -91,7 +91,7 @@ class Catalog_Controller_Block_Checkout_Register extends Controller
 			$json['error'] = $this->form->get_errors();
 		}
 		
-		if ($this->Model_Account_Customer->getTotalCustomersByEmail($_POST['email'])) {
+		if ($this->customer->emailRegistered($_POST['email'])) {
 			$json['error']['email'] = $this->_('error_exists');
 		}
 			
@@ -110,7 +110,7 @@ class Catalog_Controller_Block_Checkout_Register extends Controller
 		//If the Form is valid
 		if (!$json) {
 			//Add New Customer
-			$this->Model_Account_Customer->addCustomer($_POST);
+			$this->customer->add($_POST);
 			
 			//Add Customer Address
 			$address_id = $this->Model_Account_Address->addAddress($_POST);

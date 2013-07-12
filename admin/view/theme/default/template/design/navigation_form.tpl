@@ -1,6 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $breadcrumbs; ?>
+	<?= $this->breadcrumb->render(); ?>
 	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
@@ -11,7 +11,7 @@
 			</div>
 		</div>
 		<div class="content">
-			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
+			<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="form">
 					<tr>
 						<td class="required"> <?= $entry_name; ?></td>

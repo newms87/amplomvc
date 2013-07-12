@@ -7,7 +7,7 @@ class Admin_Controller_Payment_Paymate extends Controller
 	{
 		$this->template->load('payment/paymate');
 
-		$this->load->language('payment/paymate');
+		$this->language->load('payment/paymate');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -99,8 +99,6 @@ class Admin_Controller_Payment_Paymate extends Controller
 			$this->data['paymate_sort_order'] = $this->config->get('paymate_sort_order');
 		}
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

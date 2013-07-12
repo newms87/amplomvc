@@ -119,7 +119,7 @@ label {
 }
 
 #menu.links ul.top_menu > li:hover{
-	background: black;
+	background-color: black;
 	cursor: pointer;
 }
 
@@ -137,12 +137,6 @@ label {
 	text-decoration:none;
 	font-family: Arial, sans-serif, Helvetica;
 	padding: 0 15px;
-}
-
-
-#menu.links ul.top_menu .selected .top {
-	background: url('../image/selected.png') repeat-x;
-	color: #FFFFFF;
 }
 
 #menu li ul.link_list{
@@ -164,6 +158,16 @@ label {
 }
 #menu li ul.link_list li:hover{
 	background-color: black;
+}
+
+#menu li.active{
+	background: #5B3208; /* Old browsers */
+	background: -webkit-linear-gradient(top,  #B3610F 0%,#5B3208 100%); /* Chrome10+,Safari5.1+ */
+	background: -moz-linear-gradient(top,  #B3610F 0%, #5B3208 100%); /* FF3.6+ */
+	background: -o-linear-gradient(top,  #B3610F 0%,#5B3208 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #B3610F 0%,#5B3208 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #B3610F 0%,#5B3208 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#B3610F', endColorstr='#5B3208',GradientType=0 ); /* IE6-8 */
 }
 
 ul.link_list > li{
@@ -189,7 +193,7 @@ li ul.link_list{
 			  transform-origin: 0 0;
 }
 
-li.active > ul.link_list{
+li.hover > ul.link_list{
 	-webkit-transition: -webkit-transform 0s linear 1s,left 0s linear .5s;
 		-moz-transition: -moz-transform 0s linear 1s,left 0s linear .5s;
 		 -ms-transition: -ms-transform 0s linear 1s,left 0s linear .5s;
@@ -209,8 +213,12 @@ li ul.link_list li{
 	padding: 0;
 	cursor:pointer;
 }
-li ul.link_list li.has_children{
-	background: url('../image/arrow-right.png') 95% center no-repeat;
+
+li ul.link_list li.has_children:after{
+	content: url('../image/arrow-right.png');
+	position:absolute;
+	top:5px;
+	right: 10px;
 }
 
 li ul.link_list li:hover{
@@ -218,7 +226,7 @@ li ul.link_list li:hover{
 }
 
 
-ul.top_menu > li:hover > a, ul.top_menu > li.active > a{
+ul.top_menu > li:hover > a, ul.top_menu > li.hover > a{
 	padding-bottom:25px !important;
 	
 }
@@ -237,7 +245,7 @@ li:hover > ul.link_list{
 			  transition: transform .2s linear;
 }
 
-ul > li > ul > li:hover > ul.link_list, ul > li > ul > li.active > ul.link_list{
+ul > li > ul > li:hover > ul.link_list, ul > li > ul > li.hover > ul.link_list{
 	left: 100%;
 	top:0;
 }
@@ -258,16 +266,19 @@ ul > li > ul > li:hover > ul.link_list, ul > li > ul > li.active > ul.link_list{
 }
 
 /*** Container Content ***/
-
 #container {
-	height: 100%;
-}
-body > #container {
 	height: auto;
 	min-height: 100%;
+	position: relative;
 }
+
+#header{
+	width:100%;
+	z-index:1000;
+	background:white;
+}
+
 #content {
-	background: #FFFFFF url('../image/background.png') 0px 1px repeat-x;
 	padding: 10px 30px 0px 30px;
 	min-width: 900px;
 	padding-bottom: 128px;
@@ -294,6 +305,7 @@ body > #container {
 }
 
 .message_box {
+	position: relative;
 	padding: 10px 10px 10px 33px;
 	margin-bottom: 15px;
 	color: #555555;
@@ -323,6 +335,21 @@ body > #container {
 .message_box.attention,.message_box.notify {
 	background: #FFF5CC url('../image/attention.png') 10px center no-repeat;
 	border-color: #F2DD8C;
+}
+
+.message_box .close{
+	position:absolute;
+	top:5px;
+	right:10px;
+	cursor: pointer;
+	background: transparent url('../image/close.png') 0px 0px no-repeat;
+	background-size: 32px 16px;
+	width: 16px;
+	height: 16px;
+}
+
+.message_box .close:hover, .message_box .close:active{
+	background-position: -16px 0px;
 }
 
 .required:before {

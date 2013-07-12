@@ -9,7 +9,8 @@ $_['text_browse']		= 'Browse Files';
 $_['text_clear']			= 'Clear Image';
 
 // Column
-$_['column_name']		= 'Voucher Theme Name';
+$_['column_name']		= 'Theme Name';
+$_['column_image']		= 'Theme Image';
 $_['column_action']		= 'Action';
 
 // Entry

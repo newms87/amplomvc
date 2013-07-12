@@ -7,7 +7,7 @@ class Admin_Controller_Module_DnCarousel extends Controller
 	{
 		$this->template->load('module/dn_carousel');
 
-		$this->load->language('module/dn_carousel');
+		$this->language->load('module/dn_carousel');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -66,8 +66,6 @@ class Admin_Controller_Module_DnCarousel extends Controller
 		$this->data['layouts'] = array();
 		foreach($layouts as $layout)
 			$this->data['layouts'][$layout['layout_id']] = $layout['name'];
-		
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 		
 		$this->children = array(
 			'common/header',

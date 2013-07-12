@@ -7,7 +7,7 @@ class Admin_Controller_Total_Voucher extends Controller
 	{
 		$this->template->load('total/voucher');
 
-		$this->load->language('total/voucher');
+		$this->language->load('total/voucher');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -45,8 +45,6 @@ class Admin_Controller_Total_Voucher extends Controller
 			$this->data['voucher_sort_order'] = $this->config->get('voucher_sort_order');
 		}
 
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
-		
 		$this->children = array(
 			'common/header',
 			'common/footer'

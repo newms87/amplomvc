@@ -16,24 +16,27 @@ class Catalog_Controller_Account_Newsletter extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 				
 		if ($this->request->isPost()) {
-			$this->Model_Account_Customer->editNewsletter($_POST['newsletter']);
+			$data = array(
+				'newsletter' => $_POST['newsletter'],
+			);
 			
-			$this->message->add('success', $this->_('text_success'));
+			$this->customer->edit($data);
 			
-			$this->url->redirect($this->url->link('account/account'));
+			if (!$this->message->error_set()) {
+				$this->message->add('success', $this->_('text_success'));
+				$this->url->redirect($this->url->link('account/account'));
+			}
 		}
 
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-			$this->breadcrumb->add($this->_('text_newsletter'), $this->url->link('account/newsletter'));
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
+		$this->breadcrumb->add($this->_('text_newsletter'), $this->url->link('account/newsletter'));
 
 		$this->data['action'] = $this->url->link('account/newsletter');
 		
 		$this->data['newsletter'] = $this->customer->info('newsletter');
 		
 		$this->data['back'] = $this->url->link('account/account');
-
-		$this->data['breadcrumbs'] = $this->breadcrumb->render();
 
 		$this->children = array(
 			'common/column_left',

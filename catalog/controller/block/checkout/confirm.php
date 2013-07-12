@@ -38,14 +38,13 @@ class Catalog_Controller_Block_Checkout_Confirm extends Controller
 		}
 		
 		if (empty($this->data['redirect'])) {
-			if (!$this->cart->addOrder()) {
-				if ($this->cart->has_error('cart')) {
-					$this->message->add('warning', $this->cart->get_errors('cart'));
-					$this->data['redirect'] = $this->url->link('cart/cart', 'newman=1');
+			if (!$this->order->add()) {
+				if ($this->order->hasError()) {
+					$this->message->add('warning', $this->order->getErrors());
+					$this->data['redirect'] = $this->url->link('cart/cart');
 				}
 				else {
 					$this->data['redirect'] = $this->url->link('checkout/checkout');
-					$this->message->add('warning', $this->cart->get_errors());
 				}
 			}
 			else {
