@@ -13,7 +13,7 @@ class Catalog_Controller_Payment_Klarna extends Controller
 			$this->data['action'] = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
 		}
 
-		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
+		$order_info = $this->order->get($this->session->data['order_id']);
 
 		if ($order_info) {
 		$this->template->load('payment/pp_standard');
@@ -103,7 +103,7 @@ class Catalog_Controller_Payment_Klarna extends Controller
 			$order_id = 0;
 		}
 		
-		$order_info = $this->Model_Checkout_Order->getOrder($order_id);
+		$order_info = $this->order->get($order_id);
 		
 		if ($order_info) {
 			$request = 'cmd=_notify-validate';
@@ -175,12 +175,12 @@ class Catalog_Controller_Payment_Klarna extends Controller
 				}
 				
 				if (!$order_info['order_status_id']) {
-					$this->Model_Checkout_Order->confirm($order_id, $order_status_id);
+					$this->order->update($order_id, $order_status_id);
 				} else {
 					$this->Model_Checkout_Order->update_order($order_id, $order_status_id);
 				}
 			} else {
-				$this->Model_Checkout_Order->confirm($order_id, $this->config->get('config_order_status_id'));
+				$this->order->update($order_id, $this->config->get('config_order_status_id'));
 			}
 			
 			curl_close($curl);

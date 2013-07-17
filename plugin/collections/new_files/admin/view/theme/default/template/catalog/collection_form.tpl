@@ -1,7 +1,6 @@
 <?= $header; ?>
 <div class="content">
 	<?= $this->breadcrumb->render(); ?>
-	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'user.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -41,7 +40,7 @@
 					<tr>
 						<td>
 							<div><?= $entry_product; ?></div>
-							<div><input type="text" id='product_list_autocomplete' filter="p.name" route="catalog/product/autocomplete" /></div>
+							<div><input type="text" id='product_list_autocomplete' /></div>
 							<div><?= $text_autocomplete; ?></div>
 						</td>
 						<td>
@@ -88,7 +87,16 @@
 
 <?= $this->builder->js('ckeditor'); ?>
 
-<?= $this->builder->js('autocomplete', '#product_list_autocomplete', 'name', 'product_id', 'callback_product_autocomplete'); ?>
+<? $autocomplete_data = array(
+	'selector' => '#product_list_autocomplete',
+	'route' => 'catalog/product/autocomplete',
+	'filter' => 'name',
+	'label' => 'name',
+	'value' => 'product_id',
+	'callback' => 'callback_product_autocomplete'
+); ?>
+
+<?= $this->builder->js('autocomplete', $autocomplete_data); ?>
 
 <script type="text/javascript">//<!--
 $(document).ready(function(){

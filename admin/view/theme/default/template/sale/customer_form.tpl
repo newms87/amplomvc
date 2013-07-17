@@ -331,11 +331,11 @@ $('#transaction .pagination a').live('click', function() {
 	return false;
 });
 
-$('#transaction').load("<?= HTTP_ADMIN . "index.php?route=sale/customer/transaction"; ?>" + '&customer_id=<?= $customer_id; ?>');
+$('#transaction').load("<?= $url_transaction; ?>");
 
 function addTransaction() {
 	$.ajax({
-		url: "<?= HTTP_ADMIN . "index.php?route=sale/customer/transaction"; ?>" + '&customer_id=<?= $customer_id; ?>',
+		url: "<?= $url_transaction; ?>",
 		type: 'post',
 		dataType: 'html',
 		data: 'description=' + encodeURIComponent($('#tab-transaction input[name=\'description\']').val()) + '&amount=' + encodeURIComponent($('#tab-transaction input[name=\'amount\']').val()),
@@ -364,11 +364,11 @@ $('#reward .pagination a').live('click', function() {
 	return false;
 });
 
-$('#reward').load("<?= HTTP_ADMIN . "index.php?route=sale/customer/reward"; ?>" + '&customer_id=<?= $customer_id; ?>');
+$('#reward').load("<?= $url_reward; ?>");
 
 function addRewardPoints() {
 	$.ajax({
-		url: "<?= HTTP_ADMIN . "index.php?route=sale/customer/reward"; ?>" + '&customer_id=<?= $customer_id; ?>',
+		url: "<?= $url_reward; ?>",
 		type: 'post',
 		dataType: 'html',
 		data: 'description=' + encodeURIComponent($('#tab-reward input[name=\'description\']').val()) + '&points=' + encodeURIComponent($('#tab-reward input[name=\'points\']').val()),
@@ -392,7 +392,7 @@ function addRewardPoints() {
 
 function addBlacklist(ip) {
 	$.ajax({
-		url: "<?= HTTP_ADMIN . "index.php?route=sale/customer/addblacklist"; ?>",
+		url: "<?= $url_blacklist; ?>",
 		type: 'post',
 		dataType: 'json',
 		data: 'ip=' + encodeURIComponent(ip),
@@ -424,7 +424,7 @@ function addBlacklist(ip) {
 
 function removeBlacklist(ip) {
 	$.ajax({
-		url: "<?= HTTP_ADMIN . "index.php?route=sale/customer/removeblacklist"; ?>",
+		url: "<?= $url_remove_blacklist; ?>",
 		type: 'post',
 		dataType: 'json',
 		data: 'ip=' + encodeURIComponent(ip),

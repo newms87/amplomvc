@@ -18,7 +18,7 @@ class Catalog_Controller_Payment_Sagepay extends Controller
 		$vendor = $this->config->get('sagepay_vendor');
 		$password = $this->config->get('sagepay_password');
 		
-		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
+		$order_info = $this->order->get($this->session->data['order_id']);
 		
 		$data = array();
 		
@@ -124,7 +124,7 @@ class Catalog_Controller_Payment_Sagepay extends Controller
 			$data = $this->getToken($output);
 		
 			if ($data && is_array($data)) {
-				$this->Model_Checkout_Order->confirm($_GET['order_id'], $this->config->get('config_order_status_id'));
+				$this->order->update($_GET['order_id'], $this->config->get('config_order_status_id'));
 
 				$message = '';
 		

@@ -69,7 +69,7 @@ class Admin_Controller_Payment_Paypoint extends Controller
 			$this->data['paypoint_order_status_id'] = $this->config->get('paypoint_order_status_id');
 		}
 
-		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
+		$this->data['order_statuses'] = $this->order->getOrderStatuses();
 
 		if (isset($_POST['paypoint_geo_zone_id'])) {
 			$this->data['paypoint_geo_zone_id'] = $_POST['paypoint_geo_zone_id'];

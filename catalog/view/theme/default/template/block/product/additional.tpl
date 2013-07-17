@@ -3,9 +3,7 @@
 	<a href="#tab-information"><?= $tab_information; ?></a>
 	<? }?>
 	
-	<? if ($shipping_return) { ?>
-	<a href="#tab-shipping"><?= $tab_shipping; ?></a>
-	<? } ?>
+	<a href="#tab-shipping-return"><?= $tab_shipping_return; ?></a>
 	
 	<? if (!empty($attribute_groups)) { ?>
 	<a href="#tab-attribute"><?= $tab_attribute; ?></a>
@@ -16,13 +14,27 @@
 <div id="tab-information" class="tab-content"><?= $information; ?></div>
 <? }?>
 
-<? if ($shipping_return) { ?>
-<div id="tab-shipping" class="tab-content">
-	<?= $shipping_return; ?><br />
-	<?= $is_final?$final_sale_explanation:''; ?><br /><br /><br />
-	<?= $shipping_return_link; ?>
+<div id="tab-shipping-return" class="tab-content">
+	<? if ($shipping_policy) { ?>
+		<div class="shipping_policy">
+			<div class="title"><?= $shipping_policy['title']; ?></div>
+			<div class="description"><?= $shipping_policy['description']; ?></div>
+		</div>
+	<? } ?>
+	
+	<? if ($return_policy) { ?>
+		<div class="return_policy">
+			<div class="title"><?= $return_policy['title']; ?></div>
+			<div class="description"><?= $return_policy['description']; ?></div>
+		</div>
+	<? } ?>
+	
+	<? if (!empty($is_final_explanation)) { ?>
+		<p class="final_sale_explain"><?= $is_final_explanation; ?></p>
+	<? } ?>
+	
+	<?= $text_view_policies; ?>
 </div>
-<? } ?>
 
 <? if (!empty($attribute_groups)) { ?>
 <div id="tab-attribute" class="tab-content">

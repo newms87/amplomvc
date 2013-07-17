@@ -75,7 +75,7 @@ class Admin_Controller_Payment_WebPaymentSoftware extends Controller
 			$this->data['web_payment_software_order_status_id'] = $this->config->get('web_payment_software_order_status_id');
 		}
 
-		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
+		$this->data['order_statuses'] = $this->order->getOrderStatuses();
 		
 		if (isset($_POST['web_payment_software_geo_zone_id'])) {
 			$this->data['web_payment_software_geo_zone_id'] = $_POST['web_payment_software_geo_zone_id'];

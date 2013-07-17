@@ -140,7 +140,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			'type' => 'multiselect',
 			'display_name' => $this->_('column_store'),
 			'filter' => true,
-			'build_config' => array('store_id' => 'name'),
+			'build_config' => array('store_id' , 'name'),
 			'build_data' => $this->Model_Setting_Store->getStores(),
 			'sortable' => false,
 		);
@@ -363,15 +363,15 @@ class Admin_Controller_Catalog_Information extends Controller
 		}
 		
 		foreach ($information_ids as $information_id) {
-			if ($this->config->get('config_account_id') == $information_id) {
+			if ($this->config->get('config_account_terms_info_id') == $information_id) {
 				$this->error['warning' . $information_id] = $this->_('error_account');
 			}
 			
-			if ($this->config->get('config_checkout_id') == $information_id) {
+			if ($this->config->get('config_checkout_terms_info_id') == $information_id) {
 				$this->error['warning' . $information_id] = $this->_('error_checkout');
 			}
 			
-			if ($this->config->get('config_affiliate_id') == $information_id) {
+			if ($this->config->get('config_affiliate_terms_info_id') == $information_id) {
 				$this->error['warning' . $information_id] = $this->_('error_affiliate');
 			}
 						

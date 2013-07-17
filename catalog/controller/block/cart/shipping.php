@@ -37,7 +37,11 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 		
 		$this->data['shipping_method'] = !empty($this->data['shipping_method']) ? $this->data['shipping_method'] : false;
 		
-		$this->data['apply_shipping'] = $this->url->link('block/cart/shipping/apply');
+		//Ajax Urls
+		$this->data['url_quote'] = $this->url->ajax('block/cart/shipping/quote');
+		
+		//Action Buttons
+		$this->data['apply'] = $this->url->ajax('block/cart/shipping/apply');
 		
 		$this->data['redirect'] = $this->url->here();
 		

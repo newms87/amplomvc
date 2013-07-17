@@ -13,7 +13,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			'type' => 'multiselect',
 			'display_name' => $this->_('column_collection'),
 			'filter' => true,
-			'build_config' => array('collection_id' => 'name'),
+			'build_config' => array('collection_id' , 'name'),
 			'build_data' => $this->Model_Catalog_Collection->getCollections(),
 			'sortable' => true,
 			'sort_value' => 'cp.name',

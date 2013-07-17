@@ -272,11 +272,13 @@ class Language extends Library
 	
 	public function plugin($name, $filename)
 	{
-		$file = DIR_PLUGIN . $name . '/language/' . $filename . '.php';
+		$file = DIR_PLUGIN . $name . '/language/' . $this->directory . '/' . $filename . '.php';
 		
 		if (!file_exists($file)) {
+			$file = DIR_PLUGIN . $name . '/language/' . $this->default . '/' . $filename . '.php';
+			
 			if (!file_exists($file)) {
-				trigger_error('The plugin language file was not found for the plugin ' . $name . ': ' . $filename . '!');
+				trigger_error("The plugin language file $file was not found for the plugin $name: $filename requested!" . get_caller());
 			}
 		}
 		

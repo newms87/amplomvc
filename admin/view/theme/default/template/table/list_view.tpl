@@ -48,12 +48,15 @@
 				<? break;
 				
 				case 'int': ?>
-					<div class="filter_number_range"><input type="text" name="filter[<?= $slug; ?>]" value="<?= $column['filter_value']; ?>" /></div>
+					<div class="zoom_hover">
+						<div class="input filter_number_range"><input type="text" name="filter[<?= $slug; ?>]" value="<?= $column['filter_value']; ?>" /></div>
+						<div class="value"><?= $column['filter_value']; ?></div>
+					</div>
 				<? break;
 				case 'select':
 				case 'multiselect':
 					if(isset($column['build_config'])){
-						$this->builder->set_config(key($column['build_config']), current($column['build_config']));
+						$this->builder->set_config($column['build_config']);
 					}
 					$blank_option = $column['filter_blank'] ? array(''=>'') : array();
 					echo $this->builder->build('select', $blank_option + $column['build_data'], "filter[$slug]", $column['filter_value']);
@@ -129,18 +132,18 @@
 					
 					case 'select':
 						foreach($column['build_data'] as $c_data){
-							if($c_data[key($column['build_config'])] == $value){ ?>
-								<?= $c_data[current($column['build_config'])]; ?>
+							if(isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $value){ ?>
+								<?= $c_data[$column['build_config'][1]]; ?>
 							<? }
 						}
 						break;
 						
 					case 'multiselect':
 						foreach($value as $v){
-							$ms_value = is_array($v) ? $v[key($column['build_config'])] : $v;
+							$ms_value = is_array($v) ? $v[$column['build_config'][0]] : $v;
 							foreach($column['build_data'] as $c_data){
-								if($c_data[key($column['build_config'])] == $ms_value){
-									echo $c_data[current($column['build_config'])] . "<br/>";
+								if(isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $ms_value){
+									echo $c_data[$column['build_config'][1]] . "<br/>";
 									break;
 								}
 							}
@@ -188,6 +191,24 @@ $("#filter_list").keydown(function(e){
 		return false;
 	}
 });
+
+$('.zoom_hover').hover(zoom_hover_in, zoom_hover_out);
+
+function zoom_hover_in(){
+	input = $(this).find('.input');
+	value = $(this).find('.value');
+	
+	input.hide();
+	value.show();
+}
+
+function zoom_hover_out(){
+	input = $(this).find('.input');
+	value = $(this).find('.value');
+	
+	input.show();
+	value.hide();
+}
 //--></script>
 
 <?= $this->builder->js('filter_url', '#filter_list'); ?>

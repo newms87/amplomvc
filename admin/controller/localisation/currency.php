@@ -366,11 +366,7 @@ class Admin_Controller_Localisation_Currency extends Controller
 			$this->error['code'] = $this->_('error_code');
 		}
 
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
 
 	private function validateDelete()
@@ -394,7 +390,11 @@ class Admin_Controller_Localisation_Currency extends Controller
 				}
 			}
 			
-			$order_total = $this->Model_Sale_Order->getTotalOrdersByCurrencyId($currency_id);
+			$filter = array(
+				'currencies' => array($currency_info['code']),
+			);
+			
+			$order_total = $this->System_Model_Order->getTotalOrders($filter);
 
 			if ($order_total) {
 				$this->error['warning'] = sprintf($this->_('error_order'), $order_total);

@@ -5,7 +5,7 @@ class Catalog_Controller_Payment_Paypoint extends Controller
 	{
 		$this->template->load('payment/paypoint');
 
-		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
+		$order_info = $this->order->get($this->session->data['order_id']);
 
 		$this->data['merchant'] = $this->config->get('paypoint_merchant');
 		$this->data['trans_id'] = $this->session->data['order_id'];
@@ -74,7 +74,7 @@ class Catalog_Controller_Payment_Paypoint extends Controller
 			$order_id = 0;
 		}
 		
-		$order_info = $this->Model_Checkout_Order->getOrder($order_id);
+		$order_info = $this->order->get($order_id);
 		
 		// Validate the request is from PayPoint
 		if ($this->config->get('paypoint_password')) {
@@ -103,7 +103,7 @@ class Catalog_Controller_Payment_Paypoint extends Controller
 			if (isset($_GET['code']) && $_GET['code'] == 'A') {
 		$this->template->load('payment/paypoint_success');
 
-				$this->Model_Checkout_Order->confirm($_GET['trans_id'], $this->config->get('config_order_status_id'));
+				$this->order->update($_GET['trans_id'], $this->config->get('config_order_status_id'));
 	
 				$message = '';
 	

@@ -243,7 +243,7 @@ class Admin_Controller_Setting_Store extends Controller
 		
 		$this->data['informations'] = $this->Model_Catalog_Information->getInformations();
 		
-		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
+		$this->data['order_statuses'] = $this->order->getOrderStatuses();
 		
 		$this->data['load_theme_img'] = $this->url->link('setting/setting/theme');
 		
@@ -347,17 +347,17 @@ class Admin_Controller_Setting_Store extends Controller
 				$this->error['warning'] = $this->_('error_default');
 			}
 			
-			$store_total = $this->Model_Sale_Order->getTotalOrdersByStoreId($store_id);
+			$filter = array(
+				'store_ids' => array($store_id),
+			);
+			
+			$store_total = $this->System_Model_Order->getTotalOrders($filter);
 	
 			if ($store_total) {
 				$this->error['warning'] = sprintf($this->_('error_store'), $store_total);
 			}
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
 }

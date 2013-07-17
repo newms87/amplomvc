@@ -77,12 +77,12 @@ abstract class Controller
 	
 	protected function render()
 	{
-		//Build Errors
+		//Display Error Messages
 		$this->data['errors'] = array();
+		
 		if ($this->error) {
-			foreach ($this->error as $e=>$msg) {
-				$this->data['errors'][$e] = $msg;
-			}
+			$this->message->add('warning', $this->error);
+			$this->data['errors'] = $this->error;
 		}
 		
 		//Build language

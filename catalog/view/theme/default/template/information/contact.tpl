@@ -2,7 +2,6 @@
 <div id="content">
 	<?= $content_top; ?>
 	<?= $this->breadcrumb->render(); ?>
-	<?= $this->builder->display_errors($errors); ?>
 	<h1><?= $heading_title; ?></h1>
 	<form id='contact_form' action="<?= $action; ?>" method="post" enctype="multipart/form-data">
 		<h3><?= $text_contact_us; ?></h3>

@@ -411,7 +411,8 @@ ul{
 	left: 0!important;
 }
 
-#header #links_primary ul li.active > a.menu_link{
+#header #links_primary ul li.active > a.menu_link,
+#header #links_primary ul li.active_parent > a.menu_link{
 	color: #888;
 }
 
@@ -957,84 +958,6 @@ a.button:active, input.button:active {
 	font-weight:bold;
 }
 
-.box-product {
-	width: 100%;
-	overflow: auto;
-}
-.box-product > div {
-	width: 130px;
-	display: inline-block;
-	vertical-align: top;
-	margin-right: 20px;
-	margin-bottom: 20px;
-}
-#column_left + #column_right + .content .box-product > div {
-	width: 119px;
-}
-.box-product .image {
-	display: block;
-	margin-bottom: 0px;
-}
-.box-product .image img {
-	padding: 3px;
-	border: 1px solid #E7E7E7;
-}
-.box-product .name a {
-	color: #38B0E3;
-	font-weight: bold;
-	text-decoration: none;
-	display: block;
-	margin-bottom: 4px;
-}
-.box-product .price {
-	display: block;
-	font-weight: bold;
-	color: #333333;
-	margin-bottom: 4px;
-}
-
-.box-product .rating {
-	display: block;
-	margin-bottom: 4px;
-}
-/* box category */
-.box-category {
-	margin-top: -5px;
-}
-.box-category ul {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
-.box-category > ul > li {
-	padding: 8px 8px 8px 0px;
-}
-.box-category > ul > li + li {
-	border-top: 1px solid #EEEEEE;
-}
-.box-category > ul > li > a {
-	text-decoration: none;
-	color: #333;
-}
-.box-category > ul > li ul {
-	display: none;
-}
-.box-category > ul > li a.active {
-	font-weight: bold;
-}
-.box-category > ul > li a.active + ul {
-	display: block;
-}
-.box-category > ul > li ul > li {
-	padding: 5px 5px 0px 10px;
-}
-.box-category > ul > li ul > li > a {
-	text-decoration: none;
-	display: block;
-}
-.box-category > ul > li ul > li > a.active {
-	font-weight: bold;
-}
 /* content */
 #content_holder .content {
 	overflow: visible;
@@ -1262,6 +1185,10 @@ a.button:active, input.button:active {
 	margin-bottom: 15px;
 }
 
+#catalog_list .item_block{
+	text-decoration:none;
+	display: inline-block;
+}
 
 #catalog_list .item_block:hover{
 	background: #E5E5E5;
@@ -1272,19 +1199,14 @@ a.button:active, input.button:active {
 	margin-left: 15px;
 }
 
-#catalog_list .item_block .image a{
-	display:block;
-}
-
 #catalog_list .name {
 	margin-bottom: 3px;
-}
-#catalog_list .name a {
 	text-decoration: none;
 	color: #444444;
 	font-weight: bold;
 	font-size: 20px;
 }
+
 #catalog_list .teaser {
 	line-height: 15px;
 	margin-bottom: 5px;
@@ -1334,6 +1256,7 @@ a.button:active, input.button:active {
 #catalog_list.list .item_block{
 	padding: 7px;
 	max-height: 220px;
+	width:100%;
 }
 
 #catalog_list.list .item_block > div{
@@ -1378,7 +1301,6 @@ a.button:active, input.button:active {
 	text-decoration: none;
 }
 #catalog_list.grid .item_block{
-	display:inline-block;
 	vertical-align: bottom;
 	margin: 0 15px 15px 15px;
 	max-width: 220px;
@@ -1643,6 +1565,21 @@ a.button:active, input.button:active {
 	border-right: 1px solid #DDDDDD;
 	border-bottom: 1px solid #DDDDDD;
 }
+
+/* Product Additional */
+#tab-shipping-return .shipping_policy .title{
+	font-size: 16px;
+	font-weight:bold;
+}
+
+#tab-shipping-return .return_policy .title{
+	font-size: 16px;
+	font-weight:bold;
+	margin-top: 10px;
+	margin-bottom:5px;
+}
+
+/** Compare **/
 .compare-info {
 	border-collapse: collapse;
 	width: 100%;
@@ -1941,7 +1878,7 @@ ul.return_success_list li .label{
 .cart-info thead .quantity{
 	min-width:145px;
 }
-.cart-info thead .finalsale{
+.cart-info thead .return_policy{
 	min-width:80px;
 }
 .cart-info thead .name, .cart-info thead .model, .cart-info thead .quantity {
@@ -2320,16 +2257,14 @@ table.form_single_column select{
 	font-weight: bold;
 	color:#A0C0F0;
 	position:relative;
-	top:-2px;
+	top: 0;
+	left: 0;
 }
 
 .extra_info_block{
 	display:inline-block;
-	float:right;
 	position:relative;
 	overflow:visible;
-	right:20px;
-	clear:right;
 }
 .extra_info_block + .extra_info_block{
 	margin-top:10px;
@@ -2500,7 +2435,8 @@ table.form_single_column select{
 	padding-bottom:0;
 }
 
-#footer .links .active{
+#footer .links .active,
+#footer .links .active_parent{
 	background: #CCC;
 }
 
@@ -2968,18 +2904,6 @@ table.form_single_column select{
 
 .info_heading{
 	font-size: 20px;
-}
-
-.info_item.valid{
-	background: #EAF7D9;
-}
-
-.info_item.invalid{
-	background: #FFD1D1;
-}
-
-.info_item.validating{
-	background: #FFF5CC;
 }
 
 .validation_status{

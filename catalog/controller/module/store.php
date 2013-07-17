@@ -30,7 +30,7 @@ class Catalog_Controller_Module_Store extends Controller
 				$this->data['stores'][] = array(
 					'store_id' => $result['store_id'],
 					'name'	=> $result['name'],
-					'url'		=> $result['url'] . 'index.php?route=common/home'
+					'url'		=> $this->url->store($result['store_id'], 'common/home'),
 				);
 			}
 

@@ -93,7 +93,7 @@ class Admin_Controller_Payment_AuthorizenetAim extends Controller
 			$this->data['authorizenet_aim_order_status_id'] = $this->config->get('authorizenet_aim_order_status_id');
 		}
 
-		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
+		$this->data['order_statuses'] = $this->order->getOrderStatuses();
 		
 		if (isset($_POST['authorizenet_aim_geo_zone_id'])) {
 			$this->data['authorizenet_aim_geo_zone_id'] = $_POST['authorizenet_aim_geo_zone_id'];

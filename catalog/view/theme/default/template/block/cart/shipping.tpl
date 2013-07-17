@@ -22,7 +22,7 @@
 
 <div id='shipping_quote_template' class="shipping_quote" style='display:none'>
 	<h2><?= $text_shipping_method; ?></h2>
-	<form action="<?= $apply_shipping; ?>" method="post" enctype="multipart/form-data">
+	<form action="<?= $apply; ?>" method="post" enctype="multipart/form-data">
 		<table class="quote_method radio">
 			<tr id="%code%" class="code">
 				<td colspan="3"><b>%code_title%</b></td>
@@ -78,7 +78,7 @@ $('#button-quote').click(function() {
 	shipping_quote.find('.quote_address').html(zone_name + ', ' + postcode + ', ' + country_name);
 	
 	$.ajax({
-		url: "<?= HTTP_CATALOG . "index.php?route=block/cart/shipping/quote"; ?>",
+		url: "<?= $url_quote; ?>",
 		type: 'post',
 		data: $('#cart_shipping').serialize(),
 		dataType: 'json',

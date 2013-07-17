@@ -200,7 +200,7 @@ abstract class Model
 		if (is_integer($where) || (is_string($where) && !preg_match("/[^\d]/", $where))) {
 			$primary_key = $this->get_primary_key($table);
 			if (!$primary_key) {
-				trigger_error($this->tool->error_info() . "UPDATE $table does not have an integer primary key!");
+				trigger_error("UPDATE $table does not have an integer primary key!" . get_caller(0, 4));
 				return null;
 			}
 			
@@ -217,7 +217,7 @@ abstract class Model
 		$success = $this->db->query("UPDATE " . DB_PREFIX . "$table SET $values $where");
 		
 		if (!$success) {
-			$err_msg = $this->tool->error_info() . "There was a problem updating entry for $table! $table was not modified.";
+			$err_msg = "There was a problem updating entry for $table! $table was not modified." . get_caller(0, 4);
 			trigger_error($err_msg);
 			$this->message->add("warning", $err_msg);
 			return false;
@@ -252,7 +252,7 @@ abstract class Model
 			$truncate_allowed = $this->db->queryVar("SELECT COUNT(*) FROM `" . DB_PREFIX . "db_rule` WHERE `table`='$table' AND `truncate`='1'");
 			
 			if (!$truncate_allowed) {
-				$msg = "Attempt to TRUNCATE $table not allowed for this table! Please specify this in the Database Rules if you want this functionality. " . get_caller() . get_caller(1);
+				$msg = "Attempt to TRUNCATE $table not allowed for this table! Please specify this in the Database Rules if you want this functionality. " . get_caller(0, 1);
 				trigger_error($msg);
 				$this->message->add('warning', $msg);
 				return;

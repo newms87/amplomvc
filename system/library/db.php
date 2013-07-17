@@ -147,7 +147,7 @@ class DB
 			return null;
 		}
 		
-		return current($resource->row);
+		return $resource->row ? current($resource->row) : null;
   	}
 	
 	private function queryError($sql = '')
@@ -160,7 +160,7 @@ class DB
 		}
 		
 		if (function_exists('get_caller')) {
-			trigger_error($this->driver->getError() . get_caller(1) . get_caller(2));
+			trigger_error($this->driver->getError() . get_caller(1, 3));
 		}
 	}
 	
@@ -291,6 +291,16 @@ class DB
 		return $tables;
 	}
 	
+	public function createTable($table, $sql)
+	{
+		return $this->driver->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "$table` ($sql)");
+	}
+	
+	public function dropTable($table)
+	{
+		return $this->driver->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "$table`");
+	}
+	
 	public function countTables()
 	{
 		$result = $this->driver->query("SHOW TABLES");
@@ -322,7 +332,7 @@ class DB
 	public function addColumn($table, $column, $options = '')
 	{
 		if (!$this->hasColumn($table, $column)) {
-			$this->driver->query("ALTER TABLE `" . DB_PREFIX . "$table` ADD COLUMN `$column` $options");
+			return $this->driver->query("ALTER TABLE `" . DB_PREFIX . "$table` ADD COLUMN `$column` $options");
 		}
 	}
 	
@@ -336,14 +346,14 @@ class DB
 				return false;
 			}
 			
-			$this->driver->query("ALTER TABLE `" . DB_PREFIX . "$table` CHANGE COLUMN `$column` `$new_column` $options");
+			return $this->driver->query("ALTER TABLE `" . DB_PREFIX . "$table` CHANGE COLUMN `$column` `$new_column` $options");
 		}
 	}
 	
 	public function dropColumn($table, $column)
 	{
 		if ($this->hasColumn($table, $column)) {
-			$this->driver->query("ALTER TABLE `" . DB_PREFIX . "$table` DROP COLUMN `$column`");
+			return $this->driver->query("ALTER TABLE `" . DB_PREFIX . "$table` DROP COLUMN `$column`");
 		}
 	}
 	
@@ -368,7 +378,7 @@ class DB
 	public function escape($value)
 	{
 		if (is_resource($value) || is_object($value) || is_array($value)) {
-			trigger_error("DB:escape(): Argument for value was not a a valid type! Value: " . gettype($value) . ". " . get_caller() . " >>>> " . get_caller(2));
+			trigger_error("DB:escape(): Argument for value was not a a valid type! Value: " . gettype($value) . ". " . get_caller(0,3));
 			exit;
 		}
 		

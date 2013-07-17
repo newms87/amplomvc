@@ -946,6 +946,89 @@ class Admin_Model_Design_Navigation extends Model
 					'status'			=> 1,
 				),
 				
+					'system_settings_general' => array(
+							'display_name'	=> 'General',
+							'name'			=> 'system_settings_general',
+							'title'			=> '',
+							'href'			=> 'setting/setting',
+							'query'			=> '',
+							'is_route'		=> 1,
+							'parent_id'		=> 'system_settings',
+							'sort_order'	=> 0,
+							'status'			=> 1,
+						),
+						
+					'system_settings_update' => array(
+							'display_name'	=> 'Update',
+							'name'			=> 'system_settings_update',
+							'title'			=> '',
+							'href'			=> 'setting/update',
+							'query'			=> '',
+							'is_route'		=> 1,
+							'parent_id'		=> 'system_settings',
+							'sort_order'	=> 1,
+							'status'			=> 1,
+						),
+				
+					'system_settings_orders' => array(
+							'display_name'	=> 'Orders',
+							'name'			=> 'system_settings_orders',
+							'title'			=> '',
+							'href'			=> '',
+							'query'			=> '',
+							'is_route'		=> 0,
+							'parent_id'		=> 'system_settings',
+							'sort_order'	=> 2,
+							'status'			=> 1,
+						),
+		
+							'system_settings_orders_order_statuses' => array(
+								'display_name'	=> 'Order Statuses',
+								'name'			=> 'system_settings_orders_order_statuses',
+								'title'			=> '',
+								'href'			=> 'setting/order_status',
+								'query'			=> '',
+								'is_route'		=> 1,
+								'parent_id'		=> 'system_settings_orders',
+								'sort_order'	=> 0,
+								'status'			=> 1,
+							),
+					
+					'system_settings_policies' => array(
+							'display_name'	=> 'Policies',
+							'name'			=> 'system_settings_policies',
+							'title'			=> '',
+							'href'			=> '',
+							'query'			=> '',
+							'is_route'		=> 0,
+							'parent_id'		=> 'system_settings',
+							'sort_order'	=> 2,
+							'status'			=> 1,
+						),
+						
+						'system_settings_policies_shipping_policies' => array(
+								'display_name'	=> 'Shipping Policies',
+								'name'			=> 'system_settings_policies_shipping_policies',
+								'title'			=> '',
+								'href'			=> 'setting/shipping_policy',
+								'query'			=> '',
+								'is_route'		=> 1,
+								'parent_id'		=> 'system_settings_policies',
+								'sort_order'	=> 0,
+								'status'			=> 1,
+							),
+							
+						'system_settings_policies_return_policies' => array(
+								'display_name'	=> 'Return Policies',
+								'name'			=> 'system_settings_policies_return_policies',
+								'title'			=> '',
+								'href'			=> 'setting/return_policy',
+								'query'			=> '',
+								'is_route'		=> 1,
+								'parent_id'		=> 'system_settings_policies',
+								'sort_order'	=> 1,
+								'status'			=> 1,
+							),
 					'system_settings_returns' => array(
 							'display_name'	=> 'Returns',
 							'name'			=> 'system_settings_returns',
@@ -954,7 +1037,7 @@ class Admin_Model_Design_Navigation extends Model
 							'query'			=> '',
 							'is_route'		=> 0,
 							'parent_id'		=> 'system_settings',
-							'sort_order'	=> 1,
+							'sort_order'	=> 3,
 							'status'			=> 1,
 						),
 		
@@ -1029,7 +1112,19 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 1,
 						'status'			=> 1,
 					),
-	
+					
+					'system_mail_error' => array(
+						'display_name'	=> 'Failed Messages',
+						'name'			=> 'system_mail_error',
+						'title'			=> '',
+						'href'			=> 'mail/error',
+						'query'			=> '',
+						'is_route'		=> 1,
+						'parent_id'		=> 'system_mail',
+						'sort_order'	=> 2,
+						'status'			=> 1,
+					),
+				
 				'system_url_alias' => array(
 					'display_name'	=> 'URL Alias',
 					'name'			=> 'system_url_alias',

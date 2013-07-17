@@ -35,10 +35,10 @@ class Catalog_Controller_Cart_Cart extends Controller
 		
 		$this->data['block_total'] = $this->getBlock('cart/total');
 		
-		if (isset($_GET['redirect']) && preg_match("/route=cart\/cart/",$_GET['redirect']) == 0) {
+		//Set Continue to the redirect unless we are redirecting to the cart page
+		if (isset($_GET['redirect']) && preg_match("/cart\/cart/",$_GET['redirect']) == 0) {
 			$this->data['continue'] = urldecode($_GET['redirect']);
-		}
-		else {
+		} else {
 			$this->data['continue'] = $this->url->link('common/home');
 		}
 								

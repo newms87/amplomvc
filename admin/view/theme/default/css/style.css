@@ -160,7 +160,8 @@ label {
 	background-color: black;
 }
 
-#menu li.active{
+#menu li.active,
+#menu li.active_parent{
 	background: #5B3208; /* Old browsers */
 	background: -webkit-linear-gradient(top,  #B3610F 0%,#5B3208 100%); /* Chrome10+,Safari5.1+ */
 	background: -moz-linear-gradient(top,  #B3610F 0%, #5B3208 100%); /* FF3.6+ */
@@ -759,6 +760,14 @@ a.delete_button:visited{
 	margin: 0 3px;
 }
 
+/* Zoom Hover */
+.zoom_hover{
+	height: 100%;
+	width: 100%;
+	min-height: 25px;
+}
+
+/* Pagination */
 .pagination {
 	border-top: 1px solid #DDDDDD;
 	padding-top: 6px;

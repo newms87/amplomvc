@@ -15,7 +15,7 @@ $_['text_modify']						= 'Modify &raquo;';
 $_['text_your_details']				= 'Your Personal Details';
 $_['text_your_address']				= 'Your Address';
 $_['text_your_password']				= 'Your Password';
-$_['text_agree']							= 'I have read and agree to the <a class="colorbox" href="%s" alt="%s"><b>%s</b></a>';
+$_['text_agree']							= 'I have read and agree to the <a class="colorbox" onclick="return colorbox($(this))" href="%s" target="_blank" alt="%s"><b>%s</b></a>';
 $_['text_address_new']					= 'I want to use a new address';
 $_['text_address_existing']			= 'I want to use an existing address';
 $_['text_shipping_method']			= 'Please select the preferred shipping method to use on this order.';

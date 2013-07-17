@@ -60,6 +60,9 @@ class Admin_Controller_Setting_Setting extends Controller
 			'config_catalog_limit' => 10,
 			'config_admin_limit' => 20,
 			'config_performance_log' => 0,
+			'config_default_return_policy' => 0,
+			'config_default_shipping_policy' => 0,
+			'config_shipping_return_info_id' => 0,
 			'config_cache_ignore' => '',
 			'config_show_price_with_tax' => '',
 			'config_tax_default_id' => '',
@@ -71,9 +74,9 @@ class Admin_Controller_Setting_Setting extends Controller
 			'config_customer_price' => 0,
 			'config_customer_approval' => 0,
 			'config_guest_checkout' => '',
-			'config_account_id' => 0,
-			'config_checkout_id' => 0,
-			'config_affiliate_id' => 0,
+			'config_account_terms_info_id' => 0,
+			'config_checkout_terms_info_id' => 0,
+			'config_affiliate_terms_info_id' => 0,
 			'config_commission' => '5.00',
 			'config_breadcrumb_display' => 1,
 			'config_breadcrumb_separator' => '/',
@@ -84,8 +87,10 @@ class Admin_Controller_Setting_Setting extends Controller
 			'config_stock_warning' => 1,
 			'config_stock_checkout' => 0,
 			'config_stock_status_id' => 0,
-			'config_order_status_id' => 0,
-			'config_complete_status_id' => 0,
+			'config_order_processed_status_id' => 0,
+			'config_order_complete_status_id' => 0,
+			'config_order_blacklist_status_id' => 0,
+			'config_order_fraud_status_id' => 0,
 			'config_return_status_id' => 0,
 			'config_review_status' => 1,
 			'config_share_status' => 1,
@@ -137,7 +142,6 @@ class Admin_Controller_Setting_Setting extends Controller
 			'config_fraud_detection' => '',
 			'config_fraud_key' => '',
 			'config_fraud_score' => '',
-			'config_fraud_status_id' => '',
 			'config_use_ssl' => 0,
 			'config_seo_url' => 1,
 			'config_maintenance' => 0,
@@ -182,35 +186,28 @@ class Admin_Controller_Setting_Setting extends Controller
 			$this->data[$oct] = intval($this->data[$oct]);
 		}
 
+		//Additional Data
 		$this->data['data_layouts'] = $this->Model_Design_Layout->getLayouts();
-		
 		$this->data['themes'] = $this->theme->getThemes();
-		
 		$this->data['stores'] = $this->Model_Setting_Store->getStores();
-		
 		$this->data['countries'] = $this->Model_Localisation_Country->getCountries();
-
 		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
-						
 		$this->data['currencies'] = $this->Model_Localisation_Currency->getCurrencies();
-		
 		$this->data['length_classes'] = $this->Model_Localisation_LengthClass->getLengthClasses();
-		
 		$this->data['weight_classes'] = $this->Model_Localisation_WeightClass->getWeightClasses();
-		
 		$this->data['tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
-						
 		$this->data['customer_groups'] = $this->Model_Sale_CustomerGroup->getCustomerGroups();
-		
-		$this->data['informations'] = $this->Model_Catalog_Information->getInformations();
-		
-		$this->data['stock_statuses'] = $this->Model_Localisation_StockStatus->getStockStatuses();
-		
-		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
-		
-		$this->data['data_return_statuses'] = $this->config->load('product_return', 'return_statuses', 0);
+		$this->data['data_informations'] = array('' => $this->_('text_none')) + $this->Model_Catalog_Information->getInformations();
+		$this->data['data_stock_statuses'] = $this->Model_Localisation_StockStatus->getStockStatuses();
+		$this->data['data_order_statuses'] = $this->order->getOrderStatuses();
+		$this->data['data_return_statuses'] = $this->order->getReturnStatuses();
+		$this->data['data_return_policies'] = $this->cart->getReturnPolicies();
+		$this->data['data_shipping_policies'] = $this->cart->getShippingPolicies();
 		
 		$this->data['load_theme_img'] = $this->url->link('setting/setting/theme');
+		
+		$this->_('text_add_return_policy', $this->url->link('setting/return_policy'));
+		$this->_('text_add_shipping_policy', $this->url->link('setting/shipping_policy'));
 		
 		$this->children = array(
 			'common/header',

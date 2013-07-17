@@ -1,32 +1,56 @@
 <?php
 class Admin_Model_Setting_Setting extends Model 
 {
-	public function getSetting($group, $store_id = 0)
+	public function getSetting($group, $store_id = null)
 	{
-		$settings = $this->queryRows("SELECT * FROM " . DB_PREFIX . "setting WHERE `group` = '" . $this->db->escape($group) . "' AND store_id IN (0, " . (int)$store_id . ")");
+		if (is_null($store_id)) {
+			$store_id = $this->config->get('config_store_id');
+		}
 		
 		$data = array();
 		
+		$settings = $this->queryRows("SELECT * FROM " . DB_PREFIX . "setting WHERE store_id IN (0, " . (int)$store_id . ") AND `group` = '" . $this->db->escape($group) . "'");
+		
 		foreach ($settings as $setting) {
-			if (!$setting['serialized']) {
-				$data[$setting['key']] = $setting['value'];
-			} else {
-				$data[$setting['key']] = unserialize($setting['value']);
+			$value = $setting['serialized'] ? unserialize($setting['value']) : $setting['value'];
+			
+			if (is_array($value)) {
+				$this->translation->translate_all($setting['key'], false, $value);
 			}
+			elseif(is_string($value)) {
+				$setting_value = array($setting['key'] => $value);
+				
+				$this->translation->translate('setting', $setting['setting_id'], $setting_value);
+				
+				$value = $setting_value[$setting['key']];
+			}
+			
+			$data[$setting['key']] = $value;
 		}
 
 		return $data;
 	}
 	
-	public function getSettingKey($group, $key, $store_id = 0)
+	public function getSettingKey($group, $key, $store_id = null)
 	{
-		$setting = $this->queryRow("SELECT * FROM " . DB_PREFIX . "setting WHERE `group` = '" . $this->db->escape($group) . "' AND `key` = '" . $this->db->escape($key) . "' AND store_id IN (0, " . (int)$store_id . ")");
-		
-		if ($setting) {
-			return $setting['serialized'] ? unserialize($setting['value']) : $setting['value'];
+		if (is_null($store_id)) {
+			$store_id = $this->config->get('config_store_id');
 		}
 		
-		return null;
+		$setting = $this->queryRow("SELECT * FROM " . DB_PREFIX . "setting WHERE `group` = '" . $this->db->escape($group) . "' AND `key` = '" . $this->db->escape($key) . "' AND store_id IN (0, " . (int)$store_id . ")");
+		
+		$value = $setting['serialized'] ? unserialize($setting['value']) : $setting['value'];
+		
+		if (is_array($value)) {
+			foreach ($value as $entry_key => $entry) {
+				$this->translation->translate($key, $entry_key, $entry);
+			}
+		}
+		elseif(is_string($value)) {
+			$this->translation->translate('setting', $setting['setting_id'], array($setting['key'] => $value));
+		}
+		
+		return $value;
 	}
 	
 	public function editSetting($group, $data, $store_id = 0, $auto_load = true)

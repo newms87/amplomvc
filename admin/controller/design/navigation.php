@@ -125,7 +125,7 @@ class Admin_Controller_Design_Navigation extends Controller
 			'type' => 'multiselect',
 			'display_name' => $this->_('column_stores'),
 			'filter' => true,
-			'build_config' => array('store_id' => 'name'),
+			'build_config' => array('store_id' , 'name'),
 			'build_data' => $stores,
 			'sortable' => false,
 		);

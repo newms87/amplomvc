@@ -1,127 +1,32 @@
 <?php
 class Admin_Controller_Sale_Order extends Controller 
 {
-	
-
   	public function index()
   	{
 		$this->language->load('sale/order');
-
-		$this->document->setTitle($this->_('heading_title'));
-
+		
 		$this->getList();
-  	}
-	
-  	public function insert()
-  	{
-		$this->language->load('sale/order');
-
-		$this->document->setTitle($this->_('heading_title'));
-
-		if ($this->request->isPost() && $this->validateForm()) {
-			//TODO - Need to change this so it will actually work when ordering!
-			$this->message->add('warning', "This order method is not in use! sale/order/insert.");
-			$this->url->redirect($this->url->link('common/home'));
-			
-			//TODO - we have updated the order method...
-			$this->Model_Sale_Order->addOrder($_POST);
-			
-			$this->message->add('success', $this->_('text_success'));
-		
-			$url = '';
-			
-			if (isset($_GET['filter_order_id'])) {
-				$url .= '&filter_order_id=' . $_GET['filter_order_id'];
-			}
-			
-			if (isset($_GET['filter_customer'])) {
-				$url .= '&filter_customer=' . $_GET['filter_customer'];
-			}
-												
-			if (isset($_GET['filter_order_status_id'])) {
-				$url .= '&filter_order_status_id=' . $_GET['filter_order_status_id'];
-			}
-			
-			if (isset($_GET['filter_total'])) {
-				$url .= '&filter_total=' . $_GET['filter_total'];
-			}
-						
-			if (isset($_GET['filter_date_added'])) {
-				$url .= '&filter_date_added=' . $_GET['filter_date_added'];
-			}
-			
-			if (isset($_GET['filter_date_modified'])) {
-				$url .= '&filter_date_modified=' . $_GET['filter_date_modified'];
-			}
-													
-			if (isset($_GET['sort'])) {
-				$url .= '&sort=' . $_GET['sort'];
-			}
-
-			if (isset($_GET['order'])) {
-				$url .= '&order=' . $_GET['order'];
-			}
-
-			if (isset($_GET['page'])) {
-				$url .= '&page=' . $_GET['page'];
-			}
-			
-			$this->url->redirect($this->url->link('sale/order', $url));
-		}
-		
-		$this->getForm();
   	}
 	
   	public function update()
   	{
 		$this->language->load('sale/order');
-
-		$this->document->setTitle($this->_('heading_title'));
-
+		
 		if ($this->request->isPost() && $this->validateForm()) {
-			$this->Model_Sale_Order->editOrder($_GET['order_id'], $_POST);
-			
-			$this->message->add('success', $this->_('text_success'));
-	
-			$url = '';
-
-			if (isset($_GET['filter_order_id'])) {
-				$url .= '&filter_order_id=' . $_GET['filter_order_id'];
+			//Insert
+			if (!isset($_GET['order_id'])) {
+				$this->System_Model_Order->addOrder($_POST);
+			}
+			//Update
+			else {
+				$this->System_Model_Order->editOrder($_GET['order_id'], $_POST);
 			}
 			
-			if (isset($_GET['filter_customer'])) {
-				$url .= '&filter_customer=' . $_GET['filter_customer'];
+			if (!$this->message->error_set()) {
+				$this->message->add('success', $this->_('text_success'));
+				
+				$this->url->redirect($this->url->link('sale/order'));
 			}
-												
-			if (isset($_GET['filter_order_status_id'])) {
-				$url .= '&filter_order_status_id=' . $_GET['filter_order_status_id'];
-			}
-			
-			if (isset($_GET['filter_total'])) {
-				$url .= '&filter_total=' . $_GET['filter_total'];
-			}
-						
-			if (isset($_GET['filter_date_added'])) {
-				$url .= '&filter_date_added=' . $_GET['filter_date_added'];
-			}
-			
-			if (isset($_GET['filter_date_modified'])) {
-				$url .= '&filter_date_modified=' . $_GET['filter_date_modified'];
-			}
-													
-			if (isset($_GET['sort'])) {
-				$url .= '&sort=' . $_GET['sort'];
-			}
-
-			if (isset($_GET['order'])) {
-				$url .= '&order=' . $_GET['order'];
-			}
-
-			if (isset($_GET['page'])) {
-				$url .= '&page=' . $_GET['page'];
-			}
-			
-			$this->url->redirect($this->url->link('sale/order', $url));
 		}
 		
 		$this->getForm();
@@ -133,52 +38,14 @@ class Admin_Controller_Sale_Order extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 
-		if (isset($_POST['selected']) && ($this->validateDelete())) {
-			foreach ($_POST['selected'] as $order_id) {
-				$this->Model_Sale_Order->deleteOrder($order_id);
-			}
-
-			$this->message->add('success', $this->_('text_success'));
-
-			$url = '';
-
-			if (isset($_GET['filter_order_id'])) {
-				$url .= '&filter_order_id=' . $_GET['filter_order_id'];
-			}
+		if (!empty($_GTE['order_id']) && $this->validateDelete()) {
+			$this->System_Model_Order->deleteOrder($_GET['order_id']);
 			
-			if (isset($_GET['filter_customer'])) {
-				$url .= '&filter_customer=' . $_GET['filter_customer'];
+			if (!$this->message->error_set()) {
+				$this->message->add('success', $this->_('text_success'));
+				
+				$this->url->redirect($this->url->link('sale/order'));
 			}
-												
-			if (isset($_GET['filter_order_status_id'])) {
-				$url .= '&filter_order_status_id=' . $_GET['filter_order_status_id'];
-			}
-			
-			if (isset($_GET['filter_total'])) {
-				$url .= '&filter_total=' . $_GET['filter_total'];
-			}
-						
-			if (isset($_GET['filter_date_added'])) {
-				$url .= '&filter_date_added=' . $_GET['filter_date_added'];
-			}
-			
-			if (isset($_GET['filter_date_modified'])) {
-				$url .= '&filter_date_modified=' . $_GET['filter_date_modified'];
-			}
-													
-			if (isset($_GET['sort'])) {
-				$url .= '&sort=' . $_GET['sort'];
-			}
-
-			if (isset($_GET['order'])) {
-				$url .= '&order=' . $_GET['order'];
-			}
-
-			if (isset($_GET['page'])) {
-				$url .= '&page=' . $_GET['page'];
-			}
-
-			$this->url->redirect($this->url->link('sale/order', $url));
 		}
 
 		$this->getList();
@@ -186,192 +53,143 @@ class Admin_Controller_Sale_Order extends Controller
 
   	private function getList()
   	{
-		$this->template->load('sale/order_list');
+  		//The Template
+  		$this->template->load('sale/order_list');
   		
-		$query_defaults = array(
-			'filter_order_id'		=> null,
-			'filter_customer'		=> null,
-			'filter_order_status_id' => null,
-			'filter_total'			=> null,
-			'filter_date_added'		=> null,
-			'filter_date_modified'	=> null,
-			'sort'						=> 'o.order_id',
-			'order'						=> 'ASC',
-			'page'						=> 1
-		);
+		//Page Title
+		$this->document->setTitle($this->_('heading_title'));
 		
-		foreach ($query_defaults as $key => $default) {
-			if (isset($_GET[$key])) {
-				$$key = $_GET[$key];
-			} else {
-				$$key = $default;
-			}
-		}
-		
-		$url = $this->url->getQuery(
-			'filter_order_id', 'filter_customer', 'filter_order_status_id',
-			'filter_total', 'filter_date_added', 'filter_date_modified',
-			'sort','order','page'
-		);
-
+		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('sale/order', $url));
-
-		$this->data['invoice'] = $this->url->link('sale/order/invoice');
-		$this->data['insert'] = $this->url->link('sale/order/insert');
-		$this->data['delete'] = $this->url->link('sale/order/delete', $url);
-
-		$this->data['orders'] = array();
-
-		$data = array(
-			'filter_order_id'		=> $filter_order_id,
-			'filter_customer'			=> $filter_customer,
-			'filter_order_status_id' => $filter_order_status_id,
-			'filter_total'			=> $filter_total,
-			'filter_date_added'		=> $filter_date_added,
-			'filter_date_modified'	=> $filter_date_modified,
-			'sort'						=> $sort,
-			'order'						=> $order,
-			'start'						=> ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit'						=> $this->config->get('config_admin_limit')
+		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('sale/order'));
+		
+		//The Table Columns
+		$columns = array();
+		
+		$columns['customer'] = array(
+			'type' => 'text',
+			'display_name' => $this->_('column_customer'),
+			'filter' => true,
+			'sortable' => true,
 		);
 		
-		$order_total = $this->Model_Sale_Order->getTotalOrders($data);
-
-		$results = $this->Model_Sale_Order->getOrders($data);
-
-		foreach ($results as $result) {
-			$action = array();
-						
-			$action[] = array(
-				'text' => $this->_('text_view'),
-				'href' => $this->url->link('sale/order/info', 'order_id=' . $result['order_id'] . $url)
+		$columns['total'] = array(
+			'type' => 'int',
+			'display_name' => $this->_('column_total'),
+			'filter' => true,
+			'sortable' => true,
+		);
+		
+		$columns['store_id'] = array(
+			'type' => 'select',
+			'display_name' => $this->_('column_store'),
+			'filter' => true,
+			'build_config' => array('store_id' , 'name'),
+			'build_data' => $this->Model_Setting_Store->getStores(),
+			'sortable' => false,
+		);
+		
+		$columns['order_status_id'] = array(
+			'type' => 'select',
+			'display_name' => $this->_('column_status'),
+			'filter' => true,
+			'build_config' => array(false, 'title'),
+			'build_data' => $this->order->getOrderStatuses(),
+			'sortable' => true,
+		);
+		
+		$columns['date_added'] = array(
+			'type' => 'date',
+			'display_name' => $this->_('column_date_added'),
+			'filter' => true,
+			'sortable' => true,
+		);
+		
+		$columns['date_modified'] = array(
+			'type' => 'date',
+			'display_name' => $this->_('column_date_modified'),
+			'filter' => true,
+			'sortable' => true,
+		);
+		
+		//Get Sorted / Filtered Data
+		$sort = $this->sort->getQueryDefaults('order_id', 'ASC');
+		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
+		
+		$order_total = $this->System_Model_Order->getTotalOrders($filter);
+		$orders = $this->System_Model_Order->getOrders($sort + $filter);
+		
+		$url_query = $this->url->getQueryExclude('order_id');
+		
+		foreach ($orders as &$order) {
+			$order['actions'] = array(
+				'view' => array(
+					'text' => $this->_('text_view'),
+					'href' => $this->url->link('sale/order/info', 'order_id=' . $order['order_id'] . '&' . $url_query)
+				),
 			);
 			
-			if (strtotime($result['date_added']) > strtotime('-' . (int)$this->config->get('config_order_edit') . ' day')) {
-				$action[] = array(
+			if ($this->order->isEditable($order)) {
+				$action['edit'] = array(
 					'text' => $this->_('text_edit'),
-					'href' => $this->url->link('sale/order/update', 'order_id=' . $result['order_id'] . $url)
+					'href' => $this->url->link('sale/order/update', 'order_id=' . $order['order_id'] . '&' . $url_query)
 				);
 			}
 			
-			$this->data['orders'][] = array(
-				'order_id'		=> $result['order_id'],
-				'customer'		=> $result['customer'],
-				'status'		=> $result['status'],
-				'total'			=> $this->currency->format($result['total'], $result['currency_code'], $result['currency_value']),
-				'date_added'	=> $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
-				'date_modified' => date($this->language->getInfo('date_format_short'), strtotime($result['date_modified'])),
-				'selected'		=> isset($_POST['selected']) && in_array($result['order_id'], $_POST['selected']),
-				'action'		=> $action
-			);
-		}
-
-		$url = '';
-
-		if (isset($_GET['filter_order_id'])) {
-			$url .= '&filter_order_id=' . $_GET['filter_order_id'];
+			$customer = $this->System_Model_Customer->getCustomer($order['customer_id']);
+			$order['customer'] = $customer['firstname'] . ' ' . $customer['lastname'];
+			
+			$order['total'] = $this->currency->format($order['total'], $order['currency_code'], $order['currency_value']);
+			$order['date_added'] = $this->date->format($order['date_added'], 'short');
+			$order['date_modified'] = $this->date->format($order['date_modified'], 'short');
 		}
 		
-		if (isset($_GET['filter_customer'])) {
-			$url .= '&filter_customer=' . $_GET['filter_customer'];
-		}
-											
-		if (isset($_GET['filter_order_status_id'])) {
-			$url .= '&filter_order_status_id=' . $_GET['filter_order_status_id'];
-		}
+		//Build The Table
+		$tt_data = array(
+			'row_id'		=> 'order_id',
+		);
 		
-		if (isset($_GET['filter_total'])) {
-			$url .= '&filter_total=' . $_GET['filter_total'];
-		}
-					
-		if (isset($_GET['filter_date_added'])) {
-			$url .= '&filter_date_added=' . $_GET['filter_date_added'];
-		}
+		$this->table->init();
+		$this->table->setTemplate('table/list_view');
+		$this->table->setColumns($columns);
+		$this->table->setRows($orders);
+		$this->table->setTemplateData($tt_data);
+		$this->table->mapAttribute('filter_value', $filter);
 		
-		if (isset($_GET['filter_date_modified'])) {
-			$url .= '&filter_date_modified=' . $_GET['filter_date_modified'];
-		}
-
-		if ($order == 'ASC') {
-			$url .= '&order=DESC';
-		} else {
-			$url .= '&order=ASC';
-		}
-
-		if (isset($_GET['page'])) {
-			$url .= '&page=' . $_GET['page'];
-		}
-
-		$this->data['sort_order'] = $this->url->link('sale/order', 'sort=o.order_id' . $url);
-		$this->data['sort_customer'] = $this->url->link('sale/order', 'sort=customer' . $url);
-		$this->data['sort_status'] = $this->url->link('sale/order', 'sort=status' . $url);
-		$this->data['sort_total'] = $this->url->link('sale/order', 'sort=o.total' . $url);
-		$this->data['sort_date_added'] = $this->url->link('sale/order', 'sort=o.date_added' . $url);
-		$this->data['sort_date_modified'] = $this->url->link('sale/order', 'sort=o.date_modified' . $url);
-
-		$url = '';
-
-		if (isset($_GET['filter_order_id'])) {
-			$url .= '&filter_order_id=' . $_GET['filter_order_id'];
-		}
+		$this->data['list_view'] = $this->table->render();
 		
-		if (isset($_GET['filter_customer'])) {
-			$url .= '&filter_customer=' . $_GET['filter_customer'];
-		}
-											
-		if (isset($_GET['filter_order_status_id'])) {
-			$url .= '&filter_order_status_id=' . $_GET['filter_order_status_id'];
-		}
+		//Render Limit Menu
+		$this->data['limits'] = $this->sort->render_limit();
 		
-		if (isset($_GET['filter_total'])) {
-			$url .= '&filter_total=' . $_GET['filter_total'];
-		}
-					
-		if (isset($_GET['filter_date_added'])) {
-			$url .= '&filter_date_added=' . $_GET['filter_date_added'];
-		}
-		
-		if (isset($_GET['filter_date_modified'])) {
-			$url .= '&filter_date_modified=' . $_GET['filter_date_modified'];
-		}
-
-		if (isset($_GET['sort'])) {
-			$url .= '&sort=' . $_GET['sort'];
-		}
-
-		if (isset($_GET['order'])) {
-			$url .= '&order=' . $_GET['order'];
-		}
-
+		//Pagination
 		$this->pagination->init();
 		$this->pagination->total = $order_total;
+		
 		$this->data['pagination'] = $this->pagination->render();
 
-		$this->data['filter_order_id'] = $filter_order_id;
-		$this->data['filter_customer'] = $filter_customer;
-		$this->data['filter_order_status_id'] = $filter_order_status_id;
-		$this->data['filter_total'] = $filter_total;
-		$this->data['filter_date_added'] = $filter_date_added;
-		$this->data['filter_date_modified'] = $filter_date_modified;
+		//Action Buttons
+		$this->data['invoice'] = $this->url->link('sale/order/invoice');
+		$this->data['insert'] = $this->url->link('sale/order/insert');
+		$this->data['delete'] = $this->url->link('sale/order/delete');
 
-		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
-
-		$this->data['sort'] = $sort;
-		$this->data['order'] = $order;
-
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
 		
+		//Render
 		$this->response->setOutput($this->render());
   	}
 
   	public function getForm()
   	{
+  		//The Template
 		$this->template->load('sale/order_form');
 
+		//Page Title
+		$this->document->setTitle($this->_('heading_title'));
+		
 		if (isset($_GET['order_id'])) {
 			$this->data['order_id'] = $_GET['order_id'];
 		} else {
@@ -531,7 +349,7 @@ class Admin_Controller_Sale_Order extends Controller
 				$this->data['order_status_id'] = '';
 		}
 			
-		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
+		$this->data['order_statuses'] = $this->order->getOrderStatuses();
 			
 		if (isset($_POST['comment'])) {
 				$this->data['comment'] = $_POST['comment'];
@@ -972,12 +790,6 @@ class Admin_Controller_Sale_Order extends Controller
 
 			$this->data['order_id'] = $_GET['order_id'];
 			
-			if ($order_info['invoice_no']) {
-				$this->data['invoice_no'] = $order_info['invoice_prefix'] . $order_info['invoice_no'];
-			} else {
-				$this->data['invoice_no'] = '';
-			}
-			
 			$this->data['store_name'] = $order_info['store_name'];
 			$this->data['store_url'] = $order_info['store_url'];
 			$this->data['firstname'] = $order_info['firstname'];
@@ -1109,7 +921,7 @@ class Admin_Controller_Sale_Order extends Controller
 				}
 			}
 			
-			$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
+			$this->data['order_statuses'] = $this->order->getOrderStatuses();
 
 			$this->data['order_status_id'] = $order_info['order_status_id'];
 
@@ -1519,7 +1331,6 @@ class Admin_Controller_Sale_Order extends Controller
 
 	public function history()
 	{
-		
 		//TODO: implement this
 		echo "This page has not yet been ipmlemented!";
 		exit;
@@ -1583,16 +1394,7 @@ class Admin_Controller_Sale_Order extends Controller
 
 			if (!headers_sent()) {
 				if (file_exists($file)) {
-					header('Content-Type: application/octet-stream');
-					header('Content-Description: File Transfer');
-					header('Content-Disposition: attachment; filename="' . ($mask ? $mask : basename($file)) . '"');
-					header('Content-Transfer-Encoding: binary');
-					header('Expires: 0');
-					header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-					header('Pragma: public');
-					header('Content-Length: ' . filesize($file));
-					
-					readfile($file, 'rb');
+					$this->export->downloadFile($file, $mask);
 					exit;
 				} else {
 					exit('Error: Could not find file ' . $file . '!');

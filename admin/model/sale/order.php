@@ -15,12 +15,6 @@ class Admin_Model_Sale_Order extends Model
 		
 		$setting_info = $this->Model_Setting_Setting->getSetting('setting', $data['store_id']);
 			
-		if (isset($setting_info['invoice_prefix'])) {
-			$invoice_prefix = $setting_info['invoice_prefix'];
-		} else {
-			$invoice_prefix = $this->tool->format_invoice($this->config->get('config_invoice_prefix'));
-		}
-		
 		$country_info = $this->Model_Localisation_Country->getCountry($data['shipping_country_id']);
 		
 		if ($country_info) {
@@ -222,13 +216,13 @@ class Admin_Model_Sale_Order extends Model
 				}
 			}
 		}
-
+		
 		$this->query("DELETE FROM `" . DB_PREFIX . "order` WHERE order_id = '" . (int)$order_id . "'");
 		$this->query("DELETE FROM " . DB_PREFIX . "order_product WHERE order_id = '" . (int)$order_id . "'");
-			$this->query("DELETE FROM " . DB_PREFIX . "order_option WHERE order_id = '" . (int)$order_id . "'");
+		$this->query("DELETE FROM " . DB_PREFIX . "order_option WHERE order_id = '" . (int)$order_id . "'");
 		$this->query("DELETE FROM " . DB_PREFIX . "order_download WHERE order_id = '" . (int)$order_id . "'");
 		$this->query("DELETE FROM " . DB_PREFIX . "order_voucher WHERE order_id = '" . (int)$order_id . "'");
-			$this->query("DELETE FROM " . DB_PREFIX . "order_total WHERE order_id = '" . (int)$order_id . "'");
+		$this->query("DELETE FROM " . DB_PREFIX . "order_total WHERE order_id = '" . (int)$order_id . "'");
 		$this->query("DELETE FROM " . DB_PREFIX . "order_history WHERE order_id = '" . (int)$order_id . "'");
 		$this->query("DELETE FROM " . DB_PREFIX . "order_fraud WHERE order_id = '" . (int)$order_id . "'");
 		$this->query("DELETE FROM " . DB_PREFIX . "customer_transaction WHERE order_id = '" . (int)$order_id . "'");
@@ -633,7 +627,7 @@ class Admin_Model_Sale_Order extends Model
 			
 			if ($order_info['customer_id']) {
 				$message .= $language->get('text_link') . "\n";
-				$message .= html_entity_decode($order_info['store_url'] . 'index.php?route=account/order/info&order_id=' . $order_id, ENT_QUOTES, 'UTF-8') . "\n\n";
+				$message .= html_entity_decode($this->url->store($order_info['store_id'], 'account/order/info', 'order_id=' . $order_id), ENT_QUOTES, 'UTF-8') . "\n\n";
 			}
 			
 			if ($data['comment']) {

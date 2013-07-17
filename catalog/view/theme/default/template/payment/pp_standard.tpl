@@ -7,18 +7,18 @@
 	<input type="hidden" name="business" value="<?= $business; ?>" />
 	<? $i = 1; ?>
 	<? foreach ($products as $product) { ?>
-	<input type="hidden" name="item_name_<?= $i; ?>" value="<?= $product['name']; ?>" />
-	<input type="hidden" name="item_number_<?= $i; ?>" value="<?= $product['model']; ?>" />
-	<input type="hidden" name="amount_<?= $i; ?>" value="<?= $product['price']; ?>" />
-	<input type="hidden" name="quantity_<?= $i; ?>" value="<?= $product['quantity']; ?>" />
-	<input type="hidden" name="weight_<?= $i; ?>" value="<?= $product['weight']; ?>" />
-	<? $j = 0; ?>
-	<? foreach ($product['option'] as $option) { ?>
-	<input type="hidden" name="on<?= $j; ?>_<?= $i; ?>" value="<?= $option['name']; ?>" />
-	<input type="hidden" name="os<?= $j; ?>_<?= $i; ?>" value="<?= $option['value']; ?>" />
-	<? $j++; ?>
-	<? } ?>
-	<? $i++; ?>
+		<input type="hidden" name="item_name_<?= $i; ?>" value="<?= $product['name']; ?>" />
+		<input type="hidden" name="item_number_<?= $i; ?>" value="<?= $product['model']; ?>" />
+		<input type="hidden" name="amount_<?= $i; ?>" value="<?= $product['price']; ?>" />
+		<input type="hidden" name="quantity_<?= $i; ?>" value="<?= $product['quantity']; ?>" />
+		<input type="hidden" name="weight_<?= $i; ?>" value="<?= $product['weight']; ?>" />
+		<? $j = 0; ?>
+		<? foreach ($product['option'] as $option) { ?>
+			<input type="hidden" name="on<?= $j; ?>_<?= $i; ?>" value="<?= $option['name']; ?>" />
+			<input type="hidden" name="os<?= $j; ?>_<?= $i; ?>" value="<?= $option['value']; ?>" />
+			<? $j++; ?>
+		<? } ?>
+		<? $i++; ?>
 	<? } ?>
 	<? if ($discount_amount_cart) { ?>
 	<input type="hidden" name="discount_amount_cart" value="<?= $discount_amount_cart; ?>" />
@@ -64,7 +64,7 @@ $('#submit_pp_button input').click(function(){$('#processing_payment').fadeIn(50
 
 function check_order_update(){
 	$.ajax({
-			url: "<?= HTTP_CATALOG . "index.php?route=block/checkout/confirm/check_order_status"; ?>" + '&order_id=<?= $order_id; ?>',
+			url: "<?= $url_check_order_status; ?>",
 			dataType: 'json',
 			success: function(json){
 				if(json['redirect']){

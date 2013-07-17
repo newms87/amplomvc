@@ -3,7 +3,6 @@
 <div id="content">
 	<?= $content_top; ?>
 	<?= $this->breadcrumb->render(); ?>
-	<?= $this->builder->display_errors($errors); ?>
 	<h1><?= $heading_title; ?></h1>
 	<div class="description"><?= $text_description; ?></div>
 	<form id="order_lookup" method="post" action="<?= $order_lookup_action; ?>">
@@ -117,7 +116,7 @@
 		<? if (!$order_lookup) { ?>
 			<div class="return_captcha">
 				<label><?= $entry_captcha; ?></label>
-				<img src="index.php?route=account/return/captcha" alt="" />
+				<img src="<?= $url_captcha_image; ?>" alt="" />
 				<input type="text" name="captcha" value="<?= $captcha; ?>" />
 			</div>
 			<div class="clear"></div>

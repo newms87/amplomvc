@@ -1,7 +1,6 @@
 <?= $header; ?>
 <div class="content">
 	<?= $this->breadcrumb->render(); ?>
-	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'shipping.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -90,14 +89,13 @@ function generate_url(c){
 	$('#gen_warn').remove();
 	name =$('input[name="name"]').val();
 	if(!name)
-			alert("Please make a name for this Designer before generating the URL");
-	$.post("<?= HTTP_ADMIN . "index.php?route=catalog/manufacturer/generate_url"; ?>",{manufacturer_id:<?= $manufacturer_id?$manufacturer_id:0; ?>,name:name},function(json){$('input[name="keyword"]').val(json);},'json');
+		alert("Please make a name for this Manufacturer before generating the URL");
+	$.post("<?= $url_generate_url; ?>",{manufacturer_id:<?= $manufacturer_id?$manufacturer_id:0; ?>,name:name},function(json){$('input[name="keyword"]').val(json);},'json');
 }
  //--></script>
 
 <script type="text/javascript">//<!--
 $('#tabs a').tabs();
-$('#languages a').tabs();
 //--></script>
 
 <?= $this->builder->js('datepicker'); ?>

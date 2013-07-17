@@ -57,7 +57,7 @@ class Admin_Controller_Payment_Worldpay extends Controller
 			$this->data['worldpay_password'] = $this->config->get('worldpay_password');
 		}
 		
-		$this->data['callback'] = SITE_URL . 'index.php?route=payment/worldpay/callback';
+		$this->data['callback'] = $this->url->link('payment/worldpay/callback');
 
 		if (isset($_POST['worldpay_test'])) {
 			$this->data['worldpay_test'] = $_POST['worldpay_test'];
@@ -77,7 +77,7 @@ class Admin_Controller_Payment_Worldpay extends Controller
 			$this->data['worldpay_order_status_id'] = $this->config->get('worldpay_order_status_id');
 		}
 		
-		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
+		$this->data['order_statuses'] = $this->order->getOrderStatuses();
 		
 		if (isset($_POST['worldpay_geo_zone_id'])) {
 			$this->data['worldpay_geo_zone_id'] = $_POST['worldpay_geo_zone_id'];

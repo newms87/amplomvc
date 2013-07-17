@@ -129,18 +129,19 @@ class Mail extends Library
 		}
 	}
 	
-	public function setTemplate($template)
+	public function callController($controller)
 	{
 		$args = func_get_args();
 		array_shift($args);
 		
-		$action = new Action($this->registry, $template, $args, 'catalog/controller/mail');
+		$action = new Action($this->registry, $controller, $args, 'catalog/controller/mail');
 		
+		//Set the language and Template to the Front End
 		$this->language->setRoot(SITE_DIR . 'catalog/language/');
+		$action->getController()->template->setRootDirectory(SITE_DIR . 'catalog/view/theme/');
 		
 		if (!$action->execute()) {
-			trigger_error('Could not load Mail temlpate ' . $template . '!');
-			exit();
+			$this->mail->callController('error', "Failed to call Mail Controller: " . $action->getClass() . "! " . get_caller(0, 2));
 		}
 		
 		$this->language->setRoot(DIR_LANGUAGE);

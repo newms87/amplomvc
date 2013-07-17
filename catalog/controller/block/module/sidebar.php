@@ -77,11 +77,6 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 		//TODO: move this to admin panel once we implement!
 		$page_links = array();
 		
-		$page_links[0] = array(
-			'name' => "Sales",
-			'href' => $this->url->link('page/page', 'page_id=1')
-		);
-		
 		$this->data['page_menu'] = array(
 			'label' => '',
 			'menu' => $page_links,

@@ -38,15 +38,9 @@ class Catalog_Model_Account_Return extends Model
 		if ($return) {
 			$return['product'] = $this->Model_Catalog_Product->getProduct($return['product_id'], true);
 			
-			$this->config->loadGroup('product_return');
-				
-			$return_statuses = $this->config->get('product_return_statuses');
-			$return_reasons = $this->config->get('product_return_reasons');
-			$return_actions = $this->config->get('product_return_actions');
-			
-			$return['status'] = $return_statuses[$return['return_status_id']];
-			$return['reason'] = $return_reasons[$return['return_reason_id']];
-			$return['action'] = $return_actions[$return['return_action_id']];
+			$return['status'] = $this->order->getReturnStatus($return['return_status_id']);
+			$return['reason'] = $this->order->getReturnReason($return['return_reason_id']);
+			$return['action'] = $this->order->getReturnAction($return['return_action_id']);
 		}
 		
 		return $return;
@@ -85,16 +79,10 @@ class Catalog_Model_Account_Return extends Model
 			return $result->row['total'];
 		}
 		
-		$this->config->loadGroup('product_return');
-			
-		$return_statuses = $this->config->get('product_return_statuses');
-		$return_reasons = $this->config->get('product_return_reasons');
-		$return_actions = $this->config->get('product_return_actions');
-		
 		foreach ($result->rows as &$row) {
-			$row['status'] = $return_statuses[$row['return_status_id']];
-			$row['reason'] = $return_reasons[$row['return_reason_id']];
-			$row['action'] = $return_actions[$row['return_action_id']];
+			$row['status'] = $this->order->getReturnStatus($row['return_status_id']);
+			$row['reason'] = $this->order->getReturnReason($row['return_reason_id']);
+			$row['action'] = $this->order->getReturnAction($row['return_action_id']);
 		}
 		
 		return $result->rows;

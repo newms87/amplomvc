@@ -81,7 +81,7 @@ class Catalog_Controller_Block_Checkout_Confirm extends Controller
 		$order_id = isset($_GET['order_id'])?$_GET['order_id']:0;
 		if(!$order_id)return;
 		
-		$status = $this->Model_Checkout_Order->getOrderStatus($order_id);
+		$status = $this->order->getOrderStatus($order_id);
 		
 		if ($status) {
 			$json = array('status'=>$status, 'redirect'=>$this->url->link('checkout/success'));

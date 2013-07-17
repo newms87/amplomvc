@@ -36,7 +36,7 @@ function _require($file, $once = true, $_ = array()) {
 	}
 	
 	if (!is_file($file)) {
-		echo get_caller();
+		echo get_caller(0, 3);
 	}
 	
 	if ($once) {

@@ -75,7 +75,7 @@ class Admin_Controller_Payment_Twocheckout extends Controller
 			$this->data['twocheckout_order_status_id'] = $this->config->get('twocheckout_order_status_id');
 		}
 		
-		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
+		$this->data['order_statuses'] = $this->order->getOrderStatuses();
 		
 		if (isset($_POST['twocheckout_geo_zone_id'])) {
 			$this->data['twocheckout_geo_zone_id'] = $_POST['twocheckout_geo_zone_id'];

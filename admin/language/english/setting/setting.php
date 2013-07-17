@@ -21,6 +21,8 @@ $_['text_mail']					= 'Mail';
 $_['text_smtp']					= 'SMTP';
 $_['text_mode_explanation']  = "The file permissions are set user (owner), group, others == ugo == 755 == user has full, group has read & write, others have read & write permissions.";
 $_['text_settings']		= 'Settings';
+$_['text_add_return_policy'] = "Add a new <a href=\"%s\" target=\"_blank\">Return Policy</a>";
+$_['text_add_shipping_policy'] = "Add a new <a href=\"%s\" target=\"_blank\">Shipping Policy</a>";
 
 //Entry
 $_['entry_name']					= 'Store Name:';
@@ -52,6 +54,9 @@ $_['entry_weight_class']		= 'Weight Class:';
 $_['entry_catalog_limit'] 		= 'Default Items Per Page (Catalog):<br /><span class="help">Determines how many catalog items are shown per page (products, categories, etc)</span>';
 $_['entry_admin_limit']			= 'Default Items Per Page (Admin):<br /><span class="help">Determines how many admin items are shown per page (orders, customers, etc)</span>';
 $_['entry_performance_log']		= 'Performance Logging:';
+$_['entry_default_return_policy'] = "Default Return Policy:";
+$_['entry_default_shipping_policy'] = "Default Shipping Policy:";
+$_['entry_shipping_return_policy_info'] = "Shipping / Returns Policy Information:";
 $_['entry_show_category_image'] = "Show Category Image:";
 $_['entry_show_category_description'] = "Show Category Description:";
 $_['entry_cache_ignore']		= 'Cache Ignore List:<span class="help">(comma separated list)</span>';
@@ -76,8 +81,10 @@ $_['entry_stock_display']		= 'Display Stock:<br /><span class="help">Display sto
 $_['entry_stock_warning']		= 'Show Out Of Stock Warning:<br /><span class="help">Display out of stock message on the shopping cart page if a product is out of stock but stock checkout is yes. (Warning always shows if stock checkout is no)</span>';
 $_['entry_stock_checkout']	= 'Stock Checkout:<br /><span class="help">Allow customers to still checkout if the products they are ordering are not in stock.</span>';
 $_['entry_stock_status']		= 'Out of Stock Status:<br /><span class="help">Set the default out of stock status selected in product edit.</span>';
-$_['entry_order_status']		= 'Order Status:<br /><span class="help">Set the default order status when an order is processed.</span>';
-$_['entry_complete_status']	= 'Complete Order Status:<br /><span class="help">Set the order status the customers order must reach before they are allowed to access their downloadable products and gift vouchers.</span>';
+$_['entry_order_processed_status']		= 'Order Processed Status:<br /><span class="help">Set the default order status when an order is active in the system.</span>';
+$_['entry_order_complete_status']	= 'Complete Order Status:<br /><span class="help">Set the order status for when an order has been fully paid for and products are deducted from the inventory (Downloads / Gift Vouchers are accessible and Products requiring shipping should be shipped).</span>';
+$_['entry_order_blacklist_status']		= 'Order Blacklist Status:<br /><span class="help">Set the order status when an order is associated with a blacklisted account.</span>';
+$_['entry_order_fraud_status']		= 'Fraud Order Status:<br /><span class="help">Orders detected as potentially fraudulent will be assigned this order status and will not be allowed to reach the complete status unless manually overridden.</span>';
 $_['entry_return_status']		= 'Return Status:<br /><span class="help">Set the default return status when an returns request is submitted.</span>';
 $_['entry_review']				= 'Allow Reviews:<br /><span class="help">Enable/Disable new review entry and display of existing reviews</span>';
 $_['entry_allow_sharing'] = "Allow Social Sharing:";
@@ -116,7 +123,6 @@ $_['entry_alert_emails']		= 'Additional Alert E-Mails:<br /><span class="help">A
 $_['entry_fraud_detection']	= 'Use MaxMind Fraud Detection System:<br /><span class="help">MaxMind is a fraud detections service. If you don\'t have a license key you can <a onclick="window.open(\'http://www.maxmind.com/?rId=opencart\');"><u>sign up here</u></a>. Once you have obtained a key copy and paste it into the field below.</span>';
 $_['entry_fraud_key']			= 'MaxMind License Key:</span>';
 $_['entry_fraud_score']		= 'MaxMind Risk Score:<br /><span class="help">The higher the score the more likly the order is fraudulent. Set a score between 0 - 100.</span>';
-$_['entry_fraud_status']		= 'MaxMind Fraud Order Status:<br /><span class="help">Orders over your set score will be assigned this order status and will not be allowed to reach the complete status automatically.</span>';
 $_['entry_use_ssl']				= 'Use SSL:<br /><span class="help">To use SSL check with your host if a SSL certificate is installed and added the SSL URL to the catalog and admin config files.</span>';
 $_['entry_seo_url']				= 'Use SEO URL\'s:<br /><span class="help">To use SEO URL\'s apache module mod-rewrite must be installed and you need to rename the htaccess.txt to .htaccess.</span>';
 $_['entry_maintenance']		= 'Maintenance Mode:<br /><span class="help">Prevents customers from browsing your store. They will instead see a maintenance message. If logged in as admin, you will see the store as normal.</span>';

@@ -114,60 +114,30 @@ class Catalog_Controller_Account_Address extends Controller
 
   	private function getList()
   	{
+  		//The Template
 		$this->template->load('account/address_list');
-
+		
+		//Breadcrumbs
   		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/address'));
 		
-		$this->data['addresses'] = array();
+		//Load Addresses
+		$addresses = $this->customer->getAddresses();
 		
-		$results = $this->Model_Account_Address->getAddresses();
-
-		foreach ($results as $result) {
-			if ($result['address_format']) {
-					$format = $result['address_format'];
-			} else {
-				$format = '{firstname} {lastname}' . "\n" . '{company}' . "\n" . '{address_1}' . "\n" . '{address_2}' . "\n" . '{city} {postcode}' . "\n" . '{zone}' . "\n" . '{country}';
-			}
+		foreach ($addresses as &$address) {
+			$address['address'] = $this->address->format($address);
+			$address['update'] = $this->url->link('account/address/update', 'address_id=' . $address['address_id']);
+			$address['delete'] = $this->url->link('account/address/delete', 'address_id=' . $address['address_id']);
+		} unset($address);
 		
-			$find = array(
-				'{firstname}',
-				'{lastname}',
-				'{company}',
-					'{address_1}',
-					'{address_2}',
-				'{city}',
-					'{postcode}',
-					'{zone}',
-				'{zone_code}',
-					'{country}'
-			);
-	
-			$replace = array(
-				'firstname' => $result['firstname'],
-				'lastname'  => $result['lastname'],
-				'company'	=> $result['company'],
-					'address_1' => $result['address_1'],
-					'address_2' => $result['address_2'],
-					'city'		=> $result['city'],
-					'postcode'  => $result['postcode'],
-					'zone'		=> $result['zone'],
-				'zone_code' => $result['zone_code'],
-					'country'	=> $result['country']
-			);
-
-				$this->data['addresses'][] = array(
-				'address_id' => $result['address_id'],
-				'address'	=> str_replace(array("\r\n", "\r", "\n"), '<br />', preg_replace(array("/\s\s+/", "/\r\r+/", "/\n\n+/"), '<br />', trim(str_replace($find, $replace, $format)))),
-				'update'	=> $this->url->link('account/address/update', 'address_id=' . $result['address_id']),
-				'delete'	=> $this->url->link('account/address/delete', 'address_id=' . $result['address_id'])
-				);
-		}
-
+		$this->data['addresses'] = $addresses;
+		
+		//Action Buttons
 		$this->data['insert'] = $this->url->link('account/address/insert');
 		$this->data['back'] = $this->url->link('account/account');
 		
+		//Dependencies
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
@@ -176,7 +146,8 @@ class Catalog_Controller_Account_Address extends Controller
 			'common/footer',
 			'common/header'
 		);
-						
+		
+		//Render
 		$this->response->setOutput($this->render());
   	}
 
@@ -199,7 +170,7 @@ class Catalog_Controller_Account_Address extends Controller
 		}
 		
 		if (isset($_GET['address_id']) && !$this->request->isPost()) {
-			$address_info = $this->Model_Account_Address->getAddress($_GET['address_id']);
+			$address_info = $this->customer->getAddress($_GET['address_id']);
 		}
 	
 		if (isset($_POST['firstname'])) {

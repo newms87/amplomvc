@@ -154,12 +154,12 @@ class Theme extends Library
 		}
 	}
 	
-	public function find_file($file, $theme = false, $admin = null)
+	public function find_file($file, $theme = false, $root_dir = null)
 	{
-		if (is_null($admin)) {
-			$dir = DIR_THEME;
+		if ($root_dir && is_dir($root_dir)) {
+			$dir = $root_dir;
 		} else {
-			$dir = SITE_DIR . ($admin ? 'admin/' : 'catalog/') . 'view/theme/';
+			$dir = DIR_THEME;
 		}
 		
 		//Search By specified theme

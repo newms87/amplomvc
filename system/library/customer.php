@@ -147,34 +147,50 @@ class Customer extends Library
 		$this->db->query("DELETE FROM " . DB_PREFIX . "customer_setting WHERE customer_id = '$this->customer_id' AND `key` = '" . $this->db->escape($key) . "'");
 	}
 	
-	public function get_shipping_addresses()
+	public function getAddress($address_id)
 	{
-		$address_list = $this->Model_Account_Address->getAddresses();
+		$address = $this->Model_Account_Address->getAddress($address_id);
 		
+		if ((int)$address['customer_id'] !== $this->customer_id) {
+			trigger_error("Customer (id: $this->customer_id) attempted to access an unassociated address!");
+			
+			return null;
+		}
+		
+		return $address;
+	}
+	
+	public function getAddresses()
+	{
+		$filter = array(
+			'customer_ids' => array($this->customer_id),
+		);
+		
+		return $this->Model_Account_Address->getAddresses($filter);
+	}
+	
+	public function getShippingAddresses()
+	{
 		$allowed_zones = $this->cart->getAllowedShippingZones();
 		
-		if (empty($allowed_zones)) {
-			$addresses = $address_list;
-		}
-		else {
-			$addresses = array();
-			
-			foreach ($address_list as $key => $address) {
-				foreach ($allowed_zones as $zone) {
-					if ((int)$address['country_id'] === (int)$zone['country_id'] && ((int)$zone['zone_id'] === 0 || (int)$address['zone_id'] === (int)$zone['zone_id'])) {
-						$addresses[$address['address_id']] = $address;
-						break;
-					}
-				}
-			}
-		}
+		$filter = array(
+			'customer_ids' => array($this->customer_id),
+			'country_ids' => array_column($allowed_zones, 'country_id'),
+			'zone_ids' => array_column($allowed_zones, 'zone_id'),
+		);
+		
+		$addresses = $this->Model_Account_Address->getAddresses($filter);
 		
 		return $addresses;
 	}
 	
-	public function get_payment_addresses()
+	public function getPaymentAddresses()
 	{
-		return $this->Model_Account_Address->getAddresses();
+		$filter = array(
+			'customer_ids' => array($this->customer_id),
+		);
+		
+		return $this->Model_Account_Address->getAddresses($filter);
 	}
 	
 	public function getOrders()

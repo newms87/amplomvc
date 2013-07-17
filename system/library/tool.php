@@ -38,11 +38,6 @@ class Tool extends Library
 		return $formatted_data;
 	}
 	
-	public function error_info()
-	{
-		return "<span style='font-weight:bold; color:#E72727'>" . get_caller(2). " </span>";
-	}
-	
 	public function insertables($insertables, $text, $start = '%', $end = '%')
 	{
 		$patterns = array();
@@ -54,12 +49,6 @@ class Tool extends Library
 		}
 		
 		return preg_replace($patterns, $replacements, $text);
-	}
-	
-	public function format_invoice($d)
-	{
-		$date_format = array();
-		return preg_match("/%.*%/",$d,$date_format)?preg_replace("/%.*%/",date(preg_replace("/%/",'',$date_format[0])), $d):$d;
 	}
 	
 	function sort_by_array($array,$order, $sort_key)

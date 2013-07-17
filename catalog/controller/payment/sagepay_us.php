@@ -32,7 +32,7 @@ class Catalog_Controller_Payment_SagepayUs extends Controller
 	
 	public function send()
 	{
-		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
+		$order_info = $this->order->get($this->session->data['order_id']);
 		
 		$url = 'https://www.sagepayments.net/cgi-bin/eftbankcard.dll?transaction';
 		
@@ -65,7 +65,7 @@ class Catalog_Controller_Payment_SagepayUs extends Controller
 		$json = array();
 															
 		if ($response[1] == 'A') {
-			$this->Model_Checkout_Order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
+			$this->order->update($this->session->data['order_id'], $this->config->get('config_order_status_id'));
 
 			$message  = 'Approval Indicator: ' . $response[1] . "\n";
 			$message .= 'Approval/Error Code: ' . substr($response, 2, 6) . "\n";

@@ -12,15 +12,18 @@ class Config extends Library
 		//self assigning so we can use config immediately!
 		$this->registry->set('config', $this);
 		
-		$this->load_site_config();
+		$this->loadDefaultSites();
 		
-		//If we only have a store_id, get the store info	
+		//If we only have a store_id, get the store info
 		$store = $this->getStore($store_id);
 		
 		$this->store_id = $store['store_id'];
 		$this->data['config_store_id'] = $store['store_id'];
 		$this->data['config_url'] = $store['url'];
 		$this->data['config_ssl'] = $store['ssl'];
+		
+		//TODO: When we sort out configurations, be sure to add in translations for settings!
+		//This shoud all be done in the System_Model_Setting class
 		
 		//Get the settings specific to the requested store
 		$settings = $this->cache->get('setting.config.' . $this->store_id);
@@ -39,7 +42,9 @@ class Config extends Library
 		
 		$this->data += $settings;
 		
-		$this->checkForUpdates();
+		if (!empty($this->data['auto_update'])) {
+			$this->checkForUpdates();
+		}
 	}
 	
   	public function get($key)
@@ -57,10 +62,16 @@ class Config extends Library
 		return defined("IS_ADMIN");
 	}
 	
+	public function getDefaultStore()
+	{
+		return $this->getStore($this->config->get('config_default_store'));
+	}
+	
 	public function getStore($store_id = null)
 	{
 		if (is_null($store_id)) {
-			//TODO: How do we handle different domains for admin? Invalid domains makes DB sync difficult...
+			//TODO: Admin should be only 1 domain, should not be a store!! We can have different templates for admin,
+			//but should always be the same domain etc.. store_id 0 should be all stores.
 			if ($this->isAdmin()) {
 				return $this->site_config['admin_store'];
 			}
@@ -107,7 +118,15 @@ class Config extends Library
 	
 	public function load($group, $key, $store_id = null)
 	{
-		return $this->Model_Setting_Setting->getSettingKey($group, $key, $store_id);
+		if (is_null($store_id)) {
+			$store_id = $this->store_id;
+		}
+		
+		if (!isset($this->data[$key]) || $store_id !== $this->store_id) {
+			$this->data[$key] = $this->System_Model_Setting->getSettingKey($group, $key, $store_id);
+		}
+		
+		return $this->data[$key];
 	}
 	
 	public function save($group, $key, $value, $store_id = null, $auto_load = true)
@@ -116,20 +135,26 @@ class Config extends Library
 			$store_id = $this->store_id;
 		}
 		
-		$this->Model_Setting_Setting->editSettingKey($group, $key, $value, $store_id, $auto_load);
+		$this->System_Model_Setting->editSettingKey($group, $key, $value, $store_id, $auto_load);
 	}
 	
 	public function loadGroup($group, $store_id = null)
 	{
+		static $loaded_groups = array();
+		
 		if (is_null($store_id)) {
 			$store_id = $this->store_id;
 		}
+
+		if (!isset($loaded_groups[$group][$store_id])) {
+			$group_data = $this->System_Model_Setting->getSetting($group, $store_id);
 		
-		$group = $this->Model_Setting_Setting->getSetting($group, $store_id);
+			$this->data += $group_data;
+			
+			$loaded_groups[$group][$store_id] = $group_data;
+		}
 		
-		$this->data += $group;
-		
-		return $group;
+		return $loaded_groups[$group][$store_id];
 	}
 	
 	public function saveGroup($group, $data, $store_id = null, $auto_load = true)
@@ -138,10 +163,10 @@ class Config extends Library
 			$store_id = $this->store_id;
 		}
 		
-		$this->Model_Setting_Setting->editSetting($group, $data, $store_id, $auto_load);
+		$this->System_Model_Setting->editSetting($group, $data, $store_id, $auto_load);
 	}
 	
-	private function load_site_config()
+	private function loadDefaultSites()
 	{
 		$site_config_file = DIR_SYSTEM . 'site_config.php';
 		
@@ -176,9 +201,9 @@ class Config extends Library
 	
 	public function checkForUpdates()
 	{
-		$version = $this->get('ac_version');
+		$version = !empty($this->data['ac_version']) ? $this->data['ac_version'] : null;
 		
-		if ($version !== VERSION && $this->config->get('auto_update')) {
+		if ($version !== VERSION) {
 			$this->language->system('config');
 			$this->message->add('notify', $this->_('notify_update', $version, VERSION));
 

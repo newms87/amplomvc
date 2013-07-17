@@ -7,7 +7,7 @@ class Catalog_Controller_Payment_PpProUk extends Controller
 
 		$this->language->load('payment/pp_pro_uk');
 		
-		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
+		$order_info = $this->order->get($this->session->data['order_id']);
 		
 		$this->data['owner'] = $order_info['payment_firstname'] . ' ' . $order_info['payment_lastname'];
 		
@@ -69,7 +69,7 @@ class Catalog_Controller_Payment_PpProUk extends Controller
 	{
 		$this->language->load('payment/pp_pro_uk');
 		
-		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
+		$order_info = $this->order->get($this->session->data['order_id']);
 				
 		if (!$this->config->get('pp_pro_uk_transaction')) {
 			$payment_type = 'A';
@@ -131,7 +131,7 @@ class Catalog_Controller_Payment_PpProUk extends Controller
 		$json = array();
 
 		if ($response_data['RESULT'] == '0') {
-			$this->Model_Checkout_Order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
+			$this->order->update($this->session->data['order_id'], $this->config->get('config_order_status_id'));
 			
 			$message = '';
 			

@@ -1,8 +1,7 @@
 <?= $header; ?>
 <div class="content" id='mail_newsletter'>
 	<?= $this->breadcrumb->render(); ?>
-	<?= $this->builder->display_errors($errors); ?>
-<div class="box">
+	<div class="box">
 	<div class="heading">
 		<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
 		<div class="buttons">
@@ -94,7 +93,7 @@
 				<tr>
 					<td>
 						<div><?= $entry_product_list; ?></div>
-						<div><input type="text" id='product_list_autocomplete' filter="filter_name" route="catalog/product/autocomplete&filter_status=1" /></div>
+						<div><input type="text" id='product_list_autocomplete' /></div>
 						<div><?= $text_autocomplete; ?></div>
 					</td>
 					<td>
@@ -116,7 +115,7 @@
 				<tr>
 					<td>
 						<div><?= $entry_designer_list; ?></div>
-						<div><input type="text" id='designer_list_autocomplete' filter="name" route="catalog/manufacturer/autocomplete&status=1" /></div>
+						<div><input type="text" id='designer_list_autocomplete' /></div>
 						<div><?= $text_autocomplete; ?></div>
 					</td>
 					<td>
@@ -237,11 +236,11 @@ $('#designer_select').change(function(event, first_time){
 	if(typeof addSingleImage == 'function' && !first_time)
 			addSingleImage(data['image'], image_field.attr('id'), thumb.attr('id'));
 		
-	$.post("<?= HTTP_ADMIN . "index.php?route=catalog/product/select"; ?>", {filter: filter, select: $('#product_select').val(), fields: 'image'},
+	$.post("<?= $url_product_select; ?>", {filter: filter, select: $('#product_select').val(), fields: 'image'},
 			function(json){
 				$('#product_select').html(json['html']).data(json['option_data']);
 				if(!first_time){
-						$('#product_select').change();
+					$('#product_select').change();
 				}
 			},'json');
 }).trigger('change', true);
@@ -329,9 +328,27 @@ $('#add_featured_article_button').click(function(){
 });
 //--></script>
 
-<?= $this->builder->js('autocomplete', '#product_list_autocomplete', 'name', 'product_id', 'callback_product_autocomplete'); ?>
+<? $product_autocomplete_data = array(
+	'selector' => '#product_list_autocomplete',
+	'route' => 'catalog/product/autocomplete',
+	'filter' => 'name',
+	'label' => 'name',
+	'value' => 'product_id',
+	'callback' => 'callback_product_autocomplete',
+); ?>
 
-<?= $this->builder->js('autocomplete', '#designer_list_autocomplete', 'name', 'manufacturer_id', 'callback_designer_autocomplete'); ?>
+<?= $this->builder->js('autocomplete', $product_autocomplete_data); ?>
+
+<? $manufacturer_autocomplete_data = array(
+	'selector' => '#designer_list_autocomplete',
+	'route' => 'catalog/manufacturer/autocomplete',
+	'filter' => 'name',
+	'label' => 'name',
+	'value' => 'manufacturer_id',
+	'callback' => 'callback_designer_autocomplete',
+); ?>
+
+<?= $this->builder->js('autocomplete', $manufacturer_autocomplete_data); ?>
 
 <script type="text/javascript">//<!--
 $(document).ready(function(){

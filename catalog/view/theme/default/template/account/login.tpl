@@ -1,6 +1,4 @@
 <?= $header; ?>
-<?= $this->builder->display_errors($errors); ?>
-	
 <?= $column_left; ?><?= $column_right; ?>
 <div id="content">
 	<?= $this->breadcrumb->render(); ?>

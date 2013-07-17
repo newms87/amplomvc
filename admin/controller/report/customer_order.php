@@ -88,7 +88,7 @@ class Admin_Controller_Report_CustomerOrder extends Controller
 			);
 		}
 		
-		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
+		$this->data['order_statuses'] = $this->order->getOrderStatuses();
 			
 		$url = '';
 						

@@ -6,6 +6,7 @@ final class Action
 	private $route;
 	private $class;
 	private $classpath;
+	private $controller;
 	private $method;
 	private $parameters = array();
 	private $output;
@@ -24,7 +25,7 @@ final class Action
 			$this->classpath = rtrim($classpath,'/') . '/';
 		}
 		
-		$parts = explode('/', str_replace('../', '', $this->classpath . $route));
+		$parts = explode('/', str_replace('../', '', $this->classpath . $this->route));
 		
 		$path = '';
 		
@@ -47,7 +48,7 @@ final class Action
 				break;
 			}
 			else {
-				trigger_error("Unable to find Class file " . SITE_DIR . $this->classpath . $route . '.php!' . get_caller() . get_caller(1));
+				trigger_error("Unable to find Class file " . SITE_DIR . $this->classpath . $this->route . '.php!' . get_caller(0, 2));
 				return false;
 			}
 		}
@@ -85,20 +86,24 @@ final class Action
 	
 	public function getController()
 	{
-		if (is_file($this->file)) {
-			_require($this->file);
-			
-			$class = $this->class;
-			
-			return new $class($this->registry);
-		} else {
-			if (!$this->file) {
-				trigger_error("Failed to load controller {$this->class} because the file was not resolved! Please verify {$this->route} is a valid controller.<br>" . get_caller() . '<br />' . get_caller(1) . '<br />');
+		if (!$this->controller) {
+			if (is_file($this->file)) {
+				_require($this->file);
+				
+				$class = $this->class;
+				
+				$this->controller = new $class($this->registry);
 			} else {
-				trigger_error("Failed to load controller {$this->class} because the file {$this->file} is missing!");
+				if (!$this->file) {
+					trigger_error("Failed to load controller {$this->class} because the file was not resolved! Please verify {$this->route} is a valid controller." . get_caller(0, 2));
+				} else {
+					trigger_error("Failed to load controller {$this->class} because the file {$this->file} is missing!");
+				}
+				exit();
 			}
-			exit();
 		}
+		
+		return $this->controller;
 	}
 	
 	public function execute()

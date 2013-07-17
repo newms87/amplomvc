@@ -60,12 +60,12 @@ class Catalog_Model_Setting_Setting extends Model
 		}
 	}
 	
-	//TODO: Handle translations for single value entry
-	public function editSettingKey($group, $key = null, $value = array(), $store_id = 0, $auto_load = true){
+	public function editSettingKey($group, $key = null, $value = array(), $store_id = 0, $auto_load = true)
+	{
 		//Handle Translations
 		if (is_array($value)) {
 			foreach ($value as $entry_key => $entry) {
-				if (isset($entry['translations'])) {
+				if (is_array($entry) && isset($entry['translations'])) {
 					$this->translation->set_translations($key, $entry_key, $entry['translations']);
 					unset($value[$entry_key]['translations']);
 				}
@@ -109,5 +109,19 @@ class Catalog_Model_Setting_Setting extends Model
 		$this->cache->delete('theme');
 		
 		return $setting_id;
+	}
+	
+	public function deleteSetting($group, $store_id = 0)
+	{
+		$values = array(
+		'store_id'=>$store_id,
+		'group'=>$group
+		);
+		
+		$this->delete('setting', $values);
+		
+		$this->cache->delete('theme');
+		$this->cache->delete('setting');
+		$this->cache->delete('store');
 	}
 }

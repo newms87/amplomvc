@@ -129,7 +129,7 @@ class Admin_Controller_Catalog_Collection extends Controller
 			'type' => 'multiselect',
 			'display_name' => $this->_('column_category'),
 			'filter' => true,
-			'build_config' => array('category_id' => 'name'),
+			'build_config' => array('category_id' , 'name'),
 			'build_data' => $this->Model_Catalog_Category->getCategoriesWithParents(),
 			'sortable' => false,
 		);
@@ -138,7 +138,7 @@ class Admin_Controller_Catalog_Collection extends Controller
 			'type' => 'multiselect',
 			'display_name' => $this->_('column_store'),
 			'filter' => true,
-			'build_config' => array('store_id' => 'name'),
+			'build_config' => array('store_id' , 'name'),
 			'build_data' => $this->Model_Setting_Store->getStores(),
 			'sortable' => false,
 		);

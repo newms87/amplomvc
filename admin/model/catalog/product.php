@@ -174,20 +174,15 @@ class Admin_Model_Catalog_Product extends Model
 			}
 		}
 		
-		foreach ($data['product_tag'] as $language_id => $value) {
-			if ($value) {
-				$tags = explode(',', $value);
-				
-				foreach ($tags as $tag) {
-					$values = array(
-					'product_id' => $product_id,
-					'language_id' => $language_id,
-					'tag' => trim($tag)
-					);
-					
-					$this->insert('product_tag', $values);
-				}
-			}
+		$tag_ids = $this->tag->addAll($data['product_tags']);
+		
+		foreach ($tag_ids as $tag_id) {
+			$product_tag = array(
+				'product_id' => $product_id,
+				'tag_id' => $tag_id,
+			);
+			
+			$this->insert('product_tag', $product_tag);
 		}
 						
 		if ($data['keyword']) {
@@ -408,31 +403,16 @@ class Admin_Model_Catalog_Product extends Model
 		//Product Tags
 		$this->delete('product_tag',  array('product_id' => $product_id));
 		
-		$product_tags = array(
-			$language_id => $data['product_tag'],
-		);
+		$tag_ids = $this->tag->addAll($data['product_tags']);
 		
-		$product_tags += $data['translations']['product_tag'];
-		unset($data['translations']['product_tag']);
-		
-		foreach ($product_tags as $language_id => $value) {
-			if ($value) {
-				$tags = explode(',', $value);
-				
-				if ($tags) {
-					foreach ($tags as $tag) {
-						$values = array(
-							'product_id' => $product_id,
-							'language_id' => $language_id,
-							'tag' => trim($tag)
-						);
-						
-						$product_tag_id = $this->insert('product_tag', $values);
-					}
-				}
-			}
+		foreach ($tag_ids as $tag_id) {
+			$product_tag = array(
+				'product_id' => $product_id,
+				'tag_id' => $tag_id,
+			);
+			
+			$this->insert('product_tag', $product_tag);
 		}
-		
 		
 		//Product URL Alias
 		$this->Model_Setting_UrlAlias->deleteUrlAliasByRouteQuery('product/product', 'product_id=' . (int)$product_id);
@@ -501,7 +481,7 @@ class Admin_Model_Catalog_Product extends Model
 		$product['product_related'] = $this->getProductRelated($product_id);
 		$product['product_reward'] = $this->getProductRewards($product_id);
 		$product['product_special'] = $this->getProductSpecials($product_id);
-		$product['product_tag'] = $this->getProductTags($product_id);
+		$product['product_tags'] = $this->getProductTags($product_id);
 		$product['product_category'] = $this->getProductCategories($product_id);
 		$product['product_download'] = $this->getProductDownloads($product_id);
 		$product['product_layout'] = $this->getProductLayouts($product_id);
@@ -559,6 +539,11 @@ class Admin_Model_Catalog_Product extends Model
 		}
 			
 		return $product;
+	}
+
+	public function getProductField($product_id, $field)
+	{
+		return $this->queryVar("SELECT `" . $this->db->escape($field) . "` FROM " . DB_PREFIX . "product WHERE product_id = " . (int)$product_id);
 	}
 	
 	public function getProducts($data = array(), $select = '', $total = false)
@@ -656,8 +641,12 @@ class Admin_Model_Catalog_Product extends Model
 			$where .= " AND p.length_class_id = '" . (int)$data['length_class_id'] . "'";
 		}
 		
-		if (!empty($data['is_final'])) {
-			$where .= " AND p.is_final = '" . ($data['p.is_final'] ? 1 : 0) . "'";
+		if (!empty($data['return_policies'])) {
+			$where .= " AND p.return_policy_id IN (" . implode(',', $data['return_policies']) . ")";
+		}
+		
+		if (!empty($data['shipping_policies'])) {
+			$where .= " AND p.shipping_policy_id IN (" . implode(',', $data['shipping_policies']) . ")";
 		}
 		
 		if (!empty($data['date_expires']['from'])) {
@@ -744,7 +733,6 @@ class Admin_Model_Catalog_Product extends Model
 			'information',
 			'meta_description',
 			'meta_keywords',
-			'shipping_return',
 		);
 		
 		return $this->translation->get_translations('product', $product_id, $translate_fields);
@@ -947,21 +935,7 @@ class Admin_Model_Catalog_Product extends Model
 	
 	public function getProductTags($product_id)
 	{
-		$product_tags = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_tag WHERE product_id = '" . (int)$product_id . "'");
-		
-		$tag_data = array();
-		
-		foreach ($product_tags as $product_tag) {
-			$tag_data[$product_tag['language_id']][] = $product_tag['tag'];
-		}
-		
-		$product_tag_data = array();
-		
-		foreach ($tag_data as $language_id => $tags) {
-			$product_tag_data[$language_id] = implode(',', $tags);
-		}
-		
-		return $product_tag_data;
+		return $this->queryColumn("SELECT t.text FROM " . DB_PREFIX . "product_tag pt LEFT JOIN " . DB_PREFIX . "tag t ON (t.tag_id = pt.tag_id) WHERE product_id = '" . (int)$product_id . "'");
 	}
 	
 	public function getTotalProducts($data = array()) {

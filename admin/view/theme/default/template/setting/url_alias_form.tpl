@@ -1,7 +1,6 @@
 <?= $header; ?>
 <div class="content">
 	<?= $this->breadcrumb->render(); ?>
-	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -29,7 +28,7 @@
 						</tr>
 						<tr>
 							<td><?= $entry_admin; ?></td>
-							<td><?= $this->builder->build('select',$yes_no, 'admin',$admin); ?></td>
+							<td><?= $this->builder->build('select',$data_yes_no, 'admin',$admin); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_status; ?></td>

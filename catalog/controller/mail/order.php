@@ -1,84 +1,83 @@
 <?php
 class Catalog_Controller_Mail_Order extends Controller 
 {
-		
-	public function index($order_info)
+	public function index($order)
 	{
-		$order_id = $order_info['order_id'];
+		$order_id = $order['order_id'];
 		
 		//Order Information
-		$this->data = $order_info;
+		$this->data = $order;
 		
 		$this->data['logo'] = $this->image->get($this->config->get('config_logo'));
-		$this->data['link'] = $order_info['store_url'] . 'index.php?route=account/order/info&order_id=' . $order_id;
-		$this->data['date_added'] = $this->date->format($order_info['date_added'], 'short');
+		$this->data['link'] = $this->url->store($order['store_id'], 'account/order/info', 'order_id=' . $order_id);
+		$this->data['date_added'] = $this->date->format($order['date_added'], 'short');
 		
 		//Language data
-		$language = $this->language->fetch('mail/order', $order_info['language_directory']);
-		$language += $this->language->fetch($order_info['language_filename'], $order_info['language_directory']);
+		$language = $this->language->fetch('mail/order', $order['language_directory']);
+		$language += $this->language->fetch($order['language_filename'], $order['language_directory']);
 		
-		$language['text_subject'] = sprintf($language['text_subject'], html_entity_decode($order_info['store_name'], ENT_QUOTES, 'UTF-8'), $order_id);
-		$language['text_greeting'] = sprintf($language['text_greeting'], html_entity_decode($order_info['store_name'], ENT_QUOTES, 'UTF-8'));
+		$language['text_subject'] = sprintf($language['text_subject'], html_entity_decode($order['store_name'], ENT_QUOTES, 'UTF-8'), $order_id);
+		$language['text_greeting'] = sprintf($language['text_greeting'], html_entity_decode($order['store_name'], ENT_QUOTES, 'UTF-8'));
 		
 		$this->data += $language;
 		
 		//shipping address
-		if ($order_info['shipping_address_format']) {
-			$format = $order_info['shipping_address_format'];
+		if ($order['shipping_address_format']) {
+			$format = $order['shipping_address_format'];
 		} else {
 			$format = $this->config->get('config_address_format');
 		}
 		
 		$insertables = array(
-			'firstname' => $order_info['shipping_firstname'],
-			'lastname'  => $order_info['shipping_lastname'],
-			'company'	=> $order_info['shipping_company'],
-			'address_1' => $order_info['shipping_address_1'],
-			'address_2' => $order_info['shipping_address_2'],
-			'city'		=> $order_info['shipping_city'],
-			'postcode'  => $order_info['shipping_postcode'],
-			'zone'		=> $order_info['shipping_zone'],
-			'zone_code' => $order_info['shipping_zone_code'],
-			'country'	=> $order_info['shipping_country'],
+			'firstname' => $order['shipping_firstname'],
+			'lastname'  => $order['shipping_lastname'],
+			'company'	=> $order['shipping_company'],
+			'address_1' => $order['shipping_address_1'],
+			'address_2' => $order['shipping_address_2'],
+			'city'		=> $order['shipping_city'],
+			'postcode'  => $order['shipping_postcode'],
+			'zone'		=> $order['shipping_zone'],
+			'zone_code' => $order['shipping_zone_code'],
+			'country'	=> $order['shipping_country'],
 		);
 	
 		$this->data['shipping_address'] = $this->tool->insertables($insertables, $format, '{', '}');
 		
 		//payment address
-		if ($order_info['payment_address_format']) {
-			$format = $order_info['payment_address_format'];
+		if ($order['payment_address_format']) {
+			$format = $order['payment_address_format'];
 		} else {
 			$format = $this->config->get('config_address_format');
 		}
 		
 		$insertables = array(
-			'firstname' => $order_info['payment_firstname'],
-			'lastname'  => $order_info['payment_lastname'],
-			'company'	=> $order_info['payment_company'],
-			'address_1' => $order_info['payment_address_1'],
-			'address_2' => $order_info['payment_address_2'],
-			'city'		=> $order_info['payment_city'],
-			'postcode'  => $order_info['payment_postcode'],
-			'zone'		=> $order_info['payment_zone'],
-			'zone_code' => $order_info['payment_zone_code'],
-			'country'	=> $order_info['payment_country'],
+			'firstname' => $order['payment_firstname'],
+			'lastname'  => $order['payment_lastname'],
+			'company'	=> $order['payment_company'],
+			'address_1' => $order['payment_address_1'],
+			'address_2' => $order['payment_address_2'],
+			'city'		=> $order['payment_city'],
+			'postcode'  => $order['payment_postcode'],
+			'zone'		=> $order['payment_zone'],
+			'zone_code' => $order['payment_zone_code'],
+			'country'	=> $order['payment_country'],
 		);
 	
 		$this->data['payment_address'] = $this->tool->insertables($insertables, $format, '{', '}');
 		
 		
 		// Vouchers
-		foreach ($order_info['order_vouchers'] as &$voucher) {
-			$voucher['amount'] = $this->currency->format($voucher['amount'], $order_info['currency_code'], $order_info['currency_value']);
+		foreach ($order['order_vouchers'] as &$voucher) {
+			$voucher['amount'] = $this->currency->format($voucher['amount'], $order['currency_code'], $order['currency_value']);
 		}unset($voucher);
 		
-		$this->data['order_vouchers'] = $order_info['order_vouchers'];
+		$this->data['order_vouchers'] = $order['order_vouchers'];
 		
 		//Products
-		foreach ($order_info['order_products'] as &$product) {
-			$product['price'] = $this->currency->format($product['price'], $order_info['currency_code'], $order_info['currency_value']);
-			$product['cost'] = $this->currency->format($product['cost'], $order_info['currency_code'], $order_info['currency_value']);
-			$product['total'] = $this->currency->format($product['total'], $order_info['currency_code'], $order_info['currency_value']);
+		foreach ($order['order_products'] as &$product) {
+			$product['price'] = $this->currency->format($product['price'], $order['currency_code'], $order['currency_value']);
+			$product['cost'] = $this->currency->format($product['cost'], $order['currency_code'], $order['currency_value']);
+			$product['total'] = $this->currency->format($product['total'], $order['currency_code'], $order['currency_value']);
 			
 			foreach ($product['option'] as &$option) {
 				if (strlen($option['value']) > 22) {
@@ -87,19 +86,19 @@ class Catalog_Controller_Mail_Order extends Controller
 			}unset($option);
 		}unset($product);
 		
-		$this->data['order_products'] = $order_info['order_products'];
+		$this->data['order_products'] = $order['order_products'];
 		
 		//Totals
-		foreach ($order_info['order_totals'] as &$total) {
+		foreach ($order['order_totals'] as &$total) {
 			$total['text'] = html_entity_decode($total['text'], ENT_NOQUOTES, 'UTF-8');
 		}unset($total);
 		
-		$this->data['order_totals'] = $order_info['order_totals'];
+		$this->data['order_totals'] = $order['order_totals'];
 		
 		//Urls
-		$this->data['order_info_url'] = $order_info['store_url'] . 'index.php?route=account/order/info&order_id=' . $order_id;
+		$this->data['order_info_url'] = $this->url->store($order['store_id'], 'account/order/info', 'order_id=' . $order_id);
 		
-		$this->data['downloads_url'] = $order_info['order_downloads'] ? $order_info['store_url'] . 'index.php?route=account/download' : '';
+		$this->data['downloads_url'] = $order['order_downloads'] ? $this->url->store($order['store_id'], 'account/download') : '';
 		
 		//Generate HTML email
 		$this->template->load('mail/order_html');
@@ -115,10 +114,10 @@ class Catalog_Controller_Mail_Order extends Controller
 		
 		$this->mail->init();
 		
-		$this->mail->setTo($order_info['email']);
+		$this->mail->setTo($order['email']);
 		$this->mail->setCc($this->config->get('config_email'));
 		$this->mail->setFrom($this->config->get('config_email'));
-		$this->mail->setSender($order_info['store_name']);
+		$this->mail->setSender($order['store_name']);
 		$this->mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
 		$this->mail->setHtml($html);
 		$this->mail->setText(html_entity_decode($text, ENT_QUOTES, 'UTF-8'));
@@ -137,7 +136,7 @@ class Catalog_Controller_Mail_Order extends Controller
 			
 			$this->mail->setTo($this->config->get('config_email'));
 			$this->mail->setFrom($this->config->get('config_email'));
-			$this->mail->setSender($order_info['store_name']);
+			$this->mail->setSender($order['store_name']);
 			$this->mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
 			$this->mail->setText(html_entity_decode($text, ENT_QUOTES, 'UTF-8'));
 			$this->mail->send();

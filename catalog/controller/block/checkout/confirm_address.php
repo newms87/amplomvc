@@ -5,45 +5,21 @@ class Catalog_Controller_Block_Checkout_ConfirmAddress extends Controller
 		$this->template->load('block/checkout/confirm_address');
 		$this->language->load("block/checkout/confirm_address");
 		
-		$shipping_address = '';
-		$payment_address = '';
-		
 		if ($this->cart->hasShipping() && $this->cart->hasShippingAddress()) {
 			$shipping_address = $this->cart->getShippingAddress();
+			
+			//Format Shipping Addresses
+			if ($shipping_address) {
+				$this->data['shipping_address'] = $this->address->format($shipping_address);
+			}
 		}
 		
 		if ($this->cart->hasPaymentAddress()) {
 			$payment_address = $this->cart->getPaymentAddress();
-		}
-		
-		//Format Shipping Addresses
-		if ($shipping_address) {
-			if ($shipping_address['address_format']) {
-				$format = $shipping_address['address_format'];
+			
+			if ($payment_address) {
+				$this->data['payment_address'] = $this->address->format($payment_address);
 			}
-			else {
-				$format = $this->config->get('config_address_format');
-			}
-			
-			$format = preg_replace("/ /", "&nbsp;", $format);
-			
-			$this->data['shipping_address'] = $this->string_to_html($this->tool->insertables($shipping_address, $format, '{', '}'));
-		}
-		
-		
-		//Format Payment Address
-		if ($payment_address) {
-			
-			if ($payment_address['address_format']) {
-				$format = $payment_address['address_format'];
-			}
-			else {
-				$format = $this->config->get('config_address_format');
-			}
-			
-			$format = preg_replace("/ /", "&nbsp;", $format);
-			
-			$this->data['payment_address'] = $this->string_to_html($this->tool->insertables($payment_address, $format, '{', '}'));
 		}
 		
 		$this->response->setOutput($this->render());

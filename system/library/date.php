@@ -32,6 +32,32 @@ class Date extends Library
 		}
 	}
 	
+	public function isBeforeNow($date, $datetimezero_true = true)
+	{
+		if ($date === DATETIME_ZERO) {
+			return $datetimezero_true;
+		}
+		
+		$this->resolveDate($date);
+		
+		$diff = $date->diff(new DateTime());
+		
+		return $diff->invert === 0;
+	}
+	
+	public function isAfterNow($date, $datetimezero_true = false)
+	{
+		if ($date === DATETIME_ZERO) {
+			return $datetimezero_true;
+		}
+		
+		$this->resolveDate($date);
+		
+		$diff = $date->diff(new DateTime());
+		
+		return $diff->invert === -1;
+	}
+	
 	/**
 	 * Returns the date added with the specified interval
 	 * 
@@ -49,18 +75,7 @@ class Date extends Library
 	 */
 	public function add($date = null, $interval = '', $return_type = AC_DATE_STRING, $format = null)
 	{
-		if (!$date) {
-			$date = new DateTime();
-		} elseif (is_string($date)) {
-			try {
-				$date = new DateTime($date);
-			} catch(Exception $e) {return $date;}
-			
-		}elseif (is_int($date)) {
-			$ts = $date;
-			$date = new DateTime();
-			$date->setTimestamp($ts);
-		}
+		$this->resolveDate($date);
 		
 		if (!empty($interval) && is_string($interval)) {
 			$interval = date_interval_create_from_date_string($interval);
@@ -81,20 +96,17 @@ class Date extends Library
 		}
 	}
 	
+	public function diff($d1, $d2)
+	{
+		$this->resolveDate($d1);
+		$this->resolveDate($d2);
+		
+		return $d1->diff($d2);
+	}
+	
 	public function format($date = null, $format = '')
 	{
-		if (!$date) {
-			$date = new DateTime();
-		} elseif (is_string($date)) {
-			try {
-				$date = new DateTime($date);
-			} catch(Exception $e) {return $date;}
-			
-		}elseif (is_int($date)) {
-			$ts = $date;
-			$date = new DateTime();
-			$date->setTimestamp($ts);
-		}
+		$this->resolveDate($date);
 		
 		if (!$format) {
 			$format = $this->language->getInfo('datetime_format');
@@ -124,5 +136,21 @@ class Date extends Library
 		}
 		
 		return $date->format($format);
+	}
+	
+	public function resolveDate(&$date)
+	{
+		if (!$date) {
+			$date = new DateTime();
+		} elseif (is_string($date)) {
+			try {
+				$date = new DateTime($date);
+			} catch(Exception $e) {return $date;}
+			
+		}elseif (is_int($date)) {
+			$ts = $date;
+			$date = new DateTime();
+			$date->setTimestamp($ts);
+		}
 	}
 }

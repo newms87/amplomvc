@@ -240,7 +240,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 		$this->template->load('sale/voucher_form');
 		
 		//Insert or Update
-		$voucher_id = isset($_GET['voucher_id']) ? $_GET['voucher_id'] : 0;
+		$voucher_id = isset($_GET['voucher_id']) ? (int)$_GET['voucher_id'] : 0;
 		
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -285,9 +285,12 @@ class Admin_Controller_Sale_Voucher extends Controller
 		
 		$this->data['voucher_id'] = $voucher_id; 
 		
+		//Ajax Urls
+		$this->data['url_history'] = $this->url->ajax('sale/voucher/history', 'voucher_id=' . $voucher_id);
+		
 		//Action Buttons
-		$this->data['send'] = $this->url->link('sale/voucher/send', 'voucher_id=' . (int)$voucher_id);
-		$this->data['save'] = $this->url->link('sale/voucher/update', 'voucher_id=' . (int)$voucher_id);
+		$this->data['send'] = $this->url->link('sale/voucher/send', 'voucher_id=' . $voucher_id);
+		$this->data['save'] = $this->url->link('sale/voucher/update', 'voucher_id=' . $voucher_id);
 		$this->data['cancel'] = $this->url->link('sale/voucher');
 		
 		//Dependencies
@@ -358,10 +361,10 @@ class Admin_Controller_Sale_Voucher extends Controller
 		}
 		
 		foreach ($voucher_ids as $voucher_id) {
-			$applied = $this->db->queryVar("SELECT COUNT(*) FROM ". DB_PREFIX . "order_voucher WHERE voucher_id = " . (int)$voucher_id);
+			$order_id = $this->db->queryVar("SELECT order_id FROM ". DB_PREFIX . "order_voucher WHERE voucher_id = " . (int)$voucher_id);
 			
-			if ($applied) {
-				$this->error['warning'] = $this->_('error_order', $this->url->link('sale/order/info', 'order_id=' . $order_voucher_info['order_id']));
+			if ($order_id) {
+				$this->error['warning'] = $this->_('error_order', $this->url->link('sale/order/info', 'order_id=' . (int)$order_id));
 				break;
 			}
 		}
@@ -423,77 +426,11 @@ class Admin_Controller_Sale_Voucher extends Controller
 		}
 		
 		if (!$json) {
-			$this->mail->init();
-			
-			$this->mail->setTemplate('voucher', $voucher);
-			
-			$this->mail->send();
+			$this->mail->callController('voucher', $voucher);
 			
 			$json['success'] = $this->_('text_sent');
 		}
 		
 		$this->response->setOutput(json_encode($json));
 	}
-	
-	function blah(){
-			$voucher_theme_info = $this->Model_Sale_VoucherTheme->getVoucherTheme($voucher_info['voucher_theme_id']);
-			
-			// If voucher belongs to an order
-			if ($order_info) {
-				$language = $this->language->fetch('mail/voucher', $order_info['language_directory']);
-				$language->load($order_info['language_filename']);
-				$language->load('mail/voucher');
-				
-				$data = array(
-					'title' => $language->format('text_subject', $voucher_info['from_name']),
-					'text_greeting' => $language->format('text_greeting', $this->currency->format($voucher_info['amount'], $order_info['currency_code'], $order_info['currency_value'])),
-					'text_from' => $language->format('text_from', $voucher_info['from_name']),
-					'text_message' => $language->get('text_message'),
-					'text_redeem' => $language->format('text_redeem', $voucher_info['code']),
-					'text_footer' => $language->get('text_footer'),
-					'message' => nl2br($voucher_info['message']),
-					'store_name' => $order_info['store_name'],
-					'store_url' => $order_info['store_url'],
-					'image' => $this->image->get($voucher_theme_info['image']),
-				);
-				
-				$subject = html_entity_decode($language->format('text_subject', $voucher_info['from_name']), ENT_QUOTES, 'UTF-8');
-			
-			// If voucher does not belong to an order
-			} else {
-				$this->language->load('mail/voucher');
-				
-				$data = array(
-					'title' => $this->_('text_subject', $voucher_info['from_name']),
-					'text_greeting' => $this->_('text_greeting', $this->currency->format($voucher_info['amount'], $order_info['currency_code'], $order_info['currency_value'])),
-					'text_from' => $this->_('text_from', $voucher_info['from_name']),
-					'text_message' => $this->language->get('text_message'),
-					'text_redeem' => $this->_('text_redeem', $voucher_info['code']),
-					'text_footer' => $this->language->get('text_footer'),
-					'message' => nl2br($voucher_info['message']),
-					'store_name' => $order_info['store_name'],
-					'store_url' => $order_info['store_url'],
-					'image' => $this->image->get($voucher_theme_info['image']),
-				);
-				
-				$subject = html_entity_decode(sprintf($this->_('text_subject'), $voucher_info['from_name']), ENT_QUOTES, 'UTF-8');
-			}
-			
-			$template = new Template($this->registry);
-			
-			$template->set_data($data);
-			$template->load('mail/voucher');
-			
-			$this->mail->init();
-			
-			$this->mail->setTo($voucher_info['to_email']);
-			$this->mail->setFrom($this->config->get('config_email'));
-			$this->mail->setSender($order_info['store_name']);
-			$this->mail->setSubject($subject);
-			$this->mail->setHtml($template->render());
-			$this->mail->send();
-			
-			
-
-  	}
 }

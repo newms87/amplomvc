@@ -286,7 +286,11 @@ class Admin_Controller_Localisation_Language extends Controller
 				}
 			}
 				
-			$order_total = $this->Model_Sale_Order->getTotalOrdersByLanguageId($language_id);
+			$filter = array(
+				'language_ids' => array($language_id),
+			);
+			
+			$order_total = $this->System_Model_Order->getTotalOrders($filter);
 
 			if ($order_total) {
 				$this->error['warning'] = sprintf($this->_('error_order'), $order_total);

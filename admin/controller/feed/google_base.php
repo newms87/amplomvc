@@ -39,7 +39,7 @@ class Admin_Controller_Feed_GoogleBase extends Controller
 			$this->data['google_base_status'] = $this->config->get('google_base_status');
 		}
 		
-		$this->data['data_feed'] = SITE_URL . 'index.php?route=feed/google_base';
+		$this->data['data_feed'] = $this->url->link('feed/google_base');
 
 		$this->children = array(
 			'common/header',

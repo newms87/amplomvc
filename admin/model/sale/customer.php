@@ -173,12 +173,12 @@ class Admin_Model_Sale_Customer extends Model
 			
 			if ($store_info) {
 				$store_name = $store_info['name'];
-				$store_url = $store_info['url'] . 'index.php?route=account/login';
+				$store_url = $this->url->store($store_info['store_id'], 'account/login');
 			} else {
 				$store_name = $this->config->get('config_name');
-				$store_url = HTTP_CATALOG . 'index.php?route=account/login';
+				$store_url = $this->url->store($this->config->get('config_default_store'), 'account/login');
 			}
-	
+			
 			$patterns = array('/%first_name%/','/%last_name%/','/%store_name%/', '/%store_url%/');
 			$replacements = array($customer_info['firstname'],$customer_info['lastname'],$store_name,$store_url);
 			$subject = preg_replace($patterns,$replacements, $this->config->get('mail_registration_subject'));
@@ -422,7 +422,7 @@ class Admin_Model_Sale_Customer extends Model
 			$this->language->load('mail/customer');
 			
 			if ($order_id) {
-				$order_info = $this->Model_Sale_Order->getOrder($order_id);
+				$order_info = $this->order->get($order_id);
 				
 				if ($order_info) {
 					$store_name = $order_info['store_name'];

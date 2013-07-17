@@ -81,7 +81,7 @@ class Admin_Controller_Payment_Liqpay extends Controller
 			$this->data['liqpay_order_status_id'] = $this->config->get('liqpay_order_status_id');
 		}
 
-		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
+		$this->data['order_statuses'] = $this->order->getOrderStatuses();
 		
 		if (isset($_POST['liqpay_geo_zone_id'])) {
 			$this->data['liqpay_geo_zone_id'] = $_POST['liqpay_geo_zone_id'];

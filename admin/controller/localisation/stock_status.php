@@ -327,10 +327,6 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 			}
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
   	}
 }

@@ -1,7 +1,6 @@
 <?= $header; ?>
 <div class="content">
 	<?= $this->breadcrumb->render(); ?>
-	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'payment.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -50,7 +49,7 @@
 					</tr>
 					<tr>
 						<td><?= $entry_canceled_reversal_status; ?></td>
-						<? $this->builder->set_config('order_status_id', 'name'); ?>
+						<? $this->builder->set_config(false, 'title'); ?>
 						<td><?= $this->builder->build('select', $data_order_statuses, 'pp_standard_canceled_reversal_status_id', $pp_standard_canceled_reversal_status_id); ?></td>
 					</tr>
 					<tr>

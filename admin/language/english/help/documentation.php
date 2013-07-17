@@ -293,7 +293,7 @@ $s = &$_['sections']['users'];
 			$ss[4] = "%%User Group Name%%: this name is only used for reference in the backend system. Our users will never see this name.";
 			$ss[5] = "%%Access Permissions%%: These are the pages that this User Group is allowed to access or view. They MAY NOT modify anything on these pages therefore the database will remain unchanged.";
 			$ss[6] = "%%Modify Permissions%%: These are the pages / data that this User Group can view / modify. Only enable these for this user group if they should be allowed to make changes to the database concerning the specific tasks involved on the pages.";
-			$ss[7] = "If you are unsure what content is accessible or modifiable on these pages you can view the page in question by going to the url: bettyconfidential.com/admin/index.php?route=<i>page/name</i>.  Simply replace <i>page/name</i> with the Permission name.";
+			$ss[7] = "If you are unsure what content is accessible or modifiable on these pages you can view the page in question by going to the url: bettyconfidential.com/admin/<i>page/name</i>.  Simply replace <i>page/name</i> with the Permission name.";
 		//B. Users
 		$s['sub'][2]['title'] = "Users";
 		$ss = &$s['sub'][2]['step'];

@@ -90,7 +90,7 @@
 	<script src="<?= ELFINDER_URL; ?>js/proxy/elFinderSupportVer1.js" type="text/javascript" charset="utf-8"></script>
 
 	<!-- elfinder common javascript -->
-	<script type="text/javascript" src="view/javascript/common.js"></script>
+	<script type="text/javascript" src="<?= HTTP_ADMIN . "view/javascript/common.js"; ?>"></script>
 
 	<style type="text/css">
 		body { font-family:arial, verdana, sans-serif;}

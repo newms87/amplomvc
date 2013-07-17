@@ -76,42 +76,49 @@ class Admin_Controller_Catalog_Product extends Controller
 	{
 		$this->language->load('catalog/product');
 		
-		if (isset($_POST['selected']) && isset($_GET['action']) && $this->validateCopy()) {
-			foreach ($_POST['selected'] as $product_id) {
-				switch($_GET['action']){
-					case 'enable':
-						$this->Model_Catalog_Product->updateProduct($product_id, 'status',1);
-						break;
-					case 'disable':
-						$this->Model_Catalog_Product->updateProduct($product_id, 'status',0);
-						break;
-					case 'date_expires':
-						$this->Model_Catalog_Product->updateProduct($product_id,'date_expires',$_GET['action_value']);
-						break;
-					case 'is_final':
-						$this->Model_Catalog_Product->updateProduct($product_id,'is_final',$_GET['action_value']);
-						break;
-					case 'add_cat':
-						$this->Model_Catalog_Product->updateProductCategory($product_id, 'add',$_GET['action_value']);
-						break;
-					case 'remove_cat':
-						$this->Model_Catalog_Product->updateProductCategory($product_id, 'remove',$_GET['action_value']);
-						break;
-					case 'ship_policy':
-						$this->Model_Catalog_Product->updateProduct($product_id,'shipping_return', $_GET['action_value']);
-						break;
-					case 'copy':
-						$this->Model_Catalog_Product->copyProduct($product_id);
-						break;
-					case 'delete':
-						$this->Model_Catalog_Product->deleteProduct($product_id);
-						break;
-					default:
-						$this->error['warning'] = "Invalid Action Selected!";
+		if (isset($_POST['selected']) && isset($_GET['action'])) {
+			if (	($_GET['action'] === 'copy' && !$this->validateCopy()) || 
+					($_GET['action'] === 'delete' && !$this->validateDelete())	) {
+				//Action not allowed
+				$this->message->add("warning", $this->_('error_batch_action'));
+			}
+			else {
+				foreach ($_POST['selected'] as $product_id) {
+					switch($_GET['action']){
+						case 'enable':
+							$this->Model_Catalog_Product->updateProduct($product_id, 'status',1);
+							break;
+						case 'disable':
+							$this->Model_Catalog_Product->updateProduct($product_id, 'status',0);
+							break;
+						case 'date_expires':
+							$this->Model_Catalog_Product->updateProduct($product_id,'date_expires',$_GET['action_value']);
+							break;
+						case 'shipping_policy':
+							$this->Model_Catalog_Product->updateProduct($product_id,'shipping_policy_id', $_GET['action_value']);
+							break;
+						case 'return_policy':
+							$this->Model_Catalog_Product->updateProduct($product_id, 'return_policy_id', $_GET['action_value']);
+							break;
+						case 'add_cat':
+							$this->Model_Catalog_Product->updateProductCategory($product_id, 'add',$_GET['action_value']);
+							break;
+						case 'remove_cat':
+							$this->Model_Catalog_Product->updateProductCategory($product_id, 'remove',$_GET['action_value']);
+							break;
+						case 'copy':
+							$this->Model_Catalog_Product->copyProduct($product_id);
+							break;
+						case 'delete':
+							$this->Model_Catalog_Product->deleteProduct($product_id);
+							break;
+						default:
+							$this->error['warning'] = "Invalid Action Selected!";
+							break;
+					}
+					if($this->error)
 						break;
 				}
-				if($this->error)
-					break;
 			}
 
 			if (!$this->error && !$this->message->error_set()) {
@@ -120,7 +127,7 @@ class Admin_Controller_Catalog_Product extends Controller
 				$this->url->redirect($this->url->link('catalog/product'));
 			}
 		}
-
+		
 		$this->index();
 	}
 	
@@ -185,7 +192,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			'type' => 'multiselect',
 			'display_name' => $this->_('column_category'),
 			'filter' => true,
-			'build_config' => array('category_id' => 'name'),
+			'build_config' => array('category_id' , 'name'),
 			'build_data' => $categories,
 			'sortable' => false,
 		);
@@ -195,7 +202,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			'type' => 'select',
 			'display_name' => $this->_('column_manufacturer'),
 			'filter' => true,
-			'build_config' => array('manufacturer_id' => 'name'),
+			'build_config' => array('manufacturer_id' , 'name'),
 			'build_data' => $this->Model_Catalog_Manufacturer->getManufacturers(),
 			'sortable' => true,
 			'sort_value' => 'm.name',
@@ -242,11 +249,14 @@ class Admin_Controller_Catalog_Product extends Controller
 					'text' => $this->_('text_edit'),
 					'href' => $this->url->link('catalog/product/update', 'product_id=' . $product['product_id'])
 				),
-				'delete' => array(
-					'text' => $this->_('text_delete'),
-					'href' => $this->url->link('catalog/product/delete', 'product_id=' . $product['product_id'] . '&' . $url_query)
-				)
 			);
+			
+			if (!$this->order->productInConfirmedOrder($product['product_id'])) {
+				$product['actions']['delete'] = array(
+					'text' => $this->_('text_delete'),
+					'href' => $this->url->link('catalog/product/delete', 'product_id=' . $product['product_id'] . '&' . $url_query),
+				);
+			}
 			
 			$product['thumb'] = $this->image->resize($product['image'], $this->config->get('config_image_admin_list_width'), $this->config->get('config_image_admin_list_height'));
 			
@@ -298,31 +308,29 @@ class Admin_Controller_Catalog_Product extends Controller
 				'default'=> DATETIME_ZERO,
 			),
 			
-			'is_final' => array(
-				'label' => "Final Sale",
-				'type' => 'select',
-				'default' => 1,
-				'build_data' => $this->_('data_yes_no'),
+			'shipping_policy' => array(
+				'label' => $this->_('text_shipping_policy'),
+				'type' => 'ckedit',
+			),
+			
+			'return_policy' => array(
+				'label' => $this->_('text_return_policy'),
+				'type' => 'text',
+				'default' => $this->config->get('config_default_return_policy'),
 			),
 			
 			'add_cat' => array(
 				'label' => "Add Category",
 				'type' => 'select',
 				'build_data' => $categories,
-				'build_config' => array('category_id' => 'name'),
+				'build_config' => array('category_id' , 'name'),
 			),
 			
 			'remove_cat' => array(
 				'label' => "Remove Category",
 				'type' => 'select',
 				'build_data' => $categories,
-				'build_config' => array('category_id' => 'name'),
-			),
-			
-			'ship_policy' => array(
-				'label' => "Update Shipping / Return Policy",
-				'type' => 'ckedit',
-				'default' => $this->_('shipping_return_policy'),
+				'build_config' => array('category_id' , 'name'),
 			),
 			
 			'copy' => array(
@@ -379,9 +387,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			
 			$product_info['date_available'] = $this->date->format($product_info['date_available'], 'Y-m-d');
 			
-			$product_tags = $this->Model_Catalog_Product->getProductTags($product_id);
-			$product_info['product_tag'] = $product_tags[$this->config->get('config_language_id')];
-			
+			$product_info['product_tags'] = $this->Model_Catalog_Product->getProductTags($product_id);
 			$product_info['product_store'] = $this->Model_Catalog_Product->getProductStores($product_id);
 			$product_info['product_attributes'] = $this->Model_Catalog_Product->getProductAttributes($product_id);
 			$product_info['product_discounts'] = $this->Model_Catalog_Product->getProductDiscounts($product_id);
@@ -419,20 +425,20 @@ class Admin_Controller_Catalog_Product extends Controller
 			'information' => '',
 			'meta_keywords' => '',
 			'meta_description' => '',
-			'shipping_return' => '',
-			'product_tag' => '',
+			'product_tags' => array(),
 			'image'=>'',
 			'manufacturer_id' => 0,
 			'shipping'=>1,
 			'price'=>'',
 			'cost'=>'',
-			'is_final'=>0,
+			'return_policy_id' => $this->config->get('config_default_return_policy'),
+			'shipping_policy_id' => $this->config->get('config_default_shipping_policy'),
 			'tax_class_id'=>$this->config->get('config_tax_default_id'),
-			'date_available'=>date_format(new DateTime(),"Y-m-d H:i:s"),
+			'date_available'=>$this->date->now(),
 			'date_expires'=>'',
 			'editable' => 1,
-			'quantity'=>1,
-			'minimum'=>1,
+			'quantity' => 1,
+			'minimum' => 1,
 			'subtract'=>1,
 			'sort_order'=>1,
 			'stock_status_id'=>$this->config->get('config_stock_status_id'),
@@ -455,7 +461,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			'product_reward'=>array(),
 			'product_layout'=>array(),
 			'product_template' => array(),
-			);
+		);
 
 		foreach($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
@@ -483,9 +489,14 @@ class Admin_Controller_Catalog_Product extends Controller
 		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
 		$this->data['data_layouts'] = array('' => '') +	$this->Model_Design_Layout->getLayouts();
 		$this->data['data_templates'] = $this->Model_Design_Template->getTemplatesFor('product', true);
+		$this->data['data_shipping_policies'] = $this->cart->getShippingPolicies();
+		$this->data['data_return_policies'] = $this->cart->getReturnPolicies();
+		
+		$this->_('text_add_shipping_policy', $this->url->link('setting/shipping_policy'));
+		$this->_('text_add_return_policy', $this->url->link('setting/return_policy'));
 		
 		/**
-		* NOTE to clarify options / product options:
+		* NOTE: to clarify options / product options
 		*
 		* An option contains a set of 1 or more option_values
 		*
@@ -565,16 +576,14 @@ class Admin_Controller_Catalog_Product extends Controller
 		//Translations
 		$this->data['translations'] = $this->Model_Catalog_Product->getProductTranslations($product_id);
 		
-		//A hack to easily integrate product_tags translations
-		$tag_translations = $this->data['translations']['name'];
-		
-		foreach($tag_translations as $language_id => &$text) {
-			$text = isset($product_tags[$language_id]) ? $product_tags[$language_id] : '';
-		}
-		
-		$this->data['translations']['product_tag'] = $tag_translations;
-		
 		$this->data['no_image'] = $this->image->resize('no_image.png', $this->config->get('config_image_admin_thumb_width'), $this->config->get('config_image_admin_thumb_height'));
+		
+		//Ajax Urls
+		$this->data['url_generate_url'] = $this->url->ajax('catalog/product/generate_url');
+		$this->data['url_generate_model'] = $this->url->ajax('catalog/product/generate_model');
+		$this->data['url_autocomplete'] = $this->url->ajax('catalog/product/autocomplete');
+		$this->data['url_attribute_group_autocomplete'] = $this->url->ajax('catalog/attribute_group/autocomplete');
+		$this->data['url_option_autocomplete'] = $this->url->ajax('catalog/option/autocomplete');
 		
 		//Action Buttons
 		$this->data['save'] = $this->url->link('catalog/product/update', 'product_id=' . $product_id);
@@ -600,16 +609,28 @@ class Admin_Controller_Catalog_Product extends Controller
 			$this->error['name'] = $this->_('error_name');
 		}
 		
-		if (!$this->validation->text($_POST['model'], 1, 64)) {
-			$this->error['model'] = $this->_('error_model');
+		//We do not allow changing the Model ID for products that have been ordered
+		//A new product must be created
+		if (!empty($_GET['product_id']) && $this->order->productInConfirmedOrder($_GET['product_id'])) {
+			$model = $this->db->queryVar("SELECT model FROM " . DB_PREFIX . "product WHERE product_id = " . (int)$_GET['product_id']);
+			
+			if ($model !== $_POST['model']) {
+				$this->error['model'] = $this->_('error_model_confirmed_order_product');
+				$_POST['model'] = $model;
+			}
 		}
-		
-		$product_id = isset($_GET['product_id']) ? "AND product_id != '" . (int)$_GET['product_id'] . "'" : '';
-		
-		$exists = $this->db->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "product WHERE model='" . $this->db->escape($_POST['model']) . "' $product_id");
-		
-		if ($exists) {
-			$this->error['model'] = $this->_('error_dup_model');
+		else {
+			if (!$this->validation->text($_POST['model'], 1, 64)) {
+				$this->error['model'] = $this->_('error_model');
+			}
+			
+			$product_id = isset($_GET['product_id']) ? "AND product_id != '" . (int)$_GET['product_id'] . "'" : '';
+			
+			$exists = $this->db->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "product WHERE model='" . $this->db->escape($_POST['model']) . "' $product_id");
+			
+			if ($exists) {
+				$this->error['model'] = $this->_('error_dup_model');
+			}
 		}
 		
 		if (!$this->validation->text($_POST['keyword'], 1, 255)) {
@@ -708,6 +729,22 @@ class Admin_Controller_Catalog_Product extends Controller
   	{
 		if (!$this->user->hasPermission('modify', 'catalog/product')) {
 			$this->error['warning'] = $this->_('error_permission');
+		}
+		
+		$product_ids = array();
+		
+		if (!empty($_POST['selected'])) {
+			$product_ids = $_POST['selected'];
+		}
+		
+		if (!empty($_GET['product_id'])) {
+			$product_ids[] = $_GET['product_id'];
+		}
+		
+		foreach ($product_ids as $product_id) {
+			if ($this->order->productInConfirmedOrder($product_id)) {
+				$this->error['product'.$product_id] = $this->_('error_confirmed_order_product', $this->Model_Catalog_Product->getProductField($product_id, 'name'));
+			}
 		}
 		
 		return $this->error ? false : true;

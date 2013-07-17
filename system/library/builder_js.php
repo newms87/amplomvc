@@ -20,7 +20,7 @@ switch($js){
 		$country_selector = $args[1];
 		$zone_selector = $args[2];
 		
-		$allow_all = (count($args) > 3 && $args[3]) ? "&allow_all" : "";
+		$url_load_zones = $this->url->link('tool/data/load_zones', ((count($args) > 3 && $args[3]) ? "allow_all" : "") . '&country_id=');
 	?>
 <script type="text/javascript">//<!--
 country_selectors = $('<?= $parent_selector;?>').find('<?= $country_selector;?>');
@@ -43,7 +43,7 @@ country_selectors.live('change', function (event)
   
   zone_selector.attr('zone_id', zone_selector.val() ||  zone_selector.attr('zone_id') || zone_selector.attr('select_value') || 0);
 	
-  zone_selector.load('index.php?route=tool/data/load_zones&country_id=' + cs.val() + '<?=$allow_all;?>',
+  zone_selector.load("<?= $url_load_zones;?>" + cs.val(),
 	function ()
 	{
 		zs = $(this).closest('<?= $parent_selector;?>').find('<?= $zone_selector;?>');
@@ -70,7 +70,7 @@ country_selectors.each(function (i,e) {
 	case 'image_manager': ?>
 <? if (!isset($js_loaded_files['image_manager'])) { ?>
 <script type="text/javascript">//<!--
-var image_manager_url = "<?= HTTP_ROOT . "index.php?route=common/filemanager"; ?>";
+var image_manager_url = "<?= $this->url->link('common/filemanager'); ?>";
 var no_image = "<?= HTTP_THEME_IMAGE . "no_image.png"; ?>"
 //--></script>
 <script type="text/javascript" src="<?= HTTP_JS . "image_manager.js"; ?>"></script>
@@ -94,12 +94,12 @@ var no_image = "<?= HTTP_THEME_IMAGE . "no_image.png"; ?>"
 		
 		$selector = $args[0];
 		
-		$route = $_GET['route'];
+		$route = $this->url->route();
 		$sort_query = $this->url->getQueryExclude("filter");
 	?>
 <script type="text/javascript">//<!--
 function filter() {
-	url = '<?= HTTP_ROOT . "index.php?route=$route&$sort_query"; ?>';
+	url = '<?= $this->url->link($route, $sort_query);; ?>';
 	
 	filter_list = $('<?= $selector;?> [name]').not('[value=""]');
 	
@@ -148,45 +148,47 @@ for(var e in errors){
 
 
 	case 'autocomplete':
-		if (!$args || count($args) < 3) {
-			trigger_error("Template JS: autocomplete: invalid arguments! Usage: \$this->builder->js('autocomplete', array(\$selector,\$label,\$value,\$callback));");
+		$params = $args[0];
+		
+		if (empty($params['selector']) || empty($params['label']) || empty($params['value']) || empty($params['route'])) {
+			trigger_error("Template JS: autocomplete: Required parameters are 'selector', 'label', 'value', 'route'");
 			return '';
 		}
-		$selector = $args[0];
-		$label = $args[1];
-		$value = $args[2];
-		$callback = $args[3];
 		
-		$sort_query = $this->url->getQuery("sort","limit");
+		if (empty($params['query'])) {
+			$params['query'] = '';
+		} else {
+			$params['query'] .= '&';
+		}
+		
+		$params['query'] .= $this->url->getQuery("sort","limit");
+		
+		$url = $this->url->link($params['route'], $params['query']);
 	?>
+
 <script type="text/javascript">//<!--
-$('<?=$selector;?>').each(function (i,e) {
+$('<?=$params['selector'];?>').each(function (i,e) {
 	$(e).autocomplete({
 		delay: 0,
-		source: function (request, response)
- {
-			filter = {};
-			filter[$('<?= $selector; ?>').attr('filter')] = request.term;
+		source: function (request, response) {
+			filter = {'<?= $params['filter']; ?>' : request.term};
 			
 			$.ajax({
-				url: '<?= HTTP_ROOT; ?>index.php?route=' + $(e).attr('route') + '&<?= $sort_query; ?>',
+				url: "<?= $url; ?>",
 				dataType: 'json',
 				data: {filter: filter},
-				success: function (json)
- {
-					response($.map(json, function (item)
- {
-						item['label'] = item.<?= $label;?>;
-						item['value'] = item.<?= $value;?>;
+				success: function (json) {
+					response($.map(json, function (item) {
+						item['label'] = item.<?= $params['label'];?>;
+						item['value'] = item.<?= $params['value'];?>;
 						
 						return item;
 					}));
 				}
 			});
 		},
-		select: function (event, ui)
- {
-			<?= $callback;?>($(e), ui.item);
+		select: function (event, ui) {
+			<?= $params['callback'];?>($(e), ui.item);
 			
 			return false;
 		}
@@ -204,17 +206,17 @@ var ckedit_index = 0;
 
 function init_ckeditor_for(context){
 	context.each(function (i,e){
-		if (!$(e).attr('id')) {
+		if (!$(e).attr('id') || CKEDITOR.instances[$(e).attr('id')]) {
 			$(e).attr('id', 'ckedit_' + ckedit_index++);
 		}
 		
 		CKEDITOR.replace($(e).attr('id'), {
-			filebrowserBrowseUrl: "<?= HTTP_ADMIN . 'index.php?route=common/filemanager/ckeditor'; ?>",
-			filebrowserImageBrowseUrl: "<?= HTTP_ADMIN . 'index.php?route=common/filemanager/ckeditor'; ?>",
-			filebrowserFlashBrowseUrl: "<?= HTTP_ADMIN . 'index.php?route=common/filemanager/ckeditor'; ?>",
-			filebrowserUploadUrl: "<?= HTTP_ADMIN . 'index.php?route=common/filemanager/ckeditor'; ?>",
-			filebrowserImageUploadUrl: "<?= HTTP_ADMIN . 'index.php?route=common/filemanager/ckeditor'; ?>",
-			filebrowserFlashUploadUrl: "<?= HTTP_ADMIN . 'index.php?route=common/filemanager/ckeditor'; ?>"
+			filebrowserBrowseUrl: "<?= HTTP_AJAX . 'common/filemanager/ckeditor'; ?>",
+			filebrowserImageBrowseUrl: "<?= HTTP_AJAX . 'common/filemanager/ckeditor'; ?>",
+			filebrowserFlashBrowseUrl: "<?= HTTP_AJAX . 'common/filemanager/ckeditor'; ?>",
+			filebrowserUploadUrl: "<?= HTTP_AJAX . 'common/filemanager/ckeditor'; ?>",
+			filebrowserImageUploadUrl: "<?= HTTP_AJAX . 'common/filemanager/ckeditor'; ?>",
+			filebrowserFlashUploadUrl: "<?= HTTP_AJAX . 'common/filemanager/ckeditor'; ?>"
 		});
 	});
 }
@@ -374,6 +376,10 @@ function add_template_row(tpl_row)
 	tpl_row['count'] += 1;
 	
 	tpl_row['list'].append(template);
+	
+	template.find('.ckedit').each(function(i,e){
+		init_ckeditor_for($(e));
+	});
 }
 <? } ?>
 

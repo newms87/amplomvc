@@ -39,7 +39,7 @@ class Admin_Controller_Feed_GoogleSitemap extends Controller
 			$this->data['google_sitemap_status'] = $this->config->get('google_sitemap_status');
 		}
 		
-		$this->data['data_feed'] = SITE_URL . 'index.php?route=feed/google_sitemap';
+		$this->data['data_feed'] = $this->url->link('feed/google_sitemap');
 
 		$this->children = array(
 			'common/header',

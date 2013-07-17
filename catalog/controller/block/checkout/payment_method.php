@@ -30,11 +30,11 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 			$this->data['no_payment_address'] = true;
 		}
 		
-		if ($this->config->get('config_checkout_id')) {
-			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_checkout_id'));
+		if ($this->config->get('config_checkout_terms_info_id')) {
+			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_checkout_terms_info_id'));
 			
 			if ($information_info) {
-				$this->_('text_agree', $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_checkout_id')), $information_info['title'], $information_info['title']);
+				$this->_('text_agree', $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_checkout_terms_info_id')), $information_info['title'], $information_info['title']);
 				
 				$this->data['agree_to_payment'] = true;
 			}
@@ -77,8 +77,8 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 		}
 		
 		if (!$json) {
-			if ($this->config->get('config_checkout_id')) {
-				$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_checkout_id'));
+			if ($this->config->get('config_checkout_terms_info_id')) {
+				$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_checkout_terms_info_id'));
 				
 				if ($information_info && empty($_POST['agree'])) {
 					$json['error']['agree'] = sprintf($this->_('error_agree'), $information_info['title']);

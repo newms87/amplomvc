@@ -274,7 +274,7 @@ class Catalog_Controller_Account_Return extends Controller
 		$this->data['customer_orders'] = $customer_orders;
 		
 		$this->data['date_ordered_display'] = $this->date->format($this->data['date_ordered'], $this->language->getInfo('date_format_short'));
-		$this->data['data_return_reasons'] = $this->config->load('product_return', 'return_reasons');
+		$this->data['data_return_reasons'] = $this->order->getReturnReasons();
 		
 		$this->data['back'] = $this->url->link('account/account');
 		$this->data['return_product_url'] = $this->url->link('account/return/insert');
@@ -283,8 +283,12 @@ class Catalog_Controller_Account_Return extends Controller
 		$this->data['order_lookup_action'] = $this->url->link('account/return/find');
 		
 		if (!$this->customer->isLogged()) {
-			$this->message->add('warning', $this->_('error_customer_logged')); 
+			$this->message->add('warning', $this->_('error_customer_logged'));
 		}
+		
+		
+		//Ajax Urls
+		$this->data['url_captcha_image'] = $this->url->ajax('account/return/captcha');
 		
 		$this->children = array(
 			'common/column_left',
@@ -305,7 +309,7 @@ class Catalog_Controller_Account_Return extends Controller
 		$url_query = '';
 		
 		if ($this->request->isPost() && !empty($_POST['ol_order_id']) && !empty($_POST['ol_email'])) {
-			$order = $this->Model_Checkout_Order->getOrder($_POST['ol_order_id']);
+			$order = $this->order->get($_POST['ol_order_id']);
 			
 			if (!empty($order)) {
 				if ($order['email'] === $_POST['ol_email']) {

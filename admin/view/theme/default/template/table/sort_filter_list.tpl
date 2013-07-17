@@ -6,7 +6,7 @@
 		<? foreach($columns as $column) {?>
 		<td class="column_title <?= $column['align']; ?>">
 			<? if($column['sortable']) { ?>
-			<a href="index.php?route=<?= $route . ($filter_query? ('&' . $filter_query) : ''); ?>&sort=<?= $column['name']; ?>&order=<?= ($sort == $column['name'] && $order == 'ASC') ? 'DESC' : 'ASC'; ?>" class="<?= $sort == $column['name'] ? strtolower($order) : ''; ?>"><?= $column['display_name']; ?></a>
+			<a href="<?= $this->url->link($route , $filter_query . '&sort='.$column['name'] . '&order='.(($sort == $column['name'] && $order == 'ASC') ? 'DESC' : 'ASC'); ?>" class="<?= $sort == $column['name'] ? strtolower($order) : ''; ?>"><?= $column['display_name']; ?></a>
 			<? } else {?>
 			<?= $column['display_name']; ?>
 			<? } ?>

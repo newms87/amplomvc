@@ -57,7 +57,7 @@ class Admin_Controller_Payment_Cheque extends Controller
 			$this->data['cheque_order_status_id'] = $this->config->get('cheque_order_status_id');
 		}
 		
-		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
+		$this->data['order_statuses'] = $this->order->getOrderStatuses();
 		
 		if (isset($_POST['cheque_geo_zone_id'])) {
 			$this->data['cheque_geo_zone_id'] = $_POST['cheque_geo_zone_id'];

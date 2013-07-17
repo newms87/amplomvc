@@ -10,20 +10,24 @@
 		<div class="description_model"><span><?= $text_model; ?></span><span><?= $model; ?></span></div>
 		<? } ?>
 		
-		<? if ($price && $is_active) { ?>
+		<? if ($price && $is_purchasable) { ?>
 		<div class="price">
 			<?= $text_price; ?>
+			
 			<? if (empty($special)) { ?>
 				<span class="regular"><?= $price; ?></span>
 			<? } else { ?>
 				<span class="special"><?= $special; ?></span><span class="retail"><?= $price; ?> retail</span>
 			<? } ?>
-			<? if($is_final){?>
-					<div class='extra_info_block'><span class='final_sale'></span><span class='help_icon'><span class='help_icon_popup'><?= $final_sale_explanation; ?></span></span></div>
+			
+			<? if(!empty($is_final_explanation)){?>
+					<div class='extra_info_block'><span class='final_sale'></span><span class='help_icon'><span class='help_icon_popup'><?= $is_final_explanation; ?></span></span></div>
 			<? }?>
-			<? if(!$is_default_shipping){?>
-				<!--<div class='extra_info_block'><span class='not_default_shipping'></span><span class='help_icon'><span class='help_icon_popup'><?= $shipping_return_popup; ?></span></span></div>-->
+			
+			<? if(!empty($is_default_shipping)){?>
+				<div class='extra_info_block'><span class='not_default_shipping'></span><span class='help_icon'><span class='help_icon_popup'><?= $shipping_policy['description']; ?></span></span></div>
 			<? }?>
+			
 			<br style='clear:both' />
 			<? if (!empty($tax)) { ?>
 				<span class="price-tax"><?= $text_tax; ?> <?= $tax; ?></span><br />
@@ -53,7 +57,7 @@
 		<? } ?>
 	</div>
 	
-	<? if($is_active){?>
+	<? if($is_purchasable){?>
 	<div class="cart">
 		<? if(isset($block_product_options)) {?>
 			<?= $block_product_options; ?>
@@ -94,7 +98,7 @@
 		<?= $block_sharing; ?>
 	<? } ?>
 	
-	<? if(!$is_active){?>
+	<? if(!$is_purchasable){?>
 		<div id='product_inactive'><?= $text_inactive; ?></div>
 		<?= $block_product_suggestions; ?>
 	<? }?>
@@ -143,7 +147,7 @@ $('#button-cart, #button-buy-now').bind('click', function() {
 	data = {selected: selected_options, product_id: <?= $product_id; ?>, quantity: $('#quantity').val()};
 	
 	$.ajax({
-		url: "<?= HTTP_CATALOG . "index.php?route=cart/cart/add"; ?>",
+		url: "<?= $url_add_to_cart; ?>",
 		type: 'post',
 		data: data,
 		dataType: 'json',

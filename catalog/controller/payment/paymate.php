@@ -11,7 +11,7 @@ class Catalog_Controller_Payment_Paymate extends Controller
 			$this->data['action'] = 'https://www.paymate.com.au/PayMate/TestExpressPayment';
 		}
 		
-		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
+		$order_info = $this->order->get($this->session->data['order_id']);
 				
 		$this->data['mid'] = $this->config->get('paymate_username');
 		$this->data['amt'] = $this->currency->format($order_info['total'], $order_info['currency_code'], $order_info['currency_value'], false);
@@ -46,7 +46,7 @@ class Catalog_Controller_Payment_Paymate extends Controller
 			$order_id = 0;
 		}
 		
-		$order_info = $this->Model_Checkout_Order->getOrder($order_id);
+		$order_info = $this->order->get($order_id);
 		
 		if ($order_info) {
 			$error = '';
@@ -87,7 +87,7 @@ class Catalog_Controller_Payment_Paymate extends Controller
 			
 			$this->response->setOutput($this->render());
 		} else {
-			$this->Model_Checkout_Order->confirm($order_id, $this->config->get('paymate_order_status_id'));
+			$this->order->update($order_id, $this->config->get('paymate_order_status_id'));
 			
 			$this->url->redirect($this->url->link('checkout/success'));
 		}

@@ -221,6 +221,7 @@ class Cart extends Library
 		$results = $this->Model_Setting_Extension->getExtensions('total');
 		
 		//TODO: why sort_order was kept in config vs with extension data is beyond me...
+		//Remove `key` like '%_status' from oc_setting table
 		foreach ($results as $key => $value) {
 			$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
 		}
@@ -229,7 +230,7 @@ class Cart extends Library
 		
 		foreach ($results as $result) {
 			if ($this->config->get($result['code'] . '_status')) {
-				$classname = "Model_Total_" . $this->tool->format_classname($result['code']);
+				$classname = "System_Extension_Total_Model_" . $this->tool->format_classname($result['code']);
 				
 				$this->$classname->getTotal($total_data, $total, $taxes);
 			}
@@ -491,6 +492,27 @@ class Cart extends Library
 		return count($this->session->data['cart']);
   	}
 	
+	public function productPurchasable($product)
+	{
+		if (is_integer($product)) {
+			$product = $this->Model_Catalog_Product->getProduct($product);
+		}
+		
+		if (!$product['status']) {
+			return false;
+		}
+		
+		if ($product['quantity'] < 1 && !$this->config->get('config_stock_checkout')) {
+			return false;
+		}
+		
+		if (!$this->date->isAfterNow($product['date_expires'], true) || !$this->date->isBeforeNow($product['date_available'], false)) {
+			return false;
+		}
+		
+		return true;
+	}
+	
 	public function validateProduct($product_id, $quantity, $options)
 	{
 		$product_info = $this->Model_Catalog_Product->getProduct($product_id);
@@ -670,7 +692,7 @@ class Cart extends Library
 	public function getPaymentAddress()
 	{
 		if (isset($this->session->data['payment_address_id'])) {
-			return $this->Model_Account_Address->getAddress($this->session->data['payment_address_id']);
+			return $this->customer->getAddress($this->session->data['payment_address_id']);
 		}
 
 		return false;
@@ -735,7 +757,7 @@ class Cart extends Library
 	public function getShippingAddress()
 	{
 		if (isset($this->session->data['shipping_address_id'])) {
-			return $this->Model_Account_Address->getAddress($this->session->data['shipping_address_id']);
+			return $this->customer->getAddress($this->session->data['shipping_address_id']);
 		}
 
 		return false;
@@ -801,7 +823,7 @@ class Cart extends Library
 		if ($payment_method_id) {
 			if (!empty($payment_address)) {
 				if (!is_array($payment_address)) {
-					$payment_address = $this->Model_Account_Address->getAddress($payment_address);
+					$payment_address = $this->customer->getAddress($payment_address);
 				}
 			} else {
 				$payment_address = $this->getPaymentAddress();
@@ -922,7 +944,7 @@ class Cart extends Library
 			
 			if (!empty($shipping_address)) {
 				if (!is_array($shipping_address)) {
-					$shipping_address = $this->Model_Account_Address->getAddress($shipping_address);
+					$shipping_address = $this->customer->getAddress($shipping_address);
 				}
 			}
 			elseif ($this->hasShippingAddress()) {
@@ -1233,5 +1255,68 @@ class Cart extends Library
 	public function setComment($comment)
 	{
 		$this->session->data['comment'] = strip_tags($comment);
+	}
+	
+	/** Policies **/
+	public function getShippingPolicy($shipping_policy_id)
+	{
+		$shipping_policies = $this->getShippingPolicies();
+		
+		if (isset($shipping_policies[$shipping_policy_id])) {
+			$policy = $shipping_policies[$shipping_policy_id];
+			
+			$policy['description'] = html_entity_decode($policy['description'], ENT_QUOTES, 'UTF-8');
+			
+			return $policy;
+		}
+		
+		return null;
+	}
+	
+	public function getProductShippingPolicy($product_id)
+	{
+		$shipping_policy_id = $this->db->queryVar("SELECT shipping_policy_id FROM " . DB_PREFIX . "product WHERE product_id = " . (int)$product_id);
+		
+		if (!is_null($shipping_policy_id)) {
+			return $this->getShippingPolicy($shipping_policy_id);
+		}
+		
+		return null;
+	}
+	
+	public function getShippingPolicies()
+	{
+		return $this->config->load('policies', 'shipping_policies', 0);
+	}
+	
+	public function getReturnPolicy($return_policy_id)
+	{
+		$return_policies = $this->getReturnPolicies();
+		
+		if (isset($return_policies[$return_policy_id])) {
+			$policy = $return_policies[$return_policy_id];
+			
+			$policy['description'] = html_entity_decode($policy['description'], ENT_QUOTES, 'UTF-8');
+			
+			return $policy;
+		}
+		
+		return null;
+	}
+	
+	public function getProductReturnPolicy($product_id)
+	{
+		$return_policy_id = $this->db->queryVar("SELECT return_policy_id FROM " . DB_PREFIX . "product WHERE product_id = " . (int)$product_id);
+		
+		if (!is_null($return_policy_id)) {
+			return $this->getReturnPolicy($return_policy_id);
+		}
+		
+		return null;
+	}
+	
+	public function getReturnPolicies()
+	{
+		return $this->config->load('policies', 'return_policies', 0);
 	}
 }

@@ -108,7 +108,7 @@ class Admin_Controller_Page_Page extends Controller
 			'type' => 'multiselect',
 			'display_name' => $this->_('column_store'),
 			'filter' => true,
-			'build_config' => array('store_id' => 'name'),
+			'build_config' => array('store_id' , 'name'),
 			'build_data' => $this->Model_Setting_Store->getStores(),
 			'sortable' => false,
 		);

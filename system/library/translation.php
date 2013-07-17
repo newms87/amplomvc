@@ -100,6 +100,19 @@ class Translation extends Library
 					$this->set($table, $field, $object_id, $language_id, $text);
 				}
 			}
+			
+			//Clean up Translation Table
+			$translation_ids = $this->db->queryColumn("SELECT translation_id FROM " . DB_PREFIX . "translation t WHERE `table` = '" . $this->db->escape($table) . "' AND `field` NOT IN ('" . implode("','", array_keys($translations)) . "')");
+			
+			if ($translation_ids) {
+				$this->db->query("DELETE FROM " . DB_PREFIX . "translation_text WHERE translation_id IN (" . implode(',', $translation_ids) . ") AND object_id = " . (int)$object_id);
+			}
+			
+			$translation_ids = $this->db->queryColumn("SELECT translation_id FROM " . DB_PREFIX . "translation t WHERE 0 IN (SELECT COUNT(*) FROM " . DB_PREFIX . "translation_text tt WHERE tt.translation_id = t.translation_id)");
+			
+			if ($translation_ids) {
+				$this->db->query("DELETE FROM " . DB_PREFIX . "translation WHERE translation_id IN (" . implode(',', $translation_ids) . ")");
+			}
 		}
 	}
 	
@@ -113,17 +126,30 @@ class Translation extends Library
 		$this->cache->delete('translate');
 	}
 	
+	public function deleteAll($table, $remove_table = false)
+	{
+		$translation_ids = $this->db->queryColumn("SELECT translation_id FROM " . DB_PREFIX . "translation WHERE `table` = '" . $this->db->escape($table) . "'");
+		
+		if ($translation_ids) {
+			foreach ($translation_ids as $translation_id) {
+				$this->db->query("DELETE FROM " . DB_PREFIX . "translation_text WHERE translation_id = $translation_id");
+				
+				if ($remove_table) {
+					$this->db->query("DELETE FROM " . DB_PREFIX . "translation WHERE translation_id = $translation_id");
+				}
+			}
+		}
+	}
+	
 	public function delete($table, $object_id, $field = null)
 	{
 		if ($field) {
 			$translation_id = $this->get_translation_id($table, $field, false);
 			
-			$translations = array('translation_id' => $translation_id);
+			$translations = array(array('translation_id' => $translation_id));
 		}
 		else {
-			$result = $this->db->query("SELECT translation_id FROM " . DB_PREFIX . "translation WHERE `table` = '" . $this->db->escape($table) . "'");
-			
-			$translations = $result->rows;
+			$translations = $this->db->queryRows("SELECT translation_id FROM " . DB_PREFIX . "translation WHERE `table` = '" . $this->db->escape($table) . "'");
 		}
 		
 		foreach ($translations as $translation) {

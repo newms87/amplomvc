@@ -1,5 +1,4 @@
 <?= $header; ?>
-<?= $this->builder->display_errors($errors); ?>
 <?= $column_left; ?><?= $column_right; ?>
 <div class="content"><?= $content_top; ?>
 	<h1><?= $heading_title; ?>

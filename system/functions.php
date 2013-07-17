@@ -118,21 +118,43 @@ if (!function_exists('array_column')) {
 	}
 }
 
-function get_caller($offset = 0) {
+if (!function_exists('html2text')) {
+	/**
+	 * Converts HTML break tags (eg: <br />) to new lines, and removes all other HTML tags
+	 * 
+	 * @param string $html - The HTML to replace all the
+	 * 
+	 * @return String of plain text
+	 */
+	function html2text($html)
+	{
+		return strip_tags(preg_replace("/<br\s*\/?>/", "\r\n", $html));
+	}
+}
+
+function get_caller($offset = 0, $limit = 1) {
 	$calls = debug_backtrace(false);
 	
-	if (count($calls) <= ($offset+1)) {
-		$caller = $calls[count($calls)-1];
-	} else {
+	$html = "";
+	
+	$limit += $offset;
+	
+	while ( $offset < $limit && $offset < count($calls) ) {	
 		$caller = $calls[$offset + 1];
+		
+		if (isset($caller['file'])) {
+			$msg = "Called from <b style=\"color:red\">$caller[file]</b> on line <b style=\"color:red\">$caller[line]</b>";
+		}
+		else {
+			$msg = "Called from <b style=\"color:red\">$caller[class]::$caller[function]</b>";
+		}
+		
+		$html = "<div style=\"margin-top:5px\"><b>&#187;</b> $msg</div>" . $html;
+		
+		$offset++;
 	}
-
-	if (isset($caller['file'])) {
-		return "<br />Called from $caller[file] on line $caller[line]";
-	}
-	else {
-		return "<br />Called from $caller[class]::$caller[function]";
-	}
+	
+	return "<div style=\"margin-top: 8px; margin-bottom: 8px; margin-left: 15px\">$html</div>";
 }
 
 if (!defined("AMPLOCART_DIR_MODE")) {

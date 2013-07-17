@@ -1,7 +1,7 @@
 <? if ($thumb || $images) { ?>
 <div class="left">
 	<? if ($thumb) { ?>
-	<div id='the_zoombox' class="image"><a href="<?= $popup; ?>" title="<?= $heading_title; ?>" class="zoombox" rel='gal1'><img src="<?= $thumb; ?>" title="<?= $heading_title; ?>" alt="<?= $heading_title; ?>" id="image" /></a></div>
+	<div id='the_zoombox' class="image"><a onclick="return colorbox($(this), {width: '70%', height: '90%'});" href="<?= $popup; ?>" title="<?= $heading_title; ?>" class="zoombox" rel='gal1'><img src="<?= $thumb; ?>" title="<?= $heading_title; ?>" alt="<?= $heading_title; ?>" id="image" /></a></div>
 	<? } ?>
 	<? if ($images) { ?>
 	<div class="image-additional">
@@ -24,10 +24,5 @@ $(document).ready(function(){
 			}
 	});
 	$('.zoombox').jqzoom({zoomWidth:<?= $zoombox_width; ?>,zoomHeight:<?= $zoombox_height; ?>,position:'<?= $zoombox_position; ?>',xOffset:<?= $zoombox_x; ?>, yOffset:<?= $zoombox_y; ?>,preloadText:'<?= $text_zoombox_load; ?>'});
-	
-	<? //TODO: Make the zoombox have option to click for popup colorbox. ;?>
-	
-	//$('#the_zoombox').colorbox({});
-	//$('#the_zoombox').click(function(){console.log('hmm');});
 });
 //--></script>

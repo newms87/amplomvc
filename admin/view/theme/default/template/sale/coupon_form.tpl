@@ -1,7 +1,6 @@
 <?= $header; ?>
 <div class="content">
 	<?= $this->breadcrumb->render(); ?>
-	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'customer.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -38,12 +37,12 @@
 						</tr>
 						<tr>
 							<td><?= $entry_logged; ?></td>
-							<td><?= $this->builder->build('radio',$yes_no,'logged',(int)$logged); ?></td>
+							<td><?= $this->builder->build('radio',$data_yes_no,'logged',(int)$logged); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_shipping; ?></td>
 							<td>
-								<div><?= $this->builder->build('radio',$yes_no,'shipping',(int)$shipping, array('onclick'=>"if($(this).find(':checked').val() == '1')$('#coupon_ship_geozone').show(); else $('#coupon_ship_geozone').hide();")); ?></div>
+								<div><?= $this->builder->build('radio',$data_yes_no,'shipping',(int)$shipping, array('onclick'=>"if($(this).find(':checked').val() == '1')$('#coupon_ship_geozone').show(); else $('#coupon_ship_geozone').hide();")); ?></div>
 								<div <?= (int)$shipping ? '' : "style='display:none'"; ?> id='coupon_ship_geozone'>
 										<? $this->builder->set_config('geo_zone_id', 'name');?>
 										<?= $this->builder->build('select', $data_geo_zones, 'shipping_geozone', (int)$shipping_geozone); ?>
@@ -121,65 +120,7 @@
 	</div>
 </div>
 <script type="text/javascript"><!--
-$('input[name=\'category[]\']').bind('change', function() {
-	var filter_category_id = this;
-	
-	$.ajax({
-		url: "<?= HTTP_ADMIN . "index.php?route=catalog/product/autocomplete"; ?>" + '&filter_category_id=' +	filter_category_id.value + '&limit=10000',
-		dataType: 'json',
-		success: function(json) {
-			for (i = 0; i < json.length; i++) {
-				if ($(filter_category_id).attr('checked') == 'checked') {
-					$('#coupon-product' + json[i]['product_id']).remove();
-					
-					$('#coupon-product').append('<div id="coupon-product' + json[i]['product_id'] + '">' + json[i]['name'] + '<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" /><input type="hidden" name="coupon_product[]" value="' + json[i]['product_id'] + '" /></div>');
-				} else {
-					$('#coupon-product' + json[i]['product_id']).remove();
-				}
-			}
-			
-			$('#coupon-product div:odd').attr('class', 'odd');
-			$('#coupon-product div:even').attr('class', 'even');
-		}
-	});
-});
 
-$('input[name=\'product\']').autocomplete({
-	delay: 0,
-	source: function(request, response) {
-		$.ajax({
-			url: "<?= HTTP_ADMIN . "index.php?route=catalog/product/autocomplete"; ?>" + '&filter_name=' +	encodeURIComponent(request.term),
-			dataType: 'json',
-			success: function(json) {
-				response($.map(json, function(item) {
-					return {
-						label: item.name,
-						value: item.product_id
-					}
-				}));
-			}
-		});
-	},
-	select: function(event, ui) {
-		$('#coupon-product' + ui.item.value).remove();
-		
-		$('#coupon-product').append('<div id="coupon-product' + ui.item.value + '">' + ui.item.label + '<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" /><input type="hidden" name="coupon_product[]" value="' + ui.item.value + '" /></div>');
-
-		$('#coupon-product div:odd').attr('class', 'odd');
-		$('#coupon-product div:even').attr('class', 'even');
-		
-		$('input[name=\'product\']').val('');
-		
-		return false;
-	}
-});
-
-$('#coupon-product div img').live('click', function() {
-	$(this).parent().remove();
-	
-	$('#coupon-product div:odd').attr('class', 'odd');
-	$('#coupon-product div:even').attr('class', 'even');
-});
 //--></script>
 
 <?= $this->builder->js('datepicker'); ?>
@@ -192,7 +133,7 @@ $('#history .pagination a').live('click', function() {
 	return false;
 });
 
-$('#history').load("<?= HTTP_ADMIN . "index.php?route=sale/coupon/history"; ?>" + '&coupon_id=<?= $coupon_id; ?>');
+$('#history').load("<?= $url_coupon_history; ?>" + '&coupon_id=<?= $coupon_id; ?>');
 //--></script>
 <? } ?>
 <script type="text/javascript"><!--

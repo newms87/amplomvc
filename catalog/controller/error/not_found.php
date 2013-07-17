@@ -11,8 +11,8 @@ class Catalog_Controller_Error_NotFound extends Controller
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 				
-		if (isset($_GET['route'])) {
-			$this->breadcrumb->add($this->_('text_error'), $this->url->link($_GET['route']));
+		if (isset($this->url->route())) {
+			$this->breadcrumb->add($this->_('text_error'), $this->url->link($this->url->route()));
 		}
 		
 		$this->response->addHeader($_SERVER['SERVER_PROTOCOL'] . '/1.1 404 Not Found');

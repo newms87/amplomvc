@@ -1,8 +1,4 @@
 <div id='the_cart_form'>
-<? if($ajax_cart) {
-	echo $this->builder->display_messages($messages);
-} ?>
-<?= $this->builder->display_errors($errors); ?>
 <? if(isset($no_price_display)){?>
 <span id='cart_no_price_display'><?= $no_price_display; ?></span>
 <? }?>
@@ -16,8 +12,12 @@
 				<td class="name"><?= $column_name; ?></td>
 				<td class="model"><?= $column_model; ?></td>
 				<td class="quantity"><?= $column_quantity; ?></td>
-				<td class="finalsale"><?= $column_final_sale; ?></td>
-				<? if(!isset($no_price_display)){ ?>
+				
+				<? if (!empty($show_return_policy)) { ?>
+				<td class="return_policy"><?= $column_return_policy; ?></td>
+				<? } ?>
+				
+				<? if(empty($no_price_display)){ ?>
 				<td class="price"><?= $column_price; ?></td>
 				<td class="total"><?= $column_total; ?></td>
 				<? }?>
@@ -54,11 +54,13 @@
 					<label for='cart_update'><?= $text_update_cart; ?></label>
 					<input type='image' <?= $ajax_cart ? 'onclick="handle_ajax_cart_remove($(this)); return false;"' : ''; ?> name='action' value="remove<?= $product['key']; ?>" src="<?= HTTP_THEME_IMAGE . 'remove.png'; ?>" alt="<?= $button_remove; ?>" title="<?= $button_remove; ?>" />
 				</td>
-				<td class='final_sale_item'>
-				<? if($product['is_final']){;?>
-						<div class='extra_info_block'><span class='final_sale'></span><span class='help_icon'><span class='help_icon_popup'><?= $final_sale_explanation; ?></span></span></div>
-				<? }?>
+				
+				<? if (!empty($show_return_policy)) { ?>
+				<td class='return_policy'>
+					<div><?= $product['return_policy']; ?></div>
 				</td>
+				<? } ?>
+				
 				<? if(!isset($no_price_display)){ ?>
 				<td class="price"><?= $product['price']; ?></td>
 				<td class="total"><?= $product['total']; ?></td>

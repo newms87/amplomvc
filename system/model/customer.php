@@ -92,9 +92,7 @@ class System_Model_Customer extends Model
 					
 	public function getCustomer($customer_id)
 	{
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "customer WHERE customer_id = '" . (int)$customer_id . "'");
-		
-		return $query->row;
+		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "customer WHERE customer_id = " . (int)$customer_id);
 	}
 	
 	public function getCustomerByToken($token)

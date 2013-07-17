@@ -64,7 +64,7 @@ class Admin_Controller_Payment_PpStandard extends Controller
 			}
 		}
 		
-		$this->data['data_order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
+		$this->data['data_order_statuses'] = $this->order->getOrderStatuses();
 		
 		$this->data['data_geo_zones'] = array(0 => $this->_('text_all_zones')) + $this->Model_Localisation_GeoZone->getGeoZones();
 

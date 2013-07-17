@@ -3,11 +3,11 @@ class Request
 {
   	public function __construct()
   	{
-		$_GET = $this->clean($_GET);
-		$_POST = $this->clean($_POST);
-		$_REQUEST = $this->clean($_REQUEST);
-		$_COOKIE = $this->clean($_COOKIE);
-		$_SERVER = $this->clean($_SERVER);
+		array_walk_recursive($_GET, array($this, 'clean'));
+		array_walk_recursive($_POST, array($this, 'clean'));
+		array_walk_recursive($_REQUEST, array($this, 'clean'));
+		array_walk_recursive($_COOKIE, array($this, 'clean'));
+		array_walk_recursive($_SERVER, array($this, 'clean'));
 	}
 	
 	public function isPost()
@@ -20,22 +20,8 @@ class Request
 		return $_SERVER['REQUEST_METHOD'] === 'GET';
 	}
 	
-  	public function clean($data)
+  	public function clean(&$value)
   	{
-		if (is_array($data)) {
-			foreach ($data as $key => $value) {
-				$clean_key = htmlspecialchars(stripslashes($key), ENT_COMPAT);
-				
-				if ($clean_key !== $key) {
-					unset($data[$key]);
-				}
-				
-				$data[$clean_key] = $this->clean($value);
-			}
-		} else {
-			$data = htmlspecialchars(stripslashes($data), ENT_COMPAT);
-		}
-		
-		return $data;
+		$value = htmlspecialchars(stripslashes($value), ENT_COMPAT);
 	}
 }

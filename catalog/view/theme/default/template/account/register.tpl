@@ -2,7 +2,6 @@
 <?= $column_left; ?><?= $column_right; ?>
 <div id="content"><?= $content_top; ?>
 	<?= $this->breadcrumb->render(); ?>
-	<?= $this->builder->display_errors($errors); ?>
 	<h1><?= $heading_title; ?></h1>
 	<p><?= $text_account_already; ?></p>
 	<form action="<?= $action; ?>" method="post" enctype="multipart/form-data">
@@ -114,12 +113,6 @@
 
 <?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select'); ?>
 
-<script type="text/javascript">
-//<!--
-$('.colorbox').colorbox({
-	width: 560,
-	height: 560
-});
-//--></script>
 <?= $this->builder->js('errors', $errors); ?>
+
 <?= $footer; ?>

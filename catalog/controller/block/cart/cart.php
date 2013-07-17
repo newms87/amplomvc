@@ -1,7 +1,6 @@
 <?php
 class Catalog_Controller_Block_Cart_Cart extends Controller
 {
-		
 	public function index($settings)
 	{
 		$this->template->load('block/cart/cart');
@@ -46,9 +45,6 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 		}
 		
 		if (!$this->cart->isEmpty()) {
-			
-			$this->_('final_sale_explanation',$this->url->link('information/information/info','information_id=7'));
-			
 			if ($ajax_cart) {
 				$this->data['action'] = $this->url->link('block/cart/cart/ajax_cart');
 				
@@ -60,6 +56,10 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 						
 			if ($this->config->get('config_customer_price') && !$this->customer->isLogged()) {
 				$this->data['no_price_display'] = $this->_('text_login', $this->url->link('account/login'), $this->url->link('account/register'));
+			}
+			
+			if (true || $this->config->get('config_cart_show_return_policy')) {
+				$this->data['show_return_policy'] = true;
 			}
 			
 			if (!$this->cart->validate()) {
@@ -88,9 +88,21 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 					$product['reward'] = sprintf($this->_('text_points'), $product['reward']);
 				}
 				
+				if ($this->data['show_return_policy']) {
+					$policy = $this->cart->getReturnPolicy($product['return_policy_id']);
+					
+					if ($policy['days'] > 0) {
+						$product['return_policy'] = $this->_('text_return_days', $policy['days']);
+					} elseif ((int)$policy['days'] === 0) {
+						$product['return_policy'] = $this->_('text_return_anytime');
+					} else {
+						$product['return_policy'] = $this->builder->finalSale();
+					}
+				}
+				
 				$product['href'] = $this->url->link('product/product', 'product_id=' . $product['product_id']);
 				$product['remove'] = $this->url->link('block/cart/cart', 'remove=' . $product['key']);
-			}
+			} unset($product);
 
 			$this->data['products'] = $products;
 			

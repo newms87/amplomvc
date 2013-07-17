@@ -240,11 +240,11 @@ $('#transaction .pagination a').live('click', function() {
 	return false;
 });
 
-$('#transaction').load("<?= HTTP_ADMIN . "index.php?route=sale/affiliate/transaction"; ?>" + '&affiliate_id=<?= $affiliate_id; ?>');
+$('#transaction').load("<?= $url_transaction; ?>");
 
 function addTransaction() {
 	$.ajax({
-		url: "<?= HTTP_ADMIN . "index.php?route=sale/affiliate/transaction"; ?>" + '&affiliate_id=<?= $affiliate_id; ?>',
+		url: "<?= $url_transaction; ?>",
 		type: 'post',
 		dataType: 'html',
 		data: 'description=' + encodeURIComponent($('#tab-transaction input[name=\'description\']').val()) + '&amount=' + encodeURIComponent($('#tab-transaction input[name=\'amount\']').val()),

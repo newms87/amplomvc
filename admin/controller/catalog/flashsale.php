@@ -380,10 +380,6 @@ class Admin_Controller_Catalog_Flashsale extends Controller
 			$this->error['warning'] = $this->_('error_permission');
 		}
  
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
 }

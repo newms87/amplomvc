@@ -153,7 +153,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 			'type' => 'multiselect',
 			'display_name' => $this->_('column_store'),
 			'filter' => true,
-			'build_config' => array('store_id' => 'name'),
+			'build_config' => array('store_id' , 'name'),
 			'build_data' => $this->Model_Setting_Store->getStores(),
 			'sortable' => false,
 		);
@@ -309,6 +309,10 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		}
 		
 		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
+		
+		//Ajax Urls
+		$this->data['url_generate_url'] = $this->url->ajax('catalog/manufacturer/generate_url');
+		$this->data['url_autocomplete'] = $this->url->ajax('catalog/manufacturer/autocomplete');
 		
 		$translate_fields = array(
 			'name',

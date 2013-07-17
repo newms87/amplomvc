@@ -44,40 +44,33 @@ class System_Model_Voucher extends Model
 		return $voucher;
 	}
 	
-	public function confirmOrder($order_id)
-	{
-		$vouchers = $this->queryColumn("SELECT voucher_id FROM " . DB_PREFIX . "voucher WHERE order_id = '" . (int)$order_id . "'");
-		
-		if ($vouchers) {
-			foreach ($vouchers as $voucher_id) {
-				$this->activate($voucher_id);
-			}
-		}
-	}
-	
 	public function activate($voucher_id)
 	{
+		$this->update('voucher', array('status' => 1), $voucher_id);
+		
 		$voucher = $this->queryRow("SELECT *, vt.name AS theme FROM " . DB_PREFIX . "voucher v LEFT JOIN " . DB_PREFIX . "voucher_theme vt ON (v.voucher_theme_id = vt.voucher_theme_id) WHERE v.voucher_id = '" . (int)$voucher_id . "'");
 		
 		if (!$voucher) {
 			return false;
 		}
 		
-		if ($voucher['order_id']) {
-			$voucher['order'] = $this->order->get($voucher['order_id']);
-		}
+		$voucher['order_id'] = $this->queryVar("SELECT order_id FROM " . DB_PREFIX . "order_voucher WHERE voucher_id = " . (int)$order_id . " LIMIT 1");
 		
-		$this->mail->init();
-				
-		$this->mail->setTemplate('mail/voucher', $voucher);
-		
-		$this->mail->send();
+		$this->mail->callController('voucher', $voucher);
 		
 		return true;
 	}
 	
-	public function redeem($voucher_id, $order_id, $amount)
+	public function redeem($voucher_id, $order_id, $amount, $description = '')
 	{
-		$this->query("INSERT INTO `" . DB_PREFIX . "voucher_history` SET voucher_id = '" . (int)$voucher_id . "', order_id = '" . (int)$order_id . "', amount = '" . (float)$amount . "', date_added = NOW()");
+		$voucher_history = array(
+			'voucher_id' => $voucher_id,
+			'order_id' => $order_id,
+			'amount' => $amount,
+			'description' => $description,
+			'date_added' => $this->date->now(),
+		);
+		
+		return $this->insert('voucher_history', $voucher_history);
 	}
 }

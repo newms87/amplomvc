@@ -107,7 +107,7 @@ class Admin_Controller_Payment_PpProUk extends Controller
 			$this->data['pp_pro_uk_order_status_id'] = $this->config->get('pp_pro_uk_order_status_id');
 		}
 
-		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
+		$this->data['order_statuses'] = $this->order->getOrderStatuses();
 		
 		if (isset($_POST['pp_pro_uk_geo_zone_id'])) {
 			$this->data['pp_pro_uk_geo_zone_id'] = $_POST['pp_pro_uk_geo_zone_id'];

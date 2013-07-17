@@ -1,7 +1,6 @@
 <?= $header; ?>
 <div class="content">
 	<?= $this->breadcrumb->render(); ?>
-	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'category.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -115,7 +114,7 @@ function generate_url(c){
 	if(!name){
 		alert("Please make a name for this Category before generating the URL");
 	}
-	url = "<?= HTTP_ADMIN . "index.php?route=catalog/category/generate_url"; ?>";
+	url = "<?= $url_generate_url; ?>";
 	data = {category_id:<?= $category_id ? $category_id : 0; ?>, name: name};
 	
 	$.post(url, data, function(json){

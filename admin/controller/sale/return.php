@@ -499,7 +499,7 @@ class Admin_Controller_Sale_Return extends Controller
 		$this->data['filter_date_added'] = $filter_date_added;
 		$this->data['filter_date_modified'] = $filter_date_modified;
 
-		$this->data['data_return_statuses'] = $this->config->load('product_return', 'return_statuses', 0);
+		$this->data['data_return_statuses'] = $this->order->getReturnStatuses();
 		
 		$this->data['sort'] = $sort;
 		$this->data['order'] = $order;
@@ -765,7 +765,7 @@ class Admin_Controller_Sale_Return extends Controller
 			$this->data['return_status_id'] = '';
 		}
 		
-		$this->data['data_return_statuses'] = $this->config->load('product_return', 'return_statuses', 0);
+		$this->data['data_return_statuses'] = $this->order->getReturnStatuses();
 						
 		$this->children = array(
 			'common/header',
@@ -837,13 +837,12 @@ class Admin_Controller_Sale_Return extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 				
-				$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-				$this->breadcrumb->add($this->_('heading_title'), $this->url->link('sale/return', $url));
+			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('sale/return', $url));
 
 			$this->data['cancel'] = $this->url->link('sale/return', $url);
 			
-			$this->data['return_id'] = $return_info['return_id'];
-			$this->data['order_id'] = $return_info['order_id'];
+			$this->data = $return_info;
 			
 			$order_info = $this->Model_Sale_Order->getOrder($return_info['order_id']);
 			
@@ -854,9 +853,6 @@ class Admin_Controller_Sale_Return extends Controller
 			}
 			
 			$this->data['date_ordered'] = date($this->language->getInfo('date_format_short'), strtotime($return_info['date_ordered']));
-			
-			$this->data['firstname'] = $return_info['firstname'];
-			$this->data['lastname'] = $return_info['lastname'];
 						
 			if ($return_info['customer_id']) {
 				$this->data['customer'] = $this->url->link('sale/customer/update', 'customer_id=' . $return_info['customer_id']);
@@ -864,39 +860,17 @@ class Admin_Controller_Sale_Return extends Controller
 				$this->data['customer'] = '';
 			}
 			
-			$this->data['email'] = $return_info['email'];
-			$this->data['telephone'] = $return_info['telephone'];
-			
-			$return_statuses = $this->config->load('product_return', 'return_statuses', 0);
-
-			$this->data['return_status'] = $return_statuses[$return_info['return_status_id']]['title'];
+			$this->data['data_return_statuses'] = $this->order->getReturnStatuses();
+			$this->data['data_return_reasons'] = $this->order->getReturnReasons();
+			$this->data['data_return_actions'] = $this->order->getReturnActions();
 			
 			$this->data['date_added'] = date($this->language->getInfo('date_format_short'), strtotime($return_info['date_added']));
 			$this->data['date_modified'] = date($this->language->getInfo('date_format_short'), strtotime($return_info['date_modified']));
-			$this->data['product'] = $return_info['product'];
-			$this->data['model'] = $return_info['model'];
-			$this->data['quantity'] = $return_info['quantity'];
-			
-			$return_reason_info = $this->Model_Localisation_ReturnReason->getReturnReason($return_info['return_reason_id']);
-
-			if ($return_reason_info) {
-				$this->data['return_reason'] = $return_reason_info['name'];
-			} else {
-				$this->data['return_reason'] = '';
-			}
 			
 			$this->data['opened'] = $return_info['opened'] ? $this->_('text_yes') : $this->_('text_no');
 	
 			$this->data['comment'] = nl2br($return_info['comment']);
 			
-			$this->data['return_actions'] = $this->Model_Localisation_ReturnAction->getReturnActions();
-			
-			$this->data['return_action_id'] = $return_info['return_action_id'];
-
-			$this->data['data_return_statuses'] = $return_statuses;
-			
-			$this->data['return_status_id'] = $return_info['return_status_id'];
-		
 			$this->children = array(
 				'common/header',
 				'common/footer'

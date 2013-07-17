@@ -9,7 +9,7 @@ class Catalog_Controller_Payment_Nochex extends Controller
 
 		$this->language->load('payment/nochex');
 		
-		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
+		$order_info = $this->order->get($this->session->data['order_id']);
 		
 		$this->data['action'] = 'https://secure.nochex.com/';
 		
@@ -84,7 +84,7 @@ class Catalog_Controller_Payment_Nochex extends Controller
 			$order_id = 0;
 		}
 
-		$order_info = $this->Model_Checkout_Order->getOrder($order_id);
+		$order_info = $this->order->get($order_id);
 		
 		if (!$order_info) {
 			$this->session->data['error'] = $this->_('error_no_order');
@@ -113,9 +113,9 @@ class Catalog_Controller_Payment_Nochex extends Controller
 		curl_close($curl);
 				
 		if (strcmp($response, 'AUTHORISED') == 0) {
-			$this->Model_Checkout_Order->confirm($order_id, $this->config->get('nochex_order_status_id'));
+			$this->order->update($order_id, $this->config->get('nochex_order_status_id'));
 		} else {
-			$this->Model_Checkout_Order->confirm($order_id, $this->config->get('config_order_status_id'), 'Auto-Verification step failed. Manually check the transaction.');
+			$this->order->update($order_id, $this->config->get('config_order_status_id'), 'Auto-Verification step failed. Manually check the transaction.');
 		}
 		
 		// Since it returned, the customer should see success.

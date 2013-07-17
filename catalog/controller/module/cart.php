@@ -3,6 +3,8 @@ class Catalog_Controller_Module_Cart extends Controller
 {
 	public function index()
 	{
+		html_backtrace(10);
+		
 		$this->template->load('module/cart');
 		$this->language->load('module/cart');
 		
@@ -14,35 +16,9 @@ class Catalog_Controller_Module_Cart extends Controller
 			
 		// Totals
 		$total_data = array();
-		$total = 0;
-		$taxes = $this->cart->getTaxes();
 		
-		$sort_order = array();
 		
-		$results = $this->Model_Setting_Extension->getExtensions('total');
-		
-		foreach ($results as $key => $value) {
-			$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
-		}
-		
-		array_multisort($sort_order, SORT_ASC, $results);
-		
-		foreach ($results as $result) {
-			if ($this->config->get($result['code'] . '_status')) {
-				$classname = 'Model_Total_' . preg_replace_callback("/_([a-z])/i", function($matches){return strtoupper($matches[1]);}, ucfirst($result['code'])); 
-				$this->$classname->getTotal($total_data, $total, $taxes);
-			}
-			
-			$sort_order = array();
-		
-			foreach ($total_data as $key => $value) {
-				$sort_order[$key] = $value['sort_order'];
-			}
-
-			array_multisort($sort_order, SORT_ASC, $total_data);
-		}
-		
-		$this->data['totals'] = $total_data;
+		$this->data['totals'] = $this->cart->getTotals();
 		
 		$this->_('text_items', $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($total));
 		$this->data['products'] = array();

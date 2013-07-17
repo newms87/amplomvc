@@ -51,10 +51,6 @@ class Catalog_Controller_Common_Header extends Controller
 		
 		$this->data['messages'] = $this->message->fetch();
 		
-		if ($this->config->get('config_seo_url')) {
-			$this->data['pretty_url'] = $this->url->get_pretty_url();
-		}
-		
 		$this->data['icon'] = $this->image->get($this->config->get('config_icon'));
 		
 		$this->data['name'] = $this->config->get('config_name');
@@ -165,10 +161,15 @@ class Catalog_Controller_Common_Header extends Controller
 		
 		$this->data['social_networks'] = $this->getBlock('extras/social_media');
 		
+		if ($this->config->get('config_multi_language')) {
+			$this->data['block_languages'] = $this->getBlock('localisation/language');
+		}
+
+		if ($this->config->get('config_multi_currency')) {
+			$this->data['block_currencies'] = $this->getBlock('localisation/currency');
+		}
+		
 		$this->children = array(
-			'module/language',
-			'module/currency',
-			'module/cart',
 			'common/above_content',
 		);
 

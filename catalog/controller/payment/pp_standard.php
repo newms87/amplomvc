@@ -15,7 +15,7 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 			$this->data['action'] = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
 		}
 
-		$order_info = $this->cart->getOrder(); 
+		$order_info = $this->order->get();
 
 		if ($order_info) {
 			$this->template->load('payment/pp_standard');
@@ -53,6 +53,8 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 				$this->data['discount_amount_cart'] -= $total;
 			}
 			
+			$payment_address_info = $this->Model_Localisation_Country->getCountry($order_info['payment_country_id']);
+			
 			$this->data['currency_code'] = $order_info['currency_code'];
 			$this->data['first_name'] = html_entity_decode($order_info['payment_firstname'], ENT_QUOTES, 'UTF-8');
 			$this->data['last_name'] = html_entity_decode($order_info['payment_lastname'], ENT_QUOTES, 'UTF-8');
@@ -60,9 +62,9 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 			$this->data['address2'] = html_entity_decode($order_info['payment_address_2'], ENT_QUOTES, 'UTF-8');
 			$this->data['city'] = html_entity_decode($order_info['payment_city'], ENT_QUOTES, 'UTF-8');
 			$this->data['zip'] = html_entity_decode($order_info['payment_postcode'], ENT_QUOTES, 'UTF-8');
-			$this->data['country'] = $order_info['payment_iso_code_2'];
+			$this->data['country'] = $payment_address_info['iso_code_2'];
 			$this->data['email'] = $order_info['email'];
-			$this->data['invoice'] = $order_info['order_id'] . ' - ' . html_entity_decode($order_info['payment_firstname'], ENT_QUOTES, 'UTF-8') . ' ' . html_entity_decode($order_info['payment_lastname'], ENT_QUOTES, 'UTF-8');
+			$this->data['invoice'] = $order_info['invoice_id'] . ' - ' . html_entity_decode($order_info['payment_firstname'], ENT_QUOTES, 'UTF-8') . ' ' . html_entity_decode($order_info['payment_lastname'], ENT_QUOTES, 'UTF-8');
 			$this->data['lc'] = $this->language->code();
 			$this->data['notify_url'] = $this->url->link('payment/pp_standard/callback');
 			$this->data['cancel_return'] = $this->url->link('checkout/checkout');
@@ -77,6 +79,9 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 			$server = $this->url->is_ssl() ? HTTPS_IMAGE : HTTP_IMAGE;
 			
 			$this->data['image_url'] = $server . $this->config->get('config_logo');
+			
+			//Ajax Urls
+			$this->data['url_check_order_status'] = $this->url->ajax('block/checkout/confirm/check_order_status', 'order_id=' . $order_info['order_id']);
 			
 			$this->data['paymentaction'] = $this->config->get('pp_standard_transaction') ? 'sale' : 'authorization';
 			
@@ -98,7 +103,7 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 		
 		$order_id = $this->encryption->decrypt($_POST['custom']);
 		
-		$order_info = $this->cart->getOrder($order_id);
+		$order_info = $this->order->get($order_id);
 		
 		if ($order_info) {
 			$request = 'cmd=_notify-validate';

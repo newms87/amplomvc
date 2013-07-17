@@ -8,6 +8,9 @@ class Template extends Library
 	
 	private $template;
 	
+	private $root_dir = null;
+	private $theme_override = null;
+	
 	public function __construct($registry)
 	{
 		parent::__construct($registry);
@@ -23,9 +26,19 @@ class Template extends Library
 		return $this->file;
 	}
 	
-	public function set_file($file_name, $theme = null, $admin = null)
+	public function setTheme($theme)
 	{
-		$file = $this->theme->find_file($file_name . '.tpl', $theme, $admin);
+		$this->theme_override = $theme;
+	}
+	
+	public function setRootDirectory($dir)
+	{
+		$this->root_dir = $dir;
+	}
+	
+	public function set_file($file_name)
+	{
+		$file = $this->theme->find_file($file_name . '.tpl', $this->theme_override, $this->root_dir);
 		
 		if ($file) {
 			$this->file = $file;
@@ -35,7 +48,7 @@ class Template extends Library
 				$this->cache->delete('template' . $this->name);
 			}
 			
-			trigger_error('Template::set_file(): Could not find file ' . $file_name . '.tpl! ' . get_caller());
+			trigger_error('Template::set_file(): Could not find file ' . $file_name . '.tpl! ' . get_caller(0, 2));
 			return false;
 		}
 		
@@ -59,7 +72,7 @@ class Template extends Library
 	public function render()
 	{
 		if (!$this->file) {
-			trigger_error("No template was set!<br />" . get_caller() . "<br />" . get_caller(1));
+			trigger_error("No template was set!" . get_caller(0, 2));
 			exit();
 		}
 		
@@ -81,7 +94,7 @@ class Template extends Library
 			return ob_get_clean();
 		}
 		else {
-			trigger_error('Error: Could not load template file ' . $this->file . '! ' . get_caller(1));
+			trigger_error('Error: Could not load template file ' . $this->file . '! ' . get_caller(0, 2));
 			exit();
 		}
 	}
@@ -92,6 +105,6 @@ class Template extends Library
 			$file .= '.tpl';
 		}
 		
-		return $this->theme->find_file($file);
+		return $this->theme->find_file($file, $this->theme_override, $this->root_dir);
 	}
 }

@@ -279,7 +279,8 @@ class Admin_Controller_Mail_Newsletter extends Controller
 			$this->data['data_designer_products'] =  array($featured_product['product_id'] => $featured_product['name']);
 		}
 	
-		
+		//Ajax Urls
+		$this->data['url_product_select'] = $this->url->ajax('catalog/product/select');
 		
 		$this->children = array(
 			'common/header',
@@ -457,7 +458,6 @@ class Admin_Controller_Mail_Newsletter extends Controller
 	
 	public function email_list()
 	{
-		
 		$customers = $this->Model_Mail_Newsletter->getEmailList();
 		
 		$columns = array(
@@ -466,11 +466,11 @@ class Admin_Controller_Mail_Newsletter extends Controller
 			'email'	=> "Email",
 		);
 		
-		$this->export->generate_csv($columns, $customers);
+		$this->export->generateCsv($columns, $customers);
 		
 		$file = "email_list_" . $this->date->format(null, 'm-d-Y') . '.csv';
 		
-		$this->export->download_contents_as('csv', $file);
+		$this->export->downloadContents($file, 'csv');
 	}
 	
 	private function validateForm()

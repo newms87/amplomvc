@@ -7,7 +7,7 @@ class Catalog_Controller_Block_Checkout_PaymentAddress extends Controller
 
 		$this->language->load('checkout/checkout');
 		
-		$this->data['data_addresses'] = $this->customer->get_payment_addresses();
+		$this->data['data_addresses'] = $this->customer->getPaymentAddresses();
 		
 		if ($this->cart->validatePaymentAddress()) {
 			$this->data['payment_address_id'] = $this->cart->getPaymentAddressId();

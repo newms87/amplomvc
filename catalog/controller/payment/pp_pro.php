@@ -79,7 +79,7 @@ class Catalog_Controller_Payment_PpPro extends Controller
 			$payment_type = 'Sale';
 		}
 		
-		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
+		$order_info = $this->order->get($this->session->data['order_id']);
 		
 		$request  = 'METHOD=DoDirectPayment';
 		$request .= '&VERSION=51.0';
@@ -157,7 +157,7 @@ class Catalog_Controller_Payment_PpPro extends Controller
 		$json = array();
 		
 		if (($response_data['ACK'] == 'Success') || ($response_data['ACK'] == 'SuccessWithWarning')) {
-			$this->Model_Checkout_Order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
+			$this->order->update($this->session->data['order_id'], $this->config->get('config_order_status_id'));
 			
 			$message = '';
 			

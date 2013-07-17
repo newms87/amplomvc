@@ -69,7 +69,7 @@ class Admin_Controller_Payment_SagepayUs extends Controller
 			$this->data['sagepay_us_order_status_id'] = $this->config->get('sagepay_us_order_status_id');
 		}
 
-		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
+		$this->data['order_statuses'] = $this->order->getOrderStatuses();
 		
 		if (isset($_POST['sagepay_us_geo_zone_id'])) {
 			$this->data['sagepay_us_geo_zone_id'] = $_POST['sagepay_us_geo_zone_id'];

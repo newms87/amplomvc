@@ -1,7 +1,6 @@
 <?= $header; ?><?= $column_left; ?><?= $column_right; ?>
 <div id="content"><?= $content_top; ?>
 	<?= $this->breadcrumb->render(); ?>
-	<?= $this->builder->display_errors($errors); ?>
 	<h1><?= $heading_title; ?></h1>
 	<h3><?= $text_are_you_a_designer; ?></h3>
 	

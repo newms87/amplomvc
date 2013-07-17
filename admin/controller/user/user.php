@@ -303,11 +303,7 @@ class Admin_Controller_User_User extends Controller
 			}
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
   	}
 	
 	private function verify_user($user_id = null)

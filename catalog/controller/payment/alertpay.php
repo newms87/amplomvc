@@ -5,7 +5,7 @@ class Catalog_Controller_Payment_Alertpay extends Controller
 	{
 		$this->template->load('payment/alertpay');
 
-		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
+		$order_info = $this->order->get($this->session->data['order_id']);
 		
 		$this->data['action'] = 'https://www.alertpay.com/PayProcess.aspx';
 
@@ -24,7 +24,7 @@ class Catalog_Controller_Payment_Alertpay extends Controller
 	public function callback()
 	{
 		if (isset($_POST['ap_securitycode']) && ($_POST['ap_securitycode'] == $this->config->get('alertpay_security'))) {
-			$this->Model_Checkout_Order->confirm($_POST['ap_itemcode'], $this->config->get('alertpay_order_status_id'));
+			$this->order->update($_POST['ap_itemcode'], $this->config->get('alertpay_order_status_id'));
 		}
 	}
 }

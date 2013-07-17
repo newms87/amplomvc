@@ -12,7 +12,7 @@ class Catalog_Controller_Block_Checkout_ShippingAddress extends Controller
 			$this->data['shipping_address_id'] = $this->customer->get_setting('default_shipping_address_id');
 		}
 
-		$this->data['data_addresses'] = $this->customer->get_shipping_addresses();
+		$this->data['data_addresses'] = $this->customer->getShippingAddresses();
 		
 		//Build Address Form
 		$this->form->init('address');

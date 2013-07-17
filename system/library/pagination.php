@@ -42,7 +42,7 @@ class Pagination extends Library
 		$language = $this->language->fetch('block/widget/pagination');
 		
 		if (!$this->page_url) {
-			$this->page_url = $this->url->link($_GET['route'], $this->url->getQueryExclude('page'));
+			$this->page_url = $this->url->link($this->url->route(), $this->url->getQueryExclude('page'));
 		}
 		
 		//Setup Query to add page=n

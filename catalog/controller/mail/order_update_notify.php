@@ -20,7 +20,7 @@ class Catalog_Controller_Mail_OrderUpdateNotify extends Controller
 			
 			if ($order['customer_id']) {
 				$message .= $language['text_update_link'] . "\n";
-				$message .= $order['store_url'] . 'index.php?route=account/order/info&order_id=' . $order_id . "\n\n";
+				$message .= $this->url->store($order_info['store_id'], 'account/order/info', 'order_id=' . $order_id) . "\n\n";
 			}
 			
 			if ($comment) {
@@ -30,10 +30,14 @@ class Catalog_Controller_Mail_OrderUpdateNotify extends Controller
 				
 			$message .= $language['text_update_footer'];
 			
+			$this->mail->init();
+			
 			$this->mail->setTo($order['email']);
 			$this->mail->setFrom($this->config->get('config_email'));
 			$this->mail->setSender($order['store_name']);
 			$this->mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
 			$this->mail->setText(html_entity_decode($message, ENT_QUOTES, 'UTF-8'));
+			
+			$this->mail->send();
 	}
 }

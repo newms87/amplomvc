@@ -18,13 +18,6 @@
 <link rel="<?= $style['rel']; ?>" type="text/css" href="<?= $style['href']; ?>" media="<?= $style['media']; ?>" />
 <? } ?>
 
-<![if !IE]>
-<script type="text/javascript">//<!--
-url_state_object = {};
-window.history.pushState(url_state_object,'<?= addslashes($title); ?>', '<?= isset($pretty_url) ? $pretty_url : ''; ?>');
-//--></script>
-<![endif]>
-
 <? foreach ($js_scripts as $script) { ?>
 <script type="text/javascript" src="<?= $script; ?>"></script>
 <? } ?>
@@ -42,8 +35,8 @@ window.history.pushState(url_state_object,'<?= addslashes($title); ?>', '<?= iss
 	</div>
 	<? if ($logged) { ?>
 	<div id="menu" class="links">
-	<div class="left"><?= $this->builder->build_links($links_admin); ?></div>
-		<div class="right"><?= $this->builder->build_links($links_right); ?></div>
+	<div class="left"><?= $this->document->renderLinks($links_admin); ?></div>
+		<div class="right"><?= $this->document->renderLinks($links_right); ?></div>
 		<div class="clear"></div>
 	</div>
 	<? } ?>

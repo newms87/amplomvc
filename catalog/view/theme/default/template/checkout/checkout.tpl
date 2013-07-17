@@ -40,7 +40,7 @@ function load_checkout_item(c_item, route){
 	if(!c_item || !route) return;
 	
 	$.ajax({
-			url: "<?= HTTP_CATALOG . "index.php?route="; ?>" + route,
+			url: "<?= HTTP_ROOT; ?>" + route,
 			dataType: 'html',
 			beforeSend: page_loading,
 			complete: page_received,

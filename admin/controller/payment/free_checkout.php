@@ -39,7 +39,7 @@ class Admin_Controller_Payment_FreeCheckout extends Controller
 			$this->data['free_checkout_order_status_id'] = $this->config->get('free_checkout_order_status_id');
 		}
 		
-		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
+		$this->data['order_statuses'] = $this->order->getOrderStatuses();
 				
 		if (isset($_POST['free_checkout_status'])) {
 			$this->data['free_checkout_status'] = $_POST['free_checkout_status'];

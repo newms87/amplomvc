@@ -87,7 +87,7 @@ class Admin_Controller_Payment_Moneybookers extends Controller
 			$this->data['moneybookers_chargeback_status_id'] = $this->config->get('moneybookers_chargeback_status_id');
 		}
 		
-		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
+		$this->data['order_statuses'] = $this->order->getOrderStatuses();
 		
 		if (isset($_POST['moneybookers_geo_zone_id'])) {
 			$this->data['moneybookers_geo_zone_id'] = $_POST['moneybookers_geo_zone_id'];

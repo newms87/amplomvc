@@ -35,7 +35,7 @@ class Order Extends Library
 	
 	public function add()
 	{
-		if (!$this->validate()) {
+		if (!$this->cart->validate()) {
 			return false;
 		}
 		
@@ -79,40 +79,39 @@ class Order Extends Library
 		}
 		
 		//Order Information
-		$data['invoice_id'] = $this->System_Model_Order->generateInvoiceId();
 		$data['store_id'] = $this->config->get('config_store_id');
 		$data['language_id'] = $this->config->get('config_language_id');
-		$data['currency_id'] = $this->currency->getId();
+		$data['currency_code'] = $this->currency->getCode();
 		$data['currency_value'] = $this->currency->getValue();
 		
 		//Payment info
-		$payment_address = $this->getPaymentAddress();
+		$payment_address = $this->cart->getPaymentAddress();
 		
 		foreach ($payment_address as $key => $value) {
 			$data['payment_' . $key] = $value;
 		}
 		
-		$data['payment_method'] = $this->cart->getPaymentMethod();
+		$data['payment_method_id'] = $this->cart->getPaymentMethodId();
 		
 		//Shipping info
 		if ($this->cart->hasShipping()) {
-			$shipping_address = $this->getShippingAddress();
+			$shipping_address = $this->cart->getShippingAddress();
 			
 			foreach ($shipping_address as $key => $value) {
 				$data['shipping_' . $key] = $value;
 			}
 			
-			$data['shipping_method'] = $this->getShippingMethod();
+			$data['shipping_method_id'] = $this->cart->getShippingMethodId();
 		}
 		
 		//Totals
-		$totals = $this->getTotals();
+		$totals = $this->cart->getTotals();
 		
 		$data['total'] = $totals['total'];
 		$data['totals'] = $totals['data'];
 		
 		//Products
-		$products = $this->getProducts();
+		$products = $this->cart->getProducts();
 		
 		foreach ($products as &$product) {
 			$product['tax'] = $this->tax->getTax($product['total'], $product['tax_class_id']);
@@ -121,7 +120,7 @@ class Order Extends Library
 		$data['products'] = $products;
 		
 		// Gift Voucher
-		if ($this->cart->hasVouchers()) {
+		if ($this->cart->hasVoucher()) {
 			$data['vouchers'] = $this->cart->getVouchers();
 		}
 		
@@ -178,13 +177,21 @@ class Order Extends Library
 	
 	public function get($order_id = null)
 	{
-		$order_id = $order_id ? $order_id : $this->getId();
-		
-		if (!$order_id) {
+		if (!$order_id && !($order_id = $this->getId())) {
 			return null;
 		}
 		
 		return $this->System_Model_Order->getOrder($order_id);
+	}
+	
+	public function getProducts($order_id)
+	{
+		return $this->System_Model_Order->getOrderProducts($order_id);
+	}
+	
+	public function getVouchers($order_id)
+	{
+		return $this->System_Model_Order->getOrderVouchers($order_id);
 	}
 	
 	public function synchronizeOrders($customer)
@@ -199,6 +206,109 @@ class Order Extends Library
 		);
 	}
 	
+	public function countOrdersWithStatus($order_status_id)
+	{
+		$filter = array(
+			'order_status_ids' => array($order_status_id),
+		);
+		
+		$order_total = $this->System_Model_Order->getTotalOrders($filter);
+		
+		return $order_total;
+	}
+	
+	public function orderStatusInUse($order_status_id)
+	{
+		$filter = array(
+			'order_status_ids' => array($order_status_id),
+		);
+		
+		$order_total = $this->System_Model_Order->getTotalOrders($filter);
+		
+		if (!$order_total) {
+			$order_total = $this->System_Model_Order->getTotalOrderHistories($filter);
+		}
+		
+		return $order_total > 0;
+	}
+	
+	public function productInConfirmedOrder($product_id)
+	{
+		$filter = array(
+			'product_ids' => array($product_id),
+			'confirmed' => 1,
+		);
+		
+		return $this->System_Model_Order->getTotalOrders($filter);
+	}
+	
+	public function isEditable($order)
+	{
+		if (!is_array($order)) {
+			$order = $this->get($order);
+		}
+		
+		return strtotime($order['date_added']) > strtotime('-' . (int)$this->config->get('config_order_edit') . ' day');
+	}
+	
+	public function getOrderStatus($order_status_id)
+	{
+		$order_statuses = $this->getOrderStatuses();
+		
+		return isset($order_statuses[$order_status_id]) ? $order_statuses[$order_status_id] : null;
+	}
+		
+	public function getOrderStatuses()
+	{
+		return $this->config->load('order', 'order_statuses', 0);
+	}
+	
+	public function getReturnStatus($return_status_id)
+	{
+		$return_statuses = $this->getReturnStatuses();
+		
+		return isset($return_statuses[$return_status_id]) ? $return_statuses[$return_status_id] : null;
+	}
+	
+	public function getReturnStatuses()
+	{
+		return $this->config->load('product_return', 'return_statuses', 0);
+	}
+	
+	public function getReturnReason($return_reason_id)
+	{
+		$return_reasons = $this->getReturnReasons();
+		
+		return isset($return_reasons[$return_reason_id]) ? $return_reasons[$return_reason_id] : null;
+	}
+	
+	public function getReturnReasons()
+	{
+		return $this->config->load('product_return', 'return_reasons', 0);
+	}
+	
+	public function getReturnAction($return_action_id)
+	{
+		$return_actions = $this->getReturnActions();
+		
+		return isset($return_actions[$return_action_id]) ? $return_actions[$return_action_id] : null;
+	}
+	
+	public function getReturnActions()
+	{
+		return $this->config->load('product_return', 'return_actions', 0);
+	}
+	
+	/**
+	 * Update or Confirm (when order status is complete) an order
+	 * 
+	 * @param $order_id - The ID of the order to update
+	 * @param $order_status_id - The status to update the order to (use $this->order->getOrderStatuses() for a list of valid statuses)
+	 * @param $comment - A comment about the change in order status
+	 * @param $notify - Notify the customer about the change in their order status
+	 * 
+	 */
+	 
 	public function update($order_id, $order_status_id, $comment = '', $notify = false)
 	{
 		$order = $this->get($order_id);
@@ -210,423 +320,90 @@ class Order Extends Library
 		
 		// Fraud Detection
 		if ($this->config->get('config_fraud_detection') && $this->fraud->atRisk($order)) {
-			$order_status_id = $this->config->get('config_fraud_status_id');
+			$order_status_id = $this->config->get('config_order_fraud_status_id');
 		}
 
 		// Blacklist
 		if ($order['customer_id'] && $this->customer->isBlacklisted($order['customer_id'], array($order['ip']))) {
-			$order_status_id = $this->config->get('config_order_status_id');
+			$order_status_id = $this->config->get('config_order_blacklist_status_id');
 		}
 		
 		$this->System_Model_Order->updateOrderStatus($order_id, $order_status_id, $comment, $notify);
 		
+		if (!$order['confirmed'] && $order_status_id === $this->config->get('config_order_complete_status_id')) {
+			$this->confirm($order);
+		}
+		
 		if ($notify) {
-			$this->mail->init();
-			
-			$this->mail->setTemplate('order_update_notify', $order);
-			
-			$this->mail->send();
+			$this->mail->callController('order_update_notify', $order);
 		}
 	}
 	
-	public function confirm($order)
+	private function confirm($order)
 	{
-		$order_product_query = $this->query("SELECT op.*, p.manufacturer_id, p.cost FROM " . DB_PREFIX . "order_product op LEFT JOIN " . DB_PREFIX . "product p ON (op.product_id=p.product_id) WHERE op.order_id = '" . (int)$order_id . "'");
+		$order_products = $this->db->queryRows("SELECT * FROM " . DB_PREFIX . "order_product WHERE order_id = " . (int)$order_id);
 		
 		// Products
-		$order['order_products'] = array();
-		
-		foreach ($order_product_query->rows as $product) {
+		foreach ($order_products as &$product) {
 			//subtract Quantity from this product
-			$this->query("UPDATE " . DB_PREFIX . "product SET quantity = (quantity - " . (int)$product['quantity'] . ") WHERE product_id = '" . (int)$product['product_id'] . "' AND subtract = '1'");
+			$this->db->query("UPDATE " . DB_PREFIX . "product SET quantity = (quantity - " . (int)$product['quantity'] . ") WHERE product_id = '" . (int)$product['product_id'] . "' AND subtract = '1'");
 			
 			//Subtract Quantities from Product Option Values and Restrictions
-			$option_value_query = $this->query("SELECT pov.product_option_value_id, pov.option_value_id FROM " . DB_PREFIX . "order_option oo LEFT JOIN " . DB_PREFIX . "product_option_value pov ON (pov.product_option_value_id=oo.product_option_value_id) WHERE oo.order_id = '" . (int)$order_id . "' AND order_product_id = '" . (int)$product['order_product_id'] . "'");
+			$product_option_values = $this->db->queryRows("SELECT pov.product_option_value_id, pov.option_value_id FROM " . DB_PREFIX . "order_option oo LEFT JOIN " . DB_PREFIX . "product_option_value pov ON (pov.product_option_value_id=oo.product_option_value_id) WHERE oo.order_id = '" . (int)$order_id . "' AND order_product_id = '" . (int)$product['order_product_id'] . "'");
 			
 			$pov_to_ov = array();
 			
-			foreach ($option_value_query->rows as $option_value) {
+			foreach ($product_option_values as $option_value) {
 				$pov_to_ov[$option_value['product_option_value_id']] = $option_value['option_value_id'];
 			}
 			
-			$order_options = $this->getOrderProductOptions($order_id, $product['order_product_id']);
+			$order_options = $this->System_Model_Order->getOrderProductOptions($order_id, $product['order_product_id']);
 			
 			foreach ($order_options as $option) {
-				$this->query("UPDATE " . DB_PREFIX . "product_option_value SET quantity = (quantity - " . (int)$product['quantity'] . ") WHERE product_option_value_id = '" . (int)$option['product_option_value_id'] . "' AND subtract = '1'");
+				$this->db->query("UPDATE " . DB_PREFIX . "product_option_value SET quantity = (quantity - " . (int)$product['quantity'] . ") WHERE product_option_value_id = '" . (int)$option['product_option_value_id'] . "' AND subtract = '1'");
 					
-				$this->query("UPDATE " . DB_PREFIX . "product_option_value_restriction SET quantity = (quantity - " . (int) $product['quantity'] . ")" .
+				$this->db->query("UPDATE " . DB_PREFIX . "product_option_value_restriction SET quantity = (quantity - " . (int) $product['quantity'] . ")" .
 					" WHERE option_value_id = '" . ($pov_to_ov[$option['product_option_value_id']]) . "' AND restrict_option_value_id IN (" . implode(',', $pov_to_ov) . ")");
 			}
 			
 			//Add Product Options to product data
 			$product['option'] = $order_options;
 			
-			$order['order_products'][] = $product;
-		}
+			$this->cache->delete('product.' . $product['product_id']);
+		} unset($product);
 		
-		$this->cache->delete('product');
+		$order['order_products'] = $order_products;
 		
 		// Downloads
-		$order['order_downloads'] = $this->queryRows("SELECT * FROM " . DB_PREFIX . "order_download WHERE order_id = '" . (int)$order_id . "'");
+		$order['order_downloads'] = $this->db->queryRows("SELECT * FROM " . DB_PREFIX . "order_download WHERE order_id = '" . (int)$order_id . "'");
 		
 		// Gift Voucher
-		$order_vouchers = $this->queryRows("SELECT * FROM " . DB_PREFIX . "order_voucher WHERE order_id = '" . (int)$order_id . "'");
+		$order_voucher_ids = $this->db->queryColumn("SELECT voucher_id FROM " . DB_PREFIX . "order_voucher WHERE order_id = '" . (int)$order_id . "'");
 		
-		foreach ($order_vouchers as $order_voucher) {
-			$voucher_id = $this->sendOrderVouchers($order_id);
+		foreach ($order_voucher_ids as $voucher_id) {
+			$this->System_Model_Voucher->activate($voucher_id);
 		}
 		
-		$order['order_vouchers'] = $order_voucher_query->rows;
-		
-		// Send out any gift voucher mails
-		if (!empty($order['order_vouchers']) && $this->config->get('config_complete_status_id') == $order_status_id) {
-			$this->Model_Cart_Voucher->confirm($order_id);
-		}
+		$order['order_vouchers'] = $order_vouchers;
 		
 		// Order Totals
-		$order_total_query = $this->query("SELECT * FROM `" . DB_PREFIX . "order_total` WHERE order_id = '" . (int)$order_id . "' ORDER BY sort_order ASC");
+		$order_totals = $this->db->queryRows("SELECT * FROM `" . DB_PREFIX . "order_total` WHERE order_id = '" . (int)$order_id . "' ORDER BY sort_order ASC");
 		
-		foreach ($order_total_query->rows as $order_total) {
-			$classname = 'Model_Total_' . $this->tool->format_classname($order_total['code']);
+		foreach ($order_totals as &$order_total) {
+			$total_class = 'System_Extension_Total_Model_' . $this->tool->format_classname($order_total['code']);
 			
-			if (method_exists($this->$classname, 'confirm')) {
-				$this->$classname->confirm($order, $order_total);
+			if (method_exists($this->$total_class, 'confirm')) {
+				$this->$total_class->confirm($order, $order_total);
 			}
 		}
 		
-		$order['order_totals'] = $order_total_query->rows;
-		
+		$order['order_totals'] = $order_totals;
 		
 		//Order Status
-		$order_status_query = $this->db->query("SELECT name FROM " . DB_PREFIX . "order_status WHERE order_status_id = '" . (int)$order_status_id . "' AND language_id = '" . (int)$order['language_id'] . "'");
+		$order['order_status'] = $this->order->getOrderStatus($order['order_status_id']);
 		
-		$order['order_status'] = $order_status_query->num_rows ? $order_status_query->row['name'] : '';
-		
-		//Comments
-		$order['notify_comment'] = ($comment && $notify) ? nl2br($comment) : '';
-		
-		//TODO: we can do better than this!
-		$this->callController('mail/order', $order);
-		
-		//Generate and Email Excel Docs
-		$product_ids = array();
-		foreach ($order_product_query->rows as $p) {
-			$product_ids[] = $p['product_id'];
-		}
-		
-		$vendors = $this->query("SELECT p.manufacturer_id, m.vendor_id, m.name FROM " . DB_PREFIX . "product p LEFT JOIN " . DB_PREFIX . "manufacturer m ON (p.manufacturer_id=m.manufacturer_id) WHERE p.product_id IN (" . implode(',',$product_ids) . ") GROUP BY m.vendor_id");
-		
-		foreach ($vendors->rows as $v) {
-			$query = $this->query("SELECT c.*, ud.user_id FROM " . DB_PREFIX . "type_to_contact t2c JOIN " . DB_PREFIX . "contact c ON (t2c.contact_id=c.contact_id) ".
-											"JOIN " . DB_PREFIX . "user_designer ud ON (t2c.type_id=ud.user_id AND t2c.type='user' AND ud.designer_id='$v[manufacturer_id]') WHERE c.email != '' AND c.email IS NOT NULL ORDER BY FIELD(c.contact_type,'shipping','primary','finance','customer_service')");
-			
-			$this->mail->init();
-			
-			$this->mail->setFrom($this->config->get('config_email'));
-			$this->mail->setSender($order['store_name']);
-			$email_list = array();
-			if ($query->num_rows) {
-				foreach ($query->rows as $r) {
-					if(!isset($email_list[$r['user_id']]))
-						$email_list[$r['user_id']] = $r;
-				}
-				$v['contact'] = $query->row;
-			}
-			else {
-				$v['contact'] = array('street_1' => $this->config->get('config_address'));
-			}
-			
-			$files = $this->generate_excel_order_invoice($v, $order);
-			$this->mail->addAttachment($files);
-			
-			if (!$email_list) {
-				$email_list[] = array(
-					'first_name' => $this->config->get('config_name'),
-					'last_name' => '',
-					'email' => $this->config->get('config_email'),
-					'company' => $this->config->get('config_title')
-				);
-			}
-			
-			foreach ($email_list as $e) {
-				$insertables = array(
-					'first_name'=> $e['first_name'],
-					'last_name' => $e['last_name'],
-					'email'	=> $e['email'],
-					'company'	=> $e['company']
-				);
-				
-				$subject = $this->tool->insertables($insertables, $this->config->get('mail_designer_invoice_subject'));
-				$message = $this->tool->insertables($insertables, $this->config->get('mail_designer_invoice_message'));
-				
-				if ($this->config->get('config_debug_send_emails') && $e['email']) {
-					$this->mail->setTo($e['email']);
-					$this->mail->setCc($this->config->get('config_email'));
-				}
-				else {
-					$this->mail->setTo($this->config->get('config_email'));
-				}
-				
-				$this->mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
-				$this->mail->setHtml(html_entity_decode($message, ENT_QUOTES, 'UTF-8'));
-				$this->mail->send();
-			}
-		}
-	}
-
-	public function generate_excel_order_invoice($vendor, $order)
-	{
-		_require(DIR_SYSTEM . 'php-excel/classes/PHPExcel/IOFactory.php');
-		
-		if (!is_dir(DIR_EXCEL_FPO . $vendor['vendor_id'])) {
-			$mode = octdec($this->config->get('config_default_dir_mode'));
-			mkdir(DIR_EXCEL_FPO . $vendor['vendor_id'], $mode, true);
-			chmod(DIR_EXCEL_FPO . $vendor['vendor_id'], $mode);
-		}
-		
-		$invoice_id = $order['invoice_prefix'] . $order['invoice_no'] . $order['order_id'];
-		
-		
-		$total_lines = count($order['order_products']);
-		
-		if ($total_lines < 21) {
-			$template = 'fpo.xls';
-			$max_row = 37;
-		}
-		elseif ($total_lines <= 50) {
-			$template = 'fpo_50.xls';
-			$max_row = 67;
-		}
-		elseif ($total_lines <= 100) {
-			$template = 'fpo_100.xls';
-			$max_row = 116;
-		}
-		else {
-			$template = 'fpo_100.xls';
-			trigger_error("Need Larger FPO Template! Max Lines: $total_lines");
-		}
-		
-		//GENERATE THE FPO
-		$fpo_id = preg_replace('/INV/','FPO',$invoice_id);
-		$fpo = DIR_EXCEL_TEMPLATE . $template;
-		if (!file_exists($fpo)) {
-			$msg ="Template not found: $fpo! Unable to generate FPO!";
-			$this->message->add('warning', $msg);
-			trigger_error($msg);
-		}
-		else {
-			$e = PHPExcel_IOFactory::load($fpo);
-			
-			$e->setActiveSheetIndex(0);
-			$sheet = $e->getActiveSheet();
-			
-			$sheet->setCellValue('E4',$fpo_id);
-			$sheet->setCellValue('E5',date_format(new DateTime(),'M d, Y'));
-			$sheet->setCellValue('E6',$vendor['vendor_id']);
-			
-			//VENDOR INFORMATION
-			$row = 9;
-			$col = ord('B');
-			$sheet->setCellValue(chr($col).$row++,$vendor['name']);
-			$sheet->setCellValue(chr($col).$row++,$vendor['contact']['street_1']);
-			if(!empty($vendor['contact']['street_2']))
-				$sheet->setCellValue(chr($col).$row++,$vendor['contact']['street_2']);
-			if (isset($vendor['contact']['city'])) {
-				$sheet->setCellValue(chr($col).$row++, $vendor['contact']['city'] . ', ' . $this->Model_Localisation_Zone->getZoneName($vendor['contact']['zone_id']) . ' ' . $vendor['contact']['postcode']);
-				$sheet->setCellValue(chr($col).$row++, $this->Model_Localisation_Country->getCountryName($vendor['contact']['country_id']));
-			
-				$sheet->setCellValue(chr($col).$row++, $vendor['contact']['email']);
-			}
-			
-			//CUSTOMER SHIPPING INFORMATION
-			$row = 9;
-			$col = ord('E');
-			$sheet->setCellValue(chr($col).$row++,$order['shipping_firstname'] . " " . $order['shipping_lastname']);
-			if(!empty($order['shipping_company']))
-				$sheet->setCellValue(chr($col).$row++,$order['shipping_company']);
-			$sheet->setCellValue(chr($col).$row++,$order['shipping_address_1']);
-			if(!empty($order['shipping_address_2']))
-				$sheet->setCellValue(chr($col).$row++,$order['shipping_address_2']);
-			$sheet->setCellValue(chr($col).$row++, $order['shipping_city'] . ', ' . $order['shipping_zone'] . ' ' . $order['shipping_postcode']);
-			$sheet->setCellValue(chr($col).$row++, $order['shipping_country']);
-			
-			$sheet->setCellValue('A17',$order['shipping_method']);
-			
-			$row = 20;
-			foreach ($order['order_products'] as $p) {
-				if((int)$p['manufacturer_id'] != (int)$vendor['manufacturer_id'])continue;
-				
-				$sheet->setCellValue('A'.$row,$p['name']);
-				$sheet->setCellValue('B'.$row,$p['model']);
-				$description = '';
-				foreach($p['option'] as $o)
-					$description .= html_entity_decode($o['name']) . ": " . html_entity_decode($o['value']);
-				$sheet->setCellValue('C'.$row,$description);
-				$sheet->setCellValue('E'.$row,$p['quantity']);
-				$sheet->setCellValue('F'.$row,$p['cost']);
-				$sheet->getRowDimension($row)->setRowHeight(-1);
-				$row++;
-				
-				if($row > $max_row)
-					break;
-			}
-			
-			$fpo = DIR_EXCEL_FPO . $vendor['vendor_id'] . '/FinalPO_BettyConfidential_' . $vendor['name'] .'_' . $fpo_id . '.xls';
-			$objWriter = PHPExcel_IOFactory::createWriter($e, 'Excel5');
-			$objWriter->save($fpo);
-			
-			$this->query("UPDATE " . DB_PREFIX . "order SET fpo = '" . $this->db->escape($fpo) . "' WHERE order_id = '$order[order_id]'");
-		}
-		
-		uasort($order['order_products'], function ($a,$b) { return $a['manufacturer_id'] > $b['manufacturer_id']; });
-		
-		$tax = null;
-		$shipping = null;
-		$coupon = array();
-		foreach ($order['order_totals'] as $t) {
-			if($t['code'] == 'shipping')
-				$shipping = $t['value'];
-			elseif($t['code'] == 'tax')
-				$tax = $t;
-			elseif($t['code'] == 'coupon')
-				$coupon[] = $t;
-		}
-		
-		
-		$m_count = array();
-		foreach ($order['order_products'] as $p) {
-			$m_count[$p['manufacturer_id']] = 1;
-		}
-		
-		$total_lines = (count($m_count)*3) + count($order['order_products']) + count($coupon);
-		
-		if ($total_lines < 21) {
-			$template = 'packing_slip.xls';
-			$max_row = 37;
-			$ship_line = 39;
-			$tax_line = 40;
-		}
-		elseif ($total_lines <= 50) {
-			$template = 'packing_slip_50.xls';
-			$max_row = 67;
-			$ship_line = 69;
-			$tax_line = 70;
-		}
-		elseif ($total_lines <= 100) {
-			$template = 'packing_slip_100.xls';
-			$max_row = 116;
-			$ship_line = 118;
-			$tax_line = 119;
-		}
-		else {
-			$template = 'packing_slip_100.xls';
-			trigger_error("Need Larger Packing Slip Template!");
-		}
-		
-		//GENERATE THE PACKING SLIP
-		$packslip = DIR_EXCEL_TEMPLATE . $template;
-		if (!file_exists($packslip)) {
-			$msg = "Template not found: $packslip! Unable to generate Packing Slip!";
-			$this->message->add('warning', $msg);
-			trigger_error("Template not found: $packslip! Unable to generate Packing Slip!");
-		}
-		else {
-			$e = PHPExcel_IOFactory::load($packslip);
-			
-			$e->setActiveSheetIndex(0);
-			$sheet = $e->getActiveSheet();
-			
-			$sheet->setCellValue('E4',$invoice_id);
-			$sheet->setCellValue('E5',date_format(new DateTime(),'M d, Y'));
-			$sheet->setCellValue('E6',$order['customer_id']);
-			
-			$row = 9;
-			$col = ord('B');
-			$sheet->setCellValue(chr($col).$row++,$order['shipping_firstname'] . " " . $order['shipping_lastname']);
-			if(!empty($order['shipping_company']))
-				$sheet->setCellValue(chr($col).$row++,$order['shipping_company']);
-			$sheet->setCellValue(chr($col).$row++,$order['shipping_address_1']);
-			if(!empty($order['shipping_address_2']))
-				$sheet->setCellValue(chr($col).$row++,$order['shipping_address_2']);
-			$sheet->setCellValue(chr($col).$row++, $order['shipping_city'] . ', ' . $order['shipping_zone'] . ' ' . $order['shipping_postcode']);
-			$sheet->setCellValue(chr($col).$row++, $order['shipping_country']);
-			$sheet->setCellValue(chr($col).$row++, $order['email']);
-			
-			$row = 9;
-			$col = ord('E');
-			$sheet->setCellValue(chr($col).$row++,$order['payment_firstname'] . " " . $order['payment_lastname']);
-			if(!empty($order['payment_company']))
-				$sheet->setCellValue(chr($col).$row++,$order['payment_company']);
-			$sheet->setCellValue(chr($col).$row++,$order['payment_address_1']);
-			if(!empty($order['payment_address_2']))
-				$sheet->setCellValue(chr($col).$row++,$order['payment_address_2']);
-			$sheet->setCellValue(chr($col).$row++, $order['payment_city'] . ', ' . $order['payment_zone'] . ' ' . $order['payment_postcode']);
-			$sheet->setCellValue(chr($col).$row++, $order['payment_country']);
-			$sheet->setCellValue(chr($col).$row++, $order['email']);
-			
-			
-			$ship_from_style = array('font'=>array('bold'=>true,'size'=>'13'),
-											'alignment' => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
-											);
-			
-			$manufacturers = $this->Model_Catalog_Manufacturer->getManufacturers();
-			
-			$row = 17;
-			$curr_man = '';
-			foreach ($order['order_products'] as $p) {
-				if ($curr_man != $p['manufacturer_id']) {
-					if ($row != 17) {
-						$sheet->getRowDimension($row)->setRowHeight(30);
-						$row++;
-					}
-					$name = '';
-					foreach($manufacturers as $m)
-						if($m['manufacturer_id'] == $p['manufacturer_id'])
-							$name = $m['name'];
-					$sheet->setCellValue('C'.$row,"The Following Products Ship From $name");
-					$sheet->getStyle('C'.$row)->applyFromArray($ship_from_style);
-					$sheet->getRowDimension($row)->setRowHeight(40);
-					$curr_man = $p['manufacturer_id'];
-					$row++;
-				}
-				$sheet->setCellValue('A'.$row,$p['name']);
-				$sheet->setCellValue('B'.$row,$p['model']);
-				$description = '';
-				foreach($p['option'] as $o)
-					$description .= html_entity_decode($o['name']) . ": " . html_entity_decode($o['value']);
-				$sheet->setCellValue('C'.$row,$description);
-				$sheet->setCellValue('E'.$row,$p['quantity']);
-				$sheet->setCellValue('F'.$row,$p['price']);
-				$sheet->getRowDimension($row)->setRowHeight(-1);
-				$row++;
-				if($row > $max_row)
-					break;
-			}
-			
-			if ($coupon && $row<=$max_row) {
-				foreach ($coupon as $c) {
-					$sheet->setCellValue('A'.$row,$c['title']);
-					$sheet->setCellValue('B'.$row,'coupon');
-					$sheet->setCellValue('E'.$row,1);
-					$sheet->setCellValue('F'.$row,$c['value']);
-				}
-			}
-			
-			if ($shipping) {
-				$sheet->setCellValue('G'.$ship_line,$shipping);
-			}
-			
-			if ($tax) {
-				$sheet->setCellValue('F'.$tax_line,$tax['title']);
-				$sheet->setCellValue('G'.$tax_line,$tax['value']);
-			}
-			
-			$packslip = DIR_EXCEL_FPO .$vendor['vendor_id'].'/PackingSlip_BettyConfidential_' . $vendor['name'] .'_' . $invoice_id . '.xls';
-			$objWriter = PHPExcel_IOFactory::createWriter($e, 'Excel5');
-			$objWriter->save($packslip);
-		}
-		
-		return array($fpo,$packslip);
+		//Send Order Emails
+		$this->mail->callController('order', $order);
 	}
 
 	public function clear()

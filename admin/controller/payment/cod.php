@@ -45,7 +45,7 @@ class Admin_Controller_Payment_Cod extends Controller
 			$this->data['cod_order_status_id'] = $this->config->get('cod_order_status_id');
 		}
 		
-		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
+		$this->data['order_statuses'] = $this->order->getOrderStatuses();
 		
 		if (isset($_POST['cod_geo_zone_id'])) {
 			$this->data['cod_geo_zone_id'] = $_POST['cod_geo_zone_id'];

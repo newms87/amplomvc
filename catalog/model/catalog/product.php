@@ -50,8 +50,9 @@ class Catalog_Model_Catalog_Product extends Model
 			if (!empty($product)) {
 				$product['price'] = ($product['discount'] ? $product['discount'] : $product['price']);
 				$product['rating'] = (int)$product['rating'];
-				$product['description'] = html_entity_decode($product['description']);
-				$product['teaser'] = html_entity_decode($product['teaser']);
+				$product['teaser'] = html_entity_decode($product['teaser'], ENT_QUOTES, 'UTF-8');
+				$product['description'] = html_entity_decode($product['description'], ENT_QUOTES, 'UTF-8');
+				$product['information'] = html_entity_decode($product['information'], ENT_QUOTES, 'UTF-8');
 				
 				$this->translation->translate('product', $product_id, $product);
 			}
@@ -170,8 +171,9 @@ class Catalog_Model_Catalog_Product extends Model
 		//Product Tag
 		if (!empty($data['product_tag'])) {
 			$from .= " LEFT JOIN " . DB_PREFIX . "product_tag pt ON (p.product_id = pt.product_id)";
+			$from .= " LEFT JOIN " . DB_PREFIX . "tag t ON (pt.tag_id=t.tag_id)";
 			
-			$where .= " AND pt.tag = '" . $this->db->escape($data['product_tag']) . "'";
+			$where .= " AND LCASE(t.text) = '" . $this->db->escape(strtolower(trim($data['product_tag']))) . "'";
 		}
 		
 		//Product Categories
@@ -363,7 +365,7 @@ class Catalog_Model_Catalog_Product extends Model
 	
 	public function getProductTags($product_id)
 	{
-		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_tag WHERE product_id = '" . (int)$product_id . "' AND language_id = '" . (int)$this->config->get('config_language_id') . "'");
+		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_tag WHERE product_id = " . (int)$product_id);
 	}
 	
 	public function getProductLayoutId($product_id)

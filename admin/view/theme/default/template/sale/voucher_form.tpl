@@ -1,7 +1,6 @@
 <?= $header; ?>
 <div class="content">
 	<?= $this->breadcrumb->render(); ?>
-	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'payment.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -85,7 +84,7 @@ $('#history .pagination a').live('click', function() {
 	return false;
 });
 
-$('#history').load("<?= HTTP_ADMIN . "index.php?route=sale/voucher/history"; ?>" + '&voucher_id=<?= $voucher_id; ?>');
+$('#history').load("<?= $url_history; ?>");
 
 function send_voucher(){
 	$.get('<?= $send; ?>',{}, function(json){

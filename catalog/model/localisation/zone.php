@@ -16,7 +16,7 @@ class Catalog_Model_Localisation_Zone extends Model
 		$zones = $this->cache->get('zone.' . (int)$country_id);
 	
 		if (!$zones) {
-			$zones = $this->queryRow("SELECT * FROM " . DB_PREFIX . "zone WHERE country_id = '" . (int)$country_id . "' AND status = '1' ORDER BY name");
+			$zones = $this->queryRows("SELECT * FROM " . DB_PREFIX . "zone WHERE country_id = '" . (int)$country_id . "' AND status = '1' ORDER BY name");
 			
 			$this->cache->set('zone.' . (int)$country_id, $zones);
 		}

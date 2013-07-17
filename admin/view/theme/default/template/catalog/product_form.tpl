@@ -1,7 +1,6 @@
 <?= $header; ?>
 <div class="content">
 	<?= $this->breadcrumb->render(); ?>
-	<?= $this->builder->display_errors($errors); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'product.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -14,7 +13,7 @@
 			<div id="tabs" class="htabs">
 				<a href="#tab-general"><?= $tab_general; ?></a>
 				<a href="#tab-data"><?= $tab_data; ?></a>
-				<a href="#tab-shipping"><?= $tab_shipping; ?></a>
+				<a href="#tab-shipping-return"><?= $tab_shipping_return; ?></a>
 				<a href="#tab-links"><?= $tab_links; ?></a>
 				<a href="#tab-attribute"><?= $tab_attribute; ?></a>
 				<a href="#tab-option"><?= $tab_option; ?></a>
@@ -52,12 +51,8 @@
 							<td><textarea name="information" class="ckedit"><?= $information; ?></textarea></td>
 						</tr>
 						<tr>
-							<td><?= $entry_shipping_ret; ?></td>
-							<td><textarea name="shipping_return" class="ckedit"><?= $shipping_return; ?></textarea></td>
-						</tr>
-						<tr>
 							<td><?= $entry_tag; ?></td>
-							<td><input type="text" name="product_tag" value="<?= $product_tag; ?>" size="80" /></td>
+							<td><input type="text" name="product_tags" value="<?= implode(',', $product_tags); ?>" size="80" /></td>
 						</tr>
 					</table>
 				</div>
@@ -100,10 +95,6 @@
 							<td><input type="text" name="cost" value="<?= $cost; ?>" /></td>
 						</tr>
 						<tr>
-							<td><?= $entry_is_final; ?></td>
-							<td><?= $this->builder->build('select',$yes_no,'is_final',(int)$is_final); ?></td>
-						</tr>
-						<tr>
 							<td><?= $entry_tax_class; ?></td>
 							<td>
 								<? $this->builder->set_config('tax_class_id','title');?>
@@ -121,7 +112,7 @@
 						<tr>
 							<td><?= $entry_subtract; ?></td>
 							<td>
-									<?= $this->builder->build('select', $yes_no, "subtract", (int)$subtract); ?>
+									<?= $this->builder->build('select', $data_yes_no, "subtract", (int)$subtract); ?>
 									<input type='hidden' name='stock_status_id' value='<?= $stock_status_id; ?>' />
 								</td>
 						</tr>
@@ -146,7 +137,7 @@
 						</tr>
 						<tr>
 							<td><?= $entry_editable; ?></td>
-							<td><?= $this->builder->build('select',$yes_no, 'editable',$editable); ?></td>
+							<td><?= $this->builder->build('select',$data_yes_no, 'editable',$editable); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_sort_order; ?></td>
@@ -154,31 +145,48 @@
 						</tr>
 					</table>
 				</div>
-				<div id="tab-shipping">
+				<div id="tab-shipping-return">
 					<table class="form">
 						<tr>
+							<td><?= $entry_return_policy; ?></td>
+							<td>
+								<? if (!empty($data_return_policies)) { ?>
+								<? $this->builder->set_config(false, 'title'); ?>
+								<?= $this->builder->build('select', $data_return_policies, 'return_policy_id', $return_policy_id); ?>
+								<? } ?>
+								<p><?= $text_add_return_policy; ?></p>
+							</td>
+						</tr>
+						<tr>
 							<td><?= $entry_shipping; ?></td>
-							<td><?= $this->builder->build('radio', $yes_no, "shipping", (int)$shipping); ?></td>
+							<td><?= $this->builder->build('radio', $data_yes_no, "shipping", (int)$shipping); ?></td>
 						</tr>
 					</table>
 					<table class="form" id="shipping_details">
 						<tr>
+							<td><?= $entry_shipping_policy; ?></td>
+							<td>
+								<? if (!empty($data_shipping_policies)) { ?>
+								<? $this->builder->set_config(false, 'title'); ?>
+								<?= $this->builder->build('select', $data_shipping_policies, 'shipping_policy_id', $shipping_policy_id); ?>
+								<? } ?>
+								<p><?= $text_add_shipping_policy; ?></p>
+							</td>
+						</tr>
+						<tr>
 							<td><?= $entry_dimension; ?></td>
-							<td><input type="text" name="length" value="<?= $length; ?>" size="4" />
+							<td>
+								<input type="text" name="length" value="<?= $length; ?>" size="4" />
 								<input type="text" name="width" value="<?= $width; ?>" size="4" />
-								<input type="text" name="height" value="<?= $height; ?>" size="4" /></td>
+								<input type="text" name="height" value="<?= $height; ?>" size="4" />
+							</td>
 						</tr>
 						<tr>
 							<td><?= $entry_length; ?></td>
-							<td><select name="length_class_id">
-									<? foreach ($data_length_classes as $length_class) { ?>
-									<? if ($length_class['length_class_id'] == $length_class_id) { ?>
-									<option value="<?= $length_class['length_class_id']; ?>" selected="selected"><?= $length_class['title']; ?></option>
-									<? } else { ?>
-									<option value="<?= $length_class['length_class_id']; ?>"><?= $length_class['title']; ?></option>
-									<? } ?>
-									<? } ?>
-								</select></td>
+							<td>
+								<? $this->builder->set_config('length_class_id', 'title'); ?>
+								<?= $this->builder->build('select', $data_length_classes, 'length_class_id', $length_class_id); ?>
+							</td>
 						</tr>
 						<tr>
 							<td><?= $entry_weight; ?></td>
@@ -186,15 +194,10 @@
 						</tr>
 						<tr>
 							<td><?= $entry_weight_class; ?></td>
-							<td><select name="weight_class_id">
-									<? foreach ($data_weight_classes as $weight_class) { ?>
-									<? if ($weight_class['weight_class_id'] == $weight_class_id) { ?>
-									<option value="<?= $weight_class['weight_class_id']; ?>" selected="selected"><?= $weight_class['title']; ?></option>
-									<? } else { ?>
-									<option value="<?= $weight_class['weight_class_id']; ?>"><?= $weight_class['title']; ?></option>
-									<? } ?>
-									<? } ?>
-								</select></td>
+							<td>
+								<? $this->builder->set_config('weight_class_id', 'title'); ?>
+								<?= $this->builder->build('select', $data_weight_classes, 'weight_class_id', $weight_class_id); ?>
+							</td>
 						</tr>
 					</table>
 				</div>
@@ -609,14 +612,14 @@ function generate_url(c){
 	name = $('input[name=name]').val();
 	if(!name)
 			alert("Please make a name for this product before generating the URL");
-	$.post("<?= HTTP_ADMIN . "index.php?route=catalog/product/generate_url"; ?>",{product_id:<?= $product_id ? $product_id : 0; ?>,name:name},function(json){$('input[name="keyword"]').val(json);},'json');
+	$.post("<?= $url_generate_url; ?>",{product_id:<?= $product_id ? $product_id : 0; ?>,name:name},function(json){$('input[name="keyword"]').val(json);},'json');
 }
 function generate_model(c){
 	$(c).fadeOut(500,function(){$(c).show();});
 	name = $('input[name=name]').val();
 	if(!name)
 			alert("Please make a name for this product before generating the Model ID");
-	$.post("<?= HTTP_ADMIN . "index.php?route=catalog/product/generate_model"; ?>",{product_id:<?= $product_id?$product_id:0; ?>,name:name},function(json){$('input[name="model"]').val(json);},'json');
+	$.post("<?= $url_generate_model; ?>",{product_id:<?= $product_id?$product_id:0; ?>,name:name},function(json){$('input[name="model"]').val(json);},'json');
 }
 //--></script>
 
@@ -638,7 +641,7 @@ $('input[name=\'related\']').autocomplete({
 	delay: 0,
 	source: function(request, response) {
 		$.ajax({
-			url: "<?= HTTP_ADMIN . "index.php?route=catalog/product/autocomplete"; ?>" + '&filter_name=' +	encodeURIComponent(request.term),
+			url: "<?= $url_autocomplete; ?>" + '?filter_name=' +	encodeURIComponent(request.term),
 			dataType: 'json',
 			success: function(json) {
 				response($.map(json, function(item) {
@@ -718,7 +721,7 @@ function attributeautocomplete(attribute_row) {
 		delay: 0,
 		source: function(request, response) {
 			$.ajax({
-				url: "<?= HTTP_ADMIN . "index.php?route=catalog/attribute_group/autocomplete"; ?>" + '&name=' + encodeURIComponent(request.term),
+				url: "<?= $url_attribute_group_autocomplete; ?>" + '&name=' + encodeURIComponent(request.term),
 				dataType: 'json',
 				success: function(json) {
 					response($.map(json, function(item) {
@@ -749,7 +752,7 @@ $('#option-add input').autocomplete({
 	delay: 0,
 	source: function(request, response) {
 		$.ajax({
-			url: "<?= HTTP_ADMIN . "index.php?route=catalog/option/autocomplete"; ?>" + '&filter_name=' +	encodeURIComponent(request.term),
+			url: "<?= $url_option_autocomplete; ?>" + '&filter_name=' +	encodeURIComponent(request.term),
 			dataType: 'json',
 			success: function(json) {
 				response($.map(json, function(item) {
@@ -779,7 +782,7 @@ $('#option-add input').autocomplete({
 		html += '	<table class="form">';
 		html += '		<tr>';
 		html += '			<td><?= $entry_required; ?></td>';
-		html += '				<td>' + "<?= $this->builder->build('select', $yes_no, "product_options[%option_id%][required]", 1); ?>" + '</td>';
+		html += '				<td>' + "<?= $this->builder->build('select', $data_yes_no, "product_options[%option_id%][required]", 1); ?>" + '</td>';
 		html += '		</tr>';
 		html += '		<tr>';
 			html += '				<td><?= $entry_sort_order; ?></td>';
@@ -845,7 +848,7 @@ function addOptionValue(option_id, option_value_id, name) {
 	html += '			<input class="ov_entry_option_value_id" type="hidden" name="product_options[%option_id%][product_option_value][%option_value_id%][option_value_id]" value="%option_value_id%" />';
 	html += '		</td>';
 	html += '		<td class="right"><input type="text" name="product_options[%option_id%][product_option_value][%option_value_id%][quantity]" value="1" size="3" /></td>';
-	html += '		<td class="left">' + "<?= $this->builder->build('select', $yes_no, "product_options[%option_id%][product_option_value][%option_value_id%][subtract]",1); ?>" + '</td>';
+	html += '		<td class="left">' + "<?= $this->builder->build('select', $data_yes_no, "product_options[%option_id%][product_option_value][%option_value_id%][subtract]",1); ?>" + '</td>';
 	html += '		<td class="right"><input type="text" name="product_options[%option_id%][product_option_value][%option_value_id%][cost]" value="0" size="5" /></td>';
 	html += '		<td class="right"><input type="text" name="product_options[%option_id%][product_option_value][%option_value_id%][price]" value="0" size="5" /></td>';
 	html += '		<td class="right"><input type="text" name="product_options[%option_id%][product_option_value][%option_value_id%][points]" value="0" size="5" /></td>';
@@ -1020,7 +1023,6 @@ $(document).ready(function() {
 
 <script type="text/javascript">//<!--
 $('#tabs a').tabs();
-$('#languages a').tabs();
 $('#vtab-option a').not('.normal').tabs();
 //--></script>
 

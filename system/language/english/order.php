@@ -1,4 +1,8 @@
 <?php
+//Text
+$_['text_order_updated']	= "The Order Was Modified by %s";
+
+//Error
 $_['error_shipping_address']			= 'You must specify a Delivery Address!';
 $_['error_shipping_method']			= 'There was no Delivery Method specified!';
 

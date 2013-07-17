@@ -32,7 +32,7 @@ final class Front
 	
 	public function routeAdmin()
 	{
-		$this->route = !empty($_GET['route']) ? $_GET['route'] : 'common/home';
+		$this->route = $this->url->route();
 		
 		if (!$this->user->isLogged()) {
 			$allowed = array(
@@ -71,7 +71,7 @@ final class Front
 	
 	public function routeFront()
 	{
-		$this->route = !empty($_GET['route']) ? $_GET['route'] : 'common/home';
+		$this->route = $this->url->route();
 		
 		//Do not show maintenance page if user is an admin
 		// or if the route is a a request by a payment provider (IPN from Paypal, etc.)
@@ -95,7 +95,7 @@ final class Front
   	{
   		//Page Views tracking
   		$route = $this->db->escape($this->route);
-		$query = $this->url->getQueryExclude('route', '_route_');
+		$query = $this->url->getQueryExclude('route', '_route_', 'sort', 'order', 'limit', 'redirect', 'filter');
 		$store_id = (int)$this->config->get('config_store_id');
 		
   		$this->db->query("INSERT INTO " . DB_PREFIX . "view_count SET route = '$route', query = '$query', store_id = '$store_id', count = 1 ON DUPLICATE KEY UPDATE count = count + 1");

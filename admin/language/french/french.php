@@ -95,13 +95,3 @@ $_['tab_shipping']				= 'Adresse de livraison';
 $_['tab_total']					= 'Totaux';
 $_['tab_transaction']			= 'Transactions';
 $_['tab_voucher_history']		= 'Historique des r&eacute;c&eacute;ppiss&eacute;s';
-
-// Error
-$_['error_upload_1']			= 'Attention, le fichier envoy&eacute; d&eacute;passe la taille maiximale de fichier d&eacute;finie dans php.ini (upload_max_filesize) !';
-$_['error_upload_2']			= 'Attention, le fichier envoy&eacute; d&eacute;passe la taille maiximale de fichier d&eacute;finie dans dans le formulaire HTML (MAX_FILE_SIZE) !';
-$_['error_upload_3']			= 'Attention, le fichier envoy&eacute; a seulement &eacute;t&eacute; partiellement envoy&eacute; !';
-$_['error_upload_4']			= 'Attention, aucun fichier n&#8217;a &eacute;t&eacute; envoy&eacute; !';
-$_['error_upload_6']			= 'Attention, il manque un dossier temporaire !';
-$_['error_upload_7']			= 'Attention, &eacute;chec d&#8217;&eacute;criture sur le disque !';
-$_['error_upload_8']			= 'Attention, envoi du fichier arrêt&eacute; par extension !';
-$_['error_upload_999']			= 'Attention, aucun code d&#8217;erreur disponible !';

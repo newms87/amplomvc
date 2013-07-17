@@ -87,10 +87,13 @@ class Admin_Controller_Catalog_Category extends Controller
 	
 	private function getList()
 	{
+		//Page Title
 		$this->document->setTitle($this->_('heading_title'));
 		
+		//The Template
 		$this->template->load('catalog/category_list');
 
+		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/category'));
 		
@@ -116,7 +119,7 @@ class Admin_Controller_Catalog_Category extends Controller
 			'type' => 'multiselect',
 			'display_name' => $this->_('column_store'),
 			'filter' => true,
-			'build_config' => array('store_id' => 'name'),
+			'build_config' => array('store_id', 'name'),
 			'build_data' => $this->Model_Setting_Store->getStores(),
 			'sortable' => false,
 		);
@@ -283,6 +286,9 @@ class Admin_Controller_Catalog_Category extends Controller
 		$this->data['data_categories'] = array_merge(array(0 => $this->_('text_none')), $categories);
 		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
 		$this->data['data_layouts'] = array('' => '') + $this->Model_Design_Layout->getLayouts();
+		
+		//Ajax Urls
+		$this->data['url_generate_url'] = $this->url->ajax('catalog/category/generate_url');
 		
 		//Action Buttons
 		$this->data['action'] = $this->url->link('catalog/category/update', 'category_id=' . $category_id);
