@@ -49,7 +49,16 @@ class Admin_Controller_Common_Home extends Controller
 			);
 			
 			$order['order_status'] = $this->order->getOrderStatus($order['order_status_id']);
-			$order['customer'] = $this->System_Model_Customer->getCustomer($order['customer_id']);
+			
+			$customer = $this->System_Model_Customer->getCustomer($order['customer_id']);
+			
+			if (!$customer) {
+				$customer['firstname'] = 'Guest';
+				$customer['lastname'] = '';
+			}
+			
+			$order['customer'] = $customer;
+			
 			$order['date_added'] = $this->date->format($order['date_added'], 'short');
 			$order['total'] =	$this->currency->format($order['total'], $order['currency_code'], $order['currency_value']);
 		} unset($order);
