@@ -16,7 +16,7 @@ class Catalog_Model_Shipping_Flat extends Model
 			$valid = true;
 			
 			//Wrong Shipping Zone
-			if(!$this->Model_Localisation_Zone->inGeoZone($rate['geo_zone_id'], $address['country_id'], $address['zone_id'])) continue;
+			if (!$this->address->inGeoZone($address, $rate['geo_zone_id'])) continue;
 			
 			switch($rate['rule']['type']){
 				case 'item_qty':

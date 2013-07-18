@@ -9,7 +9,7 @@ class Catalog_Model_Payment_PpStandard extends Model
 			return array();
 		}
 		
-		if (!$this->Model_Localisation_Zone->inGeoZone($this->config->get('pp_standard_geo_zone_id'), $address['country_id'], $address['zone_id'])) {
+		if (!$this->address->inGeoZone($address, $this->config->get('pp_standard_geo_zone_id'))) {
 			return array();
 		}
 		
@@ -46,7 +46,7 @@ class Catalog_Model_Payment_PpStandard extends Model
 					
 		$method_data = array(
 			'code'		=> 'pp_standard',
-			'title'		=> '<img style="position:relative;top:-5px" src="https://www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif" border="0" alt="" /><span style="position:relative; top:-30px; margin-left:20px;"> OR pay with Credit Card via paypal.</span>',
+			'title'		=> '<img src="https://www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif" border="0" alt="" /><span class="pp_standard_paywithcc"> OR pay with Credit Card via paypal.</span>',
 			'sort_order' => $this->config->get('pp_standard_sort_order'),
 		);
 

@@ -27,6 +27,7 @@ $_['text_browse']				= 'Browse';
 $_['text_clear']				= 'Clear';
 $_['text_batch_action']		= 'Batch Action:';
 $_['text_autocomplete']		= '<span class="help">(autocomplete)</span>';
+$_['text_modify_filter']		= '+ Filter';
 
 //Data
 $_['data_statuses'] = $_['statuses'] = array(0 => $_['text_disabled'], 1 => $_['text_enabled']);

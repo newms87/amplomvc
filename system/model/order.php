@@ -209,7 +209,15 @@ class System_Model_Order extends Model
 		if (!empty($data['store_ids'])) {
 			$where .= " AND o.store_id IN (" . implode(',', $data['store_ids']) . ")";
 		}
-
+		
+		if (isset($data['order_status_id'])) {
+			if (!isset($data['order_status_ids'])) {
+				$data['order_status_ids'] = array($data['order_status_id']);
+			} else {
+				$data['order_status_ids'][] = $data['order_status_id'];
+			}
+		}
+		
 		if (!empty($data['order_status_ids'])) {
 			$where .= " AND o.order_status_id IN (" . implode(',', $data['order_status_ids']) . ")";
 		}
@@ -220,6 +228,30 @@ class System_Model_Order extends Model
 		
 		if (isset($data['confirmed'])) {
 			$where .= " AND o.confirmed = " . ($data['confirmed'] ? 1 : 0);
+		}
+		
+		if (!empty($data['total']['low'])) {
+			$where .= " AND o.total >= '" . (int)$data['total']['low'] . "'";
+		}
+		
+		if (!empty($data['total']['high'])) {
+			$where .= " AND o.total <= '" . (int)$data['total']['high'] . "'";
+		}
+		
+		if (!empty($data['date_added']['start'])) {
+			$where .= " AND o.date_added >= '" . $this->date->format($data['date_added']['start']) . "'";
+		}
+		
+		if (!empty($data['date_added']['end'])) {
+			$where .= " AND o.date_added <= '" . $this->date->add($data['date_added']['end'], '1 day') . "'";
+		}
+		
+		if (!empty($data['date_modified']['start'])) {
+			$where .= " AND o.date_modified >= '" . $this->date->format($data['date_modified']['start']) . "'";
+		}
+		
+		if (!empty($data['date_modified']['end'])) {
+			$where .= " AND o.date_modified <= '" . $this->date->add($data['date_modified']['end'], '1 day') . "'";
 		}
 
 		if (!empty($data['product_ids'])) {

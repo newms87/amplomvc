@@ -1,77 +1,68 @@
 <?php
 class Admin_Controller_Payment_Cod extends Controller 
 {
-	
-	
 	public function index()
 	{
+		//Template and Language
 		$this->template->load('payment/cod');
-
 		$this->language->load('payment/cod');
 
-		$this->document->setTitle($this->_('heading_title'));
-		
+		//Edit Settings
 		if ($this->request->isPost() && $this->validate()) {
-			$this->Model_Setting_Setting->editSetting('cod', $_POST);
+			$this->config->saveGroup('cod', $_POST);
 
 			$this->message->add('success', $this->_('text_success'));
 			
 			$this->url->redirect($this->url->link('extension/payment'));
 		}
 		
- 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
-		} else {
-			$this->data['error_warning'] = '';
+		//Page Title
+		$this->document->setTitle($this->_('heading_title'));
+		
+		//Breadcrumbs
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('text_payment'), $this->url->link('extension/payment'));
+		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('payment/cod'));
+		
+		//Load Information
+		if (!$this->request->isPost()) {
+			$cod_info = $this->config->loadGroup('cod');
 		}
-
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('text_payment'), $this->url->link('extension/payment'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('payment/cod'));
-
-		$this->data['action'] = $this->url->link('payment/cod');
-
+		
+		//Set Values or Defaults
+		$defaults = array(
+			'cod_total' => '',
+			'cod_order_status_id' => '',
+			'cod_geo_zone_id' => '',
+			'cod_status' => '',
+			'cod_sort_order' => '',
+		);
+		
+		foreach ($defaults as $key => $default) {
+			if (isset($_POST[$key])) {
+				$this->data[$key] = $_POST[$key];
+			} elseif (isset($cod_info[$key])) {
+				$this->data[$key] = $cod_info[$key];
+			} else {
+				$this->data[$key] = $default;
+			}
+		}
+		
+		//Additional Data
+		$this->data['data_order_statuses'] = $this->order->getOrderStatuses();
+		$this->data['data_geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
+		
+		//Action Buttons
+		$this->data['save'] = $this->url->link('payment/cod');
 		$this->data['cancel'] = $this->url->link('extension/payment');
 		
-		if (isset($_POST['cod_total'])) {
-			$this->data['cod_total'] = $_POST['cod_total'];
-		} else {
-			$this->data['cod_total'] = $this->config->get('cod_total');
-		}
-				
-		if (isset($_POST['cod_order_status_id'])) {
-			$this->data['cod_order_status_id'] = $_POST['cod_order_status_id'];
-		} else {
-			$this->data['cod_order_status_id'] = $this->config->get('cod_order_status_id');
-		}
-		
-		$this->data['order_statuses'] = $this->order->getOrderStatuses();
-		
-		if (isset($_POST['cod_geo_zone_id'])) {
-			$this->data['cod_geo_zone_id'] = $_POST['cod_geo_zone_id'];
-		} else {
-			$this->data['cod_geo_zone_id'] = $this->config->get('cod_geo_zone_id');
-		}
-		
-		$this->data['geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
-		
-		if (isset($_POST['cod_status'])) {
-			$this->data['cod_status'] = $_POST['cod_status'];
-		} else {
-			$this->data['cod_status'] = $this->config->get('cod_status');
-		}
-		
-		if (isset($_POST['cod_sort_order'])) {
-			$this->data['cod_sort_order'] = $_POST['cod_sort_order'];
-		} else {
-			$this->data['cod_sort_order'] = $this->config->get('cod_sort_order');
-		}
-
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
-				
+		
+		//Render
 		$this->response->setOutput($this->render());
 	}
 	

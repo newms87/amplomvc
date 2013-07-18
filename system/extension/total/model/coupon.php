@@ -96,7 +96,7 @@ class System_Extension_Total_Model_Coupon extends Model
 						);
 					}
 					
-					if ($this->Model_Localisation_Zone->inGeoZone($coupon_info['shipping_geozone'], $address['country_id'], $address['zone_id'])) {
+					if ($this->address->inGeoZone($address, $coupon_info['shipping_geozone'])) {
 						$discount_total += $shipping_method['cost'];
 					}
 				}

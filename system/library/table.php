@@ -170,6 +170,16 @@ class Table extends Library
 						}
 						$column['build_config'] = array('key', 'name');
 					}
+					elseif ($column['build_config'][0] === false) {
+						//normalize the data for easier processing
+						foreach ($column['build_data'] as $key => $bd_item) {
+							$column['build_data'][$key] = array(
+								'key' => $key,
+								'name' => $bd_item[$column['build_config'][1]],
+							);
+						}
+						$column['build_config'] = array('key', 'name');
+					}
 					
 					break;
 				default:

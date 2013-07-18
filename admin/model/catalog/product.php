@@ -598,19 +598,19 @@ class Admin_Model_Catalog_Product extends Model
 		}
 		
 		if (!empty($data['price']['low'])) {
-			$where .= " AND p.price >= '" . (int)$data['p.price']['low'] . "'";
+			$where .= " AND p.price >= '" . (int)$data['price']['low'] . "'";
 		}
 		
 		if (!empty($data['price']['high'])) {
-			$where .= " AND p.price <= '" . (int)$data['p.price']['high'] . "'";
+			$where .= " AND p.price <= '" . (int)$data['price']['high'] . "'";
 		}
 		
 		if (!empty($data['cost']['low'])) {
-			$where .= " AND p.cost >= '" . (int)$data['p.cost']['low'] . "'";
+			$where .= " AND p.cost >= '" . (int)$data['cost']['low'] . "'";
 		}
 		
 		if (!empty($data['cost']['high'])) {
-			$where .= " AND p.cost <= '" . (int)$data['p.cost']['high'] . "'";
+			$where .= " AND p.cost <= '" . (int)$data['cost']['high'] . "'";
 		}
 		
 		if (!empty($data['special']) || (isset($data['sort']) && $data['sort'] == 'special')) {
@@ -649,18 +649,20 @@ class Admin_Model_Catalog_Product extends Model
 			$where .= " AND p.shipping_policy_id IN (" . implode(',', $data['shipping_policies']) . ")";
 		}
 		
-		if (!empty($data['date_expires']['from'])) {
-			$dt_zero = DATETIME_ZERO;
-			
-			$where .= " AND (p.date_expires == '$dt_zero' OR p.date_expires >= '" . $this->db->escape($data['date_expires']['from']) . "'";
+		if (!empty($data['date_expires']['start'])) {
+			$where .= " AND (p.date_expires = '" . DATETIME_ZERO . "' OR p.date_expires >= '" . $this->date->format($data['date_expires']['start']) . "')";
 		}
 		
-		if (!empty($data['date_expires']['to'])) {
-			$where .= " AND (p.date_expires <= '" . $this->db->escape($data['date_expires']['to']) . "'";
+		if (!empty($data['date_expires']['end'])) {
+			$where .= " AND (p.date_expires = '" . DATETIME_ZERO . "' OR p.date_expires <= '" . $this->date->format($data['date_expires']['end']) . "')";
 		}
 		
-		if (isset($data['quantity'])) {
-			$where .= " AND p.quantity = '" . (int)$data['p.quantity'] . "'";
+		if (!empty($data['quantity']['low'])) {
+			$where .= " AND p.quantity >= '" . (int)$data['quantity']['low'] . "'";
+		}
+		
+		if (!empty($data['quantity']['high'])) {
+			$where .= " AND p.quantity <= '" . (int)$data['quantity']['high'] . "'";
 		}
 		
 		if (isset($data['status'])) {

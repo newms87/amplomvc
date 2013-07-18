@@ -5,28 +5,20 @@ class Catalog_Model_Payment_Cod extends Model
   	{
 		$this->language->load('payment/cod');
 		
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('cod_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
-	
-		if ($this->config->get('cod_total') > $total) {
-			$status = false;
-		} elseif (!$this->config->get('cod_geo_zone_id')) {
-			$status = true;
-		} elseif ($query->num_rows) {
-			$status = true;
-		} else {
-			$status = false;
+		if ((int)$this->config->get('cod_total') > $total) {
+			return array();
 		}
 		
-		$method_data = array();
-	
-		if ($status) {
-				$method_data = array(
-				'code'		=> 'cod',
-				'title'		=> $this->_('text_title'),
-				'sort_order' => $this->config->get('cod_sort_order')
-				);
+		if (!$this->address->inGeoZone($address, $this->config->get('cod_geo_zone_id'))) {
+			return array();
 		}
-	
+		
+		$method_data = array(
+			'code'		=> 'cod',
+			'title'		=> $this->_('text_title'),
+			'sort_order' => $this->config->get('cod_sort_order')
+		);
+
 		return $method_data;
   	}
 }

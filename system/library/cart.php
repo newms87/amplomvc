@@ -1100,7 +1100,7 @@ class Cart extends Library
 	public function isAllowedShippingZone($shipping_address)
 	{
 		if (!empty($shipping_address['country_id']) && !empty($shipping_address['zone_id'])) {
-			return $this->Model_Localisation_Zone->inGeoZone($this->config->get('config_allowed_shipping_zone'), $shipping_address['country_id'], $shipping_address['zone_id']);
+			return $this->address->inGeoZone($shipping_address, $this->config->get('config_allowed_shipping_zone'));
 		}
 		
 		return false;

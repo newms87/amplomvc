@@ -2942,6 +2942,12 @@ table.form_single_column select{
 	color:red;
 }
 
+#payment_method .method_title label{
+	height: auto;
+	width: auto;
+	display:block;
+}
+
 /** Address Form **/
 
 .address_form{
@@ -3280,6 +3286,15 @@ form .set_default_address input[type="radio"]{
 .janrain_icon_large{
 	width:30px;
 	height:30px;
+}
+
+
+/** Paypal Standard Payment */
+.pp_standard_paywithcc{
+	display: inline-block;
+	vertical-align: top;
+	padding-top: 12px
+	padding-left: 20px;
 }
 
 /** YouTube and Video Page */

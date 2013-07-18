@@ -48,9 +48,26 @@
 				<? break;
 				
 				case 'int': ?>
-					<div class="zoom_hover">
-						<div class="input filter_number_range"><input type="text" name="filter[<?= $slug; ?>]" value="<?= $column['filter_value']; ?>" /></div>
-						<div class="value"><?= $column['filter_value']; ?></div>
+					<? if (!isset($column['filter_value']['low'])) {
+							$column['filter_value']['low'] = null;
+						}
+						if (!isset($column['filter_value']['high'])) {
+							$column['filter_value']['high'] = null;
+						}
+					?>
+					<div class="zoom_hover int">
+						<div class="input">
+							<input type="text" class="int_low" name="filter[<?= $slug; ?>][low]" value="<?= $column['filter_value']['low']; ?>" />
+							<input type="text" class="int_high" name="filter[<?= $slug; ?>][high]" value="<?= $column['filter_value']['high']; ?>" />
+							<span class="clear">clear</span>
+						</div>
+						<div class="value">
+							<? if (!is_null($column['filter_value']['low']) || !is_null($column['filter_value']['high'])) { ?>
+								<?= $column['filter_value']['low'] . ' - ' . $column['filter_value']['high']; ?>
+							<? } else { ?>
+								<?= $text_modify_filter; ?>
+							<? } ?>
+						</div>
 					</div>
 				<? break;
 				case 'select':
@@ -65,8 +82,29 @@
 				case 'date':
 				case 'time':
 				case 'datetime': ?>
-					<label class="date_from"><?= $entry_date_from; ?></label><input class='<?= str_replace('_range', '', $column['type']); ?>' type="text" name="filter[<?= $slug; ?>][start]" value="<?= isset($column['filter_value']['start']) ? $column['filter_value']['start'] : ''; ?>" />
-					<label class="date_to"><?= $entry_date_to; ?></label><input class='<?= str_replace('_range', '', $column['type']); ?>' type="text" name="filter[<?= $slug?>][end]" value="<?= isset($column['filter_value']['end']) ? $column['filter_value']['end'] : ''; ?>" />
+					<? if (!isset($column['filter_value']['start'])) {
+							$column['filter_value']['start'] = null;
+						}
+						if (!isset($column['filter_value']['end'])) {
+							$column['filter_value']['end'] = null;
+						}
+					?>
+					
+					<div class="zoom_hover daterange">
+						<div class="input">
+							<input class='date_start <?= str_replace('_range', '', $column['type']); ?>' type="text" name="filter[<?= $slug; ?>][start]" value="<?= $column['filter_value']['start']; ?>" />
+							<input class='date_end <?= str_replace('_range', '', $column['type']); ?>' type="text" name="filter[<?= $slug?>][end]" value="<?= $column['filter_value']['end']; ?>" />
+							<span class="clear">clear</span>
+						</div>
+						<div class="value">
+							<? if (!is_null($column['filter_value']['start']) || !is_null($column['filter_value']['end'])) { ?>
+								<?= $column['filter_value']['start'] . ' - ' . $column['filter_value']['end']; ?>
+							<? } else { ?>
+								<?= $text_modify_filter; ?>
+							<? } ?>
+						</div>
+					</div>
+					
 				<? break;
 				
 				default: break;
@@ -131,7 +169,7 @@
 					<? break;
 					
 					case 'select':
-						foreach($column['build_data'] as $c_data){
+						foreach($column['build_data'] as $key => $c_data){
 							if(isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $value){ ?>
 								<?= $c_data[$column['build_config'][1]]; ?>
 							<? }
@@ -192,23 +230,52 @@ $("#filter_list").keydown(function(e){
 	}
 });
 
-$('.zoom_hover').hover(zoom_hover_in, zoom_hover_out);
+$('.zoom_hover input, .zoom_hover textarea').focus(zoom_hover_in).blur(zoom_hover_out);
 
 function zoom_hover_in(){
-	input = $(this).find('.input');
-	value = $(this).find('.value');
-	
-	input.hide();
-	value.show();
+	zoom = $(this).closest('.zoom_hover').addClass('active');
+	input = zoom.find('.input');
+	value = zoom.find('.value');
 }
 
 function zoom_hover_out(){
-	input = $(this).find('.input');
-	value = $(this).find('.value');
-	
-	input.show();
-	value.hide();
+	zoom = $(this).closest('.zoom_hover').removeClass('active');
+	input = zoom.find('.input');
+	value = zoom.find('.value');
 }
+
+$('.zoom_hover .clear').click(function(){
+	$(this).closest('.zoom_hover').find('input, textarea').val('').trigger('keyup').trigger('change');
+});
+
+$('.zoom_hover.int input').keyup(function(){
+	zoom = $(this).closest('.zoom_hover');
+	value = zoom.find('.value');
+	
+	low = zoom.find('.int_low').val() ;
+	high = zoom.find('.int_high').val();
+	
+	if (high || low) {
+		value.html(low + ' - ' + high);
+	} else {
+		value.html('<?= $text_modify_filter; ?>');
+	}
+});
+
+$('.zoom_hover.daterange input').change(function(){
+	zoom = $(this).closest('.zoom_hover');
+	value = zoom.find('.value');
+	
+	start = zoom.find('.date_start').val() ;
+	end = zoom.find('.date_end').val();
+	
+	if (end || start) {
+		value.html(start + ' - ' + end);
+	} else {
+		value.html('<?= $text_modify_filter; ?>');
+	}
+});
+
 //--></script>
 
 <?= $this->builder->js('filter_url', '#filter_list'); ?>

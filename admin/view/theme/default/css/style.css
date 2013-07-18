@@ -626,12 +626,17 @@ a.delete_button:visited{
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#B11818', endColorstr='#F99898',GradientType=0 ); /* IE6-8 */
 }
 
+/* List View */
 .list {
 	border-collapse: collapse;
 	width: 100%;
 	border-top: 1px solid #DDDDDD;
 	border-left: 1px solid #DDDDDD;
 	margin-bottom: 20px;
+}
+
+.list #filter_list > td{
+	background: #F5DDDD;
 }
 
 .list td {
@@ -746,12 +751,6 @@ a.delete_button:visited{
 	background: #E7EFEF;
 }
 
-.list .filter_number_range{
-}
-.list .filter_number_range > input{
-	width: 40px;
-}
-
 .list label.date_from{
 	margin: 0;
 }
@@ -765,6 +764,69 @@ a.delete_button:visited{
 	height: 100%;
 	width: 100%;
 	min-height: 25px;
+	overflow:visible;
+	margin: auto;
+	position:relative;
+}
+
+.zoom_hover.active{
+	z-index: 1000;
+}
+.zoom_hover:hover{
+	z-index: 1001;
+}
+
+.zoom_hover.active .input,
+.zoom_hover:hover .input{
+	display:block;
+}
+
+.zoom_hover.active .value,
+.zoom_hover:hover .value{
+	
+}
+
+.zoom_hover .input{
+	position:absolute;
+	display: none;
+	background:white;
+	padding: 8px;
+	margin: auto;
+	box-shadow: rgba(0,0,0,.2) 3px 3px 5px, rgba(0,0,0,.1) -2px 0 6px, rgba(0,0,0,.1) 0 -2px 6px;
+	z-index: 1000;
+}
+.zoom_hover .value{
+	display:block;
+	padding-top: 5px;
+	
+	font-size: 16px;
+	color: #003A88;
+}
+
+.zoom_hover.int .input{
+	width: 106px;
+}
+
+.zoom_hover.int .input input{
+	width: 40px;
+}
+
+.zoom_hover.daterange .input{
+	width: 300px;
+	margin: auto;
+}
+
+.zoom_hover.daterange .input input{
+	width: 120px;
+	margin: auto;
+}
+
+.zoom_hover .clear{
+	font-size: 9px;
+	color: #666;
+	cursor: pointer;
+	display:block;
+	margin-top:5px;
 }
 
 /* Pagination */

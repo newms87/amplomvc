@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Payment_Cod extends Controller 
 {
-	protected function index()
+	public function index()
 	{
 		$this->template->load('payment/cod');
 
