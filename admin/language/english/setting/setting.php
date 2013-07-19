@@ -60,6 +60,7 @@ $_['entry_shipping_return_policy_info'] = "Shipping / Returns Policy Information
 $_['entry_show_category_image'] = "Show Category Image:";
 $_['entry_show_category_description'] = "Show Category Description:";
 $_['entry_cache_ignore']		= 'Cache Ignore List:<span class="help">(comma separated list)</span>';
+$_['entry_cart_show_return_policy'] = "Display Return Policy:<span class=\"help\">(eg: final sale, # days to return, etc.) as a column in the cart</span>";
 $_['entry_tax']					= 'Display Prices With Tax:';
 $_['entry_tax_default_id']					= 'Default Tax Class:';
 $_['entry_tax_default']		= 'Use Store Tax Address:<br /><span class="help">Use the store address to calculate taxes if no one is logged in. You can choose to use the store address for the customers shipping or payment address.</span>';

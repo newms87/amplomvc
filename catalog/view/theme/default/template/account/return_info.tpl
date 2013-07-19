@@ -1,6 +1,9 @@
 <?= $header; ?><?= $column_left; ?><?= $column_right; ?>
-<div id="content"><?= $content_top; ?>
+
+<div id="content">
+	<?= $content_top; ?>
 	<?= $this->breadcrumb->render(); ?>
+	
 	<h1><?= $heading_title; ?></h1>
 	<table class="list">
 		<thead>
@@ -10,7 +13,7 @@
 		</thead>
 		<tbody>
 			<tr>
-				<td class="left" style="width: 50%;"><b><?= $text_return_id; ?></b> #<?= $return_id; ?><br />
+				<td class="left" style="width: 50%;"><b><?= $text_rma_number; ?></b> #<?= $rma; ?><br />
 					<b><?= $text_date_added; ?></b> <?= $date_added; ?></td>
 				<td class="left" style="width: 50%;"><b><?= $text_order_id; ?></b> #<?= $order_id; ?><br />
 					<b><?= $text_date_ordered; ?></b> <?= $date_ordered; ?></td>
@@ -37,16 +40,18 @@
 	<table class="list">
 		<thead>
 			<tr>
-				<td class="left" style="width: 33.3%;"><?= $column_reason; ?></td>
-				<td class="left" style="width: 33.3%;"><?= $column_opened; ?></td>
-				<td class="left" style="width: 33.3%;"><?= $column_action; ?></td>
+				<td class="left"><?= $column_reason; ?></td>
+				<td class="left"><?= $column_opened; ?></td>
+				<td class="left"><?= $column_action; ?></td>
+				<td class="left"><?= $column_status; ?></td>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
-				<td class="left"><?= $reason; ?></td>
+				<td class="left"><?= $reason['title']; ?></td>
 				<td class="left"><?= $opened; ?></td>
 				<td class="left"><?= $action; ?></td>
+				<td class="left"><?= $return_status['title']; ?></td>
 			</tr>
 		</tbody>
 	</table>

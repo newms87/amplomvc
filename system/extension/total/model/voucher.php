@@ -3,7 +3,7 @@ class System_Extension_Total_Model_Voucher extends Model
 {
 	public function getTotal(&$total_data, &$total, &$taxes)
 	{
-		if ($this->cart->hasVoucher()) {
+		if ($this->cart->hasVouchers()) {
 			$this->language->load('total/voucher');
 			
 			$vouchers = $this->cart->getVouchers();

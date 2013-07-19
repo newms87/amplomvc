@@ -57,4 +57,4 @@ $_['button_reward']			= 'Apply Points';
 $_['button_quote']			= 'Get Quotes';
 $_['button_close']			= 'Close';
 
-$_['final_sale_explanation'] = "A Product Marked as <span class='final_sale'></span> cannot be returned. Read our <a href='#' onclick=\"window.open('%s','newwindow','resizable=1,scrollbars=1,width=500,height=600');return false;\">Return Policy</a> for details.";
+$_['final_sale_explanation'] = "A Product Marked as <span class='final_sale'></span> cannot be returned. Read our <a href=\"%s\" onclick=\"return colorbox($(this));\">Return Policy</a> for details.";

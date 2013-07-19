@@ -196,7 +196,7 @@ class Customer extends Library
 	public function getOrders()
 	{
 		if ($this->isLogged()) {
-			return $this->db->queryRows("SELECT * FROM " . DB_PREFIX . "order WHERE customer_id = '" . $this->customer_id . "'");
+			return $this->db->queryRows("SELECT * FROM " . DB_PREFIX . "order WHERE customer_id = '" . $this->customer_id . "' AND order_status_id > 0");
 		}
 		
 		return false;
@@ -282,6 +282,6 @@ class Customer extends Library
 			return false;
 		}
 		
-		return $this->queryVar("SELECT COUNT(*) FROM `" . DB_PREFIX . "customer_ip_blacklist` WHERE ip IN ('" . implode("','", $ips) . "')");
+		return $this->db->queryVar("SELECT COUNT(*) FROM `" . DB_PREFIX . "customer_ip_blacklist` WHERE ip IN ('" . implode("','", $ips) . "')");
 	}
 }

@@ -3,11 +3,7 @@ echo "$text_greeting\n\n";
 
 echo "$text_order_id $order_id\n";
 echo "$text_date_added $date_added\n";
-echo "$text_order_status $order_status\n\n";
-
-if ($notify_comment) {
-	echo "$text_instruction\n\n$comment\n\n";
-}
+echo "$text_order_status $order_status[title]\n\n";
 
 echo "$text_products\n";
 
@@ -15,7 +11,7 @@ foreach ($order_products as $product) {
 	echo "$product[quantity]x $product[name] ($product[model]) - $product[total]\n";
 	
 	foreach ($product['option'] as $option) {
-			echo chr(9) . "- $option[name]: $option[value]\n";
+		echo chr(9) . "- $option[name]: $option[value]\n";
 	}
 }
 
@@ -37,7 +33,7 @@ if ($customer_id) {
 	echo "$text_link\n$order_info_url\n\n";
 }
 
-if ($downloads_url) {
+if (!empty($downloads_url)) {
 	echo "$text_download\n$downloads_url\n\n";
 }
 

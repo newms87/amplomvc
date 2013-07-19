@@ -44,8 +44,8 @@ $this->db->dropColumn('order_voucher', 'from_name');
 $this->db->dropColumn('order_voucher', 'voucher_theme_id');
 $this->db->dropColumn('order_voucher', 'code');
 $this->db->dropColumn('order_voucher', 'description');
-$this->db->dropColumn('order_voucher', 'order_id');
-$this->db->changeColumn('order_voucher', 'order_voucher_id', 'order_id', "INT(11) UNSIGNED NOT NULL");
+$this->db->dropColumn('order_voucher', 'order_voucher_id');
+$this->db->changeColumn('order_voucher', 'order_id', '', "INT(11) UNSIGNED NOT NULL");
 $this->db->changeColumn('order_voucher', 'voucher_id', '', "INT(11) UNSIGNED NOT NULL, DROP PRIMARY KEY, ADD PRIMARY KEY (`order_id`, `voucher_id`)");
 
 //Order Fraud

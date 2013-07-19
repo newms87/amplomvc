@@ -32,7 +32,7 @@ class Date extends Library
 		}
 	}
 	
-	public function isBeforeNow($date, $datetimezero_true = true)
+	public function isInPast($date, $datetimezero_true = true)
 	{
 		if ($date === DATETIME_ZERO) {
 			return $datetimezero_true;
@@ -45,7 +45,7 @@ class Date extends Library
 		return $diff->invert === 0;
 	}
 	
-	public function isAfterNow($date, $datetimezero_true = false)
+	public function isInFuture($date, $datetimezero_true = false)
 	{
 		if ($date === DATETIME_ZERO) {
 			return $datetimezero_true;
@@ -55,7 +55,7 @@ class Date extends Library
 		
 		$diff = $date->diff(new DateTime());
 		
-		return $diff->invert === -1;
+		return $diff->invert === 1;
 	}
 	
 	/**
@@ -125,6 +125,7 @@ class Date extends Library
 					$format = $this->language->getInfo('time_format');
 					break;
 				case 'datetime_format_long':
+				case 'datetime_long':
 					$format = $this->language->getInfo('datetime_format_long');
 					break;
 				case 'datetime_format':

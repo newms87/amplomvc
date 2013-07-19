@@ -44,17 +44,17 @@ class Catalog_Model_Payment_PpStandard extends Model
 			return array();
 		}
 					
-		$method_data = array(
-			'code'		=> 'pp_standard',
-			'title'		=> '<img src="https://www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif" border="0" alt="" /><span class="pp_standard_paywithcc"> OR pay with Credit Card via paypal.</span>',
-			'sort_order' => $this->config->get('pp_standard_sort_order'),
-		);
-
-		return $method_data;
+		return $this->data();
   	}
 
-	public function getTitle()
+	public function data()
 	{
-		return '<img src="https://www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif" border="0" alt="" />';
+		$method_data = array(
+			'code'		=> 'pp_standard',
+			'title'		=> "<img src=\"https://www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif\" border=\"0\" alt=\"Paypal\" />",
+			'sort_order' => $this->config->get('pp_standard_sort_order'),
+		);
+		
+		return $method_data;
 	}
 }

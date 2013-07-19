@@ -259,6 +259,10 @@
 							<td><?= $this->builder->build('select', $data_yes_no, 'config_show_category_description', $config_show_category_description); ?></td>
 						</tr>
 						<tr>
+							<td><?= $entry_cart_show_return_policy; ?></td>
+							<td><?= $this->builder->build('select', $data_yes_no, 'config_cart_show_return_policy', $config_cart_show_return_policy); ?></td>
+						</tr>
+						<tr>
 							<td><?= $entry_tax; ?></td>
 							<td><? if ($config_show_price_with_tax) { ?>
 								<input type="radio" name="config_show_price_with_tax" value="1" checked="checked" />

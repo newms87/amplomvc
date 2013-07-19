@@ -80,26 +80,21 @@
 						<tr class="return_product">
 							<td class="product">
 								<?= $product['name']; ?>
-								<input type="hidden" name="return_products[<?= $product_id; ?>][name]" value="<?= $product['name']; ?>" />
 								<input type="hidden" name="return_products[<?= $product_id; ?>][product_id]" value="<?= $product_id; ?>" />
 							</td>
 							<td class="model">
 								<?= $product['model']; ?>
-								<input type="hidden" name="return_products[<?= $product_id; ?>][model]" value="<?= $product['model']; ?>" />
 							</td>
 							<td class="price">
 								<?= $product['price']; ?>
-								<input type="hidden" name="return_products[<?= $product_id; ?>][price]" value="<?= $product['price']; ?>" />
 							</td>
 							<td class="quantity">
-								<? if (!empty($product['is_final'])) { ?>
-									<span><?= $text_is_final; ?></span>
-									<input type="hidden" name="return_products[<?= $product_id; ?>][return_quantity]" value="<?= $product['return_quantity']; ?>" />
+								<? if (!empty($product['no_return'])) { ?>
+									<span><?= $product['no_return']; ?></span>
+									<input type="hidden" name="return_products[<?= $product_id; ?>][return_quantity]" value="0" />
 								<? } else {?>
 									<?= $this->builder->build('select', range(0,(int)$product['quantity']), "return_products[$product_id][return_quantity]", $product['return_quantity']); ?>
 								<? } ?>
-								<input type="hidden" name="return_products[<?= $product_id; ?>][quantity]" value="<?= $product['quantity']; ?>" />
-								<input type="hidden" name="return_products[<?= $product_id; ?>][is_final]" value="<?= $product['is_final']; ?>" />
 							</td>
 							<td class="reason">
 								<? $this->builder->set_config(false, 'title'); ?>

@@ -90,15 +90,11 @@ class Catalog_Model_Account_Return extends Model
 			
 	public function getTotalReturns()
 	{
-		$query = $this->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "return`WHERE customer_id = '" . $this->customer->getId() . "'");
-		
-		return $query->row['total'];
+		return $this->queryVar("SELECT COUNT(*) FROM `" . DB_PREFIX . "return` WHERE customer_id = '" . (int)$this->customer->getId() . "'");
 	}
 	
 	public function getReturnHistories($return_id)
 	{
-		$query = $this->query("SELECT rh.date_added, rs.name AS status, rh.comment, rh.notify FROM " . DB_PREFIX . "return_history rh LEFT JOIN " . DB_PREFIX . "return_status rs ON rh.return_status_id = rs.return_status_id WHERE rh.return_id = '" . (int)$return_id . "' AND rs.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY rh.date_added ASC");
-
-		return $query->rows;
+		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "return_history WHERE return_id = " . (int)$return_id . " ORDER BY date_added ASC");
 	}
 }

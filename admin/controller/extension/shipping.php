@@ -82,7 +82,7 @@ class Admin_Controller_Extension_Shipping extends Controller
 
 			_require(DIR_APPLICATION . 'controller/shipping/' . $_GET['extension'] . '.php');
 			
-			$class = 'Admin_Controller_Shipping_' . $this->tool->format_classname($_GET['extension']);
+			$class = 'Admin_Controller_Shipping_' . $this->tool->formatClassname($_GET['extension']);
 			$class = new $class($this->registry);
 			
 			if (method_exists($class, 'install')) {

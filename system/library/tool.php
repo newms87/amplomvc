@@ -17,7 +17,7 @@ class Tool extends Library
 		return $slug;
 	}
 	
-	public function format_classname($component)
+	public function formatClassname($component)
 	{
 		$parts = explode('_', $component);
 		

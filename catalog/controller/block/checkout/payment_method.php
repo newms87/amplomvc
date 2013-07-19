@@ -15,12 +15,8 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 			else {
 				if ($this->cart->hasPaymentMethod()) {
 					$this->data['code'] = $this->cart->getPaymentMethodId();
-				} elseif (count($payment_methods) == 1) {
-					$method = current($payment_methods);
-					$this->data['code'] = $method['code'];
-				}
-				else {
-					$this->data['code'] = '';
+				} else {
+					$this->data['code'] = key($payment_methods);
 				}
 			}
 			
@@ -85,7 +81,9 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 				}
 			}
 			
-			if (!$json && !$this->cart->setPaymentMethod($_POST['payment_method'])) {
+			if (!isset($_POST['payment_method'])) {
+				$json['error']['_payment_method'] = $this->_('error_payment_method'); //We use _payment_method to avoid builder->js('errors') adding error under radio input
+			} elseif (!$this->cart->setPaymentMethod($_POST['payment_method'])) {
 				$json['error'] = $this->cart->get_errors('payment_method');
 			}
 			

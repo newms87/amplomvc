@@ -121,9 +121,9 @@ class Cart extends Library
 
   	public function update($key, $qty)
   	{
-	if ((int)$qty && ((int)$qty > 0)) {
-				$this->session->data['cart'][$key] = (int)$qty;
-	} else {
+		if ((int)$qty > 0) {
+			$this->session->data['cart'][$key] = (int)$qty;
+		} else {
 			$this->remove($key);
 		}
 		
@@ -230,7 +230,7 @@ class Cart extends Library
 		
 		foreach ($results as $result) {
 			if ($this->config->get($result['code'] . '_status')) {
-				$classname = "System_Extension_Total_Model_" . $this->tool->format_classname($result['code']);
+				$classname = "System_Extension_Total_Model_" . $this->tool->formatClassname($result['code']);
 				
 				$this->$classname->getTotal($total_data, $total, $taxes);
 			}
@@ -506,7 +506,7 @@ class Cart extends Library
 			return false;
 		}
 		
-		if (!$this->date->isAfterNow($product['date_expires'], true) || !$this->date->isBeforeNow($product['date_available'], false)) {
+		if (!$this->date->isInFuture($product['date_expires'], true) || !$this->date->isInPast($product['date_available'], false)) {
 			return false;
 		}
 		
@@ -618,6 +618,26 @@ class Cart extends Library
 		
 		return true;
 	}
+
+	public function validateCheckout()
+	{
+		if (!$this->validate()) {
+			$this->_e('CKO-1', 'checkout', 'error_checkout_validate');
+			return false;
+		}
+		
+		if (!$this->validatePaymentDetails()) {
+			$this->_e('CKO-2', 'checkout', 'error_checkout_payment');
+			return false;
+		}
+		
+		if (!$this->validateShippingDetails()) {
+			$this->_e('CKO-3', 'checkout', 'error_checkout_shipping');
+			return false;
+		}
+		
+		return true;
+	}
 	
 	/**
 	 * Wishlist Functions
@@ -724,10 +744,10 @@ class Cart extends Library
 		if (!$this->validatePaymentAddress()) {
 			$this->_e('SA-11', 'payment_address', 'error_payment_address_invalid');
 			unset($this->session->data['payment_address_id']);
+			
+			$this->setPaymentMethod();
 			return false;
 		}
-		
-		$this->setPaymentMethod();
 		
 		return true;
 	}
@@ -833,7 +853,7 @@ class Cart extends Library
 				$totals = $this->getTotals();
 			}
 			
-			$classname = "Model_Payment_" . $this->tool->format_classname($payment_method_id);
+			$classname = "Model_Payment_" . $this->tool->formatClassname($payment_method_id);
 			
 			$method = $this->$classname->getMethod($payment_address, $totals['total']);
 			
@@ -845,13 +865,13 @@ class Cart extends Library
 		return false;
 	}
 	
-	public function getPaymentMethodTitle($payment_method_id = null)
+	public function getPaymentMethodData($payment_method_id = null)
 	{
-		$classname = "Model_Payment_" . $this->tool->format_classname($payment_method_id);
+		$classname = "Model_Payment_" . $this->tool->formatClassname($payment_method_id);
 		
-		return $this->$classname->getTitle();
-		
-		return false;
+		if (method_exists($this->$classname, 'data')) {
+			return $this->$classname->data();
+		}
 	}
 
 	public function getPaymentMethods($payment_address = null)
@@ -871,10 +891,18 @@ class Cart extends Library
 		
 		if (!$methods) {
 			$this->error['checkout']['payment_method'] = $this->_('error_payment_methods', $this->config->get('config_email'));
+			
+			$this->setPaymentMethod();
+			
 			return false;
 		}
 		
 		uasort($methods, function ($a,$b){ return $a['sort_order'] > $b['sort_order']; });
+		
+		//Validate the currenlty selected payment method
+		if ($this->hasPaymentMethod() && !isset($methods[$this->getPaymentMethodId()])) {
+			$this->setPaymentMethod(null);
+		}
 		
 		return $methods;
 	}
@@ -960,7 +988,7 @@ class Cart extends Library
 				return false;
 			}
 
-			$classname = "Model_Shipping_" . $this->tool->format_classname($code);
+			$classname = "Model_Shipping_" . $this->tool->formatClassname($code);
 			$quotes = $this->$classname->getQuote($shipping_address);
 			
 			if (!empty($quotes)) {
@@ -997,6 +1025,11 @@ class Cart extends Library
 		}
 		
 		if ($methods) {
+			//Validate the currently selected shipping method
+			if (!$shipping_address && $this->hasShippingMethod() && !isset($methods[$this->getShippingMethodId()])) {
+				$this->setShippingMethod();
+			}
+			
 			uasort($methods, function ($a,$b){ return $a['sort_order'] > $b['sort_order']; });
 			
 			return $methods;
@@ -1009,7 +1042,7 @@ class Cart extends Library
 		return false;
 	}
 	
-	public function getShippingMethodTitle($shipping_method_id)
+	public function getShippingMethodData($shipping_method_id)
 	{
 		//Invalid Shipping method ID
 		if (!strpos($shipping_method_id, '__')) {
@@ -1019,9 +1052,11 @@ class Cart extends Library
 			list($code, $method) = explode("__", $shipping_method_id, 2);
 		}
 		
-		$classname = "Model_Shipping_" . $this->tool->format_classname($code);
+		$classname = "Model_Shipping_" . $this->tool->formatClassname($code);
 		
-		return $this->$classname->getTitle($method);
+		if (method_exists($this->$classname, 'data')) {
+			return $this->$classname->data($method);
+		}
 		
 		return false;
 	}
@@ -1029,7 +1064,7 @@ class Cart extends Library
 	public function setShippingMethod($method = null)
 	{
 		if (!$method) {
-			unset($this->session->data['shipping_method']);
+			unset($this->session->data['shipping_method_id']);
 		}
 		else {
 			$shipping_methods = $this->getShippingMethods();
@@ -1065,11 +1100,7 @@ class Cart extends Library
 				return false;
 			}
 			
-			if ($this->hasShippingMethod()) {
-				$shipping_method = $this->getShippingMethod();
-			}
-			
-			if (empty($shipping_method)) {
+			if (!$this->getShippingMethod()) {
 				$this->_e('CO-11', 'checkout', 'error_shipping_method');
 				return false;
 			}
@@ -1085,11 +1116,7 @@ class Cart extends Library
 			return false;
 		}
 		
-		if ($this->hasPaymentMethod()) {
-			$payment_method = $this->getPaymentMethod();
-		}
-		
-		if (empty($payment_method)) {
+		if (!$this->getPaymentMethod()) {
 			$this->_e('CO-13', 'checkout', 'error_payment_method');
 			return false;
 		}
@@ -1201,14 +1228,18 @@ class Cart extends Library
 		return true;
 	}
 	
-	public function hasVoucher()
+	public function hasVouchers($voucher_id = null)
 	{
-		return !empty($_SESSION['vouchers']);
+		if ($voucher_id) {
+			return !empty($this->session->data['vouchers'][$voucher_id]);
+		}
+		
+		return !empty($this->session->data['vouchers']);
 	}
 	
 	public function getVoucherIds()
 	{
-		return isset($_SESSION['vouchers']) ? $_SESSION['vouchers'] : array();
+		return isset($this->session->data['vouchers']) ? $this->session->data['vouchers'] : array();
 	}
 	
 	public function getVouchers()
@@ -1222,11 +1253,21 @@ class Cart extends Library
 			
 	public function addVoucher($voucher_id)
 	{
-		if (!isset($_SESSION['vouchers'])) {
-			$_SESSION['vouchers'][] = $voucher_id;
+		if (!isset($this->session->data['vouchers'])) {
+			$this->session->data['vouchers'][] = $voucher_id;
 		} else {
-			$_SESSION['vouchers'] = array($voucher_id);
+			$this->session->data['vouchers'] = array($voucher_id);
 		}
+	}
+	
+	public function removeVoucher($voucher_id)
+	{
+		unset($this->session->data['vouchers'][$voucher_id]);
+	}
+	
+	public function removeAllVouchers()
+	{
+		unset($this->session->data['vouchers']);
 	}
 	
 	/**

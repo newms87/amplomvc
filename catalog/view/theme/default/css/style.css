@@ -1679,21 +1679,21 @@ a.button:active, input.button:active {
 	min-height: 190px;
 }
 /* orders */
-.order-list {
+.order_list {
 	margin-bottom: 10px;
 }
-.order-list .order-id {
+.order_list .order_id {
 	width: 49%;
 	float: left;
 	margin-bottom: 2px;
 }
-.order-list .order-status {
+.order_list .order_status {
 	width: 49%;
 	float: right;
 	text-align: right;
 	margin-bottom: 2px;
 }
-.order-list .order-content {
+.order_list .order_content {
 	padding: 10px 0px;
 	display: inline-block;
 	width: 100%;
@@ -1701,17 +1701,21 @@ a.button:active, input.button:active {
 	border-top: 1px solid #EEEEEE;
 	border-bottom: 1px solid #EEEEEE;
 }
-.order-list .order-content div {
+.order_list .order_content div {
 	float: left;
 	width: 33.3%;
 }
-.order-list .order-info {
+.order_list .order_info {
 	text-align: right;
 }
-.order-detail {
+.order_list .order_info .reorder{
+	margin-left: 10px;
+}
+.order_detail {
 	background: #EFEFEF;
 	font-weight: bold;
 }
+
 /* returns */
 #order_lookup h2,
 #return_form h2{

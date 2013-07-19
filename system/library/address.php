@@ -49,16 +49,20 @@ class Address extends Library
 		
 		$insertables = $address;
 		
-		if (!empty($address['country'])) {
-			$insertables['country'] = $address['country']['name'];
-			$insertables['iso_code_2'] = $address['country']['iso_code_2'];
-			$insertables['iso_code_3'] = $address['country']['iso_code_3'];
+		if (empty($address['country'])) {
+			$address['country'] = $this->Model_Localisation_Country->getCountry($address['country_id']);
 		}
 		
-		if (!empty($address['zone'])) {
-			$insertables['zone'] = $address['zone']['name'];
-			$insertables['zone_code'] = $address['zone']['code'];
+		if (empty($address['zone'])) {
+			$address['zone'] = $this->Model_Localisation_Zone->getZone($address['zone_id']);
 		}
+		
+		$insertables['country'] = $address['country']['name'];
+		$insertables['iso_code_2'] = $address['country']['iso_code_2'];
+		$insertables['iso_code_3'] = $address['country']['iso_code_3'];
+		
+		$insertables['zone'] = $address['zone']['name'];
+		$insertables['zone_code'] = $address['zone']['code'];
 		
 		return preg_replace('/<br \/>\s+<br \/>/', '<br />', nl2br($this->tool->insertables($insertables, $address_format, '{', '}')));
 	}

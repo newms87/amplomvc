@@ -64,6 +64,7 @@ class Admin_Controller_Setting_Setting extends Controller
 			'config_default_shipping_policy' => 0,
 			'config_shipping_return_info_id' => 0,
 			'config_cache_ignore' => '',
+			'config_cart_show_return_policy' => 1,
 			'config_show_price_with_tax' => '',
 			'config_tax_default_id' => '',
 			'config_tax_default' => '',

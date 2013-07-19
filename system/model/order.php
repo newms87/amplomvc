@@ -202,7 +202,10 @@ class System_Model_Order extends Model
 		//Where
 		$where = "1";
 		
-		if (!empty($data['order_ids'])) {
+		if (!empty($data['order_id'])) {
+			$where .= " AND o.order_id = " . (int)$data['order_id'];
+		}
+		elseif (!empty($data['order_ids'])) {
 			$where .= " AND o.order_id IN (" . implode(',', $data['order_ids']) . ")";
 		}
 		
@@ -211,18 +214,12 @@ class System_Model_Order extends Model
 		}
 		
 		if (isset($data['order_status_id'])) {
-			if (!isset($data['order_status_ids'])) {
-				$data['order_status_ids'] = array($data['order_status_id']);
-			} else {
-				$data['order_status_ids'][] = $data['order_status_id'];
-			}
+			$where .= " AND o.order_status_id = " . (int)$data['order_status_id'];
 		}
-		
-		if (!empty($data['order_status_ids'])) {
+		elseif (!empty($data['order_status_ids'])) {
 			$where .= " AND o.order_status_id IN (" . implode(',', $data['order_status_ids']) . ")";
 		}
-		
-		if (!empty($data['!order_status_ids'])) {
+		elseif (!empty($data['!order_status_ids'])) {
 			$where .= " AND o.order_status_id NOT IN (" . implode(',', $data['!order_status_ids']) . ")";
 		}
 		
@@ -325,7 +322,10 @@ class System_Model_Order extends Model
 		//Where
 		$where = "1";
 		
-		if (!empty($data['order_ids'])) {
+		if (!empty($data['order_id'])) {
+			$where .= " AND oh.order_id = " . (int)$data['order_id'];
+		}
+		elseif (!empty($data['order_ids'])) {
 			$where .= " AND oh.order_id IN (" . implode(',', $data['order_ids']) . ")";
 		}
 
@@ -354,6 +354,15 @@ class System_Model_Order extends Model
 		return $result->rows;
 	}
 	
+	public function getConfirmedOrders($data = array(), $select = '', $total = false)
+	{
+		$data += array(
+			'!order_status_ids' => array(0),
+		);
+		
+		return $this->getOrders($data, $select, $total);
+	}
+	
 	public function getOrderProducts($order_id)
 	{
 		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "order_product WHERE order_id = " . (int)$order_id);
@@ -377,6 +386,11 @@ class System_Model_Order extends Model
 	public function getTotalOrders($data = array())
 	{
 		return $this->getOrders($data, '', true);
+	}
+	
+	public function getTotalConfirmedOrders($data = array())
+	{
+		return $this->getConfirmedOrders($data, '', true);
 	}
 	
 	public function getTotalOrderHistories($data = array())

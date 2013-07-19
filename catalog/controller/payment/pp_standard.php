@@ -7,12 +7,12 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 		
 		$this->config->loadGroup('pp_standard');
 		
-		$this->data['testmode'] = $this->config->get('pp_standard_test');
+		$testmode = $this->config->get('pp_standard_test');
 		
-		if (!$this->config->get('pp_standard_test')) {
-			$this->data['action'] = 'https://www.paypal.com/cgi-bin/webscr';
-  		} else {
+		if ($testmode) {
 			$this->data['action'] = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
+  		} else {
+			$this->data['action'] = 'https://www.paypal.com/cgi-bin/webscr';
 		}
 
 		$order_info = $this->order->get();
@@ -78,15 +78,16 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 			
 			$server = $this->url->is_ssl() ? HTTPS_IMAGE : HTTP_IMAGE;
 			
-			$this->data['image_url'] = $server . $this->config->get('config_logo');
-			
 			//Ajax Urls
 			$this->data['url_check_order_status'] = $this->url->ajax('block/checkout/confirm/check_order_status', 'order_id=' . $order_info['order_id']);
 			
+			//Additional Data
+			$this->data['image_url'] = $server . $this->config->get('config_logo');
 			$this->data['paymentaction'] = $this->config->get('pp_standard_transaction') ? 'sale' : 'authorization';
-			
 			$this->data['custom'] = $this->encryption->encrypt($order_info['order_id']);
 			
+			$this->data['testmode'] = $testmode;
+		
 			$this->render();
 		}
 	}

@@ -24,6 +24,7 @@ $_['text_comments']						= 'Add Comments About Your Order';
 $_['text_no_shipping_address']						= 'Please specify a Shipping Address and the shipping methods will automatically be calculated.';
 $_['text_no_payment_address']		= 'Please specify a Payment Address and the available payment methods will be displayed.';
 $_['text_address_success']				= 'You have successfully updated your Address Book!';
+$_['text_pp_standard_paywithcc']  = "<span class=\"pp_standard_paywithcc\"> OR pay with Credit Card via paypal.</span>";
 
 // Column
 $_['column_name']						= 'Product Name';

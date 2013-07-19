@@ -13,6 +13,11 @@ class Catalog_Controller_Cart_Cart extends Controller
 		
 		$this->data['block_cart'] = $this->getBlock('cart/cart');
 		
+		//We remove any active orders to allow shipping estimates to be updated
+		if ($this->order->hasOrder()) {
+			$this->order->clear();
+		}
+		
 		if ($this->config->get('config_show_cart_weight')) {
 			$this->data['weight'] = $this->weight->format($this->cart->getWeight());
 		}

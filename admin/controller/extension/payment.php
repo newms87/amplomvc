@@ -106,7 +106,7 @@ class Admin_Controller_Extension_Payment extends Controller
 
 			_require(DIR_APPLICATION . 'controller/payment/' . $_GET['extension'] . '.php');
 			
-			$class = 'Admin_Controller_Payment_' . $this->tool->format_classname($_GET['extension']);
+			$class = 'Admin_Controller_Payment_' . $this->tool->formatClassname($_GET['extension']);
 			$class = new $class($this->registry);
 			
 			if (method_exists($class, 'install')) {
@@ -130,7 +130,7 @@ class Admin_Controller_Extension_Payment extends Controller
 		
 			_require(DIR_APPLICATION . 'controller/payment/' . $_GET['extension'] . '.php');
 			
-			$class = 'Admin_Controller_Payment_' . $this->tool->format_classname($_GET['extension']);
+			$class = 'Admin_Controller_Payment_' . $this->tool->formatClassname($_GET['extension']);
 			$class = new $class($this->registry);
 			
 			if (method_exists($class, 'uninstall')) {

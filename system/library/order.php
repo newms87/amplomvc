@@ -120,7 +120,7 @@ class Order Extends Library
 		$data['products'] = $products;
 		
 		// Gift Voucher
-		if ($this->cart->hasVoucher()) {
+		if ($this->cart->hasVouchers()) {
 			$data['vouchers'] = $this->cart->getVouchers();
 		}
 		
@@ -299,6 +299,36 @@ class Order Extends Library
 		return $this->config->load('product_return', 'return_actions', 0);
 	}
 	
+	public function extractShippingAddress($order)
+	{
+		$payment_address = array();
+		
+		foreach ($order as $key => $value) {
+			if ($key === 'payment_method_id') continue;
+			
+			if (strpos($key, 'payment_') === 0) {
+				$payment_address[substr($key,8)] = $value;
+			}
+		}
+		
+		return $payment_address;
+	}
+
+	public function extractPaymentAddress($order)
+	{
+		$shipping_address = array();
+		
+		foreach ($order as $key => $value) {
+			if ($key === 'shipping_method_id') continue;
+			
+			if (strpos($key, 'shipping_') === 0) {
+				$shipping_address[substr($key,9)] = $value;
+			}
+		}
+		
+		return $shipping_address;
+	}
+	
 	/**
 	 * Update or Confirm (when order status is complete) an order
 	 * 
@@ -341,15 +371,20 @@ class Order Extends Library
 	
 	private function confirm($order)
 	{
-		$order_products = $this->db->queryRows("SELECT * FROM " . DB_PREFIX . "order_product WHERE order_id = " . (int)$order_id);
+		$order_id = (int)$order['order_id'];
+		
+		//Confirm Order
+		$this->db->query("UPDATE " . DB_PREFIX . "order SET confirmed = 1 WHERE order_id = $order_id");
 		
 		// Products
+		$order_products = $this->db->queryRows("SELECT * FROM " . DB_PREFIX . "order_product WHERE order_id = $order_id");
+		
 		foreach ($order_products as &$product) {
 			//subtract Quantity from this product
 			$this->db->query("UPDATE " . DB_PREFIX . "product SET quantity = (quantity - " . (int)$product['quantity'] . ") WHERE product_id = '" . (int)$product['product_id'] . "' AND subtract = '1'");
 			
 			//Subtract Quantities from Product Option Values and Restrictions
-			$product_option_values = $this->db->queryRows("SELECT pov.product_option_value_id, pov.option_value_id FROM " . DB_PREFIX . "order_option oo LEFT JOIN " . DB_PREFIX . "product_option_value pov ON (pov.product_option_value_id=oo.product_option_value_id) WHERE oo.order_id = '" . (int)$order_id . "' AND order_product_id = '" . (int)$product['order_product_id'] . "'");
+			$product_option_values = $this->db->queryRows("SELECT pov.product_option_value_id, pov.option_value_id FROM " . DB_PREFIX . "order_option oo LEFT JOIN " . DB_PREFIX . "product_option_value pov ON (pov.product_option_value_id=oo.product_option_value_id) WHERE oo.order_id = '$order_id' AND order_product_id = '" . (int)$product['order_product_id'] . "'");
 			
 			$pov_to_ov = array();
 			
@@ -375,22 +410,22 @@ class Order Extends Library
 		$order['order_products'] = $order_products;
 		
 		// Downloads
-		$order['order_downloads'] = $this->db->queryRows("SELECT * FROM " . DB_PREFIX . "order_download WHERE order_id = '" . (int)$order_id . "'");
+		$order['order_downloads'] = $this->db->queryRows("SELECT * FROM " . DB_PREFIX . "order_download WHERE order_id = '$order_id'");
 		
 		// Gift Voucher
-		$order_voucher_ids = $this->db->queryColumn("SELECT voucher_id FROM " . DB_PREFIX . "order_voucher WHERE order_id = '" . (int)$order_id . "'");
+		$order_vouchers = $this->db->queryRows("SELECT voucher_id FROM " . DB_PREFIX . "order_voucher WHERE order_id = '$order_id'");
 		
-		foreach ($order_voucher_ids as $voucher_id) {
-			$this->System_Model_Voucher->activate($voucher_id);
+		foreach ($order_vouchers as $voucher) {
+			$this->System_Model_Voucher->activate($voucher['voucher_id']);
 		}
 		
 		$order['order_vouchers'] = $order_vouchers;
 		
 		// Order Totals
-		$order_totals = $this->db->queryRows("SELECT * FROM `" . DB_PREFIX . "order_total` WHERE order_id = '" . (int)$order_id . "' ORDER BY sort_order ASC");
+		$order_totals = $this->db->queryRows("SELECT * FROM `" . DB_PREFIX . "order_total` WHERE order_id = '$order_id' ORDER BY sort_order ASC");
 		
 		foreach ($order_totals as &$order_total) {
-			$total_class = 'System_Extension_Total_Model_' . $this->tool->format_classname($order_total['code']);
+			$total_class = 'System_Extension_Total_Model_' . $this->tool->formatClassname($order_total['code']);
 			
 			if (method_exists($this->$total_class, 'confirm')) {
 				$this->$total_class->confirm($order, $order_total);

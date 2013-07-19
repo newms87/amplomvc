@@ -62,7 +62,7 @@ function show_msg(type, html, append){
 }
 
 function show_msgs(data){
-	$('.message_box').remove();
+	clear_msgs();
 	
 	for (var m in data) {
 		if (typeof data[m] == 'object') {
@@ -78,6 +78,10 @@ function show_msgs(data){
 			show_msg(m, data[m], true);
 		}
 	}
+}
+
+function clear_msgs(){
+	$('.message_box').remove();
 }
 
 function update_floating_window(){

@@ -81,9 +81,9 @@ class Catalog_Controller_Account_Return extends Controller
 			$this->template->load('account/return_info');
 			$this->language->set('heading_title', $this->_('text_return'));
 			
-			
 			$return_info['comment'] = nl2br($return_info['comment']);
 			$return_info['opened'] = $return_info['opened'] ? $this->_('text_yes') : $this->_('text_no');
+			$return_info['return_status'] = $this->order->getReturnStatus($return_info['return_status_id']);
 			
 			$this->data = $return_info;
 			
@@ -93,9 +93,10 @@ class Catalog_Controller_Account_Return extends Controller
 			$histories = $this->Model_Account_Return->getReturnHistories($return_id);
 			
 			foreach ($histories as &$history) {
+				$history['return_status'] = $this->order->getReturnStatus($history['return_status_id']);
 				$history['date_added'] = $this->date->format($history['date_added'], 'date_format_short');
 				$history['comment'] = nl2br($history['comment']);
-			}
+			} unset($history);
 			
 			$this->data['histories'] = $histories;
 		
@@ -148,6 +149,7 @@ class Catalog_Controller_Account_Return extends Controller
 				$return_data = $_POST + $product;
 				
 				$return_data['rma'] = $this->Model_Account_Return->generateRma($return_data);
+				$return_data['quantity'] = $return_data['return_quantity'];
 				
 				$return_ids[] = $this->Model_Account_Return->addReturn($return_data);
 				
@@ -217,10 +219,10 @@ class Catalog_Controller_Account_Return extends Controller
 			}
 		}
 		
-		if ($order_info && !$this->request->isPost()) {
+		if ($order_info) {
 			$order_info['date_ordered'] = $this->date->format($order_info['date_added']);
 			
-			$order_products = $this->Model_Checkout_Order->getOrderProducts($order_info['order_id']);
+			$order_products = $this->System_Model_Order->getOrderProducts($order_info['order_id']);
 			
 			foreach ($order_products as $key => &$product) {
 				$product_info = $this->Model_Catalog_Product->getProductInfo($product['product_id']);
@@ -229,11 +231,36 @@ class Catalog_Controller_Account_Return extends Controller
 					$product['name'] = $product_info['name'];
 					$product['model'] = $product_info['model'];
 					$product['price'] = $this->currency->format($product['price']);
-					$product['return_quantity'] = 0;
-					$product['return_reason_id'] = '';
-					$product['comment'] = '';
-					$product['opened'] = 0;
-					$product['is_final'] = $product_info['is_final'];
+					
+					$return_policy = $this->cart->getReturnPolicy($product_info['return_policy_id']);
+					
+					if ($return_policy['days'] < 0) {
+						$product['no_return'] = $this->_('text_is_final');
+					} else {
+						$return_date = $this->date->add($order_info['date_added'], $return_policy['days'] . ' days');
+						
+						if ($this->date->isInPast($return_date)) {
+							$product['no_return'] = $this->_('text_past_return_date', $this->date->format($return_date, 'short'));
+						}
+					}
+					
+					$product['return_policy'] = $return_policy;
+					
+					$product_defaults = array(
+						'return_quantity' => 0,
+						'return_reason_id' => '',
+						'comment' => '',
+						'opened' => 0,
+					);
+					
+					foreach ($product_defaults as $key => $default) {
+						if (isset($_POST['return_products'][$product['product_id']][$key])) {
+							$product[$key] = $_POST['return_products'][$product['product_id']][$key];
+						} else {
+							$product[$key] = $default;
+						}
+					}
+					
 				} else {
 					unset($order_products[$key]);
 				}
@@ -245,7 +272,6 @@ class Catalog_Controller_Account_Return extends Controller
 		$defaults = array(
 			'order_id' => $order_id,
 			'date_ordered' => '',
-			'return_products' => array(),
 			'firstname' => $this->customer->info('firstname'),
 			'lastname' => $this->customer->info('lastname'),
 			'email' => $this->customer->info('email'),
@@ -263,9 +289,11 @@ class Catalog_Controller_Account_Return extends Controller
 			}
 		}
 		
+		$this->data['return_products'] = $order_info['return_products'];
+		
 		if (!empty($customer_orders)) {
 			foreach ($customer_orders as &$order) {
-				$product_count = $this->Model_Checkout_Order->getTotalOrderProducts($order['order_id']);
+				$product_count = $this->System_Model_Order->getTotalOrderProducts($order['order_id']);
 				
 				$order['display'] = $this->_('text_order_display', $order['order_id'], $product_count);
 			} unset($order);
@@ -402,7 +430,7 @@ class Catalog_Controller_Account_Return extends Controller
 				if (!empty($product['return_quantity'])) {
 					$has_product = true;
 					
-					if (empty($product['return_reason_id'])) {
+					if (empty($product['return_reason_id']) && $product['return_reason_id'] !== '0') {
 						$this->error["return_products[$product[product_id]][return_reason_id"] = $this->_('error_reason');
 					}
 				}

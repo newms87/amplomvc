@@ -1,18 +1,30 @@
 <?php
 class Catalog_Model_Shipping_Flat extends Model 
 {
-	function getQuote($address)
+	private $flat_info;
+	private $rates;
+	
+	function __construct($registry)
 	{
-		$flat_rates = $this->Model_Setting_Setting->getSetting('shipping_flat');
+		parent::__construct($registry);
 		
+		$this->flat_info = $this->Model_Setting_Setting->getSetting('shipping_flat');
+		
+		$this->rates = array();
+		
+		foreach ($this->flat_info['flat_rates'] as $rate) {
+			$this->rates[$rate['method']] = $rate;
+		}
+	}
+	
+	public function getQuote($address)
+	{
 		$quote_data = array();
-		
-		$sort_order = $flat_rates['flat_sort_order'];
 		
 		$total_products = (int)$this->cart->countProducts();
 		$total_weight = (int)$this->cart->getWeight();
 		
-		foreach ($flat_rates['flat_rates'] as $rate) {
+		foreach ($this->rates as $key => $rate) {
 			$valid = true;
 			
 			//Wrong Shipping Zone
@@ -39,31 +51,31 @@ class Catalog_Model_Shipping_Flat extends Model
 			
 			if(!$valid) continue;
 			
-			$quote_data[] = array(
-				'code'			=> 'flat',
-				'code_title'	=> $flat_rates['flat_title'],
-				'method'			=> $rate['method'],
-				'title'			=> $rate['title'],
-				'cost'			=> $rate['cost'],
-				'tax_class_id' => $rate['tax_class_id'],
-				'text'			=> $this->currency->format($rate['cost']),
-				'sort_order' 	=> $sort_order,
-			);
-			
-			$sort_order += .1;
+			$quote_data[] = $this->data($key);
 		}
 	
 		return $quote_data;
 	}
 
-	public function getTitle($method)
+	public function data($method)
 	{
-		$flat_rates = $this->Model_Setting_Setting->getSetting('shipping_flat');
-		
-		foreach ($flat_rates['flat_rates'] as $rate) {
-			if ($rate['method'] === $method) {
-				return $rate['title'];
-			}
+		if (!isset($this->rates[$method])) {
+			return null;
 		}
+		
+		$method_info = $this->rates[$method];
+		
+		$method_data = array(
+			'code' => 'flat',
+			'code_title' => $this->flat_info['flat_title'],
+			'method' => $method_info['method'],
+			'title' => $method_info['title'],
+			'cost' => $method_info['cost'],
+			'text'			=> $this->currency->format($method_info['cost']),
+			'tax_class_id' => $method_info['tax_class_id'],
+			'sort_order' => $this->flat_info['flat_sort_order'],
+		);
+		
+		return $method_data;
 	}
 }

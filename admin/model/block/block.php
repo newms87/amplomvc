@@ -10,7 +10,7 @@ class Admin_Model_Block_Block extends Model
 		$language_dir = $this->language->getInfo('directory');
 		
 		$parts = explode('/', $data['route']);
-		$class_name = "Block_" . $this->tool->format_classname($parts[0]) . '_' . $this->tool->format_classname($parts[1]);
+		$class_name = "Block_" . $this->tool->formatClassname($parts[0]) . '_' . $this->tool->formatClassname($parts[1]);
 		
 		//Admin Controller File
 		$controller_template = DIR_THEME . 'default/template/block/template/controller_template.php';

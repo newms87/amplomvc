@@ -35,12 +35,12 @@ final class Action
 			//Scan directories until we find file requested
 			if (is_dir(SITE_DIR . $path)) {
 				$path .= '/';
-				$this->class .= $this->tool->format_classname($part) . '_';
+				$this->class .= $this->tool->formatClassname($part) . '_';
 			}
 			elseif (is_file(SITE_DIR . $path . '.php')) {
 				$this->file = SITE_DIR . $path . '.php';
 				
-				$this->class .= $this->tool->format_classname($part);
+				$this->class .= $this->tool->formatClassname($part);
 			}
 			elseif ($this->file) {
 				$this->method = $part;

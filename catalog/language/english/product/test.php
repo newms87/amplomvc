@@ -27,7 +27,7 @@ $_['text_tags']				= 'Tags:';
 $_['text_error']				= 'Product not found!';
 $_['text_inactive']			= "We're sorry, this product is no longer available.  Here are some other designer products that may interest you...";
 $_['stock_inactive']		= "<font color='red'>currently not available</font>";
-$_['text_view_ship_policy'] = "Please see our <a onclick=\"window.open('%s', 'newwindow', 'width=500, height=600'); return false;\" href='#'>Shipping & Return Policy</a> for more information.";
+$_['text_view_ship_policy'] = "Please see our <a href=\"%s\" onclick=\"return colorbox($(this));\" href='#'>Shipping & Return Policy</a> for more information.";
 $_['text_processing']		= "Processing... please wait.";
 $_['entry_name']				= 'Your Name:';
 $_['entry_review']			= 'Your Review:';
