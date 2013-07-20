@@ -24,9 +24,9 @@
 	<table class="list">
 		<thead>
 			<tr>
-				<td class="left" style="width: 33.3%;"><?= $column_product; ?></td>
-				<td class="left" style="width: 33.3%;"><?= $column_model; ?></td>
-				<td class="right" style="width: 33.3%;"><?= $column_quantity; ?></td>
+				<td class="left"><?= $column_product; ?></td>
+				<td class="left"><?= $column_model; ?></td>
+				<td class="right"><?= $column_quantity; ?></td>
 			</tr>
 		</thead>
 		<tbody>
