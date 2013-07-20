@@ -25,8 +25,14 @@ class Catalog_Controller_Block_Product_Information extends Controller
 		$this->_('text_keep_shopping', $this->url->link('product/category')); 
 //-----
 //>>>>> {php}
-		$this->_('text_view_more', $this->url->link('product/collection', 'collection_id=' . $product_info['collection']['collection_id']), $product_info['collection']['name']);
-		$this->_('text_keep_shopping', $this->url->link('product/collection'));
+		if (!empty($product_info['collection'])) {
+			$this->_('text_view_more', $this->url->link('product/collection', 'collection_id=' . $product_info['collection']['collection_id']), $product_info['collection']['name']);
+			$this->_('text_keep_shopping', $this->url->link('product/collection'));
+		}
+		else {
+			$this->_('text_view_more', $this->url->link('product/category', 'category_id=' . $product_info['category']['category_id']), $product_info['category']['name']);
+			$this->_('text_keep_shopping', $this->url->link('product/category'));
+		}
 //-----
 //=====
 	}

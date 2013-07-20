@@ -74,7 +74,9 @@ class Catalog_Model_Catalog_Collection extends Model
 			" WHERE cs.store_id='$store_id' AND cp.product_id='" . (int)$product_id . "' LIMIT 1"
 		);
 		
-		$this->translation->translate('collection', $collection['collection_id'], $collection);
+		if ($collection) {
+			$this->translation->translate('collection', $collection['collection_id'], $collection);
+		}
 		
 		return $collection;
 	}

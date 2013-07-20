@@ -98,7 +98,7 @@ class Catalog_Controller_Block_Checkout_PaymentAddress extends Controller
 		}
 		elseif (!$this->cart->validate()) {
 			$json['redirect'] = $this->url->link('cart/cart');
-			$this->message->add($this->cart->get_errors());
+			$this->message->add('warning', $this->cart->get_errors());
 		}
 		
 		return $json;
