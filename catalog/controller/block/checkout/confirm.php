@@ -92,7 +92,7 @@ class Catalog_Controller_Block_Checkout_Confirm extends Controller
 		if (isset($_GET['order_id'])) {
 			$order = $this->order->get($_GET['order_id']);
 			
-			if ($order) {
+			if ($order['confirmed']) {
 				$json = array(
 					'status' => $this->order->getOrderStatus($order['order_status_id']),
 					'redirect' => $this->url->link('checkout/success'),

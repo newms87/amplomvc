@@ -180,17 +180,33 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 						break;
 					default:
 						$order_status_id = false;
-						$this->error_log->write("PP_STANDARD :: Unknown Order Payment Status Response: " . $_POST['payment_status']);
+						$msg = "PP_STANDARD :: Unknown Order Payment Status Response: " . $_POST['payment_status'];
+						$this->error_log->write($msg);
+						
+						if ($debug) {
+							$this->log->write($msg);
+						}
 						break;
 				}
 				
 				if ($order_status_id) {
+					if ($debug) {
+						$status = $this->order->getOrderStatus($order_status_id);
+						
+						$this->log->write("PP_STANDARD :: Updating Order ( order_id: $order_id ) to order status $status[title] ( order_status_id: $order_status_id )");
+					}
+					
 					$this->order->update($order_id, $order_status_id);
 					return true;
 				}
 			}
 			else {
-				$this->error_log->write("PP_STANDARD :: Invalid Response from PayPal on callback for order ID $order_id. Request: $request");
+				$msg = "PP_STANDARD :: Invalid Response from PayPal on callback for order ID $order_id. Request: $request";
+				$this->error_log->write($msg);
+				
+				if ($debug) {
+					$this->log->write($msg);
+				}
 			}
 		}
 
