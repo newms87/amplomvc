@@ -32,6 +32,7 @@ class Admin_Controller_Payment_PpStandard extends Controller
 
 		$defaults = array(
 			'pp_standard_email' => '',
+			'pp_standard_test_email' => '',
 			'pp_standard_test' => '',
 			'pp_standard_transaction' => '',
 			'pp_standard_debug' => '',

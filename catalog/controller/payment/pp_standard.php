@@ -11,8 +11,15 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 		
 		if ($testmode) {
 			$this->data['action'] = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
+			
+			if ($this->config->get('pp_standard_test_email')) {
+				$this->data['business'] = $this->config->get('pp_standard_test_email');
+			} else {
+				$this->data['business'] = $this->config->get('pp_standard_email');
+			}
   		} else {
 			$this->data['action'] = 'https://www.paypal.com/cgi-bin/webscr';
+			$this->data['business'] = $this->config->get('pp_standard_email');
 		}
 
 		$order = $this->order->get();
@@ -21,7 +28,6 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 			$this->template->load('payment/pp_standard');
 
 			$this->data['order_id'] = $order['order_id'];
-			$this->data['business'] = $this->config->get('pp_standard_email');
 			$this->data['item_name'] = html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
 			
 			$products = $this->cart->getProducts();
@@ -182,11 +188,11 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 						$order_status_id = false;
 						$msg = "PP_STANDARD :: Unknown Order Payment Status Response: " . $_POST['payment_status'];
 						$this->error_log->write($msg);
-						
-						if ($debug) {
-							$this->log->write($msg);
-						}
 						break;
+				}
+				
+				if ($msg && $debug) {
+					$this->log->write($msg);
 				}
 				
 				if ($order_status_id) {

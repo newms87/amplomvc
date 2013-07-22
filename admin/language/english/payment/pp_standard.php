@@ -15,6 +15,7 @@ $_['data_auth_sale']	= array(
 
 // Entry
 $_['entry_email']					= 'E-Mail:';
+$_['entry_test_email']					= 'Test Account E-Mail: <span class="help">(if different than your primary account)</span>';
 $_['entry_test']					= 'Sandbox Mode:';
 $_['entry_transaction']				= 'Transaction Method:';
 $_['entry_debug']					= 'Debug Mode:<br/><span class="help">Logs additional information to the system log.</span>';

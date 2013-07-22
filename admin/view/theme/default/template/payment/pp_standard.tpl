@@ -17,6 +17,10 @@
 						<td><input type="text" name="pp_standard_email" size="50" value="<?= $pp_standard_email; ?>" /></td>
 					</tr>
 					<tr>
+						<td> <?= $entry_test_email; ?></td>
+						<td><input type="text" name="pp_standard_test_email" size="50" value="<?= $pp_standard_test_email; ?>" /></td>
+					</tr>
+					<tr>
 						<td><?= $entry_test; ?></td>
 						<td><?= $this->builder->build('radio', $data_yes_no, 'pp_standard_test', $pp_standard_test); ?></td>
 					</tr>
