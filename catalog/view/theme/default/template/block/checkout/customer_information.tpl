@@ -150,10 +150,6 @@ function validate_submit(submit, recheck){
 	}
 	
 	if ($('.info_item').length === $('.info_item.valid').length) {
-		$('.info_item').each(function(i,e){
-			set_validation_status($(e), 'loading', '<?= $text_info_loading; ?>');
-		});
-		
 		$.get("<?= $validate_customer_checkout; ?>", {}, function(json){
 			if(json && json.length){
 				$('.info_item').each(function(i,e){

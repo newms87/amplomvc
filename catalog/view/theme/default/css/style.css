@@ -147,6 +147,9 @@ ul{
 	position:relative;
 	text-align:center;
 	z-index:1000;
+	
+	border-bottom: 1px solid #CCCCCC;
+	padding-bottom: 15px;
 }
 
 #header_right{
@@ -2407,7 +2410,7 @@ table.form_single_column select{
 
 #footer .links {
 	text-align:center;
-	float:left;
+	position: relative;
 }
 #footer .links > ul > li {
 	display: inline-block;
@@ -3164,7 +3167,9 @@ form .set_default_address input[type="radio"]{
 	margin-right:20px;
 }
 #footer_social_networks{
-	float:right;
+	position: absolute;
+	right: 20px;
+	top: 0;
 }
 
 

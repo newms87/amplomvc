@@ -425,7 +425,6 @@ class Admin_Controller_Catalog_Product extends Controller
 			'information' => '',
 			'meta_keywords' => '',
 			'meta_description' => '',
-			'product_tags' => array(),
 			'image'=>'',
 			'manufacturer_id' => 0,
 			'shipping'=>1,
@@ -457,6 +456,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			'product_download'=>array(),
 			'product_category'=>array(),
 			'product_related'=>array(),
+			'product_tags' => array(),
 			'points'=>'',
 			'product_reward'=>array(),
 			'product_layout'=>array(),
@@ -473,6 +473,11 @@ class Admin_Controller_Catalog_Product extends Controller
 			}
 		}
 		
+		//TODO: Make tags into a list of tag inputs (with js)
+		if (is_string($this->data['product_tags'])) {
+			$this->data['product_tags'] = explode(',', $this->data['product_tags']);
+		}
+			
 		//Additional Data
 		$m_data = array(
 			'sort' => 'name'
