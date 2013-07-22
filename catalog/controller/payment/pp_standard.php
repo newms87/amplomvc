@@ -15,12 +15,12 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 			$this->data['action'] = 'https://www.paypal.com/cgi-bin/webscr';
 		}
 
-		$order_info = $this->order->get();
+		$order = $this->order->get();
 
-		if ($order_info) {
+		if ($order) {
 			$this->template->load('payment/pp_standard');
 
-			$this->data['order_id'] = $order_info['order_id'];
+			$this->data['order_id'] = $order['order_id'];
 			$this->data['business'] = $this->config->get('pp_standard_email');
 			$this->data['item_name'] = html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
 			
@@ -31,14 +31,14 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 					$option['value'] = $this->tool->limit_characters($option['option_value'], 20);
 				} unset($option);
 				
-				$product['price'] = $this->currency->format($product['price'], $order_info['currency_code'], false, false);
+				$product['price'] = $this->currency->format($product['price'], $order['currency_code'], false, false);
 			} unset($product);
 			
 			$this->data['products'] = $products;
 			
 			$this->data['discount_amount_cart'] = 0;
 			
-			$total = $this->currency->format($order_info['total'] - $this->cart->getSubTotal(), $order_info['currency_code'], false, false);
+			$total = $this->currency->format($order['total'] - $this->cart->getSubTotal(), $order['currency_code'], false, false);
 
 			if ($total > 0) {
 				$this->data['products'][] = array(
@@ -53,18 +53,18 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 				$this->data['discount_amount_cart'] -= $total;
 			}
 			
-			$payment_address_info = $this->Model_Localisation_Country->getCountry($order_info['payment_country_id']);
+			$payment_address_info = $this->Model_Localisation_Country->getCountry($order['payment_country_id']);
 			
-			$this->data['currency_code'] = $order_info['currency_code'];
-			$this->data['first_name'] = html_entity_decode($order_info['payment_firstname'], ENT_QUOTES, 'UTF-8');
-			$this->data['last_name'] = html_entity_decode($order_info['payment_lastname'], ENT_QUOTES, 'UTF-8');
-			$this->data['address1'] = html_entity_decode($order_info['payment_address_1'], ENT_QUOTES, 'UTF-8');
-			$this->data['address2'] = html_entity_decode($order_info['payment_address_2'], ENT_QUOTES, 'UTF-8');
-			$this->data['city'] = html_entity_decode($order_info['payment_city'], ENT_QUOTES, 'UTF-8');
-			$this->data['zip'] = html_entity_decode($order_info['payment_postcode'], ENT_QUOTES, 'UTF-8');
+			$this->data['currency_code'] = $order['currency_code'];
+			$this->data['first_name'] = html_entity_decode($order['payment_firstname'], ENT_QUOTES, 'UTF-8');
+			$this->data['last_name'] = html_entity_decode($order['payment_lastname'], ENT_QUOTES, 'UTF-8');
+			$this->data['address1'] = html_entity_decode($order['payment_address_1'], ENT_QUOTES, 'UTF-8');
+			$this->data['address2'] = html_entity_decode($order['payment_address_2'], ENT_QUOTES, 'UTF-8');
+			$this->data['city'] = html_entity_decode($order['payment_city'], ENT_QUOTES, 'UTF-8');
+			$this->data['zip'] = html_entity_decode($order['payment_postcode'], ENT_QUOTES, 'UTF-8');
 			$this->data['country'] = $payment_address_info['iso_code_2'];
-			$this->data['email'] = $order_info['email'];
-			$this->data['invoice'] = $order_info['invoice_id'] . ' - ' . html_entity_decode($order_info['payment_firstname'], ENT_QUOTES, 'UTF-8') . ' ' . html_entity_decode($order_info['payment_lastname'], ENT_QUOTES, 'UTF-8');
+			$this->data['email'] = $order['email'];
+			$this->data['invoice'] = $order['invoice_id'] . ' - ' . html_entity_decode($order['payment_firstname'], ENT_QUOTES, 'UTF-8') . ' ' . html_entity_decode($order['payment_lastname'], ENT_QUOTES, 'UTF-8');
 			$this->data['lc'] = $this->language->code();
 			$this->data['notify_url'] = $this->url->link('payment/pp_standard/callback');
 			$this->data['cancel_return'] = $this->url->link('checkout/checkout');
@@ -79,12 +79,12 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 			$server = $this->url->is_ssl() ? HTTPS_IMAGE : HTTP_IMAGE;
 			
 			//Ajax Urls
-			$this->data['url_check_order_status'] = $this->url->ajax('block/checkout/confirm/check_order_status', 'order_id=' . $order_info['order_id']);
+			$this->data['url_check_order_status'] = $this->url->ajax('block/checkout/confirm/check_order_status', 'order_id=' . $order['order_id']);
 			
 			//Additional Data
 			$this->data['image_url'] = $server . $this->config->get('config_logo');
 			$this->data['paymentaction'] = $this->config->get('pp_standard_transaction') ? 'sale' : 'authorization';
-			$this->data['custom'] = $this->encryption->encrypt($order_info['order_id']);
+			$this->data['custom'] = $this->encryption->encrypt($order['order_id']);
 			
 			$this->data['testmode'] = $testmode;
 		
@@ -104,24 +104,24 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 		
 		$order_id = $this->encryption->decrypt($_POST['custom']);
 		
-		$order_info = $this->order->get($order_id);
+		$order = $this->order->get($order_id);
 		
-		if ($order_info) {
-			
-			$request = array(
-				'cmd' => '_notify-validate',
-			);
-			
-			$request += $_POST;
-			
+		if ($order) {
 			if (!$this->config->get('pp_standard_test')) {
 				$curl = curl_init('https://www.paypal.com/cgi-bin/webscr');
 			} else {
 				$curl = curl_init('https://www.sandbox.paypal.com/cgi-bin/webscr');
 			}
-
+			
+			//IPN Response must be an exactly the same as the response received with cmd=_notify-validate prepended (same charset as well!)
+			$request = 'cmd=_notify-validate';
+			
+			foreach ($_POST as $key => $value) {
+				$request .= '&' . $key . '=' . urlencode(html_entity_decode($value, ENT_QUOTES, 'UTF-8'));
+			}
+			
 			curl_setopt($curl, CURLOPT_POST, true);
-			curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($request));
+			curl_setopt($curl, CURLOPT_POSTFIELDS, $request);
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($curl, CURLOPT_HEADER, false);
 			curl_setopt($curl, CURLOPT_TIMEOUT, 30);
@@ -146,8 +146,12 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 						$order_status_id = $this->config->get('pp_standard_canceled_reversal_status_id');
 						break;
 					case 'Completed':
-						if ((float)$_POST['mc_gross'] == $this->currency->format($order_info['total'], $order_info['currency_code'], $order_info['currency_value'], false)) {
+						if ((float)$_POST['mc_gross'] == (float)$this->currency->format($order['total'], $order['currency_code'], $order['currency_value'], false)) {
 							$order_status_id = $this->config->get('pp_standard_completed_status_id');
+						}
+						else {
+							$this->log->write("PP_STANDARD :: Payment Status Complete Received, but order total did not match payment received: " . $_POST['mc_gross'] . ' !== ' . $order['total']);
+							$order_status_id = false;
 						}
 						break;
 					case 'Denied':

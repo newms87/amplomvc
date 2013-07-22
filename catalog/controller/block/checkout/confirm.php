@@ -87,16 +87,17 @@ class Catalog_Controller_Block_Checkout_Confirm extends Controller
 	
 	public function check_order_status()
 	{
-		$order_id = isset($_GET['order_id'])?$_GET['order_id']:0;
-		if(!$order_id)return;
+		$json = array();
 		
-		$status = $this->order->getOrderStatus($order_id);
-		
-		if ($status) {
-			$json = array('status'=>$status, 'redirect'=>$this->url->link('checkout/success'));
-		}
-		else {
-			$json = array();
+		if (isset($_GET['order_id'])) {
+			$order = $this->order->get($_GET['order_id']);
+			
+			if ($order) {
+				$json = array(
+					'status' => $this->order->getOrderStatus($order['order_status_id']),
+					'redirect' => $this->url->link('checkout/success'),
+				);
+			}
 		}
 		
 		$this->response->setOutput(json_encode($json));

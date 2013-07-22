@@ -16,13 +16,15 @@ class Catalog_Controller_Block_Cart_Voucher extends Controller
 		$defaults = array(
 			'voucher' => '',
 		);
-			
-		if (isset($_POST[$key])) {
-			$this->data[$key] = $_POST[$key];
-		} elseif (isset($this->session->data[$key])) {
-			$this->data[$key] = $this->session->data[$key];
-		} else {
-			$this->data[$key] = $default;
+		
+		foreach ($defaults as $key => $default) {
+			if (isset($_POST[$key])) {
+				$this->data[$key] = $_POST[$key];
+			} elseif (isset($this->session->data[$key])) {
+				$this->data[$key] = $this->session->data[$key];
+			} else {
+				$this->data[$key] = $default;
+			}
 		}
 		
 		//Render
