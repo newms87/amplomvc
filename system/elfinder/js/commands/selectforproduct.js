@@ -19,7 +19,7 @@ elFinder.prototype.commands.selectforproduct = function() {
 				});
         $.each(this.files(hashes), function(i, file) {
             var pp = fm.path(file.hash);
-            pp = pp.replaceAll('\\', '\/');
+            pp = pp.replace('\\', '\/');
 
             // Check to see if we're on a single image page, or multi images
             //var key = "field";

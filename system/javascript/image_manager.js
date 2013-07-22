@@ -53,7 +53,7 @@ function addSingleImage(imageName, field, thumb) {
 	}
 	
 	$.ajax({
-		url: image_manager_url + '/image&image=' + encodeURIComponent(imageName) + image_size,
+		url: image_manager_url + '/image?image=' + encodeURIComponent(imageName) + image_size,
 		dataType: 'text',
 		success: function(text) {
 			thumb.attr('src', text);

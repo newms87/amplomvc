@@ -123,58 +123,58 @@ $().ready(function() {
 	var keyField = "field";
 	var valueField = getQuerystring(keyField, null);
 
-if(valueField == "imagemanager") {
+	if(valueField == "imagemanager") {
 		$('#finder').elfinder({
-				url: '<?= ELFINDER_URL; ?>php/connector.php?field=imagemanager',
-				lang: 'en',
-				resizable: 'false',
-				commands: [
- 																	'open', 'reload', 'home', 'up', 'back', 'forward', 'getfile', 'quicklook',
- 																	'download', 'rm', 'duplicate', 'rename', 'mkdir', 'mkfile', 'upload', 'copy',
- 																	'cut', 'paste', 'edit', 'extract', 'archive', 'search', 'info', 'view', 'help',
- 																	'resize', 'sort'
-										],
-				contextmenu: {
-						// navbarfolder menu
-						navbar: ['open', '|', 'copy', 'cut', 'paste', 'duplicate', '|', 'rm', '|', 'info'],
-
-						// current directory menu
-						cwd: ['reload', 'back', '|', 'upload', 'mkdir', 'mkfile', 'paste', '|', 'info'],
-
-						// current directory file menu
-						files: [
- 												'getfile', '|', 'open', 'quicklook', '|', 'download', '|', 'copy', 'cut', 'paste', 'duplicate', '|',
- 												'rm', '|', 'edit', 'rename', 'resize', '|', 'archive', 'extract', '|', 'info'
- 											]
-				},
-			});
+			url: '<?= ELFINDER_URL; ?>php/connector.php?field=imagemanager',
+			lang: 'en',
+			resizable: 'false',
+			commands: [
+				'open', 'reload', 'home', 'up', 'back', 'forward', 'getfile', 'quicklook',
+				'download', 'rm', 'duplicate', 'rename', 'mkdir', 'mkfile', 'upload', 'copy',
+				'cut', 'paste', 'edit', 'extract', 'archive', 'search', 'info', 'view', 'help',
+				'resize', 'sort'
+			],
+			contextmenu: {
+				// navbarfolder menu
+				navbar: ['open', '|', 'copy', 'cut', 'paste', 'duplicate', '|', 'rm', '|', 'info'],
+	
+				// current directory menu
+				cwd: ['reload', 'back', '|', 'upload', 'mkdir', 'mkfile', 'paste', '|', 'info'],
+	
+				// current directory file menu
+				files: [
+					'getfile', '|', 'open', 'quicklook', '|', 'download', '|', 'copy', 'cut', 'paste', 'duplicate', '|',
+					'rm', '|', 'edit', 'rename', 'resize', '|', 'archive', 'extract', '|', 'info'
+				]
+			},
+		});
 	} else {
 		$('#finder').elfinder({
-				url: '<?= ELFINDER_URL; ?>php/connector.php',
-				lang: 'en',
-				resizable: 'false',
-				commands: [
- 																	'open', 'reload', 'home', 'up', 'back', 'forward', 'getfile', 'quicklook',
- 																	'download', 'rm', 'duplicate', 'rename', 'mkdir', 'mkfile', 'upload', 'copy',
- 																	'cut', 'paste', 'edit', 'extract', 'archive', 'search', 'info', 'view', 'help',
- 																	'resize', 'sort', 'selectforproduct'
-										],
-				contextmenu: {
-						// navbarfolder menu
-						navbar: ['open', '|', 'copy', 'cut', 'paste', 'duplicate', '|', 'rm', '|', 'info'],
-
-						// current directory menu
-						cwd: ['reload', 'back', '|', 'upload', 'mkdir', 'mkfile', 'paste', '|', 'info'],
-
-						// current directory file menu
-						files: [
- 												'getfile', '|', 'open', 'quicklook', '|', 'download', '|', 'copy', 'cut', 'paste', 'duplicate', '|',
- 												'rm', '|', 'edit', 'rename', 'resize', '|', 'archive', 'extract', '|', 'info', '|', 'selectforproduct'
- 											]
-				},
-			});
-		}
-})
+			url: '<?= ELFINDER_URL; ?>php/connector.php',
+			lang: 'en',
+			resizable: 'false',
+			commands: [
+				'open', 'reload', 'home', 'up', 'back', 'forward', 'getfile', 'quicklook',
+				'download', 'rm', 'duplicate', 'rename', 'mkdir', 'mkfile', 'upload', 'copy',
+				'cut', 'paste', 'edit', 'extract', 'archive', 'search', 'info', 'view', 'help',
+				'resize', 'sort', 'selectforproduct'
+			],
+			contextmenu: {
+				// navbarfolder menu
+				navbar: ['open', '|', 'copy', 'cut', 'paste', 'duplicate', '|', 'rm', '|', 'info'],
+	
+				// current directory menu
+				cwd: ['reload', 'back', '|', 'upload', 'mkdir', 'mkfile', 'paste', '|', 'info'],
+	
+				// current directory file menu
+				files: [
+					'getfile', '|', 'open', 'quicklook', '|', 'download', '|', 'copy', 'cut', 'paste', 'duplicate', '|',
+					'rm', '|', 'edit', 'rename', 'resize', '|', 'archive', 'extract', '|', 'info', '|', 'selectforproduct'
+				]
+			},
+		});
+	}
+});
 </script>
 
 </head>
