@@ -18,8 +18,8 @@ $this->db->dropColumn('order', 'store_name');
 $this->db->dropColumn('order', 'invoice_prefix');
 $this->db->changeColumn('order', 'invoice_no', 'invoice_id', "VARCHAR(45) NOT NULL");
 $this->db->changeColumn('order', 'currency_code', '', "VARCHAR(5) NOT NULL");
-$this->db->changeColumn('order', 'payment_method', 'payment_method_id', "VARCHAR(128) NOT NULL DEFAULT");
-$this->db->changeColumn('order', 'shipping_method', 'shipping_method_id', "VARCHAR(128) NOT NULL DEFAULT");
+$this->db->changeColumn('order', 'payment_method', 'payment_method_id', "VARCHAR(128) NOT NULL");
+$this->db->changeColumn('order', 'shipping_method', 'shipping_method_id', "VARCHAR(128) NOT NULL");
 
 //Order Total
 $this->db->dropColumn('order_total', 'text');
