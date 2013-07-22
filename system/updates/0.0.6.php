@@ -50,6 +50,65 @@ $this->db->changeColumn('order_voucher', 'voucher_id', '', "INT(11) UNSIGNED NOT
 
 //Order Fraud
 $this->db->query("ALTER TABLE `" . DB_PREFIX . "order_fraud` CHANGE COLUMN `country_match` `countryMatch` VARCHAR(3) NOT NULL  , CHANGE COLUMN `country_code` `countryCode` VARCHAR(2) NOT NULL  , CHANGE COLUMN `high_risk_country` `highRiskCountry` VARCHAR(3) NOT NULL  , CHANGE COLUMN `ip_user_type` `ip_userType` VARCHAR(255) NOT NULL  , CHANGE COLUMN `ip_country_confidence` `ip_countryConf` VARCHAR(3) NOT NULL  , CHANGE COLUMN `ip_region_confidence` `ip_regionConf` VARCHAR(3) NOT NULL  , CHANGE COLUMN `ip_city_confidence` `ip_cityConf` VARCHAR(3) NOT NULL  , CHANGE COLUMN `ip_postal_confidence` `ip_postalConf` VARCHAR(3) NOT NULL  , CHANGE COLUMN `ip_postal_code` `ip_postalCode` VARCHAR(10) NOT NULL  , CHANGE COLUMN `ip_accuracy_radius` `ip_accuracyRadius` INT(11) NOT NULL  , CHANGE COLUMN `ip_net_speed_cell` `ip_netSpeedCell` VARCHAR(255) NOT NULL  , CHANGE COLUMN `ip_metro_code` `ip_metroCode` INT(3) NOT NULL  , CHANGE COLUMN `ip_area_code` `ip_areaCode` INT(3) NOT NULL  , CHANGE COLUMN `ip_time_zone` `ip_timeZone` VARCHAR(255) NOT NULL  , CHANGE COLUMN `ip_region_name` `ip_regionName` VARCHAR(255) NOT NULL  , CHANGE COLUMN `ip_country_name` `ip_countryName` VARCHAR(255) NOT NULL  , CHANGE COLUMN `ip_continent_code` `ip_continentCode` VARCHAR(2) NOT NULL  , CHANGE COLUMN `ip_corporate_proxy` `ip_corporateProxy` VARCHAR(3) NOT NULL  , CHANGE COLUMN `anonymous_proxy` `anonymousProxy` VARCHAR(3) NOT NULL  , CHANGE COLUMN `proxy_score` `proxyScore` INT(3) NOT NULL  , CHANGE COLUMN `is_trans_proxy` `isTransProxy` VARCHAR(3) NOT NULL  , CHANGE COLUMN `free_mail` `freeMail` VARCHAR(3) NOT NULL  , CHANGE COLUMN `carder_email` `carderEmail` VARCHAR(3) NOT NULL  , CHANGE COLUMN `high_risk_username` `highRiskUsername` VARCHAR(3) NOT NULL  , CHANGE COLUMN `high_risk_password` `highRiskPassword` VARCHAR(3) NOT NULL  , CHANGE COLUMN `bin_match` `binMatch` VARCHAR(10) NOT NULL  , CHANGE COLUMN `bin_country` `binCountry` VARCHAR(2) NOT NULL  , CHANGE COLUMN `bin_name_match` `binNameMatch` VARCHAR(3) NOT NULL  , CHANGE COLUMN `bin_name` `binName` VARCHAR(255) NOT NULL  , CHANGE COLUMN `bin_phone_match` `binPhoneMatch` VARCHAR(3) NOT NULL  , CHANGE COLUMN `bin_phone` `binPhone` VARCHAR(32) NOT NULL  , CHANGE COLUMN `customer_phone_in_billing_location` `custPhoneInBillingLoc` VARCHAR(8) NOT NULL  , CHANGE COLUMN `ship_forward` `shipForward` VARCHAR(3) NOT NULL  , CHANGE COLUMN `city_postal_match` `cityPostalMatch` VARCHAR(3) NOT NULL  , CHANGE COLUMN `ship_city_postal_match` `shipCityPostalMatch` VARCHAR(3) NOT NULL  , CHANGE COLUMN `risk_score` `riskScore` DECIMAL(10,5) NOT NULL  , CHANGE COLUMN `queries_remaining` `queriesRemaining` INT(11) NOT NULL  , CHANGE COLUMN `maxmind_id` `maxmindID` VARCHAR(8) NOT NULL  , CHANGE COLUMN `error` `err` TEXT NOT NULL");
+$this->db->dropTable('order_fraud');
+$this->db->createTable('order_fraud', <<<SQL
+  `order_id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `countryMatch` varchar(3) NOT NULL,
+  `countryCode` varchar(2) NOT NULL,
+  `highRiskCountry` varchar(3) NOT NULL,
+  `distance` int(11) NOT NULL,
+  `ip_region` varchar(255) NOT NULL,
+  `ip_city` varchar(255) NOT NULL,
+  `ip_latitude` decimal(10,6) NOT NULL,
+  `ip_longitude` decimal(10,6) NOT NULL,
+  `ip_isp` varchar(255) NOT NULL,
+  `ip_org` varchar(255) NOT NULL,
+  `ip_asnum` int(11) NOT NULL,
+  `ip_userType` varchar(255) NOT NULL,
+  `ip_countryConf` varchar(3) NOT NULL,
+  `ip_regionConf` varchar(3) NOT NULL,
+  `ip_cityConf` varchar(3) NOT NULL,
+  `ip_postalConf` varchar(3) NOT NULL,
+  `ip_postalCode` varchar(10) NOT NULL,
+  `ip_accuracyRadius` int(11) NOT NULL,
+  `ip_netSpeedCell` varchar(255) NOT NULL,
+  `ip_metroCode` int(3) NOT NULL,
+  `ip_areaCode` int(3) NOT NULL,
+  `ip_timeZone` varchar(255) NOT NULL,
+  `ip_regionName` varchar(255) NOT NULL,
+  `ip_domain` varchar(255) NOT NULL,
+  `ip_countryName` varchar(255) NOT NULL,
+  `ip_continentCode` varchar(2) NOT NULL,
+  `ip_corporateProxy` varchar(3) NOT NULL,
+  `anonymousProxy` varchar(3) NOT NULL,
+  `proxyScore` int(3) NOT NULL,
+  `isTransProxy` varchar(3) NOT NULL,
+  `freeMail` varchar(3) NOT NULL,
+  `carderEmail` varchar(3) NOT NULL,
+  `highRiskUsername` varchar(3) NOT NULL,
+  `highRiskPassword` varchar(3) NOT NULL,
+  `binMatch` varchar(10) NOT NULL,
+  `binCountry` varchar(2) NOT NULL,
+  `binNameMatch` varchar(3) NOT NULL,
+  `binName` varchar(255) NOT NULL,
+  `binPhoneMatch` varchar(3) NOT NULL,
+  `binPhone` varchar(32) NOT NULL,
+  `custPhoneInBillingLoc` varchar(8) NOT NULL,
+  `shipForward` varchar(3) NOT NULL,
+  `cityPostalMatch` varchar(3) NOT NULL,
+  `shipCityPostalMatch` varchar(3) NOT NULL,
+  `score` decimal(10,5) NOT NULL,
+  `explanation` text NOT NULL,
+  `riskScore` decimal(10,5) NOT NULL,
+  `queriesRemaining` int(11) NOT NULL,
+  `maxmindID` varchar(8) NOT NULL,
+  `err` text NOT NULL,
+  `date_added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`order_id`)
+SQL
+);
+
 
 //Product
 $this->db->changeColumn('product', 'is_final', 'return_policy_id', "INT(10) UNSIGNED NOT NULL DEFAULT '0'");
