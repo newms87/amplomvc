@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Information_AreYouADesigner extends Controller 
+class Catalog_Controller_Information_AreYouADesigner extends Controller
 {
 	
   	public function index()

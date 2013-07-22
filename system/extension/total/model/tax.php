@@ -1,5 +1,5 @@
 <?php
-class System_Extension_Total_Model_Tax extends Model 
+class System_Extension_Total_Model_Tax extends Model
 {
 	public function getTotal(&$total_data, &$total, &$taxes)
 	{

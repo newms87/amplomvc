@@ -1,5 +1,5 @@
 <?php
-class Customer extends Library 
+class Customer extends Library
 {
 	private $customer_id;
 	private $information;
@@ -150,6 +150,10 @@ class Customer extends Library
 	public function getAddress($address_id)
 	{
 		$address = $this->Model_Account_Address->getAddress($address_id);
+		
+		if (!$address) {
+			return null;
+		}
 		
 		if ((int)$address['customer_id'] !== $this->customer_id) {
 			trigger_error("Customer (id: $this->customer_id) attempted to access an unassociated address!");

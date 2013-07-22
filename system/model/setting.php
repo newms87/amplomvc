@@ -1,5 +1,5 @@
 <?php
-class System_Model_Setting extends Model 
+class System_Model_Setting extends Model
 {
 	private $translate = true;
 	
@@ -154,7 +154,7 @@ class System_Model_Setting extends Model
 		);
 		
 		$this->delete('setting', $values);
-		 
+		
 		$this->cache->delete('theme');
 		$this->cache->delete('setting');
 		$this->cache->delete('store');

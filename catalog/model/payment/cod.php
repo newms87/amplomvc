@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Payment_Cod extends Model 
+class Catalog_Model_Payment_Cod extends Model
 {
 	function __construct($registry)
 	{

@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Product_Product extends Controller 
+class Catalog_Controller_Product_Product extends Controller
 {
 	public function index()
 	{
@@ -64,7 +64,13 @@ class Catalog_Controller_Product_Product extends Controller
 			$tags = $this->Model_Catalog_Product->getProductTags($product_info['product_id']);
 			
 			foreach ($tags as &$tag) {
-				$tag['href'] = $this->url->link('product/search', 'filter_tag=' . $tag['tag']);
+				$url_query = array(
+					'filter' => array(
+						'tag' => $tag['text'],
+					),
+				);
+				
+				$tag['href'] = $this->url->link('product/search', $url_query);
 			}
 			
 			$this->_('text_on_store', $this->config->get('config_name'));

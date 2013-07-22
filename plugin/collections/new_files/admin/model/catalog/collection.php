@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Catalog_Collection extends Model 
+class Admin_Model_Catalog_Collection extends Model
 {
 	public function addCollection($data)
 	{

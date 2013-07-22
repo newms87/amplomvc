@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Setting_OrderStatus extends Controller 
+class Admin_Controller_Setting_OrderStatus extends Controller
 {
 	public function index()
 	{
@@ -91,7 +91,7 @@ class Admin_Controller_Setting_OrderStatus extends Controller
 
 		$order_statuses = $this->config->load('order', 'order_statuses', 0);
 		
-		//if deleted Order Statuses are associated with an order, do not allow deletion 
+		//if deleted Order Statuses are associated with an order, do not allow deletion
 		if (!empty($order_statuses)) {
 			$deleted = array_diff_key($order_statuses, $_POST['order_statuses']);
 			

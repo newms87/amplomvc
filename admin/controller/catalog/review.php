@@ -1,8 +1,8 @@
 <?php
-class Admin_Controller_Catalog_Review extends Controller 
+class Admin_Controller_Catalog_Review extends Controller
 {
 	
- 
+
 	public function index()
 	{
 		$this->language->load('catalog/review');
@@ -161,7 +161,7 @@ class Admin_Controller_Catalog_Review extends Controller
 		$review_total = $this->Model_Catalog_Review->getTotalReviews();
 	
 		$results = $this->Model_Catalog_Review->getReviews($data);
- 
+
 		foreach ($results as $result) {
 			$action = array();
 						

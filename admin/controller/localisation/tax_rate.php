@@ -1,8 +1,8 @@
 <?php
-class Admin_Controller_Localisation_TaxRate extends Controller 
+class Admin_Controller_Localisation_TaxRate extends Controller
 {
 	
- 
+
 	public function index()
 	{
 		$this->language->load('localisation/tax_rate');

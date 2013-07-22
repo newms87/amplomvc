@@ -15,7 +15,7 @@ class Language extends Library
 	private $loaded_languages = array();
 	
 	public  $data = array();
- 
+
 	public function __construct($registry, $language_id = null, $set_active_language = true)
 	{
 		parent::__construct($registry);

@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Payment_PerpetualPayments extends Controller 
+class Catalog_Controller_Payment_PerpetualPayments extends Controller
 {
 	protected function index()
 	{
@@ -86,7 +86,7 @@ class Catalog_Controller_Payment_PerpetualPayments extends Controller
 			$data = explode('|', $response);
 			
 			if (isset($data[0]) && $data[0] == 'A') {
-				$this->order->update($this->session->data['order_id'], $this->config->get('config_order_status_id'));
+				$this->order->update($this->session->data['order_id'], $this->config->get('config_order_complete_status_id'));
 				
 				$message = '';
 				

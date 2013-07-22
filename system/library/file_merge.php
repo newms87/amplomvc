@@ -122,7 +122,7 @@ class FileMerge extends Library
 	public function syncRegistryWithDb()
 	{
 		$this->loadMergeRegistry();
- 
+
 		if (!$this->applyMergeRegistry()) {
 			$msg = "Error: There was a problem remerging the file modifications. This could cause system instability. Please try to uninstall and reinstall the plugins!";
 			trigger_error($msg);

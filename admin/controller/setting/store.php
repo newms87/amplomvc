@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Setting_Store extends Controller 
+class Admin_Controller_Setting_Store extends Controller
 {
 	public function index()
 	{
@@ -89,7 +89,7 @@ class Admin_Controller_Setting_Store extends Controller
 		$store_total = $this->Model_Setting_Store->getTotalStores();
 	
 		$stores = $this->Model_Setting_Store->getStores();
- 
+
 		foreach ($stores as &$store) {
 			$action = array();
 			
@@ -190,7 +190,7 @@ class Admin_Controller_Setting_Store extends Controller
 			'config_checkout_id'=>'',
 			'config_stock_display'=>'',
 			'config_stock_checkout'=>'',
-			'config_order_status_id'=>'',
+			'config_order_complete_status_id'=>'',
 			'config_cart_weight'=>'',
 			'config_logo'=>'',
 			'config_icon'=>'',

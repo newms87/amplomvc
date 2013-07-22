@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Sale_Coupon extends Controller 
+class Admin_Controller_Sale_Coupon extends Controller
 {
 	
   	public function index()
@@ -10,7 +10,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 		
 		$this->getList();
   	}
-  
+
   	public function insert()
   	{
 		$this->language->load('sale/coupon');
@@ -99,7 +99,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 		$coupon_total = $this->Model_Sale_Coupon->getTotalCoupons();
 	
 		$results = $this->Model_Sale_Coupon->getCoupons($data);
- 
+
 		foreach ($results as $result) {
 			$action = array();
 						

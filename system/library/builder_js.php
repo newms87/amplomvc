@@ -28,19 +28,19 @@ country_selectors = $('<?= $parent_selector;?>').find('<?= $country_selector;?>'
 country_selectors.live('change', function (event)
  {
   cs = $(this);
-  
+
   if (!$(this).is('select')) {
 	cs = cs.find('<?= $country_selector;?>');
   }
 
   if(!cs.val()) return;
-  
+
   zone_selector = cs.closest('<?= $parent_selector;?>').find('<?=$zone_selector;?>');
-  
+
   if(zone_selector.attr('country_id') == cs.val()) return;
-  
+
   zone_selector.attr('country_id', cs.val());
-  
+
   zone_selector.attr('zone_id', zone_selector.val() ||  zone_selector.attr('zone_id') || zone_selector.attr('select_value') || 0);
 	
   zone_selector.load("<?= $url_load_zones;?>" + cs.val(),

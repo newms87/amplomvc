@@ -1,5 +1,5 @@
 <?php
-class Response 
+class Response
 {
 	private $headers = array();
 	private $level = 0;

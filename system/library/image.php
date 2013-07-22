@@ -45,7 +45,7 @@ class Image extends Library
 			
 			$this->image = $this->create($file);
 		} else {
-			$this->log->write("Error: Could not load image $file!");
+			$this->error_log->write("Error: Could not load image $file!");
 		}
 	}
 	
@@ -174,7 +174,7 @@ class Image extends Library
 		$scale_y = $height / $this->info['height'];
 		
 		//if the image is the correct size we do not need to do anything
-		if ($scale_x === 1 && $scale_y === 1) { 
+		if ($scale_x === 1 && $scale_y === 1) {
 			return $this->get($filename);
 		}
 		

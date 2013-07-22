@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Setting_DbRules extends Model 
+class Admin_Model_Setting_DbRules extends Model
 {
 	public function addDbRule($data)
 	{

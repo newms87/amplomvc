@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Block_Add extends Controller 
+class Admin_Controller_Block_Add extends Controller
 {
 	public function index()
 	{

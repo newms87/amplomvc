@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Catalog_Collection extends Controller 
+class Admin_Controller_Catalog_Collection extends Controller
 {
 	public function index()
 	{
@@ -41,7 +41,7 @@ class Admin_Controller_Catalog_Collection extends Controller
 	
 		$this->getForm();
 	}
- 
+
 	public function delete()
 	{
 		$this->language->load('catalog/collection');

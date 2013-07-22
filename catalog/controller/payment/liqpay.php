@@ -39,7 +39,7 @@ class Catalog_Controller_Payment_Liqpay extends Controller
 		$order_id = substr($xml, $posleft + 9, $posright - $posleft - 10);
 		
 		if ($signature == $_POST['signature']) {
-			$this->order->update($order_id, $this->config->get('config_order_status_id'));
+			$this->order->update($order_id, $this->config->get('config_order_complete_status_id'));
 		}
 	}
 }

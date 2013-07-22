@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Design_Navigation extends Controller 
+class Admin_Controller_Design_Navigation extends Controller
 {
 	
 	public function index()
@@ -32,7 +32,7 @@ class Admin_Controller_Design_Navigation extends Controller
 		
 		$this->getForm();
 	}
- 
+
 	public function delete()
 	{
 		$this->language->load('design/navigation');
@@ -157,7 +157,7 @@ class Admin_Controller_Design_Navigation extends Controller
 				'delete' => array(
 					'text' => $this->_('text_delete'),
 					'href' => $this->url->link('design/navigation/delete', 'navigation_group_id=' . $nav_group['navigation_group_id'] . '&' . $url_query),
-				) 
+				)
 			);
 			
 			if ($nav_group['name'] == 'admin') {

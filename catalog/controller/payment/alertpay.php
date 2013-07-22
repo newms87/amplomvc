@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Payment_Alertpay extends Controller 
+class Catalog_Controller_Payment_Alertpay extends Controller
 {
 	protected function index()
 	{

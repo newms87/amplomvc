@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Setting_ReturnReason extends Controller 
+class Admin_Controller_Setting_ReturnReason extends Controller
 {
 	public function index()
 	{

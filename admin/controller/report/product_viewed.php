@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Report_ProductViewed extends Controller 
+class Admin_Controller_Report_ProductViewed extends Controller
 {
 	public function index()
 	{

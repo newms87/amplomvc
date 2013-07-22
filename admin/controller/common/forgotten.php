@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Common_Forgotten extends Controller 
+class Admin_Controller_Common_Forgotten extends Controller
 {
 	
 
@@ -53,7 +53,7 @@ class Admin_Controller_Common_Forgotten extends Controller
 		}
 		
 		$this->data['action'] = $this->url->link('common/forgotten');
- 
+
 		$this->data['cancel'] = $this->url->link('common/login');
 		
 		if (isset($_POST['email'])) {

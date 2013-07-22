@@ -1,6 +1,6 @@
 <?php
 
-abstract class Library 
+abstract class Library
 {
 	protected $registry;
 	

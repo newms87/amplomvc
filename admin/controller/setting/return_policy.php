@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Setting_ReturnPolicy extends Controller 
+class Admin_Controller_Setting_ReturnPolicy extends Controller
 {
 	public function index()
 	{
@@ -100,7 +100,7 @@ class Admin_Controller_Setting_ReturnPolicy extends Controller
 
 		$return_policies = $this->config->load('policies', 'return_policies', 0);
 		
-		//if deleted Return Policies are associated with a product, do not allow deletion 
+		//if deleted Return Policies are associated with a product, do not allow deletion
 		if (!empty($return_policies)) {
 			$deleted = array_diff_key($return_policies, $_POST['return_policies']);
 			

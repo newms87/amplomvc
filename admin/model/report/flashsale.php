@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Report_Flashsale extends Model 
+class Admin_Model_Report_Flashsale extends Model
 {
 	
 	public function getFlashsaleViews()

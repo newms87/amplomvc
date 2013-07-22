@@ -1,6 +1,6 @@
 #<?php
 //=====
-class Admin_Controller_Setting_Setting extends Controller 
+class Admin_Controller_Setting_Setting extends Controller
 {
 //.....
 	public function index()

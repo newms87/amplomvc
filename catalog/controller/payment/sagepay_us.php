@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Payment_SagepayUs extends Controller 
+class Catalog_Controller_Payment_SagepayUs extends Controller
 {
 	protected function index()
 	{
@@ -65,7 +65,7 @@ class Catalog_Controller_Payment_SagepayUs extends Controller
 		$json = array();
 															
 		if ($response[1] == 'A') {
-			$this->order->update($this->session->data['order_id'], $this->config->get('config_order_status_id'));
+			$this->order->update($this->session->data['order_id'], $this->config->get('config_order_complete_status_id'));
 
 			$message  = 'Approval Indicator: ' . $response[1] . "\n";
 			$message .= 'Approval/Error Code: ' . substr($response, 2, 6) . "\n";

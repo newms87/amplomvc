@@ -1,5 +1,5 @@
 <?php
-abstract class PluginSetup 
+abstract class PluginSetup
 {
 	private $registry;
 	

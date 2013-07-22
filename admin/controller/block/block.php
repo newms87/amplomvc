@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Block_Block extends Controller 
+class Admin_Controller_Block_Block extends Controller
 {
 	private $block_controller;
 	
@@ -119,7 +119,7 @@ class Admin_Controller_Block_Block extends Controller
 		$name = $_GET['name'];
 		
 		if ($this->request->isPost() && $this->validate()) {
-			//If plugins have additional 
+			//If plugins have additional
 			$this->saveBlockData();
 			
 			$this->Model_Block_Block->updateBlock($name, $_POST);

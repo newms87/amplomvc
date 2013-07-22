@@ -102,7 +102,7 @@ function debug_stack($depth = 10, $offset = 0) {
 if (!function_exists('array_column')) {
 	/**
 	 * Returns an array of elements from the column of an array
-	 * 
+	 *
 	 * @param Array $array - An associative array of arrays
 	 * @param String $column - The key column of the $array to get elements for
 	 */
@@ -121,9 +121,9 @@ if (!function_exists('array_column')) {
 if (!function_exists('html2text')) {
 	/**
 	 * Converts HTML break tags (eg: <br />) to new lines, and removes all other HTML tags
-	 * 
+	 *
 	 * @param string $html - The HTML to replace all the
-	 * 
+	 *
 	 * @return String of plain text
 	 */
 	function html2text($html)

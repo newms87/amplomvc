@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Payment_PpProUk extends Controller 
+class Admin_Controller_Payment_PpProUk extends Controller
 {
 	
 

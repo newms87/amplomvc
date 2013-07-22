@@ -31,9 +31,9 @@
 							<span class="help"><?= $entry_pdt_enabled_help; ?></span>
 						</td>
 					</tr>
-					<tr id="auto_return_url">
-						<td class="required"><?= $entry_auto_return_url; ?></td>
-						<td><input type="text" name="pp_standard_auto_return_url" size="100" value="<?= $pp_standard_auto_return_url; ?>" /></td>
+					<tr>
+						<td class="required"><?= $entry_pdt_token; ?></td>
+						<td><input type="text" name="pp_standard_pdt_token" value="<?= $pp_standard_pdt_token; ?>" size="80" /></td>
 					</tr>
 					<tr>
 						<td><?= $entry_debug; ?></td>
@@ -109,10 +109,12 @@
 
 <script type="text/javascript">//<!--
 $('[name=pp_standard_pdt_enabled]').change(function(){
+	token_row = $('[name=pp_standard_pdt_token]').closest('tr');
+	
 	if ($(this).val() === '1') {
-		$('#auto_return_url').show();
+		token_row.show();
 	} else {
-		$('#auto_return_url').hide();
+		token_row.hide();
 	}
 }).change();
 //--></script>

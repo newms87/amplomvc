@@ -1,5 +1,5 @@
 <?php
-class System_Extension_Total_Model_Shipping extends Model 
+class System_Extension_Total_Model_Shipping extends Model
 {
 	public function getTotal(&$total_data, &$total, &$taxes)
 	{

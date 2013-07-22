@@ -2,7 +2,7 @@
 // Heading
 $_['heading_title']		= 'Product Returns';
 $_['return_success_title'] = "Return Success";
- 
+
 // Text
 $_['text_account']		= 'Account';
 $_['text_return']		= 'Return Information';
@@ -66,7 +66,7 @@ $_['button_order_lookup'] = "Find Order";
 
 //Notify
 $_['notify_order_lookup_guest'] = "The order was found! To request a return, you must first login or register a new account with the email %s.";
- 
+
 // Error
 $_['error_order_id']	= 'Order ID required!';
 $_['error_firstname']	= 'First Name must be between 1 and 64 characters!';

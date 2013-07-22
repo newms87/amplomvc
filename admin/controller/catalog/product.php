@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Catalog_Product extends Controller 
+class Admin_Controller_Catalog_Product extends Controller
 {
   	public function index()
   	{
@@ -7,7 +7,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		
 		$this->getList();
   	}
-  
+
   	public function update()
   	{
 		$this->language->load('catalog/product');
@@ -77,7 +77,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		$this->language->load('catalog/product');
 		
 		if (isset($_POST['selected']) && isset($_GET['action'])) {
-			if (	($_GET['action'] === 'copy' && !$this->validateCopy()) || 
+			if (	($_GET['action'] === 'copy' && !$this->validateCopy()) ||
 					($_GET['action'] === 'delete' && !$this->validateDelete())	) {
 				//Action not allowed
 				$this->message->add("warning", $this->_('error_batch_action'));

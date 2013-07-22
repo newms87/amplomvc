@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Mail_Voucher extends Controller 
+class Catalog_Controller_Mail_Voucher extends Controller
 {
 	public function index($voucher = null)
 	{

@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Payment_PpStandard extends Controller 
+class Catalog_Controller_Payment_PpStandard extends Controller
 {
 	public function index()
 	{
@@ -95,7 +95,7 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 	public function callback()
 	{
 		if ($this->config->get('pp_standard_debug')) {
-			$this->error_log->write('PP_STANDARD :: Callback called');
+			$this->log->write('PP_STANDARD :: Callback called');
 		}
 		
 		if (empty($_POST['custom'])) {
@@ -107,11 +107,12 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 		$order_info = $this->order->get($order_id);
 		
 		if ($order_info) {
-			$request = 'cmd=_notify-validate';
-		
-			foreach ($_POST as $key => $value) {
-				$request .= '&' . $key . '=' . urlencode(html_entity_decode($value, ENT_QUOTES, 'UTF-8'));
-			}
+			
+			$request = array(
+				'cmd' => '_notify-validate',
+			);
+			
+			$request += $_POST;
 			
 			if (!$this->config->get('pp_standard_test')) {
 				$curl = curl_init('https://www.paypal.com/cgi-bin/webscr');
@@ -120,7 +121,7 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 			}
 
 			curl_setopt($curl, CURLOPT_POST, true);
-			curl_setopt($curl, CURLOPT_POSTFIELDS, $request);
+			curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($request));
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($curl, CURLOPT_HEADER, false);
 			curl_setopt($curl, CURLOPT_TIMEOUT, 30);
@@ -128,21 +129,18 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 			
 			$response = curl_exec($curl);
 			
-			
 			if (!$response) {
 				$this->error_log->write('PP_STANDARD :: CURL failed ' . curl_error($curl) . '(' . curl_errno($curl) . ')');
 			}
 					
 			if ($this->config->get('pp_standard_debug')) {
-				$this->error_log->write('PP_STANDARD :: IPN REQUEST: ' . $request);
-				$this->error_log->write('PP_STANDARD :: IPN RESPONSE: ' . $response);
+				$this->log->write('PP_STANDARD :: IPN REQUEST: ' . $request);
+				$this->log->write('PP_STANDARD :: IPN RESPONSE: ' . $response);
 			}
 			
 			curl_close($curl);
 			
-			$order_status_id = $this->config->get('config_order_status_id');
-					
-			if ((strcmp($response, 'VERIFIED') == 0 || strcmp($response, 'UNVERIFIED') == 0) && isset($_POST['payment_status'])) {
+			if ((strcmp($response, 'VERIFIED') === 0 || strcmp($response, 'UNVERIFIED') === 0) && isset($_POST['payment_status'])) {
 				switch($_POST['payment_status']) {
 					case 'Canceled_Reversal':
 						$order_status_id = $this->config->get('pp_standard_canceled_reversal_status_id');
@@ -176,29 +174,88 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 					case 'Voided':
 						$order_status_id = $this->config->get('pp_standard_voided_status_id');
 						break;
+					default:
+						$order_status_id = false;
+						$this->error_log->write("PP_STANDARD :: Unknown Order Payment Status Response: " . $_POST['payment_status']);
+						break;
+				}
+				
+				if ($order_status_id) {
+					$this->order->update($order_id, $order_status_id);
+					return true;
 				}
 			}
-			
-			$this->order->update($order_id, $order_status_id);
-			
-			return true;
+			else {
+				$this->error_log->write("PP_STANDARD :: Invalid Response from PayPal on callback for order ID $order_id. Request: $request");
+			}
 		}
 
 		return false;
 	}
 
+	//TODO: This is not working. Need to verify PDT process?
 	public function auto_return()
 	{
 		$this->language->load('payment/pp_standard');
 		
-		if (!$this->callback()) {
-			$this->message->add('warning', $this->_('error_checkout_callback', $this->config->get('config_email')));
+		if ($this->config->get('pp_standard_debug')) {
+			$this->log->write('PP_STANDARD :: Auto Return called');
+		}
+		
+		if (empty($_POST['custom'])) {
+			return false;
+		}
+		
+		$order_id = $this->encryption->decrypt($_POST['custom']);
+		
+		$order = $this->order->get($order_id);
+		
+		$pdt_token = $this->config->load('pp_standard', 'pp_standard_pdt_token');
+		$tx = isset($_GET['tx']) ? $_GET['tx'] : $_POST['txn_id'];
+		
+		$response = '';
+		
+		if ($order) {
+			$request = array(
+				'cmd' => '_notify-synch',
+				'tx' => $tx,
+				'at' => $pdt_token,
+				'submit' => 'PDT',
+			);
 			
-			$order_id = $this->encryption->decrypt($_POST['custom']);
+			$request = http_build_query($request);
 			
-			if ($order_id) {
-				$order = $this->order->get($order_id);
+			if (!$this->config->get('pp_standard_test')) {
+				$curl = curl_init('https://www.paypal.com/cgi-bin/webscr');
+			} else {
+				$curl = curl_init('https://www.sandbox.paypal.com/cgi-bin/webscr');
 			}
+
+			curl_setopt($curl, CURLOPT_POST, true);
+			curl_setopt($curl, CURLOPT_POSTFIELDS, $request);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($curl, CURLOPT_HEADER, false);
+			curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+			
+			$response = curl_exec($curl);
+			
+			if (!$response) {
+				$this->error_log->write('PP_STANDARD :: CURL failed ' . curl_error($curl) . '(' . curl_errno($curl) . ')');
+			}
+					
+			if ($this->config->get('pp_standard_debug')) {
+				$this->log->write('PP_STANDARD :: IPN REQUEST: ' . $request);
+				$this->log->write('PP_STANDARD :: IPN RESPONSE: ' . $response);
+			}
+			
+			curl_close($curl);
+			
+			echo 'repsonse: ' . $response . '<br>';
+		}
+		
+		if (empty($response) || strpos($response, "FAIL") === 0) {
+			$this->message->add('warning', $this->_('error_checkout_callback', $this->config->get('config_email')));
 			
 			if (!$order) {
 				if (!empty($_POST['first_name'])) {
@@ -234,6 +291,6 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 			$this->mail->send();
 		}
 		
-		$this->url->redirect($this->url->link('checkout/success'));
+		//$this->url->redirect($this->url->link('checkout/success'));
 	}
 }

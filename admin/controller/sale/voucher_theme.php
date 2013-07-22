@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Sale_VoucherTheme extends Controller 
+class Admin_Controller_Sale_VoucherTheme extends Controller
 {
 	public function index()
   	{
@@ -158,7 +158,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 		//Render
 		$this->response->setOutput($this->render());
   	}
-  
+
   	private function getForm()
   	{
   		//Page Title

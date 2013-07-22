@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Tool_Data extends Controller 
+class Catalog_Controller_Tool_Data extends Controller
 {	
 	public function load_zones()
 	{

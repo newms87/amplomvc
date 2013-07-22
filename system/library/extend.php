@@ -89,7 +89,7 @@ class Extend extends Library
 		return $this->Model_Design_Layout->addLayout($layout);
 	}
 	
-	//TODO: This should remove based on a unique ID not the name... 
+	//TODO: This should remove based on a unique ID not the name...
 	public function remove_layout($name)
 	{
 		$result = $this->db->query("SELECT layout_id FROM " . DB_PREFIX . "layout WHERE name='" . $this->db->escape($name) . "' LIMIT 1");

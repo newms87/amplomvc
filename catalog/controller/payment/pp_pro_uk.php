@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Payment_PpProUk extends Controller 
+class Catalog_Controller_Payment_PpProUk extends Controller
 {
 	protected function index()
 	{
@@ -125,13 +125,13 @@ class Catalog_Controller_Payment_PpProUk extends Controller
 		}
 		
  		$response_data = array();
- 
+
 		parse_str($response, $response_data);
 
 		$json = array();
 
 		if ($response_data['RESULT'] == '0') {
-			$this->order->update($this->session->data['order_id'], $this->config->get('config_order_status_id'));
+			$this->order->update($this->session->data['order_id'], $this->config->get('config_order_complete_status_id'));
 			
 			$message = '';
 			

@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Affiliate_Logout extends Controller 
+class Catalog_Controller_Affiliate_Logout extends Controller
 {
 	public function index()
 	{
@@ -10,7 +10,7 @@ class Catalog_Controller_Affiliate_Logout extends Controller
 			
 				$this->url->redirect($this->url->link('affiliate/logout'));
 		}
- 
+
 		$this->language->load('affiliate/logout');
 		
 		$this->document->setTitle($this->_('heading_title'));

@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Localisation_WeightClass extends Model 
+class Admin_Model_Localisation_WeightClass extends Model
 {
 	public function addWeightClass($data)
 	{

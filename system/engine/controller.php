@@ -1,6 +1,6 @@
 <?php
 
-abstract class Controller 
+abstract class Controller
 {
 	protected $registry;
 	protected $children = array();

@@ -35,7 +35,7 @@ class Address extends Library
 			$address_format = $this->db->queryVar("SELECT address_format FROM " . DB_PREFIX . "country WHERE country_id = '" . (int)$country_id . "'");
 			
 			if (empty($address_format)) {
-				$address_format = 
+				$address_format =
 					"{firstname} {lastname}\n" .
 					"{company}\n" .
 					"{address_1}\n" .

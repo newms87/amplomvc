@@ -40,7 +40,7 @@ $_['entry_layout']				= 'Default Layout:';
 $_['entry_debug']					= 'Turn on Global Debug:<span class="help">Should be turned off for production sites.</span>';
 $_['entry_allow_close_message_box'] = "Allow Customers to Close Notification Messages?<span class='help'>These are popups that display warning, success and alert/notify messages</span>";
 $_['entry_theme']			= 'Theme:';
-$_['entry_address_format']	= 'Default Address Format: <span class="help">Insertables:<br/> 
+$_['entry_address_format']	= 'Default Address Format: <span class="help">Insertables:<br/>
 {firstname}, {lastname}, {company}, {address_1}, {address_2}, {postcode}, {zone}, {zone_code}, {country}. <br/><br />Can be individually set under System > Localisation > Countries</span>';
 $_['entry_country']				= 'Country:';
 $_['entry_zone']					= 'Region / State:';
@@ -82,7 +82,7 @@ $_['entry_stock_display']		= 'Display Stock:<br /><span class="help">Display sto
 $_['entry_stock_warning']		= 'Show Out Of Stock Warning:<br /><span class="help">Display out of stock message on the shopping cart page if a product is out of stock but stock checkout is yes. (Warning always shows if stock checkout is no)</span>';
 $_['entry_stock_checkout']	= 'Stock Checkout:<br /><span class="help">Allow customers to still checkout if the products they are ordering are not in stock.</span>';
 $_['entry_stock_status']		= 'Out of Stock Status:<br /><span class="help">Set the default out of stock status selected in product edit.</span>';
-$_['entry_order_processed_status']		= 'Order Processed Status:<br /><span class="help">Set the default order status when an order is active in the system.</span>';
+$_['entry_order_received_status']		= 'Order Received Status:<br /><span class="help">Set the initial order status when an order is received.</span>';
 $_['entry_order_complete_status']	= 'Complete Order Status:<br /><span class="help">Set the order status for when an order has been fully paid for and products are deducted from the inventory (Downloads / Gift Vouchers are accessible and Products requiring shipping should be shipped).</span>';
 $_['entry_order_blacklist_status']		= 'Order Blacklist Status:<br /><span class="help">Set the order status when an order is associated with a blacklisted account.</span>';
 $_['entry_order_fraud_status']		= 'Fraud Order Status:<br /><span class="help">Orders detected as potentially fraudulent will be assigned this order status and will not be allowed to reach the complete status unless manually overridden.</span>';
@@ -131,9 +131,10 @@ $_['entry_image_max_mem']		= 'Image Resize Max Memory<span class="help">The maxi
 $_['entry_encryption']			= 'Encryption Key:<br /><span class="help">Please provide a secret key that will be used to encrypt private information when processing orders.</span>';
 $_['entry_compression']		= 'Output Compression Level:<br /><span class="help">GZIP for more efficient transfer to requesting clients. Compression level must be between 0 - 9</span>';
 $_['entry_debug_send_emails']  = 'Send Emails to third parties? <span class="help">Emails sent to people other than the current user and the system emails</span>';
+$_['entry_log_filename']	= 'Log Filename:';
+$_['entry_error_filename']	= 'Error Log Filename:';
 $_['entry_error_display']		= 'Display Errors:';
 $_['entry_error_log']			= 'Log Errors:';
-$_['entry_error_filename']	= 'Error Log Filename:';
 $_['entry_statcounter']		= 'Stat Counter Code:<span class="help">Sign up at <a onclick="window.open(\'http://www.statcounter.com/sign-up/\');"><u>Stat Counter</u></a> and copy and past the code in this field.</span>';
 $_['entry_statcounter_project'] = 'Project ID';
 $_['entry_statcounter_security'] = 'Security Code';

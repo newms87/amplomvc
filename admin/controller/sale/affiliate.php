@@ -1,8 +1,8 @@
 <?php
-class Admin_Controller_Sale_Affiliate extends Controller 
+class Admin_Controller_Sale_Affiliate extends Controller
 {
 	
-  
+
   	public function index()
   	{
 		$this->language->load('sale/affiliate');
@@ -11,7 +11,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
 		
 		$this->getList();
   	}
-  
+
   	public function insert()
   	{
 		$this->language->load('sale/affiliate');
@@ -340,7 +340,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
 		$affiliate_total = $this->Model_Sale_Affiliate->getTotalAffiliates($data);
 	
 		$results = $this->Model_Sale_Affiliate->getAffiliates($data);
- 
+
 		foreach ($results as $result) {
 			$action = array();
 		
@@ -464,7 +464,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
 				
 		$this->response->setOutput($this->render());
   	}
-  
+
   	private function getForm()
   	{
 		$this->template->load('sale/affiliate_form');

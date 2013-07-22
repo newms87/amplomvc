@@ -1,5 +1,5 @@
 <?php
-class Dev_Setup extends PluginSetup 
+class Dev_Setup extends PluginSetup
 {
 	private $registry;
 	

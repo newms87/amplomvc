@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Report_AffiliateCommission extends Controller 
+class Admin_Controller_Report_AffiliateCommission extends Controller
 {
 	public function index()
 	{

@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Block_Product_Images extends Controller 
+class Catalog_Controller_Block_Product_Images extends Controller
 {
 	
 	public function index($settings)

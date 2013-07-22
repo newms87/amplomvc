@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Module_DnCarousel extends Controller 
+class Catalog_Controller_Module_DnCarousel extends Controller
 {
 	protected function index($setting)
 	{

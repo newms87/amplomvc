@@ -31,11 +31,12 @@ class Catalog_Model_Account_Address extends Model
 	
 	public function isValidAddress($address)
 	{
-		if(!trim($address['firstname'].$address['lastname']))return false;
-		if(!trim($address['address_1']))return false;
-		if(!trim($address['city']))return false;
-		if(!(int)$address['zone_id'])return false;
-		if(!(int)$address['country_id'])return false;
+		if(empty($address['firstname']) || empty($address['lastname']) || !trim($address['firstname'].$address['lastname'])) return false;
+		if(empty($address['address_1']) || !trim($address['address_1']))return false;
+		if(empty($address['city']) || !trim($address['city']))return false;
+		if(empty($address['zone_id']))return false;
+		if(empty($address['country_id']))return false;
+		
 		return true;
 	}
 	

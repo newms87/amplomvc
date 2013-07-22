@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Block_Block extends Model 
+class Catalog_Model_Block_Block extends Model
 {
 	private $blocks;
 	

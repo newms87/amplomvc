@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Block_Module_Sidebar extends Controller 
+class Admin_Controller_Block_Module_Sidebar extends Controller
 {
 	
 	public function settings(&$settings)

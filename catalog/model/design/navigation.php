@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Design_Navigation extends Model 
+class Catalog_Model_Design_Navigation extends Model
 {
 	public function getNavigationGroup($name)
 	{

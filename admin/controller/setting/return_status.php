@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Setting_ReturnStatus extends Controller 
+class Admin_Controller_Setting_ReturnStatus extends Controller
 {
 	public function index()
 	{

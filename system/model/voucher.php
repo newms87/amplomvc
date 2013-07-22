@@ -1,5 +1,5 @@
 <?php
-class System_Model_Voucher extends Model 
+class System_Model_Voucher extends Model
 {
 	public function addVoucher($order_id, $data)
 	{
@@ -13,7 +13,7 @@ class System_Model_Voucher extends Model
 	
 	public function getVoucher($voucher_id)
 	{
-		$query = 
+		$query =
 			"SELECT *, vt.name as theme FROM " . DB_PREFIX . "voucher v" .
 			" LEFT JOIN " . DB_PREFIX . "voucher_theme vt ON (vt.voucher_theme_id=v.voucher_theme_id)" .
 			" WHERE voucher_id = " . (int)$voucher_id;

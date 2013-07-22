@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Account_Password extends Controller 
+class Catalog_Controller_Account_Password extends Controller
 {
 	
 		
@@ -69,7 +69,7 @@ class Catalog_Controller_Account_Password extends Controller
 						
 		$this->response->setOutput($this->render());
   	}
-  
+
   	private function validate()
   	{
 		if ((strlen($_POST['password']) < 4) || (strlen($_POST['password']) > 20)) {

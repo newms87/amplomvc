@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Page_Page extends Controller 
+class Admin_Controller_Page_Page extends Controller
 {
 	public function index()
 	{
@@ -30,7 +30,7 @@ class Admin_Controller_Page_Page extends Controller
 	
 		$this->getForm();
 	}
- 
+
 	public function delete()
 	{
 		$this->language->load('page/page');

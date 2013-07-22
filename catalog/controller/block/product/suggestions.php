@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Block_Product_Suggestions extends Controller 
+class Catalog_Controller_Block_Product_Suggestions extends Controller
 {
 	
 	/**

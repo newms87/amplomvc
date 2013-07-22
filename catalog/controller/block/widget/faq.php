@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Block_Widget_Faq extends Controller 
+class Catalog_Controller_Block_Widget_Faq extends Controller
 {
 	public function index($settings)
 	{

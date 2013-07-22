@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Payment_Sagepay extends Controller 
+class Catalog_Controller_Payment_Sagepay extends Controller
 {
 	protected function index()
 	{
@@ -124,7 +124,7 @@ class Catalog_Controller_Payment_Sagepay extends Controller
 			$data = $this->getToken($output);
 		
 			if ($data && is_array($data)) {
-				$this->order->update($_GET['order_id'], $this->config->get('config_order_status_id'));
+				$this->order->update($_GET['order_id'], $this->config->get('config_order_complete_status_id'));
 
 				$message = '';
 		
@@ -171,7 +171,7 @@ class Catalog_Controller_Payment_Sagepay extends Controller
 				if ($data['Status'] == 'OK') {
 					$this->Model_Checkout_Order->update_order($_GET['order_id'], $this->config->get('sagepay_order_status_id'), $message, false);
 				} else {
-					$this->Model_Checkout_Order->update_order($_GET['order_id'], $this->config->get('config_order_status_id'), $message, false);
+					$this->Model_Checkout_Order->update_order($_GET['order_id'], $this->config->get('config_order_complete_status_id'), $message, false);
 				}
 				
 				$this->url->redirect($this->url->link('checkout/success'));
@@ -221,7 +221,7 @@ class Catalog_Controller_Payment_Sagepay extends Controller
 		
   		$output = array();
 		$data = array();
-  
+
   		for ($i = count($tokens) - 1; $i >= 0; $i--){
 			$start = strpos($string, $tokens[$i]);
 			
@@ -230,7 +230,7 @@ class Catalog_Controller_Payment_Sagepay extends Controller
 				$data[$i]['token'] = $tokens[$i];
 			}
 		}
-  
+
 		sort($data);
 		
 		for ($i = 0; $i < count($data); $i++){
@@ -245,7 +245,7 @@ class Catalog_Controller_Payment_Sagepay extends Controller
 			}
 
 		}
-  
+
 		return $output;
 	}
 }

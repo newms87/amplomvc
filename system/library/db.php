@@ -1,5 +1,5 @@
 <?php
-class DB 
+class DB
 {
 	private $driver;
 	private $error;

@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Block_Product_FlashsaleCountdown extends Controller 
+class Catalog_Controller_Block_Product_FlashsaleCountdown extends Controller
 {
 
 	public function index($settings, $flashsale)

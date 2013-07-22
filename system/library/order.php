@@ -331,14 +331,14 @@ class Order Extends Library
 	
 	/**
 	 * Update or Confirm (when order status is complete) an order
-	 * 
+	 *
 	 * @param $order_id - The ID of the order to update
 	 * @param $order_status_id - The status to update the order to (use $this->order->getOrderStatuses() for a list of valid statuses)
 	 * @param $comment - A comment about the change in order status
 	 * @param $notify - Notify the customer about the change in their order status
-	 * 
+	 *
 	 */
-	 
+	
 	public function update($order_id, $order_status_id, $comment = '', $notify = false)
 	{
 		$order = $this->get($order_id);

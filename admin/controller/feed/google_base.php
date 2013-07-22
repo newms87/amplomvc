@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Feed_GoogleBase extends Controller 
+class Admin_Controller_Feed_GoogleBase extends Controller
 {
 	
 	

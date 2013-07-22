@@ -1,8 +1,8 @@
 <?php
-class Admin_Controller_Design_Banner extends Controller 
+class Admin_Controller_Design_Banner extends Controller
 {
 	
- 
+
 	public function index()
 	{
 		$this->language->load('design/banner');
@@ -49,11 +49,11 @@ class Admin_Controller_Design_Banner extends Controller
 
 		$this->getForm();
 	}
- 
+
 	public function delete()
 	{
 		$this->language->load('design/banner');
- 
+
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {

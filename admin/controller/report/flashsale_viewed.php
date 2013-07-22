@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Report_FlashsaleViewed extends Controller 
+class Admin_Controller_Report_FlashsaleViewed extends Controller
 {
 	public function index()
 	{

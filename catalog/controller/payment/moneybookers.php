@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Payment_Moneybookers extends Controller 
+class Catalog_Controller_Payment_Moneybookers extends Controller
 {
 	protected function index()
 	{
@@ -57,7 +57,7 @@ class Catalog_Controller_Payment_Moneybookers extends Controller
 		$order_info = $this->order->get($order_id);
 
 		if ($order_info) {
-			$this->order->update($order_id, $this->config->get('config_order_status_id'));
+			$this->order->update($order_id, $this->config->get('config_order_complete_status_id'));
 
 			$verified = true;
 			
@@ -97,7 +97,7 @@ class Catalog_Controller_Payment_Moneybookers extends Controller
 						break;
 				}
 			} else {
-				$this->error_log->write('md5sig returned (' + $md5sig + ') does not match generated (' + $md5hash + '). Verify Manually. Current order state: ' . $this->config->get('config_order_status_id'));
+				$this->error_log->write('md5sig returned (' + $md5sig + ') does not match generated (' + $md5hash + '). Verify Manually. Current order state: ' . $this->config->get('config_order_complete_status_id'));
 			}
 		}
 	}

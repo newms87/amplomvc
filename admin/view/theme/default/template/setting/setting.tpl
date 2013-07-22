@@ -449,10 +449,10 @@
 								</select></td>
 						</tr>
 						<tr>
-							<td><?= $entry_order_processed_status; ?></td>
+							<td><?= $entry_order_received_status; ?></td>
 							<td>
 								<?= $this->builder->set_config(false, 'title'); ?>
-								<?= $this->builder->build('select', $data_order_statuses, 'config_order_processed_status_id', $config_order_processed_status_id); ?>
+								<?= $this->builder->build('select', $data_order_statuses, 'config_order_received_status_id', $config_order_received_status_id); ?>
 							</td>
 						</tr>
 						<tr>
@@ -853,36 +853,20 @@
 							<td><input type="text" name="config_compression" value="<?= $config_compression; ?>" size="3" /></td>
 						</tr>
 						<tr>
-							<td><?= $entry_error_display; ?></td>
-							<td><? if ($config_error_display) { ?>
-								<input type="radio" name="config_error_display" value="1" checked="checked" />
-								<?= $text_yes; ?>
-								<input type="radio" name="config_error_display" value="0" />
-								<?= $text_no; ?>
-								<? } else { ?>
-								<input type="radio" name="config_error_display" value="1" />
-								<?= $text_yes; ?>
-								<input type="radio" name="config_error_display" value="0" checked="checked" />
-								<?= $text_no; ?>
-								<? } ?></td>
-						</tr>
-						<tr>
-							<td><?= $entry_error_log; ?></td>
-							<td><? if ($config_error_log) { ?>
-								<input type="radio" name="config_error_log" value="1" checked="checked" />
-								<?= $text_yes; ?>
-								<input type="radio" name="config_error_log" value="0" />
-								<?= $text_no; ?>
-								<? } else { ?>
-								<input type="radio" name="config_error_log" value="1" />
-								<?= $text_yes; ?>
-								<input type="radio" name="config_error_log" value="0" checked="checked" />
-								<?= $text_no; ?>
-								<? } ?></td>
+							<td class="required"> <?= $entry_log_filename; ?></td>
+							<td><input type="text" name="config_log_filename" value="<?= $config_log_filename; ?>" />
 						</tr>
 						<tr>
 							<td class="required"> <?= $entry_error_filename; ?></td>
 							<td><input type="text" name="config_error_filename" value="<?= $config_error_filename; ?>" />
+						</tr>
+						<tr>
+							<td><?= $entry_error_display; ?></td>
+							<td><?= $this->builder->build('radio', $data_yes_no, 'config_error_display', $config_error_display); ?></td>
+						</tr>
+						<tr>
+							<td><?= $entry_error_log; ?></td>
+							<td><?= $this->builder->build('radio', $data_yes_no, 'config_error_log', $config_error_log); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_google_analytics; ?></td>

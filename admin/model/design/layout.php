@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Design_Layout extends Model 
+class Admin_Model_Design_Layout extends Model
 {
 	public function addLayout($data)
 	{

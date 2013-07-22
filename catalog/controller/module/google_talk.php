@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Module_GoogleTalk extends Controller 
+class Catalog_Controller_Module_GoogleTalk extends Controller
 {
 	protected function index()
 	{

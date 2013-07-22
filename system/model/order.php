@@ -1,5 +1,5 @@
 <?php
-class System_Model_Order extends Model 
+class System_Model_Order extends Model
 {
 	public function addOrder($data)
 	{
@@ -22,7 +22,7 @@ class System_Model_Order extends Model
 			$product['order_id'] = $order_id;
 			
 			$order_product_id = $this->insert('order_product', $product);
- 
+
 			foreach ($product['option'] as $option) {
 				$option['order_id'] = $order_id;
 				$option['order_product_id'] = $order_product_id;
@@ -83,7 +83,7 @@ class System_Model_Order extends Model
 				$product['order_id'] = $order_id;
 				
 				$order_product_id = $this->insert('order_product', $product);
-	 
+	
 				foreach ($product['option'] as $option) {
 					$option['order_id'] = $order_id;
 					$option['order_product_id'] = $order_product_id;
@@ -281,7 +281,7 @@ class System_Model_Order extends Model
 				if ($data['sort'] === 'customer') {
 					$from .= " LEFT JOIN " . DB_PREFIX . "customer c ON (c.customer_id=o.customer_id)";
 					
-					$order = "ORDER BY LCASE(CONCAT(c.firstname, c.lastname)) $data[order]"; 
+					$order = "ORDER BY LCASE(CONCAT(c.firstname, c.lastname)) $data[order]";
 				}
 			}
 			

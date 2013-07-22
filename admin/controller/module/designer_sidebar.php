@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Module_DesignerSidebar extends Controller 
+class Admin_Controller_Module_DesignerSidebar extends Controller
 {
 	
 	public function index()

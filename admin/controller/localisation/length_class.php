@@ -1,8 +1,8 @@
 <?php
-class Admin_Controller_Localisation_LengthClass extends Controller 
+class Admin_Controller_Localisation_LengthClass extends Controller
 {
 	
- 
+
 	public function index()
 	{
 		$this->language->load('localisation/length_class');

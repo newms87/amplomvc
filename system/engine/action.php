@@ -1,5 +1,5 @@
 <?php
-final class Action 
+final class Action
 {
 	private $registry;
 	private $file;

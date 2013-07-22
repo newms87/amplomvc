@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Module_Slideshow extends Controller 
+class Catalog_Controller_Module_Slideshow extends Controller
 {
 	protected function index($setting)
 	{

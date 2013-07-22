@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Module_Affiliate extends Controller 
+class Admin_Controller_Module_Affiliate extends Controller
 {
 	
 	

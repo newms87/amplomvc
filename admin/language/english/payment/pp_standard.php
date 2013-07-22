@@ -35,8 +35,9 @@ $_['entry_sort_order']				= 'Sort Order:';
 $_['entry_page_style']				= 'Page Style: <span class="help">Enter \'primary\' for the primary style set on your Paypal account, or enter the name of the style as you named it on your paypal account. Leave blank to use the default</span>';
 $_['entry_pdt_enabled']		= "PDT is enabled?<span class=\"help\">This will allow the user to be instantly returned to your site after payment.</span>";
 $_['entry_pdt_enabled_help'] = "To enabled PDT on your account you must <a target=\"_blank\" href=\"http://www.paypal.com/\">login to your paypal account</a>.<br />Go to Profile > Website payments preferences.<br />From here enable PDT and Auto Return.";
-$_['entry_auto_return_url'] = "Auto Return URL";
+$_['entry_pdt_token'] = "PDT Identity Token";
 
 // Error
 $_['error_permission']				= 'Warning: You do not have permission to modify payment PayPal!';
 $_['error_email']					= 'E-Mail required!';
+$_['error_pdt_token'] = "PDT Token is required to enable Payment Data Transfer!";

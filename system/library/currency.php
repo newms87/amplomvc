@@ -3,7 +3,7 @@ class Currency extends Library
 {
 	private $code;
   	private $currencies = array();
-  
+
   	public function __construct($registry)
   	{
 		parent::__construct($registry);
@@ -164,7 +164,7 @@ class Currency extends Library
   	{
 		return $this->code;
   	}
-  
+
   	public function getValue($currency = '')
   	{
 		if (!$currency) {

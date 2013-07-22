@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Account_Return extends Controller 
+class Catalog_Controller_Account_Return extends Controller
 {
 	public function index()
 	{
@@ -10,7 +10,7 @@ class Catalog_Controller_Account_Return extends Controller
 
 			$this->url->redirect($this->url->link('account/login'));
 		}
- 
+
 		$this->language->load('account/return');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -143,50 +143,37 @@ class Catalog_Controller_Account_Return extends Controller
 		$order_lookup = isset($_GET['order_lookup']) ? $_GET['order_lookup'] : 0;
 		
 		if ($this->request->isPost() && $this->validate()) {
-			$return_ids = array();
+			$return_data = $_POST;
 			
-			foreach ($_POST['return_products'] as $product) {
-				$return_data = $_POST + $product;
+			foreach ($return_data['return_products'] as &$product) {
+				$product['rma'] = $this->Model_Account_Return->generateRma($return_data);
+				$product['quantity'] = $return_data['return_quantity'];
 				
-				$return_data['rma'] = $this->Model_Account_Return->generateRma($return_data);
-				$return_data['quantity'] = $return_data['return_quantity'];
-				
-				$return_ids[] = $this->Model_Account_Return->addReturn($return_data);
-				
-				//Send Customer Confirmation Email
-				$this->mail->init();
-				
-				$this->mail->setTo($return_data['email']);
-				$this->mail->setCc($this->config->get('config_email'));
-				$this->mail->setFrom($this->config->get('config_email'));
-				$this->mail->setSender($this->config->get('config_name'));
-				$this->mail->setSubject(html_entity_decode($this->_('text_mail_subject'), ENT_QUOTES, 'UTF-8'));
-				$this->mail->setHtml(html_entity_decode($this->_('text_mail_message'), ENT_QUOTES, 'UTF-8'));
-				$this->mail->send();
-				
-				//Send Admin Notification Email
-				$this->mail->init();
-				
-				$this->mail->setTo($this->config->get('config_email'));
-				$this->mail->setFrom($this->config->get('config_email'));
-				$this->mail->setSender($this->config->get('config_name'));
-				$this->mail->setSubject(html_entity_decode($this->_('text_mail_admin_subject'), ENT_QUOTES, 'UTF-8'));
-				$this->mail->setHtml(html_entity_decode($this->_('text_mail_admin_message'), ENT_QUOTES, 'UTF-8'));
-				$this->mail->send();
-			}
+				$product['return_id'] = $this->Model_Account_Return->addReturn($return_data + $product);
+			} unset($product);
 			
-			$this->url->redirect($this->url->link('account/return/success', array('return_ids' => $return_ids)));
+			$this->mail->callController('return', $return_data);
+			
+			$url_query = array(
+				'return_ids' => array_column($_POST['return_products'], 'return_id'),
+			);
+			
+			$this->url->redirect($this->url->link('account/return/success', $url_query));
 		}
 		
+		//Page Title
 		$this->document->setTitle($this->_('heading_title'));
 		
+		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
 		$this->breadcrumb->add($this->_('text_return_list'), $this->url->link('account/return'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/return/insert'));
 		
+		//Action Buttons
 		$this->data['action'] = $this->url->link('account/return/insert');
 		
+		//The Data
 		$customer_orders = $this->customer->getOrders();
 		
 		if ($order_lookup) {
@@ -213,7 +200,7 @@ class Catalog_Controller_Account_Return extends Controller
 						$order_info = $order;
 						break;
 					}
-				} 
+				}
 			} else {
 				$order_info = reset($customer_orders);
 			}

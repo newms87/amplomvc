@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_User_User extends Model 
+class Admin_Model_User_User extends Model
 {
 	public function addUser($data)
 	{

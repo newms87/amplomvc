@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Setting_ShippingPolicy extends Controller 
+class Admin_Controller_Setting_ShippingPolicy extends Controller
 {
 	public function index()
 	{
@@ -97,7 +97,7 @@ class Admin_Controller_Setting_ShippingPolicy extends Controller
 
 		$shipping_policies = $this->config->load('policies', 'shipping_policies', 0);
 		
-		//if deleted Shipping Policies are associated with a product, do not allow deletion 
+		//if deleted Shipping Policies are associated with a product, do not allow deletion
 		if (!empty($shipping_policies)) {
 			$deleted = array_diff_key($shipping_policies, $_POST['shipping_policies']);
 			

@@ -1,7 +1,7 @@
 <?php
 // Nochex via form will work for both simple "Seller" account and "Merchant" account holders
 // Nochex via APC maybe only avaiable to "Merchant" account holders only - site docs a bit vague on this point
-class Catalog_Controller_Payment_Nochex extends Controller 
+class Catalog_Controller_Payment_Nochex extends Controller
 {
 	protected function index()
 	{
@@ -115,7 +115,7 @@ class Catalog_Controller_Payment_Nochex extends Controller
 		if (strcmp($response, 'AUTHORISED') == 0) {
 			$this->order->update($order_id, $this->config->get('nochex_order_status_id'));
 		} else {
-			$this->order->update($order_id, $this->config->get('config_order_status_id'), 'Auto-Verification step failed. Manually check the transaction.');
+			$this->order->update($order_id, $this->config->get('config_order_complete_status_id'), 'Auto-Verification step failed. Manually check the transaction.');
 		}
 		
 		// Since it returned, the customer should see success.

@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Sale_Return extends Controller 
+class Admin_Controller_Sale_Return extends Controller
 {
 	
 	
@@ -11,7 +11,7 @@ class Admin_Controller_Sale_Return extends Controller
 		
 		$this->getList();
   	}
-  
+
   	public function insert()
   	{
 		$this->language->load('sale/return');
@@ -345,7 +345,7 @@ class Admin_Controller_Sale_Return extends Controller
 		$return_total = $this->Model_Sale_Return->getTotalReturns($data);
 	
 		$results = $this->Model_Sale_Return->getReturns($data);
- 
+
 		foreach ($results as $result) {
 			$action = array();
 			
@@ -511,7 +511,7 @@ class Admin_Controller_Sale_Return extends Controller
 				
 		$this->response->setOutput($this->render());
   	}
-  
+
   	private function getForm()
   	{
 		$this->template->load('sale/return_form');

@@ -1,8 +1,8 @@
 <?php
-class Admin_Controller_Catalog_Option extends Controller 
+class Admin_Controller_Catalog_Option extends Controller
 {
 	
- 
+
 	public function index()
 	{
 		$this->language->load('catalog/option');

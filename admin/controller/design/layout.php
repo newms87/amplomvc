@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Design_Layout extends Controller 
+class Admin_Controller_Design_Layout extends Controller
 {
 	public function index()
 	{
@@ -31,11 +31,11 @@ class Admin_Controller_Design_Layout extends Controller
 
 		$this->getForm();
 	}
- 
+
 	public function delete()
 	{
 		$this->language->load('design/layout');
- 
+
 		if (isset($_GET['layout_id']) && $this->validateDelete()) {
 			$this->Model_Design_Layout->deleteLayout($_GET['layout_id']);
 			

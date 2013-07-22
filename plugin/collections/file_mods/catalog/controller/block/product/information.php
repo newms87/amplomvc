@@ -1,6 +1,6 @@
 #<?php
 //=====
-class Catalog_Controller_Block_Product_Information extends Controller 
+class Catalog_Controller_Block_Product_Information extends Controller
 {
 //.....
 	public function index($settings)
@@ -22,7 +22,7 @@ class Catalog_Controller_Block_Product_Information extends Controller
 //-----
 //<<<<<
 		$this->_('text_view_more', $this->url->link('product/category', 'category_id=' . $product_info['category']['category_id']), $product_info['category']['name']);
-		$this->_('text_keep_shopping', $this->url->link('product/category')); 
+		$this->_('text_keep_shopping', $this->url->link('product/category'));
 //-----
 //>>>>> {php}
 		if (!empty($product_info['collection'])) {

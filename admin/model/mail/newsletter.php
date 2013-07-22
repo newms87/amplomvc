@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Mail_Newsletter extends Model 
+class Admin_Model_Mail_Newsletter extends Model
 {
 	public function addNewsletter($data)
 	{

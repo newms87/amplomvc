@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Sale_CustomerGroup extends Model 
+class Admin_Model_Sale_CustomerGroup extends Model
 {
 	public function addCustomerGroup($data)
 	{

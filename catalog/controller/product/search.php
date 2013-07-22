@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Product_Search extends Controller 
+class Catalog_Controller_Product_Search extends Controller
 {
 	public function index()
 	{

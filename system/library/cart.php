@@ -87,7 +87,7 @@ class Cart extends Library
 	/**
 	 * Cart Functions
 	 */
-	 
+	
 	public function add($product_id, $quantity = 1, $options = array(), $no_json = true) {
   		$this->no_json = $no_json;
 		
@@ -180,7 +180,7 @@ class Cart extends Library
 	/**
 	 * Cart Weight
 	 */
-	 
+	
   	public function getWeight()
   	{
 		$weight = 0;
@@ -197,7 +197,7 @@ class Cart extends Library
 	/**
 	 * Cart Totals
 	 */
-	 
+	
   	public function getSubTotal()
   	{
 		$total = 0;
@@ -313,7 +313,7 @@ class Cart extends Library
 	/**
 	 *  Cart Products
 	 */
-	 
+	
 	public function getProductId($key)
 	{
 		if (!isset($this->session->data['cart'][$key])) {
@@ -561,12 +561,12 @@ class Cart extends Library
 	/**
 	 * Cart Stock
 	 */
-	 
+	
 	public function isEmpty()
 	{
 		return !(count($this->session->data['cart']) || !empty($this->session->data['vouchers']));
 	}
-  
+
   	public function hasStock()
   	{
   		foreach ($this->getProducts() as $product) {
@@ -642,7 +642,7 @@ class Cart extends Library
 	/**
 	 * Wishlist Functions
 	 */
-	 
+	
 	public function get_wishlist()
 	{
 		return !empty($this->session->data['wishlist']) ? $this->session->data['wishlist'] : null;
@@ -1273,7 +1273,7 @@ class Cart extends Library
 	/**
 	 * Guest API
 	 */
-	 
+	
 	public function saveGuestInfo($info)
 	{
 		$this->session->data['guest_info'] = $info;

@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Sale_Return extends Model 
+class Admin_Model_Sale_Return extends Model
 {
 	public function addReturn($data)
 	{
@@ -50,7 +50,7 @@ class Admin_Model_Sale_Return extends Model
 		//From
 		$from = DB_PREFIX . "return r";
 		
-		//Where 
+		//Where
 		$where = "1";
 		
 		if (!empty($data['return_reason_ids'])) {
@@ -178,7 +178,7 @@ class Admin_Model_Sale_Return extends Model
 		//From
 		$from = DB_PREFIX . "return_history";
 		
-		//Where 
+		//Where
 		$where = "1";
 		
 		if (!empty($data['return_status_ids'])) {

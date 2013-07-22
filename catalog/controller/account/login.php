@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Account_Login extends Controller 
+class Catalog_Controller_Account_Login extends Controller
 {
 	public function index()
 	{
@@ -61,7 +61,7 @@ class Catalog_Controller_Account_Login extends Controller
 						
 		$this->response->setOutput($this->render());
   	}
-  
+
   	private function validate()
   	{
 		if (!$this->customer->login($_POST['email'], $_POST['password'])) {

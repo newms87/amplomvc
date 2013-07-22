@@ -1,5 +1,5 @@
 <?php
-final class Loader 
+final class Loader
 {
 	protected $registry;
 	

@@ -1,7 +1,7 @@
 <?php
-class Admin_Controller_Mail_Messages extends Controller 
+class Admin_Controller_Mail_Messages extends Controller
 {
- 
+
 	public function index()
 	{
 		$this->language->load('mail/messages');

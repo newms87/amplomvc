@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Catalog_Download extends Controller 
+class Admin_Controller_Catalog_Download extends Controller
 {
 	
 	
@@ -103,7 +103,7 @@ class Admin_Controller_Catalog_Download extends Controller
   	public function delete()
   	{
 		$this->language->load('catalog/download');
- 
+
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {
@@ -196,7 +196,7 @@ class Admin_Controller_Catalog_Download extends Controller
 		$download_total = $this->Model_Catalog_Download->getTotalDownloads();
 	
 		$results = $this->Model_Catalog_Download->getDownloads($data);
- 
+
 		foreach ($results as $result) {
 			$action = array();
 						
@@ -267,7 +267,7 @@ class Admin_Controller_Catalog_Download extends Controller
 				
 		$this->response->setOutput($this->render());
   	}
-  
+
   	private function getForm()
   	{
 		$this->template->load('catalog/download_form');

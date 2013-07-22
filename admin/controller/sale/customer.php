@@ -1,8 +1,8 @@
 <?php
-class Admin_Controller_Sale_Customer extends Controller 
+class Admin_Controller_Sale_Customer extends Controller
 {
 	
-  
+
   	public function index()
   	{
 		$this->language->load('sale/customer');
@@ -11,7 +11,7 @@ class Admin_Controller_Sale_Customer extends Controller
 		
 		$this->getList();
   	}
-  
+
   	public function insert()
   	{
 		$this->language->load('sale/customer');
@@ -394,7 +394,7 @@ class Admin_Controller_Sale_Customer extends Controller
 		$customer_total = $this->Model_Sale_Customer->getTotalCustomers($data);
 	
 		$results = $this->Model_Sale_Customer->getCustomers($data);
- 
+
 		foreach ($results as $result) {
 			$action = array();
 		
@@ -543,7 +543,7 @@ class Admin_Controller_Sale_Customer extends Controller
 				
 		$this->response->setOutput($this->render());
   	}
-  
+
   	private function getForm()
   	{
 		$this->template->load('sale/customer_form');

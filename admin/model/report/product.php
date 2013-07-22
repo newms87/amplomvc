@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Report_Product extends Model 
+class Admin_Model_Report_Product extends Model
 {
 	public function getProductViews()
 	{
@@ -13,7 +13,7 @@ class Admin_Model_Report_Product extends Model
 		//From
 		$from = DB_PREFIX . "product p JOIN " .
 				  DB_PREFIX . "product_views pv ON(pv.product_id=p.product_id)";
-				  
+				
 		$order = $this->extract_order();
 		$limit = $this->extract_limit();
 		
@@ -22,7 +22,7 @@ class Admin_Model_Report_Product extends Model
 		$products = $this->queryRows($query);
 		
 		$this->translation->translate('product', 'product_id', $products);
-		 
+		
 		return $products;
 	}
 	

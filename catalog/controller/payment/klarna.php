@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Payment_Klarna extends Controller 
+class Catalog_Controller_Payment_Klarna extends Controller
 {
 	protected function index()
 	{
@@ -137,7 +137,7 @@ class Catalog_Controller_Payment_Klarna extends Controller
 			}
 						
 			if ((strcmp($response, 'VERIFIED') == 0 || strcmp($response, 'UNVERIFIED') == 0) && isset($_POST['payment_status'])) {
-				$order_status_id = $this->config->get('config_order_status_id');
+				$order_status_id = $this->config->get('config_order_complete_status_id');
 				
 				switch($_POST['payment_status']) {
 					case 'Canceled_Reversal':
@@ -180,7 +180,7 @@ class Catalog_Controller_Payment_Klarna extends Controller
 					$this->Model_Checkout_Order->update_order($order_id, $order_status_id);
 				}
 			} else {
-				$this->order->update($order_id, $this->config->get('config_order_status_id'));
+				$this->order->update($order_id, $this->config->get('config_order_complete_status_id'));
 			}
 			
 			curl_close($curl);

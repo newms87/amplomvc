@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Block_Checkout_Confirm extends Controller 
+class Catalog_Controller_Block_Checkout_Confirm extends Controller
 {
 	public function index()
 	{

@@ -1,5 +1,5 @@
 <?php
-class System_Model_Language extends Model 
+class System_Model_Language extends Model
 {
 	public function getLanguage($language_id)
 	{
@@ -21,7 +21,7 @@ class System_Model_Language extends Model
 	
 	/**
 	 * Retrieve all the languages that are not disbaled (eg: languages with status 0 (enabled) and 1 (active))
-	 * 
+	 *
 	 * @return Array - a list of enabled and active languages.
 	 */
 	public function getEnabledLanguages()

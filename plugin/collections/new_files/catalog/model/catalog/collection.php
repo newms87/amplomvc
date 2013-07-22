@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Catalog_Collection extends Model 
+class Catalog_Model_Catalog_Collection extends Model
 {
 	public function getCollection($collection_id)
 	{
@@ -163,7 +163,7 @@ class Catalog_Model_Catalog_Collection extends Model
 	
 	public function hasAttributeGroup($collection_id, $attribute_group_id)
 	{
-		$query = 
+		$query =
 			"SELECT COUNT(*) FROM " . DB_PREFIX . "collection_product cp" .
 			" LEFT JOIN " . DB_PREFIX . "product_attribute pa ON (cp.product_id=pa.product_id)" .
 			" LEFT JOIN " . DB_PREFIX . "attribute a ON (a.attribute_id=pa.attribute_id)" .

@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Catalog_Category extends Controller 
+class Admin_Controller_Catalog_Category extends Controller
 {
 	public function index()
 	{
@@ -336,7 +336,7 @@ class Admin_Controller_Catalog_Category extends Controller
 		if (!$this->user->hasPermission('modify', 'catalog/category')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
- 
-		return $this->error ? false : true; 
+
+		return $this->error ? false : true;
 	}
 }

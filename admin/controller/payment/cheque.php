@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Payment_Cheque extends Controller 
+class Admin_Controller_Payment_Cheque extends Controller
 {
 	
 

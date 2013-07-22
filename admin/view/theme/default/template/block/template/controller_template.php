@@ -1,5 +1,5 @@
 <?php
-class %class_name% extends Controller 
+class %class_name% extends Controller
 {
 	%settings_start%
 	public function settings(&$settings)

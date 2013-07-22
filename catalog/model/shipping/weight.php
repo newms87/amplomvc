@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Shipping_Weight extends Model 
+class Catalog_Model_Shipping_Weight extends Model
 {
   	public function getQuote($address)
   	{

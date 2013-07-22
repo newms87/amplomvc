@@ -1,5 +1,5 @@
 <?php
-class Captcha 
+class Captcha
 {
 	protected $code;
 	protected $width = 35;

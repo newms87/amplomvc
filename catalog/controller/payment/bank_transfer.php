@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Payment_BankTransfer extends Controller 
+class Catalog_Controller_Payment_BankTransfer extends Controller
 {
 	protected function index()
 	{

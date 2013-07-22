@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Block_Module_Press extends Controller 
+class Catalog_Controller_Block_Module_Press extends Controller
 {
 	public function index($settings)
 	{

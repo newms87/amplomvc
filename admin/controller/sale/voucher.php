@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Sale_Voucher extends Controller 
+class Admin_Controller_Sale_Voucher extends Controller
 {
   	public function index()
   	{
@@ -54,7 +54,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 		$this->language->load('sale/voucher');
 		
 		if (!empty($_POST['selected']) && isset($_GET['action'])) {
-			if ($_GET['action'] !== 'delete' || $this->validateDelete()) { 
+			if ($_GET['action'] !== 'delete' || $this->validateDelete()) {
 				foreach ($_POST['selected'] as $voucher_id) {
 					switch($_GET['action']){
 						case 'enable':
@@ -283,7 +283,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 		//Additional Data
  		$this->data['data_voucher_themes'] = $this->Model_Sale_VoucherTheme->getVoucherThemes();
 		
-		$this->data['voucher_id'] = $voucher_id; 
+		$this->data['voucher_id'] = $voucher_id;
 		
 		//Ajax Urls
 		$this->data['url_history'] = $this->url->ajax('sale/voucher/history', 'voucher_id=' . $voucher_id);

@@ -1,8 +1,8 @@
 <?php
-class Admin_Controller_Localisation_WeightClass extends Controller 
+class Admin_Controller_Localisation_WeightClass extends Controller
 {
 	
- 
+
 	public function index()
 	{
 		$this->language->load('localisation/weight_class');

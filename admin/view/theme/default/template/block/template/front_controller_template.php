@@ -1,5 +1,5 @@
 <?php
-class %class_name% extends Controller 
+class %class_name% extends Controller
 {
 	public function index($settings)
 	{

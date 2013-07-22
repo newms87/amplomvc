@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Cart_Cart extends Controller 
+class Catalog_Controller_Cart_Cart extends Controller
 {
 	public function index()
 	{

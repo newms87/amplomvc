@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Payment_PpStandard extends Controller 
+class Admin_Controller_Payment_PpStandard extends Controller
 {
 	public function index()
 	{
@@ -50,6 +50,7 @@ class Admin_Controller_Payment_PpStandard extends Controller
 			'pp_standard_sort_order' => '',
 			'pp_standard_page_style' => '',
 			'pp_standard_pdt_enabled' => false,
+			'pp_standard_pdt_token' => '',
 			'pp_standard_auto_return_url' => '',
 			'status' => 1,
 		);
@@ -84,6 +85,10 @@ class Admin_Controller_Payment_PpStandard extends Controller
 
 		if (!$_POST['pp_standard_email']) {
 			$this->error['pp_standard_email'] = $this->_('error_email');
+		}
+		
+		if ($_POST['pp_standard_pdt_enabled'] && !$_POST['pp_standard_pdt_token']) {
+			$this->error['pp_standard_pdt_token'] = $this->_('error_pdt_token');
 		}
 
 		return $this->error ? false : true;

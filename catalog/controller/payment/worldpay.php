@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Payment_Worldpay extends Controller 
+class Catalog_Controller_Payment_Worldpay extends Controller
 {
 	protected function index()
 	{
@@ -52,7 +52,7 @@ class Catalog_Controller_Payment_Worldpay extends Controller
 			if (isset($_POST['callbackPW']) && ($_POST['callbackPW'] == $this->config->get('worldpay_password'))) {
 				$this->order->update($_POST['cartId'], $this->config->get('worldpay_order_status_id'));
 			} else {
-				$this->order->update($_POST['cartId'], $this->config->get('config_order_status_id'), $this->_('text_pw_mismatch'));
+				$this->order->update($_POST['cartId'], $this->config->get('config_order_complete_status_id'), $this->_('text_pw_mismatch'));
 			}
 	
 			$message = '';

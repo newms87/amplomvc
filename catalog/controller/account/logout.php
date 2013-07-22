@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Account_Logout extends Controller 
+class Catalog_Controller_Account_Logout extends Controller
 {
 	public function index()
 	{
@@ -11,7 +11,7 @@ class Catalog_Controller_Account_Logout extends Controller
 			
 			$this->cart->clear();
 		}
- 
+
 		$this->language->load('account/logout');
 		
 		$this->document->setTitle($this->_('heading_title'));

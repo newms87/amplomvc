@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Total_Tax extends Controller 
+class Admin_Controller_Total_Tax extends Controller
 {
 	
 	
@@ -24,7 +24,7 @@ class Admin_Controller_Total_Tax extends Controller
 		} else {
 			$this->data['error_warning'] = '';
 		}
- 
+
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('text_total'), $this->url->link('extension/total'));
 			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('total/tax'));

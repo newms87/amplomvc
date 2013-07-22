@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Common_Home extends Controller 
+class Admin_Controller_Common_Home extends Controller
 {
 	public function index()
 	{
@@ -45,7 +45,7 @@ class Admin_Controller_Common_Home extends Controller
 				'view' => array(
 					'text' => $this->_('text_view'),
 					'href' => $this->url->link('sale/order/info', 'order_id=' . $order['order_id'])
-				), 
+				),
 			);
 			
 			$order['order_status'] = $this->order->getOrderStatus($order['order_status_id']);

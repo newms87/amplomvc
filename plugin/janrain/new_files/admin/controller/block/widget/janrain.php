@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Block_Widget_Janrain extends Controller 
+class Admin_Controller_Block_Widget_Janrain extends Controller
 {
 	public function settings(&$settings)
 	{
@@ -12,7 +12,7 @@ class Admin_Controller_Block_Widget_Janrain extends Controller
 			'google'		=> 1,
 			'linkedin'	=> 2,
 			'myspace'	=> 3,
-			'twitter'	=> 4, 
+			'twitter'	=> 4,
 			'windowslive' => 5,
 			'yahoo'		=> 6,
 			'aol'			=> 7,
@@ -57,7 +57,7 @@ class Admin_Controller_Block_Widget_Janrain extends Controller
 			array(
 				'mod' => 'includes/catalog/view/theme/default/template/block/account/login_header.tpl',
 				'for' => 'catalog/view/theme/default/template/block/account/login_header.tpl',
-			), 
+			),
 		);
 		
 		if (!empty($settings['integrate_header'])) {

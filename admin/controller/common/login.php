@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Common_Login extends Controller 
+class Admin_Controller_Common_Login extends Controller
 {
 	
 	public function index()

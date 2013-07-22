@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Payment_AuthorizenetAim extends Controller 
+class Catalog_Controller_Payment_AuthorizenetAim extends Controller
 {
 	protected function index()
 	{
@@ -88,7 +88,7 @@ class Catalog_Controller_Payment_AuthorizenetAim extends Controller
 		curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
 		curl_setopt($curl, CURLOPT_TIMEOUT, 10);
 		curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
- 
+
 		$response = curl_exec($curl);
 		
 		$json = array();
@@ -112,7 +112,7 @@ class Catalog_Controller_Payment_AuthorizenetAim extends Controller
 		
 			if ($response_data[1] == '1') {
 				if (strtoupper($response_data[38]) != strtoupper(md5($this->config->get('authorizenet_aim_hash') . $this->config->get('authorizenet_aim_login') . $response_data[6] . $this->currency->format($order_info['total'], $order_info['currency_code'], 1.00000, false)))) {
-					$this->order->update($this->session->data['order_id'], $this->config->get('config_order_status_id'));
+					$this->order->update($this->session->data['order_id'], $this->config->get('config_order_complete_status_id'));
 					
 					$message = '';
 					

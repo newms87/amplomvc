@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Sale_Order extends Controller 
+class Admin_Controller_Sale_Order extends Controller
 {
   	public function index()
   	{

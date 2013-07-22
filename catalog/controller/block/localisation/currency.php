@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Block_Localisation_Currency extends Controller 
+class Catalog_Controller_Block_Localisation_Currency extends Controller
 {
 	public function index()
 	{

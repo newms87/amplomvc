@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Shipping_Parcelforce4848 extends Model 
+class Catalog_Model_Shipping_Parcelforce4848 extends Model
 {
 	function getQuote($address)
 	{

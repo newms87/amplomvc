@@ -290,7 +290,7 @@ class Url extends Library
 			}
 		
 			$url_query = $this->getQuery();
-			$this->seo_url = $this->store_base($url_alias['store_id']) . $this->route . ($url_query ? '?' . $url_query : ''); 
+			$this->seo_url = $this->store_base($url_alias['store_id']) . $this->route . ($url_query ? '?' . $url_query : '');
 			
 			if ($url_alias['redirect']) {
 				if (!parse_url($url_alias['redirect'], PHP_URL_SCHEME)) {
@@ -413,7 +413,7 @@ class Url extends Library
 	
 	public function getAlias($route, $query = '', $store_id = -1)
 	{
-		$sql_query = 
+		$sql_query =
 			"SELECT keyword FROM " . DB_PREFIX . "url_alias" .
 			" WHERE `route` = '" . $this->db->escape($route) . "'" .
 			" AND `query` = '" . $this->db->escape($query) . "'" .
@@ -439,7 +439,7 @@ class Url extends Library
 	
 	public function removeAlias($route, $query = '', $store_id = -1, $keyword = '')
 	{
-		$sql_query = 
+		$sql_query =
 			"SELECT url_alias_id FROM " . DB_PREFIX . "url_alias" .
 			" WHERE `route` = '" . $this->db->escape($route) . "'" .
 			" AND `query` = '" . $this->db->escape($query) . "'" .

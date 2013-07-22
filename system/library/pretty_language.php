@@ -1,30 +1,30 @@
 <?php
-class PrettyLanguage 
+class PrettyLanguage
 {
 	/**
 	 * *.tpl
-	 * 
+	 *
 	 * Template output spacing conventions
 	 * search: <\?=\s*([^\?]*);\s*\?>
 	 * replace: <\?= $1; ?>
 	 * search: <\?=\s*([^\?]*\?[^\?]*);\s*\?>
 	 * repalce: <\?= $1; ?>
-	 * 
-	 * 
+	 *
+	 *
 	 * *.php
-	 * 
+	 *
 	 * Fixes class spacing convention
 	 * search: class[ \t]+([^\s\{)*\s*\{
 	 * replace: class $1 \R{
-	 * 
+	 *
 	 * Fixes function spacing conventions
 	 * search: ([ \t]*)([a-zA-Z0-9_]*[ \t]*)function\s*([a-zA-Z0-9_]*)\s*\(([^)]*)\)\s*\{
 	 * replace: $1$2function $3($4)\R$1\{
-	 * 
+	 *
 	 * Fixes if / elseif / foreach / while spacing convention
 	 * search: (foreach|if|while)\s*\(([^\{\r\n]*)\)[ \t]*\{
 	 * replace: $1 ($2) {
-	 * 
+	 *
 	 * Fixes else and elseif spacing convention
 	 * search: else(\s*)\{
 	 * replace: else {

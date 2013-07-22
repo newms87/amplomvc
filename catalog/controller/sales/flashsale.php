@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Sales_Flashsale extends Controller 
+class Catalog_Controller_Sales_Flashsale extends Controller
 {
 	public function index()
 	{

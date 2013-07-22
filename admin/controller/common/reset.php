@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Common_Reset extends Controller 
+class Admin_Controller_Common_Reset extends Controller
 {
 	//TODO: Probably dont need this anymore...
 	

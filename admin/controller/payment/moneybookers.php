@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Payment_Moneybookers extends Controller 
+class Admin_Controller_Payment_Moneybookers extends Controller
 {
 	
 	

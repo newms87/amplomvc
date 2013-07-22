@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Newsletter_Newsletter extends Model 
+class Catalog_Model_Newsletter_Newsletter extends Model
 {
 	public function getNewsletter($newsletter_id)
 	{

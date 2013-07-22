@@ -22,10 +22,10 @@
 		<?= $block_product_related; ?>
 	<? } ?>
 	
-	<? if ($tags) { ?>
+	<? if (!empty($tags)) { ?>
 	<div class="tags"><b><?= $text_tags; ?></b>
 		<? foreach($tags as $i => $tag) {?>
-		<a href="<?= $tags[$i]['href']; ?>"><?= $tags[$i]['tag']; ?></a> <?= $i == (count($tags) -1) ? '':','; ?>
+		<a href="<?= $tags[$i]['href']; ?>"><?= $tags[$i]['text']; ?></a> <?= $i == (count($tags) -1) ? '':','; ?>
 		<? } ?>
 	</div>
 	<? } ?>

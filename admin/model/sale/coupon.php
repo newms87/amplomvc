@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Sale_Coupon extends Model 
+class Admin_Model_Sale_Coupon extends Model
 {
 	public function addCoupon($data)
 	{

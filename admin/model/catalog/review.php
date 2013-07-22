@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Catalog_Review extends Model 
+class Admin_Model_Catalog_Review extends Model
 {
 	//TODO: Reviews should not invalidate the product!
 	public function addReview($data)

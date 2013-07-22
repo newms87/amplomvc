@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Catalog_AttributeGroup extends Controller 
+class Admin_Controller_Catalog_AttributeGroup extends Controller
 {
   	public function index()
   	{

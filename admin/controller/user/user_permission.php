@@ -1,12 +1,12 @@
 <?php
-class Admin_Controller_User_UserPermission extends Controller 
+class Admin_Controller_User_UserPermission extends Controller
 {
 	
- 
+
 	public function index()
 	{
 		$this->language->load('user/user_group');
- 
+
 		$this->document->setTitle($this->_('heading_title'));
  		
 		$this->getList();

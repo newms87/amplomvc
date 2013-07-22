@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Catalog_Flashsale extends Model 
+class Admin_Model_Catalog_Flashsale extends Model
 {
 	public function addFlashsale($data)
 	{

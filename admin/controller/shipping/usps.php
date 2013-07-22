@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Shipping_Usps extends Controller 
+class Admin_Controller_Shipping_Usps extends Controller
 {
 	
 

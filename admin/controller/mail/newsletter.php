@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Mail_Newsletter extends Controller 
+class Admin_Controller_Mail_Newsletter extends Controller
 {
 	
 	public function index()

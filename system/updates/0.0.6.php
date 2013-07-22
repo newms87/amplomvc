@@ -71,14 +71,6 @@ $this->db->createTable('tag', <<<SQL
 SQL
 );
 
-$this->db->createTable('tag_translation', <<<SQL
-	  `tag_id` INT UNSIGNED NOT NULL ,
-	  `language_id` INT UNSIGNED NOT NULL ,
-	  `text` VARCHAR(45) NOT NULL ,
-	  PRIMARY KEY (`tag_id`, `language_id`)
-SQL
-);
-
 //Voucher
 $this->db->changeColumn('voucher', 'code', '', "VARCHAR(32) NOT NULL");
 $this->db->dropColumn('voucher', 'order_id');

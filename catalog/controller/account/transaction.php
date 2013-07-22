@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Account_Transaction extends Controller 
+class Catalog_Controller_Account_Transaction extends Controller
 {
 	public function index()
 	{

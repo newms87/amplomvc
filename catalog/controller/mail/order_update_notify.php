@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Mail_OrderUpdateNotify extends Controller 
+class Catalog_Controller_Mail_OrderUpdateNotify extends Controller
 {
 	public function index($order_info)
 	{

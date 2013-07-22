@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Setting_Setting extends Controller 
+class Admin_Controller_Setting_Setting extends Controller
 {
 	public function index()
 	{
@@ -88,7 +88,7 @@ class Admin_Controller_Setting_Setting extends Controller
 			'config_stock_warning' => 1,
 			'config_stock_checkout' => 0,
 			'config_stock_status_id' => 0,
-			'config_order_processed_status_id' => 0,
+			'config_order_received_status_id' => 0,
 			'config_order_complete_status_id' => 0,
 			'config_order_blacklist_status_id' => 0,
 			'config_order_fraud_status_id' => 0,
@@ -149,6 +149,7 @@ class Admin_Controller_Setting_Setting extends Controller
 			'config_image_max_mem' => '2G',
 			'config_encryption' => '',
 			'config_compression' => '',
+			'config_log_filename' => '',
 			'config_debug_send_emails' => '',
 			'config_error_display' => '',
 			'config_error_log' => '',
@@ -327,6 +328,10 @@ class Admin_Controller_Setting_Setting extends Controller
 			$this->error['image_cart'] = $this->_('error_image_cart');
 		}
 		
+		if (!$_POST['config_log_filename']) {
+			$this->error['config_log_filename'] = $this->_('error_log_filename');
+		}
+
 		if (!$_POST['config_error_filename']) {
 			$this->error['config_error_filename'] = $this->_('error_error_filename');
 		}

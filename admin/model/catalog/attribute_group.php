@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Catalog_AttributeGroup extends Model 
+class Admin_Model_Catalog_AttributeGroup extends Model
 {
 	public function addAttributeGroup($data)
 	{
@@ -44,7 +44,7 @@ class Admin_Model_Catalog_AttributeGroup extends Model
 				
 				if ($exists) {
 					$attribute_id = $attribute['attribute_id'];
-					 
+					
 					$this->update('attribute', $attribute, $attribute_id);
 				} else {
 					$attribute_id = $this->insert('attribute', $attribute);
@@ -101,7 +101,7 @@ class Admin_Model_Catalog_AttributeGroup extends Model
 		
 		if (empty($data['sort'])) {
 			$data['sort'] = '';
-		} 
+		}
 		
 		if (!empty($data['name'])) {
 			$where .= " AND LCASE(ag.name) like '%" . $this->db->escape(strtolower($data['name'])) . "%'";
@@ -166,7 +166,7 @@ class Admin_Model_Catalog_AttributeGroup extends Model
 			$where .= " AND LCASE(name) like '%" . $this->db->escape(strtolower($data['name'])) . "%'";
 		}
 		
-		//Order and Limit 
+		//Order and Limit
 		$order = $this->extract_order($data);
 		$limit = $this->extract_limit($data);
 		

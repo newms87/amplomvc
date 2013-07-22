@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Setting_Plugin extends Model 
+class Admin_Model_Setting_Plugin extends Model
 {
 	public function getInstalledPlugins()
 	{
