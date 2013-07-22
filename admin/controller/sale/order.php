@@ -137,7 +137,14 @@ class Admin_Controller_Sale_Order extends Controller
 			}
 			
 			$customer = $this->System_Model_Customer->getCustomer($order['customer_id']);
-			$order['customer'] = $customer['firstname'] . ' ' . $customer['lastname'];
+			
+			if ($customer) { 
+				$order['customer'] = $customer['firstname'] . ' ' . $customer['lastname'];
+			} elseif ($order['customer_id']) {
+				$order['customer'] = "Unknown Customer ID ($order[customer_id])";
+			} else {
+				$order['customer'] = 'Guest';
+			}
 			
 			$order['total'] = $this->currency->format($order['total'], $order['currency_code'], $order['currency_value']);
 			$order['date_added'] = $this->date->format($order['date_added'], 'short');

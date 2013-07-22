@@ -274,12 +274,16 @@ class Customer extends Library
 
 	public function isBlacklisted($customer_id = null, $ips = array())
 	{
-		$customer_id = $customer_id ? $this->customer_id : (int)$customer_id;
+		if (!$customer_id) {
+			$customer_id = $this->customer_id;
+		}
 		
-		$customer_ips = $this->db->queryColumn("SELECT ip FROM " . DB_PREFIX . "customer_ip WHERE customer_id = $customer_id");
-		
-		if ($customer_ips) {
-			$ips += $customer_ips;
+		if ($customer_id) {
+			$customer_ips = $this->db->queryColumn("SELECT ip FROM " . DB_PREFIX . "customer_ip WHERE customer_id = " . (int)$customer_id);
+			
+			if ($customer_ips) {
+				$ips += $customer_ips;
+			}
 		}
 		
 		if (empty($ips)) {

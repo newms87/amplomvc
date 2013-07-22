@@ -42,7 +42,7 @@ class Catalog_Controller_Mail_Order extends Controller
 		
 		//Totals
 		foreach ($order['order_totals'] as &$total) {
-			$total['text'] = html_entity_decode($total['text'], ENT_NOQUOTES, 'UTF-8');
+			$total['text'] = $this->currency->format($total['value'], $order['currency_code'], $order['currency_value']);
 		} unset($total);
 		
 		//Urls
@@ -70,7 +70,7 @@ class Catalog_Controller_Mail_Order extends Controller
 		$this->mail->setTo($order['email']);
 		$this->mail->setCc($this->config->get('config_email'));
 		$this->mail->setFrom($this->config->get('config_email'));
-		$this->mail->setSender($order['store_name']);
+		$this->mail->setSender($store['name']);
 		$this->mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
 		$this->mail->setText(html_entity_decode($this->render(), ENT_QUOTES, 'UTF-8'));
 		
