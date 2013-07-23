@@ -299,7 +299,7 @@ class Order Extends Library
 		return $this->config->load('product_return', 'return_actions', 0);
 	}
 	
-	public function extractShippingAddress($order)
+	public function extractPaymentAddress($order)
 	{
 		$payment_address = array();
 		
@@ -314,7 +314,7 @@ class Order Extends Library
 		return $payment_address;
 	}
 
-	public function extractPaymentAddress($order)
+	public function extractShippingAddress($order)
 	{
 		$shipping_address = array();
 		

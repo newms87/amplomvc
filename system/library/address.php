@@ -26,6 +26,10 @@ class Address extends Library
 	{
 		static $address_formats = array();
 		
+		if (empty($address)) {
+			return '';
+		}
+		
 		$country_id = $address['country_id'];
 		
 		if (isset($address_formats[$country_id])) {
