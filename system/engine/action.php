@@ -48,7 +48,6 @@ final class Action
 				break;
 			}
 			else {
-				trigger_error("Unable to find Class file " . SITE_DIR . $this->classpath . $this->route . '.php!' . get_caller(0, 2));
 				return false;
 			}
 		}
@@ -57,6 +56,11 @@ final class Action
 	public function __get($key)
 	{
 		return $this->registry->get($key);
+	}
+	
+	public function isValid()
+	{
+		return $this->file ? true : false;
 	}
 	
 	public function getFile()
@@ -99,7 +103,6 @@ final class Action
 				} else {
 					trigger_error("Failed to load controller {$this->class} because the file {$this->file} is missing!");
 				}
-				exit();
 			}
 		}
 		

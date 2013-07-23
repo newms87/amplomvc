@@ -102,7 +102,7 @@ final class Front
 		
   		$action = new Action($this->registry, $this->route);
 		
-		if (!$action->execute()) {
+		if (!$action->isValid() || !$action->execute()) {
 			$action = new Action($this->registry, $this->error_route);
 			
 			if (!$action->execute()) {
