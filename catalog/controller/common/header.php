@@ -30,8 +30,7 @@ class Catalog_Controller_Common_Header extends Controller
 		//Add Theme Scripts
 		$this->document->addScript(HTTP_THEME_JS . 'common.js');
 		
-		
-		
+		//Header Data
 		$this->data['direction'] = $this->language->getInfo('direction');
 		
 		$this->data['description'] = $this->document->getDescription();

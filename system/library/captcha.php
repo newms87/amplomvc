@@ -1,21 +1,20 @@
 <?php
-class Captcha
+class Captcha extends Library
 {
 	protected $code;
 	protected $width = 35;
 	protected $height = 150;
-
-	function __construct()
+	
+	function generate()
 	{
 		$this->code = substr(sha1(mt_rand()), 17, 6);
+		
+		$this->session->data['captcha'] = $this->code;
+		
+		$this->getImage();
 	}
-
-	function getCode()
-	{
-		return $this->code;
-	}
-
-	function showImage()
+	
+	private function getImage()
 	{
 		$image = imagecreatetruecolor($this->height, $this->width);
 
@@ -46,5 +45,10 @@ class Captcha
 		imagejpeg($image);
 		
 		imagedestroy($image);
+	}
+
+	public function validate($code)
+	{
+		return !empty($this->session->data['captcha']) && ($this->session->data['captcha'] === $code);
 	}
 }

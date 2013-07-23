@@ -829,11 +829,11 @@ a.button:active, input.button:active {
 	margin-bottom: 20px;
 }
 .box .box_heading {
-	padding: 0 10px 7px 10px;
+	padding: 0;
 	font-family: Arial, Helvetica, sans-serif;
-	font-size: 14px;
+	font-size: 18px;
 	font-weight: bold;
-	line-height: 14px;
+	line-height: 18px;
 	color: #636363;
 }
 .box .box_content {
@@ -1996,154 +1996,6 @@ table.form_single_column select{
 	float:left;
 }
 	
-/** CONTACT FORM **/
-#contact_form{
-	overflow:auto;
-	display:block;
-}
-#contact_form h3{
-	width:90%;
-	margin-bottom: 20px;
-}
-#contact_form h3 a{
-	font-size:18px;
-}
-.contact-info {
-	padding-left:20px;
-	overflow: auto;
-	font-size: 15px;
-	margin-bottom:20px;
-}
-.contact-info .left {
-	float: left;
-	width: 48%;
-}
-.contact-info .right {
-	float: left;
-	width: 48%;
-}
-.sitemap-info {
-	overflow: auto;
-	margin-bottom: 40px;
-}
-.sitemap-info .left {
-	float: left;
-	width: 48%;
-}
-.sitemap-info .right {
-	float: left;
-	width: 48%;
-}
-
-/*
- * Custom Drop Down Menu
- */
-
-.select_dd{
-	position:relative;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-o-user-select: none;
-	user-select: none;
-	display:block;
-	width:144px;
-	height:24px;
-	margin:auto auto;
-	margin-bottom: 15px;
-	border: 1px #e2e2e2 solid;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-	background: #f2f2f2;
-	background-image: -ms-linear-gradient(top, #ffffff, #e5e5e5); /* IE10 */
-	background-image: -moz-linear-gradient(top, #ffffff, #e5e5e5); /* Firefox */
-	background-image: -o-linear-gradient(top, #ffffff, #e5e5e5); /* Opera */
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#f2f2f2)); /* old Webkit */
-	background-image: -webkit-linear-gradient(top, #ffffff, #e5e5e5); /* new Webkit */
-	background-image: linear-gradient(top, #ffffff, #e5e5e5); /* proposed W3C Markup */
-	
-	text-transform:uppercase;
-	font-size:10px;
-	color: #FF5D6F;
-}
-.select_dd .select_bar{
-	cursor: pointer;
-	border-bottom:solid 1px #e2e2e2;
-	height:24px;
-}
-.select_dd .current_selection{
-	text-align:center;
-	padding: 7px 8px;
-	padding-right:30px;
-}
-.select_dd ul{
-	position:absolute;
-	display:none;
-	width:143px;
-	
-	border: 1px #e2e2e2 solid;
-	-webkit-border-bottom-right-radius: 5px;
-	-webkit-border-bottom-left-radius: 5px;
-	-moz-border-bottom-right-radius: 5px;
-	-moz-border-bottom-left-radius: 5px;
-	border-bottom-right-radius: 5px;
-	border-bottom-left-radius: 5px;
-	background: #f2f2f2;
-	background-image: -ms-linear-gradient(top, #ffffff, #f2f2f2); /* IE10 */
-	background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2); /* Firefox */
-	background-image: -o-linear-gradient(top, #ffffff, #f2f2f2); /* Opera */
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#f2f2f2)); /* old Webkit */
-	background-image: -webkit-linear-gradient(top, #ffffff, #f2f2f2); /* new Webkit */
-	background-image: linear-gradient(top, #ffffff, #f2f2f2); /* proposed W3C Markup */
-	
-	margin:0;
-	-webkit-padding-start:0;
-	-webkit-padding-end:0;
-	-webkit-margin-before:0;
-	-webkit-margin-after:0;
-	-moz-padding-start:0;
-	-moz-padding-end:0;
-	-moz-margin-before:0;
-	-moz-margin-after:0;
-	list-style:none;
-}
-.select_dd li{
-	position:relative;
-	cursor:pointer;
-	list-style:none;
-	display:block;
-	text-align:left;
-	padding: 4px 10px;
-	padding-left:30px;
-}
-.select_dd li:hover,.select_dd li:active,.select_dd li:focus{
-	background: #e2e2e2;
-}
-.dd_separator{
-	background:white;
-	height:18px;
-	width:1px;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-	border: solid 1px #f2f2f2;
-	position:absolute;
-	right: 30px;
-	top:3px;
-}
-
-.select_dd .dd_down_arrow{
-	height:0;
-	width:0;
-	border-top: 10px solid #FF5D6F;
-	border-left: solid 7px transparent;
-	border-right: solid 7px transparent;
-	position:absolute;
-	right:10px;
-	top:8px;
-}
-
 /* tools */
 .help_icon{
 	position:absolute;
@@ -2235,16 +2087,6 @@ table.form_single_column select{
 }
 .help_icon:hover .help_icon_popup{
 	display:block;
-}
-
-/* banner */
-.banner div {
-	text-align: center;
-	width: 100%;
-	display: none;
-}
-.banner div img {
-	margin-bottom: 20px;
 }
 
 /* Press / Editorial */
@@ -2540,13 +2382,6 @@ table.form_single_column select{
 	position:relative;
 }
 
-.designer_article_details{
-	text-decoration:none;
-	padding:20px;
-	width:210px;
-	height:240px;
-	overflow:hidden;
-}
 .product_details:hover,.designer_article_details:hover{
 	background: rgba(50,50,50,.1);
 }
@@ -3208,6 +3043,55 @@ form .set_default_address input[type="radio"]{
 	height:30px;
 }
 
+/** Contact Page **/
+#block_informationcontact p{
+	margin: 5px 0;
+}
+
+#block_informationcontact table{
+	margin-top: 20px;
+}
+
+#block_informationcontact table tr > td{
+	vertical-align: top;
+}
+
+#contact_form .cf_item{
+	margin-bottom: 15px;
+}
+
+#contact_form .cf_item label{
+	width: 300px;
+	display:block;
+}
+
+#contact_form .cf_item input{
+	width: 300px;
+}
+
+#contact_form .cf_item textarea{
+	width: 600px;
+}
+
+#contact_form .captcha{
+	width: 250px;
+	text-align:center;
+}
+
+#contact_form .captcha label{
+	width:100%;
+	text-align:left;
+}
+
+#contact_form .captcha img{
+	display:block;
+	margin-bottom:15px;
+}
+
+#contact_form .captcha input{
+	display:block;
+	width: 143px;
+}
 
 /** Paypal Standard Payment */
 .pp_standard_paywithcc{

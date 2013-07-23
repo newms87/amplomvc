@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en" xml:lang="en">
 <head>
-<title><?= $title; ?></title>
+<title><?= $heading_title; ?></title>
 <base href="<?= $base; ?>" />
 <script type="text/javascript" src="<?= HTTP_JS . "jquery/jquery-1.7.1.min.js"; ?>"></script>
 <script type="text/javascript" src="<?= HTTP_JS . "jquery/ui/jquery-ui-1.8.16.custom.min.js"; ?>"></script>
@@ -188,7 +188,7 @@ $(document).ready(function() {
 						
 						$('#column-right a').each(function(index, element) {
 							$.ajax({
-								url: "<?= HTTP_AJAX . "common/filemanager/image"; ?>" + '&image=' + encodeURIComponent('data/' + $(element).find('input[name=\'image\']').attr('value')),
+								url: "<?= HTTP_AJAX . "common/filemanager/image"; ?>" + '?image=' + encodeURIComponent('data/' + $(element).find('input[name=\'image\']').attr('value')),
 								dataType: 'html',
 								success: function(html) {
 									$(element).prepend('<img src="' + html + '" title="" style="display: none;" /><br />');
@@ -217,8 +217,8 @@ $(document).ready(function() {
 	});
 	
 	$('#column-right a').live('dblclick', function() {
-		<? if ($fckeditor) { ?>
-		window.opener.CKEDITOR.tools.callFunction(<?= $fckeditor; ?>, '<?= $directory; ?>' + $(this).find('input[name=\'image\']').attr('value'));
+		<? if ($CKEditorFuncNum) { ?>
+		window.opener.CKEDITOR.tools.callFunction(<?= $CKEditorFuncNum; ?>, '<?= $directory; ?>' + $(this).find('input[name=\'image\']').attr('value'));
 		
 		self.close();
 		<? } else { ?>

@@ -83,6 +83,8 @@ abstract class Controller
 		if ($this->error) {
 			$this->message->add('warning', $this->error);
 			$this->data['errors'] = $this->error;
+			
+			$this->error = array();
 		}
 		
 		//Build language

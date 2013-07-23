@@ -428,7 +428,7 @@ class Catalog_Controller_Account_Return extends Controller
 			$this->error['return_products'] = $this->_('error_return_products');
 		}
 
-		if (empty($this->session->data['captcha']) || ($this->session->data['captcha'] != $_POST['captcha'])) {
+		if (!$this->captcha->validate($_POST['captcha'])) {
 			$this->error['captcha'] = $this->_('error_captcha');
 		}
 		
@@ -437,8 +437,6 @@ class Catalog_Controller_Account_Return extends Controller
 	
 	public function captcha()
 	{
-		$this->session->data['captcha'] = $this->captcha->getCode();
-		
-		$this->captcha->showImage();
+		$this->captcha->generate();
 	}
 }

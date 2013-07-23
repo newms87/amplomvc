@@ -128,7 +128,7 @@ class Language extends Library
 			$file = $this->root . $this->default . '/' . $filename . '.php';
 			
 			if (!file_exists($file)) {
-				trigger_error('Error: Could not load language ' . $filename . '!');
+				trigger_error('Error: Could not load language ' . $filename . '!' . get_caller());
 				exit();
 			}
 		}

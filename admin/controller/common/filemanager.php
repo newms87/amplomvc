@@ -22,28 +22,26 @@ class Admin_Controller_Common_Filemanager extends Controller
 	
 	public function ckeditor()
 	{
+		//Template and Language
 		$this->template->load('common/ckeditor');
-
 		$this->language->load('common/filemanager');
-		
-		$this->language->set('title', $this->_('heading_title'));
 		
 		$this->data['base'] = $this->url->is_ssl() ? SITE_SSL : SITE_URL;
 		
 		$this->data['directory'] = HTTP_IMAGE . 'data/';
 		
-		if (isset($_GET['field'])) {
-			$this->data['field'] = $_GET['field'];
-		} else {
-			$this->data['field'] = '';
-		}
+		$defaults = array(
+			'field' => '',
+			'CKEditorFuncNum' => false,
+		);
 		
-		if (isset($_GET['CKEditorFuncNum'])) {
-			$this->data['fckeditor'] = $_GET['CKEditorFuncNum'];
-		} else {
-			$this->data['fckeditor'] = false;
+		foreach ($defaults as $key => $default) {
+			if (isset($_GET[$key])) {
+				$this->data[$key] = $_GET[$key];
+			} else {
+				$this->data[$key] = $default;
+			}
 		}
-		
 		
 		$this->response->setOutput($this->render());
 	}

@@ -74,7 +74,7 @@ class Catalog_Controller_Block_Product_Review extends Controller
 				$json['error'] = $this->_('error_rating');
 			}
 	
-			if (empty($this->session->data['captcha']) || ($this->session->data['captcha'] != $_POST['captcha'])) {
+			if (!$this->captcha->validate($_POST['captcha'])) {
 				$json['error'] = $this->_('error_captcha');
 			}
 				
@@ -90,8 +90,6 @@ class Catalog_Controller_Block_Product_Review extends Controller
 	
 	public function captcha()
 	{
-		$this->session->data['captcha'] = $this->captcha->getCode();
-		
-		$this->captcha->showImage();
+		$this->captcha->generate();
 	}
 }
