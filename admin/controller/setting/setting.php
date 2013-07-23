@@ -4,7 +4,6 @@ class Admin_Controller_Setting_Setting extends Controller
 	public function index()
 	{
 		$this->template->load('setting/setting');
-
 		$this->language->load('setting/setting');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -84,6 +83,7 @@ class Admin_Controller_Setting_Setting extends Controller
 			'config_breadcrumb_separator_admin' => '/',
 			'config_show_category_image' => 1,
 			'config_show_category_description' => 1,
+			'config_show_product_list_hover_image' => 0,
 			'config_stock_display' => 1,
 			'config_stock_warning' => 1,
 			'config_stock_checkout' => 0,

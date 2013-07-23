@@ -1,4 +1,4 @@
-<div id="voucher" class="content">
+<div id="voucher" class="section">
 	<form action="<?= $action; ?>" method="post" enctype="multipart/form-data">
 		<?= $entry_voucher; ?>&nbsp;
 		<input type="text" name="voucher" value="<?= $voucher; ?>" />

@@ -54,6 +54,12 @@ class Catalog_Controller_Product_Collection extends Controller
 			$products = $this->Model_Catalog_Collection->getCollectionProducts($collection_id, $sort_filter);
 			
 			if (!empty($products)) {
+				if ($this->config->get('config_show_product_list_hover_image')) {
+					foreach ($products as &$product) {
+						$product['images'] = $this->Model_Catalog_Product->getProductImages($product['product_id']);
+					}
+				}
+
 				$params = array(
 					'data' => $products,
 					'template' => 'block/product/product_list'

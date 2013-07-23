@@ -1,10 +1,9 @@
 <?= $header; ?>
-<? if ($success) { ?>
-<div class="message_box success"><?= $success; ?><img src="<?= HTTP_THEME_IMAGE . 'close.png'; ?>" alt="" class="close" /></div>
-<? } ?>
 <?= $column_left; ?><?= $column_right; ?>
-<div id="content" style='padding-top:0'><?= $content_top; ?>
+<div id="content">
 	<?= $this->breadcrumb->render(); ?>
+	<?= $content_top; ?>
+	
 	<h1><?= $heading_title; ?></h1>
 	<? if ($products) { ?>
 	<div class="wishlist-info">
@@ -47,10 +46,13 @@
 		<div class="right"><a href="<?= $continue; ?>" class="button"><?= $button_continue; ?></a></div>
 	</div>
 	<? } else { ?>
-	<div class="content"><?= $text_empty; ?></div>
+	<div class="section"><?= $text_empty; ?></div>
 	<div class="buttons">
 		<div class="right"><a href="<?= $continue; ?>" class="button"><?= $button_continue; ?></a></div>
 	</div>
 	<? } ?>
-	<?= $content_bottom; ?></div>
+	
+	<?= $content_bottom; ?>
+</div>
+
 <?= $footer; ?>

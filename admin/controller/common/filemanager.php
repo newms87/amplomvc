@@ -54,7 +54,7 @@ class Admin_Controller_Common_Filemanager extends Controller
 			$width = isset($_GET['image_width']) ? (int)$_GET['image_width'] : $this->config->get('config_image_admin_thumb_width');
 			$height = isset($_GET['image_height']) ? (int)$_GET['image_height'] : $this->config->get('config_image_admin_thumb_height');
 			
-			$this->response->setOutput($this->image->resize(html_entity_decode($_GET['image'], ENT_QUOTES, 'UTF-8'), $width, $height));
+			$this->response->setOutput($this->image->resize(str_replace('\\','/',html_entity_decode($_GET['image'], ENT_QUOTES, 'UTF-8')), $width, $height));
 		}
 	}
 	

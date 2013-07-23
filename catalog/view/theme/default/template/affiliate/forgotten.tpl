@@ -1,15 +1,14 @@
 <?= $header; ?>
-<? if ($error_warning) { ?>
-<div class="message_box warning"><?= $error_warning; ?></div>
-<? } ?>
 <?= $column_left; ?><?= $column_right; ?>
-<div id="content"><?= $content_top; ?>
+<div id="content">
 	<?= $this->breadcrumb->render(); ?>
+	<?= $content_top; ?>
+
 	<h1><?= $heading_title; ?></h1>
 	<form action="<?= $action; ?>" method="post" enctype="multipart/form-data">
 		<p><?= $text_email; ?></p>
 		<h2><?= $text_your_email; ?></h2>
-		<div class="content">
+		<div class="section">
 			<table class="form">
 				<tr>
 					<td><?= $entry_email; ?></td>
@@ -24,5 +23,8 @@
 			</div>
 		</div>
 	</form>
-	<?= $content_bottom; ?></div>
+	
+	<?= $content_bottom; ?>
+</div>
+
 <?= $footer; ?>

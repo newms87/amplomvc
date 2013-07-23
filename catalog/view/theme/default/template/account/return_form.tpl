@@ -1,12 +1,13 @@
 <?= $header; ?>
 <?= $column_left; ?><?= $column_right; ?>
 <div id="content">
-	<?= $content_top; ?>
 	<?= $this->breadcrumb->render(); ?>
+	<?= $content_top; ?>
+	
 	<h1><?= $heading_title; ?></h1>
 	<div class="description"><?= $text_description; ?></div>
 	<form id="order_lookup" method="post" action="<?= $order_lookup_action; ?>">
-		<div class="content">
+		<div class="section">
 			<h2><?= $text_order_lookup; ?></h2>
 			<div class="form_item ol_order_id">
 				<label for="ol_order_id"><?= $entry_order_id; ?></label>
@@ -22,7 +23,7 @@
 	
 	<? if (!empty($return_products)) { ?>
 	<form id="return_form" action="<?= $action; ?>" method="post" enctype="multipart/form-data">
-		<div class="content">
+		<div class="section">
 			<h2><?= $text_order; ?></h2>
 			
 			<div class="order_info order_id">
@@ -60,7 +61,7 @@
 			</div>
 		</div>
 		
-		<div class="content">
+		<div class="section">
 			<h2><?= $text_product; ?></h2>
 			<table class="list return_product">
 				<thead>

@@ -165,5 +165,7 @@ function fill_data_as(type, context, name, value){
 <script type="text/javascript">//<!--
 $('#tabs a').tabs();
 //--></script>
+
 <?= $this->builder->js('errors', $errors); ?>
+
 <?= $footer; ?>

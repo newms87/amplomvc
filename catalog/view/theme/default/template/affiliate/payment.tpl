@@ -1,10 +1,13 @@
-<?= $header; ?><?= $column_left; ?><?= $column_right; ?>
-<div id="content"><?= $content_top; ?>
+<?= $header; ?>
+<?= $column_left; ?><?= $column_right; ?>
+<div id="content">
 	<?= $this->breadcrumb->render(); ?>
+	<?= $content_top; ?>
+
 	<h1><?= $heading_title; ?></h1>
 	<form action="<?= $action; ?>" method="post" enctype="multipart/form-data">
 		<h2><?= $text_your_payment; ?></h2>
-		<div class="content">
+		<div class="section">
 			<table class="form">
 				<tbody>
 					<tr>
@@ -74,7 +77,10 @@
 			<div class="right"><input type="submit" value="<?= $button_continue; ?>" class="button" /></div>
 		</div>
 	</form>
-	<?= $content_bottom; ?></div>
+	
+	<?= $content_bottom; ?>
+</div>
+
 <script type="text/javascript">
 //<!--
 $('input[name=\'payment\']').bind('change', function() {

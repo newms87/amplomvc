@@ -248,19 +248,23 @@
 						</tr>
 						<tr>
 							<td><?= $entry_allow_close_message_box; ?></td>
-							<td><?= $this->builder->build('select', $data_yes_no, 'config_allow_close_message_box', $config_allow_close_message_box); ?></td>
+							<td><?= $this->builder->build('radio', $data_yes_no, 'config_allow_close_message_box', $config_allow_close_message_box); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_show_category_image; ?></td>
-							<td><?= $this->builder->build('select', $data_yes_no, 'config_show_category_image', $config_show_category_image); ?></td>
+							<td><?= $this->builder->build('radio', $data_yes_no, 'config_show_category_image', $config_show_category_image); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_show_category_description; ?></td>
-							<td><?= $this->builder->build('select', $data_yes_no, 'config_show_category_description', $config_show_category_description); ?></td>
+							<td><?= $this->builder->build('radio', $data_yes_no, 'config_show_category_description', $config_show_category_description); ?></td>
+						</tr>
+						<tr>
+							<td><?= $entry_show_product_list_hover_image; ?></td>
+							<td><?= $this->builder->build('radio', $data_yes_no, 'config_show_product_list_hover_image', $config_show_product_list_hover_image); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_cart_show_return_policy; ?></td>
-							<td><?= $this->builder->build('select', $data_yes_no, 'config_cart_show_return_policy', $config_cart_show_return_policy); ?></td>
+							<td><?= $this->builder->build('radio', $data_yes_no, 'config_cart_show_return_policy', $config_cart_show_return_policy); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_tax; ?></td>

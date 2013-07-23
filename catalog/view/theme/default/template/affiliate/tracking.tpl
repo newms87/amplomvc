@@ -1,6 +1,9 @@
-<?= $header; ?><?= $column_left; ?><?= $column_right; ?>
-<div id="content"><?= $content_top; ?>
+<?= $header; ?>
+<?= $column_left; ?><?= $column_right; ?>
+<div id="content">
 	<?= $this->breadcrumb->render(); ?>
+	<?= $content_top; ?>
+
 	<h1><?= $heading_title; ?></h1>
 	<p><?= $text_description; ?></p>
 	<p><?= $text_code; ?><br />

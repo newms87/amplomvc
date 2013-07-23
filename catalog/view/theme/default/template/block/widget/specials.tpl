@@ -10,7 +10,7 @@
 		<div class="pagination"><?= $pagination; ?></div>
 	
 	<? } else { ?>
-		<div class="content"><?= $text_empty; ?></div>
+		<div class="section"><?= $text_empty; ?></div>
 		<div class="buttons">
 			<div class="right"><a href="<?= $continue; ?>" class="button"><?= $button_continue; ?></a></div>
 		</div>

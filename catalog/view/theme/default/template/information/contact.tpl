@@ -1,13 +1,15 @@
-<?= $header; ?><?= $column_left; ?><?= $column_right; ?>
+<?= $header; ?>
+<?= $column_left; ?><?= $column_right; ?>
 <div id="content">
-	<?= $content_top; ?>
 	<?= $this->breadcrumb->render(); ?>
+	<?= $content_top; ?>
+	
 	<h1><?= $heading_title; ?></h1>
 	<form id='contact_form' action="<?= $action; ?>" method="post" enctype="multipart/form-data">
 		<h3><?= $text_contact_us; ?></h3>
 		<h3><?= $text_contact_info; ?></h3>
 		<h2><?= $text_contact; ?></h2>
-		<div class="content">
+		<div class="section">
 		<b><?= $entry_name; ?></b><br />
 		<input type="text" name="name" value="<?= $name; ?>" />
 		<br />

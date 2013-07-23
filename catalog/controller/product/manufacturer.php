@@ -74,7 +74,13 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 			
 			$product_total = $this->Model_Catalog_Product->getTotalProducts($filter);
 			$products = $this->Model_Catalog_Product->getProducts($sort);
-
+			
+			if ($this->config->get('config_show_product_list_hover_image')) {
+				foreach ($products as &$product) {
+					$product['images'] = $this->Model_Catalog_Product->getProductImages($product['product_id']);
+				}
+			}
+			
 			$params = array(
 				'data' => $products,
 				'template' => 'block/product/product_list',

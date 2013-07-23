@@ -11,5 +11,8 @@
 		<div class="right"><a href="<?= $continue; ?>" class="button"><?= $button_continue; ?></a></div>
 	</div>
 	
-	<?= $content_bottom; ?></div>
+	
+	<?= $content_bottom; ?>
+</div>
+
 <?= $footer; ?>

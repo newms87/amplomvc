@@ -81,7 +81,7 @@ $(document).ready(function(){
 </head>
 <body>
 <div id="container">
-<div id='container_content'>
+<div id='page'>
 <div id="header">
 	<? if ($logo) { ?>
 	<div id="logo" class="<?= $logo; ?>">

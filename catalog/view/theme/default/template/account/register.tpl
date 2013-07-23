@@ -1,12 +1,14 @@
 <?= $header; ?>
 <?= $column_left; ?><?= $column_right; ?>
-<div id="content"><?= $content_top; ?>
+<div id="content">
 	<?= $this->breadcrumb->render(); ?>
+	<?= $content_top; ?>
+
 	<h1><?= $heading_title; ?></h1>
 	<p><?= $text_account_already; ?></p>
 	<form action="<?= $action; ?>" method="post" enctype="multipart/form-data">
 		<h2><?= $text_your_details; ?></h2>
-		<div class="content">
+		<div class="section">
 			<table class="form">
 				<tr>
 					<td class="required"> <?= $entry_firstname; ?></td>
@@ -23,7 +25,7 @@
 			</table>
 		</div>
 		<h2><?= $text_your_address; ?> </h2>
-		<div class="content">
+		<div class="section">
 			<table class="form">
 				<tr>
 					<td><?= $entry_company; ?></td>
@@ -59,7 +61,7 @@
 			</table>
 		</div>
 		<h2><?= $text_your_password; ?></h2>
-		<div class="content">
+		<div class="section">
 			<table class="form">
 				<tr>
 					<td class="required"> <?= $entry_password; ?></td>
@@ -72,7 +74,7 @@
 			</table>
 		</div>
 		<h2><?= $text_newsletter; ?></h2>
-		<div class="content">
+		<div class="section">
 			<table class="form">
 				<tr>
 					<td><?= $entry_newsletter; ?></td>
@@ -109,7 +111,9 @@
 		</div>
 		<? } ?>
 	</form>
-	<?= $content_bottom; ?></div>
+	
+	<?= $content_bottom; ?>
+</div>
 
 <?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select'); ?>
 

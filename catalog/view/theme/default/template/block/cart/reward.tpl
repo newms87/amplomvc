@@ -1,4 +1,4 @@
-<div id="reward" class="content">
+<div id="reward" class="section">
 	<form action="<?= $action; ?>" method="post" enctype="multipart/form-data">
 		<?= $entry_reward; ?>&nbsp;
 		<input type="text" name="reward" value="<?= $reward; ?>" />

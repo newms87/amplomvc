@@ -9,9 +9,8 @@ class Admin_Controller_Block_Block extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (isset($_GET['name'])) {
-				
-			if (!$this->Model_Block_Block->is_block($_GET['name'])) {
+		if (!empty($_GET['name'])) {
+			if (!$this->Model_Block_Block->isBlock($_GET['name'])) {
 				$this->message->add('warning', $this->_('error_unknown_block'));
 				
 				$this->url->redirect($this->url->link('block/block'));
@@ -22,6 +21,23 @@ class Admin_Controller_Block_Block extends Controller
 		else {
 			$this->getList();
 		}
+	}
+	
+	public function delete()
+	{
+		$this->language->load('block/block');
+		
+		if (!empty($_GET['name']) && $this->validateDelete()) {
+			$this->Model_Block_Block->deleteBlock($_GET['name']);
+			
+			if (!$this->message->error_set()) {
+				$this->message->add('success', $this->_('text_success_delete'));
+			}
+			
+			$this->url->redirect($this->url->link('block/block', $this->url->getQueryExclude('name')));
+		}
+		
+		$this->index();
 	}
 	
 	private function getList()
@@ -70,6 +86,10 @@ class Admin_Controller_Block_Block extends Controller
 				'edit' => array(
 					'text' => $this->_('text_edit'),
 					'href' => $this->url->link('block/block', 'name=' . $block['name'])
+				),
+				'delete' => array(
+					'text' => $this->_('text_delete'),
+					'href' => $this->url->link('block/block/delete', 'name=' . $block['name']),
 				),
 			);
 			
@@ -235,6 +255,15 @@ class Admin_Controller_Block_Block extends Controller
 		return $this->error ? false : true;
 	}
 	
+	private function validateDelete()
+	{
+		if (!$this->user->hasPermission('modify', 'block/block')) {
+			$this->error['warning'] = $this->_('error_permission');
+		}
+		
+		return $this->error ? false : true;
+	}
+
 	private function validate_block_data()
 	{
 		$this->loadBlockController();

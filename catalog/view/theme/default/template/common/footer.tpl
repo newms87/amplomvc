@@ -12,6 +12,6 @@
 	</div>
 </div>
 
-</div><!-- /container_content -->
+</div><!-- /page -->
 </div><!-- /container -->
 </body></html>

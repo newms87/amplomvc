@@ -1,4 +1,5 @@
-<?= $header; ?><?= $column_left; ?><?= $column_right; ?>
+<?= $header; ?>
+<?= $column_left; ?><?= $column_right; ?>
 <div id="content" style='padding-top:0'><?= $content_top; ?>
 	<?= $this->breadcrumb->render(); ?>
 	<h1><?= $heading_title; ?></h1>

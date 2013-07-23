@@ -26,6 +26,13 @@ class Catalog_Controller_Block_Product_List extends Controller
 					$item['thumb'] = $this->image->resize('no_image.png', $image_width, $image_height);
 				}
 				
+				if ($this->config->get('config_show_product_list_hover_image')) {
+					if (!empty($item['images'])) {
+						reset($item['images']);
+						$item['backup_thumb'] = $this->image->resize(current($item['images']), $image_width, $image_height);
+					}
+				}
+				
 				if (($this->config->get('config_customer_price') ? $this->customer->isLogged() : true)) {
 					if (!empty($item['price'])) {
 						$item['price'] = $this->currency->format($this->tax->calculate($item['price'], $item['tax_class_id']));

@@ -1,4 +1,5 @@
-<?= $header; ?><?= $column_left; ?><?= $column_right; ?>
+<?= $header; ?>
+<?= $column_left; ?><?= $column_right; ?>
 <div id="content">
 	<?= $content_top; ?>
 	<?= $this->breadcrumb->render(); ?>
@@ -33,7 +34,7 @@
 		
 		<div class="pagination"><?= $pagination; ?></div>
 	<? } else { ?>
-		<div class="content"><?= $text_empty; ?></div>
+		<div class="section"><?= $text_empty; ?></div>
 	<? } ?>
 	
 	<div class="buttons">
@@ -44,4 +45,5 @@
 	
 	<?= $content_bottom; ?>
 </div>
+
 <?= $footer; ?>

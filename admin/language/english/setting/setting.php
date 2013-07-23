@@ -78,6 +78,7 @@ $_['entry_commission']			= 'Affiliate Commission (%):<br /><span class="help">Th
 $_['entry_breadcrumb_display']			= 'Display Breadcrumbs? <span class="help">Display breadcrumbs in the storefront? (breadcrumbs will still display in the admin panel)</span>';
 $_['entry_breadcrumb_separator']			= 'Breadcrumb Separator:';
 $_['entry_breadcrumb_separator_admin']			= 'Admin Breadcrumb Separator:';
+$_['entry_show_product_list_hover_image'] = "Product List Hover Image:<span class=\"help\">For the Product List pages, show an alternate image when moving the mouse over the product block</span>";
 $_['entry_stock_display']		= 'Display Stock:<br /><span class="help">Display stock quantity on the product page.</span>';
 $_['entry_stock_warning']		= 'Show Out Of Stock Warning:<br /><span class="help">Display out of stock message on the shopping cart page if a product is out of stock but stock checkout is yes. (Warning always shows if stock checkout is no)</span>';
 $_['entry_stock_checkout']	= 'Stock Checkout:<br /><span class="help">Allow customers to still checkout if the products they are ordering are not in stock.</span>';

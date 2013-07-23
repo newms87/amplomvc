@@ -9,7 +9,11 @@
 		
 		<? if ($product['thumb']) { ?>
 		<div class="image">
-			<img src="<?= $product['thumb']; ?>" title="<?= $product['name']; ?>" alt="<?= $product['name']; ?>" />
+			<img class="primary" src="<?= $product['thumb']; ?>" title="<?= $product['name']; ?>" alt="<?= $product['name']; ?>" />
+			
+			<? if (!empty($product['backup_thumb'])) { ?>
+				<img class="backup" src="<?= $product['backup_thumb']; ?>" title="<?= $product['name']; ?>" alt="<?= $product['name']; ?>" />
+			<? } ?>
 		</div>
 		<? } ?>
 		

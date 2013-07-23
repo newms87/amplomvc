@@ -1,11 +1,13 @@
 <?= $header; ?>
 <?= $column_left; ?><?= $column_right; ?>
-<div id="content"><?= $content_top; ?>
+<div id="content">
 	<?= $this->breadcrumb->render(); ?>
+	<?= $content_top; ?>
+	
 	<h1><?= $heading_title; ?></h1>
 	<h2><?= $text_address_book; ?></h2>
 	<? foreach ($addresses as $result) { ?>
-	<div class="content">
+	<div class="section">
 		<table style="width: 100%;">
 			<tr>
 				<td><?= $result['address']; ?></td>
@@ -18,5 +20,7 @@
 		<div class="left"><a href="<?= $back; ?>" class="button"><?= $button_back; ?></a></div>
 		<div class="right"><a href="<?= $insert; ?>" class="button"><?= $button_new_address; ?></a></div>
 	</div>
-	<?= $content_bottom; ?></div>
+
+	<?= $content_bottom; ?>
+</div>
 <?= $footer; ?>

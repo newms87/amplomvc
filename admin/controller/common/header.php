@@ -135,7 +135,7 @@ class Admin_Controller_Common_Header extends Controller
 		
 		if ($failed_count) {
 			$view_mail_errors = $this->url->admin('mail/error');
-			$this->message->add('warning', "There are <strong>$failed_count</strong> failed email messages! <a href=\"$view_mail_errors\">(view errors)</a>");
+			$this->message->system('warning', "There are <strong>$failed_count</strong> failed email messages! <a href=\"$view_mail_errors\">(view errors)</a>");
 		}
 		
 		$this->render();

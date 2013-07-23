@@ -3,8 +3,10 @@
 <div class="message_box warning"><?= $error_warning; ?></div>
 <? } ?>
 <?= $column_left; ?><?= $column_right; ?>
-<div id="content"><?= $content_top; ?>
+<div id="content">
 	<?= $this->breadcrumb->render(); ?>
+	<?= $content_top; ?>
+
 	<h1><?= $heading_title; ?></h1>
 	<p><?= $text_description; ?></p>
 	<form action="<?= $action; ?>" method="post" enctype="multipart/form-data">
@@ -76,5 +78,8 @@
 			</div>
 		</div>
 	</form>
-	<?= $content_bottom; ?></div>
+	
+	<?= $content_bottom; ?>
+</div>
+
 <?= $footer; ?>

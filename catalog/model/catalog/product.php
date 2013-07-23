@@ -345,9 +345,7 @@ class Catalog_Model_Catalog_Product extends Model
 		
 	public function getProductImages($product_id)
 	{
-		$result = $this->query("SELECT * FROM " . DB_PREFIX . "product_image WHERE product_id = '" . (int)$product_id . "' ORDER BY sort_order ASC");
-
-		return $result->rows;
+		return $this->queryColumn("SELECT image FROM " . DB_PREFIX . "product_image WHERE product_id = '" . (int)$product_id . "' ORDER BY sort_order ASC");
 	}
 	
 	public function getProductRelated($product_id)

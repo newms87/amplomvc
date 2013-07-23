@@ -22,6 +22,19 @@ class Message extends Library
 		}
 	}
 	
+	//TODO: Need to add system messages to backend!
+	public function system($type, $message)
+	{
+		if (is_string($message)) {
+			$this->session->data['system_messages'][$type][] = $this->language->get($message);
+		}
+		elseif (is_array($message)) {
+			array_walk_recursive($message, function($value, $key, $data) {
+				$_SESSION['system_messages'][$data[1]][] = $data[0]->language->get($value);
+			}, array($this,$type));
+		}
+	}
+	
 	public function error_set()
 	{
 		return isset($this->session->data['messages']['error']) || isset($this->session->data['messages']['warning']);

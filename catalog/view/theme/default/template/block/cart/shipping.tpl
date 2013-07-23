@@ -1,4 +1,4 @@
-<form id="cart_shipping" action="<?= $action; ?>" class="content">
+<form id="cart_shipping" action="<?= $action; ?>" class="section">
 	<p><?= $text_shipping_detail; ?></p>
 	<table>
 		<tr>

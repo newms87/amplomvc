@@ -1,7 +1,9 @@
 <?= $header; ?>
 <?= $column_left; ?><?= $column_right; ?>
-<div class="content"><?= $content_top; ?>
+<div id="content">
 	<?= $this->breadcrumb->render(); ?>
+	<?= $content_top; ?>
+	
 	<h1><?= $heading_title; ?></h1>
 	
 	<div class="content_account content">
@@ -32,5 +34,8 @@
 			<li><a href="<?= $newsletter; ?>"><?= $text_newsletter; ?></a></li>
 		</ul>
 	</div>
-	<?= $content_bottom; ?></div>
+	
+	<?= $content_bottom; ?>
+</div>
+
 <?= $footer; ?> 
