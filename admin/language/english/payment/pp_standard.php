@@ -40,5 +40,6 @@ $_['entry_pdt_token'] = "PDT Identity Token";
 
 // Error
 $_['error_permission']				= 'Warning: You do not have permission to modify payment PayPal!';
-$_['error_email']					= 'E-Mail required!';
+$_['error_email']					= 'A Valid E-Mail is required!';
+$_['error_test_email']					= 'Please enter a valid Test Email address or leave blank to use your main account email for testing.';
 $_['error_pdt_token'] = "PDT Token is required to enable Payment Data Transfer!";

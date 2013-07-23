@@ -84,8 +84,12 @@ class Admin_Controller_Payment_PpStandard extends Controller
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
-		if (!$_POST['pp_standard_email']) {
+		if (!$this->validation->email($_POST['pp_standard_email'])) {
 			$this->error['pp_standard_email'] = $this->_('error_email');
+		}
+
+		if ($_POST['pp_standard_test_email'] && !$this->validation->email($_POST['pp_standard_test_email'])) {
+			$this->error['pp_standard_test_email'] = $this->_('error_test_email');
 		}
 		
 		if ($_POST['pp_standard_pdt_enabled'] && !$_POST['pp_standard_pdt_token']) {

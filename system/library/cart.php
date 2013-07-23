@@ -867,11 +867,17 @@ class Cart extends Library
 	
 	public function getPaymentMethodData($payment_method_id = null)
 	{
+		if (!$payment_method_id) {
+			return false;
+		}
+		
 		$classname = "Model_Payment_" . $this->tool->formatClassname($payment_method_id);
 		
 		if (method_exists($this->$classname, 'data')) {
 			return $this->$classname->data();
 		}
+		
+		return false;
 	}
 
 	public function getPaymentMethods($payment_address = null)
@@ -1044,6 +1050,10 @@ class Cart extends Library
 	
 	public function getShippingMethodData($shipping_method_id)
 	{
+		if (!$shipping_method_id) {
+			return false;
+		}
+		
 		//Invalid Shipping method ID
 		if (!strpos($shipping_method_id, '__')) {
 			$code = $shipping_method_id;
