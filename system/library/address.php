@@ -26,7 +26,7 @@ class Address extends Library
 	{
 		static $address_formats = array();
 		
-		if (empty($address)) {
+		if (!$this->Model_Account_Address->isValidAddress($address)) {
 			return '';
 		}
 		

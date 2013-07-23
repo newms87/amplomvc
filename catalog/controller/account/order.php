@@ -121,6 +121,8 @@ class Catalog_Controller_Account_Order extends Controller
 		$products = $this->System_Model_Order->getOrderProducts($order_id);
 
 		foreach ($products as &$product) {
+			$product += $this->Model_Catalog_Product->getProduct($product['product_id'], true);
+			
 			$options = $this->System_Model_Order->getOrderProductOptions($order_id, $product['order_product_id']);
 
 			foreach ($options as &$option) {
@@ -137,8 +139,6 @@ class Catalog_Controller_Account_Order extends Controller
 			if ($product['return_policy']['days'] >= 0) {
 				$product['return'] = $this->url->link('account/return/insert', 'order_id=' . $order['order_id'] . '&product_id=' . $product['product_id']);
 			}
-			
-			$product += $this->Model_Catalog_Product->getProduct($product['product_id']);
 		} unset($product);
 		
 		$this->data['products'] = $products;

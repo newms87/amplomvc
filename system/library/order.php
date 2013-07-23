@@ -318,6 +318,10 @@ class Order Extends Library
 	{
 		$shipping_address = array();
 		
+		if (empty($order['shipping_method_id'])) {
+			return array();
+		}
+		
 		foreach ($order as $key => $value) {
 			if ($key === 'shipping_method_id') continue;
 			
