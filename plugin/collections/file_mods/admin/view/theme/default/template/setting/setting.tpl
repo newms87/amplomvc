@@ -1,7 +1,7 @@
 =====
 						<tr>
 							<td><?= $entry_show_category_description; ?></td>
-							<td><?= $this->builder->build('select', $data_yes_no, 'config_show_category_description', $config_show_category_description); ?></td>
+							<td><?= $this->builder->build('radio', $data_yes_no, 'config_show_category_description', $config_show_category_description); ?></td>
 						</tr>
 -----
 >>>>> {html}
