@@ -1233,29 +1233,7 @@ a.button:active, input.button:active {
 	overflow:hidden;
 }
 
-/* Product */
-#tab-description ul{
-	margin-left:10px;
-	-webkit-padding-start: 1em;
-	-moz-padding-start: 1em;
-	list-style:disc;
-}
-#tab-description ul li{
-	margin-bottom:5px;
-}
-
-#product_page_countdown{
-	position:relative;
-	top:-10px;
-	font-size:20px;
-}
-
-#content a.countdown_clock_link{
-	text-decoration:none;
-	display:block;
-	margin-bottom:10px;
-}
-
+/* Product Page */
 .product-info {
 	overflow: visible;
 	margin-bottom: 20px;
