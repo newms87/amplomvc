@@ -1,9 +1,5 @@
 <?php
-<<<<<<< HEAD:catalog/controller/module/currency.php
-class Catalog_Controller_Module_Currency extends Controller
-=======
 class Catalog_Controller_Block_Localisation_Currency extends Controller
->>>>>>> 35786c33a0470bb6e46908697b6ed90950ffb231:catalog/controller/block/localisation/currency.php
 {
 	public function index()
 	{

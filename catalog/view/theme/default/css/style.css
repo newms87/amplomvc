@@ -1,11 +1,5 @@
 /******** PAGE DEFAULTS ********************/
 
-@font-face {
-	font-family: MercurySemiBold;
-	src: url('../fonts/MercuryTextG4-SemiBold-Pro.eot');
-	src: local('☺'), url('../fonts/MercuryTextG4-SemiBold-Pro.otf') format('opentype'), url('../fonts/MercuryTextG4-SemiBold-Pro.woff') format('woff'), url('../fonts/MercuryTextG4-SemiBold-Pro.ttf') format('truetype'), url('../fonts/MercuryTextG4-SemiBold-Pro.svg') format('svg');
-}
-
 html {
 	overflow: -moz-scrollbars-vertical;
 	margin: 0;
@@ -24,7 +18,7 @@ body, td, th, input, textarea, select, a {
 }
 h1, .welcome {
 	color: #4F4F4F;
-	font-family: Arial, MercurySemiBold, Verdana;
+	font-family: Arial, Verdana;
 	margin-top: 0px;
 	margin-bottom: 10px;
 	font-size: 45px;
@@ -2368,7 +2362,7 @@ table.form_single_column select{
 	top:-40px;
 	font-size:21px;
 	margin-bottom:15px;
-	font-family: MercurySemiBold, Arial, Sans-serif;
+	font-family: Arial, Sans-serif;
 }
 
 .product_section_text{
@@ -2805,7 +2799,7 @@ form .set_default_address input[type="radio"]{
 /** Suggested Products **/
 #product_inactive{
 	font-size:18px;
-	font-family: MercuryBold, Arial, Helvetica, Sans-serif;
+	font-family: Arial, Helvetica, Sans-serif;
 	font-weight:bold;
 	margin-top:20px;
 	color:red;
@@ -3118,4 +3112,18 @@ form .set_default_address input[type="radio"]{
 .youtube_embed{
 	text-align:center;
 	margin-bottom: 20px;
+}
+
+/* FAQ Block */
+.faq_item{
+	margin-bottom: 15px;
+}
+
+.faq_item .question{
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.faq_item .answer{
+	margin-left: 5px;
 }
