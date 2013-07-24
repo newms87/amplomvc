@@ -6,7 +6,7 @@ class Admin_Controller_Module_DesignerSidebar extends Controller
 	{
 		$this->template->load('module/designer_sidebar');
 
-		$this->load->language('module/designer_sidebar');
+		$this->language->load('module/designer_sidebar');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

@@ -1,9 +1,12 @@
-<?= $header; ?><?= $column_left; ?><?= $column_right; ?>
-<div id="content"><?= $content_top; ?>
-	<?= $this->builder->display_breadcrumbs(); ?>
+<?= $header; ?>
+<?= $column_left; ?><?= $column_right; ?>
+<div id="content">
+	<?= $this->breadcrumb->render(); ?>
+	<?= $content_top; ?>
+
 	<h1><?= $heading_title; ?></h1>
 	<b><?= $text_critea; ?></b>
-	<div class="content">
+	<div class="section">
 		<p><?= $entry_search; ?>
 			<? if ($filter_name) { ?>
 			<input type="text" name="filter_name" value="<?= $filter_name; ?>" />
@@ -111,9 +114,12 @@
 	</div>
 	<div class="pagination"><?= $pagination; ?></div>
 	<? } else { ?>
-	<div class="content"><?= $text_empty; ?></div>
+	<div class="section"><?= $text_empty; ?></div>
 	<? }?>
-	<?= $content_bottom; ?></div>
+	
+	<?= $content_bottom; ?>
+</div>
+
 <script type="text/javascript"><!--
 $('#content input[name=\'filter_name\']').keydown(function(e) {
 	if (e.keyCode == 13) {

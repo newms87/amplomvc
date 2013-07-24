@@ -21,7 +21,7 @@ class Admin_Model_Sale_CustomerGroup extends Model
 	
 	public function getCustomerGroup($customer_group_id)
 	{
-		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "customer_group WHERE customer_group_id = '" . (int)$customer_group_id . "'");
+		$query = $this->query("SELECT * FROM " . DB_PREFIX . "customer_group WHERE customer_group_id = '" . (int)$customer_group_id . "'");
 		
 		return $query->row;
 	}

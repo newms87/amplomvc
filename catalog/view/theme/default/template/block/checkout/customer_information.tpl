@@ -74,7 +74,7 @@ function load_info_item(info_item, route, callback){
 	
 	set_validation_status(info_item, 'loading', '<?= $text_info_loading; ?>');
 	
-	info_item.find('.info_content').load("<?= HTTP_CATALOG . "index.php?route="; ?>" + route, {},
+	info_item.find('.info_content').load("<?= HTTP_ROOT; ?>" + route, {},
 		function(){
 			set_validation_status(info_item, '', '');
 			if(typeof callback == 'function'){
@@ -137,37 +137,19 @@ function handle_dependencies(info_item){
 }
 
 //Validate all the form items before submitting Customer Information
-function validate_submit(submit){
-	if($('#shipping_address').length && !$('#shipping_address').hasClass('valid')){
-		if($('[name=shipping_address]:checked').val() == 'existing'){
-			ci_validate_form($('#shipping_existing form'));
-		}
-		else{
-			ci_validate_form($('#shipping_new form'));
-		}
-	}
-	else if($('#payment_address').length && !$('#payment_address').hasClass('valid')){
-		if($('[name=payment_address]:checked').val() == 'existing'){
-			ci_validate_form($('#payment_existing form'));
-		}
-		else{
-			ci_validate_form($('#payment_new form'));
-		}
-	}
-	else if($('#guest_information').length && !$('#guest_information').hasClass('valid')){
-		ci_validate_form($('#guest_information form'));
-	}
-	else if($('#shipping_method').length && !$('#shipping_method').hasClass('valid')){
-		ci_validate_form($('#shipping_method form'));
-	}
-	else if(!$('#payment_method').hasClass('valid')){
-		ci_validate_form($('#payment_method form'));
-	}
-	else{
-		$('.info_item').each(function(i,e){
-			set_validation_status($(e), 'loading', '<?= $text_info_loading; ?>');
-		});
+function validate_submit(submit, recheck){
+	recheck = recheck || false;
+	
+	if (recheck) {
+		if ($('.info_item.invalid').length) return;
 		
+		if ($('.info_item.validating').length) {
+			setTimeout(function(){validate_submit(submit, true);}, 500 );
+			return;
+		}
+	}
+	
+	if ($('.info_item').length === $('.info_item.valid').length) {
 		$.get("<?= $validate_customer_checkout; ?>", {}, function(json){
 			if(json && json.length){
 				$('.info_item').each(function(i,e){
@@ -187,6 +169,49 @@ function validate_submit(submit){
 			}
 		}, 'json')
 		.error(handle_ajax_error);
+	}
+	else if($('#guest_information').length) {
+		if($('#guest_information').length && !$('#guest_information').hasClass('valid')){
+			ci_validate_form($('#guest_information form'));
+		}
+		else {
+			if($('#shipping_method').length && !$('#shipping_method').hasClass('valid')){
+				ci_validate_form($('#shipping_method form'));
+			}
+			
+			if(!$('#payment_method').hasClass('valid')){
+				ci_validate_form($('#payment_method form'));
+			}
+		}
+		
+		setTimeout(function(){validate_submit(submit, true);}, 500 );
+	}
+	else {
+		if($('#shipping_address').length && !$('#shipping_address').hasClass('valid')){
+			if($('[name=shipping_address]:checked').val() == 'existing'){
+				ci_validate_form($('#shipping_existing form'));
+			}
+			else{
+				ci_validate_form($('#shipping_new form'));
+			}
+		}
+		else if($('#shipping_method').length && !$('#shipping_method').hasClass('valid')){
+			ci_validate_form($('#shipping_method form'));
+		}
+		
+		if(!$('#payment_address').hasClass('valid')){
+			if($('[name=payment_address]:checked').val() == 'existing'){
+				ci_validate_form($('#payment_existing form'));
+			}
+			else{
+				ci_validate_form($('#payment_new form'));
+			}
+		}
+		else if(!$('#payment_method').hasClass('valid')){
+			ci_validate_form($('#payment_method form'));
+		}
+		
+		setTimeout(function(){validate_submit(submit, true);}, 500 );
 	}
 	
 	return false;
@@ -238,14 +263,6 @@ $('#add_comment textarea').live('keyup', function(){
 });
 
 $('#shipping_method, #payment_method').on('loaded', function(){
-	sa_form = $(this).find('form');
-	
-	if(sa_form.find(':checked').val()){
-		ci_validate_form(sa_form);
-	}
-	else{
-		set_validation_status($(this), 'invalid', '');
-	}
 });
 
 $('.info_item').trigger('loaded');

@@ -5,7 +5,7 @@ class Admin_Controller_Report_ProductPurchased extends Controller
 	{
 		$this->template->load('report/product_purchased');
 
-		$this->load->language('report/product_purchased');
+		$this->language->load('report/product_purchased');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -77,7 +77,7 @@ class Admin_Controller_Report_ProductPurchased extends Controller
 			);
 		}
 				
-		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
+		$this->data['order_statuses'] = $this->order->getOrderStatuses();
 		
 		$url = '';
 						

@@ -12,9 +12,9 @@ class Plugin extends Library{
 		
 		$this->language->system('plugin');
 		
-		$this->loadPluginFileRegistry();
-		
 		$this->file_merge = new FileMerge($this->registry);
+		
+		$this->loadPluginFileRegistry();
 	}
 	
 	public function getFile($file)
@@ -50,7 +50,7 @@ class Plugin extends Library{
 	
 	/**
 	 * Install a plugin
-	 * 
+	 *
 	 * @param $name - The name of the directory for the plugin to install
 	 * @return Boolean - true on success, or false on failure (error message will be set)
 	 */
@@ -150,12 +150,12 @@ class Plugin extends Library{
 		
 		//Live file already exists! This is a possible conlflict...
 		//If it is not a registered plugin file for this plugin, ask admin what to do.
-		if ( is_file($live_file) 
+		if ( is_file($live_file)
 			  && (!isset($this->plugin_registry[$live_file]) || $this->plugin_registry[$live_file]['name'] !== $name)) {
 			//If no request to overwrite the live file
 			if (empty($_GET['overwrite_file']) || $_GET['overwrite_file'] !== $live_file) {
-				$overwrite_file_url = $this->url->link($_GET['route'], $this->url->get_query() . "&name=$name&overwrite_file=" . urlencode($live_file));
-				$msg = 
+				$overwrite_file_url = $this->url->link($this->url->route(), $this->url->getQuery() . "&name=$name&overwrite_file=" . urlencode($live_file));
+				$msg =
 					"Unable to integrate the file $plugin_file for the plugin <strong>$name</strong> because the file $live_file already exists!" .
 					" Either manually remove the file or <a href='$overwrite_file_url'>overwrite</a> this file with the plugin file.";
 					

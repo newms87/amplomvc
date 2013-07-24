@@ -154,24 +154,30 @@ class Theme extends Library
 		}
 	}
 	
-	public function find_file($file, $theme = false)
+	public function find_file($file, $theme = false, $root_dir = null)
 	{
+		if ($root_dir && is_dir($root_dir)) {
+			$dir = $root_dir;
+		} else {
+			$dir = DIR_THEME;
+		}
+		
 		//Search By specified theme
 		if ($theme) {
-			if (file_exists(DIR_THEME . $theme . '/' . $file)) {
-				return DIR_THEME . $theme . '/' . $file;
+			if (file_exists($dir . $theme . '/' . $file)) {
+				return $dir . $theme . '/' . $file;
 			}
 		}
 		//Search By current theme
 		else {
-			if (file_exists(DIR_THEME . $this->theme . '/' . $file)) {
-				return DIR_THEME . $this->theme . '/' . $file;
+			if (file_exists($dir . $this->theme . '/' . $file)) {
+				return $dir . $this->theme . '/' . $file;
 			}
-			elseif (file_exists(DIR_THEME . $this->theme . '/template/' . $file)) {
-				return DIR_THEME . $this->theme . '/template/' . $file;
+			elseif (file_exists($dir . $this->theme . '/template/' . $file)) {
+				return $dir . $this->theme . '/template/' . $file;
 			}
-			elseif (file_exists(DIR_THEME . $this->default_theme . '/template/' . $file)) {
-				return DIR_THEME . $this->default_theme . '/template/' . $file;
+			elseif (file_exists($dir . $this->default_theme . '/template/' . $file)) {
+				return $dir . $this->default_theme . '/template/' . $file;
 			}
 		}
 		

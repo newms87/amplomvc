@@ -13,7 +13,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			'type' => 'multiselect',
 			'display_name' => $this->_('column_collection'),
 			'filter' => true,
-			'build_config' => array('collection_id' => 'name'),
+			'build_config' => array('collection_id' , 'name'),
 			'build_data' => $this->Model_Catalog_Collection->getCollections(),
 			'sortable' => true,
 			'sort_value' => 'cp.name',
@@ -52,7 +52,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		$defaults = array(
 //-----
 //>>>>> {php}
-		'product_collection' => array(),
+			'product_collection' => array(),
 //-----
 //=====
 		);
@@ -60,6 +60,11 @@ class Admin_Controller_Catalog_Product extends Controller
 		$this->data['data_categories'] = $this->Model_Catalog_Category->getCategoriesWithParents();
 //-----
 //>>>>> {php}
+		$collection_sort = array(
+			'sort' => 'name',
+			'order' => 'ASC',
+		);
+		
 		$this->data['data_collections'] = $this->Model_Catalog_Collection->getCollections($collection_sort);
 //-----
 //=====

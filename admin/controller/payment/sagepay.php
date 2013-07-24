@@ -7,7 +7,7 @@ class Admin_Controller_Payment_Sagepay extends Controller
 	{
 		$this->template->load('payment/sagepay');
 
-		$this->load->language('payment/sagepay');
+		$this->language->load('payment/sagepay');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -81,7 +81,7 @@ class Admin_Controller_Payment_Sagepay extends Controller
 			$this->data['sagepay_order_status_id'] = $this->config->get('sagepay_order_status_id');
 		}
 
-		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
+		$this->data['order_statuses'] = $this->order->getOrderStatuses();
 		
 		if (isset($_POST['sagepay_geo_zone_id'])) {
 			$this->data['sagepay_geo_zone_id'] = $_POST['sagepay_geo_zone_id'];

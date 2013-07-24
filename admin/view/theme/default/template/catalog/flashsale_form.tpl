@@ -1,7 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs(); ?>
-	<?= $this->builder->display_errors($errors); ?>
+	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -20,7 +19,7 @@
 					<table class="form">
 					<tr>
 							<td><?= $entry_extend_flashsale; ?></td>
-							<td><?= $this->builder->build('select',$yes_no,'extend_flashsale',(int)$extend_flashsale); ?></td>
+							<td><?= $this->builder->build('select',$data_yes_no,'extend_flashsale',(int)$extend_flashsale); ?></td>
 					</tr>
 					<tr>
 							<td><?= $entry_designer; ?></td>

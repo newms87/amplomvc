@@ -5,7 +5,7 @@ class Admin_Controller_Report_CustomerCredit extends Controller
 	{
 		$this->template->load('report/customer_credit');
 
-		$this->load->language('report/customer_credit');
+		$this->language->load('report/customer_credit');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

@@ -27,20 +27,19 @@ class Admin_Model_Setting_Store extends Model
 		$this->cache->delete('theme');
 	}
 	
-	
 	public function getStore($store_id)
 	{
-		return $this->query_row("SELECT DISTINCT * FROM " . DB_PREFIX . "store WHERE store_id = '" . (int)$store_id . "'");
+		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE store_id = '" . (int)$store_id . "'");
 	}
 	
 	public function getStoreName($store_id)
 	{
-		return $this->query_var("SELECT name FROM " . DB_PREFIX . "store WHERE store_id = '" . (int)$store_id . "'");
+		return $this->queryVar("SELECT name FROM " . DB_PREFIX . "store WHERE store_id = '" . (int)$store_id . "'");
 	}
 	
 	public function getStoreNames()
 	{
-		return $this->query_rows("SELECT store_id, name FROM " . DB_PREFIX . "store");
+		return $this->queryRows("SELECT store_id, name FROM " . DB_PREFIX . "store");
 	}
 	
 	public function getStores($data = array(), $total = false) {
@@ -128,7 +127,7 @@ class Admin_Model_Setting_Store extends Model
 	
 	public function getTotalStoresByOrderStatusId($order_status_id)
 	{
-			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "setting WHERE `key` = 'config_order_status_id' AND `value` = '" . (int)$order_status_id . "' AND store_id != '0'");
+			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "setting WHERE `key` = 'config_order_complete_status_id' AND `value` = '" . (int)$order_status_id . "' AND store_id != '0'");
 		
 		return $query->row['total'];
 	}

@@ -7,7 +7,7 @@ class Catalog_Controller_Payment_AuthorizenetSim extends Controller
 
 		$this->data['action'] = $this->config->get('authorizenet_sim_url');
 		
-		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
+		$order_info = $this->order->get($this->session->data['order_id']);
 		
 		$data =& $this->data;
 			
@@ -191,13 +191,13 @@ class Catalog_Controller_Payment_AuthorizenetSim extends Controller
 		
 		if ($data['hash_match'] ) {
 			$order_id = $data['order_id'];
-			$order_info = $this->Model_Checkout_Order->getOrder($order_id);
+			$order_info = $this->order->get($order_id);
 			
 			if ($order_info) {
 				if ($data['x_response_code'] == '1') {
-					$this->Model_Checkout_Order->confirm($order_id, $this->config->get('authorizenet_sim_order_status_id'));
+					$this->order->update($order_id, $this->config->get('authorizenet_sim_order_status_id'));
 				} else {
-					$this->Model_Checkout_Order->confirm($order_id, $this->config->get('config_order_status_id') );
+					$this->order->update($order_id, $this->config->get('config_order_complete_status_id') );
 				}
 			}
 		}

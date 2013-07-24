@@ -5,7 +5,7 @@ class Admin_Controller_Localisation_Language extends Controller
 
 	public function index()
 	{
-		$this->load->language('localisation/language');
+		$this->language->load('localisation/language');
 		
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -14,7 +14,7 @@ class Admin_Controller_Localisation_Language extends Controller
 
 	public function insert()
 	{
-		$this->load->language('localisation/language');
+		$this->language->load('localisation/language');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -32,7 +32,7 @@ class Admin_Controller_Localisation_Language extends Controller
 
 	public function update()
 	{
-		$this->load->language('localisation/language');
+		$this->language->load('localisation/language');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -50,7 +50,7 @@ class Admin_Controller_Localisation_Language extends Controller
 
 	public function delete()
 	{
-		$this->load->language('localisation/language');
+		$this->language->load('localisation/language');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -87,7 +87,7 @@ class Admin_Controller_Localisation_Language extends Controller
 			$page = 1;
 		}
 		
-		$url = $this->url->get_query('sort', 'order', 'page');
+		$url = $this->url->getQuery('sort', 'order', 'page');
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/language'));
@@ -175,7 +175,7 @@ class Admin_Controller_Localisation_Language extends Controller
 
 		$language_id = isset($_GET['language_id']) ? $_GET['language_id'] : false;
 		
- 		$url = $this->url->get_query('sort','order','page');
+ 		$url = $this->url->getQuery('sort','order','page');
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/language'));
@@ -286,7 +286,11 @@ class Admin_Controller_Localisation_Language extends Controller
 				}
 			}
 				
-			$order_total = $this->Model_Sale_Order->getTotalOrdersByLanguageId($language_id);
+			$filter = array(
+				'language_ids' => array($language_id),
+			);
+			
+			$order_total = $this->System_Model_Order->getTotalOrders($filter);
 
 			if ($order_total) {
 				$this->error['warning'] = sprintf($this->_('error_order'), $order_total);

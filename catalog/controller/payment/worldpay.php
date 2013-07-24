@@ -5,7 +5,7 @@ class Catalog_Controller_Payment_Worldpay extends Controller
 	{
 		$this->template->load('payment/worldpay');
 
-		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
+		$order_info = $this->order->get($this->session->data['order_id']);
 		
 		$this->data['action'] = 'https://select.worldpay.com/wcc/purchase';
 
@@ -50,9 +50,9 @@ class Catalog_Controller_Payment_Worldpay extends Controller
 
 			// If returned successful but callbackPW doesn't match, set order to pendind and record reason
 			if (isset($_POST['callbackPW']) && ($_POST['callbackPW'] == $this->config->get('worldpay_password'))) {
-				$this->Model_Checkout_Order->confirm($_POST['cartId'], $this->config->get('worldpay_order_status_id'));
+				$this->order->update($_POST['cartId'], $this->config->get('worldpay_order_status_id'));
 			} else {
-				$this->Model_Checkout_Order->confirm($_POST['cartId'], $this->config->get('config_order_status_id'), $this->_('text_pw_mismatch'));
+				$this->order->update($_POST['cartId'], $this->config->get('config_order_complete_status_id'), $this->_('text_pw_mismatch'));
 			}
 	
 			$message = '';

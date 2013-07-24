@@ -3,7 +3,7 @@ class Catalog_Model_Payment_Liqpay extends Model
 {
 	public function getMethod($address, $total)
 	{
-		$this->load->language('payment/liqpay');
+		$this->language->load('payment/liqpay');
 
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('liqpay_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
 

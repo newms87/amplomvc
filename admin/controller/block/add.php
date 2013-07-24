@@ -3,7 +3,7 @@ class Admin_Controller_Block_Add extends Controller
 {
 	public function index()
 	{
-		$this->load->language('block/add');
+		$this->language->load('block/add');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

@@ -1,6 +1,6 @@
 <?php
 // Version
-define('VERSION', '0.0.2');
+define('VERSION', '0.0.6');
 
 // Error Reporting
 error_reporting(E_ALL);
@@ -22,7 +22,7 @@ $domain = parse_url(SITE_URL, PHP_URL_HOST);
 if ($domain === 'localhost') {
 	define('COOKIE_DOMAIN', '');
 } else {
-	define('COOKIE_DOMAIN', '.' . parse_url(SITE_URL, PHP_URL_HOST));
+	define('COOKIE_DOMAIN', '.' . $domain);
 }
 
 // Register Globals
@@ -40,27 +40,6 @@ if (ini_get('register_globals')) {
 			unset(${$key});
 		}
 	}
-}
-
-// Magic Quotes Fix
-if (ini_get('magic_quotes_gpc')) {
-	function clean($data)
-	{
-			if (is_array($data)) {
-  			foreach ($data as $key => $value) {
-				$data[clean($key)] = clean($value);
-  			}
-		} else {
-  			$data = stripslashes($data);
-		}
-	
-		return $data;
-	}
-	
-	$_GET = clean($_GET);
-	$_POST = clean($_POST);
-	$_REQUEST = clean($_REQUEST);
-	$_COOKIE = clean($_COOKIE);
 }
 
 if (!ini_get('date.timezone')) {
@@ -120,9 +99,7 @@ _require(DIR_SYSTEM . 'engine/registry.php');
 _require(DIR_SYSTEM . 'library/cache.php');
 _require(DIR_SYSTEM . 'library/config.php');
 _require(DIR_SYSTEM . 'library/db.php');
-_require(DIR_SYSTEM . 'library/document.php');
 _require(DIR_SYSTEM . 'library/file_merge.php');
-_require(DIR_SYSTEM . 'library/image.php');
 _require(DIR_SYSTEM . 'library/language.php');
 _require(DIR_SYSTEM . 'library/log.php');
 _require(DIR_SYSTEM . 'library/plugin.php');
@@ -133,3 +110,8 @@ _require(DIR_SYSTEM . 'library/theme.php');
 _require(DIR_SYSTEM . 'library/template.php');
 _require(DIR_SYSTEM . 'library/url.php');
 
+//TODO: Resolve which libraries are needed for ajax
+if (true || !isset($_GET['_ajax_'])) {
+	_require(DIR_SYSTEM . 'library/document.php');
+	_require(DIR_SYSTEM . 'library/image.php');
+}

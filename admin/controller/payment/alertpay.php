@@ -7,7 +7,7 @@ class Admin_Controller_Payment_Alertpay extends Controller
 	{
 		$this->template->load('payment/alertpay');
 
-		$this->load->language('payment/alertpay');
+		$this->language->load('payment/alertpay');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -57,7 +57,7 @@ class Admin_Controller_Payment_Alertpay extends Controller
 			$this->data['alertpay_security'] = $this->config->get('alertpay_security');
 		}
 		
-		$this->data['callback'] = SITE_URL . 'index.php?route=payment/alertpay/callback';
+		$this->data['callback'] = $this->url->link('payment/alertpay/callback');
 		
 		if (isset($_POST['alertpay_total'])) {
 			$this->data['alertpay_total'] = $_POST['alertpay_total'];
@@ -71,7 +71,7 @@ class Admin_Controller_Payment_Alertpay extends Controller
 			$this->data['alertpay_order_status_id'] = $this->config->get('alertpay_order_status_id');
 		}
 		
-		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
+		$this->data['order_statuses'] = $this->order->getOrderStatuses();
 		
 		if (isset($_POST['alertpay_geo_zone_id'])) {
 			$this->data['alertpay_geo_zone_id'] = $_POST['alertpay_geo_zone_id'];

@@ -5,13 +5,24 @@
 
 <div id="catalog_list" class='grid'>
 	<? foreach ($products as $product) { ?>
-	<div class="item_block">
+	<a class="item_block" href="<?= $product['href']; ?>">
+		
 		<? if ($product['thumb']) { ?>
-		<div class="image"><a href="<?= $product['href']; ?>"><img src="<?= $product['thumb']; ?>" title="<?= $product['name']; ?>" alt="<?= $product['name']; ?>" /></a></div>
+		<div class="image">
+			<img class="primary" src="<?= $product['thumb']; ?>" title="<?= $product['name']; ?>" alt="<?= $product['name']; ?>" />
+			
+			<? if (!empty($product['backup_thumb'])) { ?>
+				<img class="backup" src="<?= $product['backup_thumb']; ?>" title="<?= $product['name']; ?>" alt="<?= $product['name']; ?>" />
+			<? } ?>
+		</div>
 		<? } ?>
+		
 		<div class="item_text">
-			<div class="name"><a href="<?= $product['href']; ?>"><?= $product['name']; ?></a></div>
-			<div class="description"><?= $product['description']; ?></div>
+			<div class="name"><?= $product['name']; ?></div>
+			
+			<? if (!empty($product['teaser'])) { ?>
+				<div class="teaser"><?= $product['teaser']; ?></div>
+			<? } ?>
 		</div>
 		<? if (!empty($product['price'])) { ?>
 			<div class="price">
@@ -44,7 +55,7 @@
 		<? if($compare_status) { ?>
 			<div class="compare"><a onclick="addToCompare('<?= $product['product_id']; ?>');"><?= $button_compare; ?></a></div>
 		<? } ?>
-	</div>
+	</a>
 	<? } ?>
 </div>
 

@@ -96,7 +96,7 @@ class Catalog_Controller_Payment_SagepayDirect extends Controller
 			$url = 'https://test.sagepay.com/Simulator/VSPDirectGateway.asp';
   		}
 
-		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
+		$order_info = $this->order->get($this->session->data['order_id']);
 		
 		$data = array();
 		
@@ -212,7 +212,7 @@ class Catalog_Controller_Payment_SagepayDirect extends Controller
 			$json['PaReq'] = $data['PAReq'];
 			$json['TermUrl'] = $this->url->link('payment/sagepay_direct/callback');
 		} elseif ($data['Status'] == 'OK' || $data['Status'] == 'AUTHENTICATED' || $data['Status'] == 'REGISTERED') {
-			$this->Model_Checkout_Order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
+			$this->order->update($this->session->data['order_id'], $this->config->get('config_order_complete_status_id'));
 			
 			$message = '';
 			
@@ -293,7 +293,7 @@ class Catalog_Controller_Payment_SagepayDirect extends Controller
 			}
 			
 			if ($data['Status'] == 'OK' || $data['Status'] == 'AUTHENTICATED' || $data['Status'] == 'REGISTERED') {
-				$this->Model_Checkout_Order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
+				$this->order->update($this->session->data['order_id'], $this->config->get('config_order_complete_status_id'));
 				
 				$message = '';
 				

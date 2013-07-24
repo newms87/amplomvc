@@ -7,149 +7,28 @@ class Builder extends Library
 	
 	private $builder_template;
 	
-	private $highest_match = 0;
-	
-	public function &find_active_page(&$links, &$active_link = null)
+	/**
+	* Use this to give the builder hints on how to builder the desired html structure
+	*
+	* @param $id - the key in the array to use as the value
+	* @param $name - the key in the array to use as the display name
+	* @param (optional) $type - How the $id keys should be treated (eg: int, string, float, etc.). If no type is set, it will try to figure it out on its own
+	*/
+	public function set_config($id, $name = null, $type=null)
 	{
-		$current_page = parse_url($this->url->get_pretty_url());
+		if (is_array($id)) {
+			$name = $id[1];
+			$id = $id[0];
+		}
 		
-		$query_vars = null;
-		parse_str($this->url->get_query(), $query_vars);
-		$current_page['query'] = $query_vars;
-		
-		foreach ($links as $key => &$link) {
-			if (!empty($link['is_route'])) {
-				$query = isset($link['query']) ? $link['query'] : '';
-				$link['href'] = $this->url->link($link['href'], $query);
-			} elseif(!preg_match("/^https?:\/\//", $link['href']) && $link['href']) {
-				$link['href'] = $this->url->site($link['href']);
-			}
-			
-			$components = str_replace('&amp;', '&', parse_url($link['href']));
-			
-			if ($current_page['path'] === $components['path']) {
-				if (!empty($components['query'])) {
-					$query_vars = null;
-					parse_str($components['query'], $query_vars);
-					
-					$matches = 0;
-					
-					foreach ($query_vars as $key => $value) {
-						if (isset($current_page['query'][$key])) {
-							if($current_page['query'][$key] === $value) {
-								$matches++;
-							}
-						}
-					}
-					
-					if ($matches >= count($query_vars) && $matches > $this->highest_match) {
-						$this->highest_match = $matches;
-						$active_link = &$link;
-					}
-				} elseif(!$active_link) {
-					$active_link = &$link;
-				}
-			}
-			
-			if (!empty($link['children'])) {
-				$active_link = & $this->find_active_page($link['children'], $active_link);
-			}
-			
-		} unset($link);
-		
-		return $active_link;
+		$this->builder_id = $id;
+		$this->builder_name = $name;
+		$this->builder_type = $type;
 	}
 	
-	public function build_links($links, $depth = 0)
+	public function set_builder_template($template)
 	{
-		if ($depth === 0) {
-			$this->highest_match = 0;
-			
-			$active_link = & $this->find_active_page($links);
-			
-			if ($active_link) {
-				if (!empty($active_link['attrs']['class'])) {
-					$active_link['attrs']['class'] .= ' active';
-				} else {
-					$active_link['attrs']['class'] = 'active';
-				}
-			}
-		}
-		
-		switch($depth){
-			case 0:
-				$class = "top_menu";
-				break;
-			case 1:
-				$class = "sub_menu";
-				break;
-			default:
-				$class = "child_menu";
-				break;
-		}
-		
-		$html = "<ul class=\"link_list $class\">";
-			
-		$zindex = count($links);
-			
-		foreach ($links as $link) {
-			if (!empty($link['title']) && !isset($link['attrs']['title'])) {
-				$link['attrs']['title'] = $link['title'];
-			}
-			
-			if (empty($link['display_name'])) {
-				$link['display_name'] = $link['name'];
-			}
-				
-			$children = '';
-			
-			if (!empty($link['children'])) {
-				$children = $this->build_links($link['children'], $depth+1);
-				if (!empty($link['attrs']['class'])) {
-					$link['attrs']['class'] .= ' has_children';
-				} else {
-					$link['attrs']['class'] = 'has_children';
-				}
-			}
-			
-			$href = '';
-			if (!empty($link['href'])) {
-				$href = "href=\"$link[href]\"";
-			}
-			
-			$attr_list = '';
-				
-			if (!empty($link['attrs'])) {
-				if (is_string($link['attrs'])) {
-					$attr_list .= $link['attrs'];
-				}
-				else {
-					foreach ($link['attrs'] as $key=>$value) {
-						$attr_list .= "$key=\"$value\"";
-					}
-				}
-			}
-			
-			$target = !empty($link['target']) ? "target=\"$link[target]\"" : '';
-			
-			$html .= "<li $attr_list style=\"z-index:$zindex\"><a $href $target class=\"menu_link\">$link[display_name]</a>$children</li>";
-				
-			$zindex--;
-		}
-		
-		$html .= "</ul>";
-			
-		return $html;
-	}
-	
-	public function display_breadcrumbs()
-	{
-		$html = "";
-		foreach ($this->breadcrumb->get() as $key => $crumb) {
-			$html .= ($key > 0 ? $crumb['separator'] : '') . "<a href='$crumb[href]'>$crumb[text]</a>";
-		}
-		
-		return "<div class ='breadcrumb'>$html</div>";
+		$this->builder_template = $template;
 	}
 	
 	public function display_messages($messages)
@@ -175,7 +54,7 @@ class Builder extends Library
 		return $html;
 	}
 	
-	public function display_errors($errors=false)
+	public function display_errors($errors = false)
 	{
 		if(!$errors) return '';
 		
@@ -196,6 +75,14 @@ class Builder extends Library
 			}
 			return $html;
 		}
+	}
+	
+	//TODO: Probably get rid of this...
+	public function finalSale()
+	{
+		$final_sale_explanation = $this->_('final_sale_explanation',$this->url->link('information/information/info','information_id=' . $this->config->get('config_shipping_return_info_id')));
+		
+		return "<div class='extra_info_block'><span class='final_sale'></span><span class='help_icon'><span class='help_icon_popup'>$final_sale_explanation</span></span></div>";
 	}
 	
 	public function attrs($data)
@@ -291,29 +178,8 @@ class Builder extends Library
 		return $html;
 	}
 
-	
-	/**
-	* Use this to give the builder hints on how to builder the desired html structure
-	*
-	* @param $id - the key in the array to use as the value
-	* @param $name - the key in the array to use as the display name
-	* @param (optional) $type - How the $id keys should be treated (eg: int, string, float, etc.). If no type is set, it will try to figure it out on its own
-	*/
-	public function set_config($id,$name, $type=null)
-	{
-	$this->builder_id = $id;
-	$this->builder_name = $name;
-	$this->builder_type = $type;
-	}
-	
-	public function set_builder_template($template)
-	{
-		$this->builder_template = $template;
-	}
-	
 	function build_batch_actions($form, $actions, $url)
 	{
-		
 		foreach ($actions as $key => &$action) {
 			$action['attrs'] = '';
 			
@@ -345,7 +211,7 @@ class Builder extends Library
 		$template = new Template($this->registry);
 		
 		$template->load('block/widget/batch_action');
-		$template->set_data($data);
+		$template->setData($data);
 		
 		return $template->render();
 	}
@@ -377,7 +243,7 @@ class Builder extends Library
 			}
 			
 			$cast_to = function ($value, $type)
- {
+			{
 				switch($type){
 					case 'int':
 						return (int)$value;
@@ -397,12 +263,15 @@ class Builder extends Library
 		foreach ($data as $value => $display) {
 			
 			if (is_array($display)) {
-				if (!isset($this->builder_id) || !isset($this->builder_name) || !isset($display[$this->builder_id]) || !isset($display[$this->builder_name])) {
+				if (!isset($this->builder_id) || !isset($this->builder_name) || ($this->builder_id ? !isset($display[$this->builder_id]) : false) || !isset($display[$this->builder_name])) {
 					trigger_error("You must set the ID and Name to keys in the \$data Array using \$this->builder->set_config(\$id,\$name). " . get_caller());
 					return;
 				}
 				
-				$value = $display[$this->builder_id];
+				if ($this->builder_id) {
+					$value = $display[$this->builder_id];
+				}
+				
 				$display = $display[$this->builder_name];
 			}
 			
@@ -412,19 +281,19 @@ class Builder extends Library
 				//otherwise try to guess the type.
 				$selected = false;
 				
-				foreach ($select as $s) {
-					if (is_array($s)) {
-						$s = $s[$this->builder_id];
-					}
+			foreach ($select as $s) {
+				if (is_array($s)) {
+					$s = $s[$this->builder_id];
+				}
+				
+				if ($this->builder_type) {
+					$value = $cast_to($value, $this->builder_type);
 					
-					if ($this->builder_type) {
-						$value = $cast_to($value, $this->builder_type);
-						
-						if ($cast_to($s, $this->builder_type) === $value) {
-							$selected = true;
-							break;
-						}
+					if ($cast_to($s, $this->builder_type) === $value) {
+						$selected = true;
+						break;
 					}
+				}
 				else {
 					$v = is_integer($s) ? (int)$value : $value;
 						
@@ -455,10 +324,10 @@ class Builder extends Library
 					$options .= "<span class ='radio_button'><input type='radio' id='radio-$name-$value' name='$name' value='$value' $s /><label for='radio-$name-$value'>$display</label></span>";
 					break;
 				
-					case 'multiselect':
-						$s = $selected?'checked="checked"':'';
-						$options .= "<li><input id='checkbox_$name-$value' type='checkbox' name='$name"."[]' value='$value' $s /><label for='checkbox_$name-$value'>$display</label></li>";
-						break;
+				case 'multiselect':
+					$s = $selected?'checked="checked"':'';
+					$options .= "<li><input id='checkbox_$name-$value' type='checkbox' name='$name"."[]' value='$value' $s /><label for='checkbox_$name-$value'>$display</label></li>";
+					break;
 						
 				case 'clickable_list':
 					if ($selected) {
@@ -494,37 +363,6 @@ class Builder extends Library
 				$list = "<div class='scrollbox clickable'>$options</div>";
 				return "<div class='clickable_list'>$added_list $list</div>";
 		}
-	}
-
-	function build_custom_select_dropdown($data, $option_name, $default, $select, $id='', $class='')
-	{
-		$options = '';
-		$selected_value = isset($default)?$default['value']:"";
-		$selected_name = isset($default)?$default['display_name']:"";
-		
-		foreach ($data as $value => $display) {
-			is_array($display)?extract($display):'';
-			$display_name = is_array($display)?$display_name:$display;
-			$after = isset($after)?$after:"";
-			$before = isset($before)?$before:"";
-			$item_class = isset($item_class)?$item_class:"";
-			
-			if ($select == $value) {
-				$selected_value = $value;
-				$selected_name = $display_name;
-			}
-			$options .= "<li onclick='select_menu_item(this)' class ='$item_class' data='$value'>" . $before . $display_name . $after . "</li>";
-		}
-		
-		return <<<HTML
-		<div id='$id' class='select_dd $class' onclick="toggleDD(this)">
-			<div class='select_bar'><div class='current_selection'>$selected_name</div> <div class='dd_separator'></div><div class='dd_down_arrow'></div></div>
-			<ul>
-				$options
-			</ul>
-			<input type='hidden' name='$option_name' value='$selected_value'/>
-		</div>
-HTML;
 	}
 
 	public function js($js)

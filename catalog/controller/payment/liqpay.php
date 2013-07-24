@@ -5,7 +5,7 @@ class Catalog_Controller_Payment_Liqpay extends Controller
 	{
 		$this->template->load('payment/liqpay');
 
-		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
+		$order_info = $this->order->get($this->session->data['order_id']);
 		
 		$this->data['action'] = 'https://liqpay.com/?do=clickNbuy';
 		
@@ -39,7 +39,7 @@ class Catalog_Controller_Payment_Liqpay extends Controller
 		$order_id = substr($xml, $posleft + 9, $posright - $posleft - 10);
 		
 		if ($signature == $_POST['signature']) {
-			$this->Model_Checkout_Order->confirm($order_id, $this->config->get('config_order_status_id'));
+			$this->order->update($order_id, $this->config->get('config_order_complete_status_id'));
 		}
 	}
 }

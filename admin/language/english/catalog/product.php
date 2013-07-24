@@ -15,24 +15,23 @@ $_['text_option']				= 'Option';
 $_['text_option_value']		= 'Option Value';
 $_['text_percent']			= 'Percentage';
 $_['text_amount']				= 'Fixed Amount';
-$_['text_ship_autofill']	= 'Automatically Fill Shipping Policy For:';
 $_['text_option_help']		= '<br>To add an option category:<br><br>1.type the category into the input field above (eg: "Size", "Color", etc.).<br><br>2. As you type the available options will be displayed, click on the name when it appears.<br><br>3. Click on "Add Option Value" button<br><br>4. Choose the option Value from the dropdown box<br><br>5. Specify the Quantity of this product option that is available.<br><br>6. If you have a limited number of this Option Value leave Subtract Stock as "yes", if you do not want to limit the availability set to "no" (this will use the default quantity set in the Data tab)<br><br>7. repeat steps 3 through 6 for each Option Value this product has.<br><br> If you cannot find the appropriate Option Category or Option Value for your product, please contact your Designer Rep or email <a class="normal" href="mailto:%s?subject=New Product Option Request">Our Support Team</a>';
 $_['text_not_editable']		= 'We are sorry. You may not modify %s because the Product is currently active on our site! Please contact <a target="_blank" href="mailto:%s">Support</a> to edit this Product.';
 $_['text_no_expiration']		= "No Expiration";
+$_['text_add_shipping_policy']		= "Add <a href=\"%s\" target=\"_blank\">Shipping Policy</a>";
+$_['text_add_return_policy']		= "Add <a href=\"%s\" target=\"_blank\">Return Policy</a>";
 
 // Column
 $_['column_name']				= 'Product Name';
 $_['column_category']		= 'Categories';
-$_['column_manufacturer']	= 'Designer';
+$_['column_manufacturer']	= 'Manufacturer / Designer';
 $_['column_model']			= 'Model ID';
 $_['column_image']			= 'Image';
 $_['column_price']			= 'Price';
 $_['column_cost']				= 'Cost';
 $_['column_special']			= 'Special';
-$_['column_is_final']		= 'Final Sale';
 $_['column_quantity']		= 'Qty';
 $_['column_date_expires']	= 'Expiration Date';
-$_['column_editable']		= 'Editable by Designers?';
 $_['column_status']			= 'Status';
 $_['column_action']			= 'Action';
 
@@ -50,23 +49,21 @@ $_['button_add_restriction_value'] = "Add Value";
 $_['entry_name']				= 'Product Name:';
 $_['entry_meta_keywords'] 	= 'Meta Tag Keywords:';
 $_['entry_meta_description'] = 'Meta Tag Description:';
-$_['entry_teaser']				= 'Description:<span class="alert">Do Not Upload Pictures or Sizing Charts here!</span> <span class="help">This will show up at the top of the Product page next to the flashsale image. This can be used as a stylish description of the flashsale with images / colorful fonts / full HTML / etc.</span>';
-$_['entry_shipping_ret']	= 'Shipping / Return Policy:';
-$_['entry_shipping_ret_designer']				= 'Shipping / Return Policy:<span class="help">Note: You can change your default shipping/return policy under <a target="_blank" href="%s">Designer Brand</a> and choose the Brand you want to change the policy for.';
-$_['entry_description']		= 'More Information:<span class="help">Use a bullet point list. This is displayed below the product in the "More Info" tab.</span>';
+$_['entry_teaser']				= 'Teaser: <span class="help">A short teaser to be displayed for product previews.</span>';
+$_['entry_description']				= 'Description: <span class="help">This will show up at the top of the Product page. You may use full HTML</span>';
+$_['entry_information']				= 'Information: <span class="help">Additional information about the product. Information tables, charts, etc. You may use full HTML</span>';
 $_['entry_store']				= 'Stores:';
 $_['entry_keyword']			= 'URL Alias:<br /><span class="help">The url for a product will be at /product/url_alias. Use only letters, numbers and \'-\'.</span>';
 $_['entry_model']				= 'Model ID:';
-$_['entry_model_designer']	= 'Model ID:<span class="help">If left blank, the Model ID will be created for you</span>';
 $_['entry_sku']				= 'SKU:';
 $_['entry_upc']				= 'UPC:';
-$_['entry_is_final']			= 'Final Sale:';
 $_['entry_location']			= 'Location:';
-$_['entry_manufacturer']	= 'Designer:';
-$_['entry_shipping']			= 'Requires Shipping:';
+$_['entry_manufacturer']	= 'Manufacturer / Designer:';
 $_['entry_date_available']	= 'Date Available:';
 $_['entry_date_expires']	= 'Date Expires:';
-$_['entry_is_final']				= 'Final Sale:';
+$_['entry_shipping']			= 'Requires Shipping:';
+$_['entry_return_policy']			= 'Return Policy:';
+$_['entry_shipping_policy']			= 'Shipping Policy:';
 $_['entry_quantity']			= 'Quantity:';
 $_['entry_minimum']			= 'Minimum Quantity:<br/><span class="help">Force a minimum ordered amount</span>';
 $_['entry_stock_status']	= 'Out Of Stock Status:<br/><span class="help">Status shown when a product is out of stock</span>';
@@ -100,7 +97,7 @@ $_['entry_tag']				= 'Product Tags:<br /><span class="help">comma separated</spa
 $_['entry_reward']			= 'Reward Points:';
 $_['entry_layout']			= 'Layout Override:';
 $_['entry_template']			= 'Template Override:';
-$_['entry_editable']			= 'Editable by Designers?';
+$_['entry_editable']			= 'Editable:';
 $_['entry_option_value_list']	= 'Add Option Values';
 $_['entry_option_value_restriction']	= 'Restrictions';
 $_['entry_restriction_option_value']	= 'Option Value';
@@ -109,14 +106,17 @@ $_['entry_restriction_quantity']	= 'Quantity';
 
 //Tabs
 $_['tab_image'] = 'Additional Images';
-$_['tab_shipping'] = 'Shipping Info';
+$_['tab_shipping_return'] = 'Shipping / Returns';
 
 // Error
 $_['error_warning']			= 'Warning: Please check the form carefully for errors!';
+$_['error_batch_action']			= 'The requested action failed.';
 $_['error_keyword']			= 'Product must have a valid URL Alias between 3 and 255 characters with letters, numbers and `-`\'s only!';
 $_['error_permission']		= 'Warning: You do not have permission to modify products!';
+$_['error_confirmed_order_product']	= 'The product %s cannot be deleted after it is associated with a confirmed order! Please deactivate this product instead of deleting it.';
 $_['error_name']				= 'Product Name must be greater than 3 and less than 255 characters!';
 $_['error_model']				= 'Product Model ID must be greater than 3 and less than 64 characters!';
+$_['error_model_confirmed_order_product']	= 'Product Model ID cannot be changed after a product is associated with a confirmed order! You may create a copy of the product and deactivate this product if you wish to change the model #.';
 $_['error_no_option_value']				= 'You must specify at least 1 Option Value for %s!';
 $_['error_dup_model']				= 'Your Product Model ID is already in our system. Please make the Model ID unique or use the "Generate Model ID" button next to the Model ID field.';
 $_['error_dup_option_value']				= 'You have duplicate Option Values!';

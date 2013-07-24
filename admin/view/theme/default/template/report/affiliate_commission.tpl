@@ -1,6 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'report.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -55,7 +55,7 @@
 </div>
 <script type="text/javascript"><!--
 function filter() {
-	url = "<?= HTTP_ADMIN . "index.php?route=report/affiliate_commission"; ?>";
+	url = "<?= $url_affiliate_commission; ?>";
 	
 	var filter_date_start = $('input[name=\'filter_date_start\']').attr('value');
 	

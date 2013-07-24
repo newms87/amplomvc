@@ -100,7 +100,7 @@ class Admin_Model_Catalog_Category extends Model
 		
 		$this->delete('product_to_category', array('category_id'=>$category_id));
 		
-		$children = $this->query_rows("SELECT category_id FROM " . DB_PREFIX . "category WHERE parent_id = '" . (int)$category_id . "'");
+		$children = $this->queryRows("SELECT category_id FROM " . DB_PREFIX . "category WHERE parent_id = '" . (int)$category_id . "'");
 
 		foreach ($children as $category) {
 			$this->deleteCategory($category['category_id']);
@@ -111,7 +111,7 @@ class Admin_Model_Catalog_Category extends Model
 
 	public function getCategory($category_id)
 	{
-		$result = $this->query_row("SELECT * FROM " . DB_PREFIX . "category WHERE category_id = '" . (int)$category_id . "'");
+		$result = $this->queryRow("SELECT * FROM " . DB_PREFIX . "category WHERE category_id = '" . (int)$category_id . "'");
 		
 		$result['keyword'] = $this->url->getAlias('product/category', 'category_id=' . $category_id);
 		
@@ -150,7 +150,7 @@ class Admin_Model_Catalog_Category extends Model
 		//Order By and Limit
 		if (!$total) {
 			if (!empty($data['sort']) && strpos($data['sort'], '__image_sort__') === 0) {
-				if (!$this->db->has_column('category', $data['sort'])) {
+				if (!$this->db->hasColumn('category', $data['sort'])) {
 					$this->extend->enable_image_sorting('category', str_replace('__image_sort__', '', $data['sort']));
 				}
 			}
@@ -174,6 +174,18 @@ class Admin_Model_Catalog_Category extends Model
 		return $result->rows;
 	}
 	
+	public function getCategoryTranslations($category_id)
+	{
+		$translate_fields = array(
+			'name',
+			'meta_keywords',
+			'meta_description',
+			'description',
+		);
+		
+		return $this->translation->get_translations('category', $category_id, $translate_fields);
+	}
+		
 	public function update_field($category_id, $data)
 	{
 		$this->update('category', $data, $category_id);
@@ -225,7 +237,7 @@ class Admin_Model_Catalog_Category extends Model
 			$parent_id = $category_id;
 			
 			while ($parent_id > 0) {
-				$parent = $this->query_row("SELECT * FROM " . DB_PREFIX . "category WHERE category_id = '" . (int)$parent_id . "' LIMIT 1");
+				$parent = $this->queryRow("SELECT * FROM " . DB_PREFIX . "category WHERE category_id = '" . (int)$parent_id . "' LIMIT 1");
 				
 				if (!$parent) {
 					break;

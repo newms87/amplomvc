@@ -3,34 +3,24 @@ class Admin_Controller_Catalog_Category extends Controller
 {
 	public function index()
 	{
-		$this->load->language('catalog/category');
+		$this->language->load('catalog/category');
 
 		$this->getList();
 	}
 
-	public function insert()
-	{
-		$this->load->language('catalog/category');
-		
-		if ($this->request->isPost() && $this->validateForm()) {
-			$this->Model_Catalog_Category->addCategory($_POST);
-			
-			if (!$this->message->error_set()) {
-				$this->message->add('success', $this->_('text_success'));
-				
-				$this->url->redirect($this->url->link('catalog/category'));
-			}
-		}
-
-		$this->getForm();
-	}
-
 	public function update()
 	{
-		$this->load->language('catalog/category');
+		$this->language->load('catalog/category');
 
 		if ($this->request->isPost() && $this->validateForm()) {
-			$this->Model_Catalog_Category->editCategory($_GET['category_id'], $_POST);
+			//Insert
+			if (empty($_GET['catgory_id'])) {
+				$this->Model_Catalog_Category->addCategory($_POST);
+			}
+			//Update
+			else {
+				$this->Model_Catalog_Category->editCategory($_GET['category_id'], $_POST);
+			}
 			
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
@@ -44,7 +34,7 @@ class Admin_Controller_Catalog_Category extends Controller
 
 	public function delete()
 	{
-		$this->load->language('catalog/category');
+		$this->language->load('catalog/category');
 		
 		if (!empty($_GET['category_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_Category->deleteCategory($_GET['category_id']);
@@ -88,7 +78,7 @@ class Admin_Controller_Catalog_Category extends Controller
 			if (!$this->error && !$this->message->error_set()) {
 				$this->message->add('success',$this->_('text_success'));
 				
-				$this->url->redirect($this->url->link('catalog/category', $this->url->get_query_exclude('action')));
+				$this->url->redirect($this->url->link('catalog/category', $this->url->getQueryExclude('action')));
 			}
 		}
 
@@ -97,10 +87,13 @@ class Admin_Controller_Catalog_Category extends Controller
 	
 	private function getList()
 	{
+		//Page Title
 		$this->document->setTitle($this->_('heading_title'));
 		
+		//The Template
 		$this->template->load('catalog/category_list');
 
+		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/category'));
 		
@@ -126,7 +119,7 @@ class Admin_Controller_Catalog_Category extends Controller
 			'type' => 'multiselect',
 			'display_name' => $this->_('column_store'),
 			'filter' => true,
-			'build_config' => array('store_id' => 'name'),
+			'build_config' => array('store_id', 'name'),
 			'build_data' => $this->Model_Setting_Store->getStores(),
 			'sortable' => false,
 		);
@@ -139,23 +132,16 @@ class Admin_Controller_Catalog_Category extends Controller
 			'sortable' => true,
 		);
 		
-		//The Sort data
-		$sort_filter = array();
+		//Get Sorted / Filtered Data
+		$sort = $this->sort->getQueryDefaults('name', 'ASC');
+		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 		
-		$this->sort->load_query_defaults($sort_filter, 'name', 'ASC');
+		$category_total = $this->Model_Catalog_Category->getTotalCategories($filter);
+		$categories = $this->Model_Catalog_Category->getCategoriesWithParents($sort + $filter);
 		
-		//Filter
-		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
-		
-		if ($filter_values) {
-			$sort_filter += $filter_values;
-		}
-		
-		//Retrieve the Filtered Table row data
-		$category_total = $this->Model_Catalog_Category->getTotalCategories($sort_filter);
-		$categories = $this->Model_Catalog_Category->getCategoriesWithParents($sort_filter);
-		
-		$url_query = $this->url->get_query_exclude('category_id');
+		$url_query = $this->url->getQueryExclude('category_id');
+		$image_width = $this->config->get('config_image_admin_list_width');
+		$image_height = $this->config->get('config_image_admin_list_height');
 		
 		foreach ($categories as &$category) {
 			$category['actions'] = array(
@@ -169,55 +155,44 @@ class Admin_Controller_Catalog_Category extends Controller
 				)
 			);
 			
-			$category['thumb'] = $this->image->resize($category['image'], $this->config->get('config_image_admin_list_width'), $this->config->get('config_image_admin_list_height'));
+			$category['thumb'] = $this->image->resize($category['image'], $image_width, $image_height);
 			
 			$category['stores'] = $this->Model_Catalog_Category->getCategoryStores($category['category_id']);
 		} unset($category);
 		
-		//The table template data
+		//Build The Table
 		$tt_data = array(
 			'row_id'		=> 'category_id',
-			'route'		=> 'catalog/category',
-			'sort'		=> $sort_filter['sort'],
-			'order'		=> $sort_filter['order'],
-			'page'		=> $sort_filter['page'],
-			'sort_url'	=> $this->url->link('catalog/category', $this->url->get_query('filter')),
-			'columns'	=> $columns,
-			'data'		=> $categories,
 		);
 		
-		$tt_data += $this->language->data;
-		
-		//Build the table template
 		$this->table->init();
-		$this->table->set_template('table/list_view');
-		$this->table->set_template_data($tt_data);
-		$this->table->map_attribute('filter_value', $filter_values);
+		$this->table->setTemplate('table/list_view');
+		$this->table->setColumns($columns);
+		$this->table->setRows($categories);
+		$this->table->setTemplateData($tt_data);
+		$this->table->mapAttribute('filter_value', $filter);
 		
 		$this->data['list_view'] = $this->table->render();
 		
 		//Batch Actions
 		$this->data['batch_actions'] = array(
 			'enable'	=> array(
-				'label' => "Enable"
+				'label' => $this->_('text_enable')
 			),
 			'disable'=>	array(
-				'label' => "Disable",
+				'label' => $this->_('text_disable'),
 			),
 			'copy' => array(
-				'label' => "Copy",
+				'label' => $this->_('text_copy'),
 			),
 			'delete' => array(
-				'label' => "Delete",
+				'label' => $this->_('text_delete'),
 			),
 		);
 		
 		$this->data['batch_update'] = html_entity_decode($this->url->link('catalog/category/batch_update', $url_query));
 		
-		//Action Buttons
-		$this->data['insert'] = $this->url->link('catalog/category/insert');
-		
-		//Item Limit Menu
+		//Render Limit Menu
 		$this->data['limits'] = $this->sort->render_limit();
 		
 		//Pagination
@@ -226,33 +201,41 @@ class Admin_Controller_Catalog_Category extends Controller
 		
 		$this->data['pagination'] = $this->pagination->render();
 		
+		//Action Buttons
+		$this->data['insert'] = $this->url->link('catalog/category/update');
+		
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
-				
+		
+		//Render
 		$this->response->setOutput($this->render());
 	}
 
 	private function getForm()
 	{
+		//Page title
 		$this->document->setTitle($this->_('heading_title'));
 		
+		//The template
 		$this->template->load('catalog/category_form');
 
-		$category_id = $this->data['category_id'] = isset($_GET['category_id'])?$_GET['category_id']:null;
+		//Insert or Update
+		$category_id = $this->data['category_id'] = isset($_GET['category_id']) ? (int)$_GET['category_id'] : 0;
 		
+		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/category'));
 		
-		if (!$category_id) {
-			$this->data['action'] = $this->url->link('catalog/category/insert');
+		if ($category_id) {
+			$this->breadcrumb->add($this->_('text_edit'), $this->url->link('catalog/category/update', 'category_id=' . $category_id));
 		} else {
-			$this->data['action'] = $this->url->link('catalog/category/update', 'category_id=' . $category_id);
+			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('catalog/category/update'));
 		}
 		
-		$this->data['cancel'] = $this->url->link('catalog/category');
-
+		//Load Information
 		if ($category_id && !$this->request->isPost()) {
 			$category_info = $this->Model_Catalog_Category->getCategory($category_id);
 			
@@ -260,7 +243,7 @@ class Admin_Controller_Catalog_Category extends Controller
 			$category_info['layouts'] = $this->Model_Catalog_Category->getCategoryLayouts($category_id);
 		}
 		
-		//Set Default Values
+		//Set Values or Defaults
 		$defaults = array(
 			'parent_id'	=> 0,
 			'name'		=> '',
@@ -275,16 +258,17 @@ class Admin_Controller_Catalog_Category extends Controller
 			'stores'		=> array(0),
 		);
 
-		foreach ($defaults as $d => $default) {
-			if (isset($_POST[$d])) {
-				$this->data[$d] = $_POST[$d];
-			} elseif (isset($category_info[$d])) {
-				$this->data[$d] = $category_info[$d];
+		foreach ($defaults as $key => $default) {
+			if (isset($_POST[$key])) {
+				$this->data[$key] = $_POST[$key];
+			} elseif (isset($category_info[$key])) {
+				$this->data[$key] = $category_info[$key];
 			} else {
-				$this->data[$d] = $default;
+				$this->data[$key] = $default;
 			}
 		}
 		
+		//All other categories to select parent
 		$categories = $this->Model_Catalog_Category->getCategoriesWithParents();
 		
 		// Remove own id from list
@@ -295,26 +279,28 @@ class Admin_Controller_Catalog_Category extends Controller
 			}
 		}
 		
+		//Translations
+		$this->data['translations'] = $this->Model_Catalog_Category->getCategoryTranslations($category_id);
+		
+		//Additional Data
 		$this->data['data_categories'] = array_merge(array(0 => $this->_('text_none')), $categories);
-		
 		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
-		
 		$this->data['data_layouts'] = array('' => '') + $this->Model_Design_Layout->getLayouts();
 		
-		$translate_fields = array(
-			'name',
-			'meta_keywords',
-			'meta_description',
-			'description',
-		);
+		//Ajax Urls
+		$this->data['url_generate_url'] = $this->url->ajax('catalog/category/generate_url');
 		
-		$this->data['translations'] = $this->translation->get_translations('category', $category_id, $translate_fields);
+		//Action Buttons
+		$this->data['action'] = $this->url->link('catalog/category/update', 'category_id=' . $category_id);
+		$this->data['cancel'] = $this->url->link('catalog/category');
 		
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
-				
+		
+		//Render
 		$this->response->setOutput($this->render());
 	}
 

@@ -29,13 +29,14 @@ class Catalog_Model_Account_Address extends Model
 		$this->delete('address', array('address_id'=>$address_id, 'customer_id'=>$this->customer->getId()));
 	}
 	
-	private function isValidAddress($address)
+	public function isValidAddress($address)
 	{
-		if(!trim($address['firstname'].$address['lastname']))return false;
-		if(!trim($address['address_1']))return false;
-		if(!trim($address['city']))return false;
-		if(!(int)$address['zone_id'])return false;
-		if(!(int)$address['country_id'])return false;
+		if(empty($address['firstname']) || empty($address['lastname']) || !trim($address['firstname'].$address['lastname'])) return false;
+		if(empty($address['address_1']) || !trim($address['address_1']))return false;
+		if(empty($address['city']) || !trim($address['city']))return false;
+		if(empty($address['zone_id']))return false;
+		if(empty($address['country_id']))return false;
+		
 		return true;
 	}
 	
@@ -47,88 +48,88 @@ class Catalog_Model_Account_Address extends Model
 			return false;
 		}
 		
-		return $this->query_var("SELECT address_id FROM " . DB_PREFIX . "address WHERE $where");
+		return $this->queryVar("SELECT address_id FROM " . DB_PREFIX . "address WHERE $where");
 	}
 	
 	public function getAddress($address_id)
 	{
-		$address = $this->query_row("SELECT DISTINCT * FROM " . DB_PREFIX . "address WHERE address_id = '" . (int)$address_id . "' AND customer_id = '" . (int)$this->customer->getId() . "' LIMIT 1");
+		$address = $this->queryRow("SELECT * FROM " . DB_PREFIX . "address WHERE address_id = '" . (int)$address_id . "'");
 		
-		if ($address) {
-			$this->get_address_localisation($address);
-			
-			if ($this->isValidAddress($address)) {
-				return $address;
-			}
-			
+		if (!$this->isValidAddress($address)) {
 			$this->deleteAddress($address_id);
+			
+			return null;
 		}
 		
-		return false;
+		$address['country'] = $this->Model_Localisation_Country->getCountry($address['country_id']);
+		$address['zone'] = $this->Model_Localisation_Zone->getZone($address['zone_id']);
+		
+		return $address;
 	}
 	
-	public function getAddresses()
+	public function getAddresses($data = array(), $select = '', $total = false)
 	{
-		$address_list = $this->query_rows("SELECT * FROM " . DB_PREFIX . "address WHERE customer_id = '" . (int)$this->customer->getId() . "'");
+		//Select
+		if ($total) {
+			$select = "COUNT(*) as total";
+		} elseif (empty($select)) {
+			$select = '*';
+		}
+		
+		//From
+		$from = DB_PREFIX . "address a";
+		
+		//Where
+		$where = "1";
+		
+		if (!empty($data['customer_ids'])) {
+			$where .= " AND a.customer_id IN (" . implode(',', $data['customer_ids']) . ")";
+		}
+
+		if (!empty($data['country_ids'])) {
+			$where .= " AND a.country_id IN (0, " . implode(',', $data['country_ids']) . ")";
+		}
+		
+		if (!empty($data['zone_ids'])) {
+			$where .= " AND a.zone_id IN (0, " . implode(',', $data['zone_ids']) . ")";
+		}
+		
+		//Order By and Limit
+		if (!$total) {
+			$order = $this->extract_order($data);
+			$limit = $this->extract_limit($data);
+		} else {
+			$order = '';
+			$limit = '';
+		}
+		
+		//The Query
+		$query = "SELECT $select FROM $from WHERE $where $order $limit";
+		
+		$result = $this->query($query);
+		
+		if($total) {
+			return $result->row['total'];
+		}
 		
 		$addresses = array();
 		
-		foreach ($address_list as $address) {
-			$this->get_address_localisation($address);
-			
+		foreach ($result->rows as $address) {
 			if ($this->isValidAddress($address)) {
+				$address['country'] = $this->Model_Localisation_Country->getCountry($address['country_id']);
+				$address['zone'] = $this->Model_Localisation_Zone->getZone($address['zone_id']);
+				
 				$addresses[] = $address;
 			} else {
-				$this->delete( 'address', array('address_id' => $address['address_id'], 'customer_id' => $this->customer->getId()) );
+				$this->delete( 'address', array('address_id' => $address['address_id']) );
 			}
 		}
 		
 		return $addresses;
 	}
 	
-	/**
-	 * Adds the country and zone information for the address
-	 *
-	 * @param &$address - the address array with the country_id and zone_id keys set.
-	 */
-	private function get_address_localisation(&$address)
+	public function getTotalAddresses($data = array())
 	{
-		$country = $this->query_row("SELECT * FROM `" . DB_PREFIX . "country` WHERE country_id = '" . (int)$address['country_id'] . "'");
-		
-		if ($country) {
-			$country_name = $country['name'];
-			$iso_code_2 = $country['iso_code_2'];
-			$iso_code_3 = $country['iso_code_3'];
-			$address_format = $country['address_format'];
-		} else {
-			$country_name = '';
-			$iso_code_2 = '';
-			$iso_code_3 = '';
-			$address_format = '';
-		}
-		
-		$zone = $this->query_row("SELECT * FROM `" . DB_PREFIX . "zone` WHERE zone_id = '" . (int)$address['zone_id'] . "'");
-		
-		if ($zone) {
-			$zone_name = $zone['name'];
-			$zone_code = $zone['code'];
-		} else {
-			$zone_name = '';
-			$zone_code = '';
-		}
-		
-		$address += array(
-			'zone'			=> $zone_name,
-			'zone_code'		=> $zone_code,
-			'country'		=> $country_name,
-			'iso_code_2'	=> $iso_code_2,
-			'iso_code_3'	=> $iso_code_3,
-			'address_format' => $address_format
-		);
-	}
-	
-	public function getTotalAddresses()
-	{
-		return $this->query_var("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "address WHERE customer_id = '" . (int)$this->customer->getId() . "'");
+		return $this->getAddresses($data, '', true);
 	}
 }

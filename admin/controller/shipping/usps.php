@@ -7,7 +7,7 @@ class Admin_Controller_Shipping_Usps extends Controller
 	{
 		$this->template->load('shipping/usps');
 
-		$this->load->language('shipping/usps');
+		$this->language->load('shipping/usps');
 
 		$this->document->setTitle($this->_('heading_title'));
 

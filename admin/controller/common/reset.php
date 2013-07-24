@@ -20,7 +20,7 @@ class Admin_Controller_Common_Reset extends Controller
 		if ($user_info) {
 		$this->template->load('common/reset');
 
-			$this->load->language('common/reset');
+			$this->language->load('common/reset');
 			
 			if ($this->request->isPost() && $this->validate()) {
 				$this->Model_User_User->editPassword($user_info['user_id'], $_POST['password']);

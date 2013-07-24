@@ -4,7 +4,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 	
 	public function index()
 	{
-		$this->load->language('mail/newsletter');
+		$this->language->load('mail/newsletter');
 		
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -13,7 +13,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 
 	public function insert()
 	{
-		$this->load->language('mail/newsletter');
+		$this->language->load('mail/newsletter');
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
@@ -31,7 +31,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 
 	public function update()
 	{
-		$this->load->language('mail/newsletter');
+		$this->language->load('mail/newsletter');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -48,7 +48,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 
 	public function batch_update()
 	{
-		$this->load->language('mail/newsletter');
+		$this->language->load('mail/newsletter');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -76,7 +76,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 			if (!$this->error) {
 				$this->message->add('success', $this->_('text_success'));
 				
-				$this->url->redirect($this->url->link('mail/newsletter', $this->url->get_query()));
+				$this->url->redirect($this->url->link('mail/newsletter', $this->url->getQuery()));
 			}
 		}
 
@@ -157,7 +157,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 		$this->data['newsletter_view'] = $table->render();
 		
 		
-		$url = $this->url->get_query('filter', 'sort', 'order', 'page');
+		$url = $this->url->getQuery('filter', 'sort', 'order', 'page');
 		
 		$this->data['update_actions'] = array('enable'=>'Enable','disable'=>'Disable');
 		
@@ -167,7 +167,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 		$this->data['copy'] = $this->url->link('mail/newsletter/copy', $url);
 		$this->data['delete'] = $this->url->link('mail/newsletter/delete', $url);
 		
-		$url = $this->url->get_query('filter', 'sort', 'order');
+		$url = $this->url->getQuery('filter', 'sort', 'order');
 		
 		$this->pagination->init();
 		$this->pagination->total = $newsletter_total;
@@ -279,7 +279,8 @@ class Admin_Controller_Mail_Newsletter extends Controller
 			$this->data['data_designer_products'] =  array($featured_product['product_id'] => $featured_product['name']);
 		}
 	
-		
+		//Ajax Urls
+		$this->data['url_product_select'] = $this->url->ajax('catalog/product/select');
 		
 		$this->children = array(
 			'common/header',
@@ -457,7 +458,6 @@ class Admin_Controller_Mail_Newsletter extends Controller
 	
 	public function email_list()
 	{
-		
 		$customers = $this->Model_Mail_Newsletter->getEmailList();
 		
 		$columns = array(
@@ -466,11 +466,11 @@ class Admin_Controller_Mail_Newsletter extends Controller
 			'email'	=> "Email",
 		);
 		
-		$this->export->generate_csv($columns, $customers);
+		$this->export->generateCsv($columns, $customers);
 		
 		$file = "email_list_" . $this->date->format(null, 'm-d-Y') . '.csv';
 		
-		$this->export->download_contents_as('csv', $file);
+		$this->export->downloadContents($file, 'csv');
 	}
 	
 	private function validateForm()

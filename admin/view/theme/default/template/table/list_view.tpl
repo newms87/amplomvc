@@ -20,7 +20,7 @@
 	<tr>
 		<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);" /></td>
 		<td class="center column_title"><span><?= $column_action; ?></span></td>
-		<? foreach($columns as $column) {?>
+		<? foreach($columns as $column) { ?>
 		<td class="column_title <?= $column['align']; ?>">
 			<? if($column['sortable']) {
 				$c_order = ($sort === $column['sort_value'] && $order === 'ASC') ? 'DESC' : 'ASC';
@@ -48,12 +48,32 @@
 				<? break;
 				
 				case 'int': ?>
-					<div class="filter_number_range"><input type="text" name="filter[<?= $slug; ?>]" value="<?= $column['filter_value']; ?>" /></div>
+					<? if (!isset($column['filter_value']['low'])) {
+							$column['filter_value']['low'] = null;
+						}
+						if (!isset($column['filter_value']['high'])) {
+							$column['filter_value']['high'] = null;
+						}
+					?>
+					<div class="zoom_hover int">
+						<div class="input">
+							<input type="text" class="int_low" name="filter[<?= $slug; ?>][low]" value="<?= $column['filter_value']['low']; ?>" />
+							<input type="text" class="int_high" name="filter[<?= $slug; ?>][high]" value="<?= $column['filter_value']['high']; ?>" />
+							<span class="clear">clear</span>
+						</div>
+						<div class="value">
+							<? if (!is_null($column['filter_value']['low']) || !is_null($column['filter_value']['high'])) { ?>
+								<?= $column['filter_value']['low'] . ' - ' . $column['filter_value']['high']; ?>
+							<? } else { ?>
+								<?= $text_modify_filter; ?>
+							<? } ?>
+						</div>
+					</div>
 				<? break;
 				case 'select':
 				case 'multiselect':
 					if(isset($column['build_config'])){
-						$this->builder->set_config(key($column['build_config']), current($column['build_config']));
+						$this->builder->set_config($column['build_config']);
 					}
 					$blank_option = $column['filter_blank'] ? array(''=>'') : array();
 					echo $this->builder->build('select', $blank_option + $column['build_data'], "filter[$slug]", $column['filter_value']);
@@ -62,8 +82,29 @@
 				case 'date':
 				case 'time':
 				case 'datetime': ?>
-					<label class="date_from"><?= $entry_date_from; ?></label><input class='<?= str_replace('_range', '', $column['type']); ?>' type="text" name="filter[<?= $slug; ?>][start]" value="<?= isset($column['value']['start']) ? $column['value']['start'] : ''; ?>" />
-					<label class="date_to"><?= $entry_date_to; ?></label><input class='<?= str_replace('_range', '', $column['type']); ?>' type="text" name="filter[<?= $slug?>][end]" value="<?= isset($column['value']['end']) ? $column['value']['end'] : ''; ?>" />
+					<? if (!isset($column['filter_value']['start'])) {
+							$column['filter_value']['start'] = null;
+						}
+						if (!isset($column['filter_value']['end'])) {
+							$column['filter_value']['end'] = null;
+						}
+					?>
+					
+					<div class="zoom_hover daterange">
+						<div class="input">
+							<input class='date_start <?= str_replace('_range', '', $column['type']); ?>' type="text" name="filter[<?= $slug; ?>][start]" value="<?= $column['filter_value']['start']; ?>" />
+							<input class='date_end <?= str_replace('_range', '', $column['type']); ?>' type="text" name="filter[<?= $slug?>][end]" value="<?= $column['filter_value']['end']; ?>" />
+							<span class="clear">clear</span>
+						</div>
+						<div class="value">
+							<? if (!is_null($column['filter_value']['start']) || !is_null($column['filter_value']['end'])) { ?>
+								<?= $column['filter_value']['start'] . ' - ' . $column['filter_value']['end']; ?>
+							<? } else { ?>
+								<?= $text_modify_filter; ?>
+							<? } ?>
+						</div>
+					</div>
+					
 				<? break;
 				
 				default: break;
@@ -75,13 +116,13 @@
 		<? } ?>
 		<td align="center"><a onclick="filter();" class="button"><?= $button_filter; ?></a></td>
 	</tr>
-	<? if(!empty($data)) { ?>
-	<? foreach ($data as $data) { ?>
+	<? if(!empty($rows)) { ?>
+	<? foreach ($rows as $row) { ?>
 	<tr>
-		<td class="center"><input type="checkbox" name="selected[]" value="<?= $data[$row_id]; ?>" <?= (isset($data['selected']) && $data['selected']) ? "checked='checked'" : ""; ?> /></td>
+		<td class="center"><input type="checkbox" name="selected[]" value="<?= $row[$row_id]; ?>" <?= (isset($row['selected']) && $row['selected']) ? "checked='checked'" : ""; ?> /></td>
 		
 		<? $quick_actions = '';
-		foreach($data['actions'] as $key => $action){
+		foreach($row['actions'] as $key => $action){
 			$action['#class'] = (isset($action['#class']) ? $action['#class'] . ' ' : '') . 'action-' . $key;
 			$quick_actions .= "[ <a href=\"$action[href]\"" . $this->builder->attrs($action) . ">$action[text]</a> ]";
 		} ?>
@@ -90,7 +131,7 @@
 			<?= $quick_actions ; ?>
 		</td>
 		<? foreach($columns as $slug => $column) {
-			if(!isset($data[$slug])){?>
+			if(!isset($row[$slug])){?>
 				<td></td>
 				<? continue;
 			}
@@ -98,11 +139,11 @@
 			<td class="<?= $column['align']; ?>">
 			<?
 			
-			$value = $data[$slug];
+			$value = $row[$slug];
 			
 			//Check if the raw string override has been set for this value
-			if(isset($data['#' . $slug])){
-				echo $data['#' . $slug];
+			if(isset($row['#' . $slug])){
+				echo $row['#' . $slug];
 			}
 			else{
 				switch($column['type']) {
@@ -112,15 +153,15 @@
 					<? break;
 					
 					case 'date': ?>
-						<?= $this->date->format($value, 'M d, Y'); ?>
+						<?= $this->date->format($value, 'short'); ?>
 					<? break;
 					
 					case 'datetime': ?>
-						<?= $this->date->format($value, 'M d, Y H:i A'); ?>
+						<?= $this->date->format($value, 'datetime_format_long'); ?>
 					<? break;
 					
 					case 'time': ?>
-						<?= $this->date->format($value, 'H:i A'); ?>
+						<?= $this->date->format($value, 'time'); ?>
 					<? break;
 					
 					case 'map': ?>
@@ -128,31 +169,31 @@
 					<? break;
 					
 					case 'select':
-						foreach($column['build_data'] as $c_data){
-							if($c_data[key($column['build_config'])] == $value){ ?>
-								<?= $c_data[current($column['build_config'])]; ?>
+						foreach($column['build_data'] as $key => $c_data){
+							if(isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $value){ ?>
+								<?= $c_data[$column['build_config'][1]]; ?>
 							<? }
 						}
 						break;
 						
 					case 'multiselect':
 						foreach($value as $v){
-							$ms_value = is_array($v) ? $v[key($column['build_config'])] : $v;
+							$ms_value = is_array($v) ? $v[$column['build_config'][0]] : $v;
 							foreach($column['build_data'] as $c_data){
-								if($c_data[key($column['build_config'])] == $ms_value){
-									echo $c_data[current($column['build_config'])] . "<br/>";
+								if(isset($c_data[$column['build_config'][0]]) && $c_data[$column['build_config'][0]] == $ms_value){
+									echo $c_data[$column['build_config'][1]] . "<br/>";
 									break;
 								}
 							}
 						}
 						break;
-						
+					
 					case 'format': ?>
 						<?= sprintf($column['format'],$value); ?>
 					<? break;
 					
 					case 'image': ?>
-						<img src="<?= $data['thumb']; ?>" />
+						<img src="<?= $row['thumb']; ?>" />
 					<? break;
 					
 					case 'text_list':
@@ -188,8 +229,55 @@ $("#filter_list").keydown(function(e){
 		return false;
 	}
 });
+
+$('.zoom_hover input, .zoom_hover textarea').focus(zoom_hover_in).blur(zoom_hover_out);
+
+function zoom_hover_in(){
+	zoom = $(this).closest('.zoom_hover').addClass('active');
+	input = zoom.find('.input');
+	value = zoom.find('.value');
+}
+
+function zoom_hover_out(){
+	zoom = $(this).closest('.zoom_hover').removeClass('active');
+	input = zoom.find('.input');
+	value = zoom.find('.value');
+}
+
+$('.zoom_hover .clear').click(function(){
+	$(this).closest('.zoom_hover').find('input, textarea').val('').trigger('keyup').trigger('change');
+});
+
+$('.zoom_hover.int input').keyup(function(){
+	zoom = $(this).closest('.zoom_hover');
+	value = zoom.find('.value');
+	
+	low = zoom.find('.int_low').val() ;
+	high = zoom.find('.int_high').val();
+	
+	if (high || low) {
+		value.html(low + ' - ' + high);
+	} else {
+		value.html('<?= $text_modify_filter; ?>');
+	}
+});
+
+$('.zoom_hover.daterange input').change(function(){
+	zoom = $(this).closest('.zoom_hover');
+	value = zoom.find('.value');
+	
+	start = zoom.find('.date_start').val() ;
+	end = zoom.find('.date_end').val();
+	
+	if (end || start) {
+		value.html(start + ' - ' + end);
+	} else {
+		value.html('<?= $text_modify_filter; ?>');
+	}
+});
+
 //--></script>
 
-<?= $this->builder->js('filter_url', '#filter_list', $route); ?>
+<?= $this->builder->js('filter_url', '#filter_list'); ?>
 
 <?= $this->builder->js('datepicker'); ?>

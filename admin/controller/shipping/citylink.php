@@ -7,7 +7,7 @@ class Admin_Controller_Shipping_Citylink extends Controller
 	{
 		$this->template->load('shipping/citylink');
 
-		$this->load->language('shipping/citylink');
+		$this->language->load('shipping/citylink');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

@@ -7,7 +7,7 @@ class Admin_Controller_Total_SubTotal extends Controller
 	{
 		$this->template->load('total/sub_total');
 
-		$this->load->language('total/sub_total');
+		$this->language->load('total/sub_total');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

@@ -1,7 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs(); ?>
-	<?= $this->builder->display_errors($errors); ?>
+	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'home.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -79,8 +78,8 @@
 							<? foreach ($orders as $order) { ?>
 							<tr>
 								<td class="right"><?= $order['order_id']; ?></td>
-								<td class="left"><?= $order['customer']; ?></td>
-								<td class="left"><?= $order['status']; ?></td>
+								<td class="left"><?= $order['customer']['firstname'] . ' ' . $order['customer']['lastname']; ?></td>
+								<td class="left"><?= $order['order_status']['title']; ?></td>
 								<td class="left"><?= $order['date_added']; ?></td>
 								<td class="right"><?= $order['total']; ?></td>
 								<td class="right"><? foreach ($order['action'] as $action) { ?>
@@ -108,7 +107,7 @@
 function getSalesChart(range) {
 	$.ajax({
 		type: 'GET',
-		url: "<?= HTTP_ADMIN . "index.php?route=common/home/chart"; ?>" + '&range=' + range,
+		url: "<?= $url_chart; ?>" + '&range=' + range,
 		dataType: 'json',
 		async: false,
 		success: function(json) {

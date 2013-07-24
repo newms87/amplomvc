@@ -13,12 +13,25 @@ class Message extends Library
 	public function add($type, $message)
 	{
 		if (is_string($message)) {
-			$this->session->data['messages'][$type][] = $message;
+			$this->session->data['messages'][$type][] = $this->language->get($message);
 		}
 		elseif (is_array($message)) {
-			foreach ($message as $m) {
-				$this->add($type, $m);
-			}
+			array_walk_recursive($message, function($value, $key, $data) {
+				$_SESSION['messages'][$data[1]][] = $data[0]->language->get($value);
+			}, array($this,$type));
+		}
+	}
+	
+	//TODO: Need to add system messages to backend!
+	public function system($type, $message)
+	{
+		if (is_string($message)) {
+			$this->session->data['system_messages'][$type][] = $this->language->get($message);
+		}
+		elseif (is_array($message)) {
+			array_walk_recursive($message, function($value, $key, $data) {
+				$_SESSION['system_messages'][$data[1]][] = $data[0]->language->get($value);
+			}, array($this,$type));
 		}
 	}
 	
@@ -27,7 +40,7 @@ class Message extends Library
 		return isset($this->session->data['messages']['error']) || isset($this->session->data['messages']['warning']);
 	}
 	
-	public function peek($type='')
+	public function peek($type = null)
 	{
 		if ($type) {
 			if (isset($this->session->data['messages'][$type])) {

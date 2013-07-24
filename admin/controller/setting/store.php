@@ -1,11 +1,9 @@
 <?php
 class Admin_Controller_Setting_Store extends Controller
 {
-	
-
 	public function index()
 	{
-		$this->load->language('setting/store');
+		$this->language->load('setting/store');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -14,7 +12,7 @@ class Admin_Controller_Setting_Store extends Controller
 			
   	public function insert()
   	{
-		$this->load->language('setting/store');
+		$this->language->load('setting/store');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -34,7 +32,7 @@ class Admin_Controller_Setting_Store extends Controller
 
   	public function update()
   	{
-		$this->load->language('setting/store');
+		$this->language->load('setting/store');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -54,7 +52,7 @@ class Admin_Controller_Setting_Store extends Controller
 
   	public function delete()
   	{
-		$this->load->language('setting/store');
+		$this->language->load('setting/store');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -77,7 +75,7 @@ class Admin_Controller_Setting_Store extends Controller
 	{
 		$this->template->load('setting/store_list');
 
-		$url = $this->url->get_query('page');
+		$url = $this->url->getQuery('page');
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/store'));
@@ -144,7 +142,7 @@ class Admin_Controller_Setting_Store extends Controller
 				
 		$this->data['cancel'] = $this->url->link('setting/store');
 	
-		if ($store_id && !$this->request->isPost())) {
+		if ($store_id && !$this->request->isPost()) {
 			$store = $this->Model_Setting_Store->getStore($store_id);
 			
 			if (!$store) {
@@ -192,7 +190,7 @@ class Admin_Controller_Setting_Store extends Controller
 			'config_checkout_id'=>'',
 			'config_stock_display'=>'',
 			'config_stock_checkout'=>'',
-			'config_order_status_id'=>'',
+			'config_order_complete_status_id'=>'',
 			'config_cart_weight'=>'',
 			'config_logo'=>'',
 			'config_icon'=>'',
@@ -245,7 +243,7 @@ class Admin_Controller_Setting_Store extends Controller
 		
 		$this->data['informations'] = $this->Model_Catalog_Information->getInformations();
 		
-		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
+		$this->data['order_statuses'] = $this->order->getOrderStatuses();
 		
 		$this->data['load_theme_img'] = $this->url->link('setting/setting/theme');
 		
@@ -349,17 +347,17 @@ class Admin_Controller_Setting_Store extends Controller
 				$this->error['warning'] = $this->_('error_default');
 			}
 			
-			$store_total = $this->Model_Sale_Order->getTotalOrdersByStoreId($store_id);
+			$filter = array(
+				'store_ids' => array($store_id),
+			);
+			
+			$store_total = $this->System_Model_Order->getTotalOrders($filter);
 	
 			if ($store_total) {
 				$this->error['warning'] = sprintf($this->_('error_store'), $store_total);
 			}
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
 }

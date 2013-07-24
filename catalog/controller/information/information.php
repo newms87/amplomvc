@@ -82,4 +82,19 @@ class Catalog_Controller_Information_Information extends Controller
 		
 		$this->response->setOutput($this->render());
 	}
+	
+	public function shipping_return_policy()
+	{
+		$this->language->load('information/information');
+		$this->template->load('information/shipping_return_policy');
+		
+		$product_id = isset($_GET['product_id']) ? $_GET['product_id'] : 0;
+		
+		if ($product_id) {
+			$this->data['shipping_policy'] = $this->cart->getProductShippingPolicy($product_id);
+			$this->data['return_policy'] = $this->cart->getProductReturnPolicy($product_id);
+		}
+		
+		$this->response->setOutput($this->render());
+	}
 }

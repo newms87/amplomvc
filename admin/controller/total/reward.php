@@ -7,7 +7,7 @@ class Admin_Controller_Total_Reward extends Controller
 	{
 		$this->template->load('total/reward');
 
-		$this->load->language('total/reward');
+		$this->language->load('total/reward');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

@@ -23,9 +23,10 @@ class Catalog_Controller_Block_Product_Images extends Controller
 		
 		$this->data['images'] = array();
 		
-		$results = $this->Model_Catalog_Product->getProductImages($product_info['product_id']);
-			
-		array_unshift($results,array('image'=>$product_info['image']));
+		$images = $this->Model_Catalog_Product->getProductImages($product_info['product_id']);
+		
+		//Add the main product image as the first image
+		array_unshift($images,$product_info['image']);
 		
 		$this->data['zoombox_width'] = $this->config->get('config_image_thumb_width');
 		$this->data['zoombox_height'] = $this->config->get('config_image_thumb_height');
@@ -33,15 +34,22 @@ class Catalog_Controller_Block_Product_Images extends Controller
 		$this->data['zoombox_y'] = 0;
 		$this->data['zoombox_position'] = 'right';
 		
-		foreach ($results as $result) {
-			$small_image = $this->image->resize($result['image'], $this->config->get('config_image_thumb_width'), $this->config->get('config_image_thumb_height'));
-			$popup_image = $this->image->resize($result['image'], $this->config->get('config_image_popup_width'), $this->config->get('config_image_popup_height'));
+		$image_width = $this->config->get('config_image_thumb_width');
+		$image_height = $this->config->get('config_image_thumb_height');
+		$image_popup_width = $this->config->get('config_image_popup_width');
+		$image_popup_height = $this->config->get('config_image_popup_height');
+		$image_additional_width = $this->config->get('config_image_additional_width');
+		$image_additional_height = $this->config->get('config_image_additional_height');
+		
+		foreach ($images as $image) {
+			$small_image = $this->image->resize($image, $image_width, $image_height);
+			$popup_image = $this->image->resize($image, $image_popup_width, $image_popup_height);
 			
 			if ($small_image) {
 				$this->data['images'][] = array(
 					'rel' => "{gallery:'gal1', smallimage:'$small_image', largeimage:'$popup_image'}",
 					'popup' => $popup_image,
-					'thumb' => $this->image->resize($result['image'], $this->config->get('config_image_additional_width'), $this->config->get('config_image_additional_height'))
+					'thumb' => $this->image->resize($image, $image_additional_width, $image_additional_height),
 				);
 			}
 		}

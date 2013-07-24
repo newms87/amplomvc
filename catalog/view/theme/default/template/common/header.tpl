@@ -22,15 +22,6 @@
 <link rel="<?= $style['rel']; ?>" type="text/css" href="<?= $style['href']; ?>" media="<?= $style['media']; ?>" />
 <? } ?>
 
-<? /*TODO: Do we want to do something with this? Right now useles...
-<![if !IE]>
-<script type="text/javascript">//<!--
-//url_state_object = {};
-//window.history.pushState(url_state_object,'<?= addslashes($title); ?>', '<?= isset($pretty_url) ? $pretty_url : ''; ?>');
-//--></script>
-<![endif]>
- */ ?>
- 
 <? foreach ($js_scripts as $script) { ?>
 <script type="text/javascript" src="<?= $script; ?>"></script>
 <? } ?>
@@ -90,7 +81,7 @@ $(document).ready(function(){
 </head>
 <body>
 <div id="container">
-<div id='container_content'>
+<div id='page'>
 <div id="header">
 	<? if ($logo) { ?>
 	<div id="logo" class="<?= $logo; ?>">
@@ -103,8 +94,14 @@ $(document).ready(function(){
 	<? if(!empty($page_header)){
 		echo "<div id='the_page_header'>$page_header</div>";
 	}?>
-	<?= $language; ?>
-	<?= $currency; ?>
+	
+	<? if (!empty($languages)) { ?>
+		<?= $languages; ?>
+	<? } ?>
+	
+	<? if (!empty($currencies)) { ?>
+		<?= $currencies; ?>
+	<? } ?>
 	
 	<div id="header_right">
 		<div id="links_account">
@@ -114,6 +111,7 @@ $(document).ready(function(){
 				<? } else {?>
 					<span><?= $text_login_link; ?></span>
 				<? } ?>
+				<?= $this->document->renderLinks($links_account); ?>
 			<? } else { ?>
 				<? $this->builder->set_config("href", "display_name") ;?>
 				<?= $this->builder->build('select', $links_account, 'account_menu', '', array('onchange' => "window.location = $(this).val()")); ?>
@@ -122,7 +120,7 @@ $(document).ready(function(){
 		
 		<? if (!empty($links_cart)) { ?>
 			<div id="links_cart">
-				<?= $this->builder->build_links($links_cart); ?>
+				<?= $this->document->renderLinks($links_cart); ?>
 			</div>
 		<? } ?>
 		
@@ -135,39 +133,16 @@ $(document).ready(function(){
 	
 	<? if(!empty($links_secondary)){?>
 	<div id="links_secondary" class="links">
-		<?= $this->builder->build_links($links_secondary); ?>
+		<?= $this->document->renderLinks($links_secondary); ?>
 	</div>
 	<? }?>
 	<? if(!empty($links_primary)) { ?>
 	<div id="links_primary" class="links">
-		<?= $this->builder->build_links($links_primary); ?>
+		<?= $this->document->renderLinks($links_primary); ?>
 	</div>
 	<? } ?>
 </div>
-<? if (isset($categories) && !empty($categories)) { ?>
-<div id="menu">
-	<ul>
-		<? foreach ($categories as $category) { ?>
-		<li><a href="<?= $category['href']; ?>"><?= $category['name']; ?></a>
-				<? if ($category['children']) { ?>
-				<div>
-					<? for ($i = 0; $i < count($category['children']);) { ?>
-					<ul>
-						<? $j = $i + ceil(count($category['children']) / $category['column']); ?>
-						<? for (; $i < $j; $i++) { ?>
-						<? if (isset($category['children'][$i])) { ?>
-						<li><a href="<?= $category['children'][$i]['href']; ?>"><?= $category['children'][$i]['name']; ?></a></li>
-						<? } ?>
-						<? } ?>
-					</ul>
-					<? } ?>
-				</div>
-				<? } ?>
-		</li>
-		<? } ?>
-	</ul>
-</div>
-<? } ?>
+
 <div id="notification"></div>
 <div id="content_holder">
 

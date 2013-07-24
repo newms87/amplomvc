@@ -1,6 +1,6 @@
 <?php
 
-abstract class Controller 
+abstract class Controller
 {
 	protected $registry;
 	protected $children = array();
@@ -77,12 +77,14 @@ abstract class Controller
 	
 	protected function render()
 	{
-		//Build Errors
+		//Display Error Messages
 		$this->data['errors'] = array();
+		
 		if ($this->error) {
-			foreach ($this->error as $e=>$msg) {
-				$this->data['errors'][$e] = $msg;
-			}
+			$this->message->add('warning', $this->error);
+			$this->data['errors'] = $this->error;
+			
+			$this->error = array();
 		}
 		
 		//Build language
@@ -93,7 +95,7 @@ abstract class Controller
 			$this->data[basename($child)] = $this->getChild($child);
 		}
 		
-		$this->template->set_data($this->data);
+		$this->template->setData($this->data);
 		
 		$this->output = $this->template->render();
 		

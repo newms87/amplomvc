@@ -10,17 +10,14 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 			$payment_methods = $this->cart->getPaymentMethods();
 			
 			if (!$payment_methods) {
-				$this->message->add('error', $this->_('error_no_payment', $this->url->link('information/contact')));
-			}
-			
-			if ($this->cart->hasPaymentMethod()) {
-				$this->data['code'] = $this->cart->getPaymentMethodId();
-			} elseif (count($payment_methods) == 1) {
-				$method = current($payment_methods);
-				$this->data['code'] = $method['code'];
+				$payment_methods = array();
 			}
 			else {
-				$this->data['code'] = '';
+				if ($this->cart->hasPaymentMethod()) {
+					$this->data['code'] = $this->cart->getPaymentMethodId();
+				} else {
+					$this->data['code'] = key($payment_methods);
+				}
 			}
 			
 			$this->data['payment_methods'] = $payment_methods;
@@ -29,11 +26,11 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 			$this->data['no_payment_address'] = true;
 		}
 		
-		if ($this->config->get('config_checkout_id')) {
-			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_checkout_id'));
+		if ($this->config->get('config_checkout_terms_info_id')) {
+			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_checkout_terms_info_id'));
 			
 			if ($information_info) {
-				$this->_('text_agree', $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_checkout_id')), $information_info['title'], $information_info['title']);
+				$this->_('text_agree', $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_checkout_terms_info_id')), $information_info['title'], $information_info['title']);
 				
 				$this->data['agree_to_payment'] = true;
 			}
@@ -76,15 +73,17 @@ class Catalog_Controller_Block_Checkout_PaymentMethod extends Controller
 		}
 		
 		if (!$json) {
-			if ($this->config->get('config_checkout_id')) {
-				$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_checkout_id'));
+			if ($this->config->get('config_checkout_terms_info_id')) {
+				$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_checkout_terms_info_id'));
 				
 				if ($information_info && empty($_POST['agree'])) {
 					$json['error']['agree'] = sprintf($this->_('error_agree'), $information_info['title']);
 				}
 			}
 			
-			if (!$json && !$this->cart->setPaymentMethod($_POST['payment_method'])) {
+			if (!isset($_POST['payment_method'])) {
+				$json['error']['_payment_method'] = $this->_('error_payment_method'); //We use _payment_method to avoid builder->js('errors') adding error under radio input
+			} elseif (!$this->cart->setPaymentMethod($_POST['payment_method'])) {
 				$json['error'] = $this->cart->get_errors('payment_method');
 			}
 			

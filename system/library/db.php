@@ -1,5 +1,5 @@
 <?php
-class DB 
+class DB
 {
 	private $driver;
 	private $error;
@@ -34,9 +34,9 @@ class DB
 		$this->driver = new $driver($hostname, $username, $password, $database);
 	}
 	
-	public function get_error()
+	public function getError()
 	{
-		$driver_error = $this->driver->get_error();
+		$driver_error = $this->driver->getError();
 		
 		if ($this->error) {
 			$driver_error = '<br>' . $this->error;
@@ -60,7 +60,7 @@ class DB
   		$resource = $this->driver->query($sql);
 		
 		if (!$resource) {
-			$this->query_error($sql);
+			$this->queryError($sql);
 			
 			return false;
 		}
@@ -76,12 +76,12 @@ class DB
 	* @return mixed - an array of associative arrays of field => value pairs, or false on failure
 	*
 	*/
-	public function query_rows($sql)
+	public function queryRows($sql)
 	{
   		$resource = $this->driver->query($sql);
 		
 		if (!$resource) {
-			$this->query_error($sql);
+			$this->queryError($sql);
 			
 			return false;
 		}
@@ -97,17 +97,37 @@ class DB
 	* @return mixed - An associative array of field => value pairs, or false on failure
 	*
 	*/
-	public function query_row($sql)
+	public function queryRow($sql)
 	{
   		$resource = $this->driver->query($sql);
 		
 		if (!$resource) {
-			$this->query_error($sql);
+			$this->queryError($sql);
 			
 			return false;
 		}
 		
 		return $resource->row;
+  	}
+	
+	/**
+	* Returns an array with each value as the first Select field of each row
+	*
+	* @param $sql - the MySQL query string
+	* @return mixed - will return an indexed array or false on failure
+	*
+	*/
+	public function queryColumn($sql)
+	{
+  		$resource = $this->driver->query($sql);
+		
+		if (!$resource) {
+			$this->queryError($sql);
+			
+			return false;
+		}
+		
+		return array_column($resource->rows, key($resource->row));
   	}
 	
 	/**
@@ -117,20 +137,20 @@ class DB
 	* @return mixed - The DB table field value as an integer, float or string, or null on failure
 	*
 	*/
-  	public function query_var($sql)
+  	public function queryVar($sql)
   	{
   		$resource = $this->driver->query($sql);
 		
 		if (!$resource) {
-			$this->query_error($sql);
+			$this->queryError($sql);
 			
 			return null;
 		}
 		
-		return current($resource->row);
+		return $resource->row ? current($resource->row) : null;
   	}
 	
-	private function query_error($sql = '')
+	private function queryError($sql = '')
 	{
 		if (function_exists('debug_stack') && function_exists('html_dump')) {
 			$stack = debug_stack();
@@ -140,11 +160,11 @@ class DB
 		}
 		
 		if (function_exists('get_caller')) {
-			trigger_error($this->driver->get_error() . get_caller(1) . get_caller(2));
+			trigger_error($this->driver->getError() . get_caller(1, 3));
 		}
 	}
 	
-	public function execute_file($file)
+	public function executeFile($file)
 	{
 		$content = file_get_contents($file);
 		
@@ -156,7 +176,7 @@ class DB
 			}
 		}
 		
-		if ($this->get_error()) {
+		if ($this->getError()) {
 			return false;
 		}
 		
@@ -170,7 +190,7 @@ class DB
 		$eol = "\r\n";
 		
 		if (!$tables) {
-			$tables = $this->query_rows("SHOW TABLES");
+			$tables = $this->queryRows("SHOW TABLES");
 		}
 		
 		$sql = '';
@@ -187,7 +207,7 @@ class DB
 			$sql .= "DROP TABLE IF EXISTS `$table`;" . $eol;
 			$sql .= "CREATE TABLE `$table` (" . $eol;
 			
-			$columns = $this->query_rows("SHOW COLUMNS FROM `$table`");
+			$columns = $this->queryRows("SHOW COLUMNS FROM `$table`");
 			
 			$primary_key = array();
 			
@@ -223,7 +243,7 @@ class DB
 			
 			$sql .= ");" . $eol . $eol;
 			
-			$rows = $this->query_rows("SELECT * FROM `$table`");
+			$rows = $this->queryRows("SELECT * FROM `$table`");
 			
 			if (!empty($rows)) {
 				$sql .= "INSERT INTO `$table` VALUES ";
@@ -246,19 +266,19 @@ class DB
 			return false;
 		}
 		
-		if ($this->get_error()) {
+		if ($this->getError()) {
 			return false;
 		}
 		
 		return true;
 	}
 
-	public function has_table($table)
+	public function hasTable($table)
 	{
-		return $this->query_var("SHOW TABLES LIKE '" . DB_PREFIX . $this->escape($table) . "'") ? true : false;
+		return $this->queryVar("SHOW TABLES LIKE '" . DB_PREFIX . $this->escape($table) . "'") ? true : false;
 	}
 	
-	public function get_tables()
+	public function getTables()
 	{
 		$result = $this->driver->query("SHOW TABLES");
 		
@@ -271,14 +291,24 @@ class DB
 		return $tables;
 	}
 	
-	public function count_tables()
+	public function createTable($table, $sql)
+	{
+		return $this->driver->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "$table` ($sql)");
+	}
+	
+	public function dropTable($table)
+	{
+		return $this->driver->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "$table`");
+	}
+	
+	public function countTables()
 	{
 		$result = $this->driver->query("SHOW TABLES");
 		
 		return $result->num_rows;
 	}
 	
-	public function get_key_column($table)
+	public function getKeyColumn($table)
 	{
 		$result = $this->driver->query("SHOW KEYS FROM " . DB_PREFIX . "$table WHERE Key_name = 'PRIMARY'");
 		
@@ -289,7 +319,7 @@ class DB
 		return false;
 	}
 	
-	public function has_column($table, $column)
+	public function hasColumn($table, $column)
 	{
 		$query = $this->driver->query("SHOW COLUMNS FROM " . DB_PREFIX . "$table");
 		foreach ($query->rows as $row) {
@@ -299,31 +329,42 @@ class DB
 		return false;
 	}
 	
-	public function table_add_column($table, $column, $type, $null=true, $after=null)
+	public function addColumn($table, $column, $options = '')
 	{
-		if (!$this->has_column($table, $column)) {
-			$null = $null?"NULL":"NOT NULL";
-			$after = $after?"AFTER `$after`":'';
+		if (!$this->hasColumn($table, $column)) {
+			return $this->driver->query("ALTER TABLE `" . DB_PREFIX . "$table` ADD COLUMN `$column` $options");
+		}
+	}
+	
+	public function changeColumn($table, $column, $new_column = null, $options = '')
+	{
+		if ($this->hasColumn($table, $column)) {
+			if (!$new_column) {
+				$new_column = $column;
+			} elseif ($this->hasColumn($table, $new_column)) {
+				trigger_error("Attempted Change the database column $table => $column to a Column that already exists: $new_column!");
+				return false;
+			}
 			
-			$this->driver->query("ALTER TABLE `" . DB_PREFIX . "$table` ADD COLUMN `$column` $type $null $after");
+			return $this->driver->query("ALTER TABLE `" . DB_PREFIX . "$table` CHANGE COLUMN `$column` `$new_column` $options");
 		}
 	}
 	
-	public function table_drop_column($table, $column)
+	public function dropColumn($table, $column)
 	{
-		if ($this->has_column($table, $column)) {
-			$this->driver->query("ALTER TABLE `" . DB_PREFIX . "$table` DROP COLUMN `$column`");
+		if ($this->hasColumn($table, $column)) {
+			return $this->driver->query("ALTER TABLE `" . DB_PREFIX . "$table` DROP COLUMN `$column`");
 		}
 	}
 	
-	public function set_autoincrement($table, $value)
+	public function setAutoincrement($table, $value)
 	{
-		if (!$this->driver->set_autoincrement($table, $value)) {
-			trigger_error($this->driver->get_error());
+		if (!$this->driver->setAutoincrement($table, $value)) {
+			trigger_error($this->driver->getError());
 		}
 	}
 	
-	public function get_insert_string($data)
+	public function getInsertString($data)
 	{
 		$str = array();
 		
@@ -337,16 +378,16 @@ class DB
 	public function escape($value)
 	{
 		if (is_resource($value) || is_object($value) || is_array($value)) {
-			trigger_error("DB:escape(): Argument for value was not a a valid type! Value: " . gettype($value) . ". " . get_caller() . " >>>> " . get_caller(2));
+			trigger_error("DB:escape(): Argument for value was not a a valid type! Value: " . gettype($value) . ". " . get_caller(0,3));
 			exit;
 		}
 		
 		return $this->driver->escape($value);
 	}
 	
-	public function escape_html($value)
+	public function escapeHtml($value)
 	{
-		return $this->driver->escape_html($value);
+		return $this->driver->escapeHtml($value);
 	}
 	
   	public function countAffected()

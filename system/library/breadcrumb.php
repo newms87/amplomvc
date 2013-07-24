@@ -50,4 +50,14 @@ class Breadcrumb extends Library
 	{
 		$this->default_separator = $separator;
 	}
+	
+	public function render()
+	{
+		$html = "";
+		foreach ($this->crumbs as $key => $crumb) {
+			$html .= ($key > 0 ? $crumb['separator'] : '') . "<a href=\"$crumb[href]\">$crumb[text]</a>";
+		}
+		
+		return "<div class =\"breadcrumb\">$html</div>";
+	}
 }

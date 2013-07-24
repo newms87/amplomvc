@@ -25,7 +25,7 @@ class Admin_Model_User_UserGroup extends Model
 		$user_query = $this->query("SELECT DISTINCT user_group_id FROM " . DB_PREFIX . "user WHERE user_id = '" . (int)$user_id . "'");
 		
 		if ($user_query->num_rows) {
-			$user_group_query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "user_group WHERE user_group_id = '" . (int)$user_query->row['user_group_id'] . "'");
+			$user_group_query = $this->query("SELECT * FROM " . DB_PREFIX . "user_group WHERE user_group_id = '" . (int)$user_query->row['user_group_id'] . "'");
 		
 			if ($user_group_query->num_rows) {
 				$data = unserialize($user_group_query->row['permission']);
@@ -39,7 +39,7 @@ class Admin_Model_User_UserGroup extends Model
 	
 	public function getUserGroup($user_group_id)
 	{
-		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "user_group WHERE user_group_id = '" . (int)$user_group_id . "'");
+		$query = $this->query("SELECT * FROM " . DB_PREFIX . "user_group WHERE user_group_id = '" . (int)$user_group_id . "'");
 		
 		$user_group = array(
 			'name'		=> $query->row['name'],

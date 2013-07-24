@@ -1,6 +1,9 @@
-<?= $header; ?><?= $column_left; ?><?= $column_right; ?>
-<div id="content"><?= $content_top; ?>
-	<?= $this->builder->display_breadcrumbs(); ?>
+<?= $header; ?>
+<?= $column_left; ?><?= $column_right; ?>
+<div id="content">
+	<?= $this->breadcrumb->render(); ?>
+	<?= $content_top; ?>
+
 	<h1><?= $heading_title; ?></h1>
 	<div class="sitemap-info">
 		<div class="left">
@@ -52,5 +55,8 @@
 			</ul>
 		</div>
 	</div>
-	<?= $content_bottom; ?></div>
+	
+	<?= $content_bottom; ?>
+</div>
+
 <?= $footer; ?>

@@ -3,14 +3,14 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 {
   	public function index()
   	{
-		$this->load->language('catalog/manufacturer');
+		$this->language->load('catalog/manufacturer');
 		
 		$this->getList();
   	}
 
   	public function insert()
   	{
-		$this->load->language('catalog/manufacturer');
+		$this->language->load('catalog/manufacturer');
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Manufacturer->addManufacturer($_POST);
@@ -27,7 +27,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 	
   	public function update()
   	{
-		$this->load->language('catalog/manufacturer');
+		$this->language->load('catalog/manufacturer');
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$manufacturer_id = isset($_GET['manufacturer_id'])?$_GET['manufacturer_id']:0;
@@ -45,14 +45,14 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 
   	public function delete()
   	{
-		$this->load->language('catalog/manufacturer');
+		$this->language->load('catalog/manufacturer');
 		
 		if (isset($_GET['manufacturer_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_Manufacturer->deleteManufacturer($_GET['manufacturer_id']);
 			
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
-				$this->url->redirect($this->url->link('catalog/manufacturer', $this->url->get_query_exclude('manufacturer_id')));
+				$this->url->redirect($this->url->link('catalog/manufacturer', $this->url->getQueryExclude('manufacturer_id')));
 			}
 		}
 	
@@ -90,7 +90,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 			if (!$this->error && !$this->message->error_set()) {
 				$this->message->add('success',$this->_('text_success'));
 				
-				$this->url->redirect($this->url->link('catalog/manufacturer', $this->url->get_query_exclude('action')));
+				$this->url->redirect($this->url->link('catalog/manufacturer', $this->url->getQueryExclude('action')));
 			}
 		}
 
@@ -99,12 +99,16 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 	
   	private function getList()
   	{
+  		//Page Title
   		$this->document->setTitle($this->_('heading_title'));
 		
+		//The Template
 		$this->template->load('catalog/manufacturer_list');
 		
+		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/manufacturer'));
+		
 		//The Table Columns
 		$columns = array();
 
@@ -149,7 +153,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 			'type' => 'multiselect',
 			'display_name' => $this->_('column_store'),
 			'filter' => true,
-			'build_config' => array('store_id' => 'name'),
+			'build_config' => array('store_id' , 'name'),
 			'build_data' => $this->Model_Setting_Store->getStores(),
 			'sortable' => false,
 		);
@@ -162,20 +166,14 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 			'sortable' => true,
 		);
 		
-		//The Sort data
-		$sort_filter = array();
+		//Get Sorted / Filtered Data
+		$sort = $this->sort->getQueryDefaults('name', 'ASC');
+		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 		
-		$this->sort->load_query_defaults($sort_filter, 'name', 'ASC');
+		$manufacturer_total = $this->Model_Catalog_Manufacturer->getTotalManufacturers($filter);
+		$manufacturers = $this->Model_Catalog_Manufacturer->getManufacturers($sort + $filter);
 		
-		//Filter
-		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
-		
-		if ($filter_values) {
-			$sort_filter += $filter_values;
-		}
-		
-		$manufacturer_total = $this->Model_Catalog_Manufacturer->getTotalManufacturers($sort_filter);
-		$manufacturers = $this->Model_Catalog_Manufacturer->getManufacturers($sort_filter);
+		$url_query = $this->url->getQueryExclude('manufacturer_id');
 		
 		foreach ($manufacturers as &$manufacturer) {
 			$manufacturer['actions'] = array(
@@ -185,20 +183,20 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 				),
 				'delete' => array(
 					'text' => $this->_('text_delete'),
-					'href' => $this->url->link('catalog/manufacturer/delete', 'manufacturer_id=' . $manufacturer['manufacturer_id'])
+					'href' => $this->url->link('catalog/manufacturer/delete', 'manufacturer_id=' . $manufacturer['manufacturer_id'] . $url_query)
 				)
 			);
 			
 			if ($manufacturer['date_active'] === DATETIME_ZERO) {
 				$manufacturer['date_active'] = $this->_('text_no_date_active');
 			} else {
-				$manufacturer['date_active'] = $this->date->format($manufacturer['date_active'], 'M d, Y H:i:s');
+				$manufacturer['date_active'] = $this->date->format($manufacturer['date_active'], 'datetime_format_long');
 			}
 
 			if ($manufacturer['date_expires'] === DATETIME_ZERO) {
 				$manufacturer['date_expires'] = $this->_('text_no_date_expires');
 			} else {
-				$manufacturer['date_expires'] = $this->date->format($manufacturer['date_active'], 'M d, Y H:i:s');
+				$manufacturer['date_expires'] = $this->date->format($manufacturer['date_active'], 'datetime_format_long');
 			}
 			
 			$manufacturer['thumb'] = $this->image->resize($manufacturer['image'], $this->config->get('config_image_admin_list_width'), $this->config->get('config_image_admin_list_height'));
@@ -206,53 +204,43 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 			$manufacturer['stores'] = $this->Model_Catalog_Manufacturer->getManufacturerStores($manufacturer['manufacturer_id']);
 		} unset($manufacturer);
 		
-		//The table template data
+		//Build The Table
 		$tt_data = array(
 			'row_id'		=> 'manufacturer_id',
-			'route'		=> 'catalog/manufacturer',
-			'sort'		=> $sort_filter['sort'],
-			'order'		=> $sort_filter['order'],
-			'page'		=> $sort_filter['page'],
-			'sort_url'	=> $this->url->link('catalog/manufacturer', $this->url->get_query('filter')),
-			'columns'	=> $columns,
-			'data'		=> $manufacturers,
 		);
 		
-		$tt_data += $this->language->data;
-		
-		//Build the table template
 		$this->table->init();
-		$this->table->set_template('table/list_view');
-		$this->table->set_template_data($tt_data);
-		$this->table->map_attribute('filter_value', $filter_values);
+		$this->table->setTemplate('table/list_view');
+		$this->table->setColumns($columns);
+		$this->table->setRows($manufacturers);
+		$this->table->setTemplateData($tt_data);
+		$this->table->mapAttribute('filter_value', $filter);
 		
 		$this->data['list_view'] = $this->table->render();
 		
 		//Batch Actions
-		$url_query = $this->url->get_query('filter', 'sort', 'order', 'page');
-		
 		$this->data['batch_actions'] = array(
 			'enable'	=> array(
-				'label' => "Enable"
+				'label' => $this->_('text_enable')
 			),
 			'disable'=>	array(
-				'label' => "Disable",
+				'label' => $this->_('text_disable'),
 			),
 			'copy' => array(
-				'label' => "Copy",
+				'label' => $this->_('text_copy'),
 			),
 			'delete' => array(
-				'label' => "Delete",
+				'label' => $this->_('text_delete'),
 			),
 		);
 		
 		$this->data['batch_update'] = html_entity_decode($this->url->link('catalog/manufacturer/batch_update', $url_query));
 		
+		//Render Limit Menu
+		$this->data['limits'] = $this->sort->render_limit();
+		
 		//Action buttons
 		$this->data['insert'] = $this->url->link('catalog/manufacturer/insert');
-		
-		//Item Limit Menu
-		$this->data['limits'] = $this->sort->render_limit();
 		
 		//Pagination
 		$this->pagination->init();
@@ -260,12 +248,13 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		
 		$this->data['pagination'] = $this->pagination->render();
 		
-		//Children
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
-				
+		
+		//Render
 		$this->response->setOutput($this->render());
 	}
 
@@ -320,6 +309,10 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		}
 		
 		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
+		
+		//Ajax Urls
+		$this->data['url_generate_url'] = $this->url->ajax('catalog/manufacturer/generate_url');
+		$this->data['url_autocomplete'] = $this->url->ajax('catalog/manufacturer/autocomplete');
 		
 		$translate_fields = array(
 			'name',

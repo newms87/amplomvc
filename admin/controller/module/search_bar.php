@@ -7,7 +7,7 @@ class Admin_Controller_Module_SearchBar extends Controller
 	{
 		$this->template->load('module/search_bar');
 
-		$this->load->language('module/search_bar');
+		$this->language->load('module/search_bar');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

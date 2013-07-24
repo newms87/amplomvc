@@ -4,7 +4,7 @@
  */
 
 //Admin
-define("IS_ADMIN",true);
+define("IS_ADMIN", true);
 
 // HTTP
 define('HTTP_ROOT', SITE_URL . 'admin/');
@@ -14,6 +14,7 @@ define('HTTP_CATALOG', SITE_URL);
 define('HTTP_IMAGE', SITE_URL . 'image/');
 define('HTTP_JS', SITE_URL . 'system/javascript/');
 define('HTTP_THEME_JS', HTTP_ADMIN . 'view/javascript/');
+define('HTTP_AJAX', HTTP_ADMIN . '');
 
 // HTTPS
 define('HTTPS_ROOT', SITE_SSL . 'admin/');

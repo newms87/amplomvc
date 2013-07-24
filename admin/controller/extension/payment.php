@@ -4,17 +4,16 @@ class Admin_Controller_Extension_Payment extends Controller
 	public function index()
 	{
 		$this->template->load('extension/payment');
-
-		$this->load->language('extension/payment');
+		$this->language->load('extension/payment');
 		
 		$this->document->setTitle($this->_('heading_title'));
 
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('extension/payment'));
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('extension/payment'));
 
 		if (isset($this->session->data['success'])) {
 			$this->data['success'] = $this->session->data['success'];
-		
+			
 			unset($this->session->data['success']);
 		} else {
 			$this->data['success'] = '';
@@ -46,7 +45,7 @@ class Admin_Controller_Extension_Payment extends Controller
 			foreach ($files as $file) {
 				$extension = basename($file, '.php');
 				
-				$this->load->language('payment/' . $extension);
+				$this->language->load('payment/' . $extension);
 	
 				$action = array();
 				
@@ -107,7 +106,7 @@ class Admin_Controller_Extension_Payment extends Controller
 
 			_require(DIR_APPLICATION . 'controller/payment/' . $_GET['extension'] . '.php');
 			
-			$class = 'ControllerPayment' . str_replace('_', '', $_GET['extension']);
+			$class = 'Admin_Controller_Payment_' . $this->tool->formatClassname($_GET['extension']);
 			$class = new $class($this->registry);
 			
 			if (method_exists($class, 'install')) {
@@ -131,7 +130,7 @@ class Admin_Controller_Extension_Payment extends Controller
 		
 			_require(DIR_APPLICATION . 'controller/payment/' . $_GET['extension'] . '.php');
 			
-			$class = 'ControllerPayment' . str_replace('_', '', $_GET['extension']);
+			$class = 'Admin_Controller_Payment_' . $this->tool->formatClassname($_GET['extension']);
 			$class = new $class($this->registry);
 			
 			if (method_exists($class, 'uninstall')) {

@@ -3,7 +3,7 @@ class Admin_Model_Setting_Plugin extends Model
 {
 	public function getInstalledPlugins()
 	{
-		$plugins = $this->query_rows("SELECT * FROM " . DB_PREFIX . "plugin GROUP BY name");
+		$plugins = $this->queryRows("SELECT * FROM " . DB_PREFIX . "plugin GROUP BY name");
 		
 		$installed = array();
 		
@@ -17,10 +17,10 @@ class Admin_Model_Setting_Plugin extends Model
 	public function getPluginData($name = false)
 	{
 		if (!empty($name)) {
-			return $this->query_row("SELECT * FROM " . DB_PREFIX . "plugin WHERE `name` ='" . $this->db->escape($name) . "'");
+			return $this->queryRow("SELECT * FROM " . DB_PREFIX . "plugin WHERE `name` ='" . $this->db->escape($name) . "'");
 		}
 		
-		$plugins = $this->query_rows("SELECT * FROM " . DB_PREFIX . "plugin ORDER BY `name`");
+		$plugins = $this->queryRows("SELECT * FROM " . DB_PREFIX . "plugin ORDER BY `name`");
 		
 		$plugin_data = array();
 		

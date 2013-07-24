@@ -103,7 +103,7 @@ function setup_db($_) {
 	
 	$db = @new DB($_POST['db_type'], $_POST['db_host'], $_POST['db_username'], $_POST['db_password'], $_POST['db_name']);
 	
-	$error = $db->get_error();
+	$error = $db->getError();
 	
 	if ($error) {
 		return $error;
@@ -121,7 +121,7 @@ function setup_db($_) {
 	
 	file_put_contents($temp_file, $contents);
 	
-	if (!$db->execute_file($temp_file) || !$db->count_tables()) {
+	if (!$db->executeFile($temp_file) || !$db->countTables()) {
 		return "There was a problem encountered while building the database. Please try again.";
 	}
 	
@@ -211,8 +211,8 @@ function setup_user($_) {
 	$db->query("DELETE FROM " . DB_PREFIX . "user WHERE email = '$email' OR username = '$username'");
 	$db->query("INSERT INTO " . DB_PREFIX . "user SET user_group_id = '1', firstname = 'Admin', username = '$username', email = '$email', password = '$password', ip = '$ip', status = '1', date_added = '$date_added'");
 	
-	if ($db->get_error()) {
-		return $db->get_error();
+	if ($db->getError()) {
+		return $db->getError();
 	}
 	
 	$oc_config = SITE_DIR . 'oc_config.php';

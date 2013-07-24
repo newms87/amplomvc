@@ -21,14 +21,14 @@ class System_Update {
 		foreach ($version_list as $version) {
 			$v = str_replace('.php','',basename($version));
 			$versions[$v] = $version;
-		} 
+		}
 		
 		return $versions;
 	}
 	
 	/*
 	 * Update the database and run any necessary configurations based
-	 * on the current file version of the system 
+	 * on the current file version of the system
 	 */
 	public function update($update_version = null)
 	{
@@ -44,6 +44,6 @@ class System_Update {
 			}
 		}
 		
-		$this->config->save('system', 'ac_version', VERSION, true);
+		$this->config->save('system', 'ac_version', VERSION, 0);
 	}
 }

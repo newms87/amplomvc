@@ -5,7 +5,7 @@ class Admin_Controller_Report_CustomerOrder extends Controller
 	{
 		$this->template->load('report/customer_order');
 
-		$this->load->language('report/customer_order');
+		$this->language->load('report/customer_order');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -88,7 +88,7 @@ class Admin_Controller_Report_CustomerOrder extends Controller
 			);
 		}
 		
-		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
+		$this->data['order_statuses'] = $this->order->getOrderStatuses();
 			
 		$url = '';
 						

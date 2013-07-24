@@ -7,7 +7,7 @@ class Admin_Controller_Module_Category extends Controller
 	{
 		$this->template->load('module/category');
 
-		$this->load->language('module/category');
+		$this->language->load('module/category');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

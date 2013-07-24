@@ -32,7 +32,7 @@ class Catalog_Controller_Payment_WebPaymentSoftware extends Controller
 	
 	public function send()
 	{
-		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
+		$order_info = $this->order->get($this->session->data['order_id']);
 		
 		$request  = 'MERCHANT_ID=' . urlencode($this->config->get('web_payment_software_merchant_name'));
 		$request .= '&MERCHANT_KEY=' . urlencode($this->config->get('web_payment_software_merchant_key'));
@@ -86,7 +86,7 @@ class Catalog_Controller_Payment_WebPaymentSoftware extends Controller
 		
 		//If successful log transaction in opencart system
 		if ('00' === (string)$xml->response_code) {
-			$this->Model_Checkout_Order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
+			$this->order->update($this->session->data['order_id'], $this->config->get('config_order_complete_status_id'));
 			
 			$message = '';
 			

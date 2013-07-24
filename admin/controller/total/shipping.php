@@ -7,7 +7,7 @@ class Admin_Controller_Total_Shipping extends Controller
 	{
 		$this->template->load('total/shipping');
 
-		$this->load->language('total/shipping');
+		$this->language->load('total/shipping');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

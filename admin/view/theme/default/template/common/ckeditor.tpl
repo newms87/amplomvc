@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en" xml:lang="en">
 <head>
-<title><?= $title; ?></title>
+<title><?= $heading_title; ?></title>
 <base href="<?= $base; ?>" />
 <script type="text/javascript" src="<?= HTTP_JS . "jquery/jquery-1.7.1.min.js"; ?>"></script>
 <script type="text/javascript" src="<?= HTTP_JS . "jquery/ui/jquery-ui-1.8.16.custom.min.js"; ?>"></script>
@@ -116,7 +116,7 @@ $(document).ready(function() {
 			async: true,
 			opts: {
 				method: 'post',
-				url: "<?= HTTP_ADMIN . "index.php?route=common/filemanager/directory"; ?>"
+				url: "<?= HTTP_AJAX . "common/filemanager/directory"; ?>"
 			}
 		},
 		selected: 'top',
@@ -159,7 +159,7 @@ $(document).ready(function() {
 			},
 			onselect: function (NODE, TREE_OBJ) {
 				$.ajax({
-					url: "<?= HTTP_ADMIN . "index.php?route=common/filemanager/files"; ?>",
+					url: "<?= HTTP_AJAX . "common/filemanager/files"; ?>",
 					type: 'post',
 					data: 'directory=' + encodeURIComponent($(NODE).attr('directory')),
 					dataType: 'json',
@@ -188,7 +188,7 @@ $(document).ready(function() {
 						
 						$('#column-right a').each(function(index, element) {
 							$.ajax({
-								url: "<?= HTTP_ADMIN . "index.php?route=common/filemanager/image"; ?>" + '&image=' + encodeURIComponent('data/' + $(element).find('input[name=\'image\']').attr('value')),
+								url: "<?= HTTP_AJAX . "common/filemanager/image"; ?>" + '?image=' + encodeURIComponent('data/' + $(element).find('input[name=\'image\']').attr('value')),
 								dataType: 'html',
 								success: function(html) {
 									$(element).prepend('<img src="' + html + '" title="" style="display: none;" /><br />');
@@ -217,8 +217,8 @@ $(document).ready(function() {
 	});
 	
 	$('#column-right a').live('dblclick', function() {
-		<? if ($fckeditor) { ?>
-		window.opener.CKEDITOR.tools.callFunction(<?= $fckeditor; ?>, '<?= $directory; ?>' + $(this).find('input[name=\'image\']').attr('value'));
+		<? if ($CKEditorFuncNum) { ?>
+		window.opener.CKEDITOR.tools.callFunction(<?= $CKEditorFuncNum; ?>, '<?= $directory; ?>' + $(this).find('input[name=\'image\']').attr('value'));
 		
 		self.close();
 		<? } else { ?>
@@ -248,7 +248,7 @@ $(document).ready(function() {
 			
 			$('#dialog input[type=\'button\']').bind('click', function() {
 				$.ajax({
-					url: "<?= HTTP_ADMIN . "index.php?route=common/filemanager/create"; ?>",
+					url: "<?= HTTP_AJAX . "common/filemanager/create"; ?>",
 					type: 'post',
 					data: 'directory=' + encodeURIComponent($(tree.selected).attr('directory')) + '&name=' + encodeURIComponent($('#dialog input[name=\'name\']').val()),
 					dataType: 'json',
@@ -278,7 +278,7 @@ $(document).ready(function() {
 							
 		if (path) {
 			$.ajax({
-				url: "<?= HTTP_ADMIN . "index.php?route=common/filemanager/delete"; ?>",
+				url: "<?= HTTP_AJAX . "common/filemanager/delete"; ?>",
 				type: 'post',
 				data: 'path=' + encodeURIComponent(path),
 				dataType: 'json',
@@ -304,7 +304,7 @@ $(document).ready(function() {
 			
 			if (tree.selected) {
 				$.ajax({
-					url: "<?= HTTP_ADMIN . "index.php?route=common/filemanager/delete"; ?>",
+					url: "<?= HTTP_AJAX . "common/filemanager/delete"; ?>",
 					type: 'post',
 					data: 'path=' + encodeURIComponent($(tree.selected).attr('directory')),
 					dataType: 'json',
@@ -345,14 +345,14 @@ $(document).ready(function() {
 			resizable: false
 		});
 
-		$('#dialog select[name=\'to\']').load("<?= HTTP_ADMIN . "index.php?route=common/filemanager/folders"; ?>");
+		$('#dialog select[name=\'to\']').load("<?= HTTP_AJAX . "common/filemanager/folders"; ?>");
 		
 		$('#dialog input[type=\'button\']').bind('click', function() {
 			path = $('#column-right a.selected').find('input[name=\'image\']').attr('value');
 							
 			if (path) {
 				$.ajax({
-					url: "<?= HTTP_ADMIN . "index.php?route=common/filemanager/move"; ?>",
+					url: "<?= HTTP_AJAX . "common/filemanager/move"; ?>",
 					type: 'post',
 					data: 'from=' + encodeURIComponent(path) + '&to=' + encodeURIComponent($('#dialog select[name=\'to\']').val()),
 					dataType: 'json',
@@ -379,7 +379,7 @@ $(document).ready(function() {
 				var tree = $.tree.focused();
 				
 				$.ajax({
-					url: "<?= HTTP_ADMIN . "index.php?route=common/filemanager/move"; ?>",
+					url: "<?= HTTP_AJAX . "common/filemanager/move"; ?>",
 					type: 'post',
 					data: 'from=' + encodeURIComponent($(tree.selected).attr('directory')) + '&to=' + encodeURIComponent($('#dialog select[name=\'to\']').val()),
 					dataType: 'json',
@@ -420,14 +420,14 @@ $(document).ready(function() {
 			resizable: false
 		});
 		
-		$('#dialog select[name=\'to\']').load("<?= HTTP_ADMIN . "index.php?route=common/filemanager/folders"; ?>");
+		$('#dialog select[name=\'to\']').load("<?= HTTP_AJAX . "common/filemanager/folders"; ?>");
 		
 		$('#dialog input[type=\'button\']').bind('click', function() {
 			path = $('#column-right a.selected').find('input[name=\'image\']').attr('value');
 							
 			if (path) {
 				$.ajax({
-					url: "<?= HTTP_ADMIN . "index.php?route=common/filemanager/copy"; ?>",
+					url: "<?= HTTP_AJAX . "common/filemanager/copy"; ?>",
 					type: 'post',
 					data: 'path=' + encodeURIComponent(path) + '&name=' + encodeURIComponent($('#dialog input[name=\'name\']').val()),
 					dataType: 'json',
@@ -454,7 +454,7 @@ $(document).ready(function() {
 				var tree = $.tree.focused();
 				
 				$.ajax({
-					url: "<?= HTTP_ADMIN . "index.php?route=common/filemanager/copy"; ?>",
+					url: "<?= HTTP_AJAX . "common/filemanager/copy"; ?>",
 					type: 'post',
 					data: 'path=' + encodeURIComponent($(tree.selected).attr('directory')) + '&name=' + encodeURIComponent($('#dialog input[name=\'name\']').val()),
 					dataType: 'json',
@@ -500,7 +500,7 @@ $(document).ready(function() {
 							
 			if (path) {
 				$.ajax({
-					url: "<?= HTTP_ADMIN . "index.php?route=common/filemanager/rename"; ?>",
+					url: "<?= HTTP_AJAX . "common/filemanager/rename"; ?>",
 					type: 'post',
 					data: 'path=' + encodeURIComponent(path) + '&name=' + encodeURIComponent($('#dialog input[name=\'name\']').val()),
 					dataType: 'json',
@@ -527,7 +527,7 @@ $(document).ready(function() {
 				var tree = $.tree.focused();
 				
 				$.ajax({
-					url: "<?= HTTP_ADMIN . "index.php?route=common/filemanager/rename"; ?>",
+					url: "<?= HTTP_AJAX . "common/filemanager/rename"; ?>",
 					type: 'post',
 					data: 'path=' + encodeURIComponent($(tree.selected).attr('directory')) + '&name=' + encodeURIComponent($('#dialog input[name=\'name\']').val()),
 					dataType: 'json',
@@ -555,7 +555,7 @@ $(document).ready(function() {
 	});
 	
 	new AjaxUpload('#upload', {
-		action: "<?= HTTP_ADMIN . "index.php?route=common/filemanager/upload"; ?>",
+		action: "<?= HTTP_AJAX . "common/filemanager/upload"; ?>",
 		name: 'image',
 		autoSubmit: false,
 		responseType: 'json',

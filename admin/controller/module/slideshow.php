@@ -7,7 +7,7 @@ class Admin_Controller_Module_Slideshow extends Controller
 	{
 		$this->template->load('module/slideshow');
 
-		$this->load->language('module/slideshow');
+		$this->language->load('module/slideshow');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

@@ -1,14 +1,18 @@
 <?= $header; ?>
-<?= $this->builder->display_errors($errors); ?>
-
 <?= $column_left; ?><?= $column_right; ?>
 <div id="content">
-	<?= $this->builder->display_breadcrumbs(); ?>
-	<h1><?= $heading_title; ?></h1>
+	<?= $this->breadcrumb->render(); ?>
 	<?= $content_top; ?>
-	<?= $text_message; ?>
+	
+	<h1><?= $heading_title; ?></h1>
+	<div class="success_message"><?= $text_message; ?></div>
+	
 	<div class="buttons">
 		<div class="right"><a href="<?= $continue; ?>" class="button"><?= $button_continue; ?></a></div>
 	</div>
-	<?= $content_bottom; ?></div>
+	
+	
+	<?= $content_bottom; ?>
+</div>
+
 <?= $footer; ?>

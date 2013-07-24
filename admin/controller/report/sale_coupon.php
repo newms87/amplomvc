@@ -5,7 +5,7 @@ class Admin_Controller_Report_SaleCoupon extends Controller
 	{
 		$this->template->load('report/sale_coupon');
 
-		$this->load->language('report/sale_coupon');
+		$this->language->load('report/sale_coupon');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

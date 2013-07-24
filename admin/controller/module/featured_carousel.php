@@ -7,7 +7,7 @@ class Admin_Controller_Module_FeaturedCarousel extends Controller
 	{
 		$this->template->load('module/featured_carousel');
 
-		$this->load->language('module/featured_carousel');
+		$this->language->load('module/featured_carousel');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

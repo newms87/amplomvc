@@ -1,37 +1,23 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs(); ?>
-	<? if ($error_warning) { ?>
-	<div class="message_box warning"><?= $error_warning; ?></div>
-	<? } ?>
+	<?= $this->breadcrumb->render(); ?>
+	
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'layout.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
-			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
+			<div class="buttons">
+				<a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a>
+				<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
+			</div>
 		</div>
 		<div class="content">
-			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
-				<div id="languages" class="htabs">
-							<? foreach ($languages as $language) { ?>
-							<a href="#language<?= $language['language_id']; ?>"><img src="<?= HTTP_THEME_IMAGE . 'flags/<?= $language['image']; ?>'; ?>" title="<?= $language['name']; ?>" /> <?= $language['name']; ?></a>
-							<? } ?>
-				</div>
+			<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="form">
 					<tr>
 						<td class="required"> <?= $entry_name; ?></td>
-						<td><input type="text" name="name" value="<?= $name; ?>" />
-							<? if ($error_name) { ?>
-							<span class="error"><?= $error_name; ?></span>
-							<? } ?></td>
+						<td><input type="text" name="name" value="<?= $name; ?>" /></td>
 					</tr>
-				<tr>
-								<td><?= $entry_headers; ?></td>
-								<? foreach ($languages as $language) {?>
-									<td id='language<?= $language['language_id']; ?>'><textarea class='ckedit' name="layout_header[<?= $language['language_id']; ?>][page_header]"><?= isset($layout_header[$language['language_id']]) ? $layout_header[$language['language_id']]['page_header'] : ''; ?></textarea></td>
-								<? } ?>
-						</tr>
 				</table>
-				<br />
 				<table id="route" class="list">
 					<thead>
 						<tr>
@@ -40,15 +26,16 @@
 							<td></td>
 						</tr>
 					</thead>
+					
 					<? $route_row = 0; ?>
-					<? foreach ($layout_routes as $layout_route) { ?>
+					<? foreach ($routes as $layout_route) { ?>
 					<tbody id="route-row<?= $route_row; ?>">
 						<tr>
 							<td class="left">
 					<? $this->builder->set_config('store_id', 'name');?>
-					<?= $this->builder->build('select', $data_stores, "layout_route[$route_row][store_id]", $layout_route['store_id']); ?>
+					<?= $this->builder->build('select', $data_stores, "routes[$route_row][store_id]", $layout_route['store_id']); ?>
 					</td>
-							<td class="left"><input type="text" name="layout_route[<?= $route_row; ?>][route]" value="<?= $layout_route['route']; ?>" /></td>
+							<td class="left"><input type="text" name="routes[<?= $route_row; ?>][route]" value="<?= $layout_route['route']; ?>" /></td>
 							<td class="left"><a onclick="$('#route-row<?= $route_row; ?>').remove();" class="button"><?= $button_remove; ?></a></td>
 						</tr>
 					</tbody>

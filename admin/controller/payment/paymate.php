@@ -7,7 +7,7 @@ class Admin_Controller_Payment_Paymate extends Controller
 	{
 		$this->template->load('payment/paymate');
 
-		$this->load->language('payment/paymate');
+		$this->language->load('payment/paymate');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -77,7 +77,7 @@ class Admin_Controller_Payment_Paymate extends Controller
 			$this->data['paymate_order_status_id'] = $this->config->get('paymate_order_status_id');
 		}
 		
-		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
+		$this->data['order_statuses'] = $this->order->getOrderStatuses();
 
 		if (isset($_POST['paymate_geo_zone_id'])) {
 			$this->data['paymate_geo_zone_id'] = $_POST['paymate_geo_zone_id'];

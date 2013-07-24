@@ -1,6 +1,9 @@
-<?= $header; ?><?= $column_left; ?><?= $column_right; ?>
-<div id="content"><?= $content_top; ?>
-	<?= $this->builder->display_breadcrumbs(); ?>
+<?= $header; ?>
+<?= $column_left; ?><?= $column_right; ?>
+<div id="content">
+	<?= $content_top; ?>
+	<?= $this->breadcrumb->render(); ?>
+	
 	<h1><?= $heading_title; ?></h1>
 	<table class="list">
 		<thead>
@@ -10,17 +13,21 @@
 		</thead>
 		<tbody>
 			<tr>
-				<td class="left" style="width: 50%;"><? if ($invoice_no) { ?>
-					<b><?= $text_invoice_no; ?></b> <?= $invoice_no; ?><br />
+				<td class="left half">
+					<? if (!empty($invoice_id)) { ?>
+					<b><?= $text_invoice_id; ?></b> <?= $invoice_id; ?><br />
 					<? } ?>
 					<b><?= $text_order_id; ?></b> #<?= $order_id; ?><br />
-					<b><?= $text_date_added; ?></b> <?= $date_added; ?></td>
-				<td class="left" style="width: 50%;"><? if ($payment_method) { ?>
-					<b><?= $text_payment_method; ?></b> <?= $payment_method; ?><br />
+					<b><?= $text_date_added; ?></b> <?= $date_added; ?>
+				</td>
+				<td class="left half">
+					<? if (!empty($payment_method)) { ?>
+					<b><?= $text_payment_method; ?></b> <?= $payment_method['title']; ?><br />
 					<? } ?>
-					<? if ($shipping_method) { ?>
-					<b><?= $text_shipping_method; ?></b> <?= $shipping_method; ?>
-					<? } ?></td>
+					<? if (!empty($shipping_method)) { ?>
+					<b><?= $text_shipping_method; ?></b> <?= $shipping_method['title']; ?>
+					<? } ?>
+				</td>
 			</tr>
 		</tbody>
 	</table>
@@ -28,7 +35,7 @@
 		<thead>
 			<tr>
 				<td class="left"><?= $text_payment_address; ?></td>
-				<? if ($shipping_address) { ?>
+				<? if (!empty($shipping_address)) { ?>
 				<td class="left"><?= $text_shipping_address; ?></td>
 				<? } ?>
 			</tr>
@@ -36,7 +43,7 @@
 		<tbody>
 			<tr>
 				<td class="left"><?= $payment_address; ?></td>
-				<? if ($shipping_address) { ?>
+				<? if (!empty($shipping_address)) { ?>
 				<td class="left"><?= $shipping_address; ?></td>
 				<? } ?>
 			</tr>
@@ -50,7 +57,7 @@
 				<td class="right"><?= $column_quantity; ?></td>
 				<td class="right"><?= $column_price; ?></td>
 				<td class="right"><?= $column_total; ?></td>
-				<? if ($products) { ?>
+				<? if (!empty($products)) { ?>
 				<td style="width: 1px;"></td>
 				<? } ?>
 			</tr>
@@ -68,11 +75,14 @@
 				<td class="right"><?= $product['price']; ?></td>
 				<td class="right"><?= $product['total']; ?></td>
 				<td class="right">
-					<? if($product['is_final']){?>
+					<? if($product['return_policy']['days'] < 0){?>
 							<div class='final_sale_small'><span class='final_sale'></span></div>
 					<? }else{?>
-							<a href="<?= $product['return']; ?>"><img src="<?= HTTP_THEME_IMAGE . 'return.png'; ?>" alt="<?= $button_return; ?>" title="<?= $button_return; ?>" /></a></td>
+							<a href="<?= $product['return']; ?>">
+								<img src="<?= HTTP_THEME_IMAGE . 'return.png'; ?>" alt="<?= $button_return; ?>" title="<?= $button_return; ?>" />
+							</a>
 					<? }?>
+				</td>
 			</tr>
 			<? } ?>
 			<? foreach ($vouchers as $voucher) { ?>
@@ -129,7 +139,7 @@
 			<? foreach ($histories as $history) { ?>
 			<tr>
 				<td class="left"><?= $history['date_added']; ?></td>
-				<td class="left"><?= $history['status']; ?></td>
+				<td class="left"><?= $history['order_status']['title']; ?></td>
 				<td class="left"><?= $history['comment']; ?></td>
 			</tr>
 			<? } ?>
@@ -142,5 +152,8 @@
 	<div class="buttons">
 		<div class="right"><a href="<?= $continue; ?>" class="button"><?= $button_continue; ?></a></div>
 	</div>
-	<?= $content_bottom; ?></div>
+	
+	<?= $content_bottom; ?>
+</div>
+
 <?= $footer; ?> 

@@ -88,10 +88,14 @@ class Cache
 		$this->loaded = array();
   	}
 	
-	public function ignore($key)
+	public function ignore($ignore)
 	{
-		$key = trim($key);
-		if($key)
-			$this->ignore_list[$key] = $key;
+		foreach (explode(',',$ignore) as $key) {
+			$key = trim($key);
+		
+			if ($key) {
+				$this->ignore_list[$key] = $key;
+			}
+		}
 	}
 }

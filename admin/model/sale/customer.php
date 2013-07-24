@@ -68,14 +68,14 @@ class Admin_Model_Sale_Customer extends Model
 	
 	public function getCustomer($customer_id)
 	{
-		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "customer WHERE customer_id = '" . (int)$customer_id . "'");
+		$query = $this->query("SELECT * FROM " . DB_PREFIX . "customer WHERE customer_id = '" . (int)$customer_id . "'");
 	
 		return $query->row;
 	}
 	
 	public function getCustomerByEmail($email)
 	{
-		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "customer WHERE email = '" . $this->db->escape($email) . "'");
+		$query = $this->query("SELECT * FROM " . DB_PREFIX . "customer WHERE email = '" . $this->db->escape($email) . "'");
 	
 		return $query->row;
 	}
@@ -167,18 +167,18 @@ class Admin_Model_Sale_Customer extends Model
 		if ($customer_info) {
 			$this->query("UPDATE " . DB_PREFIX . "customer SET approved = '1' WHERE customer_id = '" . (int)$customer_id . "'");
 
-			$this->load->language('mail/customer');
+			$this->language->load('mail/customer');
 			
 			$store_info = $this->Model_Setting_Store->getStore($customer_info['store_id']);
 			
 			if ($store_info) {
 				$store_name = $store_info['name'];
-				$store_url = $store_info['url'] . 'index.php?route=account/login';
+				$store_url = $this->url->store($store_info['store_id'], 'account/login');
 			} else {
 				$store_name = $this->config->get('config_name');
-				$store_url = HTTP_CATALOG . 'index.php?route=account/login';
+				$store_url = $this->url->store($this->config->get('config_default_store'), 'account/login');
 			}
-	
+			
 			$patterns = array('/%first_name%/','/%last_name%/','/%store_name%/', '/%store_url%/');
 			$replacements = array($customer_info['firstname'],$customer_info['lastname'],$store_name,$store_url);
 			$subject = preg_replace($patterns,$replacements, $this->config->get('mail_registration_subject'));
@@ -422,7 +422,7 @@ class Admin_Model_Sale_Customer extends Model
 			$this->language->load('mail/customer');
 			
 			if ($order_id) {
-				$order_info = $this->Model_Sale_Order->getOrder($order_id);
+				$order_info = $this->order->get($order_id);
 				
 				if ($order_info) {
 					$store_name = $order_info['store_name'];

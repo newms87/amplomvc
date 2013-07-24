@@ -1,6 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'customer.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -112,15 +112,7 @@
 				<table class="form">
 					<tr>
 						<td><?= $entry_return_status; ?></td>
-						<td><select name="return_status_id">
-								<? foreach ($return_statuses as $return_status) { ?>
-								<? if ($return_status['return_status_id'] == $return_status_id) { ?>
-								<option value="<?= $return_status['return_status_id']; ?>" selected="selected"><?= $return_status['name']; ?></option>
-								<? } else { ?>
-								<option value="<?= $return_status['return_status_id']; ?>"><?= $return_status['name']; ?></option>
-								<? } ?>
-								<? } ?>
-							</select></td>
+						<td><td><?= $this->builder->build('select', $data_return_statuses, 'return_status_id', $return_status_id); ?></td>
 					</tr>
 					<tr>
 						<td><?= $entry_notify; ?></td>

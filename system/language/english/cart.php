@@ -29,3 +29,7 @@ $_['error_cart_stock'] = "We do not have the quantity requested for <a href='%s'
 $_['error_cart_empty'] = "Your shopping cart is empty!";
 $_['error_cart_product_quantity'] = "You have not reached the minimum quantity for some products in your cart!";
 $_['error_product_minimum']			= 'Minimum order amount for %s is %s!';
+
+$_['error_checkout_validate'] = "The contents of you cart have changed. Please proceed to checkout again.";
+$_['error_checkout_shipping'] = "The Shipping Options have changed! Please select a new Shipping Method.";
+$_['error_checkout_payment'] = "The Payment Options have changed! Please select a new Payment Method.";

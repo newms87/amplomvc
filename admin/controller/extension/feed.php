@@ -5,7 +5,7 @@ class Admin_Controller_Extension_Feed extends Controller
 	{
 		$this->template->load('extension/feed');
 
-		$this->load->language('extension/feed');
+		$this->language->load('extension/feed');
 		
 		$this->document->setTitle($this->_('heading_title'));
 
@@ -46,7 +46,7 @@ class Admin_Controller_Extension_Feed extends Controller
 			foreach ($files as $file) {
 				$extension = basename($file, '.php');
 			
-				$this->load->language('feed/' . $extension);
+				$this->language->load('feed/' . $extension);
 
 				$action = array();
 			

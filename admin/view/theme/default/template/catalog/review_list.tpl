@@ -1,12 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs(); ?>
-	<? if ($error_warning) { ?>
-	<div class="message_box warning"><?= $error_warning; ?></div>
-	<? } ?>
-	<? if ($success) { ?>
-	<div class="message_box success"><?= $success; ?></div>
-	<? } ?>
+	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'review.png'; ?>" alt="" /> <?= $heading_title; ?></h1>

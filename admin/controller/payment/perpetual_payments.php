@@ -7,7 +7,7 @@ class Admin_Controller_Payment_PerpetualPayments extends Controller
 	{
 		$this->template->load('payment/perpetual_payments');
 
-		$this->load->language('payment/perpetual_payments');
+		$this->language->load('payment/perpetual_payments');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -75,7 +75,7 @@ class Admin_Controller_Payment_PerpetualPayments extends Controller
 			$this->data['perpetual_payments_order_status_id'] = $this->config->get('perpetual_payments_order_status_id');
 		}
 
-		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
+		$this->data['order_statuses'] = $this->order->getOrderStatuses();
 		
 		if (isset($_POST['perpetual_payments_geo_zone_id'])) {
 			$this->data['perpetual_payments_geo_zone_id'] = $_POST['perpetual_payments_geo_zone_id'];

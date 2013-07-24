@@ -5,7 +5,7 @@ class Admin_Controller_Setting_DbRules extends Controller
 
 	public function index()
 	{
-		$this->load->language('setting/db_rules');
+		$this->language->load('setting/db_rules');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -14,7 +14,7 @@ class Admin_Controller_Setting_DbRules extends Controller
 			
   	public function insert()
   	{
-		$this->load->language('setting/db_rules');
+		$this->language->load('setting/db_rules');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -31,7 +31,7 @@ class Admin_Controller_Setting_DbRules extends Controller
 
   	public function update()
   	{
-		$this->load->language('setting/db_rules');
+		$this->language->load('setting/db_rules');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -48,7 +48,7 @@ class Admin_Controller_Setting_DbRules extends Controller
 
   	public function delete()
   	{
-		$this->load->language('setting/db_rules');
+		$this->language->load('setting/db_rules');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

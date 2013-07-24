@@ -1,5 +1,5 @@
 <?php
-class Customer extends Library 
+class Customer extends Library
 {
 	private $customer_id;
 	private $information;
@@ -11,7 +11,7 @@ class Customer extends Library
 		parent::__construct($registry);
 		
 		if (isset($this->session->data['customer_id'])) {
-			$customer = $this->db->query_row("SELECT * FROM " . DB_PREFIX . "customer WHERE customer_id = '" . (int)$this->session->data['customer_id'] . "' AND status = '1'");
+			$customer = $this->db->queryRow("SELECT * FROM " . DB_PREFIX . "customer WHERE customer_id = '" . (int)$this->session->data['customer_id'] . "' AND status = '1'");
 			
 			if (!empty($customer)) {
 				$this->set_customer($customer);
@@ -30,6 +30,29 @@ class Customer extends Library
   	{
 		return $this->customer_id;
   	}
+	
+	public function add($data)
+	{
+		$this->System_Model_Customer->addCustomer($data);
+	}
+	
+	public function edit($data, $customer_id = null)
+	{
+		if (!$customer_id) {
+			$customer_id = $this->customer_id;
+		}
+		
+		if (!$customer_id || empty($data)) {
+			return false;
+		}
+		
+		$this->System_Model_Customer->editCustomer($customer_id, $data);
+	}
+	
+	public function editPassword($customer_id, $password)
+	{
+		$this->System_Model_Customer->editPassword($customer_id, $password);
+	}
 	
 	public function info($key = null)
 	{
@@ -61,7 +84,7 @@ class Customer extends Library
 			}
 		}
 		
-		$customer = $this->db->query_row("SELECT * FROM " . DB_PREFIX . "customer WHERE $where LIMIT 1");
+		$customer = $this->db->queryRow("SELECT * FROM " . DB_PREFIX . "customer WHERE $where LIMIT 1");
 		
 		if ($customer) {
 			$this->set_customer($customer);
@@ -73,6 +96,8 @@ class Customer extends Library
 			if (!empty($customer['wishlist'])) {
 				$this->cart->merge_wishlist($customer['wishlist']);
 			}
+			
+			$this->order->synchronizeOrders($customer);
 			
 			return true;
 		}
@@ -90,7 +115,7 @@ class Customer extends Library
 		
 		$this->information = array();
 		
-		//TODO: REMOVE THIS?
+		//TODO: Add as option in admin panel $this->config->get('config_logout_message');
 		$this->message->add('notify', "Logged Out");
   	}
 	
@@ -122,48 +147,84 @@ class Customer extends Library
 		$this->db->query("DELETE FROM " . DB_PREFIX . "customer_setting WHERE customer_id = '$this->customer_id' AND `key` = '" . $this->db->escape($key) . "'");
 	}
 	
-	public function get_shipping_addresses()
+	public function getAddress($address_id)
 	{
-		$address_list = $this->Model_Account_Address->getAddresses();
+		$address = $this->Model_Account_Address->getAddress($address_id);
 		
-		$allowed_zones = $this->cart->getAllowedShippingZones();
-		
-		if (empty($allowed_zones)) {
-			$addresses = $address_list;
+		if (!$address) {
+			return null;
 		}
-		else {
-			$addresses = array();
-			
-			foreach ($address_list as $key => $address) {
-				foreach ($allowed_zones as $zone) {
-					if ((int)$address['country_id'] === (int)$zone['country_id'] && ((int)$zone['zone_id'] === 0 || (int)$address['zone_id'] === (int)$zone['zone_id'])) {
-						$addresses[$address['address_id']] = $address;
-						break;
-					}
-				}
+		
+		if ($this->isLogged()) {
+			//Associate this address to this customer
+			if (!(int)$address['customer_id']) {
+				$address['customer_id'] = $this->customer_id;
+				$this->Model_Account_Address->editAddress($address['address_id'], $address);
+			}
+			elseif ((int)$address['customer_id'] !== $this->customer_id) {
+				trigger_error("Customer (id: $this->customer_id) attempted to access an unassociated address!");
+				
+				return null;
 			}
 		}
+		
+		return $address;
+	}
+	
+	public function getAddresses()
+	{
+		$filter = array(
+			'customer_ids' => array($this->customer_id),
+		);
+		
+		return $this->Model_Account_Address->getAddresses($filter);
+	}
+	
+	public function getShippingAddresses()
+	{
+		$allowed_zones = $this->cart->getAllowedShippingZones();
+		
+		$filter = array(
+			'customer_ids' => array($this->customer_id),
+			'country_ids' => array_column($allowed_zones, 'country_id'),
+			'zone_ids' => array_column($allowed_zones, 'zone_id'),
+		);
+		
+		$addresses = $this->Model_Account_Address->getAddresses($filter);
 		
 		return $addresses;
 	}
 	
-	public function get_payment_addresses()
+	public function getPaymentAddresses()
 	{
-		return $this->Model_Account_Address->getAddresses();
+		$filter = array(
+			'customer_ids' => array($this->customer_id),
+		);
+		
+		return $this->Model_Account_Address->getAddresses($filter);
+	}
+	
+	public function getOrders()
+	{
+		if ($this->isLogged()) {
+			return $this->db->queryRows("SELECT * FROM " . DB_PREFIX . "order WHERE customer_id = '" . $this->customer_id . "' AND order_status_id > 0");
+		}
+		
+		return false;
 	}
 	
   	public function getBalance()
   	{
   		if(!$this->customer_id) return 0;
 		
-		return $this->db->query_var("SELECT SUM(amount) AS total FROM " . DB_PREFIX . "customer_transaction WHERE customer_id = '" . (int)$this->customer_id . "'");
+		return $this->db->queryVar("SELECT SUM(amount) AS total FROM " . DB_PREFIX . "customer_transaction WHERE customer_id = '" . (int)$this->customer_id . "'");
   	}
 
   	public function getRewardPoints()
   	{
   		if(!$this->customer_id) return 0;
   		
-		return $this->db->query_var("SELECT SUM(points) AS total FROM " . DB_PREFIX . "customer_reward WHERE customer_id = '" . (int)$this->customer_id . "'");
+		return $this->db->queryVar("SELECT SUM(points) AS total FROM " . DB_PREFIX . "customer_reward WHERE customer_id = '" . (int)$this->customer_id . "'");
   	}
 	
 	public function encrypt($password)
@@ -180,7 +241,7 @@ class Customer extends Library
 		$this->information = $customer;
 		
 		//Load Customer Settings
-		$settings = $this->db->query_rows("SELECT * FROM " . DB_PREFIX . "customer_setting WHERE customer_id = '" . $this->customer_id . "'");
+		$settings = $this->db->queryRows("SELECT * FROM " . DB_PREFIX . "customer_setting WHERE customer_id = '" . $this->customer_id . "'");
 		
 		foreach ($settings as $setting) {
 			if ($setting['serialized']) {
@@ -204,12 +265,38 @@ class Customer extends Library
 		
 		$this->db->query("UPDATE " . DB_PREFIX . "customer SET cart = '" . $this->db->escape(serialize($cart)) . "', wishlist = '" . $this->db->escape(serialize($wishlist)) . "', ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "' WHERE customer_id = '" . (int)$this->customer_id . "'");
 	
-		$ip_set = $this->db->query_var("SELECT COUNT(*) FROM " . DB_PREFIX . "customer_ip WHERE customer_id = '" . (int)$this->session->data['customer_id'] . "' AND ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "'");
+		$ip_set = $this->db->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "customer_ip WHERE customer_id = '" . (int)$this->session->data['customer_id'] . "' AND ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "'");
 		
 		if (!$ip_set) {
 			$this->db->query("INSERT INTO " . DB_PREFIX . "customer_ip SET customer_id = '" . $this->customer_id . "', ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "', date_added = NOW()");
 		}
 		
 		$this->db->query("UPDATE " . DB_PREFIX . "customer SET ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "' WHERE customer_id = '" . (int)$this->customer_id . "'");
+	}
+
+	public function emailRegistered($email)
+	{
+		return (int) $this->db->queryVar("SELECT customer_id FROM " . DB_PREFIX . "customer WHERE email = '" . $this->db->escape($email) . "'");
+	}
+
+	public function isBlacklisted($customer_id = null, $ips = array())
+	{
+		if (!$customer_id) {
+			$customer_id = $this->customer_id;
+		}
+		
+		if ($customer_id) {
+			$customer_ips = $this->db->queryColumn("SELECT ip FROM " . DB_PREFIX . "customer_ip WHERE customer_id = " . (int)$customer_id);
+			
+			if ($customer_ips) {
+				$ips += $customer_ips;
+			}
+		}
+		
+		if (empty($ips)) {
+			return false;
+		}
+		
+		return $this->db->queryVar("SELECT COUNT(*) FROM `" . DB_PREFIX . "customer_ip_blacklist` WHERE ip IN ('" . implode("','", $ips) . "')");
 	}
 }

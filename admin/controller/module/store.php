@@ -7,7 +7,7 @@ class Admin_Controller_Module_Store extends Controller
 	{
 		$this->template->load('module/store');
 
-		$this->load->language('module/store');
+		$this->language->load('module/store');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

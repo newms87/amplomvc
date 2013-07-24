@@ -43,7 +43,7 @@ class Catalog_Controller_Payment_PerpetualPayments extends Controller
 	{
 		$this->language->load('payment/perpetual_payments');
 		
-		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
+		$order_info = $this->order->get($this->session->data['order_id']);
 
 		$payment_data = array(
 			'auth_id'		=> $this->config->get('perpetual_payments_auth_id'),
@@ -86,7 +86,7 @@ class Catalog_Controller_Payment_PerpetualPayments extends Controller
 			$data = explode('|', $response);
 			
 			if (isset($data[0]) && $data[0] == 'A') {
-				$this->Model_Checkout_Order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
+				$this->order->update($this->session->data['order_id'], $this->config->get('config_order_complete_status_id'));
 				
 				$message = '';
 				

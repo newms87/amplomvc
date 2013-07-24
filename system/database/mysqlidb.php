@@ -29,7 +29,7 @@ final class mysqlidb implements Database
 		}
   	}
 	
-	public function get_error()
+	public function getError()
 	{
 		return $this->err_msg;
 	}
@@ -80,7 +80,7 @@ final class mysqlidb implements Database
 		return true;
   	}
 
-	public function set_autoincrement($table, $value)
+	public function setAutoincrement($table, $value)
 	{
 		return $this->query("ALTER TABLE " . DB_PREFIX . "$table AUTO_INCREMENT=" . (int)$value . "");
 	}
@@ -90,7 +90,7 @@ final class mysqlidb implements Database
 		return $this->mysqli->real_escape_string($value);
 	}
 	
-	public function escape_html($value)
+	public function escapeHtml($value)
 	{
 		return $this->mysqli->real_escape_string(htmlspecialchars_decode($value));
 	}

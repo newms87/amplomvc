@@ -1,7 +1,7 @@
 <?php
 class Catalog_Model_Catalog_Product extends Model
 {
-	public function getProduct($product_id)
+	public function getProduct($product_id, $ignore_status = false)
 	{
 		$product_id = (int)$product_id;
 		$language_id = $this->config->get('config_language_id');
@@ -36,17 +36,23 @@ class Catalog_Model_Catalog_Product extends Model
 			
 			$query =
 				"SELECT p.*, p2c.category_id, p2s.*, $special, p.image, m.name AS manufacturer, m.keyword, m.status as manufacturer_status, $discount, $reward, $stock_status, $weight_class, $length_class, $rating, $reviews, $template, p.sort_order " .
-				" FROM " . DB_PREFIX . "product p LEFT JOIN $category JOIN $store LEFT JOIN $manufacturer" .
-				" WHERE p.product_id='$product_id' AND p.status = '1' AND m.status='1' AND (p.date_available <= NOW() OR p.date_available = '" . DATETIME_ZERO . "') AND (p.date_expires > NOW() OR p.date_expires = '" . DATETIME_ZERO . "')";
+				" FROM " . DB_PREFIX . "product p LEFT JOIN $category JOIN $store LEFT JOIN $manufacturer";
+				
+			if ($ignore_status) {
+				$query .= " WHERE p.product_id = '$product_id'";
+			} else {
+				$query .= " WHERE p.product_id='$product_id' AND p.status = '1' AND m.status='1' AND (p.date_available <= NOW() OR p.date_available = '" . DATETIME_ZERO . "') AND (p.date_expires > NOW() OR p.date_expires = '" . DATETIME_ZERO . "')";
+			}
 				
 			
-			$product = $this->query_row($query);
+			$product = $this->queryRow($query);
 			
 			if (!empty($product)) {
 				$product['price'] = ($product['discount'] ? $product['discount'] : $product['price']);
 				$product['rating'] = (int)$product['rating'];
-				$product['description'] = html_entity_decode($product['description']);
-				$product['teaser'] = html_entity_decode($product['teaser']);
+				$product['teaser'] = html_entity_decode($product['teaser'], ENT_QUOTES, 'UTF-8');
+				$product['description'] = html_entity_decode($product['description'], ENT_QUOTES, 'UTF-8');
+				$product['information'] = html_entity_decode($product['information'], ENT_QUOTES, 'UTF-8');
 				
 				$this->translation->translate('product', $product_id, $product);
 			}
@@ -57,9 +63,14 @@ class Catalog_Model_Catalog_Product extends Model
 		return $product;
 	}
 	
+	public function getProductInfo($product_id)
+	{
+		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "product WHERE product_id = '" . (int)$product_id . "'");
+	}
+	
 	public function getProductName($product_id)
 	{
-		return $this->query_var("SELECT name FROM " . DB_PREFIX . "product WHERE product_id='" . (int)$product_id . "'");
+		return $this->queryVar("SELECT name FROM " . DB_PREFIX . "product WHERE product_id='" . (int)$product_id . "'");
 	}
 	
 	public function getProducts($data = array(), $select = '*', $total = false) {
@@ -160,8 +171,9 @@ class Catalog_Model_Catalog_Product extends Model
 		//Product Tag
 		if (!empty($data['product_tag'])) {
 			$from .= " LEFT JOIN " . DB_PREFIX . "product_tag pt ON (p.product_id = pt.product_id)";
+			$from .= " LEFT JOIN " . DB_PREFIX . "tag t ON (pt.tag_id=t.tag_id)";
 			
-			$where .= " AND pt.tag = '" . $this->db->escape($data['product_tag']) . "'";
+			$where .= " AND LCASE(t.text) = '" . $this->db->escape(strtolower(trim($data['product_tag']))) . "'";
 		}
 		
 		//Product Categories
@@ -264,24 +276,26 @@ class Catalog_Model_Catalog_Product extends Model
 		$query =
 			"SELECT ag.* FROM " . DB_PREFIX . "product_attribute pa" .
 			" LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id)" .
-			" LEFT JOIN " . DB_PREFIX . "attribute_group ag ON (a.attribute_id=ag.attribute_group_id)" .
+			" LEFT JOIN " . DB_PREFIX . "attribute_group ag ON (a.attribute_group_id=ag.attribute_group_id)" .
 			" WHERE pa.product_id = '" . (int)$product_id . "' GROUP BY ag.attribute_group_id ORDER BY ag.sort_order, ag.name";
 			
-		$attribute_groups = $this->query_rows($query);
+		$attribute_groups = $this->queryRows($query);
 		
-		$this->translation->translate_all('attribute_group', 'attribute_group_id', $attribute_groups);
-		
-		foreach ($attribute_groups as &$attribute_group) {
-			$query =
-				"SELECT a.*, pa.text FROM " . DB_PREFIX . "product_attribute pa" .
-				" LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id)" .
-				" WHERE pa.product_id = '" . (int)$product_id . "' AND a.attribute_group_id = '" . (int)$attribute_group['attribute_group_id'] . "' ORDER BY a.sort_order, a.name";
+		if (!empty($attribute_groups)) {
+			$this->translation->translate_all('attribute_group', 'attribute_group_id', $attribute_groups);
 			
-			$attributes = $this->query_rows($query);
-			
-			$this->translation->translate_all('attribute', 'attribute_id', $attributes);
-			
-			$attribute_group['attributes'] = $attributes;
+			foreach ($attribute_groups as &$attribute_group) {
+				$query =
+					"SELECT a.*, pa.text FROM " . DB_PREFIX . "product_attribute pa" .
+					" LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id)" .
+					" WHERE pa.product_id = '" . (int)$product_id . "' AND a.attribute_group_id = '" . (int)$attribute_group['attribute_group_id'] . "' ORDER BY a.sort_order, a.name";
+				
+				$attributes = $this->queryRows($query);
+				
+				$this->translation->translate_all('attribute', 'attribute_id', $attributes);
+				
+				$attribute_group['attributes'] = $attributes;
+			}
 		}
 		
 		return $attribute_groups;
@@ -331,9 +345,7 @@ class Catalog_Model_Catalog_Product extends Model
 		
 	public function getProductImages($product_id)
 	{
-		$result = $this->query("SELECT * FROM " . DB_PREFIX . "product_image WHERE product_id = '" . (int)$product_id . "' ORDER BY sort_order ASC");
-
-		return $result->rows;
+		return $this->queryColumn("SELECT image FROM " . DB_PREFIX . "product_image WHERE product_id = '" . (int)$product_id . "' ORDER BY sort_order ASC");
 	}
 	
 	public function getProductRelated($product_id)
@@ -351,12 +363,12 @@ class Catalog_Model_Catalog_Product extends Model
 	
 	public function getProductTags($product_id)
 	{
-		return $this->query_rows("SELECT * FROM " . DB_PREFIX . "product_tag WHERE product_id = '" . (int)$product_id . "' AND language_id = '" . (int)$this->config->get('config_language_id') . "'");
+		return $this->queryRows("SELECT t.* FROM " . DB_PREFIX . "product_tag pt LEFT JOIN " . DB_PREFIX . "tag t ON (pt.tag_id=t.tag_id) WHERE product_id = " . (int)$product_id);
 	}
 	
 	public function getProductLayoutId($product_id)
 	{
-		return $this->query_var("SELECT layout_id FROM " . DB_PREFIX . "product_to_layout WHERE product_id = '" . (int)$product_id . "' AND store_id = '" . (int)$this->config->get('config_store_id') . "'");
+		return $this->queryVar("SELECT layout_id FROM " . DB_PREFIX . "product_to_layout WHERE product_id = '" . (int)$product_id . "' AND store_id = '" . (int)$this->config->get('config_store_id') . "'");
 	}
 	
 	public function getCategories($product_id)
@@ -376,7 +388,7 @@ class Catalog_Model_Catalog_Product extends Model
 			$query = "SELECT attribute_id, name FROM " . DB_PREFIX . "attribute" .
 						" WHERE attribute_group_id = '$attribute_group_id' ORDER BY name";
 			
-			$attributes = $this->query_rows($query);
+			$attributes = $this->queryRows($query);
 			
 			$this->translation->translate_all('attribute', 'attribute_id', $attributes);
 			

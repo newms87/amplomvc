@@ -7,7 +7,7 @@ class Admin_Controller_Module_Affiliate extends Controller
 	{
 		$this->template->load('module/affiliate');
 
-		$this->load->language('module/affiliate');
+		$this->language->load('module/affiliate');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

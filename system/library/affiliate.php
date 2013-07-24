@@ -52,7 +52,7 @@ class Affiliate extends Library
 				return false;
 		}
   	}
-  
+
   	public function logout()
   	{
 		unset($this->session->data['affiliate_id']);
@@ -64,7 +64,7 @@ class Affiliate extends Library
 		$this->telephone = '';
 		$this->fax = '';
   	}
-  
+
   	public function isLogged()
   	{
 		return $this->affiliate_id;
@@ -79,22 +79,22 @@ class Affiliate extends Library
   	{
 		return $this->firstname;
   	}
-  
+
   	public function getLastName()
   	{
 		return $this->lastname;
   	}
-  
+
   	public function getEmail()
   	{
 		return $this->email;
   	}
-  
+
   	public function getTelephone()
   	{
 		return $this->telephone;
   	}
-  
+
   	public function getFax()
   	{
 		return $this->fax;

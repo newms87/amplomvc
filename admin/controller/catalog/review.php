@@ -5,7 +5,7 @@ class Admin_Controller_Catalog_Review extends Controller
 
 	public function index()
 	{
-		$this->load->language('catalog/review');
+		$this->language->load('catalog/review');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -14,7 +14,7 @@ class Admin_Controller_Catalog_Review extends Controller
 
 	public function insert()
 	{
-		$this->load->language('catalog/review');
+		$this->language->load('catalog/review');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -45,7 +45,7 @@ class Admin_Controller_Catalog_Review extends Controller
 
 	public function update()
 	{
-		$this->load->language('catalog/review');
+		$this->language->load('catalog/review');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -76,7 +76,7 @@ class Admin_Controller_Catalog_Review extends Controller
 
 	public function delete()
 	{
-		$this->load->language('catalog/review');
+		$this->language->load('catalog/review');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -349,7 +349,11 @@ class Admin_Controller_Catalog_Review extends Controller
 		} else {
 			$this->data['status'] = '';
 		}
-
+		
+		//Ajax Urls
+		$this->data['url_product_autocomplete'] = $this->url->ajax('catalog/product/autocomplete');
+		
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'

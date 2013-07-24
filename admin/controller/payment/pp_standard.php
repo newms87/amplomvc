@@ -4,13 +4,19 @@ class Admin_Controller_Payment_PpStandard extends Controller
 	public function index()
 	{
 		$this->template->load('payment/pp_standard');
-		$this->load->language('payment/pp_standard');
+		$this->language->load('payment/pp_standard');
 
 		$this->document->setTitle($this->_('heading_title'));
-
+		
+		//TODO: Move Payments / Shipping (other extensions) to the block/block style
+		// where status, and other data is handled separately
 		if ($this->request->isPost() && $this->validate()) {
 			$this->Model_Setting_Setting->editSetting('pp_standard', $_POST);
-
+			
+			$status = !empty($_POST['status']) ? 1 : 0;
+			
+			$this->db->query("UPDATE " . DB_PREFIX . "extension SET status = $status WHERE `code` = 'pp_standard' AND type = 'payment'");
+			
 			$this->message->add('success', $this->_('text_success'));
 
 			$this->url->redirect($this->url->link('extension/payment'));
@@ -26,6 +32,7 @@ class Admin_Controller_Payment_PpStandard extends Controller
 
 		$defaults = array(
 			'pp_standard_email' => '',
+			'pp_standard_test_email' => '',
 			'pp_standard_test' => '',
 			'pp_standard_transaction' => '',
 			'pp_standard_debug' => '',
@@ -41,11 +48,12 @@ class Admin_Controller_Payment_PpStandard extends Controller
 			'pp_standard_reversed_status_id' => '',
 			'pp_standard_voided_status_id' => '',
 			'pp_standard_geo_zone_id' => '',
-			'pp_standard_status' => '',
 			'pp_standard_sort_order' => '',
 			'pp_standard_page_style' => '',
 			'pp_standard_pdt_enabled' => false,
+			'pp_standard_pdt_token' => '',
 			'pp_standard_auto_return_url' => '',
+			'status' => 1,
 		);
 		
 		foreach ($defaults as $key => $default) {
@@ -58,9 +66,9 @@ class Admin_Controller_Payment_PpStandard extends Controller
 			}
 		}
 		
-		$this->data['data_order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
+		$this->data['data_order_statuses'] = $this->order->getOrderStatuses();
 		
-		$this->data['data_geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
+		$this->data['data_geo_zones'] = array(0 => $this->_('text_all_zones')) + $this->Model_Localisation_GeoZone->getGeoZones();
 
 		$this->children = array(
 			'common/header',
@@ -76,8 +84,16 @@ class Admin_Controller_Payment_PpStandard extends Controller
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
-		if (!$_POST['pp_standard_email']) {
+		if (!$this->validation->email($_POST['pp_standard_email'])) {
 			$this->error['pp_standard_email'] = $this->_('error_email');
+		}
+
+		if ($_POST['pp_standard_test_email'] && !$this->validation->email($_POST['pp_standard_test_email'])) {
+			$this->error['pp_standard_test_email'] = $this->_('error_test_email');
+		}
+		
+		if ($_POST['pp_standard_pdt_enabled'] && !$_POST['pp_standard_pdt_token']) {
+			$this->error['pp_standard_pdt_token'] = $this->_('error_pdt_token');
 		}
 
 		return $this->error ? false : true;

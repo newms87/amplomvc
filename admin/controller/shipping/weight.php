@@ -7,7 +7,7 @@ class Admin_Controller_Shipping_Weight extends Controller
 	{
 		$this->template->load('shipping/weight');
 
-		$this->load->language('shipping/weight');
+		$this->language->load('shipping/weight');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

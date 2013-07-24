@@ -3,14 +3,14 @@ class Admin_Controller_Catalog_Information extends Controller
 {
 	public function index()
 	{
-		$this->load->language('catalog/information');
+		$this->language->load('catalog/information');
 
 		$this->getList();
 	}
 
 	public function insert()
 	{
-		$this->load->language('catalog/information');
+		$this->language->load('catalog/information');
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Information->addInformation($_POST);
@@ -27,7 +27,7 @@ class Admin_Controller_Catalog_Information extends Controller
 
 	public function update()
 	{
-		$this->load->language('catalog/information');
+		$this->language->load('catalog/information');
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Information->editInformation($_GET['information_id'], $_POST);
@@ -44,7 +44,7 @@ class Admin_Controller_Catalog_Information extends Controller
  	
 	public function copy()
 	{
-		$this->load->language('catalog/information');
+		$this->language->load('catalog/information');
 
 		if (isset($_GET['information_id']) && $this->validateCopy()) {
 			$this->Model_Catalog_Information->copyInformation($_GET['information_id']);
@@ -52,7 +52,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 				
-				$this->url->redirect($this->url->link('catalog/information', $this->url->get_query_exclude('information_id')));
+				$this->url->redirect($this->url->link('catalog/information', $this->url->getQueryExclude('information_id')));
 			}
 		}
 
@@ -61,7 +61,7 @@ class Admin_Controller_Catalog_Information extends Controller
 	
 	public function delete()
 	{
-		$this->load->language('catalog/information');
+		$this->language->load('catalog/information');
 
 		if (isset($_GET['information_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_Information->deleteInformation($_GET['information_id']);
@@ -69,7 +69,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 				
-				$this->url->redirect($this->url->link('catalog/information', $this->url->get_query_exclude('information_id')));
+				$this->url->redirect($this->url->link('catalog/information', $this->url->getQueryExclude('information_id')));
 			}
 		}
 
@@ -107,7 +107,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			if (!$this->error && !$this->message->error_set()) {
 				$this->message->add('success',$this->_('text_success'));
 				
-				$this->url->redirect($this->url->link('catalog/information', $this->url->get_query_exclude('action')));
+				$this->url->redirect($this->url->link('catalog/information', $this->url->getQueryExclude('action')));
 			}
 		}
 
@@ -116,10 +116,13 @@ class Admin_Controller_Catalog_Information extends Controller
 	
 	private function getList()
 	{
+		//Page Title
 		$this->document->setTitle($this->_('heading_title'));
 		
+		//The Template
 		$this->template->load('catalog/information_list');
-
+		
+		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/information'));
 		
@@ -137,7 +140,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			'type' => 'multiselect',
 			'display_name' => $this->_('column_store'),
 			'filter' => true,
-			'build_config' => array('store_id' => 'name'),
+			'build_config' => array('store_id' , 'name'),
 			'build_data' => $this->Model_Setting_Store->getStores(),
 			'sortable' => false,
 		);
@@ -150,22 +153,14 @@ class Admin_Controller_Catalog_Information extends Controller
 			'sortable' => true,
 		);
 		
-		//The Sort data
-		$sort_filter = array();
+		//Get Sorted / Filtered Data
+		$sort = $this->sort->getQueryDefaults('title', 'ASC');
+		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 		
-		$this->sort->load_query_defaults($sort_filter, 'title', 'ASC');
-		
-		//Filter
-		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
-		
-		if ($filter_values) {
-			$sort_filter += $filter_values;
-		}
-
-		$information_total = $this->Model_Catalog_Information->getTotalInformations($sort_filter);
-		$informations = $this->Model_Catalog_Information->getInformations($sort_filter);
+		$information_total = $this->Model_Catalog_Information->getTotalInformations($filter);
+		$informations = $this->Model_Catalog_Information->getInformations($sort + $filter);
  		
-		$url_query = $this->url->get_query_exclude('information_id');
+		$url_query = $this->url->getQueryExclude('information_id');
 		
 		foreach ($informations as &$information) {
 			$information['actions'] = array(
@@ -186,51 +181,43 @@ class Admin_Controller_Catalog_Information extends Controller
 			$information['stores'] = $this->Model_Catalog_Information->getInformationStores($information['information_id']);
 		} unset($information);
 		
-		//The table template data
+		//Build The Table
 		$tt_data = array(
 			'row_id'		=> 'information_id',
-			'route'		=> 'catalog/information',
-			'sort'		=> $sort_filter['sort'],
-			'order'		=> $sort_filter['order'],
-			'page'		=> $sort_filter['page'],
-			'sort_url'	=> $this->url->link('catalog/information', $this->url->get_query('filter')),
-			'columns'	=> $columns,
-			'data'		=> $informations,
 		);
 		
-		$tt_data += $this->language->data;
-		
-		//Build the table template
 		$this->table->init();
-		$this->table->set_template('table/list_view');
-		$this->table->set_template_data($tt_data);
-		$this->table->map_attribute('filter_value', $filter_values);
+		$this->table->setTemplate('table/list_view');
+		$this->table->setColumns($columns);
+		$this->table->setRows($informations);
+		$this->table->setTemplateData($tt_data);
+		$this->table->mapAttribute('filter_value', $filter);
 		
 		$this->data['list_view'] = $this->table->render();
 		
 		//Batch Actions
 		$this->data['batch_actions'] = array(
 			'enable'	=> array(
-				'label' => "Enable"
+				'label' => $this->_('text_enable')
 			),
 			'disable'=>	array(
-				'label' => "Disable",
+				'label' => $this->_('text_disable'),
 			),
 			'copy' => array(
-				'label' => "Copy",
+				'label' => $this->_('text_copy'),
 			),
 			'delete' => array(
-				'label' => "Delete",
+				'label' => $this->_('text_delete'),
 			),
 		);
 		
 		$this->data['batch_update'] = html_entity_decode($this->url->link('catalog/information/batch_update', $url_query));
 		
+		//Render Limit Menu
+		$this->data['limits'] = $this->sort->render_limit();
+		
 		//Action Buttons
 		$this->data['insert'] = $this->url->link('catalog/information/insert');
-		
-		//Item Limit Menu
-		$this->data['limits'] = $this->sort->render_limit();
 		
 		//Pagination
 		$this->pagination->init();
@@ -244,6 +231,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			'common/footer'
 		);
 		
+		//Render
 		$this->response->setOutput($this->render());
 	}
 
@@ -375,15 +363,15 @@ class Admin_Controller_Catalog_Information extends Controller
 		}
 		
 		foreach ($information_ids as $information_id) {
-			if ($this->config->get('config_account_id') == $information_id) {
+			if ($this->config->get('config_account_terms_info_id') == $information_id) {
 				$this->error['warning' . $information_id] = $this->_('error_account');
 			}
 			
-			if ($this->config->get('config_checkout_id') == $information_id) {
+			if ($this->config->get('config_checkout_terms_info_id') == $information_id) {
 				$this->error['warning' . $information_id] = $this->_('error_checkout');
 			}
 			
-			if ($this->config->get('config_affiliate_id') == $information_id) {
+			if ($this->config->get('config_affiliate_terms_info_id') == $information_id) {
 				$this->error['warning' . $information_id] = $this->_('error_affiliate');
 			}
 						

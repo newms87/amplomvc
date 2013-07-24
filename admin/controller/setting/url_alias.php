@@ -4,7 +4,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 
 	public function index()
 	{
-		$this->load->language('setting/url_alias');
+		$this->language->load('setting/url_alias');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -13,7 +13,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 			
   	public function insert()
   	{
-		$this->load->language('setting/url_alias');
+		$this->language->load('setting/url_alias');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -30,7 +30,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 
   	public function update()
   	{
-		$this->load->language('setting/url_alias');
+		$this->language->load('setting/url_alias');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -47,7 +47,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 
   	public function delete()
   	{
-		$this->load->language('setting/url_alias');
+		$this->language->load('setting/url_alias');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -167,11 +167,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
 	}
 	
 	private function get_url($filters=null)

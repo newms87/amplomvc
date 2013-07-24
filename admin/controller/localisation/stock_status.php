@@ -5,7 +5,7 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 	
   	public function index()
   	{
-		$this->load->language('localisation/stock_status');
+		$this->language->load('localisation/stock_status');
 	
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -14,7 +14,7 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 				
   	public function insert()
   	{
-		$this->load->language('localisation/stock_status');
+		$this->language->load('localisation/stock_status');
 	
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -45,7 +45,7 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 
   	public function update()
   	{
-		$this->load->language('localisation/stock_status');
+		$this->language->load('localisation/stock_status');
 	
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -76,7 +76,7 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 
   	public function delete()
   	{
-		$this->load->language('localisation/stock_status');
+		$this->language->load('localisation/stock_status');
 	
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -327,10 +327,6 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 			}
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
   	}
 }

@@ -4,7 +4,7 @@ class Admin_Controller_Common_Home extends Controller
 	public function index()
 	{
 		$this->template->load('common/home');
-		$this->load->language('common/home');
+		$this->language->load('common/home');
 		
 		if ($this->user->isDesigner()) {
 			$this->document->setTitle($this->_('heading_title_restricted'));;
@@ -16,9 +16,9 @@ class Admin_Controller_Common_Home extends Controller
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 
-		$this->data['total_sale'] = $this->currency->format($this->Model_Sale_Order->getTotalSales(), $this->config->get('config_currency'));
-		$this->data['total_sale_year'] = $this->currency->format($this->Model_Sale_Order->getTotalSalesByYear(date('Y')), $this->config->get('config_currency'));
-		$this->data['total_order'] = $this->Model_Sale_Order->getTotalOrders();
+		$this->data['total_sale'] = $this->currency->format($this->System_Model_Order->getGrossSales(), $this->config->get('config_currency'));
+		$this->data['total_sale_year'] = $this->currency->format($this->System_Model_Order->getGrossSales(array('years' => array(date('Y')))), $this->config->get('config_currency'));
+		$this->data['total_order'] = $this->System_Model_Order->getTotalOrders();
 		
 		$this->data['total_customer'] = $this->Model_Sale_Customer->getTotalCustomers();
 		$this->data['total_customer_approval'] = $this->Model_Sale_Customer->getTotalCustomersAwaitingApproval();
@@ -28,39 +28,49 @@ class Admin_Controller_Common_Home extends Controller
 		
 		$this->data['total_affiliate'] = $this->Model_Sale_Affiliate->getTotalAffiliates();
 		$this->data['total_affiliate_approval'] = $this->Model_Sale_Affiliate->getTotalAffiliatesAwaitingApproval();
-				
-		$this->data['orders'] = array();
 		
+		//Last 10 orders
 		$data = array(
 			'sort'  => 'o.date_added',
 			'order' => 'DESC',
 			'start' => 0,
-			'limit' => 10
+			'limit' => 10,
+			'order_status_ids' => array(0),
 		);
 		
-		$results = $this->Model_Sale_Order->getOrders($data);
+		$orders = $this->System_Model_Order->getOrders($data);
 		
-		foreach ($results as $result) {
-			$action = array();
+		foreach ($orders as &$order) {
+			$order['action'] = array(
+				'view' => array(
+					'text' => $this->_('text_view'),
+					'href' => $this->url->link('sale/order/info', 'order_id=' . $order['order_id'])
+				),
+			);
 			
-			$action[] = array(
-				'text' => $this->_('text_view'),
-				'href' => $this->url->link('sale/order/info', 'order_id=' . $result['order_id'])
-			);
-					
-			$this->data['orders'][] = array(
-				'order_id'	=> $result['order_id'],
-				'customer'	=> $result['customer'],
-				'status'	=> $result['status'],
-				'date_added' => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
-				'total'		=> $this->currency->format($result['total'], $result['currency_code'], $result['currency_value']),
-				'action'	=> $action
-			);
-		}
-
+			$order['order_status'] = $this->order->getOrderStatus($order['order_status_id']);
+			
+			$customer = $this->System_Model_Customer->getCustomer($order['customer_id']);
+			
+			if (!$customer) {
+				$customer['firstname'] = 'Guest';
+				$customer['lastname'] = '';
+			}
+			
+			$order['customer'] = $customer;
+			
+			$order['date_added'] = $this->date->format($order['date_added'], 'short');
+			$order['total'] =	$this->currency->format($order['total'], $order['currency_code'], $order['currency_value']);
+		} unset($order);
+		
+		$this->data['orders'] = $orders;
+		
 		if ($this->config->get('config_currency_auto')) {
 			$this->Model_Localisation_Currency->updateCurrencies();
 		}
+		
+		
+		$this->data['url_chart'] = $this->url->link('common/home/chart');
 		
 		$this->children = array(
 			'common/header',
@@ -72,7 +82,7 @@ class Admin_Controller_Common_Home extends Controller
 	
 	public function chart()
 	{
-		$this->load->language('common/home');
+		$this->language->load('common/home');
 		
 		$data = array();
 		

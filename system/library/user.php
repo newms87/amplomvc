@@ -144,7 +144,7 @@ class User extends Library
   	{
 		return $this->user_id ? true : false;
   	}
-  
+
   	public function getId()
   	{
 		return $this->user_id;

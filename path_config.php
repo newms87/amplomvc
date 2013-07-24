@@ -7,6 +7,7 @@ define('HTTP_CATALOG', SITE_URL . 'catalog/');
 define('HTTP_IMAGE', SITE_URL .'image/');
 define('HTTP_JS', SITE_URL . 'system/javascript/');
 define('HTTP_THEME_JS', HTTP_CATALOG . 'view/javascript/');
+define('HTTP_AJAX', SITE_URL . 'ajax/');
 
 // HTTPS
 define('HTTPS_ROOT', SITE_SSL);

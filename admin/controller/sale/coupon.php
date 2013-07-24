@@ -4,7 +4,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 	
   	public function index()
   	{
-		$this->load->language('sale/coupon');
+		$this->language->load('sale/coupon');
 		
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -13,7 +13,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 
   	public function insert()
   	{
-		$this->load->language('sale/coupon');
+		$this->language->load('sale/coupon');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -32,7 +32,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 
   	public function update()
   	{
-		$this->load->language('sale/coupon');
+		$this->language->load('sale/coupon');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -51,7 +51,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 
   	public function delete()
   	{
-		$this->load->language('sale/coupon');
+		$this->language->load('sale/coupon');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -245,6 +245,10 @@ class Admin_Controller_Sale_Coupon extends Controller
 		$this->data['data_geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
 		
 		$this->data['categories'] = $this->Model_Catalog_Category->getCategoriesWithParents();
+		
+		//Ajax Urls
+		$this->data['url_product_autocomplete'] = $this->url->ajax('catalog/product/autocomplete');
+		$this->data['url_coupon_history'] = $this->url->ajax('sale/coupon/history');
 		
 		$this->children = array(
 			'common/header',

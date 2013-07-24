@@ -1,6 +1,7 @@
-<?= $header; ?><?= $column_left; ?><?= $column_right; ?>
+<?= $header; ?>
+<?= $column_left; ?><?= $column_right; ?>
 <div id="content" style='padding-top:0'><?= $content_top; ?>
-	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->breadcrumb->render(); ?>
 	<h1><?= $heading_title; ?></h1>
 	<? $step = 1;?>
 	<div id='checkout_process' class="checkout">
@@ -32,7 +33,7 @@ $(document).ready(function() {
 
 function load_checkout_item(c_item, route){
 	if(typeof c_item == 'string'){
-			c_item = $('#' + c_item);
+		c_item = $('#' + c_item);
 	}
 
 	route = route || c_item.attr('route');
@@ -40,7 +41,7 @@ function load_checkout_item(c_item, route){
 	if(!c_item || !route) return;
 	
 	$.ajax({
-			url: "<?= HTTP_CATALOG . "index.php?route="; ?>" + route,
+			url: "<?= HTTP_ROOT; ?>" + route,
 			dataType: 'html',
 			beforeSend: page_loading,
 			complete: page_received,
@@ -50,8 +51,8 @@ function load_checkout_item(c_item, route){
 				c_content.html(html);
 				
 				if($('.active_checkout_item').length){
-						scroll_to = $('.active_checkout_item').position().top;
-						$('body,html').animate({scrollTop: scroll_to}, 400);
+					scroll_to = $('.active_checkout_item').position().top;
+					$('body,html').animate({scrollTop: scroll_to}, 400);
 				}
 				
 				$('.active_checkout_item .checkout-content').slideUp('slow')
@@ -75,6 +76,7 @@ function load_checkout_item(c_item, route){
 }
 
 function load_next_checkout_item(){
+	clear_msgs();
 	load_checkout_item($('.active_checkout_item').next());
 }
 

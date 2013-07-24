@@ -10,7 +10,7 @@ $_['data_stock_display_types'] = array(
 		10 => "Display quantity up to 10"
 	);
 
-// Text
+//Text
 $_['text_success']				= 'Success: You have modified settings!';
 $_['text_image_manager']		= 'Image Manager';
 $_['text_browse']				= 'Browse Files';
@@ -21,8 +21,10 @@ $_['text_mail']					= 'Mail';
 $_['text_smtp']					= 'SMTP';
 $_['text_mode_explanation']  = "The file permissions are set user (owner), group, others == ugo == 755 == user has full, group has read & write, others have read & write permissions.";
 $_['text_settings']		= 'Settings';
+$_['text_add_return_policy'] = "Add a new <a href=\"%s\" target=\"_blank\">Return Policy</a>";
+$_['text_add_shipping_policy'] = "Add a new <a href=\"%s\" target=\"_blank\">Shipping Policy</a>";
 
-// Entry
+//Entry
 $_['entry_name']					= 'Store Name:';
 $_['entry_owner']				= 'Store Owner:';
 $_['entry_address']				= 'Address:';
@@ -52,7 +54,13 @@ $_['entry_weight_class']		= 'Weight Class:';
 $_['entry_catalog_limit'] 		= 'Default Items Per Page (Catalog):<br /><span class="help">Determines how many catalog items are shown per page (products, categories, etc)</span>';
 $_['entry_admin_limit']			= 'Default Items Per Page (Admin):<br /><span class="help">Determines how many admin items are shown per page (orders, customers, etc)</span>';
 $_['entry_performance_log']		= 'Performance Logging:';
+$_['entry_default_return_policy'] = "Default Return Policy:";
+$_['entry_default_shipping_policy'] = "Default Shipping Policy:";
+$_['entry_shipping_return_policy_info'] = "Shipping / Returns Policy Information:";
+$_['entry_show_category_image'] = "Show Category Image:";
+$_['entry_show_category_description'] = "Show Category Description:";
 $_['entry_cache_ignore']		= 'Cache Ignore List:<span class="help">(comma separated list)</span>';
+$_['entry_cart_show_return_policy'] = "Display Return Policy:<span class=\"help\">(eg: final sale, # days to return, etc.) as a column in the cart</span>";
 $_['entry_tax']					= 'Display Prices With Tax:';
 $_['entry_tax_default_id']					= 'Default Tax Class:';
 $_['entry_tax_default']		= 'Use Store Tax Address:<br /><span class="help">Use the store address to calculate taxes if no one is logged in. You can choose to use the store address for the customers shipping or payment address.</span>';
@@ -70,12 +78,15 @@ $_['entry_commission']			= 'Affiliate Commission (%):<br /><span class="help">Th
 $_['entry_breadcrumb_display']			= 'Display Breadcrumbs? <span class="help">Display breadcrumbs in the storefront? (breadcrumbs will still display in the admin panel)</span>';
 $_['entry_breadcrumb_separator']			= 'Breadcrumb Separator:';
 $_['entry_breadcrumb_separator_admin']			= 'Admin Breadcrumb Separator:';
+$_['entry_show_product_list_hover_image'] = "Product List Hover Image:<span class=\"help\">For the Product List pages, show an alternate image when moving the mouse over the product block</span>";
 $_['entry_stock_display']		= 'Display Stock:<br /><span class="help">Display stock quantity on the product page.</span>';
 $_['entry_stock_warning']		= 'Show Out Of Stock Warning:<br /><span class="help">Display out of stock message on the shopping cart page if a product is out of stock but stock checkout is yes. (Warning always shows if stock checkout is no)</span>';
 $_['entry_stock_checkout']	= 'Stock Checkout:<br /><span class="help">Allow customers to still checkout if the products they are ordering are not in stock.</span>';
 $_['entry_stock_status']		= 'Out of Stock Status:<br /><span class="help">Set the default out of stock status selected in product edit.</span>';
-$_['entry_order_status']		= 'Order Status:<br /><span class="help">Set the default order status when an order is processed.</span>';
-$_['entry_complete_status']	= 'Complete Order Status:<br /><span class="help">Set the order status the customers order must reach before they are allowed to access their downloadable products and gift vouchers.</span>';
+$_['entry_order_received_status']		= 'Order Received Status:<br /><span class="help">Set the initial order status when an order is received.</span>';
+$_['entry_order_complete_status']	= 'Complete Order Status:<br /><span class="help">Set the order status for when an order has been fully paid for and products are deducted from the inventory (Downloads / Gift Vouchers are accessible and Products requiring shipping should be shipped).</span>';
+$_['entry_order_blacklist_status']		= 'Order Blacklist Status:<br /><span class="help">Set the order status when an order is associated with a blacklisted account.</span>';
+$_['entry_order_fraud_status']		= 'Fraud Order Status:<br /><span class="help">Orders detected as potentially fraudulent will be assigned this order status and will not be allowed to reach the complete status unless manually overridden.</span>';
 $_['entry_return_status']		= 'Return Status:<br /><span class="help">Set the default return status when an returns request is submitted.</span>';
 $_['entry_review']				= 'Allow Reviews:<br /><span class="help">Enable/Disable new review entry and display of existing reviews</span>';
 $_['entry_allow_sharing'] = "Allow Social Sharing:";
@@ -114,7 +125,6 @@ $_['entry_alert_emails']		= 'Additional Alert E-Mails:<br /><span class="help">A
 $_['entry_fraud_detection']	= 'Use MaxMind Fraud Detection System:<br /><span class="help">MaxMind is a fraud detections service. If you don\'t have a license key you can <a onclick="window.open(\'http://www.maxmind.com/?rId=opencart\');"><u>sign up here</u></a>. Once you have obtained a key copy and paste it into the field below.</span>';
 $_['entry_fraud_key']			= 'MaxMind License Key:</span>';
 $_['entry_fraud_score']		= 'MaxMind Risk Score:<br /><span class="help">The higher the score the more likly the order is fraudulent. Set a score between 0 - 100.</span>';
-$_['entry_fraud_status']		= 'MaxMind Fraud Order Status:<br /><span class="help">Orders over your set score will be assigned this order status and will not be allowed to reach the complete status automatically.</span>';
 $_['entry_use_ssl']				= 'Use SSL:<br /><span class="help">To use SSL check with your host if a SSL certificate is installed and added the SSL URL to the catalog and admin config files.</span>';
 $_['entry_seo_url']				= 'Use SEO URL\'s:<br /><span class="help">To use SEO URL\'s apache module mod-rewrite must be installed and you need to rename the htaccess.txt to .htaccess.</span>';
 $_['entry_maintenance']		= 'Maintenance Mode:<br /><span class="help">Prevents customers from browsing your store. They will instead see a maintenance message. If logged in as admin, you will see the store as normal.</span>';
@@ -122,9 +132,10 @@ $_['entry_image_max_mem']		= 'Image Resize Max Memory<span class="help">The maxi
 $_['entry_encryption']			= 'Encryption Key:<br /><span class="help">Please provide a secret key that will be used to encrypt private information when processing orders.</span>';
 $_['entry_compression']		= 'Output Compression Level:<br /><span class="help">GZIP for more efficient transfer to requesting clients. Compression level must be between 0 - 9</span>';
 $_['entry_debug_send_emails']  = 'Send Emails to third parties? <span class="help">Emails sent to people other than the current user and the system emails</span>';
+$_['entry_log_filename']	= 'Log Filename:';
+$_['entry_error_filename']	= 'Error Log Filename:';
 $_['entry_error_display']		= 'Display Errors:';
 $_['entry_error_log']			= 'Log Errors:';
-$_['entry_error_filename']	= 'Error Log Filename:';
 $_['entry_statcounter']		= 'Stat Counter Code:<span class="help">Sign up at <a onclick="window.open(\'http://www.statcounter.com/sign-up/\');"><u>Stat Counter</u></a> and copy and past the code in this field.</span>';
 $_['entry_statcounter_project'] = 'Project ID';
 $_['entry_statcounter_security'] = 'Security Code';
@@ -152,7 +163,7 @@ $_['entry_plugin_dir_mode'] = "Plugin Directory Permissions";
 $_['tab_mail_msgs']			= 'Mail Messages';
 $_['tab_file_permissions']			= 'File Permissions';
 
-// Error
+//Error
 $_['error_warning']				= 'Warning: Please check the form carefully for errors!';
 $_['error_permission']			= 'Warning: You do not have permission to modify settings!';
 $_['error_name']					= 'Store Name must be between 3 and 32 characters!';

@@ -1,17 +1,9 @@
 <?php
-//Data
-$_['data_statuses'] = $_['statuses']				= array(0=>'Disabled',1=>'Enabled');
-$_['data_statuses_blank'] = $_['statuses_blank'] = array(''=>'',0=>'Disabled',1=>'Enabled');
-
-$_['data_yes_no'] = $_['yes_no']					= array(1=>'Yes',0=>'No');
-$_['data_no_yes'] = $_['no_yes']					= array(0=>'No',1=>'Yes');
-$_['data_yes_no_blank'] = $_['yes_no_blank']	= array(''=>'',1=>'Yes',0=>'No');
-$_['data_no_yes_blank'] = $_['no_yes_blank']	= array(''=>'',0=>'No',1=>'Yes');
-
-
 // Text
 $_['text_yes']					= 'Yes';
 $_['text_no']					= 'No';
+$_['text_enable']				= 'Enable';
+$_['text_disable']			= 'Disable';
 $_['text_enabled']				= 'Enabled';
 $_['text_disabled']			= 'Disabled';
 $_['text_none']					= ' --- None --- ';
@@ -25,27 +17,25 @@ $_['text_close']				= 'Close';
 $_['text_pagination']			= 'Showing {start} to {end} of {total} ({pages} Pages)';
 $_['text_no_results']			= 'No results!';
 $_['text_separator']			= ' &gt; ';
+$_['text_insert']					= 'Add';
 $_['text_edit']					= 'Edit';
 $_['text_copy']					= 'Copy';
-$_['text_delete']			= 'Delete';
+$_['text_delete']					= 'Delete';
 $_['text_view']					= 'View';
 $_['text_home']					= 'Home';
 $_['text_browse']				= 'Browse';
 $_['text_clear']				= 'Clear';
 $_['text_batch_action']		= 'Batch Action:';
 $_['text_autocomplete']		= '<span class="help">(autocomplete)</span>';
-$_['text_above_content']		= "Above Content";
-$_['text_content_top']		= "Content Top";
-$_['text_content_bottom']		= "Content Bottom";
-$_['text_column_left']		= "Column Left";
-$_['text_column_right']		= "Column Right";
+$_['text_modify_filter']		= '+ Filter';
 
-//Positions
-$_['position_above_content']	= "Above Content";
-$_['position_content_top']		= "Content Top";
-$_['position_content_bottom']	= "Content Bottom";
-$_['position_column_left']		= "Column Left";
-$_['position_column_right']	= "Column Right";
+//Data
+$_['data_statuses'] = $_['statuses'] = array(0 => $_['text_disabled'], 1 => $_['text_enabled']);
+$_['data_statuses_blank']	= array(''=>'') + $_['data_statuses'];
+$_['data_yes_no']			= array(1 => $_['text_yes'], 0 => $_['text_no']);
+$_['data_no_yes']			= array(0 => $_['text_no'], 1 => $_['text_yes']);
+$_['data_yes_no_blank'] = array(''=>'') + $_['data_yes_no'];
+$_['data_no_yes_blank'] = array(''=>'') + $_['data_no_yes'];
 
 //Entry
 $_['entry_date_from'] = "";
@@ -131,15 +121,3 @@ $_['tab_total']					= 'Totals';
 $_['tab_transaction']			= 'Transactions';
 $_['tab_voucher']				= 'Vouchers';
 $_['tab_voucher_history']	= 'Voucher History';
-
-$_['shipping_return_policy'] = "Orders will ship within 24 hours of purchase";
-
-// Error
-$_['error_upload_1']			= 'Warning: The uploaded file exceeds the upload_max_filesize directive in php.ini!';
-$_['error_upload_2']			= 'Warning: The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form!';
-$_['error_upload_3']			= 'Warning: The uploaded file was only partially uploaded!';
-$_['error_upload_4']			= 'Warning: No file was uploaded!';
-$_['error_upload_6']			= 'Warning: Missing a temporary folder!';
-$_['error_upload_7']			= 'Warning: Failed to write file to disk!';
-$_['error_upload_8']			= 'Warning: File upload stopped by extension!';
-$_['error_upload_999']		= 'Warning: No error code available!';

@@ -6,7 +6,7 @@ class Admin_Controller_Shipping_Flat extends Controller
 	{
 		$this->template->load('shipping/flat');
 
-		$this->load->language('shipping/flat');
+		$this->language->load('shipping/flat');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

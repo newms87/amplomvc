@@ -5,7 +5,7 @@ class Admin_Controller_User_User extends Controller
 	
   	public function index()
   	{
-		$this->load->language('user/user');
+		$this->language->load('user/user');
 
 		$this->document->setTitle($this->_('heading_title'));
 	
@@ -14,7 +14,7 @@ class Admin_Controller_User_User extends Controller
 	
   	public function insert()
   	{
-		$this->load->language('user/user');
+		$this->language->load('user/user');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -39,7 +39,7 @@ class Admin_Controller_User_User extends Controller
 
   	public function update()
   	{
-		$this->load->language('user/user');
+		$this->language->load('user/user');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -63,7 +63,7 @@ class Admin_Controller_User_User extends Controller
 
   	public function delete()
   	{
-		$this->load->language('user/user');
+		$this->language->load('user/user');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -303,11 +303,7 @@ class Admin_Controller_User_User extends Controller
 			}
 		}
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}
+		return $this->error ? false : true;
   	}
 	
 	private function verify_user($user_id = null)

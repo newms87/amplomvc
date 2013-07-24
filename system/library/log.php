@@ -1,5 +1,5 @@
 <?php
-class Log 
+class Log
 {
 	private $filename;
 	private $store_name;

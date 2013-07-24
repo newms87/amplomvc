@@ -6,7 +6,7 @@ $_['heading_title']			= 'Order History';
 $_['text_account']			= 'Account';
 $_['text_order']				= 'Order Information';
 $_['text_order_detail']	= 'Order Details';
-$_['text_invoice_no']		= 'Invoice No.:';
+$_['text_invoice_id']		= 'Invoice No.:';
 $_['text_order_id']			= 'Order ID:';
 $_['text_status']			= 'Status:';
 $_['text_date_added']		= 'Date Added:';
@@ -33,3 +33,7 @@ $_['column_action']			= 'Action';
 $_['column_date_added']	= 'Date Added';
 $_['column_status']			= 'Status';
 $_['column_comment']		= 'Comment';
+
+//Error
+$_['error_order_info'] = "Unable to find requested order. Please choose an order to view from the list.";
+$_['error_reorder'] = "Unable to find requested order. Please add the products you want manually";

@@ -1,7 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs(); ?>
-	<?= $this->builder->display_errors($errors); ?>
+	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -47,7 +46,6 @@
 							<input type="hidden" name="from" value="<?= $msg['from']; ?>" />
 							<input type="hidden" name="sender" value="<?= $msg['sender']; ?>" />
 							<input type="hidden" name="subject" value="<?= $msg['subject']; ?>" />
-							<input type="hidden" name="message" value="<?= !empty($msg['html']) ? $msg['html'] : $msg['text']; ?>" />
 							<input type="hidden" name="allow_html" value="<?= !empty($msg['html']) ? 'class="html"' : ''; ?>" />
 							<? if(!empty($msg['attachments'])) { ?>
 								<input type="hidden" name="_attachments" value="<?= implode(',',$msg['attachments']); ?>" />
@@ -97,15 +95,26 @@
 
 <script type="text/javascript">//<!--
 $('a.edit_message').click(function(){
-	$('#mail_form input[name=allow_html]').removeAttr('checked').change();
+	message = $(this).closest('.message_preview');
 	
-	$(this).closest('.message_preview').find('input[type=hidden]').not('[name=_attachment]').each(function(i,e){
+	message.find('input[type=hidden]').not('[name=_attachment]').each(function(i,e){
 		$('#mail_form [name=' + $(e).attr('name') + ']').val($(e).val());
 	});
 	
-	if(true || $(this).find('[name=message]').hasClass('html')){
-		$('#mail_form input[name=allow_html]').attr('checked','checked').change();
-	}
+	$.get('<?= $load_message; ?>', {mail_fail_id: message.find('[name=mail_fail_id]').val()}, function(html){
+		type = html.substring(0,8);
+		
+		if (type == '__TEXT__') {
+			html = html.substring(9);
+			$('#mail_form [name=allow_html]').removeAttr('checked').change();
+			$('#mail_form [name=message]').val(html);
+		}
+		else {
+			$('#mail_form [name=allow_html]').attr('checked','checked').change();
+			$('#cke_mail_message .cke_button_source').click();
+			$('#cke_mail_message .cke_source').val(html);
+		}
+	});
 });
 
 $('a.delete_message').click(function(){

@@ -7,7 +7,7 @@ class Admin_Controller_Module_Banner extends Controller
 	{
 		$this->template->load('module/banner');
 
-		$this->load->language('module/banner');
+		$this->language->load('module/banner');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

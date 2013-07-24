@@ -1,31 +1,33 @@
 <?php
-final class Action 
+final class Action
 {
 	private $registry;
 	private $file;
 	private $route;
 	private $class;
-	private $class_path;
+	private $classpath;
+	private $controller;
 	private $method;
 	private $parameters = array();
 	private $output;
 
-	public function __construct($registry, $route, $parameters = array())
+	public function __construct($registry, $route, $parameters = array(), $classpath = '')
 	{
 		$this->registry = $registry;
-		$this->route = $route;
-		$this->class_path = ($this->config->isAdmin() ? "admin/" : "catalog/") . "controller/";
 		$this->file = null;
-		$this->class = ($this->config->isAdmin() ? "Admin_" : "Catalog_") . "Controller_";
-		$this->method = 'index'; 
+		$this->route = $route;
+		$this->parameters = $parameters;
+		$this->method = 'index';
 		
-		if (!empty($parameters)) {
-			$this->parameters = $parameters;
+		if (!$classpath) {
+			$this->classpath = ($this->config->isAdmin() ? "admin/" : "catalog/") . "controller/";
+		} else {
+			$this->classpath = rtrim($classpath,'/') . '/';
 		}
 		
-		$parts = explode('/', str_replace('../', '', (string)$route));
+		$parts = explode('/', str_replace('../', '', $this->classpath . $this->route));
 		
-		$path = $this->class_path;
+		$path = '';
 		
 		foreach ($parts as $part) {
 			$path .= $part;
@@ -33,17 +35,20 @@ final class Action
 			//Scan directories until we find file requested
 			if (is_dir(SITE_DIR . $path)) {
 				$path .= '/';
-				$this->class_path .= $part . '/';
-				$this->class .= $this->tool->format_classname($part) . '_';
+				$this->class .= $this->tool->formatClassname($part) . '_';
 			}
 			elseif (is_file(SITE_DIR . $path . '.php')) {
 				$this->file = SITE_DIR . $path . '.php';
 				
-				$this->class .= $this->tool->format_classname($part);
+				$this->class .= $this->tool->formatClassname($part);
+			}
+			elseif ($this->file) {
+				$this->method = $part;
+				$this->classpath = str_replace('/'.$part, '', $this->classpath);
+				break;
 			}
 			else {
-				$this->method = $part;
-				break;
+				return false;
 			}
 		}
 	}
@@ -51,6 +56,11 @@ final class Action
 	public function __get($key)
 	{
 		return $this->registry->get($key);
+	}
+	
+	public function isValid()
+	{
+		return $this->file ? true : false;
 	}
 	
 	public function getFile()
@@ -65,7 +75,7 @@ final class Action
 	
 	public function getClassPath()
 	{
-		return $this->class_path;
+		return $this->classpath;
 	}
 	
 	public function getMethod()
@@ -80,20 +90,23 @@ final class Action
 	
 	public function getController()
 	{
-		if (is_file($this->file)) {
-			_require($this->file);
-			
-			$class = $this->class;
-			
-			return new $class($this->registry);
-		} else {
-			if (!$this->file) {
-				trigger_error("Failed to load controller {$this->class} because the file was not resolved! Please verify {$this->route} is a valid controller.<br>" . get_caller() . '<br />' . get_caller(1) . '<br />');
+		if (!$this->controller) {
+			if (is_file($this->file)) {
+				_require($this->file);
+				
+				$class = $this->class;
+				
+				$this->controller = new $class($this->registry);
 			} else {
-				trigger_error("Failed to load controller {$this->class} because the file {$this->file} is missing!");
+				if (!$this->file) {
+					trigger_error("Failed to load controller {$this->class} because the file was not resolved! Please verify {$this->route} is a valid controller." . get_caller(0, 2));
+				} else {
+					trigger_error("Failed to load controller {$this->class} because the file {$this->file} is missing!");
+				}
 			}
-			exit();
 		}
+		
+		return $this->controller;
 	}
 	
 	public function execute()

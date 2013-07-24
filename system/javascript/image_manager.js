@@ -52,12 +52,14 @@ function addSingleImage(imageName, field, thumb) {
 		image_size = '&image_width=' + thumb.width() + '&image_height=' + thumb.height();
 	}
 	
+	image = imageName.replace('\\','/');
+	
 	$.ajax({
-		url: image_manager_url + '/image&image=' + encodeURIComponent(imageName) + image_size,
+		url: image_manager_url + '/image?image=' + encodeURIComponent(image) + image_size,
 		dataType: 'text',
 		success: function(text) {
 			thumb.attr('src', text);
-			field.val(imageName);
+			field.val(image);
 		}
 	});
 };

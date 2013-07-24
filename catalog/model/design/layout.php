@@ -6,7 +6,7 @@ class Catalog_Model_Design_Layout extends Model
 	public function get_layout_id($route = null)
 	{
 		if (!$route) {
-			$route = !empty($_GET['route']) ? $_GET['route'] : 'common/home';
+			$route = !empty($this->url->route()) ? $this->url->route() : 'common/home';
 		}
 		
 		if (!isset($this->layout_ids[$route])) {

@@ -1,113 +1,140 @@
 <?= $header; ?>
 <?= $column_left; ?><?= $column_right; ?>
-<div id="content"><?= $content_top; ?>
-	<?= $this->builder->display_breadcrumbs(); ?>
-	<?= $this->builder->display_errors($errors); ?>
+<div id="content">
+	<?= $this->breadcrumb->render(); ?>
+	<?= $content_top; ?>
+	
 	<h1><?= $heading_title; ?></h1>
-	<?= $text_description; ?>
-	<form action="<?= $action; ?>" method="post" enctype="multipart/form-data">
-		<h2><?= $text_order; ?></h2>
-		<div class="content">
-			<div class="left"><span class="required"></span> <?= $entry_firstname; ?><br />
-				<input type="text" name="firstname" value="<?= $firstname; ?>" class="large-field" />
-				<br />
-				<br />
-				<span class="required"></span> <?= $entry_lastname; ?><br />
-				<input type="text" name="lastname" value="<?= $lastname; ?>" class="large-field" />
-				<br />
-				<br />
-				<span class="required"></span> <?= $entry_email; ?><br />
-				<input type="text" name="email" value="<?= $email; ?>" class="large-field" />
-				<br />
-				<br />
-				<span class="required"></span> <?= $entry_telephone; ?><br />
-				<input type="text" name="telephone" value="<?= $telephone; ?>" class="large-field" />
-				<br />
-				<br />
+	<div class="description"><?= $text_description; ?></div>
+	<form id="order_lookup" method="post" action="<?= $order_lookup_action; ?>">
+		<div class="section">
+			<h2><?= $text_order_lookup; ?></h2>
+			<div class="form_item ol_order_id">
+				<label for="ol_order_id"><?= $entry_order_id; ?></label>
+				<input type="text" size="2" name="ol_order_id" value="" />
 			</div>
-			<div class="right"><span class="required"></span> <?= $entry_order_id; ?><br />
-				<input type="text" name="order_id" value="<?= $order_id; ?>" class="large-field" />
-				<br />
-				<br />
-				<?= $entry_date_ordered; ?><br />
-				<input type="text" name="date_ordered" value="<?= $date_ordered; ?>" class="large-field date" />
-				<br />
+			<div class="form_item ol_email">
+				<label for="ol_email"><?= $entry_email; ?></label>
+				<input type="text" size="25" name="ol_email" value="" />
 			</div>
-		</div>
-		<h2><?= $text_product; ?></h2>
-		<div id="return-product">
-			<div class="content">
-				<div class="return-product">
-					<div class="return-name"><span class="required"></span> <b><?= $entry_product; ?></b><br />
-						<input type="text" name="product" value="<?= $product; ?>" />
-						<br />
-					</div>
-					<div class="return-model"><span class="required"></span> <b><?= $entry_model; ?></b><br />
-						<input type="text" name="model" value="<?= $model; ?>" />
-						<br />
-					</div>
-					<div class="return-quantity"><b><?= $entry_quantity; ?></b><br />
-						<input type="text" name="quantity" value="<?= $quantity; ?>" />
-					</div>
-				</div>
-				<div class="return-detail">
-					<div class="return-reason"><span class="required"></span> <b><?= $entry_reason; ?></b><br />
-						<table>
-							<? foreach ($return_reasons as $return_reason) { ?>
-							<? if ($return_reason['return_reason_id'] == $return_reason_id) { ?>
-							<tr>
-								<td width="1"><input type="radio" name="return_reason_id" value="<?= $return_reason['return_reason_id']; ?>" id="return-reason-id<?= $return_reason['return_reason_id']; ?>" checked="checked" /></td>
-								<td><label for="return-reason-id<?= $return_reason['return_reason_id']; ?>"><?= $return_reason['name']; ?></label></td>
-							</tr>
-							<? } else { ?>
-							<tr>
-								<td width="1"><input type="radio" name="return_reason_id" value="<?= $return_reason['return_reason_id']; ?>" id="return-reason-id<?= $return_reason['return_reason_id']; ?>" /></td>
-								<td><label for="return-reason-id<?= $return_reason['return_reason_id']; ?>"><?= $return_reason['name']; ?></label></td>
-							</tr>
-							<?	} ?>
-							<?	} ?>
-						</table>
-					</div>
-					<div class="return-opened"><b><?= $entry_opened; ?></b><br />
-						<? if ($opened) { ?>
-						<input type="radio" name="opened" value="1" id="opened" checked="checked" />
-						<? } else { ?>
-						<input type="radio" name="opened" value="1" id="opened" />
-						<? } ?>
-						<label for="opened"><?= $text_yes; ?></label>
-						<? if (!$opened) { ?>
-						<input type="radio" name="opened" value="0" id="unopened" checked="checked" />
-						<? } else { ?>
-						<input type="radio" name="opened" value="0" id="unopened" />
-						<? } ?>
-						<label for="unopened"><?= $text_no; ?></label>
-						<br />
-						<br />
-						<?= $entry_fault_detail; ?><br />
-						<textarea name="comment" cols="150" rows="6"><?= $comment; ?></textarea>
-					</div>
-					<div class="return-captcha"><b><?= $entry_captcha; ?></b><br />
-						<input type="text" name="captcha" value="<?= $captcha; ?>" />
-						<br />
-						<img src="index.php?route=account/return/captcha" alt="" />
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="buttons">
-			<div class="left"><a href="<?= $back; ?>" class="button"><?= $button_back; ?></a></div>
-			<div class="right">
-				<input type="submit" value="<?= $button_continue; ?>" class="button" />
-			</div>
+			<input type="submit" name="order_lookup" class="button" value="<?= $button_order_lookup; ?>" />
 		</div>
 	</form>
-	<?= $content_bottom; ?></div>
-<script type="text/javascript">
-//<!--
-$(document).ready(function() {
-	$('.date').datepicker({dateFormat: 'yy-mm-dd'});
+	
+	<? if (!empty($return_products)) { ?>
+	<form id="return_form" action="<?= $action; ?>" method="post" enctype="multipart/form-data">
+		<div class="section">
+			<h2><?= $text_order; ?></h2>
+			
+			<div class="order_info order_id">
+				<label><?= $entry_order_id; ?></label>
+				<? if (count($customer_orders) > 1) { ?>
+					<? $this->builder->set_config('order_id', 'display'); ?>
+					<?= $this->builder->build('select', $customer_orders, 'order_id', $order_id); ?>
+				<? } elseif ($order_id) { ?>
+					<span class="value"><?= $order_id; ?></span>
+				<? } ?>
+				<input type="hidden" name="order_id" value="<?= $order_id; ?>" />
+				
+			</div>
+			
+			<div class="order_info date_ordered">
+				<label><?= $entry_date_ordered; ?></label>
+				<span class="value"><?= $date_ordered_display; ?></span>
+				<input type="hidden" name="date_ordered" value="<?= $date_ordered; ?>" />
+			</div>
+			<div class="form_item">
+				<label for="firstname" class="required"><?= $entry_firstname; ?></label>
+				<input id="firstname" type="text" name="firstname" value="<?= $firstname; ?>" />
+			</div>
+			<div class="form_item">
+				<label for="lastname" class="required"><?= $entry_lastname; ?></label>
+				<input id="lastname" type="text" name="lastname" value="<?= $lastname; ?>" />
+			</div>
+			<div class="form_item">
+				<label for="email" class="required"><?= $entry_email; ?></label>
+				<input id="email" type="text" name="email" value="<?= $email; ?>" />
+			</div>
+			<div class="form_item">
+				<label for="telephone" class="required"><?= $entry_telephone; ?></label>
+				<input id="telephone" type="text" name="telephone" value="<?= $telephone; ?>" />
+			</div>
+		</div>
+		
+		<div class="section">
+			<h2><?= $text_product; ?></h2>
+			<table class="list return_product">
+				<thead>
+					<tr>
+						<td><?= $column_return_product; ?></td>
+						<td><?= $column_return_model; ?></td>
+						<td><?= $column_return_price; ?></td>
+						<td><?= $column_return_quantity; ?></td>
+						<td><?= $column_return_reason; ?></td>
+						<td><?= $column_return_comment; ?></td>
+						<td><?= $column_return_opened; ?></td>
+					</tr>
+				</thead>
+				<tbody>
+					<? foreach ($return_products as $product) { ?>
+						<? $product_id = $product['product_id']; ?>
+						<tr class="return_product">
+							<td class="product">
+								<?= $product['name']; ?>
+								<input type="hidden" name="return_products[<?= $product_id; ?>][product_id]" value="<?= $product_id; ?>" />
+							</td>
+							<td class="model">
+								<?= $product['model']; ?>
+							</td>
+							<td class="price">
+								<?= $product['price']; ?>
+							</td>
+							<td class="quantity">
+								<? if (!empty($product['no_return'])) { ?>
+									<span><?= $product['no_return']; ?></span>
+									<input type="hidden" name="return_products[<?= $product_id; ?>][return_quantity]" value="0" />
+								<? } else {?>
+									<?= $this->builder->build('select', range(0,(int)$product['quantity']), "return_products[$product_id][return_quantity]", $product['return_quantity']); ?>
+								<? } ?>
+							</td>
+							<td class="reason">
+								<? $this->builder->set_config(false, 'title'); ?>
+								<?= $this->builder->build('select', $data_return_reasons, "return_products[$product_id][return_reason_id]", $product['return_reason_id']); ?>
+							</td>
+							<td class="comment"><textarea name="return_products[<?= $product_id; ?>][comment]"><?= $product['comment']; ?></textarea></td>
+							<td class="opened"><?= $this->builder->build('select', $data_yes_no, "return_products[$product_id][opened]", $product['opened']); ?></td>
+						</tr>
+					<? } ?>
+				</tbody>
+			</table>
+		</div>	
+		
+		<? if (!$order_lookup) { ?>
+			<div class="return_captcha">
+				<label><?= $entry_captcha; ?></label>
+				<img src="<?= $url_captcha_image; ?>" alt="" />
+				<input type="text" name="captcha" value="<?= $captcha; ?>" />
+			</div>
+			<div class="clear"></div>
+			<div class="buttons">
+				<div class="left"><a href="<?= $back; ?>" class="button"><?= $button_back; ?></a></div>
+				<div class="right">
+					<input type="submit" value="<?= $button_continue; ?>" class="button" />
+				</div>
+			</div>
+		<? } ?>
+	</form>
+	<? }//end if ((!empty($return_products))) ?>
+	
+	<?= $content_bottom; ?>
+</div>
+
+<script type="text/javascript">//<!--
+$('.order_info.order_id select').change(function(){
+	location = "<?= $return_product_url; ?>" + '&order_id=' + $(this).val();
 });
 //--></script>
 
+<?= $this->builder->js('datepicker'); ?>
 <?= $this->builder->js('errors',$errors); ?>
 <?= $footer; ?>

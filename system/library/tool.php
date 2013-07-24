@@ -9,15 +9,6 @@ class Tool extends Library
 		define("FILELIST_SPLFILEINFO",2);
 	}
 	
-	public function error_set()
-	{
-		if (isset($this->session->data['warning']) && $this->session->data['warning']) {
-			return true;
-		}
-		
-		return false;
-	}
-	
 	public function get_slug($name)
 	{
 		$slug = preg_replace("/\s/",'_', strtolower(trim($name)));
@@ -26,10 +17,10 @@ class Tool extends Library
 		return $slug;
 	}
 	
-	public function format_classname($component)
+	public function formatClassname($component)
 	{
 		$parts = explode('_', $component);
-				
+		
 		//capitalize each component of the class name
 		array_walk($parts, function(&$e, $i){ $e = ucfirst($e); });
 		
@@ -47,11 +38,6 @@ class Tool extends Library
 		return $formatted_data;
 	}
 	
-	public function error_info()
-	{
-		return "<span style='font-weight:bold; color:#E72727'>" . get_caller(2). " </span>";
-	}
-	
 	public function insertables($insertables, $text, $start = '%', $end = '%')
 	{
 		$patterns = array();
@@ -63,12 +49,6 @@ class Tool extends Library
 		}
 		
 		return preg_replace($patterns, $replacements, $text);
-	}
-	
-	public function format_invoice($d)
-	{
-		$date_format = array();
-		return preg_match("/%.*%/",$d,$date_format)?preg_replace("/%.*%/",date(preg_replace("/%/",'',$date_format[0])), $d):$d;
 	}
 	
 	function sort_by_array($array,$order, $sort_key)
@@ -110,6 +90,21 @@ class Tool extends Library
 		return $short;
 	}
 	
+	public function add_template_row(&$data)
+	{
+		if (empty($data)) {
+			$data['__row__'] = array();
+		} else {
+			$data['__row__'] = reset($data);
+		}
+		
+		if (is_array($data['__row__'])) {
+			array_walk_recursive($data['__row__'], function(&$value, $key) { $value = $key; });
+		} else {
+			$data['__row__'] = '';
+		}
+	}
+		
 	public function bytes2str($size, $decimals = 2, $unit = null)
 	{
 		$unit_sizes = array(

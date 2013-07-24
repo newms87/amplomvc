@@ -7,7 +7,7 @@ class Catalog_Controller_Block_Checkout_PaymentAddress extends Controller
 
 		$this->language->load('checkout/checkout');
 		
-		$this->data['data_addresses'] = $this->customer->get_payment_addresses();
+		$this->data['data_addresses'] = $this->customer->getPaymentAddresses();
 		
 		if ($this->cart->validatePaymentAddress()) {
 			$this->data['payment_address_id'] = $this->cart->getPaymentAddressId();
@@ -98,7 +98,7 @@ class Catalog_Controller_Block_Checkout_PaymentAddress extends Controller
 		}
 		elseif (!$this->cart->validate()) {
 			$json['redirect'] = $this->url->link('cart/cart');
-			$this->message->add($this->cart->get_errors());
+			$this->message->add('warning', $this->cart->get_errors());
 		}
 		
 		return $json;

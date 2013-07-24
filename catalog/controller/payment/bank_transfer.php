@@ -22,6 +22,6 @@ class Catalog_Controller_Payment_BankTransfer extends Controller
 		$comment .= $this->config->get('bank_transfer_bank_' . $this->config->get('config_language_id')) . "\n\n";
 		$comment .= $this->_('text_payment');
 		
-		$this->Model_Checkout_Order->confirm($this->session->data['order_id'], $this->config->get('bank_transfer_order_status_id'), $comment, true);
+		$this->order->update($this->session->data['order_id'], $this->config->get('bank_transfer_order_status_id'), $comment, true);
 	}
 }

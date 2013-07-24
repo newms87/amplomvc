@@ -1,5 +1,5 @@
 <?php
-final class Loader 
+final class Loader
 {
 	protected $registry;
 	
@@ -36,7 +36,7 @@ final class Loader
 			return $class;
 			
 		} else {
-			trigger_error('Could not load library ' . $library . '!<br>' . get_caller(1) . '<br>' . get_caller(2) . '<Br>' .  get_caller(3) . '<br>', E_USER_WARNING);
+			trigger_error('Could not load library ' . $library . '!<br>' . get_caller(1, 3), E_USER_WARNING);
 			return null;
 		}
 	}
@@ -71,7 +71,7 @@ final class Loader
 			
 			return $class;
 		} else {
-			trigger_error('Could not load model ' . $model . '! ' . get_caller() . html_backtrace(5,-1,false));
+			trigger_error('Could not load model ' . $model . '! ' . get_caller(0, 4) . html_backtrace(5,-1,false));
 			exit();
 		}
 	}

@@ -33,11 +33,11 @@ class Catalog_Controller_Block_Checkout_Register extends Controller
 		$this->data['form_address'] = $this->form->build();
 		
 		//Terms and Conditions
-		if ($this->config->get('config_account_id')) {
-			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_account_id'));
+		if ($this->config->get('config_account_terms_info_id')) {
+			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_account_terms_info_id'));
 			
 			if ($information_info) {
-				$this->_('text_agree', $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_account_id')), $information_info['title'], $information_info['title']);
+				$this->_('text_agree', $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_account_terms_info_id')), $information_info['title'], $information_info['title']);
 				
 				$this->data['agree_to_terms'] = true;
 			}
@@ -91,7 +91,7 @@ class Catalog_Controller_Block_Checkout_Register extends Controller
 			$json['error'] = $this->form->get_errors();
 		}
 		
-		if ($this->Model_Account_Customer->getTotalCustomersByEmail($_POST['email'])) {
+		if ($this->customer->emailRegistered($_POST['email'])) {
 			$json['error']['email'] = $this->_('error_exists');
 		}
 			
@@ -99,8 +99,8 @@ class Catalog_Controller_Block_Checkout_Register extends Controller
 			$json['error']['confirm'] = $this->_('error_confirm');
 		}
 		
-		if ($this->config->get('config_account_id')) {
-			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_account_id'));
+		if ($this->config->get('config_account_terms_info_id')) {
+			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_account_terms_info_id'));
 			
 			if ($information_info && !isset($_POST['agree'])) {
 				$json['error']['agree'] = sprintf($this->_('error_agree'), $information_info['title']);
@@ -110,7 +110,7 @@ class Catalog_Controller_Block_Checkout_Register extends Controller
 		//If the Form is valid
 		if (!$json) {
 			//Add New Customer
-			$this->Model_Account_Customer->addCustomer($_POST);
+			$this->customer->add($_POST);
 			
 			//Add Customer Address
 			$address_id = $this->Model_Account_Address->addAddress($_POST);

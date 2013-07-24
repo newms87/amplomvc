@@ -6,7 +6,7 @@ class Admin_Controller_Includes_Contact extends Controller
 	{
 		$this->template->load('includes/contact');
 
-		$this->load->language('includes/contact');
+		$this->language->load('includes/contact');
 		$id = isset($args['id'])?$args['id']:null;
 		$type = isset($args['type'])?$args['type']:'general';
 		

@@ -6,7 +6,7 @@ class Admin_Controller_Help_Documentation extends Controller
 	{
 		$this->template->load('help/documentation');
 
-		$this->load->language('help/documentation');
+		$this->language->load('help/documentation');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

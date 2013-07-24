@@ -43,7 +43,7 @@ class Session extends Library
 			exit();
 		}
 		elseif (!isset($this->data['session_token_saved'])) {
-			$ip_session_exists = $this->db->query_var("SELECT COUNT(*) as total FROM " . DB_PREFIX . "session WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "'");
+			$ip_session_exists = $this->db->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "session WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "'");
 			
 			if ($ip_session_exists) {
 				$this->db->query("DELETE FROM " . DB_PREFIX . "session WHERE `ip` = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "'");

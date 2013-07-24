@@ -20,7 +20,7 @@ class Admin_Controller_Dev_Dev extends Controller
 	{
 		$this->template->load('dev/sync');
 
-		$this->load->language('dev/dev');
+		$this->language->load('dev/dev');
 		
 		$this->document->setTitle($this->_('text_sync'));
 		
@@ -64,7 +64,7 @@ class Admin_Controller_Dev_Dev extends Controller
 		
 		$this->data['data_sites'] = $dev_sites;
 		
-		$this->data['data_tables'] = $this->db->get_tables();
+		$this->data['data_tables'] = $this->db->getTables();
 		
 		$this->content();
 	}
@@ -73,7 +73,7 @@ class Admin_Controller_Dev_Dev extends Controller
 	{
 		$this->template->load('dev/site_management');
 		
-		$this->load->language('dev/dev');
+		$this->language->load('dev/dev');
 		
 		$this->document->setTitle($this->_('text_site_management'));
 		
@@ -123,7 +123,7 @@ class Admin_Controller_Dev_Dev extends Controller
 	{
 		$this->template->load('dev/backup_restore');
 		
-		$this->load->language('dev/dev');
+		$this->language->load('dev/dev');
 		
 		$this->document->setTitle($this->_('text_backup_restore'));
 		
@@ -131,7 +131,7 @@ class Admin_Controller_Dev_Dev extends Controller
 			if (isset($_POST['site_backup'])) {
 				$tables = isset($_POST['tables']) ? $_POST['tables'] : null;
 				
-				if (count($tables) == $this->db->count_tables()) {
+				if (count($tables) == $this->db->countTables()) {
 					$tables = null;
 				}
 				
@@ -143,11 +143,11 @@ class Admin_Controller_Dev_Dev extends Controller
 			elseif (isset($_POST['execute_file'])) {
 				if (is_uploaded_file($_FILES['filename']['tmp_name'])) {
 					$filename = $_FILES['filename']['name'];
-					if ($this->db->execute_file($_FILES['filename']['tmp_name'])) {
+					if ($this->db->executeFile($_FILES['filename']['tmp_name'])) {
 						$this->message->add('success', "Successfully executed the contents of $filename!");
 					}
 					else {
-						$this->message->add('warning', "There was a problem while executing $filename. " . $this->db->get_error());
+						$this->message->add('warning', "There was a problem while executing $filename. " . $this->db->getError());
 					}
 				}
 			}
@@ -175,7 +175,7 @@ class Admin_Controller_Dev_Dev extends Controller
 		
 		$this->data['data_backup_files'] = $backup_files;
 		
-		$this->data['data_tables'] = $this->db->get_tables();
+		$this->data['data_tables'] = $this->db->getTables();
 		
 		$this->content();
 	}

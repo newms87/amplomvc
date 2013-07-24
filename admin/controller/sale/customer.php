@@ -5,7 +5,7 @@ class Admin_Controller_Sale_Customer extends Controller
 
   	public function index()
   	{
-		$this->load->language('sale/customer');
+		$this->language->load('sale/customer');
 		
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -14,7 +14,7 @@ class Admin_Controller_Sale_Customer extends Controller
 
   	public function insert()
   	{
-		$this->load->language('sale/customer');
+		$this->language->load('sale/customer');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -73,7 +73,7 @@ class Admin_Controller_Sale_Customer extends Controller
 	
   	public function update()
   	{
-		$this->load->language('sale/customer');
+		$this->language->load('sale/customer');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -132,7 +132,7 @@ class Admin_Controller_Sale_Customer extends Controller
 
   	public function delete()
   	{
-		$this->load->language('sale/customer');
+		$this->language->load('sale/customer');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -193,7 +193,7 @@ class Admin_Controller_Sale_Customer extends Controller
 	
 	public function approve()
 	{
-		$this->load->language('sale/customer');
+		$this->language->load('sale/customer');
 		
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -805,6 +805,12 @@ class Admin_Controller_Sale_Customer extends Controller
 			}
 		}
 		
+		//Ajax Urls
+		$this->data['url_transaction'] = $this->url->ajax('sale/customer/transaction', 'customer_id=' . (int)$customer_id);
+		$this->data['url_reward'] = $this->url->ajax('sale/customer/reward', 'customer_id=' . (int)$customer_id);
+		$this->data['url_blacklist'] = $this->url->ajax('sale/customer/addblacklist');
+		$this->data['url_remove_blacklist'] = $this->url->ajax('sale/customer/removeblacklist');
+		
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -940,7 +946,7 @@ class Admin_Controller_Sale_Customer extends Controller
 		} else {
 		$this->template->load('error/not_found');
 
-			$this->load->language('error/not_found');
+			$this->language->load('error/not_found');
 
 			$this->document->setTitle($this->_('heading_title'));
 

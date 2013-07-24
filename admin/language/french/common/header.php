@@ -68,7 +68,6 @@ $_['text_tax_class']					= 'Classe des taxes';
 $_['text_tax_rate']						= 'Taux de taxe';
 $_['text_total']						= 'Totaux commande';
 $_['text_user']							= 'Utilisateur';
-$_['text_documentation']				= '<a href="http://www.opencart-france.com/index.php?route=documentation/introduction" target="_blank">Documentation</a>';
 $_['text_users']						= 'Utilisateurs';
 $_['text_user_group']					= 'Groupes utilisateurs';
 $_['text_voucher']						= 'Ch&egrave;ques-cadeaux';

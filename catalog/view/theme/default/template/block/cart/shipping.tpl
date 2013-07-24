@@ -1,4 +1,4 @@
-<form id="cart_shipping" action="<?= $action; ?>" class="content">
+<form id="cart_shipping" action="<?= $action; ?>" class="section">
 	<p><?= $text_shipping_detail; ?></p>
 	<table>
 		<tr>
@@ -22,13 +22,13 @@
 
 <div id='shipping_quote_template' class="shipping_quote" style='display:none'>
 	<h2><?= $text_shipping_method; ?></h2>
-	<form action="<?= $apply_shipping; ?>" method="post" enctype="multipart/form-data">
+	<form action="<?= $apply; ?>" method="post" enctype="multipart/form-data">
 		<table class="quote_method radio">
 			<tr id="%code%" class="code">
 				<td colspan="3"><b>%code_title%</b></td>
 			</tr>
 			<tr class="method highlight" onclick="$(this).find('[name=shipping_method]').attr('checked','checked')">
-				<td><input type="radio" name="shipping_method" value="%code%_%method%" id="%method%" /></td>
+				<td><input type="radio" name="shipping_method" value="%method_id%" id="%method%" /></td>
 				<td><label for="%method%">%title%</label></td>
 				<td class="method"><label for="%method%">%text%</label></td>
 			</tr>
@@ -45,7 +45,7 @@
 			<div class="quote_address"></div>
 		</div>
 		<input type="hidden" name="redirect" value="<?= $redirect; ?>" />
-		<input type="submit" value="<?= $button_shipping; ?>" class="button" />
+		<input type="submit" onclick="return apply_shipping_quote($(this));" value="<?= $button_shipping; ?>" class="button" />
 	</form>
 </div>
 
@@ -78,7 +78,7 @@ $('#button-quote').click(function() {
 	shipping_quote.find('.quote_address').html(zone_name + ', ' + postcode + ', ' + country_name);
 	
 	$.ajax({
-		url: "<?= HTTP_CATALOG . "index.php?route=block/cart/shipping/quote"; ?>",
+		url: "<?= $url_quote; ?>",
 		type: 'post',
 		data: $('#cart_shipping').serialize(),
 		dataType: 'json',
@@ -102,9 +102,9 @@ $('#button-quote').click(function() {
 				show_msg('warning', msg);
 			}
 			else if (json['shipping_method']) {
-				for (i in json['shipping_method']) {
-					code = json['shipping_method'][i]['code'];
-					code_title = json['shipping_method'][i]['code_title'];
+				for (method_id in json['shipping_method']) {
+					code = json['shipping_method'][method_id]['code'];
+					code_title = json['shipping_method'][method_id]['code_title'];
 					
 					if (!shipping_quote.find('#' + code).length) {
 						code_t = code_template
@@ -114,15 +114,16 @@ $('#button-quote').click(function() {
 						shipping_quote.find('table.quote_method').append(code_t);
 					}
 					
-					if (!json['shipping_method'][i]['error']) {
-						title = json['shipping_method'][i]['title'];
-						method = json['shipping_method'][i]['method'];
-						text = json['shipping_method'][i]['text'];
+					if (!json['shipping_method'][method_id]['error']) {
+						title = json['shipping_method'][method_id]['title'];
+						method = json['shipping_method'][method_id]['method'];
+						text = json['shipping_method'][method_id]['text'];
 						
 						method_t = method_template
 							.replace(/%title%/g, title)
 							.replace(/%method%/g, method)
 							.replace(/%code%/g, code)
+							.replace(/%method_id%/, method_id)
 							.replace(/%text%/g, text);
 						
 						shipping_quote.find('#' + code).after(method_t);
@@ -131,58 +132,53 @@ $('#button-quote').click(function() {
 							shipping_quote.find('#' + method).attr('checked', 'checked');
 						}
 					} else {
-						error = json['shipping_method'][i]['error'];
+						error = json['shipping_method'][method_id]['error'];
 						shipping_quote.find('table.quote_method').append(error_template.replace(/%error%/g, error));
 					}
 				}
 				
-				$.colorbox({
-					overlayClose: true,
-					opacity: 0.5,
-					width: '600px',
-					height: '400px',
-					href: false,
-					html: shipping_quote.show()
-				});
-				
-				shipping_quote.find('form [type=submit]').click(function(){
-					form = $(this).closest('form');
-					
-					form.find('input[name=redirect]').remove();
-					$.ajax({
-						url: form.attr('action'),
-						type: 'post',
-						data: form.serialize(),
-						dataType: 'json',
-						beforeSend: function() {
-							$(this).attr('disabled', true);
-							$(this).after('<span class="wait"><img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /></span>');
-						},
-						complete: function() {
-							$(this).attr('disabled', false);
-							$('.wait').remove();
-						},
-						
-						success: function(json) {
-							if (json['request_address']) {
-								shipping_quote.find('[name=add_address]').val(1);
-								shipping_quote.find('#quote_full_address').slideDown();
-								show_msg('notify', '<?= $text_request_address; ?>');
-								return;
-							}
-							
-							show_msgs(json);
-							
-							if (json['success']) {
-								$.colorbox.close();
-								load_block($('#cart_block_total'), 'block/cart/total');
-							}
-						}
-					});
-					return false;
-				});
+				colorbox(shipping_quote);
 			}
 		}
 	});
 });
+
+function apply_shipping_quote(context){
+	form = context.closest('form');
+	
+	form.find('input[name=redirect]').remove();
+	
+	$.ajax({
+		url: form.attr('action'),
+		type: 'post',
+		data: form.serialize(),
+		dataType: 'json',
+		beforeSend: function() {
+			context.attr('disabled', true);
+			context.after('<span class="wait"><img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /></span>');
+		},
+		complete: function() {
+			context.attr('disabled', false);
+			$('.wait').remove();
+		},
+		
+		success: function(json) {
+			if (json['request_address']) {
+				form.find('[name=add_address]').val(1);
+				form.find('#quote_full_address').slideDown();
+				show_msg('notify', '<?= $text_request_address; ?>');
+				return;
+			}
+			
+			show_msgs(json);
+			
+			if (json['success']) {
+				$.colorbox.close();
+				load_block($('#cart_block_total'), 'block/cart/total');
+			}
+		}
+	});
+	
+	return false;
+}
 //--></script>

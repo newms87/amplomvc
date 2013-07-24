@@ -5,7 +5,7 @@ class Admin_Controller_Report_AffiliateCommission extends Controller
 	{
 		$this->template->load('report/affiliate_commission');
 
-		$this->load->language('report/affiliate_commission');
+		$this->language->load('report/affiliate_commission');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

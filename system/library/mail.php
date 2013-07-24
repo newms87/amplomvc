@@ -68,7 +68,7 @@ class Mail extends Library
 		}
 	}
 	
-	public function setCopyTo($to)
+	public function setCc($to)
 	{
 		if (is_array($to)) {
 			array_walk($to, 'trim');
@@ -78,7 +78,7 @@ class Mail extends Library
 		}
 	}
 	
-	public function setBlindCopyTo($to)
+	public function setBcc($to)
 	{
 		if (is_array($to)) {
 			array_walk($to, 'trim');
@@ -128,7 +128,25 @@ class Mail extends Library
 			$this->attachments[] = $filename;
 		}
 	}
-
+	
+	public function callController($controller)
+	{
+		$args = func_get_args();
+		array_shift($args);
+		
+		$action = new Action($this->registry, $controller, $args, 'catalog/controller/mail');
+		
+		//Set the language and Template to the Front End
+		$this->language->setRoot(SITE_DIR . 'catalog/language/');
+		$action->getController()->template->setRootDirectory(SITE_DIR . 'catalog/view/theme/');
+		
+		if (!$action->execute()) {
+			$this->mail->callController('error', "Failed to call Mail Controller: " . $action->getClass() . "! " . get_caller(0, 2));
+		}
+		
+		$this->language->setRoot(DIR_LANGUAGE);
+	}
+	
 	public function send($data = null)
 	{
 		if ($data) {
@@ -145,11 +163,11 @@ class Mail extends Library
 			}
 			
 			if (isset($data['cc'])) {
-				$this->setCopyTo($data['cc']);
+				$this->setCc($data['cc']);
 			}
 			
 			if (isset($data['bcc'])) {
-				$this->setBlindCopyTo($data['bcc']);
+				$this->setBcc($data['bcc']);
 			}
 			
 			if (isset($data['subject'])) {
@@ -572,7 +590,7 @@ class Mail extends Library
 		
 		if ($this->config->get('config_error_display')) {
 			$view_mail_errors = $this->url->admin('mail/error');
-			$this->message->add('warning', "There was an error while sending an email <a href=\"$view_mail_errors\">(review all mail errors)</a>: " . $msg);
+			$this->message->system('warning', "There was an error while sending an email <a href=\"$view_mail_errors\">(review all mail errors)</a>: " . $msg);
 		}
 		
 		$mail_fail = array(

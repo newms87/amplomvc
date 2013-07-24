@@ -7,7 +7,7 @@ class Admin_Controller_Shipping_Ups extends Controller
 	{
 		$this->template->load('shipping/ups');
 
-		$this->load->language('shipping/ups');
+		$this->language->load('shipping/ups');
 			
 		$this->document->setTitle($this->_('heading_title'));
 		

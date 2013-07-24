@@ -1,60 +1,39 @@
 <?php
 class Admin_Controller_Page_Page extends Controller
 {
-	
 	public function index()
 	{
-		$this->load->language('page/page');
-
-		$this->document->setTitle($this->_('heading_title'));
+		$this->language->load('page/page');
 		
 		$this->getList();
 	}
-
-	public function insert()
-	{
-		$this->load->language('page/page');
-
-		$this->document->setTitle($this->_('heading_title'));
-		
-		if ($this->request->isPost() && $this->validateForm()) {
-			$this->Model_Page_Page->addPage($_POST);
-			
-			if (!$this->message->error_set()) {
-				$this->message->add('success', $this->_('text_success_insert'));
-			}
-			
-			$this->getList();
-		}
-		else {
-			$this->getForm();
-		}
-	}
-
+	
 	public function update()
 	{
-		$this->load->language('page/page');
+		$this->language->load('page/page');
 
-		$this->document->setTitle($this->_('heading_title'));
-		
 		if ($this->request->isPost() && $this->validateForm()) {
-			$this->Model_Page_Page->editPage($_GET['page_id'], $_POST);
+			//Insert
+			if (empty($_GET['page_id'])) {
+				$this->Model_Page_Page->addPage($_POST);
+			}
+			//Update
+			else {
+				$this->Model_Page_Page->editPage($_GET['page_id'], $_POST);
+			}
 			
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success_update'));
+				$this->url->redirect($this->url->link('page/page'));
 			}
-			
-			$this->getList();
 		}
-		else {
-			$this->getForm();
-		}
+	
+		$this->getForm();
 	}
 
 	public function delete()
 	{
-		$this->load->language('page/page');
-		$this->document->setTitle($this->_('heading_title'));
+		$this->language->load('page/page');
 		
 		if (isset($_GET['page_id']) && $this->validateDelete()) {
 			$this->Model_Page_Page->deletePage($_GET['page_id']);
@@ -105,8 +84,13 @@ class Admin_Controller_Page_Page extends Controller
 
 	private function getList()
 	{
+		//Page Title
+		$this->document->setTitle($this->_('heading_title'));
+		
+		//The Template
 		$this->template->load('page/page_list');
 
+		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('page/page'));
 		
@@ -124,7 +108,7 @@ class Admin_Controller_Page_Page extends Controller
 			'type' => 'multiselect',
 			'display_name' => $this->_('column_store'),
 			'filter' => true,
-			'build_config' => array('store_id' => 'name'),
+			'build_config' => array('store_id' , 'name'),
 			'build_data' => $this->Model_Setting_Store->getStores(),
 			'sortable' => false,
 		);
@@ -137,32 +121,14 @@ class Admin_Controller_Page_Page extends Controller
 			'sortable' => true,
 		);
 		
-		//The Sort data
-		$data = array();
-		
-		$sort_defaults = array(
-			'sort' => 'name',
-			'order' => 'ASC',
-			'limit' => $this->config->get('config_admin_limit'),
-			'page' => 1,
-		);
-		
-		foreach ($sort_defaults as $key => $default) {
-			$data[$key] = isset($_GET[$key]) ? $_GET[$key] : $default;
-		}
-		
-		$data['start'] = ($data['page'] - 1) * $data['limit'];
-		
-		//Filter
+		//Get Sorted / Filtered Data
+		$sort = $this->sort->getQueryDefaults('name', 'ASC');
 		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 		
-		if ($filter) {
-			$data += $filter;
-		}
+		$page_total = $this->Model_Page_Page->getTotalPages($filter);
+		$pages = $this->Model_Page_Page->getPages($sort + $filter);
 		
-		//Retrieve the Filtered Table row data
-		$page_total = $this->Model_Page_Page->getTotalPages($data);
-		$pages = $this->Model_Page_Page->getPages($data);
+		$url_query = $this->url->getQueryExclude('page_id');
 		
 		foreach ($pages as &$page) {
 			$page['actions'] = array(
@@ -172,62 +138,55 @@ class Admin_Controller_Page_Page extends Controller
 				),
 				'delete' => array(
 					'text' => $this->_('text_delete'),
-					'href' => $this->url->link('page/page/delete', 'page_id=' . $page['page_id'])
+					'href' => $this->url->link('page/page/delete', 'page_id=' . $page['page_id'] . '&' . $url_query)
 				)
 			);
 			
 			$page['stores'] = $this->Model_Page_Page->getPageStores($page['page_id']);
-		}unset($page);
+		} unset($page);
 		
-		//The table template data
+		//Build The Table
 		$tt_data = array(
 			'row_id'		=> 'page_id',
-			'route'		=> 'page/page',
-			'sort'		=> $data['sort'],
-			'order'		=> $data['order'],
-			'sort_url'	=> $this->url->link('page/page', $this->url->get_query('filter')),
-			'columns'	=> $columns,
-			'data'		=> $pages,
 		);
 		
-		$tt_data += $this->language->data;
-		
-		//Build the table template
 		$this->table->init();
-		$this->table->set_template('table/list_view');
-		$this->table->set_template_data($tt_data);
-		$this->table->map_attribute('filter_value', $filter);
+		$this->table->setTemplate('table/list_view');
+		$this->table->setColumns($columns);
+		$this->table->setRows($pages);
+		$this->table->setTemplateData($tt_data);
+		$this->table->mapAttribute('filter_value', $filter);
 		
 		$this->data['list_view'] = $this->table->render();
 		
 		//Batch Actions
-		$url_query = $this->url->get_query('filter', 'sort', 'order', 'page');
-		
 		$this->data['batch_actions'] = array(
 			'enable'	=> array(
-				'label' => "Enable"
+				'label' => $this->_('text_enable')
 			),
 			'disable'=>	array(
-				'label' => "Disable",
+				'label' => $this->_('text_disable'),
 			),
 			'delete' => array(
-				'label' => "Delete",
+				'label' => $this->_('text_delete'),
 			),
 		);
 		
 		$this->data['batch_update'] = html_entity_decode($this->url->link('page/page/batch_update', $url_query));
 		
-		//Action Buttons
-		$this->data['insert'] = $this->url->link('page/page/insert', $url_query);
+		//Render Limit Menu
+		$this->data['limits'] = $this->sort->render_limit();
 		
 		//Pagination
-		$url_query = $this->url->get_query('filter', 'sort', 'order');
-		
 		$this->pagination->init();
 		$this->pagination->total = $page_total;
+		
 		$this->data['pagination'] = $this->pagination->render();
 		
-		//Template Children
+		//Action Buttons
+		$this->data['insert'] = $this->url->link('page/page/update');
+		
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -239,30 +198,33 @@ class Admin_Controller_Page_Page extends Controller
 
 	private function getForm()
 	{
-		$this->language->load('page/page');
+		//Page Title
+		$this->document->setTitle($this->_('heading_title'));
 		
+		//The Template
 		$this->template->load('page/page_form');
 
+		//Insert or Update
 		$page_id = isset($_GET['page_id']) ? $_GET['page_id'] : null;
 		
+		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('page/page'));
 		
-		if (!$page_id) {
-			$this->data['action'] = $this->url->link('page/page/insert');
+		if ($page_id) {
+			$this->breadcrumb->add($this->_('text_edit'), $this->url->link('page/page/update', 'page_id=' . $page_id));
 		} else {
-			$this->data['action'] = $this->url->link('page/page/update', 'page_id=' . $page_id);
+			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('page/page/update'));
 		}
 		
-		$this->data['cancel'] = $this->url->link('page/page');
-
+		//Load Information
 		if ($page_id && !$this->request->isPost()) {
 			$page_info = $this->Model_Page_Page->getPage($page_id);
 			
 			$page_info['stores'] = $this->Model_Page_Page->getPageStores($page_id);
 		}
 		
-		//initialize the values in order of Post, Database, Default
+		//Set Values or Defaults
 		$defaults = array(
 			'name' => '',
 			'keyword' => '',
@@ -286,26 +248,25 @@ class Admin_Controller_Page_Page extends Controller
 			}
 		}
 		
-		if ($page_id) {
-			$this->breadcrumb->add($this->data['name'], $this->url->link('page/page/update', 'page_id=' . $page_id));
-		} else {
-			$this->breadcrumb->add($this->_('text_new_page'), $this->url->link('page/page/insert'));
-		}
-		
-		//Data
+		//Additional Data
 		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
 		$this->data['data_layouts'] = $this->Model_Design_Layout->getLayouts();
 		
-		//Urls
 		$this->data['url_blocks'] = $this->url->link('block/block');
 		$this->data['url_create_layout'] = $this->url->link('page/page/create_layout');
 		$this->data['url_load_blocks'] = $this->url->link('page/page/loadBlocks');
 		
+		//Action Buttons
+		$this->data['save'] = $this->url->link('page/page/update', 'page_id=' . $page_id);
+		$this->data['cancel'] = $this->url->link('page/page');
+		
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
 		
+		//Render
 		$this->response->setOutput($this->render());
 	}
 	

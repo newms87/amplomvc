@@ -1,7 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs(); ?>
-	<?= $this->builder->display_errors($errors); ?>
+	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -17,7 +16,7 @@
 				<a href="#tab-design"><?= $tab_design; ?></a>
 			</div>
 			
-			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
+			<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
 				<div id="tab-general">
 					<table class="form">
 						<tr>

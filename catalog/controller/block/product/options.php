@@ -1,26 +1,17 @@
 <?php
-
-/**
- * @param $product_id - Required, the product ID to generate the options template for
- *
- * @return Product options template
- *
- */
 class Catalog_Controller_Block_Product_Options extends Controller
 {
-	
 	public function index($settings)
 	{
 		$product_id = !empty($settings['product_id']) ? $settings['product_id'] : null;
 		
 		if (!$product_id) {
-			return;
+			return '';
 		}
 		
 		$this->language->load('block/product/options');
 		$this->template->load('block/product/options');
 		
-		//TODO - Change this to template controlled values
 		$image_width = $this->config->get('config_image_product_option_width');
 		$image_height = $this->config->get('config_image_product_option_height');
 		

@@ -7,7 +7,7 @@ class Admin_Controller_Module_Welcome extends Controller
 	{
 		$this->template->load('module/welcome');
 
-		$this->load->language('module/welcome');
+		$this->language->load('module/welcome');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

@@ -24,7 +24,8 @@ class Catalog_Controller_Account_Account extends Controller
 		$this->data['wishlist'] = $this->url->link('account/wishlist');
 		$this->data['order'] = $this->url->link('account/order');
 		$this->data['download'] = $this->url->link('account/download');
-		$this->data['return'] = $this->url->link('account/return');
+		$this->data['return_view'] = $this->url->link('account/return');
+		$this->data['return_request'] = $this->url->link('account/return/insert');
 		$this->data['transaction'] = $this->url->link('account/transaction');
 		$this->data['newsletter'] = $this->url->link('account/newsletter');
 		

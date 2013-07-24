@@ -7,7 +7,7 @@ class Admin_Controller_Module_DnCarousel extends Controller
 	{
 		$this->template->load('module/dn_carousel');
 
-		$this->load->language('module/dn_carousel');
+		$this->language->load('module/dn_carousel');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

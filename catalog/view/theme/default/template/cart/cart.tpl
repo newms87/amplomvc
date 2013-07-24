@@ -1,7 +1,9 @@
 <?= $header; ?>
-<?= $this->builder->display_errors($errors); ?>
 <?= $column_left; ?><?= $column_right; ?>
-<div class="content"><?= $content_top; ?>
+<div id="content">
+	<?= $this->breadcrumb->render(); ?>
+	<?= $content_top; ?>
+	
 	<h1><?= $heading_title; ?>
 	<? if (isset($weight)) { ?>
 		<span id='cart_weight'>(<?= $weight; ?>)</span>
@@ -68,9 +70,10 @@
 		<h3><?= $text_cart_empty; ?></h3>
 		<div class="center"><a href="<?= $continue; ?>" class="button"><?= $button_shopping; ?></a></div>
 	<? }?>
+	
 	<?= $content_bottom; ?>
 </div>
-<?= $footer; ?>
+
 
 <? //We use javascript to hide for no script compatibility ?>
 <script type="text/javascript">//<!--
@@ -93,5 +96,4 @@ function handle_ajax_cart_load(action, data){
 //--></script>
 
 
-
-
+<?= $footer; ?>

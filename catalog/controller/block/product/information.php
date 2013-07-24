@@ -1,71 +1,54 @@
 <?php
 class Catalog_Controller_Block_Product_Information extends Controller
 {
-	
 	public function index($settings)
 	{
-		$product_info = !empty($settings['product_info']) ? $settings['product_info'] : null;
-		
-		if (!$product_info) {
+		if (empty($settings['product_info'])) {
 			return;
 		}
+		
+		$product_info = $settings['product_info'];
 		
 		$this->language->load('block/product/information');
 		$this->template->load('block/product/information');
 		
-		$review_status = $this->config->get('config_review_status');
-		$share_status = $this->config->get('config_share_status');
+		$this->data = $product_info;
 		
-		$this->data['product_id'] = $product_info['product_id'];
+		$this->data['url_manufacturer'] = $this->url->link('manufacturer/manufacturer', 'manufacturer_id=' . $product_info['manufacturer_id']);
 		
-		$this->data['review_status'] = $review_status;
-		$this->data['share_status'] = $share_status;
+		$this->data['is_purchasable'] = $this->cart->productPurchasable($product_info);
+		$this->data['display_model'] = $this->config->get('config_show_product_model');
 		
-		$this->data['manufacturer'] = $product_info['manufacturer'];
-		$this->data['manufacturer_url'] = $this->url->link('designers/designers', 'designer_id=' . $product_info['manufacturer_id']);
-			
-		$expiration = $product_info['date_expires'];
-		$diff = date_diff(new DateTime(), new DateTime($expiration));
-		
-		//If the product is not active
-		$is_active = (!$diff->invert || $expiration == DATETIME_ZERO) && (int)$product_info['manufacturer_status'] && ($product_info['quantity'] >0);
-		
-		$this->data['is_active'] = $is_active;
-		
-		if ($is_active) {
+		if ($this->data['is_purchasable']) {
 			//The Product Options Block
 			$this->data['block_product_options'] = $this->getBlock('product/options', array('product_id' => $product_info['product_id']));
 		}
-		else {
+		
+		$show_related = $this->config->get('config_show_product_related');
+		
+		if ($show_related > 1 || ($show_related == 1 && !$this->data['is_purchasable'])) {
 			$ps_params = array(
-				'product_info'=>$product_info,
-				'limit'=>4
+				'product_info' => $product_info,
+				'limit' => 4
 			);
 			
 			$this->data['block_product_suggestions'] = $this->getBlock('product/suggestions', $ps_params);
 		}
 		
-		$this->data['teaser'] = html_entity_decode($product_info['teaser'], ENT_QUOTES, 'UTF-8');
-		
-		$this->data['model'] = $product_info['model'];
-		$this->data['reward'] = $product_info['reward'];
-		$this->data['points'] = $product_info['points'];
-		
-		$this->data['display_model'] = $this->config->get('config_show_product_model');
-		
+		//Stock
 		$stock_type = $this->config->get('config_stock_display');
 		
 		if ($stock_type == 'hide') {
 			$this->data['stock_type'] = "";
 		}
-		elseif (!$is_active) {
-			$this->language->set('stock', $this->_('text_stock_inactive'));
+		elseif (!$this->data['is_purchasable']) {
+			$this->data['stock'] = $this->_('text_stock_inactive');
 		}
 		elseif ($product_info['quantity'] <= 0) {
 			$this->data['stock'] = $product_info['stock_status'];
 		} else {
 			if ($stock_type == 'status') {
-				$this->language->set('stock', $this->_('text_instock'));
+				$this->data['stock'] = $this->_('text_instock');
 			}
 			elseif ((int)$product_info['quantity'] > (int)$stock_type) {
 				$this->data['stock'] = $this->_('text_more_stock', (int)$stock_type);
@@ -81,9 +64,6 @@ class Catalog_Controller_Block_Product_Information extends Controller
 			$this->data['price'] = false;
 		}
 		
-		$this->data['is_final'] = (int)$product_info['is_final'];
-		$this->_('final_sale_explanation', $this->url->link('information/information/info','information_id=7').'/#return_policy');
-		
 		if ((float)$product_info['special']) {
 			$this->data['special'] = $this->currency->format($product_info['special'], $product_info['tax_class_id']);
 		}
@@ -94,15 +74,44 @@ class Catalog_Controller_Block_Product_Information extends Controller
 		
 		$discounts = $this->Model_Catalog_Product->getProductDiscounts($product_info['product_id']);
 		
-		$this->data['discounts'] = array();
-		
-		foreach ($discounts as $discount) {
+		foreach ($discounts as &$discount) {
 			$this->data['discounts'][] = array(
 				'quantity' => $discount['quantity'],
 				'price'	=> $this->currency->format($this->tax->calculate($discount['price'], $product_info['tax_class_id']))
 			);
+		} unset($discount);
+		
+		$this->data['discounts'] = $discounts;
+		
+		//customers must order at least 1 of this product
+		$this->data['minimum'] = $product_info['minimum'] ? $product_info['minimum'] : 1;
+		
+		$this->_('text_minimum', $product_info['minimum']);
+		
+		//Product Review
+		if ($this->config->get('config_review_status')) {
+			$this->data['block_review'] = $this->getBlock('product/review');
+		}
+
+		//Social Sharing
+		if ($this->config->get('config_share_status')) {
+			$this->data['block_sharing'] = $this->getBlock('extras/sharing');
 		}
 		
+		//Shipping & Return Policies
+		$this->data['shipping_policy'] = $this->cart->getShippingPolicy($product_info['shipping_policy_id']);
+		$this->data['return_policy'] = $this->cart->getReturnPolicy($product_info['return_policy_id']);
+		
+		$this->data['default_shipping_policy'] = $this->config->get('config_default_shipping_policy') == $product_info['shipping_policy_id'];
+		$this->data['default_return_policy'] = $this->config->get('config_default_return_policy') == $product_info['return_policy_id'];
+		
+		if ($this->data['return_policy']['days'] < 0) {
+			$this->data['is_final_explanation'] = $this->_('final_sale_explanation', $this->url->link('information/information/shipping_return_policy','product_id=' . $product_info['product_id']));
+		}
+
+		//Links
+		$this->_('text_view_more', $this->url->link('product/category', 'category_id=' . $product_info['category']['category_id']), $product_info['category']['name']);
+		$this->_('text_keep_shopping', $this->url->link('product/category'));
 		$this->data['continue_shopping_link'] = $this->breadcrumb->get_prev_url();
 		
 		$this->data['view_cart_link'] = $this->url->link('cart/cart');
@@ -110,37 +119,10 @@ class Catalog_Controller_Block_Product_Information extends Controller
 		
 		$this->_('error_add_to_cart', $this->config->get('config_email'));
 		
-		if ($product_info['shipping_return']) {
-			$this->data['shipping_return'] = html_entity_decode($product_info['shipping_return'], ENT_QUOTES, 'UTF-8');
-			
-			$this->data['is_default_shipping'] = trim(strip_tags($this->data['shipping_return'])) == trim($this->_('shipping_return_policy'));
-		}
-		else {
-			$this->data['shipping_return'] = $this->_('shipping_return_policy');
-			
-			$this->data['is_default_shipping'] = true;
-		}
+		//Ajax Urls
+		$this->data['url_add_to_cart'] = $this->url->ajax('cart/cart/add');
 		
-		$this->data['shipping_return_popup'] = $this->tool->limit_characters($this->data['shipping_return'], 90) . $this->_('text_read_more');
-		
-		//customers must order at least 1 of this product
-		$this->data['minimum'] = $product_info['minimum'] ? $product_info['minimum'] : 1;
-		
-		$this->_('text_minimum', $product_info['minimum']);
-		
-		if ($review_status) {
-			$this->data['reviews'] = $this->_('text_reviews', (int)$product_info['reviews']);
-			
-			$this->data['rating'] = (int)$product_info['rating'];
-		}
-
-		if ($share_status) {
-			$this->data['block_sharing'] = $this->getBlock('extras/sharing');
-		}
-		
-		$this->_('text_view_more', $this->url->link('product/category', 'category_id=' . $product_info['category']['category_id']), $product_info['category']['name']);
-		$this->_('text_keep_shopping', $this->url->link('product/category'));
-		
+		//Render
 		$this->render();
 	}
 }

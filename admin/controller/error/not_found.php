@@ -5,7 +5,7 @@ class Admin_Controller_Error_NotFound extends Controller
 	{
 		$this->template->load('error/not_found');
 
-		$this->load->language('error/not_found');
+		$this->language->load('error/not_found');
 
 		$this->document->setTitle($this->_('heading_title'));
 
@@ -19,4 +19,4 @@ class Admin_Controller_Error_NotFound extends Controller
 				
 		$this->response->setOutput($this->render());
   	}
-}
+}

@@ -15,7 +15,7 @@ $_['text_modify']						= 'Modify &raquo;';
 $_['text_your_details']				= 'Your Personal Details';
 $_['text_your_address']				= 'Your Address';
 $_['text_your_password']				= 'Your Password';
-$_['text_agree']							= 'I have read and agree to the <a class="colorbox" href="%s" alt="%s"><b>%s</b></a>';
+$_['text_agree']							= 'I have read and agree to the <a class="colorbox" onclick="return colorbox($(this))" href="%s" target="_blank" alt="%s"><b>%s</b></a>';
 $_['text_address_new']					= 'I want to use a new address';
 $_['text_address_existing']			= 'I want to use an existing address';
 $_['text_shipping_method']			= 'Please select the preferred shipping method to use on this order.';
@@ -24,6 +24,7 @@ $_['text_comments']						= 'Add Comments About Your Order';
 $_['text_no_shipping_address']						= 'Please specify a Shipping Address and the shipping methods will automatically be calculated.';
 $_['text_no_payment_address']		= 'Please specify a Payment Address and the available payment methods will be displayed.';
 $_['text_address_success']				= 'You have successfully updated your Address Book!';
+$_['text_pp_standard_paywithcc']  = "<span class=\"pp_standard_paywithcc\"> OR pay with Credit Card via paypal.</span>";
 
 // Column
 $_['column_name']						= 'Product Name';
@@ -77,6 +78,6 @@ $_['error_payment_address']			= 'You must select a Billing Address!';
 $_['error_shipping']					= 'Shipping method required!';
 $_['error_no_shipping_required']	= 'Shipping is not required for you current selection';
 $_['error_payment']						= 'Payment method required!';
-$_['error_no_payment']					= 'No Payment options are available. Please <a href="%s">contact us</a> for assistance!';
+$_['error_no_payment_method']					= 'No Payment options are available. Please <a href="%s">contact us</a> for assistance!';
 $_['error_ajax_response']				= 'There was an error while processing your request: ';
 $_['error_same_shipping_invalid']	= 'We do not ship to the address you specified in the Billing Address';

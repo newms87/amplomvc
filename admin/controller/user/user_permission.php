@@ -5,7 +5,7 @@ class Admin_Controller_User_UserPermission extends Controller
 
 	public function index()
 	{
-		$this->load->language('user/user_group');
+		$this->language->load('user/user_group');
 
 		$this->document->setTitle($this->_('heading_title'));
  		
@@ -14,7 +14,7 @@ class Admin_Controller_User_UserPermission extends Controller
 
 	public function insert()
 	{
-		$this->load->language('user/user_group');
+		$this->language->load('user/user_group');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -45,7 +45,7 @@ class Admin_Controller_User_UserPermission extends Controller
 
 	public function update()
 	{
-		$this->load->language('user/user_group');
+		$this->language->load('user/user_group');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -76,7 +76,7 @@ class Admin_Controller_User_UserPermission extends Controller
 
 	public function delete()
 	{
-		$this->load->language('user/user_group');
+		$this->language->load('user/user_group');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -240,7 +240,7 @@ class Admin_Controller_User_UserPermission extends Controller
  		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('user/user_permission'));
 		
-		$url_query = $this->url->get_query('sort','order','page');
+		$url_query = $this->url->getQuery('sort','order','page');
 		
 		if ($user_group_id) {
 			$this->data['action'] = $this->url->link('user/user_permission/update', 'user_group_id=' . $user_group_id . $url_query);
@@ -317,4 +317,4 @@ class Admin_Controller_User_UserPermission extends Controller
 		
 		return $this->error ? false : true;
 	}
-}
+}

@@ -5,7 +5,7 @@ class Catalog_Controller_Common_Maintenance extends Controller
 	{
 		$this->template->load('common/maintenance');
 
-		$this->load->language('common/maintenance');
+		$this->language->load('common/maintenance');
 		
 		$this->document->setTitle($this->_('heading_title'));
 		

@@ -7,7 +7,7 @@ class Admin_Controller_Tool_Tool extends Controller
 	{
 		$this->template->load('tool/tool');
 
-		$this->load->language('tool/tool');
+		$this->language->load('tool/tool');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

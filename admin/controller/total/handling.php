@@ -7,7 +7,7 @@ class Admin_Controller_Total_Handling extends Controller
 	{
 		$this->template->load('total/handling');
 
-		$this->load->language('total/handling');
+		$this->language->load('total/handling');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

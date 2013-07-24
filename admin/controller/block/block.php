@@ -5,13 +5,12 @@ class Admin_Controller_Block_Block extends Controller
 	
 	public function index()
 	{
-		$this->load->language('block/block');
+		$this->language->load('block/block');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (isset($_GET['name'])) {
-				
-			if (!$this->Model_Block_Block->is_block($_GET['name'])) {
+		if (!empty($_GET['name'])) {
+			if (!$this->Model_Block_Block->isBlock($_GET['name'])) {
 				$this->message->add('warning', $this->_('error_unknown_block'));
 				
 				$this->url->redirect($this->url->link('block/block'));
@@ -22,6 +21,23 @@ class Admin_Controller_Block_Block extends Controller
 		else {
 			$this->getList();
 		}
+	}
+	
+	public function delete()
+	{
+		$this->language->load('block/block');
+		
+		if (!empty($_GET['name']) && $this->validateDelete()) {
+			$this->Model_Block_Block->deleteBlock($_GET['name']);
+			
+			if (!$this->message->error_set()) {
+				$this->message->add('success', $this->_('text_success_delete'));
+			}
+			
+			$this->url->redirect($this->url->link('block/block', $this->url->getQueryExclude('name')));
+		}
+		
+		$this->index();
 	}
 	
 	private function getList()
@@ -57,33 +73,13 @@ class Admin_Controller_Block_Block extends Controller
 			'sortable' => true,
 		);
 		
-		//TODO: update to new sort / filter format
-		//The Sort data
-		$data = array();
-		
-		$sort_defaults = array(
-			'sort' => 'name',
-			'order' => 'ASC',
-			'limit' => $this->config->get('config_admin_limit'),
-			'page' => 1,
-		);
-		
-		foreach ($sort_defaults as $key => $default) {
-			$data[$key] = $$key = isset($_GET[$key]) ? $_GET[$key] : $default;
-		}
-		
-		$data['start'] = ($page - 1) * $limit;
-		
-		//Filter
-		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
-		
-		if ($filter_values) {
-			$data += $filter_values;
-		}
+		//The Sort & Filter Data
+		$sort = $this->sort->getQueryDefaults('name', 'ASC');
+		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 		
 		//Table Row Data
-		$block_total = $this->Model_Block_Block->getTotalBlocks($data);
-		$blocks = $this->Model_Block_Block->getBlocks($data);
+		$block_total = $this->Model_Block_Block->getTotalBlocks($filter);
+		$blocks = $this->Model_Block_Block->getBlocks($sort + $filter);
 		
 		foreach ($blocks as &$block) {
 			$actions = array(
@@ -91,35 +87,34 @@ class Admin_Controller_Block_Block extends Controller
 					'text' => $this->_('text_edit'),
 					'href' => $this->url->link('block/block', 'name=' . $block['name'])
 				),
+				'delete' => array(
+					'text' => $this->_('text_delete'),
+					'href' => $this->url->link('block/block/delete', 'name=' . $block['name']),
+				),
 			);
 			
 			$block['actions'] = $actions;
 		}
 		
-		//The table template data
+		//Build The Table
 		$tt_data = array(
 			'row_id'		=> 'name',
-			'route'		=> 'block/block',
-			'sort'		=> $sort,
-			'order'		=> $order,
-			'page'		=> $page,
-			'sort_url'	=> $this->url->link('block/block', $this->url->get_query('filter')),
-			'columns'	=> $columns,
-			'data'		=> $blocks,
 		);
 		
-		$tt_data += $this->language->data;
-		
-		//Build the table template
 		$this->table->init();
-		$this->table->set_template('table/list_view');
-		$this->table->set_template_data($tt_data);
-		$this->table->map_attribute('filter_value', $filter_values);
+		$this->table->setTemplate('table/list_view');
+		$this->table->setColumns($columns);
+		$this->table->setRows($blocks);
+		$this->table->setTemplateData($tt_data);
+		$this->table->mapAttribute('filter_value', $filter);
 		
 		$this->data['list_view'] = $this->table->render();
 		
 		//Action Buttons
 		$this->data['insert'] = $this->url->link('block/add');
+		
+		//Render limit Menu
+		$this->data['limits'] = $this->sort->render_limit();
 		
 		//Pagination
 		$this->pagination->init();
@@ -127,7 +122,7 @@ class Admin_Controller_Block_Block extends Controller
 		
 		$this->data['pagination'] = $this->pagination->render();
 		
-		//Template Children
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -260,6 +255,15 @@ class Admin_Controller_Block_Block extends Controller
 		return $this->error ? false : true;
 	}
 	
+	private function validateDelete()
+	{
+		if (!$this->user->hasPermission('modify', 'block/block')) {
+			$this->error['warning'] = $this->_('error_permission');
+		}
+		
+		return $this->error ? false : true;
+	}
+
 	private function validate_block_data()
 	{
 		$this->loadBlockController();

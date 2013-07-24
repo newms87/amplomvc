@@ -87,7 +87,7 @@ class Cart extends Library
 	/**
 	 * Cart Functions
 	 */
-	 
+	
 	public function add($product_id, $quantity = 1, $options = array(), $no_json = true) {
   		$this->no_json = $no_json;
 		
@@ -121,9 +121,9 @@ class Cart extends Library
 
   	public function update($key, $qty)
   	{
-	if ((int)$qty && ((int)$qty > 0)) {
-				$this->session->data['cart'][$key] = (int)$qty;
-	} else {
+		if ((int)$qty > 0) {
+			$this->session->data['cart'][$key] = (int)$qty;
+		} else {
 			$this->remove($key);
 		}
 		
@@ -165,20 +165,22 @@ class Cart extends Library
 		$this->session->data['cart'] = array();
 		$this->session->data['wishlist'] = array();
 		
-		unset($this->session->data['shipping_method']);
-		unset($this->session->data['payment_method']);
+		unset($this->session->data['shipping_address_id']);
+		unset($this->session->data['payment_address_id']);
+		unset($this->session->data['shipping_method_id']);
+		unset($this->session->data['payment_method_id']);
 		unset($this->session->data['comment']);
-		unset($this->session->data['order_id']);
 		unset($this->session->data['coupons']);
 		unset($this->session->data['reward']);
-		unset($this->session->data['voucher']);
 		unset($this->session->data['vouchers']);
+		
+		$this->order->clear();
   	}
 	
 	/**
 	 * Cart Weight
 	 */
-	 
+	
   	public function getWeight()
   	{
 		$weight = 0;
@@ -195,7 +197,7 @@ class Cart extends Library
 	/**
 	 * Cart Totals
 	 */
-	 
+	
   	public function getSubTotal()
   	{
 		$total = 0;
@@ -219,6 +221,7 @@ class Cart extends Library
 		$results = $this->Model_Setting_Extension->getExtensions('total');
 		
 		//TODO: why sort_order was kept in config vs with extension data is beyond me...
+		//Remove `key` like '%_status' from oc_setting table
 		foreach ($results as $key => $value) {
 			$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
 		}
@@ -227,7 +230,7 @@ class Cart extends Library
 		
 		foreach ($results as $result) {
 			if ($this->config->get($result['code'] . '_status')) {
-				$classname = "Model_Total_" . $this->tool->format_classname($result['code']);
+				$classname = "System_Extension_Total_Model_" . $this->tool->formatClassname($result['code']);
 				
 				$this->$classname->getTotal($total_data, $total, $taxes);
 			}
@@ -310,7 +313,7 @@ class Cart extends Library
 	/**
 	 *  Cart Products
 	 */
-	 
+	
 	public function getProductId($key)
 	{
 		if (!isset($this->session->data['cart'][$key])) {
@@ -351,7 +354,7 @@ class Cart extends Library
 					$options = array();
 				}
 				
-				$product = $this->db->query_row("SELECT * FROM " . DB_PREFIX . "product p WHERE p.product_id = '" . (int)$product_id . "' AND p.date_available <= NOW() AND p.status = '1'");
+				$product = $this->db->queryRow("SELECT * FROM " . DB_PREFIX . "product p WHERE p.product_id = '" . (int)$product_id . "' AND p.date_available <= NOW() AND p.status = '1'");
 				
 				if ($product) {
 					$this->translation->translate('product', $product['product_id'], $product);
@@ -412,7 +415,7 @@ class Cart extends Library
 					$customer_group_id = $this->customer->getCustomerGroupId();
 					
 					// Product Specials
-					$product_special_price = $this->db->query_var("SELECT price FROM " . DB_PREFIX . "product_special WHERE product_id = '" . (int)$product_id . "' AND customer_group_id = '" . (int)$customer_group_id . "' AND ((date_start = '" . DATETIME_ZERO . "' OR date_start <= NOW()) AND (date_end = '" . DATETIME_ZERO . "' OR date_end > NOW())) ORDER BY priority ASC, price ASC LIMIT 1");
+					$product_special_price = $this->db->queryVar("SELECT price FROM " . DB_PREFIX . "product_special WHERE product_id = '" . (int)$product_id . "' AND customer_group_id = '" . (int)$customer_group_id . "' AND ((date_start = '" . DATETIME_ZERO . "' OR date_start <= NOW()) AND (date_end = '" . DATETIME_ZERO . "' OR date_end > NOW())) ORDER BY priority ASC, price ASC LIMIT 1");
 				
 					if ($product_special_price) {
 						$product['price'] = $product_special_price;
@@ -428,7 +431,7 @@ class Cart extends Library
 							}
 						}
 						
-						$product_discount_price = $this->db->query_var("SELECT price FROM " . DB_PREFIX . "product_discount WHERE product_id = '" . (int)$product_id . "' AND customer_group_id = '" . (int)$customer_group_id . "' AND quantity <= '" . (int)$discount_quantity . "' AND ((date_start = '" . DATETIME_ZERO . "' OR date_start <= NOW()) AND (date_end = '" . DATETIME_ZERO . "' OR date_end > NOW())) ORDER BY quantity DESC, priority ASC, price ASC LIMIT 1");
+						$product_discount_price = $this->db->queryVar("SELECT price FROM " . DB_PREFIX . "product_discount WHERE product_id = '" . (int)$product_id . "' AND customer_group_id = '" . (int)$customer_group_id . "' AND quantity <= '" . (int)$discount_quantity . "' AND ((date_start = '" . DATETIME_ZERO . "' OR date_start <= NOW()) AND (date_end = '" . DATETIME_ZERO . "' OR date_end > NOW())) ORDER BY quantity DESC, priority ASC, price ASC LIMIT 1");
 						
 						if ($product_discount_price) {
 							$product['price'] = $product_discount_price;
@@ -436,10 +439,10 @@ class Cart extends Library
 					}
 			
 					// Reward Points
-					$reward = (int)$this->db->query_var("SELECT points FROM " . DB_PREFIX . "product_reward WHERE product_id = '" . (int)$product_id . "' AND customer_group_id = '" . (int)$customer_group_id . "'");
+					$reward = (int)$this->db->queryVar("SELECT points FROM " . DB_PREFIX . "product_reward WHERE product_id = '" . (int)$product_id . "' AND customer_group_id = '" . (int)$customer_group_id . "'");
 					
 					// Downloads
-					$downloads = $this->db->query_rows("SELECT * FROM " . DB_PREFIX . "product_to_download p2d LEFT JOIN " . DB_PREFIX . "download d ON (p2d.download_id = d.download_id) WHERE p2d.product_id = '" . (int)$product_id . "'");
+					$downloads = $this->db->queryRows("SELECT * FROM " . DB_PREFIX . "product_to_download p2d LEFT JOIN " . DB_PREFIX . "download d ON (p2d.download_id = d.download_id) WHERE p2d.product_id = '" . (int)$product_id . "'");
 					
 					$this->translation->translate_all('download', 'download_id', $downloads);
 					
@@ -489,6 +492,27 @@ class Cart extends Library
 		return count($this->session->data['cart']);
   	}
 	
+	public function productPurchasable($product)
+	{
+		if (is_integer($product)) {
+			$product = $this->Model_Catalog_Product->getProduct($product);
+		}
+		
+		if (!$product['status']) {
+			return false;
+		}
+		
+		if ($product['quantity'] < 1 && !$this->config->get('config_stock_checkout')) {
+			return false;
+		}
+		
+		if (!$this->date->isInFuture($product['date_expires'], true) || !$this->date->isInPast($product['date_available'], false)) {
+			return false;
+		}
+		
+		return true;
+	}
+	
 	public function validateProduct($product_id, $quantity, $options)
 	{
 		$product_info = $this->Model_Catalog_Product->getProduct($product_id);
@@ -537,12 +561,12 @@ class Cart extends Library
 	/**
 	 * Cart Stock
 	 */
-	 
+	
 	public function isEmpty()
 	{
 		return !(count($this->session->data['cart']) || !empty($this->session->data['vouchers']));
 	}
-  
+
   	public function hasStock()
   	{
   		foreach ($this->getProducts() as $product) {
@@ -594,11 +618,31 @@ class Cart extends Library
 		
 		return true;
 	}
+
+	public function validateCheckout()
+	{
+		if (!$this->validate()) {
+			$this->_e('CKO-1', 'checkout', 'error_checkout_validate');
+			return false;
+		}
+		
+		if (!$this->validatePaymentDetails()) {
+			$this->_e('CKO-2', 'checkout', 'error_checkout_payment');
+			return false;
+		}
+		
+		if (!$this->validateShippingDetails()) {
+			$this->_e('CKO-3', 'checkout', 'error_checkout_shipping');
+			return false;
+		}
+		
+		return true;
+	}
 	
 	/**
 	 * Wishlist Functions
 	 */
-	 
+	
 	public function get_wishlist()
 	{
 		return !empty($this->session->data['wishlist']) ? $this->session->data['wishlist'] : null;
@@ -644,18 +688,7 @@ class Cart extends Library
 	 * Shipping & Payment API
 	 */
 	
-  	public function hasShipping()
-  	{
-		foreach ($this->getProducts() as $product) {
-			if ($product['shipping']) {
-			return true;
-			}
-		}
-		
-		return false;
-	}
-	
-  	public function hasDownload()
+  public function hasDownload()
   	{
 		foreach ($this->getProducts() as $product) {
 			if ($product['download']) {
@@ -671,87 +704,17 @@ class Cart extends Library
 		return !empty($this->session->data['payment_address_id']);
 	}
 	
-	public function hasShippingAddress()
-	{
-		return !empty($this->session->data['shipping_address_id']);
-	}
-
-	public function hasPaymentMethod()
-	{
-		return !empty($this->session->data['payment_method']);
-	}
-	
-	public function hasShippingMethod()
-	{
-		return !empty($this->session->data['shipping_method']);
-	}
-	
 	public function getPaymentAddressId()
 	{
 		return isset($this->session->data['payment_address_id']) ? $this->session->data['payment_address_id'] : false;
 	}
 	
-	public function getShippingAddressId()
-	{
-		return isset($this->session->data['shipping_address_id']) ? $this->session->data['shipping_address_id'] : false;
-	}
-	
 	public function getPaymentAddress()
 	{
 		if (isset($this->session->data['payment_address_id'])) {
-			return $this->Model_Account_Address->getAddress($this->session->data['payment_address_id']);
+			return $this->customer->getAddress($this->session->data['payment_address_id']);
 		}
 
-		return false;
-	}
-	
-	public function getShippingAddress()
-	{
-		if (isset($this->session->data['shipping_address_id'])) {
-			return $this->Model_Account_Address->getAddress($this->session->data['shipping_address_id']);
-		}
-
-		return false;
-	}
-	
-	public function getPaymentMethod()
-	{
-		return isset($this->session->data['payment_method']) ? $this->session->data['payment_method'] : false;
-	}
-	
-	public function getPaymentMethodId()
-	{
-		return isset($this->session->data['payment_method']) ? $this->session->data['payment_method']['code'] : false;
-	}
-	
-	public function getShippingMethod()
-	{
-		if (isset($this->session->data['shipping_method'])) {
-			$method = $this->session->data['shipping_method'];
-			
-			$classname = "Model_Shipping_" . $this->tool->format_classname($method['code']);
-			$quotes = $this->$classname->getQuote($this->getShippingAddress());
-			
-			if (!empty($quotes)) {
-				foreach ($quotes as $quote) {
-					if ($quote['method'] == $method['method']) {
-						return $method;
-					}
-				}
-			}
-		}
-		
-		unset($this->session->data['shipping_method']);
-
-		return false;
-	}
-	
-	public function getShippingMethodId()
-	{
-		if (isset($this->session->data['shipping_method'])) {
-			return $this->session->data['shipping_method']['code'] . '_' . $this->session->data['shipping_method']['method'];
-		}
-		
 		return false;
 	}
 	
@@ -781,12 +744,43 @@ class Cart extends Library
 		if (!$this->validatePaymentAddress()) {
 			$this->_e('SA-11', 'payment_address', 'error_payment_address_invalid');
 			unset($this->session->data['payment_address_id']);
+			
+			$this->setPaymentMethod();
 			return false;
 		}
 		
-		$this->setPaymentMethod();
-		
 		return true;
+	}
+	
+	/** Shipping Address Operations **/
+	public function hasShipping()
+  	{
+		foreach ($this->getProducts() as $product) {
+			if ($product['shipping']) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public function hasShippingAddress()
+	{
+		return !empty($this->session->data['shipping_address_id']);
+	}
+	
+	public function getShippingAddressId()
+	{
+		return isset($this->session->data['shipping_address_id']) ? $this->session->data['shipping_address_id'] : false;
+	}
+	
+	public function getShippingAddress()
+	{
+		if (isset($this->session->data['shipping_address_id'])) {
+			return $this->customer->getAddress($this->session->data['shipping_address_id']);
+		}
+
+		return false;
 	}
 	
 	public function setShippingAddress($address = null)
@@ -823,10 +817,106 @@ class Cart extends Library
 		return true;
 	}
 	
+	//TODO: Move this to System_Extension_Payment controller...
+	/** Payment Method Operations **/
+	
+	public function hasPaymentMethod()
+	{
+		return !empty($this->session->data['payment_method_id']);
+	}
+	
+	public function getPaymentMethodId()
+	{
+		if (isset($this->session->data['payment_method_id'])) {
+			return $this->session->data['payment_method_id'];
+		}
+		
+		return false;
+	}
+	
+	public function getPaymentMethod($payment_method_id = null, $payment_address = null, $totals = null)
+	{
+		if (!$payment_method_id) {
+			$payment_method_id = $this->getPaymentMethodId();
+		}
+
+		if ($payment_method_id) {
+			if (!empty($payment_address)) {
+				if (!is_array($payment_address)) {
+					$payment_address = $this->customer->getAddress($payment_address);
+				}
+			} else {
+				$payment_address = $this->getPaymentAddress();
+			}
+		
+			if (!$totals) {
+				$totals = $this->getTotals();
+			}
+			
+			$classname = "Model_Payment_" . $this->tool->formatClassname($payment_method_id);
+			
+			$method = $this->$classname->getMethod($payment_address, $totals['total']);
+			
+			if ($method) {
+				return $method;
+			}
+		}
+		
+		return false;
+	}
+	
+	public function getPaymentMethodData($payment_method_id = null)
+	{
+		if (!$payment_method_id) {
+			return false;
+		}
+		
+		$classname = "Model_Payment_" . $this->tool->formatClassname($payment_method_id);
+		
+		if (method_exists($this->$classname, 'data')) {
+			return $this->$classname->data();
+		}
+		
+		return false;
+	}
+
+	public function getPaymentMethods($payment_address = null)
+	{
+		// Payment Methods
+		$methods = array();
+		
+		$results = $this->Model_Setting_Extension->getExtensions('payment');
+		
+		foreach ($results as $result) {
+			$method = $this->getPaymentMethod($result['code'], $payment_address);
+			
+			if ($method) {
+				$methods[$result['code']] = $method;
+			}
+		}
+		
+		if (!$methods) {
+			$this->error['checkout']['payment_method'] = $this->_('error_payment_methods', $this->config->get('config_email'));
+			
+			$this->setPaymentMethod();
+			
+			return false;
+		}
+		
+		uasort($methods, function ($a,$b){ return $a['sort_order'] > $b['sort_order']; });
+		
+		//Validate the currenlty selected payment method
+		if ($this->hasPaymentMethod() && !isset($methods[$this->getPaymentMethodId()])) {
+			$this->setPaymentMethod(null);
+		}
+		
+		return $methods;
+	}
+	
 	public function setPaymentMethod($method = null)
 	{
 		if (!$method) {
-			unset($this->session->data['payment_method']);
+			unset($this->session->data['payment_method_id']);
 		}
 		else {
 			$payment_methods = $this->getPaymentMethods();
@@ -837,27 +927,154 @@ class Cart extends Library
 					return false;
 				}
 				
-				$method = $payment_methods[$method];
+				$payment_method_id = $payment_methods[$method]['code'];
 			}
 			else {
-				$key = $method['code'];
-				
-				if (!isset($payment_methods[$key])) {
+				if (!isset($payment_methods[$method['code']])) {
 					$this->_e('PM-1b', 'payment_method', 'error_payment_method');
 					return false;
 				}
+				
+				$payment_method_id = $method['code'];
 			}
 			
-			$this->session->data['payment_method'] = $method;
+			$this->session->data['payment_method_id'] = $payment_method_id;
 		}
 		
 		return true;
 	}
 	
+	//TODO: Move this to System_Extension_Shipping controller...
+	/** Shipping Method Operations **/
+	
+	public function hasShippingMethod()
+	{
+		return !empty($this->session->data['shipping_method_id']);
+	}
+	
+	public function getShippingMethodId()
+	{
+		if (isset($this->session->data['shipping_method_id'])) {
+			return $this->session->data['shipping_method_id'];
+		}
+		
+		return false;
+	}
+	
+	public function getShippingMethod($shipping_method_id = null, $shipping_address = null)
+	{
+		if (!$shipping_method_id) {
+			$shipping_method_id = $this->getShippingMethodId();
+		}
+
+		if ($shipping_method_id) {
+			//Invalid Shipping method ID
+			if (!strpos($shipping_method_id, '__')) {
+				$code = $shipping_method_id;
+				$method = false;
+			} else {
+				list($code, $method) = explode("__", $shipping_method_id, 2);
+			}
+			
+			if (!empty($shipping_address)) {
+				if (!is_array($shipping_address)) {
+					$shipping_address = $this->customer->getAddress($shipping_address);
+				}
+			}
+			elseif ($this->hasShippingAddress()) {
+				$shipping_address = $this->getShippingAddress();
+			}
+			else {
+				$this->_e('SM-2', 'shipping_method', 'error_shipping_address');
+				return false;
+			}
+		
+			if (!$this->isAllowedShippingZone($shipping_address)) {
+				$this->_e('SM-3', 'shipping_method', 'error_shipping_zone');
+				return false;
+			}
+
+			$classname = "Model_Shipping_" . $this->tool->formatClassname($code);
+			$quotes = $this->$classname->getQuote($shipping_address);
+			
+			if (!empty($quotes)) {
+				if (!$method) {
+					return $quotes;
+				}
+				
+				foreach ($quotes as $quote) {
+					if ($quote['method'] === $method) {
+						return $quote;
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	public function getShippingMethods($shipping_address = null)
+	{
+		//Find Available Shipping Methods
+		$results = $this->Model_Setting_Extension->getExtensions('shipping');
+		
+		$methods = array();
+		
+		foreach ($results as $result) {
+			$quotes = $this->getShippingMethod($result['code'], $shipping_address);
+			
+			if (!empty($quotes)) {
+				foreach ($quotes as $quote) {
+					$methods[$quote['code'] . '__' . $quote['method']] = $quote;
+				}
+			}
+		}
+		
+		if ($methods) {
+			//Validate the currently selected shipping method
+			if (!$shipping_address && $this->hasShippingMethod() && !isset($methods[$this->getShippingMethodId()])) {
+				$this->setShippingMethod();
+			}
+			
+			uasort($methods, function ($a,$b){ return $a['sort_order'] > $b['sort_order']; });
+			
+			return $methods;
+		}
+		
+		//No Shipping Options Available!
+		$msg = $this->_('error_shipping_methods', $this->url->link('information/contact'));
+		$this->_e('SM-4', 'shipping_method', $msg);
+		
+		return false;
+	}
+	
+	public function getShippingMethodData($shipping_method_id)
+	{
+		if (!$shipping_method_id) {
+			return false;
+		}
+		
+		//Invalid Shipping method ID
+		if (!strpos($shipping_method_id, '__')) {
+			$code = $shipping_method_id;
+			$method = false;
+		} else {
+			list($code, $method) = explode("__", $shipping_method_id, 2);
+		}
+		
+		$classname = "Model_Shipping_" . $this->tool->formatClassname($code);
+		
+		if (method_exists($this->$classname, 'data')) {
+			return $this->$classname->data($method);
+		}
+		
+		return false;
+	}
+	
 	public function setShippingMethod($method = null)
 	{
 		if (!$method) {
-			unset($this->session->data['shipping_method']);
+			unset($this->session->data['shipping_method_id']);
 		}
 		else {
 			$shipping_methods = $this->getShippingMethods();
@@ -868,129 +1085,23 @@ class Cart extends Library
 					return false;
 				}
 				
-				$method =  $shipping_methods[$method];
+				$shipping_method_id = $method;
 			}
 			else {
-				$key = $method['code'] . '_' . $method['method'];
+				$shipping_method_id = $method['code'] . '__' . $method['method'];
 				
-				if (!isset($shipping_methods[$key])) {
+				if (!isset($shipping_methods[$shipping_method_id])) {
 					$this->_e('SM-1b', 'shipping_method', 'error_shipping_method');
 					return false;
 				}
 			}
 			
-			$this->session->data['shipping_method'] = $method;
+			$this->session->data['shipping_method_id'] = $shipping_method_id;
 		}
 		
 		return true;
 	}
 	
-	public function getPaymentMethods($address = null)
-	{
-		if (!empty($address)) {
-			if (is_array($address)) {
-				$payment_address = $address;
-			}
-			else {
-				$payment_address = $this->Model_Account_Address->getAddress($address);
-			}
-		} elseif (isset($this->session->data['payment_address_id'])) {
-			$payment_address = $this->Model_Account_Address->getAddress($this->session->data['payment_address_id']);
-		}
-		else {
-			$payment_address = 0;
-		}
-		
-		$totals = $this->cart->getTotals();
-		
-		// Payment Methods
-		$method_data = array();
-		
-		$results = $this->Model_Setting_Extension->getExtensions('payment');
-		
-		//TODO: Fix this along with totals and shipping...
-		foreach ($results as $result) {
-			if ($this->config->get($result['code'] . '_status')) {
-				$classname = "Model_Payment_" . $this->tool->format_classname($result['code']);
-				
-				$method = $this->$classname->getMethod($payment_address, $totals['total']);
-				
-				if ($method) {
-					$method_data[$result['code']] = $method;
-				}
-			}
-		}
-		
-		if (!$method_data) {
-			$this->error['checkout']['payment_method'] = $this->_('error_payment_methods', $this->config->get('config_email'));
-			return false;
-		}
-		
-		uasort($method_data, function ($a,$b){ return $a['sort_order'] > $b['sort_order']; });
-		
-		return $method_data;
-	}
-	
-	public function getShippingMethods($address = null)
-	{
-		if (!empty($address)) {
-			if (is_array($address)) {
-				$shipping_address = $address;
-			}
-			else {
-				$shipping_address = $this->Model_Account_Address->getAddress($address);
-			}
-		}
-		elseif ($this->hasShippingAddress()) {
-			$shipping_address = $this->getShippingAddress();
-		}
-		else {
-			$this->_e('SM-2', 'shipping_method', 'error_shipping_address');
-			return false;
-		}
-		
-		if (!$this->isAllowedShippingZone($shipping_address)) {
-			$this->_e('SM-3', 'shipping_method', 'error_shipping_zone');
-			return false;
-		}
-		
-		//Find Available Shipping Methods
-		$results = $this->Model_Setting_Extension->getExtensions('shipping');
-		
-		$methods = array();
-		
-		foreach ($results as $result) {
-			//TODO: Fix this along with Pyament and Totals
-			if ($this->config->get($result['code'] . '_status')) {
-				$classname = "Model_Shipping_" . $this->tool->format_classname($result['code']);
-				$quotes = $this->$classname->getQuote($shipping_address);
-				
-				if(empty($quotes)) continue;
-				
-				foreach ($quotes as $quote) {
-					$methods[$quote['code'] . '_' . $quote['method']] = $quote;
-				}
-			}
-		}
-		
-		if ($methods) {
-			uasort($methods, function ($a,$b){ return $a['sort_order'] > $b['sort_order']; });
-			
-			return $methods;
-		}
-		
-		
-		//No Shipping Options Available!
-		$msg = $this->_('error_shipping_methods', $this->url->link('information/contact'));
-		$this->_e('SM-4', 'shipping_method', $msg);
-		
-		if ($this->hasShippingAddress()) {
-			$this->message->add('error', $msg);
-		}
-		
-		return false;
-	}
-
 	public function validateShippingDetails()
 	{
 		if ($this->hasShipping()) {
@@ -999,11 +1110,7 @@ class Cart extends Library
 				return false;
 			}
 			
-			if ($this->hasShippingMethod()) {
-				$shipping_method = $this->getShippingMethod();
-			}
-			
-			if (empty($shipping_method)) {
+			if (!$this->getShippingMethod()) {
 				$this->_e('CO-11', 'checkout', 'error_shipping_method');
 				return false;
 			}
@@ -1019,11 +1126,7 @@ class Cart extends Library
 			return false;
 		}
 		
-		if ($this->hasPaymentMethod()) {
-			$payment_method = $this->getPaymentMethod();
-		}
-		
-		if (empty($payment_method)) {
+		if (!$this->getPaymentMethod()) {
 			$this->_e('CO-13', 'checkout', 'error_payment_method');
 			return false;
 		}
@@ -1034,7 +1137,7 @@ class Cart extends Library
 	public function isAllowedShippingZone($shipping_address)
 	{
 		if (!empty($shipping_address['country_id']) && !empty($shipping_address['zone_id'])) {
-			return $this->Model_Localisation_Zone->inGeoZone($this->config->get('config_allowed_shipping_zone'), $shipping_address['country_id'], $shipping_address['zone_id']);
+			return $this->address->inGeoZone($shipping_address, $this->config->get('config_allowed_shipping_zone'));
 		}
 		
 		return false;
@@ -1087,12 +1190,12 @@ class Cart extends Library
 		$country_id = !empty($address['country_id']) ? (int)$address['country_id'] : 0;
 		$zone_id = !empty($address['zone_id']) ? (int)$address['zone_id'] : 0;
 		
-		if ( ! $this->db->query_var("SELECT COUNT(*) as total FROM " . DB_PREFIX . "country WHERE country_id = '$country_id'")) {
+		if ( ! $this->db->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "country WHERE country_id = '$country_id'")) {
 			$this->_e('PA-2', 'payment_address', 'error_country_id');
 			return false;
 		}
 		
-		if ( ! $this->db->query_var("SELECT COUNT(*) as total FROM " . DB_PREFIX . "zone WHERE zone_id = '$zone_id' AND country_id = '$country_id'")) {
+		if ( ! $this->db->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "zone WHERE zone_id = '$zone_id' AND country_id = '$country_id'")) {
 			$this->_e('PA-3', 'payment_address', 'error_zone_id');
 			return false;
 		}
@@ -1117,12 +1220,12 @@ class Cart extends Library
 		$country_id = !empty($address['country_id']) ? (int)$address['country_id'] : 0;
 		$zone_id = !empty($address['zone_id']) ? (int)$address['zone_id'] : 0;
 		
-		if ( ! $this->db->query_var("SELECT COUNT(*) as total FROM " . DB_PREFIX . "country WHERE country_id = '$country_id'")) {
+		if ( ! $this->db->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "country WHERE country_id = '$country_id'")) {
 			$this->_e('SA-2', 'shipping_address', 'error_country_id');
 			return false;
 		}
 		
-		if ( ! $this->db->query_var("SELECT COUNT(*) as total FROM " . DB_PREFIX . "zone WHERE zone_id = '$zone_id' AND country_id = '$country_id'")) {
+		if ( ! $this->db->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "zone WHERE zone_id = '$zone_id' AND country_id = '$country_id'")) {
 			$this->_e('SA-3', 'shipping_address', 'error_zone_id');
 			return false;
 		}
@@ -1135,10 +1238,52 @@ class Cart extends Library
 		return true;
 	}
 	
+	public function hasVouchers($voucher_id = null)
+	{
+		if ($voucher_id) {
+			return !empty($this->session->data['vouchers'][$voucher_id]);
+		}
+		
+		return !empty($this->session->data['vouchers']);
+	}
+	
+	public function getVoucherIds()
+	{
+		return isset($this->session->data['vouchers']) ? $this->session->data['vouchers'] : array();
+	}
+	
+	public function getVouchers()
+	{
+		$vouchers = array();
+		
+		foreach ($this->getVoucherIds() as $voucher_id) {
+			$vouchers[] = $this->System_Model_Voucher->getVoucher($voucher_id);
+		}
+	}
+			
+	public function addVoucher($voucher_id)
+	{
+		if (!isset($this->session->data['vouchers'])) {
+			$this->session->data['vouchers'][] = $voucher_id;
+		} else {
+			$this->session->data['vouchers'] = array($voucher_id);
+		}
+	}
+	
+	public function removeVoucher($voucher_id)
+	{
+		unset($this->session->data['vouchers'][$voucher_id]);
+	}
+	
+	public function removeAllVouchers()
+	{
+		unset($this->session->data['vouchers']);
+	}
+	
 	/**
 	 * Guest API
 	 */
-	 
+	
 	public function saveGuestInfo($info)
 	{
 		$this->session->data['guest_info'] = $info;
@@ -1163,177 +1308,66 @@ class Cart extends Library
 		$this->session->data['comment'] = strip_tags($comment);
 	}
 	
-	/**
-	 * Cart Order
-	 */
-	 
-	public function addOrder()
+	/** Policies **/
+	public function getShippingPolicy($shipping_policy_id)
 	{
-		if (!$this->validate()) {
-			return false;
-		}
+		$shipping_policies = $this->getShippingPolicies();
 		
-		$data = array();
-		
-		//Validate Shipping Address & Method
-		if ($this->cart->hasShipping()) {
-			if (!$this->cart->hasShippingAddress()) {
-				$this->_e('CO-1', 'checkout', 'error_shipping_address');
-				return false;
-			}
+		if (isset($shipping_policies[$shipping_policy_id])) {
+			$policy = $shipping_policies[$shipping_policy_id];
 			
-			if (!$this->cart->hasShippingMethod()) {
-				$this->_e('CO-2', 'checkout', 'error_shipping_method');
-			}
-		}
-		
-		//Validate Payment Address & Method
-		if (!$this->cart->hasPaymentAddress()) {
-			$this->_e('CO-3', 'checkout', 'error_payment_address');
-			return false;
-		}
-		
-		if (!$this->cart->hasPaymentMethod()) {
-			$this->_e('CO-3', 'checkout', 'error_payment_method');
-			return false;
-		}
-		
-		//Customer Checkout
-		if ($this->customer->isLogged()) {
-			$data = $this->customer->info();
-		}
-		elseif ($this->config->get('config_guest_checkout')) {
-			$data['customer_id'] = 0;
-			$data['customer_group_id'] = $this->config->get('config_customer_group_id');
-		}
-		//Guest checkout no allowed and customer not logged in
-		else {
-			$this->error['checkout']['guest'] = $this->language->get('error_checkout_guest');
-			return false;
-		}
-		
-		//Payment info
-		$data['payment_address']  = $this->getPaymentAddress();
-		
-		$payment_method = $this->cart->getPaymentMethod();
-		$data['payment_method'] = $payment_method['code'];
-		
-		//Shipping info
-		if ($this->cart->hasShipping()) {
-			$data['shipping_address'] = $this->getShippingAddress();
+			$policy['description'] = html_entity_decode($policy['description'], ENT_QUOTES, 'UTF-8');
 			
-			$shipping_method = $this->getShippingMethod();
-			$data['shipping_code'] = $shipping_method['code'];
-			$data['shipping_method'] = $shipping_method['method'];
+			return $policy;
 		}
 		
-		$data['invoice_prefix'] = $this->tool->format_invoice($this->config->get('config_invoice_prefix'));
-		$data['store_id'] = $this->config->get('config_store_id');
-		$data['store_name'] = $this->config->get('config_name');
-		
-		if ($data['store_id']) {
-			$data['store_url'] = $this->config->get('config_url');
-		} else {
-			$data['store_url'] = SITE_URL;
-		}
-		
-		$totals = $this->getTotals();
-		
-		$data['total'] = $totals['total'];
-		$data['totals'] = $totals['data'];
-		
-		$product_data = $this->getProducts();
-		
-		foreach ($product_data as &$product) {
-			$product['tax'] = $this->tax->getTax($product['total'], $product['tax_class_id']);
-		}unset($product);
-		
-		// Gift Voucher
-		$voucher_data = array();
-		
-		if (!empty($this->session->data['vouchers'])) {
-			$voucher_data = $this->session->data['vouchers'];
-			
-			//TODO: This is not a good way to generate unique IDs!
-			foreach ($voucher_data as &$voucher) {
-				$voucher['code'] = substr(md5(rand()), 0, 7);
-			}
-		}
-		
-		$data['products'] = $product_data;
-		$data['vouchers'] = $voucher_data;
-		$data['comment'] = $this->session->data['comment'];
-		
-		
-		$data['affiliate_id'] = 0;
-		$data['commission'] = 0;
-		
-		if (isset($_COOKIE['tracking'])) {
-			$affiliate_info = $this->Model_Affiliate_Affiliate->getAffiliateByCode($_COOKIE['tracking']);
-			
-			if ($affiliate_info) {
-				$data['affiliate_id'] = $affiliate_info['affiliate_id'];
-				$data['commission'] = ($total / 100) * $affiliate_info['commission'];
-			}
-		}
-		
-		$data['language_id'] = $this->config->get('config_language_id');
-		$data['currency_id'] = $this->currency->getId();
-		$data['currency_code'] = $this->currency->getCode();
-		$data['currency_value'] = $this->currency->getValue($this->currency->getCode());
-		$data['ip'] = $_SERVER['REMOTE_ADDR'];
-		
-		if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-			$data['forwarded_ip'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
-		} elseif (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-			$data['forwarded_ip'] = $_SERVER['HTTP_CLIENT_IP'];
-		}
-		
-		if (isset($_SERVER['HTTP_USER_AGENT'])) {
-			$data['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
-		}
-		
-		if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
-			$data['accept_language'] = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
-		}
-		
-		foreach ($data['payment_address'] as $key => $pa) {
-			$data['payment_' . $key] = $pa;
-		}
-		
-		if (!empty($data['shipping_address'])) {
-			foreach ($data['shipping_address'] as $key => $sa) {
-				$data['shipping_' . $key] = $sa;
-			}
-		}
-		
-		$order_id = $this->Model_Checkout_Order->addOrder($data);
-		
-		$this->session->data['order_id'] = $order_id;
-		
-		return $order_id;
+		return null;
 	}
 	
-	public function hasOrder()
+	public function getProductShippingPolicy($product_id)
 	{
-		return !empty($this->session->data['order_id']);
-	}
-	
-	public function getOrderId()
-	{
-		return !empty($this->session->data['order_id']) ? $this->session->data['order_id'] : false;
-	}
-	
-	public function getOrder($order_id = null)
-	{
-		if (!$order_id) {
-			$order_id = $this->getOrderId();
-			
-			if (!$order_id) {
-				return null;
-			}
+		$shipping_policy_id = $this->db->queryVar("SELECT shipping_policy_id FROM " . DB_PREFIX . "product WHERE product_id = " . (int)$product_id);
+		
+		if (!is_null($shipping_policy_id)) {
+			return $this->getShippingPolicy($shipping_policy_id);
 		}
 		
-		return $this->Model_Checkout_Order->getOrder($order_id);
+		return null;
+	}
+	
+	public function getShippingPolicies()
+	{
+		return $this->config->load('policies', 'shipping_policies', 0);
+	}
+	
+	public function getReturnPolicy($return_policy_id)
+	{
+		$return_policies = $this->getReturnPolicies();
+		
+		if (isset($return_policies[$return_policy_id])) {
+			$policy = $return_policies[$return_policy_id];
+			
+			$policy['description'] = html_entity_decode($policy['description'], ENT_QUOTES, 'UTF-8');
+			
+			return $policy;
+		}
+		
+		return null;
+	}
+	
+	public function getProductReturnPolicy($product_id)
+	{
+		$return_policy_id = $this->db->queryVar("SELECT return_policy_id FROM " . DB_PREFIX . "product WHERE product_id = " . (int)$product_id);
+		
+		if (!is_null($return_policy_id)) {
+			return $this->getReturnPolicy($return_policy_id);
+		}
+		
+		return null;
+	}
+	
+	public function getReturnPolicies()
+	{
+		return $this->config->load('policies', 'return_policies', 0);
 	}
 }

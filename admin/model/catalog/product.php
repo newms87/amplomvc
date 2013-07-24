@@ -174,20 +174,15 @@ class Admin_Model_Catalog_Product extends Model
 			}
 		}
 		
-		foreach ($data['product_tag'] as $language_id => $value) {
-			if ($value) {
-				$tags = explode(',', $value);
-				
-				foreach ($tags as $tag) {
-					$values = array(
-					'product_id' => $product_id,
-					'language_id' => $language_id,
-					'tag' => trim($tag)
-					);
-					
-					$this->insert('product_tag', $values);
-				}
-			}
+		$tag_ids = $this->tag->addAll($data['product_tags']);
+		
+		foreach ($tag_ids as $tag_id) {
+			$product_tag = array(
+				'product_id' => $product_id,
+				'tag_id' => $tag_id,
+			);
+			
+			$this->insert('product_tag', $product_tag);
 		}
 						
 		if ($data['keyword']) {
@@ -408,31 +403,16 @@ class Admin_Model_Catalog_Product extends Model
 		//Product Tags
 		$this->delete('product_tag',  array('product_id' => $product_id));
 		
-		$product_tags = array(
-			$language_id => $data['product_tag'],
-		);
+		$tag_ids = $this->tag->addAll($data['product_tags']);
 		
-		$product_tags += $data['translations']['product_tag'];
-		unset($data['translations']['product_tag']);
-		
-		foreach ($product_tags as $language_id => $value) {
-			if ($value) {
-				$tags = explode(',', $value);
-				
-				if ($tags) {
-					foreach ($tags as $tag) {
-						$values = array(
-							'product_id' => $product_id,
-							'language_id' => $language_id,
-							'tag' => trim($tag)
-						);
-						
-						$product_tag_id = $this->insert('product_tag', $values);
-					}
-				}
-			}
+		foreach ($tag_ids as $tag_id) {
+			$product_tag = array(
+				'product_id' => $product_id,
+				'tag_id' => $tag_id,
+			);
+			
+			$this->insert('product_tag', $product_tag);
 		}
-		
 		
 		//Product URL Alias
 		$this->Model_Setting_UrlAlias->deleteUrlAliasByRouteQuery('product/product', 'product_id=' . (int)$product_id);
@@ -501,14 +481,14 @@ class Admin_Model_Catalog_Product extends Model
 		$product['product_related'] = $this->getProductRelated($product_id);
 		$product['product_reward'] = $this->getProductRewards($product_id);
 		$product['product_special'] = $this->getProductSpecials($product_id);
-		$product['product_tag'] = $this->getProductTags($product_id);
+		$product['product_tags'] = $this->getProductTags($product_id);
 		$product['product_category'] = $this->getProductCategories($product_id);
 		$product['product_download'] = $this->getProductDownloads($product_id);
 		$product['product_layout'] = $this->getProductLayouts($product_id);
 		$product['product_template'] = $this->getProductTemplates($product_id);
 		$product['product_store'] = $this->getProductStores($product_id);
 		
-		$name_count = $this->query_var("SELECT COUNT(*) FROM " . DB_PREFIX . "product WHERE `name` like '" . $this->db->escape($product['name']) . "%'");
+		$name_count = $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "product WHERE `name` like '" . $this->db->escape($product['name']) . "%'");
 		
 		$product['name'] .= ' - Copy' . ($name_count > 1 ? "($name_count)" : '');
 		
@@ -549,7 +529,7 @@ class Admin_Model_Catalog_Product extends Model
 	
 	public function getProduct($product_id)
 	{
-		$product = $this->query_row("SELECT DISTINCT * FROM " . DB_PREFIX . "product p WHERE p.product_id = '" . (int)$product_id . "'");
+		$product = $this->queryRow("SELECT * FROM " . DB_PREFIX . "product p WHERE p.product_id = '" . (int)$product_id . "'");
 		
 		if ($product) {
 			$url_alias = $this->Model_Setting_UrlAlias->getUrlAliasByRouteQuery('product/product', "product_id=" . (int)$product_id);
@@ -559,6 +539,11 @@ class Admin_Model_Catalog_Product extends Model
 		}
 			
 		return $product;
+	}
+
+	public function getProductField($product_id, $field)
+	{
+		return $this->queryVar("SELECT `" . $this->db->escape($field) . "` FROM " . DB_PREFIX . "product WHERE product_id = " . (int)$product_id);
 	}
 	
 	public function getProducts($data = array(), $select = '', $total = false)
@@ -613,19 +598,19 @@ class Admin_Model_Catalog_Product extends Model
 		}
 		
 		if (!empty($data['price']['low'])) {
-			$where .= " AND p.price >= '" . (int)$data['p.price']['low'] . "'";
+			$where .= " AND p.price >= '" . (int)$data['price']['low'] . "'";
 		}
 		
 		if (!empty($data['price']['high'])) {
-			$where .= " AND p.price <= '" . (int)$data['p.price']['high'] . "'";
+			$where .= " AND p.price <= '" . (int)$data['price']['high'] . "'";
 		}
 		
 		if (!empty($data['cost']['low'])) {
-			$where .= " AND p.cost >= '" . (int)$data['p.cost']['low'] . "'";
+			$where .= " AND p.cost >= '" . (int)$data['cost']['low'] . "'";
 		}
 		
 		if (!empty($data['cost']['high'])) {
-			$where .= " AND p.cost <= '" . (int)$data['p.cost']['high'] . "'";
+			$where .= " AND p.cost <= '" . (int)$data['cost']['high'] . "'";
 		}
 		
 		if (!empty($data['special']) || (isset($data['sort']) && $data['sort'] == 'special')) {
@@ -656,22 +641,28 @@ class Admin_Model_Catalog_Product extends Model
 			$where .= " AND p.length_class_id = '" . (int)$data['length_class_id'] . "'";
 		}
 		
-		if (!empty($data['is_final'])) {
-			$where .= " AND p.is_final = '" . ($data['p.is_final'] ? 1 : 0) . "'";
+		if (!empty($data['return_policies'])) {
+			$where .= " AND p.return_policy_id IN (" . implode(',', $data['return_policies']) . ")";
 		}
 		
-		if (!empty($data['date_expires']['from'])) {
-			$dt_zero = DATETIME_ZERO;
-			
-			$where .= " AND (p.date_expires == '$dt_zero' OR p.date_expires >= '" . $this->db->escape($data['date_expires']['from']) . "'";
+		if (!empty($data['shipping_policies'])) {
+			$where .= " AND p.shipping_policy_id IN (" . implode(',', $data['shipping_policies']) . ")";
 		}
 		
-		if (!empty($data['date_expires']['to'])) {
-			$where .= " AND (p.date_expires <= '" . $this->db->escape($data['date_expires']['to']) . "'";
+		if (!empty($data['date_expires']['start'])) {
+			$where .= " AND (p.date_expires = '" . DATETIME_ZERO . "' OR p.date_expires >= '" . $this->date->format($data['date_expires']['start']) . "')";
 		}
 		
-		if (isset($data['quantity'])) {
-			$where .= " AND p.quantity = '" . (int)$data['p.quantity'] . "'";
+		if (!empty($data['date_expires']['end'])) {
+			$where .= " AND (p.date_expires = '" . DATETIME_ZERO . "' OR p.date_expires <= '" . $this->date->format($data['date_expires']['end']) . "')";
+		}
+		
+		if (!empty($data['quantity']['low'])) {
+			$where .= " AND p.quantity >= '" . (int)$data['quantity']['low'] . "'";
+		}
+		
+		if (!empty($data['quantity']['high'])) {
+			$where .= " AND p.quantity <= '" . (int)$data['quantity']['high'] . "'";
 		}
 		
 		if (isset($data['status'])) {
@@ -708,7 +699,7 @@ class Admin_Model_Catalog_Product extends Model
 			
 			//enable image sorting if requested and not already installed
 			if (!empty($data['sort']) && strpos($data['sort'], '__image_sort__') === 0) {
-				if (!$this->db->has_column('product', $data['sort'])) {
+				if (!$this->db->hasColumn('product', $data['sort'])) {
 					$this->extend->enable_image_sorting('product', str_replace('__image_sort__', '', $data['sort']));
 				}
 			}
@@ -735,9 +726,23 @@ class Admin_Model_Catalog_Product extends Model
 		return $result->rows;
 	}
 	
+	public function getProductTranslations($product_id)
+	{
+		$translate_fields = array(
+			'name',
+			'teaser',
+			'description',
+			'information',
+			'meta_description',
+			'meta_keywords',
+		);
+		
+		return $this->translation->get_translations('product', $product_id, $translate_fields);
+	}
+		
 	public function isEditable($product_id)
 	{
-		return (int)$this->query_var("SELECT editable FROM " . DB_PREFIX . "product WHERE product_id='$product_id'");
+		return (int)$this->queryVar("SELECT editable FROM " . DB_PREFIX . "product WHERE product_id='$product_id'");
 	}
 
 	public function updateProductCategory($product_id, $op, $category_id)
@@ -765,7 +770,7 @@ class Admin_Model_Catalog_Product extends Model
 	
 	public function getProductAttributes($product_id)
 	{
-		$attributes = $this->query_rows("SELECT * FROM " . DB_PREFIX . "product_attribute pa LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id) WHERE pa.product_id = '" . (int)$product_id . "' GROUP BY pa.attribute_id");
+		$attributes = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_attribute pa LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id) WHERE pa.product_id = '" . (int)$product_id . "' GROUP BY pa.attribute_id");
 		
 		$this->translation->translate_all('attribute', 'attribute_id', $attributes);
 		
@@ -932,21 +937,7 @@ class Admin_Model_Catalog_Product extends Model
 	
 	public function getProductTags($product_id)
 	{
-		$product_tags = $this->query_rows("SELECT * FROM " . DB_PREFIX . "product_tag WHERE product_id = '" . (int)$product_id . "'");
-		
-		$tag_data = array();
-		
-		foreach ($product_tags as $product_tag) {
-			$tag_data[$product_tag['language_id']][] = $product_tag['tag'];
-		}
-		
-		$product_tag_data = array();
-		
-		foreach ($tag_data as $language_id => $tags) {
-			$product_tag_data[$language_id] = implode(',', $tags);
-		}
-		
-		return $product_tag_data;
+		return $this->queryColumn("SELECT t.text FROM " . DB_PREFIX . "product_tag pt LEFT JOIN " . DB_PREFIX . "tag t ON (t.tag_id = pt.tag_id) WHERE product_id = '" . (int)$product_id . "'");
 	}
 	
 	public function getTotalProducts($data = array()) {

@@ -38,10 +38,6 @@ class Admin_Controller_Common_Header extends Controller
 		
 		$this->language->set('lang', $this->language->getInfo('code'));
 		
-		if ($this->config->get('config_seo_url')) {
-			$this->data['pretty_url'] = $this->url->get_pretty_url();
-		}
-		
 		$this->data['admin_logo'] = $this->image->get($this->config->get('config_admin_logo'));
 		
 		if (!$this->user->isLogged()) {
@@ -54,40 +50,49 @@ class Admin_Controller_Common_Header extends Controller
 			$this->data['logged'] = $this->_('text_logged', $this->user->getUserName());
 			
 			$menu_items = array();
-			if ($this->user->isDesigner()) {
-				$this->_('support',"mailto:" . $this->config->get('config_email'));
-				$menu_items = array(
-					'product'=>'catalog/product','product_insert'=>'catalog/product/insert',
-					'home'=>'common/home',
-					'designers'=>'catalog/manufacturer',
-					'logout'=>'common/logout'
+			
+			$this->_('support', $this->config->get('config_email_support'));
+			
+			$this->data['store'] = SITE_URL;
+			
+			//Add Store Settings
+			$stores = $this->Model_Setting_Store->getStores();
+			
+			$link_stores = array(
+				'name' => 'system_settings_stores',
+				'display_name' => $this->_('text_store_settings'),
+				'parent' => 'system_settings',
+				'sort_order' => 1,
+			);
+			
+			$this->document->addLink('admin', $link_stores);
+			
+			foreach ($stores as $index => $store) {
+				$link_store_setting = array(
+					'name' => 'system_settings_stores_' . $this->tool->get_slug($store['name']),
+					'display_name' => $store['name'],
+					'href' => $this->url->link('setting/store/update', 'store_id=' . $store['store_id']),
+					'parent' => 'system_settings_stores',
+					'sort_order' => $index,
 				);
-				$this->data['user_info'] = $this->url->link('user/user/update','user_id='.$this->user->getId());
+				
+				$this->document->addLink('admin', $link_store_setting);
 			}
-			else {
-				$this->_('support', $this->config->get('config_email_support'));
+			
+			//Add the Image Manager to the Main Menu if user has permissions
+			if ($this->user->hasPermission('access','common/filemanager')) {
+				$link_image_manager = array(
+					'name' => $this->_('text_image_manager'),
+					'sort_order' => 3,
+					'attrs' => array('onclick' => 'image_manager();'),
+				);
 				
-				$this->data['store'] = SITE_URL;
-				
-				//Add the Image Manager to the Main Menu if user has permissions
-				if ($this->user->hasPermission('access','common/filemanager')) {
-					$link_image_manager = array(
-						'name' => $this->_('text_image_manager'),
-						'sort_order' => 3,
-						'attrs' => array('onclick' => 'image_manager();'),
-					);
-					
-					$this->document->addLink('admin', $link_image_manager);
-				}
+				$this->document->addLink('admin', $link_image_manager);
 			}
 			
 			$this->data['links_admin'] = $this->document->getLinks('admin');
 			
-			/*
-			* Right Side Navigation Menu
-			*/
-			
-			//Store Navigation
+			//Store Fronts and Settings
 			$link_stores = array(
 				'name' => 'stores',
 				'display_name' => $this->_('text_stores'),
@@ -96,8 +101,6 @@ class Admin_Controller_Common_Header extends Controller
 			$this->document->addLink('right', $link_stores);
 			
 			//Link to all of the stores under the stores top level navigation
-			$stores = $this->Model_Setting_Store->getStores();
-			
 			foreach ($stores as $store) {
 				$link_store = array(
 					'name' => 'store_' . $store['store_id'],
@@ -132,7 +135,7 @@ class Admin_Controller_Common_Header extends Controller
 		
 		if ($failed_count) {
 			$view_mail_errors = $this->url->admin('mail/error');
-			$this->message->add('warning', "There are <strong>$failed_count</strong> failed email messages! <a href=\"$view_mail_errors\">(view errors)</a>");
+			$this->message->system('warning', "There are <strong>$failed_count</strong> failed email messages! <a href=\"$view_mail_errors\">(view errors)</a>");
 		}
 		
 		$this->render();

@@ -60,17 +60,17 @@ class Admin_Model_User_User extends Model
 	
 	public function getUser($user_id)
 	{
-		return $this->query_row("SELECT * FROM `" . DB_PREFIX . "user` WHERE user_id = '" . (int)$user_id . "'");
+		return $this->queryRow("SELECT * FROM `" . DB_PREFIX . "user` WHERE user_id = '" . (int)$user_id . "'");
 	}
 	
 	public function getUserByUsername($username)
 	{
-		return $this->query_row("SELECT * FROM `" . DB_PREFIX . "user` WHERE username = '" . $this->db->escape($username) . "'");
+		return $this->queryRow("SELECT * FROM `" . DB_PREFIX . "user` WHERE username = '" . $this->db->escape($username) . "'");
 	}
 		
 	public function getUserByCode($code)
 	{
-		return $this->query_row("SELECT * FROM `" . DB_PREFIX . "user` WHERE code = '" . $this->db->escape($code) . "' AND code != ''");
+		return $this->queryRow("SELECT * FROM `" . DB_PREFIX . "user` WHERE code = '" . $this->db->escape($code) . "' AND code != ''");
 	}
 		
 	public function getUsers($data = array(), $select = '*', $total = false)
@@ -119,11 +119,11 @@ class Admin_Model_User_User extends Model
 
 	public function getTotalUsersByGroupId($user_group_id)
 	{
-		return $this->query_var("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "user` WHERE user_group_id = '" . (int)$user_group_id . "'");
+		return $this->queryVar("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "user` WHERE user_group_id = '" . (int)$user_group_id . "'");
 	}
 	
 	public function getTotalUsersByEmail($email)
 	{
-		return $this->query_var("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "user` WHERE email = '" . $this->db->escape($email) . "'");
+		return $this->queryVar("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "user` WHERE email = '" . $this->db->escape($email) . "'");
 	}
 }

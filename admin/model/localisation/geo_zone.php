@@ -50,7 +50,7 @@ class Admin_Model_Localisation_GeoZone extends Model
 	
 	public function getGeoZone($geo_zone_id)
 	{
-		return $this->query_row("SELECT * FROM " . DB_PREFIX . "geo_zone WHERE geo_zone_id = '" . (int)$geo_zone_id . "'");
+		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "geo_zone WHERE geo_zone_id = '" . (int)$geo_zone_id . "'");
 	}
 
 	public function getGeoZones($data = array()) {
@@ -106,7 +106,7 @@ class Admin_Model_Localisation_GeoZone extends Model
 	
 	public function getTotalGeoZones()
 	{
-		return $this->query_var("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "geo_zone");
+		return $this->queryVar("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "geo_zone");
 	}
 	
 	public function getZones($geo_zone_id)
@@ -118,7 +118,7 @@ class Admin_Model_Localisation_GeoZone extends Model
 	
 	public function getTotalZones($geo_zone_id)
 	{
-		return $this->query_var("SELECT COUNT(*) as total FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$geo_zone_id . "'");
+		return $this->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$geo_zone_id . "'");
 	}
 	
 	public function getTotalZoneToGeoZoneByCountryId($country_id)

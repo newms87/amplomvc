@@ -7,7 +7,7 @@ class Admin_Controller_Shipping_Item extends Controller
 	{
 		$this->template->load('shipping/item');
 
-		$this->load->language('shipping/item');
+		$this->language->load('shipping/item');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

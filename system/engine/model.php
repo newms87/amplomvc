@@ -1,11 +1,11 @@
 <?php
-abstract class Model 
+abstract class Model
 {
 	protected $registry;
 	
-	public function __construct(&$registry)
+	public function __construct($registry)
 	{
-		$this->registry = &$registry;
+		$this->registry = $registry;
 	}
 	
 	public function __get($key)
@@ -42,14 +42,14 @@ abstract class Model
 	*
 	* @return mixed - usually HTML, output from the rendered controller
 	*/
-	protected function callController($route)
+	protected function callController($route, $param)
 	{
 		//TODO: We can probably find a better way to implement this...
 		
 		$params = func_get_args();
 		array_shift($params);
 	
-		$action = new Action($route);
+		$action = new Action($this->registry, $route, $param);
 		
 		if ($action->execute()) {
 			return $action->get_result();
@@ -64,26 +64,31 @@ abstract class Model
 		$resource = $this->db->query($sql);
 		if (!$resource) {
 			if ($this->config->get('config_error_display')) {
-				$this->message->add("warning", "The Database Query Failed! " . $this->db->get_error());
+				$this->message->add("warning", "The Database Query Failed! " . $this->db->getError());
 			}
 		}
 		
 		return $resource;
 	}
 	
-	protected function query_rows($sql)
+	protected function queryRows($sql)
 	{
-		return $this->db->query_rows($sql);
+		return $this->db->queryRows($sql);
 	}
 	
-	protected function query_row($sql)
+	protected function queryRow($sql)
 	{
-		return $this->db->query_row($sql);
+		return $this->db->queryRow($sql);
 	}
 	
-	protected function query_var($sql)
+	protected function queryColumn($sql)
 	{
-		return $this->db->query_var($sql);
+		return $this->db->queryColumn($sql);
+	}
+	
+	protected function queryVar($sql)
+	{
+		return $this->db->queryVar($sql);
 	}
 	
 	/**
@@ -160,7 +165,7 @@ abstract class Model
 		$resource = $this->db->query("SELECT $select FROM " . DB_PREFIX . "$table $where $group_by $order_by $limit");
 		
 		if (!$resource) {
-			$err_msg = $this->config->get('config_error_display')?"<br /><br />" . $this->db->get_error():'';
+			$err_msg = $this->config->get('config_error_display')?"<br /><br />" . $this->db->getError():'';
 			$this->message->add("warning", "There was a problem getting values for $table!" . $err_msg);
 		}
 		
@@ -176,7 +181,7 @@ abstract class Model
 		$success = $this->db->query("INSERT INTO " . DB_PREFIX . "$table SET $values");
 		
 		if (!$success) {
-			$err_msg = $this->config->get('config_error_display')?"<br /><br />" . $this->db->get_error():'';
+			$err_msg = $this->config->get('config_error_display')?"<br /><br />" . $this->db->getError():'';
 			$this->message->add("warning", "There was a problem inserting entry for $table! $table was not modified." . $err_msg);
 			return false;
 		}
@@ -195,7 +200,7 @@ abstract class Model
 		if (is_integer($where) || (is_string($where) && !preg_match("/[^\d]/", $where))) {
 			$primary_key = $this->get_primary_key($table);
 			if (!$primary_key) {
-				trigger_error($this->tool->error_info() . "UPDATE $table does not have an integer primary key!");
+				trigger_error("UPDATE $table does not have an integer primary key!" . get_caller(0, 4));
 				return null;
 			}
 			
@@ -212,7 +217,7 @@ abstract class Model
 		$success = $this->db->query("UPDATE " . DB_PREFIX . "$table SET $values $where");
 		
 		if (!$success) {
-			$err_msg = $this->tool->error_info() . "There was a problem updating entry for $table! $table was not modified.";
+			$err_msg = "There was a problem updating entry for $table! $table was not modified." . get_caller(0, 4);
 			trigger_error($err_msg);
 			$this->message->add("warning", $err_msg);
 			return false;
@@ -244,10 +249,10 @@ abstract class Model
 			$where = "WHERE $where";
 		}
 		else {
-			$truncate_allowed = $this->db->query_var("SELECT COUNT(*) FROM `" . DB_PREFIX . "db_rule` WHERE `table`='$table' AND `truncate`='1'");
+			$truncate_allowed = $this->db->queryVar("SELECT COUNT(*) FROM `" . DB_PREFIX . "db_rule` WHERE `table`='$table' AND `truncate`='1'");
 			
 			if (!$truncate_allowed) {
-				$msg = "Attempt to TRUNCATE $table not allowed for this table! Please specify this in the Database Rules if you want this functionality. " . get_caller() . get_caller(1);
+				$msg = "Attempt to TRUNCATE $table not allowed for this table! Please specify this in the Database Rules if you want this functionality. " . get_caller(0, 1);
 				trigger_error($msg);
 				$this->message->add('warning', $msg);
 				return;
@@ -257,7 +262,7 @@ abstract class Model
 		$success = $this->db->query("DELETE FROM " . DB_PREFIX . "$table $where");
 		
 		if (!$success) {
-			$err_msg = $this->config->get('config_error_display')?"<br /><br />" . $this->db->get_error():'';
+			$err_msg = $this->config->get('config_error_display')?"<br /><br />" . $this->db->getError():'';
 			$this->message->add("warning", "There was a problem deleting entry for $table! $table was not modified." . $err_msg);
 			return false;
 		}

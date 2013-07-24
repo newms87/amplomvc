@@ -30,8 +30,7 @@ class Catalog_Controller_Common_Header extends Controller
 		//Add Theme Scripts
 		$this->document->addScript(HTTP_THEME_JS . 'common.js');
 		
-		
-		
+		//Header Data
 		$this->data['direction'] = $this->language->getInfo('direction');
 		
 		$this->data['description'] = $this->document->getDescription();
@@ -50,10 +49,6 @@ class Catalog_Controller_Common_Header extends Controller
 		$this->language->load('common/header');
 		
 		$this->data['messages'] = $this->message->fetch();
-		
-		if ($this->config->get('config_seo_url')) {
-			$this->data['pretty_url'] = $this->url->get_pretty_url();
-		}
 		
 		$this->data['icon'] = $this->image->get($this->config->get('config_icon'));
 		
@@ -123,10 +118,20 @@ class Catalog_Controller_Common_Header extends Controller
 			
 			$this->data['links_account'] = $this->document->getLinks('account');
 		} else {
-		
 			$this->data['is_logged'] = false;
 			
 			$this->data['block_login'] = $this->getBlock('account/login', array('type' => 'header'));
+			
+			$link_register = array(
+				'name' => 'register',
+				'display_name' => $this->_('text_register'),
+				'href' => $this->url->link('account/register'),
+				'sort_order' => 1,
+			);
+			
+			$this->document->addLink('account', $link_register);
+			
+			$this->data['links_account'] = $this->document->getLinks('account');
 		}
 		
 		if (!$this->cart->isEmpty()) {
@@ -155,10 +160,15 @@ class Catalog_Controller_Common_Header extends Controller
 		
 		$this->data['social_networks'] = $this->getBlock('extras/social_media');
 		
+		if ($this->config->get('config_multi_language')) {
+			$this->data['block_languages'] = $this->getBlock('localisation/language');
+		}
+
+		if ($this->config->get('config_multi_currency')) {
+			$this->data['block_currencies'] = $this->getBlock('localisation/currency');
+		}
+		
 		$this->children = array(
-			'module/language',
-			'module/currency',
-			'module/cart',
 			'common/above_content',
 		);
 

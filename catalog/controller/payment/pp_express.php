@@ -11,7 +11,7 @@ class Catalog_Controller_Payment_PpExpress extends Controller
 			$this->data['action'] = 'https://www.sandbox.pp_express.com/cgi-bin/webscr';
 		}
 		
-		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
+		$order_info = $this->order->get($this->session->data['order_id']);
 
 		if (!$this->config->get('pp_direct_test')) {
 			$api_endpoint = 'https://api-3t.pp.com/nvp';

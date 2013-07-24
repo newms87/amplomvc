@@ -67,7 +67,7 @@ class Catalog_Model_Cart_Coupon extends Model
 	{
 		$customer_id = $this->customer->getId();
 		
-		$query = $this->query("SELECT DISTINCT * FROM " . DB_PREFIX . "coupon_customer WHERE customer_id = '" . (int)$customer_id . "'");
+		$query = $this->query("SELECT * FROM " . DB_PREFIX . "coupon_customer WHERE customer_id = '" . (int)$customer_id . "'");
 		
 		if ($query->num_rows) {
 			if (!isset($this->session->data['coupons'])) {

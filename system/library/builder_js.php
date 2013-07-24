@@ -20,7 +20,7 @@ switch($js){
 		$country_selector = $args[1];
 		$zone_selector = $args[2];
 		
-		$allow_all = (count($args) > 3 && $args[3]) ? "&allow_all" : "";
+		$url_load_zones = $this->url->link('tool/data/load_zones', ((count($args) > 3 && $args[3]) ? "allow_all" : "") . '&country_id=');
 	?>
 <script type="text/javascript">//<!--
 country_selectors = $('<?= $parent_selector;?>').find('<?= $country_selector;?>');
@@ -28,22 +28,22 @@ country_selectors = $('<?= $parent_selector;?>').find('<?= $country_selector;?>'
 country_selectors.live('change', function (event)
  {
   cs = $(this);
-  
+
   if (!$(this).is('select')) {
 	cs = cs.find('<?= $country_selector;?>');
   }
 
   if(!cs.val()) return;
-  
+
   zone_selector = cs.closest('<?= $parent_selector;?>').find('<?=$zone_selector;?>');
-  
+
   if(zone_selector.attr('country_id') == cs.val()) return;
-  
+
   zone_selector.attr('country_id', cs.val());
-  
+
   zone_selector.attr('zone_id', zone_selector.val() ||  zone_selector.attr('zone_id') || zone_selector.attr('select_value') || 0);
 	
-  zone_selector.load('index.php?route=tool/data/load_zones&country_id=' + cs.val() + '<?=$allow_all;?>',
+  zone_selector.load("<?= $url_load_zones;?>" + cs.val(),
 	function ()
 	{
 		zs = $(this).closest('<?= $parent_selector;?>').find('<?= $zone_selector;?>');
@@ -70,7 +70,7 @@ country_selectors.each(function (i,e) {
 	case 'image_manager': ?>
 <? if (!isset($js_loaded_files['image_manager'])) { ?>
 <script type="text/javascript">//<!--
-var image_manager_url = "<?= HTTP_ROOT . "index.php?route=common/filemanager"; ?>";
+var image_manager_url = "<?= $this->url->link('common/filemanager'); ?>";
 var no_image = "<?= HTTP_THEME_IMAGE . "no_image.png"; ?>"
 //--></script>
 <script type="text/javascript" src="<?= HTTP_JS . "image_manager.js"; ?>"></script>
@@ -87,20 +87,19 @@ var no_image = "<?= HTTP_THEME_IMAGE . "no_image.png"; ?>"
  * @param $filters - The list of filters to activate
  */
 	case 'filter_url':
-		if (count($args) < 2 || count($args) > 3) {
-			trigger_error("Template JS: filter_url: excepts exactly 1 argument! Usage: \$this->builder->js('filter_url', selector, route, query='');");
+		if (count($args) !== 1) {
+			trigger_error("Template JS: filter_url: excepts exactly 1 argument! Usage: \$this->builder->js('filter_url', selector);");
 			return '';
 		}
 		
 		$selector = $args[0];
-		$url = $args[1];
-		$query = isset($args[2]) ? $args[2] : '';
 		
-		$sort_query = $this->url->get_query("sort","order","page");
+		$route = $this->url->route();
+		$sort_query = $this->url->getQueryExclude("filter");
 	?>
 <script type="text/javascript">//<!--
 function filter() {
-	url = '<?= HTTP_ROOT; ?>index.php?route=<?= $url . '&' . $sort_query . ($query ? '&'.$query : '');?>';
+	url = '<?= $this->url->link($route, $sort_query);; ?>';
 	
 	filter_list = $('<?= $selector;?> [name]').not('[value=""]');
 	
@@ -149,45 +148,47 @@ for(var e in errors){
 
 
 	case 'autocomplete':
-		if (!$args || count($args) < 3) {
-			trigger_error("Template JS: autocomplete: invalid arguments! Usage: \$this->builder->js('autocomplete', array(\$selector,\$label,\$value,\$callback));");
+		$params = $args[0];
+		
+		if (empty($params['selector']) || empty($params['label']) || empty($params['value']) || empty($params['route'])) {
+			trigger_error("Template JS: autocomplete: Required parameters are 'selector', 'label', 'value', 'route'");
 			return '';
 		}
-		$selector = $args[0];
-		$label = $args[1];
-		$value = $args[2];
-		$callback = $args[3];
 		
-		$sort_query = $this->url->get_query("sort","limit");
+		if (empty($params['query'])) {
+			$params['query'] = '';
+		} else {
+			$params['query'] .= '&';
+		}
+		
+		$params['query'] .= $this->url->getQuery("sort","limit");
+		
+		$url = $this->url->link($params['route'], $params['query']);
 	?>
+
 <script type="text/javascript">//<!--
-$('<?=$selector;?>').each(function (i,e) {
+$('<?=$params['selector'];?>').each(function (i,e) {
 	$(e).autocomplete({
 		delay: 0,
-		source: function (request, response)
- {
-			filter = {};
-			filter[$('<?= $selector; ?>').attr('filter')] = request.term;
+		source: function (request, response) {
+			filter = {'<?= $params['filter']; ?>' : request.term};
 			
 			$.ajax({
-				url: '<?= HTTP_ROOT; ?>index.php?route=' + $(e).attr('route') + '&<?= $sort_query; ?>',
+				url: "<?= $url; ?>",
 				dataType: 'json',
 				data: {filter: filter},
-				success: function (json)
- {
-					response($.map(json, function (item)
- {
-						item['label'] = item.<?= $label;?>;
-						item['value'] = item.<?= $value;?>;
+				success: function (json) {
+					response($.map(json, function (item) {
+						item['label'] = item.<?= $params['label'];?>;
+						item['value'] = item.<?= $params['value'];?>;
 						
 						return item;
 					}));
 				}
 			});
 		},
-		select: function (event, ui)
- {
-			<?= $callback;?>($(e), ui.item);
+		select: function (event, ui) {
+			<?= $params['callback'];?>($(e), ui.item);
 			
 			return false;
 		}
@@ -205,17 +206,17 @@ var ckedit_index = 0;
 
 function init_ckeditor_for(context){
 	context.each(function (i,e){
-		if (!$(e).attr('id')) {
+		if (!$(e).attr('id') || CKEDITOR.instances[$(e).attr('id')]) {
 			$(e).attr('id', 'ckedit_' + ckedit_index++);
 		}
 		
 		CKEDITOR.replace($(e).attr('id'), {
-			filebrowserBrowseUrl: "<?= HTTP_ADMIN . 'index.php?route=common/filemanager/ckeditor'; ?>",
-			filebrowserImageBrowseUrl: "<?= HTTP_ADMIN . 'index.php?route=common/filemanager/ckeditor'; ?>",
-			filebrowserFlashBrowseUrl: "<?= HTTP_ADMIN . 'index.php?route=common/filemanager/ckeditor'; ?>",
-			filebrowserUploadUrl: "<?= HTTP_ADMIN . 'index.php?route=common/filemanager/ckeditor'; ?>",
-			filebrowserImageUploadUrl: "<?= HTTP_ADMIN . 'index.php?route=common/filemanager/ckeditor'; ?>",
-			filebrowserFlashUploadUrl: "<?= HTTP_ADMIN . 'index.php?route=common/filemanager/ckeditor'; ?>"
+			filebrowserBrowseUrl: "<?= HTTP_AJAX . 'common/filemanager/ckeditor'; ?>",
+			filebrowserImageBrowseUrl: "<?= HTTP_AJAX . 'common/filemanager/ckeditor'; ?>",
+			filebrowserFlashBrowseUrl: "<?= HTTP_AJAX . 'common/filemanager/ckeditor'; ?>",
+			filebrowserUploadUrl: "<?= HTTP_AJAX . 'common/filemanager/ckeditor'; ?>",
+			filebrowserImageUploadUrl: "<?= HTTP_AJAX . 'common/filemanager/ckeditor'; ?>",
+			filebrowserFlashUploadUrl: "<?= HTTP_AJAX . 'common/filemanager/ckeditor'; ?>"
 		});
 	});
 }
@@ -242,7 +243,7 @@ function remove_ckeditor_for(context) {
 			$name_format = false;
 		}
 		
-		$languages = $this->Model_Localisation_Language->getLanguageList();
+		$languages = $this->System_Model_Language->getEnabledLanguages();
 		
 		$default_language = $this->config->get('config_language_id');
 		
@@ -336,6 +337,75 @@ for(var t in translations){
 //--></script>
 
 <?php break;
+	
+	
+	case 'template_rows':
+		if (empty($args[0])) {
+			trigger_error("Builder::js('template_rows'): You must specify the list selector to apply the template row to!");
+			return;
+		}
+		
+		$list_selector = $args[0];
+		
+		$button_selector = !empty($args[1]) ? $args[1] : false;
+		$max_row = !empty($args[2]) ? $args[2] : false;
+		$template_row_defaults = !empty($args[3]) ? $args[3] : false;
+	?>
+<script type="text/javascript">//<!--
+<? if (!isset($js_loaded_files['template_rows'])) { ?>
+	var _tpl_rows = {};
+	
+function add_template_row(tpl_row)
+{
+	template = tpl_row['template'].clone(true);
+	
+	template.find('[name]').each(function(i,e){
+		t_name = $(e).attr('name').replace(/__row__/g, tpl_row['count']);
+		$(e).attr('name', t_name);
+		
+		key = $(e).val();
+		if (tpl_row['defaults']) {
+			$(e).val(tpl_row['defaults'][key]);
+		} else {
+			$(e).val('');
+		}
+	});
+	
+	template.removeClass('__row__');
+	
+	tpl_row['count'] += 1;
+	
+	tpl_row['list'].append(template);
+	
+	template.find('.ckedit').each(function(i,e){
+		init_ckeditor_for($(e));
+	});
+}
+<? } ?>
+
+var _tr_id = '<?= $list_selector; ?>';
+
+_tpl_rows[_tr_id] = {};
+
+_tpl_list = $(_tr_id);
+_tpl_rows[_tr_id]['template'] = _tpl_list.find('.__row__').clone(true);
+_tpl_list.find('.__row__').remove();
+_tpl_rows[_tr_id]['count'] = <?= (int)$max_row; ?>;
+
+if (!_tpl_rows[_tr_id]['count']) {
+	_tpl_rows[_tr_id]['count'] = _tpl_list.children().length + 1;
+}
+
+_tpl_rows[_tr_id]['list'] = _tpl_list;
+
+_tpl_rows[_tr_id]['defaults'] = <?= !empty($template_row_defaults) ? json_encode($template_row_defaults) : 0; ?>;
+
+<? if ($button_selector) { ?>
+$('<?= $button_selector; ?>').click(function(){add_template_row(_tpl_rows['<?= $list_selector; ?>'])});
+<? } ?>
+//--></script>
+<?php break;
+
 
 	case 'html_entity_decode': ?>
 

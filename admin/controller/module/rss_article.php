@@ -7,7 +7,7 @@ class Admin_Controller_Module_RssArticle extends Controller
 	{
 		$this->template->load('module/rss_article');
 
-		$this->load->language('module/rss_article');
+		$this->language->load('module/rss_article');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

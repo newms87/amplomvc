@@ -4,7 +4,7 @@ class Admin_Controller_Mail_Messages extends Controller
 
 	public function index()
 	{
-		$this->load->language('mail/messages');
+		$this->language->load('mail/messages');
 		
 		$this->template->load('mail/messages');
 

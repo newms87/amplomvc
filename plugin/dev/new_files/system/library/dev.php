@@ -46,7 +46,7 @@ class Dev
 			return false;
 		}
 		
-		if ($this->db->execute_file($file)) {
+		if ($this->db->executeFile($file)) {
 			$this->message->add('success', "Successfully restored $site_name from backup file $file!");
 			return true;
 		}
@@ -62,7 +62,7 @@ class Dev
 		$request = 'username=' . $username;
 		$request .= '&password=' . $password;
 		
-		$curl = curl_init($domain . '/admin/index.php?route=common/login&response=1');
+		$curl = curl_init($domain . '/admin/common/login?response=1');
 		
 		curl_setopt($curl, CURLOPT_POST, true);
 		curl_setopt($curl, CURLOPT_POSTFIELDS, $request);
@@ -93,7 +93,7 @@ class Dev
 			return false;
 		}
 		
-		$curl = curl_init($conn_info['domain'] . '/admin/index.php?route=dev/dev/request_table_data');
+		$curl = curl_init($conn_info['domain'] . '/admin/dev/dev/request_table_data');
 		
 		$request = http_build_query(array('tables' => $tables));
 		
@@ -126,13 +126,13 @@ class Dev
 			file_put_contents($file, $response);
 			
 			//Execute the database sync file
-			if ($this->db->execute_file($file)) {
+			if ($this->db->executeFile($file)) {
 				$this->message->add('success', "Successfully synchronized the requested tables from $conn_info[domain]!");
 				
 				return true;
 			}
 			else {
-				$this->message->add('warning', $this->db->get_error());
+				$this->message->add('warning', $this->db->getError());
 			}
 		}
 		

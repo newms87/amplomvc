@@ -1,6 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->breadcrumb->render(); ?>
 	<? if($errors){?>
 		<div class="message_box warning">
 		<? $br=false; foreach($errors as $e){ echo ($br?'<br>':'') . $e; $br=true;}?>

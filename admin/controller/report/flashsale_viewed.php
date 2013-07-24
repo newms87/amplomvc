@@ -5,7 +5,7 @@ class Admin_Controller_Report_FlashsaleViewed extends Controller
 	{
 		$this->template->load('report/flashsale_viewed');
 
-		$this->load->language('report/flashsale_viewed');
+		$this->language->load('report/flashsale_viewed');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -99,7 +99,7 @@ class Admin_Controller_Report_FlashsaleViewed extends Controller
 	
 	public function reset()
 	{
-		$this->load->language('report/flashsale_viewed');
+		$this->language->load('report/flashsale_viewed');
 		
 		$this->Model_Report_Flashsale->reset();
 		

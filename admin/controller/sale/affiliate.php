@@ -5,7 +5,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
 
   	public function index()
   	{
-		$this->load->language('sale/affiliate');
+		$this->language->load('sale/affiliate');
 		
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -14,7 +14,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
 
   	public function insert()
   	{
-		$this->load->language('sale/affiliate');
+		$this->language->load('sale/affiliate');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -65,7 +65,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
 	
   	public function update()
   	{
-		$this->load->language('sale/affiliate');
+		$this->language->load('sale/affiliate');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -116,7 +116,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
 
   	public function delete()
   	{
-		$this->load->language('sale/affiliate');
+		$this->language->load('sale/affiliate');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -169,7 +169,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
 		
 	public function approve()
 	{
-		$this->load->language('sale/affiliate');
+		$this->language->load('sale/affiliate');
 		
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -807,6 +807,9 @@ class Admin_Controller_Sale_Affiliate extends Controller
 		} else {
 			$this->data['confirm'] = '';
 		}
+		
+		//Ajax Urls
+		$this->data['url_transaction'] = $this->url->ajax('sale/affiliate/transaction', 'affiliate_id=' . $affiliate_id);
 
 		$this->children = array(
 			'common/header',

@@ -3,14 +3,14 @@ class Admin_Controller_Catalog_Collection extends Controller
 {
 	public function index()
 	{
-		$this->load->language('catalog/collection');
+		$this->language->load('catalog/collection');
 
 		$this->getList();
 	}
 
 	public function insert()
 	{
-		$this->load->language('catalog/collection');
+		$this->language->load('catalog/collection');
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Collection->addCollection($_POST);
@@ -27,7 +27,7 @@ class Admin_Controller_Catalog_Collection extends Controller
 
 	public function update()
 	{
-		$this->load->language('catalog/collection');
+		$this->language->load('catalog/collection');
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Collection->editCollection($_GET['collection_id'], $_POST);
@@ -44,7 +44,7 @@ class Admin_Controller_Catalog_Collection extends Controller
 
 	public function delete()
 	{
-		$this->load->language('catalog/collection');
+		$this->language->load('catalog/collection');
 		
 		if (!empty($_GET['collection_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_Collection->deleteCollection($_GET['collection_id']);
@@ -97,10 +97,13 @@ class Admin_Controller_Catalog_Collection extends Controller
 
 	private function getList()
 	{
+		//Page Title
 		$this->document->setTitle($this->_('heading_title'));
 		
+		//The Template
 		$this->template->load('catalog/collection_list');
 
+		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/collection'));
 		
@@ -126,7 +129,7 @@ class Admin_Controller_Catalog_Collection extends Controller
 			'type' => 'multiselect',
 			'display_name' => $this->_('column_category'),
 			'filter' => true,
-			'build_config' => array('category_id' => 'name'),
+			'build_config' => array('category_id' , 'name'),
 			'build_data' => $this->Model_Catalog_Category->getCategoriesWithParents(),
 			'sortable' => false,
 		);
@@ -135,7 +138,7 @@ class Admin_Controller_Catalog_Collection extends Controller
 			'type' => 'multiselect',
 			'display_name' => $this->_('column_store'),
 			'filter' => true,
-			'build_config' => array('store_id' => 'name'),
+			'build_config' => array('store_id' , 'name'),
 			'build_data' => $this->Model_Setting_Store->getStores(),
 			'sortable' => false,
 		);
@@ -148,21 +151,14 @@ class Admin_Controller_Catalog_Collection extends Controller
 			'sortable' => true,
 		);
 		
-		//The Sort data
-		$sort_filter = array();
+		//Get Sorted / Filtered Data
+		$sort = $this->sort->getQueryDefaults('name', 'ASC');
+		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 		
-		$this->sort->load_query_defaults($sort_filter, 'name', 'ASC');
+		$collection_total = $this->Model_Catalog_Collection->getTotalCollections($sort);
+		$collections = $this->Model_Catalog_Collection->getCollections($sort + $filter);
 		
-		//Filter
-		$filter_values = !empty($_GET['filter']) ? $_GET['filter'] : array();
-		
-		if ($filter_values) {
-			$sort_filter += $filter_values;
-		}
-		
-		//Retrieve the Filtered Table row data
-		$collection_total = $this->Model_Catalog_Collection->getTotalCollections($sort_filter);
-		$collections = $this->Model_Catalog_Collection->getCollections($sort_filter);
+		$url_query = $this->url->getQueryExclude('collection_id');
 		
 		foreach ($collections as &$collection) {
 			$collection['actions'] = array(
@@ -172,7 +168,7 @@ class Admin_Controller_Catalog_Collection extends Controller
 				),
 				'delete' => array(
 					'text' => $this->_('text_delete'),
-					'href' => $this->url->link('catalog/collection/delete', 'collection_id=' . $collection['collection_id'])
+					'href' => $this->url->link('catalog/collection/delete', 'collection_id=' . $collection['collection_id'] . $url_query)
 				)
 			);
 			
@@ -181,52 +177,42 @@ class Admin_Controller_Catalog_Collection extends Controller
 			$collection['categories'] = $this->Model_Catalog_Collection->getCollectionCategories($collection['collection_id']);
 			
 			$collection['stores'] = $this->Model_Catalog_Collection->getCollectionStores($collection['collection_id']);
-		}unset($collection);
+		} unset($collection);
 		
-		//The table template data
+		//Build The Table
 		$tt_data = array(
-			'row_id'		=> 'collection_id',
-			'route'		=> 'catalog/collection',
-			'sort'		=> $sort_filter['sort'],
-			'order'		=> $sort_filter['order'],
-			'page'		=> $sort_filter['page'],
-			'sort_url'	=> $this->url->link('catalog/collection', $this->url->get_query('filter')),
-			'columns'	=> $columns,
-			'data'		=> $collections,
+			'row_id'		=> 'collecion_id',
 		);
 		
-		$tt_data += $this->language->data;
-		
-		//Build the table template
 		$this->table->init();
-		$this->table->set_template('table/list_view');
-		$this->table->set_template_data($tt_data);
-		$this->table->map_attribute('filter_value', $filter_values);
+		$this->table->setTemplate('table/list_view');
+		$this->table->setColumns($columns);
+		$this->table->setRows($collections);
+		$this->table->setTemplateData($tt_data);
+		$this->table->mapAttribute('filter_value', $filter);
 		
 		$this->data['list_view'] = $this->table->render();
 		
 		//Batch Actions
-		$url_query = $this->url->get_query('filter', 'sort', 'order', 'page');
-		
 		$this->data['batch_actions'] = array(
 			'enable'	=> array(
-				'label' => "Enable"
+				'label' => $this->_('text_enable')
 			),
 			'disable'=>	array(
-				'label' => "Disable",
+				'label' => $this->_('text_disable'),
 			),
 			'delete' => array(
-				'label' => "Delete",
+				'label' => $this->_('text_delete'),
 			),
 		);
 		
 		$this->data['batch_update'] = html_entity_decode($this->url->link('catalog/collection/batch_update', $url_query));
 		
+		//Render Limit Menu
+		$this->data['limits'] = $this->sort->render_limit();
+		
 		//Action Buttons
 		$this->data['insert'] = $this->url->link('catalog/collection/insert', $url_query);
-		
-		//Item Limit Menu
-		$this->data['limits'] = $this->sort->render_limit();
 		
 		//Pagination
 		$this->pagination->init();
@@ -234,7 +220,7 @@ class Admin_Controller_Catalog_Collection extends Controller
 		
 		$this->data['pagination'] = $this->pagination->render();
 		
-		//Template Children
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'

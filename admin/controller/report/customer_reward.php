@@ -5,7 +5,7 @@ class Admin_Controller_Report_CustomerReward extends Controller
 	{
 		$this->template->load('report/customer_reward');
 
-		$this->load->language('report/customer_reward');
+		$this->language->load('report/customer_reward');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

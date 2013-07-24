@@ -1,7 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs(); ?>
-	<?= $this->builder->display_errors($errors); ?>
+	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt="" /> <?= $name; ?></h1>
@@ -285,9 +284,9 @@
 						</tr>
 						<tr>
 							<td><?= $entry_order_status; ?></td>
-							<td><select name="config_order_status_id">
+							<td><select name="config_order_complete_status_id">
 									<? foreach ($order_statuses as $order_status) { ?>
-									<? if ($order_status['order_status_id'] == $config_order_status_id) { ?>
+									<? if ($order_status['order_status_id'] == $config_order_complete_status_id) { ?>
 									<option value="<?= $order_status['order_status_id']; ?>" selected="selected"><?= $order_status['name']; ?></option>
 									<? } else { ?>
 									<option value="<?= $order_status['order_status_id']; ?>"><?= $order_status['name']; ?></option>

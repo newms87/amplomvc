@@ -7,7 +7,7 @@ class Admin_Controller_Module_FlashsaleSidebar extends Controller
 	{
 		$this->template->load('module/flashsale_sidebar');
 
-		$this->load->language('module/flashsale_sidebar');
+		$this->language->load('module/flashsale_sidebar');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

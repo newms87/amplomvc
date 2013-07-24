@@ -1,7 +1,6 @@
 <?php
 class Admin_Controller_Common_Filemanager extends Controller
 {
-	
 	public function index()
 	{
 		$this->template->load('common/filemanager');
@@ -12,45 +11,37 @@ class Admin_Controller_Common_Filemanager extends Controller
 		
 		$this->data['elfinder_root_dir'] = '';
 		
-		if ($this->user->isDesigner()) {
-			$dir = 'user_uploads/user_' . $this->user->getUserName();
-			$this->data['elfinder_root_dir'] = 'data/user_uploads/';
-		}
-		
 		_is_writable(DIR_IMAGE.'data/'.$dir, $this->config->get('config_image_dir_mode'));
 		
 		$_SESSION['elfinder_root_dir'] = $dir;
 		$_SESSION['elfinder_dir_mode'] = $this->config->get('config_image_dir_mode');
 		$_SESSION['elfinder_file_mode'] = $this->config->get('config_image_file_mode');
 		
-		
 		$this->response->setOutput($this->render());
 	}
 	
 	public function ckeditor()
 	{
+		//Template and Language
 		$this->template->load('common/ckeditor');
-
-		$this->load->language('common/filemanager');
-		
-		$this->language->set('title', $this->_('heading_title'));
+		$this->language->load('common/filemanager');
 		
 		$this->data['base'] = $this->url->is_ssl() ? SITE_SSL : SITE_URL;
 		
 		$this->data['directory'] = HTTP_IMAGE . 'data/';
 		
-		if (isset($_GET['field'])) {
-			$this->data['field'] = $_GET['field'];
-		} else {
-			$this->data['field'] = '';
-		}
+		$defaults = array(
+			'field' => '',
+			'CKEditorFuncNum' => false,
+		);
 		
-		if (isset($_GET['CKEditorFuncNum'])) {
-			$this->data['fckeditor'] = $_GET['CKEditorFuncNum'];
-		} else {
-			$this->data['fckeditor'] = false;
+		foreach ($defaults as $key => $default) {
+			if (isset($_GET[$key])) {
+				$this->data[$key] = $_GET[$key];
+			} else {
+				$this->data[$key] = $default;
+			}
 		}
-		
 		
 		$this->response->setOutput($this->render());
 	}
@@ -61,7 +52,7 @@ class Admin_Controller_Common_Filemanager extends Controller
 			$width = isset($_GET['image_width']) ? (int)$_GET['image_width'] : $this->config->get('config_image_admin_thumb_width');
 			$height = isset($_GET['image_height']) ? (int)$_GET['image_height'] : $this->config->get('config_image_admin_thumb_height');
 			
-			$this->response->setOutput($this->image->resize(html_entity_decode($_GET['image'], ENT_QUOTES, 'UTF-8'), $width, $height));
+			$this->response->setOutput($this->image->resize(str_replace('\\','/',html_entity_decode($_GET['image'], ENT_QUOTES, 'UTF-8')), $width, $height));
 		}
 	}
 	
@@ -170,7 +161,7 @@ class Admin_Controller_Common_Filemanager extends Controller
 	
 	public function create()
 	{
-		$this->load->language('common/filemanager');
+		$this->language->load('common/filemanager');
 				
 		$json = array();
 		
@@ -212,7 +203,7 @@ class Admin_Controller_Common_Filemanager extends Controller
 	
 	public function delete()
 	{
-		$this->load->language('common/filemanager');
+		$this->language->load('common/filemanager');
 		
 		$json = array();
 		
@@ -276,7 +267,7 @@ class Admin_Controller_Common_Filemanager extends Controller
 
 	public function move()
 	{
-		$this->load->language('common/filemanager');
+		$this->language->load('common/filemanager');
 		
 		$json = array();
 		
@@ -319,7 +310,7 @@ class Admin_Controller_Common_Filemanager extends Controller
 	
 	public function copy()
 	{
-		$this->load->language('common/filemanager');
+		$this->language->load('common/filemanager');
 		
 		$json = array();
 		
@@ -407,7 +398,7 @@ class Admin_Controller_Common_Filemanager extends Controller
 	
 	public function rename()
 	{
-		$this->load->language('common/filemanager');
+		$this->language->load('common/filemanager');
 		
 		$json = array();
 		
@@ -450,7 +441,7 @@ class Admin_Controller_Common_Filemanager extends Controller
 	
 	public function upload()
 	{
-		$this->load->language('common/filemanager');
+		$this->language->load('common/filemanager');
 		
 		$json = array();
 		

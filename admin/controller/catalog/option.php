@@ -5,7 +5,7 @@ class Admin_Controller_Catalog_Option extends Controller
 
 	public function index()
 	{
-		$this->load->language('catalog/option');
+		$this->language->load('catalog/option');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -14,7 +14,7 @@ class Admin_Controller_Catalog_Option extends Controller
 
 	public function insert()
 	{
-		$this->load->language('catalog/option');
+		$this->language->load('catalog/option');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -46,7 +46,7 @@ class Admin_Controller_Catalog_Option extends Controller
 
 	public function update()
 	{
-		$this->load->language('catalog/option');
+		$this->language->load('catalog/option');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -78,7 +78,7 @@ class Admin_Controller_Catalog_Option extends Controller
 
 	public function delete()
 	{
-		$this->load->language('catalog/option');
+		$this->language->load('catalog/option');
 
 		$this->document->setTitle($this->_('heading_title'));
  		
@@ -316,7 +316,7 @@ class Admin_Controller_Catalog_Option extends Controller
 		$json = array();
 		
 		if (isset($_GET['filter_name'])) {
-			$this->load->language('catalog/option');
+			$this->language->load('catalog/option');
 			
 			$data = array(
 				'filter_name' => $_GET['filter_name'],

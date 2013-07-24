@@ -1,11 +1,13 @@
 <?php
-// Text
+//Head
+$_['head_title']				= '';
+
+//Text
 $_['text_subject']			= '%s - Order %s';
-$_['text_greeting']			= 'Thank you for your purchase from %s - <i>Live Gorgeously!</i> Your order has been received and will be processed once payment has been confirmed.';
+$_['text_greeting']			= 'Thank you for your purchase from %s! Your order has been received and will be processed once payment has been confirmed.';
 $_['text_received']			= 'You have received an order.';
 $_['text_link']				= 'To view your order click on the link below:';
 $_['text_order_detail']	= 'Order Details';
-$_['text_instruction']		= 'Instructions';
 $_['text_order_id']			= 'Order ID:';
 $_['text_date_added']		= 'Date Added:';
 $_['text_order_status']	= 'Order Status:';

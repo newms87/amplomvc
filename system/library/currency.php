@@ -3,7 +3,7 @@ class Currency extends Library
 {
 	private $code;
   	private $currencies = array();
-  
+
   	public function __construct($registry)
   	{
 		parent::__construct($registry);
@@ -12,12 +12,12 @@ class Currency extends Library
 
 		foreach ($query->rows as $result) {
 				$this->currencies[$result['code']] = array(
-				'currency_id'	=> $result['currency_id'],
-				'title'			=> $result['title'],
-				'symbol_left'	=> $result['symbol_left'],
-				'symbol_right'  => $result['symbol_right'],
-				'decimal_place' => $result['decimal_place'],
-				'value'			=> $result['value']
+					'currency_id'	=> $result['currency_id'],
+					'title'			=> $result['title'],
+					'symbol_left'	=> $result['symbol_left'],
+					'symbol_right'  => $result['symbol_right'],
+					'decimal_place' => $result['decimal_place'],
+					'value'			=> $result['value']
 				);
 		}
 		
@@ -164,7 +164,7 @@ class Currency extends Library
   	{
 		return $this->code;
   	}
-  
+
   	public function getValue($currency = '')
   	{
 		if (!$currency) {

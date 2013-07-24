@@ -7,7 +7,7 @@ class Admin_Controller_Payment_Nochex extends Controller
 	{
 		$this->template->load('payment/nochex');
 
-		$this->load->language('payment/nochex');
+		$this->language->load('payment/nochex');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -87,7 +87,7 @@ class Admin_Controller_Payment_Nochex extends Controller
 			$this->data['nochex_order_status_id'] = $this->config->get('nochex_order_status_id');
 		}
 
-		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
+		$this->data['order_statuses'] = $this->order->getOrderStatuses();
 		
 		if (isset($_POST['nochex_geo_zone_id'])) {
 			$this->data['nochex_geo_zone_id'] = $_POST['nochex_geo_zone_id'];

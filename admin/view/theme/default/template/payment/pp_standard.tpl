@@ -1,7 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs(); ?>
-	<?= $this->builder->display_errors($errors); ?>
+	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'payment.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -18,6 +17,10 @@
 						<td><input type="text" name="pp_standard_email" size="50" value="<?= $pp_standard_email; ?>" /></td>
 					</tr>
 					<tr>
+						<td> <?= $entry_test_email; ?></td>
+						<td><input type="text" name="pp_standard_test_email" size="50" value="<?= $pp_standard_test_email; ?>" /></td>
+					</tr>
+					<tr>
 						<td><?= $entry_test; ?></td>
 						<td><?= $this->builder->build('radio', $data_yes_no, 'pp_standard_test', $pp_standard_test); ?></td>
 					</tr>
@@ -32,9 +35,9 @@
 							<span class="help"><?= $entry_pdt_enabled_help; ?></span>
 						</td>
 					</tr>
-					<tr id="auto_return_url">
-						<td class="required"><?= $entry_auto_return_url; ?></td>
-						<td><input type="text" name="pp_standard_auto_return_url" size="100" value="<?= $pp_standard_auto_return_url; ?>" /></td>
+					<tr>
+						<td class="required"><?= $entry_pdt_token; ?></td>
+						<td><input type="text" name="pp_standard_pdt_token" value="<?= $pp_standard_pdt_token; ?>" size="80" /></td>
 					</tr>
 					<tr>
 						<td><?= $entry_debug; ?></td>
@@ -50,7 +53,7 @@
 					</tr>
 					<tr>
 						<td><?= $entry_canceled_reversal_status; ?></td>
-						<? $this->builder->set_config('order_status_id', 'name'); ?>
+						<? $this->builder->set_config(false, 'title'); ?>
 						<td><?= $this->builder->build('select', $data_order_statuses, 'pp_standard_canceled_reversal_status_id', $pp_standard_canceled_reversal_status_id); ?></td>
 					</tr>
 					<tr>
@@ -96,7 +99,7 @@
 					</tr>
 					<tr>
 						<td><?= $entry_status; ?></td>
-						<td><?= $this->builder->build('select', $data_statuses, 'pp_standard_status', $pp_standard_status); ?></td>
+						<td><?= $this->builder->build('select', $data_statuses, 'status', $status); ?></td>
 					</tr>
 					<tr>
 						<td><?= $entry_sort_order; ?></td>
@@ -110,10 +113,12 @@
 
 <script type="text/javascript">//<!--
 $('[name=pp_standard_pdt_enabled]').change(function(){
+	token_row = $('[name=pp_standard_pdt_token]').closest('tr');
+	
 	if ($(this).val() === '1') {
-		$('#auto_return_url').show();
+		token_row.show();
 	} else {
-		$('#auto_return_url').hide();
+		token_row.hide();
 	}
 }).change();
 //--></script>

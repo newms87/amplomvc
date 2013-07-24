@@ -7,7 +7,7 @@ class Admin_Controller_Total_Credit extends Controller
 	{
 		$this->template->load('total/credit');
 
-		$this->load->language('total/credit');
+		$this->language->load('total/credit');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

@@ -7,7 +7,7 @@ class Admin_Controller_Module_FeaturedFlashsale extends Controller
 	{
 		$this->template->load('module/featured_flashsale');
 
-		$this->load->language('module/featured_flashsale');
+		$this->language->load('module/featured_flashsale');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

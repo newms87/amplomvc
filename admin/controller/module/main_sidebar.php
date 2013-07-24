@@ -7,7 +7,7 @@ class Admin_Controller_Module_MainSidebar extends Controller
 	{
 		$this->template->load('module/main_sidebar');
 
-		$this->load->language('module/main_sidebar');
+		$this->language->load('module/main_sidebar');
 
 		$this->document->setTitle('Main Sidebar');
 		

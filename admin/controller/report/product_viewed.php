@@ -5,7 +5,7 @@ class Admin_Controller_Report_ProductViewed extends Controller
 	{
 		$this->template->load('report/product_viewed');
 
-		$this->load->language('report/product_viewed');
+		$this->language->load('report/product_viewed');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -98,7 +98,7 @@ class Admin_Controller_Report_ProductViewed extends Controller
 	
 	public function reset()
 	{
-		$this->load->language('report/product_viewed');
+		$this->language->load('report/product_viewed');
 		
 		$this->Model_Report_Product->reset();
 		

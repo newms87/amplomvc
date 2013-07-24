@@ -4,7 +4,7 @@ class Admin_Controller_Mail_SendEmail extends Controller
 
 	public function index()
 	{
-		$this->load->language('mail/send_email');
+		$this->language->load('mail/send_email');
 		
 		$this->template->load('mail/send_email');
 		

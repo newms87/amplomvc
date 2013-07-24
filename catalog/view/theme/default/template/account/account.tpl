@@ -1,9 +1,9 @@
 <?= $header; ?>
-<?= $this->builder->display_errors($errors); ?>
-
 <?= $column_left; ?><?= $column_right; ?>
-<div class="content"><?= $content_top; ?>
-	<?= $this->builder->display_breadcrumbs(); ?>
+<div id="content">
+	<?= $this->breadcrumb->render(); ?>
+	<?= $content_top; ?>
+	
 	<h1><?= $heading_title; ?></h1>
 	
 	<div class="content_account content">
@@ -23,7 +23,8 @@
 			<? if ($reward) { ?>
 			<li><a href="<?= $reward; ?>"><?= $text_reward; ?></a></li>
 			<? } ?>
-			<li><a href="<?= $return; ?>"><?= $text_return; ?></a></li>
+			<li><a href="<?= $return_view; ?>"><?= $text_return_view; ?></a></li>
+			<li><a href="<?= $return_request; ?>"><?= $text_return_request; ?></a></li>
 			<li><a href="<?= $transaction; ?>"><?= $text_transaction; ?></a></li>
 		</ul>
 	</div>
@@ -33,5 +34,8 @@
 			<li><a href="<?= $newsletter; ?>"><?= $text_newsletter; ?></a></li>
 		</ul>
 	</div>
-	<?= $content_bottom; ?></div>
+	
+	<?= $content_bottom; ?>
+</div>
+
 <?= $footer; ?> 

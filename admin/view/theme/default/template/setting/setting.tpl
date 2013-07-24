@@ -1,7 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs(); ?>
-	<?= $this->builder->display_errors($errors); ?>
+	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -195,7 +194,7 @@
 					<table class="form">
 						<tr>
 							<td class="required"> <?= $entry_breadcrumb_display; ?></td>
-							<td><?= $this->builder->build('select', $yes_no, "config_breadcrumb_display", $config_breadcrumb_display); ?></td>
+							<td><?= $this->builder->build('select', $data_yes_no, "config_breadcrumb_display", $config_breadcrumb_display); ?></td>
 						</tr>
 						<tr>
 							<td class="required"> <?= $entry_breadcrumb_separator; ?></td>
@@ -218,12 +217,54 @@
 							<td><?= $this->builder->build('select', $data_statuses, 'config_performance_log', $config_performance_log); ?></td>
 						</tr>
 						<tr>
+							<td><?= $entry_default_return_policy; ?></td>
+							<td>
+								<? if (!empty($data_return_policies)) { ?>
+								<? $this->builder->set_config(false, 'title'); ?>
+								<?= $this->builder->build('select', $data_return_policies, 'config_default_return_policy', $config_default_return_policy); ?>
+								<? } ?>
+								<p><?= $text_add_return_policy; ?></p>
+							</td>
+						</tr>
+						<tr>
+							<td><?= $entry_default_shipping_policy; ?></td>
+							<td>
+								<? if (!empty($data_shipping_policies)) { ?>
+								<? $this->builder->set_config(false, 'title'); ?>
+								<?= $this->builder->build('select', $data_shipping_policies, 'config_default_shipping_policy', $config_default_shipping_policy); ?>
+								<? } ?>
+								<p><?= $text_add_shipping_policy; ?></p>
+							</td>
+						</tr>
+						<tr>
+							<td><?= $entry_shipping_return_policy_info; ?></td>
+							<td>
+								<? $this->builder->set_config('information_id', 'title'); ?>
+								<?= $this->builder->build('select', $data_informations, 'config_shipping_return_info_id', $config_shipping_return_info_id); ?>
+							</td>
+						<tr>
 							<td><?= $entry_cache_ignore; ?></td>
 							<td><textarea name='config_cache_ignore'><?= $config_cache_ignore; ?></textarea></td>
 						</tr>
 						<tr>
 							<td><?= $entry_allow_close_message_box; ?></td>
-							<td><?= $this->builder->build('select', $yes_no, 'config_allow_close_message_box', $config_allow_close_message_box); ?></td>
+							<td><?= $this->builder->build('radio', $data_yes_no, 'config_allow_close_message_box', $config_allow_close_message_box); ?></td>
+						</tr>
+						<tr>
+							<td><?= $entry_show_category_image; ?></td>
+							<td><?= $this->builder->build('radio', $data_yes_no, 'config_show_category_image', $config_show_category_image); ?></td>
+						</tr>
+						<tr>
+							<td><?= $entry_show_category_description; ?></td>
+							<td><?= $this->builder->build('radio', $data_yes_no, 'config_show_category_description', $config_show_category_description); ?></td>
+						</tr>
+						<tr>
+							<td><?= $entry_show_product_list_hover_image; ?></td>
+							<td><?= $this->builder->build('radio', $data_yes_no, 'config_show_product_list_hover_image', $config_show_product_list_hover_image); ?></td>
+						</tr>
+						<tr>
+							<td><?= $entry_cart_show_return_policy; ?></td>
+							<td><?= $this->builder->build('radio', $data_yes_no, 'config_cart_show_return_policy', $config_cart_show_return_policy); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_tax; ?></td>
@@ -342,42 +383,24 @@
 						</tr>
 						<tr>
 							<td><?= $entry_account; ?></td>
-							<td><select name="config_account_id">
-									<option value="0"><?= $text_none; ?></option>
-									<? foreach ($informations as $information) { ?>
-									<? if ($information['information_id'] == $config_account_id) { ?>
-									<option value="<?= $information['information_id']; ?>" selected="selected"><?= $information['title']; ?></option>
-									<? } else { ?>
-									<option value="<?= $information['information_id']; ?>"><?= $information['title']; ?></option>
-									<? } ?>
-									<? } ?>
-								</select></td>
+							<td>
+								<? $this->builder->set_config('information_id', 'title'); ?>
+								<?= $this->builder->build('select', $data_informations, 'config_account_terms_info_id', $config_account_terms_info_id); ?>
+							</td>
 						</tr>
 						<tr>
 							<td><?= $entry_checkout; ?></td>
-							<td><select name="config_checkout_id">
-									<option value="0"><?= $text_none; ?></option>
-									<? foreach ($informations as $information) { ?>
-									<? if ($information['information_id'] == $config_checkout_id) { ?>
-									<option value="<?= $information['information_id']; ?>" selected="selected"><?= $information['title']; ?></option>
-									<? } else { ?>
-									<option value="<?= $information['information_id']; ?>"><?= $information['title']; ?></option>
-									<? } ?>
-									<? } ?>
-								</select></td>
+							<td>
+								<? $this->builder->set_config('information_id', 'title'); ?>
+								<?= $this->builder->build('select', $data_informations, 'config_checkout_terms_info_id', $config_checkout_terms_info_id); ?>
+							</td>
 						</tr>
 						<tr>
 							<td><?= $entry_affiliate; ?></td>
-							<td><select name="config_affiliate_id">
-									<option value="0"><?= $text_none; ?></option>
-									<? foreach ($informations as $information) { ?>
-									<? if ($information['information_id'] == $config_affiliate_id) { ?>
-									<option value="<?= $information['information_id']; ?>" selected="selected"><?= $information['title']; ?></option>
-									<? } else { ?>
-									<option value="<?= $information['information_id']; ?>"><?= $information['title']; ?></option>
-									<? } ?>
-									<? } ?>
-								</select></td>
+							<td>
+								<? $this->builder->set_config('information_id', 'title'); ?>
+								<?= $this->builder->build('select', $data_informations, 'config_affiliate_terms_info_id', $config_affiliate_terms_info_id); ?>
+							</td>
 						</tr>
 						<tr>
 							<td><?= $entry_commission; ?></td>
@@ -420,7 +443,7 @@
 						<tr>
 							<td><?= $entry_stock_status; ?></td>
 							<td><select name="config_stock_status_id">
-									<? foreach ($stock_statuses as $stock_status) { ?>
+									<? foreach ($data_stock_statuses as $stock_status) { ?>
 									<? if ($stock_status['stock_status_id'] == $config_stock_status_id) { ?>
 									<option value="<?= $stock_status['stock_status_id']; ?>" selected="selected"><?= $stock_status['name']; ?></option>
 									<? } else { ?>
@@ -430,40 +453,37 @@
 								</select></td>
 						</tr>
 						<tr>
-							<td><?= $entry_order_status; ?></td>
-							<td><select name="config_order_status_id">
-									<? foreach ($order_statuses as $order_status) { ?>
-									<? if ($order_status['order_status_id'] == $config_order_status_id) { ?>
-									<option value="<?= $order_status['order_status_id']; ?>" selected="selected"><?= $order_status['name']; ?></option>
-									<? } else { ?>
-									<option value="<?= $order_status['order_status_id']; ?>"><?= $order_status['name']; ?></option>
-									<? } ?>
-									<? } ?>
-								</select></td>
+							<td><?= $entry_order_received_status; ?></td>
+							<td>
+								<?= $this->builder->set_config(false, 'title'); ?>
+								<?= $this->builder->build('select', $data_order_statuses, 'config_order_received_status_id', $config_order_received_status_id); ?>
+							</td>
 						</tr>
 						<tr>
-							<td><?= $entry_complete_status; ?></td>
-							<td><select name="config_complete_status_id">
-									<? foreach ($order_statuses as $order_status) { ?>
-									<? if ($order_status['order_status_id'] == $config_complete_status_id) { ?>
-									<option value="<?= $order_status['order_status_id']; ?>" selected="selected"><?= $order_status['name']; ?></option>
-									<? } else { ?>
-									<option value="<?= $order_status['order_status_id']; ?>"><?= $order_status['name']; ?></option>
-									<? } ?>
-									<? } ?>
-								</select></td>
+							<td><?= $entry_order_complete_status; ?></td>
+							<td>
+								<?= $this->builder->set_config(false, 'title'); ?>
+								<?= $this->builder->build('select', $data_order_statuses, 'config_order_complete_status_id', $config_order_complete_status_id); ?>
+							</td>
+						</tr>
+						<tr>
+							<td><?= $entry_order_blacklist_status; ?></td>
+							<td>
+								<?= $this->builder->set_config(false, 'title'); ?>
+								<?= $this->builder->build('select', $data_order_statuses, 'config_order_blacklist_status_id', $config_order_blacklist_status_id); ?>
+							</td>
+						</tr>
+						<tr>
+							<td><?= $entry_order_fraud_status; ?></td>
+							<td>
+								<?= $this->builder->set_config(false, 'title'); ?>
+								<?= $this->builder->build('select', $data_order_statuses, 'config_order_fraud_status_id', $config_order_fraud_status_id); ?>
+							</td>
 						</tr>
 						<tr>
 							<td><?= $entry_return_status; ?></td>
-							<td><select name="config_return_status_id">
-									<? foreach ($return_statuses as $return_status) { ?>
-									<? if ($return_status['return_status_id'] == $config_return_status_id) { ?>
-									<option value="<?= $return_status['return_status_id']; ?>" selected="selected"><?= $return_status['name']; ?></option>
-									<? } else { ?>
-									<option value="<?= $return_status['return_status_id']; ?>"><?= $return_status['name']; ?></option>
-									<? } ?>
-									<? } ?>
-								</select></td>
+							<? $this->builder->set_config(false, 'title'); ?>
+							<td><?= $this->builder->build('select', $data_return_statuses, 'config_return_status_id', $config_return_status_id); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_review; ?></td>
@@ -720,18 +740,6 @@
 							<td><?= $entry_fraud_score; ?></td>
 							<td><input type="text" name="config_fraud_score" value="<?= $config_fraud_score; ?>" /></td>
 						</tr>
-						<tr>
-							<td><?= $entry_fraud_status; ?></td>
-							<td><select name="config_fraud_status_id">
-									<? foreach ($order_statuses as $order_status) { ?>
-									<? if ($order_status['order_status_id'] == $config_fraud_status_id) { ?>
-									<option value="<?= $order_status['order_status_id']; ?>" selected="selected"><?= $order_status['name']; ?></option>
-									<? } else { ?>
-									<option value="<?= $order_status['order_status_id']; ?>"><?= $order_status['name']; ?></option>
-									<? } ?>
-									<? } ?>
-								</select></td>
-						</tr>
 					</table>
 				</div>
 				<div id='tab-file-permissions'>
@@ -788,11 +796,11 @@
 					<table class="form">
 						<tr>
 							<td><?= $entry_debug; ?></td>
-							<td><?= $this->builder->build('select',$yes_no,'config_debug',(int)$config_debug); ?></td>
+							<td><?= $this->builder->build('select',$data_yes_no,'config_debug',(int)$config_debug); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_debug_send_emails; ?></td>
-							<td><?= $this->builder->build('select',$yes_no,'config_debug_send_emails',(int)$config_debug_send_emails); ?></td>
+							<td><?= $this->builder->build('select',$data_yes_no,'config_debug_send_emails',(int)$config_debug_send_emails); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_use_ssl; ?></td>
@@ -849,36 +857,20 @@
 							<td><input type="text" name="config_compression" value="<?= $config_compression; ?>" size="3" /></td>
 						</tr>
 						<tr>
-							<td><?= $entry_error_display; ?></td>
-							<td><? if ($config_error_display) { ?>
-								<input type="radio" name="config_error_display" value="1" checked="checked" />
-								<?= $text_yes; ?>
-								<input type="radio" name="config_error_display" value="0" />
-								<?= $text_no; ?>
-								<? } else { ?>
-								<input type="radio" name="config_error_display" value="1" />
-								<?= $text_yes; ?>
-								<input type="radio" name="config_error_display" value="0" checked="checked" />
-								<?= $text_no; ?>
-								<? } ?></td>
-						</tr>
-						<tr>
-							<td><?= $entry_error_log; ?></td>
-							<td><? if ($config_error_log) { ?>
-								<input type="radio" name="config_error_log" value="1" checked="checked" />
-								<?= $text_yes; ?>
-								<input type="radio" name="config_error_log" value="0" />
-								<?= $text_no; ?>
-								<? } else { ?>
-								<input type="radio" name="config_error_log" value="1" />
-								<?= $text_yes; ?>
-								<input type="radio" name="config_error_log" value="0" checked="checked" />
-								<?= $text_no; ?>
-								<? } ?></td>
+							<td class="required"> <?= $entry_log_filename; ?></td>
+							<td><input type="text" name="config_log_filename" value="<?= $config_log_filename; ?>" />
 						</tr>
 						<tr>
 							<td class="required"> <?= $entry_error_filename; ?></td>
 							<td><input type="text" name="config_error_filename" value="<?= $config_error_filename; ?>" />
+						</tr>
+						<tr>
+							<td><?= $entry_error_display; ?></td>
+							<td><?= $this->builder->build('radio', $data_yes_no, 'config_error_display', $config_error_display); ?></td>
+						</tr>
+						<tr>
+							<td><?= $entry_error_log; ?></td>
+							<td><?= $this->builder->build('radio', $data_yes_no, 'config_error_log', $config_error_log); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_google_analytics; ?></td>
@@ -905,9 +897,8 @@ $('[name=config_theme]').change(function(){
 	$('#theme').load('<?= $load_theme_img; ?>' + '&theme=' + $(this).val());
 }).change();
 //--></script>
-<?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select'); ?>
 
-<?= $this->builder->js('ckeditor'); ?>
+<?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select'); ?>
 
 <script type="text/javascript">//<!--
 $('#tabs a').tabs();

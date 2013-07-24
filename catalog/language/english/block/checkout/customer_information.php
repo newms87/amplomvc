@@ -8,7 +8,7 @@ $_['text_payment_method']	= 'Payment Method';
 $_['text_info_loading'] = "Loading... please wait.";
 $_['text_info_validating'] = "Validating...";
 $_['text_info_valid'] = "";
-$_['text_info_error'] = "Invalid! Please review the errors.";
+$_['text_info_error'] = "";
 
 $_['error_payment_address'] = "Please provide a Payment Address.";
 $_['error_shipping_address'] = "Please provide a Shipping Address.";

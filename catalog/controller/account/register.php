@@ -1,7 +1,6 @@
 <?php
 class Catalog_Controller_Account_Register extends Controller
 {
-	
   	public function index()
   	{
   		$this->template->load('account/register');
@@ -15,7 +14,7 @@ class Catalog_Controller_Account_Register extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if ($this->request->isPost() && $this->validate()) {
-			$this->Model_Account_Customer->addCustomer($_POST);
+			$this->customer->add($_POST);
 
 			$this->customer->login($_POST['email'], $_POST['password']);
 			
@@ -55,11 +54,11 @@ class Catalog_Controller_Account_Register extends Controller
 		
 		$this->data['text_agree'] = '';
 		
-		if ($this->config->get('config_account_id')) {
-			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_account_id'));
+		if ($this->config->get('config_account_terms_info_id')) {
+			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_account_terms_info_id'));
 			
 			if ($information_info) {
-				$this->_('text_agree', $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_account_id')), $information_info['title'], $information_info['title']);
+				$this->_('text_agree', $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_account_terms_info_id')), $information_info['title'], $information_info['title']);
 			}
 		}
 		
@@ -89,7 +88,7 @@ class Catalog_Controller_Account_Register extends Controller
 				$this->error['email'] = $this->_('error_email');
 		}
 
-		if ($this->Model_Account_Customer->getTotalCustomersByEmail($_POST['email'])) {
+		if ($this->customer->emailRegistered($_POST['email'])) {
 				$this->error['email'] = $this->_('error_exists');
 		}
 		
@@ -123,8 +122,8 @@ class Catalog_Controller_Account_Register extends Controller
 				$this->error['confirm'] = $this->_('error_confirm');
 		}
 		
-		if ($this->config->get('config_account_id')) {
-			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_account_id'));
+		if ($this->config->get('config_account_terms_info_id')) {
+			$information_info = $this->Model_Catalog_Information->getInformation($this->config->get('config_account_terms_info_id'));
 			
 			if ($information_info && !isset($_POST['agree'])) {
 					$this->error['warning'] = sprintf($this->_('error_agree'), $information_info['title']);

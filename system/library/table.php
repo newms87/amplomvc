@@ -2,7 +2,11 @@
 class Table extends Library
 {
 	private $file;
-	private $template_data;
+	private $template_data = array();
+	
+	private $columns;
+	private $rows;
+	
 	private $path;
 	
 	public function init()
@@ -10,17 +14,22 @@ class Table extends Library
 		$this->path = '';
 	}
 	
-	public function set_path($path)
+	public function setColumns($columns)
 	{
-		$this->path = $path;
+		$this->columns = $columns;
 	}
 	
-	public function set_template_data($template_data)
+	public function setRows($rows)
+	{
+		$this->rows = $rows;
+	}
+	
+	public function setTemplateData($template_data)
 	{
 		$this->template_data = $template_data;
 	}
 	
-	public function set_template($file)
+	public function setTemplate($file)
 	{
 		if (!preg_match("/\.tpl$/", $file)) {
 			$file .= '.tpl';
@@ -33,19 +42,19 @@ class Table extends Library
 			$this->file = DIR_THEME . 'default/template/' . $file;
 		}
 		else {
-			trigger_error("Error: Could not load form template " . DIR_THEME . $this->path . $file . "!" . get_caller(3));
+			trigger_error("Error: Could not load form template " . DIR_THEME . $this->path . $file . "!" . get_caller(1, 3));
 			exit();
 		}
 	}
 	
-	public function map_attribute($attr, $values)
+	public function mapAttribute($attr, $values)
 	{
-		if (empty($this->template_data['columns'])) {
-			trigger_error("Error: You must set the table structure with Table::set_template_data() before mapping data!" . get_caller(3));
+		if (empty($this->columns)) {
+			trigger_error("Error: You must set the Columns (eg: \$this->table->setColumns(\$columns); ) before mapping data!" . get_caller());
 			exit();
 		}
 		
-		foreach ($this->template_data['columns'] as $slug => &$column) {
+		foreach ($this->columns as $slug => &$column) {
 			$column[$attr] = isset($values[$slug]) ? $values[$slug] : null;
 		}
 	}
@@ -55,6 +64,10 @@ class Table extends Library
 		$this->prepare();
 		
 		extract($this->template_data);
+		extract($this->language->data);
+		
+		$columns = $this->columns;
+		$rows = $this->rows;
 		
 		$file = $this->plugin->getFile($this->file);
 		
@@ -69,19 +82,22 @@ class Table extends Library
 	private function prepare()
 	{
 		if (!$this->file || !file_exists($this->file)) {
-			trigger_error("You must set the template for the form before building! " . get_caller(3));
+			trigger_error("You must set the template for the form before building! " . get_caller(2, 2));
 			exit();
 		}
 		
-		if (!isset($this->template_data)) {
-			trigger_error("The table structure was not set! Please call Table::set_template_data(\$tt_data) before building! " . get_caller(3));
-			exit();
+		//Add Sort data
+		$this->template_data += $this->sort->getSortData();
+		
+		if (empty($this->template_data['sort_url'])) {
+			$this->template_data['sort_url'] = $this->url->link($this->url->route(), $this->url->getQueryExclude('sort', 'order', 'page'));
 		}
 		
-		foreach ($this->template_data['columns'] as $slug => &$column) {
+		//Normalize Columns
+		foreach ($this->columns as $slug => &$column) {
 			
 			if (!isset($column['type'])) {
-				trigger_error("Invalid table column! The type was not set for $slug! " . get_caller(3));
+				trigger_error("Invalid table column! The type was not set for $slug! " . get_caller(2, 2));
 				exit();
 			}
 			
@@ -133,13 +149,13 @@ class Table extends Library
 					break;
 				case 'select':
 					if (empty($column['build_data'])) {
-						trigger_error("You must specify build_data for the column $slug of type select! " . get_caller(3));
+						trigger_error("You must specify build_data for the column $slug of type select! " . get_caller(2, 2));
 						exit();
 					}
 					
 					if (!isset($column['build_config'])) {
 						if (is_array(current($column['build_data']))) {
-							trigger_error("You must specify build_config for the column $slug of type select with this nature of build_data! " . get_caller(3));
+							trigger_error("You must specify build_config for the column $slug of type select with this nature of build_data! " . get_caller(2, 2));
 							exit();
 						}
 					}
@@ -152,7 +168,17 @@ class Table extends Library
 								'name' => $bd_item
 							);
 						}
-						$column['build_config'] = array('key' => 'name');
+						$column['build_config'] = array('key', 'name');
+					}
+					elseif ($column['build_config'][0] === false) {
+						//normalize the data for easier processing
+						foreach ($column['build_data'] as $key => $bd_item) {
+							$column['build_data'][$key] = array(
+								'key' => $key,
+								'name' => $bd_item[$column['build_config'][1]],
+							);
+						}
+						$column['build_config'] = array('key', 'name');
 					}
 					
 					break;

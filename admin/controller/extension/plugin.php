@@ -4,7 +4,7 @@ class Admin_Controller_Extension_Plugin extends Controller
 	
 	public function index()
 	{
-		$this->load->language('extension/plugin');
+		$this->language->load('extension/plugin');
 		
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -102,7 +102,7 @@ class Admin_Controller_Extension_Plugin extends Controller
 	{
 		$this->cache->delete('model');
 		
-		$this->load->language('extension/plugin');
+		$this->language->load('extension/plugin');
 
 		if (!isset($_GET['name'])) {
 			$this->message->add('warning', $this->_('error_no_plugin'));

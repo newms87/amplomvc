@@ -1,10 +1,9 @@
 <?php
 class Admin_Controller_Mail_Error extends Controller
 {
-
 	public function index()
 	{
-		$this->load->language('mail/error');
+		$this->language->load('mail/error');
 		$this->template->load('mail/error');
 
 		$this->document->setTitle($this->_('heading_title'));
@@ -21,6 +20,7 @@ class Admin_Controller_Mail_Error extends Controller
 		$this->data['send_message'] = $this->url->link('mail/error/resend');
 		$this->data['resend_message'] = $this->url->link('mail/error/resend');
 		$this->data['delete_message'] = $this->url->link('mail/error/delete');
+		$this->data['load_message'] = $this->url->link('mail/error/load_message');
 		
 		$this->children = array(
 			'common/header',
@@ -29,7 +29,22 @@ class Admin_Controller_Mail_Error extends Controller
 	
 		$this->response->setOutput($this->render());
 	}
-
+	
+	public function load_message()
+	{
+		$message = '';
+		
+		if (!empty($_GET['mail_fail_id'])) {
+			$message = $this->Model_Mail_Error->getFailedMessage($_GET['mail_fail_id']);
+			
+			if ($message) {
+				$message = $message['html'] ? $message['html'] : '__TEXT__' . $message['text'];
+			}
+		}
+		
+		$this->response->setOutput($message);
+	}
+	
 	public function resend()
 	{
 		if ($this->validate()) {
@@ -39,10 +54,12 @@ class Admin_Controller_Mail_Error extends Controller
 				$mail['attachment'] = $_FILES['attachment'];
 			}
 			
+			$message = $this->Model_Mail_Error->getFailedMessage($_POST['mail_fail_id']);
+			
 			if (!empty($mail['allow_html'])) {
-				$mail['html'] = html_entity_decode($mail['message'], ENT_QUOTES, 'UTF-8');
+				$mail['html'] = html_entity_decode($message['html'], ENT_QUOTES, 'UTF-8');
 			} else {
-				$mail['text'] = htmlentities($mail['message']);
+				$mail['text'] = htmlentities($message['text']);
 			}
 			
 			$this->mail->init();
@@ -114,7 +131,7 @@ class Admin_Controller_Mail_Error extends Controller
 			$this->error['subject'] = $this->_('error_subject');
 		}
 		
-		if (!$_POST['message']) {
+		if (!$_POST['mail_fail_id'] && !$_POST['message']) {
 			$this->error['message'] = $this->_('error_message');
 		}
 		

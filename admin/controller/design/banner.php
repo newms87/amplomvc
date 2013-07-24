@@ -5,7 +5,7 @@ class Admin_Controller_Design_Banner extends Controller
 
 	public function index()
 	{
-		$this->load->language('design/banner');
+		$this->language->load('design/banner');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -14,7 +14,7 @@ class Admin_Controller_Design_Banner extends Controller
 
 	public function insert()
 	{
-		$this->load->language('design/banner');
+		$this->language->load('design/banner');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -33,7 +33,7 @@ class Admin_Controller_Design_Banner extends Controller
 
 	public function update()
 	{
-		$this->load->language('design/banner');
+		$this->language->load('design/banner');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -52,7 +52,7 @@ class Admin_Controller_Design_Banner extends Controller
 
 	public function delete()
 	{
-		$this->load->language('design/banner');
+		$this->language->load('design/banner');
 
 		$this->document->setTitle($this->_('heading_title'));
 		

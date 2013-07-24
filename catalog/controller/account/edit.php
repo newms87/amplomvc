@@ -1,8 +1,6 @@
 <?php
 class Catalog_Controller_Account_Edit extends Controller
 {
-	
-
 	public function index()
 	{
 		$this->template->load('account/edit');
@@ -18,7 +16,7 @@ class Catalog_Controller_Account_Edit extends Controller
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if ($this->request->isPost() && $this->validate()) {
-			$this->Model_Account_Customer->editCustomer($_POST);
+			$this->customer->edit($_POST);
 			
 			$this->message->add('success', $this->_('text_success'));
 
@@ -62,7 +60,7 @@ class Catalog_Controller_Account_Edit extends Controller
 		$this->data['action'] = $this->url->link('account/edit');
 
 		if (!$this->request->isPost()) {
-			$customer_info = $this->Model_Account_Customer->getCustomer($this->customer->getId());
+			$customer_info = $this->customer->info();
 		}
 
 		if (isset($_POST['firstname'])) {
@@ -121,23 +119,23 @@ class Catalog_Controller_Account_Edit extends Controller
 
 	private function validate()
 	{
-		if ((strlen($_POST['firstname']) < 1) || (strlen($_POST['firstname']) > 32)) {
+		if (!$this->validation->text($_POST['firstname'], 1, 32)) {
 			$this->error['firstname'] = $this->_('error_firstname');
 		}
 
-		if ((strlen($_POST['lastname']) < 1) || (strlen($_POST['lastname']) > 32)) {
+		if (!$this->validation->text($_POST['lastname'], 1, 32)) {
 			$this->error['lastname'] = $this->_('error_lastname');
 		}
 
-		if ((strlen($_POST['email']) > 96) || !preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $_POST['email'])) {
+		if (!$this->validation->email($_POST['email'])) {
 			$this->error['email'] = $this->_('error_email');
 		}
 		
-		if (($this->customer->info('email') != $_POST['email']) && $this->Model_Account_Customer->getTotalCustomersByEmail($_POST['email'])) {
+		if (($this->customer->info('email') !== $_POST['email']) && $this->customer->emailRegistered($_POST['email'])) {
 			$this->error['warning'] = $this->_('error_exists');
 		}
 
-		if (isset($_POST['telephone']) && (strlen($_POST['telephone']) < 3) || (strlen($_POST['telephone']) > 32)) {
+		if (isset($_POST['telephone']) && !$this->validation->phone($_POST['telephone'])) {
 			$this->error['telephone'] = $this->_('error_telephone');
 		}
 

@@ -1,17 +1,14 @@
 <?php
 class Admin_Controller_Setting_Setting extends Controller
 {
-
 	public function index()
 	{
 		$this->template->load('setting/setting');
-
-		$this->load->language('setting/setting');
+		$this->language->load('setting/setting');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if ($this->request->isPost() && $this->validate()) {
-			
 			$this->Model_Setting_Setting->editSetting('config', $_POST);
 
 			if ($this->config->get('config_currency_auto')) {
@@ -26,145 +23,155 @@ class Admin_Controller_Setting_Setting extends Controller
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_settings'), $this->url->link('setting/store'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/setting'));
-				$this->data['action'] = $this->url->link('setting/setting');
 		
+		$this->data['action'] = $this->url->link('setting/setting');
 		$this->data['cancel'] = $this->url->link('setting/store');
 
+		if (!$this->request->isPost()) {
+			$config_data = $this->config->loadGroup('config');
+		}
+		
 		$defaults = array(
-			'config_name',
-			'config_owner',
-			'config_address',
-			'config_email',
-			'config_email_support',
-			'config_email_error',
-			'config_telephone',
-			'config_fax',
-			'config_title',
-			'config_default_store',
-			'config_meta_description',
+			'config_name' => '',
+			'config_owner' => '',
+			'config_address' => '',
+			'config_email' => '',
+			'config_email_support' => '',
+			'config_email_error' => '',
+			'config_telephone' => '',
+			'config_fax' => '',
+			'config_title' => '',
+			'config_default_store' => '',
+			'config_meta_description' => '',
 			'config_debug'=>0,
 			'config_allow_close_message_box'=>1,
-			'config_default_layout_id',
-			'config_theme',
-			'config_address_format',
-			'config_country_id',
-			'config_zone_id',
-			'config_language',
-			'config_admin_language',
+			'config_default_layout_id' => '',
+			'config_theme' => 'default',
+			'config_address_format' => '',
+			'config_country_id' => 223,
+			'config_zone_id' => 8,
+			'config_language' => 1,
+			'config_admin_language' => 1,
 			'config_use_macro_languages' => 0,
-			'config_currency',
-			'config_currency_auto',
-			'config_length_class_id',
-			'config_weight_class_id',
-			'config_catalog_limit',
-			'config_admin_limit',
-			'config_performance_log',
-			'config_cache_ignore',
-			'config_show_price_with_tax',
-			'config_tax_default_id',
-			'config_tax_default',
-			'config_tax_customer',
+			'config_currency' => '',
+			'config_currency_auto' => '',
+			'config_length_class_id' => 0,
+			'config_weight_class_id' => 0,
+			'config_catalog_limit' => 10,
+			'config_admin_limit' => 20,
+			'config_performance_log' => 0,
+			'config_default_return_policy' => 0,
+			'config_default_shipping_policy' => 0,
+			'config_shipping_return_info_id' => 0,
+			'config_cache_ignore' => '',
+			'config_cart_show_return_policy' => 1,
+			'config_show_price_with_tax' => '',
+			'config_tax_default_id' => '',
+			'config_tax_default' => '',
+			'config_tax_customer' => '',
 			'config_invoice_prefix'=>'INV-%Y-M%',
-			'config_order_edit'=>7,
-			'config_customer_group_id',
-			'config_customer_price',
-			'config_customer_approval',
-			'config_guest_checkout',
-			'config_account_id',
-			'config_checkout_id',
-			'config_affiliate_id',
-			'config_commission'=>'5.00',
-			'config_breadcrumb_display'=>1,
+			'config_order_edit' => 7,
+			'config_customer_group_id' => '',
+			'config_customer_price' => 0,
+			'config_customer_approval' => 0,
+			'config_guest_checkout' => '',
+			'config_account_terms_info_id' => 0,
+			'config_checkout_terms_info_id' => 0,
+			'config_affiliate_terms_info_id' => 0,
+			'config_commission' => '5.00',
+			'config_breadcrumb_display' => 1,
 			'config_breadcrumb_separator' => '/',
 			'config_breadcrumb_separator_admin' => '/',
-			'config_stock_display',
-			'config_stock_warning',
-			'config_stock_checkout',
-			'config_stock_status_id',
-			'config_order_status_id',
-			'config_complete_status_id',
-			'config_return_status_id',
-			'config_review_status',
-			'config_share_status',
+			'config_show_category_image' => 1,
+			'config_show_category_description' => 1,
+			'config_show_product_list_hover_image' => 0,
+			'config_stock_display' => 1,
+			'config_stock_warning' => 1,
+			'config_stock_checkout' => 0,
+			'config_stock_status_id' => 0,
+			'config_order_received_status_id' => 0,
+			'config_order_complete_status_id' => 0,
+			'config_order_blacklist_status_id' => 0,
+			'config_order_fraud_status_id' => 0,
+			'config_return_status_id' => 0,
+			'config_review_status' => 1,
+			'config_share_status' => 1,
 			'config_show_product_attributes' => 1,
-			'config_download',
-			'config_upload_allowed',
-			'config_upload_images_allowed',
-			'config_upload_images_mime_types_allowed',
-			'config_cart_weight',
-			'config_logo',
-			'config_admin_logo',
-			'config_icon',
-			'config_image_admin_thumb_width',
-			'config_image_admin_thumb_height',
-			'config_image_admin_list_width',
-			'config_image_admin_list_height',
-			'config_image_category_width',
-			'config_image_category_height',
-			'config_image_manufacturer_width',
-			'config_image_manufacturer_height',
-			'config_image_thumb_width',
-			'config_image_thumb_height',
-			'config_image_popup_width',
-			'config_image_popup_height',
-			'config_image_product_width',
-			'config_image_product_height',
-			'config_image_product_option_width',
-			'config_image_product_option_height',
-			'config_image_additional_width',
-			'config_image_additional_height',
-			'config_image_related_width',
-			'config_image_related_height',
-			'config_image_compare_width',
-			'config_image_compare_height',
-			'config_image_wishlist_width',
-			'config_image_wishlist_height',
-			'config_image_cart_width',
-			'config_image_cart_height',
-			'config_mail_protocol',
-			'config_mail_parameter',
-			'config_smtp_host',
-			'config_smtp_username',
-			'config_smtp_password',
+			'config_download' => 1,
+			'config_upload_allowed' => 1,
+			'config_upload_images_allowed' => '',
+			'config_upload_images_mime_types_allowed' => '',
+			'config_cart_weight' => 1,
+			'config_logo' => '',
+			'config_admin_logo' => '',
+			'config_icon' => '',
+			'config_image_admin_thumb_width' => 120,
+			'config_image_admin_thumb_height' => 120,
+			'config_image_admin_list_width' => 60,
+			'config_image_admin_list_height' => 60,
+			'config_image_category_width' => 240,
+			'config_image_category_height' => 240,
+			'config_image_manufacturer_width' => 240,
+			'config_image_manufacturer_height' => 240,
+			'config_image_thumb_width' => 120,
+			'config_image_thumb_height' => 120,
+			'config_image_popup_width' => 1024,
+			'config_image_popup_height' => 1024,
+			'config_image_product_width' => 420,
+			'config_image_product_height' => 420,
+			'config_image_product_option_width' => 50,
+			'config_image_product_option_height' => 50,
+			'config_image_additional_width' => 120,
+			'config_image_additional_height' => 120,
+			'config_image_related_width' => 120,
+			'config_image_related_height' => 120,
+			'config_image_compare_width' => 120,
+			'config_image_compare_height' => 120,
+			'config_image_wishlist_width' => 120,
+			'config_image_wishlist_height' => 120,
+			'config_image_cart_width' => 80,
+			'config_image_cart_height' => 80,
+			'config_mail_protocol' => 'smpt',
+			'config_mail_parameter' => '',
+			'config_smtp_host' => '',
+			'config_smtp_username' => '',
+			'config_smtp_password' => '',
 			'config_smtp_port'=>25,
 			'config_smtp_timeout'=>5,
-			'config_alert_mail',
-			'config_account_mail',
-			'config_alert_emails',
-			'config_fraud_detection',
-			'config_fraud_key',
-			'config_fraud_score',
-			'config_fraud_status_id',
-			'config_use_ssl',
-			'config_seo_url',
-			'config_maintenance',
-			'config_image_max_mem',
-			'config_encryption',
-			'config_compression',
-			'config_debug_send_emails',
-			'config_error_display',
-			'config_error_log',
-			'config_error_filename',
-			'config_google_analytics',
-			'config_statcounter',
-			'config_default_file_mode'=>755,
-			'config_default_dir_mode'=>755,
-			'config_image_file_mode'=>755,
-			'config_image_dir_mode'=>755,
-			'config_plugin_file_mode'=>755,
+			'config_alert_mail' => '',
+			'config_account_mail' => '',
+			'config_alert_emails' => '',
+			'config_fraud_detection' => '',
+			'config_fraud_key' => '',
+			'config_fraud_score' => '',
+			'config_use_ssl' => 0,
+			'config_seo_url' => 1,
+			'config_maintenance' => 0,
+			'config_image_max_mem' => '2G',
+			'config_encryption' => '',
+			'config_compression' => '',
+			'config_log_filename' => '',
+			'config_debug_send_emails' => '',
+			'config_error_display' => '',
+			'config_error_log' => '',
+			'config_error_filename' => '',
+			'config_google_analytics' => '',
+			'config_statcounter' => '',
+			'config_default_file_mode' => 644,
+			'config_default_dir_mode' => 755,
+			'config_image_file_mode' => 644,
+			'config_image_dir_mode' => 755,
+			'config_plugin_file_mode' => 644,
 			'config_plugin_dir_mode'=>755,
 		);
 
-		foreach($defaults as $key=>$default) {
-			$k = is_integer($key)?$default:$key;
-			if (isset($_POST[$k])) {
-				$this->data[$k] = $_POST[$k];
-			}
-			elseif ($this->config->get($k)) {
-				$this->data[$k] = $this->config->get($k);
-			}
-			else {
-				$this->data[$k] = is_integer($key)?'':$default;
+		foreach($defaults as $key => $default) {
+			if (isset($_POST[$key])) {
+				$this->data[$key] = $_POST[$key];
+			} elseif (isset($config_data[$key])) {
+				$this->data[$key] = $config_data[$key];
+			} else {
+				$this->data[$key] = $default;
 			}
 		}
 		
@@ -182,35 +189,28 @@ class Admin_Controller_Setting_Setting extends Controller
 			$this->data[$oct] = intval($this->data[$oct]);
 		}
 
+		//Additional Data
 		$this->data['data_layouts'] = $this->Model_Design_Layout->getLayouts();
-		
 		$this->data['themes'] = $this->theme->getThemes();
-		
 		$this->data['stores'] = $this->Model_Setting_Store->getStores();
-		
 		$this->data['countries'] = $this->Model_Localisation_Country->getCountries();
-
 		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
-						
 		$this->data['currencies'] = $this->Model_Localisation_Currency->getCurrencies();
-		
 		$this->data['length_classes'] = $this->Model_Localisation_LengthClass->getLengthClasses();
-		
 		$this->data['weight_classes'] = $this->Model_Localisation_WeightClass->getWeightClasses();
-		
 		$this->data['tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
-						
 		$this->data['customer_groups'] = $this->Model_Sale_CustomerGroup->getCustomerGroups();
-		
-		$this->data['informations'] = $this->Model_Catalog_Information->getInformations();
-		
-		$this->data['stock_statuses'] = $this->Model_Localisation_StockStatus->getStockStatuses();
-		
-		$this->data['order_statuses'] = $this->Model_Localisation_OrderStatus->getOrderStatuses();
-		
-		$this->data['return_statuses'] = $this->Model_Localisation_ReturnStatus->getReturnStatuses();
+		$this->data['data_informations'] = array('' => $this->_('text_none')) + $this->Model_Catalog_Information->getInformations();
+		$this->data['data_stock_statuses'] = $this->Model_Localisation_StockStatus->getStockStatuses();
+		$this->data['data_order_statuses'] = $this->order->getOrderStatuses();
+		$this->data['data_return_statuses'] = $this->order->getReturnStatuses();
+		$this->data['data_return_policies'] = $this->cart->getReturnPolicies();
+		$this->data['data_shipping_policies'] = $this->cart->getShippingPolicies();
 		
 		$this->data['load_theme_img'] = $this->url->link('setting/setting/theme');
+		
+		$this->_('text_add_return_policy', $this->url->link('setting/return_policy'));
+		$this->_('text_add_shipping_policy', $this->url->link('setting/shipping_policy'));
 		
 		$this->children = array(
 			'common/header',
@@ -329,6 +329,10 @@ class Admin_Controller_Setting_Setting extends Controller
 			$this->error['image_cart'] = $this->_('error_image_cart');
 		}
 		
+		if (!$_POST['config_log_filename']) {
+			$this->error['config_log_filename'] = $this->_('error_log_filename');
+		}
+
 		if (!$_POST['config_error_filename']) {
 			$this->error['config_error_filename'] = $this->_('error_error_filename');
 		}

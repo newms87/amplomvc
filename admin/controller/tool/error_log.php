@@ -7,14 +7,14 @@ class Admin_Controller_Tool_ErrorLog extends Controller
 	{
 		$this->template->load('tool/error_log');
 
-		$this->load->language('tool/error_log');
+		$this->language->load('tool/error_log');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('tool/error_log'));
 		
-		$url_query = $this->url->get_query(array('filter_store'));
+		$url_query = $this->url->getQuery('filter_store');
 		
 		$this->data['remove'] = $this->url->link('tool/error_log/remove',$url_query);
 		$this->data['clear'] = $this->url->link('tool/error_log/clear', $url_query);
@@ -86,7 +86,7 @@ class Admin_Controller_Tool_ErrorLog extends Controller
 		$this->data['limit'] = $limit;
 		$this->data['log'] = $log;
 		
-		$url_query = $this->url->get_query(array('limit','start'));
+		$url_query = $this->url->getQuery('limit','start');
 		
 		$this->data['filter_url'] = $this->url->link('tool/error_log');
 		
@@ -152,7 +152,7 @@ class Admin_Controller_Tool_ErrorLog extends Controller
 				}
 			}
 			
-			$this->load->language('tool/error_log');
+			$this->language->load('tool/error_log');
 			
 			$file = DIR_LOGS . $this->config->get('config_error_filename');
 			
@@ -186,7 +186,7 @@ class Admin_Controller_Tool_ErrorLog extends Controller
 	
 	public function clear()
 	{
-		$this->load->language('tool/error_log');
+		$this->language->load('tool/error_log');
 		
 		$file = DIR_LOGS . $this->config->get('config_error_filename');
 		

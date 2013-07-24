@@ -132,7 +132,7 @@ class Admin_Model_Catalog_Manufacturer extends Model
 	
 	public function getManufacturer($manufacturer_id)
 	{
-		return $this->query_row("SELECT DISTINCT * FROM " . DB_PREFIX . "manufacturer WHERE manufacturer_id = '" . (int)$manufacturer_id . "'");
+		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "manufacturer WHERE manufacturer_id = '" . (int)$manufacturer_id . "'");
 	}
 	
 	public function getManufacturers($data = array(), $select = '*', $total = false) {
@@ -164,7 +164,7 @@ class Admin_Model_Catalog_Manufacturer extends Model
 		//Order and Limit
 		if (!$total) {
 			if (!empty($data['sort']) && strpos($data['sort'], '__image_sort__') === 0) {
-				if (!$this->db->has_column('manufacturer', $data['sort'])) {
+				if (!$this->db->hasColumn('manufacturer', $data['sort'])) {
 					$this->extend->enable_image_sorting('manufacturer', str_replace('__image_sort__', '', $data['sort']));
 				}
 			}

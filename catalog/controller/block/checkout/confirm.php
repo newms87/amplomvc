@@ -38,14 +38,22 @@ class Catalog_Controller_Block_Checkout_Confirm extends Controller
 		}
 		
 		if (empty($this->data['redirect'])) {
-			if (!$this->cart->addOrder()) {
-				if ($this->cart->has_error('cart')) {
-					$this->message->add('warning', $this->cart->get_errors('cart'));
-					$this->data['redirect'] = $this->url->link('cart/cart', 'newman=1');
+			if (!$this->cart->validateCheckout()) {
+				$this->message->add('warning', $this->cart->get_errors('checkout'));
+				
+				if ($this->cart->get_error_code() === 'CKO-1') {
+					$this->data['redirect'] = $this->url->link('cart/cart');
+				} else {
+					$this->data['redirect'] = $this->url->link('checkout/checkout');
+				}
+			}
+			elseif (!$this->order->add()) {
+				if ($this->order->hasError()) {
+					$this->message->add('warning', $this->order->getErrors());
+					$this->data['redirect'] = $this->url->link('cart/cart');
 				}
 				else {
 					$this->data['redirect'] = $this->url->link('checkout/checkout');
-					$this->message->add('warning', $this->cart->get_errors());
 				}
 			}
 			else {
@@ -70,7 +78,7 @@ class Catalog_Controller_Block_Checkout_Confirm extends Controller
 				
 				$this->data['checkout_url'] = $this->url->link('checkout/checkout');
 				
-				$this->data['payment'] = $this->getChild('payment/' . $this->session->data['payment_method']['code']);
+				$this->data['payment'] = $this->getChild('payment/' . $this->cart->getPaymentMethodId());
 			}
 		}
 
@@ -79,16 +87,17 @@ class Catalog_Controller_Block_Checkout_Confirm extends Controller
 	
 	public function check_order_status()
 	{
-		$order_id = isset($_GET['order_id'])?$_GET['order_id']:0;
-		if(!$order_id)return;
+		$json = array();
 		
-		$status = $this->Model_Checkout_Order->getOrderStatus($order_id);
-		
-		if ($status) {
-			$json = array('status'=>$status, 'redirect'=>$this->url->link('checkout/success'));
-		}
-		else {
-			$json = array();
+		if (isset($_GET['order_id'])) {
+			$order = $this->order->get($_GET['order_id']);
+			
+			if ($order['confirmed']) {
+				$json = array(
+					'status' => $this->order->getOrderStatus($order['order_status_id']),
+					'redirect' => $this->url->link('checkout/success'),
+				);
+			}
 		}
 		
 		$this->response->setOutput(json_encode($json));

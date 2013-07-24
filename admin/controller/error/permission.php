@@ -5,7 +5,7 @@ class Admin_Controller_Error_Permission extends Controller
 	{
 		$this->template->load('error/permission');
 
-		$this->load->language('error/permission');
+		$this->language->load('error/permission');
 
 		$this->document->setTitle($this->_('heading_title'));
 		
@@ -19,4 +19,4 @@ class Admin_Controller_Error_Permission extends Controller
 				
 		$this->response->setOutput($this->render());
   	}
-}
+}

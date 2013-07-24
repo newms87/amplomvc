@@ -42,7 +42,7 @@ class Pagination extends Library
 		$language = $this->language->fetch('block/widget/pagination');
 		
 		if (!$this->page_url) {
-			$this->page_url = $this->url->link($_GET['route'], $this->url->get_query_exclude('page'));
+			$this->page_url = $this->url->link($this->url->route(), $this->url->getQueryExclude('page'));
 		}
 		
 		//Setup Query to add page=n
@@ -137,7 +137,7 @@ class Pagination extends Library
 		
 		$language['text_pager'] = $this->tool->insertables($insertables, $language['text_pager']);
 		
-		$this->template->set_data($data + $language);
+		$this->template->setData($data + $language);
 		
 		return $this->template->render();
 	}

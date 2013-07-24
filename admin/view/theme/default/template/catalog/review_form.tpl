@@ -1,6 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->breadcrumb->render(); ?>
 	<? if ($error_warning) { ?>
 	<div class="message_box warning"><?= $error_warning; ?></div>
 	<? } ?>
@@ -93,7 +93,7 @@ $('input[name=\'product\']').autocomplete({
 	delay: 0,
 	source: function(request, response) {
 		$.ajax({
-			url: "<?= HTTP_ADMIN . "index.php?route=catalog/product/autocomplete"; ?>" + '&filter_name=' +	encodeURIComponent(request.term),
+			url: "<?= $url_product_autocomplete; ?>" + '&filter_name=' +	encodeURIComponent(request.term),
 			dataType: 'json',
 			success: function(json) {
 				response($.map(json, function(item) {

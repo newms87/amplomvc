@@ -14,10 +14,10 @@ class Translation extends Library
 			
 			$translations = array();
 			
-			$translate_list = $this->db->query_rows("SELECT translation_id, `field` FROM " . DB_PREFIX . "translation WHERE `table` = '$table'");
+			$translate_list = $this->db->queryRows("SELECT translation_id, `field` FROM " . DB_PREFIX . "translation WHERE `table` = '$table'");
 			
 			foreach ($translate_list as $row) {
-				$result = $this->db->query_row("SELECT text FROM " . DB_PREFIX . "translation_text WHERE translation_id = '$row[translation_id]' AND language_id = '$language_id' AND object_id = '" . (int)$object_id . "' AND `text` != ''");
+				$result = $this->db->queryRow("SELECT text FROM " . DB_PREFIX . "translation_text WHERE translation_id = '$row[translation_id]' AND language_id = '$language_id' AND object_id = '" . (int)$object_id . "' AND `text` != ''");
 				
 				if ($result) {
 					$translations[$row['field']] = html_entity_decode($result['text']);
@@ -33,7 +33,11 @@ class Translation extends Library
 	public function translate_all($table, $object_key, &$data)
 	{
 		foreach ($data as $key => $item) {
-			$this->translate($table, $item[$object_key], $data[$key]);
+			if ($object_key) {
+				$this->translate($table, $item[$object_key], $data[$key]);
+			} else {
+				$this->translate($table, $key, $data[$key]);
+			}
 		}
 	}
 	
@@ -60,7 +64,7 @@ class Translation extends Library
 		
 		$translations = array();
 		
-		$results = $this->db->query_rows("SELECT translation_id, `field` FROM " . DB_PREFIX . "translation WHERE `table` = '" . $this->db->escape($table) . "'");
+		$results = $this->db->queryRows("SELECT translation_id, `field` FROM " . DB_PREFIX . "translation WHERE `table` = '" . $this->db->escape($table) . "'");
 		
 		//Identify all necessary fields
 		if (empty($fields)) {
@@ -78,7 +82,7 @@ class Translation extends Library
 				" WHERE translation_id = '$translation[translation_id]'" .
 				" AND object_id = '" . $this->db->escape($object_id) . "'";
 			
-			$t_rows = $this->db->query_rows($query);
+			$t_rows = $this->db->queryRows($query);
 			
 			foreach ($t_rows as $row) {
 				$translations[$translation['field']][$row['language_id']] = html_entity_decode($row['text']);
@@ -90,11 +94,24 @@ class Translation extends Library
 	
 	public function set_translations($table, $object_id, $translations)
 	{
-		if (!empty($translations)) {
+		if (!empty($translations) && is_array($translations)) {
 			foreach ($translations as $field => $translation) {
 				foreach ($translation as $language_id => $text) {
 					$this->set($table, $field, $object_id, $language_id, $text);
 				}
+			}
+			
+			//Clean up Translation Table
+			$translation_ids = $this->db->queryColumn("SELECT translation_id FROM " . DB_PREFIX . "translation t WHERE `table` = '" . $this->db->escape($table) . "' AND `field` NOT IN ('" . implode("','", array_keys($translations)) . "')");
+			
+			if ($translation_ids) {
+				$this->db->query("DELETE FROM " . DB_PREFIX . "translation_text WHERE translation_id IN (" . implode(',', $translation_ids) . ") AND object_id = " . (int)$object_id);
+			}
+			
+			$translation_ids = $this->db->queryColumn("SELECT translation_id FROM " . DB_PREFIX . "translation t WHERE 0 IN (SELECT COUNT(*) FROM " . DB_PREFIX . "translation_text tt WHERE tt.translation_id = t.translation_id)");
+			
+			if ($translation_ids) {
+				$this->db->query("DELETE FROM " . DB_PREFIX . "translation WHERE translation_id IN (" . implode(',', $translation_ids) . ")");
 			}
 		}
 	}
@@ -109,17 +126,30 @@ class Translation extends Library
 		$this->cache->delete('translate');
 	}
 	
+	public function deleteAll($table, $remove_table = false)
+	{
+		$translation_ids = $this->db->queryColumn("SELECT translation_id FROM " . DB_PREFIX . "translation WHERE `table` = '" . $this->db->escape($table) . "'");
+		
+		if ($translation_ids) {
+			foreach ($translation_ids as $translation_id) {
+				$this->db->query("DELETE FROM " . DB_PREFIX . "translation_text WHERE translation_id = $translation_id");
+				
+				if ($remove_table) {
+					$this->db->query("DELETE FROM " . DB_PREFIX . "translation WHERE translation_id = $translation_id");
+				}
+			}
+		}
+	}
+	
 	public function delete($table, $object_id, $field = null)
 	{
 		if ($field) {
 			$translation_id = $this->get_translation_id($table, $field, false);
 			
-			$translations = array('translation_id' => $translation_id);
+			$translations = array(array('translation_id' => $translation_id));
 		}
 		else {
-			$result = $this->db->query("SELECT translation_id FROM " . DB_PREFIX . "translation WHERE `table` = '" . $this->db->escape($table) . "'");
-			
-			$translations = $result->rows;
+			$translations = $this->db->queryRows("SELECT translation_id FROM " . DB_PREFIX . "translation WHERE `table` = '" . $this->db->escape($table) . "'");
 		}
 		
 		foreach ($translations as $translation) {
@@ -131,7 +161,7 @@ class Translation extends Library
 	
 	public function get_translation_id($table, $field, $create = true)
 	{
-		$translation_id = $this->db->query_var("SELECT translation_id FROM " . DB_PREFIX . "translation WHERE `table` = '" . $this->db->escape($table) . "' AND `field` = '" . $this->db->escape($field) . "' LIMIT 1");
+		$translation_id = $this->db->queryVar("SELECT translation_id FROM " . DB_PREFIX . "translation WHERE `table` = '" . $this->db->escape($table) . "' AND `field` = '" . $this->db->escape($field) . "' LIMIT 1");
 		
 		if (!$translation_id && $create) {
 			$translation_id = $this->add($table, $field);

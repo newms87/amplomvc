@@ -1,7 +1,6 @@
 <?= $header; ?>
 <div class="content">
-	<?= $this->builder->display_breadcrumbs(); ?>
-	<?= $this->builder->display_errors($errors); ?>
+	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
@@ -166,5 +165,7 @@ function fill_data_as(type, context, name, value){
 <script type="text/javascript">//<!--
 $('#tabs a').tabs();
 //--></script>
+
 <?= $this->builder->js('errors', $errors); ?>
+
 <?= $footer; ?>

@@ -1,8 +1,7 @@
 <?= $header; ?>
 <div class="content">
-<?= $this->builder->display_breadcrumbs(); ?>
-<?= $this->builder->display_errors($errors); ?>
-	<div class="box">
+<?= $this->breadcrumb->render(); ?>
+<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'order.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
 			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
@@ -482,7 +481,7 @@ $('input[name=\'customer\']').catcomplete({
 	delay: 0,
 	source: function(request, response) {
 		$.ajax({
-			url: "<?= HTTP_ADMIN . "index.php?route=sale/customer/autocomplete"; ?>" + '&filter_name=' +	encodeURIComponent(request.term),
+			url: "<?= //TODO: standardize .. $url_autocomplete; ?>" + '&filter_name=' +	encodeURIComponent(request.term),
 			dataType: 'json',
 			success: function(json) {
 				response($.map(json, function(item) {

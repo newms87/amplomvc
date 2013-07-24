@@ -4,7 +4,7 @@ class Admin_Controller_Module_Cron extends Controller
 	
 	public function index()
 	{
-		$this->load->language('module/cron');
+		$this->language->load('module/cron');
 			
 		$this->template->load('module/cron');
 

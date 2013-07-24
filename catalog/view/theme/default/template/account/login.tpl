@@ -1,16 +1,14 @@
 <?= $header; ?>
-<?= $this->builder->display_errors($errors); ?>
-	
 <?= $column_left; ?><?= $column_right; ?>
 <div id="content">
-	<?= $this->builder->display_breadcrumbs(); ?>
+	<?= $this->breadcrumb->render(); ?>
+	<?= $content_top; ?>
 	
 	<h1><?= $heading_title; ?></h1>
-	<?= $content_top; ?>
 	<div class="login-content">
 		<div class="left">
 			<h2><?= $text_new_customer; ?></h2>
-			<div class="content">
+			<div class="section">
 				<p><b><?= $text_register; ?></b></p>
 				<p><?= $text_register_account; ?></p>
 				<a href="<?= $register; ?>" class="button"><?= $button_continue; ?></a></div>
@@ -18,7 +16,7 @@
 		<div class="right">
 			<h2><?= $text_returning_customer; ?></h2>
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data">
-				<div class="content">
+				<div class="section">
 					<p><?= $text_i_am_returning_customer; ?></p>
 					<b><?= $entry_email; ?></b><br />
 					<input type="text" name="email" value="" />
@@ -37,6 +35,8 @@
 			</form>
 		</div>
 	</div>
-	<?= $content_bottom; ?></div>
+	
+	<?= $content_bottom; ?>
+</div>
 	
 <?= $footer; ?>

@@ -98,13 +98,3 @@ $_['tab_voucher_history']	= 'Historial vales';
 $_['tab_fraud']				= 'Estafas';
 $_['tab_customer']				= 'Cliente';
 $_['tab_voucher']				= 'Vale Regalo';
-
-// Error
-$_['error_upload_1']			= 'Cuidado: El archivo subido excede la directiva upload_max_filesize de php.ini!';
-$_['error_upload_2']			= 'Cuidado: El archivo subido excede la directavia MAX_FILE_SIZE especificada en el formulario HTML!';
-$_['error_upload_3']			= 'Cuidado: El archivo solo fue parcialmente subido!';
-$_['error_upload_4']			= 'Cuidado: No se subió ningún archivo!';
-$_['error_upload_6']			= 'Cuidado: Falta la carpeta temporal!';
-$_['error_upload_7']			= 'Cuidado: Error al escribir en disco!';
-$_['error_upload_8']			= 'Cuidado: Subida de archivo interrumpida por la extensión!';
-$_['error_upload_999']		= 'Cuidado: Código de error no disponible!';

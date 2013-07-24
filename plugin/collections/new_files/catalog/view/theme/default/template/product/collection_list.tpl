@@ -1,24 +1,22 @@
 <?= $header; ?>
-<?= $column_left; ?>
-<?= $column_right; ?>
+<?= $column_left; ?><?= $column_right; ?>
 <div id="content" class="collection_list">
+	<?= $this->breadcrumb->render(); ?>
 	<?= $content_top; ?>
 	
-	<?= $this->builder->display_breadcrumbs(); ?>
 	<h1><?= $heading_title; ?></h1>
 	
-	<? if ($thumb || $description) { ?>
 	<div class="header-info">
-		<? if ($thumb) { ?>
+		<? if (!empty($thumb)) { ?>
 		<div class="image">
 			<img src="<?= $thumb; ?>" alt="<?= $heading_title; ?>" />
 		</div>
 		<? } ?>
-		<? if ($description) { ?>
-			<div class="description"><?= $description; ?></div>
+		
+		<? if (!empty($description)) { ?>
+		<div class="description"><?= $description; ?></div>
 		<? } ?>
 	</div>
-	<? } ?>
 	
 	<? if (!empty($block_collection_list)) { ?>
 		<div class="item-filter">
@@ -30,7 +28,7 @@
 		
 		<div class="pagination"><?= $pagination; ?></div>
 	<? } else { ?>
-		<div class="content"><?= $text_empty; ?></div>
+		<div class="section"><?= $text_empty; ?></div>
 		<div class="buttons">
 			<div class="right"><a href="<?= $continue; ?>" class="button"><?= $button_continue; ?></a></div>
 		</div>

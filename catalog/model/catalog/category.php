@@ -3,7 +3,7 @@ class Catalog_Model_Catalog_Category extends Model
 {
 	public function getCategory($category_id)
 	{
-		$category = $this->query_row(
+		$category = $this->queryRow(
 			"SELECT * FROM " . DB_PREFIX . "category c" .
 			" LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c.category_id = c2s.category_id)" .
 			" WHERE c.category_id = '" . (int)$category_id . "' AND c2s.store_id = '" . (int)$this->config->get('config_store_id') . "' AND c.status = '1'"
@@ -25,7 +25,7 @@ class Catalog_Model_Catalog_Category extends Model
 		}
 		
 		//TODO: Need vastly improved API
-		$categories = $this->query_rows(
+		$categories = $this->queryRows(
 			"SELECT * FROM " . DB_PREFIX . "category c " .
 			"LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c.category_id = c2s.category_id) " .
 			"WHERE $parent AND c2s.store_id = '" . (int)$this->config->get('config_store_id') . "'  AND c.status = '1' ORDER BY c.sort_order, LCASE(name)"
@@ -65,7 +65,7 @@ class Catalog_Model_Catalog_Category extends Model
 			$parent_id = $category_id;
 			
 			while ($parent_id > 0) {
-				$parent = $this->query_row("SELECT * FROM " . DB_PREFIX . "category WHERE category_id = '" . (int)$parent_id . "' LIMIT 1");
+				$parent = $this->queryRow("SELECT * FROM " . DB_PREFIX . "category WHERE category_id = '" . (int)$parent_id . "' LIMIT 1");
 				
 				if (!$parent) {
 					break;
@@ -101,7 +101,7 @@ class Catalog_Model_Catalog_Category extends Model
 			" LEFT JOIN " . DB_PREFIX . "attribute a ON (a.attribute_id=pa.attribute_id)" .
 			" WHERE a.attribute_group_id = '" . (int)$attribute_group_id . "' AND pc.category_id = '" . (int)$category_id . "' LIMIT 1";
 			
-		return $this->query_var($query);
+		return $this->queryVar($query);
 	}
 	
 	public function getAttributeList($category_id, $attribute_group_id)
@@ -117,7 +117,7 @@ class Catalog_Model_Catalog_Category extends Model
 				" LEFT JOIN " . DB_PREFIX . "product_to_category p2c ON (p2c.product_id=pa.product_id)" .
 				" WHERE a.attribute_group_id = '$attribute_group_id' AND p2c.category_id = '" . (int)$category_id . "' GROUP BY a.attribute_id ORDER BY name";
 			
-			$attributes = $this->query_rows($query);
+			$attributes = $this->queryRows($query);
 			
 			$this->translation->translate('attribute', 'attribute_id', $attribute);
 			
@@ -129,7 +129,7 @@ class Catalog_Model_Catalog_Category extends Model
 	
 	public function getCategoryName($category_id)
 	{
-		$category = $this->query_row("SELECT name FROM " . DB_PREFIX . "category WHERE category_id='" . (int)$category_id . "'");
+		$category = $this->queryRow("SELECT name FROM " . DB_PREFIX . "category WHERE category_id='" . (int)$category_id . "'");
 		
 		$this->translation->translate('category', $category_id, $category);
 		
@@ -138,7 +138,7 @@ class Catalog_Model_Catalog_Category extends Model
 	
 	public function getCategoryLayoutId($category_id)
 	{
-		return $this->query_var("SELECT layout_id FROM " . DB_PREFIX . "category_to_layout WHERE category_id = '" . (int)$category_id . "' AND store_id = '" . (int)$this->config->get('config_store_id') . "'");
+		return $this->queryVar("SELECT layout_id FROM " . DB_PREFIX . "category_to_layout WHERE category_id = '" . (int)$category_id . "' AND store_id = '" . (int)$this->config->get('config_store_id') . "'");
 	}
 					
 	public function getTotalCategoriesByCategoryId($parent_id = 0)

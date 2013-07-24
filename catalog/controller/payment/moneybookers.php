@@ -18,7 +18,7 @@ class Catalog_Controller_Payment_Moneybookers extends Controller
 		$this->data['language'] = $this->language->code();
 		$this->data['logo'] = HTTP_IMAGE . $this->config->get('config_logo');
 		
-		$order_info = $this->Model_Checkout_Order->getOrder($this->session->data['order_id']);
+		$order_info = $this->order->get($this->session->data['order_id']);
 			
 		$this->data['pay_from_email'] = $order_info['email'];
 		$this->data['firstname'] = $order_info['payment_firstname'];
@@ -54,10 +54,10 @@ class Catalog_Controller_Payment_Moneybookers extends Controller
 			$order_id = 0;
 		}
 
-		$order_info = $this->Model_Checkout_Order->getOrder($order_id);
+		$order_info = $this->order->get($order_id);
 
 		if ($order_info) {
-			$this->Model_Checkout_Order->confirm($order_id, $this->config->get('config_order_status_id'));
+			$this->order->update($order_id, $this->config->get('config_order_complete_status_id'));
 
 			$verified = true;
 			
@@ -97,7 +97,7 @@ class Catalog_Controller_Payment_Moneybookers extends Controller
 						break;
 				}
 			} else {
-				$this->error_log->write('md5sig returned (' + $md5sig + ') does not match generated (' + $md5hash + '). Verify Manually. Current order state: ' . $this->config->get('config_order_status_id'));
+				$this->error_log->write('md5sig returned (' + $md5sig + ') does not match generated (' + $md5hash + '). Verify Manually. Current order state: ' . $this->config->get('config_order_complete_status_id'));
 			}
 		}
 	}
