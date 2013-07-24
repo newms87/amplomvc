@@ -1,9 +1,5 @@
 <?php
-<<<<<<< HEAD:catalog/model/account/customer.php
-class Catalog_Model_Account_Customer extends Model
-=======
 class System_Model_Customer extends Model
->>>>>>> 35786c33a0470bb6e46908697b6ed90950ffb231:system/model/customer.php
 {
 	public function addCustomer($data)
 	{
@@ -20,15 +16,13 @@ class System_Model_Customer extends Model
 		
 		if ($this->config->get('config_customer_approval')) {
 			$data['approved'] = 1;
-		}
-		else {
+		} else {
 			$data['approved'] = 0;
 		}
 		
 		$data['customer_id'] = $this->insert('customer', $data);
 		
 		$address_id = $this->insert('address',  $data);
-		
 		
 		//Add Address ID to new customer
 		$this->update('customer', array('address_id' => $address_id) , $data['customer_id']);
@@ -42,7 +36,7 @@ class System_Model_Customer extends Model
 			'store_name'	=> $this->config->get('config_name'),
 			'store_url'=> $this->url->site()
 		);
-			
+		
 		$subject = $this->tool->insertables($insertables, $this->config->get('mail_registration_subject'));
 		$message = $this->tool->insertables($insertables, $this->config->get('mail_registration_message'));
 		

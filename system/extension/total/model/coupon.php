@@ -1,9 +1,5 @@
 <?php
-<<<<<<< HEAD:catalog/model/total/coupon.php
-class Catalog_Model_Total_Coupon extends Model
-=======
 class System_Extension_Total_Model_Coupon extends Model
->>>>>>> 35786c33a0470bb6e46908697b6ed90950ffb231:system/extension/total/model/coupon.php
 {
 	public function getTotal(&$total_data, &$total, &$taxes)
 	{
