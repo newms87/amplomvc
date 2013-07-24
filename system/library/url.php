@@ -349,9 +349,9 @@ class Url extends Library
 			$query_sql = "query = ''";
 		}
 		
-		$where = "WHERE $query_sql AND route != '' AND status='1'";
+		$where = "WHERE $query_sql AND status='1'";
 		$where .= " AND store_id IN ('$all_stores', '" . (int)$store_id . "')";
-		$where .= " AND '" . $this->db->escape($route) . "' like CONCAT(route, '%')";
+		$where .= " AND route = '" . $this->db->escape($route) . "'";
 		
 		$sql = "SELECT * FROM " . DB_PREFIX . "url_alias $where ORDER BY query DESC LIMIT 1";
 		

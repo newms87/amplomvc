@@ -656,10 +656,14 @@ table.list tbody td {
 table.list .left {
 	text-align: left;
 	padding: 7px;
+	float: none;
+	width: auto;
 }
 table.list .right {
 	text-align: right;
 	padding: 7px;
+	float: none;
+	width: auto;
 }
 table.list .center {
 	text-align: center;
@@ -860,15 +864,6 @@ a.button:active, input.button:active {
 #content .section{
 	padding: 10px;
 	margin-bottom: 20px;
-}
-
-#content .left {
-	float: left;
-	width: 49%;
-}
-#content .right {
-	float: right;
-	width: 49%;
 }
 
 .description{
@@ -1282,11 +1277,11 @@ a.button:active, input.button:active {
 	height: 0;
 }
 
-#content .product-info > .left {
+.product-info > .left {
 	float: left;
 	width: 50%;
 }
-#content .product-info > .right {
+.product-info > .right {
 	float: right;
 	width: 49%;
 }

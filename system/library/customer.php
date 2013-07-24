@@ -155,10 +155,17 @@ class Customer extends Library
 			return null;
 		}
 		
-		if ((int)$address['customer_id'] !== $this->customer_id) {
-			trigger_error("Customer (id: $this->customer_id) attempted to access an unassociated address!");
-			
-			return null;
+		if ($this->isLogged()) {
+			//Associate this address to this customer
+			if (!(int)$address['customer_id']) {
+				$address['customer_id'] = $this->customer_id;
+				$this->Model_Account_Address->editAddress($address['address_id'], $address);
+			}
+			elseif ((int)$address['customer_id'] !== $this->customer_id) {
+				trigger_error("Customer (id: $this->customer_id) attempted to access an unassociated address!");
+				
+				return null;
+			}
 		}
 		
 		return $address;

@@ -170,6 +170,22 @@ function validate_submit(submit, recheck){
 		}, 'json')
 		.error(handle_ajax_error);
 	}
+	else if($('#guest_information').length) {
+		if($('#guest_information').length && !$('#guest_information').hasClass('valid')){
+			ci_validate_form($('#guest_information form'));
+		}
+		else {
+			if($('#shipping_method').length && !$('#shipping_method').hasClass('valid')){
+				ci_validate_form($('#shipping_method form'));
+			}
+			
+			if(!$('#payment_method').hasClass('valid')){
+				ci_validate_form($('#payment_method form'));
+			}
+		}
+		
+		setTimeout(function(){validate_submit(submit, true);}, 500 );
+	}
 	else {
 		if($('#shipping_address').length && !$('#shipping_address').hasClass('valid')){
 			if($('[name=shipping_address]:checked').val() == 'existing'){
@@ -193,10 +209,6 @@ function validate_submit(submit, recheck){
 		}
 		else if(!$('#payment_method').hasClass('valid')){
 			ci_validate_form($('#payment_method form'));
-		}
-		
-		if($('#guest_information').length && !$('#guest_information').hasClass('valid')){
-			ci_validate_form($('#guest_information form'));
 		}
 		
 		setTimeout(function(){validate_submit(submit, true);}, 500 );

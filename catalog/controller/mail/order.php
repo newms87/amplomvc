@@ -67,11 +67,16 @@ class Catalog_Controller_Mail_Order extends Controller
 		
 		$this->mail->init();
 		
+		if (empty($order['email'])) {
+			$order['email'] = $this->config->get('config_email_error');
+			$subject .= " (No Order Email was found!)";
+		}
+		
 		$this->mail->setTo($order['email']);
 		$this->mail->setCc($this->config->get('config_email'));
 		$this->mail->setFrom($this->config->get('config_email'));
 		$this->mail->setSender($store['name']);
-		$this->mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
+		$this->mail->setSubject($subject);
 		$this->mail->setText(html_entity_decode($this->render(), ENT_QUOTES, 'UTF-8'));
 		
 		$this->mail->send();

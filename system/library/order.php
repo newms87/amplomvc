@@ -71,6 +71,7 @@ class Order Extends Library
 		elseif ($this->config->get('config_guest_checkout')) {
 			$data['customer_id'] = 0;
 			$data['customer_group_id'] = $this->config->get('config_customer_group_id');
+			$data += $this->cart->loadGuestInfo();
 		}
 		//Guest checkout not allowed and customer not logged in
 		else {

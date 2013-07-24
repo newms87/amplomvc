@@ -163,11 +163,11 @@ class Mail extends Library
 			}
 			
 			if (isset($data['cc'])) {
-				$this->setCopyTo($data['cc']);
+				$this->setCc($data['cc']);
 			}
 			
 			if (isset($data['bcc'])) {
-				$this->setBlindCopyTo($data['bcc']);
+				$this->setBcc($data['bcc']);
 			}
 			
 			if (isset($data['subject'])) {
@@ -590,7 +590,7 @@ class Mail extends Library
 		
 		if ($this->config->get('config_error_display')) {
 			$view_mail_errors = $this->url->admin('mail/error');
-			$this->message->add('warning', "There was an error while sending an email <a href=\"$view_mail_errors\">(review all mail errors)</a>: " . $msg);
+			$this->message->system('warning', "There was an error while sending an email <a href=\"$view_mail_errors\">(review all mail errors)</a>: " . $msg);
 		}
 		
 		$mail_fail = array(
