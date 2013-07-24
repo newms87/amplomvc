@@ -1267,30 +1267,39 @@ a.button:active, input.button:active {
 }
 
 .product-info {
-	overflow: auto;
+	overflow: visible;
 	margin-bottom: 20px;
-	min-height: 440px;
-	padding-top:10px;
+	margin-top: 10px;
 }
-.product-info > .left {
-	float: left;
-	margin-right: 15px;
+
+/* float fix */
+.product-info:after{
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
 }
-.product-info > .right {
+
+#content .product-info > .left {
 	float: left;
-	max-width:48%;
+	width: 50%;
+}
+#content .product-info > .right {
+	float: right;
+	width: 49%;
 }
 .product-info .image {
 	border: 1px solid #E7E7E7;
 	float: right;
 	margin-bottom: 20px;
-	padding: 10px;
+	padding: 5px;
 	text-align: center;
 }
 .product-info .image-additional {
 	float:left;
-	padding-top: 12px;
-	margin-right: 10px;
+	padding-top: 10px;
 }
 .product-info .image-additional a {
 	display: block;
