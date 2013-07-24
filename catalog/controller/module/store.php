@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Module_Store extends Controller 
+class Catalog_Controller_Module_Store extends Controller
 {
 	protected function index()
 	{

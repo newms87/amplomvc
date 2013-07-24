@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Localisation_Country extends Model 
+class Admin_Model_Localisation_Country extends Model
 {
 	public function addCountry($data)
 	{

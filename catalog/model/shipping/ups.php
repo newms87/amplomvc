@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Shipping_Ups extends Model 
+class Catalog_Model_Shipping_Ups extends Model
 {
 	function getQuote($address)
 	{

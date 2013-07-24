@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Feed_GoogleBase extends Controller 
+class Catalog_Controller_Feed_GoogleBase extends Controller
 {
 	public function index()
 	{

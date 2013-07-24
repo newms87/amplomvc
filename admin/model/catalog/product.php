@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Catalog_Product extends Model 
+class Admin_Model_Catalog_Product extends Model
 {
 	public function addProduct($data)
 	{
@@ -681,25 +681,25 @@ class Admin_Model_Catalog_Product extends Model
 		if (!empty($data['downloads'])) {
 			$from .= " LEFT JOIN " . DB_PREFIX . "product_to_download p2dl ON (p.product_id=p2dl.product_id)";
 			
-			$where .= " AND p2dl.download_id IN (" . implode(',', $data['downloads']) . ")"; 
+			$where .= " AND p2dl.download_id IN (" . implode(',', $data['downloads']) . ")";
 		}
 		
 		if (!empty($data['attributes'])) {
 			$from .= " LEFT JOIN " . DB_PREFIX . "product_attribute pa ON (p.product_id=pa.product_id)";
 			
-			$where .= " AND pa.attribute_id IN (" . implode(',', $data['attributes']) . ")"; 
+			$where .= " AND pa.attribute_id IN (" . implode(',', $data['attributes']) . ")";
 		}
 		
 		if (!empty($data['options'])) {
 			$from .= " LEFT JOIN " . DB_PREFIX . "product_option po ON (p.product_id=po.product_id)";
 			
-			$where .= " AND po.option_id IN (" . implode(',', $data['options']) . ")"; 
+			$where .= " AND po.option_id IN (" . implode(',', $data['options']) . ")";
 		}
 		
 		if (!empty($data['layouts'])) {
 			$from .= " LEFT JOIN " . DB_PREFIX . "product_to_layout p2l ON (p.product_id=p2l.product_id)";
 			
-			$where .= " AND p2l.layout_id IN (" . implode(',', $data['layouts']) . ")"; 
+			$where .= " AND p2l.layout_id IN (" . implode(',', $data['layouts']) . ")";
 		}
 		
 		//Group By, Order By and Limit

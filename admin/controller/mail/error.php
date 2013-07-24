@@ -1,7 +1,7 @@
 <?php
-class Admin_Controller_Mail_Error extends Controller 
+class Admin_Controller_Mail_Error extends Controller
 {
- 
+
 	public function index()
 	{
 		$this->load->language('mail/error');

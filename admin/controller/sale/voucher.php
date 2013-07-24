@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Sale_Voucher extends Controller 
+class Admin_Controller_Sale_Voucher extends Controller
 {
 	
 	
@@ -11,7 +11,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 		
 		$this->getList();
   	}
-  
+
   	public function insert()
   	{
 		$this->load->language('sale/voucher');
@@ -161,7 +161,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 		$voucher_total = $this->Model_Sale_Voucher->getTotalVouchers();
 	
 		$results = $this->Model_Sale_Voucher->getVouchers($data);
- 
+
 		foreach ($results as $result) {
 			$action = array();
 									
@@ -363,7 +363,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 		} else {
 				$this->data['to_email'] = '';
 		}
- 
+
  		$this->data['voucher_themes'] = $this->Model_Sale_VoucherTheme->getVoucherThemes();
 
 		if (isset($_POST['voucher_theme_id'])) {

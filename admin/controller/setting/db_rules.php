@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Setting_DbRules extends Controller 
+class Admin_Controller_Setting_DbRules extends Controller
 {
 	
 
@@ -78,7 +78,7 @@ class Admin_Controller_Setting_DbRules extends Controller
 		$url = $this->get_url(array('page'));
 		
 		$db_rules = $this->Model_Setting_DbRules->getDbRules();
- 
+
 		foreach ($db_rules as &$db_rule) {
 			$action = array(
 				'text' => $this->_('text_edit'),

@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Module_FeaturedCarousel extends Controller 
+class Catalog_Controller_Module_FeaturedCarousel extends Controller
 {
 	public function index($setting=null)
 	{

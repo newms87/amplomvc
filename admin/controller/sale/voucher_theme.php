@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Sale_VoucherTheme extends Controller 
+class Admin_Controller_Sale_VoucherTheme extends Controller
 {
 	
 	
@@ -161,7 +161,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 		$voucher_theme_total = $this->Model_Sale_VoucherTheme->getTotalVoucherThemes();
 	
 		$results = $this->Model_Sale_VoucherTheme->getVoucherThemes($data);
- 
+
 		foreach ($results as $result) {
 			$action = array();
 			
@@ -230,7 +230,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 				
 		$this->response->setOutput($this->render());
   	}
-  
+
   	private function getForm()
   	{
 		$this->template->load('sale/voucher_theme_form');

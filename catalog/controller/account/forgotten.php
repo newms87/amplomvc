@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Account_Forgotten extends Controller 
+class Catalog_Controller_Account_Forgotten extends Controller
 {
 	
 
@@ -53,7 +53,7 @@ class Catalog_Controller_Account_Forgotten extends Controller
 		}
 		
 		$this->data['action'] = $this->url->link('account/forgotten');
- 
+
 		$this->data['back'] = $this->url->link('account/login');
 
 		$this->children = array(

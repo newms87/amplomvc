@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Common_ContentTop extends Controller 
+class Catalog_Controller_Common_ContentTop extends Controller
 {
 	public function index()
 	{

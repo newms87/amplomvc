@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Shipping_Usps extends Model 
+class Catalog_Model_Shipping_Usps extends Model
 {
 	public function getQuote($address)
 	{
@@ -368,7 +368,7 @@ class Catalog_Model_Shipping_Usps extends Model
 										if ($ClassId == '0') {
 											$mailservice = $postage->getElementsByTagName('MailService')->item(0)->nodeValue;
 
-											foreach ($firstclasses as $k => $firstclass)  
+											foreach ($firstclasses as $k => $firstclass)
 {
 												if ($firstclass == $mailservice) {
 													$ClassId = $classid . $k;

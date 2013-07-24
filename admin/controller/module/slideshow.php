@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Module_Slideshow extends Controller 
+class Admin_Controller_Module_Slideshow extends Controller
 {
 	
 	

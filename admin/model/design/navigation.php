@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Design_Navigation extends Model 
+class Admin_Model_Design_Navigation extends Model
 {
 	public function addNavigationGroup($data)
 	{

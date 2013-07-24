@@ -1,6 +1,6 @@
 #<?php
 //=====
-class Catalog_Model_Catalog_Product extends Model 
+class Catalog_Model_Catalog_Product extends Model
 {
 //.....
 	public function getProduct($product_id)

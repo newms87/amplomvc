@@ -1,8 +1,8 @@
 <?php
-class Admin_Controller_Localisation_Currency extends Controller 
+class Admin_Controller_Localisation_Currency extends Controller
 {
 	
- 
+
 	public function index()
 	{
 		$this->load->language('localisation/currency');

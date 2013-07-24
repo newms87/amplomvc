@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Account_Order extends Model 
+class Catalog_Model_Account_Order extends Model
 {
 	public function getOrder($order_id)
 	{

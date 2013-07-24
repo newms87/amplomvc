@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Feed_GoogleSitemap extends Controller 
+class Admin_Controller_Feed_GoogleSitemap extends Controller
 {
 	
 	

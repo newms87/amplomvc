@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Module_FlashsaleSidebar extends Controller 
+class Catalog_Controller_Module_FlashsaleSidebar extends Controller
 {
 	protected function index($setting)
 	{

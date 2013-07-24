@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Payment_AuthorizenetSim extends Controller 
+class Catalog_Controller_Payment_AuthorizenetSim extends Controller
 {
 	protected function index()
 	{
@@ -22,7 +22,7 @@ class Catalog_Controller_Payment_AuthorizenetSim extends Controller
 		*	Maximum length 20, the Payment Page ID from the Administration Console. Case-sensitive.
 		*/
 		$data['x_login'] = $this->config->get('authorizenet_sim_merchant');
-  
+
 		/**
 		*
 		* Chosen by merchant 	Can be a random number. Used in "x_fp_hash"

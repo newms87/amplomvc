@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Sale_Affiliate extends Model 
+class Admin_Model_Sale_Affiliate extends Model
 {
 	public function addAffiliate($data)
 	{

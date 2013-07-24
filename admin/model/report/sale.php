@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Report_Sale extends Model 
+class Admin_Model_Report_Sale extends Model
 {
 	public function getOrders($data = array()) {
 		$select = "MIN(tmp.date_added) AS date_start,".

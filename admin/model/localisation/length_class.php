@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Localisation_LengthClass extends Model 
+class Admin_Model_Localisation_LengthClass extends Model
 {
 	public function addLengthclass($data)
 	{

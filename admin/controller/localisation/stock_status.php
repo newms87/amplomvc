@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Localisation_StockStatus extends Controller 
+class Admin_Controller_Localisation_StockStatus extends Controller
 {
 	
 	
@@ -161,7 +161,7 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 		$stock_status_total = $this->Model_Localisation_StockStatus->getTotalStockStatuses();
 	
 		$results = $this->Model_Localisation_StockStatus->getStockStatuses($data);
- 
+
 		foreach ($results as $result) {
 			$action = array();
 			
@@ -230,7 +230,7 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 				
 		$this->response->setOutput($this->render());
   	}
-  
+
   	private function getForm()
   	{
 		$this->template->load('localisation/stock_status_form');

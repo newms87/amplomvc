@@ -16,7 +16,7 @@ $_['entry_name']				= 'Nom du pays :';
 $_['entry_iso_code_2']			= 'Code ISO (2) :';
 $_['entry_iso_code_3']			= 'Code ISO (3) :';
 $_['entry_address_format']		= 'Format d&#8217;adresse :<br /><span class ="help">
-Pr&eacute;nom = 
+Pr&eacute;nom =
 {firstname}<br />
 Nom = {lastname}<br />
 Soci&eacute;t&eacute; = {company}<br />

@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Help_Documentation extends Controller 
+class Admin_Controller_Help_Documentation extends Controller
 {
 	
 	public function index()

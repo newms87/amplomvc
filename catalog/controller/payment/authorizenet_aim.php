@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Payment_AuthorizenetAim extends Controller 
+class Catalog_Controller_Payment_AuthorizenetAim extends Controller
 {
 	protected function index()
 	{
@@ -88,7 +88,7 @@ class Catalog_Controller_Payment_AuthorizenetAim extends Controller
 		curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
 		curl_setopt($curl, CURLOPT_TIMEOUT, 10);
 		curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
- 
+
 		$response = curl_exec($curl);
 		
 		$json = array();

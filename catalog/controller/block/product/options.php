@@ -6,7 +6,7 @@
  * @return Product options template
  *
  */
-class Catalog_Controller_Block_Product_Options extends Controller 
+class Catalog_Controller_Block_Product_Options extends Controller
 {
 	
 	public function index($settings)

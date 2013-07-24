@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Payment_AuthorizenetAim extends Model 
+class Catalog_Model_Payment_AuthorizenetAim extends Model
 {
   	public function getMethod($address, $total)
   	{

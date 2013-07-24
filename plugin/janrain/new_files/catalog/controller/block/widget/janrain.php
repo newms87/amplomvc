@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Block_Widget_Janrain extends Controller 
+class Catalog_Controller_Block_Widget_Janrain extends Controller
 {
 	public function index($settings)
 	{
@@ -328,7 +328,7 @@ class Catalog_Controller_Block_Widget_Janrain extends Controller
 		}
 		return false;
   	}
-  
+
   	public function logout()
   	{
   		$settings = $this->Model_Block_Block->getBlockSettings('widget/janrain');

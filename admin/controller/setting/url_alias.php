@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Setting_UrlAlias extends Controller 
+class Admin_Controller_Setting_UrlAlias extends Controller
 {
 
 	public function index()
@@ -77,7 +77,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 		$url = $this->get_url(array('page'));
 		
 		$aliases = $this->Model_Setting_UrlAlias->getUrlAliases();
- 
+
 		foreach ($aliases as &$alias) {
 			$alias['action'] = array(
 				'text' => $this->_('text_edit'),

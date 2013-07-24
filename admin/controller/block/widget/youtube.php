@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Block_Widget_Youtube extends Controller 
+class Admin_Controller_Block_Widget_Youtube extends Controller
 {
 	
 	public function settings(&$settings)

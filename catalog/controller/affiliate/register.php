@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Affiliate_Register extends Controller 
+class Catalog_Controller_Affiliate_Register extends Controller
 {
 	
 			

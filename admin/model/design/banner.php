@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Design_Banner extends Model 
+class Admin_Model_Design_Banner extends Model
 {
 	public function addBanner($data)
 	{

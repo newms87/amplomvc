@@ -1,7 +1,7 @@
 <?php
-class Admin_Controller_Mail_SendEmail extends Controller 
+class Admin_Controller_Mail_SendEmail extends Controller
 {
- 
+
 	public function index()
 	{
 		$this->load->language('mail/send_email');

@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Account_Download extends Model 
+class Catalog_Model_Account_Download extends Model
 {
 	public function getDownload($order_download_id)
 	{

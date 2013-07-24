@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Catalog_Download extends Model 
+class Admin_Model_Catalog_Download extends Model
 {
 	public function addDownload($data)
 	{
@@ -48,7 +48,7 @@ class Admin_Model_Catalog_Download extends Model
 	}
 
 	public function getDownload($download_id)
-	{ 
+	{
 		return $this->query_row("SELECT DISTINCT * FROM " . DB_PREFIX . "download WHERE download_id = '" . (int)$download_id . "'");
 	}
 

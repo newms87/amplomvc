@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Total_LowOrderFee extends Controller 
+class Admin_Controller_Total_LowOrderFee extends Controller
 {
 	
 	

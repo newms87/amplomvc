@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Setting_Update extends Controller 
+class Admin_Controller_Setting_Update extends Controller
 {
 	public function index()
 	{
@@ -58,7 +58,7 @@ class Admin_Controller_Setting_Update extends Controller
 		$versions = array();
 		
 		foreach($version_list as $version => $file) {
-			$versions[$version] = $this->_('text_version', $version); 
+			$versions[$version] = $this->_('text_version', $version);
 		}
 
 		$this->data['data_versions'] = $versions;

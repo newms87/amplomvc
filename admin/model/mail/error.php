@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Mail_Error extends Model 
+class Admin_Model_Mail_Error extends Model
 {
 		
 	public function getFailedMessages()

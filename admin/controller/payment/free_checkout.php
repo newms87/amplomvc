@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Payment_FreeCheckout extends Controller 
+class Admin_Controller_Payment_FreeCheckout extends Controller
 {
 	
 	

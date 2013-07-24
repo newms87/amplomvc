@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Payment_SagepayDirect extends Controller 
+class Catalog_Controller_Payment_SagepayDirect extends Controller
 {
 	protected function index()
 	{
@@ -187,7 +187,7 @@ class Catalog_Controller_Payment_SagepayDirect extends Controller
 		curl_setopt($curl, CURLOPT_FRESH_CONNECT, 1);
 		curl_setopt($curl, CURLOPT_POST, 1);
 		curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
- 
+
 		$response = curl_exec($curl);
   		
 		curl_close($curl);

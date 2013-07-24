@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Payment_PpStandard extends Controller 
+class Catalog_Controller_Payment_PpStandard extends Controller
 {
 	public function index()
 	{
@@ -15,7 +15,7 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 			$this->data['action'] = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
 		}
 
-		$order_info = $this->cart->getOrder(); 
+		$order_info = $this->cart->getOrder();
 
 		if ($order_info) {
 			$this->template->load('payment/pp_standard');
@@ -70,7 +70,7 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 			
 			if ($this->config->get('pp_standard_pdt_enabled_url')) {
 				echo "enabled!";
-				$this->data['return'] = $this->config->get('pp_standard_auto_return_url');
+				$this->data['return'] = $this->url->link('payment/pp_standard/auto_return');
 			} else {
 				echo 'no...';
 				$this->data['return'] = $this->url->link('checkout/success');

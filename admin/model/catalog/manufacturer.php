@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Catalog_Manufacturer extends Model 
+class Admin_Model_Catalog_Manufacturer extends Model
 {
 	public function addManufacturer($data)
 	{

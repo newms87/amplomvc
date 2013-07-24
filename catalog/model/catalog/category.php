@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Catalog_Category extends Model 
+class Catalog_Model_Catalog_Category extends Model
 {
 	public function getCategory($category_id)
 	{
@@ -75,7 +75,7 @@ class Catalog_Model_Catalog_Category extends Model
 				
 				if ($parent['category_id'] == $category_id) {
 					continue;
-				} 
+				}
 				
 				if (isset($parents[$parent_id])) {
 					trigger_error("There is a circular reference for parent categories for $category_id!");
@@ -95,7 +95,7 @@ class Catalog_Model_Catalog_Category extends Model
 	
 	public function hasAttributeGroup($category_id, $attribute_group_id)
 	{
-		$query = 
+		$query =
 			"SELECT COUNT(*) FROM " . DB_PREFIX . "product_to_category pc" .
 			" LEFT JOIN " . DB_PREFIX . "product_attribute pa ON (pc.product_id=pa.product_id)" .
 			" LEFT JOIN " . DB_PREFIX . "attribute a ON (a.attribute_id=pa.attribute_id)" .

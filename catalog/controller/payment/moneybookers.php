@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Payment_Moneybookers extends Controller 
+class Catalog_Controller_Payment_Moneybookers extends Controller
 {
 	protected function index()
 	{

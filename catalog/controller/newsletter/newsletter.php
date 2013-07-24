@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Newsletter_Newsletter extends Controller 
+class Catalog_Controller_Newsletter_Newsletter extends Controller
 {
 
 	public function index()

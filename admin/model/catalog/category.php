@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Catalog_Category extends Model 
+class Admin_Model_Catalog_Category extends Model
 {
 	public function addCategory($data)
 	{
@@ -144,7 +144,7 @@ class Admin_Model_Catalog_Category extends Model
 		if (!empty($data['layouts'])) {
 			$from .= " LEFT JOIN " . DB_PREFIX . "category_to_layout c2l ON (c.category_id=c2l.category_id)";
 			
-			$where .= " AND c2l.layout_id IN (" . implode(',', $data['layouts']) . ")"; 
+			$where .= " AND c2l.layout_id IN (" . implode(',', $data['layouts']) . ")";
 		}
 		
 		//Order By and Limit
@@ -235,7 +235,7 @@ class Admin_Model_Catalog_Category extends Model
 				
 				if ($parent['category_id'] == $category_id) {
 					continue;
-				} 
+				}
 				
 				if (isset($parents[$parent_id])) {
 					trigger_error("There is a circular reference for parent categories for $category_id!");

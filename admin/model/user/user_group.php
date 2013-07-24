@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_User_UserGroup extends Model 
+class Admin_Model_User_UserGroup extends Model
 {
 	public function addUserGroup($data)
 	{

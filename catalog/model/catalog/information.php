@@ -1,10 +1,10 @@
 <?php
-class Catalog_Model_Catalog_Information extends Model 
+class Catalog_Model_Catalog_Information extends Model
 {
 	public function getInformation($information_id)
 	{
-		$query = 
-			"SELECT DISTINCT * FROM " . DB_PREFIX . "information i" . 
+		$query =
+			"SELECT DISTINCT * FROM " . DB_PREFIX . "information i" .
 			" LEFT JOIN " . DB_PREFIX . "information_to_store i2s ON (i.information_id = i2s.information_id)" .
 			" WHERE i.information_id = '" . (int)$information_id . "' AND i2s.store_id = '" . (int)$this->config->get('config_store_id') . "' AND i.status = '1'";
 			
@@ -17,10 +17,10 @@ class Catalog_Model_Catalog_Information extends Model
 	
 	public function getInformations()
 	{
-		$query = 
-			"SELECT * FROM " . DB_PREFIX . "information i" . 
+		$query =
+			"SELECT * FROM " . DB_PREFIX . "information i" .
 			" LEFT JOIN " . DB_PREFIX . "information_to_store i2s ON (i.information_id = i2s.information_id)" .
-			" WHERE AND i2s.store_id = '" . (int)$this->config->get('config_store_id') . "' AND i.status = '1'" . 
+			" WHERE AND i2s.store_id = '" . (int)$this->config->get('config_store_id') . "' AND i.status = '1'" .
 			" ORDER BY i.sort_order, LCASE(i.title) ASC";
 		
 		$informations = $this->query_rows($query);

@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Includes_Contact extends Model 
+class Admin_Model_Includes_Contact extends Model
 {
 	public function addContact($type, $type_id, $data)
 	{

@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Localisation_ReturnReason extends Model 
+class Catalog_Model_Localisation_ReturnReason extends Model
 {
 	public function addReturnReason($data)
 	{

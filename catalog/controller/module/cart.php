@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Module_Cart extends Controller 
+class Catalog_Controller_Module_Cart extends Controller
 {
 	public function index()
 	{
@@ -29,7 +29,7 @@ class Catalog_Controller_Module_Cart extends Controller
 		
 		foreach ($results as $result) {
 			if ($this->config->get($result['code'] . '_status')) {
-				$classname = 'Model_Total_' . preg_replace_callback("/_([a-z])/i", function($matches){return strtoupper($matches[1]);}, ucfirst($result['code'])); 
+				$classname = 'Model_Total_' . preg_replace_callback("/_([a-z])/i", function($matches){return strtoupper($matches[1]);}, ucfirst($result['code']));
 				$this->$classname->getTotal($total_data, $total, $taxes);
 			}
 			

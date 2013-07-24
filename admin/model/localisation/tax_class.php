@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Localisation_TaxClass extends Model 
+class Admin_Model_Localisation_TaxClass extends Model
 {
 	public function addTaxclass($data)
 	{

@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Sale_Order extends Model 
+class Admin_Model_Sale_Order extends Model
 {
 	public function addOrder($data)
 	{

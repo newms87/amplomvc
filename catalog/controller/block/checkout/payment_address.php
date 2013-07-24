@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Block_Checkout_PaymentAddress extends Controller 
+class Catalog_Controller_Block_Checkout_PaymentAddress extends Controller
 {
 	public function index()
 	{

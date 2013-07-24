@@ -1,8 +1,8 @@
 <?php
-class Admin_Controller_Sale_CustomerBlacklist extends Controller 
+class Admin_Controller_Sale_CustomerBlacklist extends Controller
 {
 	
-  
+
   	public function index()
   	{
 		$this->load->language('sale/customer_blacklist');
@@ -11,7 +11,7 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 		
 		$this->getList();
   	}
-  
+
   	public function insert()
   	{
 		$this->load->language('sale/customer_blacklist');
@@ -161,7 +161,7 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 		$customer_blacklist_total = $this->Model_Sale_CustomerBlacklist->getTotalCustomerBlacklists($data);
 	
 		$results = $this->Model_Sale_CustomerBlacklist->getCustomerBlacklists($data);
- 
+
 		foreach ($results as $result) {
 			$action = array();
 		
@@ -232,7 +232,7 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 				
 		$this->response->setOutput($this->render());
   	}
-  
+
   	private function getForm()
   	{
 		$this->template->load('sale/customer_blacklist_form');

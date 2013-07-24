@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Total_Reward extends Model 
+class Catalog_Model_Total_Reward extends Model
 {
 	public function getTotal(&$total_data, &$total, &$taxes)
 	{

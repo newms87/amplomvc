@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Payment_Sagepay extends Controller 
+class Admin_Controller_Payment_Sagepay extends Controller
 {
 	
 

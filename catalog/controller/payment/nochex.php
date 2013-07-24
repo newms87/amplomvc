@@ -1,7 +1,7 @@
 <?php
 // Nochex via form will work for both simple "Seller" account and "Merchant" account holders
 // Nochex via APC maybe only avaiable to "Merchant" account holders only - site docs a bit vague on this point
-class Catalog_Controller_Payment_Nochex extends Controller 
+class Catalog_Controller_Payment_Nochex extends Controller
 {
 	protected function index()
 	{

@@ -1,5 +1,5 @@
 <?php
-class Janrain_Setup extends PluginSetup 
+class Janrain_Setup extends PluginSetup
 {
 	public function install()
 	{

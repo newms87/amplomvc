@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Tool_Data extends Controller 
+class Admin_Controller_Tool_Data extends Controller
 {
 	public function index()
 	{

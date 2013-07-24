@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Product_Compare extends Controller 
+class Catalog_Controller_Product_Compare extends Controller
 {
 	public function index()
 	{

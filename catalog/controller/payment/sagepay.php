@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Payment_Sagepay extends Controller 
+class Catalog_Controller_Payment_Sagepay extends Controller
 {
 	protected function index()
 	{
@@ -221,7 +221,7 @@ class Catalog_Controller_Payment_Sagepay extends Controller
 		
   		$output = array();
 		$data = array();
-  
+
   		for ($i = count($tokens) - 1; $i >= 0; $i--){
 			$start = strpos($string, $tokens[$i]);
 			
@@ -230,7 +230,7 @@ class Catalog_Controller_Payment_Sagepay extends Controller
 				$data[$i]['token'] = $tokens[$i];
 			}
 		}
-  
+
 		sort($data);
 		
 		for ($i = 0; $i < count($data); $i++){
@@ -245,7 +245,7 @@ class Catalog_Controller_Payment_Sagepay extends Controller
 			}
 
 		}
-  
+
 		return $output;
 	}
 }

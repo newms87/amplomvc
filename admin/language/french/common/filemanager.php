@@ -1,7 +1,7 @@
 <?php
 // Heading
 $_['heading_title']		= 'Gestionnaire d&#8217;images';
- 
+
 // Text
 $_['text_uploaded']		= 'F&eacute;licitations, votre fichier a &eacute;t&eacute; transf&eacute;r&eacute; avec succ&egrave;s !';
 $_['text_file_delete']	= 'Le fichier a &eacute;t&eacute; supprim&eacute; !';

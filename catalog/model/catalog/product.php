@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Catalog_Product extends Model 
+class Catalog_Model_Catalog_Product extends Model
 {
 	public function getProduct($product_id)
 	{
@@ -34,7 +34,7 @@ class Catalog_Model_Catalog_Product extends Model
 			$category = DB_PREFIX . "product_to_category p2c ON (p2c.product_id=p.product_id)";
 			$store = DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id AND p2s.store_id='$store_id')";
 			
-			$query = 
+			$query =
 				"SELECT p.*, p2c.category_id, p2s.*, $special, p.image, m.name AS manufacturer, m.keyword, m.status as manufacturer_status, $discount, $reward, $stock_status, $weight_class, $length_class, $rating, $reviews, $template, p.sort_order " .
 				" FROM " . DB_PREFIX . "product p LEFT JOIN $category JOIN $store LEFT JOIN $manufacturer" .
 				" WHERE p.product_id='$product_id' AND p.status = '1' AND m.status='1' AND (p.date_available <= NOW() OR p.date_available = '" . DATETIME_ZERO . "') AND (p.date_expires > NOW() OR p.date_expires = '" . DATETIME_ZERO . "')";
@@ -69,12 +69,12 @@ class Catalog_Model_Catalog_Product extends Model
 		/* TODO:
 		 *
 		 * We can Cache by checking the dates in the cache file to invalidate
-		 * 
+		 *
 		 * The quantity (any other changers?) will delete the cache file on product purchase
-		 * 
+		 *
 		 * Need to search in translations as well:
 		 * if ($language_id !== $this->config->get('config_default_language_id'))
-		 * 
+		 *
 		if (empty($data['search'])) {
 			//unique cache string for this query
 			$cache_id = "product.$language_id.$store_id." . md5(http_build_query($data) . ($total?'.total':''));
@@ -261,7 +261,7 @@ class Catalog_Model_Catalog_Product extends Model
 
 	public function getProductAttributes($product_id)
 	{
-		$query = 
+		$query =
 			"SELECT ag.* FROM " . DB_PREFIX . "product_attribute pa" .
 			" LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id)" .
 			" LEFT JOIN " . DB_PREFIX . "attribute_group ag ON (a.attribute_id=ag.attribute_group_id)" .

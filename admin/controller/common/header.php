@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Common_Header extends Controller 
+class Admin_Controller_Common_Header extends Controller
 {
 	public function index()
 	{

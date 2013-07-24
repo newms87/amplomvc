@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Catalog_Information extends Controller 
+class Admin_Controller_Catalog_Information extends Controller
 {
 	public function index()
 	{
@@ -81,7 +81,7 @@ class Admin_Controller_Catalog_Information extends Controller
 		$this->language->load('catalog/information');
 		
 		if (!empty($_POST['selected']) && isset($_GET['action'])) {
-			if ($_GET['action'] !== 'delete' || $this->validateDelete()) { 
+			if ($_GET['action'] !== 'delete' || $this->validateDelete()) {
 				foreach ($_POST['selected'] as $information_id) {
 					switch($_GET['action']){
 						case 'enable':

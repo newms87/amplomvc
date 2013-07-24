@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Module_Banner extends Controller 
+class Admin_Controller_Module_Banner extends Controller
 {
 	
 	

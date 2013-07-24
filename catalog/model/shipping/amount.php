@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Shipping_Amount extends Model 
+class Catalog_Model_Shipping_Amount extends Model
 {
 	
 	public function getQuote($address)

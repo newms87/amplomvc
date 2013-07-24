@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Module_Currency extends Controller 
+class Catalog_Controller_Module_Currency extends Controller
 {
 	public function index()
 	{

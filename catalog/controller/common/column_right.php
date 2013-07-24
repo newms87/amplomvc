@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Common_ColumnRight extends Controller 
+class Catalog_Controller_Common_ColumnRight extends Controller
 {
 	public function index()
 	{

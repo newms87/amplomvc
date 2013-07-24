@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Localisation_OrderStatus extends Model 
+class Admin_Model_Localisation_OrderStatus extends Model
 {
 	public function addOrderStatus($data)
 	{

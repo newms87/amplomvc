@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Feed_GoogleSitemap extends Controller 
+class Catalog_Controller_Feed_GoogleSitemap extends Controller
 {
 	public function index()
 	{

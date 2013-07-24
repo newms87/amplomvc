@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Design_Layout extends Controller 
+class Admin_Controller_Design_Layout extends Controller
 {
 	
 	public function index()
@@ -72,11 +72,11 @@ class Admin_Controller_Design_Layout extends Controller
 
 		$this->getForm();
 	}
- 
+
 	public function delete()
 	{
 		$this->load->language('design/layout');
- 
+
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {

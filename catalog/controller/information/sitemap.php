@@ -1,12 +1,12 @@
 <?php
-class Catalog_Controller_Information_Sitemap extends Controller 
+class Catalog_Controller_Information_Sitemap extends Controller
 {
 	public function index()
 	{
 		$this->template->load('information/sitemap');
 
 		$this->language->load('information/sitemap');
- 
+
 		$this->document->setTitle($this->_('heading_title'));
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));

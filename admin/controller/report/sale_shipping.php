@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Report_SaleShipping extends Controller 
+class Admin_Controller_Report_SaleShipping extends Controller
 {
 	public function index()
 	{

@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Module_Category extends Controller 
+class Catalog_Controller_Module_Category extends Controller
 {
 	protected function index($setting)
 	{

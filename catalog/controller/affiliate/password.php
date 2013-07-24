@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Affiliate_Password extends Controller 
+class Catalog_Controller_Affiliate_Password extends Controller
 {
 	
 		
@@ -19,7 +19,7 @@ class Catalog_Controller_Affiliate_Password extends Controller
 			
 		if ($this->request->isPost() && $this->validate()) {
 			$this->Model_Affiliate_Affiliate->editPassword($this->affiliate->getEmail(), $_POST['password']);
- 
+
 				$this->message->add('success', $this->_('text_success'));
 	
 			$this->url->redirect($this->url->link('affiliate/account'));
@@ -68,7 +68,7 @@ class Catalog_Controller_Affiliate_Password extends Controller
 								
 		$this->response->setOutput($this->render());
   	}
-  
+
   	private function validate()
   	{
 		if ((strlen($_POST['password']) < 4) || (strlen($_POST['password']) > 20)) {

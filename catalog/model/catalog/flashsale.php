@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Catalog_Flashsale extends Model 
+class Catalog_Model_Catalog_Flashsale extends Model
 {
 	public function updateViewed($flashsale_id)
 	{

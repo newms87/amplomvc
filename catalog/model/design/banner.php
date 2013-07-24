@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Design_Banner extends Model 
+class Catalog_Model_Design_Banner extends Model
 {
 	public function getBanner($banner_id)
 	{

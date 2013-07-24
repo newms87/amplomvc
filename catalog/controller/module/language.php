@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Module_Language extends Controller 
+class Catalog_Controller_Module_Language extends Controller
 {
 	public function index()
 	{

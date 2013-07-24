@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Extension_Payment extends Controller 
+class Admin_Controller_Extension_Payment extends Controller
 {
 	public function index()
 	{

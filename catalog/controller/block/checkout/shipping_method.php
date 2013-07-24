@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Block_Checkout_ShippingMethod extends Controller 
+class Catalog_Controller_Block_Checkout_ShippingMethod extends Controller
 {
   	public function index()
   	{

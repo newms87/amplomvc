@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Common_Logout extends Controller 
+class Admin_Controller_Common_Logout extends Controller
 {
 	public function index()
 	{

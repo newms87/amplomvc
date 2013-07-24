@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Catalog_Product extends Controller 
+class Admin_Controller_Catalog_Product extends Controller
 {
   	public function index()
   	{
@@ -9,7 +9,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		
 		$this->getList();
   	}
-  
+
   	public function insert()
   	{
 		$this->load->language('catalog/product');
@@ -609,7 +609,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		$this->_('text_option_help', $this->config->get('config_email'));
 		$this->_('text_not_editable', $this->data['name'], $this->config->get('config_email'));
 		
-		//Translation
+		//Translations
 		$translate_fields = array(
 			'name',
 			'description',
@@ -621,20 +621,13 @@ class Admin_Controller_Catalog_Product extends Controller
 		
 		$this->data['translations'] = $this->translation->get_translations('product', $product_id, $translate_fields);
 		
-		//A hack to easily integrate product_tags translations
-		$tag_translations = $this->data['translations']['name'];
-		
-		foreach($tag_translations as $language_id => &$text) {
-			$text = isset($product_tags[$language_id]) ? $product_tags[$language_id] : '';
-		}
-		
-		$this->data['translations']['product_tag'] = $tag_translations;
-		
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
 		
+		//Render
 		$this->response->setOutput($this->render());
   	}
 	

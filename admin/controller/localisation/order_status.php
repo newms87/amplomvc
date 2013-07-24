@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Localisation_OrderStatus extends Controller 
+class Admin_Controller_Localisation_OrderStatus extends Controller
 {
 	
 	
@@ -161,7 +161,7 @@ class Admin_Controller_Localisation_OrderStatus extends Controller
 		$order_status_total = $this->Model_Localisation_OrderStatus->getTotalOrderStatuses();
 	
 		$results = $this->Model_Localisation_OrderStatus->getOrderStatuses($data);
- 
+
 		foreach ($results as $result) {
 			$action = array();
 			
@@ -230,7 +230,7 @@ class Admin_Controller_Localisation_OrderStatus extends Controller
 				
 		$this->response->setOutput($this->render());
   	}
-  
+
   	private function getForm()
   	{
 		$this->template->load('localisation/order_status_form');

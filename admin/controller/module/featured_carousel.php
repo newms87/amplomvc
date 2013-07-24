@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Module_FeaturedCarousel extends Controller 
+class Admin_Controller_Module_FeaturedCarousel extends Controller
 {
 	
 	

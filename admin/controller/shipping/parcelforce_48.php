@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Shipping_Parcelforce4848_Controller_Shipping_Parcelforce4848 extends Controller 
+class Admin_Controller_Shipping_Parcelforce4848_Controller_Shipping_Parcelforce4848 extends Controller
 {
 	
 	

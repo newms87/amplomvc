@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Account_Return extends Controller 
+class Catalog_Controller_Account_Return extends Controller
 {
 	
 	public function index()
@@ -11,7 +11,7 @@ class Catalog_Controller_Account_Return extends Controller
 
 			$this->url->redirect($this->url->link('account/login'));
 		}
- 
+
 		$this->language->load('account/return');
 
 		$this->document->setTitle($this->_('heading_title'));

@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Information_Information extends Controller 
+class Catalog_Controller_Information_Information extends Controller
 {
 	public function index()
 	{
@@ -76,7 +76,7 @@ class Catalog_Controller_Information_Information extends Controller
 		
 		if ($information_info) {
 			$information_info['description'] = html_entity_decode($information_info['description'], ENT_QUOTES, 'UTF-8');
-			 
+			
 			$this->data = $information_info;
 		}
 		

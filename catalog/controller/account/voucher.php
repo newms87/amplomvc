@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Account_Voucher extends Controller 
+class Catalog_Controller_Account_Voucher extends Controller
 {
 	
 	

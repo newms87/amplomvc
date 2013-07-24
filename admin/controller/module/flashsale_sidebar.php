@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Module_FlashsaleSidebar extends Controller 
+class Admin_Controller_Module_FlashsaleSidebar extends Controller
 {
 	
 	

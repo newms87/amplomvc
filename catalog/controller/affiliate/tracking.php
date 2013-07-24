@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Affiliate_Tracking extends Controller 
+class Catalog_Controller_Affiliate_Tracking extends Controller
 {
 	public function index()
 	{

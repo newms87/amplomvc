@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Account_Address extends Model 
+class Catalog_Model_Account_Address extends Model
 {
 	public function addAddress($data)
 	{

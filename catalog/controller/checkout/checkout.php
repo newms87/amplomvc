@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Checkout_Checkout extends Controller 
+class Catalog_Controller_Checkout_Checkout extends Controller
 {
 	public function index()
 	{

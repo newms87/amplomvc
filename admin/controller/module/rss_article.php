@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Module_RssArticle extends Controller 
+class Admin_Controller_Module_RssArticle extends Controller
 {
 	
 	

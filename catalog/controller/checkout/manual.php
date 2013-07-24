@@ -2,7 +2,7 @@
 
 //TODO: This Process has been forsaken... Gotta fix at some point right?
 
-class Catalog_Controller_Checkout_Manual extends Controller 
+class Catalog_Controller_Checkout_Manual extends Controller
 {
 	public function index()
 	{

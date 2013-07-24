@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Cart_Voucher extends Model 
+class Catalog_Model_Cart_Voucher extends Model
 {
 	public function addVoucher($order_id, $data)
 	{

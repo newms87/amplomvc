@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Setting_Store extends Controller 
+class Admin_Controller_Setting_Store extends Controller
 {
 	
 
@@ -91,7 +91,7 @@ class Admin_Controller_Setting_Store extends Controller
 		$store_total = $this->Model_Setting_Store->getTotalStores();
 	
 		$stores = $this->Model_Setting_Store->getStores();
- 
+
 		foreach ($stores as &$store) {
 			$action = array();
 			

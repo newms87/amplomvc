@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Payment_WebPaymentSoftware extends Controller 
+class Catalog_Controller_Payment_WebPaymentSoftware extends Controller
 {
 	protected function index()
 	{

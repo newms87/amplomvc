@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Sale_Voucher extends Model 
+class Admin_Model_Sale_Voucher extends Model
 {
 	public function addVoucher($data)
 	{

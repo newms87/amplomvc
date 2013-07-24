@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Includes_Contact extends Controller 
+class Admin_Controller_Includes_Contact extends Controller
 {
 	
 	public function index($args)

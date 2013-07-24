@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Extension_Feed extends Controller 
+class Admin_Controller_Extension_Feed extends Controller
 {
 	public function index()
 	{

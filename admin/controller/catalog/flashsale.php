@@ -1,8 +1,8 @@
 <?php
-class Admin_Controller_Catalog_Flashsale extends Controller 
+class Admin_Controller_Catalog_Flashsale extends Controller
 {
 	
- 
+
 	public function index()
 	{
 		$this->load->language('catalog/flashsale');
@@ -379,7 +379,7 @@ class Admin_Controller_Catalog_Flashsale extends Controller
 		if (!$this->user->hasPermission('modify', 'catalog/flashsale')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
- 
+
 		if (!$this->error) {
 			return true;
 		} else {

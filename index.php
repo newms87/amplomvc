@@ -22,7 +22,7 @@ require_once('path_config.php');
 
 require_once(DIR_SYSTEM . 'functions.php');
 
-/*  PRETTY LANGUAGE TESTING 
+/*  PRETTY LANGUAGE TESTING
 echo 'testing pretty language<br /><br />';
 require_once(DIR_SYSTEM . 'library/pretty_language.php');
 new PrettyLanguage();

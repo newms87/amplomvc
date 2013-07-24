@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Design_Layout extends Model 
+class Catalog_Model_Design_Layout extends Model
 {
 	private $layout_ids = array();
 	

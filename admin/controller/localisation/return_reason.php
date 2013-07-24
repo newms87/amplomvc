@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Localisation_ReturnReason extends Controller 
+class Admin_Controller_Localisation_ReturnReason extends Controller
 {
 	
 	
@@ -161,7 +161,7 @@ class Admin_Controller_Localisation_ReturnReason extends Controller
 		$return_reason_total = $this->Model_Localisation_ReturnReason->getTotalReturnReasons();
 	
 		$results = $this->Model_Localisation_ReturnReason->getReturnReasons($data);
- 
+
 		foreach ($results as $result) {
 			$action = array();
 			
@@ -230,7 +230,7 @@ class Admin_Controller_Localisation_ReturnReason extends Controller
 				
 		$this->response->setOutput($this->render());
   	}
-  
+
   	private function getForm()
   	{
 		$this->template->load('localisation/return_reason_form');

@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Localisation_Zone extends Controller 
+class Admin_Controller_Localisation_Zone extends Controller
 {
 	
 
@@ -193,7 +193,7 @@ class Admin_Controller_Localisation_Zone extends Controller
 		} else {
 			$this->data['success'] = '';
 		}
- 
+
 		$url = '';
 
 		if ($order == 'ASC') {

@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Checkout_Order extends Model 
+class Catalog_Model_Checkout_Order extends Model
 {
 	public function addOrder($data)
 	{
@@ -23,7 +23,7 @@ class Catalog_Model_Checkout_Order extends Model
 			$product['order_id'] = $order_id;
 			
 			$order_product_id = $this->insert('order_product', $product);
- 
+
 			foreach ($product['option'] as $option) {
 				$option['order_id'] = $order_id;
 				$option['order_product_id'] = $order_product_id;

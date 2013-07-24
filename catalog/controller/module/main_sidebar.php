@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Module_MainSidebar extends Controller 
+class Catalog_Controller_Module_MainSidebar extends Controller
 {
 	protected function index()
 	{

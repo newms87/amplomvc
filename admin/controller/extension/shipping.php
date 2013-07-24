@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Extension_Shipping extends Controller 
+class Admin_Controller_Extension_Shipping extends Controller
 {
 	public function index()
 	{

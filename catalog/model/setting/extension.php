@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Setting_Extension extends Model 
+class Catalog_Model_Setting_Extension extends Model
 {
 	public function getExtensions($type)
 	{

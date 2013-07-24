@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Report_SaleCoupon extends Controller 
+class Admin_Controller_Report_SaleCoupon extends Controller
 {
 	public function index()
 	{

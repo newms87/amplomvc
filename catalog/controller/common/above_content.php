@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Common_AboveContent extends Controller 
+class Catalog_Controller_Common_AboveContent extends Controller
 {
 	public function index()
 	{

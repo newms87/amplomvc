@@ -1,8 +1,8 @@
 <?php
-class Admin_Controller_Localisation_Country extends Controller 
+class Admin_Controller_Localisation_Country extends Controller
 {
 	
- 
+
 	public function index()
 	{
 		$this->load->language('localisation/country');
@@ -73,11 +73,11 @@ class Admin_Controller_Localisation_Country extends Controller
 
 		$this->getForm();
 	}
- 
+
 	public function delete()
 	{
 		$this->load->language('localisation/country');
- 
+
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (isset($_POST['selected']) && $this->validateDelete()) {

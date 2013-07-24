@@ -1,5 +1,5 @@
 <?php
-class Collections_Setup extends PluginSetup 
+class Collections_Setup extends PluginSetup
 {
 	function __construct($registry)
 	{

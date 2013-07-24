@@ -1,7 +1,7 @@
 <?php
 // Heading
 $_['heading_title']		= 'Plan du site';
- 
+
 // Text
 $_['text_special']		= 'Promotions';
 $_['text_account']		= 'Mon compte';

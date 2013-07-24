@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Localisation_ReturnStatus extends Controller 
+class Admin_Controller_Localisation_ReturnStatus extends Controller
 {
 	
 	
@@ -161,7 +161,7 @@ class Admin_Controller_Localisation_ReturnStatus extends Controller
 		$return_status_total = $this->Model_Localisation_ReturnStatus->getTotalReturnStatuses();
 	
 		$results = $this->Model_Localisation_ReturnStatus->getReturnStatuses($data);
- 
+
 		foreach ($results as $result) {
 			$action = array();
 			
@@ -230,7 +230,7 @@ class Admin_Controller_Localisation_ReturnStatus extends Controller
 				
 		$this->response->setOutput($this->render());
   	}
-  
+
   	private function getForm()
   	{
 		$this->template->load('localisation/return_status_form');

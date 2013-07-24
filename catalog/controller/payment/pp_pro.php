@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Payment_PpPro extends Controller 
+class Catalog_Controller_Payment_PpPro extends Controller
 {
 	protected function index()
 	{
@@ -145,13 +145,13 @@ class Catalog_Controller_Payment_PpPro extends Controller
 		$response = curl_exec($curl);
  		
 		curl_close($curl);
- 
+
 		if (!$response) {
 			$this->error_log->write('DoDirectPayment failed: ' . curl_error($curl) . '(' . curl_errno($curl) . ')');
 		}
- 
+
  		$response_data = array();
- 
+
 		parse_str($response, $response_data);
 
 		$json = array();

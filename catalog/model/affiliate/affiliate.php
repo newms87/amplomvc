@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Affiliate_Affiliate extends Model 
+class Catalog_Model_Affiliate_Affiliate extends Model
 {
 	public function addAffiliate($data)
 	{

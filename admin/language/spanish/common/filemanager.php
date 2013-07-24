@@ -1,7 +1,7 @@
 <?php
 // Heading
 $_['heading_title']	= 'Gestor de imágenes';
- 
+
 // Text
 $_['text_uploaded']	= 'Éxito: Tu archivo ha sido subido!';
 $_['text_file_delete'] = 'El archivo ha sido borrado!';

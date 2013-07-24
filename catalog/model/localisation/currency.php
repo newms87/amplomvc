@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Localisation_Currency extends Model 
+class Catalog_Model_Localisation_Currency extends Model
 {
 	public function getCurrencyByCode($currency)
 	{

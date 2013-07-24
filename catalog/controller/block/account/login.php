@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Block_Account_Login extends Controller 
+class Catalog_Controller_Block_Account_Login extends Controller
 {
 	
 	public function index($settings)

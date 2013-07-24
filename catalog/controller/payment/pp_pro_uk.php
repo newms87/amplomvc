@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Payment_PpProUk extends Controller 
+class Catalog_Controller_Payment_PpProUk extends Controller
 {
 	protected function index()
 	{
@@ -125,7 +125,7 @@ class Catalog_Controller_Payment_PpProUk extends Controller
 		}
 		
  		$response_data = array();
- 
+
 		parse_str($response, $response_data);
 
 		$json = array();

@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Cart_VoucherTheme extends Model 
+class Catalog_Model_Cart_VoucherTheme extends Model
 {
 	public function getVoucherTheme($voucher_theme_id)
 	{

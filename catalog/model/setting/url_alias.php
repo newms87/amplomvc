@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Setting_UrlAlias extends Model 
+class Catalog_Model_Setting_UrlAlias extends Model
 {
 	public function setUrlAliasStatus($route, $query, $status)
 	{

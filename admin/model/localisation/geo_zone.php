@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Localisation_GeoZone extends Model 
+class Admin_Model_Localisation_GeoZone extends Model
 {
 	public function addGeoZone($data)
 	{

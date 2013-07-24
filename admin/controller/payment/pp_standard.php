@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Payment_PpStandard extends Controller 
+class Admin_Controller_Payment_PpStandard extends Controller
 {
 	public function index()
 	{

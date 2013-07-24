@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Payment_Paypoint extends Controller 
+class Admin_Controller_Payment_Paypoint extends Controller
 {
 	
 

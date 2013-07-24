@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Payment_Liqpay extends Controller 
+class Catalog_Controller_Payment_Liqpay extends Controller
 {
 	protected function index()
 	{

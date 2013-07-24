@@ -1,12 +1,12 @@
 <?php
-class Admin_Controller_Sale_CustomerGroup extends Controller 
+class Admin_Controller_Sale_CustomerGroup extends Controller
 {
 	
- 
+
 	public function index()
 	{
 		$this->load->language('sale/customer_group');
- 
+
 		$this->document->setTitle($this->_('heading_title'));
  		
 		$this->getList();

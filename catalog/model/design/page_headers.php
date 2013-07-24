@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Design_PageHeaders extends Model 
+class Catalog_Model_Design_PageHeaders extends Model
 {
 	public function getPageHeader()
 	{

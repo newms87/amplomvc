@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Shipping_Citylink extends Controller 
+class Admin_Controller_Shipping_Citylink extends Controller
 {
 	
 	

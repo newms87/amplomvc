@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_User_User extends Controller 
+class Admin_Controller_User_User extends Controller
 {
 	
 	
@@ -60,7 +60,7 @@ class Admin_Controller_User_User extends Controller
 	
 		$this->getForm();
   	}
- 
+
   	public function delete()
   	{
 		$this->load->language('user/user');

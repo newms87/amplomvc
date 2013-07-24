@@ -1,5 +1,5 @@
 <?php
-class Mail_Setup extends PluginSetup 
+class Mail_Setup extends PluginSetup
 {
 
 	public function install()

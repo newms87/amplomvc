@@ -1,5 +1,5 @@
 <?php
-class Catalog_Model_Setting_Setting extends Model 
+class Catalog_Model_Setting_Setting extends Model
 {
 	public function getSetting($group, $store_id = 0)
 	{

@@ -1,5 +1,5 @@
 <?php
-class Admin_Controller_Catalog_Manufacturer extends Controller 
+class Admin_Controller_Catalog_Manufacturer extends Controller
 {
   	public function index()
   	{
@@ -7,7 +7,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		
 		$this->getList();
   	}
-  
+
   	public function insert()
   	{
 		$this->load->language('catalog/manufacturer');

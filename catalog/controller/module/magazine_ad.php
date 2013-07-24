@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Module_MagazineAd extends Controller 
+class Catalog_Controller_Module_MagazineAd extends Controller
 {
 	
 	public function index($setting=null)

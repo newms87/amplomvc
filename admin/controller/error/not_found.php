@@ -1,12 +1,12 @@
 <?php
-class Admin_Controller_Error_NotFound extends Controller 
+class Admin_Controller_Error_NotFound extends Controller
 {
 	public function index()
 	{
 		$this->template->load('error/not_found');
 
 		$this->load->language('error/not_found');
- 
+
 		$this->document->setTitle($this->_('heading_title'));
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));

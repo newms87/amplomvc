@@ -1,5 +1,5 @@
 <?php
-class Admin_Model_Block_Block extends Model 
+class Admin_Model_Block_Block extends Model
 {
 	public function addBlock($data)
 	{
@@ -268,7 +268,7 @@ class Admin_Model_Block_Block extends Model
 					return $a[$data['sort']] < $b[$data['sort']];
 				} else {
 					return $a[$data['sort']] > $b[$data['sort']];
-				} 
+				}
 			});
 		}
 		

@@ -1,5 +1,5 @@
 <?php
-class Catalog_Controller_Cron_Cron extends Controller 
+class Catalog_Controller_Cron_Cron extends Controller
 {
 	function index()
 	{
