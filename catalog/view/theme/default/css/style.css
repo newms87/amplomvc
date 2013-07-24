@@ -1075,6 +1075,7 @@ a.button:active, input.button:active {
 #catalog_list .item_block{
 	text-decoration:none;
 	display: inline-block;
+	text-align:center;
 }
 
 #catalog_list .right {
@@ -1129,7 +1130,7 @@ a.button:active, input.button:active {
 	float: right;
 	height: 50px;
 	margin-left: 8px;
-	text-align: right;
+	text-align: center;
 	color: #333333;
 	font-size:20px;
 }
@@ -1219,7 +1220,7 @@ a.button:active, input.button:active {
 #catalog_list.grid .price{
 	float:none;
 	height:auto;
-	text-align:left;
+	text-align:center;
 	margin:0;
 	padding:0;
 }

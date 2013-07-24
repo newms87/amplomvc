@@ -1,9 +1,5 @@
 <?php
-<<<<<<< HEAD:catalog/model/account/customer.php
-class Catalog_Model_Account_Customer extends Model
-=======
 class System_Model_Customer extends Model
->>>>>>> 35786c33a0470bb6e46908697b6ed90950ffb231:system/model/customer.php
 {
 	public function addCustomer($data)
 	{
