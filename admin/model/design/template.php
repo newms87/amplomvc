@@ -14,8 +14,8 @@ class Admin_Model_Design_Template extends Model
 		
 		$templates = array();
 	
-		foreach ($themes as $theme) {
-			$dir = $root . $theme . '/template/' . trim($path,'/') . '/';
+		foreach ($themes as $theme_dir => $theme) {
+			$dir = $root . $theme_dir . '/template/' . trim($path,'/') . '/';
 			
 			if (!is_dir($dir)) {
 				continue;
@@ -32,7 +32,7 @@ class Admin_Model_Design_Template extends Model
 				}
 			}
 			
-			$templates[$theme] = $template_files;
+			$templates[$theme_dir] = $template_files;
 		}
 		
 		return $templates;
