@@ -693,6 +693,10 @@ a.delete_button:visited{
 	text-decoration:none;
 }
 
+.list .ui-sortable{
+	cursor: move;
+}
+
 .list .sortable:after{
 	position:relative;
 	top: 7px;

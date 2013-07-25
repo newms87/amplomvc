@@ -100,7 +100,7 @@ class Admin_Model_Catalog_AttributeGroup extends Model
 		$where = '1';
 		
 		if (empty($data['sort'])) {
-			$data['sort'] = '';
+			$data['sort'] = 'ag.sort_order';
 		}
 		
 		if (!empty($data['name'])) {
@@ -141,7 +141,7 @@ class Admin_Model_Catalog_AttributeGroup extends Model
 	
 	public function getAttributes($attribute_group_id)
 	{
-		$attributes = $this->queryRows("SELECT * FROM " . DB_PREFIX . "attribute WHERE attribute_group_id = '" . (int)$attribute_group_id . "'");
+		$attributes = $this->queryRows("SELECT * FROM " . DB_PREFIX . "attribute WHERE attribute_group_id = '" . (int)$attribute_group_id . "' ORDER BY sort_order");
 		
 		return $attributes;
 	}

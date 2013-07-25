@@ -86,6 +86,10 @@ class DB
 			return false;
 		}
 		
+		if (!is_object($resource)) {
+			return array();
+		}
+		
 		return $resource->rows;
   	}
 	
@@ -105,6 +109,10 @@ class DB
 			$this->queryError($sql);
 			
 			return false;
+		}
+		
+		if (!is_object($resource)) {
+			return array();
 		}
 		
 		return $resource->row;
@@ -127,6 +135,10 @@ class DB
 			return false;
 		}
 		
+		if (!is_object($resource)) {
+			return array();
+		}
+		
 		return array_column($resource->rows, key($resource->row));
   	}
 	
@@ -144,6 +156,10 @@ class DB
 		if (!$resource) {
 			$this->queryError($sql);
 			
+			return null;
+		}
+		
+		if (!is_object($resource)) {
 			return null;
 		}
 		
@@ -334,6 +350,8 @@ class DB
 		if (!$this->hasColumn($table, $column)) {
 			return $this->driver->query("ALTER TABLE `" . DB_PREFIX . "$table` ADD COLUMN `$column` $options");
 		}
+		
+		return false;
 	}
 	
 	public function changeColumn($table, $column, $new_column = null, $options = '')
@@ -355,13 +373,19 @@ class DB
 		if ($this->hasColumn($table, $column)) {
 			return $this->driver->query("ALTER TABLE `" . DB_PREFIX . "$table` DROP COLUMN `$column`");
 		}
+		
+		return false;
 	}
 	
 	public function setAutoincrement($table, $value)
 	{
 		if (!$this->driver->setAutoincrement($table, $value)) {
 			trigger_error($this->driver->getError());
+			
+			return false;
 		}
+		
+		return true;
 	}
 	
 	public function getInsertString($data)

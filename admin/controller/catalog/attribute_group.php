@@ -7,30 +7,20 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		
 		$this->getList();
   	}
-				
-  	public function insert()
-	{
-		$this->language->load('catalog/attribute_group');
-		
-		if ($this->request->isPost() && $this->validateForm()) {
-			$this->Model_Catalog_AttributeGroup->addAttributeGroup($_POST);
-			
-			if (!$this->message->error_set()) {
-				$this->message->add('success', $this->_('text_success'));
-				
-				$this->url->redirect($this->url->link('catalog/attribute_group'));
-			}
-		}
-
-		$this->getForm();
-	}
-
+	
 	public function update()
 	{
 		$this->language->load('catalog/attribute_group');
 
 		if ($this->request->isPost() && $this->validateForm()) {
-			$this->Model_Catalog_AttributeGroup->editAttributeGroup($_GET['attribute_group_id'], $_POST);
+			//Insert
+			if (empty($_GET['attribute_group_id'])) {
+				$this->Model_Catalog_AttributeGroup->addAttributeGroup($_POST);
+			}
+			//Update
+			else {
+				$this->Model_Catalog_AttributeGroup->editAttributeGroup($_GET['attribute_group_id'], $_POST);
+			}
 			
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
@@ -129,8 +119,8 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 		
 		//This triggers the attribute_count to be added to the query
-		if (!isset($sort_filter['attribute_count'])) {
-			$sort_filter['attribute_count'] = true;
+		if (empty($sort['attribute_count'])) {
+			$sort['attribute_count'] = true;
 		}
 		
 		$attribute_group_total = $this->Model_Catalog_AttributeGroup->getTotalAttributeGroups($filter);
@@ -178,7 +168,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		$this->data['limits'] = $this->sort->render_limit();
 		
 		//Action Buttons
-		$this->data['insert'] = $this->url->link('catalog/attribute_group/insert');
+		$this->data['insert'] = $this->url->link('catalog/attribute_group/update');
 		
 		//Pagination
 		$this->pagination->init();
@@ -198,23 +188,26 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
   	
   	private function getForm()
   	{
+  		//Page Title
   		$this->document->setTitle($this->_('heading_title'));
 		
+		//The Template
 		$this->template->load('catalog/attribute_group_form');
 		
+		//Insert or Update
 		$attribute_group_id = !empty($_GET['attribute_group_id']) ? $_GET['attribute_group_id'] : 0;
 
+		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/attribute_group'));
 
 		if (!$attribute_group_id) {
-			$this->data['action'] = $this->url->link('catalog/attribute_group/insert');
+			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('catalog/attribute_group/update'));
 		} else {
-			$this->data['action'] = $this->url->link('catalog/attribute_group/update', 'attribute_group_id=' . $attribute_group_id);
+			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('catalog/attribute_group/update', 'attribute_group_id=' . $attribute_group_id));
 		}
 		
-		$this->data['cancel'] = $this->url->link('catalog/attribute_group');
-
+		//Handle Post
 		if ($attribute_group_id && !$this->request->isPost()) {
 			$attribute_group_info = $this->Model_Catalog_AttributeGroup->getAttributeGroup($attribute_group_id);
 			
@@ -231,6 +224,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 			$attribute_group_info['attributes'] = $attributes;
 		}
 		
+		//Load Values or Defaults
 		$defaults = array(
 			'name' => '',
 			'sort_order' => '',
@@ -263,11 +257,17 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 			$attribute['translations'] = $this->translation->get_translations('attribute', $attribute['attribute_id'], $translate_fields);
 		};
 		
+		//Action Buttons
+		$this->data['save'] = $this->url->link('catalog/attribute_group/update', 'attribute_group_id=' . $attribute_group_id);
+		$this->data['cancel'] = $this->url->link('catalog/attribute_group');
+		
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
-				
+		
+		//Render
 		$this->response->setOutput($this->render());
   	}
   	

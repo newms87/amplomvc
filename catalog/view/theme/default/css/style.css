@@ -1344,15 +1344,20 @@ a.button:active, input.button:active {
 }
 
 .product-info .product_description.overflowed{
-	-webkit-transition: all .7s ease .4s;
-		-moz-transition: all .7s ease .4s;
-		 -ms-transition: all .7s ease .4s;
-		  -o-transition: all .7s ease .4s;
-			  transition: all .7s ease .4s;
+	-webkit-transition: all .7s cubic-bezier(0,0,.5,1) .7s;
+		-moz-transition: all .7s cubic-bezier(0,0,.5,1) .7s;
+		 -ms-transition: all .7s cubic-bezier(0,0,.5,1) .7s;
+		  -o-transition: all .7s cubic-bezier(0,0,.5,1) .7s;
+			  transition: all .7s cubic-bezier(0,0,.5,1) .7s;
 }
 
 .product-info .product_description.overflowed:hover{
 	max-height: 1000px;
+	-webkit-transition: all 1.5s cubic-bezier(1,0,.5,0);
+		-moz-transition: all 1.5s cubic-bezier(1,0,.5,0);
+		 -ms-transition: all 1.5s cubic-bezier(1,0,.5,0);
+		  -o-transition: all 1.5s cubic-bezier(1,0,.5,0);
+			  transition: all 1.5s cubic-bezier(1,0,.5,0);
 }
 
 .product-info .product_description.overflowed:after{
