@@ -19,13 +19,43 @@
 					<tr>
 						<td><?= $entry_front_template; ?></td>
 						<td>
-							<? $this->builder->build('select', $data_templates, 'front_template', $front_template); ?>
+							<table class="list">
+								<thead>
+									<tr>
+										<td><?= $entry_theme_name; ?></td>
+										<td><?= $entry_theme_template; ?></td>
+									</tr>
+								</thead>
+								<tbody>
+									<? foreach ($data_front_templates as $theme => $templates) { ?>
+									<tr>
+										<td><?= $theme; ?></td>
+										<td><?= $this->builder->build('select', $templates, "front_template[$theme]", $front_template[$theme]); ?></td>
+									</tr>
+									<? } ?>
+								</tbody>
+							</table>
 						</td>
 					</tr>
 					<tr>
 						<td><?= $entry_admin_template; ?></td>
 						<td>
-							<? $this->builder->build('select', $data_templates, 'admin_template', $admin_template); ?>
+							<table class="list">
+								<thead>
+									<tr>
+										<td><?= $entry_theme_name; ?></td>
+										<td><?= $entry_theme_template; ?></td>
+									</tr>
+								</thead>
+								<tbody>
+									<? foreach ($data_admin_templates as $theme => $templates) { ?>
+										<tr>
+											<td><?= $theme; ?></td>
+											<td><?= $this->builder->build('select', $templates, "admin_template[$theme]", $admin_template[$theme]); ?></td>
+										</tr>
+									<? } ?>
+								</tbody>
+							</table>
 						</td>
 					</tr>
 				</table>

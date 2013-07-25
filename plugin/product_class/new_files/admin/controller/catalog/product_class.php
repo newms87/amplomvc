@@ -14,7 +14,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			//Insert
-			if (empty($_GET['catgory_id'])) {
+			if (empty($_GET['product_class_id'])) {
 				$this->Model_Catalog_ProductClass->addProductClass($_POST);
 			}
 			//Update
@@ -101,15 +101,11 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 		$columns['front_template'] = array(
 			'type' => 'text',
 			'display_name' => $this->_('column_front_template'),
-			'filter' => true,
-			'sortable' => false,
 		);
 		
 		$columns['admin_template'] = array(
 			'type' => 'text',
 			'display_name' => $this->_('column_admin_template'),
-			'filter' => true,
-			'sortable' => false,
 		);
 		
 		
@@ -133,6 +129,22 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 					'href' => $this->url->link('catalog/product_class/delete', 'product_class_id=' . $product_class['product_class_id'] . '&' . $url_query)
 				)
 			);
+			
+			$front_list = '';
+			
+			foreach ($product_class['front_template'] as $theme => $template) {
+				$front_list .= $this->_('text_front_template_list', $theme, ($template ? $template : $this->_('text_default_template'))) . '<br />';
+			}
+			
+			$product_class['front_template'] = $front_list;
+			
+			$admin_list = '';
+			
+			foreach ($product_class['admin_template'] as $theme => $template) {
+				$admin_list .= $this->_('text_admin_template_list', $theme, ($template ? $template : $this->_('text_default_template'))) . '<br />';
+			}
+			
+			$product_class['admin_template'] = $admin_list;
 		} unset($product_class);
 		
 		//Build The Table
@@ -194,7 +206,12 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/product_class'));
-		$this->breadcrumb->add($this->_('text_edit'), $this->url->link('catalog/product_class/update', 'product_class_id=' . $product_class_id));
+		
+		if ($product_class_id) {
+			$this->breadcrumb->add($this->_('text_edit'), $this->url->link('catalog/product_class/update', 'product_class_id=' . $product_class_id));
+		} else {
+			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('catalog/product_class/update'));
+		}
 		
 		//Load Information
 		if ($product_class_id && !$this->request->isPost()) {
@@ -219,8 +236,8 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 		}
 		
 		//Additional Data
-		$this->data['data_front_templates'] = $this->Model_Design_Template->getTemplatesFrom('product/product_class');
-		$this->data['data_admin_templates'] = $this->Model_Design_Template->getTemplatesFrom('catalog/product_class', true);
+		$this->data['data_front_templates'] = $this->Model_Catalog_ProductClass->getFrontTemplates();
+		$this->data['data_admin_templates'] = $this->Model_Catalog_ProductClass->getAdminTemplates();
 		
 		//Action Buttons
 		$this->data['save'] = $this->url->link('catalog/product_class/update', 'product_class_id=' . $product_class_id);

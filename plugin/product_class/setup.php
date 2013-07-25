@@ -9,8 +9,8 @@ class ProductClass_Setup extends PluginSetup
 		$this->db->createTable('product_class', <<<SQL
 		  `product_class_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
 		  `name` VARCHAR(45) NOT NULL,
-		  `admin_template` VARCHAR(128) NOT NULL,
-		  `front_template` VARCHAR(128) NOT NULL,
+		  `admin_template` TEXT NOT NULL,
+		  `front_template` TEXT NOT NULL,
 		  PRIMARY KEY (`product_class_id`)
 SQL
 		);

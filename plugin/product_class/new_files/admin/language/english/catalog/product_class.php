@@ -3,9 +3,16 @@
 $_['heading_title'] = "Product Classes";
 
 //Text
+$_['text_front_template_list'] = "Template (<strong>%s</strong>): <strong>%s</strong>";
+$_['text_admin_template_list'] = "Template (<strong>%s</strong>): <strong>%s</strong>";
+$_['text_default_template'] = "Default Template";
 
 //Entry
 $_['entry_name'] = "Product Class Name:";
+$_['entry_front_template'] = "Front End Template: <span class=\"help\">This is the template used when customers view the product page</span>";
+$_['entry_admin_template'] = "Admin Template: <span class=\"help\">This is the template for the product input form in the Admin Panel</span>";
+$_['entry_theme_name'] = "Theme Name:";
+$_['entry_theme_template'] = "Theme Template:";
 
 //Column
 $_['column_name'] = "Name:";

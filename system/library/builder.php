@@ -221,7 +221,6 @@ class Builder extends Library
 		//This is for select option groups
 		$opt_group_active = false;
 		
-		
 		if (!is_array($data)) {
 			$this->error_log->write("library/tpl.php::build(): data was not an array. " . gettype($data) . " was given.");
 			return;
