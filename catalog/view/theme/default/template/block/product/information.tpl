@@ -1,4 +1,5 @@
 <div class="right">
+	<div class="title"><?= $heading_title; ?></div>
 	<div class="description">
 		<? if ($manufacturer) { ?>
 		<div class="description_manufacturer">

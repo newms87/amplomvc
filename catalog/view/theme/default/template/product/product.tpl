@@ -4,7 +4,7 @@
 	<?= $this->breadcrumb->render(); ?>
 	<?= $content_top; ?>
 	
-	<h1><?= $heading_title; ?></h1>
+	<!--<h1><?= $heading_title; ?></h1> -->
 	<? if(!empty($block_product_flashsale_countdown)){ ?>
 		<?= $block_product_flashsale_countdown; ?>
 	<? }?>
