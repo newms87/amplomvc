@@ -1224,7 +1224,7 @@ a.button:active, input.button:active {
 }
 
 #catalog_list.grid .name{
-	height:50px;
+	min-height:50px;
 	overflow:hidden;
 }
 
