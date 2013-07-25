@@ -101,11 +101,15 @@ class Theme extends Library
 		return $theme_settings_admin;
 	}
 	
-	public function getThemes()
+	public function getThemes($admin = false)
 	{
-		$theme_dir = DIR_CATALOG . 'view/theme/';
+		if ($admin) {
+			$theme_dir = SITE_DIR . 'admin/view/theme/';
+		} else {
+			$theme_dir = DIR_CATALOG . 'view/theme/';
+		}
 		
-		$themes = $this->cache->get('themes');
+		$themes = $this->cache->get('themes' . ($admin ? '.admin' : ''));
 		
 		//invalidate all themes if one of the themes' settings has been updated
 		if ($themes) {
@@ -134,7 +138,7 @@ class Theme extends Library
 				);
 			}
 			
-			$this->cache->set('themes', $themes);
+			$this->cache->set('themes' . ($admin ? '.admin' : ''), $themes);
 		}
 		
 		return $themes;

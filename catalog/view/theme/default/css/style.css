@@ -1287,6 +1287,43 @@ a.button:active, input.button:active {
 	line-height: 20px;
 	color: #636363;
 	max-width: 500px;
+	position:relative;
+}
+
+.product-info .product_description{
+	max-height: 200px;
+	overflow:hidden;
+	position:relative;
+}
+
+.product-info .product_description.overflowed{
+	-webkit-transition: all .5s ease-out;
+		-moz-transition: all .5s linear;
+		 -ms-transition: all .5s linear;
+		  -o-transition: all .5s linear;
+			  transition: all .5s linear;
+}
+
+.product-info .product_description.overflowed:hover{
+	max-height: 800px;
+}
+
+.product-info .product_description.overflowed:after{
+	content: "read more";
+	color: #38B0E3;
+	font-size: 14px;
+	background: white;
+	
+	width: 100%;
+	height: 16px;
+	position:absolute;
+	bottom: 0;
+	left: 0;
+	text-align:center;
+}
+
+.product-info .product_description.overflowed:hover:after{
+	content: "";
 }
 
 .product-info .description_model span + span{
