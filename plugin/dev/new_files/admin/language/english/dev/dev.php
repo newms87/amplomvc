@@ -46,6 +46,7 @@ $_['button_return'] = "Back To Dashboard";
 $_['button_backup'] = "Backup Database";
 $_['button_execute_file'] = "Execute File";
 $_['button_submit_query'] = "Execute Query";
+$_['button_download'] = "Download Backup";
 
 //Success
 $_['success_sync_table'] = 'The table %s was successfully synchronized!';
@@ -53,3 +54,4 @@ $_['success_sync_table'] = 'The table %s was successfully synchronized!';
 // Error
 $_['error_permission'] = 'Warning: You do not have permission to use the development console!';
 $_['error_sync_table'] = 'There was a problem while synchronizing from the server.';
+$_['error_download_backup_file'] = 'Please select a backup file to download.';

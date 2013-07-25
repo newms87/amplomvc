@@ -37,7 +37,10 @@
 					</tr>
 					<tr>
 						<td></td>
-						<td><input type="submit" class="button" name="site_restore" value="<?= $button_restore; ?>" /></td>
+						<td>
+							<input type="submit" class="button" name="site_restore" value="<?= $button_restore; ?>" />
+							<input type="submit" class="button" onclick="$(this).closest('form').attr('target', '_blank');" name="backup_download" value="<?= $button_download; ?>" />
+						</td>
 					</tr>
 				</table>
 			</form>
