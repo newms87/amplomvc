@@ -493,7 +493,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		$this->data['data_categories'] = $this->Model_Catalog_Category->getCategoriesWithParents();
 		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
 		$this->data['data_layouts'] = array('' => '') +	$this->Model_Design_Layout->getLayouts();
-		$this->data['data_templates'] = array('' => '') + $this->Model_Design_Template->getTemplatesFrom('product');
+		$this->data['data_templates'] = $this->template->getTemplatesFrom('product', false, '');
 		$this->data['data_shipping_policies'] = $this->cart->getShippingPolicies();
 		$this->data['data_return_policies'] = $this->cart->getReturnPolicies();
 		

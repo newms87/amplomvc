@@ -105,6 +105,12 @@
 </div>
 
 <script type="text/javascript">//<!--
+//Check if Product description is overflowed
+pd = $('.product-info .product_description')[0];
+if (pd.scrollHeight > pd.clientHeight) {
+	$(pd).addClass('overflowed');
+}
+
 function option_select_post_before(){
 	$('#button-cart, #button-buy-now').attr('disabled',true);
 	$('#buy_product_buttons').hide();

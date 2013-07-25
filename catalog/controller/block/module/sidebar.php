@@ -6,19 +6,18 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 		$this->template->load('block/module/sidebar');
 		$this->language->load('block/module/sidebar');
 		
-		$collection_id = !empty($_GET['collection_id']) ? (int)$_GET['collection_id'] : false;
 		$category_id = !empty($_GET['category_id']) ? (int)$_GET['category_id'] : false;
 		
 		$main_menu = array();
 		
 		$main_menu[0] = array(
 			'name' => $this->_('text_name_all'),
-			'href' => $this->url->link("product/collection"),
+			'href' => $this->url->link("product/category"),
 		);
 		
 		$collections = $this->Model_Catalog_Collection->getCollectionCategories();
 		
-		$main_menu += $this->build_collection_menu($collections);
+		$main_menu += $this->buildCategoryMenu($collections);
 		
 		$this->data['main_menu'] = array(
 			'label' => $this->_('text_main_menu'),
@@ -26,21 +25,17 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 		);
 		
 		//Product Attributes Filter
-		if ($category_id || $collection_id) {
-			$route = !empty($collection_id) ? 'product/collection' : 'product/category';
+		if ($category_id) {
+			$route = 'product/category';
 			
 			$current_filter = isset($_GET['attribute']) ? $_GET['attribute'] : array();
 			
-			$url_query = $this->url->getQuery('collection_id', 'category_id');
+			$url_query = $this->url->getQuery('category_id');
 			
 			foreach ($settings['attributes'] as $attribute_menu) {
 				$attribute_group_id = $attribute_menu['attribute_group_id'];
 				
-				if ($collection_id) {
-					$attribute_list = $this->Model_Catalog_Collection->getAttributeList($collection_id, $attribute_group_id);
-				} else {
-					$attribute_list = $this->Model_Catalog_Category->getAttributeList($category_id, $attribute_group_id);
-				}
+				$attribute_list = $this->Model_Catalog_Category->getAttributeList($category_id, $attribute_group_id);
 				
 				if(empty($attribute_list)) {
 					continue;
@@ -85,7 +80,7 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 		$this->render();
 	}
 
-	private function build_collection_menu($collections)
+	private function buildCategoryMenu($collections)
 	{
 		$category_id = !empty($_GET['category_id']) ? $_GET['category_id'] : false;
 		

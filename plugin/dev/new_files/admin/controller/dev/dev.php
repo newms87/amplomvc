@@ -121,14 +121,23 @@ class Admin_Controller_Dev_Dev extends Controller
 	
 	public function backup_restore()
 	{
+		//Template and Language
 		$this->template->load('dev/backup_restore');
-		
 		$this->language->load('dev/dev');
 		
+		//Page Title
 		$this->document->setTitle($this->_('text_backup_restore'));
 		
+		//Handle POST
 		if ($this->request->isPost() && $this->validate()) {
-			if (isset($_POST['site_backup'])) {
+			if (isset($_POST['backup_download'])) {
+				if (!empty($_POST['backup_file'])) {
+					$this->export->downloadFile($_POST['backup_file']);
+				} else {
+					$this->message->add('warning', $this->_('error_download_backup_file'));
+				}
+			}
+			elseif (isset($_POST['site_backup'])) {
 				$tables = isset($_POST['tables']) ? $_POST['tables'] : null;
 				
 				if (count($tables) == $this->db->countTables()) {

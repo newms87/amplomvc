@@ -69,6 +69,46 @@ class Template extends Library
 		}
 	}
 	
+	public function getTemplatesFrom($path, $admin = false, $blank_row = false)
+	{
+		if ($admin) {
+			$root = SITE_DIR . 'admin/view/theme/';
+		} else {
+			$root = SITE_DIR . 'catalog/view/theme/';
+		}
+		
+		$themes = $this->theme->getThemes($admin);
+		
+		$templates = array();
+	
+		foreach ($themes as $theme_dir => $theme) {
+			$dir = $root . $theme_dir . '/template/' . trim($path,'/') . '/';
+			
+			if (!is_dir($dir)) {
+				continue;
+			}
+			
+			$files = scandir($dir);
+			
+			$template_files = array();
+			
+			if ($blank_row !== false) {
+				$template_files[''] = $blank_row;
+			}
+			
+			foreach ($files as $file) {
+				if (is_file($dir . $file) && preg_match("/\.tpl$/", $file) > 0) {
+					$filename = str_replace('.tpl', '', $file);
+					$template_files[$filename] = $filename;
+				}
+			}
+			
+			$templates[$theme_dir] = $template_files;
+		}
+		
+		return $templates;
+	}
+	
 	public function render()
 	{
 		if (!$this->file) {

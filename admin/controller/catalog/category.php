@@ -14,7 +14,7 @@ class Admin_Controller_Catalog_Category extends Controller
 
 		if ($this->request->isPost() && $this->validateForm()) {
 			//Insert
-			if (empty($_GET['catgory_id'])) {
+			if (empty($_GET['category_id'])) {
 				$this->Model_Catalog_Category->addCategory($_POST);
 			}
 			//Update

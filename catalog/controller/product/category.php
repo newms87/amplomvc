@@ -59,7 +59,8 @@ class Catalog_Controller_Product_Category extends Controller
 		//TODO: How do we handle sub categories....?
 		
 		//Sorting / Filtering
-		$sort = $this->sort->getQueryDefaults('p.sort_order', 'ASC');
+		$sort_by = $category_id ? 'p.sort_order' : 'c.sort_order';
+		$sort = $this->sort->getQueryDefaults($sort_by, 'ASC');
 		
 		$filter = array();
 		

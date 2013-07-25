@@ -53,7 +53,7 @@ class Export extends Library
 					"Content-Disposition: attachment; filename=\"$filename\"",
 					"Pragma: no-cache",
 					"Expires: 0",
-					"Content-Length: " . filesize($file),
+					"Content-Length: " . strlen($this->contents),
 				);
 				break;
 			case 'xls':
@@ -67,7 +67,7 @@ class Export extends Library
 					"Cache-Control: must-revalidate, post-check=0, pre-check=0",
 					"Pragma: public",
 					"Expires: 0",
-					"Content-Length: " . filesize($file),
+					"Content-Length: " . strlen($this->contents),
 				);
 				
 				break;
@@ -76,6 +76,10 @@ class Export extends Library
 		$this->response->setHeader($headers);
 		
 		$this->response->setOutput($this->contents);
+		
+		$this->response->output();
+		
+		exit();
 	}
 	
 	public function generateCsv($columns, $data, $row_headings = true)

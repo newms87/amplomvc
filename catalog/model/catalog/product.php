@@ -48,6 +48,7 @@ class Catalog_Model_Catalog_Product extends Model
 			$product = $this->queryRow($query);
 			
 			if (!empty($product)) {
+				$product['name'] = html_entity_decode($product['name'], ENT_QUOTES, 'UTF-8');
 				$product['price'] = ($product['discount'] ? $product['discount'] : $product['price']);
 				$product['rating'] = (int)$product['rating'];
 				$product['teaser'] = html_entity_decode($product['teaser'], ENT_QUOTES, 'UTF-8');
@@ -177,10 +178,16 @@ class Catalog_Model_Catalog_Product extends Model
 		}
 		
 		//Product Categories
-		if (!empty($data['category_ids'])) {
+		if (!empty($data['category_ids']) || $data['sort'] === 'c.sort_order') {
 			$from .= " LEFT JOIN " . DB_PREFIX . "product_to_category p2c ON (p.product_id = p2c.product_id)";
 			
-			$where .= " AND p2c.category_id IN (" . implode(',', $data['category_ids']) . ")";
+			if ($data['sort'] === 'c.sort_order') {
+				$from .= " LEFT JOIN " . DB_PREFIX . "category c ON (c.category_id=p2c.category_id)";
+			}
+			
+			if (!empty($data['category_ids'])) {
+				$where .= " AND p2c.category_id IN (" . implode(',', $data['category_ids']) . ")";
+			}
 		}
 		
 		if (!empty($data['search'])) {
