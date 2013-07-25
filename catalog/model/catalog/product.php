@@ -53,6 +53,7 @@ class Catalog_Model_Catalog_Product extends Model
 				$product['teaser'] = html_entity_decode($product['teaser'], ENT_QUOTES, 'UTF-8');
 				$product['description'] = html_entity_decode($product['description'], ENT_QUOTES, 'UTF-8');
 				$product['information'] = html_entity_decode($product['information'], ENT_QUOTES, 'UTF-8');
+				$product['name'] = html_entity_decode($product['name'], ENT_QUOTES, 'UTF-8');
 				
 				$this->translation->translate('product', $product_id, $product);
 			}
