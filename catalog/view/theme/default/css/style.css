@@ -16,12 +16,12 @@ body {
 body, td, th, input, textarea, select, a {
 	font-size: 12px;
 }
-h1, .welcome {
-	color: #4F4F4F;
+h1{
+	color: black;
 	font-family: Arial, Verdana;
 	margin-top: 0px;
 	margin-bottom: 10px;
-	font-size: 45px;
+	font-size: 30px;
 	font-weight: normal;
 	text-shadow: 0 0 1px rgba(0, 0, 0, .01);
 }
@@ -1297,15 +1297,15 @@ a.button:active, input.button:active {
 }
 
 .product-info .product_description.overflowed{
-	-webkit-transition: all .5s ease-out;
-		-moz-transition: all .5s linear;
-		 -ms-transition: all .5s linear;
-		  -o-transition: all .5s linear;
-			  transition: all .5s linear;
+	-webkit-transition: all .7s ease .4s;
+		-moz-transition: all .7s ease .4s;
+		 -ms-transition: all .7s ease .4s;
+		  -o-transition: all .7s ease .4s;
+			  transition: all .7s ease .4s;
 }
 
 .product-info .product_description.overflowed:hover{
-	max-height: 800px;
+	max-height: 1000px;
 }
 
 .product-info .product_description.overflowed:after{
