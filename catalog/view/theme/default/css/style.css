@@ -1106,9 +1106,9 @@ a.button:active, input.button:active {
 #catalog_list .name {
 	margin-bottom: 3px;
 	text-decoration: none;
-	color: #444444;
+	color: black;
 	font-weight: bold;
-	font-size: 20px;
+	font-size: 18px;
 }
 
 #catalog_list .teaser {
