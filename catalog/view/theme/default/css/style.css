@@ -1070,6 +1070,17 @@ a.button:active, input.button:active {
 	text-decoration:none;
 	display: inline-block;
 	text-align:center;
+	
+	-webkit-transform-style: preserve-3d;
+	   -moz-transform-style: preserve-3d;
+	    -ms-transform-style: preserve-3d;
+	     -o-transform-style: preserve-3d;
+	        transform-style: preserve-3d;
+	-webkit-user-select: none;
+	 -khtml-user-select: none;
+		-moz-user-select: none;
+		  -o-user-select: none;
+			  user-select: none;
 }
 
 #catalog_list .right {
@@ -1087,20 +1098,48 @@ a.button:active, input.button:active {
 	position: absolute;
 	top: 0;
 	left:0;
+	z-index:3;
+	
 }
 
 #catalog_list .item_block .image img.backup{
 	position: absolute;
 	top:0;
-	right:-9999px;
+	left:0;
+	z-index:2;
+	
+	-webkit-transform-origin: 70% 80%;
+   	-moz-transform-origin: 70% 80%;
+   	 -ms-transform-origin: 70% 80%;
+   	  -o-transform-origin: 70% 80%;
+			  transform-origin: 70% 80%;
+	-webkit-transform: scale3d(.1,.1,0);
+      -moz-transform: scale3d(.1,.1,0);
+       -ms-transform: scale3d(.1,.1,0);
+        -o-transform: scale3d(.1,.1,0);
+           transform: scale3d(.1,.1,0);
+           
+	-webkit-transition: -webkit-transform .5s ease-out, z-index 0s linear .5s;
+		-moz-transition: -moz-transform .5s ease-out, z-index 0s linear .5s;
+		 -ms-transition: -ms-transform .5s ease-out, z-index 0s linear .5s;
+		  -o-transition: -o-transform .5s ease-out, z-index 0s linear .5s;
+			  transition: transform .5s ease-out, z-index 0s linear .5s;
 }
 
-#catalog_list .item_block:hover .image img.backup ~ img.primary{
-	left: -9999px;
-}
-
-#catalog_list .item_block:hover .image img.backup{
-	right:0;
+#catalog_list .item_block:hover img.backup{
+	z-index:4;
+	
+	-webkit-transition: -webkit-transform .5s ease-out;
+		-moz-transition: -moz-transform .5s ease-out;
+		 -ms-transition: -ms-transform .5s ease-out;
+		  -o-transition: -o-transform .5s ease-out;
+			  transition: transform .5s ease-out;
+	
+	-webkit-transform: scale3d(1,1,1);
+      -moz-transform: scale3d(1,1,1);
+       -ms-transform: scale3d(1,1,1);
+        -o-transform: scale3d(1,1,1);
+           transform: scale3d(1,1,1);
 }
 
 #catalog_list .name {
