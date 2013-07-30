@@ -390,6 +390,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			$product_info['product_tags'] = $this->Model_Catalog_Product->getProductTags($product_id);
 			$product_info['product_store'] = $this->Model_Catalog_Product->getProductStores($product_id);
 			$product_info['product_attributes'] = $this->Model_Catalog_Product->getProductAttributes($product_id);
+			$product_info['product_options'] = $this->Model_Catalog_Product->getProductOptions($product_id);
 			$product_info['product_discounts'] = $this->Model_Catalog_Product->getProductDiscounts($product_id);
 			$product_info['product_specials'] = $this->Model_Catalog_Product->getProductSpecials($product_id);
 			$product_info['product_images'] = $this->Model_Catalog_Product->getProductImages($product_id);
@@ -484,7 +485,6 @@ class Admin_Controller_Catalog_Product extends Controller
 		);
 		
 		$this->data['data_manufacturers'] = array('' => $this->_('text_none')) + $this->Model_Catalog_Manufacturer->getManufacturers($m_data);
-		
 		$this->data['data_tax_classes'] = array('' => $this->_('text_none')) + $this->Model_Localisation_TaxClass->getTaxClasses();
 		$this->data['data_weight_classes'] = $this->Model_Localisation_WeightClass->getWeightClasses();
 		$this->data['data_length_classes'] = $this->Model_Localisation_LengthClass->getLengthClasses();
@@ -499,89 +499,86 @@ class Admin_Controller_Catalog_Product extends Controller
 		
 		$this->_('text_add_shipping_policy', $this->url->link('setting/shipping_policy'));
 		$this->_('text_add_return_policy', $this->url->link('setting/return_policy'));
-		
-		/**
-		* NOTE: to clarify options / product options
-		*
-		* An option contains a set of 1 or more option_values
-		*
-		* A product_option is associated to a product and contains product_option_values (a subset option_values from an option),
-		* A product_option_value has a reference to an option_value and contains additional data.
-		*
-		*/
-		
-		//Get Product Options with product_option_values
-		if (!isset($this->data['product_options'])) {
-			$product_options = $this->Model_Catalog_Product->getProductOptions($product_id);
-			
-			$this->data['product_options'] = array();
-			
-			foreach ($product_options as $product_option) {
-				$this->data['product_options'][$product_option['product_option_id']] = $product_option;
-				
-				$product_option_value_data = array();
-				
-				foreach ($product_option['product_option_value'] as $product_option_value) {
-					$pov_id = $product_option_value['product_option_value_id'];
-					
-					$product_option_value_data[$pov_id] = $product_option_value;
-					
-					//Add restrictions to the product_option_value
-					if (isset($restrictions[$pov_id])) {
-						$product_option_value_data[$pov_id]['restrictions'] = $restrictions[$pov_id];
-					}
-				}
-				
-				$this->data['product_options'][$product_option['product_option_id']]['product_option_value'] = $product_option_value_data;
-			}
-		}
-		
-		
-		//Get All option values currently assigned to this product in flat list (for option restrictions)
-		$this->data['all_product_option_values'] = array();
-		
-		foreach ($this->data['product_options'] as $key=>$product_option) {
-			if (!isset($product_option['product_option_value'])) {
-				$product_option['product_option_value'] = array();
-			}
-
-			foreach ($product_option['product_option_value'] as $product_option_value) {
-				$this->data['all_product_option_values'][$product_option_value['option_value_id']] = $product_option_value;
-			}
-		}
-		
-		//Get Set of Option Values
-		$this->data['option_values'] = array();
-		
-		foreach ($this->data['product_options'] as $product_option) {
-			if (!isset($this->data['option_values'][$product_option['option_id']])) {
-				$this->data['option_values'][$product_option['option_id']] = $this->Model_Catalog_Option->getOptionValues($product_option['option_id']);
-			}
-		}
-		
-		//Find set of option values that are not associated to a product_option
-		$this->data['unused_option_values'] = $this->data['option_values'];
-		
-		foreach ($this->data['unused_option_values'] as $option_id=>$option_value) {
-			foreach ($this->data['product_options'] as $product_option) {
-				if($product_option['option_id'] != $option_id)continue;
-				foreach ($product_option['product_option_value'] as $product_option_value) {
-					foreach ($option_value as $key=>$ov) {
-						if ($product_option_value['option_value_id'] == $ov['option_value_id']) {
-							unset($this->data['unused_option_values'][$option_id][$key]);
-						}
-					}
-				}
-			}
-		}
-		
 		$this->_('text_option_help', $this->config->get('config_email'));
 		$this->_('text_not_editable', $this->data['name'], $this->config->get('config_email'));
+		
+		//TODO: do we really need ths here?
+		$this->data['no_image'] = $this->image->resize('no_image.png', $this->config->get('config_image_admin_thumb_width'), $this->config->get('config_image_admin_thumb_height'));
 		
 		//Translations
 		$this->data['translations'] = $this->Model_Catalog_Product->getProductTranslations($product_id);
 		
-		$this->data['no_image'] = $this->image->resize('no_image.png', $this->config->get('config_image_admin_thumb_width'), $this->config->get('config_image_admin_thumb_height'));
+		$image_width = $this->config->get('config_image_product_option_width');
+		$image_height = $this->config->get('config_image_product_option_height');
+		
+		//Product Options Unused Option Values
+		foreach ($this->data['product_options'] as &$product_option) {
+			$filter = array(
+				'!option_value_ids' => array_column($product_option['product_option_values'], 'option_value_id'),
+			);
+			
+			$option_values = $this->Model_Catalog_Option->getOptionValues($product_option['option_id'], $filter);
+			
+			foreach ($option_values as &$option_value) {
+				$option_value['image'] = $this->image->resize($option_value['image'], $image_width, $image_height);
+			} unset($option_value);
+			
+			$product_option['unused_option_values'] = $option_values;
+			
+		} unset($product_option);
+			
+		//Product Options Templates
+		$product_option_value_restriction_defaults = array(
+			'product_option_value_id' => 0,
+			'restrict_option_value_id' => 0,
+		);
+		 
+		$product_option_value_restrictions = array();
+		 
+		$this->builder->addTemplateRow($product_option_value_resrictions, $product_option_value_restriction_defaults);
+		
+		$product_option_value_defaults = array(
+			'product_option_value_id' => 0,
+			'option_value_id' => '',
+			'name' => '',
+			'image' => '',
+			'quantity' => 1,
+			'subtract' => 1,
+			'cost' => '',
+			'price' => '',
+			'points' => '',
+			'weight' => '',
+			'sort_order' => 0,
+			'restrictions' => $product_option_value_restrictions,
+		);
+		
+		$product_option_values = array();
+		
+		$this->builder->addTemplateRow($product_option_values, $product_option_value_defaults);
+		
+		$unused_option_values = array();
+		
+		//Add Unused template row
+		$unused_template_defaults = array(
+			'option_value_id' => '',
+			'name' => '',
+		);
+		
+		$this->builder->addTemplateRow($unused_option_values, $unused_template_defaults);
+		
+		$product_option_defaults = array(
+			'product_option_id' => 0,
+			'option_id' => '',
+			'name' => '',
+			'display_name' => '',
+			'type' => '',
+			'required' => 1,
+			'sort_order' => 0,
+			'product_option_values' => $product_option_values,
+			'unused_option_values' => $unused_option_values,
+		);
+		
+		$this->builder->addTemplateRow($this->data['product_options'], $product_option_defaults);
 		
 		//Ajax Urls
 		$this->data['url_generate_url'] = $this->url->ajax('catalog/product/generate_url');
@@ -643,83 +640,39 @@ class Admin_Controller_Catalog_Product extends Controller
 		}
 		
 		if (isset($_POST['product_images'])) {
-			foreach ($_POST['product_images']  as $key=>$image) {
+			foreach ($_POST['product_images']  as $key => $image) {
 				if (strtolower($image['image']) == 'data/no_image.png' || !$image['image']) {
 					unset($_POST['product_images'][$key]);
 				}
 			}
 		}
 		
-		$product_options = isset($_POST['product_options']) ? $_POST['product_options'] : false;
 		//validate the quantities
-		if ($product_options) {
-			$po_quantity = array();
-			
-			foreach ($product_options as $option_id=>$product_option) {
-				if (!isset($product_option['product_option_value'])) {
-					$this->error["option-value$option_id"] = $this->_('error_no_option_value', $product_option['name']);
+		if (!empty($_POST['product_options'])) {
+			foreach ($_POST['product_options'] as $option_id => $product_option) {
+				if (empty($product_option['product_option_values'])) {
+					$this->error["option_value$option_id"] = $this->_('error_no_option_value', $product_option['name']);
 					continue;
 				}
 				
-				if(!$product_option['required']) continue;
-				
-				if ((string)$po_quantity != 'INF') {
-					$po_quantity[$option_id] = 0;
-				}
-				
-				foreach ($product_option['product_option_value'] as $option_value_id=>$product_option_value) {
-					if (!$product_option_value['subtract']) {
-						$po_quantity = 'INF';
-						continue;
-					}
-					
-					if ((string)$po_quantity != 'INF') {
-						$po_quantity[$option_id] += (int)$product_option_value['quantity'];
-					}
-					
-					if (isset($product_option_value['restrictions'])) {
-						$restrict_quantity = 0;
-						
+				//Validate Product Option Value Restrictions
+				foreach ($product_option['product_option_values'] as $product_option_value_id => $product_option_value) {
+					if (!empty($product_option_value['restrictions'])) {
 						foreach ($product_option_value['restrictions'] as $r_key=>$restriction) {
-							$restrict_quantity += (int)$restriction['quantity'];
-						}
-						
-						if ($restrict_quantity > (int)$product_option_value['quantity']) {
-							$this->error["product_options[$option_id][product_option_value][$option_value_id][quantity]"] = $this->_('error_restrict_quantity', $product_option_value['quantity'], $restrict_quantity);
-						}
-					}
-				}
-			}
-			
-			if ($po_quantity != 'INF' && min($po_quantity) < (int)$_POST['quantity']) {
-				$this->error['quantity'] = $this->_('error_po_quantity', $_POST['quantity'], min($po_quantity));
-			}
-		}
-		
-		//validate the option restrictions
-		if ($product_options) {
-			foreach ($product_options as $option_id=>$product_option) {
-				if (!isset($product_option['product_option_value'])) {
-					continue;
-				}
-				
-				foreach ($product_option['product_option_value'] as $option_value_id=>$product_option_value) {
-					if (isset($product_option_value['restrictions'])) {
-						foreach ($product_option_value['restrictions'] as $r_key=>$restriction) {
-							if ($restriction['restrict_option_value_id'] == $option_value_id) {
-								$this->error["product_options[$option_id][product_option_value][$option_value_id][restrictions][$r_key][restrict_option_value_id]"] = $this->_('error_pov_restrict_same');
+							if ($restriction['restrict_option_value_id'] == $product_option_value_id) {
+								$this->error["product_options[$option_id][product_option_value][$product_option_value_id][restrictions][$r_key][restrict_option_value_id]"] = $this->_('error_pov_restrict_same');
 							}
 							
 							foreach ($product_option_value['restrictions'] as $r_key2=>$restriction2) {
 								if ($r_key != $r_key2) {
 									if ($restriction['restrict_option_value_id'] == $restriction2['restrict_option_value_id']) {
-										$this->error["product_options[$option_id][product_option_value][$option_value_id][restrictions][$r_key][restrict_option_value_id]"] = $this->_('error_dup_restrict');
+										$this->error["product_options[$option_id][product_option_value][$product_option_value_id][restrictions][$r_key][restrict_option_value_id]"] = $this->_('error_dup_restrict');
 									}
 								}
 							}
 							
 							if (isset($product_option['product_option_value'][$restriction['restrict_option_value_id']])) {
-								$this->error["product_options[$option_id][product_option_value][$option_value_id][restrictions][$r_key][restrict_option_value_id]"] = sprintf($this->_('error_restrict_same_option_id'), ucfirst($product_option['type']));
+								$this->error["product_options[$option_id][product_option_value][$product_option_value_id][restrictions][$r_key][restrict_option_value_id]"] = sprintf($this->_('error_restrict_same_option_id'), ucfirst($product_option['type']));
 							}
 						}
 					}
@@ -794,84 +747,51 @@ class Admin_Controller_Catalog_Product extends Controller
 	
 	public function autocomplete()
 	{
-		$json = array();
+		//Sort
+		$sort = $this->sort->getQueryDefaults('name', 'ASC', $this->config->get('config_autocomplete_limit'));
 		
-		$query_args = array(
-			'start' => 0,
-			'limit' => 20,
-		);
+		//Filter
+		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 		
-		$data = array();
+		//Label and Value
+		$label = !empty($_GET['label']) ? $_GET['label'] : 'name';
+		$value = !empty($_GET['value']) ? $_GET['value'] : 'product_id';
 		
-		foreach ($query_args as $key => $default) {
-			if (isset($_GET[$key])) {
-				$data[$key] = $_GET[$key];
-			} elseif (!is_null($default)) {
-				$data[$key] = $default;
-			}
-		}
+		//Load Sorted / Filtered Data
+		$products = $this->Model_Catalog_Product->getProducts($sort + $filter);
 		
-		$data += !empty($_GET['filter']) ? $_GET['filter'] : array();
-		
-		$results = $this->Model_Catalog_Product->getProducts($data);
-		
-		foreach ($results as $result) {
-			$option_data = array();
+		foreach ($products as &$product) {
+			$product['label'] = $product[$label];
+			$product['value'] = $product[$value];
 			
-			$product_options = $this->Model_Catalog_Product->getProductOptions($result['product_id']);
+			$product['name'] = html_entity_decode($product['name'], ENT_QUOTES, 'UTF-8');
+			$product['thumb'] = $this->image->resize($product['image'], 100,100);
 			
-			foreach ($product_options as $product_option) {
-				$option_value_data = array();
-				
-				foreach ($product_option['product_option_value'] as $product_option_value) {
-					$option_value_data[] = array(
-						'product_option_value_id' => $product_option_value['product_option_value_id'],
-						'option_value_id'			=> $product_option_value['option_value_id'],
-						'name'						=> $product_option_value['name'],
-						'price'						=> (float)$product_option_value['price'] ? $this->currency->format($product_option_value['price'], $this->config->get('config_currency')) : false,
-					);
+			$product_options = $this->Model_Catalog_Product->getProductOptions($product['product_id']);
+			
+			foreach ($product_options as &$product_option) {
+				foreach ($product_option['product_option_value'] as &$product_option_value) {
+					$product_option_value['price'] = $this->currency->format($product_option_value['price']);
 				}
+			} unset($product_option);
 			
-				$option_data[] = array(
-					'product_option_id' => $product_option['product_option_id'],
-					'option_id'			=> $product_option['option_id'],
-					'name'				=> $product_option['name'],
-					'type'				=> $product_option['type'],
-					'option_value'		=> $option_value_data,
-					'required'			=> $product_option['required']
-				);
-			}
-			
-			$json[] = array(
-				'product_id' => $result['product_id'],
-				'name'		=> html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8'),
-				'model'		=> $result['model'],
-				'option'	=> $option_data,
-				'image'		=> $result['image'],
-				'thumb'		=> $this->image->resize($result['image'], 100,100),
-				'price'		=> $result['price']
-			);
-		}
-
-		$this->response->setOutput(json_encode($json));
+		} unset($product);
+		
+		//JSON response
+		$this->response->setOutput(json_encode($products));
 	}
-
+	
 	public function generate_url()
 	{
-		$name = isset($_POST['name'])?$_POST['name']:'';
-		$product_id = isset($_POST['product_id'])?$_POST['product_id']:'';
-		if(!$name)return;
-		
-		echo json_encode($this->Model_Catalog_Product->generate_url($product_id,$name));
-		exit;
+		if (!empty($_POST['name']) && !empty($_POST['product_id'])) {
+			$this->response->setOutput(json_encode($this->Model_Catalog_Product->generate_url($_POST['product_id'],$_POST['name'])));
+		}
 	}
 	
 	public function generate_model()
 	{
-		$name = isset($_POST['name'])?$_POST['name']:'';
-		if(!$name)return;
-		
-		echo json_encode($this->Model_Catalog_Product->generate_model($name));
-		exit;
+		if (!empty($_POST['name'])) {
+			$this->response->setOutput(json_encode($this->Model_Catalog_Product->generate_model($_POST['name'])));
+		}
 	}
 }

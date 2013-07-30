@@ -131,7 +131,7 @@ class Admin_Model_Block_Block extends Model
 				$content = file_get_contents($front_template);
 				
 				$insertables = array(
-					'slug' => $this->tool->get_slug($data['route']),
+					'slug' => $this->tool->getSlug($data['route']),
 				);
 				
 				$content = $this->tool->insertables($insertables, $content, '__', '__');
@@ -210,7 +210,7 @@ class Admin_Model_Block_Block extends Model
 	
 	public function getBlock($name)
 	{
-		$block = $this->queryRow("SELECT * FROM " . DB_PREFIX . "block WHERE `name` = '" . $this->db->escape($name) . "'");
+		$block = $this->queryRow("SELECT * FROM " . DB_PREFIX . "block WHERE `name` = '" . $this->escape($name) . "'");
 		
 		if ($block) {
 			if (!empty($block['settings'])) {

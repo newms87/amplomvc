@@ -19,13 +19,14 @@ class Admin_Controller_Common_Header extends Controller
 		
 		//Add Styles
 		$this->document->addStyle(HTTP_THEME_STYLE . 'style.css');
-		$this->document->addStyle(HTTP_JS . 'jquery/ui/themes/ui-lightness/jquery-ui-1.9.2.custom.css');
+		$this->document->addStyle(HTTP_JS . 'jquery/ui/themes/ui-lightness/jquery-ui.custom.css');
 		
 		//Add Scripts
-		$this->document->addScript(HTTP_JS . 'jquery/jquery-1.7.1.min.js');
-		$this->document->addScript(HTTP_JS . 'jquery/ui/jquery-ui-1.9.2.custom.min.js');
-		$this->document->addScript(HTTP_JS . 'jquery/tabs.js');
-		$this->document->addScript(HTTP_THEME_JS . 'common.js');
+		$this->document->addScript(HTTP_JS . 'jquery/jquery.js', 50);
+		$this->document->addScript(HTTP_JS . 'jquery/ui/jquery-ui.js', 51);
+		$this->document->addScript(HTTP_JS . 'jquery/tabs.js', 52);
+		$this->document->addScript(HTTP_THEME_JS . 'common.js', 53);
+		$this->document->localizeScript(DIR_APPLICATION . 'view/javascript/ac_vars.php');
 		
 		$this->data['messages'] = $this->message->fetch();
 		
@@ -69,7 +70,7 @@ class Admin_Controller_Common_Header extends Controller
 			
 			foreach ($stores as $index => $store) {
 				$link_store_setting = array(
-					'name' => 'system_settings_stores_' . $this->tool->get_slug($store['name']),
+					'name' => 'system_settings_stores_' . $this->tool->getSlug($store['name']),
 					'display_name' => $store['name'],
 					'href' => $this->url->link('setting/store/update', 'store_id=' . $store['store_id']),
 					'parent' => 'system_settings_stores',
@@ -127,7 +128,7 @@ class Admin_Controller_Common_Header extends Controller
 		
 		
 		$this->data['css_styles'] = $this->document->getStyles();
-		$this->data['js_scripts'] = $this->document->getScripts();
+		$this->data['scripts'] = $this->document->renderScripts();
 		
 		
 		//Failed Email Messages warnings

@@ -5,7 +5,7 @@ class Admin_Model_Setting_Extension extends Model
 	{
 		$extension_data = array();
 		
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "extension WHERE `type` = '" . $this->db->escape($type) . "'");
+		$query = $this->query("SELECT * FROM " . DB_PREFIX . "extension WHERE `type` = '" . $this->escape($type) . "'");
 		
 		foreach ($query->rows as $result) {
 			$extension_data[] = $result['code'];
@@ -16,11 +16,11 @@ class Admin_Model_Setting_Extension extends Model
 	
 	public function install($type, $code)
 	{
-		$this->query("INSERT INTO " . DB_PREFIX . "extension SET `type` = '" . $this->db->escape($type) . "', `code` = '" . $this->db->escape($code) . "'");
+		$this->query("INSERT INTO " . DB_PREFIX . "extension SET `type` = '" . $this->escape($type) . "', `code` = '" . $this->escape($code) . "'");
 	}
 	
 	public function uninstall($type, $code)
 	{
-		$this->query("DELETE FROM " . DB_PREFIX . "extension WHERE `type` = '" . $this->db->escape($type) . "' AND `code` = '" . $this->db->escape($code) . "'");
+		$this->query("DELETE FROM " . DB_PREFIX . "extension WHERE `type` = '" . $this->escape($type) . "' AND `code` = '" . $this->escape($code) . "'");
 	}
 }

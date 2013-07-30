@@ -295,7 +295,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			'description',
 		);
 		
-		$this->data['translations'] = $this->translation->get_translations('information', $information_id, $translate_fields);
+		$this->data['translations'] = $this->translation->getTranslations('information', $information_id, $translate_fields);
 		
 		//Dependencies
 		$this->children = array(

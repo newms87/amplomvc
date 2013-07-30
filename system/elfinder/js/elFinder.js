@@ -701,9 +701,6 @@ window.elFinder = function(node, opts) {
 		var file = files[hash],
 			url = file && file.tmb && file.tmb != 1 ? cwdOptions['tmbUrl'] + file.tmb : '';
 		
-		if (url && ($.browser.opera || $.browser.msie)) {
-			url += '?_=' + new Date().getTime();
-		}
 		return url;
 	}
 	
@@ -1902,7 +1899,7 @@ elFinder.prototype = {
 					}),
 				name = 'iframe-'+self.namespace+(++self.iframeCnt),
 				form = $('<form action="'+self.uploadURL+'" method="post" enctype="multipart/form-data" encoding="multipart/form-data" target="'+name+'" style="display:none"><input type="hidden" name="cmd" value="upload" /></form>'),
-				msie = $.browser.msie,
+				msie = false,
 				// clear timeouts, close notification dialog, remove form/iframe
 				onload = function() {
 					abortto  && clearTimeout(abortto);
@@ -2084,7 +2081,7 @@ elFinder.prototype = {
 			
 			xhr.send(formData);
 
-			if (!$.browser.safari || !data.files) {
+			if (!data.files) {
 				notifyto = startNotify();
 			}
 			

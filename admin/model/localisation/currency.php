@@ -3,7 +3,7 @@ class Admin_Model_Localisation_Currency extends Model
 {
 	public function addCurrency($data)
 	{
-		$this->query("INSERT INTO " . DB_PREFIX . "currency SET title = '" . $this->db->escape($data['title']) . "', code = '" . $this->db->escape($data['code']) . "', symbol_left = '" . $this->db->escape($data['symbol_left']) . "', symbol_right = '" . $this->db->escape($data['symbol_right']) . "', decimal_place = '" . $this->db->escape($data['decimal_place']) . "', value = '" . $this->db->escape($data['value']) . "', status = '" . (int)$data['status'] . "', date_modified = NOW()");
+		$this->query("INSERT INTO " . DB_PREFIX . "currency SET title = '" . $this->escape($data['title']) . "', code = '" . $this->escape($data['code']) . "', symbol_left = '" . $this->escape($data['symbol_left']) . "', symbol_right = '" . $this->escape($data['symbol_right']) . "', decimal_place = '" . $this->escape($data['decimal_place']) . "', value = '" . $this->escape($data['value']) . "', status = '" . (int)$data['status'] . "', date_modified = NOW()");
 
 		if ($this->config->get('config_currency_auto')) {
 			$this->updateCurrencies(true);
@@ -14,7 +14,7 @@ class Admin_Model_Localisation_Currency extends Model
 	
 	public function editCurrency($currency_id, $data)
 	{
-		$this->query("UPDATE " . DB_PREFIX . "currency SET title = '" . $this->db->escape($data['title']) . "', code = '" . $this->db->escape($data['code']) . "', symbol_left = '" . $this->db->escape($data['symbol_left']) . "', symbol_right = '" . $this->db->escape($data['symbol_right']) . "', decimal_place = '" . $this->db->escape($data['decimal_place']) . "', value = '" . $this->db->escape($data['value']) . "', status = '" . (int)$data['status'] . "', date_modified = NOW() WHERE currency_id = '" . (int)$currency_id . "'");
+		$this->query("UPDATE " . DB_PREFIX . "currency SET title = '" . $this->escape($data['title']) . "', code = '" . $this->escape($data['code']) . "', symbol_left = '" . $this->escape($data['symbol_left']) . "', symbol_right = '" . $this->escape($data['symbol_right']) . "', decimal_place = '" . $this->escape($data['decimal_place']) . "', value = '" . $this->escape($data['value']) . "', status = '" . (int)$data['status'] . "', date_modified = NOW() WHERE currency_id = '" . (int)$currency_id . "'");
 
 		$this->cache->delete('currency');
 	}
@@ -35,7 +35,7 @@ class Admin_Model_Localisation_Currency extends Model
 	
 	public function getCurrencyByCode($currency)
 	{
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "currency WHERE code = '" . $this->db->escape($currency) . "'");
+		$query = $this->query("SELECT * FROM " . DB_PREFIX . "currency WHERE code = '" . $this->escape($currency) . "'");
 	
 		return $query->row;
 	}
@@ -113,9 +113,9 @@ class Admin_Model_Localisation_Currency extends Model
 			$data = array();
 			
 			if ($force) {
-				$query = $this->query("SELECT * FROM " . DB_PREFIX . "currency WHERE code != '" . $this->db->escape($this->config->get('config_currency')) . "'");
+				$query = $this->query("SELECT * FROM " . DB_PREFIX . "currency WHERE code != '" . $this->escape($this->config->get('config_currency')) . "'");
 			} else {
-				$query = $this->query("SELECT * FROM " . DB_PREFIX . "currency WHERE code != '" . $this->db->escape($this->config->get('config_currency')) . "' AND date_modified < '" .  $this->db->escape(date('Y-m-d H:i:s', strtotime('-1 day'))) . "'");
+				$query = $this->query("SELECT * FROM " . DB_PREFIX . "currency WHERE code != '" . $this->escape($this->config->get('config_currency')) . "' AND date_modified < '" .  $this->escape(date('Y-m-d H:i:s', strtotime('-1 day'))) . "'");
 			}
 			
 			foreach ($query->rows as $result) {
@@ -138,11 +138,11 @@ class Admin_Model_Localisation_Currency extends Model
 				$value = substr($line, 11, 6);
 				
 				if ((float)$value) {
-					$this->query("UPDATE " . DB_PREFIX . "currency SET value = '" . (float)$value . "', date_modified = '" .  $this->db->escape(date('Y-m-d H:i:s')) . "' WHERE code = '" . $this->db->escape($currency) . "'");
+					$this->query("UPDATE " . DB_PREFIX . "currency SET value = '" . (float)$value . "', date_modified = '" .  $this->escape(date('Y-m-d H:i:s')) . "' WHERE code = '" . $this->escape($currency) . "'");
 				}
 			}
 			
-			$this->query("UPDATE " . DB_PREFIX . "currency SET value = '1.00000', date_modified = '" .  $this->db->escape(date('Y-m-d H:i:s')) . "' WHERE code = '" . $this->db->escape($this->config->get('config_currency')) . "'");
+			$this->query("UPDATE " . DB_PREFIX . "currency SET value = '1.00000', date_modified = '" .  $this->escape(date('Y-m-d H:i:s')) . "' WHERE code = '" . $this->escape($this->config->get('config_currency')) . "'");
 			
 			$this->cache->delete('currency');
 		}

@@ -59,6 +59,7 @@ class Admin_Controller_Setting_Setting extends Controller
 			'config_weight_class_id' => 0,
 			'config_catalog_limit' => 10,
 			'config_admin_limit' => 20,
+			'config_autocomplete_limit' => 10,
 			'config_performance_log' => 0,
 			'config_default_return_policy' => 0,
 			'config_default_shipping_policy' => 0,

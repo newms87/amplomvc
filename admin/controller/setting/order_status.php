@@ -24,7 +24,7 @@ class Admin_Controller_Setting_OrderStatus extends Controller
 		$this->breadcrumb->add($this->_('text_settings'), $this->url->link('setting/setting'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/order_status'));
 		
-		$this->data['action'] = $this->url->link('setting/order_status');
+		$this->data['save'] = $this->url->link('setting/order_status');
 		$this->data['cancel'] = $this->url->link('setting/store');
 		
 		if (!$this->request->isPost()) {
@@ -44,19 +44,15 @@ class Admin_Controller_Setting_OrderStatus extends Controller
 			}
 		} unset($order_status);
 
-		//Defaults
+		
+		//Add in the template row
 		$defaults = array(
 			'title' => $this->_('entry_title'),
 		);
 		
-		if (empty($order_statuses)) {
-			$order_statuses[0] = $defaults;
-		}
+		$this->builder->addTemplateRow($order_statuses, $defaults);
 		
-		//Add in the template row
-		$this->tool->add_template_row($order_statuses);
-		
-		$this->data['template_row_defaults'] = $defaults;
+		$this->data['template_defaults'] = $defaults;
 		
 		//Get the Field Translations
 		$translate_fields = array(
@@ -64,7 +60,7 @@ class Admin_Controller_Setting_OrderStatus extends Controller
 		);
 		
 		foreach ($order_statuses as $key => &$order_status) {
-			$order_status['translations'] = $this->translation->get_translations('order_statuses', $key, $translate_fields);
+			$order_status['translations'] = $this->translation->getTranslations('order_statuses', $key, $translate_fields);
 		} unset($order_status);
 
 		$this->data['order_statuses'] = $order_statuses;

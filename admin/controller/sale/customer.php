@@ -1102,41 +1102,29 @@ class Admin_Controller_Sale_Customer extends Controller
 
 	public function autocomplete()
 	{
-		$json = array();
+		//Sort
+		$sort = $this->sort->getQueryDefaults('name', 'ASC', $this->config->get('config_autocomplete_limit'));
 		
-		if (isset($_GET['filter_name'])) {
-			$data = array(
-				'filter_name' => $_GET['filter_name'],
-				'start'		=> 0,
-				'limit'		=> 20
-			);
+		//Filter
+		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 		
-			$results = $this->Model_Sale_Customer->getCustomers($data);
+		//Label and Value
+		$label = !empty($_GET['label']) ? $_GET['label'] : 'name';
+		$value = !empty($_GET['value']) ? $_GET['value'] : 'customer_id';
+		
+		//Load Sorted / Filtered Data
+		$customers = $this->Model_Sale_Customer->getCustomers($sort + $filter);
+		
+		foreach ($customers as &$customer) {
+			$customer['label'] = $customer[$label];
+			$customer['value'] = $customer[$value];
 			
-			foreach ($results as $result) {
-				$json[] = array(
-					'customer_id'	=> $result['customer_id'],
-					'name'			=> html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8'),
-					'customer_group' => $result['customer_group'],
-					'firstname'		=> $result['firstname'],
-					'lastname'		=> $result['lastname'],
-					'email'			=> $result['email'],
-					'telephone'		=> $result['telephone'],
-					'fax'				=> $result['fax'],
-					'address'		=> $this->Model_Sale_Customer->getAddresses($result['customer_id'])
-				);
-			}
-		}
-
-		$sort_order = array();
-	
-		foreach ($json as $key => $value) {
-			$sort_order[$key] = $value['name'];
-		}
-
-		array_multisort($sort_order, SORT_ASC, $json);
-
-		$this->response->setOutput(json_encode($json));
+			$customer['name'] = html_entity_decode($customer['name'], ENT_QUOTES, 'UTF-8');
+			$customer['address'] = $this->Model_Sale_Customer->getAddresses($customer['customer_id']);
+		} unset($customer);
+		
+		//JSON output
+		$this->response->setOutput(json_encode($customers));
 	}
 	
 	public function address()

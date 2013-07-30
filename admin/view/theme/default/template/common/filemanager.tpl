@@ -5,9 +5,9 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-	<script src="<?= ELFINDER_URL; ?>jquery/jquery-1.7.2.min.js" type="text/javascript" charset="utf-8"></script>
-	<script src="<?= ELFINDER_URL; ?>jquery/jquery-ui-1.8.18.custom.min.js" type="text/javascript" charset="utf-8"></script>
-	<link rel="stylesheet" href="<?= ELFINDER_URL; ?>jquery/ui-themes/smoothness/jquery-ui-1.8.18.custom.css" type="text/css" media="screen" title="no title" charset="utf-8">
+	<script src="<?= HTTP_JS; ?>jquery/jquery.js" type="text/javascript" charset="utf-8"></script>
+	<script src="<?= HTTP_JS; ?>jquery/ui/jquery-ui.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" href="<?= HTTP_JS; ?>jquery/ui/themes/ui-lightness/jquery-ui.custom.css" type="text/css" media="screen" title="no title" charset="utf-8">
 
 	<link rel="stylesheet" href="<?= ELFINDER_URL; ?>css/common.css"			type="text/css" media="screen" charset="utf-8">
 	<link rel="stylesheet" href="<?= ELFINDER_URL; ?>css/dialog.css"			type="text/css" media="screen" charset="utf-8">

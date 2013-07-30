@@ -4,9 +4,9 @@
 <head>
 <title><?= $heading_title; ?></title>
 <base href="<?= $base; ?>" />
-<script type="text/javascript" src="<?= HTTP_JS . "jquery/jquery-1.7.1.min.js"; ?>"></script>
-<script type="text/javascript" src="<?= HTTP_JS . "jquery/ui/jquery-ui-1.8.16.custom.min.js"; ?>"></script>
-<link rel="stylesheet" type="text/css" href="<?= HTTP_JS . "jquery/ui/themes/ui-lightness/jquery-ui-1.8.16.custom.css"; ?>" />
+<script type="text/javascript" src="<?= HTTP_JS . "jquery/jquery.js"; ?>"></script>
+<script type="text/javascript" src="<?= HTTP_JS . "jquery/ui/jquery-ui.js"; ?>"></script>
+<link rel="stylesheet" type="text/css" href="<?= HTTP_JS . "jquery/ui/themes/ui-lightness/jquery-ui.custom.css"; ?>" />
 <script type="text/javascript" src="<?= HTTP_JS . "jquery/ui/external/jquery.bgiframe-2.1.2.js"; ?>"></script>
 <script type="text/javascript" src="<?= HTTP_JS . "jquery/jstree/jquery.tree.min.js"; ?>"></script>
 <script type="text/javascript" src="<?= HTTP_JS . "jquery/ajaxupload.js"; ?>"></script>

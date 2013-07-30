@@ -48,20 +48,15 @@ class Admin_Controller_Setting_ShippingPolicy extends Controller
 			}
 		} unset($shipping_policy);
 
-		//Defaults
+		//Add in the template row
 		$defaults = array(
 			'title' => $this->_('entry_title'),
 			'description' => $this->_('entry_description'),
 		);
 		
-		if (empty($shipping_policies)) {
-			$shipping_policies[0] = $defaults;
-		}
+		$this->builder->addTemplateRow($shipping_policies, $defaults);
 		
-		//Add in the template row
-		$this->tool->add_template_row($shipping_policies);
-		
-		$this->data['template_row_defaults'] = $defaults;
+		$this->data['template_defaults'] = $defaults;
 		
 		//Get the Field Translations
 		$translate_fields = array(
@@ -70,7 +65,7 @@ class Admin_Controller_Setting_ShippingPolicy extends Controller
 		);
 		
 		foreach ($shipping_policies as $key => &$shipping_policy) {
-			$shipping_policy['translations'] = $this->translation->get_translations('shipping_policies', $key, $translate_fields);
+			$shipping_policy['translations'] = $this->translation->getTranslations('shipping_policies', $key, $translate_fields);
 		} unset($shipping_policy);
 
 		$this->data['shipping_policies'] = $shipping_policies;

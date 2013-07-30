@@ -91,6 +91,11 @@ abstract class Model
 		return $this->db->queryVar($sql);
 	}
 	
+	protected function escape($value)
+	{
+		return $this->db->escape($value);
+	}
+	
 	/**
 	* Use to select rows from a talbe in the database
 	*

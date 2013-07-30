@@ -9,7 +9,7 @@ class Catalog_Model_Setting_Setting extends Model
 		
 		$data = array();
 		
-		$settings = $this->queryRows("SELECT * FROM " . DB_PREFIX . "setting WHERE store_id IN (0, " . (int)$store_id . ") AND `group` = '" . $this->db->escape($group) . "'");
+		$settings = $this->queryRows("SELECT * FROM " . DB_PREFIX . "setting WHERE store_id IN (0, " . (int)$store_id . ") AND `group` = '" . $this->escape($group) . "'");
 		
 		foreach ($settings as $setting) {
 			$value = $setting['serialized'] ? unserialize($setting['value']) : $setting['value'];
@@ -37,7 +37,7 @@ class Catalog_Model_Setting_Setting extends Model
 			$store_id = $this->config->get('config_store_id');
 		}
 		
-		$setting = $this->queryRow("SELECT * FROM " . DB_PREFIX . "setting WHERE `group` = '" . $this->db->escape($group) . "' AND `key` = '" . $this->db->escape($key) . "' AND store_id IN (0, " . (int)$store_id . ")");
+		$setting = $this->queryRow("SELECT * FROM " . DB_PREFIX . "setting WHERE `group` = '" . $this->escape($group) . "' AND `key` = '" . $this->escape($key) . "' AND store_id IN (0, " . (int)$store_id . ")");
 		
 		$value = $setting['serialized'] ? unserialize($setting['value']) : $setting['value'];
 		
@@ -66,7 +66,7 @@ class Catalog_Model_Setting_Setting extends Model
 		if (is_array($value)) {
 			foreach ($value as $entry_key => $entry) {
 				if (is_array($entry) && isset($entry['translations'])) {
-					$this->translation->set_translations($key, $entry_key, $entry['translations']);
+					$this->translation->setTranslations($key, $entry_key, $entry['translations']);
 					unset($value[$entry_key]['translations']);
 				}
 			}
@@ -101,7 +101,7 @@ class Catalog_Model_Setting_Setting extends Model
 		$setting_id = $this->insert('setting',  $values);
 		
 		if (!empty($translations)) {
-			$this->translation->set_translations('setting', $setting_id, $translations);
+			$this->translation->setTranslations('setting', $setting_id, $translations);
 		}
 		
 		$this->cache->delete('setting');

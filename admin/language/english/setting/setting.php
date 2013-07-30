@@ -53,6 +53,7 @@ $_['entry_length_class']		= 'Length Class:';
 $_['entry_weight_class']		= 'Weight Class:';
 $_['entry_catalog_limit'] 		= 'Default Items Per Page (Catalog):<br /><span class="help">Determines how many catalog items are shown per page (products, categories, etc)</span>';
 $_['entry_admin_limit']			= 'Default Items Per Page (Admin):<br /><span class="help">Determines how many admin items are shown per page (orders, customers, etc)</span>';
+$_['entry_autocomplete_limit']			= 'Default Autocomplete Limit:<br /><span class="help">Determines how many autocomplete items are retrieved at a time</span>';
 $_['entry_performance_log']		= 'Performance Logging:';
 $_['entry_default_return_policy'] = "Default Return Policy:";
 $_['entry_default_shipping_policy'] = "Default Shipping Policy:";

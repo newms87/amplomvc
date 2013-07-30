@@ -9,6 +9,51 @@ function getQuerystring(key, defaultValue) {
 		return qs[1];
 }
 
+//A jQuery Plugin to update the sort orders columns (or any column needing to be indexed)
+$.fn.update_index = function(column) {
+	column = column || '.sort_order';
+	
+	return this.each(function(i,ele){
+		count = 0;
+		$(ele).find(column).each(function(i,e){
+			$(e).val(count++);
+		});
+	});
+}
+
+$.fn.flash_highlight = function() {
+	pos = this.offset();
+	
+	var ele = $('<div />');
+	
+	ele.css({
+			background: 'rgba(255,255,255,0)',
+			position: 'absolute',
+			top: pos.top,
+			left: pos.left,
+			opacity: .8,
+			'z-index': 10000
+		})
+		.width($(this).width())
+		.height($(this).height());
+	
+	$('body').css({position: 'relative'});
+	$('body').append(ele);
+	
+	ele.animate({'background-color': 'rgba(255,255,85,1)'}, {duration: 300, always: function(){
+		ele.animate({'background-color': 'rgba(255,255,255,0)'}, {duration: 700, always: function(){ele.remove()}});
+	}});
+	
+	return this;
+}
+
+String.prototype.str_replace = function(find, replace) {
+  var str = this;
+  for (var i = 0; i < find.length; i++) {
+    str = str.replace(find[i], replace[i]);
+  }
+  return str;
+};
 
 //-----------------------------------------
 // Submit form on enter key

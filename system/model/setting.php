@@ -89,7 +89,7 @@ class System_Model_Setting extends Model
 						$this->translation->deleteAll($key);
 					}
 					
-					$this->translation->set_translations($key, $entry_key, $entry['translations']);
+					$this->translation->setTranslations($key, $entry_key, $entry['translations']);
 					
 					unset($value[$entry_key]['translations']);
 					

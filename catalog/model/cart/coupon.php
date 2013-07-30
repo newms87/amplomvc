@@ -3,7 +3,7 @@ class Catalog_Model_Cart_Coupon extends Model
 {
 	public function getCoupon($code)
 	{
-		$code = $this->db->escape($code);
+		$code = $this->escape($code);
 		
 		$coupon_query = $this->query("SELECT * FROM " . DB_PREFIX . "coupon WHERE (LCASE(coupon_id) = LCASE('$code') OR LCASE(code) = LCASE('$code')) AND ((date_start = '0000-00-00' OR date_start <= NOW()) AND (date_end = '0000-00-00' OR date_end >= NOW())) AND status = '1'");
 		

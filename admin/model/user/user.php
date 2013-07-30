@@ -65,12 +65,12 @@ class Admin_Model_User_User extends Model
 	
 	public function getUserByUsername($username)
 	{
-		return $this->queryRow("SELECT * FROM `" . DB_PREFIX . "user` WHERE username = '" . $this->db->escape($username) . "'");
+		return $this->queryRow("SELECT * FROM `" . DB_PREFIX . "user` WHERE username = '" . $this->escape($username) . "'");
 	}
 		
 	public function getUserByCode($code)
 	{
-		return $this->queryRow("SELECT * FROM `" . DB_PREFIX . "user` WHERE code = '" . $this->db->escape($code) . "' AND code != ''");
+		return $this->queryRow("SELECT * FROM `" . DB_PREFIX . "user` WHERE code = '" . $this->escape($code) . "' AND code != ''");
 	}
 		
 	public function getUsers($data = array(), $select = '*', $total = false)
@@ -124,6 +124,6 @@ class Admin_Model_User_User extends Model
 	
 	public function getTotalUsersByEmail($email)
 	{
-		return $this->queryVar("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "user` WHERE email = '" . $this->db->escape($email) . "'");
+		return $this->queryVar("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "user` WHERE email = '" . $this->escape($email) . "'");
 	}
 }

@@ -10,7 +10,7 @@
 			</div>
 		</div>
 		<div class="content">
-			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
+			<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="form">
 					<tr>
 						<td class="required"> <?= $entry_name; ?></td>
@@ -45,27 +45,25 @@
 						</td>
 						<td>
 							<ol id="product_list" class="scrollbox editable_list">
-								<? if(!empty($products)) { ?>
-								<? foreach ($products as $product) { ?>
-								<li>
-									<div class='editable_label'>
-											<input type="hidden" class='ac_item_id' name="products[<?= $product['product_id']; ?>][product_id]" value="<?= $product['product_id']; ?>" />
-											<input type="text" size="60" name="products[<?= $product['product_id']; ?>][name]" value="<?= $product['name']; ?>" />
+								<? foreach ($products as $row => $product) { ?>
+								<li data-row="<?= $row; ?>" data-id="<?= $product['product_id']; ?>">
+									<div class='product editable_label'>
+										<input type="hidden" class='ac_item_id' name="products[<?= $row; ?>][product_id]" value="<?= $product['product_id']; ?>" />
+										<input type="text" size="60" name="products[<?= $row; ?>][name]" value="<?= $product['name']; ?>" />
 									</div>
 									<img onclick="$(this).parent().remove()" src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" />
 								</li>
-								<? } ?>
 								<? } ?>
 							</ol>
 						</td>
 					</tr>
 					<tr>
-						<td class="required"> <?= $entry_category; ?></td>
+						<td class="required"><?= $entry_category; ?></td>
 						<? $this->builder->set_config('category_id', 'name');?>
 						<td><?= $this->builder->build('multiselect', $data_categories, "categories", $categories); ?></td>
 					</tr>
 					<tr>
-						<td class="required"> <?= $entry_store; ?></td>
+						<td class="required"><?= $entry_store; ?></td>
 						<? $this->builder->set_config('store_id', 'name');?>
 						<td><?= $this->builder->build('multiselect', $data_stores, "stores", $stores); ?></td>
 					</tr>
@@ -86,40 +84,28 @@
 <?= $footer; ?>
 
 <?= $this->builder->js('ckeditor'); ?>
-
-<? $autocomplete_data = array(
-	'selector' => '#product_list_autocomplete',
-	'route' => 'catalog/product/autocomplete',
-	'filter' => 'name',
-	'label' => 'name',
-	'value' => 'product_id',
-	'callback' => 'callback_product_autocomplete'
-); ?>
-
-<?= $this->builder->js('autocomplete', $autocomplete_data); ?>
+<?= $this->builder->js('translations', $translations); ?>
+<?= $this->builder->js('ac_template'); ?>
 
 <script type="text/javascript">//<!--
-$(document).ready(function(){
-	$('#product_list').sortable({revert:true});
+$('#product_list').ac_template('product_list', {unique: 'product_id'});
+
+$('#product_list_autocomplete').autocomplete({
+	delay: 0,
+	source: function(request, response) {
+		filter = {name: request.term};
+		$.get("<?= $url_product_autocomplete; ?>", {filter: filter}, response, 'json');
+	},
+	select: autocomplete_callback_product
 });
 
-function callback_product_autocomplete(selector, data){
-	if($('#product_list').find('.ac_item_id[value=' + data.product_id + ']').length > 0) return;
-	
-	html =	'<li>';
-	html += '	<input type="hidden" class="ac_item_id" name="products[%product_id%][product_id]" value="%product_id%" />';
-	html += '	<div class="autocomplete_label">';
-	html += '			<input type="text" size="60" name="products[%product_id%][name]" value="%name%" />';
-	html += '	</div>';
-	html += '	<img onclick="$(this).parent().remove()" src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" />';
-	html += '</li>';
-	
-	html = html.replace(/%product_id%/g, data.product_id).replace(/%name%/g, data.name);
-	
-	$('#product_list').append(html);
+function autocomplete_callback_product(event, data) {
+	$.ac_template('product_list', 'add', data.item);
+	$(this).val('');
+	return false;
 }
-//--></script>
 
-<?= $this->builder->js('translations', $translations); ?>
+$('#product_list').sortable({revert:true});
+//--></script>
 
 <?= $this->builder->js('errors', $errors); ?>

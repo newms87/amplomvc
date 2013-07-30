@@ -9,7 +9,7 @@ class Tool extends Library
 		define("FILELIST_SPLFILEINFO",2);
 	}
 	
-	public function get_slug($name)
+	public function getSlug($name)
 	{
 		$slug = preg_replace("/\s/",'_', strtolower(trim($name)));
 		$slug = preg_replace("/[^a-z0-9_]/", '', $slug);
@@ -88,21 +88,6 @@ class Tool extends Library
 		}
 		
 		return $short;
-	}
-	
-	public function add_template_row(&$data)
-	{
-		if (empty($data)) {
-			$data['__row__'] = array();
-		} else {
-			$data['__row__'] = reset($data);
-		}
-		
-		if (is_array($data['__row__'])) {
-			array_walk_recursive($data['__row__'], function(&$value, $key) { $value = $key; });
-		} else {
-			$data['__row__'] = '';
-		}
 	}
 		
 	public function bytes2str($size, $decimals = 2, $unit = null)

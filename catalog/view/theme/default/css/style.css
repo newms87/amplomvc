@@ -1142,12 +1142,16 @@ a.button:active, input.button:active {
            transform: scale3d(1,1,1);
 }
 
+#catalog_list .item_text{
+	margin-top: 5px;
+}
+
 #catalog_list .name {
 	margin-bottom: 3px;
 	text-decoration: none;
 	color: black;
 	font-weight: bold;
-	font-size: 18px;
+	font-size: 13px;
 }
 
 #catalog_list .teaser {
@@ -1165,7 +1169,7 @@ a.button:active, input.button:active {
 	margin-left: 8px;
 	text-align: center;
 	color: #333333;
-	font-size:20px;
+	font-size:13px;
 }
 
 #catalog_list .price-tax {
@@ -1263,7 +1267,6 @@ a.button:active, input.button:active {
 }
 
 #catalog_list.grid .name{
-	min-height:50px;
 	overflow:hidden;
 }
 

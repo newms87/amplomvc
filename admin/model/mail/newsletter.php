@@ -64,15 +64,15 @@ class Admin_Model_Mail_Newsletter extends Model
 		$where = "1";
 		
 		if (isset($data['name'])) {
-			$where .= " AND name like '%" . $this->db->escape($data['name']) . "%'";
+			$where .= " AND name like '%" . $this->escape($data['name']) . "%'";
 		}
 		
 		if (isset($data['send_date']['start'])) {
-			$where .= " AND send_date >= '" . $this->db->escape($data['send_date']['start']) . "'";
+			$where .= " AND send_date >= '" . $this->escape($data['send_date']['start']) . "'";
 		}
 		
 		if (isset($data['send_date']['end'])) {
-			$where .= " AND send_date <= '" . $this->db->escape($data['send_date']['end']) . "'";
+			$where .= " AND send_date <= '" . $this->escape($data['send_date']['end']) . "'";
 		}
 		
 		if (isset($data['status'])) {

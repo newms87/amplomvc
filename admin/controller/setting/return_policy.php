@@ -48,23 +48,17 @@ class Admin_Controller_Setting_ReturnPolicy extends Controller
 			}
 		} unset($return_policy);
 
-		//Defaults
+		//Add in the template row
 		$defaults = array(
 			'title' => $this->_('entry_title'),
 			'description' => $this->_('entry_description'),
 			'days' => 14,
 		);
 		
-		if (empty($return_policies)) {
-			$return_policies[0] = $defaults;
-		}
 		
-		//Add in the template row
-		$this->tool->add_template_row($return_policies);
+		$this->builder->addTemplateRow($return_policies, $defaults);
 		
-		$this->data['template_row_defaults'] = $defaults;
-		
-		$this->data['default_days'] = 14;
+		$this->data['template_defaults'] = $defaults;
 		
 		//Get the Field Translations
 		$translate_fields = array(
@@ -73,7 +67,7 @@ class Admin_Controller_Setting_ReturnPolicy extends Controller
 		);
 		
 		foreach ($return_policies as $key => &$return_policy) {
-			$return_policy['translations'] = $this->translation->get_translations('return_policies', $key, $translate_fields);
+			$return_policy['translations'] = $this->translation->getTranslations('return_policies', $key, $translate_fields);
 		} unset($return_policy);
 
 		$this->data['return_policies'] = $return_policies;

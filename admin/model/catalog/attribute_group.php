@@ -12,13 +12,13 @@ class Admin_Model_Catalog_AttributeGroup extends Model
 				$attribute_id = $this->insert('attribute', $attribute);
 				
 				if (!empty($attribute['translations'])) {
-					$this->translation->set_translations('attribute', $attribute_id, $attribute['translations']);
+					$this->translation->setTranslations('attribute', $attribute_id, $attribute['translations']);
 				}
 			}
 		}
 		
 		if (!empty($data['translations'])) {
-			$this->translation->set_translations('attribute_group', $attribute_group_id, $data['translations']);
+			$this->translation->setTranslations('attribute_group', $attribute_group_id, $data['translations']);
 		}
 		
 		return $attribute_group_id;
@@ -51,7 +51,7 @@ class Admin_Model_Catalog_AttributeGroup extends Model
 				}
 				
 				if (!empty($attribute['translations'])) {
-					$this->translation->set_translations('attribute', $attribute_id, $attribute['translations']);
+					$this->translation->setTranslations('attribute', $attribute_id, $attribute['translations']);
 				}
 				
 				$attribute_ids[] = $attribute_id;
@@ -61,7 +61,7 @@ class Admin_Model_Catalog_AttributeGroup extends Model
 		}
 		
 		if (!empty($data['translations'])) {
-			$this->translation->set_translations('attribute_group', $attribute_group_id, $data['translations']);
+			$this->translation->setTranslations('attribute_group', $attribute_group_id, $data['translations']);
 		}
 	}
 	
@@ -85,7 +85,7 @@ class Admin_Model_Catalog_AttributeGroup extends Model
 		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "attribute_group WHERE attribute_group_id = '" . (int)$attribute_group_id . "'");
 	}
 	
-	public function getAttributeGroups($data = array(), $select = '*', $total = FALSE) {
+	public function getAttributeGroups($data = array(), $select = '', $total = FALSE) {
 		//Select
 		if ($total) {
 			$select = "COUNT(*) as total";
@@ -104,7 +104,7 @@ class Admin_Model_Catalog_AttributeGroup extends Model
 		}
 		
 		if (!empty($data['name'])) {
-			$where .= " AND LCASE(ag.name) like '%" . $this->db->escape(strtolower($data['name'])) . "%'";
+			$where .= " AND LCASE(ag.name) like '%" . $this->escape(strtolower($data['name'])) . "%'";
 		}
 		
 		if (!empty($data['attribute_count']) || $data['sort'] === 'attribute_count') {
@@ -163,7 +163,7 @@ class Admin_Model_Catalog_AttributeGroup extends Model
 		$where = '1';
 		
 		if (!empty($data['name'])) {
-			$where .= " AND LCASE(name) like '%" . $this->db->escape(strtolower($data['name'])) . "%'";
+			$where .= " AND LCASE(name) like '%" . $this->escape(strtolower($data['name'])) . "%'";
 		}
 		
 		//Order and Limit

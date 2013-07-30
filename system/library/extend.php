@@ -26,7 +26,7 @@ class Extend extends Library
 		}
 		
 		if (!$link['name']) {
-			$link['name'] = $this->tool->get_slug($link['display_name']);
+			$link['name'] = $this->tool->getSlug($link['display_name']);
 		}
 		
 		if (!$link['parent_id'] && $parent) {

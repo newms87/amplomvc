@@ -24,7 +24,7 @@ class Admin_Controller_Setting_ReturnAction extends Controller
 		$this->breadcrumb->add($this->_('text_settings'), $this->url->link('setting/setting'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/return_action'));
 		
-		$this->data['form_action'] = $this->url->link('setting/return_action');
+		$this->data['save'] = $this->url->link('setting/return_action');
 		$this->data['cancel'] = $this->url->link('setting/store');
 		
 		if (!$this->request->isPost()) {
@@ -50,19 +50,14 @@ class Admin_Controller_Setting_ReturnAction extends Controller
 			}
 		}  unset($return_action);
 		
-		//Defaults
+		//Add in the template row
 		$defaults = array(
 			'title' => $this->_('entry_title'),
 		);
 		
-		if (empty($return_actions)) {
-			$return_actions[0] = $defaults;
-		}
+		$this->builder->addTemplateRow($return_actions, $defaults);
 		
-		//Add in the template row
-		$this->tool->add_template_row($return_actions);
-		
-		$this->data['template_row_defaults'] = $defaults;
+		$this->data['template_defaults'] = $defaults;
 		
 		//Get the Field Translations
 		$translate_fields = array(
@@ -70,7 +65,7 @@ class Admin_Controller_Setting_ReturnAction extends Controller
 		);
 		
 		foreach ($return_actions as $key => &$return_action) {
-			$return_action['translations'] = $this->translation->get_translations('return_actions', $key, $translate_fields);
+			$return_action['translations'] = $this->translation->getTranslations('return_actions', $key, $translate_fields);
 		} unset($return_action);
 
 		$this->data['return_actions'] = $return_actions;

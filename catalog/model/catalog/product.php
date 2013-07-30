@@ -123,12 +123,12 @@ class Catalog_Model_Catalog_Product extends Model
 		
 		//Product Name
 		if (!empty($data['name'])) {
-			$where .= " AND p.name = '" . $this->db->escape($data['name']) . "'";
+			$where .= " AND p.name = '" . $this->escape($data['name']) . "'";
 		}
 		
 		//Product Name Search
 		if (!empty($data['name_like'])) {
-			$where .= " AND p.name like '%" . $this->db->escape($data['name']) . "%'";
+			$where .= " AND p.name like '%" . $this->escape($data['name']) . "%'";
 		}
 		
 		//Product Manufacturer
@@ -174,7 +174,7 @@ class Catalog_Model_Catalog_Product extends Model
 			$from .= " LEFT JOIN " . DB_PREFIX . "product_tag pt ON (p.product_id = pt.product_id)";
 			$from .= " LEFT JOIN " . DB_PREFIX . "tag t ON (pt.tag_id=t.tag_id)";
 			
-			$where .= " AND LCASE(t.text) = '" . $this->db->escape(strtolower(trim($data['product_tag']))) . "'";
+			$where .= " AND LCASE(t.text) = '" . $this->escape(strtolower(trim($data['product_tag']))) . "'";
 		}
 		
 		//Product Categories

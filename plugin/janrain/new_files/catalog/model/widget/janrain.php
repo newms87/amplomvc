@@ -102,9 +102,9 @@ class Catalog_Model_Widget_Janrain extends Model{
 	public function addCustomer( $user_data )
 	{
 		$query = "INSERT INTO `" . DB_PREFIX . "customer` SET
-					firstname  = '" . $this->db->escape($user_data['firstname']) . "',
-					lastname = '" . $this->db->escape($user_data['lastname']) . "',
-					email = '" . $this->db->escape($user_data['email']) . "',
+					firstname  = '" . $this->escape($user_data['firstname']) . "',
+					lastname = '" . $this->escape($user_data['lastname']) . "',
+					email = '" . $this->escape($user_data['email']) . "',
 					password = '" . $this->user->encrypt($user_data['password']) . "',
 					customer_group_id = '" . (int)$user_data['customer_group_id'] . "',
 					status = '" . (int)$user_data['status'] . "',

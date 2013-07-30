@@ -10,24 +10,20 @@
 			</div>
 		</div>
 		<div class="content">
-			<form action="<?= $form_action; ?>" method="post" enctype="multipart/form-data" id="form">
+			<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="form">
 					<tr>
 						<td valign="top"><a id="add_action" class="button"><?= $button_add; ?></a></td>
 						<td>
 							<ul id="return_action_list" class="easy_list">
-							
-								<? $max_row = 0; ?>
-								<? foreach ($return_actions as $key => $action) { ?>
-									<li class="return_action <?= $key; ?>">
-										<input class="title" size="50" type="text" name="return_actions[<?= $key; ?>][title]" value="<?= $action['title']; ?>" /><br />
+								<? foreach ($return_actions as $row => $action) { ?>
+									<li class="return_action" data-row="<?= $row; ?>">
+										<input class="title" size="50" type="text" name="return_actions[<?= $row; ?>][title]" value="<?= $action['title']; ?>" /><br />
 										<? if (empty($action['no_delete'])) { ?>
 											<a class="delete_button text" onclick="$(this).closest('li').remove()"><?= $button_delete; ?></a>
 										<? } ?>
 									</li>
-									<? if (is_integer($key)) { $max_row = max($max_row, $key); } ?>
 								<? } ?>
-								
 							</ul>
 						</td>
 					</tr>
@@ -41,12 +37,15 @@
 	<?= $this->builder->js('translations', $action['translations'], "return_actions[$key][%name%]"); ?>
 <? } ?>
 
-<?= $this->builder->js('template_rows', '#return_action_list', '#add_action', $max_row+1, $template_row_defaults); ?>
-
-<?= $this->builder->js('errors',$errors); ?>
+<?= $this->builder->js('ac_template'); ?>
 
 <script type="text/javascript">//<!--
+$('#return_action_list').ac_template('ra_list', {defaults: <?= json_encode($template_defaults); ?>});
+$('#add_action').click(function(){ $.ac_template('ra_list', 'add') });
+
 $('#return_action_list').sortable();
 //--></script>
+
+<?= $this->builder->js('errors',$errors); ?>
 
 <?= $footer; ?>

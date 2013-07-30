@@ -35,7 +35,7 @@ class Admin_Model_Catalog_Category extends Model
 		}
 		
 		if (!empty($data['translations'])) {
-			$this->translation->set_translations('category', $category_id, $data['translations']);
+			$this->translation->setTranslations('category', $category_id, $data['translations']);
 		}
 		
 		$this->cache->delete('category');
@@ -82,7 +82,7 @@ class Admin_Model_Catalog_Category extends Model
 		}
 		
 		if (!empty($data['translations'])) {
-			$this->translation->set_translations('category', $category_id, $data['translations']);
+			$this->translation->setTranslations('category', $category_id, $data['translations']);
 		}
 		
 		$this->cache->delete('category');
@@ -183,7 +183,7 @@ class Admin_Model_Catalog_Category extends Model
 			'description',
 		);
 		
-		return $this->translation->get_translations('category', $category_id, $translate_fields);
+		return $this->translation->getTranslations('category', $category_id, $translate_fields);
 	}
 		
 	public function update_field($category_id, $data)

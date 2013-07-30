@@ -24,7 +24,7 @@ class Admin_Controller_Setting_ReturnStatus extends Controller
 		$this->breadcrumb->add($this->_('text_settings'), $this->url->link('setting/setting'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/return_status'));
 		
-		$this->data['action'] = $this->url->link('setting/return_status');
+		$this->data['save'] = $this->url->link('setting/return_status');
 		$this->data['cancel'] = $this->url->link('setting/store');
 		
 		if (!$this->request->isPost()) {
@@ -54,19 +54,14 @@ class Admin_Controller_Setting_ReturnStatus extends Controller
 			}
 		} unset($return_status);
 
-		//Defaults
+		//Add in the template row
 		$defaults = array(
 			'title' => $this->_('entry_title'),
 		);
 		
-		if (empty($return_statuses)) {
-			$return_statuses[0] = $defaults;
-		}
+		$this->builder->addTemplateRow($return_statuses, $defaults);
 		
-		//Add in the template row
-		$this->tool->add_template_row($return_statuses);
-		
-		$this->data['template_row_defaults'] = $defaults;
+		$this->data['template_defaults'] = $defaults;
 		
 		//Get the Field Translations
 		$translate_fields = array(
@@ -74,7 +69,7 @@ class Admin_Controller_Setting_ReturnStatus extends Controller
 		);
 		
 		foreach ($return_statuses as $key => &$return_status) {
-			$return_status['translations'] = $this->translation->get_translations('return_statuses', $key, $translate_fields);
+			$return_status['translations'] = $this->translation->getTranslations('return_statuses', $key, $translate_fields);
 		} unset($return_status);
 
 		$this->data['return_statuses'] = $return_statuses;

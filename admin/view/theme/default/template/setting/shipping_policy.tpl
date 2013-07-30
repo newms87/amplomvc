@@ -13,22 +13,18 @@
 			<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="form">
 					<tr>
-						<td valign="top"><a id="add_status" class="button"><?= $button_add; ?></a></td>
+						<td valign="top"><a id="add_policy" class="button"><?= $button_add; ?></a></td>
 						<td>
 							<ul id="shipping_policy_list" class="easy_list">
-							
-								<? $max_row = 0; ?>
-								<? foreach ($shipping_policies as $key => $policy) { ?>
-									<li class="shipping_policy <?= $key; ?>">
-										<input class="title" size="50" type="text" name="shipping_policies[<?= $key; ?>][title]" value="<?= $policy['title']; ?>" /><br />
-										<textarea class="description ckedit" name="shipping_policies[<?= $key; ?>][description]"><?= $policy['description']; ?></textarea>
+								<? foreach ($shipping_policies as $row => $policy) { ?>
+									<li class="shipping_policy" data-row="<?= $row; ?>">
+										<input class="title" size="50" type="text" name="shipping_policies[<?= $row; ?>][title]" value="<?= $policy['title']; ?>" /><br />
+										<textarea class="description ckedit" name="shipping_policies[<?= $row; ?>][description]"><?= $policy['description']; ?></textarea>
 										<? if (empty($policy['no_delete'])) { ?>
 											<a class="delete_button text" onclick="$(this).closest('li').remove()"><?= $button_delete; ?></a>
 										<? } ?>
 									</li>
-									<? if (is_integer($key)) { $max_row = max($max_row, $key); } ?>
 								<? } ?>
-								
 							</ul>
 						</td>
 					</tr>
@@ -42,14 +38,16 @@
 	<?= $this->builder->js('translations', $policy['translations'], "shipping_policies[$key][%name%]"); ?>
 <? } ?>
 
-<?= $this->builder->js('errors',$errors); ?>
+<?= $this->builder->js('ac_template'); ?>
 
 <script type="text/javascript">//<!--
+$('#shipping_policy_list').ac_template('sp_list', {defaults: <?= json_encode($template_defaults); ?>});
+$('#add_policy').click(function(){ $.ac_template('sp_list', 'add') });
+
 $('#shipping_policy_list').sortable();
 //--></script>
 
-<?= $this->builder->js('template_rows', '#shipping_policy_list', '#add_status', $max_row+1, $template_row_defaults); ?>
-
 <?= $this->builder->js('ckeditor'); ?>
+<?= $this->builder->js('errors',$errors); ?>
 
 <?= $footer; ?>

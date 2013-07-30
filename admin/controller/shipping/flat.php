@@ -71,7 +71,7 @@ class Admin_Controller_Shipping_Flat extends Controller
 					$this->error["flat_rates[$key][title]"] = $this->_('error_title');
 				}
 				else {
-					$_POST['flat_rates'][$key]['method'] = $this->tool->get_slug($rate['title']);
+					$_POST['flat_rates'][$key]['method'] = $this->tool->getSlug($rate['title']);
 					
 					foreach ($_POST['flat_rates'] as $key2 => $rate2) {
 						if ($rate2['method'] == $rate['title']) {

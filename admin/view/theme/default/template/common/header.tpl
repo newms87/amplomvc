@@ -18,9 +18,7 @@
 <link rel="<?= $style['rel']; ?>" type="text/css" href="<?= $style['href']; ?>" media="<?= $style['media']; ?>" />
 <? } ?>
 
-<? foreach ($js_scripts as $script) { ?>
-<script type="text/javascript" src="<?= $script; ?>"></script>
-<? } ?>
+<?= $scripts; ?>
 
 </head>
 <body>

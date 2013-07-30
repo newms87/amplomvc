@@ -22,7 +22,7 @@ class Admin_Model_Page_Page extends Model
 		}
 		
 		if (!empty($data['translations'])) {
-			$this->translation->set_translations('page', $page_id, $data['translations']);
+			$this->translation->setTranslations('page', $page_id, $data['translations']);
 		}
 		
 		$this->cache->delete('page');
@@ -52,7 +52,7 @@ class Admin_Model_Page_Page extends Model
 		}
 		
 		if (!empty($data['translations'])) {
-			$this->translation->set_translations('page', $page_id, $data['translations']);
+			$this->translation->setTranslations('page', $page_id, $data['translations']);
 		}
 		
 		$this->cache->delete('page');
@@ -97,7 +97,7 @@ class Admin_Model_Page_Page extends Model
 			'content',
 		);
 		
-		$result['translations'] = $this->translation->get_translations('page', $page_id, $translate_fields);
+		$result['translations'] = $this->translation->getTranslations('page', $page_id, $translate_fields);
 		
 		return $result;
 	}
@@ -118,7 +118,7 @@ class Admin_Model_Page_Page extends Model
 		$where = 'WHERE 1';
 		
 		if (isset($data['name'])) {
-			$where .= " AND c.name like '%" . $this->db->escape($data['name']) . "%'";
+			$where .= " AND c.name like '%" . $this->escape($data['name']) . "%'";
 		}
 		
 		if (!empty($data['stores'])) {

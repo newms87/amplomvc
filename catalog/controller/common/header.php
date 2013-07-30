@@ -16,19 +16,19 @@ class Catalog_Controller_Common_Header extends Controller
 		
 		//Add Styles
 		$this->document->addStyle(HTTP_THEME_STYLE . 'style.css');
-		$this->document->addStyle(HTTP_JS . 'jquery/ui/themes/ui-lightness/jquery-ui-1.9.2.custom.css');
+		$this->document->addStyle(HTTP_JS . 'jquery/ui/themes/ui-lightness/jquery-ui.custom.css');
 		$this->document->addStyle(HTTP_JS . 'jquery/colorbox/colorbox.css');
 		
 		//Add Scripts
-		$this->document->addScript(HTTP_JS . 'jquery/jquery-1.7.1.min.js');
-		$this->document->addScript(HTTP_JS . 'jquery/ui/jquery-ui-1.9.2.custom.min.js');
-		$this->document->addScript(HTTP_JS . 'jquery/ui/external/jquery.bgiframe-2.1.2.js');
-		$this->document->addScript(HTTP_JS . 'jquery/ui/external/jquery.cookie.js');
-		$this->document->addScript(HTTP_JS . 'jquery/tabs.js');
-		$this->document->addScript(HTTP_JS . 'jquery/colorbox/jquery.colorbox.min.js');
+		$this->document->addScript(HTTP_JS . 'jquery/jquery.js', 50);
+		$this->document->addScript(HTTP_JS . 'jquery/ui/jquery-ui.js', 51);
+		$this->document->addScript(HTTP_JS . 'jquery/ui/external/jquery.bgiframe-2.1.2.js', 52);
+		$this->document->addScript(HTTP_JS . 'jquery/ui/external/jquery.cookie.js', 53);
+		$this->document->addScript(HTTP_JS . 'jquery/tabs.js', 54);
+		$this->document->addScript(HTTP_JS . 'jquery/colorbox/jquery.colorbox.min.js', 55);
 		
 		//Add Theme Scripts
-		$this->document->addScript(HTTP_THEME_JS . 'common.js');
+		$this->document->addScript(HTTP_THEME_JS . 'common.js', 56);
 		
 		//Header Data
 		$this->data['direction'] = $this->language->getInfo('direction');
@@ -39,7 +39,7 @@ class Catalog_Controller_Common_Header extends Controller
 		$this->data['canonical_link'] = $this->document->getCanonicalLink();
 		
 		$this->data['css_styles'] = $this->document->getStyles();
-		$this->data['js_scripts'] = $this->document->getScripts();
+		$this->data['scripts'] = $this->document->renderScripts();
 		
 		$this->language->set('lang', $this->language->getInfo('code'));
 		

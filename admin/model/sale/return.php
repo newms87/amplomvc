@@ -78,15 +78,15 @@ class Admin_Model_Sale_Return extends Model
 		}
 		
 		if (!empty($data['customer'])) {
-			$where .= " AND LCASE(CONCAT(r.firstname, ' ', r.lastname)) like '%" . $this->db->escape(strtolower($data['customer'])) . "%'";
+			$where .= " AND LCASE(CONCAT(r.firstname, ' ', r.lastname)) like '%" . $this->escape(strtolower($data['customer'])) . "%'";
 		}
 		
 		if (!empty($data['date_added'])) {
-			$where .= " AND DATE(r.date_added) = DATE('" . $this->db->escape($data['date_added']) . "')";
+			$where .= " AND DATE(r.date_added) = DATE('" . $this->escape($data['date_added']) . "')";
 		}
 
 		if (!empty($data['date_modified'])) {
-			$where .= " AND DATE(r.date_modified) = DATE('" . $this->db->escape($data['date_modified']) . "')";
+			$where .= " AND DATE(r.date_modified) = DATE('" . $this->escape($data['date_modified']) . "')";
 		}
 		
 		//Order and Limit
@@ -186,7 +186,7 @@ class Admin_Model_Sale_Return extends Model
 		}
 		
 		if (!empty($data['date_added'])) {
-			$where .= " AND DATE(date_added) = DATE('" . $this->db->escape($data['date_added']) . "')";
+			$where .= " AND DATE(date_added) = DATE('" . $this->escape($data['date_added']) . "')";
 		}
 		
 		//Order and Limit

@@ -37,7 +37,7 @@ class Admin_Model_Design_Layout extends Model
 		$this->query("TRUNCATE " . DB_PREFIX . "page_header");
 		foreach ($data['page_headers'] as $page_header_id => $header) {
 			foreach($header['page_header'] as $language_id=>$html)
-				$this->query("INSERT INTO " . DB_PREFIX . "page_header SET page_header_id='$page_header_id', language_id = '" . (int)$language_id . "', page_header='" . $this->db->escape($html) . "', priority = '" . (int)$header['priority'] . "', status = '" . (int)$header['status'] . "'");
+				$this->query("INSERT INTO " . DB_PREFIX . "page_header SET page_header_id='$page_header_id', language_id = '" . (int)$language_id . "', page_header='" . $this->escape($html) . "', priority = '" . (int)$header['priority'] . "', status = '" . (int)$header['status'] . "'");
 			foreach(array_unique($header['layouts']) as $layout_id)
 				$this->query("INSERT INTO " . DB_PREFIX . "layout_header SET layout_id = '" . (int)$layout_id . "', page_header_id='$page_header_id'");
 		}
@@ -96,7 +96,7 @@ class Admin_Model_Design_Layout extends Model
 		$where = "1";
 		
 		if (!empty($data['name'])) {
-			$where .= " AND LCASE(l.name) like '%" . $this->db->escape(strtolower($data['name'])) . "%'";
+			$where .= " AND LCASE(l.name) like '%" . $this->escape(strtolower($data['name'])) . "%'";
 		}
 		
 		//Order By & Limit

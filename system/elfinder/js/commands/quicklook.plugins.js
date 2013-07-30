@@ -151,17 +151,15 @@ elFinder.prototype.commands.quicklook.plugins = [
 			preview = ql.preview,
 			active  = false;
 			
-		if (($.browser.safari && navigator.platform.indexOf('Mac') != -1) || $.browser.msie) {
-			active = true;
-		} else {
-			$.each(navigator.plugins, function(i, plugins) {
-				$.each(plugins, function(i, plugin) {
-					if (plugin.type == mime) {
-						return !(active = true);
-					}
-				});
+		
+		
+		$.each(navigator.plugins, function(i, plugins) {
+			$.each(plugins, function(i, plugin) {
+				if (plugin.type == mime) {
+					return !(active = true);
+				}
 			});
-		}
+		});
 
 		active && preview.bind('update', function(e) {
 			var file = e.file, node;

@@ -107,8 +107,11 @@ final class mysqlidb implements Database
 	
 	public function __destruct()
 	{
-		if (!empty($this->mysqli)){
-			@$this->mysqli->close();
+		static $called = false;
+		
+		if (!$called && !empty($this->mysqli)) {
+			$called = true;
+			$this->mysqli->close();
 		}
 	}
 }

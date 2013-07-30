@@ -32,7 +32,7 @@ class Admin_Model_Catalog_Manufacturer extends Model
 		}
 		
 		if (!empty($data['translations'])) {
-			$this->translation->set_translations('manufacturer', $manufacturer_id, $data['translations']);
+			$this->translation->setTranslations('manufacturer', $manufacturer_id, $data['translations']);
 		}
 		
 		$this->cache->delete('manufacturer');
@@ -70,7 +70,7 @@ class Admin_Model_Catalog_Manufacturer extends Model
 		}
 		
 		if (!empty($data['translations'])) {
-			$this->translation->set_translations('manufacturer', $manufacturer_id, $data['translations']);
+			$this->translation->setTranslations('manufacturer', $manufacturer_id, $data['translations']);
 		}
 
 		$this->cache->delete('manufacturer');
@@ -89,7 +89,7 @@ class Admin_Model_Catalog_Manufacturer extends Model
 		
 		$manufacturer['stores'] = $this->getManufacturerStores($manufacturer_id);
 		
-		$manufacturer['translations'] = $this->translation->get_translations('manufacturer', $manufacturer_id);
+		$manufacturer['translations'] = $this->translation->getTranslations('manufacturer', $manufacturer_id);
 		
 		$this->addManufacturer($manufacturer);
 	}
@@ -150,7 +150,7 @@ class Admin_Model_Catalog_Manufacturer extends Model
 		$where = "1";
 		
 		if (isset($data['name'])) {
-			$where .= " AND LCASE(`name`) like '%" . $this->db->escape(strtolower($data['name'])) . "%'";
+			$where .= " AND LCASE(`name`) like '%" . $this->escape(strtolower($data['name'])) . "%'";
 		}
 		
 		if (isset($data['status'])) {

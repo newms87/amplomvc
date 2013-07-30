@@ -246,7 +246,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 			'name',
 		);
 		
-		$this->data['translations'] = $this->translation->get_translations('attribute_group', $attribute_group_id, $translate_fields);
+		$this->data['translations'] = $this->translation->getTranslations('attribute_group', $attribute_group_id, $translate_fields);
 		
 		//Translations for Attributes
 		$translate_fields = array(
@@ -254,7 +254,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		);
 		
 		foreach ($this->data['attributes'] as &$attribute) {
-			$attribute['translations'] = $this->translation->get_translations('attribute', $attribute['attribute_id'], $translate_fields);
+			$attribute['translations'] = $this->translation->getTranslations('attribute', $attribute['attribute_id'], $translate_fields);
 		};
 		
 		//Action Buttons
@@ -313,36 +313,25 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 	
 	public function autocomplete()
 	{
-		$json = array();
+		//Sort
+		$sort = $this->sort->getQueryDefaults('name', 'ASC', $this->config->get('config_autocomplete_limit'));
 		
-		if (isset($_GET['name'])) {
-			$data = array(
-				'name' => $_GET['name'],
-				'start'		=> 0,
-				'limit'		=> 20
-			);
-			
-			$json = array();
-			
-			$results = $this->Model_Catalog_AttributeGroup->getAttributesFilter($data);
-			
-			foreach ($results as $result) {
-				$json[] = array(
-					'attribute_id'	=> $result['attribute_id'],
-					'name'				=> $result['name'],
-					'attribute_group' => $result['attribute_group_id']
-				);
-			}
-		}
-
-		$sort_order = array();
-	
-		foreach ($json as $key => $value) {
-			$sort_order[$key] = $value['name'];
-		}
-
-		array_multisort($sort_order, SORT_ASC, $json);
-
-		$this->response->setOutput(json_encode($json));
+		//Filter
+		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
+		
+		//Label and Value
+		$label = !empty($_GET['label']) ? $_GET['label'] : 'name';
+		$value = !empty($_GET['value']) ? $_GET['value'] : 'attribute_id';
+		
+		//Load Sorted / Filtered Data
+		$attributes = $this->Model_Catalog_AttributeGroup->getAttributesFilter($sort + $filter);
+		
+		foreach ($attributes as &$attribute) {
+			$attribute['label'] = $attribute[$label];
+			$attribute['value'] = $attribute[$value];
+		} unset($attribute);
+		
+		//JSON response
+		$this->response->setOutput(json_encode($attributes));
 	}
 }

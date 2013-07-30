@@ -272,130 +272,9 @@
 						</tfoot>
 					</table>
 				</div>
-				<div id="tab-option">
-					<div id="vtab-option" class="vtabs">
-						<? foreach ($product_options as $product_option_id=>$product_option) { ?>
-						<? $option_id = $product_option['option_id'];?>
-						<a href="#tab-option-<?= $option_id; ?>" id="option-<?= $option_id; ?>">
-							<?= $product_option['name']; ?>
-							<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" alt="" onclick="$('#vtabs a:first').trigger('click'); $('#option-<?= $option_id; ?>').remove(); $('#tab-option-<?= $option_id; ?>').remove(); update_ov_entries_select(); return false;" />
-						</a>
-						<? } ?>
-						<span id="option-add">
-							<input value="" style="width: 130px;" />
-							<img src="<?= HTTP_THEME_IMAGE . 'add.png'; ?>" alt="<?= $button_add_option; ?>" title="<?= $button_add_option; ?>" />
-						</span>
-						<div class='help'><?= $text_option_help; ?></div>
-					</div>
-					<? foreach ($product_options as $product_option) { ?>
-						<? $option_id = $product_option['option_id'];?>
-					<div id="tab-option-<?= $option_id; ?>" class="vtabs-content">
-						<input type="hidden" name="product_options[<?= $option_id; ?>][product_option_id]" value="<?= $product_option_id; ?>" />
-						<input type="hidden" name="product_options[<?= $option_id; ?>][name]" value="<?= $product_option['name']; ?>" />
-						<input type="hidden" name="product_options[<?= $option_id; ?>][option_id]" value="<?= $product_option['option_id']; ?>" />
-						<input type="hidden" name="product_options[<?= $option_id; ?>][type]" value="<?= $product_option['type']; ?>" />
-						<table class="form">
-							<tr>
-								<td><?= $entry_required; ?></td>
-								<td><?= $this->builder->build('select', $data_yes_no, "product_options[$option_id][required]", (int)$product_option['required']); ?></td>
-							</tr>
-							<tr>
-								<td><?= $entry_sort_order; ?></td>
-								<td><input type="text" name="product_options[<?= $option_id; ?>][sort_order]" value="<?= $product_option['sort_order']; ?>" /></td>
-							</tr>
-							<tr>
-								<td><?= $entry_option_value_list; ?></td>
-								<td>
-										<div class='scrollbox option_value_list clickable'>
-										<? foreach($unused_option_values[$option_id] as $ov) {?>
-												<div onclick="addOptionValue(<?= $option_id; ?>,<?= $ov['option_value_id']; ?>,'<?= addslashes($ov['name']); ?>'); $(this).remove();" >
-													<span class='po_label'><?= $ov['name']; ?></span>
-													<img src="<?= HTTP_THEME_IMAGE . "add.png"; ?>" />
-												</div>
-										<? }?>
-										</div>
-								</td>
-							</tr>
-						</table>
-						<table id="option-value<?= $option_id; ?>" class="list">
-							<thead>
-								<tr>
-									<td class="left"><?= $entry_option_value; ?></td>
-									<td class="right"><?= $entry_quantity; ?></td>
-									<td class="left"><?= $entry_subtract; ?></td>
-									<td class="right"><?= $entry_cost; ?></td>
-									<td class="right"><?= $entry_price; ?></td>
-									<td class="right"><?= $entry_option_points; ?></td>
-									<td class="right"><?= $entry_weight; ?></td>
-									<td class="center"><?= $entry_option_value_restriction; ?></td>
-									<td></td>
-								</tr>
-							</thead>
-							<tbody class='option_value_entries'>
-							<? foreach ($product_option['product_option_value'] as $product_option_value_id=>$product_option_value) { ?>
-								<? $option_value_id = $product_option_value['option_value_id'];?>
-								<tr>
-									<td class="left">
-										<span class='option_value_label'><?= $product_option_value['name']; ?></span>
-										<input class="ov_entry_name" type="hidden" name="product_options[<?= $option_id; ?>][product_option_value][<?= $option_value_id; ?>][name]" value="<?= $product_option_value['name']; ?>" />
-										<input type="hidden" name="product_options[<?= $option_id; ?>][product_option_value][<?= $option_value_id; ?>][option_id]" value="<?= $option_id; ?>" />
-										<input class="ov_entry_option_value_id" type="hidden" name="product_options[<?= $option_id; ?>][product_option_value][<?= $option_value_id; ?>][option_value_id]" value="<?= $option_value_id; ?>" />
-									</td>
-									<td class="right"><input type="text" name="product_options[<?= $option_id; ?>][product_option_value][<?= $option_value_id; ?>][quantity]" value="<?= $product_option_value['quantity']; ?>" size="3" /></td>
-									<td class="left">
-										<?= $this->builder->build('select', $data_yes_no, "product_options[$option_id][product_option_value][$option_value_id][subtract]", (int)$product_option_value['subtract']); ?>
-									</td>
-									<td class="right">
-										<input type="text" name="product_options[<?= $option_id; ?>][product_option_value][<?= $option_value_id; ?>][cost]" value="<?= $product_option_value['cost']; ?>" size="5" />
-									</td>
-									<td class="right">
-										<input type="text" name="product_options[<?= $option_id; ?>][product_option_value][<?= $option_value_id; ?>][price]" value="<?= $product_option_value['price']; ?>" size="5" />
-									</td>
-									<td class="right">
-										<input type="text" name="product_options[<?= $option_id; ?>][product_option_value][<?= $option_value_id; ?>][points]" value="<?= $product_option_value['points']; ?>" size="5" />
-									</td>
-									<td class="right">
-										<input type="text" name="product_options[<?= $option_id; ?>][product_option_value][<?= $option_value_id; ?>][weight]" value="<?= $product_option_value['weight']; ?>" size="5" />
-									</td>
-									<td class="center">
-										<table class='list'>
-												<thead>
-													<tr>
-															<td class="center"><?= $entry_restriction_option_value; ?></td>
-															<td class="center"><?= $entry_restriction_quantity; ?></td>
-															<td></td>
-													</tr>
-												</thead>
-												<tbody class='restrict_entries'>
-													<? if(isset($product_option_value['restrictions'])){?>
-													<? foreach($product_option_value['restrictions'] as $row=>$restriction){?>
-													<tr>
-															<?= $this->builder->set_config('option_value_id', 'name'); ?>
-															<td class="center"><?= $this->builder->build('select', $all_product_option_values, "product_options[$option_id][product_option_value][$option_value_id][restrictions][$row][restrict_option_value_id]", $restriction['restrict_option_value_id'], array('class'=>'restrict_option_values')); ?></td>
-															<td class="center"><input type="text" size='3' name="product_options[<?= $option_id; ?>][product_option_value][<?= $option_value_id; ?>][restrictions][<?= $row; ?>][quantity]" value="<?= $restriction['quantity']; ?>" /></td>
-															<td class="center"><a onclick="$(this).closest('tr').remove()" class="button_remove"></a></td>
-													</tr>
-													<? }?>
-													<? }?>
-												</tbody>
-												<tfoot>
-													<tr>
-															<td colspan='2'></td>
-															<td class="center"><a onclick="add_restriction_value($(this), <?= $option_id; ?>, <?= $option_value_id; ?>)" class="button_add"></a></td>
-													</tr>
-												</tfoot>
-										</table>
-									</td>
-									<td class="left">
-										<a onclick="remove_option_value($(this), <?= $option_id; ?>, <?= $option_value_id; ?>, '<?= addslashes($product_option_value['name']); ?>');" class="button"><?= $button_remove; ?></a>
-									</td>
-								</tr>
-							<? } ?>
-							</tbody>
-						</table>
-					</div>
-					<? } ?>
-				</div>
+				
+				
+				
 				<div id="tab-discount">
 					<table id="discount" class="list">
 						<thead>
@@ -575,6 +454,157 @@
 						</tbody>
 					</table>
 				</div>
+				
+				<div id="tab-option">
+					<? html_dump($product_options); ?>
+					<div id="vtab-option" class="vtabs">
+						<div id="option_tab_list">
+						<? foreach ($product_options as $row => $product_option) { ?>
+							<a href="#tab-option-<?= $row; ?>" class="option_tab_button" data-row="<?= $row; ?>">
+								<span class="option_tab_title"><?= $product_option['name']; ?></span>
+								<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" alt="" onclick="return remove_option($(this));" />
+							</a>
+						<? } ?>
+						</div>
+						
+						<div id="option-add">
+							<input id="product_option_autocomplete" value="" />
+							<img src="<?= HTTP_THEME_IMAGE . 'add.png'; ?>" alt="<?= $button_add_option; ?>" title="<?= $button_add_option; ?>" />
+						</div>
+						<div class='help'><?= $text_option_help; ?></div>
+					</div>
+					
+					<div id="product_option_list">
+						
+					<? foreach ($product_options as $row => $product_option) { ?>
+						<div id="tab-option-<?= $row; ?>" class="product_option vtabs-content" data-row="<?= $row; ?>" data-id="<?= $product_option['option_id']; ?>">
+							<input type="hidden" name="product_options[<?= $row; ?>][product_option_id]" value="<?= $product_option['product_option_id']; ?>" />
+							<input type="hidden" name="product_options[<?= $row; ?>][name]" value="<?= $product_option['name']; ?>" />
+							<input type="hidden" name="product_options[<?= $row; ?>][display_name]" value="<?= $product_option['display_name']; ?>" />
+							<input type="hidden" name="product_options[<?= $row; ?>][option_id]" value="<?= $product_option['option_id']; ?>" />
+							<input type="hidden" name="product_options[<?= $row; ?>][type]" value="<?= $product_option['type']; ?>" />
+							<div class="product_option_name"><?= $product_option['display_name']; ?></div>
+							<table class="form">
+								<tr>
+									<td><?= $entry_required; ?></td>
+									<td><?= $this->builder->build('select', $data_yes_no, "product_options[$row][required]", (int)$product_option['required']); ?></td>
+								</tr>
+								<tr>
+									<td><?= $entry_sort_order; ?></td>
+									<td><input type="text" name="product_options[<?= $row; ?>][sort_order]" value="<?= $product_option['sort_order']; ?>" /></td>
+								</tr>
+								<tr>
+									<td><?= $entry_option_value_list; ?></td>
+									<td>
+										<div class='scrollbox unused_option_value_list clickable'>
+										<? foreach($product_option['unused_option_values'] as $ov_row => $option_value) {?>
+											<div class="unused_option_value" data-row="<?= $ov_row; ?>" data-id="<?= $option_value['option_value_id']; ?>" onclick="add_option_value($(this));" >
+												<span class='uov_label'><?= $option_value['name']; ?></span>
+												<img src="<?= HTTP_THEME_IMAGE . "add.png"; ?>" />
+												<script type="text/javascript">//<!--
+												$('#tab-option-<?= $row; ?> .unused_option_value[data-id=<?= $option_value['option_value_id']; ?>]').data('option_value', <?= json_encode($option_value); ?>);
+												//--></script>
+											</div>
+										<? }?>
+										</div>
+									</td>
+								</tr>
+							</table>
+							<table class="list">
+								<thead>
+									<tr>
+										<td class="center"><?= $entry_option_value; ?></td>
+										<td class="center"><?= $entry_image; ?></td>
+										<td class="center"><?= $entry_quantity; ?></td>
+										<td class="center"><?= $entry_subtract; ?></td>
+										<td class="center"><?= $entry_cost; ?></td>
+										<td class="center"><?= $entry_price; ?></td>
+										<td class="center"><?= $entry_option_points; ?></td>
+										<td class="center"><?= $entry_weight; ?></td>
+										<td class="center"><?= $entry_sort_order; ?></td>
+										<td class="center"><?= $entry_option_value_restriction; ?></td>
+										<td></td>
+									</tr>
+								</thead>
+								<tbody class='product_option_value_list'>
+								<? foreach ($product_option['product_option_values'] as $pov_row => $product_option_value) { ?>
+									<? $product_option_value_row = "product_options[$row][product_option_values][$pov_row]"; ?>
+									<tr class="product_option_value" data-row="<?= $pov_row; ?>">
+										<td class="center">
+											<input type="hidden" name="<?= $product_option_value_row; ?>[product_option_value_id]" value="<?= $product_option_value['product_option_value_id']; ?>" />
+											<input type="hidden" name="<?= $product_option_value_row; ?>[option_value_id]" value="<?= $product_option_value['option_value_id']; ?>" />
+											<span class='option_value_label'><?= $product_option_value['name']; ?></span>
+											<input type="hidden" name="<?= $product_option_value_row; ?>[name]" value="<?= $product_option_value['name']; ?>" />
+										</td>
+										<td class="center">
+											<? $this->builder->set_builder_template('click_image_small'); ?>
+											<?= $this->builder->image_input($product_option_value_row . '[image]', $product_option_value['image'], null, null, $this->config->get('config_image_product_option_width'), $this->config->get('config_image_product_option_height')); ?>
+										</td>
+										<td class="center"><input type="text" name="<?= $product_option_value_row; ?>[quantity]" value="<?= $product_option_value['quantity']; ?>" size="3" /></td>
+										<td class="center">
+											<?= $this->builder->build('select', $data_yes_no, $product_option_value_row."[subtract]", $product_option_value['subtract']); ?>
+										</td>
+										<td class="center">
+											<input type="text" name="<?= $product_option_value_row; ?>[cost]" value="<?= $product_option_value['cost']; ?>" size="5" />
+										</td>
+										<td class="center">
+											<input type="text" name="<?= $product_option_value_row; ?>[price]" value="<?= $product_option_value['price']; ?>" size="5" />
+										</td>
+										<td class="center">
+											<input type="text" name="<?= $product_option_value_row; ?>[points]" value="<?= $product_option_value['points']; ?>" size="5" />
+										</td>
+										<td class="center">
+											<input type="text" name="<?= $product_option_value_row; ?>[weight]" value="<?= $product_option_value['weight']; ?>" size="5" />
+										</td>
+										<td class="center">
+											<input type="text" class="sort_order" name="<?= $product_option_value_row; ?>[sort_order]" value="<?= $product_option_value['sort_order']; ?>" size="5" />
+										</td>
+										<td class="center">
+											<table class='list'>
+												<thead>
+													<tr>
+														<td class="center"><?= $entry_restriction_option_value; ?></td>
+														<td class="center"><?= $entry_restriction_quantity; ?></td>
+														<td></td>
+													</tr>
+												</thead>
+												<tbody class="product_option_value_restriction_list">
+													<? if (!empty($product_option_value['restrictions'])) { ?>
+													<? foreach ($product_option_value['restrictions'] as $r_row => $restriction) { ?>
+														<? $restriction_row = $product_option_value_row . "[restrictions][$r_row]"; ?>
+														<tr class="product_option_value_restriction" data-row="<?= $r_row; ?>">
+															<td class="center">
+																<?= $this->builder->set_config('option_value_id', 'name'); ?>
+																<?= $this->builder->build('select', $all_product_option_values, $restriction_row."[restrict_option_value_id]", $restriction['restrict_option_value_id']); ?>
+															</td>
+															<td class="center"><input type="text" size='3' name="<?= $restriction_row; ?>[quantity]" value="<?= $restriction['quantity']; ?>" /></td>
+															<td class="center"><a onclick="$(this).closest('tr').remove()" class="button_remove"></a></td>
+														</tr>
+													<? } ?>
+													<? } ?>
+												</tbody>
+												<tfoot>
+													<tr>
+														<td colspan='2'></td>
+														<td class="center"><a onclick="return add_restriction_value($(this))" class="button_add"></a></td>
+													</tr>
+												</tfoot>
+											</table>
+										</td>
+										<td class="left">
+											<span onclick="remove_option_value($(this))" class="button"><?= $button_remove; ?></span>
+											<script type="text/javascript">//<!--
+												$('#tab-option-<?= $row; ?> .product_option_value[data-row=<?= $pov_row; ?>]').data('option_value', <?= json_encode($product_option_value); ?>);
+												//--></script>
+										</td>
+									</tr>
+								<? } ?>
+								</tbody>
+							</table>
+						</div>
+					<? } ?>
+				</div>
+				</div>
 			</form>
 		</div>
 	</div>
@@ -637,84 +667,14 @@ $('[name=shipping]').change(function(){
 //--></script>
 
 <script type="text/javascript">//<!--
-$('input[name=\'related\']').autocomplete({
-	delay: 0,
-	source: function(request, response) {
-		$.ajax({
-			url: "<?= $url_autocomplete; ?>" + '?filter_name=' +	encodeURIComponent(request.term),
-			dataType: 'json',
-			success: function(json) {
-				response($.map(json, function(item) {
-					return {
-						label: item.name,
-						value: item.product_id
-					}
-				}));
-			}
-		});
-		
-	},
-	select: function(event, ui) {
-		$('#product-related' + ui.item.value).remove();
-		
-		$('#product-related').append('<div id="product-related' + ui.item.value + '">' + ui.item.label + '<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" /><input type="hidden" name="product_related[]" value="' + ui.item.value + '" /></div>');
-
-		$('#product-related div:odd').attr('class', 'odd');
-		$('#product-related div:even').attr('class', 'even');
-				
-		return false;
-	}
-});
-
-$('#product-related div img').live('click', function() {
-	$(this).parent().remove();
-	
-	$('#product-related div:odd').attr('class', 'odd');
-	$('#product-related div:even').attr('class', 'even');
-});
-//--></script>
-<script type="text/javascript">//<!--
 var attribute_row = <?= $attribute_row; ?>;
 
 function addAttribute() {
-	html	= '<tbody id="attribute-row' + attribute_row + '">';
-		html += '	<tr>';
-	html += '		<td class="left"><input type="text" name="product_attributes[' + attribute_row + '][name]" value="" /><input type="hidden" name="product_attributes[' + attribute_row + '][attribute_id]" value="" /></td>';
-	html += '		<td class="left">';
-	html += '		<textarea name="product_attributes[' + attribute_row + '][text]" cols="40" rows="5"></textarea>';
-	html += '		</td>';
-	html += '		<td class="left"><a onclick="$(\'#attribute-row' + attribute_row + '\').remove();" class="button"><?= $button_remove; ?></a></td>';
-		html += '	</tr>';
-		html += '</tbody>';
-	
-	$('#attribute tfoot').before(html);
 	
 	attributeautocomplete(attribute_row);
 	
 	attribute_row++;
 }
-
-<? //TODO: fix the autocomplete to use the catcomplete... menu items do not have data associated
-/*
-$.widget('custom.catcomplete', $.ui.autocomplete, {
-	_renderMenu: function(ul, items) {
-		var self = this, currentCategory = '';
-		
-		console.dir(items);
-		
-		$.each(items, function(index, item) {
-			if (item.category != currentCategory) {
-				ul.append('<li class="ui-autocomplete-category">' + item.category + '</li>');
-				
-				currentCategory = item.category;
-			}
-			
-			self._renderItem(ul, item);
-		});
-	}
-});
-*/
-?>
 
 function attributeautocomplete(attribute_row) {
 	$('input[name=\'product_attributes[' + attribute_row + '][name]\']').autocomplete({
@@ -747,145 +707,138 @@ $('#attribute tbody').each(function(index, element) {
 	attributeautocomplete(index);
 });
 //--></script>
+
+<?= $this->builder->js('ac_template'); ?>
+
 <script type="text/javascript">//<!--
-$('#option-add input').autocomplete({
+$('#product_option_list .product_option_value_restriction_list').ac_template('povr_list');
+$('#product_option_list .unused_option_value_list').ac_template('uov_list', {unique: 'option_value_id'});
+$('#product_option_list .product_option_value_list').ac_template('pov_list');
+$('#option_tab_list').ac_template('option_tabs');
+$('#product_option_list').ac_template('po_list', {unique: 'option_id'});
+
+$('#product_option_autocomplete').autocomplete({
 	delay: 0,
 	source: function(request, response) {
-		$.ajax({
-			url: "<?= $url_option_autocomplete; ?>" + '&filter_name=' +	encodeURIComponent(request.term),
-			dataType: 'json',
-			success: function(json) {
-				response($.map(json, function(item) {
-					return {
-						category: item.category,
-						label: item.name,
-						value: item.option_id,
-						type: item.type,
-						option_value: item.option_value
-					}
-				}));
-			}
-		});
+		filter = {name: request.term};
+		$.get("<?= $url_option_autocomplete; ?>", {filter: filter}, response, 'json');
 	},
-	select: function(event, ui) {
-		if($('#tab-option-'+ui.item.value).length){
-				$('.dup_option_warning').remove();
-				$('#tab-option-'+ui.item.value).prepend("<div class='dup_option_warning warning'>This Option has already been added here!</span>");
-				$('#option-' + ui.item.value).trigger('click');
-				return;
-		}
-		html	= '<div id="tab-option-%option_id%" class="vtabs-content">';
-		html += '	<input type="hidden" name="product_options[%option_id%][product_option_id]" value="" />';
-		html += '	<input type="hidden" name="product_options[%option_id%][option_id]" value="%option_id%" />';
-		html += '	<input type="hidden" name="product_options[%option_id%][name]" value="' + ui.item.label + '" />';
-		html += '	<input type="hidden" name="product_options[%option_id%][type]" value="' + ui.item.type + '" />';
-		html += '	<table class="form">';
-		html += '		<tr>';
-		html += '			<td><?= $entry_required; ?></td>';
-		html += '				<td>' + "<?= $this->builder->build('select', $data_yes_no, "product_options[%option_id%][required]", 1); ?>" + '</td>';
-		html += '		</tr>';
-		html += '		<tr>';
-			html += '				<td><?= $entry_sort_order; ?></td>';
-			html += '				<td><input type="text" name="product_options[%option_id%][sort_order]" value="" /></td>';
-			html += '		</tr>';
-		html += '		<tr>';
-			html += '				<td><?= $entry_option_value_list; ?></td>';
-			html += '				<td>';
-			html += '						<div class="scrollbox option_value_list clickable">';
-			for(i=0; i< ui.item.option_value.length; i++){
-				html += '							<div onclick="addOptionValue(%option_id%, ' + ui.item.option_value[i]['option_value_id'] + ',\'' + addslashes(ui.item.option_value[i]['name']) + '\'); $(this).remove();"><span class="po_label">' + ui.item.option_value[i]['name'] + '</span><img src="<?= HTTP_THEME_IMAGE . 'add.png'; ?>" /></div>';
-			}
-			html += '						</div>';
-			html += '				</td>';
-			html += '			</tr>';
-		html += '	</table>';
-			
-		html += '	<table id="option-value%option_id%" class="list">';
-		html += '			<thead>';
-		html += '			<tr>';
-		html += '				<td class="left"><?= $entry_option_value; ?></td>';
-		html += '				<td class="right"><?= $entry_quantity; ?></td>';
-		html += '				<td class="left"><?= $entry_subtract; ?></td>';
-		html += '				<td class="right"><?= $entry_cost; ?></td>';
-		html += '				<td class="right"><?= $entry_price; ?></td>';
-		html += '				<td class="right"><?= $entry_option_points; ?></td>';
-		html += '				<td class="right"><?= $entry_weight; ?></td>';
-		html += '				<td class="right"><?= $entry_option_value_restriction; ?></td>';
-		html += '				<td></td>';
-		html += '			</tr>';
-		html += '			</thead>';
-		html += '		<tbody class="option_value_entries"></tbody>';
-		html += '	</table>';
-			html += '</div>';
+	select: autocomplete_callback_product_option
+});
+
+function autocomplete_callback_product_option(event, data) {
+	$(this).val('');
 	
-			
-			$('#tab-option').append(html.replace(/%option_id%/g, ui.item.value));
-		
-		$('#option-add').before('<a href="#tab-option-' + ui.item.value + '" id="option-' + ui.item.value + '">' + ui.item.label + '&nbsp;<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" alt="" onclick="$(\'#vtab-option a:first\').trigger(\'click\'); $(\'#option-' + ui.item.value + '\').remove(); $(\'#tab-option-' + ui.item.value + '\').remove(); update_ov_entries_select();return false;" /></a>');
-		
-		$('#vtab-option a').tabs();
-		
-		$('#option-' + ui.item.value).trigger('click');
+	product_option = $.ac_template('po_list', 'add', data.item);
+	
+	if (!product_option) {
+		//If false, the product option already exists
+		if (product_option === false) {
+			//Click tab for this product option
+			$('[href=#'+$('.product_option[data-id='+data.item.option_id+']').attr('id')+']').click();
+		}
 		
 		return false;
 	}
-});
+	
+	tab = $.ac_template('option_tabs', 'add');
+	
+	tab.attr('href', '#tab-option-' + tab.attr('data-row'));
+	tab.find('.option_tab_title').html(data.item.name);
+	
+	product_option.attr('id', 'tab-option-' + tab.attr('data-row'));
+	product_option.find('.product_option_value_list').sortable({stop: function(){$(this).update_index('.sort_order')} });
+	product_option.find('.product_option_name').html(data.item.display_name);
+	
+	option_value_list = product_option.find('.unused_option_value_list');
+	
+	for (ov in data.item.option_values) {
+		option_value = data.item.option_values[ov];
+		
+		ov_row = option_value_list.ac_template('uov_list', 'add', option_value);
+		
+		ov_row.data('option_value', option_value);
+		ov_row.find('.uov_label').html(option_value.name);
+	}
+	
+	$('#option_tab_list a').tabs();
+	
+	tab.click();
+	
+	return false;
+}
+
+function add_option_value(option_value) {
+	pov_list = option_value.closest('.product_option').find('.product_option_value_list');
+	ov_data = option_value.data('option_value');
+	
+	row = pov_list.ac_template('pov_list', 'add', ov_data);
+	row.find('.option_value_label').html(ov_data.name);
+	
+	if (ov_data.image) {
+		row.find('.image .iu_thumb').attr('src', ov_data.image);
+	}
+	
+	row.data('option_value', ov_data);
+	
+	pov_list.update_index();
+	
+	option_value.remove();
+	
+	update_ov_entries_select();
+}
+
+function add_restriction_value(context){
+	console.log(context.closest('table').find('.product_option_value_restriction_list'));
+	
+	console.log(context.closest('table').find('.product_option_value_restriction_list'));
+	
+	context.closest('table').find('.product_option_value_restriction_list').ac_template('povr_list', 'add');
+	console.log('rstrict');
+	console.log(context);
+}
+
+function remove_option(context) {
+	tab = context.closest('a');
+	$(tab.attr('href')).remove();
+	tab.remove();
+	
+	$('#option_tab_list a:first').click();
+	
+	context.closest('.product_option_value_list').update_index();
+	
+	update_ov_entries_select();
+	
+	return false;
+}
+
+function remove_option_value(context){
+	var product_option = context.closest('.product_option');
+	var row = context.closest('.product_option_value');
+	var ov_data = row.data('option_value');
+	
+	//save image
+	ov_data.image = row.find('.image .iu_thumb').attr('src');
+	
+	row.remove();
+	
+	uov_row = product_option.find('.unused_option_value_list').ac_template('uov_list', 'add', ov_data);
+	
+	uov_row.data('option_value', ov_data);
+	uov_row.find('.uov_label').html(ov_data.name);
+	
+	update_ov_entries_select();
+}
+
+$('.product_option_value_list').sortable({stop: function(){$(this).update_index('.sort_order');}});
 //--></script>
 
 <span id='all_product_option_values' style='display:none'>
 	<?= $this->builder->set_config('option_value_id', 'name'); ?>
-	<?= $this->builder->build('select', $all_product_option_values, "product_options[%option_id%][product_option_value][%option_value_id%][restrictions][%row%][restrict_option_value_id]", '', array('class'=>'restrict_option_values')); ?>
+	<?= $this->builder->build('select', $all_product_option_values, "product_options[%option_id%][product_option_values][%option_value_id%][restrictions][%row%][restrict_option_value_id]", '', array('class'=>'restrict_option_values')); ?>
 </span>
 					
 <script type="text/javascript">//<!--
-
-function addOptionValue(option_id, option_value_id, name) {
-	html = '	<tr>';
-	html += '		<td class="left">';
-	html += '			<span class="option_value_label">' + name + '</span>';
-	html += '			<input class="ov_entry_name" type="hidden" name="product_options[%option_id%][product_option_value][%option_value_id%][name]" value="' + addslashes(name) + '" />';
-	html += '			<input type="hidden" name="product_options[%option_id%][product_option_value][%option_value_id%][option_id]" value="%option_id%" />';
-	html += '			<input class="ov_entry_option_value_id" type="hidden" name="product_options[%option_id%][product_option_value][%option_value_id%][option_value_id]" value="%option_value_id%" />';
-	html += '		</td>';
-	html += '		<td class="right"><input type="text" name="product_options[%option_id%][product_option_value][%option_value_id%][quantity]" value="1" size="3" /></td>';
-	html += '		<td class="left">' + "<?= $this->builder->build('select', $data_yes_no, "product_options[%option_id%][product_option_value][%option_value_id%][subtract]",1); ?>" + '</td>';
-	html += '		<td class="right"><input type="text" name="product_options[%option_id%][product_option_value][%option_value_id%][cost]" value="0" size="5" /></td>';
-	html += '		<td class="right"><input type="text" name="product_options[%option_id%][product_option_value][%option_value_id%][price]" value="0" size="5" /></td>';
-	html += '		<td class="right"><input type="text" name="product_options[%option_id%][product_option_value][%option_value_id%][points]" value="0" size="5" /></td>';
-	html += '		<td class="right"><input type="text" name="product_options[%option_id%][product_option_value][%option_value_id%][weight]" value="0" size="5" /></td>';
-	html += '		<td class="center">';
-	html += '			<table class="list">';
-	html += '				<thead>';
-	html += '						<tr>';
-	html += '							<td class="center"><?= $entry_restriction_option_value; ?></td>';
-	html += '							<td class="center"><?= $entry_restriction_quantity; ?></td>';
-	html += '							<td></td>';
-	html += '						</tr>';
-	html += '				</thead>';
-	html += '				<tbody class="restrict_entries"></tbody>';
-	html += '				<tfoot>';
-	html += '						<tr>';
-	html += '							<td colspan="2"></td>';
-	html += '							<td class="center"><a onclick="add_restriction_value($(this),%option_id%,%option_value_id%)" class="button_add"></a></td>';
-	html += '						</tr>';
-	html += '				</tfoot>';
-	html += '			</table>';
-	html += '		</td>';
-	html += '		<td class="left"><a onclick="remove_option_value($(this),%option_id%, %option_value_id%, \'' + addslashes(name) + '\')" class="button"><?= $button_remove; ?></a></td>';
-	html += '	</tr>';
-	
-	$('#tab-option-' + option_id + ' .option_value_entries').append(html.replace(/%option_id%/g,option_id).replace(/%option_value_id%/g,option_value_id));
-	
-	update_ov_entries_select();
-}
-
-function remove_option_value(context, option_id, option_value_id, name){
-	context.closest('tr').remove();
-	$('#tab-option-'+option_id + ' .option_value_list').append('<div onclick="addOptionValue(' + option_id + ',' + option_value_id + ',\'' + addslashes(name) + '\'); $(this).remove();"><span class="po_label" >' + name + '</span><img src="<?= HTTP_THEME_IMAGE . 'add.png'; ?>" /></div>');
-	
-	update_ov_entries_select();
-}
-
 function update_ov_entries_select(){
 	new_options = '';
 	$('.option_value_entries > tr').each(function(i,e){
@@ -900,25 +853,6 @@ function update_ov_entries_select(){
 			$(e).val(select);
 	});
 }
-
-var restrict_row = 0;
-
-function add_restriction_value(context, option_id, option_value_id){
-	html =	'<tr>';
-				<?= $this->builder->set_config('product_option_value_id', 'name'); ?>
-	html += '	<td class="center">' + $('#all_product_option_values').html() + '</td>';
-	html += '	<td class="center"><input type="text" size="3" name="product_options[%option_id%][product_option_value][%option_value_id%][restrictions][%row%][quantity]" value="1" /></td>';
-	html += '	<td class="center"><a onclick="$(this).closest(\'tr\').remove()" class="button_remove"></a></td>';
-	html += '</tr>';
-	
-	context.closest('table').find('.restrict_entries').append(html.replace(/%option_id%/g,option_id).replace(/%option_value_id%/g, option_value_id).replace(/%row%/g, 'new'+restrict_row));
-	restrict_row++;
-}
-
-function addslashes(text){
-	return text.replace(/\'/g,'\\\'').replace(/\"/g,'\\"');
-}
-
 //--></script>
 <script type="text/javascript">//<!--
 var discount_row = <?= $discount_row; ?>;

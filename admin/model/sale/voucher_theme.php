@@ -6,7 +6,7 @@ class Admin_Model_Sale_VoucherTheme extends Model
 		$voucher_theme_id = $this->insert('voucher_theme', $data);
 		
 		if (!empty($data['translations'])) {
-			$this->translation->set_translations('voucher_theme', $voucher_theme_id, $data['translations']);
+			$this->translation->setTranslations('voucher_theme', $voucher_theme_id, $data['translations']);
 		}
 			
 		return $voucher_theme_id;
@@ -17,7 +17,7 @@ class Admin_Model_Sale_VoucherTheme extends Model
 		$this->update('voucher_theme', $data, $voucher_theme_id);
 		
 		if (!empty($data['translations'])) {
-			$this->translation->set_translations('voucher_theme', $voucher_theme_id, $data['translations']);
+			$this->translation->setTranslations('voucher_theme', $voucher_theme_id, $data['translations']);
 		}
 	}
 	
@@ -49,7 +49,7 @@ class Admin_Model_Sale_VoucherTheme extends Model
 		$where = '1';
 		
 		if (isset($data['name'])) {
-			$where .= " AND LCASE(name) like '%" . $this->db->escape(strtolower($data['name'])) . "%'";
+			$where .= " AND LCASE(name) like '%" . $this->escape(strtolower($data['name'])) . "%'";
 		}
 		
 		//Order and Limit
@@ -85,7 +85,7 @@ class Admin_Model_Sale_VoucherTheme extends Model
 			'name',
 		);
 		
-		return $this->translation->get_translations('voucher_theme', $voucher_theme_id, $translate_fields);
+		return $this->translation->getTranslations('voucher_theme', $voucher_theme_id, $translate_fields);
 	}
 	
 	public function getTotalVoucherThemes($data = array())

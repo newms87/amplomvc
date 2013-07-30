@@ -177,7 +177,7 @@ class Document extends Library
 		return $this->styles;
 	}
 	
-	public function addScript($script)
+	public function addScript($script, $priority = 100)
 	{
 		if (!is_file($script)) {
 			if (is_file(SITE_DIR . $script)) {
@@ -191,12 +191,57 @@ class Document extends Library
 			}
 		}
 		
-		$this->scripts[md5($script)] = $script;
+		$this->scripts[(int)$priority][md5($script)] = $script;
 	}
 	
+	public function localizeScript($script, $priority = 100)
+	{
+		$this->addScript('local:'.$script, $priority);
+	}
+	
+	/**
+	 * Retrieves the scripts requested, sorted by priority
+	 * Note: We sort the scripts here as it is assumed this is only called once
+	 * 
+	 * @return array - Each element is a string of the absolute filepath to the script
+	 */
 	public function getScripts()
 	{
-		return $this->scripts;
+		$scripts = array();
+		
+		ksort($this->scripts);
+		
+		foreach ($this->scripts as $priority => $script_list) {
+			foreach ($script_list as $script) {
+				$scripts[] = $script;
+			}
+		}
+		
+		return $scripts;
+	}
+	
+	public function renderScripts()
+	{
+		$scripts = $this->getScripts();
+		
+		$html = '';
+		
+		foreach ($scripts as $script) {
+			if (strpos($script,'local:') === 0) {
+				if (is_file($file = substr($script, 6))) {
+					$html .= "<script type=\"text/javascript\">//<!--\r\n";
+					ob_start();
+					include($file);
+					$html .= ob_get_clean();
+					$html .= "\r\n//--></script>\r\n";
+				}
+			}
+			else {
+				$html .= "<script type=\"text/javascript\" src=\"$script\"></script>\r\n";
+			}
+		}
+		
+		return $html;
 	}
 	
 	public function &findActiveLink(&$links, $page, &$active_link = null, $highest_match = 0)

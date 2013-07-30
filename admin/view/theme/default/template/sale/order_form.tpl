@@ -1333,15 +1333,8 @@ $('#button-product, #button-voucher, #button-update').live('click', function() {
 	});
 });
 //--></script>
-<script type="text/javascript" src="view/javascript/jquery/ui/jquery-ui-timepicker-addon.js"></script>
-<script type="text/javascript"><!--
-$('.date').datepicker({dateFormat: 'yy-mm-dd'});
-$('.datetime').datetimepicker({
-	dateFormat: 'yy-mm-dd',
-	timeFormat: 'h:m'
-});
-$('.time').timepicker({timeFormat: 'h:m'});
-//--></script>
+
+<?= $this->builder->js('datepicker'); ?>
 <script type="text/javascript"><!--
 $('.vtabs a').tabs();
 //--></script>

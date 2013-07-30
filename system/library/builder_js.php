@@ -147,56 +147,6 @@ for(var e in errors){
 <?php break;
 
 
-	case 'autocomplete':
-		$params = $args[0];
-		
-		if (empty($params['selector']) || empty($params['label']) || empty($params['value']) || empty($params['route'])) {
-			trigger_error("Template JS: autocomplete: Required parameters are 'selector', 'label', 'value', 'route'");
-			return '';
-		}
-		
-		if (empty($params['query'])) {
-			$params['query'] = '';
-		} else {
-			$params['query'] .= '&';
-		}
-		
-		$params['query'] .= $this->url->getQuery("sort","limit");
-		
-		$url = $this->url->link($params['route'], $params['query']);
-	?>
-
-<script type="text/javascript">//<!--
-$('<?=$params['selector'];?>').each(function (i,e) {
-	$(e).autocomplete({
-		delay: 0,
-		source: function (request, response) {
-			filter = {'<?= $params['filter']; ?>' : request.term};
-			
-			$.ajax({
-				url: "<?= $url; ?>",
-				dataType: 'json',
-				data: {filter: filter},
-				success: function (json) {
-					response($.map(json, function (item) {
-						item['label'] = item.<?= $params['label'];?>;
-						item['value'] = item.<?= $params['value'];?>;
-						
-						return item;
-					}));
-				}
-			});
-		},
-		select: function (event, ui) {
-			<?= $params['callback'];?>($(e), ui.item);
-			
-			return false;
-		}
-	})
-});
-//--></script>
-<?php break;
-
 
 	case 'ckeditor': ?>
 <? if (!isset($js_loaded_files['ckeditor'])) { ?>
@@ -338,73 +288,109 @@ for(var t in translations){
 
 <?php break;
 	
-	
-	case 'template_rows':
-		if (empty($args[0])) {
-			trigger_error("Builder::js('template_rows'): You must specify the list selector to apply the template row to!");
-			return;
-		}
-		
-		$list_selector = $args[0];
-		
-		$button_selector = !empty($args[1]) ? $args[1] : false;
-		$max_row = !empty($args[2]) ? $args[2] : false;
-		$template_row_defaults = !empty($args[3]) ? $args[3] : false;
-	?>
+
+
+	case 'ac_template':
+		if (isset($js_loaded_files['ac_template'])) break; ?>
+
 <script type="text/javascript">//<!--
-<? if (!isset($js_loaded_files['template_rows'])) { ?>
-	var _tpl_rows = {};
+$.ac_template = $.fn.ac_template = function(name, action, data) {
+	templates = $.fn.ac_template.templates;
 	
-function add_template_row(tpl_row)
-{
-	template = tpl_row['template'].clone(true);
-	
-	template.find('[name]').each(function(i,e){
-		t_name = $(e).attr('name').replace(/__row__/g, tpl_row['count']);
-		$(e).attr('name', t_name);
+	//Load Template
+	if (!action || typeof action === 'object') {
+		template_row = this.find('[data-row="__row__"]');
+		template = template_row.clone(true);
+		template_row.remove();
 		
-		key = $(e).val();
-		if (tpl_row['defaults']) {
-			$(e).val(tpl_row['defaults'][key]);
+		count = 0;
+		
+		this.find('[data-row]').each(function(i,e){
+			count = Math.max(count, parseInt($(e).attr('data-row'))+1);
+		});
+		
+		templates[name] = $.extend({
+			list: this,
+			template: template,
+			defaults: {}, //action being used as data here
+			count: count,
+			unique: false
+		}, action);
+	}
+	else {
+		row = templates[name];
+		template = row.template.clone(true);
+		data = $.extend({}, row.defaults, data || {});
+		
+		if (typeof this === 'function') {
+			list = row.list;
 		} else {
-			$(e).val('');
+			list = this;
 		}
-	});
-	
-	template.removeClass('__row__');
-	
-	tpl_row['count'] += 1;
-	
-	tpl_row['list'].append(template);
-	
-	template.find('.ckedit').each(function(i,e){
-		init_ckeditor_for($(e));
-	});
-}
-<? } ?>
+		
+		if (action === 'add') {
+			if (row.unique && (duplicate = list.children('[data-id="' + data[row.unique] + '"]')).length) {
+				duplicate.flash_highlight();
+				return false;
+			}
+			
+			template.attr('data-row', row.count);
+			
+			if (row.unique) {
+				template.attr('data-id', data[row.unique]);
+			} 
+			
+			list.append(template);
+			
+			datarow_parents = template.parents('[data-row]');
+			
+			template.find('[name]').each(function(i,e) {
+				e_name = $(e).attr('name');
+				
+				row_count = e_name.match(/__row__/g).length;
+				
+				if (row_count > 1) {
+					find = ['__row__'];
+					replace = [row.count];
+					
+					for (var i=0;i<row_count-1;i++) {
+						find.push('__row__');
+						replace.push(parseInt($(datarow_parents[i]).attr('data-row')));
+					}
+					
+					t_name = e_name.str_replace(find, replace.reverse());
+				}
+				else {
+					t_name = e_name.replace(/__row__/g, row.count);
+				}
+				
+				$(e).attr('name', t_name);
+				
+				key = $(e).val();
+				
+				if (typeof data[key] !== 'undefined') {
+					$(e).val(data[key]);
+				} else {
+					$(e).val('');
+				}
+			});
+			
+			template.find('.ckedit').each(function(i,e){
+				init_ckeditor_for($(e));
+			});
+			
+			row.count++;
+			
+			return template.flash_highlight();
+		}
+	}
+	return this;
+};
 
-var _tr_id = '<?= $list_selector; ?>';
-
-_tpl_rows[_tr_id] = {};
-
-_tpl_list = $(_tr_id);
-_tpl_rows[_tr_id]['template'] = _tpl_list.find('.__row__').clone(true);
-_tpl_list.find('.__row__').remove();
-_tpl_rows[_tr_id]['count'] = <?= (int)$max_row; ?>;
-
-if (!_tpl_rows[_tr_id]['count']) {
-	_tpl_rows[_tr_id]['count'] = _tpl_list.children().length + 1;
-}
-
-_tpl_rows[_tr_id]['list'] = _tpl_list;
-
-_tpl_rows[_tr_id]['defaults'] = <?= !empty($template_row_defaults) ? json_encode($template_row_defaults) : 0; ?>;
-
-<? if ($button_selector) { ?>
-$('<?= $button_selector; ?>').click(function(){add_template_row(_tpl_rows['<?= $list_selector; ?>'])});
-<? } ?>
+$.fn.ac_template.templates = {};
 //--></script>
 <?php break;
+
 
 
 	case 'html_entity_decode': ?>

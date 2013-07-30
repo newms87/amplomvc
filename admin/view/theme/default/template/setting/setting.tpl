@@ -213,6 +213,10 @@
 							<td><input type="text" name="config_admin_limit" value="<?= $config_admin_limit; ?>" size="3" />
 						</tr>
 						<tr>
+							<td class="required"> <?= $entry_autocomplete_limit; ?></td>
+							<td><input type="text" name="config_autocomplete_limit" value="<?= $config_autocomplete_limit; ?>" size="3" />
+						</tr>
+						<tr>
 							<td><?= $entry_performance_log; ?></td>
 							<td><?= $this->builder->build('select', $data_statuses, 'config_performance_log', $config_performance_log); ?></td>
 						</tr>

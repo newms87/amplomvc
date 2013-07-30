@@ -20,7 +20,7 @@
 						<td class="left"><?= $plugin['name']; ?></td>
 						<td class="right">
 							<? foreach ($plugin['action'] as $action) { ?>
-							[ <a href="<?= $action['href']; ?>" class="<?= $this->tool->get_slug($action['text']); ?>"><?= $action['text']; ?></a> ]
+							[ <a href="<?= $action['href']; ?>" class="<?= $this->tool->getSlug($action['text']); ?>"><?= $action['text']; ?></a> ]
 							<? } ?>
 						</td>
 					</tr>

@@ -24,7 +24,7 @@ class Admin_Controller_Setting_ReturnReason extends Controller
 		$this->breadcrumb->add($this->_('text_settings'), $this->url->link('setting/setting'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/return_reason'));
 		
-		$this->data['action'] = $this->url->link('setting/return_reason');
+		$this->data['save'] = $this->url->link('setting/return_reason');
 		$this->data['cancel'] = $this->url->link('setting/store');
 		
 		if (!$this->request->isPost()) {
@@ -50,18 +50,14 @@ class Admin_Controller_Setting_ReturnReason extends Controller
 			}
 		} unset($return_reason);
 		
+		//Add in the template row
 		$defaults = array(
 			'title' => $this->_('entry_title'),
 		);
 		
-		if (empty($return_reasons)) {
-			$return_reasons[0] = $defaults;
-		}
+		$this->builder->addTemplateRow($return_reasons, $defaults);
 		
-		//Add in the template row
-		$this->tool->add_template_row($return_reasons);
-		
-		$this->data['template_row_defaults'] = $defaults;
+		$this->data['template_defaults'] = $defaults;
 		
 		//Get the Field Translations
 		$translate_fields = array(
@@ -69,7 +65,7 @@ class Admin_Controller_Setting_ReturnReason extends Controller
 		);
 		
 		foreach ($return_reasons as $key => &$return_reason) {
-			$return_reason['translations'] = $this->translation->get_translations('return_reasons', $key, $translate_fields);
+			$return_reason['translations'] = $this->translation->getTranslations('return_reasons', $key, $translate_fields);
 		} unset($return_reason);
 
 		$this->data['return_reasons'] = $return_reasons;
