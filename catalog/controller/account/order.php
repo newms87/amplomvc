@@ -14,7 +14,7 @@ class Catalog_Controller_Account_Order extends Controller
 			$this->url->redirect($this->url->link('account/login'));
 		}
 		
-		//Page Title
+		//Page Head
 		$this->document->setTitle($this->_('heading_title'));
 		
 		//Breadcrumbs
@@ -90,7 +90,7 @@ class Catalog_Controller_Account_Order extends Controller
 			$this->url->redirect($this->url->link('account/order'));
 		}
 		
-		//Page Title
+		//Page Head
 		$this->document->setTitle($this->_('text_order'));
 		
 		//Breadcrumbs

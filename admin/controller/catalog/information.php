@@ -116,7 +116,7 @@ class Admin_Controller_Catalog_Information extends Controller
 	
 	private function getList()
 	{
-		//Page Title
+		//Page Head
 		$this->document->setTitle($this->_('heading_title'));
 		
 		//The Template

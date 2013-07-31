@@ -39,11 +39,11 @@
 							<td></td>
 							<td align="left">
 								<?= $this->builder->build('select', $data_prefixes, 'date_start_prefix', $date_start_prefix); ?>
-								<input type="text" name="filter_date_start" value="<?= $filter_date_start; ?>" class='datetime' size="8"/>
+								<input type="text" name="filter_date_start" value="<?= $filter_date_start; ?>" class="datetimepicker" size="8"/>
 							</td>
 							<td align="left">
 								<?= $this->builder->build('select', $data_prefixes, 'date_end_prefix', $date_end_prefix); ?>
-								<input type="text" name="filter_date_end" value="<?= $filter_date_end; ?>" class='datetime' size="8"/>
+								<input type="text" name="filter_date_end" value="<?= $filter_date_end; ?>" class="datetimepicker" size="8"/>
 							</td>
 							<td><?= $this->builder->build('select', $data_statuses_blank, "filter_status", $filter_status); ?></td>
 							<td align="right"><a onclick="filter();" class="button"><?= $button_filter; ?></a></td>

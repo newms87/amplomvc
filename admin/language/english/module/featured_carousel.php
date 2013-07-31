@@ -6,7 +6,6 @@ $_['data_styles'] = array('regular'=>'Regular', 'large'=>'Large');
 
 // Text
 $_['text_module']			= 'Modules';
-$_['text_autocomplete']  = "<span class='help'>(autocomplete)</span>";
 $_['text_success']		= 'Success: You have modified Featured Carousels!';
 
 // Entry

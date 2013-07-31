@@ -133,7 +133,7 @@ class Admin_Controller_Catalog_Product extends Controller
 	
   	private function getList()
   	{
-  		//Page Title
+  		//Page Head
   		$this->document->setTitle($this->_('heading_title'));
 		
 		//The Template
@@ -368,7 +368,7 @@ class Admin_Controller_Catalog_Product extends Controller
 
   	private function getForm()
   	{
-  		//Page Title
+  		//Page Head
   		$this->document->setTitle($this->_('heading_title'));
 		
   		//The Template
@@ -381,12 +381,17 @@ class Admin_Controller_Catalog_Product extends Controller
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/product'));
 		
+		if (!$product_id) {
+			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('catalog/product/update'));
+		} else {
+			$this->breadcrumb->add($this->_('text_edit'), $this->url->link('catalog/product/update', 'product_id=' . $product_id));
+		}
+		
 		//Load Information
 		if ($product_id && !$this->request->isPost()) {
 			$product_info = $this->Model_Catalog_Product->getProduct($product_id);
 			
 			$product_info['date_available'] = $this->date->format($product_info['date_available'], 'Y-m-d');
-			
 			$product_info['product_tags'] = $this->Model_Catalog_Product->getProductTags($product_id);
 			$product_info['product_store'] = $this->Model_Catalog_Product->getProductStores($product_id);
 			$product_info['product_attributes'] = $this->Model_Catalog_Product->getProductAttributes($product_id);
@@ -399,17 +404,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			$product_info['product_reward'] = $this->Model_Catalog_Product->getProductRewards($product_id);
 			$product_info['product_layout'] = $this->Model_Catalog_Product->getProductLayouts($product_id);
 			$product_info['product_template'] = $this->Model_Catalog_Product->getProductTemplates($product_id);
-			
-			$product_info['product_related'] = array();
-			$products = $this->Model_Catalog_Product->getProductRelated($product_id);
-			
-			foreach ($products as $product_id) {
-				$related_info = $this->Model_Catalog_Product->getProduct($product_id);
-				
-				if ($related_info) {
-					$product_info['product_related'][] = $related_info;
-				}
-			}
+			$product_info['product_related'] = $this->Model_Catalog_Product->getProductRelated($product_id);
 		}
 		
 		//Set Values or Defaults
@@ -419,7 +414,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			'upc'=>'',
 			'location'=>'',
 			'keyword'=>'',
-			'product_store'=>array(0,1,2),
+			'product_store' => array(0,1),
 			'name' => '',
 			'description' => '',
 			'teaser' => '',
@@ -428,9 +423,9 @@ class Admin_Controller_Catalog_Product extends Controller
 			'meta_description' => '',
 			'image'=>'',
 			'manufacturer_id' => 0,
-			'shipping'=>1,
-			'price'=>'',
-			'cost'=>'',
+			'shipping' => 1,
+			'price' => '',
+			'cost' => '',
 			'return_policy_id' => $this->config->get('config_default_return_policy'),
 			'shipping_policy_id' => $this->config->get('config_default_shipping_policy'),
 			'tax_class_id'=>$this->config->get('config_tax_default_id'),
@@ -511,62 +506,31 @@ class Admin_Controller_Catalog_Product extends Controller
 		$image_width = $this->config->get('config_image_product_option_width');
 		$image_height = $this->config->get('config_image_product_option_height');
 		
+		//Product Attribute Template Defaults
+		$this->data['product_attributes']['__ac_template__'] = array(
+			'attribute_id' => '',
+			'name' => '',
+			'text' => '',
+		);
+		
 		//Product Options Unused Option Values
 		foreach ($this->data['product_options'] as &$product_option) {
-			$filter = array(
-				'!option_value_ids' => array_column($product_option['product_option_values'], 'option_value_id'),
-			);
+			if (!empty($product_option['product_option_values'])) { 
+				$filter = array(
+					'!option_value_ids' => array_column($product_option['product_option_values'], 'option_value_id'),
+				);
+			} else {
+				$filter = array();
+			}
 			
 			$option_values = $this->Model_Catalog_Option->getOptionValues($product_option['option_id'], $filter);
-			
-			foreach ($option_values as &$option_value) {
-				$option_value['image'] = $this->image->resize($option_value['image'], $image_width, $image_height);
-			} unset($option_value);
 			
 			$product_option['unused_option_values'] = $option_values;
 			
 		} unset($product_option);
 			
-		//Product Options Templates
-		$product_option_value_restriction_defaults = array(
-			'product_option_value_id' => 0,
-			'restrict_option_value_id' => 0,
-		);
-		 
-		$product_option_value_restrictions = array();
-		 
-		$this->builder->addTemplateRow($product_option_value_resrictions, $product_option_value_restriction_defaults);
-		
-		$product_option_value_defaults = array(
-			'product_option_value_id' => 0,
-			'option_value_id' => '',
-			'name' => '',
-			'image' => '',
-			'quantity' => 1,
-			'subtract' => 1,
-			'cost' => '',
-			'price' => '',
-			'points' => '',
-			'weight' => '',
-			'sort_order' => 0,
-			'restrictions' => $product_option_value_restrictions,
-		);
-		
-		$product_option_values = array();
-		
-		$this->builder->addTemplateRow($product_option_values, $product_option_value_defaults);
-		
-		$unused_option_values = array();
-		
-		//Add Unused template row
-		$unused_template_defaults = array(
-			'option_value_id' => '',
-			'name' => '',
-		);
-		
-		$this->builder->addTemplateRow($unused_option_values, $unused_template_defaults);
-		
-		$product_option_defaults = array(
+		//Product Options Template Defaults
+		$this->data['product_options']['__ac_template__'] = array(
 			'product_option_id' => 0,
 			'option_id' => '',
 			'name' => '',
@@ -574,17 +538,61 @@ class Admin_Controller_Catalog_Product extends Controller
 			'type' => '',
 			'required' => 1,
 			'sort_order' => 0,
-			'product_option_values' => $product_option_values,
-			'unused_option_values' => $unused_option_values,
+			'unused_option_values' => array('__ac_template__' => array(
+				'option_value_id' => '',
+				'name' => '',
+			)),
+			'product_option_values' => array('__ac_template__' => array(
+				'product_option_value_id' => 0,
+				'option_value_id' => '',
+				'name' => '',
+				'image' => '',
+				'quantity' => 1,
+				'subtract' => 0,
+				'cost' => 0,
+				'price' => 0,
+				'points' => 0,
+				'weight' => 0,
+				'sort_order' => 0,
+				'restrictions' => array('__ac_template__' => array(
+					'product_option_value_id' => 0,
+					'restrict_option_value_id' => 0,
+				)),
+					
+			)),
 		);
 		
-		$this->builder->addTemplateRow($this->data['product_options'], $product_option_defaults);
+		//Product Discount Template Defaults
+		$this->data['product_discounts']['__ac_template__'] = array(
+			'customer_group_id' => $this->config->get('config_customer_group_id'),
+			'quantity' => 0,
+			'priority' => 0,
+			'price' => 0,
+			'date_start' => $this->date->now(),
+			'date_end' => $this->date->add('30 days'),
+		);
+		
+		//Product Special Template Defaults
+		$this->data['product_specials']['__ac_template__'] = array(
+			'customer_group_id' => $this->config->get('config_customer_group_id'),
+			'priority' => 0,
+			'price' => 0,
+			'date_start' => $this->date->now(),
+			'date_end' => $this->date->add('30 days'),
+		);
+		
+		//Product Additional Images Template Defaults
+		$this->data['product_images']['__ac_template__'] = array(
+			'image' => '',
+			'thumb' => '',
+			'sort_order' => 0,
+		);
 		
 		//Ajax Urls
 		$this->data['url_generate_url'] = $this->url->ajax('catalog/product/generate_url');
 		$this->data['url_generate_model'] = $this->url->ajax('catalog/product/generate_model');
 		$this->data['url_autocomplete'] = $this->url->ajax('catalog/product/autocomplete');
-		$this->data['url_attribute_group_autocomplete'] = $this->url->ajax('catalog/attribute_group/autocomplete');
+		$this->data['url_attribute_autocomplete'] = $this->url->ajax('catalog/attribute_group/autocomplete');
 		$this->data['url_option_autocomplete'] = $this->url->ajax('catalog/option/autocomplete');
 		
 		//Action Buttons
@@ -671,7 +679,7 @@ class Admin_Controller_Catalog_Product extends Controller
 								}
 							}
 							
-							if (isset($product_option['product_option_value'][$restriction['restrict_option_value_id']])) {
+							if (isset($product_option['product_option_values'][$restriction['restrict_option_value_id']])) {
 								$this->error["product_options[$option_id][product_option_value][$product_option_value_id][restrictions][$r_key][restrict_option_value_id]"] = sprintf($this->_('error_restrict_same_option_id'), ucfirst($product_option['type']));
 							}
 						}
@@ -770,7 +778,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			$product_options = $this->Model_Catalog_Product->getProductOptions($product['product_id']);
 			
 			foreach ($product_options as &$product_option) {
-				foreach ($product_option['product_option_value'] as &$product_option_value) {
+				foreach ($product_option['product_option_values'] as &$product_option_value) {
 					$product_option_value['price'] = $this->currency->format($product_option_value['price']);
 				}
 			} unset($product_option);

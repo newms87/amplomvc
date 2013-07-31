@@ -22,10 +22,8 @@ class Catalog_Controller_Common_Header extends Controller
 		//Add Scripts
 		$this->document->addScript(HTTP_JS . 'jquery/jquery.js', 50);
 		$this->document->addScript(HTTP_JS . 'jquery/ui/jquery-ui.js', 51);
-		$this->document->addScript(HTTP_JS . 'jquery/ui/external/jquery.bgiframe-2.1.2.js', 52);
-		$this->document->addScript(HTTP_JS . 'jquery/ui/external/jquery.cookie.js', 53);
-		$this->document->addScript(HTTP_JS . 'jquery/tabs.js', 54);
-		$this->document->addScript(HTTP_JS . 'jquery/colorbox/jquery.colorbox.min.js', 55);
+		$this->document->addScript(HTTP_JS . 'common.js', 53);
+		$this->document->localizeScript(DIR_APPLICATION . 'view/javascript/ac_vars.php');
 		
 		//Add Theme Scripts
 		$this->document->addScript(HTTP_THEME_JS . 'common.js', 56);
@@ -38,7 +36,7 @@ class Catalog_Controller_Common_Header extends Controller
 		
 		$this->data['canonical_link'] = $this->document->getCanonicalLink();
 		
-		$this->data['css_styles'] = $this->document->getStyles();
+		$this->data['styles'] = $this->document->renderStyles();
 		$this->data['scripts'] = $this->document->renderScripts();
 		
 		$this->language->set('lang', $this->language->getInfo('code'));

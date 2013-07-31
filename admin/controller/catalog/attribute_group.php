@@ -80,7 +80,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 	
 	private function getList()
 	{
-		//Page Title
+		//Page Head
 		$this->document->setTitle($this->_('heading_title'));
 		
 		//The Template
@@ -188,7 +188,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
   	
   	private function getForm()
   	{
-  		//Page Title
+  		//Page Head
   		$this->document->setTitle($this->_('heading_title'));
 		
 		//The Template
@@ -313,10 +313,8 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 	
 	public function autocomplete()
 	{
-		//Sort
+		//Sort / Filter
 		$sort = $this->sort->getQueryDefaults('name', 'ASC', $this->config->get('config_autocomplete_limit'));
-		
-		//Filter
 		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 		
 		//Label and Value

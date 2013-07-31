@@ -38,7 +38,7 @@
  <tbody>
 	<tr id="filter_list">
 		<td></td>
-		<td align="center"><a onclick="filter();" class="button"><?= $button_filter; ?></a></td>
+		<td align="center"><a onclick="apply_filter();" class="button"><?= $button_filter; ?></a></td>
 		<? foreach($columns as $slug => $column) { ?>
 		<? if($column['filter']) { ?>
 		<td class='column_filter <?= $column['align']; ?>'>
@@ -114,7 +114,7 @@
 		<td></td>
 		<? } ?>
 		<? } ?>
-		<td align="center"><a onclick="filter();" class="button"><?= $button_filter; ?></a></td>
+		<td align="center"><a onclick="apply_filter();" class="button"><?= $button_filter; ?></a></td>
 	</tr>
 	<? if(!empty($rows)) { ?>
 	<? foreach ($rows as $row) { ?>
@@ -225,7 +225,7 @@
 <script type="text/javascript">//<!--
 $("#filter_list").keydown(function(e){
 	if (e.keyCode == 13) {
-		filter();
+		apply_filter();
 		return false;
 	}
 });
@@ -276,8 +276,9 @@ $('.zoom_hover.daterange input').change(function(){
 	}
 });
 
+function apply_filter() {
+	$('#filter_list').filter_url("<?= $this->url->link($this->url->route(), $this->url->getQueryExclude('filter')); ?>");
+}
 //--></script>
-
-<?= $this->builder->js('filter_url', '#filter_list'); ?>
 
 <?= $this->builder->js('datepicker'); ?>

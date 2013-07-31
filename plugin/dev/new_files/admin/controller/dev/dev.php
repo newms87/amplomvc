@@ -125,7 +125,7 @@ class Admin_Controller_Dev_Dev extends Controller
 		$this->template->load('dev/backup_restore');
 		$this->language->load('dev/dev');
 		
-		//Page Title
+		//Page Head
 		$this->document->setTitle($this->_('text_backup_restore'));
 		
 		//Handle POST

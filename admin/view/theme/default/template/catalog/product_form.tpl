@@ -5,7 +5,7 @@
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'product.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
 			<div class="buttons">
-				<a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a>
+				<a onclick="$('#product_form').submit();" class="button"><?= $button_save; ?></a>
 				<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
 			</div>
 		</div>
@@ -23,7 +23,7 @@
 				<a href="#tab-reward"><?= $tab_reward; ?></a>
 				<a href="#tab-design"><?= $tab_design; ?></a>
 			</div>
-			<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
+			<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="product_form">
 				<div id="tab-general">
 					<table class="form">
 						<tr>
@@ -125,11 +125,11 @@
 						</tr>
 						<tr>
 							<td><?= $entry_date_available; ?></td>
-							<td><input type="text" name="date_available" value="<?= $date_available; ?>" size="12" class="datetime" /></td>
+							<td><input type="text" name="date_available" value="<?= $date_available; ?>" size="12" class="datetimepicker" /></td>
 						</tr>
 						<tr>
 							<td><?= $entry_date_expires; ?></td>
-							<td><input type="text" name="date_expires" value="<?= $date_expires; ?>" size="12" class="datetime" /></td>
+							<td><input type="text" name="date_expires" value="<?= $date_expires; ?>" size="12" class="datetimepicker" /></td>
 						</tr>
 						<tr>
 							<td><?= $entry_status; ?></td>
@@ -241,222 +241,8 @@
 						</tr>
 					</table>
 				</div>
-				<div id="tab-attribute">
-					<table id="attribute" class="list">
-						<thead>
-							<tr>
-								<td class="left"><?= $entry_attribute; ?></td>
-								<td class="left"><?= $entry_text; ?></td>
-								<td></td>
-							</tr>
-						</thead>
-						<? $attribute_row = 0; ?>
-						<? foreach ($product_attributes as $product_attribute) { ?>
-						<tbody id="attribute-row<?= $attribute_row; ?>">
-							<tr>
-								<td class="left"><input type="text" name="product_attributes[<?= $attribute_row; ?>][name]" value="<?= $product_attribute['name']; ?>" />
-									<input type="hidden" name="product_attributes[<?= $attribute_row; ?>][attribute_id]" value="<?= $product_attribute['attribute_id']; ?>" /></td>
-								<td class="left">
-									<textarea name="product_attributes[<?= $attribute_row; ?>][text]" cols="40" rows="5"><?= $product_attribute['text']; ?></textarea>
-								</td>
-								<td class="left"><a onclick="$('#attribute-row<?= $attribute_row; ?>').remove();" class="button"><?= $button_remove; ?></a></td>
-							</tr>
-						</tbody>
-						<? $attribute_row++; ?>
-						<? } ?>
-						<tfoot>
-							<tr>
-								<td colspan="2"></td>
-								<td class="left"><a onclick="addAttribute();" class="button"><?= $button_add_attribute; ?></a></td>
-							</tr>
-						</tfoot>
-					</table>
-				</div>
-				
-				
-				
-				<div id="tab-discount">
-					<table id="discount" class="list">
-						<thead>
-							<tr>
-								<td class="left"><?= $entry_customer_group; ?></td>
-								<td class="right"><?= $entry_quantity; ?></td>
-								<td class="right"><?= $entry_priority; ?></td>
-								<td class="right"><?= $entry_price; ?></td>
-								<td class="left"><?= $entry_date_start; ?></td>
-								<td class="left"><?= $entry_date_end; ?></td>
-								<td></td>
-							</tr>
-						</thead>
-						<? $discount_row = 0; ?>
-						<? foreach ($product_discounts as $product_discount) { ?>
-						<tbody id="discount-row<?= $discount_row; ?>">
-							<tr>
-								<td class="left"><select name="product_discounts[<?= $discount_row; ?>][customer_group_id]">
-										<? foreach ($data_customer_groups as $customer_group) { ?>
-										<? if ($customer_group['customer_group_id'] == $product_discount['customer_group_id']) { ?>
-										<option value="<?= $customer_group['customer_group_id']; ?>" selected="selected"><?= $customer_group['name']; ?></option>
-										<? } else { ?>
-										<option value="<?= $customer_group['customer_group_id']; ?>"><?= $customer_group['name']; ?></option>
-										<? } ?>
-										<? } ?>
-									</select></td>
-								<td class="right"><input type="text" name="product_discounts[<?= $discount_row; ?>][quantity]" value="<?= $product_discount['quantity']; ?>" size="2" /></td>
-								<td class="right"><input type="text" name="product_discounts[<?= $discount_row; ?>][priority]" value="<?= $product_discount['priority']; ?>" size="2" /></td>
-								<td class="right"><input type="text" name="product_discounts[<?= $discount_row; ?>][price]" value="<?= $product_discount['price']; ?>" /></td>
-								<td class="left"><input type="text" name="product_discounts[<?= $discount_row; ?>][date_start]" value="<?= $product_discount['date_start']; ?>" class="datetime" /></td>
-								<td class="left"><input type="text" name="product_discounts[<?= $discount_row; ?>][date_end]" value="<?= $product_discount['date_end']; ?>" class="datetime" /></td>
-								<td class="left"><a onclick="$('#discount-row<?= $discount_row; ?>').remove();" class="button"><?= $button_remove; ?></a></td>
-							</tr>
-						</tbody>
-						<? $discount_row++; ?>
-						<? } ?>
-						<tfoot>
-							<tr>
-								<td colspan="6"></td>
-								<td class="left"><a onclick="addDiscount();" class="button"><?= $button_add_discount; ?></a></td>
-							</tr>
-						</tfoot>
-					</table>
-				</div>
-				<div id="tab-special">
-					<table id="special" class="list">
-						<thead>
-							<tr>
-								<td class="left"><?= $entry_customer_group; ?></td>
-								<td class="right"><?= $entry_priority; ?></td>
-								<td class="right"><?= $entry_price; ?></td>
-								<td class="left"><?= $entry_date_start; ?></td>
-								<td class="left"><?= $entry_date_end; ?></td>
-								<td></td>
-							</tr>
-						</thead>
-						<? $special_row = 0; ?>
-						<? foreach ($product_specials as $product_special) { ?>
-						<tbody id="special-row<?= $special_row; ?>">
-							<tr>
-								<td class="left">
-									<input type='hidden' name='product_specials[<?= $special_row; ?>][flashsale_id]' value='<?= $product_special['flashsale_id']; ?>' />
-									<select name="product_specials[<?= $special_row; ?>][customer_group_id]">
-										<? foreach ($data_customer_groups as $customer_group) { ?>
-										<? if ($customer_group['customer_group_id'] == $product_special['customer_group_id']) { ?>
-										<option value="<?= $customer_group['customer_group_id']; ?>" selected="selected"><?= $customer_group['name']; ?></option>
-										<? } else { ?>
-										<option value="<?= $customer_group['customer_group_id']; ?>"><?= $customer_group['name']; ?></option>
-										<? } ?>
-										<? } ?>
-									</select></td>
-								<td class="right"><input type="text" name="product_specials[<?= $special_row; ?>][priority]" value="<?= $product_special['priority']; ?>" size="2" /></td>
-								<td class="right"><input type="text" name="product_specials[<?= $special_row; ?>][price]" value="<?= $product_special['price']; ?>" /></td>
-								<td class="left"><input type="text" name="product_specials[<?= $special_row; ?>][date_start]" value="<?= $product_special['date_start']; ?>" class="datetime" /></td>
-								<td class="left"><input type="text" name="product_specials[<?= $special_row; ?>][date_end]" value="<?= $product_special['date_end']; ?>" class="datetime" /></td>
-								<td class="left"><a onclick="$('#special-row<?= $special_row; ?>').remove();" class="button"><?= $button_remove; ?></a></td>
-							</tr>
-						</tbody>
-						<? $special_row++; ?>
-						<? } ?>
-						<tfoot>
-							<tr>
-								<td colspan="5"></td>
-								<td class="left"><a onclick="addSpecial();" class="button"><?= $button_add_special; ?></a></td>
-							</tr>
-						</tfoot>
-					</table>
-				</div>
-				<div id="tab-image">
-					<? //TODO: add in multiimage selector! ?>
-					<table id="images" class="list">
-						<thead>
-							<tr>
-								<td class="center"><?= $entry_image; ?></td>
-								<td class="center"><?= $entry_sort_order; ?></td>
-								<td></td>
-							</tr>
-						</thead>
-						<tbody id="product_image_list">
-							<? $product_images['template_row'] = array(
-								'image' => '%image%',
-								'thumb' => '%thumb%',
-								'sort_order' => '%sort_order%',
-							); ?>
-							
-							<? $image_row = 0; ?>
-							<? foreach ($product_images as $key => $product_image) { ?>
-								<? $row = $key === 'template_row' ? '%image_row%' : $image_row++; ?>
-								<tr class="product_image <?= $key; ?>">
-									<td class="center">
-										<?= $this->builder->image_input("product_images[$row][image]", $product_image['image']); ?>
-									</td>
-									<td class="center"><input class="sortOrder" type="text" name="product_images[<?= $row; ?>][sort_order]" value="<?= $product_image['sort_order']; ?>" size="2" /></td>
-									<td class="left"><a onclick="$(this).closest('.product_image').remove();" class="button"><?= $button_remove; ?></a></td>
-								</tr>
-							<? } ?>
-						</tbody>
-						<tfoot>
-							<tr>
-								<td colspan="2"></td>
-								<td><a class="button" onclick="add_product_image_row()"><?= $button_add_image; ?></a></td>
-							</tr>
-						</tfoot>
-					</table>
-				</div>
-				<div id="tab-reward">
-					<table class="form">
-						<tr>
-							<td><?= $entry_points; ?></td>
-							<td><input type="text" name="points" value="<?= $points; ?>" /></td>
-						</tr>
-					</table>
-					<table class="list">
-						<thead>
-							<tr>
-								<td class="left"><?= $entry_customer_group; ?></td>
-								<td class="right"><?= $entry_reward; ?></td>
-							</tr>
-						</thead>
-						<? foreach ($data_customer_groups as $customer_group) { ?>
-						<tbody>
-							<tr>
-								<td class="left"><?= $customer_group['name']; ?></td>
-								<td class="right"><input type="text" name="product_reward[<?= $customer_group['customer_group_id']; ?>][points]" value="<?= isset($product_reward[$customer_group['customer_group_id']]) ? $product_reward[$customer_group['customer_group_id']]['points'] : ''; ?>" /></td>
-							</tr>
-						</tbody>
-						<? } ?>
-					</table>
-				</div>
-				<div id="tab-design">
-					<table class="list">
-						<thead>
-							<tr>
-								<td class="left"><?= $entry_store; ?></td>
-								<td class="left"><?= $entry_layout; ?></td>
-								<td class="left"><?= $entry_template; ?></td>
-							</tr>
-						</thead>
-						<tbody>
-							<? foreach ($data_stores as $store) { ?>
-							<tr>
-								<td class="left"><?= $store['name']; ?></td>
-								<td class="left">
-									<? $this->builder->set_config('layout_id', 'name');?>
-									<?= $this->builder->build('select', $data_layouts, "product_layout[$store[store_id]][layout_id]", isset($product_layout[$store['store_id']]) ? $product_layout[$store['store_id']] : ''); ?>
-								</td>
-								<td class="left">
-									<? foreach ($data_templates as $theme => $template) {?>
-									<label class="product_template">
-										<div><?= $theme; ?></div>
-										<?= $this->builder->build('select', $template, "product_template[$store[store_id]][$theme][template]", isset($product_template[$store['store_id']][$theme]['template']) ? $product_template[$store['store_id']][$theme]['template'] : '') ; ?>
-									</label>
-									<? } ?>
-								</td>
-							</tr>
-							<? } ?>
-						</tbody>
-					</table>
-				</div>
 				
 				<div id="tab-option">
-					<? html_dump($product_options); ?>
 					<div id="vtab-option" class="vtabs">
 						<div id="option_tab_list">
 						<? foreach ($product_options as $row => $product_option) { ?>
@@ -475,7 +261,6 @@
 					</div>
 					
 					<div id="product_option_list">
-						
 					<? foreach ($product_options as $row => $product_option) { ?>
 						<div id="tab-option-<?= $row; ?>" class="product_option vtabs-content" data-row="<?= $row; ?>" data-id="<?= $product_option['option_id']; ?>">
 							<input type="hidden" name="product_options[<?= $row; ?>][product_option_id]" value="<?= $product_option['product_option_id']; ?>" />
@@ -527,84 +312,280 @@
 									</tr>
 								</thead>
 								<tbody class='product_option_value_list'>
-								<? foreach ($product_option['product_option_values'] as $pov_row => $product_option_value) { ?>
-									<? $product_option_value_row = "product_options[$row][product_option_values][$pov_row]"; ?>
-									<tr class="product_option_value" data-row="<?= $pov_row; ?>">
-										<td class="center">
-											<input type="hidden" name="<?= $product_option_value_row; ?>[product_option_value_id]" value="<?= $product_option_value['product_option_value_id']; ?>" />
-											<input type="hidden" name="<?= $product_option_value_row; ?>[option_value_id]" value="<?= $product_option_value['option_value_id']; ?>" />
-											<span class='option_value_label'><?= $product_option_value['name']; ?></span>
-											<input type="hidden" name="<?= $product_option_value_row; ?>[name]" value="<?= $product_option_value['name']; ?>" />
-										</td>
-										<td class="center">
-											<? $this->builder->set_builder_template('click_image_small'); ?>
-											<?= $this->builder->image_input($product_option_value_row . '[image]', $product_option_value['image'], null, null, $this->config->get('config_image_product_option_width'), $this->config->get('config_image_product_option_height')); ?>
-										</td>
-										<td class="center"><input type="text" name="<?= $product_option_value_row; ?>[quantity]" value="<?= $product_option_value['quantity']; ?>" size="3" /></td>
-										<td class="center">
-											<?= $this->builder->build('select', $data_yes_no, $product_option_value_row."[subtract]", $product_option_value['subtract']); ?>
-										</td>
-										<td class="center">
-											<input type="text" name="<?= $product_option_value_row; ?>[cost]" value="<?= $product_option_value['cost']; ?>" size="5" />
-										</td>
-										<td class="center">
-											<input type="text" name="<?= $product_option_value_row; ?>[price]" value="<?= $product_option_value['price']; ?>" size="5" />
-										</td>
-										<td class="center">
-											<input type="text" name="<?= $product_option_value_row; ?>[points]" value="<?= $product_option_value['points']; ?>" size="5" />
-										</td>
-										<td class="center">
-											<input type="text" name="<?= $product_option_value_row; ?>[weight]" value="<?= $product_option_value['weight']; ?>" size="5" />
-										</td>
-										<td class="center">
-											<input type="text" class="sort_order" name="<?= $product_option_value_row; ?>[sort_order]" value="<?= $product_option_value['sort_order']; ?>" size="5" />
-										</td>
-										<td class="center">
-											<table class='list'>
-												<thead>
-													<tr>
-														<td class="center"><?= $entry_restriction_option_value; ?></td>
-														<td class="center"><?= $entry_restriction_quantity; ?></td>
-														<td></td>
-													</tr>
-												</thead>
-												<tbody class="product_option_value_restriction_list">
-													<? if (!empty($product_option_value['restrictions'])) { ?>
-													<? foreach ($product_option_value['restrictions'] as $r_row => $restriction) { ?>
-														<? $restriction_row = $product_option_value_row . "[restrictions][$r_row]"; ?>
-														<tr class="product_option_value_restriction" data-row="<?= $r_row; ?>">
-															<td class="center">
-																<?= $this->builder->set_config('option_value_id', 'name'); ?>
-																<?= $this->builder->build('select', $all_product_option_values, $restriction_row."[restrict_option_value_id]", $restriction['restrict_option_value_id']); ?>
-															</td>
-															<td class="center"><input type="text" size='3' name="<?= $restriction_row; ?>[quantity]" value="<?= $restriction['quantity']; ?>" /></td>
-															<td class="center"><a onclick="$(this).closest('tr').remove()" class="button_remove"></a></td>
+								<? if (!empty($product_option['product_option_values'])) { ?>
+									<? foreach ($product_option['product_option_values'] as $pov_row => $product_option_value) { ?>
+										<? $product_option_value_row = "product_options[$row][product_option_values][$pov_row]"; ?>
+										<tr class="product_option_value" data-row="<?= $pov_row; ?>">
+											<td class="center">
+												<input type="hidden" name="<?= $product_option_value_row; ?>[product_option_value_id]" value="<?= $product_option_value['product_option_value_id']; ?>" />
+												<input type="hidden" name="<?= $product_option_value_row; ?>[option_value_id]" value="<?= $product_option_value['option_value_id']; ?>" />
+												<span class='option_value_label'><?= $product_option_value['name']; ?></span>
+												<input type="hidden" name="<?= $product_option_value_row; ?>[name]" value="<?= $product_option_value['name']; ?>" />
+											</td>
+											<td class="center">
+												<? $this->builder->set_builder_template('click_image_small'); ?>
+												<?= $this->builder->image_input($product_option_value_row . '[image]', $product_option_value['image'], null, null, $this->config->get('config_image_product_option_width'), $this->config->get('config_image_product_option_height')); ?>
+											</td>
+											<td class="center"><input type="text" name="<?= $product_option_value_row; ?>[quantity]" value="<?= $product_option_value['quantity']; ?>" size="3" /></td>
+											<td class="center">
+												<?= $this->builder->build('select', $data_yes_no, $product_option_value_row."[subtract]", $product_option_value['subtract']); ?>
+											</td>
+											<td class="center">
+												<input type="text" name="<?= $product_option_value_row; ?>[cost]" value="<?= $product_option_value['cost']; ?>" size="5" />
+											</td>
+											<td class="center">
+												<input type="text" name="<?= $product_option_value_row; ?>[price]" value="<?= $product_option_value['price']; ?>" size="5" />
+											</td>
+											<td class="center">
+												<input type="text" name="<?= $product_option_value_row; ?>[points]" value="<?= $product_option_value['points']; ?>" size="5" />
+											</td>
+											<td class="center">
+												<input type="text" name="<?= $product_option_value_row; ?>[weight]" value="<?= $product_option_value['weight']; ?>" size="5" />
+											</td>
+											<td class="center">
+												<input type="text" class="sort_order" name="<?= $product_option_value_row; ?>[sort_order]" value="<?= $product_option_value['sort_order']; ?>" size="5" />
+											</td>
+											<td class="center">
+												<table class='list'>
+													<thead>
+														<tr>
+															<td class="center"><?= $entry_restriction_option_value; ?></td>
+															<td class="center"><?= $entry_restriction_quantity; ?></td>
+															<td></td>
 														</tr>
-													<? } ?>
-													<? } ?>
-												</tbody>
-												<tfoot>
-													<tr>
-														<td colspan='2'></td>
-														<td class="center"><a onclick="return add_restriction_value($(this))" class="button_add"></a></td>
-													</tr>
-												</tfoot>
-											</table>
-										</td>
-										<td class="left">
-											<span onclick="remove_option_value($(this))" class="button"><?= $button_remove; ?></span>
-											<script type="text/javascript">//<!--
-												$('#tab-option-<?= $row; ?> .product_option_value[data-row=<?= $pov_row; ?>]').data('option_value', <?= json_encode($product_option_value); ?>);
-												//--></script>
-										</td>
-									</tr>
+													</thead>
+													<tbody class="product_option_value_restriction_list">
+														<? if (!empty($product_option_value['restrictions'])) { ?>
+														<? foreach ($product_option_value['restrictions'] as $r_row => $restriction) { ?>
+															<? $restriction_row = $product_option_value_row . "[restrictions][$r_row]"; ?>
+															<tr class="product_option_value_restriction" data-row="<?= $r_row; ?>">
+																<td class="center">
+																	<?= $this->builder->set_config('option_value_id', 'name'); ?>
+																	<?= $this->builder->build('select', $all_product_option_values, $restriction_row."[restrict_option_value_id]", $restriction['restrict_option_value_id']); ?>
+																</td>
+																<td class="center"><input type="text" size='3' name="<?= $restriction_row; ?>[quantity]" value="<?= $restriction['quantity']; ?>" /></td>
+																<td class="center"><a onclick="$(this).closest('tr').remove()" class="button_remove"></a></td>
+															</tr>
+														<? } ?>
+														<? } ?>
+													</tbody>
+													<tfoot>
+														<tr>
+															<td colspan='2'></td>
+															<td class="center"><a onclick="return add_restriction_value($(this))" class="button_add"></a></td>
+														</tr>
+													</tfoot>
+												</table>
+											</td>
+											<td class="left">
+												<span onclick="remove_option_value($(this))" class="button"><?= $button_remove; ?></span>
+												<script type="text/javascript">//<!--
+													$('#tab-option-<?= $row; ?> .product_option_value[data-row=<?= $pov_row; ?>]').data('option_value', <?= json_encode($product_option_value); ?>);
+													//--></script>
+											</td>
+										</tr>
+									<? } ?>
 								<? } ?>
 								</tbody>
 							</table>
 						</div>
 					<? } ?>
+					</div>
+				</div><!-- /tab-option -->
+				
+				<div id="tab-attribute">
+					<div class="add_attribute">
+						<span class="entry"><?= $entry_add_attribute; ?></span>
+						<div>
+							<input type="text" id="product_attribute_autocomplete" value="" />
+							<span class="help">(<?= $text_autocomplete; ?>)</span>
+						</div>
+					</div>
+					
+					<table class="list">
+						<thead>
+							<tr>
+								<td class="left"><?= $entry_attribute; ?></td>
+								<td class="left"><?= $entry_text; ?></td>
+								<td></td>
+							</tr>
+						</thead>
+						<tbody id="product_attribute_list">
+							<? foreach ($product_attributes as $row => $product_attribute) { ?>
+								<tr class="attribute" data-row="<?= $row; ?>" data-id="<?= $product_attribute['attribute_id']; ?>">
+									<td class="left">
+										<input type="hidden" name="product_attributes[<?= $row; ?>][attribute_id]" value="<?= $product_attribute['attribute_id']; ?>" />
+										<span class="attribute_name"><?= $product_attribute['name']; ?></span>
+									</td>
+									<td class="left">
+										<textarea name="product_attributes[<?= $row; ?>][text]" cols="40" rows="5"><?= $product_attribute['text']; ?></textarea>
+									</td>
+									<td class="left"><a onclick="$(this).closest('.attribute').remove()" class="button"><?= $button_remove; ?></a></td>
+								</tr>
+							<? } ?>
+						</tbody>
+					</table>
+				</div> <!-- /tab-attribute -->
+				
+				<div id="tab-discount">
+					<table id="discount" class="list">
+						<thead>
+							<tr>
+								<td class="left"><?= $entry_customer_group; ?></td>
+								<td class="right"><?= $entry_quantity; ?></td>
+								<td class="right"><?= $entry_priority; ?></td>
+								<td class="right"><?= $entry_price; ?></td>
+								<td class="left"><?= $entry_date_start; ?></td>
+								<td class="left"><?= $entry_date_end; ?></td>
+								<td></td>
+							</tr>
+						</thead>
+						<tbody id="product_discount_list">
+							<? foreach ($product_discounts as $row => $product_discount) { ?>
+								<tr class="product_discount" data-row="<?= $row; ?>">
+									<td class="left">
+										<? $this->builder->set_config('customer_group_id', 'name'); ?>
+										<?= $this->builder->build('select', $data_customer_groups, "product_discounts[$row][customer_group_id]", $product_discount['customer_group_id']); ?>
+									</td>
+									<td class="right"><input type="text" name="product_discounts[<?= $row; ?>][quantity]" value="<?= $product_discount['quantity']; ?>" size="2" /></td>
+									<td class="right"><input type="text" name="product_discounts[<?= $row; ?>][priority]" value="<?= $product_discount['priority']; ?>" size="2" /></td>
+									<td class="right"><input type="text" name="product_discounts[<?= $row; ?>][price]" value="<?= $product_discount['price']; ?>" /></td>
+									<td class="left"><input type="text" name="product_discounts[<?= $row; ?>][date_start]" value="<?= $product_discount['date_start']; ?>" class="datetimepicker" /></td>
+									<td class="left"><input type="text" name="product_discounts[<?= $row; ?>][date_end]" value="<?= $product_discount['date_end']; ?>" class="datetimepicker" /></td>
+									<td class="left"><a onclick="$(this).closest('.product_discount').remove();" class="button"><?= $button_remove; ?></a></td>
+								</tr>
+							<? } ?>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td colspan="6"></td>
+								<td class="left"><a id="add_product_discount" class="button"><?= $button_add_discount; ?></a></td>
+							</tr>
+						</tfoot>
+					</table>
+				</div> <!-- /tab-attribute -->
+				
+				<div id="tab-special">
+					<table id="special" class="list">
+						<thead>
+							<tr>
+								<td class="left"><?= $entry_customer_group; ?></td>
+								<td class="right"><?= $entry_priority; ?></td>
+								<td class="right"><?= $entry_price; ?></td>
+								<td class="left"><?= $entry_date_start; ?></td>
+								<td class="left"><?= $entry_date_end; ?></td>
+								<td></td>
+							</tr>
+						</thead>
+						<tbody id="product_special_list">
+							<? foreach ($product_specials as $row => $product_special) { ?>
+								<tr class="product_special" data-row="<?= $row; ?>">
+									<td class="left">
+										<? $this->builder->set_config('customer_group_id', 'name'); ?>
+										<?= $this->builder->build('select', $data_customer_groups, "product_specials[$row][customer_group_id]", $product_special['customer_group_id']); ?>
+									</td>
+									<td class="right"><input type="text" name="product_specials[<?= $row; ?>][priority]" value="<?= $product_special['priority']; ?>" size="2" /></td>
+									<td class="right"><input type="text" name="product_specials[<?= $row; ?>][price]" value="<?= $product_special['price']; ?>" /></td>
+									<td class="left"><input type="text" name="product_specials[<?= $row; ?>][date_start]" value="<?= $product_special['date_start']; ?>" class="datetimepicker" /></td>
+									<td class="left"><input type="text" name="product_specials[<?= $row; ?>][date_end]" value="<?= $product_special['date_end']; ?>" class="datetimepicker" /></td>
+									<td class="left"><a onclick="$(this).closest('.product_special').remove();" class="button"><?= $button_remove; ?></a></td>
+								</tr>							
+							<? } ?>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td colspan="5"></td>
+								<td class="left"><a id="add_product_special" class="button"><?= $button_add_special; ?></a></td>
+							</tr>
+						</tfoot>
+					</table>
 				</div>
+				
+				<div id="tab-image">
+					<? //TODO: add in multiimage selector! ?>
+					<table id="images" class="list">
+						<thead>
+							<tr>
+								<td class="center"><?= $entry_image; ?></td>
+								<td class="center"><?= $entry_sort_order; ?></td>
+								<td></td>
+							</tr>
+						</thead>
+						<tbody id="product_image_list">
+							<? foreach ($product_images as $row => $product_image) { ?>
+								<tr class="product_image" data-row="<?= $row; ?>">
+									<td class="center">
+										<?= $this->builder->image_input("product_images[$row][image]", $product_image['image']); ?>
+									</td>
+									<td class="center"><input class="sort_order" type="text" name="product_images[<?= $row; ?>][sort_order]" value="<?= $product_image['sort_order']; ?>" size="2" /></td>
+									<td class="left"><a onclick="$(this).closest('.product_image').remove();" class="button"><?= $button_remove; ?></a></td>
+								</tr>
+							<? } ?>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td colspan="2"></td>
+								<td><a class="button" onclick="add_product_image()"><?= $button_add_image; ?></a></td>
+							</tr>
+						</tfoot>
+					</table>
 				</div>
+				
+				<div id="tab-reward">
+					<table class="form">
+						<tr>
+							<td><?= $entry_points; ?></td>
+							<td><input type="text" name="points" value="<?= $points; ?>" /></td>
+						</tr>
+					</table>
+					<table class="list">
+						<thead>
+							<tr>
+								<td class="left"><?= $entry_customer_group; ?></td>
+								<td class="right"><?= $entry_reward; ?></td>
+							</tr>
+						</thead>
+						<? foreach ($data_customer_groups as $customer_group) { ?>
+						<tbody>
+							<tr>
+								<td class="left"><?= $customer_group['name']; ?></td>
+								<td class="right"><input type="text" name="product_reward[<?= $customer_group['customer_group_id']; ?>][points]" value="<?= isset($product_reward[$customer_group['customer_group_id']]) ? $product_reward[$customer_group['customer_group_id']]['points'] : ''; ?>" /></td>
+							</tr>
+						</tbody>
+						<? } ?>
+					</table>
+				</div>
+				
+				<div id="tab-design">
+					<table class="list">
+						<thead>
+							<tr>
+								<td class="left"><?= $entry_store; ?></td>
+								<td class="left"><?= $entry_layout; ?></td>
+								<td class="left"><?= $entry_template; ?></td>
+							</tr>
+						</thead>
+						<tbody>
+							<? foreach ($data_stores as $store) { ?>
+							<tr>
+								<td class="left"><?= $store['name']; ?></td>
+								<td class="left">
+									<? $this->builder->set_config('layout_id', 'name');?>
+									<?= $this->builder->build('select', $data_layouts, "product_layout[$store[store_id]][layout_id]", isset($product_layout[$store['store_id']]) ? $product_layout[$store['store_id']] : ''); ?>
+								</td>
+								<td class="left">
+									<? foreach ($data_templates as $theme => $template) {?>
+									<label class="product_template">
+										<div><?= $theme; ?></div>
+										<?= $this->builder->build('select', $template, "product_template[$store[store_id]][$theme][template]", isset($product_template[$store['store_id']][$theme]['template']) ? $product_template[$store['store_id']][$theme]['template'] : '') ; ?>
+									</label>
+									<? } ?>
+								</td>
+							</tr>
+							<? } ?>
+						</tbody>
+					</table>
+				</div>				
 			</form>
 		</div>
 	</div>
@@ -613,28 +594,11 @@
 <?= $this->builder->js('ckeditor'); ?>
 
 <script type="text/javascript">//<!--
-var temp = $('#product_image_list').find('.template_row');
-var image_template = temp.html();
-temp.remove();
+$('.datepicker, .timepicker, .datetimepicker').ac_datepicker();
 
-var image_row = <?= $image_row; ?>;
-
-function add_product_image_row(){
-	template = image_template
-		.replace(/%image_row%/g, image_row)
-		.replace(/%image%/g, "<?= $no_image; ?>")
-		.replace(/%sort_order%/g, $('#product_image_list').children().length);
-	
-	$('#product_image_list').append($('<tr class="product_image ' + image_row + '" />').append(template));
-	
-	image_row++;
-};
-//--></script>
-
-<script type="text/javascript">//<!--
 function generate_url_warning(field){
-	if($('#gen_warn').length == 0)
-			$(field).parent().append('<span id="gen_warn" style="color:red"><?= $warning_generate_url; ?></span>');
+	if(!$('#gen_warn').length)
+		$(field).parent().append('<span id="gen_warn" style="color:red"><?= $warning_generate_url; ?></span>');
 }
 function generate_url(c){
 	$(c).fadeOut(500,function(){$(c).show();});
@@ -667,55 +631,31 @@ $('[name=shipping]').change(function(){
 //--></script>
 
 <script type="text/javascript">//<!--
-var attribute_row = <?= $attribute_row; ?>;
+$('#product_attribute_list').ac_template('attribute_list', {unique: 'attribute_id'});
 
-function addAttribute() {
-	
-	attributeautocomplete(attribute_row);
-	
-	attribute_row++;
-}
-
-function attributeautocomplete(attribute_row) {
-	$('input[name=\'product_attributes[' + attribute_row + '][name]\']').autocomplete({
-		delay: 0,
-		source: function(request, response) {
-			$.ajax({
-				url: "<?= $url_attribute_group_autocomplete; ?>" + '&name=' + encodeURIComponent(request.term),
-				dataType: 'json',
-				success: function(json) {
-					response($.map(json, function(item) {
-						return {
-							category: item.attribute_group,
-							label: item.name,
-							value: item.attribute_id
-						}
-					}));
-				}
-			});
-		},
-		select: function(event, ui) {
-			$('input[name=\'product_attributes[' + attribute_row + '][name]\']').attr('value', ui.item.label);
-			$('input[name=\'product_attributes[' + attribute_row + '][attribute_id]\']').attr('value', ui.item.value);
-			
-			return false;
+$('#product_attribute_autocomplete').autocomplete({
+	delay: 0,
+	source: function(request, response) {
+		filter = {name: request.term};
+		$.get("<?= $url_attribute_autocomplete; ?>", {filter: filter}, response, 'json');
+	},
+	select: function(event, data){
+		if (attribute_row = $.ac_template('attribute_list', 'add', data.item)) {
+			attribute_row.find('.attribute_name').html(data.item.name);
 		}
-	});
-}
-
-$('#attribute tbody').each(function(index, element) {
-	attributeautocomplete(index);
+		
+		$(this).val('');
+		return false;
+	}
 });
 //--></script>
-
-<?= $this->builder->js('ac_template'); ?>
 
 <script type="text/javascript">//<!--
 $('#product_option_list .product_option_value_restriction_list').ac_template('povr_list');
 $('#product_option_list .unused_option_value_list').ac_template('uov_list', {unique: 'option_value_id'});
-$('#product_option_list .product_option_value_list').ac_template('pov_list');
+$('#product_option_list .product_option_value_list').ac_template('pov_list', {defaults: <?= json_encode($product_options['__ac_template__']['product_option_values']['__ac_template__']); ?>});
 $('#option_tab_list').ac_template('option_tabs');
-$('#product_option_list').ac_template('po_list', {unique: 'option_id'});
+$('#product_option_list').ac_template('po_list', {unique: 'option_id', defaults: <?= json_encode($product_options['__ac_template__']); ?>});
 
 $('#product_option_autocomplete').autocomplete({
 	delay: 0,
@@ -776,7 +716,7 @@ function add_option_value(option_value) {
 	row.find('.option_value_label').html(ov_data.name);
 	
 	if (ov_data.image) {
-		row.find('.image .iu_thumb').attr('src', ov_data.image);
+		row.find('.image .iu_thumb').attr('src', ov_data.thumb);
 	}
 	
 	row.data('option_value', ov_data);
@@ -818,7 +758,8 @@ function remove_option_value(context){
 	var ov_data = row.data('option_value');
 	
 	//save image
-	ov_data.image = row.find('.image .iu_thumb').attr('src');
+	ov_data.image = row.find('.image .iu_image').val();
+	ov_data.thumb = row.find('.image .iu_thumb').attr('src');
 	
 	row.remove();
 	
@@ -831,14 +772,8 @@ function remove_option_value(context){
 }
 
 $('.product_option_value_list').sortable({stop: function(){$(this).update_index('.sort_order');}});
-//--></script>
 
-<span id='all_product_option_values' style='display:none'>
-	<?= $this->builder->set_config('option_value_id', 'name'); ?>
-	<?= $this->builder->build('select', $all_product_option_values, "product_options[%option_id%][product_option_values][%option_value_id%][restrictions][%row%][restrict_option_value_id]", '', array('class'=>'restrict_option_values')); ?>
-</span>
-					
-<script type="text/javascript">//<!--
+<? //TODO: Finish the product restrictions for new templating style ?>
 function update_ov_entries_select(){
 	new_options = '';
 	$('.option_value_entries > tr').each(function(i,e){
@@ -854,110 +789,45 @@ function update_ov_entries_select(){
 	});
 }
 //--></script>
-<script type="text/javascript">//<!--
-var discount_row = <?= $discount_row; ?>;
 
-function addDiscount() {
-	html	= '<tbody id="discount-row' + discount_row + '">';
-	html += '	<tr>';
-		html += '		<td class="left"><select name="product_discounts[' + discount_row + '][customer_group_id]">';
-		<? foreach ($data_customer_groups as $customer_group) { ?>
-		html += '			<option value="<?= $customer_group['customer_group_id']; ?>"><?= $customer_group['name']; ?></option>';
-		<? } ?>
-		html += '		</select></td>';
-		html += '		<td class="right"><input type="text" name="product_discounts[' + discount_row + '][quantity]" value="" size="2" /></td>';
-		html += '		<td class="right"><input type="text" name="product_discounts[' + discount_row + '][priority]" value="" size="2" /></td>';
-	html += '		<td class="right"><input type="text" name="product_discounts[' + discount_row + '][price]" value="" /></td>';
-		html += '		<td class="left"><input type="text" name="product_discounts[' + discount_row + '][date_start]" value="" class="date" /></td>';
-	html += '		<td class="left"><input type="text" name="product_discounts[' + discount_row + '][date_end]" value="" class="date" /></td>';
-	html += '		<td class="left"><a onclick="$(\'#discount-row' + discount_row + '\').remove();" class="button"><?= $button_remove; ?></a></td>';
-	html += '	</tr>';
-		html += '</tbody>';
-	
-	$('#discount tfoot').before(html);
-		
-	$('#discount-row' + special_row + ' .datetime').datetimepicker({dateFormat: 'yy-mm-dd',timeFormat:'h:m'});
-	
-	discount_row++;
-}
-//--></script>
-<script type="text/javascript"><!--
-var special_row = <?= $special_row; ?>;
-
-function addSpecial() {
-	html	= '<tbody id="special-row' + special_row + '">';
-	html += '	<tr>';
-		html += '		<td class="left"><select name="product_specials[' + special_row + '][customer_group_id]">';
-		<? foreach ($data_customer_groups as $customer_group) { ?>
-		html += '			<option value="<?= $customer_group['customer_group_id']; ?>"><?= $customer_group['name']; ?></option>';
-		<? } ?>
-		html += '		</select></td>';
-		html += '		<td class="right"><input type="text" name="product_specials[' + special_row + '][priority]" value="" size="2" /></td>';
-	html += '		<td class="right"><input type="text" name="product_specials[' + special_row + '][price]" value="" /></td>';
-		html += '		<td class="left"><input type="text" name="product_specials[' + special_row + '][date_start]" value="" class="datetime" /></td>';
-	html += '		<td class="left"><input type="text" name="product_specials[' + special_row + '][date_end]" value="" class="datetime" /></td>';
-	html += '		<td class="left"><a onclick="$(\'#special-row' + special_row + '\').remove();" class="button"><?= $button_remove; ?></a></td>';
-	html += '	</tr>';
-		html += '</tbody>';
-	
-	$('#special tfoot').before(html);
- 
-	$('#special-row' + special_row + ' .datetime').datetimepicker({dateFormat: 'yy-mm-dd',timeFormat:'h:m'});
-	
-	special_row++;
-}
-//--></script>
+<span id='all_product_option_values' style='display:none'>
+	<?= $this->builder->set_config('option_value_id', 'name'); ?>
+	<?= $this->builder->build('select', $all_product_option_values, "product_options[%option_id%][product_option_values][%option_value_id%][restrictions][%row%][restrict_option_value_id]", '', array('class'=>'restrict_option_values')); ?>
+</span>
 
 <script type="text/javascript">//<!--
-var image_row = <?= $image_row; ?>;
-function addImage(imageName) {
-	html = '	<tr class="imagerow" id="image-row' + image_row + '">';
-	html += '		<td class="left"><div class="image"><img width="100" src="../image/' + imageName + '" alt="' + imageName + '" title="' + imageName + '" id="thumb' + image_row + '" /><input type="hidden" name="product_images[' + image_row + '][image]" value="' + imageName + '" id="image' + image_row + '" /></div></td>';
-	html += '		<td class="left">' + imageName + '</td>';
-	html += '		<td class="right"><input type="radio" name="primary_product_image" value="' + imageName + '" /></td>';
-	html += '		<td class="right"><input class="sortOrder" type="text" name="product_images[' + image_row + '][sort_order]" value="' + (image_row + 1) + '" size="2" /></td>';
-	html += '		<td class="left"><a onclick="$(\'#image-row' + image_row	+ '\').remove();" class="button"><?= $button_remove; ?></a></td>';
-	html += '	</tr>';
+$('#product_image_list').ac_template('image_list', {defaults: <?= json_encode($product_images['__ac_template__']); ?>});
+
+function add_product_image(data){
+	data = data || null;
 	
-	$('#images tbody').append(html);
+	$.ac_template('image_list', 'add', data);
 	
-	image_row++;
-		
-		$('#images').sortable('refresh');
+	$('#product_image_list').update_index('.sort_order');
 };
 
-$('input[name=primary_product_image]').live("change", function() { $('input[name=image]').val($(this).val()); });
+$('#product_image_list').sortable({cursor:'move', stop: function(){$(this).update_index('.sort_order');} });
+//--></script>
 
-$('#images').bind('sortupdate', function(event, ui) {
-	var index = 0;
-	$('#images tbody tr').each(function() {
-			index += 1;
-			var so = $(this).find('.sortOrder');
-			so.val(index);
-	});
-});
-	
-$(document).ready(function() {
-	var c = {};
-	$('#images tbody').sortable({
-		items: 'tr.imagerow',
-		forcePlaceholderSize:true,
-		cursor: "move",
-		helper: function(event) { return $('<div class="drag-row"><table></table></div>').find('table').append($(event.target).closest('tr').clone()).end(); },
-		forceHelperSize: true,
-		forcePlaceholderSize: true,
-		scroll: true,
-		scrollSensitivity: 30,
-		scrollSpeed: 30
-	});
+<script type="text/javascript">//<!--
+$('#product_discount_list').ac_template('discount_list', {defaults: <?= json_encode($product_discounts['__ac_template__']); ?>});
+
+$('#add_product_discount').click(function(){
+	$.ac_template('discount_list', 'add');
 });
 //--></script>
 
-<?= $this->builder->js('datepicker'); ?>
+<script type="text/javascript">//<!--
+$('#product_special_list').ac_template('special_list', {defaults: <?= json_encode($product_specials['__ac_template__']); ?>});
+
+$('#add_product_special').click(function(){
+	$.ac_template('special_list', 'add');
+});
+//--></script>
 
 <script type="text/javascript">//<!--
 $('#tabs a').tabs();
-$('#vtab-option a').not('.normal').tabs();
+$('#option_tab_list > a').tabs();
 //--></script>
 
 <?= $this->builder->js('translations', $translations); ?>

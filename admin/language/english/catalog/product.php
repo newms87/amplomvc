@@ -82,6 +82,7 @@ $_['entry_customer_group']	= 'Customer Group:';
 $_['entry_date_start']		= 'Date Start:';
 $_['entry_date_end']			= 'Date End:';
 $_['entry_priority']			= 'Priority:';
+$_['entry_add_attribute'] 		= 'Add Attribute';
 $_['entry_attribute']		= 'Attribute:';
 $_['entry_attribute_group']  = 'Attribute Group:';
 $_['entry_text']				= 'Text:';

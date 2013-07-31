@@ -41,7 +41,7 @@
 						<td>
 							<div><?= $entry_product; ?></div>
 							<div><input type="text" id='product_list_autocomplete' /></div>
-							<div><?= $text_autocomplete; ?></div>
+							<div><span class="help">(<?= $text_autocomplete; ?>)</span></div>
 						</td>
 						<td>
 							<ol id="product_list" class="scrollbox editable_list">
@@ -81,11 +81,9 @@
 		</div>
 	</div>
 </div>
-<?= $footer; ?>
 
 <?= $this->builder->js('ckeditor'); ?>
 <?= $this->builder->js('translations', $translations); ?>
-<?= $this->builder->js('ac_template'); ?>
 
 <script type="text/javascript">//<!--
 $('#product_list').ac_template('product_list', {unique: 'product_id'});
@@ -109,3 +107,5 @@ $('#product_list').sortable({revert:true});
 //--></script>
 
 <?= $this->builder->js('errors', $errors); ?>
+
+<?= $footer; ?>

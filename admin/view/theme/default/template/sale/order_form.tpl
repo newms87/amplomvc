@@ -780,7 +780,7 @@ $('input[name=\'product\']').autocomplete({
 					}
 					
 					html += option['name'] + '<br />';
-					html += '<input type="text" name="option[' + option['product_option_id'] + ']" value="' + option['option_value'] + '" class="date" />';
+					html += '<input type="text" name="option[' + option['product_option_id'] + ']" value="' + option['option_value'] + '" class="datepicker" />';
 					html += '</div>';
 					html += '<br />';
 				}
@@ -793,7 +793,7 @@ $('input[name=\'product\']').autocomplete({
 					}
 					
 					html += option['name'] + '<br />';
-					html += '<input type="text" name="option[' + option['product_option_id'] + ']" value="' + option['option_value'] + '" class="datetime" />';
+					html += '<input type="text" name="option[' + option['product_option_id'] + ']" value="' + option['option_value'] + '" class="datetimepicker" />';
 					html += '</div>';
 					html += '<br />';
 				}

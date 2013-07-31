@@ -67,8 +67,6 @@
 	</div>
 </div>
 
-<?= $this->builder->js('ac_template'); ?>
-
 <script type="text/javascript">//<!--
 $('#option_value_list').ac_template('ov_list');
 

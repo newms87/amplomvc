@@ -7,8 +7,6 @@
 <script type="text/javascript" src="<?= HTTP_JS . "jquery/jquery.js"; ?>"></script>
 <script type="text/javascript" src="<?= HTTP_JS . "jquery/ui/jquery-ui.js"; ?>"></script>
 <link rel="stylesheet" type="text/css" href="<?= HTTP_JS . "jquery/ui/themes/ui-lightness/jquery-ui.custom.css"; ?>" />
-<script type="text/javascript" src="<?= HTTP_JS . "jquery/ui/external/jquery.bgiframe-2.1.2.js"; ?>"></script>
-<script type="text/javascript" src="<?= HTTP_JS . "jquery/jstree/jquery.tree.min.js"; ?>"></script>
 <script type="text/javascript" src="<?= HTTP_JS . "jquery/ajaxupload.js"; ?>"></script>
 <script type="text/javascript" src="<?= HTTP_THEME_JS . "common.js"; ?>"></script>
 <style type="text/css">
@@ -110,6 +108,7 @@ img {
 </div>
 <script type="text/javascript">//<!--
 $(document).ready(function() {
+	alert("This has not been fully implemented! You will not be able to upload picture to the CKEDITOR this way for now...");
 	$('#column-left').tree({
 		data: {
 			type: 'json',

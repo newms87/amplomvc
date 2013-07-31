@@ -3,11 +3,20 @@ class Admin_Controller_Setting_ReturnReason extends Controller
 {
 	public function index()
 	{
+		//Template and Languge
 		$this->template->load('setting/return_reason');
 		$this->language->load('setting/return_reason');
 
+		//Page Head
 		$this->document->setTitle($this->_('heading_title'));
 		
+		//Breadcrumbs
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('text_store_list'), $this->url->link('setting/store'));
+		$this->breadcrumb->add($this->_('text_settings'), $this->url->link('setting/setting'));
+		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/return_reason'));
+		
+		//Load Information
 		if ($this->request->isPost() && $this->validate()) {
 			$return_reasons = !empty($_POST['return_reasons']) ? $_POST['return_reasons'] : array();
 			
@@ -19,14 +28,7 @@ class Admin_Controller_Setting_ReturnReason extends Controller
 			}
 		}
 		
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_store_list'), $this->url->link('setting/store'));
-		$this->breadcrumb->add($this->_('text_settings'), $this->url->link('setting/setting'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/return_reason'));
-		
-		$this->data['save'] = $this->url->link('setting/return_reason');
-		$this->data['cancel'] = $this->url->link('setting/store');
-		
+		//Load Data or Defaults
 		if (!$this->request->isPost()) {
 			$return_reasons = $this->config->load('product_return', 'return_reasons', 0);
 		} else {
@@ -51,13 +53,9 @@ class Admin_Controller_Setting_ReturnReason extends Controller
 		} unset($return_reason);
 		
 		//Add in the template row
-		$defaults = array(
+		$return_reasonse['__ac_template__'] = array(
 			'title' => $this->_('entry_title'),
 		);
-		
-		$this->builder->addTemplateRow($return_reasons, $defaults);
-		
-		$this->data['template_defaults'] = $defaults;
 		
 		//Get the Field Translations
 		$translate_fields = array(
@@ -70,11 +68,17 @@ class Admin_Controller_Setting_ReturnReason extends Controller
 
 		$this->data['return_reasons'] = $return_reasons;
 		
+		//Action Buttons
+		$this->data['save'] = $this->url->link('setting/return_reason');
+		$this->data['cancel'] = $this->url->link('setting/store');
+		
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
 		
+		//Render
 		$this->response->setOutput($this->render());
 	}
 	

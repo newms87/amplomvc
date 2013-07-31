@@ -87,7 +87,7 @@ class Admin_Controller_Catalog_Collection extends Controller
 
 	private function getList()
 	{
-		//Page Title
+		//Page Head
 		$this->document->setTitle($this->_('heading_title'));
 		
 		//The Template
@@ -222,7 +222,7 @@ class Admin_Controller_Catalog_Collection extends Controller
 
 	private function getForm()
 	{
-		//Page Title
+		//Page Head
 		$this->document->setTitle($this->_('heading_title'));
 		
 		//The Template
@@ -282,14 +282,10 @@ class Admin_Controller_Catalog_Collection extends Controller
 		$this->data['url_product_autocomplete'] = $this->url->link('catalog/product/autocomplete');
 		
 		//Template Defaults
-		$template_defaults = array(
+		$this->data['products']['__row__'] = array(
 			'product_id' => '',
 			'name' => '',
 		);
-		
-		$this->builder->addTemplateRow($this->data['products'], $template_defaults);
-		
-		$this->data['template_defaults'] = $template_defaults;
 		
 		//Translations
 		$this->data['translations'] = $this->Model_Catalog_Collection->getTranslations($collection_id);

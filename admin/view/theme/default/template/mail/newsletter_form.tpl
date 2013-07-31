@@ -29,7 +29,7 @@
 				</tr>
 				<tr>
 					<td><?= $entry_send_date; ?></td>
-					<td><input type="text" name="send_date" class='datetime' value="<?= $send_date; ?>" /></td>
+					<td><input type="text" name="send_date" class="datetimepicker" value="<?= $send_date; ?>" /></td>
 				</tr>
 				<tr>
 					<td>
@@ -94,7 +94,7 @@
 					<td>
 						<div><?= $entry_product_list; ?></div>
 						<div><input type="text" id='product_list_autocomplete' /></div>
-						<div><?= $text_autocomplete; ?></div>
+						<div><span class="help">(<?= $text_autocomplete; ?>)</span></div>
 					</td>
 					<td>
 						<ol id="product_list" class="scrollbox editable_list">
@@ -116,7 +116,7 @@
 					<td>
 						<div><?= $entry_designer_list; ?></div>
 						<div><input type="text" id='designer_list_autocomplete' /></div>
-						<div><?= $text_autocomplete; ?></div>
+						<div><span class="help">(<?= $text_autocomplete; ?>)</span></div>
 					</td>
 					<td>
 						<ol id="designer_list" class="scrollbox editable_list">

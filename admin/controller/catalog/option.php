@@ -83,7 +83,7 @@ class Admin_Controller_Catalog_Option extends Controller
 	
 	private function getList()
 	{
-		//Page Title
+		//Page Head
 		$this->document->setTitle($this->_('heading_title'));
 		
 		//The Template
@@ -183,7 +183,7 @@ class Admin_Controller_Catalog_Option extends Controller
 
 	private function getForm()
 	{
-		//Page Title
+		//Page Head
 		$this->document->setTitle($this->_('heading_title'));
 		
 		//The Template
@@ -212,14 +212,12 @@ class Admin_Controller_Catalog_Option extends Controller
 			
 			$option_values = $this->Model_Catalog_Option->getOptionValues($option_id);
 			
-			$template_defaults = array(
+			$option_values['__ac_template__'] = array(
 				'option_value_id' => '',
 				'name' => '',
 				'image' => '',
-				'sort_order' => '',
+				'sort_order' => 0,
 			);
-			
-			$this->builder->addTemplateRow($option_values, $template_defaults);
 			
 			foreach ($option_values as &$option_value) {
 				$option_value['translations'] = $this->Model_Catalog_Option->getOptionValueTranslations($option_value['option_value_id']);
@@ -340,7 +338,7 @@ class Admin_Controller_Catalog_Option extends Controller
 			$image_height = $this->config->get('config_image_product_option_height');
 			
 			foreach ($option_values as &$option_value) {
-				$option_value['image'] = $this->image->resize($option_value['image'], $image_width, $image_height);
+				$option_value['thumb'] = $this->image->resize($option_value['image'], $image_width, $image_height);
 				$option_value['name'] = html_entity_decode($option_value['name'], ENT_QUOTES, 'UTF-8');
 			} unset($option_value);
 			

@@ -7,7 +7,7 @@ class Catalog_Controller_Checkout_Success extends Controller
 		$this->template->load('common/success');
 		$this->language->load('checkout/success');
 		
-		//Page Title
+		//Page Head
 		$this->document->setTitle($this->_('heading_title'));
 		
 		//Breadcrumbs

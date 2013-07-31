@@ -37,10 +37,8 @@
 	<?= $this->builder->js('translations', $action['translations'], "return_actions[$key][%name%]"); ?>
 <? } ?>
 
-<?= $this->builder->js('ac_template'); ?>
-
 <script type="text/javascript">//<!--
-$('#return_action_list').ac_template('ra_list', {defaults: <?= json_encode($template_defaults); ?>});
+$('#return_action_list').ac_template('ra_list', {defaults: <?= json_encode($return_actions['__ac_template__']); ?>});
 $('#add_action').click(function(){ $.ac_template('ra_list', 'add') });
 
 $('#return_action_list').sortable();

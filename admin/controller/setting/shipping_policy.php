@@ -3,11 +3,20 @@ class Admin_Controller_Setting_ShippingPolicy extends Controller
 {
 	public function index()
 	{
+		//Template and Language
 		$this->template->load('setting/shipping_policy');
 		$this->language->load('setting/shipping_policy');
-
+		
+		//Page Head
 		$this->document->setTitle($this->_('heading_title'));
 		
+		//Breadcrumbs
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('text_store_list'), $this->url->link('setting/store'));
+		$this->breadcrumb->add($this->_('text_settings'), $this->url->link('setting/setting'));
+		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/shipping_policy'));
+		
+		//Load Information
 		if ($this->request->isPost() && $this->validate()) {
 			$shipping_policies = !empty($_POST['shipping_policies']) ? $_POST['shipping_policies'] : array();
 			
@@ -19,14 +28,7 @@ class Admin_Controller_Setting_ShippingPolicy extends Controller
 			}
 		}
 		
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_store_list'), $this->url->link('setting/store'));
-		$this->breadcrumb->add($this->_('text_settings'), $this->url->link('setting/setting'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/shipping_policy'));
-		
-		$this->data['save'] = $this->url->link('setting/shipping_policy');
-		$this->data['cancel'] = $this->url->link('setting/store');
-		
+		//Load Data or Defaults
 		if (!$this->request->isPost()) {
 			$shipping_policies = $this->config->load('policies', 'shipping_policies', 0);
 		} else {
@@ -49,14 +51,10 @@ class Admin_Controller_Setting_ShippingPolicy extends Controller
 		} unset($shipping_policy);
 
 		//Add in the template row
-		$defaults = array(
+		$shipping_policies['__ac_template__'] = array(
 			'title' => $this->_('entry_title'),
 			'description' => $this->_('entry_description'),
 		);
-		
-		$this->builder->addTemplateRow($shipping_policies, $defaults);
-		
-		$this->data['template_defaults'] = $defaults;
 		
 		//Get the Field Translations
 		$translate_fields = array(
@@ -70,11 +68,17 @@ class Admin_Controller_Setting_ShippingPolicy extends Controller
 
 		$this->data['shipping_policies'] = $shipping_policies;
 		
+		//Action Buttons
+		$this->data['save'] = $this->url->link('setting/shipping_policy');
+		$this->data['cancel'] = $this->url->link('setting/store');
+		
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
 		
+		//Render
 		$this->response->setOutput($this->render());
 	}
 	

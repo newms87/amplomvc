@@ -24,8 +24,8 @@ class Admin_Controller_Common_Header extends Controller
 		//Add Scripts
 		$this->document->addScript(HTTP_JS . 'jquery/jquery.js', 50);
 		$this->document->addScript(HTTP_JS . 'jquery/ui/jquery-ui.js', 51);
-		$this->document->addScript(HTTP_JS . 'jquery/tabs.js', 52);
-		$this->document->addScript(HTTP_THEME_JS . 'common.js', 53);
+		$this->document->addScript(HTTP_JS . 'common.js', 53);
+		$this->document->addScript(HTTP_THEME_JS . 'common.js', 54);
 		$this->document->localizeScript(DIR_APPLICATION . 'view/javascript/ac_vars.php');
 		
 		$this->data['messages'] = $this->message->fetch();
@@ -127,9 +127,8 @@ class Admin_Controller_Common_Header extends Controller
 		}
 		
 		
-		$this->data['css_styles'] = $this->document->getStyles();
+		$this->data['styles'] = $this->document->renderStyles();
 		$this->data['scripts'] = $this->document->renderScripts();
-		
 		
 		//Failed Email Messages warnings
 		$failed_count = $this->Model_Mail_Error->total_failed_messages();

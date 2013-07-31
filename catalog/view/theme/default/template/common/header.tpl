@@ -18,10 +18,7 @@
 <link href="<?= $canonical_link; ?>" rel="canonical" />
 <? }?>
 
-<? foreach ($css_styles as $style) { ?>
-<link rel="<?= $style['rel']; ?>" type="text/css" href="<?= $style['href']; ?>" media="<?= $style['media']; ?>" />
-<? } ?>
-
+<?= $styles; ?>
 <?= $scripts; ?>
 
 <script type="text/javascript">//<!--

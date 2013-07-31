@@ -13,7 +13,7 @@ class Catalog_Controller_Page_Page extends Controller
 			$this->url->redirect("error/not_found");
 		}
 		
-		//Page Title
+		//Page Head
 		$this->document->setTitle($page['name']);
 		
 		//Breacrumbs

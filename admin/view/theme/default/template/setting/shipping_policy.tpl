@@ -38,10 +38,8 @@
 	<?= $this->builder->js('translations', $policy['translations'], "shipping_policies[$key][%name%]"); ?>
 <? } ?>
 
-<?= $this->builder->js('ac_template'); ?>
-
 <script type="text/javascript">//<!--
-$('#shipping_policy_list').ac_template('sp_list', {defaults: <?= json_encode($template_defaults); ?>});
+$('#shipping_policy_list').ac_template('sp_list', {defaults: <?= json_encode($shipping_policies['__ac_template__']); ?>});
 $('#add_policy').click(function(){ $.ac_template('sp_list', 'add') });
 
 $('#shipping_policy_list').sortable();

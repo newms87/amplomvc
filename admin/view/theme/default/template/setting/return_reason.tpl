@@ -37,10 +37,8 @@
 	<?= $this->builder->js('translations', $reason['translations'], "return_reasons[$key][%name%]"); ?>
 <? } ?>
 
-<?= $this->builder->js('ac_template'); ?>
-
 <script type="text/javascript">//<!--
-$('#return_reason_list').ac_template('rr_list', {defaults: <?= json_encode($template_defaults); ?>});
+$('#return_reason_list').ac_template('rr_list', {defaults: <?= json_encode($return_reasons['__ac_template__']); ?>});
 $('#add_reason').click(function(){ $.ac_template('rr_list', 'add') });
 
 $('#return_reason_list').sortable();

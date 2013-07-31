@@ -362,13 +362,6 @@ class Builder extends Library
 		}
 	}
 	
-	public function addTemplateRow(&$data, $defaults = array())
-	{
-		array_walk_recursive($defaults, function(&$value, $key) { $value = $key; });
-		
-		$data['__row__'] = $defaults;
-	}
-
 	public function js($js)
 	{
 		static $js_loaded_files = array();

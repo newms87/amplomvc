@@ -3,11 +3,20 @@ class Admin_Controller_Setting_ReturnAction extends Controller
 {
 	public function index()
 	{
+		//Template and Language
 		$this->template->load('setting/return_action');
 		$this->language->load('setting/return_action');
 
+		//Page Head
 		$this->document->setTitle($this->_('heading_title'));
 		
+		//Breadcrumbs
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('text_store_list'), $this->url->link('setting/store'));
+		$this->breadcrumb->add($this->_('text_settings'), $this->url->link('setting/setting'));
+		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/return_action'));
+		
+		//Load Information
 		if ($this->request->isPost() && $this->validate()) {
 			$return_actions = !empty($_POST['return_actions']) ? $_POST['return_actions'] : array();
 			
@@ -19,14 +28,7 @@ class Admin_Controller_Setting_ReturnAction extends Controller
 			}
 		}
 		
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_store_list'), $this->url->link('setting/store'));
-		$this->breadcrumb->add($this->_('text_settings'), $this->url->link('setting/setting'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/return_action'));
-		
-		$this->data['save'] = $this->url->link('setting/return_action');
-		$this->data['cancel'] = $this->url->link('setting/store');
-		
+		//Load Data or Defaults
 		if (!$this->request->isPost()) {
 			$return_actions = $this->config->load('product_return', 'return_actions', 0);
 		} else {
@@ -51,13 +53,9 @@ class Admin_Controller_Setting_ReturnAction extends Controller
 		}  unset($return_action);
 		
 		//Add in the template row
-		$defaults = array(
+		$return_actions['__ac_template__'] = array(
 			'title' => $this->_('entry_title'),
 		);
-		
-		$this->builder->addTemplateRow($return_actions, $defaults);
-		
-		$this->data['template_defaults'] = $defaults;
 		
 		//Get the Field Translations
 		$translate_fields = array(
@@ -70,11 +68,17 @@ class Admin_Controller_Setting_ReturnAction extends Controller
 
 		$this->data['return_actions'] = $return_actions;
 		
+		//Action Buttons
+		$this->data['save'] = $this->url->link('setting/return_action');
+		$this->data['cancel'] = $this->url->link('setting/store');
+		
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
 		
+		//Render
 		$this->response->setOutput($this->render());
 	}
 	

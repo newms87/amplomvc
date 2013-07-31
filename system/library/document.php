@@ -177,17 +177,35 @@ class Document extends Library
 		return $this->styles;
 	}
 	
+	public function renderStyles()
+	{
+		$html = '';
+		
+		foreach ($this->styles as $style) {
+			$html .= "<link rel=\"$style[rel]\" type=\"text/css\" href=\"$style[href]\" media=\"$style[media]\" />\r\n";
+		}
+		
+		return $html;
+	}
+	
 	public function addScript($script, $priority = 100)
 	{
 		if (!is_file($script)) {
 			if (is_file(SITE_DIR . $script)) {
 				$script = SITE_URL . $script;
 			}
-			elseif ($this->config->isAdmin() && is_file(SITE_DIR . 'admin/view/javascript/' . $script)) {
-				$script = SITE_URL . 'admin/view/javascript/' . $script;
+			elseif (is_file(DIR_JS . $script)) {
+				$script = HTTP_JS . $script;
 			}
-			elseif (!$this->config->isAdmin() && is_file(SITE_DIR . 'catalog/view/javascript/' . $script)) {
-				$script = SITE_URL . 'catalog/view/javascript/' . $script;
+			elseif ($this->config->isAdmin()) {
+				if (is_file(SITE_DIR . 'admin/view/javascript/' . $script)) {
+					$script = SITE_URL . 'admin/view/javascript/' . $script;
+				}
+			}
+			else {
+				if (is_file(SITE_DIR . 'catalog/view/javascript/' . $script)) {
+					$script = SITE_URL . 'catalog/view/javascript/' . $script;
+				}
 			}
 		}
 		

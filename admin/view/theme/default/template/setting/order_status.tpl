@@ -38,10 +38,8 @@
 	<?= $this->builder->js('translations', $status['translations'], "order_statuses[$key][%name%]"); ?>
 <? } ?>
 
-<?= $this->builder->js('ac_template'); ?>
-
 <script type="text/javascript">//<!--
-$('#order_status_list').ac_template('os_list', {defaults: <?= json_encode($template_defaults); ?>});
+$('#order_status_list').ac_template('os_list', {defaults: <?= json_encode($order_statuses['__ac_template__']); ?>});
 $('#add_status').click(function(){ $.ac_template('os_list', 'add') });
 
 $('#order_status_list').sortable();

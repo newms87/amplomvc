@@ -36,8 +36,8 @@ class Admin_Model_Catalog_Product extends Model
 					
 					$product_option_id = $this->insert('product_option', $product_option);
 				
-					if (isset($product_option['product_option_value'])) {
-						foreach ($product_option['product_option_value'] as $product_option_value) {
+					if (!empty($product_option['product_option_value'])) {
+						foreach ($product_option['product_option_values'] as $product_option_value) {
 							$product_option_value['product_option_id'] = $product_option_id;
 							$product_option_value['product_id'] = $product_id;
 							$product_option_value['option_id'] = $product_option['option_id'];

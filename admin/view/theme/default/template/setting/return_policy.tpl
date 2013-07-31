@@ -43,8 +43,6 @@
 	<?= $this->builder->js('translations', $policy['translations'], "return_policies[$key][%name%]"); ?>
 <? } ?>
 
-<?= $this->builder->js('ac_template'); ?>
-
 <script type="text/javascript">//<!--
 $('[name=data_days]').change(function(){
 	days_input = $(this).closest('.return_days_box').find('input');
@@ -57,12 +55,12 @@ $('[name=data_days]').change(function(){
 	else {
 		days_input.show();
 		
-		if (!parseInt(days_input.val()) || parseInt(days_input.val()) < 1) days_input.val(<?= $template_defaults['days']; ?>);
+		if (!parseInt(days_input.val()) || parseInt(days_input.val()) < 1) days_input.val(<?= $return_policies['__ac_template__']['days']; ?>);
 	}
 }).change();
 
 
-$('#return_policy_list').ac_template('rp_list', {defaults: <?= json_encode($template_defaults); ?>});
+$('#return_policy_list').ac_template('rp_list', {defaults: <?= json_encode($return_policies['__ac_template__']); ?>});
 $('#add_policy').click(function(){ $.ac_template('rp_list', 'add') });
 
 $('#return_policy_list').sortable();

@@ -1,49 +1,6 @@
 //mouse wheel enable for jquery
 (function(a){function d(b){var c=b||window.event,d=[].slice.call(arguments,1),e=0,f=!0,g=0,h=0;return b=a.event.fix(c),b.type="mousewheel",c.wheelDelta&&(e=c.wheelDelta/120),c.detail&&(e=-c.detail/3),h=e,c.axis!==undefined&&c.axis===c.HORIZONTAL_AXIS&&(h=0,g=-1*e),c.wheelDeltaY!==undefined&&(h=c.wheelDeltaY/120),c.wheelDeltaX!==undefined&&(g=-1*c.wheelDeltaX/120),d.unshift(b,e,g,h),(a.event.dispatch||a.event.handle).apply(this,d)}var b=["DOMMouseScroll","mousewheel"];if(a.event.fixHooks)for(var c=b.length;c;)a.event.fixHooks[b[--c]]=a.event.mouseHooks;a.event.special.mousewheel={setup:function(){if(this.addEventListener)for(var a=b.length;a;)this.addEventListener(b[--a],d,!1);else this.onmousewheel=d},teardown:function(){if(this.removeEventListener)for(var a=b.length;a;)this.removeEventListener(b[--a],d,!1);else this.onmousewheel=null}},a.fn.extend({mousewheel:function(a){return a?this.bind("mousewheel",a):this.trigger("mousewheel")},unmousewheel:function(a){return this.unbind("mousewheel",a)}})})(jQuery)
 
-$(document).ready(function() {
-	$('form input').keydown(function(e) {
-		if (e.keyCode == 13) {
-			$(this).closest('form').submit();
-		}
-	});
-	
-	$('.colorbox').click(colorbox);
-});
-
-function colorbox(context, data){
-	context = context || $(this);
-	
-	if (context.attr('href')) {
-		href = context.attr('href');
-		html = null;
-	} else {
-		href = null
-		html = context.html();
-	}
-	
-	defaults = {
-		overlayClose: true,
-		opacity: 0.5,
-		width: '60%',
-		height: '80%',
-		href: href,
-		html: html,
-		onCleanup: function(){ $.colorbox.close(); },
-		onClosed: function(){ $.colorbox.remove(); },
-	};
-	
-	if (typeof data == 'object') {
-		for (var d in data) {
-			defaults[d] = data[d];
-		}
-	}
-	
-	$.colorbox(defaults);
-	
-	return false;
-}
-
 function show_msg(type, html, append){
 	append = append || false;
 	
