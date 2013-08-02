@@ -92,7 +92,7 @@ class Translation extends Library
 		return $translations;
 	}
 	
-	public function set_translations($table, $object_id, $translations)
+	public function setTranslations($table, $object_id, $translations)
 	{
 		if (!empty($translations) && is_array($translations)) {
 			foreach ($translations as $field => $translation) {

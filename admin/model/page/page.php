@@ -22,7 +22,7 @@ class Admin_Model_Page_Page extends Model
 		}
 		
 		if (!empty($data['translations'])) {
-			$this->translation->set_translations('page', $page_id, $data['translations']);
+			$this->translation->setTranslations('page', $page_id, $data['translations']);
 		}
 		
 		$this->cache->delete('page');
@@ -52,7 +52,7 @@ class Admin_Model_Page_Page extends Model
 		}
 		
 		if (!empty($data['translations'])) {
-			$this->translation->set_translations('page', $page_id, $data['translations']);
+			$this->translation->setTranslations('page', $page_id, $data['translations']);
 		}
 		
 		$this->cache->delete('page');

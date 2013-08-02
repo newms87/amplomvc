@@ -32,7 +32,7 @@ class Admin_Model_Catalog_Information extends Model
 		}
 		
 		if (!empty($data['translations'])) {
-			$this->translation->set_translations('information', $information_id, $data['translations']);
+			$this->translation->setTranslations('information', $information_id, $data['translations']);
 		}
 		
 		$this->cache->delete('information');
@@ -78,7 +78,7 @@ class Admin_Model_Catalog_Information extends Model
 		}
 		
 		if (!empty($data['translations'])) {
-			$this->translation->set_translations('information', $information_id, $data['translations']);
+			$this->translation->setTranslations('information', $information_id, $data['translations']);
 		}
 
 		$this->cache->delete('information');

@@ -41,7 +41,7 @@ class Admin_Model_Catalog_Collection extends Model
 		}
 		
 		if (!empty($data['translations'])) {
-			$this->translation->set_translations('collection', $collection_id, $data['translations']);
+			$this->translation->setTranslations('collection', $collection_id, $data['translations']);
 		}
 		
 		$this->cache->delete('collection');
@@ -108,7 +108,7 @@ class Admin_Model_Catalog_Collection extends Model
 		}
 		
 		if (!empty($data['translations'])) {
-			$this->translation->set_translations('collection', $collection_id, $data['translations']);
+			$this->translation->setTranslations('collection', $collection_id, $data['translations']);
 		}
 		
 		$this->cache->delete('collection');

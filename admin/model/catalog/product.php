@@ -194,7 +194,7 @@ class Admin_Model_Catalog_Product extends Model
 		}
 
 		if (!empty($data['translations'])) {
-			$this->translation->set_translations('product', $product_id, $data['translations']);
+			$this->translation->setTranslations('product', $product_id, $data['translations']);
 		}
 		
 		$this->cache->delete('product');
@@ -429,7 +429,7 @@ class Admin_Model_Catalog_Product extends Model
 		
 		//Translations
 		if (!empty($data['translations'])) {
-			$this->translation->set_translations('product', $product_id, $data['translations']);
+			$this->translation->setTranslations('product', $product_id, $data['translations']);
 		}
 		
 		$this->cache->delete('product');

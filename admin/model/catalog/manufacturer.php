@@ -32,7 +32,7 @@ class Admin_Model_Catalog_Manufacturer extends Model
 		}
 		
 		if (!empty($data['translations'])) {
-			$this->translation->set_translations('manufacturer', $manufacturer_id, $data['translations']);
+			$this->translation->setTranslations('manufacturer', $manufacturer_id, $data['translations']);
 		}
 		
 		$this->cache->delete('manufacturer');
@@ -70,7 +70,7 @@ class Admin_Model_Catalog_Manufacturer extends Model
 		}
 		
 		if (!empty($data['translations'])) {
-			$this->translation->set_translations('manufacturer', $manufacturer_id, $data['translations']);
+			$this->translation->setTranslations('manufacturer', $manufacturer_id, $data['translations']);
 		}
 
 		$this->cache->delete('manufacturer');

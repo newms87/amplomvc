@@ -12,7 +12,7 @@ class Admin_Model_Catalog_Download extends Model
 		$download_id = $this->insert('download', $data);
 		
 		if (!empty($data['translations'])) {
-			$this->translation->set_translations('download', $download_id, $data['translations']);
+			$this->translation->setTranslations('download', $download_id, $data['translations']);
 		}
 	}
 	
@@ -27,7 +27,7 @@ class Admin_Model_Catalog_Download extends Model
 		$download_id = $this->update('download', $data, $download_id);
 		
 		if (!empty($data['translations'])) {
-			$this->translation->set_translations('download', $download_id, $data['translations']);
+			$this->translation->setTranslations('download', $download_id, $data['translations']);
 		}
 		
 		//Update Download file for already purchased downloads
