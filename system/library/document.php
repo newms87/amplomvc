@@ -20,7 +20,7 @@ class Document extends Library
 	
 	public function setTitle($title)
 	{
-		$this->title = $title;
+		$this->title = $this->tool->cleanTitle($title);
 	}
 	
 	public function getTitle()

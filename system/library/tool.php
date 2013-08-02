@@ -61,6 +61,10 @@ class Tool extends Library
 		return $new_array;
 	}
 	
+	public function cleanTitle($text)
+	{
+		return strip_tags(preg_replace("/<br\\s*\/?>/", ' ', $text));
+	}
 	
 	/**
 	* limits the number of characters in a string to the nearest word or character
