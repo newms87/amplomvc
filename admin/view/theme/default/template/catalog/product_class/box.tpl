@@ -125,11 +125,11 @@
 						</tr>
 						<tr>
 							<td><?= $entry_date_available; ?></td>
-							<td><input type="text" name="date_available" value="<?= $date_available; ?>" size="12" class="datetime" /></td>
+							<td><input type="text" name="date_available" value="<?= $date_available; ?>" size="12" class="datetimepicker" /></td>
 						</tr>
 						<tr>
 							<td><?= $entry_date_expires; ?></td>
-							<td><input type="text" name="date_expires" value="<?= $date_expires; ?>" size="12" class="datetime" /></td>
+							<td><input type="text" name="date_expires" value="<?= $date_expires; ?>" size="12" class="datetimepicker" /></td>
 						</tr>
 						<tr>
 							<td><?= $entry_status; ?></td>
@@ -425,8 +425,8 @@
 								<td class="right"><input type="text" name="product_discounts[<?= $discount_row; ?>][quantity]" value="<?= $product_discount['quantity']; ?>" size="2" /></td>
 								<td class="right"><input type="text" name="product_discounts[<?= $discount_row; ?>][priority]" value="<?= $product_discount['priority']; ?>" size="2" /></td>
 								<td class="right"><input type="text" name="product_discounts[<?= $discount_row; ?>][price]" value="<?= $product_discount['price']; ?>" /></td>
-								<td class="left"><input type="text" name="product_discounts[<?= $discount_row; ?>][date_start]" value="<?= $product_discount['date_start']; ?>" class="datetime" /></td>
-								<td class="left"><input type="text" name="product_discounts[<?= $discount_row; ?>][date_end]" value="<?= $product_discount['date_end']; ?>" class="datetime" /></td>
+								<td class="left"><input type="text" name="product_discounts[<?= $discount_row; ?>][date_start]" value="<?= $product_discount['date_start']; ?>" class="datetimepicker" /></td>
+								<td class="left"><input type="text" name="product_discounts[<?= $discount_row; ?>][date_end]" value="<?= $product_discount['date_end']; ?>" class="datetimepicker" /></td>
 								<td class="left"><a onclick="$('#discount-row<?= $discount_row; ?>').remove();" class="button"><?= $button_remove; ?></a></td>
 							</tr>
 						</tbody>
@@ -469,8 +469,8 @@
 									</select></td>
 								<td class="right"><input type="text" name="product_specials[<?= $special_row; ?>][priority]" value="<?= $product_special['priority']; ?>" size="2" /></td>
 								<td class="right"><input type="text" name="product_specials[<?= $special_row; ?>][price]" value="<?= $product_special['price']; ?>" /></td>
-								<td class="left"><input type="text" name="product_specials[<?= $special_row; ?>][date_start]" value="<?= $product_special['date_start']; ?>" class="datetime" /></td>
-								<td class="left"><input type="text" name="product_specials[<?= $special_row; ?>][date_end]" value="<?= $product_special['date_end']; ?>" class="datetime" /></td>
+								<td class="left"><input type="text" name="product_specials[<?= $special_row; ?>][date_start]" value="<?= $product_special['date_start']; ?>" class="datetimepicker" /></td>
+								<td class="left"><input type="text" name="product_specials[<?= $special_row; ?>][date_end]" value="<?= $product_special['date_end']; ?>" class="datetimepicker" /></td>
 								<td class="left"><a onclick="$('#special-row<?= $special_row; ?>').remove();" class="button"><?= $button_remove; ?></a></td>
 							</tr>
 						</tbody>
@@ -934,8 +934,8 @@ function addDiscount() {
 		html += '		<td class="right"><input type="text" name="product_discounts[' + discount_row + '][quantity]" value="" size="2" /></td>';
 		html += '		<td class="right"><input type="text" name="product_discounts[' + discount_row + '][priority]" value="" size="2" /></td>';
 	html += '		<td class="right"><input type="text" name="product_discounts[' + discount_row + '][price]" value="" /></td>';
-		html += '		<td class="left"><input type="text" name="product_discounts[' + discount_row + '][date_start]" value="" class="date" /></td>';
-	html += '		<td class="left"><input type="text" name="product_discounts[' + discount_row + '][date_end]" value="" class="date" /></td>';
+		html += '		<td class="left"><input type="text" name="product_discounts[' + discount_row + '][date_start]" value="" class="datepicker" /></td>';
+	html += '		<td class="left"><input type="text" name="product_discounts[' + discount_row + '][date_end]" value="" class="datepicker" /></td>';
 	html += '		<td class="left"><a onclick="$(\'#discount-row' + discount_row + '\').remove();" class="button"><?= $button_remove; ?></a></td>';
 	html += '	</tr>';
 		html += '</tbody>';
@@ -960,8 +960,8 @@ function addSpecial() {
 		html += '		</select></td>';
 		html += '		<td class="right"><input type="text" name="product_specials[' + special_row + '][priority]" value="" size="2" /></td>';
 	html += '		<td class="right"><input type="text" name="product_specials[' + special_row + '][price]" value="" /></td>';
-		html += '		<td class="left"><input type="text" name="product_specials[' + special_row + '][date_start]" value="" class="datetime" /></td>';
-	html += '		<td class="left"><input type="text" name="product_specials[' + special_row + '][date_end]" value="" class="datetime" /></td>';
+		html += '		<td class="left"><input type="text" name="product_specials[' + special_row + '][date_start]" value="" class="datetimepicker" /></td>';
+	html += '		<td class="left"><input type="text" name="product_specials[' + special_row + '][date_end]" value="" class="datetimepicker" /></td>';
 	html += '		<td class="left"><a onclick="$(\'#special-row' + special_row + '\').remove();" class="button"><?= $button_remove; ?></a></td>';
 	html += '	</tr>';
 		html += '</tbody>';

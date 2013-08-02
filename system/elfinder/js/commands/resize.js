@@ -278,7 +278,7 @@ elFinder.prototype.commands.resize = function() {
 							if (typeof animate == 'undefined') {
 								animate = true;
 							}
-							if (! animate || $.browser.opera || ($.browser.msie && parseInt($.browser.version) < 9)) {
+							if (! animate) {
 								imgr.rotate(value);
 							} else {
 								imgr.animate({rotate: value + 'deg'});
@@ -578,11 +578,6 @@ elFinder.prototype.commands.resize = function() {
 					open           : function() { preview.zIndex(1+$(this).parent().zIndex()); }
 				}).attr('id', id);
 				
-				// for IE < 9 dialog mising at open second+ time.
-				if ($.browser.msie && parseInt($.browser.version) < 9) {
-					$('.elfinder-dialog').css('filter', '');
-				}
-				
 				reset.css('left', width.position().left + width.width() + 12);
 				
 				coverc.css({ 'opacity': 0.2, 'background-color': '#fff', 'position': 'absolute'}),
@@ -666,14 +661,8 @@ elFinder.prototype.commands.resize = function() {
 	
 	$.fn.rotate = function(val) {
 		if (typeof val == 'undefined') {
-			if ($.browser.opera) {
-				var r = this.css('transform').match(/rotate\((.*?)\)/);
-				return  ( r && r[1])?
-					Math.round(parseFloat(r[1]) * 180 / Math.PI) : 0;
-			} else {
-				var r = this.css('transform').match(/rotate\((.*?)\)/);
-				return  ( r && r[1])? parseInt(r[1]) : 0;
-			}
+			var r = this.css('transform').match(/rotate\((.*?)\)/);
+			return  ( r && r[1])? parseInt(r[1]) : 0;
 		}
 		this.css('transform',
 			this.css('transform').replace(/none|rotate\(.*?\)/, '') + 'rotate(' + parseInt(val) + 'deg)');
@@ -687,100 +676,5 @@ elFinder.prototype.commands.resize = function() {
 		}
 		$(fx.elem).rotate(fx.now);
 	};
-
-	if ($.browser.msie && parseInt($.browser.version) < 9) {
-		var GetAbsoluteXY = function(element) {
-			var pnode = element;
-			var x = pnode.offsetLeft;
-			var y = pnode.offsetTop;
-			
-			while ( pnode.offsetParent ) {
-				pnode = pnode.offsetParent;
-				if (pnode != document.body && pnode.currentStyle['position'] != 'static') {
-					break;
-				}
-				if (pnode != document.body && pnode != document.documentElement) {
-					x -= pnode.scrollLeft;
-					y -= pnode.scrollTop;
-				}
-				x += pnode.offsetLeft;
-				y += pnode.offsetTop;
-			}
-			
-			return { x: x, y: y };
-		};
-		
-		var StaticToAbsolute = function (element) {
-			if ( element.currentStyle['position'] != 'static') {
-				return ;
-			}
-
-			var xy = GetAbsoluteXY(element);
-			element.style.position = 'absolute' ;
-			element.style.left = xy.x + 'px';
-			element.style.top = xy.y + 'px';
-		};
-
-		var IETransform = function(element,transform){
-
-			var r;
-			var m11 = 1;
-			var m12 = 1;
-			var m21 = 1;
-			var m22 = 1;
-
-			if (typeof element.style['msTransform'] != 'undefined'){
-				return true;
-			}
-
-			StaticToAbsolute(element);
-
-			r = transform.match(/rotate\((.*?)\)/);
-			var rotate =  ( r && r[1])	?	parseInt(r[1])	:	0;
-
-			rotate = rotate % 360;
-			if (rotate < 0) rotate = 360 + rotate;
-
-			var radian= rotate * Math.PI / 180;
-			var cosX =Math.cos(radian);
-			var sinY =Math.sin(radian);
-
-			m11 *= cosX;
-			m12 *= -sinY;
-			m21 *= sinY;
-			m22 *= cosX;
-
-			element.style.filter =  (element.style.filter || '').replace(/progid:DXImageTransform\.Microsoft\.Matrix\([^)]*\)/, "" ) +
-				("progid:DXImageTransform.Microsoft.Matrix(" +
-					 "M11=" + m11 +
-					",M12=" + m12 +
-					",M21=" + m21 +
-					",M22=" + m22 +
-					",FilterType='bilinear',sizingMethod='auto expand')")
-				;
-
-	  		var ow = parseInt(element.style.width || element.width || 0 );
-	  		var oh = parseInt(element.style.height || element.height || 0 );
-
-			var radian = rotate * Math.PI / 180;
-			var absCosX =Math.abs(Math.cos(radian));
-			var absSinY =Math.abs(Math.sin(radian));
-
-			var dx = (ow - (ow * absCosX + oh * absSinY)) / 2;
-			var dy = (oh - (ow * absSinY + oh * absCosX)) / 2;
-
-			element.style.marginLeft = Math.floor(dx) + "px";
-			element.style.marginTop  = Math.floor(dy) + "px";
-
-			return(true);
-		};
-		
-		var transform_set = $.cssHooks.transform.set;
-		$.cssHooks.transform.set = function(elem, value) {
-			transform_set.apply(this, [elem, value] );
-			IETransform(elem,value);
-			return value;
-		};
-	}
 
 })(jQuery);

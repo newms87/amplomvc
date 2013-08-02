@@ -175,12 +175,23 @@ class Admin_Model_Catalog_Collection extends Model
 		return $result;
 	}
 	
+	public function getTranslations($collection_id)
+	{
+		$translate_fields = array(
+			'name',
+			'meta_keywords',
+			'meta_description',
+			'description',
+		);
+		
+		return $this->translation->getTranslations('collection', $collection_id, $translate_fields);
+	}
+	
 	public function getCollections($data = array(), $select = null, $total = false) {
 		//Select
 		if ($total) {
 			$select = 'COUNT(*) as total';
-		}
-		elseif (!$select) {
+		} elseif (!$select) {
 			$select = '*';
 		}
 		
@@ -191,7 +202,7 @@ class Admin_Model_Catalog_Collection extends Model
 		$where = 'WHERE 1';
 		
 		if (isset($data['name'])) {
-			$where .= " AND c.name like '%" . $this->db->escape($data['name']) . "%'";
+			$where .= " AND c.name like '%" . $this->escape($data['name']) . "%'";
 		}
 		
 		if (!empty($data['categories'])) {
@@ -275,5 +286,10 @@ class Admin_Model_Catalog_Collection extends Model
 	
 	public function getTotalCollections($data = array()) {
 		return $this->getCollections($data, null, true);
+	}
+	
+	public function isDuplicateName($collection_id, $name)
+	{
+		return $this->db->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "collection WHERE name = '" . $this->escape($name) . "' AND collection_id != " . (int)$collection_id);
 	}
 }

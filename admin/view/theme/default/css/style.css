@@ -389,14 +389,29 @@ ul > li > ul > li:hover > ul.link_list, ul > li > ul > li.hover > ul.link_list{
 	vertical-align: middle;
 	cursor: pointer;
 }
+
 .image {
 	border: 1px solid #EEEEEE;
 	padding: 10px;
 	display: inline-block;
+	position:relative;
 	text-align:center;
 }
 .image img {
 	margin-bottom: 5px;
+}
+
+.click_image{
+	cursor: pointer;
+}
+
+.click_image_small{
+	border: none;
+	padding: 0;
+	display:inline-block;
+	position:relative;
+	text-align:center;
+	cursor: pointer;
 }
 
 .click_image_text{
@@ -410,6 +425,20 @@ ul > li > ul > li:hover > ul.link_list, ul > li > ul > li.hover > ul.link_list{
 	top:6px;
 	margin-right:5px;
 }
+
+.image .click_image_small_change{
+	display:none;
+	position:absolute;
+	top:0;
+	left:0;
+	z-index:2;
+}
+
+.image:hover .click_image_small_change{
+	opacity:.7;
+	display:block;
+}
+
 
 .box {
 	margin-bottom: 15px;
@@ -490,7 +519,7 @@ ul > li > ul > li:hover > ul.link_list, ul > li > ul > li.hover > ul.link_list{
 	-moz-box-shadow: 0px 2px 2px #DDDDDD;
 	box-shadow: 0px 2px 2px #DDDDDD;
 }
-a.button {
+.button {
 	display: inline-block;
 	text-decoration: none;
 	padding: 6px 12px 6px 12px;
@@ -639,6 +668,14 @@ a.delete_button:visited{
 	background: #F5DDDD;
 }
 
+#filter_list .reset{
+	display:block;
+	margin-top:3px;
+}
+#filter_list .reset:hover{
+	text-decoration: none;
+}
+
 .list td {
 	border-right: 1px solid #DDDDDD;
 	border-bottom: 1px solid #DDDDDD;
@@ -691,6 +728,10 @@ a.delete_button:visited{
 
 .list .actions a{
 	text-decoration:none;
+}
+
+.list .ui-sortable{
+	cursor: move;
 }
 
 .list .sortable:after{
@@ -805,6 +846,8 @@ a.delete_button:visited{
 
 .zoom_hover.int .input{
 	width: 106px;
+	margin-left: -53px;
+	left: 50%;
 }
 
 .zoom_hover.int .input input{
@@ -813,7 +856,8 @@ a.delete_button:visited{
 
 .zoom_hover.daterange .input{
 	width: 300px;
-	margin: auto;
+	margin-left: -150px;
+	left: 50%;
 }
 
 .zoom_hover.daterange .input input{
@@ -1248,7 +1292,6 @@ input.p_sortorder:active,input.p_sortorder:focus{
 	color:black;
 }
 
-
 .product_template{
 	float:left;
 	margin-left: 10px;
@@ -1261,6 +1304,25 @@ input.p_sortorder:active,input.p_sortorder:focus{
 .product_special{
 	color:red;
 }
+
+#product_option_list .product_option_name{
+	font-size: 30px;
+	font-weight:bold;
+	margin-top:10px;
+}
+
+#product_form .add_attribute{
+	float:left;
+	text-align:center;
+	margin-bottom: 15px;
+	margin-left: 10%;
+}
+
+#product_form .add_attribute .entry{
+	font-size: 16px;
+	font-weight:bold;
+}
+
 
 /*** FEATURED PRODUCTS MODULE STYLE **/
 #product_filter{
@@ -1751,19 +1813,6 @@ td.mail_info label{
 	position:relative;
 	margin: 0;
 	z-index:1;
-}
-
-.social_icon .image .click_image_small_change{
-	display:none;
-	position:absolute;
-	top:0;
-	left:0;
-	z-index:2;
-}
-
-.social_icon .image:hover .click_image_small_change{
-	opacity:.7;
-	display:block;
 }
 
 .social_url{

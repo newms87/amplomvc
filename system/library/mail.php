@@ -309,7 +309,7 @@ class Mail extends Library
 		}
 
 		$message .= '--' . $boundary . '--' . $this->newline;
-
+		
 		if ($this->protocol == 'mail') {
 			ini_set('sendmail_from', $this->from);
 

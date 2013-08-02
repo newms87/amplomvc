@@ -3,18 +3,18 @@ class Admin_Model_Design_Banner extends Model
 {
 	public function addBanner($data)
 	{
-		$this->query("INSERT INTO " . DB_PREFIX . "banner SET name = '" . $this->db->escape($data['name']) . "', status = '" . (int)$data['status'] . "'");
+		$this->query("INSERT INTO " . DB_PREFIX . "banner SET name = '" . $this->escape($data['name']) . "', status = '" . (int)$data['status'] . "'");
 	
 		$banner_id = $this->db->getLastId();
 	
 		if (isset($data['banner_image'])) {
 			foreach ($data['banner_image'] as $banner_image) {
-				$this->query("INSERT INTO " . DB_PREFIX . "banner_image SET banner_id = '" . (int)$banner_id . "', link = '" .  $this->db->escape($banner_image['link']) . "', image = '" .  $this->db->escape($banner_image['image']) . "', sort_order = '" . (int)($this->db->escape($banner_image['sort_order'])) . "'");
+				$this->query("INSERT INTO " . DB_PREFIX . "banner_image SET banner_id = '" . (int)$banner_id . "', link = '" .  $this->escape($banner_image['link']) . "', image = '" .  $this->escape($banner_image['image']) . "', sort_order = '" . (int)($this->escape($banner_image['sort_order'])) . "'");
 				
 				$banner_image_id = $this->db->getLastId();
 				
 				foreach ($banner_image['banner_image_description'] as $language_id => $banner_image_description) {
-					$this->query("INSERT INTO " . DB_PREFIX . "banner_image_description SET banner_image_id = '" . (int)$banner_image_id . "', language_id = '" . (int)$language_id . "', banner_id = '" . (int)$banner_id . "', title = '" .  $this->db->escape($banner_image_description['title']) . "'");
+					$this->query("INSERT INTO " . DB_PREFIX . "banner_image_description SET banner_image_id = '" . (int)$banner_image_id . "', language_id = '" . (int)$language_id . "', banner_id = '" . (int)$banner_id . "', title = '" .  $this->escape($banner_image_description['title']) . "'");
 				}
 			}
 		}
@@ -22,19 +22,19 @@ class Admin_Model_Design_Banner extends Model
 	
 	public function editBanner($banner_id, $data)
 	{
-		$this->query("UPDATE " . DB_PREFIX . "banner SET name = '" . $this->db->escape($data['name']) . "', status = '" . (int)$data['status'] . "' WHERE banner_id = '" . (int)$banner_id . "'");
+		$this->query("UPDATE " . DB_PREFIX . "banner SET name = '" . $this->escape($data['name']) . "', status = '" . (int)$data['status'] . "' WHERE banner_id = '" . (int)$banner_id . "'");
 
 		$this->query("DELETE FROM " . DB_PREFIX . "banner_image WHERE banner_id = '" . (int)$banner_id . "'");
 		$this->query("DELETE FROM " . DB_PREFIX . "banner_image_description WHERE banner_id = '" . (int)$banner_id . "'");
 			
 		if (isset($data['banner_image'])) {
 			foreach ($data['banner_image'] as $banner_image) {
-				$this->query("INSERT INTO " . DB_PREFIX . "banner_image SET banner_id = '" . (int)$banner_id . "', link = '" .  $this->db->escape($banner_image['link']) . "', image = '" .  $this->db->escape($banner_image['image']) . "', sort_order = '" . (int)($this->db->escape($banner_image['sort_order'])) . "'");
+				$this->query("INSERT INTO " . DB_PREFIX . "banner_image SET banner_id = '" . (int)$banner_id . "', link = '" .  $this->escape($banner_image['link']) . "', image = '" .  $this->escape($banner_image['image']) . "', sort_order = '" . (int)($this->escape($banner_image['sort_order'])) . "'");
 				
 				$banner_image_id = $this->db->getLastId();
 				
 				foreach ($banner_image['banner_image_description'] as $language_id => $banner_image_description) {
-					$this->query("INSERT INTO " . DB_PREFIX . "banner_image_description SET banner_image_id = '" . (int)$banner_image_id . "', language_id = '" . (int)$language_id . "', banner_id = '" . (int)$banner_id . "', title = '" .  $this->db->escape($banner_image_description['title']) . "'");
+					$this->query("INSERT INTO " . DB_PREFIX . "banner_image_description SET banner_image_id = '" . (int)$banner_image_id . "', language_id = '" . (int)$language_id . "', banner_id = '" . (int)$banner_id . "', title = '" .  $this->escape($banner_image_description['title']) . "'");
 				}
 			}
 		}

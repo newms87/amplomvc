@@ -16,7 +16,7 @@ class Admin_Controller_Payment_Cod extends Controller
 			$this->url->redirect($this->url->link('extension/payment'));
 		}
 		
-		//Page Title
+		//Page Head
 		$this->document->setTitle($this->_('heading_title'));
 		
 		//Breadcrumbs

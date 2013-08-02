@@ -102,7 +102,7 @@ class Admin_Model_Sale_Coupon extends Model
 
 	public function getCouponByCode($code)
 	{
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "coupon WHERE code = '" . $this->db->escape($code) . "'");
+		$query = $this->query("SELECT * FROM " . DB_PREFIX . "coupon WHERE code = '" . $this->escape($code) . "'");
 		
 		return $query->row;
 	}

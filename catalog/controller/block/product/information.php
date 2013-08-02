@@ -24,17 +24,6 @@ class Catalog_Controller_Block_Product_Information extends Controller
 			$this->data['block_product_options'] = $this->getBlock('product/options', array('product_id' => $product_info['product_id']));
 		}
 		
-		$show_related = $this->config->get('config_show_product_related');
-		
-		if ($show_related > 1 || ($show_related == 1 && !$this->data['is_purchasable'])) {
-			$ps_params = array(
-				'product_info' => $product_info,
-				'limit' => 4
-			);
-			
-			$this->data['block_product_suggestions'] = $this->getBlock('product/suggestions', $ps_params);
-		}
-		
 		//Stock
 		$stock_type = $this->config->get('config_stock_display');
 		
@@ -58,7 +47,7 @@ class Catalog_Controller_Block_Product_Information extends Controller
 			}
 		}
 		
-		if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
+		if (($this->config->get('config_customer_hide_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_hide_price')) {
 			$this->data['price'] = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id']));
 		} else {
 			$this->data['price'] = false;

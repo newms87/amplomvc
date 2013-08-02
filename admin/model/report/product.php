@@ -51,11 +51,11 @@ class Admin_Model_Report_Product extends Model
 		}
 		
 		if (!empty($data['filter_date_start'])) {
-			$sql .= " AND DATE(o.date_added) >= '" . $this->db->escape($data['filter_date_start']) . "'";
+			$sql .= " AND DATE(o.date_added) >= '" . $this->escape($data['filter_date_start']) . "'";
 		}
 
 		if (!empty($data['filter_date_end'])) {
-			$sql .= " AND DATE(o.date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
+			$sql .= " AND DATE(o.date_added) <= '" . $this->escape($data['filter_date_end']) . "'";
 		}
 		
 		$sql .= " GROUP BY op.model ORDER BY total DESC";
@@ -88,11 +88,11 @@ class Admin_Model_Report_Product extends Model
 		}
 		
 		if (!empty($data['filter_date_start'])) {
-			$sql .= " AND DATE(o.date_added) >= '" . $this->db->escape($data['filter_date_start']) . "'";
+			$sql .= " AND DATE(o.date_added) >= '" . $this->escape($data['filter_date_start']) . "'";
 		}
 
 		if (!empty($data['filter_date_end'])) {
-			$sql .= " AND DATE(o.date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
+			$sql .= " AND DATE(o.date_added) <= '" . $this->escape($data['filter_date_end']) . "'";
 		}
 		
 		$query = $this->query($sql);

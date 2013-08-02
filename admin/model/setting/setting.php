@@ -9,7 +9,7 @@ class Admin_Model_Setting_Setting extends Model
 		
 		$data = array();
 		
-		$settings = $this->queryRows("SELECT * FROM " . DB_PREFIX . "setting WHERE store_id IN (0, " . (int)$store_id . ") AND `group` = '" . $this->db->escape($group) . "'");
+		$settings = $this->queryRows("SELECT * FROM " . DB_PREFIX . "setting WHERE store_id IN (0, " . (int)$store_id . ") AND `group` = '" . $this->escape($group) . "'");
 		
 		foreach ($settings as $setting) {
 			$value = $setting['serialized'] ? unserialize($setting['value']) : $setting['value'];
@@ -37,7 +37,7 @@ class Admin_Model_Setting_Setting extends Model
 			$store_id = $this->config->get('config_store_id');
 		}
 		
-		$setting = $this->queryRow("SELECT * FROM " . DB_PREFIX . "setting WHERE `group` = '" . $this->db->escape($group) . "' AND `key` = '" . $this->db->escape($key) . "' AND store_id IN (0, " . (int)$store_id . ")");
+		$setting = $this->queryRow("SELECT * FROM " . DB_PREFIX . "setting WHERE `group` = '" . $this->escape($group) . "' AND `key` = '" . $this->escape($key) . "' AND store_id IN (0, " . (int)$store_id . ")");
 		
 		$value = $setting['serialized'] ? unserialize($setting['value']) : $setting['value'];
 		

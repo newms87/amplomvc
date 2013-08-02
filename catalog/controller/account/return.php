@@ -161,7 +161,7 @@ class Catalog_Controller_Account_Return extends Controller
 			$this->url->redirect($this->url->link('account/return/success', $url_query));
 		}
 		
-		//Page Title
+		//Page Head
 		$this->document->setTitle($this->_('heading_title'));
 		
 		//Breadcrumbs

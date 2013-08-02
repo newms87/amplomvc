@@ -90,11 +90,11 @@
 						</tr>
 						<tr>
 							<td class="required"> <?= $entry_date_start; ?></td>
-							<td><input type="text" class="datetime" name="date_start" value="<?= $date_start; ?>" size="20" /></td>
+							<td><input type="text" class="datetimepicker" name="date_start" value="<?= $date_start; ?>" size="20" /></td>
 						</tr>
 						<tr>
 							<td class="required"> <?= $entry_date_end; ?></td>
-							<td><input type="text" class="datetime" name="date_end" value="<?= $date_end; ?>" size="20" /></td>
+							<td><input type="text" class="datetimepicker" name="date_end" value="<?= $date_end; ?>" size="20" /></td>
 						</tr>
 						<tr>
 							<td><?= $entry_section_attr; ?></td>

@@ -98,7 +98,7 @@ class Admin_Controller_Design_Navigation extends Controller
 
 	private function getList()
 	{
-		//Page Title
+		//Page Head
 		$this->document->setTitle($this->_('heading_title'));
 		
 		//The Template
@@ -221,7 +221,7 @@ class Admin_Controller_Design_Navigation extends Controller
 
 	private function getForm()
 	{
-		//Page title
+		//Page Head
 		$this->document->setTitle($this->_('heading_title'));
 		
 		//The Template
@@ -303,10 +303,10 @@ class Admin_Controller_Design_Navigation extends Controller
 		
 			//If name already exists in database, append _n to the name
 			if (empty($link['name'])) {
-				$name = $this->tool->get_slug($link['display_name']);
+				$name = $this->tool->getSlug($link['display_name']);
 			}
 			else {
-				$name = $this->db->escape($this->tool->get_slug($link['name']));
+				$name = $this->db->escape($this->tool->getSlug($link['name']));
 			}
 			
 			$count = 0;

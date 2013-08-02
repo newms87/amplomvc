@@ -18,13 +18,8 @@
 <link href="<?= $canonical_link; ?>" rel="canonical" />
 <? }?>
 
-<? foreach ($css_styles as $style) { ?>
-<link rel="<?= $style['rel']; ?>" type="text/css" href="<?= $style['href']; ?>" media="<?= $style['media']; ?>" />
-<? } ?>
-
-<? foreach ($js_scripts as $script) { ?>
-<script type="text/javascript" src="<?= $script; ?>"></script>
-<? } ?>
+<?= $styles; ?>
+<?= $scripts; ?>
 
 <script type="text/javascript">//<!--
 if (Function('/*@cc_on return document.documentMode===10@*/')()){

@@ -13,27 +13,23 @@
 			<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="form">
 					<tr>
-						<td valign="top"><a id="add_status" class="button"><?= $button_add; ?></a></td>
+						<td valign="top"><a id="add_policy" class="button"><?= $button_add; ?></a></td>
 						<td>
 							<ul id="return_policy_list" class="easy_list">
-							
-								<? $max_row = 0; ?>
-								<? foreach ($return_policies as $key => $policy) { ?>
-									<li class="return_policy <?= $key; ?>">
-										<input class="title" size="50" type="text" name="return_policies[<?= $key; ?>][title]" value="<?= $policy['title']; ?>" /><br />
-										<textarea class="description ckedit" name="return_policies[<?= $key; ?>][description]"><?= $policy['description']; ?></textarea>
+								<? foreach ($return_policies as $row => $policy) { ?>
+									<li class="return_policy" data-row="<?= $row; ?>">
+										<input class="title" size="50" type="text" name="return_policies[<?= $row; ?>][title]" value="<?= $policy['title']; ?>" /><br />
+										<textarea class="description ckedit" name="return_policies[<?= $row; ?>][description]"><?= $policy['description']; ?></textarea>
 										<div class="return_days_box">
 											<?= $this->builder->build('select', $data_days, 'data_days', $policy['days'] > 0 ? 1 : $policy['days']); ?>
-											<input type="text" size="2" name="return_policies[<?= $key; ?>][days]" value="<?= $policy['days']; ?>" />
+											<input type="text" size="2" name="return_policies[<?= $row; ?>][days]" value="<?= $policy['days']; ?>" />
 										</div>
 										 
 										<? if (empty($policy['no_delete'])) { ?>
 											<a class="delete_button text" onclick="$(this).closest('li').remove()"><?= $button_delete; ?></a>
 										<? } ?>
 									</li>
-									<? if (is_integer($key)) { $max_row = max($max_row, $key); } ?>
 								<? } ?>
-								
 							</ul>
 						</td>
 					</tr>
@@ -47,8 +43,6 @@
 	<?= $this->builder->js('translations', $policy['translations'], "return_policies[$key][%name%]"); ?>
 <? } ?>
 
-<?= $this->builder->js('errors',$errors); ?>
-
 <script type="text/javascript">//<!--
 $('[name=data_days]').change(function(){
 	days_input = $(this).closest('.return_days_box').find('input');
@@ -59,14 +53,20 @@ $('[name=data_days]').change(function(){
 		days_input.hide().val(0);
 	}
 	else {
-		days_input.show().val(<?= $default_days; ?>);
+		days_input.show();
+		
+		if (!parseInt(days_input.val()) || parseInt(days_input.val()) < 1) days_input.val(<?= $return_policies['__ac_template__']['days']; ?>);
 	}
 }).change();
+
+
+$('#return_policy_list').ac_template('rp_list', {defaults: <?= json_encode($return_policies['__ac_template__']); ?>});
+$('#add_policy').click(function(){ $.ac_template('rp_list', 'add') });
 
 $('#return_policy_list').sortable();
 //--></script>
 
-<?= $this->builder->js('template_rows', '#return_policy_list', '#add_status', $max_row+1, $template_row_defaults); ?>
+<?= $this->builder->js('errors',$errors); ?>
 
 <?= $this->builder->js('ckeditor'); ?>
 

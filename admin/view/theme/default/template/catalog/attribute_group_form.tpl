@@ -10,7 +10,7 @@
 			</div>
 		</div>
 		<div class="content">
-			<form action="<?= $action; ?>" method="post" id="form">
+			<form action="<?= $save; ?>" method="post" id="form">
 				<table class="form">
 					<tr>
 						<td class="required"> <?= $entry_name; ?></td>
@@ -48,7 +48,7 @@
 												<input type="hidden" name="attributes[<?= $row; ?>][attribute_id]" value="<?= $row; ?>" />
 												<input type="text" name="attributes[<?= $row; ?>][name]" value="<?= $attribute['name']; ?>" />
 											</td>
-											<td class="center"><input type="text" name="attributes[<?= $row; ?>][sort_order]" value="<?= $attribute['sort_order']; ?>" /></td>
+											<td class="center"><input type="text" class="sort_order" name="attributes[<?= $row; ?>][sort_order]" value="<?= $attribute['sort_order']; ?>" /></td>
 											<td class="center">
 												<? if (!empty($attribute['product_count'])) { ?>
 													<span class="product_count"><?= $attribute['product_count']; ?></span>
@@ -94,6 +94,13 @@ $('#add_attribute').click(function(){
 	
 	attr_row++;
 });
+
+$('#attribute_list tbody').sortable({cursor: 'move', stop: function() {
+	count = 0;
+	$('#attribute_list .attribute .sort_order').each(function(i,e){
+		$(e).val(count++);
+	});
+}});
 //--></script>
 
 <?= $this->builder->js('errors',$errors); ?>

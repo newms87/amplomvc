@@ -11,11 +11,11 @@ class Admin_Model_Report_Return extends Model
 		}
 		
 		if (!empty($data['filter_date_start'])) {
-			$sql .= " AND DATE(r.date_added) >= '" . $this->db->escape($data['filter_date_start']) . "'";
+			$sql .= " AND DATE(r.date_added) >= '" . $this->escape($data['filter_date_start']) . "'";
 		}
 
 		if (!empty($data['filter_date_end'])) {
-			$sql .= " AND DATE(r.date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
+			$sql .= " AND DATE(r.date_added) <= '" . $this->escape($data['filter_date_end']) . "'";
 		}
 		
 		if (isset($data['filter_group'])) {
@@ -87,11 +87,11 @@ class Admin_Model_Report_Return extends Model
 		}
 				
 		if (!empty($data['filter_date_start'])) {
-			$sql .= " AND DATE(date_added) >= '" . $this->db->escape($data['filter_date_start']) . "'";
+			$sql .= " AND DATE(date_added) >= '" . $this->escape($data['filter_date_start']) . "'";
 		}
 
 		if (!empty($data['filter_date_end'])) {
-			$sql .= " AND DATE(date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
+			$sql .= " AND DATE(date_added) <= '" . $this->escape($data['filter_date_end']) . "'";
 		}
 
 		$query = $this->query($sql);

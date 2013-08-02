@@ -11,11 +11,11 @@ class Admin_Model_Report_Customer extends Model
 		}
 				
 		if (!empty($data['filter_date_start'])) {
-			$sql .= " AND DATE(o.date_added) >= '" . $this->db->escape($data['filter_date_start']) . "'";
+			$sql .= " AND DATE(o.date_added) >= '" . $this->escape($data['filter_date_start']) . "'";
 		}
 
 		if (!empty($data['filter_date_end'])) {
-			$sql .= " AND DATE(o.date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
+			$sql .= " AND DATE(o.date_added) <= '" . $this->escape($data['filter_date_end']) . "'";
 		}
 		
 		$sql .= ") tmp GROUP BY tmp.customer_id ORDER BY total DESC";
@@ -47,11 +47,11 @@ class Admin_Model_Report_Customer extends Model
 		}
 						
 		if (!empty($data['filter_date_start'])) {
-			$sql .= " AND DATE(o.date_added) >= '" . $this->db->escape($data['filter_date_start']) . "'";
+			$sql .= " AND DATE(o.date_added) >= '" . $this->escape($data['filter_date_start']) . "'";
 		}
 
 		if (!empty($data['filter_date_end'])) {
-			$sql .= " AND DATE(o.date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
+			$sql .= " AND DATE(o.date_added) <= '" . $this->escape($data['filter_date_end']) . "'";
 		}
 						
 		$query = $this->query($sql);
@@ -65,11 +65,11 @@ class Admin_Model_Report_Customer extends Model
 		$implode = array();
 		
 		if (!empty($data['filter_date_start'])) {
-			$implode[] = "DATE(cr.date_added) >= '" . $this->db->escape($data['filter_date_start']) . "'";
+			$implode[] = "DATE(cr.date_added) >= '" . $this->escape($data['filter_date_start']) . "'";
 		}
 
 		if (!empty($data['filter_date_end'])) {
-			$implode[] = "DATE(cr.date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
+			$implode[] = "DATE(cr.date_added) <= '" . $this->escape($data['filter_date_end']) . "'";
 		}
 
 		if ($implode) {
@@ -102,11 +102,11 @@ class Admin_Model_Report_Customer extends Model
 		$implode = array();
 		
 		if (!empty($data['filter_date_start'])) {
-			$implode[] = "DATE(cr.date_added) >= '" . $this->db->escape($data['filter_date_start']) . "'";
+			$implode[] = "DATE(cr.date_added) >= '" . $this->escape($data['filter_date_start']) . "'";
 		}
 
 		if (!empty($data['filter_date_end'])) {
-			$implode[] = "DATE(cr.date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
+			$implode[] = "DATE(cr.date_added) <= '" . $this->escape($data['filter_date_end']) . "'";
 		}
 		
 		if ($implode) {
@@ -136,11 +136,11 @@ class Admin_Model_Report_Customer extends Model
 		$implode = array();
 		
 		if (!empty($data['filter_date_start'])) {
-			$implode[] = "DATE(ct.date_added) >= '" . $this->db->escape($data['filter_date_start']) . "'";
+			$implode[] = "DATE(ct.date_added) >= '" . $this->escape($data['filter_date_start']) . "'";
 		}
 
 		if (!empty($data['filter_date_end'])) {
-			$implode[] = "DATE(ct.date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
+			$implode[] = "DATE(ct.date_added) <= '" . $this->escape($data['filter_date_end']) . "'";
 		}
 
 		if ($implode) {
@@ -173,11 +173,11 @@ class Admin_Model_Report_Customer extends Model
 		$implode = array();
 		
 		if (!empty($data['filter_date_start'])) {
-			$implode[] = "DATE(cr.date_added) >= '" . $this->db->escape($data['filter_date_start']) . "'";
+			$implode[] = "DATE(cr.date_added) >= '" . $this->escape($data['filter_date_start']) . "'";
 		}
 
 		if (!empty($data['filter_date_end'])) {
-			$implode[] = "DATE(cr.date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
+			$implode[] = "DATE(cr.date_added) <= '" . $this->escape($data['filter_date_end']) . "'";
 		}
 		
 		if ($implode) {

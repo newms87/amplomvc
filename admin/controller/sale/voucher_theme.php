@@ -51,7 +51,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 	
   	private function getList()
   	{
-  		//Page Title
+  		//Page Head
   		$this->document->setTitle($this->_('heading_title'));
 		
 		//The Template
@@ -161,7 +161,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 
   	private function getForm()
   	{
-  		//Page Title
+  		//Page Head
   		$this->document->setTitle($this->_('heading_title'));
 		
 		//The Template

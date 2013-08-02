@@ -19,7 +19,7 @@ class Admin_Controller_Dev_DbAdmin extends Controller
 		//Check for post data
 		if ($this->request->isPost() && $this->validate()) {
 			if (!empty($_POST['query'])) {
-				$results = $this->db->queryRows($_POST['query']);
+				$results = $this->db->queryRows(html_entity_decode($_POST['query'], ENT_QUOTES, 'UTF-8'));
 				
 				$this->data['results'] = $results;
 			}

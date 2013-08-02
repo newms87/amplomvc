@@ -10,22 +10,19 @@
 			</div>
 		</div>
 		<div class="content">
-			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
+			<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="form">
 					<tr>
 						<td valign="top"><a id="add_status" class="button"><?= $button_add; ?></a></td>
 						<td>
 							<ul id="order_status_list" class="easy_list">
-							
-								<? $max_row = 0; ?>
-								<? foreach ($order_statuses as $key => $status) { ?>
-									<li class="order_status <?= $key; ?>">
-										<input class="title" size="50" type="text" name="order_statuses[<?= $key; ?>][title]" value="<?= $status['title']; ?>" /><br />
+								<? foreach ($order_statuses as $row => $status) { ?>
+									<li class="order_status" data-row="<?= $row; ?>">
+										<input class="title" size="50" type="text" name="order_statuses[<?= $row; ?>][title]" value="<?= $status['title']; ?>" /><br />
 										<? if (empty($status['no_delete'])) { ?>
 											<a class="delete_button text" onclick="$(this).closest('li').remove()"><?= $button_delete; ?></a>
 										<? } ?>
 									</li>
-									<? if (is_integer($key)) { $max_row = max($max_row, $key); } ?>
 								<? } ?>
 								
 							</ul>
@@ -41,11 +38,13 @@
 	<?= $this->builder->js('translations', $status['translations'], "order_statuses[$key][%name%]"); ?>
 <? } ?>
 
-<?= $this->builder->js('template_rows', '#order_status_list', '#add_status', $max_row+1, $template_row_defaults); ?>
+<script type="text/javascript">//<!--
+$('#order_status_list').ac_template('os_list', {defaults: <?= json_encode($order_statuses['__ac_template__']); ?>});
+$('#add_status').click(function(){ $.ac_template('os_list', 'add') });
+
+$('#order_status_list').sortable();
+//--></script>
 
 <?= $this->builder->js('errors',$errors); ?>
 
-<script type="text/javascript">//<!--
-$('#order_status_list').sortable();
-//--></script>
 <?= $footer; ?>

@@ -56,11 +56,11 @@
 						</tr>
 						<tr>
 							<td><?= $entry_date_active; ?></td>
-							<td><input type='text' class='datetime' name='date_active' value='<?= $date_active; ?>' /></td>
+							<td><input type='text' class="datetimepicker" name='date_active' value='<?= $date_active; ?>' /></td>
 						</tr>
 						<tr>
 							<td><?= $entry_date_expires; ?></td>
-							<td><input type='text' class='datetime' name='date_expires' value='<?= $date_expires; ?>' /></td>
+							<td><input type='text' class="datetimepicker" name='date_expires' value='<?= $date_expires; ?>' /></td>
 						</tr>
 						<tr>
 							<td><?= $entry_sort_order; ?></td>
@@ -80,6 +80,8 @@
 <?= $this->builder->js('ckeditor'); ?>
 
 <script type="text/javascript">//<!--
+$('.datetimepicker').ac_datepicker();
+
 function generate_url_warning(field){
 	if($('#gen_warn').length == 0)
 			$(field).parent().append('<span id="gen_warn" style="color:red"><?= $warning_generate_url; ?></span>');
@@ -98,7 +100,6 @@ function generate_url(c){
 $('#tabs a').tabs();
 //--></script>
 
-<?= $this->builder->js('datepicker'); ?>
 <?= $this->builder->js('errors', $errors); ?>
 <?= $this->builder->js('translations', $translations); ?>
 

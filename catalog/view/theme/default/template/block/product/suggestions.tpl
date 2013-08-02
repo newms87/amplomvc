@@ -1,24 +1,37 @@
-<div id='suggested_products'>
-	<? foreach($suggestions as $s){?>
-			<a href='<?= $s['href']; ?>' class='suggested_product'>
-				<? if ($s['thumb']) { ?>
-				<div class="image"><img src="<?= $s['thumb']; ?>" alt="<?= $s['name']; ?>" /></div>
+<div id="suggested_products">
+	<div id="catalog_list" class='grid'>
+		<? foreach ($products as $product) { ?>
+			<a class="item_block" href="<?= $product['href']; ?>">
+				
+				<? if ($product['thumb']) { ?>
+				<div class="image">
+					<img class="primary" src="<?= $product['thumb']; ?>" title="<?= $product['name']; ?>" alt="<?= $product['name']; ?>" />
+					
+					<? if (!empty($product['backup_thumb'])) { ?>
+						<img class="backup" src="<?= $product['backup_thumb']; ?>" title="<?= $product['name']; ?>" alt="<?= $product['name']; ?>" />
+					<? } ?>
+				</div>
 				<? } ?>
-				<div class='suggested_product_info'>
-					<div class="name"><?= $s['name']; ?></div>
-					<? if ($s['price']) { ?>
+				
+				<div class="item_text">
+					<div class="name"><?= $product['name']; ?></div>
+				</div>
+				
+				<? if (!empty($product['price'])) { ?>
 					<div class="price">
-						<? if (!$s['special']) { ?>
-						<span class="special"><?= $s['price']; ?></span>
+						<? if (empty($product['special'])) { ?>
+							<?= $product['price']; ?>
 						<? } else { ?>
-						<span class="special"><?= $s['special']; ?></span> <span class="retail"><?= $s['price']; ?> <?= $text_retail; ?></span>
+							<span class="retail"><?= $product['price']; ?></span> <span class="special"><?= $product['special']; ?></span>
+						<? } ?>
+						
+						<? if ($show_price_tax) { ?>
+							<br />
+							<span class="price-tax"><?= $text_tax; ?> <?= $product['tax']; ?></span>
 						<? } ?>
 					</div>
-					<? } ?>
-					<? if($s['flashsale_id']){?>
-						<div class='fs_countdown'><div id='fpop-<?= $s['product_id']; ?>' class='flash_countdown' callback='end_featured_fs' type='short' flashid='<?= $s['flashsale_id']; ?>'></div></div>
-					<? }?>
-				</div>
+				<? } ?>
 			</a>
-	<? } ?>
+		<? } ?>
+	</div>
 </div>

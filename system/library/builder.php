@@ -141,13 +141,11 @@ class Builder extends Library
 			$thumb = $no_image;
 		}
 		
-		$id = uniqid();
-	
 		$html = '';
 		
 		switch($this->builder_template){
 			case 'browse_clear':
-				$html .= "<div class =\"image\">";
+				$html .= "<div class =\"image browse_clear\">";
 				$html .= 	"<img src=\"$thumb\" alt=\"\" class=\"iu_thumb\" /><br />";
 				$html .= 	"<input type=\"hidden\" name=\"$name\" value=\"$image\" class=\"iu_image\" />";
 				$html .= 	"<a onclick=\"upload_image($(this).closest('.image'));\">$text_browse</a>&nbsp;&nbsp;|&nbsp;&nbsp;";
@@ -156,7 +154,7 @@ class Builder extends Library
 				break;
 				
 			case 'click_image_small':
-				$html .= "<div class=\"image\" onclick=\"upload_image($(this));\">";
+				$html .= "<div class=\"image click_image_small\" onclick=\"upload_image($(this));\">";
 				$html .= 	"<img src=\"$thumb\" alt=\"\" class=\"iu_thumb\" />";
 				$html .= 	"<input type=\"hidden\" name=\"$name\" value=\"$image\" class=\"iu_image\" />";
 				$html .= 	"<img src=\"$no_image\" alt=\"\" class=\"click_image_small_change\" />";
@@ -165,7 +163,7 @@ class Builder extends Library
 			
 			case 'click_image':
 			default:
-				$html .= "<div class=\"image\" onclick=\"upload_image($(this));\">";
+				$html .= "<div class=\"image click_image\" onclick=\"upload_image($(this));\">";
 				$html .= 	"<img src=\"$thumb\" alt=\"\" class=\"iu_thumb\" /><br />";
 				$html .= 	"<input type=\"hidden\" name=\"$name\" value=\"$image\" class=\"iu_image\" />";
 				$html .= 	"<div class=\"click_image_text\"><img src=\"" . HTTP_THEME_IMAGE . "small_plus_icon.gif\" /><span>Click to Change<span></div>";
@@ -222,7 +220,7 @@ class Builder extends Library
 		$opt_group_active = false;
 		
 		if (!is_array($data)) {
-			$this->error_log->write("library/tpl.php::build(): data was not an array. " . gettype($data) . " was given.");
+			$this->error_log->write("library/tpl.php::build(): data was not an array. " . gettype($data) . " was given." . get_caller(0,1));
 			return;
 		}
 		
@@ -363,7 +361,7 @@ class Builder extends Library
 				return "<div class='clickable_list'>$added_list $list</div>";
 		}
 	}
-
+	
 	public function js($js)
 	{
 		static $js_loaded_files = array();

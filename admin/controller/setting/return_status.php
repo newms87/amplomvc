@@ -3,11 +3,20 @@ class Admin_Controller_Setting_ReturnStatus extends Controller
 {
 	public function index()
 	{
+		//Template and Language
 		$this->template->load('setting/return_status');
 		$this->language->load('setting/return_status');
 
+		//Page Head
 		$this->document->setTitle($this->_('heading_title'));
 		
+		//Breadcrumbs
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('text_store_list'), $this->url->link('setting/store'));
+		$this->breadcrumb->add($this->_('text_settings'), $this->url->link('setting/setting'));
+		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/return_status'));
+		
+		//Load Information
 		if ($this->request->isPost() && $this->validate()) {
 			$return_statuses = !empty($_POST['return_statuses']) ? $_POST['return_statuses'] : array();
 			
@@ -19,14 +28,7 @@ class Admin_Controller_Setting_ReturnStatus extends Controller
 			}
 		}
 		
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_store_list'), $this->url->link('setting/store'));
-		$this->breadcrumb->add($this->_('text_settings'), $this->url->link('setting/setting'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/return_status'));
-		
-		$this->data['action'] = $this->url->link('setting/return_status');
-		$this->data['cancel'] = $this->url->link('setting/store');
-		
+		//Load Data or Defaults
 		if (!$this->request->isPost()) {
 			$return_statuses = $this->config->load('product_return', 'return_statuses', 0);
 		} else {
@@ -54,19 +56,10 @@ class Admin_Controller_Setting_ReturnStatus extends Controller
 			}
 		} unset($return_status);
 
-		//Defaults
-		$defaults = array(
+		//Add in the template row
+		$return_statuses['__ac_template__'] = array(
 			'title' => $this->_('entry_title'),
 		);
-		
-		if (empty($return_statuses)) {
-			$return_statuses[0] = $defaults;
-		}
-		
-		//Add in the template row
-		$this->tool->add_template_row($return_statuses);
-		
-		$this->data['template_row_defaults'] = $defaults;
 		
 		//Get the Field Translations
 		$translate_fields = array(
@@ -74,16 +67,22 @@ class Admin_Controller_Setting_ReturnStatus extends Controller
 		);
 		
 		foreach ($return_statuses as $key => &$return_status) {
-			$return_status['translations'] = $this->translation->get_translations('return_statuses', $key, $translate_fields);
+			$return_status['translations'] = $this->translation->getTranslations('return_statuses', $key, $translate_fields);
 		} unset($return_status);
 
 		$this->data['return_statuses'] = $return_statuses;
 		
+		//Action Buttons
+		$this->data['save'] = $this->url->link('setting/return_status');
+		$this->data['cancel'] = $this->url->link('setting/store');
+		
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
 		
+		//Render
 		$this->response->setOutput($this->render());
 	}
 	

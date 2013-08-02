@@ -221,7 +221,7 @@ function validate_submit(submit, recheck){
 <script type="text/javascript">//<!--
 <? if(!empty($guest_checkout)) { ?>
 	
-$('input[name=submit_guest_checkout]').live('click', function(){
+$('input[name=submit_guest_checkout]').click(function(){
 	ci_validate_form($('#guest_checkout form'));
 	
 	return false;
@@ -233,7 +233,7 @@ $('#guest_checkout').on('loaded', function(){
 
 <? } else { ?>
 	
-$('#shipping_new input[type=submit], #payment_new input[type=submit]').live('click', function(){
+$('#shipping_new input[type=submit], #payment_new input[type=submit]').click(function(){
 	ci_validate_form($(this).closest('form'), true);
 	
 	return false;
@@ -254,13 +254,6 @@ $('#payment_address').on('loaded', function(){
 });
 
 <? } ?>
-
-
-$('#add_comment textarea').live('keyup', function(){
-	if($(this).closest('.info_item').hasClass('valid')){
-		set_validation_status($(this).closest('.info_item'), '', '');
-	}
-});
 
 $('#shipping_method, #payment_method').on('loaded', function(){
 });

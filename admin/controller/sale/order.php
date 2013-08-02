@@ -56,7 +56,7 @@ class Admin_Controller_Sale_Order extends Controller
   		//The Template
   		$this->template->load('sale/order_list');
   		
-		//Page Title
+		//Page Head
 		$this->document->setTitle($this->_('heading_title'));
 		
 		//Breadcrumbs
@@ -194,7 +194,7 @@ class Admin_Controller_Sale_Order extends Controller
   		//The Template
 		$this->template->load('sale/order_form');
 
-		//Page Title
+		//Page Head
 		$this->document->setTitle($this->_('heading_title'));
 		
 		if (isset($_GET['order_id'])) {

@@ -5,6 +5,6 @@ class Catalog_Model_Setting_UrlAlias extends Model
 	{
 		$status = $status ? 1 : 0;
 		
-		$this->query("UPDATE " . DB_PREFIX . "url_alias SET status='$status' WHERE route = '" . $this->db->escape($route) . "' AND query = '" . $this->db->escape($query) . "'");
+		$this->query("UPDATE " . DB_PREFIX . "url_alias SET status='$status' WHERE route = '" . $this->escape($route) . "' AND query = '" . $this->escape($query) . "'");
 	}
 }

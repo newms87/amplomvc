@@ -43,9 +43,9 @@ elFinder.prototype.commands.selectforproduct = function() {
             var keyThumb = "thumb";
             var keyField = "field";
             var keyRows = "rows";
-            var valueThumb = getQuerystring(keyThumb, null);
-            var valueField = getQuerystring(keyField, null);
-            var valueRows = getQuerystring(keyRows, null);
+            var valueThumb = getQueryString(keyThumb, null);
+            var valueField = getQueryString(keyField, null);
+            var valueRows = getQueryString(keyRows, null);
 
             if(valueField == "multiselect") {
                 parent.addImage(elfinder_root_dir + pp);
@@ -67,7 +67,7 @@ elFinder.prototype.commands.selectforproduct = function() {
         });
 
 
-        return dfrd.isRejected() ? dfrd : dfrd.resolve(fm.clipboard(this.hashes(hashes), true));
+        return dfrd.state() === 'rejected' ? dfrd : dfrd.resolve(fm.clipboard(this.hashes(hashes), true));
     }
 
 }

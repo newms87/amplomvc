@@ -27,7 +27,7 @@ $_['text_home']					= 'Home';
 $_['text_browse']				= 'Browse';
 $_['text_clear']				= 'Clear';
 $_['text_batch_action']		= 'Batch Action:';
-$_['text_autocomplete']		= '<span class="help">(autocomplete)</span>';
+$_['text_autocomplete']		= 'autocomplete';
 $_['text_modify_filter']		= '+ Filter';
 
 //Data
@@ -67,7 +67,6 @@ $_['button_upload']			= 'Upload';
 $_['button_submit']			= 'Submit';
 $_['button_invoice']			= 'Print Invoice';
 $_['button_add_address']		= 'Add Address';
-$_['button_add_attribute']	= 'Add Attribute';
 $_['button_add_banner']		= 'Add Banner';
 $_['button_add_product']		= 'Add Product';
 $_['button_add_voucher']		= 'Add Voucher';

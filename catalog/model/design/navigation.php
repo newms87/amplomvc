@@ -5,7 +5,7 @@ class Catalog_Model_Design_Navigation extends Model
 	{
 		$query  = "SELECT ng.* FROM " . DB_PREFIX . "navigation_group ng";
 		$query .= " LEFT JOIN " . DB_PREFIX . "navigation_store ns ON (ng.navigation_group_id=ns.navigation_group_id)";
-		$query .= " WHERE ng.name = '" . $this->db->escape($name) . "' AND ng.status='1' AND ns.store_id='" . $this->config->get('config_store_id') . "'";
+		$query .= " WHERE ng.name = '" . $this->escape($name) . "' AND ng.status='1' AND ns.store_id='" . $this->config->get('config_store_id') . "'";
 		
 		$result = $this->query($query);
 		

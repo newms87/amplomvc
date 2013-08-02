@@ -1,108 +1,111 @@
-<div class="right">
-	<div class="description">
-		<? if ($manufacturer) { ?>
-		<div class="description_manufacturer">
-			<span class="view_more"><?= $text_view_more; ?></span>
-			<span class="keep_shopping"><?= $text_keep_shopping; ?></span>
-		</div>
-		<? } ?>
-		<? if($display_model) {?>
-		<div class="description_model"><span><?= $text_model; ?></span><span><?= $model; ?></span></div>
+
+<div class="title"><?= $heading_title; ?></div>
+<div class="description">
+	<? if ($manufacturer) { ?>
+	<div class="description_manufacturer">
+		<span class="view_more"><?= $text_view_more; ?></span>
+		<span class="keep_shopping"><?= $text_keep_shopping; ?></span>
+	</div>
+	<? } ?>
+	<? if($display_model) {?>
+	<div class="description_model"><span><?= $text_model; ?></span><span><?= $model; ?></span></div>
+	<? } ?>
+	
+	<? if ($price && $is_purchasable) { ?>
+	<div class="price">
+		<?= $text_price; ?>
+		
+		<? if (empty($special)) { ?>
+			<span class="regular"><?= $price; ?></span>
+		<? } else { ?>
+			<span class="special"><?= $special; ?></span><span class="retail"><?= $price; ?> retail</span>
 		<? } ?>
 		
-		<? if ($price && $is_purchasable) { ?>
-		<div class="price">
-			<?= $text_price; ?>
-			
-			<? if (empty($special)) { ?>
-				<span class="regular"><?= $price; ?></span>
-			<? } else { ?>
-				<span class="special"><?= $special; ?></span><span class="retail"><?= $price; ?> retail</span>
-			<? } ?>
-			
-			<? if(!empty($is_final_explanation)){?>
-					<div class='extra_info_block'><span class='final_sale'></span><span class='help_icon'><span class='help_icon_popup'><?= $is_final_explanation; ?></span></span></div>
-			<? }?>
-			
-			<? if(!empty($is_default_shipping)){?>
-				<div class='extra_info_block'><span class='not_default_shipping'></span><span class='help_icon'><span class='help_icon_popup'><?= $shipping_policy['description']; ?></span></span></div>
-			<? }?>
-			
-			<br style='clear:both' />
-			<? if (!empty($tax)) { ?>
-				<span class="price-tax"><?= $text_tax; ?> <?= $tax; ?></span><br />
-			<? } ?>
-			<? if ($points) { ?>
-				<span class="reward"><small><?= $text_points; ?> <?= $points; ?></small></span><br />
-			<? } ?>
-			<? if ($discounts) { ?>
-			<br />
-			<div class="discount">
-				<? foreach ($discounts as $discount) { ?>
-				<?= sprintf($text_discount, $discount['quantity'], $discount['price']); ?><br />
-				<? } ?>
-			</div>
-			<? } ?>
-		</div>
-		<? } ?>
-	
-		<? if ($reward) { ?>
-		<div class="description_reward"><span><?= $text_reward; ?></span><span><?= $reward; ?></span></div>
-		<? } ?>
-		<? if(!empty($stock)) {?>
-		<div class="description_stock"><span><?= $text_stock; ?></span><span><?= $stock; ?></span></div>
-		<? } ?>
-		<? if($description) { ?>
-		<div class="product_description"><?= $description; ?></div>
-		<? } ?>
-	</div>
-	
-	<? if($is_purchasable){?>
-	<div class="cart">
-		<? if(isset($block_product_options)) {?>
-			<?= $block_product_options; ?>
+		<? if(!empty($is_final_explanation)){?>
+				<div class='extra_info_block'><span class='final_sale'></span><span class='help_icon'><span class='help_icon_popup'><?= $is_final_explanation; ?></span></span></div>
 		<? }?>
-	<div style="clear:both"></div>
-		<div id='product_submit_box'>
-			<div id='product_quantity_box'>
-				<?= $text_qty; ?>
-				<input type="text" name="quantity" id='quantity' size="2" value="<?= $minimum; ?>" />
-				<input type="hidden" id='product_id' name="product_id" size="2" value="<?= $product_id; ?>" />
-			</div>
-			<div id='product_buttons_box'>
-				<span id='buy_product_buttons'>
-					<input type="button" value="<?= $button_buy_now; ?>" id="button-buy-now" class="button" />
-					<input type="button" value="<?= $button_cart; ?>" id="button-cart" class="button" />
-				</span>
-				<span id='processing_product' style='display:none'><?= $text_processing; ?></span>
-			</div>
+		
+		<? if(!empty($is_default_shipping)){?>
+			<div class='extra_info_block'><span class='not_default_shipping'></span><span class='help_icon'><span class='help_icon_popup'><?= $shipping_policy['description']; ?></span></span></div>
+		<? }?>
+		
+		<br style='clear:both' />
+		<? if (!empty($tax)) { ?>
+			<span class="price-tax"><?= $text_tax; ?> <?= $tax; ?></span><br />
+		<? } ?>
+		<? if ($points) { ?>
+			<span class="reward"><small><?= $text_points; ?> <?= $points; ?></small></span><br />
+		<? } ?>
+		<? if ($discounts) { ?>
+		<br />
+		<div class="discount">
+			<? foreach ($discounts as $discount) { ?>
+			<?= sprintf($text_discount, $discount['quantity'], $discount['price']); ?><br />
+			<? } ?>
 		</div>
-		<div id='or_text'><?= $text_or; ?></div>
-			<div id='cart_additional_buttons' >
-				<!-- <a onclick="addToWishList('<?= $product_id; ?>');"><?= $button_wishlist; ?></a> -->
-				<a href='<?= $view_cart_link; ?>'><?= $button_view_cart; ?></a>
-				<a href='<?= $checkout_link; ?>'><?= $button_checkout; ?></a>
-				<a href='<?= $continue_shopping_link; ?>'><?= $button_shopping; ?></a>
-			</div>
-		<? if ($minimum > 1) { ?>
-		<div class="minimum"><?= $text_minimum; ?></div>
 		<? } ?>
 	</div>
-	<? }?>
-	
-	<? if (!empty($block_review)) { ?>
-		<?= $block_review; ?>
 	<? } ?>
-	
-	<? if (!empty($block_sharing)) { ?>
-		<?= $block_sharing; ?>
+
+	<? if ($reward) { ?>
+	<div class="description_reward"><span><?= $text_reward; ?></span><span><?= $reward; ?></span></div>
 	<? } ?>
-	
-	<? if(!$is_purchasable){?>
-		<div id='product_inactive'><?= $text_inactive; ?></div>
-		<?= $block_product_suggestions; ?>
-	<? }?>
+	<? if(!empty($stock)) {?>
+	<div class="description_stock"><span><?= $text_stock; ?></span><span><?= $stock; ?></span></div>
+	<? } ?>
+	<? if($description) { ?>
+	<div class="product_description">
+		<div class="scroll_wrapper">
+			<?= $description; ?>
+		</div>
+	</div>
+	<? } ?>
 </div>
+
+<? if($is_purchasable){?>
+<div class="cart">
+	<? if(isset($block_product_options)) {?>
+		<?= $block_product_options; ?>
+	<? }?>
+<div style="clear:both"></div>
+	<div id='product_submit_box'>
+		<div id='product_quantity_box'>
+			<?= $text_qty; ?>
+			<input type="text" name="quantity" id='quantity' size="2" value="<?= $minimum; ?>" />
+			<input type="hidden" id='product_id' name="product_id" size="2" value="<?= $product_id; ?>" />
+		</div>
+		<div id='product_buttons_box'>
+			<span id='buy_product_buttons'>
+				<input type="button" value="<?= $button_buy_now; ?>" id="button-buy-now" class="button" />
+				<input type="button" value="<?= $button_cart; ?>" id="button-cart" class="button" />
+			</span>
+			<span id='processing_product' style='display:none'><?= $text_processing; ?></span>
+		</div>
+	</div>
+	<div id='or_text'><?= $text_or; ?></div>
+		<div id='cart_additional_buttons' >
+			<!-- <a onclick="addToWishList('<?= $product_id; ?>');"><?= $button_wishlist; ?></a> -->
+			<a href='<?= $view_cart_link; ?>'><?= $button_view_cart; ?></a>
+			<a href='<?= $checkout_link; ?>'><?= $button_checkout; ?></a>
+			<a href='<?= $continue_shopping_link; ?>'><?= $button_shopping; ?></a>
+		</div>
+	<? if ($minimum > 1) { ?>
+	<div class="minimum"><?= $text_minimum; ?></div>
+	<? } ?>
+</div>
+<? }?>
+
+<? if (!empty($block_review)) { ?>
+	<?= $block_review; ?>
+<? } ?>
+
+<? if (!empty($block_sharing)) { ?>
+	<?= $block_sharing; ?>
+<? } ?>
+
+<? if(!$is_purchasable){?>
+	<div id='product_inactive'><?= $text_inactive; ?></div>
+<? }?>
 
 <script type="text/javascript">//<!--
 //Check if Product description is overflowed
@@ -123,34 +126,26 @@ function option_select_post_after(){
 	$('#processing_product').fadeOut(200);
 }
 
-$('#button-cart, #button-buy-now').bind('click', function() {
+$('#button-cart, #button-buy-now').click(function() {
 	buynow = this.id=='button-buy-now';
 	
 	option_select_post_before();
 	
 	selected_options = {};
 	
-	$('.option').each(function(opt_i,opt_e){
-		options = {}
-		$(opt_e).find('.selected_option').each(function(i,e){
-			if($(e).attr('value') || $(e).val()){
-				ov = 0;
-				if($(e).is('select')){
-					ov = $(e).find('option[value="' + $(e).val() + '"]').attr('ov');
-					pov = $(e).val();
-				}
-				else{
-					ov = $(e).attr('ov');
-					pov = $(e).attr('value');
-				}
-				
-				options[i] = {option_value_id: ov, product_option_value_id: pov};
+	$('.product_option').each(function(opt_i,opt_e){
+		product_options = {}
+		
+		$(opt_e).find('input[type=text],select,input[type=radio]:checked,input[type=checkbox]:checked').each(function(i,e){
+			if ($(e).val() !== '') {
+				product_options[$(e).val()] = true;
 			}
 		});
-		selected_options[$(opt_e).attr('option_id')] = options;
+		
+		selected_options[$(opt_e).attr('data-po-id')] = product_options;
 	});
 	
-	data = {selected: selected_options, product_id: <?= $product_id; ?>, quantity: $('#quantity').val()};
+	data = {selected_options: selected_options, product_id: <?= $product_id; ?>, quantity: $('#quantity').val()};
 	
 	$.ajax({
 		url: "<?= $url_add_to_cart; ?>",
@@ -158,18 +153,19 @@ $('#button-cart, #button-buy-now').bind('click', function() {
 		data: data,
 		dataType: 'json',
 		success: function(json) {
-			$('.success, .warning, .attention, information, .error').remove();
-			$('#product_options .option').removeClass('option_error');
+			clear_msgs();
+			$('#product_options .product_option').removeClass('option_error');
+			$('#product_options .error').remove();
 			
 			if (json['error']) {
 				if (json['error']['option']) {
 					msgs = '';
-					for (i in json['error']['option']) {
-						$('#option-' + i).after('<span class="error">' + json['error']['option'][i] + '</span>').addClass('option_error');
-						msgs += json['error']['option'][i] + '<br>';
+					for (o in json['error']['option']) {
+						$('[data-po-id=' + o +']').after('<span class="error">' + json['error']['option'][o] + '</span>').addClass('option_error');
+						msgs += json['error']['option'][o] + '<br>';
 					}
 					
-					$('#page-content > .product-info').before("<div class='message_box warning'>" + msgs + "</div>");
+					show_msg('error',msgs);
 				}
 			}
 			

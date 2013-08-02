@@ -99,7 +99,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 	
   	private function getList()
   	{
-  		//Page Title
+  		//Page Head
   		$this->document->setTitle($this->_('heading_title'));
 		
 		//The Template
@@ -321,7 +321,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 			'shipping_return',
 		);
 		
-		$this->data['translations'] = $this->translation->get_translations('manufacturer', $manufacturer_id, $translate_fields);
+		$this->data['translations'] = $this->translation->getTranslations('manufacturer', $manufacturer_id, $translate_fields);
 		
 		$this->children = array(
 			'common/header',
@@ -342,7 +342,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		}
 		
 		if (!isset($_POST['keyword'])) {
-			$_POST['keyword'] = $this->tool->get_slug($_POST['name']);
+			$_POST['keyword'] = $this->tool->getSlug($_POST['name']);
 		} elseif (empty($_POST['keyword']) || preg_match("/[^A-Za-z0-9-]/", $_POST['keyword'])) {
 			$this->error['keyword'] = $this->_('error_keyword');
 		}
@@ -391,38 +391,27 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		exit;
 	}
 	
-	
 	public function autocomplete()
 	{
-		$filters = array(
-			'name' => null,
-			'status' => null,
-			'start' => 0,
-			'limit' => 20,
-		);
+		//Sort
+		$sort = $this->sort->getQueryDefaults('name', 'ASC', $this->config->get('config_autocomplete_limit'));
 		
-		$data = array();
+		//Filter
+		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 		
-		foreach ($filters as $key => $default) {
-			if (isset($_GET[$key])) {
-				$data[$key] = $_GET[$key];
-			} elseif (!is_null($default)) {
-				$data[$key] = $default;
-			}
-		}
+		//Label and Value
+		$label = !empty($_GET['label']) ? $_GET['label'] : 'name';
+		$value = !empty($_GET['value']) ? $_GET['value'] : 'manufacturer_id';
 		
-		$results = $this->Model_Catalog_Manufacturer->getManufacturers($data);
+		//Load Sorted / Filtered Data
+		$manufacturers = $this->Model_Catalog_Manufacturer->getManufacturers($sort + $filter);
 		
-		$json = array();
+		foreach ($manufacturers as &$manufacturer) {
+			$manufacturer['label'] = $manufacturer[$label];
+			$manufacturer['value'] = $manufacturer[$value];
+		} unset($manufacturer);
 		
-		foreach ($results as $result) {
-			$json[] = array(
-				'manufacturer_id' => $result['manufacturer_id'],
-				'name'		=> html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8'),
-				'image'		=> $result['image'],
-			);
-		}
-
-		$this->response->setOutput(json_encode($json));
+		//JSON response
+		$this->response->setOutput(json_encode($manufacturers));
 	}
 }

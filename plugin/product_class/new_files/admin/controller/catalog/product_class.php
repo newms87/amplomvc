@@ -78,7 +78,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 	
 	private function getList()
 	{
-		//Page Title
+		//Page Head
 		$this->document->setTitle($this->_('heading_title'));
 		
 		//The Template
@@ -194,7 +194,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 
 	private function getForm()
 	{
-		//Page title
+		//Page Head
 		$this->document->setTitle($this->_('heading_title'));
 		
 		//The template

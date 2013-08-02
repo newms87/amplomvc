@@ -99,7 +99,7 @@ class Admin_Model_Catalog_Information extends Model
 		$information['stores'] = $this->getInformationStores($information_id);
 		$information['layouts'] = $this->getInformationLayouts($information_id);
 		
-		$information['translations'] = $this->translation->get_translations('information', $information_id);
+		$information['translations'] = $this->translation->getTranslations('information', $information_id);
 		
 		$this->addInformation($information);
 	}
@@ -141,7 +141,7 @@ class Admin_Model_Catalog_Information extends Model
 		$where = "1";
 		
 		if (!empty($data['title'])) {
-			$where .= " AND LCASE(title) like '%" . $this->db->escape(strtolower($data['title'])) . "%'";
+			$where .= " AND LCASE(title) like '%" . $this->escape(strtolower($data['title'])) . "%'";
 		}
 		
 		if (!empty($data['status'])) {

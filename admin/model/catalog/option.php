@@ -3,49 +3,33 @@ class Admin_Model_Catalog_Option extends Model
 {
 	public function addOption($data)
 	{
-		
 		$option_id = $this->insert('option', $data);
 		
-		
-		foreach ($data['option_description'] as $language_id => $value) {
-			$value['language_id'] = $language_id;
-			$value['option_id']	= $option_id;
-			
-			$this->insert('option_description', $value);
-		}
-
-		if (isset($data['option_value'])) {
+		if (!empty($data['option_value'])) {
 			foreach ($data['option_value'] as $option_value) {
 				$option_value['option_id'] = $option_id;
 				
 				$option_value_id = $this->insert('option_value', $option_value);
 				
-				foreach ($option_value['option_value_description'] as $language_id => $option_value_description) {
-					$option_value_description['option_value_id'] = $option_value_id;
-					$option_value_description['language_id']	= $language_id;
-					$option_value_description['option_id']		= $option_id;
-					
-					$this->insert('option_value_description', $option_value_description);
+				if (!empty($attribute['translations'])) {
+					$this->translation->setTranslations('option_value', $option_value_id, $option_value['translations']);
 				}
 			}
 		}
+		
+		if (!empty($data['translations'])) {
+			$this->translation->setTranslations('option', $option_id, $data['translations']);
+		}
+		
 		$this->cache->delete('option');
+		
+		return $option_id;
 	}
 	
 	public function editOption($option_id, $data)
 	{
-		$this->update('option', $data, array('option_id'=>$option_id));
+		$this->update('option', $data, $option_id);
 		
-		$this->delete('option_description', array('option_id'=>$option_id));
-
-		foreach ($data['option_description'] as $language_id => $value) {
-			$value['language_id'] = $language_id;
-			$value['option_id']	= $option_id;
-			
-			$this->insert('option_description', $value);
-		}
-		
-		$this->delete('option_value_description', array('option_id'=>$option_id));
 		
 		if (isset($data['option_value'])) {
 			foreach ($data['option_value'] as $option_value) {
@@ -53,18 +37,12 @@ class Admin_Model_Catalog_Option extends Model
 				
 				if ($option_value['option_value_id']) {
 					$this->update('option_value', $option_value, $option_value['option_value_id']);
-					$option_value_id = $option_value['option_value_id'];
-				}
-				else {
-					$option_value_id = $this->insert('option_value', $option_value);
+				} else {
+					$option_value['option_value_id'] = $this->insert('option_value', $option_value);
 				}
 				
-				foreach ($option_value['option_value_description'] as $language_id => $option_value_description) {
-					$option_value_description['option_value_id'] = $option_value_id;
-					$option_value_description['language_id']	= $language_id;
-					$option_value_description['option_id']		= $option_id;
-					
-					$this->insert('option_value_description', $option_value_description);
+				if (!empty($attribute['translations'])) {
+					$this->translation->setTranslations('option_value', $option_value['option_value_id'], $option_value['translations']);
 				}
 			}
 		}
@@ -75,108 +53,156 @@ class Admin_Model_Catalog_Option extends Model
 	public function deleteOption($option_id)
 	{
 		$this->delete('option', $option_id);
-		$this->delete('option_description', array('option_id'=>$option_id));
-		$this->delete('option_value', array('option_id'=>$option_id));
-		$this->delete('option_value_description', array('option_id'=>$option_id));
+		$this->delete('option_value', array('option_id' => $option_id));
 		
 		$this->cache->delete('option');
 	}
 	
 	public function getOption($option_id)
 	{
-		$query = $this->query("SELECT * FROM `" . DB_PREFIX . "option` o LEFT JOIN " . DB_PREFIX . "option_description od ON (o.option_id = od.option_id) WHERE o.option_id = '" . (int)$option_id . "' AND od.language_id = '" . (int)$this->config->get('config_language_id') . "'");
-		
-		return $query->row;
+		return $this->queryRow("SELECT * FROM `" . DB_PREFIX . "option` o WHERE o.option_id = " . (int)$option_id);
 	}
-		
-	public function getOptions($data = array()) {
-		$sql = "SELECT * FROM `" . DB_PREFIX . "option` o LEFT JOIN " . DB_PREFIX . "option_description od ON (o.option_id = od.option_id) WHERE od.language_id = '" . (int)$this->config->get('config_language_id') . "'";
-		
-		if (isset($data['filter_name']) && !is_null($data['filter_name'])) {
-			$sql .= " AND LCASE(od.name) LIKE '%" . $this->db->escape(strtolower($data['filter_name'])) . "%'";
-		}
-
-		$sort_data = array(
-			'od.name',
-			'o.type',
-			'o.sort_order'
+	
+	public function getOptionTranslations($option_id)
+	{
+		$translate_fields = array(
+			'name',
+			'display_name',
 		);
 		
-		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
-			$sql .= " ORDER BY " . $data['sort'];
-		} else {
-			$sql .= " ORDER BY od.name";
+		return $this->translation->getTranslations('option', $option_id, $translate_fields);
+	}
+		
+	public function getOptions($data = array(), $select = '', $total = false)
+	{
+		//Select
+		if ($total) {
+			$select = "COUNT(*) as total";
+		} elseif(empty($select)) {
+			$select = '*';
 		}
 		
-		if (isset($data['order']) && ($data['order'] == 'DESC')) {
-			$sql .= " DESC";
-		} else {
-			$sql .= " ASC";
+		//From
+		$from = DB_PREFIX . "option o";
+		
+		//Where
+		$where = '1';
+		
+		if (empty($data['sort'])) {
+			$data['sort'] = 'o.sort_order';
 		}
 		
-		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
+		if (!empty($data['name'])) {
+			$where .= " AND LCASE(o.name) like '%" . $this->escape(strtolower($data['name'])) . "%'";
+		}
+		
+		if (!empty($data['sort_order'])) {
+			if (!empty($data['sort_order']['low'])) {
+				$where .= " AND o.sort_order >= '" . (int)$data['sort_order']['low'] . "'";
 			}
-
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
+			
+			if (!empty($data['sort_order']['high'])) {
+				$where .= " AND o.sort_order <= '" . (int)$data['sort_order']['high'] . "'";
 			}
-		
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
 		}
 		
-		$query = $this->query($sql);
-
-		return $query->rows;
-	}
-	
-	public function getOptionDescriptions($option_id)
-	{
-		$option_data = array();
-		
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "option_description WHERE option_id = '" . (int)$option_id . "'");
-				
-		foreach ($query->rows as $result) {
-			$option_data[$result['language_id']] = $result;
+		if (!$total) {
+			$order = $this->extract_order($data);
+			$limit = $this->extract_limit($data);
+		} else {
+			$order = '';
+			$limit = '';
 		}
 		
-		return $option_data;
+		//The Query
+		$query = "SELECT $select FROM $from WHERE $where $order $limit";
+		
+		$result = $this->query($query);
+		
+		if ($total) {
+			return $result->row['total'];
+		}
+		
+		return $result->rows;
 	}
 	
-	public function getOptionValues($option_id)
+	public function getOptionValues($option_id, $data = array(), $select = '', $total = false)
 	{
-		$option_value_data = array();
+		//Select
+		if ($total) {
+			$select = "COUNT(*) as total";
+		} elseif(empty($select)) {
+			$select = '*';
+		}
 		
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "option_value ov LEFT JOIN " . DB_PREFIX . "option_value_description ovd ON (ov.option_value_id = ovd.option_value_id) WHERE ov.option_id = '" . (int)$option_id . "' AND ovd.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY ov.sort_order ASC");
+		//From
+		$from = DB_PREFIX . "option_value ov";
 		
-		return $query->rows;
+		//Where
+		$where = 'ov.option_id = ' . (int)$option_id;
+		
+		if (empty($data['sort'])) {
+			$data['sort'] = 'ov.sort_order';
+		}
+		
+		if (!empty($data['value'])) {
+			$where .= " AND LCASE(ov.value) like '%" . $this->escape(strtolower($data['value'])) . "%'";
+		}
+		
+		if (!empty($data['!option_value_ids'])) {
+			$where .= " AND option_value_id NOT IN (" . implode(',', $data['!option_value_ids']) . ")";
+		}
+		
+		if (!empty($data['sort_order'])) {
+			if (!empty($data['sort_order']['low'])) {
+				$where .= " AND ov.sort_order >= '" . (int)$data['sort_order']['low'] . "'";
+			}
+			
+			if (!empty($data['sort_order']['high'])) {
+				$where .= " AND ov.sort_order <= '" . (int)$data['sort_order']['high'] . "'";
+			}
+		}
+		
+		if (!$total) {
+			$order = $this->extract_order($data);
+			$limit = $this->extract_limit($data);
+		} else {
+			$order = '';
+			$limit = '';
+		}
+		
+		//The Query
+		$query = "SELECT $select FROM $from WHERE $where $order $limit";
+		
+		$result = $this->query($query);
+		
+		if ($total) {
+			return $result->row['total'];
+		}
+		
+		return $result->rows;
 	}
 	
-	public function getOptionValueDescriptions($option_id)
+	public function getOptionValueTranslations($option_value_id)
 	{
-		$options = array(
-			'order_by'=>'sort_order ASC'
+		$translate_fields = array(
+			'value',
 		);
 		
-		$query = $this->get('option_value','*', array('option_id'=>$option_id), $options);
-		
-		foreach ($query->rows as &$option_value) {
-			
-			$description_query = $this->get('option_value_description', '*', array('option_value_id'=>$option_value['option_value_id']));
-			
-			foreach ($description_query->rows as $description) {
-				$option_value['option_value_description'][$description['language_id']] = $description;
-			}
-		}
-		
-		return $query->rows;
+		return $this->translation->getTranslations('option_value', $option_value_id, $translate_fields);
 	}
 
-	public function getTotalOptions()
+	public function getTotalOptions($filter = array())
 	{
-		$query = $this->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "option`");
-		
-		return $query->row['total'];
+		return $this->getOptions($filter, '', true);
+	}
+	
+	public function countProducts($option_id)
+	{
+		$filter = array (
+			'options' => array($option_id),
+		);
+			
+		return $this->Model_Catalog_Product->getTotalProducts($filter);
 	}
 }

@@ -949,28 +949,30 @@ class Admin_Controller_Sale_Affiliate extends Controller
 		
 		$this->response->setOutput($this->render());
 	}
-		
+	
 	public function autocomplete()
 	{
-		$affiliate_data = array();
+		//Sort
+		$sort = $this->sort->getQueryDefaults('name', 'ASC', $this->config->get('config_autocomplete_limit'));
 		
-		if (isset($_GET['filter_name'])) {
-			$data = array(
-				'filter_name' => $_GET['filter_name'],
-				'start'		=> 0,
-				'limit'		=> 20
-			);
+		//Filter
+		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 		
-			$results = $this->Model_Sale_Affiliate->getAffiliates($data);
+		//Label and Value
+		$label = !empty($_GET['label']) ? $_GET['label'] : 'name';
+		$value = !empty($_GET['value']) ? $_GET['value'] : 'affiliate_id';
+		
+		//Load Sorted / Filtered Data
+		$affiliates = $this->Model_Sale_Affiliate->getAffiliates($sort + $filter);
+		
+		foreach ($affiliates as &$affiliate) {
+			$affiliate['label'] = $affiliate[$label];
+			$affiliate['value'] = $affiliate[$value];
 			
-			foreach ($results as $result) {
-				$affiliate_data[] = array(
-					'affiliate_id' => $result['affiliate_id'],
-					'name'			=> html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8')
-				);
-			}
-		}
+			$affiliate['name'] = html_entity_decode($affiliate['name'], ENT_QUOTES, 'UTF-8');
+		} unset($affiliate);
 		
-		$this->response->setOutput(json_encode($affiliate_data));
+		//JSON output
+		$this->response->setOutput(json_encode($affiliates));
 	}
 }

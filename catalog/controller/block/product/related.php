@@ -22,7 +22,7 @@ class Catalog_Controller_Block_Product_Related extends Controller
 				$product['image'] = false;
 			}
 			
-			if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
+			if (($this->config->get('config_customer_hide_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_hide_price')) {
 				if ($this->config->get('config_show_price_with_tax')) {
 					$product['price'] = $this->tax->calculate($product['price'], $product['tax_class_id']);
 				}

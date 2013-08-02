@@ -1,14 +1,3 @@
-function getQuerystring(key, defaultValue) {
-	if(defaultValue == null) defaultValue = "";
-	key = key.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-	var regex = new RegExp("[\\?&]" + key + "=([^&#]*)");
-	var qs = regex.exec(window.location.href);
-	if(qs == null)
-		return defaultValue;
-	else
-		return qs[1];
-}
-
 
 //-----------------------------------------
 // Submit form on enter key

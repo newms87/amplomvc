@@ -11,27 +11,44 @@ function html_dump($var, $label= "HTML Dump", $level=0, $max = -1, $print = true
 		ob_start();
 	}
 ?>
-<a id='<?=$id;?>' class ='html_dump' onclick="open_html_dump('<?=$id;?>')">
-	<span class='html_dump_label'><?=$label;?></span>
-	
-<style>
-.html_dump
-{background:white;overflow:auto;top:0;left:0;}
-.html_dump_label{cursor:pointer; color:blue; text-decoration:underline;}
-.dump_output{margin:15px;}
-.key_value_pair{position:relative; height:20px;overflow:visible;}
-.type_label{background: #EF99A8;}
-.key{word-wrap:break-word; max-width:200px;background: #82E182;padding:3px 5px}
-.value{background: #92ADE3;max-width:800px; word-wrap:break-word}
-</style>
 
+<? if (!$html_dump_count) { ?>
+<style>
+#html_dump_list{
+	position:relative;
+	background:#EEE;
+	border-radius: 5px;
+	box-shadow: 2px 2px 5px rgba(0,0,0,.3);
+	overflow:auto;
+	display:block;
+	padding: 5px 10px;
+	margin-bottom: 10px;
+}
+.html_dump{
+	float:left;
+	display:block;
+	margin-bottom:15px;
+	margin-left:20px
+}
+</style>
+<? } ?>
+
+<a id="<?=$id;?>" class ='html_dump' onclick="open_html_dump('<?=$id;?>')">
+	<style>
+	.html_dump_label{cursor:pointer; color:blue; text-decoration:underline;}
+	.dump_output{margin:15px;}
+	.key_value_pair{position:relative; height:20px;overflow:visible;}
+	.type_label{background: #EF99A8;}
+	.key{word-wrap:break-word; max-width:200px;background: #82E182;padding:3px 5px}
+	.value{background: #92ADE3;max-width:800px; word-wrap:break-word}
+	</style>
+	<span class='html_dump_label'><?=$label;?></span>
 	<div class ='dump_output' id='<?=$id;?>-output' style='display:none'>
 		<? $dump = html_dump_r($var,$level,$max);?>
 	</div>
-</a><br/>
-<?
-	if ($html_dump_count == 0) {
-?>
+</a>
+
+<? if ($html_dump_count == 0) { ?>
 <script type='text/javascript'>//<!--
 function open_html_dump(id) {
 	var w = window.open(null, 'newwindow', 'resizable=1,scrollbars=1, width=800, height=800');
@@ -40,14 +57,13 @@ function open_html_dump(id) {
 	document.getElementById(id + '-output').setAttribute('style','display:none');
 }
 //--></script>
+<? } ?>
+
 <?
-	}
 	$html_dump_count++;
 	
 	if (!$print) {
-		$dump = ob_get_clean();
-		
-		return $dump;
+		return ob_get_clean();
 	}
 }
 
@@ -101,20 +117,60 @@ function debug_stack($depth = 10, $offset = 0) {
 
 if (!function_exists('array_column')) {
 	/**
+	 * PHP < 5.5 backwards Compatibility
+	 *
 	 * Returns an array of elements from the column of an array
 	 *
-	 * @param Array $array - An associative array of arrays
-	 * @param String $column - The key column of the $array to get elements for
+	 * @param array array - An associative array of arrays
+	 * @param column string - The key column of the $array to get elements for
+	 * 
+	 * @return array - an array of values of the column requested
 	 */
 	function array_column($array, $column)
 	{
 		$values = array();
 		
 		foreach ($array as $row) {
-			$values[] = $row[$column];
+			if (!isset($row[$column])) {
+				$values[] = null;
+			} else {
+				$values[] = $row[$column];
+			}
 		}
 		
 		return $values;
+	}
+}
+
+if (!function_exists('array_search_key')) {
+	/**
+	 * Searches for an element in a multidimensional array for an element key that matches search_key and
+	 * value that matches needle. 
+	 * It will return the array that contains the search_key => needle pair.
+	 *
+	 * @param search_key mixed - Either a string or int to search by the array key 
+	 * @param needle mixed - The searched value. If needle is a string, the comparison is done in a case-sensitive manner. 
+	 * @param haystack array - The array. 
+	 * @param strict bool[optional] - If the third parameter strict is set to true then the array_search function will search for identical elements in the haystack.
+	 * This means it will also check the types of the needle in the haystack, and objects must be the same instance. 
+	 * 
+	 * @return mixed the key for needle if it is found in the array, false otherwise. 
+	 */
+	
+	function array_search_key($search_key, $needle, $haystack, $strict = false){
+		foreach ($haystack as $key => $value) {
+			if (is_array($value)) {
+				$result = array_search_key($search_key, $needle, $value, $strict);
+				
+				if (!is_null($result)) {
+					return $result;
+				}
+			}
+	 		
+	 		if ($key === $search_key && $value == $needle) {
+	 			return $haystack;
+			}
+		}
 	}
 }
 

@@ -23,7 +23,7 @@
 						</tr>
 						<tr>
 							<td><?= $entry_date_ordered; ?></td>
-							<td><input type="text" name="date_ordered" value="<?= $date_ordered; ?>" class="date" /></td>
+							<td><input type="text" name="date_ordered" value="<?= $date_ordered; ?>" class="datepicker" /></td>
 						</tr>
 						<tr>
 							<td><?= $entry_customer; ?></td>

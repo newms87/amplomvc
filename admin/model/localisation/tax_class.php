@@ -3,13 +3,13 @@ class Admin_Model_Localisation_TaxClass extends Model
 {
 	public function addTaxclass($data)
 	{
-		$this->query("INSERT INTO " . DB_PREFIX . "tax_class SET title = '" . $this->db->escape($data['title']) . "', description = '" . $this->db->escape($data['description']) . "', date_added = NOW()");
+		$this->query("INSERT INTO " . DB_PREFIX . "tax_class SET title = '" . $this->escape($data['title']) . "', description = '" . $this->escape($data['description']) . "', date_added = NOW()");
 		
 		$tax_class_id = $this->db->getLastId();
 		
 		if (isset($data['tax_rule'])) {
 			foreach ($data['tax_rule'] as $tax_rule) {
-				$this->query("INSERT INTO " . DB_PREFIX . "tax_rule SET tax_class_id = '" . (int)$tax_class_id . "', tax_rate_id = '" . (int)$tax_rule['tax_rate_id'] . "', based = '" . $this->db->escape($tax_rule['based']) . "', priority = '" . (int)$tax_rule['priority'] . "'");
+				$this->query("INSERT INTO " . DB_PREFIX . "tax_rule SET tax_class_id = '" . (int)$tax_class_id . "', tax_rate_id = '" . (int)$tax_rule['tax_rate_id'] . "', based = '" . $this->escape($tax_rule['based']) . "', priority = '" . (int)$tax_rule['priority'] . "'");
 			}
 		}
 		
@@ -18,13 +18,13 @@ class Admin_Model_Localisation_TaxClass extends Model
 	
 	public function editTaxClass($tax_class_id, $data)
 	{
-		$this->query("UPDATE " . DB_PREFIX . "tax_class SET title = '" . $this->db->escape($data['title']) . "', description = '" . $this->db->escape($data['description']) . "', date_modified = NOW() WHERE tax_class_id = '" . (int)$tax_class_id . "'");
+		$this->query("UPDATE " . DB_PREFIX . "tax_class SET title = '" . $this->escape($data['title']) . "', description = '" . $this->escape($data['description']) . "', date_modified = NOW() WHERE tax_class_id = '" . (int)$tax_class_id . "'");
 		
 		$this->query("DELETE FROM " . DB_PREFIX . "tax_rule WHERE tax_class_id = '" . (int)$tax_class_id . "'");
 
 		if (isset($data['tax_rule'])) {
 			foreach ($data['tax_rule'] as $tax_rule) {
-				$this->query("INSERT INTO " . DB_PREFIX . "tax_rule SET tax_class_id = '" . (int)$tax_class_id . "', tax_rate_id = '" . (int)$tax_rule['tax_rate_id'] . "', based = '" . $this->db->escape($tax_rule['based']) . "', priority = '" . (int)$tax_rule['priority'] . "'");
+				$this->query("INSERT INTO " . DB_PREFIX . "tax_rule SET tax_class_id = '" . (int)$tax_class_id . "', tax_rate_id = '" . (int)$tax_rule['tax_rate_id'] . "', based = '" . $this->escape($tax_rule['based']) . "', priority = '" . (int)$tax_rule['priority'] . "'");
 			}
 		}
 		

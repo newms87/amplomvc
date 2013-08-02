@@ -87,7 +87,7 @@ class Admin_Controller_Design_Layout extends Controller
 	
 	private function getList()
 	{
-		//Page Title
+		//Page Head
 		$this->document->setTitle($this->_('heading_title'));
 		
 		//The Template
@@ -194,7 +194,7 @@ class Admin_Controller_Design_Layout extends Controller
 
 	private function getForm()
 	{
-		//Page Title
+		//Page Head
 		$this->document->setTitle($this->_('heading_title'));
 		
 		//The Template

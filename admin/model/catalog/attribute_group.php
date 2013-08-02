@@ -85,7 +85,7 @@ class Admin_Model_Catalog_AttributeGroup extends Model
 		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "attribute_group WHERE attribute_group_id = '" . (int)$attribute_group_id . "'");
 	}
 	
-	public function getAttributeGroups($data = array(), $select = '*', $total = FALSE) {
+	public function getAttributeGroups($data = array(), $select = '', $total = FALSE) {
 		//Select
 		if ($total) {
 			$select = "COUNT(*) as total";
@@ -100,11 +100,11 @@ class Admin_Model_Catalog_AttributeGroup extends Model
 		$where = '1';
 		
 		if (empty($data['sort'])) {
-			$data['sort'] = '';
+			$data['sort'] = 'ag.sort_order';
 		}
 		
 		if (!empty($data['name'])) {
-			$where .= " AND LCASE(ag.name) like '%" . $this->db->escape(strtolower($data['name'])) . "%'";
+			$where .= " AND LCASE(ag.name) like '%" . $this->escape(strtolower($data['name'])) . "%'";
 		}
 		
 		if (!empty($data['attribute_count']) || $data['sort'] === 'attribute_count') {
@@ -141,7 +141,7 @@ class Admin_Model_Catalog_AttributeGroup extends Model
 	
 	public function getAttributes($attribute_group_id)
 	{
-		$attributes = $this->queryRows("SELECT * FROM " . DB_PREFIX . "attribute WHERE attribute_group_id = '" . (int)$attribute_group_id . "'");
+		$attributes = $this->queryRows("SELECT * FROM " . DB_PREFIX . "attribute WHERE attribute_group_id = '" . (int)$attribute_group_id . "' ORDER BY sort_order");
 		
 		return $attributes;
 	}
@@ -163,7 +163,7 @@ class Admin_Model_Catalog_AttributeGroup extends Model
 		$where = '1';
 		
 		if (!empty($data['name'])) {
-			$where .= " AND LCASE(name) like '%" . $this->db->escape(strtolower($data['name'])) . "%'";
+			$where .= " AND LCASE(name) like '%" . $this->escape(strtolower($data['name'])) . "%'";
 		}
 		
 		//Order and Limit

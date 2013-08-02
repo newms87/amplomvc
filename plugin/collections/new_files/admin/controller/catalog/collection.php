@@ -8,29 +8,19 @@ class Admin_Controller_Catalog_Collection extends Controller
 		$this->getList();
 	}
 
-	public function insert()
-	{
-		$this->language->load('catalog/collection');
-
-		if ($this->request->isPost() && $this->validateForm()) {
-			$this->Model_Catalog_Collection->addCollection($_POST);
-			
-			if (!$this->message->error_set()) {
-				$this->message->add('success',$this->_('text_success'));
-				
-				$this->url->redirect($this->url->link('catalog/collection'));
-			}
-		}
-	
-		$this->getForm();
-	}
-
 	public function update()
 	{
 		$this->language->load('catalog/collection');
 
 		if ($this->request->isPost() && $this->validateForm()) {
-			$this->Model_Catalog_Collection->editCollection($_GET['collection_id'], $_POST);
+			//Insert
+			if (empty($_GET['collection_id'])) {
+				$this->Model_Catalog_Collection->addCollection($_POST);
+			}
+			//Update
+			else {
+				$this->Model_Catalog_Collection->editCollection($_GET['collection_id'], $_POST);
+			}
 
 			if (!$this->message->error_set()) {
 				$this->message->add('success',$this->_('text_success'));
@@ -97,7 +87,7 @@ class Admin_Controller_Catalog_Collection extends Controller
 
 	private function getList()
 	{
-		//Page Title
+		//Page Head
 		$this->document->setTitle($this->_('heading_title'));
 		
 		//The Template
@@ -159,6 +149,8 @@ class Admin_Controller_Catalog_Collection extends Controller
 		$collections = $this->Model_Catalog_Collection->getCollections($sort + $filter);
 		
 		$url_query = $this->url->getQueryExclude('collection_id');
+		$image_width = $this->config->get('config_image_admin_list_width');
+		$image_height = $this->config->get('config_image_admin_list_height');
 		
 		foreach ($collections as &$collection) {
 			$collection['actions'] = array(
@@ -172,10 +164,8 @@ class Admin_Controller_Catalog_Collection extends Controller
 				)
 			);
 			
-			$collection['thumb'] = $this->image->resize($collection['image'], $this->config->get('config_image_admin_list_width'), $this->config->get('config_image_admin_list_height'));
-			
+			$collection['thumb'] = $this->image->resize($collection['image'], $image_width, $image_height);
 			$collection['categories'] = $this->Model_Catalog_Collection->getCollectionCategories($collection['collection_id']);
-			
 			$collection['stores'] = $this->Model_Catalog_Collection->getCollectionStores($collection['collection_id']);
 		} unset($collection);
 		
@@ -211,14 +201,14 @@ class Admin_Controller_Catalog_Collection extends Controller
 		//Render Limit Menu
 		$this->data['limits'] = $this->sort->render_limit();
 		
-		//Action Buttons
-		$this->data['insert'] = $this->url->link('catalog/collection/insert', $url_query);
-		
 		//Pagination
 		$this->pagination->init();
 		$this->pagination->total = $collection_total;
 		
 		$this->data['pagination'] = $this->pagination->render();
+		
+		//Action Buttons
+		$this->data['insert'] = $this->url->link('catalog/collection/update');
 		
 		//Dependencies
 		$this->children = array(
@@ -232,25 +222,26 @@ class Admin_Controller_Catalog_Collection extends Controller
 
 	private function getForm()
 	{
+		//Page Head
 		$this->document->setTitle($this->_('heading_title'));
 		
-		$this->language->load('catalog/collection');
-		
+		//The Template
 		$this->template->load('catalog/collection_form');
-
-		$collection_id = isset($_GET['collection_id']) ? $_GET['collection_id'] : null;
 		
+		//Insert / Update
+		$collection_id = isset($_GET['collection_id']) ? (int)$_GET['collection_id'] : 0;
+		
+		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/collection'));
 		
 		if (!$collection_id) {
-			$this->data['action'] = $this->url->link('catalog/collection/insert');
+			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('catalog/collection/update'));
 		} else {
-			$this->data['action'] = $this->url->link('catalog/collection/update', 'collection_id=' . $collection_id);
+			$this->breadcrumb->add($this->_('text_edit'), $this->url->link('catalog/collection/update', 'collection_id=' . $collection_id));
 		}
 		
-		$this->data['cancel'] = $this->url->link('catalog/collection');
-
+		//Load Information
 		if ($collection_id && !$this->request->isPost()) {
 			$collection_info = $this->Model_Catalog_Collection->getCollection($collection_id);
 			
@@ -259,7 +250,7 @@ class Admin_Controller_Catalog_Collection extends Controller
 			$collection_info['stores'] = $this->Model_Catalog_Collection->getCollectionStores($collection_id);
 		}
 		
-		//initialize the values in order of Post, Database, Default
+		//Load Values or Defaults
 		$defaults = array(
 			'name' => '',
 			'keyword' => '',
@@ -284,27 +275,32 @@ class Admin_Controller_Catalog_Collection extends Controller
 			}
 		}
 		
-		//Image
+		//Additional Data
 		$this->data['thumb'] = $this->image->resize($this->data['image'], $this->config->get('config_image_admin_width'), $this->config->get('config_image_admin_height'));
-		
 		$this->data['data_categories'] = $this->Model_Catalog_Category->getCategoriesWithParents();
-		
 		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
+		$this->data['url_product_autocomplete'] = $this->url->link('catalog/product/autocomplete');
 		
-		$translate_fields = array(
-			'name',
-			'meta_keywords',
-			'meta_description',
-			'description',
+		//Template Defaults
+		$this->data['products']['__row__'] = array(
+			'product_id' => '',
+			'name' => '',
 		);
 		
-		$this->data['translations'] = $this->translation->get_translations('collection', $collection_id, $translate_fields);
+		//Translations
+		$this->data['translations'] = $this->Model_Catalog_Collection->getTranslations($collection_id);
 		
+		//Action Buttons
+		$this->data['save'] = $this->url->link('catalog/collection/update', 'collection_id=' . $collection_id);
+		$this->data['cancel'] = $this->url->link('catalog/collection');
+		
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
 		
+		//Render
 		$this->response->setOutput($this->render());
 	}
 
@@ -320,23 +316,19 @@ class Admin_Controller_Catalog_Collection extends Controller
 		
 		$collection_id = isset($_GET['collection_id']) ? $_GET['collection_id'] : 0;
 		
-		$name = $_POST['name'];
-		
-		$query = $this->db->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . "collection WHERE name = '$name' AND collection_id != $collection_id");
-	
-		if ($query->row['total']) {
-			$this->error['name'] = $this->_('error_duplicate_name', $name);
+		if ($this->Model_Catalog_Collection->isDuplicateName($collection_id, $_POST['name'])) {
+			$this->error['name'] = $this->_('error_duplicate_name', $_POST['name']);
 		}
 		
-		if (!$this->validation->text($name, 3, 63)) {
+		if (!$this->validation->text($_POST['name'], 3, 63)) {
 			$this->error['name'] = $this->_('error_name');
 		}
 		
 		if (!$this->error) {
 			if (empty($_POST['keyword'])) {
-				$_POST['keyword'] = $this->tool->get_slug($name);
+				$_POST['keyword'] = $this->tool->getSlug($_POST['name']);
 			} else {
-				$_POST['keyword'] = $this->tool->get_slug($_POST['keyword']);
+				$_POST['keyword'] = $this->tool->getSlug($_POST['keyword']);
 			}
 		}
 		

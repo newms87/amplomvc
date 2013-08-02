@@ -196,45 +196,15 @@
 						</tr>
 						<tr>
 							<td><?= $entry_customer_price; ?></td>
-							<td><? if ($config_customer_price) { ?>
-								<input type="radio" name="config_customer_price" value="1" checked="checked" />
-								<?= $text_yes; ?>
-								<input type="radio" name="config_customer_price" value="0" />
-								<?= $text_no; ?>
-								<? } else { ?>
-								<input type="radio" name="config_customer_price" value="1" />
-								<?= $text_yes; ?>
-								<input type="radio" name="config_customer_price" value="0" checked="checked" />
-								<?= $text_no; ?>
-								<? } ?></td>
+							<td><?= $this->builder->build('radio', $data_yes_no, 'config_customer_hide_price', $config_customer_hide_price); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_customer_approval; ?></td>
-							<td><? if ($config_customer_approval) { ?>
-								<input type="radio" name="config_customer_approval" value="1" checked="checked" />
-								<?= $text_yes; ?>
-								<input type="radio" name="config_customer_approval" value="0" />
-								<?= $text_no; ?>
-								<? } else { ?>
-								<input type="radio" name="config_customer_approval" value="1" />
-								<?= $text_yes; ?>
-								<input type="radio" name="config_customer_approval" value="0" checked="checked" />
-								<?= $text_no; ?>
-								<? } ?></td>
+							<td><?= $this->builder->build('radio', $data_yes_no, 'config_customer_approval', $config_customer_approval); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_guest_checkout; ?></td>
-							<td><? if ($config_guest_checkout) { ?>
-								<input type="radio" name="config_guest_checkout" value="1" checked="checked" />
-								<?= $text_yes; ?>
-								<input type="radio" name="config_guest_checkout" value="0" />
-								<?= $text_no; ?>
-								<? } else { ?>
-								<input type="radio" name="config_guest_checkout" value="1" />
-								<?= $text_yes; ?>
-								<input type="radio" name="config_guest_checkout" value="0" checked="checked" />
-								<?= $text_no; ?>
-								<? } ?></td>
+							<td><?= $this->builder->build('radio', $data_yes_no, 'config_guest_checkout', $config_guest_checkout); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_account; ?></td>
@@ -283,16 +253,11 @@
 								<? } ?></td>
 						</tr>
 						<tr>
-							<td><?= $entry_order_status; ?></td>
-							<td><select name="config_order_complete_status_id">
-									<? foreach ($order_statuses as $order_status) { ?>
-									<? if ($order_status['order_status_id'] == $config_order_complete_status_id) { ?>
-									<option value="<?= $order_status['order_status_id']; ?>" selected="selected"><?= $order_status['name']; ?></option>
-									<? } else { ?>
-									<option value="<?= $order_status['order_status_id']; ?>"><?= $order_status['name']; ?></option>
-									<? } ?>
-									<? } ?>
-								</select></td>
+							<td><?= $entry_order_complete_status; ?></td>
+							<td>
+								<?= $this->builder->set_config(false, 'title'); ?>
+								<?= $this->builder->build('select', $data_order_statuses, 'config_order_complete_status_id', $config_order_complete_status_id); ?>
+							</td>
 						</tr>
 						<tr>
 							<td><?= $entry_cart_weight; ?></td>

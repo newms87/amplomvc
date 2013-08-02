@@ -17,7 +17,7 @@ class Admin_Model_Sale_Voucher extends Model
 	{
 		$voucher = $this->getVoucher($voucher_id);
 		
-		$code_count = $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "voucher WHERE code like '" . $this->db->escape($voucher['code']) . "%'");
+		$code_count = $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "voucher WHERE code like '" . $this->escape($voucher['code']) . "%'");
 		
 		$voucher['code'] .= $code_count+1;
 		
@@ -37,7 +37,7 @@ class Admin_Model_Sale_Voucher extends Model
 
 	public function getVoucherByCode($code)
 	{
-		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "voucher WHERE code = '" . $this->db->escape($code) . "' LIMIT 1");
+		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "voucher WHERE code = '" . $this->escape($code) . "' LIMIT 1");
 	}
 		
 	public function getVouchers($data = array(), $select = '', $total = false)
@@ -58,7 +58,7 @@ class Admin_Model_Sale_Voucher extends Model
 		$where = '1';
 		
 		if (isset($data['code'])) {
-			$where .= " AND LCASE(v.code) like '%" . $this->db->escape(strtolower($data['code'])) . "%'";
+			$where .= " AND LCASE(v.code) like '%" . $this->escape(strtolower($data['code'])) . "%'";
 		}
 		
 		if (isset($data['theme'])) {
@@ -66,19 +66,19 @@ class Admin_Model_Sale_Voucher extends Model
 		}
 		
 		if (isset($data['to_name'])) {
-			$where .= " AND LCASE(v.to_name) like '%" . $this->db->escape(strtolower($data['to_name'])) . "%'";
+			$where .= " AND LCASE(v.to_name) like '%" . $this->escape(strtolower($data['to_name'])) . "%'";
 		}
 		
 		if (isset($data['to_email'])) {
-			$where .= " AND LCASE(v.to_email) like '%" . $this->db->escape(strtolower($data['to_email'])) . "%'";
+			$where .= " AND LCASE(v.to_email) like '%" . $this->escape(strtolower($data['to_email'])) . "%'";
 		}
 		
 		if (isset($data['from_name'])) {
-			$where .= " AND LCASE(v.from_name) like '%" . $this->db->escape(strtolower($data['from_name'])) . "%'";
+			$where .= " AND LCASE(v.from_name) like '%" . $this->escape(strtolower($data['from_name'])) . "%'";
 		}
 		
 		if (isset($data['from_email'])) {
-			$where .= " AND LCASE(v.from_email) like '%" . $this->db->escape(strtolower($data['to_email'])) . "%'";
+			$where .= " AND LCASE(v.from_email) like '%" . $this->escape(strtolower($data['to_email'])) . "%'";
 		}
 		
 		if (isset($data['amount'])) {

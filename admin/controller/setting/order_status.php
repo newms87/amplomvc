@@ -3,11 +3,20 @@ class Admin_Controller_Setting_OrderStatus extends Controller
 {
 	public function index()
 	{
+		//Template and Language
 		$this->template->load('setting/order_status');
 		$this->language->load('setting/order_status');
 
+		//Page Head
 		$this->document->setTitle($this->_('heading_title'));
 		
+		//Breadcrumbs
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('text_store_list'), $this->url->link('setting/store'));
+		$this->breadcrumb->add($this->_('text_settings'), $this->url->link('setting/setting'));
+		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/order_status'));
+		
+		//Load Information
 		if ($this->request->isPost() && $this->validate()) {
 			$order_statuses = !empty($_POST['order_statuses']) ? $_POST['order_statuses'] : array();
 			
@@ -19,14 +28,7 @@ class Admin_Controller_Setting_OrderStatus extends Controller
 			}
 		}
 		
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_store_list'), $this->url->link('setting/store'));
-		$this->breadcrumb->add($this->_('text_settings'), $this->url->link('setting/setting'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/order_status'));
-		
-		$this->data['action'] = $this->url->link('setting/order_status');
-		$this->data['cancel'] = $this->url->link('setting/store');
-		
+		//Load Data or Defaults
 		if (!$this->request->isPost()) {
 			$order_statuses = $this->config->load('order', 'order_statuses', 0);
 		} else {
@@ -44,19 +46,15 @@ class Admin_Controller_Setting_OrderStatus extends Controller
 			}
 		} unset($order_status);
 
-		//Defaults
-		$defaults = array(
-			'title' => $this->_('entry_title'),
-		);
-		
-		if (empty($order_statuses)) {
-			$order_statuses[0] = $defaults;
-		}
 		
 		//Add in the template row
-		$this->tool->add_template_row($order_statuses);
+		$defaults = array(
+			
+		);
 		
-		$this->data['template_row_defaults'] = $defaults;
+		$order_statuses['__ac_template__'] = array(
+			'title' => $this->_('entry_title'),
+		);
 		
 		//Get the Field Translations
 		$translate_fields = array(
@@ -64,16 +62,22 @@ class Admin_Controller_Setting_OrderStatus extends Controller
 		);
 		
 		foreach ($order_statuses as $key => &$order_status) {
-			$order_status['translations'] = $this->translation->get_translations('order_statuses', $key, $translate_fields);
+			$order_status['translations'] = $this->translation->getTranslations('order_statuses', $key, $translate_fields);
 		} unset($order_status);
 
 		$this->data['order_statuses'] = $order_statuses;
 		
+		//Action Buttons
+		$this->data['save'] = $this->url->link('setting/order_status');
+		$this->data['cancel'] = $this->url->link('setting/store');
+		
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
 		
+		//Render
 		$this->response->setOutput($this->render());
 	}
 	

@@ -73,8 +73,8 @@
 								<? $this->builder->set_config(false, 'title'); ?>
 								<?= $this->builder->build('select', $data_return_statuses, 'filter_return_status_id', $filter_return_status_id); ?>
 							</td>
-							<td><input type="text" name="filter_date_added" value="<?= $filter_date_added; ?>" size="12" class="date" /></td>
-							<td><input type="text" name="filter_date_modified" value="<?= $filter_date_modified; ?>" size="12" class="date" /></td>
+							<td><input type="text" name="filter_date_added" value="<?= $filter_date_added; ?>" size="12" class="datepicker" /></td>
+							<td><input type="text" name="filter_date_modified" value="<?= $filter_date_modified; ?>" size="12" class="datepicker" /></td>
 							<td align="right"><a onclick="filter();" class="button"><?= $button_filter; ?></a></td>
 						</tr>
 						<? if ($returns) { ?>

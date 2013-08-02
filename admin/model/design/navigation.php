@@ -157,7 +157,7 @@ class Admin_Model_Design_Navigation extends Model
 		$where = "WHERE 1";
 		
 		if (!empty($data['name'])) {
-			$where .= " AND name like '%" . $this->db->escape($data['name']) . "%'";
+			$where .= " AND name like '%" . $this->escape($data['name']) . "%'";
 		}
 		
 		if (isset($data['stores'])) {

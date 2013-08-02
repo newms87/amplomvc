@@ -1,11 +1,6 @@
 <?php
 class Catalog_Controller_Block_Product_Suggestions extends Controller
 {
-	
-	/**
-	* @param - $product_info - an array of product information
-	* @param $limit - The maximum number of suggested products to show
-	*/
 	public function index($settings)
 	{
 		$product_info = !empty($settings['product_info']) ? $settings['product_info'] : null;
@@ -16,53 +11,46 @@ class Catalog_Controller_Block_Product_Suggestions extends Controller
 		
 		$limit = !empty($settings['limit']) ? $settings['limit'] : null;
 		
+		//Template and Language
 		$this->language->load('block/product/suggestions');
 		$this->template->load('block/product/suggestions');
 		
-		if (!$limit) {
-			$limit = $settings['limit'];
-		}
-		
-		$image_width = 174; //$settings['image_width'];
-		$image_height = 135; //$settings['image_height'];
+		$image_width = $this->config->get('config_image_related_width');
+		$image_height = $this->config->get('config_image_related_height');
 		
 		$suggestions = $this->Model_Catalog_Product->getProductSuggestions($product_info, $limit);
 		
-		$this->data['suggestions'] = array();
-		
-		foreach ($suggestions as $p) {
-			if ($p['image']) {
-				$image = $this->image->resize($p['image'],$image_width,$image_height);
-			} else {
-				$image = false;
+		foreach ($suggestions as &$product) {
+			if ($product['image']) {
+				$product['thumb'] = $this->image->resize($product['image'],$image_width,$image_height);
 			}
-	
-			if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
-				$price = $this->currency->format($this->tax->calculate($p['price'], $p['tax_class_id']));
+			
+			if ($this->config->get('config_show_product_list_hover_image')) {
+				$product['images'] = $this->Model_Catalog_Product->getProductImages($product['product_id']);
+				
+				if (!empty($product['images'])) {
+					reset($product['images']);
+					$product['backup_thumb'] = $this->image->resize(current($product['images']), $image_width, $image_height);
+				}
+			}
+			
+			if ($this->config->get('config_customer_hide_price') && !$this->customer->isLogged()) {
+				$product['price'] = false;
 			} else {
-				$price = false;
+				$product['price'] = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id']));
 			}
 				
-			if ((float)$p['special']) {
-				$special = $this->currency->format($this->tax->calculate($p['special'], $p['tax_class_id']));
-			} else {
-				$special = false;
+			if ($product['special']) {
+				$product['special'] = $this->currency->format($this->tax->calculate($product['special'], $product['tax_class_id']));
 			}
-				
-			$this->data['suggestions'][] = array(
-				'product_id' => $p['product_id'],
-				'thumb'		=> $image,
-				'name'		=> $this->tool->limit_characters($p['name'], 25),
-				'price'		=> $price,
-				'special'	=> $special,
-				'flashsale_id'=>$special?$p['flashsale_id']:null,
-				'is_final'	=> $p['is_final'],
-				'href'		=> $this->url->link('product/product','product_id='.$p['product_id'])
-			);
-		}
+			
+			$product['href'] = $this->url->link('product/product', 'product_id=' . (int)$product['product_id']);
+		} unset($product);
 		
-		$this->children = array();
-					
-		$this->response->setOutput($this->render());
+		$this->data['products'] = $suggestions;
+		
+		$this->data['show_price_tax'] = $this->config->get('config_show_price_with_tax');
+		
+		$this->render();
   	}
 }

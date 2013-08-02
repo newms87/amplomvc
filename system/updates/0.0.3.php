@@ -6,6 +6,6 @@ $this->db->dropColumn('return', 'model');
 
 $this->db->addColumn('return', 'rma', "VARCHAR(45) NOT NULL AFTER `return_id`, ADD UNIQUE INDEX `RMA_UNIQUE` (`rma` ASC)");
 
-$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "return_action`");
-$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "return_reason`");
-$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "return_status`");
+$this->db->dropTable('return_action');
+$this->db->dropTable('return_reason');
+$this->db->dropTable('return_status');

@@ -1,76 +1,32 @@
 <?php
 class Admin_Controller_Catalog_Option extends Controller
 {
-	
-
 	public function index()
 	{
 		$this->language->load('catalog/option');
 
-		$this->document->setTitle($this->_('heading_title'));
-		
 		$this->getList();
-	}
-
-	public function insert()
-	{
-		$this->language->load('catalog/option');
-
-		$this->document->setTitle($this->_('heading_title'));
-		
-		if ($this->request->isPost() && $this->validateForm()) {
-			$this->Model_Catalog_Option->addOption($_POST);
-			
-			$this->message->add('success', $this->_('text_success'));
-
-			$url = '';
-			
-			if (isset($_GET['sort'])) {
-				$url .= '&sort=' . $_GET['sort'];
-			}
-
-			if (isset($_GET['order'])) {
-				$url .= '&order=' . $_GET['order'];
-			}
-
-			if (isset($_GET['page'])) {
-				$url .= '&page=' . $_GET['page'];
-			}
-			
-			$this->getList();
-			return;
-		}
-
-		$this->getForm();
 	}
 
 	public function update()
 	{
 		$this->language->load('catalog/option');
-
-		$this->document->setTitle($this->_('heading_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
-			$this->Model_Catalog_Option->editOption($_GET['option_id'], $_POST);
-			
-			$this->message->add('success', $this->_('text_success'));
-
-			$url = '';
-			
-			if (isset($_GET['sort'])) {
-				$url .= '&sort=' . $_GET['sort'];
+			//Insert
+			if (empty($_GET['option_id'])) {
+				$this->Model_Catalog_Option->addOption($_POST);
 			}
-
-			if (isset($_GET['order'])) {
-				$url .= '&order=' . $_GET['order'];
-			}
-
-			if (isset($_GET['page'])) {
-				$url .= '&page=' . $_GET['page'];
+			//Update
+			else {
+				$this->Model_Catalog_Option->editOption($_GET['option_id'], $_POST);
 			}
 			
-			$this->getList();
-			return;
+			if (!$this->message->error_set()) {
+				$this->message->add('success', $this->_('text_success'));
+				
+				$this->url->redirect($this->url->link('catalog/option'));
+			}
 		}
 
 		$this->getForm();
@@ -82,180 +38,220 @@ class Admin_Controller_Catalog_Option extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
  		
-		if (isset($_POST['selected']) && $this->validateDelete()) {
-			foreach ($_POST['selected'] as $option_id) {
-				$this->Model_Catalog_Option->deleteOption($option_id);
-			}
+		if (isset($_GET['option_id']) && $this->validateDelete()) {
+			$this->Model_Catalog_Option->deleteOption($_GET['option_id']);
 			
-			$this->message->add('success', $this->_('text_success'));
-			
-			$url = '';
-			
-			if (isset($_GET['sort'])) {
-				$url .= '&sort=' . $_GET['sort'];
-			}
-
-			if (isset($_GET['order'])) {
-				$url .= '&order=' . $_GET['order'];
-			}
-
-			if (isset($_GET['page'])) {
-				$url .= '&page=' . $_GET['page'];
+			if (!$this->message->error_set()) {
+				$this->message->add('success', $this->_('text_success'));
+				
+				$this->url->redirect($this->url->link('catalog/option'));
 			}
 		}
 
 		$this->getList();
 	}
+	
+	public function batch_update()
+	{
+		$this->language->load('catalog/option');
+		
+		if (!empty($_POST['selected']) && isset($_GET['action'])) {
+			if ($_GET['action'] !== 'delete' || $this->validateDelete()) {
+				foreach ($_POST['selected'] as $option_id) {
+					switch($_GET['action']){
+						case 'delete':
+							$this->Model_Catalog_Option->deleteOption($option_id);
+							break;
+					}
+					
+					if ($this->error) {
+						break;
+					}
+				}
+			}
+			
+			if (!$this->error && !$this->message->error_set()) {
+				$this->message->add('success',$this->_('text_success'));
+				
+				$this->url->redirect($this->url->link('catalog/option', $this->url->getQueryExclude('action')));
+			}
+		}
 
+		$this->getList();
+	}
+	
+	
 	private function getList()
 	{
-		$this->template->load('catalog/option_list');
-
-		$defaults = array('sort'=>'od.name','order'=>'ASC','page'=>1);
-		foreach ($defaults as $key=>$default) {
-			$$key = isset($_GET[$key])?$_GET[$key]:$default;
-		}
-			
-		$url = $this->get_url();
+		//Page Head
+		$this->document->setTitle($this->_('heading_title'));
 		
+		//The Template
+		$this->template->load('catalog/option_list');
+		
+		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/option'));
-				
-		$this->data['insert'] = $this->url->link('catalog/option/insert', $url);
-		$this->data['delete'] = $this->url->link('catalog/option/delete', $url);
 		
-		$this->data['options'] = array();
+		//The Table Columns
+		$columns = array();
 		
-		$data = array(
-			'sort'  => $sort,
-			'order' => $order,
-			'start' => ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit' => $this->config->get('config_admin_limit')
+		$columns['name'] = array(
+			'type' => 'text',
+			'display_name' => $this->_('column_name'),
+			'filter' => true,
+			'sortable' => true,
 		);
 		
-		$option_total = $this->Model_Catalog_Option->getTotalOptions();
+		$columns['sort_order'] = array(
+			'type' => 'int',
+			'display_name' => $this->_('column_sort_order'),
+			'filter' => true,
+			'sortable' => true,
+		);
 		
-		$results = $this->Model_Catalog_Option->getOptions($data);
+		//Get Sorted /Filtered Data
+		$sort = $this->sort->getQueryDefaults('name', 'ASC');
+		$filter = isset($_GET['filter']) ? $_GET['filter'] : array();
 		
-		foreach ($results as $result) {
-			$action = array();
+		$option_total = $this->Model_Catalog_Option->getTotalOptions($filter);
+		$options = $this->Model_Catalog_Option->getOptions($sort + $filter);
+		
+		$url_query = $this->url->getQueryExclude('option_id');
+		
+		foreach ($options as &$option) {
+			$option['actions'] = array(
+				'edit' => array(
+					'text' => $this->_('text_edit'),
+					'href' => $this->url->link('catalog/option/update', 'option_id=' . $option['option_id'])
+				),
+			);
 			
-			$action[] = array(
-				'text' => $this->_('text_edit'),
-				'href' => $this->url->link('catalog/option/update', 'option_id=' . $result['option_id'] . $url)
-			);
+			if (!$this->Model_Catalog_Option->countProducts($option['option_id'])) {
+				$option['actions']['delete'] = array(
+					'text' => $this->_('text_delete'),
+					'href' => $this->url->link('catalog/option/delete', 'option_id=' . $option['option_id'] . '&' . $url_query)
+				);
+			}
 
-			$this->data['options'][] = array(
-				'option_id'  => $result['option_id'],
-				'name'		=> $result['name'],
-				'sort_order' => $result['sort_order'],
-				'selected'	=> isset($_POST['selected']) && in_array($result['option_id'], $_POST['selected']),
-				'action'	=> $action
-			);
-		}
+		} unset($option);
 		
-		$url = '';
-
-		if ($order == 'ASC') {
-			$url .= '&order=DESC';
-		} else {
-			$url .= '&order=ASC';
-		}
-
-		if (isset($_GET['page'])) {
-			$url .= '&page=' . $_GET['page'];
-		}
+		//Build The Table
+		$tt_data = array(
+			'row_id'		=> 'option_id',
+		);
 		
-		$this->data['sort_name'] = $this->url->link('catalog/option', 'sort=od.name' . $url);
-		$this->data['sort_sort_order'] = $this->url->link('catalog/option', 'sort=o.sort_order' . $url);
+		$this->table->init();
+		$this->table->setTemplate('table/list_view');
+		$this->table->setColumns($columns);
+		$this->table->setRows($options);
+		$this->table->setTemplateData($tt_data);
+		$this->table->mapAttribute('filter_value', $filter);
 		
-		$url = $this->get_url(array('sort','order'));
-
+		$this->data['list_view'] = $this->table->render();
+		
+		//Batch Actions
+		$this->data['batch_actions'] = array(
+			'delete' => array(
+				'label' => $this->_('text_delete'),
+			),
+		);
+		
+		$this->data['batch_update'] = html_entity_decode($this->url->link('catalog/option/batch_update', $url_query));
+		
+		//Render Limit Menu
+		$this->data['limits'] = $this->sort->render_limit();
+		
+		//Pagination
 		$this->pagination->init();
 		$this->pagination->total = $option_total;
 		$this->data['pagination'] = $this->pagination->render();
 		
-		$this->data['sort'] = $sort;
-		$this->data['order'] = $order;
-
+		//Action Buttons
+		$this->data['insert'] = $this->url->link('catalog/option/update');
+		$this->data['delete'] = $this->url->link('catalog/option/delete');
+		
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
-				
+		
+		//Render
 		$this->response->setOutput($this->render());
 	}
 
 	private function getForm()
 	{
+		//Page Head
+		$this->document->setTitle($this->_('heading_title'));
+		
+		//The Template
 		$this->template->load('catalog/option_form');
 
-		$option_id = isset($_GET['option_id'])?$_GET['option_id']:false;
+		//Insert or Update
+		$option_id = isset($_GET['option_id']) ? (int)$_GET['option_id'] : 0;
 		
-		$url = $this->get_url();
-		
+		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/option'));
 		
 		if (!$option_id) {
-			$this->data['action'] = $this->url->link('catalog/option/insert', $url);
+			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('catalog/option/update'));
 		} else {
-			$this->data['action'] = $this->url->link('catalog/option/update', 'option_id=' . $option_id . $url);
+			$this->breadcrumb->add($this->_('text_edit'), $this->url->link('catalog/option/update', 'option_id=' . $option_id));
 		}
 
-		$this->data['cancel'] = $this->url->link('catalog/option', $url);
+		//Action Buttons
+		$this->data['save'] = $this->url->link('catalog/option/update', 'option_id=' . $option_id);
+		$this->data['cancel'] = $this->url->link('catalog/option');
 
+		//Load Information
 		if ($option_id && !$this->request->isPost()) {
 			$option_info = $this->Model_Catalog_Option->getOption($option_id);
-		}
-		
-		$this->data['languages'] = $this->Model_Localisation_Language->getLanguages();
-		
-		$defaults = array(
-			'option_description'=>array(),
-			'type'=>'',
-			'sort_order'=>'',
-			'option_values'=>array()
-		);
-		foreach ($defaults as $d=>$value) {
-			if (isset($_POST[$d])) {
-				$this->data[$d] = $_POST[$d];
-			} elseif (isset($option_info[$d])) {
-				$this->data[$d] = $option_info[$d];
-			} elseif (!$option_id) {
-				$this->data[$d] = $value;
-			}
-		}
-		
-		if (!isset($this->data['option_description'])) {
-			$this->data['option_description'] = $this->Model_Catalog_Option->getOptionDescriptions($option_id);
-		}
-		
-		if (!isset($this->data['option_values'])) {
-			$option_values = $this->Model_Catalog_Option->getOptionValueDescriptions($option_id);
+			
+			$option_values = $this->Model_Catalog_Option->getOptionValues($option_id);
+			
+			$option_values['__ac_template__'] = array(
+				'option_value_id' => '',
+				'value' => '',
+				'image' => '',
+				'sort_order' => 0,
+			);
 			
 			foreach ($option_values as &$option_value) {
-				if ($option_value['image'] && file_exists(DIR_IMAGE . $option_value['image'])) {
-					$image = $option_value['image'];
-				} else {
-					$image = 'no_image.png';
-				}
-				
-				$option_value['image'] = $image;
-				$option_value['thumb'] = $this->image->resize($image, 100, 100);
-			}
+				$option_value['translations'] = $this->Model_Catalog_Option->getOptionValueTranslations($option_value['option_value_id']);
+			} unset($option_value);
 			
-			$this->data['option_values'] = $option_values;
+			$option_info['option_values'] = $option_values;
 		}
 		
+		//Load Values or Defaults
+		$defaults = array(
+			'name'			=> '',
+			'display_name' => '',
+			'type'			=> '',
+			'sort_order'	=> '',
+			'option_values'=> array()
+		);
 		
-		$this->data['no_image'] = $this->image->resize('no_image.png', 100, 100);
-
+		foreach ($defaults as $key => $default) {
+			if (isset($_POST[$key])) {
+				$this->data[$key] = $_POST[$key];
+			} elseif (isset($option_info[$key])) {
+				$this->data[$key] = $option_info[$key];
+			} else {
+				$this->data[$key] = $default;
+			}
+		}
+		
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
-				
+		
+		//Render
 		$this->response->setOutput($this->render());
 	}
 
@@ -264,25 +260,22 @@ class Admin_Controller_Catalog_Option extends Controller
 		if (!$this->user->hasPermission('modify', 'catalog/option')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
-
-		foreach ($_POST['option_description'] as $language_id => $value) {
-			if ((strlen($value['name']) < 1) || (strlen($value['name']) > 128)) {
-				$this->error["option_description[$language_id][name]"] = $this->_('error_name');
-			}
-			if ((strlen($value['display_name']) < 1) || (strlen($value['display_name']) > 128)) {
-				$this->error["option_description[$language_id][display_name]"] = $this->_('error_display_name');
-			}
+		
+		if (!$this->validation->text($_POST['name'], 3, 45)) {
+			$this->error['name'] = $this->_('error_name');
 		}
 
+		if (!$this->validation->text($_POST['display_name'], 1, 128)) {
+			$this->error['display_name'] = $this->_('error_display_name');
+		}
+		
 		if (!isset($_POST['option_value'])) {
 			$this->error['warning'] = $this->_('error_type');
 		}
 		else {
 			foreach ($_POST['option_value'] as $option_value_id => $option_value) {
-				foreach ($option_value['option_value_description'] as $language_id => $option_value_description) {
-					if ((strlen($option_value_description['name']) < 1) || (strlen($option_value_description['name']) > 128)) {
-						$this->error['option_value'.$option_value_id] = $this->_('error_option_value');
-					}
+				if (!$this->validation->text($option_value['value'], 1, 128)) {
+					$this->error["option_value[$option_value_id][value]"] = $this->_('error_option_value');
 				}
 			}
 		}
@@ -296,15 +289,19 @@ class Admin_Controller_Catalog_Option extends Controller
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		foreach ($_POST['selected'] as $option_id) {
-			$data = array (
-				'options' => array($option_id),
-			);
-			
-			$product_total = $this->Model_Catalog_Product->getTotalProducts($data);
-
-			if ($product_total) {
-				$this->error['warning'] = sprintf($this->_('error_product'), $product_total);
+		$option_ids = array();
+		
+		if (!empty($_POST['selected'])) {
+			$option_ids += $_POST['selected'];
+		}
+		
+		if (!empty($_GET['option_id'])) {
+			$option_ids[] = $_GET['option_id'];
+		}
+		
+		foreach ($option_ids as $option_id) {
+			if ($product_total = $this->Model_Catalog_Option->countProducts($option_id)) {
+				$this->error['warning'] = $this->_('error_product', $product_total);
 			}
 		}
 
@@ -313,94 +310,43 @@ class Admin_Controller_Catalog_Option extends Controller
 	
 	public function autocomplete()
 	{
-		$json = array();
+		//Sort
+		$sort = $this->sort->getQueryDefaults('name', 'ASC', $this->config->get('config_autocomplete_limit'));
 		
-		if (isset($_GET['filter_name'])) {
-			$this->language->load('catalog/option');
+		//Filter
+		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
+		
+		//Label and Value
+		$label = !empty($_GET['label']) ? $_GET['label'] : 'name';
+		$value = !empty($_GET['value']) ? $_GET['value'] : 'option_id';
+		
+		//Language
+		$this->language->load('catalog/option');
+		
+		//Load Sorted / Filtered Data
+		$options = $this->Model_Catalog_Option->getOptions($filter);
+		
+		foreach ($options as &$option) {
+			$option['label'] = $option[$label];
+			$option['value'] = $option[$value];
 			
-			$data = array(
-				'filter_name' => $_GET['filter_name'],
-				'start'		=> 0,
-				'limit'		=> 20
-			);
+			$option['name'] = html_entity_decode($option['name'], ENT_QUOTES, 'UTF-8');
 			
-			$options = $this->Model_Catalog_Option->getOptions($data);
+			$option_values = $this->Model_Catalog_Option->getOptionValues($option['option_id']);
 			
-			foreach ($options as $option) {
-				$option_value_data = array();
-				
-				if ($option['type'] == 'select' || $option['type'] == 'radio' || $option['type'] == 'checkbox' || $option['type'] == 'image') {
-					$option_values = $this->Model_Catalog_Option->getOptionValues($option['option_id']);
-					
-					foreach ($option_values as $option_value) {
-						if ($option_value['image'] && file_exists(DIR_IMAGE . $option_value['image'])) {
-							$image = $this->image->resize($option_value['image'], 50, 50);
-						} else {
-							$image = '';
-						}
-													
-						$option_value_data[] = array(
-							'option_value_id' => $option_value['option_value_id'],
-							'name'				=> html_entity_decode($option_value['name'], ENT_QUOTES, 'UTF-8'),
-							'image'			=> $image
-						);
-					}
-					
-					$sort_order = array();
-				
-					foreach ($option_value_data as $key => $value) {
-						$sort_order[$key] = $value['name'];
-					}
+			$image_width = $this->config->get('config_image_product_option_width');
+			$image_height = $this->config->get('config_image_product_option_height');
 			
-					array_multisort($sort_order, SORT_ASC, $option_value_data);
-				}
-				
-				$type = '';
-				
-				if ($option['type'] == 'select' || $option['type'] == 'radio' || $option['type'] == 'checkbox' || $option['type'] == 'image') {
-					$type = $this->_('text_choose');
-				}
-				
-				if ($option['type'] == 'text' || $option['type'] == 'textarea') {
-					$type = $this->_('text_input');
-				}
-				
-				if ($option['type'] == 'file') {
-					$type = $this->_('text_file');
-				}
-				
-				if ($option['type'] == 'date' || $option['type'] == 'datetime' || $option['type'] == 'time') {
-					$type = $this->_('text_date');
-				}
-												
-				$json[] = array(
-					'option_id'	=> $option['option_id'],
-					'name'			=> html_entity_decode($option['name'], ENT_QUOTES, 'UTF-8'),
-					'category'	=> $type,
-					'type'			=> $option['type'],
-					'option_value' => $option_value_data
-				);
-			}
-		}
-
-		$sort_order = array();
-	
-		foreach ($json as $key => $value) {
-			$sort_order[$key] = $value['name'];
-		}
-
-		array_multisort($sort_order, SORT_ASC, $json);
-				
-		$this->response->setOutput(json_encode($json));
-	}
-	
-	private function get_url()
-	{
-		$url = '';
-		$filters = array('sort', 'order', 'page');
-		foreach($filters as $f)
-			if (isset($_GET[$f]))
-				$url .= "&$f=" . $_GET[$f];
-		return $url;
+			foreach ($option_values as &$option_value) {
+				$option_value['thumb'] = $this->image->resize($option_value['image'], $image_width, $image_height);
+				$option_value['value'] = html_entity_decode($option_value['value'], ENT_QUOTES, 'UTF-8');
+			} unset($option_value);
+			
+			$option['option_values'] = $option_values;
+			
+		} unset($option);
+		
+		//JSON response
+		$this->response->setOutput(json_encode($options));
 	}
 }

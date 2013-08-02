@@ -17,7 +17,7 @@ class Admin_Model_Setting_Plugin extends Model
 	public function getPluginData($name = false)
 	{
 		if (!empty($name)) {
-			return $this->queryRow("SELECT * FROM " . DB_PREFIX . "plugin WHERE `name` ='" . $this->db->escape($name) . "'");
+			return $this->queryRow("SELECT * FROM " . DB_PREFIX . "plugin WHERE `name` ='" . $this->escape($name) . "'");
 		}
 		
 		$plugins = $this->queryRows("SELECT * FROM " . DB_PREFIX . "plugin ORDER BY `name`");

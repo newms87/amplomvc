@@ -3,12 +3,12 @@ class Admin_Model_Sale_CustomerBlacklist extends Model
 {
 	public function addCustomerBlacklist($data)
 	{
-		$this->query("INSERT INTO `" . DB_PREFIX . "customer_ip_blacklist` SET `ip` = '" . $this->db->escape($data['ip']) . "'");
+		$this->query("INSERT INTO `" . DB_PREFIX . "customer_ip_blacklist` SET `ip` = '" . $this->escape($data['ip']) . "'");
 	}
 	
 	public function editCustomerBlacklist($customer_ip_blacklist_id, $data)
 	{
-		$this->query("UPDATE `" . DB_PREFIX . "customer_ip_blacklist` SET `ip` = '" . $this->db->escape($data['ip']) . "' WHERE customer_ip_blacklist_id = '" . (int)$customer_ip_blacklist_id . "'");
+		$this->query("UPDATE `" . DB_PREFIX . "customer_ip_blacklist` SET `ip` = '" . $this->escape($data['ip']) . "' WHERE customer_ip_blacklist_id = '" . (int)$customer_ip_blacklist_id . "'");
 	}
 	
 	public function deleteCustomerBlacklist($customer_ip_blacklist_id)

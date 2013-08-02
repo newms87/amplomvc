@@ -41,7 +41,7 @@ class Translation extends Library
 		}
 	}
 	
-	public function get_translations($table, $object_id, $fields = array()){
+	public function getTranslations($table, $object_id, $fields = array()){
 		if(isset($_POST['translations'])) return $_POST['translations'];
 		
 		$languages = $this->cache->get('language.id_list');

@@ -183,7 +183,7 @@ class Admin_Model_Catalog_Category extends Model
 			'description',
 		);
 		
-		return $this->translation->get_translations('category', $category_id, $translate_fields);
+		return $this->translation->getTranslations('category', $category_id, $translate_fields);
 	}
 		
 	public function update_field($category_id, $data)

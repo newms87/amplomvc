@@ -79,6 +79,9 @@ class Catalog_Controller_Mail_Order extends Controller
 		$this->mail->setSubject($subject);
 		$this->mail->setText(html_entity_decode($this->render(), ENT_QUOTES, 'UTF-8'));
 		
+		html_dump($order, 'order');
+		echo $this->config->get('config_email') . ' == email<br>';
+		
 		$this->mail->send();
 		
 		//Generate HTML email

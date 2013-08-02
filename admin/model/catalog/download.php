@@ -32,11 +32,11 @@ class Admin_Model_Catalog_Download extends Model
 		
 		//Update Download file for already purchased downloads
 		if (isset($data['update'])) {
-			$old_filename = $this->db->escape($old_download['filename']);
+			$old_filename = $this->escape($old_download['filename']);
 			$old_remaining = (int)$old_download['remaining'];
 			$new_remaining = (int)$data['remaining'];
 			
-			$this->query("UPDATE " . DB_PREFIX . "order_download SET remaining = $new_remaining - ($old_remaining - remaining), `filename` = '" . $this->db->escape($data['filename']) . "', mask = '" . $this->db->escape($data['mask']) . "' WHERE `filename` = '" . $this->db->escape($old_filename) . "'");
+			$this->query("UPDATE " . DB_PREFIX . "order_download SET remaining = $new_remaining - ($old_remaining - remaining), `filename` = '" . $this->escape($data['filename']) . "', mask = '" . $this->escape($data['mask']) . "' WHERE `filename` = '" . $this->escape($old_filename) . "'");
 		}
 	}
 	

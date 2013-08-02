@@ -10,7 +10,7 @@ class Catalog_Controller_Block_Checkout_Login extends Controller
 			$this->validate();
 		}
 		
-		$this->data['guest_checkout'] = ($this->config->get('config_guest_checkout') && !$this->config->get('config_customer_price') && !$this->cart->hasDownload());
+		$this->data['guest_checkout'] = ($this->config->get('config_guest_checkout') && !$this->config->get('config_customer_hide_price') && !$this->cart->hasDownload());
 		
 		//TODO: do we want to have an isBlock check? Or move this to janrain plugin
 		$janrain_args = array(

@@ -72,7 +72,7 @@ class Admin_Model_Catalog_Product extends Model
 	{
 //.....
 		if (isset($data['model'])) {
-			$where .= " AND LCASE(p.model) like '%" . strtolower($this->db->escape($data['model'])) . "%'";
+			$where .= " AND LCASE(p.model) like '%" . strtolower($this->escape($data['model'])) . "%'";
 		}
 //-----
 //>>>>> {php}

@@ -5,9 +5,9 @@ class Admin_Model_Localisation_StockStatus extends Model
 	{
 		foreach ($data['stock_status'] as $language_id => $value) {
 			if (isset($stock_status_id)) {
-				$this->query("INSERT INTO " . DB_PREFIX . "stock_status SET stock_status_id = '" . (int)$stock_status_id . "', language_id = '" . (int)$language_id . "', name = '" . $this->db->escape($value['name']) . "'");
+				$this->query("INSERT INTO " . DB_PREFIX . "stock_status SET stock_status_id = '" . (int)$stock_status_id . "', language_id = '" . (int)$language_id . "', name = '" . $this->escape($value['name']) . "'");
 			} else {
-				$this->query("INSERT INTO " . DB_PREFIX . "stock_status SET language_id = '" . (int)$language_id . "', name = '" . $this->db->escape($value['name']) . "'");
+				$this->query("INSERT INTO " . DB_PREFIX . "stock_status SET language_id = '" . (int)$language_id . "', name = '" . $this->escape($value['name']) . "'");
 				
 				$stock_status_id = $this->db->getLastId();
 			}
@@ -21,7 +21,7 @@ class Admin_Model_Localisation_StockStatus extends Model
 		$this->query("DELETE FROM " . DB_PREFIX . "stock_status WHERE stock_status_id = '" . (int)$stock_status_id . "'");
 
 		foreach ($data['stock_status'] as $language_id => $value) {
-			$this->query("INSERT INTO " . DB_PREFIX . "stock_status SET stock_status_id = '" . (int)$stock_status_id . "', language_id = '" . (int)$language_id . "', name = '" . $this->db->escape($value['name']) . "'");
+			$this->query("INSERT INTO " . DB_PREFIX . "stock_status SET stock_status_id = '" . (int)$stock_status_id . "', language_id = '" . (int)$language_id . "', name = '" . $this->escape($value['name']) . "'");
 		}
 				
 		$this->cache->delete('stock_status');

@@ -182,7 +182,7 @@ class Admin_Controller_Setting_Store extends Controller
 			'config_tax_default'=>'',
 			'config_tax_customer'=>'',
 			'config_customer_group_id'=>'',
-			'config_customer_price'=>'',
+			'config_customer_hide_price'=>'',
 			'config_show_product_model' => 1,
 			'config_customer_approval'=>'',
 			'config_guest_checkout'=>'',
@@ -243,7 +243,7 @@ class Admin_Controller_Setting_Store extends Controller
 		
 		$this->data['informations'] = $this->Model_Catalog_Information->getInformations();
 		
-		$this->data['order_statuses'] = $this->order->getOrderStatuses();
+		$this->data['data_order_statuses'] = $this->order->getOrderStatuses();
 		
 		$this->data['load_theme_img'] = $this->url->link('setting/setting/theme');
 		
