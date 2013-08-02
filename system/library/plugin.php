@@ -153,11 +153,14 @@ class Plugin extends Library{
 		if ( is_file($live_file)
 			  && (!isset($this->plugin_registry[$live_file]) || $this->plugin_registry[$live_file]['name'] !== $name)) {
 			//If no request to overwrite the live file
-			if (empty($_GET['overwrite_file']) || $_GET['overwrite_file'] !== $live_file) {
+			if ((empty($_GET['force_install']) || $_GET['force_install'] !== $name)
+				&& (empty($_GET['overwrite_file']) || $_GET['overwrite_file'] !== $live_file)) {
 				$overwrite_file_url = $this->url->link($this->url->route(), $this->url->getQuery() . "&name=$name&overwrite_file=" . urlencode($live_file));
+				$force_install_url = $this->url->link($this->url->route(), $this->url->getQuery() . "&name=$name&force_install=$name");
 				$msg =
 					"Unable to integrate the file $plugin_file for the plugin <strong>$name</strong> because the file $live_file already exists!" .
-					" Either manually remove the file or <a href='$overwrite_file_url'>overwrite</a> this file with the plugin file.";
+					" Either manually remove the file or <a href=\"$overwrite_file_url\">overwrite</a> this file with the plugin file.<br /><br />" .
+					"To overwrite all files for this plugin installation <a href=\"$force_install_url\">click here</a><br />";
 					
 				$this->message->add("warning", $msg);
 				
