@@ -220,7 +220,7 @@ class Builder extends Library
 		$opt_group_active = false;
 		
 		if (!is_array($data)) {
-			$this->error_log->write("library/tpl.php::build(): data was not an array. " . gettype($data) . " was given.");
+			$this->error_log->write("library/tpl.php::build(): data was not an array. " . gettype($data) . " was given." . get_caller(0,1));
 			return;
 		}
 		

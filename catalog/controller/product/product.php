@@ -57,9 +57,18 @@ class Catalog_Controller_Product_Product extends Controller
 			//Additional Information
 			$this->data['block_product_additional'] = $this->getBlock('product/additional', array('product_info' => $product_info));
 			
-			//Find the related products
-			$this->data['block_product_related'] = $this->getBlock('product/related', array('product_id' => $product_id));
+			//Related Products
+			$show_related = $this->config->get('config_show_product_related');
 			
+			if ($show_related > 1 || ($show_related == 1 && !$this->cart->productPurchasable($product_info))) {
+				$ps_params = array(
+					'product_info' => $product_info,
+					'limit' => 4
+				);
+				
+				$this->data['block_product_related'] = $this->getBlock('product/suggestions', $ps_params);
+			}
+
 			//The Tags associated with this product
 			$tags = $this->Model_Catalog_Product->getProductTags($product_info['product_id']);
 			

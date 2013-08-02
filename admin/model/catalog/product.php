@@ -197,7 +197,7 @@ class Admin_Model_Catalog_Product extends Model
 			$this->translation->setTranslations('product', $product_id, $data['translations']);
 		}
 		
-		$this->cache->delete('product');
+		return $product_id;
 	}
 	
 	public function editProduct($product_id, $data)
@@ -209,37 +209,45 @@ class Admin_Model_Catalog_Product extends Model
 		$this->update('product', $data, $product_id);
 		
 		//Product Options
-		$this->delete('product_option', array('product_id'=>$product_id));
-		$this->delete('product_option_value', array('product_id'=>$product_id));
-		$this->delete('product_option_value_restriction', array('product_id'=>$product_id));
+		$this->delete('product_option_value_restriction', array('product_id' => $product_id));
 		
+		$product_option_ids = array(0);
+		$product_option_value_ids = array(0);
+		
+		//TODO: Maybe add $this->addProductOptions() and $this->editProductOptions(), etc...?? 
 		if (!empty($data['product_options'])) {
 			foreach ($data['product_options'] as $product_option) {
 				$product_option['product_id'] = $product_id;
 				
-				$product_option_id = $this->insert('product_option', $product_option);
-			
+				$product_option_id = $this->update('product_option', $product_option);
+				
 				if (!empty($product_option['product_option_values'])) {
 					foreach ($product_option['product_option_values'] as $product_option_value) {
 						$product_option_value['product_id'] = $product_id;
-						$product_option_value['option_id'] = $product_option['option_id'];
 						$product_option_value['product_option_id'] = $product_option_id;
+						$product_option_value['option_id'] = $product_option['option_id'];
 						
-						$product_option_value_id = $this->insert('product_option_value', $product_option_value);
+						$product_option_value_id = $this->update('product_option_value', $product_option_value);
 						
 						if (!empty($product_option_value['restrictions'])) {
 							foreach ($product_option_value['restrictions'] as $restriction) {
 								$restriction['product_id']		= $product_id;
-								$restriction['option_value_id'] = $product_option_value['option_value_id'];
+								$restriction['product_option_value_id'] = $product_option_value_id;
 								
 								$this->insert('product_option_value_restriction', $restriction);
 							}
 						}
+						
+						$product_option_value_ids[] = $product_option_value_id;
 					}
 				}
+				
+				$product_option_ids[] = $product_option_id;
 			}
 		}
 		
+		$this->query("DELETE FROM " . DB_PREFIX . "product_option WHERE product_id = '$product_id' AND product_option_id NOT IN (" . implode(',', $product_option_ids) . ")");
+		$this->query("DELETE FROM " . DB_PREFIX . "product_option_value WHERE product_id = '$product_id' AND product_option_value_id NOT IN (" . implode(',', $product_option_value_ids) . ")");
 		
 		//Product Additional Images
 		$this->delete('product_image', array('product_id'=>$product_id));
@@ -432,7 +440,7 @@ class Admin_Model_Catalog_Product extends Model
 			$this->translation->setTranslations('product', $product_id, $data['translations']);
 		}
 		
-		$this->cache->delete('product');
+		$this->cache->delete("product.$product_id");
 	}
 	
 	public function generate_url($product_id, $name)
@@ -524,7 +532,7 @@ class Admin_Model_Catalog_Product extends Model
 		
 		$this->translation->delete('product', $product_id);
 		
-		$this->cache->delete('product');
+		$this->cache->delete("product.$product_id");
 	}
 	
 	public function getProduct($product_id)
@@ -758,14 +766,14 @@ class Admin_Model_Catalog_Product extends Model
 			$this->delete('product_to_category', $where);
 		}
 		
-		$this->cache->delete('product');
+		$this->cache->delete("product.$product_id");
 	}
 	
 	public function updateProduct($product_id, $name, $value)
 	{
 		$this->query("UPDATE " . DB_PREFIX . "product SET `$name`='$value' WHERE product_id='$product_id'");
 		
-		$this->cache->delete('product');
+		$this->cache->delete("product.$product_id");
 	}
 	
 	public function getProductAttributes($product_id)

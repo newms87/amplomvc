@@ -38,7 +38,12 @@
  <tbody>
 	<tr id="filter_list">
 		<td></td>
-		<td align="center"><a onclick="apply_filter();" class="button"><?= $button_filter; ?></a></td>
+		<td align="center">
+			<a onclick="return apply_filter();" class="button"><?= $button_filter; ?></a>
+			<? if (!empty($_GET['filter'])) { ?>
+				<a onclick="return reset_filter();" class="reset"><?= $button_reset; ?></a>
+			<? } ?>
+		</td>
 		<? foreach($columns as $slug => $column) { ?>
 		<? if($column['filter']) { ?>
 		<td class='column_filter <?= $column['align']; ?>'>
@@ -92,8 +97,8 @@
 					
 					<div class="zoom_hover daterange">
 						<div class="input">
-							<input class='date_start <?= str_replace('_range', '', $column['type']); ?>' type="text" name="filter[<?= $slug; ?>][start]" value="<?= $column['filter_value']['start']; ?>" />
-							<input class='date_end <?= str_replace('_range', '', $column['type']); ?>' type="text" name="filter[<?= $slug?>][end]" value="<?= $column['filter_value']['end']; ?>" />
+							<input class="date_start <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $slug; ?>][start]" value="<?= $column['filter_value']['start']; ?>" />
+							<input class="date_end <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $slug?>][end]" value="<?= $column['filter_value']['end']; ?>" />
 							<span class="clear">clear</span>
 						</div>
 						<div class="value">
@@ -114,7 +119,12 @@
 		<td></td>
 		<? } ?>
 		<? } ?>
-		<td align="center"><a onclick="apply_filter();" class="button"><?= $button_filter; ?></a></td>
+		<td align="center">
+			<a onclick="return apply_filter();" class="button"><?= $button_filter; ?></a>
+			<? if (!empty($_GET['filter'])) { ?>
+				<a onclick="return reset_filter();" class="reset"><?= $button_reset; ?></a>
+			<? } ?>
+		</td>
 	</tr>
 	<? if(!empty($rows)) { ?>
 	<? foreach ($rows as $row) { ?>
@@ -225,8 +235,7 @@
 <script type="text/javascript">//<!--
 $("#filter_list").keydown(function(e){
 	if (e.keyCode == 13) {
-		apply_filter();
-		return false;
+		return apply_filter();
 	}
 });
 
@@ -276,9 +285,16 @@ $('.zoom_hover.daterange input').change(function(){
 	}
 });
 
+//Add jQuery datepicker
+$.ac_datepicker();
+
 function apply_filter() {
-	$('#filter_list').filter_url("<?= $this->url->link($this->url->route(), $this->url->getQueryExclude('filter')); ?>");
+	$('#filter_list').apply_filter("<?= $this->url->link($this->url->route(), $this->url->getQueryExclude('filter')); ?>");
+	return false;
+}
+
+function reset_filter() {
+	$('#filter_list').find('[name]').val('');
+	return apply_filter();
 }
 //--></script>
-
-<?= $this->builder->js('datepicker'); ?>

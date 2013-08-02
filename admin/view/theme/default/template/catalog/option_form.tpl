@@ -29,7 +29,7 @@
 						<td><input type="text" name="sort_order" value="<?= $sort_order; ?>" size="1" /></td>
 					</tr>
 				</table>
-				<? html_dump($option_values);?>
+				
 				<table class="list">
 					<thead>
 						<tr>
@@ -44,7 +44,7 @@
 							<tr class="optionvaluerow" data-row="<?= $row; ?>">
 								<td class="center">
 									<input type="hidden" name="option_value[<?= $row; ?>][option_value_id]" value="<?= $option_value['option_value_id']; ?>" />
-									<input type="text" name="option_value[<?= $row; ?>][name]" value="<?= $option_value['name']; ?>" />
+									<input type="text" name="option_value[<?= $row; ?>][value]" value="<?= $option_value['value']; ?>" />
 								</td>
 								<td class="center">
 									<? $this->builder->set_builder_template('click_image_small'); ?>

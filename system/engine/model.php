@@ -194,41 +194,52 @@ abstract class Model
 		return $this->db->getLastId();
 	}
 	
-	protected function update($table, $data, $where)
+	protected function update($table, $data, $where = null)
 	{
-		$this->action_filter('update', $table, $data);
+		$this->action_filter('update', $table, $data, $where);
 		
 		$table_model = $this->get_table_model($table);
+		$primary_key = $this->get_primary_key($table);
 		
 		$values = $this->get_escaped_values($table, $data, ',');
 		
-		if (is_integer($where) || (is_string($where) && !preg_match("/[^\d]/", $where))) {
-			$primary_key = $this->get_primary_key($table);
+		$update_id = true; //Our Return value
+		
+		if (!$where) {
+			if (empty($data[$primary_key])) {
+				return $this->insert($table, $data);
+			}
+			
+			$update_id = (int)$data[$primary_key];
+			
+			$where = "WHERE `$primary_key` = $update_id";
+		}
+		elseif (is_integer($where) || (is_string($where) && !preg_match("/[^\d]/", $where))) {
 			if (!$primary_key) {
 				trigger_error("UPDATE $table does not have an integer primary key!" . get_caller(0, 4));
 				return null;
 			}
 			
-			$where = "`$primary_key` = '$where'";
+			$update_id = (int)$where;
+			
+			$where = "WHERE `$primary_key` = $update_id";
 		}
 		elseif (is_array($where)) {
-			$where = $this->get_escaped_values($table, $where, ' AND ');
+			$where = "WHERE " . $this->get_escaped_values($table, $where, ' AND ');
+			
+			if (isset($where[$primary_key])) {
+				$update_id = (int)$where[$primary_key];
+			}
 		}
 		
-		if ($where) {
-			$where = "WHERE $where";
-		}
-		
-		$success = $this->db->query("UPDATE " . DB_PREFIX . "$table SET $values $where");
-		
-		if (!$success) {
+		if (!$this->db->query("UPDATE " . DB_PREFIX . "$table SET $values $where")) {
 			$err_msg = "There was a problem updating entry for $table! $table was not modified." . get_caller(0, 4);
 			trigger_error($err_msg);
 			$this->message->add("warning", $err_msg);
 			return false;
 		}
 		
-		return true;
+		return $update_id;
 	}
 	
 	protected function delete($table, $where=null)
@@ -426,7 +437,7 @@ abstract class Model
 		if (!empty($data['sort'])) {
 			$order = (isset($data['order']) && strtoupper($data['order']) === 'DESC') ? 'DESC' : 'ASC';
 			
-			if (!strpos($data['sort'], '.')) {
+			if (!preg_match("/[^a-z0-9_]/i", $data['sort'])) {
 				$data['sort'] = "`" . $this->db->escape($data['sort']) . "`";
 			} else {
 				$data['sort'] = $this->db->escape($data['sort']);

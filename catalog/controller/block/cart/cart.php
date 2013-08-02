@@ -41,7 +41,6 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 			//Check if the shipping estimate was invalidated and that we are not in the checkout process
 			// -> update the shipping estimate to the first Shipping option
 			if (!$this->order->hasOrder() && $this->cart->hasShippingMethod()) {
-				echo 'order inactive';
 				$shipping_methods = $this->cart->getShippingMethods();
 				
 				if (!empty($shipping_methods) && !isset($shipping_methods[$this->cart->getShippingMethodId()])) {
@@ -58,7 +57,7 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 				$this->data['action'] = $this->url->here();
 			}
 			
-			if ($this->config->get('config_customer_price') && !$this->customer->isLogged()) {
+			if ($this->config->get('config_customer_hide_price') && !$this->customer->isLogged()) {
 				$this->data['no_price_display'] = $this->_('text_login', $this->url->link('account/login'), $this->url->link('account/register'));
 			}
 			
@@ -66,27 +65,28 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 				$this->error = $this->cart->get_errors(null, true);
 			}
 			
+			$show_return_policy = $this->config->get('config_cart_show_return_policy');
+			
 			$products = $this->cart->getProducts();
 			
-			$show_return_policy = $this->config->get('config_cart_show_return_policy');
+			$image_width = $this->config->get('config_image_cart_width');
+			$image_height = $this->config->get('config_image_cart_height');
 			
 			foreach ($products as &$product) {
 				if ($product['image']) {
-					$product['thumb'] = $this->image->resize($product['image'], $this->config->get('config_image_cart_width'), $this->config->get('config_image_cart_height'));
-				}
-
-				$option_data = array();
-
-				foreach ($product['option'] as &$option) {
-					$option['value'] = $this->tool->limit_characters($option['option_value'], 20);
+					$product['thumb'] = $this->image->resize($product['image'], $image_width, $image_height);
 				}
 				
+				foreach ($product['selected_options'] as &$product_option) {
+					$product_option['product_option'] = $this->Model_Catalog_Product->getProductOption($product['product_id'], $product_option['product_option_id']);
+					$product_option['value'] = $this->tool->limit_characters($product_option['value'], 20);
+				} unset($product_option);
 				
 				$product['price'] = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id']));
 				$product['total'] = $this->currency->format($this->tax->calculate($product['total'], $product['tax_class_id']));
 				
 				if ($product['reward']) {
-					$product['reward'] = sprintf($this->_('text_points'), $product['reward']);
+					$product['reward'] = $this->_('text_points', $product['reward']);
 				}
 				
 				if ($show_return_policy) {

@@ -19,6 +19,8 @@ class System_Extension_Total_Model_Coupon extends Model
 		}
 		
 		if ($coupon_list) {
+			$products = $this->cart->getProducts();
+			
 			foreach ($coupon_list as $coupon_info) {
 				$discount_total = 0;
 				
@@ -28,7 +30,7 @@ class System_Extension_Total_Model_Coupon extends Model
 					$sub_total = 0;
 					
 					
-					foreach ($this->cart->getProducts() as $product) {
+					foreach ($products as $product) {
 						if (in_array($product['product_id'], $coupon_info['product'])) {
 							$sub_total += $product['total'];
 						}
@@ -39,7 +41,7 @@ class System_Extension_Total_Model_Coupon extends Model
 					$coupon_info['discount'] = min($coupon_info['discount'], $sub_total);
 				}
 				
-				foreach ($this->cart->getProducts() as $product) {
+				foreach ($products as $product) {
 					$discount = 0;
 					
 					if (!$coupon_info['product']) {

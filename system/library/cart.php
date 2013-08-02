@@ -5,8 +5,6 @@ class Cart extends Library
 	private $error = array();
 	private $error_code = null;
 	
-	private $no_json = false;
-	
   	public function __construct($registry)
   	{
   		parent::__construct($registry);
@@ -79,44 +77,33 @@ class Cart extends Library
 		return true;
 	}
 	
-	public function get_cart()
+	/**
+	 * Cart Functions
+	 */
+	public function getCart()
 	{
 		return !empty($this->session->data['cart']) ? $this->session->data['cart'] : null;
 	}
 	
-	/**
-	 * Cart Functions
-	 */
-	
-	public function add($product_id, $quantity = 1, $options = array(), $no_json = true) {
-  		$this->no_json = $no_json;
-		
-  		$product_id = (int)$product_id;
-		
-		
-		if ($this->validateProduct($product_id, $quantity, $options)) {
-		if (!$options) {
-					$key = $product_id;
-		} else {
-					$key = $product_id . ':' . base64_encode(serialize($options));
-		}
-		
-			$quantity = (int)$quantity;
-			
-			if ($quantity && $quantity > 0) {
-			if (!isset($this->session->data['cart'][$key])) {
-						$this->session->data['cart'][$key] = $quantity;
-			} else {
-						$this->session->data['cart'][$key] += $quantity;
-			}
+	public function add($product_id, $quantity = 1, $product_options = array()) {
+  		if ($this->validateProduct($product_id, $quantity, $product_options)) {
+			if ((int)$quantity > 0) {
+				$key = (int)$product_id . ':' . base64_encode(serialize($product_options));
+				
+				if (empty($this->session->data['cart'][$key])) {
+					$this->session->data['cart'][$key] = $quantity;
+				} else {
+					$this->session->data['cart'][$key] += $quantity;
+				}
 			}
 			
+			//Invalidate Rendered Data
 			$this->data = array();
+			
 			return true;
 		}
-		else {
-			return false;
-		}
+		
+		return false;
   	}
 
   	public function update($key, $qty)
@@ -339,130 +326,98 @@ class Cart extends Library
 		return $this->Model_Catalog_Product->getProductName($product_id);
 	}
 	
+	public function getProductIds()
+	{
+		$product_ids = array();
+		
+		foreach ($this->session->data['cart'] as $key => $quantity) {
+			$cart_product = explode(':', $key);
+			$product_ids[] = $cart_product[0];
+		}
+		
+		return $product_ids;
+	}
+	
 	public function getProducts()
 	{
 		if (!$this->data) {
 			foreach ($this->session->data['cart'] as $key => $quantity) {
-				$product = explode(':', $key);
-				$product_id = $product[0];
-				$stock = true;
-	
+				$cart_product = explode(':', $key);
+				$product_id = $cart_product[0];
+				$in_stock = true;
+				
 				// Options
-				if (isset($product[1])) {
-					$options = unserialize(base64_decode($product[1]));
+				if (!empty($cart_product[1])) {
+					$product_options = unserialize(base64_decode($cart_product[1]));
 				} else {
-					$options = array();
+					$product_options = array();
 				}
 				
-				$product = $this->db->queryRow("SELECT * FROM " . DB_PREFIX . "product p WHERE p.product_id = '" . (int)$product_id . "' AND p.date_available <= NOW() AND p.status = '1'");
+				$product = $this->Model_Catalog_Product->getProduct($product_id);
 				
 				if ($product) {
-					$this->translation->translate('product', $product['product_id'], $product);
-					
 					$option_cost = 0;
 					$option_price = 0;
 					$option_points = 0;
 					$option_weight = 0;
+					$selected_options = array();
 					
-					$option_data = array();
-					
-					foreach ($options as $product_option_id => $option_value) {
-						$option_query = $this->db->query("SELECT po.product_option_id, po.option_id, od.name, od.display_name, o.type FROM " . DB_PREFIX . "product_option po" .
-							" LEFT JOIN `" . DB_PREFIX . "option` o ON (po.option_id = o.option_id)" .
-							" LEFT JOIN " . DB_PREFIX . "option_description od ON (o.option_id = od.option_id)" .
-							" WHERE po.product_option_id = '" . (int)$product_option_id . "' AND po.product_id = '" . (int)$product_id . "' AND od.language_id = '" . (int)$this->config->get('config_language_id') . "'");
+					if (!empty($product_options)) {
+						$filter = array(
+							'product_option_ids' => array_keys($product_options),
+						);
 						
-						if ($option_query->num_rows) {
-							foreach ($option_value as $product_option_value) {
-								$option_value_query = $this->db->query(
-									"SELECT pov.option_value_id, ovd.name, pov.* FROM " . DB_PREFIX . "product_option_value pov" .
-									" LEFT JOIN " . DB_PREFIX . "option_value ov ON (pov.option_value_id = ov.option_value_id)" .
-									" LEFT JOIN " . DB_PREFIX . "option_value_description ovd ON (ov.option_value_id = ovd.option_value_id)" .
-									" WHERE pov.product_option_value_id = '" . (int)$product_option_value['product_option_value_id'] . "' AND pov.product_option_id = '" . (int)$product_option_id . "' AND ovd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
+						$product_option_data = $this->Model_Catalog_Product->getFilteredProductOptions($filter);
+						
+						foreach ($product_options as $product_option_id => $product_option_values) {
+							foreach ($product_option_values as $product_option_value_id => $product_option_value) {
+								$product_option_value = $this->Model_Catalog_Product->getProductOptionValue($product_id, $product_option_id, $product_option_value_id);
 								
-								if ($option_value_query->num_rows) {
+								if ($product_option_value) {
+									$option_cost	+= $product_option_value['cost'];
+									$option_price  += $product_option_value['price'];
+									$option_points += $product_option_value['points'];
+									$option_weight += $product_option_value['weight'];
 									
-									$option_cost	+= $option_value_query->row['cost'];
-									$option_price  += $option_value_query->row['price'];
-									$option_points += $option_value_query->row['points'];
-									$option_weight += $option_value_query->row['weight'];
-									
-									if ($option_value_query->row['subtract'] && (!$option_value_query->row['quantity'] || ($option_value_query->row['quantity'] < $quantity))) {
-										$stock = false;
+									if ($product_option_value['subtract'] && $product_option_value['quantity'] < $quantity) {
+										$in_stock = false;
 									}
 									
-									$option_data[] = array(
-										'product_option_id'	=> $product_option_id,
-										'product_option_value_id' => $product_option_value['product_option_value_id'],
-										'option_id'					=> $option_query->row['option_id'],
-										'option_value_id'			=> $option_value_query->row['option_value_id'],
-										'name'						=> $option_query->row['name'],
-										'display_name'				=> $option_query->row['display_name'],
-										'option_value'				=> $option_value_query->row['name'],
-										'type'						=> $option_query->row['type'],
-										'quantity'				=> $option_value_query->row['quantity'],
-										'subtract'				=> $option_value_query->row['subtract'],
-										'cost'						=> $option_value_query->row['cost'],
-										'price'					=> $option_value_query->row['price'],
-										'points'						=> $option_value_query->row['points'],
-										'weight'						=> $option_value_query->row['weight'],
-									);
+									$product_option_value += array_search_key('product_option_id', $product_option_id, $product_option_data);
+									
+									$selected_options[$product_option_value_id] = $product_option_value;
 								}
 							}
 						}
 					}
 
-					$customer_group_id = $this->customer->getCustomerGroupId();
-					
-					// Product Specials
-					$product_special_price = $this->db->queryVar("SELECT price FROM " . DB_PREFIX . "product_special WHERE product_id = '" . (int)$product_id . "' AND customer_group_id = '" . (int)$customer_group_id . "' AND ((date_start = '" . DATETIME_ZERO . "' OR date_start <= NOW()) AND (date_end = '" . DATETIME_ZERO . "' OR date_end > NOW())) ORDER BY priority ASC, price ASC LIMIT 1");
-				
-					if ($product_special_price) {
-						$product['price'] = $product_special_price;
-					} else {
-						// Product Discounts
-						$discount_quantity = 0;
-						
-						foreach ($this->session->data['cart'] as $key_2 => $quantity_2) {
-							$product_2 = explode(':', $key_2);
-							
-							if ((int)$product_2[0] === (int)$product_id) {
-								$discount_quantity += $quantity_2;
-							}
-						}
-						
-						$product_discount_price = $this->db->queryVar("SELECT price FROM " . DB_PREFIX . "product_discount WHERE product_id = '" . (int)$product_id . "' AND customer_group_id = '" . (int)$customer_group_id . "' AND quantity <= '" . (int)$discount_quantity . "' AND ((date_start = '" . DATETIME_ZERO . "' OR date_start <= NOW()) AND (date_end = '" . DATETIME_ZERO . "' OR date_end > NOW())) ORDER BY quantity DESC, priority ASC, price ASC LIMIT 1");
-						
-						if ($product_discount_price) {
-							$product['price'] = $product_discount_price;
-						}
+					// Product Specials / Discounts
+					if ($product['special']) {
+						$product['price'] = $product['special'];
+					} elseif ($product['discount']) {
+						$product['price'] = $product['discount'];
 					}
 			
-					// Reward Points
-					$reward = (int)$this->db->queryVar("SELECT points FROM " . DB_PREFIX . "product_reward WHERE product_id = '" . (int)$product_id . "' AND customer_group_id = '" . (int)$customer_group_id . "'");
-					
 					// Downloads
-					$downloads = $this->db->queryRows("SELECT * FROM " . DB_PREFIX . "product_to_download p2d LEFT JOIN " . DB_PREFIX . "download d ON (p2d.download_id = d.download_id) WHERE p2d.product_id = '" . (int)$product_id . "'");
-					
-					$this->translation->translate_all('download', 'download_id', $downloads);
+					$downloads = $this->Model_Catalog_Product->getProductDownloads($product_id);
 					
 					// Stock
 					if (!$product['quantity'] || ($product['quantity'] < $quantity)) {
-						$stock = false;
+						$in_stock = false;
 					}
 					
-					$product['key'] 			= $key;
-					$product['option']		= $option_data;
-					$product['download']		= $downloads;
-					$product['quantity']		= $quantity;
-					$product['stock']			= $stock;
-					$product['cost']			+= $option_cost;
-					$product['total_cost']	= $product['cost'] * $quantity;
-					$product['price']			+= $option_price;
-					$product['total']			= $product['price'] * $quantity;
-					$product['reward']		= $reward * $quantity;
-					$product['points']		= ((int)$product['points'] + $option_points) * $quantity;
-					$product['weight']		= ((int)$product['weight'] + $option_weight) * $quantity;
+					$product['key']					= $key;
+					$product['selected_options']	= $selected_options;
+					$product['downloads']			= $downloads;
+					$product['quantity']				= $quantity;
+					$product['in_stock']				= $in_stock;
+					$product['cost']					+= $option_cost;
+					$product['total_cost']			= $product['cost'] * $quantity;
+					$product['price']					+= $option_price;
+					$product['total']					= $product['price'] * $quantity;
+					$product['total_reward']		= $product['reward'] * $quantity;
+					$product['points']				= ((int)$product['points'] + $option_points) * $quantity;
+					$product['weight']				= ((float)$product['weight'] + $option_weight) * $quantity;
 					
 					$this->data[$key] = $product;
 				} else {
@@ -476,20 +431,12 @@ class Cart extends Library
 
   	public function countProducts()
   	{
-		$product_total = 0;
-			
-		$products = $this->getProducts();
-			
-		foreach ($products as $product) {
-			$product_total += $product['quantity'];
-		}
-					
-		return $product_total;
+		return array_sum($this->getCart());
 	}
 	
   	public function hasProducts()
   	{
-		return count($this->session->data['cart']);
+		return !empty($this->session->data['cart']);
   	}
 	
 	public function productPurchasable($product)
@@ -506,25 +453,23 @@ class Cart extends Library
 			return false;
 		}
 		
-		if (!$this->date->isInFuture($product['date_expires'], true) || !$this->date->isInPast($product['date_available'], false)) {
+		if ($this->date->isInFuture($product['date_available'], false) || $this->date->isInPast($product['date_expires'], false)) {
 			return false;
 		}
 		
 		return true;
 	}
 	
-	public function validateProduct($product_id, $quantity, $options)
+	public function validateProduct($product_id, $quantity, $selected_options = array())
 	{
 		$product_info = $this->Model_Catalog_Product->getProduct($product_id);
 		
 		if ($product_info) {
 			$product_options = $this->Model_Catalog_Product->getProductOptions($product_id);
 			
-			$restrictions = $this->Model_Catalog_Product->getProductOptionValueRestrictions($product_id);
-			
 			foreach ($product_options as $product_option) {
-				if (!empty($product_option['product_option_value']) && $product_option['required']) {
-					if (empty($options[$product_option['product_option_id']])) {
+				if (!empty($product_option['product_option_values']) && $product_option['required']) {
+					if (empty($selected_options[$product_option['product_option_id']])) {
 						$this->error['add']['option'][$product_option['product_option_id']] = $this->_('error_required', $product_option['display_name']);
 						return false;
 					}
@@ -535,23 +480,26 @@ class Cart extends Library
 				}
 			}
 			
-			foreach ($options as $po_id => $selected_po) {
-				foreach ($selected_po as $selected_pov) {
-					if (isset($selected_pov['option_value_id']) && isset($restrictions[$selected_pov['option_value_id']])) {
-						foreach ($options as $selected_po2) {
-							foreach ($selected_po2 as $selected_pov2) {
-								if (in_array($selected_pov2['option_value_id'], $restrictions[$selected_pov['option_value_id']])) {
-									$this->error['add']['option'][$po_id] = $this->language->get('error_pov_restriction');
-									return false;
+			//validate Product Option resrictions
+			/*
+				foreach ($selected_options as $product_option_id => $selected_po) {
+					foreach ($selected_po as $selected_pov) {
+						if (isset($selected_pov['option_value_id']) && isset($restrictions[$selected_pov['option_value_id']])) {
+							foreach ($options as $selected_po2) {
+								foreach ($selected_po2 as $selected_pov2) {
+									if (in_array($selected_pov2['option_value_id'], $restrictions[$selected_pov['option_value_id']])) {
+										$this->error['add']['option'][$product_option_id] = $this->language->get('error_pov_restriction');
+										return false;
+									}
 								}
 							}
 						}
 					}
 				}
-			}
+			*/
 		}
 		else {
-			$this->error['add']['product_id'] = $this->language->get('error_invalid_product_id');
+			$this->_e('PV-1', 'add', 'error_invalid_product_id');
 			return false;
 		}
 
@@ -570,7 +518,7 @@ class Cart extends Library
   	public function hasStock()
   	{
   		foreach ($this->getProducts() as $product) {
-			if (!$product['stock']) {
+			if (!$product['in_stock']) {
 				$this->_e('C-2', 'cart', $this->_('error_cart_stock', $this->url->link('product/product','product_id=' . $product['product_id']), $product['name']));
 				return false;
 			}
@@ -691,8 +639,8 @@ class Cart extends Library
   public function hasDownload()
   	{
 		foreach ($this->getProducts() as $product) {
-			if ($product['download']) {
-			return true;
+			if (!empty($product['downloads'])) {
+				return true;
 			}
 		}
 		

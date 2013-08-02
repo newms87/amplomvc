@@ -345,45 +345,15 @@
 						</tr>
 						<tr>
 							<td><?= $entry_customer_price; ?></td>
-							<td><? if ($config_customer_price) { ?>
-								<input type="radio" name="config_customer_price" value="1" checked="checked" />
-								<?= $text_yes; ?>
-								<input type="radio" name="config_customer_price" value="0" />
-								<?= $text_no; ?>
-								<? } else { ?>
-								<input type="radio" name="config_customer_price" value="1" />
-								<?= $text_yes; ?>
-								<input type="radio" name="config_customer_price" value="0" checked="checked" />
-								<?= $text_no; ?>
-								<? } ?></td>
+							<td><?= $this->builder->build('radio', $data_yes_no, 'config_customer_hide_price', $config_customer_hide_price); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_customer_approval; ?></td>
-							<td><? if ($config_customer_approval) { ?>
-								<input type="radio" name="config_customer_approval" value="1" checked="checked" />
-								<?= $text_yes; ?>
-								<input type="radio" name="config_customer_approval" value="0" />
-								<?= $text_no; ?>
-								<? } else { ?>
-								<input type="radio" name="config_customer_approval" value="1" />
-								<?= $text_yes; ?>
-								<input type="radio" name="config_customer_approval" value="0" checked="checked" />
-								<?= $text_no; ?>
-								<? } ?></td>
+							<td><?= $this->builder->build('radio', $data_yes_no, 'config_customer_approval', $config_customer_approval); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_guest_checkout; ?></td>
-							<td><? if ($config_guest_checkout) { ?>
-								<input type="radio" name="config_guest_checkout" value="1" checked="checked" />
-								<?= $text_yes; ?>
-								<input type="radio" name="config_guest_checkout" value="0" />
-								<?= $text_no; ?>
-								<? } else { ?>
-								<input type="radio" name="config_guest_checkout" value="1" />
-								<?= $text_yes; ?>
-								<input type="radio" name="config_guest_checkout" value="0" checked="checked" />
-								<?= $text_no; ?>
-								<? } ?></td>
+							<td><?= $this->builder->build('radio', $data_yes_no, 'config_guest_checkout', $config_guest_checkout); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_account; ?></td>
@@ -412,37 +382,15 @@
 						</tr>
 						<tr>
 							<td><?= $entry_stock_display; ?></td>
-							<td>
-								<?= $this->builder->build('radio', $data_stock_display_types, "config_stock_display", $config_stock_display, array('class'=>'display_stock_radio')); ?>
-							</td>
+							<td><?= $this->builder->build('radio', $data_stock_display_types, "config_stock_display", $config_stock_display, array('class'=>'display_stock_radio')); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_stock_warning; ?></td>
-							<td><? if ($config_stock_warning) { ?>
-								<input type="radio" name="config_stock_warning" value="1" checked="checked" />
-								<?= $text_yes; ?>
-								<input type="radio" name="config_stock_warning" value="0" />
-								<?= $text_no; ?>
-								<? } else { ?>
-								<input type="radio" name="config_stock_warning" value="1" />
-								<?= $text_yes; ?>
-								<input type="radio" name="config_stock_warning" value="0" checked="checked" />
-								<?= $text_no; ?>
-								<? } ?></td>
+							<td><?= $this->builder->build('select', $data_yes_no, 'config_stock_warning', $config_stock_warning); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_stock_checkout; ?></td>
-							<td><? if ($config_stock_checkout) { ?>
-								<input type="radio" name="config_stock_checkout" value="1" checked="checked" />
-								<?= $text_yes; ?>
-								<input type="radio" name="config_stock_checkout" value="0" />
-								<?= $text_no; ?>
-								<? } else { ?>
-								<input type="radio" name="config_stock_checkout" value="1" />
-								<?= $text_yes; ?>
-								<input type="radio" name="config_stock_checkout" value="0" checked="checked" />
-								<?= $text_no; ?>
-								<? } ?></td>
+							<td><?= $this->builder->build('radio', $data_yes_no, 'config_stock_checkout', $config_stock_checkout); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_stock_status; ?></td>
@@ -455,6 +403,10 @@
 									<? } ?>
 									<? } ?>
 								</select></td>
+						</tr>
+						<tr>
+							<td><?= $entry_show_product_related; ?></td>
+							<td><?= $this->builder->build('select', $data_show_product_related, 'config_show_product_related', $config_show_product_related); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_order_received_status; ?></td>

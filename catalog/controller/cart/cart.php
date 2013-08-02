@@ -60,17 +60,17 @@ class Catalog_Controller_Cart_Cart extends Controller
 		
 		$this->response->setOutput($this->render());
   	}
-								
+	
 	public function add()
 	{
 		$this->language->load('cart/cart');
 		
 		$product_id = isset($_POST['product_id']) ? $_POST['product_id'] : 0;
 		$quantity = isset($_POST['quantity']) ? $_POST['quantity'] : 1;
-		$options = isset($_POST['selected']) ? array_filter($_POST['selected']) : array();
+		$selected_options = isset($_POST['selected_options']) ? array_filter($_POST['selected_options']) : array();
 		$load_page = isset($_POST['load_page']);
 		
-		$this->cart->add($product_id, $quantity, $options, $load_page);
+		$this->cart->add($product_id, $quantity, $selected_options);
 		
 		if ($load_page) {
 			$this->index();
@@ -89,8 +89,7 @@ class Catalog_Controller_Cart_Cart extends Controller
 				
 				$json['total'] = sprintf($this->_('text_items'), $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($total_data['total']));
 			} else {
-				$errors = $this->cart->get_errors();
-				$json['error'] = $errors['add'];
+				$json['error'] = $this->cart->get_errors('add');
 			}
 			
 			$this->response->setOutput(json_encode($json));

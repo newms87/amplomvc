@@ -5,10 +5,18 @@ $_['heading_title']				= 'General Settings';
 //Data
 $_['data_stock_display_types'] = array(
 	'hide' => "Do not display stock",
-		'status' => "Only show stock status",
-		-1 => "Display stock quantity available",
-		10 => "Display quantity up to 10"
-	);
+	'status' => "Only show stock status",
+	-1 => "Display stock quantity available",
+	10 => "Display quantity up to 10"
+);
+
+$_['data_show_product_related'] = array(
+	0 => 'Never',
+	1 => 'Only When Unavailable',
+	2 => 'Always',
+);
+
+	
 
 //Text
 $_['text_success']				= 'Success: You have modified settings!';
@@ -84,6 +92,7 @@ $_['entry_stock_display']		= 'Display Stock:<br /><span class="help">Display sto
 $_['entry_stock_warning']		= 'Show Out Of Stock Warning:<br /><span class="help">Display out of stock message on the shopping cart page if a product is out of stock but stock checkout is yes. (Warning always shows if stock checkout is no)</span>';
 $_['entry_stock_checkout']	= 'Stock Checkout:<br /><span class="help">Allow customers to still checkout if the products they are ordering are not in stock.</span>';
 $_['entry_stock_status']		= 'Out of Stock Status:<br /><span class="help">Set the default out of stock status selected in product edit.</span>';
+$_['entry_show_product_related'] = "Show Related Products on Product Page:";
 $_['entry_order_received_status']		= 'Order Received Status:<br /><span class="help">Set the initial order status when an order is received.</span>';
 $_['entry_order_complete_status']	= 'Complete Order Status:<br /><span class="help">Set the order status for when an order has been fully paid for and products are deducted from the inventory (Downloads / Gift Vouchers are accessible and Products requiring shipping should be shipped).</span>';
 $_['entry_order_blacklist_status']		= 'Order Blacklist Status:<br /><span class="help">Set the order status when an order is associated with a blacklisted account.</span>';

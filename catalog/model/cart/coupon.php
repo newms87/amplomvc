@@ -45,7 +45,7 @@ class Catalog_Model_Cart_Coupon extends Model
 			
 			$coupon_product = false;
 				
-			foreach ($this->cart->getProducts() as $product) {
+			foreach ($this->cart->getProductIds() as $product) {
 				if (in_array($product['product_id'], $coupon_products)) {
 					$coupon_product = true;
 						

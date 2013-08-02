@@ -33,7 +33,7 @@ class Catalog_Controller_Block_Product_List extends Controller
 					}
 				}
 				
-				if (($this->config->get('config_customer_price') ? $this->customer->isLogged() : true)) {
+				if (($this->config->get('config_customer_hide_price') ? $this->customer->isLogged() : true)) {
 					if (!empty($item['price'])) {
 						$item['price'] = $this->currency->format($this->tax->calculate($item['price'], $item['tax_class_id']));
 					}

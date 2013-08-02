@@ -31,7 +31,6 @@ function html_dump($var, $label= "HTML Dump", $level=0, $max = -1, $print = true
 	margin-left:20px
 }
 </style>
-<div id="html_dump_list"></div>
 <? } ?>
 
 <a id="<?=$id;?>" class ='html_dump' onclick="open_html_dump('<?=$id;?>')">
@@ -57,13 +56,8 @@ function open_html_dump(id) {
 	w.document.body.innerHTML = document.getElementById(id).innerHTML;
 	document.getElementById(id + '-output').setAttribute('style','display:none');
 }
-document.getElementsByTagName('body')[0].appendChild(document.getElementById("html_dump_list"));
 //--></script>
 <? } ?>
-
-<script type='text/javascript'>//<!--
-document.getElementById("html_dump_list").appendChild(document.getElementById("<?= $id; ?>"));
-//--></script>
 
 <?
 	$html_dump_count++;
@@ -137,7 +131,11 @@ if (!function_exists('array_column')) {
 		$values = array();
 		
 		foreach ($array as $row) {
-			$values[] = $row[$column];
+			if (!isset($row[$column])) {
+				$values[] = null;
+			} else {
+				$values[] = $row[$column];
+			}
 		}
 		
 		return $values;
@@ -147,7 +145,8 @@ if (!function_exists('array_column')) {
 if (!function_exists('array_search_key')) {
 	/**
 	 * Searches for an element in a multidimensional array for an element key that matches search_key and
-	 * value that matches needle. It will return the parent array of this key => value pair.
+	 * value that matches needle. 
+	 * It will return the array that contains the search_key => needle pair.
 	 *
 	 * @param search_key mixed - Either a string or int to search by the array key 
 	 * @param needle mixed - The searched value. If needle is a string, the comparison is done in a case-sensitive manner. 
@@ -168,7 +167,7 @@ if (!function_exists('array_search_key')) {
 				}
 			}
 	 		
-	 		if ($key === $search_key && $value === $needle) {
+	 		if ($key === $search_key && $value == $needle) {
 	 			return $haystack;
 			}
 		}

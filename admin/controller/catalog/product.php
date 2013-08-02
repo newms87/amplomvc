@@ -540,12 +540,12 @@ class Admin_Controller_Catalog_Product extends Controller
 			'sort_order' => 0,
 			'unused_option_values' => array('__ac_template__' => array(
 				'option_value_id' => '',
-				'name' => '',
+				'value' => '',
 			)),
 			'product_option_values' => array('__ac_template__' => array(
 				'product_option_value_id' => 0,
 				'option_value_id' => '',
-				'name' => '',
+				'value' => '',
 				'image' => '',
 				'quantity' => 1,
 				'subtract' => 0,
@@ -557,6 +557,7 @@ class Admin_Controller_Catalog_Product extends Controller
 				'restrictions' => array('__ac_template__' => array(
 					'product_option_value_id' => 0,
 					'restrict_option_value_id' => 0,
+					'quantity' => 0,
 				)),
 					
 			)),
@@ -749,8 +750,8 @@ class Admin_Controller_Catalog_Product extends Controller
 			
 			$html .= "<option value='$product[product_id]' $selected>$product[name]</option>";
 		}
-		echo json_encode(array('option_data' => $data, 'html' =>$html));
-		exit();
+		
+		$this->response->setOutput(json_encode(array('option_data' => $data, 'html' =>$html)));
 	}
 	
 	public function autocomplete()

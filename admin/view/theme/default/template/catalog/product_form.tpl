@@ -282,9 +282,9 @@
 									<td><?= $entry_option_value_list; ?></td>
 									<td>
 										<div class='scrollbox unused_option_value_list clickable'>
-										<? foreach($product_option['unused_option_values'] as $ov_row => $option_value) {?>
-											<div class="unused_option_value" data-row="<?= $ov_row; ?>" data-id="<?= $option_value['option_value_id']; ?>" onclick="add_option_value($(this));" >
-												<span class='uov_label'><?= $option_value['name']; ?></span>
+										<? foreach($product_option['unused_option_values'] as $uov_row => $option_value) {?>
+											<div class="unused_option_value" data-row="<?= $uov_row; ?>" data-id="<?= $option_value['option_value_id']; ?>" onclick="add_option_value($(this));" >
+												<span class='uov_label'><?= $option_value['value']; ?></span>
 												<img src="<?= HTTP_THEME_IMAGE . "add.png"; ?>" />
 												<script type="text/javascript">//<!--
 												$('#tab-option-<?= $row; ?> .unused_option_value[data-id=<?= $option_value['option_value_id']; ?>]').data('option_value', <?= json_encode($option_value); ?>);
@@ -319,8 +319,8 @@
 											<td class="center">
 												<input type="hidden" name="<?= $product_option_value_row; ?>[product_option_value_id]" value="<?= $product_option_value['product_option_value_id']; ?>" />
 												<input type="hidden" name="<?= $product_option_value_row; ?>[option_value_id]" value="<?= $product_option_value['option_value_id']; ?>" />
-												<span class='option_value_label'><?= $product_option_value['name']; ?></span>
-												<input type="hidden" name="<?= $product_option_value_row; ?>[name]" value="<?= $product_option_value['name']; ?>" />
+												<input type="hidden" name="<?= $product_option_value_row; ?>[value]" value="<?= $product_option_value['value']; ?>" />
+												<span class='option_value_label'><?= $product_option_value['value']; ?></span>
 											</td>
 											<td class="center">
 												<? $this->builder->set_builder_template('click_image_small'); ?>
@@ -360,8 +360,8 @@
 															<? $restriction_row = $product_option_value_row . "[restrictions][$r_row]"; ?>
 															<tr class="product_option_value_restriction" data-row="<?= $r_row; ?>">
 																<td class="center">
-																	<?= $this->builder->set_config('option_value_id', 'name'); ?>
-																	<?= $this->builder->build('select', $all_product_option_values, $restriction_row."[restrict_option_value_id]", $restriction['restrict_option_value_id']); ?>
+																	<?// $this->builder->set_config('product_option_value_id', 'name'); ?>
+																	<?// $this->builder->build('select', $all_product_option_values, $restriction_row."[restrict_option_value_id]", $restriction['restrict_option_value_id']); ?>
 																</td>
 																<td class="center"><input type="text" size='3' name="<?= $restriction_row; ?>[quantity]" value="<?= $restriction['quantity']; ?>" /></td>
 																<td class="center"><a onclick="$(this).closest('tr').remove()" class="button_remove"></a></td>
@@ -594,7 +594,7 @@
 <?= $this->builder->js('ckeditor'); ?>
 
 <script type="text/javascript">//<!--
-$('.datepicker, .timepicker, .datetimepicker').ac_datepicker();
+$.ac_datepicker();
 
 function generate_url_warning(field){
 	if(!$('#gen_warn').length)
@@ -622,8 +622,7 @@ $('[name=shipping]').change(function(){
 	if($(this).is(':checked')){
 		if($(this).val() === '1'){
 			$('#shipping_details').show();
-		}
-		else{
+		} else{
 			$('#shipping_details').hide();
 		}
 	}
@@ -698,7 +697,7 @@ function autocomplete_callback_product_option(event, data) {
 		ov_row = option_value_list.ac_template('uov_list', 'add', option_value);
 		
 		ov_row.data('option_value', option_value);
-		ov_row.find('.uov_label').html(option_value.name);
+		ov_row.find('.uov_label').html(option_value.value);
 	}
 	
 	$('#option_tab_list a').tabs();
@@ -713,7 +712,7 @@ function add_option_value(option_value) {
 	ov_data = option_value.data('option_value');
 	
 	row = pov_list.ac_template('pov_list', 'add', ov_data);
-	row.find('.option_value_label').html(ov_data.name);
+	row.find('.option_value_label').html(ov_data.value);
 	
 	if (ov_data.image) {
 		row.find('.image .iu_thumb').attr('src', ov_data.thumb);
@@ -766,7 +765,7 @@ function remove_option_value(context){
 	uov_row = product_option.find('.unused_option_value_list').ac_template('uov_list', 'add', ov_data);
 	
 	uov_row.data('option_value', ov_data);
-	uov_row.find('.uov_label').html(ov_data.name);
+	uov_row.find('.uov_label').html(ov_data.value);
 	
 	update_ov_entries_select();
 }
@@ -791,8 +790,8 @@ function update_ov_entries_select(){
 //--></script>
 
 <span id='all_product_option_values' style='display:none'>
-	<?= $this->builder->set_config('option_value_id', 'name'); ?>
-	<?= $this->builder->build('select', $all_product_option_values, "product_options[%option_id%][product_option_values][%option_value_id%][restrictions][%row%][restrict_option_value_id]", '', array('class'=>'restrict_option_values')); ?>
+	<? //$this->builder->set_config('option_value_id', 'name'); ?>
+	<? //$this->builder->build('select', $all_product_option_values, "product_options[%option_id%][product_option_values][%option_value_id%][restrictions][%row%][restrict_option_value_id]", '', array('class'=>'restrict_option_values')); ?>
 </span>
 
 <script type="text/javascript">//<!--

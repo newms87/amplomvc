@@ -4,23 +4,22 @@
 	<?= $this->breadcrumb->render(); ?>
 	<?= $content_top; ?>
 	
-	<!--<h1><?= $heading_title; ?></h1> -->
-	<? if(!empty($block_product_flashsale_countdown)){ ?>
-		<?= $block_product_flashsale_countdown; ?>
-	<? }?>
-	
 	<div class="product-info">
-		<?= $block_product_images; ?>
+		<div class="left">
+			<?= $block_product_images; ?>
+			
+			<? if (!empty($block_product_related)) { ?>
+				<?= $block_product_related; ?>
+			<? } ?>
+		</div>
 		
-		<?= $block_product_information; ?>
+		<div class="right">
+			<?= $block_product_information; ?>
+		</div>
 	</div>
 	
 	<? if (!empty($block_product_additional) ) { ?>
 		<?= $block_product_additional; ?>
-	<? } ?>
-	
-	<? if ( !empty($block_product_related) ) {?>
-		<?= $block_product_related; ?>
 	<? } ?>
 	
 	<? if (!empty($tags)) { ?>

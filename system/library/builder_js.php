@@ -25,8 +25,7 @@ switch($js){
 <script type="text/javascript">//<!--
 country_selectors = $('<?= $parent_selector;?>').find('<?= $country_selector;?>');
 
-country_selectors.live('change', function (event)
- {
+country_selectors.change(function (event) {
   cs = $(this);
 
   if (!$(this).is('select')) {
@@ -77,22 +76,8 @@ var no_image = "<?= HTTP_THEME_IMAGE . "no_image.png"; ?>"
 <? } ?>
 	<? break;
 	
-
-	case 'datepicker': ?>
-<? if (!isset($js_loaded_files['datepicker'])) {?>
-<script type="text/javascript" src="<?= HTTP_JS . 'jquery/ui/jquery-ui-timepicker-addon.js'; ?>"></script>
-<script type="text/javascript">//<!--
-$('.date').datepicker({dateFormat: 'yy-mm-dd'});
-$('.datetime').datetimepicker({
-	dateFormat: 'yy-mm-dd',
-	timeFormat: 'h:m:s'
-});
-$('.time').timepicker({timeFormat: 'h:m'});
-//--></script>
-<? } ?>
-<?php  break;
-		
-		
+	
+	
 	case 'errors':
 		if(!$args)return'';
 		$errors = json_encode($args[0]); ?>

@@ -403,12 +403,13 @@ class Order Extends Library
 				$this->db->query("UPDATE " . DB_PREFIX . "product_option_value SET quantity = (quantity - " . (int)$product['quantity'] . ") WHERE product_option_value_id = '" . (int)$option['product_option_value_id'] . "' AND subtract = '1'");
 					
 				$this->db->query("UPDATE " . DB_PREFIX . "product_option_value_restriction SET quantity = (quantity - " . (int) $product['quantity'] . ")" .
-					" WHERE option_value_id = '" . ($pov_to_ov[$option['product_option_value_id']]) . "' AND restrict_option_value_id IN (" . implode(',', $pov_to_ov) . ")");
+					" WHERE product_option_value_id = '" . ($pov_to_ov[$option['product_option_value_id']]) . "' AND restrict_product_option_value_id IN (" . implode(',', $pov_to_ov) . ")");
 			}
 			
 			//Add Product Options to product data
 			$product['option'] = $order_options;
 			
+			//We must invalidate the product for each order to keep the product quantities valid!
 			$this->cache->delete('product.' . $product['product_id']);
 		} unset($product);
 		

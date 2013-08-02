@@ -46,7 +46,7 @@
 <? } ?>
 
 <script type="text/javascript">//<!--
-$('#review .pagination a').live('click', function() {
+$('#review .pagination a')click(function() {
 	$('#review').slideUp('slow');
 			
 	$('#review').load(this.href);

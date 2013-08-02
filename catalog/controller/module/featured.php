@@ -155,7 +155,7 @@ class Catalog_Controller_Module_Featured extends Controller
 				$image = false;
 			}
 
-			if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
+			if (($this->config->get('config_customer_hide_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_hide_price')) {
 				$price = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id']));
 			} else {
 				$price = false;

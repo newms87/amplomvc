@@ -35,14 +35,18 @@
 					</td>
 					<td class="name">
 						<a href="<?= $product['href']; ?>"><?= $product['name']; ?></a>
-						<? if (!$product['stock']) { ?>
-						<span class="stock">***</span>
+						<? if (!$product['in_stock']) { ?>
+							<span class="stock">***</span>
 						<? } ?>
-						<div>
-							<? foreach ($product['option'] as $option) { ?>
-							<div class='cart_product_option_value'><?= $text_option_bullet; ?><?= $option['display_name']; ?>: <?= $option['value']; ?></div>
+						
+						<? if (!empty($product['selected_options'])) { ?>
+							<div class="product_option_description">
+							<? foreach ($product['selected_options'] as $selected_option) { ?>
+								<div class='cart_product_option_value'><?= $text_option_bullet; ?><?= $selected_option['product_option']['display_name']; ?>: <?= $selected_option['value']; ?></div>
 							<? } ?>
-						</div>
+							</div>
+						<? } ?>
+						
 						<? if ($product['reward']) { ?>
 						<span class='cart_product_reward'><?= $product['reward']; ?></span>
 						<? } ?>

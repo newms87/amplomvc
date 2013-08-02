@@ -181,11 +181,11 @@ $('.car_title').live('keyup',function(){
 	$("#" + href +"-title").html($(this).attr('value'));
 });
 //--></script>
-<script type="text/javascript"><!--
+<script type="text/javascript">//<!--
 $('.vtabs a').tabs();
 //--></script>
 
-<script type="text/javascript"><!--
+<script type="text/javascript">//<!--
 set_autocomplete($('.rel_article'));
 function set_autocomplete(selector){
 	selector.autocomplete({
@@ -257,7 +257,7 @@ $('#article-related div img').live('click', function() {
 	$('#article-related div:even').attr('class', 'even');
 });
 //--></script>
-<script type="text/javascript"><!--
+<script type="text/javascript">//<!--
 function image_upload(field, thumb) {
 	$('#dialog').remove();
 	
@@ -284,7 +284,7 @@ function image_upload(field, thumb) {
 	});
 };
 //--></script>
-<script type="text/javascript"><!--
+<script type="text/javascript">//<!--
 <? $module_row = 1; ?>
 <? foreach ($modules as $module) { ?>
 $('#language-<?= $module_row; ?> a').tabs();

@@ -214,7 +214,7 @@ class Admin_Controller_Catalog_Option extends Controller
 			
 			$option_values['__ac_template__'] = array(
 				'option_value_id' => '',
-				'name' => '',
+				'value' => '',
 				'image' => '',
 				'sort_order' => 0,
 			);
@@ -274,8 +274,8 @@ class Admin_Controller_Catalog_Option extends Controller
 		}
 		else {
 			foreach ($_POST['option_value'] as $option_value_id => $option_value) {
-				if (!$this->validation->text($option_value['name'], 1, 128)) {
-					$this->error["option_value[$option_value_id][name]"] = $this->_('error_option_value_name');
+				if (!$this->validation->text($option_value['value'], 1, 128)) {
+					$this->error["option_value[$option_value_id][value]"] = $this->_('error_option_value');
 				}
 			}
 		}
@@ -339,7 +339,7 @@ class Admin_Controller_Catalog_Option extends Controller
 			
 			foreach ($option_values as &$option_value) {
 				$option_value['thumb'] = $this->image->resize($option_value['image'], $image_width, $image_height);
-				$option_value['name'] = html_entity_decode($option_value['name'], ENT_QUOTES, 'UTF-8');
+				$option_value['value'] = html_entity_decode($option_value['value'], ENT_QUOTES, 'UTF-8');
 			} unset($option_value);
 			
 			$option['option_values'] = $option_values;

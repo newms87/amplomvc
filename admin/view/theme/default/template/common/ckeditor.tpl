@@ -8,6 +8,7 @@
 <script type="text/javascript" src="<?= HTTP_JS . "jquery/ui/jquery-ui.js"; ?>"></script>
 <link rel="stylesheet" type="text/css" href="<?= HTTP_JS . "jquery/ui/themes/ui-lightness/jquery-ui.custom.css"; ?>" />
 <script type="text/javascript" src="<?= HTTP_JS . "jquery/ajaxupload.js"; ?>"></script>
+<script type="text/javascript" src="<?= HTTP_JS . "common.js"; ?>"></script>
 <script type="text/javascript" src="<?= HTTP_THEME_JS . "common.js"; ?>"></script>
 <style type="text/css">
 body {

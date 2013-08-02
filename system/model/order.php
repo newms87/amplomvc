@@ -23,12 +23,11 @@ class System_Model_Order extends Model
 			
 			$order_product_id = $this->insert('order_product', $product);
 
-			foreach ($product['option'] as $option) {
-				$option['order_id'] = $order_id;
-				$option['order_product_id'] = $order_product_id;
-				$option['value'] = $option['option_value'];
+			foreach ($product['selected_options'] as $selected_option) {
+				$selected_option['order_id'] = $order_id;
+				$selected_option['order_product_id'] = $order_product_id;
 				
-				$this->insert('order_option', $option);
+				$this->insert('order_option', $selected_option);
 			}
 			
 			if (!empty($product['download'])) {

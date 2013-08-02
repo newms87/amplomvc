@@ -168,6 +168,10 @@ class Plugin extends Library{
 		//Generate the live file with the contents of the plugin file
 		_is_writable(dirname($live_file));
 		
+		if (is_file($live_file)) {
+			@unlink($live_file);
+		}
+		
 		if (!symlink($file->getPathName(), $live_file)) {
 			$this->message->add("warning", "There was an error while copying $plugin_file to $live_file for plugin <strong>$name</strong>.");
 			return false;

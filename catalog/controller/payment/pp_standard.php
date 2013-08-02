@@ -33,9 +33,10 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 			$products = $this->cart->getProducts();
 			
 			foreach ($products as &$product) {
-				foreach ($product['option'] as &$option) {
-					$option['value'] = $this->tool->limit_characters($option['option_value'], 20);
-				} unset($option);
+				foreach ($product['selected_options'] as &$selected_option) {
+					$selected_option['product_option'] = $this->Model_Catalog_Product->getProductOption($product['product_id'], $selected_option['product_option_id']);
+					$selected_option['value'] = $this->tool->limit_characters($selected_option['value'], 20);
+				} unset($product_option);
 				
 				$product['price'] = $this->currency->format($product['price'], $order['currency_code'], false, false);
 			} unset($product);
@@ -52,7 +53,6 @@ class Catalog_Controller_Payment_PpStandard extends Controller
 					'model'	=> '',
 					'price'	=> $total,
 					'quantity' => 1,
-					'option'	=> array(),
 					'weight'	=> 0
 				);
 			} else {

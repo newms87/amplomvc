@@ -145,8 +145,8 @@ class Admin_Model_Catalog_Option extends Model
 			$data['sort'] = 'ov.sort_order';
 		}
 		
-		if (!empty($data['name'])) {
-			$where .= " AND LCASE(ov.name) like '%" . $this->escape(strtolower($data['name'])) . "%'";
+		if (!empty($data['value'])) {
+			$where .= " AND LCASE(ov.value) like '%" . $this->escape(strtolower($data['value'])) . "%'";
 		}
 		
 		if (!empty($data['!option_value_ids'])) {
@@ -186,7 +186,7 @@ class Admin_Model_Catalog_Option extends Model
 	public function getOptionValueTranslations($option_value_id)
 	{
 		$translate_fields = array(
-			'name',
+			'value',
 		);
 		
 		return $this->translation->getTranslations('option_value', $option_value_id, $translate_fields);

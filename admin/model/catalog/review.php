@@ -8,8 +8,6 @@ class Admin_Model_Catalog_Review extends Model
 		$data['text'] = strip_tags($data['text']);
 		
 		$review_id = $this->insert('review', $data);
-	
-		$this->cache->delete('product');
 		
 		return $review_id;
 	}
@@ -20,15 +18,11 @@ class Admin_Model_Catalog_Review extends Model
 		$data['text'] = strip_tags($data['text']);
 		
 		$this->update('review', $data, $review_id);
-		
-		$this->cache->delete('product');
 	}
 	
 	public function deleteReview($review_id)
 	{
 		$this->delete('review', $review_id);
-		
-		$this->cache->delete('product');
 	}
 	
 	public function getReview($review_id)

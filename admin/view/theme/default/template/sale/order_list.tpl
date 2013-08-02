@@ -14,9 +14,9 @@
 				<?= $limits; ?>
 			</div>
 			
-			<form action="" method="post" id="form">
+			<div id="listing">
 				<?= $list_view; ?>
-			</form>
+			</div>
 			<div class="pagination"><?= $pagination; ?></div>
 		</div>
 	</div>

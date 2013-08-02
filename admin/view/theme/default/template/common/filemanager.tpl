@@ -7,8 +7,10 @@
 
 	<script src="<?= HTTP_JS; ?>jquery/jquery.js" type="text/javascript" charset="utf-8"></script>
 	<script src="<?= HTTP_JS; ?>jquery/ui/jquery-ui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="<?= HTTP_JS . "common.js"; ?>"></script>
+	
 	<link rel="stylesheet" href="<?= HTTP_JS; ?>jquery/ui/themes/ui-lightness/jquery-ui.custom.css" type="text/css" media="screen" title="no title" charset="utf-8">
-
+	
 	<link rel="stylesheet" href="<?= ELFINDER_URL; ?>css/common.css"			type="text/css" media="screen" charset="utf-8">
 	<link rel="stylesheet" href="<?= ELFINDER_URL; ?>css/dialog.css"			type="text/css" media="screen" charset="utf-8">
 	<link rel="stylesheet" href="<?= ELFINDER_URL; ?>css/toolbar.css"		type="text/css" media="screen" charset="utf-8">
@@ -78,7 +80,7 @@
 	<script src="<?= ELFINDER_URL; ?>js/commands/view.js"			type="text/javascript" charset="utf-8"></script>
 	<script src="<?= ELFINDER_URL; ?>js/commands/resize.js"		type="text/javascript" charset="utf-8"></script>
 	<script src="<?= ELFINDER_URL; ?>js/commands/sort.js"			type="text/javascript" charset="utf-8"></script>
-		<script src="<?= ELFINDER_URL; ?>js/commands/selectforproduct.js"			type="text/javascript" charset="utf-8"></script>
+	<script src="<?= ELFINDER_URL; ?>js/commands/selectforproduct.js"			type="text/javascript" charset="utf-8"></script>
 
 	<!-- elfinder languages -->
 	<script src="<?= ELFINDER_URL; ?>js/i18n/elfinder.en.js"		type="text/javascript" charset="utf-8"></script>
@@ -88,9 +90,6 @@
 
 	<!-- elfinder 1.x connector API support -->
 	<script src="<?= ELFINDER_URL; ?>js/proxy/elFinderSupportVer1.js" type="text/javascript" charset="utf-8"></script>
-
-	<!-- elfinder common javascript -->
-	<script type="text/javascript" src="<?= HTTP_ADMIN . "view/javascript/common.js"; ?>"></script>
 
 	<style type="text/css">
 		body { font-family:arial, verdana, sans-serif;}
@@ -121,7 +120,7 @@ var elfinder_root_dir = '<?= $elfinder_root_dir; ?>';
 
 $().ready(function() {
 	var keyField = "field";
-	var valueField = getQuerystring(keyField, null);
+	var valueField = getQueryString(keyField, null);
 
 	if(valueField == "imagemanager") {
 		$('#finder').elfinder({

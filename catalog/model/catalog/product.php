@@ -21,7 +21,7 @@ class Catalog_Model_Catalog_Product extends Model
 		
 		if (!$product) {
 			$discount = "(SELECT price FROM " . DB_PREFIX . "product_discount pdc WHERE pdc.product_id = p.product_id AND pdc.customer_group_id ='$customer_group_id' AND pdc.quantity >= '0' AND ((pdc.date_start = '0000-00-00' OR pdc.date_start < NOW()) AND (pdc.date_end = '0000-00-00' OR pdc.date_end > NOW())) ORDER BY pdc.priority ASC, pdc.price ASC LIMIT 1) AS discount";
-			$special = "(SELECT price FROM " . DB_PREFIX . "product_special ps WHERE ps.product_id = p.product_id AND ps.customer_group_id = '$customer_group_id' AND ((ps.date_start = '" . DATETIME_ZERO . "' OR ps.date_start < NOW()) AND (ps.date_end = '". DATETIME_ZERO . "' OR ps.date_end > NOW())) ORDER BY ps.priority ASC, ps.price ASC LIMIT 1) AS special";
+			$special = "(SELECT price FROM " . DB_PREFIX . "product_special ps WHERE ps.product_id = p.product_id AND ps.customer_group_id = '$customer_group_id' AND (ps.date_start <= NOW() AND (ps.date_end = '". DATETIME_ZERO . "' OR ps.date_end > NOW())) ORDER BY ps.priority ASC, ps.price ASC LIMIT 1) AS special";
 			$reward = "(SELECT points FROM " . DB_PREFIX . "product_reward pr WHERE pr.product_id = p.product_id AND pr.customer_group_id = '$customer_group_id') AS reward";
 			$stock_status = "(SELECT ss.name FROM " . DB_PREFIX . "stock_status ss WHERE ss.stock_status_id = p.stock_status_id AND ss.language_id = '$language_id') AS stock_status";
 			$weight_class = "(SELECT wcd.unit FROM " . DB_PREFIX . "weight_class_description wcd WHERE p.weight_class_id = wcd.weight_class_id AND wcd.language_id = '$language_id') AS weight_class";
@@ -128,7 +128,7 @@ class Catalog_Model_Catalog_Product extends Model
 		
 		//Product Name Search
 		if (!empty($data['name_like'])) {
-			$where .= " AND p.name like '%" . $this->escape($data['name']) . "%'";
+			$where .= " AND p.name like '%" . $this->escape($data['name_like']) . "%'";
 		}
 		
 		//Product Manufacturer
@@ -247,35 +247,21 @@ class Catalog_Model_Catalog_Product extends Model
 		return $product_data;
 	}
 	
-	public function getProductSuggestions($product, $limit)
+	public function getProductSuggestions($product, $limit = 4)
 	{
-		if(!is_array($product))
+		if (!is_array($product)) {
 			$product = $this->getProduct($product);
+		}
 		
-		$data = array(
+		$filter = array(
 			'category_ids' => array($product['category_id']),
 			'limit' => $limit,
+			'sort' => 'RAND()',
 		);
 		
-		$suggestions = $this->getProducts($data);
+		$suggestions = $this->getProducts($filter);
 		
-		$count = !empty($suggestions) ? count($suggestions) : 0;
-		
-		if ($count < $limit) {
-			$featured_products = $this->config->get('featured_product');
-		
-			if (!empty($featured_products)) {
-				$products = array();
-				
-				foreach ($featured_products as $product_id) {
-					if ($count++ >= $limit) break;
-					
-					$products[] = $this->getProduct($product_id);
-				}
-				
-				return $products;
-			}
-		}
+		return $suggestions;
 	}
 
 	public function getProductAttributes($product_id)
@@ -307,65 +293,132 @@ class Catalog_Model_Catalog_Product extends Model
 		
 		return $attribute_groups;
 	}
-			
+	
+	public function getProductOption($product_id, $product_option_id)
+	{
+		$product_option = $this->queryRow("SELECT * FROM " . DB_PREFIX . "product_option WHERE product_id = " . (int)$product_id . " AND product_option_id = " . (int)$product_option_id);
+		
+		if ($product_option) {
+			$product_option['product_option_values'] = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_option_value WHERE product_option_id = " . (int)$product_option_id);
+		}
+		
+		return $product_option;
+	}
+	
+	public function getProductOptionValue($product_id, $product_option_id, $product_option_value_id)
+	{
+		$product_option_value = $this->queryRow("SELECT * FROM " . DB_PREFIX . "product_option_value WHERE product_id = " . (int)$product_id . " AND product_option_id = " . (int)$product_option_id . " AND product_option_value_id = " . (int)$product_option_value_id);
+		
+		$this->translation->translate('product_option_value', $product_option_value_id, $product_option_value);
+		
+		return $product_option_value;
+	}
+	
 	public function getProductOptions($product_id)
 	{
-		$result = $this->query("SELECT * FROM " . DB_PREFIX . "product_option po LEFT JOIN `" . DB_PREFIX . "option` o ON (po.option_id = o.option_id) LEFT JOIN " . DB_PREFIX . "option_description od ON (o.option_id = od.option_id) WHERE po.product_id = '" . (int)$product_id . "' AND od.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY po.sort_order ASC, o.sort_order ASC");
+		$product_options = $this->cache->get("product.$product_id.options");
 		
-		foreach ($result->rows as &$product_option) {
-			$pov_result = $this->query("SELECT * FROM " . DB_PREFIX . "product_option_value pov LEFT JOIN " . DB_PREFIX . "option_value ov ON (pov.option_value_id = ov.option_value_id) LEFT JOIN " . DB_PREFIX . "option_value_description ovd ON (ov.option_value_id = ovd.option_value_id) WHERE pov.product_option_id = '" . (int)$product_option['product_option_id'] . "' AND ovd.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY ov.sort_order");
+		if (is_null($product_options)) {
+			$product_options = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_option WHERE product_id = " . (int)$product_id . " ORDER BY sort_order ASC");
 			
-			$product_option['product_option_value'] = $pov_result->rows;
+			$restrictions = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_option_value_restriction WHERE product_id = " . (int)$product_id . " AND quantity > 1");
+			
+			foreach ($product_options as &$product_option) {
+				$product_option_values = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_option_value WHERE product_option_id = " . (int)$product_option['product_option_id'] . " ORDER BY sort_order ASC");
+				
+				foreach ($product_option_values as &$product_option_value) {
+					$product_option_value['restrictions'] = array_search_key('product_option_value_id', $product_option_value['product_option_value_id'], $restrictions);
+				}
+				
+				$product_option['product_option_values'] = $product_option_values;
+			} unset($product_option);
+			
+			$this->cache->set("product.$product_id.options", $product_options);
+		}
+			
+		return $product_options;
+	}
+	
+	public function getFilteredProductOptions($data = array(), $select = '', $total = false)
+	{
+		//Select
+		if ($total) {
+			$select = 'COUNT(*) as total';
+		} elseif(empty($select)) {
+			$select = '*';
+		}
+		
+		//From
+		$from = DB_PREFIX . "product_option po";
+		
+		//Where
+		$where = "1";
+		
+		//Product IDs
+		if (!empty($data['product_option_ids'])) {
+			$where .= " AND po.product_option_id IN (" . implode(',', $data['product_option_ids']) . ")";
+		}
+		
+		//Product Name Search
+		if (!empty($data['name'])) {
+			$where .= " AND po.name like '%" . $this->escape($data['name']) . "%'";
+		}
+		
+		//Group By, Order By and Limit
+		if (!$total) {
+			$order = $this->extract_order($data);
+			$limit = $this->extract_limit($data);
+		} else {
+			$order = '';
+			$limit = '';
+		}
+		
+		//The Query
+		$query = "SELECT $select  FROM $from WHERE $where $order $limit";
+		
+		$result = $this->query($query);
+		
+		//Process Results
+		if ($total) {
+			return $result->row['total'];
 		}
 		
 		return $result->rows;
 	}
 	
-	public function getProductOptionValueRestrictions($product_id)
-	{
-		$language_id = $this->config->get('config_language_id');
-		
-		$result = $this->query("SELECT * FROM " . DB_PREFIX . "product_option_value_restriction WHERE product_id='" . (int)$product_id . "' AND quantity < '1'");
-		
-		$restrictions = array();
-		
-		foreach ($result->rows as $value) {
-			$restrictions[$value['option_value_id']][] = $value['restrict_option_value_id'];
-			$restrictions[$value['restrict_option_value_id']][] = $value['option_value_id'];
-		}
-		
-		foreach ($restrictions as &$r) {
-			$r = array_unique($r);
-		}
-		
-		return $restrictions;
-	}
 	
 	public function getProductDiscounts($product_id)
 	{
-		$customer_group_id = $this->customer->getCustomerGroupId();
-		
-		$result = $this->query("SELECT * FROM " . DB_PREFIX . "product_discount WHERE product_id = '" . (int)$product_id . "' AND customer_group_id = '" . (int)$customer_group_id . "' AND quantity > 0 AND ((date_start = '0000-00-00' OR date_start < NOW()) AND (date_end = '0000-00-00' OR date_end > NOW())) ORDER BY quantity ASC, priority ASC, price ASC");
-
-		return $result->rows;
+		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_discount WHERE product_id = " . (int)$product_id . " AND customer_group_id = " . (int)$this->customer->getCustomerGroupId() . " AND quantity > 0 AND (date_start <= NOW() AND (date_end = '" . DATETIME_ZERO . "' OR date_end > NOW())) ORDER BY quantity ASC, priority ASC, price ASC");
 	}
-		
+	
+	public function getProductSpecialPrice($product_id)
+	{
+		return $this->queryVar("SELECT price FROM " . DB_PREFIX . "product_special WHERE product_id = " . (int)$product_id . " AND customer_group_id = " . (int)$customer_group_id . " AND (date_start <= NOW() AND (date_end = '" . DATETIME_ZERO . "' OR date_end > NOW())) ORDER BY priority ASC, price ASC LIMIT 1");
+	}
+	
 	public function getProductImages($product_id)
 	{
 		return $this->queryColumn("SELECT image FROM " . DB_PREFIX . "product_image WHERE product_id = '" . (int)$product_id . "' ORDER BY sort_order ASC");
 	}
 	
+	public function getProductDownloads($product_id)
+	{
+		$downloads = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_to_download p2d LEFT JOIN " . DB_PREFIX . "download d ON (p2d.download_id = d.download_id) WHERE p2d.product_id = " . (int)$product_id);
+		
+		$this->translation->translate_all('download', 'download_id', $downloads);
+		
+		return $downloads;
+	}
+	
+	public function getProdutReward($product_id)
+	{
+		return (int)$this->queryVar("SELECT points FROM " . DB_PREFIX . "product_reward WHERE product_id = " . (int)$product_id . " AND customer_group_id = " . (int)$this->customer->getCustomerGroupId());
+	}
+	
 	public function getProductRelated($product_id)
 	{
-		$product_data = array();
-
-		$result = $this->query("SELECT * FROM " . DB_PREFIX . "product_related pr LEFT JOIN " . DB_PREFIX . "product p ON (pr.related_id = p.product_id) LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id) WHERE pr.product_id = '" . (int)$product_id . "' AND p.status = '1' AND p.date_available <= NOW() AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "'");
-		
-		foreach ($result->rows as $row) {
-			$product_data[$row['related_id']] = $this->getProduct($row['related_id']);
-		}
-		
-		return $product_data;
+		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_related pr LEFT JOIN " . DB_PREFIX . "product p ON (pr.related_id = p.product_id) LEFT JOIN " . DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id) WHERE pr.product_id = " . (int)$product_id . " AND p.status = 1 AND p.date_available <= NOW() AND p2s.store_id = " . (int)$this->config->get('config_store_id'));
 	}
 	
 	public function getProductTags($product_id)
@@ -380,9 +433,7 @@ class Catalog_Model_Catalog_Product extends Model
 	
 	public function getCategories($product_id)
 	{
-		$result = $this->query("SELECT * FROM " . DB_PREFIX . "product_to_category WHERE product_id = '" . (int)$product_id . "'");
-		
-		return $result->rows;
+		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_to_category WHERE product_id = " . (int)$product_id);
 	}
 	
 	public function getAttributeList($attribute_group_id)
@@ -403,26 +454,6 @@ class Catalog_Model_Catalog_Product extends Model
 		}
 
 		return $attributes;
-	}
-	
-	public function getOptionList($option_id)
-	{
-		$options = $this->cache->get("option.option_list.$option_id");
-		
-		if (!$options) {
-			$lang_id = $this->config->get('config_language_id');
-			$result = $this->query("SELECT ovd.option_value_id, ovd.name FROM " . DB_PREFIX . "option_value_description ovd JOIN " . DB_PREFIX . "option_value ov ON (ovd.option_value_id=ov.option_value_id AND ov.sort_order >= 0) WHERE ovd.option_id='$option_id' AND ovd.language_id='$lang_id' ORDER BY ovd.name");
-			
-			$options = array();
-			if ($result->num_rows) {
-				foreach ($result->rows as $cat) {
-					$options[$cat['option_value_id']] = $cat['name'];
-				}
-			}
-			
-			$this->cache->set("option.option_list.$option_id",$options);
-		}
-		return $options;
 	}
 	
 	public function getTotalProducts($data = array()) {
