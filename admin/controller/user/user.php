@@ -67,8 +67,8 @@ class Admin_Controller_User_User extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (isset($_POST['selected']) && $this->validateDelete()) {
-				foreach ($_POST['selected'] as $user_id) {
+		if (isset($_GET['selected']) && $this->validateDelete()) {
+				foreach ($_GET['selected'] as $user_id) {
 				$this->Model_User_User->deleteUser($user_id);
 			}
 
@@ -128,7 +128,7 @@ class Admin_Controller_User_User extends Controller
 			
 			$result['status']	= $result['status'] ? $this->_('text_enabled') : $this->_('text_disabled');
 			$result['date_added'] = $this->date->format($result['date_added'], $this->language->getInfo('date_format_short'));
-			$result['selected']	= isset($_POST['selected']) && in_array($result['user_id'], $_POST['selected']);
+			$result['selected']	= isset($_GET['selected']) && in_array($result['user_id'], $_GET['selected']);
 			$result['action']	= $action;
 		}unset($result);
 		
@@ -297,7 +297,7 @@ class Admin_Controller_User_User extends Controller
 				$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		foreach ($_POST['selected'] as $user_id) {
+		foreach ($_GET['selected'] as $user_id) {
 			if ($this->user->getId() == $user_id) {
 				$this->error['warning'] = $this->_('error_account');
 			}

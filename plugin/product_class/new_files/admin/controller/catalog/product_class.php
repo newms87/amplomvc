@@ -53,8 +53,8 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 	{
 		$this->language->load('catalog/product_class');
 		
-		if (!empty($_POST['selected']) && isset($_GET['action'])) {
-			foreach ($_POST['selected'] as $product_class_id) {
+		if (!empty($_GET['selected']) && isset($_GET['action'])) {
+			foreach ($_GET['selected'] as $product_class_id) {
 				switch($_GET['action']){
 					case 'delete':
 						$this->Model_Catalog_ProductClass->deleteProductClass($product_class_id);
@@ -168,7 +168,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 			),
 		);
 		
-		$this->data['batch_update'] = html_entity_decode($this->url->link('catalog/product_class/batch_update', $url_query));
+		$this->data['batch_update'] = 'catalog/product_class/batch_update';
 		
 		//Render Limit Menu
 		$this->data['limits'] = $this->sort->render_limit();

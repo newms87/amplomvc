@@ -77,6 +77,44 @@ class Builder extends Library
 		}
 	}
 	
+	public function batch_action($selector, $actions, $path)
+	{
+		foreach ($actions as $key => &$action) {
+			$action['attrs'] = '';
+			
+			//All keys beginning with '#' are html tag attributes
+			foreach ($action as $attr => $val) {
+				if (strpos($attr, '#') === 0) {
+					$action['attrs'] .= "$attr='$val' ";
+				}
+			}
+		
+			if (!isset($action['default'])) {
+				$action['default'] = '';
+			}
+				
+			if (!isset($action['key'])) {
+				$action['key'] = $key;
+			}
+		}
+		
+		$data = array(
+			'selector' => $selector,
+			'actions' => $actions,
+			'url' => $this->url->link($path, 'action=_action_&action_value=_action_value_&' . $this->url->getQueryExclude('action', 'action_value', 'selected')),
+		);
+		
+		$data += $this->language->data;
+		
+		//Load Batch Action template
+		$template = new Template($this->registry);
+		
+		$template->load('block/widget/batch_action');
+		$template->setData($data);
+		
+		return $template->render();
+	}
+	
 	//TODO: Probably get rid of this...
 	public function finalSale()
 	{
@@ -176,45 +214,6 @@ class Builder extends Library
 		return $html;
 	}
 
-	function build_batch_actions($form, $actions, $url)
-	{
-		foreach ($actions as $key => &$action) {
-			$action['attrs'] = '';
-			
-			//All keys beginning with '#' are html tag attributes
-			foreach ($action as $attr => $val) {
-				if (strpos($attr, '#') === 0) {
-					$action['attrs'] .= "$attr='$val' ";
-				}
-			}
-		
-			if (!isset($action['default'])) {
-				$action['default'] = '';
-			}
-				
-			if (!isset($action['key'])) {
-				$action['key'] = $key;
-			}
-		}
-		
-		$data = array(
-			'form' => $form,
-			'text_batch_action' => $this->_('text_batch_action'),
-			'actions' => $actions,
-			'url' => $url,
-			'button_batch_update' => $this->_('button_batch_update'),
-		);
-		
-		//Load Batch Action template
-		$template = new Template($this->registry);
-		
-		$template->load('block/widget/batch_action');
-		$template->setData($data);
-		
-		return $template->render();
-	}
-	
-	
 	function build($type, $data, $name, $select=null,$attr_list = array(), $escape_quotes = false){
 		//This is for select option groups
 		$opt_group_active = false;

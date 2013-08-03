@@ -28,12 +28,12 @@ RewriteRule ^googlebase.xml$ index.php?route=feed/google_base [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_URI} !.*\.(ico|gif|jpg|jpeg|png|js|css)
-RewriteRule ^admin([^?]*) admin/index.php?_route_=$0 [L,QSA]
+RewriteRule ^admin([^?]*) admin/index.php?_path_=$0 [L,QSA]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_URI} !.*\.(ico|gif|jpg|jpeg|png|js|css)
-RewriteRule ^([^?]*) index.php?_route_=$1 [L,QSA]
+RewriteRule ^([^?]*) index.php?_path_=$1 [L,QSA]
 
 
 

@@ -55,9 +55,9 @@ class Admin_Controller_Catalog_Option extends Controller
 	{
 		$this->language->load('catalog/option');
 		
-		if (!empty($_POST['selected']) && isset($_GET['action'])) {
+		if (!empty($_GET['selected']) && isset($_GET['action'])) {
 			if ($_GET['action'] !== 'delete' || $this->validateDelete()) {
-				foreach ($_POST['selected'] as $option_id) {
+				foreach ($_GET['selected'] as $option_id) {
 					switch($_GET['action']){
 						case 'delete':
 							$this->Model_Catalog_Option->deleteOption($option_id);
@@ -157,7 +157,7 @@ class Admin_Controller_Catalog_Option extends Controller
 			),
 		);
 		
-		$this->data['batch_update'] = html_entity_decode($this->url->link('catalog/option/batch_update', $url_query));
+		$this->data['batch_update'] = 'catalog/option/batch_update';
 		
 		//Render Limit Menu
 		$this->data['limits'] = $this->sort->render_limit();
@@ -291,8 +291,8 @@ class Admin_Controller_Catalog_Option extends Controller
 		
 		$option_ids = array();
 		
-		if (!empty($_POST['selected'])) {
-			$option_ids += $_POST['selected'];
+		if (!empty($_GET['selected'])) {
+			$option_ids += $_GET['selected'];
 		}
 		
 		if (!empty($_GET['option_id'])) {

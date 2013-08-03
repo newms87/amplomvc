@@ -80,9 +80,9 @@ class Admin_Controller_Catalog_Information extends Controller
 	{
 		$this->language->load('catalog/information');
 		
-		if (!empty($_POST['selected']) && isset($_GET['action'])) {
+		if (!empty($_GET['selected']) && isset($_GET['action'])) {
 			if ($_GET['action'] !== 'delete' || $this->validateDelete()) {
-				foreach ($_POST['selected'] as $information_id) {
+				foreach ($_GET['selected'] as $information_id) {
 					switch($_GET['action']){
 						case 'enable':
 							$this->Model_Catalog_Information->updateField($information_id, array('status' => 1));
@@ -211,7 +211,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			),
 		);
 		
-		$this->data['batch_update'] = html_entity_decode($this->url->link('catalog/information/batch_update', $url_query));
+		$this->data['batch_update'] = 'catalog/information/batch_update';
 		
 		//Render Limit Menu
 		$this->data['limits'] = $this->sort->render_limit();
@@ -259,7 +259,7 @@ class Admin_Controller_Catalog_Information extends Controller
 		$defaults = array(
 			'title' => '',
 			'description' => '',
-			'keyword' => '',
+			'alias' => '',
 			'stores' => array(0),
 			'layouts' => array(),
 			'sort_order' => 0,
@@ -356,8 +356,8 @@ class Admin_Controller_Catalog_Information extends Controller
 
 		$informations_ids = array();
 		
-		if (!empty($_POST['selected'])) {
-			$information_ids = $_POST['selected'];
+		if (!empty($_GET['selected'])) {
+			$information_ids = $_GET['selected'];
 		} elseif (!empty($_GET['information_id'])) {
 			$information_ids[] = $_GET['information_id'];
 		}

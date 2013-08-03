@@ -1,45 +1,32 @@
 <?php
 class Admin_Controller_Setting_UrlAlias extends Controller
 {
-
 	public function index()
 	{
 		$this->language->load('setting/url_alias');
 
-		$this->document->setTitle($this->_('heading_title'));
-		
 		$this->getList();
 	}
-			
-  	public function insert()
-  	{
-		$this->language->load('setting/url_alias');
-
-		$this->document->setTitle($this->_('heading_title'));
-		
-		if ($this->request->isPost() && $this->validateForm()) {
-			$store_id = $this->Model_Setting_UrlAlias->addUrlAlias($_POST);
-			
-			$this->message->add('success', $this->_('text_success'));
-			
-			$this->url->redirect($this->url->link('setting/url_alias'));
-		}
 	
-		$this->getForm();
-  	}
-
   	public function update()
   	{
 		$this->language->load('setting/url_alias');
 
-		$this->document->setTitle($this->_('heading_title'));
-		
 		if ($this->request->isPost() && $this->validateForm()) {
-			$this->Model_Setting_UrlAlias->editUrlAlias($_GET['url_alias_id'], $_POST);
+			//Insert
+			if (empty($_GET['url_alias_id'])) {
+				$this->Model_Setting_UrlAlias->addUrlAlias($_POST);
+			}
+			//Update
+			else {
+				$this->Model_Setting_UrlAlias->editUrlAlias($_GET['url_alias_id'], $_POST);
+			}
 			
-			$this->message->add('success', $this->_('text_success'));
-			
-			$this->url->redirect($this->url->link('setting/url_alias', 'store_id=' . $_GET['store_id']));
+			if (!$this->message->error_set()) {
+				$this->message->add('success', $this->_('text_success'));
+				
+				$this->url->redirect($this->url->link('setting/url_alias', 'store_id=' . $_GET['store_id']));
+			}
 		}
 
 		$this->getForm();
@@ -49,53 +36,176 @@ class Admin_Controller_Setting_UrlAlias extends Controller
   	{
 		$this->language->load('setting/url_alias');
 
-		$this->document->setTitle($this->_('heading_title'));
-		
-		if (isset($_POST['selected']) && $this->validateDelete()) {
-			foreach ($_POST['selected'] as $url_alias_id) {
-				$this->Model_Setting_UrlAlias->deleteUrlAlias($url_alias_id);
-			}
+		if (!empty($_POST['url_alias_id']) && $this->validateDelete()) {
+			$this->Model_Setting_UrlAlias->deleteUrlAlias($url_alias_id);
 
-			$this->message->add('success', $this->_('text_success'));
-			
-			$this->url->redirect($this->url->link('setting/url_alias'));
+			if (!$this->message->error_set()) {
+				$this->message->add('success', $this->_('text_success'));
+				
+				$this->url->redirect($this->url->link('setting/url_alias'));
+			}
 		}
 
 		$this->getList();
   	}
 	
+	public function batch_update()
+	{
+		$this->language->load('setting/url_alias');
+		
+		if (!empty($_GET['selected']) && isset($_GET['action'])) {
+			foreach ($_GET['selected'] as $url_alias_id) {
+				switch($_GET['action']){
+					case 'enable':
+						$this->Model_Setting_UrlAlias->updateUrlAlias($url_alias_id, array('status' => 1));
+						break;
+					case 'disable':
+						$this->Model_Setting_UrlAlias->updateUrlAlias($url_alias_id, array('status' => 0));
+						break;
+					case 'delete':
+						$this->Model_Setting_UrlAlias->deleteUrlAlias($url_alias_id);
+						break;
+				}
+				
+				if ($this->error) {
+					break;
+				}
+			}
+			
+			if (!$this->error && !$this->message->error_set()) {
+				$this->message->add('success',$this->_('text_success'));
+				
+				$this->url->redirect($this->url->link('setting/url_alias', $this->url->getQueryExclude('action')));
+			}
+		}
+
+		$this->getList();
+	}
+	
 	private function getList()
 	{
+		//Page Head
+		$this->document->setTitle($this->_('heading_title'));
+		
+		//Template
 		$this->template->load('setting/url_alias_list');
 
+		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/url_alias'));
 		
-		$this->data['insert'] = $this->url->link('setting/url_alias/insert');
+		//The Table Columns
+		$columns = array();
+
+		$columns['alias'] = array(
+			'type' => 'text',
+			'display_name' => $this->_('column_name'),
+			'filter' => true,
+			'sortable' => true,
+		);
+		
+		$columns['alias'] = array(
+			'type' => 'text',
+			'display_name' => $this->_('column_name'),
+			'filter' => true,
+			'sortable' => true,
+		);
+		
+		$columns['alias'] = array(
+			'type' => 'text',
+			'display_name' => $this->_('column_name'),
+			'filter' => true,
+			'sortable' => true,
+		);
+		
+		$columns['store_id'] = array(
+			'type' => 'select',
+			'display_name' => $this->_('column_store'),
+			'filter' => true,
+			'build_config' => array('store_id', 'name'),
+			'build_data' => $this->Model_Setting_Store->getStores(),
+			'sortable' => false,
+		);
+		
+		$columns['status'] = array(
+			'type' => 'select',
+			'display_name' => $this->_('column_status'),
+			'filter' => true,
+			'build_data' => $this->_('data_statuses'),
+			'sortable' => true,
+		);
+		
+		//Get Sorted / Filtered Data
+		$sort = $this->sort->getQueryDefaults('alias', 'ASC');
+		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
+		
+		$url_alias_total = $this->Model_Setting_UrlAlias->getTotalUrlAliases($filter);
+		$url_aliases = $this->Model_Setting_UrlAlias->getUrlAliases($sort + $filter);
+		
+		$url_query = $this->url->getQueryExclude('url_alias_id');
+		
+		foreach ($url_aliases as &$alias) {
+			$url_alias['actions'] = array(
+				'edit' => array(
+					'text' => $this->_('text_edit'),
+					'href' => $this->url->link('setting/url_alias/update', 'url_alias_id=' . $url_alias['url_alias_id'])
+				),
+				'delete' => array(
+					'text' => $this->_('text_delete'),
+					'href' => $this->url->link('setting/url_alias/delete', 'url_alias_id=' . $url_alias['url_alias_id'] . '&' . $url_query)
+				)
+			);
+		} unset($alias);
+		
+		//Build The Table
+		$tt_data = array(
+			'row_id'		=> 'url_alias_id',
+		);
+		
+		$this->table->init();
+		$this->table->setTemplate('table/list_view');
+		$this->table->setColumns($columns);
+		$this->table->setRows($url_aliases);
+		$this->table->setTemplateData($tt_data);
+		$this->table->mapAttribute('filter_value', $filter);
+		
+		$this->data['list_view'] = $this->table->render();
+		
+		//Batch Actions
+		$this->data['batch_actions'] = array(
+			'enable'	=> array(
+				'label' => $this->_('text_enable')
+			),
+			'disable'=>	array(
+				'label' => $this->_('text_disable'),
+			),
+			'delete' => array(
+				'label' => $this->_('text_delete'),
+			),
+		);
+		
+		$this->data['batch_update'] = 'setting/url_alias/batch_update';
+		
+		//Render Limit Menu
+		$this->data['limits'] = $this->sort->render_limit();
+		
+		//Pagination
+		$this->pagination->init();
+		$this->pagination->total = $url_alias_total;
+		
+		$this->data['pagination'] = $this->pagination->render();
+		
+		//Action Buttons
+		$this->data['insert'] = $this->url->link('setting/url_alias/update');
 		$this->data['delete'] = $this->url->link('setting/url_alias/delete');
 		
-		$url = $this->get_url(array('page'));
-		
-		$aliases = $this->Model_Setting_UrlAlias->getUrlAliases();
-
-		foreach ($aliases as &$alias) {
-			$alias['action'] = array(
-				'text' => $this->_('text_edit'),
-				'href' => $this->url->link('setting/url_alias/update', 'url_alias_id=' . $alias['url_alias_id'])
-			);
-			
-			$alias['selected'] = isset($_POST['selected']) && in_array($result['url_alias_id'], $_POST['selected']);
-		}
-		
-		$this->data['aliases'] = $aliases;
-		
-		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
-	
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
-				
+		
+		//Render
 		$this->response->setOutput($this->render());
 	}
 	
@@ -168,15 +278,5 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 		}
 		
 		return $this->error ? false : true;
-	}
-	
-	private function get_url($filters=null)
-	{
-		$url = '';
-		$filters = $filters?$filters:array('sort', 'order', 'page');
-		foreach($filters as $f)
-			if (isset($_GET[$f]))
-				$url .= "&$f=" . $_GET[$f];
-		return $url;
 	}
 }

@@ -52,8 +52,8 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (isset($_POST['selected']) && $this->validateDelete()) {
-			foreach ($_POST['selected'] as $geo_zone_id) {
+		if (isset($_GET['selected']) && $this->validateDelete()) {
+			foreach ($_GET['selected'] as $geo_zone_id) {
 				$this->Model_Localisation_GeoZone->deleteGeoZone($geo_zone_id);
 			}
 						
@@ -130,7 +130,7 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 				'geo_zone_id' => $result['geo_zone_id'],
 				'name'		=> $result['name'],
 				'description' => $result['description'],
-				'selected'	=> isset($_POST['selected']) && in_array($result['geo_zone_id'], $_POST['selected']),
+				'selected'	=> isset($_GET['selected']) && in_array($result['geo_zone_id'], $_GET['selected']),
 				'action'		=> $action
 			);
 		}
@@ -270,7 +270,7 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		foreach ($_POST['selected'] as $geo_zone_id) {
+		foreach ($_GET['selected'] as $geo_zone_id) {
 			$tax_rate_total = $this->Model_Localisation_TaxRate->getTotalTaxRatesByGeoZoneId($geo_zone_id);
 
 			if ($tax_rate_total) {

@@ -1072,12 +1072,10 @@ a.button:active, input.button:active {
 	-webkit-transform-style: preserve-3d;
 	   -moz-transform-style: preserve-3d;
 	    -ms-transform-style: preserve-3d;
-	     -o-transform-style: preserve-3d;
 	        transform-style: preserve-3d;
 	-webkit-user-select: none;
 	 -khtml-user-select: none;
 		-moz-user-select: none;
-		  -o-user-select: none;
 			  user-select: none;
 }
 
@@ -1105,18 +1103,15 @@ a.button:active, input.button:active {
 	-webkit-transform-origin: 70% 80%;
    	-moz-transform-origin: 70% 80%;
    	 -ms-transform-origin: 70% 80%;
-   	  -o-transform-origin: 70% 80%;
 			  transform-origin: 70% 80%;
 	-webkit-transform: scale3d(.1,.1,0);
       -moz-transform: scale3d(.1,.1,0);
        -ms-transform: scale3d(.1,.1,0);
-        -o-transform: scale3d(.1,.1,0);
            transform: scale3d(.1,.1,0);
            
 	-webkit-transition: -webkit-transform .5s ease-out, z-index 0s linear .5s;
 		-moz-transition: -moz-transform .5s ease-out, z-index 0s linear .5s;
 		 -ms-transition: -ms-transform .5s ease-out, z-index 0s linear .5s;
-		  -o-transition: -o-transform .5s ease-out, z-index 0s linear .5s;
 			  transition: transform .5s ease-out, z-index 0s linear .5s;
 }
 
@@ -1126,13 +1121,11 @@ a.button:active, input.button:active {
 	-webkit-transition: -webkit-transform .5s ease-out;
 		-moz-transition: -moz-transform .5s ease-out;
 		 -ms-transition: -ms-transform .5s ease-out;
-		  -o-transition: -o-transform .5s ease-out;
 			  transition: transform .5s ease-out;
 	
 	-webkit-transform: scale3d(1,1,1);
       -moz-transform: scale3d(1,1,1);
        -ms-transform: scale3d(1,1,1);
-        -o-transform: scale3d(1,1,1);
            transform: scale3d(1,1,1);
 }
 
@@ -1352,10 +1345,9 @@ a.button:active, input.button:active {
 }
 
 .product-info .product_description.overflowed{
-	-webkit-transition: all 0s linear 1s, height .5s linear, box-shadow 1s;
-		-moz-transition: all 0s linear 1s, height .5s linear, box-shadow 1s;
-		 -ms-transition: all 0s linear 1s, height .5s linear, box-shadow 1s;
-		  -o-transition: all 0s linear 1s, height .5s linear, box-shadow 1s;
+	-webkit-transition: all 0s linear 1s, max-height .5s linear, box-shadow 1s;
+		-moz-transition: all 0s linear 1s, max-height .5s linear, box-shadow 1s;
+		 -ms-transition: all 0s linear 1s, max-height .5s linear, box-shadow 1s;
 			  transition: all 0s linear 1s, max-height .5s linear, box-shadow 1s;
 }
 
@@ -1365,10 +1357,9 @@ a.button:active, input.button:active {
 	z-index: 1000;
 	max-height: 600px;
 	
-	-webkit-transition: height .5s ease-in .5s, box-shadow .6s;
-		-moz-transition: height .5s ease-in .5s, box-shadow .6s;
-		 -ms-transition: height .5s ease-in .5s, box-shadow .6s;
-		  -o-transition: height .5s ease-in .5s, box-shadow .6s;
+	-webkit-transition: max-height .5s ease-in .5s, box-shadow .6s;
+		-moz-transition: max-height .5s ease-in .5s, box-shadow .6s;
+		 -ms-transition: max-height .5s ease-in .5s, box-shadow .6s;
 			  transition: max-height .5s ease-in .5s, box-shadow .6s;
 }
 
@@ -1376,10 +1367,9 @@ a.button:active, input.button:active {
 	padding-right:1%;
 	max-height: 600px;
 	
-	-webkit-transition: width .5s ease-in 1s;
-		-moz-transition: width .5s ease-in 1s;
-		 -ms-transition: width .5s ease-in 1s;
-		  -o-transition: width .5s ease-in 1s;
+	-webkit-transition: width .5s ease-in 1s, padding .5s ease-in 1s;
+		-moz-transition: width .5s ease-in 1s, padding .5s ease-in 1s;
+		 -ms-transition: width .5s ease-in 1s, padding .5s ease-in 1s;
 			  transition: width .5s ease-in 1s, padding .5s ease-in 1s;
 }
 
@@ -2652,20 +2642,6 @@ table.form_single_column select{
 	display:inline-block;
 }
 
-#countdown_msg{
-	white-space:nowrap;
-	overflow:visible;
-}
-#countdown_msg .fs_num{
-	padding: 0 5px;
-}
-
-#countdown_msg.ended{
-	display:none;
-}
-.product_info .flash_countdown{
-	font-size:14px;
-}
 .more_details + .product_info_price{
 	width:100%;
 	text-align:center;
@@ -2687,8 +2663,6 @@ table.form_single_column select{
 	background: #f2f2f2;
 	background-image: -ms-linear-gradient(top, #ffffff, #f2f2f2); /* IE10 */
 	background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2); /* Firefox */
-	background-image: -o-linear-gradient(top, #ffffff, #f2f2f2); /* Opera */
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#f2f2f2)); /* old Webkit */
 	background-image: -webkit-linear-gradient(top, #ffffff, #f2f2f2); /* new Webkit */
 	background-image: linear-gradient(top, #ffffff, #f2f2f2); /* proposed W3C Markup */
 	
@@ -2713,7 +2687,6 @@ table.form_single_column select{
 	background: #e2e2e2;
 	background-image: -ms-linear-gradient(top, #f2f2f2, #ffffff); /* IE10 */
 	background-image: -moz-linear-gradient(top,#f2f2f2, #ffffff); /* Firefox */
-	background-image: -o-linear-gradient(top, #f2f2f2, #ffffff); /* Opera */
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#ffffff)); /* old Webkit */
 	background-image: -webkit-linear-gradient(top, #f2f2f2, #ffffff); /* new Webkit */
 	background-image: linear-gradient(top, #f2f2f2, #ffffff); /* proposed W3C Markup */
@@ -2849,13 +2822,11 @@ form .set_default_address input[type="radio"]{
 	-webkit-filter: grayscale(100%);
 		-moz-filter: grayscale(100%);
 		 -ms-filter: grayscale(100%);
-		  -o-filter: grayscale(100%);
 			  filter: grayscale(100%);
 	
 	-webkit-transition: all .5s linear;
 		-moz-transition: all .5s linear;
 		 -ms-transition: all .5s linear;
-		  -o-transition: all .5s linear;
 			  transition: all .5s linear;
 	
 	-webkit-backface-visibility: hidden;
@@ -2867,7 +2838,6 @@ form .set_default_address input[type="radio"]{
 	-webkit-filter: grayscale(0%);
 		-moz-filter: grayscale(0%);
 		 -ms-filter: grayscale(0%);
-		  -o-filter: grayscale(0%);
 			  filter: grayscale(0%);
 }
 

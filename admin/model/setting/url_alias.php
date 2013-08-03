@@ -3,35 +3,22 @@ class Admin_Model_Setting_UrlAlias extends Model
 {
 	public function addUrlAlias($data)
 	{
-		$data['status'] = isset($data['status'])?$data['status']:1;
-		$data['keyword'] = $this->format_url($data['keyword']);
+		$data['alias'] = $this->url->format($data['alias']);
 		
-		if (!isset($data['store_id']) || (empty($data['store_id']) && $data['store_id'] !== 0)) {
-			$data['store_id'] = -1;
+		if (empty($data['store_id'])) {
+			$data['store_id'] = 0;
 		}
 		
-		$this->insert('url_alias', $data);
+		return $this->insert('url_alias', $data);
 	}
 	
 	public function editUrlAlias($url_alias_id, $data)
 	{
-		if (isset($data['keyword'])) {
-			$data['keyword'] = $this->format_url($data['keyword']);
-		}
-		
-		if (!isset($data['store_id']) || (!$data['store_id'] && $data['store_id'] !== 0)) {
-			$data['store_id'] = -1;
+		if (!empty($data['alias'])) {
+			$data['alias'] = $this->url->format($data['alias']);
 		}
 		
 		$this->update('url_alias', $data, $url_alias_id);
-	}
-	
-	public function format_url($url)
-	{
-		$l = preg_replace("/[^A-Za-z0-9\/\\\\]+/","-",strtolower($url));
-		$l = preg_replace("/(^-)|(-$)/",'',$l);
-		$l = preg_replace("/[\/\\\\]-/","/",$l);
-		return $l;
 	}
 	
 	public function deleteUrlAlias($url_alias_id)
@@ -39,35 +26,32 @@ class Admin_Model_Setting_UrlAlias extends Model
 		$this->delete('url_alias', $url_alias_id);
 	}
 	
-	public function deleteUrlAliasByRouteQuery($route, $query)
-	{
-		$this->delete('url_alias', array('route'=>$route, 'query'=>$query));
-	}
-	
 	public function getUrlAlias($url_alias_id)
 	{
-		$query = $this->get("url_alias", '*', $url_alias_id);
-		
-		return $query->row;
+		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "url_alias WHERE url_alias_id = " . (int)$url_alias_id);
 	}
 	
-	public function getUrlAliasByKeyword($keyword)
+	public function getUrlAliasByAlias($alias)
 	{
-		$query = $this->get("url_alias", '*', array('keyword' => $keyword));
-		
-		return $query->row;
+		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "url_alias WHERE alias = " . (int)$url_alias_id);
 	}
 	
-	public function getUrlAliasByRouteQuery($route, $query = '')
+	public function getUniqueAlias($alias, $path, $query = '', $store_id = 0)
 	{
-		$query = $this->get("url_alias", '*', array('route' => $route, 'query' => $query));
+		$alias = $this->escape($this->url->format($alias));
 		
-		return $query->row;
+		$count = $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "url_alias WHERE alias like '$alias%' AND !(path = '" . $this->escape($path) . "' AND query = '" . $this->escape($query) . "' AND store_id = " . (int)$store_id . ")");
+		
+		if ($count) {
+			$alias .= '-' . $count;
+		}
+
+		return $alias;
 	}
 	
 	public function getUrlAliases()
 	{
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "url_alias ORDER BY keyword");
+		$query = $this->query("SELECT * FROM " . DB_PREFIX . "url_alias ORDER BY alias");
 		
 		return $query->rows;
 	}

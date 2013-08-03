@@ -80,8 +80,8 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (isset($_POST['selected']) && $this->validateDelete()) {
-			foreach ($_POST['selected'] as $customer_ip_blacklist_id) {
+		if (isset($_GET['selected']) && $this->validateDelete()) {
+			foreach ($_GET['selected'] as $customer_ip_blacklist_id) {
 				$this->Model_Sale_CustomerBlacklist->deleteCustomerBlacklist($customer_ip_blacklist_id);
 			}
 			
@@ -175,7 +175,7 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 				'ip'							=> $result['ip'],
 				'total'						=> $result['total'],
 				'customer'					=> $this->url->link('sale/customer', 'filter_ip=' . $result['ip']),
-				'selected'					=> isset($_POST['selected']) && in_array($result['customer_ip_blacklist_id'], $_POST['selected']),
+				'selected'					=> isset($_GET['selected']) && in_array($result['customer_ip_blacklist_id'], $_GET['selected']),
 				'action'						=> $action
 			);
 		}

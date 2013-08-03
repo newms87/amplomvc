@@ -18,7 +18,7 @@
 <?= $scripts; ?>
 
 </head>
-<body>
+<body class="<?= $body_class; ?>">
 <div id="container">
 <div id="header">
 	<div class="div1">

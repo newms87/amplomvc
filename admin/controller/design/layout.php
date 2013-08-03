@@ -53,8 +53,8 @@ class Admin_Controller_Design_Layout extends Controller
 	{
 		$this->language->load('catalog/category');
 		
-		if (!empty($_POST['selected']) && isset($_GET['action'])) {
-			foreach ($_POST['selected'] as $category_id) {
+		if (!empty($_GET['selected']) && isset($_GET['action'])) {
+			foreach ($_GET['selected'] as $category_id) {
 				switch($_GET['action']){
 					case 'enable':
 						$this->Model_Catalog_Category->updateField($category_id, array('status' => 1));
@@ -169,7 +169,7 @@ class Admin_Controller_Design_Layout extends Controller
 			),
 		);
 		
-		$this->data['batch_update'] = html_entity_decode($this->url->link('design/layout/batch_update', $url_query));
+		$this->data['batch_update'] = 'design/layout/batch_update';
 		
 		//Render Limit Menu
 		$this->data['limits'] = $this->sort->render_limit();
@@ -266,7 +266,7 @@ class Admin_Controller_Design_Layout extends Controller
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		foreach ($_POST['selected'] as $layout_id) {
+		foreach ($_GET['selected'] as $layout_id) {
 			if ($this->config->get('config_default_layout_id') == $layout_id) {
 				$this->error['warning'] = $this->_('error_default');
 			}

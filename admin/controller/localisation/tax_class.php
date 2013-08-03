@@ -80,8 +80,8 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
  		
-		if (isset($_POST['selected']) && $this->validateDelete()) {
-			foreach ($_POST['selected'] as $tax_class_id) {
+		if (isset($_GET['selected']) && $this->validateDelete()) {
+			foreach ($_GET['selected'] as $tax_class_id) {
 				$this->Model_Localisation_Taxclass->deleteTaxClass($tax_class_id);
 			}
 			
@@ -173,7 +173,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 			$this->data['tax_classes'][] = array(
 				'tax_class_id' => $result['tax_class_id'],
 				'title'		=> $result['title'],
-				'selected'	=> isset($_POST['selected']) && in_array($result['tax_class_id'], $_POST['selected']),
+				'selected'	=> isset($_GET['selected']) && in_array($result['tax_class_id'], $_GET['selected']),
 				'action'		=> $action
 			);
 		}
@@ -339,7 +339,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		foreach ($_POST['selected'] as $tax_class_id) {
+		foreach ($_GET['selected'] as $tax_class_id) {
 			$data = array(
 				'tax_class_id' => $tax_class_id,
 			);

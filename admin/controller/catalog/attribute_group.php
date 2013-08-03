@@ -53,8 +53,8 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 	{
 		$this->language->load('catalog/attribute_group');
 		
-		if (!empty($_POST['selected']) && isset($_GET['action'])) {
-			foreach ($_POST['selected'] as $attribute_group_id) {
+		if (!empty($_GET['selected']) && isset($_GET['action'])) {
+			foreach ($_GET['selected'] as $attribute_group_id) {
 				switch($_GET['action']){
 					case 'delete':
 						if ($this->validateDelete()) {
@@ -162,7 +162,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 			),
 		);
 		
-		$this->data['batch_update'] = html_entity_decode($this->url->link('catalog/attribute_group/batch_update', $url_query));
+		$this->data['batch_update'] = 'catalog/attribute_group/batch_update';
 		
 		//Render Limit Menu
 		$this->data['limits'] = $this->sort->render_limit();
@@ -296,8 +296,8 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 			$attribute_group_ids[] = $_GET['attribute_group_id'];
 		}
 		
-		if (!empty($_POST['selected'])) {
-			$attribute_group_ids = array_merge($_POST['selected'], $attribute_group_ids);
+		if (!empty($_GET['selected'])) {
+			$attribute_group_ids = array_merge($_GET['selected'], $attribute_group_ids);
 		}
 		
 		foreach ($attribute_group_ids as $attribute_group_id) {
@@ -313,6 +313,9 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 	
 	public function autocomplete()
 	{
+		//Language
+		$this->language->load('catalog/attribute_group');
+		
 		//Sort / Filter
 		$sort = $this->sort->getQueryDefaults('name', 'ASC', $this->config->get('config_autocomplete_limit'));
 		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
@@ -328,6 +331,12 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 			$attribute['label'] = $attribute[$label];
 			$attribute['value'] = $attribute[$value];
 		} unset($attribute);
+		
+		$attributes[] = array(
+			'label' => $this->_("text_add_attribute_autocomplete"),
+			'value' => false,
+			'href' => $this->url->link('catalog/attribute_group/update'),
+		);
 		
 		//JSON response
 		$this->response->setOutput(json_encode($attributes));

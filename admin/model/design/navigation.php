@@ -417,6 +417,17 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 3,
 					'status'			=> 1,
 				),
+				
+					'catalog_products_insert' => array(
+						'display_name'	=> 'Add Product',
+						'name'			=> 'catalog_products_insert',
+						'title'			=> '',
+						'href'			=> 'catalog/product/update',
+						'query'			=> '',
+						'parent_id'		=> 'catalog_products',
+						'sort_order'	=> 0,
+						'status'			=> 1,
+					),
 	
 				'catalog_designers' => array(
 					'display_name'	=> 'Designers',

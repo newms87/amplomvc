@@ -47,7 +47,7 @@ class Admin_Controller_Common_Login extends Controller
 		
 		//If trying to access an admin page, redirect after login
 		if (!isset($_GET['redirect'])) {
-			$route = $this->url->route();
+			$route = $this->url->getPath();
 			
 			if ($route) {
 				$not_allowed = array(

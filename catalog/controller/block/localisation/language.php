@@ -6,7 +6,7 @@ class Catalog_Controller_Block_Localisation_Language extends Controller
 		$this->template->load('block/localisation/language');
 		$this->language->load('block/localisation/language');
 		
-		$this->data['action'] = $this->url->link($this->url->route(), $this->url->getQueryExclude('language_code') . '&language_code=');
+		$this->data['action'] = $this->url->link($this->url->getPath(), $this->url->getQueryExclude('language_code') . '&language_code=');
 
 		$languages = $this->language->getLanguages();
 		

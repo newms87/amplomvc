@@ -80,8 +80,8 @@ class Admin_Controller_Localisation_Currency extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (isset($_POST['selected']) && $this->validateDelete()) {
-			foreach ($_POST['selected'] as $currency_id) {
+		if (isset($_GET['selected']) && $this->validateDelete()) {
+			foreach ($_GET['selected'] as $currency_id) {
 				$this->Model_Localisation_Currency->deleteCurrency($currency_id);
 			}
 			
@@ -176,7 +176,7 @@ class Admin_Controller_Localisation_Currency extends Controller
 				'code'			=> $result['code'],
 				'value'			=> $result['value'],
 				'date_modified' => $this->date->format($result['date_modified'], $this->language->getInfo('date_format_short')),
-				'selected'		=> isset($_POST['selected']) && in_array($result['currency_id'], $_POST['selected']),
+				'selected'		=> isset($_GET['selected']) && in_array($result['currency_id'], $_GET['selected']),
 				'action'		=> $action
 			);
 		}
@@ -375,7 +375,7 @@ class Admin_Controller_Localisation_Currency extends Controller
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
-		foreach ($_POST['selected'] as $currency_id) {
+		foreach ($_GET['selected'] as $currency_id) {
 			$currency_info = $this->Model_Localisation_Currency->getCurrency($currency_id);
 
 			if ($currency_info) {

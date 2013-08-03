@@ -80,8 +80,8 @@ class Admin_Controller_User_UserPermission extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (isset($_POST['selected']) && $this->validateDelete()) {
-				foreach ($_POST['selected'] as $user_group_id) {
+		if (isset($_GET['selected']) && $this->validateDelete()) {
+				foreach ($_GET['selected'] as $user_group_id) {
 				$this->Model_User_UserGroup->deleteUserGroup($user_group_id);
 			}
 						
@@ -173,7 +173,7 @@ class Admin_Controller_User_UserPermission extends Controller
 			$this->data['user_groups'][] = array(
 				'user_group_id' => $result['user_group_id'],
 				'name'			=> $result['name'],
-				'selected'		=> isset($_POST['selected']) && in_array($result['user_group_id'], $_POST['selected']),
+				'selected'		=> isset($_GET['selected']) && in_array($result['user_group_id'], $_GET['selected']),
 				'action'		=> $action
 			);
 		}
@@ -307,7 +307,7 @@ class Admin_Controller_User_UserPermission extends Controller
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		foreach ($_POST['selected'] as $user_group_id) {
+		foreach ($_GET['selected'] as $user_group_id) {
 			$user_total = $this->Model_User_User->getTotalUsersByGroupId($user_group_id);
 
 			if ($user_total) {

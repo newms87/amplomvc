@@ -11,19 +11,26 @@
 	<div class="action_value" id="for-<?= $action['key']; ?>" <?= $action['attrs']; ?>>
 		
 	<? switch($action['type']){
-				case 'text': ?>
-					<input type="text" name='action_value' value="<?= $action['default']; ?>" />
-				<? break;
-				case 'ckedit': ?>
-					<? $ckeditor = true; ?>
-					<textarea class="ckedit batch_ckedit" id="ba-<?= $action['key']; ?>" name="action_value"><?= $action['default']; ?></textarea>
-				<? break;
-				case 'select': ?>
-					<? $this->builder->set_config(key($action['build_config']), current($action['build_config'])); ?>
-					<?= $this->builder->build('select', $action['build_data'], "action_value", $action['default']); ?>
-				<? break;
-				default:
-					break;
+			case 'text': ?>
+				<input type="text" name="action_value value="<?= $action['default']; ?>" />
+			<? break;
+			case 'ckedit': ?>
+				<? $ckeditor = true; ?>
+				<textarea class="ckedit batch_ckedit" id="ba-<?= $action['key']; ?>" name="action_value"><?= $action['default']; ?></textarea>
+			<? break;
+			case 'select': ?>
+				<? $this->builder->set_config($action['build_config'][0], $action['build_config'][1]); ?>
+				<?= $this->builder->build('select', $action['build_data'], "action_value", $action['default']); ?>
+			<? break;
+			
+			case 'date':
+			case 'time':
+			case 'datetime': ?>
+				<input type="text" class="<?= $action['type'] . 'picker'; ?>" name="action_value" value="<?= $action['default']; ?>" />
+			<? break;
+			
+			default:
+				break;
 	} ?>
 	
 	</div>
@@ -36,22 +43,34 @@
 } ?>
 
 <script type='text/javascript'>//<!--
+$.ac_datepicker();
+
 $('select[name=batch_action]').change(function(){
 	$('.action_value').removeClass('active');
 	$('#for-' + $(this).val()).addClass('active');
 });
 
 function do_batch_action(action){
+	selected = $('<?= $selector; ?>:checked');
+	
+	if (!selected.length) {
+		alert("<?= $error_batch_action_selection; ?>");
+		return false;
+	}
+	
 	if(!action){
 		action = $('select[name=batch_action]').val();
 	}
 	
 	av=$('.action_value.active [name=action_value]');
-	if(av.hasClass('ckedit'))
-			av = escape(CKEDITOR.instances[av.attr('id')].getData());
-	else
-			av = av.val() || '';
 	
-	$('<?= $form; ?>').attr('action', '<?= $url; ?>' + '&action=' + action + '&action_value=' + av).submit();
+	if(av.hasClass('ckedit'))
+		av = escape(CKEDITOR.instances[av.attr('id')].getData());
+	else
+		av = av.val() || '';
+	
+	url = '<?= $url; ?>'.replace(/_action_/,action).replace(/_action_value_/, av);
+	
+	location = url + '&' + selected.serialize();
 }
 //--></script>

@@ -52,8 +52,8 @@ class Admin_Controller_Setting_DbRules extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (isset($_POST['selected']) && $this->validateDelete()) {
-			foreach ($_POST['selected'] as $db_rule_id) {
+		if (isset($_GET['selected']) && $this->validateDelete()) {
+			foreach ($_GET['selected'] as $db_rule_id) {
 				$this->Model_Setting_DbRules->deleteDbRule($db_rule_id);
 			}
 
@@ -85,7 +85,7 @@ class Admin_Controller_Setting_DbRules extends Controller
 				'href' => $this->url->link('setting/db_rules/update', 'db_rule_id=' . $db_rule['db_rule_id'])
 			);
 			
-			$db_rule['selected'] = isset($_POST['selected']) && in_array($result['db_rule_id'], $_POST['selected']);
+			$db_rule['selected'] = isset($_GET['selected']) && in_array($result['db_rule_id'], $_GET['selected']);
 			$db_rule['action']	= $action;
 		}
 		

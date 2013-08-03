@@ -53,9 +53,9 @@ class Admin_Controller_Sale_Voucher extends Controller
 	{
 		$this->language->load('sale/voucher');
 		
-		if (!empty($_POST['selected']) && isset($_GET['action'])) {
+		if (!empty($_GET['selected']) && isset($_GET['action'])) {
 			if ($_GET['action'] !== 'delete' || $this->validateDelete()) {
-				foreach ($_POST['selected'] as $voucher_id) {
+				foreach ($_GET['selected'] as $voucher_id) {
 					switch($_GET['action']){
 						case 'enable':
 							$this->Model_Sale_Voucher->editVoucher($voucher_id, array('status' => 1));
@@ -207,7 +207,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 			),
 		);
 		
-		$this->data['batch_update'] = html_entity_decode($this->url->link('sale/voucher/batch_update', $url_query));
+		$this->data['batch_update'] = 'sale/voucher/batch_update';
 		
 		//Render Limit Menu
 		$this->data['limits'] = $this->sort->render_limit();
@@ -350,8 +350,8 @@ class Admin_Controller_Sale_Voucher extends Controller
 				$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		if (!empty($_POST['selected'])) {
-			$voucher_ids = $_POST['selected'];
+		if (!empty($_GET['selected'])) {
+			$voucher_ids = $_GET['selected'];
 		} else {
 			$voucher_ids = array();
 		}

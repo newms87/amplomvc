@@ -52,8 +52,8 @@ class Admin_Controller_Mail_Newsletter extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (isset($_POST['selected']) && isset($_GET['action']) && $this->validateModify()) {
-			foreach ($_POST['selected'] as $newsletter_id) {
+		if (isset($_GET['selected']) && isset($_GET['action']) && $this->validateModify()) {
+			foreach ($_GET['selected'] as $newsletter_id) {
 				switch($_GET['action']){
 					case 'enable':
 						$this->Model_Mail_Newsletter->editNewsletter($newsletter_id, array('status' => 1));

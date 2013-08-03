@@ -80,8 +80,8 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (isset($_POST['selected']) && $this->validateDelete()) {
-				foreach ($_POST['selected'] as $customer_group_id) {
+		if (isset($_GET['selected']) && $this->validateDelete()) {
+				foreach ($_GET['selected'] as $customer_group_id) {
 				$this->Model_Sale_CustomerGroup->deleteCustomerGroup($customer_group_id);
 			}
 						
@@ -173,7 +173,7 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 			$this->data['customer_groups'][] = array(
 				'customer_group_id' => $result['customer_group_id'],
 				'name'				=> $result['name'] . (($result['customer_group_id'] == $this->config->get('config_customer_group_id')) ? $this->_('text_default') : null),
-				'selected'			=> isset($_POST['selected']) && in_array($result['customer_group_id'], $_POST['selected']),
+				'selected'			=> isset($_GET['selected']) && in_array($result['customer_group_id'], $_GET['selected']),
 				'action'				=> $action
 			);
 		}
@@ -311,7 +311,7 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		foreach ($_POST['selected'] as $customer_group_id) {
+		foreach ($_GET['selected'] as $customer_group_id) {
 			if ($this->config->get('config_customer_group_id') == $customer_group_id) {
 				$this->error['warning'] = $this->_('error_default');
 			}

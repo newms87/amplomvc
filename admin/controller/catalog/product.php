@@ -11,8 +11,6 @@ class Admin_Controller_Catalog_Product extends Controller
   	public function update()
   	{
 		$this->language->load('catalog/product');
-
-		$this->document->setTitle($this->_('heading_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			//Insert
@@ -33,7 +31,22 @@ class Admin_Controller_Catalog_Product extends Controller
 
 		$this->getForm();
   	}
+	
+	public function change_class()
+	{
+		$this->language->load('catalog/product');
+		
+		if ($this->request->isPost() && $this->user->hasPermission('modify', 'catalog/product')) {
+			$this->Model_Catalog_Product->editProduct($_GET['product_id'], $_POST, true);
+			
+			if (!$this->message->error_set()) {
+				$this->message->add('success',$this->_('text_success_class'));
+			}
+		}
 
+		$this->url->redirect($this->url->link('catalog/product/update', $this->url->getQuery()));
+	}
+	
   	public function delete()
   	{
   		$this->language->load('catalog/product');
@@ -76,35 +89,37 @@ class Admin_Controller_Catalog_Product extends Controller
 	{
 		$this->language->load('catalog/product');
 		
-		if (isset($_POST['selected']) && isset($_GET['action'])) {
+		if (!empty($_GET['selected']) && !empty($_GET['action'])) {
 			if (	($_GET['action'] === 'copy' && !$this->validateCopy()) ||
 					($_GET['action'] === 'delete' && !$this->validateDelete())	) {
 				//Action not allowed
 				$this->message->add("warning", $this->_('error_batch_action'));
 			}
 			else {
-				foreach ($_POST['selected'] as $product_id) {
+				foreach ($_GET['selected'] as $product_id) {
+					$data = array();
+					
 					switch($_GET['action']){
 						case 'enable':
-							$this->Model_Catalog_Product->updateProduct($product_id, 'status',1);
+							$data['status'] = 1;
 							break;
 						case 'disable':
-							$this->Model_Catalog_Product->updateProduct($product_id, 'status',0);
+							$data['status'] = 0;
 							break;
 						case 'date_expires':
-							$this->Model_Catalog_Product->updateProduct($product_id,'date_expires',$_GET['action_value']);
-							break;
-						case 'shipping_policy':
-							$this->Model_Catalog_Product->updateProduct($product_id,'shipping_policy_id', $_GET['action_value']);
-							break;
-						case 'return_policy':
-							$this->Model_Catalog_Product->updateProduct($product_id, 'return_policy_id', $_GET['action_value']);
+						case 'shipping_policy_id':
+						case 'return_policy_id':
+							$data[$_GET['action']] = $_GET['action_value'];
 							break;
 						case 'add_cat':
-							$this->Model_Catalog_Product->updateProductCategory($product_id, 'add',$_GET['action_value']);
-							break;
 						case 'remove_cat':
-							$this->Model_Catalog_Product->updateProductCategory($product_id, 'remove',$_GET['action_value']);
+							$categories = $this->Model_Catalog_Product->getProductCategories($product_id);
+							
+							if ($_GET['action'] === 'add_cat') {
+								$data['product_category'][] = $_GET['action_value'];
+							} else {
+								$data['product_category'] = array_diff($categories, array($_GET['action_value'])); 
+							}
 							break;
 						case 'copy':
 							$this->Model_Catalog_Product->copyProduct($product_id);
@@ -113,22 +128,22 @@ class Admin_Controller_Catalog_Product extends Controller
 							$this->Model_Catalog_Product->deleteProduct($product_id);
 							break;
 						default:
-							$this->error['warning'] = "Invalid Action Selected!";
-							break;
+							$this->message->add('warning', $this->_('error_batch_action'));
+							break 2; //break the for loop
 					}
-					if($this->error)
-						break;
+					
+					if ($data) {
+						$this->Model_Catalog_Product->editProduct($product_id, $data, true);
+					}
 				}
 			}
 
-			if (!$this->error && !$this->message->error_set()) {
+			if (!$this->message->error_set()) {
 				$this->message->add('success',$this->_('text_success'));
-				
-				$this->url->redirect($this->url->link('catalog/product'));
 			}
 		}
 		
-		$this->index();
+		$this->url->redirect($this->url->link('catalog/product', $this->url->getQueryExclude('action', 'action_value')));
 	}
 	
   	private function getList()
@@ -154,6 +169,16 @@ class Admin_Controller_Catalog_Product extends Controller
 			'filter' => false,
 			'sortable' => true,
 			'sort_value' => '__image_sort__image',
+		);
+		
+		$columns['product_class_id'] = array(
+			'type' => 'select',
+			'display_name' => $this->_('column_class'),
+			'filter' => true,
+			'build_config' => array('product_class_id' , 'name'),
+			'build_data' => $this->Model_Catalog_ProductClass->getProductClasses(),
+			'sortable' => true,
+			'sort_value' => 'pc.name',
 		);
 		
 		$columns['name'] = array(
@@ -305,17 +330,22 @@ class Admin_Controller_Catalog_Product extends Controller
 			'date_expires' => array(
 				'label'	=> "Product Expiration Date",
 				'type'	=>'datetime',
-				'default'=> DATETIME_ZERO,
+				'default' => $this->date->add('30 days'),
 			),
 			
-			'shipping_policy' => array(
+			'shipping_policy_id' => array(
 				'label' => $this->_('text_shipping_policy'),
-				'type' => 'ckedit',
+				'type' => 'select',
+				'build_data' => $this->cart->getShippingPolicies(),
+				'build_config' => array(false, 'title'),
+				'default' => $this->config->get('config_default_shipping_policy'),
 			),
 			
-			'return_policy' => array(
+			'return_policy_id' => array(
 				'label' => $this->_('text_return_policy'),
-				'type' => 'text',
+				'type' => 'select',
+				'build_data' => $this->cart->getReturnPolicies(),
+				'build_config' => array(false, 'title'),
 				'default' => $this->config->get('config_default_return_policy'),
 			),
 			
@@ -342,7 +372,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			),
 		);
 		
-		$this->data['batch_update'] = $this->url->link('catalog/product/batch_update', $url_query);
+		$this->data['batch_update'] = 'catalog/product/batch_update';
 		
 		//Render Limit Menu
 		$this->data['limits'] = $this->sort->render_limit();
@@ -371,10 +401,7 @@ class Admin_Controller_Catalog_Product extends Controller
   		//Page Head
   		$this->document->setTitle($this->_('heading_title'));
 		
-  		//The Template
-		$this->template->load('catalog/product_form');
-		
-		//Insert or Update
+  		//Insert or Update
   		$product_id = $this->data['product_id'] = isset($_GET['product_id']) ? $_GET['product_id'] : false;
 		
 		//Breadcrumbs
@@ -407,13 +434,24 @@ class Admin_Controller_Catalog_Product extends Controller
 			$product_info['product_related'] = $this->Model_Catalog_Product->getProductRelated($product_id);
 		}
 		
+		//Apply Product Class Skin
+		$product_classes = $this->Model_Catalog_ProductClass->getProductClasses();
+		$theme = $this->theme->getTheme();
+		
+		$product_class = array_search_key('product_class_id', $product_info['product_class_id'], $product_classes);
+		
+  		if (!empty($product_class['admin_template'][$theme])) {
+  			$template = 'catalog/product_class/' . $product_class['admin_template'][$theme];
+		}
+		
 		//Set Values or Defaults
 		$defaults = array(
+			'product_class_id' => 0,
 			'model'=>'',
 			'sku'=>'',
 			'upc'=>'',
 			'location'=>'',
-			'keyword'=>'',
+			'alias'=>'',
 			'product_store' => array(0,1),
 			'name' => '',
 			'description' => '',
@@ -473,13 +511,10 @@ class Admin_Controller_Catalog_Product extends Controller
 		if (is_string($this->data['product_tags'])) {
 			$this->data['product_tags'] = explode(',', $this->data['product_tags']);
 		}
-			
-		//Additional Data
-		$m_data = array(
-			'sort' => 'name'
-		);
 		
-		$this->data['data_manufacturers'] = array('' => $this->_('text_none')) + $this->Model_Catalog_Manufacturer->getManufacturers($m_data);
+		//Additional Data
+		$this->data['data_product_classes'] = $product_classes;
+		$this->data['data_manufacturers'] = array('' => $this->_('text_none')) + $this->Model_Catalog_Manufacturer->getManufacturers(array('sort' => 'name'));
 		$this->data['data_tax_classes'] = array('' => $this->_('text_none')) + $this->Model_Localisation_TaxClass->getTaxClasses();
 		$this->data['data_weight_classes'] = $this->Model_Localisation_WeightClass->getWeightClasses();
 		$this->data['data_length_classes'] = $this->Model_Localisation_LengthClass->getLengthClasses();
@@ -599,12 +634,20 @@ class Admin_Controller_Catalog_Product extends Controller
 		//Action Buttons
 		$this->data['save'] = $this->url->link('catalog/product/update', 'product_id=' . $product_id);
 		$this->data['cancel'] = $this->url->link('catalog/product');
+		$this->data['change_class'] = $this->url->link('catalog/product/change_class', 'product_id=' . $product_id);
 		
 		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
+		
+		//The Template
+		if (!empty($template)) {
+			$this->template->load($template);
+		} else {
+			$this->template->load('catalog/product_form');
+		}
 		
 		//Render
 		$this->response->setOutput($this->render());
@@ -644,8 +687,8 @@ class Admin_Controller_Catalog_Product extends Controller
 			}
 		}
 		
-		if (!$this->validation->text($_POST['keyword'], 1, 255)) {
-			$this->error['keyword'] = $this->_('error_keyword');
+		if (empty($_POST['alias'])) {
+			$_POST['alias'] = $this->tool->getSlug($_POST['name']);
 		}
 		
 		if (isset($_POST['product_images'])) {
@@ -700,8 +743,8 @@ class Admin_Controller_Catalog_Product extends Controller
 		
 		$product_ids = array();
 		
-		if (!empty($_POST['selected'])) {
-			$product_ids = $_POST['selected'];
+		if (!empty($_GET['selected'])) {
+			$product_ids = $_GET['selected'];
 		}
 		
 		if (!empty($_GET['product_id'])) {
@@ -792,9 +835,15 @@ class Admin_Controller_Catalog_Product extends Controller
 	
 	public function generate_url()
 	{
-		if (!empty($_POST['name']) && !empty($_POST['product_id'])) {
-			$this->response->setOutput(json_encode($this->Model_Catalog_Product->generate_url($_POST['product_id'],$_POST['name'])));
+		if (!empty($_POST['name'])) {
+			$product_id = !empty($_POST['product_id']) ? (int)$_POST['product_id'] : 0;
+			
+			$url = $this->Model_Setting_UrlAlias->getUniqueAlias($_POST['name'], 'product/product', 'product_id=' . $product_id);
+		} else {
+			$url = '';
 		}
+
+		$this->response->setOutput($url);
 	}
 	
 	public function generate_model()

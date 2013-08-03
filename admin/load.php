@@ -32,6 +32,7 @@ $log = new Log($config->get('config_log_filename'), 'Admin');
 $registry->set('log', $log);
 
 $error_handler = function($errno, $errstr, $errfile, $errline) use($error_log, $config){
+	
 	switch ($errno) {
 		case E_NOTICE:
 		case E_USER_NOTICE:

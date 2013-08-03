@@ -31,11 +31,10 @@ class Admin_Controller_Common_Header extends Controller
 		$this->data['messages'] = $this->message->fetch();
 		
 		$this->data['direction'] = $this->language->getInfo('direction');
-		
   		$this->data['description'] = $this->document->getDescription();
 		$this->data['keywords'] = $this->document->getKeywords();
-		
 		$this->data['canonical_link'] = $this->document->getCanonicalLink();
+		$this->data['body_class'] = $this->tool->getSlug($this->url->getPath());
 		
 		$this->language->set('lang', $this->language->getInfo('code'));
 		
@@ -84,7 +83,7 @@ class Admin_Controller_Common_Header extends Controller
 			if ($this->user->hasPermission('access','common/filemanager')) {
 				$link_image_manager = array(
 					'name' => $this->_('text_image_manager'),
-					'sort_order' => 3,
+					'sort_order' => 5,
 					'attrs' => array('onclick' => 'image_manager();'),
 				);
 				

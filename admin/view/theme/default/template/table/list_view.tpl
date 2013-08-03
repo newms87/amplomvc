@@ -289,7 +289,7 @@ $('.zoom_hover.daterange input').change(function(){
 $.ac_datepicker();
 
 function apply_filter() {
-	$('#filter_list').apply_filter("<?= $this->url->link($this->url->route(), $this->url->getQueryExclude('filter')); ?>");
+	$('#filter_list').apply_filter("<?= $this->url->link($this->url->getPath(), $this->url->getQueryExclude('filter')); ?>");
 	return false;
 }
 

@@ -121,3 +121,7 @@ $_['tab_total']					= 'Totals';
 $_['tab_transaction']			= 'Transactions';
 $_['tab_voucher']				= 'Vouchers';
 $_['tab_voucher_history']	= 'Voucher History';
+
+//Error
+$_['error_batch_action']			= 'The requested action failed.';
+$_['error_batch_action_selection']		= 'Please select items to apply the batch action to.';

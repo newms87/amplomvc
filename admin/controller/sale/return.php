@@ -144,8 +144,8 @@ class Admin_Controller_Sale_Return extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (isset($_POST['selected']) && $this->validateDelete()) {
-			foreach ($_POST['selected'] as $return_id) {
+		if (isset($_GET['selected']) && $this->validateDelete()) {
+			foreach ($_GET['selected'] as $return_id) {
 				$this->Model_Sale_Return->deleteReturn($return_id);
 			}
 			
@@ -368,7 +368,7 @@ class Admin_Controller_Sale_Return extends Controller
 				'status'		=> $result['status'],
 				'date_added'	=> $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
 				'date_modified' => date($this->language->getInfo('date_format_short'), strtotime($result['date_modified'])),
-				'selected'		=> isset($_POST['selected']) && in_array($result['return_id'], $_POST['selected']),
+				'selected'		=> isset($_GET['selected']) && in_array($result['return_id'], $_GET['selected']),
 				'action'		=> $action
 			);
 		}

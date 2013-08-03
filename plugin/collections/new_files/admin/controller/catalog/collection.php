@@ -196,7 +196,7 @@ class Admin_Controller_Catalog_Collection extends Controller
 			),
 		);
 		
-		$this->data['batch_update'] = html_entity_decode($this->url->link('catalog/collection/batch_update', $url_query));
+		$this->data['batch_update'] = 'catalog/collection/batch_update';
 		
 		//Render Limit Menu
 		$this->data['limits'] = $this->sort->render_limit();

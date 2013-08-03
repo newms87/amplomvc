@@ -27,8 +27,8 @@ class Admin_Model_Catalog_Information extends Model
 			}
 		}
 
-		if (!empty($data['keyword'])) {
-			$this->url->setAlias($data['keyword'], 'information/information', 'information_id=' . (int)$information_id);
+		if (!empty($data['alias'])) {
+			$this->url->setAlias($data['alias'], 'information/information', 'information_id=' . (int)$information_id);
 		}
 		
 		if (!empty($data['translations'])) {
@@ -71,8 +71,8 @@ class Admin_Model_Catalog_Information extends Model
 			}
 		}
 
-		if (!empty($data['keyword'])) {
-			$this->url->setAlias($data['keyword'], 'information/information', 'information_id=' . (int)$information_id);
+		if (!empty($data['alias'])) {
+			$this->url->setAlias($data['alias'], 'information/information', 'information_id=' . (int)$information_id);
 		} else {
 			$this->url->removeAlias('information/information', 'information_id=' . (int)$information_id);
 		}
@@ -94,7 +94,7 @@ class Admin_Model_Catalog_Information extends Model
 		
 		$information['title'] .= " - Copy" . ($num > 1 ? ' ('.$num.')' : '');
 		
-		$information['keyword'] = '';
+		$information['alias'] = '';
 		
 		$information['stores'] = $this->getInformationStores($information_id);
 		$information['layouts'] = $this->getInformationLayouts($information_id);
@@ -121,7 +121,7 @@ class Admin_Model_Catalog_Information extends Model
 	{
 		$information = $this->queryRow("SELECT * FROM " . DB_PREFIX . "information WHERE information_id = '" . (int)$information_id . "'");
 		
-		$information['keyword'] = $this->url->getAlias('information/information', 'information_id=' . $information_id);
+		$information['alias'] = $this->url->getAlias('information/information', 'information_id=' . $information_id);
 		
 		return $information;
 	}

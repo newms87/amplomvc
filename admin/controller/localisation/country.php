@@ -80,8 +80,8 @@ class Admin_Controller_Localisation_Country extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (isset($_POST['selected']) && $this->validateDelete()) {
-			foreach ($_POST['selected'] as $country_id) {
+		if (isset($_GET['selected']) && $this->validateDelete()) {
+			foreach ($_GET['selected'] as $country_id) {
 				$this->Model_Localisation_Country->deleteCountry($country_id);
 			}
 			
@@ -175,7 +175,7 @@ class Admin_Controller_Localisation_Country extends Controller
 				'name'		=> $result['name'] . (($result['country_id'] == $this->config->get('config_country_id')) ? $this->_('text_default') : null),
 				'iso_code_2' => $result['iso_code_2'],
 				'iso_code_3' => $result['iso_code_3'],
-				'selected'	=> isset($_POST['selected']) && in_array($result['country_id'], $_POST['selected']),
+				'selected'	=> isset($_GET['selected']) && in_array($result['country_id'], $_GET['selected']),
 				'action'	=> $action
 			);
 		}
@@ -355,7 +355,7 @@ class Admin_Controller_Localisation_Country extends Controller
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		foreach ($_POST['selected'] as $country_id) {
+		foreach ($_GET['selected'] as $country_id) {
 			if ($this->config->get('config_country_id') == $country_id) {
 				$this->error['warning'] = $this->_('error_default');
 			}

@@ -80,8 +80,8 @@ class Admin_Controller_Localisation_Zone extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (isset($_POST['selected']) && $this->validateDelete()) {
-			foreach ($_POST['selected'] as $zone_id) {
+		if (isset($_GET['selected']) && $this->validateDelete()) {
+			foreach ($_GET['selected'] as $zone_id) {
 				$this->Model_Localisation_Zone->deleteZone($zone_id);
 			}
 			
@@ -175,7 +175,7 @@ class Admin_Controller_Localisation_Zone extends Controller
 				'country'  => $result['country'],
 				'name'	=> $result['name'] . (($result['zone_id'] == $this->config->get('config_zone_id')) ? $this->_('text_default') : null),
 				'code'	=> $result['code'],
-				'selected' => isset($_POST['selected']) && in_array($result['zone_id'], $_POST['selected']),
+				'selected' => isset($_GET['selected']) && in_array($result['zone_id'], $_GET['selected']),
 				'action'	=> $action
 			);
 		}
@@ -341,7 +341,7 @@ class Admin_Controller_Localisation_Zone extends Controller
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		foreach ($_POST['selected'] as $zone_id) {
+		foreach ($_GET['selected'] as $zone_id) {
 			if ($this->config->get('config_zone_id') == $zone_id) {
 				$this->error['warning'] = $this->_('error_default');
 			}

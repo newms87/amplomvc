@@ -80,8 +80,8 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
  		
-		if (isset($_POST['selected']) && $this->validateDelete()) {
-			foreach ($_POST['selected'] as $length_class_id) {
+		if (isset($_GET['selected']) && $this->validateDelete()) {
+			foreach ($_GET['selected'] as $length_class_id) {
 				$this->Model_Localisation_Lengthclass->deleteLengthClass($length_class_id);
 			}
 			
@@ -175,7 +175,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 				'title'			=> $result['title'] . (($result['unit'] == $this->config->get('config_length_class')) ? $this->_('text_default') : null),
 				'unit'				=> $result['unit'],
 				'value'			=> $result['value'],
-				'selected'		=> isset($_POST['selected']) && in_array($result['length_class_id'], $_POST['selected']),
+				'selected'		=> isset($_GET['selected']) && in_array($result['length_class_id'], $_GET['selected']),
 				'action'			=> $action
 			);
 		}
@@ -337,7 +337,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		foreach ($_POST['selected'] as $length_class_id) {
+		foreach ($_GET['selected'] as $length_class_id) {
 			if ($this->config->get('config_length_class_id') == $length_class_id) {
 				$this->error['warning'] = $this->_('error_default');
 			}

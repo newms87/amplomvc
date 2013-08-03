@@ -110,7 +110,7 @@ if (isset($_GET['tracking']) && !isset($_COOKIE['tracking'])) {
 $registry->set('theme', new Theme($registry));
 
 //Resolve Layout ID
-$layout = $db->queryRow("SELECT layout_id FROM " . DB_PREFIX . "layout_route WHERE '" . $db->escape($url->route()) . "' LIKE CONCAT(route, '%') AND store_id = '" . $config->get('config_store_id') . "' ORDER BY route ASC LIMIT 1");
+$layout = $db->queryRow("SELECT layout_id FROM " . DB_PREFIX . "layout_route WHERE '" . $db->escape($url->getPath()) . "' LIKE CONCAT(route, '%') AND store_id = '" . $config->get('config_store_id') . "' ORDER BY route ASC LIMIT 1");
 
 if ($layout) {
 	$config->set('config_layout_id', $layout['layout_id']);

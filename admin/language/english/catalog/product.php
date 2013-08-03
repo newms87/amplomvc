@@ -4,7 +4,7 @@ $_['heading_title']			= 'Products';
 
 // Text
 $_['text_success']			= 'Success: You have modified products!';
-$_['text_batch_action']				= 'Batch Action:';
+$_['text_success_class']			= 'The Product\'s Class has been changed!';
 $_['text_plus']				= '+';
 $_['text_minus']				= '-';
 $_['text_default']			= 'Default';
@@ -15,6 +15,8 @@ $_['text_option']				= 'Option';
 $_['text_option_value']		= 'Option Value';
 $_['text_percent']			= 'Percentage';
 $_['text_amount']				= 'Fixed Amount';
+$_['text_shipping_policy'] = "Shipping Policy";
+$_['text_return_policy'] = "Return Policy";
 $_['text_option_help']		= '<br>To add an option category:<br><br>1.type the category into the input field above (eg: "Size", "Color", etc.).<br><br>2. As you type the available options will be displayed, click on the name when it appears.<br><br>3. Click on "Add Option Value" button<br><br>4. Choose the option Value from the dropdown box<br><br>5. Specify the Quantity of this product option that is available.<br><br>6. If you have a limited number of this Option Value leave Subtract Stock as "yes", if you do not want to limit the availability set to "no" (this will use the default quantity set in the Data tab)<br><br>7. repeat steps 3 through 6 for each Option Value this product has.<br><br> If you cannot find the appropriate Option Category or Option Value for your product, please contact your Designer Rep or email <a class="normal" href="mailto:%s?subject=New Product Option Request">Our Support Team</a>';
 $_['text_not_editable']		= 'We are sorry. You may not modify %s because the Product is currently active on our site! Please contact <a target="_blank" href="mailto:%s">Support</a> to edit this Product.';
 $_['text_no_expiration']		= "No Expiration";
@@ -22,7 +24,8 @@ $_['text_add_shipping_policy']		= "Add <a href=\"%s\" target=\"_blank\">Shipping
 $_['text_add_return_policy']		= "Add <a href=\"%s\" target=\"_blank\">Return Policy</a>";
 
 // Column
-$_['column_name']				= 'Product Name';
+$_['column_class']				= 'Class';
+$_['column_name']				= 'Name';
 $_['column_category']		= 'Categories';
 $_['column_manufacturer']	= 'Manufacturer / Designer';
 $_['column_model']			= 'Model ID';
@@ -43,7 +46,7 @@ $_['button_fill_ship']		="%s";
 $_['button_add_image'] = "Add Image";
 $_['button_add_restriction_set'] = "Add Restriction Set";
 $_['button_add_restriction_value'] = "Add Value";
-
+$_['button_change_class'] = "Change Class";
 
 // Entry
 $_['entry_name']				= 'Product Name:';
@@ -53,7 +56,7 @@ $_['entry_teaser']				= 'Teaser: <span class="help">A short teaser to be display
 $_['entry_description']				= 'Description: <span class="help">This will show up at the top of the Product page. You may use full HTML</span>';
 $_['entry_information']				= 'Information: <span class="help">Additional information about the product. Information tables, charts, etc. You may use full HTML</span>';
 $_['entry_store']				= 'Stores:';
-$_['entry_keyword']			= 'URL Alias:<br /><span class="help">The url for a product will be at /product/url_alias. Use only letters, numbers and \'-\'.</span>';
+$_['entry_alias']			= 'SEO URL:<span class="help">The Search Engine Optimized URL for this product.</span>';
 $_['entry_model']				= 'Model ID:';
 $_['entry_sku']				= 'SKU:';
 $_['entry_upc']				= 'UPC:';
@@ -112,7 +115,7 @@ $_['tab_shipping_return'] = 'Shipping / Returns';
 // Error
 $_['error_warning']			= 'Warning: Please check the form carefully for errors!';
 $_['error_batch_action']			= 'The requested action failed.';
-$_['error_keyword']			= 'Product must have a valid URL Alias between 3 and 255 characters with letters, numbers and `-`\'s only!';
+$_['error_alias']			= 'Product must have a valid SEO URL between 3 and 255 characters with letters, numbers and `-`\'s only!';
 $_['error_permission']		= 'Warning: You do not have permission to modify products!';
 $_['error_confirmed_order_product']	= 'The product %s cannot be deleted after it is associated with a confirmed order! Please deactivate this product instead of deleting it.';
 $_['error_name']				= 'Product Name must be greater than 3 and less than 255 characters!';

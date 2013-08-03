@@ -53,8 +53,8 @@ class Admin_Controller_Catalog_Category extends Controller
 	{
 		$this->language->load('catalog/category');
 		
-		if (!empty($_POST['selected']) && isset($_GET['action'])) {
-			foreach ($_POST['selected'] as $category_id) {
+		if (!empty($_GET['selected']) && isset($_GET['action'])) {
+			foreach ($_GET['selected'] as $category_id) {
 				switch($_GET['action']){
 					case 'enable':
 						$this->Model_Catalog_Category->updateField($category_id, array('status' => 1));
@@ -190,7 +190,7 @@ class Admin_Controller_Catalog_Category extends Controller
 			),
 		);
 		
-		$this->data['batch_update'] = html_entity_decode($this->url->link('catalog/category/batch_update', $url_query));
+		$this->data['batch_update'] = 'catalog/category/batch_update';
 		
 		//Render Limit Menu
 		$this->data['limits'] = $this->sort->render_limit();
@@ -250,7 +250,7 @@ class Admin_Controller_Catalog_Category extends Controller
 			'description' => '',
 			'meta_keywords' => '',
 			'meta_description' => '',
-			'keyword'	=> '',
+			'alias'	=> '',
 			'image'		=> '',
 			'sort_order'=> 0,
 			'status'		=> 1,
@@ -307,15 +307,14 @@ class Admin_Controller_Catalog_Category extends Controller
 	public function generate_url()
 	{
 		if (!empty($_POST['name'])) {
-			$category_id = isset($_POST['category_id']) ? $_POST['category_id'] : 0;
+			$category_id = !empty($_POST['category_id']) ? (int)$_POST['category_id'] : 0;
 			
-			$url = $this->Model_Catalog_Category->generate_url($category_id, $_POST['name']);
-		}
-		else {
+			$url = $this->Model_Setting_UrlAlias->getUniqueAlias($_POST['name'], 'catalog/category', 'category_id=' . $category_id);
+		} else {
 			$url = '';
 		}
 
-		$this->response->setOutput(json_encode($url));
+		$this->response->setOutput($url);
 	}
 	
 	private function validateForm()

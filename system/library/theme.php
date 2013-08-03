@@ -34,6 +34,11 @@ class Theme extends Library
 		}
 	}
 	
+	public function getTheme()
+	{
+		return $this->theme;
+	}
+	
 	public function get_setting($key)
 	{
 		if (isset($this->settings[$key])) {

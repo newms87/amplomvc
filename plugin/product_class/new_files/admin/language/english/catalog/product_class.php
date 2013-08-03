@@ -6,6 +6,7 @@ $_['heading_title'] = "Product Classes";
 $_['text_front_template_list'] = "Template (<strong>%s</strong>): <strong>%s</strong>";
 $_['text_admin_template_list'] = "Template (<strong>%s</strong>): <strong>%s</strong>";
 $_['text_default_template'] = "Default Template";
+$_['text_success'] = "You have successfully updated the Product Classes!";
 
 //Entry
 $_['entry_name'] = "Product Class Name:";

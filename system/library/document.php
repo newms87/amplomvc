@@ -140,11 +140,7 @@ class Document extends Library
 		}
 		
 		if (isset($child_list)) {
-			if (!empty($child_list) && !is_null($new_link['sort_order'])) {
-				array_splice($child_list, (int)$new_link['sort_order'], 0, array($new_link['name'] => $new_link));
-			} else {
-				$child_list[] = $new_link;
-			}
+			$child_list[] = $new_link;
 			
 			return true;
 		}
@@ -262,8 +258,15 @@ class Document extends Library
 		return $html;
 	}
 	
-	public function &findActiveLink(&$links, $page, &$active_link = null, $highest_match = 0)
+	public function &findActiveLink(&$links, $page = null, &$active_link = null, $highest_match = 0)
 	{
+		if (!$page) {
+			$page = parse_url($this->url->getSeoUrl());
+			
+			$page['query'] = null;
+			parse_str($this->url->getQuery(), $page['query']);
+		}
+		
 		foreach ($links as $key => &$link) {
 			if (!preg_match("/^https?:\/\//", $link['href'])) {
 				if (!empty($link['is_route'])) {
@@ -316,24 +319,21 @@ class Document extends Library
 			$active_link['active'] = 'active';
 		}
 		
+		//If the link wasn't found, try changing the route to the index function and search for the active link again
+		//if (preg_match("/^([a-z0-9_]+\/[a-z0-9_]+)\/.*/", $this->url->getPath())) {
+		//	$current_page['query']['route'] = preg_replace("/^([a-z0-9_]+\/[a-z0-9_]+)\/.*/", "\$1", $this->url->getPath());
+		//	$this->findActiveLink($links, $current_page);
+		//}
+		
 		return $active_link;
 	}
 	
 	public function renderLinks($links, $depth = 0)
 	{
+		usort($links, function($a,$b){ return $a['sort_order'] > $b['sort_order']; });
+		
 		if ($depth === 0) {
-			$current_page = parse_url($this->url->getSeoUrl());
-			
-			$current_page['query'] = null;
-			parse_str($this->url->getQuery(), $current_page['query']);
-			
-			if (!$this->findActiveLink($links, $current_page)) {
-				//If the link wasn't found, try changing the route to the index function and search for the active link again
-				if (preg_match("/^([a-z0-9_]+\/[a-z0-9_]+)\/.*/", $this->url->route())) {
-					$current_page['query']['route'] = preg_replace("/^([a-z0-9_]+\/[a-z0-9_]+)\/.*/", "\$1", $this->url->route());
-					$this->findActiveLink($links, $current_page);
-				}
-			}
+			$this->findActiveLink($links);
 		}
 		
 		switch($depth){

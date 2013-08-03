@@ -56,8 +56,8 @@ class Admin_Controller_Design_Banner extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (isset($_POST['selected']) && $this->validateDelete()) {
-			foreach ($_POST['selected'] as $banner_id) {
+		if (isset($_GET['selected']) && $this->validateDelete()) {
+			foreach ($_GET['selected'] as $banner_id) {
 				$this->Model_Design_Banner->deleteBanner($banner_id);
 			}
 			
@@ -113,7 +113,7 @@ class Admin_Controller_Design_Banner extends Controller
 				'banner_id' => $result['banner_id'],
 				'name'		=> $result['name'],
 				'status'	=> ($result['status'] ? $this->_('text_enabled') : $this->_('text_disabled')),
-				'selected'  => isset($_POST['selected']) && in_array($result['banner_id'], $_POST['selected']),
+				'selected'  => isset($_GET['selected']) && in_array($result['banner_id'], $_GET['selected']),
 				'action'	=> $action
 			);
 		}

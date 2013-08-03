@@ -20,16 +20,17 @@ SQL
 			'display_name' => "Product Classes",
 			'name' => 'catalog_products_product_classes',
 			'href' => 'catalog/product_class',
-			'sort_order' => 1,
+			'sort_order' => 10,
+			'parent' => 'catalog_products',
 		);
 		
-		$this->extend->add_navigation_link($link, 'catalog_products', 'admin');
+		$this->extend->addNavigationLink('admin', $link);
 	}
 	
 	public function uninstall($keep_data = true)
 	{
 		//Remove Navigation Links
-		$this->extend->remove_navigation_link('catalog_product_product_classes');
+		$this->extend->removeNavigationLink('catalog_products_product_classes');
 		
 		//Remove data last as good practice
 		if (!$keep_data) {

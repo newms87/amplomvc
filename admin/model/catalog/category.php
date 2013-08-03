@@ -30,8 +30,8 @@ class Admin_Model_Catalog_Category extends Model
 			}
 		}
 		
-		if (!empty($data['keyword'])) {
-			$this->url->setAlias($data['keyword'], 'product/category', 'category_id=' . (int)$category_id);
+		if (!empty($data['alias'])) {
+			$this->url->setAlias($data['alias'], 'product/category', 'category_id=' . (int)$category_id);
 		}
 		
 		if (!empty($data['translations'])) {
@@ -75,11 +75,12 @@ class Admin_Model_Catalog_Category extends Model
 			}
 		}
 		
-		if (!empty($data['keyword'])) {
-			$this->url->setAlias($data['keyword'], 'product/category', 'category_id=' . (int)$category_id);
+		if (!empty($data['alias'])) {
+			$this->url->setAlias($data['alias'], 'product/category', 'category_id=' . (int)$category_id);
 		} else {
 			$this->url->removeAlias('product/category', 'category_id=' . (int)$category_id);
 		}
+			
 		
 		if (!empty($data['translations'])) {
 			$this->translation->setTranslations('category', $category_id, $data['translations']);
@@ -113,7 +114,7 @@ class Admin_Model_Catalog_Category extends Model
 	{
 		$result = $this->queryRow("SELECT * FROM " . DB_PREFIX . "category WHERE category_id = '" . (int)$category_id . "'");
 		
-		$result['keyword'] = $this->url->getAlias('product/category', 'category_id=' . $category_id);
+		$result['alias'] = $this->url->getAlias('product/category', 'category_id=' . $category_id);
 		
 		return $result;
 	}
@@ -189,23 +190,6 @@ class Admin_Model_Catalog_Category extends Model
 	public function update_field($category_id, $data)
 	{
 		$this->update('category', $data, $category_id);
-	}
-
-	//TODO: need to rethink this
-	public function generate_url($category_id, $name)
-	{
-		$url = $this->Model_Setting_UrlAlias->format_url($name);
-		$orig = $url;
-		$count = 2;
-		
-		$url_alias = $category_id?$this->Model_Setting_UrlAlias->getUrlAliasByRouteQuery('product/category', "category_id=$category_id"):null;
-		
-		$test = $this->Model_Setting_UrlAlias->getUrlAliasByKeyword($url);
-		while (!empty($test) && $test['url_alias_id'] != $url_alias['url_alias_id']) {
-			$url = $orig . '-' . $count++;
-			$test = $this->Model_Setting_UrlAlias->getUrlAliasByKeyword($url);
-		}
-		return $url;
 	}
 	
 	public function getCategoriesWithParents($data = array(), $select = '', $delimeter = ' > ')

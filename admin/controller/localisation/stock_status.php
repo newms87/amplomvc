@@ -80,8 +80,8 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 	
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (isset($_POST['selected']) && $this->validateDelete()) {
-			foreach ($_POST['selected'] as $stock_status_id) {
+		if (isset($_GET['selected']) && $this->validateDelete()) {
+			foreach ($_GET['selected'] as $stock_status_id) {
 				$this->Model_Localisation_StockStatus->deleteStockStatus($stock_status_id);
 			}
 							
@@ -173,7 +173,7 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 			$this->data['stock_statuses'][] = array(
 				'stock_status_id' => $result['stock_status_id'],
 				'name'				=> $result['name'] . (($result['stock_status_id'] == $this->config->get('config_stock_status_id')) ? $this->_('text_default') : null),
-				'selected'		=> isset($_POST['selected']) && in_array($result['stock_status_id'], $_POST['selected']),
+				'selected'		=> isset($_GET['selected']) && in_array($result['stock_status_id'], $_GET['selected']),
 				'action'			=> $action
 			);
 		}
@@ -311,7 +311,7 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 				$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		foreach ($_POST['selected'] as $stock_status_id) {
+		foreach ($_GET['selected'] as $stock_status_id) {
 			if ($this->config->get('config_stock_status_id') == $stock_status_id) {
 				$this->error['warning'] = $this->_('error_default');
 			}

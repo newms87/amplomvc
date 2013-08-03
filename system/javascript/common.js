@@ -167,6 +167,77 @@ function colorbox(context, data){
 	return false;
 }
 
+
+$.fn.display_error = function(msg, id){
+	if (id && $('#' + id).length) return;
+	
+	this.after('<div class="display_error"' + (id ? 'id="' + id + '"' : '') + '>' + msg + '</div>');
+}
+
+$.clear_errors = function(id) {
+	if (id) {
+		$('#' + id).remove();
+	} else {
+		$('.display_error').remove();
+	}
+}
+
+$.fn.fade_post = function(url, data, callback, dataType) {
+	context = this;
+	
+	context.stop().fadeOut(300);
+	
+	context.after($.loading);
+	
+	$.post(url, data, function(data){
+		context.fadeIn(0);
+		$.loading('stop');
+		
+		if (typeof callback === 'function') {
+			callback(data);
+		}
+	});
+	
+	return this;
+}
+
+$.loading = function(params) {
+	if (params === 'stop') {
+		$('.loader').remove();
+	}
+	
+	params = $.extend({}, {
+		dots: 8,
+		width: null,
+		height: null,
+		animations: 'bounce, fadecolor'
+	}, params);
+	
+	loader = $('<div class="loader">' + '<div class="loader_item"></div>'.repeat(params.dots) + '</div>');
+	
+	loader.children('.loader_item').each(function(i,e){
+		$(e).attr('style', '-webkit-animation-name: ' + params.animations + '; animation-name: ' + params.animations);
+	});
+	
+	if (params.width) {
+		loader.width(params.width);
+	}
+	
+	if (params.height) {
+		loader.height(params.height);
+	}
+	
+	return loader[0].outerHTML;
+}
+
+$.fn.loading = function(params) {
+	return this.append($.loading(params));
+}
+
+String.prototype.repeat = function(times) {
+   return (new Array(times + 1)).join(this);
+};
+
 //Utility Functions
 String.prototype.str_replace = function(find, replace) {
   var str = this;
@@ -217,6 +288,12 @@ $.cookie = function (key, value, options) {
 };
 
 $(document).ready(function() {
+	$('.ui-autocomplete-input').on("autocompleteselect", function(e, ui) {
+		if (!ui.item.value && ui.item.href) {
+			window.open(ui.item.href);
+		}
+	});
+
 	$('form input').keydown(function(e) {
 		if (e.keyCode == 13) {
 			$(this).closest('form').submit();

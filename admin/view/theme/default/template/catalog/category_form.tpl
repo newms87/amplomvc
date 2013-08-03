@@ -50,10 +50,10 @@
 							<td><?= $this->builder->build('multiselect', $data_stores, "category_store", $stores); ?></td>
 						</tr>
 						<tr>
-							<td><?= $entry_keyword; ?></td>
+							<td><?= $entry_alias; ?></td>
 							<td>
-								<input type="text" onfocus='generate_url_warning(this)' name="keyword" value="<?= $keyword; ?>" />
-								<a class='gen_url' onclick='generate_url(this)'><?= $button_generate_url; ?></a>
+								<input type="text" onfocus="$(this).next().display_error('<?= $warning_generate_url; ?>', 'gen_url');" name="alias" value="<?= $alias; ?>" />
+								<a class='gen_url' onclick="generate_url($(this))"><?= $button_generate_url; ?></a>
 							</td>
 						</tr>
 						<tr>
@@ -103,27 +103,24 @@
 <?= $this->builder->js('ckeditor'); ?>
 
 <script type="text/javascript">//<!--
-function generate_url_warning(field){
-	if($('#gen_warn').length == 0)
-			$(field).parent().append('<span id="gen_warn" style="color:red"><?= $warning_generate_url; ?></span>');
-}
-function generate_url(c){
-	$(c).fadeOut(500,function(){$(this).show();});
-	$('#gen_warn').remove();
+function generate_url(context){
+	$.clear_errors('gen_url');
+	
 	name =$('input[name=name]').val();
+	
 	if(!name){
 		alert("Please make a name for this Category before generating the URL");
+		return;
 	}
-	url = "<?= $url_generate_url; ?>";
-	data = {category_id:<?= $category_id ? $category_id : 0; ?>, name: name};
 	
-	$.post(url, data, function(json){
-		$('input[name="keyword"]').val(json);
-	},'json');
+	data = {category_id: <?= (int)$category_id; ?>, name: name};
+	
+	$(context).fade_post("<?= $url_generate_url; ?>", data, function(json){
+		$('input[name="alias"]').val(json);
+	});
 }
- //--></script>
- 
-<script type="text/javascript">//<!--
+
+//Tabs
 $('#tabs a').tabs();
 //--></script>
 

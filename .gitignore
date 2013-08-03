@@ -28,3 +28,14 @@ cache
 /admin/model/catalog/product_class.php
 /admin/view/theme/default/template/catalog/product_class_form.tpl
 /admin/view/theme/default/template/catalog/product_class_list.tpl
+
+/admin/controller/block/widget/janrain.php
+/admin/language/english/block/widget/janrain.php
+/admin/view/theme/default/template/block/widget/janrain_profile.tpl
+/admin/view/theme/default/template/block/widget/janrain_settings.tpl
+/catalog/controller/block/widget/janrain.php
+/catalog/language/english/block/widget/janrain.php
+/catalog/model/widget/janrain.php
+/catalog/view/theme/default/template/block/widget/janrain.tpl
+/image/janrain/rpx-icons16.png
+/image/janrain/rpx-icons30.png

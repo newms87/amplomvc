@@ -1,13 +1,13 @@
 <?php
 class Extend extends Library
 {
-	public function add_navigation_link($link, $parent = '', $group = 'admin')
+	public function addNavigationLink($group, $link)
 	{
 		$defaults = array(
 			'title' => '',
 			'href' => '',
 			'query' => '',
-			'is_route' => '',
+			'parent' => '',
 			'parent_id' => 0,
 			'sort_order' => 0,
 			'status' => 1,
@@ -20,7 +20,7 @@ class Extend extends Library
 		}
 		
 		if (empty($link['display_name'])) {
-			$this->message->add("warning", "Extend::add_navigation_link(): You must specify the display_name when adding a new navigation link!");
+			$this->message->add("warning", "Extend::addNavigationLink(): You must specify the display_name when adding a new navigation link!");
 			
 			return false;
 		}
@@ -29,29 +29,25 @@ class Extend extends Library
 			$link['name'] = $this->tool->getSlug($link['display_name']);
 		}
 		
-		if (!$link['parent_id'] && $parent) {
-			$result = $this->db->query("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE name ='" . $this->db->escape($parent) . "'");
-			
-			if ($result->num_rows) {
-				$link['parent_id'] = $result->row['navigation_id'];
-			}
+		if (!$link['parent_id'] && $link['parent']) {
+			$link['parent_id'] = $this->db->queryVar("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE name = '" . $this->db->escape($link['parent']) . "'");
 		}
 		
-		$result = $this->db->query("SELECT navigation_group_id FROM " . DB_PREFIX . "navigation_group WHERE name = '" . $this->db->escape($group) . "'");
+		$navigation_group_id = $this->db->queryVar("SELECT navigation_group_id FROM " . DB_PREFIX . "navigation_group WHERE name = '" . $this->db->escape($group) . "'");
 		
-		if ($result->num_rows) {
-			$this->Model_Design_Navigation->addNavigationLink($result->row['navigation_group_id'], $link);
+		if ($navigation_group_id) {
+			$this->Model_Design_Navigation->addNavigationLink($navigation_group_id, $link);
 		}
 		
 		return true;
 	}
 	
-	public function remove_navigation_link($name)
+	public function removeNavigationLink($name)
 	{
-		$links = $this->db->queryRows("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE name = '" . $this->db->escape($name) . "'");
+		$navigation_ids = $this->db->queryColumn("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE name = '" . $this->db->escape($name) . "'");
 		
-		foreach ($links as $link) {
-			$this->Model_Design_Navigation->deleteNavigationLink($link['navigation_id']);
+		foreach ($navigation_ids as $navigation_id) {
+			$this->Model_Design_Navigation->deleteNavigationLink($navigation_id);
 		}
 	}
 	

@@ -80,8 +80,8 @@ class Admin_Controller_Catalog_Review extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (isset($_POST['selected']) && $this->validateDelete()) {
-			foreach ($_POST['selected'] as $review_id) {
+		if (isset($_GET['selected']) && $this->validateDelete()) {
+			foreach ($_GET['selected'] as $review_id) {
 				$this->Model_Catalog_Review->deleteReview($review_id);
 			}
 
@@ -177,7 +177,7 @@ class Admin_Controller_Catalog_Review extends Controller
 				'rating'	=> $result['rating'],
 				'status'	=> ($result['status'] ? $this->_('text_enabled') : $this->_('text_disabled')),
 				'date_added' => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
-				'selected'	=> isset($_POST['selected']) && in_array($result['review_id'], $_POST['selected']),
+				'selected'	=> isset($_GET['selected']) && in_array($result['review_id'], $_GET['selected']),
 				'action'	=> $action
 			);
 		}

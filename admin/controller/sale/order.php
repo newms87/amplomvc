@@ -1493,8 +1493,8 @@ class Admin_Controller_Sale_Order extends Controller
 
 		$orders = array();
 
-		if (isset($_POST['selected'])) {
-			$orders = $_POST['selected'];
+		if (isset($_GET['selected'])) {
+			$orders = $_GET['selected'];
 		} elseif (isset($_GET['order_id'])) {
 			$orders[] = $_GET['order_id'];
 		}

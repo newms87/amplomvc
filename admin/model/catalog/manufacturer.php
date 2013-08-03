@@ -27,8 +27,8 @@ class Admin_Model_Catalog_Manufacturer extends Model
 			}
 		}
 		
-		if (!empty($data['keyword'])) {
-			$this->url->setAlias($data['keyword'], 'product/manufacturer', 'manufacturer_id=' . (int)$manufacturer_id);
+		if (!empty($data['alias'])) {
+			$this->url->setAlias($data['alias'], 'product/manufacturer', 'manufacturer_id=' . (int)$manufacturer_id);
 		}
 		
 		if (!empty($data['translations'])) {
@@ -63,8 +63,8 @@ class Admin_Model_Catalog_Manufacturer extends Model
 			}
 		}
 				
-		if (!empty($data['keyword'])) {
-			$this->url->setAlias($data['keyword'], 'product/manufacturer', 'manufacturer_id=' . (int)$manufacturer_id);
+		if (!empty($data['alias'])) {
+			$this->url->setAlias($data['alias'], 'product/manufacturer', 'manufacturer_id=' . (int)$manufacturer_id);
 		} else {
 			$this->url->removeAlias('product/manufacturer', 'manufacturer_id=' . (int)$manufacturer_id);
 		}
@@ -85,7 +85,7 @@ class Admin_Model_Catalog_Manufacturer extends Model
 	{
 		$manufacturer = $this->getManufacturer($manufacturer_id);
 		
-		$manufacturer['keyword'] = '';
+		$manufacturer['alias'] = '';
 		
 		$manufacturer['stores'] = $this->getManufacturerStores($manufacturer_id);
 		
@@ -112,22 +112,6 @@ class Admin_Model_Catalog_Manufacturer extends Model
 		$f = $n[0];
 		$l = count($n)>1?$n[1][0]:$f[1];
 		return sprintf('%04d',$data['id']) . '-' . (sprintf('%02d',ord($f)-96)) . (sprintf('%02d',ord($l)-96));
-	}
-	
-	public function generate_url($manufacturer_id, $name)
-	{
-		$url = $this->Model_Setting_UrlAlias->format_url($name);
-		$orig = $url;
-		$count = 2;
-		
-		$url_alias = $manufacturer_id?$this->Model_Setting_UrlAlias->getUrlAliasByRouteQuery('product/manufacturer/product', "manufacturer_id=$manufacturer_id"):null;
-		
-		$test = $this->Model_Setting_UrlAlias->getUrlAliasByKeyword($url);
-		while (!empty($test) && $test['url_alias_id'] != $url_alias['url_alias_id']) {
-			$url = $orig . '-' . $count++;
-			$test = $this->Model_Setting_UrlAlias->getUrlAliasByKeyword($url);
-		}
-		return $url;
 	}
 	
 	public function getManufacturer($manufacturer_id)

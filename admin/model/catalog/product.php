@@ -22,7 +22,6 @@ class Admin_Model_Catalog_Product extends Model
 		if (isset($data['product_attributes'])) {
 				foreach ($data['product_attributes'] as $product_attribute) {
 					$product_attribute['product_id'] = $product_id;
-					$product_attribute['language_id'] = $language_id;
 					
 					$this->insert('product_attribute', $product_attribute);
 				}
@@ -184,13 +183,9 @@ class Admin_Model_Catalog_Product extends Model
 			
 			$this->insert('product_tag', $product_tag);
 		}
-						
-		if ($data['keyword']) {
-			if (!preg_match("/^product\//",$data['keyword'])) {
-				$data['keyword'] = 'product/' . $data['keyword'];
-			}
-			
-			$this->url->setAlias($data['keyword'], 'product/product', 'product_id=' . (int)$product_id);
+		
+		if (!empty($data['alias'])) {
+			$this->url->setAlias($data['alias'], 'product/product', 'product_id=' . (int)$product_id);
 		}
 
 		if (!empty($data['translations'])) {
@@ -200,238 +195,253 @@ class Admin_Model_Catalog_Product extends Model
 		return $product_id;
 	}
 	
-	public function editProduct($product_id, $data)
+	public function editProduct($product_id, $data, $strict = false)
 	{
-		$language_id = $this->config->get('config_language_id');
-		
 		$data['date_modified'] = $this->date->now();
 		
 		$this->update('product', $data, $product_id);
 		
 		//Product Options
-		$this->delete('product_option_value_restriction', array('product_id' => $product_id));
+		if (($insert = isset($data['product_options'])) || !$strict) {
+			$this->delete('product_option_value_restriction', array('product_id' => $product_id));
 		
-		$product_option_ids = array(0);
-		$product_option_value_ids = array(0);
-		
-		//TODO: Maybe add $this->addProductOptions() and $this->editProductOptions(), etc...?? 
-		if (!empty($data['product_options'])) {
-			foreach ($data['product_options'] as $product_option) {
-				$product_option['product_id'] = $product_id;
-				
-				$product_option_id = $this->update('product_option', $product_option);
-				
-				if (!empty($product_option['product_option_values'])) {
-					foreach ($product_option['product_option_values'] as $product_option_value) {
-						$product_option_value['product_id'] = $product_id;
-						$product_option_value['product_option_id'] = $product_option_id;
-						$product_option_value['option_id'] = $product_option['option_id'];
-						
-						$product_option_value_id = $this->update('product_option_value', $product_option_value);
-						
-						if (!empty($product_option_value['restrictions'])) {
-							foreach ($product_option_value['restrictions'] as $restriction) {
-								$restriction['product_id']		= $product_id;
-								$restriction['product_option_value_id'] = $product_option_value_id;
-								
-								$this->insert('product_option_value_restriction', $restriction);
+			$product_option_ids = array(0);
+			$product_option_value_ids = array(0);
+			
+			if ($insert) {
+				foreach ($data['product_options'] as $product_option) {
+					$product_option['product_id'] = $product_id;
+					
+					$product_option_id = $this->update('product_option', $product_option);
+					
+					if (!empty($product_option['product_option_values'])) {
+						foreach ($product_option['product_option_values'] as $product_option_value) {
+							$product_option_value['product_id'] = $product_id;
+							$product_option_value['product_option_id'] = $product_option_id;
+							$product_option_value['option_id'] = $product_option['option_id'];
+							
+							$product_option_value_id = $this->update('product_option_value', $product_option_value);
+							
+							if (!empty($product_option_value['restrictions'])) {
+								foreach ($product_option_value['restrictions'] as $restriction) {
+									$restriction['product_id']		= $product_id;
+									$restriction['product_option_value_id'] = $product_option_value_id;
+									
+									$this->insert('product_option_value_restriction', $restriction);
+								}
 							}
+							
+							$product_option_value_ids[] = $product_option_value_id;
 						}
-						
-						$product_option_value_ids[] = $product_option_value_id;
 					}
+					
+					$product_option_ids[] = $product_option_id;
 				}
-				
-				$product_option_ids[] = $product_option_id;
 			}
+
+			$this->query("DELETE FROM " . DB_PREFIX . "product_option WHERE product_id = '$product_id' AND product_option_id NOT IN (" . implode(',', $product_option_ids) . ")");
+			$this->query("DELETE FROM " . DB_PREFIX . "product_option_value WHERE product_id = '$product_id' AND product_option_value_id NOT IN (" . implode(',', $product_option_value_ids) . ")");
 		}
 		
-		$this->query("DELETE FROM " . DB_PREFIX . "product_option WHERE product_id = '$product_id' AND product_option_id NOT IN (" . implode(',', $product_option_ids) . ")");
-		$this->query("DELETE FROM " . DB_PREFIX . "product_option_value WHERE product_id = '$product_id' AND product_option_value_id NOT IN (" . implode(',', $product_option_value_ids) . ")");
-		
 		//Product Additional Images
-		$this->delete('product_image', array('product_id'=>$product_id));
-		
-		if (isset($data['product_images'])) {
-			foreach ($data['product_images'] as $product_image) {
-				$product_image['product_id'] = $product_id;
-				
-				$this->insert('product_image', $product_image);
+		if (($insert = isset($data['product_images'])) || !$strict) {
+			$this->delete('product_image', array('product_id'=>$product_id));
+			
+			if ($insert) {
+				foreach ($data['product_images'] as $product_image) {
+					$product_image['product_id'] = $product_id;
+					
+					$this->insert('product_image', $product_image);
+				}
 			}
 		}
 		
 		//Product Categories
-		$this->delete('product_to_category', array('product_id'=>$product_id));
-				
-		if (isset($data['product_category'])) {
-			foreach (array_unique($data['product_category']) as $category_id) {
-				$values = array(
-					'product_id' => $product_id,
-					'category_id' => $category_id
-				);
-				$this->insert('product_to_category',  $values);
+		if (($insert = isset($data['product_category'])) || !$strict) {
+			$this->delete('product_to_category', array('product_id'=>$product_id));
+			
+			if ($insert) {
+				foreach (array_unique($data['product_category']) as $category_id) {
+					$values = array(
+						'product_id' => $product_id,
+						'category_id' => $category_id
+					);
+					$this->insert('product_to_category',  $values);
+				}
 			}
 		}
 		
 		
 		//Product Stores
-		$this->delete('product_to_store', array('product_id'=>$product_id));
-
-		if (isset($data['product_store'])) {
-			foreach ($data['product_store'] as $store_id) {
-				$values = array(
-					'store_id' => $store_id,
-					'product_id' => $product_id
-				);
-				$this->insert('product_to_store', $values);
+		if (($insert = isset($data['product_store'])) || !$strict) {
+			$this->delete('product_to_store', array('product_id'=>$product_id));
+	
+			if ($insert) {
+				foreach ($data['product_store'] as $store_id) {
+					$values = array(
+						'store_id' => $store_id,
+						'product_id' => $product_id
+					);
+					$this->insert('product_to_store', $values);
+				}
 			}
 		}
 		
 		
 		//Product Attributes
-		$this->delete('product_attribute', array('product_id'=>$product_id));
-
-		if (isset($data['product_attributes'])) {
-			$product_attributes = array_unique($data['product_attributes'], SORT_REGULAR);
-			
-			foreach ($product_attributes as $product_attribute) {
-				$product_attribute['product_id'] = $product_id;
-				$product_attribute['language_id'] = $language_id;
+		if (($insert = isset($data['product_attributes'])) || !$strict) {
+			$this->delete('product_attribute', array('product_id'=>$product_id));
+	
+			if ($insert) {
+				$product_attributes = array_unique($data['product_attributes'], SORT_REGULAR);
 				
-				$this->insert('product_attribute', $product_attribute);
+				foreach ($product_attributes as $product_attribute) {
+					$product_attribute['product_id'] = $product_id;
+					
+					$this->insert('product_attribute', $product_attribute);
+				}
 			}
 		}
 		
 		//Product Discount
-		$this->delete('product_discount', array('product_id'=>$product_id));
-
-		if (isset($data['product_discounts'])) {
-			foreach ($data['product_discounts'] as $product_discount) {
-				$product_discount['product_id'] = $product_id;
-				
-				$this->insert('product_discount', $product_discount);
+		if (($insert = isset($data['product_discounts'])) || !$strict) {
+			$this->delete('product_discount', array('product_id'=>$product_id));
+	
+			if ($insert) {
+				foreach ($data['product_discounts'] as $product_discount) {
+					$product_discount['product_id'] = $product_id;
+					
+					$this->insert('product_discount', $product_discount);
+				}
 			}
 		}
-		
 		
 		//Product Special
-		$this->delete('product_special', array('product_id'=>$product_id));
-		
-		if (isset($data['product_specials'])) {
-			foreach ($data['product_specials'] as $product_special) {
-				$product_special['product_id'] = $product_id;
-				
-				$this->insert('product_special', $product_special);
+		if (($insert = isset($data['product_specials'])) || !$strict) {
+			$this->delete('product_special', array('product_id'=>$product_id));
+			
+			if ($insert) {
+				foreach ($data['product_specials'] as $product_special) {
+					$product_special['product_id'] = $product_id;
+					
+					$this->insert('product_special', $product_special);
+				}
 			}
 		}
 		
-		
 		//Product Downloads
-		$this->delete('product_to_download',  array('product_id'=>$product_id));
-		
-		if (isset($data['product_download'])) {
-			foreach ($data['product_download'] as $download_id) {
-				$values = array(
-					'download_id' => $download_id,
-					'product_id' => $product_id
-				);
-				$this->insert('product_to_download', $values);
+		if (($insert = isset($data['product_download'])) || !$strict) {
+			$this->delete('product_to_download',  array('product_id'=>$product_id));
+			
+			if ($insert) {
+				foreach ($data['product_download'] as $download_id) {
+					$values = array(
+						'download_id' => $download_id,
+						'product_id' => $product_id
+					);
+					$this->insert('product_to_download', $values);
+				}
 			}
 		}
 		
 		
 		//Product Related
-		$this->delete('product_related',  array('product_id'=>$product_id));
-		$this->delete('product_related', array('related_id'=>$product_id));
-
-		if (isset($data['product_related'])) {
-			foreach ($data['product_related'] as $related_id) {
-				$values = array(
-					'product_id' => $product_id,
-					'related_id' => $related_id
-				);
+		if (($insert = isset($data['product_related'])) || !$strict) {
+			$this->delete('product_related',  array('product_id'=>$product_id));
+			$this->delete('product_related', array('related_id'=>$product_id));
+	
+			if ($insert) {
+				foreach ($data['product_related'] as $related_id) {
+					$values = array(
+						'product_id' => $product_id,
+						'related_id' => $related_id
+					);
+						
+					$this->insert('product_related', $values);
 					
-				$this->insert('product_related', $values);
-				
-				//the inverse so the other product is related to this product too!
-				$values = array(
-					'product_id' => $related_id,
-					'related_id' => $product_id
-				);
-					
-				$this->insert('product_related', $values);
+					//the inverse so the other product is related to this product too!
+					$values = array(
+						'product_id' => $related_id,
+						'related_id' => $product_id
+					);
+						
+					$this->insert('product_related', $values);
+				}
 			}
 		}
 		
 		//Product Reward
-		$this->delete('product_reward',  array('product_id'=>$product_id));
-
-		if (isset($data['product_reward'])) {
-			foreach ($data['product_reward'] as $customer_group_id => $product_reward) {
-				$product_reward['product_id'] = $product_id;
-				$product_reward['customer_group_id'] = $customer_group_id;
-				
-				$this->insert('product_reward', $product_reward);
+		if (($insert = isset($data['product_reward'])) || !$strict) {
+			$this->delete('product_reward',  array('product_id'=>$product_id));
+	
+			if ($insert) {
+				foreach ($data['product_reward'] as $customer_group_id => $product_reward) {
+					$product_reward['product_id'] = $product_id;
+					$product_reward['customer_group_id'] = $customer_group_id;
+					
+					$this->insert('product_reward', $product_reward);
+				}
 			}
 		}
 		
 		//Product Layouts
-		$this->delete('product_to_layout',  array('product_id'=>$product_id));
-
-		if (isset($data['product_layout'])) {
-			foreach ($data['product_layout'] as $store_id => $layout) {
-				if ($layout['layout_id']) {
-					$layout['product_id'] = $product_id;
-					$layout['store_id'] = $store_id;
-					
-					
-					$this->insert('product_to_layout', $layout);
+		if (($insert = isset($data['product_layout'])) || !$strict) {
+			$this->delete('product_to_layout',  array('product_id'=>$product_id));
+	
+			if ($insert) {
+				foreach ($data['product_layout'] as $store_id => $layout) {
+					if ($layout['layout_id']) {
+						$layout['product_id'] = $product_id;
+						$layout['store_id'] = $store_id;
+						
+						$this->insert('product_to_layout', $layout);
+					}
 				}
 			}
 		}
 		
 		//Product Templates
-		$this->delete('product_template',  array('product_id'=>$product_id));
-
-		if (isset($data['product_template'])) {
-			foreach ($data['product_template'] as $store_id => $themes) {
-				foreach ($themes as $theme => $template) {
-					if(empty($template['template'])) continue;
-					
-					$template['product_id'] = $product_id;
-					$template['theme'] = $theme;
-					$template['store_id'] = $store_id;
-					
-					$this->insert('product_template', $template);
+		if (($insert = isset($data['product_template'])) || !$strict) {
+			$this->delete('product_template',  array('product_id'=>$product_id));
+	
+			if ($insert) {
+				foreach ($data['product_template'] as $store_id => $themes) {
+					foreach ($themes as $theme => $template) {
+						if(empty($template['template'])) continue;
+						
+						$template['product_id'] = $product_id;
+						$template['theme'] = $theme;
+						$template['store_id'] = $store_id;
+						
+						$this->insert('product_template', $template);
+					}
 				}
 			}
 		}
 		
 		
 		//Product Tags
-		$this->delete('product_tag',  array('product_id' => $product_id));
-		
-		$tag_ids = $this->tag->addAll($data['product_tags']);
-		
-		foreach ($tag_ids as $tag_id) {
-			$product_tag = array(
-				'product_id' => $product_id,
-				'tag_id' => $tag_id,
-			);
+		if (($insert = isset($data['product_tags'])) || !$strict) {
+			$this->delete('product_tag',  array('product_id' => $product_id));
 			
-			$this->insert('product_tag', $product_tag);
+			if ($insert) {
+				$tag_ids = $this->tag->addAll($data['product_tags']);
+				
+				foreach ($tag_ids as $tag_id) {
+					$product_tag = array(
+						'product_id' => $product_id,
+						'tag_id' => $tag_id,
+					);
+					
+					$this->insert('product_tag', $product_tag);
+				}
+			}
 		}
 		
 		//Product URL Alias
-		$this->Model_Setting_UrlAlias->deleteUrlAliasByRouteQuery('product/product', 'product_id=' . (int)$product_id);
-		
-		if ($data['keyword']) {
-			if (!preg_match("/^product\//",$data['keyword'])) {
-				$data['keyword'] = 'product/' . $data['keyword'];
-			}
-			
-			$this->url->setAlias($data['keyword'], 'product/product', 'product_id=' . (int)$product_id);
-		} else {
+		if (!empty($data['alias'])) {
+			$this->url->setAlias($data['alias'], 'product/product', 'product_id=' . (int)$product_id);
+		} elseif (!$strict) {
 			$this->url->removeAlias('product/product', 'product_id=' . (int)$product_id);
 		}
 		
@@ -443,32 +453,16 @@ class Admin_Model_Catalog_Product extends Model
 		$this->cache->delete("product.$product_id");
 	}
 	
-	public function generate_url($product_id, $name)
-	{
-		$url = 'product/'.$this->Model_Setting_UrlAlias->format_url($name);
-		$orig = $url;
-		$count = 2;
-		
-		$url_alias = $product_id?$this->Model_Setting_UrlAlias->getUrlAliasByRouteQuery('product/product', "product_id=$product_id"):null;
-		
-		$test = $this->Model_Setting_UrlAlias->getUrlAliasByKeyword($url);
-		while (!empty($test) && $test['url_alias_id'] != $url_alias['url_alias_id']) {
-			$url = $orig . '-' . $count++;
-			$test = $this->Model_Setting_UrlAlias->getUrlAliasByKeyword($url);
-		}
-		return $url;
-	}
-	
 	public function generate_model($name)
 	{
-		$model = strtoupper($this->Model_Setting_UrlAlias->format_url($name));
-		$orig = $model;
-		$count = 2;
-		$test = $this->query("SELECT COUNT(*) as count FROM " . DB_PREFIX ."product WHERE model='$model'");
-		while ($test->row['count']) {
-			$model = $orig . '-' . $count++;
-			$test = $this->query("SELECT COUNT(*) as count FROM " . DB_PREFIX ."product WHERE model='$model'");
+		$model = strtoupper($this->url->format($name));
+		
+		$count = $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX ."product WHERE model like '" . $this->db->escape($model) . "%'");
+		
+		if ($count) {
+			$model .= '-'.$count;
 		}
+		
 		return $model;
 	}
 	
@@ -478,7 +472,7 @@ class Admin_Model_Catalog_Product extends Model
 		
 		if (!$product) return false;
 		
-		$product['keyword'] = '';
+		$product['alias'] = '';
 
 		$product['status'] = 0;
 		
@@ -528,7 +522,7 @@ class Admin_Model_Catalog_Product extends Model
 		$this->delete('product_to_store', array('product_id'=>$product_id));
 		$this->delete('review', array('product_id'=>$product_id));
 		
-		$this->url->remove_alias('product/product', 'product_id=' . (int)$product_id);
+		$this->url->removeAlias('product/product', 'product_id=' . (int)$product_id);
 		
 		$this->translation->delete('product', $product_id);
 		
@@ -540,8 +534,7 @@ class Admin_Model_Catalog_Product extends Model
 		$product = $this->queryRow("SELECT * FROM " . DB_PREFIX . "product p WHERE p.product_id = '" . (int)$product_id . "'");
 		
 		if ($product) {
-			$url_alias = $this->Model_Setting_UrlAlias->getUrlAliasByRouteQuery('product/product', "product_id=" . (int)$product_id);
-			$product['keyword'] = $url_alias ? $url_alias['keyword']:'';
+			$product['alias'] = $this->url->getAlias('product/product', 'product_id=' . (int)$product_id);
 			
 			$this->translation->translate('product', $product_id, $product);
 		}
@@ -556,8 +549,10 @@ class Admin_Model_Catalog_Product extends Model
 	
 	public function getProducts($data = array(), $select = '', $total = false)
 	{
-		$lang_id = (int)$this->config->get('config_language_id');
-		
+		if (!isset($data['sort'])) {
+			$data['sort'] = 'p.sort_order';
+		}
+
 		//Select
 		if ($total) {
 			$select = 'COUNT(*) as total';
@@ -569,6 +564,10 @@ class Admin_Model_Catalog_Product extends Model
 		//From
 		$from = "FROM " . DB_PREFIX . "product p";
 		
+		if ($data['sort'] === 'pc.name') {
+			$from .= " LEFT JOIN " . DB_PREFIX . "product_class pc ON (p.product_class_id=pc.product_class_id)";
+		}
+		
 		//Where
 		$where = "WHERE 1";
 		
@@ -578,6 +577,10 @@ class Admin_Model_Catalog_Product extends Model
 		
 		if (isset($data['model'])) {
 			$where .= " AND LCASE(p.model) like '%" . strtolower($this->escape($data['model'])) . "%'";
+		}
+		
+		if (isset($data['product_class_id'])) {
+			$where .= " AND p.product_class_id = " . (int)$data['product_class_id'];
 		}
 		
 		if (!empty($data['categories'])) {
@@ -751,29 +754,6 @@ class Admin_Model_Catalog_Product extends Model
 	public function isEditable($product_id)
 	{
 		return (int)$this->queryVar("SELECT editable FROM " . DB_PREFIX . "product WHERE product_id='$product_id'");
-	}
-
-	public function updateProductCategory($product_id, $op, $category_id)
-	{
-		$where = array(
-			'category_id' => $category_id,
-			'product_id' => $product_id,
-		);
-		
-		$this->delete('product_to_category', $where);
-		
-		if ($op == 'add') {
-			$this->delete('product_to_category', $where);
-		}
-		
-		$this->cache->delete("product.$product_id");
-	}
-	
-	public function updateProduct($product_id, $name, $value)
-	{
-		$this->query("UPDATE " . DB_PREFIX . "product SET `$name`='$value' WHERE product_id='$product_id'");
-		
-		$this->cache->delete("product.$product_id");
 	}
 	
 	public function getProductAttributes($product_id)

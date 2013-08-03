@@ -63,9 +63,9 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 	{
 		$this->language->load('catalog/manufacturer');
 		
-		if (!empty($_POST['selected']) && isset($_GET['action'])) {
+		if (!empty($_GET['selected']) && isset($_GET['action'])) {
 			if ($_GET['action'] !== 'delete' || $this->validateDelete()) {
-				foreach ($_POST['selected'] as $manufacturer_id) {
+				foreach ($_GET['selected'] as $manufacturer_id) {
 					switch($_GET['action']){
 						case 'enable':
 							$this->Model_Catalog_Manufacturer->updateField($manufacturer_id, array('status' => 1));
@@ -234,7 +234,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 			),
 		);
 		
-		$this->data['batch_update'] = html_entity_decode($this->url->link('catalog/manufacturer/batch_update', $url_query));
+		$this->data['batch_update'] = 'catalog/manufacturer/batch_update';
 		
 		//Render Limit Menu
 		$this->data['limits'] = $this->sort->render_limit();
@@ -285,7 +285,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		
 		$defaults = array(
 			'name' => '',
-			'keyword' => '',
+			'alias' => '',
 			'image' => '',
 			'date_active' => $this->date->now(),
 			'date_expires'=> $this->date->add(null, '30 days'),
@@ -341,10 +341,8 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 			$this->error['name'] = $this->_('error_name');
 		}
 		
-		if (!isset($_POST['keyword'])) {
-			$_POST['keyword'] = $this->tool->getSlug($_POST['name']);
-		} elseif (empty($_POST['keyword']) || preg_match("/[^A-Za-z0-9-]/", $_POST['keyword'])) {
-			$this->error['keyword'] = $this->_('error_keyword');
+		if (empty($_POST['alias'])) {
+			$_POST['alias'] = $this->tool->getSlug($_POST['name']);
 		}
 		
 		return $this->error ? false : true;
@@ -358,8 +356,8 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 		
 		$manufacturer_ids = array();
 		
-		if (isset($_POST['selected'])) {
-			$manufacturer_ids = $_POST['selected'];
+		if (isset($_GET['selected'])) {
+			$manufacturer_ids = $_GET['selected'];
 		}
 		
 		if (isset($_GET['manufacturer_id'])) {
@@ -383,12 +381,15 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 	
 	public function generate_url()
 	{
-		$name = isset($_POST['name'])?$_POST['name']:'';
-		$manufacturer_id = isset($_POST['manufacturer_id'])?$_POST['manufacturer_id']:'';
-		if(!$name)return;
-		
-		echo json_encode($this->Model_Catalog_Manufacturer->generate_url($manufacturer_id,$name));
-		exit;
+		if (!empty($_POST['name'])) {
+			$manufacturer_id = !empty($_POST['manufacturer_id']) ? (int)$_POST['manufacturer_id'] : 0;
+			
+			$url = $this->Model_Setting_UrlAlias->getUniqueAlias('catalog/manufacturer', 'manufacturer_id=' . $manufacturer_id, $_POST['name']);
+		} else {
+			$url = '';
+		}
+
+		$this->response->setOutput($url);
 	}
 	
 	public function autocomplete()

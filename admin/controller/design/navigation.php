@@ -65,9 +65,9 @@ class Admin_Controller_Design_Navigation extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (isset($_POST['selected']) && isset($_GET['action'])) {
+		if (isset($_GET['selected']) && isset($_GET['action'])) {
 			if ($_GET['action'] !== 'delete' || $this->validateDelete()) {
-				foreach ($_POST['selected'] as $navigation_group_id) {
+				foreach ($_GET['selected'] as $navigation_group_id) {
 					switch($_GET['action']){
 						case 'enable':
 							$this->Model_Design_Navigation->editNavigationGroup($navigation_group_id, array('status' => 1));

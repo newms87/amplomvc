@@ -55,8 +55,8 @@ class Admin_Controller_Sale_Coupon extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (isset($_POST['selected']) && $this->validateDelete()) {
-			foreach ($_POST['selected'] as $coupon_id) {
+		if (isset($_GET['selected']) && $this->validateDelete()) {
+			foreach ($_GET['selected'] as $coupon_id) {
 				$this->Model_Sale_Coupon->deleteCoupon($coupon_id);
 			}
 				
@@ -116,7 +116,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 				'date_start' => $this->date->format($result['date_start'], $this->language->getInfo('date_format_short')),
 				'date_end'	=> $this->date->format($result['date_end'], $this->language->getInfo('date_format_short')),
 				'status'	=> ($result['status'] ? $this->_('text_enabled') : $this->_('text_disabled')),
-				'selected'	=> isset($_POST['selected']) && in_array($result['coupon_id'], $_POST['selected']),
+				'selected'	=> isset($_GET['selected']) && in_array($result['coupon_id'], $_GET['selected']),
 				'action'	=> $action
 			);
 		}

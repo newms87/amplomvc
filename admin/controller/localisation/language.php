@@ -54,8 +54,8 @@ class Admin_Controller_Localisation_Language extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (isset($_POST['selected']) && $this->validateDelete()) {
-			foreach ($_POST['selected'] as $language_id) {
+		if (isset($_GET['selected']) && $this->validateDelete()) {
+			foreach ($_GET['selected'] as $language_id) {
 				$this->Model_Localisation_Language->deleteLanguage($language_id);
 			}
 
@@ -123,7 +123,7 @@ class Admin_Controller_Localisation_Language extends Controller
 				'name'		=> $result['name'] . (($result['code'] == $this->config->get('config_language')) ? $this->_('text_default') : null),
 				'code'		=> $result['code'],
 				'sort_order'  => $result['sort_order'],
-				'selected'	=> isset($_POST['selected']) && in_array($result['language_id'], $_POST['selected']),
+				'selected'	=> isset($_GET['selected']) && in_array($result['language_id'], $_GET['selected']),
 				'action'		=> $action
 			);
 		}
@@ -267,7 +267,7 @@ class Admin_Controller_Localisation_Language extends Controller
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		foreach ($_POST['selected'] as $language_id) {
+		foreach ($_GET['selected'] as $language_id) {
 			$language_info = $this->Model_Localisation_Language->getLanguage($language_id);
 
 			if ($language_info) {

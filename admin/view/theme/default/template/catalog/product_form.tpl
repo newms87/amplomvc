@@ -5,6 +5,13 @@
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'product.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
 			<div class="buttons">
+				<? if (count($data_product_classes) > 1) { ?>
+					<form id="product_class_form" action="<?= $change_class; ?>" method="post">
+						<? $this->builder->set_config('product_class_id', 'name'); ?>
+						<?= $this->builder->build('select', $data_product_classes, 'product_class_id', $product_class_id); ?>
+						<input type="submit" class="button" value="<?= $button_change_class; ?>" />
+					</form>
+				<? } ?>
 				<a onclick="$('#product_form').submit();" class="button"><?= $button_save; ?></a>
 				<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
 			</div>
@@ -66,9 +73,9 @@
 							</td>
 						</tr>
 						<tr>
-							<td class="required"><?= $entry_keyword; ?></td>
+							<td class="required"><?= $entry_alias; ?></td>
 							<td>
-								<input type="text" onfocus='generate_url_warning(this)' name="keyword" value="<?= $keyword; ?>" />
+								<input type="text" onfocus="$(this).display_error('<?= $warning_generate_url; ?>', 'gen_url');" name="alias" value="<?= $alias; ?>" />
 								<a class='gen_url' onclick='generate_url(this)'><?= $button_generate_url; ?></a>
 							</td>
 						</tr>
@@ -596,24 +603,32 @@
 <script type="text/javascript">//<!--
 $.ac_datepicker();
 
-function generate_url_warning(field){
-	if(!$('#gen_warn').length)
-		$(field).parent().append('<span id="gen_warn" style="color:red"><?= $warning_generate_url; ?></span>');
-}
-function generate_url(c){
-	$(c).fadeOut(500,function(){$(c).show();});
-	$('#gen_warn').remove();
+function generate_url(context){
+	$.clear_errors('gen_url');
+	
 	name = $('input[name=name]').val();
-	if(!name)
-			alert("Please make a name for this product before generating the URL");
-	$.post("<?= $url_generate_url; ?>",{product_id:<?= $product_id ? $product_id : 0; ?>,name:name},function(json){$('input[name="keyword"]').val(json);},'json');
+	
+	if (!name) {
+		alert("Please make a name for this product before generating the URL");
+	}
+	else {
+		data = {product_id:<?= (int)$product_id; ?>, name:name};
+		$(context).fade_post("<?= $url_generate_url; ?>",data, function(json) {
+			$('input[name="alias"]').val(json);
+		});
+	}
 }
-function generate_model(c){
-	$(c).fadeOut(500,function(){$(c).show();});
+function generate_model(context){
 	name = $('input[name=name]').val();
-	if(!name)
-			alert("Please make a name for this product before generating the Model ID");
-	$.post("<?= $url_generate_model; ?>",{product_id:<?= $product_id?$product_id:0; ?>,name:name},function(json){$('input[name="model"]').val(json);},'json');
+	
+	if(!name) {
+		alert("Please make a name for this product before generating the Model ID");
+	} else {
+		data = {product_id:<?= $product_id; ?>, name:name};
+		$(context).fade_post("<?= $url_generate_model; ?>", data, function(json) {
+			$('input[name="model"]').val(json);
+		});
+	}
 }
 //--></script>
 
@@ -639,7 +654,7 @@ $('#product_attribute_autocomplete').autocomplete({
 		$.get("<?= $url_attribute_autocomplete; ?>", {filter: filter}, response, 'json');
 	},
 	select: function(event, data){
-		if (attribute_row = $.ac_template('attribute_list', 'add', data.item)) {
+		if (data.item.value && (attribute_row = $.ac_template('attribute_list', 'add', data.item))) {
 			attribute_row.find('.attribute_name').html(data.item.name);
 		}
 		

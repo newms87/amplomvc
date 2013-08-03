@@ -52,8 +52,8 @@ class Admin_Controller_Page_Page extends Controller
 	{
 		$this->language->load('page/page');
 		
-		if (isset($_POST['selected']) && isset($_GET['action'])) {
-			foreach ($_POST['selected'] as $page_id) {
+		if (isset($_GET['selected']) && isset($_GET['action'])) {
+			foreach ($_GET['selected'] as $page_id) {
 				switch($_GET['action']){
 					case 'enable':
 						$this->Model_Page_Page->update_field($page_id, array('status' => 1));
@@ -172,7 +172,7 @@ class Admin_Controller_Page_Page extends Controller
 			),
 		);
 		
-		$this->data['batch_update'] = html_entity_decode($this->url->link('page/page/batch_update', $url_query));
+		$this->data['batch_update'] = 'page/page/batch_update';
 		
 		//Render Limit Menu
 		$this->data['limits'] = $this->sort->render_limit();

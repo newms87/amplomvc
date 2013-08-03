@@ -16,15 +16,15 @@ class Dev_Setup extends PluginSetup
 			'display_name' => "Development",
 			'name' => DEV_NAVIGATION_LINK_NAME,
 			'href' => 'dev/dev',
-			'is_route' => 1,
+			'parent' => 'system',
 			'sort_order' => 15,
 		);
 		
-		$this->extend->add_navigation_link($link, 'system', 'admin');
+		$this->extend->addNavigationLink('admin', $link);
 	}
 	
 	public function uninstall($keep_data = false)
 	{
-		$this->extend->remove_navigation_link(DEV_NAVIGATION_LINK_NAME);
+		$this->extend->removeNavigationLink(DEV_NAVIGATION_LINK_NAME);
 	}
 }

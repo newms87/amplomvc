@@ -106,8 +106,8 @@ class Admin_Controller_Catalog_Download extends Controller
 
 		$this->document->setTitle($this->_('heading_title'));
 		
-		if (isset($_POST['selected']) && $this->validateDelete()) {
-			foreach ($_POST['selected'] as $download_id) {
+		if (isset($_GET['selected']) && $this->validateDelete()) {
+			foreach ($_GET['selected'] as $download_id) {
 			
 				$results = $this->Model_Catalog_Download->getDownload($download_id) ;
 					
@@ -209,7 +209,7 @@ class Admin_Controller_Catalog_Download extends Controller
 				'download_id' => $result['download_id'],
 				'name'		=> $result['name'],
 				'remaining'	=> $result['remaining'],
-				'selected'	=> isset($_POST['selected']) && in_array($result['download_id'], $_POST['selected']),
+				'selected'	=> isset($_GET['selected']) && in_array($result['download_id'], $_GET['selected']),
 				'action'		=> $action
 			);
 		}
@@ -398,7 +398,7 @@ class Admin_Controller_Catalog_Download extends Controller
 				$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		foreach ($_POST['selected'] as $download_id) {
+		foreach ($_GET['selected'] as $download_id) {
 			$data = array(
 				'downloads' => array($download_id),
 			);

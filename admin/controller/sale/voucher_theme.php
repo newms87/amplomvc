@@ -135,7 +135,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 			),
 		);
 		
-		$this->data['batch_update'] = html_entity_decode($this->url->link('sale/voucher_theme/batch_update', $url_query));
+		$this->data['batch_update'] = 'sale/voucher_theme/batch_update';
 		
 		//Render Limit Menu
 		$this->data['limits'] = $this->sort->render_limit();
@@ -241,8 +241,8 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		if (!empty($_POST['selected'])) {
-			$voucher_theme_ids = $_POST['selected'];
+		if (!empty($_GET['selected'])) {
+			$voucher_theme_ids = $_GET['selected'];
 		} else {
 			$voucher_theme_ids = array();
 		}

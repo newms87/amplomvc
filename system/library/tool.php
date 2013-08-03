@@ -11,10 +11,12 @@ class Tool extends Library
 	
 	public function getSlug($name)
 	{
-		$slug = preg_replace("/\s/",'_', strtolower(trim($name)));
-		$slug = preg_replace("/[^a-z0-9_]/", '', $slug);
+		$patterns = array(
+			"/[\s\\\\\/]/" => '_',
+			"/[^a-z0-9_]/" => '',
+		);
 		
-		return $slug;
+		return preg_replace(array_keys($patterns), array_values($patterns), strtolower(trim($name)));
 	}
 	
 	public function formatClassname($component)

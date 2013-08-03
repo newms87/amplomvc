@@ -5,6 +5,7 @@ $_['heading_title']	= 'Attribute Groups';
 // Text
 $_['text_success']		= 'Success: You have modified attribute groups!';
 $_['text_product_count'] = "Associated to %d Product(s)";
+$_['text_add_attribute_autocomplete'] = " + Add Attribute";
 
 // Column
 $_['column_name']		= 'Attribute Group Name';

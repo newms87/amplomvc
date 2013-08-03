@@ -17,8 +17,8 @@ class Admin_Model_Page_Page extends Model
 			}
 		}
 		
-		if (!empty($data['keyword'])) {
-			$this->url->setAlias($data['keyword'], 'page/page', 'page_id=' . (int)$page_id);
+		if (!empty($data['alias'])) {
+			$this->url->setAlias($data['alias'], 'page/page', 'page_id=' . (int)$page_id);
 		}
 		
 		if (!empty($data['translations'])) {
@@ -45,8 +45,8 @@ class Admin_Model_Page_Page extends Model
 			}
 		}
 
-		if (!empty($data['keyword'])) {
-			$this->url->setAlias($data['keyword'], 'page/page', 'page_id=' . (int)$page_id);
+		if (!empty($data['alias'])) {
+			$this->url->setAlias($data['alias'], 'page/page', 'page_id=' . (int)$page_id);
 		} else {
 			$this->url->removeAlias('page/page', 'page_id=' . (int)$page_id);
 		}
@@ -87,7 +87,7 @@ class Admin_Model_Page_Page extends Model
 	{
 		$result = $this->queryRow("SELECT * FROM " . DB_PREFIX . "page WHERE page_id = '" . (int)$page_id . "'");
 		
-		$result['keyword'] = $this->url->getAlias('page/page', 'page_id=' . (int)$page_id);
+		$result['alias'] = $this->url->getAlias('page/page', 'page_id=' . (int)$page_id);
 		
 		//Translations
 		$translate_fields = array(

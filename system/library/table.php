@@ -90,7 +90,7 @@ class Table extends Library
 		$this->template_data += $this->sort->getSortData();
 		
 		if (empty($this->template_data['sort_url'])) {
-			$this->template_data['sort_url'] = $this->url->link($this->url->route(), $this->url->getQueryExclude('sort', 'order', 'page'));
+			$this->template_data['sort_url'] = $this->url->link($this->url->getPath(), $this->url->getQueryExclude('sort', 'order', 'page'));
 		}
 		
 		//Normalize Columns
