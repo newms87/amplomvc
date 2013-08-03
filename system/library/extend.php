@@ -9,6 +9,7 @@ class Extend extends Library
 			'query' => '',
 			'parent' => '',
 			'parent_id' => 0,
+			'parent' => '',
 			'sort_order' => 0,
 			'status' => 1,
 		);
