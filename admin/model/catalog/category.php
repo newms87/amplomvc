@@ -194,7 +194,7 @@ class Admin_Model_Catalog_Category extends Model
 	//TODO: need to rethink this
 	public function generate_url($category_id, $name)
 	{
-		$url = $this->Model_Setting_UrlAlias->format_url($name);
+		$url = $this->url->format($name);
 		$orig = $url;
 		$count = 2;
 		

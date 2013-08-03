@@ -1,7 +1,7 @@
 <?php
 class Extend extends Library
 {
-	public function add_navigation_link($link, $parent = '', $group = 'admin')
+	public function addNavigationLink($link, $group = 'admin')
 	{
 		$defaults = array(
 			'title' => '',
@@ -9,6 +9,7 @@ class Extend extends Library
 			'query' => '',
 			'is_route' => '',
 			'parent_id' => 0,
+			'parent' => '',
 			'sort_order' => 0,
 			'status' => 1,
 		);
@@ -29,12 +30,8 @@ class Extend extends Library
 			$link['name'] = $this->tool->getSlug($link['display_name']);
 		}
 		
-		if (!$link['parent_id'] && $parent) {
-			$result = $this->db->query("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE name ='" . $this->db->escape($parent) . "'");
-			
-			if ($result->num_rows) {
-				$link['parent_id'] = $result->row['navigation_id'];
-			}
+		if (!$link['parent_id'] && $link['parent']) {
+			$link['parent_id'] = $this->db->queryVar("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE name ='" . $this->db->escape($link['parent']) . "'");
 		}
 		
 		$result = $this->db->query("SELECT navigation_group_id FROM " . DB_PREFIX . "navigation_group WHERE name = '" . $this->db->escape($group) . "'");

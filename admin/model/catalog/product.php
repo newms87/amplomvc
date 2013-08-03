@@ -445,7 +445,7 @@ class Admin_Model_Catalog_Product extends Model
 	
 	public function generate_url($product_id, $name)
 	{
-		$url = 'product/'.$this->Model_Setting_UrlAlias->format_url($name);
+		$url = 'product/'.$this->url->format($name);
 		$orig = $url;
 		$count = 2;
 		
@@ -461,7 +461,7 @@ class Admin_Model_Catalog_Product extends Model
 	
 	public function generate_model($name)
 	{
-		$model = strtoupper($this->Model_Setting_UrlAlias->format_url($name));
+		$model = strtoupper($this->url->format($name));
 		$orig = $model;
 		$count = 2;
 		$test = $this->query("SELECT COUNT(*) as count FROM " . DB_PREFIX ."product WHERE model='$model'");

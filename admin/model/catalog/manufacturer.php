@@ -116,7 +116,7 @@ class Admin_Model_Catalog_Manufacturer extends Model
 	
 	public function generate_url($manufacturer_id, $name)
 	{
-		$url = $this->Model_Setting_UrlAlias->format_url($name);
+		$url = $this->url->format($name);
 		$orig = $url;
 		$count = 2;
 		

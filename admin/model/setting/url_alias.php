@@ -4,7 +4,7 @@ class Admin_Model_Setting_UrlAlias extends Model
 	public function addUrlAlias($data)
 	{
 		$data['status'] = isset($data['status'])?$data['status']:1;
-		$data['keyword'] = $this->format_url($data['keyword']);
+		$data['keyword'] = $this->url->format($data['keyword']);
 		
 		if (!isset($data['store_id']) || (empty($data['store_id']) && $data['store_id'] !== 0)) {
 			$data['store_id'] = -1;
@@ -16,7 +16,7 @@ class Admin_Model_Setting_UrlAlias extends Model
 	public function editUrlAlias($url_alias_id, $data)
 	{
 		if (isset($data['keyword'])) {
-			$data['keyword'] = $this->format_url($data['keyword']);
+			$data['keyword'] = $this->url->format($data['keyword']);
 		}
 		
 		if (!isset($data['store_id']) || (!$data['store_id'] && $data['store_id'] !== 0)) {
@@ -24,14 +24,6 @@ class Admin_Model_Setting_UrlAlias extends Model
 		}
 		
 		$this->update('url_alias', $data, $url_alias_id);
-	}
-	
-	public function format_url($url)
-	{
-		$l = preg_replace("/[^A-Za-z0-9\/\\\\]+/","-",strtolower($url));
-		$l = preg_replace("/(^-)|(-$)/",'',$l);
-		$l = preg_replace("/[\/\\\\]-/","/",$l);
-		return $l;
 	}
 	
 	public function deleteUrlAlias($url_alias_id)

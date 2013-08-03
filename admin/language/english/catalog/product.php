@@ -111,8 +111,7 @@ $_['tab_shipping_return'] = 'Shipping / Returns';
 
 // Error
 $_['error_warning']			= 'Warning: Please check the form carefully for errors!';
-$_['error_batch_action']			= 'The requested action failed.';
-$_['error_keyword']			= 'Product must have a valid URL Alias between 3 and 255 characters with letters, numbers and `-`\'s only!';
+$_['error_alias']			= 'Product must have a valid URL Alias between 3 and 255 characters with letters, numbers and `-`\'s only!';
 $_['error_permission']		= 'Warning: You do not have permission to modify products!';
 $_['error_confirmed_order_product']	= 'The product %s cannot be deleted after it is associated with a confirmed order! Please deactivate this product instead of deleting it.';
 $_['error_name']				= 'Product Name must be greater than 3 and less than 255 characters!';

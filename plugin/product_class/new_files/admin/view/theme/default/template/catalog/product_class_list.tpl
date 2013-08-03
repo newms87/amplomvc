@@ -5,7 +5,7 @@
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
 			<div class="batch_actions">
-				<?= $this->builder->build_batch_actions('#listing', $batch_actions, $batch_update); ?>
+				<?= $this->builder->batch_action('#listing [name="selected[]"]', $batch_actions, $batch_update); ?>
 			</div>
 			<div class="buttons">
 				<a href="<?= $insert; ?>" class="button"><?= $button_insert; ?></a>

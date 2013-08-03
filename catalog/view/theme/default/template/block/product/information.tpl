@@ -112,6 +112,7 @@
 pd = $('.product-info .product_description')[0];
 if (pd.scrollHeight > pd.clientHeight) {
 	$(pd).addClass('overflowed');
+	$(pd).click(function(){$(this).toggleClass('hover');})
 }
 
 function option_select_post_before(){
