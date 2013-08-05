@@ -11,8 +11,7 @@ class Catalog_Controller_Block_Product_Review extends Controller
 	public function review()
 	{
 		$this->template->load('product/review');
-
-		$this->language->load('product/product');
+		$this->language->load('product/review');
 
 		if (isset($_GET['page'])) {
 			$page = $_GET['page'];

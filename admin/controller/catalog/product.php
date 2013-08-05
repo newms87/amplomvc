@@ -36,7 +36,7 @@ class Admin_Controller_Catalog_Product extends Controller
 	{
 		$this->language->load('catalog/product');
 		
-		if ($this->request->isPost() && $this->user->hasPermission('modify', 'catalog/product')) {
+		if (!empty($_GET['product_id']) && $this->request->isPost() && $this->user->hasPermission('modify', 'catalog/product')) {
 			$this->Model_Catalog_Product->editProduct($_GET['product_id'], $_POST, true);
 			
 			if (!$this->message->error_set()) {
@@ -106,6 +106,7 @@ class Admin_Controller_Catalog_Product extends Controller
 						case 'disable':
 							$data['status'] = 0;
 							break;
+						case 'product_class_id':
 						case 'date_expires':
 						case 'shipping_policy_id':
 						case 'return_policy_id':
@@ -116,7 +117,8 @@ class Admin_Controller_Catalog_Product extends Controller
 							$categories = $this->Model_Catalog_Product->getProductCategories($product_id);
 							
 							if ($_GET['action'] === 'add_cat') {
-								$data['product_category'][] = $_GET['action_value'];
+								$categories[] = $_GET['action_value'];
+								$data['product_category'] = $categories;
 							} else {
 								$data['product_category'] = array_diff($categories, array($_GET['action_value'])); 
 							}
@@ -160,6 +162,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		
 		//The Table Columns
 		$categories = $this->Model_Catalog_Category->getCategoriesWithParents();
+		$product_classes = $this->Model_Catalog_ProductClass->getProductClasses();
 		
 		$columns = array();
 		
@@ -176,7 +179,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			'display_name' => $this->_('column_class'),
 			'filter' => true,
 			'build_config' => array('product_class_id' , 'name'),
-			'build_data' => $this->Model_Catalog_ProductClass->getProductClasses(),
+			'build_data' => $product_classes,
 			'sortable' => true,
 			'sort_value' => 'pc.name',
 		);
@@ -217,7 +220,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			'type' => 'multiselect',
 			'display_name' => $this->_('column_category'),
 			'filter' => true,
-			'build_config' => array('category_id' , 'name'),
+			'build_config' => array('category_id' , 'pathname'),
 			'build_data' => $categories,
 			'sortable' => false,
 		);
@@ -301,7 +304,11 @@ class Admin_Controller_Catalog_Product extends Controller
 			if ($product['date_expires'] === DATETIME_ZERO) {
 				$product['#date_expires'] = $this->_('text_no_expiration');
 			}
-		}
+			
+			if (!(int)$product['subtract']) {
+				$product['quantity'] = $this->_('text_unlimited');
+			}
+		} unset($product);
 		
 		//Build The Table
 		$tt_data = array(
@@ -325,6 +332,14 @@ class Admin_Controller_Catalog_Product extends Controller
 			
 			'disable' => array(
 				'label' => $this->_('text_disable'),
+			),
+			
+			'product_class_id' => array(
+				'label'	=> "Change Class",
+				'type'	=>'select',
+				'build_config' => array('product_class_id', 'name'),
+				'build_data' => $product_classes,
+				'default' => '',
 			),
 			
 			'date_expires' => array(
@@ -436,17 +451,10 @@ class Admin_Controller_Catalog_Product extends Controller
 		
 		//Apply Product Class Skin
 		$product_classes = $this->Model_Catalog_ProductClass->getProductClasses();
-		$theme = $this->theme->getTheme();
-		
-		$product_class = array_search_key('product_class_id', $product_info['product_class_id'], $product_classes);
-		
-  		if (!empty($product_class['admin_template'][$theme])) {
-  			$template = 'catalog/product_class/' . $product_class['admin_template'][$theme];
-		}
 		
 		//Set Values or Defaults
 		$defaults = array(
-			'product_class_id' => 0,
+			'product_class_id' => $this->config->get('config_default_product_class_id'),
 			'model'=>'',
 			'sku'=>'',
 			'upc'=>'',
@@ -643,8 +651,8 @@ class Admin_Controller_Catalog_Product extends Controller
 		);
 		
 		//The Template
-		if (!empty($template)) {
-			$this->template->load($template);
+		if ($this->data['product_class_id']) {
+			$this->template->load($this->Model_Catalog_Product->getClassTemplate($this->data['product_class_id']));
 		} else {
 			$this->template->load('catalog/product_form');
 		}
@@ -849,7 +857,7 @@ class Admin_Controller_Catalog_Product extends Controller
 	public function generate_model()
 	{
 		if (!empty($_POST['name'])) {
-			$this->response->setOutput(json_encode($this->Model_Catalog_Product->generate_model($_POST['name'])));
+			$this->response->setOutput($this->Model_Catalog_Product->generateModel($_POST['name']));
 		}
 	}
 }

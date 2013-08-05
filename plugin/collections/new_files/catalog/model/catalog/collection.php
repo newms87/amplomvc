@@ -161,40 +161,6 @@ class Catalog_Model_Catalog_Collection extends Model
 		return $this->getCollectionProducts($collection_id, $data, '', true);
 	}
 	
-	public function hasAttributeGroup($collection_id, $attribute_group_id)
-	{
-		$query =
-			"SELECT COUNT(*) FROM " . DB_PREFIX . "collection_product cp" .
-			" LEFT JOIN " . DB_PREFIX . "product_attribute pa ON (cp.product_id=pa.product_id)" .
-			" LEFT JOIN " . DB_PREFIX . "attribute a ON (a.attribute_id=pa.attribute_id)" .
-			" WHERE a.attribute_group_id = '" . (int)$attribute_group_id . "' AND cp.collection_id = '" . (int)$collection_id . "' LIMIT 1";
-			
-		return $this->queryVar($query);
-	}
-	
-	public function getAttributeList($collection_id, $attribute_group_id)
-	{
-		$language_id = $this->config->get('config_language_id');
-		
-		$attributes = $this->cache->get("collection.attribute.list.$collection_id.$attribute_group_id.$language_id");
-		
-		if (!$attributes) {
-			$query =
-				"SELECT a.* FROM " . DB_PREFIX . "attribute a" .
-				" LEFT JOIN " . DB_PREFIX . "product_attribute pa ON (pa.attribute_id=a.attribute_id)" .
-				" LEFT JOIN " . DB_PREFIX . "collection_product cp ON (cp.product_id=pa.product_id)" .
-				" WHERE a.attribute_group_id = '$attribute_group_id' AND cp.collection_id = '" . (int)$collection_id . "' GROUP BY a.attribute_id ORDER BY name";
-			
-			$attributes = $this->queryRows($query);
-			
-			$this->translation->translate_all('attribute', 'attribute_id', $attributes);
-			
-			$this->cache->set("collection.attribute.list.$collection_id.$attribute_group_id.$language_id",$attributes);
-		}
-		
-		return $attributes;
-	}
-	
 	public function get_name($product_id)
 	{
 		$result = $this->query(

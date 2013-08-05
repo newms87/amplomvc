@@ -2,8 +2,8 @@
 final class Front 
 {
 	protected $registry;
-	private $error_route = 'error/not_found';
-	private $route;
+	private $error_path = 'error/not_found';
+	private $path;
 	
 	public function __construct($registry)
 	{
@@ -15,24 +15,9 @@ final class Front
 		return $this->registry->get($key);
 	}
 	
-	public function setErrorRoute($route)
-	{
-		$this->error_route = $route;
-	}
-	
-	public function setRoute($route)
-	{
-		$this->route = $route;
-	}
-	
-	public function getRoute()
-	{
-		return $this->route;
-	}
-	
 	public function routeAdmin()
 	{
-		$this->route = $this->url->getPath();
+		$this->path = $this->url->getPath();
 		
 		if (!$this->user->isLogged()) {
 			$allowed = array(
@@ -41,8 +26,8 @@ final class Front
 				'common/login',
 			);
 			
-			if (!$this->isInRoutes($allowed)) {
-				$this->route = 'common/login';
+			if (!$this->pathIsIn($allowed)) {
+				$this->path = 'common/login';
 			}
 		}
 		else {
@@ -56,14 +41,27 @@ final class Front
 				'error/permission'
 			);
 			
-			if (!$this->isInRoutes($ignore)) {
-				$parts = explode('/', $this->route);
+			if (!$this->pathIsIn($ignore)) {
+				$parts = explode('/', $this->path);
 			
 				if (!isset($parts[0]) || !isset($parts[1])) {
-					$this->route = 'common/home';
+					$this->path = 'common/home';
 				}
 				elseif (!$this->user->hasPermission('access', $parts[0] . '/' . $parts[1])) {
-					$this->route = 'error/permission';
+					$this->path = 'error/permission';
+				}
+			}
+		}
+		
+		//Controller Overrides
+		$controller_overrides = $this->config->load('controller_override', 'controller_override');
+		
+		if ($controller_overrides) {
+			foreach ($controller_overrides as $override) {
+				if (('admin/controller/' . $this->path) === $override['original']) {
+					if (empty($override['condition']) || preg_match("/.*" . $override['condition'] . ".*/", $_SERVER['QUERY_STRING'])) {
+						$this->path = str_replace('admin/controller/','',$override['alternate']);
+					}
 				}
 			}
 		}
@@ -71,19 +69,32 @@ final class Front
 	
 	public function routeFront()
 	{
-		$this->route = $this->url->getPath();
+		$this->path = $this->url->getPath();
 		
 		//Do not show maintenance page if user is an admin
-		// or if the route is a a request by a payment provider (IPN from Paypal, etc.)
-		if ($this->config->get('config_maintenance') && !$this->user->isAdmin() && strpos($this->route, 'payment') !== 0 ) {
-			$this->route = 'common/maintenance';
+		// or if the path is a a request by a payment provider (IPN from Paypal, etc.)
+		if ($this->config->get('config_maintenance') && !$this->user->isAdmin() && strpos($this->path, 'payment') !== 0 ) {
+			$this->path = 'common/maintenance';
+		}
+		
+		//Controller Overrides
+		$controller_overrides = $this->config->load('controller_override', 'controller_override');
+		
+		if ($controller_overrides) {
+			foreach ($controller_overrides as $override) {
+				if (('catalog/controller/' . $this->path) === $override['original']) {
+					if (empty($override['condition']) || preg_match("/.*" . $override['condition'] . ".*/", $_SERVER['QUERY_STRING'])) {
+						$this->path = str_replace('catalog/controller/','',$override['alternate']);
+					}
+				}
+			}
 		}
 	}
 	
-	public function isInRoutes($routes)
+	public function pathIsIn($paths)
 	{
-		foreach($routes as $route) {
-			if(strpos($this->route, $route) === 0){
+		foreach($paths as $path) {
+			if(strpos($this->path, $path) === 0){
 				return true;
 			}
 		}
@@ -94,16 +105,16 @@ final class Front
   	public function dispatch()
   	{
   		//Page Views tracking
-  		$route = $this->db->escape($this->route);
-		$query = $this->url->getQueryExclude('route', '_path_', 'sort', 'order', 'limit', 'redirect', 'filter');
+  		$path = $this->db->escape($this->path);
+		$query = $this->url->getQueryExclude('_path_', 'sort', 'order', 'limit', 'redirect', 'filter');
 		$store_id = (int)$this->config->get('config_store_id');
 		
-  		$this->db->query("INSERT INTO " . DB_PREFIX . "view_count SET route = '$route', query = '$query', store_id = '$store_id', count = 1 ON DUPLICATE KEY UPDATE count = count + 1");
+  		$this->db->query("INSERT INTO " . DB_PREFIX . "view_count SET path = '$path', query = '$query', store_id = '$store_id', count = 1 ON DUPLICATE KEY UPDATE count = count + 1");
 		
-  		$action = new Action($this->registry, $this->route);
+  		$action = new Action($this->registry, $this->path);
 		
 		if (!$action->isValid() || !$action->execute()) {
-			$action = new Action($this->registry, $this->error_route);
+			$action = new Action($this->registry, $this->error_path);
 			
 			if (!$action->execute()) {
 				trigger_error("Front::dispatch(): There is a problem with the system. Unable to execute any actions!");

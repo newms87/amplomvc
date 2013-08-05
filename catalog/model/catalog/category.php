@@ -16,115 +16,190 @@ class Catalog_Model_Catalog_Category extends Model
 		return $category;
 	}
 	
-	public function getCategories($parent_id = 0)
+	public function getCategories($data = array(), $select = '', $total = false)
 	{
-		$parent = '';
-		
-		if ($parent_id >= 0) {
-			$parent = "c.parent_id = '" . (int)$parent_id . "' AND";
+		//Select
+		if ($total) {
+			$select = "COUNT(*) as total";
+		} elseif (empty($select)) {
+			$select = '*';
 		}
 		
-		//TODO: Need vastly improved API
-		$categories = $this->queryRows(
-			"SELECT * FROM " . DB_PREFIX . "category c " .
-			"LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c.category_id = c2s.category_id) " .
-			"WHERE $parent AND c2s.store_id = '" . (int)$this->config->get('config_store_id') . "'  AND c.status = '1' ORDER BY c.sort_order, LCASE(name)"
-		);
+		//From
+		$from = DB_PREFIX . "category c" .
+			" LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c2s.category_id=c.category_id)";
+			
+		//Where
+		$where = "c2s.store_id = " . (int)$this->config->get('config_store_id') . " AND c.status = 1";
 		
-		$this->translation->translate_all('category', 'category_id', $category);
-		
-		return $query->rows;
-	}
-	
-	public function getCategoriesWithParents($parent_id = 0, $delimeter = ' > ')
-	{
-		$categories = $this->getCategories($parent_id);
-	
-		foreach ($categories as &$category) {
-			if ($category['parent_id'] > 0) {
-				$parents = $this->Model_Catalog_Category->getParents($category['category_id']);
-				
-				if (!empty($parents)) {
-					$category['name'] = implode($delimeter, array_column($parents, 'name')) . $delimeter . $category['name'];
-				}
-			}
+		if (!empty($data['category_ids'])) {
+			$where .= " AND category_id IN (" . implode(',', $data['category_ids']) . ")";
+		}
+
+		if (!empty($data['parent_ids'])) {
+			$where .= " AND parent_id IN (" . implode(',', $data['parent_ids']) . ")";
 		}
 		
-		return $categories;
-	}
-	
-	public function getParents($category_id)
-	{
-		$language_id = $this->config->get('config_language_id');
-		
-		$parents = $this->cache->get("category.parents.$category_id.$language_id");
-		
-		if (!$parents) {
-			$parents = array();
+		if (!empty($data['layouts'])) {
+			$from .= " LEFT JOIN " . DB_PREFIX . "category_to_layout c2l ON (c.category_id=c2l.category_id)";
 			
-			$parent_id = $category_id;
-			
-			while ($parent_id > 0) {
-				$parent = $this->queryRow("SELECT * FROM " . DB_PREFIX . "category WHERE category_id = '" . (int)$parent_id . "' LIMIT 1");
-				
-				if (!$parent) {
-					break;
+			$where .= " AND c2l.layout_id IN (" . implode(',', $data['layouts']) . ")";
+		}
+		
+		//Order By and Limit
+		if (!$total) {
+			if (empty($data['sort'])) {
+				$data['sort'] = "c.sort_order, LCASE(c.name)";
+			}
+			elseif (strpos($data['sort'], '__image_sort__') === 0) {
+				if (!$this->db->hasColumn('category', $data['sort'])) {
+					$this->extend->enable_image_sorting('category', str_replace('__image_sort__', '', $data['sort']));
 				}
-				
-				$parent_id = (int)$parent['parent_id'];
-				
-				if ($parent['category_id'] == $category_id) {
-					continue;
-				}
-				
-				if (isset($parents[$parent_id])) {
-					trigger_error("There is a circular reference for parent categories for $category_id!");
-					exit();
-				}
-				
-				$this->translation->translate('category', $parent_id, $parent);
-				
-				$parents[$parent_id] = $parent;
 			}
 			
-			$this->cache->set("category.parents.$category_id.$language_id", $parents);
+			$order = $this->extract_order($data);
+			$limit = $this->extract_limit($data);
+		} else {
+			$order = '';
+			$limit = '';
+		}
+		
+		//The Query
+		$query = "SELECT $select FROM $from WHERE $where $order $limit";
+		
+		$result = $this->query($query);
+		
+		if($total) {
+			return $result->row['total'];
+		}
+		
+		$this->translation->translate_all('category', 'category_id', $result->rows);
+		
+		return $result->rows;
+	}
+	
+	public function getChildrenIds($category_tree)
+	{
+		if (!is_array($category_tree)) {
+			$category_tree = $this->getCategoryTree($category_tree);
+		}
+		
+		$children_ids = array();
+		
+		foreach ($category_tree['children'] as $child) {
+			$children_ids[] = $child['category_id'];
+			
+			$children_ids = array_merge($children_ids, $this->getChildrenIds($child));
+		}
+		
+		return $children_ids;
+	}
+	
+	public function getParents($category)
+	{
+		$category_tree = $this->getCategoryTree($category);
+		
+		if (!is_array($category)) {
+			$category = array_search_key('category_id', (int)$category, $category_tree);
+		}
+		
+		//An array of parent ID's
+		$parent_path = explode(',',$category['parent_path']);
+		//minus the 0 root ID
+		array_shift($parent_path);
+		
+		$parents = array();
+		
+		//Although this is a lot of extra data, PHP returns arrays via copy on write, making this optimized performance wise
+		foreach ($parent_path as $parent_id) {
+			$parents[] = $this->getCategoryTree($parent_id);
 		}
 		
 		return $parents;
 	}
 	
-	public function hasAttributeGroup($category_id, $attribute_group_id)
-	{
-		$query =
-			"SELECT COUNT(*) FROM " . DB_PREFIX . "product_to_category pc" .
-			" LEFT JOIN " . DB_PREFIX . "product_attribute pa ON (pc.product_id=pa.product_id)" .
-			" LEFT JOIN " . DB_PREFIX . "attribute a ON (a.attribute_id=pa.attribute_id)" .
-			" WHERE a.attribute_group_id = '" . (int)$attribute_group_id . "' AND pc.category_id = '" . (int)$category_id . "' LIMIT 1";
-			
-		return $this->queryVar($query);
-	}
-	
-	public function getAttributeList($category_id, $attribute_group_id)
+	public function getCategoryTree($category_id = 0)
 	{
 		$language_id = $this->config->get('config_language_id');
+		$store_id = $this->config->get('config_store_id');
 		
-		$attributes = $this->cache->get("category.attribute.list.$category_id.$attribute_group_id.$language_id");
+		$category_tree = $this->cache->get("category.tree.$store_id.$language_id");
 		
-		if (!$attributes) {
-			$query =
-				"SELECT a.* FROM " . DB_PREFIX . "attribute a" .
-				" LEFT JOIN " . DB_PREFIX . "product_attribute pa ON (pa.attribute_id=a.attribute_id)" .
-				" LEFT JOIN " . DB_PREFIX . "product_to_category p2c ON (p2c.product_id=pa.product_id)" .
-				" WHERE a.attribute_group_id = '$attribute_group_id' AND p2c.category_id = '" . (int)$category_id . "' GROUP BY a.attribute_id ORDER BY name";
+		if (!$category_tree) {
+			$categories = $this->getCategories();
 			
-			$attributes = $this->queryRows($query);
+			//TODO: Make Root Categories in Admin Panel to customize root category data
+			//XXX: To allow overriding this verbiage
+			if ($this->_("text_all_categories") === 'text_all_categories') {
+				$this->language->load('product/category');
+			}
 			
-			$this->translation->translate('attribute', 'attribute_id', $attribute);
+			$category_tree = array(
+				'name' => $this->_('text_all_categories'),
+				'description' => $this->_('text_all_description'),
+				'meta_description' => $this->_('text_all_meta_description'),
+				'meta_keywords' => $this->_('text_all_meta_keywords'),
+				'image' => '',
+				'children' => array(),
+				'parent_path' => '0',
+				'parent_id' => '',
+				'depth' => 0,
+			);
 			
-			$this->cache->set("category.attribute.list.$category_id.$attribute_group_id.$language_id",$attributes);
+			$parent_ref = array();
+			
+			foreach ($categories as &$category) {
+				$category['children'] = array();
+				$parent_ref[$category['category_id']] = &$category;
+			} unset($category);
+			
+			foreach ($categories as &$category) {
+				if ($category['parent_id']) {
+					$parent_ref[$category['parent_id']]['children'][$category['category_id']] = &$category;
+				}
+
+				if ((int)$category['parent_id'] === 0) {
+					$category_tree['children'][$category['category_id']] = $category;
+				}
+			} unset($category);
+			
+			$this->resolvePaths($category_tree['children']);
+			
+			$this->cache->set("category.tree.$store_id.$language_id", $category_tree);
 		}
 		
-		return $attributes;
+		if ($category_id) {
+			return array_search_key('category_id', $category_id, $category_tree);
+		}
+		
+		return $category_tree;
+	}
+	
+	private function resolvePaths(&$category_tree, $parent_path = '0', $path = '', $depth = 0, $delimeter = ' > ')
+	{
+		foreach ($category_tree as &$category) {
+			$category['depth'] = $depth;
+			$category['pathname'] = $path . $category['name'];
+			$category['parent_path'] = $parent_path;
+			
+			if (!empty($category['children'])) {
+				$this->resolvePaths($category['children'], $parent_path . ',' . $category['category_id'], $path . $category['name'] . $delimeter, $depth+1, $delimeter);
+			}
+		}
+	}
+	
+	public function applyFunction(&$category_tree, $callback)
+	{
+		foreach ($category_tree as &$category) {
+			$args = func_get_args();
+			array_splice($args, 0, 2);
+			
+			call_user_func_array($callback, array_merge(array(&$category), $args));
+				
+			if (!empty($category['children'])) {
+				call_user_func_array(array($this, 'applyFunction'), array_merge(array(&$category['children'], $callback), $args));
+			}
+		}
 	}
 	
 	public function getCategoryName($category_id)
@@ -139,12 +214,5 @@ class Catalog_Model_Catalog_Category extends Model
 	public function getCategoryLayoutId($category_id)
 	{
 		return $this->queryVar("SELECT layout_id FROM " . DB_PREFIX . "category_to_layout WHERE category_id = '" . (int)$category_id . "' AND store_id = '" . (int)$this->config->get('config_store_id') . "'");
-	}
-					
-	public function getTotalCategoriesByCategoryId($parent_id = 0)
-	{
-		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "category c LEFT JOIN " . DB_PREFIX . "category_to_store c2s ON (c.category_id = c2s.category_id) WHERE c.parent_id = '" . (int)$parent_id . "' AND c2s.store_id = '" . (int)$this->config->get('config_store_id') . "' AND c.status = '1'");
-		
-		return $query->row['total'];
 	}
 }

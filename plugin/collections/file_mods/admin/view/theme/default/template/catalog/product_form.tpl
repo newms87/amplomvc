@@ -1,7 +1,7 @@
 =====
 				<tr>
 							<td><?= $entry_category; ?></td>
-							<? $this->builder->set_config('category_id', 'name');?>
+							<? $this->builder->set_config('category_id', 'pathname');?>
 							<td><?= $this->builder->build('multiselect', $data_categories, "product_category", $product_category); ?></td>
 						</tr>
 -----

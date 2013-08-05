@@ -1087,7 +1087,19 @@ class Admin_Model_Design_Navigation extends Model
 								'sort_order'	=> 2,
 								'status'			=> 1,
 							),
-	
+				
+				'system_settings_controller_overrides' => array(
+							'display_name'	=> 'Controller Overrides',
+							'name'			=> 'system_settings_controller_overrides',
+							'title'			=> '',
+							'href'			=> 'setting/controller_override',
+							'query'			=> '',
+							'is_route'		=> 0,
+							'parent_id'		=> 'system_settings',
+							'sort_order'	=> 4,
+							'status'			=> 1,
+						),
+						
 				'system_mail' => array(
 					'display_name'	=> 'Mail',
 					'name'			=> 'system_mail',

@@ -80,8 +80,8 @@ class User extends Library
 				}
 			}
 			
-			$this->session->set_token();
-			$this->session->save_token_session();
+			$this->session->setToken();
+			$this->session->saveTokenSession();
 		
 			return true;
 		} else {
@@ -94,7 +94,7 @@ class User extends Library
   		$this->user_id = '';
 		$this->username = '';
 		
-		$this->session->end_token_session();
+		$this->session->endTokenSession();
   	}
 
   	public function hasPermission($key, $value)

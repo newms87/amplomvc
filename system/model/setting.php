@@ -103,8 +103,8 @@ class System_Model_Setting extends Model
 			$entry_value = serialize($value);
 			$serialized = 1;
 		} else {
-			$serialized = 0;
 			$entry_value = $value;
+			$serialized = 0;
 		}
 		
 		$values = array(
@@ -130,6 +130,8 @@ class System_Model_Setting extends Model
 		$this->cache->delete('setting');
 		$this->cache->delete('store');
 		$this->cache->delete('theme');
+		
+		$this->config->set($key, $value);
 		
 		return $setting_id;
 	}

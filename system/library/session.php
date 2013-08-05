@@ -24,13 +24,13 @@ class Session extends Library
 		
 		//These will load the session / token if we are using curlopt
 		if (!isset($this->data['token']) && isset($_COOKIE['token'])) {
-			$this->load_token_session($_COOKIE['token']);
+			$this->loadTokenSession($_COOKIE['token']);
 			unset($this->data['session_token_saved']);
 		}
 		
 		//refresh this logged in session
 		if (isset($_COOKIE['token'])) {
-			$this->set_cookie('token', $_COOKIE['token'], 3600);
+			$this->setCookie('token', $_COOKIE['token'], 3600);
 			if (isset($this->data['session_token_saved'])) {
 				$this->db->query("DELETE FROM " . DB_PREFIX . "session WHERE `ip` = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "'");
 				unset($this->data['session_token_saved']);
@@ -52,7 +52,7 @@ class Session extends Library
 		}
 	}
 	
-	public function load_token_session($token)
+	public function loadTokenSession($token)
 	{
 		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "session WHERE `token` = '" . $this->db->escape($token) . "' LIMIT 1");
 			
@@ -67,7 +67,7 @@ class Session extends Library
 		}
 	}
 	
-	public function save_token_session()
+	public function saveTokenSession()
 	{
 		if (empty($this->data['token']) || empty($this->data['user_id'])) {
 			return false;
@@ -77,11 +77,11 @@ class Session extends Library
 		$this->data['session_token_saved'] = 1;
 	}
 	
-	public function end_token_session()
+	public function endTokenSession()
 	{
-		$this->delete_cookie('token');
+		$this->deleteCookie('token');
 		
-		$this->delete_cookie(AMPLOCART_SESSION);
+		$this->deleteCookie(AMPLOCART_SESSION);
 		
 		$this->end();
 	}
@@ -100,23 +100,23 @@ class Session extends Library
 		}
 	}
 	
-	public function set_cookie($name, $value, $expire = 3600)
+	public function setCookie($name, $value, $expire = 3600)
 	{
 		//TODO: ADD EXPIRATION TIME BACK IN! Remove because Chrome was not working
 		setcookie($name, $value, time() + $expire, '/', COOKIE_DOMAIN);
 	}
 	
-	public function delete_cookie($name)
+	public function deleteCookie($name)
 	{
-		$this->set_cookie($name, '', -3600);
+		$this->setCookie($name, '', -3600);
 	}
 	
-	public function set_token($token = null)
+	public function setToken($token = null)
 	{
 		if (!$token) {
 			$token = md5(mt_rand());
 		}
-		$this->set_cookie("token", $token, 3600);
+		$this->setCookie("token", $token, 3600);
 		$this->data['token'] = $token;
 	}
 }

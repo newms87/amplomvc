@@ -39,3 +39,7 @@ cache
 /catalog/view/theme/default/template/block/widget/janrain.tpl
 /image/janrain/rpx-icons16.png
 /image/janrain/rpx-icons30.png
+/catalog/controller/product/box.php
+/catalog/controller/product/boxes.php
+/catalog/language/english/product/box.php
+/catalog/language/english/product/boxes.php

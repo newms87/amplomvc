@@ -6,7 +6,7 @@
 	
 	<h1><?= $heading_title; ?></h1>
 	
-	<div class="category-info">
+	<div class="category_info">
 		<? if (!empty($thumb)) { ?>
 		<div class="image">
 			<img src="<?= $thumb; ?>" alt="<?= $heading_title; ?>" />

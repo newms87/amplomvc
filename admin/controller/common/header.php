@@ -96,6 +96,7 @@ class Admin_Controller_Common_Header extends Controller
 			$link_stores = array(
 				'name' => 'stores',
 				'display_name' => $this->_('text_stores'),
+				'sort_order' => 0,
 			);
 			
 			$this->document->addLink('right', $link_stores);
@@ -118,6 +119,7 @@ class Admin_Controller_Common_Header extends Controller
 				'name' => 'logout',
 				'display_name' => $this->_('text_logout'),
 				'href' => $this->url->link('common/logout'),
+				'sort_order' => 10,
 			);
 			
 			$this->document->addLink('right', $link_logout);

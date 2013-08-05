@@ -23,7 +23,7 @@ class Admin_Model_Catalog_Product extends Model
 //.....
 	}
 //.....
-	public function editProduct($product_id, $data)
+	public function editProduct($product_id, $data, $strict = false)
 	{
 //-----
 //>>>>> {php} {before}

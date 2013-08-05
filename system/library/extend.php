@@ -30,6 +30,11 @@ class Extend extends Library
 			$link['name'] = $this->tool->getSlug($link['display_name']);
 		}
 		
+		if ($this->db->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "navigation WHERE name = '" . $this->db->escape($link['name']) . "'")) {
+			$this->message->add("notify", "Extend::addNavigationLink(): A Link with that name already exists!");
+			return false;
+		}
+		
 		if (!$link['parent_id'] && $link['parent']) {
 			$link['parent_id'] = $this->db->queryVar("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE name = '" . $this->db->escape($link['parent']) . "'");
 		}
@@ -140,6 +145,40 @@ class Extend extends Library
 		}
 		
 		$this->config->saveGroup('db_hook', $db_hooks);
+	}
+	
+	public function addControllerOverride($original, $alternate, $condition = '')
+	{
+		$overrides = $this->config->load('controller_override', 'controller_override');
+		
+		if (!$overrides) {
+			$overrides = array();
+		}
+		
+		$overrides[] = array(
+			'original' => $original,
+			'alternate' => $alternate,
+			'condition' => $condition,
+		);
+		
+		$this->config->save('controller_override', 'controller_override', $overrides);
+		
+		$overrides = $this->config->load('controller_override', 'controller_override');
+	}
+	
+	public function removeControllerOverride($original, $alternate, $condition = '')
+	{
+		$overrides = $this->config->load('controller_override', 'controller_override');
+		
+		if ($overrides) {
+			foreach ($overrides as $key => $override) {
+				if ($override['original'] === $original && $override['alternate'] === $alternate && (string)$override['condition'] === $condition) {
+					unset($overrides[$key]);
+				}
+			}
+			
+			$this->config->save('controller_override', 'controller_override', $overrides);
+		}
 	}
 	
 	public function enable_image_sorting($table, $column)

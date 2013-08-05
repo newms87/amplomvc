@@ -2056,6 +2056,14 @@ td.mail_info label{
 	float:left;
 }
 
+/* Category List */
+.catalog_category .filter_list_item > .name > span,
+.filter_list_item .categories > span{
+	text-align:left;
+	display:block;
+	margin-left: 10%;
+}
+
 /* Page Form */
 #assigned_block_list tbody tr td{
 	font-size: 16px;

@@ -49,10 +49,65 @@ class Admin_Model_Setting_UrlAlias extends Model
 		return $alias;
 	}
 	
-	public function getUrlAliases()
+	public function getUrlAliases($data = array(), $select = '', $total = false)
 	{
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "url_alias ORDER BY alias");
+		//Select
+		if ($total) {
+			$select = "COUNT(*) as total";
+		} elseif (empty($select)) {
+			$select = '*';
+		}
 		
-		return $query->rows;
+		//From
+		$from = DB_PREFIX . "url_alias ua";
+		
+		//Where
+		$where = "1";
+		
+		if (!empty($data['alias'])) {
+			$where .= " AND LCASE(ua.alias) like '%" . strtolower($this->db->escape($data['alias'])) . "%'";
+		}
+		
+		if (!empty($data['path'])) {
+			$where .= " AND LCASE(ua.path) like '" . strtolower($this->db->escape($data['path'])) . "%'";
+		}
+		
+		if (!empty($data['query'])) {
+			$where .= " AND LCASE(ua.query) like '%" . strtolower($this->db->escape($data['query'])) . "%'";
+		}
+		
+		if (isset($data['store_id'])) {
+			if ((int)$data['store_id'] === 0) {
+				$where .= " AND ua.store_id >= 0";
+			} else {
+				$where .= " AND ua.store_id = " . (int)$data['store_id'];
+			}
+		}
+		
+		//Order By and Limit
+		if (!$total) {
+			$order = $this->extract_order($data);
+			$limit = $this->extract_limit($data);
+		} else {
+			$order = '';
+			$limit = '';
+		}
+		
+		//The Query
+		$query = "SELECT $select FROM $from WHERE $where $order $limit";
+		
+		$result = $this->query($query);
+		
+		if($total) {
+			return $result->row['total'];
+		}
+		
+		return $result->rows;
 	}
+	
+	public function getTotalUrlAliases($data = array())
+	{
+		return $this->getUrlAliases($data, '', true);
+	}
+	
 }

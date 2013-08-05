@@ -35,7 +35,7 @@ class Language extends Library
 			$session->data['language_code'] = $this->code;
 			
 			//Set as default language for this user for 30 days
-			$this->session->set_cookie('language_code', $this->code, 60 * 60 * 24 * 30);
+			$this->session->setCookie('language_code', $this->code, 60 * 60 * 24 * 30);
 			
 			$this->config->set('config_language_id', $this->language_id);
 		}

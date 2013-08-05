@@ -25,7 +25,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 				
-				$this->url->redirect($this->url->link('setting/url_alias', 'store_id=' . $_GET['store_id']));
+				$this->url->redirect($this->url->link('setting/url_alias'));
 			}
 		}
 
@@ -35,9 +35,9 @@ class Admin_Controller_Setting_UrlAlias extends Controller
   	public function delete()
   	{
 		$this->language->load('setting/url_alias');
-
-		if (!empty($_POST['url_alias_id']) && $this->validateDelete()) {
-			$this->Model_Setting_UrlAlias->deleteUrlAlias($url_alias_id);
+		
+		if (!empty($_GET['url_alias_id']) && $this->validateDelete()) {
+			$this->Model_Setting_UrlAlias->deleteUrlAlias($_GET['url_alias_id']);
 
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
@@ -45,8 +45,8 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 				$this->url->redirect($this->url->link('setting/url_alias'));
 			}
 		}
-
-		$this->getList();
+		
+		$this->index();
   	}
 	
 	public function batch_update()
@@ -55,31 +55,31 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 		
 		if (!empty($_GET['selected']) && isset($_GET['action'])) {
 			foreach ($_GET['selected'] as $url_alias_id) {
+				$data = array();
+				
 				switch($_GET['action']){
 					case 'enable':
-						$this->Model_Setting_UrlAlias->updateUrlAlias($url_alias_id, array('status' => 1));
+						$data['status'] = 1;
 						break;
 					case 'disable':
-						$this->Model_Setting_UrlAlias->updateUrlAlias($url_alias_id, array('status' => 0));
+						$data['status'] = 0;
 						break;
 					case 'delete':
 						$this->Model_Setting_UrlAlias->deleteUrlAlias($url_alias_id);
 						break;
+					default:
+						break 2; //Break For loop
 				}
-				
-				if ($this->error) {
-					break;
-				}
+
+				$this->Model_Setting_UrlAlias->editUrlAlias($url_alias_id, $data);
 			}
 			
-			if (!$this->error && !$this->message->error_set()) {
+			if (!$this->message->error_set()) {
 				$this->message->add('success',$this->_('text_success'));
-				
-				$this->url->redirect($this->url->link('setting/url_alias', $this->url->getQueryExclude('action')));
 			}
 		}
 
-		$this->getList();
+		$this->url->redirect($this->url->link('setting/url_alias', $this->url->getQueryExclude('action', 'action_value')));
 	}
 	
 	private function getList()
@@ -99,21 +99,21 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 
 		$columns['alias'] = array(
 			'type' => 'text',
-			'display_name' => $this->_('column_name'),
+			'display_name' => $this->_('column_alias'),
 			'filter' => true,
 			'sortable' => true,
 		);
 		
-		$columns['alias'] = array(
+		$columns['path'] = array(
 			'type' => 'text',
-			'display_name' => $this->_('column_name'),
+			'display_name' => $this->_('column_path'),
 			'filter' => true,
 			'sortable' => true,
 		);
 		
-		$columns['alias'] = array(
+		$columns['query'] = array(
 			'type' => 'text',
-			'display_name' => $this->_('column_name'),
+			'display_name' => $this->_('column_query'),
 			'filter' => true,
 			'sortable' => true,
 		);
@@ -123,7 +123,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 			'display_name' => $this->_('column_store'),
 			'filter' => true,
 			'build_config' => array('store_id', 'name'),
-			'build_data' => $this->Model_Setting_Store->getStores(),
+			'build_data' => array_merge($this->_('data_non_stores'), $this->Model_Setting_Store->getStores()),
 			'sortable' => false,
 		);
 		
@@ -144,7 +144,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 		
 		$url_query = $this->url->getQueryExclude('url_alias_id');
 		
-		foreach ($url_aliases as &$alias) {
+		foreach ($url_aliases as &$url_alias) {
 			$url_alias['actions'] = array(
 				'edit' => array(
 					'text' => $this->_('text_edit'),
@@ -155,7 +155,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 					'href' => $this->url->link('setting/url_alias/delete', 'url_alias_id=' . $url_alias['url_alias_id'] . '&' . $url_query)
 				)
 			);
-		} unset($alias);
+		} unset($url_alias);
 		
 		//Build The Table
 		$tt_data = array(
@@ -211,47 +211,64 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 	
 	public function getForm()
 	{
-		$this->template->load('setting/url_alias_form');
-
-		$url_alias_id = isset($_GET['url_alias_id']) ? $_GET['url_alias_id']:null;
+		//Page Head
+		$this->document->setTitle($this->_('heading_title'));
 		
+		//Template
+		$this->template->load('setting/url_alias_form');
+		
+		//Insert or Update
+		$url_alias_id = isset($_GET['url_alias_id']) ? (int)$_GET['url_alias_id'] : 0;
+		
+		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/url_alias'));
 		
 		if (!$url_alias_id) {
-			$this->data['action'] = $this->url->link('setting/url_alias/insert');
+			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('setting/url_alias/udpate'));
 		} else {
-			$this->data['action'] = $this->url->link('setting/url_alias/update', 'url_alias_id=' . $url_alias_id);
+			$this->breadcrumb->add($this->_('text_edit'), $this->url->link('setting/url_alias/update', 'url_alias_id=' . $url_alias_id));
 		}
-				
-		$this->data['cancel'] = $this->url->link('setting/url_alias');
 		
-		$alias_info = $url_alias_id ? $this->Model_Setting_UrlAlias->getUrlAlias($url_alias_id) : null;
+		//Load Information
+		if ($url_alias_id && !$this->request->isPost()) {
+			$url_alias_info = $this->Model_Setting_UrlAlias->getUrlAlias($url_alias_id);
+		}
 		
+		//Load Values or Defaults
 		$defaults = array(
-			'keyword'	=>'',
-			'route'	=>'',
+			'alias'	=>'',
+			'path'	=>'',
 			'query'	=>'',
-			'admin'	=>'',
-			'redirect'  =>'',
-			'status'	=>'',
+			'store_id'	=> 0,
+			'redirect'  => '',
+			'status'	=> 1,
 		);
 			
-		foreach ($defaults as $d=>$value) {
-			if (isset($_POST[$d])) {
-				$this->data[$d] = $_POST[$d];
-			} elseif (isset($alias_info[$d])) {
-				$this->data[$d] = $alias_info[$d];
-			} elseif (!$url_alias_id) {
-				$this->data[$d] = $value;
+		foreach ($defaults as $key => $default) {
+			if (isset($_POST[$key])) {
+				$this->data[$key] = $_POST[$key];
+			} elseif (isset($url_alias_info[$key])) {
+				$this->data[$key] = $url_alias_info[$key];
+			} else {
+				$this->data[$key] = $default;
 			}
 		}
-
+		
+		//Additional Data
+		$this->data['data_stores'] = array_merge($this->_('data_non_stores'), $this->Model_Setting_Store->getStores());
+		
+		//Action Buttons
+		$this->data['save'] = $this->url->link('setting/url_alias/update', 'url_alias_id=' . $url_alias_id);
+		$this->data['cancel'] = $this->url->link('setting/url_alias');
+		
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
-				
+		
+		//Render
 		$this->response->setOutput($this->render());
 	}
 
@@ -261,11 +278,8 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		if (!$_POST['keyword']) {
-			$this->error['keyword'];
-		}
-		if (!$_POST['query']) {
-			$this->error['query'];
+		if (empty($_POST['alias'])) {
+			$this->error['alias'];
 		}
 		
 		return $this->error ? false : true;

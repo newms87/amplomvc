@@ -402,7 +402,7 @@ class Cart extends Library
 					$downloads = $this->Model_Catalog_Product->getProductDownloads($product_id);
 					
 					// Stock
-					if (!$product['quantity'] || ($product['quantity'] < $quantity)) {
+					if ($product['subtract'] && (!$product['quantity'] || ($product['quantity'] < $quantity))) {
 						$in_stock = false;
 					}
 					

@@ -453,17 +453,18 @@ class Admin_Model_Catalog_Product extends Model
 		$this->cache->delete("product.$product_id");
 	}
 	
-	public function generate_model($name)
+	public function generateModel($name)
 	{
 		$model = strtoupper($this->url->format($name));
 		
-		$count = $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX ."product WHERE model like '" . $this->db->escape($model) . "%'");
+		$count = 1;
+		$unique_model = $model;
 		
-		if ($count) {
-			$model .= '-'.$count;
+		while ($this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX ."product WHERE model like '" . $this->db->escape($unique_model) . "'")) {
+			$unique_model = $model.'-'.$count++;
 		}
 		
-		return $model;
+		return $unique_model;
 	}
 	
 	public function copyProduct($product_id)
@@ -472,8 +473,8 @@ class Admin_Model_Catalog_Product extends Model
 		
 		if (!$product) return false;
 		
+		$product['model'] = $this->generateModel($product['name']);
 		$product['alias'] = '';
-
 		$product['status'] = 0;
 		
 		$product['product_attribute'] = $this->getProductAttributes($product_id);
@@ -858,7 +859,34 @@ class Admin_Model_Catalog_Product extends Model
 		
 		return $product_templates;
 	}
+	
+	public function getClassTemplate($product_class_id)
+	{
+		$product_classes = $this->cache->get('product_classes');
 		
+		if (is_null($product_classes)) {
+			$product_classes = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_class");
+			
+			foreach ($product_classes as &$product_class) {
+				$product_class['front_template'] = unserialize($product_class['front_template']);
+				$product_class['admin_template'] = unserialize($product_class['admin_template']);
+				$product_class['defaults'] = unserialize($product_class['defaults']);
+			} unset($product_class);
+			
+			$this->cache->set('product_classes', $product_classes);
+		}
+		
+		$theme = $this->theme->getTheme();
+		
+		$product_class = array_search_key('product_class_id', $product_class_id, $product_classes);
+		
+  		if (!empty($product_class['admin_template'][$theme])) {
+  			return 'catalog/product_class/' . $product_class['admin_template'][$theme];
+		}
+		
+		return 'catalog/product';
+	}
+	
 	public function getProductCategories($product_id)
 	{
 		return $this->queryColumn("SELECT category_id FROM " . DB_PREFIX . "product_to_category WHERE product_id = " . (int)$product_id);

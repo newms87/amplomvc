@@ -217,7 +217,7 @@
 						</tr>
 						<tr>
 							<td><?= $entry_category; ?></td>
-							<? $this->builder->set_config('category_id', 'name');?>
+							<? $this->builder->set_config('category_id', 'pathname');?>
 							<td><?= $this->builder->build('multiselect', $data_categories, "product_category", $product_category); ?></td>
 						</tr>
 						<tr>
@@ -682,6 +682,8 @@ $('#product_option_autocomplete').autocomplete({
 
 function autocomplete_callback_product_option(event, data) {
 	$(this).val('');
+	
+	if (!data.item.value) return false;
 	
 	product_option = $.ac_template('po_list', 'add', data.item);
 	

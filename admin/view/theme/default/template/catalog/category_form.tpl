@@ -41,7 +41,7 @@
 					<table class="form">
 						<tr>
 							<td><?= $entry_parent; ?></td>
-							<? $this->builder->set_config('category_id', 'name');?>
+							<? $this->builder->set_config('category_id', 'pathname'); ?>
 							<td><?= $this->builder->build('select', $data_categories, 'parent_id', (int)$parent_id); ?></td>
 						</tr>
 						<tr>

@@ -7,28 +7,31 @@
 			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
 		</div>
 		<div class="content">
-			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
+			<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
 				<div id="tab-general">
 					<table class="form">
 						<tr>
-							<td class="required"> <?= $entry_keyword; ?></td>
-							<td><input type="text" name="keyword" value="<?= $keyword; ?>" size="40" /></td>
+							<td class="required"> <?= $entry_alias; ?></td>
+							<td><input type="text" name="alias" value="<?= $alias; ?>" size="40" /></td>
 						</tr>
 						<tr>
-							<td class="required"> <?= $entry_route; ?></td>
-							<td><input type="text" name="route" value="<?= $route; ?>" size="40" />
+							<td class="required"> <?= $entry_path; ?></td>
+							<td><input type="text" name="path" value="<?= $path; ?>" size="40" /></td>
 						</tr>
 						<tr>
 							<td class="required"> <?= $entry_query; ?></td>
-							<td><input type="text" name="query" value="<?= $query; ?>" size="40" />
+							<td><input type="text" name="query" value="<?= $query; ?>" size="40" /></td>
 						</tr>
 						<tr>
 							<td class="required"> <?= $entry_redirect; ?></td>
-							<td><input type="text" name="redirect" value="<?= $redirect; ?>" size="40" />
+							<td><input type="text" name="redirect" value="<?= $redirect; ?>" size="40" /></td>
 						</tr>
 						<tr>
-							<td><?= $entry_admin; ?></td>
-							<td><?= $this->builder->build('select',$data_yes_no, 'admin',$admin); ?></td>
+							<td><?= $entry_store; ?></td>
+							<td>
+								<? $this->builder->set_config('store_id', 'name'); ?>
+								<?= $this->builder->build('select', $data_stores, 'store_id', $store_id); ?>
+							</td>
 						</tr>
 						<tr>
 							<td><?= $entry_status; ?></td>

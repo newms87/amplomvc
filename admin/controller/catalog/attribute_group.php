@@ -335,7 +335,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		$attributes[] = array(
 			'label' => $this->_("text_add_attribute_autocomplete"),
 			'value' => false,
-			'href' => $this->url->link('catalog/attribute_group/update'),
+			'href' => $this->url->link('catalog/attribute_group'),
 		);
 		
 		//JSON response

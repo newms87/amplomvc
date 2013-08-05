@@ -13,16 +13,10 @@ class Plugin extends Library{
 		$this->language->system('plugin');
 		
 		$this->file_merge = new FileMerge($this->registry);
-		
-		$this->loadPluginFileRegistry();
 	}
 	
 	public function getFile($file)
 	{
-		if (isset($this->plugin_registry[$file])) {
-			$file = $this->plugin_registry[$file]['plugin_file'];
-		}
-		
 		return $this->file_merge->getFile($file);
 	}
 	
@@ -143,6 +137,10 @@ class Plugin extends Library{
 	
 	public function activatePluginFile($name, $file)
 	{
+		if (!$this->plugin_registry) {
+			$this->loadPluginFileRegistry();
+		}
+		
 		$dir = DIR_PLUGIN . $name . '/new_files/';
 		
 		$plugin_file = preg_replace("/\\\\/", "/", $file->getPathName());

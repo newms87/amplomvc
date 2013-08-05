@@ -22,6 +22,7 @@ $_['text_not_editable']		= 'We are sorry. You may not modify %s because the Prod
 $_['text_no_expiration']		= "No Expiration";
 $_['text_add_shipping_policy']		= "Add <a href=\"%s\" target=\"_blank\">Shipping Policy</a>";
 $_['text_add_return_policy']		= "Add <a href=\"%s\" target=\"_blank\">Return Policy</a>";
+$_['text_unlimited']		= "Unlimited";
 
 // Column
 $_['column_class']				= 'Class';

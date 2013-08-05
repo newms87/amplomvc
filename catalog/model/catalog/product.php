@@ -41,7 +41,7 @@ class Catalog_Model_Catalog_Product extends Model
 			if ($ignore_status) {
 				$query .= " WHERE p.product_id = '$product_id'";
 			} else {
-				$query .= " WHERE p.product_id='$product_id' AND p.status = '1' AND m.status='1' AND (p.date_available <= NOW() OR p.date_available = '" . DATETIME_ZERO . "') AND (p.date_expires > NOW() OR p.date_expires = '" . DATETIME_ZERO . "')";
+				$query .= " WHERE p.product_id='$product_id' AND p.status = '1' AND (m.manufacturer_id IS NULL OR m.status='1') AND (p.date_available <= NOW() OR p.date_available = '" . DATETIME_ZERO . "') AND (p.date_expires > NOW() OR p.date_expires = '" . DATETIME_ZERO . "')";
 			}
 				
 			
@@ -113,8 +113,8 @@ class Catalog_Model_Catalog_Product extends Model
 		
 		//WHERE
 		$where =
-			"p.status='1' AND p2s.store_id = '$store_id' AND m.status='1' AND p.date_available <= NOW()" .
-			" AND (p.date_expires > NOW() OR p.date_expires = '" . DATETIME_ZERO . "')";
+			"p.status='1' AND p2s.store_id = '$store_id' AND (m.manufacturer_id IS NULL OR m.status='1')" .
+			" AND p.date_available <= NOW() AND (p.date_expires > NOW() OR p.date_expires = '" . DATETIME_ZERO . "')";
 		
 		//Product IDs
 		if (!empty($data['product_ids'])) {
@@ -454,6 +454,33 @@ class Catalog_Model_Catalog_Product extends Model
 		}
 
 		return $attributes;
+	}
+	
+	public function getClassTemplate($product_class_id)
+	{
+		$product_classes = $this->cache->get('product_classes');
+		
+		if (is_null($product_classes)) {
+			$product_classes = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_class");
+			
+			foreach ($product_classes as &$product_class) {
+				$product_class['front_template'] = unserialize($product_class['front_template']);
+				$product_class['admin_template'] = unserialize($product_class['admin_template']);
+				$product_class['defaults'] = unserialize($product_class['defaults']);
+			} unset($product_class);
+			
+			$this->cache->set('product_classes', $product_classes);
+		}
+		
+		$theme = $this->theme->getTheme();
+		
+		$product_class = array_search_key('product_class_id', $product_class_id, $product_classes);
+		
+  		if (!empty($product_class['front_template'][$theme])) {
+  			return 'product/' . $product_class['front_template'][$theme];
+		}
+		
+		return 'product/product';
 	}
 	
 	public function getTotalProducts($data = array()) {

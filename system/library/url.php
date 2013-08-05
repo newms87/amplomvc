@@ -73,7 +73,7 @@ class Url extends Library
 		
 		if ($admin) {
 			//we save the session to the DB because we lose sessions when using cURL
-			$this->session->save_token_session();
+			$this->session->saveTokenSession();
 		}
 		
 		session_write_close();
@@ -98,81 +98,40 @@ class Url extends Library
 	
 	public function getQuery()
 	{
-		$query = '';
-		
 		$args = func_get_args();
 		
-		$filters = array();
-		
-		foreach ($args as $a) {
-			if (is_array($a)) {
-				$filters = array_merge($filters, $a);
-			}
-			elseif (is_string($a)) {
-				$filters[] = $a;
-			}
-			else {
-				trigger_error("Url::getQuery(\$arg1, [\$arg2, ...]) - all arguments must be an array or string! " . get_caller());
-				return '';
-			}
-		}
-
-		if ($filters) {
-			foreach ($filters as $f) {
-				if (isset($_GET[$f])) {
-					if (is_array($_GET[$f])) {
-						$query .= ($query ? '&':'') . http_build_query(array($f => $_GET[$f]));
-					}
-					else {
-						$query .= ($query ? '&':'') . "$f=" . $_GET[$f];
-					}
-				}
-			}
-		}
-		else {
-			return http_build_query($_GET);
+		if (empty($args)) {
+			return $_SERVER['QUERY_STRING'];
 		}
 		
-		$query = $this->decodeURIComponent($query);
+		$query = array();
 		
-		return $query;
+		foreach ($_GET as $key => $value) {
+			if (in_array($key, $args)) {
+				$query[$key] = $value;
+			}
+		}
+		
+		return http_build_query($query);
 	}
 	
 	public function getQueryExclude()
 	{
-		$query = '';
-		
 		$args = func_get_args();
 		
 		if (empty($args)) {
-			trigger_error("Url::getQueryExclude(): You must specify at least 1 argument to exclude! " . get_caller());
-			return '';
+			return $_SERVER['QUERY_STRING'];
 		}
 		
-		$filters = array();
-		
-		foreach ($args as $a) {
-			if (is_array($a)) {
-				$filters = array_merge($filters, $a);
-			}
-			elseif (is_string($a)) {
-				$filters[] = $a;
-			}
-			else {
-				trigger_error("Url::getQuery(\$arg1, [\$arg2, ...]) - all arguments must be an array or string! " . get_caller());
-				return '';
-			}
-		}
-
-		$get_filter = array();
+		$query = array();
 		
 		foreach ($_GET as $key => $value) {
-			if (!in_array($key, $filters)) {
-				$get_filter[$key] = $value;
+			if (!in_array($key, $args)) {
+				$query[$key] = $value;
 			}
 		}
 		
-		return http_build_query($get_filter);
+		return http_build_query($query);
 	}
 	
 	public function getSeoUrl()
@@ -182,7 +141,7 @@ class Url extends Library
 	
 	public function admin($path, $query = '')
 	{
-		$link = $this->find_alias($path, $query, 0);
+		$link = $this->find_alias($path, $query, -1);
 		
 		return $link;
 	}
@@ -209,7 +168,7 @@ class Url extends Library
 	
 	public function store_base($store_id, $ssl = false)
 	{
-		if ($store_id == $this->config->get('config_store_id')) {
+		if ((int)$store_id === 0 || $store_id == $this->config->get('config_store_id')) {
 			return $ssl ? $this->config->get('config_ssl') : $this->config->get('config_url');
 		}
 		
@@ -288,13 +247,21 @@ class Url extends Library
 	private function loadSeoUrl()
 	{
 		// Decode URL
-		$url_alias = $this->db->queryRow("SELECT * FROM " . DB_PREFIX . "url_alias WHERE alias = '" . $this->db->escape($this->path) . "' AND status = '1' LIMIT 1");
+		$path = $this->db->escape($this->path);
+		$query = $this->db->escape($this->getQuery());
+		
+		$sql =
+			"SELECT * FROM " . DB_PREFIX . "url_alias" .
+			" WHERE (alias = '$path' OR (path = '$path' AND (query = '*' OR '$query' like CONCAT('%', query, '%'))) )" .
+			" AND status = '1' AND store_id IN (0, " . (int)$this->config->get('config_store_id') . ") LIMIT 1";
+		
+		$url_alias = $this->db->queryRow($sql);
 		
 		if ($url_alias) {
 			//TODO: We need to reconsider how we handle all stores...
-			if ($url_alias['store_id'] == -1) {
+			if ($url_alias['store_id'] === 0) {
 				if(!$this->config->isAdmin()) {
-					$url_alias['store_id'] = $this->config->get('config_store_id');
+					$url_alias['store_id'] = (int)$this->config->get('config_store_id');
 				} else {
 					$this->redirect($this->store($this->config->get('default_store_id'), $url_alias['path'], $url_alias['query']));
 				}
@@ -312,11 +279,10 @@ class Url extends Library
 			}
 			
 			
-			if ((int)$url_alias['store_id'] != (int)$this->config->get('config_store_id') && $url_alias['store_id'] != -1) {
-				if ((int)$url_alias['store_id'] === 0) {
+			if ((int)$url_alias['store_id'] !== (int)$this->config->get('config_store_id') && (int)$url_alias['store_id'] !== 0) {
+				if ((int)$url_alias['store_id'] === -1) {
 					$this->redirect($this->admin($url_alias['path'], $url_alias['query']));
-				}
-				else {
+				} else {
 					$this->redirect($this->store($url_alias['store_id'], $url_alias['path'], $url_alias['query']));
 				}
 			}
@@ -352,8 +318,6 @@ class Url extends Library
 			$store_id = $this->config->get('config_store_id');
 		}
 		
-		$all_stores = (int)$store_id === 0 ? -2 : -1;
-		
 		if ($query) {
 			$query_sql = "'" . $this->db->escape($query) . "' like CONCAT('%', query, '%')";
 		} else {
@@ -361,9 +325,10 @@ class Url extends Library
 		}
 		
 		$where = "WHERE $query_sql AND status='1'";
-		$where .= " AND store_id IN ('$all_stores', '" . (int)$store_id . "')";
+		$where .= " AND store_id IN (0, " . (int)$store_id . ")";
 		$where .= " AND path = '" . $this->db->escape($path) . "'";
 		
+		//TODO: Validate that we need to ORDER BY query here... can be costly with a large number of aliases
 		$sql = "SELECT * FROM " . DB_PREFIX . "url_alias $where ORDER BY query DESC LIMIT 1";
 		
 		$url_alias = $this->db->queryRow($sql);
@@ -387,7 +352,7 @@ class Url extends Library
 				}
 			}
 			
-			$alias_keyword = $url_alias['keyword'];
+			$alias = $url_alias['alias'];
 			
 			$alias_query = null;
 			
@@ -414,10 +379,10 @@ class Url extends Library
 		
 		$query = !empty($args) ? http_build_query($args) : '';
 		
-		if (empty($alias_keyword)) {
+		if (empty($alias)) {
 			return $url . $path . ($query ? '?' . $query : '');
 		} else {
-			return $url . $alias_keyword . ($query ? '?' . $query : '');
+			return $url . $alias . ($query ? '?' . $query : '');
 		}
 	}
 	

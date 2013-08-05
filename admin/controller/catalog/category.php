@@ -155,6 +155,8 @@ class Admin_Controller_Catalog_Category extends Controller
 				)
 			);
 			
+			$category['name'] = $category['pathname'];
+			
 			$category['thumb'] = $this->image->resize($category['image'], $image_width, $image_height);
 			
 			$category['stores'] = $this->Model_Catalog_Category->getCategoryStores($category['category_id']);

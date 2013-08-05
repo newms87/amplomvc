@@ -22,6 +22,10 @@ class Request
 	
   	public function clean(&$value)
   	{
-		$value = htmlspecialchars(stripslashes($value), ENT_COMPAT);
+		$value = htmlspecialchars($value, ENT_COMPAT);
+		
+		if (get_magic_quotes_gpc()) {
+			$value = stripslashes($value);
+		}
 	}
 }

@@ -1,6 +1,6 @@
 <?= $header; ?>
 <?= $column_left; ?><?= $column_right; ?>
-<div class="section">
+<div id="content">
 	<?= $this->breadcrumb->render(); ?>
 	<?= $content_top; ?>
 	

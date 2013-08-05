@@ -414,6 +414,13 @@ class DB
 		return $this->driver->escapeHtml($value);
 	}
 	
+	public function escapeAll($values)
+	{
+		array_walk_recursive($values, function(&$value, $key, $db) { $value = $db->escape($value); }, $this);
+		
+		return $values;
+	}
+	
   	public function countAffected()
   	{
 		return $this->driver->countAffected();

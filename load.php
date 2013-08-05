@@ -131,6 +131,7 @@ $response->output();
 //TODO: try to move this so it is valid HTML
 //Performance Logging
 if ($config->get('config_performance_log')) {
+	global $__start;
 	$stats = array(
 		'peak_memory' => $registry->get('tool')->bytes2str(memory_get_peak_usage(true)),
 		'count_included_files' => count(get_included_files()),

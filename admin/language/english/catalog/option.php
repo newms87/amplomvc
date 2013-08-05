@@ -12,8 +12,6 @@ $_['data_option_types'] = array(
 	'#optgroup2'=>'Input',
 	'text'=>'Text',
 	'textarea'=>'Textarea',
-	'#optgroup3'=>'File',
-	'file'=>'file',
 	'#optgroup4'=>'Date',
 	'date'=>'Date',
 	'datetime'=>'Date &amp; Time',
@@ -22,9 +20,7 @@ $_['data_option_types'] = array(
 
 // Text
 $_['text_success']		= 'Success: You have modified options!';
-$_['text_image_manager']  = 'Image Manager';
-$_['text_browse']			= 'Browse Files';
-$_['text_clear']			= 'Clear Image';
+$_['text_add_option_autocomplete']			= ' + Add Option';
 
 // Column
 $_['column_name']			= 'Option Name';

@@ -120,8 +120,10 @@ class Catalog_Controller_Product_Category extends Controller
 		else {
 			$this->_('text_empty', $category_info['name']);
 		}
+		
 		$this->data['continue'] = $this->url->link('common/home');
-
+		
+		//Dependencies
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
@@ -131,6 +133,7 @@ class Catalog_Controller_Product_Category extends Controller
 			'common/header'
 		);
 		
+		//Render
 		$this->response->setOutput($this->render());
   	}
 }

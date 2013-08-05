@@ -150,6 +150,22 @@ class Document extends Library
 		return false;
 	}
 	
+	public function addLinks($group, $links)
+	{
+		foreach ($links as $link) {
+			$this->addLink($group, $link);
+			
+			if (!empty($link['children'])) {
+				$this->addLinks($group, $link['children']);
+			}
+		}
+	}
+	
+	public function setLinks($group, $links)
+	{
+		$this->links[$group] = $links;
+	}
+	
 	public function getLinks($group = 'primary')
 	{
 		if (isset($this->links[$group])) {
@@ -330,6 +346,10 @@ class Document extends Library
 	
 	public function renderLinks($links, $depth = 0)
 	{
+		if (is_string($links)) {
+			$links = $this->getLinks($links);
+		}
+		
 		usort($links, function($a,$b){ return $a['sort_order'] > $b['sort_order']; });
 		
 		if ($depth === 0) {

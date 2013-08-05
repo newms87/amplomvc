@@ -1,9 +1,12 @@
 <?php
-// Text
+//TODO: Move this to Admin Panel and remove all these... 
+//Root Category Info
 $_['text_all_categories'] = "All Categories";
-$_['text_title_all'] = "All Categories";
-$_['text_name_all'] = "All Categories";
-$_['text_description_all'] = '';
+$_['text_all_description'] = '';
+$_['text_all_meta_description'] = 'All the categories on this site';
+$_['text_all_meta_keywords'] = 'all categories, categories, see list, view all, search, find';
+
+//Text
 $_['text_refine']		= 'Refine Search';
 $_['text_product']		= 'Products';
 $_['text_error']		= 'Category not found!';

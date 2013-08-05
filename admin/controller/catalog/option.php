@@ -310,10 +310,8 @@ class Admin_Controller_Catalog_Option extends Controller
 	
 	public function autocomplete()
 	{
-		//Sort
+		//Sort / Filter
 		$sort = $this->sort->getQueryDefaults('name', 'ASC', $this->config->get('config_autocomplete_limit'));
-		
-		//Filter
 		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 		
 		//Label and Value
@@ -345,6 +343,12 @@ class Admin_Controller_Catalog_Option extends Controller
 			$option['option_values'] = $option_values;
 			
 		} unset($option);
+		
+		$options[] = array(
+			'label' => $this->_("text_add_option_autocomplete"),
+			'value' => false,
+			'href' => $this->url->link('catalog/option'),
+		);
 		
 		//JSON response
 		$this->response->setOutput(json_encode($options));

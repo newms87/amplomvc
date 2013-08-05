@@ -20,8 +20,8 @@
 	<tr>
 		<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);" /></td>
 		<td class="center column_title"><span><?= $column_action; ?></span></td>
-		<? foreach($columns as $column) { ?>
-		<td class="column_title <?= $column['align']; ?>">
+		<? foreach($columns as $slug => $column) { ?>
+		<td class="column_title <?= $column['align'] . ' ' . $slug; ?>">
 			<? if($column['sortable']) {
 				$c_order = ($sort === $column['sort_value'] && $order === 'ASC') ? 'DESC' : 'ASC';
 				$class = $sort === $column['sort_value'] ? strtolower($order) : '';
@@ -46,7 +46,7 @@
 		</td>
 		<? foreach($columns as $slug => $column) { ?>
 		<? if($column['filter']) { ?>
-		<td class='column_filter <?= $column['align']; ?>'>
+		<td class="column_filter <?= $column['align'] . ' ' . $slug; ?>">
 			<? switch($column['type']) {
 				case 'text': ?>
 					<input type="text" name="filter[<?= $slug; ?>]" value="<?= $column['filter_value']; ?>" />
@@ -128,7 +128,7 @@
 	</tr>
 	<? if(!empty($rows)) { ?>
 	<? foreach ($rows as $row) { ?>
-	<tr>
+	<tr class="filter_list_item">
 		<td class="center"><input type="checkbox" name="selected[]" value="<?= $row[$row_id]; ?>" <?= (isset($row['selected']) && $row['selected']) ? "checked='checked'" : ""; ?> /></td>
 		
 		<? $quick_actions = '';
@@ -146,7 +146,8 @@
 				<? continue;
 			}
 			?>
-			<td class="<?= $column['align']; ?>">
+			<td class="<?= $column['align'] . ' ' . $slug; ?>">
+				<span>
 			<?
 			
 			$value = $row[$slug];
@@ -217,6 +218,7 @@
 					default: break;
 				}
 			}?>
+				</span>
 			</td>
 		<? } ?>
 		<td class="center actions">

@@ -192,6 +192,7 @@ class Admin_Model_Catalog_Category extends Model
 		$this->update('category', $data, $category_id);
 	}
 	
+	//TODO: Update Categories in Admin to Category Tree style (see front end!)
 	public function getCategoriesWithParents($data = array(), $select = '', $delimeter = ' > ')
 	{
 		$categories = $this->getCategories($data, $select);
@@ -201,8 +202,11 @@ class Admin_Model_Catalog_Category extends Model
 				$parents = $this->Model_Catalog_Category->getParents($category['category_id']);
 				
 				if (!empty($parents)) {
-					$category['name'] = implode($delimeter, array_column($parents, 'name')) . $delimeter . $category['name'];
+					$category['pathname'] = implode($delimeter, array_column($parents, 'name')) . $delimeter . $category['name'];
 				}
+			}
+			else {
+				$category['pathname'] = $category['name'];
 			}
 		}
 		
@@ -229,19 +233,19 @@ class Admin_Model_Catalog_Category extends Model
 				
 				$parent_id = (int)$parent['parent_id'];
 				
-				if ($parent['category_id'] == $category_id) {
-					continue;
-				}
+				if ($parent['category_id'] === $category_id) continue;
 				
-				if (isset($parents[$parent_id])) {
+				if ($parent_id == $category_id || isset($parents[$parent['category_id']])) {
 					trigger_error("There is a circular reference for parent categories for $category_id!");
 					exit();
 				}
 				
-				$this->translation->translate('category', $parent_id, $parent);
+				$this->translation->translate('category', $parent['category_id'], $parent);
 				
-				$parents[$parent_id] = $parent;
+				$parents[$parent['category_id']] = $parent;
 			}
+			
+			$parents = array_reverse($parents, true);
 			
 			$this->cache->set("category.parents.$category_id.$language_id", $parents);
 		}

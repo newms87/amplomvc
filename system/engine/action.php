@@ -3,7 +3,7 @@ final class Action
 {
 	private $registry;
 	private $file;
-	private $route;
+	private $path;
 	private $class;
 	private $classpath;
 	private $controller;
@@ -11,11 +11,11 @@ final class Action
 	private $parameters = array();
 	private $output;
 
-	public function __construct($registry, $route, $parameters = array(), $classpath = '')
+	public function __construct($registry, $path, $parameters = array(), $classpath = '')
 	{
 		$this->registry = $registry;
 		$this->file = null;
-		$this->route = $route;
+		$this->path = $path;
 		$this->parameters = $parameters;
 		$this->method = 'index';
 		
@@ -25,20 +25,20 @@ final class Action
 			$this->classpath = rtrim($classpath,'/') . '/';
 		}
 		
-		$parts = explode('/', str_replace('../', '', $this->classpath . $this->route));
+		$parts = explode('/', str_replace('../', '', $this->classpath . $this->path));
 		
-		$path = '';
+		$filepath = '';
 		
 		foreach ($parts as $part) {
-			$path .= $part;
+			$filepath .= $part;
 			
 			//Scan directories until we find file requested
-			if (is_dir(SITE_DIR . $path)) {
-				$path .= '/';
+			if (is_dir(SITE_DIR . $filepath)) {
+				$filepath .= '/';
 				$this->class .= $this->tool->formatClassname($part) . '_';
 			}
-			elseif (is_file(SITE_DIR . $path . '.php')) {
-				$this->file = SITE_DIR . $path . '.php';
+			elseif (is_file(SITE_DIR . $filepath . '.php')) {
+				$this->file = SITE_DIR . $filepath . '.php';
 				
 				$this->class .= $this->tool->formatClassname($part);
 			}
@@ -99,7 +99,7 @@ final class Action
 				$this->controller = new $class($this->registry);
 			} else {
 				if (!$this->file) {
-					trigger_error("Failed to load controller {$this->class} because the file was not resolved! Please verify {$this->route} is a valid controller." . get_caller(0, 2));
+					trigger_error("Failed to load controller {$this->class} because the file was not resolved! Please verify {$this->path} is a valid controller." . get_caller(0, 2));
 				} else {
 					trigger_error("Failed to load controller {$this->class} because the file {$this->file} is missing!");
 				}

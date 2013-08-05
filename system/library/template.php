@@ -117,14 +117,8 @@ class Template extends Library
 		}
 		
 		if (is_file($this->file)) {
-			//TODO: Do we want plugins to modify templates in this way!?
-			// The plugins can only modify for default template... does this make sense? just use a new template?
-			// Maybe the plugin template overrides the default template (when requested by plugin)?
-			
-			//if there are plugins that have modified this template,
-			//we use the merged version of this file
 			$file = $this->plugin->getFile($this->file);
-		
+			
 			extract($this->data);
 			
 			ob_start();

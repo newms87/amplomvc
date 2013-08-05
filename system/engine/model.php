@@ -96,85 +96,9 @@ abstract class Model
 		return $this->db->escape($value);
 	}
 	
-	/**
-	* Use to select rows from a talbe in the database
-	*
-	* @param $table - The table to select from
-	* @param $select - The fields to select from the table
-	* @param $where - Can be an associative array, string or integer.
-	*					If it is an integer it will be treated as the primary key.
-	*					If it is a string, it will be left untouched and passed as the WHERE value
-	*					If it is an associative array it will be treated as `key` = 'value' pairs combined with "AND"
-	*
-	* @param $options - an associative array, options are
-	*				'group_by' - An array of field names which will be combined with implode(',', $group_by),
-	*								or it can be a string to allow for any GROUP BY (and HAVING) clause
-	*
-	*				'order_by' - An array of field names which will be combined with implode(',', $order_by),
-	*								or it can be a string to allow for any ORDER BY clause
-	*
-	*				'limit' - An int (for limit only) or string in the format "start, limit"
-	*
-	* @return array - the rows that were retrieved from the database
-	*/
-	protected function get($table, $select, $where=null, $options=null)
+	protected function escapeAll($values)
 	{
-		if (isset($where)) {
-			if (is_integer($where) || ((is_string($where) && preg_match("/[^\d]/", $where) == 0) && $where !== '')) {
-				$primary_key = $this->get_primary_key($table);
-				if (!$primary_key) {
-					trigger_error("SELECT $table does not have an integer primary key!");
-					return null;
-				}
-				
-				$where = "`$primary_key` = '$where'";
-			}
-			elseif (is_array($where)) {
-				$where = $this->get_escaped_values($table, $where, ' AND ');
-			}
-		}
-	
-		if ($where) {
-			$where = "WHERE $where";
-		}
-		
-		$group_by = '';
-		if (isset($options['group_by'])) {
-			$group_by = "GROUP BY ";
-			
-			if (is_array($options['group_by'])) {
-				$group_by .= implode(',',$options['group_by']);
-			}
-			else {
-				$group_by .= $options['group_by'];
-			}
-		}
-		
-		$order_by = '';
-		if (isset($options['order_by'])) {
-			$order_by = "ORDER BY ";
-			
-			if (is_array($options['order_by'])) {
-				$order_by .= implode(',',$options['order_by']);
-			}
-			else {
-				$order_by .= $options['order_by'];
-			}
-		}
-		
-		$limit = '';
-		if (isset($options['limit'])) {
-			$limit = "LIMIT " . $options['limit'];
-		}
-		
-		$resource = $this->db->query("SELECT $select FROM " . DB_PREFIX . "$table $where $group_by $order_by $limit");
-		
-		if (!$resource) {
-			$err_msg = $this->config->get('config_error_display')?"<br /><br />" . $this->db->getError():'';
-			$this->message->add("warning", "There was a problem getting values for $table!" . $err_msg);
-		}
-		
-		return $resource;
+		return $this->db->escapeAll($values);
 	}
 	
 	protected function insert($table, $data)

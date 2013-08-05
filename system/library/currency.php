@@ -41,7 +41,7 @@ class Currency extends Library
 		}
 
 		if (!isset($_COOKIE['currency']) || ($_COOKIE['currency'] != $currency)) {
-			setcookie('currency', $currency, time() + 60 * 60 * 24 * 30, '/', $_SERVER['HTTP_HOST']);
+			$this->session->setCookie('currency', $currency);
 		}
   	}
 

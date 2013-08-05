@@ -132,7 +132,7 @@ $(document).ready(function(){
 	</div>
 	<? }?>
 	<? if(!empty($links_primary)) { ?>
-	<div id="links_primary" class="links">
+	<div id="links_primary" class="links dropdown">
 		<?= $this->document->renderLinks($links_primary); ?>
 	</div>
 	<? } ?>
