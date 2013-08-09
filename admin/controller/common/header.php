@@ -26,7 +26,10 @@ class Admin_Controller_Common_Header extends Controller
 		$this->document->addScript(HTTP_JS . 'jquery/ui/jquery-ui.js', 51);
 		$this->document->addScript(HTTP_JS . 'common.js', 53);
 		$this->document->addScript(HTTP_THEME_JS . 'common.js', 54);
-		$this->document->localizeScript(DIR_APPLICATION . 'view/javascript/ac_vars.php');
+		
+		//TODO: Move this to admin Panel?
+		$this->document->localizeVar('image_thumb_width',  $this->config->get('config_image_admin_thumb_width'));
+		$this->document->localizeVar('image_thumb_height',  $this->config->get('config_image_admin_thumb_height'));
 		
 		$this->data['messages'] = $this->message->fetch();
 		

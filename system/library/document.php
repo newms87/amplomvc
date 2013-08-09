@@ -8,6 +8,7 @@ class Document extends Library
 	private $links = array();
 	private $styles = array();
 	private $scripts = array();
+	private $ac_vars = array();
 	
 	function __construct($registry)
 	{
@@ -16,6 +17,12 @@ class Document extends Library
 		$this->links = $this->Model_Design_Navigation->getNavigationLinks();
 		
 		$this->setCanonicalLink($this->url->getSeoUrl());
+		
+		$this->ac_vars['site_url'] = SITE_URL;
+		
+		if ($ac_vars = $this->config->get('config_ac_vars')) {
+			$this->ac_vars += $ac_vars;
+		}
 	}
 	
 	public function setTitle($title)
@@ -229,6 +236,11 @@ class Document extends Library
 		$this->addScript('local:'.$script, $priority);
 	}
 	
+	public function localizeVar($var, $value)
+	{
+		$this->ac_vars[$var] = $value;
+	}
+	
 	/**
 	 * Retrieves the scripts requested, sorted by priority
 	 * Note: We sort the scripts here as it is assumed this is only called once
@@ -269,6 +281,10 @@ class Document extends Library
 			else {
 				$html .= "<script type=\"text/javascript\" src=\"$script\"></script>\r\n";
 			}
+		}
+		
+		if (!empty($this->ac_vars)) {
+			$html .= "<script type=\"text/javascript\">\r\n$.ac_vars = " . json_encode($this->ac_vars) . ";\r\n</script>";
 		}
 		
 		return $html;

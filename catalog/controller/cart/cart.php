@@ -67,11 +67,12 @@ class Catalog_Controller_Cart_Cart extends Controller
 		
 		$product_id = isset($_POST['product_id']) ? $_POST['product_id'] : 0;
 		$quantity = isset($_POST['quantity']) ? $_POST['quantity'] : 1;
-		$selected_options = isset($_POST['selected_options']) ? array_filter($_POST['selected_options']) : array();
+		$selected_options = !empty($_POST['selected_options']) ? $_POST['selected_options'] : array();
 		$load_page = isset($_POST['load_page']);
 		
 		$this->cart->add($product_id, $quantity, $selected_options);
 		
+		var_dump($_POST);
 		if ($load_page) {
 			$this->index();
 		}

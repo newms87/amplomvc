@@ -23,7 +23,10 @@ class Catalog_Controller_Common_Header extends Controller
 		$this->document->addScript(HTTP_JS . 'jquery/jquery.js', 50);
 		$this->document->addScript(HTTP_JS . 'jquery/ui/jquery-ui.js', 51);
 		$this->document->addScript(HTTP_JS . 'common.js', 53);
-		$this->document->localizeScript(DIR_APPLICATION . 'view/javascript/ac_vars.php');
+		
+		//TODO: Move this to admin Panel?
+		$this->document->localizeVar('image_thumb_width',  $this->config->get('config_image_thumb_width'));
+		$this->document->localizeVar('image_thumb_height',  $this->config->get('config_image_thumb_height'));
 		
 		//Add Theme Scripts
 		$this->document->addScript(HTTP_THEME_JS . 'common.js', 56);

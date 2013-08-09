@@ -59,7 +59,7 @@ final class Front
 		if ($controller_overrides) {
 			foreach ($controller_overrides as $override) {
 				if (('admin/controller/' . $this->path) === $override['original']) {
-					if (empty($override['condition']) || preg_match("/.*" . $override['condition'] . ".*/", $_SERVER['QUERY_STRING'])) {
+					if (empty($override['condition']) || preg_match("/.*" . $override['condition'] . ".*/", $this->url->getQuery())) {
 						$this->path = str_replace('admin/controller/','',$override['alternate']);
 					}
 				}
@@ -83,7 +83,7 @@ final class Front
 		if ($controller_overrides) {
 			foreach ($controller_overrides as $override) {
 				if (('catalog/controller/' . $this->path) === $override['original']) {
-					if (empty($override['condition']) || preg_match("/.*" . $override['condition'] . ".*/", $_SERVER['QUERY_STRING'])) {
+					if (empty($override['condition']) || preg_match("/.*" . $override['condition'] . ".*/", $this->url->getQuery())) {
 						$this->path = str_replace('catalog/controller/','',$override['alternate']);
 					}
 				}

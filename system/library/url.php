@@ -101,7 +101,7 @@ class Url extends Library
 		$args = func_get_args();
 		
 		if (empty($args)) {
-			return $_SERVER['QUERY_STRING'];
+			return http_build_query($_GET); //We do not use the query string for SEO URLs to function
 		}
 		
 		$query = array();
@@ -120,7 +120,7 @@ class Url extends Library
 		$args = func_get_args();
 		
 		if (empty($args)) {
-			return $_SERVER['QUERY_STRING'];
+			return http_build_query($_GET); //We do not use the query string for SEO URLs to function
 		}
 		
 		$query = array();
