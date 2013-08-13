@@ -360,7 +360,6 @@ class DB
 			if (!$new_column) {
 				$new_column = $column;
 			} elseif ($this->hasColumn($table, $new_column)) {
-				trigger_error("Attempted Change the database column $table => $column to a Column that already exists: $new_column!");
 				return false;
 			}
 			
