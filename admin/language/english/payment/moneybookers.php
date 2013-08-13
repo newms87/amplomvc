@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']				= 'Moneybookers';
+$_['head_title']				= 'Moneybookers';
 
 // Text
 $_['text_payment']				= 'Payment';

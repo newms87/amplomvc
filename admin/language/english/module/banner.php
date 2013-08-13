@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'Banner';
+$_['head_title']		= 'Banner';
 
 // Text
 $_['text_module']			= 'Modules';

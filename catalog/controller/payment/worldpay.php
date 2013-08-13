@@ -35,12 +35,12 @@ class Catalog_Controller_Payment_Worldpay extends Controller
 	{
 		$this->language->load('payment/worldpay');
 	
-		$this->data['title'] = $this->_('heading_title', $this->config->get('config_name'));
+		$this->data['title'] = $this->_('head_title', $this->config->get('config_name'));
 
 		$this->data['base'] = $this->url->is_ssl() ? $this->config->get('config_ssl') : $this->config->get('config_url');
 	
 		$this->language->set('language', $this->language->getInfo('code'));
-		$this->_('heading_title', $this->config->get('config_name'));
+		$this->_('head_title', $this->config->get('config_name'));
 		
 		$this->_('text_success_wait', $this->url->link('checkout/success'));
 		$this->_('text_failure_wait', $this->url->link('checkout/checkout'));

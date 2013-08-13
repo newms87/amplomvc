@@ -1,6 +1,6 @@
 <?php
 // Text
-$_['heading_title']		= 'Specials';
+$_['head_title']		= 'Specials';
 $_['text_empty']		= 'There are no specials at this time.';
 $_['text_display']		= 'Display:';
 $_['text_list']			= 'List';

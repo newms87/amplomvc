@@ -9,7 +9,7 @@
 	<? } ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'customer.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'customer.png'; ?>" alt="" /> <?= $head_title; ?></h1>
 			<div class="buttons"><a onclick="$('form').attr('action', '<?= $approve; ?>'); $('form').submit();" class="button"><?= $button_approve; ?></a><a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a onclick="$('form').attr('action', '<?= $delete; ?>'); $('form').submit();" class="button"><?= $button_delete; ?></a></div>
 		</div>
 		<div class="content">

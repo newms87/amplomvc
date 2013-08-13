@@ -13,7 +13,7 @@ class Catalog_Controller_Affiliate_Login extends Controller
 	
 		$this->language->load('affiliate/login');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 						
 		if ($this->request->isPost() && isset($_POST['email']) && isset($_POST['password']) && $this->validate()) {
 			if (isset($_POST['redirect'])) {

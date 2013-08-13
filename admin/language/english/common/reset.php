@@ -1,6 +1,6 @@
 <?php
 // header
-$_['heading_title']  = 'Reset your password';
+$_['head_title']  = 'Reset your password';
 
 // Text
 $_['text_reset']	= 'Reset your password!';

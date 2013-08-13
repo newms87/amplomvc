@@ -9,7 +9,7 @@ class Admin_Controller_Payment_Paymate extends Controller
 
 		$this->language->load('payment/paymate');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validate()) {
 			$this->Model_Setting_Setting->editSetting('paymate', $_POST);
@@ -39,7 +39,7 @@ class Admin_Controller_Payment_Paymate extends Controller
 		
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('text_payment'), $this->url->link('extension/payment'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('payment/paymate'));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('payment/paymate'));
 
 		$this->data['action'] = $this->url->link('payment/paymate');
 		

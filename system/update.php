@@ -33,17 +33,17 @@ class System_Update {
 	public function update($update_version = null)
 	{
 		if (!$update_version) {
-			$update_version = VERSION;
+			$update_version = AC_VERSION;
 		}
 		
 		$versions = $this->getVersions();
 		
 		foreach ($versions as $version => $file) {
-			if ($update_version >= $version) {
+			if (version_compare($update_version, $version, '>=')) {
 				require_once($file);
 			}
 		}
 		
-		$this->config->save('system', 'ac_version', VERSION, 0);
+		$this->config->save('system', 'ac_version', AC_VERSION, 0);
 	}
 }

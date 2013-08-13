@@ -7,7 +7,7 @@ class Admin_Controller_User_UserPermission extends Controller
 	{
 		$this->language->load('user/user_group');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
  		
 		$this->getList();
 	}
@@ -16,7 +16,7 @@ class Admin_Controller_User_UserPermission extends Controller
 	{
 		$this->language->load('user/user_group');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_User_UserGroup->addUserGroup($_POST);
@@ -47,7 +47,7 @@ class Admin_Controller_User_UserPermission extends Controller
 	{
 		$this->language->load('user/user_group');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_User_UserGroup->editUserGroup($_GET['user_group_id'], $_POST);
@@ -78,7 +78,7 @@ class Admin_Controller_User_UserPermission extends Controller
 	{
 		$this->language->load('user/user_group');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 				foreach ($_GET['selected'] as $user_group_id) {
@@ -144,7 +144,7 @@ class Admin_Controller_User_UserPermission extends Controller
 		}
 			
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('user/user_permission', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('user/user_permission', $url));
 
 		$this->data['insert'] = $this->url->link('user/user_permission/insert', $url);
 		$this->data['delete'] = $this->url->link('user/user_permission/delete', $url);
@@ -238,7 +238,7 @@ class Admin_Controller_User_UserPermission extends Controller
 		$user_group_id = !empty($_GET['user_group_id']) ? (int)$_GET['user_group_id'] : 0;
 		
  		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('user/user_permission'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('user/user_permission'));
 		
 		$url_query = $this->url->getQuery('sort','order','page');
 		

@@ -1,6 +1,6 @@
 <?php
 //Heading
-$_['heading_title'] = "Order Statuses";
+$_['head_title'] = "Order Statuses";
 
 //Text
 $_['text_settings'] = "Settings";

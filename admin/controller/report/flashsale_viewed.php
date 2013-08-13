@@ -7,7 +7,7 @@ class Admin_Controller_Report_FlashsaleViewed extends Controller
 
 		$this->language->load('report/flashsale_viewed');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (isset($_GET['page'])) {
 			$page = $_GET['page'];
@@ -18,7 +18,7 @@ class Admin_Controller_Report_FlashsaleViewed extends Controller
 		$url = $this->get_url();
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('report/flashsale_viewed'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('report/flashsale_viewed'));
 							
 		$data = array(
 			'start' => ($page - 1) * $this->config->get('config_admin_limit'),

@@ -26,7 +26,7 @@ class Catalog_Controller_Product_Category extends Controller
 			$this->document->setDescription($category_info['meta_description']);
 			$this->document->setKeywords($category_info['meta_keywords']);
 			
-			$this->language->set('heading_title', $category_info['name']);
+			$this->language->set('head_title', $category_info['name']);
 			
 			if ($this->config->get('config_show_category_image')) {
 				$this->data['thumb'] = $this->image->resize($category_info['image'], $this->config->get('config_image_category_width'), $this->config->get('config_image_category_height'));
@@ -49,7 +49,7 @@ class Catalog_Controller_Product_Category extends Controller
 			$this->document->setDescription($this->_('text_description_all'));
 			$this->document->setKeywords($this->_('text_metakeyword_all'));
 			
-			$this->language->set('heading_title', $this->_('text_name_all'));
+			$this->language->set('head_title', $this->_('text_name_all'));
 			
 			$this->data['thumb'] = '';
 			

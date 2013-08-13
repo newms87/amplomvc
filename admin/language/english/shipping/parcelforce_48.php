@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']			= 'Parcelforce 48';
+$_['head_title']			= 'Parcelforce 48';
 
 // Text
 $_['text_shipping']			= 'Shipping';

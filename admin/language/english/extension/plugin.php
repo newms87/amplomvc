@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Plugins';
+$_['head_title']	= 'Plugins';
 
 //Data
 $_['call_when'] = array('before'=>"Before", 'replace'=>"Instead of", 'after'=>"After");

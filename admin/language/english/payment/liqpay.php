@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'LIQPAY';
+$_['head_title']		= 'LIQPAY';
 
 // Text
 $_['text_payment']		= 'Payment';

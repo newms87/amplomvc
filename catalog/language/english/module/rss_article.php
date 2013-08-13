@@ -1,4 +1,4 @@
 <?php
 // Heading
-$_['heading_title'] = 'BettyConfidential<br/>The Magazine';
+$_['head_title'] = 'BettyConfidential<br/>The Magazine';
  

@@ -9,7 +9,7 @@ class Admin_Controller_Payment_Cheque extends Controller
 
 		$this->language->load('payment/cheque');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validate()) {
 			$this->Model_Setting_Setting->editSetting('cheque', $_POST);
@@ -33,7 +33,7 @@ class Admin_Controller_Payment_Cheque extends Controller
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('text_payment'), $this->url->link('extension/payment'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('payment/cheque'));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('payment/cheque'));
 
 		$this->data['action'] = $this->url->link('payment/cheque');
 		

@@ -7,7 +7,7 @@ class Admin_Controller_Report_SaleOrder extends Controller
 
 		$this->language->load('report/sale_order');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		$query_defaults = array(
 				'filter_date_start'=>'',
@@ -23,7 +23,7 @@ class Admin_Controller_Report_SaleOrder extends Controller
 		$url = $this->get_url();
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('report/sale_order'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('report/sale_order'));
 		
 		$this->data['orders'] = array();
 		

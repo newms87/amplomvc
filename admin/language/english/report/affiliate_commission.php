@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Affiliate Commission Report';
+$_['head_title']	= 'Affiliate Commission Report';
 
 // Column
 $_['column_affiliate']  = 'Affiliate Name';

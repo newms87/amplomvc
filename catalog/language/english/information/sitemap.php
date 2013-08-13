@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Site Map';
+$_['head_title']	= 'Site Map';
 
 // Text
 $_['text_special']	= 'Special Offers';

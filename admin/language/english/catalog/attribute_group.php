@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Attribute Groups';
+$_['head_title']	= 'Attribute Groups';
 
 // Text
 $_['text_success']		= 'Success: You have modified attribute groups!';

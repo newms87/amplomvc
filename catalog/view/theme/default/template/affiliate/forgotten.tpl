@@ -4,7 +4,7 @@
 	<?= $this->breadcrumb->render(); ?>
 	<?= $content_top; ?>
 
-	<h1><?= $heading_title; ?></h1>
+	<h1><?= $head_title; ?></h1>
 	<form action="<?= $action; ?>" method="post" enctype="multipart/form-data">
 		<p><?= $text_email; ?></p>
 		<h2><?= $text_your_email; ?></h2>

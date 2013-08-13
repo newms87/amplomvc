@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Handling Fee';
+$_['head_title']	= 'Handling Fee';
 
 // Text
 $_['text_total']		= 'Order Totals';

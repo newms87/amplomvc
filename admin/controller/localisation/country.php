@@ -7,7 +7,7 @@ class Admin_Controller_Localisation_Country extends Controller
 	{
 		$this->language->load('localisation/country');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		$this->getList();
 	}
@@ -16,7 +16,7 @@ class Admin_Controller_Localisation_Country extends Controller
 	{
 		$this->language->load('localisation/country');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Country->addCountry($_POST);
@@ -47,7 +47,7 @@ class Admin_Controller_Localisation_Country extends Controller
 	{
 		$this->language->load('localisation/country');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Country->editCountry($_GET['country_id'], $_POST);
@@ -78,7 +78,7 @@ class Admin_Controller_Localisation_Country extends Controller
 	{
 		$this->language->load('localisation/country');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $country_id) {
@@ -144,7 +144,7 @@ class Admin_Controller_Localisation_Country extends Controller
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/country', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/country', $url));
 
 		$this->data['insert'] = $this->url->link('localisation/country/insert', $url);
 		$this->data['delete'] = $this->url->link('localisation/country/delete', $url);
@@ -266,7 +266,7 @@ class Admin_Controller_Localisation_Country extends Controller
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/country', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/country', $url));
 
 		if (!isset($_GET['country_id'])) {
 			$this->data['action'] = $this->url->link('localisation/country/insert', $url);

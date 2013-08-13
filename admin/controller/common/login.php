@@ -8,7 +8,7 @@ class Admin_Controller_Common_Login extends Controller
 
 		$this->language->load('common/login');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		//IF user is logged in, redirect to the homepage
 		if (isset($_POST['username']) && isset($_POST['password'])) {

@@ -117,14 +117,14 @@ class Admin_Controller_Catalog_Information extends Controller
 	private function getList()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		//The Template
 		$this->template->load('catalog/information_list');
 		
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/information'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/information'));
 		
 		//The Table Columns
 		$columns = array();
@@ -237,7 +237,7 @@ class Admin_Controller_Catalog_Information extends Controller
 
 	private function getForm()
 	{
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		$this->template->load('catalog/information_form');
 		
@@ -246,7 +246,7 @@ class Admin_Controller_Catalog_Information extends Controller
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_information_list'), $this->url->link('catalog/information'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/information', 'information_id=' . $information_id));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/information', 'information_id=' . $information_id));
 		
 		//Saved Data
 		if ($information_id && !$this->request->isPost()) {

@@ -88,14 +88,14 @@ class Admin_Controller_Design_Layout extends Controller
 	private function getList()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		//The Template
 		$this->template->load('design/layout_list');
 		
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('design/layout'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('design/layout'));
 		
 		//The Table Columns
 		$columns = array();
@@ -195,14 +195,14 @@ class Admin_Controller_Design_Layout extends Controller
 	private function getForm()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		//The Template
 		$this->template->load('design/layout_form');
 		
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('design/layout'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('design/layout'));
 
 		//Insert or Update
 		$layout_id = isset($_GET['layout_id']) ? (int)$_GET['layout_id'] : 0;

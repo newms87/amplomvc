@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Products Purchased Report';
+$_['head_title']	= 'Products Purchased Report';
 
 // Text
 $_['text_all_status']	= 'All Statuses';

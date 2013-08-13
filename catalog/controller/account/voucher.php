@@ -9,7 +9,7 @@ class Catalog_Controller_Account_Voucher extends Controller
 
 		$this->language->load('account/voucher');
 		
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (!isset($this->session->data['vouchers'])) {
 			$this->session->data['vouchers'] = array();
@@ -152,10 +152,10 @@ class Catalog_Controller_Account_Voucher extends Controller
 
 		$this->language->load('account/voucher');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/voucher'));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('account/voucher'));
 
 		$this->data['continue'] = $this->url->link('cart/cart');
 

@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'Designers Sidebar';
+$_['head_title']		= 'Designers Sidebar';
 
 // Text
 $_['text_module']			= 'Modules';

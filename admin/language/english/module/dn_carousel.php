@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'DN Carousel';
+$_['head_title']		= 'DN Carousel';
 
 // Text
 $_['text_carousel']			= 'Carousels';

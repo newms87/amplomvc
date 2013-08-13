@@ -4,7 +4,7 @@
 	<?= $this->builder->display_errors(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'country.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'country.png'; ?>" alt="" /> <?= $head_title; ?></h1>
 			<div class="buttons">
 				<a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a>
 				<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>

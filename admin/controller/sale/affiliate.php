@@ -7,7 +7,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
   	{
 		$this->language->load('sale/affiliate');
 		
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		$this->getList();
   	}
@@ -16,7 +16,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
   	{
 		$this->language->load('sale/affiliate');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 				$this->Model_Sale_Affiliate->addAffiliate($_POST);
@@ -67,7 +67,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
   	{
 		$this->language->load('sale/affiliate');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Sale_Affiliate->editAffiliate($_GET['affiliate_id'], $_POST);
@@ -118,7 +118,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
   	{
 		$this->language->load('sale/affiliate');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $affiliate_id) {
@@ -171,7 +171,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
 	{
 		$this->language->load('sale/affiliate');
 		
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (!$this->user->hasPermission('modify', 'sale/affiliate')) {
 			$this->error['warning'] = $this->_('error_permission');
@@ -317,7 +317,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('sale/affiliate', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/affiliate', $url));
 
 		$this->data['approve'] = $this->url->link('sale/affiliate/approve', $url);
 		$this->data['insert'] = $this->url->link('sale/affiliate/insert', $url);
@@ -588,7 +588,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
 		}
 		
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('sale/affiliate', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/affiliate', $url));
 
 		if (!isset($_GET['affiliate_id'])) {
 			$this->data['action'] = $this->url->link('sale/affiliate/insert', $url);

@@ -1,6 +1,6 @@
 <?php
 //Heading
-$_['heading_title'] = "System Update";
+$_['head_title'] = "System Update";
 
 //Text
 $_['text_version'] = "AmploCart Version %s";

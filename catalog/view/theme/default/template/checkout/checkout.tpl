@@ -2,7 +2,7 @@
 <?= $column_left; ?><?= $column_right; ?>
 <div id="content" style='padding-top:0'><?= $content_top; ?>
 	<?= $this->breadcrumb->render(); ?>
-	<h1><?= $heading_title; ?></h1>
+	<h1><?= $head_title; ?></h1>
 	<? $step = 1;?>
 	<div id='checkout_process' class="checkout">
 		<div id="login" class='checkout_item' route='block/checkout/login'>

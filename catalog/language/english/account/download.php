@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Account Downloads';
+$_['head_title']	= 'Account Downloads';
 
 // Text
 $_['text_account']	= 'Account';

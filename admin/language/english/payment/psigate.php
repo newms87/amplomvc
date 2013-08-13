@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'PSIGate';
+$_['head_title']		= 'PSIGate';
 
 // Text
 $_['text_payment']		= 'Payment';

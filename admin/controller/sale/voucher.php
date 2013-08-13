@@ -90,7 +90,7 @@ class Admin_Controller_Sale_Voucher extends Controller
   	private function getList()
   	{
   		//Page Head
-  		$this->document->setTitle($this->_('heading_title'));
+  		$this->document->setTitle($this->_('head_title'));
 		
 		//The Template
 		$this->template->load('sale/voucher_list');
@@ -234,7 +234,7 @@ class Admin_Controller_Sale_Voucher extends Controller
   	private function getForm()
   	{
   		//Page Head
-  		$this->document->setTitle($this->_('heading_title'));
+  		$this->document->setTitle($this->_('head_title'));
 		
 		//The Template
 		$this->template->load('sale/voucher_form');
@@ -244,7 +244,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 		
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('sale/voucher'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/voucher'));
 		
 		if ($voucher_id) {
 			$this->breadcrumb->add($this->_('text_edit'), $this->url->link('sale/voucher/update', 'voucher_id=' . $voucher_id));

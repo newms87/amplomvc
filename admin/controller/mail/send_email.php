@@ -8,7 +8,7 @@ class Admin_Controller_Mail_SendEmail extends Controller
 		
 		$this->template->load('mail/send_email');
 		
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost()) {
 			if (!$this->send()) {
@@ -20,7 +20,7 @@ class Admin_Controller_Mail_SendEmail extends Controller
 		}
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('mail/send_email'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('mail/send_email'));
 		
 		$this->data['action'] = $this->url->link('mail/send_email');
 		

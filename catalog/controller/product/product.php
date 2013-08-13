@@ -47,7 +47,7 @@ class Catalog_Controller_Product_Product extends Controller
 		$this->document->setDescription($product_info['meta_description']);
 		$this->document->setKeywords($product_info['meta_keywords']);
 		
-		$this->language->set('heading_title', $product_info['name']);
+		$this->language->set('head_title', $product_info['name']);
 		
 		if ($product_info['template']) {
 			$this->template->load('product/' . $product_info['template']);

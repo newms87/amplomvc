@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']						= 'Administration';
+$_['head_title']						= 'Administration';
 
 $_['support']								= '<a href="mailto:%s?subject=Support%%20Request" target="_blank">Support</a>';
 

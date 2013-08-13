@@ -1,4 +1,4 @@
 <?php
 // Heading
-$_['heading_title'] = '72-Hour Sales';
+$_['head_title'] = '72-Hour Sales';
  

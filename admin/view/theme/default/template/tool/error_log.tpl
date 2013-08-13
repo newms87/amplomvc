@@ -3,7 +3,7 @@
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'log.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'log.png'; ?>" alt="" /> <?= $head_title; ?></h1>
 			<div class="buttons">
 				<? if($prev || $next){?>
 						<?= $text_limit; ?> <input type='text' id='limit' value='<?= $limit; ?>' onchange='update_limit();' />

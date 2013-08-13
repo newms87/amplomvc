@@ -36,7 +36,7 @@ class Admin_Controller_Sale_Order extends Controller
   	{
 		$this->language->load('sale/order');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 
 		if (!empty($_GTE['order_id']) && $this->validateDelete()) {
 			$this->System_Model_Order->deleteOrder($_GET['order_id']);
@@ -57,11 +57,11 @@ class Admin_Controller_Sale_Order extends Controller
   		$this->template->load('sale/order_list');
   		
 		//Page Head
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('sale/order'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/order'));
 		
 		//The Table Columns
 		$columns = array();
@@ -195,7 +195,7 @@ class Admin_Controller_Sale_Order extends Controller
 		$this->template->load('sale/order_form');
 
 		//Page Head
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (isset($_GET['order_id'])) {
 			$this->data['order_id'] = $_GET['order_id'];
@@ -242,7 +242,7 @@ class Admin_Controller_Sale_Order extends Controller
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('sale/order', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/order', $url));
 
 		if (!isset($_GET['order_id'])) {
 			$this->data['action'] = $this->url->link('sale/order/insert', $url);
@@ -749,7 +749,7 @@ class Admin_Controller_Sale_Order extends Controller
 		$this->template->load('sale/order_info');
 			$this->language->load('sale/order');
 
-			$this->document->setTitle($this->_('heading_title'));
+			$this->document->setTitle($this->_('head_title'));
 
 			$url = '';
 
@@ -790,7 +790,7 @@ class Admin_Controller_Sale_Order extends Controller
 			}
 
 				$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-				$this->breadcrumb->add($this->_('heading_title'), $this->url->link('sale/order', $url));
+				$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/order', $url));
 
 			$this->data['invoice'] = $this->url->link('sale/order/invoice', 'order_id=' . (int)$_GET['order_id']);
 			$this->data['cancel'] = $this->url->link('sale/order', $url);
@@ -1147,10 +1147,10 @@ class Admin_Controller_Sale_Order extends Controller
 		$this->template->load('error/not_found');
 			$this->language->load('error/not_found');
 
-			$this->document->setTitle($this->_('heading_title'));
+			$this->document->setTitle($this->_('head_title'));
 
 				$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-				$this->breadcrumb->add($this->_('heading_title'), $this->url->link('error/not_found'));
+				$this->breadcrumb->add($this->_('head_title'), $this->url->link('error/not_found'));
 
 			$this->children = array(
 				'common/header',
@@ -1414,10 +1414,10 @@ class Admin_Controller_Sale_Order extends Controller
 
 			$this->language->load('error/not_found');
 
-			$this->document->setTitle($this->_('heading_title'));
+			$this->document->setTitle($this->_('head_title'));
 
 				$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-				$this->breadcrumb->add($this->_('heading_title'), $this->url->link('error/not_found'));
+				$this->breadcrumb->add($this->_('head_title'), $this->url->link('error/not_found'));
 
 			$this->children = array(
 				'common/header',
@@ -1483,7 +1483,7 @@ class Admin_Controller_Sale_Order extends Controller
 
 		$this->language->load('sale/order');
 
-		$this->language->set('title', $this->_('heading_title'));
+		$this->language->set('title', $this->_('head_title'));
 
 		$this->data['base'] = $this->url->is_ssl() ? SITE_SSL : SITE_URL;
 

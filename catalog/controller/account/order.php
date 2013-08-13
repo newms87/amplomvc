@@ -15,12 +15,12 @@ class Catalog_Controller_Account_Order extends Controller
 		}
 		
 		//Page Head
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/order'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('account/order'));
 		
 		//Get Sorted / Filtered Data
 		$sort = $this->sort->getQueryDefaults('order_id', 'ASC', 10);
@@ -96,10 +96,10 @@ class Catalog_Controller_Account_Order extends Controller
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/order'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('account/order'));
 		$this->breadcrumb->add($this->_('text_order'), $this->url->here());
 		
-		$this->language->set('heading_title', $this->_('text_order'));
+		$this->language->set('head_title', $this->_('text_order'));
 		
 		$this->_('final_sale_explanation', $this->url->link('information/information/info', 'information_id=' . $this->config->get('config_shipping_return_info_id')));
 		

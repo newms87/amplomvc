@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title'] 		= 'Sign In With:';
+$_['head_title'] 		= 'Sign In With:';
 
 // Text
 $_['text_subject'] 			= 'New customer via Janrain Engage SignIn Module';

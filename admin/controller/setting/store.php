@@ -5,7 +5,7 @@ class Admin_Controller_Setting_Store extends Controller
 	{
 		$this->language->load('setting/store');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		$this->getList();
 	}
@@ -14,7 +14,7 @@ class Admin_Controller_Setting_Store extends Controller
   	{
 		$this->language->load('setting/store');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			
@@ -34,7 +34,7 @@ class Admin_Controller_Setting_Store extends Controller
   	{
 		$this->language->load('setting/store');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			
@@ -54,7 +54,7 @@ class Admin_Controller_Setting_Store extends Controller
   	{
 		$this->language->load('setting/store');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $store_id) {
@@ -78,7 +78,7 @@ class Admin_Controller_Setting_Store extends Controller
 		$url = $this->url->getQuery('page');
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/store'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('setting/store'));
 		
 		$this->data['admin_settings'] = $this->url->link('setting/setting');
 		$this->data['system_update'] = $this->url->link('setting/update');
@@ -132,7 +132,7 @@ class Admin_Controller_Setting_Store extends Controller
 		$store_id = isset($_GET['store_id']) ? $_GET['store_id'] : 0;
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/store'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('setting/store'));
 		
 		if (!$store_id) {
 			$this->data['action'] = $this->url->link('setting/store/insert');

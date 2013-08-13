@@ -20,7 +20,7 @@
 		</div>
 	</div>
 	<div id='sort_by_sidebar'>
-		<div class="box_heading"><?= $heading_title; ?></div>
+		<div class="box_heading"><?= $head_title; ?></div>
 		<div class="box_content">
 				<ul>
 					<? foreach ($menu_items as $key=>$item) { ?>

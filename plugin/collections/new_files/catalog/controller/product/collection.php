@@ -34,7 +34,7 @@ class Catalog_Controller_Product_Collection extends Controller
 			
 			$this->breadcrumb->add($collection_info['name'], $this->url->link('product/collection', 'collection_id=' . $collection_id));
 			
-			$this->language->set('heading_title', $collection_info['name']);
+			$this->language->set('head_title', $collection_info['name']);
 			
 			if ($this->config->get('config_show_collection_image')) {
 				$this->data['thumb'] = $this->image->resize($collection_info['image'], $this->config->get('config_image_collection_width'), $this->config->get('config_image_collection_height'));
@@ -76,7 +76,7 @@ class Catalog_Controller_Product_Collection extends Controller
 			
 			$this->template->load('product/collection_list');
 						
-			$this->language->set('heading_title', $this->_('text_name_all'));
+			$this->language->set('head_title', $this->_('text_name_all'));
 			
 			$this->data['thumb'] = '';
 			

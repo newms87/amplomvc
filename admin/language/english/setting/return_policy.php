@@ -1,9 +1,9 @@
 <?php
 //Heading
-$_['heading_title'] = "Return Policies";
+$_['head_title'] = "Return Policies";
 
 //Text
-$_['text_success'] = "You have successfully updated " . $_['heading_title'];
+$_['text_success'] = "You have successfully updated " . $_['head_title'];
 $_['text_settings'] = "Settings";
 $_['text_store_list'] = "Stores";
 

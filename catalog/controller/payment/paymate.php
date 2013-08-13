@@ -70,7 +70,7 @@ class Catalog_Controller_Payment_Paymate extends Controller
 				$this->breadcrumb->add($this->_('text_checkout'), $this->url->link('checkout/checkout'));
 				$this->breadcrumb->add($this->_('text_failed'), $this->url->link('checkout/success'));
 
-			$this->language->set('heading_title', $this->_('text_failed'));
+			$this->language->set('head_title', $this->_('text_failed'));
 
 			$this->data['text_message'] = $this->_('text_failed_message', $error, $this->url->link('information/contact'));
 			

@@ -5,7 +5,7 @@ class Admin_Controller_Block_Add extends Controller
 	{
 		$this->language->load('block/add');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validate()) {
 			$this->Model_Block_Block->addBlock($_POST);
@@ -30,7 +30,7 @@ class Admin_Controller_Block_Add extends Controller
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_block_list'), $this->url->link('block/block'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('block/add'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('block/add'));
 
 		$this->data['action'] = $this->url->link('block/add');
 		$this->data['cancel'] = $this->url->link('block/block');

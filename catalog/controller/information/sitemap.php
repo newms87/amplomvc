@@ -7,10 +7,10 @@ class Catalog_Controller_Information_Sitemap extends Controller
 
 		$this->language->load('information/sitemap');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('information/sitemap'));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('information/sitemap'));
 
 		$this->data['categories'] = array();
 					

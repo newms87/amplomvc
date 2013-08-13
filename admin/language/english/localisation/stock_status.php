@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Stock Status';
+$_['head_title']	= 'Stock Status';
 
 // Text
 $_['text_success']	= 'Success: You have modified stock statuses!';

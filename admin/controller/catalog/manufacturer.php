@@ -100,14 +100,14 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
   	private function getList()
   	{
   		//Page Head
-  		$this->document->setTitle($this->_('heading_title'));
+  		$this->document->setTitle($this->_('head_title'));
 		
 		//The Template
 		$this->template->load('catalog/manufacturer_list');
 		
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/manufacturer'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/manufacturer'));
 		
 		//The Table Columns
 		$columns = array();
@@ -260,14 +260,14 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 
   	private function getForm()
   	{
-  		$this->document->setTitle($this->_('heading_title'));
+  		$this->document->setTitle($this->_('head_title'));
 		
 		$this->template->load('catalog/manufacturer_form');
 
   		$manufacturer_id = $this->data['manufacturer_id'] = isset($_GET['manufacturer_id']) ? (int)$_GET['manufacturer_id'] : null;
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/manufacturer'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/manufacturer'));
 		
 		if (!$manufacturer_id) {
 			$this->data['action'] = $this->url->link('catalog/manufacturer/insert');

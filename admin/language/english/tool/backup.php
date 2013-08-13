@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Backup / Restore';
+$_['head_title']	= 'Backup / Restore';
 
 // Text
 $_['text_backup']		= 'Download Backup';

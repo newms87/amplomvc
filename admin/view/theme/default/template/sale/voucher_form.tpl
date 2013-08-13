@@ -3,7 +3,7 @@
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'payment.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'payment.png'; ?>" alt="" /> <?= $head_title; ?></h1>
 			<div class="buttons">
 				<? if ($voucher_id) { ?>
 					<a onclick="send_voucher()" class="button"><?= $button_send;?></a>

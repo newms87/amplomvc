@@ -9,10 +9,10 @@ class Admin_Controller_Tool_Tool extends Controller
 
 		$this->language->load('tool/tool');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('tool/tool'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('tool/tool'));
 		
 		$this->data['clear_cache'] = $this->url->link('tool/tool/clear_cache');
 		

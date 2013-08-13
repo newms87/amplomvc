@@ -235,16 +235,16 @@ $.fn.loading = function(params) {
 }
 
 String.prototype.repeat = function(times) {
-   return (new Array(times + 1)).join(this);
+	 return (new Array(times + 1)).join(this);
 };
 
 //Utility Functions
 String.prototype.str_replace = function(find, replace) {
-  var str = this;
-  for (var i = 0; i < find.length; i++) {
-    str = str.replace(find[i], replace[i]);
-  }
-  return str;
+	var str = this;
+	for (var i = 0; i < find.length; i++) {
+		str = str.replace(find[i], replace[i]);
+	}
+	return str;
 };
 
 function getQueryString(key, defaultValue) {
@@ -258,33 +258,73 @@ function getQueryString(key, defaultValue) {
 		return qs[1];
 }
 
+function currency_format(number, params) {
+	params = $.extend({}, {
+		symbol_left: $.ac_vars.currency.symbol_left,
+		symbol_right: $.ac_vars.currency.symbol_right,
+		decimals: $.ac_vars.currency.decimals,
+		dec_point: $.ac_vars.currency.decimal_point,
+		thousands_sep: $.ac_vars.currency.thousands_sep,
+		neg: '-',
+		pos: '+'
+	}, params);
+	
+	str = number_format(Math.abs(number), params.decimals, params.dec_point, params.thousands_sep);
+	
+	return (number < 0 ? params.neg : params.pos) + params.symbol_left + str + params.symbol_right;
+}
+
+function number_format(number, decimals, dec_point, thousands_sep) {
+	number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
+	var n = !isFinite(+number) ? 0 : +number,
+		prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+		sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+		dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+		s = '',
+		toFixedFix = function (n, prec) {
+			var k = Math.pow(10, prec);
+			return '' + Math.round(n * k) / k;
+		};
+	// Fix for IE parseFloat(0.55).toFixed(0) = 0;
+	s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+	if (s[0].length > 3) {
+		s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+	}
+	if ((s[1] || '').length < prec) {
+		s[1] = s[1] || '';
+		s[1] += new Array(prec - s[1].length + 1).join('0');
+	}
+	return s.join(dec);
+}
+
+
 $.cookie = function (key, value, options) {
-    if (arguments.length > 1 && (value === null || typeof value !== "object")) {
-        options = options || {};
+	if (arguments.length > 1 && (value === null || typeof value !== "object")) {
+		options = options || {};
 
-        if (value === null) {
-            options.expires = -1;
-        }
+		if (value === null) {
+			options.expires = -1;
+		}
 
-        if (typeof options.expires === 'number') {
-            var days = options.expires, t = options.expires = new Date();
-            t.setDate(t.getDate() + days);
-        }
+		if (typeof options.expires === 'number') {
+			var days = options.expires, t = options.expires = new Date();
+			t.setDate(t.getDate() + days);
+		}
 
-        return (document.cookie = [
-            encodeURIComponent(key), '=',
-            options.raw ? String(value) : encodeURIComponent(String(value)),
-            options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
-            options.path ? '; path=' + options.path : '',
-            options.domain ? '; domain=' + options.domain : '',
-            options.secure ? '; secure' : ''
-        ].join(''));
-    }
+		return (document.cookie = [
+			encodeURIComponent(key), '=',
+			options.raw ? String(value) : encodeURIComponent(String(value)),
+			options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
+			options.path ? '; path=' + options.path : '',
+			options.domain ? '; domain=' + options.domain : '',
+			options.secure ? '; secure' : ''
+		].join(''));
+	}
 
-    // key and possibly options given, get cookie...
-    options = value || {};
-    var result, decode = options.raw ? function (s) { return s; } : decodeURIComponent;
-    return (result = new RegExp('(?:^|; )' + encodeURIComponent(key) + '=([^;]*)').exec(document.cookie)) ? decode(result[1]) : null;
+	// key and possibly options given, get cookie...
+	options = value || {};
+	var result, decode = options.raw ? function (s) { return s; } : decodeURIComponent;
+	return (result = new RegExp('(?:^|; )' + encodeURIComponent(key) + '=([^;]*)').exec(document.cookie)) ? decode(result[1]) : null;
 };
 
 $(document).ready(function() {

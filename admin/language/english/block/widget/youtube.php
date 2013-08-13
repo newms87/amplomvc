@@ -1,6 +1,6 @@
 <?php
 //Heading
-$_['heading_title'] = "YouTube";
+$_['head_title'] = "YouTube";
 
 //Entry
 $_['entry_title'] = "Your Video Title";

@@ -15,7 +15,7 @@ class Catalog_Controller_Affiliate_Password extends Controller
 
 		$this->language->load('affiliate/password');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 			
 		if ($this->request->isPost() && $this->validate()) {
 			$this->Model_Affiliate_Affiliate->editPassword($this->affiliate->getEmail(), $_POST['password']);
@@ -27,7 +27,7 @@ class Catalog_Controller_Affiliate_Password extends Controller
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('text_account'), $this->url->link('affiliate/account'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('affiliate/password'));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('affiliate/password'));
 
 		if (isset($this->error['password'])) {
 			$this->data['error_password'] = $this->error['password'];

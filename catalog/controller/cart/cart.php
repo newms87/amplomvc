@@ -6,10 +6,10 @@ class Catalog_Controller_Cart_Cart extends Controller
 		$this->template->load('cart/cart');
 		$this->language->load('cart/cart');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('cart/cart'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('cart/cart'));
 		
 		$this->data['block_cart'] = $this->getBlock('cart/cart');
 		
@@ -44,7 +44,7 @@ class Catalog_Controller_Cart_Cart extends Controller
 		if (isset($_GET['redirect']) && preg_match("/cart\/cart/",$_GET['redirect']) == 0) {
 			$this->data['continue'] = urldecode($_GET['redirect']);
 		} else {
-			$this->data['continue'] = $this->url->link('common/home');
+			$this->data['continue'] = $this->url->link('product/category');
 		}
 								
 		$this->data['checkout'] = $this->url->link('checkout/checkout');
@@ -72,7 +72,6 @@ class Catalog_Controller_Cart_Cart extends Controller
 		
 		$this->cart->add($product_id, $quantity, $selected_options);
 		
-		var_dump($_POST);
 		if ($load_page) {
 			$this->index();
 		}

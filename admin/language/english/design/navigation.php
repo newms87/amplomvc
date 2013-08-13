@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Navigation';
+$_['head_title']	= 'Navigation';
 
 // Text
 $_['text_success']		= 'Success: You have modified navigation!';

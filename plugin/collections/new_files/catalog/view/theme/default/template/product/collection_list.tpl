@@ -4,12 +4,12 @@
 	<?= $this->breadcrumb->render(); ?>
 	<?= $content_top; ?>
 	
-	<h1><?= $heading_title; ?></h1>
+	<h1><?= $head_title; ?></h1>
 	
 	<div class="header-info">
 		<? if (!empty($thumb)) { ?>
 		<div class="image">
-			<img src="<?= $thumb; ?>" alt="<?= $heading_title; ?>" />
+			<img src="<?= $thumb; ?>" alt="<?= $head_title; ?>" />
 		</div>
 		<? } ?>
 		

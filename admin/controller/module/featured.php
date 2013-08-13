@@ -9,7 +9,7 @@ class Admin_Controller_Module_Featured extends Controller
 
 		$this->language->load('module/featured');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validate()) {
 			$settings = $_POST;
@@ -26,7 +26,7 @@ class Admin_Controller_Module_Featured extends Controller
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_module'), $this->url->link('extension/module'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('module/featured'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('module/featured'));
 		
 		$this->data['action'] = $this->url->link('module/featured');
 		$this->data['cancel'] = $this->url->link('extension/module');

@@ -7,7 +7,6 @@ class Url extends Library
 	private $is_ssl;
 	private $rewrite = array();
 	private $seo_url;
-	private $ie_version = null;
 	private $secure_pages = array();
 	private $store_info = array();
 	
@@ -39,8 +38,6 @@ class Url extends Library
 		else {
 			$this->path = 'common/home';
 		}
-		
-		$this->ie_version = $this->is_IE();
 		
 		if($this->config->get('config_seo_url')) {
 			$this->loadSeoUrl();
@@ -174,6 +171,12 @@ class Url extends Library
 		
 		$scheme = $ssl ? 'ssl':'url';
 		
+		//TODO: Need to Rebase stores so 0 is all stores (not an entry in the DB). 
+		// -1 is an entry in the DB but is for the admin and 1 will be the initial store (deleteable, if it is not set as the default)
+		if ((int)$store_id === -1) {
+			return SITE_URL . 'admin/';
+		}
+		
 		$link = $this->db->queryVar("SELECT $scheme as link FROM " . DB_PREFIX . "store WHERE store_id = '" . (int)$store_id . "'");
 		
 		if (!is_string($link)) {
@@ -182,26 +185,6 @@ class Url extends Library
 		}
 		
 		return $link;
-	}
-	
-	/**
-	* This determines if the browser being used is Internet Explorer and returns the version number
-	*
-	* @return int or bool - version # of IE, or false if it is not IE
-	*/
-	public function is_IE()
-	{
-		$match = null;
-		
-		$user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER["HTTP_USER_AGENT"] : '';
-		
-		if(preg_match("/MSIE\s*\d{1,2}.\d{1,2}/i", $user_agent, $match) == 0){
-			return false;
-		}
-		else {
-			return (float)str_replace('msie ', '', strtolower($match[0]));
-		}
-		
 	}
 	
 	public function site($uri='', $query='', $base_site = false)

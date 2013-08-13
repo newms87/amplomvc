@@ -11,7 +11,7 @@ class Admin_Controller_Dev_DbAdmin extends Controller
 		$this->document->addStyle(HTTP_THEME_STYLE . 'dev.css');
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'), '', 0);
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('dev/dev'), '', 1);
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('dev/dev'), '', 1);
 		$this->breadcrumb->add($this->_('text_db_admin'), $this->url->link('dev/db_admin'));
 		
 		$this->data['return'] = $this->url->link('common/home');

@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'Tax Rates';
+$_['head_title']		= 'Tax Rates';
 
 // Text
 $_['text_percent']			= 'Percentage';

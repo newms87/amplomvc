@@ -9,7 +9,7 @@ class Admin_Controller_Total_Shipping extends Controller
 
 		$this->language->load('total/shipping');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && ($this->validate())) {
 			$this->Model_Setting_Setting->editSetting('shipping', $_POST);
@@ -27,7 +27,7 @@ class Admin_Controller_Total_Shipping extends Controller
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('text_total'), $this->url->link('extension/total'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('total/shipping'));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('total/shipping'));
 
 		$this->data['action'] = $this->url->link('total/shipping');
 		

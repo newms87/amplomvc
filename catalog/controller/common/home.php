@@ -8,7 +8,7 @@ class Catalog_Controller_Common_Home extends Controller
 		$this->document->setTitle($this->config->get('config_title'));
 		$this->document->setDescription($this->config->get('config_meta_description'));
 
-		$this->language->set('heading_title', $this->config->get('config_title'));
+		$this->language->set('head_title', $this->config->get('config_title'));
 		
 		$this->data['main_image'] = $this->image->resize('data/display.jpg', 1024, 640);
 		

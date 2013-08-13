@@ -1,5 +1,5 @@
 <?php
-$_['heading_title'] = "Betty 2.0 Documentation";
+$_['head_title'] = "Betty 2.0 Documentation";
 
 $_['sections'] = array();
 

@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Development Console';
+$_['head_title']	= 'Development Console';
 
 //Data
 $_['data_site_status'] = array(

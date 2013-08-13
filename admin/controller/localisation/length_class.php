@@ -7,7 +7,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 	{
 		$this->language->load('localisation/length_class');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		$this->getList();
 	}
@@ -16,7 +16,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 	{
 		$this->language->load('localisation/length_class');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Lengthclass->addLengthClass($_POST);
@@ -47,7 +47,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 	{
 		$this->language->load('localisation/length_class');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Lengthclass->editLengthClass($_GET['length_class_id'], $_POST);
@@ -78,7 +78,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 	{
 		$this->language->load('localisation/length_class');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
  		
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $length_class_id) {
@@ -144,7 +144,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/length_class', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/length_class', $url));
 
 		$this->data['insert'] = $this->url->link('localisation/length_class/insert', $url);
 		$this->data['delete'] = $this->url->link('localisation/length_class/delete', $url);
@@ -272,7 +272,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/length_class', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/length_class', $url));
 
 		if (!isset($_GET['length_class_id'])) {
 			$this->data['action'] = $this->url->link('localisation/length_class/insert', $url);

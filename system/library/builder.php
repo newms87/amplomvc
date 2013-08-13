@@ -35,8 +35,8 @@ class Builder extends Library
 	{
 		$html ='';
 		foreach ($messages as $type=>$msgs) {
-			$html .= "<div class ='message_box $type'>";
-			$html .= "<div class='message_list'>";
+			$html .= "<div class =\"message_box $type\">";
+			$html .= "<div class=\"message_list\">";
 			foreach($msgs as $msg) {
 				if (!empty($msg)) {
 					$html .= "<div>$msg</div>";
@@ -45,7 +45,7 @@ class Builder extends Library
 			$html .= "</div>";
 			
 			if ($this->config->get('config_allow_close_message_box')) {
-				$html .= "<span class ='close' onclick=\"$(this).closest('.message_box').remove()\"></span>";
+				$html .= "<span class =\"close\" onclick=\"$(this).closest('.message_box').remove()\"></span>";
 			}
 			
 			$html .= "</div>";
@@ -58,7 +58,7 @@ class Builder extends Library
 	{
 		if(!$errors) return '';
 		
-		return $html = "<div class ='message_box warning'>" . $this->display_errors_r($errors) . "</div>";
+		return $html = "<div class =\"message_box warning\">" . $this->display_errors_r($errors) . "</div>";
 	}
 		
 	public function display_errors_r($errors)
@@ -214,7 +214,7 @@ class Builder extends Library
 		return $html;
 	}
 
-	function build($type, $data, $name, $select=null,$attr_list = array(), $escape_quotes = false){
+	function build($type, $data, $name, $select = null, $attr_list = array(), $escape_quotes = false){
 		//This is for select option groups
 		$opt_group_active = false;
 		
@@ -227,31 +227,31 @@ class Builder extends Library
 		if (is_array($attr_list)) {
 			$attrs ='';
 			foreach ($attr_list as $attr => $value) {
-				$attrs .= $escape_quotes ? $attr.'=\"'.$value.'\"' : $attr . "=\"" . $value ."\"";
+				$attrs .= $escape_quotes ? $attr. '=\"' . $value . '\"' : $attr . "=\"" . $value . "\"";
 			}
 		}
 		else {
 			$attrs = $attr_list;
 		}
 		
-			if (!is_array($select)) {
-				$select = array($select);
+		if (!is_array($select)) {
+			$select = array($select);
+		}
+		
+		$cast_to = function ($value, $type)
+		{
+			switch($type){
+				case 'int':
+					return (int)$value;
+				case 'float':
+					return (float)$value;
+				case 'string':
+					return (string)$value;
+				default:
+					trigger_error("Invalid Builder Type: " . $type. ". Valid values are 'int', 'string', 'float', 'none'");
+					return null;
 			}
-			
-			$cast_to = function ($value, $type)
-			{
-				switch($type){
-					case 'int':
-						return (int)$value;
-					case 'float':
-						return (float)$value;
-					case 'string':
-						return (string)$value;
-					default:
-						trigger_error("Invalid Builder Type: " . $type. ". Valid values are 'int', 'string', 'float', 'none'");
-						return null;
-				}
-			};
+		};
 			
 		$options='';
 		$selected_options = ''; //for clickable list
@@ -307,30 +307,35 @@ class Builder extends Library
 					if ($opt_group_active) {
 						$options .= "</optgroup>";
 					}
-					$options .= "<optgroup label='$display'>";
+					$options .= "<optgroup label=\"$display\">";
 					$opt_group_active = true;
 					}
 					else {
-					$options .= "<option value='$value' $s>$display</option>";
+					$options .= "<option value=\"$value\" $s>$display</option>";
 					}
 					break;
 					
 				case 'radio':
 					$s = $selected?'checked="checked"':'';
-					$options .= "<span class ='radio_button'><input type='radio' id='radio-$name-$value' name='$name' value='$value' $s /><label for='radio-$name-$value'>$display</label></span>";
+					$options .= "<span class=\"radio_button\"><input type=\"radio\" id=\"radio-$name-$value\" name=\"$name\" value=\"$value\" $s /><label for=\"radio-$name-$value\">$display</label></span>";
 					break;
 				
+				case 'checkbox':
+					$s = $selected?'checked="checked"':'';
+					$options .= "<span class=\"checkbox_button\"><input type=\"checkbox\" id=\"checkbox-$name-$value\" name=\"{$name}[]\" value=\"$value\" $s /><label for=\"checkbox-$name-$value\">$display</label></span>";
+					break;
+					
 				case 'multiselect':
 					$s = $selected?'checked="checked"':'';
-					$options .= "<li><input id='checkbox_$name-$value' type='checkbox' name='$name"."[]' value='$value' $s /><label for='checkbox_$name-$value'>$display</label></li>";
+					$options .= "<li><input id=\"checkbox_$name-$value\" type=\"checkbox\" name=\"$name"."[]\" value=\"$value\" $s /><label for=\"checkbox_$name-$value\">$display</label></li>";
 					break;
 						
 				case 'clickable_list':
 					if ($selected) {
-					$selected_options .= "<div onclick='clickable_list_remove($(this))'><span>$display</span><input type='hidden' value='$value' name='$value' /><img src='view/theme/default/image/remove.png' /></div>";
+					$selected_options .= "<div onclick=\"clickable_list_remove($(this))\"><span>$display</span><input type=\"hidden\" value=\"$value\" name=\"$value\" /><img src=\"view/theme/default/image/remove.png\" /></div>";
 					}
 					else {
-					$options .= "<div onclick='clickable_list_add($(this), '$value')'><span>$display</span><img src='view/theme/default/image/add.png' /></div>";
+					$options .= "<div onclick=\"clickable_list_add($(this), '$value')\"><span>$display</span><img src=\"view/theme/default/image/add.png\" /></div>";
 					}
 				default:
 					break;
@@ -342,22 +347,23 @@ class Builder extends Library
 				if ($opt_group_active) {
 					$options .= "</optgroup>";
 				}
-				return "<select name='$name' $attrs>$options</select>";
+				return "<select name=\"$name\" $attrs>$options</select>";
 				
 			case 'radio':
+			case 'checkbox':
 				return "<span $attrs>$options</span>";
 				
-				case 'multiselect':
-					return "<ul class ='scrollbox' $attrs>$options</ul>" .
-							"<div class='scrollbox_buttons'>".
-								"<a class='check_all' onclick=\"$(this).parent().prev().find('input[type=checkbox]').attr('checked','checked')\">[ Check All ]</a>".
-								"<a class='uncheck_all' onclick=\"$(this).parent().prev().find('input[type=checkbox]').removeAttr('checked')\">[ Uncheck All ]</a>".
-							"</div>";
+			case 'multiselect':
+				return "<ul class =\"scrollbox\" $attrs>$options</ul>" .
+						"<div class=\"scrollbox_buttons\">".
+							"<a class=\"check_all\" onclick=\"$(this).parent().prev().find('input[type=checkbox]').attr('checked','checked')\">[ Check All ]</a>".
+							"<a class=\"uncheck_all\" onclick=\"$(this).parent().prev().find('input[type=checkbox]').removeAttr('checked')\">[ Uncheck All ]</a>".
+						"</div>";
 					
 			case 'clickable_list':
-				$added_list = "<div class='scrollbox clickable_added'>$selected_options</div>";
-				$list = "<div class='scrollbox clickable'>$options</div>";
-				return "<div class='clickable_list'>$added_list $list</div>";
+				$added_list = "<div class=\"scrollbox clickable_added\">$selected_options</div>";
+				$list = "<div class=\"scrollbox clickable\">$options</div>";
+				return "<div class=\"clickable_list\">$added_list $list</div>";
 		}
 	}
 	

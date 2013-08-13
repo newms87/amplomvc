@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'PayPal Express';
+$_['head_title']		= 'PayPal Express';
 
 // Text
 $_['text_payment']		= 'Payment';

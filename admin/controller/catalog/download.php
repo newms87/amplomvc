@@ -7,7 +7,7 @@ class Admin_Controller_Catalog_Download extends Controller
   	{
 		$this->language->load('catalog/download');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 	
 		$this->getList();
   	}
@@ -16,7 +16,7 @@ class Admin_Controller_Catalog_Download extends Controller
   	{
 		$this->language->load('catalog/download');
 	
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$data = array();
@@ -60,7 +60,7 @@ class Admin_Controller_Catalog_Download extends Controller
   	{
 		$this->language->load('catalog/download');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$data = array();
@@ -104,7 +104,7 @@ class Admin_Controller_Catalog_Download extends Controller
   	{
 		$this->language->load('catalog/download');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $download_id) {
@@ -179,7 +179,7 @@ class Admin_Controller_Catalog_Download extends Controller
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/download', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/download', $url));
 
 		$this->data['insert'] = $this->url->link('catalog/download/insert', $url);
 		$this->data['delete'] = $this->url->link('catalog/download/delete', $url);
@@ -305,7 +305,7 @@ class Admin_Controller_Catalog_Download extends Controller
 		}
 		
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/download', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/download', $url));
 
 		if (!isset($_GET['download_id'])) {
 			$this->data['action'] = $this->url->link('catalog/download/insert', $url);

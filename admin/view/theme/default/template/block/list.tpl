@@ -3,7 +3,7 @@
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt="" /> <?= $head_title; ?></h1>
 			<div class="buttons">
 				<a href="<?= $insert; ?>" class="button"><?= $button_insert; ?></a>
 			</div>

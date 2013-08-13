@@ -13,7 +13,7 @@ class Catalog_Controller_Account_Newsletter extends Controller
 		
 		$this->language->load('account/newsletter');
 		
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 				
 		if ($this->request->isPost()) {
 			$data = array(

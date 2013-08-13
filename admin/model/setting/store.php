@@ -22,7 +22,7 @@ class Admin_Model_Setting_Store extends Model
 	public function deleteStore($store_id)
 	{
 		$this->delete('store', $store_id);
-			
+		
 		$this->cache->delete('store');
 		$this->cache->delete('theme');
 	}
@@ -42,16 +42,18 @@ class Admin_Model_Setting_Store extends Model
 		return $this->queryRows("SELECT store_id, name FROM " . DB_PREFIX . "store");
 	}
 	
-	public function getStores($data = array(), $total = false) {
+	public function getStores($data = array(), $select = '', $total = false) {
+		//Select
 		if ($total) {
 			$select = "COUNT(*) as total";
-		}
-		else {
+		} elseif(empty($select)) {
 			$select = "*";
 		}
 		
+		//From
 		$from = DB_PREFIX . "store s";
 		
+		//Where
 		$where = "store_id > 0";
 		
 		//Order By & Limit
@@ -63,8 +65,10 @@ class Admin_Model_Setting_Store extends Model
 			$limit = '';
 		}
 		
+		//The Query
 		$query = "SELECT $select FROM $from WHERE $where $order $limit";
 		
+		//Results
 		$result = $this->query($query);
 		
 		if ($total) {
@@ -74,16 +78,14 @@ class Admin_Model_Setting_Store extends Model
 		return $result->rows;
 	}
 
-	public function getTotalStores()
+	public function getTotalStores($data = array())
 	{
-			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "store");
-		
-		return $query->row['total'];
+		return $this->getStores($data, '', true);
 	}
 	
 	public function getTotalStoresByLanguage($language)
 	{
-			$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "setting WHERE `key` = 'config_language' AND `value` = '" . $this->escape($language) . "' AND store_id != '0'");
+		$query = $this->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "setting WHERE `key` = 'config_language' AND `value` = '" . $this->escape($language) . "' AND store_id != '0'");
 		
 		return $query->row['total'];
 	}

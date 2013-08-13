@@ -9,7 +9,7 @@ class Admin_Controller_Shipping_Parcelforce4848_Controller_Shipping_Parcelforce4
 
 		$this->language->load('shipping/parcelforce_48');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validate()) {
 			$this->Model_Setting_Setting->editSetting('parcelforce_48', $_POST);
@@ -27,7 +27,7 @@ class Admin_Controller_Shipping_Parcelforce4848_Controller_Shipping_Parcelforce4
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('text_shipping'), $this->url->link('extension/shipping'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('shipping/parcelforce_48'));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('shipping/parcelforce_48'));
 
 		$this->data['action'] = $this->url->link('shipping/parcelforce_48');
 		

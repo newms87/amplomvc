@@ -7,7 +7,7 @@ class Admin_Controller_Localisation_Language extends Controller
 	{
 		$this->language->load('localisation/language');
 		
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		$this->getList();
 	}
@@ -16,7 +16,7 @@ class Admin_Controller_Localisation_Language extends Controller
 	{
 		$this->language->load('localisation/language');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Language->addLanguage($_POST);
@@ -34,7 +34,7 @@ class Admin_Controller_Localisation_Language extends Controller
 	{
 		$this->language->load('localisation/language');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Language->editLanguage($_GET['language_id'], $_POST);
@@ -52,7 +52,7 @@ class Admin_Controller_Localisation_Language extends Controller
 	{
 		$this->language->load('localisation/language');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $language_id) {
@@ -90,7 +90,7 @@ class Admin_Controller_Localisation_Language extends Controller
 		$url = $this->url->getQuery('sort', 'order', 'page');
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/language'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/language'));
 		
 		$this->data['insert'] = $this->url->link('localisation/language/insert', $url);
 		$this->data['delete'] = $this->url->link('localisation/language/delete', $url);
@@ -178,7 +178,7 @@ class Admin_Controller_Localisation_Language extends Controller
  		$url = $this->url->getQuery('sort','order','page');
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/language'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/language'));
 		
 		if (!$language_id) {
 			$this->data['action'] = $this->url->link('localisation/language/insert', $url);

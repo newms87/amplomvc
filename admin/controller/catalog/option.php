@@ -36,7 +36,7 @@ class Admin_Controller_Catalog_Option extends Controller
 	{
 		$this->language->load('catalog/option');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
  		
 		if (isset($_GET['option_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_Option->deleteOption($_GET['option_id']);
@@ -84,14 +84,14 @@ class Admin_Controller_Catalog_Option extends Controller
 	private function getList()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		//The Template
 		$this->template->load('catalog/option_list');
 		
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/option'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/option'));
 		
 		//The Table Columns
 		$columns = array();
@@ -123,16 +123,13 @@ class Admin_Controller_Catalog_Option extends Controller
 			$option['actions'] = array(
 				'edit' => array(
 					'text' => $this->_('text_edit'),
-					'href' => $this->url->link('catalog/option/update', 'option_id=' . $option['option_id'])
+					'href' => $this->url->link('catalog/option/update', 'option_id=' . $option['option_id']),
+				),
+				'delete' => array(
+					'text' => $this->_('text_delete'),
+					'href' => $this->url->link('catalog/option/delete', 'option_id=' . $option['option_id'] . '&' . $url_query),
 				),
 			);
-			
-			if (!$this->Model_Catalog_Option->countProducts($option['option_id'])) {
-				$option['actions']['delete'] = array(
-					'text' => $this->_('text_delete'),
-					'href' => $this->url->link('catalog/option/delete', 'option_id=' . $option['option_id'] . '&' . $url_query)
-				);
-			}
 
 		} unset($option);
 		
@@ -184,7 +181,7 @@ class Admin_Controller_Catalog_Option extends Controller
 	private function getForm()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		//The Template
 		$this->template->load('catalog/option_form');
@@ -194,7 +191,7 @@ class Admin_Controller_Catalog_Option extends Controller
 		
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/option'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/option'));
 		
 		if (!$option_id) {
 			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('catalog/option/update'));
@@ -245,6 +242,14 @@ class Admin_Controller_Catalog_Option extends Controller
 			}
 		}
 		
+		//Product Options Template Defaults
+		$this->data['option_values']['__ac_template__'] = array(
+			'option_id' => 0,
+			'name' => '',
+			'image' => '',
+			'sort_order' => 0,
+		);
+		
 		//Dependencies
 		$this->children = array(
 			'common/header',
@@ -289,22 +294,6 @@ class Admin_Controller_Catalog_Option extends Controller
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		$option_ids = array();
-		
-		if (!empty($_GET['selected'])) {
-			$option_ids += $_GET['selected'];
-		}
-		
-		if (!empty($_GET['option_id'])) {
-			$option_ids[] = $_GET['option_id'];
-		}
-		
-		foreach ($option_ids as $option_id) {
-			if ($product_total = $this->Model_Catalog_Option->countProducts($option_id)) {
-				$this->error['warning'] = $this->_('error_product', $product_total);
-			}
-		}
-
 		return $this->error ? false : true;
 	}
 	

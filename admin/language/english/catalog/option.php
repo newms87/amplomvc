@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'Options';
+$_['head_title']		= 'Options';
 
 //Data
 $_['data_option_types'] = array(

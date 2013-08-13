@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']				= 'Failed Email Messages';
+$_['head_title']				= 'Failed Email Messages';
 
 // Text
 $_['text_message_sent']				= 'Successfully resent the message!';
@@ -27,7 +27,7 @@ $_['entry_mail_attachment'] = "Attachments:";
 $_['entry_allow_html'] = "Allow HTML in message?";
 
 // Error
-$_['error_permission']			= 'Warning: You do not have permission to access ' . $_['heading_title'] . '!';
+$_['error_permission']			= 'Warning: You do not have permission to access ' . $_['head_title'] . '!';
 $_['error_no_mail_fail']		= "No Error Mail message was found!";
 $_['errro_send_email']			= "There was an error while sending the message. Mail not sent.";
 $_['error_from']				= 'You must specify an email to send from!';

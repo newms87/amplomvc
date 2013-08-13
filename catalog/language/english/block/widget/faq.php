@@ -1,3 +1,3 @@
 <?php
 //Heading
-$_['heading_title'] = "Frequently Asked Questions";
+$_['head_title'] = "Frequently Asked Questions";

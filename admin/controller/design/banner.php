@@ -7,7 +7,7 @@ class Admin_Controller_Design_Banner extends Controller
 	{
 		$this->language->load('design/banner');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		$this->getList();
 	}
@@ -16,7 +16,7 @@ class Admin_Controller_Design_Banner extends Controller
 	{
 		$this->language->load('design/banner');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Design_Banner->addBanner($_POST);
@@ -35,7 +35,7 @@ class Admin_Controller_Design_Banner extends Controller
 	{
 		$this->language->load('design/banner');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Design_Banner->editBanner($_GET['banner_id'], $_POST);
@@ -54,7 +54,7 @@ class Admin_Controller_Design_Banner extends Controller
 	{
 		$this->language->load('design/banner');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $banner_id) {
@@ -83,7 +83,7 @@ class Admin_Controller_Design_Banner extends Controller
 		$url = $this->get_url();
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('design/banner'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('design/banner'));
 		
 		$this->data['insert'] = $this->url->link('design/banner/insert', $url);
 		$this->data['delete'] = $this->url->link('design/banner/delete', $url);
@@ -159,7 +159,7 @@ class Admin_Controller_Design_Banner extends Controller
 		$url = $this->get_url();
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('design/banner'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('design/banner'));
 		
 		if (!$banner_id) {
 			$this->data['action'] = $this->url->link('design/banner/insert', $url);

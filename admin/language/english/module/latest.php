@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'Latest';
+$_['head_title']		= 'Latest';
 
 // Text
 $_['text_module']			= 'Modules';

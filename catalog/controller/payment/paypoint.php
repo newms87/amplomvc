@@ -90,12 +90,12 @@ class Catalog_Controller_Payment_Paypoint extends Controller
 		if ($order_info && $status) {
 			$this->language->load('payment/paypoint');
 	
-			$this->data['title'] = $this->_('heading_title', $this->config->get('config_name'));
+			$this->data['title'] = $this->_('head_title', $this->config->get('config_name'));
 			
 			$this->data['base'] = $this->url->is_ssl() ? SITE_SSL : SITE_URL;
 	
 			$this->language->set('language', $this->language->getInfo('code'));
-			$this->_('heading_title', $this->config->get('config_name'));
+			$this->_('head_title', $this->config->get('config_name'));
 	
 			$this->_('text_success_wait', $this->url->link('checkout/success'));
 			$this->_('text_failure_wait', $this->url->link('cart/cart'));

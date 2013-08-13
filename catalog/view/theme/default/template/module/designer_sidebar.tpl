@@ -1,5 +1,5 @@
 <div id='featured_designer_sidebar' class="box sidebar_box">
-	<div class="box_heading"><?= $heading_title; ?></div>
+	<div class="box_heading"><?= $head_title; ?></div>
 	<div class="box_content">
 			<ul>
 				<? foreach ($designers as $fs) { ?>

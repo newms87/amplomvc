@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'Flash Sales';
+$_['head_title']		= 'Flash Sales';
 
 //Data
 $_['data_discount_types'] = array('percent'=>"Percent",'dollar'=>'Dollars');

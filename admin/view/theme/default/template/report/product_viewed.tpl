@@ -3,7 +3,7 @@
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'report.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'report.png'; ?>" alt="" /> <?= $head_title; ?></h1>
 			<div class="buttons"><a onclick="location = '<?= $reset; ?>';" class="button"><?= $button_reset; ?></a></div>
 		</div>
 		<div class="content">

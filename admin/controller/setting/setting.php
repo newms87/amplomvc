@@ -6,7 +6,7 @@ class Admin_Controller_Setting_Setting extends Controller
 		$this->template->load('setting/setting');
 		$this->language->load('setting/setting');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validate()) {
 			$this->Model_Setting_Setting->editSetting('config', $_POST);
@@ -22,7 +22,7 @@ class Admin_Controller_Setting_Setting extends Controller
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_settings'), $this->url->link('setting/store'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/setting'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('setting/setting'));
 		
 		$this->data['action'] = $this->url->link('setting/setting');
 		$this->data['cancel'] = $this->url->link('setting/store');

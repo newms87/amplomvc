@@ -12,7 +12,7 @@ class Catalog_Controller_Account_Address extends Controller
 	
 		$this->language->load('account/address');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		$this->getList();
   	}
@@ -27,7 +27,7 @@ class Catalog_Controller_Account_Address extends Controller
 
 		$this->language->load('account/address');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$address_id = $this->Model_Account_Address->addAddress($_POST);
@@ -54,7 +54,7 @@ class Catalog_Controller_Account_Address extends Controller
 		
 		$this->language->load('account/address');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Account_Address->editAddress($_GET['address_id'], $_POST);
@@ -89,7 +89,7 @@ class Catalog_Controller_Account_Address extends Controller
 			
 		$this->language->load('account/address');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (isset($_GET['address_id']) && $this->validateDelete()) {
 			$this->Model_Account_Address->deleteAddress($_GET['address_id']);
@@ -120,7 +120,7 @@ class Catalog_Controller_Account_Address extends Controller
 		//Breadcrumbs
   		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/address'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('account/address'));
 		
 		//Load Addresses
 		$addresses = $this->customer->getAddresses();
@@ -156,11 +156,11 @@ class Catalog_Controller_Account_Address extends Controller
 		$this->template->load('account/address_form');
 
   		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/account'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('account/account'));
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('account/address'));
 		
 		$crumb_url = isset($_GET['address_id']) ? $this->url->link('account/address/update') : $this->url->link('account/address/insert');
-		$this->breadcrumb->add($this->_('heading_title'), $crumb_url);
+		$this->breadcrumb->add($this->_('head_title'), $crumb_url);
 						
 						
 		if (!isset($_GET['address_id'])) {

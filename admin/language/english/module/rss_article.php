@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'RSS Article Teaser';
+$_['head_title']		= 'RSS Article Teaser';
 
 // Text
 $_['text_module']			= 'Modules';

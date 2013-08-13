@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Flat Rate';
+$_['head_title']	= 'Flat Rate';
 
 //Data
 $_['data_rule_types']	= array(

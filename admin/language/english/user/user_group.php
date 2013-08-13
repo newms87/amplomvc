@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'User Group';
+$_['head_title']	= 'User Group';
 
 // Text
 $_['text_success']		= 'Success: You have modified user groups!';

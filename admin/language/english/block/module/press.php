@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'Editorial';
+$_['head_title']		= 'Editorial';
 
 // Text
 $_['text_success']		= 'Success: You have modified the Editorial Block!';

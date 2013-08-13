@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title'] = 'Error Log';
+$_['head_title'] = 'Error Log';
 
 //Text
 $_['text_limit'] = "Limit";

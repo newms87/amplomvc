@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Google Base';
+$_['head_title']	= 'Google Base';
 
 // Text
 $_['text_feed']		= 'Product Feeds';

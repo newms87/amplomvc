@@ -4,7 +4,7 @@
 	<?= $this->builder->display_messages($messages); ?>
 <div class="box">
 	<div class="heading">
-		<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
+		<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt="" /> <?= $head_title; ?></h1>
 	</div>
 	<div id='help_docs' class="content">
 		<? function display_levels($sub, $level){

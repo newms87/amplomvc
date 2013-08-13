@@ -7,7 +7,7 @@
 
 <? } else { ?>
 <div class="box janrain_signin">
-	<div class="box_heading"><?= $heading_title; ?></div>
+	<div class="box_heading"><?= $head_title; ?></div>
 	<div id="janrain" class="box_content">
 			<div class="janiainengage janrain_login">
 			<? if( $display_type == 'iframe') { ?>

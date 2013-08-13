@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Returns Report';
+$_['head_title']	= 'Returns Report';
 
 // Text
 $_['text_year']			= 'Years';

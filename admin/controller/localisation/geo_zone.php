@@ -7,7 +7,7 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 	{
 		$this->language->load('localisation/geo_zone');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		$this->getList();
 	}
@@ -16,7 +16,7 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 	{
 		$this->language->load('localisation/geo_zone');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_GeoZone->addGeoZone($_POST);
@@ -33,7 +33,7 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 	{
 		$this->language->load('localisation/geo_zone');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_GeoZone->editGeoZone($_GET['geo_zone_id'], $_POST);
@@ -50,7 +50,7 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 	{
 		$this->language->load('localisation/geo_zone');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $geo_zone_id) {
@@ -100,7 +100,7 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/geo_zone', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/geo_zone', $url));
 
 		$this->data['insert'] = $this->url->link('localisation/geo_zone/insert', $url);
 		$this->data['delete'] = $this->url->link('localisation/geo_zone/delete', $url);
@@ -198,7 +198,7 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 		$url = $this->url->getQuery('sort', 'order', 'page');
 
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/geo_zone', $url));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/geo_zone', $url));
 
 		if (!$geo_zone_id) {
 			$this->data['action'] = $this->url->link('localisation/geo_zone/insert', $url);

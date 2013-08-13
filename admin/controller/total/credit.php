@@ -9,7 +9,7 @@ class Admin_Controller_Total_Credit extends Controller
 
 		$this->language->load('total/credit');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && ($this->validate())) {
 			$this->Model_Setting_Setting->editSetting('credit', $_POST);
@@ -27,7 +27,7 @@ class Admin_Controller_Total_Credit extends Controller
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('text_total'), $this->url->link('extension/total'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('total/credit'));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('total/credit'));
 
 		$this->data['action'] = $this->url->link('total/credit');
 		

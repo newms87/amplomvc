@@ -15,7 +15,7 @@ class Catalog_Controller_Account_Password extends Controller
 
 		$this->language->load('account/password');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 			
 		if ($this->request->isPost() && $this->validate()) {
 			$this->customer->editPassword($this->customer->getId(), $_POST['password']);
@@ -28,7 +28,7 @@ class Catalog_Controller_Account_Password extends Controller
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/password'));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('account/password'));
 
 		if (isset($this->error['password'])) {
 			$this->data['error_password'] = $this->error['password'];

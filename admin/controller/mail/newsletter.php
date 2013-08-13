@@ -6,7 +6,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 	{
 		$this->language->load('mail/newsletter');
 		
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		$this->getList();
 	}
@@ -14,7 +14,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 	public function insert()
 	{
 		$this->language->load('mail/newsletter');
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$newsletter_id = $this->Model_Mail_Newsletter->addNewsletter($_POST);
@@ -33,7 +33,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 	{
 		$this->language->load('mail/newsletter');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Mail_Newsletter->editNewsletter($_GET['newsletter_id'], $_POST);
@@ -50,7 +50,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 	{
 		$this->language->load('mail/newsletter');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (isset($_GET['selected']) && isset($_GET['action']) && $this->validateModify()) {
 			foreach ($_GET['selected'] as $newsletter_id) {
@@ -89,7 +89,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 		$this->language->load('mail/newsletter');
 
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('mail/newsletter'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('mail/newsletter'));
 
 		//The Table Columns
 		$columns = array();
@@ -198,7 +198,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 		
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('mail/newsletter'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('mail/newsletter'));
 		
 		
 		//Action buttons

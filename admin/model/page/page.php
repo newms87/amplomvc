@@ -3,7 +3,6 @@ class Admin_Model_Page_Page extends Model
 {
 	public function addPage($data)
 	{
-		
 		$page_id = $this->insert('page', $data);
 		
 		if (!empty($data['stores'])) {

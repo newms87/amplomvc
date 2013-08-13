@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Page';
+$_['head_title']	= 'Page';
 
 // Text
 $_['text_success']		= 'Success: You have modified Pages!';
@@ -24,7 +24,7 @@ $_['entry_name']		= 'Page Title:';
 $_['entry_content'] = 'Page Content:';
 $_['entry_layout']		= 'Layout:';
 $_['entry_store']		= 'Stores:';
-$_['entry_keyword']	= 'SEO Keyword:<br /><span class="help">Do not use spaces instead replace spaces with - and make sure the keyword is globally unique.</span>';
+$_['entry_alias']	= 'SEO URL:<br /><span class="help">The Search Engine Optimized URL.</span>';
 $_['entry_meta_keywords'] = 'Meta Keywords:';
 $_['entry_meta_description'] = 'Meta Description:';
 $_['entry_status']		= 'Status:';

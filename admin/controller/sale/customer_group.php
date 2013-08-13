@@ -7,7 +7,7 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 	{
 		$this->language->load('sale/customer_group');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
  		
 		$this->getList();
 	}
@@ -16,7 +16,7 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 	{
 		$this->language->load('sale/customer_group');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Sale_CustomerGroup->addCustomerGroup($_POST);
@@ -47,7 +47,7 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 	{
 		$this->language->load('sale/customer_group');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Sale_CustomerGroup->editCustomerGroup($_GET['customer_group_id'], $_POST);
@@ -78,7 +78,7 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 	{
 		$this->language->load('sale/customer_group');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 				foreach ($_GET['selected'] as $customer_group_id) {
@@ -144,7 +144,7 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 		}
 			
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('sale/customer_group', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/customer_group', $url));
 
 		$this->data['insert'] = $this->url->link('sale/customer_group/insert', $url);
 		$this->data['delete'] = $this->url->link('sale/customer_group/delete', $url);
@@ -262,7 +262,7 @@ class Admin_Controller_Sale_CustomerGroup extends Controller
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('sale/customer_group', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/customer_group', $url));
 
 		if (!isset($_GET['customer_group_id'])) {
 			$this->data['action'] = $this->url->link('sale/customer_group/insert', $url);

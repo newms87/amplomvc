@@ -43,3 +43,9 @@ cache
 /catalog/controller/product/boxes.php
 /catalog/language/english/product/box.php
 /catalog/language/english/product/boxes.php
+
+/admin/controller/catalog/subscription.php
+/admin/language/english/catalog/subscription.php
+/admin/model/catalog/subscription.php
+/admin/view/theme/default/template/catalog/subscription_form.tpl
+/admin/view/theme/default/template/catalog/subscription_list.tpl

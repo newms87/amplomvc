@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'Sidebar Navigation';
+$_['head_title']		= 'Sidebar Navigation';
 
 // Text
 $_['text_success']		= 'Success: You have modified the Sidebar Navigation Block!';

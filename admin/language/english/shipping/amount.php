@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Total Price';
+$_['head_title']	= 'Total Price';
 
 //Data
 $_['priceset_types']	= array('percent'=>"Percent", 'fixed'=>"Fixed Amount");

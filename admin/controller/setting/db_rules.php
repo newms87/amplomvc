@@ -7,7 +7,7 @@ class Admin_Controller_Setting_DbRules extends Controller
 	{
 		$this->language->load('setting/db_rules');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		$this->getList();
 	}
@@ -16,7 +16,7 @@ class Admin_Controller_Setting_DbRules extends Controller
   	{
 		$this->language->load('setting/db_rules');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$store_id = $this->Model_Setting_DbRules->addDbRule($_POST);
@@ -33,7 +33,7 @@ class Admin_Controller_Setting_DbRules extends Controller
   	{
 		$this->language->load('setting/db_rules');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Setting_DbRules->editDbRule($_GET['db_rule_id'], $_POST);
@@ -50,7 +50,7 @@ class Admin_Controller_Setting_DbRules extends Controller
   	{
 		$this->language->load('setting/db_rules');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $db_rule_id) {
@@ -70,7 +70,7 @@ class Admin_Controller_Setting_DbRules extends Controller
 		$this->template->load('setting/db_rules_list');
 
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/db_rules'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('setting/db_rules'));
 		
 		$this->data['insert'] = $this->url->link('setting/db_rules/insert');
 		$this->data['delete'] = $this->url->link('setting/db_rules/delete');
@@ -106,7 +106,7 @@ class Admin_Controller_Setting_DbRules extends Controller
 		$db_rule_id = isset($_GET['db_rule_id']) ? $_GET['db_rule_id']:null;
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/db_rules'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('setting/db_rules'));
 		
 		if (!$db_rule_id) {
 			$this->data['action'] = $this->url->link('setting/db_rules/insert');

@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Product Feeds';
+$_['head_title']	= 'Product Feeds';
 
 // Text
 $_['text_install']	= 'Install';

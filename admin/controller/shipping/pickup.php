@@ -9,7 +9,7 @@ class Admin_Controller_Shipping_Pickup extends Controller
 
 		$this->language->load('shipping/pickup');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validate()) {
 			$this->Model_Setting_Setting->editSetting('pickup', $_POST);
@@ -27,7 +27,7 @@ class Admin_Controller_Shipping_Pickup extends Controller
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('text_shipping'), $this->url->link('extension/shipping'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('shipping/pickup'));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('shipping/pickup'));
 
 		$this->data['action'] = $this->url->link('shipping/pickup');
 		

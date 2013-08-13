@@ -3,7 +3,7 @@
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt="" /> <?= $head_title; ?></h1>
 			<div class="buttons">
 				<a onclick="$('#form').submit()" class="button"><?= $button_save; ?></a>
 				<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
@@ -24,8 +24,8 @@
 							<td><input type="text" name="name" size="60" value="<?= $name; ?>" /></td>
 						</tr>
 						<tr>
-							<td class="required"> <?= $entry_keyword; ?></td>
-							<td><input type="text" name="keyword" size="60" value="<?= $keyword; ?>" /></td>
+							<td class="required"> <?= $entry_alias; ?></td>
+							<td><input type="text" name="alias" size="60" value="<?= $alias; ?>" /></td>
 						</tr>
 						<tr>
 							<td><?= $entry_meta_keywords; ?></td>

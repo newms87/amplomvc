@@ -7,7 +7,7 @@ class Admin_Controller_Localisation_StockStatus extends Controller
   	{
 		$this->language->load('localisation/stock_status');
 	
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		$this->getList();
   	}
@@ -16,7 +16,7 @@ class Admin_Controller_Localisation_StockStatus extends Controller
   	{
 		$this->language->load('localisation/stock_status');
 	
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 				$this->Model_Localisation_StockStatus->addStockStatus($_POST);
@@ -47,7 +47,7 @@ class Admin_Controller_Localisation_StockStatus extends Controller
   	{
 		$this->language->load('localisation/stock_status');
 	
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_StockStatus->editStockStatus($_GET['stock_status_id'], $_POST);
@@ -78,7 +78,7 @@ class Admin_Controller_Localisation_StockStatus extends Controller
   	{
 		$this->language->load('localisation/stock_status');
 	
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $stock_status_id) {
@@ -144,7 +144,7 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/stock_status', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/stock_status', $url));
 
 		$this->data['insert'] = $this->url->link('localisation/stock_status/insert', $url);
 		$this->data['delete'] = $this->url->link('localisation/stock_status/delete', $url);
@@ -262,7 +262,7 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/stock_status', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/stock_status', $url));
 
 		if (!isset($_GET['stock_status_id'])) {
 			$this->data['action'] = $this->url->link('localisation/stock_status/insert', $url);

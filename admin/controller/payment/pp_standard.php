@@ -6,7 +6,7 @@ class Admin_Controller_Payment_PpStandard extends Controller
 		$this->template->load('payment/pp_standard');
 		$this->language->load('payment/pp_standard');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		//TODO: Move Payments / Shipping (other extensions) to the block/block style
 		// where status, and other data is handled separately
@@ -24,7 +24,7 @@ class Admin_Controller_Payment_PpStandard extends Controller
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_payment'), $this->url->link('extension/payment'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('payment/pp_standard'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('payment/pp_standard'));
 		
 		$this->data['action'] = $this->url->link('payment/pp_standard');
 

@@ -8,7 +8,7 @@ class Catalog_Controller_Checkout_Success extends Controller
 		$this->language->load('checkout/success');
 		
 		//Page Head
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));

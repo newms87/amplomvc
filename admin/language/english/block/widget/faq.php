@@ -1,6 +1,6 @@
 <?php
 //Heading
-$_['heading_title'] = "Frequently Asked Questions";
+$_['head_title'] = "Frequently Asked Questions";
 
 //Entry
 $_['entry_group_title'] = "FAQ Group Title";

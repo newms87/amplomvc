@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Tax Class';
+$_['head_title']	= 'Tax Class';
 
 // Text
 $_['text_shipping']	= 'Shipping Address';

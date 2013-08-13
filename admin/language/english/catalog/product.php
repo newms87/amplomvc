@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']			= 'Products';
+$_['head_title']			= 'Products';
 
 // Text
 $_['text_success']			= 'Success: You have modified products!';
@@ -92,6 +92,7 @@ $_['entry_attribute_group']  = 'Attribute Group:';
 $_['entry_text']				= 'Text:';
 $_['entry_option']			= 'Option:';
 $_['entry_option_value']	= 'Option Value:';
+$_['entry_default']	= "Default";
 $_['entry_required']			= 'Required:';
 $_['entry_status']			= 'Status:';
 $_['entry_sort_order']		= 'Sort Order:';

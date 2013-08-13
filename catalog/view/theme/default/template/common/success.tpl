@@ -4,7 +4,7 @@
 	<?= $this->breadcrumb->render(); ?>
 	<?= $content_top; ?>
 	
-	<h1><?= $heading_title; ?></h1>
+	<h1><?= $head_title; ?></h1>
 	<div class="success_message"><?= $text_message; ?></div>
 	
 	<div class="buttons">

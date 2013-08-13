@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Language';
+$_['head_title']	= 'Language';
 
 //Data
 $_['data_direction']	= array('ltr'=>"Left to Right", 'rtl'=>"Right to Left");

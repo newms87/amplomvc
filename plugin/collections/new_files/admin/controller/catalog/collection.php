@@ -88,14 +88,14 @@ class Admin_Controller_Catalog_Collection extends Controller
 	private function getList()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		//The Template
 		$this->template->load('catalog/collection_list');
 
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/collection'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/collection'));
 		
 		//The Table Columns
 		$columns = array();
@@ -223,7 +223,7 @@ class Admin_Controller_Catalog_Collection extends Controller
 	private function getForm()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		//The Template
 		$this->template->load('catalog/collection_form');
@@ -233,7 +233,7 @@ class Admin_Controller_Catalog_Collection extends Controller
 		
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/collection'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/collection'));
 		
 		if (!$collection_id) {
 			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('catalog/collection/update'));

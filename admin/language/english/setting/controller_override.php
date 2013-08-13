@@ -1,6 +1,6 @@
 <?php
 //Heading
-$_['heading_title'] = "Controller Override";
+$_['head_title'] = "Controller Override";
 
 //Text
 $_['text_store_list'] = "Stores";

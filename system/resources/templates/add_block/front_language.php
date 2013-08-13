@@ -1,3 +1,3 @@
 <?php
 //Heading Title
-$_['heading_title'] = "__heading_title__";
+$_['head_title'] = "__head_title__";

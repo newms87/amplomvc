@@ -11,7 +11,7 @@ class Catalog_Controller_Account_Forgotten extends Controller
 
 		$this->language->load('account/forgotten');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validate()) {
 			$this->language->load('mail/forgotten');

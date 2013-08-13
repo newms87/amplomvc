@@ -4,7 +4,7 @@
 	<?= $this->breadcrumb->render(); ?>
 	<?= $content_top; ?>
 
-	<h1><?= $heading_title; ?></h1>
+	<h1><?= $head_title; ?></h1>
 	<p><?= $text_description; ?></p>
 	<p><?= $text_code; ?><br />
 		<textarea cols="40" rows="5"><?= $code; ?></textarea>

@@ -23,10 +23,10 @@ class Catalog_Controller_Product_Compare extends Controller
 			$this->url->redirect($this->url->link('product/compare'));
 		}
 		
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('product/compare'));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('product/compare'));
 
 		if (isset($this->session->data['success'])) {
 			$this->data['success'] = $this->session->data['success'];

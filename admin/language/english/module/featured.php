@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'Featured';
+$_['head_title']		= 'Featured';
 
 //Data
 $_['display_styles']  = array('context'=>"In Context", "popup"=>"Popup Window");

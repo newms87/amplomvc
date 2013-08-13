@@ -7,11 +7,11 @@ class Admin_Controller_Common_Home extends Controller
 		$this->language->load('common/home');
 		
 		if ($this->user->isDesigner()) {
-			$this->document->setTitle($this->_('heading_title_restricted'));;
-			$this->language->set('heading_title', $this->_('heading_title_restricted'));
+			$this->document->setTitle($this->_('head_title_restricted'));;
+			$this->language->set('head_title', $this->_('head_title_restricted'));
 		}
 		else {
-			$this->document->setTitle($this->_('heading_title'));
+			$this->document->setTitle($this->_('head_title'));
 		}
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));

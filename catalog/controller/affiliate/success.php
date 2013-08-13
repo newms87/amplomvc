@@ -7,7 +7,7 @@ class Catalog_Controller_Affiliate_Success extends Controller
 
 		$this->language->load('affiliate/success');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('text_account'), $this->url->link('affiliate/account'));

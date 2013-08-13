@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']				= 'Mail Messages';
+$_['head_title']				= 'Mail Messages';
 
 // Text
 $_['text_success']				= 'Success: You have modified mail messages!';

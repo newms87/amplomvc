@@ -1,6 +1,6 @@
 <?php
 $_['admin_store'] = array(
-	'store_id' => 0,
+	'store_id' => -1,
 	'name' => 'Admin Panel',
 	'url' => SITE_URL . 'admin/',
 	'ssl' => SITE_SSL . 'admin/',

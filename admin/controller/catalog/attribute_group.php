@@ -81,14 +81,14 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 	private function getList()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		//The Template
 		$this->template->load('catalog/attribute_group_list');
 
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/attribute_group'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/attribute_group'));
 		
 		//The Table Columns
 		$columns = array();
@@ -189,7 +189,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
   	private function getForm()
   	{
   		//Page Head
-  		$this->document->setTitle($this->_('heading_title'));
+  		$this->document->setTitle($this->_('head_title'));
 		
 		//The Template
 		$this->template->load('catalog/attribute_group_form');
@@ -199,7 +199,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/attribute_group'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/attribute_group'));
 
 		if (!$attribute_group_id) {
 			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('catalog/attribute_group/update'));

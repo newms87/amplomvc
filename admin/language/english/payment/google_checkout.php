@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'Google Checkout';
+$_['head_title']		= 'Google Checkout';
 
 // Text
 $_['text_payment']		= 'Payment';

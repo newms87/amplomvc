@@ -4,7 +4,7 @@
 	<?= $this->breadcrumb->render(); ?>
 	<?= $content_top; ?>
 	
-	<h1><?= $heading_title; ?></h1>
+	<h1><?= $head_title; ?></h1>
 	<div class="description"><?= $text_description; ?></div>
 	<form id="order_lookup" method="post" action="<?= $order_lookup_action; ?>">
 		<div class="section">

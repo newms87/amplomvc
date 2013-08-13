@@ -8,7 +8,7 @@ class Catalog_Controller_Error_NotFound extends Controller
 		$this->language->load('error/not_found');
 		
 		//Page Head
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));

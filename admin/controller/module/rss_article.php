@@ -9,7 +9,7 @@ class Admin_Controller_Module_RssArticle extends Controller
 
 		$this->language->load('module/rss_article');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validate()) {
 
@@ -22,7 +22,7 @@ class Admin_Controller_Module_RssArticle extends Controller
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_module'), $this->url->link('extension/module'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('module/rss_article'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('module/rss_article'));
 		
 		$this->data['action'] = $this->url->link('module/rss_article');
 		$this->data['cancel'] = $this->url->link('extension/module');

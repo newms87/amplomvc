@@ -11,7 +11,7 @@ class Catalog_Controller_Account_Register extends Controller
 
 		$this->language->load('account/register');
 		
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validate()) {
 			$this->customer->add($_POST);

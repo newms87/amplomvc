@@ -88,14 +88,14 @@ class Admin_Controller_Catalog_Category extends Controller
 	private function getList()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		//The Template
 		$this->template->load('catalog/category_list');
 
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/category'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/category'));
 		
 		//The Table Columns
 		$columns = array();
@@ -219,7 +219,7 @@ class Admin_Controller_Catalog_Category extends Controller
 	private function getForm()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		//The template
 		$this->template->load('catalog/category_form');
@@ -229,7 +229,7 @@ class Admin_Controller_Catalog_Category extends Controller
 		
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/category'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/category'));
 		
 		if ($category_id) {
 			$this->breadcrumb->add($this->_('text_edit'), $this->url->link('catalog/category/update', 'category_id=' . $category_id));

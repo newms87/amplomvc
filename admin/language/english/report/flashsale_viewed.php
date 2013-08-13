@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']  = 'Flashsales Viewed Report';
+$_['head_title']  = 'Flashsales Viewed Report';
 
 // Text
 $_['text_success']	= 'Success: You have reset the flashsales viewed report!';

@@ -8,13 +8,13 @@ class Admin_Controller_Setting_ControllerOverride extends Controller
 		$this->language->load('setting/controller_override');
 
 		//Page Head
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_store_list'), $this->url->link('setting/store'));
 		$this->breadcrumb->add($this->_('text_settings'), $this->url->link('setting/setting'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/controller_override'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('setting/controller_override'));
 		
 		//Load Information
 		if ($this->request->isPost() && $this->validate()) {

@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']				= 'URL Aliases';
+$_['head_title']				= 'URL Aliases';
 
 //Data
 $_['data_non_stores'] = array(

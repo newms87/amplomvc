@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'Product Returns';
+$_['head_title']		= 'Product Returns';
 $_['return_success_title'] = "Return Success";
 
 // Text

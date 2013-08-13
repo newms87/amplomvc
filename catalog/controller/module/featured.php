@@ -42,7 +42,7 @@ class Catalog_Controller_Module_Featured extends Controller
 		if (isset($setting['fm_id'])) {
 			$this->template->load('module/featured_menu');
 			
-			$this->language->set('heading_title', $this->_('heading_title_menu'));
+			$this->language->set('head_title', $this->_('head_title_menu'));
 			$this->language->set('category_title', $this->_('category_title_menu'));
 			
 			foreach ($filter_types as &$type) {

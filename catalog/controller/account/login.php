@@ -22,7 +22,7 @@ class Catalog_Controller_Account_Login extends Controller
 	
 		$this->language->load('account/login');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 								
 		if ($this->request->isPost() && $this->validate()) {
 			if (!empty($_POST['redirect'])) {

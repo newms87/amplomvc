@@ -51,7 +51,7 @@ class Admin_Controller_Catalog_Product extends Controller
   	{
   		$this->language->load('catalog/product');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (!empty($_GET['product_id']) && $this->validateDelete()) {
 			$this->Model_Catalog_Product->deleteProduct($_GET['product_id']);
@@ -70,7 +70,7 @@ class Admin_Controller_Catalog_Product extends Controller
   	{
   		$this->language->load('catalog/product');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (!empty($_GET['product_id']) && $this->validateCopy()) {
 			$this->Model_Catalog_Product->copyProduct($_GET['product_id']);
@@ -151,14 +151,14 @@ class Admin_Controller_Catalog_Product extends Controller
   	private function getList()
   	{
   		//Page Head
-  		$this->document->setTitle($this->_('heading_title'));
+  		$this->document->setTitle($this->_('head_title'));
 		
 		//The Template
 		$this->template->load('catalog/product_list');
 		
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/product'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/product'));
 		
 		//The Table Columns
 		$categories = $this->Model_Catalog_Category->getCategoriesWithParents();
@@ -414,14 +414,14 @@ class Admin_Controller_Catalog_Product extends Controller
   	private function getForm()
   	{
   		//Page Head
-  		$this->document->setTitle($this->_('heading_title'));
+  		$this->document->setTitle($this->_('head_title'));
 		
   		//Insert or Update
   		$product_id = $this->data['product_id'] = isset($_GET['product_id']) ? $_GET['product_id'] : false;
 		
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/product'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/product'));
 		
 		if (!$product_id) {
 			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('catalog/product/update'));
@@ -588,6 +588,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			'product_option_values' => array('__ac_template__' => array(
 				'product_option_value_id' => 0,
 				'option_value_id' => '',
+				'default' => 0,
 				'value' => '',
 				'image' => '',
 				'quantity' => 1,
@@ -596,6 +597,7 @@ class Admin_Controller_Catalog_Product extends Controller
 				'price' => 0,
 				'points' => 0,
 				'weight' => 0,
+				'default' => 0,
 				'sort_order' => 0,
 				'restrictions' => array('__ac_template__' => array(
 					'product_option_value_id' => 0,
@@ -857,7 +859,9 @@ class Admin_Controller_Catalog_Product extends Controller
 	public function generate_model()
 	{
 		if (!empty($_POST['name'])) {
-			$this->response->setOutput($this->Model_Catalog_Product->generateModel($_POST['name']));
+			$product_id = !empty($_POST['product_id']) ? $_POST['product_id'] : 0;
+			
+			$this->response->setOutput($this->Model_Catalog_Product->generateModel($product_id, $_POST['name']));
 		}
 	}
 }

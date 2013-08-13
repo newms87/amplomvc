@@ -1,6 +1,6 @@
 <?php
 //Heading
-$_['heading_title'] = "Contact Form";
+$_['head_title'] = "Contact Form";
 
 //Text
 $_['text_contact_info_default'] = "Please feel free to contact us with any questions!";

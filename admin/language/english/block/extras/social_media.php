@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'Social Media Networks';
+$_['head_title']		= 'Social Media Networks';
 
 // Text
 $_['text_module']			= 'Modules';

@@ -1,6 +1,6 @@
 <div id="cart">
 	<div class="heading">
-		<h4><?= $heading_title; ?></h4>
+		<h4><?= $head_title; ?></h4>
 		<a><span id="cart-total"><?= $text_items; ?></span></a></div>
 	<div class="content">
 		<? if ($products || $vouchers) { ?>

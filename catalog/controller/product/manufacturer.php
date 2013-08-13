@@ -6,7 +6,7 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 		$this->template->load('product/manufacturer');
 		$this->language->load('product/manufacturer');
 		
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_brand'), $this->url->link('product/manufacturer'));
@@ -60,7 +60,7 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 	
 		if ($manufacturer) {
 			$this->document->setTitle($manufacturer['name']);
-			$this->language->set('heading_title', $manufacturer['name']);
+			$this->language->set('head_title', $manufacturer['name']);
 			
 			$this->breadcrumb->add($manufacturer['name'], $this->url->here());
 			

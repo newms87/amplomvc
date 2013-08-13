@@ -3,7 +3,7 @@
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'product.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'product.png'; ?>" alt="" /> <?= $head_title; ?></h1>
 			<div class="buttons">
 				<? if (count($data_product_classes) > 1) { ?>
 					<form id="product_class_form" action="<?= $change_class; ?>" method="post">
@@ -328,6 +328,9 @@
 												<input type="hidden" name="<?= $product_option_value_row; ?>[option_value_id]" value="<?= $product_option_value['option_value_id']; ?>" />
 												<input type="hidden" name="<?= $product_option_value_row; ?>[value]" value="<?= $product_option_value['value']; ?>" />
 												<span class='option_value_label'><?= $product_option_value['value']; ?></span>
+											</td>
+											<td class="center">
+												<input type="radio" name="<?= $product_option_value_row; ?>[default]" value="1" <?= $product_option_value['default'] ? 'checked="checked"' : ''; ?> />
 											</td>
 											<td class="center">
 												<? $this->builder->set_builder_template('click_image_small'); ?>

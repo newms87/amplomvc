@@ -6,11 +6,11 @@ class Catalog_Controller_Account_Success extends Controller
 		$this->template->load('common/success');
 		$this->language->load('account/success');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/success'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('account/success'));
 		
 		if (!$this->config->get('config_customer_approval')) {
 			$this->_('text_message', $this->url->link('information/contact'));

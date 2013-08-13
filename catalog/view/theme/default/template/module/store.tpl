@@ -1,5 +1,5 @@
 <div class="box">
-	<div class="box_heading"><?= $heading_title; ?></div>
+	<div class="box_heading"><?= $head_title; ?></div>
 	<div class="box_content" style="text-align: center;">
 		<p><?= $text_store; ?></p>
 		<select name="store" onchange="location = this.value">

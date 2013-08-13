@@ -13,7 +13,7 @@ class Catalog_Controller_Account_Edit extends Controller
 
 		$this->language->load('account/edit');
 		
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validate()) {
 			$this->customer->edit($_POST);

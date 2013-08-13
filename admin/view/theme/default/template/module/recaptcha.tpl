@@ -6,7 +6,7 @@
 <? } ?>
 <div class="box">
 	<div class="heading">
-		<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
+		<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt="" /> <?= $head_title; ?></h1>
 		<div class="buttons"><a onclick="$('#form').submit();" class="button"><span><?= $button_save; ?></span></a><a href="<?= $cancel; ?>" class="button"><span><?= $button_cancel; ?></span></a></div>
 	</div>
 	<div class="content">

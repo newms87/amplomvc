@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title'] = 'Account Logout';
+$_['head_title'] = 'Account Logout';
 
 // Text
 $_['text_message']  = '<p>You have been logged off your Affiliate Account.</p>';

@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'Authorize.Net (AIM)';
+$_['head_title']		= 'Authorize.Net (AIM)';
 
 // Text
 $_['text_payment']		= 'Payment';

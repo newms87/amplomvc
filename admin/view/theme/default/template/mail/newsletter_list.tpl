@@ -3,7 +3,7 @@
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt="" /> <?= $head_title; ?></h1>
 			<div class="batch_actions">
 				<a href="<?= $download_email_list; ?>" class="button email_list"><?= $button_email_list; ?></a>
 				<?= $this->builder->batch_action('#listing [name="selected[]"]', $batch_actions, $batch_update); ?>

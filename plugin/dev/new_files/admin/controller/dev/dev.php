@@ -6,7 +6,7 @@ class Admin_Controller_Dev_Dev extends Controller
 		$this->template->load('dev/dev');
 		$this->language->load('dev/dev');
 		
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		$this->data['url_sync'] = $this->url->link("dev/dev/sync");
 		$this->data['url_site_management'] = $this->url->link("dev/dev/site_management");
@@ -194,7 +194,7 @@ class Admin_Controller_Dev_Dev extends Controller
 		$this->document->addStyle(HTTP_THEME_STYLE . 'dev.css');
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'), '', 0);
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('dev/dev'), '', 1);
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('dev/dev'), '', 1);
 		
 		$this->data['return'] = $this->url->link('common/home');
 		

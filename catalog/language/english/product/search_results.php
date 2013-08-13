@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Search Results';
+$_['head_title']	= 'Search Results';
 
 $_['no_search'] = "No search request was made";
 

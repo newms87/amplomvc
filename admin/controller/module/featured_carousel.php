@@ -9,7 +9,7 @@ class Admin_Controller_Module_FeaturedCarousel extends Controller
 
 		$this->language->load('module/featured_carousel');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		$is_post = $this->request->isPost();
 		
@@ -23,7 +23,7 @@ class Admin_Controller_Module_FeaturedCarousel extends Controller
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_module'), $this->url->link('extension/module'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('module/featured_carousel'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('module/featured_carousel'));
 		
 		$this->data['action'] = $this->url->link('module/featured_carousel', 'another=343');
 		$this->data['cancel'] = $this->url->link('extension/module');

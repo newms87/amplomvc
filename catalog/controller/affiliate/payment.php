@@ -15,7 +15,7 @@ class Catalog_Controller_Affiliate_Payment extends Controller
 
 		$this->language->load('affiliate/payment');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost()) {
 			$this->Model_Affiliate_Affiliate->editPayment($_POST);

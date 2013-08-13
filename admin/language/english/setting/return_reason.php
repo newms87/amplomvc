@@ -1,6 +1,6 @@
 <?php
 //Heading
-$_['heading_title'] = "Return Reasons";
+$_['head_title'] = "Return Reasons";
 
 //Text
 $_['text_settings'] = "Settings";

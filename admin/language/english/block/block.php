@@ -1,5 +1,5 @@
 <?php
-$_['heading_title'] = "Blocks";
+$_['head_title'] = "Blocks";
 
 //Text
 $_['text_profiles'] = "Profiles";

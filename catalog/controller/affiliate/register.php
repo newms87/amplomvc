@@ -13,7 +13,7 @@ class Catalog_Controller_Affiliate_Register extends Controller
 
 		$this->language->load('affiliate/register');
 		
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validate()) {
 			$this->Model_Affiliate_Affiliate->addAffiliate($_POST);

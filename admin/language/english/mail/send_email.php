@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']				= 'Send Email';
+$_['head_title']				= 'Send Email';
 
 // Text
 $_['text_success']				= 'Success: Your message has been sent!';

@@ -7,7 +7,7 @@ class Admin_Controller_Catalog_Review extends Controller
 	{
 		$this->language->load('catalog/review');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		$this->getList();
 	}
@@ -16,7 +16,7 @@ class Admin_Controller_Catalog_Review extends Controller
 	{
 		$this->language->load('catalog/review');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Review->addReview($_POST);
@@ -47,7 +47,7 @@ class Admin_Controller_Catalog_Review extends Controller
 	{
 		$this->language->load('catalog/review');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Catalog_Review->editReview($_GET['review_id'], $_POST);
@@ -78,7 +78,7 @@ class Admin_Controller_Catalog_Review extends Controller
 	{
 		$this->language->load('catalog/review');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $review_id) {
@@ -144,7 +144,7 @@ class Admin_Controller_Catalog_Review extends Controller
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/review', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/review', $url));
 
 		$this->data['insert'] = $this->url->link('catalog/review/insert', $url);
 		$this->data['delete'] = $this->url->link('catalog/review/delete', $url);
@@ -288,7 +288,7 @@ class Admin_Controller_Catalog_Review extends Controller
 		}
 				
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('catalog/review', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('catalog/review', $url));
 
 		if (!isset($_GET['review_id'])) {
 			$this->data['action'] = $this->url->link('catalog/review/insert', $url);

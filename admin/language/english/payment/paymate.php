@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'Paymate';
+$_['head_title']		= 'Paymate';
 
 // Text
 $_['text_payment']		= 'Payment';

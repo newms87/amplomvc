@@ -7,7 +7,7 @@ class Admin_Controller_Report_SaleCoupon extends Controller
 
 		$this->language->load('report/sale_coupon');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (isset($_GET['filter_date_start'])) {
 			$filter_date_start = $_GET['filter_date_start'];
@@ -42,7 +42,7 @@ class Admin_Controller_Report_SaleCoupon extends Controller
 		}
 						
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('report/sale_coupon', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('report/sale_coupon', $url));
 
 		$this->data['coupons'] = array();
 		

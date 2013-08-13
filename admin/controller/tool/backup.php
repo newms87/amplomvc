@@ -10,7 +10,7 @@ class Admin_Controller_Tool_Backup extends Controller
 
 		$this->language->load('tool/backup');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validate()) {
 			if (is_uploaded_file($_FILES['import']['tmp_name'])) {
@@ -45,7 +45,7 @@ class Admin_Controller_Tool_Backup extends Controller
 		}
 		
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('tool/backup'));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('tool/backup'));
 
 		$this->data['restore'] = $this->url->link('tool/backup');
 

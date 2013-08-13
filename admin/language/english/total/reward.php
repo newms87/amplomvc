@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Reward Points';
+$_['head_title']	= 'Reward Points';
 
 // Text
 $_['text_total']		= 'Order Totals';

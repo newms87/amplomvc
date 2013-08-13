@@ -7,7 +7,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 	{
 		$this->language->load('localisation/tax_class');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		$this->getList();
 	}
@@ -16,7 +16,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 	{
 		$this->language->load('localisation/tax_class');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Taxclass->addTaxClass($_POST);
@@ -47,7 +47,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 	{
 		$this->language->load('localisation/tax_class');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Taxclass->editTaxClass($_GET['tax_class_id'], $_POST);
@@ -78,7 +78,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 	{
 		$this->language->load('localisation/tax_class');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
  		
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $tax_class_id) {
@@ -144,7 +144,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 		}
 		
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/tax_class', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/tax_class', $url));
 
 		$this->data['insert'] = $this->url->link('localisation/tax_class/insert', $url);
 		$this->data['delete'] = $this->url->link('localisation/tax_class/delete', $url);
@@ -268,7 +268,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/tax_class', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/tax_class', $url));
 
 		if (!isset($_GET['tax_class_id'])) {
 			$this->data['action'] = $this->url->link('localisation/tax_class/insert', $url);

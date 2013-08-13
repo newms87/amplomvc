@@ -9,7 +9,7 @@ class Admin_Controller_Module_Carousel extends Controller
 
 		$this->language->load('module/carousel');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validate()) {
 			$this->Model_Setting_Setting->editSetting('carousel', $_POST);
@@ -33,7 +33,7 @@ class Admin_Controller_Module_Carousel extends Controller
 		
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('text_module'), $this->url->link('extension/module'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('module/carousel'));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('module/carousel'));
 
 		$this->data['action'] = $this->url->link('module/carousel');
 		

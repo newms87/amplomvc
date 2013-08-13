@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']				= 'Web Payment Software';
+$_['head_title']				= 'Web Payment Software';
 
 // Text
 $_['text_payment']				= 'Payment';

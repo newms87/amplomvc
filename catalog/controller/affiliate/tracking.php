@@ -13,11 +13,11 @@ class Catalog_Controller_Affiliate_Tracking extends Controller
 	
 		$this->language->load('affiliate/tracking');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('text_account'), $this->url->link('affiliate/account'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('affiliate/tracking'));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('affiliate/tracking'));
 
 		$this->_('text_description', $this->config->get('config_name'));
 		$this->data['code'] = $this->affiliate->getCode();

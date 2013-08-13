@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'PayPal Website Payment Pro (UK)';
+$_['head_title']		= 'PayPal Website Payment Pro (UK)';
 
 // Text
 $_['text_payment']		= 'Payment';

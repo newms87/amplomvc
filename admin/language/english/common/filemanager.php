@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Image Manager';
+$_['head_title']	= 'Image Manager';
 
 // Text
 $_['text_uploaded']	= 'Success: Your file has been uploaded!';

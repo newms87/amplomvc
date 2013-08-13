@@ -8,13 +8,13 @@ class Admin_Controller_Setting_ReturnReason extends Controller
 		$this->language->load('setting/return_reason');
 
 		//Page Head
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_store_list'), $this->url->link('setting/store'));
 		$this->breadcrumb->add($this->_('text_settings'), $this->url->link('setting/setting'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/return_reason'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('setting/return_reason'));
 		
 		//Load Information
 		if ($this->request->isPost() && $this->validate()) {

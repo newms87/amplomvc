@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'Your Reward Points';
+$_['head_title']		= 'Your Reward Points';
 
 // Column
 $_['column_date_added']  = 'Date Added';

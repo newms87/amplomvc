@@ -7,7 +7,7 @@ class Admin_Controller_Sale_Customer extends Controller
   	{
 		$this->language->load('sale/customer');
 		
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		$this->getList();
   	}
@@ -16,7 +16,7 @@ class Admin_Controller_Sale_Customer extends Controller
   	{
 		$this->language->load('sale/customer');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 				$this->Model_Sale_Customer->addCustomer($_POST);
@@ -75,7 +75,7 @@ class Admin_Controller_Sale_Customer extends Controller
   	{
 		$this->language->load('sale/customer');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Sale_Customer->editCustomer($_GET['customer_id'], $_POST);
@@ -134,7 +134,7 @@ class Admin_Controller_Sale_Customer extends Controller
   	{
 		$this->language->load('sale/customer');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $customer_id) {
@@ -195,7 +195,7 @@ class Admin_Controller_Sale_Customer extends Controller
 	{
 		$this->language->load('sale/customer');
 		
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (!$this->user->hasPermission('modify', 'sale/customer')) {
 			$this->error['warning'] = $this->_('error_permission');
@@ -369,7 +369,7 @@ class Admin_Controller_Sale_Customer extends Controller
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('sale/customer', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/customer', $url));
 
 		$this->data['approve'] = $this->url->link('sale/customer/approve', $url);
 		$this->data['insert'] = $this->url->link('sale/customer/insert', $url);
@@ -677,7 +677,7 @@ class Admin_Controller_Sale_Customer extends Controller
 		}
 		
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('sale/customer', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/customer', $url));
 
 		if (!isset($_GET['customer_id'])) {
 			$this->data['action'] = $this->url->link('sale/customer/insert', $url);
@@ -948,10 +948,10 @@ class Admin_Controller_Sale_Customer extends Controller
 
 			$this->language->load('error/not_found');
 
-			$this->document->setTitle($this->_('heading_title'));
+			$this->document->setTitle($this->_('head_title'));
 
 				$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-				$this->breadcrumb->add($this->_('heading_title'), $this->url->link('error/not_found'));
+				$this->breadcrumb->add($this->_('head_title'), $this->url->link('error/not_found'));
 
 			$this->children = array(
 				'common/header',

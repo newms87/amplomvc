@@ -1,3 +1,3 @@
 <?php
 //Heading
-$_['heading_title'] = "YouTube";
+$_['head_title'] = "YouTube";

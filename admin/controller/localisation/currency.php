@@ -7,7 +7,7 @@ class Admin_Controller_Localisation_Currency extends Controller
 	{
 		$this->language->load('localisation/currency');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		$this->getList();
 	}
@@ -16,7 +16,7 @@ class Admin_Controller_Localisation_Currency extends Controller
 	{
 		$this->language->load('localisation/currency');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Currency->addCurrency($_POST);
@@ -47,7 +47,7 @@ class Admin_Controller_Localisation_Currency extends Controller
 	{
 		$this->language->load('localisation/currency');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Currency->editCurrency($_GET['currency_id'], $_POST);
@@ -78,7 +78,7 @@ class Admin_Controller_Localisation_Currency extends Controller
 	{
 		$this->language->load('localisation/currency');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $currency_id) {
@@ -144,7 +144,7 @@ class Admin_Controller_Localisation_Currency extends Controller
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/currency', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/currency', $url));
 
 		$this->data['insert'] = $this->url->link('localisation/currency/insert', $url);
 		$this->data['delete'] = $this->url->link('localisation/currency/delete', $url);
@@ -274,7 +274,7 @@ class Admin_Controller_Localisation_Currency extends Controller
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/currency', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/currency', $url));
 
 		if (!isset($_GET['currency_id'])) {
 			$this->data['action'] = $this->url->link('localisation/currency/insert', $url);

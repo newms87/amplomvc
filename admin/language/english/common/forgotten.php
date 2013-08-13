@@ -1,6 +1,6 @@
 <?php
 // header
-$_['heading_title']	= 'Forgot Your Password?';
+$_['head_title']	= 'Forgot Your Password?';
 
 // Text
 $_['text_forgotten']  = 'Forgotten Password';

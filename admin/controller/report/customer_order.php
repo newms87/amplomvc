@@ -7,7 +7,7 @@ class Admin_Controller_Report_CustomerOrder extends Controller
 
 		$this->language->load('report/customer_order');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (isset($_GET['filter_date_start'])) {
 			$filter_date_start = $_GET['filter_date_start'];
@@ -52,7 +52,7 @@ class Admin_Controller_Report_CustomerOrder extends Controller
 		}
 						
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('report/customer_order', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('report/customer_order', $url));
 
 		$this->data['customers'] = array();
 		

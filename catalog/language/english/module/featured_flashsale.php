@@ -1,3 +1,3 @@
 <?php
 // Heading
-$_['heading_title'] = 'Featured Flash Sale';
+$_['head_title'] = 'Featured Flash Sale';

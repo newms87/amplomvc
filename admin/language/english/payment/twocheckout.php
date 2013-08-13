@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= '2Checkout';
+$_['head_title']		= '2Checkout';
 
 // Text
 $_['text_payment']		= 'Payment';

@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'Flashsales Sidebar';
+$_['head_title']		= 'Flashsales Sidebar';
 
 // Text
 $_['text_module']			= 'Modules';

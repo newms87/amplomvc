@@ -33,6 +33,8 @@ class Catalog_Controller_Block_Product_Options extends Controller
 				continue;
 			}
 			
+			$product_option['default'] = array();
+			
 			foreach ($product_option['product_option_values'] as $key => &$product_option_value) {
 				//if this product is still in stock
 				if (!$product_option_value['subtract'] || ((int)$product_option_value['quantity'] > 0)) {
@@ -51,9 +53,9 @@ class Catalog_Controller_Block_Product_Options extends Controller
 						
 						//Show the price with the Product Option Name
 						if ($pov_price > 0) {
-							$product_option_value['value'] .= $this->_('text_option_price_add', $product_option_value['price']);
+							$product_option_value['value'] .= $this->_('text_option_price_add', $pov_price, $product_option_value['price']);
 						} elseif ($pov_price < 0) {
-							$product_option_value['value'] .= $this->_('text_option_price_subtract', $product_option_value['price']);
+							$product_option_value['value'] .= $this->_('text_option_price_subtract', $pov_price, $product_option_value['price']);
 						}
 					}
 					
@@ -65,6 +67,10 @@ class Catalog_Controller_Block_Product_Options extends Controller
 						$popup_image = $this->image->resize($image, $image_popup_width, $image_popup_height);
 						$product_option_value['rel'] = "{gallery:'gal1', smallimage:'$small_image', largeimage:'$popup_image'}";
 					}
+					
+					if ($product_option_value['default']) {
+						$product_option['default'][] = $product_option_value['product_option_value_id'];
+					}
 				}
 				else {
 					unset($product_option['product_option_values'][$key]);
@@ -75,10 +81,13 @@ class Catalog_Controller_Block_Product_Options extends Controller
 			
 			switch($product_option['type']){
 				case 'select':
-				case 'radio':
 					$blank_option[''] = array('option_value_id'=>'', 'product_option_value_id'=>'', 'value' => $this->_('text_select_option'));
 					break;
 				
+				case 'radio':
+				case 'checkbox':
+					break;
+					
 				case 'image':
 					if (!(int)$product_option['required']) {
 						$image = $this->image->resize('data/no_image_select.png', $image_width, $image_height);

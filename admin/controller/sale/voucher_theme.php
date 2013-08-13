@@ -12,7 +12,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
   	{
 		$this->language->load('sale/voucher_theme');
 	
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			//Insert
@@ -52,14 +52,14 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
   	private function getList()
   	{
   		//Page Head
-  		$this->document->setTitle($this->_('heading_title'));
+  		$this->document->setTitle($this->_('head_title'));
 		
 		//The Template
 		$this->template->load('sale/voucher_theme_list');
 
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('sale/voucher_theme'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/voucher_theme'));
 		
 		//The Table Columns
 		$columns = array();
@@ -162,7 +162,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
   	private function getForm()
   	{
   		//Page Head
-  		$this->document->setTitle($this->_('heading_title'));
+  		$this->document->setTitle($this->_('head_title'));
 		
 		//The Template
 		$this->template->load('sale/voucher_theme_form');
@@ -172,7 +172,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 		
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('sale/voucher_theme'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/voucher_theme'));
 		
 		if ($voucher_theme_id) {
 			$this->breadcrumb->add($this->_('text_edit'), $this->url->link('sale/voucher_theme/update', 'voucher_theme_id=' . $voucher_theme_id));

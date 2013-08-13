@@ -85,14 +85,14 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 	private function getList()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		//Template
 		$this->template->load('setting/url_alias_list');
 
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/url_alias'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('setting/url_alias'));
 		
 		//The Table Columns
 		$columns = array();
@@ -212,7 +212,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 	public function getForm()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		//Template
 		$this->template->load('setting/url_alias_form');
@@ -222,7 +222,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 		
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/url_alias'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('setting/url_alias'));
 		
 		if (!$url_alias_id) {
 			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('setting/url_alias/udpate'));

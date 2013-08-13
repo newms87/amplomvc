@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'Featured Flash Sales';
+$_['head_title']		= 'Featured Flash Sales';
 
 $_['styles'] = array('regular'=>'Regular', 'large'=>'Large');
 

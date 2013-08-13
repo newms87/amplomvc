@@ -370,22 +370,24 @@ class Cart extends Library
 						$product_option_data = $this->Model_Catalog_Product->getFilteredProductOptions($filter);
 						
 						foreach ($product_options as $product_option_id => $product_option_values) {
-							foreach ($product_option_values as $product_option_value_id => $product_option_value) {
-								$product_option_value = $this->Model_Catalog_Product->getProductOptionValue($product_id, $product_option_id, $product_option_value_id);
-								
-								if ($product_option_value) {
-									$option_cost	+= $product_option_value['cost'];
-									$option_price  += $product_option_value['price'];
-									$option_points += $product_option_value['points'];
-									$option_weight += $product_option_value['weight'];
+							if (!empty($product_option_values)) {
+								foreach ($product_option_values as $product_option_value_id => $product_option_value) {
+									$product_option_value = $this->Model_Catalog_Product->getProductOptionValue($product_id, $product_option_id, $product_option_value_id);
 									
-									if ($product_option_value['subtract'] && $product_option_value['quantity'] < $quantity) {
-										$in_stock = false;
+									if ($product_option_value) {
+										$option_cost	+= $product_option_value['cost'];
+										$option_price  += $product_option_value['price'];
+										$option_points += $product_option_value['points'];
+										$option_weight += $product_option_value['weight'];
+										
+										if ($product_option_value['subtract'] && $product_option_value['quantity'] < $quantity) {
+											$in_stock = false;
+										}
+										
+										$product_option_value += array_search_key('product_option_id', $product_option_id, $product_option_data);
+										
+										$selected_options[$product_option_value_id] = $product_option_value;
 									}
-									
-									$product_option_value += array_search_key('product_option_id', $product_option_id, $product_option_data);
-									
-									$selected_options[$product_option_value_id] = $product_option_value;
 								}
 							}
 						}

@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Layouts';
+$_['head_title']	= 'Layouts';
 
 // Text
 $_['text_success']		= 'Success: You have modified layouts!';

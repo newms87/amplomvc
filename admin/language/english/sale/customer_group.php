@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Customer Group';
+$_['head_title']	= 'Customer Group';
 
 // Text
 $_['text_success']	= 'Success: You have modified customer groups!';

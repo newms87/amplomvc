@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'ReCAPTCHA Free';
+$_['head_title']		= 'ReCAPTCHA Free';
 
 // Text
 $_['text_module']			= 'Modules';

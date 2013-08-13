@@ -7,7 +7,7 @@ class Admin_Controller_Report_AffiliateCommission extends Controller
 
 		$this->language->load('report/affiliate_commission');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (isset($_GET['filter_date_start'])) {
 			$filter_date_start = $_GET['filter_date_start'];
@@ -42,7 +42,7 @@ class Admin_Controller_Report_AffiliateCommission extends Controller
 		}
 						
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('report/affiliate_commission', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('report/affiliate_commission', $url));
 
 		$this->data['affiliates'] = array();
 		

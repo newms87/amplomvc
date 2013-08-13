@@ -7,10 +7,10 @@ class Admin_Controller_Error_Permission extends Controller
 
 		$this->language->load('error/permission');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('error/permission'));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('error/permission'));
 
 		$this->children = array(
 			'common/header',

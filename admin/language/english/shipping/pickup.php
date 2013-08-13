@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Pickup From Store';
+$_['head_title']	= 'Pickup From Store';
 
 // Text
 $_['text_shipping']	= 'Shipping';

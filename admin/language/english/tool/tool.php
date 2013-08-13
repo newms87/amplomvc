@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'System Tools';
+$_['head_title']	= 'System Tools';
 
 // Text
 $_['text_cache_tables']		= 'Cache Tables:';

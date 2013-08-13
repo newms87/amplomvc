@@ -4,7 +4,7 @@
 	<?= $this->breadcrumb->render(); ?>
 	<?= $content_top; ?>
 
-	<h1><?= $heading_title; ?></h1>
+	<h1><?= $head_title; ?></h1>
 	<p><?= $text_total; ?><b> <?= $total; ?></b>.</p>
 	<table class="list">
 		<thead>

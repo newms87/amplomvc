@@ -8,7 +8,7 @@ class Admin_Controller_Mail_Messages extends Controller
 		
 		$this->template->load('mail/messages');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validate()) {
 			
@@ -18,7 +18,7 @@ class Admin_Controller_Mail_Messages extends Controller
 		}
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('mail/messages'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('mail/messages'));
 		
 		$this->data['action'] = $this->url->link('mail/messages');
 		

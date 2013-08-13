@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']			= 'Customer Reward Points Report';
+$_['head_title']			= 'Customer Reward Points Report';
 
 // Column
 $_['column_customer']		= 'Customer Name';

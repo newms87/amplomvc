@@ -181,7 +181,7 @@ class Config extends Library
 	{
 		$admin_store = $this->site_config['admin_store'];
 		
-		$admin_exists = $this->db->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "store WHERE store_id = 0 AND `url` ='" . $this->db->escape($admin_store['url']) . "' AND `ssl` = '" . $this->db->escape($admin_store['ssl']) . "'");
+		$admin_exists = $this->db->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "store WHERE store_id = -1 AND `url` ='" . $this->db->escape($admin_store['url']) . "' AND `ssl` = '" . $this->db->escape($admin_store['ssl']) . "'");
 		
 		if (!$admin_exists) {
 			$this->db->query("DELETE FROM " . DB_PREFIX . "store WHERE store_id = 0");
@@ -203,11 +203,11 @@ class Config extends Library
 	{
 		$version = !empty($this->data['ac_version']) ? $this->data['ac_version'] : null;
 		
-		if ($version !== VERSION) {
+		if ($version !== AC_VERSION) {
 			$this->language->system('config');
-			$this->message->add('notify', $this->_('notify_update', $version, VERSION));
+			$this->message->add('notify', $this->_('notify_update', $version, AC_VERSION));
 
-			$this->System_Update->update(VERSION);
+			$this->System_Update->update(AC_VERSION);
 		}
 	}
 }

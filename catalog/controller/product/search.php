@@ -64,9 +64,9 @@ class Catalog_Controller_Product_Search extends Controller
 		}
 		
 		if (isset($_GET['keyword'])) {
-			$this->document->setTitle($this->_('heading_title') .  ' - ' . $_GET['keyword']);
+			$this->document->setTitle($this->_('head_title') .  ' - ' . $_GET['keyword']);
 		} else {
-			$this->document->setTitle($this->_('heading_title'));
+			$this->document->setTitle($this->_('head_title'));
 		}
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -109,7 +109,7 @@ class Catalog_Controller_Product_Search extends Controller
 			$url .= '&limit=' . $_GET['limit'];
 		}
 		
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('product/search', $url));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('product/search', $url));
 		
 		$this->_('text_compare', (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));
 		$this->data['compare'] = $this->url->link('product/compare');

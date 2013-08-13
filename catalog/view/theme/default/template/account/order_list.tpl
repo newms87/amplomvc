@@ -4,7 +4,7 @@
 	<?= $content_top; ?>
 	<?= $this->breadcrumb->render(); ?>
 	
-	<h1><?= $heading_title; ?></h1>
+	<h1><?= $head_title; ?></h1>
 	
 	<? if (!empty($orders)) { ?>
 		<? foreach ($orders as $order) { ?>

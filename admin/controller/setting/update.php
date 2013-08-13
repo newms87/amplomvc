@@ -6,7 +6,7 @@ class Admin_Controller_Setting_Update extends Controller
 		$this->template->load('setting/update');
 		$this->language->load('setting/update');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validate()) {
 			if (!empty($_POST['version'])) {
@@ -29,7 +29,7 @@ class Admin_Controller_Setting_Update extends Controller
 		}
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('setting/update'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('setting/update'));
 		
 		$this->data['action'] = $this->url->link('setting/update');
 		$this->data['cancel'] = $this->url->link('common/home');
@@ -39,7 +39,7 @@ class Admin_Controller_Setting_Update extends Controller
 		}
 		
 		$defaults = array(
-			'version' => VERSION,
+			'version' => AC_VERSION,
 			'auto_update' => 0,
 		);
 

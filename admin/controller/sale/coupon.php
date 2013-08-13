@@ -6,7 +6,7 @@ class Admin_Controller_Sale_Coupon extends Controller
   	{
 		$this->language->load('sale/coupon');
 		
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		$this->getList();
   	}
@@ -15,7 +15,7 @@ class Admin_Controller_Sale_Coupon extends Controller
   	{
 		$this->language->load('sale/coupon');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Sale_Coupon->addCoupon($_POST);
@@ -34,7 +34,7 @@ class Admin_Controller_Sale_Coupon extends Controller
   	{
 		$this->language->load('sale/coupon');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Sale_Coupon->editCoupon($_GET['coupon_id'], $_POST);
@@ -53,7 +53,7 @@ class Admin_Controller_Sale_Coupon extends Controller
   	{
 		$this->language->load('sale/coupon');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $coupon_id) {
@@ -82,7 +82,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 		$url = $this->get_url();
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('sale/coupon'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/coupon'));
 							
 		$this->data['insert'] = $this->url->link('sale/coupon/insert', $url);
 		$this->data['delete'] = $this->url->link('sale/coupon/delete', $url);
@@ -164,7 +164,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 		$url = $this->get_url();
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('sale/coupon'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/coupon'));
 		
 		if (!$coupon_id) {
 			$this->data['action'] = $this->url->link('sale/coupon/insert', $url);

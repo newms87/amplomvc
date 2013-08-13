@@ -1,2 +1,2 @@
-<div class="welcome"><?= $heading_title; ?></div>
+<div class="welcome"><?= $head_title; ?></div>
 <?= $message; ?>

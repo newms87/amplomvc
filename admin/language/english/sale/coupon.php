@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'Coupon';
+$_['head_title']		= 'Coupon';
 
 //Data
 $_['data_types']		= array('P'=>"Percent",'F'=>"Fixed Amount");

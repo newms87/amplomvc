@@ -1,7 +1,7 @@
 <?php
 // Heading
-$_['heading_title']					= 'Dashboard';
-$_['heading_title_restricted']					= 'Designer Portal';
+$_['head_title']					= 'Dashboard';
+$_['head_title_restricted']					= 'Designer Portal';
 
 // Text
 $_['text_overview']					= 'Overview';

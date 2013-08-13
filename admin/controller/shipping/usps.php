@@ -9,7 +9,7 @@ class Admin_Controller_Shipping_Usps extends Controller
 
 		$this->language->load('shipping/usps');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 
 		if ($this->request->isPost() && $this->validate()) {
 			$this->Model_Setting_Setting->editSetting('usps', $_POST);
@@ -57,7 +57,7 @@ class Admin_Controller_Shipping_Usps extends Controller
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 			$this->breadcrumb->add($this->_('text_shipping'), $this->url->link('extension/shipping'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('shipping/usps'));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('shipping/usps'));
 
 		$this->data['action'] = $this->url->link('shipping/usps');
 

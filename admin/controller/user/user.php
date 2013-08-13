@@ -7,7 +7,7 @@ class Admin_Controller_User_User extends Controller
   	{
 		$this->language->load('user/user');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 	
 		$this->getList();
   	}
@@ -16,7 +16,7 @@ class Admin_Controller_User_User extends Controller
   	{
 		$this->language->load('user/user');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_User_User->addUser($_POST);
@@ -41,7 +41,7 @@ class Admin_Controller_User_User extends Controller
   	{
 		$this->language->load('user/user');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_User_User->editUser($_GET['user_id'], $_POST);
@@ -65,7 +65,7 @@ class Admin_Controller_User_User extends Controller
   	{
 		$this->language->load('user/user');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 				foreach ($_GET['selected'] as $user_id) {
@@ -100,7 +100,7 @@ class Admin_Controller_User_User extends Controller
 		$url = $this->get_url();
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('user/user'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('user/user'));
 		
 		$this->data['insert'] = $this->url->link('user/user/insert', $url);
 		$this->data['delete'] = $this->url->link('user/user/delete', $url);
@@ -177,7 +177,7 @@ class Admin_Controller_User_User extends Controller
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		
 		if (!$this->user->isDesigner()) {
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('user/user'));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('user/user'));
 		}
 		
 		if (!$user_id) {

@@ -11,24 +11,24 @@ class Currency extends Library
 		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "currency");
 
 		foreach ($query->rows as $result) {
-				$this->currencies[$result['code']] = array(
-					'currency_id'	=> $result['currency_id'],
-					'title'			=> $result['title'],
-					'symbol_left'	=> $result['symbol_left'],
-					'symbol_right'  => $result['symbol_right'],
-					'decimal_place' => $result['decimal_place'],
-					'value'			=> $result['value']
-				);
+			$this->currencies[$result['code']] = array(
+				'currency_id'	=> $result['currency_id'],
+				'title'			=> $result['title'],
+				'symbol_left'	=> $result['symbol_left'],
+				'symbol_right'  => $result['symbol_right'],
+				'decimal_place' => $result['decimal_place'],
+				'value'			=> $result['value']
+			);
 		}
 		
 		if (isset($_GET['currency']) && (array_key_exists($_GET['currency'], $this->currencies))) {
 			$this->set($_GET['currency']);
 		} elseif ((isset($this->session->data['currency'])) && (array_key_exists($this->session->data['currency'], $this->currencies))) {
-				$this->set($this->session->data['currency']);
+			$this->set($this->session->data['currency']);
 		} elseif ((isset($_COOKIE['currency'])) && (array_key_exists($_COOKIE['currency'], $this->currencies))) {
-				$this->set($_COOKIE['currency']);
+			$this->set($_COOKIE['currency']);
 		} else {
-				$this->set($this->config->get('config_currency'));
+			$this->set($this->config->get('config_currency'));
 		}
   	}
 	
@@ -43,60 +43,51 @@ class Currency extends Library
 		if (!isset($_COOKIE['currency']) || ($_COOKIE['currency'] != $currency)) {
 			$this->session->setCookie('currency', $currency);
 		}
+
+		$vars = array(
+			'symbol_left' => $this->currencies[$currency]['symbol_left'],
+			'symbol_right' => $this->currencies[$currency]['symbol_right'],
+			'decimals' => (int)$this->currencies[$currency]['decimal_place'],
+			'decimal_point' => $this->language->getInfo('decimal_point'),
+			'thousand_sep' => $this->language->getInfo('thousand_point'),
+		);
+		
+		$this->document->localizeVar('currency', $vars);
   	}
 
-  	public function format($number, $currency = '', $value = '', $format = true, $decimal = null)
+  	public function format($number, $currency = '', $value = '', $format = true, $decimals = null)
   	{
-		if ($currency && $this->has($currency)) {
-				$symbol_left	= $this->currencies[$currency]['symbol_left'];
-				$symbol_right  = $this->currencies[$currency]['symbol_right'];
-				$decimal_place = $this->currencies[$currency]['decimal_place'];
-		} else {
-				$symbol_left	= $this->currencies[$this->code]['symbol_left'];
-				$symbol_right  = $this->currencies[$this->code]['symbol_right'];
-				$decimal_place = $this->currencies[$this->code]['decimal_place'];
-			
+		if (!$currency || !$this->has($currency)) {
 			$currency = $this->code;
-		}
-
-		if ($value) {
-				$value = $value;
-		} else {
-				$value = $this->currencies[$currency]['value'];
-		}
-
-		if ($value) {
-				$value = (float)$number * $value;
-		} else {
-				$value = $number;
-		}
-
-		$string = '';
-
-		if (($symbol_left) && ($format)) {
-				$string .= $symbol_left;
-		}
-
-		if ($format) {
-			$decimal_point = $this->language->getInfo('decimal_point');
-		} else {
-			$decimal_point = '.';
 		}
 		
 		if ($format) {
+			$symbol_left	= $this->currencies[$currency]['symbol_left'];
+			$symbol_right  = $this->currencies[$currency]['symbol_right'];
+			$decimal_point = $this->language->getInfo('decimal_point');
 			$thousand_point = $this->language->getInfo('thousand_point');
 		} else {
+			$symbol_left = '';
+			$symbol_right = '';
+			$decimal_point = '.';
 			$thousand_point = '';
 		}
 		
-		$precision = $decimal !== null ? $decimal : (int)$decimal_place;
-		$string .= number_format(round($value, $precision), $precision, $decimal_point, $thousand_point);
-
-		if (($symbol_right) && ($format)) {
-				$string .= $symbol_right;
+		if ($decimals === null) {
+			$decimals = (int)$this->currencies[$currency]['decimal_place'];
+		}
+		
+		if (!$value) {
+			$value = $this->currencies[$currency]['value'];
 		}
 
-		return $string;
+		if ($value) {
+			$number = (float)$number * $value;
+		}
+		
+		$string = number_format($number, $decimals, $decimal_point, $thousand_point);
+		
+		return $symbol_left . $string . $symbol_right;
   	}
 	
   	public function convert($value, $from, $to)

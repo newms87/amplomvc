@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']				= 'DB Rules';
+$_['head_title']				= 'DB Rules';
 
 //Data
 $_['data_escape_types']		= array(0=>'Normal Escape', 1=>'No Escape', 2=>"Image", 3=>"Integer",

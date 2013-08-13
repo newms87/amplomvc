@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Weight Class';
+$_['head_title']	= 'Weight Class';
 
 // Text
 $_['text_success']	= 'Success: You have modified weight classes!';

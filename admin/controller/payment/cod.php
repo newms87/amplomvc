@@ -17,12 +17,12 @@ class Admin_Controller_Payment_Cod extends Controller
 		}
 		
 		//Page Head
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_payment'), $this->url->link('extension/payment'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('payment/cod'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('payment/cod'));
 		
 		//Load Information
 		if (!$this->request->isPost()) {

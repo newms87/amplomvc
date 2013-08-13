@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Per Item';
+$_['head_title']	= 'Per Item';
 
 // Text
 $_['text_shipping']	= 'Shipping';

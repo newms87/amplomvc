@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'Your Transactions';
+$_['head_title']		= 'Your Transactions';
 
 // Column
 $_['column_date_added']  = 'Date Added';

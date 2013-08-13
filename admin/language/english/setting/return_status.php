@@ -1,6 +1,6 @@
 <?php
 //Heading
-$_['heading_title'] = "Return Statuses";
+$_['head_title'] = "Return Statuses";
 
 //Text
 $_['text_settings'] = "Settings";

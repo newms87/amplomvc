@@ -40,18 +40,14 @@ class Admin_Controller_Page_Page extends Controller
 			
 			if (!$this->message->error_set()) {
 				$this->message->add('notify', $this->_('text_success_delete'));
-				
-				$this->url->redirect($this->url->link('page/page'));
 			}
 		}
 
-		$this->getList();
+		$this->url->redirect($this->url->link('page/page'));
 	}
 	
 	public function batch_update()
 	{
-		$this->language->load('page/page');
-		
 		if (isset($_GET['selected']) && isset($_GET['action'])) {
 			foreach ($_GET['selected'] as $page_id) {
 				switch($_GET['action']){
@@ -67,32 +63,31 @@ class Admin_Controller_Page_Page extends Controller
 					case 'copy':
 						$this->Model_Page_Page->copyPage($page_id);
 						break;
+					default:
+						break 2; //Exit the For Loop
 				}
-				if($this->error)
-					break;
 			}
 			
-			if (!$this->error) {
-				if (!$this->message->error_set()) {
-					$this->message->add('success',$this->_('text_success'));
-				}
+			if (!$this->message->error_set()) {
+				$this->language->load('page/page');
+				$this->message->add('success',$this->_('text_success'));
 			}
 		}
 
-		$this->index();
+		$this->url->redirect($this->url->link('page/page'));
 	}
 
 	private function getList()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		//The Template
 		$this->template->load('page/page_list');
 
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('page/page'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('page/page'));
 		
 		//The Table Columns
 		$columns = array();
@@ -199,7 +194,7 @@ class Admin_Controller_Page_Page extends Controller
 	private function getForm()
 	{
 		//Page Head
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		//The Template
 		$this->template->load('page/page_form');
@@ -209,7 +204,7 @@ class Admin_Controller_Page_Page extends Controller
 		
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('page/page'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('page/page'));
 		
 		if ($page_id) {
 			$this->breadcrumb->add($this->_('text_edit'), $this->url->link('page/page/update', 'page_id=' . $page_id));
@@ -227,7 +222,7 @@ class Admin_Controller_Page_Page extends Controller
 		//Set Values or Defaults
 		$defaults = array(
 			'name' => '',
-			'keyword' => '',
+			'alias' => '',
 			'content' => '',
 			'meta_keywords' => '',
 			'meta_description' => '',

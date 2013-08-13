@@ -220,6 +220,10 @@ class Admin_Model_Catalog_Product extends Model
 							$product_option_value['product_option_id'] = $product_option_id;
 							$product_option_value['option_id'] = $product_option['option_id'];
 							
+							if (empty($product_option_value['default'])) {
+								$product_option_value['default'] = 0;
+							}
+							
 							$product_option_value_id = $this->update('product_option_value', $product_option_value);
 							
 							if (!empty($product_option_value['restrictions'])) {
@@ -453,14 +457,14 @@ class Admin_Model_Catalog_Product extends Model
 		$this->cache->delete("product.$product_id");
 	}
 	
-	public function generateModel($name)
+	public function generateModel($product_id, $name)
 	{
 		$model = strtoupper($this->url->format($name));
 		
 		$count = 1;
 		$unique_model = $model;
 		
-		while ($this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX ."product WHERE model like '" . $this->db->escape($unique_model) . "'")) {
+		while ($this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX ."product WHERE model like '" . $this->db->escape($unique_model) . "' AND product_id != " . (int)$product_id)) {
 			$unique_model = $model.'-'.$count++;
 		}
 		

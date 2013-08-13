@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'Currency';
+$_['head_title']		= 'Currency';
 
 // Text
 $_['text_success']			= 'Success: You have modified currencies!';

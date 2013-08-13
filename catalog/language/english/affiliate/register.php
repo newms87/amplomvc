@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']				= 'Affiliate Program';
+$_['head_title']				= 'Affiliate Program';
 
 // Text
 $_['text_account']				= 'Account';

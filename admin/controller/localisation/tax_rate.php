@@ -7,7 +7,7 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 	{
 		$this->language->load('localisation/tax_rate');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		$this->getList();
 	}
@@ -16,7 +16,7 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 	{
 		$this->language->load('localisation/tax_rate');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_TaxRate->addTaxRate($_POST);
@@ -47,7 +47,7 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 	{
 		$this->language->load('localisation/tax_rate');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_TaxRate->editTaxRate($_GET['tax_rate_id'], $_POST);
@@ -78,7 +78,7 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 	{
 		$this->language->load('localisation/tax_rate');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
  		
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $tax_rate_id) {
@@ -144,7 +144,7 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 		}
 		
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/tax_rate', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/tax_rate', $url));
 
 		$this->data['insert'] = $this->url->link('localisation/tax_rate/insert', $url);
 		$this->data['delete'] = $this->url->link('localisation/tax_rate/delete', $url);
@@ -278,7 +278,7 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('localisation/tax_rate', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/tax_rate', $url));
 
 		if (!isset($_GET['tax_rate_id'])) {
 			$this->data['action'] = $this->url->link('localisation/tax_rate/insert', $url);

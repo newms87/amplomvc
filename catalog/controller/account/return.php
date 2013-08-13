@@ -13,11 +13,11 @@ class Catalog_Controller_Account_Return extends Controller
 
 		$this->language->load('account/return');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/return'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('account/return'));
 		
 		$sort_filter = $this->sort->getQueryDefaults('date_added', 'ASC');
 		
@@ -72,14 +72,14 @@ class Catalog_Controller_Account_Return extends Controller
 		//Breadcrumbs	
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/return', $url_query));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('account/return', $url_query));
 		$this->breadcrumb->add($this->_('text_return'), $this->url->link('account/return/info', 'return_id=' . $return_id . '&' . $url_query));
 		
 		$return_info = $this->Model_Account_Return->getReturn($return_id);
 		
 		if ($return_info) {
 			$this->template->load('account/return_info');
-			$this->language->set('heading_title', $this->_('text_return'));
+			$this->language->set('head_title', $this->_('text_return'));
 			
 			$return_info['comment'] = nl2br($return_info['comment']);
 			$return_info['opened'] = $return_info['opened'] ? $this->_('text_yes') : $this->_('text_no');
@@ -115,7 +115,7 @@ class Catalog_Controller_Account_Return extends Controller
 		} else {
 			$this->template->load('error/not_found');
 			
-			$this->language->set('heading_title', $this->_('text_return'));
+			$this->language->set('head_title', $this->_('text_return'));
 			
 			$this->data['continue'] = $this->url->link('account/return');
 
@@ -162,13 +162,13 @@ class Catalog_Controller_Account_Return extends Controller
 		}
 		
 		//Page Head
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
 		$this->breadcrumb->add($this->_('text_return_list'), $this->url->link('account/return'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/return/insert'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('account/return/insert'));
 		
 		//Action Buttons
 		$this->data['action'] = $this->url->link('account/return/insert');
@@ -361,7 +361,7 @@ class Catalog_Controller_Account_Return extends Controller
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_return_list'), $this->url->link('account/return'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('account/return/insert'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('account/return/insert'));
 		$this->breadcrumb->add($this->_('return_success_title'), $this->url->link('account/return/success'));
 		
 		$returns = array();

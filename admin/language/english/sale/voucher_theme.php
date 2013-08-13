@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'Voucher Themes';
+$_['head_title']		= 'Voucher Themes';
 
 // Text
 $_['text_success']		= 'Success: You have modified voucher themes!';

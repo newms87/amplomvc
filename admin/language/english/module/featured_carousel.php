@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'Featured Carousels';
+$_['head_title']		= 'Featured Carousels';
 
 $_['data_styles'] = array('regular'=>'Regular', 'large'=>'Large');
 

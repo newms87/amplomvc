@@ -1,5 +1,5 @@
 <div id='press_entries' class="box">
-	<h1><?= $heading_title; ?></h1>
+	<h1><?= $head_title; ?></h1>
 	<div class="box_content">
 		<ul id='press_list'>
 		<? foreach($press_list as $press){ ?>

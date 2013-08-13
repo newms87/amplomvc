@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'Perpetual Payments';
+$_['head_title']		= 'Perpetual Payments';
 
 // Text
 $_['text_payment']		= 'Payment';

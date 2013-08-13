@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']				= 'General Settings';
+$_['head_title']				= 'General Settings';
 
 //Data
 $_['data_stock_display_types'] = array(

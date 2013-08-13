@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Product Comparison';
+$_['head_title']	= 'Product Comparison';
 
 // Text
 $_['text_product']		= 'Product Details';

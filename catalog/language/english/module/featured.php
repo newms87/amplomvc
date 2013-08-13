@@ -1,7 +1,7 @@
 <?php
 // Heading
-$_['heading_title']		= 'Featured';
-$_['heading_title_menu']	= 'Sort By';
+$_['head_title']		= 'Featured';
+$_['head_title_menu']	= 'Sort By';
 $_['category_title_menu']  = "Shop By Category";
 $_['text_scroll_more']	= 'Scroll to see more products...';
 

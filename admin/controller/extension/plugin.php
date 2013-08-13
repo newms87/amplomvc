@@ -6,7 +6,7 @@ class Admin_Controller_Extension_Plugin extends Controller
 	{
 		$this->language->load('extension/plugin');
 		
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		$this->getList();
 	}
@@ -16,7 +16,7 @@ class Admin_Controller_Extension_Plugin extends Controller
 		$this->template->load('extension/plugin');
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('extension/plugin'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('extension/plugin'));
 		
 		$plugins = $this->Model_Setting_Plugin->getInstalledPlugins();
 		
@@ -73,10 +73,10 @@ class Admin_Controller_Extension_Plugin extends Controller
 		}
 		$plugin_name = $_GET['name'];
 		
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('extension/plugin'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('extension/plugin'));
 				
 		if (isset($_POST['plugin_data'])) {
 			$this->data['plugin_data'] = $_POST['plugin_data'];
@@ -109,7 +109,7 @@ class Admin_Controller_Extension_Plugin extends Controller
 			$this->url->redirect($this->url->link('extension/plugin'));
 		}
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Setting_Plugin->updatePlugin($_GET['name'], $_POST['plugin_data']);

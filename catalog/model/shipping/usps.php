@@ -16,7 +16,7 @@ class Catalog_Model_Shipping_Usps extends Model
 		}
 
 		$method_data = array();
-
+		
 		if ($status) {
 			$quote_data = array();
 

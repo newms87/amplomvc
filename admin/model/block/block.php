@@ -54,7 +54,7 @@ class Admin_Model_Block_Block extends Model
 		$language_file = SITE_DIR . 'admin/language/' . $language_dir . '/block/' . $data['route'] . '.php';
 		
 		$insertables = array(
-			'heading_title' => $data['name'],
+			'head_title' => $data['name'],
 		);
 		
 		$content = file_get_contents($language_template);
@@ -108,7 +108,7 @@ class Admin_Model_Block_Block extends Model
 		$language_file = SITE_DIR . 'catalog/language/' . $language_dir . '/block/' . $data['route'] . '.php';
 		
 		$insertables = array(
-			'heading_title' => $data['name'],
+			'head_title' => $data['name'],
 		);
 		
 		$content = file_get_contents($language_template);
@@ -255,7 +255,7 @@ class Admin_Model_Block_Block extends Model
 			
 			$block_language = $this->language->fetch('block/' . $block['name']);
 			
-			$block['display_name'] = $block_language['heading_title'];
+			$block['display_name'] = $block_language['head_title'];
 			
 			//filter name
 			if (!empty($data['name'])) {

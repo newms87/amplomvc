@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']		= 'Cheque / Money Order';
+$_['head_title']		= 'Cheque / Money Order';
 
 // Text
 $_['text_payment']		= 'Payment';

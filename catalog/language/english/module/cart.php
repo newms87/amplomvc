@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title'] = 'Shopping Cart';
+$_['head_title'] = 'Shopping Cart';
 
 // Text
 $_['text_items']	= '%s item(s) - %s';

@@ -8,8 +8,8 @@
 		<div class="left">
 			<? if (!empty($thumb)) { ?>
 				<div id='the_zoombox' class="image">
-					<a onclick="return colorbox($(this), {width: '70%', height: '90%'});" href="<?= $popup; ?>" title="<?= $heading_title; ?>" class="zoombox" rel='gal1'>
-						<img src="<?= $thumb; ?>" title="<?= $heading_title; ?>" alt="<?= $heading_title; ?>" id="image" />
+					<a onclick="return colorbox($(this), {width: '70%', height: '90%'});" href="<?= $popup; ?>" title="<?= $head_title; ?>" class="zoombox" rel='gal1'>
+						<img src="<?= $thumb; ?>" title="<?= $head_title; ?>" alt="<?= $head_title; ?>" id="image" />
 					</a>
 				</div>
 			<? } ?>
@@ -17,8 +17,8 @@
 			<? if (!empty($images)) { ?>
 				<div class="image-additional">
 					<? foreach ($images as $img) { ?>
-					<a href="javscript:void(0);" title="<?= $heading_title; ?>" rel="<?= $img['rel']; ?>">
-						<img src="<?= $img['thumb']; ?>" title="<?= $heading_title; ?>" alt="<?= $heading_title; ?>" />
+					<a href="javscript:void(0);" title="<?= $head_title; ?>" rel="<?= $img['rel']; ?>">
+						<img src="<?= $img['thumb']; ?>" title="<?= $head_title; ?>" alt="<?= $head_title; ?>" />
 					</a>
 					<? } ?>
 				</div>
@@ -30,7 +30,7 @@
 		</div>
 		
 		<div class="right">
-			<div class="title"><?= $heading_title; ?></div>
+			<div class="title"><?= $head_title; ?></div>
 			
 			<div class="description">
 				<? if ($manufacturer) { ?>

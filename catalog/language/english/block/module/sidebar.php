@@ -1,5 +1,5 @@
 <?php
-$_['heading_title'] = "Store Directory";
+$_['head_title'] = "Store Directory";
 
 $_['text_name_all'] = "All Collections";
 

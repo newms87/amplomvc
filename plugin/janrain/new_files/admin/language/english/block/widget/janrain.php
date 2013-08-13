@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']			= 'Janrain Engage SignIn';
+$_['head_title']			= 'Janrain Engage SignIn';
 
 //Data
 $_['data_display_icons'] = array(
@@ -30,7 +30,7 @@ $_['data_icon_sizes'] = array(
 );
 
 // Text
-$_['text_success']			= 'Success: You have modified ' . $_['heading_title'];
+$_['text_success']			= 'Success: You have modified ' . $_['head_title'];
 
 // Entry
 $_['entry_api_key']					= 'Janrain Engage API key:';

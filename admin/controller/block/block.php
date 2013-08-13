@@ -7,7 +7,7 @@ class Admin_Controller_Block_Block extends Controller
 	{
 		$this->language->load('block/block');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (!empty($_GET['name'])) {
 			if (!$this->Model_Block_Block->isBlock($_GET['name'])) {
@@ -45,7 +45,7 @@ class Admin_Controller_Block_Block extends Controller
 		$this->template->load('block/list');
 
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('block/block'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('block/block'));
 		
 		//The Table Columns
 		$columns = array();
@@ -153,7 +153,7 @@ class Admin_Controller_Block_Block extends Controller
 		$this->breadcrumb->add($this->_('text_block_list'), $this->url->link('block/block'));
 		
 		$this->language->load('block/' . $name);
-		$this->breadcrumb->add($this->_('heading_title'), $this->url->link('block/block','name=' . $name));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('block/block','name=' . $name));
 
 		$this->data['action'] = $this->url->link('block/block','name=' . $name);
 		$this->data['cancel'] = $this->url->link('block/block');

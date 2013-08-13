@@ -7,7 +7,7 @@ class Admin_Controller_Sale_Return extends Controller
   	{
 		$this->language->load('sale/return');
 		
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		$this->getList();
   	}
@@ -16,7 +16,7 @@ class Admin_Controller_Sale_Return extends Controller
   	{
 		$this->language->load('sale/return');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 				$this->Model_Sale_Return->addReturn($_POST);
@@ -79,7 +79,7 @@ class Admin_Controller_Sale_Return extends Controller
   	{
 		$this->language->load('sale/return');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Sale_Return->editReturn($_GET['return_id'], $_POST);
@@ -142,7 +142,7 @@ class Admin_Controller_Sale_Return extends Controller
   	{
 		$this->language->load('sale/return');
 
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 		
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $return_id) {
@@ -320,7 +320,7 @@ class Admin_Controller_Sale_Return extends Controller
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('sale/return', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/return', $url));
 
 		$this->data['insert'] = $this->url->link('sale/return/insert', $url);
 		$this->data['delete'] = $this->url->link('sale/return/delete', $url);
@@ -611,7 +611,7 @@ class Admin_Controller_Sale_Return extends Controller
 		}
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('sale/return', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/return', $url));
 
 		if (!isset($_GET['return_id'])) {
 			$this->data['action'] = $this->url->link('sale/return/insert', $url);
@@ -789,7 +789,7 @@ class Admin_Controller_Sale_Return extends Controller
 		$this->template->load('sale/return_info');
 			$this->language->load('sale/return');
 		
-			$this->document->setTitle($this->_('heading_title'));
+			$this->document->setTitle($this->_('head_title'));
 			
 			$url = '';
 			
@@ -838,7 +838,7 @@ class Admin_Controller_Sale_Return extends Controller
 			}
 				
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('sale/return', $url));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('sale/return', $url));
 
 			$this->data['cancel'] = $this->url->link('sale/return', $url);
 			
@@ -881,10 +881,10 @@ class Admin_Controller_Sale_Return extends Controller
 		$this->template->load('error/not_found');
 			$this->language->load('error/not_found');
 
-			$this->document->setTitle($this->_('heading_title'));
+			$this->document->setTitle($this->_('head_title'));
 
 				$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-				$this->breadcrumb->add($this->_('heading_title'), $this->url->link('error/not_found'));
+				$this->breadcrumb->add($this->_('head_title'), $this->url->link('error/not_found'));
 
 			$this->children = array(
 				'common/header',

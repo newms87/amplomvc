@@ -3,7 +3,7 @@
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'product.png'; ?>" alt="" /> <?= $heading_title; ?></h1>
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'product.png'; ?>" alt="" /> <?= $head_title; ?></h1>
 			<div class="buttons">
 				<? if (count($data_product_classes) > 1) { ?>
 					<form id="product_class_form" action="<?= $change_class; ?>" method="post">
@@ -286,6 +286,7 @@
 								<thead>
 									<tr>
 										<td class="center"><?= $entry_option_value; ?></td>
+										<td class="center"><?= $entry_default; ?></td>
 										<td class="center"><?= $entry_image; ?></td>
 										<td class="center"><?= $entry_quantity; ?></td>
 										<td class="center"><?= $entry_subtract; ?></td>
@@ -310,10 +311,25 @@
 												<span class='option_value_label'><?= $product_option_value['value']; ?></span>
 											</td>
 											<td class="center">
+												<? switch ($product_option['type']) {
+													case 'select':
+													case 'image':
+													case 'radio': ?>
+														<input type="radio" name="<?= $product_option_value_row; ?>[default]" value="1" <?= $product_option_value['default'] ? 'checked="checked"' : ''; ?> />
+													<? break;
+													
+													case 'checkbox': ?>
+														<input type="checkbox" name="<?= $product_option_value_row; ?>[default]" value="1" <?= $product_option_value['default'] ? 'checked="checked"' : ''; ?> />
+													<? break;
+												} ?>
+											</td>
+											<td class="center">
 												<? $this->builder->set_builder_template('click_image_small'); ?>
 												<?= $this->builder->image_input($product_option_value_row . '[image]', $product_option_value['image'], null, null, $this->config->get('config_image_product_option_width'), $this->config->get('config_image_product_option_height')); ?>
 											</td>
-											<td class="center"><input type="text" name="<?= $product_option_value_row; ?>[quantity]" value="<?= $product_option_value['quantity']; ?>" size="3" /></td>
+											<td class="center">
+												<input type="text" name="<?= $product_option_value_row; ?>[quantity]" value="<?= $product_option_value['quantity']; ?>" size="3" />
+											</td>
 											<td class="center">
 												<?= $this->builder->build('select', $data_yes_no, $product_option_value_row."[subtract]", $product_option_value['subtract']); ?>
 											</td>

@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title']	= 'Google Sitemap';
+$_['head_title']	= 'Google Sitemap';
 
 // Text
 $_['text_feed']		= 'Product Feeds';

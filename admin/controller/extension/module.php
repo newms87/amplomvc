@@ -7,10 +7,10 @@ class Admin_Controller_Extension_Module extends Controller
 
 		$this->language->load('extension/module');
 		
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
 
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('extension/module'));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('extension/module'));
 
 		if (isset($this->session->data['success'])) {
 			$this->data['success'] = $this->session->data['success'];
@@ -68,7 +68,7 @@ class Admin_Controller_Extension_Module extends Controller
 				}
 												
 				$this->data['extensions'][] = array(
-					'name'	=> $this->_('heading_title'),
+					'name'	=> $this->_('head_title'),
 					'action' => $action
 				);
 			}

@@ -7,10 +7,10 @@ class Admin_Controller_Extension_Shipping extends Controller
 
 		$this->language->load('extension/shipping');
 		
-		$this->document->setTitle($this->_('heading_title'));
+		$this->document->setTitle($this->_('head_title'));
   		
 			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('heading_title'), $this->url->link('extension/shipping'));
+			$this->breadcrumb->add($this->_('head_title'), $this->url->link('extension/shipping'));
 
 		$extensions = $this->Model_Setting_Extension->getInstalled('shipping');
 		
@@ -52,7 +52,7 @@ class Admin_Controller_Extension_Shipping extends Controller
 				}
 										
 				$this->data['extensions'][] = array(
-					'name'		=> $this->_('heading_title'),
+					'name'		=> $this->_('head_title'),
 					'status'	=> $this->config->get($extension . '_status') ? $this->_('text_enabled') : $this->_('text_disabled'),
 					'sort_order' => $this->config->get($extension . '_sort_order'),
 					'action'	=> $action
