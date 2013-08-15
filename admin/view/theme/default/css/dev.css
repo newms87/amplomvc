@@ -25,3 +25,19 @@
 	font-weight:bold;
 }
 
+#overwrite_default_db{
+	padding: 10px 20px 32px 20px;
+	
+	background: #CF7B7B; /* Old browsers */
+	background: -webkit-linear-gradient(top,  #CF7B7B 0%,#9F0808 100%); /* Mobile, Safari5.1+ */
+	background: linear-gradient(to bottom,  #CF7B7B 0%,#9F0808 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#CF7B7B', endColorstr='#9F0808',GradientType=0 ); /* IE6-8 */
+}
+
+#overwrite_default_db:hover{
+	background: #CF7B7B; /* Old browsers */
+	background: -webkit-linear-gradient(top,  #9F0808 0%,#CF7B7B 100%); /* Mobile, Safari5.1+ */
+	background: linear-gradient(to bottom,  #9F0808 0%,#CF7B7B 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9F0808', endColorstr='#CF7B7B',GradientType=0 ); /* IE6-8 */
+	
+}

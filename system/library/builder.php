@@ -214,7 +214,7 @@ class Builder extends Library
 		return $html;
 	}
 
-	function build($type, $data, $name, $select = null, $attr_list = array(), $escape_quotes = false){
+	function build($type, $data, $name = '', $select = null, $attr_list = array(), $escape_quotes = false){
 		//This is for select option groups
 		$opt_group_active = false;
 		

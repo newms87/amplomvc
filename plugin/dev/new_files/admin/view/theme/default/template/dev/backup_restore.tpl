@@ -15,6 +15,8 @@
 						<td>
 							<label><?= $entry_backup; ?></label>
 							<input type="submit" class="button" name="site_backup" value="<?= $button_backup; ?>" />
+							<br /><br />
+							<input type="submit" id="overwrite_default_db" class="button" name="default_installation" value="<?= $button_default_installation; ?>" />
 						</td>
 						<td>
 							<?= $this->builder->build('multiselect', $data_tables, 'tables', $tables); ?>
@@ -60,5 +62,11 @@
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">//<!--
+$('#overwrite_default_db').click(function(){
+	return confirm("This will overwrite the Default Database Installation for Amplo Cart! Are you sure you want to continue?");
+});
+//--></script>
 
 <?= $footer; ?>

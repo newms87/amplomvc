@@ -173,6 +173,39 @@ if (!function_exists('array_search_key')) {
 	}
 }
 
+if (!function_exists('array_unique_keys')) {
+	/**
+	 * Searches for a duplicate elements in a multidimensional array by a list of keys
+	 *
+	 * @param array array - The array to filter duplicate values from
+	 * @param key1 string - the first key to filter by
+	 * @param key2... string (optional) - the second key to filter by
+	 * 
+	 * @return array An array of arrays with unique elements based on specified keys 
+	 */
+	
+	function array_unique_keys($array)
+	{
+		$keys = func_get_args();
+		array_shift($keys);
+		
+		foreach ($array as $index => $ele) {
+			foreach ($keys as $key) {
+				if (isset($ele[$key])) {
+					foreach ($array as $index2 => $ele2) {
+						if ($index !== $index2 && isset($ele2) && $ele2[$key] == $ele[$key]) {
+							unset($array[$index]);
+							continue 2;
+						}
+					}
+				}
+			}
+		}
+		
+		return $array;
+	}
+}
+
 if (!function_exists('html2text')) {
 	/**
 	 * Converts HTML break tags (eg: <br />) to new lines, and removes all other HTML tags

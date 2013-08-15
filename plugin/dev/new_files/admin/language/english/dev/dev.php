@@ -44,6 +44,7 @@ $_['button_add_site'] = "Add Site";
 $_['button_sync'] = "Request Synchronization";
 $_['button_return'] = "Back To Dashboard";
 $_['button_backup'] = "Backup Database";
+$_['button_default_installation'] = "Overwrite Default \r\nDB Installation";
 $_['button_execute_file'] = "Execute File";
 $_['button_submit_query'] = "Execute Query";
 $_['button_download'] = "Download Backup";

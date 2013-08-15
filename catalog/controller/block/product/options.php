@@ -43,20 +43,20 @@ class Catalog_Controller_Block_Product_Options extends Controller
 						$product_option_value['price'] = false;
 					}
 					else {
-						$pov_price = $product_option_value['price'];
-						
 						if ($this->config->get('config_show_price_with_tax')) {
-							$pov_price= $this->tax->calculate($pov_price, $product_info['tax_class_id']);
+							$product_option_value['price'] = $this->tax->calculate($product_option_value['price'], $product_info['tax_class_id']);
 						}
-						
-						$product_option_value['price'] = $this->currency->format($pov_price);
 						
 						//Show the price with the Product Option Name
-						if ($pov_price > 0) {
-							$product_option_value['value'] .= $this->_('text_option_price_add', $pov_price, $product_option_value['price']);
-						} elseif ($pov_price < 0) {
-							$product_option_value['value'] .= $this->_('text_option_price_subtract', $pov_price, $product_option_value['price']);
+						if ($product_option_value['price'] > 0) {
+							$product_option_value['display_price'] = $this->_('text_option_price_add', $this->currency->format($product_option_value['price']));
+						} elseif ($product_option_value['display_price'] < 0) {
+							$product_option_value['display_price'] = $this->_('text_option_price_subtract', $this->currency->format($product_option_value['price']));
+						} else {
+							$product_option_value['display_price'] = '';
 						}
+						
+						$product_option_value['value'] .= $product_option_value['display_price'];
 					}
 					
 					if ($product_option['type'] == 'image') {

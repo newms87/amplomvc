@@ -1,11 +1,4 @@
 /******** PAGE DEFAULTS ********************/
-
-@font-face {
-	font-family: MercurySemiBold;
-	src: url('../fonts/MercuryTextG4-SemiBold-Pro.eot');
-	src: local('☺'), url('../fonts/MercuryTextG4-SemiBold-Pro.otf') format('opentype'), url('../fonts/MercuryTextG4-SemiBold-Pro.woff') format('woff'), url('../fonts/MercuryTextG4-SemiBold-Pro.ttf') format('truetype'), url('../fonts/MercuryTextG4-SemiBold-Pro.svg') format('svg');
-}
-
 html {
 	overflow: -moz-scrollbars-vertical;
 	margin: 0;
@@ -25,7 +18,6 @@ body, td, th, input, textarea, select, a {
 h1, .welcome {
 	text-align: center;
 	color: #4F4F4F;
-	font-family: Arial, MercurySemiBold, Verdana;
 	margin-top: 0px;
 	margin-bottom: 10px;
 	font-size: 45px;
@@ -270,7 +262,6 @@ ul{
 	cursor: pointer;
 	color: #FFFFFF;
 	line-height: 12px;
-	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	font-weight: bold;
 	
@@ -320,7 +311,6 @@ input.button {
 }
 .box .box_heading {
 	padding: 0 10px 7px 10px;
-	font-family: Arial, Helvetica, sans-serif;
 	font-size: 14px;
 	font-weight: bold;
 	line-height: 14px;

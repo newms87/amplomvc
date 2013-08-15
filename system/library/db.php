@@ -199,7 +199,7 @@ class DB
 		return true;
 	}
 	
-	public function dump($file, $tables = '')
+	public function dump($file, $tables = '', $prefix = null)
 	{
 		_is_writable(dirname($file));
 		
@@ -209,6 +209,10 @@ class DB
 			$tables = $this->queryRows("SHOW TABLES");
 		}
 		
+		if (is_null($prefix)) {
+			$prefix = DB_PREFIX;
+		}
+		
 		$sql = '';
 		
 		foreach ($tables as $table) {
@@ -216,14 +220,14 @@ class DB
 				$table = current($table);
 			}
 			
-			if (!preg_match("/^".DB_PREFIX."/", $table)) {
-				$table = DB_PREFIX . $table;
-			}
+			$table = preg_replace("/^".DB_PREFIX."/",'',$table);
 			
-			$sql .= "DROP TABLE IF EXISTS `$table`;" . $eol;
-			$sql .= "CREATE TABLE `$table` (" . $eol;
+			$tablename = $prefix . $table;
 			
-			$columns = $this->queryRows("SHOW COLUMNS FROM `$table`");
+			$sql .= "DROP TABLE IF EXISTS `$tablename`;" . $eol;
+			$sql .= "CREATE TABLE `$tablename` (" . $eol;
+			
+			$columns = $this->queryRows("SHOW COLUMNS FROM `" . DB_PREFIX . "$table`");
 			
 			$primary_key = array();
 			
@@ -259,10 +263,10 @@ class DB
 			
 			$sql .= ");" . $eol . $eol;
 			
-			$rows = $this->queryRows("SELECT * FROM `$table`");
+			$rows = $this->queryRows("SELECT * FROM `" . DB_PREFIX . "$table`");
 			
 			if (!empty($rows)) {
-				$sql .= "INSERT INTO `$table` VALUES ";
+				$sql .= "INSERT INTO `$tablename` VALUES ";
 				foreach ($rows as $row) {
 					$sql .= "(";
 					foreach ($row as $key => $value) {

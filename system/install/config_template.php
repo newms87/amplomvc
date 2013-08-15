@@ -42,17 +42,3 @@ define("AMPLOCART_SESSION", "cross-store-session");
 
 //ROOT DIRECTORY
 define('SITE_DIR', str_replace('\\','/',dirname(__FILE__) . '/'));
-
-//SYSTEM DIRECTORIES
-define('DIR_EXCEL_TEMPLATE', SITE_DIR . 'system/php-excel/templates/');
-define('DIR_EXCEL_FPO', SITE_DIR . 'upload/fpo/');
-define('DIR_SYSTEM', SITE_DIR . 'system/');
-define('DIR_DATABASE', SITE_DIR . 'system/database/');
-define('DIR_DATABASE_BACKUP', SITE_DIR . 'system/database/backups/');
-define('DIR_CONFIG', SITE_DIR . 'system/config/');
-define('DIR_IMAGE', SITE_DIR . 'image/');
-define('DIR_CACHE', SITE_DIR . 'system/cache/');
-define('DIR_DOWNLOAD', SITE_DIR . 'download/');
-define('DIR_MERGED_FILES', SITE_DIR . 'system/plugins/merged/');
-define('DIR_LOGS', SITE_DIR . 'system/logs/');
-define("AMPLOCART_INSTALL_USER", 1);

@@ -324,10 +324,13 @@ class Catalog_Model_Catalog_Product extends Model
 			$restrictions = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_option_value_restriction WHERE product_id = " . (int)$product_id . " AND quantity > 1");
 			
 			foreach ($product_options as &$product_option) {
-				$product_option_values = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_option_value WHERE product_option_id = " . (int)$product_option['product_option_id'] . " ORDER BY sort_order ASC");
+				$product_option_value_list = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_option_value WHERE product_option_id = " . (int)$product_option['product_option_id'] . " ORDER BY sort_order ASC");
 				
-				foreach ($product_option_values as &$product_option_value) {
-					$product_option_value['restrictions'] = array_search_key('product_option_value_id', $product_option_value['product_option_value_id'], $restrictions);
+				$product_option_values = array();
+				
+				foreach ($product_option_value_list as $product_option_value) {
+					$product_option_values[$product_option_value['product_option_value_id']] = $product_option_value;
+					$product_option_values[$product_option_value['product_option_value_id']]['restrictions'] = array_search_key('product_option_value_id', $product_option_value['product_option_value_id'], $restrictions);
 				}
 				
 				$product_option['product_option_values'] = $product_option_values;

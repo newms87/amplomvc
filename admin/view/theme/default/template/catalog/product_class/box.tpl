@@ -22,6 +22,7 @@
 				<a href="#tab-data"><?= $tab_data; ?></a>
 				<a href="#tab-shipping-return"><?= $tab_shipping_return; ?></a>
 				<a href="#tab-links"><?= $tab_links; ?></a>
+				<a href="#tab-subscription"><?= $tab_subscription; ?></a>
 				<a href="#tab-attribute"><?= $tab_attribute; ?></a>
 				<a href="#tab-option"><?= $tab_option; ?></a>
 				<a href="#tab-special"><?= $tab_special; ?></a>
@@ -187,7 +188,8 @@
 							</td>
 						</tr>
 					</table>
-				</div>
+				</div> <!-- tab-shipping-return -->
+				
 				<div id="tab-links">
 					<table class="form">
 						<tr>
@@ -228,6 +230,33 @@
 						</tr>
 					</table>
 				</div> <!-- /tab-links -->
+				
+				<div id="tab-subscription">
+					<table class="form">
+						<tr>
+							<td>
+								<?= $entry_subscription; ?>
+								<? $this->builder->set_config('subscription_id', 'name'); ?><br /><br />
+								<?= $this->builder->build('select', $data_subscriptions, 'subscription'); ?><br /><br />
+								<a class="button" id="add_subscription"><?= $button_subscription; ?></a>
+							</td>
+							<td>
+								<ul id="subscription_list" class="easy_list">
+									<? foreach ($product_subscriptions as $row => $subscription) { ?>
+										<li class="subscription" data-row="<?= $row; ?>">
+											<input class="subscription_id" type="hidden" name="product_subscriptions[<?= $row; ?>][subscription_id]" value="<?= $subscription['subscription_id']; ?>" />
+											<span class="name"><?= $subscription['name']; ?></span>
+											<input class="sort_order" type="text" name="product_subscriptions[<?= $row; ?>][sort_order]" value="<?= $subscription['sort_order']; ?>" />
+											<? if (empty($subscription['no_delete'])) { ?>
+												<a class="delete_button text" onclick="$(this).closest('li').remove()"><?= $button_delete; ?></a>
+											<? } ?>
+										</li>
+									<? } ?>
+								</ul>
+							</td>
+						</tr>
+					</table>
+				</div> <!-- /tab-subscription -->
 				
 				<div id="tab-option">
 					<div id="vtab-option" class="vtabs">
@@ -310,16 +339,17 @@
 												<input type="hidden" name="<?= $product_option_value_row; ?>[value]" value="<?= $product_option_value['value']; ?>" />
 												<span class='option_value_label'><?= $product_option_value['value']; ?></span>
 											</td>
-											<td class="center">
+											<td class="center default_option">
 												<? switch ($product_option['type']) {
-													case 'select':
-													case 'image':
-													case 'radio': ?>
-														<input type="radio" name="<?= $product_option_value_row; ?>[default]" value="1" <?= $product_option_value['default'] ? 'checked="checked"' : ''; ?> />
-													<? break;
-													
 													case 'checkbox': ?>
 														<input type="checkbox" name="<?= $product_option_value_row; ?>[default]" value="1" <?= $product_option_value['default'] ? 'checked="checked"' : ''; ?> />
+													<? break;
+													
+													case 'select':
+													case 'image':
+													case 'radio': 
+													default: ?>
+														<input type="radio" name="<?= $product_option_value_row; ?>[default]" value="1" <?= $product_option_value['default'] ? 'checked="checked"' : ''; ?> />
 													<? break;
 												} ?>
 											</td>
@@ -613,6 +643,8 @@ function autocomplete_callback_product_option(event, data) {
 	
 	product_option = $.ac_template('po_list', 'add', data.item);
 	
+	product_option.data('option', data.item);
+	
 	if (!product_option) {
 		//If false, the product option already exists
 		if (product_option === false) {
@@ -651,8 +683,9 @@ function autocomplete_callback_product_option(event, data) {
 }
 
 function add_option_value(option_value) {
-	pov_list = option_value.closest('.product_option').find('.product_option_value_list');
-	ov_data = option_value.data('option_value');
+	var product_option = option_value.closest('.product_option');
+	var pov_list = product_option.find('.product_option_value_list');
+	var ov_data = option_value.data('option_value');
 	
 	row = pov_list.ac_template('pov_list', 'add', ov_data);
 	row.find('.option_value_label').html(ov_data.value);
@@ -660,6 +693,8 @@ function add_option_value(option_value) {
 	if (ov_data.image) {
 		row.find('.image .iu_thumb').attr('src', ov_data.thumb);
 	}
+	
+	row.find('.default_option input').attr('type', product_option.data('option').type);
 	
 	row.data('option_value', ov_data);
 	
@@ -752,19 +787,27 @@ $('#product_image_list').sortable({cursor:'move', stop: function(){$(this).updat
 //--></script>
 
 <script type="text/javascript">//<!--
-$('#product_discount_list').ac_template('discount_list', {defaults: <?= json_encode($product_discounts['__ac_template__']); ?>});
-
-$('#add_product_discount').click(function(){
-	$.ac_template('discount_list', 'add');
-});
-//--></script>
-
-<script type="text/javascript">//<!--
 $('#product_special_list').ac_template('special_list', {defaults: <?= json_encode($product_specials['__ac_template__']); ?>});
 
 $('#add_product_special').click(function(){
 	$.ac_template('special_list', 'add');
 });
+//--></script>
+
+<script type="text/javascript">//<!--
+$('#subscription_list').ac_template('subscription_list', {defaults: <?= json_encode($product_subscriptions['__ac_template__']); ?>});
+
+$('#add_subscription').click(function(){
+	select = $('select[name=subscription]');
+	
+	sub_row = $.ac_template('subscription_list', 'add', {subscription_id: select.val()} );
+	
+	sub_row.find('.name').html(select.find('option[value='+select.val()+']').html());
+	
+	$('#subscription_list').update_index('.sort_order');
+});
+
+$('#subscription_list').sortable({cursor:'move', stop: function(){$(this).update_index('.sort_order');} });
 //--></script>
 
 <script type="text/javascript">//<!--

@@ -49,3 +49,7 @@ cache
 /admin/model/catalog/subscription.php
 /admin/view/theme/default/template/catalog/subscription_form.tpl
 /admin/view/theme/default/template/catalog/subscription_list.tpl
+
+/admin/language/english/catalog/product_subscription.php
+/catalog/language/english/product/subscription.php
+/catalog/model/catalog/subscription.php

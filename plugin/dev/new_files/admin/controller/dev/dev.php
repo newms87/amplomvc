@@ -137,6 +137,9 @@ class Admin_Controller_Dev_Dev extends Controller
 					$this->message->add('warning', $this->_('error_download_backup_file'));
 				}
 			}
+			elseif (isset($_POST['default_installation'])) {
+				$this->dev->site_backup(DIR_SYSTEM . 'install/db.sql', null, '%__TABLE_PREFIX__%');
+			}
 			elseif (isset($_POST['site_backup'])) {
 				$tables = isset($_POST['tables']) ? $_POST['tables'] : null;
 				

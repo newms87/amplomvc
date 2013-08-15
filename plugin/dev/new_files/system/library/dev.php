@@ -13,19 +13,21 @@ class Dev
 		return $this->registry->get($key);
 	}
 	
-	public function site_backup($file = null, $tables = null)
+	public function site_backup($file = null, $tables = null, $prefix = null)
 	{
 		$site_name = $this->config->get('config_name');
 		
-		if (!empty($tables)) {
-			$table_string = count($tables) > 3 ? $tables[0] . '+' . $tables[1] . '+' . (count($tables)-2) . '_more' : implode('+', $tables);
-			$file = DIR_DATABASE_BACKUP . "dump_" . $table_string . '_' . date('Y-m-d-G_i_s') . ".sql";
-		}
-		else {
-			$file = DIR_DATABASE_BACKUP . "full_backup_" . date('Y-m-d-G_i_s') . ".sql";
+		if (!$file) {
+			if (!empty($tables)) {
+				$table_string = count($tables) > 3 ? $tables[0] . '+' . $tables[1] . '+' . (count($tables)-2) . '_more' : implode('+', $tables);
+				$file = DIR_DATABASE_BACKUP . "dump_" . $table_string . '_' . date('Y-m-d-G_i_s') . ".sql";
+			}
+			else {
+				$file = DIR_DATABASE_BACKUP . "full_backup_" . date('Y-m-d-G_i_s') . ".sql";
+			}
 		}
 		
-		if ($this->db->dump($file, $tables)) {
+		if ($this->db->dump($file, $tables, $prefix)) {
 			$this->message->add('success', "Successfully backed up $site_name!");
 			
 			return true;

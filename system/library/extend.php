@@ -48,9 +48,13 @@ class Extend extends Library
 		return true;
 	}
 	
-	public function removeNavigationLink($name)
+	public function removeNavigationLink($group, $name)
 	{
-		$navigation_ids = $this->db->queryColumn("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE name = '" . $this->db->escape($name) . "'");
+		$query = "SELECT navigation_id FROM " . DB_PREFIX . "navigation n" .
+		" LEFT JOIN " . DB_PREFIX . "navigation_group ng ON (ng.navigation_group_id=n.navigation_group_id)" . 
+		" WHERE ng.name = '" . $this->db->escape($group) . "' AND n.name = '" . $this->db->escape($name) . "'";
+		
+		$navigation_ids = $this->db->queryColumn($query);
 		
 		foreach ($navigation_ids as $navigation_id) {
 			$this->Model_Design_Navigation->deleteNavigationLink($navigation_id);

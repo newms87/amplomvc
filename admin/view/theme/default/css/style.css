@@ -507,18 +507,11 @@ ul > li > ul > li:hover > ul.link_list, ul > li > ul > li.hover > ul.link_list{
 	font-weight: bold;
 	
 	background: #003366; /* Old browsers */
-	background: -webkit-linear-gradient(top,  #003366 0%,#212121 100%); /* Chrome10+,Safari5.1+ */
-	background: -moz-linear-gradient(top,  #003366 0%, #212121 100%); /* FF3.6+ */
-	background: -ms-linear-gradient(top,  #003366 0%,#212121 100%); /* IE10+ */
+	background: -webkit-linear-gradient(top,  #003366 0%,#212121 100%); /* Mobile, Safari5.1+ */
 	background: linear-gradient(to bottom,  #003366 0%,#212121 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#003366', endColorstr='#212121',GradientType=0 ); /* IE6-8 */
-
-	-webkit-border-radius: 7px 7px 7px 7px;
-	-moz-border-radius: 7px 7px 7px 7px;
-	-khtml-border-radius: 7px 7px 7px 7px;
+	
 	border-radius: 7px 7px 7px 7px;
-	-webkit-box-shadow: 0px 2px 2px #DDDDDD;
-	-moz-box-shadow: 0px 2px 2px #DDDDDD;
 	box-shadow: 0px 2px 2px #DDDDDD;
 }
 .button {
@@ -535,11 +528,10 @@ input.button {
 .button:hover{
 	background: #212121; /* Old browsers */
 	background: -webkit-linear-gradient(top,  #212121 0%,#003366 100%); /* Chrome10+,Safari5.1+ */
-	background: -moz-linear-gradient(top,  #212121 0%, #003366 100%); /* FF3.6+ */
-	background: -ms-linear-gradient(top,  #212121 0%,#003366 100%); /* IE10+ */
 	background: linear-gradient(to bottom,  #212121 0%,#003366 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#212121', endColorstr='#003366',GradientType=0 ); /* IE6-8 */
 }
+
 .button:active {
 	position:relative;
 	top:2px;
@@ -2120,9 +2112,19 @@ body .easy_list li textarea:focus{
 	padding: 0 40px;
 }
 
+div .easy_list  li > * + *{
+	margin-left: 10px;
+}
+
 .easy_list .title{
 	font-size: 16px;
 	font-weight:bold;
+	max-width: 200px;
+}
+
+.easy_list .sort_order{
+	width: 20px;
+	text-align:center;
 }
 
 /* FAQ Block */
