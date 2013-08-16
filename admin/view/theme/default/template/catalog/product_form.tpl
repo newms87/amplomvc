@@ -235,16 +235,17 @@
 							<td><input type="text" name="related" value="" /></td>
 						</tr>
 						<tr>
-							<td>&nbsp;</td>
+							<td></td>
 							<td><div id="product-related" class="scrollbox">
-									<? $class = 'odd'; ?>
-									<? foreach ($product_related as $product_related) { ?>
-									<? $class = ($class == 'even' ? 'odd' : 'even'); ?>
-									<div id="product-related<?= $product_related['product_id']; ?>" class="<?= $class; ?>"> <?= $product_related['name']; ?><img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" />
+									<? foreach ($product_related as $row => $product_related) { ?>
+									<div class="product_related" data-row="<?= $row; ?>">
+										<span class="name"><?= $product_related['name']; ?></span>
+										<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" />
 										<input type="hidden" name="product_related[]" value="<?= $product_related['product_id']; ?>" />
 									</div>
 									<? } ?>
-								</div></td>
+								</div>
+							</td>
 						</tr>
 					</table>
 				</div>
