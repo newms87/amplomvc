@@ -8,30 +8,30 @@ class Catalog_Controller_Account_Download extends Controller
 
 			$this->url->redirect($this->url->link('account/login'));
 		}
-					
+
 		$this->language->load('account/download');
 
 		$this->document->setTitle($this->_('head_title'));
 
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-			$this->breadcrumb->add($this->_('text_downloads'), $this->url->link('account/download'));
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
+		$this->breadcrumb->add($this->_('text_downloads'), $this->url->link('account/download'));
 
 		$download_total = $this->Model_Account_Download->getTotalDownloads();
-		
+
 		if ($download_total) {
-		$this->template->load('account/download');
+			$this->template->load('account/download');
 
 			if (isset($_GET['page'])) {
 				$page = $_GET['page'];
 			} else {
 				$page = 1;
 			}
-	
+
 			$this->data['downloads'] = array();
-			
+
 			$results = $this->Model_Account_Download->getDownloads(($page - 1) * $this->config->get('config_catalog_limit'), $this->config->get('config_catalog_limit'));
-			
+
 			foreach ($results as $result) {
 				if (file_exists(DIR_DOWNLOAD . $result['filename'])) {
 					$size = filesize(DIR_DOWNLOAD . $result['filename']);
@@ -56,20 +56,20 @@ class Catalog_Controller_Account_Download extends Controller
 					}
 
 					$this->data['downloads'][] = array(
-						'order_id'	=> $result['order_id'],
+						'order_id'   => $result['order_id'],
 						'date_added' => $this->date->format($result['date_added'], $this->language->getInfo('date_format_short')),
-						'name'		=> $result['name'],
+						'name'       => $result['name'],
 						'remaining'  => $result['remaining'],
-						'size'		=> round(substr($size, 0, strpos($size, '.') + 4), 2) . $suffix[$i],
-						'href'		=> $this->url->link('account/download/download', 'order_download_id=' . $result['order_download_id'])
+						'size'       => round(substr($size, 0, strpos($size, '.') + 4), 2) . $suffix[$i],
+						'href'       => $this->url->link('account/download/download', 'order_download_id=' . $result['order_download_id'])
 					);
 				}
 			}
-		
+
 			$this->pagination->init();
-			$this->pagination->total = $download_total;
+			$this->pagination->total  = $download_total;
 			$this->data['pagination'] = $this->pagination->render();
-			
+
 			$this->data['continue'] = $this->url->link('account/account');
 
 			$this->children = array(
@@ -80,10 +80,10 @@ class Catalog_Controller_Account_Download extends Controller
 				'common/footer',
 				'common/header'
 			);
-							
+
 			$this->response->setOutput($this->render());
 		} else {
-		$this->template->load('error/not_found');
+			$this->template->load('error/not_found');
 
 			$this->language->set('text_error', $this->_('text_empty'));
 
@@ -97,7 +97,7 @@ class Catalog_Controller_Account_Download extends Controller
 				'common/footer',
 				'common/header'
 			);
-										
+
 			$this->response->setOutput($this->render());
 		}
 	}
@@ -115,9 +115,9 @@ class Catalog_Controller_Account_Download extends Controller
 		} else {
 			$order_download_id = 0;
 		}
-		
+
 		$download_info = $this->Model_Account_Download->getDownload($order_download_id);
-		
+
 		if ($download_info) {
 			$file = DIR_DOWNLOAD . $download_info['filename'];
 			$mask = basename($download_info['mask']);
@@ -132,11 +132,11 @@ class Catalog_Controller_Account_Download extends Controller
 					header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 					header('Pragma: public');
 					header('Content-Length: ' . filesize($file));
-					
+
 					readfile($file, 'rb');
-					
+
 					$this->Model_Account_Download->updateRemaining($_GET['order_download_id']);
-					
+
 					exit;
 				} else {
 					exit('Error: Could not find file ' . $file . '!');
@@ -148,4 +148,4 @@ class Catalog_Controller_Account_Download extends Controller
 			$this->url->redirect($this->url->link('account/download'));
 		}
 	}
-}
+}

@@ -3,4 +3,4 @@
 $_['head_title'] = 'Latest';
 
 // Text
-$_['text_reviews']  = 'Based on %s reviews.'; 
+$_['text_reviews'] = 'Based on %s reviews.';

@@ -9,7 +9,7 @@ echo "$text_products\n";
 
 foreach ($order_products as $product) {
 	echo "$product[quantity]x $product[name] ($product[model]) - $product[total]\n";
-	
+
 	foreach ($product['option'] as $option) {
 		echo chr(9) . "- $option[name]: $option[value]\n";
 	}

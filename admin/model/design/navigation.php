@@ -418,9 +418,9 @@ class Admin_Model_Design_Navigation extends Model
 						'status'			=> 1,
 					),
 
-				'catalog_designers' => array(
-					'display_name'	=> 'Designers',
-					'name'			=> 'catalog_designers',
+				'catalog_manufacturer' => array(
+					'display_name'	=> 'Manufacturers',
+					'name'			=> 'catalog_manufacturer',
 					'title'			=> '',
 					'href'			=> 'catalog/manufacturer',
 					'query'			=> '',

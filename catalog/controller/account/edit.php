@@ -12,20 +12,20 @@ class Catalog_Controller_Account_Edit extends Controller
 		}
 
 		$this->language->load('account/edit');
-		
+
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		if ($this->request->isPost() && $this->validate()) {
 			$this->customer->edit($_POST);
-			
+
 			$this->message->add('success', $this->_('text_success'));
 
 			$this->url->redirect($this->url->link('account/account'));
 		}
 
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-			$this->breadcrumb->add($this->_('text_edit'), $this->url->link('account/edit'));
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
+		$this->breadcrumb->add($this->_('text_edit'), $this->url->link('account/edit'));
 
 		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -44,13 +44,13 @@ class Catalog_Controller_Account_Edit extends Controller
 		} else {
 			$this->data['error_lastname'] = '';
 		}
-		
+
 		if (isset($this->error['email'])) {
 			$this->data['error_email'] = $this->error['email'];
 		} else {
 			$this->data['error_email'] = '';
 		}
-		
+
 		if (isset($this->error['telephone'])) {
 			$this->data['error_telephone'] = $this->error['telephone'];
 		} else {
@@ -113,7 +113,7 @@ class Catalog_Controller_Account_Edit extends Controller
 			'common/footer',
 			'common/header'
 		);
-						
+
 		$this->response->setOutput($this->render());
 	}
 
@@ -130,7 +130,7 @@ class Catalog_Controller_Account_Edit extends Controller
 		if (!$this->validation->email($_POST['email'])) {
 			$this->error['email'] = $this->_('error_email');
 		}
-		
+
 		if (($this->customer->info('email') !== $_POST['email']) && $this->customer->emailRegistered($_POST['email'])) {
 			$this->error['warning'] = $this->_('error_exists');
 		}
@@ -141,4 +141,4 @@ class Catalog_Controller_Account_Edit extends Controller
 
 		return $this->error ? false : true;
 	}
-}
+}

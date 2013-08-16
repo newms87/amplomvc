@@ -9,7 +9,7 @@ class Catalog_Controller_Payment_FreeCheckout extends Controller
 
 		$this->render();
 	}
-	
+
 	public function confirm()
 	{
 		$this->order->update($this->session->data['order_id'], $this->config->get('free_checkout_order_status_id'));

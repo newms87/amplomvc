@@ -5,7 +5,8 @@
 			<? foreach ($videos as $video) { ?>
 				<div class="youtube_video">
 					<h3><?= $video['title']; ?></h3>
-					<iframe width="<?= $video['width']; ?>" height="<?= $video['height']; ?>" src="<?= $video['href']; ?>" frameborder="0" allowfullscreen></iframe>
+					<iframe width="<?= $video['width']; ?>" height="<?= $video['height']; ?>" src="<?= $video['href']; ?>"
+					        frameborder="0" allowfullscreen></iframe>
 				</div>
 			<? } ?>
 		<? } ?>

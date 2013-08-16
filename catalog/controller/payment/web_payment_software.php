@@ -6,16 +6,16 @@ class Catalog_Controller_Payment_WebPaymentSoftware extends Controller
 		$this->template->load('payment/web_payment_software');
 
 		$this->language->load('payment/web_payment_software');
-		
+
 		$this->data['months'] = array();
-		
+
 		for ($i = 1; $i <= 12; $i++) {
 			$this->data['months'][] = array(
 				'text'  => strftime('%B', mktime(0, 0, 0, $i, 1, 2000)),
 				'value' => sprintf('%02d', $i)
 			);
 		}
-		
+
 		$today = getdate();
 
 		$this->data['year_expire'] = array();
@@ -29,12 +29,12 @@ class Catalog_Controller_Payment_WebPaymentSoftware extends Controller
 
 		$this->render();
 	}
-	
+
 	public function send()
 	{
 		$order_info = $this->order->get($this->session->data['order_id']);
-		
-		$request  = 'MERCHANT_ID=' . urlencode($this->config->get('web_payment_software_merchant_name'));
+
+		$request = 'MERCHANT_ID=' . urlencode($this->config->get('web_payment_software_merchant_name'));
 		$request .= '&MERCHANT_KEY=' . urlencode($this->config->get('web_payment_software_merchant_key'));
 		$request .= '&TRANS_TYPE=' . urlencode($this->config->get('web_payment_software_method') == 'capture' ? 'AuthCapture' : 'AuthOnly');
 		$request .= '&AMOUNT=' . urlencode($this->currency->format($order_info['total'], $order_info['currency_code'], 1.00000, false));
@@ -51,11 +51,11 @@ class Catalog_Controller_Payment_WebPaymentSoftware extends Controller
 		$request .= '&CC_PHONE=' . urlencode($order_info['telephone']);
 		$request .= '&CC_EMAIL=' . urlencode($order_info['email']);
 		$request .= '&INVOICE_NUM=' . urlencode($this->session->data['order_id']);
-	
+
 		if ($this->config->get('web_payment_software_mode') == 'test') {
 			$request .= '&TEST_MODE=1';
 		}
-		
+
 		$curl = curl_init('https://secure.web-payment-software.com/gateway');
 
 		curl_setopt($curl, CURLOPT_PORT, 443);
@@ -68,71 +68,71 @@ class Catalog_Controller_Payment_WebPaymentSoftware extends Controller
 		curl_setopt($curl, CURLOPT_POSTFIELDS, $request);
 
 		$response = curl_exec($curl);
-		
+
 		curl_close($curl);
-		
+
 		//If in test mode strip results to only contain xml data
 		if ($this->config->get('web_payment_software_mode') == 'test') {
 			$end_index = strpos($response, '</WebPaymentSoftwareResponse>');
-			$debug = substr($response, $end_index + 30);
-			$response = substr($response, 0, $end_index)  .'</WebPaymentSoftwareResponse>';
+			$debug     = substr($response, $end_index + 30);
+			$response  = substr($response, 0, $end_index) . '</WebPaymentSoftwareResponse>';
 		}
-		
+
 		//get response xml
 		$xml = simplexml_load_string($response);
 
 		//create object to use as json
 		$json = array();
-		
+
 		//If successful log transaction in opencart system
 		if ('00' === (string)$xml->response_code) {
 			$this->order->update($this->session->data['order_id'], $this->config->get('config_order_complete_status_id'));
-			
+
 			$message = '';
-			
+
 			$message .= 'Response Code: ';
-			
+
 			if (isset($xml->response_code)) {
 				$message .= (string)$xml->response_code . "\n";
 			}
-			
+
 			$message .= 'Approval Code: ';
-			
+
 			if (isset($xml->approval_code)) {
 				$message .= (string)$xml->approval_code . "\n";
 			}
-			
+
 			$message .= 'AVS Result Code: ';
-			
+
 			if (isset($xml->avs_result_code)) {
 				$message .= (string)$xml->avs_result_code . "\n";
 			}
-	
+
 			$message .= 'Transaction ID (web payment software order id): ';
-			
+
 			if (isset($xml->order_id)) {
 				$message .= (string)$xml->order_id . "\n";
 			}
 
 			$message .= 'CVV Result Code: ';
-			
+
 			if (isset($xml->cvv_result_code)) {
 				$message .= (string)$xml->cvv_result_code . "\n";
 			}
-			
+
 			$message .= 'Response Text: ';
-			
+
 			if (isset($xml->response_text)) {
 				$message .= (string)$xml->response_text . "\n";
 			}
-			
+
 			$this->Model_Checkout_Order->update_order($this->session->data['order_id'], $this->config->get('web_payment_software_order_status_id'), $message, false);
-			
+
 			$json['success'] = $this->url->link('checkout/success');
 		} else {
 			$json['error'] = (string)$xml->response_text;
 		}
-		
+
 		$this->response->setOutput(json_encode($json));
 	}
-}
+}

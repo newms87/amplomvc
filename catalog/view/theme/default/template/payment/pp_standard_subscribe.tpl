@@ -1,5 +1,5 @@
 <? if ($testmode) { ?>
-<div class="message_box warning"><?= $text_testmode; ?></div>
+	<div class="message_box warning"><?= $text_testmode; ?></div>
 <? } ?>
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
 	<!-- Identify your business so that you can collect the payments. -->
@@ -24,9 +24,9 @@
 	<!-- Display the payment button. -->
 	<div class="submit_pp_button">
 		<input type="image" name="submit" border="0"
-		src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribe_LG.gif"
-		alt="PayPal - The safer, easier way to pay online">
-		<img alt="" border="0" width="1" height="1" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" >
+		       src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribe_LG.gif"
+		       alt="PayPal - The safer, easier way to pay online">
+		<img alt="" border="0" width="1" height="1" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif">
 	</div>
 </form>
 <!--
@@ -80,7 +80,7 @@
 	<? if($page_style){?>
 	<input type="hidden" name="page_style" value="<?= $page_style; ?>" />
 	<? }?>
-	
+
 	<div class="buttons">
 		<div class="right">
 			<div id='submit_pp_button'><div id="submit_payment"><?= $text_submit_payment; ?></div><input type="submit" value="<?= $button_confirm; ?>" class="button" /></div>
@@ -94,20 +94,24 @@
 -->
 
 <script type="text/javascript">//<!--
-$('#submit_pp_button input').click(function(){$('#processing_payment').fadeIn(500);$('#submit_pp_button').hide();check_order_update()});
+	$('#submit_pp_button input').click(function () {
+		$('#processing_payment').fadeIn(500);
+		$('#submit_pp_button').hide();
+		check_order_update()
+	});
 
-function check_order_update(){
-	$.ajax({
+	function check_order_update() {
+		$.ajax({
 			url: "<?= $url_check_order_status; ?>",
 			dataType: 'json',
-			success: function(json){
-				if(json['redirect']){
-						window.location = json['redirect'];
+			success: function (json) {
+				if (json['redirect']) {
+					window.location = json['redirect'];
 				}
 			},
-			complete: function(){
-				setTimeout(check_order_update,2000);
+			complete: function () {
+				setTimeout(check_order_update, 2000);
 			}
-	});
-}
-//--></script>
+		});
+	}
+	//--></script>

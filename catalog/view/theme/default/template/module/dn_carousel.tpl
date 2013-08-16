@@ -1,3 +1,3 @@
 <div class="dn_carousel">
-		DN CAROUSEL
+	DN CAROUSEL
 </div>

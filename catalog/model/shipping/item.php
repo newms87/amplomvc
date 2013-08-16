@@ -4,9 +4,9 @@ class Catalog_Model_Shipping_Item extends Model
 	function getQuote($address)
 	{
 		$this->language->load('shipping/item');
-		
+
 		$query = $this->query("SELECT * FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('item_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
-		
+
 		if (!$this->config->get('item_geo_zone_id')) {
 			$status = true;
 		} elseif ($query->num_rows) {
@@ -14,29 +14,29 @@ class Catalog_Model_Shipping_Item extends Model
 		} else {
 			$status = false;
 		}
-		
+
 		$method_data = array();
-	
+
 		if ($status) {
 			$quote_data = array();
-			
-				$quote_data['item'] = array(
-				'code'			=> 'item.item',
-				'title'		=> $this->_('text_description'),
-				'cost'			=> $this->config->get('item_cost') * $this->cart->countProducts(),
-					'tax_class_id' => $this->config->get('item_tax_class_id'),
-				'text'			=> $this->currency->format($this->tax->calculate($this->config->get('item_cost') * $this->cart->countProducts(), $this->config->get('item_tax_class_id')))
-				);
 
-				$method_data = array(
-				'code'		=> 'item',
-				'title'		=> $this->_('text_title'),
-				'quote'		=> $quote_data,
+			$quote_data['item'] = array(
+				'code'         => 'item.item',
+				'title'        => $this->_('text_description'),
+				'cost'         => $this->config->get('item_cost') * $this->cart->countProducts(),
+				'tax_class_id' => $this->config->get('item_tax_class_id'),
+				'text'         => $this->currency->format($this->tax->calculate($this->config->get('item_cost') * $this->cart->countProducts(), $this->config->get('item_tax_class_id')))
+			);
+
+			$method_data = array(
+				'code'       => 'item',
+				'title'      => $this->_('text_title'),
+				'quote'      => $quote_data,
 				'sort_order' => $this->config->get('item_sort_order'),
-				'error'		=> false
-				);
+				'error'      => false
+			);
 		}
-	
+
 		return $method_data;
 	}
-}
+}

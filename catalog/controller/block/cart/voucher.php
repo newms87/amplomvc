@@ -6,17 +6,17 @@ class Catalog_Controller_Block_Cart_Voucher extends Controller
 		$this->template->load('block/cart/voucher');
 
 		$this->language->load('block/cart/shipping');
-		
+
 		if (isset($_POST['voucher']) && $this->validateVoucher()) {
 			$this->session->data['voucher'] = $_POST['voucher'];
-				
+
 			$this->message->add('success', $this->_('text_voucher'));
 		}
-		
+
 		$defaults = array(
 			'voucher' => '',
 		);
-		
+
 		foreach ($defaults as $key => $default) {
 			if (isset($_POST[$key])) {
 				$this->data[$key] = $_POST[$key];
@@ -26,19 +26,19 @@ class Catalog_Controller_Block_Cart_Voucher extends Controller
 				$this->data[$key] = $default;
 			}
 		}
-		
+
 		//Render
 		$this->response->setOutput($this->render());
 	}
-	
+
 	private function validateVoucher()
 	{
 		$voucher_info = $this->System_Model_Voucher->getVoucherByCode($_POST['voucher']);
-		
+
 		if (!$voucher_info) {
 			$this->error['warning'] = $this->_('error_voucher');
 		}
-		
+
 		return $this->error ? false : true;
 	}
 }

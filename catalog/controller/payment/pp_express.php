@@ -7,10 +7,10 @@ class Catalog_Controller_Payment_PpExpress extends Controller
 
 		if (!$this->config->get('pp_express_test')) {
 			$this->data['action'] = 'https://www.pp_express.com/cgi-bin/webscr';
-  		} else {
+		} else {
 			$this->data['action'] = 'https://www.sandbox.pp_express.com/cgi-bin/webscr';
 		}
-		
+
 		$order_info = $this->order->get($this->session->data['order_id']);
 
 		if (!$this->config->get('pp_direct_test')) {
@@ -21,4 +21,4 @@ class Catalog_Controller_Payment_PpExpress extends Controller
 
 		$this->render();
 	}
-}
+}

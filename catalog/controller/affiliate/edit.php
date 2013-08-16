@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Affiliate_Edit extends Controller
 {
-	
+
 
 	public function index()
 	{
@@ -16,18 +16,18 @@ class Catalog_Controller_Affiliate_Edit extends Controller
 		$this->language->load('affiliate/edit');
 
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		if ($this->request->isPost() && $this->validate()) {
 			$this->Model_Affiliate_Affiliate->editAffiliate($_POST);
-			
+
 			$this->message->add('success', $this->_('text_success'));
 
 			$this->url->redirect($this->url->link('affiliate/account'));
 		}
 
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('text_account'), $this->url->link('affiliate/account'));
-			$this->breadcrumb->add($this->_('text_edit'), $this->url->link('affiliate/edit'));
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('text_account'), $this->url->link('affiliate/account'));
+		$this->breadcrumb->add($this->_('text_edit'), $this->url->link('affiliate/edit'));
 
 		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -46,30 +46,30 @@ class Catalog_Controller_Affiliate_Edit extends Controller
 		} else {
 			$this->data['error_lastname'] = '';
 		}
-		
+
 		if (isset($this->error['email'])) {
 			$this->data['error_email'] = $this->error['email'];
 		} else {
 			$this->data['error_email'] = '';
 		}
-		
+
 		if (isset($this->error['telephone'])) {
 			$this->data['error_telephone'] = $this->error['telephone'];
 		} else {
 			$this->data['error_telephone'] = '';
 		}
-  		if (isset($this->error['address_1'])) {
+		if (isset($this->error['address_1'])) {
 			$this->data['error_address_1'] = $this->error['address_1'];
 		} else {
 			$this->data['error_address_1'] = '';
 		}
-			
+
 		if (isset($this->error['city'])) {
 			$this->data['error_city'] = $this->error['city'];
 		} else {
 			$this->data['error_city'] = '';
 		}
-		
+
 		if (isset($this->error['postcode'])) {
 			$this->data['error_postcode'] = $this->error['postcode'];
 		} else {
@@ -87,7 +87,7 @@ class Catalog_Controller_Affiliate_Edit extends Controller
 		} else {
 			$this->data['error_zone'] = '';
 		}
-		
+
 		$this->data['action'] = $this->url->link('affiliate/edit');
 
 		if (!$this->request->isPost()) {
@@ -133,7 +133,7 @@ class Catalog_Controller_Affiliate_Edit extends Controller
 		} else {
 			$this->data['fax'] = '';
 		}
-		
+
 		if (isset($_POST['company'])) {
 			$this->data['company'] = $_POST['company'];
 		} elseif (!empty($affiliate_info)) {
@@ -149,7 +149,7 @@ class Catalog_Controller_Affiliate_Edit extends Controller
 		} else {
 			$this->data['website'] = '';
 		}
-				
+
 		if (isset($_POST['address_1'])) {
 			$this->data['address_1'] = $_POST['address_1'];
 		} elseif (!empty($affiliate_info)) {
@@ -173,7 +173,7 @@ class Catalog_Controller_Affiliate_Edit extends Controller
 		} else {
 			$this->data['postcode'] = '';
 		}
-		
+
 		if (isset($_POST['city'])) {
 			$this->data['city'] = $_POST['city'];
 		} elseif (!empty($affiliate_info)) {
@@ -183,21 +183,21 @@ class Catalog_Controller_Affiliate_Edit extends Controller
 		}
 
 		if (isset($_POST['country_id'])) {
-				$this->data['country_id'] = $_POST['country_id'];
+			$this->data['country_id'] = $_POST['country_id'];
 		} elseif (!empty($affiliate_info)) {
 			$this->data['country_id'] = $affiliate_info['country_id'];
 		} else {
-				$this->data['country_id'] = $this->config->get('config_country_id');
+			$this->data['country_id'] = $this->config->get('config_country_id');
 		}
 
 		if (isset($_POST['zone_id'])) {
-				$this->data['zone_id'] = $_POST['zone_id'];
+			$this->data['zone_id'] = $_POST['zone_id'];
 		} elseif (!empty($affiliate_info)) {
 			$this->data['zone_id'] = $affiliate_info['zone_id'];
 		} else {
-				$this->data['zone_id'] = '';
+			$this->data['zone_id'] = '';
 		}
-		
+
 		$this->data['countries'] = $this->Model_Localisation_Country->getCountries();
 
 		$this->data['back'] = $this->url->link('affiliate/account');
@@ -210,7 +210,7 @@ class Catalog_Controller_Affiliate_Edit extends Controller
 			'common/footer',
 			'common/header'
 		);
-						
+
 		$this->response->setOutput($this->render());
 	}
 
@@ -227,7 +227,7 @@ class Catalog_Controller_Affiliate_Edit extends Controller
 		if ((strlen($_POST['email']) > 96) || !preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $_POST['email'])) {
 			$this->error['email'] = $this->_('error_email');
 		}
-		
+
 		if (($this->affiliate->getEmail() != $_POST['email']) && $this->Model_Affiliate_Affiliate->getTotalAffiliatesByEmail($_POST['email'])) {
 			$this->error['warning'] = $this->_('error_exists');
 		}
@@ -236,27 +236,27 @@ class Catalog_Controller_Affiliate_Edit extends Controller
 			$this->error['telephone'] = $this->_('error_telephone');
 		}
 		if ((strlen($_POST['address_1']) < 3) || (strlen($_POST['address_1']) > 128)) {
-				$this->error['address_1'] = $this->_('error_address_1');
+			$this->error['address_1'] = $this->_('error_address_1');
 		}
 
 		if ((strlen($_POST['city']) < 2) || (strlen($_POST['city']) > 128)) {
-				$this->error['city'] = $this->_('error_city');
+			$this->error['city'] = $this->_('error_city');
 		}
-		
+
 		$country_info = $this->Model_Localisation_Country->getCountry($_POST['country_id']);
-		
+
 		if ($country_info && $country_info['postcode_required'] && (strlen($_POST['postcode']) < 2) || (strlen($_POST['postcode']) > 10)) {
 			$this->error['postcode'] = $this->_('error_postcode');
 		}
 
 		if ($_POST['country_id'] == '') {
-				$this->error['country'] = $this->_('error_country');
+			$this->error['country'] = $this->_('error_country');
 		}
-		
+
 		if ($_POST['zone_id'] == '') {
-				$this->error['zone'] = $this->_('error_zone');
+			$this->error['zone'] = $this->_('error_zone');
 		}
-		
+
 		return $this->error ? false : true;
 	}
-}
+}

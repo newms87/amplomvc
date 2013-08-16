@@ -1,13 +1,13 @@
 <?php
 // Heading
-$_['head_title']	= 'Reward Points';
+$_['head_title'] = 'Reward Points';
 
 // Text
-$_['text_total']		= 'Order Totals';
-$_['text_success']	= 'Success: You have modified reward points total!';
+$_['text_total']   = 'Order Totals';
+$_['text_success'] = 'Success: You have modified reward points total!';
 
 // Entry
-$_['entry_status']	= 'Status:';
+$_['entry_status']     = 'Status:';
 $_['entry_sort_order'] = 'Sort Order:';
 
 // Error

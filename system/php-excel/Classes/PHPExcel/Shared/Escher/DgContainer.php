@@ -18,34 +18,34 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category	PHPExcel
- * @package	PHPExcel_Shared_Escher
+ * @category   PHPExcel
+ * @package   PHPExcel_Shared_Escher
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version	1.7.7, 2012-05-19
+ * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt   LGPL
+ * @version   1.7.7, 2012-05-19
  */
 
 /**
  * PHPExcel_Shared_Escher_DgContainer
  *
- * @category	PHPExcel
- * @package	PHPExcel_Shared_Escher
+ * @category   PHPExcel
+ * @package   PHPExcel_Shared_Escher
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_Shared_Escher_DgContainer
 {
 	/**
-	* Drawing index, 1-based.
-	*
-	* @var int
-	*/
+	 * Drawing index, 1-based.
+	 *
+	 * @var int
+	 */
 	private $_dgId;
 
 	/**
-	* Last shape index in this drawing
-	*
-	* @var int
-	*/
+	 * Last shape index in this drawing
+	 *
+	 * @var int
+	 */
 	private $_lastSpId;
 
 	private $_spgrContainer = null;

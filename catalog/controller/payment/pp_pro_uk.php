@@ -6,11 +6,11 @@ class Catalog_Controller_Payment_PpProUk extends Controller
 		$this->template->load('payment/pp_pro_uk');
 
 		$this->language->load('payment/pp_pro_uk');
-		
+
 		$order_info = $this->order->get($this->session->data['order_id']);
-		
+
 		$this->data['owner'] = $order_info['payment_firstname'] . ' ' . $order_info['payment_lastname'];
-		
+
 		$this->data['cards'] = array();
 
 		$this->data['cards'][] = array(
@@ -27,25 +27,25 @@ class Catalog_Controller_Payment_PpProUk extends Controller
 			'text'  => 'Maestro',
 			'value' => '9'
 		);
-		
+
 		$this->data['cards'][] = array(
 			'text'  => 'Solo',
 			'value' => 'S'
 		);
-	
+
 		$this->data['months'] = array();
-		
+
 		for ($i = 1; $i <= 12; $i++) {
 			$this->data['months'][] = array(
 				'text'  => strftime('%B', mktime(0, 0, 0, $i, 1, 2000)),
 				'value' => sprintf('%02d', $i)
 			);
 		}
-		
+
 		$today = getdate();
-		
+
 		$this->data['year_valid'] = array();
-		
+
 		for ($i = $today['year'] - 10; $i < $today['year'] + 1; $i++) {
 			$this->data['year_valid'][] = array(
 				'text'  => strftime('%Y', mktime(0, 0, 0, 1, 1, $i)),
@@ -68,16 +68,16 @@ class Catalog_Controller_Payment_PpProUk extends Controller
 	public function send()
 	{
 		$this->language->load('payment/pp_pro_uk');
-		
+
 		$order_info = $this->order->get($this->session->data['order_id']);
-				
+
 		if (!$this->config->get('pp_pro_uk_transaction')) {
 			$payment_type = 'A';
 		} else {
 			$payment_type = 'S';
 		}
-		
-		$request  = 'USER=' . urlencode($this->config->get('pp_pro_uk_user'));
+
+		$request = 'USER=' . urlencode($this->config->get('pp_pro_uk_user'));
 		$request .= '&VENDOR=' . urlencode($this->config->get('pp_pro_uk_vendor'));
 		$request .= '&PARTNER=' . urlencode($this->config->get('pp_pro_uk_partner'));
 		$request .= '&PWD=' . urlencode($this->config->get('pp_pro_uk_password'));
@@ -95,17 +95,17 @@ class Catalog_Controller_Payment_PpProUk extends Controller
 		$request .= '&EMAIL=' . urlencode($order_info['email']);
 		$request .= '&ACCT=' . urlencode(str_replace(' ', '', $_POST['cc_number']));
 		$request .= '&ACCTTYPE=' . urlencode($_POST['cc_type']);
-		$request .= '&CARDSTART=' . urlencode($_POST['cc_start_date_month'] . substr($_POST['cc_start_date_year'], - 2, 2));
-		$request .= '&EXPDATE=' . urlencode($_POST['cc_expire_date_month'] . substr($_POST['cc_expire_date_year'], - 2, 2));
+		$request .= '&CARDSTART=' . urlencode($_POST['cc_start_date_month'] . substr($_POST['cc_start_date_year'], -2, 2));
+		$request .= '&EXPDATE=' . urlencode($_POST['cc_expire_date_month'] . substr($_POST['cc_expire_date_year'], -2, 2));
 		$request .= '&CVV2=' . urlencode($_POST['cc_cvv2']);
 		$request .= '&CARDISSUE=' . urlencode($_POST['cc_issue']);
-		
+
 		if (!$this->config->get('pp_pro_uk_test')) {
 			$curl = curl_init('https://payflowpro.verisign.com/transaction');
 		} else {
 			$curl = curl_init('https://pilot-payflowpro.verisign.com/transaction');
 		}
-		
+
 		curl_setopt($curl, CURLOPT_PORT, 443);
 		curl_setopt($curl, CURLOPT_HEADER, 0);
 		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
@@ -117,14 +117,14 @@ class Catalog_Controller_Payment_PpProUk extends Controller
 		curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-VPS-REQUEST-ID: ' . md5($this->session->data['order_id'] . rand())));
 
 		$response = curl_exec($curl);
-  		
+
 		curl_close($curl);
-		
+
 		if (!$response) {
 			$this->error_log->write('DoDirectPayment failed: ' . curl_error($curl) . '(' . curl_errno($curl) . ')');
 		}
-		
- 		$response_data = array();
+
+		$response_data = array();
 
 		parse_str($response, $response_data);
 
@@ -132,9 +132,9 @@ class Catalog_Controller_Payment_PpProUk extends Controller
 
 		if ($response_data['RESULT'] == '0') {
 			$this->order->update($this->session->data['order_id'], $this->config->get('config_order_complete_status_id'));
-			
+
 			$message = '';
-			
+
 			if (isset($response_data['AVSCODE'])) {
 				$message .= 'AVSCODE: ' . $response_data['AVSCODE'] . "\n";
 			}
@@ -146,9 +146,9 @@ class Catalog_Controller_Payment_PpProUk extends Controller
 			if (isset($response_data['TRANSACTIONID'])) {
 				$message .= 'TRANSACTIONID: ' . $response_data['TRANSACTIONID'] . "\n";
 			}
-			
+
 			$this->Model_Checkout_Order->update_order($this->session->data['order_id'], $this->config->get('pp_pro_uk_order_status_id'), $message, false);
-		
+
 			$json['success'] = $this->url->link('checkout/success');
 		} else {
 			switch ($response_data['RESULT']) {
@@ -171,7 +171,7 @@ class Catalog_Controller_Payment_PpProUk extends Controller
 					break;
 			}
 		}
-		
+
 		$this->response->setOutput(json_encode($json));
 	}
-}
+}
