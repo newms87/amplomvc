@@ -23,12 +23,6 @@ cache
 /admin/view/theme/*
 !/admin/view/theme/default
 
-/admin/controller/catalog/product_class.php
-/admin/language/english/catalog/product_class.php
-/admin/model/catalog/product_class.php
-/admin/view/theme/default/template/catalog/product_class_form.tpl
-/admin/view/theme/default/template/catalog/product_class_list.tpl
-
 /admin/controller/block/widget/janrain.php
 /admin/language/english/block/widget/janrain.php
 /admin/view/theme/default/template/block/widget/janrain_profile.tpl
