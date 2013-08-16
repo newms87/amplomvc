@@ -1,6 +1,6 @@
 <?php
 // Text
-$_['text_portal']             = 'Designer Portal';
+$_['text_portal']             = 'Admin Portal';
 $_['text_information']        = 'Information';
 $_['text_service']            = 'Customer Service';
 $_['text_extra']              = 'Extras';
@@ -15,5 +15,4 @@ $_['text_account']            = 'My Account';
 $_['text_order']              = 'Order History';
 $_['text_wishlist']           = 'Wish List';
 $_['text_newsletter']         = 'Newsletter';
-$_['text_powered']            = ''; //Powered By <a href="http://www.opencart.com">OpenCart</a><br /> %s &copy; %s';
-$_['text_are_you_a_designer'] = "Are You A Designer?";
+$_['text_powered']            = 'An <a href="http://www.amplocart.com">AmploCart</a> Production<br /> %s &copy; %s';

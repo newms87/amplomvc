@@ -31,9 +31,7 @@
 			</form>
 		</div>
 		<div class="content" style="min-height:80px">
-			<div class="help"><?= $text_lost; ?></a>.</div>
-			<br><br>
-			<div class="help"><?= $text_are_you_a_designer; ?></div>
+			<div class="help"><?= $text_lost; ?></a></div>
 		</div>
 	</div>
 </div>
