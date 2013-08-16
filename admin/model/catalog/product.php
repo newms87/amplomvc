@@ -477,7 +477,7 @@ class Admin_Model_Catalog_Product extends Model
 		
 		if (!$product) return false;
 		
-		$product['model'] = $this->generateModel($product['name']);
+		$product['model'] = $this->generateModel($product_id, $product['name']);
 		$product['alias'] = '';
 		$product['status'] = 0;
 		
@@ -862,33 +862,6 @@ class Admin_Model_Catalog_Product extends Model
 		}
 		
 		return $product_templates;
-	}
-	
-	public function getClassTemplate($product_class_id)
-	{
-		$product_classes = $this->cache->get('product_classes');
-		
-		if (is_null($product_classes)) {
-			$product_classes = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_class");
-			
-			foreach ($product_classes as &$product_class) {
-				$product_class['front_template'] = unserialize($product_class['front_template']);
-				$product_class['admin_template'] = unserialize($product_class['admin_template']);
-				$product_class['defaults'] = unserialize($product_class['defaults']);
-			} unset($product_class);
-			
-			$this->cache->set('product_classes', $product_classes);
-		}
-		
-		$theme = $this->theme->getTheme();
-		
-		$product_class = array_search_key('product_class_id', $product_class_id, $product_classes);
-		
-  		if (!empty($product_class['admin_template'][$theme])) {
-  			return 'catalog/product_class/' . $product_class['admin_template'][$theme];
-		}
-		
-		return 'catalog/product';
 	}
 	
 	public function getProductCategories($product_id)

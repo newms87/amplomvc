@@ -48,7 +48,7 @@ $.ac_template = $.fn.ac_template = function(name, action, data) {
 			
 			if (row.unique) {
 				template.attr('data-id', data[row.unique]);
-			} 
+			}
 			
 			list.append(template);
 			
@@ -82,6 +82,10 @@ $.ac_template = $.fn.ac_template = function(name, action, data) {
 					$(e).val(data[key]);
 				} else {
 					$(e).val('');
+				}
+				
+				if ($(e).is('select') && !$(e).find(':selected').length) {
+					$(e).val($(e).find(':first').val());
 				}
 			});
 			

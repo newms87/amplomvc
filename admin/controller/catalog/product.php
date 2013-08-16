@@ -654,7 +654,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		
 		//The Template
 		if ($this->data['product_class_id']) {
-			$this->template->load($this->Model_Catalog_Product->getClassTemplate($this->data['product_class_id']));
+			$this->template->load($this->Model_Catalog_ProductClass->getTemplate($this->data['product_class_id']));
 		} else {
 			$this->template->load('catalog/product_form');
 		}
