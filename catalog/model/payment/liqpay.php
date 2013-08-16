@@ -21,12 +21,12 @@ class Catalog_Model_Payment_Liqpay extends Model
 
 		if ($status) {
 			$method_data = array(
-				'code'		=> 'liqpay',
-				'title'		=> $this->_('text_title'),
+				'code'       => 'liqpay',
+				'title'      => $this->_('text_title'),
 				'sort_order' => $this->config->get('liqpay_sort_order')
 			);
 		}
 
 		return $method_data;
 	}
-}
+}

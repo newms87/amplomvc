@@ -4,64 +4,67 @@
 
 // http://www.idiom.com/~zilla/Computer/Javanumeric/LM.java
 
-class LevenbergMarquardt {
+class LevenbergMarquardt
+{
 
 	/**
-	* Calculate the current sum-squared-error
-	*
-	* Chi-squared is the distribution of squared Gaussian errors,
-	* thus the name.
-	*
-	* @param double[][] $x
-	* @param double[] $a
-	* @param double[] $y,
-	* @param double[] $s,
-	* @param object $f
-	*/
-	function chiSquared($x, $a, $y, $s, $f) {
+	 * Calculate the current sum-squared-error
+	 *
+	 * Chi-squared is the distribution of squared Gaussian errors,
+	 * thus the name.
+	 *
+	 * @param double[][] $x
+	 * @param double[] $a
+	 * @param double[] $y,
+	 * @param double[] $s,
+	 * @param object $f
+	 */
+	function chiSquared($x, $a, $y, $s, $f)
+	{
 		$npts = count($y);
-		$sum = 0.0;
+		$sum  = 0.0;
 
 		for ($i = 0; $i < $npts; ++$i) {
-			$d = $y[$i] - $f->val($x[$i], $a);
-			$d = $d / $s[$i];
-			$sum = $sum + ($d*$d);
+			$d   = $y[$i] - $f->val($x[$i], $a);
+			$d   = $d / $s[$i];
+			$sum = $sum + ($d * $d);
 		}
 
 		return $sum;
-	}	//	function chiSquared()
+	} //	function chiSquared()
 
 
 	/**
-	* Minimize E = sum {(y[k] - f(x[k],a)) / s[k]}^2
-	* The individual errors are optionally scaled by s[k].
-	* Note that LMfunc implements the value and gradient of f(x,a),
-	* NOT the value and gradient of E with respect to a!
-	*
-	* @param x array of domain points, each may be multidimensional
-	* @param y corresponding array of values
-	* @param a the parameters/state of the model
-	* @param vary false to indicate the corresponding a[k] is to be held fixed
-	* @param s2 sigma^2 for point i
-	* @param lambda blend between steepest descent (lambda high) and
-	*	jump to bottom of quadratic (lambda zero).
-	* 	Start with 0.001.
-	* @param termepsilon termination accuracy (0.01)
-	* @param maxiter	stop and return after this many iterations if not done
-	* @param verbose	set to zero (no prints), 1, 2
-	*
-	* @return the new lambda for future iterations.
-	*  Can use this and maxiter to interleave the LM descent with some other
-	*  task, setting maxiter to something small.
-	*/
-	function solve($x, $a, $y, $s, $vary, $f, $lambda, $termepsilon, $maxiter, $verbose) {
-		$npts = count($y);
+	 * Minimize E = sum {(y[k] - f(x[k],a)) / s[k]}^2
+	 * The individual errors are optionally scaled by s[k].
+	 * Note that LMfunc implements the value and gradient of f(x,a),
+	 * NOT the value and gradient of E with respect to a!
+	 *
+	 * @param x array of domain points, each may be multidimensional
+	 * @param y corresponding array of values
+	 * @param a the parameters/state of the model
+	 * @param vary false to indicate the corresponding a[k] is to be held fixed
+	 * @param s2 sigma^2 for point i
+	 * @param lambda blend between steepest descent (lambda high) and
+	 *   jump to bottom of quadratic (lambda zero).
+	 *   Start with 0.001.
+	 * @param termepsilon termination accuracy (0.01)
+	 * @param maxiter   stop and return after this many iterations if not done
+	 * @param verbose   set to zero (no prints), 1, 2
+	 *
+	 * @return the new lambda for future iterations.
+	 *  Can use this and maxiter to interleave the LM descent with some other
+	 *  task, setting maxiter to something small.
+	 */
+	function solve($x, $a, $y, $s, $vary, $f, $lambda, $termepsilon, $maxiter, $verbose)
+	{
+		$npts  = count($y);
 		$nparm = count($a);
 
 		if ($verbose > 0) {
-			print("solve x[".count($x)."][".count($x[0])."]");
-			print(" a[".count($a)."]");
-			println(" y[".count(length)."]");
+			print("solve x[" . count($x) . "][" . count($x[0]) . "]");
+			print(" a[" . count($a) . "]");
+			println(" y[" . count(length) . "]");
 		}
 
 		$e0 = $this->chiSquared($x, $a, $y, $s, $f);
@@ -78,44 +81,49 @@ class LevenbergMarquardt {
 
 		$oos2 = array();
 
-		for($i = 0; $i < $npts; ++$i) {
-			$oos2[$i] = 1./($s[$i]*$s[$i]);
+		for ($i = 0; $i < $npts; ++$i) {
+			$oos2[$i] = 1. / ($s[$i] * $s[$i]);
 		}
 		$iter = 0;
-		$term = 0;	// termination count test
+		$term = 0; // termination count test
 
 		do {
 			++$iter;
 
 			// hessian approximation
-			for( $r = 0; $r < $nparm; ++$r) {
-				for( $c = 0; $c < $nparm; ++$c) {
-					for( $i = 0; $i < $npts; ++$i) {
-						if ($i == 0) $H[$r][$c] = 0.;
+			for ($r = 0; $r < $nparm; ++$r) {
+				for ($c = 0; $c < $nparm; ++$c) {
+					for ($i = 0; $i < $npts; ++$i) {
+						if ($i == 0) {
+							$H[$r][$c] = 0.;
+						}
 						$xi = $x[$i];
 						$H[$r][$c] += ($oos2[$i] * $f->grad($xi, $a, $r) * $f->grad($xi, $a, $c));
-					}  //npts
+					} //npts
 				} //c
 			} //r
 
 			// boost diagonal towards gradient descent
-			for( $r = 0; $r < $nparm; ++$r)
+			for ($r = 0; $r < $nparm; ++$r) {
 				$H[$r][$r] *= (1. + $lambda);
+			}
 
 			// gradient
-			for( $r = 0; $r < $nparm; ++$r) {
-				for( $i = 0; $i < $npts; ++$i) {
-					if ($i == 0) $g[$r] = 0.;
+			for ($r = 0; $r < $nparm; ++$r) {
+				for ($i = 0; $i < $npts; ++$i) {
+					if ($i == 0) {
+						$g[$r] = 0.;
+					}
 					$xi = $x[$i];
-					$g[$r] += ($oos2[$i] * ($y[$i]-$f->val($xi,$a)) * $f->grad($xi, $a, $r));
+					$g[$r] += ($oos2[$i] * ($y[$i] - $f->val($xi, $a)) * $f->grad($xi, $a, $r));
 				}
 			} //npts
 
 			// scale (for consistency with NR, not necessary)
 			if ($false) {
-				for( $r = 0; $r < $nparm; ++$r) {
+				for ($r = 0; $r < $nparm; ++$r) {
 					$g[$r] = -0.5 * $g[$r];
-					for( $c = 0; $c < $nparm; ++$c) {
+					for ($c = 0; $c < $nparm; ++$c) {
 						$H[$r][$c] *= 0.5;
 					}
 				}
@@ -177,9 +185,9 @@ class LevenbergMarquardt {
 //					if (vary[i]) a[i] = na[i];
 //				}
 //			}
-		} while(!$done);
+		} while (!$done);
 
 		return $lambda;
-	}	//	function solve()
+	} //	function solve()
 
-}	//	class LevenbergMarquardt
+} //	class LevenbergMarquardt

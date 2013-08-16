@@ -6,16 +6,16 @@ class Catalog_Controller_Error_NotFound extends Controller
 		//Template and Language
 		$this->template->load('error/not_found');
 		$this->language->load('error/not_found');
-		
+
 		//Page Head
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_error'), $this->url->here());
-		
+
 		$this->response->addHeader($_SERVER['SERVER_PROTOCOL'] . '/1.1 404 Not Found');
-		
+
 		//Action Buttons
 		$this->data['continue'] = $this->url->link('common/home');
 
@@ -28,8 +28,8 @@ class Catalog_Controller_Error_NotFound extends Controller
 			'common/footer',
 			'common/header'
 		);
-		
+
 		//Render
 		$this->response->setOutput($this->render());
-  	}
+	}
 }

@@ -6,18 +6,18 @@ class Catalog_Controller_Affiliate_Logout extends Controller
 		$this->template->load('common/success');
 
 		if ($this->affiliate->isLogged()) {
-				$this->affiliate->logout();
-			
-				$this->url->redirect($this->url->link('affiliate/logout'));
+			$this->affiliate->logout();
+
+			$this->url->redirect($this->url->link('affiliate/logout'));
 		}
 
 		$this->language->load('affiliate/logout');
-		
+
 		$this->document->setTitle($this->_('head_title'));
-		
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('text_account'), $this->url->link('affiliate/account'));
-			$this->breadcrumb->add($this->_('text_logout'), $this->url->link('affiliate/logout'));
+
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('text_account'), $this->url->link('affiliate/account'));
+		$this->breadcrumb->add($this->_('text_logout'), $this->url->link('affiliate/logout'));
 
 		$this->data['continue'] = $this->url->link('common/home');
 
@@ -29,7 +29,7 @@ class Catalog_Controller_Affiliate_Logout extends Controller
 			'common/footer',
 			'common/header'
 		);
-						
+
 		$this->response->setOutput($this->render());
-  	}
-}
+	}
+}

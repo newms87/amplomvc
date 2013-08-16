@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Affiliate_Forgotten extends Controller
 {
-	
+
 
 	public function index()
 	{
@@ -14,17 +14,17 @@ class Catalog_Controller_Affiliate_Forgotten extends Controller
 		$this->language->load('affiliate/forgotten');
 
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		if ($this->request->isPost() && $this->validate()) {
 			$this->language->load('mail/forgotten');
-			
+
 			$password = substr(md5(rand()), 0, 7);
-			
+
 			$this->Model_Affiliate_Affiliate->editPassword($_POST['email'], $password);
-			
+
 			$subject = sprintf($this->_('text_subject'), $this->config->get('config_name'));
-			
-			$message  = sprintf($this->_('text_greeting'), $this->config->get('config_name')) . "\n\n";
+
+			$message = sprintf($this->_('text_greeting'), $this->config->get('config_name')) . "\n\n";
 			$message .= $this->_('text_password') . "\n\n";
 			$message .= $password;
 
@@ -36,22 +36,22 @@ class Catalog_Controller_Affiliate_Forgotten extends Controller
 			$this->mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
 			$this->mail->setText(html_entity_decode($message, ENT_QUOTES, 'UTF-8'));
 			$this->mail->send();
-			
+
 			$this->message->add('success', $this->_('text_success'));
 
 			$this->url->redirect($this->url->link('affiliate/login'));
 		}
 
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('text_account'), $this->url->link('affiliate/account'));
-			$this->breadcrumb->add($this->_('text_forgotten'), $this->url->link('affiliate/forgotten'));
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('text_account'), $this->url->link('affiliate/account'));
+		$this->breadcrumb->add($this->_('text_forgotten'), $this->url->link('affiliate/forgotten'));
 
 		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
 		} else {
 			$this->data['error_warning'] = '';
 		}
-		
+
 		$this->data['action'] = $this->url->link('affiliate/forgotten');
 
 		$this->data['back'] = $this->url->link('affiliate/login');
@@ -64,7 +64,7 @@ class Catalog_Controller_Affiliate_Forgotten extends Controller
 			'common/footer',
 			'common/header'
 		);
-						
+
 		$this->response->setOutput($this->render());
 	}
 
@@ -78,4 +78,4 @@ class Catalog_Controller_Affiliate_Forgotten extends Controller
 
 		return $this->error ? false : true;
 	}
-}
+}

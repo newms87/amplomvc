@@ -1,9 +1,9 @@
 <div id="reward" class="section">
 	<form action="<?= $action; ?>" method="post" enctype="multipart/form-data">
 		<?= $entry_reward; ?>&nbsp;
-		<input type="text" name="reward" value="<?= $reward; ?>" />
-		<input type="hidden" name="next" value="reward" />
+		<input type="text" name="reward" value="<?= $reward; ?>"/>
+		<input type="hidden" name="next" value="reward"/>
 		&nbsp;
-		<input type="submit" value="<?= $button_reward; ?>" class="button" />
+		<input type="submit" value="<?= $button_reward; ?>" class="button"/>
 	</form>
 </div>

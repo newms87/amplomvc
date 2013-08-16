@@ -7,13 +7,13 @@ class Catalog_Controller_Common_ContentBottom extends Controller
 
 		//Load Blocks associated with this position
 		$blocks = $this->Model_Block_Block->getBlocksForPosition('content_bottom');
-		
+
 		$this->data['blocks'] = array();
-		
+
 		foreach ($blocks as $key => $block) {
 			$this->data['blocks'][] = $this->getBlock($key);
 		}
-		
+
 		$this->render();
 	}
-}
+}

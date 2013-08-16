@@ -1,2 +1,2 @@
 <?php
-$_['text_retail']		= "retail";
+$_['text_retail'] = "retail";

@@ -3,9 +3,9 @@
 <div id="content">
 	<?= $this->breadcrumb->render(); ?>
 	<?= $content_top; ?>
-	
+
 	<h1><?= $head_title; ?></h1>
-	
+
 	<div class="content_account content">
 		<h2><?= $text_my_account; ?></h2>
 		<ul>
@@ -21,7 +21,7 @@
 			<li><a href="<?= $order; ?>"><?= $text_order; ?></a></li>
 			<li><a href="<?= $download; ?>"><?= $text_download; ?></a></li>
 			<? if ($reward) { ?>
-			<li><a href="<?= $reward; ?>"><?= $text_reward; ?></a></li>
+				<li><a href="<?= $reward; ?>"><?= $text_reward; ?></a></li>
 			<? } ?>
 			<li><a href="<?= $return_view; ?>"><?= $text_return_view; ?></a></li>
 			<li><a href="<?= $return_request; ?>"><?= $text_return_request; ?></a></li>
@@ -34,8 +34,8 @@
 			<li><a href="<?= $newsletter; ?>"><?= $text_newsletter; ?></a></li>
 		</ul>
 	</div>
-	
+
 	<?= $content_bottom; ?>
 </div>
 
-<?= $footer; ?> 
+<?= $footer; ?>

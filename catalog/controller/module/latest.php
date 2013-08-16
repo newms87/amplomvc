@@ -6,9 +6,9 @@ class Catalog_Controller_Module_Latest extends Controller
 		$this->template->load('module/latest');
 
 		$this->language->load('module/latest');
-		
+
 		$this->data['products'] = array();
-		
+
 		$data = array(
 			'sort'  => 'p.date_added',
 			'order' => 'DESC',
@@ -24,37 +24,37 @@ class Catalog_Controller_Module_Latest extends Controller
 			} else {
 				$image = false;
 			}
-						
+
 			if (($this->config->get('config_customer_hide_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_hide_price')) {
 				$price = $this->currency->format($this->tax->calculate($result['price'], $result['tax_class_id']));
 			} else {
 				$price = false;
 			}
-					
+
 			if ((float)$result['special']) {
 				$special = $this->currency->format($this->tax->calculate($result['special'], $result['tax_class_id']));
 			} else {
 				$special = false;
 			}
-			
+
 			if ($this->config->get('config_review_status')) {
 				$rating = $result['rating'];
 			} else {
 				$rating = false;
 			}
-			
+
 			$this->data['products'][] = array(
 				'product_id' => $result['product_id'],
-				'thumb'		=> $image,
-				'name'		=> $result['name'],
-				'price'		=> $price,
-				'special' 	=> $special,
-				'rating'	=> $rating,
-				'reviews'	=> sprintf($this->_('text_reviews'), (int)$result['reviews']),
-				'href'		=> $this->url->link('product/product', 'product_id=' . $result['product_id']),
+				'thumb'      => $image,
+				'name'       => $result['name'],
+				'price'      => $price,
+				'special'    => $special,
+				'rating'     => $rating,
+				'reviews'    => sprintf($this->_('text_reviews'), (int)$result['reviews']),
+				'href'       => $this->url->link('product/product', 'product_id=' . $result['product_id']),
 			);
 		}
 
 		$this->render();
 	}
-}
+}

@@ -18,11 +18,11 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category	PHPExcel
- * @package	PHPExcel_Calculation
+ * @category   PHPExcel
+ * @package   PHPExcel_Calculation
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version	1.7.7, 2012-05-19
+ * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt   LGPL
+ * @version   1.7.7, 2012-05-19
  */
 
 
@@ -53,124 +53,131 @@ PARTLY BASED ON:
 /**
  * PHPExcel_Calculation_FormulaToken
  *
- * @category	PHPExcel
- * @package	PHPExcel_Calculation
+ * @category   PHPExcel
+ * @package   PHPExcel_Calculation
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
-class PHPExcel_Calculation_FormulaToken {
+class PHPExcel_Calculation_FormulaToken
+{
 	/* Token types */
-	const TOKEN_TYPE_NOOP					= 'Noop';
-	const TOKEN_TYPE_OPERAND				= 'Operand';
-	const TOKEN_TYPE_FUNCTION				= 'Function';
-	const TOKEN_TYPE_SUBEXPRESSION			= 'Subexpression';
-	const TOKEN_TYPE_ARGUMENT				= 'Argument';
-	const TOKEN_TYPE_OPERATORPREFIX			= 'OperatorPrefix';
-	const TOKEN_TYPE_OPERATORINFIX			= 'OperatorInfix';
-	const TOKEN_TYPE_OPERATORPOSTFIX		= 'OperatorPostfix';
-	const TOKEN_TYPE_WHITESPACE				= 'Whitespace';
-	const TOKEN_TYPE_UNKNOWN				= 'Unknown';
+	const TOKEN_TYPE_NOOP            = 'Noop';
+	const TOKEN_TYPE_OPERAND         = 'Operand';
+	const TOKEN_TYPE_FUNCTION        = 'Function';
+	const TOKEN_TYPE_SUBEXPRESSION   = 'Subexpression';
+	const TOKEN_TYPE_ARGUMENT        = 'Argument';
+	const TOKEN_TYPE_OPERATORPREFIX  = 'OperatorPrefix';
+	const TOKEN_TYPE_OPERATORINFIX   = 'OperatorInfix';
+	const TOKEN_TYPE_OPERATORPOSTFIX = 'OperatorPostfix';
+	const TOKEN_TYPE_WHITESPACE      = 'Whitespace';
+	const TOKEN_TYPE_UNKNOWN         = 'Unknown';
 
 	/* Token subtypes */
-	const TOKEN_SUBTYPE_NOTHING				= 'Nothing';
-	const TOKEN_SUBTYPE_START				= 'Start';
-	const TOKEN_SUBTYPE_STOP				= 'Stop';
-	const TOKEN_SUBTYPE_TEXT				= 'Text';
-	const TOKEN_SUBTYPE_NUMBER				= 'Number';
-	const TOKEN_SUBTYPE_LOGICAL				= 'Logical';
-	const TOKEN_SUBTYPE_ERROR				= 'Error';
-	const TOKEN_SUBTYPE_RANGE				= 'Range';
-	const TOKEN_SUBTYPE_MATH				= 'Math';
-	const TOKEN_SUBTYPE_CONCATENATION		= 'Concatenation';
-	const TOKEN_SUBTYPE_INTERSECTION		= 'Intersection';
-	const TOKEN_SUBTYPE_UNION				= 'Union';
+	const TOKEN_SUBTYPE_NOTHING       = 'Nothing';
+	const TOKEN_SUBTYPE_START         = 'Start';
+	const TOKEN_SUBTYPE_STOP          = 'Stop';
+	const TOKEN_SUBTYPE_TEXT          = 'Text';
+	const TOKEN_SUBTYPE_NUMBER        = 'Number';
+	const TOKEN_SUBTYPE_LOGICAL       = 'Logical';
+	const TOKEN_SUBTYPE_ERROR         = 'Error';
+	const TOKEN_SUBTYPE_RANGE         = 'Range';
+	const TOKEN_SUBTYPE_MATH          = 'Math';
+	const TOKEN_SUBTYPE_CONCATENATION = 'Concatenation';
+	const TOKEN_SUBTYPE_INTERSECTION  = 'Intersection';
+	const TOKEN_SUBTYPE_UNION         = 'Union';
 
 	/**
-	* Value
-	*
-	* @var string
-	*/
+	 * Value
+	 *
+	 * @var string
+	 */
 	private $_value;
 
 	/**
-	* Token Type (represented by TOKEN_TYPE_*)
-	*
-	* @var string
-	*/
+	 * Token Type (represented by TOKEN_TYPE_*)
+	 *
+	 * @var string
+	 */
 	private $_tokenType;
 
 	/**
-	* Token SubType (represented by TOKEN_SUBTYPE_*)
-	*
-	* @var string
-	*/
+	 * Token SubType (represented by TOKEN_SUBTYPE_*)
+	 *
+	 * @var string
+	 */
 	private $_tokenSubType;
 
 	/**
-	* Create a new PHPExcel_Calculation_FormulaToken
-	*
-	* @param string	$pValue
-	* @param string	$pTokenType 	Token type (represented by TOKEN_TYPE_*)
-	* @param string	$pTokenSubType 	Token Subtype (represented by TOKEN_SUBTYPE_*)
-	*/
+	 * Create a new PHPExcel_Calculation_FormulaToken
+	 *
+	 * @param string $pValue
+	 * @param string $pTokenType   Token type (represented by TOKEN_TYPE_*)
+	 * @param string $pTokenSubType   Token Subtype (represented by TOKEN_SUBTYPE_*)
+	 */
 	public function __construct($pValue, $pTokenType = PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_UNKNOWN, $pTokenSubType = PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_NOTHING)
 	{
 		// Initialise values
-		$this->_value				= $pValue;
-		$this->_tokenType			= $pTokenType;
-		$this->_tokenSubType 		= $pTokenSubType;
+		$this->_value        = $pValue;
+		$this->_tokenType    = $pTokenType;
+		$this->_tokenSubType = $pTokenSubType;
 	}
 
 	/**
-	* Get Value
-	*
-	* @return string
-	*/
-	public function getValue() {
+	 * Get Value
+	 *
+	 * @return string
+	 */
+	public function getValue()
+	{
 		return $this->_value;
 	}
 
 	/**
-	* Set Value
-	*
-	* @param string	$value
-	*/
-	public function setValue($value) {
+	 * Set Value
+	 *
+	 * @param string $value
+	 */
+	public function setValue($value)
+	{
 		$this->_value = $value;
 	}
 
 	/**
-	* Get Token Type (represented by TOKEN_TYPE_*)
-	*
-	* @return string
-	*/
-	public function getTokenType() {
+	 * Get Token Type (represented by TOKEN_TYPE_*)
+	 *
+	 * @return string
+	 */
+	public function getTokenType()
+	{
 		return $this->_tokenType;
 	}
 
 	/**
-	* Set Token Type
-	*
-	* @param string	$value
-	*/
-	public function setTokenType($value = PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_UNKNOWN) {
+	 * Set Token Type
+	 *
+	 * @param string $value
+	 */
+	public function setTokenType($value = PHPExcel_Calculation_FormulaToken::TOKEN_TYPE_UNKNOWN)
+	{
 		$this->_tokenType = $value;
 	}
 
 	/**
-	* Get Token SubType (represented by TOKEN_SUBTYPE_*)
-	*
-	* @return string
-	*/
-	public function getTokenSubType() {
+	 * Get Token SubType (represented by TOKEN_SUBTYPE_*)
+	 *
+	 * @return string
+	 */
+	public function getTokenSubType()
+	{
 		return $this->_tokenSubType;
 	}
 
 	/**
-	* Set Token SubType
-	*
-	* @param string	$value
-	*/
-	public function setTokenSubType($value = PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_NOTHING) {
+	 * Set Token SubType
+	 *
+	 * @param string $value
+	 */
+	public function setTokenSubType($value = PHPExcel_Calculation_FormulaToken::TOKEN_SUBTYPE_NOTHING)
+	{
 		$this->_tokenSubType = $value;
 	}
 }

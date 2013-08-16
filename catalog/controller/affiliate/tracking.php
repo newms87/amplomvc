@@ -7,21 +7,21 @@ class Catalog_Controller_Affiliate_Tracking extends Controller
 
 		if (!$this->affiliate->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('affiliate/tracking');
-	
+
 			$this->url->redirect($this->url->link('affiliate/login'));
 		}
-	
+
 		$this->language->load('affiliate/tracking');
 
 		$this->document->setTitle($this->_('head_title'));
 
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('text_account'), $this->url->link('affiliate/account'));
-			$this->breadcrumb->add($this->_('head_title'), $this->url->link('affiliate/tracking'));
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('text_account'), $this->url->link('affiliate/account'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('affiliate/tracking'));
 
 		$this->_('text_description', $this->config->get('config_name'));
 		$this->data['code'] = $this->affiliate->getCode();
-		
+
 		$this->data['continue'] = $this->url->link('affiliate/account');
 
 		$this->children = array(
@@ -32,23 +32,23 @@ class Catalog_Controller_Affiliate_Tracking extends Controller
 			'common/footer',
 			'common/header'
 		);
-				
+
 		$this->response->setOutput($this->render());
-  	}
-	
+	}
+
 	public function autocomplete()
 	{
 		$json = array();
-		
+
 		if (isset($_GET['filter_name'])) {
 			$data = array(
 				'filter_name' => $_GET['filter_name'],
-				'start'		=> 0,
-				'limit'		=> 20
+				'start'       => 0,
+				'limit'       => 20
 			);
-			
+
 			$results = $this->Model_Catalog_Product->getProducts($data);
-			
+
 			foreach ($results as $result) {
 				$json[] = array(
 					'name' => html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8'),
@@ -59,4 +59,4 @@ class Catalog_Controller_Affiliate_Tracking extends Controller
 
 		$this->response->setOutput(json_encode($json));
 	}
-}
+}

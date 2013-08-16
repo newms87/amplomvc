@@ -21,6 +21,7 @@
 
 /**
  * TCPDF language file (contains translated texts).
+ *
  * @package com.tecnick.tcpdf
  * @abstract TCPDF language file.
  * @author Nicola Asuni
@@ -29,7 +30,7 @@
  * @license http://www.gnu.org/copyleft/lesser.html LGPL
  * @since 2004-03-03
  */
- 
+
 // ENGLISH
 
 global $l;
@@ -37,8 +38,8 @@ $l = Array();
 
 // PAGE META DESCRIPTORS --------------------------------------
 
-$l['a_meta_charset'] = 'UTF-8';
-$l['a_meta_dir'] = 'ltr';
+$l['a_meta_charset']  = 'UTF-8';
+$l['a_meta_dir']      = 'ltr';
 $l['a_meta_language'] = 'it';
 
 // TRANSLATIONS --------------------------------------

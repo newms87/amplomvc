@@ -1,7 +1,7 @@
 <?= $header; ?>
 <div class="content">
 	<?= $this->breadcrumb->render(); ?>
-	
+
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'layout.png'; ?>" alt="" /> <?= $head_title; ?></h1>
@@ -26,7 +26,7 @@
 							<td></td>
 						</tr>
 					</thead>
-					
+
 					<tbody id="route_list">
 					<? foreach ($routes as $row => $route) { ?>
 						<tr class="route" data-row="<?= $row; ?>">
@@ -35,7 +35,7 @@
 								<?= $this->builder->build('select', $data_stores, "routes[$row][store_id]", $route['store_id']); ?>
 							</td>
 							<td class="left"><input type="text" name="routes[<?= $row; ?>][route]" value="<?= $route['route']; ?>" /></td>
-							<td class="left"><a onclick="$(this).closest('.route').remove();" class="button_delete"><?= $button_remove; ?></a></td>
+							<td class="left"><a onclick="$(this).closest('.route').remove();" class="delete_button"><?= $button_remove; ?></a></td>
 						</tr>
 					<? } ?>
 					</tbody>
@@ -51,9 +51,8 @@
 	</div>
 </div>
 
-
 <?= $this->builder->js('ckeditor'); ?>
- 
+
 <script type="text/javascript">//<!--
 $('#route_list').ac_template('route_list');
 

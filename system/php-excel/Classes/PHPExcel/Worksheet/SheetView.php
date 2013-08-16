@@ -18,67 +18,69 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category	PHPExcel
- * @package	PHPExcel_Worksheet
+ * @category   PHPExcel
+ * @package   PHPExcel_Worksheet
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license	http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version	1.7.7, 2012-05-19
+ * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt   LGPL
+ * @version   1.7.7, 2012-05-19
  */
 
 
 /**
  * PHPExcel_Worksheet_SheetView
  *
- * @category	PHPExcel
- * @package	PHPExcel_Worksheet
+ * @category   PHPExcel
+ * @package   PHPExcel_Worksheet
  * @copyright  Copyright (c) 2006 - 2012 PHPExcel (http://www.codeplex.com/PHPExcel)
  */
 class PHPExcel_Worksheet_SheetView
 {
 	/**
-	* ZoomScale
-	*
-	* Valid values range from 10 to 400.
-	*
-	* @var int
-	*/
-	private $_zoomScale			= 100;
+	 * ZoomScale
+	 *
+	 * Valid values range from 10 to 400.
+	 *
+	 * @var int
+	 */
+	private $_zoomScale = 100;
 
 	/**
-	* ZoomScaleNormal
-	*
-	* Valid values range from 10 to 400.
-	*
-	* @var int
-	*/
-	private $_zoomScaleNormal	= 100;
+	 * ZoomScaleNormal
+	 *
+	 * Valid values range from 10 to 400.
+	 *
+	 * @var int
+	 */
+	private $_zoomScaleNormal = 100;
 
 	/**
-	* Create a new PHPExcel_Worksheet_SheetView
-	*/
+	 * Create a new PHPExcel_Worksheet_SheetView
+	 */
 	public function __construct()
 	{
 	}
 
 	/**
-	* Get ZoomScale
-	*
-	* @return int
-	*/
-	public function getZoomScale() {
+	 * Get ZoomScale
+	 *
+	 * @return int
+	 */
+	public function getZoomScale()
+	{
 		return $this->_zoomScale;
 	}
 
 	/**
-	* Set ZoomScale
-	*
-	* Valid values range from 10 to 400.
-	*
-	* @param 	int 	$pValue
-	* @throws 	Exception
-	* @return PHPExcel_Worksheet_SheetView
-	*/
-	public function setZoomScale($pValue = 100) {
+	 * Set ZoomScale
+	 *
+	 * Valid values range from 10 to 400.
+	 *
+	 * @param   int $pValue
+	 * @throws   Exception
+	 * @return PHPExcel_Worksheet_SheetView
+	 */
+	public function setZoomScale($pValue = 100)
+	{
 		// Microsoft Office Excel 2007 only allows setting a scale between 10 and 400 via the user interface,
 		// but it is apparently still able to handle any scale >= 1
 		if (($pValue >= 1) || is_null($pValue)) {
@@ -90,24 +92,26 @@ class PHPExcel_Worksheet_SheetView
 	}
 
 	/**
-	* Get ZoomScaleNormal
-	*
-	* @return int
-	*/
-	public function getZoomScaleNormal() {
+	 * Get ZoomScaleNormal
+	 *
+	 * @return int
+	 */
+	public function getZoomScaleNormal()
+	{
 		return $this->_zoomScaleNormal;
 	}
 
 	/**
-	* Set ZoomScale
-	*
-	* Valid values range from 10 to 400.
-	*
-	* @param 	int 	$pValue
-	* @throws 	Exception
-	* @return PHPExcel_Worksheet_SheetView
-	*/
-	public function setZoomScaleNormal($pValue = 100) {
+	 * Set ZoomScale
+	 *
+	 * Valid values range from 10 to 400.
+	 *
+	 * @param   int $pValue
+	 * @throws   Exception
+	 * @return PHPExcel_Worksheet_SheetView
+	 */
+	public function setZoomScaleNormal($pValue = 100)
+	{
 		if (($pValue >= 1) || is_null($pValue)) {
 			$this->_zoomScaleNormal = $pValue;
 		} else {
@@ -117,9 +121,10 @@ class PHPExcel_Worksheet_SheetView
 	}
 
 	/**
-	* Implement PHP __clone to create a deep clone, not just a shallow copy.
-	*/
-	public function __clone() {
+	 * Implement PHP __clone to create a deep clone, not just a shallow copy.
+	 */
+	public function __clone()
+	{
 		$vars = get_object_vars($this);
 		foreach ($vars as $key => $value) {
 			if (is_object($value)) {

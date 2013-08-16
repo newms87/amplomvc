@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Affiliate_Payment extends Controller
 {
-	
+
 
 	public function index()
 	{
@@ -16,18 +16,18 @@ class Catalog_Controller_Affiliate_Payment extends Controller
 		$this->language->load('affiliate/payment');
 
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		if ($this->request->isPost()) {
 			$this->Model_Affiliate_Affiliate->editPayment($_POST);
-			
+
 			$this->message->add('success', $this->_('text_success'));
 
 			$this->url->redirect($this->url->link('affiliate/account'));
 		}
 
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('text_account'), $this->url->link('affiliate/account'));
-			$this->breadcrumb->add($this->_('text_payment'), $this->url->link('affiliate/payment'));
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('text_account'), $this->url->link('affiliate/account'));
+		$this->breadcrumb->add($this->_('text_payment'), $this->url->link('affiliate/payment'));
 
 		$this->data['action'] = $this->url->link('affiliate/payment');
 
@@ -42,7 +42,7 @@ class Catalog_Controller_Affiliate_Payment extends Controller
 		} else {
 			$this->data['tax'] = '';
 		}
-		
+
 		if (isset($_POST['payment'])) {
 			$this->data['payment'] = $_POST['payment'];
 		} elseif (!empty($affiliate_info)) {
@@ -98,7 +98,7 @@ class Catalog_Controller_Affiliate_Payment extends Controller
 		} else {
 			$this->data['bank_account_name'] = '';
 		}
-		
+
 		if (isset($_POST['bank_account_number'])) {
 			$this->data['bank_account_number'] = $_POST['bank_account_number'];
 		} elseif (!empty($affiliate_info)) {
@@ -106,7 +106,7 @@ class Catalog_Controller_Affiliate_Payment extends Controller
 		} else {
 			$this->data['bank_account_number'] = '';
 		}
-		
+
 		$this->data['back'] = $this->url->link('affiliate/account');
 
 		$this->children = array(
@@ -117,7 +117,7 @@ class Catalog_Controller_Affiliate_Payment extends Controller
 			'common/footer',
 			'common/header'
 		);
-						
+
 		$this->response->setOutput($this->render());
 	}
-}
+}

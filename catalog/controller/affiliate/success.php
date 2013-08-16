@@ -8,13 +8,13 @@ class Catalog_Controller_Affiliate_Success extends Controller
 		$this->language->load('affiliate/success');
 
 		$this->document->setTitle($this->_('head_title'));
-		
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('text_account'), $this->url->link('affiliate/account'));
-			$this->breadcrumb->add($this->_('text_success'), $this->url->link('affiliate/success'));
+
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('text_account'), $this->url->link('affiliate/account'));
+		$this->breadcrumb->add($this->_('text_success'), $this->url->link('affiliate/success'));
 
 		$this->data['text_message'] = $this->_('text_approval', $this->config->get('config_name'), $this->url->link('information/contact'));
-		
+
 		$this->data['continue'] = $this->url->link('affiliate/account');
 
 		$this->children = array(
@@ -25,7 +25,7 @@ class Catalog_Controller_Affiliate_Success extends Controller
 			'common/footer',
 			'common/header'
 		);
-				
+
 		$this->response->setOutput($this->render());
-  	}
+	}
 }
