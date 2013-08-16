@@ -181,14 +181,14 @@ class Config extends Library
 	{
 		$admin_store = $this->site_config['admin_store'];
 		
-		$admin_exists = $this->db->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "store WHERE store_id = -1 AND `url` ='" . $this->db->escape($admin_store['url']) . "' AND `ssl` = '" . $this->db->escape($admin_store['ssl']) . "'");
+		$admin_exists = $this->db->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "store WHERE store_id = " . (int)$admin_store['store_id'] . " AND `url` ='" . $this->db->escape($admin_store['url']) . "' AND `ssl` = '" . $this->db->escape($admin_store['ssl']) . "'");
 		
 		if (!$admin_exists) {
-			$this->db->query("DELETE FROM " . DB_PREFIX . "store WHERE store_id = 0");
+			$this->db->query("DELETE FROM " . DB_PREFIX . "store WHERE store_id = " . (int)$admin_store['store_id']);
 			
 			$this->db->query("SET GLOBAL sql_mode='NO_AUTO_VALUE_ON_ZERO'");
 			$this->db->query("SET SESSION sql_mode='NO_AUTO_VALUE_ON_ZERO'");
-			$this->db->query("INSERT INTO " . DB_PREFIX . "store SET " . $this->db->getInsertString($this->site_config['admin_store']));
+			$this->db->query("INSERT INTO " . DB_PREFIX . "store SET " . $this->db->getInsertString($admin_store));
 		}
 		
 		$default_exists = $this->db->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "store WHERE store_id > 0 LIMIT 1");

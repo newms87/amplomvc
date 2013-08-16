@@ -22,7 +22,7 @@ class Admin_Model_Design_Navigation extends Model
 		foreach ($data['links'] as $link_id => $link) {
 			$link['navigation_group_id'] = $navigation_group_id;
 			
-			if (empty($link['sort_order'])) {
+			if (!isset($link['sort_order']) || $link['sort_order'] !== 0) {
 				$link['sort_order'] = $sort_index++;
 			}
 			
@@ -130,12 +130,9 @@ class Admin_Model_Design_Navigation extends Model
 	
 	public function getNavigationGroup($navigation_group_id)
 	{
-		$query = $this->get("navigation_group", '*', $navigation_group_id);
-		
-		$nav_group = $query->row;
+		$nav_group = $this->queryRow("SELECT * FROM " . DB_PREFIX . "navigation_group WHERE navigation_group_id = " . (int)$navigation_group_id);
 		
 		$nav_group['stores'] = $this->getNavigationGroupStores($navigation_group_id);
-		
 		$nav_group['links'] = $this->getNavigationGroupLinks($navigation_group_id);
 		
 		return $nav_group;
@@ -255,15 +252,7 @@ class Admin_Model_Design_Navigation extends Model
 	
 	public function getNavigationGroupStores($navigation_group_id)
 	{
-		$query = $this->get("navigation_store", '*', array("navigation_group_id" => $navigation_group_id));
-		
-		$stores = array();
-		
-		foreach ($query->rows as $row) {
-			$stores[] = $row['store_id'];
-		}
-		
-		return $stores;
+		return $this->queryColumn("SELECT store_id FROM " . DB_PREFIX . "navigation_store WHERE navigation_group_id = " . (int)$navigation_group_id);
 	}
 	
 	public function getTotalNavigationGroups($data)
@@ -1013,7 +1002,7 @@ class Admin_Model_Design_Navigation extends Model
 							'query'			=> '',
 							'is_route'		=> 0,
 							'parent_id'		=> 'system_settings',
-							'sort_order'	=> 2,
+							'sort_order'	=> 3,
 							'status'			=> 1,
 						),
 						
@@ -1048,7 +1037,7 @@ class Admin_Model_Design_Navigation extends Model
 							'query'			=> '',
 							'is_route'		=> 0,
 							'parent_id'		=> 'system_settings',
-							'sort_order'	=> 3,
+							'sort_order'	=> 4,
 							'status'			=> 1,
 						),
 		
@@ -1088,17 +1077,17 @@ class Admin_Model_Design_Navigation extends Model
 								'status'			=> 1,
 							),
 				
-				'system_settings_controller_overrides' => array(
-							'display_name'	=> 'Controller Overrides',
-							'name'			=> 'system_settings_controller_overrides',
-							'title'			=> '',
-							'href'			=> 'setting/controller_override',
-							'query'			=> '',
-							'is_route'		=> 0,
-							'parent_id'		=> 'system_settings',
-							'sort_order'	=> 4,
-							'status'			=> 1,
-						),
+					'system_settings_controller_overrides' => array(
+								'display_name'	=> 'Controller Overrides',
+								'name'			=> 'system_settings_controller_overrides',
+								'title'			=> '',
+								'href'			=> 'setting/controller_override',
+								'query'			=> '',
+								'is_route'		=> 0,
+								'parent_id'		=> 'system_settings',
+								'sort_order'	=> 5,
+								'status'			=> 1,
+							),
 						
 				'system_mail' => array(
 					'display_name'	=> 'Mail',

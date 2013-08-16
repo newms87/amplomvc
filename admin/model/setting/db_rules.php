@@ -29,19 +29,11 @@ class Admin_Model_Setting_DbRules extends Model
 	
 	public function getDbRule($db_rule_id)
 	{
-		$query = $this->get('db_rule', '*', $db_rule_id);
-		
-		return $query->row;
+		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "db_rule WHERE db_rule_id = " . (int)$db_rule_id);
 	}
 	
 	public function getDbRules()
 	{
-		$options = array(
-		'order_by' => '`table` ASC, `column` ASC'
-		);
-		
-		$query = $this->get('db_rule',  '*', null, $options);
-		
-		return $query->rows;
+		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "db_rule ORDER BY `table` ASC, `column` ASC");
 	}
 }

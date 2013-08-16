@@ -366,7 +366,7 @@ class Document extends Library
 			$links = $this->getLinks($links);
 		}
 		
-		usort($links, function($a,$b){ return $a['sort_order'] > $b['sort_order']; });
+		usort($links, function($a,$b){ return (int)$a['sort_order'] > (int)$b['sort_order']; } );
 		
 		if ($depth === 0) {
 			$this->findActiveLink($links);

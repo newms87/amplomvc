@@ -4,6 +4,9 @@ oc_config.php
 *.db
 
 /image/data
+!/image/data/ac_logo.png
+!/image/data/ac_icon.png
+
 logs
 /system/plugins/merged
 cache

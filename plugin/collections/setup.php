@@ -90,7 +90,7 @@ SQL;
 	public function uninstall($keep_data = false)
 	{
 		//Remove Collections Navigation
-		$this->extend->removeNavigationLink(COLLECTION_NAVIGATION_LINK_NAME);
+		$this->extend->removeNavigationLink('admin', COLLECTION_NAVIGATION_LINK_NAME);
 		
 		//disable image sorting for 'collection' table
 		$this->extend->disable_image_sorting('collection', 'image');

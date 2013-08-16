@@ -3,16 +3,14 @@ class Catalog_Model_Newsletter_Newsletter extends Model
 {
 	public function getNewsletter($newsletter_id)
 	{
-		$query = $this->get('newsletter', '*', $newsletter_id);
+		$newsletter = $this->queryRow("SELECT * FROM " . DB_PREFIX . "newsletter WHERE newsletter_id = " . (int)$newsletter_id);
 		
-		if ($query->num_rows) {
-			$query->row['newsletter'] = unserialize($query->row['data']);
+		if ($newsletter) {
+			$newlsetter['newsletter'] = unserialize($newsletter['data']);
 			
-			unset($query->row['data']);
-			
-			return $query->row;
+			unset($newsletter['data']);
 		}
 		
-		return array();
+		return $newsletter;
 	}
 }

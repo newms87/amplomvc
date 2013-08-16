@@ -23,13 +23,11 @@ class Admin_Model_Mail_Newsletter extends Model
 	
 	public function copyNewsletter($newsletter_id)
 	{
-		$query = $this->get('newsletter', '*', $newsletter_id);
-		
-		if ($query->num_rows) {
-			$query->row['name'] .= ' - Copy ' . uniqid();
+		$newsletter = $this->getNewsletter($newsletter_id);
 			
-			$this->insert('newsletter', $query->row);
-		}
+		$newsletter['name'] .= ' - Copy (' . uniqid() . ')';
+		
+		$this->insert('newsletter', $newsletter);
 	}
 	
 	public function deleteNewsletter($newsletter_id)
@@ -39,17 +37,15 @@ class Admin_Model_Mail_Newsletter extends Model
 	
 	public function getNewsletter($newsletter_id)
 	{
-		$query = $this->get('newsletter', '*', $newsletter_id);
+		$newsletter = $this->queryRow("SELECT * FROM " . DB_PREFIX . "newsletter WHERE newsletter_id = " . (int)$newsletter_id);
 		
-		if ($query->num_rows) {
-			$query->row['newsletter'] = unserialize($query->row['data']);
+		if ($newsletter) {
+			$newlsetter['newsletter'] = unserialize($newsletter['data']);
 			
-			unset($query->row['data']);
-			
-			return $query->row;
+			unset($newsletter['data']);
 		}
 		
-		return array();
+		return $newsletter;
 	}
 	
 	public function getNewsletters($data = array(), $select = '*', $total = false){

@@ -72,7 +72,7 @@ class Admin_Model_Setting_Store extends Model
 		$result = $this->query($query);
 		
 		if ($total) {
-			return $result['total'];
+			return $result->row['total'];
 		}
 		
 		return $result->rows;
