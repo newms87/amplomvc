@@ -14,8 +14,6 @@ cache
 !/plugin/janrain
 !/plugin/dev
 !/plugin/mail
-!/plugin/collections
-
 
 /catalog/view/theme/*
 !/catalog/view/theme/default
@@ -33,17 +31,11 @@ cache
 /catalog/view/theme/default/template/block/widget/janrain.tpl
 /image/janrain/rpx-icons16.png
 /image/janrain/rpx-icons30.png
-/catalog/controller/product/box.php
-/catalog/controller/product/boxes.php
-/catalog/language/english/product/box.php
-/catalog/language/english/product/boxes.php
-
 /admin/controller/catalog/subscription.php
 /admin/language/english/catalog/subscription.php
 /admin/model/catalog/subscription.php
 /admin/view/theme/default/template/catalog/subscription_form.tpl
 /admin/view/theme/default/template/catalog/subscription_list.tpl
-
 /admin/language/english/catalog/product_subscription.php
 /catalog/language/english/product/subscription.php
 /catalog/model/catalog/subscription.php
