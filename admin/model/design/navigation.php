@@ -4,78 +4,78 @@ class Admin_Model_Design_Navigation extends Model
 	public function addNavigationGroup($data)
 	{
 		$navigation_group_id = $this->insert("navigation_group", $data);
-		
+
 		//Add Stores
 		foreach ($data['stores'] as $store_id) {
 			$store_data = array(
 				'navigation_group_id' => $navigation_group_id,
 				'store_id' => $store_id
 			);
-			
+
 			$this->insert("navigation_store", $store_data);
 		}
-		
+
 		//Add Links
 		$parent = array();
 		$sort_index = 0;
-		
+
 		foreach ($data['links'] as $link_id => $link) {
 			$link['navigation_group_id'] = $navigation_group_id;
-			
-			if (!isset($link['sort_order']) || $link['sort_order'] !== 0) {
+
+			if (!isset($link['sort_order'])) {
 				$link['sort_order'] = $sort_index++;
 			}
-			
+
 			if ($link['parent_id']) {
 				if (!isset($parent[$link['parent_id']])) {
 					$msg = "ModelDesignNavigation::addNavigationGroup(): There was an error resolving the parent_id, $link[parent_id]!";
 					trigger_error($msg);
 					$this->mail->send_error_email($msg);
-					
+
 					$this->add_message('error', "There was an error saving Navigation group to the database! The Web Admin has been notified. Please try again later");
 				}
 				else {
 					$link['parent_id'] = $parent[$link['parent_id']];
 				}
 			}
-			
+
 			$nav_id = $this->insert("navigation", $link);
-			
+
 			$parent[$link_id] = $nav_id;
 		}
-		
+
 		$this->cache->delete('navigation');
 	}
-	
+
 	public function editNavigationGroup($navigation_group_id, $data)
 	{
 		$this->update("navigation_group", $data, $navigation_group_id);
-		
+
 		//Update Stores
 		if (isset($data['stores'])) {
 			$this->delete("navigation_store", array("navigation_group_id" => $navigation_group_id));
-			
+
 			foreach ($data['stores'] as $store_id) {
 				$store_data = array(
 					'navigation_group_id' => $navigation_group_id,
 					'store_id' => $store_id
 				);
-				
+
 				$this->insert("navigation_store", $store_data);
 			}
 		}
-		
-		
+
+
 		//Update Links
 		if (isset($data['links'])) {
 			$this->delete("navigation", array("navigation_group_id" => $navigation_group_id));
-			
+
 			$parent = array();
 			$sort_index = 0;
-			
+
 			foreach ($data['links'] as $link_id => $link) {
 				$link['navigation_group_id'] = $navigation_group_id;
-				
+
 				if (empty($link['sort_order'])) {
 					$link['sort_order'] = $sort_index++;
 				}
@@ -85,59 +85,59 @@ class Admin_Model_Design_Navigation extends Model
 						$msg = "ModelDesignNavigation::addNavigationGroup(): There was an error resolving the parent_id!";
 						trigger_error($msg);
 						$this->mail->send_error_email($msg);
-						
+
 						$this->add_message('error', "There was an error saving Navigation group to the database! The Web Admin has been notified. Please try again later");
 					}
 					else {
 						$link['parent_id'] = $parent[$link['parent_id']];
 					}
 				}
-				
+
 				$nav_id = $this->insert("navigation", $link);
-				
+
 				$parent[$link_id] = $nav_id;
 			}
 		}
-		
+
 		$this->cache->delete('navigation');
 	}
-	
+
 	public function deleteNavigationGroup($navigation_group_id)
 	{
 		$this->delete("navigation_group", $navigation_group_id);
-		
+
 		$this->delete("navigation_store", array("navigation_group_id" => $navigation_group_id));
 		$this->delete("navigation", array("navigation_group_id" => $navigation_group_id));
-		
+
 		$this->cache->delete('navigation');
 	}
-	
+
 	public function addNavigationLink($navigation_group_id, $link)
 	{
 		$link['navigation_group_id'] = $navigation_group_id;
-		
+
 		$this->insert("navigation", $link);
-		
+
 		$this->cache->delete('navigation');
 	}
-	
+
 	public function deleteNavigationLink($navigation_id)
 	{
 		$this->delete("navigation", $navigation_id);
-		
+
 		$this->cache->delete('navigation');
 	}
-	
+
 	public function getNavigationGroup($navigation_group_id)
 	{
 		$nav_group = $this->queryRow("SELECT * FROM " . DB_PREFIX . "navigation_group WHERE navigation_group_id = " . (int)$navigation_group_id);
-		
+
 		$nav_group['stores'] = $this->getNavigationGroupStores($navigation_group_id);
 		$nav_group['links'] = $this->getNavigationGroupLinks($navigation_group_id);
-		
+
 		return $nav_group;
 	}
-	
+
 	public function getNavigationGroups($data = array(), $select = '*', $total = false) {
 		//Select
 		if ($total) {
@@ -146,31 +146,31 @@ class Admin_Model_Design_Navigation extends Model
 		elseif (!$select) {
 			$select = '*';
 		}
-		
+
 		//From
 		$from = "FROM " . DB_PREFIX . "navigation_group ng";
-		
+
 		//Where
 		$where = "WHERE 1";
-		
+
 		if (!empty($data['name'])) {
 			$where .= " AND name like '%" . $this->escape($data['name']) . "%'";
 		}
-		
+
 		if (isset($data['stores'])) {
 			$from .= " LEFT JOIN " . DB_PREFIX . "navigation_store ns ON (ns.navigation_group_id=ng.navigation_group_id)";
-			
+
 			if (!is_array($data['stores'])) {
 				$data['stores'] = array((int)$data['stores']);
 			}
-			
+
 			$where .= " AND ns.store_id IN (" . implode(',', $data['stores']) . ")";
 		}
-		
+
 		if (isset($data['status'])) {
 			$where .= " AND status = '" . ($data['status'] ? 1 : 0) . "'";
 		}
-		
+
 		//Order By & Limit
 		if (!$total) {
 			$order = $this->extract_order($data);
@@ -179,13 +179,13 @@ class Admin_Model_Design_Navigation extends Model
 			$order = '';
 			$limit = '';
 		}
-		
+
 		//The Query
 		$query = "SELECT $select $from $where $order $limit";
-		
+
 		//Execute
 		$result = $this->query($query);
-		
+
 		//Process Results
 		if ($total) {
 			return $result->row['total'];
@@ -195,29 +195,29 @@ class Admin_Model_Design_Navigation extends Model
 				$row['links'] = $this->getNavigationGroupLinks($row['navigation_group_id']);
 				$row['stores'] = $this->getNavigationGroupStores($row['navigation_group_id']);
 			}
-			
+
 			return $result->rows;
 		}
 	}
-	
+
 	public function getNavigationLinks()
 	{
 		$nav_groups = $this->cache->get('navigation_groups.admin');
-		
+
 		if (!$nav_groups) {
 			$query = "SELECT ng.* FROM " . DB_PREFIX . "navigation_group ng";
 			$query .= " LEFT JOIN " . DB_PREFIX . "navigation_store ns ON (ng.navigation_group_id=ns.navigation_group_id)";
-			$query .= " WHERE ng.status='1' AND ns.store_id='0'";
-			
+			$query .= " WHERE ng.status='1' AND ns.store_id='-1'";
+
 			$query = $this->query($query);
-			
+
 			$nav_groups = array();
-			
+
 			foreach ($query->rows as &$group) {
 				$nav_group_links = $this->getNavigationGroupLinks($group['navigation_group_id']);
-				
+
 				$parent_ref = array();
-				
+
 				foreach ($nav_group_links as $key => &$link) {
 					if (!empty($parent_ref[$link['navigation_id']]['children'])) {
 						$link['children'] = &$parent_ref[$link['navigation_id']]['children'];
@@ -225,36 +225,36 @@ class Admin_Model_Design_Navigation extends Model
 					else {
 						$link['children'] = array();
 					}
-					
+
 					$parent_ref[$link['navigation_id']] = &$link;
-					
+
 					if ($link['parent_id']) {
 						$parent_ref[$link['parent_id']]['children'][] = &$link;
 						unset($nav_group_links[$key]);
 					}
 				}
-				
+
 				$nav_groups[$group['name']] = $nav_group_links;
 			}
 
 			$this->cache->set('navigation_groups.admin', $nav_groups);
 		}
-		
+
 		return $nav_groups;
 	}
-	
+
 	public function getNavigationGroupLinks($navigation_group_id)
 	{
 		$result = $this->query("SELECT * FROM " . DB_PREFIX . "navigation WHERE navigation_group_id = '" . (int)$navigation_group_id . "' ORDER BY sort_order ASC");
-		
+
 		return $result->rows;
 	}
-	
+
 	public function getNavigationGroupStores($navigation_group_id)
 	{
 		return $this->queryColumn("SELECT store_id FROM " . DB_PREFIX . "navigation_store WHERE navigation_group_id = " . (int)$navigation_group_id);
 	}
-	
+
 	public function getTotalNavigationGroups($data)
 	{
 		return $this->getNavigationGroups($data, '', true);
@@ -274,7 +274,7 @@ class Admin_Model_Design_Navigation extends Model
 				'sort_order'	=> 0,
 				'status'			=> 1,
 			),
-			
+
 			'content' => array(
 				'display_name'	=> 'Content',
 				'name'			=> 'content',
@@ -283,10 +283,10 @@ class Admin_Model_Design_Navigation extends Model
 				'query'			=> '',
 				'is_route'		=> 0,
 				'parent_id'		=> '',
-				'sort_order'	=> 3,
+				'sort_order'	=> 1,
 				'status'			=> 1,
 			),
-	
+
 				'content_blocks' => array(
 					'display_name'	=> 'Blocks',
 					'name'			=> 'content_blocks',
@@ -298,7 +298,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 0,
 					'status'			=> 1,
 				),
-				
+
 				'content_pages' => array(
 					'display_name'	=> 'Pages',
 					'name'			=> 'content_pages',
@@ -310,7 +310,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 1,
 					'status'			=> 1,
 				),
-				
+
 				'content_featured_products' => array(
 					'display_name'	=> 'Featured Products',
 					'name'			=> 'content_featured_products',
@@ -322,7 +322,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 2,
 					'status'			=> 1,
 				),
-	
+
 				'content_leaderboard' => array(
 					'display_name'	=> 'Leaderboard',
 					'name'			=> 'content_leaderboard',
@@ -334,7 +334,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 3,
 					'status'			=> 1,
 				),
-	
+
 				'content_newsletter' => array(
 					'display_name'	=> 'Newsletter',
 					'name'			=> 'content_newsletter',
@@ -346,7 +346,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 4,
 					'status'			=> 1,
 				),
-	
+
 			'catalog' => array(
 				'display_name'	=> 'Catalog',
 				'name'			=> 'catalog',
@@ -358,7 +358,7 @@ class Admin_Model_Design_Navigation extends Model
 				'sort_order'	=> 4,
 				'status'			=> 1,
 			),
-	
+
 				'catalog_attributes' => array(
 					'display_name'	=> 'Attribute Groups',
 					'name'			=> 'catalog_attributes',
@@ -370,7 +370,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 1,
 					'status'			=> 1,
 				),
-	
+
 				'catalog_options' => array(
 					'display_name'	=> 'Options',
 					'name'			=> 'catalog_options',
@@ -382,7 +382,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 1,
 					'status'			=> 1,
 				),
-	
+
 				'catalog_categories' => array(
 					'display_name'	=> 'Categories',
 					'name'			=> 'catalog_categories',
@@ -394,7 +394,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 2,
 					'status'			=> 1,
 				),
-	
+
 				'catalog_products' => array(
 					'display_name'	=> 'Products',
 					'name'			=> 'catalog_products',
@@ -406,7 +406,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 3,
 					'status'			=> 1,
 				),
-				
+
 					'catalog_products_insert' => array(
 						'display_name'	=> 'Add Product',
 						'name'			=> 'catalog_products_insert',
@@ -417,7 +417,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 0,
 						'status'			=> 1,
 					),
-	
+
 				'catalog_designers' => array(
 					'display_name'	=> 'Designers',
 					'name'			=> 'catalog_designers',
@@ -429,7 +429,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 4,
 					'status'			=> 1,
 				),
-	
+
 				'catalog_downloads' => array(
 					'display_name'	=> 'Downloads',
 					'name'			=> 'catalog_downloads',
@@ -441,7 +441,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 5,
 					'status'			=> 1,
 				),
-	
+
 				'catalog_reviews' => array(
 					'display_name'	=> 'Reviews',
 					'name'			=> 'catalog_reviews',
@@ -453,7 +453,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 6,
 					'status'			=> 1,
 				),
-	
+
 				'catalog_information' => array(
 					'display_name'	=> 'Information',
 					'name'			=> 'catalog_information',
@@ -465,7 +465,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 7,
 					'status'			=> 1,
 				),
-	
+
 			'sales' => array(
 				'display_name'	=> 'Sales',
 				'name'			=> 'sales',
@@ -477,7 +477,7 @@ class Admin_Model_Design_Navigation extends Model
 				'sort_order'	=> 5,
 				'status'			=> 1,
 			),
-	
+
 				'sales_affiliates' => array(
 					'display_name'	=> 'Affiliates',
 					'name'			=> 'sales_affiliates',
@@ -489,7 +489,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 0,
 					'status'			=> 1,
 				),
-	
+
 				'sales_coupons' => array(
 					'display_name'	=> 'Coupons',
 					'name'			=> 'sales_coupons',
@@ -501,7 +501,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 1,
 					'status'			=> 1,
 				),
-	
+
 				'sales_customers' => array(
 					'display_name'	=> 'Customers',
 					'name'			=> 'sales_customers',
@@ -513,7 +513,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 2,
 					'status'			=> 1,
 				),
-	
+
 					'sales_customers_customers' => array(
 						'display_name'	=> 'Customers',
 						'name'			=> 'sales_customers_customers',
@@ -525,7 +525,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 0,
 						'status'			=> 1,
 					),
-	
+
 					'sales_customers_customer_groups' => array(
 						'display_name'	=> 'Customer Groups',
 						'name'			=> 'sales_customers_customer_groups',
@@ -537,7 +537,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 1,
 						'status'			=> 1,
 					),
-	
+
 					'sales_customers_ip_blacklist' => array(
 						'display_name'	=> 'IP Blacklist',
 						'name'			=> 'sales_customers_ip_blacklist',
@@ -549,7 +549,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 2,
 						'status'			=> 1,
 					),
-	
+
 				'sales_orders' => array(
 					'display_name'	=> 'Orders',
 					'name'			=> 'sales_orders',
@@ -561,7 +561,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 3,
 					'status'			=> 1,
 				),
-	
+
 				'sales_gift_vouchers' => array(
 					'display_name'	=> 'Gift Vouchers',
 					'name'			=> 'sales_gift_vouchers',
@@ -573,7 +573,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 4,
 					'status'			=> 1,
 				),
-	
+
 					'sales_gift_vouchers_voucher_themes' => array(
 						'display_name'	=> 'Voucher Themes',
 						'name'			=> 'sales_gift_vouchers_voucher_themes',
@@ -585,7 +585,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 0,
 						'status'			=> 1,
 					),
-	
+
 					'sales_gift_vouchers_gift_vouchers' => array(
 						'display_name'	=> 'Gift Vouchers',
 						'name'			=> 'sales_gift_vouchers_gift_vouchers',
@@ -597,7 +597,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 1,
 						'status'			=> 1,
 					),
-	
+
 				'sales_returns' => array(
 					'display_name'	=> 'Returns',
 					'name'			=> 'sales_returns',
@@ -609,7 +609,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 5,
 					'status'			=> 1,
 				),
-	
+
 			'extensions' => array(
 				'display_name'	=> 'Extensions',
 				'name'			=> 'extensions',
@@ -621,7 +621,7 @@ class Admin_Model_Design_Navigation extends Model
 				'sort_order'	=> 6,
 				'status'			=> 1,
 			),
-	
+
 				'extensions_plugins' => array(
 					'display_name'	=> 'Plugins',
 					'name'			=> 'extensions_plugins',
@@ -633,7 +633,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 0,
 					'status'			=> 1,
 				),
-	
+
 				'extensions_payments' => array(
 					'display_name'	=> 'Payments',
 					'name'			=> 'extensions_payments',
@@ -645,7 +645,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 1,
 					'status'			=> 1,
 				),
-	
+
 				'extensions_modules' => array(
 					'display_name'	=> 'Modules',
 					'name'			=> 'extensions_modules',
@@ -657,7 +657,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 2,
 					'status'			=> 1,
 				),
-	
+
 				'extensions_product_feeds' => array(
 					'display_name'	=> 'Product Feeds',
 					'name'			=> 'extensions_product_feeds',
@@ -669,7 +669,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 3,
 					'status'			=> 1,
 				),
-	
+
 				'extensions_order_totals' => array(
 					'display_name'	=> 'Order Totals',
 					'name'			=> 'extensions_order_totals',
@@ -681,7 +681,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 4,
 					'status'			=> 1,
 				),
-	
+
 				'extensions_shipping' => array(
 					'display_name'	=> 'Shipping',
 					'name'			=> 'extensions_shipping',
@@ -693,7 +693,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 5,
 					'status'			=> 1,
 				),
-	
+
 			'users' => array(
 				'display_name'	=> 'Users',
 				'name'			=> 'users',
@@ -705,7 +705,7 @@ class Admin_Model_Design_Navigation extends Model
 				'sort_order'	=> 7,
 				'status'			=> 1,
 			),
-	
+
 				'users_users' => array(
 					'display_name'	=> 'Users',
 					'name'			=> 'users_users',
@@ -717,7 +717,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 0,
 					'status'			=> 1,
 				),
-	
+
 				'users_user_groups' => array(
 					'display_name'	=> 'User Groups',
 					'name'			=> 'users_user_groups',
@@ -729,7 +729,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 1,
 					'status'			=> 1,
 				),
-	
+
 			'reports' => array(
 				'display_name'	=> 'Reports',
 				'name'			=> 'reports',
@@ -741,7 +741,7 @@ class Admin_Model_Design_Navigation extends Model
 				'sort_order'	=> 8,
 				'status'			=> 1,
 			),
-	
+
 				'reports_affiliates' => array(
 					'display_name'	=> 'Affiliates',
 					'name'			=> 'reports_affiliates',
@@ -753,7 +753,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 0,
 					'status'			=> 1,
 				),
-	
+
 					'reports_affiliates_commission' => array(
 						'display_name'	=> 'Commission',
 						'name'			=> 'reports_affiliates_commission',
@@ -765,7 +765,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 0,
 						'status'			=> 1,
 					),
-	
+
 				'reports_customers' => array(
 					'display_name'	=> 'Customers',
 					'name'			=> 'reports_customers',
@@ -777,7 +777,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 1,
 					'status'			=> 1,
 				),
-	
+
 					'reports_customers_credit' => array(
 						'display_name'	=> 'Credit',
 						'name'			=> 'reports_customers_credit',
@@ -789,7 +789,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 0,
 						'status'			=> 1,
 					),
-	
+
 					'reports_customers_reward_points' => array(
 						'display_name'	=> 'Reward Points',
 						'name'			=> 'reports_customers_reward_points',
@@ -801,7 +801,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 1,
 						'status'			=> 1,
 					),
-	
+
 					'reports_customers_orders' => array(
 						'display_name'	=> 'Orders',
 						'name'			=> 'reports_customers_orders',
@@ -813,7 +813,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 2,
 						'status'			=> 1,
 					),
-	
+
 				'reports_products' => array(
 					'display_name'	=> 'Products',
 					'name'			=> 'reports_products',
@@ -825,7 +825,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 2,
 					'status'			=> 1,
 				),
-	
+
 					'reports_products_purchased' => array(
 						'display_name'	=> 'Purchased',
 						'name'			=> 'reports_products_purchased',
@@ -837,7 +837,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 0,
 						'status'			=> 1,
 					),
-	
+
 					'reports_products_viewed' => array(
 						'display_name'	=> 'Viewed',
 						'name'			=> 'reports_products_viewed',
@@ -849,7 +849,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 1,
 						'status'			=> 1,
 					),
-	
+
 				'reports_sales' => array(
 					'display_name'	=> 'Sales',
 					'name'			=> 'reports_sales',
@@ -861,7 +861,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 3,
 					'status'			=> 1,
 				),
-	
+
 					'reports_sales_orders' => array(
 						'display_name'	=> 'Orders',
 						'name'			=> 'reports_sales_orders',
@@ -873,7 +873,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 0,
 						'status'			=> 1,
 					),
-	
+
 					'reports_sales_tax' => array(
 						'display_name'	=> 'Tax',
 						'name'			=> 'reports_sales_tax',
@@ -885,7 +885,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 1,
 						'status'			=> 1,
 					),
-	
+
 					'reports_sales_coupons' => array(
 						'display_name'	=> 'Coupons',
 						'name'			=> 'reports_sales_coupons',
@@ -897,7 +897,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 2,
 						'status'			=> 1,
 					),
-	
+
 					'reports_sales_shipping' => array(
 						'display_name'	=> 'Shipping',
 						'name'			=> 'reports_sales_shipping',
@@ -909,7 +909,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 3,
 						'status'			=> 1,
 					),
-	
+
 					'reports_sales_returns' => array(
 						'display_name'	=> 'Returns',
 						'name'			=> 'reports_sales_returns',
@@ -921,7 +921,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 4,
 						'status'			=> 1,
 					),
-	
+
 			'system' => array(
 				'display_name'	=> 'System',
 				'name'			=> 'system',
@@ -933,7 +933,7 @@ class Admin_Model_Design_Navigation extends Model
 				'sort_order'	=> 9,
 				'status'			=> 1,
 			),
-	
+
 				'system_settings' => array(
 					'display_name'	=> 'Settings',
 					'name'			=> 'system_settings',
@@ -945,7 +945,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 0,
 					'status'			=> 1,
 				),
-				
+
 					'system_settings_general' => array(
 							'display_name'	=> 'General',
 							'name'			=> 'system_settings_general',
@@ -957,7 +957,7 @@ class Admin_Model_Design_Navigation extends Model
 							'sort_order'	=> 0,
 							'status'			=> 1,
 						),
-						
+
 					'system_settings_update' => array(
 							'display_name'	=> 'Update',
 							'name'			=> 'system_settings_update',
@@ -969,7 +969,7 @@ class Admin_Model_Design_Navigation extends Model
 							'sort_order'	=> 1,
 							'status'			=> 1,
 						),
-				
+
 					'system_settings_orders' => array(
 							'display_name'	=> 'Orders',
 							'name'			=> 'system_settings_orders',
@@ -981,7 +981,7 @@ class Admin_Model_Design_Navigation extends Model
 							'sort_order'	=> 2,
 							'status'			=> 1,
 						),
-		
+
 							'system_settings_orders_order_statuses' => array(
 								'display_name'	=> 'Order Statuses',
 								'name'			=> 'system_settings_orders_order_statuses',
@@ -993,7 +993,7 @@ class Admin_Model_Design_Navigation extends Model
 								'sort_order'	=> 0,
 								'status'			=> 1,
 							),
-					
+
 					'system_settings_policies' => array(
 							'display_name'	=> 'Policies',
 							'name'			=> 'system_settings_policies',
@@ -1005,7 +1005,7 @@ class Admin_Model_Design_Navigation extends Model
 							'sort_order'	=> 3,
 							'status'			=> 1,
 						),
-						
+
 						'system_settings_policies_shipping_policies' => array(
 								'display_name'	=> 'Shipping Policies',
 								'name'			=> 'system_settings_policies_shipping_policies',
@@ -1017,7 +1017,7 @@ class Admin_Model_Design_Navigation extends Model
 								'sort_order'	=> 0,
 								'status'			=> 1,
 							),
-							
+
 						'system_settings_policies_return_policies' => array(
 								'display_name'	=> 'Return Policies',
 								'name'			=> 'system_settings_policies_return_policies',
@@ -1040,7 +1040,7 @@ class Admin_Model_Design_Navigation extends Model
 							'sort_order'	=> 4,
 							'status'			=> 1,
 						),
-		
+
 							'system_settings_returns_return_reasons' => array(
 								'display_name'	=> 'Return Reasons',
 								'name'			=> 'system_settings_returns_return_reasons',
@@ -1052,7 +1052,7 @@ class Admin_Model_Design_Navigation extends Model
 								'sort_order'	=> 0,
 								'status'			=> 1,
 							),
-		
+
 							'system_settings_returns_return_actions' => array(
 								'display_name'	=> 'Return Actions',
 								'name'			=> 'system_settings_returns_return_actions',
@@ -1064,7 +1064,7 @@ class Admin_Model_Design_Navigation extends Model
 								'sort_order'	=> 1,
 								'status'			=> 1,
 							),
-		
+
 							'system_settings_returns_return_statuses' => array(
 								'display_name'	=> 'Return Statuses',
 								'name'			=> 'system_settings_returns_return_statuses',
@@ -1076,7 +1076,7 @@ class Admin_Model_Design_Navigation extends Model
 								'sort_order'	=> 2,
 								'status'			=> 1,
 							),
-				
+
 					'system_settings_controller_overrides' => array(
 								'display_name'	=> 'Controller Overrides',
 								'name'			=> 'system_settings_controller_overrides',
@@ -1088,7 +1088,7 @@ class Admin_Model_Design_Navigation extends Model
 								'sort_order'	=> 5,
 								'status'			=> 1,
 							),
-						
+
 				'system_mail' => array(
 					'display_name'	=> 'Mail',
 					'name'			=> 'system_mail',
@@ -1100,7 +1100,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 1,
 					'status'			=> 1,
 				),
-	
+
 					'system_mail_send_email' => array(
 						'display_name'	=> 'Send Email',
 						'name'			=> 'system_mail_send_email',
@@ -1112,7 +1112,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 0,
 						'status'			=> 1,
 					),
-	
+
 					'system_mail_mail_messages' => array(
 						'display_name'	=> 'Mail Messages',
 						'name'			=> 'system_mail_mail_messages',
@@ -1124,7 +1124,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 1,
 						'status'			=> 1,
 					),
-					
+
 					'system_mail_error' => array(
 						'display_name'	=> 'Failed Messages',
 						'name'			=> 'system_mail_error',
@@ -1136,7 +1136,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 2,
 						'status'			=> 1,
 					),
-				
+
 				'system_url_alias' => array(
 					'display_name'	=> 'URL Alias',
 					'name'			=> 'system_url_alias',
@@ -1148,7 +1148,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 2,
 					'status'			=> 1,
 				),
-	
+
 				'system_db_rules' => array(
 					'display_name'	=> 'DB Rules',
 					'name'			=> 'system_db_rules',
@@ -1160,7 +1160,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 3,
 					'status'			=> 1,
 				),
-	
+
 				'system_cron' => array(
 					'display_name'	=> 'Cron',
 					'name'			=> 'system_cron',
@@ -1172,7 +1172,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 4,
 					'status'			=> 1,
 				),
-	
+
 				'system_design' => array(
 					'display_name'	=> 'Design',
 					'name'			=> 'system_design',
@@ -1184,7 +1184,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 5,
 					'status'			=> 1,
 				),
-	
+
 					'system_design_banners' => array(
 						'display_name'	=> 'Banners',
 						'name'			=> 'system_design_banners',
@@ -1196,7 +1196,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 0,
 						'status'			=> 1,
 					),
-	
+
 					'system_design_navigation' => array(
 						'display_name'	=> 'Navigation',
 						'name'			=> 'system_design_navigation',
@@ -1208,7 +1208,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 1,
 						'status'			=> 1,
 					),
-	
+
 					'system_design_layouts' => array(
 						'display_name'	=> 'Layouts',
 						'name'			=> 'system_design_layouts',
@@ -1220,7 +1220,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 2,
 						'status'			=> 1,
 					),
-	
+
 				'system_backup__restore' => array(
 					'display_name'	=> 'Backup / Restore',
 					'name'			=> 'system_backup__restore',
@@ -1232,7 +1232,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 6,
 					'status'			=> 1,
 				),
-	
+
 				'system_system_tools' => array(
 					'display_name'	=> 'System Tools',
 					'name'			=> 'system_system_tools',
@@ -1244,7 +1244,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 7,
 					'status'			=> 1,
 				),
-	
+
 				'system_error_logs' => array(
 					'display_name'	=> 'Error Logs',
 					'name'			=> 'system_error_logs',
@@ -1256,7 +1256,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 8,
 					'status'			=> 1,
 				),
-	
+
 				'system_localisation' => array(
 					'display_name'	=> 'Localisation',
 					'name'			=> 'system_localisation',
@@ -1268,7 +1268,7 @@ class Admin_Model_Design_Navigation extends Model
 					'sort_order'	=> 9,
 					'status'			=> 1,
 				),
-	
+
 					'system_localisation_currencies' => array(
 						'display_name'	=> 'Currencies',
 						'name'			=> 'system_localisation_currencies',
@@ -1280,7 +1280,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 0,
 						'status'			=> 1,
 					),
-	
+
 					'system_localisation_languages' => array(
 						'display_name'	=> 'Languages',
 						'name'			=> 'system_localisation_languages',
@@ -1292,7 +1292,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 1,
 						'status'			=> 1,
 					),
-	
+
 					'system_localisation_taxes' => array(
 						'display_name'	=> 'Taxes',
 						'name'			=> 'system_localisation_taxes',
@@ -1304,7 +1304,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 3,
 						'status'			=> 1,
 					),
-	
+
 						'system_localisation_taxes_tax_classes' => array(
 							'display_name'	=> 'Tax Classes',
 							'name'			=> 'system_localisation_taxes_tax_classes',
@@ -1316,7 +1316,7 @@ class Admin_Model_Design_Navigation extends Model
 							'sort_order'	=> 0,
 							'status'			=> 1,
 						),
-	
+
 						'system_localisation_taxes_tax_rates' => array(
 							'display_name'	=> 'Tax Rates',
 							'name'			=> 'system_localisation_taxes_tax_rates',
@@ -1328,7 +1328,7 @@ class Admin_Model_Design_Navigation extends Model
 							'sort_order'	=> 1,
 							'status'			=> 1,
 						),
-	
+
 					'system_localisation_zones' => array(
 						'display_name'	=> 'Zones',
 						'name'			=> 'system_localisation_zones',
@@ -1340,7 +1340,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 4,
 						'status'			=> 1,
 					),
-					
+
 					'system_localisation_countries' => array(
 						'display_name'	=> 'Countries',
 						'name'			=> 'system_localisation_countries',
@@ -1352,7 +1352,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 5,
 						'status'			=> 1,
 					),
-					
+
 					'system_localisation_geo_zones' => array(
 						'display_name'	=> 'Geo Zones',
 						'name'			=> 'system_localisation_geo_zones',
@@ -1364,7 +1364,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 6,
 						'status'			=> 1,
 					),
-	
+
 					'system_localisation_stock_statuses' => array(
 						'display_name'	=> 'Stock Statuses',
 						'name'			=> 'system_localisation_stock_statuses',
@@ -1376,7 +1376,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 7,
 						'status'			=> 1,
 					),
-	
+
 					'system_localisation_order_statuses' => array(
 						'display_name'	=> 'Order Statuses',
 						'name'			=> 'system_localisation_order_statuses',
@@ -1388,7 +1388,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 8,
 						'status'			=> 1,
 					),
-	
+
 					'system_localisation_length_classes' => array(
 						'display_name'	=> 'Length Classes',
 						'name'			=> 'system_localisation_length_classes',
@@ -1400,7 +1400,7 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 9,
 						'status'			=> 1,
 					),
-	
+
 					'system_localisation_weight_classes' => array(
 						'display_name'	=> 'Weight Classes',
 						'name'			=> 'system_localisation_weight_classes',
@@ -1412,8 +1412,8 @@ class Admin_Model_Design_Navigation extends Model
 						'sort_order'	=> 10,
 						'status'			=> 1,
 					),
-	
-	
+
+
 			'help' => array(
 				'display_name'	=> 'Help',
 				'name'			=> 'help',
@@ -1425,7 +1425,7 @@ class Admin_Model_Design_Navigation extends Model
 				'sort_order'	=> 10,
 				'status'			=> 1,
 			),
-	
+
 				'help_documentation' => array(
 					'display_name'	=> 'Documentation',
 					'name'			=> 'help_documentation',
@@ -1438,20 +1438,20 @@ class Admin_Model_Design_Navigation extends Model
 					'status'			=> 1,
 				),
 		);
-		
+
 		$result = $this->query("SELECT navigation_group_id FROM " . DB_PREFIX . "navigation_group WHERE name = 'admin'");
-		
+
 		if ($result->num_rows) {
 			$this->deleteNavigationGroup($result->row['navigation_group_id']);
 		}
-		
+
 		$data = array(
 			'name' => 'admin',
 			'status' => 1,
-			'stores' => array(0),
+			'stores' => array(-1),
 			'links' => $links
 		);
-		
+
 		$this->addNavigationGroup($data);
 	}
 }
