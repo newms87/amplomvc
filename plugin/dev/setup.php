@@ -25,6 +25,6 @@ class Dev_Setup extends PluginSetup
 	
 	public function uninstall($keep_data = false)
 	{
-		$this->extend->removeNavigationLink(DEV_NAVIGATION_LINK_NAME);
+		$this->extend->removeNavigationLink('admin', DEV_NAVIGATION_LINK_NAME);
 	}
 }

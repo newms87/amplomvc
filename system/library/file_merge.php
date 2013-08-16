@@ -263,7 +263,22 @@ class FileMerge extends Library
 			}
 		}
 	}
-
+	
+	private function phpQueryMerge($orig_file, $mod_file)
+	{
+		require_once DIR_RESOURCES . 'phpQuery.php';
+		
+		$php_html = file_get_contents($orig_file);
+		
+		$doc = phpQuery::newDocumentPHP($php_html);
+		
+		require_once $mod_file;
+		
+		$doc_string = (string)$doc;
+		
+		return phpQuery::markupToPHP($doc_string);
+	}
+	
 	public function mergeFiles($orig_file, $mod_file, $new_file_path)
 	{
 		if (!file_exists($orig_file)) {
@@ -274,6 +289,34 @@ class FileMerge extends Library
 			return false;
 		}
 		
+		if (preg_match("/\.tpl$/", $orig_file)) {
+			$contents = $this->phpQueryMerge($orig_file, $mod_file);
+		} else {
+			$contents = $this->fileMerge($orig_file, $mod_file);
+		}
+		
+		if (!is_dir(dirname($new_file_path))) {
+			$mode = octdec($this->config->get('config_plugin_dir_mode'));
+			mkdir(dirname($new_file_path), $mode, true);
+			chmod(dirname($new_file_path), $mode);
+		}
+		if (!is_file($new_file_path)) {
+			$mode = octdec($this->config->get('config_plugin_file_mode'));
+			touch($new_file_path);
+			chmod($new_file_path, $mode);
+		}
+		
+		if ( file_put_contents($new_file_path, $contents) ) {
+			return true;
+		}
+		else {
+			$this->setError($new_file_path, 0, '', "Could not write to file!");
+			return false;
+		}
+	}
+	
+	private function fileMerge($orig_file, $mod_file)
+	{
 		$comments = array('php'=>array('#',''), 'html'=>array("<? #", "?>"));
 		$comm_mode = false;
 		
@@ -478,28 +521,9 @@ class FileMerge extends Library
 			$original[$i] .= "\r\n";
 		}
 		
-		$new_file = array_merge($new_file, array_slice($original, $index));
-		
-		if (!is_dir(dirname($new_file_path))) {
-			$mode = octdec($this->config->get('config_plugin_dir_mode'));
-			mkdir(dirname($new_file_path), $mode, true);
-			chmod(dirname($new_file_path), $mode);
-		}
-		if (!is_file($new_file_path)) {
-			$mode = octdec($this->config->get('config_plugin_file_mode'));
-			touch($new_file_path);
-			chmod($new_file_path, $mode);
-		}
-		
-		if ( file_put_contents($new_file_path, $new_file) ) {
-			return true;
-		}
-		else {
-			$this->setError($new_file_path, 0, '', "Could not write to file!");
-			return false;
-		}
+		return array_merge($new_file, array_slice($original, $index));
 	}
-
+		
 	private function findBlock($block, $file, $start_index)
 	{
 		if(!count($block) || (count($block) > (count($file) - $start_index))) return false;
