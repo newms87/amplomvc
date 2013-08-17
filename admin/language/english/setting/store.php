@@ -26,6 +26,7 @@ $_['button_system_update']  = "System Update";
 // Column
 $_['column_name']   = 'Store Name';
 $_['column_url']    = 'Store URL';
+$_['column_image']  = 'Store Preview';
 $_['column_action'] = 'Action';
 
 // Entry
