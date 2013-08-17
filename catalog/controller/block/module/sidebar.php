@@ -8,20 +8,17 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 
 		$category_id = !empty($_GET['category_id']) ? (int)$_GET['category_id'] : false;
 
-		$main_menu = array();
+		$categories = $this->Model_Catalog_Category->getCategoryTree();
 
-		$main_menu[0] = array(
-			'name' => $this->_('text_name_all'),
-			'href' => $this->url->link("product/category"),
-		);
+		$this->Model_Catalog_Category->applyFunction($categories, function(&$category, $that) {
+			$category['href'] = $that->url->link('product/category', 'category_id=' . $category['category_id']);
+		}, $this);
 
-		$collections = $this->Model_Catalog_Collection->getCollectionCategories();
-
-		$main_menu += $this->buildCategoryMenu($collections);
+		$main_menu = $categories;
 
 		$this->data['main_menu'] = array(
 			'label' => $this->_('text_main_menu'),
-			'menu'  => $main_menu,
+			'menu' => $main_menu,
 		);
 
 		//Product Attributes Filter
@@ -35,18 +32,23 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 			foreach ($settings['attributes'] as $attribute_menu) {
 				$attribute_group_id = $attribute_menu['attribute_group_id'];
 
-				$attribute_list = $this->Model_Catalog_Category->getAttributeList($category_id, $attribute_group_id);
+				$filter = array(
+					'category_ids' => array($category_id),
+					'attribute_group_ids' => array($attribute_group_id),
+				);
 
-				if (empty($attribute_list)) {
+				$attribute_list = $this->Model_Catalog_Product->getAttributes($filter);
+
+				if(empty($attribute_list)) {
 					continue;
 				}
 
 				//Setup attribute menu items
 				foreach ($attribute_list as &$attribute) {
 					//Build Attribute Query
-					$attribute_filter                      = $current_filter;
+					$attribute_filter = $current_filter;
 					$attribute_filter[$attribute_group_id] = $attribute['attribute_id'];
-					$attribute_query                       = http_build_query(array('attribute' => $attribute_filter));
+					$attribute_query = http_build_query(array('attribute' => $attribute_filter));
 
 					$attribute['href'] = $this->url->link($route, $url_query . '&' . $attribute_query);
 				}
@@ -57,14 +59,14 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 				$attribute_query = http_build_query(array('attribute' => $attribute_filter));
 
 				$menu = array(
-					'name'     => $attribute_menu['group_name'],
-					'href'     => $this->url->link($route, $url_query . '&' . $attribute_query),
+					'name' => $attribute_menu['group_name'],
+					'href' => $this->url->link($route, $url_query . '&' . $attribute_query),
 					'children' => $attribute_list,
 				);
 
 				$this->data['attribute_menu'][] = array(
 					'label' => $attribute_menu['menu_name'],
-					'menu'  => array($menu)
+					'menu' => array($menu)
 				);
 			}
 		}
@@ -74,34 +76,9 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 
 		$this->data['page_menu'] = array(
 			'label' => '',
-			'menu'  => $page_links,
+			'menu' => $page_links,
 		);
 
 		$this->render();
-	}
-
-	private function buildCategoryMenu($collections)
-	{
-		$category_id = !empty($_GET['category_id']) ? $_GET['category_id'] : false;
-
-		$collection_menu = array();
-		$parents         = array();
-
-		//NOTE: This is only a 2 level menu
-		foreach ($collections as $collection) {
-
-			$menu_item = array(
-				'name' => $collection['name'],
-				'href' => $this->url->link('product/category', 'category_id=' . $collection['category_id']),
-			);
-
-			if ((int)$collection['parent_id'] == 0) {
-				$parents[$collection['category_id']] = $menu_item;
-			} else {
-				$parents[$collection['parent_id']]['children'][] = $menu_item;
-			}
-		}
-
-		return $parents;
 	}
 }
