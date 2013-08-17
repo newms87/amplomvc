@@ -8,16 +8,13 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 
 		$category_id = !empty($_GET['category_id']) ? (int)$_GET['category_id'] : false;
 
-		$main_menu = array();
+		$categories = $this->Model_Catalog_Category->getCategoryTree();
 
-		$main_menu[0] = array(
-			'name' => $this->_('text_name_all'),
-			'href' => $this->url->link("product/category"),
-		);
+		$this->Model_Catalog_Category->applyFunction($categories, function(&$category, $that) {
+			$category['href'] = $that->url->link('product/category', 'category_id=' . $category['category_id']);
+		}, $this);
 
-		$categories = $this->Model_Catalog_Product->getCategoryTree();
-
-		$main_menu += $this->buildCategoryMenu($categories);
+		$main_menu = $categories;
 
 		$this->data['main_menu'] = array(
 			'label' => $this->_('text_main_menu'),
@@ -35,7 +32,12 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 			foreach ($settings['attributes'] as $attribute_menu) {
 				$attribute_group_id = $attribute_menu['attribute_group_id'];
 
-				$attribute_list = $this->Model_Catalog_Category->getAttributeList($category_id, $attribute_group_id);
+				$filter = array(
+					'category_ids' => array($category_id),
+					'attribute_group_ids' => array($attribute_group_id),
+				);
+
+				$attribute_list = $this->Model_Catalog_Product->getAttributes($filter);
 
 				if(empty($attribute_list)) {
 					continue;
@@ -78,28 +80,5 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 		);
 
 		$this->render();
-	}
-
-	private function buildCategoryMenu($categories)
-	{
-		$parents = array();
-
-		//NOTE: This is only a 2 level menu
-		foreach ($categories as $category) {
-
-			$menu_item = array(
-				'name' => $category['name'],
-				'href' => $this->url->link('product/category', 'category_id=' . $category['category_id']),
-			);
-
-			if ((int)$category['parent_id'] == 0) {
-				$parents[$category['category_id']] = $menu_item;
-			}
-			else {
-				$parents[$category['parent_id']]['children'][] = $menu_item;
-			}
-		}
-
-		return $parents;
 	}
 }
