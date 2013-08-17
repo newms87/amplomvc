@@ -1,7 +1,7 @@
 <?php
 class Admin_Controller_Shipping_Usps extends Controller
 {
-	
+
 
 	public function index()
 	{
@@ -25,13 +25,13 @@ class Admin_Controller_Shipping_Usps extends Controller
 			$this->data['error_warning'] = '';
 		}
 
- 		if (isset($this->error['user_id'])) {
+		if (isset($this->error['user_id'])) {
 			$this->data['error_user_id'] = $this->error['user_id'];
 		} else {
 			$this->data['error_user_id'] = '';
 		}
 
- 		if (isset($this->error['postcode'])) {
+		if (isset($this->error['postcode'])) {
 			$this->data['error_postcode'] = $this->error['postcode'];
 		} else {
 			$this->data['error_postcode'] = '';
@@ -55,9 +55,9 @@ class Admin_Controller_Shipping_Usps extends Controller
 			$this->data['error_height'] = '';
 		}
 
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('text_shipping'), $this->url->link('extension/shipping'));
-			$this->breadcrumb->add($this->_('head_title'), $this->url->link('shipping/usps'));
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('text_shipping'), $this->url->link('extension/shipping'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('shipping/usps'));
 
 		$this->data['action'] = $this->url->link('shipping/usps');
 
@@ -464,4 +464,4 @@ class Admin_Controller_Shipping_Usps extends Controller
 
 		return $this->error ? false : true;
 	}
-}
+}

@@ -1,20 +1,21 @@
 <?= $header; ?>
-<div class="content">
-	<?= $this->breadcrumb->render(); ?>
-	<div class="box">
-		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt="" /> <?= $head_title; ?></h1>
-			<div class="buttons">
-				<a href="<?= $insert; ?>" class="button"><?= $button_insert; ?></a>
+	<div class="content">
+		<?= $this->breadcrumb->render(); ?>
+		<div class="box">
+			<div class="heading">
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'setting.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+
+				<div class="buttons">
+					<a href="<?= $insert; ?>" class="button"><?= $button_insert; ?></a>
+				</div>
 			</div>
-		</div>
-		<div class="content">
-			<div id="listing">
-				<?= $list_view; ?>
+			<div class="content">
+				<div id="listing">
+					<?= $list_view; ?>
+				</div>
+				<div class="pagination"><?= $pagination; ?></div>
 			</div>
-			<div class="pagination"><?= $pagination; ?></div>
 		</div>
 	</div>
-</div>
 
 <?= $footer; ?>

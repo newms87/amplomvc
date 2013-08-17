@@ -262,6 +262,10 @@ class Admin_Controller_Catalog_Product extends Controller
 					'text' => $this->_('text_edit'),
 					'href' => $this->url->link('catalog/product/update', 'product_id=' . $product['product_id'])
 				),
+				'copy' => array(
+					'text' => $this->_('text_copy'),
+					'href' => $this->url->link('catalog/product/copy', 'product_id=' . $product['product_id'])
+				)
 			);
 
 			if (!$this->order->productInConfirmedOrder($product['product_id'])) {
@@ -348,7 +352,7 @@ class Admin_Controller_Catalog_Product extends Controller
 				'default'      => $this->config->get('config_default_shipping_policy'),
 			),
 
-			'return_policy_id' => array(
+			'return_policy_id'   => array(
 				'label'        => $this->_('text_return_policy'),
 				'type'         => 'select',
 				'build_data'   => $this->cart->getReturnPolicies(),
@@ -359,7 +363,7 @@ class Admin_Controller_Catalog_Product extends Controller
 				'default'      => $this->config->get('config_default_return_policy'),
 			),
 
-			'add_cat' => array(
+			'add_cat'            => array(
 				'label'        => "Add Category",
 				'type'         => 'select',
 				'build_data'   => $categories,
@@ -369,7 +373,7 @@ class Admin_Controller_Catalog_Product extends Controller
 				),
 			),
 
-			'remove_cat' => array(
+			'remove_cat'         => array(
 				'label'        => "Remove Category",
 				'type'         => 'select',
 				'build_data'   => $categories,
@@ -379,11 +383,11 @@ class Admin_Controller_Catalog_Product extends Controller
 				),
 			),
 
-			'copy' => array(
+			'copy'               => array(
 				'label' => $this->_('text_copy'),
 			),
 
-			'delete' => array(
+			'delete'             => array(
 				'label' => $this->_('text_delete'),
 			),
 		);

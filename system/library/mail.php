@@ -10,7 +10,7 @@ class Mail extends Library
 	protected $text;
 	protected $html;
 	protected $attachments;
-	
+
 	public $protocol;
 	public $parameter;
 	public $hostname;
@@ -18,7 +18,7 @@ class Mail extends Library
 	public $password;
 	public $port;
 	public $timeout;
-	
+
 	public $newline;
 	public $crlf;
 	public $verp;
@@ -26,38 +26,38 @@ class Mail extends Library
 	public function __construct($registry)
 	{
 		parent::__construct($registry);
-		
+
 		$this->protocol  = $this->config->get('config_mail_protocol');
 		$this->parameter = $this->config->get('config_mail_parameter');
 		$this->hostname  = $this->config->get('config_smtp_host');
 		$this->username  = $this->config->get('config_smtp_username');
 		$this->password  = $this->config->get('config_smtp_password');
-		$this->port		= $this->config->get('config_smtp_port');
-		$this->timeout	= $this->config->get('config_smtp_timeout');
-		
+		$this->port      = $this->config->get('config_smtp_port');
+		$this->timeout   = $this->config->get('config_smtp_timeout');
+
 		$this->init();
 	}
-	
+
 	public function init()
 	{
-		$this->to = null;
-		$this->cc = null;
-		$this->bcc = null;
-		$this->from = null;
-		$this->sender = null;
-		$this->subject = null;
-		$this->text = null;
-		$this->html = null;
+		$this->to          = null;
+		$this->cc          = null;
+		$this->bcc         = null;
+		$this->from        = null;
+		$this->sender      = null;
+		$this->subject     = null;
+		$this->text        = null;
+		$this->html        = null;
 		$this->attachments = array();
-		$this->newline = "\n";
-		$this->crlf = "\r\n";
-		$this->verp = false;
+		$this->newline     = "\n";
+		$this->crlf        = "\r\n";
+		$this->verp        = false;
 	}
-	
+
 	/**
-	* @param $to - Can be a single email, an array of emails or comma separated string of emails
-	*/
-	
+	 * @param $to - Can be a single email, an array of emails or comma separated string of emails
+	 */
+
 	public function setTo($to)
 	{
 		if (is_array($to)) {
@@ -67,7 +67,7 @@ class Mail extends Library
 			$this->to = trim($to);
 		}
 	}
-	
+
 	public function setCc($to)
 	{
 		if (is_array($to)) {
@@ -77,7 +77,7 @@ class Mail extends Library
 			$this->cc = trim($to);
 		}
 	}
-	
+
 	public function setBcc($to)
 	{
 		if (is_array($to)) {
@@ -87,18 +87,18 @@ class Mail extends Library
 			$this->bcc = trim($to);
 		}
 	}
-	
+
 	/**
-	* @param $from - The email address to be sent from
-	*/
+	 * @param $from - The email address to be sent from
+	 */
 	public function setFrom($from)
 	{
 		$this->from = trim($from);
 	}
-	
+
 	/**
-	* @param $sender - The name displayed for who the email was sent from
-	*/
+	 * @param $sender - The name displayed for who the email was sent from
+	 */
 	public function setSender($sender)
 	{
 		$this->sender = trim($sender);
@@ -122,69 +122,68 @@ class Mail extends Library
 	public function addAttachment($filename)
 	{
 		if (is_array($filename)) {
-			$this->attachments = array_merge($this->attachments,$filename);
-		}
-		else {
+			$this->attachments = array_merge($this->attachments, $filename);
+		} else {
 			$this->attachments[] = $filename;
 		}
 	}
-	
+
 	public function callController($controller)
 	{
 		$args = func_get_args();
 		array_shift($args);
-		
+
 		$action = new Action($this->registry, $controller, $args, 'catalog/controller/mail');
-		
+
 		//Set the language and Template to the Front End
 		$this->language->setRoot(SITE_DIR . 'catalog/language/');
 		$action->getController()->template->setRootDirectory(SITE_DIR . 'catalog/view/theme/');
-		
+
 		if (!$action->execute()) {
 			$this->mail->callController('error', "Failed to call Mail Controller: " . $action->getClass() . "! " . get_caller(0, 2));
 		}
-		
+
 		$this->language->setRoot(DIR_LANGUAGE);
 	}
-	
+
 	public function send($data = null)
 	{
 		if ($data) {
 			if (isset($data['sender'])) {
 				$this->setSender($data['sender']);
 			}
-			
+
 			if (isset($data['from'])) {
 				$this->setFrom($data['from']);
 			}
-			
+
 			if (isset($data['to'])) {
 				$this->setTo($data['to']);
 			}
-			
+
 			if (isset($data['cc'])) {
 				$this->setCc($data['cc']);
 			}
-			
+
 			if (isset($data['bcc'])) {
 				$this->setBcc($data['bcc']);
 			}
-			
+
 			if (isset($data['subject'])) {
 				$this->setSubject($data['subject']);
 			}
-			
+
 			if (!empty($data['html'])) {
 				$this->setHtml($data['html']);
 			} elseif (!empty($data['text'])) {
 				$this->setText($data['text']);
 			}
-			
+
 			if (isset($data['attachment'])) {
 				if (!empty($_FILES['attachment']) && empty($_FILES['attachment']['error'])) {
 					$files = $_FILES['attachment'];
-					
-					for($i = 0; $i < count($files['name']); $i++){
+
+					for ($i = 0; $i < count($files['name']); $i++) {
 						$file_name = dirname($files['tmp_name'][$i]) . '/' . $files['name'][$i];
 						rename($files['tmp_name'][$i], $file_name);
 						$this->addAttachment($file_name);
@@ -192,7 +191,7 @@ class Mail extends Library
 				}
 			}
 		}
-		
+
 		$errors = '';
 		if (!$this->to) {
 			$msg = 'E-Mail To required!';
@@ -221,41 +220,40 @@ class Mail extends Library
 			$this->trigger_error($msg);
 			$errors .= $msg;
 		}
-		
+
 		if ($errors) {
-			$cc = $this->cc ? "(CC: $this->cc)":'';
-			$bcc = $this->bcc ? "(BCC: $this->bcc)":'';
+			$cc  = $this->cc ? "(CC: $this->cc)" : '';
+			$bcc = $this->bcc ? "(BCC: $this->bcc)" : '';
 			$msg = "There was a problem while sending an email to $this->to $cc $bcc<br />\r\n<br />\r\nThe Errors were as follows below: <br />\r\n<br />\r\n$errors";
-			
+
 			$msg .= get_caller();
-			
+
 			$this->trigger_error($msg);
-			
+
 			if (isset($this->config) && $this->config->get('config_email_error')) {
-				$this->to = $this->config->get('config_email_error');
-				$this->cc = '';
-				$this->bcc = '';
+				$this->to      = $this->config->get('config_email_error');
+				$this->cc      = '';
+				$this->bcc     = '';
 				$this->subject = "There was a problem sending out the email!";
-				$this->text = $msg;
-			}
-			else {
+				$this->text    = $msg;
+			} else {
 				$this->trigger_error("Please set the Error Email Address under settings!");
 				return false;
 			}
 		}
-		
+
 
 		$boundary = '----=_NextPart_' . md5(time());
 
 		$header = '';
-		
+
 		$header .= 'MIME-Version: 1.0' . $this->newline;
-		
+
 		if ($this->protocol != 'mail') {
 			$header .= 'To: ' . $this->to . $this->newline;
 			$header .= 'Subject: ' . $this->subject . $this->newline;
 		}
-		
+
 		$header .= 'Cc: ' . $this->cc . $this->newline;
 		$header .= 'Bcc: ' . $this->bcc . $this->newline;
 		$header .= 'Date: ' . date("D, d M Y H:i:s O") . $this->newline;
@@ -266,12 +264,12 @@ class Mail extends Library
 		$header .= 'Content-Type: multipart/related; boundary="' . $boundary . '"' . $this->newline . $this->newline;
 
 		if (!$this->html) {
-			$message  = '--' . $boundary . $this->newline;
+			$message = '--' . $boundary . $this->newline;
 			$message .= 'Content-Type: text/plain; charset="utf-8"' . $this->newline;
 			$message .= 'Content-Transfer-Encoding: 8bit' . $this->newline . $this->newline;
 			$message .= $this->text . $this->newline;
 		} else {
-			$message  = '--' . $boundary . $this->newline;
+			$message = '--' . $boundary . $this->newline;
 			$message .= 'Content-Type: multipart/alternative; boundary="' . $boundary . '_alt"' . $this->newline . $this->newline;
 			$message .= '--' . $boundary . '_alt' . $this->newline;
 			$message .= 'Content-Type: text/plain; charset="utf-8"' . $this->newline;
@@ -293,9 +291,9 @@ class Mail extends Library
 		foreach ($this->attachments as $attachment) {
 			if (file_exists($attachment)) {
 				$handle = fopen($attachment, 'r');
-				
+
 				$content = fread($handle, filesize($attachment));
-				
+
 				fclose($handle);
 
 				$message .= '--' . $boundary . $this->newline;
@@ -309,7 +307,7 @@ class Mail extends Library
 		}
 
 		$message .= '--' . $boundary . '--' . $this->newline;
-		
+
 		if ($this->protocol == 'mail') {
 			ini_set('sendmail_from', $this->from);
 
@@ -320,14 +318,14 @@ class Mail extends Library
 			}
 		} elseif ($this->protocol == 'smtp') {
 			$handle = fsockopen($this->hostname, $this->port, $errno, $errstr, $this->timeout);
-			
+
 			$handle = fsockopen('localhost', 25, $errno, $errstr, 3);
-			
+
 			if (!$handle) {
 				$this->trigger_error('' . $errstr . ' (' . $errno . ')');
 				return false;
 			}
-			
+
 			if (substr(PHP_OS, 0, 3) != 'WIN') {
 				socket_set_timeout($handle, $this->timeout, 0);
 			}
@@ -355,9 +353,9 @@ class Mail extends Library
 				}
 			}
 
-			if (!empty($this->username)  && !empty($this->password)) {
+			if (!empty($this->username) && !empty($this->password)) {
 				fputs($handle, 'EHLO ' . getenv('SERVER_NAME') . $this->crlf);
-				
+
 				$reply = '';
 
 				while ($line = fgets($handle, 515)) {
@@ -367,7 +365,7 @@ class Mail extends Library
 						break;
 					}
 				}
-				
+
 				if (substr($reply, 0, 3) != 250) {
 					$this->trigger_error('EHLO not accepted from server!');
 					return false;
@@ -425,7 +423,7 @@ class Mail extends Library
 				}
 			} else {
 				fputs($handle, 'HELO ' . getenv('SERVER_NAME') . $this->crlf);
-				
+
 				$reply = '';
 
 				while ($line = fgets($handle, 515)) {
@@ -517,16 +515,16 @@ class Mail extends Library
 				$this->trigger_error('DATA not accepted from server!');
 				return false;
 			}
-				
+
 			// According to rfc 821 we should not send more than 1000 including the CRLF
-			$message = str_replace("\r\n", "\n",  $header . $message);
+			$message = str_replace("\r\n", "\n", $header . $message);
 			$message = str_replace("\r", "\n", $message);
-			
+
 			$lines = explode("\n", $message);
-			
+
 			foreach ($lines as $line) {
 				$results = str_split($line, 998);
-				
+
 				foreach ($results as $result) {
 					if (substr(PHP_OS, 0, 3) != 'WIN') {
 						fputs($handle, $result . $this->crlf);
@@ -535,24 +533,24 @@ class Mail extends Library
 					}
 				}
 			}
-			
+
 			fputs($handle, '.' . $this->crlf);
 
 			$reply = '';
-			
+
 			while ($line = fgets($handle, 515)) {
 				$reply .= $line;
-				
+
 				if (substr($line, 3, 1) == ' ') {
 					break;
 				}
 			}
-			
+
 			if (substr($reply, 0, 3) != 250) {
 				$this->trigger_error('DATA not accepted from server!');
 				return false;
 			}
-			
+
 			fputs($handle, 'QUIT' . $this->crlf);
 
 			$reply = '';
@@ -583,39 +581,38 @@ class Mail extends Library
 			$this->config->set('config_error_display', false);
 			trigger_error($msg);
 			$this->config->set('config_error_display', true);
-		}
-		else {
+		} else {
 			trigger_error($msg);
 		}
-		
+
 		if ($this->config->get('config_error_display')) {
 			$view_mail_errors = $this->url->admin('mail/error');
 			$this->message->system('warning', "There was an error while sending an email <a href=\"$view_mail_errors\">(review all mail errors)</a>: " . $msg);
 		}
-		
+
 		$mail_fail = array(
-			'mail' => $this,
-			'error' => $msg,
-			'to' => $this->to,
-			'cc' => $this->cc,
-			'bcc' => $this->bcc,
-			'from' => $this->from,
-			'sender' => $this->sender,
-			'subject' => $this->subject,
-			'html' => $this->html,
-			'text' => $this->text,
+			'mail'       => $this,
+			'error'      => $msg,
+			'to'         => $this->to,
+			'cc'         => $this->cc,
+			'bcc'        => $this->bcc,
+			'from'       => $this->from,
+			'sender'     => $this->sender,
+			'subject'    => $this->subject,
+			'html'       => $this->html,
+			'text'       => $this->text,
 			'attachment' => $this->attachments,
-			'store_id' => $this->config->get('config_store_id'),
-			'time' => time(),
+			'store_id'   => $this->config->get('config_store_id'),
+			'time'       => time(),
 		);
-		
+
 		$temp = $this->registry;
 		unset($this->registry);
-		$mail_fail = serialize($mail_fail);
+		$mail_fail      = serialize($mail_fail);
 		$this->registry = $temp;
-		
+
 		$mail_fail = $this->db->escape($mail_fail);
-		
+
 		$this->db->query("INSERT INTO " . DB_PREFIX . "setting SET store_id = '0', `group` = 'mail_fail', `key` = 'mail_fail', value = '$mail_fail', serialized = '1', auto_load = '0'");
 	}
-}
+}

@@ -4,9 +4,9 @@ global $html_dump_count;
 $html_dump_count = 0;
 function html_dump($var, $label= "HTML Dump", $level=0, $max = -1, $print = true) {
 	global $html_dump_count;
-	
+
 	$id = 'html_dump-' . $html_dump_count;
-	
+
 	if (!$print) {
 		ob_start();
 	}
@@ -60,7 +60,7 @@ function open_html_dump(id) {
 
 <?
 	$html_dump_count++;
-	
+
 	if (!$print) {
 		return ob_get_clean();
 	}
@@ -75,7 +75,7 @@ function html_dump_r($var, $level, $max) {
 		foreach($var as $key=>$v) {
 			echo "<tr class ='key_value_pair'>";
 			echo "<td valign='top' class='key'>[$key]</td>";
-			
+
 			if ((is_array($v) || is_object($v)) && !($max >= 0 && $level >= ($max-1))) {
 				echo "<td class ='value'>";
 				html_dump_r($v, $level+1, $max);
@@ -94,7 +94,7 @@ function html_dump_r($var, $level, $max) {
 					$val = "NULL";
 				else
 					$val = $v;
-				
+
 				echo "<td class ='value'>$val</td>";
 			}
 			echo "</tr>";
@@ -122,13 +122,13 @@ if (!function_exists('array_column')) {
 	 *
 	 * @param array array - An associative array of arrays
 	 * @param column string - The key column of the $array to get elements for
-	 * 
+	 *
 	 * @return array - an array of values of the column requested
 	 */
 	function array_column($array, $column)
 	{
 		$values = array();
-		
+
 		foreach ($array as $row) {
 			if (!isset($row[$column])) {
 				$values[] = null;
@@ -136,7 +136,7 @@ if (!function_exists('array_column')) {
 				$values[] = $row[$column];
 			}
 		}
-		
+
 		return $values;
 	}
 }
@@ -144,28 +144,28 @@ if (!function_exists('array_column')) {
 if (!function_exists('array_search_key')) {
 	/**
 	 * Searches for an element in a multidimensional array for an element key that matches search_key and
-	 * value that matches needle. 
+	 * value that matches needle.
 	 * It will return the array that contains the search_key => needle pair.
 	 *
-	 * @param search_key mixed - Either a string or int to search by the array key 
-	 * @param needle mixed - The searched value. If needle is a string, the comparison is done in a case-sensitive manner. 
-	 * @param haystack array - The array. 
+	 * @param search_key mixed - Either a string or int to search by the array key
+	 * @param needle mixed - The searched value. If needle is a string, the comparison is done in a case-sensitive manner.
+	 * @param haystack array - The array.
 	 * @param strict bool[optional] - If the third parameter strict is set to true then the array_search function will search for identical elements in the haystack.
-	 * This means it will also check the types of the needle in the haystack, and objects must be the same instance. 
-	 * 
-	 * @return mixed the key for needle if it is found in the array, false otherwise. 
+	 * This means it will also check the types of the needle in the haystack, and objects must be the same instance.
+	 *
+	 * @return mixed the key for needle if it is found in the array, false otherwise.
 	 */
-	
+
 	function array_search_key($search_key, $needle, $haystack, $strict = false){
 		foreach ($haystack as $key => $value) {
 			if (is_array($value)) {
 				$result = array_search_key($search_key, $needle, $value, $strict);
-				
+
 				if (!is_null($result)) {
 					return $result;
 				}
 			}
-	 		
+
 	 		if ($key === $search_key && $value == $needle) {
 	 			return $haystack;
 			}
@@ -180,15 +180,15 @@ if (!function_exists('array_unique_keys')) {
 	 * @param array array - The array to filter duplicate values from
 	 * @param key1 string - the first key to filter by
 	 * @param key2... string (optional) - the second key to filter by
-	 * 
-	 * @return array An array of arrays with unique elements based on specified keys 
+	 *
+	 * @return array An array of arrays with unique elements based on specified keys
 	 */
-	
+
 	function array_unique_keys($array)
 	{
 		$keys = func_get_args();
 		array_shift($keys);
-		
+
 		foreach ($array as $index => $ele) {
 			foreach ($keys as $key) {
 				if (isset($ele[$key])) {
@@ -201,7 +201,7 @@ if (!function_exists('array_unique_keys')) {
 				}
 			}
 		}
-		
+
 		return $array;
 	}
 }
@@ -222,26 +222,26 @@ if (!function_exists('html2text')) {
 
 function get_caller($offset = 0, $limit = 1) {
 	$calls = debug_backtrace(false);
-	
+
 	$html = "";
-	
+
 	$limit += $offset;
-	
-	while ( $offset < $limit && $offset < count($calls) ) {	
+
+	while ( $offset < $limit && $offset < count($calls) ) {
 		$caller = $calls[$offset + 1];
-		
+
 		if (isset($caller['file'])) {
 			$msg = "Called from <b style=\"color:red\">$caller[file]</b> on line <b style=\"color:red\">$caller[line]</b>";
 		}
 		else {
 			$msg = "Called from <b style=\"color:red\">$caller[class]::$caller[function]</b>";
 		}
-		
+
 		$html = "<div style=\"margin-top:5px\"><b>&#187;</b> $msg</div>" . $html;
-		
+
 		$offset++;
 	}
-	
+
 	return "<div style=\"margin-top: 8px; margin-bottom: 8px; margin-left: 15px\">$html</div>";
 }
 
@@ -260,7 +260,7 @@ function _is_writable($dir, $mode = 0755) {
 			mkdir($dir, AMPLOCART_DIR_MODE,true);
 			chmod($dir, AMPLOCART_DIR_MODE);
 		}
-		
+
 		if (!is_dir($dir)) {
 			trigger_error("Do not have write permissions to create directory " . $dir . ". Please change the permissions to allow writing to this directory.");
 			return false;
@@ -275,7 +275,7 @@ function _is_writable($dir, $mode = 0755) {
 			unlink($t_file);
 		}
 	}
-	
+
 	return true;
 }
 

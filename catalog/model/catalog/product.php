@@ -392,7 +392,6 @@ class Catalog_Model_Catalog_Product extends Model
 		return $result->rows;
 	}
 
-
 	public function getProductDiscounts($product_id)
 	{
 		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_discount WHERE product_id = " . (int)$product_id . " AND customer_group_id = " . (int)$this->customer->getCustomerGroupId() . " AND quantity > 0 AND (date_start <= NOW() AND (date_end = '" . DATETIME_ZERO . "' OR date_end > NOW())) ORDER BY quantity ASC, priority ASC, price ASC");

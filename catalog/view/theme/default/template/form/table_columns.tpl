@@ -6,7 +6,7 @@
 		$column_set = array();
 
 		foreach ($fields as $key => $f) {
-			$col_set_num = (int)(($f['column'] - 1) / $max_column);
+			$col_set_num                              = (int)(($f['column'] - 1) / $max_column);
 			$column_set[$col_set_num][$f['column']][] = $f;
 		}
 
@@ -35,7 +35,8 @@
 							                                                        'button',
 							                                                        'submit'
 							                                                   ))
-							) { ?>
+							) {
+								?>
 								<? if ($field['required']) {
 									; ?>
 									<span class="required"></span>
@@ -100,7 +101,8 @@
 						</td>
 					<? } ?>
 				</tr>
-			<? }
+			<?
+			}
 			unset($field_list);
 			unset($field_list2); ?>
 		<? } ?>

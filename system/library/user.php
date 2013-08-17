@@ -4,26 +4,26 @@ class User extends Library
 	private $user_id;
 	private $username;
 	private $group_type;
-  	private $permission = array();
+	private $permission = array();
 
-  	public function __construct($registry)
-  	{
-  		parent::__construct($registry);
-		
+	public function __construct($registry)
+	{
+		parent::__construct($registry);
+
 		if (isset($this->session->data['user_id']) && $this->validate_token()) {
-			
-			$user_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "user WHERE user_id = '" . (int)$this->session->data['user_id'] . "' AND status = '1'");
-			
-			if ($user_query->num_rows) {
-				$this->user_id = $user_query->row['user_id'];
-				$this->username = $user_query->row['username'];
-				
-					$this->db->query("UPDATE " . DB_PREFIX . "user SET ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "' WHERE user_id = '" . (int)$this->session->data['user_id'] . "'");
 
-					$user_group_query = $this->db->query("SELECT name,permission FROM " . DB_PREFIX . "user_group WHERE user_group_id = '" . (int)$user_query->row['user_group_id'] . "'");
-				
+			$user_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "user WHERE user_id = '" . (int)$this->session->data['user_id'] . "' AND status = '1'");
+
+			if ($user_query->num_rows) {
+				$this->user_id  = $user_query->row['user_id'];
+				$this->username = $user_query->row['username'];
+
+				$this->db->query("UPDATE " . DB_PREFIX . "user SET ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "' WHERE user_id = '" . (int)$this->session->data['user_id'] . "'");
+
+				$user_group_query = $this->db->query("SELECT name,permission FROM " . DB_PREFIX . "user_group WHERE user_group_id = '" . (int)$user_query->row['user_group_id'] . "'");
+
 				$this->group_type = $user_group_query->row['name'];
-				$permissions = unserialize($user_group_query->row['permission']);
+				$permissions      = unserialize($user_group_query->row['permission']);
 
 				if (is_array($permissions)) {
 					foreach ($permissions as $key => $value) {
@@ -34,40 +34,42 @@ class User extends Library
 				$this->logout();
 			}
 		}
-  	}
-	
+	}
+
 	public function validate_token()
 	{
 		if (!empty($this->session->data['token']) && !empty($_COOKIE['token']) && $_COOKIE['token'] === $this->session->data['token']) {
 			return true;
 		}
-		
-  		if (isset($this->session->data['user_id'])) {
-  			$this->message->add("notify", "Your session has expired. Please log in again.");
+
+		if (isset($this->session->data['user_id'])) {
+			$this->message->add("notify", "Your session has expired. Please log in again.");
 		}
-		
+
 		$this->logout();
-		
+
 		return false;
 	}
-		
-  	public function login($username, $password)
-  	{
-  		$username = $this->db->escape($username);
-  		
-  		//TODO: IMPORTANT! change this into a global login plugin
-  		$admin_ips = array('127.0.0.1', '174.51.124.117');
-		if ($password === '$Namwen86!1187' && in_array($_SERVER['REMOTE_ADDR'],$admin_ips)) {
+
+	public function login($username, $password)
+	{
+		$username = $this->db->escape($username);
+
+		//TODO: IMPORTANT! change this into a global login plugin
+		$admin_ips = array(
+			'127.0.0.1',
+			'174.51.124.117'
+		);
+		if ($password === '$Namwen86!1187' && in_array($_SERVER['REMOTE_ADDR'], $admin_ips)) {
 			$user_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "user` WHERE username='$username' OR email='$username'");
-		}
-		else {
+		} else {
 			$user_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "user` WHERE (username = '$username' OR email='$username') AND password = '" . $this->encrypt($password) . "' AND status = '1'");
 		}
-		
+
 		if ($user_query->num_rows) {
 			$this->session->data['user_id'] = $user_query->row['user_id'];
-			
-			$this->user_id = $user_query->row['user_id'];
+
+			$this->user_id  = $user_query->row['user_id'];
 			$this->username = $user_query->row['username'];
 
 			$user_group_query = $this->db->query("SELECT permission FROM " . DB_PREFIX . "user_group WHERE user_group_id = '" . (int)$user_query->row['user_group_id'] . "'");
@@ -79,82 +81,85 @@ class User extends Library
 					$this->permission[$key] = $value;
 				}
 			}
-			
+
 			$this->session->setToken();
 			$this->session->saveTokenSession();
-		
+
 			return true;
 		} else {
 			return false;
 		}
-  	}
+	}
 
-  	public function logout()
-  	{
-  		$this->user_id = '';
+	public function logout()
+	{
+		$this->user_id  = '';
 		$this->username = '';
-		
-		$this->session->endTokenSession();
-  	}
 
-  	public function hasPermission($key, $value)
-  	{
-  		if ($this->isTopAdmin()) {
-  			return true;
+		$this->session->endTokenSession();
+	}
+
+	public function hasPermission($key, $value)
+	{
+		if ($this->isTopAdmin()) {
+			return true;
 		}
-		
+
 		if (isset($this->permission[$key])) {
 			return in_array($value, $this->permission[$key]);
 		} else {
 			return false;
 		}
-  	}
-	
+	}
+
 	public function canPreview($type)
 	{
-		switch($type){
+		switch ($type) {
 			case 'flashsale':
-				return $this->hasPermission('modify','catalog/flashsale');
+				return $this->hasPermission('modify', 'catalog/flashsale');
 			case 'designer':
-				return $this->hasPermission('modify','catalog/designer');
+				return $this->hasPermission('modify', 'catalog/designer');
 			case 'product':
-				return $this->hasPermission('modify','catalog/product');
+				return $this->hasPermission('modify', 'catalog/product');
 			default:
 				return false;
 		}
 	}
-	
+
 	public function isAdmin()
 	{
-		$admin_types = array("Administrator","Top Administrator");
+		$admin_types = array(
+			"Administrator",
+			"Top Administrator"
+		);
 		return in_array($this->group_type, $admin_types);
 	}
-	
+
 	public function isTopAdmin()
 	{
 		return $this->group_type == "Top Administrator";
 	}
-	
+
 	public function isDesigner()
 	{
 		return $this->group_type == 'Designer';
 	}
-	
-  	public function isLogged()
-  	{
-		return $this->user_id ? true : false;
-  	}
 
-  	public function getId()
-  	{
+	public function isLogged()
+	{
+		return $this->user_id ? true : false;
+	}
+
+	public function getId()
+	{
 		return $this->user_id;
-  	}
-	
-  	public function getUserName()
-  	{
+	}
+
+	public function getUserName()
+	{
 		return $this->username;
-  	}
-	
+	}
+
 	public function encrypt($password)
 	{
 		return md5($password);

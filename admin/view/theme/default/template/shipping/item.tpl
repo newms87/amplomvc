@@ -2,43 +2,47 @@
 <div class="content">
 	<?= $this->breadcrumb->render(); ?>
 	<? if ($error_warning) { ?>
-	<div class="message_box warning"><?= $error_warning; ?></div>
+		<div class="message_box warning"><?= $error_warning; ?></div>
 	<? } ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'shipping.png'; ?>" alt="" /> <?= $head_title; ?></h1>
-			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'shipping.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+
+			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a
+					href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
 		</div>
 		<div class="content">
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="form">
 					<tr>
 						<td><?= $entry_cost; ?></td>
-						<td><input type="text" name="item_cost" value="<?= $item_cost; ?>" /></td>
+						<td><input type="text" name="item_cost" value="<?= $item_cost; ?>"/></td>
 					</tr>
 					<tr>
 						<td><?= $entry_tax_class; ?></td>
 						<td><select name="item_tax_class_id">
-									<option value="0"><?= $text_none; ?></option>
-									<? foreach ($tax_classes as $tax_class) { ?>
+								<option value="0"><?= $text_none; ?></option>
+								<? foreach ($tax_classes as $tax_class) { ?>
 									<? if ($tax_class['tax_class_id'] == $item_tax_class_id) { ?>
-									<option value="<?= $tax_class['tax_class_id']; ?>" selected="selected"><?= $tax_class['title']; ?></option>
+										<option value="<?= $tax_class['tax_class_id']; ?>"
+										        selected="selected"><?= $tax_class['title']; ?></option>
 									<? } else { ?>
-									<option value="<?= $tax_class['tax_class_id']; ?>"><?= $tax_class['title']; ?></option>
+										<option value="<?= $tax_class['tax_class_id']; ?>"><?= $tax_class['title']; ?></option>
 									<? } ?>
-									<? } ?>
-								</select></td>
+								<? } ?>
+							</select></td>
 					</tr>
 					<tr>
 						<td><?= $entry_geo_zone; ?></td>
 						<td><select name="item_geo_zone_id">
 								<option value="0"><?= $text_all_zones; ?></option>
 								<? foreach ($geo_zones as $geo_zone) { ?>
-								<? if ($geo_zone['geo_zone_id'] == $item_geo_zone_id) { ?>
-								<option value="<?= $geo_zone['geo_zone_id']; ?>" selected="selected"><?= $geo_zone['name']; ?></option>
-								<? } else { ?>
-								<option value="<?= $geo_zone['geo_zone_id']; ?>"><?= $geo_zone['name']; ?></option>
-								<? } ?>
+									<? if ($geo_zone['geo_zone_id'] == $item_geo_zone_id) { ?>
+										<option value="<?= $geo_zone['geo_zone_id']; ?>"
+										        selected="selected"><?= $geo_zone['name']; ?></option>
+									<? } else { ?>
+										<option value="<?= $geo_zone['geo_zone_id']; ?>"><?= $geo_zone['name']; ?></option>
+									<? } ?>
 								<? } ?>
 							</select></td>
 					</tr>
@@ -46,21 +50,21 @@
 						<td><?= $entry_status; ?></td>
 						<td><select name="item_status">
 								<? if ($item_status) { ?>
-								<option value="1" selected="selected"><?= $text_enabled; ?></option>
-								<option value="0"><?= $text_disabled; ?></option>
+									<option value="1" selected="selected"><?= $text_enabled; ?></option>
+									<option value="0"><?= $text_disabled; ?></option>
 								<? } else { ?>
-								<option value="1"><?= $text_enabled; ?></option>
-								<option value="0" selected="selected"><?= $text_disabled; ?></option>
+									<option value="1"><?= $text_enabled; ?></option>
+									<option value="0" selected="selected"><?= $text_disabled; ?></option>
 								<? } ?>
 							</select></td>
 					</tr>
 					<tr>
 						<td><?= $entry_sort_order; ?></td>
-						<td><input type="text" name="item_sort_order" value="<?= $item_sort_order; ?>" size="1" /></td>
+						<td><input type="text" name="item_sort_order" value="<?= $item_sort_order; ?>" size="1"/></td>
 					</tr>
 				</table>
 			</form>
 		</div>
 	</div>
 </div>
-<?= $footer; ?> 
+<?= $footer; ?>

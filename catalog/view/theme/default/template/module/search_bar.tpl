@@ -3,38 +3,42 @@
 		<input type='hidden' name='action' value='betty_search'/>
 		<ul>
 			<li>
-				<?= $this->builder->build_custom_select_dropdown($categories, 'search_category', array(
-				                                                                                      'display_name' => 'CATEGORY',
-				                                                                                      'value'        => ""
-				                                                                                 ), $search_category); ?>
+				<?=
+				$this->builder->build_custom_select_dropdown($categories, 'search_category', array(
+				                                                                                  'display_name' => 'CATEGORY',
+				                                                                                  'value'        => ""
+				                                                                             ), $search_category); ?>
 			</li>
 			<li>
 				<?
 				$color_list = array();
 				foreach ($colors as $key => $c) {
-					$color_style = "style='background: " . get_color_hex($c) . "'";
+					$color_style  = "style='background: " . get_color_hex($c) . "'";
 					$color_list[] = array(
 						'display_name' => $c,
 						'value'        => $key,
 						'before'       => "<div class='color_circle' $color_style></div>"
 					);
 				}?>
-				<?= $this->builder->build_custom_select_dropdown($color_list, 'search_color', array(
-				                                                                                   'display_name' => 'COLOR',
-				                                                                                   'value'        => ""
-				                                                                              ), $search_color); ?>
-			</li>
-			<li>
-				<?= $this->builder->build_custom_select_dropdown($styles, 'search_style', array(
-				                                                                               'display_name' => 'STYLE',
+				<?=
+				$this->builder->build_custom_select_dropdown($color_list, 'search_color', array(
+				                                                                               'display_name' => 'COLOR',
 				                                                                               'value'        => ""
-				                                                                          ), $search_style); ?>
+				                                                                          ), $search_color); ?>
 			</li>
 			<li>
-				<?= $this->builder->build_custom_select_dropdown($countries, 'search_country', array(
-				                                                                                    'display_name' => 'COUNTRY',
-				                                                                                    'value'        => ""
-				                                                                               ), $search_country); ?>
+				<?=
+				$this->builder->build_custom_select_dropdown($styles, 'search_style', array(
+				                                                                           'display_name' => 'STYLE',
+				                                                                           'value'        => ""
+				                                                                      ), $search_style); ?>
+			</li>
+			<li>
+				<?=
+				$this->builder->build_custom_select_dropdown($countries, 'search_country', array(
+				                                                                                'display_name' => 'COUNTRY',
+				                                                                                'value'        => ""
+				                                                                           ), $search_country); ?>
 			</li>
 		</ul>
 		<input type='submit' value='Go' class='search_go'/>

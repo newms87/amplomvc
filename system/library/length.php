@@ -2,43 +2,43 @@
 class Length extends Library
 {
 	private $lengths = array();
-	
+
 	public function __construct($registry)
 	{
 		parent::__construct($registry);
-		
+
 		$length_class_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "length_class mc LEFT JOIN " . DB_PREFIX . "length_class_description mcd ON (mc.length_class_id = mcd.length_class_id) WHERE mcd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
-	
+
 		foreach ($length_class_query->rows as $result) {
-				$this->lengths[$result['length_class_id']] = array(
+			$this->lengths[$result['length_class_id']] = array(
 				'length_class_id' => $result['length_class_id'],
-				'title'			=> $result['title'],
-				'unit'				=> $result['unit'],
-				'value'			=> $result['value']
-				);
+				'title'           => $result['title'],
+				'unit'            => $result['unit'],
+				'value'           => $result['value']
+			);
 		}
-  	}
-	
-  	public function convert($value, $from, $to)
-  	{
+	}
+
+	public function convert($value, $from, $to)
+	{
 		if ($from == $to) {
-				return $value;
+			return $value;
 		}
-		
+
 		if (isset($this->lengths[$from])) {
 			$from = $this->lengths[$from]['value'];
 		} else {
 			$from = 0;
 		}
-		
+
 		if (isset($this->lengths[$to])) {
 			$to = $this->lengths[$to]['value'];
 		} else {
 			$to = 0;
 		}
-		
-			return $value * ($to / $from);
-  	}
+
+		return $value * ($to / $from);
+	}
 
 	public function format($value, $length_class_id, $decimal_point = '.', $thousand_point = ',')
 	{
@@ -48,4 +48,4 @@ class Length extends Library
 			return number_format($value, 2, $decimal_point, $thousand_point);
 		}
 	}
-}
+}

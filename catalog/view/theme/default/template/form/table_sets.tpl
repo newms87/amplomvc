@@ -27,7 +27,8 @@
 						                                      'button',
 						                                      'submit'
 						                                 ))
-						) { ?>
+						) {
+							?>
 							<div class="field_title">
 								<? if ($field['required']) {
 									; ?>

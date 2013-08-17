@@ -28,7 +28,7 @@ $registry->set('error_log', $error_log);
 $log = new Log($config->get('config_log_filename'), 'Admin');
 $registry->set('log', $log);
 
-$error_handler = function($errno, $errstr, $errfile, $errline) use($error_log, $config){
+$error_handler = function ($errno, $errstr, $errfile, $errline) use ($error_log, $config) {
 	switch ($errno) {
 		case E_NOTICE:
 		case E_USER_NOTICE:
@@ -46,12 +46,12 @@ $error_handler = function($errno, $errstr, $errfile, $errline) use($error_log, $
 			$error = 'Unknown';
 			break;
 	}
-		
+
 	if ($config->get('config_error_display')) {
 		echo '<b>' . $error . '</b>: ' . $errstr . ' in <b>' . $errfile . '</b> on line <b>' . $errline . '</b><br /><br />';
 		flush(); //Flush the error to block any redirects that may execute, this ensure errors are seen!
 	}
-	
+
 	if ($config->get('config_error_log')) {
 		$error_log->write('PHP ' . $error . ':  ' . $errstr . ' in ' . $errfile . ' on line ' . $errline);
 	}

@@ -20,7 +20,7 @@ define('HTTP_AJAX', HTTP_ADMIN . '');
 define('HTTPS_ROOT', SITE_SSL . 'admin/');
 define('HTTPS_IMAGE', SITE_SSL . 'image/');
 
-define('ELFINDER_URL', SITE_URL. 'system/elfinder/');
+define('ELFINDER_URL', SITE_URL . 'system/elfinder/');
 
 // DIR
 define('DIR_APPLICATION', SITE_DIR . 'admin/');

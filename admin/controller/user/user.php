@@ -1,110 +1,117 @@
 <?php
 class Admin_Controller_User_User extends Controller
 {
-	
-	
-  	public function index()
-  	{
+
+
+	public function index()
+	{
 		$this->language->load('user/user');
 
 		$this->document->setTitle($this->_('head_title'));
-	
+
 		$this->getList();
-  	}
-	
-  	public function insert()
-  	{
+	}
+
+	public function insert()
+	{
 		$this->language->load('user/user');
 
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_User_User->addUser($_POST);
-			
-			if($this->user->isAdmin())
-				$this->message->add('success', $this->_('text_success'));
-			else
-				$this->message->add('success', $this->_('text_success_portal'));
-			
-			$url = $this->get_url();
-						
-			if($this->user->isAdmin())
-				$this->url->redirect($this->url->link('user/user', $url));
-			else
-				$this->url->redirect($this->url->link('common/home', $url));
-		}
-	
-		$this->getForm();
-  	}
 
-  	public function update()
-  	{
+			if ($this->user->isAdmin()) {
+				$this->message->add('success', $this->_('text_success'));
+			} else {
+				$this->message->add('success', $this->_('text_success_portal'));
+			}
+
+			$url = $this->get_url();
+
+			if ($this->user->isAdmin()) {
+				$this->url->redirect($this->url->link('user/user', $url));
+			} else {
+				$this->url->redirect($this->url->link('common/home', $url));
+			}
+		}
+
+		$this->getForm();
+	}
+
+	public function update()
+	{
 		$this->language->load('user/user');
 
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_User_User->editUser($_GET['user_id'], $_POST);
-			
+
 			$url = $this->get_url();
-			
+
 			if ($this->user->isDesigner()) {
 				$this->message->add('success', $this->_('text_success_portal'));
 				$this->url->redirect($this->url->link('common/home', $url));
-			}
-			else {
+			} else {
 				$this->message->add('success', $this->_('text_success'));
 				$this->url->redirect($this->url->link('user/user', $url));
 			}
 		}
-	
-		$this->getForm();
-  	}
 
-  	public function delete()
-  	{
+		$this->getForm();
+	}
+
+	public function delete()
+	{
 		$this->language->load('user/user');
 
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		if (isset($_GET['selected']) && $this->validateDelete()) {
-				foreach ($_GET['selected'] as $user_id) {
+			foreach ($_GET['selected'] as $user_id) {
 				$this->Model_User_User->deleteUser($user_id);
 			}
 
-			if($this->user->isAdmin())
+			if ($this->user->isAdmin()) {
 				$this->message->add('success', $this->_('text_success'));
-			else
+			} else {
 				$this->message->add('success', $this->_('text_success_portal'));
-			
+			}
+
 			$url = $this->get_url();
-			
+
 			$this->url->redirect($this->url->link('user/user', $url));
 		}
-	
-		$this->getList();
-  	}
 
-  	private function getList()
-  	{
-  		if ($this->user->isDesigner()) {
-  			$this->url->redirect($this->url->link('common/home'));
+		$this->getList();
+	}
+
+	private function getList()
+	{
+		if ($this->user->isDesigner()) {
+			$this->url->redirect($this->url->link('common/home'));
 		}
-		
+
 		$this->template->load('user/user_list');
 
-  		$url_items = array('sort'=>'username','order'=>'ASC','page'=>1);
-		foreach($url_items as $item=>$default)
-			$$item = isset($_GET[$item])?$_GET[$item]:$default;
-			
+		$url_items = array(
+			'sort'  => 'username',
+			'order' => 'ASC',
+			'page'  => 1
+		);
+		foreach ($url_items as $item => $default) {
+			$$item = isset($_GET[$item]) ? $_GET[$item] : $default;
+		}
+
 		$url = $this->get_url();
-		
+
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('head_title'), $this->url->link('user/user'));
-		
+
 		$this->data['insert'] = $this->url->link('user/user/insert', $url);
 		$this->data['delete'] = $this->url->link('user/user/delete', $url);
-			
+
 		$this->data['users'] = array();
 
 		$data = array(
@@ -113,137 +120,162 @@ class Admin_Controller_User_User extends Controller
 			'start' => ($page - 1) * $this->config->get('config_admin_limit'),
 			'limit' => $this->config->get('config_admin_limit')
 		);
-		
+
 		$user_total = $this->Model_User_User->getTotalUsers();
-		
+
 		$results = $this->Model_User_User->getUsers($data);
-		
+
 		foreach ($results as &$result) {
 			$action = array();
-			
+
 			$action[] = array(
 				'text' => $this->_('text_edit'),
 				'href' => $this->url->link('user/user/update', 'user_id=' . $result['user_id'] . $url)
 			);
-			
-			$result['status']	= $result['status'] ? $this->_('text_enabled') : $this->_('text_disabled');
+
+			$result['status']     = $result['status'] ? $this->_('text_enabled') : $this->_('text_disabled');
 			$result['date_added'] = $this->date->format($result['date_added'], $this->language->getInfo('date_format_short'));
-			$result['selected']	= isset($_GET['selected']) && in_array($result['user_id'], $_GET['selected']);
-			$result['action']	= $action;
-		}unset($result);
-		
+			$result['selected']   = isset($_GET['selected']) && in_array($result['user_id'], $_GET['selected']);
+			$result['action']     = $action;
+		}
+		unset($result);
+
 		$this->data['users'] = $results;
-		
+
 		$url = $order == 'ASC' ? '&order=DESC' : '&order=ASC';
-		
+
 		$url .= $this->get_url(array('page'));
-					
-		$sort_by = array('username','email','status','date_added');
-		foreach($sort_by as $s)
-			$this->data['sort_'.$s] = $this->url->link('user/user', 'sort=' . $s . $url);
-		
-		$url = $this->get_url(array('sort','order'));
-				
+
+		$sort_by = array(
+			'username',
+			'email',
+			'status',
+			'date_added'
+		);
+		foreach ($sort_by as $s) {
+			$this->data['sort_' . $s] = $this->url->link('user/user', 'sort=' . $s . $url);
+		}
+
+		$url = $this->get_url(array(
+		                           'sort',
+		                           'order'
+		                      ));
+
 		$this->pagination->init();
-		$this->pagination->total = $user_total;
+		$this->pagination->total  = $user_total;
 		$this->data['pagination'] = $this->pagination->render();
-								
-		$this->data['sort'] = $sort;
+
+		$this->data['sort']  = $sort;
 		$this->data['order'] = $order;
 
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
-				
+
 		$this->response->setOutput($this->render());
-  	}
-	
+	}
+
 	private function getForm()
 	{
 		if ($this->user->isDesigner()) {
 			$this->template->load('user/user_form_restricted');
-		}
-		else {
+		} else {
 			$this->template->load('user/user_form');
 		}
 
-		$user_id =  isset($_GET['user_id'])? $_GET['user_id']:null;
-		
+		$user_id = isset($_GET['user_id']) ? $_GET['user_id'] : null;
+
 		$this->verify_user();
-		
+
 		$url = $this->get_url();
-		
+
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		
+
 		if (!$this->user->isDesigner()) {
 			$this->breadcrumb->add($this->_('head_title'), $this->url->link('user/user'));
 		}
-		
+
 		if (!$user_id) {
 			$this->data['action'] = $this->url->link('user/user/insert', $url);
 		} else {
-			$this->data['action'] = $this->url->link('user/user/update', 'user_id=' .$user_id . $url);
+			$this->data['action'] = $this->url->link('user/user/update', 'user_id=' . $user_id . $url);
 		}
-		
+
 		$this->data['cancel'] = $this->url->link('user/user', $url);
 
 		if ($user_id && !$this->request->isPost()) {
 			$user_info = $this->Model_User_User->getUser($user_id);
 		}
-		
-		$data_items = array('username'=>'','password'=>'','confirm'=>'','firstname'=>'','lastname'=>'',
-								'email'=>'','designers'=>array(),'user_group_id'=>12,'status'=>0,
-								);
-		$no_fill = array('confirm','password','designers');
-		
-		foreach ($data_items as $item=>$default) {
-			if (isset($_POST[$item]))
+
+		$data_items = array(
+			'username'      => '',
+			'password'      => '',
+			'confirm'       => '',
+			'firstname'     => '',
+			'lastname'      => '',
+			'email'         => '',
+			'designers'     => array(),
+			'user_group_id' => 12,
+			'status'        => 0,
+		);
+		$no_fill    = array(
+			'confirm',
+			'password',
+			'designers'
+		);
+
+		foreach ($data_items as $item => $default) {
+			if (isset($_POST[$item])) {
 				$this->data[$item] = $_POST[$item];
-			elseif (!empty($user_info) && !in_array($item,$no_fill))
+			} elseif (!empty($user_info) && !in_array($item, $no_fill)) {
 				$this->data[$item] = $user_info[$item];
-			else
+			} else {
 				$this->data[$item] = $default;
+			}
 		}
-		
+
 		$manufacturers = $this->Model_Catalog_Manufacturer->getManufacturers();
-		foreach($manufacturers as $m)
+		foreach ($manufacturers as $m) {
 			$this->data['manufacturers'][$m['manufacturer_id']] = $m['name'];
-		
+		}
+
 		$this->data['user_groups'] = $this->Model_User_UserGroup->getUserGroups();
-		
-		$this->data['contact_template'] = $this->getChild('includes/contact',array('type'=>'user', 'id'=>$user_id));
-		
-		
+
+		$this->data['contact_template'] = $this->getChild('includes/contact', array(
+		                                                                           'type' => 'user',
+		                                                                           'id'   => $user_id
+		                                                                      ));
+
+
 		if (!$user_id) {
 			$this->breadcrumb->add($this->_('text_new_user'), $this->url->link('user/user/insert'));
-		}
-		else {
+		} else {
 			$this->breadcrumb->add($this->data['username'], $this->url->link('user/user/update', 'user_id=' . $user_id));
 		}
-		
+
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
-				
+
 		$this->response->setOutput($this->render());
-  	}
-  	
-  	private function validateForm()
-  	{
-  		$this->verify_user();
+	}
+
+	private function validateForm()
+	{
+		$this->verify_user();
 		if (!$this->user->hasPermission('modify', 'user/user')) {
-				$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = $this->_('error_permission');
 		}
-		
+
 		if ($this->user->isAdmin()) {
 			if ((strlen($_POST['username']) < 3) || (strlen($_POST['username']) > 20)) {
-					$this->error['username'] = $this->_('error_username');
+				$this->error['username'] = $this->_('error_username');
 			}
 
 			$user_info = $this->Model_User_User->getUserByUsername($_POST['username']);
-			
+
 			if (!isset($_GET['user_id'])) {
 				if ($user_info) {
 					$this->error['warning'] = $this->_('error_exists');
@@ -254,58 +286,58 @@ class Admin_Controller_User_User extends Controller
 				}
 			}
 		}
-		
+
 		if ((strlen($_POST['firstname']) < 1) || (strlen($_POST['firstname']) > 32)) {
 			$this->error['firstname'] = $this->_('error_firstname');
 		}
 
 		if ((strlen($_POST['lastname']) < 1) || (strlen($_POST['lastname']) > 32)) {
-				$this->error['lastname'] = $this->_('error_lastname');
+			$this->error['lastname'] = $this->_('error_lastname');
 		}
 
 		if ($_POST['password'] || (!isset($_GET['user_id']))) {
-				if ((strlen($_POST['password']) < 4) || (strlen($_POST['password']) > 20)) {
+			if ((strlen($_POST['password']) < 4) || (strlen($_POST['password']) > 20)) {
 				$this->error['password'] = $this->_('error_password');
-				}
-	
+			}
+
 			if ($_POST['password'] != $_POST['confirm']) {
 				$this->error['confirm'] = $this->_('error_confirm');
 			}
 		}
-		
+
 		if ($this->user->isAdmin()) {
 			//if this is a Designer user
 			if ($_POST['user_group_id'] == 12) {
 				if (!isset($_POST['designers'])) {
 					$this->error['no_designer'] = $this->_('error_no_designer');
 				}
-			
+
 				if (!isset($_POST['contact'])) {
 					$this->error['no_contact'] = $this->_("error_no_contact");
 				}
 			}
 		}
-	
-		return $this->error ? false : true;
-  	}
 
-  	private function validateDelete()
-  	{
-  		$this->verify_user(0);
-		
+		return $this->error ? false : true;
+	}
+
+	private function validateDelete()
+	{
+		$this->verify_user(0);
+
 		if (!$this->user->hasPermission('modify', 'user/user')) {
-				$this->error['warning'] = $this->_('error_permission');
+			$this->error['warning'] = $this->_('error_permission');
 		}
-		
+
 		foreach ($_GET['selected'] as $user_id) {
 			if ($this->user->getId() == $user_id) {
 				$this->error['warning'] = $this->_('error_account');
 			}
 		}
-		
+
 		return $this->error ? false : true;
-  	}
-	
+	}
+
 	private function verify_user($user_id = null)
 	{
 		if ($this->user->isDesigner()) {
@@ -316,13 +348,20 @@ class Admin_Controller_User_User extends Controller
 			}
 		}
 	}
-	
-	private function get_url($override=array()){
-		$url = '';
-		$filters = !empty($override)?$override:array('sort', 'order', 'page');
-		foreach($filters as $f)
-			if (isset($_GET[$f]))
+
+	private function get_url($override = array())
+	{
+		$url     = '';
+		$filters = !empty($override) ? $override : array(
+			'sort',
+			'order',
+			'page'
+		);
+		foreach ($filters as $f) {
+			if (isset($_GET[$f])) {
 				$url .= "&$f=" . $_GET[$f];
+			}
+		}
 		return $url;
 	}
 }

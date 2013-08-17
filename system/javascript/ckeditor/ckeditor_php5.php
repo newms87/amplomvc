@@ -448,7 +448,7 @@ class CKEditor
 			return "";
 		}
 
-		$args = "";
+		$args         = "";
 		$ckeditorPath = $this->ckeditorPath();
 
 		if (!empty($this->timestamp) && $this->timestamp != "%" . "TIMESTAMP%") {

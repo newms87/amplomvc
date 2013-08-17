@@ -1,14 +1,14 @@
 <?php
 class Admin_Controller_Localisation_Country extends Controller
 {
-	
+
 
 	public function index()
 	{
 		$this->language->load('localisation/country');
 
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		$this->getList();
 	}
 
@@ -17,14 +17,14 @@ class Admin_Controller_Localisation_Country extends Controller
 		$this->language->load('localisation/country');
 
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Country->addCountry($_POST);
-			
+
 			$this->message->add('success', $this->_('text_success'));
 
 			$url = '';
-			
+
 			if (isset($_GET['sort'])) {
 				$url .= '&sort=' . $_GET['sort'];
 			}
@@ -36,7 +36,7 @@ class Admin_Controller_Localisation_Country extends Controller
 			if (isset($_GET['page'])) {
 				$url .= '&page=' . $_GET['page'];
 			}
-			
+
 			$this->url->redirect($this->url->link('localisation/country', $url));
 		}
 
@@ -48,14 +48,14 @@ class Admin_Controller_Localisation_Country extends Controller
 		$this->language->load('localisation/country');
 
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Country->editCountry($_GET['country_id'], $_POST);
 
 			$this->message->add('success', $this->_('text_success'));
 
 			$url = '';
-			
+
 			if (isset($_GET['sort'])) {
 				$url .= '&sort=' . $_GET['sort'];
 			}
@@ -67,7 +67,7 @@ class Admin_Controller_Localisation_Country extends Controller
 			if (isset($_GET['page'])) {
 				$url .= '&page=' . $_GET['page'];
 			}
-					
+
 			$this->url->redirect($this->url->link('localisation/country', $url));
 		}
 
@@ -79,16 +79,16 @@ class Admin_Controller_Localisation_Country extends Controller
 		$this->language->load('localisation/country');
 
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $country_id) {
 				$this->Model_Localisation_Country->deleteCountry($country_id);
 			}
-			
+
 			$this->message->add('success', $this->_('text_success'));
 
 			$url = '';
-			
+
 			if (isset($_GET['sort'])) {
 				$url .= '&sort=' . $_GET['sort'];
 			}
@@ -116,21 +116,21 @@ class Admin_Controller_Localisation_Country extends Controller
 		} else {
 			$sort = 'name';
 		}
-		
+
 		if (isset($_GET['order'])) {
 			$order = $_GET['order'];
 		} else {
 			$order = 'ASC';
 		}
-		
+
 		if (isset($_GET['page'])) {
 			$page = $_GET['page'];
 		} else {
 			$page = 1;
 		}
-			
+
 		$url = '';
-			
+
 		if (isset($_GET['sort'])) {
 			$url .= '&sort=' . $_GET['sort'];
 		}
@@ -138,17 +138,17 @@ class Admin_Controller_Localisation_Country extends Controller
 		if (isset($_GET['order'])) {
 			$url .= '&order=' . $_GET['order'];
 		}
-		
+
 		if (isset($_GET['page'])) {
 			$url .= '&page=' . $_GET['page'];
 		}
 
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/country', $url));
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/country', $url));
 
 		$this->data['insert'] = $this->url->link('localisation/country/insert', $url);
 		$this->data['delete'] = $this->url->link('localisation/country/delete', $url);
-		
+
 		$this->data['countries'] = array();
 
 		$data = array(
@@ -157,14 +157,14 @@ class Admin_Controller_Localisation_Country extends Controller
 			'start' => ($page - 1) * $this->config->get('config_admin_limit'),
 			'limit' => $this->config->get('config_admin_limit')
 		);
-		
+
 		$country_total = $this->Model_Localisation_Country->getTotalCountries();
-		
+
 		$results = $this->Model_Localisation_Country->getCountries($data);
-		
+
 		foreach ($results as $result) {
 			$action = array();
-			
+
 			$action[] = array(
 				'text' => $this->_('text_edit'),
 				'href' => $this->url->link('localisation/country/update', 'country_id=' . $result['country_id'] . $url)
@@ -172,23 +172,23 @@ class Admin_Controller_Localisation_Country extends Controller
 
 			$this->data['countries'][] = array(
 				'country_id' => $result['country_id'],
-				'name'		=> $result['name'] . (($result['country_id'] == $this->config->get('config_country_id')) ? $this->_('text_default') : null),
+				'name'       => $result['name'] . (($result['country_id'] == $this->config->get('config_country_id')) ? $this->_('text_default') : null),
 				'iso_code_2' => $result['iso_code_2'],
 				'iso_code_3' => $result['iso_code_3'],
-				'selected'	=> isset($_GET['selected']) && in_array($result['country_id'], $_GET['selected']),
-				'action'	=> $action
+				'selected'   => isset($_GET['selected']) && in_array($result['country_id'], $_GET['selected']),
+				'action'     => $action
 			);
 		}
 
- 		if (isset($this->error['warning'])) {
+		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
 		} else {
 			$this->data['error_warning'] = '';
 		}
-		
+
 		if (isset($this->session->data['success'])) {
 			$this->data['success'] = $this->session->data['success'];
-		
+
 			unset($this->session->data['success']);
 		} else {
 			$this->data['success'] = '';
@@ -205,33 +205,33 @@ class Admin_Controller_Localisation_Country extends Controller
 		if (isset($_GET['page'])) {
 			$url .= '&page=' . $_GET['page'];
 		}
-		
-		$this->data['sort_name'] = $this->url->link('localisation/country', 'sort=name' . $url);
+
+		$this->data['sort_name']       = $this->url->link('localisation/country', 'sort=name' . $url);
 		$this->data['sort_iso_code_2'] = $this->url->link('localisation/country', 'sort=iso_code_2' . $url);
 		$this->data['sort_iso_code_3'] = $this->url->link('localisation/country', 'sort=iso_code_3' . $url);
-		
+
 		$url = '';
 
 		if (isset($_GET['sort'])) {
 			$url .= '&sort=' . $_GET['sort'];
 		}
-												
+
 		if (isset($_GET['order'])) {
 			$url .= '&order=' . $_GET['order'];
 		}
 
 		$this->pagination->init();
-		$this->pagination->total = $country_total;
+		$this->pagination->total  = $country_total;
 		$this->data['pagination'] = $this->pagination->render();
-		
-		$this->data['sort'] = $sort;
+
+		$this->data['sort']  = $sort;
 		$this->data['order'] = $order;
 
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
-				
+
 		$this->response->setOutput($this->render());
 	}
 
@@ -239,18 +239,18 @@ class Admin_Controller_Localisation_Country extends Controller
 	{
 		$this->template->load('localisation/country_form');
 
- 		if (isset($this->error['warning'])) {
+		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
 		} else {
 			$this->data['error_warning'] = '';
 		}
 
- 		if (isset($this->error['name'])) {
+		if (isset($this->error['name'])) {
 			$this->data['error_name'] = $this->error['name'];
 		} else {
 			$this->data['error_name'] = '';
 		}
-				
+
 		$url = '';
 
 		if (isset($_GET['sort'])) {
@@ -260,22 +260,22 @@ class Admin_Controller_Localisation_Country extends Controller
 		if (isset($_GET['order'])) {
 			$url .= '&order=' . $_GET['order'];
 		}
-		
+
 		if (isset($_GET['page'])) {
 			$url .= '&page=' . $_GET['page'];
 		}
 
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/country', $url));
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/country', $url));
 
 		if (!isset($_GET['country_id'])) {
 			$this->data['action'] = $this->url->link('localisation/country/insert', $url);
 		} else {
 			$this->data['action'] = $this->url->link('localisation/country/update', 'country_id=' . $_GET['country_id'] . $url);
 		}
-		
+
 		$this->data['cancel'] = $this->url->link('localisation/country', $url);
-		
+
 		if (isset($_GET['country_id']) && !$this->request->isPost()) {
 			$country_info = $this->Model_Localisation_Country->getCountry($_GET['country_id']);
 		}
@@ -319,7 +319,7 @@ class Admin_Controller_Localisation_Country extends Controller
 		} else {
 			$this->data['postcode_required'] = 0;
 		}
-				
+
 		if (isset($_POST['status'])) {
 			$this->data['status'] = $_POST['status'];
 		} elseif (isset($country_info)) {
@@ -332,7 +332,7 @@ class Admin_Controller_Localisation_Country extends Controller
 			'common/header',
 			'common/footer'
 		);
-				
+
 		$this->response->setOutput($this->render());
 	}
 
@@ -354,43 +354,43 @@ class Admin_Controller_Localisation_Country extends Controller
 		if (!$this->user->hasPermission('modify', 'localisation/country')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
-		
+
 		foreach ($_GET['selected'] as $country_id) {
 			if ($this->config->get('config_country_id') == $country_id) {
 				$this->error['warning'] = $this->_('error_default');
 			}
-			
+
 			$store_total = $this->Model_Setting_Store->getTotalStoresByCountryId($country_id);
 
 			if ($store_total) {
 				$this->error['warning'] = sprintf($this->_('error_store'), $store_total);
 			}
-			
+
 			$address_total = $this->Model_Sale_Customer->getTotalAddressesByCountryId($country_id);
-	
+
 			if ($address_total) {
 				$this->error['warning'] = sprintf($this->_('error_address'), $address_total);
 			}
 
 			$affiliate_total = $this->Model_Sale_Affiliate->getTotalAffiliatesByCountryId($country_id);
-	
+
 			if ($affiliate_total) {
 				$this->error['warning'] = sprintf($this->_('error_affiliate'), $affiliate_total);
 			}
-							
+
 			$zone_total = $this->Model_Localisation_Zone->getTotalZonesByCountryId($country_id);
-		
+
 			if ($zone_total) {
 				$this->error['warning'] = sprintf($this->_('error_zone'), $zone_total);
 			}
-		
+
 			$zone_to_geo_zone_total = $this->Model_Localisation_GeoZone->getTotalZoneToGeoZoneByCountryId($country_id);
-		
+
 			if ($zone_to_geo_zone_total) {
 				$this->error['warning'] = sprintf($this->_('error_zone_to_geo_zone'), $zone_to_geo_zone_total);
 			}
 		}
-	
+
 		return $this->error ? false : true;
 	}
 }

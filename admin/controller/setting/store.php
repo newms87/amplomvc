@@ -85,40 +85,40 @@ class Admin_Controller_Setting_Store extends Controller
 		$columns = array();
 
 		$columns['thumb'] = array(
-			'type' => 'image',
+			'type'         => 'image',
 			'display_name' => $this->_('column_image'),
 		);
 
 		$columns['name'] = array(
-			'type' => 'text',
+			'type'         => 'text',
 			'display_name' => $this->_('column_name'),
-			'filter' => true,
-			'sortable' => true,
+			'filter'       => true,
+			'sortable'     => true,
 		);
 
 		$columns['url'] = array(
-			'type' => 'text',
+			'type'         => 'text',
 			'display_name' => $this->_('column_url'),
-			'filter' => true,
-			'sortable' => true,
+			'filter'       => true,
+			'sortable'     => true,
 		);
 
 		$columns['status'] = array(
-			'type' => 'select',
+			'type'         => 'select',
 			'display_name' => $this->_('column_status'),
-			'filter' => true,
-			'build_data' => $this->_('data_statuses'),
-			'sortable' => true,
+			'filter'       => true,
+			'build_data'   => $this->_('data_statuses'),
+			'sortable'     => true,
 		);
 
 		//Get Sorted / Filtered Data
-		$sort = $this->sort->getQueryDefaults('name', 'ASC');
+		$sort   = $this->sort->getQueryDefaults('name', 'ASC');
 		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 
 		$store_total = $this->Model_Setting_Store->getTotalStores($filter);
 		$stores      = $this->Model_Setting_Store->getStores($sort + $filter);
 
-		$image_width = $this->config->get('config_image_admin_thumb_width');
+		$image_width  = $this->config->get('config_image_admin_thumb_width');
 		$image_height = $this->config->get('config_image_admin_thumb_height');
 
 		foreach ($stores as &$store) {
@@ -136,15 +136,16 @@ class Admin_Controller_Setting_Store extends Controller
 				);
 			}
 
-			$theme = $this->config->load('config', 'config_theme', $store['store_id']);
-			$image = DIR_CATALOG . 'view/theme/' . $theme . '/' . $theme . '.png';
+			$theme          = $this->config->load('config', 'config_theme', $store['store_id']);
+			$image          = DIR_CATALOG . 'view/theme/' . $theme . '/' . $theme . '.png';
 			$store['thumb'] = $this->image->resize($image, $image_width, $image_height);
 
-		} unset($store);
+		}
+		unset($store);
 
 		//Build The Table
 		$tt_data = array(
-			'row_id'		=> 'store_id',
+			'row_id' => 'store_id',
 		);
 
 		$this->table->init();
@@ -366,9 +367,8 @@ class Admin_Controller_Setting_Store extends Controller
 			'image_cart',
 		);
 
-		foreach ($image_sizes as $image_size)
-		{
-			$image_width = 'config_' . $image_size . '_width';
+		foreach ($image_sizes as $image_size) {
+			$image_width  = 'config_' . $image_size . '_width';
 			$image_height = 'config_' . $image_size . '_height';
 
 			if ((int)$_POST[$image_width] <= 0 || (int)$_POST[$image_height] <= 0) {
@@ -400,8 +400,7 @@ class Admin_Controller_Setting_Store extends Controller
 	{
 		if ((int)$store_id < 1) {
 			$this->error[$store_id]['warning'] = $this->_('error_default');
-		}
-		else {
+		} else {
 			$filter = array(
 				'store_ids' => array($store_id),
 			);

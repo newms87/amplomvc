@@ -20,7 +20,7 @@ class Url extends Library
 			$this->ssl = $this->config->get('config_ssl');
 
 			//TODO - finish secure pages
-			$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "secure_page");
+			$query              = $this->db->query("SELECT * FROM " . DB_PREFIX . "secure_page");
 			$this->secure_pages = $query->rows;
 		}
 
@@ -29,16 +29,15 @@ class Url extends Library
 		if (isset($_GET['_path_'])) {
 			$this->path = trim($_GET['_path_'], '/ ');
 
-            $this->path = preg_replace("/^admin\/?/", '', $this->path);
-            $this->path = preg_replace("/^controller\/?/", '', $this->path);
+			$this->path = preg_replace("/^admin\/?/", '', $this->path);
+			$this->path = preg_replace("/^controller\/?/", '', $this->path);
 
 			unset($_GET['_path_']);
-		}
-		else {
+		} else {
 			$this->path = 'common/home';
 		}
 
-		if($this->config->get('config_seo_url')) {
+		if ($this->config->get('config_seo_url')) {
 			$this->loadSeoUrl();
 		}
 	}
@@ -74,7 +73,7 @@ class Url extends Library
 
 		session_write_close();
 
-		$ch = curl_init();
+		$ch      = curl_init();
 		$timeout = 5;
 
 		curl_setopt($ch, CURLOPT_URL, $url);
@@ -168,7 +167,7 @@ class Url extends Library
 			return $ssl ? $this->config->get('config_ssl') : $this->config->get('config_url');
 		}
 
-		$scheme = $ssl ? 'ssl':'url';
+		$scheme = $ssl ? 'ssl' : 'url';
 
 		//TODO: Need to Rebase stores so 0 is all stores (not an entry in the DB).
 		// -1 is an entry in the DB but is for the admin and 1 will be the initial store (deleteable, if it is not set as the default)
@@ -186,22 +185,22 @@ class Url extends Library
 		return $link;
 	}
 
-	public function site($uri='', $query='', $base_site = false)
+	public function site($uri = '', $query = '', $base_site = false)
 	{
-		return ($base_site ? SITE_URL : $this->url) . $uri . (!empty($query)?"?$query":'');
+		return ($base_site ? SITE_URL : $this->url) . $uri . (!empty($query) ? "?$query" : '');
 	}
 
-	public function urlencode_link($uri='',$query='')
+	public function urlencode_link($uri = '', $query = '')
 	{
-		return preg_replace("/%26amp%3B/i","%26",urlencode($this->link($uri,$query)));
+		return preg_replace("/%26amp%3B/i", "%26", urlencode($this->link($uri, $query)));
 	}
 
 	public function format($url)
 	{
 		$patterns = array(
 			"/[^A-Za-z0-9\/\\\\]+/" => "-",
-			"/(^-)|(-$)/" 				=> '',
-			"/[\/\\\\]-/"				=> "/",
+			"/(^-)|(-$)/"           => '',
+			"/[\/\\\\]-/"           => "/",
 		);
 
 		return preg_replace(array_keys($patterns), array_values($patterns), strtolower($url));
@@ -209,8 +208,14 @@ class Url extends Library
 
 	public function decodeURIcomponent($uri)
 	{
-		$patterns = array('/&gt;/','/&lt;/');
-		$replacements = array('>','<');
+		$patterns     = array(
+			'/&gt;/',
+			'/&lt;/'
+		);
+		$replacements = array(
+			'>',
+			'<'
+		);
 		return preg_replace($patterns, $replacements, rawurldecode($uri));
 	}
 
@@ -229,7 +234,7 @@ class Url extends Library
 	private function loadSeoUrl()
 	{
 		// Decode URL
-		$path = $this->db->escape($this->path);
+		$path  = $this->db->escape($this->path);
 		$query = $this->db->escape($this->getQuery());
 
 		$sql =
@@ -242,14 +247,14 @@ class Url extends Library
 		if ($url_alias) {
 			//TODO: We need to reconsider how we handle all stores...
 			if ($url_alias['store_id'] === 0) {
-				if(!$this->config->isAdmin()) {
+				if (!$this->config->isAdmin()) {
 					$url_alias['store_id'] = (int)$this->config->get('config_store_id');
 				} else {
 					$this->redirect($this->store($this->config->get('default_store_id'), $url_alias['path'], $url_alias['query']));
 				}
 			}
 
-			$url_query = $this->getQuery();
+			$url_query     = $this->getQuery();
 			$this->seo_url = $this->store_base($url_alias['store_id']) . $this->path . ($url_query ? '?' . $url_query : '');
 
 			if ($url_alias['redirect']) {
@@ -276,8 +281,7 @@ class Url extends Library
 			$_GET += $args;
 
 			$this->path = $url_alias['path'];
-		}
-		else {
+		} else {
 			$this->seo_url = $this->here();
 		}
 	}
@@ -352,7 +356,7 @@ class Url extends Library
 		);
 
 		if (!empty($alias_query)) {
-			$disclude = array_merge($disclude,array_keys($alias_query));
+			$disclude = array_merge($disclude, array_keys($alias_query));
 		}
 
 		foreach ($disclude as $key) {
@@ -382,11 +386,11 @@ class Url extends Library
 	public function setAlias($alias, $path, $query = '', $store_id = 0)
 	{
 		$url_alias = array(
-			'alias' => $alias,
-			'path'	=> $path,
-			'query'	=> $query,
+			'alias'    => $alias,
+			'path'     => $path,
+			'query'    => $query,
 			'store_id' => $store_id,
-			'status'  => 1,
+			'status'   => 1,
 		);
 
 		$this->removeAlias($path, $query, $store_id);

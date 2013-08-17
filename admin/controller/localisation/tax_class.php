@@ -1,14 +1,14 @@
 <?php
 class Admin_Controller_Localisation_TaxClass extends Controller
 {
-	
+
 
 	public function index()
 	{
 		$this->language->load('localisation/tax_class');
 
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		$this->getList();
 	}
 
@@ -17,14 +17,14 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 		$this->language->load('localisation/tax_class');
 
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Taxclass->addTaxClass($_POST);
 
 			$this->message->add('success', $this->_('text_success'));
 
 			$url = '';
-			
+
 			if (isset($_GET['sort'])) {
 				$url .= '&sort=' . $_GET['sort'];
 			}
@@ -36,7 +36,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 			if (isset($_GET['page'])) {
 				$url .= '&page=' . $_GET['page'];
 			}
-			
+
 			$this->url->redirect($this->url->link('localisation/tax_class', $url));
 		}
 
@@ -48,14 +48,14 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 		$this->language->load('localisation/tax_class');
 
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Taxclass->editTaxClass($_GET['tax_class_id'], $_POST);
-			
+
 			$this->message->add('success', $this->_('text_success'));
-			
+
 			$url = '';
-			
+
 			if (isset($_GET['sort'])) {
 				$url .= '&sort=' . $_GET['sort'];
 			}
@@ -67,7 +67,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 			if (isset($_GET['page'])) {
 				$url .= '&page=' . $_GET['page'];
 			}
-			
+
 			$this->url->redirect($this->url->link('localisation/tax_class', $url));
 		}
 
@@ -79,16 +79,16 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 		$this->language->load('localisation/tax_class');
 
 		$this->document->setTitle($this->_('head_title'));
- 		
+
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $tax_class_id) {
 				$this->Model_Localisation_Taxclass->deleteTaxClass($tax_class_id);
 			}
-			
+
 			$this->message->add('success', $this->_('text_success'));
-			
+
 			$url = '';
-			
+
 			if (isset($_GET['sort'])) {
 				$url .= '&sort=' . $_GET['sort'];
 			}
@@ -100,7 +100,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 			if (isset($_GET['page'])) {
 				$url .= '&page=' . $_GET['page'];
 			}
-			
+
 			$this->url->redirect($this->url->link('localisation/tax_class', $url));
 		}
 
@@ -116,21 +116,21 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 		} else {
 			$sort = 'title';
 		}
-		
+
 		if (isset($_GET['order'])) {
 			$order = $_GET['order'];
 		} else {
 			$order = 'ASC';
 		}
-		
+
 		if (isset($_GET['page'])) {
 			$page = $_GET['page'];
 		} else {
 			$page = 1;
 		}
-				
+
 		$url = '';
-			
+
 		if (isset($_GET['sort'])) {
 			$url .= '&sort=' . $_GET['sort'];
 		}
@@ -138,47 +138,47 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 		if (isset($_GET['order'])) {
 			$url .= '&order=' . $_GET['order'];
 		}
-						
+
 		if (isset($_GET['page'])) {
 			$url .= '&page=' . $_GET['page'];
 		}
-		
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/tax_class', $url));
+
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/tax_class', $url));
 
 		$this->data['insert'] = $this->url->link('localisation/tax_class/insert', $url);
 		$this->data['delete'] = $this->url->link('localisation/tax_class/delete', $url);
-		
+
 		$this->data['tax_classes'] = array();
-		
+
 		$data = array(
 			'sort'  => $sort,
 			'order' => $order,
 			'start' => ($page - 1) * $this->config->get('config_admin_limit'),
 			'limit' => $this->config->get('config_admin_limit')
 		);
-		
+
 		$tax_class_total = $this->Model_Localisation_TaxClass->getTotalTaxClasses();
 
 		$results = $this->Model_Localisation_TaxClass->getTaxClasses($data);
 
 		foreach ($results as $result) {
 			$action = array();
-			
+
 			$action[] = array(
 				'text' => $this->_('text_edit'),
 				'href' => $this->url->link('localisation/tax_class/update', 'tax_class_id=' . $result['tax_class_id'] . $url)
 			);
-					
+
 			$this->data['tax_classes'][] = array(
 				'tax_class_id' => $result['tax_class_id'],
-				'title'		=> $result['title'],
-				'selected'	=> isset($_GET['selected']) && in_array($result['tax_class_id'], $_GET['selected']),
-				'action'		=> $action
+				'title'        => $result['title'],
+				'selected'     => isset($_GET['selected']) && in_array($result['tax_class_id'], $_GET['selected']),
+				'action'       => $action
 			);
 		}
 
- 		if (isset($this->error['warning'])) {
+		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
 		} else {
 			$this->data['error_warning'] = '';
@@ -186,12 +186,12 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 
 		if (isset($this->session->data['success'])) {
 			$this->data['success'] = $this->session->data['success'];
-		
+
 			unset($this->session->data['success']);
 		} else {
 			$this->data['success'] = '';
 		}
-		
+
 		$url = '';
 
 		if ($order == 'ASC') {
@@ -203,31 +203,31 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 		if (isset($_GET['page'])) {
 			$url .= '&page=' . $_GET['page'];
 		}
-		
+
 		$this->data['sort_title'] = $this->url->link('localisation/tax_class', 'sort=title' . $url);
-		
+
 		$url = '';
 
 		if (isset($_GET['sort'])) {
 			$url .= '&sort=' . $_GET['sort'];
 		}
-												
+
 		if (isset($_GET['order'])) {
 			$url .= '&order=' . $_GET['order'];
 		}
 
 		$this->pagination->init();
-		$this->pagination->total = $tax_class_total;
+		$this->pagination->total  = $tax_class_total;
 		$this->data['pagination'] = $this->pagination->render();
 
-		$this->data['sort'] = $sort;
+		$this->data['sort']  = $sort;
 		$this->data['order'] = $order;
 
 		$this->children = array(
 			'common/header',
 			'common/footer',
 		);
-				
+
 		$this->response->setOutput($this->render());
 	}
 
@@ -235,26 +235,26 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 	{
 		$this->template->load('localisation/tax_class_form');
 
- 		if (isset($this->error['warning'])) {
+		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
 		} else {
 			$this->data['error_warning'] = '';
 		}
 
- 		if (isset($this->error['title'])) {
+		if (isset($this->error['title'])) {
 			$this->data['error_title'] = $this->error['title'];
 		} else {
 			$this->data['error_title'] = '';
 		}
-		
- 		if (isset($this->error['description'])) {
+
+		if (isset($this->error['description'])) {
 			$this->data['error_description'] = $this->error['description'];
 		} else {
 			$this->data['error_description'] = '';
 		}
-				
+
 		$url = '';
-			
+
 		if (isset($_GET['sort'])) {
 			$url .= '&sort=' . $_GET['sort'];
 		}
@@ -262,20 +262,20 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 		if (isset($_GET['order'])) {
 			$url .= '&order=' . $_GET['order'];
 		}
-		
+
 		if (isset($_GET['page'])) {
 			$url .= '&page=' . $_GET['page'];
 		}
 
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/tax_class', $url));
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/tax_class', $url));
 
 		if (!isset($_GET['tax_class_id'])) {
 			$this->data['action'] = $this->url->link('localisation/tax_class/insert', $url);
 		} else {
 			$this->data['action'] = $this->url->link('localisation/tax_class/update', 'tax_class_id=' . $_GET['tax_class_id'] . $url);
 		}
-		
+
 		$this->data['cancel'] = $this->url->link('localisation/tax_class', $url);
 
 		if (isset($_GET['tax_class_id']) && !$this->request->isPost()) {
@@ -299,7 +299,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 		}
 
 		$this->data['tax_rates'] = $this->Model_Localisation_TaxRate->getTaxRates();
-		
+
 		if (isset($_POST['tax_rule'])) {
 			$this->data['tax_rules'] = $_POST['tax_rule'];
 		} elseif (isset($_GET['tax_class_id'])) {
@@ -312,7 +312,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 			'common/header',
 			'common/footer',
 		);
-				
+
 		$this->response->setOutput($this->render());
 	}
 
@@ -329,7 +329,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 		if ((strlen($_POST['description']) < 3) || (strlen($_POST['description']) > 255)) {
 			$this->error['description'] = $this->_('error_description');
 		}
-		
+
 		return $this->error ? false : true;
 	}
 
@@ -338,19 +338,19 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 		if (!$this->user->hasPermission('modify', 'localisation/tax_class')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
-		
+
 		foreach ($_GET['selected'] as $tax_class_id) {
 			$data = array(
 				'tax_class_id' => $tax_class_id,
 			);
-			
+
 			$product_total = $this->Model_Catalog_Product->getTotalProducts($data);
 
 			if ($product_total) {
 				$this->error['warning'] = sprintf($this->_('error_product'), $product_total);
 			}
 		}
-		
+
 		return $this->error ? false : true;
 	}
-}
+}

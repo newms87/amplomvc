@@ -5,39 +5,40 @@ class Admin_Controller_Dev_DbAdmin extends Controller
 	{
 		$this->template->load('dev/db_admin');
 		$this->language->load('dev/dev');
-		
+
 		$this->document->setTitle($this->_('text_db_admin'));
-		
+
 		$this->document->addStyle(HTTP_THEME_STYLE . 'dev.css');
-		
+
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'), '', 0);
 		$this->breadcrumb->add($this->_('head_title'), $this->url->link('dev/dev'), '', 1);
 		$this->breadcrumb->add($this->_('text_db_admin'), $this->url->link('dev/db_admin'));
-		
+
 		$this->data['return'] = $this->url->link('common/home');
-		
+
 		//Check for post data
 		if ($this->request->isPost() && $this->validate()) {
 			if (!empty($_POST['query'])) {
 				$results = $this->db->queryRows(html_entity_decode($_POST['query'], ENT_QUOTES, 'UTF-8'));
-				
+
 				$this->data['results'] = $results;
 			}
 		}
-		
+
 		$defaults = array(
 			'query' => '',
 		);
 
-		foreach ($defaults as $key=>$default) {
-			if(isset($_POST[$key]))
+		foreach ($defaults as $key => $default) {
+			if (isset($_POST[$key])) {
 				$this->data[$key] = $_POST[$key];
-			else
+			} else {
 				$this->data[$key] = $default;
+			}
 		}
-		
+
 		$this->data['data_tables'] = $this->db->getTables();
-		
+
 		$this->children = array(
 			'common/header',
 			'common/footer'
@@ -51,7 +52,7 @@ class Admin_Controller_Dev_DbAdmin extends Controller
 		if (!$this->user->hasPermission('modify', 'dev/dev')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
-				
+
 		return $this->error ? false : true;
 	}
 }

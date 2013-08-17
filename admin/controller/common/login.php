@@ -13,8 +13,7 @@ class Admin_Controller_Common_Login extends Controller
 		//IF user is logged in, redirect to the homepage
 		if (isset($_POST['username']) && isset($_POST['password'])) {
 			$this->user->logout();
-		}
-		elseif ($this->user->isLogged()) {
+		} elseif ($this->user->isLogged()) {
 			$this->url->redirect($this->url->link('common/home'));
 		}
 
@@ -36,12 +35,12 @@ class Admin_Controller_Common_Login extends Controller
 		$this->data['messages'] = $this->message->fetch();
 
 		$defaults = array(
-			'username'=>'',
-			'password'=>'',
+			'username' => '',
+			'password' => '',
 		);
 
-		foreach ($defaults as $key=>$default) {
-			$this->data[$key] = isset($_POST[$key]) ? $_POST[$key]:$default;
+		foreach ($defaults as $key => $default) {
+			$this->data[$key] = isset($_POST[$key]) ? $_POST[$key] : $default;
 		}
 
 		//If trying to access an admin page, redirect after login
@@ -50,21 +49,19 @@ class Admin_Controller_Common_Login extends Controller
 
 			if ($route) {
 				$not_allowed = array(
-					'common/login', 'common/logout'
+					'common/login',
+					'common/logout'
 				);
 
 				if (in_array($route, $not_allowed)) {
 					$redirect = urlencode($this->url->link('common/home'));
+				} else {
+					$redirect = urlencode(preg_replace("/redirect=[^&#]*/", '', $this->url->here()));
 				}
-				else {
-					$redirect = urlencode(preg_replace("/redirect=[^&#]*/",'',$this->url->here()));
-				}
-			}
-			else {
+			} else {
 				$redirect = urlencode($this->url->link('common/home'));
 			}
-		}
-		else {
+		} else {
 			$redirect = $_GET['redirect'];
 		}
 
@@ -78,7 +75,7 @@ class Admin_Controller_Common_Login extends Controller
 		);
 
 		$this->response->setOutput($this->render());
-  	}
+	}
 
 	private function validate()
 	{

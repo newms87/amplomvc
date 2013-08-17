@@ -7,16 +7,18 @@ $_['priceset_types']  = array(
 	'percent' => "Percent",
 	'fixed'   => "Fixed Amount"
 );
-$_['priceset_ranges'] = array('lt'    => "<",
-                              'lte'   => '<=',
-                              'gt'    => ">",
-                              'gte'   => '>=',
-                              'eq'    => '=',
-                              'range' => 'range'
+$_['priceset_ranges'] = array(
+	'lt'    => "<",
+	'lte'   => '<=',
+	'gt'    => ">",
+	'gte'   => '>=',
+	'eq'    => '=',
+	'range' => 'range'
 );
-$_['rule_mods']       = array('add'      => "+",
-                              'subtract' => '-',
-                              'fixed'    => "="
+$_['rule_mods']       = array(
+	'add'      => "+",
+	'subtract' => '-',
+	'fixed'    => "="
 );
 
 // Text

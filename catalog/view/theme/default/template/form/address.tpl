@@ -6,7 +6,8 @@
 		<? foreach ($fields as $name => $field) { ?>
 			<? if ($name == 'default' || $name == 'submit_address') {
 				continue;
-			} //We add these fields at the bottom ?>
+			} //We add these fields at the bottom
+			?>
 			<tr>
 				<td>
 					<? if ($field['required']) { ?>

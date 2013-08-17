@@ -1,7 +1,7 @@
 <?php
 class Admin_Controller_Payment_Nochex extends Controller
 {
-	
+
 
 	public function index()
 	{
@@ -10,41 +10,41 @@ class Admin_Controller_Payment_Nochex extends Controller
 		$this->language->load('payment/nochex');
 
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		if ($this->request->isPost() && $this->validate()) {
 			$this->Model_Setting_Setting->editSetting('nochex', $_POST);
-			
+
 			$this->message->add('success', $this->_('text_success'));
 
 			$this->url->redirect($this->url->link('extension/payment'));
 		}
 
-  		if (isset($this->error['warning'])) {
+		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
 		} else {
 			$this->data['error_warning'] = '';
 		}
-		
- 		if (isset($this->error['email'])) {
+
+		if (isset($this->error['email'])) {
 			$this->data['error_email'] = $this->error['email'];
 		} else {
 			$this->data['error_email'] = '';
 		}
-		
- 		if (isset($this->error['merchant'])) {
+
+		if (isset($this->error['merchant'])) {
 			$this->data['error_merchant'] = $this->error['merchant'];
 		} else {
 			$this->data['error_merchant'] = '';
 		}
 
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('text_payment'), $this->url->link('extension/payment'));
-			$this->breadcrumb->add($this->_('head_title'), $this->url->link('payment/nochex'));
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('text_payment'), $this->url->link('extension/payment'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('payment/nochex'));
 
 		$this->data['action'] = $this->url->link('payment/nochex');
-		
+
 		$this->data['cancel'] = $this->url->link('extension/payment');
-		
+
 		if (isset($_POST['nochex_email'])) {
 			$this->data['nochex_email'] = $_POST['nochex_email'];
 		} else {
@@ -68,19 +68,19 @@ class Admin_Controller_Payment_Nochex extends Controller
 		} else {
 			$this->data['nochex_template'] = $this->config->get('nochex_template');
 		}
-		
+
 		if (isset($_POST['nochex_test'])) {
 			$this->data['nochex_test'] = $_POST['nochex_test'];
 		} else {
 			$this->data['nochex_test'] = $this->config->get('nochex_test');
 		}
-		
+
 		if (isset($_POST['nochex_total'])) {
 			$this->data['nochex_total'] = $_POST['nochex_total'];
 		} else {
 			$this->data['nochex_total'] = $this->config->get('nochex_total');
 		}
-				
+
 		if (isset($_POST['nochex_order_status_id'])) {
 			$this->data['nochex_order_status_id'] = $_POST['nochex_order_status_id'];
 		} else {
@@ -88,21 +88,21 @@ class Admin_Controller_Payment_Nochex extends Controller
 		}
 
 		$this->data['order_statuses'] = $this->order->getOrderStatuses();
-		
+
 		if (isset($_POST['nochex_geo_zone_id'])) {
 			$this->data['nochex_geo_zone_id'] = $_POST['nochex_geo_zone_id'];
 		} else {
 			$this->data['nochex_geo_zone_id'] = $this->config->get('nochex_geo_zone_id');
 		}
-		
+
 		$this->data['geo_zones'] = $this->Model_Localisation_GeoZone->getGeoZones();
-		
+
 		if (isset($_POST['nochex_status'])) {
 			$this->data['nochex_status'] = $_POST['nochex_status'];
 		} else {
 			$this->data['nochex_status'] = $this->config->get('nochex_status');
 		}
-		
+
 		if (isset($_POST['nochex_sort_order'])) {
 			$this->data['nochex_sort_order'] = $_POST['nochex_sort_order'];
 		} else {
@@ -113,7 +113,7 @@ class Admin_Controller_Payment_Nochex extends Controller
 			'common/header',
 			'common/footer'
 		);
-				
+
 		$this->response->setOutput($this->render());
 	}
 
@@ -122,7 +122,7 @@ class Admin_Controller_Payment_Nochex extends Controller
 		if (!$this->user->hasPermission('modify', 'payment/nochex')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
-		
+
 		if (!$_POST['nochex_email']) {
 			$this->error['email'] = $this->_('error_email');
 		}
@@ -130,7 +130,7 @@ class Admin_Controller_Payment_Nochex extends Controller
 		if (!$_POST['nochex_merchant']) {
 			$this->error['merchant'] = $this->_('error_merchant');
 		}
-		
+
 		return $this->error ? false : true;
 	}
-}
+}

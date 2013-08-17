@@ -80,9 +80,10 @@ class Catalog_Controller_Block_Product_Options extends Controller
 
 			switch ($product_option['type']) {
 				case 'select':
-					$blank_option[''] = array('option_value_id'         => '',
-					                          'product_option_value_id' => '',
-					                          'value'                   => $this->_('text_select_option')
+					$blank_option[''] = array(
+						'option_value_id'         => '',
+						'product_option_value_id' => '',
+						'value'                   => $this->_('text_select_option')
 					);
 					break;
 
@@ -93,11 +94,12 @@ class Catalog_Controller_Block_Product_Options extends Controller
 				case 'image':
 					if (!(int)$product_option['required']) {
 						$image            = $this->image->resize('data/no_image_select.png', $image_width, $image_height);
-						$blank_option[''] = array('option_value_id'         => '',
-						                          'product_option_value_id' => '',
-						                          'rel'                     => '',
-						                          'thumb'                   => $image,
-						                          'value'                   => $this->_('text_select_option')
+						$blank_option[''] = array(
+							'option_value_id'         => '',
+							'product_option_value_id' => '',
+							'rel'                     => '',
+							'thumb'                   => $image,
+							'value'                   => $this->_('text_select_option')
 						);
 					}
 					break;

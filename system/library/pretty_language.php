@@ -34,198 +34,205 @@ class PrettyLanguage
 	function __construct()
 	{
 		$ignore_list = array(DIR_CACHE);
-		$ext = array('php');
-		
-		
+		$ext         = array('php');
+
+
 		$files = $this->get_all_files_r(SITE_DIR . 'admin/', $ext);
-		
+
 		$this->render_breadcrumbs($files);
-		
+
 		//$this->smodel_call_update($files);
-		
+
 		//$this->class_name_convention($files);
-		
-		
+
+
 		//$files = array(SITE_DIR . 'catalog/controller/checkout/checkout.php');
-		
-	// $this->update_message_format($files);
-		
+
+		// $this->update_message_format($files);
+
 		//$this->remove_language_gets($files);
-		
+
 		//$this->update_url_links($files);
-		
+
 		//$this->update_breadcrumb_format($files);
-		
+
 		//$this->format_langauge_files($files);
-		
+
 		//$this->clean_php_line_endings($files);
-		
+
 		//$this->update_template_format($files);
 
 	}
-	
-	public function render_breadcrumbs($files){
+
+	public function render_breadcrumbs($files)
+	{
 		foreach ($files as $file) {
 			$lines = explode("\n", file_get_contents($file));
-			
+
 			$orig_lines = $lines;
-			
+
 			$count = 0;
-			
-			$bracket_count = 0;
+
+			$bracket_count    = 0;
 			$function_bracket = null;
-			$has_bread = false;
-			
+			$has_bread        = false;
+
 			$new_lines = array();
-			
+
 			foreach ($lines as $num => $line) {
 				$bracket_count += substr_count($line, '{');
 				$bracket_count -= substr_count($line, '}');
-				
+
 				$matches = null;
-				
+
 				if ($function_bracket && $bracket_count < current($function_bracket)) {
 					$function_bracket = null;
-					$has_bread = false;
-				}
-				elseif (!$function_bracket && preg_match("/function\\s*([A-Za-z_]*)\\s*\(/", $line, $matches)) {
-					$function_bracket = array($matches[1] => $bracket_count+1);
-				}
-				elseif (!$has_bread && strpos($line, "\$this->breadcrumb->add")) {
+					$has_bread        = false;
+				} elseif (!$function_bracket && preg_match("/function\\s*([A-Za-z_]*)\\s*\(/", $line, $matches)) {
+					$function_bracket = array($matches[1] => $bracket_count + 1);
+				} elseif (!$has_bread && strpos($line, "\$this->breadcrumb->add")) {
 					$has_bread = true;
-				}
-				elseif ($has_bread && strpos($line, "\$this->data['breadcrumbs'] = \$this->breadcrumb->render();\r")) {
+				} elseif ($has_bread && strpos($line, "\$this->data['breadcrumbs'] = \$this->breadcrumb->render();\r")) {
 					$has_bread = false;
-				}
-				elseif ($has_bread && strpos($line, "\$this->children")) {
+				} elseif ($has_bread && strpos($line, "\$this->children")) {
 					$count++;
 					preg_match("/(\\s*)\\\$/", $line, $matches);
-					
+
 					$new_lines[] = $matches[1] . "\$this->data['breadcrumbs'] = \$this->breadcrumb->render();\r";
 					$new_lines[] = $matches[1] . "\r";
 				}
-				
+
 				$new_lines[] = $line;
 			}
-			
-			if($count > 0){
+
+			if ($count > 0) {
 				echo "modified $count lines in $file<br>";
 			}
-			
+
 			//$this->print_lines($orig_lines, $new_lines, false, true);
 			file_put_contents($file, implode("\n", $new_lines));
 		}
 	}
-	
-	public function smodel_call_update($files){
+
+	public function smodel_call_update($files)
+	{
 		foreach ($files as $file) {
 			$lines = explode("\n", file_get_contents($file));
-			
+
 			$orig_lines = $lines;
-			
+
 			$count = 0;
-			
+
 			foreach ($lines as $num => $line) {
 				$matches = null;
 				if (preg_match("/\\\$this->(model_[a-z_]*)/", $line, $matches)) {
-					$parts = explode('_', $matches[1]);
+					$parts  = explode('_', $matches[1]);
 					$rename = ucfirst($parts[0]) . '_' . ucfirst($parts[1]) . '_' . ucfirst($parts[2]);
-					
-					if(isset($parts[3])){
+
+					if (isset($parts[3])) {
 						$rename .= ucfirst($parts[3]);
 					}
-					
+
 					$lines[$num] = str_replace($matches[1], $rename, $line);
-					
+
 					$count++;
 				}
 			}
-			
-			if($count > 0){
+
+			if ($count > 0) {
 				echo "modified $count lines in $file<br>";
 			}
 			file_put_contents($file, implode("\n", $lines));
 		}
 	}
-	
-	public function class_name_convention($files){
+
+	public function class_name_convention($files)
+	{
 		foreach ($files as $file) {
 			$lines = explode("\n", file_get_contents($file));
-			
+
 			$orig_lines = $lines;
-			
-			$dir_components = explode('/',str_replace(SITE_DIR, '', dirname($file)));
-			
-			if($dir_components[0] == 'plugin'){
+
+			$dir_components = explode('/', str_replace(SITE_DIR, '', dirname($file)));
+
+			if ($dir_components[0] == 'plugin') {
 				array_shift($dir_components);
-				while (!in_array(current($dir_components), array("", "catalog", "admin", "system"))) {
+				while (!in_array(current($dir_components), array(
+				                                                "",
+				                                                "catalog",
+				                                                "admin",
+				                                                "system"
+				                                           ))) {
 					array_shift($dir_components);
 				}
 			}
-			
-			array_walk($dir_components, function(&$e, $index){
-				 $e = ucfirst($e);
-				 $e = preg_replace_callback("/_([a-z])/", function($matches){return strtoupper($matches[1]);}, $e);
+
+			array_walk($dir_components, function (&$e, $index) {
+				$e = ucfirst($e);
+				$e = preg_replace_callback("/_([a-z])/", function ($matches) { return strtoupper($matches[1]); }, $e);
 			});
-			
-			$file_component = ucfirst(str_replace('.php','', basename($file)));
-			$file_component = preg_replace_callback("/_([a-z])/", function($matches){return strtoupper($matches[1]);}, $file_component);
-			
+
+			$file_component = ucfirst(str_replace('.php', '', basename($file)));
+			$file_component = preg_replace_callback("/_([a-z])/", function ($matches) { return strtoupper($matches[1]); }, $file_component);
+
 			$classname = implode('_', $dir_components) . '_' . $file_component;
-			
+
 			foreach ($lines as $num => $line) {
 				$count = 0;
-				
-				$replace = "class $classname";
+
+				$replace     = "class $classname";
 				$lines[$num] = preg_replace("/class [A-Z0-9_\\\\\/]*/i", "class {$classname}", $line, 1, $count);
-				
-				if($count){
+
+				if ($count) {
 					echo "&lt;&lt;&lt;$line<br />&gt;&gt;&gt;$lines[$num]<br>";
 					break;
-				 }
+				}
 			}
-			
+
 			file_put_contents($file, implode("\n", $lines));
 		}
 	}
-	
+
 	public function update_template_format($files)
 	{
 		foreach ($files as $file) {
 			$lines = explode("\n", file_get_contents($file));
-			
+
 			$orig_lines = $lines;
-			
-			$brackets = array();
+
+			$brackets  = array();
 			$to_remove = array();
-			$to_add = array();
-			
+			$to_add    = array();
+
 			echo $file . '<br>';
-			
+
 			$dir_temp = -1;
-			
-			foreach ($lines as $num=>$line) {
-				for($i=0;$i<strlen($line);$i++){
-					if($line[$i] == '{')
+
+			foreach ($lines as $num => $line) {
+				for ($i = 0; $i < strlen($line); $i++) {
+					if ($line[$i] == '{') {
 						array_push($brackets, $num);
-					elseif($line[$i] == '}')
+					} elseif ($line[$i] == '}') {
 						array_pop($brackets);
+					}
 				}
-				
+
 				if (strpos($line, "DIR_THEME") !== false) {
 					$dir_temp = 0;
 				}
-				
-				switch($dir_temp){
+
+				switch ($dir_temp) {
 					case 0:
-						if(!preg_match('/if\s*\(file_exists\(DIR_THEME\s*\.\s*\$this->config->get\([^\)]*\)\s*\.\s*\'[^\']*\'\)\)\s*\{/', $line)){
-							echo "PROBLEM at 0";exit;
+						if (!preg_match('/if\s*\(file_exists\(DIR_THEME\s*\.\s*\$this->config->get\([^\)]*\)\s*\.\s*\'[^\']*\'\)\)\s*\{/', $line)) {
+							echo "PROBLEM at 0";
+							exit;
 						}
 						$lines[$num] .= "**REMOVE ME**";
 						break;
 					case 1:
 						if (!preg_match('/\$this->template_file\s*=\s*\$this->config->get\(\'config_theme\'\)\s*\.\s*\'[^\']*\';/', $line)) {
-							echo "PROBLEM at 1"; exit;
+							echo "PROBLEM at 1";
+							exit;
 						}
 						$lines[$num] .= "**REMOVE ME**";
 						break;
@@ -233,14 +240,16 @@ class PrettyLanguage
 						array_pop($brackets);
 						break;
 					case 2:
-						if(!preg_match('/\}\s*else\s*\{/', $line)){
-							echo "PROBLEM at 2"; exit;
+						if (!preg_match('/\}\s*else\s*\{/', $line)) {
+							echo "PROBLEM at 2";
+							exit;
 						}
 						$lines[$num] .= "**REMOVE ME**";
 						break;
 					case 4:
 						if (trim($line) != '}') {
-							echo "PROBLEM at 4"; exit;
+							echo "PROBLEM at 4";
+							exit;
 						}
 						$lines[$num] .= "**REMOVE ME**";
 						break;
@@ -253,71 +262,75 @@ class PrettyLanguage
 						break;
 				}
 
-				if ($dir_temp >=0 && $dir_temp != 3) {
-					$dir_temp++;continue;
+				if ($dir_temp >= 0 && $dir_temp != 3) {
+					$dir_temp++;
+					continue;
 				}
-				
+
 				if (preg_match('/\$this->template_file/', $line)) {
-					if (substr_count($line,'=') > 1) {
+					if (substr_count($line, '=') > 1) {
 						echo "WEIRD TEMPLATE LINE!";
 						exit;
 					}
-					$template = trim(preg_replace(array('/\.tpl/','/;/','/[^=]*=/'), '', $line));
-					
+					$template = trim(preg_replace(array(
+					                                   '/\.tpl/',
+					                                   '/;/',
+					                                   '/[^=]*=/'
+					                              ), '', $line));
+
 					if ($dir_temp == 3) {
-						if (!preg_match('/default\/template\//',$template)) {
-							echo "PROBLEM PREG at 3"; exit;
+						if (!preg_match('/default\/template\//', $template)) {
+							echo "PROBLEM PREG at 3";
+							exit;
 						}
-						$template = str_replace("default/template/",'', $template);
+						$template = str_replace("default/template/", '', $template);
 						$dir_temp++;
 					}
-					
+
 					$lines[$num] .= "**REMOVE ME**";
-					
+
 					$to_add[end($brackets)] = '$this->template->load(' . $template . ');' . "\r\n";
-				}
-				elseif ($dir_temp == 3) {
+				} elseif ($dir_temp == 3) {
 					$this->pl($num, $line);
-					echo "PROBLEM at 3";exit;
+					echo "PROBLEM at 3";
+					exit;
 				}
 			}
-			
-			$new_lines = array();
+
+			$new_lines      = array();
 			$new_orig_lines = array();
-			foreach ($lines as $num=>$l) {
+			foreach ($lines as $num => $l) {
 				if (!preg_match('/\*\*REMOVE ME\*\*/', $l)) {
 					$new_lines[] = $l;
-				}
-				else {
+				} else {
 					$new_lines[] = null;
 				}
 				$new_orig_lines[] = $l;
 				if (in_array($num, array_keys($to_add))) {
-					$new_lines[] = $to_add[$num];
+					$new_lines[]      = $to_add[$num];
 					$new_orig_lines[] = '';
 				}
 			}
-			
+
 			//$this->print_lines($new_orig_lines, $new_lines, true);
 			file_put_contents($file, implode("\n", $new_lines));
 		}
 	}
-	
-	
+
+
 	public function clean_php_line_endings($files)
 	{
 		foreach ($files as $file) {
 			$lines = explode("\n", file_get_contents($file));
-			
+
 			$orig_lines = $lines;
-			
-			for($i=count($lines)-1; $i > max(0,count($lines)-10); $i--){
+
+			for ($i = count($lines) - 1; $i > max(0, count($lines) - 10); $i--) {
 				if (preg_match("/[^\s]/", $lines[$i]) > 0) {
 					//echo "checking " . htmlspecialchars($lines[$i]) . '<br>';
 					if (preg_match("/\?>\s*$/", $lines[$i])) {
 						unset($lines[$i]);
-					}
-					else {
+					} else {
 						//echo 'skipping ' . htmlspecialchars($lines[$i]);
 					}
 					break;
@@ -327,77 +340,86 @@ class PrettyLanguage
 			file_put_contents($file, implode("\n", $lines));
 		}
 	}
-	
+
 	public function format_language_files($files)
 	{
 		echo 'Formatting Language Files';
-		
+
 		$files = array(SITE_DIR . 'catalog/language/english/product/test.php');
 		foreach ($files as $file) {
-			$lines = explode("\n", file_get_contents($file));
+			$lines     = explode("\n", file_get_contents($file));
 			$new_lines = array();
-			$max = 0;
+			$max       = 0;
 			foreach ($lines as $line) {
-				if(preg_match('/\s*\$[^=]*=/', $line) == 0) continue;
-				
-				echo 'parsing line ' .$line  . '<br>';
+				if (preg_match('/\s*\$[^=]*=/', $line) == 0) {
+					continue;
+				}
+
+				echo 'parsing line ' . $line . '<br>';
 				list($entry, $text) = explode('=', $line, 2);
 				html_dump($entry);
 				html_dump($text);
-				$entry = str_replace(' ', '', $entry);
-				$text = trim($text);
-				$max = max($max, strlen($entry));
-				$new_lines[] = array('e'=>$entry, 't' => $text);
+				$entry       = str_replace(' ', '', $entry);
+				$text        = trim($text);
+				$max         = max($max, strlen($entry));
+				$new_lines[] = array(
+					'e' => $entry,
+					't' => $text
+				);
 			}
-			
+
 			foreach ($new_lines as &$line) {
 				$line = str_pad($line['e'], $max) . ' = ' . $line['t'];
 			}
 			file_put_contents($file, implode("\n", $new_lines));
 		}
 	}
-	
+
 	public function update_breadcrumb_format($files)
 	{
 		foreach ($files as $file) {
 			$lines = explode("\n", file_get_contents($file));
-			
+
 			$flag_delete = false;
-			$orig_lines = $lines;
-			
+			$orig_lines  = $lines;
+
 			$tricky = false;
-			
+
 			$block_started = false;
-			
+
 			$brace_count = 0;
-			$r_href = $r_text = null;
-			
-			foreach ($lines as $num=>&$line) {
+			$r_href      = $r_text = null;
+
+			foreach ($lines as $num => &$line) {
 				if (preg_match("/[^\s]/", $line) == 0) {
-					if($block_started)
+					if ($block_started) {
 						unset($lines[$num]);
+					}
 					continue;
 				}
 
 				if (!$block_started) {
 					if (strpos($line, '=')) {
 						list($var, $assign) = explode('=', $line, 2);
-						
-						if(preg_match('/\$this->data\[[\'"]breadcrumbs[\'"]\]/', $var) == 0) continue;
-						
+
+						if (preg_match('/\$this->data\[[\'"]breadcrumbs[\'"]\]/', $var) == 0) {
+							continue;
+						}
+
 						if (preg_match('/\$this->data\[[\'"]breadcrumbs[\'"]\]\[\]/', $var) > 0) {
 							echo "Tricky File $file at line $num<br><br>";
 							$tricky = true;
 							break;
 						}
-						
-						if(preg_match('/\$this->tool->breadcrumbs/', $assign) > 0) continue;
-						
+
+						if (preg_match('/\$this->tool->breadcrumbs/', $assign) > 0) {
+							continue;
+						}
+
 						if (trim($assign) == 'array();') {
 							unset($lines[$num]);
 							$block_started = true;
-						}
-						else {
+						} else {
 							echo "Unusual Assign Start of block: $file at line $num<br><br>";
 							$tricky = true;
 							break;
@@ -405,30 +427,27 @@ class PrettyLanguage
 					}
 
 					continue;
-				}
-				else {
+				} else {
 					if (strpos($line, '=')) {
 
 						list($var, $assign) = explode('=', $line, 2);
 						if ($brace_count == 0) {
 							if (preg_match('/\$this->data\[[\'"]breadcrumbs[\'"]\]\[\]/', $var) == 0) {
-								$line = "\r\n" . $line;
+								$line          = "\r\n" . $line;
 								$block_started = false;
 								continue;
 							}
-						
+
 							if (trim($assign) == 'array(') {
 								$brace_count++;
 								unset($lines[$num]);
-							}
-							else {
+							} else {
 								echo "Unusual Assign in block: $file at line $num<br><br>";
 								$tricky = true;
 								break;
 							}
-						}
-						else {
-							$var = trim($var, " \t\n\r\0\x0B'");
+						} else {
+							$var    = trim($var, " \t\n\r\0\x0B'");
 							$assign = trim($assign, " \t\n\r\0\x0B,>");
 							if ($var == 'text') {
 								if ($r_text) {
@@ -436,86 +455,83 @@ class PrettyLanguage
 									break;
 								}
 								$r_text = $assign;
-							}
-							elseif ($var == 'href') {
+							} elseif ($var == 'href') {
 								if ($r_href) {
 									echo "OVERWRITING HREF? $file line $num<br><br>";
 									break;
 								}
 								$r_href = $assign;
-							}
-							elseif ($var != 'separator') {
+							} elseif ($var != 'separator') {
 								echo "Unusual attribute $file at line $num<br><br>";
 								$tricky = true;
 								break;
 							}
-							
+
 							if ($r_text && $r_href) {
 								$pre = null;
-								preg_match("/^\s*/",$line,$pre);
+								preg_match("/^\s*/", $line, $pre);
 								$lines[$num] = $pre[0] . '$this->breadcrumb->add(' . $r_text . ', ' . $r_href . ');';
-								$r_text = null;
-								$r_href = null;
-							}
-							else {
+								$r_text      = null;
+								$r_href      = null;
+							} else {
 								unset($lines[$num]);
 							}
 						}
-					}
-					else {
+					} else {
 						if (trim($line) == ');') {
 							$brace_count--;
 							unset($lines[$num]);
-						}
-						else {
-							$line = "\r\n" . $line;
+						} else {
+							$line          = "\r\n" . $line;
 							$block_started = false;
 							continue;
 						}
 					}
 				}
 			}
-			
+
 			if (!$tricky) {
 				file_put_contents($file, implode("\n", $lines));
-			}
-			else {
+			} else {
 				$this->print_lines($orig_lines, $lines, true);
 			}
 		}
 	}
-	
+
 	public function update_message_format($files)
 	{
 		foreach ($files as $file) {
 			$lines = explode("\n", file_get_contents($file));
-			
+
 			$flag_delete = false;
-			$orig_lines = $lines;
-			
-			foreach ($lines as $num=>&$line) {
+			$orig_lines  = $lines;
+
+			foreach ($lines as $num => &$line) {
 				if (preg_match("/[^\s]/", $line) == 0) {
 					continue;
 				}
-				
-				$msg_types = array('warning', 'success', 'notify', 'attention');
-				
+
+				$msg_types = array(
+					'warning',
+					'success',
+					'notify',
+					'attention'
+				);
+
 				foreach ($msg_types as $mt) {
-					$r = preg_replace("/\\\$this->session->data\[['\"]" . $mt . "[\"']\]\s*=/",'$this->message->add(\'' . $mt . '\',', $line);
+					$r = preg_replace("/\\\$this->session->data\[['\"]" . $mt . "[\"']\]\s*=/", '$this->message->add(\'' . $mt . '\',', $line);
 					if ($r) {
 						if ($r != $line) {
 							$pos = strrpos($r, ';');
 							if ($pos !== false) {
 								$r = substr_replace($r, ');', $pos, 1);
-							}
-							else {
+							} else {
 								echo 'NO ENDING DELIMETER';
 								exit;
 							}
 							$line = $r;
 						}
-					}
-					else {
+					} else {
 						echo "ERROR PREG";
 						exit;
 					}
@@ -525,14 +541,14 @@ class PrettyLanguage
 			file_put_contents($file, implode("\n", $lines));
 		}
 	}
-	
+
 	public function update_url_links($files)
 	{
 		foreach ($files as $file) {
 			$lines = explode("\n", file_get_contents($file));
 			foreach ($lines as &$line) {
 				if (strpos($line, '$this->url->link') !== false) {
-					$patterns = array(
+					$patterns     = array(
 						"/['\"]token=['\"]\s*\.\s*\\\$this->session->data\[['\"]token['\"]\][^a-zA-Z0-9]*,/",
 						"/['\"]token=['\"]\s*\.\s*\\\$this->session->data\[['\"]token['\"]\]\s*\.\s*\\\$/",
 						"/['\"]token=['\"]\s*\.\s*\\\$this->session->data\[['\"]token['\"]\]\s*\.\s*['\"]&/",
@@ -552,43 +568,47 @@ class PrettyLanguage
 						'',
 						')'
 					);
-					
+
 					$orig = $line;
-					$line = preg_replace($patterns,$replacements,$line);
+					$line = preg_replace($patterns, $replacements, $line);
 					if ($orig != $line) {
 						echo "Changed $orig<br>$line<br><br>";
 					}
 				}
 			}
-			
+
 			file_put_contents($file, implode("\n", $lines));
 		}
 	}
-	
-	public function get_all_files_r($dir, $ignore=array(), $ext=array('php'), $depth=0){
+
+	public function get_all_files_r($dir, $ignore = array(), $ext = array('php'), $depth = 0)
+	{
 		if ($depth > 20) {
 			echo "we have too many recursions!";
 			exit;
 		}
-		
-		if(!is_dir($dir) || in_array($dir . '/', $ignore))return array();
-		
+
+		if (!is_dir($dir) || in_array($dir . '/', $ignore)) {
+			return array();
+		}
+
 		$handle = @opendir($dir);
-		
+
 		$files = array();
 		while (($file = readdir($handle)) !== false) {
-			if($file == '.' || $file == '..')continue;
-			
-			$file_path = rtrim($dir,'/') . '/' . $file;
-			
-			if (is_dir($file_path)) {
-				$files = array_merge($files, $this->get_all_files_r($file_path, $ignore,$ext, $depth+1));
+			if ($file == '.' || $file == '..') {
+				continue;
 			}
-			else {
+
+			$file_path = rtrim($dir, '/') . '/' . $file;
+
+			if (is_dir($file_path)) {
+				$files = array_merge($files, $this->get_all_files_r($file_path, $ignore, $ext, $depth + 1));
+			} else {
 				if (!empty($ext)) {
 					$match = null;
 					preg_match("/[^\.]*$/", $file, $match);
-					
+
 					if (!in_array($match[0], $ext)) {
 						continue;
 					}
@@ -596,22 +616,21 @@ class PrettyLanguage
 				$files[] = $file_path;
 			}
 		}
-		
+
 		return $files;
 	}
-	
+
 	public function print_lines($orig, $lines, $changes_only = true, $special_chars = false)
 	{
-		$orig_i = 0;
+		$orig_i     = 0;
 		$total_orig = count($orig);
-		
-		for ($new_i = 0;$new_i < count($lines);$new_i++) {
+
+		for ($new_i = 0; $new_i < count($lines); $new_i++) {
 			$l = $lines[$new_i];
-			
+
 			if ($orig_i >= $total_orig) {
 				$color = '#C2E782';
-			}
-			elseif ($lines[$new_i] != $orig[$orig_i]) {
+			} elseif ($lines[$new_i] != $orig[$orig_i]) {
 				$in_orig = false;
 				for ($i = $orig_i; $i < count($orig); $i++) {
 					if ($lines[$new_i] == $orig[$i]) {
@@ -619,7 +638,7 @@ class PrettyLanguage
 						break;
 					}
 				}
-				
+
 				$in_new = false;
 				for ($i = $new_i; $i < count($lines); $i++) {
 					if ($orig[$orig_i] == $lines[$i]) {
@@ -627,7 +646,7 @@ class PrettyLanguage
 						break;
 					}
 				}
-				
+
 				if ($in_new && $in_orig) {
 					if ($in_new < $in_orig) {
 						$in_orig = false;
@@ -635,73 +654,78 @@ class PrettyLanguage
 						$in_new = false;
 					}
 				}
-				
-				if($in_new) {
+
+				if ($in_new) {
 					for ($i = $new_i; $i < $in_new; $i++) {
-						$this->pl($i+1, $lines[$i], '#C2E782', $special_chars);
+						$this->pl($i + 1, $lines[$i], '#C2E782', $special_chars);
 					}
-					
-					$new_i = $in_new-1;
-					
+
+					$new_i = $in_new - 1;
+
 					continue;
-				}
-				elseif($in_orig) {
+				} elseif ($in_orig) {
 					for ($i = $orig_i; $i < $in_orig; $i++) {
-						$this->pl($i+1, $orig[$i], '#F98888', $special_chars);
+						$this->pl($i + 1, $orig[$i], '#F98888', $special_chars);
 					}
-					
+
 					$orig_i = $in_orig;
 					$new_i++;
-					
+
 					continue;
-				}
-				else {
+				} else {
 					$orig_i++;
 					$color = '#C282E7';
 					/*
 					$changes = false;
 					for ($i = 0; $i < count($lines) - $new_i; $i++) {
 						if (!isset($orig[$orig_i+$i])) break;
-						
+
 						if ($orig[$orig_i+$i] == $lines[$new_i+$i]) {
 							echo "FOUND Changes!<br>";
 							$changes = $i;
 							break;
 						}
 					}
-					
+
 					if ($changes) {
 						for ($i = 0; $i < $changes; $i++) {
 							$this->pl($orig_i + $i + 1, $orig[$orig_i + $i], '#A232A7', $special_chars);
 							$this->pl($new_i + $i + 1, $lines[$new_i + $i], '#C282E7', $special_chars);
 						}
-						
+
 						$new_i += $i-1;
 						$orig_i += $i;
-						
+
 						continue;
 					} else {
 						$color = '#C2E782';
 					}*/
 				}
-			}
-			else {
+			} else {
 				$orig_i++;
-				if($changes_only)continue;
+				if ($changes_only) {
+					continue;
+				}
 				$color = '#CBCBCB';
 			}
-			
-			$this->pl($new_i+1, $l, $color, $special_chars);
+
+			$this->pl($new_i + 1, $l, $color, $special_chars);
 		}
 	}
-	
+
 	public function pl($num, $line, $color, $special_chars)
 	{
 		if ($special_chars) {
 			$line = htmlspecialchars($line);
 		}
-		
-		$line = preg_replace(array('/ /','/\t/'),array('&nbsp;','&nbsp;&nbsp;&nbsp;'), $line);
+
+		$line = preg_replace(array(
+		                          '/ /',
+		                          '/\t/'
+		                     ), array(
+		                             '&nbsp;',
+		                             '&nbsp;&nbsp;&nbsp;'
+		                        ), $line);
 
 		echo "<div style='background: $color'>$num. $line</div>";
 	}
