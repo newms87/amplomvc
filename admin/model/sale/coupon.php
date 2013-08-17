@@ -95,16 +95,12 @@ class Admin_Model_Sale_Coupon extends Model
 	
 	public function getCoupon($coupon_id)
 	{
-		$query = $this->get('coupon', '*', $coupon_id);
-		
-		return $query->row;
+		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "coupon WHERE coupon_id = " . (int)$coupon_id);
 	}
 
 	public function getCouponByCode($code)
 	{
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "coupon WHERE code = '" . $this->escape($code) . "'");
-		
-		return $query->row;
+		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "coupon WHERE code = '" . $this->escape($code) . "'");
 	}
 		
 	public function getCoupons($data = array()) {

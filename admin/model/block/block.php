@@ -3,7 +3,7 @@ class Admin_Model_Block_Block extends Model
 {
 	public function addBlock($data)
 	{
-		$dir_templates = DIR_SYSTEM . 'resources/templates/add_block/';
+		$dir_templates = DIR_RESOURCES . 'templates/add_block/';
 		
 		$data['route'] = strtolower($data['route']);
 		

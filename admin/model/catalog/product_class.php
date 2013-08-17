@@ -102,6 +102,33 @@ class Admin_Model_Catalog_ProductClass extends Model
 		return $this->getProductClasses($data, '', true);
 	}
 	
+	public function getTemplate($product_class_id)
+	{
+		$product_classes = $this->cache->get('product_classes');
+		
+		if (is_null($product_classes)) {
+			$product_classes = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_class");
+			
+			foreach ($product_classes as &$product_class) {
+				$product_class['front_template'] = unserialize($product_class['front_template']);
+				$product_class['admin_template'] = unserialize($product_class['admin_template']);
+				$product_class['defaults'] = unserialize($product_class['defaults']);
+			} unset($product_class);
+			
+			$this->cache->set('product_classes', $product_classes);
+		}
+		
+		$theme = $this->theme->getTheme();
+		
+		$product_class = array_search_key('product_class_id', $product_class_id, $product_classes);
+		
+  		if (!empty($product_class['admin_template'][$theme])) {
+  			return 'catalog/product_class/' . $product_class['admin_template'][$theme];
+		}
+		
+		return 'catalog/product_form';
+	}
+	
 	public function getFrontTemplates()
 	{
 		$this->language->load('catalog/product_class');

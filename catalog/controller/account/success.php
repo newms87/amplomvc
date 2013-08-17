@@ -7,19 +7,19 @@ class Catalog_Controller_Account_Success extends Controller
 		$this->language->load('account/success');
 
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
 		$this->breadcrumb->add($this->_('head_title'), $this->url->link('account/success'));
-		
+
 		if (!$this->config->get('config_customer_approval')) {
 			$this->_('text_message', $this->url->link('information/contact'));
 		} else {
 			$this->data['text_message'] = $this->_('text_approval', $this->config->get('config_name'), $this->url->link('information/contact'));
 		}
-		
+
 		$this->data['continue'] = $this->url->link('account/account');
-		
+
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
@@ -28,7 +28,7 @@ class Catalog_Controller_Account_Success extends Controller
 			'common/footer',
 			'common/header'
 		);
-						
+
 		$this->response->setOutput($this->render());
-  	}
+	}
 }

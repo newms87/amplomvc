@@ -12,7 +12,7 @@ class Theme extends Library
 		
 		$this->theme = $this->config->get('config_theme');
 		
-		if (!$this->theme) {
+		if (!$this->theme || !is_dir(DIR_APPLICATION . '/view/theme/' . $this->theme)) {
 			$this->theme = $this->default_theme;
 		}
 		

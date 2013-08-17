@@ -11,7 +11,7 @@ class Admin_Controller_Design_Layout extends Controller
 	public function update()
 	{
 		$this->language->load('design/layout');
-
+		
 		if ($this->request->isPost() && $this->validateForm()) {
 			//Insert
 			if (empty($_GET['layout_id'])) {
@@ -28,7 +28,7 @@ class Admin_Controller_Design_Layout extends Controller
 				$this->url->redirect($this->url->link('design/layout'));
 			}
 		}
-
+		
 		$this->getForm();
 	}
 
@@ -51,37 +51,38 @@ class Admin_Controller_Design_Layout extends Controller
 	
 	public function batch_update()
 	{
-		$this->language->load('catalog/category');
+		$this->language->load('design/layout');
 		
-		if (!empty($_GET['selected']) && isset($_GET['action'])) {
-			foreach ($_GET['selected'] as $category_id) {
+		if (!empty($_GET['selected']) && isset($_GET['action']) && $this->user->hasPermission('modify', 'design/layout')) {
+			foreach ($_GET['selected'] as $layout_id) {
 				switch($_GET['action']){
 					case 'enable':
-						$this->Model_Catalog_Category->updateField($category_id, array('status' => 1));
+						$this->Model_Design_Layout->editLayout($layout_id, array('status' => 1));
 						break;
 					case 'disable':
-						$this->Model_Catalog_Category->updateField($category_id, array('status' => 0));
+						$this->Model_Design_Layout->editLayout($layout_id, array('status' => 0));
 						break;
 					case 'delete':
-						$this->Model_Catalog_Category->deleteCategory($category_id);
+						if ($this->canDelete($layout_id)) {
+							$this->Model_Design_Layout->deleteLayout($layout_id);
+						}
 						break;
 					case 'copy':
-						$this->Model_Catalog_Category->copyCategory($category_id);
+						$this->Model_Design_Layout->copyLayout($layout_id);
 						break;
-				}
-				
-				if ($this->error) {
-					break;
+					
+					default:
+						break 2; // Break For Loop
 				}
 			}
 			
 			if (!$this->error && !$this->message->error_set()) {
 				$this->message->add('success',$this->_('text_success'));
 				
-				$this->url->redirect($this->url->link('catalog/category', $this->url->getQueryExclude('action')));
+				$this->url->redirect($this->url->link('design/layout', $this->url->getQueryExclude('action')));
 			}
 		}
-
+		
 		$this->getList();
 	}
 	
@@ -230,6 +231,12 @@ class Admin_Controller_Design_Layout extends Controller
 			}
 		}
 		
+		//Template Defaults
+		$this->data['routes']['__ac_template__'] = array(
+			'store_id' => 1,
+			'route' => '',
+		);
+		
 		//Additional Data
 		$this->data['data_stores'] = $this->Model_Setting_Store->getStores();
 		
@@ -252,48 +259,47 @@ class Admin_Controller_Design_Layout extends Controller
 		if (!$this->user->hasPermission('modify', 'design/layout')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
-
-		if ((strlen($_POST['name']) < 3) || (strlen($_POST['name']) > 64)) {
+		
+		if (!$this->validation->text($_POST['name'], 3, 64)) {
 			$this->error['name'] = $this->_('error_name');
 		}
 
 		return $this->error ? false : true;
 	}
-
+	
 	private function validateDelete()
 	{
 		if (!$this->user->hasPermission('modify', 'design/layout')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 		
-		foreach ($_GET['selected'] as $layout_id) {
-			if ($this->config->get('config_default_layout_id') == $layout_id) {
-				$this->error['warning'] = $this->_('error_default');
-			}
-			
-			$data = array(
-				'layouts' => array($layout_id),
-			);
-			
-			$product_total = $this->Model_Catalog_Product->getTotalProducts($data);
-	
-			if ($product_total) {
-				$this->error['warning_product'] = $this->_('error_product', $product_total);
-			}
-
-			$category_total = $this->Model_Catalog_Category->getTotalCategories($data);
-	
-			if ($category_total) {
-				$this->error['warning_category'] = $this->_('error_category', $category_total);
-			}
-			
-			$information_total = $this->Model_Catalog_Information->getTotalInformations($data);
-		
-			if ($information_total) {
-				$this->error['warning_information'] = $this->_('error_information', $information_total);
-			}
+		if ($this->config->get('config_default_layout_id') == $_GET['layout_id']) {
+			$this->error['warning'] = $this->_('error_default');
 		}
+			
+		$this->canDelete($_GET['layout_id']);
 	
 		return $this->error ? false : true;
+	}
+
+	private function canDelete($layout_id)
+	{
+		$filter = array(
+			'layouts' => array($layout_id),
+		);
+		
+		if ($this->Model_Catalog_Product->getTotalProducts($filter)) {
+			$this->error[$layout_id]['warning_product'] = $this->_('error_product', $product_total);
+		}
+
+		if ($this->Model_Catalog_Category->getTotalCategories($filter)) {
+			$this->error[$layout_id]['warning_category'] = $this->_('error_category', $category_total);
+		}
+		
+		if ($this->Model_Catalog_Information->getTotalInformations($filter)) {
+			$this->error[$layout_id]['warning_information'] = $this->_('error_information', $information_total);
+		}
+		
+		return !isset($this->error[$layout_id]);
 	}
 }

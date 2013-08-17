@@ -5,17 +5,17 @@ class Catalog_Model_Localisation_Currency extends Model
 	{
 		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "currency WHERE code = '" . $this->escape($currency) . "'");
 	}
-	
+
 	public function getCurrencies()
 	{
 		$currencies = $this->cache->get('currency');
 
 		if (!$currencies) {
 			$currencies = $this->queryRows("SELECT * FROM " . DB_PREFIX . "currency ORDER BY title ASC");
-			
+
 			$this->cache->set('currency', $currencies);
 		}
-			
+
 		return $currencies;
 	}
 }

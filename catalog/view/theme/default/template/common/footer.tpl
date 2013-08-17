@@ -4,11 +4,11 @@
 <div id="footer">
 	<div id="links_footer" class="links">
 		<?= $this->document->renderLinks($links_footer); ?>
-		<? if(!empty($social_networks)){ ?>
+		<? if (!empty($social_networks)) { ?>
 			<div id="footer_social_networks">
-			<?= $social_networks; ?>
+				<?= $social_networks; ?>
 			</div>
-		<? }?>
+		<? } ?>
 	</div>
 </div>
 

@@ -6,13 +6,13 @@ class Catalog_Controller_Module_Banner extends Controller
 		$this->template->load('module/banner');
 
 		static $module = 0;
-		
+
 		$this->document->addScript('catalog/view/javascript/jquery/jquery.cycle.js');
-				
+
 		$this->data['banners'] = array();
-		
+
 		$results = $this->Model_Design_Banner->getBanner($setting['banner_id']);
-		
+
 		foreach ($results as $result) {
 			if (file_exists(DIR_IMAGE . $result['image'])) {
 				$this->data['banners'][] = array(
@@ -22,9 +22,9 @@ class Catalog_Controller_Module_Banner extends Controller
 				);
 			}
 		}
-		
+
 		$this->data['module'] = $module++;
 
 		$this->render();
 	}
-}
+}

@@ -30,6 +30,9 @@ $registry->set('error_log', $error_log);
 $log = new Log($config->get('config_log_filename'), $config->get('config_name'));
 $registry->set('log', $log);
 
+//Error Callbacks allow customization of error display / messages
+$error_callbacks = array();
+
 $error_handler = function($errno, $errstr, $errfile, $errline) use($error_log, $config){
 	switch ($errno) {
 		case E_NOTICE:
@@ -48,13 +51,23 @@ $error_handler = function($errno, $errstr, $errfile, $errline) use($error_log, $
 			$error = 'Unknown';
 			break;
 	}
-		
-	if ($config->get('config_error_display')) {
-		echo '<b>' . $error . '</b>: ' . $errstr . ' in <b>' . $errfile . '</b> on line <b>' . $errline . '</b><br /><br />';
+	
+	global $error_callbacks;
+	
+	if (!empty($error_callbacks)) {
+		foreach ($error_callbacks as $cb) {
+			$cb($error, $errno, $errstr, $errfile, $errline);
+		}
 	}
 	
-	if ($config->get('config_error_log')) {
-		$error_log->write('PHP ' . $error . ':  ' . $errstr . ' in ' . $errfile . ' on line ' . $errline);
+	if ($error) {
+		if ($config->get('config_error_display')) {
+			echo '<b>' . $error . '</b>: ' . $errstr . ' in <b>' . $errfile . '</b> on line <b>' . $errline . '</b><br /><br />';
+		}
+		
+		if ($config->get('config_error_log')) {
+			$error_log->write('PHP ' . $error . ':  ' . $errstr . ' in ' . $errfile . ' on line ' . $errline);
+		}
 	}
 
 	return true;

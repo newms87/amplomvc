@@ -1,3 +1,3 @@
 <?php
 // Heading
-$_['head_title']	= 'All Designers';
+$_['head_title'] = 'All Designers';

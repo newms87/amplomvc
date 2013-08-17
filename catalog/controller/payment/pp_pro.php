@@ -6,7 +6,7 @@ class Catalog_Controller_Payment_PpPro extends Controller
 		$this->template->load('payment/pp_pro');
 
 		$this->language->load('payment/pp_pro');
-		
+
 		$this->data['cards'] = array();
 
 		$this->data['cards'][] = array(
@@ -23,7 +23,7 @@ class Catalog_Controller_Payment_PpPro extends Controller
 			'text'  => 'Discover Card',
 			'value' => 'DISCOVER'
 		);
-		
+
 		$this->data['cards'][] = array(
 			'text'  => 'American Express',
 			'value' => 'AMEX'
@@ -33,25 +33,25 @@ class Catalog_Controller_Payment_PpPro extends Controller
 			'text'  => 'Maestro',
 			'value' => 'SWITCH'
 		);
-		
+
 		$this->data['cards'][] = array(
 			'text'  => 'Solo',
 			'value' => 'SOLO'
 		);
-	
+
 		$this->data['months'] = array();
-		
+
 		for ($i = 1; $i <= 12; $i++) {
 			$this->data['months'][] = array(
 				'text'  => strftime('%B', mktime(0, 0, 0, $i, 1, 2000)),
 				'value' => sprintf('%02d', $i)
 			);
 		}
-		
+
 		$today = getdate();
-		
+
 		$this->data['year_valid'] = array();
-		
+
 		for ($i = $today['year'] - 10; $i < $today['year'] + 1; $i++) {
 			$this->data['year_valid'][] = array(
 				'text'  => strftime('%Y', mktime(0, 0, 0, 1, 1, $i)),
@@ -78,10 +78,10 @@ class Catalog_Controller_Payment_PpPro extends Controller
 		} else {
 			$payment_type = 'Sale';
 		}
-		
+
 		$order_info = $this->order->get($this->session->data['order_id']);
-		
-		$request  = 'METHOD=DoDirectPayment';
+
+		$request = 'METHOD=DoDirectPayment';
 		$request .= '&VERSION=51.0';
 		$request .= '&USER=' . urlencode($this->config->get('pp_pro_username'));
 		$request .= '&PWD=' . urlencode($this->config->get('pp_pro_password'));
@@ -94,11 +94,11 @@ class Catalog_Controller_Payment_PpPro extends Controller
 		$request .= '&CARDSTART=' . urlencode($_POST['cc_start_date_month'] . $_POST['cc_start_date_year']);
 		$request .= '&EXPDATE=' . urlencode($_POST['cc_expire_date_month'] . $_POST['cc_expire_date_year']);
 		$request .= '&CVV2=' . urlencode($_POST['cc_cvv2']);
-		
+
 		if ($_POST['cc_type'] == 'SWITCH' || $_POST['cc_type'] == 'SOLO') {
 			$request .= '&CARDISSUE=' . urlencode($_POST['cc_issue']);
 		}
-		
+
 		$request .= '&FIRSTNAME=' . urlencode($order_info['payment_firstname']);
 		$request .= '&LASTNAME=' . urlencode($order_info['payment_lastname']);
 		$request .= '&EMAIL=' . urlencode($order_info['email']);
@@ -110,7 +110,7 @@ class Catalog_Controller_Payment_PpPro extends Controller
 		$request .= '&ZIP=' . urlencode($order_info['payment_postcode']);
 		$request .= '&COUNTRYCODE=' . urlencode($order_info['payment_iso_code_2']);
 		$request .= '&CURRENCYCODE=' . urlencode($order_info['currency_code']);
-		
+
 		if ($this->cart->hasShipping()) {
 			$request .= '&SHIPTONAME=' . urlencode($order_info['shipping_firstname'] . ' ' . $order_info['shipping_lastname']);
 			$request .= '&SHIPTOSTREET=' . urlencode($order_info['shipping_address_1']);
@@ -126,13 +126,13 @@ class Catalog_Controller_Payment_PpPro extends Controller
 			$request .= '&SHIPTOCOUNTRYCODE=' . urlencode($order_info['payment_iso_code_2']);
 			$request .= '&SHIPTOZIP=' . urlencode($order_info['payment_postcode']);
 		}
-		
+
 		if (!$this->config->get('pp_pro_test')) {
 			$curl = curl_init('https://api-3t.paypal.com/nvp');
 		} else {
 			$curl = curl_init('https://api-3t.sandbox.paypal.com/nvp');
 		}
-		
+
 		curl_setopt($curl, CURLOPT_PORT, 443);
 		curl_setopt($curl, CURLOPT_HEADER, 0);
 		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
@@ -143,24 +143,24 @@ class Catalog_Controller_Payment_PpPro extends Controller
 		curl_setopt($curl, CURLOPT_POSTFIELDS, $request);
 
 		$response = curl_exec($curl);
- 		
+
 		curl_close($curl);
 
 		if (!$response) {
 			$this->error_log->write('DoDirectPayment failed: ' . curl_error($curl) . '(' . curl_errno($curl) . ')');
 		}
 
- 		$response_data = array();
+		$response_data = array();
 
 		parse_str($response, $response_data);
 
 		$json = array();
-		
+
 		if (($response_data['ACK'] == 'Success') || ($response_data['ACK'] == 'SuccessWithWarning')) {
 			$this->order->update($this->session->data['order_id'], $this->config->get('config_order_complete_status_id'));
-			
+
 			$message = '';
-			
+
 			if (isset($response_data['AVSCODE'])) {
 				$message .= 'AVSCODE: ' . $response_data['AVSCODE'] . "\n";
 			}
@@ -172,14 +172,14 @@ class Catalog_Controller_Payment_PpPro extends Controller
 			if (isset($response_data['TRANSACTIONID'])) {
 				$message .= 'TRANSACTIONID: ' . $response_data['TRANSACTIONID'] . "\n";
 			}
-			
+
 			$this->Model_Checkout_Order->update_order($this->session->data['order_id'], $this->config->get('pp_pro_order_status_id'), $message, false);
-		
+
 			$json['success'] = $this->url->link('checkout/success');
 		} else {
 			$json['error'] = $response_data['L_LONGMESSAGE0'];
 		}
-		
+
 		$this->response->setOutput(json_encode($json));
 	}
-}
+}

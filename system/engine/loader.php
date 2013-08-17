@@ -71,7 +71,7 @@ final class Loader
 			
 			return $class;
 		} else {
-			trigger_error('Could not load model ' . $model . '! ' . get_caller(0, 4) . html_backtrace(5,-1,false));
+			trigger_error('Could not load model ' . $model . " (tried $model_class)!" . get_caller(0, 4) . html_backtrace(5,-1,false));
 			exit();
 		}
 	}

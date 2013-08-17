@@ -5,28 +5,30 @@ class Admin_Model_Design_Layout extends Model
 	{
 		$layout_id = $this->insert('layout', $data);
 		
-		if (!empty($data['layout_route'])) {
-			foreach ($data['layout_route'] as $layout_route) {
-				$layout_route['layout_id'] = $layout_id;
+		if (!empty($data['routes'])) {
+			foreach ($data['routes'] as $route) {
+				$route['layout_id'] = $layout_id;
 				
-				$this->insert('layout_route', $layout_route);
+				$this->insert('layout_route', $route);
 			}
 		}
 		
 		return $layout_id;
 	}
 	
-	public function editLayout($layout_id, $data)
+	public function editLayout($layout_id, $data, $strict = false)
 	{
 		$this->update('layout', $data, $layout_id);
 		
-		$this->delete('layout_route', array('layout_id' => $layout_id));
+		if (isset($data['routes']) || !$strict) {
+			$this->delete('layout_route', array('layout_id' => $layout_id));
+		}
 		
-		if (!empty($data['layout_route'])) {
-			foreach ($data['layout_route'] as $layout_route) {
-				$layout_route['layout_id'] = $layout_id;
+		if (!empty($data['routes'])) {
+			foreach ($data['routes'] as $route) {
+				$route['layout_id'] = $layout_id;
 				
-				$this->insert('layout_route', $layout_route);
+				$this->insert('layout_route', $route);
 			}
 		}
 	}

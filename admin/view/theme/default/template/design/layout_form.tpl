@@ -1,7 +1,7 @@
 <?= $header; ?>
 <div class="content">
 	<?= $this->breadcrumb->render(); ?>
-	
+
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'layout.png'; ?>" alt="" /> <?= $head_title; ?></h1>
@@ -26,25 +26,23 @@
 							<td></td>
 						</tr>
 					</thead>
-					
-					<? $route_row = 0; ?>
-					<? foreach ($routes as $layout_route) { ?>
-					<tbody id="route-row<?= $route_row; ?>">
-						<tr>
+
+					<tbody id="route_list">
+					<? foreach ($routes as $row => $route) { ?>
+						<tr class="route" data-row="<?= $row; ?>">
 							<td class="left">
-					<? $this->builder->set_config('store_id', 'name');?>
-					<?= $this->builder->build('select', $data_stores, "routes[$route_row][store_id]", $layout_route['store_id']); ?>
-					</td>
-							<td class="left"><input type="text" name="routes[<?= $route_row; ?>][route]" value="<?= $layout_route['route']; ?>" /></td>
-							<td class="left"><a onclick="$('#route-row<?= $route_row; ?>').remove();" class="button"><?= $button_remove; ?></a></td>
+								<? $this->builder->set_config('store_id', 'name');?>
+								<?= $this->builder->build('select', $data_stores, "routes[$row][store_id]", $route['store_id']); ?>
+							</td>
+							<td class="left"><input type="text" name="routes[<?= $row; ?>][route]" value="<?= $route['route']; ?>" /></td>
+							<td class="left"><a onclick="$(this).closest('.route').remove();" class="delete_button"><?= $button_remove; ?></a></td>
 						</tr>
-					</tbody>
-					<? $route_row++; ?>
 					<? } ?>
+					</tbody>
 					<tfoot>
 						<tr>
 							<td colspan="2"></td>
-							<td class="left"><a onclick="addRoute();" class="button"><?= $button_add_route; ?></a></td>
+							<td class="left"><a id="add_route" class="button"><?= $button_add_route; ?></a></td>
 						</tr>
 					</tfoot>
 				</table>
@@ -53,30 +51,13 @@
 	</div>
 </div>
 
-
 <?= $this->builder->js('ckeditor'); ?>
- 
-<script type="text/javascript"><!--
-$('#languages a').tabs();
 
-var route_row = <?= $route_row; ?>;
+<script type="text/javascript">//<!--
+$('#route_list').ac_template('route_list');
 
-function addRoute() {
-	html	= '<tbody id="route-row' + route_row + '">';
-	html += '	<tr>';
-	html += '		<td class="left"><select name="layout_route[' + route_row + '][store_id]">';
-	<? foreach ($data_stores as $store) { ?>
-	html += '<option value="<?= $store['store_id']; ?>"><?= addslashes($store['name']); ?></option>';
-	<? } ?>
-	html += '		</select></td>';
-	html += '		<td class="left"><input type="text" name="layout_route[' + route_row + '][route]" value="" /></td>';
-	html += '		<td class="left"><a onclick="$(\'#route-row' + route_row + '\').remove();" class="button"><?= $button_remove; ?></a></td>';
-	html += '	</tr>';
-	html += '</tbody>';
-	
-	$('#route > tfoot').before(html);
-	
-	route_row++;
-}
+$('#add_route').click(function(){
+	$.ac_template('route_list', 'add');
+});
 //--></script>
 <?= $footer; ?>
