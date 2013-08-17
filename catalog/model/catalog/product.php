@@ -76,7 +76,6 @@ class Catalog_Model_Catalog_Product extends Model
 
 	public function getProducts($data = array(), $select = '*', $total = false)
 	{
-		$language_id = (int)$this->config->get('config_language_id');
 		$store_id    = (int)$this->config->get('config_store_id');
 
 		/* TODO:
@@ -442,22 +441,72 @@ class Catalog_Model_Catalog_Product extends Model
 		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_to_category WHERE product_id = " . (int)$product_id);
 	}
 
-	public function getAttributeList($attribute_group_id)
+	public function getAttributes($data = array(), $select = '', $total = false)
 	{
 		$language_id = $this->config->get('config_language_id');
 
-		$attributes = $this->cache->get("attribute.list.$attribute_group_id.$language_id");
+		$cache_id = "attributes." . md5(serialize($data)) . ($total ? 'total' : "$select.$language_id");
 
-		if (!$attributes) {
-			$query = "SELECT attribute_id, name FROM " . DB_PREFIX . "attribute" .
-				" WHERE attribute_group_id = '$attribute_group_id' ORDER BY name";
+		$attributes = $this->cache->get($cache_id);
 
-			$attributes = $this->queryRows($query);
+		if (is_null($attributes)) {
+			//Select
+			if ($total) {
+				$select = 'COUNT(*) as total';
+			} elseif (empty($select)) {
+				$select = '*';
+			}
 
-			$this->translation->translate_all('attribute', 'attribute_id', $attributes);
+			//From
+			$from = DB_PREFIX . "attribute a";
 
-			$this->cache->set("attribute.list.$attribute_group_id.$language_id", $attributes);
+			//Where
+			$where = "1";
+
+			if (!empty($data['attribute_group_ids'])) {
+				$where .= " AND a.attribute_group_id IN (" . implode(',', $data['attribute_group_ids']) . ")";
+			}
+
+			//Attribute Name Search
+			if (!empty($data['name'])) {
+				$where .= " AND LCASE(a.name) like '%" . $this->escape(strtolower($data['name'])) . "%'";
+			}
+
+			//This is a specialty function for advanced attribute selection
+			//We resolve the category_ids by finding the products in the category list and grab all associated attributes
+			if (!empty($data['category_ids'])) {
+				$where .= " AND a.attribute_group_id IN (" .
+					"SELECT pa.product_attribute FROM " . DB_PREFIX . "product_attribute pa" .
+					" LEFT JOIN " . DB_PREFIX . "product_category pc ON (pc.product_id=pa.product_id)" .
+					" WHERE pc.category_id IN (" . implode(',', $data['category_ids']) . ")" .
+				")";
+			}
+
+			//Group By, Order By and Limit
+			if (!$total) {
+				$order = $this->extract_order($data);
+				$limit = $this->extract_limit($data);
+			} else {
+				$order = 'ORDER BY name ASC';
+				$limit = '';
+			}
+
+			//The Query
+			$query = "SELECT $select FROM $from WHERE $where $order $limit";
+
+			$result = $this->query($query);
+
+			//Process Results
+			if ($total) {
+				$attributes = $result->row['total'];
+			} else {
+				$attributes = $result->rows;
+
+				$this->translation->translate_all('attribute', 'attribute_id', $attributes);
+			}
 		}
+
+		$this->cache->set($cache_id, $attributes);
 
 		return $attributes;
 	}
