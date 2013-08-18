@@ -190,24 +190,6 @@ class Catalog_Model_Catalog_Category extends Model
 		}
 	}
 
-	public function applyFunction(&$category_tree, $callback)
-	{
-		if (!is_array(current($category_tree))) {
-			$category_tree = array($category_tree);
-		}
-
-		foreach ($category_tree as &$category) {
-			$args = func_get_args();
-			array_splice($args, 0, 2);
-
-			call_user_func_array($callback, array_merge(array(&$category), $args));
-
-			if (!empty($category['children'])) {
-				call_user_func_array(array($this,'applyFunction'), array_merge(array(&$category['children'],$callback), $args));
-			}
-		}
-	}
-
 	public function getCategoryName($category_id)
 	{
 		$category = $this->queryRow("SELECT name FROM " . DB_PREFIX . "category WHERE category_id='" . (int)$category_id . "'");

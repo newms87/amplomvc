@@ -14,16 +14,6 @@ function html_dump($var, $label= "HTML Dump", $level=0, $max = -1, $print = true
 
 <? if (!$html_dump_count) { ?>
 <style>
-#html_dump_list{
-	position:relative;
-	background:#EEE;
-	border-radius: 5px;
-	box-shadow: 2px 2px 5px rgba(0,0,0,.3);
-	overflow:auto;
-	display:block;
-	padding: 5px 10px;
-	margin-bottom: 10px;
-}
 .html_dump{
 	display:block;
 	margin-bottom:15px;
@@ -203,6 +193,38 @@ if (!function_exists('array_unique_keys')) {
 		}
 
 		return $array;
+	}
+}
+
+if (!function_exists('array_walk_children')) {
+	/**
+	 * Applies a callback function on every node element of an array tree
+	 *
+	 * @param array $array_tree - The array Tree to walk recursively
+	 * @param string $children - The array key id for the child nodes
+	 * @param callback $callback - The Callback function to apply on every node of the array
+	 * @param mixed arg1 - The first parameter to pass to each callback call
+	 * @params mixed arg2 - The 2nd parameter...etc.
+	 *
+	 * @return void
+	 */
+
+	function array_walk_children(&$array_tree, $children, $callback)
+	{
+		if (!is_array(current($array_tree))) {
+			$array_tree = array($array_tree);
+		}
+
+		foreach ($array_tree as &$node) {
+			$args = func_get_args();
+			array_splice($args, 0, 3);
+
+			call_user_func_array($callback, array_merge(array(&$node), $args));
+
+			if (!empty($node[$children])) {
+				call_user_func_array('array_walk_children', array_merge(array(&$node[$children], $children, $callback), $args));
+			}
+		}
 	}
 }
 

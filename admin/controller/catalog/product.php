@@ -454,7 +454,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			$product_info['product_related']    = $this->Model_Catalog_Product->getProductRelated($product_id);
 		}
 
-		//Apply Product Class Skin
+		//Apply Product Class
 		$product_classes = $this->Model_Catalog_ProductClass->getProductClasses();
 
 		//Set Values or Defaults
@@ -609,7 +609,6 @@ class Admin_Controller_Catalog_Product extends Controller
 					'price'                   => 0,
 					'points'                  => 0,
 					'weight'                  => 0,
-					'default'                 => 0,
 					'sort_order'              => 0,
 					'restrictions'            => array(
 						'__ac_template__' => array(
@@ -668,11 +667,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		);
 
 		//The Template
-		if ($this->data['product_class_id']) {
-			$this->template->load($this->Model_Catalog_ProductClass->getTemplate($this->data['product_class_id']));
-		} else {
-			$this->template->load('catalog/product_form');
-		}
+		$this->template->load($this->Model_Catalog_ProductClass->getTemplate($this->data['product_class_id']));
 
 		//Render
 		$this->response->setOutput($this->render());
@@ -817,7 +812,7 @@ class Admin_Controller_Catalog_Product extends Controller
 
 			$selected = $product['product_id'] == $select ? 'selected="selected"' : '';
 
-			$html .= "<option value='$product[product_id]' $selected>$product[name]</option>";
+			$html .= "<option value=\"$product[product_id]\" " . $selected . ">$product[name]</option>";
 		}
 
 		$this->response->setOutput(json_encode(array(

@@ -10,7 +10,7 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 
 		$categories = $this->Model_Catalog_Category->getCategoryTree();
 
-		$this->Model_Catalog_Category->applyFunction($categories, function(&$category, $that) {
+		array_walk_children($categories, 'children', function(&$category, $that) {
 			$category['href'] = $that->url->link('product/category', 'category_id=' . $category['category_id']);
 		}, $this);
 

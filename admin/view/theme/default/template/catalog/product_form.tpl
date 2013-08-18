@@ -320,6 +320,7 @@
 					<thead>
 					<tr>
 						<td class="center"><?= $entry_option_value; ?></td>
+						<td class="center"><?= $entry_default; ?></td>
 						<td class="center"><?= $entry_image; ?></td>
 						<td class="center"><?= $entry_quantity; ?></td>
 						<td class="center"><?= $entry_subtract; ?></td>
