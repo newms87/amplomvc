@@ -158,7 +158,7 @@
 
 			list.append(html);
 		}
-		//--></script>
+//--></script>
 
 	<script type="text/javascript">//<!--
 		var module_row = <?= $module_row; ?>;
@@ -181,7 +181,7 @@
 			$('#module tfoot').before(html.replace(/%modrow%/g, module_row));
 			module_row++;
 		}
-		//--></script>
+//--></script>
 
 <?= $this->builder->js('autocomplete', '.autocomplete', 'name', 'product_id', 'add_to_list'); ?>
 

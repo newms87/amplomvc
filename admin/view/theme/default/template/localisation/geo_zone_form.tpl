@@ -105,7 +105,7 @@
 				}
 			});
 		}
-		//--></script>
+//--></script>
 
 	<script type="text/javascript">//<!--
 		var temp = $('#zone_list').find('.template_row');
@@ -130,7 +130,7 @@
 			zone_row++;
 		}
 		;
-		//--></script>
+//--></script>
 
 <?= $this->builder->js('errors', $errors); ?>
 

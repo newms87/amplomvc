@@ -314,6 +314,16 @@ class Admin_Controller_Catalog_Product extends Controller
 
 		$this->data['list_view'] = $this->table->render();
 
+		//Additional Data
+		if (count($product_classes) > 1) {
+			foreach ($product_classes as &$product_class) {
+				$product_class['insert'] = $this->url->link('catalog/product/update', 'product_class_id=' . $product_class['product_class_id']);
+			}
+			unset($product_class);
+
+			$this->data['product_classes'] = $product_classes;
+		}
+
 		//Batch actions
 		$this->data['batch_actions'] = array(
 			'enable'             => array(
@@ -422,7 +432,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		$this->document->setTitle($this->_('head_title'));
 
 		//Insert or Update
-		$product_id = $this->data['product_id'] = isset($_GET['product_id']) ? $_GET['product_id'] : false;
+		$product_id = $this->data['product_id'] = isset($_GET['product_id']) ? $_GET['product_id'] : 0;
 
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -456,19 +466,17 @@ class Admin_Controller_Catalog_Product extends Controller
 
 		//Apply Product Class
 		$product_classes = $this->Model_Catalog_ProductClass->getProductClasses();
+		$default_product_class_id = isset($_GET['product_class_id']) ? $_GET['product_class_id'] : $this->config->get('config_default_product_class_id');
 
 		//Set Values or Defaults
 		$defaults = array(
-			'product_class_id'   => $this->config->get('config_default_product_class_id'),
+			'product_class_id'   => $default_product_class_id,
 			'model'              => '',
 			'sku'                => '',
 			'upc'                => '',
 			'location'           => '',
 			'alias'              => '',
-			'product_store'      => array(
-				0,
-				1
-			),
+			'product_store'      => array($this->config->get('config_default_store_id')),
 			'name'               => '',
 			'description'        => '',
 			'teaser'             => '',
@@ -564,6 +572,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			'text'         => '',
 		);
 
+		html_dump($this->data['product_options'], 'pos');
 		//Product Options Unused Option Values
 		foreach ($this->data['product_options'] as &$product_option) {
 			if (!empty($product_option['product_option_values'])) {
@@ -693,6 +702,10 @@ class Admin_Controller_Catalog_Product extends Controller
 				$_POST['model']       = $model;
 			}
 		} else {
+			if (!$_POST['model']) {
+				$_POST['model'] = $this->Model_Catalog_Product->generateModel(0, $_POST['name']);
+			}
+
 			if (!$this->validation->text($_POST['model'], 1, 64)) {
 				$this->error['model'] = $this->_('error_model');
 			}
@@ -706,8 +719,8 @@ class Admin_Controller_Catalog_Product extends Controller
 			}
 		}
 
-		if (empty($_POST['alias'])) {
-			$_POST['alias'] = $this->tool->getSlug($_POST['name']);
+		if (empty($_POST['alias']) && $this->config->get('config_seo_url')) {
+			$_POST['alias'] = $this->Model_Setting_UrlAlias->getUniqueAlias($_POST['name'], 'product/product', 'product_id=' . $product_id);
 		}
 
 		if (isset($_POST['product_images'])) {
@@ -815,10 +828,12 @@ class Admin_Controller_Catalog_Product extends Controller
 			$html .= "<option value=\"$product[product_id]\" " . $selected . ">$product[name]</option>";
 		}
 
-		$this->response->setOutput(json_encode(array(
-		                                            'option_data' => $data,
-		                                            'html'        => $html
-		                                       )));
+		$json = array(
+			'option_data' => $data,
+			'html'        => $html,
+		);
+
+		$this->response->setOutput(json_encode($json));
 	}
 
 	public function autocomplete()

@@ -488,6 +488,11 @@ ul > li > ul > li:hover > ul.link_list, ul > li > ul > li.hover > ul.link_list {
 	margin-left: 5px;
 }
 
+.box > .heading .buttons .insert_classes {
+	float:left;
+	margin-right: 20px;
+}
+
 .box > .content .limits {
 	float: right;
 	padding: 5px 0 15px 0;

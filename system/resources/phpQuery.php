@@ -584,7 +584,7 @@ class DOMDocumentWrapper
 			. ($xhtml ? '/' : '')
 			. '>';
 		if (strpos($html, '<head') === false) {
-			if (strpos($hltml, '<html') === false) {
+			if (strpos($html, '<html') === false) {
 				return $meta . $html;
 			} else {
 				return preg_replace(
@@ -5569,7 +5569,6 @@ abstract class phpQuery
 
 		while (!empty($saved_sections)) {
 			foreach ($saved_sections as $key => $ss) {
-				echo '__ss' . $key . '__' . ' == <br>';
 				$content = str_replace('__ss' . $key . '__', $ss, $content, $found);
 				if ($found) {
 					unset($saved_sections[$key]);
@@ -5788,7 +5787,7 @@ abstract class phpQuery
 					continue;
 				}
 				if (isset(self::$pluginsStaticMethods[$method])) {
-					throw new Exception("Duplicate method '{$method}' from plugin '{$c}' conflicts with same method from plugin '" . self::$pluginsStaticMethods[$method] . "'");
+					throw new Exception("Duplicate method '{$method}' from plugin '{$class}' conflicts with same method from plugin '" . self::$pluginsStaticMethods[$method] . "'");
 					return;
 				}
 				self::$pluginsStaticMethods[$method] = $class;

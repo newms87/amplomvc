@@ -9,8 +9,15 @@
 					<?= $this->builder->batch_action('#listing [name="selected[]"]', $batch_actions, $batch_update); ?>
 				</div>
 				<div class="buttons">
-					<a href="<?= $insert; ?>" class="button"><?= $button_insert; ?></a>
-					<a onclick="do_batch_action('copy')" class="button"><?= $button_copy; ?></a>
+					<? if (!empty($product_classes)) { ?>
+						<div class="insert_classes">
+							<? foreach ($product_classes as $product_class) { ?>
+								<a href="<?= $product_class['insert']; ?>" class="button"><?= $button_insert . ' ' . $product_class['name']; ?></a>
+							<? } ?>
+						</div>
+					<? } else { ?>
+						<a href="<?= $insert; ?>" class="button"><?= $button_insert; ?></a>
+					<? } ?>
 				</div>
 			</div>
 			<div class="content">

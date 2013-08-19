@@ -401,12 +401,12 @@
 		$('[name=config_theme]').change(function () {
 			$('#theme').load('<?= $load_theme_img; ?>' + '&theme=' + $(this).val());
 		}).change();
-		//--></script>
+//--></script>
 
 <?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select'); ?>
 
 	<script type="text/javascript">//<!--
 		$('#tabs a').tabs();
-		//--></script>
+//--></script>
 <?= $this->builder->js('errors', $errors); ?>
 <?= $footer; ?>

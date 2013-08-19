@@ -107,7 +107,7 @@
 
 			$('#featured_list').append(html);
 		}
-		//--></script>
+//--></script>
 	<script type="text/javascript">//<!--
 		var module_row = <?= $module_row; ?>;
 
@@ -128,7 +128,7 @@
 			$('#module tfoot').before(html.replace(/%modrow%/g, module_row));
 			module_row++;
 		}
-		//--></script>
+//--></script>
 
 	<script type="text/javascript">//<!--
 		$('input[name=\'choose_product\']').autocomplete({
@@ -153,5 +153,5 @@
 				return false;
 			}
 		});
-		//--></script>
+//--></script>
 <?= $footer; ?>

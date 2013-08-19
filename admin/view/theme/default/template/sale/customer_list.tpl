@@ -201,10 +201,10 @@
 
 		location = url;
 	}
-	//--></script>
+//--></script>
 <script type="text/javascript"><!--
 	$(document).ready(function () {
 		$('#date').datepicker({dateFormat: 'yy-mm-dd'});
 	});
-	//--></script>
+//--></script>
 <?= $footer; ?>

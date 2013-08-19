@@ -257,6 +257,14 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 			$attribute['translations'] = $this->translation->getTranslations('attribute', $attribute['attribute_id'], $translate_fields);
 		};
 
+		//Attribute Group AC Templates
+		$this->data['attributes']['__ac_template__'] = array(
+			'attribute_id' => '',
+			'name' => '',
+			'sort_order' => 0,
+			'translations' => array(),
+		);
+
 		//Action Buttons
 		$this->data['save']   = $this->url->link('catalog/attribute_group/update', 'attribute_group_id=' . $attribute_group_id);
 		$this->data['cancel'] = $this->url->link('catalog/attribute_group');

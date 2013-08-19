@@ -333,7 +333,7 @@
 
 			article_row++;
 		});
-		//--></script>
+//--></script>
 	<script type="text/javascript">//<!--
 		$(document).ready(function () {
 			$('#featured_article_list').sortable({revert: true});
@@ -367,7 +367,7 @@
 
 			featured_article_row++;
 		});
-		//--></script>
+//--></script>
 
 <? $product_autocomplete_data = array(
 	'selector' => '#product_list_autocomplete',
@@ -429,7 +429,7 @@
 
 			$('#designer_list').append(html);
 		}
-		//--></script>
+//--></script>
 
 	<div id="preview_page">
 		<div id="preview_window">
@@ -460,7 +460,7 @@
 			});
 
 		}
-		//--></script>
+//--></script>
 
 <?= $this->builder->js('ckeditor'); ?>
 

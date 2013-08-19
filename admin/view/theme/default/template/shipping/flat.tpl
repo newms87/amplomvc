@@ -122,7 +122,7 @@
 
 			$('#flat_rates').append($('<table class="form rate" />').append(template));
 		});
-		//--></script>
+//--></script>
 
 <?= $this->builder->js('errors', $errors); ?>
 <?= $footer; ?>

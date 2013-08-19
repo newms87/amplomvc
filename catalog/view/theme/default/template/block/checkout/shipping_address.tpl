@@ -58,4 +58,4 @@
 			$('#shipping_existing').hide();
 		}
 	}).trigger('change');
-	//--></script>
+//--></script>

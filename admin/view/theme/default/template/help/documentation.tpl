@@ -77,5 +77,5 @@
 			window.event.cancelBubble = true;
 			return false;
 		}
-		//--></script>
+//--></script>
 <?= $footer; ?>

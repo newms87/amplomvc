@@ -654,7 +654,7 @@
 				}
 			});
 		});
-		//--></script>
+//--></script>
 
 <?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select'); ?>
 
@@ -927,7 +927,7 @@
 			return false;
 		}
 	});
-	//--></script>
+//--></script>
 	<script type="text/javascript"><!--
 		$('select[name=\'payment\']').bind('change', function () {
 			if (this.value) {
@@ -948,7 +948,7 @@
 
 			$('input[name=\'shipping_code\']').attr('value', this.value);
 		});
-		//--></script>
+//--></script>
 	<script type="text/javascript"><!--
 	$('#button-product, #button-voucher, #button-update').live('click', function () {
 		data = '#tab-customer input[type=\'text\'], #tab-customer input[type=\'hidden\'], #tab-customer input[type=\'radio\']:checked, #tab-customer input[type=\'checkbox\']:checked, #tab-customer select, #tab-customer textarea, ';
@@ -1399,10 +1399,10 @@
 			}
 		});
 	});
-	//--></script>
+//--></script>
 
 <?= $this->builder->js('datepicker'); ?>
 	<script type="text/javascript"><!--
 		$('.vtabs a').tabs();
-		//--></script>
+//--></script>
 <?= $footer; ?>

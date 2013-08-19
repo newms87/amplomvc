@@ -93,4 +93,4 @@
 	view = $.cookie('display') || 'grid';
 
 	$('#toggle_' + view).click();
-	//--></script>
+//--></script>

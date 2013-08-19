@@ -216,7 +216,7 @@
 
 			$('input[name=\'featured_product\']').attr('value', data.join());
 		});
-		//--></script>
+//--></script>
 	<script type="text/javascript"><!--
 		var module_row = <?= $module_row; ?>;
 
@@ -258,7 +258,7 @@
 
 			module_row++;
 		}
-		//--></script>
+//--></script>
 	<script type="text/javascript"><!--
 		$('#add_product_filter').keyup(add_product_filter_to_list);
 		$('ul#product_filter li img').live('click', function () {
@@ -299,7 +299,7 @@
 			$('.product_filter_item[filter_id="' + filter_id + '"] .filter_default').html('default').addClass('is_default');
 
 		}
-		//--></script>
+//--></script>
 
 <?= $this->builder->js('errors'); ?>
 <?= $footer; ?>

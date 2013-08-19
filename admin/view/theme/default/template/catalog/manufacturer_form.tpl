@@ -102,11 +102,11 @@
 				$('input[name="keyword"]').val(json);
 			}, 'json');
 		}
-		//--></script>
+//--></script>
 
 	<script type="text/javascript">//<!--
 		$('#tabs a').tabs();
-		//--></script>
+//--></script>
 
 <?= $this->builder->js('errors', $errors); ?>
 <?= $this->builder->js('translations', $translations); ?>

@@ -63,4 +63,4 @@
 	$('#form').on('saving', function () {
 		$('#network_template').remove();
 	});
-	//--></script>
+//--></script>

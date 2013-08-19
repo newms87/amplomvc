@@ -99,12 +99,12 @@
 
 			location = url;
 		}
-		//--></script>
+//--></script>
 	<script type="text/javascript"><!--
 		$(document).ready(function () {
 			$('#date-start').datepicker({dateFormat: 'yy-mm-dd'});
 
 			$('#date-end').datepicker({dateFormat: 'yy-mm-dd'});
 		});
-		//--></script>
+//--></script>
 <?= $footer; ?>

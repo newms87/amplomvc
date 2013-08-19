@@ -129,7 +129,7 @@
 	}
 
 	$('[name="stores[]"], [name=layout_id]').change(load_assigned_blocks).first().change();
-	//--></script>
+//--></script>
 
 <script type="text/javascript">//<!--
 	$('#create_layout').click(function () {
@@ -156,11 +156,11 @@
 
 		return false;
 	});
-	//--></script>
+//--></script>
 
 <script type="text/javascript">//<!--
 	$('#tabs a').tabs();
-	//--></script>
+//--></script>
 
 <?= $this->builder->js('ckeditor'); ?>
 

@@ -181,15 +181,17 @@ class Admin_Model_Catalog_Product extends Model
 			}
 		}
 
-		$tag_ids = $this->tag->addAll($data['product_tags']);
+		if (!empty($data['product_tags'])) {
+			$tag_ids = $this->tag->addAll($data['product_tags']);
 
-		foreach ($tag_ids as $tag_id) {
-			$product_tag = array(
-				'product_id' => $product_id,
-				'tag_id'     => $tag_id,
-			);
+			foreach ($tag_ids as $tag_id) {
+				$product_tag = array(
+					'product_id' => $product_id,
+					'tag_id'     => $tag_id,
+				);
 
-			$this->insert('product_tag', $product_tag);
+				$this->insert('product_tag', $product_tag);
+			}
 		}
 
 		if (!empty($data['alias'])) {
@@ -433,7 +435,6 @@ class Admin_Model_Catalog_Product extends Model
 			}
 		}
 
-
 		//Product Tags
 		if (($insert = isset($data['product_tags'])) || !$strict) {
 			$this->delete('product_tag', array('product_id' => $product_id));
@@ -596,7 +597,11 @@ class Admin_Model_Catalog_Product extends Model
 		}
 
 		if (isset($data['product_class_id'])) {
-			$where .= " AND p.product_class_id = " . (int)$data['product_class_id'];
+			$data['product_class_ids'][] = $data['product_class_id'];
+		}
+
+		if (isset($data['product_class_ids'])) {
+			$where .= " AND p.product_class_id IN (" . implode(',', $data['product_class_ids']) . ")";
 		}
 
 		if (!empty($data['categories'])) {

@@ -105,7 +105,7 @@
 				scrollSensitivity: 30,
 				scrollSpeed: 30});
 		});
-		//--></script>
+//--></script>
 
 <?= $this->builder->js('errors', $errors); ?>
 

@@ -164,6 +164,11 @@ class Config extends Library
 		$this->System_Model_Setting->editSetting($group, $data, $store_id, $auto_load);
 	}
 
+	public function deleteGroup($group, $store_id = null)
+	{
+		$this->System_Model_Setting->deleteSetting($group, $store_id);
+	}
+
 	private function loadDefaultSites()
 	{
 		$site_config_file = DIR_SYSTEM . 'site_config.php';

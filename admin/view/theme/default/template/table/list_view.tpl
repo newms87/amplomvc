@@ -330,4 +330,4 @@
 		$('#filter_list').find('[name]').val('');
 		return apply_filter();
 	}
-	//--></script>
+//--></script>

@@ -64,4 +64,4 @@
 
 		$('#attribute_list').append($('<div class="attribute ' + $(this).val() + '" />').append(template));
 	});
-	//--></script>
+//--></script>

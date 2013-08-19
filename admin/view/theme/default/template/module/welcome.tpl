@@ -128,7 +128,7 @@
 		<? } ?>
 		<? $module_row++; ?>
 		<? } ?>
-		//--></script>
+//--></script>
 	<script type="text/javascript"><!--
 		var module_row = <?= $module_row; ?>;
 
@@ -205,15 +205,15 @@
 
 			module_row++;
 		}
-		//--></script>
+//--></script>
 	<script type="text/javascript"><!--
 		$('.vtabs a').tabs();
-		//--></script>
+//--></script>
 	<script type="text/javascript"><!--
 		<? $module_row = 1; ?>
 		<? foreach ($modules as $module) { ?>
 		$('#language-<?= $module_row; ?> a').tabs();
 		<? $module_row++; ?>
 		<? } ?>
-		//--></script>
+//--></script>
 <?= $footer; ?>

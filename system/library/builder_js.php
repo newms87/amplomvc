@@ -55,7 +55,7 @@ switch ($js) {
 					$(e).trigger('change', $(e));
 				}
 			});
-			//--></script>
+		//--></script>
 		<?   break;
 
 	/**
@@ -71,7 +71,7 @@ switch ($js) {
 		<script type="text/javascript">//<!--
 			var image_manager_url = "<?= $this->url->link('common/filemanager'); ?>";
 			var no_image = "<?= HTTP_THEME_IMAGE . "no_image.png"; ?>"
-			//--></script>
+		//--></script>
 		<script type="text/javascript" src="<?= HTTP_JS . "image_manager.js"; ?>"></script>
 	<? } ?>
 		<? break;
@@ -93,7 +93,7 @@ switch ($js) {
 					context = $(e);
 				context.after("<span class ='error'>" + errors[e] + "</span");
 			}
-			//--></script>
+		//--></script>
 
 		<?php break;
 
@@ -129,7 +129,7 @@ switch ($js) {
 					CKEDITOR.instances[$(e).attr('id')].destroy();
 				});
 			}
-			//--></script>
+		//--></script>
 	<? } ?>
 		<?php break;
 
@@ -236,7 +236,7 @@ switch ($js) {
 					context.show();
 				}
 			}
-			//--></script>
+		//--></script>
 
 		<?php break;
 

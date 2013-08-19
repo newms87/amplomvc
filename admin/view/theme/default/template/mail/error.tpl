@@ -144,7 +144,7 @@
 				remove_ckeditor_for($('#mail_message'));
 			}
 		}).change();
-		//--></script>
+//--></script>
 
 <?= $this->builder->js('errors', $errors); ?>
 

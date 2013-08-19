@@ -86,11 +86,11 @@
 				$('#layout_store_' + $(this).val()).hide();
 			}
 		}).change();
-		//--></script>
+//--></script>
 
 	<script type="text/javascript">//<!--
 		$('#tabs a').tabs();
-		//--></script>
+//--></script>
 
 <?= $this->builder->js('translations', $translations); ?>
 <?= $this->builder->js('errors', $errors); ?>

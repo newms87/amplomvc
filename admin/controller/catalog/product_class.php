@@ -222,8 +222,8 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 		//Set Values or Defaults
 		$defaults = array(
 			'name'           => '',
-			'front_template' => '',
-			'admin_template' => '',
+			'front_template' => array(),
+			'admin_template' => array(),
 		);
 
 		foreach ($defaults as $key => $default) {

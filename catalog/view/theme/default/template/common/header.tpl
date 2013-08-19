@@ -36,7 +36,7 @@
 		else if (Function('/*@cc_on return document.documentMode===7@*/')()) {
 			document.documentElement.className += ' IE7';
 		}
-		//--></script>
+//--></script>
 
 	<!--[if IE 9]>
 	<link rel="stylesheet" type="text/css" href="<?= HTTP_THEME_STYLE . " ie9.css"; ?>" />
@@ -52,7 +52,7 @@
 		<!-- Google Analytics Tracker -->
 		<script type="text/javascript">//<!--
 			<?= $google_analytics; ?>
-			//--></script>
+	//--></script>
 	<? } ?>
 
 	<? if (!empty($statcounter)) { ?>
@@ -65,7 +65,7 @@
 			$(document).ready(function () {
 				$.getScript('http://www.statcounter.com/counter/counter.js');
 			});
-			//--></script>
+	//--></script>
 		<noscript>
 			<div class="statcounter">
 				<a title="tumblr tracker" href="http://statcounter.com/tumblr/" target="_blank">
@@ -160,6 +160,6 @@
 					$(this).removeClass('hover')
 						.find('.submenu_arrow').remove();
 				}
-				//--></script>
+		//--></script>
 
 			<?= $above_content; ?>

@@ -85,7 +85,7 @@
 		$('#option_value_list').sortable({cursor: "move", stop: function () {
 			$('#option_value_list').update_index();
 		} });
-		//--></script>
+//--></script>
 
 <?= $this->builder->js('errors', $errors); ?>
 

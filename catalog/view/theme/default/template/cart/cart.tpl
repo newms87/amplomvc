@@ -99,7 +99,7 @@
 	function handle_ajax_cart_load(action, data) {
 		load_block($('#cart_block_total'), 'block/cart/total');
 	}
-	//--></script>
+//--></script>
 
 
 <?= $footer; ?>

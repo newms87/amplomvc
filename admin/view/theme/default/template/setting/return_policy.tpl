@@ -72,7 +72,7 @@
 		});
 
 		$('#return_policy_list').sortable();
-		//--></script>
+//--></script>
 
 <?= $this->builder->js('errors', $errors); ?>
 

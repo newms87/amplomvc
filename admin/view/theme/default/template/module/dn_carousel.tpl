@@ -218,10 +218,10 @@
 			href = $(this).closest('.vtabs-content').attr('id');
 			$("#" + href + "-title").html($(this).attr('value'));
 		});
-		//--></script>
+//--></script>
 	<script type="text/javascript">//<!--
 		$('.vtabs a').tabs();
-		//--></script>
+//--></script>
 
 	<script type="text/javascript">//<!--
 		set_autocomplete($('.rel_article'));
@@ -298,7 +298,7 @@
 			$('#article-related div:odd').attr('class', 'odd');
 			$('#article-related div:even').attr('class', 'even');
 		});
-		//--></script>
+//--></script>
 	<script type="text/javascript">//<!--
 		function image_upload(field, thumb) {
 			$('#dialog').remove();
@@ -326,12 +326,12 @@
 			});
 		}
 		;
-		//--></script>
+//--></script>
 	<script type="text/javascript">//<!--
 		<? $module_row = 1; ?>
 		<? foreach ($modules as $module) { ?>
 		$('#language-<?= $module_row; ?> a').tabs();
 		<? $module_row++; ?>
 		<? } ?>
-		//--></script>
+//--></script>
 <?= $footer; ?>

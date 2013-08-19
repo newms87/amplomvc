@@ -47,4 +47,4 @@
 			shipping_form.slideDown('fast');
 		}
 	}).trigger('change');
-	//--></script>
+//--></script>

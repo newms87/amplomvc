@@ -36,4 +36,4 @@
 			setTimeout(show_social_media_sharing, 200);
 		}
 	}
-	//--></script>
+//--></script>

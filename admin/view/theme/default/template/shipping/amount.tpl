@@ -189,7 +189,7 @@
 		zr.find('.country_select').trigger('change');
 		rule_row++;
 	}
-	//--></script>
+//--></script>
 
 <?= $this->builder->js('errors', $errors); ?>
 

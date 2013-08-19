@@ -39,7 +39,7 @@
 
 	<script type="text/javascript">//<!--
 		$('#tabs a').tabs();
-		//--></script>
+//--></script>
 
 <?= $this->builder->js('errors', $errors); ?>
 

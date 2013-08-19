@@ -52,6 +52,13 @@ class Admin_Model_Catalog_ProductClass extends Model
 		return $product_class;
 	}
 
+	public function getProductClassByName($name)
+	{
+		$product_class_id = $this->queryVar("SELECT product_class_id FROM " . DB_PREFIX . "product_class WHERE name = '" . $this->escape($name) . "' LIMIT 1");
+
+		return $this->getProductClass($product_class_id);
+	}
+
 	public function getProductClasses($data = array(), $select = '', $total = false)
 	{
 		//Select

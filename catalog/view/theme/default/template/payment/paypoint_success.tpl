@@ -22,6 +22,6 @@
 <script type="text/javascript">
 	//<!--
 	setTimeout('location = \'<?= $continue; ?>\';', 2500);
-	//--></script>
+//--></script>
 </body>
 </html>

@@ -47,7 +47,7 @@
 		});
 
 		$('#return_reason_list').sortable();
-		//--></script>
+//--></script>
 
 <?= $this->builder->js('errors', $errors); ?>
 

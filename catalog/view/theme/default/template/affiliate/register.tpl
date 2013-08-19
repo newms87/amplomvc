@@ -220,12 +220,12 @@
 		});
 
 		$('input[name=\'payment\']:checked').trigger('change');
-		//--></script>
+//--></script>
 	<script type="text/javascript">
 		//<!--
 		$('.colorbox').colorbox({
 			width: 560,
 			height: 560
 		});
-		//--></script>
+//--></script>
 <?= $footer; ?>

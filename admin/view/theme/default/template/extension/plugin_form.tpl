@@ -120,6 +120,6 @@
 			$(c).before(html.replace(/%key%/g, key).replace(/%row%/g, row));
 			$(c).data('hook_rows', key);
 		}
-		//--></script>
+//--></script>
 
 <?= $this->builder->js('errors', $errors); ?>

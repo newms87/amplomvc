@@ -143,5 +143,5 @@
 
 			return false;
 		});
-		//--></script>
+//--></script>
 <? } ?>

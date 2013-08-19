@@ -62,5 +62,5 @@
 		$('#add_route').click(function () {
 			$.ac_template('route_list', 'add');
 		});
-		//--></script>
+//--></script>
 <?= $footer; ?>

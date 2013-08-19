@@ -58,5 +58,5 @@
 	</div>
 	<script type="text/javascript"><!--
 		$('.tabs a').tabs();
-		//--></script>
+//--></script>
 <?= $footer; ?>

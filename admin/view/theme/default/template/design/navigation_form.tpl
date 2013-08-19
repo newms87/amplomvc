@@ -297,5 +297,5 @@
 		function update_display_name(context) {
 			context.closest('.link_info').find('.display_name').html(context.val())
 		}
-		//--></script>
+//--></script>
 <?= $this->builder->js('errors', $errors); ?>

@@ -101,7 +101,7 @@
 			$('#module tfoot').before(html.replace(/%modrow%/g, task_row));
 			task_row++;
 		}
-		//--></script>
+//--></script>
 
 <?= $this->builder->js('datepicker', true); ?>
 

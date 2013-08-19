@@ -122,4 +122,4 @@
 
 		press_list.attr('count', press_id + 1);
 	});
-	//--></script>
+//--></script>

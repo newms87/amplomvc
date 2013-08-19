@@ -96,7 +96,7 @@ class Catalog_Model_Catalog_Product extends Model
 		*/
 
 		if (empty($data['sort'])) {
-			$data['sort'] = '';
+			$data['sort'] = 'p.sort_order';
 		}
 
 		//Select
@@ -175,6 +175,13 @@ class Catalog_Model_Catalog_Product extends Model
 			$from .= " LEFT JOIN " . DB_PREFIX . "tag t ON (pt.tag_id=t.tag_id)";
 
 			$where .= " AND LCASE(t.text) = '" . $this->escape(strtolower(trim($data['product_tag']))) . "'";
+		}
+
+		//Product Related
+		if (!empty($data['related_ids'])) {
+			$from .= " LEFT JOIN " . DB_PREFIX . "product_related pr ON (pr.product_id=p.product_id)";
+
+			$where .= " AND pr.related_id IN (" . implode(',', $data['related_ids']) . ")";
 		}
 
 		//Product Categories

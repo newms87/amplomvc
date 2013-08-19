@@ -24,7 +24,7 @@
 						<tr>
 							<td><?= $entry_attributes; ?></td>
 							<td>
-								<table id="attribute_list" class="list">
+								<table class="list">
 									<thead>
 									<tr>
 										<td class="center"><?= $entry_attribute_name; ?></td>
@@ -32,34 +32,21 @@
 										<td></td>
 									</tr>
 									</thead>
-									<tbody>
-
-									<? //TODO: find a good way to make template_row w/ translations! ?>
-									<? $attributes['template_row'] = array(
-										'attribute_id' => '%attribute_id%',
-										'name'         => '%name%',
-										'sort_order'   => '%sort_order%',
-										'translations' => array(),
-									); ?>
-
-									<? foreach ($attributes as $key => $attribute) { ?>
-										<? $row = $attribute['attribute_id']; ?>
-										<tr class="attribute <?= $key; ?>">
+									<tbody id="attribute_list">
+									<? foreach ($attributes as $row => $attribute) { ?>
+										<tr class="attribute" data-row="<?= $row; ?>">
 											<td class="center">
-												<input type="hidden" name="attributes[<?= $row; ?>][attribute_id]"
-												       value="<?= $row; ?>"/>
-												<input type="text" name="attributes[<?= $row; ?>][name]"
-												       value="<?= $attribute['name']; ?>"/>
+												<input type="hidden" name="attributes[<?= $row; ?>][attribute_id]" value="<?= $row; ?>"/>
+												<input type="text" name="attributes[<?= $row; ?>][name]" value="<?= $attribute['name']; ?>"/>
 											</td>
-											<td class="center"><input type="text" class="sort_order"
-											                          name="attributes[<?= $row; ?>][sort_order]"
-											                          value="<?= $attribute['sort_order']; ?>"/></td>
+											<td class="center">
+												<input type="text" class="sort_order" name="attributes[<?= $row; ?>][sort_order]" value="<?= $attribute['sort_order']; ?>"/>
+											</td>
 											<td class="center">
 												<? if (!empty($attribute['product_count'])) { ?>
 													<span class="product_count"><?= $attribute['product_count']; ?></span>
 												<? } else { ?>
-													<a class="button"
-													   onclick="$(this).closest('.attribute').remove()"><?= $button_remove; ?></a>
+													<a class="button" onclick="$(this).closest('.attribute').remove()"><?= $button_remove; ?></a>
 												<? } ?>
 											</td>
 										</tr>
@@ -82,32 +69,19 @@
 
 <?= $this->builder->js('translations', $translations); ?>
 
-	<script type="text/javascript">//<!--
-		var list_template = $('#attribute_list').find('.template_row');
-		var attributes_template = list_template.html();
-		list_template.remove();
+<script type="text/javascript">//<!--
+var a_list = $('#attribute_list');
+a_list.ac_template('a_list');
 
-		var attr_row = 0;
+$('#add_attribute').click(function () {
+	$.ac_template('a_list', 'add');
+	a_list.update_index('.sort_order');
+});
 
-		$('#add_attribute').click(function () {
-			template = attributes_template
-				.replace(/%attribute_id%/g, 'new_' + attr_row)
-				.replace(/%name%/g, '')
-				.replace(/%sort_order%/g, 0)
-				.replace(/%t_name%/g, '');
-
-			$('#attribute_list').append($('<tr class="attribute new_' + attr_row + '" />').append(template));
-
-			attr_row++;
-		});
-
-		$('#attribute_list tbody').sortable({cursor: 'move', stop: function () {
-			count = 0;
-			$('#attribute_list .attribute .sort_order').each(function (i, e) {
-				$(e).val(count++);
-			});
-		}});
-		//--></script>
+a_list.sortable({cursor: 'move', stop: function () {
+	$(this).update_index('.sort_order');
+}});
+//--></script>
 
 <?= $this->builder->js('errors', $errors); ?>
 

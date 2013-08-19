@@ -46,7 +46,7 @@
 		$('#add_override').click(function () {
 			$.ac_template('co_list', 'add')
 		});
-		//--></script>
+//--></script>
 
 <?= $this->builder->js('errors', $errors); ?>
 

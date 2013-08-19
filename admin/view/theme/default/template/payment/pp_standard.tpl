@@ -125,7 +125,7 @@
 			token_row.hide();
 		}
 	}).change();
-	//--></script>
+//--></script>
 <?= $this->builder->js('errors', $errors); ?>
 
 <?= $footer; ?>

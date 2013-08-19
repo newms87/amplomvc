@@ -31,7 +31,7 @@
 									<? foreach ($data_front_templates as $theme => $templates) { ?>
 										<tr>
 											<td><?= $theme; ?></td>
-											<td><?= $this->builder->build('select', $templates, "front_template[$theme]", $front_template[$theme]); ?></td>
+											<td><?= $this->builder->build('select', $templates, "front_template[$theme]", isset($front_template[$theme]) ? $front_template[$theme] : ''); ?></td>
 										</tr>
 									<? } ?>
 									</tbody>
@@ -52,7 +52,7 @@
 									<? foreach ($data_admin_templates as $theme => $templates) { ?>
 										<tr>
 											<td><?= $theme; ?></td>
-											<td><?= $this->builder->build('select', $templates, "admin_template[$theme]", $admin_template[$theme]); ?></td>
+											<td><?= $this->builder->build('select', $templates, "admin_template[$theme]", isset($admin_template[$theme]) ? $admin_template[$theme] : ''); ?></td>
 										</tr>
 									<? } ?>
 									</tbody>

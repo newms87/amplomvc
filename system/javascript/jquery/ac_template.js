@@ -6,8 +6,8 @@ $.ac_template = $.fn.ac_template = function (name, action, data) {
         template_row = this.find('[data-row="__ac_template__"]');
 
         if (!template_row.length) {
-            $.error('Unable to find template row! The element containing the template row must have the following attribute: data-row="__ac_template__"');
-            return;
+            $.error('Unable to find template row for ' + name + '! The element containing the template row must have the following attribute: data-row="__ac_template__"');
+            return this;
         }
 
         template = template_row.clone(true);
@@ -104,7 +104,8 @@ $.ac_template = $.fn.ac_template = function (name, action, data) {
             return template.flash_highlight();
         }
     }
-    return this;
+
+	return this;
 };
 
 $.fn.ac_template.templates = {};

@@ -49,7 +49,7 @@
 		});
 
 		$('#shipping_policy_list').sortable();
-		//--></script>
+//--></script>
 
 <?= $this->builder->js('ckeditor'); ?>
 <?= $this->builder->js('errors', $errors); ?>

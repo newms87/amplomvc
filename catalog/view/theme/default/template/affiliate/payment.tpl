@@ -92,5 +92,5 @@
 		});
 
 		$('input[name=\'payment\']:checked').trigger('change');
-		//--></script>
+//--></script>
 <?= $footer; ?>

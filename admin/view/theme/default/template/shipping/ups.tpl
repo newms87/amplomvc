@@ -763,5 +763,5 @@
 		});
 
 		$('select[name=\'ups_origin\']').trigger('change');
-		//--></script>
+//--></script>
 <?= $footer; ?>

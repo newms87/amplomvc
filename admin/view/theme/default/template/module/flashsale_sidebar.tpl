@@ -73,6 +73,6 @@
 
 			module_row++;
 		}
-		//--></script>
+//--></script>
 <?= $this->builder->js('errors', $errors); ?>
 <?= $footer; ?>

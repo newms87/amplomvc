@@ -32,6 +32,7 @@
 	<a href="#tab-design"><?= $tab_design; ?></a>
 </div>
 <form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="product_form">
+<input type="hidden" name="product_class_id" value="<?= $product_class_id; ?>" />
 <div id="tab-general">
 	<table class="form">
 		<tr>
@@ -309,7 +310,7 @@
 										<img src="<?= HTTP_THEME_IMAGE . "add.png"; ?>"/>
 										<script type="text/javascript">//<!--
 											$('#tab-option-<?= $row; ?> .unused_option_value[data-id=<?= $option_value['option_value_id']; ?>]').data('option_value', <?= json_encode($option_value); ?>);
-											//--></script>
+									//--></script>
 									</div>
 								<? } ?>
 							</div>
@@ -420,7 +421,7 @@
 									<span onclick="remove_option_value($(this))" class="button"><?= $button_remove; ?></span>
 									<script type="text/javascript">//<!--
 										$('#tab-option-<?= $row; ?> .product_option_value[data-row=<?= $pov_row; ?>]').data('option_value', <?= json_encode($product_option_value); ?>);
-										//--></script>
+								//--></script>
 								</td>
 							</tr>
 						<? } ?>
@@ -685,7 +686,7 @@
 			});
 		}
 	}
-	//--></script>
+//--></script>
 
 <script type="text/javascript">//<!--
 	$('[name=shipping]').change(function () {
@@ -697,7 +698,7 @@
 			}
 		}
 	}).change();
-	//--></script>
+//--></script>
 
 <script type="text/javascript">//<!--
 	$('#product_attribute_list').ac_template('attribute_list', {unique: 'attribute_id'});
@@ -717,7 +718,7 @@
 			return false;
 		}
 	});
-	//--></script>
+//--></script>
 
 <script type="text/javascript">//<!--
 	$('#product_option_list .product_option_value_restriction_list').ac_template('povr_list');
@@ -863,7 +864,7 @@
 			$(e).val(select);
 		});
 	}
-	//--></script>
+//--></script>
 
 <span id='all_product_option_values' style='display:none'>
 	<? //$this->builder->set_config('option_value_id', 'name'); ?>
@@ -885,7 +886,7 @@
 	$('#product_image_list').sortable({cursor: 'move', stop: function () {
 		$(this).update_index('.sort_order');
 	} });
-	//--></script>
+//--></script>
 
 <script type="text/javascript">//<!--
 	$('#product_discount_list').ac_template('discount_list', {defaults: <?= json_encode($product_discounts['__ac_template__']); ?>});
@@ -893,7 +894,7 @@
 	$('#add_product_discount').click(function () {
 		$.ac_template('discount_list', 'add');
 	});
-	//--></script>
+//--></script>
 
 <script type="text/javascript">//<!--
 	$('#product_special_list').ac_template('special_list', {defaults: <?= json_encode($product_specials['__ac_template__']); ?>});
@@ -901,12 +902,12 @@
 	$('#add_product_special').click(function () {
 		$.ac_template('special_list', 'add');
 	});
-	//--></script>
+//--></script>
 
 <script type="text/javascript">//<!--
 	$('#tabs a').tabs();
 	$('#option_tab_list > a').tabs();
-	//--></script>
+//--></script>
 
 <?= $this->builder->js('translations', $translations); ?>
 <?= $this->builder->js('errors', $errors); ?>

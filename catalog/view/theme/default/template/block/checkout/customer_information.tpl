@@ -227,7 +227,7 @@
 
 		return false;
 	}
-	//--></script>
+//--></script>
 
 <script type="text/javascript">//<!--
 	<? if(!empty($guest_checkout)) { ?>
@@ -270,4 +270,4 @@
 	});
 
 	$('.info_item').trigger('loaded');
-	//--></script>
+//--></script>

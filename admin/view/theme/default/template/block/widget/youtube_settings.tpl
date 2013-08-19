@@ -43,4 +43,4 @@
 	});
 
 	$('#video_list').sortable();
-	//--></script>
+//--></script>

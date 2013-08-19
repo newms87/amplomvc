@@ -176,7 +176,7 @@
 
 		location = url;
 	}
-	//--></script>
+//--></script>
 <script type="text/javascript"><!--
 	$.widget('custom.catcomplete', $.ui.autocomplete, {
 		_renderMenu: function (ul, items) {
@@ -217,10 +217,10 @@
 			return false;
 		}
 	});
-	//--></script>
+//--></script>
 <script type="text/javascript"><!--
 	$(document).ready(function () {
 		$('.date').datepicker({dateFormat: 'yy-mm-dd'});
 	});
-	//--></script>
+//--></script>
 <?= $footer; ?>
