@@ -121,6 +121,11 @@ class Catalog_Model_Catalog_Product extends Model
 			$where .= " AND p.product_id IN (" . implode(',', $data['product_ids']) . ")";
 		}
 
+		//Product Class IDs
+		if (!empty($data['product_class_ids'])) {
+			$where .= " AND p.product_class_id IN (" . implode(',', $data['product_class_ids']) . ")";
+		}
+
 		//Product Name
 		if (!empty($data['name'])) {
 			$where .= " AND p.name = '" . $this->escape($data['name']) . "'";
@@ -287,7 +292,7 @@ class Catalog_Model_Catalog_Product extends Model
 
 			foreach ($attribute_groups as &$attribute_group) {
 				$query =
-					"SELECT a.*, pa.text FROM " . DB_PREFIX . "product_attribute pa" .
+					"SELECT a.name, pa.* FROM " . DB_PREFIX . "product_attribute pa" .
 					" LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id)" .
 					" WHERE pa.product_id = '" . (int)$product_id . "' AND a.attribute_group_id = '" . (int)$attribute_group['attribute_group_id'] . "' ORDER BY a.sort_order, a.name";
 

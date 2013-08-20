@@ -465,7 +465,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		}
 
 		//Apply Product Class
-		$product_classes = $this->Model_Catalog_ProductClass->getProductClasses();
+		$product_classes          = $this->Model_Catalog_ProductClass->getProductClasses();
 		$default_product_class_id = isset($_GET['product_class_id']) ? $_GET['product_class_id'] : $this->config->get('config_default_product_class_id');
 
 		//Set Values or Defaults
@@ -569,10 +569,11 @@ class Admin_Controller_Catalog_Product extends Controller
 		$this->data['product_attributes']['__ac_template__'] = array(
 			'attribute_id' => '',
 			'name'         => '',
+			'image'        => '',
 			'text'         => '',
+			'sort_order'   => 0,
 		);
 
-		html_dump($this->data['product_options'], 'pos');
 		//Product Options Unused Option Values
 		foreach ($this->data['product_options'] as &$product_option) {
 			if (!empty($product_option['product_option_values'])) {

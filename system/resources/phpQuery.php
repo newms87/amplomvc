@@ -540,11 +540,9 @@ class DOMDocumentWrapper
 
 	protected function charsetFromXML($markup)
 	{
-		$matches;
+		$matches = null;
 		// find declaration
-		preg_match('@<' . '?xml[^>]+encoding\\s*=\\s*(["|\'])(.*?)\\1@i',
-			$markup, $matches
-		);
+		preg_match('@<' . '?xml[^>]+encoding\\s*=\\s*(["|\'])(.*?)\\1@i', $markup, $matches);
 		return isset($matches[2])
 			? strtolower($matches[2])
 			: null;
@@ -1308,8 +1306,6 @@ class CallbackParam
  * @package phpQuery
  * @method phpQueryObject clone() clone()
  * @method phpQueryObject empty() empty()
- * @method phpQueryObject next() next($selector = null)
- * @method phpQueryObject prev() prev($selector = null)
  * @property Int $length
  */
 class phpQueryObject
@@ -3429,6 +3425,8 @@ class phpQueryObject
 			                                 'htmlOuter'
 			                            ), $args);
 		}
+
+		return '';
 	}
 
 	/**
@@ -3998,7 +3996,7 @@ class phpQueryObject
 	 */
 	public static function extend($class, $file = null)
 	{
-		return $this->plugin($class, $file);
+		return phpQueryObject::plugin($class, $file);
 	}
 
 	/**
@@ -6315,7 +6313,7 @@ abstract class phpQuery
 	 * @return unknown_type
 	 * @link http://docs.jquery.com/Utilities/jQuery.makeArray
 	 */
-	public static function makeArray($obj)
+	public static function makeArray($object)
 	{
 		$array = array();
 		if (is_object($object) && $object instanceof DOMNODELIST) {

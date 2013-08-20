@@ -2084,7 +2084,12 @@ td.mail_info label {
 	display: block;
 	margin-left: 10%;
 }
-
+.list tbody .filter_list_item:hover > td{
+	background: #EBE9A2;
+}
+.list tbody .filter_list_item.active > td{
+ background: #C3EBA2;
+}
 /* Page Form */
 #assigned_block_list tbody tr td {
 	font-size: 16px;

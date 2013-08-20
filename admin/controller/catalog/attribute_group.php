@@ -255,13 +255,15 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 
 		foreach ($this->data['attributes'] as &$attribute) {
 			$attribute['translations'] = $this->translation->getTranslations('attribute', $attribute['attribute_id'], $translate_fields);
-		};
+		}
+		unset($attribute);
 
-		//Attribute Group AC Templates
+		//Attribute Defaults
 		$this->data['attributes']['__ac_template__'] = array(
 			'attribute_id' => '',
-			'name' => '',
-			'sort_order' => 0,
+			'name'         => '',
+			'image'        => '',
+			'sort_order'   => 0,
 			'translations' => array(),
 		);
 
@@ -335,9 +337,13 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		//Load Sorted / Filtered Data
 		$attributes = $this->Model_Catalog_AttributeGroup->getAttributesFilter($sort + $filter);
 
+		$image_width = $this->config->get('config_image_admin_thumb_width');
+		$image_height = $this->config->get('config_image_admin_thumb_height');
+
 		foreach ($attributes as &$attribute) {
 			$attribute['label'] = $attribute[$label];
 			$attribute['value'] = $attribute[$value];
+			$attribute['thumb'] = $this->image->resize($attribute['image'], $image_width, $image_height);
 		}
 		unset($attribute);
 

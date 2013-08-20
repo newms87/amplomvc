@@ -779,7 +779,7 @@ class Admin_Model_Catalog_Product extends Model
 
 	public function getProductAttributes($product_id)
 	{
-		$attributes = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_attribute pa LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id) WHERE pa.product_id = '" . (int)$product_id . "' GROUP BY pa.attribute_id");
+		$attributes = $this->queryRows("SELECT pa.*, a.name FROM " . DB_PREFIX . "product_attribute pa LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id) WHERE pa.product_id = '" . (int)$product_id . "' GROUP BY pa.attribute_id");
 
 		$this->translation->translate_all('attribute', 'attribute_id', $attributes);
 

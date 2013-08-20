@@ -157,7 +157,7 @@ class Config extends Library
 
 	public function saveGroup($group, $data, $store_id = null, $auto_load = true)
 	{
-		if (!$store_id) {
+		if (is_null($store_id)) {
 			$store_id = $this->store_id;
 		}
 

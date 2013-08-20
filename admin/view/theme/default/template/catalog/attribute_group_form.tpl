@@ -40,6 +40,11 @@
 												<input type="text" name="attributes[<?= $row; ?>][name]" value="<?= $attribute['name']; ?>"/>
 											</td>
 											<td class="center">
+												<div class="image">
+													<?= $this->builder->image_input("attributes[$row][image]", $attribute['image']); ?>
+												</div>
+											</td>
+											<td class="center">
 												<input type="text" class="sort_order" name="attributes[<?= $row; ?>][sort_order]" value="<?= $attribute['sort_order']; ?>"/>
 											</td>
 											<td class="center">

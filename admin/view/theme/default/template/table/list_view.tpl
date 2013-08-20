@@ -19,7 +19,7 @@
 <thead>
 <tr>
 	<? if (!empty($row_id)) { ?>
-	<td width="1" class="center"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);"/></td>
+	<td width="1" class="center"><input type="checkbox" onclick="$('[name=\'selected[]\']').prop('checked', this.checked).change();"/></td>
 	<? } ?>
 	<td class="center column_title"><span><?= $column_action; ?></span></td>
 	<? foreach ($columns as $slug => $column) { ?>
@@ -144,7 +144,7 @@
 		<tr class="filter_list_item">
 			<? if (!empty($row_id)) { ?>
 			<td class="center">
-				<input type="checkbox" name="selected[]" value="<?= $row[$row_id]; ?>" <?= (isset($row['selected']) && $row['selected']) ? "checked='checked'" : ""; ?> />
+				<input type="checkbox" name="selected[]" onclick="$(this).data('clicked',true)" value="<?= $row[$row_id]; ?>" <?= (isset($row['selected']) && $row['selected']) ? "checked='checked'" : ""; ?> />
 			</td>
 			<? } ?>
 
@@ -320,6 +320,20 @@
 
 	//Add jQuery datepicker
 	$.ac_datepicker();
+
+	//Add Item Selector
+	$('.filter_list_item').click(function(){
+		cb = $(this).find('[name="selected[]"]');
+		if (cb.data('clicked')) {
+			cb.data('clicked',false);
+		} else {
+			cb.prop('checked', !cb.prop('checked')).change();
+		}
+	});
+
+	$('.filter_list_item [name="selected[]"]').change(function(){
+		$(this).closest('.filter_list_item').toggleClass('active', $(this).prop('checked'));
+	});
 
 	function apply_filter() {
 		$('#filter_list').apply_filter("<?= $this->url->link($this->url->getPath(), $this->url->getQueryExclude('filter')); ?>");

@@ -453,21 +453,27 @@
 		</tr>
 		</thead>
 		<tbody id="product_attribute_list">
-		<? foreach ($product_attributes as $row => $product_attribute) { ?>
-			<tr class="attribute" data-row="<?= $row; ?>" data-id="<?= $product_attribute['attribute_id']; ?>">
-				<td class="left">
-					<input type="hidden" name="product_attributes[<?= $row; ?>][attribute_id]"
-					       value="<?= $product_attribute['attribute_id']; ?>"/>
-					<span class="attribute_name"><?= $product_attribute['name']; ?></span>
-				</td>
-				<td class="left">
-					<textarea name="product_attributes[<?= $row; ?>][text]" cols="40"
-					          rows="5"><?= $product_attribute['text']; ?></textarea>
-				</td>
-				<td class="left"><a onclick="$(this).closest('.attribute').remove()"
-				                    class="button"><?= $button_remove; ?></a></td>
-			</tr>
-		<? } ?>
+			<? foreach ($product_attributes as $row => $product_attribute) { ?>
+				<tr class="attribute" data-row="<?= $row; ?>" data-id="<?= $product_attribute['attribute_id']; ?>">
+					<td class="left">
+						<input type="hidden" name="product_attributes[<?= $row; ?>][attribute_id]" value="<?= $product_attribute['attribute_id']; ?>"/>
+						<span class="attribute_name"><?= $product_attribute['name']; ?></span>
+					</td>
+					<td class="left">
+						<div class="image">
+							<? $this->builder->set_builder_template('browse_clear'); ?>
+							<?= $this->builder->image_input("product_attributes[$row][image]", $product_attribute['image']); ?>
+						</div>
+					</td>
+					<td class="left">
+						<textarea name="product_attributes[<?= $row; ?>][text]" cols="40" rows="5"><?= $product_attribute['text']; ?></textarea>
+					</td>
+					<td>
+						<input type="text" size="1" class="sort_order" name="product_attributes[<?= $row; ?>][sort_order]" value="<?= $product_attribute['sort_order']; ?>" />
+					</td>
+					<td class="left"><a onclick="$(this).closest('.attribute').remove()" class="button"><?= $button_remove; ?></a></td>
+				</tr>
+			<? } ?>
 		</tbody>
 	</table>
 </div>
@@ -701,7 +707,8 @@
 //--></script>
 
 <script type="text/javascript">//<!--
-	$('#product_attribute_list').ac_template('attribute_list', {unique: 'attribute_id'});
+	var attribute_list = $('#product_attribute_list');
+	attribute_list.ac_template('attribute_list', {unique: 'attribute_id'});
 
 	$('#product_attribute_autocomplete').autocomplete({
 		delay: 0,
@@ -712,20 +719,32 @@
 		select: function (event, data) {
 			if (data.item.value && (attribute_row = $.ac_template('attribute_list', 'add', data.item))) {
 				attribute_row.find('.attribute_name').html(data.item.name);
+
+				if (data.item.thumb) {
+					attribute_row.find('.image .iu_thumb').attr('src', data.item.thumb);
+				}
 			}
 
 			$(this).val('');
+
+			attribute_list.update_index('.sort_order');
+
 			return false;
 		}
 	});
-//--></script>
+
+	attribute_list.sortable({cursor:'move', stop: function(){
+		attribute_list.update_index('.sort_order');
+	}});
+	//--></script>
 
 <script type="text/javascript">//<!--
-	$('#product_option_list .product_option_value_restriction_list').ac_template('povr_list');
-	$('#product_option_list .unused_option_value_list').ac_template('uov_list', {unique: 'option_value_id'});
-	$('#product_option_list .product_option_value_list').ac_template('pov_list', {defaults: <?= json_encode($product_options['__ac_template__']['product_option_values']['__ac_template__']); ?>});
+	var po_list = $('#product_option_list');
+	po_list.product_option_value_restriction_list').ac_template('povr_list');
+	po_list.find('.unused_option_value_list').ac_template('uov_list', {unique: 'option_value_id'});
+	po_list.find('.product_option_value_list').ac_template('pov_list', {defaults: <?= json_encode($product_options['__ac_template__']['product_option_values']['__ac_template__']); ?>});
 	$('#option_tab_list').ac_template('option_tabs');
-	$('#product_option_list').ac_template('po_list', {unique: 'option_id', defaults: <?= json_encode($product_options['__ac_template__']); ?>});
+	po_list.ac_template('po_list', {unique: 'option_id', defaults: <?= json_encode($product_options['__ac_template__']); ?>});
 
 	$('#product_option_autocomplete').autocomplete({
 		delay: 0,

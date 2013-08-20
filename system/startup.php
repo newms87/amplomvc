@@ -1,6 +1,6 @@
 <?php
 // Version
-define('AC_VERSION', '0.0.10');
+define('AC_VERSION', '0.0.11');
 
 // Error Reporting
 error_reporting(E_ALL);
@@ -29,10 +29,10 @@ if ($domain === 'localhost') {
 if (ini_get('register_globals')) {
 	ini_set('session.use_cookies', 'On');
 	ini_set('session.use_trans_sid', 'Off');
-		
+
 	session_set_cookie_params(0, '/');
 	session_start();
-	
+
 	$globals = array($_REQUEST, $_SESSION, $_SERVER, $_FILES);
 
 	foreach ($globals as $global) {
@@ -72,7 +72,7 @@ if (!isset($_SERVER['DOCUMENT_ROOT'])) {
 
 if (!isset($_SERVER['REQUEST_URI'])) {
 	$_SERVER['REQUEST_URI'] = substr($_SERVER['PHP_SELF'], 1);
-	
+
 	if (isset($_SERVER['QUERY_STRING'])) {
 		$_SERVER['REQUEST_URI'] .= '?' . $_SERVER['QUERY_STRING'];
 	}
