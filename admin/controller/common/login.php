@@ -1,7 +1,6 @@
 <?php
 class Admin_Controller_Common_Login extends Controller
 {
-
 	public function index()
 	{
 		$this->template->load('common/login');
@@ -17,7 +16,7 @@ class Admin_Controller_Common_Login extends Controller
 			$this->url->redirect($this->url->link('common/home'));
 		}
 
-		//if user is not logged in and has provided valid login credentals
+		//if user is not logged in and has provided valid login credentials
 		if ($this->request->isPost() && $this->validate()) {
 			if (!empty($_GET['redirect'])) {
 				$this->url->redirect(urldecode($_GET['redirect']));
