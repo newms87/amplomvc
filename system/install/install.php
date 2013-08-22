@@ -5,6 +5,9 @@ if (!defined("AMPLOCART_INSTALL")) {
 	exit;
 }
 
+define("SITE_DIR", str_replace('system/install','', rtrim(str_replace('\\','/',dirname(__FILE__)), '/')));
+define("DIR_DATABASE", SITE_DIR . 'system/database/');
+
 $language = (!empty($_GET['language']) && is_file($_GET['language'] . '.php')) ? $_GET['language'] : 'english';
 
 $_ = array();
@@ -94,8 +97,6 @@ require_once("system/install/install_{$template}.tpl");
 
 
 function setup_db($_) {
-	define("SITE_DIR", str_replace('system/install','', rtrim(str_replace('\\','/',dirname(__FILE__)), '/')));
-	define("DIR_DATABASE", SITE_DIR . 'system/database/');
 	define("DB_PREFIX", $_POST['db_prefix']);
 
 	require_once(DIR_DATABASE . "database.php");
@@ -168,6 +169,9 @@ function setup_db($_) {
 
 	$contents = preg_replace($patterns, $replacements, $contents);
 
+	//Allows for user installation (will be removed after user installation
+	$contents .= "\r\n\r\ndefine(\"AMPLOCART_INSTALL_USER\", 1);";
+
 	file_put_contents($ac_config, $contents);
 
 	//Setup .htaccess file
@@ -189,15 +193,14 @@ function setup_user($_) {
 
 		return $_['error_password_confirm'];
 	}
-	require_once(SITE_DIR . "ac_config.php");
-	require_once(SITE_DIR . "path_config.php");
+	require_once("ac_config.php");
 	require_once(SITE_DIR . "system/library/db.php");
 
 	$db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 
 	$username = $db->escape($_POST['username']);
 	$email = $db->escape($_POST['email']);
-	$password = $db->escape(md5($_POST['password']));
+	$password = $db->escape($_POST['password']);
 	$ip = $_SERVER['REMOTE_ADDR'];
 	$date_added = date('Y-m-d H:i:s', time());
 
@@ -213,7 +216,7 @@ function setup_user($_) {
 	//remove user install configuration
 	$contents = file_get_contents($ac_config);
 
-	$contents = str_replace("define(\"AMPLOCART_INSTALL_USER\", 1);", '', $contents);
+	$contents = str_replace("\r\n\r\ndefine(\"AMPLOCART_INSTALL_USER\", 1);", '', $contents);
 
 	file_put_contents($ac_config, $contents);
 

@@ -15,20 +15,20 @@
 			<div id="slogan"><?= $text_slogan; ?></div>
 		</div>
 	</div>
-	
+
 	<div id="content_holder">
 		<h1><?= $text_setup; ?></h1>
-		
+
 		<div id="notification">
 			<? if ($error_msg) { ?>
 				<div class="message_box warning"><?= $error_msg; ?></div>
 			<? } ?>
-			
+
 			<? if ($success_msg) { ?>
 				<div class="message_box success"><?= $success_msg; ?></div>
 			<? } ?>
 		</div>
-		
+
 		<form action="" method="post">
 			<div class="install_item">
 				<label for="username"><?= $entry_username; ?></label>
@@ -53,7 +53,3 @@
 		</form>
 	</div>
 </div>
-<script type="text/javascript">//<!--
-
-//--></script>
-
