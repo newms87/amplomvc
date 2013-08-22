@@ -57,7 +57,7 @@ class Extend extends Library
 		$navigation_ids = $this->db->queryColumn($query);
 
 		foreach ($navigation_ids as $navigation_id) {
-			$this->Model_Design_Navigation->deleteNavigationLink($navigation_id);
+			$this->Admin_Model_Design_Navigation->deleteNavigationLink($navigation_id);
 		}
 	}
 
@@ -81,7 +81,7 @@ class Extend extends Library
 		$layout += $data;
 
 		if (!empty($routes)) {
-			$stores = $this->Model_Setting_Store->getStores();
+			$stores = $this->Admin_Model_Setting_Store->getStores();
 
 			foreach ($stores as $store) {
 				foreach ($routes as $route) {
@@ -93,7 +93,7 @@ class Extend extends Library
 			}
 		}
 
-		return $this->Model_Design_Layout->addLayout($layout);
+		return $this->Admin_Model_Design_Layout->addLayout($layout);
 	}
 
 	//TODO: This should remove based on a unique ID not the name...
@@ -102,7 +102,7 @@ class Extend extends Library
 		$result = $this->db->query("SELECT layout_id FROM " . DB_PREFIX . "layout WHERE name='" . $this->db->escape($name) . "' LIMIT 1");
 
 		if ($result->num_rows) {
-			$this->Model_Design_Layout->deleteLayout($result->row['layout_id']);
+			$this->Admin_Model_Design_Layout->deleteLayout($result->row['layout_id']);
 		}
 	}
 
