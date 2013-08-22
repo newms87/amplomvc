@@ -939,8 +939,6 @@ CREATE TABLE `%__TABLE_PREFIX__%product_class` (
 	PRIMARY KEY (`product_class_id`)
 );
 
-INSERT INTO `%__TABLE_PREFIX__%product_class` VALUES ('0','Default','','',''),('1','Default','','','');
-
 DROP TABLE IF EXISTS `%__TABLE_PREFIX__%product_description`;
 CREATE TABLE `%__TABLE_PREFIX__%product_description` (
 	`product_id` int(11) NOT NULL  ,
