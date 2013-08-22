@@ -179,6 +179,49 @@ class DB
 		}
 	}
 
+	public function multiquery($string)
+	{
+		$file_length = strlen($string);
+		$quote_char_list = array("'", "`", '"');
+		$in_quote = false;
+		$sql = '';
+		$pos = 0;
+
+		while($pos < $file_length) {
+			$char = $string[$pos];
+			if ($char === '\\') {
+				$pos++;
+				$sql .= $char . $string[$pos];
+			}
+			elseif (in_array($char, $quote_char_list)) {
+				if ($in_quote) {
+					if ($in_quote === $char) {
+						$in_quote = false;
+					}
+				} else {
+					$in_quote = $char;
+				}
+
+				$sql .= $char;
+			}
+			elseif ($in_quote) {
+				$sql .= $char;
+			}
+			elseif ($char !== ';') {
+
+				$sql .= $string[$pos];
+			}
+			else {
+				$this->query($sql);
+
+				if ($this->getError()) {
+					return false;
+				}
+				$sql = '';
+			}
+			$pos++;
+		}
+	}
 	public function executeFile($file)
 	{
 		$content = file_get_contents($file);
