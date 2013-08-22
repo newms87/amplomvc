@@ -10,7 +10,7 @@ ini_set('mbstring.internal_encoding', 'UTF-8');
 ini_set('mbstring.func_overload', 2);
 
 // Configuration
-require_once('../../../oc_config.php');
+require_once('../../../ac_config.php');
 require_once('../../../path_config.php');
 
 include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinderConnector.class.php';
@@ -41,7 +41,7 @@ function debug($o) {
  **/
 function logger($cmd, $result, $args, $elfinder) {
 
-	
+
 	$log = sprintf("[%s] %s: %s \n", date('r'), strtoupper($cmd), var_export($result, true));
 	$logfile = '../files/temp/log.txt';
 	$dir = dirname($logfile);
@@ -94,14 +94,14 @@ function logger($cmd, $result, $args, $elfinder) {
  * @author Dmitry (dio) Levashov
  **/
 class elFinderSimpleLogger {
-	
+
 	/**
 	* Log file path
 	*
 	* @var string
 	**/
 	protected $file = '';
-	
+
 	/**
 	* constructor
 	*
@@ -115,7 +115,7 @@ class elFinderSimpleLogger {
 			mkdir($dir);
 		}
 	}
-	
+
 	/**
 	* Create log record
 	*
@@ -128,37 +128,37 @@ class elFinderSimpleLogger {
 	**/
 	public function log($cmd, $result, $args, $elfinder) {
 		$log = $cmd.' ['.date('d.m H:s')."]\n";
-		
+
 		if (!empty($result['error'])) {
 			$log .= "\tERROR: ".implode(' ', $result['error'])."\n";
 		}
-		
+
 		if (!empty($result['warning'])) {
 			$log .= "\tWARNING: ".implode(' ', $result['warning'])."\n";
 		}
-		
+
 		if (!empty($result['removed'])) {
 			foreach ($result['removed'] as $file) {
 				// removed file contain additional field "realpath"
 				$log .= "\tREMOVED: ".$file['realpath']."\n";
 			}
 		}
-		
+
 		if (!empty($result['added'])) {
 			foreach ($result['added'] as $file) {
 				$log .= "\tADDED: ".$elfinder->realpath($file['hash'])."\n";
 			}
 		}
-		
+
 		if (!empty($result['changed'])) {
 			foreach ($result['changed'] as $file) {
 				$log .= "\tCHANGED: ".$elfinder->realpath($file['hash'])."\n";
 			}
 		}
-		
+
 		$this->write($log);
 	}
-	
+
 	/**
 	* Write log into file
 	*
@@ -167,14 +167,14 @@ class elFinderSimpleLogger {
 	* @author Dmitry (dio) Levashov
 	**/
 	protected function write($log) {
-		
+
 		if (($fp = @fopen($this->file, 'a'))) {
 			fwrite($fp, $log."\n");
 			fclose($fp);
 		}
 	}
-	
-	
+
+
 } // END class
 
 
@@ -198,7 +198,7 @@ function access($attr, $path, $data, $volume) {
  * @author Dmitry (dio) Levashov
  **/
 class elFinderTestACL {
-	
+
 	/**
 	* make dotfiles not readable, not writable, hidden and locked
 	*
@@ -210,16 +210,16 @@ class elFinderTestACL {
 	* @author Dmitry (dio) Levashov
 	**/
 	public function fsAccess($attr, $path, $data, $volume) {
-		
+
 		if ($volume->name() == 'localfilesystem') {
 			return strpos(basename($path), '.') === 0
 				? !($attr == 'read' || $attr == 'write')
 				: $attr == 'read' || $attr == 'write';
 		}
-		
+
 		return true;
 	}
-	
+
 } // END class
 
 $acl = new elFinderTestACL();
@@ -251,7 +251,7 @@ $relpath = '';
 if(isset($_SESSION['elfinder_root_dir'])){
 	$relpath = '/'.$_SESSION['elfinder_root_dir'];
 }
-	
+
 if ($filemanager == TRUE) {
 	$path_to_use = $_SERVER['DOCUMENT_ROOT'];
 	$url_path = 'http://'.$_SERVER['HTTP_HOST'];
@@ -319,7 +319,7 @@ $opts = array(
 		// 	),
 		// 	// 'defaults' => array('read' => false, 'write' => true)
 		// ),
-		
+
 		// array(
 		// 	'driver' => 'FTP',
 		// 	'host' => '192.168.1.38',
@@ -354,7 +354,7 @@ $opts = array(
 		// 	'pass' => 'frontrow',
 		// 	'path' => '/'
 		// ),
-		
+
 		// array(
 		// 	'driver'	=> 'LocalFileSystem',
 		// 	'path'		=> '../files2/',
@@ -375,7 +375,7 @@ $opts = array(
 		// 		),
 		// 	)
 		// ),
-		
+
 		array(
 			'driver' => 'MySQL2',
 			'path' => 1,
@@ -408,10 +408,10 @@ $opts = array(
 			// 		'hidden' => true
 			// 	)
 			// )
-			
+
 		)
 	)
-		
+
 );
 
 

@@ -1,7 +1,7 @@
 <?php
 // Configuration
-if (is_file('oc_config.php')) {
-	require_once('oc_config.php');
+if (is_file('ac_config.php')) {
+	require_once('ac_config.php');
 }
 
 // Install
