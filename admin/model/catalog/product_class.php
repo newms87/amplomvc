@@ -5,11 +5,12 @@ class Admin_Model_Catalog_ProductClass extends Model
 	{
 		parent::__construct($registry);
 
-		if (!$this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "product_class WHERE product_class_id = 0")) {
-			$this->query("SET GLOBAL sql_mode='NO_AUTO_VALUE_ON_ZERO'");
-			$this->query("SET SESSION sql_mode='NO_AUTO_VALUE_ON_ZERO'");
+		if (!$this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "product_class")) {
+			$default_product_class = array(
+				'name' => 'Default',
+			);
 
-			$this->query("INSERT INTO " . DB_PREFIX . "product_class SET product_class_id = 0, name = 'Default'");
+			$this->addProductClass($default_product_class);
 		}
 	}
 
