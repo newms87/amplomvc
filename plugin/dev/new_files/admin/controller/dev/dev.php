@@ -236,7 +236,7 @@ class Admin_Controller_Dev_Dev extends Controller
 	{
 		$tables = $this->db->getTables();
 
-		$tables[DB_PREFIX . 'store'] = false;
+		//TODO: Setup DB Install Profile (or maybe make this accessible from Admin Panel?
 
 		return $tables;
 	}
