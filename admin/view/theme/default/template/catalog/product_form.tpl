@@ -238,13 +238,12 @@
 							<td><?= $this->builder->build('multiselect', $data_downloads, "product_downloads", $product_downloads); ?></td>
 						</tr>
 						<tr>
-							<td><?= $entry_related; ?></td>
-							<td><input type="text" name="related" value=""/></td>
-						</tr>
-						<tr>
-							<td>&nbsp;</td>
 							<td>
-								<div id="product-related" class="scrollbox">
+								<?= $entry_related; ?>
+								<input type="text" name="related" value=""/>
+							</td>
+							<td>
+								<div id="product_related" class="scrollbox">
 									<? foreach ($product_related as $row => $related) { ?>
 										<div class="product_related" data-row="<?= $row; ?>">
 											<span class="name"><?= $related['name']; ?></span>
@@ -325,7 +324,7 @@
 											<td class="center"><?= $entry_option_points; ?></td>
 											<td class="center"><?= $entry_weight; ?></td>
 											<td class="center"><?= $entry_sort_order; ?></td>
-										<td class="center"><?= $entry_option_value_restriction; ?></td>
+											<td class="center"><?= $entry_option_value_restriction; ?></td>
 											<td></td>
 										</tr>
 									</thead>
@@ -341,20 +340,8 @@
 														<span class='option_value_label'><?= $product_option_value['value']; ?></span>
 													</td>
 													<td class="center default_option">
-														<? switch ($product_option['type']) {
-															case 'checkbox':
-																?>
-																<input type="checkbox" name="<?= $product_option_value_row; ?>[default]" value="1" <?= $product_option_value['default'] ? 'checked="checked"' : ''; ?> />
-																<? break;
-
-															case 'select':
-															case 'image':
-															case 'radio':
-															default:
-																?>
-																	<input type="radio" name="<?= $product_option_value_row; ?>[default]" value="1" <?= $product_option_value['default'] ? 'checked="checked"' : ''; ?> />
-																<? break;
-														} ?>
+														<? $type = $product_option['type'] === 'checkbox' ? 'checkbox' : 'radio'; ?>
+														<input type="<?= $type; ?>" name="<?= $product_option_value_row; ?>[default]" value="1" <?= $product_option_value['default'] ? 'checked="checked"' : ''; ?> />
 													</td>
 													<td class="center">
 														<? $this->builder->set_builder_template('click_image_small'); ?>

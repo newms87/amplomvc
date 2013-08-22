@@ -41,7 +41,7 @@ class Mod extends Library
 		return str_replace(SITE_DIR, DIR_MOD_FILES, $source);
 	}
 
-	public function addFile($source, $mod_file, $destination = null)
+	public function addFile($source, $mod_file, $destination = null, $directives = array())
 	{
 		if (!is_file($source)) {
 			$this->message->add('warning', "File $source was not found. Unable to add to file modification registry" . get_caller(0, 3));
@@ -63,7 +63,7 @@ class Mod extends Library
 			$destination = $this->getSourceDestination($source);
 		}
 
-		$this->mod_registry[$source][$destination][$mod_file] = true;
+		$this->mod_registry[$source][$destination][$mod_file] = $directives;
 	}
 
 	public function addFiles($source, $mod_files, $destination = null)
@@ -120,7 +120,66 @@ class Mod extends Library
 		$this->removeFile($dir);
 	}
 
-	public function apply()
+	public function addModFile($mod_file)
+	{
+		$directives = $this->tool->getFileCommentDirectives($mod_file);
+
+		if (isset($directives['skip'])) return true;
+
+		if (!empty($directives['originalsource'])) {
+			$source = SITE_DIR . trim($directives['source']);
+		}
+		elseif (!empty($directives['source'])) {
+			$source = SITE_DIR . trim($directives['source']);
+
+			if (!is_file($source)) {
+				$this->error[] = "File Mod failed. The source file $source does not exist!" . get_caller(0, 4);
+				return false;
+			}
+		} else {
+			$this->error[] = "File Mod failed for $mod_file. You must specify a Source File in the PHPDoc Comment Directives. (eg: /** Source: relative/path/to/mysourcefile.php */)" . get_caller(0, 4);
+			return false;
+		}
+
+		if (!empty($directives['destination'])) {
+			$destination = SITE_DIR . trim($directives['destination']);
+		} else {
+			$this->error[] = "File Mod failed for $mod_file. You must specify a Destination File in the PHPDoc Comment Directives. (eg: /** Destination: relative/path/to/mydestinationfile.php */)" . get_caller(0, 4);
+			return false;
+		}
+
+		$set_file_root = function(&$file) { $file = SITE_DIR . trim($file); };
+		$file_filter = function($file) { return trim($file); };
+
+		if (!empty($directives['require'])) {
+			$directives['require'] = array_filter(explode("\n", $directives['require']), $file_filter);
+			array_walk_recursive($directives['require'], $set_file_root);
+		}
+
+		if (!empty($directives['include'])) {
+			$directives['include'] = array_filter(explode("\n", $directives['include']), $file_filter);
+			array_walk_recursive($directives['include'], $set_file_root);
+		}
+
+		$this->addFile($source, $mod_file, $destination, $directives);
+	}
+
+	public function addModDirectory($dir)
+	{
+		$mod_files = $this->tool->get_files_r($dir, null, FILELIST_STRING);
+
+		foreach ($mod_files as $mod_file) {
+			$this->addModFile($mod_file);
+		}
+
+		if (!$this->error && $this->apply()) {
+			$this->write();
+		}
+
+		return $this->error ? false : true;
+	}
+
+	public function apply($invalidated = false)
 	{
 		$this->live_registry = array();
 
@@ -131,14 +190,36 @@ class Mod extends Library
 					$this->live_registry[$source] = $destination;
 				}
 
+				if ($invalidated) {
+					if (!isset($this->invalid[$destination])) continue; //skip if no changes made
+
+						$this->message->add('notify', "Mod File $destination was updated");
+				}
+
 				//Each mod file using the same destination will stack changes on the destination file
 				$stack_source = $source;
 
-				foreach ($mod_files as $mod_file => $filemtime) {
+				foreach ($mod_files as $mod_file => $extends) {
 					$this->modifyFile($stack_source, $mod_file, $destination);
 
 					//stack changes
 					$stack_source = $destination;
+
+					//Required File Mods
+					if (!empty($extends['require'])) {
+						foreach ($extends['require'] as $required_file) {
+							$this->modifyFile($stack_source, $required_file, $destination);
+						}
+					}
+
+					//Included File Mods
+					if (!empty($extends['include'])) {
+						foreach ($extends['include'] as $included_file) {
+							if (is_file($included_file)) {
+								$this->modifyFile($stack_source, $included_file, $destination);
+							}
+						}
+					}
 				}
 			}
 		}
@@ -190,8 +271,8 @@ class Mod extends Library
 		$algorithm = !empty($directives['algorithm']) ? trim($directives['algorithm']) : 'fileMerge';
 
 		switch ($algorithm) {
-			case 'phpQueryMerge':
-				$contents = $this->phpQueryMerge($source, $mod_file);
+			case 'Ganon':
+				$contents = $this->Ganon($source, $mod_file);
 				break;
 			case 'fileMerge':
 				$contents = $this->fileMerge($source, $mod_file);
@@ -224,46 +305,10 @@ class Mod extends Library
 		return $this->error ? false : true;
 	}
 
-	public function addModDirectory($dir)
+	private function Ganon($source, $mod_file)
 	{
-		$mod_files = $this->tool->get_files_r($dir, null, FILELIST_STRING);
+		ini_set('max_execution_time', 300); //300 seconds = 5 minutes
 
-		foreach ($mod_files as $mod_file) {
-			$directives = $this->tool->getFileCommentDirectives($mod_file);
-
-			if (isset($directives['skip'])) continue;
-
-			if (!empty($directives['source'])) {
-				$source = SITE_DIR . trim($directives['source']);
-
-				if (!is_file($source)) {
-					$this->error[] = "File Mod failed. The source file $source does not exist!" . get_caller(0, 4);
-					continue;
-				}
-			} else {
-				$this->error[] = "File Mod failed for $mod_file. You must specify a Source File in the PHPDoc Comment Directives. (eg: /** Source: relative/path/to/mysourcefile.php */)" . get_caller(0, 4);
-				continue;
-			}
-
-			if (!empty($directives['destination'])) {
-				$destination = SITE_DIR . trim($directives['destination']);
-			} else {
-				$this->error[] = "File Mod failed for $mod_file. You must specify a Destination File in the PHPDoc Comment Directives. (eg: /** Destination: relative/path/to/mydestinationfile.php */)" . get_caller(0, 4);
-				continue;
-			}
-
-			$this->addFile($source, $mod_file, $destination);
-		}
-
-		if (!$this->error && $this->apply()) {
-			$this->write();
-		}
-
-		return $this->error ? false : true;
-	}
-
-	private function phpQueryMerge($source, $mod_file)
-	{
 		require_once DIR_RESOURCES . 'ganon.php';
 
 		if (!($node = file_get_dom($source))) {
@@ -562,12 +607,12 @@ class Mod extends Library
 
 	private function validate()
 	{
-		$valid = true;
+		$this->invalid = array();
 
 		foreach ($this->mod_registry as $source => $mods) {
 			if (!is_file($source)) {
 				unset($this->mod_registry[$source]);
-				$valid = false;
+				$this->invalid['source'] = true; //Nothing to apply, only write
 				continue;
 			}
 
@@ -575,22 +620,22 @@ class Mod extends Library
 
 			foreach ($mods as $destination => $mod_files) {
 				if (!is_file($destination) || (($dest_filemtime = filemtime($destination)) < $source_filemtime)) {
-					$valid = false;
+					$this->invalid[$destination] = true;
 				}
 
 				foreach ($mod_files as $mod_file => $value) {
 					if (!is_file($mod_file)) {
 						$this->removeFile($mod_file);
-						$valid = false;
+						$this->invalid[$destination] = true;
 					} elseif (filemtime($mod_file) > $dest_filemtime) {
-						$valid = false;
+						$this->invalid[$destination] = true;
 					}
 				}
 			}
 		}
 
-		if (!$valid) {
-			if ($this->apply()) {
+		if ($this->invalid) {
+			if ($this->apply(true)) {
 				$this->write();
 				$this->message->add('notify', "The Mod File Registry was out of date and has been updated");
 			} else {
