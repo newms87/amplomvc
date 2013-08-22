@@ -122,7 +122,7 @@ function setup_db($_) {
 	}
 
 	$config_template = SITE_DIR . 'system/install/config_template.php';
-	$oc_config = SITE_DIR . 'oc_config.php';
+	$ac_config = SITE_DIR . 'ac_config.php';
 
 	$contents = file_get_contents($config_template);
 
@@ -168,7 +168,7 @@ function setup_db($_) {
 
 	$contents = preg_replace($patterns, $replacements, $contents);
 
-	file_put_contents($oc_config, $contents);
+	file_put_contents($ac_config, $contents);
 
 	//Setup .htaccess file
 	$htaccess_template = SITE_DIR . 'system/install/template.htaccess';
@@ -189,7 +189,7 @@ function setup_user($_) {
 
 		return $_['error_password_confirm'];
 	}
-	require_once("oc_config.php");
+	require_once("ac_config.php");
 	require_once(SITE_DIR . "system/library/db.php");
 
 	$db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
@@ -207,14 +207,14 @@ function setup_user($_) {
 		return $db->getError();
 	}
 
-	$oc_config = SITE_DIR . 'oc_config.php';
+	$ac_config = SITE_DIR . 'ac_config.php';
 
 	//remove user install configuration
-	$contents = file_get_contents($oc_config);
+	$contents = file_get_contents($ac_config);
 
 	$contents = str_replace("define(\"AMPLOCART_INSTALL_USER\", 1);", '', $contents);
 
-	file_put_contents($oc_config, $contents);
+	file_put_contents($ac_config, $contents);
 
 	//Start the session so we can send a message for the new user
 	ini_set('session.use_cookies', 'On');
