@@ -238,13 +238,12 @@ class Tokenizer_Base {
 		if (($this->pos < $this->size) && (($p = stripos($this->doc, $needle, $this->pos + 1)) !== false)) {
 
 			if ($needle == '>') {
-				if (($php_pos = stripos($this->doc, '<?', $this->pos + 1)) !== false && $php_pos < $p) {
-					echo $php_pos . ', ' . $p . "\r\n";
-					echo stripos($this->doc, '?>', $p+1);
-					$p = stripos($this->doc, $needle, $p+1);
+				if (($php_pos = stripos($this->doc, '<?', $this->pos)) !== false && $php_pos < $p) {
+					$php_end = stripos($this->doc, '?>', $php_pos);
+					$php_attr = substr($this->doc, $this->pos, $php_end-$this->pos+2);
+					$this->doc = substr_replace($this->doc, ">>>>".$php_attr, $this->pos, strlen($php_attr));
+					$p = $this->pos;
 				}
-				echo 'here';
-
 			}
 			elseif ($needle == '"') {
 				if (($php_pos = stripos($this->doc, '<?', $this->pos)) !== false && $php_pos < $p) {
@@ -497,7 +496,7 @@ class HTML_Parser_Base extends Tokenizer_Base {
 				$val = $attr;
 				$this->pos = (($this->token_start) ? $this->token_start : $this->pos) - 1;
 			}
-			$this->status['attributes'][$attr] = $val;
+			$this->status['attributes'][$attr] = $val === 'name' ? '__name__' : $val;
 		}
 		return true;
 	}
@@ -903,7 +902,7 @@ class HTML_Node {
 		} else {
 			$this->tag = $tag['tag_name'];
 			$this->self_close = $tag['self_close'];
-			$this->attributes = $tag['attributes'];
+			$this->attributes = !empty($tag['attributes']) ? $tag['attributes'] : array();
 		}
 	}
 	function __destruct() {
@@ -924,7 +923,7 @@ class HTML_Node {
 	function __unset($attribute) {
 		return $this->deleteAttribute($attribute);
 	}
-	function __invoke($query = '*', $index = false, $recursive = true, $check_self = false) {
+	function __invoke($query = '*', $index = 0, $recursive = true, $check_self = false) {
 		return $this->select($query, $index, $recursive, $check_self);
 	}
 	function dumpLocation() {
@@ -932,8 +931,10 @@ class HTML_Node {
 	}
 	protected function toString_attributes() {
 		$s = '';
-		foreach($this->attributes as $a => $v) {
-			$s .= ' '.$a.(((!$this->attribute_shorttag) || ($this->attributes[$a] !== $a)) ? '="'.$this->attributes[$a].'"' : '');
+		if (!empty($this->attributes)) {
+			foreach($this->attributes as $a => $v) {
+				$s .= ' '.$a.(((!$this->attribute_shorttag) || ($this->attributes[$a] !== $a)) ? '="'.$this->attributes[$a].'"' : '');
+			}
 		}
 		return $s;
 	}
@@ -945,26 +946,21 @@ class HTML_Node {
 		return $s;
 	}
 	function toString($attributes = true, $recursive = true, $content_only = false) {
-		if ($content_only) {
+		if ($content_only || strpos($this->tag, '~root~') === 0) {
 			if (is_int($content_only)) {
 				--$content_only;
 			}
 			return $this->toString_content($attributes, $recursive, $content_only);
 		}
-		$s = '<'.$this->tag;
-		if ($attributes) {
-			$s .= $this->toString_attributes();
-		}
+
+		$attrs = $attributes ? $this->toString_attributes() : '';
+		$content = $recursive ? $this->toString_content($attributes) : '';
+
 		if ($this->self_close) {
-			$s .= $this->self_close_str.'>';
+			return '<'.$this->tag.$attrs.$this->self_close_str.'>';
 		} else {
-			$s .= '>';
-			if($recursive) {
-				$s .= $this->toString_content($attributes);
-			}
-			$s .= '</'.$this->tag.'>';
+			return '<'.$this->tag.$attrs.'>'.$content.'</'.$this->tag.'>';
 		}
-		return $s;
 	}
 	function getOuterText() {
 		return html_entity_decode($this->toString(), ENT_QUOTES);
@@ -983,7 +979,7 @@ class HTML_Node {
 		return (($parser && $parser->errors) ? $parser->errors : true);
 	}
 	function html() {
-		return $this->toString();
+		return str_replace(array("/>>>><?",">>>><?", "__name__"), array(" <?", " <?", "name"), $this->toString());
 	}
 	function getInnerText() {
 		return html_entity_decode($this->toString(true, true, 1), ENT_QUOTES);
@@ -1264,7 +1260,11 @@ class HTML_Node {
 	}
 	function &addChild($tag, &$offset = null) {
 		if (!is_object($tag)) {
-			$tag = new $this->childClass($tag, $this);
+			if (is_string($tag) && strpos(trim($tag),'<') === 0) {
+				$tag = str_get_dom($tag);
+			} else {
+				$tag = new $this->childClass($tag, $this);
+			}
 		} elseif ($tag->parent !== $this) {
 			$index = false;
 			$tag->changeParent($this, $index);
@@ -1319,16 +1319,11 @@ class HTML_Node {
 	}
 	function after($tag)
 	{
-		if (!is_object($tag)) {
-			if (is_string($tag)) {
-				$tag = str_get_dom($tag);
-			} else {
-				$tag = new $this->childClass($tag, $this);
-			}
-		}
-
-		$tag->changeParent($this->parent, -1);
-		$this->parent->children[] = &$tag;
+		$this->parent->addChild($tag);
+	}
+	function before($tag)
+	{
+		$this->parent->addChild($tag, 0);
 	}
 	function deleteChild($child, $soft_delete = false) {
 		if (is_object($child)) {
@@ -1839,7 +1834,7 @@ class HTML_Node {
 			if ($index < 0) {
 				$index += count($res);
 			}
-			return ($index < count($res)) ? $res[$index] : null;
+			return ($index < count($res)) ? $res[$index] : str_get_dom("<div />");
 		} else {
 			return $res;
 		}
@@ -2047,17 +2042,18 @@ class HTML_NODE_EMBEDDED extends HTML_Node {
 		}
 		$this->tag = $tag;
 		$this->text = $text;
-		$this->attributes = $attributes;
+		$this->attributes = $attributes ? $attributes : array();
 		$this->self_close_str = $tag_char;
 	}
 	protected function filter_element() {return false;}
 	function toString($attributes = true, $recursive = true, $content_only = false) {
-		$s = '<'.$this->tag;
-		if ($attributes) {
-			$s .= $this->toString_attributes();
+		if(strpos(trim($this->tag), '?php') === 0) {
+			$this->tag = '?';
 		}
-		$s .= $this->text.$this->self_close_str.'>';
-		return $s;
+
+		$attrs = $this->toString_attributes();
+
+		return '<'.$this->tag.$attrs.$this->text.$this->self_close_str.'>';
 	}
 }
 class HTML_NODE_XML extends HTML_NODE_EMBEDDED {

@@ -266,9 +266,6 @@ class Mod extends Library
 	{
 		require_once DIR_RESOURCES . 'ganon.php';
 
-		$node = str_get_dom("<div><label for=\"you\">mylabel</label><input tag=\"<?= \$php ? \$php : \"nothing\"; ?>\" type=\"text\" class=\"what\" name=\"name\" value=\"1\"/></div>");
-		echo "final\r\n" . $node->html();
-		exit;
 		if (!($node = file_get_dom($source))) {
 			$this->message->add('warning', "There was an error while parsing the source file $source with Ganon!");
 
