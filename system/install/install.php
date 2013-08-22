@@ -122,7 +122,7 @@ function setup_db($_) {
 	}
 
 	$config_template = SITE_DIR . 'system/install/config_template.php';
-	$oc_config = SITE_DIR . 'ac_config.php';
+	$oc_config = SITE_DIR . 'oc_config.php';
 
 	$contents = file_get_contents($config_template);
 
@@ -189,14 +189,14 @@ function setup_user($_) {
 
 		return $_['error_password_confirm'];
 	}
-	require_once("ac_config.php");
+	require_once("oc_config.php");
 	require_once(SITE_DIR . "system/library/db.php");
 
 	$db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 
 	$username = $db->escape($_POST['username']);
 	$email = $db->escape($_POST['email']);
-	$password = $db->escape($_POST['password']);
+	$password = md5($db->escape($_POST['password']));
 	$ip = $_SERVER['REMOTE_ADDR'];
 	$date_added = date('Y-m-d H:i:s', time());
 
@@ -207,7 +207,7 @@ function setup_user($_) {
 		return $db->getError();
 	}
 
-	$oc_config = SITE_DIR . 'ac_config.php';
+	$oc_config = SITE_DIR . 'oc_config.php';
 
 	//remove user install configuration
 	$contents = file_get_contents($oc_config);
