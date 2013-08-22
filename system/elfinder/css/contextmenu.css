@@ -34,6 +34,7 @@
 .elfinder-contextmenu-rtl .elfinder-contextmenu-item { text-align:right; }
 .elfinder-contextmenu-ltr .elfinder-contextmenu-sub .elfinder-contextmenu-item { padding-left:12px;  }
 .elfinder-contextmenu-rtl .elfinder-contextmenu-sub .elfinder-contextmenu-item { padding-right:12px; }
+.elfinder-contextmenu-item:hover { background: #DDDDDD; }
 
 /* command/submenu icon */
 .elfinder-contextmenu-arrow,

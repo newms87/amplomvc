@@ -7,9 +7,9 @@
  * @author Dmitry (dio) Levashov
  **/
 elFinder.prototype.commands.paste = function() {
-	
+
 	this.updateOnSelect  = false;
-	
+
 	this.handlers = {
 		changeclipboard : function() { this.update(); }
 	}
@@ -17,7 +17,7 @@ elFinder.prototype.commands.paste = function() {
 	this.shortcuts = [{
 		pattern     : 'ctrl+v shift+insert'
 	}];
-	
+
 	this.getstate = function(dst) {
 		if (this._disabled) {
 			return -1;
@@ -35,7 +35,7 @@ elFinder.prototype.commands.paste = function() {
 
 		return this.fm.clipboard().length && dst.mime == 'directory' && dst.write ? 0 : -1;
 	}
-	
+
 	this.exec = function(dst) {
 		var self   = this,
 			fm     = self.fm,
@@ -132,7 +132,7 @@ elFinder.prototype.commands.paste = function() {
 
 						src = files[0].phash;
 						files = $.map(files, function(f) { return f.hash});
-						
+
 						fm.request({
 								data   : {cmd : 'paste', dst : dst.hash, targets : files, cut : cut ? 1 : 0, src : src},
 								notify : {type : cut ? 'move' : 'copy', cnt : cnt}
@@ -146,12 +146,12 @@ elFinder.prototype.commands.paste = function() {
 				if (self._disabled || !files.length) {
 					return dfrd.resolve();
 				}
-				
-					
+
+
 				if (fm.oldAPI) {
 					paste(files);
 				} else {
-					
+
 					if (!fm.option('copyOverwrite')) {
 						paste(files);
 					} else {
@@ -168,7 +168,7 @@ elFinder.prototype.commands.paste = function() {
 							});
 					}
 				}
-				
+
 				return dfrd;
 			},
 			parents, fparents;
@@ -177,34 +177,34 @@ elFinder.prototype.commands.paste = function() {
 		if (!cnt || !dst || dst.mime != 'directory') {
 			return dfrd.reject();
 		}
-			
+
 		if (!dst.write)	{
 			return dfrd.reject([error, files[0].name, 'errPerm']);
 		}
-		
+
 		parents = fm.parents(dst.hash);
-		
+
 		$.each(files, function(i, file) {
 			if (!file.read) {
 				return !dfrd.reject([error, files[0].name, 'errPerm']);
 			}
-			
+
 			if (cut && file.locked) {
 				return !dfrd.reject(['errLocked', file.name]);
 			}
-			
+
 			if ($.inArray(file.hash, parents) !== -1) {
 				return !dfrd.reject(['errCopyInItself', file.name]);
 			}
-			
+
 			fparents = fm.parents(file.hash);
 			if ($.inArray(dst.hash, fparents) !== -1) {
-				
+
 				if ($.map(fparents, function(h) { var d = fm.file(h); return d.phash == dst.hash && d.name == file.name ? d : null }).length) {
 					return !dfrd.reject(['errReplByChild', file.name]);
 				}
 			}
-			
+
 			if (file.phash == dst.hash) {
 				fcopy.push(file.hash);
 			} else {
@@ -216,7 +216,7 @@ elFinder.prototype.commands.paste = function() {
 			}
 		});
 
-		if (dfrd.isRejected()) {
+		if (dfrd.state() === 'rejected') {
 			return dfrd;
 		}
 

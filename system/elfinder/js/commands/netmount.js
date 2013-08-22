@@ -12,7 +12,7 @@ elFinder.prototype.commands.netmount = function() {
 	this.updateOnSelect = false;
 
 	this.drivers = [];
-	
+
 	this.handlers = {
 		load : function() {
 			this.drivers = this.fm.netDrivers;
@@ -22,7 +22,7 @@ elFinder.prototype.commands.netmount = function() {
 	this.getstate = function() {
 		return this.drivers.length ? 0 : -1;
 	}
-	
+
 	this.exec = function() {
 		var fm = self.fm,
 			dfrd = $.Deferred(),
@@ -42,7 +42,7 @@ elFinder.prototype.commands.netmount = function() {
 						destroyOnClose : true,
 						close          : function() {
 							delete self.dialog;
-							!dfrd.isResolved() && !dfrd.isRejected() && dfrd.reject();
+							dfrd.state() === 'pending' && dfrd.reject();
 						},
 						buttons        : {}
 					},

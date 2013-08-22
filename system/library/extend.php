@@ -42,7 +42,7 @@ class Extend extends Library
 		$navigation_group_id = $this->db->queryVar("SELECT navigation_group_id FROM " . DB_PREFIX . "navigation_group WHERE name = '" . $this->db->escape($group) . "'");
 
 		if ($navigation_group_id) {
-			$this->Model_Design_Navigation->addNavigationLink($navigation_group_id, $link);
+			$this->Admin_Model_Design_Navigation->addNavigationLink($navigation_group_id, $link);
 		}
 
 		return true;
