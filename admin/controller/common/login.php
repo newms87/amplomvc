@@ -1,7 +1,6 @@
 <?php
 class Admin_Controller_Common_Login extends Controller
 {
-
 	public function index()
 	{
 		$this->template->load('common/login');
