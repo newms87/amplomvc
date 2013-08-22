@@ -221,7 +221,10 @@ class DB
 			}
 			$pos++;
 		}
+
+		return true;
 	}
+
 	public function executeFile($file)
 	{
 		$content = file_get_contents($file);
@@ -251,25 +254,13 @@ class DB
 			$tables = $this->queryRows("SHOW TABLES");
 		}
 
-		//Normalize Table Requests
-		$table_list = array();
-		foreach ($tables as $table => $with_data) {
-			if (!is_string($table)) {
-				$table = $with_data;
-			}
-
-			$table_list[$table] = (bool)$with_data;
-		}
-
-		$tables = $table_list;
-
 		if (is_null($prefix)) {
 			$prefix = DB_PREFIX;
 		}
 
 		$sql = '';
 
-		foreach ($tables as $table => $with_data) {
+		foreach ($tables as $table) {
 			if (is_array($table)) {
 				$table = current($table);
 			}
@@ -317,23 +308,20 @@ class DB
 
 			$sql .= ");" . $eol . $eol;
 
-			//Table Data
-			if ($with_data) {
-				$rows = $this->queryRows("SELECT * FROM `" . DB_PREFIX . "$table`");
+			$rows = $this->queryRows("SELECT * FROM `" . DB_PREFIX . "$table`");
 
-				if (!empty($rows)) {
-					$sql .= "INSERT INTO `$tablename` VALUES ";
-					foreach ($rows as $row) {
-						$sql .= "(";
-						foreach ($row as $key => $value) {
-							$sql .= "'" . $this->escape($value) . "',";
-						}
-
-						$sql = rtrim($sql, ',') . "),";
+			if (!empty($rows)) {
+				$sql .= "INSERT INTO `$tablename` VALUES ";
+				foreach ($rows as $row) {
+					$sql .= "(";
+					foreach ($row as $key => $value) {
+						$sql .= "'" . $this->escape($value) . "',";
 					}
 
-					$sql = rtrim($sql, ',') . ";" . $eol . $eol;
+					$sql = rtrim($sql, ',') . "),";
 				}
+
+				$sql = rtrim($sql, ',') . ";" . $eol . $eol;
 			}
 		}
 
