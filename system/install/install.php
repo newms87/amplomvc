@@ -189,7 +189,8 @@ function setup_user($_) {
 
 		return $_['error_password_confirm'];
 	}
-	require_once("ac_config.php");
+	require_once(SITE_DIR . "ac_config.php");
+	require_once(SITE_DIR . "path_config.php");
 	require_once(SITE_DIR . "system/library/db.php");
 
 	$db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
