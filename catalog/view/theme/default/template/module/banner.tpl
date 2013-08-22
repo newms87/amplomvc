@@ -24,4 +24,4 @@
 	}
 
 	setTimeout(banner, 2000);
-	//--></script>
+//--></script>

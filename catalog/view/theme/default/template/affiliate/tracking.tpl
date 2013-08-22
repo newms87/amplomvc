@@ -42,5 +42,5 @@
 			$('input[name=product]').attr('value', label);
 			$('textarea[name=link]').attr('value', value);
 		}
-		//--></script>
+//--></script>
 <?= $footer; ?>

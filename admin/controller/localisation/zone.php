@@ -1,14 +1,14 @@
 <?php
 class Admin_Controller_Localisation_Zone extends Controller
 {
-	
+
 
 	public function index()
 	{
 		$this->language->load('localisation/zone');
 
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		$this->getList();
 	}
 
@@ -17,14 +17,14 @@ class Admin_Controller_Localisation_Zone extends Controller
 		$this->language->load('localisation/zone');
 
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Zone->addZone($_POST);
-	
+
 			$this->message->add('success', $this->_('text_success'));
-			
+
 			$url = '';
-			
+
 			if (isset($_GET['sort'])) {
 				$url .= '&sort=' . $_GET['sort'];
 			}
@@ -36,7 +36,7 @@ class Admin_Controller_Localisation_Zone extends Controller
 			if (isset($_GET['page'])) {
 				$url .= '&page=' . $_GET['page'];
 			}
-			
+
 			$this->url->redirect($this->url->link('localisation/zone', $url));
 		}
 
@@ -48,14 +48,14 @@ class Admin_Controller_Localisation_Zone extends Controller
 		$this->language->load('localisation/zone');
 
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Localisation_Zone->editZone($_GET['zone_id'], $_POST);
-			
+
 			$this->message->add('success', $this->_('text_success'));
-			
+
 			$url = '';
-			
+
 			if (isset($_GET['sort'])) {
 				$url .= '&sort=' . $_GET['sort'];
 			}
@@ -67,7 +67,7 @@ class Admin_Controller_Localisation_Zone extends Controller
 			if (isset($_GET['page'])) {
 				$url .= '&page=' . $_GET['page'];
 			}
-			
+
 			$this->url->redirect($this->url->link('localisation/zone', $url));
 		}
 
@@ -79,16 +79,16 @@ class Admin_Controller_Localisation_Zone extends Controller
 		$this->language->load('localisation/zone');
 
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $zone_id) {
 				$this->Model_Localisation_Zone->deleteZone($zone_id);
 			}
-			
+
 			$this->message->add('success', $this->_('text_success'));
-			
+
 			$url = '';
-			
+
 			if (isset($_GET['sort'])) {
 				$url .= '&sort=' . $_GET['sort'];
 			}
@@ -116,21 +116,21 @@ class Admin_Controller_Localisation_Zone extends Controller
 		} else {
 			$sort = 'c.name';
 		}
-		
+
 		if (isset($_GET['order'])) {
 			$order = $_GET['order'];
 		} else {
 			$order = 'ASC';
 		}
-		
+
 		if (isset($_GET['page'])) {
 			$page = $_GET['page'];
 		} else {
 			$page = 1;
 		}
-				
+
 		$url = '';
-			
+
 		if (isset($_GET['sort'])) {
 			$url .= '&sort=' . $_GET['sort'];
 		}
@@ -138,17 +138,17 @@ class Admin_Controller_Localisation_Zone extends Controller
 		if (isset($_GET['order'])) {
 			$url .= '&order=' . $_GET['order'];
 		}
-		
+
 		if (isset($_GET['page'])) {
 			$url .= '&page=' . $_GET['page'];
 		}
 
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/zone', $url));
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/zone', $url));
 
 		$this->data['insert'] = $this->url->link('localisation/zone/insert', $url);
 		$this->data['delete'] = $this->url->link('localisation/zone/delete', $url);
-	
+
 		$this->data['zones'] = array();
 
 		$data = array(
@@ -157,30 +157,30 @@ class Admin_Controller_Localisation_Zone extends Controller
 			'start' => ($page - 1) * $this->config->get('config_admin_limit'),
 			'limit' => $this->config->get('config_admin_limit')
 		);
-		
+
 		$zone_total = $this->Model_Localisation_Zone->getTotalZones();
-			
+
 		$results = $this->Model_Localisation_Zone->getZones($data);
 
 		foreach ($results as $result) {
 			$action = array();
-			
+
 			$action[] = array(
 				'text' => $this->_('text_edit'),
 				'href' => $this->url->link('localisation/zone/update', 'zone_id=' . $result['zone_id'] . $url)
 			);
-					
+
 			$this->data['zones'][] = array(
 				'zone_id'  => $result['zone_id'],
 				'country'  => $result['country'],
-				'name'	=> $result['name'] . (($result['zone_id'] == $this->config->get('config_zone_id')) ? $this->_('text_default') : null),
-				'code'	=> $result['code'],
+				'name'     => $result['name'] . (($result['zone_id'] == $this->config->get('config_zone_id')) ? $this->_('text_default') : null),
+				'code'     => $result['code'],
 				'selected' => isset($_GET['selected']) && in_array($result['zone_id'], $_GET['selected']),
-				'action'	=> $action
+				'action'   => $action
 			);
 		}
-	
- 		if (isset($this->error['warning'])) {
+
+		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
 		} else {
 			$this->data['error_warning'] = '';
@@ -188,7 +188,7 @@ class Admin_Controller_Localisation_Zone extends Controller
 
 		if (isset($this->session->data['success'])) {
 			$this->data['success'] = $this->session->data['success'];
-		
+
 			unset($this->session->data['success']);
 		} else {
 			$this->data['success'] = '';
@@ -205,33 +205,33 @@ class Admin_Controller_Localisation_Zone extends Controller
 		if (isset($_GET['page'])) {
 			$url .= '&page=' . $_GET['page'];
 		}
-		
+
 		$this->data['sort_country'] = $this->url->link('localisation/zone', 'sort=c.name' . $url);
-		$this->data['sort_name'] = $this->url->link('localisation/zone', 'sort=z.name' . $url);
-		$this->data['sort_code'] = $this->url->link('localisation/zone', 'sort=z.code' . $url);
-		
+		$this->data['sort_name']    = $this->url->link('localisation/zone', 'sort=z.name' . $url);
+		$this->data['sort_code']    = $this->url->link('localisation/zone', 'sort=z.code' . $url);
+
 		$url = '';
 
 		if (isset($_GET['sort'])) {
 			$url .= '&sort=' . $_GET['sort'];
 		}
-												
+
 		if (isset($_GET['order'])) {
 			$url .= '&order=' . $_GET['order'];
 		}
 
 		$this->pagination->init();
-		$this->pagination->total = $zone_total;
+		$this->pagination->total  = $zone_total;
 		$this->data['pagination'] = $this->pagination->render();
-		
-		$this->data['sort'] = $sort;
+
+		$this->data['sort']  = $sort;
 		$this->data['order'] = $order;
 
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
-				
+
 		$this->response->setOutput($this->render());
 	}
 
@@ -239,20 +239,20 @@ class Admin_Controller_Localisation_Zone extends Controller
 	{
 		$this->template->load('localisation/zone_form');
 
- 		if (isset($this->error['warning'])) {
+		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
 		} else {
 			$this->data['error_warning'] = '';
 		}
-		
- 		if (isset($this->error['name'])) {
+
+		if (isset($this->error['name'])) {
 			$this->data['error_name'] = $this->error['name'];
 		} else {
 			$this->data['error_name'] = '';
 		}
-		
+
 		$url = '';
-			
+
 		if (isset($_GET['sort'])) {
 			$url .= '&sort=' . $_GET['sort'];
 		}
@@ -260,20 +260,20 @@ class Admin_Controller_Localisation_Zone extends Controller
 		if (isset($_GET['order'])) {
 			$url .= '&order=' . $_GET['order'];
 		}
-		
+
 		if (isset($_GET['page'])) {
 			$url .= '&page=' . $_GET['page'];
 		}
 
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/zone', $url));
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('localisation/zone', $url));
 
 		if (!isset($_GET['zone_id'])) {
 			$this->data['action'] = $this->url->link('localisation/zone/insert', $url);
 		} else {
 			$this->data['action'] = $this->url->link('localisation/zone/update', 'zone_id=' . $_GET['zone_id'] . $url);
 		}
-		
+
 		$this->data['cancel'] = $this->url->link('localisation/zone', $url);
 
 		if (isset($_GET['zone_id']) && !$this->request->isPost()) {
@@ -287,7 +287,7 @@ class Admin_Controller_Localisation_Zone extends Controller
 		} else {
 			$this->data['status'] = '1';
 		}
-		
+
 		if (isset($_POST['name'])) {
 			$this->data['name'] = $_POST['name'];
 		} elseif (isset($zone_info)) {
@@ -311,14 +311,14 @@ class Admin_Controller_Localisation_Zone extends Controller
 		} else {
 			$this->data['country_id'] = '';
 		}
-		
+
 		$this->data['countries'] = $this->Model_Localisation_Country->getCountries();
 
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
-				
+
 		$this->response->setOutput($this->render());
 	}
 
@@ -340,18 +340,18 @@ class Admin_Controller_Localisation_Zone extends Controller
 		if (!$this->user->hasPermission('modify', 'localisation/zone')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
-		
+
 		foreach ($_GET['selected'] as $zone_id) {
 			if ($this->config->get('config_zone_id') == $zone_id) {
 				$this->error['warning'] = $this->_('error_default');
 			}
-			
+
 			$store_total = $this->Model_Setting_Store->getTotalStoresByZoneId($zone_id);
 
 			if ($store_total) {
 				$this->error['warning'] = sprintf($this->_('error_store'), $store_total);
 			}
-		
+
 			$address_total = $this->Model_Sale_Customer->getTotalAddressesByZoneId($zone_id);
 
 			if ($address_total) {
@@ -363,14 +363,14 @@ class Admin_Controller_Localisation_Zone extends Controller
 			if ($affiliate_total) {
 				$this->error['warning'] = sprintf($this->_('error_affiliate'), $affiliate_total);
 			}
-					
+
 			$zone_to_geo_zone_total = $this->Model_Localisation_GeoZone->getTotalZoneToGeoZoneByZoneId($zone_id);
-		
+
 			if ($zone_to_geo_zone_total) {
 				$this->error['warning'] = sprintf($this->_('error_zone_to_geo_zone'), $zone_to_geo_zone_total);
 			}
 		}
-		
+
 		return $this->error ? false : true;
 	}
-}
+}

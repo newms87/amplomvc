@@ -83,8 +83,7 @@
 							<tr class="return_product">
 								<td class="product">
 									<?= $product['name']; ?>
-									<input type="hidden" name="return_products[<?= $product_id; ?>][product_id]"
-									       value="<?= $product_id; ?>"/>
+									<input type="hidden" name="return_products[<?= $product_id; ?>][product_id]" value="<?= $product_id; ?>"/>
 								</td>
 								<td class="model">
 									<?= $product['model']; ?>
@@ -95,8 +94,7 @@
 								<td class="quantity">
 									<? if (!empty($product['no_return'])) { ?>
 										<span><?= $product['no_return']; ?></span>
-										<input type="hidden" name="return_products[<?= $product_id; ?>][return_quantity]"
-										       value="0"/>
+										<input type="hidden" name="return_products[<?= $product_id; ?>][return_quantity]" value="0"/>
 									<? } else { ?>
 										<?= $this->builder->build('select', range(0, (int)$product['quantity']), "return_products[$product_id][return_quantity]", $product['return_quantity']); ?>
 									<? } ?>
@@ -105,8 +103,7 @@
 									<? $this->builder->set_config(false, 'title'); ?>
 									<?= $this->builder->build('select', $data_return_reasons, "return_products[$product_id][return_reason_id]", $product['return_reason_id']); ?>
 								</td>
-								<td class="comment"><textarea
-										name="return_products[<?= $product_id; ?>][comment]"><?= $product['comment']; ?></textarea>
+								<td class="comment"><textarea name="return_products[<?= $product_id; ?>][comment]"><?= $product['comment']; ?></textarea>
 								</td>
 								<td
 									class="opened"><?= $this->builder->build('select', $data_yes_no, "return_products[$product_id][opened]", $product['opened']); ?></td>
@@ -140,7 +137,7 @@
 		$('.order_info.order_id select').change(function () {
 			location = "<?= $return_product_url; ?>" + '&order_id=' + $(this).val();
 		});
-		//--></script>
+//--></script>
 
 <?= $this->builder->js('datepicker'); ?>
 <?= $this->builder->js('errors', $errors); ?>

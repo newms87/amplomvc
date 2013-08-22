@@ -116,8 +116,7 @@
 				<tr>
 					<td></td>
 					<? foreach ($products as $product) { ?>
-						<td><input type="button" value="<?= $button_cart; ?>"
-						           onclick="addToCart('<?= $product['product_id']; ?>');" class="button"/></td>
+						<td><input type="button" value="<?= $button_cart; ?>" onclick="addToCart('<?= $product['product_id']; ?>');" class="button"/></td>
 					<? } ?>
 				</tr>
 				<tr>

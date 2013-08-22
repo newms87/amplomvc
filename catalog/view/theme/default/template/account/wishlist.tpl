@@ -39,8 +39,7 @@
 									</div>
 								<? } ?></td>
 							<td class="action"><img src="<?= HTTP_THEME_IMAGE . 'cart-add.png'; ?>" alt="<?= $button_cart; ?>"
-							                        title="<?= $button_cart; ?>"
-							                        onclick="addToCart('<?= $product['product_id']; ?>');"/>&nbsp;&nbsp;<a
+							                        title="<?= $button_cart; ?>" onclick="addToCart('<?= $product['product_id']; ?>');"/>&nbsp;&nbsp;<a
 									href="<?= $product['remove']; ?>"><img src="<?= HTTP_THEME_IMAGE . 'remove.png'; ?>"
 							                                             alt="<?= $button_remove; ?>"
 							                                             title="<?= $button_remove; ?>"/></a></td>

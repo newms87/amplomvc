@@ -13,4 +13,4 @@
 		visible: <?= $limit; ?>,
 		scroll: <?= $scroll; ?>
 	});
-	//--></script>
+//--></script>

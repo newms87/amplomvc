@@ -18,8 +18,7 @@
 	<br/>
 
 	<p><?= $text_register_account; ?></p>
-	<input type="button" value="<?= $button_continue; ?>" id="button-account" class="button"
-	       onclick="submit_checkout_item($(this));"/>
+	<input type="button" value="<?= $button_continue; ?>" id="button-account" class="button" onclick="submit_checkout_item($(this));"/>
 </div>
 <div id="checkout_login" class="right">
 	<h2><?= $text_returning_customer; ?></h2>

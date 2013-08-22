@@ -1,8 +1,8 @@
 <?php
 class Admin_Controller_Total_Voucher extends Controller
 {
-	
-	
+
+
 	public function index()
 	{
 		$this->template->load('total/voucher');
@@ -10,27 +10,27 @@ class Admin_Controller_Total_Voucher extends Controller
 		$this->language->load('total/voucher');
 
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		if ($this->request->isPost() && ($this->validate())) {
 			$this->Model_Setting_Setting->editSetting('voucher', $_POST);
-		
+
 			$this->message->add('success', $this->_('text_success'));
-			
+
 			$this->url->redirect($this->url->link('extension/total'));
 		}
-		
- 		if (isset($this->error['warning'])) {
+
+		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
 		} else {
 			$this->data['error_warning'] = '';
 		}
 
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('text_total'), $this->url->link('extension/total'));
-			$this->breadcrumb->add($this->_('head_title'), $this->url->link('total/voucher'));
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('text_total'), $this->url->link('extension/total'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('total/voucher'));
 
 		$this->data['action'] = $this->url->link('total/voucher');
-		
+
 		$this->data['cancel'] = $this->url->link('extension/total');
 
 		if (isset($_POST['voucher_status'])) {
@@ -49,7 +49,7 @@ class Admin_Controller_Total_Voucher extends Controller
 			'common/header',
 			'common/footer'
 		);
-				
+
 		$this->response->setOutput($this->render());
 	}
 
@@ -58,7 +58,7 @@ class Admin_Controller_Total_Voucher extends Controller
 		if (!$this->user->hasPermission('modify', 'total/voucher')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
-		
+
 		return $this->error ? false : true;
 	}
-}
+}

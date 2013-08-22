@@ -96,7 +96,7 @@ class Catalog_Model_Catalog_Product extends Model
 		*/
 
 		if (empty($data['sort'])) {
-			$data['sort'] = '';
+			$data['sort'] = 'p.sort_order';
 		}
 
 		//Select
@@ -119,6 +119,11 @@ class Catalog_Model_Catalog_Product extends Model
 		//Product IDs
 		if (!empty($data['product_ids'])) {
 			$where .= " AND p.product_id IN (" . implode(',', $data['product_ids']) . ")";
+		}
+
+		//Product Class IDs
+		if (!empty($data['product_class_ids'])) {
+			$where .= " AND p.product_class_id IN (" . implode(',', $data['product_class_ids']) . ")";
 		}
 
 		//Product Name
@@ -175,6 +180,13 @@ class Catalog_Model_Catalog_Product extends Model
 			$from .= " LEFT JOIN " . DB_PREFIX . "tag t ON (pt.tag_id=t.tag_id)";
 
 			$where .= " AND LCASE(t.text) = '" . $this->escape(strtolower(trim($data['product_tag']))) . "'";
+		}
+
+		//Product Related
+		if (!empty($data['related_ids'])) {
+			$from .= " LEFT JOIN " . DB_PREFIX . "product_related pr ON (pr.product_id=p.product_id)";
+
+			$where .= " AND pr.related_id IN (" . implode(',', $data['related_ids']) . ")";
 		}
 
 		//Product Categories
@@ -280,7 +292,7 @@ class Catalog_Model_Catalog_Product extends Model
 
 			foreach ($attribute_groups as &$attribute_group) {
 				$query =
-					"SELECT a.*, pa.text FROM " . DB_PREFIX . "product_attribute pa" .
+					"SELECT a.name, pa.* FROM " . DB_PREFIX . "product_attribute pa" .
 					" LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id)" .
 					" WHERE pa.product_id = '" . (int)$product_id . "' AND a.attribute_group_id = '" . (int)$attribute_group['attribute_group_id'] . "' ORDER BY a.sort_order, a.name";
 
@@ -390,7 +402,6 @@ class Catalog_Model_Catalog_Product extends Model
 
 		return $result->rows;
 	}
-
 
 	public function getProductDiscounts($product_id)
 	{
@@ -557,3 +568,4 @@ class Catalog_Model_Catalog_Product extends Model
 		}
 	}
 }
+

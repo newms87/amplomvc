@@ -540,11 +540,9 @@ class DOMDocumentWrapper
 
 	protected function charsetFromXML($markup)
 	{
-		$matches;
+		$matches = null;
 		// find declaration
-		preg_match('@<' . '?xml[^>]+encoding\\s*=\\s*(["|\'])(.*?)\\1@i',
-			$markup, $matches
-		);
+		preg_match('@<' . '?xml[^>]+encoding\\s*=\\s*(["|\'])(.*?)\\1@i', $markup, $matches);
 		return isset($matches[2])
 			? strtolower($matches[2])
 			: null;
@@ -584,7 +582,7 @@ class DOMDocumentWrapper
 			. ($xhtml ? '/' : '')
 			. '>';
 		if (strpos($html, '<head') === false) {
-			if (strpos($hltml, '<html') === false) {
+			if (strpos($html, '<html') === false) {
 				return $meta . $html;
 			} else {
 				return preg_replace(
@@ -1308,8 +1306,6 @@ class CallbackParam
  * @package phpQuery
  * @method phpQueryObject clone() clone()
  * @method phpQueryObject empty() empty()
- * @method phpQueryObject next() next($selector = null)
- * @method phpQueryObject prev() prev($selector = null)
  * @property Int $length
  */
 class phpQueryObject
@@ -3429,6 +3425,8 @@ class phpQueryObject
 			                                 'htmlOuter'
 			                            ), $args);
 		}
+
+		return '';
 	}
 
 	/**
@@ -3859,25 +3857,25 @@ class phpQueryObject
 						break;
 					case 'insertBefore':
 					case 'before':
-					if (!$toNode->parentNode) {
-						throw new Exception("No parentNode, can't do {$type}()");
-					} else {
-						$toNode->parentNode->insertBefore(
-							$insert,
-							$toNode
-						);
-					}
+						if (!$toNode->parentNode) {
+							throw new Exception("No parentNode, can't do {$type}()");
+						} else {
+							$toNode->parentNode->insertBefore(
+								$insert,
+								$toNode
+							);
+						}
 						break;
 					case 'insertAfter':
 					case 'after':
-					if (!$toNode->parentNode) {
-						throw new Exception("No parentNode, can't do {$type}()");
-					} else {
-						$toNode->parentNode->insertBefore(
-							$insert,
-							$nextSibling
-						);
-					}
+						if (!$toNode->parentNode) {
+							throw new Exception("No parentNode, can't do {$type}()");
+						} else {
+							$toNode->parentNode->insertBefore(
+								$insert,
+								$nextSibling
+							);
+						}
 						break;
 				}
 				// Mutation event
@@ -3998,7 +3996,7 @@ class phpQueryObject
 	 */
 	public static function extend($class, $file = null)
 	{
-		return $this->plugin($class, $file);
+		return phpQueryObject::plugin($class, $file);
 	}
 
 	/**
@@ -5568,13 +5566,15 @@ abstract class phpQuery
 		global $saved_sections;
 
 		while (!empty($saved_sections)) {
+			$continue = false;
 			foreach ($saved_sections as $key => $ss) {
-				echo '__ss' . $key . '__' . ' == <br>';
 				$content = str_replace('__ss' . $key . '__', $ss, $content, $found);
 				if ($found) {
+					$continue = true;
 					unset($saved_sections[$key]);
 				}
 			}
+			if (!$continue) break;
 		}
 
 		return $content;
@@ -5788,7 +5788,7 @@ abstract class phpQuery
 					continue;
 				}
 				if (isset(self::$pluginsStaticMethods[$method])) {
-					throw new Exception("Duplicate method '{$method}' from plugin '{$c}' conflicts with same method from plugin '" . self::$pluginsStaticMethods[$method] . "'");
+					throw new Exception("Duplicate method '{$method}' from plugin '{$class}' conflicts with same method from plugin '" . self::$pluginsStaticMethods[$method] . "'");
 					return;
 				}
 				self::$pluginsStaticMethods[$method] = $class;
@@ -6316,7 +6316,7 @@ abstract class phpQuery
 	 * @return unknown_type
 	 * @link http://docs.jquery.com/Utilities/jQuery.makeArray
 	 */
-	public static function makeArray($obj)
+	public static function makeArray($object)
 	{
 		$array = array();
 		if (is_object($object) && $object instanceof DOMNODELIST) {

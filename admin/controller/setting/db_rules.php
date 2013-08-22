@@ -1,82 +1,82 @@
 <?php
 class Admin_Controller_Setting_DbRules extends Controller
 {
-	
+
 
 	public function index()
 	{
 		$this->language->load('setting/db_rules');
 
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		$this->getList();
 	}
-			
-  	public function insert()
-  	{
+
+	public function insert()
+	{
 		$this->language->load('setting/db_rules');
 
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		if ($this->request->isPost() && $this->validateForm()) {
 			$store_id = $this->Model_Setting_DbRules->addDbRule($_POST);
-			
+
 			$this->message->add('success', $this->_('text_success'));
-			
+
 			$this->url->redirect($this->url->link('setting/db_rules'));
 		}
-	
-		$this->getForm();
-  	}
 
-  	public function update()
-  	{
+		$this->getForm();
+	}
+
+	public function update()
+	{
 		$this->language->load('setting/db_rules');
 
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		if ($this->request->isPost() && $this->validateForm()) {
 			$this->Model_Setting_DbRules->editDbRule($_GET['db_rule_id'], $_POST);
-			
+
 			$this->message->add('success', $this->_('text_success'));
-			
+
 			$this->url->redirect($this->url->link('setting/db_rules', 'store_id=' . $_GET['store_id']));
 		}
 
 		$this->getForm();
-  	}
+	}
 
-  	public function delete()
-  	{
+	public function delete()
+	{
 		$this->language->load('setting/db_rules');
 
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		if (isset($_GET['selected']) && $this->validateDelete()) {
 			foreach ($_GET['selected'] as $db_rule_id) {
 				$this->Model_Setting_DbRules->deleteDbRule($db_rule_id);
 			}
 
 			$this->message->add('success', $this->_('text_success'));
-			
+
 			$this->url->redirect($this->url->link('setting/db_rules'));
 		}
 
 		$this->getList();
-  	}
-	
+	}
+
 	private function getList()
 	{
 		$this->template->load('setting/db_rules_list');
 
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('head_title'), $this->url->link('setting/db_rules'));
-		
+
 		$this->data['insert'] = $this->url->link('setting/db_rules/insert');
 		$this->data['delete'] = $this->url->link('setting/db_rules/delete');
-		
+
 		$url = $this->get_url(array('page'));
-		
+
 		$db_rules = $this->Model_Setting_DbRules->getDbRules();
 
 		foreach ($db_rules as &$db_rule) {
@@ -84,48 +84,48 @@ class Admin_Controller_Setting_DbRules extends Controller
 				'text' => $this->_('text_edit'),
 				'href' => $this->url->link('setting/db_rules/update', 'db_rule_id=' . $db_rule['db_rule_id'])
 			);
-			
+
 			$db_rule['selected'] = isset($_GET['selected']) && in_array($result['db_rule_id'], $_GET['selected']);
-			$db_rule['action']	= $action;
+			$db_rule['action']   = $action;
 		}
-		
+
 		$this->data['db_rules'] = $db_rules;
-	
+
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
-				
+
 		$this->response->setOutput($this->render());
 	}
-	
+
 	public function getForm()
 	{
 		$this->template->load('setting/db_rules_form');
 
-		$db_rule_id = isset($_GET['db_rule_id']) ? $_GET['db_rule_id']:null;
-		
+		$db_rule_id = isset($_GET['db_rule_id']) ? $_GET['db_rule_id'] : null;
+
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('head_title'), $this->url->link('setting/db_rules'));
-		
+
 		if (!$db_rule_id) {
 			$this->data['action'] = $this->url->link('setting/db_rules/insert');
 		} else {
 			$this->data['action'] = $this->url->link('setting/db_rules/update', 'db_rule_id=' . $db_rule_id);
 		}
-				
+
 		$this->data['cancel'] = $this->url->link('setting/db_rules');
-		
+
 		$db_rule_info = $db_rule_id ? $this->Model_Setting_DbRules->getDbRule($db_rule_id) : null;
-		
+
 		$defaults = array(
-			'table'		=>'',
-			'column'		=>'',
-			'escape_type' =>'',
-			'truncate'	=>''
+			'table'       => '',
+			'column'      => '',
+			'escape_type' => '',
+			'truncate'    => ''
 		);
-			
-		foreach ($defaults as $d=>$value) {
+
+		foreach ($defaults as $d => $value) {
 			if (isset($_POST[$d])) {
 				$this->data[$d] = $_POST[$d];
 			} elseif (isset($db_rule_info[$d])) {
@@ -139,7 +139,7 @@ class Admin_Controller_Setting_DbRules extends Controller
 			'common/header',
 			'common/footer'
 		);
-				
+
 		$this->response->setOutput($this->render());
 	}
 
@@ -148,7 +148,7 @@ class Admin_Controller_Setting_DbRules extends Controller
 		if (!$this->user->hasPermission('modify', 'setting/db_rules')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
-		
+
 		$required = array(
 			'table',
 			'column',
@@ -158,7 +158,7 @@ class Admin_Controller_Setting_DbRules extends Controller
 				$this->error[$r] = $this->_('error_' . $r);
 			}
 		}
-				
+
 		return empty($this->error);
 	}
 
@@ -167,17 +167,23 @@ class Admin_Controller_Setting_DbRules extends Controller
 		if (!$this->user->hasPermission('modify', 'setting/db_rules')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
-		
+
 		return empty($this->error);
 	}
-	
-	private function get_url($filters=null)
+
+	private function get_url($filters = null)
 	{
-		$url = '';
-		$filters = $filters?$filters:array('sort', 'order', 'page');
-		foreach($filters as $f)
-			if (isset($_GET[$f]))
+		$url     = '';
+		$filters = $filters ? $filters : array(
+			'sort',
+			'order',
+			'page'
+		);
+		foreach ($filters as $f) {
+			if (isset($_GET[$f])) {
 				$url .= "&$f=" . $_GET[$f];
+			}
+		}
 		return $url;
 	}
 }

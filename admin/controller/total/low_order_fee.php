@@ -1,8 +1,8 @@
 <?php
 class Admin_Controller_Total_LowOrderFee extends Controller
 {
-	
-	
+
+
 	public function index()
 	{
 		$this->template->load('total/low_order_fee');
@@ -10,27 +10,27 @@ class Admin_Controller_Total_LowOrderFee extends Controller
 		$this->language->load('total/low_order_fee');
 
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		if ($this->request->isPost() && ($this->validate())) {
 			$this->Model_Setting_Setting->editSetting('low_order_fee', $_POST);
-		
+
 			$this->message->add('success', $this->_('text_success'));
-			
+
 			$this->url->redirect($this->url->link('extension/total'));
 		}
-		
- 		if (isset($this->error['warning'])) {
+
+		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
 		} else {
 			$this->data['error_warning'] = '';
 		}
 
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('text_total'), $this->url->link('extension/total'));
-			$this->breadcrumb->add($this->_('head_title'), $this->url->link('total/low_order_fee'));
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('text_total'), $this->url->link('extension/total'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('total/low_order_fee'));
 
 		$this->data['action'] = $this->url->link('total/low_order_fee');
-		
+
 		$this->data['cancel'] = $this->url->link('extension/total');
 
 		if (isset($_POST['low_order_fee_total'])) {
@@ -38,7 +38,7 @@ class Admin_Controller_Total_LowOrderFee extends Controller
 		} else {
 			$this->data['low_order_fee_total'] = $this->config->get('low_order_fee_total');
 		}
-		
+
 		if (isset($_POST['low_order_fee_fee'])) {
 			$this->data['low_order_fee_fee'] = $_POST['low_order_fee_fee'];
 		} else {
@@ -50,7 +50,7 @@ class Admin_Controller_Total_LowOrderFee extends Controller
 		} else {
 			$this->data['low_order_fee_tax_class_id'] = $this->config->get('low_order_fee_tax_class_id');
 		}
-		
+
 		if (isset($_POST['low_order_fee_status'])) {
 			$this->data['low_order_fee_status'] = $_POST['low_order_fee_status'];
 		} else {
@@ -62,14 +62,14 @@ class Admin_Controller_Total_LowOrderFee extends Controller
 		} else {
 			$this->data['low_order_fee_sort_order'] = $this->config->get('low_order_fee_sort_order');
 		}
-		
+
 		$this->data['tax_classes'] = $this->Model_Localisation_TaxClass->getTaxClasses();
 
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
-				
+
 		$this->response->setOutput($this->render());
 	}
 
@@ -78,7 +78,7 @@ class Admin_Controller_Total_LowOrderFee extends Controller
 		if (!$this->user->hasPermission('modify', 'total/low_order_fee')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
-		
+
 		return $this->error ? false : true;
 	}
-}
+}

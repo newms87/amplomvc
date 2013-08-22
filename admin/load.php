@@ -34,8 +34,8 @@ $registry->set('log', $log);
 //Error Callbacks allow customization of error display / messages
 $error_callbacks = array();
 
-$error_handler = function($errno, $errstr, $errfile, $errline) use($error_log, $config){
-	
+$error_handler = function ($errno, $errstr, $errfile, $errline) use ($error_log, $config) {
+
 	switch ($errno) {
 		case E_NOTICE:
 		case E_USER_NOTICE:
@@ -53,21 +53,21 @@ $error_handler = function($errno, $errstr, $errfile, $errline) use($error_log, $
 			$error = 'Unknown';
 			break;
 	}
-	
+
 	global $error_callbacks;
-	
+
 	if (!empty($error_callbacks)) {
 		foreach ($error_callbacks as $cb) {
 			$cb($error, $errno, $errstr, $errfile, $errline);
 		}
 	}
-	
+
 	if ($error) {
 		if ($config->get('config_error_display')) {
 			echo '<b>' . $error . '</b>: ' . $errstr . ' in <b>' . $errfile . '</b> on line <b>' . $errline . '</b><br /><br />';
 			flush(); //Flush the error to block any redirects that may execute, this ensure errors are seen!
 		}
-		
+
 		if ($config->get('config_error_log')) {
 			$error_log->write('PHP ' . $error . ':  ' . $errstr . ' in ' . $errfile . ' on line ' . $errline);
 		}
@@ -86,6 +86,9 @@ _is_writable(DIR_LOGS, $config->get('config_default_dir_mode'));
 
 // Session
 $registry->set('session', new Session($registry));
+
+//Mod Files
+$registry->set('mod', new Mod($registry));
 
 // Url
 $registry->set('url', new Url($registry));

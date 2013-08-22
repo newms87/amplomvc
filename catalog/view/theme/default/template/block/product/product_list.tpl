@@ -55,12 +55,10 @@
 			<? } ?>
 
 			<? if ($wishlist_status) { ?>
-				<div class="wishlist"><a
-						onclick="addToWishList('<?= $product['product_id']; ?>');"><?= $button_wishlist; ?></a></div>
+				<div class="wishlist"><a onclick="addToWishList('<?= $product['product_id']; ?>');"><?= $button_wishlist; ?></a></div>
 			<? } ?>
 			<? if ($compare_status) { ?>
-				<div class="compare"><a
-						onclick="addToCompare('<?= $product['product_id']; ?>');"><?= $button_compare; ?></a></div>
+				<div class="compare"><a onclick="addToCompare('<?= $product['product_id']; ?>');"><?= $button_compare; ?></a></div>
 			<? } ?>
 		</a>
 	<? } ?>
@@ -93,4 +91,4 @@
 	view = $.cookie('display') || 'grid';
 
 	$('#toggle_' + view).click();
-	//--></script>
+//--></script>

@@ -5289,8 +5289,8 @@
             return T.replace(/<!--\{cke_protected\}([\s\S]+?)-->/g,function (W, X) {
                 return decodeURIComponent(X);
             }).replace(/\{cke_protected_(\d+)\}/g, function (W, X) {
-                return V && V[X] || '';
-            });
+                    return V && V[X] || '';
+                });
         };
         function S(T, U) {
             var V = [], W = U.config.protectedSource, X = U._.dataStore || (U._.dataStore = {id: 1}), Y = /<\!--\{cke_temp(comment)?\}(\d*?)-->/g, Z = [/<script[\s\S]*?<\/script>/gi, /<noscript[\s\S]*?<\/noscript>/gi].concat(W);
@@ -8742,9 +8742,9 @@
                         C.docType = Y = ab;
                         return '';
                     }).replace(/<\?xml\s[^\?]*\?>/i, function (ab) {
-                        C.xmlDeclaration = ab;
-                        return '';
-                    });
+                            C.xmlDeclaration = ab;
+                            return '';
+                        });
                     if (C.dataProcessor)V = C.dataProcessor.toHtml(V, D);
                     if (X) {
                         if (!/<body[\s|>]/.test(V))V = '<body>' + V;

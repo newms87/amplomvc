@@ -1,8 +1,8 @@
 <?php
 class Admin_Controller_Total_Credit extends Controller
 {
-	
-	
+
+
 	public function index()
 	{
 		$this->template->load('total/credit');
@@ -10,27 +10,27 @@ class Admin_Controller_Total_Credit extends Controller
 		$this->language->load('total/credit');
 
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		if ($this->request->isPost() && ($this->validate())) {
 			$this->Model_Setting_Setting->editSetting('credit', $_POST);
-		
+
 			$this->message->add('success', $this->_('text_success'));
-			
+
 			$this->url->redirect($this->url->link('extension/total'));
 		}
-		
- 		if (isset($this->error['warning'])) {
+
+		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
 		} else {
 			$this->data['error_warning'] = '';
 		}
 
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('text_total'), $this->url->link('extension/total'));
-			$this->breadcrumb->add($this->_('head_title'), $this->url->link('total/credit'));
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('text_total'), $this->url->link('extension/total'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('total/credit'));
 
 		$this->data['action'] = $this->url->link('total/credit');
-		
+
 		$this->data['cancel'] = $this->url->link('extension/total');
 
 		if (isset($_POST['credit_status'])) {
@@ -44,12 +44,12 @@ class Admin_Controller_Total_Credit extends Controller
 		} else {
 			$this->data['credit_sort_order'] = $this->config->get('credit_sort_order');
 		}
-																		
+
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
-				
+
 		$this->response->setOutput($this->render());
 	}
 
@@ -58,7 +58,7 @@ class Admin_Controller_Total_Credit extends Controller
 		if (!$this->user->hasPermission('modify', 'total/credit')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
-		
+
 		return $this->error ? false : true;
 	}
-}
+}

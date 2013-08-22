@@ -262,6 +262,10 @@ class Admin_Controller_Catalog_Product extends Controller
 					'text' => $this->_('text_edit'),
 					'href' => $this->url->link('catalog/product/update', 'product_id=' . $product['product_id'])
 				),
+				'copy' => array(
+					'text' => $this->_('text_copy'),
+					'href' => $this->url->link('catalog/product/copy', 'product_id=' . $product['product_id'])
+				)
 			);
 
 			if (!$this->order->productInConfirmedOrder($product['product_id'])) {
@@ -310,6 +314,16 @@ class Admin_Controller_Catalog_Product extends Controller
 
 		$this->data['list_view'] = $this->table->render();
 
+		//Additional Data
+		if (count($product_classes) > 1) {
+			foreach ($product_classes as &$product_class) {
+				$product_class['insert'] = $this->url->link('catalog/product/update', 'product_class_id=' . $product_class['product_class_id']);
+			}
+			unset($product_class);
+
+			$this->data['product_classes'] = $product_classes;
+		}
+
 		//Batch actions
 		$this->data['batch_actions'] = array(
 			'enable'             => array(
@@ -348,7 +362,7 @@ class Admin_Controller_Catalog_Product extends Controller
 				'default'      => $this->config->get('config_default_shipping_policy'),
 			),
 
-			'return_policy_id' => array(
+			'return_policy_id'   => array(
 				'label'        => $this->_('text_return_policy'),
 				'type'         => 'select',
 				'build_data'   => $this->cart->getReturnPolicies(),
@@ -359,7 +373,7 @@ class Admin_Controller_Catalog_Product extends Controller
 				'default'      => $this->config->get('config_default_return_policy'),
 			),
 
-			'add_cat' => array(
+			'add_cat'            => array(
 				'label'        => "Add Category",
 				'type'         => 'select',
 				'build_data'   => $categories,
@@ -369,7 +383,7 @@ class Admin_Controller_Catalog_Product extends Controller
 				),
 			),
 
-			'remove_cat' => array(
+			'remove_cat'         => array(
 				'label'        => "Remove Category",
 				'type'         => 'select',
 				'build_data'   => $categories,
@@ -379,11 +393,11 @@ class Admin_Controller_Catalog_Product extends Controller
 				),
 			),
 
-			'copy' => array(
+			'copy'               => array(
 				'label' => $this->_('text_copy'),
 			),
 
-			'delete' => array(
+			'delete'             => array(
 				'label' => $this->_('text_delete'),
 			),
 		);
@@ -418,7 +432,7 @@ class Admin_Controller_Catalog_Product extends Controller
 		$this->document->setTitle($this->_('head_title'));
 
 		//Insert or Update
-		$product_id = $this->data['product_id'] = isset($_GET['product_id']) ? $_GET['product_id'] : false;
+		$product_id = $this->data['product_id'] = isset($_GET['product_id']) ? $_GET['product_id'] : 0;
 
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
@@ -435,36 +449,33 @@ class Admin_Controller_Catalog_Product extends Controller
 			$product_info = $this->Model_Catalog_Product->getProduct($product_id);
 
 			$product_info['date_available']     = $this->date->format($product_info['date_available'], 'Y-m-d');
-			$product_info['product_tags']       = $this->Model_Catalog_Product->getProductTags($product_id);
-			$product_info['product_store']      = $this->Model_Catalog_Product->getProductStores($product_id);
+			$product_info['product_stores']     = $this->Model_Catalog_Product->getProductStores($product_id);
 			$product_info['product_attributes'] = $this->Model_Catalog_Product->getProductAttributes($product_id);
 			$product_info['product_options']    = $this->Model_Catalog_Product->getProductOptions($product_id);
 			$product_info['product_discounts']  = $this->Model_Catalog_Product->getProductDiscounts($product_id);
 			$product_info['product_specials']   = $this->Model_Catalog_Product->getProductSpecials($product_id);
 			$product_info['product_images']     = $this->Model_Catalog_Product->getProductImages($product_id);
-			$product_info['product_category']   = $this->Model_Catalog_Product->getProductCategories($product_id);
-			$product_info['product_download']   = $this->Model_Catalog_Product->getProductDownloads($product_id);
-			$product_info['product_reward']     = $this->Model_Catalog_Product->getProductRewards($product_id);
-			$product_info['product_layout']     = $this->Model_Catalog_Product->getProductLayouts($product_id);
-			$product_info['product_template']   = $this->Model_Catalog_Product->getProductTemplates($product_id);
+			$product_info['product_categories'] = $this->Model_Catalog_Product->getProductCategories($product_id);
+			$product_info['product_downloads']  = $this->Model_Catalog_Product->getProductDownloads($product_id);
+			$product_info['product_rewards']    = $this->Model_Catalog_Product->getProductRewards($product_id);
+			$product_info['product_layouts']    = $this->Model_Catalog_Product->getProductLayouts($product_id);
+			$product_info['product_templates']  = $this->Model_Catalog_Product->getProductTemplates($product_id);
 			$product_info['product_related']    = $this->Model_Catalog_Product->getProductRelated($product_id);
+			$product_info['product_tags']       = $this->Model_Catalog_Product->getProductTags($product_id);
 		}
 
-		//Apply Product Class Skin
-		$product_classes = $this->Model_Catalog_ProductClass->getProductClasses();
+		//Apply Product Class
+		$product_classes          = $this->Model_Catalog_ProductClass->getProductClasses();
+		$default_product_class_id = isset($_GET['product_class_id']) ? $_GET['product_class_id'] : $this->config->get('config_default_product_class_id');
 
 		//Set Values or Defaults
 		$defaults = array(
-			'product_class_id'   => $this->config->get('config_default_product_class_id'),
+			'product_class_id'   => $default_product_class_id,
 			'model'              => '',
 			'sku'                => '',
 			'upc'                => '',
 			'location'           => '',
 			'alias'              => '',
-			'product_store'      => array(
-				0,
-				1
-			),
 			'name'               => '',
 			'description'        => '',
 			'teaser'             => '',
@@ -494,19 +505,20 @@ class Admin_Controller_Catalog_Product extends Controller
 			'width'              => '',
 			'height'             => '',
 			'length_class_id'    => $this->config->get('config_length_class_id'),
+			'product_stores'     => array($this->config->get('config_default_store_id')),
 			'product_options'    => array(),
 			'product_discounts'  => array(),
 			'product_specials'   => array(),
 			'product_attributes' => array(),
 			'product_images'     => array(),
-			'product_download'   => array(),
-			'product_category'   => array(),
+			'product_downloads'  => array(),
+			'product_categories' => array(),
 			'product_related'    => array(),
 			'product_tags'       => array(),
 			'points'             => '',
-			'product_reward'     => array(),
-			'product_layout'     => array(),
-			'product_template'   => array(),
+			'product_rewards'    => array(),
+			'product_layouts'    => array(),
+			'product_templates'  => array(),
 		);
 
 		foreach ($defaults as $key => $default) {
@@ -550,14 +562,13 @@ class Admin_Controller_Catalog_Product extends Controller
 		//Translations
 		$this->data['translations'] = $this->Model_Catalog_Product->getProductTranslations($product_id);
 
-		$image_width  = $this->config->get('config_image_product_option_width');
-		$image_height = $this->config->get('config_image_product_option_height');
-
 		//Product Attribute Template Defaults
 		$this->data['product_attributes']['__ac_template__'] = array(
 			'attribute_id' => '',
 			'name'         => '',
+			'image'        => '',
 			'text'         => '',
+			'sort_order'   => 0,
 		);
 
 		//Product Options Unused Option Values
@@ -605,7 +616,6 @@ class Admin_Controller_Catalog_Product extends Controller
 					'price'                   => 0,
 					'points'                  => 0,
 					'weight'                  => 0,
-					'default'                 => 0,
 					'sort_order'              => 0,
 					'restrictions'            => array(
 						'__ac_template__' => array(
@@ -664,11 +674,16 @@ class Admin_Controller_Catalog_Product extends Controller
 		);
 
 		//The Template
-		if ($this->data['product_class_id']) {
-			$this->template->load($this->Model_Catalog_ProductClass->getTemplate($this->data['product_class_id']));
-		} else {
-			$this->template->load('catalog/product_form');
+		$template = $this->Model_Catalog_ProductClass->getTemplate($this->data['product_class_id']);
+
+		if (!$this->template->find_file($template)) {
+			$product_class = array_search_key('product_class_id', $this->data['product_class_id'], $product_classes);
+			$this->message->add('warning', $this->_('error_class_template', $product_class['name'], $template));
+
+			$template = 'catalog/product_form';
 		}
+
+		$this->template->load($template);
 
 		//Render
 		$this->response->setOutput($this->render());
@@ -694,6 +709,10 @@ class Admin_Controller_Catalog_Product extends Controller
 				$_POST['model']       = $model;
 			}
 		} else {
+			if (!$_POST['model']) {
+				$_POST['model'] = $this->Model_Catalog_Product->generateModel(0, $_POST['name']);
+			}
+
 			if (!$this->validation->text($_POST['model'], 1, 64)) {
 				$this->error['model'] = $this->_('error_model');
 			}
@@ -707,8 +726,8 @@ class Admin_Controller_Catalog_Product extends Controller
 			}
 		}
 
-		if (empty($_POST['alias'])) {
-			$_POST['alias'] = $this->tool->getSlug($_POST['name']);
+		if (empty($_POST['alias']) && $this->config->get('config_seo_url')) {
+			$_POST['alias'] = $this->Model_Setting_UrlAlias->getUniqueAlias($_POST['name'], 'product/product', 'product_id=' . $product_id);
 		}
 
 		if (isset($_POST['product_images'])) {
@@ -813,13 +832,15 @@ class Admin_Controller_Catalog_Product extends Controller
 
 			$selected = $product['product_id'] == $select ? 'selected="selected"' : '';
 
-			$html .= "<option value='$product[product_id]' $selected>$product[name]</option>";
+			$html .= "<option value=\"$product[product_id]\" " . $selected . ">$product[name]</option>";
 		}
 
-		$this->response->setOutput(json_encode(array(
-		                                            'option_data' => $data,
-		                                            'html'        => $html
-		                                       )));
+		$json = array(
+			'option_data' => $data,
+			'html'        => $html,
+		);
+
+		$this->response->setOutput(json_encode($json));
 	}
 
 	public function autocomplete()
@@ -882,3 +903,8 @@ class Admin_Controller_Catalog_Product extends Controller
 		}
 	}
 }
+
+
+
+
+

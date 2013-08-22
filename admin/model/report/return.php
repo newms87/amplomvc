@@ -1,7 +1,8 @@
 <?php
 class Admin_Model_Report_Return extends Model
 {
-	public function getReturns($data = array()) {
+	public function getReturns($data = array())
+	{
 		$sql = "SELECT MIN(r.date_added) AS date_start, MAX(r.date_added) AS date_end, COUNT(r.return_id) AS `returns` FROM `" . DB_PREFIX . "return` r";
 
 		if (!empty($data['filter_return_status_id'])) {
@@ -9,7 +10,7 @@ class Admin_Model_Report_Return extends Model
 		} else {
 			$sql .= " WHERE r.return_status_id > '0'";
 		}
-		
+
 		if (!empty($data['filter_date_start'])) {
 			$sql .= " AND DATE(r.date_added) >= '" . $this->escape($data['filter_date_start']) . "'";
 		}
@@ -17,14 +18,14 @@ class Admin_Model_Report_Return extends Model
 		if (!empty($data['filter_date_end'])) {
 			$sql .= " AND DATE(r.date_added) <= '" . $this->escape($data['filter_date_end']) . "'";
 		}
-		
+
 		if (isset($data['filter_group'])) {
 			$group = $data['filter_group'];
 		} else {
 			$group = 'week';
 		}
-		
-		switch($group) {
+
+		switch ($group) {
 			case 'day';
 				$sql .= " GROUP BY DAY(r.date_added)";
 				break;
@@ -39,7 +40,7 @@ class Admin_Model_Report_Return extends Model
 				$sql .= " GROUP BY YEAR(r.date_added)";
 				break;
 		}
-		
+
 		if (isset($data['start']) || isset($data['limit'])) {
 			if ($data['start'] < 0) {
 				$data['start'] = 0;
@@ -48,23 +49,24 @@ class Admin_Model_Report_Return extends Model
 			if ($data['limit'] < 1) {
 				$data['limit'] = 20;
 			}
-			
+
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
 		}
-		
+
 		$query = $this->query($sql);
-		
+
 		return $query->rows;
 	}
-	
-	public function getTotalReturns($data = array()) {
+
+	public function getTotalReturns($data = array())
+	{
 		if (!empty($data['filter_group'])) {
 			$group = $data['filter_group'];
 		} else {
 			$group = 'week';
 		}
-		
-		switch($group) {
+
+		switch ($group) {
 			case 'day';
 				$sql = "SELECT COUNT(DISTINCT DAY(date_added)) AS total FROM `" . DB_PREFIX . "return`";
 				break;
@@ -79,13 +81,13 @@ class Admin_Model_Report_Return extends Model
 				$sql = "SELECT COUNT(DISTINCT YEAR(date_added)) AS total FROM `" . DB_PREFIX . "return`";
 				break;
 		}
-		
+
 		if (!empty($data['filter_return_status_id'])) {
 			$sql .= " WHERE return_status_id = '" . (int)$data['filter_return_status_id'] . "'";
 		} else {
 			$sql .= " WHERE return_status_id > '0'";
 		}
-				
+
 		if (!empty($data['filter_date_start'])) {
 			$sql .= " AND DATE(date_added) >= '" . $this->escape($data['filter_date_start']) . "'";
 		}
@@ -98,4 +100,4 @@ class Admin_Model_Report_Return extends Model
 
 		return $query->row['total'];
 	}
-}
+}

@@ -1,6 +1,6 @@
 <?php
 // Version
-define('AC_VERSION', '0.0.10');
+define('AC_VERSION', '0.0.11');
 
 // Error Reporting
 error_reporting(E_ALL);
@@ -29,10 +29,10 @@ if ($domain === 'localhost') {
 if (ini_get('register_globals')) {
 	ini_set('session.use_cookies', 'On');
 	ini_set('session.use_trans_sid', 'Off');
-		
+
 	session_set_cookie_params(0, '/');
 	session_start();
-	
+
 	$globals = array($_REQUEST, $_SESSION, $_SERVER, $_FILES);
 
 	foreach ($globals as $global) {
@@ -72,7 +72,7 @@ if (!isset($_SERVER['DOCUMENT_ROOT'])) {
 
 if (!isset($_SERVER['REQUEST_URI'])) {
 	$_SERVER['REQUEST_URI'] = substr($_SERVER['PHP_SELF'], 1);
-	
+
 	if (isset($_SERVER['QUERY_STRING'])) {
 		$_SERVER['REQUEST_URI'] .= '?' . $_SERVER['QUERY_STRING'];
 	}
@@ -84,34 +84,34 @@ if (is_dir(dirname(DIR_APPLICATION) . '/install')) {
 }
 
 // Helper
-_require(DIR_SYSTEM . 'helper/json.php');
+require_once(_ac_mod_file(DIR_SYSTEM . 'helper/json.php'));
 
 // Engine
-_require(DIR_SYSTEM . 'engine/action.php');
-_require(DIR_SYSTEM . 'engine/controller.php');
-_require(DIR_SYSTEM . 'engine/front.php');
-_require(DIR_SYSTEM . 'engine/library.php');
-_require(DIR_SYSTEM . 'engine/loader.php');
-_require(DIR_SYSTEM . 'engine/model.php');
-_require(DIR_SYSTEM . 'engine/registry.php');
+require_once(_ac_mod_file(DIR_SYSTEM . 'engine/action.php'));
+require_once(_ac_mod_file(DIR_SYSTEM . 'engine/controller.php'));
+require_once(_ac_mod_file(DIR_SYSTEM . 'engine/front.php'));
+require_once(_ac_mod_file(DIR_SYSTEM . 'engine/library.php'));
+require_once(_ac_mod_file(DIR_SYSTEM . 'engine/loader.php'));
+require_once(_ac_mod_file(DIR_SYSTEM . 'engine/model.php'));
+require_once(_ac_mod_file(DIR_SYSTEM . 'engine/registry.php'));
 
 // Common
-_require(DIR_SYSTEM . 'library/cache.php');
-_require(DIR_SYSTEM . 'library/config.php');
-_require(DIR_SYSTEM . 'library/db.php');
-_require(DIR_SYSTEM . 'library/file_merge.php');
-_require(DIR_SYSTEM . 'library/language.php');
-_require(DIR_SYSTEM . 'library/log.php');
-_require(DIR_SYSTEM . 'library/plugin.php');
-_require(DIR_SYSTEM . 'library/request.php');
-_require(DIR_SYSTEM . 'library/response.php');
-_require(DIR_SYSTEM . 'library/session.php');
-_require(DIR_SYSTEM . 'library/theme.php');
-_require(DIR_SYSTEM . 'library/template.php');
-_require(DIR_SYSTEM . 'library/url.php');
+require_once(_ac_mod_file(DIR_SYSTEM . 'library/cache.php'));
+require_once(_ac_mod_file(DIR_SYSTEM . 'library/config.php'));
+require_once(_ac_mod_file(DIR_SYSTEM . 'library/db.php'));
+require_once(_ac_mod_file(DIR_SYSTEM . 'library/mod.php'));
+require_once(_ac_mod_file(DIR_SYSTEM . 'library/language.php'));
+require_once(_ac_mod_file(DIR_SYSTEM . 'library/log.php'));
+require_once(_ac_mod_file(DIR_SYSTEM . 'library/plugin.php'));
+require_once(_ac_mod_file(DIR_SYSTEM . 'library/request.php'));
+require_once(_ac_mod_file(DIR_SYSTEM . 'library/response.php'));
+require_once(_ac_mod_file(DIR_SYSTEM . 'library/session.php'));
+require_once(_ac_mod_file(DIR_SYSTEM . 'library/theme.php'));
+require_once(_ac_mod_file(DIR_SYSTEM . 'library/template.php'));
+require_once(_ac_mod_file(DIR_SYSTEM . 'library/url.php'));
 
 //TODO: Resolve which libraries are needed for ajax
 if (true || !isset($_GET['_ajax_'])) {
-	_require(DIR_SYSTEM . 'library/document.php');
-	_require(DIR_SYSTEM . 'library/image.php');
+	require_once(_ac_mod_file(DIR_SYSTEM . 'library/document.php'));
+	require_once(_ac_mod_file(DIR_SYSTEM . 'library/image.php'));
 }

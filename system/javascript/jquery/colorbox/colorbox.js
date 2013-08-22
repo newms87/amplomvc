@@ -104,15 +104,15 @@
         }), u(e(n))) : O.iframe ? u(" ") : O.html ? u(O.html) : a(O, n) ? (n = h(O, n), U = t.createElement("img"), e(U).addClass(et + "Photo").bind("error",function () {
             O.title = !1, u(o(st, "Error").html(O.imgError))
         }).one("load", function () {
-            var t;
-            p === dt && (U.alt = e(A).attr("alt") || e(A).attr("data-alt") || "", O.retinaImage && i.devicePixelRatio > 1 && (U.height = U.height / i.devicePixelRatio, U.width = U.width / i.devicePixelRatio), O.scalePhotos && (r = function () {
-                U.height -= U.height * t, U.width -= U.width * t
-            }, O.mw && U.width > O.mw && (t = (U.width - O.mw) / U.width, r()), O.mh && U.height > O.mh && (t = (U.height - O.mh) / U.height, r())), O.h && (U.style.marginTop = Math.max(O.mh - U.height, 0) / 2 + "px"), E[1] && (O.loop || E[j + 1]) && (U.style.cursor = "pointer", U.onclick = function () {
-                J.next()
-            }), U.style.width = U.width + "px", U.style.height = U.height + "px", setTimeout(function () {
-                u(U)
-            }, 1))
-        }), setTimeout(function () {
+                var t;
+                p === dt && (U.alt = e(A).attr("alt") || e(A).attr("data-alt") || "", O.retinaImage && i.devicePixelRatio > 1 && (U.height = U.height / i.devicePixelRatio, U.width = U.width / i.devicePixelRatio), O.scalePhotos && (r = function () {
+                    U.height -= U.height * t, U.width -= U.width * t
+                }, O.mw && U.width > O.mw && (t = (U.width - O.mw) / U.width, r()), O.mh && U.height > O.mh && (t = (U.height - O.mh) / U.height, r())), O.h && (U.style.marginTop = Math.max(O.mh - U.height, 0) / 2 + "px"), E[1] && (O.loop || E[j + 1]) && (U.style.cursor = "pointer", U.onclick = function () {
+                    J.next()
+                }), U.style.width = U.width + "px", U.style.height = U.height + "px", setTimeout(function () {
+                    u(U)
+                }, 1))
+            }), setTimeout(function () {
             U.src = n
         }, 1)) : n && F.load(n, O.data, function (t, i) {
             p === dt && u("error" === i ? o(st, "Error").html(O.xhrError) : e(this).contents())

@@ -8,7 +8,7 @@ class Admin_Controller_Report_SaleTax extends Controller
 		$this->language->load('report/sale_tax');
 
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		if (isset($_GET['filter_date_start'])) {
 			$filter_date_start = $_GET['filter_date_start'];
 		} else {
@@ -20,19 +20,19 @@ class Admin_Controller_Report_SaleTax extends Controller
 		} else {
 			$filter_date_end = '';
 		}
-		
+
 		if (isset($_GET['filter_group'])) {
 			$filter_group = $_GET['filter_group'];
 		} else {
 			$filter_group = 'week';
 		}
-		
+
 		if (isset($_GET['filter_order_status_id'])) {
 			$filter_order_status_id = $_GET['filter_order_status_id'];
 		} else {
 			$filter_order_status_id = 0;
 		}
-				
+
 		if (isset($_GET['page'])) {
 			$page = $_GET['page'];
 		} else {
@@ -40,15 +40,15 @@ class Admin_Controller_Report_SaleTax extends Controller
 		}
 
 		$url = '';
-		
+
 		if (isset($_GET['filter_date_start'])) {
 			$url .= '&filter_date_start=' . $_GET['filter_date_start'];
 		}
-		
+
 		if (isset($_GET['filter_date_end'])) {
 			$url .= '&filter_date_end=' . $_GET['filter_date_end'];
 		}
-		
+
 		if (isset($_GET['filter_group'])) {
 			$url .= '&filter_group=' . $_GET['filter_group'];
 		}
@@ -56,41 +56,41 @@ class Admin_Controller_Report_SaleTax extends Controller
 		if (isset($_GET['filter_order_status_id'])) {
 			$url .= '&filter_order_status_id=' . $_GET['filter_order_status_id'];
 		}
-				
+
 		if (isset($_GET['page'])) {
 			$url .= '&page=' . $_GET['page'];
 		}
-						
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('head_title'), $this->url->link('report/sale_tax', $url));
+
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('report/sale_tax', $url));
 
 		$this->data['orders'] = array();
-		
+
 		$data = array(
-			'filter_date_start'		=> $filter_date_start,
-			'filter_date_end'		=> $filter_date_end,
-			'filter_group'			=> $filter_group,
+			'filter_date_start'      => $filter_date_start,
+			'filter_date_end'        => $filter_date_end,
+			'filter_group'           => $filter_group,
 			'filter_order_status_id' => $filter_order_status_id,
-			'start'						=> ($page - 1) * $this->config->get('config_admin_limit'),
-			'limit'						=> $this->config->get('config_admin_limit')
+			'start'                  => ($page - 1) * $this->config->get('config_admin_limit'),
+			'limit'                  => $this->config->get('config_admin_limit')
 		);
-				
+
 		$order_total = $this->Model_Report_Sale->getTotalTaxes($data);
-		
+
 		$this->data['orders'] = array();
-		
+
 		$results = $this->Model_Report_Sale->getTaxes($data);
-		
+
 		foreach ($results as $result) {
 			$this->data['orders'][] = array(
 				'date_start' => $this->date->format($result['date_start'], $this->language->getInfo('date_format_short')),
-				'date_end'	=> $this->date->format($result['date_end'], $this->language->getInfo('date_format_short')),
-				'title'		=> $result['title'],
-				'orders'	=> $result['orders'],
-				'total'		=> $this->currency->format($result['total'], $this->config->get('config_currency'))
+				'date_end'   => $this->date->format($result['date_end'], $this->language->getInfo('date_format_short')),
+				'title'      => $result['title'],
+				'orders'     => $result['orders'],
+				'total'      => $this->currency->format($result['total'], $this->config->get('config_currency'))
 			);
 		}
-		
+
 		$this->data['order_statuses'] = $this->order->getOrderStatuses();
 
 		$this->data['groups'] = array();
@@ -114,17 +114,17 @@ class Admin_Controller_Report_SaleTax extends Controller
 			'text'  => $this->_('text_day'),
 			'value' => 'day',
 		);
-		
+
 		$url = '';
-						
+
 		if (isset($_GET['filter_date_start'])) {
 			$url .= '&filter_date_start=' . $_GET['filter_date_start'];
 		}
-		
+
 		if (isset($_GET['filter_date_end'])) {
 			$url .= '&filter_date_end=' . $_GET['filter_date_end'];
 		}
-		
+
 		if (isset($_GET['filter_group'])) {
 			$url .= '&filter_group=' . $_GET['filter_group'];
 		}
@@ -132,21 +132,21 @@ class Admin_Controller_Report_SaleTax extends Controller
 		if (isset($_GET['filter_order_status_id'])) {
 			$url .= '&filter_order_status_id=' . $_GET['filter_order_status_id'];
 		}
-								
+
 		$this->pagination->init();
-		$this->pagination->total = $order_total;
+		$this->pagination->total  = $order_total;
 		$this->data['pagination'] = $this->pagination->render();
-		
-		$this->data['filter_date_start'] = $filter_date_start;
-		$this->data['filter_date_end'] = $filter_date_end;
-		$this->data['filter_group'] = $filter_group;
+
+		$this->data['filter_date_start']      = $filter_date_start;
+		$this->data['filter_date_end']        = $filter_date_end;
+		$this->data['filter_group']           = $filter_group;
 		$this->data['filter_order_status_id'] = $filter_order_status_id;
-				
+
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
-				
+
 		$this->response->setOutput($this->render());
 	}
-}
+}

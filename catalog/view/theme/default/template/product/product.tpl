@@ -234,7 +234,7 @@
 				preloadText: '<?= $text_zoombox_load; ?>'
 			});
 		});
-		//--></script>
+//--></script>
 
 	<script type="text/javascript">//<!--
 		//Check if Product description is overflowed
@@ -323,10 +323,10 @@
 				}
 			});
 		});
-		//--></script>
+//--></script>
 
 	<script type="text/javascript">//<!--
 		$('#product_additional_tabs a').tabs();
-		//--></script>
+//--></script>
 
 <?= $footer; ?>

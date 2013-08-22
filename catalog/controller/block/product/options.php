@@ -49,7 +49,7 @@ class Catalog_Controller_Block_Product_Options extends Controller
 						//Show the price with the Product Option Name
 						if ($product_option_value['price'] > 0) {
 							$product_option_value['display_price'] = $this->_('text_option_price_add', $this->currency->format($product_option_value['price']));
-						} elseif ($product_option_value['display_price'] < 0) {
+						} elseif ($product_option_value['price'] < 0) {
 							$product_option_value['display_price'] = $this->_('text_option_price_subtract', $this->currency->format($product_option_value['price']));
 						} else {
 							$product_option_value['display_price'] = '';
@@ -80,9 +80,10 @@ class Catalog_Controller_Block_Product_Options extends Controller
 
 			switch ($product_option['type']) {
 				case 'select':
-					$blank_option[''] = array('option_value_id'         => '',
-					                          'product_option_value_id' => '',
-					                          'value'                   => $this->_('text_select_option')
+					$blank_option[''] = array(
+						'option_value_id'         => '',
+						'product_option_value_id' => '',
+						'value'                   => $this->_('text_select_option')
 					);
 					break;
 
@@ -93,11 +94,12 @@ class Catalog_Controller_Block_Product_Options extends Controller
 				case 'image':
 					if (!(int)$product_option['required']) {
 						$image            = $this->image->resize('data/no_image_select.png', $image_width, $image_height);
-						$blank_option[''] = array('option_value_id'         => '',
-						                          'product_option_value_id' => '',
-						                          'rel'                     => '',
-						                          'thumb'                   => $image,
-						                          'value'                   => $this->_('text_select_option')
+						$blank_option[''] = array(
+							'option_value_id'         => '',
+							'product_option_value_id' => '',
+							'rel'                     => '',
+							'thumb'                   => $image,
+							'value'                   => $this->_('text_select_option')
 						);
 					}
 					break;

@@ -17,8 +17,7 @@
 	<input type="hidden" name="ship_country" value="<?= $ship_country; ?>"/>
 	<? $i = 0; ?>
 	<? foreach ($products as $product) { ?>
-		<input type="hidden" name="c_prod_<?= $i; ?>"
-		       value="<?= $product['product_id']; ?>,<?= $product['quantity']; ?>"/>
+		<input type="hidden" name="c_prod_<?= $i; ?>" value="<?= $product['product_id']; ?>,<?= $product['quantity']; ?>"/>
 		<input type="hidden" name="c_name_<?= $i; ?>" value="<?= $product['name']; ?>"/>
 		<input type="hidden" name="c_description_<?= $i; ?>" value="<?= $product['description']; ?>"/>
 		<input type="hidden" name="c_price_<?= $i; ?>" value="<?= $product['price']; ?>"/>

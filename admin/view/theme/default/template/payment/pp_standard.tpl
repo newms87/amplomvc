@@ -3,7 +3,8 @@
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'payment.png'; ?>" alt="" /> <?= $head_title; ?></h1>
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'payment.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+
 			<div class="buttons">
 				<a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a>
 				<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
@@ -14,11 +15,11 @@
 				<table class="form">
 					<tr>
 						<td class="required"> <?= $entry_email; ?></td>
-						<td><input type="text" name="pp_standard_email" size="50" value="<?= $pp_standard_email; ?>" /></td>
+						<td><input type="text" name="pp_standard_email" size="50" value="<?= $pp_standard_email; ?>"/></td>
 					</tr>
 					<tr>
 						<td> <?= $entry_test_email; ?></td>
-						<td><input type="text" name="pp_standard_test_email" size="50" value="<?= $pp_standard_test_email; ?>" /></td>
+						<td><input type="text" name="pp_standard_test_email" size="50" value="<?= $pp_standard_test_email; ?>"/></td>
 					</tr>
 					<tr>
 						<td><?= $entry_test; ?></td>
@@ -37,7 +38,8 @@
 					</tr>
 					<tr>
 						<td class="required"><?= $entry_pdt_token; ?></td>
-						<td><input type="text" name="pp_standard_pdt_token" value="<?= $pp_standard_pdt_token; ?>" size="80" /></td>
+						<td><input type="text" name="pp_standard_pdt_token" value="<?= $pp_standard_pdt_token; ?>" size="80"/>
+						</td>
 					</tr>
 					<tr>
 						<td><?= $entry_debug; ?></td>
@@ -45,11 +47,11 @@
 					</tr>
 					<tr>
 						<td><?= $entry_total; ?></td>
-						<td><input type="text" name="pp_standard_total" value="<?= $pp_standard_total; ?>" /></td>
+						<td><input type="text" name="pp_standard_total" value="<?= $pp_standard_total; ?>"/></td>
 					</tr>
 					<tr>
 						<td><?= $entry_page_style; ?></td>
-						<td><input type="text" name="pp_standard_page_style" value="<?= $pp_standard_page_style; ?>" /></td>
+						<td><input type="text" name="pp_standard_page_style" value="<?= $pp_standard_page_style; ?>"/></td>
 					</tr>
 					<tr>
 						<td><?= $entry_canceled_reversal_status; ?></td>
@@ -103,7 +105,8 @@
 					</tr>
 					<tr>
 						<td><?= $entry_sort_order; ?></td>
-						<td><input type="text" name="pp_standard_sort_order" value="<?= $pp_standard_sort_order; ?>" size="1" /></td>
+						<td><input type="text" name="pp_standard_sort_order" value="<?= $pp_standard_sort_order; ?>"
+						           size="1"/></td>
 					</tr>
 				</table>
 			</form>
@@ -112,16 +115,16 @@
 </div>
 
 <script type="text/javascript">//<!--
-$('[name=pp_standard_pdt_enabled]').change(function(){
-	token_row = $('[name=pp_standard_pdt_token]').closest('tr');
-	
-	if ($(this).val() === '1') {
-		token_row.show();
-	} else {
-		token_row.hide();
-	}
-}).change();
-//--></script>
-<?= $this->builder->js('errors',$errors); ?>
+	$('[name=pp_standard_pdt_enabled]').change(function () {
+		token_row = $('[name=pp_standard_pdt_token]').closest('tr');
 
-<?= $footer; ?> 
+		if ($(this).val() === '1') {
+			token_row.show();
+		} else {
+			token_row.hide();
+		}
+	}).change();
+//--></script>
+<?= $this->builder->js('errors', $errors); ?>
+
+<?= $footer; ?>

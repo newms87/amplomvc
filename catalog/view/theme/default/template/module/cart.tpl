@@ -25,8 +25,7 @@
 							<td class="quantity">x&nbsp;<?= $product['quantity']; ?></td>
 							<td class="total"><?= $product['total']; ?></td>
 							<td class="remove"><img src="<?= HTTP_THEME_IMAGE . 'remove-small.png'; ?>"
-							                        alt="<?= $button_remove; ?>" title="<?= $button_remove; ?>"
-							                        onclick="$('#cart').load("<?= HTTP_CATALOG . "index.php?route=module/cart"; ?>
+							                        alt="<?= $button_remove; ?>" title="<?= $button_remove; ?>" onclick="$('#cart').load("<?= HTTP_CATALOG . "index.php?route=module/cart"; ?>
 								" + '&remove=<?= $product['key']; ?> #cart > *');" />
 							</td>
 						</tr>
@@ -38,8 +37,7 @@
 							<td class="quantity">x&nbsp;1</td>
 							<td class="total"><?= $voucher['amount']; ?></td>
 							<td class="remove"><img src="<?= HTTP_THEME_IMAGE . 'remove-small.png'; ?>"
-							                        alt="<?= $button_remove; ?>" title="<?= $button_remove; ?>"
-							                        onclick="$('#cart').load("<?= HTTP_CATALOG . "index.php?route=module/cart"; ?>
+							                        alt="<?= $button_remove; ?>" title="<?= $button_remove; ?>" onclick="$('#cart').load("<?= HTTP_CATALOG . "index.php?route=module/cart"; ?>
 								" + '&remove=<?= $voucher['key']; ?> #cart > *');" />
 							</td>
 						</tr>

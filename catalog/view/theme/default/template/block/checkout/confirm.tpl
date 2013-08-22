@@ -1,7 +1,7 @@
 <? if (!empty($redirect)) { ?>
 	<script type="text/javascript">//<!--
 		location = "<?= $redirect; ?>";
-		//--></script>
+//--></script>
 
 <? } elseif (!empty($totals_only)) { ?>
 	<div class='checkout_totals'>
@@ -76,5 +76,5 @@
 				}
 			});
 		}
-		//--></script>
+//--></script>
 <? } ?>

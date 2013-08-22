@@ -31,16 +31,16 @@ exit;
 //*/
 
 
-//File Merge for plugins
-require_once(DIR_SYSTEM . 'file_merge.php');
+//File Modifications
+require_once(DIR_SYSTEM . 'ac_mod_file.php');
 
-// System Bootstrap
-_require(DIR_SYSTEM . 'startup.php');
+// System Startup
+require_once(_ac_mod_file(DIR_SYSTEM . 'startup.php'));
 
 if (isset($_GET['_ajax_'])) {
 	//Load Ajax Front End
-	_require(SITE_DIR . 'ajax.php');
+	require_once(_ac_mod_file(SITE_DIR . 'ajax.php'));
 } else {
 	//Load Front End
-	_require(SITE_DIR . 'load.php');
+	require_once(_ac_mod_file(SITE_DIR . 'load.php'));
 }

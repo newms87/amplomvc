@@ -1,8 +1,8 @@
 <?php
 class Admin_Controller_Total_Shipping extends Controller
 {
-	
-	
+
+
 	public function index()
 	{
 		$this->template->load('total/shipping');
@@ -10,27 +10,27 @@ class Admin_Controller_Total_Shipping extends Controller
 		$this->language->load('total/shipping');
 
 		$this->document->setTitle($this->_('head_title'));
-		
+
 		if ($this->request->isPost() && ($this->validate())) {
 			$this->Model_Setting_Setting->editSetting('shipping', $_POST);
-		
+
 			$this->message->add('success', $this->_('text_success'));
-			
+
 			$this->url->redirect($this->url->link('extension/total'));
 		}
-		
- 		if (isset($this->error['warning'])) {
+
+		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
 		} else {
 			$this->data['error_warning'] = '';
 		}
 
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('text_total'), $this->url->link('extension/total'));
-			$this->breadcrumb->add($this->_('head_title'), $this->url->link('total/shipping'));
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('text_total'), $this->url->link('extension/total'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('total/shipping'));
 
 		$this->data['action'] = $this->url->link('total/shipping');
-		
+
 		$this->data['cancel'] = $this->url->link('extension/total');
 
 		if (isset($_POST['shipping_estimator'])) {
@@ -38,7 +38,7 @@ class Admin_Controller_Total_Shipping extends Controller
 		} else {
 			$this->data['shipping_estimator'] = $this->config->get('shipping_estimator');
 		}
-		
+
 		if (isset($_POST['shipping_status'])) {
 			$this->data['shipping_status'] = $_POST['shipping_status'];
 		} else {
@@ -50,12 +50,12 @@ class Admin_Controller_Total_Shipping extends Controller
 		} else {
 			$this->data['shipping_sort_order'] = $this->config->get('shipping_sort_order');
 		}
-																		
+
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
-				
+
 		$this->response->setOutput($this->render());
 	}
 
@@ -64,7 +64,7 @@ class Admin_Controller_Total_Shipping extends Controller
 		if (!$this->user->hasPermission('modify', 'total/shipping')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
-		
+
 		return $this->error ? false : true;
 	}
-}
+}

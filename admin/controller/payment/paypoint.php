@@ -1,7 +1,7 @@
 <?php
 class Admin_Controller_Payment_Paypoint extends Controller
 {
-	
+
 
 	public function index()
 	{
@@ -19,7 +19,7 @@ class Admin_Controller_Payment_Paypoint extends Controller
 			$this->url->redirect($this->url->link('extension/payment'));
 		}
 
- 		if (isset($this->error['warning'])) {
+		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
 		} else {
 			$this->data['error_warning'] = '';
@@ -31,9 +31,9 @@ class Admin_Controller_Payment_Paypoint extends Controller
 			$this->data['error_merchant'] = '';
 		}
 
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('text_payment'), $this->url->link('extension/payment'));
-			$this->breadcrumb->add($this->_('head_title'), $this->url->link('payment/paypoint'));
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('text_payment'), $this->url->link('extension/payment'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('payment/paypoint'));
 
 		$this->data['action'] = $this->url->link('payment/paypoint');
 
@@ -111,4 +111,4 @@ class Admin_Controller_Payment_Paypoint extends Controller
 
 		return $this->error ? false : true;
 	}
-}
+}

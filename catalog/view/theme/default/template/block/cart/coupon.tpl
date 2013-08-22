@@ -21,5 +21,5 @@
 		});
 		$('body').bind('coupon_error', function () {
 		});
-		//--></script>
+//--></script>
 <? } ?>

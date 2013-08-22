@@ -31,8 +31,7 @@
 
 			<? if (!empty($block_voucher)) { ?>
 				<div>
-					<a id='text_block_voucher'
-					   onclick="$('#toggle_block_voucher').slideToggle();"><?= $text_use_voucher; ?></a>
+					<a id='text_block_voucher' onclick="$('#toggle_block_voucher').slideToggle();"><?= $text_use_voucher; ?></a>
 
 					<div id='toggle_block_voucher' class='content'>
 						<?= $block_voucher; ?>
@@ -52,8 +51,7 @@
 
 			<? if (!empty($block_shipping)) { ?>
 				<div>
-					<a id='text_block_shipping'
-					   onclick="$('#toggle_block_shipping').slideToggle();"><?= $text_use_shipping; ?></a>
+					<a id='text_block_shipping' onclick="$('#toggle_block_shipping').slideToggle();"><?= $text_use_shipping; ?></a>
 
 					<div id='toggle_block_shipping' class='content'>
 						<?= $block_shipping; ?>
@@ -99,7 +97,7 @@
 	function handle_ajax_cart_load(action, data) {
 		load_block($('#cart_block_total'), 'block/cart/total');
 	}
-	//--></script>
+//--></script>
 
 
 <?= $footer; ?>

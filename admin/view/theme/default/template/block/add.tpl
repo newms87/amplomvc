@@ -3,7 +3,8 @@
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt="" /> <?= $head_title; ?></h1>
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+
 			<div class="buttons">
 				<a onclick="$('#form').submit();" class="button"><?= $button_create; ?></a>
 				<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
@@ -14,12 +15,12 @@
 				<table class="form">
 					<tr>
 						<td class="required"><?= $entry_name; ?></td>
-						<td><input type="text" name="name" value="<?= $name; ?>" /></td>
+						<td><input type="text" name="name" value="<?= $name; ?>"/></td>
 					</tr>
 					<tr>
 						<td class="required"><?= $entry_route; ?></td>
 						<td>
-							<input type="text" name="route" value="<?= $route; ?>" /><br />
+							<input type="text" name="route" value="<?= $route; ?>"/><br/>
 							<span class="help"><?= $entry_route_help; ?></span>
 						</td>
 					</tr>
@@ -51,13 +52,13 @@
 </div>
 
 <script type="text/javascript">//<!--
-$('[name=has_template]').change(function(){
-	if ($(this).is(':checked')) {
-		$('#template_file_data').slideDown();
-	} else {
-		$('#template_file_data').hide();
-	}
-}).change();
+	$('[name=has_template]').change(function () {
+		if ($(this).is(':checked')) {
+			$('#template_file_data').slideDown();
+		} else {
+			$('#template_file_data').hide();
+		}
+	}).change();
 //--></script>
 
 <?= $this->builder->js('errors', $errors); ?>

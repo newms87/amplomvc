@@ -18,8 +18,7 @@
 			<select name="address_id" onchange="ci_validate_form($(this).closest('form'))"
 			        style="width: 100%; margin-bottom: 15px;" size="5">
 				<? foreach ($data_addresses as $address) { ?>
-					<option
-						value="<?= $address['address_id']; ?>" <?= $address['address_id'] == $shipping_address_id ? 'selected="selected"' : ''; ?>><?= $address['firstname']; ?> <?= $address['lastname']; ?>
+					<option value="<?= $address['address_id']; ?>" <?= $address['address_id'] == $shipping_address_id ? 'selected="selected"' : ''; ?>><?= $address['firstname']; ?> <?= $address['lastname']; ?>
 						, <?= $address['address_1']; ?>, <?= $address['city']; ?>, <?= $address['zone']['name']; ?>
 						, <?= $address['country']['name']; ?></option>
 				<? } ?>
@@ -58,4 +57,4 @@
 			$('#shipping_existing').hide();
 		}
 	}).trigger('change');
-	//--></script>
+//--></script>

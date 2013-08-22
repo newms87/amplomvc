@@ -1,7 +1,7 @@
 <?php
 class Admin_Controller_Module_Recaptcha extends Controller
 {
-	
+
 
 	public function index()
 	{
@@ -19,7 +19,7 @@ class Admin_Controller_Module_Recaptcha extends Controller
 			$this->url->redirect($this->url->link('extension/module'));
 		}
 
- 		if (isset($this->error['warning'])) {
+		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
 		} else {
 			$this->data['error_warning'] = '';
@@ -37,9 +37,9 @@ class Admin_Controller_Module_Recaptcha extends Controller
 			$this->data['error_public_key'] = '';
 		}
 
-			$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-			$this->breadcrumb->add($this->_('text_module'), $this->url->link('extension/module'));
-			$this->breadcrumb->add($this->_('head_title'), $this->url->link('module/recaptcha'));
+		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
+		$this->breadcrumb->add($this->_('text_module'), $this->url->link('extension/module'));
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('module/recaptcha'));
 
 		$this->data['action'] = $this->url->link('module/recaptcha');
 
@@ -81,4 +81,4 @@ class Admin_Controller_Module_Recaptcha extends Controller
 
 		return $this->error ? false : true;
 	}
-}
+}

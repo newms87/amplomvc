@@ -6,7 +6,7 @@
 		$column_set = array();
 
 		foreach ($fields as $key => $f) {
-			$col_set_num = (int)(($f['column'] - 1) / $max_column);
+			$col_set_num                              = (int)(($f['column'] - 1) / $max_column);
 			$column_set[$col_set_num][$f['column']][] = $f;
 		}
 
@@ -35,7 +35,8 @@
 							                                                        'button',
 							                                                        'submit'
 							                                                   ))
-							) { ?>
+							) {
+								?>
 								<? if ($field['required']) {
 									; ?>
 									<span class="required"></span>
@@ -64,8 +65,7 @@
 								case 'text':
 								case 'password':
 									?>
-									<input type="<?= $field['type']; ?>" name="<?= $field['name']; ?>"
-									       value="<?= $field['select']; ?>" <?= $field['html_attrs']; ?> />
+									<input type="<?= $field['type']; ?>" name="<?= $field['name']; ?>" value="<?= $field['select']; ?>" <?= $field['html_attrs']; ?> />
 									<? break;
 
 								case 'select':
@@ -86,8 +86,7 @@
 								case 'submit':
 								case 'image':
 									?>
-									<input type="<?= $field['type']; ?>" name="<?= $field['name']; ?>"
-									       value="<?= $field['display_name']; ?>" <?= $field['html_attrs']; ?> />
+									<input type="<?= $field['type']; ?>" name="<?= $field['name']; ?>" value="<?= $field['display_name']; ?>" <?= $field['html_attrs']; ?> />
 									<? break;
 
 								default:
@@ -100,7 +99,8 @@
 						</td>
 					<? } ?>
 				</tr>
-			<? }
+			<?
+			}
 			unset($field_list);
 			unset($field_list2); ?>
 		<? } ?>

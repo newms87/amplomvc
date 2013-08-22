@@ -31,9 +31,7 @@
 					<div class="option_image_list">
 						<? foreach ($product_option['product_option_values'] as $product_option_value) { ?>
 							<? $id = "product_option_image_$product_option_value[product_option_value_id]"; ?>
-							<input style="display:none" type="radio" id="<?= $id; ?>"
-							       name="selected_option[<?= $product_option['product_option_id']; ?>]"
-							       value="<?= $product_option_value['product_option_value_id']; ?>"/>
+							<input style="display:none" type="radio" id="<?= $id; ?>" name="selected_option[<?= $product_option['product_option_id']; ?>]" value="<?= $product_option_value['product_option_value_id']; ?>"/>
 							<label for="<?= $id; ?>" class="option_image">
 								<div class="option_image_box">
 									<? if ($product_option_value['thumb']) { ?>
@@ -104,4 +102,4 @@
 
 		update_option_restrictions(parseInt($(this).attr('ov')));
 	});
-	//--></script>
+//--></script>

@@ -31,4 +31,4 @@
 	$(document).ready(function () {
 		$('.dncarousel').dncarousel({display: 3, scroll: 1, page_spacing: 5, intervaltime: 3000, interval: true});
 	});
-	//--></script>
+//--></script>
