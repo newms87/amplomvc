@@ -13,8 +13,7 @@
 
 			<div class="buttons"><a onclick="$('form').attr('action', '<?= $approve; ?>'); $('form').submit();"
 			                        class="button"><?= $button_approve; ?></a><a onclick="location = '<?= $insert; ?>'"
-			                                                                     class="button"><?= $button_insert; ?></a><a
-					onclick="$('form').attr('action', '<?= $delete; ?>'); $('form').submit();"
+			                                                                     class="button"><?= $button_insert; ?></a><a onclick="$('form').attr('action', '<?= $delete; ?>'); $('form').submit();"
 					class="button"><?= $button_delete; ?></a></div>
 		</div>
 		<div class="content">
@@ -22,8 +21,7 @@
 				<table class="list">
 					<thead>
 					<tr>
-						<td width="1" style="text-align: center;"><input type="checkbox"
-						                                                 onclick="$('input[name*=\'selected\']').attr('checked', this.checked);"/>
+						<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);"/>
 						</td>
 						<td class="left"><? if ($sort == 'name') { ?>
 								<a href="<?= $sort_name; ?>" class="<?= strtolower($order); ?>"><?= $column_name; ?></a>
@@ -78,8 +76,7 @@
 										<option value="<?= $customer_group['customer_group_id']; ?>"
 										        selected="selected"><?= $customer_group['name']; ?></option>
 									<? } else { ?>
-										<option
-											value="<?= $customer_group['customer_group_id']; ?>"><?= $customer_group['name']; ?></option>
+										<option value="<?= $customer_group['customer_group_id']; ?>"><?= $customer_group['name']; ?></option>
 									<? } ?>
 								<? } ?>
 							</select></td>

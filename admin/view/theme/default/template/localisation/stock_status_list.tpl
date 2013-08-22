@@ -11,16 +11,14 @@
 			<div class="heading">
 				<h1><img src="<?= HTTP_THEME_IMAGE . 'stock-status.png'; ?>" alt=""/> <?= $head_title; ?></h1>
 
-				<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a
-						onclick="$('form').submit();" class="button"><?= $button_delete; ?></a></div>
+				<div class="buttons"><a onclick="location = '<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a onclick="$('form').submit();" class="button"><?= $button_delete; ?></a></div>
 			</div>
 			<div class="content">
 				<form action="<?= $delete; ?>" method="post" enctype="multipart/form-data" id="form">
 					<table class="list">
 						<thead>
 						<tr>
-							<td width="1" style="text-align: center;"><input type="checkbox"
-							                                                 onclick="$('input[name*=\'selected\']').attr('checked', this.checked);"/>
+							<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);"/>
 							</td>
 							<td class="left"><? if ($sort == 'name') { ?>
 									<a href="<?= $sort_name; ?>" class="<?= strtolower($order); ?>"><?= $column_name; ?></a>
@@ -35,11 +33,9 @@
 							<? foreach ($stock_statuses as $stock_status) { ?>
 								<tr>
 									<td style="text-align: center;"><? if ($stock_status['selected']) { ?>
-											<input type="checkbox" name="selected[]"
-											       value="<?= $stock_status['stock_status_id']; ?>" checked="checked"/>
+											<input type="checkbox" name="selected[]" value="<?= $stock_status['stock_status_id']; ?>" checked="checked"/>
 										<? } else { ?>
-											<input type="checkbox" name="selected[]"
-											       value="<?= $stock_status['stock_status_id']; ?>"/>
+											<input type="checkbox" name="selected[]" value="<?= $stock_status['stock_status_id']; ?>"/>
 										<? } ?></td>
 									<td class="left"><?= $stock_status['name']; ?></td>
 									<td class="right"><? foreach ($stock_status['action'] as $action) { ?>

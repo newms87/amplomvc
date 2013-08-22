@@ -11,16 +11,14 @@
 			<div class="heading">
 				<h1><img src="<?= HTTP_THEME_IMAGE . 'measurement.png'; ?>" alt=""/> <?= $head_title; ?></h1>
 
-				<div class="buttons"><a onclick="location='<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a
-						onclick="$('form').submit();" class="button"><?= $button_delete; ?></a></div>
+				<div class="buttons"><a onclick="location='<?= $insert; ?>'" class="button"><?= $button_insert; ?></a><a onclick="$('form').submit();" class="button"><?= $button_delete; ?></a></div>
 			</div>
 			<div class="content">
 				<form action="<?= $delete; ?>" method="post" enctype="multipart/form-data" id="form">
 					<table class="list">
 						<thead>
 						<tr>
-							<td width="1" style="align: center;"><input type="checkbox"
-							                                            onclick="$('input[name*=\'selected\']').attr('checked', this.checked);"/>
+							<td width="1" style="align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);"/>
 							</td>
 							<td class="left"><? if ($sort == 'title') { ?>
 									<a href="<?= $sort_title; ?>" class="<?= strtolower($order); ?>"><?= $column_title; ?></a>
@@ -40,11 +38,9 @@
 							<? foreach ($measurement_classes as $measurement_class) { ?>
 								<tr>
 									<td style="align: center;"><? if ($measurement_class['selected']) { ?>
-											<input type="checkbox" name="selected[]"
-											       value="<?= $measurement_class['measurement_class_id']; ?>" checked="checked"/>
+											<input type="checkbox" name="selected[]" value="<?= $measurement_class['measurement_class_id']; ?>" checked="checked"/>
 										<? } else { ?>
-											<input type="checkbox" name="selected[]"
-											       value="<?= $measurement_class['measurement_class_id']; ?>"/>
+											<input type="checkbox" name="selected[]" value="<?= $measurement_class['measurement_class_id']; ?>"/>
 										<? } ?></td>
 									<td class="left"><?= $measurement_class['title']; ?></td>
 									<td class="left"><?= $measurement_class['unit']; ?></td>

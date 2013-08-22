@@ -90,8 +90,7 @@
 												<option value="<?= $return_reason['return_reason_id']; ?>"
 												        selected="selected"><?= $return_reason['name']; ?></option>
 											<? } else { ?>
-												<option
-													value="<?= $return_reason['return_reason_id']; ?>"><?= $return_reason['name']; ?></option>
+												<option value="<?= $return_reason['return_reason_id']; ?>"><?= $return_reason['name']; ?></option>
 											<? } ?>
 										<? } ?>
 									</select></td>
@@ -121,8 +120,7 @@
 												<option value="<?= $return_action['return_action_id']; ?>"
 												        selected="selected"> <?= $return_action['name']; ?></option>
 											<? } else { ?>
-												<option
-													value="<?= $return_action['return_action_id']; ?>"><?= $return_action['name']; ?></option>
+												<option value="<?= $return_action['return_action_id']; ?>"><?= $return_action['name']; ?></option>
 											<? } ?>
 										<? } ?>
 									</select></td>

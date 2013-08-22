@@ -137,7 +137,9 @@ class Language extends Library
 
 		$this->set_latest_modified_file(filemtime($file));
 
-		$_ = _require($file, false);
+		$_ = array();
+
+		require(_ac_mod_file($file));
 
 		$this->data = $_ + $this->data;
 
@@ -165,7 +167,9 @@ class Language extends Library
 			}
 		}
 
-		$_ = _require($file, false);
+		$_ = array();
+
+		require(_ac_mod_file($file));
 
 		$this->saved_data = $this->data;
 
@@ -194,7 +198,9 @@ class Language extends Library
 			}
 		}
 
-		$_ = _require($file, false);
+		$_ = array();
+
+		require(_ac_mod_file($file));
 
 		return $_;
 	}
@@ -246,7 +252,9 @@ class Language extends Library
 			}
 		}
 
-		$_ = _require($file, false);
+		$_ = array();
+
+		require(_ac_mod_file($file));
 
 		$this->data = $_ + $this->data;
 
@@ -268,7 +276,9 @@ class Language extends Library
 			}
 		}
 
-		$_ = _require($file, false);
+		$_ = array();
+
+		require(_ac_mod_file($file));
 
 		return $_;
 	}
@@ -285,7 +295,9 @@ class Language extends Library
 			}
 		}
 
-		$_ = _require($file, false);
+		$_ = array();
+
+		require(_ac_mod_file($file));
 
 		$this->data = $_ + $this->data;
 

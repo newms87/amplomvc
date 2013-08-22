@@ -3,7 +3,7 @@ class Plugin extends Library
 {
 	private $plugins;
 	private $plugin_registry;
-	private $file_merge;
+	private $installed;
 
 	function __construct($registry)
 	{
@@ -13,12 +13,16 @@ class Plugin extends Library
 
 		$this->language->system('plugin');
 
-		$this->file_merge = new FileMerge($this->registry);
+		$this->installed = $this->db->queryColumn("SELECT * FROM " . DB_PREFIX . "plugin WHERE status = 1");
+
+		if ($this->config->isAdmin()) {
+			$this->validatePluginModFiles();
+		}
 	}
 
-	public function getFile($file)
+	public function isInstalled($name)
 	{
-		return $this->file_merge->getFile($file);
+		return !in_array($name, $this->installed);
 	}
 
 	public function loadPlugin($name)
@@ -32,8 +36,8 @@ class Plugin extends Library
 				return false;
 			}
 
-			_require(DIR_SYSTEM . 'plugins/plugin_setup.php');
-			_require($setup_file);
+			require_once(_ac_mod_file(DIR_SYSTEM . 'plugins/plugin_setup.php'));
+			require_once(_ac_mod_file($setup_file));
 
 			$user_class = preg_replace("/[^A-Z0-9]/i", "", $name) . '_Setup';
 
@@ -79,10 +83,18 @@ class Plugin extends Library
 			return false;
 		}
 
-		$this->file_merge->addFiles($name, $file_mods);
+		$this->mod->addFiles(null, $file_mods);
 
-		if (!$this->file_merge->applyMergeRegistry()) {
-			$this->message->add('warning', $this->_('error_install_merge', $name));
+		if (!$this->mod->apply()) {
+			$this->message->add('warning', $this->mod->fetchErrors());
+			$this->message->add('warning', $this->_('error_install', $name));
+			$this->uninstall($name);
+			return false;
+		}
+
+		if (!$this->mod->write()) {
+			$this->message->add('warning', $this->mod->fetchErrors());
+			$this->message->add('warning', $this->_('error_install', $name));
 			$this->uninstall($name);
 			return false;
 		}
@@ -108,13 +120,15 @@ class Plugin extends Library
 		//Uninstall the plugin from the system
 		$this->System_Model_Plugin->uninstall($name, $data);
 
-		//Reload the merge registry
-		if (!$this->file_merge->syncRegistryWithDb()) {
-			$this->message->add('warning', $this->_('error_uninstall_merge', $name));
-			return false;
-		}
+		$this->mod->removeDirectory(DIR_PLUGIN . $name);
 
-		$this->message->add('notify', $this->_('success_uninstall', $name));
+		if ($this->mod->apply()) {
+			$this->mod->write();
+
+			$this->message->add('notify', $this->_('success_uninstall', $name));
+		} else {
+			$this->message->add('warning', $this->mod->fetchErrors());
+		}
 
 		return true;
 	}
@@ -228,24 +242,6 @@ class Plugin extends Library
 		}
 	}
 
-	public function addFileModifications($name, $file_modifications)
-	{
-		foreach ($file_modifications as $file_mod) {
-			$this->file_merge->addFile($file_mod['for'], $name, $file_mod['mod']);
-		}
-
-		$this->file_merge->applyMergeRegistry();
-	}
-
-	public function removeFileModifications($name, $file_modifications)
-	{
-		foreach ($file_modifications as $file_mod) {
-			$this->file_merge->removeFile($file_mod['for'], $name);
-		}
-
-		$this->file_merge->applyMergeRegistry();
-	}
-
 	public function getFileMods($name)
 	{
 		$dir = DIR_PLUGIN . $name . '/file_mods';
@@ -259,48 +255,43 @@ class Plugin extends Library
 		$file_mods = array();
 
 		foreach ($files as $file) {
-			$rel_file = str_replace('\\', '/', substr(str_replace($dir, '', $file), 1));
+			$file = str_replace('\\', '/', $file); //Fix for Windows
+
+			$rel_file = substr(str_replace($dir, '', $file), 1);
 
 			if (is_file(SITE_DIR . $rel_file)) {
-				$file_mods[$rel_file] = 'file_mods/' . $rel_file;
+				$file_mods[SITE_DIR . $rel_file] = $file;
 				continue;
-			}
-
-			$filename = basename($file);
-
-			//TODO: We probably dont need this anymore???
-			$path = $this->nameToPath(SITE_DIR, $filename);
-
-			if ($path) {
-				$file_mods[str_replace(SITE_DIR, '', $path)] = 'file_mods/' . $filename;
-			} else {
-				$this->message->add("warning", "Invalid File Mod: " . $filename . ". The path could not be resolved to a file.");
-				return false;
 			}
 		}
 
 		return $file_mods;
 	}
 
-	private function nameToPath($dir, $name)
+	public function validatePluginModFiles()
 	{
-		$path = explode("_", $name);
+		if ($mod_files = $this->mod->getModFiles(DIR_PLUGIN)) {
+			$plugins = array();
 
-		$segment = '';
-
-		do {
-			$segment .= array_shift($path);
-
-			if (is_dir($dir . $segment)) {
-				$dir .= $segment . '/';
-				$segment = '';
-			} elseif (is_file($dir . $segment)) {
-				return $dir . $segment;
-			} else {
-				$segment .= "_";
+			foreach ($mod_files as $mod_file) {
+				$plugins[] = preg_replace("/.*?\\/plugin\\/(.*?)\\/.*/", '$1', $mod_file);
 			}
-		} while (count($path) > 0);
 
-		return '';
+			$plugins = array_unique($plugins);
+
+			$valid = true;
+
+			foreach ($plugins as $plugin) {
+				if (!$this->isInstalled($plugin)) {
+					$valid = false;
+					$this->mod->removeDirectory(DIR_PLUGIN . $plugin);
+				}
+			}
+
+			if (!$valid) {
+				$this->mod->apply();
+				$this->mod->write(); //no mod->apply validation because we must get rid erroneous plugin files
+			}
+		}
 	}
 }

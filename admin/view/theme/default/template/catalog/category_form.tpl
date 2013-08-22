@@ -55,8 +55,7 @@
 								<td><?= $entry_alias; ?></td>
 								<td>
 									<input type="text"
-									       onfocus="$(this).next().display_error('<?= $warning_generate_url; ?>', 'gen_url');"
-									       name="alias" value="<?= $alias; ?>"/>
+									       onfocus="$(this).next().display_error('<?= $warning_generate_url; ?>', 'gen_url');" name="alias" value="<?= $alias; ?>"/>
 									<a class='gen_url' onclick="generate_url($(this))"><?= $button_generate_url; ?></a>
 								</td>
 							</tr>

@@ -84,8 +84,7 @@
 										<option value="0" selected="selected"><?= $text_disabled; ?></option>
 									<? } ?>
 								</select></td>
-							<td class="right"><input type="text" name="store_module[<?= $module_row; ?>][sort_order]"
-							                         value="<?= $module['sort_order']; ?>" size="3"/></td>
+							<td class="right"><input type="text" name="store_module[<?= $module_row; ?>][sort_order]" value="<?= $module['sort_order']; ?>" size="3"/></td>
 							<td class="left"><a onclick="$('#module-row<?= $module_row; ?>').remove();"
 							                    class="button"><?= $button_remove; ?></a></td>
 						</tr>

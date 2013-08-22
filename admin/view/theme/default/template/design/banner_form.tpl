@@ -40,23 +40,18 @@
 						<? foreach ($banner_images as $banner_image) { ?>
 							<tr class="imagerow" id="image-row<?= $image_row; ?>">
 								<td class="left"><? foreach ($languages as $language) { ?>
-										<input type="text"
-										       name="banner_image[<?= $image_row; ?>][banner_image_description][<?= $language['language_id']; ?>][title]"
-										       value="<?= isset($banner_image['banner_image_description'][$language['language_id']]) ? $banner_image['banner_image_description'][$language['language_id']]['title'] : ''; ?>"/>
+										<input type="text" name="banner_image[<?= $image_row; ?>][banner_image_description][<?= $language['language_id']; ?>][title]" value="<?= isset($banner_image['banner_image_description'][$language['language_id']]) ? $banner_image['banner_image_description'][$language['language_id']]['title'] : ''; ?>"/>
 										<img src="<?= HTTP_THEME_IMAGE . "flags/$language[image]"; ?>"
 										     title="<?= $language['name']; ?>"/><br/>
 									<? } ?>
 								</td>
 								<td class="left">
-									<input type="text" name="banner_image[<?= $image_row; ?>][link]"
-									       value="<?= $banner_image['link']; ?>" size="50"/>
+									<input type="text" name="banner_image[<?= $image_row; ?>][link]" value="<?= $banner_image['link']; ?>" size="50"/>
 								</td>
 								<td class="left">
 									<?= $this->builder->image_input("banner_image[$image_row][image]", $banner_image['image']); ?>
 								</td>
-								<td class="right"><input class="sortOrder" type="text"
-								                         name="banner_image[<?= $image_row; ?>][sort_order]"
-								                         value="<?= $banner_image['sort_order']; ?>" size="2"/></td>
+								<td class="right"><input class="sortOrder" type="text" name="banner_image[<?= $image_row; ?>][sort_order]" value="<?= $banner_image['sort_order']; ?>" size="2"/></td>
 								<td class="left"><a onclick="$('#image-row<?= $image_row; ?>').remove();"
 								                    class="button"><?= $button_remove; ?></a></td>
 							</tr>

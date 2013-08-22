@@ -29,8 +29,7 @@
 								<input id='mail_subject' type='text' name='subject' value='<?= $subject; ?>' size='100'/>
 								<label for='mail_message'><span class='required'>*</span><?= $entry_mail_message; ?></label>
 								<textarea id='mail_message' rows='15' cols='120' name='message'><?= $message; ?></textarea>
-								<label for="allow_html"><input type="checkbox" <?= $allow_html ? 'checked' : ''; ?>
-								                               name='allow_html' id='allow_html'/><?= $entry_allow_html; ?>
+								<label for="allow_html"><input type="checkbox" <?= $allow_html ? 'checked' : ''; ?> name='allow_html' id='allow_html'/><?= $entry_allow_html; ?>
 								</label>
 								<label for='mail_attachment'><?= $entry_mail_attachment; ?></label>
 								<input id='mail_attachment' type='file' multiple name='attachment[]' value='<?= $attachment; ?>'

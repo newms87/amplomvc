@@ -33,8 +33,7 @@
 										<option value="<?= $return_status['return_status_id']; ?>"
 										        selected="selected"><?= $return_status['name']; ?></option>
 									<? } else { ?>
-										<option
-											value="<?= $return_status['return_status_id']; ?>"><?= $return_status['name']; ?></option>
+										<option value="<?= $return_status['return_status_id']; ?>"><?= $return_status['name']; ?></option>
 									<? } ?>
 								<? } ?>
 							</select></td>

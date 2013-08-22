@@ -143,7 +143,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 
 		//Build The Table
 		$tt_data = array(
-			'row_id' => 'attribute_id',
+			'row_id' => 'attribute_group_id',
 		);
 
 		$this->table->init();

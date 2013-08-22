@@ -58,8 +58,7 @@
 				<td><select name="payment_address">
 						<option value="0" selected="selected"><?= $text_none; ?></option>
 						<? foreach ($addresses as $address) { ?>
-							<option
-								value="<?= $address['address_id']; ?>"><?= $address['firstname'] . ' ' . $address['lastname'] . ', ' . $address['address_1'] . ', ' . $address['city'] . ', ' . $address['country']; ?></option>
+							<option value="<?= $address['address_id']; ?>"><?= $address['firstname'] . ' ' . $address['lastname'] . ', ' . $address['address_1'] . ', ' . $address['city'] . ', ' . $address['country']; ?></option>
 						<? } ?>
 					</select></td>
 			</tr>
@@ -111,8 +110,7 @@
 				<td><select name="shipping_address">
 						<option value="0" selected="selected"><?= $text_none; ?></option>
 						<? foreach ($addresses as $address) { ?>
-							<option
-								value="<?= $address['address_id']; ?>"><?= $address['firstname'] . ' ' . $address['lastname'] . ', ' . $address['address_1'] . ', ' . $address['city'] . ', ' . $address['country']; ?></option>
+							<option value="<?= $address['address_id']; ?>"><?= $address['firstname'] . ' ' . $address['lastname'] . ', ' . $address['address_1'] . ', ' . $address['city'] . ', ' . $address['country']; ?></option>
 						<? } ?>
 					</select></td>
 			</tr>
@@ -178,73 +176,41 @@
 					<tr id="product-row<?= $product_row; ?>">
 						<td class="center" style="width: 3px;"><img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"
 						                                            title="<?= $button_remove; ?>"
-						                                            alt="<?= $button_remove; ?>" style="cursor: pointer;"
-						                                            onclick="$('#product-row<?= $product_row; ?>').remove(); $('#button-update').trigger('click');"/>
+						                                            alt="<?= $button_remove; ?>" style="cursor: pointer;" onclick="$('#product-row<?= $product_row; ?>').remove(); $('#button-update').trigger('click');"/>
 						</td>
 						<td class="left"><?= $order_product['name']; ?><br/>
-							<input type="hidden" name="order_product[<?= $product_row; ?>][order_product_id]"
-							       value="<?= $order_product['order_product_id']; ?>"/>
-							<input type="hidden" name="order_product[<?= $product_row; ?>][product_id]"
-							       value="<?= $order_product['product_id']; ?>"/>
-							<input type="hidden" name="order_product[<?= $product_row; ?>][name]"
-							       value="<?= $order_product['name']; ?>"/>
+							<input type="hidden" name="order_product[<?= $product_row; ?>][order_product_id]" value="<?= $order_product['order_product_id']; ?>"/>
+							<input type="hidden" name="order_product[<?= $product_row; ?>][product_id]" value="<?= $order_product['product_id']; ?>"/>
+							<input type="hidden" name="order_product[<?= $product_row; ?>][name]" value="<?= $order_product['name']; ?>"/>
 							<? foreach ($order_product['option'] as $option) { ?>
 								-
 								<small><?= $option['name']; ?>: <?= $option['value']; ?></small><br/>
-								<input type="hidden"
-								       name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][order_option_id]"
-								       value="<?= $option['order_option_id']; ?>"/>
-								<input type="hidden"
-								       name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][product_option_id]"
-								       value="<?= $option['product_option_id']; ?>"/>
-								<input type="hidden"
-								       name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][product_option_value_id]"
-								       value="<?= $option['product_option_value_id']; ?>"/>
-								<input type="hidden"
-								       name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][name]"
-								       value="<?= $option['name']; ?>"/>
-								<input type="hidden"
-								       name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][value]"
-								       value="<?= $option['value']; ?>"/>
-								<input type="hidden"
-								       name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][type]"
-								       value="<?= $option['type']; ?>"/>
+								<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][order_option_id]" value="<?= $option['order_option_id']; ?>"/>
+								<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][product_option_id]" value="<?= $option['product_option_id']; ?>"/>
+								<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][product_option_value_id]" value="<?= $option['product_option_value_id']; ?>"/>
+								<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][name]" value="<?= $option['name']; ?>"/>
+								<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][value]" value="<?= $option['value']; ?>"/>
+								<input type="hidden" name="order_product[<?= $product_row; ?>][order_option][<?= $option_row; ?>][type]" value="<?= $option['type']; ?>"/>
 								<? $option_row++; ?>
 							<? } ?>
 							<? foreach ($order_product['download'] as $download) { ?>
-								<input type="hidden"
-								       name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][order_download_id]"
-								       value="<?= $download['order_download_id']; ?>"/>
-								<input type="hidden"
-								       name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][name]"
-								       value="<?= $download['name']; ?>"/>
-								<input type="hidden"
-								       name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][filename]"
-								       value="<?= $download['filename']; ?>"/>
-								<input type="hidden"
-								       name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][mask]"
-								       value="<?= $download['mask']; ?>"/>
-								<input type="hidden"
-								       name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][remaining]"
-								       value="<?= $download['remaining']; ?>"/>
+								<input type="hidden" name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][order_download_id]" value="<?= $download['order_download_id']; ?>"/>
+								<input type="hidden" name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][name]" value="<?= $download['name']; ?>"/>
+								<input type="hidden" name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][filename]" value="<?= $download['filename']; ?>"/>
+								<input type="hidden" name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][mask]" value="<?= $download['mask']; ?>"/>
+								<input type="hidden" name="order_product[<?= $product_row; ?>][order_download][<?= $download_row; ?>][remaining]" value="<?= $download['remaining']; ?>"/>
 								<? $download_row++; ?>
 							<? } ?></td>
 						<td class="left"><?= $order_product['model']; ?>
-							<input type="hidden" name="order_product[<?= $product_row; ?>][model]"
-							       value="<?= $order_product['model']; ?>"/></td>
+							<input type="hidden" name="order_product[<?= $product_row; ?>][model]" value="<?= $order_product['model']; ?>"/></td>
 						<td class="right"><?= $order_product['quantity']; ?>
-							<input type="hidden" name="order_product[<?= $product_row; ?>][quantity]"
-							       value="<?= $order_product['quantity']; ?>"/></td>
+							<input type="hidden" name="order_product[<?= $product_row; ?>][quantity]" value="<?= $order_product['quantity']; ?>"/></td>
 						<td class="right"><?= $order_product['price']; ?>
-							<input type="hidden" name="order_product[<?= $product_row; ?>][price]"
-							       value="<?= $order_product['price']; ?>"/></td>
+							<input type="hidden" name="order_product[<?= $product_row; ?>][price]" value="<?= $order_product['price']; ?>"/></td>
 						<td class="right"><?= $order_product['total']; ?>
-							<input type="hidden" name="order_product[<?= $product_row; ?>][total]"
-							       value="<?= $order_product['total']; ?>"/>
-							<input type="hidden" name="order_product[<?= $product_row; ?>][tax]"
-							       value="<?= $order_product['tax']; ?>"/>
-							<input type="hidden" name="order_product[<?= $product_row; ?>][reward]"
-							       value="<?= $order_product['reward']; ?>"/></td>
+							<input type="hidden" name="order_product[<?= $product_row; ?>][total]" value="<?= $order_product['total']; ?>"/>
+							<input type="hidden" name="order_product[<?= $product_row; ?>][tax]" value="<?= $order_product['tax']; ?>"/>
+							<input type="hidden" name="order_product[<?= $product_row; ?>][reward]" value="<?= $order_product['reward']; ?>"/></td>
 					</tr>
 					<? $product_row++; ?>
 				<? } ?>
@@ -300,32 +266,20 @@
 					<tr id="voucher-row<?= $voucher_row; ?>">
 						<td class="center" style="width: 3px;"><img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"
 						                                            title="<?= $button_remove; ?>"
-						                                            alt="<?= $button_remove; ?>" style="cursor: pointer;"
-						                                            onclick="$('#voucher-row<?= $voucher_row; ?>').remove(); $('#button-update').trigger('click');"/>
+						                                            alt="<?= $button_remove; ?>" style="cursor: pointer;" onclick="$('#voucher-row<?= $voucher_row; ?>').remove(); $('#button-update').trigger('click');"/>
 						</td>
 						<td class="left"><?= $order_voucher['description']; ?>
-							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][order_voucher_id]"
-							       value="<?= $order_voucher['order_voucher_id']; ?>"/>
-							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][voucher_id]"
-							       value="<?= $order_voucher['voucher_id']; ?>"/>
-							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][description]"
-							       value="<?= $order_voucher['description']; ?>"/>
-							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][code]"
-							       value="<?= $order_voucher['code']; ?>"/>
-							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][from_name]"
-							       value="<?= $order_voucher['from_name']; ?>"/>
-							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][from_email]"
-							       value="<?= $order_voucher['from_email']; ?>"/>
-							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][to_name]"
-							       value="<?= $order_voucher['to_name']; ?>"/>
-							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][to_email]"
-							       value="<?= $order_voucher['to_email']; ?>"/>
-							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][voucher_theme_id]"
-							       value="<?= $order_voucher['voucher_theme_id']; ?>"/>
-							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][message]"
-							       value="<?= $order_voucher['message']; ?>"/>
-							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][amount]"
-							       value="<?= $order_voucher['amount']; ?>"/></td>
+							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][order_voucher_id]" value="<?= $order_voucher['order_voucher_id']; ?>"/>
+							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][voucher_id]" value="<?= $order_voucher['voucher_id']; ?>"/>
+							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][description]" value="<?= $order_voucher['description']; ?>"/>
+							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][code]" value="<?= $order_voucher['code']; ?>"/>
+							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][from_name]" value="<?= $order_voucher['from_name']; ?>"/>
+							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][from_email]" value="<?= $order_voucher['from_email']; ?>"/>
+							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][to_name]" value="<?= $order_voucher['to_name']; ?>"/>
+							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][to_email]" value="<?= $order_voucher['to_email']; ?>"/>
+							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][voucher_theme_id]" value="<?= $order_voucher['voucher_theme_id']; ?>"/>
+							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][message]" value="<?= $order_voucher['message']; ?>"/>
+							<input type="hidden" name="order_voucher[<?= $voucher_row; ?>][amount]" value="<?= $order_voucher['amount']; ?>"/></td>
 						<td class="left"></td>
 						<td class="right">1</td>
 						<td class="right"><?= $order_voucher['amount']; ?></td>
@@ -367,8 +321,7 @@
 				<td class="left"><span class="required"></span> <?= $entry_theme; ?></td>
 				<td class="left"><select name="voucher_theme_id">
 						<? foreach ($voucher_themes as $voucher_theme) { ?>
-							<option
-								value="<?= $voucher_theme['voucher_theme_id']; ?>"><?= addslashes($voucher_theme['name']); ?></option>
+							<option value="<?= $voucher_theme['voucher_theme_id']; ?>"><?= addslashes($voucher_theme['name']); ?></option>
 						<? } ?>
 					</select></td>
 			</tr>
@@ -428,18 +381,12 @@
 				<? foreach ($order_totals as $order_total) { ?>
 					<tr id="total-row<?= $total_row; ?>">
 						<td class="right" colspan="4"><?= $order_total['title']; ?>:
-							<input type="hidden" name="order_total[<?= $total_row; ?>][order_total_id]"
-							       value="<?= $order_total['order_total_id']; ?>"/>
-							<input type="hidden" name="order_total[<?= $total_row; ?>][code]"
-							       value="<?= $order_total['code']; ?>"/>
-							<input type="hidden" name="order_total[<?= $total_row; ?>][title]"
-							       value="<?= $order_total['title']; ?>"/>
-							<input type="hidden" name="order_total[<?= $total_row; ?>][text]"
-							       value="<?= $order_total['text']; ?>"/>
-							<input type="hidden" name="order_total[<?= $total_row; ?>][value]"
-							       value="<?= $order_total['value']; ?>"/>
-							<input type="hidden" name="order_total[<?= $total_row; ?>][sort_order]"
-							       value="<?= $order_total['sort_order']; ?>"/></td>
+							<input type="hidden" name="order_total[<?= $total_row; ?>][order_total_id]" value="<?= $order_total['order_total_id']; ?>"/>
+							<input type="hidden" name="order_total[<?= $total_row; ?>][code]" value="<?= $order_total['code']; ?>"/>
+							<input type="hidden" name="order_total[<?= $total_row; ?>][title]" value="<?= $order_total['title']; ?>"/>
+							<input type="hidden" name="order_total[<?= $total_row; ?>][text]" value="<?= $order_total['text']; ?>"/>
+							<input type="hidden" name="order_total[<?= $total_row; ?>][value]" value="<?= $order_total['value']; ?>"/>
+							<input type="hidden" name="order_total[<?= $total_row; ?>][sort_order]" value="<?= $order_total['sort_order']; ?>"/></td>
 						<td class="right"><?= $order_total['value']; ?></td>
 					</tr>
 					<? $total_row++; ?>

@@ -71,8 +71,7 @@
 											<option value="store"><?= $text_store; ?></option>
 										<? } ?>
 									</select></td>
-								<td class="left"><input type="text" name="tax_rule[<?= $tax_rule_row; ?>][priority]"
-								                        value="<?= $tax_rule['priority']; ?>" size="1"/></td>
+								<td class="left"><input type="text" name="tax_rule[<?= $tax_rule_row; ?>][priority]" value="<?= $tax_rule['priority']; ?>" size="1"/></td>
 								<td class="left"><a onclick="$('#tax-rule-row<?= $tax_rule_row; ?>').remove();"
 								                    class="button"><?= $button_remove; ?></a></td>
 							</tr>

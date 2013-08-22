@@ -59,8 +59,7 @@
 						<td class="quantity">
 							<input type="text" name="quantity[<?= $product['key']; ?>]" value="<?= $product['quantity']; ?>"
 							       size="1"/>
-							<input class="block_cart_update" onclick="javascript: void(0)" type="image" name='action'
-							       value='update' src="<?= HTTP_THEME_IMAGE . 'update.png'; ?>" alt="<?= $button_update; ?>"
+							<input class="block_cart_update" onclick="javascript: void(0)" type="image" name='action' value='update' src="<?= HTTP_THEME_IMAGE . 'update.png'; ?>" alt="<?= $button_update; ?>"
 							       title="<?= $button_update; ?>"/>
 							<label><?= $text_update_cart; ?></label>
 							<a class="block_cart_remove" onclick="return false;" href="<?= $product['remove']; ?>">

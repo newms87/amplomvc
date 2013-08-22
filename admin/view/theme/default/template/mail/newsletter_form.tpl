@@ -52,15 +52,12 @@
 									<?= $this->builder->image_input("newsletter[featured][product][image]", !empty($newsletter) ? $newsletter['featured']['product']['image'] : ''); ?>
 								</div>
 								<div class='image_heading'>
-									<input type="text" name="newsletter[featured][product][name]"
-									       value="<?= !empty($newsletter) ? $newsletter['featured']['product']['name'] : ''; ?>"/>
+									<input type="text" name="newsletter[featured][product][name]" value="<?= !empty($newsletter) ? $newsletter['featured']['product']['name'] : ''; ?>"/>
 								</div>
 								<div>
-									<input type="text" size="3" name="newsletter[featured][product][width]"
-									       value="<?= !empty($newsletter) ? $newsletter['featured']['product']['width'] : ''; ?>"/>
+									<input type="text" size="3" name="newsletter[featured][product][width]" value="<?= !empty($newsletter) ? $newsletter['featured']['product']['width'] : ''; ?>"/>
 									x
-									<input type="text" size="3" name="newsletter[featured][product][height]"
-									       value="<?= !empty($newsletter) ? $newsletter['featured']['product']['height'] : ''; ?>"/>
+									<input type="text" size="3" name="newsletter[featured][product][height]" value="<?= !empty($newsletter) ? $newsletter['featured']['product']['height'] : ''; ?>"/>
 								</div>
 								<div style="margin-top:10px"><?= $entry_featured_product_image; ?></div>
 							</div>
@@ -69,23 +66,19 @@
 									<?= $this->builder->image_input("newsletter[featured][designer][image]", !empty($newsletter) ? $newsletter['featured']['designer']['image'] : ''); ?>
 								</div>
 								<div class='image_heading'>
-									<input type="text" name="newsletter[featured][designer][name]"
-									       value="<?= !empty($newsletter) ? $newsletter['featured']['designer']['name'] : ''; ?>"/>
+									<input type="text" name="newsletter[featured][designer][name]" value="<?= !empty($newsletter) ? $newsletter['featured']['designer']['name'] : ''; ?>"/>
 								</div>
 								<div>
-									<input type="text" size="3" name="newsletter[featured][designer][width]"
-									       value="<?= !empty($newsletter) ? $newsletter['featured']['designer']['width'] : ''; ?>"/>
+									<input type="text" size="3" name="newsletter[featured][designer][width]" value="<?= !empty($newsletter) ? $newsletter['featured']['designer']['width'] : ''; ?>"/>
 									x
-									<input type="text" size="3" name="newsletter[featured][designer][height]"
-									       value="<?= !empty($newsletter) ? $newsletter['featured']['designer']['height'] : ''; ?>"/>
+									<input type="text" size="3" name="newsletter[featured][designer][height]" value="<?= !empty($newsletter) ? $newsletter['featured']['designer']['height'] : ''; ?>"/>
 								</div>
 								<div style="margin-top:10px"><?= $entry_featured_designer_image; ?></div>
 							</div>
 							<div class='featured_info'>
 								<div>
 									<label for='designer_title'><?= $entry_designer_title; ?></label>
-									<input type="text" name="newsletter[featured][designer][title]"
-									       value="<?= !empty($newsletter) ? $newsletter['featured']['designer']['title'] : ''; ?>"/>
+									<input type="text" name="newsletter[featured][designer][title]" value="<?= !empty($newsletter) ? $newsletter['featured']['designer']['title'] : ''; ?>"/>
 								</div>
 								<div>
 									<label for='designer_description'><?= $entry_designer_description; ?></label>
@@ -94,8 +87,7 @@
 								</div>
 								<div>
 									<label for="designer_article"><?= $entry_designer_article; ?></label>
-									<input type="text" name="newsletter[featured][designer][article]"
-									       value="<?= !empty($newsletter) ? $newsletter['featured']['designer']['article'] : ''; ?>"/>
+									<input type="text" name="newsletter[featured][designer][article]" value="<?= !empty($newsletter) ? $newsletter['featured']['designer']['article'] : ''; ?>"/>
 								</div>
 							</div>
 						</div>
@@ -113,12 +105,8 @@
 								<? foreach ($newsletter['products'] as $product) { ?>
 									<li>
 										<div class='editable_label'>
-											<input type="hidden" class='ac_item_id'
-											       name="newsletter[products][<?= $product['product_id']; ?>][product_id]"
-											       value="<?= $product['product_id']; ?>"/>
-											<input type="text" size="60"
-											       name="newsletter[products][<?= $product['product_id']; ?>][name]"
-											       value="<?= $product['name']; ?>"/>
+											<input type="hidden" class='ac_item_id' name="newsletter[products][<?= $product['product_id']; ?>][product_id]" value="<?= $product['product_id']; ?>"/>
+											<input type="text" size="60" name="newsletter[products][<?= $product['product_id']; ?>][name]" value="<?= $product['name']; ?>"/>
 										</div>
 										<img onclick="$(this).parent().remove()" src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"/>
 									</li>
@@ -138,13 +126,10 @@
 							<? if (!empty($newsletter['designers'])) { ?>
 								<? foreach ($newsletter['designers'] as $designer) { ?>
 									<li>
-										<input type="hidden" class='ac_item_id'
-										       name="newsletter[designers][<?= $designer['designer_id']; ?>][designer_id]"
-										       value="<?= $designer['designer_id']; ?>"/>
+										<input type="hidden" class='ac_item_id' name="newsletter[designers][<?= $designer['designer_id']; ?>][designer_id]" value="<?= $designer['designer_id']; ?>"/>
 
 										<div class='editable_label'>
-											<input type="text" name="newsletter[designers][<?= $designer['designer_id']; ?>][name]"
-											       value="<?= $designer['name']; ?>"/>
+											<input type="text" name="newsletter[designers][<?= $designer['designer_id']; ?>][name]" value="<?= $designer['name']; ?>"/>
 										</div>
 										<img onclick="$(this).parent().remove()" src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"/>
 									</li>
@@ -160,8 +145,7 @@
 							<div><?= $entry_article_list_image; ?></div>
 							<?= $this->builder->image_input("newsletter[articles_image]", !empty($newsletter['articles_image']) ? $newsletter['articles_image'] : ''); ?>
 							<span><?= $entry_article_list_url; ?></span>
-							<input type="text" name="newsletter[articles_url]"
-							       value="<?= !empty($newsletter['articles_url']) ? $newsletter['articles_url'] : ''; ?>"
+							<input type="text" name="newsletter[articles_url]" value="<?= !empty($newsletter['articles_url']) ? $newsletter['articles_url'] : ''; ?>"
 							       size="50"/>
 						</div>
 						<div style='margin-top:10px;'><?= $entry_article_list_articles; ?></div>
@@ -181,10 +165,8 @@
 									<? foreach ($newsletter['articles'] as $article) { ?>
 										<li>
 											<div class='editable_label'>
-												<input type="text" name="newsletter[articles][<?= $article_row ?>][title]"
-												       value="<?= $article['title']; ?>" size="30"/>
-												<input type="text" name="newsletter[articles][<?= $article_row; ?>][href]"
-												       value="<?= $article['href']; ?>" size="50"/>
+												<input type="text" name="newsletter[articles][<?= $article_row ?>][title]" value="<?= $article['title']; ?>" size="30"/>
+												<input type="text" name="newsletter[articles][<?= $article_row; ?>][href]" value="<?= $article['href']; ?>" size="50"/>
 											</div>
 											<img onclick="$(this).parent().remove()"
 											     src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"/>
@@ -220,15 +202,9 @@
 										<li>
 											<div class='editable_label'>
 												<?= $this->builder->image_input("newsletter[featured][articles][$featured_article_row][image]", $article['image']); ?>
-												<input type="text"
-												       name="newsletter[featured][articles][<?= $featured_article_row ?>][title]"
-												       value="<?= $article['title']; ?>" size="30"/>
-												<input type="text"
-												       name="newsletter[featured][articles][<?= $featured_article_row ?>][teaser]"
-												       value="<?= $article['teaser']; ?>" size="30"/>
-												<input type="text"
-												       name="newsletter[featured][articles][<?= $featured_article_row; ?>][href]"
-												       value="<?= $article['href']; ?>" size="80"/>
+												<input type="text" name="newsletter[featured][articles][<?= $featured_article_row ?>][title]" value="<?= $article['title']; ?>" size="30"/>
+												<input type="text" name="newsletter[featured][articles][<?= $featured_article_row ?>][teaser]" value="<?= $article['teaser']; ?>" size="30"/>
+												<input type="text" name="newsletter[featured][articles][<?= $featured_article_row; ?>][href]" value="<?= $article['href']; ?>" size="80"/>
 											</div>
 											<img onclick="$(this).parent().remove()"
 											     src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"/>

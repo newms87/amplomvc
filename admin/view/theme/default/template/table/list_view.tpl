@@ -69,10 +69,8 @@
 						?>
 						<div class="zoom_hover int">
 							<div class="input">
-								<input type="text" class="int_low" name="filter[<?= $slug; ?>][low]"
-								       value="<?= $column['filter_value']['low']; ?>"/>
-								<input type="text" class="int_high" name="filter[<?= $slug; ?>][high]"
-								       value="<?= $column['filter_value']['high']; ?>"/>
+								<input type="text" class="int_low" name="filter[<?= $slug; ?>][low]" value="<?= $column['filter_value']['low']; ?>"/>
+								<input type="text" class="int_high" name="filter[<?= $slug; ?>][high]" value="<?= $column['filter_value']['high']; ?>"/>
 								<span class="clear">clear</span>
 							</div>
 							<div class="value">
@@ -107,10 +105,8 @@
 
 						<div class="zoom_hover daterange">
 							<div class="input">
-								<input class="date_start <?= $column['type'] . 'picker'; ?>" type="text"
-								       name="filter[<?= $slug; ?>][start]" value="<?= $column['filter_value']['start']; ?>"/>
-								<input class="date_end <?= $column['type'] . 'picker'; ?>" type="text"
-								       name="filter[<?= $slug ?>][end]" value="<?= $column['filter_value']['end']; ?>"/>
+								<input class="date_start <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $slug; ?>][start]" value="<?= $column['filter_value']['start']; ?>"/>
+								<input class="date_end <?= $column['type'] . 'picker'; ?>" type="text" name="filter[<?= $slug ?>][end]" value="<?= $column['filter_value']['end']; ?>"/>
 								<span class="clear">clear</span>
 							</div>
 							<div class="value">
@@ -144,7 +140,8 @@
 		<tr class="filter_list_item">
 			<? if (!empty($row_id)) { ?>
 			<td class="center">
-				<input type="checkbox" name="selected[]" onclick="$(this).data('clicked',true)" value="<?= $row[$row_id]; ?>" <?= (isset($row['selected']) && $row['selected']) ? "checked='checked'" : ""; ?> />
+				<input id="rowid<?= $row[$row_id]; ?>" type="checkbox" name="selected[]" onclick="$(this).data('clicked',true)" value="<?= $row[$row_id]; ?>" <?= !empty($row['selected']) ? "checked='checked'" : ""; ?> />
+				<label for="rowid<?= $row[$row_id]; ?>" class="rowid"><?= $text_id; ?><?= $row[$row_id]; ?></label>
 			</td>
 			<? } ?>
 

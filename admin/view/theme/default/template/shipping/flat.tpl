@@ -52,23 +52,19 @@
 											<tr>
 												<td><?= $entry_method_title; ?></td>
 												<td>
-													<input type="hidden" name="flat_rates[<?= $row; ?>][method]"
-													       value="<?= $rate['method']; ?>"/>
-													<input type="text" name="flat_rates[<?= $row; ?>][title]"
-													       value="<?= $rate['title']; ?>"/>
+													<input type="hidden" name="flat_rates[<?= $row; ?>][method]" value="<?= $rate['method']; ?>"/>
+													<input type="text" name="flat_rates[<?= $row; ?>][title]" value="<?= $rate['title']; ?>"/>
 												</td>
 											</tr>
 											<tr>
 												<td><?= $entry_cost; ?></td>
-												<td><input type="text" name="flat_rates[<?= $row; ?>][cost]"
-												           value="<?= $rate['cost']; ?>"/></td>
+												<td><input type="text" name="flat_rates[<?= $row; ?>][cost]" value="<?= $rate['cost']; ?>"/></td>
 											</tr>
 											<tr>
 												<td><?= $entry_rule; ?></td>
 												<td>
 													<?= $this->builder->build('select', $data_rule_types, "flat_rates[$row][rule][type]", $rate['rule']['type']); ?>
-													<input type="text" name="flat_rates[<?= $row; ?>][rule][value]"
-													       value="<?= $rate['rule']['value']; ?>"/>
+													<input type="text" name="flat_rates[<?= $row; ?>][rule][value]" value="<?= $rate['rule']['value']; ?>"/>
 												</td>
 											</tr>
 											<tr>
@@ -86,8 +82,7 @@
 												</td>
 											</tr>
 											<tr>
-												<td colspan="2"><a class="delete"
-												                   onclick="$(this).closest('.rate').remove();"><?= $button_delete; ?></a>
+												<td colspan="2"><a class="delete" onclick="$(this).closest('.rate').remove();"><?= $button_delete; ?></a>
 												</td>
 											</tr>
 										</table>

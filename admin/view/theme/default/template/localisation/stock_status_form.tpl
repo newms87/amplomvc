@@ -17,8 +17,7 @@
 						<tr>
 							<td class="required"> <?= $entry_name; ?></td>
 							<td><? foreach ($languages as $language) { ?>
-									<input type="text" name="stock_status[<?= $language['language_id']; ?>][name]"
-									       value="<?= isset($stock_status[$language['language_id']]) ? $stock_status[$language['language_id']]['name'] : ''; ?>"/>
+									<input type="text" name="stock_status[<?= $language['language_id']; ?>][name]" value="<?= isset($stock_status[$language['language_id']]) ? $stock_status[$language['language_id']]['name'] : ''; ?>"/>
 									<img src="<?= HTTP_THEME_IMAGE . 'flags/<?= $language['image']; ?>'; ?>"
 									     title="<?= $language['name']; ?>"/><br/>
 									<? if (isset($error_name[$language['language_id']])) { ?>

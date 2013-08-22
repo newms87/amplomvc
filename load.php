@@ -51,20 +51,20 @@ $error_handler = function($errno, $errstr, $errfile, $errline) use($error_log, $
 			$error = 'Unknown';
 			break;
 	}
-	
+
 	global $error_callbacks;
-	
+
 	if (!empty($error_callbacks)) {
 		foreach ($error_callbacks as $cb) {
 			$cb($error, $errno, $errstr, $errfile, $errline);
 		}
 	}
-	
+
 	if ($error) {
 		if ($config->get('config_error_display')) {
 			echo '<b>' . $error . '</b>: ' . $errstr . ' in <b>' . $errfile . '</b> on line <b>' . $errline . '</b><br /><br />';
 		}
-		
+
 		if ($config->get('config_error_log')) {
 			$error_log->write('PHP ' . $error . ':  ' . $errstr . ' in ' . $errfile . ' on line ' . $errline);
 		}
@@ -83,6 +83,9 @@ _is_writable(DIR_LOGS, $config->get('config_default_dir_mode'));
 
 // Session
 $registry->set('session', new Session($registry));
+
+//Mod Files
+$registry->set('mod', new Mod($registry));
 
 // Url
 $url = new Url($registry);
@@ -150,7 +153,7 @@ if ($config->get('config_performance_log')) {
 		'count_included_files' => count(get_included_files()),
 		'execution_time' => microtime(true) - $__start,
 	);
-	
+
 	foreach ($stats as $key => $s) {
 		echo "$key = $s<br>";
 	}

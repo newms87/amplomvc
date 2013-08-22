@@ -449,19 +449,19 @@ class Admin_Controller_Catalog_Product extends Controller
 			$product_info = $this->Model_Catalog_Product->getProduct($product_id);
 
 			$product_info['date_available']     = $this->date->format($product_info['date_available'], 'Y-m-d');
-			$product_info['product_tags']       = $this->Model_Catalog_Product->getProductTags($product_id);
-			$product_info['product_store']      = $this->Model_Catalog_Product->getProductStores($product_id);
+			$product_info['product_stores']     = $this->Model_Catalog_Product->getProductStores($product_id);
 			$product_info['product_attributes'] = $this->Model_Catalog_Product->getProductAttributes($product_id);
 			$product_info['product_options']    = $this->Model_Catalog_Product->getProductOptions($product_id);
 			$product_info['product_discounts']  = $this->Model_Catalog_Product->getProductDiscounts($product_id);
 			$product_info['product_specials']   = $this->Model_Catalog_Product->getProductSpecials($product_id);
 			$product_info['product_images']     = $this->Model_Catalog_Product->getProductImages($product_id);
-			$product_info['product_category']   = $this->Model_Catalog_Product->getProductCategories($product_id);
-			$product_info['product_download']   = $this->Model_Catalog_Product->getProductDownloads($product_id);
-			$product_info['product_reward']     = $this->Model_Catalog_Product->getProductRewards($product_id);
-			$product_info['product_layout']     = $this->Model_Catalog_Product->getProductLayouts($product_id);
-			$product_info['product_template']   = $this->Model_Catalog_Product->getProductTemplates($product_id);
+			$product_info['product_categories'] = $this->Model_Catalog_Product->getProductCategories($product_id);
+			$product_info['product_downloads']  = $this->Model_Catalog_Product->getProductDownloads($product_id);
+			$product_info['product_rewards']    = $this->Model_Catalog_Product->getProductRewards($product_id);
+			$product_info['product_layouts']    = $this->Model_Catalog_Product->getProductLayouts($product_id);
+			$product_info['product_templates']  = $this->Model_Catalog_Product->getProductTemplates($product_id);
 			$product_info['product_related']    = $this->Model_Catalog_Product->getProductRelated($product_id);
+			$product_info['product_tags']       = $this->Model_Catalog_Product->getProductTags($product_id);
 		}
 
 		//Apply Product Class
@@ -476,7 +476,6 @@ class Admin_Controller_Catalog_Product extends Controller
 			'upc'                => '',
 			'location'           => '',
 			'alias'              => '',
-			'product_store'      => array($this->config->get('config_default_store_id')),
 			'name'               => '',
 			'description'        => '',
 			'teaser'             => '',
@@ -506,19 +505,20 @@ class Admin_Controller_Catalog_Product extends Controller
 			'width'              => '',
 			'height'             => '',
 			'length_class_id'    => $this->config->get('config_length_class_id'),
+			'product_stores'     => array($this->config->get('config_default_store_id')),
 			'product_options'    => array(),
 			'product_discounts'  => array(),
 			'product_specials'   => array(),
 			'product_attributes' => array(),
 			'product_images'     => array(),
-			'product_download'   => array(),
-			'product_category'   => array(),
+			'product_downloads'  => array(),
+			'product_categories' => array(),
 			'product_related'    => array(),
 			'product_tags'       => array(),
 			'points'             => '',
-			'product_reward'     => array(),
-			'product_layout'     => array(),
-			'product_template'   => array(),
+			'product_rewards'    => array(),
+			'product_layouts'    => array(),
+			'product_templates'  => array(),
 		);
 
 		foreach ($defaults as $key => $default) {
@@ -561,9 +561,6 @@ class Admin_Controller_Catalog_Product extends Controller
 
 		//Translations
 		$this->data['translations'] = $this->Model_Catalog_Product->getProductTranslations($product_id);
-
-		$image_width  = $this->config->get('config_image_product_option_width');
-		$image_height = $this->config->get('config_image_product_option_height');
 
 		//Product Attribute Template Defaults
 		$this->data['product_attributes']['__ac_template__'] = array(
@@ -677,7 +674,16 @@ class Admin_Controller_Catalog_Product extends Controller
 		);
 
 		//The Template
-		$this->template->load($this->Model_Catalog_ProductClass->getTemplate($this->data['product_class_id']));
+		$template = $this->Model_Catalog_ProductClass->getTemplate($this->data['product_class_id']);
+
+		if (!$this->template->find_file($template)) {
+			$product_class = array_search_key('product_class_id', $this->data['product_class_id'], $product_classes);
+			$this->message->add('warning', $this->_('error_class_template', $product_class['name'], $template));
+
+			$template = 'catalog/product_form';
+		}
+
+		$this->template->load($template);
 
 		//Render
 		$this->response->setOutput($this->render());
@@ -897,3 +903,8 @@ class Admin_Controller_Catalog_Product extends Controller
 		}
 	}
 }
+
+
+
+
+

@@ -24,12 +24,10 @@
 			<? foreach ($addresses as $address) { ?>
 				<a href="#tab-address-<?= $address_row; ?>"
 				   id="address-<?= $address_row; ?>"><?= $tab_address . ' ' . $address_row; ?>&nbsp;<img
-						src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" alt=""
-						onclick="$('#vtabs a:first').trigger('click'); $('#address-<?= $address_row; ?>').remove(); $('#tab-address-<?= $address_row; ?>').remove(); return false;"/></a>
+						src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" alt="" onclick="$('#vtabs a:first').trigger('click'); $('#address-<?= $address_row; ?>').remove(); $('#tab-address-<?= $address_row; ?>').remove(); return false;"/></a>
 				<? $address_row++; ?>
 			<? } ?>
-			<span id="address-add"><?= $button_add_address; ?>&nbsp;<img src="<?= HTTP_THEME_IMAGE . 'add.png'; ?>" alt=""
-			                                                             onclick="addAddress();"/></span></div>
+			<span id="address-add"><?= $button_add_address; ?>&nbsp;<img src="<?= HTTP_THEME_IMAGE . 'add.png'; ?>" alt="" onclick="addAddress();"/></span></div>
 		<div id="tab-customer" class="vtabs-content">
 			<table class="form">
 				<tr>
@@ -99,8 +97,7 @@
 									<option value="<?= $customer_group['customer_group_id']; ?>"
 									        selected="selected"><?= $customer_group['name']; ?></option>
 								<? } else { ?>
-									<option
-										value="<?= $customer_group['customer_group_id']; ?>"><?= $customer_group['name']; ?></option>
+									<option value="<?= $customer_group['customer_group_id']; ?>"><?= $customer_group['name']; ?></option>
 								<? } ?>
 							<? } ?>
 						</select></td>
@@ -122,42 +119,36 @@
 		<? $address_row = 1; ?>
 		<? foreach ($addresses as $address) { ?>
 			<div id="tab-address-<?= $address_row; ?>" class="vtabs-content">
-				<input type="hidden" name="address[<?= $address_row; ?>][address_id]"
-				       value="<?= $address['address_id']; ?>"/>
+				<input type="hidden" name="address[<?= $address_row; ?>][address_id]" value="<?= $address['address_id']; ?>"/>
 				<table class="form">
 					<tr>
 						<td class="required"> <?= $entry_firstname; ?></td>
-						<td><input type="text" name="address[<?= $address_row; ?>][firstname]"
-						           value="<?= $address['firstname']; ?>"/>
+						<td><input type="text" name="address[<?= $address_row; ?>][firstname]" value="<?= $address['firstname']; ?>"/>
 							<? if (isset($error_address_firstname[$address_row])) { ?>
 								<span class="error"><?= $error_address_firstname[$address_row]; ?></span>
 							<? } ?></td>
 					</tr>
 					<tr>
 						<td class="required"> <?= $entry_lastname; ?></td>
-						<td><input type="text" name="address[<?= $address_row; ?>][lastname]"
-						           value="<?= $address['lastname']; ?>"/>
+						<td><input type="text" name="address[<?= $address_row; ?>][lastname]" value="<?= $address['lastname']; ?>"/>
 							<? if (isset($error_address_lastname[$address_row])) { ?>
 								<span class="error"><?= $error_address_lastname[$address_row]; ?></span>
 							<? } ?></td>
 					</tr>
 					<tr>
 						<td><?= $entry_company; ?></td>
-						<td><input type="text" name="address[<?= $address_row; ?>][company]"
-						           value="<?= $address['company']; ?>"/></td>
+						<td><input type="text" name="address[<?= $address_row; ?>][company]" value="<?= $address['company']; ?>"/></td>
 					</tr>
 					<tr>
 						<td class="required"> <?= $entry_address_1; ?></td>
-						<td><input type="text" name="address[<?= $address_row; ?>][address_1]"
-						           value="<?= $address['address_1']; ?>"/>
+						<td><input type="text" name="address[<?= $address_row; ?>][address_1]" value="<?= $address['address_1']; ?>"/>
 							<? if (isset($error_address_address_1[$address_row])) { ?>
 								<span class="error"><?= $error_address_address_1[$address_row]; ?></span>
 							<? } ?></td>
 					</tr>
 					<tr>
 						<td><?= $entry_address_2; ?></td>
-						<td><input type="text" name="address[<?= $address_row; ?>][address_2]"
-						           value="<?= $address['address_2']; ?>"/></td>
+						<td><input type="text" name="address[<?= $address_row; ?>][address_2]" value="<?= $address['address_2']; ?>"/></td>
 					</tr>
 					<tr>
 						<td class="required"> <?= $entry_city; ?></td>
@@ -168,8 +159,7 @@
 					</tr>
 					<tr>
 						<td class="required"> <?= $entry_postcode; ?></td>
-						<td><input type="text" name="address[<?= $address_row; ?>][postcode]"
-						           value="<?= $address['postcode']; ?>"/></td>
+						<td><input type="text" name="address[<?= $address_row; ?>][postcode]" value="<?= $address['postcode']; ?>"/></td>
 					</tr>
 					<tr>
 						<td class="required"> <?= $entry_country; ?></td>
@@ -215,8 +205,7 @@
 					<td><input type="text" name="amount" value=""/></td>
 				</tr>
 				<tr>
-					<td colspan="2" style="text-align: right;"><a id="button-reward" class="button"
-					                                              onclick="addTransaction();"><span><?= $button_add_transaction; ?></span></a>
+					<td colspan="2" style="text-align: right;"><a id="button-reward" class="button" onclick="addTransaction();"><span><?= $button_add_transaction; ?></span></a>
 					</td>
 				</tr>
 			</table>
@@ -233,8 +222,7 @@
 					<td><input type="text" name="points" value=""/></td>
 				</tr>
 				<tr>
-					<td colspan="2" style="text-align: right;"><a id="button-reward" class="button"
-					                                              onclick="addRewardPoints();"><span><?= $button_add_reward; ?></span></a>
+					<td colspan="2" style="text-align: right;"><a id="button-reward" class="button" onclick="addRewardPoints();"><span><?= $button_add_reward; ?></span></a>
 					</td>
 				</tr>
 			</table>
@@ -255,18 +243,15 @@
 			<? if ($ips) { ?>
 				<? foreach ($ips as $ip) { ?>
 					<tr>
-						<td class="left"><a
-								onclick="window.open('http://www.geoiptool.com/en/?IP=<?= $ip['ip']; ?>');"><?= $ip['ip']; ?></a>
+						<td class="left"><a onclick="window.open('http://www.geoiptool.com/en/?IP=<?= $ip['ip']; ?>');"><?= $ip['ip']; ?></a>
 						</td>
 						<td class="right"><a onclick="window.open('<?= $ip['filter_ip']; ?>');"><?= $ip['total']; ?></a></td>
 						<td class="left"><?= $ip['date_added']; ?></td>
 						<td class="right"><? if ($ip['blacklist']) { ?>
-								<b>[</b> <a id="<?= str_replace('.', '-', $ip['ip']); ?>"
-								            onclick="removeBlacklist('<?= $ip['ip']; ?>');"><?= $text_remove_blacklist; ?></a>
+								<b>[</b> <a id="<?= str_replace('.', '-', $ip['ip']); ?>" onclick="removeBlacklist('<?= $ip['ip']; ?>');"><?= $text_remove_blacklist; ?></a>
 								<b>]</b>
 							<? } else { ?>
-								<b>[</b> <a id="<?= str_replace('.', '-', $ip['ip']); ?>"
-								            onclick="addBlacklist('<?= $ip['ip']; ?>');"><?= $text_add_blacklist; ?></a>
+								<b>[</b> <a id="<?= str_replace('.', '-', $ip['ip']); ?>" onclick="addBlacklist('<?= $ip['ip']; ?>');"><?= $text_add_blacklist; ?></a>
 								<b>]</b>
 							<? } ?></td>
 					</tr>

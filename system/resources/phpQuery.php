@@ -5566,12 +5566,15 @@ abstract class phpQuery
 		global $saved_sections;
 
 		while (!empty($saved_sections)) {
+			$continue = false;
 			foreach ($saved_sections as $key => $ss) {
 				$content = str_replace('__ss' . $key . '__', $ss, $content, $found);
 				if ($found) {
+					$continue = true;
 					unset($saved_sections[$key]);
 				}
 			}
+			if (!$continue) break;
 		}
 
 		return $content;

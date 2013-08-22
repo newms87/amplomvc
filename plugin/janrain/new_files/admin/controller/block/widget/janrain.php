@@ -58,20 +58,24 @@ class Admin_Controller_Block_Widget_Janrain extends Controller
 	public function saveSettings(&$settings)
 	{
 		$file_modifications = array(
-			array(
-				'mod' => 'includes/catalog/controller/block/account/login.php',
-				'for' => 'catalog/controller/block/account/login.php',
-			),
-			array(
-				'mod' => 'includes/catalog/view/theme/default/template/block/account/login_header.tpl',
-				'for' => 'catalog/view/theme/default/template/block/account/login_header.tpl',
-			),
+			'catalog/view/theme/default/template/block/account/login_header.tpl' => 'includes/catalog/view/theme/default/template/block/account/login_header.tpl',
+			'catalog/controller/block/account/login.php' => 'includes/catalog/controller/block/account/login.php',
 		);
 
 		if (!empty($settings['integrate_header'])) {
-			$this->plugin->addFileModifications('janrain', $file_modifications);
+			foreach($file_modifications as $source => $file_mod) {
+				$this->mod->addFile($source, $file_mod);
+			}
+
+			$this->mod->apply();
+			$this->mod->write();
 		} else {
-			$this->plugin->removeFileModifications('janrain', $file_modifications);
+			foreach($file_modifications as $source => $file_mod) {
+				$this->mod->removeFile($source, $file_mod);
+			}
+
+			$this->mod->apply();
+			$this->mod->write();
 		}
 	}
 

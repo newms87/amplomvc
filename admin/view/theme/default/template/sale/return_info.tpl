@@ -98,8 +98,7 @@
 											<option value="<?= $return_action['return_action_id']; ?>"
 											        selected="selected"><?= $return_action['name']; ?></option>
 										<? } else { ?>
-											<option
-												value="<?= $return_action['return_action_id']; ?>"><?= $return_action['name']; ?></option>
+											<option value="<?= $return_action['return_action_id']; ?>"><?= $return_action['name']; ?></option>
 										<? } ?>
 									<? } ?>
 								</select></td>

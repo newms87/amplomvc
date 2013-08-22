@@ -10,11 +10,9 @@
 					<? } ?>
 				<? } else { ?>
 					<? if ($currency['symbol_left']) { ?>
-						<a title="<?= $currency['title']; ?>"
-						   onClick="$('input[name=\'currency_code\']').attr('value', '<?= $currency['code']; ?>').submit(); $(this).parent().parent().submit();"><?= $currency['symbol_left']; ?></a>
+						<a title="<?= $currency['title']; ?>" onclick="$('input[name=\'currency_code\']').attr('value', '<?= $currency['code']; ?>').submit(); $(this).parent().parent().submit();"><?= $currency['symbol_left']; ?></a>
 					<? } else { ?>
-						<a title="<?= $currency['title']; ?>"
-						   onClick="$('input[name=\'currency_code\']').attr('value', '<?= $currency['code']; ?>').submit(); $(this).parent().parent().submit();"><?= $currency['symbol_right']; ?></a>
+						<a title="<?= $currency['title']; ?>" onclick="$('input[name=\'currency_code\']').attr('value', '<?= $currency['code']; ?>').submit(); $(this).parent().parent().submit();"><?= $currency['symbol_right']; ?></a>
 					<? } ?>
 				<? } ?>
 			<? } ?>

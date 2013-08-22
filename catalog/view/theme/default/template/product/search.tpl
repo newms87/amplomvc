@@ -62,8 +62,7 @@
 		<h2><?= $text_search; ?></h2>
 		<? if ($products) { ?>
 			<div class="product-filter">
-				<div class="display"><b><?= $text_display; ?></b> <?= $text_list; ?> <b>/</b> <a
-						onclick="display('grid');"><?= $text_grid; ?></a></div>
+				<div class="display"><b><?= $text_display; ?></b> <?= $text_list; ?> <b>/</b> <a onclick="display('grid');"><?= $text_grid; ?></a></div>
 				<div class="limit"><?= $text_limit; ?>
 					<select onchange="location = this.value;">
 						<? foreach ($limits as $limits) { ?>
@@ -117,12 +116,9 @@
 							<div class="rating"><img src="<?= HTTP_THEME_IMAGE . "stars-$product[rating].png"; ?>"
 							                         alt="<?= $product['reviews']; ?>"/></div>
 						<? } ?>
-						<div class="cart"><input type="button" value="<?= $button_cart; ?>"
-						                         onclick="addToCart('<?= $product['product_id']; ?>');" class="button"/></div>
-						<div class="wishlist"><a
-								onclick="addToWishList('<?= $product['product_id']; ?>');"><?= $button_wishlist; ?></a></div>
-						<div class="compare"><a
-								onclick="addToCompare('<?= $product['product_id']; ?>');"><?= $button_compare; ?></a></div>
+						<div class="cart"><input type="button" value="<?= $button_cart; ?>" onclick="addToCart('<?= $product['product_id']; ?>');" class="button"/></div>
+						<div class="wishlist"><a onclick="addToWishList('<?= $product['product_id']; ?>');"><?= $button_wishlist; ?></a></div>
+						<div class="compare"><a onclick="addToCompare('<?= $product['product_id']; ?>');"><?= $button_compare; ?></a></div>
 					</div>
 				<? } ?>
 			</div>

@@ -232,8 +232,7 @@ class Form extends Library
 		//render the file
 		ob_start();
 
-		$file = $this->plugin->getFile($this->template_file);
-		require($file);
+		require_once(_ac_mod_file($this->template_file));
 
 		return ob_get_clean();
 	}

@@ -68,8 +68,7 @@
 										<? foreach ($categories as $category) { ?>
 											<? $class = ($class == 'even' ? 'odd' : 'even'); ?>
 											<div class="<?= $class; ?>">
-												<input type="checkbox" name="categories[]"
-												       value="<?= $category['category_id']; ?>"/>
+												<input type="checkbox" name="categories[]" value="<?= $category['category_id']; ?>"/>
 												<?= $category['name']; ?> </div>
 										<? } ?>
 									</div>
@@ -87,8 +86,7 @@
 											<div id="coupon-product<?= $coupon_product['product_id']; ?>">
 												<?= $coupon_product['name']; ?>
 												<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"/>
-												<input type="hidden" name="coupon_products[]"
-												       value="<?= $coupon_product['product_id']; ?>"/>
+												<input type="hidden" name="coupon_products[]" value="<?= $coupon_product['product_id']; ?>"/>
 											</div>
 										<? } ?>
 									</div>

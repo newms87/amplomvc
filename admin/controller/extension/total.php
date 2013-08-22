@@ -96,7 +96,7 @@ class Admin_Controller_Extension_Total extends Controller
 			$this->Model_User_UserGroup->addPermission($this->user->getId(), 'access', 'total/' . $_GET['extension']);
 			$this->Model_User_UserGroup->addPermission($this->user->getId(), 'modify', 'total/' . $_GET['extension']);
 
-			_require(DIR_APPLICATION . 'controller/total/' . $_GET['extension'] . '.php');
+			require_once(_ac_mod_file(DIR_APPLICATION . 'controller/total/' . $_GET['extension'] . '.php'));
 
 			$class = 'ControllerTotal' . str_replace('_', '', $_GET['extension']);
 			$class = new $class($this->registry);
@@ -120,7 +120,7 @@ class Admin_Controller_Extension_Total extends Controller
 
 			$this->Model_Setting_Setting->deleteSetting($_GET['extension']);
 
-			_require(DIR_APPLICATION . 'controller/total/' . $_GET['extension'] . '.php');
+			require_once(_ac_mod_file(DIR_APPLICATION . 'controller/total/' . $_GET['extension'] . '.php'));
 
 			$class = 'ControllerTotal' . str_replace('_', '', $_GET['extension']);
 			$class = new $class($this->registry);

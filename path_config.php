@@ -36,5 +36,5 @@ define('DIR_IMAGE', SITE_DIR . 'image/');
 define('DIR_JS', SITE_DIR . 'system/javascript/');
 define('DIR_CACHE', SITE_DIR . 'system/cache/');
 define('DIR_DOWNLOAD', SITE_DIR . 'download/');
-define('DIR_MERGED_FILES', SITE_DIR . 'system/plugins/merged/');
+define('DIR_MOD_FILES', SITE_DIR . 'system/mods/');
 define('DIR_LOGS', SITE_DIR . 'system/logs/');

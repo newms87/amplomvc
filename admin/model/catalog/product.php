@@ -8,8 +8,8 @@ class Admin_Model_Catalog_Product extends Model
 		$product_id = $this->insert('product', $data);
 
 		//Product Store
-		if (isset($data['product_store'])) {
-			foreach ($data['product_store'] as $store_id) {
+		if (!empty($data['product_stores'])) {
+			foreach ($data['product_stores'] as $store_id) {
 				$values = array(
 					'store_id'   => $store_id,
 					'product_id' => $product_id
@@ -19,7 +19,7 @@ class Admin_Model_Catalog_Product extends Model
 		}
 
 		//Product Attributes
-		if (isset($data['product_attributes'])) {
+		if (!empty($data['product_attributes'])) {
 			foreach ($data['product_attributes'] as $product_attribute) {
 				$product_attribute['product_id'] = $product_id;
 
@@ -28,48 +28,35 @@ class Admin_Model_Catalog_Product extends Model
 		}
 
 		//Product Options
-		if (isset($data['product_options'])) {
+		if (!empty($data['product_options'])) {
 			foreach ($data['product_options'] as $product_option) {
-				if (in_array($product_option['type'], array(
-				                                           'select',
-				                                           'radio',
-				                                           'checkbox',
-				                                           'image'
-				                                      ))
-				) {
-					$product_option['product_id'] = $product_id;
+				$product_option['product_id'] = $product_id;
 
-					$product_option_id = $this->insert('product_option', $product_option);
+				$product_option_id = $this->insert('product_option', $product_option);
 
-					if (!empty($product_option['product_option_value'])) {
-						foreach ($product_option['product_option_values'] as $product_option_value) {
-							$product_option_value['product_option_id'] = $product_option_id;
-							$product_option_value['product_id']        = $product_id;
-							$product_option_value['option_id']         = $product_option['option_id'];
+				if (!empty($product_option['product_option_values'])) {
+					foreach ($product_option['product_option_values'] as $product_option_value) {
+						$product_option_value['product_option_id'] = $product_option_id;
+						$product_option_value['product_id']        = $product_id;
+						$product_option_value['option_id']         = $product_option['option_id'];
 
-							$product_option_value_id = $this->insert('product_option_value', $product_option_value);
+						$product_option_value_id = $this->insert('product_option_value', $product_option_value);
 
-							if (isset($product_option_value['restrictions'])) {
-								foreach ($product_option_value['restrictions'] as $restriction) {
-									$restriction['product_id']      = $product_id;
-									$restriction['option_value_id'] = $product_option_value['option_value_id'];
+						if (!empty($product_option_value['restrictions'])) {
+							foreach ($product_option_value['restrictions'] as $restriction) {
+								$restriction['product_id']      = $product_id;
+								$restriction['option_value_id'] = $product_option_value['option_value_id'];
 
-									$this->insert('product_option_value_restriction', $restriction);
-								}
+								$this->insert('product_option_value_restriction', $restriction);
 							}
 						}
 					}
-				} else {
-					$product_option['product_id'] = $product_id;
-
-					$this->insert('product_option', $product_option);
 				}
 			}
 		}
 
-
 		//Additional Product Images
-		if (isset($data['product_images'])) {
+		if (!empty($data['product_images'])) {
 			foreach ($data['product_images'] as $product_image) {
 				$product_image['product_id'] = $product_id;
 
@@ -78,16 +65,16 @@ class Admin_Model_Catalog_Product extends Model
 		}
 
 		//Product Categories
-		if (isset($data['product_category'])) {
-			foreach (array_unique($data['product_category']) as $category_id) {
+		if (isset($data['product_categories'])) {
+			foreach (array_unique($data['product_categories']) as $category_id) {
 				$values = array(
 					'product_id'  => $product_id,
 					'category_id' => $category_id
 				);
+
 				$this->insert('product_to_category', $values);
 			}
 		}
-
 
 		//Product Discount
 		if (isset($data['product_discounts'])) {
@@ -107,14 +94,14 @@ class Admin_Model_Catalog_Product extends Model
 			}
 		}
 
-
 		//Product Downloads
-		if (isset($data['product_download'])) {
-			foreach ($data['product_download'] as $download_id) {
+		if (isset($data['product_downloads'])) {
+			foreach ($data['product_downloads'] as $download_id) {
 				$values = array(
 					'download_id' => $download_id,
 					'product_id'  => $product_id
 				);
+
 				$this->insert('product_to_download', $values);
 			}
 		}
@@ -129,21 +116,12 @@ class Admin_Model_Catalog_Product extends Model
 				);
 
 				$this->insert('product_related', $values);
-
-				//the inverse so the other product is related to this product too!
-				$values = array(
-					'product_id' => $related_id,
-					'related_id' => $product_id
-				);
-
-				$this->insert('product_related', $values);
 			}
 		}
 
-
 		//Product Reward
-		if (isset($data['product_reward'])) {
-			foreach ($data['product_reward'] as $customer_group_id => $product_reward) {
+		if (isset($data['product_rewards'])) {
+			foreach ($data['product_rewards'] as $customer_group_id => $product_reward) {
 				$product_reward['product_id']        = $product_id;
 				$product_reward['customer_group_id'] = $customer_group_id;
 
@@ -151,10 +129,9 @@ class Admin_Model_Catalog_Product extends Model
 			}
 		}
 
-
 		//Product Layouts
-		if (isset($data['product_layout'])) {
-			foreach ($data['product_layout'] as $store_id => $layout) {
+		if (isset($data['product_layouts'])) {
+			foreach ($data['product_layouts'] as $store_id => $layout) {
 				if ($layout['layout_id']) {
 					$layout['product_id'] = $product_id;
 					$layout['store_id']   = $store_id;
@@ -165,8 +142,8 @@ class Admin_Model_Catalog_Product extends Model
 		}
 
 		//Product Templates
-		if (isset($data['product_template'])) {
-			foreach ($data['product_template'] as $store_id => $themes) {
+		if (isset($data['product_templates'])) {
+			foreach ($data['product_templates'] as $store_id => $themes) {
 				foreach ($themes as $theme => $template) {
 					if (empty($template['template'])) {
 						continue;
@@ -271,11 +248,11 @@ class Admin_Model_Catalog_Product extends Model
 		}
 
 		//Product Categories
-		if (($insert = isset($data['product_category'])) || !$strict) {
+		if (($insert = isset($data['product_categories'])) || !$strict) {
 			$this->delete('product_to_category', array('product_id' => $product_id));
 
 			if ($insert) {
-				foreach (array_unique($data['product_category']) as $category_id) {
+				foreach (array_unique($data['product_categories']) as $category_id) {
 					$values = array(
 						'product_id'  => $product_id,
 						'category_id' => $category_id
@@ -285,13 +262,12 @@ class Admin_Model_Catalog_Product extends Model
 			}
 		}
 
-
 		//Product Stores
-		if (($insert = isset($data['product_store'])) || !$strict) {
+		if (($insert = isset($data['product_stores'])) || !$strict) {
 			$this->delete('product_to_store', array('product_id' => $product_id));
 
 			if ($insert) {
-				foreach ($data['product_store'] as $store_id) {
+				foreach ($data['product_stores'] as $store_id) {
 					$values = array(
 						'store_id'   => $store_id,
 						'product_id' => $product_id
@@ -344,11 +320,11 @@ class Admin_Model_Catalog_Product extends Model
 		}
 
 		//Product Downloads
-		if (($insert = isset($data['product_download'])) || !$strict) {
+		if (($insert = isset($data['product_downloads'])) || !$strict) {
 			$this->delete('product_to_download', array('product_id' => $product_id));
 
 			if ($insert) {
-				foreach ($data['product_download'] as $download_id) {
+				foreach ($data['product_downloads'] as $download_id) {
 					$values = array(
 						'download_id' => $download_id,
 						'product_id'  => $product_id
@@ -385,11 +361,11 @@ class Admin_Model_Catalog_Product extends Model
 		}
 
 		//Product Reward
-		if (($insert = isset($data['product_reward'])) || !$strict) {
+		if (($insert = isset($data['product_rewards'])) || !$strict) {
 			$this->delete('product_reward', array('product_id' => $product_id));
 
 			if ($insert) {
-				foreach ($data['product_reward'] as $customer_group_id => $product_reward) {
+				foreach ($data['product_rewards'] as $customer_group_id => $product_reward) {
 					$product_reward['product_id']        = $product_id;
 					$product_reward['customer_group_id'] = $customer_group_id;
 
@@ -399,11 +375,11 @@ class Admin_Model_Catalog_Product extends Model
 		}
 
 		//Product Layouts
-		if (($insert = isset($data['product_layout'])) || !$strict) {
+		if (($insert = isset($data['product_layouts'])) || !$strict) {
 			$this->delete('product_to_layout', array('product_id' => $product_id));
 
 			if ($insert) {
-				foreach ($data['product_layout'] as $store_id => $layout) {
+				foreach ($data['product_layouts'] as $store_id => $layout) {
 					if ($layout['layout_id']) {
 						$layout['product_id'] = $product_id;
 						$layout['store_id']   = $store_id;
@@ -415,11 +391,11 @@ class Admin_Model_Catalog_Product extends Model
 		}
 
 		//Product Templates
-		if (($insert = isset($data['product_template'])) || !$strict) {
+		if (($insert = isset($data['product_templates'])) || !$strict) {
 			$this->delete('product_template', array('product_id' => $product_id));
 
 			if ($insert) {
-				foreach ($data['product_template'] as $store_id => $themes) {
+				foreach ($data['product_templates'] as $store_id => $themes) {
 					foreach ($themes as $theme => $template) {
 						if (empty($template['template'])) {
 							continue;
@@ -494,19 +470,19 @@ class Admin_Model_Catalog_Product extends Model
 		$product['alias']  = '';
 		$product['status'] = 0;
 
-		$product['product_attribute'] = $this->getProductAttributes($product_id);
-		$product['product_discount']  = $this->getProductDiscounts($product_id);
-		$product['product_image']     = $this->getProductImages($product_id);
-		$product['product_option']    = $this->getProductOptions($product_id);
-		$product['product_related']   = $this->getProductRelated($product_id);
-		$product['product_reward']    = $this->getProductRewards($product_id);
-		$product['product_special']   = $this->getProductSpecials($product_id);
-		$product['product_tags']      = $this->getProductTags($product_id);
-		$product['product_category']  = $this->getProductCategories($product_id);
-		$product['product_download']  = $this->getProductDownloads($product_id);
-		$product['product_layout']    = $this->getProductLayouts($product_id);
-		$product['product_template']  = $this->getProductTemplates($product_id);
-		$product['product_store']     = $this->getProductStores($product_id);
+		$product['product_attributes'] = $this->getProductAttributes($product_id);
+		$product['product_discounts']  = $this->getProductDiscounts($product_id);
+		$product['product_images']     = $this->getProductImages($product_id);
+		$product['product_options']    = $this->getProductOptions($product_id);
+		$product['product_related']    = $this->getProductRelated($product_id);
+		$product['product_rewards']    = $this->getProductRewards($product_id);
+		$product['product_specials']   = $this->getProductSpecials($product_id);
+		$product['product_tags']       = $this->getProductTags($product_id);
+		$product['product_categories'] = $this->getProductCategories($product_id);
+		$product['product_downloads']  = $this->getProductDownloads($product_id);
+		$product['product_layouts']    = $this->getProductLayouts($product_id);
+		$product['product_templates']  = $this->getProductTemplates($product_id);
+		$product['product_stores']     = $this->getProductStores($product_id);
 
 		$name_count = $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "product WHERE `name` like '" . $this->escape($product['name']) . "%'");
 
@@ -902,3 +878,8 @@ class Admin_Model_Catalog_Product extends Model
 		return $this->getProducts($data, '', true);
 	}
 }
+
+
+
+
+

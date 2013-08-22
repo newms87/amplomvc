@@ -198,8 +198,7 @@
 								<option value="<?= $customer_group['customer_group_id']; ?>"
 								        selected="selected"><?= $customer_group['name']; ?></option>
 							<? } else { ?>
-								<option
-									value="<?= $customer_group['customer_group_id']; ?>"><?= $customer_group['name']; ?></option>
+								<option value="<?= $customer_group['customer_group_id']; ?>"><?= $customer_group['name']; ?></option>
 							<? } ?>
 						<? } ?>
 					</select></td>

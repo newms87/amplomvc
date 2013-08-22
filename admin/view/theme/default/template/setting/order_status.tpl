@@ -19,11 +19,9 @@
 								<ul id="order_status_list" class="easy_list">
 									<? foreach ($order_statuses as $row => $status) { ?>
 										<li class="order_status" data-row="<?= $row; ?>">
-											<input class="title" size="50" type="text" name="order_statuses[<?= $row; ?>][title]"
-											       value="<?= $status['title']; ?>"/><br/>
+											<input class="title" size="50" type="text" name="order_statuses[<?= $row; ?>][title]" value="<?= $status['title']; ?>"/><br/>
 											<? if (empty($status['no_delete'])) { ?>
-												<a class="delete_button text"
-												   onclick="$(this).closest('li').remove()"><?= $button_delete; ?></a>
+												<a class="delete_button text" onclick="$(this).closest('li').remove()"><?= $button_delete; ?></a>
 											<? } ?>
 										</li>
 									<? } ?>

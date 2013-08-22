@@ -11,8 +11,7 @@
 			<div class="heading">
 				<h1><img src="<?= HTTP_THEME_IMAGE . 'backup.png'; ?>" alt=""/> <?= $head_title; ?></h1>
 
-				<div class="buttons"><a onclick="$('#restore').submit();" class="button"><?= $button_restore; ?></a><a
-						onclick="$('#backup').submit();" class="button"><?= $button_backup; ?></a></div>
+				<div class="buttons"><a onclick="$('#restore').submit();" class="button"><?= $button_restore; ?></a><a onclick="$('#backup').submit();" class="button"><?= $button_backup; ?></a></div>
 			</div>
 			<div class="content">
 				<form action="<?= $restore; ?>" method="post" enctype="multipart/form-data" id="restore">
@@ -38,8 +37,7 @@
 									<? } ?>
 								</div>
 								<a onclick="$(this).parent().find(':checkbox').attr('checked', true);"><?= $text_select_all; ?></a>
-								/ <a
-									onclick="$(this).parent().find(':checkbox').attr('checked', false);"><?= $text_unselect_all; ?></a>
+								/ <a onclick="$(this).parent().find(':checkbox').attr('checked', false);"><?= $text_unselect_all; ?></a>
 							</td>
 						</tr>
 					</table>

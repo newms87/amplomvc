@@ -15,8 +15,7 @@
 		<? if (!empty($product['selected_options'])) { ?>
 			<? $j = 0; ?>
 			<? foreach ($product['selected_options'] as $selected_option) { ?>
-				<input type="hidden" name="on<?= $j; ?>_<?= $i; ?>"
-				       value="<?= $selected_option['product_option']['name']; ?>"/>
+				<input type="hidden" name="on<?= $j; ?>_<?= $i; ?>" value="<?= $selected_option['product_option']['name']; ?>"/>
 				<input type="hidden" name="os<?= $j; ?>_<?= $i; ?>" value="<?= $selected_option['value']; ?>"/>
 				<? $j++; ?>
 			<? } ?>

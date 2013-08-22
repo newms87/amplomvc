@@ -47,11 +47,9 @@
 									<input type="hidden" name="from" value="<?= $msg['from']; ?>"/>
 									<input type="hidden" name="sender" value="<?= $msg['sender']; ?>"/>
 									<input type="hidden" name="subject" value="<?= $msg['subject']; ?>"/>
-									<input type="hidden" name="allow_html"
-									       value="<?= !empty($msg['html']) ? 'class="html"' : ''; ?>"/>
+									<input type="hidden" name="allow_html" value="<?= !empty($msg['html']) ? 'class="html"' : ''; ?>"/>
 									<? if (!empty($msg['attachments'])) { ?>
-										<input type="hidden" name="_attachments"
-										       value="<?= implode(',', $msg['attachments']); ?>"/>
+										<input type="hidden" name="_attachments" value="<?= implode(',', $msg['attachments']); ?>"/>
 									<? } ?>
 									<div class="action_buttons">
 										<input type="submit" class="button" name="resend_message" value="<?= $button_resend; ?>"/>

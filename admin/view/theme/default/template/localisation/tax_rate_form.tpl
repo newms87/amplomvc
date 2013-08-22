@@ -52,12 +52,10 @@
 										<? $class = ($class == 'even' ? 'odd' : 'even'); ?>
 										<div class="<?= $class; ?>">
 											<? if (in_array($customer_group['customer_group_id'], $tax_rate_customer_group)) { ?>
-												<input type="checkbox" name="tax_rate_customer_group[]"
-												       value="<?= $customer_group['customer_group_id']; ?>" checked="checked"/>
+												<input type="checkbox" name="tax_rate_customer_group[]" value="<?= $customer_group['customer_group_id']; ?>" checked="checked"/>
 												<?= $customer_group['name']; ?>
 											<? } else { ?>
-												<input type="checkbox" name="tax_rate_customer_group[]"
-												       value="<?= $customer_group['customer_group_id']; ?>"/>
+												<input type="checkbox" name="tax_rate_customer_group[]" value="<?= $customer_group['customer_group_id']; ?>"/>
 												<?= $customer_group['name']; ?>
 											<? } ?>
 										</div>

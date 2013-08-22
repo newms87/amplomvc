@@ -203,13 +203,11 @@
 	</tr>
 	<tr>
 		<td class="required"> <?= $entry_breadcrumb_separator; ?></td>
-		<td><input type="text" style='font-size:20px' name="config_breadcrumb_separator"
-		           value="<?= $config_breadcrumb_separator; ?>" size="1"/>
+		<td><input type="text" style='font-size:20px' name="config_breadcrumb_separator" value="<?= $config_breadcrumb_separator; ?>" size="1"/>
 	</tr>
 	<tr>
 		<td class="required"> <?= $entry_breadcrumb_separator_admin; ?></td>
-		<td><input type="text" style='font-size:20px' name="config_breadcrumb_separator_admin"
-		           value="<?= $config_breadcrumb_separator_admin; ?>" size="1"/>
+		<td><input type="text" style='font-size:20px' name="config_breadcrumb_separator_admin" value="<?= $config_breadcrumb_separator_admin; ?>" size="1"/>
 	</tr>
 	<tr>
 		<td class="required"> <?= $entry_catalog_limit; ?></td>
@@ -533,8 +531,7 @@
 				<td><input type="text" name="config_image_admin_thumb_width" value="<?= $config_image_admin_thumb_width; ?>"
 				           size="3"/>
 					x
-					<input type="text" name="config_image_admin_thumb_height"
-					       value="<?= $config_image_admin_thumb_height; ?>" size="3"/>
+					<input type="text" name="config_image_admin_thumb_height" value="<?= $config_image_admin_thumb_height; ?>" size="3"/>
 			</tr>
 			<tr>
 				<td class="required"> <?= $entry_image_admin_list; ?></td>
@@ -554,11 +551,9 @@
 			</tr>
 			<tr>
 				<td class="required"> <?= $entry_image_manufacturer; ?></td>
-				<td><input type="text" name="config_image_manufacturer_width"
-				           value="<?= $config_image_manufacturer_width; ?>" size="3"/>
+				<td><input type="text" name="config_image_manufacturer_width" value="<?= $config_image_manufacturer_width; ?>" size="3"/>
 					x
-					<input type="text" name="config_image_manufacturer_height"
-					       value="<?= $config_image_manufacturer_height; ?>" size="3"/>
+					<input type="text" name="config_image_manufacturer_height" value="<?= $config_image_manufacturer_height; ?>" size="3"/>
 			</tr>
 			<tr>
 				<td class="required"> <?= $entry_image_thumb; ?></td>
@@ -582,11 +577,9 @@
 			</tr>
 			<tr>
 				<td class="required"> <?= $entry_image_product_option; ?></td>
-				<td><input type="text" name="config_image_product_option_width"
-				           value="<?= $config_image_product_option_width; ?>" size="3"/>
+				<td><input type="text" name="config_image_product_option_width" value="<?= $config_image_product_option_width; ?>" size="3"/>
 					x
-					<input type="text" name="config_image_product_option_height"
-					       value="<?= $config_image_product_option_height; ?>" size="3"/>
+					<input type="text" name="config_image_product_option_height" value="<?= $config_image_product_option_height; ?>" size="3"/>
 			</tr>
 			<tr>
 				<td class="required"> <?= $entry_image_additional; ?></td>
@@ -790,33 +783,27 @@
 				<td><?= $entry_default_modes; ?></td>
 				<td>
 					<label for='default_file_mode'><?= $entry_default_file_mode; ?></label>
-					<input id='default_file_mode' type='text' size='3' maxlength='3' name='config_default_file_mode'
-					       value="<?= $config_default_file_mode; ?>"/>
+					<input id='default_file_mode' type='text' size='3' maxlength='3' name='config_default_file_mode' value="<?= $config_default_file_mode; ?>"/>
 					<label for='default_dir_mode'><?= $entry_default_dir_mode; ?></label>
-					<input id='default_dir_mode' type='text' size='3' maxlength='3' name='config_default_dir_mode'
-					       value="<?= $config_default_dir_mode; ?>"/>
+					<input id='default_dir_mode' type='text' size='3' maxlength='3' name='config_default_dir_mode' value="<?= $config_default_dir_mode; ?>"/>
 				</td>
 			</tr>
 			<tr>
 				<td><?= $entry_image_modes; ?></td>
 				<td>
 					<label for='image_file_mode'><?= $entry_image_file_mode; ?></label>
-					<input id='image_file_mode' type='text' size='3' maxlength='3' name='config_image_file_mode'
-					       value="<?= $config_image_file_mode; ?>"/>
+					<input id='image_file_mode' type='text' size='3' maxlength='3' name='config_image_file_mode' value="<?= $config_image_file_mode; ?>"/>
 					<label for='_dir_mode'><?= $entry_image_dir_mode; ?></label>
-					<input id='image_dir_mode' type='text' size='3' maxlength='3' name='config_image_dir_mode'
-					       value="<?= $config_image_dir_mode; ?>"/>
+					<input id='image_dir_mode' type='text' size='3' maxlength='3' name='config_image_dir_mode' value="<?= $config_image_dir_mode; ?>"/>
 				</td>
 			</tr>
 			<tr>
 				<td><?= $entry_plugin_modes; ?></td>
 				<td>
 					<label for='plugin_file_mode'><?= $entry_plugin_file_mode; ?></label>
-					<input id='plugin_file_mode' type='text' size='3' maxlength='3' name='config_plugin_file_mode'
-					       value="<?= $config_plugin_file_mode; ?>"/>
+					<input id='plugin_file_mode' type='text' size='3' maxlength='3' name='config_plugin_file_mode' value="<?= $config_plugin_file_mode; ?>"/>
 					<label for='_dir_mode'><?= $entry_plugin_dir_mode; ?></label>
-					<input id='plugin_dir_mode' type='text' size='3' maxlength='3' name='config_plugin_dir_mode'
-					       value="<?= $config_plugin_dir_mode; ?>"/>
+					<input id='plugin_dir_mode' type='text' size='3' maxlength='3' name='config_plugin_dir_mode' value="<?= $config_plugin_dir_mode; ?>"/>
 				</td>
 			</tr>
 		</table>
@@ -910,8 +897,7 @@
 				<td><?= $entry_statcounter; ?></td>
 				<td>
 					<label for="statcounter_project"><?= $entry_statcounter_project; ?></label><br/>
-					<input type="text" name="config_statcounter[project]"
-					       value="<?= $config_statcounter['project']; ?>"/><br/><br/>
+					<input type="text" name="config_statcounter[project]" value="<?= $config_statcounter['project']; ?>"/><br/><br/>
 					<label for="statcounter_project"><?= $entry_statcounter_security; ?></label><br/>
 					<input type="text" name="config_statcounter[security]" value="<?= $config_statcounter['security']; ?>"/>
 				</td>

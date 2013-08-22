@@ -29,13 +29,11 @@
 					</tr>
 					<tr>
 						<td><?= $entry_profiles_file; ?></td>
-						<td><input type="checkbox" name="profiles_file"
-						           value="1" <?= $profiles_file ? 'checked' : ''; ?> /></td>
+						<td><input type="checkbox" name="profiles_file" value="1" <?= $profiles_file ? 'checked' : ''; ?> /></td>
 					</tr>
 					<tr>
 						<td><?= $entry_settings_file; ?></td>
-						<td><input type="checkbox" name="settings_file"
-						           value="1" <?= $settings_file ? 'checked' : ''; ?> /></td>
+						<td><input type="checkbox" name="settings_file" value="1" <?= $settings_file ? 'checked' : ''; ?> /></td>
 					</tr>
 					<tr>
 						<td colspan="2"><h2><?= $text_front_end; ?></h2></td>

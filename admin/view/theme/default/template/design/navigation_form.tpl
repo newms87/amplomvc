@@ -36,35 +36,29 @@
 										<div class="left">
 											<div id='new_navigation_link'>
 												<div class="editable">
-													<input type="hidden" class="parent_id" name="links[%link_num%][parent_id]"
-													       value="0"/>
+													<input type="hidden" class="parent_id" name="links[%link_num%][parent_id]" value="0"/>
 
 													<div class="link_entry_display_name">
 														<label
 															for="link_display_name_%link_num%"><?= $entry_link_display_name; ?></label>
-														<input id='link_display_name_%link_num%' type="text"
-														       name="links[%link_num%][display_name]"
+														<input id='link_display_name_%link_num%' type="text" name="links[%link_num%][display_name]"
 														       onkeyup="update_display_name($(this));" value=""/>
 													</div>
 													<div class="link_entry_name">
 														<label for="link_name_%link_num%"><?= $entry_link_name; ?></label>
-														<input id='link_name_%link_num%' type="text" name="links[%link_num%][name]"
-														       value=""/>
+														<input id='link_name_%link_num%' type="text" name="links[%link_num%][name]" value=""/>
 													</div>
 													<div class="link_entry_title">
 														<label for="link_title_%link_num%"><?= $entry_link_title; ?></label>
-														<input id='link_title_%link_num%' type="text" name="links[%link_num%][title]"
-														       value=""/>
+														<input id='link_title_%link_num%' type="text" name="links[%link_num%][title]" value=""/>
 													</div>
 													<div class="link_entry_href">
 														<label for="link_href_%link_num%"><?= $entry_link_href; ?></label>
-														<input id='link_href_%link_num%' type="text" class='long'
-														       name="links[%link_num%][href]" value=""/>
+														<input id='link_href_%link_num%' type="text" class='long' name="links[%link_num%][href]" value=""/>
 													</div>
 													<div class="link_entry_query">
 														<label for="link_query_%link_num%"><?= $entry_link_query; ?></label>
-														<input id='link_query_%link_num%' type="text" class='long'
-														       name="links[%link_num%][query]" value=""/>
+														<input id='link_query_%link_num%' type="text" class='long' name="links[%link_num%][query]" value=""/>
 													</div>
 													<div class="link_entry_is_route">
 														<label for="link_is_route_%link_num%"><?= $entry_link_is_route; ?></label>
@@ -76,8 +70,7 @@
 													</div>
 												</div>
 
-												<input type="button" class="button" onclick="add_navigation_link();"
-												       value="<?= $text_add_link; ?>"/>
+												<input type="button" class="button" onclick="add_navigation_link();" value="<?= $text_add_link; ?>"/>
 											</div>
 										</div>
 										<div class="right">
@@ -94,47 +87,35 @@
 																	class="display_name"><?= $link['display_name']; ?></span><span
 																	class="show_link_edit" onclick="toggle_edit_link($(this))"><span
 																		class="edit_text"><?= $text_edit_link; ?></span><img
-																		class="remove_link" src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"
-																		onclick="$(this).closest('li').remove();"/></span></div>
+																		class="remove_link" src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" onclick="$(this).closest('li').remove();"/></span></div>
 															<div class="editable" style="display:none">
-																<input type="hidden" class="parent_id"
-																       name="links[<?= $link_num; ?>][parent_id]" value="0"/>
+																<input type="hidden" class="parent_id" name="links[<?= $link_num; ?>][parent_id]" value="0"/>
 
 																<div class="link_entry_display_name">
 																	<label
 																		for="link_display_name_<?= $link_num; ?>"><?= $entry_link_display_name; ?></label>
-																	<input id='link_display_name_<?= $link_num; ?>' type="text"
-																	       name="links[<?= $link_num; ?>][display_name]"
-																	       onkeyup="update_display_name($(this));"
-																	       value="<?= $link['display_name']; ?>"/>
+																	<input id='link_display_name_<?= $link_num; ?>' type="text" name="links[<?= $link_num; ?>][display_name]"
+																	       onkeyup="update_display_name($(this));" value="<?= $link['display_name']; ?>"/>
 																</div>
 																<div class="link_entry_name">
 																	<label
 																		for="link_name_<?= $link_num; ?>"><?= $entry_link_name; ?></label>
-																	<input id='link_name_<?= $link_num; ?>' type="text"
-																	       name="links[<?= $link_num; ?>][name]"
-																	       value="<?= $link['name']; ?>"/>
+																	<input id='link_name_<?= $link_num; ?>' type="text" name="links[<?= $link_num; ?>][name]" value="<?= $link['name']; ?>"/>
 																</div>
 																<div class="link_entry_title">
 																	<label
 																		for="link_title_<?= $link_num; ?>"><?= $entry_link_title; ?></label>
-																	<input id='link_title_<?= $link_num; ?>' type="text"
-																	       name="links[<?= $link_num; ?>][title]"
-																	       value="<?= $link['title']; ?>"/>
+																	<input id='link_title_<?= $link_num; ?>' type="text" name="links[<?= $link_num; ?>][title]" value="<?= $link['title']; ?>"/>
 																</div>
 																<div class="link_entry_href">
 																	<label
 																		for="link_href_<?= $link_num; ?>"><?= $entry_link_href; ?></label>
-																	<input id='link_href_<?= $link_num; ?>' type="text"
-																	       name="links[<?= $link_num; ?>][href]"
-																	       value="<?= $link['href']; ?>"/>
+																	<input id='link_href_<?= $link_num; ?>' type="text" name="links[<?= $link_num; ?>][href]" value="<?= $link['href']; ?>"/>
 																</div>
 																<div class="link_entry_query">
 																	<label
 																		for="link_query_<?= $link_num; ?>"><?= $entry_link_query; ?></label>
-																	<input id='link_query_<?= $link_num; ?>' type="text"
-																	       name="links[<?= $link_num; ?>][query]"
-																	       value="<?= $link['query']; ?>"/>
+																	<input id='link_query_<?= $link_num; ?>' type="text" name="links[<?= $link_num; ?>][query]" value="<?= $link['query']; ?>"/>
 																</div>
 																<div class="link_entry_is_route">
 																	<label

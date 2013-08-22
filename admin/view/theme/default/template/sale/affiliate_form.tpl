@@ -214,8 +214,7 @@
 					<td><input type="text" name="amount" value=""/></td>
 				</tr>
 				<tr>
-					<td colspan="2" style="text-align: right;"><a id="button-reward" class="button"
-					                                              onclick="addTransaction();"><span><?= $button_add_transaction; ?></span></a>
+					<td colspan="2" style="text-align: right;"><a id="button-reward" class="button" onclick="addTransaction();"><span><?= $button_add_transaction; ?></span></a>
 					</td>
 				</tr>
 			</table>

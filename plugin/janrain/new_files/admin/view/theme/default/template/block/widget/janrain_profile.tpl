@@ -30,8 +30,7 @@
 			<td class="center">
 				<?= $this->builder->build('select', $statuses, "janrain_module[$module_row][status]", (int)$module['status']); ?>
 			</td>
-			<td class="center"><input type="text" name="janrain_module[<?= $module_row; ?>][sort_order]"
-			                          value="<?= $module['sort_order']; ?>" size="3"/></td>
+			<td class="center"><input type="text" name="janrain_module[<?= $module_row; ?>][sort_order]" value="<?= $module['sort_order']; ?>" size="3"/></td>
 			<td class="left"><a onclick="$('#module-row<?= $module_row; ?>').remove();"
 			                    class="button"><span><?= $button_remove; ?></span></a></td>
 		</tr>

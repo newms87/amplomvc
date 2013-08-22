@@ -47,8 +47,7 @@
 	</form>
 	<form method='post' action='<?= $results_url; ?>' target='search_results'>
 		<input type='hidden' name='action' value='betty_search'/>
-		<input id='gen_search' type='text' value='<?= empty($search_general) ? "SEARCH HERE" : $search_general; ?>'
-		       name='search_general'/>
+		<input id='gen_search' type='text' value='<?= empty($search_general) ? "SEARCH HERE" : $search_general; ?>' name='search_general'/>
 		<input id='gen_search_go' type='submit' value='Go' class='search_go'/>
 
 		<div style='clear:both'></div>

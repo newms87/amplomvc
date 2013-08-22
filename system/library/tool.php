@@ -141,6 +141,31 @@ class Tool extends Library
 		return $return;
 	}
 
+	/**
+	 * Parses PHPDoc comments for Directives in the form Directive: String information
+	 *
+	 * @param string $file - The File to get the comment Directives from.
+	 *
+	 * @return array - An associative array with key as the Comment Directive, and value of the String following the ':'
+	 */
+	function getFileCommentDirectives($file)
+	{
+		$directives = array();
+
+		if (is_file($file)) {
+			$tokens = token_get_all(file_get_contents($file));
+
+			foreach ($tokens as $token) {
+				if ($token[0] === T_DOC_COMMENT) {
+					if (preg_match_all("/(.*?)([a-z0-9_]*?):(.*?)\\*/is", $token[1], $matches)) {
+						$directives = array_change_key_case(array_combine($matches[2], $matches[3]));
+					}
+				}
+			}
+		}
+
+		return $directives;
+	}
 
 	/**
 	 * Retrieves files in a specified directory recursively
@@ -151,14 +176,17 @@ class Tool extends Library
 	 *
 	 * @return array - Each value in the array will be determined by the $return_type param.
 	 */
-	function get_files_r($dir, $exts = array(
-		'php',
-		'tpl',
-		'css',
-		'js',
-		'to'
-	), $return_type = FILELIST_SPLFILEINFO)
+	function get_files_r($dir, $exts = null, $return_type = FILELIST_SPLFILEINFO)
 	{
+		if (is_null($exts)) {
+			$exts = array(
+				'php',
+				'tpl',
+				'css',
+				'js'
+			);
+		}
+
 		if (!is_dir($dir)) {
 			return array();
 		}

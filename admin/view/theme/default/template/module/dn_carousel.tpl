@@ -19,8 +19,7 @@
 							<a href="#tab-module-<?= $module_row; ?>" id="module-<?= $module_row; ?>">
 								<div id='tab-module-<?= $module_row ?>-title'
 								     class="tab_title"><?= $module['title'][$lang_id]; ?></div>
-								&nbsp;<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" alt=""
-								           onclick="$('.vtabs a:first').trigger('click'); $('#module-<?= $module_row; ?>').remove(); $('#tab-module-<?= $module_row; ?>').remove(); return false;"/></a>
+								&nbsp;<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" alt="" onclick="$('.vtabs a:first').trigger('click'); $('#module-<?= $module_row; ?>').remove(); $('#tab-module-<?= $module_row; ?>').remove(); return false;"/></a>
 							<? $module_row++; ?>
 						<? } ?>
 						<span id="module-add"><?= $button_add_module; ?>&nbsp;<img src="<?= HTTP_THEME_IMAGE . 'add.png'; ?>"
@@ -45,10 +44,8 @@
 										<table class="form">
 											<tr>
 												<td><?= $entry_title; ?></td>
-												<td><input class="car_title" max_length="20" size="20"
-												           name="dn_carousel_module[<?= $module_row; ?>][title][<?= $language['language_id']; ?>]"
-												           id="title-<?= $module_row; ?>-<?= $language['language_id']; ?>"
-												           value="<?= isset($module['title'][$language['language_id']]) ? $module['title'][$language['language_id']] : ''; ?>"/>
+												<td><input class="car_title" max_length="20" size="20" name="dn_carousel_module[<?= $module_row; ?>][title][<?= $language['language_id']; ?>]"
+												           id="title-<?= $module_row; ?>-<?= $language['language_id']; ?>" value="<?= isset($module['title'][$language['language_id']]) ? $module['title'][$language['language_id']] : ''; ?>"/>
 												</td>
 											</tr>
 											<tr>
@@ -61,16 +58,13 @@
 											</tr>
 											<tr>
 												<td class="left"><?= $entry_sort_order; ?></td>
-												<td><input type='text' max_length='3' size='3'
-												           name="dn_carousel_module[<?= $module_row; ?>][sort_order]"
-												           value="<?= $module['sort_order']; ?>"/></td>
+												<td><input type='text' max_length='3' size='3' name="dn_carousel_module[<?= $module_row; ?>][sort_order]" value="<?= $module['sort_order']; ?>"/></td>
 											</tr>
 										</table>
 										<table class="form">
 											<tr>
 												<td><?= $entry_add_article; ?></td>
-												<td><input type="text" modrow="<?= $module_row; ?>" class="rel_article"
-												           name="rel_article" value=""/></td>
+												<td><input type="text" modrow="<?= $module_row; ?>" class="rel_article" name="rel_article" value=""/></td>
 											</tr>
 											<tr>
 												<td><?= $entry_slides; ?></td>
@@ -83,16 +77,12 @@
 																<!--<label><?= $entry_article_title; ?></label>-->
 																<div class='slide_article_title'><?= $md['article_title']; ?></div>
 																<br/>
-																<input type="hidden"
-																       name="dn_carousel_module[<?= $module_row; ?>][data][<?= $md_row; ?>][article_id]"
-																       value="<?= $md['article_id']; ?>"/>
+																<input type="hidden" name="dn_carousel_module[<?= $module_row; ?>][data][<?= $md_row; ?>][article_id]" value="<?= $md['article_id']; ?>"/>
 																<?= isset($error_dn_carousel_module[$module_row]['data'][$md_row][$language['language_id']]) ? "<span class='error'>$error_dn_carousel_module[$module_row]['data'][$md_row][$language[language_id]]</span>" : ""; ?>
 																<div class="image">
 																	<img src="<?= $md['thumb']; ?>" alt=""
 																	     id="thumb<?= "$module_row-$md_row"; ?>"/>
-																	<input type="hidden"
-																	       name="dn_carousel_module[<?= $module_row; ?>][data][<?= $md_row; ?>][image]"
-																	       value="<?= $md['image']; ?>"
+																	<input type="hidden" name="dn_carousel_module[<?= $module_row; ?>][data][<?= $md_row; ?>][image]" value="<?= $md['image']; ?>"
 																	       id="image<?= "$module_row-$md_row"; ?>"/>
 																	<br/>
 																	<a onclick="upload_image('image<?= "$module_row-$md_row"; ?>', 'thumb<?= "$module_row-$md_row"; ?>');"><?= $text_browse; ?></a>&nbsp;&nbsp;|&nbsp;&nbsp;
@@ -100,16 +90,12 @@
 																</div>
 																<br/>
 																<label><?= $entry_title_text; ?></label>
-																<input type='text'
-																       name="dn_carousel_module[<?= $module_row; ?>][data][<?= $md_row; ?>][display_title]"
-																       value="<?= $md['display_title']; ?>"/><br/>
+																<input type='text' name="dn_carousel_module[<?= $module_row; ?>][data][<?= $md_row; ?>][display_title]" value="<?= $md['display_title']; ?>"/><br/>
 																<label><?= $entry_description; ?></label>
-																<textarea
-																	name="dn_carousel_module[<?= $module_row; ?>][data][<?= $md_row; ?>][description]"><?= isset($md['description']) ? $md['description'] : ''; ?></textarea>
+																<textarea name="dn_carousel_module[<?= $module_row; ?>][data][<?= $md_row; ?>][description]"><?= isset($md['description']) ? $md['description'] : ''; ?></textarea>
 																<img class='remove_slide_img'
 																     src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"
-																     alt=""
-																     onclick="remove_article_slide(<?= $module_row . ',' . $md_row; ?>);"/>
+																     alt="" onclick="remove_article_slide(<?= $module_row . ',' . $md_row; ?>);"/>
 															</div>
 															<? $md_row++; ?>
 														<?

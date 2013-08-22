@@ -18,20 +18,20 @@ final class Action
 		$this->path = $path;
 		$this->parameters = $parameters;
 		$this->method = 'index';
-		
+
 		if (!$classpath) {
 			$this->classpath = ($this->config->isAdmin() ? "admin/" : "catalog/") . "controller/";
 		} else {
 			$this->classpath = rtrim($classpath,'/') . '/';
 		}
-		
+
 		$parts = explode('/', str_replace('../', '', $this->classpath . $this->path));
-		
+
 		$filepath = '';
-		
+
 		foreach ($parts as $part) {
 			$filepath .= $part;
-			
+
 			//Scan directories until we find file requested
 			if (is_dir(SITE_DIR . $filepath)) {
 				$filepath .= '/';
@@ -39,7 +39,7 @@ final class Action
 			}
 			elseif (is_file(SITE_DIR . $filepath . '.php')) {
 				$this->file = SITE_DIR . $filepath . '.php';
-				
+
 				$this->class .= $this->tool->formatClassname($part);
 			}
 			elseif ($this->file) {
@@ -52,50 +52,50 @@ final class Action
 			}
 		}
 	}
-	
+
 	public function __get($key)
 	{
 		return $this->registry->get($key);
 	}
-	
+
 	public function isValid()
 	{
 		return $this->file ? true : false;
 	}
-	
+
 	public function getFile()
 	{
 		return $this->file;
 	}
-	
+
 	public function getClass()
 	{
 		return $this->class;
 	}
-	
+
 	public function getClassPath()
 	{
 		return $this->classpath;
 	}
-	
+
 	public function getMethod()
 	{
 		return $this->method;
 	}
-	
+
 	public function getParameters()
 	{
 		return $this->parameters;
 	}
-	
+
 	public function getController()
 	{
 		if (!$this->controller) {
 			if (is_file($this->file)) {
-				_require($this->file);
-				
+				require_once(_ac_mod_file($this->file));
+
 				$class = $this->class;
-				
+
 				$this->controller = new $class($this->registry);
 			} else {
 				if (!$this->file) {
@@ -105,27 +105,27 @@ final class Action
 				}
 			}
 		}
-		
+
 		return $this->controller;
 	}
-	
+
 	public function execute()
 	{
 		$controller = $this->getController();
-		
+
 		if (is_callable(array($controller, $this->method))) {
 			call_user_func_array(array($controller, $this->method), $this->parameters);
-			
+
 			$this->output = $controller->output;
-			
+
 			return true;
 		}
-		
+
 		trigger_error("The method $this->method() was not callable in $this->class. Please make sure it is a public method!");
-		
+
 		return false;
 	}
-	
+
 	public function getOutput()
 	{
 		return $this->output;

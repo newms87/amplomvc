@@ -17,15 +17,11 @@
 				<? foreach ($settings['attributes'] as $key => $attribute) { ?>
 					<? $row = $attribute['attribute_group_id']; ?>
 					<div class="attribute <?= $key; ?>">
-						<input type="hidden" name="settings[attributes][<?= $row; ?>][attribute_group_id]"
-						       value="<?= $attribute['attribute_group_id']; ?>"/>
+						<input type="hidden" name="settings[attributes][<?= $row; ?>][attribute_group_id]" value="<?= $attribute['attribute_group_id']; ?>"/>
 						<label for="attribute_group_name<?= $key; ?>"><?= $entry_attribute_group_name; ?></label>
-						<input id="attribute_group_name<?= $key; ?>" type="text"
-						       name="settings[attributes][<?= $row; ?>][group_name]"
-						       value="<?= $attribute['group_name']; ?>"/>
+						<input id="attribute_group_name<?= $key; ?>" type="text" name="settings[attributes][<?= $row; ?>][group_name]" value="<?= $attribute['group_name']; ?>"/>
 						<label for="attribute_menu_name<?= $key; ?>"><?= $entry_attribute_menu_name; ?></label>
-						<input id="attribute_menu_name<?= $key; ?>" type="text"
-						       name="settings[attributes][<?= $row; ?>][menu_name]" value="<?= $attribute['menu_name']; ?>"/>
+						<input id="attribute_menu_name<?= $key; ?>" type="text" name="settings[attributes][<?= $row; ?>][menu_name]" value="<?= $attribute['menu_name']; ?>"/>
 						<a class="delete" onclick="$(this).closest('.attribute').remove()"><?= $button_delete; ?></a>
 					</div>
 				<? } ?>

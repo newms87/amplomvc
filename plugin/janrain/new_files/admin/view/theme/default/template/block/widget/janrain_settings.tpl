@@ -2,8 +2,7 @@
 	<tr>
 		<td><label class="required" for="application_domain"><?= $entry_application_domain; ?></label></td>
 		<td>
-			<input id="application_domain" type="text" name="settings[application_domain]"
-			       value="<?= $application_domain; ?>"/>
+			<input id="application_domain" type="text" name="settings[application_domain]" value="<?= $application_domain; ?>"/>
 			<label for="application_domain" class="janrain_label_desc"><?= $entry_application_domain_desc; ?></label>
 		</td>
 	</tr>
@@ -20,8 +19,7 @@
 			<div class='display_icon_list'>
 				<? foreach ($data_display_icons as $key => $icon) { ?>
 					<div class='display_icon_label'>
-						<input id="icon-<?= $key; ?>" type='checkbox' name="settings[display_icons][]"
-						       value="<?= $key; ?>" <?= in_array($key, $display_icons) ? 'checked="checked"' : ''; ?> />
+						<input id="icon-<?= $key; ?>" type='checkbox' name="settings[display_icons][]" value="<?= $key; ?>" <?= in_array($key, $display_icons) ? 'checked="checked"' : ''; ?> />
 						<label for="icon-<?= $key; ?>" style="display: block">
 							<div class='janrain-icon-small'
 							     style="background: url(<?= $social_icon_sprite; ?>) no-repeat 0 <?= $image_offset[$key] * -16; ?>px;"></div>

@@ -23,8 +23,7 @@
 					</tr>
 					<tr>
 						<td class="required"> <?= $entry_auth_pass; ?></td>
-						<td><input type="text" name="perpetual_payments_auth_pass"
-						           value="<?= $perpetual_payments_auth_pass; ?>"/>
+						<td><input type="text" name="perpetual_payments_auth_pass" value="<?= $perpetual_payments_auth_pass; ?>"/>
 							<? if ($error_auth_pass) { ?>
 								<span class="error"><?= $error_auth_pass; ?></span>
 							<? } ?></td>
@@ -56,8 +55,7 @@
 										<option value="<?= $order_status['order_status_id']; ?>"
 										        selected="selected"><?= $order_status['name']; ?></option>
 									<? } else { ?>
-										<option
-											value="<?= $order_status['order_status_id']; ?>"><?= $order_status['name']; ?></option>
+										<option value="<?= $order_status['order_status_id']; ?>"><?= $order_status['name']; ?></option>
 									<? } ?>
 								<? } ?>
 							</select></td>
@@ -90,8 +88,7 @@
 					</tr>
 					<tr>
 						<td><?= $entry_sort_order; ?></td>
-						<td><input type="text" name="perpetual_payments_sort_order"
-						           value="<?= $perpetual_payments_sort_order; ?>" size="1"/></td>
+						<td><input type="text" name="perpetual_payments_sort_order" value="<?= $perpetual_payments_sort_order; ?>" size="1"/></td>
 					</tr>
 				</table>
 			</form>

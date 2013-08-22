@@ -20,8 +20,7 @@
 			case 'ckedit':
 				?>
 				<? $ckeditor = true; ?>
-				<textarea class="ckedit batch_ckedit" id="ba-<?= $action['key']; ?>"
-				          name="action_value"><?= $action['default']; ?></textarea>
+				<textarea class="ckedit batch_ckedit" id="ba-<?= $action['key']; ?>" name="action_value"><?= $action['default']; ?></textarea>
 				<? break;
 			case 'select':
 				?>
@@ -33,8 +32,7 @@
 			case 'time':
 			case 'datetime':
 				?>
-				<input type="text" class="<?= $action['type'] . 'picker'; ?>" name="action_value"
-				       value="<?= $action['default']; ?>"/>
+				<input type="text" class="<?= $action['type'] . 'picker'; ?>" name="action_value" value="<?= $action['default']; ?>"/>
 				<? break;
 
 			default:

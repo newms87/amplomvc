@@ -30,8 +30,7 @@
 											<?= $this->builder->image_input("featured_product_list[$id][image]", $item['image']); ?>
 										</div>
 										<div class='item_name'>
-											<input type='text' size="50" value='<?= $item['name']; ?>'
-											       name='featured_product_list[<?= $id; ?>][name]'/>
+											<input type='text' size="50" value='<?= $item['name']; ?>' name='featured_product_list[<?= $id; ?>][name]'/>
 										</div>
 										<img class='remove' onclick='$(this).parent().remove();' width='30px'
 										     src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"/>
@@ -59,8 +58,7 @@
 										<div class='item_image'>
 											<?= $this->builder->image_input("featured_carousel_list[$id][image]", $item['image']); ?>
 										</div>
-										<div class='item_name'><input type='text' size="50" value='<?= $item['name']; ?>'
-										                              name='featured_carousel_list[<?= $id; ?>][name]'/></div>
+										<div class='item_name'><input type='text' size="50" value='<?= $item['name']; ?>' name='featured_carousel_list[<?= $id; ?>][name]'/></div>
 										<img class='remove' onclick='$(this).parent().remove();' width='30px'
 										     src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"/>
 									</li>
@@ -85,10 +83,8 @@
 					<? foreach ($featured_carousel_module as $module) { ?>
 						<tbody id="module-row<?= $module_row; ?>">
 						<tr>
-							<td class="left"><input type="text" name="featured_carousel_module[<?= $module_row; ?>][limit]"
-							                        value="<?= $module['limit']; ?>" size="1" maxlength='2'/></td>
-							<td class="left"><input type="text" name="featured_carousel_module[<?= $module_row; ?>][size]"
-							                        value="<?= $module['size']; ?>" size="1" maxlength='3'/></td>
+							<td class="left"><input type="text" name="featured_carousel_module[<?= $module_row; ?>][limit]" value="<?= $module['limit']; ?>" size="1" maxlength='2'/></td>
+							<td class="left"><input type="text" name="featured_carousel_module[<?= $module_row; ?>][size]" value="<?= $module['size']; ?>" size="1" maxlength='3'/></td>
 							<td
 								class='left'><?= $this->builder->build('select', $data_styles, "featured_carousel_module[$module_row][style]", $module['style']); ?></td>
 							<? $this->builder->set_config('layout_id', 'name'); ?>
@@ -98,9 +94,7 @@
 								class='left'><?= $this->builder->build('select', $data_positions, "featured_carousel_module[$module_row][position]", $module['position']); ?></td>
 							<td
 								class="left"><?= $this->builder->build('select', $data_statuses, "featured_carousel_module[$module_row][status]", (int)$module['status']); ?></td>
-							<td class="right"><input type="text"
-							                         name="featured_carousel_module[<?= $module_row; ?>][sort_order]"
-							                         value="<?= $module['sort_order']; ?>" size="3"/></td>
+							<td class="right"><input type="text" name="featured_carousel_module[<?= $module_row; ?>][sort_order]" value="<?= $module['sort_order']; ?>" size="3"/></td>
 							<td class="left"><a onclick="$('#module-row<?= $module_row; ?>').remove();"
 							                    class="button"><?= $button_remove; ?></a></td>
 						</tr>

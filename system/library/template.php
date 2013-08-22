@@ -117,13 +117,12 @@ class Template extends Library
 		}
 
 		if (is_file($this->file)) {
-			$file = $this->plugin->getFile($this->file);
 
 			extract($this->data);
 
 			ob_start();
 
-			include($file);
+			include(_ac_mod_file($this->file));
 
 			return ob_get_clean();
 		} else {

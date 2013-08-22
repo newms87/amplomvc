@@ -31,17 +31,7 @@ class Admin_Model_Setting_Plugin extends Model
 					}
 
 					$setup_file = DIR_PLUGIN . $plugin['name'] . '/setup.php';
-					if (is_file($setup_file)) {
-						$tokens = token_get_all(file_get_contents($setup_file));
-
-						foreach ($tokens as $token) {
-							if ($token[0] === T_DOC_COMMENT) {
-								if (preg_match_all("/(.*?)([a-z0-9_]*?):(.*?)\\*/is", $token[1], $matches)) {
-									$plugin += array_change_key_case(array_combine($matches[2], $matches[3]));
-								}
-							}
-						}
-					}
+					$plugin += $this->tool->getFileCommentDirectives($setup_file);
 
 					$plugin += array_fill_keys(array('title','description','date','author', 'version', 'dependencies', 'link'), '');
 

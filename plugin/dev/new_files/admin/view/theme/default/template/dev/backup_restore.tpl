@@ -17,8 +17,7 @@
 								<label><?= $entry_backup; ?></label>
 								<input type="submit" class="button" name="site_backup" value="<?= $button_backup; ?>"/>
 								<br/><br/>
-								<input type="submit" id="overwrite_default_db" class="button" name="default_installation"
-								       value="<?= $button_default_installation; ?>"/>
+								<input type="submit" id="overwrite_default_db" class="button" name="default_installation" value="<?= $button_default_installation; ?>"/>
 							</td>
 							<td>
 								<?= $this->builder->build('multiselect', $data_tables, 'tables', $tables); ?>
@@ -44,8 +43,7 @@
 							<td></td>
 							<td>
 								<input type="submit" class="button" name="site_restore" value="<?= $button_restore; ?>"/>
-								<input type="submit" class="button" onclick="$(this).closest('form').attr('target', '_blank');"
-								       name="backup_download" value="<?= $button_download; ?>"/>
+								<input type="submit" class="button" onclick="$(this).closest('form').attr('target', '_blank');" name="backup_download" value="<?= $button_download; ?>"/>
 							</td>
 						</tr>
 					</table>

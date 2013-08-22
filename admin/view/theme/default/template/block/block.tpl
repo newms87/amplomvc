@@ -50,8 +50,7 @@
 <div id="profile_tab_template" style="display:none">
 	<a href="#tab-profile-%pid%" id="profile-%pid%">
 		<span><?= $tab_profile . ' %pid%'; ?></span>
-		<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" alt=""
-		     onclick="$('.vtabs a:first').trigger('click'); $('#profile-%pid%').remove(); $('#tab-profile-%pid%').remove(); return false;"/>
+		<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" alt="" onclick="$('.vtabs a:first').trigger('click'); $('#profile-%pid%').remove(); $('#tab-profile-%pid%').remove(); return false;"/>
 	</a>
 </div>
 

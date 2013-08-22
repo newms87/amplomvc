@@ -16,16 +16,14 @@
 				<table class="form">
 					<tr>
 						<td class="required"> <?= $entry_merchant_id; ?></td>
-						<td><input type="text" name="google_checkout_merchant_id"
-						           value="<?= $google_checkout_merchant_id; ?>"/>
+						<td><input type="text" name="google_checkout_merchant_id" value="<?= $google_checkout_merchant_id; ?>"/>
 							<? if ($error_merchant_id) { ?>
 								<span class="error"><?= $error_merchant_id; ?></span>
 							<? } ?></td>
 					</tr>
 					<tr>
 						<td class="required"> <?= $entry_merchant_key; ?></td>
-						<td><input type="text" name="google_checkout_merchant_key"
-						           value="<?= $google_checkout_merchant_key; ?>"/>
+						<td><input type="text" name="google_checkout_merchant_key" value="<?= $google_checkout_merchant_key; ?>"/>
 							<? if ($error_merchant_key) { ?>
 								<span class="error"><?= $error_merchant_key; ?></span>
 							<? } ?></td>

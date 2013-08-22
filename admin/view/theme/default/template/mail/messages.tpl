@@ -21,11 +21,9 @@
 								<td><?= $entry_mail_registration; ?></td>
 								<td class='mail_info'>
 									<label for='registration_subject'><?= $entry_mail_subject; ?></label>
-									<input id='registration_subject' type='text' name='mail_registration_subject'
-									       value='<?= $mail_registration_subject; ?>' size='100'/>
+									<input id='registration_subject' type='text' name='mail_registration_subject' value='<?= $mail_registration_subject; ?>' size='100'/>
 									<label for='registration_message'><?= $entry_mail_message; ?></label>
-									<textarea id='registration_message' class='ckedit'
-									          name='mail_registration_message'><?= $mail_registration_message; ?></textarea>
+									<textarea id='registration_message' class='ckedit' name='mail_registration_message'><?= $mail_registration_message; ?></textarea>
 								</td>
 							</tr>
 						</table>

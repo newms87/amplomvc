@@ -44,18 +44,14 @@
 						<? foreach ($option_values as $row => $option_value) { ?>
 							<tr class="optionvaluerow" data-row="<?= $row; ?>">
 								<td class="center">
-									<input type="hidden" name="option_value[<?= $row; ?>][option_value_id]"
-									       value="<?= $option_value['option_value_id']; ?>"/>
-									<input type="text" name="option_value[<?= $row; ?>][value]"
-									       value="<?= $option_value['value']; ?>"/>
+									<input type="hidden" name="option_value[<?= $row; ?>][option_value_id]" value="<?= $option_value['option_value_id']; ?>"/>
+									<input type="text" name="option_value[<?= $row; ?>][value]" value="<?= $option_value['value']; ?>"/>
 								</td>
 								<td class="center">
 									<? $this->builder->set_builder_template('click_image_small'); ?>
 									<?= $this->builder->image_input("option_value[$row][image]", $option_value['image'], null, null, $this->config->get('config_image_product_option_width'), $this->config->get('config_image_product_option_height')); ?>
 								</td>
-								<td class="center"><input class="sort_order" type="text"
-								                          name="option_value[<?= $row; ?>][sort_order]"
-								                          value="<?= $option_value['sort_order']; ?>" size="1"/></td>
+								<td class="center"><input class="sort_order" type="text" name="option_value[<?= $row; ?>][sort_order]" value="<?= $option_value['sort_order']; ?>" size="1"/></td>
 								<td class="center"><a onclick="$(this).closest('tr').remove();"
 								                      class="button"><?= $button_remove; ?></a></td>
 							</tr>

@@ -55,20 +55,14 @@
 										<td class="left pricetotal">
 											<span
 												class='total' <?= $set['range'] == 'range' ? "style='display:none'" : ''; ?>><input
-													type="text" name="amount_priceset[<?= $set_row; ?>][total]"
-													value="<?= $set['total']; ?>"/></span>
+													type="text" name="amount_priceset[<?= $set_row; ?>][total]" value="<?= $set['total']; ?>"/></span>
 													<span
 														class='pricerange' <?= $set['range'] != 'range' ? "style='display:none'" : ''; ?>>
-															<?= $entry_priceset_min; ?><input type="text"
-															                                  name="amount_priceset[<?= $set_row; ?>][from]"
-															                                  value="<?= $set['from']; ?>"/>
-														<?= $entry_priceset_max; ?><input type="text"
-														                                  name="amount_priceset[<?= $set_row; ?>][to]"
-														                                  value="<?= $set['to']; ?>"/>
+															<?= $entry_priceset_min; ?><input type="text" name="amount_priceset[<?= $set_row; ?>][from]" value="<?= $set['from']; ?>"/>
+														<?= $entry_priceset_max; ?><input type="text" name="amount_priceset[<?= $set_row; ?>][to]" value="<?= $set['to']; ?>"/>
 													</span>
 										</td>
-										<td class="left"><input type="text" name="amount_priceset[<?= $set_row; ?>][cost]"
-										                        value="<?= $set['cost']; ?>"/></td>
+										<td class="left"><input type="text" name="amount_priceset[<?= $set_row; ?>][cost]" value="<?= $set['cost']; ?>"/></td>
 										<td
 											class="left"><?= $this->builder->build('select', $priceset_types, "amount_priceset[$set_row][type]", $set['type']); ?></td>
 										<td class="left"><a onclick="$('#set-row<?= $set_row; ?>').remove();"
@@ -107,14 +101,12 @@
 										<td class="left">
 											<? $this->builder->set_config('country_id', 'name'); ?>
 											<?= $this->builder->build('select', $countries, "amount_zonerule[$rule_row][country_id]", $rule['country_id'], array('class' => 'country_select')); ?>
-											<select id="zone_id-<?= $rule_row; ?>"
-											        name="amount_zonerule[<?= $rule_row; ?>][zone_id]" class="zone_select"
+											<select id="zone_id-<?= $rule_row; ?>" name="amount_zonerule[<?= $rule_row; ?>][zone_id]" class="zone_select"
 											        zone_id="<?= $rule['zone_id']; ?>"></select>
 										</td>
 										<td
 											class="left"><?= $this->builder->build('select', $rule_mods, "amount_zonerule[$rule_row][mod]", $rule['mod'], array('id' => "zone_id-$rule_row")); ?></td>
-										<td class="left"><input type="text" name="amount_zonerule[<?= $rule_row; ?>][cost]"
-										                        value="<?= $rule['cost']; ?>"/></td>
+										<td class="left"><input type="text" name="amount_zonerule[<?= $rule_row; ?>][cost]" value="<?= $rule['cost']; ?>"/></td>
 										<td
 											class="left"><?= $this->builder->build('select', $priceset_types, "amount_zonerule[$rule_row][type]", $rule['type']); ?></td>
 										<td class="left"><a onclick="$('#rule-row<?= $rule_row; ?>').remove();"

@@ -56,8 +56,7 @@
 									     "0" => "Disabled"
 									), "main_sidebar_module[$module_row][status]", $module['status']); ?>
 							</td>
-							<td class="right"><input type="text" name="main_sidebar_module[<?= $module_row; ?>][sort_order]"
-							                         value="<?= $module['sort_order']; ?>" size="3"/></td>
+							<td class="right"><input type="text" name="main_sidebar_module[<?= $module_row; ?>][sort_order]" value="<?= $module['sort_order']; ?>" size="3"/></td>
 							<td class="left"><a onclick="$('#module-row<?= $module_row; ?>').remove();"
 							                    class="button"><?= $button_remove; ?></a></td>
 						</tr>

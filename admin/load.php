@@ -87,6 +87,9 @@ _is_writable(DIR_LOGS, $config->get('config_default_dir_mode'));
 // Session
 $registry->set('session', new Session($registry));
 
+//Mod Files
+$registry->set('mod', new Mod($registry));
+
 // Url
 $registry->set('url', new Url($registry));
 

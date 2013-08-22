@@ -19,8 +19,7 @@
 					</tr>
 					<tr>
 						<td> <?= $entry_test_email; ?></td>
-						<td><input type="text" name="pp_standard_test_email" size="50"
-						           value="<?= $pp_standard_test_email; ?>"/></td>
+						<td><input type="text" name="pp_standard_test_email" size="50" value="<?= $pp_standard_test_email; ?>"/></td>
 					</tr>
 					<tr>
 						<td><?= $entry_test; ?></td>

@@ -13,10 +13,10 @@ class DB
 
 		//the database interface
 		if (function_exists("_require_once")) {
-			_require(DIR_DATABASE . 'database.php');
+			require_once(_ac_mod_file(DIR_DATABASE . 'database.php'));
 
 			if (file_exists(DIR_DATABASE . $driver . '.php')) {
-				_require(DIR_DATABASE . $driver . '.php');
+				require_once(_ac_mod_file(DIR_DATABASE . $driver . '.php'));
 			} else {
 				die('Error: Could not load database file ' . $driver . '!');
 			}
@@ -175,7 +175,7 @@ class DB
 		}
 
 		if (function_exists('get_caller')) {
-			trigger_error($this->driver->getError() . get_caller(1, 3));
+			trigger_error($this->driver->getError() . get_caller(1, 5));
 		}
 	}
 

@@ -19,20 +19,16 @@
 								<ul id="return_policy_list" class="easy_list">
 									<? foreach ($return_policies as $row => $policy) { ?>
 										<li class="return_policy" data-row="<?= $row; ?>">
-											<input class="title" size="50" type="text" name="return_policies[<?= $row; ?>][title]"
-											       value="<?= $policy['title']; ?>"/><br/>
-											<textarea class="description ckedit"
-											          name="return_policies[<?= $row; ?>][description]"><?= $policy['description']; ?></textarea>
+											<input class="title" size="50" type="text" name="return_policies[<?= $row; ?>][title]" value="<?= $policy['title']; ?>"/><br/>
+											<textarea class="description ckedit" name="return_policies[<?= $row; ?>][description]"><?= $policy['description']; ?></textarea>
 
 											<div class="return_days_box">
 												<?= $this->builder->build('select', $data_days, 'data_days', $policy['days'] > 0 ? 1 : $policy['days']); ?>
-												<input type="text" size="2" name="return_policies[<?= $row; ?>][days]"
-												       value="<?= $policy['days']; ?>"/>
+												<input type="text" size="2" name="return_policies[<?= $row; ?>][days]" value="<?= $policy['days']; ?>"/>
 											</div>
 
 											<? if (empty($policy['no_delete'])) { ?>
-												<a class="delete_button text"
-												   onclick="$(this).closest('li').remove()"><?= $button_delete; ?></a>
+												<a class="delete_button text" onclick="$(this).closest('li').remove()"><?= $button_delete; ?></a>
 											<? } ?>
 										</li>
 									<? } ?>

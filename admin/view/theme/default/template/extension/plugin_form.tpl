@@ -30,17 +30,13 @@
 						<? foreach ($plugin_data as $data) { ?>
 							<tbody id="plug-row<?= $row; ?>" row='<?= $row; ?>'>
 							<tr>
-								<td class="left"><input type="text" name="plugin_data[<?= $row; ?>][on_render]"
-								                        value="<?= $data['on_render']; ?>" size="30"/></td>
-								<td class="left"><input type="text" name="plugin_data[<?= $row; ?>][plugin_path]"
-								                        value="<?= $data['plugin_path']; ?>" size="30"/></td>
-								<td class="left"><input type="text" name="plugin_data[<?= $row; ?>][route]"
-								                        value="<?= $data['route']; ?>" size="30"/></td>
+								<td class="left"><input type="text" name="plugin_data[<?= $row; ?>][on_render]" value="<?= $data['on_render']; ?>" size="30"/></td>
+								<td class="left"><input type="text" name="plugin_data[<?= $row; ?>][plugin_path]" value="<?= $data['plugin_path']; ?>" size="30"/></td>
+								<td class="left"><input type="text" name="plugin_data[<?= $row; ?>][route]" value="<?= $data['route']; ?>" size="30"/></td>
 								<td class="left">
 									<?= $this->builder->build('select', $base_types, "plugin_data[$row][base_type]", $data['base_type']); ?>
 								</td>
-								<td class="left"><input type="text" name="plugin_data[<?= $row; ?>][class_path]"
-								                        value="<?= $data['class_path']; ?>" size="30"/></td>
+								<td class="left"><input type="text" name="plugin_data[<?= $row; ?>][class_path]" value="<?= $data['class_path']; ?>" size="30"/></td>
 								<td class="left">
 									<?= $this->builder->build('select', $types, "plugin_data[$row][type]", $data['type']); ?>
 								</td>
@@ -49,14 +45,11 @@
 										<? foreach ($data['hooks'] as $key => $hook) { ?>
 											<div class='hook_input'>
 												<label for='hook-method-<?= $key; ?>'><?= $entry_hook_method; ?></label><input
-													id='hook-method-<?= $key; ?>' type="text"
-													name="plugin_data[<?= $row; ?>][hooks][<?= $key; ?>][callback]"
-													value="<?= $hook['callback']; ?>" size="25"/>
+													id='hook-method-<?= $key; ?>' type="text" name="plugin_data[<?= $row; ?>][hooks][<?= $key; ?>][callback]" value="<?= $hook['callback']; ?>" size="25"/>
 												<?= $this->builder->build('select', $call_when, "plugin_data[$row][hooks][$key][when]", $hook['when']); ?>
 												<br/>
 												<label for='hook-for-<?= $key; ?>'><?= $entry_hook_for; ?></label><input
-													id='hook-for-<?= $key; ?>' type="text"
-													name="plugin_data[<?= $row; ?>][hooks][<?= $key; ?>][for]" value="<?= $key; ?>"
+													id='hook-for-<?= $key; ?>' type="text" name="plugin_data[<?= $row; ?>][hooks][<?= $key; ?>][for]" value="<?= $key; ?>"
 													size="25"/>
 												<a onclick="$(this).parent().remove()"><?= $button_hook_remove; ?></a>
 											</div>

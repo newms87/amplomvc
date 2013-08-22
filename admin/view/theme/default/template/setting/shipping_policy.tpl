@@ -19,13 +19,10 @@
 								<ul id="shipping_policy_list" class="easy_list">
 									<? foreach ($shipping_policies as $row => $policy) { ?>
 										<li class="shipping_policy" data-row="<?= $row; ?>">
-											<input class="title" size="50" type="text"
-											       name="shipping_policies[<?= $row; ?>][title]" value="<?= $policy['title']; ?>"/><br/>
-											<textarea class="description ckedit"
-											          name="shipping_policies[<?= $row; ?>][description]"><?= $policy['description']; ?></textarea>
+											<input class="title" size="50" type="text" name="shipping_policies[<?= $row; ?>][title]" value="<?= $policy['title']; ?>"/><br/>
+											<textarea class="description ckedit" name="shipping_policies[<?= $row; ?>][description]"><?= $policy['description']; ?></textarea>
 											<? if (empty($policy['no_delete'])) { ?>
-												<a class="delete_button text"
-												   onclick="$(this).closest('li').remove()"><?= $button_delete; ?></a>
+												<a class="delete_button text" onclick="$(this).closest('li').remove()"><?= $button_delete; ?></a>
 											<? } ?>
 										</li>
 									<? } ?>

@@ -94,7 +94,7 @@ class Admin_Controller_Extension_Module extends Controller
 			$this->Model_User_UserGroup->addPermission($this->user->getId(), 'access', 'module/' . $_GET['extension']);
 			$this->Model_User_UserGroup->addPermission($this->user->getId(), 'modify', 'module/' . $_GET['extension']);
 
-			_require(DIR_APPLICATION . 'controller/module/' . $_GET['extension'] . '.php');
+			require_once(_ac_mod_file(DIR_APPLICATION . 'controller/module/' . $_GET['extension'] . '.php'));
 
 			$class = 'ControllerModule' . str_replace('_', '', $_GET['extension']);
 			$class = new $class('module' . $_GET['extension'], $this->registry);
@@ -120,7 +120,7 @@ class Admin_Controller_Extension_Module extends Controller
 
 			$this->Model_Setting_Setting->deleteSetting($_GET['extension']);
 
-			_require(DIR_APPLICATION . 'controller/module/' . $_GET['extension'] . '.php');
+			require_once(_ac_mod_file(DIR_APPLICATION . 'controller/module/' . $_GET['extension'] . '.php'));
 
 			$class = 'ControllerModule' . str_replace('_', '', $_GET['extension']);
 			$class = new $class('module/' . $_GET['extension'], $this->registry);

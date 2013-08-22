@@ -46,13 +46,11 @@
 						</tr>
 						<tr>
 							<td class="required"> <?= $entry_decimal_point; ?></td>
-							<td><input type="text" style='font-size:30px' size='1' name="decimal_point"
-							           value="<?= $decimal_point; ?>"/></td>
+							<td><input type="text" style='font-size:30px' size='1' name="decimal_point" value="<?= $decimal_point; ?>"/></td>
 						</tr>
 						<tr>
 							<td class="required"> <?= $entry_thousand_point; ?></td>
-							<td><input type="text" style='font-size:30px' size='1' name="thousand_point"
-							           value="<?= $thousand_point; ?>"/></td>
+							<td><input type="text" style='font-size:30px' size='1' name="thousand_point" value="<?= $thousand_point; ?>"/></td>
 						</tr>
 						<tr>
 							<td class="required"> <?= $entry_image; ?></td>

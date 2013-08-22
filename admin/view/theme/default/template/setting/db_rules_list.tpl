@@ -15,8 +15,7 @@
 				<table class="list">
 					<thead>
 					<tr>
-						<td width="1" style="text-align: center;"><input type="checkbox"
-						                                                 onclick="$('input[name*=\'selected\']').attr('checked', this.checked);"/>
+						<td width="1" style="text-align: center;"><input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);"/>
 						</td>
 						<td class="left"><?= $column_table; ?></a></td>
 						<td class="left"><?= $column_column; ?></td>
@@ -30,8 +29,7 @@
 						<? foreach ($db_rules as $db_rule) { ?>
 							<tr>
 								<td style="text-align: center;">
-									<input type="checkbox" name="selected[]"
-									       value="<?= $db_rule['db_rule_id']; ?>" <?= $db_rule['selected'] ? "checked='checked'" : ""; ?> />
+									<input type="checkbox" name="selected[]" value="<?= $db_rule['db_rule_id']; ?>" <?= $db_rule['selected'] ? "checked='checked'" : ""; ?> />
 								</td>
 								<td class="left"><?= $db_rule['table']; ?></td>
 								<td class="left"><?= $db_rule['column']; ?></td>

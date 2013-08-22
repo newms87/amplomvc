@@ -604,8 +604,7 @@
 			</div>
 		</div>
 	</div>
-	<a onclick="$(this).parent().find(':checkbox').attr('checked', true);"><?= $text_select_all; ?></a> / <a
-		onclick="$(this).parent().find(':checkbox').attr('checked', false);"><?= $text_unselect_all; ?></a></td>
+	<a onclick="$(this).parent().find(':checkbox').attr('checked', true);"><?= $text_select_all; ?></a> / <a onclick="$(this).parent().find(':checkbox').attr('checked', false);"><?= $text_unselect_all; ?></a></td>
 	</tr>
 	<tr>
 		<td><?= $entry_insurance; ?></td>

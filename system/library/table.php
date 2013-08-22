@@ -67,12 +67,10 @@ class Table extends Library
 		$columns = $this->columns;
 		$rows    = $this->rows;
 
-		$file = $this->plugin->getFile($this->file);
-
 		//render the file
 		ob_start();
 
-		require($file);
+		require_once(_ac_mod_file($this->file));
 
 		return ob_get_clean();
 	}

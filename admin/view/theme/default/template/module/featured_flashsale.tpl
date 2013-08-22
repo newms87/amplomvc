@@ -51,10 +51,8 @@
 					<? foreach ($modules as $module) { ?>
 						<tbody id="module-row<?= $module_row; ?>">
 						<tr>
-							<td class="left"><input type="text" name="featured_flashsale_module[<?= $module_row; ?>][limit]"
-							                        value="<?= $module['limit']; ?>" size="1" maxlength='2'/></td>
-							<td class="left"><input type="text" name="featured_flashsale_module[<?= $module_row; ?>][size]"
-							                        value="<?= $module['size']; ?>" size="1" maxlength='3'/></td>
+							<td class="left"><input type="text" name="featured_flashsale_module[<?= $module_row; ?>][limit]" value="<?= $module['limit']; ?>" size="1" maxlength='2'/></td>
+							<td class="left"><input type="text" name="featured_flashsale_module[<?= $module_row; ?>][size]" value="<?= $module['size']; ?>" size="1" maxlength='3'/></td>
 							<td
 								class='left'><?= $this->builder->build('select', $styles, "featured_flashsale_module[$module_row][style]", $module['style']); ?></td>
 							<td
@@ -63,9 +61,7 @@
 								class='left'><?= $this->builder->build('select', $positions, "featured_flashsale_module[$module_row][position]", $module['position']); ?></td>
 							<td
 								class="left"><?= $this->builder->build('select', $statuses, "featured_flashsale_module[$module_row][status]", (int)$module['status']); ?></td>
-							<td class="right"><input type="text"
-							                         name="featured_flashsale_module[<?= $module_row; ?>][sort_order]"
-							                         value="<?= $module['sort_order']; ?>" size="3"/></td>
+							<td class="right"><input type="text" name="featured_flashsale_module[<?= $module_row; ?>][sort_order]" value="<?= $module['sort_order']; ?>" size="3"/></td>
 							<td class="left"><a onclick="$('#module-row<?= $module_row; ?>').remove();"
 							                    class="button"><?= $button_remove; ?></a></td>
 						</tr>

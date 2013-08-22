@@ -41,14 +41,10 @@
 										<? } ?>
 									<? } ?>
 								</select></td>
-							<td class="left"><input type="text" name="carousel_module[<?= $module_row; ?>][limit]"
-							                        value="<?= $module['limit']; ?>" size="1"/></td>
-							<td class="left"><input type="text" name="carousel_module[<?= $module_row; ?>][scroll]"
-							                        value="<?= $module['scroll']; ?>" size="3"/></td>
-							<td class="left"><input type="text" name="carousel_module[<?= $module_row; ?>][width]"
-							                        value="<?= $module['width']; ?>" size="3"/>
-								<input type="text" name="carousel_module[<?= $module_row; ?>][height]"
-								       value="<?= $module['height']; ?>" size="3"/>
+							<td class="left"><input type="text" name="carousel_module[<?= $module_row; ?>][limit]" value="<?= $module['limit']; ?>" size="1"/></td>
+							<td class="left"><input type="text" name="carousel_module[<?= $module_row; ?>][scroll]" value="<?= $module['scroll']; ?>" size="3"/></td>
+							<td class="left"><input type="text" name="carousel_module[<?= $module_row; ?>][width]" value="<?= $module['width']; ?>" size="3"/>
+								<input type="text" name="carousel_module[<?= $module_row; ?>][height]" value="<?= $module['height']; ?>" size="3"/>
 								<? if (isset($error_image[$module_row])) { ?>
 									<span class="error"><?= $error_image[$module_row]; ?></span>
 								<? } ?></td>
@@ -93,8 +89,7 @@
 										<option value="0" selected="selected"><?= $text_disabled; ?></option>
 									<? } ?>
 								</select></td>
-							<td class="right"><input type="text" name="carousel_module[<?= $module_row; ?>][sort_order]"
-							                         value="<?= $module['sort_order']; ?>" size="3"/></td>
+							<td class="right"><input type="text" name="carousel_module[<?= $module_row; ?>][sort_order]" value="<?= $module['sort_order']; ?>" size="3"/></td>
 							<td class="left"><a onclick="$('#module-row<?= $module_row; ?>').remove();"
 							                    class="button"><?= $button_remove; ?></a></td>
 						</tr>

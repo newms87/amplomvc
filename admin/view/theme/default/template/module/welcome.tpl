@@ -18,8 +18,7 @@
 						<? foreach ($modules as $module) { ?>
 							<a href="#tab-module-<?= $module_row; ?>"
 							   id="module-<?= $module_row; ?>"><?= $tab_module . ' ' . $module_row; ?>&nbsp;<img
-									src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" alt=""
-									onclick="$('.vtabs a:first').trigger('click'); $('#module-<?= $module_row; ?>').remove(); $('#tab-module-<?= $module_row; ?>').remove(); return false;"/></a>
+									src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" alt="" onclick="$('.vtabs a:first').trigger('click'); $('#module-<?= $module_row; ?>').remove(); $('#tab-module-<?= $module_row; ?>').remove(); return false;"/></a>
 							<? $module_row++; ?>
 						<? } ?>
 						<span id="module-add"><?= $button_add_module; ?>&nbsp;<img src="<?= HTTP_THEME_IMAGE . 'add.png'; ?>"
@@ -40,8 +39,7 @@
 									<table class="form">
 										<tr>
 											<td><?= $entry_description; ?></td>
-											<td><textarea
-													name="welcome_module[<?= $module_row; ?>][description][<?= $language['language_id']; ?>]"
+											<td><textarea name="welcome_module[<?= $module_row; ?>][description][<?= $language['language_id']; ?>]"
 													id="description-<?= $module_row; ?>-<?= $language['language_id']; ?>"><?= isset($module['description'][$language['language_id']]) ? $module['description'][$language['language_id']] : ''; ?></textarea>
 											</td>
 										</tr>
@@ -102,8 +100,7 @@
 								</tr>
 								<tr>
 									<td><?= $entry_sort_order; ?></td>
-									<td><input type="text" name="welcome_module[<?= $module_row; ?>][sort_order]"
-									           value="<?= $module['sort_order']; ?>" size="3"/></td>
+									<td><input type="text" name="welcome_module[<?= $module_row; ?>][sort_order]" value="<?= $module['sort_order']; ?>" size="3"/></td>
 								</tr>
 							</table>
 						</div>

@@ -15,10 +15,8 @@
 	<? foreach ($contact_info as $row => $contact) { ?>
 		<tbody id='contact-<?= $row; ?>'>
 		<tr>
-			<td class="left"><input type="text" name="contact[<?= $row; ?>][first_name]"
-			                        value="<?= $contact['first_name']; ?>"/></td>
-			<td class="left"><input type="text" name="contact[<?= $row; ?>][last_name]"
-			                        value="<?= $contact['last_name']; ?>"/></td>
+			<td class="left"><input type="text" name="contact[<?= $row; ?>][first_name]" value="<?= $contact['first_name']; ?>"/></td>
+			<td class="left"><input type="text" name="contact[<?= $row; ?>][last_name]" value="<?= $contact['last_name']; ?>"/></td>
 			<td class="left"><input type="text" name="contact[<?= $row; ?>][company]" value="<?= $contact['company']; ?>"/>
 			</td>
 			<td class="left"><input type="text" name="contact[<?= $row; ?>][email]" value="<?= $contact['email']; ?>"/>
@@ -31,8 +29,7 @@
 						foreach ($contact['phone'] as $key => $phone) {
 							?>
 							<li>
-								<input type="text" name="contact[<?= $row; ?>][phone][<?= $key; ?>][number]"
-								       value="<?= is_array($phone) ? $phone['number'] : $phone->number; ?>"/>
+								<input type="text" name="contact[<?= $row; ?>][phone][<?= $key; ?>][number]" value="<?= is_array($phone) ? $phone['number'] : $phone->number; ?>"/>
 								<?= $this->builder->build('select', $phone_types, "contact[$row][phone][$key][type]", is_array($phone) ? $phone['type'] : $phone->type); ?>
 								<a onclick="$(this).parent().remove()"><?= $button_remove_phone; ?></a>
 							</li>
@@ -44,26 +41,21 @@
 			</td>
 			<td class="contact_address left">
 				<div class="contact_street_1"><label for="street_1_<?= $row; ?>"><?= $entry_street_1; ?></label><input
-						id="street_1_<?= $row; ?>" type="text" name="contact[<?= $row; ?>][street_1]"
-						value="<?= $contact['street_1']; ?>"/></div>
+						id="street_1_<?= $row; ?>" type="text" name="contact[<?= $row; ?>][street_1]" value="<?= $contact['street_1']; ?>"/></div>
 				<div class="contact_street_2"><label for="street_2_<?= $row; ?>"><?= $entry_street_2; ?></label><input
-						id="street_2_<?= $row; ?>" type="text" name="contact[<?= $row; ?>][street_2]"
-						value="<?= $contact['street_2']; ?>"/></div>
+						id="street_2_<?= $row; ?>" type="text" name="contact[<?= $row; ?>][street_2]" value="<?= $contact['street_2']; ?>"/></div>
 				<div class="contact_city"><label for="city_<?= $row; ?>"><?= $entry_city; ?></label><input
-						id="city_<?= $row; ?>" type="text" name="contact[<?= $row; ?>][city]"
-						value="<?= $contact['city']; ?>"/></div>
+						id="city_<?= $row; ?>" type="text" name="contact[<?= $row; ?>][city]" value="<?= $contact['city']; ?>"/></div>
 				<div class="contact_country">
 					<label> <?= $entry_country; ?></label>
 					<?= $this->builder->build('select', $countries, "contact[$row][country_id]", $contact['country_id']); ?>
 				</div>
 				<div class="contact_zone">
 					<label>   <?= $entry_zone; ?></label>
-					<select id="zone_id-<?= $row; ?>" zone_id="<?= $contact['zone_id']; ?>"
-					        name="contact[<?= $row; ?>][zone_id]"></select>
+					<select id="zone_id-<?= $row; ?>" zone_id="<?= $contact['zone_id']; ?>" name="contact[<?= $row; ?>][zone_id]"></select>
 				</div>
 				<div class="contact_postcode"><label for="postcode_<?= $row; ?>"><?= $entry_postcode; ?></label><input
-						id="postcode_<?= $row; ?>" type="text" maxlength="10" name="contact[<?= $row; ?>][postcode]"
-						value="<?= $contact['postcode']; ?>"/></div>
+						id="postcode_<?= $row; ?>" type="text" maxlength="10" name="contact[<?= $row; ?>][postcode]" value="<?= $contact['postcode']; ?>"/></div>
 			</td>
 			<td
 				class="left"><?= $this->builder->build('select', $contact_types, "contact[$row][contact_type]", $contact['contact_type']); ?></td>

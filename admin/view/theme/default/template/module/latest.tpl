@@ -29,12 +29,9 @@
 					<? foreach ($modules as $module) { ?>
 						<tbody id="module-row<?= $module_row; ?>">
 						<tr>
-							<td class="left"><input type="text" name="latest_module[<?= $module_row; ?>][limit]"
-							                        value="<?= $module['limit']; ?>" size="1"/></td>
-							<td class="left"><input type="text" name="latest_module[<?= $module_row; ?>][image_width]"
-							                        value="<?= $module['image_width']; ?>" size="3"/>
-								<input type="text" name="latest_module[<?= $module_row; ?>][image_height]"
-								       value="<?= $module['image_height']; ?>" size="3"/>
+							<td class="left"><input type="text" name="latest_module[<?= $module_row; ?>][limit]" value="<?= $module['limit']; ?>" size="1"/></td>
+							<td class="left"><input type="text" name="latest_module[<?= $module_row; ?>][image_width]" value="<?= $module['image_width']; ?>" size="3"/>
+								<input type="text" name="latest_module[<?= $module_row; ?>][image_height]" value="<?= $module['image_height']; ?>" size="3"/>
 								<? if (isset($error_image[$module_row])) { ?>
 									<span class="error"><?= $error_image[$module_row]; ?></span>
 								<? } ?></td>
@@ -79,8 +76,7 @@
 										<option value="0" selected="selected"><?= $text_disabled; ?></option>
 									<? } ?>
 								</select></td>
-							<td class="right"><input type="text" name="latest_module[<?= $module_row; ?>][sort_order]"
-							                         value="<?= $module['sort_order']; ?>" size="3"/></td>
+							<td class="right"><input type="text" name="latest_module[<?= $module_row; ?>][sort_order]" value="<?= $module['sort_order']; ?>" size="3"/></td>
 							<td class="left"><a onclick="$('#module-row<?= $module_row; ?>').remove();"
 							                    class="button"><?= $button_remove; ?></a></td>
 						</tr>

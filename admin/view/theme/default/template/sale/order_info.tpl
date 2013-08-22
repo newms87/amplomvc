@@ -356,8 +356,7 @@
 								<option value="<?= $order_statuses['order_status_id']; ?>"
 								        selected="selected"><?= $order_statuses['name']; ?></option>
 							<? } else { ?>
-								<option
-									value="<?= $order_statuses['order_status_id']; ?>"><?= $order_statuses['name']; ?></option>
+								<option value="<?= $order_statuses['order_status_id']; ?>"><?= $order_statuses['name']; ?></option>
 							<? } ?>
 						<? } ?>
 					</select></td>

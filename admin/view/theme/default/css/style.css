@@ -651,6 +651,15 @@ a.delete_button:visited {
 	margin-bottom: 20px;
 }
 
+#listing .rowid{
+	font-weight:bold;
+	display:block;
+	width:100%;
+	min-width: 30px;
+	text-align:center;
+	margin-top: 2px;
+}
+
 .list #filter_list > td {
 	background: #F5DDDD;
 }

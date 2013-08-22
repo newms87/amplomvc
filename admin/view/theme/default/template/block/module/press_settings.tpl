@@ -21,17 +21,13 @@
 					<li class="press_item <?= $key; ?>" press_id="<?= $row; ?>">
 						<div class="press_info">
 							<label class="description"><?= $entry_press_description; ?></label>
-							<input type="text" name="settings[press_items][<?= $row; ?>][description]"
-							       value="<?= $press['description']; ?>"/><br/>
+							<input type="text" name="settings[press_items][<?= $row; ?>][description]" value="<?= $press['description']; ?>"/><br/>
 							<label class="author"><?= $entry_press_author; ?></label>
-							<input type="text" name="settings[press_items][<?= $row; ?>][author]"
-							       value="<?= $press['author']; ?>"/><br/>
+							<input type="text" name="settings[press_items][<?= $row; ?>][author]" value="<?= $press['author']; ?>"/><br/>
 							<label class="date"><?= $entry_press_date; ?></label>
-							<input type="text" name="settings[press_items][<?= $row; ?>][date]"
-							       value="<?= $press['date']; ?>"/><br/>
+							<input type="text" name="settings[press_items][<?= $row; ?>][date]" value="<?= $press['date']; ?>"/><br/>
 							<label class="href"><?= $entry_press_href; ?></label>
-							<input type="text" name="settings[press_items][<?= $row; ?>][href]"
-							       value="<?= $press['href']; ?>"/>
+							<input type="text" name="settings[press_items][<?= $row; ?>][href]" value="<?= $press['href']; ?>"/>
 						</div>
 						<div class="press_images">
 							<a class="add_image_item"><?= $button_add_image; ?></a>

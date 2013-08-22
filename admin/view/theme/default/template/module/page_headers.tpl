@@ -36,8 +36,7 @@
 									<?
 									}
 								} ?>
-								<a onclick="add_layout_header(this)"
-								   name='layout_<?= $module_row; ?>'><?= $button_add_layout; ?></a>
+								<a onclick="add_layout_header(this)" name='layout_<?= $module_row; ?>'><?= $button_add_layout; ?></a>
 							</td>
 							<td class="center">
 								<? if (count($languages) > 1) { ?>
@@ -51,13 +50,11 @@
 								<? } ?>
 								<? foreach ($header['page_header'] as $language_id => $html) { ?>
 									<div id='language-<?= $module_row . '-' . $language_id; ?>'><textarea
-											id='page_header-<?= $module_row; ?>-<?= $language_id; ?>' class='ckedit'
-											name="page_headers[<?= $module_row; ?>][page_header][<?= $language_id; ?>]"><?= $html; ?></textarea>
+											id='page_header-<?= $module_row; ?>-<?= $language_id; ?>' class='ckedit' name="page_headers[<?= $module_row; ?>][page_header][<?= $language_id; ?>]"><?= $html; ?></textarea>
 									</div>
 								<? } ?>
 							</td>
-							<td class="center"><input type='text' name='page_headers[<?= $module_row; ?>][priority]'
-							                          value='<?= $header['priority']; ?>'/></td>
+							<td class="center"><input type='text' name='page_headers[<?= $module_row; ?>][priority]' value='<?= $header['priority']; ?>'/></td>
 							<td
 								class='center'><?= $this->builder->build('select', $statuses, "page_headers[$module_row][status]", $header['status']); ?></td>
 							<td class="center"><a onclick="$('#module-row<?= $module_row; ?>').remove();"

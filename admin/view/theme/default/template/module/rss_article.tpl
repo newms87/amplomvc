@@ -15,17 +15,11 @@
 						<td><?= $entry_rss_settings; ?></td>
 						<td>
 							<label for='num_to_grab'><?= $entry_num_to_grab; ?></label><input type='text' maxlength='2'
-							                                                                  it='num_to_grab' size='3'
-							                                                                  name='num_to_grab'
-							                                                                  value='<?= $num_to_grab; ?>'/>
+							                                                                  it='num_to_grab' size='3' name='num_to_grab' value='<?= $num_to_grab; ?>'/>
 							<label for='num_to_keep'><?= $entry_num_to_keep; ?></label><input type='text' maxlength='2'
-							                                                                  id='num_to_keep' size='3'
-							                                                                  name='num_to_keep'
-							                                                                  value='<?= $num_to_keep; ?>'/>
+							                                                                  id='num_to_keep' size='3' name='num_to_keep' value='<?= $num_to_keep; ?>'/>
 							<label for='title_length'><?= $entry_title_length; ?></label><input type='text' maxlength='2'
-							                                                                    id='title_length' size='3'
-							                                                                    name='title_length'
-							                                                                    value='<?= $title_length; ?>'/>
+							                                                                    id='title_length' size='3' name='title_length' value='<?= $title_length; ?>'/>
 						</td>
 					</tr>
 					<tr>
@@ -50,14 +44,10 @@
 								<? $article_count = 0; ?>
 								<? foreach ($featured_articles as $key => $article) { ?>
 									<li>
-										<input type='text' class='article_title'
-										       name="featured_articles[<?= $article_count; ?>][title]"
-										       value='<?= $article['title']; ?>' size='30' maxlength='22'/>
+										<input type='text' class='article_title' name="featured_articles[<?= $article_count; ?>][title]" value='<?= $article['title']; ?>' size='30' maxlength='22'/>
 
 										<div class='rss_title_chars'></div>
-										<input type='text' class='article_url'
-										       name="featured_articles[<?= $article_count++; ?>][url]"
-										       value='<?= $article['url']; ?>' size='50'/>
+										<input type='text' class='article_url' name="featured_articles[<?= $article_count++; ?>][url]" value='<?= $article['url']; ?>' size='50'/>
 										<img onclick='$(this).parent().remove();' src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"/>
 									</li>
 								<? } ?>
@@ -79,16 +69,14 @@
 					<? foreach ($modules as $module) { ?>
 						<tbody id="module-row<?= $module_row; ?>">
 						<tr>
-							<td class="left"><input type="text" name="rss_article_module[<?= $module_row; ?>][limit]"
-							                        value="<?= $module['limit']; ?>" size="1" maxlength='2'/></td>
+							<td class="left"><input type="text" name="rss_article_module[<?= $module_row; ?>][limit]" value="<?= $module['limit']; ?>" size="1" maxlength='2'/></td>
 							<td
 								class='left'><?= $this->builder->build('select', $layouts, "rss_article_module[$module_row][layout_id]", (int)$module['layout_id']); ?></td>
 							<td
 								class='left'><?= $this->builder->build('select', $positions, "rss_article_module[$module_row][position]", $module['position']); ?></td>
 							<td
 								class="left"><?= $this->builder->build('select', $statuses, "rss_article_module[$module_row][status]", (int)$module['status']); ?></td>
-							<td class="right"><input type="text" name="rss_article_module[<?= $module_row; ?>][sort_order]"
-							                         value="<?= $module['sort_order']; ?>" size="3"/></td>
+							<td class="right"><input type="text" name="rss_article_module[<?= $module_row; ?>][sort_order]" value="<?= $module['sort_order']; ?>" size="3"/></td>
 							<td class="left"><a onclick="$('#module-row<?= $module_row; ?>').remove();"
 							                    class="button"><?= $button_remove; ?></a></td>
 						</tr>

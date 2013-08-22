@@ -16,16 +16,14 @@
 				<table class="form">
 					<tr>
 						<td class="required"> <?= $entry_login; ?></td>
-						<td><input type="text" name="web_payment_software_merchant_name"
-						           value="<?= $web_payment_software_merchant_name; ?>"/>
+						<td><input type="text" name="web_payment_software_merchant_name" value="<?= $web_payment_software_merchant_name; ?>"/>
 							<? if ($error_login) { ?>
 								<span class="error"><?= $error_login; ?></span>
 							<? } ?></td>
 					</tr>
 					<tr>
 						<td class="required"> <?= $entry_key; ?></td>
-						<td><input type="text" name="web_payment_software_merchant_key"
-						           value="<?= $web_payment_software_merchant_key; ?>"/>
+						<td><input type="text" name="web_payment_software_merchant_key" value="<?= $web_payment_software_merchant_key; ?>"/>
 							<? if ($error_key) { ?>
 								<span class="error"><?= $error_key; ?></span>
 							<? } ?></td>
@@ -68,8 +66,7 @@
 										<option value="<?= $order_status['order_status_id']; ?>"
 										        selected="selected"><?= $order_status['name']; ?></option>
 									<? } else { ?>
-										<option
-											value="<?= $order_status['order_status_id']; ?>"><?= $order_status['name']; ?></option>
+										<option value="<?= $order_status['order_status_id']; ?>"><?= $order_status['name']; ?></option>
 									<? } ?>
 								<? } ?>
 							</select></td>
@@ -107,8 +104,7 @@
 					</tr>
 					<tr>
 						<td><?= $entry_sort_order; ?></td>
-						<td><input type="text" name="web_payment_software_sort_order"
-						           value="<?= $web_payment_software_sort_order; ?>" size="1"/></td>
+						<td><input type="text" name="web_payment_software_sort_order" value="<?= $web_payment_software_sort_order; ?>" size="1"/></td>
 					</tr>
 				</table>
 			</form>

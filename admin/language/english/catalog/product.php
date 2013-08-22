@@ -132,3 +132,4 @@ $_['error_dup_restrict']                  = "You have duplicate restriction valu
 $_['error_restrict_same_option_id']       = "You cannot restrict a Product Option Value with another Product Option value of the same Option Category For Type '%s'!";
 $_['error_restrict_quantity']             = "The total quantity for the product option value of %s is less than the total for the restrictions %s.";
 $_['error_po_quantity']                   = "The total quantity for this product %s must be less than or equal to the smallest quantity for the required product options %s so we do not require options that are not in stock.";
+$_['error_class_template']                = "The %s Class template file %s could not be found!";

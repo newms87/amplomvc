@@ -568,3 +568,4 @@ class Catalog_Model_Catalog_Product extends Model
 		}
 	}
 }
+

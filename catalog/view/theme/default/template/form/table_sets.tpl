@@ -42,8 +42,7 @@
 							case 'text':
 							case 'password':
 								?>
-								<input type="<?= $field['type']; ?>" name="<?= $field['name']; ?>"
-								       value="<?= $field['select']; ?>" <?= $field['html_attrs']; ?> />
+								<input type="<?= $field['type']; ?>" name="<?= $field['name']; ?>" value="<?= $field['select']; ?>" <?= $field['html_attrs']; ?> />
 								<? break;
 
 							case 'select':
@@ -64,8 +63,7 @@
 							case 'submit':
 							case 'image':
 								?>
-								<input type="<?= $field['type']; ?>" name="<?= $field['name']; ?>"
-								       value="<?= $field['display_name']; ?>" <?= $field['html_attrs']; ?> />
+								<input type="<?= $field['type']; ?>" name="<?= $field['name']; ?>" value="<?= $field['display_name']; ?>" <?= $field['html_attrs']; ?> />
 								<? break;
 
 							default:

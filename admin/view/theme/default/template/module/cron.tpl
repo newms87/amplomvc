@@ -34,10 +34,8 @@
 					<? foreach ($tasks as $row => $task) { ?>
 						<tbody id="module-row<?= $row; ?>">
 						<tr>
-							<td class="left"><input type="text" name="tasks[<?= $row; ?>][name]"
-							                        value="<?= $tasks[$row]['name']; ?>" size="30" maxlength='30'/></td>
-							<td class="left"><input type="text" name="tasks[<?= $row; ?>][action]"
-							                        value="<?= $tasks[$row]['action']; ?>" size="100" maxlength='100'/></td>
+							<td class="left"><input type="text" name="tasks[<?= $row; ?>][name]" value="<?= $tasks[$row]['name']; ?>" size="30" maxlength='30'/></td>
+							<td class="left"><input type="text" name="tasks[<?= $row; ?>][action]" value="<?= $tasks[$row]['action']; ?>" size="100" maxlength='100'/></td>
 							<td
 								class="left"><?= $this->builder->build('select', $statuses, "tasks[$row][status]", (int)$tasks[$row]['status']); ?></td>
 							<td class="left">
@@ -47,17 +45,14 @@
 											<li>
 												<input type="text" name="tasks[<?= $row; ?>][times][]" value="<?= $time; ?>"
 												       class='time'/>
-												<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"
-												     onclick="$(this).parent().remove();"/>
+												<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" onclick="$(this).parent().remove();"/>
 											</li>
 										<? } ?>
 									<? } ?>
 								</ul>
-								<div style="text-align:center"><a
-										onclick="add_cron_time($(this), <?= $row; ?>);"><?= $text_add_cron_time; ?></a></div>
+								<div style="text-align:center"><a onclick="add_cron_time($(this), <?= $row; ?>);"><?= $text_add_cron_time; ?></a></div>
 							</td>
-							<td class="right"><input type="text" name="tasks[<?= $row; ?>][sort_order]"
-							                         value="<?= $tasks[$row]['sort_order']; ?>" size="3"/></td>
+							<td class="right"><input type="text" name="tasks[<?= $row; ?>][sort_order]" value="<?= $tasks[$row]['sort_order']; ?>" size="3"/></td>
 							<td class="left"><a onclick="$('#module-row<?= $row; ?>').remove();"
 							                    class="button"><?= $button_remove; ?></a></td>
 						</tr>

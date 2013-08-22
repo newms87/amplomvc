@@ -54,36 +54,42 @@ $.ac_template = $.fn.ac_template = function (name, action, data) {
 
 			list.append(template);
 
-			datarow_parents = template.parents('[data-row]');
+			var row_list = [row.count];
+
+			template.parents('[data-row]').each(function(i,e){
+				row_list.unshift(parseInt($(e).attr('data-row')));
+			});
 
 			template.find('[name]').each(function (i, e) {
-				e_name = $(e).attr('name');
+				var e_name = $(e).attr('name');
 
-				row_count = e_name.match(/__ac_template__/g).length;
+				var match = e_name.match(/__ac_template__/g);
+				var row_count = match ? match.length : 0;
 
-				if (row_count > 1) {
-					find = ['__ac_template__'];
-					replace = [row.count];
+				//rowset filters which parent row ID are filled (For nested AC_Template Calls)
+				//(eg: rowset=[0,3,4], this will use the topmost parent, skips the next 2 parents, then 4th & 5th parent)
+				var rowset = $(e).attr('data-rowset');
+				rowset = typeof rowset == 'string' ? rowset.split(',') : false;
 
-					for (var i = 0; i < row_count - 1; i++) {
-						find.push('__ac_template__');
-						replace.push(parseInt($(datarow_parents[i]).attr('data-row')));
-					}
-
-					t_name = e_name.str_replace(find, replace.reverse());
+				var find = [];
+				var replace = [];
+				for (var i = 0; i < row_count; i++) {
+					if (rowset !== false && ($.inArray(''+i,rowset) == -1)) continue; //only insert rows requested
+					find.push('__ac_template__');
+					replace.push(row_list[i]);
 				}
-				else {
-					t_name = e_name.replace(/__ac_template__/g, row.count);
-				}
+
+				t_name = e_name.str_replace(find, replace);
 
 				$(e).attr('name', t_name);
 
 				key = e_name.replace(/^.*\[([^\]]+)\]$/, '$1');
 
-				if (typeof data[key] !== 'undefined') {
-					$(e).val(data[key]);
+				var value = typeof data[key] !== 'undefined' ? data[key] : '';
+				if ($.inArray($(e).attr('type'), ['checkbox','radio']) >= 0) {
+					$(e).prop('checked', value);
 				} else {
-					$(e).val('');
+					$(e).val(value);
 				}
 
 				if ($(e).is('select') && !$(e).find(':selected').length) {

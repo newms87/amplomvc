@@ -26,13 +26,11 @@
 
 										<div
 											class='filter_default <?= $default_product_filter == $filter_id ? 'is_default' : ''; ?>'><?= $default_product_filter == $filter_id ? "default" : "<a onclick=\"make_default_filter('$filter_id');\">make default</a>"; ?></div>
-										<input type="hidden" name="product_filter_types[<?= $filter_id; ?>]"
-										       value="<?= $filter ?>"/>
+										<input type="hidden" name="product_filter_types[<?= $filter_id; ?>]" value="<?= $filter ?>"/>
 									</li>
 								<? } ?>
 							</ul>
-							<input type="hidden" id='default_product_filter' name="default_product_filter"
-							       value="<?= $default_product_filter; ?>"/>
+							<input type="hidden" id='default_product_filter' name="default_product_filter" value="<?= $default_product_filter; ?>"/>
 					</tr>
 				</table>
 				<table class="form">
@@ -74,12 +72,9 @@
 						} ?>
 						<tbody id="module-row<?= $module_row; ?>">
 						<tr>
-							<td class="left"><input type="text" name="featured_module[<?= $module_row; ?>][limit]"
-							                        value="<?= $module['limit']; ?>" size="1"/></td>
-							<td class="left"><input type="text" name="featured_module[<?= $module_row; ?>][image_width]"
-							                        value="<?= $module['image_width']; ?>" size="3"/>
-								<input type="text" name="featured_module[<?= $module_row; ?>][image_height]"
-								       value="<?= $module['image_height']; ?>" size="3"/>
+							<td class="left"><input type="text" name="featured_module[<?= $module_row; ?>][limit]" value="<?= $module['limit']; ?>" size="1"/></td>
+							<td class="left"><input type="text" name="featured_module[<?= $module_row; ?>][image_width]" value="<?= $module['image_width']; ?>" size="3"/>
+								<input type="text" name="featured_module[<?= $module_row; ?>][image_height]" value="<?= $module['image_height']; ?>" size="3"/>
 							</td>
 							<td class="left"><select name="featured_module[<?= $module_row; ?>][layout_id]">
 									<? foreach ($layouts as $layout) { ?>
@@ -147,8 +142,7 @@
 										<option value="0" selected="selected"><?= $text_disabled; ?></option>
 									<? } ?>
 								</select></td>
-							<td class="right"><input type="text" name="featured_module[<?= $module_row; ?>][sort_order]"
-							                         value="<?= $module['sort_order']; ?>" size="3"/></td>
+							<td class="right"><input type="text" name="featured_module[<?= $module_row; ?>][sort_order]" value="<?= $module['sort_order']; ?>" size="3"/></td>
 							<td class="left"><a onclick="$('#module-row<?= $module_row; ?>').remove();"
 							                    class="button"><?= $button_remove; ?></a></td>
 						</tr>
