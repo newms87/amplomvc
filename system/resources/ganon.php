@@ -3658,7 +3658,7 @@ class HTML_Formatter
 		$prev_asblock = false;
 		for ($i = 0; $i < $child_count; $i++) {
 			$n      =& $root->children[$i];
-			$indent = $n->indent();
+			$indent = str_repeat($this->indent_string, $n->indent());
 			if (!$n->isText()) {
 				$n_tag         = strtolower($n->tag);
 				$new_line      = isset($this->block_elements[$n_tag]) && $this->block_elements[$n_tag]['new_line'];
@@ -3668,13 +3668,13 @@ class HTML_Formatter
 					if ($this->whitespace[$char]) {
 						$prev->text .= str_repeat($this->indent_string, $indent);
 					} else {
-						$prev->text = substr_replace($prev->text, $this->linebreak_string . str_repeat($this->indent_string, $indent), -1, 1);
+						$prev->text = substr_replace($prev->text, $this->linebreak_string . $indent, -1, 1);
 					}
 				} elseif (($new_line || $prev_asblock || ($in_block && ($i === 0)))) {
 					if ($prev && ($prev->isText())) {
-						$prev->text .= $this->linebreak_string . str_repeat($this->indent_string, $indent);
+						$prev->text .= $this->linebreak_string . $indent;
 					} else {
-						$root->addText($this->linebreak_string . str_repeat($this->indent_string, $indent), $i);
+						$root->addText($this->linebreak_string . $indent, $i);
 						++$child_count;
 					}
 				}
@@ -3686,16 +3686,16 @@ class HTML_Formatter
 						if ($last && ($last->isText()) && $last->text && ($char = $last->text[strlen($last->text) - 1]) && isset($this->whitespace[$char])) {
 							if ($as_block || ($last->index() > 0) || isset($this->whitespace[$last->text[0]])) {
 								if ($this->whitespace[$char]) {
-									$last->text .= str_repeat($this->indent_string, $indent);
+									$last->text .= $indent;
 								} else {
-									$last->text = substr_replace($last->text, $this->linebreak_string . str_repeat($this->indent_string, $indent), -1, 1);
+									$last->text = substr_replace($last->text, $this->linebreak_string . $indent, -1, 1);
 								}
 							}
 						} elseif (($as_block || $last_asblock || ($in_block && ($i === 0))) && $last) {
 							if ($last && ($last->isText())) {
-								$last->text .= $this->linebreak_string . str_repeat($this->indent_string, $indent);
+								$last->text .= $this->linebreak_string . $indent;
 							} else {
-								$n->addText($this->linebreak_string . str_repeat($this->indent_string, $indent));
+								$n->addText($this->linebreak_string . $indent);
 							}
 						}
 					} elseif (!trim($n->getInnerText())) {
@@ -3708,12 +3708,12 @@ class HTML_Formatter
 			} elseif (trim($n->text) && ((($i - 1 < $child_count) && ($char = $n->text[0]) && isset($this->whitespace[$char])) || ($in_block && ($i === 0)))) {
 				if (isset($this->whitespace[$char])) {
 					if ($this->whitespace[$char]) {
-						$n->text = str_repeat($this->indent_string, $indent) . $n->text;
+						$n->text = $indent . $n->text;
 					} else {
-						$n->text = substr_replace($n->text, $this->linebreak_string . str_repeat($this->indent_string, $indent), 0, 1);
+						$n->text = substr_replace($n->text, $this->linebreak_string . $indent, 0, 1);
 					}
 				} else {
-					$n->text = $this->linebreak_string . str_repeat($this->indent_string, $indent) . $n->text;
+					$n->text = $this->linebreak_string . $indent . $n->text;
 				}
 			}
 			$prev         = $n;

@@ -722,7 +722,7 @@ attribute_list.sortable({cursor:'move', stop: function(){
 
 <script type="text/javascript">//<!--
 var po_list = $('#product_option_list');
-po_list.find('.product_option_value_restriction_list').ac_template('povr_list');
+//po_list.find('.product_option_value_restriction_list').ac_template('povr_list');
 po_list.find('.unused_option_value_list').ac_template('uov_list', {unique: 'option_value_id'});
 po_list.find('.product_option_value_list').ac_template('pov_list', {defaults: <?= json_encode($product_options['__ac_template__']['product_option_values']['__ac_template__']); ?>});
 $('#option_tab_list').ac_template('option_tabs');

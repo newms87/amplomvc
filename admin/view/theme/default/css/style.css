@@ -692,6 +692,11 @@ a.action {
 	left: 1px;
 }
 
+a.action-edit{
+	padding: 5px 15px;
+	font-size: 16px;
+}
+
 a.action-copy, a.action-copy:visited {
 	color: #9BA20B;
 	background: #FFF3B9;
