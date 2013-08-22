@@ -8,21 +8,6 @@ class Admin_Controller_Setting_Store extends Controller
 		$this->getList();
 	}
 
-	public function insert()
-	{
-		$this->language->load('setting/store');
-
-		if ($this->request->isPost() && $this->validateForm()) {
-
-
-			$this->message->add('success', $this->_('text_success'));
-
-			$this->url->redirect($this->url->link('setting/store'));
-		}
-
-		$this->getForm();
-	}
-
 	public function update()
 	{
 		$this->language->load('setting/store');
@@ -129,7 +114,7 @@ class Admin_Controller_Setting_Store extends Controller
 				),
 			);
 
-			if ($this->canDelete($store['store_id'])) {
+			if ($this->canDelete($store['store_id'], true)) {
 				$store['actions']['delete'] = array(
 					'text' => $this->_('text_delete'),
 					'href' => $this->url->link('setting/store/delete', 'store_id=' . $store['store_id']),
@@ -171,7 +156,7 @@ class Admin_Controller_Setting_Store extends Controller
 		$this->data['system_update']  = $this->url->link('setting/update');
 
 		//Action Buttons
-		$this->data['insert'] = $this->url->link('setting/store/update');
+		$this->data['save'] = $this->url->link('setting/store/update');
 		$this->data['delete'] = $this->url->link('setting/store/delete');
 
 		//Dependencies
@@ -396,10 +381,10 @@ class Admin_Controller_Setting_Store extends Controller
 		return $this->error ? false : true;
 	}
 
-	private function canDelete($store_id)
+	private function canDelete($store_id, $silent = false)
 	{
 		if ((int)$store_id < 1) {
-			$this->error[$store_id]['warning'] = $this->_('error_default');
+			$error[$store_id]['warning'] = $this->_('error_default');
 		} else {
 			$filter = array(
 				'store_ids' => array($store_id),
@@ -408,10 +393,14 @@ class Admin_Controller_Setting_Store extends Controller
 			$store_total = $this->System_Model_Order->getTotalOrders($filter);
 
 			if ($store_total) {
-				$this->error[$store_id]['warning'] = $this->_('error_store', $store_total);
+				$error[$store_id]['warning'] = $this->_('error_store', $store_total);
 			}
 		}
 
-		return !isset($this->error[$store_id]);
+		if (!$silent) {
+			$this->error += $error;
+		}
+
+		return !isset($error[$store_id]);
 	}
 }

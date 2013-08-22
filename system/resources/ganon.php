@@ -3658,7 +3658,7 @@ class HTML_Formatter
 		$prev_asblock = false;
 		for ($i = 0; $i < $child_count; $i++) {
 			$n      =& $root->children[$i];
-			$indent = str_repeat($this->indent_string, $n->indent());
+			$indent = str_repeat($this->indent_string, max(0, (int)$n->indent()));
 			if (!$n->isText()) {
 				$n_tag         = strtolower($n->tag);
 				$new_line      = isset($this->block_elements[$n_tag]) && $this->block_elements[$n_tag]['new_line'];

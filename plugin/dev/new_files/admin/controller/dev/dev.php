@@ -135,7 +135,7 @@ class Admin_Controller_Dev_Dev extends Controller
 					$this->message->add('warning', $this->_('error_download_backup_file'));
 				}
 			} elseif (isset($_POST['default_installation'])) {
-				$this->dev->site_backup(DIR_SYSTEM . 'install/db.sql', null, '%__TABLE_PREFIX__%');
+				$this->dev->site_backup(DIR_SYSTEM . 'install/db.sql', $this->getDefaultInstallProfile(), '%__TABLE_PREFIX__%');
 			} elseif (isset($_POST['site_backup'])) {
 				$tables = isset($_POST['tables']) ? $_POST['tables'] : null;
 
@@ -230,5 +230,14 @@ class Admin_Controller_Dev_Dev extends Controller
 		}
 
 		return $this->error ? false : true;
+	}
+
+	private function getDefaultInstallProfile()
+	{
+		$tables = $this->db->getTables();
+
+		$tables[DB_PREFIX . 'store'] = false;
+
+		return $tables;
 	}
 }

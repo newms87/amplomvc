@@ -7,18 +7,18 @@
  * @author  Dmitry (dio) Levashov
  */
 elFinder.prototype.commands.copy = function() {
-	
+
 	this.shortcuts = [{
 		pattern     : 'ctrl+c ctrl+insert'
 	}];
-	
+
 	this.getstate = function(sel) {
 		var sel = this.files(sel),
 			cnt = sel.length;
 
 		return cnt && $.map(sel, function(f) { return f.phash && f.read ? f : null  }).length == cnt ? 0 : -1;
 	}
-	
+
 	this.exec = function(hashes) {
 		var fm   = this.fm,
 			dfrd = $.Deferred()
@@ -31,8 +31,8 @@ elFinder.prototype.commands.copy = function() {
 				return !dfrd.reject(['errCopy', file.name, 'errPerm']);
 			}
 		});
-		
-		return dfrd.isRejected() ? dfrd : dfrd.resolve(fm.clipboard(this.hashes(hashes)));
+
+		return dfrd.state() === 'rejected' ? dfrd : dfrd.resolve(fm.clipboard(this.hashes(hashes)));
 	}
 
 }

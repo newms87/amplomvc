@@ -12,36 +12,36 @@ elFinder.prototype.commands.extract = function() {
 		filter  = function(files) {
 			return $.map(files, function(file) {
 				return file.read && $.inArray(file.mime, mimes) !== -1 ? file : null
-				
+
 			})
 		};
-	
+
 	this.disableOnSearch = true;
-	
+
 	// Update mimes list on open/reload
 	fm.bind('open reload', function() {
 		mimes = fm.option('archivers')['extract'] || [];
 		self.change();
 	});
-	
+
 	this.getstate = function(sel) {
 		var sel = this.files(sel),
 			cnt = sel.length;
-		
+
 		return !this._disabled && cnt && this.fm.cwd().write && filter(sel).length == cnt ? 0 : -1;
 	}
-	
+
 	this.exec = function(hashes) {
 		var files    = this.files(hashes),
 			dfrd     = $.Deferred(),
 			cnt      = files.length,
 			complete = cnt,
 			i, file, error;
-		
+
 		if (!(this.enabled() && cnt && mimes.length)) {
 			return dfrd.reject();
 		}
-		
+
 		for (i = 0; i < cnt; i++) {
 			file = files[i];
 			if (!(file.read && fm.file(file.phash).write)) {
@@ -49,20 +49,20 @@ elFinder.prototype.commands.extract = function() {
 				fm.error(error);
 				return dfrd.reject(error);
 			}
-			
+
 			if ($.inArray(file.mime, mimes) === -1) {
 				error = ['errExtract', file.name, 'errNoArchive'];
 				fm.error(error);
 				return dfrd.reject(error);
 			}
-			
+
 			fm.request({
 				data       : {cmd : 'extract', target : file.hash},
 				notify     : {type : 'extract', cnt : 1},
 				syncOnFail : true
 			})
 			.fail(function(error) {
-				if (!dfrd.isRejected()) {
+				if (!dfrd.state() === 'rejected') {
 					dfrd.reject(error);
 				}
 			})
@@ -72,9 +72,9 @@ elFinder.prototype.commands.extract = function() {
 					dfrd.resolve();
 				}
 			});
-			
+
 		}
-		
+
 		return dfrd;
 	}
 
