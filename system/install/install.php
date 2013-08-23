@@ -200,7 +200,7 @@ function setup_user($_) {
 
 	$username = $db->escape($_POST['username']);
 	$email = $db->escape($_POST['email']);
-	$password = $db->escape($_POST['password']);
+	$password = $db->escape(md5($_POST['password']));
 	$ip = $_SERVER['REMOTE_ADDR'];
 	$date_added = date('Y-m-d H:i:s', time());
 

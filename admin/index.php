@@ -9,7 +9,7 @@ if (is_file('../ac_config.php')) {
 }
 
 // Install
-if (!defined('SITE_URL')) {
+if (!defined('SITE_URL') || defined("AMPLOCART_INSTALL_USER")) {
 	header("Location: ../index.php");
 	exit;
 }
