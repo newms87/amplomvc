@@ -16,8 +16,8 @@ class Admin_Model_Catalog_ProductClass extends Model
 
 	public function addProductClass($data)
 	{
-		$data['front_template'] = serialize($data['front_template']);
-		$data['admin_template'] = serialize($data['admin_template']);
+		$data['front_template'] = !empty($data['front_template']) ? serialize($data['front_template']) : '';
+		$data['admin_template'] = !empty($data['admin_template']) ? serialize($data['admin_template']) : '';
 
 		$product_class_id = $this->insert('product_class', $data);
 
@@ -28,8 +28,8 @@ class Admin_Model_Catalog_ProductClass extends Model
 
 	public function editProductClass($product_class_id, $data)
 	{
-		$data['front_template'] = serialize($data['front_template']);
-		$data['admin_template'] = serialize($data['admin_template']);
+		$data['front_template'] = !empty($data['front_template']) ? serialize($data['front_template']) : '';
+		$data['admin_template'] = !empty($data['admin_template']) ? serialize($data['admin_template']) : '';
 
 		$this->update('product_class', $data, $product_class_id);
 
