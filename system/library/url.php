@@ -170,7 +170,7 @@ class Url extends Library
 		$scheme = $ssl ? 'ssl' : 'url';
 
 		//TODO: Need to Rebase stores so 0 is all stores (not an entry in the DB).
-		// -1 is an entry in the DB but is for the admin and 1 will be the initial store (deleteable, if it is not set as the default)
+		//-1 is an entry in the DB but is for the admin and 1 will be the initial store (deleteable, if it is not set as the default)
 		if ((int)$store_id === -1) {
 			return SITE_URL . 'admin/';
 		}
