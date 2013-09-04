@@ -140,6 +140,7 @@ $_['entry_maintenance']                      = 'Maintenance Mode:<br /><span cla
 $_['entry_image_max_mem']                    = 'Image Resize Max Memory<span class="help">The maximum allowed memory when resizing images for the cache. Must be in php memory format (eg: 128M, 512M, 1G, etc.)</span>';
 $_['entry_encryption']                       = 'Encryption Key:<br /><span class="help">Please provide a secret key that will be used to encrypt private information when processing orders.</span>';
 $_['entry_compression']                      = 'Output Compression Level:<br /><span class="help">GZIP for more efficient transfer to requesting clients. Compression level must be between 0 - 9</span>';
+$_['entry_jquery_cdn']                       = 'Use the jQuery CDN:<span class="help">This will load jQuery and jQuery UI from the jQuery Content Delivery Network. Recommended for production sites</span>';
 $_['entry_debug_send_emails']                = 'Send Emails to third parties? <span class="help">Emails sent to people other than the current user and the system emails</span>';
 $_['entry_log_filename']                     = 'Log Filename:';
 $_['entry_error_filename']                   = 'Error Log Filename:';

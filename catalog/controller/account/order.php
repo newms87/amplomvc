@@ -23,10 +23,14 @@ class Catalog_Controller_Account_Order extends Controller
 		$this->breadcrumb->add($this->_('head_title'), $this->url->link('account/order'));
 
 		//Get Sorted / Filtered Data
-		$sort = $this->sort->getQueryDefaults('order_id', 'ASC', 10);
+		$sort = $this->sort->getQueryDefaults('order_id', 'DESC', 10);
 
-		$order_total = $this->System_Model_Order->getTotalConfirmedOrders($sort);
-		$orders      = $this->System_Model_Order->getConfirmedOrders($sort);
+		$filter = array(
+			'customer_ids' => array($this->customer->getId()),
+		);
+
+		$order_total = $this->System_Model_Order->getTotalConfirmedOrders($filter);
+		$orders      = $this->System_Model_Order->getConfirmedOrders($filter + $sort);
 
 		foreach ($orders as &$order) {
 			$product_total = $this->System_Model_Order->getTotalOrderProducts($order['order_id']);
@@ -45,9 +49,13 @@ class Catalog_Controller_Account_Order extends Controller
 
 		$this->data['orders'] = $orders;
 
+		//Render Limit Menu
+		//$this->data['limits'] = $this->sort->render_limit();
+
 		//Pagination
 		$this->pagination->init();
 		$this->pagination->total  = $order_total;
+
 		$this->data['pagination'] = $this->pagination->render();
 
 		//Action Buttons

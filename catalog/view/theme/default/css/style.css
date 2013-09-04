@@ -101,6 +101,12 @@ ul {
     list-style: none;
 }
 
+/* Inline Error messages */
+.error{
+    display:block;
+    color: red;
+}
+
 /* layout */
 #container {
     width: 1024px;
@@ -1400,12 +1406,13 @@ a.button:active, input.button:active {
     position: relative;
     z-index: 10;
     float: left;
-    width: 50%;
+    width: 52%;
 }
 
 .product_info > .right {
     float: right;
-    width: 49%;
+    width: 47.8%;
+    padding-left: .2%;
     position: relative;
     z-index: 1;
 }
@@ -2735,6 +2742,9 @@ table.form_single_column select {
     padding: 21px 5px;
 }
 
+#additional_information{
+    clear:both;
+}
 #product_options .option.option_error {
     border: 2px red solid;
     padding: 2px;
@@ -3141,6 +3151,7 @@ form .set_default_address input[type="radio"] {
 #suggested_products .grid {
     margin: 0;
     float: right;
+    margin-right: 20px;
 }
 
 #suggested_products .grid .item_block {

@@ -356,13 +356,15 @@ class Document extends Library
 		return $active_link;
 	}
 
-	public function renderLinks($links, $depth = 0)
+	public function renderLinks($links, $sort = true, $depth = 0)
 	{
 		if (is_string($links)) {
 			$links = $this->getLinks($links);
 		}
 
-		usort($links, function ($a, $b) { return (int)$a['sort_order'] > (int)$b['sort_order']; });
+		if ($sort) {
+			usort($links, function ($a, $b) { return (int)$a['sort_order'] > (int)$b['sort_order']; });
+		}
 
 		if ($depth === 0) {
 			$this->findActiveLink($links);
@@ -396,7 +398,7 @@ class Document extends Library
 			$children = '';
 
 			if (!empty($link['children'])) {
-				$children = $this->renderLinks($link['children'], $depth + 1);
+				$children = $this->renderLinks($link['children'], $sort, $depth + 1);
 				if (!empty($link['attrs']['class'])) {
 					$link['attrs']['class'] .= ' has_children';
 				} else {

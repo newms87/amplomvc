@@ -815,6 +815,10 @@
 				<td><?= $this->builder->build('select', $data_yes_no, 'config_debug', (int)$config_debug); ?></td>
 			</tr>
 			<tr>
+				<td><?= $entry_jquery_cdn; ?></td>
+				<td><?= $this->builder->build('select', $data_yes_no, 'config_jquery_cdn', (int)$config_jquery_cdn); ?></td>
+			</tr>
+			<tr>
 				<td><?= $entry_debug_send_emails; ?></td>
 				<td><?= $this->builder->build('select', $data_yes_no, 'config_debug_send_emails', (int)$config_debug_send_emails); ?></td>
 			</tr>

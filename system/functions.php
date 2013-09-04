@@ -211,6 +211,8 @@ if (!function_exists('array_walk_children')) {
 
 	function array_walk_children(&$array_tree, $children, $callback)
 	{
+		reset($array_tree);
+
 		if (!is_array(current($array_tree))) {
 			$array_tree = array($array_tree);
 		}

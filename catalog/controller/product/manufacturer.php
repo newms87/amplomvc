@@ -49,7 +49,7 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 	public function product()
 	{
 		$this->language->load('product/manufacturer');
-		$this->template->load('product/product_list');
+		$this->template->load('product/category');
 
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_manufacturer_list'), $this->url->link('product/manufacturer'));
@@ -65,7 +65,7 @@ class Catalog_Controller_Product_Manufacturer extends Controller
 			$this->breadcrumb->add($manufacturer['name'], $this->url->here());
 
 			//Sort Data
-			$sort = $this->sort->getQueryDefaults('name', 'ASC');
+			$sort = $this->sort->getQueryDefaults('p.name', 'ASC');
 
 			//Filter Data
 			$filter = array(

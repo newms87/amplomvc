@@ -137,7 +137,7 @@ class Order Extends Library
 
 			if ($affiliate_info) {
 				$data['affiliate_id'] = $affiliate_info['affiliate_id'];
-				$data['commission']   = ($total / 100) * $affiliate_info['commission'];
+				$data['commission']   = ($totals['total'] / 100) * $affiliate_info['commission'];
 			}
 		}
 

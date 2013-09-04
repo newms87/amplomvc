@@ -4,7 +4,6 @@ class Catalog_Controller_Block_Checkout_PaymentAddress extends Controller
 	public function index()
 	{
 		$this->template->load('block/checkout/payment_address');
-
 		$this->language->load('checkout/checkout');
 
 		$this->data['data_addresses'] = $this->customer->getPaymentAddresses();
