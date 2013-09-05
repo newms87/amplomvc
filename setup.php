@@ -4,16 +4,16 @@ class Collections_Setup extends PluginSetup
 	function __construct($registry)
 	{
 		parent::__construct($registry);
-		
+
 		define("COLLECTION_LAYOUT_NAME", "Collections");
 		define("COLLECTION_NAVIGATION_LINK_NAME", "catalog_collection");
 	}
-	
+
 	public function install()
 	{
 		//Create collection table
 		$table = DB_PREFIX . "collection";
-		
+
 		$sql =<<<SQL
 CREATE TABLE IF NOT EXISTS `$table` (
   `collection_id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
@@ -28,10 +28,10 @@ CREATE TABLE IF NOT EXISTS `$table` (
 SQL;
 
 		$this->db->query($sql);
-		
+
 		//Create collection_product table
 		$table = DB_PREFIX . "collection_product";
-		
+
 		$sql = <<<SQL
 CREATE TABLE IF NOT EXISTS `$table` (
   `collection_id` int(10) unsigned NOT NULL,
@@ -40,12 +40,12 @@ CREATE TABLE IF NOT EXISTS `$table` (
   PRIMARY KEY (`collection_id`,`product_id`)
 )
 SQL;
-		
+
 		$this->db->query($sql);
-		
+
 		//Create collection_category table
 		$table = DB_PREFIX . "collection_category";
-		
+
 		$sql = <<<SQL
 CREATE  TABLE IF NOT EXISTS `$table` (
   `collection_id` INT UNSIGNED NOT NULL ,
@@ -53,12 +53,12 @@ CREATE  TABLE IF NOT EXISTS `$table` (
   PRIMARY KEY (`collection_id`, `category_id`)
 );
 SQL;
-		
+
 		$this->db->query($sql);
-		
+
 		//Create collection_store table
 		$table = DB_PREFIX . "collection_store";
-		
+
 		$sql = <<<SQL
 CREATE TABLE IF NOT EXISTS `$table` (
   `collection_id` int(10) unsigned NOT NULL,
@@ -66,9 +66,9 @@ CREATE TABLE IF NOT EXISTS `$table` (
   PRIMARY KEY (`collection_id`,`store_id`)
 )
 SQL;
-		
+
 		$this->db->query($sql);
-		
+
 		//Add Collections Navigation
 		$link = array(
 			'display_name' => "Collections",
@@ -77,35 +77,35 @@ SQL;
 			'parent' => 'catalog',
 			'sort_order' => 4,
 		);
-		
+
 		$this->extend->addNavigationLink('admin', $link);
-		
+
 		//Add Collections Layout
 		$this->extend->add_layout(COLLECTION_LAYOUT_NAME, 'product/collection');
-		
+
 		//Enable image sorting for the 'collection' table on column 'image'
 		$this->extend->enable_image_sorting('collection', 'image');
 	}
-	
+
 	public function uninstall($keep_data = false)
 	{
 		//Remove Collections Navigation
-		$this->extend->removeNavigationLink(COLLECTION_NAVIGATION_LINK_NAME);
-		
+		$this->extend->removeNavigationLink('admin', COLLECTION_NAVIGATION_LINK_NAME);
+
 		//disable image sorting for 'collection' table
 		$this->extend->disable_image_sorting('collection', 'image');
-		
+
 		//Remove Collections Layout
 		$this->extend->remove_layout(COLLECTION_LAYOUT_NAME);
-		
+
 		//Remove data last as good practice
 		if (!$keep_data) {
 			$table = DB_PREFIX . "collection";
 			$this->db->query("DROP TABLE $table");
-			
+
 			$table = DB_PREFIX . "collection_product";
 			$this->db->query("DROP TABLE $table");
-			
+
 			$table = DB_PREFIX . "collection_store";
 			$this->db->query("DROP TABLE $table");
 		}
