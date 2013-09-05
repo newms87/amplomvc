@@ -11,7 +11,7 @@ $_['text_new_page']        = "New Page";
 $_['text_creating_layout'] = "Please wait...";
 
 // Column
-$_['column_name']           = 'Page Title';
+$_['column_title']           = 'Page Title';
 $_['column_store']          = 'Stores';
 $_['column_status']         = 'Status';
 $_['column_action']         = 'Action';
@@ -20,9 +20,10 @@ $_['column_block_store']    = "Store Name";
 $_['column_block_position'] = "Position";
 
 // Entry
-$_['entry_name']             = 'Page Title:';
+$_['entry_title']             = 'Page Title:';
 $_['entry_content']          = 'Page Content:';
 $_['entry_layout']           = 'Layout:';
+$_['entry_display_title']             = 'Display Title?';
 $_['entry_store']            = 'Stores:';
 $_['entry_alias']            = 'SEO URL:<br /><span class="help">The Search Engine Optimized URL.</span>';
 $_['entry_meta_keywords']    = 'Meta Keywords:';

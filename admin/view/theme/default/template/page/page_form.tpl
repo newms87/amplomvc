@@ -21,8 +21,14 @@
 				<div id="tab-general">
 					<table class="form">
 						<tr>
-							<td class="required"> <?= $entry_name; ?></td>
-							<td><input type="text" name="name" size="60" value="<?= $name; ?>"/></td>
+							<td class="required"> <?= $entry_title; ?></td>
+							<td>
+								<input type="text" name="title" size="60" value="<?= $title; ?>"/>
+								<div class="display_title">
+									<input type="checkbox" id="display_title" name="display_title" <?= $display_title ? "checked=\"checked\"" : ''; ?> value="1" />
+									<label for="display_title"><?= $entry_display_title; ?></label>
+								</div>
+							</td>
 						</tr>
 						<tr>
 							<td class="required"> <?= $entry_alias; ?></td>

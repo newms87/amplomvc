@@ -91,9 +91,9 @@ class Admin_Controller_Page_Page extends Controller
 		//The Table Columns
 		$columns = array();
 
-		$columns['name'] = array(
+		$columns['title'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_name'),
+			'display_name' => $this->_('column_title'),
 			'filter'       => true,
 			'sortable'     => true,
 		);
@@ -119,7 +119,7 @@ class Admin_Controller_Page_Page extends Controller
 		);
 
 		//Get Sorted / Filtered Data
-		$sort   = $this->sort->getQueryDefaults('name', 'ASC');
+		$sort   = $this->sort->getQueryDefaults('title', 'ASC');
 		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 
 		$page_total = $this->Model_Page_Page->getTotalPages($filter);
@@ -224,11 +224,12 @@ class Admin_Controller_Page_Page extends Controller
 
 		//Set Values or Defaults
 		$defaults = array(
-			'name'             => '',
+			'title'             => '',
 			'alias'            => '',
 			'content'          => '',
 			'meta_keywords'    => '',
 			'meta_description' => '',
+			'display_title'    => 1,
 			'layout_id'        => 0,
 			'stores'           => array(0),
 			'blocks'           => array(),
@@ -285,12 +286,12 @@ class Admin_Controller_Page_Page extends Controller
 			}
 		}
 
-		$data = array(
+		$sort = array(
 			'sort'  => 'name',
 			'order' => "ASC",
 		);
 
-		$layouts = $this->Model_Design_Layout->getLayouts($data);
+		$layouts = $this->Model_Design_Layout->getLayouts($sort);
 
 		$this->builder->set_config('layout_id', 'name');
 
@@ -338,8 +339,12 @@ class Admin_Controller_Page_Page extends Controller
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
-		if (!$this->validation->text($_POST['name'], 3, 64)) {
-			$this->error['name'] = $this->_('error_name');
+		if (!$this->validation->text($_POST['title'], 3, 64)) {
+			$this->error['title'] = $this->_('error_title');
+		}
+
+		if (empty($_POST['display_title'])) {
+			$_POST['display_title'] = 0;
 		}
 
 		return $this->error ? false : true;

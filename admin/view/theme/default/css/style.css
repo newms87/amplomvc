@@ -2110,6 +2110,10 @@ td.mail_info label {
 	font-weight: bold;
 }
 
+body.page_page_update .display_title{
+	margin-top: 5px;
+}
+
 /* Easy List */
 .easy_list {
 	list-style: none;

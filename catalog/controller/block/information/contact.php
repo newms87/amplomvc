@@ -13,6 +13,8 @@ class Catalog_Controller_Block_Information_Contact extends Controller
 			return;
 		}
 
+		$this->data = $settings;
+
 		//The Contact Form
 		$contact_form = $this->getForm();
 
