@@ -11,7 +11,8 @@ class Catalog_Controller_Common_ColumnRight extends Controller
 		$this->data['blocks'] = array();
 
 		foreach ($blocks as $key => $block) {
-			$this->data['blocks'][] = $this->getBlock($key);
+			$settings = $block['settings'] + $block['profile'];
+			$this->data['blocks'][] = $this->getBlock($key, array(), $settings);
 		}
 
 		$this->render();

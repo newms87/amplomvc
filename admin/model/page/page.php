@@ -90,7 +90,7 @@ class Admin_Model_Page_Page extends Model
 
 		//Translations
 		$translate_fields = array(
-			'name',
+			'title',
 			'meta_keywords',
 			'meta_description',
 			'content',
@@ -116,20 +116,20 @@ class Admin_Model_Page_Page extends Model
 		//Where
 		$where = 'WHERE 1';
 
-		if (isset($data['name'])) {
-			$where .= " AND c.name like '%" . $this->escape($data['name']) . "%'";
+		if (isset($data['title'])) {
+			$where .= " AND p.title like '%" . $this->escape($data['title']) . "%'";
 		}
 
 		if (!empty($data['stores'])) {
 			$store_ids = is_array($data['stores']) ? $data['stores'] : array($data['stores']);
 
-			$from .= " LEFT JOIN " . DB_PREFIX . "page_store cs ON (c.page_id=cs.page_id)";
+			$from .= " LEFT JOIN " . DB_PREFIX . "page_store ps ON (p.page_id=ps.page_id)";
 
-			$where .= " AND cs.store_id IN (" . implode(',', $store_ids) . ")";
+			$where .= " AND ps.store_id IN (" . implode(',', $store_ids) . ")";
 		}
 
 		if (isset($data['status'])) {
-			$where .= " AND c.status = '" . ($data['status'] ? 1 : 0) . "'";
+			$where .= " AND p.status = '" . ($data['status'] ? 1 : 0) . "'";
 		}
 
 		//Order By & Limit

@@ -113,7 +113,7 @@ class Catalog_Model_Catalog_Product extends Model
 
 		//WHERE
 		$where =
-			"p.status='1' AND p2s.store_id = '$store_id' AND (m.manufacturer_id IS NULL OR m.status='1')" .
+			"p.status='1' AND p2s.store_id = '$store_id' AND (m.manufacturer_id IS NULL OR m.status = 1)" .
 			" AND p.date_available <= NOW() AND (p.date_expires > NOW() OR p.date_expires = '" . DATETIME_ZERO . "')";
 
 		//Product IDs
@@ -238,7 +238,7 @@ class Catalog_Model_Catalog_Product extends Model
 		}
 
 		//The Query
-		$query = "SELECT $select  FROM $from WHERE $where $group_by $order $limit";
+		$query = "SELECT $select FROM $from WHERE $where $group_by $order $limit";
 
 		$result = $this->query($query);
 
@@ -486,10 +486,10 @@ class Catalog_Model_Catalog_Product extends Model
 			//This is a specialty function for advanced attribute selection
 			//We resolve the category_ids by finding the products in the category list and grab all associated attributes
 			if (!empty($data['category_ids'])) {
-				$where .= " AND a.attribute_group_id IN (" .
-					"SELECT pa.product_attribute FROM " . DB_PREFIX . "product_attribute pa" .
-					" LEFT JOIN " . DB_PREFIX . "product_category pc ON (pc.product_id=pa.product_id)" .
-					" WHERE pc.category_id IN (" . implode(',', $data['category_ids']) . ")" .
+				$where .= " AND a.attribute_id IN (" .
+					"SELECT pa.attribute_id FROM " . DB_PREFIX . "product_attribute pa" .
+					" LEFT JOIN " . DB_PREFIX . "product_to_category p2c ON (p2c.product_id=pa.product_id)" .
+					" WHERE p2c.category_id IN (" . implode(',', $data['category_ids']) . ")" .
 				")";
 			}
 

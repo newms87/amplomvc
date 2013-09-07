@@ -38,7 +38,7 @@ abstract class Controller
 	}
 
 	//TODO: move this to block plugin!
-	protected function getBlock($path, $args = array())
+	protected function getBlock($path, $args = array(), $settings = null)
 	{
 		$block = 'block/' . $path;
 
@@ -47,12 +47,14 @@ abstract class Controller
 			exit();
 		}
 
-		$block_settings = $this->Model_Block_Block->getBlockSettings($path);
+		if (is_null($settings)) {
+			$settings = $this->Model_Block_Block->getBlockSettings($path);
+		}
 
-		$settings = $args;
-
-		if (!empty($block_settings)) {
-			$settings += $block_settings;
+		if ($settings) {
+			$settings = $args + $settings;
+		} else {
+			$settings = $args;
 		}
 
 		$action = new Action($this->registry, $block, array('settings' => $settings));

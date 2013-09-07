@@ -91,7 +91,7 @@
 		);
 	}
 
-	function ci_validate_form(form, reload) {
+	function ci_validate_form(form, reload, callback) {
 		reload = reload || false;
 
 		info_page_loading(form.closest('.info_item'));
@@ -108,6 +108,10 @@
 				if (reload) {
 					load_info_item(info_item);
 				}
+			}
+
+			if (typeof callback == 'function') {
+				callback(form, json);
 			}
 		});
 	}
@@ -245,7 +249,13 @@
 	<? } else { ?>
 
 	$('#shipping_new input[type=submit], #payment_new input[type=submit]').click(function () {
-		ci_validate_form($(this).closest('form'), true);
+		ci_validate_form($(this).closest('form'), true, function(form, json) {
+			if (form.closest('.info_item').attr('id') === 'payment_address') {
+				load_info_item($('#shipping_address'));
+			} else {
+				load_info_item($('#payment_address'));
+			}
+		});
 
 		return false;
 	});

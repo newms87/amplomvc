@@ -58,8 +58,8 @@ class Admin_Controller_Block_Widget_Janrain extends Controller
 	public function saveSettings(&$settings)
 	{
 		$file_modifications = array(
-			'catalog/view/theme/default/template/block/account/login_header.tpl' => 'includes/catalog/view/theme/default/template/block/account/login_header.tpl',
-			'catalog/controller/block/account/login.php' => 'includes/catalog/controller/block/account/login.php',
+			'catalog/view/theme/default/template/block/account/login_header.tpl' => DIR_PLUGIN . 'janrain/includes/catalog/view/theme/default/template/block/account/login_header.tpl',
+			'catalog/controller/block/account/login.php' => DIR_PLUGIN . 'janrain/includes/catalog/controller/block/account/login.php',
 		);
 
 		if (!empty($settings['integrate_header'])) {

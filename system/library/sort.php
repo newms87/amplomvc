@@ -163,6 +163,11 @@ class Sort extends Library
 			$this->limit = false;
 		}
 
+		//Set limit for pagination compatibility (and potentially other places)
+		if (!isset($_GET['limit'])) {
+			$_GET['limit'] = $this->limit;
+		}
+
 		$this->sort  = $data['sort'];
 		$this->order = $data['order'];
 		$this->page  = $data['page'];

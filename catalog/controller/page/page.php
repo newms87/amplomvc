@@ -14,14 +14,16 @@ class Catalog_Controller_Page_Page extends Controller
 		}
 
 		//Page Head
-		$this->document->setTitle($page['name']);
+		$this->document->setTitle($page['title']);
 
 		//Breacrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($page['name'], $this->url->here());
+		$this->breadcrumb->add($page['title'], $this->url->here());
 
 		//Change Layout to desired page layout
 		$this->config->set('config_layout_id', $page['layout_id']);
+
+		$this->data = $page;
 
 		$this->data['content'] = html_entity_decode($page['content']);
 

@@ -1,6 +1,7 @@
 <?php
 // Heading
 $_['head_title'] = 'Find Your Favorite Brand';
+$_['text_manufacturer_list'] = "Manufacturers";
 
 // Text
 $_['text_brand']        = 'Brand';

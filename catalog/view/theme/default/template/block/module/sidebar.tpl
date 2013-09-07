@@ -16,7 +16,7 @@
 				<? foreach ($attribute_menu as $attr_menu) { ?>
 					<div class="attribute_menu">
 						<div class="label"><?= $attr_menu['label']; ?></div>
-						<div class="links"><?= $this->document->renderLinks($attr_menu['menu']); ?></div>
+						<div class="links"><?= $this->document->renderLinks($attr_menu['menu'], false); ?></div>
 					</div>
 				<? } ?>
 			<? } ?>

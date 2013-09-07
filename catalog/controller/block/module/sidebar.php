@@ -32,12 +32,17 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 			foreach ($settings['attributes'] as $attribute_menu) {
 				$attribute_group_id = $attribute_menu['attribute_group_id'];
 
+				$sort = array(
+					'sort' => 'name',
+					'order' => 'ASC',
+				);
+
 				$filter = array(
 					'category_ids' => array($category_id),
 					'attribute_group_ids' => array($attribute_group_id),
 				);
 
-				$attribute_list = $this->Model_Catalog_Product->getAttributes($filter);
+				$attribute_list = $this->Model_Catalog_Product->getAttributes($sort + $filter);
 
 				if(empty($attribute_list)) {
 					continue;
@@ -51,7 +56,7 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 					$attribute_query = http_build_query(array('attribute' => $attribute_filter));
 
 					$attribute['href'] = $this->url->link($route, $url_query . '&' . $attribute_query);
-				}
+				} unset($attribute);
 
 				//Remove Filter for this attribute for the All menu link
 				$attribute_filter = $current_filter;

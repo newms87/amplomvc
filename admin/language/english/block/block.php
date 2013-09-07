@@ -7,6 +7,7 @@ $_['text_positions']  = "Positions";
 $_['text_block_list'] = "Blocks";
 
 //Entries
+$_['entry_show_block_title']       = "Show Block Title?";
 $_['entry_store']          = "Stores";
 $_['entry_layout']         = "Layouts";
 $_['entry_position']       = "Positions";

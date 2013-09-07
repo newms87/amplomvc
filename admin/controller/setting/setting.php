@@ -152,6 +152,7 @@ class Admin_Controller_Setting_Setting extends Controller
 			'config_image_max_mem'                    => '2G',
 			'config_encryption'                       => '',
 			'config_compression'                      => '',
+			'config_jquery_cdn'                       => 0,
 			'config_log_filename'                     => '',
 			'config_debug_send_emails'                => '',
 			'config_error_display'                    => '',

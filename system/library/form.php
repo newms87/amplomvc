@@ -232,7 +232,7 @@ class Form extends Library
 		//render the file
 		ob_start();
 
-		require_once(_ac_mod_file($this->template_file));
+		require(_ac_mod_file($this->template_file));
 
 		return ob_get_clean();
 	}

@@ -44,15 +44,21 @@ class Mod extends Library
 	public function addFile($source, $mod_file, $destination = null, $directives = array())
 	{
 		if (!is_file($source)) {
-			$this->message->add('warning', "File $source was not found. Unable to add to file modification registry" . get_caller(0, 3));
-
-			return false;
+			if (is_file(SITE_DIR . $source)) {
+				$source = SITE_DIR . $source;
+			} else {
+				$this->message->add('warning', "File $source was not found. Unable to add to file modification registry" . get_caller(0, 3));
+				return false;
+			}
 		}
 
 		if (!is_file($mod_file)) {
-			$this->message->add('warning', "Mod File $mod_file was not found. Unable to add to file modification registry" . get_caller(0, 3));
-
-			return false;
+			if (is_file(SITE_DIR . $mod_file)) {
+				$mod_file = SITE_DIR . $mod_file;
+			} else {
+				$this->message->add('warning', "Mod File $mod_file was not found. Unable to add to file modification registry" . get_caller(0, 3));
+				return false;
+			}
 		}
 
 		if (!isset($this->mod_registry[$source])) {

@@ -31,6 +31,7 @@ $_['text_read_more']      = "... <a onclick=\"$('[href=#tab-shipping]').click();
 $_['error_add_to_cart']   = 'There was a problem adding your item to the cart. Please contact <a href="mailto:%s">Customer Service</a> to notify them of the problem, and complete your order.';
 $_['text_inactive']       = "This product is currently unavailable.";
 $_['text_zoombox_load']   = 'Grabbing off the rack...';
+$_['text_view_full_size_image'] = 'View Full Sized Image';
 
 //Button
 $_['button_view_cart'] = "View Cart";

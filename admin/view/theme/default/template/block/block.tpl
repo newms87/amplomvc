@@ -58,6 +58,10 @@
 	<div id="tab-profile-%pid%" class="vtabs-content profiles">
 		<table class="form">
 			<tr>
+				<td><?= $entry_show_block_title; ?></td>
+				<td><?= $this->builder->build('radio', $data_yes_no, "profiles[%pid%][show_block_title]"); ?></td>
+			</tr>
+			<tr>
 				<td><?= $entry_store; ?></td>
 				<td>
 					<? $this->builder->set_config("store_id", "name"); ?>
@@ -93,78 +97,91 @@
 </div>
 
 <script type="text/javascript">//<!--
-	var profile_id = 0;
+var profile_id = 0;
 
-	<? foreach($profiles as $profile){ ?>
+<? foreach($profiles as $profile){ ?>
 	data = {}
 	<? foreach($profile as $key => $data) {?>
 	data['<?= $key; ?>'] = <?= json_encode($data); ?>;
 	<? } ?>
 
 	addProfile(data);
-	<? } ?>
+<? } ?>
 
-	function addProfile(data) {
-		tab_html = $('#profile_tab_template').html().replace(/%pid%/g, profile_id);
-		$('#profile-add').before(tab_html);
+function addProfile(data) {
+	tab_html = $('#profile_tab_template').html().replace(/%pid%/g, profile_id);
+	$('#profile-add').before(tab_html);
 
-		profile_html = $($('#profile_template').html().replace(/%pid%/g, profile_id));
+	profile_html = $($('#profile_template').html().replace(/%pid%/g, profile_id));
 
-		$('#profiles').append(profile_html);
+	$('#profiles').append(profile_html);
 
-		if (data) {
-			fill_data($('#tab-profile-' + profile_id), data);
-		}
-
-		$('.vtabs a').tabs();
-
-		$('#profile-' + profile_id).trigger('click');
-
-		profile_id++;
+	if (data) {
+		fill_data($('#tab-profile-' + profile_id), data);
 	}
 
-	function fill_data(context, data) {
-		for (var d in data) {
-			switch (d) {
-				case 'status':
-				case 'position':
-					fill_data_as('select', context, d, data[d]);
-					break;
-				case 'layout_ids':
-				case 'store_ids':
-					fill_data_as('multiselect', context, d, data[d]);
-					break;
-				default:
-					if (typeof user_fill_profile_data === 'function') {
-						user_fill_profile_data(context, data);
-					}
-					break;
-			}
-		}
-	}
+	$('.vtabs a').tabs();
 
-	function fill_data_as(type, context, name, value) {
-		switch (type) {
-			case 'select':
-				input = context.find('[name="profiles[' + profile_id + '][' + name + ']"]');
-				input.val(value);
+	$('#profile-' + profile_id).trigger('click');
+
+	profile_id++;
+}
+
+function fill_data(context, data) {
+	for (var d in data) {
+		filltype = 'user';
+
+		switch (d) {
+			case 'show_block_title':
+			  filltype = 'radio';
+			  break;
+			case 'status':
+			case 'position':
+				filltype = 'select';
 				break;
-
-			case 'multiselect':
-				for (var i = 0; i < value.length; i++) {
-					input = context.find('[name="profiles[' + profile_id + '][' + name + '][]"][value=' + value[i] + ']');
-					input.attr('checked', 'checked');
-				}
+			case 'layout_ids':
+			case 'store_ids':
+				filltype = 'multiselect';
 				break;
-
 			default:
+
 				break;
 		}
-	}
-//--></script>
 
-<script type="text/javascript">//<!--
-	$('#tabs a').tabs();
+		if (filltype === 'user') {
+			if (typeof user_fill_profile_data === 'function') {
+				user_fill_profile_data(context, data);
+			}
+		} else {
+			fill_data_as(filltype, context, d, data[d]);
+		}
+	}
+}
+
+function fill_data_as(type, context, name, value) {
+	switch (type) {
+		case 'radio':
+			context.find('[name="profiles[' + profile_id + '][' + name + ']"][value="'+value+'"]').prop('checked', true);
+		  break;
+
+		case 'select':
+			input = context.find('[name="profiles[' + profile_id + '][' + name + ']"]');
+			input.val(value);
+			break;
+
+		case 'multiselect':
+			for (var i = 0; i < value.length; i++) {
+				input = context.find('[name="profiles[' + profile_id + '][' + name + '][]"][value=' + value[i] + ']');
+				input.prop('checked', true);
+			}
+			break;
+
+		default:
+			break;
+	}
+}
+
+$('#tabs a').tabs();
 //--></script>
 
 <?= $this->builder->js('errors', $errors); ?>

@@ -44,15 +44,15 @@ class Catalog_Controller_Product_Category extends Controller
 
 			$this->breadcrumb->add($category_info['name'], $this->url->link('product/category', 'category_id=' . $category_id));
 		} else {
-			$this->document->setTitle($this->_('text_title_all'));
-			$this->document->setDescription($this->_('text_description_all'));
-			$this->document->setKeywords($this->_('text_metakeyword_all'));
+			$this->document->setTitle($this->_('text_all_categories'));
+			$this->document->setDescription($this->_('text_all_meta_description'));
+			$this->document->setKeywords($this->_('text_all_meta_keywords'));
 
-			$this->language->set('head_title', $this->_('text_name_all'));
+			$this->language->set('head_title', $this->_('text_all_categories'));
 
 			$this->data['thumb'] = '';
 
-			$this->data['description'] = $this->_('text_description_all');
+			$this->data['description'] = $this->_('text_all_description');
 		}
 
 		//TODO: How do we handle sub categories....?

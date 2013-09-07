@@ -19,9 +19,15 @@ class Catalog_Controller_Common_Header extends Controller
 		$this->document->addStyle(HTTP_JS . 'jquery/ui/themes/ui-lightness/jquery-ui.custom.css');
 		$this->document->addStyle(HTTP_JS . 'jquery/colorbox/colorbox.css');
 
-		//Add Scripts
-		$this->document->addScript(HTTP_JS . 'jquery/jquery.js', 50);
-		$this->document->addScript(HTTP_JS . 'jquery/ui/jquery-ui.js', 51);
+		//Add jQuery from the CDN or locally
+		if ($this->config->get('config_jquery_cdn')) {
+			$this->document->addScript("http://code.jquery.com/jquery-1.10.2.min.js", 50);
+			$this->document->addScript("http://code.jquery.com/ui/1.10.3/jquery-ui.js", 51);
+		} else {
+			$this->document->addScript(HTTP_JS . 'jquery/jquery.js', 50);
+			$this->document->addScript(HTTP_JS . 'jquery/ui/jquery-ui.js', 51);
+		}
+
 		$this->document->addScript(HTTP_JS . 'common.js', 53);
 
 		//TODO: Move this to admin Panel?

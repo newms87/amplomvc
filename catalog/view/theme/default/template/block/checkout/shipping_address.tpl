@@ -31,8 +31,7 @@
 <? } ?>
 
 <p>
-	<input type="radio" name="shipping_address" value="new"
-	       id="shipping-address-new" <?= $data_addresses ? '' : 'checked="checked"'; ?> />
+	<input type="radio" name="shipping_address" value="new" id="shipping-address-new" <?= $data_addresses ? '' : 'checked="checked"'; ?> />
 	<label for="shipping-address-new"><?= $text_address_new; ?></label>
 </p>
 <div id="shipping_new" class="address_form" <?= $data_addresses ? 'style="display: none;"' : ''; ?>>
@@ -41,20 +40,20 @@
 
 
 <script type="text/javascript">//<!--
-	$('[name=shipping_address]').change(function () {
-		if ($('[name=shipping_address]:checked').val() == 'existing') {
-			$('#shipping_new').hide();
-			$('#shipping_existing').show();
+$('[name=shipping_address]').change(function () {
+	if ($('[name=shipping_address]:checked').val() == 'existing') {
+		$('#shipping_new').hide();
+		$('#shipping_existing').show();
 
-			if (typeof ci_validate_form == 'function') {
-				select = $('#shipping_existing [name=address_id]');
-				if (select.children().length == 1) {
-					select.val(select.find('option:first').val()).change();
-				}
+		if (typeof ci_validate_form == 'function') {
+			select = $('#shipping_existing [name=address_id]');
+			if (select.children().length == 1) {
+				select.val(select.find('option:first').val()).change();
 			}
-		} else {
-			$('#shipping_new').show();
-			$('#shipping_existing').hide();
 		}
-	}).trigger('change');
+	} else {
+		$('#shipping_new').show();
+		$('#shipping_existing').hide();
+	}
+}).trigger('change');
 //--></script>

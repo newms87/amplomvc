@@ -55,7 +55,7 @@ class Mail extends Library
 	}
 
 	/**
-	 * @param $to - Can be a single email, an array of emails or comma separated string of emails
+	 * @param mixed $to - Can be a single email string, an array of emails or comma separated string of emails
 	 */
 
 	public function setTo($to)
@@ -68,6 +68,10 @@ class Mail extends Library
 		}
 	}
 
+	/**
+	 * @param mixed $to - Can be a single email string, an array of emails or comma separated string of emails
+	 */
+
 	public function setCc($to)
 	{
 		if (is_array($to)) {
@@ -77,6 +81,10 @@ class Mail extends Library
 			$this->cc = trim($to);
 		}
 	}
+
+	/**
+	 * @param mixed $to - Can be a single email string, an array of emails or comma separated string of emails
+	 */
 
 	public function setBcc($to)
 	{
@@ -247,21 +255,27 @@ class Mail extends Library
 
 		$header = '';
 
-		$header .= 'MIME-Version: 1.0' . $this->newline;
+		$header .= 'MIME-Version: 1.0' . $this->crlf;
 
 		if ($this->protocol != 'mail') {
-			$header .= 'To: ' . $this->to . $this->newline;
-			$header .= 'Subject: ' . $this->subject . $this->newline;
+			$header .= 'To: ' . $this->to . $this->crlf;
+			$header .= 'Subject: ' . $this->subject . $this->crlf;
 		}
 
-		$header .= 'Cc: ' . $this->cc . $this->newline;
-		$header .= 'Bcc: ' . $this->bcc . $this->newline;
-		$header .= 'Date: ' . date("D, d M Y H:i:s O") . $this->newline;
-		$header .= 'From: ' . '=?UTF-8?B?' . base64_encode($this->sender) . '?=' . '<' . $this->from . '>' . $this->newline;
-		$header .= 'Reply-To: ' . $this->sender . '<' . $this->from . '>' . $this->newline;
-		$header .= 'Return-Path: ' . $this->from . $this->newline;
-		$header .= 'X-Mailer: PHP/' . phpversion() . $this->newline;
-		$header .= 'Content-Type: multipart/related; boundary="' . $boundary . '"' . $this->newline . $this->newline;
+		if ($this->cc) {
+			$header .= 'Cc: ' . $this->cc . $this->crlf;
+		}
+
+		if ($this->bcc) {
+			$header .= 'Bcc: ' . $this->bcc . $this->crlf;
+		}
+
+		$header .= 'Date: ' . date("D, d M Y H:i:s O") . $this->crlf;
+		$header .= 'From: ' . '=?UTF-8?B?' . base64_encode($this->sender) . '?=' . '<' . $this->from . '>' . $this->crlf;
+		$header .= 'Reply-To: ' . $this->sender . '<' . $this->from . '>' . $this->crlf;
+		$header .= 'Return-Path: ' . $this->from . $this->crlf;
+		$header .= 'X-Mailer: PHP/' . phpversion() . $this->crlf;
+		$header .= 'Content-Type: multipart/related; boundary="' . $boundary . '"' . $this->crlf . $this->crlf;
 
 		if (!$this->html) {
 			$message = '--' . $boundary . $this->newline;
@@ -311,15 +325,15 @@ class Mail extends Library
 		if ($this->protocol == 'mail') {
 			ini_set('sendmail_from', $this->from);
 
-			if ($this->parameter) {
-				mail($this->to, '=?UTF-8?B?' . base64_encode($this->subject) . '?=', $message, $header, $this->parameter);
-			} else {
-				mail($this->to, '=?UTF-8?B?' . base64_encode($this->subject) . '?=', $message, $header);
+			if (!$this->parameter) {
+				$this->parameter = null;
+			}
+
+			if (!mail($this->to, '=?UTF-8?B?' . base64_encode($this->subject) . '?=', $message, $header, $this->parameter)) {
+				$this->trigger_error("There was an error while sending the email message to: $this->to  -- from: $this->from");
 			}
 		} elseif ($this->protocol == 'smtp') {
 			$handle = fsockopen($this->hostname, $this->port, $errno, $errstr, $this->timeout);
-
-			$handle = fsockopen('localhost', 25, $errno, $errstr, 3);
 
 			if (!$handle) {
 				$this->trigger_error('' . $errstr . ' (' . $errno . ')');

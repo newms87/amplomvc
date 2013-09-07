@@ -124,7 +124,7 @@ class Catalog_Model_Catalog_Category extends Model
 
 		$category_tree = $this->cache->get("category.tree.$store_id.$language_id");
 
-		if (!$category_tree) {
+		if (!$category_tree || true) {
 			$categories = $this->getCategories();
 
 			//TODO: Make Root Categories in Admin Panel to customize root category data
@@ -158,9 +158,8 @@ class Catalog_Model_Catalog_Category extends Model
 				if ($category['parent_id']) {
 					$parent_ref[$category['parent_id']]['children'][$category['category_id']] = & $category;
 				}
-
-				if ((int)$category['parent_id'] === 0) {
-					$category_tree['children'][$category['category_id']] = $category;
+				elseif ((int)$category['parent_id'] === 0) {
+					$category_tree['children'][$category['category_id']] = & $category;
 				}
 			}
 			unset($category);

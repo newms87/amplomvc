@@ -8,10 +8,11 @@
 		<div class="left">
 			<? if (!empty($thumb)) { ?>
 				<div id='the_zoombox' class="image">
-					<a onclick="return colorbox($(this), {width: '70%', height: '90%'});" href="<?= $popup; ?>"
+					<a id="zoombox_image_link" onclick="return colorbox($(this), {width: '70%', height: '90%'});" href="<?= $popup; ?>"
 					   title="<?= $head_title; ?>" class="zoombox" rel='gal1'>
 						<img src="<?= $thumb; ?>" title="<?= $head_title; ?>" alt="<?= $head_title; ?>" id="image"/>
 					</a>
+					<a class="view_full_size" onclick="return colorbox($('#zoombox_image_link'), {width: '70%', height: '90%'});"><?= $text_view_full_size_image; ?></a>
 				</div>
 			<? } ?>
 

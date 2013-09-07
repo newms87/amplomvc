@@ -34,7 +34,7 @@ class Catalog_Controller_Product_Product extends Controller
 
 		$manufacturer_info = $this->Model_Catalog_Manufacturer->getManufacturer($product_info['manufacturer_id']);
 
-		if ($manufacturer_info) {
+		if ($manufacturer_info && $this->config->get('config_breadcrumbs_show_manufacturer')) {
 			$this->breadcrumb->add($manufacturer_info['name'], $this->url->link('product/manufacturer/product', 'manufacturer_id=' . $product_info['manufacturer_id']));
 		}
 
