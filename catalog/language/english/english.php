@@ -36,6 +36,7 @@ $_['data_no_yes_blank']   = array('' => '') + $_['data_no_yes'];
 $_['button_add_address']    = 'Add Address';
 $_['button_back']           = 'Back';
 $_['button_continue']       = 'Continue';
+$_['button_save']       = 'Save';
 $_['button_buy_now']        = 'Buy Now';
 $_['button_cart']           = 'Add to Cart';
 $_['button_compare']        = 'Add to Compare';

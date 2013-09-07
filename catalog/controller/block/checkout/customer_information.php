@@ -12,7 +12,7 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 			$this->data['block_guest_information'] = $this->getBlock('checkout/guest_information');
 		} else {
 			//Use Customer Payment Preference
-			$payment_preference = $this->customer->get_setting('payment_preference');
+			$payment_preference = $this->customer->getMeta('payment_preference');
 
 			if ($payment_preference) {
 				if (!$this->cart->hasPaymentMethod()) {
@@ -30,7 +30,7 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 
 			if ($this->cart->hasShipping()) {
 				//Use customer Shipping Preference
-				$shipping_preference = $this->customer->get_setting('shipping_preference');
+				$shipping_preference = $this->customer->getMeta('shipping_preference');
 
 				if ($shipping_preference) {
 					if (!$this->cart->hasShippingMethod()) {
@@ -79,7 +79,7 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 				'address' => $this->cart->getPaymentAddressId(),
 			);
 
-			$this->customer->set_setting('payment_preference', $payment_preference);
+			$this->customer->setMeta('payment_preference', $payment_preference);
 		}
 
 		//Handle Shipping
@@ -99,7 +99,7 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 					'address' => $this->cart->getShippingAddressId(),
 				);
 
-				$this->customer->set_setting('shipping_preference', $shipping_preference);
+				$this->customer->setMeta('shipping_preference', $shipping_preference);
 			}
 		}
 

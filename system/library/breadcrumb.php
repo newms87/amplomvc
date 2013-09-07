@@ -36,6 +36,11 @@ class Breadcrumb extends Library
 		return $this->crumbs;
 	}
 
+	public function clear()
+	{
+		$this->crumbs = array();
+	}
+
 	public function get_prev_url()
 	{
 		if (count($this->crumbs) > 1) {

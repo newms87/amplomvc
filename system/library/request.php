@@ -35,6 +35,11 @@ class Request
 		return $_SERVER['REQUEST_METHOD'] === 'GET';
 	}
 
+	public function isAjax()
+	{
+		return !empty($_GET['ajax']);
+	}
+
 	public function clean(&$value)
 	{
 		$value = htmlspecialchars($value, ENT_COMPAT);

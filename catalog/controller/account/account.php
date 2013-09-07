@@ -18,7 +18,7 @@ class Catalog_Controller_Account_Account extends Controller
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('head_title'), $this->url->link('account/account'));
 
-		$this->data['edit']           = $this->url->link('account/edit');
+		$this->data['update']           = $this->url->link('account/update');
 		$this->data['password']       = $this->url->link('account/password');
 		$this->data['address']        = $this->url->link('account/address');
 		$this->data['wishlist']       = $this->url->link('account/wishlist');

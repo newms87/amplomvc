@@ -101,6 +101,10 @@ ul {
     list-style: none;
 }
 
+.clear{
+	clear:both;
+}
+
 /* layout */
 #container {
     width: 1024px;

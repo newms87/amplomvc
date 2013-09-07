@@ -114,8 +114,8 @@ class Catalog_Controller_Block_Checkout_Register extends Controller
 			//Add Customer Address
 			$address_id = $this->Model_Account_Address->addAddress($_POST);
 
-			$this->customer->set_setting('default_payment_address_id', $address_id);
-			$this->customer->set_setting('default_shipping_address_id', $address_id);
+			$this->customer->setMeta('default_payment_address_id', $address_id);
+			$this->customer->setMeta('default_shipping_address_id', $address_id);
 
 			if (!$this->config->get('config_customer_approval')) {
 				$this->customer->login($_POST['email'], $_POST['password']);

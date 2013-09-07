@@ -155,10 +155,13 @@ class Url extends Library
 		return $this->find_alias($path, $query);
 	}
 
-	public function ajax($path, $query = '')
+	public function ajax($path, $query = '', $store_id = false)
 	{
-		//TODO: for ajax, no alias needed. Just route to /ajax/route or /admin/ajax/route
-		return $this->find_alias($path, $query);
+		if (!$store_id && $store_id !== 0) {
+			$store_id = $this->config->get('config_store_id');
+		}
+
+		return $this->store_base($store_id) . $path .  '?' . rtrim('ajax=1&' . $query, '&');
 	}
 
 	public function store_base($store_id, $ssl = false)

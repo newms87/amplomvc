@@ -592,12 +592,12 @@ class Cart extends Library
 	 * Wishlist Functions
 	 */
 
-	public function get_wishlist()
+	public function getWishlist()
 	{
 		return !empty($this->session->data['wishlist']) ? $this->session->data['wishlist'] : null;
 	}
 
-	public function merge_wishlist($wishlist)
+	public function mergeWishlist($wishlist)
 	{
 		if (is_string($wishlist)) {
 			$wishlist = unserialize($wishlist);

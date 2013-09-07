@@ -6,7 +6,7 @@
 
 		<h1><?= $head_title; ?></h1>
 
-		<form action="<?= $action; ?>" method="post" enctype="multipart/form-data">
+		<form id="new_address_form" action="<?= $save; ?>" method="post" enctype="multipart/form-data">
 			<h2><?= $text_edit_address; ?></h2>
 
 			<div class="section">
@@ -43,7 +43,7 @@
 						<td class="required"> <?= $entry_country; ?></td>
 						<td>
 							<?= $this->builder->set_config('country_id', 'name'); ?>
-							<?= $this->builder->build('select', $countries, "country_id", $country_id, array('class' => "country_select")); ?>
+							<?= $this->builder->build('select', $data_countries, "country_id", $country_id, array('class' => "country_select")); ?>
 						</td>
 					</tr>
 					<tr>
@@ -52,23 +52,16 @@
 					</tr>
 					<tr>
 						<td><?= $entry_default; ?></td>
-						<td><? if ($default) { ?>
-								<input type="radio" name="default" value="1" checked="checked"/>
-								<?= $text_yes; ?>
-								<input type="radio" name="default" value="0"/>
-								<?= $text_no; ?>
-							<? } else { ?>
-								<input type="radio" name="default" value="1"/>
-								<?= $text_yes; ?>
-								<input type="radio" name="default" value="0" checked="checked"/>
-								<?= $text_no; ?>
-							<? } ?></td>
+						<td><?= $this->builder->build('radio', $data_yes_no, "default", $default); ?></td>
 					</tr>
 				</table>
 			</div>
+
 			<div class="buttons">
-				<div class="left"><a href="<?= $back; ?>" class="button"><?= $button_back; ?></a></div>
-				<div class="right"><input type="submit" value="<?= $button_continue; ?>" class="button"/></div>
+				<? if (!empty($back)) { ?>
+					<div class="left"><a href="<?= $back; ?>" class="button"><?= $button_back; ?></a></div>
+				<? } ?>
+				<div class="right"><input type="submit" value="<?= $button_save; ?>" class="button"/></div>
 			</div>
 		</form>
 
@@ -76,5 +69,16 @@
 	</div>
 
 <?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select'); ?>
+
+<? if ($this->request->isAjax()) { ?>
+<script type="text/javascript">//<!--
+$('#new_address_form').submit(function(){
+	$.post($(this).attr('action'), $(this).serialize(), function(){
+		console.log('added address');
+	});
+	return false;
+});
+//--></script>
+<? } ?>
 
 <?= $footer; ?>
