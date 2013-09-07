@@ -1,5 +1,5 @@
 <?= $header; ?>
-<div class="content">
+<div class="section">
 <?= $this->breadcrumb->render(); ?>
 <? if ($errors) { ?>
 	<div class="message_box warning">
@@ -17,7 +17,7 @@
 			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a
 					href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
 		</div>
-		<div class="content">
+		<div class="section">
 			<a href='<?= $run_cron; ?>' target="_blank" class="button run_cron_button"><?= $button_run_cron; ?></a>
 
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">

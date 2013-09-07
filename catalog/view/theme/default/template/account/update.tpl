@@ -1,6 +1,6 @@
 <?= $header; ?>
 <?= $column_left; ?><?= $column_right; ?>
-<div id="content">
+<div class="content">
 	<?= $this->breadcrumb->render(); ?>
 	<?= $content_top; ?>
 
@@ -34,10 +34,10 @@
 			<h3><?= $text_ship_to; ?></h3>
 			<div id="address_list">
 				<? foreach ($data_addresses as $address) { ?>
-					<? $checked = ($address['address_id'] == $address_id) ? 'checked="checked"' : ''; ?>
+					<? $checked = ($address['address_id'] == $metadata['default_shipping_address_id']) ? 'checked="checked"' : ''; ?>
 					<div class="address <?= $checked ? 'checked' : ''; ?>">
-						<input type="radio" name="address_id" value="<?= $address['address_id']; ?>" <?= $checked; ?> />
-						<?= $address['display']; ?>
+						<input id="shipaddress<?= $address['address_id']; ?>" type="radio" name="metadata[default_shipping_address_id]" value="<?= $address['address_id']; ?>" <?= $checked; ?> />
+						<label for="shipaddress<?= $address['address_id']; ?>"><?= $address['display']; ?></label>
 					</div>
 				<? } ?>
 			</div>

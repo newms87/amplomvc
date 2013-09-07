@@ -1,5 +1,5 @@
 <?= $header; ?>
-	<div class="content">
+	<div class="section">
 		<?= $this->breadcrumb->render(); ?>
 		<div class="box">
 			<div class="heading">
@@ -9,7 +9,7 @@
 					<a href="<?= $return; ?>" class="button"><?= $button_return; ?></a>
 				</div>
 			</div>
-			<div class="content">
+			<div class="section">
 				<a class="dev_console_item" href="<?= $url_site_management; ?>">
 					<div class="title"><?= $console_site_management; ?></div>
 					<div class="image"><img src="<?= HTTP_THEME_IMAGE . 'dev/site_management.png'; ?>"/></div>

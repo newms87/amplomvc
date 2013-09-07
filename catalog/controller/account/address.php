@@ -1,7 +1,6 @@
 <?php
 class Catalog_Controller_Account_Address extends Controller
 {
-
 	public function index()
 	{
 		if (!$this->customer->isLogged()) {
@@ -51,9 +50,12 @@ class Catalog_Controller_Account_Address extends Controller
 			}
 
 			if (!$this->message->error_set()) {
-				$this->message->add('success', !empty($_GET['address_id']) ? $this->_('text_update') : $this->_('text_insert'));
-
-				$this->url->redirect($this->url->link('account/address'));
+				if ($this->request->isAjax()) {
+					return ; //output nothing for an ajax request
+				} else {
+					$this->message->add('success', !empty($_GET['address_id']) ? $this->_('text_update') : $this->_('text_insert'));
+					$this->url->redirect($this->url->link('account/address'));
+				}
 			}
 		}
 
@@ -213,19 +215,19 @@ class Catalog_Controller_Account_Address extends Controller
 
 	private function validateForm()
 	{
-		if ((strlen($_POST['firstname']) < 1) || (strlen($_POST['firstname']) > 32)) {
+		if (!$this->validation->text($_POST['firstname'], 1, 32)) {
 			$this->error['firstname'] = $this->_('error_firstname');
 		}
 
-		if ((strlen($_POST['lastname']) < 1) || (strlen($_POST['lastname']) > 32)) {
+		if (!$this->validation->text($_POST['lastname'], 1, 32)) {
 			$this->error['lastname'] = $this->_('error_lastname');
 		}
 
-		if ((strlen($_POST['address_1']) < 3) || (strlen($_POST['address_1']) > 128)) {
+		if (!$this->validation->text($_POST['address_1'], 1, 128)) {
 			$this->error['address_1'] = $this->_('error_address_1');
 		}
 
-		if ((strlen($_POST['city']) < 2) || (strlen($_POST['city']) > 128)) {
+		if (!$this->validation->text($_POST['city'], 2, 128)) {
 			$this->error['city'] = $this->_('error_city');
 		}
 
@@ -239,7 +241,7 @@ class Catalog_Controller_Account_Address extends Controller
 			$this->error['country'] = $this->_('error_country');
 		}
 
-		if ($_POST['zone_id'] == '') {
+		if (!isset($_POST['zone_id']) || $_POST['zone_id'] === '') {
 			$this->error['zone'] = $this->_('error_zone');
 		}
 

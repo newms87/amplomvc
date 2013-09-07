@@ -1,5 +1,5 @@
 <?= $header; ?>
-	<div class="content">
+	<div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<? if ($error_warning) { ?>
 		<div class="message_box warning"><?= $error_warning; ?></div>
@@ -11,7 +11,7 @@
 		<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a
 				href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
 	</div>
-	<div class="content">
+	<div class="section">
 	<div id="htabs" class="htabs"><a href="#tab-general"><?= $tab_general; ?></a> <a
 			href="#tab-payment"><?= $tab_payment; ?></a>
 		<? if ($affiliate_id) { ?>

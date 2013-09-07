@@ -1,5 +1,5 @@
 <?= $header; ?>
-	<div class="content">
+	<div class="section">
 		<?= $this->breadcrumb->render(); ?>
 		<? if ($success) { ?>
 			<div class="message_box success"><?= $success; ?></div>
@@ -11,7 +11,7 @@
 			<div class="heading">
 				<h1><img src="<?= HTTP_THEME_IMAGE . 'feed.png'; ?>" alt=""/> <?= $head_title; ?></h1>
 			</div>
-			<div class="content">
+			<div class="section">
 				<table class="list">
 					<thead>
 					<tr>

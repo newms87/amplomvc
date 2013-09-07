@@ -1,11 +1,11 @@
 <?= $header; ?>
-	<div class="content">
+	<div class="section">
 		<div class="box"
 		     style="width: 400px; min-height: 300px; margin-top: 40px; margin-left: auto; margin-right: auto;">
 			<div class="heading">
 				<h1><img src="<?= HTTP_THEME_IMAGE . 'lockscreen.png'; ?>" alt=""/> <?= $text_login; ?></h1>
 			</div>
-			<div class="content" style="min-height: 150px; overflow: hidden;">
+			<div class="section" style="min-height: 150px; overflow: hidden;">
 				<?= $this->builder->display_messages($messages); ?>
 				<form action="<?= $action ?>" method="post" enctype="multipart/form-data" id="form">
 					<table style="width: 100%;">
@@ -34,7 +34,7 @@
 					</table>
 				</form>
 			</div>
-			<div class="content" style="min-height:80px">
+			<div class="section" style="min-height:80px">
 				<div class="help"><?= $text_lost; ?></a></div>
 			</div>
 		</div>

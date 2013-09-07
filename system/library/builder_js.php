@@ -81,18 +81,22 @@ switch ($js) {
 		if (!$args) {
 			return '';
 		}
-		$errors = json_encode($args[0]); ?>
 
-		<script type="text/javascript">//<!--
+		$errors = json_encode($args[0]);
+		$script_id = "script" . uniqid(); ?>
+
+		<script id="<?= $script_id; ?>" type="text/javascript">//<!--
 			var errors = <?=$errors;?>;
+			var error_holder = $('#<?= $script_id; ?>').parent();
+
 			for (var e in errors) {
-				context = $('#content [name="' + e + '"]');
+				context = error_holder.find('[name="' + e + '"]');
 				if (!context.length)
 					context = $('#' + e);
 				if (!context.length)
 					context = $(e);
-				context.after("<span class ='error'>" + errors[e] + "</span");
-			}
+				context.after("<span class =\"error\">" + errors[e] + "</span");
+			};
 		//--></script>
 
 		<?php break;

@@ -1,5 +1,5 @@
 <?= $header; ?>
-	<div class="content">
+	<div class="section">
 		<?= $this->breadcrumb->render(); ?>
 		<div class="box">
 			<div class="heading">
@@ -9,7 +9,7 @@
 					<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
 				</div>
 			</div>
-			<div class="content">
+			<div class="section">
 				<form action="<?= $clear_cache; ?>" method="post" enctype="multipart/form-data" id="clear_cache">
 					<table class="form">
 						<tr>

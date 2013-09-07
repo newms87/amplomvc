@@ -39,7 +39,7 @@
 		<? } ?>
 	</div>
 
-	<div id='content'>
+	<div class="content">
 		<?= $this->builder->display_messages($messages); ?>
 
 		<?= $this->builder->js('image_manager'); ?>

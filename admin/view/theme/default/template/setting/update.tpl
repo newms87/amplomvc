@@ -1,5 +1,5 @@
 <?= $header; ?>
-	<div class="content">
+	<div class="section">
 		<?= $this->breadcrumb->render(); ?>
 		<div class="box">
 			<div class="heading">
@@ -9,7 +9,7 @@
 					<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
 				</div>
 			</div>
-			<div class="content">
+			<div class="section">
 				<form id="form_version" action="<?= $action; ?>" method="post">
 					<table class="form">
 						<tr>

@@ -46,7 +46,6 @@ class Catalog_Controller_Account_Update extends Controller
 			'email'      => '',
 			'telephone'  => '',
 			'fax'        => '',
-			'address_id' => null,
 			'metadata'   => array(),
 		);
 
@@ -61,9 +60,11 @@ class Catalog_Controller_Account_Update extends Controller
 		}
 
 		//Additional Data
-		if (!$this->data['address_id'] && !empty($addresses)) {
+		$default_shipping_address_id = $this->data['metadata']['default_shipping_address_id'];
+
+		if (!empty($addresses) && (!$default_shipping_address_id || !array_search_key('address_id', $default_shipping_address_id, $addresses))) {
 			$first_address            = current($addresses);
-			$this->data['address_id'] = $first_address['address_id'];
+			$this->data['metadata']['default_shipping_address_id'] = $first_address['address_id'];
 		}
 
 		foreach ($addresses as &$address) {

@@ -2,7 +2,7 @@
 	<div class="heading">
 		<h4><?= $head_title; ?></h4>
 		<a><span id="cart-total"><?= $text_items; ?></span></a></div>
-	<div class="content">
+	<div class="section">
 		<? if ($products || $vouchers) { ?>
 			<div class="mini-cart-info">
 				<table>
