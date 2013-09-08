@@ -268,7 +268,7 @@ ul > li > ul > li:hover > ul.link_list, ul > li > ul > li.hover > ul.link_list {
 	background: white;
 }
 
-#content {
+.content {
 	padding: 10px 30px 0 30px;
 	min-width: 900px;
 	padding-bottom: 128px;
@@ -493,18 +493,18 @@ ul > li > ul > li:hover > ul.link_list, ul > li > ul > li.hover > ul.link_list {
 	margin-right: 20px;
 }
 
-.box > .content .limits {
+.box > .section .limits {
 	float: right;
 	padding: 5px 0 15px 0;
 	margin-right: 20px;
 }
 
-.box > .content .limits .selected {
+.box > .section .limits .selected {
 	color: black;
 	text-decoration: none;
 }
 
-.box > .content {
+.box > .section {
 	padding: 10px;
 	border-left: 1px solid #CCCCCC;
 	border-right: 1px solid #CCCCCC;
@@ -1741,18 +1741,18 @@ td.mail_info label {
 }
 
 /** Navigation Links Form **/
-#links_list_data .content .right {
+#links_list_data .section .right {
 	float: right;
 	width: 75%;
 }
 
-#links_list_data .content .left {
+#links_list_data .section .left {
 	float: left;
 	border-right: 1px dotted #CCCCCC;
 	width: 20%;
 }
 
-#links_list_data .content .left input.button {
+#links_list_data .section .left input.button {
 	width: 50%;
 	margin-left: 25%;
 }
