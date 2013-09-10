@@ -1,5 +1,5 @@
 <div id="block_informationcontact" class="box">
-	<? if ($show_block_title) { ?>
+	<? if (!empty($show_block_title)) { ?>
 		<div class="box_heading"><?= $head_title; ?></div>
 	<? } ?>
 

@@ -12,15 +12,13 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 			$this->data['block_guest_information'] = $this->getBlock('checkout/guest_information');
 		} else {
 			//Use Customer Payment Preference
-			$payment_preference = $this->customer->getMeta('payment_preference');
-
-			if ($payment_preference) {
+			if ($this->customer->getMeta('default_payment_method_id')) {
 				if (!$this->cart->hasPaymentMethod()) {
-					$this->cart->setPaymentMethod($payment_preference['method']);
+					$this->cart->setPaymentMethod($this->customer->getMeta('default_payment_method_id'));
 				}
 
 				if (!$this->cart->hasPaymentAddress()) {
-					$this->cart->setPaymentAddress($payment_preference['address']);
+					$this->cart->setPaymentAddress($this->customer->getMeta('default_payment_address_id'));
 				}
 			}
 
@@ -30,15 +28,13 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 
 			if ($this->cart->hasShipping()) {
 				//Use customer Shipping Preference
-				$shipping_preference = $this->customer->getMeta('shipping_preference');
-
-				if ($shipping_preference) {
+				if ($this->customer->getMeta('default_shipping_method_id')) {
 					if (!$this->cart->hasShippingMethod()) {
-						$this->cart->setShippingMethod($shipping_preference['method']);
+						$this->cart->setShippingMethod($this->customer->getMeta('default_shipping_method_id'));
 					}
 
 					if (!$this->cart->hasShippingAddress()) {
-						$this->cart->setShippingAddress($shipping_preference['address']);
+						$this->cart->setShippingAddress($this->customer->getMeta('default_shipping_address_id'));
 					}
 				}
 
@@ -74,12 +70,8 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 
 		//Save Customer Payment Preferences (for future reference)
 		if (!$json && $this->customer->isLogged()) {
-			$payment_preference = array(
-				'method'  => $this->cart->getPaymentMethodId(),
-				'address' => $this->cart->getPaymentAddressId(),
-			);
-
-			$this->customer->setMeta('payment_preference', $payment_preference);
+			$this->customer->setMeta('default_payment_method_id', $this->cart->getPaymentMethodId());
+			$this->customer->setMeta('default_payment_address_id', $this->cart->getPaymentAddressId());
 		}
 
 		//Handle Shipping
@@ -94,12 +86,8 @@ class Catalog_Controller_Block_Checkout_CustomerInformation extends Controller
 
 			//Save Customer Shipping Preferences (for future reference)
 			if (!$json && $this->customer->isLogged()) {
-				$shipping_preference = array(
-					'method'  => $this->cart->getShippingMethodId(),
-					'address' => $this->cart->getShippingAddressId(),
-				);
-
-				$this->customer->setMeta('shipping_preference', $shipping_preference);
+				$this->customer->setMeta('default_shipping_method_id', $this->cart->getShippingMethodId());
+				$this->customer->setMeta('default_shipping_address_id', $this->cart->getShippingAddressId());
 			}
 		}
 

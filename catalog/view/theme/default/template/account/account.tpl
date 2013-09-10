@@ -20,7 +20,7 @@
 			<ul>
 				<li><a href="<?= $order; ?>"><?= $text_order; ?></a></li>
 				<li><a href="<?= $download; ?>"><?= $text_download; ?></a></li>
-				<? if ($reward) { ?>
+				<? if (!empty($reward)) { ?>
 					<li><a href="<?= $reward; ?>"><?= $text_reward; ?></a></li>
 				<? } ?>
 				<li><a href="<?= $return_view; ?>"><?= $text_return_view; ?></a></li>

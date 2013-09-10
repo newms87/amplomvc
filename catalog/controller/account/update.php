@@ -3,6 +3,9 @@ class Catalog_Controller_Account_Update extends Controller
 {
 	public function index()
 	{
+		//Load Language
+		$this->language->load('account/update');
+
 		//Login Verification
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/update');
@@ -19,9 +22,8 @@ class Catalog_Controller_Account_Update extends Controller
 			$this->url->redirect($this->url->link('account/account'));
 		}
 
-		//The Template and Language
+		//The Template
 		$this->template->load('account/update');
-		$this->language->load('account/update');
 
 		//Page Head
 		$this->document->setTitle($this->_('head_title'));
@@ -47,6 +49,7 @@ class Catalog_Controller_Account_Update extends Controller
 			'telephone'  => '',
 			'fax'        => '',
 			'metadata'   => array(),
+			'newsletter' => 1,
 		);
 
 		foreach ($defaults as $key => $default) {
@@ -117,6 +120,15 @@ class Catalog_Controller_Account_Update extends Controller
 		if (isset($_POST['telephone']) && !$this->validation->phone($_POST['telephone'])) {
 			$this->error['telephone'] = $this->_('error_telephone');
 		}
+
+		if (!empty($_POST['password']) && !$this->validation->password($_POST['password'])) {
+			$this->error['password'] = $this->_('error_password');
+		}
+		elseif ($_POST['password'] !== $_POST['confirm']) {
+			$this->error['confirm'] = $this->_('error_confirm');
+		}
+
+		$_POST['newsletter'] = !empty($_POST['newsletter']) ? 1 : 0;
 
 		return $this->error ? false : true;
 	}

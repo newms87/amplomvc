@@ -47,6 +47,10 @@ class Customer extends Library
 		}
 
 		$this->System_Model_Customer->editCustomer($customer_id, $data);
+
+		if (!empty($data['password'])) {
+			$this->editPassword($customer_id, $data['password']);
+		}
 	}
 
 	public function editPassword($customer_id, $password)
@@ -175,6 +179,24 @@ class Customer extends Library
 		);
 
 		return $this->Model_Account_Address->getAddresses($filter);
+	}
+
+	public function getDefaultShippingAddress()
+	{
+		if (!empty($this->metadata['default_shipping_address_id'])) {
+			return $this->getAddress($this->metadata['default_shipping_address_id']);
+		}
+
+		return null;
+	}
+
+	public function getDefaultPaymentAddress()
+	{
+		if (!empty($this->metadata['default_payment_address_id'])) {
+			return $this->getAddress($this->metadata['default_payment_address_id']);
+		}
+
+		return null;
 	}
 
 	public function getShippingAddresses()

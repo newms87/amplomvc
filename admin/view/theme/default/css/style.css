@@ -515,6 +515,8 @@ ul > li > ul > li:hover > ul.link_list, ul > li > ul > li.hover > ul.link_list {
 
 /* button */
 .button {
+	display: inline-block;
+	text-decoration: none;
 	cursor: pointer;
 	color: #FFFFFF;
 	line-height: 12px;
@@ -526,12 +528,6 @@ ul > li > ul > li:hover > ul.link_list, ul > li > ul > li.hover > ul.link_list {
 	background: linear-gradient(to bottom, #15508B 0%, #212121 100%); /* W3C */
 
 	border-radius: 7px 7px 7px 7px;
-	box-shadow: 0 2px 2px #DDDDDD;
-}
-
-.button {
-	display: inline-block;
-	text-decoration: none;
 	padding: 6px 12px 6px 12px;
 	box-shadow: 3px 3px 6px rgba(0, 0, 0, .8);
 }
