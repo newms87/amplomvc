@@ -1,5 +1,5 @@
 <?= $header; ?>
-	<div class="content">
+	<div class="section">
 		<?= $this->breadcrumb->render(); ?>
 		<div class="box">
 			<div class="heading">
@@ -8,7 +8,7 @@
 				<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a
 						href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
 			</div>
-			<div class="content">
+			<div class="section">
 				<div id="tabs" class="htabs"><a href="#tab-general"><?= $tab_general; ?></a><a
 						href="#tab-contact"><?= $tab_contact; ?></a></div>
 				<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">

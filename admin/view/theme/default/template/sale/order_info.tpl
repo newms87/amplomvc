@@ -1,5 +1,5 @@
 <?= $header; ?>
-	<div class="content">
+	<div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 	<div class="heading">
@@ -8,7 +8,7 @@
 		<div class="buttons"><a onclick="window.open('<?= $invoice; ?>');" class="button"><?= $button_invoice; ?></a><a
 				href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
 	</div>
-	<div class="content">
+	<div class="section">
 	<div class="vtabs"><a href="#tab-order"><?= $tab_order; ?></a><a href="#tab-payment"><?= $tab_payment; ?></a>
 		<? if ($shipping_method) { ?>
 			<a href="#tab-shipping"><?= $tab_shipping; ?></a>

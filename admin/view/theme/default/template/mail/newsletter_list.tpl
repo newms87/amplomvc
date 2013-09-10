@@ -1,5 +1,5 @@
 <?= $header; ?>
-	<div class="content">
+	<div class="section">
 		<?= $this->breadcrumb->render(); ?>
 		<div class="box">
 			<div class="heading">
@@ -14,7 +14,7 @@
 					<a onclick="do_batch_action('copy')" class="button"><?= $button_copy; ?></a>
 				</div>
 			</div>
-			<div class="content">
+			<div class="section">
 				<form action="" method="post" id="form">
 					<?= $newsletter_view; ?>
 				</form>

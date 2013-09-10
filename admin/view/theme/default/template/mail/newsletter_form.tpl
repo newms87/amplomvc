@@ -1,5 +1,5 @@
 <?= $header; ?>
-<div class="content" id='mail_newsletter'>
+<div class="section" id='mail_newsletter'>
 <?= $this->breadcrumb->render(); ?>
 	<div class="box">
 	<div class="heading">
@@ -12,7 +12,7 @@
 			<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
 		</div>
 	</div>
-	<div class="content">
+	<div class="section">
 		<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 			<table class="form">
 				<tr>

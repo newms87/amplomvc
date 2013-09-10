@@ -4,7 +4,7 @@ class Customer extends Library
 	private $customer_id;
 	private $information;
 	private $payment_info;
-	private $settings;
+	private $metadata;
 
 	public function __construct($registry)
 	{
@@ -14,7 +14,7 @@ class Customer extends Library
 			$customer = $this->db->queryRow("SELECT * FROM " . DB_PREFIX . "customer WHERE customer_id = '" . (int)$this->session->data['customer_id'] . "' AND status = '1'");
 
 			if (!empty($customer)) {
-				$this->set_customer($customer);
+				$this->setCustomer($customer);
 			} else {
 				$this->logout();
 			}
@@ -47,6 +47,10 @@ class Customer extends Library
 		}
 
 		$this->System_Model_Customer->editCustomer($customer_id, $data);
+
+		if (!empty($data['password'])) {
+			$this->editPassword($customer_id, $data['password']);
+		}
 	}
 
 	public function editPassword($customer_id, $password)
@@ -87,14 +91,14 @@ class Customer extends Library
 		$customer = $this->db->queryRow("SELECT * FROM " . DB_PREFIX . "customer WHERE $where LIMIT 1");
 
 		if ($customer) {
-			$this->set_customer($customer);
+			$this->setCustomer($customer);
 
 			if (!empty($customer['cart'])) {
 				$this->cart->merge($customer['cart']);
 			}
 
 			if (!empty($customer['wishlist'])) {
-				$this->cart->merge_wishlist($customer['wishlist']);
+				$this->cart->mergeWishlist($customer['wishlist']);
 			}
 
 			$this->order->synchronizeOrders($customer);
@@ -119,34 +123,30 @@ class Customer extends Library
 		$this->message->add('notify', "Logged Out");
 	}
 
-	public function get_setting($key)
+	public function getMeta($key)
 	{
-		return isset($this->settings[$key]) ? $this->settings[$key] : null;
+		return isset($this->metadata[$key]) ? $this->metadata[$key] : null;
 	}
 
-	public function set_setting($key, $value)
+	public function getMetaData()
+	{
+		return $this->metadata;
+	}
+
+	public function setMeta($key, $value)
 	{
 		if (!$this->customer_id) {
 			return;
 		}
 
-		$this->db->query("DELETE FROM " . DB_PREFIX . "customer_setting WHERE customer_id = '" . $this->customer_id . "' AND `key` = '" . $this->db->escape($key) . "'");
+		$this->System_Model_Customer->setMetaData($this->customer_id, $key, $value);
 
-		if (is_object($value) || is_array($value) || is_resource($value)) {
-			$value      = serialize($value);
-			$serialized = 1;
-		} else {
-			$serialized = 0;
-		}
-
-		$this->db->query("INSERT INTO " . DB_PREFIX . "customer_setting SET customer_id = '" . $this->customer_id . "', `key` = '" . $this->db->escape($key) . "', `value` = '" . $this->db->escape($value) . "', serialized = '$serialized'");
-
-		$this->settings[$key] = $value;
+		$this->metadata[$key] = $value;
 	}
 
-	public function delete_setting($key)
+	public function deleteMeta($key)
 	{
-		$this->db->query("DELETE FROM " . DB_PREFIX . "customer_setting WHERE customer_id = '$this->customer_id' AND `key` = '" . $this->db->escape($key) . "'");
+		$this->System_Model_Customer->deleteMetaData($this->customer_id, $key);
 	}
 
 	public function getAddress($address_id)
@@ -179,6 +179,24 @@ class Customer extends Library
 		);
 
 		return $this->Model_Account_Address->getAddresses($filter);
+	}
+
+	public function getDefaultShippingAddress()
+	{
+		if (!empty($this->metadata['default_shipping_address_id'])) {
+			return $this->getAddress($this->metadata['default_shipping_address_id']);
+		}
+
+		return null;
+	}
+
+	public function getDefaultPaymentAddress()
+	{
+		if (!empty($this->metadata['default_payment_address_id'])) {
+			return $this->getAddress($this->metadata['default_payment_address_id']);
+		}
+
+		return null;
 	}
 
 	public function getShippingAddresses()
@@ -237,7 +255,7 @@ class Customer extends Library
 		return md5($password);
 	}
 
-	private function set_customer($customer)
+	private function setCustomer($customer)
 	{
 		if (empty($customer)) {
 			return;
@@ -248,17 +266,9 @@ class Customer extends Library
 		$this->information                  = $customer;
 
 		//Load Customer Settings
-		$settings = $this->db->queryRows("SELECT * FROM " . DB_PREFIX . "customer_setting WHERE customer_id = '" . $this->customer_id . "'");
+		$this->metadata = $this->System_Model_Customer->getMetaData($this->customer_id);
 
-		foreach ($settings as $setting) {
-			if ($setting['serialized']) {
-				$this->settings[$setting['key']] = unserialize($setting['value']);
-			} else {
-				$this->settings[$setting['key']] = $setting['value'];
-			}
-		}
-
-		$this->payment_info = $this->get_setting('payment_info_' . $this->information['payment_code']);
+		$this->payment_info = $this->getMeta('payment_info_' . $this->information['payment_code']);
 
 		if (!$this->payment_info) {
 			$this->payment_info = array(
@@ -268,7 +278,7 @@ class Customer extends Library
 		}
 
 		$cart     = $this->cart->getCart();
-		$wishlist = $this->cart->get_wishlist();
+		$wishlist = $this->cart->getWishlist();
 
 		$this->db->query("UPDATE " . DB_PREFIX . "customer SET cart = '" . $this->db->escape(serialize($cart)) . "', wishlist = '" . $this->db->escape(serialize($wishlist)) . "', ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "' WHERE customer_id = '" . (int)$this->customer_id . "'");
 
@@ -277,8 +287,6 @@ class Customer extends Library
 		if (!$ip_set) {
 			$this->db->query("INSERT INTO " . DB_PREFIX . "customer_ip SET customer_id = '" . $this->customer_id . "', ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "', date_added = NOW()");
 		}
-
-		$this->db->query("UPDATE " . DB_PREFIX . "customer SET ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "' WHERE customer_id = '" . (int)$this->customer_id . "'");
 	}
 
 	public function emailRegistered($email)

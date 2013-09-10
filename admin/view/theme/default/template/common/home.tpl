@@ -1,11 +1,11 @@
 <?= $header; ?>
-	<div class="content">
+	<div class="section">
 		<?= $this->breadcrumb->render(); ?>
 		<div class="box">
 			<div class="heading">
 				<h1><img src="<?= HTTP_THEME_IMAGE . 'home.png'; ?>" alt=""/> <?= $head_title; ?></h1>
 			</div>
-			<div class="content">
+			<div class="section">
 				<div class="overview">
 					<div class="dashboard-heading"><?= $text_overview; ?></div>
 					<div class="dashboard-content">

@@ -1,6 +1,6 @@
 <?= $header; ?>
 <?= $column_left; ?><?= $column_right; ?>
-	<div id="content">
+	<div class="content">
 		<?= $this->breadcrumb->render(); ?>
 		<?= $content_top; ?>
 
@@ -9,7 +9,7 @@
 		<div class="content_account content">
 			<h2><?= $text_my_account; ?></h2>
 			<ul>
-				<li><a href="<?= $edit; ?>"><?= $text_edit; ?></a></li>
+				<li><a href="<?= $update; ?>"><?= $text_update; ?></a></li>
 				<li><a href="<?= $password; ?>"><?= $text_password; ?></a></li>
 				<li><a href="<?= $address; ?>"><?= $text_address; ?></a></li>
 				<li><a href="<?= $wishlist; ?>"><?= $text_wishlist; ?></a></li>
@@ -20,7 +20,7 @@
 			<ul>
 				<li><a href="<?= $order; ?>"><?= $text_order; ?></a></li>
 				<li><a href="<?= $download; ?>"><?= $text_download; ?></a></li>
-				<? if ($reward) { ?>
+				<? if (!empty($reward)) { ?>
 					<li><a href="<?= $reward; ?>"><?= $text_reward; ?></a></li>
 				<? } ?>
 				<li><a href="<?= $return_view; ?>"><?= $text_return_view; ?></a></li>

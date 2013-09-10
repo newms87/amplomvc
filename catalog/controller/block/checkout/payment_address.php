@@ -11,7 +11,7 @@ class Catalog_Controller_Block_Checkout_PaymentAddress extends Controller
 		if ($this->cart->validatePaymentAddress()) {
 			$this->data['payment_address_id'] = $this->cart->getPaymentAddressId();
 		} else {
-			$this->data['payment_address_id'] = $this->customer->get_setting('default_payment_address_id');
+			$this->data['payment_address_id'] = $this->customer->getMeta('default_payment_address_id');
 		}
 
 		//Build Address Form

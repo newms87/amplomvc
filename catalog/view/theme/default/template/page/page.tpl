@@ -1,10 +1,10 @@
 <?= $header; ?>
 <?= $column_left; ?><?= $column_right; ?>
 
-	<div id="content">
+	<div class="content">
 		<?= $this->breadcrumb->render(); ?>
 
-		<? if ($display_title) { ?>
+		<? if (!empty($display_title)) { ?>
 			<h1><?= $title; ?></h1>
 		<? } ?>
 

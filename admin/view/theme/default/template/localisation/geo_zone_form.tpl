@@ -1,5 +1,5 @@
 <?= $header; ?>
-	<div class="content">
+	<div class="section">
 		<?= $this->breadcrumb->render(); ?>
 		<?= $this->builder->display_errors(); ?>
 		<div class="box">
@@ -11,7 +11,7 @@
 					<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
 				</div>
 			</div>
-			<div class="content">
+			<div class="section">
 				<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 					<table class="form">
 						<tr>

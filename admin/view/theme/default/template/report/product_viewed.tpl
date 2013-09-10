@@ -1,5 +1,5 @@
 <?= $header; ?>
-	<div class="content">
+	<div class="section">
 		<?= $this->breadcrumb->render(); ?>
 		<div class="box">
 			<div class="heading">
@@ -8,7 +8,7 @@
 				<div class="buttons"><a onclick="location = '<?= $reset; ?>';" class="button"><?= $button_reset; ?></a>
 				</div>
 			</div>
-			<div class="content">
+			<div class="section">
 				<table class="list">
 					<thead>
 					<tr>

@@ -1,5 +1,5 @@
 <?= $header; ?>
-<div class="content">
+<div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<? if ($error_warning) { ?>
 		<div class="message_box warning"><?= $error_warning; ?></div>
@@ -11,7 +11,7 @@
 			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a
 					href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
 		</div>
-		<div class="content">
+		<div class="section">
 			<div class="vtabs"><a href="#tab-general"><?= $tab_general; ?></a>
 				<? foreach ($geo_zones as $geo_zone) { ?>
 					<a href="#tab-geo-zone<?= $geo_zone['geo_zone_id']; ?>"><?= $geo_zone['name']; ?></a>

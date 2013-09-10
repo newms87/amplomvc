@@ -9,7 +9,7 @@ class Catalog_Controller_Block_Checkout_ShippingAddress extends Controller
 		if ($this->cart->validateShippingAddress()) {
 			$this->data['shipping_address_id'] = $this->cart->getShippingAddressId();
 		} else {
-			$this->data['shipping_address_id'] = $this->customer->get_setting('default_shipping_address_id');
+			$this->data['shipping_address_id'] = $this->customer->getMeta('default_shipping_address_id');
 		}
 
 		$this->data['data_addresses'] = $this->customer->getShippingAddresses();

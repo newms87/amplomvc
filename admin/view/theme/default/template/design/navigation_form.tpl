@@ -1,5 +1,5 @@
 <?= $header; ?>
-	<div class="content">
+	<div class="section">
 		<?= $this->breadcrumb->render(); ?>
 		<div class="box">
 			<div class="heading">
@@ -10,7 +10,7 @@
 					<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
 				</div>
 			</div>
-			<div class="content">
+			<div class="section">
 				<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
 					<table class="form">
 						<tr>
@@ -32,7 +32,7 @@
 								<div id='links_list' class='box'>
 									<div class='heading'><h3><?= $entry_links; ?></h3></div>
 
-									<div class="content">
+									<div class="section">
 										<div class="left">
 											<div id='new_navigation_link'>
 												<div class="editable">

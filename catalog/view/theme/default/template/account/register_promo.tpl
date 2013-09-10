@@ -1,6 +1,6 @@
 <?= $header; ?>
 <?= $column_left; ?><?= $column_right; ?>
-	<div id="content">
+	<div class="content">
 		<?= $content_top; ?>
 
 		<h1><?= $head_title; ?></h1>

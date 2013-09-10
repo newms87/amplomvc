@@ -69,7 +69,7 @@ function image_manager(query) {
 	query = query || '';
 
 	$('#im_dialog').remove();
-	$('#content').prepend('<div id="im_dialog"><iframe src="' + image_manager_url + query + '" frameborder="no" scrolling="auto"></iframe></div>');
+	$('.content').prepend('<div id="im_dialog"><iframe src="' + image_manager_url + query + '" frameborder="no" scrolling="auto"></iframe></div>');
 
 	$('#im_dialog').dialog({
 		title: 'File Manager',

@@ -1,5 +1,5 @@
 <?= $header; ?>
-<div class="content">
+<div class="section">
 	<?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
@@ -10,7 +10,7 @@
 				<a onclick="$('form').submit();" class="button"><?= $button_delete; ?></a>
 			</div>
 		</div>
-		<div class="content">
+		<div class="section">
 			<form action="<?= $delete; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table class="list">
 					<thead>

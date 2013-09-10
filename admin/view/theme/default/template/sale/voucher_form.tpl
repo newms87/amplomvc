@@ -1,5 +1,5 @@
 <?= $header; ?>
-<div class="content">
+<div class="section">
 <?= $this->breadcrumb->render(); ?>
 	<div class="box">
 		<div class="heading">
@@ -14,7 +14,7 @@
 			</div>
 		</div>
 
-		<div class="content">
+		<div class="section">
 			<div id="tabs" class="htabs">
 				<a href="#tab-general"><?= $tab_general; ?></a>
 				<? if ($voucher_id) { ?>

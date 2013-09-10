@@ -3,7 +3,7 @@
 	<div class="message_box warning"><?= $error_warning; ?></div>
 <? } ?>
 <?= $column_left; ?><?= $column_right; ?>
-	<div id="content">
+	<div class="content">
 		<?= $this->breadcrumb->render(); ?>
 		<?= $content_top; ?>
 

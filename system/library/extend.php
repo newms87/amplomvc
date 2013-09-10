@@ -152,9 +152,9 @@ class Extend extends Library
 		$this->config->saveGroup('db_hook', $db_hooks);
 	}
 
-	public function addControllerOverride($original, $alternate, $condition = '')
+	public function addControllerOverride($original, $alternate, $condition = '', $store_id = 0)
 	{
-		$overrides = $this->config->load('controller_override', 'controller_override');
+		$overrides = $this->config->load('controller_override', 'controller_override', $store_id);
 
 		if (!$overrides) {
 			$overrides = array();
@@ -166,14 +166,14 @@ class Extend extends Library
 			'condition' => $condition,
 		);
 
-		$this->config->save('controller_override', 'controller_override', $overrides);
+		$this->config->save('controller_override', 'controller_override', $overrides, $store_id);
 
 		$overrides = $this->config->load('controller_override', 'controller_override');
 	}
 
-	public function removeControllerOverride($original, $alternate, $condition = '')
+	public function removeControllerOverride($original, $alternate, $condition = '', $store_id = 0)
 	{
-		$overrides = $this->config->load('controller_override', 'controller_override');
+		$overrides = $this->config->load('controller_override', 'controller_override', $store_id);
 
 		if ($overrides) {
 			foreach ($overrides as $key => $override) {
@@ -182,7 +182,7 @@ class Extend extends Library
 				}
 			}
 
-			$this->config->save('controller_override', 'controller_override', $overrides);
+			$this->config->save('controller_override', 'controller_override', $overrides, $store_id);
 		}
 	}
 

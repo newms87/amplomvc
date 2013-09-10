@@ -1,5 +1,5 @@
 <?= $header; ?>
-	<div class="content">
+	<div class="section">
 		<?= $this->breadcrumb->render(); ?>
 		<? if ($error_warning) { ?>
 			<div class="message_box warning"><?= $error_warning; ?></div>
@@ -16,7 +16,7 @@
 				                                                                     class="button"><?= $button_insert; ?></a><a onclick="$('form').attr('action', '<?= $delete; ?>'); $('form').submit();"
 						class="button"><?= $button_delete; ?></a></div>
 			</div>
-			<div class="content">
+			<div class="section">
 				<form action="" method="post" enctype="multipart/form-data" id="form">
 					<table class="list">
 						<thead>

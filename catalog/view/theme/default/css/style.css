@@ -107,6 +107,10 @@ ul {
 	color: red;
 }
 
+.clear{
+	clear:both;
+}
+
 /* layout */
 #container {
 	width: 1024px;

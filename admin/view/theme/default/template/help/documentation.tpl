@@ -1,12 +1,12 @@
 <?= $header; ?>
-<div class="content">
+<div class="section">
 <?= $this->breadcrumb->render(); ?>
 <?= $this->builder->display_messages($messages); ?>
 	<div class="box">
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= $head_title; ?></h1>
 		</div>
-		<div id='help_docs' class="content">
+		<div id='help_docs' class="section">
 			<? function display_levels($sub, $level)
 			{
 				$list_types = array(

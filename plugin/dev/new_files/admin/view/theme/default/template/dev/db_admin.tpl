@@ -1,5 +1,5 @@
 <?= $header; ?>
-	<div class="content">
+	<div class="section">
 		<?= $this->breadcrumb->render(); ?>
 		<div class="box">
 			<div class="heading">
@@ -9,7 +9,7 @@
 					<a href="<?= $return; ?>" class="button"><?= $button_return; ?></a>
 				</div>
 			</div>
-			<div class="content">
+			<div class="section">
 				<form id="form_db_query" action="" method="post">
 					<table class="form">
 						<tr>

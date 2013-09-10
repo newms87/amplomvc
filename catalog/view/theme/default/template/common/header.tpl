@@ -78,7 +78,7 @@
 	<? } ?>
 
 </head>
-<body>
+<body class="<?= $body_class; ?>">
 <div id="container">
 	<div id='page'>
 		<div id="header">

@@ -45,10 +45,10 @@ $(document).ready(function () {
 });
 
 function show_msg(type, html) {
-    if ($('#content .' + type).length) {
-        $('#content .' + type).append('<br />' + html);
+    if ($('.content:first .' + type).length) {
+        $('.content:first .' + type).append('<br />' + html);
     } else {
-        $('#content').prepend('<div class="message_box ' + type + '" style="display: none;">' + html + '<span class="close"></span></div>');
+        $('.content:first').prepend('<div class="message_box ' + type + '" style="display: none;">' + html + '<span class="close"></span></div>');
         $('.message_box.' + type).fadeIn('slow');
         $('.message_box .close').click(function () {
             $(this).parent().remove();

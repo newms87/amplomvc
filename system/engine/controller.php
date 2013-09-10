@@ -83,7 +83,10 @@ abstract class Controller
 		$this->data['errors'] = array();
 
 		if ($this->error) {
-			$this->message->add('warning', $this->error);
+			if (!$this->request->isAjax()) {
+				$this->message->add('warning', $this->error);
+			}
+
 			$this->data['errors'] = $this->error;
 
 			$this->error = array();
@@ -92,9 +95,18 @@ abstract class Controller
 		//Build language
 		$this->data += $this->language->data;
 
-		//Render Children
-		foreach ($this->children as $child) {
-			$this->data[basename($child)] = $this->getChild($child);
+		//Empty Dependencies and Breadcrumbs if an ajax request
+		if ($this->request->isAjax()) {
+			$this->breadcrumb->clear();
+
+			foreach ($this->children as $child) {
+				$this->data[basename($child)] = '';
+			}
+		} else {
+			//Render Dependencies
+			foreach ($this->children as $child) {
+				$this->data[basename($child)] = $this->getChild($child);
+			}
 		}
 
 		$this->template->setData($this->data);

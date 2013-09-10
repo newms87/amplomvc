@@ -414,13 +414,13 @@ class Cart extends Library
 					$product['downloads']        = $downloads;
 					$product['quantity']         = $quantity;
 					$product['in_stock']         = $in_stock;
-					$product['cost'] += $option_cost;
-					$product['total_cost'] = $product['cost'] * $quantity;
-					$product['price'] += $option_price;
-					$product['total']        = $product['price'] * $quantity;
-					$product['total_reward'] = $product['reward'] * $quantity;
-					$product['points']       = ((int)$product['points'] + $option_points) * $quantity;
-					$product['weight']       = ((float)$product['weight'] + $option_weight) * $quantity;
+					$product['cost']             += $option_cost;
+					$product['total_cost']       = $product['cost'] * $quantity;
+					$product['price']            += $option_price;
+					$product['total']            = $product['price'] * $quantity;
+					$product['total_reward']     = $product['reward'] * $quantity;
+					$product['points']           = ((int)$product['points'] + $option_points) * $quantity;
+					$product['weight']           = ((float)$product['weight'] + $option_weight) * $quantity;
 
 					$this->data[$key] = $product;
 				} else {
@@ -592,12 +592,12 @@ class Cart extends Library
 	 * Wishlist Functions
 	 */
 
-	public function get_wishlist()
+	public function getWishlist()
 	{
 		return !empty($this->session->data['wishlist']) ? $this->session->data['wishlist'] : null;
 	}
 
-	public function merge_wishlist($wishlist)
+	public function mergeWishlist($wishlist)
 	{
 		if (is_string($wishlist)) {
 			$wishlist = unserialize($wishlist);

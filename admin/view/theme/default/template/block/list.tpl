@@ -1,5 +1,5 @@
 <?= $header; ?>
-	<div class="content">
+	<div class="section">
 		<?= $this->breadcrumb->render(); ?>
 		<div class="box">
 			<div class="heading">
@@ -9,7 +9,7 @@
 					<a href="<?= $insert; ?>" class="button"><?= $button_insert; ?></a>
 				</div>
 			</div>
-			<div class="content">
+			<div class="section">
 				<div id="listing">
 					<?= $list_view; ?>
 				</div>

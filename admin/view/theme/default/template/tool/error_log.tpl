@@ -1,5 +1,5 @@
 <?= $header; ?>
-	<div class="content">
+	<div class="section">
 		<?= $this->breadcrumb->render(); ?>
 		<div class="box">
 			<div class="heading">
@@ -17,7 +17,7 @@
 					<? } ?>
 				</div>
 			</div>
-			<div class="content">
+			<div class="section">
 				<table class='form'>
 					<tr>
 						<td><?= $entry_remove; ?></td>

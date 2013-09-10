@@ -1,5 +1,5 @@
 <?= $header; ?>
-	<div class="content">
+	<div class="section">
 		<?= $this->breadcrumb->render(); ?>
 		<div class="box">
 			<div class="heading">
@@ -9,7 +9,7 @@
 					<a href="<?= $insert; ?>" class="button"><?= $button_insert; ?></a>
 				</div>
 			</div>
-			<div class="content">
+			<div class="section">
 				<div class="menu_icons">
 					<a class="menu_item" href="<?= $admin_settings; ?>">
 						<div class="title"><?= $button_admin_settings; ?></div>
@@ -20,7 +20,7 @@
 						<div class="image"><img src="<?= HTTP_THEME_IMAGE . "system_update.png"; ?>"/></div>
 					</a>
 				</div>
-				<div class="content">
+				<div class="section">
 					<div class="limits">
 						<?= $limits; ?>
 					</div>

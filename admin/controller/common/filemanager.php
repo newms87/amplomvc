@@ -11,11 +11,11 @@ class Admin_Controller_Common_Filemanager extends Controller
 
 		$this->data['elfinder_root_dir'] = '';
 
-		_is_writable(DIR_IMAGE . 'data/' . $dir, $this->config->get('config_image_dir_mode'));
+		_is_writable(DIR_IMAGE . 'data/' . $dir, AMPLOCART_DIR_MODE);
 
 		$_SESSION['elfinder_root_dir']  = $dir;
-		$_SESSION['elfinder_dir_mode']  = $this->config->get('config_image_dir_mode');
-		$_SESSION['elfinder_file_mode'] = $this->config->get('config_image_file_mode');
+		$_SESSION['elfinder_dir_mode']  = AMPLOCART_DIR_MODE;
+		$_SESSION['elfinder_file_mode'] = AMPLOCART_FILE_MODE;
 
 		$this->response->setOutput($this->render());
 	}
