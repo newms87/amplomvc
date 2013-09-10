@@ -17,7 +17,7 @@ $_['column_action']     = 'Action';
 $_['entry_title']       = 'Information Title:';
 $_['entry_description'] = 'Description:';
 $_['entry_store']       = 'Stores:';
-$_['entry_keyword']     = 'SEO Keyword:<br /><span class="help">Do not use spaces instead replace spaces with - and make sure the keyword is globally unique.</span>';
+$_['entry_alias']       = 'SEO Url:<span class="help">The Search Engine Optimized alias for this category.</span>';
 $_['entry_status']      = 'Status:';
 $_['entry_sort_order']  = 'Sort Order:';
 $_['entry_layout']      = 'Layout Override:';

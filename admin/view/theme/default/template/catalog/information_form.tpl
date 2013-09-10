@@ -23,8 +23,8 @@
 								<td><input type="text" name="title" value="<?= $title; ?>" size="100"/></td>
 							</tr>
 							<tr>
-								<td><?= $entry_keyword; ?></td>
-								<td><input type="text" name="keyword" value="<?= $keyword; ?>"/></td>
+								<td><?= $entry_alias; ?></td>
+								<td><input type="text" name="alias" value="<?= $alias; ?>"/></td>
 							</tr>
 							<tr>
 								<td class="required"> <?= $entry_description; ?></td>
