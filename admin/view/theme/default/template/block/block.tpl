@@ -101,14 +101,14 @@
 										<td><?= $entry_store; ?></td>
 										<td>
 											<? $this->builder->set_config("store_id", "name"); ?>
-											<?= $this->builder->build('multiselect', $data_stores, "profiles[$row][store_ids]", $profile['store_ids']); ?>
+											<?= $this->builder->build('multiselect', $data_stores, "profiles[$row][store_ids]", !empty($profile['store_ids']) ? $profile['store_ids'] : null); ?>
 										</td>
 									</tr>
 									<tr>
 										<td><?= $entry_layout; ?></td>
 										<td>
 											<? $this->builder->set_config("layout_id", "name"); ?>
-											<?= $this->builder->build('multiselect', $data_layouts, "profiles[$row][layout_ids]", $profile['layout_ids']); ?>
+											<?= $this->builder->build('multiselect', $data_layouts, "profiles[$row][layout_ids]", !empty($profile['layout_ids']) ? $profile['layout_ids'] : null); ?>
 										</td>
 									</tr>
 									<tr>

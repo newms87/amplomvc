@@ -161,6 +161,19 @@ class Admin_Controller_Block_Block extends Controller
 			$block = $this->Model_Block_Block->getBlock($name);
 		}
 
+		$default_profile_settings = array(
+			'name' => $this->_('var_default_profile_setting_name'),
+			'show_block_title' => 1,
+		);
+
+		$default_profile = array(
+			'profile_setting_id' => 0,
+			'store_ids' => array($this->config->get('config_default_store')),
+			'layout_ids' => array(),
+			'position' => '',
+			'status' => 1,
+		);
+
 		$defaults = array(
 			'settings' => array(),
 			'profile_settings' => array(),
@@ -178,27 +191,16 @@ class Admin_Controller_Block_Block extends Controller
 			}
 		}
 
-		//AC Templates
-		$this->data['profile_settings']['__ac_template__'] = array(
-			'name' => 'Profile __ac_template__',
-			'show_block_title' => 1,
-		);
-
-		$this->data['profiles']['__ac_template__'] = array(
-			'profile_setting_id' => 0,
-			'store_ids' => array($this->config->get('config_default_store')),
-			'layout_ids' => array(),
-			'position' => '',
-			'status' => 1,
-		);
-
-		//Validate Profile Settings
-		if (count($this->data['profile_settings']) <= 1) {
-			$this->data['profile_settings'][0] = array(
-				'name' => $this->_('var_default_profile_setting_name'),
-				'show_block_title' => 1,
-			);
+		//Load Defaults for Settings, Profile Settings and Profiles
+		if (empty($this->data['profile_settings'])) {
+			$this->data['profile_settings'][0] = $default_profile_settings;
 		}
+
+		//AC Templates
+		$this->data['profile_settings']['__ac_template__'] = $default_profile_settings;
+		$this->data['profile_settings']['__ac_template__']['name'] = 'Profile __ac_template__';
+
+		$this->data['profiles']['__ac_template__'] = $default_profile;
 
 		foreach ($this->data['profiles'] as &$profile) {
 			if (empty($profile['profile_setting_id']) || !in_array($profile['profile_setting_id'], array_keys($this->data['profile_settings']))) {
