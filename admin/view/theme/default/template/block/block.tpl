@@ -13,6 +13,7 @@
 		<div class="section">
 			<div id="tabs" class="htabs">
 				<a href="#tab-settings"><?= $tab_settings; ?></a>
+				<a href="#tab-profile-settings"><?= $tab_profile_settings; ?></a>
 				<a href="#tab-profile"><?= $tab_profile; ?></a>
 			</div>
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
@@ -21,7 +22,7 @@
 					<table class="form">
 						<? if (!empty($extend_settings)) { ?>
 							<tr>
-								<td colspan="2" style="border:none;padding: 0;"><?= $extend_settings; ?></td>
+								<td colspan="2"><?= $extend_settings; ?></td>
 							</tr>
 						<? } ?>
 						<tr>
@@ -31,14 +32,101 @@
 					</table>
 				</div>
 
-				<div id='tab-profile'>
-					<div class="vtabs">
-						<span id="profile-add">
-							<span><?= $button_add_profile; ?></span>
-							<img src="<?= HTTP_THEME_IMAGE . 'add.png'; ?>" alt="" onclick="addProfile();"/>
+				<div id='tab-profile-settings'>
+					<div id="profile_settings_tab_list" class="vtabs">
+						<span id="add_profile_setting">
+							<span><?= $button_add_profile_setting; ?></span>
+							<img src="<?= HTTP_THEME_IMAGE . 'add.png'; ?>" alt="" />
 						</span>
+
+						<? foreach ($profile_settings as $row => $profile_setting) { ?>
+							<a href="#tab-profile-setting-<?= $row; ?>" data-row="<?= $row; ?>">
+								<span class="profile_settings_tab_name"><?= $profile_setting['name']; ?></span>
+								<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" onclick="return false" class="delete_tab" />
+							</a>
+						<? } ?>
 					</div>
-					<div id="profiles"></div>
+
+					<div id="profile_settings_list">
+						<? foreach ($profile_settings as $row => $profile_setting) { ?>
+							<div id="tab-profile-setting-<?= $row; ?>" data-row="<?= $row; ?>" class="vtabs-content profile_setting">
+								<table class="form">
+									<tr>
+										<td><?= $entry_profile_setting_name; ?></td>
+										<td><input type="text" class="profile_setting_name" name="profile_settings[<?= $row; ?>][name]" value="<?= $profile_setting['name']; ?>" /></td>
+									</tr>
+									<tr>
+										<td><?= $entry_show_block_title; ?></td>
+										<td><?= $this->builder->build('radio', $data_yes_no, "profile_settings[$row][show_block_title]", $profile_setting['show_block_title']); ?></td>
+									</tr>
+								</table>
+							</div>
+						<? } ?>
+					</div>
+
+					<? if (!empty($extend_profile_settings)) { ?>
+						<div id="extend_profile_settings">
+							<?= $extend_profile_settings; ?>
+						</div>
+					<? } ?>
+				</div>
+
+				<div id='tab-profile'>
+					<div id="profile_tab_list" class="vtabs">
+						<span id="add_profile">
+							<span><?= $button_add_profile; ?></span>
+							<img src="<?= HTTP_THEME_IMAGE . 'add.png'; ?>" />
+						</span>
+
+						<? foreach ($profiles as $row => $profile) { ?>
+							<a href="#tab-profile-<?= $row; ?>" data-row="<?= $row; ?>">
+								<span class="profile_tab_name"><?= $tab_profile . ' ' . $row; ?></span>
+								<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" class="delete_tab" />
+							</a>
+						<? } ?>
+					</div>
+
+					<div id="profile_list">
+						<? foreach ($profiles as $row => $profile) { ?>
+							<div id="tab-profile-<?= $row; ?>" data-row="<?= $row; ?>" class="vtabs-content profile">
+								<table class="form">
+									<tr>
+										<td><?= $entry_profile_setting_id; ?></td>
+										<td>
+											<? $this->builder->set_config(false, "name"); ?>
+											<?= $this->builder->build('select', $data_profile_settings, "profiles[$row][profile_setting_id]", $profile['profile_setting_id']); ?>
+										</td>
+									</tr>
+									<tr>
+										<td><?= $entry_store; ?></td>
+										<td>
+											<? $this->builder->set_config("store_id", "name"); ?>
+											<?= $this->builder->build('multiselect', $data_stores, "profiles[$row][store_ids]", $profile['store_ids']); ?>
+										</td>
+									</tr>
+									<tr>
+										<td><?= $entry_layout; ?></td>
+										<td>
+											<? $this->builder->set_config("layout_id", "name"); ?>
+											<?= $this->builder->build('multiselect', $data_layouts, "profiles[$row][layout_ids]", $profile['layout_ids']); ?>
+										</td>
+									</tr>
+									<tr>
+										<td><?= $entry_position; ?></td>
+										<td>
+											<?= $this->builder->build('select', $data_positions, "profiles[$row][position]", $profile['position']); ?>
+										</td>
+									</tr>
+									<tr>
+										<td><?= $entry_profile_status; ?></td>
+										<td>
+											<?= $this->builder->build('select', $data_statuses, "profiles[$row][status]", $profile['status']); ?>
+										</td>
+									</tr>
+								</table>
+							</div>
+						<? } ?>
+					</div>
 				</div>
 
 			</form>
@@ -46,142 +134,79 @@
 	</div>
 </div>
 
-
-<div id="profile_tab_template" style="display:none">
-	<a href="#tab-profile-%pid%" id="profile-%pid%">
-		<span><?= $tab_profile . ' %pid%'; ?></span>
-		<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" alt="" onclick="$('.vtabs a:first').trigger('click'); $('#profile-%pid%').remove(); $('#tab-profile-%pid%').remove(); return false;"/>
-	</a>
-</div>
-
-<div id="profile_template" style="display:none">
-	<div id="tab-profile-%pid%" class="vtabs-content profiles">
-		<table class="form">
-			<tr>
-				<td><?= $entry_show_block_title; ?></td>
-				<td><?= $this->builder->build('radio', $data_yes_no, "profiles[%pid%][show_block_title]"); ?></td>
-			</tr>
-			<tr>
-				<td><?= $entry_store; ?></td>
-				<td>
-					<? $this->builder->set_config("store_id", "name"); ?>
-					<?= $this->builder->build('multiselect', $data_stores, "profiles[%pid%][store_ids]"); ?>
-				</td>
-			</tr>
-			<tr>
-				<td><?= $entry_layout; ?></td>
-				<td>
-					<? $this->builder->set_config("layout_id", "name"); ?>
-					<?= $this->builder->build('multiselect', $data_layouts, "profiles[%pid%][layout_ids]"); ?>
-				</td>
-			</tr>
-			<tr>
-				<td><?= $entry_position; ?></td>
-				<td>
-					<?= $this->builder->build('select', $data_positions, "profiles[%pid%][position]"); ?>
-				</td>
-			</tr>
-			<tr>
-				<td><?= $entry_profile_status; ?></td>
-				<td>
-					<?= $this->builder->build('select', $data_statuses, "profiles[%pid%][status]"); ?>
-				</td>
-			</tr>
-		</table>
-		<? if (!empty($extend_profile)) { ?>
-			<div class="extend_profile">
-				<?= $extend_profile; ?>
-			</div>
-		<? } ?>
-	</div>
-</div>
-
 <script type="text/javascript">//<!--
-var profile_id = 0;
+$('[data-extend]').each(function(i,e){
+	$(e).appendTo('#'+$(e).attr('data-extend'));
+});
 
-<? foreach($profiles as $profile){ ?>
-	data = {}
-	<? foreach($profile as $key => $data) {?>
-	data['<?= $key; ?>'] = <?= json_encode($data); ?>;
-	<? } ?>
+//Update Tab Name
+$('.profile_setting_name').keyup(function(){
+	id = $(this).closest('.profile_setting').attr('id');
+	$('[href="#'+id+'"]').find('.profile_settings_tab_name').html($(this).val());
 
-	addProfile(data);
-<? } ?>
+	update_profile_setting_select();
+});
 
-function addProfile(data) {
-	tab_html = $('#profile_tab_template').html().replace(/%pid%/g, profile_id);
-	$('#profile-add').before(tab_html);
-
-	profile_html = $($('#profile_template').html().replace(/%pid%/g, profile_id));
-
-	$('#profiles').append(profile_html);
-
-	if (data) {
-		fill_data($('#tab-profile-' + profile_id), data);
+//Delete Tab
+$('.delete_tab').click(function(){
+	if ($(this).closest('a').hasClass('selected')) {
+		$(this).closest('.vtabs').children('a:first').click();
 	}
 
-	$('.vtabs a').tabs();
+	var tab = $(this).closest('a');
 
-	$('#profile-' + profile_id).trigger('click');
+	$(tab.attr('href')).remove();
+	tab.remove();
 
-	profile_id++;
+	update_profile_setting_select();
+
+	return false;
+});
+
+//Profile Settings
+$('#profile_settings_tab_list').ac_template('profile_settings_tab_list');
+$('#profile_settings_list').ac_template('profile_settings_list', {defaults: <?= json_encode($profile_settings['__ac_template__']); ?>});
+
+$('#add_profile_setting').click(function(){
+	var pstab = $.ac_template('profile_settings_tab_list', 'add');
+	$.ac_template('profile_settings_list', 'add');
+
+	pstab.closest('.vtabs').children('a').tabs();
+	pstab.click();
+
+	update_profile_setting_select();
+});
+
+function update_profile_setting_select(){
+	profile_template = $.ac_template.templates['profile_list'].template.find('select[name*=profile_setting_id]');
+	context = $('select[name*=profile_setting_id]').add(profile_template);
+
+	var options = '';
+
+	$('#profile_settings_tab_list a').each(function(i,e){
+		options += '<option value="'+$(e).attr('data-row')+'">'+$(e).find('.profile_settings_tab_name').html()+'</option>';
+	});
+
+	context.html(options);
 }
 
-function fill_data(context, data) {
-	for (var d in data) {
-		filltype = 'user';
+//Profile
+$('#profile_tab_list').ac_template('profile_tab_list');
+$('#profile_list').ac_template('profile_list', {defaults: <?= json_encode($profiles['__ac_template__']); ?>});
 
-		switch (d) {
-			case 'show_block_title':
-			  filltype = 'radio';
-			  break;
-			case 'status':
-			case 'position':
-				filltype = 'select';
-				break;
-			case 'layout_ids':
-			case 'store_ids':
-				filltype = 'multiselect';
-				break;
-			default:
+$('#add_profile').click(function(){
+	var ptab = $.ac_template('profile_tab_list', 'add');
+	$.ac_template('profile_list', 'add');
 
-				break;
-		}
+	ptab.closest('.vtabs').children('a').tabs();
+	ptab.click();
+});
 
-		if (filltype === 'user') {
-			if (typeof user_fill_profile_data === 'function') {
-				user_fill_profile_data(context, data);
-			}
-		} else {
-			fill_data_as(filltype, context, d, data[d]);
-		}
-	}
-}
-
-function fill_data_as(type, context, name, value) {
-	switch (type) {
-		case 'radio':
-			context.find('[name="profiles[' + profile_id + '][' + name + ']"][value="'+value+'"]').prop('checked', true);
-		  break;
-
-		case 'select':
-			input = context.find('[name="profiles[' + profile_id + '][' + name + ']"]');
-			input.val(value);
-			break;
-
-		case 'multiselect':
-			for (var i = 0; i < value.length; i++) {
-				input = context.find('[name="profiles[' + profile_id + '][' + name + '][]"][value=' + value[i] + ']');
-				input.prop('checked', true);
-			}
-			break;
-
-		default:
-			break;
-	}
-}
-
+//Tabs
 $('#tabs a').tabs();
+$('.vtabs').each(function(i,e){
+	$(e).children('a').tabs();
+});
 //--></script>
 
 <?= $this->builder->js('errors', $errors); ?>

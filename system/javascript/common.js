@@ -13,6 +13,12 @@ function syncload(s) {
 }
 
 //Load jQuery Plugins On Call
+$.fn.nivoSlider = function (params) {
+	$.fn.nivoSlider = null;
+	syncload('system/javascript/jquery/nivo_slider/nivo-slider.js');
+	if (this.nivoSlider) this.nivoSlider(params);
+}
+
 $.ac_template = $.fn.ac_template = function (name, action, data) {
 	$.ac_template = $.fn.ac_template = null;
 	syncload('system/javascript/jquery/ac_template.js');
@@ -132,7 +138,7 @@ $.fn.flash_highlight = function () {
 	return this;
 }
 
-$.fn.tabs = function () {
+$.fn.tabs = function (callback) {
 	var selector = this;
 	this.each(function (i, obj) {
 		var obj = $(obj);
@@ -148,8 +154,11 @@ $.fn.tabs = function () {
 
 			obj.addClass('selected');
 
-			$(obj.attr('href')).show();
+			content = $(obj.attr('href')).show();
 
+			if (typeof callback === 'function') {
+				callback(content.attr('id'), obj, content);
+			}
 			return false;
 		});
 	});

@@ -149,6 +149,10 @@ class Admin_Model_Block_Block extends Model
 			$data['settings'] = serialize($data['settings']);
 		}
 
+		if (isset($data['profile_settings'])) {
+			$data['profile_settings'] = serialize($data['profile_settings']);
+		}
+
 		if (isset($data['profiles'])) {
 			$data['profiles'] = serialize($data['profiles']);
 		}
@@ -222,6 +226,12 @@ class Admin_Model_Block_Block extends Model
 				$block['settings'] = array();
 			}
 
+			if (!empty($block['profile_settings'])) {
+				$block['profile_settings'] = unserialize($block['profile_settings']);
+			} else {
+				$block['profile_settings'] = array();
+			}
+
 			if (!empty($block['profiles'])) {
 				$block['profiles'] = unserialize($block['profiles']);
 			} else {
@@ -231,6 +241,7 @@ class Admin_Model_Block_Block extends Model
 			$block = array(
 				'name'     => $name,
 				'settings' => array(),
+				'profile_settings' => array(),
 				'profiles' => array(),
 				'status'   => 0,
 			);
@@ -321,6 +332,7 @@ class Admin_Model_Block_Block extends Model
 					'name'         => $name,
 					'display_name' => $name,
 					'settings'     => array(),
+					'profile_settings' => array(),
 					'profiles'     => array(),
 					'status'       => 1,
 				);

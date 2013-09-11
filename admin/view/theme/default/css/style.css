@@ -56,6 +56,16 @@ label {
 	clear: both;
 }
 
+.floatfix:after,
+.ac_carousel_list:after{
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
+}
+
 #header .div1 {
 	height: 112px;
 	padding: 0 30px;
@@ -1317,6 +1327,7 @@ ul.scrollbox li {
 	margin-right: 20px;
 }
 
+
 /**
  * 	Image Manager
  */
@@ -2357,4 +2368,31 @@ div .easy_list  li > * + * {
 	100% {
 		transform: scale(.3);
 	}
+}
+
+
+/** AC Carousel Block **/
+.ac_carousel_slide{
+	border: 2px dashed gray;
+	float:left;
+	margin-left: 10px;
+	position:relative;
+}
+
+.add_carousel_slide{
+	margin-top: 15px;
+}
+
+.ac_carousel_slide .delete_button{
+	position:absolute;
+	top:5px;
+	right: 5px;
+	height:12px;
+	width: 9px;
+	padding: 6px;
+	box-shadow: none;
+	opacity: .5;
+}
+.ac_carousel_slide .delete_button:hover{
+	opacity: 1;
 }

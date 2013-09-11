@@ -12,30 +12,17 @@ class Catalog_Model_Block_Block extends Model
 
 	public function getBlockSettings($name)
 	{
-		if (!isset($this->blocks[$name]['settings'])) {
-			$block = $this->cache->get("block.$name");
+		return isset($this->blocks[$name]) ? $this->blocks[$name]['settings'] : null;
+	}
 
-			if (!$block) {
-				$block = $this->queryRow("SELECT * FROM " . DB_PREFIX . "block WHERE status = '1' AND `name` = '" . $this->escape($name) . "'");
+	public function getBlockProfileSettings($name, $profile_setting_id)
+	{
+		return isset($this->blocks[$name]['profile_settings'][$profile_setting_id]) ? $this->blocks[$name]['profile_settings'][$profile_setting_id] : null;
+	}
 
-				if (!empty($block)) {
-					$block['profiles'] = unserialize($block['profiles']);
-					$block['settings'] = unserialize($block['settings']);
-				} else {
-					$block['profiles'] = null;
-					$block['settings'] = null;
-				}
-
-				$this->cache->set("block.$name", $block);
-			}
-
-			$this->blocks[$name] = array(
-				'profiles' => $block['profiles'],
-				'settings' => $block['settings'],
-			);
-		}
-
-		return $this->blocks[$name]['settings'];
+	public function getBlockProfiles($name, $profile_setting_id)
+	{
+		return isset($this->blocks[$name]) ? $this->blocks[$name]['profiles'] : null;
 	}
 
 	private function loadBlocks()
@@ -43,7 +30,7 @@ class Catalog_Model_Block_Block extends Model
 		$store_id  = $this->config->get('config_store_id');
 		$layout_id = $this->config->get('config_layout_id');
 
-		$blocks = $this->cache->get("blocks.$store_id.$layout_id");
+		$blocks = $this->cache->get("blocks.$store_id");
 
 		if (!$blocks) {
 			$results = $this->query("SELECT * FROM " . DB_PREFIX . "block WHERE status = '1'");
@@ -51,24 +38,31 @@ class Catalog_Model_Block_Block extends Model
 			$blocks = array('position' => array());
 
 			foreach ($results->rows as $row) {
-				$row['settings'] = unserialize($row['settings']);
-				$row['profiles'] = unserialize($row['profiles']);
+				$row['settings']         = $row['settings'] ? unserialize($row['settings']) : array();
+				$row['profile_settings'] = $row['profile_settings'] ? unserialize($row['profile_settings']) : array();
+				$row['profiles']         = $row['profiles'] ? unserialize($row['profiles']) : array();
 
 				if (!empty($row['profiles'])) {
 					foreach ($row['profiles'] as $profile) {
-						if (in_array($layout_id, $profile['layout_ids']) && in_array($store_id, $profile['store_ids'])) {
-							$blocks[$row['name']] = array(
-								'profile'  => $profile,
-								'settings' => $row['settings'],
-							);
+						if (in_array($store_id, $profile['store_ids'])) {
+							//Load this profiles settings
+							if (isset($profile['profile_setting_id']) && isset($row['profile_settings'][$profile['profile_setting_id']])) {
+								$profile += $row['profile_settings'][$profile['profile_setting_id']];
+							}
 
-							$blocks['position'][$profile['position']][$row['name']] = & $blocks[$row['name']];
+							$blocks[$row['name']] = $row;
+							$blocks[$row['name']]['profile'] = $profile;
+
+							//Automatically loaded blocks for this layout
+							if (in_array($layout_id, $profile['layout_ids'])) {
+								$blocks['position'][$profile['position']][$row['name']] = & $blocks[$row['name']];
+							}
 						}
 					}
 				}
 			}
 
-			$this->cache->set("blocks.$store_id.$layout_id", $blocks);
+			$this->cache->set("blocks.$store_id", $blocks);
 		}
 
 		$this->blocks = $blocks;

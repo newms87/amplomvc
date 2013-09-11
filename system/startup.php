@@ -1,6 +1,6 @@
 <?php
 // Version
-define('AC_VERSION', '0.0.13');
+define('AC_VERSION', '0.0.14');
 
 // Error Reporting
 error_reporting(E_ALL);

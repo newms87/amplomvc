@@ -163,6 +163,7 @@ class Admin_Controller_Block_Block extends Controller
 
 		$defaults = array(
 			'settings' => array(),
+			'profile_settings' => array(),
 			'profiles' => array(),
 			'status'   => 1,
 		);
@@ -176,6 +177,37 @@ class Admin_Controller_Block_Block extends Controller
 				$this->data[$key] = $default;
 			}
 		}
+
+		//AC Templates
+		$this->data['profile_settings']['__ac_template__'] = array(
+			'name' => 'Profile __ac_template__',
+			'show_block_title' => 1,
+		);
+
+		$this->data['profiles']['__ac_template__'] = array(
+			'profile_setting_id' => 0,
+			'store_ids' => array($this->config->get('config_default_store')),
+			'layout_ids' => array(),
+			'position' => '',
+			'status' => 1,
+		);
+
+		//Validate Profile Settings
+		if (count($this->data['profile_settings']) <= 1) {
+			$this->data['profile_settings'][0] = array(
+				'name' => $this->_('var_default_profile_setting_name'),
+				'show_block_title' => 1,
+			);
+		}
+
+		foreach ($this->data['profiles'] as &$profile) {
+			if (empty($profile['profile_setting_id']) || !in_array($profile['profile_setting_id'], array_keys($this->data['profile_settings']))) {
+				$profile['profile_setting_id'] = key(current($this->data['profile_settings']));
+			}
+		}
+		unset($profile);
+
+		$this->data['data_profile_settings'] = array_diff_key($this->data['profile_settings'], array('__ac_template__' => false));
 
 		//Get additional Block settings and profile data (this is the plugin part)
 		$this->loadBlockData();
@@ -224,6 +256,11 @@ class Admin_Controller_Block_Block extends Controller
 		if (method_exists($this->block_controller, 'settings')) {
 			$this->block_controller->settings($this->data['settings']);
 			$this->data['extend_settings'] = $this->block_controller->output;
+		}
+
+		if (method_exists($this->block_controller, 'profile_settings')) {
+			$this->block_controller->profile_settings($this->data['profile_settings']);
+			$this->data['extend_profile_settings'] = $this->block_controller->output;
 		}
 
 		if (method_exists($this->block_controller, 'profile')) {

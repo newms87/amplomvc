@@ -10,8 +10,6 @@ class Catalog_Controller_Common_Home extends Controller
 
 		$this->language->set('head_title', $this->config->get('config_title'));
 
-		$this->data['main_image'] = $this->image->resize('data/display.jpg', 1024, 640);
-
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',

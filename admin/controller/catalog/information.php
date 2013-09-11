@@ -264,7 +264,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			'title'       => '',
 			'description' => '',
 			'alias'       => '',
-			'stores'      => array(0),
+			'stores'      => array($this->config->get('config_default_store')),
 			'layouts'     => array(),
 			'sort_order'  => 0,
 			'status'      => 1,

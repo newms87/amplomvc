@@ -21,7 +21,7 @@ class Template extends Library
 		return $this->template;
 	}
 
-	public function get_file()
+	public function getFile()
 	{
 		return $this->file;
 	}

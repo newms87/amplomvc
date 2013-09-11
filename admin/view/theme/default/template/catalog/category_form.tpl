@@ -105,26 +105,26 @@
 
 <?= $this->builder->js('ckeditor'); ?>
 
-	<script type="text/javascript">//<!--
-		function generate_url(context) {
-			$.clear_errors('gen_url');
+<script type="text/javascript">//<!--
+function generate_url(context) {
+	$.clear_errors('gen_url');
 
-			name = $('input[name=name]').val();
+	name = $('input[name=name]').val();
 
-			if (!name) {
-				alert("Please make a name for this Category before generating the URL");
-				return;
-			}
+	if (!name) {
+		alert("Please make a name for this Category before generating the URL");
+		return;
+	}
 
-			data = {category_id: <?= (int)$category_id; ?>, name: name};
+	data = {category_id: <?= (int)$category_id; ?>, name: name};
 
-			$(context).fade_post("<?= $url_generate_url; ?>", data, function (json) {
-				$('input[name="alias"]').val(json);
-			});
-		}
+	$(context).fade_post("<?= $url_generate_url; ?>", data, function (json) {
+		$('input[name="alias"]').val(json);
+	});
+}
 
-		//Tabs
-		$('#tabs a').tabs();
+//Tabs
+$('#tabs a').tabs();
 //--></script>
 
 <?= $this->builder->js('errors', $errors); ?>

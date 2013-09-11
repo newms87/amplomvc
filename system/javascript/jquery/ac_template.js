@@ -101,13 +101,33 @@ $.ac_template = $.fn.ac_template = function (name, action, data) {
 				init_ckeditor_for($(e));
 			});
 
+			//TODO: remove this... this cant be right???
 			template.find('.date').each(function (i, e) {
 				init_ckeditor_for($(e));
+			});
+
+			//Replace all attribute occurrences
+			template.find('*').addBack().each(function(i,e){
+				$.each(this.attributes, function(a, attr) {
+					$(e).attr(attr.name, attr.value.replace('__ac_template__', row.count));
+					if (attr.name === 'value') {
+						$(e).val($(e).attr('value'));
+					}
+				});
+
+			});
+
+			//Replace all text occurrences
+			template.find('*').contents().filter(function() { return this.nodeType === 3; }).each(function(i,e){
+				e.nodeValue = e.nodeValue.replace('__ac_template__', row.count);
 			});
 
 			row.count++;
 
 			return template.flash_highlight();
+		}
+		else if (action === 'get_row_count') {
+			return row.count;
 		}
 	}
 
