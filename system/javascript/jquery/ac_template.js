@@ -13,9 +13,9 @@ $.ac_template = $.fn.ac_template = function (name, action, data) {
 		template = template_row.clone(true);
 		template_row.remove();
 
-		count = 0;
+		var count = 0;
 
-		this.find('[data-row]').each(function (i, e) {
+		this.children('[data-row]').each(function (i, e) {
 			count = Math.max(count, parseInt($(e).attr('data-row')) + 1);
 		});
 

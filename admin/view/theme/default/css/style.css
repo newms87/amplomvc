@@ -2376,6 +2376,7 @@ div .easy_list  li > * + * {
 	border: 2px dashed gray;
 	float:left;
 	margin-left: 10px;
+	margin-bottom: 10px;
 	position:relative;
 }
 

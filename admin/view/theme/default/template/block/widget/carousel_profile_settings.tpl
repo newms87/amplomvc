@@ -32,4 +32,6 @@ $('.add_carousel_slide').click(function(){
 	console.log('adding..');
 	$(this).siblings('.ac_carousel_list').ac_template('ac_carousel_list', 'add');
 });
+
+$('.ac_carousel_list').sortable();
 //--></script>
