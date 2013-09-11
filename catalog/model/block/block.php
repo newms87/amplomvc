@@ -30,7 +30,7 @@ class Catalog_Model_Block_Block extends Model
 		$store_id  = $this->config->get('config_store_id');
 		$layout_id = $this->config->get('config_layout_id');
 
-		$blocks = $this->cache->get("blocks.$store_id");
+		$blocks = $this->cache->get("blocks.$store_id.$layout_id");
 
 		if (!$blocks) {
 			$results = $this->query("SELECT * FROM " . DB_PREFIX . "block WHERE status = '1'");
@@ -62,7 +62,7 @@ class Catalog_Model_Block_Block extends Model
 				}
 			}
 
-			$this->cache->set("blocks.$store_id", $blocks);
+			$this->cache->set("blocks.$store_id.$layout_id", $blocks);
 		}
 
 		$this->blocks = $blocks;

@@ -141,7 +141,7 @@
 	$('#create_layout').click(function () {
 		url = "<?= $url_create_layout; ?>";
 
-		layout_name = $('[name=name]').val();
+		layout_name = $('[name=title]').val();
 
 		if (!layout_name) {
 			alert('You must specify a name before you can create a new layout!');
