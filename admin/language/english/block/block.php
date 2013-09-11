@@ -4,6 +4,7 @@ $_['head_title'] = "Blocks";
 
 //Var
 $_['var_default_profile_setting_name'] = 'Default';
+$_['var_default_profile_name'] = 'New Profile';
 
 //Text
 $_['text_profiles']   = "Profiles";
@@ -16,6 +17,7 @@ $_['entry_store']                = "Stores";
 $_['entry_layout']               = "Layouts";
 $_['entry_position']             = "Positions";
 $_['entry_block_status']         = "Block Status";
+$_['entry_profile_name']         = "Profile Name";
 $_['entry_profile_status']       = "Profile Status";
 $_['entry_profile_setting_id']   = "Profile Setting";
 $_['entry_profile_setting_name'] = "Profile Setting Name";

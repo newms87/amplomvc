@@ -41,7 +41,7 @@
 
 						<? foreach ($profile_settings as $row => $profile_setting) { ?>
 							<a href="#tab-profile-setting-<?= $row; ?>" data-row="<?= $row; ?>">
-								<span class="profile_settings_tab_name"><?= $profile_setting['name']; ?></span>
+								<span class="tab_name"><?= $profile_setting['name']; ?></span>
 								<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" onclick="return false" class="delete_tab" />
 							</a>
 						<? } ?>
@@ -53,7 +53,7 @@
 								<table class="form">
 									<tr>
 										<td><?= $entry_profile_setting_name; ?></td>
-										<td><input type="text" class="profile_setting_name" name="profile_settings[<?= $row; ?>][name]" value="<?= $profile_setting['name']; ?>" /></td>
+										<td><input type="text" class="tab_name profile_setting_name" name="profile_settings[<?= $row; ?>][name]" value="<?= $profile_setting['name']; ?>" /></td>
 									</tr>
 									<tr>
 										<td><?= $entry_show_block_title; ?></td>
@@ -80,7 +80,7 @@
 
 						<? foreach ($profiles as $row => $profile) { ?>
 							<a href="#tab-profile-<?= $row; ?>" data-row="<?= $row; ?>">
-								<span class="profile_tab_name"><?= $tab_profile . ' ' . $row; ?></span>
+								<span class="tab_name"><?= $profile['name']; ?></span>
 								<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" class="delete_tab" />
 							</a>
 						<? } ?>
@@ -90,6 +90,10 @@
 						<? foreach ($profiles as $row => $profile) { ?>
 							<div id="tab-profile-<?= $row; ?>" data-row="<?= $row; ?>" class="vtabs-content profile">
 								<table class="form">
+									<tr>
+										<td><?= $entry_profile_name; ?></td>
+										<td><input type="text" class="tab_name" name="profiles[<?= $row; ?>][name]" value="<?= $profile['name']; ?>" /></td>
+									</tr>
 									<tr>
 										<td><?= $entry_profile_setting_id; ?></td>
 										<td>
@@ -141,9 +145,6 @@ $('[data-extend]').each(function(i,e){
 
 //Update Tab Name
 $('.profile_setting_name').keyup(function(){
-	id = $(this).closest('.profile_setting').attr('id');
-	$('[href="#'+id+'"]').find('.profile_settings_tab_name').html($(this).val());
-
 	update_profile_setting_select();
 });
 
@@ -184,7 +185,7 @@ function update_profile_setting_select(){
 	var options = '';
 
 	$('#profile_settings_tab_list a').each(function(i,e){
-		options += '<option value="'+$(e).attr('data-row')+'">'+$(e).find('.profile_settings_tab_name').html()+'</option>';
+		options += '<option value="'+$(e).attr('data-row')+'">'+$(e).find('.tab_name').html()+'</option>';
 	});
 
 	context.html(options);

@@ -167,6 +167,7 @@ class Admin_Controller_Block_Block extends Controller
 		);
 
 		$default_profile = array(
+			'name' => $this->_('var_default_profile_name'),
 			'profile_setting_id' => 0,
 			'store_ids' => array($this->config->get('config_default_store')),
 			'layout_ids' => array(),
@@ -201,6 +202,7 @@ class Admin_Controller_Block_Block extends Controller
 		$this->data['profile_settings']['__ac_template__']['name'] = 'Profile __ac_template__';
 
 		$this->data['profiles']['__ac_template__'] = $default_profile;
+		$this->data['profiles']['__ac_template__']['name'] = 'Profile __ac_template__';
 
 		foreach ($this->data['profiles'] as &$profile) {
 			if (empty($profile['profile_setting_id']) || !in_array($profile['profile_setting_id'], array_keys($this->data['profile_settings']))) {
