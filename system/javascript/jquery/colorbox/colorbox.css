@@ -95,9 +95,6 @@
 }
 
 #cboxLoadedContent {
-    box-sizing: border-box;
-    width: 100% !important;
-    height: 100% !important;
     padding: 6px;
     border: 5px solid #000;
     background: #fff;

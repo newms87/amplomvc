@@ -2690,13 +2690,12 @@ table.form_single_column select {
 }
 
 /* Press / Editorial */
-#press_list {
-	list-style: none url('../image/list_marker.png');
-}
 
 #press_list > li {
+	float:left;
 	margin: 10px 5px;
 	color: #333;
+	height: 240px;
 }
 
 #press_list > li a.press_title {
@@ -2719,14 +2718,13 @@ table.form_single_column select {
 }
 
 #press_list .press_images {
-	margin-top: 10px;
+	cursor: pointer;
 }
 
-#press_list .press_images img {
-	max-height: 200px;
-	margin-left: 10px;
+#press_list .press_link{
+	display:block;
+	text-align:center;
 }
-
 /* footer */
 #footer {
 	padding: 10px 0;

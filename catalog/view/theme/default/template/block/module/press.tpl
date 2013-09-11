@@ -3,32 +3,34 @@
 
 	<div class="box_content">
 		<ul id='press_list'>
-			<? foreach ($press_list as $press) { ?>
+			<? foreach ($press_list as $row => $press) { ?>
 				<li>
 					<div class="press_item">
-						<a <?= !empty($press['href']) ? "href=\"$press[href]\"" : ''; ?> class="press_title">
-							<? if (!empty($press['description'])) { ?>
-								<span class="description"><?= $press['description']; ?></span>,
-							<? } ?>
-							<? if (!empty($press['author'])) { ?>
-								<span class="author"><?= $press['author']; ?></span>,
-							<? } ?>
-							<? if (!empty($press['date'])) { ?>
-								<span class="date"><?= $press['date']; ?></span>
-							<? } ?>
-						</a>
 						<? if (!empty($press['images'])) { ?>
+							<? $colorbox_group = 'press-item-' . $row; ?>
 							<div class="press_images">
+								<img src="<?= $press['thumb']; ?>" onclick="$('.<?= $colorbox_group; ?>:first').click()"/>
+
 								<? foreach ($press['images'] as $image) { ?>
-									<? if ($press['href']) { ?><a href="<?= $press['href']; ?>"><? } ?>
-									<img src="<?= $image; ?>"/>
-									<? if ($press['href']) { ?></a><? } ?>
+									<a href="<?= $image; ?>" class="<?= $colorbox_group; ?>" title="<?= $press['description']; ?>" ></a>
 								<? } ?>
 							</div>
 						<? } ?>
+						<? if (false && $press['href']) { ?><a class="press_link" href="<?= $press['href']; ?>"><?= $press['description']; ?></a><? } ?>
 					</div>
 				</li>
 			<? } ?>
 		</ul>
 	</div>
 </div>
+
+<script type="text/javascript">//<!--
+<? foreach ($press_list as $row => $press) { ?>
+	<? $colorbox_group = 'press-item-' . $row; ?>
+	$('.<?= $colorbox_group; ?>').colorbox({
+		rel: '<?= $colorbox_group; ?>',
+		width:'80%',
+		height: '80%'
+	});
+<? } ?>
+//--></script>
