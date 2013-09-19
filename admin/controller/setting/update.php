@@ -34,7 +34,7 @@ class Admin_Controller_Setting_Update extends Controller
 		$this->data['cancel'] = $this->url->link('common/home');
 
 		if (!$this->request->isPost()) {
-			$update_info = $this->Model_Setting_Setting->getSetting('system');
+			$update_info = $this->System_Model_Setting->getSetting('system');
 		}
 
 		$defaults = array(

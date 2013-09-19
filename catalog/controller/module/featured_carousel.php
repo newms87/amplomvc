@@ -8,7 +8,7 @@ class Catalog_Controller_Module_FeaturedCarousel extends Controller
 		//$this->language->load('module/featured_carousel');
 
 		if (!$setting) {
-			$fc       = $this->Model_Setting_Setting->getSetting('featured_carousel');
+			$fc       = $this->System_Model_Setting->getSetting('featured_carousel');
 			$products = $fc['featured_carousel_list'];
 		}
 
@@ -39,7 +39,7 @@ class Catalog_Controller_Module_FeaturedCarousel extends Controller
 
 	public function cron()
 	{
-		$featured_carousel = $this->Model_Setting_Setting->getSetting('featured_carousel');
+		$featured_carousel = $this->System_Model_Setting->getSetting('featured_carousel');
 
 		$flashsales = $this->Model_Catalog_Flashsale->getFlashsales('', 'fs.date_end DESC');
 
@@ -112,6 +112,6 @@ class Catalog_Controller_Module_FeaturedCarousel extends Controller
 
 		$featured_carousel['featured_product_list'] = $products;
 
-		$limit = $this->Model_Setting_Setting->editSetting('featured_carousel', $featured_carousel);
+		$limit = $this->System_Model_Setting->editSetting('featured_carousel', $featured_carousel);
 	}
 }

@@ -15,7 +15,7 @@ class Admin_Controller_Module_FeaturedFlashsale extends Controller
 			unset($_POST['designer']);
 			unset($_POST['choose_product']);
 
-			$this->Model_Setting_Setting->editSetting('featured_flashsale', $_POST);
+			$this->System_Model_Setting->editSetting('featured_flashsale', $_POST);
 
 			$this->message->add('success', $this->_('text_success'));
 
@@ -32,7 +32,7 @@ class Admin_Controller_Module_FeaturedFlashsale extends Controller
 		if (isset($_POST['featured_flashsale'])) {
 			$ff = $_POST['featured_flashsale'];
 		} else {
-			$ff = $this->Model_Setting_Setting->getSetting('featured_flashsale');
+			$ff = $this->System_Model_Setting->getSetting('featured_flashsale');
 		}
 
 		$this->data['featured_list'] = isset($ff['featured_list']) ? $ff['featured_list'] : array();

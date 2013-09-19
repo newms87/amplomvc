@@ -25,7 +25,7 @@ class Admin_Controller_Module_Featured extends Controller
 				);
 			}
 
-			$this->Model_Setting_Setting->editSetting('featured', $settings);
+			$this->System_Model_Setting->editSetting('featured', $settings);
 
 			$this->message->add('success', $this->_('text_success'));
 

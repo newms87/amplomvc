@@ -18,11 +18,11 @@ class Admin_Controller_Setting_Store extends Controller
 			//Insert
 			if (empty($_GET['store_id'])) {
 				$store_id = $this->Model_Setting_Store->addStore($_POST);
-				$this->Model_Setting_Setting->editSetting('config', $_POST, $store_id);
+				$this->System_Model_Setting->editSetting('config', $_POST, $store_id);
 			} //Update
 			else {
 				$this->Model_Setting_Store->editStore($_GET['store_id'], $_POST);
-				$this->Model_Setting_Setting->editSetting('config', $_POST, $_GET['store_id']);
+				$this->System_Model_Setting->editSetting('config', $_POST, $_GET['store_id']);
 			}
 
 			if (!$this->message->error_set()) {
@@ -42,7 +42,7 @@ class Admin_Controller_Setting_Store extends Controller
 		//TODO: Change Permissions to include a query parameter (eg: store_id=$store_id). (by default this can be *, so no code breaking necessary)
 		if (!empty($_GET['store_id']) && $this->user->hasPermission('modify', 'setting/store') && $this->canDelete($_GET['store_id'])) {
 			$this->Model_Setting_Store->deleteStore($_GET['store_id']);
-			$this->Model_Setting_Setting->deleteSetting('config', $_GET['store_id']);
+			$this->System_Model_Setting->deleteSetting('config', $_GET['store_id']);
 
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
@@ -184,14 +184,6 @@ class Admin_Controller_Setting_Store extends Controller
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('head_title'), $this->url->link('setting/store'));
 
-		if (!$store_id) {
-			$this->data['action'] = $this->url->link('setting/store/update');
-		} else {
-			$this->data['action'] = $this->url->link('setting/store/update', 'store_id=' . $store_id);
-		}
-
-		$this->data['cancel'] = $this->url->link('setting/store');
-
 		if ($store_id && !$this->request->isPost()) {
 			$store = $this->Model_Setting_Store->getStore($store_id);
 
@@ -200,10 +192,10 @@ class Admin_Controller_Setting_Store extends Controller
 				$this->url->redirect($this->url->link('setting/store'));
 			}
 
-			$store_config = $this->Model_Setting_Setting->getSetting('config', $store_id);
+			$store_config = $this->System_Model_Setting->getSetting('config', $store_id);
 
 			if (empty($store_config)) {
-				$store_config = $this->Model_Setting_Setting->getSetting('config', 0);
+				$store_config = $this->System_Model_Setting->getSetting('config', 0);
 			}
 
 			$store_info = $store + $store_config;
@@ -288,6 +280,10 @@ class Admin_Controller_Setting_Store extends Controller
 		$this->data['customer_groups']     = $this->Model_Sale_CustomerGroup->getCustomerGroups();
 		$this->data['informations']        = $this->Model_Catalog_Information->getInformations();
 		$this->data['data_order_statuses'] = $this->order->getOrderStatuses();
+
+		//Action Buttons
+		$this->data['save'] = $this->url->link('setting/store/update', 'store_id=' . $store_id);
+		$this->data['cancel'] = $this->url->link('setting/store');
 
 		//Ajax Urls
 		$this->data['load_theme_img'] = $this->url->ajax('setting/setting/theme');

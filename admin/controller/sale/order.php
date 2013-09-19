@@ -1508,7 +1508,7 @@ class Admin_Controller_Sale_Order extends Controller
 			$order_info = $this->Model_Sale_Order->getOrder($order_id);
 
 			if ($order_info) {
-				$store_info = $this->Model_Setting_Setting->getSetting('config', $order_info['store_id']);
+				$store_info = $this->System_Model_Setting->getSetting('config', $order_info['store_id']);
 
 				if ($store_info) {
 					$store_address   = $store_info['config_address'];

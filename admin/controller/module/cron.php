@@ -12,7 +12,7 @@ class Admin_Controller_Module_Cron extends Controller
 
 		if ($this->request->isPost() && $this->validate()) {
 
-			$this->Model_Setting_Setting->editSetting('cron_tasks', $_POST);
+			$this->System_Model_Setting->editSetting('cron_tasks', $_POST);
 
 
 			//TODO: Implement full cron control from this code:
@@ -38,7 +38,7 @@ class Admin_Controller_Module_Cron extends Controller
 
 		$this->data['run_cron'] = $this->url->store(null, 'cron/cron');
 
-		$info                = isset($_POST['cron_tasks']) ? $_POST['cron_tasks'] : $this->Model_Setting_Setting->getSetting('cron_tasks');
+		$info                = isset($_POST['cron_tasks']) ? $_POST['cron_tasks'] : $this->System_Model_Setting->getSetting('cron_tasks');
 		$this->data['tasks'] = isset($info['tasks']) ? $info['tasks'] : array();
 
 		$this->children = array(

@@ -102,7 +102,7 @@ class Admin_Controller_Extension_Shipping extends Controller
 		} else {
 			$this->Model_Setting_Extension->uninstall('shipping', $_GET['extension']);
 
-			$this->Model_Setting_Setting->deleteSetting($_GET['extension']);
+			$this->System_Model_Setting->deleteSetting($_GET['extension']);
 
 			require_once(_ac_mod_file(DIR_APPLICATION . 'controller/shipping/' . $_GET['extension'] . '.php'));
 

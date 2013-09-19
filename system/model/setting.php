@@ -16,7 +16,7 @@ class System_Model_Setting extends Model
 
 		$data = array();
 
-		$settings = $this->queryRows("SELECT * FROM " . DB_PREFIX . "setting WHERE store_id IN (0, " . (int)$store_id . ") AND `group` = '" . $this->db->escape($group) . "'");
+		$settings = $this->queryRows("SELECT * FROM " . DB_PREFIX . "setting WHERE store_id = " . (int)$store_id . " AND `group` = '" . $this->db->escape($group) . "'");
 
 		foreach ($settings as $setting) {
 			$value = $setting['serialized'] ? unserialize($setting['value']) : $setting['value'];

@@ -3,13 +3,16 @@ class Admin_Controller_Setting_Setting extends Controller
 {
 	public function index()
 	{
+		//The Template and Language
 		$this->template->load('setting/setting');
 		$this->language->load('setting/setting');
 
+		//Page Head
 		$this->document->setTitle($this->_('head_title'));
 
+		//Handle Post
 		if ($this->request->isPost() && $this->validate()) {
-			$this->Model_Setting_Setting->editSetting('config', $_POST);
+			$this->System_Model_Setting->editSetting('config', $_POST);
 
 			if ($this->config->get('config_currency_auto')) {
 				$this->Model_Localisation_Currency->updateCurrencies();
@@ -20,15 +23,14 @@ class Admin_Controller_Setting_Setting extends Controller
 			$this->url->redirect($this->url->link('setting/store'));
 		}
 
+		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_settings'), $this->url->link('setting/store'));
 		$this->breadcrumb->add($this->_('head_title'), $this->url->link('setting/setting'));
 
-		$this->data['action'] = $this->url->link('setting/setting');
-		$this->data['cancel'] = $this->url->link('setting/store');
-
+		//Load Information
 		if (!$this->request->isPost()) {
-			$config_data = $this->config->loadGroup('config');
+			$config_data = $this->config->loadGroup('config', 0);
 		}
 
 		$defaults = array(
@@ -104,7 +106,6 @@ class Admin_Controller_Setting_Setting extends Controller
 			'config_upload_images_allowed'            => '',
 			'config_upload_images_mime_types_allowed' => '',
 			'config_cart_weight'                      => 1,
-			'config_logo'                             => '',
 			'config_admin_logo'                       => '',
 			'config_icon'                             => '',
 			'config_image_admin_thumb_width'          => 120,
@@ -215,11 +216,17 @@ class Admin_Controller_Setting_Setting extends Controller
 		$this->_('text_add_return_policy', $this->url->link('setting/return_policy'));
 		$this->_('text_add_shipping_policy', $this->url->link('setting/shipping_policy'));
 
+		//Action Buttons
+		$this->data['save'] = $this->url->link('setting/setting');
+		$this->data['cancel'] = $this->url->link('setting/store');
+
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
 
+		//Render
 		$this->response->setOutput($this->render());
 	}
 

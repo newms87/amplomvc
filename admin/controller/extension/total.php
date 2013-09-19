@@ -118,7 +118,7 @@ class Admin_Controller_Extension_Total extends Controller
 		} else {
 			$this->Model_Setting_Extension->uninstall('total', $_GET['extension']);
 
-			$this->Model_Setting_Setting->deleteSetting($_GET['extension']);
+			$this->System_Model_Setting->deleteSetting($_GET['extension']);
 
 			require_once(_ac_mod_file(DIR_APPLICATION . 'controller/total/' . $_GET['extension'] . '.php'));
 

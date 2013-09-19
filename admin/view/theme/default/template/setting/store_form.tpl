@@ -13,7 +13,7 @@
 			href="#tab-store"><?= $tab_store; ?></a><a href="#tab-local"><?= $tab_local; ?></a><a
 			href="#tab-option"><?= $tab_option; ?></a><a href="#tab-image"><?= $tab_image; ?></a><a
 			href="#tab-server"><?= $tab_server; ?></a></div>
-	<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
+	<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
 	<div id="tab-general">
 		<table class="form">
 			<tr>

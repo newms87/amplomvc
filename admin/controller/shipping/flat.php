@@ -11,7 +11,7 @@ class Admin_Controller_Shipping_Flat extends Controller
 		$this->document->setTitle($this->_('head_title'));
 
 		if ($this->request->isPost() && $this->validate()) {
-			$this->Model_Setting_Setting->editSetting('shipping_flat', $_POST);
+			$this->System_Model_Setting->editSetting('shipping_flat', $_POST);
 
 			$this->message->add('success', $this->_('text_success'));
 
@@ -25,7 +25,7 @@ class Admin_Controller_Shipping_Flat extends Controller
 		$this->data['action'] = $this->url->link('shipping/flat');
 		$this->data['cancel'] = $this->url->link('extension/shipping');
 
-		$flat_info = $this->Model_Setting_Setting->getSetting('shipping_flat');
+		$flat_info = $this->System_Model_Setting->getSetting('shipping_flat');
 
 		$defaults = array(
 			'flat_title'      => '',
