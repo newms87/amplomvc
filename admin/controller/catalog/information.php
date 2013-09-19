@@ -282,7 +282,7 @@ class Admin_Controller_Catalog_Information extends Controller
 
 		//Data Lists
 		$this->data['data_stores']  = $this->Model_Setting_Store->getStores();
-		$this->data['data_layouts'] = $this->Model_Design_Layout->getLayouts();
+		$this->data['data_layouts'] = array('' => $this->_('text_none')) + $this->Model_Design_Layout->getLayouts();
 
 		//Action Buttons
 		if ($information_id) {

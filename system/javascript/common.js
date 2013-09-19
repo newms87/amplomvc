@@ -161,6 +161,14 @@ $.fn.tabs = function (callback) {
 			}
 			return false;
 		});
+
+		var tab_name = obj.find('.tab_name');
+
+		if (tab_name.length) {
+			$(obj.attr('href')).find('.tab_name').keyup(function(){
+				tab_name.html($(this).val());
+			});
+		}
 	});
 
 	this.show().first().click();

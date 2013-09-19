@@ -1,6 +1,16 @@
 $.ac_template = $.fn.ac_template = function (name, action, data) {
 	templates = $.fn.ac_template.templates;
 
+	function get_count(context) {
+		var count = 0;
+
+		list.children('[data-row]').each(function (i, e) {
+			count = Math.max(count, parseInt($(e).attr('data-row')) + 1);
+		});
+
+		return count;
+	}
+
 	//Load Template
 	if (!action || typeof action === 'object') {
 		template_row = this.find('[data-row="__ac_template__"]');
@@ -13,17 +23,10 @@ $.ac_template = $.fn.ac_template = function (name, action, data) {
 		template = template_row.clone(true);
 		template_row.remove();
 
-		var count = 0;
-
-		this.children('[data-row]').each(function (i, e) {
-			count = Math.max(count, parseInt($(e).attr('data-row')) + 1);
-		});
-
 		templates[name] = $.extend({
 			list: this,
 			template: template,
 			defaults: {}, //action being used as data here
-			count: count,
 			unique: false
 		}, action);
 	}
@@ -46,7 +49,9 @@ $.ac_template = $.fn.ac_template = function (name, action, data) {
 				return false;
 			}
 
-			template.attr('data-row', row.count);
+			count = get_count(list);
+
+			template.attr('data-row', count);
 
 			if (row.unique) {
 				template.attr('data-id', data[row.unique]);
@@ -54,7 +59,7 @@ $.ac_template = $.fn.ac_template = function (name, action, data) {
 
 			list.append(template);
 
-			var row_list = [row.count];
+			var row_list = [count];
 
 			template.parents('[data-row]').each(function(i,e){
 				row_list.unshift(parseInt($(e).attr('data-row')));
@@ -109,7 +114,7 @@ $.ac_template = $.fn.ac_template = function (name, action, data) {
 			//Replace all attribute occurrences
 			template.find('*').addBack().each(function(i,e){
 				$.each(this.attributes, function(a, attr) {
-					$(e).attr(attr.name, attr.value.replace('__ac_template__', row.count));
+					$(e).attr(attr.name, attr.value.replace('__ac_template__', count));
 					if (attr.name === 'value') {
 						$(e).val($(e).attr('value'));
 					}
@@ -119,15 +124,13 @@ $.ac_template = $.fn.ac_template = function (name, action, data) {
 
 			//Replace all text occurrences
 			template.find('*').contents().filter(function() { return this.nodeType === 3; }).each(function(i,e){
-				e.nodeValue = e.nodeValue.replace('__ac_template__', row.count);
+				e.nodeValue = e.nodeValue.replace('__ac_template__', count);
 			});
-
-			row.count++;
 
 			return template.flash_highlight();
 		}
 		else if (action === 'get_row_count') {
-			return row.count;
+			return get_count(list);
 		}
 	}
 

@@ -139,6 +139,8 @@ class Admin_Model_Block_Block extends Model
 				file_put_contents($template_file, $content);
 			}
 		}
+
+		$this->cache->delete('block');
 	}
 
 	public function updateBlock($name, $data)
@@ -208,6 +210,8 @@ class Admin_Model_Block_Block extends Model
 				}
 			}
 		}
+
+		$this->cache->delete('block');
 	}
 
 	public function isBlock($name)
