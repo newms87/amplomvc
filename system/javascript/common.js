@@ -194,12 +194,6 @@ function colorbox(context, data) {
 		height: '80%',
 		href: href,
 		html: html,
-		onCleanup: function () {
-			$.colorbox.close();
-		},
-		onClosed: function () {
-			$.colorbox.remove();
-		}
 	};
 
 	if (typeof data == 'object') {

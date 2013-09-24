@@ -30,11 +30,11 @@ class Admin_Controller_Common_Home extends Controller
 
 		//Last 10 orders
 		$data = array(
-			'sort'             => 'o.date_added',
-			'order'            => 'DESC',
-			'start'            => 0,
-			'limit'            => 10,
-			'order_status_ids' => array(0),
+			'sort'              => 'o.date_added',
+			'order'             => 'DESC',
+			'start'             => 0,
+			'limit'             => 10,
+			'!order_status_ids' => array(0),
 		);
 
 		$orders = $this->System_Model_Order->getOrders($data);

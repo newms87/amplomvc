@@ -32,12 +32,13 @@ class Catalog_Model_Block_Block extends Model
 
 		$blocks = $this->cache->get("blocks.$store_id.$layout_id");
 
-		if (!$blocks) {
-			$results = $this->query("SELECT * FROM " . DB_PREFIX . "block WHERE status = '1'");
+		//TODO: We can optimize this to grab cached blocks, then process the data. Should minimize cache file size, and we can use only 1 cache file.
+		if (is_null($blocks)) {
+			$results = $this->queryRows("SELECT * FROM " . DB_PREFIX . "block WHERE status = '1'");
 
 			$blocks = array('position' => array());
 
-			foreach ($results->rows as $row) {
+			foreach ($results as $row) {
 				$row['settings']         = $row['settings'] ? unserialize($row['settings']) : array();
 				$row['profile_settings'] = $row['profile_settings'] ? unserialize($row['profile_settings']) : array();
 				$row['profiles']         = $row['profiles'] ? unserialize($row['profiles']) : array();
