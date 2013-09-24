@@ -29,6 +29,8 @@ class Config extends Library
 		$settings = $this->cache->get('setting.config.' . $this->store_id);
 
 		if (!$settings) {
+			//TODO: all settings for store should be under setting store_id = n (should not use IN (0, n))
+			//TODO: Should use $this->System_Model_Setting->getSetting('config', $this->store_id);
 			$results = $this->db->query("SELECT * FROM " . DB_PREFIX . "setting WHERE store_id = '0' OR store_id = '$this->store_id' ORDER BY store_id ASC");
 
 			$settings = array();

@@ -23,7 +23,7 @@ class Catalog_Controller_Module_RssArticle extends Controller
 
 	public function update()
 	{
-		$rss_article = $this->Model_Setting_Setting->getSetting('rss_article');
+		$rss_article = $this->System_Model_Setting->getSetting('rss_article');
 
 		if (!empty($rss_article['rss_feed_url'])) {
 			extract($rss_article);

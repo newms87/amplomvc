@@ -12,7 +12,7 @@ class Admin_Controller_Feed_GoogleBase extends Controller
 		$this->document->setTitle($this->_('head_title'));
 
 		if ($this->request->isPost() && $this->validate()) {
-			$this->Model_Setting_Setting->editSetting('google_base', $_POST);
+			$this->System_Model_Setting->editSetting('google_base', $_POST);
 
 			$this->message->add('success', $this->_('text_success'));
 

@@ -26,7 +26,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 			unset($this->session->data['vouchers']);
 
 			// Settings
-			$settings = $this->Model_Setting_Setting->getSetting('config', $_POST['store_id']);
+			$settings = $this->System_Model_Setting->getSetting('config', $_POST['store_id']);
 
 			foreach ($settings as $key => $value) {
 				$this->config->set($key, $value);

@@ -14,7 +14,7 @@ class Admin_Controller_Module_FeaturedCarousel extends Controller
 		$is_post = $this->request->isPost();
 
 		if ($is_post && $this->validate()) {
-			$this->Model_Setting_Setting->editSetting('featured_carousel', $_POST);
+			$this->System_Model_Setting->editSetting('featured_carousel', $_POST);
 
 			$this->message->add('success', $this->_('text_success'));
 
@@ -35,7 +35,7 @@ class Admin_Controller_Module_FeaturedCarousel extends Controller
 		);
 
 		if (!$is_post) {
-			$featured_carousel = $this->Model_Setting_Setting->getSetting('featured_carousel');
+			$featured_carousel = $this->System_Model_Setting->getSetting('featured_carousel');
 		}
 
 		foreach ($defaults as $key => $default) {

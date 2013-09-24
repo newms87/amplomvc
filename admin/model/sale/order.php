@@ -13,7 +13,7 @@ class Admin_Model_Sale_Order extends Model
 			$store_url  = HTTP_CATALOG;
 		}
 
-		$setting_info = $this->Model_Setting_Setting->getSetting('setting', $data['store_id']);
+		$setting_info = $this->System_Model_Setting->getSetting('setting', $data['store_id']);
 
 		$country_info = $this->Model_Localisation_Country->getCountry($data['shipping_country_id']);
 

@@ -126,7 +126,7 @@ class Admin_Controller_Extension_Payment extends Controller
 		} else {
 			$this->Model_Setting_Extension->uninstall('payment', $_GET['extension']);
 
-			$this->Model_Setting_Setting->deleteSetting($_GET['extension']);
+			$this->System_Model_Setting->deleteSetting($_GET['extension']);
 
 			require_once(_ac_mod_file(DIR_APPLICATION . 'controller/payment/' . $_GET['extension'] . '.php'));
 

@@ -11,7 +11,7 @@ class Admin_Controller_Payment_PpStandard extends Controller
 		//TODO: Move Payments / Shipping (other extensions) to the block/block style
 		// where status, and other data is handled separately
 		if ($this->request->isPost() && $this->validate()) {
-			$this->Model_Setting_Setting->editSetting('pp_standard', $_POST);
+			$this->System_Model_Setting->editSetting('pp_standard', $_POST);
 
 			$status = !empty($_POST['status']) ? 1 : 0;
 

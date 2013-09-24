@@ -3,7 +3,7 @@ class Catalog_Controller_Cron_Cron extends Controller
 {
 	function index()
 	{
-		$tasks = $this->Model_Setting_Setting->getSetting('cron_tasks');
+		$tasks = $this->System_Model_Setting->getSetting('cron_tasks');
 
 		echo "Running Cron - " . $this->date->now() . "<br><br>";
 		foreach ($tasks['tasks'] as $task) {

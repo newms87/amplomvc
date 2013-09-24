@@ -13,7 +13,7 @@ class Admin_Controller_Module_RssArticle extends Controller
 
 		if ($this->request->isPost() && $this->validate()) {
 
-			$this->Model_Setting_Setting->editSetting('rss_article', $_POST);
+			$this->System_Model_Setting->editSetting('rss_article', $_POST);
 
 			$this->message->add('success', $this->_('text_success'));
 
@@ -30,7 +30,7 @@ class Admin_Controller_Module_RssArticle extends Controller
 		if (isset($_POST['rss_article'])) {
 			$ff = $_POST['rss_article'];
 		} else {
-			$ff = $this->Model_Setting_Setting->getSetting('rss_article');
+			$ff = $this->System_Model_Setting->getSetting('rss_article');
 		}
 
 		$this->data['featured_articles'] = isset($ff['featured_articles']) ? $ff['featured_articles'] : array();
@@ -58,7 +58,7 @@ class Admin_Controller_Module_RssArticle extends Controller
 
 	public function update()
 	{
-		$rss_article = $this->Model_Setting_Setting->getSetting('rss_article');
+		$rss_article = $this->System_Model_Setting->getSetting('rss_article');
 
 		if (!empty($rss_article['rss_feed_url'])) {
 			extract($rss_article);
@@ -80,7 +80,7 @@ class Admin_Controller_Module_RssArticle extends Controller
 				);
 			}
 			$rss_article['featured_articles'] = array_slice(array_merge($new_articles, $featured_articles), 0, $num_to_keep);;
-			$this->Model_Setting_Setting->editSetting('rss_article', $rss_article);
+			$this->System_Model_Setting->editSetting('rss_article', $rss_article);
 
 			if (isset($_GET['redirect'])) {
 				$this->message->add('success', "Successfully Updated the RSS Feed!");

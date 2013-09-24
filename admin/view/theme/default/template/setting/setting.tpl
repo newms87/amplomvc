@@ -22,7 +22,7 @@
 		<a href="#tab-file-permissions"><?= $tab_file_permissions; ?></a>
 		<a href="#tab-server"><?= $tab_server; ?></a>
 	</div>
-	<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
+	<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
 	<div id="tab-general">
 		<table class="form">
 			<tr>
@@ -505,13 +505,6 @@
 	</div>
 	<div id="tab-image">
 		<table class="form">
-			<tr>
-				<td><?= $entry_logo; ?></td>
-				<td>
-					<?= $this->builder->set_builder_template('click_image'); ?>
-					<?= $this->builder->image_input("config_logo", $config_logo); ?>
-				</td>
-			</tr>
 			<tr>
 				<td><?= $entry_admin_logo; ?></td>
 				<td>

@@ -9,7 +9,7 @@ class Catalog_Controller_Module_MagazineAd extends Controller
 		$this->template->load('module/magazine_ad');
 
 		if (!$setting) {
-			$setting  = $this->Model_Setting_Setting->getSetting('featured_carousel');
+			$setting  = $this->System_Model_Setting->getSetting('featured_carousel');
 			$products = $setting['featured_product_list'];
 		} else {
 			$setting  = array();

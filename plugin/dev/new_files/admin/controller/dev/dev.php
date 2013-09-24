@@ -24,7 +24,7 @@ class Admin_Controller_Dev_Dev extends Controller
 
 		$this->document->setTitle($this->_('text_sync'));
 
-		$dev_sites = $this->Model_Setting_Setting->getSetting('dev_sites');
+		$dev_sites = $this->System_Model_Setting->getSetting('dev_sites');
 
 		if ($this->request->isPost() && $this->validate()) {
 			if (isset($_POST['sync_site'])) {
@@ -77,7 +77,7 @@ class Admin_Controller_Dev_Dev extends Controller
 
 		$this->document->setTitle($this->_('text_site_management'));
 
-		$dev_sites = $this->Model_Setting_Setting->getSetting('dev_sites');
+		$dev_sites = $this->System_Model_Setting->getSetting('dev_sites');
 
 		if ($this->request->isPost() && $this->validate()) {
 			if (isset($_POST['add_site'])) {
@@ -93,7 +93,7 @@ class Admin_Controller_Dev_Dev extends Controller
 
 			unset($_POST);
 
-			$this->Model_Setting_Setting->editSetting('dev_sites', $dev_sites, null, false);
+			$this->System_Model_Setting->editSetting('dev_sites', $dev_sites, null, false);
 		}
 
 		$this->breadcrumb->add($this->_('text_site_management'), $this->url->link('dev/dev/site_management'));
