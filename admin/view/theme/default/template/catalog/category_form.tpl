@@ -54,9 +54,8 @@
 							<tr>
 								<td><?= $entry_alias; ?></td>
 								<td>
-									<input type="text"
-									       onfocus="$(this).next().display_error('<?= $warning_generate_url; ?>', 'gen_url');" name="alias" value="<?= $alias; ?>"/>
-									<a class='gen_url' onclick="generate_url($(this))"><?= $button_generate_url; ?></a>
+									<input type="text" onfocus="$(this).next().display_error('<?= $warning_generate_url; ?>', 'gen_url');" name="alias" value="<?= $alias; ?>"/>
+									<a class="gen_url" onclick="generate_url($(this))"><?= $button_generate_url; ?></a>
 								</td>
 							</tr>
 							<tr>
@@ -118,8 +117,8 @@ function generate_url(context) {
 
 	data = {category_id: <?= (int)$category_id; ?>, name: name};
 
-	$(context).fade_post("<?= $url_generate_url; ?>", data, function (json) {
-		$('input[name="alias"]').val(json);
+	$(context).fade_post("<?= $url_generate_url; ?>", data, function (response) {
+		$('input[name="alias"]').val(response);
 	});
 }
 

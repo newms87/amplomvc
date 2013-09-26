@@ -676,7 +676,7 @@ class Cart extends Library
 			$this->setPaymentMethod();
 			return true;
 		} elseif (is_array($address)) {
-			$address_id = $this->Model_Account_Address->addAddress($address);
+			$address_id = $this->address->add($address);
 
 			if (!$address_id) {
 				$this->_e('PA-10', 'payment_address', 'error_payment_address_details');
@@ -739,7 +739,7 @@ class Cart extends Library
 			$this->setShippingMethod();
 			return true;
 		} elseif (is_array($address)) {
-			$address_id = $this->Model_Account_Address->addAddress($address);
+			$address_id = $this->address->add($address);
 
 			if (!$address_id) {
 				$this->_e('SA-10', 'shipping_address', 'error_shipping_address_details');
@@ -800,7 +800,7 @@ class Cart extends Library
 				$totals = $this->getTotals();
 			}
 
-			$classname = "Model_Payment_" . $this->tool->formatClassname($payment_method_id);
+			$classname = "Catalog_Model_Payment_" . $this->tool->formatClassname($payment_method_id);
 
 			$method = $this->$classname->getMethod($payment_address, $totals['total']);
 
@@ -818,7 +818,7 @@ class Cart extends Library
 			return false;
 		}
 
-		$classname = "Model_Payment_" . $this->tool->formatClassname($payment_method_id);
+		$classname = "Catalog_Model_Payment_" . $this->tool->formatClassname($payment_method_id);
 
 		if (method_exists($this->$classname, 'data')) {
 			return $this->$classname->data();
@@ -937,7 +937,7 @@ class Cart extends Library
 				return false;
 			}
 
-			$classname = "Model_Shipping_" . $this->tool->formatClassname($code);
+			$classname = "Catalog_Model_Shipping_" . $this->tool->formatClassname($code);
 			$quotes    = $this->$classname->getQuote($shipping_address);
 
 			if (!empty($quotes)) {
@@ -1005,7 +1005,7 @@ class Cart extends Library
 			list($code, $method) = explode("__", $shipping_method_id, 2);
 		}
 
-		$classname = "Model_Shipping_" . $this->tool->formatClassname($code);
+		$classname = "Catalog_Model_Shipping_" . $this->tool->formatClassname($code);
 
 		if (method_exists($this->$classname, 'data')) {
 			return $this->$classname->data($method);

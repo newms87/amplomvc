@@ -109,7 +109,7 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 			if (!$this->cart->validateShippingAddress($_POST)) {
 				$json['error'] = $this->cart->get_errors('shipping_address');
 			} else {
-				$address_id = $this->Model_Account_Address->addAddress($_POST);
+				$address_id = $this->address->add($_POST);
 			}
 		} else {
 			$address = array(
@@ -119,7 +119,7 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 				'postcode'    => $_POST['postcode'],
 			);
 
-			$address_id = $this->Model_Account_Address->addressExists($address);
+			$address_id = $this->System_Model_Address->addressExists($address);
 		}
 
 		if (!empty($address_id)) {

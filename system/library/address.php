@@ -1,6 +1,29 @@
 <?php
 class Address extends Library
 {
+	public function add($address)
+	{
+		if (!isset($address['customer_id']) && $this->customer->isLogged()) {
+			$address['customer_id'] = $this->customer->getId();
+		}
+
+		return $this->System_Model_Address->addAddress($address);
+	}
+
+	public function update($address_id, $address)
+	{
+		if (!isset($address['customer_id']) && $this->customer->isLogged()) {
+			$address['customer_id'] = $this->customer->getId();
+		}
+
+		$this->System_Model_Address->editAddress($address_id, $address);
+	}
+
+	public function delete($address_id)
+	{
+		$this->System_Model_Address->deleteAddress($address_id);
+	}
+
 	public function inGeoZone($address, $geo_zone_id)
 	{
 		if (!$geo_zone_id) {
@@ -11,7 +34,7 @@ class Address extends Library
 		}
 
 		if (!is_array($address)) {
-			$address = $this->Model_Account_Address->getAddress($address);
+			$address = $this->System_Model_Address->getAddress($address);
 		}
 
 		$geo_zone_id = (int)$geo_zone_id;
@@ -30,7 +53,7 @@ class Address extends Library
 	{
 		static $address_formats = array();
 
-		if (!$this->Model_Account_Address->isValidAddress($address)) {
+		if (!$this->System_Model_Address->isValidAddress($address)) {
 			return '';
 		}
 

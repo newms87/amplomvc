@@ -844,7 +844,7 @@ class Admin_Controller_Sale_Return extends Controller
 
 			$this->data = $return_info;
 
-			$order_info = $this->Model_Sale_Order->getOrder($return_info['order_id']);
+			$order_info = $this->order->get($return_info['order_id']);
 
 			if ($return_info['order_id'] && $order_info) {
 				$this->data['order'] = $this->url->link('sale/order/info', 'order_id=' . $return_info['order_id']);

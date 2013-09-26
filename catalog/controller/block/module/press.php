@@ -14,7 +14,7 @@ class Catalog_Controller_Block_Module_Press extends Controller
 
 		foreach ($settings['press_items'] as &$press) {
 			if (!empty($press['images'])) {
-				$thumb = current($press['images']);
+				$thumb          = current($press['images']);
 				$press['thumb'] = $this->image->resize($thumb, $settings['image_width'], $settings['image_height']);
 
 				foreach ($press['images'] as &$image) {

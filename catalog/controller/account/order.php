@@ -54,7 +54,7 @@ class Catalog_Controller_Account_Order extends Controller
 
 		//Pagination
 		$this->pagination->init();
-		$this->pagination->total  = $order_total;
+		$this->pagination->total = $order_total;
 
 		$this->data['pagination'] = $this->pagination->render();
 

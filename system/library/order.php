@@ -451,6 +451,60 @@ class Order Extends Library
 		$this->mail->callController('order', $order);
 	}
 
+	public function addHistory($order_id, $data)
+	{
+		$this->System_Model_Order->addOrderHistory($order_id, $data);
+
+		// Send out any gift voucher mails
+		if ($this->config->get('config_complete_status_id') == $data['order_status_id']) {
+			$this->confirm($this->get($order_id));
+		}
+
+		//TODO: finish implementing mail sending for Order History notification
+		if (!empty($data['notify'])) {
+			$this->message->add('warning', "The notification email for order history has not yet been implemented! Please notify manually.");
+			return;
+
+			$order_info = $this->getOrder($order_id);
+
+			$_l = $this->language->newInstance($order_info['language_id']);
+			$_l->load('mail/order');
+
+			$subject = sprintf($language->get('text_subject'), $order_info['store_name'], $order_id);
+
+			$message = $language->get('text_order') . ' ' . $order_id . "\n";
+			$message .= $language->get('text_date_added') . ' ' . $this->date->format($order_info['date_added'], $language->get('date_format_short')) . "\n\n";
+
+			$order_status_query = $this->query("SELECT * FROM " . DB_PREFIX . "order_status WHERE order_status_id = '" . (int)$data['order_status_id'] . "' AND language_id = '" . (int)$order_info['language_id'] . "'");
+
+			if ($order_status_query->num_rows) {
+				$message .= $language->get('text_order_status') . "\n";
+				$message .= $order_status_query->row['name'] . "\n\n";
+			}
+
+			if ($order_info['customer_id']) {
+				$message .= $language->get('text_link') . "\n";
+				$message .= html_entity_decode($this->url->store($order_info['store_id'], 'account/order/info', 'order_id=' . $order_id), ENT_QUOTES, 'UTF-8') . "\n\n";
+			}
+
+			if ($data['comment']) {
+				$message .= $language->get('text_comment') . "\n\n";
+				$message .= strip_tags(html_entity_decode($data['comment'], ENT_QUOTES, 'UTF-8')) . "\n\n";
+			}
+
+			$message .= $language->get('text_footer');
+
+			$this->mail->init();
+
+			$this->mail->setTo($order_info['email']);
+			$this->mail->setFrom($this->config->get('config_email'));
+			$this->mail->setSender($order_info['store_name']);
+			$this->mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
+			$this->mail->setText(html_entity_decode($message, ENT_QUOTES, 'UTF-8'));
+			$this->mail->send();
+		}
+	}
+
 	public function clear()
 	{
 		unset($this->session->data['order_id']);

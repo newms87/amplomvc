@@ -10,19 +10,19 @@ $_['text_password_help'] = 'Leave blank to keep the same.';
 $_['text_success']       = 'Your account information has been updated successfully!';
 
 // Entry
-$_['entry_firstname'] = 'First Name:';
-$_['entry_lastname']  = 'Last Name:';
-$_['entry_birthdate'] = 'Birthdate:';
-$_['entry_email']     = 'E-Mail:';
-$_['entry_telephone'] = 'Telephone:';
-$_['entry_fax']       = 'Fax:';
-$_['entry_password']  = 'Password:';
-$_['entry_confirm']   = 'Confirm Password:';
+$_['entry_firstname']  = 'First Name:';
+$_['entry_lastname']   = 'Last Name:';
+$_['entry_birthdate']  = 'Birthdate:';
+$_['entry_email']      = 'E-Mail:';
+$_['entry_telephone']  = 'Telephone:';
+$_['entry_fax']        = 'Fax:';
+$_['entry_password']   = 'Password:';
+$_['entry_confirm']    = 'Confirm Password:';
 $_['entry_newsletter'] = "Join our mailing list?";
 
 //Section
-$_['section_info']     = 'Your Personal Details';
-$_['section_password'] = "Change Password";
+$_['section_info']       = 'Your Personal Details';
+$_['section_password']   = "Change Password";
 $_['section_newsletter'] = "Newsletter:";
 
 //Button

@@ -112,7 +112,7 @@ class Catalog_Controller_Block_Checkout_Register extends Controller
 			$this->customer->add($_POST);
 
 			//Add Customer Address
-			$address_id = $this->Model_Account_Address->addAddress($_POST);
+			$address_id = $this->address->add($_POST);
 
 			$this->customer->setMeta('default_payment_address_id', $address_id);
 			$this->customer->setMeta('default_shipping_address_id', $address_id);

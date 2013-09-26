@@ -10,7 +10,7 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 
 		$categories = $this->Model_Catalog_Category->getCategoryTree();
 
-		array_walk_children($categories, 'children', function(&$category, $that) {
+		array_walk_children($categories, 'children', function (&$category, $that) {
 			$category['href'] = $that->url->link('product/category', 'category_id=' . $category['category_id']);
 		}, $this);
 
@@ -18,7 +18,7 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 
 		$this->data['main_menu'] = array(
 			'label' => $this->_('text_main_menu'),
-			'menu' => $main_menu,
+			'menu'  => $main_menu,
 		);
 
 		//Product Attributes Filter
@@ -33,30 +33,31 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 				$attribute_group_id = $attribute_menu['attribute_group_id'];
 
 				$sort = array(
-					'sort' => 'name',
+					'sort'  => 'name',
 					'order' => 'ASC',
 				);
 
 				$filter = array(
-					'category_ids' => array($category_id),
+					'category_ids'        => array($category_id),
 					'attribute_group_ids' => array($attribute_group_id),
 				);
 
 				$attribute_list = $this->Model_Catalog_Product->getAttributes($sort + $filter);
 
-				if(empty($attribute_list)) {
+				if (empty($attribute_list)) {
 					continue;
 				}
 
 				//Setup attribute menu items
 				foreach ($attribute_list as &$attribute) {
 					//Build Attribute Query
-					$attribute_filter = $current_filter;
+					$attribute_filter                      = $current_filter;
 					$attribute_filter[$attribute_group_id] = $attribute['attribute_id'];
-					$attribute_query = http_build_query(array('attribute' => $attribute_filter));
+					$attribute_query                       = http_build_query(array('attribute' => $attribute_filter));
 
 					$attribute['href'] = $this->url->link($route, $url_query . '&' . $attribute_query);
-				} unset($attribute);
+				}
+				unset($attribute);
 
 				//Remove Filter for this attribute for the All menu link
 				$attribute_filter = $current_filter;
@@ -64,14 +65,14 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 				$attribute_query = http_build_query(array('attribute' => $attribute_filter));
 
 				$menu = array(
-					'name' => $attribute_menu['group_name'],
-					'href' => $this->url->link($route, $url_query . '&' . $attribute_query),
+					'name'     => $attribute_menu['group_name'],
+					'href'     => $this->url->link($route, $url_query . '&' . $attribute_query),
 					'children' => $attribute_list,
 				);
 
 				$this->data['attribute_menu'][] = array(
 					'label' => $attribute_menu['menu_name'],
-					'menu' => array($menu)
+					'menu'  => array($menu)
 				);
 			}
 		}
@@ -81,7 +82,7 @@ class Catalog_Controller_Block_Module_Sidebar extends Controller
 
 		$this->data['page_menu'] = array(
 			'label' => '',
-			'menu' => $page_links,
+			'menu'  => $page_links,
 		);
 
 		$this->render();

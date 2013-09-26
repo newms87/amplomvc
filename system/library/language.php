@@ -148,6 +148,21 @@ class Language extends Library
 		return $this->data;
 	}
 
+	public function loadFrom($location, $filename)
+	{
+		$temp_root = $this->root;
+
+		if ($location === 'admin') {
+			$this->root = SITE_DIR . "admin/language/";
+		} elseif ($location === 'catalog') {
+			$this->root = SITE_DIR . "catalog/language/";
+		}
+
+		$this->load($filename);
+
+		$this->root = $temp_root;
+	}
+
 	public function loadTemporary($filename, $language_id = null)
 	{
 		if ($language_id && $language_id !== $this->language_id) {
@@ -204,7 +219,6 @@ class Language extends Library
 
 		return $_;
 	}
-
 
 	public function set_orig($key, $value)
 	{

@@ -311,6 +311,23 @@ class System_Model_Order extends Model
 		return $result->rows;
 	}
 
+	public function addOrderHistory($order_id, $data)
+	{
+		//Update Order Status
+		$order_status = array(
+			'order_status_id' => $data['order_status_id'],
+			'date_modified' => $this->date->now(),
+		);
+
+		$this->update('order', $order_status, $order_id);
+
+		//Add History Entry
+		$data['order_id'] = $order_id;
+		$data['date_added'] = $this->date->now();
+
+		return $this->insert('order_history', $data);
+	}
+
 	public function getOrderHistories($data = array(), $select = '', $total = false)
 	{
 		//Select
@@ -374,7 +391,7 @@ class System_Model_Order extends Model
 
 	public function getOrderProductOptions($order_id, $order_product_id)
 	{
-		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "order_option WHERE order_id = " . (int)$order_id . " AND order_product_id = '" . (int)$order_product_id . "'");
+		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "order_option WHERE order_id = " . (int)$order_id . " AND order_product_id = " . (int)$order_product_id);
 	}
 
 	public function getOrderTotals($order_id)
@@ -385,6 +402,16 @@ class System_Model_Order extends Model
 	public function getOrderVouchers($order_id)
 	{
 		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "order_voucher WHERE order_id = " . (int)$order_id);
+	}
+
+	public function getOrderDownload($order_id, $order_product_id)
+	{
+		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "order_download WHERE order_id = " . (int)$order_id . " AND order_product_id = " . (int)$order_product_id);
+	}
+
+	public function getOrderDownloads($order_id)
+	{
+		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "order_download WHERE order_id = " . (int)$order_id);
 	}
 
 	public function getTotalOrders($data = array())

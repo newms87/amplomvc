@@ -9,15 +9,15 @@
 				href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
 	</div>
 	<div class="section">
-	<div class="vtabs"><a href="#tab-order"><?= $tab_order; ?></a><a href="#tab-payment"><?= $tab_payment; ?></a>
-		<? if ($shipping_method) { ?>
-			<a href="#tab-shipping"><?= $tab_shipping; ?></a>
-		<? } ?>
-		<a href="#tab-product"><?= $tab_product; ?></a><a href="#tab-history"><?= $tab_order_history; ?></a>
-		<? if ($maxmind_id) { ?>
+	<div class="vtabs">
+		<a href="#tab-order"><?= $tab_order; ?></a>
+		<a href="#tab-product"><?= $tab_product; ?></a>
+		<a href="#tab-history"><?= $tab_order_history; ?></a>
+		<? if (!empty($maxmind_id)) { ?>
 			<a href="#tab-fraud"><?= $tab_fraud; ?></a>
 		<? } ?>
 	</div>
+
 	<div id="tab-order" class="vtabs-content">
 		<table class="form">
 			<tr>
@@ -26,32 +26,23 @@
 			</tr>
 			<tr>
 				<td><?= $text_invoice_no; ?></td>
-				<td><? if ($invoice_no) { ?>
-						<?= $invoice_no; ?>
+				<td><?= $invoice_id; ?></td>
+			</tr>
+			<tr>
+				<td><?= $text_store; ?></td>
+				<td><a target="_blank" href="<?= $store['url']; ?>"><?= $store['name']; ?></a></td>
+			</tr>
+			<tr>
+				<td><?= $text_customer; ?></td>
+				<td>
+					<? if (!empty($url_customer)) { ?>
+						<a target="_blank" href="<?= $url_customer; ?>"><?= $firstname; ?> <?= $lastname; ?></a>
 					<? } else { ?>
-						<span id="invoice"><b>[</b> <a id="invoice-generate"><?= $text_generate; ?></a> <b>]</b></span>
-					<? } ?></td>
+						<?= $firstname; ?> <?= $lastname; ?>
+					<? } ?>
+				</td>
 			</tr>
-			<tr>
-				<td><?= $text_store_name; ?></td>
-				<td><?= $store_name; ?></td>
-			</tr>
-			<tr>
-				<td><?= $text_store_url; ?></td>
-				<td><a onclick="window.open('<?= $store_url; ?>');"><u><?= $store_url; ?></u></a></td>
-			</tr>
-			<? if ($customer) { ?>
-				<tr>
-					<td><?= $text_customer; ?></td>
-					<td><a href="<?= $customer; ?>"><?= $firstname; ?> <?= $lastname; ?></a></td>
-				</tr>
-			<? } else { ?>
-				<tr>
-					<td><?= $text_customer; ?></td>
-					<td><?= $firstname; ?> <?= $lastname; ?></td>
-				</tr>
-			<? } ?>
-			<? if ($customer_group) { ?>
+			<? if (!empty($customer_group)) { ?>
 				<tr>
 					<td><?= $text_customer_group; ?></td>
 					<td><?= $customer_group; ?></td>
@@ -65,24 +56,41 @@
 				<td><?= $text_telephone; ?></td>
 				<td><?= $telephone; ?></td>
 			</tr>
-			<? if ($fax) { ?>
+			<? if (!empty($fax)) { ?>
 				<tr>
 					<td><?= $text_fax; ?></td>
 					<td><?= $fax; ?></td>
 				</tr>
 			<? } ?>
 			<tr>
+				<td><?= $text_payment_info; ?></td>
+				<td>
+					<p><?= $payment_method['title']; ?></p>
+					<p><?= $payment_address; ?></p>
+				</td>
+			</tr>
+			<? if (!empty($shipping_address)) { ?>
+				<tr>
+					<td><?= $text_shipping_info; ?></td>
+					<td>
+						<p><?= $shipping_method['title']; ?></p>
+						<p><?= $shipping_address; ?></p>
+					</td>
+				</tr>
+			<? } ?>
+			<tr>
 				<td><?= $text_total; ?></td>
 				<td><?= $total; ?>
-					<? if ($credit && $customer) { ?>
+					<? if ($credit && $customer_id) { ?>
 						<? if (!$credit_total) { ?>
 							<span id="credit"><b>[</b> <a id="credit-add"><?= $text_credit_add; ?></a> <b>]</b></span>
 						<? } else { ?>
 							<span id="credit"><b>[</b> <a id="credit-remove"><?= $text_credit_remove; ?></a> <b>]</b></span>
 						<? } ?>
-					<? } ?></td>
+					<? } ?>
+				</td>
 			</tr>
-			<? if ($reward && $customer) { ?>
+			<? if (!empty($reward) && $customer_id) { ?>
 				<tr>
 					<td><?= $text_reward; ?></td>
 					<td><?= $reward; ?>
@@ -96,16 +104,16 @@
 			<? if ($order_status) { ?>
 				<tr>
 					<td><?= $text_order_status; ?></td>
-					<td id="order-status"><?= $order_status; ?></td>
+					<td id="order-status"><?= $order_status['title']; ?></td>
 				</tr>
 			<? } ?>
-			<? if ($comment) { ?>
+			<? if (!empty($comment)) { ?>
 				<tr>
 					<td><?= $text_comment; ?></td>
 					<td><?= $comment; ?></td>
 				</tr>
 			<? } ?>
-			<? if ($affiliate) { ?>
+			<? if (!empty($affiliate)) { ?>
 				<tr>
 					<td><?= $text_affiliate; ?></td>
 					<td><a href="<?= $affiliate; ?>"><?= $affiliate_firstname; ?> <?= $affiliate_lastname; ?></a></td>
@@ -155,123 +163,8 @@
 				<td><?= $date_modified; ?></td>
 			</tr>
 		</table>
-	</div>
-	<div id="tab-payment" class="vtabs-content">
-		<table class="form">
-			<tr>
-				<td><?= $text_firstname; ?></td>
-				<td><?= $payment_firstname; ?></td>
-			</tr>
-			<tr>
-				<td><?= $text_lastname; ?></td>
-				<td><?= $payment_lastname; ?></td>
-			</tr>
-			<? if ($payment_company) { ?>
-				<tr>
-					<td><?= $text_company; ?></td>
-					<td><?= $payment_company; ?></td>
-				</tr>
-			<? } ?>
-			<tr>
-				<td><?= $text_address_1; ?></td>
-				<td><?= $payment_address_1; ?></td>
-			</tr>
-			<? if ($payment_address_2) { ?>
-				<tr>
-					<td><?= $text_address_2; ?></td>
-					<td><?= $payment_address_2; ?></td>
-				</tr>
-			<? } ?>
-			<tr>
-				<td><?= $text_city; ?></td>
-				<td><?= $payment_city; ?></td>
-			</tr>
-			<? if ($payment_postcode) { ?>
-				<tr>
-					<td><?= $text_postcode; ?></td>
-					<td><?= $payment_postcode; ?></td>
-				</tr>
-			<? } ?>
-			<tr>
-				<td><?= $text_zone; ?></td>
-				<td><?= $payment_zone; ?></td>
-			</tr>
-			<? if ($payment_zone_code) { ?>
-				<tr>
-					<td><?= $text_zone_code; ?></td>
-					<td><?= $payment_zone_code; ?></td>
-				</tr>
-			<? } ?>
-			<tr>
-				<td><?= $text_country; ?></td>
-				<td><?= $payment_country; ?></td>
-			</tr>
-			<tr>
-				<td><?= $text_payment_method; ?></td>
-				<td><?= $payment_method; ?></td>
-			</tr>
-		</table>
-	</div>
-	<? if ($shipping_method) { ?>
-		<div id="tab-shipping" class="vtabs-content">
-			<table class="form">
-				<tr>
-					<td><?= $text_firstname; ?></td>
-					<td><?= $shipping_firstname; ?></td>
-				</tr>
-				<tr>
-					<td><?= $text_lastname; ?></td>
-					<td><?= $shipping_lastname; ?></td>
-				</tr>
-				<? if ($shipping_company) { ?>
-					<tr>
-						<td><?= $text_company; ?></td>
-						<td><?= $shipping_company; ?></td>
-					</tr>
-				<? } ?>
-				<tr>
-					<td><?= $text_address_1; ?></td>
-					<td><?= $shipping_address_1; ?></td>
-				</tr>
-				<? if ($shipping_address_2) { ?>
-					<tr>
-						<td><?= $text_address_2; ?></td>
-						<td><?= $shipping_address_2; ?></td>
-					</tr>
-				<? } ?>
-				<tr>
-					<td><?= $text_city; ?></td>
-					<td><?= $shipping_city; ?></td>
-				</tr>
-				<? if ($shipping_postcode) { ?>
-					<tr>
-						<td><?= $text_postcode; ?></td>
-						<td><?= $shipping_postcode; ?></td>
-					</tr>
-				<? } ?>
-				<tr>
-					<td><?= $text_zone; ?></td>
-					<td><?= $shipping_zone; ?></td>
-				</tr>
-				<? if ($shipping_zone_code) { ?>
-					<tr>
-						<td><?= $text_zone_code; ?></td>
-						<td><?= $shipping_zone_code; ?></td>
-					</tr>
-				<? } ?>
-				<tr>
-					<td><?= $text_country; ?></td>
-					<td><?= $shipping_country; ?></td>
-				</tr>
-				<? if ($shipping_method) { ?>
-					<tr>
-						<td><?= $text_shipping_method; ?></td>
-						<td><?= $shipping_method; ?></td>
-					</tr>
-				<? } ?>
-			</table>
-		</div>
-	<? } ?>
+	</div> <!-- /tab-order -->
+
 	<div id="tab-product" class="vtabs-content">
 		<table class="list">
 			<thead>
@@ -286,22 +179,19 @@
 			<tbody>
 			<? foreach ($products as $product) { ?>
 				<tr>
-					<td class="left"><a href="<?= $product['href']; ?>"><?= $product['name']; ?></a>
-						<? foreach ($product['option'] as $option) { ?>
-							<br/>
-							<? if ($option['type'] != 'file') { ?>
-								&nbsp;
-								<small> - <?= $option['name']; ?>: <?= $option['value']; ?></small>
-							<? } else { ?>
-								&nbsp;
-								<small> - <?= $option['name']; ?>: <a
-										href="<?= $option['href']; ?>"><?= $option['value']; ?></a></small>
-							<? } ?>
-						<? } ?></td>
+					<td class="left">
+						<a href="<?= $product['href']; ?>"><?= $product['name']; ?></a>
+						<? foreach ($product['options'] as $option) { ?>
+							<div class="product_option">
+								<span class="name"><?= $option['name']; ?>:</span>
+								<span class="value"><?= $option['value']; ?></span>
+							</div>
+						<? } ?>
+					</td>
 					<td class="left"><?= $product['model']; ?></td>
 					<td class="right"><?= $product['quantity']; ?></td>
-					<td class="right"><?= $product['price']; ?></td>
-					<td class="right"><?= $product['total']; ?></td>
+					<td class="right"><?= $product['price_display']; ?></td>
+					<td class="right"><?= $product['total_display']; ?></td>
 				</tr>
 			<? } ?>
 			<? foreach ($vouchers as $voucher) { ?>
@@ -313,17 +203,16 @@
 					<td class="right"><?= $voucher['amount']; ?></td>
 				</tr>
 			<? } ?>
-			</tbody>
 			<? foreach ($totals as $totals) { ?>
-				<tbody id="totals">
-				<tr>
+				<tr class="totals">
 					<td colspan="4" class="right"><?= $totals['title']; ?>:</td>
-					<td class="right"><?= $totals['text']; ?></td>
+					<td class="right"><?= $totals['value_display']; ?></td>
 				</tr>
-				</tbody>
 			<? } ?>
+			</tbody>
 		</table>
-		<? if ($downloads) { ?>
+
+		<? if (!empty($downloads)) { ?>
 			<h3><?= $text_download; ?></h3>
 			<table class="list">
 				<thead>
@@ -344,38 +233,70 @@
 				</tbody>
 			</table>
 		<? } ?>
-	</div>
-	<div id="tab-history" class="vtabs-content">
-		<div id="history"></div>
-		<table class="form">
-			<tr>
-				<td><?= $entry_order_status; ?></td>
-				<td><select name="order_status_id">
-						<? foreach ($order_statuses as $order_statuses) { ?>
-							<? if ($order_statuses['order_status_id'] == $order_status_id) { ?>
-								<option value="<?= $order_statuses['order_status_id']; ?>"
-								        selected="selected"><?= $order_statuses['name']; ?></option>
-							<? } else { ?>
-								<option value="<?= $order_statuses['order_status_id']; ?>"><?= $order_statuses['name']; ?></option>
-							<? } ?>
-						<? } ?>
-					</select></td>
-			</tr>
-			<tr>
-				<td><?= $entry_notify; ?></td>
-				<td><input type="checkbox" name="notify" value="1"/></td>
-			</tr>
-			<tr>
-				<td><?= $entry_comment; ?></td>
-				<td><textarea name="comment" cols="40" rows="8" style="width: 99%"></textarea>
+	</div> <!-- /tab-products -->
 
-					<div style="margin-top: 10px; text-align: right;"><a id="button-history"
-					                                                     class="button"><?= $button_add_history; ?></a></div>
-				</td>
-			</tr>
-		</table>
-	</div>
-	<? if ($maxmind_id) { ?>
+	<div id="tab-history" class="vtabs-content">
+		<div id="history">
+			<table class="list">
+				<thead>
+				<tr>
+					<td class="left"><b><?= $column_date_added; ?></b></td>
+					<td class="left"><b><?= $column_comment; ?></b></td>
+					<td class="left"><b><?= $column_status; ?></b></td>
+					<td class="left"><b><?= $column_notify; ?></b></td>
+				</tr>
+				</thead>
+				<tbody>
+				<? if (!empty($histories)) { ?>
+					<? foreach ($histories as $history) { ?>
+						<tr>
+							<td class="left"><?= $history['date_added']; ?></td>
+							<td class="left"><?= $history['comment']; ?></td>
+							<td class="left"><?= $history['status']; ?></td>
+							<td class="left"><?= $history['notify']; ?></td>
+						</tr>
+					<? } ?>
+				<? } else { ?>
+					<tr>
+						<td class="center" colspan="4"><?= $text_no_results; ?></td>
+					</tr>
+				<? } ?>
+				</tbody>
+			</table>
+		</div>
+
+		<form id="add_history_form" action="" method="post">
+			<table class="form">
+				<tr>
+					<td><?= $entry_order_status; ?></td>
+					<td>
+						<select name="order_status_id">
+							<? foreach ($data_order_statuses as $os_id => $order_status) { ?>
+								<option value="<?= $os_id; ?>" <?= $os_id == $order_status_id ? 'selected="selected"' : ''; ?>><?= $order_status['title']; ?></option>
+							<? } ?>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td><?= $entry_notify; ?></td>
+					<td><input type="checkbox" name="notify" value="1"/></td>
+				</tr>
+				<tr>
+					<td><?= $entry_comment; ?></td>
+					<td>
+						<textarea name="comment" cols="40" rows="8"></textarea>
+
+						<div>
+							<input type="submit" id="button-history" class="button" value="<?= $button_add_history; ?>" />
+						</div>
+					</td>
+				</tr>
+			</table>
+		</form>
+
+	</div><!-- /tab-history -->
+
+	<? if (!empty($maxmind_id)) { ?>
 		<div id="tab-fraud" class="vtabs-content">
 		<table class="form">
 		<? if ($country_match) { ?>
@@ -683,258 +604,11 @@
 	<? } ?>
 	</div>
 	</div>
-	</div>
-	<script type="text/javascript"><!--
-	$('#invoice-generate').live('click', function () {
-		$.ajax({
-			url: "<?= HTTP_ADMIN . "index.php?route=sale/order/createinvoiceno"; ?>" + '&order_id=<?= $order_id; ?>',
-			dataType: 'json',
-			beforeSend: function () {
-				$('#invoice').after('<img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" class="loading" style="padding-left: 5px;" />');
-			},
-			complete: function () {
-				$('.loading').remove();
-			},
-			success: function (json) {
-				$('.success, .warning').remove();
+</div>
 
-				if (json['error']) {
-					$('#tab-order').prepend('<div class="message_box warning" style="display: none;">' + json['error'] + '</div>');
 
-					$('.warning').fadeIn('slow');
-				}
-
-				if (json.invoice_no) {
-					$('#invoice').fadeOut('slow', function () {
-						$('#invoice').html(json['invoice_no']);
-
-						$('#invoice').fadeIn('slow');
-					});
-				}
-			}
-		});
-	});
-
-	$('#credit-add').live('click', function () {
-		$.ajax({
-			url: "<?= HTTP_ADMIN . "index.php?route=sale/order/addcredit"; ?>" + '&order_id=<?= $order_id; ?>',
-			type: 'post',
-			dataType: 'json',
-			beforeSend: function () {
-				$('#credit').after('<img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" class="loading" style="padding-left: 5px;" />');
-			},
-			complete: function () {
-				$('.loading').remove();
-			},
-			success: function (json) {
-				$('.success, .warning').remove();
-
-				if (json['error']) {
-					$('.box').before('<div class="message_box warning" style="display: none;">' + json['error'] + '</div>');
-
-					$('.warning').fadeIn('slow');
-				}
-
-				if (json['success']) {
-					$('.box').before('<div class="message_box success" style="display: none;">' + json['success'] + '</div>');
-
-					$('.success').fadeIn('slow');
-
-					$('#credit').html('<b>[</b> <a id="credit-remove"><?= $text_credit_remove; ?></a> <b>]</b>');
-				}
-			}
-		});
-	});
-
-	$('#credit-remove').live('click', function () {
-		$.ajax({
-			url: "<?= HTTP_ADMIN . "index.php?route=sale/order/removecredit"; ?>" + '&order_id=<?= $order_id; ?>',
-			type: 'post',
-			dataType: 'json',
-			beforeSend: function () {
-				$('#credit').after('<img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" class="loading" style="padding-left: 5px;" />');
-			},
-			complete: function () {
-				$('.loading').remove();
-			},
-			success: function (json) {
-				$('.success, .warning').remove();
-
-				if (json['error']) {
-					$('.box').before('<div class="message_box warning" style="display: none;">' + json['error'] + '</div>');
-
-					$('.warning').fadeIn('slow');
-				}
-
-				if (json['success']) {
-					$('.box').before('<div class="message_box success" style="display: none;">' + json['success'] + '</div>');
-
-					$('.success').fadeIn('slow');
-
-					$('#credit').html('<b>[</b> <a id="credit-add"><?= $text_credit_add; ?></a> <b>]</b>');
-				}
-			}
-		});
-	});
-
-	$('#reward-add').live('click', function () {
-		$.ajax({
-			url: "<?= HTTP_ADMIN . "index.php?route=sale/order/addreward"; ?>" + '&order_id=<?= $order_id; ?>',
-			type: 'post',
-			dataType: 'json',
-			beforeSend: function () {
-				$('#reward').after('<img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" class="loading" style="padding-left: 5px;" />');
-			},
-			complete: function () {
-				$('.loading').remove();
-			},
-			success: function (json) {
-				$('.success, .warning').remove();
-
-				if (json['error']) {
-					$('.box').before('<div class="message_box warning" style="display: none;">' + json['error'] + '</div>');
-
-					$('.warning').fadeIn('slow');
-				}
-
-				if (json['success']) {
-					$('.box').before('<div class="message_box success" style="display: none;">' + json['success'] + '</div>');
-
-					$('.success').fadeIn('slow');
-
-					$('#reward').html('<b>[</b> <a id="reward-remove"><?= $text_reward_remove; ?></a> <b>]</b>');
-				}
-			}
-		});
-	});
-
-	$('#reward-remove').live('click', function () {
-		$.ajax({
-			url: "<?= HTTP_ADMIN . "index.php?route=sale/order/removereward"; ?>" + '&order_id=<?= $order_id; ?>',
-			type: 'post',
-			dataType: 'json',
-			beforeSend: function () {
-				$('#reward').after('<img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" class="loading" style="padding-left: 5px;" />');
-			},
-			complete: function () {
-				$('.loading').remove();
-			},
-			success: function (json) {
-				$('.success, .warning').remove();
-
-				if (json['error']) {
-					$('.box').before('<div class="message_box warning" style="display: none;">' + json['error'] + '</div>');
-
-					$('.warning').fadeIn('slow');
-				}
-
-				if (json['success']) {
-					$('.box').before('<div class="message_box success" style="display: none;">' + json['success'] + '</div>');
-
-					$('.success').fadeIn('slow');
-
-					$('#reward').html('<b>[</b> <a id="reward-add"><?= $text_reward_add; ?></a> <b>]</b>');
-				}
-			}
-		});
-	});
-
-	$('#commission-add').live('click', function () {
-		$.ajax({
-			url: "<?= HTTP_ADMIN . "index.php?route=sale/order/addcommission"; ?>" + '&order_id=<?= $order_id; ?>',
-			type: 'post',
-			dataType: 'json',
-			beforeSend: function () {
-				$('#commission').after('<img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" class="loading" style="padding-left: 5px;" />');
-			},
-			complete: function () {
-				$('.loading').remove();
-			},
-			success: function (json) {
-				$('.success, .warning').remove();
-
-				if (json['error']) {
-					$('.box').before('<div class="message_box warning" style="display: none;">' + json['error'] + '</div>');
-
-					$('.warning').fadeIn('slow');
-				}
-
-				if (json['success']) {
-					$('.box').before('<div class="message_box success" style="display: none;">' + json['success'] + '</div>');
-
-					$('.success').fadeIn('slow');
-
-					$('#commission').html('<b>[</b> <a id="commission-remove"><?= $text_commission_remove; ?></a> <b>]</b>');
-				}
-			}
-		});
-	});
-
-	$('#commission-remove').live('click', function () {
-		$.ajax({
-			url: "<?= HTTP_ADMIN . "index.php?route=sale/order/removecommission"; ?>" + '&order_id=<?= $order_id; ?>',
-			type: 'post',
-			dataType: 'json',
-			beforeSend: function () {
-				$('#commission').after('<img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" class="loading" style="padding-left: 5px;" />');
-			},
-			complete: function () {
-				$('.loading').remove();
-			},
-			success: function (json) {
-				$('.success, .warning').remove();
-
-				if (json['error']) {
-					$('.box').before('<div class="message_box warning" style="display: none;">' + json['error'] + '</div>');
-
-					$('.warning').fadeIn('slow');
-				}
-
-				if (json['success']) {
-					$('.box').before('<div class="message_box success" style="display: none;">' + json['success'] + '</div>');
-
-					$('.success').fadeIn('slow');
-
-					$('#commission').html('<b>[</b> <a id="commission-add"><?= $text_commission_add; ?></a> <b>]</b>');
-				}
-			}
-		});
-	});
-
-	$('#history .pagination a').live('click', function () {
-		$('#history').load(this.href);
-
-		return false;
-	});
-
-	$('#history').load("<?= HTTP_ADMIN . "index.php?route=sale/order/history"; ?>" + '&order_id=<?= $order_id; ?>');
-
-	$('#button-history').live('click', function () {
-		$.ajax({
-			url: "<?= HTTP_ADMIN . "index.php?route=sale/order/history"; ?>" + '&order_id=<?= $order_id; ?>',
-			type: 'post',
-			dataType: 'html',
-			data: 'order_status_id=' + encodeURIComponent($('select[name=\'order_status_id\']').val()) + '&notify=' + encodeURIComponent($('input[name=\'notify\']').attr('checked') ? 1 : 0) + '&append=' + encodeURIComponent($('input[name=\'append\']').attr('checked') ? 1 : 0) + '&comment=' + encodeURIComponent($('textarea[name=\'comment\']').val()),
-			beforeSend: function () {
-				$('.success, .warning').remove();
-				$('#button-history').attr('disabled', true);
-				$('#history').prepend('<div class="attention"><img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> <?= $text_wait; ?></div>');
-			},
-			complete: function () {
-				$('#button-history').attr('disabled', false);
-				$('.attention').remove();
-			},
-			success: function (html) {
-				$('#history').html(html);
-
-				$('textarea[name=\'comment\']').val('');
-
-				$('#order-status').html($('select[name=\'order_status_id\'] option:selected').text());
-			}
-		});
-	});
+<script type="text/javascript"><!--
+$('.vtabs a').tabs();
 //--></script>
-	<script type="text/javascript"><!--
-		$('.vtabs a').tabs();
-//--></script>
+
 <?= $footer; ?>

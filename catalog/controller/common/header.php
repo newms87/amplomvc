@@ -55,9 +55,9 @@ class Catalog_Controller_Common_Header extends Controller
 		$this->language->load('common/header');
 
 		$this->data['messages'] = $this->message->fetch();
-		$this->data['icon'] = $this->image->get($this->config->get('config_icon'));
-		$this->data['name'] = $this->config->get('config_name');
-		$this->data['logo'] = $this->image->get($this->config->get('config_logo'));
+		$this->data['icon']     = $this->image->get($this->config->get('config_icon'));
+		$this->data['name']     = $this->config->get('config_name');
+		$this->data['logo']     = $this->image->get($this->config->get('config_logo'));
 
 		$this->data['page_header'] = $this->Model_Design_PageHeaders->getPageHeader();
 

@@ -66,7 +66,7 @@ class Catalog_Controller_Account_Update extends Controller
 		$default_shipping_address_id = $this->data['metadata']['default_shipping_address_id'];
 
 		if (!empty($addresses) && (!$default_shipping_address_id || !array_search_key('address_id', $default_shipping_address_id, $addresses))) {
-			$first_address            = current($addresses);
+			$first_address                                         = current($addresses);
 			$this->data['metadata']['default_shipping_address_id'] = $first_address['address_id'];
 		}
 
@@ -78,8 +78,8 @@ class Catalog_Controller_Account_Update extends Controller
 		$this->data['data_addresses'] = $addresses;
 
 		//Action Buttons
-		$this->data['save'] = $this->url->link('account/update');
-		$this->data['back'] = $this->url->link('account/account');
+		$this->data['save']        = $this->url->link('account/update');
+		$this->data['back']        = $this->url->link('account/account');
 		$this->data['add_address'] = $this->url->link('account/address/update');
 
 		//Ajax
@@ -123,8 +123,7 @@ class Catalog_Controller_Account_Update extends Controller
 
 		if (!empty($_POST['password']) && !$this->validation->password($_POST['password'])) {
 			$this->error['password'] = $this->_('error_password');
-		}
-		elseif ($_POST['password'] !== $_POST['confirm']) {
+		} elseif ($_POST['password'] !== $_POST['confirm']) {
 			$this->error['confirm'] = $this->_('error_confirm');
 		}
 

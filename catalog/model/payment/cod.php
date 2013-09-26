@@ -5,7 +5,7 @@ class Catalog_Model_Payment_Cod extends Model
 	{
 		parent::__construct($registry);
 
-		$this->language->load('payment/cod');
+		$this->language->loadFrom('catalog', 'payment/cod');
 	}
 
 	public function getMethod($address, $total)

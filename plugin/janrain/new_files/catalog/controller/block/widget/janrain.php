@@ -45,9 +45,10 @@ class Catalog_Controller_Block_Widget_Janrain extends Controller
 			''            => 21
 		);
 
-		$icon_sizes = array('tiny'  => 16,
-		                    'small' => 16,
-		                    'large' => 30
+		$icon_sizes = array(
+			'tiny'  => 16,
+			'small' => 16,
+			'large' => 30
 		);
 
 		$this->data['image_size'] = $icon_sizes[$icon_size];

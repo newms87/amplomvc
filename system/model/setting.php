@@ -11,7 +11,7 @@ class System_Model_Setting extends Model
 	public function getSetting($group, $store_id = null)
 	{
 		if (is_null($store_id)) {
-			$store_id = $this->config->get('config_store_id');
+			$store_id = $this->config->isAdmin() ? 0 : $this->config->get('config_store_id');
 		}
 
 		$data = array();

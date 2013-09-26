@@ -27,14 +27,14 @@ class Catalog_Controller_Account_Address extends Controller
 		if ($this->request->isPost() && $this->validateForm()) {
 			//Insert
 			if (empty($_GET['address_id'])) {
-				$address_id = $this->Model_Account_Address->addAddress($_POST);
+				$address_id = $this->address->add($_POST);
 
 				if (!empty($_POST['default'])) {
 					$this->customer->setMeta('default_shipping_address_id', $address_id);
 				}
 			} //Update
 			else {
-				$this->Model_Account_Address->editAddress($_GET['address_id'], $_POST);
+				$this->address->update($_GET['address_id'], $_POST);
 
 				if (!empty($_POST['default'])) {
 					$this->customer->setMeta('default_shipping_address_id', $_GET['address_id']);
@@ -51,7 +51,7 @@ class Catalog_Controller_Account_Address extends Controller
 
 			if (!$this->message->error_set()) {
 				if ($this->request->isAjax()) {
-					return ; //output nothing for an ajax request
+					return; //output nothing for an ajax request
 				} else {
 					$this->message->add('success', !empty($_GET['address_id']) ? $this->_('text_update') : $this->_('text_insert'));
 					$this->url->redirect($this->url->link('account/address'));
@@ -75,7 +75,7 @@ class Catalog_Controller_Account_Address extends Controller
 		$this->document->setTitle($this->_('head_title'));
 
 		if (isset($_GET['address_id']) && $this->validateDelete()) {
-			$this->Model_Account_Address->deleteAddress($_GET['address_id']);
+			$this->address->delete($_GET['address_id']);
 
 			if ((int)$_GET['address_id'] === $this->cart->getShippingAddressId()) {
 				$this->cart->setShippingAddress();
@@ -250,10 +250,9 @@ class Catalog_Controller_Account_Address extends Controller
 
 	private function validateDelete()
 	{
-		if ($this->Model_Account_Address->getTotalAddresses() == 1) {
+		if ($this->System_Model_Address->getTotalAddresses() == 1) {
 			$this->error['warning'] = $this->_('error_delete');
 		}
-
 		if ($this->customer->getMeta('default_shipping_address_id') === (int)$_GET['address_id']) {
 			$this->error['warning'] = $this->_('error_default');
 		}

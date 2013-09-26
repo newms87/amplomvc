@@ -1,10 +1,8 @@
 <?php
-class Catalog_Model_Account_Address extends Model
+class System_Model_Address extends Model
 {
 	public function addAddress($data)
 	{
-		$data['customer_id'] = $this->customer->getId();
-
 		$match_data = $data;
 		unset($match_data['address_id']);
 
@@ -21,10 +19,7 @@ class Catalog_Model_Account_Address extends Model
 
 	public function editAddress($address_id, $data)
 	{
-		$this->update('address', $data, array(
-		                                     'address_id'  => $address_id,
-		                                     'customer_id' => $this->customer->getId()
-		                                ));
+		$this->update('address', $data, $address_id);
 	}
 
 	public function deleteAddress($address_id)

@@ -151,7 +151,7 @@ class Customer extends Library
 
 	public function getAddress($address_id)
 	{
-		$address = $this->Model_Account_Address->getAddress($address_id);
+		$address = $this->System_Model_Address->getAddress($address_id);
 
 		if (!$address) {
 			return null;
@@ -161,7 +161,7 @@ class Customer extends Library
 			//Associate this address to this customer
 			if (!(int)$address['customer_id']) {
 				$address['customer_id'] = $this->customer_id;
-				$this->Model_Account_Address->editAddress($address['address_id'], $address);
+				$this->address->update($address_id, $address);
 			} elseif ((int)$address['customer_id'] !== $this->customer_id) {
 				trigger_error("Customer (id: $this->customer_id) attempted to access an unassociated address!");
 
@@ -178,7 +178,7 @@ class Customer extends Library
 			'customer_ids' => array($this->customer_id),
 		);
 
-		return $this->Model_Account_Address->getAddresses($filter);
+		return $this->System_Model_Address->getAddresses($filter);
 	}
 
 	public function getDefaultShippingAddress()
@@ -209,7 +209,7 @@ class Customer extends Library
 			'zone_ids'     => array_column($allowed_zones, 'zone_id'),
 		);
 
-		$addresses = $this->Model_Account_Address->getAddresses($filter);
+		$addresses = $this->System_Model_Address->getAddresses($filter);
 
 		return $addresses;
 	}
@@ -220,7 +220,7 @@ class Customer extends Library
 			'customer_ids' => array($this->customer_id),
 		);
 
-		return $this->Model_Account_Address->getAddresses($filter);
+		return $this->System_Model_Address->getAddresses($filter);
 	}
 
 	public function getOrders()
