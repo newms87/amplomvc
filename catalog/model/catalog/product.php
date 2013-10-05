@@ -285,7 +285,7 @@ class Catalog_Model_Catalog_Product extends Model
 			" LEFT JOIN " . DB_PREFIX . "attribute_group ag ON (a.attribute_group_id=ag.attribute_group_id)" .
 			" WHERE pa.product_id = '" . (int)$product_id . "' GROUP BY ag.attribute_group_id ORDER BY ag.sort_order, ag.name";
 
-		$attribute_groups = $this->queryRows($query);
+		$attribute_groups = $this->queryRows($query, 'attribute_group_id');
 
 		if (!empty($attribute_groups)) {
 			$this->translation->translate_all('attribute_group', 'attribute_group_id', $attribute_groups);
@@ -296,7 +296,7 @@ class Catalog_Model_Catalog_Product extends Model
 					" LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id)" .
 					" WHERE pa.product_id = '" . (int)$product_id . "' AND a.attribute_group_id = '" . (int)$attribute_group['attribute_group_id'] . "' ORDER BY a.sort_order, a.name";
 
-				$attributes = $this->queryRows($query);
+				$attributes = $this->queryRows($query, 'attribute_id');
 
 				$this->translation->translate_all('attribute', 'attribute_id', $attributes);
 
@@ -312,7 +312,7 @@ class Catalog_Model_Catalog_Product extends Model
 		$product_option = $this->queryRow("SELECT * FROM " . DB_PREFIX . "product_option WHERE product_id = " . (int)$product_id . " AND product_option_id = " . (int)$product_option_id);
 
 		if ($product_option) {
-			$product_option['product_option_values'] = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_option_value WHERE product_option_id = " . (int)$product_option_id);
+			$product_option['product_option_values'] = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_option_value WHERE product_option_id = " . (int)$product_option_id, 'product_option_value_id');
 		}
 
 		return $product_option;

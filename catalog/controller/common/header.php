@@ -33,6 +33,7 @@ class Catalog_Controller_Common_Header extends Controller
 		//TODO: Move this to admin Panel?
 		$this->document->localizeVar('image_thumb_width', $this->config->get('config_image_thumb_width'));
 		$this->document->localizeVar('image_thumb_height', $this->config->get('config_image_thumb_height'));
+		$this->document->localizeVar('url_add_to_cart', $this->url->ajax('cart/cart/add'));
 
 		//Add Theme Scripts
 		$this->document->addScript(HTTP_THEME_JS . 'common.js', 56);

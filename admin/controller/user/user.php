@@ -50,13 +50,8 @@ class Admin_Controller_User_User extends Controller
 
 			$url = $this->get_url();
 
-			if ($this->user->isDesigner()) {
-				$this->message->add('success', $this->_('text_success_portal'));
-				$this->url->redirect($this->url->link('common/home', $url));
-			} else {
-				$this->message->add('success', $this->_('text_success'));
-				$this->url->redirect($this->url->link('user/user', $url));
-			}
+			$this->message->add('success', $this->_('text_success'));
+			$this->url->redirect($this->url->link('user/user', $url));
 		}
 
 		$this->getForm();
@@ -89,10 +84,6 @@ class Admin_Controller_User_User extends Controller
 
 	private function getList()
 	{
-		if ($this->user->isDesigner()) {
-			$this->url->redirect($this->url->link('common/home'));
-		}
-
 		$this->template->load('user/user_list');
 
 		$url_items = array(
@@ -178,23 +169,15 @@ class Admin_Controller_User_User extends Controller
 
 	private function getForm()
 	{
-		if ($this->user->isDesigner()) {
-			$this->template->load('user/user_form_restricted');
-		} else {
-			$this->template->load('user/user_form');
-		}
+		$this->template->load('user/user_form');
 
 		$user_id = isset($_GET['user_id']) ? $_GET['user_id'] : null;
 
-		$this->verify_user();
-
 		$url = $this->get_url();
 
+		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-
-		if (!$this->user->isDesigner()) {
-			$this->breadcrumb->add($this->_('head_title'), $this->url->link('user/user'));
-		}
+		$this->breadcrumb->add($this->_('head_title'), $this->url->link('user/user'));
 
 		if (!$user_id) {
 			$this->data['action'] = $this->url->link('user/user/insert', $url);
@@ -264,7 +247,6 @@ class Admin_Controller_User_User extends Controller
 
 	private function validateForm()
 	{
-		$this->verify_user();
 		if (!$this->user->hasPermission('modify', 'user/user')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
@@ -323,8 +305,6 @@ class Admin_Controller_User_User extends Controller
 
 	private function validateDelete()
 	{
-		$this->verify_user(0);
-
 		if (!$this->user->hasPermission('modify', 'user/user')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
@@ -336,17 +316,6 @@ class Admin_Controller_User_User extends Controller
 		}
 
 		return $this->error ? false : true;
-	}
-
-	private function verify_user($user_id = null)
-	{
-		if ($this->user->isDesigner()) {
-			$user_id = isset($user_id) ? $user_id : (isset($_GET['user_id']) ? $_GET['user_id'] : 0);
-			if ($user_id != $this->user->getId()) {
-				$this->message->add('warning', $this->_('error_wrong_user'));
-				$this->url->redirect($this->url->link("common/home"));
-			}
-		}
 	}
 
 	private function get_url($override = array())

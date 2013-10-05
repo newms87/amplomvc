@@ -275,6 +275,10 @@ class Admin_Controller_Catalog_Option extends Controller
 			$this->error['display_name'] = $this->_('error_display_name');
 		}
 
+		$multi_types = array('checkbox');
+
+		$_POST['group_type'] = in_array($_POST['type'], $multi_types) ? 'multi' : 'single';
+
 		if (!isset($_POST['option_value'])) {
 			$this->error['warning'] = $this->_('error_type');
 		} else {

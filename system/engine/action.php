@@ -33,14 +33,14 @@ final class Action
 			$filepath .= $part;
 
 			//Scan directories until we find file requested
-			if (is_dir(SITE_DIR . $filepath)) {
-				$filepath .= '/';
-				$this->class .= $this->tool->formatClassname($part) . '_';
-			}
-			elseif (is_file(SITE_DIR . $filepath . '.php')) {
+			if (is_file(SITE_DIR . $filepath . '.php')) {
 				$this->file = SITE_DIR . $filepath . '.php';
 
 				$this->class .= $this->tool->formatClassname($part);
+			}
+			elseif (is_dir(SITE_DIR . $filepath)) {
+				$filepath .= '/';
+				$this->class .= $this->tool->formatClassname($part) . '_';
 			}
 			elseif ($this->file) {
 				$this->method = $part;

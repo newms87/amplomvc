@@ -58,15 +58,8 @@ class Admin_Controller_Common_Filemanager extends Controller
 
 	public function directory()
 	{
-		$json       = array();
-		$restricted = $this->user->isDesigner();
-		if ($restricted) {
-			$dir = 'user_uploads/user_' . $this->user->getUserName();
-			if (!is_dir(DIR_IMAGE . 'data/' . $dir)) {
-				mkdir(DIR_IMAGE . 'data/' . $dir, 0777, true);
-			}
-			$_POST['directory'] = $dir;
-		}
+		$json = array();
+
 		if (isset($_POST['directory'])) {
 			$directories = glob(rtrim(DIR_IMAGE . 'data/' . str_replace('../', '', $_POST['directory']), '/') . '/*', GLOB_ONLYDIR);
 
@@ -95,21 +88,10 @@ class Admin_Controller_Common_Filemanager extends Controller
 	{
 		$json = array();
 
-		$restricted = $this->user->isDesigner();
-		$restrict   = '';
-		if ($restricted) {
-			$dir = 'user_uploads/user_' . $this->user->getUserName();
-			if (!is_dir(DIR_IMAGE . 'data/' . $dir)) {
-				mkdir(DIR_IMAGE . 'data/' . $dir, 0777, true);
-			}
-			$restrict           = !empty($_POST['directory']) ? $_POST['directory'] : $dir . '/';
-			$_POST['directory'] = '';
-		}
-
 		if (!empty($_POST['directory'])) {
 			$directory = DIR_IMAGE . 'data/' . str_replace('../', '', $_POST['directory']);
 		} else {
-			$directory = DIR_IMAGE . 'data/' . $restrict;
+			$directory = DIR_IMAGE . 'data/';
 		}
 
 		$allowed = explode(',', strtolower($this->config->get('config_upload_images_allowed')));
@@ -170,11 +152,6 @@ class Admin_Controller_Common_Filemanager extends Controller
 
 		if (isset($_POST['directory'])) {
 			if (isset($_POST['name']) || $_POST['name']) {
-				$restricted = $this->user->isDesigner();
-				if ($restricted && empty($this->requst->post['directory'])) {
-					$_POST['directory'] = 'user_uploads/user_' . $this->user->getUserName() . '/';
-				}
-
 				$directory = rtrim(DIR_IMAGE . 'data/' . str_replace('../', '', $_POST['directory']), '/');
 
 				if (!is_dir($directory)) {
@@ -454,11 +431,6 @@ class Admin_Controller_Common_Filemanager extends Controller
 
 				if ((strlen($filename) < 3) || (strlen($filename) > 255)) {
 					$json['error'] = $this->_('error_filename');
-				}
-
-				$restricted = $this->user->isDesigner();
-				if ($restricted && empty($this->requst->post['directory'])) {
-					$_POST['directory'] = 'user_uploads/user_' . $this->user->getUserName() . '/';
 				}
 
 				$directory = rtrim(DIR_IMAGE . 'data/' . str_replace('../', '', $_POST['directory']), '/');

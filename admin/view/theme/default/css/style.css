@@ -56,6 +56,14 @@ label {
 	clear: both;
 }
 
+div.left {
+	float: left;
+}
+
+div.right{
+	float: right;
+}
+
 .floatfix:after,
 .ac_carousel_list:after{
 	visibility: hidden;
@@ -648,6 +656,22 @@ a.delete_button:visited {
 	background: linear-gradient(to bottom, #B11818 0%, #F99898 100%); /* W3C */
 }
 
+/** Editor **/
+#extension_editor{
+	min-height: 600px;
+}
+#extension_editor .CodeMirror {
+	min-height: 600px;
+}
+
+.extension_file_name{
+	color: red;
+}
+#extension_editor div.CodeMirror span.CodeMirror-matchingbracket {
+	color: green;
+	border: 1px solid #0f0;
+}
+
 /* List View */
 .list {
 	border-collapse: collapse;
@@ -1041,13 +1065,20 @@ ol.scrollbox li {
 }
 
 .scrollbox {
-	padding: 2px 0;
+	padding: 3px 0;
 	border: 1px solid #CCCCCC;
 	width: 50%;
 	min-width: 450px;
 	height: 150px;
 	background: #FFFFFF;
 	overflow-y: scroll;
+	position: relative;
+}
+
+.scrollbox > div{
+	position: relative;
+	margin-bottom:2px;
+	padding: 2px 5px;
 }
 
 .scrollbox input + label {
@@ -1060,7 +1091,8 @@ ol.scrollbox li {
 	cursor: pointer;
 }
 
-.scrollbox td:hover, .scrollbox li:hover {
+.scrollbox td:hover, .scrollbox li:hover,
+.scrollbox > div:hover {
 	background: #BBDF8D !important;
 }
 
@@ -1153,6 +1185,12 @@ ul.scrollbox li {
 	min-width: 80px;
 	text-align: center;
 	display: inline-block;
+}
+
+.scrollbox .delete{
+	position: absolute;
+	right: 5px;
+	top: 2px;
 }
 
 .htabs {

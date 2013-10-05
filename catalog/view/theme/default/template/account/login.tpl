@@ -19,7 +19,7 @@
 			<div class="right">
 				<h2><?= $text_returning_customer; ?></h2>
 
-				<form action="<?= $action; ?>" method="post" enctype="multipart/form-data">
+				<form action="<?= $login; ?>" method="post" enctype="multipart/form-data">
 					<div class="section">
 						<p><?= $text_i_am_returning_customer; ?></p>
 						<b><?= $entry_email; ?></b><br/>
@@ -32,7 +32,7 @@
 						<a href="<?= $forgotten; ?>"><?= $text_forgotten; ?></a><br/>
 						<br/>
 						<input type="submit" value="<?= $button_login; ?>" class="button"/>
-						<? if ($redirect) { ?>
+						<? if (!empty($redirect)) { ?>
 							<input type="hidden" name="redirect" value="<?= $redirect; ?>"/>
 						<? } ?>
 					</div>

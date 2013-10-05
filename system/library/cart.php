@@ -2,6 +2,7 @@
 class Cart extends Library
 {
 	private $data = array();
+	private $totals = null;
 	private $error = array();
 	private $error_code = null;
 
@@ -98,6 +99,7 @@ class Cart extends Library
 
 			//Invalidate Rendered Data
 			$this->data = array();
+			$this->totals = null;
 
 			return true;
 		}
@@ -114,6 +116,7 @@ class Cart extends Library
 		}
 
 		$this->data = array();
+		$this->totals = null;
 	}
 
 	public function merge($cart)
@@ -134,6 +137,8 @@ class Cart extends Library
 			}
 		}
 
+		$this->totals = null;
+
 		return true;
 	}
 
@@ -144,11 +149,13 @@ class Cart extends Library
 		}
 
 		$this->data = array();
+		$this->totals = null;
 	}
 
 	public function clear()
 	{
 		$this->data = array();
+		$this->totals = null;
 
 		$this->session->data['cart']     = array();
 		$this->session->data['wishlist'] = array();
@@ -164,10 +171,6 @@ class Cart extends Library
 
 		$this->order->clear();
 	}
-
-	/**
-	 * Cart Weight
-	 */
 
 	public function getWeight()
 	{
@@ -188,68 +191,47 @@ class Cart extends Library
 
 	public function getSubTotal()
 	{
-		$total = 0;
-
-		foreach ($this->getProducts() as $product) {
-			$total += $product['total'];
+		if (!$this->totals) {
+			$this->getTotals();
 		}
 
-		return $total;
-	}
-
-	public function getTotals()
-	{
-		$total_data = array();
-		$total      = 0;
-		$taxes      = $this->getTaxes();
-
-		$sort_order = array();
-
-		//TODO: We can do better than this, getExtensions should only return active totals
-		$results = $this->Model_Setting_Extension->getExtensions('total');
-
-		//TODO: why sort_order was kept in config vs with extension data is beyond me...
-		//Remove `key` like '%_status' from oc_setting table
-		foreach ($results as $key => $value) {
-			$sort_order[$key] = $this->config->get($value['code'] . '_sort_order');
-		}
-
-		array_multisort($sort_order, SORT_ASC, $results);
-
-		foreach ($results as $result) {
-			if ($this->config->get($result['code'] . '_status')) {
-				$classname = "System_Extension_Total_Model_" . $this->tool->formatClassname($result['code']);
-
-				$this->$classname->getTotal($total_data, $total, $taxes);
-			}
-
-			$sort_order = array();
-
-			foreach ($total_data as $key => $value) {
-				$sort_order[$key] = $value['sort_order'];
-			}
-
-			array_multisort($sort_order, SORT_ASC, $total_data);
-		}
-
-		$values = array(
-			'data'  => $total_data,
-			'total' => $total,
-			'taxes' => $taxes
-		);
-
-		return $values;
+		return $this->totals['sub_total']['value'];
 	}
 
 	public function getTotal()
 	{
-		$total = 0;
-
-		foreach ($this->getProducts() as $product) {
-			$total += $this->tax->calculate($product['total'], $product['tax_class_id']);
+		if (!$this->totals) {
+			$this->getTotals();
 		}
 
-		return $total;
+		return $this->totals['total']['value'];
+	}
+
+	public function getTotals($refresh = false)
+	{
+		if (!$this->totals || $refresh) {
+			$total_data = array();
+			$total      = 0;
+			$taxes      = $this->getTaxes();
+
+			$total_extensions = $this->System_Extension_Total->getActive();
+
+			foreach ($total_extensions as $code => $extension) {
+				if (method_exists($extension, 'getTotal')) {
+					$extension->getTotal($total_data, $total, $taxes);
+				}
+
+				if (isset($total_data[$code])) {
+					$total_data[$code] += $extension->getInfo();
+				}
+			}
+
+			uasort($total_data, function($a, $b) { return $a['sort_order'] > $b['sort_order']; });
+
+			$this->totals = $total_data;
+		}
+
+		return $this->totals;
 	}
 
 	public function getTotalPoints()
@@ -372,7 +354,7 @@ class Cart extends Library
 
 						foreach ($product_options as $product_option_id => $product_option_values) {
 							if (!empty($product_option_values)) {
-								foreach ($product_option_values as $product_option_value_id => $product_option_value) {
+								foreach ($product_option_values as $product_option_value_id) {
 									$product_option_value = $this->Model_Catalog_Product->getProductOptionValue($product_id, $product_option_id, $product_option_value_id);
 
 									if ($product_option_value) {
@@ -422,6 +404,15 @@ class Cart extends Library
 					$product['points']           = ((int)$product['points'] + $option_points) * $quantity;
 					$product['weight']           = ((float)$product['weight'] + $option_weight) * $quantity;
 
+					//Allow Extensions to modify product info in cart
+					$total_extensions = $this->System_Extension_Total->getActive();
+
+					foreach ($total_extensions as $extension) {
+						if (method_exists($extension, 'getProductTotal')) {
+							$extension->getProductTotal($product, $product_options);
+						}
+					}
+
 					$this->data[$key] = $product;
 				} else {
 					$this->remove($key);
@@ -463,7 +454,7 @@ class Cart extends Library
 		return true;
 	}
 
-	public function validateProduct($product_id, $quantity, $selected_options = array())
+	public function validateProduct($product_id, $quantity, &$selected_options = array())
 	{
 		$product_info = $this->Model_Catalog_Product->getProduct($product_id);
 
@@ -475,9 +466,16 @@ class Cart extends Library
 					if (empty($selected_options[$product_option['product_option_id']])) {
 						$this->error['add']['option'][$product_option['product_option_id']] = $this->_('error_required', $product_option['display_name']);
 						return false;
-					} elseif ($product_option['group_type'] == 'single' && count($options[$product_option['product_option_id']]) > 1) {
-						$this->error['add']['option'][$product_option['product_option_id']] = $this->_('error_selected_multi', $product_option['display_name']);
-						return false;
+					} elseif ($product_option['group_type'] === 'single') {
+						if (is_array($selected_options[$product_option['product_option_id']])) {
+							if (count($selected_options[$product_option['product_option_id']]) > 1) {
+								$this->error['add']['option'][$product_option['product_option_id']] = $this->_('error_selected_multi', $product_option['display_name']);
+								return false;
+							}
+						} else {
+							//Convert to array format to standardize
+							$selected_options[$product_option['product_option_id']] = array($selected_options[$product_option['product_option_id']]);
+						}
 					}
 				}
 			}
@@ -781,7 +779,7 @@ class Cart extends Library
 		return false;
 	}
 
-	public function getPaymentMethod($payment_method_id = null, $payment_address = null, $totals = null)
+	public function getPaymentMethod($payment_method_id = null, $payment_address = null)
 	{
 		if (!$payment_method_id) {
 			$payment_method_id = $this->getPaymentMethodId();
@@ -796,13 +794,9 @@ class Cart extends Library
 				$payment_address = $this->getPaymentAddress();
 			}
 
-			if (!$totals) {
-				$totals = $this->getTotals();
-			}
-
 			$classname = "Catalog_Model_Payment_" . $this->tool->formatClassname($payment_method_id);
 
-			$method = $this->$classname->getMethod($payment_address, $totals['total']);
+			$method = $this->$classname->getMethod($payment_address, $this->getTotal());
 
 			if ($method) {
 				return $method;

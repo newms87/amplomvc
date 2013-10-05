@@ -3,15 +3,7 @@ class Admin_Model_Setting_Extension extends Model
 {
 	public function getInstalled($type)
 	{
-		$extension_data = array();
-
-		$query = $this->query("SELECT * FROM " . DB_PREFIX . "extension WHERE `type` = '" . $this->escape($type) . "'");
-
-		foreach ($query->rows as $result) {
-			$extension_data[] = $result['code'];
-		}
-
-		return $extension_data;
+		return $this->queryColumn("SELECT code FROM " . DB_PREFIX . "extension WHERE `type` = '" . $this->escape($type) . "'");
 	}
 
 	public function install($type, $code)

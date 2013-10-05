@@ -104,10 +104,10 @@ class Order Extends Library
 		}
 
 		//Totals
-		$totals = $this->cart->getTotals();
+		$total = $this->cart->getTotal();
 
-		$data['total']  = $totals['total'];
-		$data['totals'] = $totals['data'];
+		$data['total']  = $total;
+		$data['totals'] = $this->cart->getTotals();
 
 		//Products
 		$products = $this->cart->getProducts();
@@ -137,7 +137,7 @@ class Order Extends Library
 
 			if ($affiliate_info) {
 				$data['affiliate_id'] = $affiliate_info['affiliate_id'];
-				$data['commission']   = ($totals['total'] / 100) * $affiliate_info['commission'];
+				$data['commission']   = ($total / 100) * $affiliate_info['commission'];
 			}
 		}
 

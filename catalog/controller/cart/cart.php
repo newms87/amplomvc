@@ -67,10 +67,10 @@ class Catalog_Controller_Cart_Cart extends Controller
 
 		$product_id       = isset($_POST['product_id']) ? $_POST['product_id'] : 0;
 		$quantity         = isset($_POST['quantity']) ? $_POST['quantity'] : 1;
-		$selected_options = !empty($_POST['selected_options']) ? $_POST['selected_options'] : array();
+		$product_options = !empty($_POST['product_options']) ? $_POST['product_options'] : array();
 		$load_page        = isset($_POST['load_page']);
 
-		$this->cart->add($product_id, $quantity, $selected_options);
+		$this->cart->add($product_id, $quantity, $product_options);
 
 		if ($load_page) {
 			$this->index();
@@ -82,11 +82,9 @@ class Catalog_Controller_Cart_Cart extends Controller
 
 				$redirect = urlencode($this->url->link('product/product', 'product_id=' . $product_id));
 
-				$json['success'] = sprintf($this->_('text_success'), $this->url->link('product/product', 'product_id=' . $product_id), $name, $this->url->link('cart/cart', "redirect=$redirect"));
+				$json['success'] = $this->_('text_success', $this->url->link('product/product', 'product_id=' . $product_id), $name, $this->url->link('cart/cart', "redirect=$redirect"));
 
-				$total_data = $this->cart->getTotals();
-
-				$json['total'] = sprintf($this->_('text_items'), $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($total_data['total']));
+				$json['total'] = $this->_('text_items', $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($this->cart->getTotal()));
 			} else {
 				$json['error'] = $this->cart->get_errors('add');
 			}

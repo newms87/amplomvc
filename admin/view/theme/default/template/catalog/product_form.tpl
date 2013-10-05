@@ -240,15 +240,18 @@
 						<tr>
 							<td>
 								<?= $entry_related; ?>
-								<input type="text" name="related" value=""/>
+								<div class="left">
+									<input type="text" id="related_autocomplete" value=""/>
+									<div class="help center">(<?= $text_autocomplete; ?>)</div>
+								</div>
 							</td>
 							<td>
-								<div id="product_related" class="scrollbox">
+								<div id="product_related_list" class="scrollbox">
 									<? foreach ($product_related as $row => $related) { ?>
 										<div class="product_related" data-row="<?= $row; ?>">
-											<span class="name"><?= $related['name']; ?></span>
-											<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"/>
 											<input type="hidden" name="product_related[]" value="<?= $related['product_id']; ?>"/>
+											<span class="related_name"><?= $related['name']; ?></span>
+											<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" class="delete" onclick="$(this).closest('.product_related').remove();"/>
 										</div>
 									<? } ?>
 								</div>
@@ -283,6 +286,7 @@
 								<input type="hidden" name="product_options[<?= $row; ?>][display_name]" value="<?= $product_option['display_name']; ?>"/>
 								<input type="hidden" name="product_options[<?= $row; ?>][option_id]" value="<?= $product_option['option_id']; ?>"/>
 								<input type="hidden" name="product_options[<?= $row; ?>][type]" value="<?= $product_option['type']; ?>"/>
+								<input type="hidden" name="product_options[<?= $row; ?>][group_type]" value="<?= $product_option['group_type']; ?>"/>
 
 								<div class="product_option_name"><?= $product_option['display_name']; ?></div>
 								<table class="form">
@@ -300,7 +304,7 @@
 											<div class='scrollbox unused_option_value_list clickable'>
 												<? foreach ($product_option['unused_option_values'] as $uov_row => $option_value) { ?>
 													<div class="unused_option_value" data-row="<?= $uov_row; ?>" data-id="<?= $option_value['option_value_id']; ?>" onclick="add_option_value($(this));">
-														<span class='uov_label'><?= $option_value['value']; ?></span>
+														<span class="uov_label"><?= $option_value['value']; ?></span>
 														<img src="<?= HTTP_THEME_IMAGE . "add.png"; ?>"/>
 														<script type="text/javascript">//<!--
 															$('#tab-option-<?= $row; ?> .unused_option_value[data-id=<?= $option_value['option_value_id']; ?>]').data('option_value', <?= json_encode($option_value); ?>);
@@ -368,39 +372,40 @@
 													<td class="center">
 														<input type="text" class="sort_order" name="<?= $product_option_value_row; ?>[sort_order]" value="<?= $product_option_value['sort_order']; ?>" size="5"/>
 													</td>
-												<td class="center">
-													<table class='list'>
-														<thead>
-														<tr>
-															<td class="center"><?= $entry_restriction_option_value; ?></td>
-															<td class="center"><?= $entry_restriction_quantity; ?></td>
-															<td></td>
-														</tr>
-														</thead>
-														<tbody class="product_option_value_restriction_list">
-														<? if (!empty($product_option_value['restrictions'])) { ?>
-															<? foreach ($product_option_value['restrictions'] as $r_row => $restriction) { ?>
-																<? $restriction_row = $product_option_value_row . "[restrictions][$r_row]"; ?>
-																<tr class="product_option_value_restriction" data-row="<?= $r_row; ?>">
-																	<td class="center">
-																		<? // $this->builder->set_config('product_option_value_id', 'name'); ?>
-																		<? // $this->builder->build('select', $all_product_option_values, $restriction_row."[restrict_option_value_id]", $restriction['restrict_option_value_id']); ?>
-																	</td>
-																	<td class="center"><input type="text" size='3' name="<?= $restriction_row; ?>[quantity]" value="<?= $restriction['quantity']; ?>"/></td>
-																	<td class="center"><a onclick="$(this).closest('tr').remove()"
-																	                      class="button_remove"></a></td>
-																</tr>
+													<td class="center">
+														<? /** ?>
+														<!--<table class='list'>
+															<thead>
+															<tr>
+																<td class="center"><?= $entry_restriction_option_value; ?></td>
+																<td class="center"><?= $entry_restriction_quantity; ?></td>
+																<td></td>
+															</tr>
+															</thead>
+															<tbody class="product_option_value_restriction_list">
+															<? if (!empty($product_option_value['restrictions'])) { ?>
+																<? foreach ($product_option_value['restrictions'] as $r_row => $restriction) { ?>
+																	<? $restriction_row = $product_option_value_row . "[restrictions][$r_row]"; ?>
+																	<tr class="product_option_value_restriction" data-row="<?= $r_row; ?>">
+																		<td class="center">
+																			<? // $this->builder->set_config('product_option_value_id', 'name'); ?>
+																			<? // $this->builder->build('select', $all_product_option_values, $restriction_row."[restrict_option_value_id]", $restriction['restrict_option_value_id']); ?>
+																		</td>
+																		<td class="center"><input type="text" size='3' name="<?= $restriction_row; ?>[quantity]" value="<?= $restriction['quantity']; ?>"/></td>
+																		<td class="center"><a onclick="$(this).closest('tr').remove()" class="button_remove"></a></td>
+																	</tr>
+																<? } ?>
 															<? } ?>
-														<? } ?>
-														</tbody>
-														<tfoot>
-														<tr>
-															<td colspan='2'></td>
-															<td class="center"><a onclick="return add_restriction_value($(this))"
-															                      class="button_add"></a></td>
-														</tr>
-														</tfoot>
-													</table>
+															</tbody>
+															<tfoot>
+															<tr>
+																<td colspan='2'></td>
+																<td class="center"><a onclick="return add_restriction_value($(this))" class="button_add"></a></td>
+															</tr>
+															</tfoot>
+														</table>
+														-->
+														*/ ?>
 													</td>
 													<td class="left">
 														<span onclick="remove_option_value($(this))" class="button"><?= $button_remove; ?></span>
@@ -635,6 +640,28 @@
 </div>
 
 <?= $this->builder->js('ckeditor'); ?>
+
+<script type="text/javascript">//<!--
+var related_list = $('#product_related_list');
+related_list.ac_template('related_list', {unique: 'product_id'});
+
+$('#related_autocomplete').autocomplete({
+	delay: 0,
+	source: function (request, response) {
+		filter = {name: request.term};
+		$.get("<?= $url_autocomplete; ?>", {filter: filter}, response, 'json');
+	},
+	select: function (event, data) {
+		if (data.item.value && (related_row = $.ac_template('related_list', 'add', data.item))) {
+			related_row.find('.related_name').html(data.item.name);
+		}
+
+		$(this).val('');
+
+		return false;
+	}
+});
+//--></script>
 
 <script type="text/javascript">//<!--
 $('.product_option_value_list [type=radio]').change(function(){

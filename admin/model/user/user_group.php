@@ -20,21 +20,20 @@ class Admin_Model_User_UserGroup extends Model
 		$this->delete('user_group', $user_group_id);
 	}
 
-	public function addPermission($user_id, $type, $page)
+	//TODO: Change permissions to $data[$type][$page] = 1 format
+	public function addPermission($user_group_id, $type, $page)
 	{
-		$user_query = $this->query("SELECT DISTINCT user_group_id FROM " . DB_PREFIX . "user WHERE user_id = '" . (int)$user_id . "'");
+		$permission = $this->queryVar("SELECT permission FROM " . DB_PREFIX . "user_group WHERE user_group_id = " . (int)$user_group_id);
 
-		if ($user_query->num_rows) {
-			$user_group_query = $this->query("SELECT * FROM " . DB_PREFIX . "user_group WHERE user_group_id = '" . (int)$user_query->row['user_group_id'] . "'");
+		$permission = $permission ? unserialize($permission) : array();
 
-			if ($user_group_query->num_rows) {
-				$data = unserialize($user_group_query->row['permission']);
+		$permission[$type][] = $page;
 
-				$data[$type][] = $page;
+		$user_group_data = array(
+			'permission' => serialize($permission),
+		);
 
-				$this->query("UPDATE " . DB_PREFIX . "user_group SET permission = '" . serialize($data) . "' WHERE user_group_id = '" . (int)$user_query->row['user_group_id'] . "'");
-			}
-		}
+		$this->update('user_group', $user_group_data, $user_group_id);
 	}
 
 	public function getUserGroup($user_group_id)

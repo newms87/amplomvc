@@ -8,33 +8,40 @@ class System_Model_Setting extends Model
 		$this->translate = $translate;
 	}
 
+	//TODO: Setup store_id = 0 for all stores including admin. Admin Settings will have group = 'admin'. group = 'config' will be front end.
 	public function getSetting($group, $store_id = null)
 	{
 		if (is_null($store_id)) {
 			$store_id = $this->config->isAdmin() ? 0 : $this->config->get('config_store_id');
 		}
 
-		$data = array();
+		$data = $this->cache->get("setting.$group.$store_id");
 
-		$settings = $this->queryRows("SELECT * FROM " . DB_PREFIX . "setting WHERE store_id = " . (int)$store_id . " AND `group` = '" . $this->db->escape($group) . "'");
+		if (is_null($data)) {
+			$data = array();
 
-		foreach ($settings as $setting) {
-			$value = $setting['serialized'] ? unserialize($setting['value']) : $setting['value'];
+			$settings = $this->queryRows("SELECT * FROM " . DB_PREFIX . "setting WHERE store_id IN (0, " . (int)$store_id . ") AND `group` = '" . $this->db->escape($group) . "' ORDER BY store_id ASC");
 
-			if ($this->translate && $setting['translate']) {
-				if (is_array($value)) {
-					$this->translation->translate_all($setting['key'], false, $value);
+			foreach ($settings as $setting) {
+				$value = $setting['serialized'] ? unserialize($setting['value']) : $setting['value'];
+
+				if ($this->translate && $setting['translate']) {
+					if (is_array($value)) {
+						$this->translation->translate_all($setting['key'], false, $value);
+					}
+					elseif(is_string($value)) {
+						$setting_value = array($setting['key'] => $value);
+
+						$this->translation->translate('setting', $setting['setting_id'], $setting_value);
+
+						$value = $setting_value[$setting['key']];
+					}
 				}
-				elseif(is_string($value)) {
-					$setting_value = array($setting['key'] => $value);
 
-					$this->translation->translate('setting', $setting['setting_id'], $setting_value);
-
-					$value = $setting_value[$setting['key']];
-				}
+				$data[$setting['key']] = $value;
 			}
 
-			$data[$setting['key']] = $value;
+			$this->cache->set("setting.$group.$store_id", $data);
 		}
 
 		return $data;
@@ -46,7 +53,7 @@ class System_Model_Setting extends Model
 			$store_id = $this->config->get('config_store_id');
 		}
 
-		$setting = $this->queryRow("SELECT * FROM " . DB_PREFIX . "setting WHERE `group` = '" . $this->db->escape($group) . "' AND `key` = '" . $this->db->escape($key) . "' AND store_id IN (0, " . (int)$store_id . ")");
+		$setting = $this->queryRow("SELECT * FROM " . DB_PREFIX . "setting WHERE `group` = '" . $this->db->escape($group) . "' AND `key` = '" . $this->db->escape($key) . "' AND store_id IN (0, " . (int)$store_id . ") ORDER BY store_id ASC");
 
 		if ($setting) {
 			$value = $setting['serialized'] ? unserialize($setting['value']) : $setting['value'];

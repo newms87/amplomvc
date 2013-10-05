@@ -29,7 +29,7 @@ $_['text_clear']         = 'Clear';
 $_['text_batch_action']  = 'Batch Action:';
 $_['text_autocomplete']  = 'autocomplete';
 $_['text_modify_filter'] = '+ Filter';
-$_['text_id']            = 'ID:';
+$_['text_id']            = '';
 
 //Data
 $_['data_statuses']       = $_['statuses'] = array(

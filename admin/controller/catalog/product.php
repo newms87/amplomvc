@@ -536,6 +536,18 @@ class Admin_Controller_Catalog_Product extends Controller
 			$this->data['product_tags'] = explode(',', $this->data['product_tags']);
 		}
 
+		//Format Data
+		foreach ($this->data['product_related'] as $key => &$related) {
+			$related_product = $this->Model_Catalog_Product->getProduct($related);
+
+			if (!$related_product) {
+				unset($this->data['product_related'][$key]);
+			} else {
+				$related = $related_product;
+			}
+		}
+		unset($related);
+
 		//Additional Data
 		$this->data['data_product_classes']   = $product_classes;
 		$this->data['data_manufacturers']     = array('' => $this->_('text_none')) + $this->Model_Catalog_Manufacturer->getManufacturers(array('sort' => 'name'));
@@ -654,6 +666,13 @@ class Admin_Controller_Catalog_Product extends Controller
 			'thumb'      => '',
 			'sort_order' => 0,
 		);
+
+		//Product Related Template Defaults
+		$this->data['product_related']['__ac_template__'] = array(
+			'product_id' => '',
+			'name' => '',
+		);
+
 
 		//Ajax Urls
 		$this->data['url_generate_url']           = $this->url->ajax('catalog/product/generate_url');

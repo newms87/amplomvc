@@ -755,7 +755,7 @@ class Admin_Model_Catalog_Product extends Model
 
 	public function getProductAttributes($product_id)
 	{
-		$attributes = $this->queryRows("SELECT pa.*, a.name FROM " . DB_PREFIX . "product_attribute pa LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id) WHERE pa.product_id = '" . (int)$product_id . "' GROUP BY pa.attribute_id");
+		$attributes = $this->queryRows("SELECT pa.*, a.name FROM " . DB_PREFIX . "product_attribute pa LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id) WHERE pa.product_id = '" . (int)$product_id . "' GROUP BY pa.attribute_id", 'attribute_id');
 
 		$this->translation->translate_all('attribute', 'attribute_id', $attributes);
 
@@ -769,7 +769,7 @@ class Admin_Model_Catalog_Product extends Model
 		$restrictions = $this->getProductOptionValueRestrictions($product_id);
 
 		foreach ($product_options as &$product_option) {
-			$product_option_values = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_option_value WHERE product_option_id = " . (int)$product_option['product_option_id'] . " ORDER BY sort_order ASC");
+			$product_option_values = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_option_value WHERE product_option_id = " . (int)$product_option['product_option_id'] . " ORDER BY sort_order ASC", 'product_option_id');
 
 			foreach ($product_option_values as &$product_option_value) {
 				$product_option_value['restrictions'] = array_search_key('product_option_value_id', $product_option_value['product_option_value_id'], $restrictions);

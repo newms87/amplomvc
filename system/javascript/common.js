@@ -13,6 +13,63 @@ function syncload(s) {
 }
 
 //Load jQuery Plugins On Call
+$.fn.codemirror = function (params) {
+	$.fn.codemirror = null;
+	$('head').append('<link rel="stylesheet" type="text/css" href="system/javascript/codemirror/lib/codemirror.css" />');
+	$('head').append('<link rel="stylesheet" type="text/css" href="system/javascript/codemirror/ui/css/codemirror-ui.css" />');
+	syncload('system/javascript/codemirror/lib/codemirror.js');
+
+	params = $.extend({},{
+		tabSize: 3,
+		indentWithTabs: true,
+		indentUnit: 3
+	}, params);
+
+
+	var depends = {};
+	var addons = {'edit': {'matchbrackets':1}, 'search': {'searchcursor':1}};
+	params.matchBrackets = true;
+
+	switch(params.mode) {
+		case 'html':
+		case 'htmlmixed':
+		case 'php':
+			params.mode = 'php';
+			depends = {'php':1, 'htmlmixed':1, 'css':1, 'clike':1, 'javascript':1,'xml':1};
+			break;
+
+		case 'javascript':
+		case 'js':
+			params.mode = 'javascript';
+			depends = {'javascript':1};
+
+		case 'css':
+			depends = {'css':1};
+			break;
+	}
+
+	for (d in depends) {
+		syncload('system/javascript/codemirror/mode/' + d + '/' + d + '.js');
+	}
+
+	for (a in addons) {
+		for (f in addons[a]) {
+			syncload('system/javascript/codemirror/addon/' + a + '/' + f + '.js');
+		}
+	}
+
+	//CodeMirrorUI
+	syncload('system/javascript/codemirror/ui/js/codemirror-ui.js');
+	uiOptions = {
+		searchMode: 'popup',
+		'path': 'system/javascript/codemirror/ui/js/'
+	}
+
+	this.each(function(i,e){
+		new CodeMirrorUI(e, uiOptions, params);
+	});
+}
+
 $.fn.nivoSlider = function (params) {
 	$.fn.nivoSlider = null;
 	syncload('system/javascript/jquery/nivo_slider/nivo-slider.js');
@@ -243,6 +300,7 @@ $.fn.fade_post = function (url, data, callback, dataType) {
 $.loading = function (params) {
 	if (params === 'stop') {
 		$('.loader').remove();
+		return;
 	}
 
 	params = $.extend({}, {

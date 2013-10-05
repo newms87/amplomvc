@@ -9,11 +9,11 @@ class Catalog_Controller_Block_Cart_Total extends Controller
 
 		$totals = $this->cart->getTotals();
 
-		foreach ($totals['data'] as &$total) {
+		foreach ($totals as &$total) {
 			$total['text'] = $this->currency->format($total['value']);
 		}
 
-		$this->data['totals'] = $totals['data'];
+		$this->data['totals'] = $totals;
 
 		$this->response->setOutput($this->render());
 	}

@@ -75,7 +75,7 @@ class DB
 	 * @return mixed - an array of associative arrays of field => value pairs, or false on failure
 	 *
 	 */
-	public function queryRows($sql)
+	public function queryRows($sql, $key_column = null)
 	{
 		$resource = $this->driver->query($sql);
 
@@ -87,6 +87,16 @@ class DB
 
 		if (!is_object($resource)) {
 			return array();
+		}
+
+		if ($key_column) {
+			$rows = array();
+
+			foreach ($resource->rows as $row) {
+				$rows[$row[$key_column]] = $row;
+			}
+
+			return $rows;
 		}
 
 		return $resource->rows;
