@@ -70,14 +70,14 @@
 											<tr>
 												<td><?= $entry_tax_class; ?></td>
 												<td>
-													<? $this->builder->set_config('tax_class_id', 'title'); ?>
+													<? $this->builder->setConfig('tax_class_id', 'title'); ?>
 													<?= $this->builder->build('select', $data_tax_classes, "flat_rates[$row][tax_class_id]", $rate['tax_class_id']); ?>
 												</td>
 											</tr>
 											<tr>
 												<td><?= $entry_geo_zone; ?></td>
 												<td>
-													<? $this->builder->set_config('geo_zone_id', 'name'); ?>
+													<? $this->builder->setConfig('geo_zone_id', 'name'); ?>
 													<?= $this->builder->build('select', $data_geo_zones, "flat_rates[$row][geo_zone_id]", $rate['geo_zone_id']); ?>
 												</td>
 											</tr>

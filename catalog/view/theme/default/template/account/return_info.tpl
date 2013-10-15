@@ -32,8 +32,8 @@
 			</thead>
 			<tbody>
 			<tr>
-				<td class="left"><?= $product['name']; ?></td>
-				<td class="left"><?= $product['model']; ?></td>
+				<td class="left"><?= $subscription['name']; ?></td>
+				<td class="left"><?= $subscription['model']; ?></td>
 				<td class="right"><?= $quantity; ?></td>
 			</tr>
 			</tbody>

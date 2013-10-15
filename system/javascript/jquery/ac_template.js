@@ -1,7 +1,7 @@
 $.ac_template = $.fn.ac_template = function (name, action, data) {
 	templates = $.fn.ac_template.templates;
 
-	function get_count(context) {
+	function get_count() {
 		var count = 0;
 
 		list.children('[data-row]').each(function (i, e) {
@@ -94,7 +94,7 @@ $.ac_template = $.fn.ac_template = function (name, action, data) {
 				if ($.inArray($(e).attr('type'), ['checkbox','radio']) >= 0) {
 					$(e).prop('checked', value);
 				} else {
-					$(e).val(value);
+					$(e).val(value).attr('value', value);
 				}
 
 				if ($(e).is('select') && !$(e).find(':selected').length) {

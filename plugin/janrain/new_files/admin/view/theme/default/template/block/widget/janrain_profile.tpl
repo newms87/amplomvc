@@ -15,7 +15,7 @@
 		<tbody id="module-row<?= $module_row; ?>">
 		<tr>
 			<td class="center">
-				<? $this->builder->set_config('layout_id', 'name'); ?>
+				<? $this->builder->setConfig('layout_id', 'name'); ?>
 				<?= $this->builder->build('select', $layouts, "janrain_module[$module_row][layout_id]", $module['layout_id']); ?>
 			</td>
 			<td class="center">

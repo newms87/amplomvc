@@ -172,13 +172,22 @@ class Customer extends Library
 		return $address;
 	}
 
-	public function getAddresses()
+	public function getAddresses($filter = array())
 	{
-		$filter = array(
-			'customer_ids' => array($this->customer_id),
-		);
+		$filter['customer_ids'] = array($this->customer_id);
 
-		return $this->System_Model_Address->getAddresses($filter);
+		$addresses = $this->System_Model_Address->getAddresses($filter);
+
+		$payment_address_id = (int)$this->getMeta('default_payment_address_id');
+		$shipping_address_id = (int)$this->getMeta('default_shipping_address_id');
+
+		foreach ($addresses as &$address) {
+			$address['default_payment'] = (int)$address['address_id'] === $payment_address_id;
+			$address['default_shipping'] = (int)$address['address_id'] === $shipping_address_id;
+		}
+		unset($address);
+
+		return $addresses;
 	}
 
 	public function getDefaultShippingAddress()
@@ -199,28 +208,47 @@ class Customer extends Library
 		return null;
 	}
 
-	public function getShippingAddresses()
+	public function getShippingAddresses($filter = array())
 	{
 		$allowed_zones = $this->cart->getAllowedShippingZones();
 
-		$filter = array(
-			'customer_ids' => array($this->customer_id),
+		$defaults = array(
 			'country_ids'  => array_column($allowed_zones, 'country_id'),
 			'zone_ids'     => array_column($allowed_zones, 'zone_id'),
 		);
 
-		$addresses = $this->System_Model_Address->getAddresses($filter);
+		$addresses = $this->getAddresses($filter + $defaults);
+
+		if (empty($filter) && !array_search_key('default_shipping', true, $addresses)) {
+			html_dump($addresses, 'addresses');
+			echo 'setting meta default shipping';
+			//Reference first Address in array, then break loop
+			foreach ($addresses as &$address) {
+				$address['default_shipping'] = true;
+				//$this->setMeta('default_shipping_address_id', $address['address_id']);
+				break;
+			}
+			unset($address);
+		}
 
 		return $addresses;
 	}
 
-	public function getPaymentAddresses()
+	public function getPaymentAddresses($filter = array())
 	{
-		$filter = array(
-			'customer_ids' => array($this->customer_id),
-		);
+		$addresses = $this->getAddresses($filter);
 
-		return $this->System_Model_Address->getAddresses($filter);
+		if (empty($filter) && !array_search_key('default_payment', true, $addresses)) {
+			//Reference first Address in array, then break loop
+			foreach ($addresses as &$address) {
+				$address['default_payment'] = true;
+				$this->setMeta('default_payment_address_id', $address['address_id']);
+				break;
+			}
+			unset($address);
+		}
+
+		return $addresses;
 	}
 
 	public function getOrders()

@@ -37,6 +37,11 @@ abstract class Controller
 		return $this->language->get($key);
 	}
 
+	public function getError()
+	{
+		return $this->error;
+	}
+
 	//TODO: move this to block plugin!
 	protected function getBlock($path, $args = array(), $settings = null)
 	{

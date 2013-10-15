@@ -5,20 +5,21 @@ $_['head_title'] = 'My Account Information';
 // Text
 $_['text_account']       = 'Account';
 $_['text_edit']          = 'Edit Information';
-$_['text_ship_to']       = 'Choose Your Default Shipping Address:';
 $_['text_password_help'] = 'Leave blank to keep the same.';
 $_['text_success']       = 'Your account information has been updated successfully!';
 
 // Entry
-$_['entry_firstname']  = 'First Name:';
-$_['entry_lastname']   = 'Last Name:';
-$_['entry_birthdate']  = 'Birthdate:';
-$_['entry_email']      = 'E-Mail:';
-$_['entry_telephone']  = 'Telephone:';
-$_['entry_fax']        = 'Fax:';
-$_['entry_password']   = 'Password:';
-$_['entry_confirm']    = 'Confirm Password:';
-$_['entry_newsletter'] = "Join our mailing list?";
+$_['entry_firstname']        = 'First Name:';
+$_['entry_lastname']         = 'Last Name:';
+$_['entry_birthdate']        = 'Birthdate:';
+$_['entry_email']            = 'E-Mail:';
+$_['entry_telephone']        = 'Telephone:';
+$_['entry_fax']              = 'Fax:';
+$_['entry_password']         = 'Password:';
+$_['entry_confirm']          = 'Confirm Password:';
+$_['entry_newsletter']       = "Join our mailing list?";
+$_['entry_shipping_address'] = 'Choose Your Default Shipping Address:';
+$_['entry_credit_card'] = "Default Credit Card:";
 
 //Section
 $_['section_info']       = 'Your Personal Details';

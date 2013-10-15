@@ -57,7 +57,7 @@
 						<tr>
 							<td class="required"> <?= $entry_layout; ?></td>
 							<td>
-								<? $this->builder->set_config('layout_id', 'name'); ?>
+								<? $this->builder->setConfig('layout_id', 'name'); ?>
 								<div
 									id="layout_select"><?= $this->builder->build('select', $data_layouts, "layout_id", $layout_id); ?></div>
 								<a id="create_layout" class="link_button"><?= $button_create_layout; ?></a>
@@ -66,7 +66,7 @@
 						</tr>
 						<tr>
 							<td class="required"> <?= $entry_store; ?></td>
-							<? $this->builder->set_config('store_id', 'name'); ?>
+							<? $this->builder->setConfig('store_id', 'name'); ?>
 							<td><?= $this->builder->build('multiselect', $data_stores, "stores", $stores); ?></td>
 						</tr>
 						<tr>

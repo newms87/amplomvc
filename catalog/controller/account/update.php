@@ -17,6 +17,10 @@ class Catalog_Controller_Account_Update extends Controller
 		if ($this->request->isPost() && $this->validate()) {
 			$this->customer->edit($_POST);
 
+			if (!empty($_POST['credit_card'])) {
+				$this->System_Extension_Payment->get('braintree')->update_card($_POST['credit_card'], array('default' => true));
+			}
+
 			$this->message->add('success', $this->_('text_success'));
 
 			$this->url->redirect($this->url->link('account/account'));
@@ -33,13 +37,13 @@ class Catalog_Controller_Account_Update extends Controller
 		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
 		$this->breadcrumb->add($this->_('text_edit'), $this->url->link('account/update'));
 
-
+		//Handle POST
 		if (!$this->request->isPost()) {
 			$customer_info             = $this->customer->info();
 			$customer_info['metadata'] = $this->customer->getMetaData();
 		}
 
-		$addresses = $this->customer->getAddresses();
+		$addresses = $this->customer->getShippingAddresses();
 
 		//Load Data or Defaults
 		$defaults = array(
@@ -72,10 +76,13 @@ class Catalog_Controller_Account_Update extends Controller
 
 		foreach ($addresses as &$address) {
 			$address['display'] = $this->address->format($address);
+			$address['remove'] = $this->url->link('account/update/remove_address', 'address_id=' . $address['address_id']);
 		}
 		unset($address);
 
 		$this->data['data_addresses'] = $addresses;
+
+		$this->data['card_select'] = $this->System_Extension_Payment->get('braintree')->card_select(true);
 
 		//Action Buttons
 		$this->data['save']        = $this->url->link('account/update');
@@ -97,6 +104,29 @@ class Catalog_Controller_Account_Update extends Controller
 
 		//Render
 		$this->response->setOutput($this->render());
+	}
+
+	public function remove_address()
+	{
+		if (!empty($_GET['address_id'])) {
+			if ($this->address->canDelete($_GET['address_id'])) {
+				$this->address->delete($_GET['address_id']);
+			}
+
+			$error = $this->address->getError();
+		}
+
+		if ($this->request->isAjax()) {
+			if ($error) {
+				$this->response->setOutput(json_encode(array('error' => $error)));
+			}
+		} else {
+			if ($error) {
+				$this->message->add('warning', $error);
+			}
+
+			$this->url->redirect($this->url->link('account/update'));
+		}
 	}
 
 	private function validate()

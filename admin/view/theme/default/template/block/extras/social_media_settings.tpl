@@ -10,8 +10,8 @@
 				<? foreach ($networks as $network) { ?>
 					<li class="social_network">
 					<span class="social_icon">
-						<?= $this->builder->set_builder_template('click_image_small'); ?>
-						<?= $this->builder->image_input("settings[networks][$network_id][icon]", $network['icon'], $network['thumb'], $no_image, $thumb_width, $thumb_height); ?>
+						<?= $this->builder->setBuilderTemplate('click_image_small'); ?>
+						<?= $this->builder->imageInput("settings[networks][$network_id][icon]", $network['icon'], $network['thumb'], $no_image, $thumb_width, $thumb_height); ?>
 					</span>
 					<span class="social_url">
 						<input type="text" name="settings[networks][<?= $network_id; ?>][href]" value="<?= $network['href']; ?>"/>
@@ -28,8 +28,8 @@
 <ul id="network_template" style="display:none">
 	<li class="social_network">
 		<span class="social_icon">
-			<?= $this->builder->set_builder_template('click_image_small'); ?>
-			<?= $this->builder->image_input("settings[networks][%net_id%][icon]", null, null, $no_image, $thumb_width, $thumb_height); ?>
+			<?= $this->builder->setBuilderTemplate('click_image_small'); ?>
+			<?= $this->builder->imageInput("settings[networks][%net_id%][icon]", null, null, $no_image, $thumb_width, $thumb_height); ?>
 		</span>
 		<span class="social_url">
 			<input type="text" name="settings[networks][%net_id%][href]" value="http://www.your-network.com"/>

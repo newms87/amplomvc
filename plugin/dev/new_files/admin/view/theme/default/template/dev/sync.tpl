@@ -15,7 +15,7 @@
 						<tr>
 							<td>
 								<label><?= $text_sync_site; ?></label>
-								<? $this->builder->set_config('domain', 'domain'); ?>
+								<? $this->builder->setConfig('domain', 'domain'); ?>
 								<?= $this->builder->build('select', $data_sites, 'domain', $domain); ?>
 							</td>
 						</tr>

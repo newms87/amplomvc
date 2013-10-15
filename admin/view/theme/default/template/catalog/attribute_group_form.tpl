@@ -41,7 +41,7 @@
 											</td>
 											<td class="center">
 												<div class="image">
-													<?= $this->builder->image_input("attributes[$row][image]", $attribute['image']); ?>
+													<?= $this->builder->imageInput("attributes[$row][image]", $attribute['image']); ?>
 												</div>
 											</td>
 											<td class="center">

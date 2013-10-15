@@ -130,7 +130,7 @@ class System_Model_Order extends Model
 
 		$history_data = array(
 			'order_id' => $order_id,
-			'order_status_id' => $order_status_id,
+			'order_status_id' => $data['order_status_id'],
 			'comment' => $this->_('text_order_updated', $this->user->getUserName()),
 			'notify' => 0,
 			'date_added' => $this->date->now(),

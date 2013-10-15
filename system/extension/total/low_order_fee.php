@@ -3,18 +3,13 @@ class System_Extension_Total_LowOrderFee extends Extension
 {
 	public function getTotal(&$total_data, &$total, &$taxes)
 	{
-		if ($this->cart->getSubTotal() && ($this->cart->getSubTotal() < $this->config->get('low_order_fee_total'))) {
-			$_ = $this->language->system_fetch('extension/total/low_order_fee');
+		$subtotal = isset($total_data['sub_total']['value']) ? (int)$total_data['sub_total']['value'] : 0;
 
-			$total_data[] = array(
-				'code'		=> 'low_order_fee',
-				'title'		=> $_['text_low_order_fee'],
-				'value'		=> $this->config->get('low_order_fee_fee'),
-				'sort_order' => $this->config->get('low_order_fee_sort_order')
-			);
+		if ($subtotal < $this->settings['total']) {
+			$total += $this->settings['fee'];
 
-			if ($this->config->get('low_order_fee_tax_class_id')) {
-				$tax_rates = $this->tax->getRates($this->config->get('low_order_fee_fee'), $this->config->get('low_order_fee_tax_class_id'));
+			if ($this->settings['tax_class_id']) {
+				$tax_rates = $this->tax->getRates($this->settings['fee'], $this->settings['tax_class_id']);
 
 				foreach ($tax_rates as $tax_rate) {
 					if (!isset($taxes[$tax_rate['tax_rate_id']])) {
@@ -25,7 +20,11 @@ class System_Extension_Total_LowOrderFee extends Extension
 				}
 			}
 
-			$total += $this->config->get('low_order_fee_fee');
+			$data = array(
+				'value' => $this->settings['fee'],
+			);
+
+			return $data;
 		}
 	}
 }

@@ -7,10 +7,10 @@ class System_Extension_Total_Shipping extends Extension
 			$shipping_method = $this->cart->getShippingMethod();
 
 			$total_data[] = array(
-				'code'		=> 'shipping',
-				'method_id' => $this->cart->getShippingMethodId(),
-				'title'		=> $shipping_method['title'],
-				'value'		=> $shipping_method['cost'],
+				'code'       => 'shipping',
+				'method_id'  => $this->cart->getShippingMethodId(),
+				'title'      => $shipping_method['title'],
+				'value'      => $shipping_method['cost'],
 				'sort_order' => $this->config->get('shipping_sort_order')
 			);
 

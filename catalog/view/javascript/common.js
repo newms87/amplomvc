@@ -85,15 +85,19 @@ function show_msg(type, html, append) {
 	}
 
 	var notify = $('#notification').show();
+	var box = $('.message_box.' + type);
 
-	notify.append('<div class="message_box ' + type + '" style="display: none;">' + html + '<span class="close"></span></div>');
-	$('.message_box').fadeIn('slow');
-	notify.appendTo($('body'));
-	update_floating_window();
-	$('.message_box .close').click(function () {
-		$(this).parent().remove();
-	});
-	$(window).scroll(update_floating_window);
+	if (!box.length) {
+		box = $('<div class="message_box ' + type + '" style="display: none;"><span class="close"></span></div>');
+		notify.append(box.fadeIn('slow'));
+		box.find('.close').click(function () { $(this).parent().remove(); });
+	}
+
+	box.prepend($('<div />').html(html));
+
+	if (!notify.parent().is('body')) {
+		notify.appendTo($('body'));
+	}
 }
 
 function show_msgs(data, type) {

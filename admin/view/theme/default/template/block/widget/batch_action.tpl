@@ -1,6 +1,6 @@
 <span class="batch_action_title"><?= $text_batch_action; ?></span>
 
-<? $this->builder->set_config('key', 'label'); ?>
+<? $this->builder->setConfig('key', 'label'); ?>
 <?= $this->builder->build('select', $actions, 'batch_action'); ?>
 
 <? $ckeditor = false; ?>
@@ -24,7 +24,7 @@
 				<? break;
 			case 'select':
 				?>
-				<? $this->builder->set_config($action['build_config'][0], $action['build_config'][1]); ?>
+				<? $this->builder->setConfig($action['build_config'][0], $action['build_config'][1]); ?>
 				<?= $this->builder->build('select', $action['build_data'], "action_value", $action['default']); ?>
 				<? break;
 

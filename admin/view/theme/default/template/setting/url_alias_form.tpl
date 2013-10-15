@@ -31,7 +31,7 @@
 							<tr>
 								<td><?= $entry_store; ?></td>
 								<td>
-									<? $this->builder->set_config('store_id', 'name'); ?>
+									<? $this->builder->setConfig('store_id', 'name'); ?>
 									<?= $this->builder->build('select', $data_stores, 'store_id', $store_id); ?>
 								</td>
 							</tr>

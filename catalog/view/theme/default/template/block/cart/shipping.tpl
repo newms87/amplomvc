@@ -4,7 +4,7 @@
 		<tr>
 			<td class="required"> <?= $entry_country; ?></td>
 			<td>
-				<? $this->builder->set_config('country_id', 'name'); ?>
+				<? $this->builder->setConfig('country_id', 'name'); ?>
 				<?= $this->builder->build('select', $countries, "country_id", $country_id, array('class' => 'country_select')); ?>
 			</td>
 		</tr>

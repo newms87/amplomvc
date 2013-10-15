@@ -85,7 +85,7 @@
 					case 'select':
 					case 'multiselect':
 						if (isset($column['build_config'])) {
-							$this->builder->set_config($column['build_config']);
+							$this->builder->setConfig($column['build_config']);
 						}
 						$blank_option = $column['filter_blank'] ? array('' => '') : array();
 						echo $this->builder->build('select', $blank_option + $column['build_data'], "filter[$slug]", $column['filter_value']);

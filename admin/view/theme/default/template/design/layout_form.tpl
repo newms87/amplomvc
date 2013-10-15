@@ -32,7 +32,7 @@
 						<? foreach ($routes as $row => $route) { ?>
 							<tr class="route" data-row="<?= $row; ?>">
 								<td class="left">
-									<? $this->builder->set_config('store_id', 'name'); ?>
+									<? $this->builder->setConfig('store_id', 'name'); ?>
 									<?= $this->builder->build('select', $data_stores, "routes[$row][store_id]", $route['store_id']); ?>
 								</td>
 								<td class="left"><input type="text" name="routes[<?= $row; ?>][route]" value="<?= $route['route']; ?>"/></td>

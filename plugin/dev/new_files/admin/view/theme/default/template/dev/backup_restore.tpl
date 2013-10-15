@@ -17,6 +17,8 @@
 								<label><?= $entry_backup; ?></label>
 								<input type="submit" class="button" name="site_backup" value="<?= $button_backup; ?>"/>
 								<br/><br/>
+								<input type="submit" class="button" name="sync_file" value="<?= $button_sync_file; ?>" />
+								<br/><br/>
 								<input type="submit" id="overwrite_default_db" class="button" name="default_installation" value="<?= $button_default_installation; ?>"/>
 							</td>
 							<td>
@@ -28,8 +30,7 @@
 							<td>
 								<? foreach ($data_backup_files as $file) { ?>
 									<span class="radio_button">
-									<input type="radio" name="backup_file" value="<?= $file['path']; ?>"
-									       id="radio_button_<?= md5($file['path']); ?>"/>
+									<input type="radio" name="backup_file" value="<?= $file['path']; ?>" id="radio_button_<?= md5($file['path']); ?>"/>
 									<label for="radio_button_<?= md5($file['path']); ?>">
 										<span class="date"><?= $file['display_date']; ?></span> -
 										<span class="name"><?= $file['name']; ?></span> -
@@ -54,6 +55,8 @@
 							<td>
 								<label><?= $entry_execute_file; ?></label>
 								<input type="submit" class="button" name="execute_file" value="<?= $button_execute_file; ?>"/>
+								<br/><br/>
+								<input type="submit" class="button" name="execute_sync_file" value="<?= $button_execute_sync_file; ?>"/>
 							</td>
 							<td>
 								<input type="file" name="filename" value=""/>
@@ -65,10 +68,10 @@
 		</div>
 	</div>
 
-	<script type="text/javascript">//<!--
-		$('#overwrite_default_db').click(function () {
-			return confirm("This will overwrite the Default Database Installation for Amplo Cart! Are you sure you want to continue?");
-		});
+<script type="text/javascript">//<!--
+	$('#overwrite_default_db').click(function () {
+		return confirm("This will overwrite the Default Database Installation for Amplo Cart! Are you sure you want to continue?");
+	});
 //--></script>
 
 <?= $footer; ?>

@@ -113,7 +113,7 @@
 						<? } ?>
 						<?= $this->document->renderLinks($links_account); ?>
 					<? } else { ?>
-						<? $this->builder->set_config("href", "display_name"); ?>
+						<? $this->builder->setConfig("href", "display_name"); ?>
 						<?= $this->builder->build('select', $links_account, 'account_menu', '', array('onchange' => "window.location = $(this).val()")); ?>
 					<? } ?>
 				</div>
@@ -146,7 +146,7 @@
 		<div id="notification"></div>
 		<div id="content_holder">
 
-			<?= $this->builder->display_messages($messages); ?>
+			<?= $this->builder->displayMessages($messages); ?>
 
 			<script type="text/javascript">//<!--
 				$('#links_primary .top_menu > li').hover(top_menu_hoverin, top_menu_hoverout);

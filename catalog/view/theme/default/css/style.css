@@ -1078,6 +1078,18 @@ a.button:active, input.button:active {
 	animation-delay: .9s;
 }
 
+@-webkit-keyframes circleleft {
+	0% {
+		-webkit-transform: scale(.3);
+		left: 0;
+	}
+	50% {
+		-webkit-transform: scale(1);
+		top: 500%;
+		left: 100%;
+	}
+}
+
 @-webkit-keyframes sidecircle {
 	0% {
 		-webkit-transform: scale(.3);
@@ -1085,6 +1097,18 @@ a.button:active, input.button:active {
 	}
 	50% {
 		-webkit-transform: scale(1);
+		top: 500%;
+		left: 100%;
+	}
+}
+
+@keyframes sidecircle {
+	0% {
+		transform: scale(.3);
+		left: 0;
+	}
+	50% {
+		transform: scale(1);
 		top: 500%;
 		left: 100%;
 	}
@@ -2418,8 +2442,8 @@ ul.return_success_list li .label {
 	font-weight: bold;
 }
 
-.cart-module > div {
-	display: none;
+.cart-info a.remove {
+	background: url(../image/remove.png);
 }
 
 .cart-total {
@@ -3691,6 +3715,9 @@ form .set_default_address input[type="radio"] {
 }
 
 /* Account Page */
+#address_list{
+	position:relative;
+}
 #address_list .address {
 	position: relative;
 	background: #FFFF7F;

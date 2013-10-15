@@ -44,9 +44,10 @@
 							<? if (!empty($product['selected_options'])) { ?>
 								<div class="product_option_description">
 									<? foreach ($product['selected_options'] as $selected_option) { ?>
-										<div
-											class='cart_product_option_value'><?= $text_option_bullet; ?><?= $selected_option['product_option']['display_name']; ?>
-											: <?= $selected_option['value']; ?></div>
+										<div class='cart_product_option_value'>
+											<?= $text_option_bullet; ?><?= $selected_option['product_option']['display_name']; ?>
+											: <?= $selected_option['value']; ?>
+										</div>
 									<? } ?>
 								</div>
 							<? } ?>
@@ -57,15 +58,10 @@
 						</td>
 						<td class="model"><?= $product['model']; ?></td>
 						<td class="quantity">
-							<input type="text" name="quantity[<?= $product['key']; ?>]" value="<?= $product['quantity']; ?>"
-							       size="1"/>
-							<input class="block_cart_update" onclick="javascript: void(0)" type="image" name='action' value='update' src="<?= HTTP_THEME_IMAGE . 'update.png'; ?>" alt="<?= $button_update; ?>"
-							       title="<?= $button_update; ?>"/>
+							<input type="text" name="quantity[<?= $product['key']; ?>]" value="<?= $product['quantity']; ?>" size="1"/>
+							<input class="block_cart_update" onclick="javascript: void(0)" type="image" name='action' value='update' src="<?= HTTP_THEME_IMAGE . 'update.png'; ?>" alt="<?= $button_update; ?>" title="<?= $button_update; ?>"/>
 							<label><?= $text_update_cart; ?></label>
-							<a class="block_cart_remove" onclick="return false;" href="<?= $product['remove']; ?>">
-								<img src="<?= HTTP_THEME_IMAGE . 'remove.png'; ?>" alt="<?= $button_remove; ?>"
-								     title="<?= $button_remove; ?>"/>
-							</a>
+							<a class="button remove" onclick="return false;" href="<?= $product['remove']; ?>"></a>
 						</td>
 
 						<? if (!empty($show_return_policy)) { ?>

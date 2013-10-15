@@ -44,15 +44,15 @@
 							<tr>
 								<td><?= $entry_store; ?></td>
 								<td>
-									<? $this->builder->set_config('store_id', 'name'); ?>
+									<? $this->builder->setConfig('store_id', 'name'); ?>
 									<?= $this->builder->build('multiselect', $data_stores, "stores", $stores); ?>
 								</td>
 							</tr>
 							<tr>
 								<td><?= $entry_image; ?></td>
 								<td>
-									<?= $this->builder->set_builder_template('click_image'); ?>
-									<?= $this->builder->image_input("image", $image); ?>
+									<?= $this->builder->setBuilderTemplate('click_image'); ?>
+									<?= $this->builder->imageInput("image", $image); ?>
 								</td>
 							</tr>
 							<tr>

@@ -31,7 +31,7 @@
 					<div class="order_info order_id">
 						<label><?= $entry_order_id; ?></label>
 						<? if (count($customer_orders) > 1) { ?>
-							<? $this->builder->set_config('order_id', 'display'); ?>
+							<? $this->builder->setConfig('order_id', 'display'); ?>
 							<?= $this->builder->build('select', $customer_orders, 'order_id', $order_id); ?>
 						<? } elseif ($order_id) { ?>
 							<span class="value"><?= $order_id; ?></span>
@@ -100,7 +100,7 @@
 									<? } ?>
 								</td>
 								<td class="reason">
-									<? $this->builder->set_config(false, 'title'); ?>
+									<? $this->builder->setConfig(false, 'title'); ?>
 									<?= $this->builder->build('select', $data_return_reasons, "return_products[$product_id][return_reason_id]", $product['return_reason_id']); ?>
 								</td>
 								<td class="comment"><textarea name="return_products[<?= $product_id; ?>][comment]"><?= $product['comment']; ?></textarea>

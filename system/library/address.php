@@ -1,6 +1,13 @@
 <?php
 class Address extends Library
 {
+	private $error = array();
+
+	public function getError()
+	{
+		return $this->error;
+	}
+
 	public function add($address)
 	{
 		if (!isset($address['customer_id']) && $this->customer->isLogged()) {
@@ -22,6 +29,21 @@ class Address extends Library
 	public function delete($address_id)
 	{
 		$this->System_Model_Address->deleteAddress($address_id);
+	}
+
+	public function canDelete($address_id)
+	{
+		$this->language->system('address');
+
+		if ($this->System_Model_Address->getTotalAddresses() == 1) {
+			$this->error['warning'] = $this->_('error_delete');
+		}
+
+		if ((int)$this->customer->getMeta('default_shipping_address_id') === (int)$_GET['address_id']) {
+			$this->error['warning'] = $this->_('error_default');
+		}
+
+		return $this->error ? false : true;
 	}
 
 	public function inGeoZone($address, $geo_zone_id)

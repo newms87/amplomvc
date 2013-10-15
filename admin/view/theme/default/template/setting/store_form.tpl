@@ -64,7 +64,7 @@
 			<tr>
 				<td><?= $entry_theme; ?></td>
 				<td>
-					<? $this->builder->set_config('name', 'name'); ?>
+					<? $this->builder->setConfig('name', 'name'); ?>
 					<?= $this->builder->build('select', $themes, 'config_theme', $config_theme); ?>
 				</td>
 			</tr>
@@ -92,7 +92,7 @@
 			<tr>
 				<td><?= $entry_country; ?></td>
 				<td>
-					<?= $this->builder->set_config('country_id', 'name'); ?>
+					<?= $this->builder->setConfig('country_id', 'name'); ?>
 					<?= $this->builder->build('select', $countries, "config_country_id", $config_country_id, array('class' => "country_select")); ?>
 				</td>
 			</tr>
@@ -136,7 +136,7 @@
 			<tr>
 				<td><?= $entry_allowed_shipping_zone; ?></td>
 				<td>
-					<? $this->builder->set_config('geo_zone_id', 'name'); ?>
+					<? $this->builder->setConfig('geo_zone_id', 'name'); ?>
 					<?= $this->builder->build('select', $geo_zones, "config_allowed_shipping_zone", (int)$config_allowed_shipping_zone); ?>
 				</td>
 			</tr>
@@ -266,7 +266,7 @@
 			<tr>
 				<td><?= $entry_order_complete_status; ?></td>
 				<td>
-					<?= $this->builder->set_config(false, 'title'); ?>
+					<?= $this->builder->setConfig(false, 'title'); ?>
 					<?= $this->builder->build('select', $data_order_statuses, 'config_order_complete_status_id', $config_order_complete_status_id); ?>
 				</td>
 			</tr>
@@ -291,15 +291,15 @@
 			<tr>
 				<td><?= $entry_logo; ?></td>
 				<td>
-					<?= $this->builder->set_builder_template('click_image'); ?>
-					<?= $this->builder->image_input("config_logo", $config_logo); ?>
+					<?= $this->builder->setBuilderTemplate('click_image'); ?>
+					<?= $this->builder->imageInput("config_logo", $config_logo); ?>
 				</td>
 			</tr>
 			<tr>
 				<td><?= $entry_icon; ?></td>
 				<td>
-					<?= $this->builder->set_builder_template('click_image'); ?>
-					<?= $this->builder->image_input("config_icon", $config_icon); ?>
+					<?= $this->builder->setBuilderTemplate('click_image'); ?>
+					<?= $this->builder->imageInput("config_icon", $config_icon); ?>
 				</td>
 			</tr>
 			<tr>

@@ -19,7 +19,7 @@
 			<tr>
 				<td class="left"><?= $entry_store; ?></td>
 				<td class="left">
-					<? $this->builder->set_config('store_id', 'name'); ?>
+					<? $this->builder->setConfig('store_id', 'name'); ?>
 					<?= $this->builder->build('select', $data_stores, "store_id", $store_id); ?>
 				</td>
 			</tr>
@@ -93,7 +93,7 @@
 			<tr>
 				<td class="required"> <?= $entry_country; ?></td>
 				<td>
-					<?= $this->builder->set_config('country_id', 'name'); ?>
+					<?= $this->builder->setConfig('country_id', 'name'); ?>
 					<?= $this->builder->build('select', $countries, "payment_country_id", $payment_country_id, array('class' => "country_select")); ?>
 				</td>
 			</tr>
@@ -145,7 +145,7 @@
 			<tr>
 				<td class="required"> <?= $entry_country; ?></td>
 				<td>
-					<?= $this->builder->set_config('country_id', 'name'); ?>
+					<?= $this->builder->setConfig('country_id', 'name'); ?>
 					<?= $this->builder->build('select', $countries, "shipping_country_id", $shipping_country_id, array('class' => "country_select")); ?>
 				</td>
 			</tr>

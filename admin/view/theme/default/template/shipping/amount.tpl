@@ -14,14 +14,14 @@
 					<tr>
 						<td><?= $entry_tax_class; ?></td>
 						<td>
-							<? $this->builder->set_config('tax_class_id', 'title'); ?>
+							<? $this->builder->setConfig('tax_class_id', 'title'); ?>
 							<?= $this->builder->build('select', $tax_classes, 'amount_tax_class_id', $amount_tax_class_id); ?>
 						</td>
 					</tr>
 					<tr>
 						<td><?= $entry_geo_zone; ?></td>
 						<td>
-							<? $this->builder->set_config('geo_zone_id', 'name'); ?>
+							<? $this->builder->setConfig('geo_zone_id', 'name'); ?>
 							<?= $this->builder->build('select', $geo_zones, 'amount_geo_zone_id', $amount_geo_zone_id); ?>
 						</td>
 					</tr>
@@ -99,7 +99,7 @@
 									<tbody id="rule-row<?= $rule_row; ?>">
 									<tr>
 										<td class="left">
-											<? $this->builder->set_config('country_id', 'name'); ?>
+											<? $this->builder->setConfig('country_id', 'name'); ?>
 											<?= $this->builder->build('select', $countries, "amount_zonerule[$rule_row][country_id]", $rule['country_id'], array('class' => 'country_select')); ?>
 											<select id="zone_id-<?= $rule_row; ?>" name="amount_zonerule[<?= $rule_row; ?>][zone_id]" class="zone_select"
 											        zone_id="<?= $rule['zone_id']; ?>"></select>
@@ -166,7 +166,7 @@
 	function addZoneRule() {
 		html = '<tbody id="rule-row%rule_row%">';
 		html += '	<tr>';
-		<? $this->builder->set_config('country_id','name');?>
+		<? $this->builder->setConfig('country_id','name');?>
 		html += '		<td class="left">' + "<?= $this->builder->build('select',$countries,"amount_zonerule[%rule_row%][country_id]",'',array('class'=>'country_select'),true); ?>"
 			+ '<select id="zone_id-%rule_row%" name="amount_zonerule[%rule_row%][zone_id]" class="zone_select"></select></td>';
 		html += '		<td class="left">' + "<?= $this->builder->build('select',$rule_mods,"amount_zonerule[%rule_row%][mod]"); ?>" + '</td>';

@@ -764,12 +764,12 @@ class Admin_Model_Catalog_Product extends Model
 
 	public function getProductOptions($product_id)
 	{
-		$product_options = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_option WHERE product_id = '" . (int)$product_id . "' ORDER BY sort_order ASC");
+		$product_options = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_option WHERE product_id = '" . (int)$product_id . "' ORDER BY sort_order ASC", 'product_option_id');
 
 		$restrictions = $this->getProductOptionValueRestrictions($product_id);
 
 		foreach ($product_options as &$product_option) {
-			$product_option_values = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_option_value WHERE product_option_id = " . (int)$product_option['product_option_id'] . " ORDER BY sort_order ASC", 'product_option_id');
+			$product_option_values = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_option_value WHERE product_option_id = " . (int)$product_option['product_option_id'] . " ORDER BY sort_order ASC", 'product_option_value_id');
 
 			foreach ($product_option_values as &$product_option_value) {
 				$product_option_value['restrictions'] = array_search_key('product_option_value_id', $product_option_value['product_option_value_id'], $restrictions);

@@ -15,6 +15,10 @@
 			<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
 				<div id="extension_settings">
 					<table class="form">
+						<tr>
+							<td><?= $entry_title; ?></td>
+							<td><input type="text" name="title" value="<?= $title; ?>" /></td>
+						</tr>
 						<? if (!empty($extend_settings)) { ?>
 							<tr>
 								<td colspan="2"><?= $extend_settings; ?></td>

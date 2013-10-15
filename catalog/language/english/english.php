@@ -68,3 +68,6 @@ $_['button_quote']          = 'Get Quotes';
 $_['button_close']          = 'Close';
 
 $_['final_sale_explanation'] = "A Product Marked as <span class='final_sale'></span> cannot be returned. Read our <a href=\"%s\" onclick=\"return colorbox($(this));\">Return Policy</a> for details.";
+
+//Error
+$_['error_javascript_required'] = "You must enable javascript in your browser in order to continue";

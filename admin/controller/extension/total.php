@@ -14,10 +14,6 @@ class Admin_Controller_Extension_Total extends Controller
 				$this->url->redirect($this->url->link('extension/total'));
 			}
 
-			$this->language->system('extension/total/' . $_GET['code']);
-
-			$this->loadExtensionController();
-
 			$this->getForm();
 		} else {
 			$this->getList();
@@ -56,9 +52,9 @@ class Admin_Controller_Extension_Total extends Controller
 		//The Table Columns
 		$columns = array();
 
-		$columns['name'] = array(
+		$columns['title'] = array(
 			'type'         => 'text',
-			'display_name' => $this->_('column_name'),
+			'display_name' => $this->_('column_title'),
 			'filter'       => true,
 			'sortable'     => true,
 		);
@@ -90,8 +86,8 @@ class Admin_Controller_Extension_Total extends Controller
 		$filter = !empty($_GET['filter']) ? $_GET['filter'] : array();
 
 		//Table Row Data
-		$extension_total = $this->System_Extension_Total->getTotalExtensions($filter);
-		$extensions      = $this->System_Extension_Total->getFilteredExtensions($sort + $filter);
+		$extension_total = $this->System_Extension_Total->getTotal($filter);
+		$extensions      = $this->System_Extension_Total->getFiltered($sort + $filter);
 
 		foreach ($extensions as &$extension) {
 			if ($extension['installed']) {
@@ -100,7 +96,7 @@ class Admin_Controller_Extension_Total extends Controller
 						'text' => $this->_('text_edit'),
 						'href' => $this->url->link('extension/total/edit', 'code=' . $extension['code'])
 					),
-					'settings'      => array(
+					'settings'  => array(
 						'text' => $this->_('text_settings'),
 						'href' => $this->url->link('extension/total', 'code=' . $extension['code'])
 					),
@@ -158,6 +154,8 @@ class Admin_Controller_Extension_Total extends Controller
 	{
 		$code = $_GET['code'];
 
+		$this->loadExtensionController($code);
+
 		if ($this->request->isPost() && $this->validate()) {
 			//If Extension needs to customize the way data is stored
 			if (method_exists($this->extension_controller, 'saveSettings')) {
@@ -166,13 +164,20 @@ class Admin_Controller_Extension_Total extends Controller
 
 			$this->System_Extension_Total->updateExtension($code, $_POST);
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', $this->_('text_success', $code));
 
 			$this->url->redirect($this->url->link('extension/total'));
 		}
 
+		if (!$this->request->isPost()) {
+			$extension = $this->System_Extension_Total->get($code)->getInfo();
+		} else {
+			$extension = $_POST;
+		}
+
 		//Page Head
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle($extension['title']);
+		$this->language->set('head_title', $extension['title']);
 
 		//Template and Language
 		$this->template->load('extension/total');
@@ -181,27 +186,16 @@ class Admin_Controller_Extension_Total extends Controller
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_extension_list'), $this->url->link('extension/total'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('extension/total', 'name=' . $code));
-
-		if (!$this->request->isPost()) {
-			$extension = $this->System_Extension_Total->get($code);
-		}
+		$this->breadcrumb->add($extension['title'], $this->url->link('extension/total', 'code=' . $code));
 
 		$defaults = array(
+			'title'      => '',
 			'settings'   => array(),
 			'sort_order' => 0,
 			'status'     => 1,
 		);
 
-		foreach ($defaults as $key => $default) {
-			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
-			} elseif (isset($extension[$key])) {
-				$this->data[$key] = $extension[$key];
-			} else {
-				$this->data[$key] = $default;
-			}
-		}
+		$this->data += $extension + $defaults;
 
 		//Get additional extension settings and profile data (this is the plugin part)
 		if (method_exists($this->extension_controller, 'settings')) {
@@ -210,7 +204,7 @@ class Admin_Controller_Extension_Total extends Controller
 		}
 
 		//Action Buttons
-		$this->data['save'] = $this->url->link('extension/total', 'code=' . $code);
+		$this->data['save']   = $this->url->link('extension/total', 'code=' . $code);
 		$this->data['cancel'] = $this->url->link('extension/total');
 
 		//Dependencies
@@ -250,21 +244,21 @@ class Admin_Controller_Extension_Total extends Controller
 		}
 
 		//Load extension
-		$extension = $this->System_Extension_Total->get($code);
+		$extension = $this->System_Extension_Total->get($code)->getInfo();
 
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('text_extension_list'), $this->url->link('extension/total'));
-		$this->breadcrumb->add($extension['name'], $this->url->link('extension/total', 'name=' . $code));
+		$this->breadcrumb->add($extension['title'], $this->url->link('extension/total/edit', 'code=' . $code));
 
 		//Load Contents
 		$this->data['contents'] = file_get_contents($file);
 
 		//Additional Data
-		$this->language->set('head_title', $this->_('text_editing', $extension['name'], $file));
+		$this->language->set('head_title', $this->_('text_editing', $extension['title'], $file));
 
 		//Action Buttons
-		$this->data['save'] = $this->url->link('extension/total/edit', 'code=' . $code);
+		$this->data['save']   = $this->url->link('extension/total/edit', 'code=' . $code);
 		$this->data['cancel'] = $this->url->link('extension/total');
 
 		//Template
@@ -280,15 +274,15 @@ class Admin_Controller_Extension_Total extends Controller
 		$this->response->setOutput($this->render());
 	}
 
-	private function loadExtensionController()
+	private function loadExtensionController($code)
 	{
-		if ($this->extension_controller || empty($_GET['code'])) {
-			return;
+		if (!$this->extension_controller && !empty($code)) {
+			$action = new Action($this->registry, 'extension/total/' . $code);
+
+			if ($action->isValid()) {
+				$this->extension_controller = $action->getController();
+			}
 		}
-
-		$action = new Action($this->registry, 'extension/ext_total/' . $_GET['code']);
-
-		$this->extension_controller = $action->getController();
 	}
 
 	private function validate()
@@ -298,7 +292,9 @@ class Admin_Controller_Extension_Total extends Controller
 		}
 
 		if (method_exists($this->extension_controller, 'validate')) {
-			$this->error += $this->extension_controller->validate();
+			if (!$this->extension_controller->validate()) {
+				return false;
+			}
 		}
 
 		return $this->error ? false : true;
@@ -318,6 +314,17 @@ class Admin_Controller_Extension_Total extends Controller
 		$this->language->load('extension/total');
 
 		if ($this->System_Extension_Total->install($_GET['code'])) {
+			$this->loadExtensionController($_GET['code']);
+
+			$settings = array();
+
+			//Save Default Settings
+			if (method_exists($this->extension_controller, 'settings')) {
+				$this->extension_controller->settings($settings);
+			}
+
+			$this->System_Extension_Total->updateExtension($_GET['code'], array('settings' => $settings));
+
 			$this->message->add('success', $this->_('text_install_success', $_GET['code']));
 		}
 

@@ -36,6 +36,19 @@ class Mod extends Library
 		$this->error[] = $msg;
 	}
 
+	public function isRegistered($file)
+	{
+		foreach ($this->mod_registry as $source => $mods) {
+			foreach ($mods as $destination => $mod_files) {
+				foreach ($mod_files as $mod_file => $value) {
+					if ($mod_file === $file) return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	public function getSourceDestination($source)
 	{
 		return str_replace(SITE_DIR, DIR_MOD_FILES, $source);

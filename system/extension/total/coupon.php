@@ -3,15 +3,15 @@ class System_Extension_Total_Coupon extends Extension
 {
 	public function getTotal(&$total_data, &$total, &$taxes)
 	{
-		$_ = $this->language->system_fetch('extension/total/coupon');
+		$this->language->system('extension/total/coupon');
 
-		$this->Model_Cart_Coupon->loadAutoCoupons();
+		$this->System_Model_Coupon->loadAutoCoupons();
 
 		$coupon_list = array();
 
 		if (isset($this->session->data['coupons'])) {
 			foreach ($this->session->data['coupons'] as $code=>$coupon) {
-				$coupon_info = $this->Model_Cart_Coupon->getCoupon($code);
+				$coupon_info = $this->System_Model_Coupon->getCoupon($code);
 				if ($coupon_info) {
 					$coupon_list[$code] = $coupon_info;
 				}
@@ -103,13 +103,13 @@ class System_Extension_Total_Coupon extends Extension
 					}
 				}
 
-				$total_data[] = array(
-					'code'		=> 'coupon',
+				$data = array(
 					'method_id' => $coupon_info['code'],
-					'title'		=> sprintf($_['text_coupon'], $coupon_info['code']),
+					'title'		=> $this->_('text_coupon_title', $coupon_info['code']),
 					'value'		=> -$discount_total,
-					'sort_order' => $this->config->get('coupon_sort_order')
 				);
+
+				$total_data['code__' . $coupon_info['code']] = $data + $this->info();
 
 				$total -= $discount_total;
 			}
@@ -120,10 +120,11 @@ class System_Extension_Total_Coupon extends Extension
 	public function confirm($order_info, $order_total)
 	{
 		if ($order_total['method_id']) {
-			$coupon_info = $this->Model_Cart_Coupon->getCoupon($order_total['method_id']);
+			//TODO: This should be moved to $this->cart->getCoupon()
+			$coupon_info = $this->System_Model_Coupon->getCoupon($order_total['method_id']);
 
 			if ($coupon_info) {
-				$this->Model_Cart_Coupon->redeem($coupon_info['coupon_id'], $order_info['order_id'], $order_info['customer_id'], $order_total['value']);
+				$this->System_Model_Coupon->redeem($coupon_info['coupon_id'], $order_info['order_id'], $order_info['customer_id'], $order_total['value']);
 			}
 		}
 	}

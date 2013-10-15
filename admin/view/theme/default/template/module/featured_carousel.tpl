@@ -27,7 +27,7 @@
 								<? foreach ($featured_product_list as $id => $item) { ?>
 									<li item_id='<?= $id; ?>'>
 										<div class='item_image'>
-											<?= $this->builder->image_input("featured_product_list[$id][image]", $item['image']); ?>
+											<?= $this->builder->imageInput("featured_product_list[$id][image]", $item['image']); ?>
 										</div>
 										<div class='item_name'>
 											<input type='text' size="50" value='<?= $item['name']; ?>' name='featured_product_list[<?= $id; ?>][name]'/>
@@ -56,7 +56,7 @@
 								<? foreach ($featured_carousel_list as $id => $item) { ?>
 									<li item_id='<?= $id; ?>'>
 										<div class='item_image'>
-											<?= $this->builder->image_input("featured_carousel_list[$id][image]", $item['image']); ?>
+											<?= $this->builder->imageInput("featured_carousel_list[$id][image]", $item['image']); ?>
 										</div>
 										<div class='item_name'><input type='text' size="50" value='<?= $item['name']; ?>' name='featured_carousel_list[<?= $id; ?>][name]'/></div>
 										<img class='remove' onclick='$(this).parent().remove();' width='30px'
@@ -87,7 +87,7 @@
 							<td class="left"><input type="text" name="featured_carousel_module[<?= $module_row; ?>][size]" value="<?= $module['size']; ?>" size="1" maxlength='3'/></td>
 							<td
 								class='left'><?= $this->builder->build('select', $data_styles, "featured_carousel_module[$module_row][style]", $module['style']); ?></td>
-							<? $this->builder->set_config('layout_id', 'name'); ?>
+							<? $this->builder->setConfig('layout_id', 'name'); ?>
 							<td
 								class='left'><?= $this->builder->build('select', $data_layouts, "featured_carousel_module[$module_row][layout_id]", (int)$module['layout_id']); ?></td>
 							<td
@@ -140,7 +140,7 @@
 
 			html = '<li item_id="%row_id%">';
 			html += '	<div class="item_image">'
-			html += "			<?= $this->builder->image_input("%id%[%row_id%][image]", '%image%', null, null, null, null, true); ?>";
+			html += "			<?= $this->builder->imageInput("%id%[%row_id%][image]", '%image%', null, null, null, null, true); ?>";
 			html += '	</div>';
 			html += '	<div class="item_name"><input type="text" size="50" value="' + data.label + '" name="%id%[%row_id%][name]" /></div>';
 			html += '	<img class="remove" onclick="$(this).parent().remove();" width="30px" src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" />';
@@ -163,7 +163,7 @@
 			html += '		<td class="left"><input type="text" name="featured_carousel_module[%modrow%][limit]" value="5" size="1" maxlength="2" /></td>';
 			html += '		<td class="left"><input type="text" name="featured_carousel_module[%modrow%][size]" value="260" size="1" maxlength="3" /></td>';
 			html += '		<td class="left">' + "<?= $this->builder->build('select',$data_styles, 'featured_carousel_module[%modrow%][style]'); ?>" + '</td>';
-			<? $this->builder->set_config('layout_id','name');?>
+			<? $this->builder->setConfig('layout_id','name');?>
 			html += '		<td class="left">' + "<?= $this->builder->build('select',$data_layouts,'featured_carousel_module[%modrow%][layout_id]'); ?>" + '</td>';
 			html += '		<td class="left">' + "<?= $this->builder->build('select',$data_positions,'featured_carousel_module[%modrow%][position]','content_top'); ?>" + '</td>';
 			html += '		<td class="left">' + "<?= $this->builder->build('select',$data_statuses,'featured_carousel_module[%modrow%][status]',1); ?>" + '</td>';

@@ -4,7 +4,7 @@ class System_Extension_Total_Voucher extends Extension
 	public function getTotal(&$total_data, &$total, &$taxes)
 	{
 		if ($this->cart->hasVouchers()) {
-			$_ = $this->language->system_fetch('extension/total/voucher');
+			$this->language->system('extension/total/voucher');
 
 			$vouchers = $this->cart->getVouchers();
 
@@ -15,13 +15,11 @@ class System_Extension_Total_Voucher extends Extension
 					$amount = $vouchers['amount'];
 				}
 
-				$total_data[] = array(
-					'code'		=> 'voucher',
+				$total_data['voucher'] = array(
 					'method_id' => $vouchers['voucher_id'],
-					'title'		=> sprintf($_['text_voucher'], $this->session->data['voucher']),
+					'title'		=> $this->_('text_voucher', $this->session->data['voucher']),
 					'value'		=> -$amount,
-					'sort_order' => $this->config->get('voucher_sort_order')
-					);
+				);
 
 				$total -= $amount;
 			}

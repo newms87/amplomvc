@@ -209,13 +209,6 @@ class Admin_Controller_Catalog_Option extends Controller
 
 			$option_values = $this->Model_Catalog_Option->getOptionValues($option_id);
 
-			$option_values['__ac_template__'] = array(
-				'option_value_id' => '',
-				'value'           => '',
-				'image'           => '',
-				'sort_order'      => 0,
-			);
-
 			foreach ($option_values as &$option_value) {
 				$option_value['translations'] = $this->Model_Catalog_Option->getOptionValueTranslations($option_value['option_value_id']);
 			}
@@ -245,10 +238,12 @@ class Admin_Controller_Catalog_Option extends Controller
 
 		//Product Options Template Defaults
 		$this->data['option_values']['__ac_template__'] = array(
-			'option_id'  => 0,
-			'name'       => '',
-			'image'      => '',
-			'sort_order' => 0,
+			'option_id'     => 0,
+			'name'          => '',
+			'value'         => '',
+			'display_value' => '',
+			'image'         => '',
+			'sort_order'    => 0,
 		);
 
 		//Dependencies

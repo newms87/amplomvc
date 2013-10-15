@@ -8,12 +8,7 @@ class System_Extension_Total extends ExtensionModel
 
 	public function get($code)
 	{
-		return $this->getExtension('total', $code);
-	}
-
-	public function getAll()
-	{
-		return $this->getExtensions('total');
+		return $this->loadClass('total', $code);
 	}
 
 	public function getActive()
@@ -25,7 +20,7 @@ class System_Extension_Total extends ExtensionModel
 				'status' => 1,
 			);
 
-			$active = $this->getFilteredExtensions($filter);
+			$active = $this->getFiltered($filter);
 
 			$this->cache->set('extension.total.active', $active);
 		}
@@ -33,8 +28,7 @@ class System_Extension_Total extends ExtensionModel
 		$extensions = array();
 
 		foreach ($active as $code => $extension) {
-			$extensions[$code] = $this->loadClass('total', $code);
-			$extensions[$code]->setInfo($extension);
+			$extensions[$code] = $this->loadClass('total', $code, $extension);
 		}
 
 		return $extensions;
@@ -44,66 +38,28 @@ class System_Extension_Total extends ExtensionModel
 	{
 		$this->_updateExtension('total', $code, $data);
 
-		$this->cache->delete('extension_total');
+		$this->cache->delete('extension.total');
 	}
 
-	public function getFilteredExtensions($filter = array())
+	public function getFiltered($filter = array())
 	{
-		$extensions = $this->getExtensions('total');
-
-		foreach ($extensions as $key => $extension) {
-			if (!empty($filter['name'])) {
-				if (!preg_match("/$filter[name]/i", $extension['name'])) {
-					unset($extensions[$key]);
-				}
-			}
-
-			if (!empty($filter['code'])) {
-				if (!preg_match("/$filter[code]/i", $extension['code'])) {
-					unset($extensions[$key]);
-				}
-			}
-
-			if (!empty($filter['sort_order'])) {
-				if ((int)$extension['sort_order'] < $filter['sort_order']['low'] || (int)$extension['sort_order'] > $filter['sort_order']['high']) {
-					unset($extensions[$key]);
-				}
-			}
-
-			if (!empty($filter['status'])) {
-				if ((bool)$filter['status'] !== (bool)$extension['status']) {
-					unset($extensions[$key]);
-				}
-			}
-		}
-
-		if (!empty($filter['sort'])) {
-			$sort = $filter['sort'];
-			$order = ( !empty($filter['order']) && $filter['order'] === 'DESC' ) ? 'DESC' : 'ASC';
-
-			usort($extensions, function($a,$b) use($sort, $order) { return $order === 'DESC' ? $a[$sort] < $b[$sort] : $a[$sort] > $b[$sort]; });
-		}
-
-		if (!empty($filter['limit'])) {
-			$start = !empty($filter['start']) ? max(0,(int)$filter['start']) : 0;
-			$extensions = array_slice($extensions, $start, (int)$filter['limit']);
-		}
+		$extensions = $this->getExtensions('total', $filter);
 
 		return $extensions;
 	}
 
-	public function getTotalExtensions($filter = array())
+	public function getTotal($filter = array())
 	{
 		unset($filter['start']);
 		unset($filter['limit']);
 
-		return count($this->getFilteredExtensions($filter));
+		return count($this->getFiltered($filter));
 	}
 
 	public function install($code)
 	{
 		//Language
-		$this->language->system('extension_total');
+		$this->language->system('extension/total');
 
 		if (!$this->user->hasPermission('modify', 'extension/total')) {
 			$this->message->add('warning', 'error_permission');
@@ -112,7 +68,7 @@ class System_Extension_Total extends ExtensionModel
 
 		$this->installExtension('total', $code);
 
-		$this->cache->delete('extension_total');
+		$this->cache->delete('extension.total');
 
 		return true;
 	}
@@ -121,7 +77,7 @@ class System_Extension_Total extends ExtensionModel
 	{
 		$this->uninstallExtension('total', $code);
 
-		$this->cache->delete('extension_total');
+		$this->cache->delete('extension.total');
 
 		return true;
 	}

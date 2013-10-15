@@ -7,7 +7,7 @@
 
 				<div class="batch_actions">
 					<a href="<?= $download_email_list; ?>" class="button email_list"><?= $button_email_list; ?></a>
-					<?= $this->builder->batch_action('#listing [name="selected[]"]', $batch_actions, $batch_update); ?>
+					<?= $this->builder->batchAction('#listing [name="selected[]"]', $batch_actions, $batch_update); ?>
 				</div>
 				<div class="buttons">
 					<a href="<?= $insert; ?>" class="button"><?= $button_insert; ?></a>

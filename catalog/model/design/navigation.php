@@ -28,11 +28,11 @@ class Catalog_Model_Design_Navigation extends Model
 			$query .= " LEFT JOIN " . DB_PREFIX . "navigation_store ns ON (ng.navigation_group_id=ns.navigation_group_id)";
 			$query .= " WHERE ng.status='1' AND ns.store_id='$store_id'";
 
-			$result = $this->query($query);
+			$result = $this->queryRows($query);
 
 			$nav_groups = array();
 
-			foreach ($result->rows as &$group) {
+			foreach ($result as &$group) {
 				$nav_group_links = $this->getNavigationGroupLinks($group['navigation_group_id']);
 
 				$parent_ref = array();
@@ -58,8 +58,14 @@ class Catalog_Model_Design_Navigation extends Model
 
 	public function getNavigationGroupLinks($navigation_group_id)
 	{
-		$result = $this->query("SELECT * FROM " . DB_PREFIX . "navigation WHERE status='1' AND navigation_group_id='" . (int)$navigation_group_id . "' ORDER BY parent_id ASC, sort_order ASC");
+		$links = $this->queryRows("SELECT * FROM " . DB_PREFIX . "navigation WHERE status='1' AND navigation_group_id='" . (int)$navigation_group_id . "' ORDER BY parent_id ASC, sort_order ASC");
 
-		return $result->rows;
+		foreach ($links as $key => $link) {
+			if (!empty($link['condition']) && !$this->condition->is($link['condition'])) {
+				unset($links[$key]);
+			}
+		}
+
+		return $links;
 	}
 }

@@ -23,7 +23,7 @@
 						</tr>
 						<tr>
 							<td><?= $entry_product; ?></td>
-							<td><input type="text" name="product" value="<?= $product; ?>"/>
+							<td><input type="text" name="product" value="<?= $subscription; ?>"/>
 								<input type="hidden" name="product_id" value="<?= $product_id; ?>"/>
 								<? if ($error_product) { ?>
 									<span class="error"><?= $error_product; ?></span>

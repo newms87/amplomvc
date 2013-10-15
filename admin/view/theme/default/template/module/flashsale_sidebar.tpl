@@ -27,7 +27,7 @@
 						<tr>
 							<td class="left"><input type="text" name="flashsale_sidebar_module[<?= $module_row; ?>][limit]" value="<?= $module['limit']; ?>" size="1" maxlength='2'/></td>
 							<td class='left'>
-								<? $this->builder->set_config('layout_id', 'name'); ?>
+								<? $this->builder->setConfig('layout_id', 'name'); ?>
 								<?= $this->builder->build('select', $layouts, "flashsale_sidebar_module[$module_row][layout_id]", (int)$module['layout_id']); ?>
 							</td>
 							<td

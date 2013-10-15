@@ -42,9 +42,9 @@ class Admin_Model_Design_Navigation extends Model
 		}
 
 		//Update Links
-		if (isset($data['links'])) {
-			$this->delete("navigation", array("navigation_group_id" => $navigation_group_id));
+		$this->delete("navigation", array("navigation_group_id" => $navigation_group_id));
 
+		if (!empty($data['links'])) {
 			$this->addNavigationLinks($navigation_group_id, $data['links']);
 		}
 
@@ -69,39 +69,40 @@ class Admin_Model_Design_Navigation extends Model
 			$link['parent_id'] = $this->queryVar("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE `name` = '" . $this->escape($link['parent']) . "'");
 		}
 
-		$navigation_id = $this->insert("navigation", $link);
-
 		$this->cache->delete('navigation');
 
-		return $navigation_id;
+		return $this->insert("navigation", $link);
 	}
 
-	public function addNavigationLinks($navigation_group_id, $links, $parent_id = 0)
+	public function addNavigationLinks($navigation_group_id, $links)
 	{
-		$sort_index = 0;
+		$sort_index = array();
 
-		foreach ($links as $name => $link) {
-			if (empty($link['parent']) && empty($link['parent_id'])) {
-				$link['parent_id'] = $parent_id;
-			}
-
+		foreach ($links as $nav_id => &$link) {
 			if (empty($link['name'])) {
-				$link['name'] = $name;
+				$link['name'] = 'link_' . $nav_id;
 			}
 
 			if (!isset($link['status'])) {
 				$link['status'] = 1;
 			}
 
+			$link['navigation_id'] = $this->addNavigationLink($navigation_group_id, $link);
+		}
+		unset($link);
+
+		foreach ($links as $nav_id => $link) {
+			$link['parent_id'] = isset($links[$link['parent_id']]) ? $links[$link['parent_id']]['navigation_id'] : 0;
+
 			if (!isset($link['sort_order'])) {
-				$link['sort_order'] = $sort_index++;
+				if (!isset($sort_index[$link['parent_id']])) {
+					$sort_index[$link['parent_id']] = 0;
+				}
+
+				$link['sort_order'] = $sort_index[$link['parent_id']]++;
 			}
 
-			$link_id = $this->addNavigationLink($navigation_group_id, $link);
-
-			if (!empty($link['children'])) {
-				$this->addNavigationLinks($navigation_group_id, $link['children'], $link_id);
-			}
+			$this->editNavigationLink($navigation_group_id, $link['navigation_id'], $link);
 		}
 	}
 
@@ -241,9 +242,7 @@ class Admin_Model_Design_Navigation extends Model
 
 	public function getNavigationGroupLinks($navigation_group_id)
 	{
-		$result = $this->query("SELECT * FROM " . DB_PREFIX . "navigation WHERE navigation_group_id = '" . (int)$navigation_group_id . "' ORDER BY sort_order ASC");
-
-		return $result->rows;
+		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "navigation WHERE navigation_group_id = '" . (int)$navigation_group_id . "' ORDER BY sort_order ASC", 'navigation_id');
 	}
 
 	public function getNavigationGroupStores($navigation_group_id)

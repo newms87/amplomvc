@@ -29,18 +29,29 @@ final class Action
 
 		$filepath = '';
 
-		foreach ($parts as $part) {
+		$count = count($parts);
+
+		for ($i = 0; $i < $count; $i++) {
+			$part = $parts[$i];
+
 			$filepath .= $part;
 
+			$is_file = is_file(SITE_DIR . $filepath . '.php');
+			$is_dir = is_dir(SITE_DIR . $filepath);
+
+			$next = ($i < ($count-1)) ? SITE_DIR . $filepath . '/' . $parts[$i+1] : '';
+
 			//Scan directories until we find file requested
-			if (is_file(SITE_DIR . $filepath . '.php')) {
+			//If part is a directory AND either not a file, or a file and the next part is a file or directory, assume the part is a directory
+			if ( $is_dir &&
+					( !$is_file || ($is_file && $is_dir && ($i < ($count-1)) && (is_file($next . '.php') || is_dir($next))) ) ) {
+				$filepath .= '/';
+				$this->class .= $this->tool->formatClassname($part) . '_';
+			}
+			elseif ($is_file) {
 				$this->file = SITE_DIR . $filepath . '.php';
 
 				$this->class .= $this->tool->formatClassname($part);
-			}
-			elseif (is_dir(SITE_DIR . $filepath)) {
-				$filepath .= '/';
-				$this->class .= $this->tool->formatClassname($part) . '_';
 			}
 			elseif ($this->file) {
 				$this->method = $part;
@@ -99,9 +110,9 @@ final class Action
 				$this->controller = new $class($this->registry);
 			} else {
 				if (!$this->file) {
-					trigger_error("Failed to load controller {$this->class} because the file was not resolved! Please verify {$this->path} is a valid controller." . get_caller(0, 2));
+					trigger_error("Failed to load controller {$this->class} because the file was not resolved! Please verify {$this->path} is a valid controller." . get_caller(0, 3));
 				} else {
-					trigger_error("Failed to load controller {$this->class} because the file {$this->file} is missing!");
+					trigger_error("Failed to load controller {$this->class} because the file {$this->file} is missing!" . get_caller(0, 3));
 				}
 			}
 		}

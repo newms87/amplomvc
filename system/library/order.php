@@ -435,10 +435,10 @@ class Order Extends Library
 		$order_totals = $this->db->queryRows("SELECT * FROM `" . DB_PREFIX . "order_total` WHERE order_id = '$order_id' ORDER BY sort_order ASC");
 
 		foreach ($order_totals as &$order_total) {
-			$total_class = 'System_Extension_Total_Model_' . $this->tool->formatClassname($order_total['code']);
+			$extension = $this->System_Extension_Total->get($order_total['code']);
 
-			if (method_exists($this->$total_class, 'confirm')) {
-				$this->$total_class->confirm($order, $order_total);
+			if (method_exists($extension, 'confirm')) {
+				$extension->confirm($order, $order_total);
 			}
 		}
 

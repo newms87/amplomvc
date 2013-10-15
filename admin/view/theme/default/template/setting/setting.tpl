@@ -73,7 +73,7 @@
 			<tr>
 				<td><?= $entry_theme; ?></td>
 				<td>
-					<? $this->builder->set_config('name', 'name'); ?>
+					<? $this->builder->setConfig('name', 'name'); ?>
 					<?= $this->builder->build('select', $themes, 'config_theme', $config_theme); ?>
 				</td>
 			</tr>
@@ -84,13 +84,13 @@
 			<tr>
 				<td><?= $entry_default_store; ?></td>
 				<td>
-					<? $this->builder->set_config('store_id', 'name'); ?>
+					<? $this->builder->setConfig('store_id', 'name'); ?>
 					<?= $this->builder->build('select', $stores, 'config_default_store', $config_default_store); ?>
 				</td>
 			</tr>
 			<tr>
 				<td><?= $entry_layout; ?></td>
-				<? $this->builder->set_config('layout_id', 'name'); ?>
+				<? $this->builder->setConfig('layout_id', 'name'); ?>
 				<td><?= $this->builder->build('select', $data_layouts, 'config_default_layout_id', $config_default_layout_id); ?></td>
 			</tr>
 		</table>
@@ -104,7 +104,7 @@
 			<tr>
 				<td><?= $entry_country; ?></td>
 				<td>
-					<?= $this->builder->set_config('country_id', 'name'); ?>
+					<?= $this->builder->setConfig('country_id', 'name'); ?>
 					<?= $this->builder->build('select', $countries, "config_country_id", $config_country_id, array('class' => "country_select")); ?>
 				</td>
 			</tr>
@@ -229,7 +229,7 @@
 		<td><?= $entry_default_return_policy; ?></td>
 		<td>
 			<? if (!empty($data_return_policies)) { ?>
-				<? $this->builder->set_config(false, 'title'); ?>
+				<? $this->builder->setConfig(false, 'title'); ?>
 				<?= $this->builder->build('select', $data_return_policies, 'config_default_return_policy', $config_default_return_policy); ?>
 			<? } ?>
 			<p><?= $text_add_return_policy; ?></p>
@@ -239,7 +239,7 @@
 		<td><?= $entry_default_shipping_policy; ?></td>
 		<td>
 			<? if (!empty($data_shipping_policies)) { ?>
-				<? $this->builder->set_config(false, 'title'); ?>
+				<? $this->builder->setConfig(false, 'title'); ?>
 				<?= $this->builder->build('select', $data_shipping_policies, 'config_default_shipping_policy', $config_default_shipping_policy); ?>
 			<? } ?>
 			<p><?= $text_add_shipping_policy; ?></p>
@@ -248,7 +248,7 @@
 	<tr>
 		<td><?= $entry_shipping_return_policy_info; ?></td>
 		<td>
-			<? $this->builder->set_config('information_id', 'title'); ?>
+			<? $this->builder->setConfig('information_id', 'title'); ?>
 			<?= $this->builder->build('select', $data_informations, 'config_shipping_return_info_id', $config_shipping_return_info_id); ?>
 		</td>
 	<tr>
@@ -292,7 +292,7 @@
 	<tr>
 		<td><?= $entry_tax_default_id; ?></td>
 		<td>
-			<? $this->builder->set_config('tax_class_id', 'title'); ?>
+			<? $this->builder->setConfig('tax_class_id', 'title'); ?>
 			<?= $this->builder->build('select', $tax_classes, 'config_tax_default_id', $config_tax_default_id); ?>
 		</td>
 	</tr>
@@ -364,21 +364,21 @@
 	<tr>
 		<td><?= $entry_account; ?></td>
 		<td>
-			<? $this->builder->set_config('information_id', 'title'); ?>
+			<? $this->builder->setConfig('information_id', 'title'); ?>
 			<?= $this->builder->build('select', $data_informations, 'config_account_terms_info_id', $config_account_terms_info_id); ?>
 		</td>
 	</tr>
 	<tr>
 		<td><?= $entry_checkout; ?></td>
 		<td>
-			<? $this->builder->set_config('information_id', 'title'); ?>
+			<? $this->builder->setConfig('information_id', 'title'); ?>
 			<?= $this->builder->build('select', $data_informations, 'config_checkout_terms_info_id', $config_checkout_terms_info_id); ?>
 		</td>
 	</tr>
 	<tr>
 		<td><?= $entry_affiliate; ?></td>
 		<td>
-			<? $this->builder->set_config('information_id', 'title'); ?>
+			<? $this->builder->setConfig('information_id', 'title'); ?>
 			<?= $this->builder->build('select', $data_informations, 'config_affiliate_terms_info_id', $config_affiliate_terms_info_id); ?>
 		</td>
 	</tr>
@@ -418,34 +418,34 @@
 	<tr>
 		<td><?= $entry_order_received_status; ?></td>
 		<td>
-			<?= $this->builder->set_config(false, 'title'); ?>
+			<?= $this->builder->setConfig(false, 'title'); ?>
 			<?= $this->builder->build('select', $data_order_statuses, 'config_order_received_status_id', $config_order_received_status_id); ?>
 		</td>
 	</tr>
 	<tr>
 		<td><?= $entry_order_complete_status; ?></td>
 		<td>
-			<?= $this->builder->set_config(false, 'title'); ?>
+			<?= $this->builder->setConfig(false, 'title'); ?>
 			<?= $this->builder->build('select', $data_order_statuses, 'config_order_complete_status_id', $config_order_complete_status_id); ?>
 		</td>
 	</tr>
 	<tr>
 		<td><?= $entry_order_blacklist_status; ?></td>
 		<td>
-			<?= $this->builder->set_config(false, 'title'); ?>
+			<?= $this->builder->setConfig(false, 'title'); ?>
 			<?= $this->builder->build('select', $data_order_statuses, 'config_order_blacklist_status_id', $config_order_blacklist_status_id); ?>
 		</td>
 	</tr>
 	<tr>
 		<td><?= $entry_order_fraud_status; ?></td>
 		<td>
-			<?= $this->builder->set_config(false, 'title'); ?>
+			<?= $this->builder->setConfig(false, 'title'); ?>
 			<?= $this->builder->build('select', $data_order_statuses, 'config_order_fraud_status_id', $config_order_fraud_status_id); ?>
 		</td>
 	</tr>
 	<tr>
 		<td><?= $entry_return_status; ?></td>
-		<? $this->builder->set_config(false, 'title'); ?>
+		<? $this->builder->setConfig(false, 'title'); ?>
 		<td><?= $this->builder->build('select', $data_return_statuses, 'config_return_status_id', $config_return_status_id); ?></td>
 	</tr>
 	<tr>
@@ -508,23 +508,24 @@
 			<tr>
 				<td><?= $entry_admin_logo; ?></td>
 				<td>
-					<?= $this->builder->set_builder_template('click_image'); ?>
-					<?= $this->builder->image_input("config_admin_logo", $config_admin_logo); ?>
+					<?= $this->builder->setBuilderTemplate('click_image'); ?>
+					<?= $this->builder->imageInput("config_admin_logo", $config_admin_logo); ?>
 				</td>
 			</tr>
 			<tr>
 				<td><?= $entry_icon; ?></td>
 				<td>
-					<?= $this->builder->set_builder_template('click_image'); ?>
-					<?= $this->builder->image_input("config_icon", $config_icon); ?>
+					<?= $this->builder->setBuilderTemplate('click_image'); ?>
+					<?= $this->builder->imageInput("config_icon", $config_icon); ?>
 				</td>
 			</tr>
 			<tr>
 				<td class="required"> <?= $entry_image_admin_thumb; ?></td>
-				<td><input type="text" name="config_image_admin_thumb_width" value="<?= $config_image_admin_thumb_width; ?>"
-				           size="3"/>
+				<td>
+					<input type="text" name="config_image_admin_thumb_width" value="<?= $config_image_admin_thumb_width; ?>" size="3"/>
 					x
 					<input type="text" name="config_image_admin_thumb_height" value="<?= $config_image_admin_thumb_height; ?>" size="3"/>
+				</td>
 			</tr>
 			<tr>
 				<td class="required"> <?= $entry_image_admin_list; ?></td>

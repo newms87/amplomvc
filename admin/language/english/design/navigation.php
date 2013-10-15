@@ -32,6 +32,7 @@ $_['entry_link_href']         = 'URL / route';
 $_['entry_link_query']        = 'Query';
 $_['entry_link_is_route']     = "Use as route?";
 $_['entry_link_status']       = 'Status:';
+$_['entry_link_condition'] = "Display When:";
 
 // Error
 $_['error_permission']     = 'Warning: You do not have permission to modify navigation!';

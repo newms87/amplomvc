@@ -47,17 +47,26 @@
 		</div>
 
 		<div class="section right">
-			<h2><?= $text_ship_to; ?></h2>
-			<div id="address_list" class="noselect">
-				<? foreach ($data_addresses as $address) { ?>
-					<? $checked = ($address['address_id'] == $metadata['default_shipping_address_id']) ? 'checked="checked"' : ''; ?>
-					<div class="address <?= $checked ? 'checked' : ''; ?>">
-						<input id="shipaddress<?= $address['address_id']; ?>" type="radio" name="metadata[default_shipping_address_id]" value="<?= $address['address_id']; ?>" <?= $checked; ?> />
-						<label for="shipaddress<?= $address['address_id']; ?>"><?= $address['display']; ?></label>
-					</div>
-				<? } ?>
+			<div class="shipping_address">
+				<h2><?= $entry_shipping_address; ?></h2>
+				<div class="address_list noselect">
+					<? foreach ($data_addresses as $address) { ?>
+						<div class="address <?= $address['default_shipping'] ? 'checked' : ''; ?>">
+							<input id="shipaddress<?= $address['address_id']; ?>" type="radio" name="metadata[default_shipping_address_id]" value="<?= $address['address_id']; ?>" <?= $address['default_shipping'] ? 'checked="checked"' : ''; ?> />
+							<label for="shipaddress<?= $address['address_id']; ?>"><?= $address['display']; ?></label>
+							<a href="<?= $address['remove']; ?>" class="remove"></a>
+						</div>
+					<? } ?>
+					<a href="<?= $add_address; ?>" class="address add_slide noradio" onclick="return colorbox($(this));"><?= $button_add_address; ?></a>
+				</div>
 			</div>
-			<a href="<?= $add_address; ?>" class="add_address" onclick="return colorbox($(this).attr('href', '<?= $ajax_add_address; ?>'));"><?= $button_add_address; ?></a>
+
+			<div class="credit_card">
+				<h2><?= $entry_credit_card; ?></h2>
+				<div class="credit_card_list">
+					<?= $card_select; ?>
+				</div>
+			</div>
 		</div>
 
 		<div class="clear buttons">
@@ -72,8 +81,20 @@
 </div>
 
 <script type="text/javascript">//<!--
-$('#address_list .address').ac_radio();
+	$('.address_list').ac_radio().ac_slidelist({pad_y: -15, x_dir: -1});
 
-$.ac_datepicker({changeYear: true, yearRange: "c-150:c", changeMonth: true});
+	$('.address_list .remove').click(function(){
+		var address = $(this);
+		$.get(address.attr('href'),{}, function(json){
+			if (json['error']) {
+				show_msgs(json['error'], 'error');
+			} else {
+				location.reload();
+			}
+		});
+		return false;
+	});
+
+	$.ac_datepicker({changeYear: true, yearRange: "c-150:c", changeMonth: true});
 //--></script>
 <?= $footer; ?>

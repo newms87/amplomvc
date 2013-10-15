@@ -48,7 +48,7 @@
 						<tr>
 							<td><?= $entry_theme; ?></td>
 							<td>
-								<? $this->builder->set_config('voucher_theme_id', 'name'); ?>
+								<? $this->builder->setConfig('voucher_theme_id', 'name'); ?>
 								<?= $this->builder->build('select', $data_voucher_themes, 'voucher_theme_id', $voucher_theme_id); ?>
 							</td>
 						</tr>

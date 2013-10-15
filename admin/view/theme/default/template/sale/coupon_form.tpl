@@ -46,7 +46,7 @@
 								<td>
 									<div><?= $this->builder->build('radio', $data_yes_no, 'shipping', (int)$shipping, array('onclick' => "if($(this).find(':checked').val() == '1')$('#coupon_ship_geozone').show(); else $('#coupon_ship_geozone').hide();")); ?></div>
 									<div <?= (int)$shipping ? '' : "style='display:none'"; ?> id='coupon_ship_geozone'>
-										<? $this->builder->set_config('geo_zone_id', 'name'); ?>
+										<? $this->builder->setConfig('geo_zone_id', 'name'); ?>
 										<?= $this->builder->build('select', $data_geo_zones, 'shipping_geozone', (int)$shipping_geozone); ?>
 									</div>
 								</td>

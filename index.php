@@ -1,4 +1,11 @@
 <?php
+//Check PHP Info if requested
+//TODO: This is a security issue. Must hide PHPINFO unless logged into admin panel!!
+if (isset($_GET['phpinfo'])) {
+	phpinfo();
+	exit;
+}
+
 // Configuration
 if (is_file('ac_config.php')) {
 	require_once('ac_config.php');
@@ -8,11 +15,6 @@ if (is_file('ac_config.php')) {
 if (!defined('SITE_URL') || defined("AMPLOCART_INSTALL_USER")) {
 	define("AMPLOCART_INSTALL", true);
 	require_once('system/install/install.php');
-}
-
-if (isset($_GET['phpinfo'])) {
-	phpinfo();
-	exit;
 }
 
 $__start = microtime(true);

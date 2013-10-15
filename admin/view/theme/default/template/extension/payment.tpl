@@ -1,48 +1,60 @@
 <?= $header; ?>
+
 	<div class="section">
 		<?= $this->breadcrumb->render(); ?>
-		<? if ($success) { ?>
-			<div class="message_box success"><?= $success; ?></div>
-		<? } ?>
-		<? if ($error) { ?>
-			<div class="message_box warning"><?= $error; ?></div>
-		<? } ?>
 		<div class="box">
 			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'payment.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+				<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+
+				<div class="buttons">
+					<a onclick="$('#form').trigger('saving').submit();" class="button"><?= $button_save; ?></a>
+					<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
+				</div>
 			</div>
 			<div class="section">
-				<table class="list">
-					<thead>
-					<tr>
-						<td class="left"><?= $column_name; ?></td>
-						<td></td>
-						<td class="left"><?= $column_status; ?></td>
-						<td class="right"><?= $column_sort_order; ?></td>
-						<td class="right"><?= $column_action; ?></td>
-					</tr>
-					</thead>
-					<tbody>
-					<? if ($extensions) { ?>
-						<? foreach ($extensions as $extension) { ?>
+				<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
+					<div id="extension_settings">
+						<table class="form">
 							<tr>
-								<td class="left"><?= $extension['name']; ?></td>
-								<td class="center"><?= $extension['link'] ?></td>
-								<td class="left"><?= $extension['status'] ?></td>
-								<td class="right"><?= $extension['sort_order']; ?></td>
-								<td class="right"><? foreach ($extension['action'] as $action) { ?>
-										[ <a href="<?= $action['href']; ?>"><?= $action['text']; ?></a> ]
-									<? } ?></td>
+								<td><?= $entry_title; ?></td>
+								<td><input type="text" name="title" value="<?= $title; ?>" /></td>
 							</tr>
-						<? } ?>
-					<? } else { ?>
-						<tr>
-							<td class="center" colspan="6"><?= $text_no_results; ?></td>
-						</tr>
-					<? } ?>
-					</tbody>
-				</table>
+							<? if (!empty($extend_settings)) { ?>
+								<tr>
+									<td colspan="2"><?= $extend_settings; ?></td>
+								</tr>
+							<? } ?>
+							<tr>
+								<td><?= $entry_complete_status; ?></td>
+								<td>
+									<? $this->builder->setConfig(false, 'title'); ?>
+									<?= $this->builder->build('select', $data_order_statuses, "settings[complete_order_status_id]", $settings['complete_order_status_id']); ?>
+								</td>
+							</tr>
+							<tr>
+								<td><?= $entry_min_total; ?></td>
+								<td><input type="text" name="settings[min_total]" value="<?= $settings['min_total']; ?>" /></td>
+							</tr>
+							<tr>
+								<td><?= $entry_geo_zone; ?></td>
+								<? $this->builder->setConfig('geo_zone_id', 'name'); ?>
+								<td><?= $this->builder->build('select', $data_geo_zones, "settings[geo_zone_id]", $settings['geo_zone_id']); ?></td>
+							</tr>
+							<tr>
+								<td><?= $entry_sort_order; ?></td>
+								<td><input type="text" name="sort_order" value="<?= $sort_order; ?>" /></td>
+							</tr>
+							<tr>
+								<td><?= $entry_status; ?></td>
+								<td><?= $this->builder->build('select', $data_statuses, "status", $status); ?></td>
+							</tr>
+						</table>
+					</div>
+				</form>
 			</div>
 		</div>
 	</div>
+
+<?= $this->builder->js('errors', $errors); ?>
+
 <?= $footer; ?>

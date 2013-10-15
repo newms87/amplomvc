@@ -71,7 +71,7 @@
 					<table class="form">
 						<tr>
 							<td><?= $text_product; ?></td>
-							<td><?= $product; ?></td>
+							<td><?= $subscription; ?></td>
 						</tr>
 						<tr>
 							<td><?= $text_model; ?></td>

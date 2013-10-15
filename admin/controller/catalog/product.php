@@ -621,6 +621,7 @@ class Admin_Controller_Catalog_Product extends Controller
 					'option_value_id'         => '',
 					'default'                 => 0,
 					'value'                   => '',
+					'display_value'           => '',
 					'image'                   => '',
 					'quantity'                => 1,
 					'subtract'                => 0,

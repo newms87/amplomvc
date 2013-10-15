@@ -567,5 +567,10 @@ class Catalog_Model_Catalog_Product extends Model
 			return 0;
 		}
 	}
+
+	public function optionIdToProductOptionId($product_id, $option_id)
+	{
+		return $this->queryVar("SELECT product_option_id FROM " . DB_PREFIX . "product_option WHERE product_id = " . (int)$product_id . " AND option_id = " . (int)$option_id);
+	}
 }
 

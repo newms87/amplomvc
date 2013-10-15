@@ -19,7 +19,7 @@
 						</tr>
 						<tr>
 							<td><?= $entry_image; ?></td>
-							<td><?= $this->builder->image_input("image", $image); ?></td>
+							<td><?= $this->builder->imageInput("image", $image); ?></td>
 						</tr>
 					</table>
 				</form>

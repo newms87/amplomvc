@@ -28,7 +28,7 @@
 						case 'select':
 							?>
 							<? if (!empty($field['options'])) { ?>
-							<? $this->builder->set_config(key($field['build_config']), current($field['build_config'])); ?>
+							<? $this->builder->setConfig(key($field['build_config']), current($field['build_config'])); ?>
 							<?= $this->builder->build($field['type'], $field['options'], $field['name'], $field['value'], $field['attrs']); ?>
 						<? } elseif ($field['type'] == 'select') { ?>
 							<select name="<?= $field['name']; ?>" <?= $field['html_attrs']; ?> <?= !empty($field['value']) ? "select_value=\"$field[value]\"" : ''; ?>></select>

@@ -40,7 +40,7 @@
 	</div>
 
 	<div class="content">
-		<?= $this->builder->display_messages($messages); ?>
+		<?= $this->builder->displayMessages($messages); ?>
 
 		<?= $this->builder->js('image_manager'); ?>
 

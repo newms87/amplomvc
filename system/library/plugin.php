@@ -133,7 +133,7 @@ class Plugin extends Library
 		return true;
 	}
 
-	public function integrateNewFiles($name)
+	public function getNewFiles($name)
 	{
 		$dir = DIR_PLUGIN . $name . '/new_files/';
 
@@ -148,13 +148,95 @@ class Plugin extends Library
 			'gif'
 		);
 
-		$files = $this->tool->get_files_r($dir, $file_types);
+		return $this->tool->get_files_r($dir, $file_types);
+	}
+
+	public function integrateNewFiles($name)
+	{
+		$files = $this->getNewFiles($name);
 
 		foreach ($files as $file) {
 			if (!$this->activatePluginFile($name, $file)) {
 				return false;
 			}
 		}
+
+		return true;
+	}
+
+	public function hasChanges($name)
+	{
+		$changes = $this->getChanges($name);
+
+		return !empty($changes['new_files']) || !empty($changes['mod_files']);
+	}
+
+	public function getChanges($name)
+	{
+		if (!$this->plugin_registry) {
+			$this->loadPluginFileRegistry();
+		}
+
+		$changes = array(
+			'new_files' => array(),
+			'mod_files' => array(),
+		);
+
+		$files = $this->getNewFiles($name);
+
+		foreach ($files as $key => $file) {
+			$filepath = str_replace('\\','/',$file->getPathName());
+			if (!array_search_key('plugin_file', $filepath, $this->plugin_registry)) {
+				$changes['new_files'][] = $filepath;
+			}
+		}
+
+		$mod_files = $this->getFileMods($name);
+
+		foreach ($mod_files as $mod => $file) {
+			if ($this->mod->isRegistered($file)) {
+				unset($mod_files[$mod]);
+			}
+		}
+
+		$changes['mod_files'] = $mod_files;
+
+		return $changes;
+	}
+
+	public function integrateChanges($name)
+	{
+		$this->language->system('plugin');
+
+		$changes = $this->getChanges($name);
+
+		if (empty($changes['new_files']) && empty($changes['mod_files'])) {
+			$this->message->add('notify', 'text_no_changes');
+			return false;
+		}
+
+		foreach ($changes['new_files'] as $file) {
+			$this->activatePluginFile($name, $file);
+			$this->message->add('success', $this->_('text_add_new_file', $file));
+		}
+
+		$this->mod->addFiles(null, $changes['mod_files']);
+
+		if (!empty($changes['mod_files'])) {
+			if ($this->mod->apply()) {
+				foreach ($changes['mod_files'] as $file) {
+					$this->message->add('notify', $this->_('text_add_mod_file', $file));
+				}
+
+				$this->mod->write();
+			} else {
+				$this->message->add('warning', $this->mod->fetchErrors());
+				$this->message->add('warning', 'error_add_mod_failed');
+				return false;
+			}
+		}
+
+		$this->message->add('success', $this->_('success_add_changes', $name));
 
 		return true;
 	}
@@ -167,7 +249,7 @@ class Plugin extends Library
 
 		$dir = DIR_PLUGIN . $name . '/new_files/';
 
-		$plugin_file = preg_replace("/\\\\/", "/", $file->getPathName());
+		$plugin_file = is_object($file) ? str_replace("\\", "/", $file->getPathName()) : $file;
 		$live_file   = str_replace($dir, SITE_DIR, $plugin_file);
 
 		//Live file already exists! This is a possible conlflict...
@@ -199,7 +281,7 @@ class Plugin extends Library
 			@unlink($live_file);
 		}
 
-		if (!symlink($file->getPathName(), $live_file)) {
+		if (!symlink($plugin_file, $live_file)) {
 			$this->message->add("warning", "There was an error while copying $plugin_file to $live_file for plugin <strong>$name</strong>.");
 			return false;
 		}

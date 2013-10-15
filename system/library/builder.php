@@ -14,7 +14,7 @@ class Builder extends Library
 	 * @param $name - the key in the array to use as the display name
 	 * @param (optional) $type - How the $id keys should be treated (eg: int, string, float, etc.). If no type is set, it will try to figure it out on its own
 	 */
-	public function set_config($id, $name = null, $type = null)
+	public function setConfig($id, $name = null, $type = null)
 	{
 		if (is_array($id)) {
 			$name = $id[1];
@@ -26,12 +26,12 @@ class Builder extends Library
 		$this->builder_type = $type;
 	}
 
-	public function set_builder_template($template)
+	public function setBuilderTemplate($template)
 	{
 		$this->builder_template = $template;
 	}
 
-	public function display_messages($messages)
+	public function displayMessages($messages)
 	{
 		$html = '';
 		foreach ($messages as $type => $msgs) {
@@ -54,33 +54,7 @@ class Builder extends Library
 		return $html;
 	}
 
-	public function display_errors($errors = false)
-	{
-		if (!$errors) {
-			return '';
-		}
-
-		return $html = "<div class =\"message_box warning\">" . $this->display_errors_r($errors) . "</div>";
-	}
-
-	public function display_errors_r($errors)
-	{
-		if (!$errors) {
-			return '';
-		}
-
-		if (is_string($errors)) {
-			return "<div>$errors</div>";
-		} elseif (is_array($errors)) {
-			$html = '';
-			foreach ($errors as $e) {
-				$html .= $this->display_errors_r($e);
-			}
-			return $html;
-		}
-	}
-
-	public function batch_action($selector, $actions, $path)
+	public function batchAction($selector, $actions, $path)
 	{
 		foreach ($actions as $key => &$action) {
 			$action['attrs'] = '';
@@ -139,7 +113,7 @@ class Builder extends Library
 		return $html;
 	}
 
-	public function image_input($name, $image = '', $thumb = null, $no_image = null, $width = null, $height = null, $escape_quotes = false)
+	public function imageInput($name, $image = '', $thumb = null, $no_image = null, $width = null, $height = null, $escape_quotes = false)
 	{
 		$text_clear  = $this->language->get('text_clear');
 		$text_browse = $this->language->get('text_browse');
@@ -258,7 +232,7 @@ class Builder extends Library
 
 			if (is_array($display)) {
 				if (!isset($this->builder_id) || !isset($this->builder_name) || ($this->builder_id ? !isset($display[$this->builder_id]) : false) || !isset($display[$this->builder_name])) {
-					trigger_error("You must set the ID and Name to keys in the \$data Array using \$this->builder->set_config(\$id,\$name). " . get_caller());
+					trigger_error("You must set the ID and Name to keys in the \$data Array using \$this->builder->setConfig(\$id,\$name). " . get_caller());
 					return;
 				}
 

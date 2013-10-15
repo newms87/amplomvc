@@ -26,10 +26,10 @@ function html_dump($var, $label= "HTML Dump", $level=0, $max = -1, $print = true
 	<style>
 	.html_dump_label{cursor:pointer; color:blue; text-decoration:underline;}
 	.dump_output{margin:15px;}
-	.key_value_pair{position:relative; height:20px;overflow:visible;}
-	.type_label{background: #EF99A8;}
-	.key{word-wrap:break-word; max-width:200px;background: #82E182;padding:3px 5px}
-	.value{background: #92ADE3;max-width:800px; word-wrap:break-word}
+	.dump_output .key_value_pair{position:relative; height:20px;overflow:visible;}
+	.dump_output .type_label{background: #EF99A8;}
+	.dump_output .key_value_pair > .key{word-wrap:break-word; max-width:200px;background: #82E182;padding:3px 5px}
+	.dump_output .key_value_pair > .value{background: #92ADE3;max-width:800px; word-wrap:break-word}
 	</style>
 	<span class='html_dump_label'><?=$label;?></span>
 	<div class ='dump_output' id='<?=$id;?>-output' style='display:none'>

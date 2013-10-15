@@ -46,12 +46,12 @@
 								<? break;
 
 							case 'select':
-								$this->builder->set_config($field['builder_id'], $field['builder_name']);
+								$this->builder->setConfig($field['builder_id'], $field['builder_name']);
 								echo $this->builder->build('select', $field['values'], $field['name'], $field['select'], $field['html_attrs']);
 								break;
 
 							case 'radio':
-								$this->builder->set_config($field['builder_id'], $field['builder_name']);
+								$this->builder->setConfig($field['builder_id'], $field['builder_name']);
 								echo $this->builder->build('radio', $field['values'], $field['name'], $field['select'], $field['html_attrs']);
 								break;
 

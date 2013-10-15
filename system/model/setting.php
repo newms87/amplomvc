@@ -28,8 +28,7 @@ class System_Model_Setting extends Model
 				if ($this->translate && $setting['translate']) {
 					if (is_array($value)) {
 						$this->translation->translate_all($setting['key'], false, $value);
-					}
-					elseif(is_string($value)) {
+					} elseif (is_string($value)) {
 						$setting_value = array($setting['key'] => $value);
 
 						$this->translation->translate('setting', $setting['setting_id'], $setting_value);
@@ -63,13 +62,11 @@ class System_Model_Setting extends Model
 					foreach ($value as $entry_key => $entry) {
 						$this->translation->translate($key, $entry_key, $entry);
 					}
-				}
-				elseif(is_string($value)) {
+				} elseif (is_string($value)) {
 					$this->translation->translate('setting', $setting['setting_id'], array($setting['key'] => $value));
 				}
 			}
-		}
-		else {
+		} else {
 			$value = null;
 		}
 
@@ -108,31 +105,31 @@ class System_Model_Setting extends Model
 		//Serialize if necessary
 		if (is_array($value) || is_object($value)) {
 			$entry_value = serialize($value);
-			$serialized = 1;
+			$serialized  = 1;
 		} else {
 			$entry_value = $value;
-			$serialized = 0;
+			$serialized  = 0;
 		}
 
 		$values = array(
-			'group' => $group,
-			'key' => $key,
-			'value' => $entry_value,
+			'group'      => $group,
+			'key'        => $key,
+			'value'      => $entry_value,
 			'serialized' => $serialized,
-			'translate' => $translate,
-			'store_id' => $store_id,
-			'auto_load' => $auto_load ? 1 : 0,
+			'translate'  => $translate,
+			'store_id'   => $store_id,
+			'auto_load'  => $auto_load ? 1 : 0,
 		);
 
 		$where = array(
-			'group' => $group,
-			'key' => $key,
+			'group'    => $group,
+			'key'      => $key,
 			'store_id' => $store_id,
 		);
 
 		$this->delete('setting', $where);
 
-		$setting_id = $this->insert('setting',  $values);
+		$setting_id = $this->insert('setting', $values);
 
 		$this->cache->delete('setting');
 		$this->cache->delete('store');
@@ -153,7 +150,7 @@ class System_Model_Setting extends Model
 
 		if (!is_null($store_id)) {
 			$values['store_id'] = $store_id;
-			$store_query = "AND store_id = '" . (int)$store_id . "'";
+			$store_query        = "AND store_id = '" . (int)$store_id . "'";
 		}
 
 		$settings = $this->queryRows("SELECT * FROM " . DB_PREFIX . "setting WHERE `group` = '" . $this->db->escape($group) . "' $store_query");

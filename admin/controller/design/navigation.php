@@ -36,8 +36,8 @@ class Admin_Controller_Design_Navigation extends Controller
 	{
 		$this->language->load('design/navigation');
 
-		if (!empty($_GET['navigation_id']) && $this->validateDelete()) {
-			$this->Model_Design_Navigation->deleteNavigationGroup($_GET['navigation_id']);
+		if (!empty($_GET['navigation_group_id']) && $this->validateDelete()) {
+			$this->Model_Design_Navigation->deleteNavigationGroup($_GET['navigation_group_id']);
 
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
@@ -268,6 +268,19 @@ class Admin_Controller_Design_Navigation extends Controller
 			}
 		}
 
+		//Link AC Template
+		$this->data['links']['__ac_template__'] = array(
+			'navigation_id' => '',
+			'parent_id'     => '',
+			'name'          => 'new_link __ac_template__',
+			'display_name'  => 'New Link __ac_template__',
+			'title'         => '',
+			'href'          => '',
+			'query'         => '',
+			'condition'     => '',
+			'status'        => 1,
+		);
+
 		//Additional Data
 		$admin_store = array(
 			'admin' => array(
@@ -276,7 +289,8 @@ class Admin_Controller_Design_Navigation extends Controller
 			)
 		);
 
-		$this->data['data_stores'] = $admin_store + $this->Model_Setting_Store->getStores();
+		$this->data['data_stores']     = $admin_store + $this->Model_Setting_Store->getStores();
+		$this->data['data_conditions'] = $this->condition->getConditions();
 
 		//Action Buttons
 		$this->data['save']   = $this->url->link('design/navigation/update', 'navigation_group_id=' . $navigation_group_id);
@@ -308,32 +322,31 @@ class Admin_Controller_Design_Navigation extends Controller
 			$this->error['name'] = $this->_('error_name');
 		}
 
-		//unset the fake link
-		unset($_POST['links']['%link_num%']);
+		if (!empty($_POST['links'])) {
+			foreach ($_POST['links'] as $key => $link) {
+				if (!$this->validation->text($link['display_name'], 1, 255)) {
+					$link_name                                = !empty($link['name']) ? $link['name'] : (!empty($link['display_name']) ? $link['display_name'] : $key);
+					$this->error["links[$key][display_name]"] = $this->_('error_display_name', $link_name);
+				}
 
-		foreach ($_POST['links'] as $key => $link) {
-			if (!$this->validation->text($link['display_name'], 1, 255)) {
-				$link_name                                = !empty($link['name']) ? $link['name'] : (!empty($link['display_name']) ? $link['display_name'] : $key);
-				$this->error["links[$key][display_name]"] = $this->_('error_display_name', $link_name);
+				//If name already exists in database, append _n to the name
+				if (empty($link['name'])) {
+					$name = $this->tool->getSlug($link['display_name']);
+				} else {
+					$name = $this->db->escape($this->tool->getSlug($link['name']));
+				}
+
+				$count = 0;
+				do {
+					$check_name = $count ? $name . '_' . $count : $name;
+
+					$result = $this->db->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . "navigation_group WHERE name = '$check_name' AND navigation_group_id != $navigation_group_id");
+
+					$count++;
+				} while ($result->row['total']);
+
+				$_POST['links'][$key]['name'] = $check_name;
 			}
-
-			//If name already exists in database, append _n to the name
-			if (empty($link['name'])) {
-				$name = $this->tool->getSlug($link['display_name']);
-			} else {
-				$name = $this->db->escape($this->tool->getSlug($link['name']));
-			}
-
-			$count = 0;
-			do {
-				$check_name = $count ? $name . '_' . $count : $name;
-
-				$result = $this->db->query("SELECT COUNT(*) as total FROM " . DB_PREFIX . "navigation_group WHERE name = '$check_name' AND navigation_group_id != $navigation_group_id");
-
-				$count++;
-			} while ($result->row['total']);
-
-			$_POST['links'][$key]['name'] = $check_name;
 		}
 
 		return $this->error ? false : true;

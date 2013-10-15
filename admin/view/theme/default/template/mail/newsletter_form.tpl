@@ -37,11 +37,11 @@
 					<td>
 						<div><?= $entry_featured; ?></div>
 						<div>
-							<?= $this->builder->set_config('manufacturer_id', 'name'); ?>
+							<?= $this->builder->setConfig('manufacturer_id', 'name'); ?>
 							<?= $this->builder->build('select', $data_designers, "newsletter[featured][designer][designer_id]", !empty($newsletter) ? $newsletter['featured']['designer']['designer_id'] : '', array('id' => 'designer_select')); ?>
 						</div>
 						<div>
-							<?= $this->builder->set_config('product_id', 'name'); ?>
+							<?= $this->builder->setConfig('product_id', 'name'); ?>
 							<?= $this->builder->build('select', $data_designer_products, "newsletter[featured][product][product_id]", !empty($newsletter) ? $newsletter['featured']['product']['product_id'] : '', array('id' => 'product_select')); ?>
 						</div>
 					</td>
@@ -49,7 +49,7 @@
 						<div id='newsletter_featured'>
 							<div class='product_image'>
 								<div>
-									<?= $this->builder->image_input("newsletter[featured][product][image]", !empty($newsletter) ? $newsletter['featured']['product']['image'] : ''); ?>
+									<?= $this->builder->imageInput("newsletter[featured][product][image]", !empty($newsletter) ? $newsletter['featured']['product']['image'] : ''); ?>
 								</div>
 								<div class='image_heading'>
 									<input type="text" name="newsletter[featured][product][name]" value="<?= !empty($newsletter) ? $newsletter['featured']['product']['name'] : ''; ?>"/>
@@ -63,7 +63,7 @@
 							</div>
 							<div class='designer_image'>
 								<div>
-									<?= $this->builder->image_input("newsletter[featured][designer][image]", !empty($newsletter) ? $newsletter['featured']['designer']['image'] : ''); ?>
+									<?= $this->builder->imageInput("newsletter[featured][designer][image]", !empty($newsletter) ? $newsletter['featured']['designer']['image'] : ''); ?>
 								</div>
 								<div class='image_heading'>
 									<input type="text" name="newsletter[featured][designer][name]" value="<?= !empty($newsletter) ? $newsletter['featured']['designer']['name'] : ''; ?>"/>
@@ -143,7 +143,7 @@
 					<td>
 						<div>
 							<div><?= $entry_article_list_image; ?></div>
-							<?= $this->builder->image_input("newsletter[articles_image]", !empty($newsletter['articles_image']) ? $newsletter['articles_image'] : ''); ?>
+							<?= $this->builder->imageInput("newsletter[articles_image]", !empty($newsletter['articles_image']) ? $newsletter['articles_image'] : ''); ?>
 							<span><?= $entry_article_list_url; ?></span>
 							<input type="text" name="newsletter[articles_url]" value="<?= !empty($newsletter['articles_url']) ? $newsletter['articles_url'] : ''; ?>"
 							       size="50"/>
@@ -182,7 +182,7 @@
 					<td><?= $entry_featured_article_list; ?></td>
 					<td>
 						<div id='add_featured_article_form'>
-							<?= $this->builder->image_input("", ''); ?>
+							<?= $this->builder->imageInput("", ''); ?>
 							<label for="add_featured_article_title"><?= $entry_article_title; ?></label><input type="text"
 							                                                                                   id="add_featured_article_title"
 							                                                                                   size="30"/>
@@ -201,7 +201,7 @@
 									<? foreach ($newsletter['featured']['articles'] as $article) { ?>
 										<li>
 											<div class='editable_label'>
-												<?= $this->builder->image_input("newsletter[featured][articles][$featured_article_row][image]", $article['image']); ?>
+												<?= $this->builder->imageInput("newsletter[featured][articles][$featured_article_row][image]", $article['image']); ?>
 												<input type="text" name="newsletter[featured][articles][<?= $featured_article_row ?>][title]" value="<?= $article['title']; ?>" size="30"/>
 												<input type="text" name="newsletter[featured][articles][<?= $featured_article_row ?>][teaser]" value="<?= $article['teaser']; ?>" size="30"/>
 												<input type="text" name="newsletter[featured][articles][<?= $featured_article_row; ?>][href]" value="<?= $article['href']; ?>" size="80"/>
@@ -320,7 +320,7 @@
 
 			html = '<li>';
 			html += '	<div class="editable_label">';
-			html += "			<?= $this->builder->image_input("newsletter[featured][articles][%row%][image]", '%image%', null, null, null, null, true); ?>";
+			html += "			<?= $this->builder->imageInput("newsletter[featured][articles][%row%][image]", '%image%', null, null, null, null, true); ?>";
 			html += '			<input type="text" name="newsletter[featured][articles][%row%][title]" value="%title%" />';
 			html += '			<input type="text" name="newsletter[featured][articles][%row%][teaser]" value="%teaser%" />';
 			html += '			<input type="text" name="newsletter[featured][articles][%row%][href]" value="%href%" size="80"/>';

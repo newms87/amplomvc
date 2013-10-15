@@ -18,7 +18,7 @@ class Catalog_Controller_Mail_Order extends Controller
 		$order['shipping_address'] = $this->address->format($this->order->extractShippingAddress($order));
 
 		//Shipping / Payment Methods
-		$order['payment_method']  = $this->cart->getPaymentMethod($order['payment_method_id']);
+		$order['payment_method']  = $this->cart->getPaymentMethod($order['payment_method_id'])->info();
 		$order['shipping_method'] = $this->cart->getShippingMethod($order['shipping_method_id']);
 
 		// Vouchers

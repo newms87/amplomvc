@@ -97,21 +97,21 @@
 									<tr>
 										<td><?= $entry_profile_setting_id; ?></td>
 										<td>
-											<? $this->builder->set_config(false, "name"); ?>
+											<? $this->builder->setConfig(false, "name"); ?>
 											<?= $this->builder->build('select', $data_profile_settings, "profiles[$row][profile_setting_id]", $profile['profile_setting_id']); ?>
 										</td>
 									</tr>
 									<tr>
 										<td><?= $entry_store; ?></td>
 										<td>
-											<? $this->builder->set_config("store_id", "name"); ?>
+											<? $this->builder->setConfig("store_id", "name"); ?>
 											<?= $this->builder->build('multiselect', $data_stores, "profiles[$row][store_ids]", !empty($profile['store_ids']) ? $profile['store_ids'] : null); ?>
 										</td>
 									</tr>
 									<tr>
 										<td><?= $entry_layout; ?></td>
 										<td>
-											<? $this->builder->set_config("layout_id", "name"); ?>
+											<? $this->builder->setConfig("layout_id", "name"); ?>
 											<?= $this->builder->build('multiselect', $data_layouts, "profiles[$row][layout_ids]", !empty($profile['layout_ids']) ? $profile['layout_ids'] : null); ?>
 										</td>
 									</tr>

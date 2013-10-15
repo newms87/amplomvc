@@ -3,8 +3,6 @@ class System_Extension_Total_SubTotal extends Extension
 {
 	public function getTotal(&$total_data, &$total, &$taxes)
 	{
-		$_ = $this->language->system_fetch('extension/total/sub_total');
-
 		$sub_total = 0;
 
 		foreach ($this->cart->getProducts() as $product) {
@@ -20,10 +18,10 @@ class System_Extension_Total_SubTotal extends Extension
 
 		$total += $sub_total;
 
-		//Add Total Data (must use code as Index!)
-		$total_data['sub_total'] = array(
-			'title'      => $_['text_sub_total'],
-			'value'      => $sub_total,
+		$data = array(
+			'value' => $sub_total,
 		);
+
+		return $data;
 	}
 }

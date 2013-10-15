@@ -43,12 +43,12 @@
 						<table class="form">
 							<tr>
 								<td><?= $entry_parent; ?></td>
-								<? $this->builder->set_config('category_id', 'pathname'); ?>
+								<? $this->builder->setConfig('category_id', 'pathname'); ?>
 								<td><?= $this->builder->build('select', $data_categories, 'parent_id', (int)$parent_id); ?></td>
 							</tr>
 							<tr>
 								<td><?= $entry_store; ?></td>
-								<? $this->builder->set_config('store_id', 'name'); ?>
+								<? $this->builder->setConfig('store_id', 'name'); ?>
 								<td><?= $this->builder->build('multiselect', $data_stores, "category_store", $stores); ?></td>
 							</tr>
 							<tr>
@@ -61,8 +61,8 @@
 							<tr>
 								<td><?= $entry_image; ?></td>
 								<td>
-									<?= $this->builder->set_builder_template('click_image'); ?>
-									<?= $this->builder->image_input("image", $image); ?>
+									<?= $this->builder->setBuilderTemplate('click_image'); ?>
+									<?= $this->builder->imageInput("image", $image); ?>
 								</td>
 							</tr>
 							<tr>
@@ -84,7 +84,7 @@
 							</tr>
 							</thead>
 							<tbody>
-							<? $this->builder->set_config('layout_id', 'name'); ?>
+							<? $this->builder->setConfig('layout_id', 'name'); ?>
 
 							<? foreach ($data_stores as $store) { ?>
 								<tr>

@@ -4,13 +4,11 @@ class System_Extension_Total_Handling extends Extension
 	public function getTotal(&$total_data, &$total, &$taxes)
 	{
 		if (($this->cart->getSubTotal() < $this->config->get('handling_total')) && ($this->cart->getSubTotal() > 0)) {
-			$_ = $this->language->system_fetch('extension/total/handling');
+			$this->language->system('extension/total/handling');
 
-			$total_data[] = array(
-				'code'		=> 'handling',
-				'title'		=> $_['text_handling'],
-				'value'		=> $this->config->get('handling_fee'),
-				'sort_order' => $this->config->get('handling_sort_order')
+			$total_data['handling'] = array(
+				'title' => $this->_('text_handling'),
+				'value' => $this->config->get('handling_fee'),
 			);
 
 			if ($this->config->get('handling_tax_class_id')) {

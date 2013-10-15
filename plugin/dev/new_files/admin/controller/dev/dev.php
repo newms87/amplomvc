@@ -134,9 +134,11 @@ class Admin_Controller_Dev_Dev extends Controller
 				} else {
 					$this->message->add('warning', $this->_('error_download_backup_file'));
 				}
-			} elseif (isset($_POST['default_installation'])) {
+			}
+			elseif (isset($_POST['default_installation'])) {
 				$this->dev->site_backup(DIR_SYSTEM . 'install/db.sql', $this->getDefaultInstallProfile(), '%__TABLE_PREFIX__%');
-			} elseif (isset($_POST['site_backup'])) {
+			}
+			elseif (isset($_POST['site_backup'])) {
 				$tables = isset($_POST['tables']) ? $_POST['tables'] : null;
 
 				if (count($tables) == $this->db->countTables()) {
@@ -144,9 +146,28 @@ class Admin_Controller_Dev_Dev extends Controller
 				}
 
 				$this->dev->site_backup(null, $tables);
-			} elseif (isset($_POST['site_restore'])) {
+			}
+			elseif (isset($_POST['site_restore'])) {
 				$this->dev->site_restore($_POST['backup_file']);
-			} elseif (isset($_POST['execute_file'])) {
+			}
+			elseif (isset($_POST['sync_file'])) {
+				$sync_file = DIR_DOWNLOAD . 'sync_file-' . $this->date->now(AC_DATE_STRING, 'm-d-y') . '.sql';
+				$tables = isset($_POST['tables']) ? $_POST['tables'] : null;
+
+				$this->dev->site_backup($sync_file, $tables, '__AC_PREFIX__');
+
+				$this->export->downloadFile($sync_file);
+			}
+			elseif (isset($_POST['execute_sync_file'])) {
+				if (is_uploaded_file($_FILES['filename']['tmp_name'])) {
+					if ($this->dev->site_restore($_FILES['filename']['tmp_name'], true)) {
+						$this->message->add('success', "Successfully synchronized your site!");
+					} else {
+						$this->message->add('warning', "There was a problem while synchronizing from the sync file. " . $this->db->getError());
+					}
+				}
+			}
+			elseif (isset($_POST['execute_file'])) {
 				if (is_uploaded_file($_FILES['filename']['tmp_name'])) {
 					$filename = $_FILES['filename']['name'];
 					if ($this->db->executeFile($_FILES['filename']['tmp_name'])) {

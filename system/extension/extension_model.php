@@ -10,6 +10,10 @@ abstract class ExtensionModel extends Model
 			'code' => $code,
 		);
 
+		if (!empty($data['settings'])) {
+			$data['settings'] = serialize($data['settings']);
+		}
+
 		$this->update('extension', $data, $where);
 	}
 
@@ -22,7 +26,7 @@ abstract class ExtensionModel extends Model
 		return null;
 	}
 
-	protected function getExtensions($type)
+	protected function getExtensions($type, $filter = array())
 	{
 		if (!isset($this->extensions[$type])) {
 			$extensions = $this->queryRows("SELECT * FROM " . DB_PREFIX . "extension WHERE `type` = '" . $this->escape($type) . "' ORDER BY sort_order ASC", 'code');
@@ -36,7 +40,8 @@ abstract class ExtensionModel extends Model
 					$extensions[$code] = array(
 						'type'       => $type,
 						'code'       => $code,
-						'settings'   => '',
+						'title'      => $this->codeTitle($code),
+						'settings'   => array(),
 						'sort_order' => '',
 						'status'     => 0,
 						'installed'  => 0,
@@ -54,17 +59,71 @@ abstract class ExtensionModel extends Model
 					continue;
 				}
 
-				//Load Extension Language
-				$_l = $this->language->system_fetch("extension/$type/$code");
-
-				$extension['name'] = $_l['head_title'];
+				$extension['settings'] = $extension['settings'] ? unserialize($extension['settings']) : array();
 			}
 			unset ($extension);
 
 			$this->extensions[$type] = $extensions;
 		}
 
+		if ($filter) {
+			return $this->filter($this->extensions[$type], $filter);
+		}
+
 		return $this->extensions[$type];
+	}
+
+	private function filter($extensions, $filter)
+	{
+		foreach ($extensions as $key => $extension) {
+			if (!empty($filter['name'])) {
+				if (!preg_match("/$filter[name]/i", $extension['name'])) {
+					unset($extensions[$key]);
+				}
+			}
+
+			if (!empty($filter['code'])) {
+				if (!preg_match("/$filter[code]/i", $extension['code'])) {
+					unset($extensions[$key]);
+				}
+			}
+
+			if (!empty($filter['sort_order'])) {
+				if ((int)$extension['sort_order'] < $filter['sort_order']['low'] || (int)$extension['sort_order'] > $filter['sort_order']['high']) {
+					unset($extensions[$key]);
+				}
+			}
+
+			if (isset($filter['status'])) {
+				if ((bool)$filter['status'] !== (bool)$extension['status']) {
+					unset($extensions[$key]);
+				}
+			}
+		}
+
+		if (!empty($filter['sort'])) {
+			$sort  = $filter['sort'];
+			$order = (!empty($filter['order']) && $filter['order'] === 'DESC') ? 'DESC' : 'ASC';
+
+			$sort_empty_last = function ($a, $b) use ($sort, $order) {
+				if ($a[$sort] === '') {
+					$a[$sort] = PHP_INT_MAX;
+				}
+				if ($b[$sort] === '') {
+					$b[$sort] = PHP_INT_MAX;
+				}
+				return $order === 'DESC' ? $a[$sort] < $b[$sort] : $a[$sort] > $b[$sort];
+			};
+
+			usort($extensions, $sort_empty_last);
+		}
+
+		if (!empty($filter['limit'])) {
+			$start      = !empty($filter['start']) ? max(0, (int)$filter['start']) : 0;
+			$extensions = array_slice($extensions, $start, (int)$filter['limit']);
+		}
+
+		return $extensions;
 	}
 
 	protected function extensionExists($type, $code)
@@ -79,19 +138,20 @@ abstract class ExtensionModel extends Model
 		$this->Admin_Model_User_UserGroup->addPermission($this->user->info('user_group_id'), 'access', "$type/$code");
 		$this->Admin_Model_User_UserGroup->addPermission($this->user->info('user_group_id'), 'modify', "$type/$code");
 
-		$class = $this->loadClass($type, $code);
-
-		if (method_exists($class, 'install')) {
-			$class->install();
-		}
-
 		$data = array(
 			'type'       => $type,
 			'code'       => $code,
+			'title'      => $this->codeTitle($code),
 			'settings'   => '',
 			'sort_order' => 0,
 			'status'     => 1,
 		);
+
+		$extension = $this->loadClass($type, $code, $data);
+
+		if (method_exists($extension, 'install')) {
+			$extension->install();
+		}
 
 		$this->insert('extension', $data);
 	}
@@ -99,10 +159,10 @@ abstract class ExtensionModel extends Model
 	protected function uninstallExtension($type, $code, $full = true)
 	{
 		if ($full) {
-			$class = $this->loadClass($type, $code);
+			$extension = $this->loadClass($type, $code);
 
-			if (method_exists($class, 'uninstall')) {
-				$class->uninstall();
+			if (method_exists($extension, 'uninstall')) {
+				$extension->uninstall();
 			}
 		}
 
@@ -114,13 +174,28 @@ abstract class ExtensionModel extends Model
 		$this->delete('extension', $where);
 	}
 
-	protected function loadClass($type, $code)
+	protected function loadClass($type, $code, $info = null)
 	{
 		require_once(_ac_mod_file(DIR_SYSTEM . 'extension/extension.php'));
 		require_once(_ac_mod_file(DIR_SYSTEM . 'extension/' . $type . '/' . $code . '.php'));
 
 		$class = 'System_Extension_' . $this->tool->formatClassname($type) . '_' . $this->tool->formatClassname($code);
 
-		return new $class($this->registry);
+		$extension = new $class($this->registry);
+
+		if (!$info) {
+			$info = $this->getExtension($type, $code);
+		}
+
+		$extension->setInfo($info);
+
+		return $extension;
+	}
+
+	private function codeTitle($code)
+	{
+		$title_parts = explode('_', $code);
+		array_walk($title_parts, function (&$t) { $t = ucfirst($t); });
+		return implode(' ', $title_parts);
 	}
 }

@@ -8,7 +8,7 @@
 		<div class="buttons">
 			<? if (count($data_product_classes) > 1) { ?>
 				<form id="product_class_form" action="<?= $change_class; ?>" method="post">
-					<? $this->builder->set_config('product_class_id', 'name'); ?>
+					<? $this->builder->setConfig('product_class_id', 'name'); ?>
 					<?= $this->builder->build('select', $data_product_classes, 'product_class_id', $product_class_id); ?>
 					<input type="submit" class="button" value="<?= $button_change_class; ?>"/>
 				</form>
@@ -103,7 +103,7 @@
 						<tr>
 							<td><?= $entry_tax_class; ?></td>
 							<td>
-								<? $this->builder->set_config('tax_class_id', 'title'); ?>
+								<? $this->builder->setConfig('tax_class_id', 'title'); ?>
 								<?= $this->builder->build('select', $data_tax_classes, 'tax_class_id', $tax_class_id); ?>
 							</td>
 						</tr>
@@ -125,8 +125,8 @@
 						<tr>
 							<td><?= $entry_image; ?></td>
 							<td>
-								<?= $this->builder->set_builder_template('click_image'); ?>
-								<?= $this->builder->image_input("image", $image); ?>
+								<?= $this->builder->setBuilderTemplate('click_image'); ?>
+								<?= $this->builder->imageInput("image", $image); ?>
 							</td>
 						</tr>
 						<tr>
@@ -162,7 +162,7 @@
 							<td><?= $entry_return_policy; ?></td>
 							<td>
 								<? if (!empty($data_return_policies)) { ?>
-									<? $this->builder->set_config(false, 'title'); ?>
+									<? $this->builder->setConfig(false, 'title'); ?>
 									<?= $this->builder->build('select', $data_return_policies, 'return_policy_id', $return_policy_id); ?>
 								<? } ?>
 								<p><?= $text_add_return_policy; ?></p>
@@ -178,7 +178,7 @@
 							<td><?= $entry_shipping_policy; ?></td>
 							<td>
 								<? if (!empty($data_shipping_policies)) { ?>
-									<? $this->builder->set_config(false, 'title'); ?>
+									<? $this->builder->setConfig(false, 'title'); ?>
 									<?= $this->builder->build('select', $data_shipping_policies, 'shipping_policy_id', $shipping_policy_id); ?>
 								<? } ?>
 								<p><?= $text_add_shipping_policy; ?></p>
@@ -195,7 +195,7 @@
 						<tr>
 							<td><?= $entry_length; ?></td>
 							<td>
-								<? $this->builder->set_config('length_class_id', 'title'); ?>
+								<? $this->builder->setConfig('length_class_id', 'title'); ?>
 								<?= $this->builder->build('select', $data_length_classes, 'length_class_id', $length_class_id); ?>
 							</td>
 						</tr>
@@ -206,7 +206,7 @@
 						<tr>
 							<td><?= $entry_weight_class; ?></td>
 							<td>
-								<? $this->builder->set_config('weight_class_id', 'title'); ?>
+								<? $this->builder->setConfig('weight_class_id', 'title'); ?>
 								<?= $this->builder->build('select', $data_weight_classes, 'weight_class_id', $weight_class_id); ?>
 							</td>
 						</tr>
@@ -217,24 +217,24 @@
 					<table class="form">
 						<tr>
 							<td><?= $entry_manufacturer; ?></td>
-							<? $this->builder->set_config('manufacturer_id', 'name'); ?>
+							<? $this->builder->setConfig('manufacturer_id', 'name'); ?>
 							<td><?= $this->builder->build('select', $data_manufacturers, 'manufacturer_id', (int)$manufacturer_id); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_category; ?></td>
-							<? $this->builder->set_config('category_id', 'pathname'); ?>
+							<? $this->builder->setConfig('category_id', 'pathname'); ?>
 							<td><?= $this->builder->build('multiselect', $data_categories, "product_categories", $product_categories); ?></td>
 						</tr>
 						<tr>
 							<td><?= $entry_store; ?></td>
 							<td>
-								<? $this->builder->set_config('store_id', 'name'); ?>
+								<? $this->builder->setConfig('store_id', 'name'); ?>
 								<?= $this->builder->build('multiselect', $data_stores, "product_stores", $product_stores); ?>
 							</td>
 						</tr>
 						<tr>
 							<td><?= $entry_download; ?></td>
-							<? $this->builder->set_config('download_id', 'name'); ?>
+							<? $this->builder->setConfig('download_id', 'name'); ?>
 							<td><?= $this->builder->build('multiselect', $data_downloads, "product_downloads", $product_downloads); ?></td>
 						</tr>
 						<tr>
@@ -321,11 +321,9 @@
 											<td class="center"><?= $entry_option_value; ?></td>
 											<td class="center"><?= $entry_default; ?></td>
 											<td class="center"><?= $entry_image; ?></td>
+											<td class="center"><?= $entry_display_value; ?></td>
 											<td class="center"><?= $entry_quantity; ?></td>
-											<td class="center"><?= $entry_subtract; ?></td>
-											<td class="center"><?= $entry_cost; ?></td>
-											<td class="center"><?= $entry_price; ?></td>
-											<td class="center"><?= $entry_option_points; ?></td>
+											<td class="center"><?= $entry_pricing; ?></td>
 											<td class="center"><?= $entry_weight; ?></td>
 											<td class="center"><?= $entry_sort_order; ?></td>
 											<td class="center"><?= $entry_option_value_restriction; ?></td>
@@ -348,23 +346,25 @@
 														<input type="<?= $type; ?>" name="<?= $product_option_value_row; ?>[default]" value="1" <?= $product_option_value['default'] ? 'checked="checked"' : ''; ?> />
 													</td>
 													<td class="center">
-														<? $this->builder->set_builder_template('click_image_small'); ?>
-														<?= $this->builder->image_input($product_option_value_row . '[image]', $product_option_value['image'], null, null, $this->config->get('config_image_product_option_width'), $this->config->get('config_image_product_option_height')); ?>
+														<? $this->builder->setBuilderTemplate('click_image_small'); ?>
+														<?= $this->builder->imageInput($product_option_value_row . '[image]', $product_option_value['image'], null, null, $this->config->get('config_image_product_option_width'), $this->config->get('config_image_product_option_height')); ?>
 													</td>
 													<td class="center">
-														<input type="text" name="<?= $product_option_value_row; ?>[quantity]" value="<?= $product_option_value['quantity']; ?>" size="3"/>
+														<input type="text" size="50" name="<?= $product_option_value_row; ?>[display_value]" value="<?= $product_option_value['display_value']; ?>" />
 													</td>
 													<td class="center">
-														<?= $this->builder->build('select', $data_yes_no, $product_option_value_row . "[subtract]", $product_option_value['subtract']); ?>
+														<input type="text" name="<?= $product_option_value_row; ?>[quantity]" value="<?= $product_option_value['quantity']; ?>" size="3"/><br />
+														<? $checked = $product_option_value['subtract'] ? 'checked="checked"' : ''; ?>
+														<input id="subtractstock<?= "$row-$pov_row"; ?>" type="checkbox" <?= $checked; ?> name="<?= $product_option_value_row . "[subtract]"; ?>" value="1" />
+														<label for="subtractstock<?= "$row-$pov_row"; ?>" class="subtract_stock"><?= $entry_subtract; ?></label>
 													</td>
 													<td class="center">
-														<input type="text" name="<?= $product_option_value_row; ?>[cost]" value="<?= $product_option_value['cost']; ?>" size="5"/>
-													</td>
-													<td class="center">
-														<input type="text" name="<?= $product_option_value_row; ?>[price]" value="<?= $product_option_value['price']; ?>" size="5"/>
-													</td>
-													<td class="center">
-														<input type="text" name="<?= $product_option_value_row; ?>[points]" value="<?= $product_option_value['points']; ?>" size="5"/>
+														<label for="cost<?= "$row-$pov_row"; ?>"><?= $entry_cost; ?></label>
+														<input id="cost<?= "$row-$pov_row"; ?>" type="text" name="<?= $product_option_value_row; ?>[cost]" value="<?= $product_option_value['cost']; ?>" size="5"/><br/>
+														<label for="price<?= "$row-$pov_row"; ?>"><?= $entry_price; ?></label>
+														<input id="price<?= "$row-$pov_row"; ?>" type="text" name="<?= $product_option_value_row; ?>[price]" value="<?= $product_option_value['price']; ?>" size="5"/><br/>
+														<label for="points<?= "$row-$pov_row"; ?>"><?= $entry_option_points; ?></label>
+														<input id="points<?= "$row-$pov_row"; ?>" type="text" name="<?= $product_option_value_row; ?>[points]" value="<?= $product_option_value['points']; ?>" size="5"/>
 													</td>
 													<td class="center">
 														<input type="text" name="<?= $product_option_value_row; ?>[weight]" value="<?= $product_option_value['weight']; ?>" size="5"/>
@@ -388,7 +388,7 @@
 																	<? $restriction_row = $product_option_value_row . "[restrictions][$r_row]"; ?>
 																	<tr class="product_option_value_restriction" data-row="<?= $r_row; ?>">
 																		<td class="center">
-																			<? // $this->builder->set_config('product_option_value_id', 'name'); ?>
+																			<? // $this->builder->setConfig('product_option_value_id', 'name'); ?>
 																			<? // $this->builder->build('select', $all_product_option_values, $restriction_row."[restrict_option_value_id]", $restriction['restrict_option_value_id']); ?>
 																		</td>
 																		<td class="center"><input type="text" size='3' name="<?= $restriction_row; ?>[quantity]" value="<?= $restriction['quantity']; ?>"/></td>
@@ -455,8 +455,8 @@
 									</td>
 									<td class="left">
 										<div class="image">
-											<? $this->builder->set_builder_template('browse_clear'); ?>
-											<?= $this->builder->image_input("product_attributes[$row][image]", $product_attribute['image']); ?>
+											<? $this->builder->setBuilderTemplate('browse_clear'); ?>
+											<?= $this->builder->imageInput("product_attributes[$row][image]", $product_attribute['image']); ?>
 										</div>
 									</td>
 									<td class="left">
@@ -489,7 +489,7 @@
 						<? foreach ($product_discounts as $row => $product_discount) { ?>
 							<tr class="product_discount" data-row="<?= $row; ?>">
 								<td class="left">
-									<? $this->builder->set_config('customer_group_id', 'name'); ?>
+									<? $this->builder->setConfig('customer_group_id', 'name'); ?>
 									<?= $this->builder->build('select', $data_customer_groups, "product_discounts[$row][customer_group_id]", $product_discount['customer_group_id']); ?>
 								</td>
 								<td class="right"><input type="text" name="product_discounts[<?= $row; ?>][quantity]" value="<?= $product_discount['quantity']; ?>" size="2"/></td>
@@ -527,7 +527,7 @@
 							<? foreach ($product_specials as $row => $product_special) { ?>
 								<tr class="product_special" data-row="<?= $row; ?>">
 									<td class="left">
-										<? $this->builder->set_config('customer_group_id', 'name'); ?>
+										<? $this->builder->setConfig('customer_group_id', 'name'); ?>
 										<?= $this->builder->build('select', $data_customer_groups, "product_specials[$row][customer_group_id]", $product_special['customer_group_id']); ?>
 									</td>
 									<td class="right"><input type="text" name="product_specials[<?= $row; ?>][priority]" value="<?= $product_special['priority']; ?>" size="2"/></td>
@@ -560,7 +560,7 @@
 							<? foreach ($product_images as $row => $product_image) { ?>
 								<tr class="product_image" data-row="<?= $row; ?>">
 									<td class="center">
-										<?= $this->builder->image_input("product_images[$row][image]", $product_image['image']); ?>
+										<?= $this->builder->imageInput("product_images[$row][image]", $product_image['image']); ?>
 									</td>
 									<td class="center"><input class="sort_order" type="text" name="product_images[<?= $row; ?>][sort_order]" value="<?= $product_image['sort_order']; ?>" size="2"/></td>
 									<td class="left"><a onclick="$(this).closest('.product_image').remove();"
@@ -617,7 +617,7 @@
 						<tr>
 							<td class="left"><?= $store['name']; ?></td>
 							<td class="left">
-								<? $this->builder->set_config('layout_id', 'name'); ?>
+								<? $this->builder->setConfig('layout_id', 'name'); ?>
 								<?= $this->builder->build('select', $data_layouts, "product_layouts[$store[store_id]][layout_id]", isset($product_layouts[$store['store_id']]) ? $product_layouts[$store['store_id']] : ''); ?>
 							</td>
 							<td class="left">

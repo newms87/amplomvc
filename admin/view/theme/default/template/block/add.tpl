@@ -41,7 +41,7 @@
 					<tr>
 						<td><?= $entry_theme; ?></td>
 						<td>
-							<? $this->builder->set_config('name', 'name'); ?>
+							<? $this->builder->setConfig('name', 'name'); ?>
 							<?= $this->builder->build('multiselect', $data_themes, 'themes', $themes); ?>
 						</td>
 					</tr>

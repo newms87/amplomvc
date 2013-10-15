@@ -1,5 +1,7 @@
 function syncload(s) {
-	s = $.ac_vars.site_url + s;
+	if (!s.match(/^https?:\/\//)) {
+		s = $.ac_vars.site_url + s;
+	}
 
 	$.ajax({
 		async: false,
@@ -124,22 +126,132 @@ $.fn.ac_datepicker = function (params) {
 	});
 }
 
-$.fn.ac_radio = function () {
-	var radiolist = this;
+$.fn.ac_radio = function (params) {
+	params = $.extend({}, {
+		elements: $(this).children().not('.noradio')
+	}, params);
 
 	this.find('input[type=radio]').hide();
 
-	this.each(function (i, e) {
+	params.elements.each(function (i, e) {
 		if ($(e).find('input[type=radio]:checked').length) {
 			$(e).addClass('checked');
 		}
-	});
+	})
 
-	this.click(function () {
-		radiolist.removeClass('checked').find('input[type=radio]').prop('checked', false);
+	.click(function () {
+		params.elements.removeClass('checked').find('input[type=radio]').prop('checked', false);
 		$(this).addClass("checked").find('input[type=radio]').prop('checked', true);
 	});
+
+	return this;
 }
+
+$.fn.ac_slidelist = function(params) {
+	var allowed = 'div, a, span';
+	this.each(function(i,e){
+		var box = $('<div class="slidelistbox" />');
+		var slider = $('<div class="slidelist" />').width($(e).width()).append($(e).children(allowed));
+
+		if (params.x_dir < 0) {
+			box.addClass('right');
+		}
+		$(e).append(box.append(slider));
+
+		var items = slider.children(':not(.add_slide)').addClass('slideitem');
+		var add_slide = slider.children('.add_slide');
+
+		params = $.extend(true, {}, {
+			min_space_y: 10,
+			min_space_x: 0,
+			pad_y: 0,
+			pad_x: 0,
+			add_slide: {x: 0, y: null, xout: 0, yout: 0},
+			item_height: items.first().outerHeight(true),
+			item_width: items.first().outerWidth(true),
+			max_rows: 4,
+			x_dir: 1,
+			hover_in_delay: 0,
+			hover_out_delay: 0
+		}, params);
+
+		if (params.add_slide.y === null) {
+			params.add_slide.y = params.item_height * .4;
+		}
+
+		var rows = Math.min(items.length-1, params.max_rows);
+		var cols = Math.floor((items.length-1) / rows);
+		var item_height = params.item_height;
+		var item_width = params.item_width;
+		var max_height = (params.pad_y + item_height) * rows;
+		var min_height = rows * params.min_space_y;
+		var max_width = (params.pad_x + item_width) * cols;
+		var min_width = cols * params.min_space_x;
+
+		slider.css({
+			'margin-top': item_height
+		});
+
+		box.width(params.item_width);
+
+		var sort = function() {
+			slider.children('.slideitem:first').css({
+				top: -item_height,
+				bottom:'auto',
+				left: params.x_dir >= 0 ? 0 : 'auto',
+				right: params.x_dir < 0 ? 0 : 'auto',
+				'z-index': items.length
+			});
+
+			slider.children('.slideitem').not(':first').each(function(i,e){
+				y_perc = (rows - (i%rows) - 1) / rows * 100;
+				x_perc = Math.floor(i/rows) / cols * 100;
+
+				left = params.x_dir >= 0 ? x_perc + '%' : 'auto';
+				right = params.x_dir < 0 ? x_perc + '%' : 'auto';
+
+				$(e).css({
+					top: 'auto',
+					bottom: y_perc + '%',
+					left: left,
+					right: right,
+					'z-index': items.length - i -1
+				});
+			})
+		}
+
+		function hoverIn(){
+			slider.css({
+				height: max_height,
+				width: max_width
+			})
+
+			add_slide.css({
+				bottom: (-params.add_slide.y / max_height * 100) + '%'
+			});
+		};
+
+		function hoverOut(){
+			slider.css({
+				height: min_height,
+				width: min_width
+			})
+
+			add_slide.css({
+				bottom: ((params.add_slide.yout + min_height) / min_height) + '%'
+			});
+		};hoverOut();//call this for initial position
+
+		slider.parent().hover(function(){ setTimeout(hoverIn, params.hover_in_delay); }, function() { setTimeout(hoverOut, params.hover_out_delay); });
+
+		slider.click(function(){
+			slider.prepend(slider.children('.checked'));
+			sort();
+		}).click();
+	});
+
+	return this;
+};
 
 //Apply a filter form to the URL
 $.fn.apply_filter = function (url) {
@@ -237,7 +349,7 @@ function colorbox(context, data) {
 	context = context || $(this);
 
 	if (context.attr('href')) {
-		href = context.attr('href');
+		href = ajaxurl(context.attr('href'));
 		html = null;
 	} else {
 		href = null
@@ -262,6 +374,27 @@ function colorbox(context, data) {
 	$.colorbox(defaults);
 
 	return false;
+}
+
+function ajaxurl(url){
+	if (url.match(/\?.*ajax=/)) {
+		return url;
+	}
+
+	return url.match(/\?/) ? url + '&ajax=1' : url + '?ajax=1';
+}
+
+function show_errors(errors, context) {
+	context = context || $('body');
+
+	for (var e in errors) {
+		ele = context.find('[name="' + e + '"]');
+		if (!ele.length)
+			ele = $('#' + e);
+		if (!ele.length)
+			ele = $(e);
+		ele.after("<span class=\"error\">" + errors[e] + "</span");
+	};
 }
 
 $.fn.display_error = function (msg, id) {

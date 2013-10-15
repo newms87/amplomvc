@@ -293,7 +293,7 @@ class Admin_Controller_Page_Page extends Controller
 
 		$layouts = $this->Model_Design_Layout->getLayouts($sort);
 
-		$this->builder->set_config('layout_id', 'name');
+		$this->builder->setConfig('layout_id', 'name');
 
 		$this->response->setOutput($this->builder->build('select', $layouts, 'layout_id', $layout_id));
 	}

@@ -89,14 +89,7 @@ switch ($js) {
 			var errors = <?=$errors;?>;
 			var error_holder = $('#<?= $script_id; ?>').parent();
 
-			for (var e in errors) {
-				context = error_holder.find('[name="' + e + '"]');
-				if (!context.length)
-					context = $('#' + e);
-				if (!context.length)
-					context = $(e);
-				context.after("<span class =\"error\">" + errors[e] + "</span");
-			};
+			show_errors(errors, error_holder);
 		//--></script>
 
 		<?php break;

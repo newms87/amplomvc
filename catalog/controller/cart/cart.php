@@ -70,7 +70,7 @@ class Catalog_Controller_Cart_Cart extends Controller
 		$product_options = !empty($_POST['product_options']) ? $_POST['product_options'] : array();
 		$load_page        = isset($_POST['load_page']);
 
-		$this->cart->add($product_id, $quantity, $product_options);
+		$key = $this->cart->add($product_id, $quantity, $product_options);
 
 		if ($load_page) {
 			$this->index();
@@ -85,11 +85,24 @@ class Catalog_Controller_Cart_Cart extends Controller
 				$json['success'] = $this->_('text_success', $this->url->link('product/product', 'product_id=' . $product_id), $name, $this->url->link('cart/cart', "redirect=$redirect"));
 
 				$json['total'] = $this->_('text_items', $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($this->cart->getTotal()));
+
+				$json['key'] = $key;
 			} else {
 				$json['error'] = $this->cart->get_errors('add');
 			}
 
 			$this->response->setOutput(json_encode($json));
+		}
+	}
+
+	public function remove()
+	{
+		if (!empty($_GET['key'])) {
+			$this->cart->remove($_GET['key']);
+		}
+
+		if (!$this->request->isAjax()) {
+			$this->url->redirect($this->url->link('cart/cart'));
 		}
 	}
 }

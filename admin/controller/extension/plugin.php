@@ -100,6 +100,13 @@ class Admin_Controller_Extension_Plugin extends Controller
 					),*/
 				);
 
+				if ($this->plugin->hasChanges($plugin['name'])) {
+					$plugin['actions']['add_changes'] = array(
+						'text' => $this->_('text_add_changes'),
+						'href' => $this->url->link('extension/plugin/add_changes', 'name=' . $plugin['name']),
+					);
+				}
+
 				if ($this->Model_Setting_Plugin->canUninstall($plugin['name'])) {
 					$plugin['actions']['uninstall'] = array(
 						'text' => $this->_('text_uninstall'),
@@ -229,6 +236,15 @@ class Admin_Controller_Extension_Plugin extends Controller
 		}
 
 		$this->getForm();
+	}
+
+	public function add_changes()
+	{
+		if (!empty($_GET['name'])) {
+			$this->plugin->integrateChanges($_GET['name']);
+		}
+
+		$this->url->redirect($this->url->link('extension/plugin'));
 	}
 
 	public function install()

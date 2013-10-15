@@ -16,7 +16,7 @@
 	<div class="ac_carousel_list">
 		<? foreach ($profile_setting['slides'] as $slide_row => $slide) { ?>
 			<div class="ac_carousel_slide" data-row="<?= $slide_row; ?>">
-				<?= $this->builder->image_input("profile_settings[$row][slides][$slide_row][image]", $slide['image']); ?>
+				<?= $this->builder->imageInput("profile_settings[$row][slides][$slide_row][image]", $slide['image']); ?>
 				<div class="delete_button" onclick="$(this).closest('.ac_carousel_slide').remove()"></div>
 			</div>
 		<? } ?>

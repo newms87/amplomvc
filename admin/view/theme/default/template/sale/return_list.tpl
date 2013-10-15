@@ -77,7 +77,7 @@
 						<td><input type="text" name="filter_product" value="<?= $filter_product; ?>"/></td>
 						<td><input type="text" name="filter_model" value="<?= $filter_model; ?>"/></td>
 						<td>
-							<? $this->builder->set_config(false, 'title'); ?>
+							<? $this->builder->setConfig(false, 'title'); ?>
 							<?= $this->builder->build('select', $data_return_statuses, 'filter_return_status_id', $filter_return_status_id); ?>
 						</td>
 						<td><input type="text" name="filter_date_added" value="<?= $filter_date_added; ?>" size="12"

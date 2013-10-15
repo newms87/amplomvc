@@ -86,22 +86,20 @@ class Cart extends Library
 
 	public function add($product_id, $quantity = 1, $product_options = array())
 	{
-		if ($this->validateProduct($product_id, $quantity, $product_options)) {
-			if ((int)$quantity > 0) {
-				$key = (int)$product_id . ':' . base64_encode(serialize($product_options));
+		if ($this->validateProduct($product_id, $quantity, $product_options) && (int)$quantity > 0) {
+			$key = (int)$product_id . ':' . base64_encode(serialize($product_options));
 
-				if (empty($this->session->data['cart'][$key])) {
-					$this->session->data['cart'][$key] = $quantity;
-				} else {
-					$this->session->data['cart'][$key] += $quantity;
-				}
+			if (empty($this->session->data['cart'][$key])) {
+				$this->session->data['cart'][$key] = $quantity;
+			} else {
+				$this->session->data['cart'][$key] += $quantity;
 			}
 
 			//Invalidate Rendered Data
 			$this->data = array();
 			$this->totals = null;
 
-			return true;
+			return $key;
 		}
 
 		return false;
@@ -218,11 +216,15 @@ class Cart extends Library
 
 			foreach ($total_extensions as $code => $extension) {
 				if (method_exists($extension, 'getTotal')) {
-					$extension->getTotal($total_data, $total, $taxes);
+					$data = $extension->getTotal($total_data, $total, $taxes);
+
+					if ($data) {
+						$total_data[$code] = $data;
+					}
 				}
 
 				if (isset($total_data[$code])) {
-					$total_data[$code] += $extension->getInfo();
+					$total_data[$code] += $extension->info();
 				}
 			}
 
@@ -283,6 +285,11 @@ class Cart extends Library
 	/**
 	 *  Cart Products
 	 */
+
+	public function getProduct($key)
+	{
+		return array_search_key('key', $key, $this->getProducts());
+	}
 
 	public function getProductId($key)
 	{
@@ -409,7 +416,11 @@ class Cart extends Library
 
 					foreach ($total_extensions as $extension) {
 						if (method_exists($extension, 'getProductTotal')) {
-							$extension->getProductTotal($product, $product_options);
+							$total = $extension->getProductTotal($product['product_id'], $quantity, $product_options, $product);
+
+							if (!is_null($total)) {
+								$product['total'] = $total;
+							}
 						}
 					}
 
@@ -794,16 +805,23 @@ class Cart extends Library
 				$payment_address = $this->getPaymentAddress();
 			}
 
-			$classname = "Catalog_Model_Payment_" . $this->tool->formatClassname($payment_method_id);
+			$extension = $this->System_Extension_Payment->get($payment_method_id);
 
-			$method = $this->$classname->getMethod($payment_address, $this->getTotal());
-
-			if ($method) {
-				return $method;
+			if ($extension->isActive() && $extension->validate($payment_address, $this->getTotal())) {
+				return $extension;
 			}
 		}
 
 		return false;
+	}
+
+	public function getPaymentMethodTemplate()
+	{
+		$extension = $this->System_Extension_Payment->get($this->getPaymentMethodId());
+
+		$extension->renderTemplate();
+
+		return $extension->output;
 	}
 
 	public function getPaymentMethodData($payment_method_id = null)
@@ -812,31 +830,30 @@ class Cart extends Library
 			return false;
 		}
 
-		$classname = "Catalog_Model_Payment_" . $this->tool->formatClassname($payment_method_id);
-
-		if (method_exists($this->$classname, 'data')) {
-			return $this->$classname->data();
-		}
-
-		return false;
+		return $this->System_Extension_Payment->get($payment_method_id)->info();
 	}
 
 	public function getPaymentMethods($payment_address = null)
 	{
+		if (!empty($payment_address)) {
+			if (!is_array($payment_address)) {
+				$payment_address = $this->customer->getAddress($payment_address);
+			}
+		} else {
+			$payment_address = $this->getPaymentAddress();
+		}
+
 		// Payment Methods
+		$payment_extensions = $this->System_Extension_Payment->getActive();
 		$methods = array();
 
-		$results = $this->Model_Setting_Extension->getExtensions('payment');
-
-		foreach ($results as $result) {
-			$method = $this->getPaymentMethod($result['code'], $payment_address);
-
-			if ($method) {
-				$methods[$result['code']] = $method;
+		foreach ($payment_extensions as $code => $extension) {
+			if ($extension->validate($payment_address, $this->getTotal())) {
+				$methods[$code] = $extension->info();
 			}
 		}
 
-		if (!$methods) {
+		if (empty($methods)) {
 			$this->error['checkout']['payment_method'] = $this->_('error_payment_methods', $this->config->get('config_email'));
 
 			$this->setPaymentMethod();

@@ -1,7 +1,7 @@
 <?= $header; ?>
 	<div class="section">
 		<?= $this->breadcrumb->render(); ?>
-		<?= $this->builder->display_errors(); ?>
+
 		<div class="box">
 			<div class="heading">
 				<h1><img src="<?= HTTP_THEME_IMAGE . 'country.png'; ?>" alt=""/> <?= $head_title; ?></h1>
@@ -50,7 +50,7 @@
 							<? $row = $key == 'template_row' ? '%zone_row%' : $zone_row++; ?>
 							<tr class="geozone_selector <?= $key; ?>">
 								<td class="left">
-									<? $this->builder->set_config('country_id', 'name'); ?>
+									<? $this->builder->setConfig('country_id', 'name'); ?>
 									<?= $this->builder->build('select', $data_countries, "zones[$row][country_id]", $zone['country_id'], array('class' => 'country_selector')); ?>
 									<a onclick="add_all_zones($(this))"
 									   style="text-decoration:none; display:block"><?= $button_add_all_zones; ?></a>

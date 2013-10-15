@@ -44,8 +44,8 @@
 									<? foreach ($press['images'] as $img_key => $image) { ?>
 										<? $image_row = $img_key === 'template_row' ? '%image_row%' : $img_row++; ?>
 										<div class="press_image <?= $img_key; ?>" image_id="<?= $image_row; ?>">
-											<?= $this->builder->set_builder_template('click_image'); ?>
-											<?= $this->builder->image_input("settings[press_items][$row][images][$image_row]", $image); ?>
+											<?= $this->builder->setBuilderTemplate('click_image'); ?>
+											<?= $this->builder->imageInput("settings[press_items][$row][images][$image_row]", $image); ?>
 											<br/>
 											<a onclick="$(this).closest('.press_image').remove()"
 											   class="delete"><?= $button_remove; ?></a>

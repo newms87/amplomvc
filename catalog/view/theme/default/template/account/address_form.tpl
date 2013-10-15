@@ -2,7 +2,7 @@
 <?= $column_left; ?><?= $column_right; ?>
 <div id="address_update" class="content">
 	<? if ($errors && $this->request->isAjax()) { ?>
-		<?= $this->builder->display_messages(array('error' => $errors)); ?>
+		<?= $this->builder->displayMessages(array('error' => $errors)); ?>
 	<? } ?>
 
 	<?= $this->breadcrumb->render(); ?>
@@ -46,7 +46,7 @@
 				<tr>
 					<td class="required"> <?= $entry_country; ?></td>
 					<td>
-						<?= $this->builder->set_config('country_id', 'name'); ?>
+						<?= $this->builder->setConfig('country_id', 'name'); ?>
 						<?= $this->builder->build('select', $data_countries, "country_id", $country_id, array('class' => "country_select")); ?>
 					</td>
 				</tr>

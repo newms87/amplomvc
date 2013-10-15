@@ -37,13 +37,18 @@ class Dev
 		return false;
 	}
 
-	public function site_restore($file)
+	public function site_restore($file, $sync_file = false)
 	{
 		$site_name = $this->config->get('config_name');
 
 		if (!is_file($file)) {
 			$this->message->add('warning', "Failed to restore $site_name from $file. The File was not found.");
 			return false;
+		}
+
+		if ($sync_file) {
+			$contents = preg_replace("/__AC_PREFIX__/", DB_PREFIX, file_get_contents($file));
+			file_put_contents($file, $contents);
 		}
 
 		if ($this->db->executeFile($file)) {

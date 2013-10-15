@@ -250,11 +250,8 @@ class Catalog_Controller_Account_Address extends Controller
 
 	private function validateDelete()
 	{
-		if ($this->System_Model_Address->getTotalAddresses() == 1) {
-			$this->error['warning'] = $this->_('error_delete');
-		}
-		if ($this->customer->getMeta('default_shipping_address_id') === (int)$_GET['address_id']) {
-			$this->error['warning'] = $this->_('error_default');
+		if (!$this->address->canDelete($_POST['address_id'])) {
+			$this->error += $this->address->getError();
 		}
 
 		return $this->error ? false : true;

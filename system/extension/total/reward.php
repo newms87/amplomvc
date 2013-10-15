@@ -4,7 +4,7 @@ class System_Extension_Total_Reward extends Extension
 	public function getTotal(&$total_data, &$total, &$taxes)
 	{
 		if (isset($this->session->data['reward'])) {
-			$_ = $this->language->system_fetch('extension/total/reward');
+			$this->language->system('extension/total/reward');
 
 			$points = $this->customer->getRewardPoints();
 
@@ -43,8 +43,8 @@ class System_Extension_Total_Reward extends Extension
 
 				$total_data['reward'] = array(
 					'method_id' => $this->session->data['reward'],
-					'title'		=> sprintf($_['text_reward'], $this->session->data['reward']),
-					'value'		=> -$discount_total,
+					'title'     => $this->_('text_reward', $this->session->data['reward']),
+					'value'     => -$discount_total,
 				);
 
 				$total -= $discount_total;
@@ -55,14 +55,14 @@ class System_Extension_Total_Reward extends Extension
 	//TODO - The reward should be the method_id (not grabbed from title..)
 	public function confirm($order_info, $order_total)
 	{
-		$_ = $this->language->system_fetch('total/reward');
+		$this->language->system('extension/total/reward');
 
 		if ($order_total['method_id']) {
 			$customer_reward = array(
 				'customer_id' => $order_info['customer_id'],
-				'description' => sprintf($_['text_order_id'], $order_info['order_id']),
-				'points' => -$order_total['method_id'],
-				'date_added' => $this->date->now(),
+				'description' => $this->_('text_order_id', $order_info['order_id']),
+				'points'      => -$order_total['method_id'],
+				'date_added'  => $this->date->now(),
 			);
 
 			$this->insert('customer_reward', $customer_reward);

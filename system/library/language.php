@@ -16,7 +16,7 @@ class Language extends Library
 
 	public $data = array();
 
-	public function __construct($registry, $language_id = null, $set_active_language = true)
+	public function __construct($registry, $language_id = null, $set_active_language = true, $load_default = true)
 	{
 		parent::__construct($registry);
 
@@ -32,7 +32,7 @@ class Language extends Library
 		$this->directory   = $language['directory'];
 
 		if ($set_active_language) {
-			$session->data['language_code'] = $this->code;
+			$this->session->data['language_code'] = $this->code;
 
 			//Set as default language for this user for 30 days
 			$this->session->setCookie('language_code', $this->code, 60 * 60 * 24 * 30);
@@ -40,7 +40,9 @@ class Language extends Library
 			$this->config->set('config_language_id', $this->language_id);
 		}
 
-		$this->load($language['filename']);
+		if ($load_default) {
+			$this->load($language['filename']);
+		}
 	}
 
 	public function setRoot($root)
@@ -130,7 +132,7 @@ class Language extends Library
 			$file = $this->root . $this->default . '/' . $filename . '.php';
 
 			if (!file_exists($file)) {
-				trigger_error('Error: Could not load language ' . $filename . '!' . get_caller());
+				trigger_error('Error: Could not load language ' . $filename . '!' . get_caller(0, 2));
 				exit();
 			}
 		}
@@ -177,7 +179,7 @@ class Language extends Library
 			$file = $this->root . $this->default . '/' . $filename . '.php';
 
 			if (!file_exists($file)) {
-				trigger_error('Error: Could not load language ' . $filename . '!');
+				trigger_error('Error: Could not load language ' . $filename . '!' . get_caller(0, 2));
 				exit();
 			}
 		}
@@ -208,7 +210,7 @@ class Language extends Library
 			$file = $this->root . $this->default . '/' . $filename . '.php';
 
 			if (!file_exists($file)) {
-				trigger_error("Could not fetch language $filename in $directory! " . get_caller());
+				trigger_error("Could not fetch language $filename in $directory! " . get_caller(0, 2));
 				exit();
 			}
 		}
@@ -260,7 +262,7 @@ class Language extends Library
 			$file = DIR_SYSTEM . 'language/' . $this->default . '/' . $filename . '.php';
 
 			if (!is_file($file)) {
-				trigger_error('Could not load system language file ' . $filename . '!');
+				trigger_error('Could not load system language file ' . $filename . '!' . get_caller(0, 2));
 
 				return null;
 			}
@@ -285,7 +287,7 @@ class Language extends Library
 			$file = DIR_SYSTEM . 'language/' . $this->default . '/' . $filename . '.php';
 
 			if (!file_exists($file)) {
-				trigger_error("The langauge file was not found for $filename in $directory! " . get_caller());
+				trigger_error("The langauge file was not found for $filename in $directory! " . get_caller(0, 2));
 				exit();
 			}
 		}
@@ -305,7 +307,7 @@ class Language extends Library
 			$file = DIR_PLUGIN . $name . '/language/' . $this->default . '/' . $filename . '.php';
 
 			if (!file_exists($file)) {
-				trigger_error("The plugin language file $file was not found for the plugin $name: $filename requested!" . get_caller());
+				trigger_error("The plugin language file $file was not found for the plugin $name: $filename requested!" . get_caller(0, 2));
 			}
 		}
 

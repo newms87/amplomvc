@@ -6,7 +6,7 @@
 				<h1><img src="<?= HTTP_THEME_IMAGE . 'lockscreen.png'; ?>" alt=""/> <?= $text_login; ?></h1>
 			</div>
 			<div class="section" style="min-height: 150px; overflow: hidden;">
-				<?= $this->builder->display_messages($messages); ?>
+				<?= $this->builder->displayMessages($messages); ?>
 				<form action="<?= $action ?>" method="post" enctype="multipart/form-data" id="form">
 					<table style="width: 100%;">
 						<tr>

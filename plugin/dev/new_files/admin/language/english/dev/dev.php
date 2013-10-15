@@ -29,25 +29,26 @@ $_['column_username'] = "Username";
 $_['column_status']   = "Site Status";
 
 // Entry
-$_['entry_sync_table']   = 'Tables:';
-$_['entry_domain']       = 'Site Domain: <span class="help">(eg: www.yourdomain.com)</span>';
-$_['entry_username']     = 'Username:';
-$_['entry_password']     = 'Password:';
-$_['entry_status']       = 'Site Status:';
-$_['entry_backup']       = 'Database Backup:';
-$_['entry_restore']      = 'Restore Site From Backup:';
-$_['entry_execute_file'] = 'Execute DB Script File:';
-
+$_['entry_sync_table']        = 'Tables:';
+$_['entry_domain']            = 'Site Domain: <span class="help">(eg: www.yourdomain.com)</span>';
+$_['entry_username']          = 'Username:';
+$_['entry_password']          = 'Password:';
+$_['entry_status']            = 'Site Status:';
+$_['entry_backup']            = 'Database Backup:';
+$_['entry_restore']           = 'Restore Site From Backup:';
+$_['entry_execute_file']      = 'Execute DB Script File:';
 
 //Button
 $_['button_add_site']             = "Add Site";
 $_['button_sync']                 = "Request Synchronization";
+$_['button_sync_file']            = "Download Synchronization File";
 $_['button_return']               = "Back To Dashboard";
 $_['button_backup']               = "Backup Database";
 $_['button_default_installation'] = "Overwrite Default \r\nDB Installation";
 $_['button_execute_file']         = "Execute File";
 $_['button_submit_query']         = "Execute Query";
 $_['button_download']             = "Download Backup";
+$_['button_execute_sync_file'] = 'Execute Synchronization File';
 
 //Success
 $_['success_sync_table'] = 'The table %s was successfully synchronized!';

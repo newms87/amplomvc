@@ -1,7 +1,7 @@
 <div id='product_options' class="options">
 	<h2><?= $text_option; ?></h2>
 	<br/>
-	<?= $this->builder->set_config('product_option_value_id', 'value'); ?>
+	<?= $this->builder->setConfig('product_option_value_id', 'value'); ?>
 
 	<? foreach ($product_options as $product_option) { ?>
 		<div class="product_option" data-po-id="<?= $product_option['product_option_id']; ?>">
