@@ -59,7 +59,7 @@ abstract class ExtensionModel extends Model
 					continue;
 				}
 
-				$extension['settings'] = $extension['settings'] ? unserialize($extension['settings']) : array();
+				$extension['settings'] = !empty($extension['settings']) ? unserialize($extension['settings']) : array();
 			}
 			unset ($extension);
 
