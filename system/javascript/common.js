@@ -24,6 +24,7 @@ $.fn.codemirror = function (params) {
 	params = $.extend({},{
 		tabSize: 3,
 		indentWithTabs: true,
+		lineNumbers: false,
 		indentUnit: 3
 	}, params);
 
@@ -64,11 +65,12 @@ $.fn.codemirror = function (params) {
 	syncload('system/javascript/codemirror/ui/js/codemirror-ui.js');
 	uiOptions = {
 		searchMode: 'popup',
-		'path': 'system/javascript/codemirror/ui/js/'
+		path: 'system/javascript/codemirror/ui/js/',
+		imagePath: 'system/javascript/codemirror/ui/images/silk'
 	}
 
-	this.each(function(i,e){
-		new CodeMirrorUI(e, uiOptions, params);
+	return this.each(function(i,e) {
+		e.cm_editor = new CodeMirrorUI(e, uiOptions, params);
 	});
 }
 
@@ -114,7 +116,7 @@ $.fn.ac_datepicker = function (params) {
 	params = $.extend({}, {
 		type: null,
 		dateFormat: 'yy-mm-dd',
-		timeFormat: 'h:m',
+		timeFormat: 'HH:mm',
 	}, params);
 
 	return this.each(function (i, e) {
@@ -143,6 +145,32 @@ $.fn.ac_radio = function (params) {
 		params.elements.removeClass('checked').find('input[type=radio]').prop('checked', false);
 		$(this).addClass("checked").find('input[type=radio]').prop('checked', true);
 	});
+
+	return this;
+}
+
+$.fn.ac_checklist = function (params) {
+	params = $.extend({}, {
+		elements: $(this).children().not('.nocheck')
+	}, params);
+
+	this.find('input[type=checkbox]').hide();
+
+	params.elements.each(function (i, e) {
+		if ($(e).find('input[type=checkbox]:checked').length) {
+			$(e).addClass('checked');
+		}
+	})
+
+		.click(function () {
+			if ($(this).hasClass('checked')) {
+				$(this).removeClass('checked');
+				$(this).find('input[type=checkbox]').prop('checked',false).change();
+			} else {
+				$(this).addClass('checked');
+				$(this).find('input[type=checkbox]').prop('checked',true).change();
+			}
+		});
 
 	return this;
 }
@@ -425,7 +453,7 @@ $.fn.fade_post = function (url, data, callback, dataType) {
 		if (typeof callback === 'function') {
 			callback(data);
 		}
-	});
+	}, dataType || null);
 
 	return this;
 }
@@ -462,6 +490,10 @@ $.loading = function (params) {
 
 $.fn.loading = function (params) {
 	return this.append($.loading(params));
+}
+
+$.fn.postForm = function (callback, datatype, params) {
+	$.post(ajaxurl(this.attr('action')), this.serialize(), callback, datatype);
 }
 
 String.prototype.repeat = function (times) {

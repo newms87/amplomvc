@@ -72,6 +72,10 @@ class Catalog_Controller_Common_Header extends Controller
 		$this->data['is_logged'] = $this->customer->isLogged();
 		$this->_('text_logged', $this->customer->info('firstname'));
 
+		if (!$this->data['is_logged']) {
+			$this->data['block_login'] = $this->getBlock('account/login');
+		}
+
 		$this->data['home'] = $this->url->link('common/home');
 
 		$this->data['social_networks'] = $this->getBlock('extras/social_media');
@@ -84,10 +88,12 @@ class Catalog_Controller_Common_Header extends Controller
 			$this->data['block_currencies'] = $this->getBlock('localisation/currency');
 		}
 
+		//Dependencies
 		$this->children = array(
 			'common/above_content',
 		);
 
+		//Render
 		$this->render();
 	}
 }

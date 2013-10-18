@@ -3,6 +3,7 @@ class System_Extension_Payment_Braintree extends Extension
 {
 	private $cards;
 	private $bt_customer;
+	private $init = false;
 
 	public function renderTemplate()
 	{
@@ -79,7 +80,14 @@ class System_Extension_Payment_Braintree extends Extension
 		return $this->cards;
 	}
 
-	public function card_select($remove = false)
+	public function getSubscription($id)
+	{
+		$this->initAPI();
+
+		return Braintree_Subscription::find($id);
+	}
+
+	public function cardSelect($select_id = '', $remove = false)
 	{
 		//Language
 		$this->language->system('extension/payment/braintree');
@@ -88,9 +96,13 @@ class System_Extension_Payment_Braintree extends Extension
 		$this->data['encryption_key'] = $this->settings['client_side_encryption_key'];
 		$this->data['cards']          = $this->getCards();
 
-		if ($remove) {
-			foreach ($this->data['cards'] as &$card) {
+		foreach ($this->data['cards'] as &$card) {
+			if ($remove) {
 				$card['remove'] = $this->callbackUrl('remove_card', 'card_id=' . $card['id']);
+			}
+
+			if ($select_id) {
+				$card['default'] = $select_id === $card['id'];
 			}
 		}
 
@@ -102,74 +114,6 @@ class System_Extension_Payment_Braintree extends Extension
 
 		//Render
 		return $this->render();
-	}
-
-	public function update_card($id = null, $data)
-	{
-		$this->initAPI();
-
-		if (!empty($data['default'])) {
-			unset($data['default']);
-			$data['options'] = array(
-				'makeDefault' => true,
-			);
-		}
-
-		Braintree_CreditCard::update($id, $data);
-	}
-
-	public function remove_card($id = null)
-	{
-		$this->language->system('extension/payment/braintree');
-
-		if (!$id) {
-			$id = $_GET['card_id'];
-		}
-
-		$this->initAPI();
-
-		Braintree_CreditCard::delete($id);
-
-		$this->message->add('notify', $this->_('text_removed_card'));
-
-		$this->url->redirect($this->url->link('account/update'));
-	}
-
-	public function register_card()
-	{
-		//Initialize BrainTree API
-		$this->initAPI();
-
-		//Language
-		$this->language->system('extension/payment/braintree');
-
-		$payment_address = $this->customer->getDefaultPaymentAddress();
-
-		$defaults = array(
-			'firstname' => $this->customer->info('firstname'),
-			'lastname'  => $this->customer->info('lastname'),
-			'postcode'  => $payment_address ? $payment_address['postcode'] : '',
-		);
-
-		$this->data += $_POST + $defaults;
-
-		//Additional Data
-		$this->data['encryption_key'] = $this->settings['client_side_encryption_key'];
-
-		//Action Buttons
-		$this->data['submit'] = $this->callbackUrl('add_card');
-
-		//The Template
-		$this->template->load('payment/braintree_register_card');
-
-		//Dependencies
-		$this->children = array(
-			'common/header',
-			'common/footer',
-		);
-
-		//Render
-		$this->response->setOutput($this->render());
 	}
 
 	public function add_card($card = array())
@@ -256,6 +200,74 @@ class System_Extension_Payment_Braintree extends Extension
 		}
 	}
 
+	public function update_card($id = null, $data)
+	{
+		$this->initAPI();
+
+		if (!empty($data['default'])) {
+			unset($data['default']);
+			$data['options'] = array(
+				'makeDefault' => true,
+			);
+		}
+
+		Braintree_CreditCard::update($id, $data);
+	}
+
+	public function remove_card($id = null)
+	{
+		$this->language->system('extension/payment/braintree');
+
+		if (!$id) {
+			$id = $_GET['card_id'];
+		}
+
+		$this->initAPI();
+
+		Braintree_CreditCard::delete($id);
+
+		$this->message->add('notify', $this->_('text_removed_card'));
+
+		$this->url->redirect($this->url->link('account/update'));
+	}
+
+	public function register_card()
+	{
+		//Initialize BrainTree API
+		$this->initAPI();
+
+		//Language
+		$this->language->system('extension/payment/braintree');
+
+		$payment_address = $this->customer->getDefaultPaymentAddress();
+
+		$defaults = array(
+			'firstname' => $this->customer->info('firstname'),
+			'lastname'  => $this->customer->info('lastname'),
+			'postcode'  => $payment_address ? $payment_address['postcode'] : '',
+		);
+
+		$this->data += $_POST + $defaults;
+
+		//Additional Data
+		$this->data['encryption_key'] = $this->settings['client_side_encryption_key'];
+
+		//Action Buttons
+		$this->data['submit'] = $this->callbackUrl('add_card');
+
+		//The Template
+		$this->template->load('payment/braintree_register_card');
+
+		//Dependencies
+		$this->children = array(
+			'common/header',
+			'common/footer',
+		);
+
+		//Render
+		$this->response->setOutput($this->render());
+	}
+
 	public function getPlans()
 	{
 		$this->initAPI();
@@ -272,28 +284,148 @@ class System_Extension_Payment_Braintree extends Extension
 		}
 	}
 
-	public function confirmSubscription($subscription_data)
+	public function activateSubscription($subscription)
 	{
 		$this->initAPI();
 
-		$card = $this->getCard($subscription_data['payment_key']);
+		$this->language->system('extension/payment/braintree');
+
+		$braintree_subscription_id = $this->subscription->getMeta($subscription['customer_subscription_id'], 'braintree_subscription_id');
+
+		//Check if this subscription already is associated with a BrainTree Subscription
+		if ($braintree_subscription_id) {
+			$bt_subscription = $this->getSubscription($braintree_subscription_id);
+
+			$failed_statuses = array(
+				Braintree_Subscription::CANCELED,
+				Braintree_Subscription::EXPIRED,
+			);
+
+			if ($bt_subscription && !in_array($bt_subscription->status, $failed_statuses)
+			) {
+				$this->message->add('warning', $this->_('error_subscription_active'));
+				return false;
+			}
+		}
+
+		$card = $this->getCard($subscription['payment_key']);
 
 		$data = array(
 			'paymentMethodToken' => $card['id'],
 			'planId'             => $this->settings['plan_id'],
+			'price'              => $subscription['total'],
 		);
 
-		$results = Braintree_Subscription::create($data);
+		if ($this->date->isInFuture($subscription['subscription']['start_date'])) {
+			$data['firstBillingDate'] = new DateTime($subscription['subscription']['start_date']);
+		} elseif (!empty($subscription['day_of_month'])) {
+			$data['billingDayOfMonth'] = $subscription['subscription']['day_of_month'];
+		} else {
+			$data['options'] = array('startImmediately' => true);
+		}
 
-		$this->subscription->setMeta($subscription_data['customer_subscription_id'], 'braintree_subscription_id', $results->subscription->_attributes['id']);
+		$result = Braintree_Subscription::create($data);
+
+		if ($result->success) {
+			$this->subscription->setMeta($subscription['customer_subscription_id'], 'braintree_subscription_id', $result->subscription->_attributes['id']);
+
+			return true;
+		}
+
+		$this->resultError($result, true);
+
+		$this->error_log->write('System_Extension_Payment_Braintree::activateSubscription(): ' . implode('; ', $this->error));
+
+		return false;
+	}
+
+	public function updateSubscription($customer_subscription_id, $data)
+	{
+		$this->initAPI();
+
+		$this->language->system('extension/payment/braintree');
+
+		$id = $this->subscription->getMeta($customer_subscription_id, 'braintree_subscription_id');
+
+		if ($id) {
+			$braintree_data = array(
+				'price'              => $data['total'],
+				'paymentMethodToken' => $data['payment_key'],
+				'options'            => array(
+					'prorateCharges'                       => $data['prorate'],
+					'revertSubscriptionOnProrationFailure' => true,
+				),
+			);
+
+			try {
+				$result = Braintree_Subscription::update($id, $braintree_data);
+
+				if ($result->success) {
+					$bt_subscription = $this->getSubscription($id);
+
+					if ($bt_subscription->_attributes['price'] != $braintree_data['price']) {
+						echo 'here'; exit;
+						$result = Braintree_Subscription::update($id, $braintree_data);
+					}
+
+					if ($result->success) {
+						return true;
+					}
+				}
+
+				$this->resultError($result);
+			}
+			catch (Braintree_Exception $e) {
+				$this->error[] = $e->getMessage();
+			}
+		}
+
+		$this->error_log->write('System_Extension_Payment_Braintree::updateSubscription(): ' . implode('; ', $this->error));
+
+		return false;
+	}
+
+	public function cancelSubscription($customer_subscription_id)
+	{
+		$this->initAPI();
+
+		$id = $this->subscription->getMeta($customer_subscription_id, 'braintree_subscription_id');
+
+		if ($id) {
+			$result = Braintree_Subscription::cancel($id);
+
+			if ($result->success) {
+				return true;
+			}
+
+
+			$this->resultError($result);
+		}
+
+		return false;
+	}
+
+	private function resultError($result)
+	{
+		if ($result->_attributes && !empty($result->_attributes['message'])) {
+			$this->error[] = $result->_attributes['message'];
+		} elseif ($result->errors) {
+			foreach ($result->errors->deepAll() as $error) {
+				$this->error[] = $error->message;
+			}
+		} else {
+			$this->error[] = $this->_('error_transaction_failed');
+		}
 	}
 
 	public function validateSubscription(&$subscription_data)
 	{
-		if (empty($_POST['credit_card']) || !$this->hasCard($_POST['credit_card'])) {
-			$this->error['credit_card'] = $this->_('error_credit_card_id');
+		$this->language->system('extension/payment/braintree');
+
+		if (empty($_POST['payment_key']) || !$this->hasCard($_POST['payment_key'])) {
+			$this->error['payment_key'] = $this->_('error_payment_key');
 		} else {
-			$subscription_data['payment_key'] = $_POST['credit_card'];
+			$subscription_data['payment_key'] = $_POST['payment_key'];
 		}
 
 		return $this->error ? false : true;
@@ -310,12 +442,16 @@ class System_Extension_Payment_Braintree extends Extension
 
 	private function initAPI()
 	{
-		require_once DIR_RESOURCES . '/braintree/lib/Braintree.php';
+		if (!$this->init) {
+			require_once DIR_RESOURCES . '/braintree/lib/Braintree.php';
 
-		Braintree_Configuration::environment($this->settings['mode']);
-		Braintree_Configuration::merchantId($this->settings['merchant_id']);
-		Braintree_Configuration::publicKey($this->settings['public_key']);
-		Braintree_Configuration::privateKey($this->settings['private_key']);
+			Braintree_Configuration::environment($this->settings['mode']);
+			Braintree_Configuration::merchantId($this->settings['merchant_id']);
+			Braintree_Configuration::publicKey($this->settings['public_key']);
+			Braintree_Configuration::privateKey($this->settings['private_key']);
+
+			$this->init = true;
+		}
 	}
 
 	private function loadCustomer()

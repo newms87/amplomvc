@@ -42,6 +42,15 @@ abstract class Controller
 		return $this->error;
 	}
 
+	public function getErrorMsg($delimiter = "\r\n")
+	{
+		$msg = '';
+
+		array_walk_recursive($this->error, function($value, $id, &$msg) use($delimiter) { $msg .= ($msg ? $delimiter : '') . $value; } );
+
+		return $msg;
+	}
+
 	//TODO: move this to block plugin!
 	protected function getBlock($path, $args = array(), $settings = null)
 	{

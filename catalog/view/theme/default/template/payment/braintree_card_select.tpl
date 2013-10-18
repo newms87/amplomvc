@@ -4,7 +4,7 @@
 		<a class="register_card button subscribe" href="<?= $register_card; ?>"><?= $button_add_card; ?></a>
 	<? } else { ?>
 		<div id="braintree_card_list" class="card_list noselect">
-			<input type="hidden" name="credit_card[extension_code]" value="braintree" />
+			<input type="hidden" name="payment_method_id" value="braintree" />
 			<? foreach ($cards as $card) { ?>
 				<div class="card <?= !empty($card['default']) ? 'checked' :''; ?>">
 					<div class="card_type">
@@ -16,7 +16,7 @@
 					</div>
 					<div class="name"><?= $card['name']; ?></div>
 					<div class="number"><?= $card['masked']; ?></div>
-					<input type="radio" name="credit_card" value="<?= $card['id']; ?>" <?= !empty($card['default']) ? 'checked="checked"' :''; ?> />
+					<input type="radio" name="payment_key" value="<?= $card['id']; ?>" <?= !empty($card['default']) ? 'checked="checked"' :''; ?> />
 					<? if (!empty($card['remove'])) { ?>
 						<a href="<?= $card['remove']; ?>" class="remove"></a>
 					<? } ?>

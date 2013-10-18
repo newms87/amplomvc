@@ -156,7 +156,7 @@ class Admin_Controller_Setting_Store extends Controller
 		$this->data['system_update']  = $this->url->link('setting/update');
 
 		//Action Buttons
-		$this->data['save'] = $this->url->link('setting/store/update');
+		$this->data['save']   = $this->url->link('setting/store/update');
 		$this->data['delete'] = $this->url->link('setting/store/delete');
 
 		//Dependencies
@@ -199,6 +199,8 @@ class Admin_Controller_Setting_Store extends Controller
 			}
 
 			$store_info = $store + $store_config;
+		} else {
+			$store_info = $_POST;
 		}
 
 		$defaults = array(
@@ -255,34 +257,28 @@ class Admin_Controller_Setting_Store extends Controller
 			'config_image_cart_width'         => 80,
 			'config_image_cart_height'        => 80,
 			'config_use_ssl'                  => '',
+			'config_contact_page_id'          => '',
 		);
 
-		foreach ($defaults as $key => $default) {
-			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
-			} elseif (isset($store_info[$key])) {
-				$this->data[$key] = $store_info[$key];
-			} else {
-				$this->data[$key] = $default;
-			}
-		}
+		$this->data += $store_info + $defaults;
 
 		//Current Page Breadcrumb
 		$this->breadcrumb->add($this->data['name'], $this->url->link('setting/store/update', 'store_id=' . $store_id));
 
 		//Additional Info
-		$this->data['layouts']             = $this->Model_Design_Layout->getLayouts();
-		$this->data['themes']              = $this->theme->getThemes();
-		$this->data['geo_zones']           = array_merge(array(0 => "--- All Zones ---"), $this->Model_Localisation_GeoZone->getGeoZones());
-		$this->data['countries']           = $this->Model_Localisation_Country->getCountries();
-		$this->data['languages']           = $this->Model_Localisation_Language->getLanguages();
-		$this->data['currencies']          = $this->Model_Localisation_Currency->getCurrencies();
-		$this->data['customer_groups']     = $this->Model_Sale_CustomerGroup->getCustomerGroups();
-		$this->data['informations']        = $this->Model_Catalog_Information->getInformations();
-		$this->data['data_order_statuses'] = $this->order->getOrderStatuses();
+		$this->data['layouts']              = $this->Model_Design_Layout->getLayouts();
+		$this->data['themes']               = $this->theme->getThemes();
+		$this->data['geo_zones']            = array_merge(array(0 => "--- All Zones ---"), $this->Model_Localisation_GeoZone->getGeoZones());
+		$this->data['countries']            = $this->Model_Localisation_Country->getCountries();
+		$this->data['languages']            = $this->Model_Localisation_Language->getLanguages();
+		$this->data['currencies']           = $this->Model_Localisation_Currency->getCurrencies();
+		$this->data['data_customer_groups'] = $this->Model_Sale_CustomerGroup->getCustomerGroups();
+		$this->data['informations']         = $this->Model_Catalog_Information->getInformations();
+		$this->data['data_order_statuses']  = $this->order->getOrderStatuses();
+		$this->data['data_pages']           = array('' => $this->_('text_select')) + $this->Model_Page_Page->getPages();
 
 		//Action Buttons
-		$this->data['save'] = $this->url->link('setting/store/update', 'store_id=' . $store_id);
+		$this->data['save']   = $this->url->link('setting/store/update', 'store_id=' . $store_id);
 		$this->data['cancel'] = $this->url->link('setting/store');
 
 		//Ajax Urls

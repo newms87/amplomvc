@@ -15,7 +15,12 @@ class Admin_Controller_Page_Page extends Controller
 		if ($this->request->isPost() && $this->validateForm()) {
 			//Insert
 			if (empty($_GET['page_id'])) {
-				$this->Model_Page_Page->addPage($_POST);
+				$page_id = $this->Model_Page_Page->addPage($_POST);
+
+				if ($this->request->isAjax()) {
+					$this->response->setOutput(json_encode(array('redirect' => $this->url->link('page/page', 'page_id=' . $page_id))));
+					return;
+				}
 			} //Update
 			else {
 				$this->Model_Page_Page->editPage($_GET['page_id'], $_POST);
@@ -23,11 +28,19 @@ class Admin_Controller_Page_Page extends Controller
 
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success_update'));
-				$this->url->redirect($this->url->link('page/page'));
+
+				if (!$this->request->isAjax()) {
+					$this->url->redirect($this->url->link('page/page'));
+				}
 			}
 		}
 
-		$this->getForm();
+		if ($this->request->isAjax()) {
+			$json = $this->error ? array('error' => $this->error) : $this->message->fetch();
+			$this->response->setOutput(json_encode($json));
+		} else {
+			$this->getForm();
+		}
 	}
 
 	public function delete()
@@ -215,8 +228,11 @@ class Admin_Controller_Page_Page extends Controller
 			$this->breadcrumb->add($this->_('text_insert'), $this->url->link('page/page/update'));
 		}
 
-		//Load Information
-		if ($page_id && !$this->request->isPost()) {
+		//Load Information from POST or DB
+		if ($this->request->isPost()) {
+			$page_info = $_POST;
+		}
+		elseif ($page_id) {
 			$page_info = $this->Model_Page_Page->getPage($page_id);
 
 			$page_info['stores'] = $this->Model_Page_Page->getPageStores($page_id);
@@ -237,15 +253,7 @@ class Admin_Controller_Page_Page extends Controller
 			'translations'     => array(),
 		);
 
-		foreach ($defaults as $key => $default) {
-			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
-			} elseif (isset($page_info[$key])) {
-				$this->data[$key] = $page_info[$key];
-			} else {
-				$this->data[$key] = $default;
-			}
-		}
+		$this->data += $page_info + $defaults;
 
 		//Additional Data
 		$this->data['data_stores']  = $this->Model_Setting_Store->getStores();
@@ -254,6 +262,8 @@ class Admin_Controller_Page_Page extends Controller
 		$this->data['url_blocks']        = $this->url->link('block/block');
 		$this->data['url_create_layout'] = $this->url->link('page/page/create_layout');
 		$this->data['url_load_blocks']   = $this->url->link('page/page/loadBlocks');
+
+		$this->data['page_preview'] = $this->url->store(current($this->data['stores']), 'page/page', 'page_id=' . $page_id);
 
 		//Action Buttons
 		$this->data['save']   = $this->url->link('page/page/update', 'page_id=' . $page_id);
@@ -267,6 +277,11 @@ class Admin_Controller_Page_Page extends Controller
 
 		//Render
 		$this->response->setOutput($this->render());
+	}
+
+	public function save()
+	{
+
 	}
 
 	public function create_layout()

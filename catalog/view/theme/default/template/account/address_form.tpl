@@ -10,64 +10,69 @@
 
 	<h1><?= $head_title; ?></h1>
 
-	<form id="new_address_form" action="<?= $save; ?>" method="post" enctype="multipart/form-data">
-		<h2><?= $text_edit_address; ?></h2>
+	<div class="box">
+		<h2 class="box_heading"><?= $text_edit_address; ?></h2>
 
 		<div class="section">
-			<table class="form">
-				<tr>
-					<td class="required"> <?= $entry_firstname; ?></td>
-					<td><input type="text" name="firstname" value="<?= $firstname; ?>"/></td>
-				</tr>
-				<tr>
-					<td class="required"> <?= $entry_lastname; ?></td>
-					<td><input type="text" name="lastname" value="<?= $lastname; ?>"/></td>
-				</tr>
-				<tr>
-					<td><?= $entry_company; ?></td>
-					<td><input type="text" name="company" value="<?= $company; ?>"/></td>
-				</tr>
-				<tr>
-					<td class="required"> <?= $entry_address_1; ?></td>
-					<td><input type="text" name="address_1" value="<?= $address_1; ?>"/></td>
-				</tr>
-				<tr>
-					<td><?= $entry_address_2; ?></td>
-					<td><input type="text" name="address_2" value="<?= $address_2; ?>"/></td>
-				</tr>
-				<tr>
-					<td class="required"> <?= $entry_city; ?></td>
-					<td><input type="text" name="city" value="<?= $city; ?>"/></td>
-				</tr>
-				<tr>
-					<td class="required"> <?= $entry_postcode; ?></td>
-					<td><input type="text" name="postcode" value="<?= $postcode; ?>"/></td>
-				</tr>
-				<tr>
-					<td class="required"> <?= $entry_country; ?></td>
-					<td>
-						<?= $this->builder->setConfig('country_id', 'name'); ?>
-						<?= $this->builder->build('select', $data_countries, "country_id", $country_id, array('class' => "country_select")); ?>
-					</td>
-				</tr>
-				<tr>
-					<td class="required"> <?= $entry_zone; ?></td>
-					<td><select name="zone_id" class="zone_select" zone_id="<?= $zone_id; ?>"></select></td>
-				</tr>
-				<tr>
-					<td><?= $entry_default; ?></td>
-					<td><?= $this->builder->build('radio', $data_yes_no, "default", $default); ?></td>
-				</tr>
-			</table>
-		</div>
+			<form id="new_address_form" action="<?= $save; ?>" method="post" enctype="multipart/form-data">
 
-		<div class="buttons">
-			<? if (!empty($back)) { ?>
-				<div class="left"><a href="<?= $back; ?>" class="button"><?= $button_back; ?></a></div>
-			<? } ?>
-			<div class="right"><input type="submit" value="<?= $button_save; ?>" class="button"/></div>
+				<div class="section">
+					<table class="form">
+						<tr>
+							<td class="required"> <?= $entry_firstname; ?></td>
+							<td><input type="text" name="firstname" value="<?= $firstname; ?>"/></td>
+						</tr>
+						<tr>
+							<td class="required"> <?= $entry_lastname; ?></td>
+							<td><input type="text" name="lastname" value="<?= $lastname; ?>"/></td>
+						</tr>
+						<tr>
+							<td><?= $entry_company; ?></td>
+							<td><input type="text" name="company" value="<?= $company; ?>"/></td>
+						</tr>
+						<tr>
+							<td class="required"> <?= $entry_address_1; ?></td>
+							<td><input type="text" name="address_1" value="<?= $address_1; ?>"/></td>
+						</tr>
+						<tr>
+							<td><?= $entry_address_2; ?></td>
+							<td><input type="text" name="address_2" value="<?= $address_2; ?>"/></td>
+						</tr>
+						<tr>
+							<td class="required"> <?= $entry_city; ?></td>
+							<td><input type="text" name="city" value="<?= $city; ?>"/></td>
+						</tr>
+						<tr>
+							<td class="required"> <?= $entry_postcode; ?></td>
+							<td><input type="text" name="postcode" value="<?= $postcode; ?>"/></td>
+						</tr>
+						<tr>
+							<td class="required"> <?= $entry_country; ?></td>
+							<td>
+								<?= $this->builder->setConfig('country_id', 'name'); ?>
+								<?= $this->builder->build('select', $data_countries, "country_id", $country_id, array('class' => "country_select")); ?>
+							</td>
+						</tr>
+						<tr>
+							<td class="required"> <?= $entry_zone; ?></td>
+							<td><select name="zone_id" class="zone_select" zone_id="<?= $zone_id; ?>"></select></td>
+						</tr>
+						<tr>
+							<td><?= $entry_default; ?></td>
+							<td><?= $this->builder->build('radio', $data_yes_no, "default", $default); ?></td>
+						</tr>
+					</table>
+				</div>
+
+				<div class="buttons">
+					<? if (!empty($back)) { ?>
+						<div class="left"><a href="<?= $back; ?>" class="button"><?= $button_back; ?></a></div>
+					<? } ?>
+					<div class="right"><input type="submit" value="<?= $button_save; ?>" class="button"/></div>
+				</div>
+			</form>
 		</div>
-	</form>
+	</div>
 
 	<?= $content_bottom; ?>
 </div>

@@ -314,8 +314,16 @@ ul > li > ul > li:hover > ul.link_list, ul > li > ul > li.hover > ul.link_list {
 	margin-bottom: 15px;
 }
 
+.datetimepicker{
+	min-width: 120px;
+}
+
 .message_box {
-	position: relative;
+	position: fixed;
+	top: 25%;
+	left: 10%;
+	width: 80%;
+	margin-left: -2.5%;
 	padding: 10px 10px 10px 33px;
 	margin-bottom: 15px;
 	color: #555555;
@@ -325,6 +333,7 @@ ul > li > ul > li:hover > ul.link_list, ul > li > ul > li.hover > ul.link_list {
 	-moz-border-radius: 5px 5px 5px 5px;
 	-khtml-border-radius: 5px 5px 5px 5px;
 	border-radius: 5px 5px 5px 5px;
+	z-index:100000;
 }
 
 .message_box strong {
@@ -2467,4 +2476,15 @@ div .easy_list  li > * + * {
 /** Paypal Payments Form **/
 #button_graphic_img{
 	margin-left: 20px;
+}
+
+/** Code Preview **/
+#code_preview{
+	width: 100%;
+	margin-top: 10px;
+}
+
+#preview_frame{
+	width: 100%;
+	min-height: 600px;
 }

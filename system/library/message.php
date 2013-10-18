@@ -59,7 +59,7 @@ class Message extends Library
 
 	public function fetch($type = '')
 	{
-		if (!isset($this->session->data['messages'])) {
+		if (empty($this->session->data['messages'])) {
 			return array();
 		}
 

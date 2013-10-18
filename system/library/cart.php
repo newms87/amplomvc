@@ -96,7 +96,7 @@ class Cart extends Library
 			}
 
 			//Invalidate Rendered Data
-			$this->data = array();
+			$this->data   = array();
 			$this->totals = null;
 
 			return $key;
@@ -113,7 +113,7 @@ class Cart extends Library
 			$this->remove($key);
 		}
 
-		$this->data = array();
+		$this->data   = array();
 		$this->totals = null;
 	}
 
@@ -146,13 +146,13 @@ class Cart extends Library
 			unset($this->session->data['cart'][$key]);
 		}
 
-		$this->data = array();
+		$this->data   = array();
 		$this->totals = null;
 	}
 
 	public function clear()
 	{
-		$this->data = array();
+		$this->data   = array();
 		$this->totals = null;
 
 		$this->session->data['cart']     = array();
@@ -228,7 +228,7 @@ class Cart extends Library
 				}
 			}
 
-			uasort($total_data, function($a, $b) { return $a['sort_order'] > $b['sort_order']; });
+			uasort($total_data, function ($a, $b) { return $a['sort_order'] > $b['sort_order']; });
 
 			$this->totals = $total_data;
 		}
@@ -334,7 +334,6 @@ class Cart extends Library
 			foreach ($this->session->data['cart'] as $key => $quantity) {
 				$cart_product = explode(':', $key);
 				$product_id   = $cart_product[0];
-				$in_stock     = true;
 
 				// Options
 				if (!empty($cart_product[1])) {
@@ -346,83 +345,12 @@ class Cart extends Library
 				$product = $this->Model_Catalog_Product->getProduct($product_id);
 
 				if ($product) {
-					$option_cost      = 0;
-					$option_price     = 0;
-					$option_points    = 0;
-					$option_weight    = 0;
-					$selected_options = array();
+					$product['key']       = $key;
+					$product['remaining'] = $product['quantity'];
 
-					if (!empty($product_options)) {
-						$filter = array(
-							'product_option_ids' => array_keys($product_options),
-						);
+					$this->getProductTotal($product['product_id'], $quantity, $product_options, $product);
 
-						$product_option_data = $this->Model_Catalog_Product->getFilteredProductOptions($filter);
-
-						foreach ($product_options as $product_option_id => $product_option_values) {
-							if (!empty($product_option_values)) {
-								foreach ($product_option_values as $product_option_value_id) {
-									$product_option_value = $this->Model_Catalog_Product->getProductOptionValue($product_id, $product_option_id, $product_option_value_id);
-
-									if ($product_option_value) {
-										$option_cost += $product_option_value['cost'];
-										$option_price += $product_option_value['price'];
-										$option_points += $product_option_value['points'];
-										$option_weight += $product_option_value['weight'];
-
-										if ($product_option_value['subtract'] && $product_option_value['quantity'] < $quantity) {
-											$in_stock = false;
-										}
-
-										$product_option_value += array_search_key('product_option_id', $product_option_id, $product_option_data);
-
-										$selected_options[$product_option_value_id] = $product_option_value;
-									}
-								}
-							}
-						}
-					}
-
-					// Product Specials / Discounts
-					if ($product['special']) {
-						$product['price'] = $product['special'];
-					} elseif ($product['discount']) {
-						$product['price'] = $product['discount'];
-					}
-
-					// Downloads
-					$downloads = $this->Model_Catalog_Product->getProductDownloads($product_id);
-
-					// Stock
-					if ($product['subtract'] && (!$product['quantity'] || ($product['quantity'] < $quantity))) {
-						$in_stock = false;
-					}
-
-					$product['key']              = $key;
-					$product['selected_options'] = $selected_options;
-					$product['downloads']        = $downloads;
-					$product['quantity']         = $quantity;
-					$product['in_stock']         = $in_stock;
-					$product['cost']             += $option_cost;
-					$product['total_cost']       = $product['cost'] * $quantity;
-					$product['price']            += $option_price;
-					$product['total']            = $product['price'] * $quantity;
-					$product['total_reward']     = $product['reward'] * $quantity;
-					$product['points']           = ((int)$product['points'] + $option_points) * $quantity;
-					$product['weight']           = ((float)$product['weight'] + $option_weight) * $quantity;
-
-					//Allow Extensions to modify product info in cart
-					$total_extensions = $this->System_Extension_Total->getActive();
-
-					foreach ($total_extensions as $extension) {
-						if (method_exists($extension, 'getProductTotal')) {
-							$total = $extension->getProductTotal($product['product_id'], $quantity, $product_options, $product);
-
-							if (!is_null($total)) {
-								$product['total'] = $total;
-							}
-						}
-					}
+					$product['quantity'] = $quantity;
 
 					$this->data[$key] = $product;
 				} else {
@@ -432,6 +360,121 @@ class Cart extends Library
 		}
 
 		return $this->data;
+	}
+
+	public function getProductTotal($product_id, $quantity, $product_options = array(), &$product = null)
+	{
+		if (!$product) {
+			$product = $this->Model_Catalog_Product->getProduct($product_id);
+		}
+
+		$product += array(
+			'in_stock'    => true,
+			'base_price'  => $product['price'],
+			'base_cost'   => $product['cost'],
+			'base_points' => $product['points'],
+			'base_weight' => $product['weight'],
+		);
+
+		//Calculate Option totals
+		$option_cost   = 0;
+		$option_price  = 0;
+		$option_points = 0;
+		$option_weight = 0;
+
+		$selected_options = $this->getProductOptionInfo($product_id, $product_options);
+
+		if (!empty($selected_options)) {
+			foreach ($selected_options as $product_option_value) {
+				$option_cost += $product_option_value['cost'];
+				$option_price += $product_option_value['price'];
+				$option_points += $product_option_value['points'];
+				$option_weight += $product_option_value['weight'];
+
+				if ($product_option_value['subtract'] && $product_option_value['quantity'] < $quantity) {
+					$product['in_stock'] = false;
+				}
+			}
+		}
+
+		$product['selected_options'] = $selected_options;
+
+		// Product Specials / Discounts
+		if ($product['special']) {
+			$product['price'] = $product['special'];
+		} elseif ($product['discount']) {
+			$product['price'] = $product['discount'];
+		}
+
+		// Downloads
+		$product['downloads'] = $this->Model_Catalog_Product->getProductDownloads($product_id);
+
+		// Stock
+		if ($product['subtract'] && (!$product['quantity'] || ($product['quantity'] < $quantity))) {
+			$product['in_stock'] = false;
+		}
+
+		$product['cost'] += $option_cost;
+		$product['price'] += $option_price;
+		$product['total_cost']   = $product['cost'] * $quantity;
+		$product['total']        = $product['price'] * $quantity;
+		$product['total_reward'] = $product['reward'] * $quantity;
+		$product['points']       = ((int)$product['points'] + $option_points) * $quantity;
+		$product['weight']       = ((float)$product['weight'] + $option_weight) * $quantity;
+
+		//Allow Extensions to modify product info in cart
+		$total_extensions = $this->System_Extension_Total->getActive();
+
+		foreach ($total_extensions as $extension) {
+			if (method_exists($extension, 'getProductTotal')) {
+				$total = $extension->getProductTotal($product_id, $quantity, $selected_options, $product);
+
+				if ($product && !is_null($total)) {
+					$product['total'] = $total;
+				}
+			}
+		}
+
+		return $product['total'];
+	}
+
+	public function getProductOptionInfo($product_id, $product_options)
+	{
+		foreach ($product_options as $key => &$product_option) {
+			//be sure each value is an array of values
+			if (!is_array($product_option)) {
+				$product_option = array($product_option);
+			} //Check if information already loaded and in correct format
+			elseif (is_string(key($product_option))) {
+				return $product_options;
+			}
+		}
+		unset($product_option);
+
+		//Load option information and format $selected_options as an array where each element is an associative array of option_value data
+		$filter = array(
+			'product_option_ids' => array_keys($product_options),
+		);
+
+		$product_option_data = $this->Model_Catalog_Product->getFilteredProductOptions($filter);
+
+		$selected_options = array();
+
+		foreach ($product_options as $product_option_id => $product_option_values) {
+			if (!empty($product_option_values)) {
+				foreach ($product_option_values as $product_option_value_id) {
+					$product_option_value = $this->Model_Catalog_Product->getProductOptionValue($product_id, $product_option_id, $product_option_value_id);
+
+					if ($product_option_value) {
+						$product_option_value += array_search_key('product_option_id', $product_option_id, $product_option_data);
+
+						$selected_options[$product_option_value_id] = $product_option_value;
+					}
+				}
+			}
+		}
+
+		return $selected_options;
 	}
 
 	public function countProducts()
@@ -845,7 +888,7 @@ class Cart extends Library
 
 		// Payment Methods
 		$payment_extensions = $this->System_Extension_Payment->getActive();
-		$methods = array();
+		$methods            = array();
 
 		foreach ($payment_extensions as $code => $extension) {
 			if ($extension->validate($payment_address, $this->getTotal())) {

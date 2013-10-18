@@ -4,13 +4,15 @@
 	<div class="content">
 		<?= $this->breadcrumb->render(); ?>
 
-		<? if (!empty($display_title)) { ?>
-			<h1><?= $title; ?></h1>
-		<? } ?>
-
 		<?= $content_top; ?>
 
-		<?= $content; ?>
+		<div class="section">
+			<? if (!empty($display_title)) { ?>
+				<h1><?= $title; ?></h1>
+			<? } ?>
+
+			<div class="page_content"><?= $content; ?></div>
+		</div>
 
 		<?= $content_bottom; ?>
 	</div>

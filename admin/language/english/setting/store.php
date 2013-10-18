@@ -74,6 +74,7 @@ $_['entry_image_compare']         = 'Compare Image Size:';
 $_['entry_image_wishlist']        = 'Wish List Image Size:';
 $_['entry_image_cart']            = 'Cart Image Size:';
 $_['entry_use_ssl']               = 'Use SSL:<br /><span class="help">To use SSL check with your host if a SSL certificate is installed.</span>';
+$_['entry_contact_page']         = "The Contact Page";
 
 // Error
 $_['error_store_invalid']      = 'You attempted to access a store that does not exist!';

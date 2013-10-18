@@ -14,6 +14,7 @@
 
 			<div id="tabs" class="htabs">
 				<a href="#tab-general"><?= $tab_general; ?></a>
+				<a href="#tab-content"><?= _("Content"); ?></a>
 				<a href="#tab-design"><?= $tab_design; ?></a>
 			</div>
 
@@ -43,15 +44,24 @@
 							<td><textarea name="meta_description" rows="8" cols="60"><?= $meta_description; ?></textarea></td>
 						</tr>
 						<tr>
-							<td><?= $entry_content; ?></td>
-							<td><textarea name="content" class="ckedit"><?= $content; ?></textarea></td>
-						</tr>
-						<tr>
 							<td><?= $entry_status; ?></td>
 							<td><?= $this->builder->build('select', $data_statuses, 'status', (int)$status); ?></td>
 						</tr>
 					</table>
-				</div>
+				</div><!-- /tab-general -->
+
+				<div id="tab-content">
+					<div id="code_editor">
+						<h2><?= $entry_content; ?></h2>
+						<textarea id="html_editor" name="content"><?= $content; ?></textarea>
+					</div>
+
+					<div id="code_preview">
+						<iframe id="preview_frame"></iframe>
+					</div>
+
+				</div><!-- /tab-content -->
+
 				<div id="tab-design">
 					<table class="form">
 						<tr>
@@ -99,7 +109,8 @@
 							</td>
 						</tr>
 					</table>
-				</div>
+				</div><!-- /tab-design -->
+
 			</form>
 		</div>
 	</div>
@@ -135,9 +146,7 @@
 	}
 
 	$('[name="stores[]"], [name=layout_id]').change(load_assigned_blocks).first().change();
-//--></script>
 
-<script type="text/javascript">//<!--
 	$('#create_layout').click(function () {
 		url = "<?= $url_create_layout; ?>";
 
@@ -162,9 +171,28 @@
 
 		return false;
 	});
-//--></script>
 
-<script type="text/javascript">//<!--
+	$('#html_editor').codemirror({mode: 'html'})
+
+	$('#preview_frame').attr('src',"<?= $page_preview; ?>");
+
+	$('#html_editor')[0].cm_editor.mirror.on('keyup',function(instance, changeObj){
+		$('#preview_frame').contents().find('#content_holder .page_content').html(instance.getValue());
+	});
+
+	$(document).bind('keydown', function(e) {
+		if(e.ctrlKey && (e.which == 83)) {
+			$('#html_editor')[0].cm_editor.mirror.save();
+
+			$('#form').postForm(function(response){
+				handle_response(response);
+			}, 'json');
+
+			e.preventDefault();
+			return false;
+		}
+	});
+
 	$('#tabs a').tabs();
 //--></script>
 

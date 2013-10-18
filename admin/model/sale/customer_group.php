@@ -26,33 +26,45 @@ class Admin_Model_Sale_CustomerGroup extends Model
 		return $query->row;
 	}
 
-	public function getCustomerGroups($data = array())
+	public function getCustomerGroups($data = array(), $select = '', $total = false)
 	{
-		$sql = "SELECT * FROM " . DB_PREFIX . "customer_group";
+		//Select
+		if ($total) {
+			$select = "COUNT(*) as total";
+		} elseif (empty($select)) {
+			$select = '*';
+		}
 
-		$sql .= " ORDER BY name";
+		//From
+		$from = DB_PREFIX . "customer_group";
 
-		if (isset($data['order']) && ($data['order'] == 'DESC')) {
-			$sql .= " DESC";
+		//Where
+		$where = "1";
+
+		//Order By and Limit
+		if (!$total) {
+			if (empty($data['sort'])) {
+				$data['sort'] = 'name';
+				$data['order'] = 'ASC';
+			}
+
+			$order = $this->extract_order($data);
+			$limit = $this->extract_limit($data);
 		} else {
-			$sql .= " ASC";
+			$order = '';
+			$limit = '';
 		}
 
-		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
-			}
+		//The Query
+		$query = "SELECT $select FROM $from WHERE $where $order $limit";
 
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
-			}
+		$result = $this->query($query);
 
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
+		if ($total) {
+			return $result->row['total'];
 		}
 
-		$query = $this->query($sql);
-
-		return $query->rows;
+		return $result->rows;
 	}
 
 	public function getTotalCustomerGroups()

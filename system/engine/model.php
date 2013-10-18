@@ -122,7 +122,6 @@ abstract class Model
 	{
 		$this->action_filter('update', $table, $data, $where);
 
-		$table_model = $this->get_table_model($table);
 		$primary_key = $this->get_primary_key($table);
 
 		$values = $this->get_escaped_values($table, $data, ',');

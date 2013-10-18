@@ -192,16 +192,10 @@
 			</tr>
 			<tr>
 				<td><?= $entry_customer_group; ?></td>
-				<td><select name="config_customer_group_id">
-						<? foreach ($customer_groups as $customer_group) { ?>
-							<? if ($customer_group['customer_group_id'] == $config_customer_group_id) { ?>
-								<option value="<?= $customer_group['customer_group_id']; ?>"
-								        selected="selected"><?= $customer_group['name']; ?></option>
-							<? } else { ?>
-								<option value="<?= $customer_group['customer_group_id']; ?>"><?= $customer_group['name']; ?></option>
-							<? } ?>
-						<? } ?>
-					</select></td>
+				<td>
+					<? $this->builder->setConfig('customer_group_id', 'name'); ?>
+					<?= $this->builder->build('select', $data_customer_groups, 'config_customer_gorup_id', $config_customer_group_id); ?>
+				</td>
 			</tr>
 			<tr>
 				<td><?= $entry_customer_price; ?></td>
@@ -214,6 +208,13 @@
 			<tr>
 				<td><?= $entry_guest_checkout; ?></td>
 				<td><?= $this->builder->build('radio', $data_yes_no, 'config_guest_checkout', $config_guest_checkout); ?></td>
+			</tr>
+			<tr>
+				<td><?= $entry_contact_page; ?></td>
+				<td>
+					<? $this->builder->setConfig('page_id', 'title'); ?>
+					<?= $this->builder->build('select', $data_pages, 'config_contact_page_id', $config_contact_page_id); ?>
+				</td>
 			</tr>
 			<tr>
 				<td><?= $entry_account; ?></td>

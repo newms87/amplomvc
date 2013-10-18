@@ -38,7 +38,7 @@ class Date extends Library
 			return $datetimezero_true;
 		}
 
-		$this->resolveDate($date);
+		$this->getObject($date);
 
 		$diff = $date->diff(new DateTime());
 
@@ -51,7 +51,7 @@ class Date extends Library
 			return $datetimezero_true;
 		}
 
-		$this->resolveDate($date);
+		$this->getObject($date);
 
 		$diff = $date->diff(new DateTime());
 
@@ -63,19 +63,20 @@ class Date extends Library
 	 *
 	 * @param DateTime $date (optional) - A DateTime object with the starting date, or null for the current date
 	 * @param Mixed $interval (optional) - A DateInterval object or a string in the format parseable by PHP's strtotime().
-	 *         See link for more details. If not set, the current date will be returned.
+	 *         (see first link on relative formats) If not set, the current date will be returned.
 	 * @param Int $return_type (optional) - Can be AC_DATE_STRING, AC_DATE_OBJECT, or AC_DATE_TIMESTAMP. Default is AC_DATE_STRING
 	 * @param String $format (optional) - The date format compatible with PHP's date_format().
 	 *         Or 'short', 'long', 'datetime' ('default' is alias) for AmploCart Language specific format. Default uses the language Datetime default format.
 	 *         Only used with $return_type = AC_DATE_STRING
 	 *
+	 * @link http://www.php.net/manual/en/datetime.formats.relative.php
 	 * @link http://www.php.net/manual/en/datetime.formats.php
 	 *
 	 * @return Mixed - string, DateTime object or Unix timestamp as specified in $return_type. Default is String
 	 */
 	public function add($date = null, $interval = '', $return_type = AC_DATE_STRING, $format = null)
 	{
-		$this->resolveDate($date);
+		$this->getObject($date);
 
 		if (!empty($interval) && is_string($interval)) {
 			$interval = date_interval_create_from_date_string($interval);
@@ -98,8 +99,8 @@ class Date extends Library
 
 	public function diff($d1, $d2)
 	{
-		$this->resolveDate($d1);
-		$this->resolveDate($d2);
+		$this->getObject($d1);
+		$this->getObject($d2);
 
 		return $d1->diff($d2);
 	}
@@ -116,7 +117,7 @@ class Date extends Library
 
 	public function format($date = null, $format = '')
 	{
-		$this->resolveDate($date);
+		$this->getObject($date);
 
 		if (!$format) {
 			$format = $this->language->getInfo('datetime_format');
@@ -149,7 +150,7 @@ class Date extends Library
 		return $date->format($format);
 	}
 
-	public function resolveDate(&$date)
+	public function getObject(&$date)
 	{
 		if (!$date) {
 			$date = new DateTime();
@@ -165,5 +166,7 @@ class Date extends Library
 			$date = new DateTime();
 			$date->setTimestamp($ts);
 		}
+
+		return $date;
 	}
 }

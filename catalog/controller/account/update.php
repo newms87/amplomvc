@@ -17,8 +17,8 @@ class Catalog_Controller_Account_Update extends Controller
 		if ($this->request->isPost() && $this->validate()) {
 			$this->customer->edit($_POST);
 
-			if (!empty($_POST['credit_card'])) {
-				$this->System_Extension_Payment->get('braintree')->update_card($_POST['credit_card'], array('default' => true));
+			if (!empty($_POST['payment_method_id']) && !empty($_POST['payment_key'])) {
+				$this->System_Extension_Payment->get($_POST['payment_method_id'])->update_card($_POST['payment_key'], array('default' => true));
 			}
 
 			$this->message->add('success', $this->_('text_success'));
@@ -82,15 +82,12 @@ class Catalog_Controller_Account_Update extends Controller
 
 		$this->data['data_addresses'] = $addresses;
 
-		$this->data['card_select'] = $this->System_Extension_Payment->get('braintree')->card_select(true);
+		$this->data['card_select'] = $this->System_Extension_Payment->get('braintree')->cardSelect(null, true);
 
 		//Action Buttons
 		$this->data['save']        = $this->url->link('account/update');
 		$this->data['back']        = $this->url->link('account/account');
 		$this->data['add_address'] = $this->url->link('account/address/update');
-
-		//Ajax
-		$this->data['ajax_add_address'] = $this->url->ajax('account/address/update');
 
 		//Dependencies
 		$this->children = array(

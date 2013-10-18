@@ -448,7 +448,6 @@ class Admin_Controller_Catalog_Product extends Controller
 		if ($product_id && !$this->request->isPost()) {
 			$product_info = $this->Model_Catalog_Product->getProduct($product_id);
 
-			$product_info['date_available']     = $this->date->format($product_info['date_available'], 'Y-m-d');
 			$product_info['product_stores']     = $this->Model_Catalog_Product->getProductStores($product_id);
 			$product_info['product_attributes'] = $this->Model_Catalog_Product->getProductAttributes($product_id);
 			$product_info['product_options']    = $this->Model_Catalog_Product->getProductOptions($product_id);
