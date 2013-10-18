@@ -15,5 +15,5 @@ $this->db->changeColumn('navigation', 'parent_id', 'parent_id', "INT(10) UNSIGNE
 
 
 //Product Table Fix
-$this->db->query("ALTER TABLE `realmeal`.`ac_product` DROP PRIMARY KEY , ADD PRIMARY KEY (`product_id`)");
+//$this->db->query("ALTER TABLE `realmeal`.`ac_product` DROP PRIMARY KEY , ADD PRIMARY KEY (`product_id`)");
 $this->db->changeColumn('product', 'product_id', 'product_id', "INT(11) UNSIGNED NOT NULL AUTO_INCREMENT");
