@@ -10,9 +10,7 @@ abstract class ExtensionModel extends Model
 			'code' => $code,
 		);
 
-		if (!empty($data['settings'])) {
-			$data['settings'] = serialize($data['settings']);
-		}
+		$data['settings'] = !empty($data['settings']) ? serialize($data['settings']) : '';
 
 		$this->update('extension', $data, $where);
 	}
