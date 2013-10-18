@@ -82,7 +82,7 @@ class System_Extension_Payment_Braintree extends Extension
 
 	public function getSubscription($id)
 	{
-		$this->initAPI();
+		if (!$this->initAPI()) return;
 
 		return Braintree_Subscription::find($id);
 	}
@@ -118,6 +118,8 @@ class System_Extension_Payment_Braintree extends Extension
 
 	public function add_card($card = array())
 	{
+		if (!$this->initAPI()) return;
+
 		$this->language->system('extension/payment/braintree');
 
 		//Handle POST
@@ -202,7 +204,7 @@ class System_Extension_Payment_Braintree extends Extension
 
 	public function update_card($id = null, $data)
 	{
-		$this->initAPI();
+		if (!$this->initAPI()) return;
 
 		if (!empty($data['default'])) {
 			unset($data['default']);
@@ -216,13 +218,13 @@ class System_Extension_Payment_Braintree extends Extension
 
 	public function remove_card($id = null)
 	{
+		if (!$this->initAPI()) return;
+
 		$this->language->system('extension/payment/braintree');
 
 		if (!$id) {
 			$id = $_GET['card_id'];
 		}
-
-		$this->initAPI();
 
 		Braintree_CreditCard::delete($id);
 
@@ -234,7 +236,7 @@ class System_Extension_Payment_Braintree extends Extension
 	public function register_card()
 	{
 		//Initialize BrainTree API
-		$this->initAPI();
+		if (!$this->initAPI()) return;
 
 		//Language
 		$this->language->system('extension/payment/braintree');
@@ -270,7 +272,7 @@ class System_Extension_Payment_Braintree extends Extension
 
 	public function getPlans()
 	{
-		$this->initAPI();
+		if (!$this->initAPI()) return;
 
 		$results = Braintree_Plan::all();
 
@@ -286,7 +288,7 @@ class System_Extension_Payment_Braintree extends Extension
 
 	public function activateSubscription($subscription)
 	{
-		$this->initAPI();
+		if (!$this->initAPI()) return;
 
 		$this->language->system('extension/payment/braintree');
 
@@ -341,7 +343,7 @@ class System_Extension_Payment_Braintree extends Extension
 
 	public function updateSubscription($customer_subscription_id, $data)
 	{
-		$this->initAPI();
+		if (!$this->initAPI()) return;
 
 		$this->language->system('extension/payment/braintree');
 
@@ -387,7 +389,7 @@ class System_Extension_Payment_Braintree extends Extension
 
 	public function cancelSubscription($customer_subscription_id)
 	{
-		$this->initAPI();
+		if (!$this->initAPI()) return;
 
 		$id = $this->subscription->getMeta($customer_subscription_id, 'braintree_subscription_id');
 
@@ -443,15 +445,19 @@ class System_Extension_Payment_Braintree extends Extension
 	private function initAPI()
 	{
 		if (!$this->init) {
-			require_once DIR_RESOURCES . '/braintree/lib/Braintree.php';
+			if (!empty($this->settings['merchant_id'])) {
+				require_once DIR_RESOURCES . '/braintree/lib/Braintree.php';
 
-			Braintree_Configuration::environment($this->settings['mode']);
-			Braintree_Configuration::merchantId($this->settings['merchant_id']);
-			Braintree_Configuration::publicKey($this->settings['public_key']);
-			Braintree_Configuration::privateKey($this->settings['private_key']);
+				Braintree_Configuration::environment($this->settings['mode']);
+				Braintree_Configuration::merchantId($this->settings['merchant_id']);
+				Braintree_Configuration::publicKey($this->settings['public_key']);
+				Braintree_Configuration::privateKey($this->settings['private_key']);
 
-			$this->init = true;
+				$this->init = true;
+			}
 		}
+
+		return $this->init;
 	}
 
 	private function loadCustomer()
@@ -461,7 +467,7 @@ class System_Extension_Payment_Braintree extends Extension
 
 			if ($braintree_id) {
 				//Load BrainTree API
-				$this->initAPI();
+				if (!$this->initAPI()) return;
 
 				try {
 					$this->bt_customer = Braintree_Customer::find($braintree_id);

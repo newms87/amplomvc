@@ -196,8 +196,6 @@
 	$('#tabs a').tabs();
 //--></script>
 
-<?= $this->builder->js('ckeditor'); ?>
-
 <?= $this->builder->js('translations', $translations); ?>
 
 <?= $this->builder->js('errors', $errors); ?>
