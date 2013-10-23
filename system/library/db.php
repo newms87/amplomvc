@@ -460,9 +460,14 @@ class DB
 
 	public function escape($value)
 	{
-		if (is_resource($value) || is_object($value) || is_array($value)) {
+		if (is_resource($value) || is_object($value)) {
 			trigger_error("DB:escape(): Argument for value was not a a valid type! Value: " . gettype($value) . ". " . get_caller(0, 3));
 			exit;
+		}
+		elseif (is_array($value)) {
+			$driver = $this->driver;
+			array_walk_recursive($value, function(&$v)use($driver) { $v = $driver->escape($v); });
+			return $value;
 		}
 
 		return $this->driver->escape($value);

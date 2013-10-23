@@ -53,7 +53,7 @@ class System_Model_Address extends Model
 
 	public function addressExists($data)
 	{
-		$where = $this->get_escaped_values('address', $data, ' AND ');
+		$where = $this->getWhere('address', $data);
 
 		if (empty($where)) {
 			return false;

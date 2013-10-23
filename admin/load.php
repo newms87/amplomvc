@@ -2,6 +2,11 @@
 // Registry
 $registry = new Registry();
 
+//TODO: Maybe make this our main handler for loading (move out of registry)??
+spl_autoload_register(function($class) use($registry){
+	$registry->get($class);
+});
+
 // Request
 $registry->set('request', new Request());
 

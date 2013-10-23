@@ -324,7 +324,8 @@ ul > li > ul > li:hover > ul.link_list, ul > li > ul > li.hover > ul.link_list {
 	bottom: 0;
 	left: 10%;
 	width: 80%;
-	height: 26px;
+	max-height: 26px;
+	min-height: 26px;
 	padding: 10px 10px 10px 33px;
 	color: #555555;
 	font-size: 15px;
@@ -363,7 +364,6 @@ ul > li > ul > li:hover > ul.link_list, ul > li > ul > li.hover > ul.link_list {
 }
 
 .message_box:hover {
-	height: auto;
 	max-height: 50%;
 	min-height: 35px;
 	overflow: auto;

@@ -2,6 +2,10 @@
 // Registry
 $registry = new Registry();
 
+spl_autoload_register(function($class) use($registry){
+	$registry->get($class);
+});
+
 // Request
 $registry->set('request', new Request());
 

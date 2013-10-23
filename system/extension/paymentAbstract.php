@@ -38,43 +38,43 @@ abstract class PaymentCard extends Payment
 {
 	public function hasCard($id)
 	{
-		echo "Please implement " . get_called_class() . '::' . __FUNCTION__ . " to extend PaymentCard!";
+		echo "Please implement " . __METHOD__ . " to extend PaymentCard!";
 		exit;
 	}
 
 	public function getCard($id)
 	{
-		echo "Please implement " . get_called_class() . '::' . __FUNCTION__ . " to extend PaymentCard!";
+		echo "Please implement " . __METHOD__ . " to extend PaymentCard!";
 		exit;
 	}
 
 	public function getCards()
 	{
-		echo "Please implement " . get_called_class() . '::' . __FUNCTION__ . " to extend PaymentCard!";
+		echo "Please implement " . __METHOD__ . " to extend PaymentCard!";
 		exit;
 	}
 
 	public function add_card($card = array())
 	{
-		echo "Please implement " . get_called_class() . '::' . __FUNCTION__ . " to extend PaymentCard!";
+		echo "Please implement " . __METHOD__ . " to extend PaymentCard!";
 		exit;
 	}
 
 	public function update_card($id = null, $data)
 	{
-		echo "Please implement " . get_called_class() . '::' . __FUNCTION__ . " to extend PaymentCard!";
+		echo "Please implement " . __METHOD__ . " to extend PaymentCard!";
 		exit;
 	}
 
 	public function remove_card($id = null)
 	{
-		echo "Please implement " . get_called_class() . '::' . __FUNCTION__ . " to extend PaymentCard!";
+		echo "Please implement " . __METHOD__ . " to extend PaymentCard!";
 		exit;
 	}
 
 	public function charge($card_id, $amount, $info = array())
 	{
-		echo "Please implement " . get_called_class() . '::' . __FUNCTION__ . " to extend PaymentCard!";
+		echo "Please implement " . __METHOD__ . " to extend PaymentCard!";
 		exit;
 	}
 
@@ -157,7 +157,7 @@ abstract class PaymentSubscription extends PaymentCard
 
 	public function chargeSubscription($customer_subscription)
 	{
-		echo "Please implement " . get_called_class() . '::' . __FUNCTION__ . "(\$customer_subscription) to extend PaymentSubscription!";
+		echo "Please implement " . __METHOD__ . "(\$customer_subscription) to extend PaymentSubscription!";
 		exit;
 	}
 

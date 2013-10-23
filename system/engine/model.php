@@ -96,6 +96,7 @@ abstract class Model
 		return $this->db->escape($value);
 	}
 
+	//TODO: This method is deprectated. Use escape().
 	protected function escapeAll($values)
 	{
 		return $this->db->escapeAll($values);
@@ -105,7 +106,7 @@ abstract class Model
 	{
 		$this->action_filter('insert', $table, $data);
 
-		$values = $this->get_escaped_values($table, $data, ',', false);
+		$values = $this->getSetValues($table, $data, false);
 
 		$success = $this->db->query("INSERT INTO " . DB_PREFIX . "$table SET $values");
 
@@ -124,7 +125,7 @@ abstract class Model
 
 		$primary_key = $this->get_primary_key($table);
 
-		$values = $this->get_escaped_values($table, $data, ',');
+		$values = $this->getSetValues($table, $data);
 
 		$update_id = true; //Our Return value
 
@@ -148,7 +149,7 @@ abstract class Model
 			$where = "WHERE `$primary_key` = $update_id";
 		}
 		elseif (is_array($where)) {
-			$where = "WHERE " . $this->get_escaped_values($table, $where, ' AND ');
+			$where = "WHERE " . $this->getWhere($table, $where);
 
 			if (isset($where[$primary_key])) {
 				$update_id = (int)$where[$primary_key];
@@ -179,12 +180,12 @@ abstract class Model
 			$where = "`$primary_key` = '$where'";
 		}
 		elseif (is_array($where)) {
-			$where = $this->get_escaped_values($table, $where, ' AND ');
+			$where = $this->getWhere($table, $where);
 		}
 
 		$table = $this->db->escape($table);
 
-		if ($where) {
+		if ($where !== '1') {
 			$where = "WHERE $where";
 		}
 		else {
@@ -290,7 +291,33 @@ abstract class Model
 		return $primary_key;
 	}
 
-	public function get_escaped_values($table, $data, $glue = false, $auto_inc = true)
+	public function getWhere($table, $data, $prefix = '', $glue = 'AND', $primary_key = false)
+	{
+		$data = $this->getEscapedValues($table, $data, $primary_key);
+
+		$values = '';
+
+		foreach ($data as $key => $value) {
+			$values .= ($values ? ' '.$glue.' ' : '') . ($prefix ? $prefix . '.' : '') . "`$key` = '$value'";
+		}
+
+		return $values;
+	}
+
+	public function getSetValues($table, $data, $primary_key = false)
+	{
+		$data = $this->getEscapedValues($table, $data, $primary_key);
+
+		$values = '';
+
+		foreach ($data as $key => $value) {
+			$values .= ($values ? ',' : '') . "`$key` = '$value'";
+		}
+
+		return $values ? $values : '1';
+	}
+
+	public function getEscapedValues($table, $data, $auto_inc = true)
 	{
 		$table_model = $this->get_table_model($table);
 
@@ -299,7 +326,7 @@ abstract class Model
 		foreach ($data as $key => &$value) {
 
 			if (is_resource($value) || is_array($value) || is_object($value)) {
-				trigger_error("Model::escape_value(): The field $key was given a value that was not a valid type! Value: " . gettype($value) . ". " . get_caller(1));
+				trigger_error("Model::escape_value(): The field $key was given a value that was not a valid type! Value: " . gettype($value) . ". " . get_caller(0,2));
 				exit;
 			}
 
@@ -339,16 +366,6 @@ abstract class Model
 					break;
 			}
 		}unset($value);
-
-		if ($glue) {
-			$values = '';
-
-			foreach ($data as $key=>$value) {
-				$values .= ($values ? $glue : '') . "`$key` = '$value'";
-			}
-
-			return $values;
-		}
 
 		return $data;
 	}
