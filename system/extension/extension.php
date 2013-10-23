@@ -52,36 +52,4 @@ abstract class Extension extends Controller
 	{
 		return $this->settings;
 	}
-
-	public function renderTemplate()
-	{
-		$this->template->load('payment/payment');
-
-		$this->data['confirm'] = $this->url->link('payment/confirm', 'code=' . $this->info['code'] . '&order_id=' . $this->order->getId());
-
-		$this->render();
-	}
-
-	protected function confirmUrl()
-	{
-		return $this->url->link('payment/confirm', 'code=' . $this->info['code'] . '&order_id=' . $this->order->getId());
-	}
-
-	protected function callbackUrl($callback = 'callback', $query = '')
-	{
-		return $this->url->link('payment/callback', 'code=' . $this->info['code'] . '&callback=' . $callback . ($query?'&'.$query:''));
-	}
-
-	public function validate($address, $total)
-	{
-		if ((int)$this->settings['min_total'] > $total) {
-			return false;
-		}
-
-		if (!$this->address->inGeoZone($address, $this->settings['geo_zone_id'])) {
-			return false;
-		}
-
-		return true;
-	}
 }

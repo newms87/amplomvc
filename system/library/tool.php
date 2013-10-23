@@ -53,7 +53,7 @@ class Tool extends Library
 		return preg_replace($patterns, $replacements, $text);
 	}
 
-	function sort_by_array($array, $order, $sort_key)
+	public function sort_by_array($array, $order, $sort_key)
 	{
 		$new_array = array();
 		foreach ($order as $o) {
@@ -148,7 +148,7 @@ class Tool extends Library
 	 *
 	 * @return array - An associative array with key as the Comment Directive, and value of the String following the ':'
 	 */
-	function getFileCommentDirectives($file)
+	public function getFileCommentDirectives($file)
 	{
 		$directives = array();
 
@@ -176,7 +176,7 @@ class Tool extends Library
 	 *
 	 * @return array - Each value in the array will be determined by the $return_type param.
 	 */
-	function get_files_r($dir, $exts = null, $return_type = FILELIST_SPLFILEINFO)
+	public function get_files_r($dir, $exts = null, $return_type = FILELIST_SPLFILEINFO)
 	{
 		if (is_null($exts)) {
 			$exts = array(
@@ -215,5 +215,4 @@ class Tool extends Library
 
 		return $files;
 	}
-
 }

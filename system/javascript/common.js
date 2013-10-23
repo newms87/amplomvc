@@ -10,16 +10,27 @@ function syncload(s) {
 		error: function (e) {
 			$.error('Failed to load script from ' + s)
 		},
-		dataType: 'script',
+		dataType: 'script'
 	});
 }
 
 //Load jQuery Plugins On Call
 $.fn.codemirror = function (params) {
-	$.fn.codemirror = null;
-	$('head').append('<link rel="stylesheet" type="text/css" href="system/javascript/codemirror/lib/codemirror.css" />');
-	$('head').append('<link rel="stylesheet" type="text/css" href="system/javascript/codemirror/ui/css/codemirror-ui.css" />');
-	syncload('system/javascript/codemirror/lib/codemirror.js');
+	if (!$.fn.codemirror.once) {
+		$('head').append('<link rel="stylesheet" type="text/css" href="system/javascript/codemirror/lib/codemirror.css" />');
+		$('head').append('<link rel="stylesheet" type="text/css" href="system/javascript/codemirror/ui/css/codemirror-ui.css" />');
+		syncload('system/javascript/codemirror/lib/codemirror.js');
+
+		//CodeMirrorUI
+		syncload('system/javascript/codemirror/ui/js/codemirror-ui.js');
+		uiOptions = {
+			searchMode: 'popup',
+			path: 'system/javascript/codemirror/ui/js/',
+			imagePath: 'system/javascript/codemirror/ui/images/silk'
+		}
+
+		$.fn.codemirror.once = true;
+	}
 
 	params = $.extend({},{
 		tabSize: 3,
@@ -59,14 +70,6 @@ $.fn.codemirror = function (params) {
 		for (f in addons[a]) {
 			syncload('system/javascript/codemirror/addon/' + a + '/' + f + '.js');
 		}
-	}
-
-	//CodeMirrorUI
-	syncload('system/javascript/codemirror/ui/js/codemirror-ui.js');
-	uiOptions = {
-		searchMode: 'popup',
-		path: 'system/javascript/codemirror/ui/js/',
-		imagePath: 'system/javascript/codemirror/ui/images/silk'
 	}
 
 	return this.each(function(i,e) {
@@ -151,7 +154,8 @@ $.fn.ac_radio = function (params) {
 
 $.fn.ac_checklist = function (params) {
 	params = $.extend({}, {
-		elements: $(this).children().not('.nocheck')
+		elements: $(this).children().not('.nocheck'),
+		change: null
 	}, params);
 
 	this.find('input[type=checkbox]').hide();
@@ -169,6 +173,10 @@ $.fn.ac_checklist = function (params) {
 			} else {
 				$(this).addClass('checked');
 				$(this).find('input[type=checkbox]').prop('checked',true).change();
+			}
+
+			if (typeof params.change === 'function') {
+				params.change($(this), $(this).hasClass('checked'));
 			}
 		});
 

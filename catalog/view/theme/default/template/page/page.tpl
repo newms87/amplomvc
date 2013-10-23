@@ -6,6 +6,8 @@
 
 		<?= $content_top; ?>
 
+		<style><?= $css; ?></style>
+
 		<div class="section">
 			<? if (!empty($display_title)) { ?>
 				<h1><?= $title; ?></h1>

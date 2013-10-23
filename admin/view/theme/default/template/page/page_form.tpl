@@ -51,13 +51,20 @@
 				</div><!-- /tab-general -->
 
 				<div id="tab-content">
-					<div id="code_editor">
-						<h2><?= $entry_content; ?></h2>
+					<div id="code_editor_preview">
 						<textarea id="html_editor" name="content"><?= $content; ?></textarea>
+						<textarea id="css_editor" name="css"><?= $css; ?></textarea>
 					</div>
 
 					<div id="code_preview">
-						<iframe id="preview_frame"></iframe>
+						<div id="zoom_preview">
+							<input type="text" id="zoom_value" value="80%" />
+							<div class="zoom_change">
+								<img class="zoom_in" src="<?= HTTP_THEME_IMAGE . 'zoom-in.png'; ?>" />
+								<img class="zoom_out" src="<?= HTTP_THEME_IMAGE . 'zoom-out.png'; ?>" />
+							</div>
+						</div>
+						<iframe id="preview_frame" frameborder="1" scrolling="auto" marginheight="0" onload="if(typeof update_zoom === 'function')update_zoom()"></iframe>
 					</div>
 
 				</div><!-- /tab-content -->
@@ -68,8 +75,7 @@
 							<td class="required"> <?= $entry_layout; ?></td>
 							<td>
 								<? $this->builder->setConfig('layout_id', 'name'); ?>
-								<div
-									id="layout_select"><?= $this->builder->build('select', $data_layouts, "layout_id", $layout_id); ?></div>
+								<div id="layout_select"><?= $this->builder->build('select', $data_layouts, "layout_id", $layout_id); ?></div>
 								<a id="create_layout" class="link_button"><?= $button_create_layout; ?></a>
 								<span id="create_layout_load" style="display:none"><?= $text_creating_layout; ?></span>
 							</td>
@@ -100,8 +106,7 @@
 									<tfoot>
 									<tr>
 										<td colspan="3">
-											<a id="add_block" href="<?= $url_blocks; ?>" target="_blank"
-											   class="button"><?= $button_add_blocks; ?></a>
+											<a id="add_block" href="<?= $url_blocks; ?>" target="_blank" class="button"><?= $button_add_blocks; ?></a>
 										</td>
 									</tr>
 									</tfoot>
@@ -172,17 +177,42 @@
 		return false;
 	});
 
-	$('#html_editor').codemirror({mode: 'html'})
+	function get_zoom_value() {
+		return (parseInt($('#zoom_value').val()) || 0) / 100;
+	}
+	function update_zoom() {
+		var z = get_zoom_value();
+		var new_css = {
+			'-webkit-transform': 'scale3d('+z+','+z+',1)',
+			'transform': 'scale3d('+z+','+z+',1)'
+		};
+		$('#preview_frame').contents().find('#container').css(new_css);
+	}
 
-	$('#preview_frame').attr('src',"<?= $page_preview; ?>");
+	$('#zoom_value').keyup(update_zoom);
+
+	$('#zoom_preview .zoom_in, #zoom_preview .zoom_out').click(function(){
+		var z = get_zoom_value();
+		var zoom = $(this).hasClass('zoom_out') ? Math.max(z - .1,.1) : Math.min(z + .1, 3);
+		$('#zoom_value').val(parseInt(zoom*100)+'%');
+		update_zoom();
+	});
+
+	$('#html_editor').codemirror({mode: 'html'});
+	$('#css_editor').codemirror({mode: 'css'});
 
 	$('#html_editor')[0].cm_editor.mirror.on('keyup',function(instance, changeObj){
 		$('#preview_frame').contents().find('#content_holder .page_content').html(instance.getValue());
 	});
 
+	$('#css_editor')[0].cm_editor.mirror.on('keyup',function(instance, changeObj){
+		$('#preview_frame').contents().find('#page_css').html(instance.getValue());
+	});
+
 	$(document).bind('keydown', function(e) {
 		if(e.ctrlKey && (e.which == 83)) {
 			$('#html_editor')[0].cm_editor.mirror.save();
+			$('#css_editor')[0].cm_editor.mirror.save();
 
 			$('#form').postForm(function(response){
 				handle_response(response);
@@ -194,6 +224,10 @@
 	});
 
 	$('#tabs a').tabs();
+
+	$(document).ready(function(){
+		$('#preview_frame').attr('src',"<?= $page_preview; ?>");
+	});
 //--></script>
 
 <?= $this->builder->js('translations', $translations); ?>

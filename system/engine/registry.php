@@ -12,6 +12,10 @@ final class Registry
 			require_once(_ac_mod_file(DIR_SYSTEM . "extension/extension_model.php"));
 			require_once(_ac_mod_file(DIR_SYSTEM . "extension/extension.php"));
 
+			if (strpos($key, "System_Extension_Payment") === 0) {
+				require_once(_ac_mod_file(DIR_SYSTEM . "extension/paymentAbstract.php"));
+			}
+
 			return $this->data['load']->model($key);
 		}
 		elseif (preg_match("/^(Model_|System_|Admin_|Catalog_)/", $key)) {

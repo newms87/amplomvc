@@ -97,7 +97,22 @@ class Date extends Library
 		}
 	}
 
-	public function diff($d1, $d2)
+	public function getDayOfWeek($date = null)
+	{
+		return $this->format($date, 'w');
+	}
+
+	public function getDayOfMonth($date = null)
+	{
+		return $this->format($date, 'd');
+	}
+
+	public function getDayOfYear($date = null)
+	{
+		return $this->format($date, 'z');
+	}
+
+	public function diff($d1, $d2 = null)
 	{
 		$this->getObject($d1);
 		$this->getObject($d2);

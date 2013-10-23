@@ -1,5 +1,5 @@
 <?php
-class System_Extension_Payment_Cod extends Extension
+class System_Extension_Payment_Cod extends Payment
 {
 	public function confirm($order_id)
 	{

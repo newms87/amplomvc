@@ -74,8 +74,38 @@ class Admin_Model_Design_Navigation extends Model
 		return $this->insert("navigation", $link);
 	}
 
+	public function addNavigationLinkTree($navigation_group_id, $links, $parent_id = 0)
+	{
+		$sort_order = 0;
+
+		foreach ($links as $name => $link) {
+			if (!isset($link['sort_order'])) {
+				$link['sort_order'] = $sort_order++;
+			}
+
+			if (empty($link['name'])) {
+				$link['name'] = $name;
+			}
+
+			$link['parent_id'] = $parent_id;
+
+			$navigation_id = $this->addNavigationLink($navigation_group_id, $link);
+
+			if (!empty($link['children'])) {
+				$this->addNavigationLinkTree($navigation_group_id, $link['children'], $navigation_id);
+			}
+		}
+	}
+
 	public function addNavigationLinks($navigation_group_id, $links)
 	{
+		//Check if these links are in a Tree format
+		foreach ($links as $link) {
+			if (isset($link['children'])) {
+				return $this->addNavigationLinkTree($navigation_group_id, $links);
+			}
+		}
+
 		$sort_index = array();
 
 		foreach ($links as $nav_id => &$link) {
@@ -92,7 +122,7 @@ class Admin_Model_Design_Navigation extends Model
 		unset($link);
 
 		foreach ($links as $nav_id => $link) {
-			$link['parent_id'] = isset($links[$link['parent_id']]) ? $links[$link['parent_id']]['navigation_id'] : 0;
+			$link['parent_id'] = (isset($link['parent_id']) && isset($links[$link['parent_id']])) ? $links[$link['parent_id']]['navigation_id'] : 0;
 
 			if (!isset($link['sort_order'])) {
 				if (!isset($sort_index[$link['parent_id']])) {

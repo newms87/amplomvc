@@ -15,7 +15,7 @@ function html_dump($var, $label= "HTML Dump", $level=0, $max = -1, $print = true
 <? if (!$html_dump_count) { ?>
 <style>
 .html_dump{
-	display:block;
+	display:inline-block;
 	margin-bottom:15px;
 	margin-left:20px
 }

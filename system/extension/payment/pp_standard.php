@@ -1,5 +1,5 @@
 <?php
-class System_Extension_Payment_PpStandard extends Extension
+class System_Extension_Payment_PpStandard extends Payment
 {
 	public function getTemplate()
 	{

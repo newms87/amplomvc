@@ -231,8 +231,7 @@ class Admin_Controller_Page_Page extends Controller
 		//Load Information from POST or DB
 		if ($this->request->isPost()) {
 			$page_info = $_POST;
-		}
-		elseif ($page_id) {
+		} elseif ($page_id) {
 			$page_info = $this->Model_Page_Page->getPage($page_id);
 
 			$page_info['stores'] = $this->Model_Page_Page->getPageStores($page_id);
@@ -240,9 +239,10 @@ class Admin_Controller_Page_Page extends Controller
 
 		//Set Values or Defaults
 		$defaults = array(
-			'title'             => '',
+			'title'            => '',
 			'alias'            => '',
 			'content'          => '',
+			'css'              => '',
 			'meta_keywords'    => '',
 			'meta_description' => '',
 			'display_title'    => 1,
@@ -263,7 +263,7 @@ class Admin_Controller_Page_Page extends Controller
 		$this->data['url_create_layout'] = $this->url->link('page/page/create_layout');
 		$this->data['url_load_blocks']   = $this->url->link('page/page/loadBlocks');
 
-		$this->data['page_preview'] = $this->url->store(current($this->data['stores']), 'page/page', 'page_id=' . $page_id);
+		$this->data['page_preview'] = $this->url->store(current($this->data['stores']), 'page/page/preview', 'page_id=' . $page_id);
 
 		//Action Buttons
 		$this->data['save']   = $this->url->link('page/page/update', 'page_id=' . $page_id);
