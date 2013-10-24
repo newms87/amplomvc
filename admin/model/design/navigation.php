@@ -87,6 +87,10 @@ class Admin_Model_Design_Navigation extends Model
 				$link['name'] = $name;
 			}
 
+			if (!isset($link['status'])) {
+				$link['status'] = 1;
+			}
+
 			$link['parent_id'] = $parent_id;
 
 			$navigation_id = $this->addNavigationLink($navigation_group_id, $link);
@@ -99,15 +103,7 @@ class Admin_Model_Design_Navigation extends Model
 
 	public function addNavigationLinks($navigation_group_id, $links)
 	{
-		//Check if these links are in a Tree format
-		foreach ($links as $link) {
-			if (isset($link['children'])) {
-				return $this->addNavigationLinkTree($navigation_group_id, $links);
-			}
-		}
-
-		$sort_index = array();
-
+		//Transform links into Tree structure (if not already)
 		foreach ($links as $nav_id => &$link) {
 			if (empty($link['name'])) {
 				$link['name'] = 'link_' . $nav_id;
@@ -117,23 +113,23 @@ class Admin_Model_Design_Navigation extends Model
 				$link['status'] = 1;
 			}
 
-			$link['navigation_id'] = $this->addNavigationLink($navigation_group_id, $link);
+			if (($pid = $link['parent_id']) != 0) {
+				if (!isset($links[$pid]['children'])) {
+					$links[$pid]['children'] = array();
+				}
+
+				$links[$pid]['children'][$nav_id] = &$link;
+			}
 		}
 		unset($link);
 
-		foreach ($links as $nav_id => $link) {
-			$link['parent_id'] = (isset($link['parent_id']) && isset($links[$link['parent_id']])) ? $links[$link['parent_id']]['navigation_id'] : 0;
-
-			if (!isset($link['sort_order'])) {
-				if (!isset($sort_index[$link['parent_id']])) {
-					$sort_index[$link['parent_id']] = 0;
-				}
-
-				$link['sort_order'] = $sort_index[$link['parent_id']]++;
+		foreach ($links as $key => $link) {
+			if ($link['parent_id'] > 0) {
+				unset($links[$key]);
 			}
-
-			$this->editNavigationLink($navigation_group_id, $link['navigation_id'], $link);
 		}
+
+		return $this->addNavigationLinkTree($navigation_group_id, $links);
 	}
 
 	public function editNavigationLink($navigation_group_id, $link_id, $link)
@@ -609,7 +605,7 @@ class Admin_Model_Design_Navigation extends Model
 					),
 					'system_cron'            => array(
 						'display_name' => 'Cron',
-						'href'         => 'module/cron',
+						'href'         => 'setting/cron',
 					),
 					'system_design'          => array(
 						'display_name' => 'Design',

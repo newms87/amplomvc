@@ -44,9 +44,7 @@
 						<style id="page_css"><?= $css; ?></style>
 
 						<div class="section">
-							<? if (!empty($display_title)) { ?>
-								<h1><?= $title; ?></h1>
-							<? } ?>
+							<h1 id="page_title" <?= empty($display_title) ? 'style="display:none"' : ''; ?>><?= $title; ?></h1>
 
 							<div class="page_content"><?= $content; ?></div>
 						</div>

@@ -2554,9 +2554,12 @@ div .easy_list li > * + * {
 	float: left;
 }
 
+#code_editor_preview .page_title{
+	margin-bottom: 10px;
+}
 #preview_frame {
 	width: 100%;
-	min-height: 732px;
+	min-height: 814px;
 }
 
 #zoom_value {

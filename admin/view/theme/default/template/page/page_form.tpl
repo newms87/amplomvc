@@ -13,24 +13,45 @@
 		<div class="section">
 
 			<div id="tabs" class="htabs">
-				<a href="#tab-general"><?= $tab_general; ?></a>
 				<a href="#tab-content"><?= _("Content"); ?></a>
+				<a href="#tab-data"><?= _("Data"); ?></a>
 				<a href="#tab-design"><?= $tab_design; ?></a>
 			</div>
 
 			<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
-				<div id="tab-general">
+
+				<div id="tab-content">
+					<div id="code_editor_preview">
+						<div class="page_title">
+							<div class="title"><?= _("Page Title"); ?></div>
+							<input type="text" name="title" size="60" value="<?= $title; ?>"/>
+							<span class="display_title">
+								<input type="checkbox" id="display_title" name="display_title" <?= $display_title ? "checked=\"checked\"" : ''; ?> value="1" />
+								<label for="display_title"><?= _("Display Title?"); ?></label>
+							</span>
+						</div>
+
+						<div class="html_title"><?= _("HTML"); ?></div>
+						<textarea id="html_editor" name="content"><?= $content; ?></textarea>
+						<div class="css_title"><?= _("CSS"); ?></div>
+						<textarea id="css_editor" name="css"><?= $css; ?></textarea>
+					</div>
+
+					<div id="code_preview">
+						<div id="zoom_preview">
+							<input type="text" id="zoom_value" value="80%" />
+							<div class="zoom_change">
+								<img class="zoom_in" src="<?= HTTP_THEME_IMAGE . 'zoom-in.png'; ?>" />
+								<img class="zoom_out" src="<?= HTTP_THEME_IMAGE . 'zoom-out.png'; ?>" />
+							</div>
+						</div>
+						<iframe id="preview_frame" frameborder="1" scrolling="auto" marginheight="0" onload="if(typeof update_zoom === 'function')update_zoom()"></iframe>
+					</div>
+
+				</div><!-- /tab-content -->
+
+				<div id="tab-data">
 					<table class="form">
-						<tr>
-							<td class="required"> <?= $entry_title; ?></td>
-							<td>
-								<input type="text" name="title" size="60" value="<?= $title; ?>"/>
-								<div class="display_title">
-									<input type="checkbox" id="display_title" name="display_title" <?= $display_title ? "checked=\"checked\"" : ''; ?> value="1" />
-									<label for="display_title"><?= $entry_display_title; ?></label>
-								</div>
-							</td>
-						</tr>
 						<tr>
 							<td class="required"> <?= $entry_alias; ?></td>
 							<td><input type="text" name="alias" size="60" value="<?= $alias; ?>"/></td>
@@ -48,26 +69,7 @@
 							<td><?= $this->builder->build('select', $data_statuses, 'status', (int)$status); ?></td>
 						</tr>
 					</table>
-				</div><!-- /tab-general -->
-
-				<div id="tab-content">
-					<div id="code_editor_preview">
-						<textarea id="html_editor" name="content"><?= $content; ?></textarea>
-						<textarea id="css_editor" name="css"><?= $css; ?></textarea>
-					</div>
-
-					<div id="code_preview">
-						<div id="zoom_preview">
-							<input type="text" id="zoom_value" value="80%" />
-							<div class="zoom_change">
-								<img class="zoom_in" src="<?= HTTP_THEME_IMAGE . 'zoom-in.png'; ?>" />
-								<img class="zoom_out" src="<?= HTTP_THEME_IMAGE . 'zoom-out.png'; ?>" />
-							</div>
-						</div>
-						<iframe id="preview_frame" frameborder="1" scrolling="auto" marginheight="0" onload="if(typeof update_zoom === 'function')update_zoom()"></iframe>
-					</div>
-
-				</div><!-- /tab-content -->
+				</div><!-- /tab-data -->
 
 				<div id="tab-design">
 					<table class="form">
@@ -207,6 +209,14 @@
 
 	$('#css_editor')[0].cm_editor.mirror.on('keyup',function(instance, changeObj){
 		$('#preview_frame').contents().find('#page_css').html(instance.getValue());
+	});
+
+	$('[name=title]').keyup(function(){
+		$('#preview_frame').contents().find('#page_title').html($(this).val());
+	});
+
+	$('[name=display_title]').change(function(){
+		$('#preview_frame').contents().find('#page_title').stop().toggle($(this).val());
 	});
 
 	$(document).bind('keydown', function(e) {

@@ -236,10 +236,13 @@ class Admin_Controller_Page_Page extends Controller
 
 			$page_info['stores'] = $this->Model_Page_Page->getPageStores($page_id);
 		}
+		else {
+			$page_info = array();
+		}
 
 		//Set Values or Defaults
 		$defaults = array(
-			'title'            => '',
+			'title'            => 'New Page',
 			'alias'            => '',
 			'content'          => '',
 			'css'              => '',

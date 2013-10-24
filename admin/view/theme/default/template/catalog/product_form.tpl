@@ -910,10 +910,8 @@ function update_ov_entries_select() {
 <script type="text/javascript">//<!--
 $('#product_image_list').ac_template('image_list', {defaults: <?= json_encode($product_images['__ac_template__']); ?>});
 
-function add_product_image(data) {
-	data = data || null;
-
-	$.ac_template('image_list', 'add', data);
+function add_product_image() {
+	$.ac_template('image_list', 'add');
 
 	$('#product_image_list').update_index('.sort_order');
 }

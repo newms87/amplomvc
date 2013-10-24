@@ -16,4 +16,13 @@ class Catalog_Model_Page_Page extends Model
 
 		return $page;
 	}
+
+	public function getPageForPreview($page_id)
+	{
+		$page = $this->queryRow("SELECT * FROM " . DB_PREFIX . "page WHERE page_id = " . (int)$page_id);
+
+		$this->translation->translate('page', $page_id, $page);
+
+		return $page;
+	}
 }

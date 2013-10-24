@@ -7,87 +7,93 @@
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= _("Cron Jobs"); ?></h1>
 
 			<div class="buttons">
-				<a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a>
-				<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
+				<a href="<?= $run_cron; ?>" target="_blank" class="button run_cron_button"><?= _("Run Cron"); ?></a>
+				<a onclick="$('#form').submit();" class="button"><?= _("Save"); ?></a>
+				<a href="<?= $cancel; ?>" class="button"><?= _("Cancel"); ?></a>
 			</div>
 		</div>
 		<div class="section">
-			<a href='<?= $run_cron; ?>' target="_blank" class="button run_cron_button"><?= $button_run_cron; ?></a>
-
-			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
+			<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table id="module" class="list">
 					<thead>
-					<tr>
-						<td class="left"><?= $entry_name; ?></td>
-						<td class="left"><?= $entry_action; ?></td>
-						<td class="left"><?= $entry_status; ?></td>
-						<td class="right"><?= $entry_sort_order; ?></td>
-						<td></td>
-					</tr>
-					</thead>
-					<? foreach ($tasks as $row => $task) { ?>
-						<tbody id="module-row<?= $row; ?>">
 						<tr>
-							<td class="left"><input type="text" name="tasks[<?= $row; ?>][name]" value="<?= $tasks[$row]['name']; ?>" size="30" maxlength='30'/></td>
-							<td class="left"><input type="text" name="tasks[<?= $row; ?>][action]" value="<?= $tasks[$row]['action']; ?>" size="100" maxlength='100'/></td>
-							<td class="left"><?= $this->builder->build('select', $statuses, "tasks[$row][status]", (int)$tasks[$row]['status']); ?></td>
-							<td class="left">
-								<ul class='time_list'>
-									<? if (isset($tasks[$row]['times'])) { ?>
-										<? foreach ($tasks[$row]['times'] as $time) { ?>
-											<li>
-												<input type="text" name="tasks[<?= $row; ?>][times][]" value="<?= $time; ?>" class='time'/>
-												<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" onclick="$(this).parent().remove();"/>
-											</li>
-										<? } ?>
-									<? } ?>
-								</ul>
-								<div style="text-align:center"><a onclick="add_cron_time($(this), <?= $row; ?>);"><?= $text_add_cron_time; ?></a></div>
-							</td>
-							<td class="right"><input type="text" name="tasks[<?= $row; ?>][sort_order]" value="<?= $tasks[$row]['sort_order']; ?>" size="3"/></td>
-							<td class="left"><a onclick="$('#module-row<?= $row; ?>').remove();"
-							                    class="button"><?= $button_remove; ?></a></td>
+							<td class="left"><?= _("Name"); ?></td>
+							<td class="left"><?= _("Action"); ?><span class="help"><?= _("These files are located in " . DIR_CRON); ?></span></td>
+							<td class="left"><?= _("Time"); ?></td>
+							<td class="right"><?= _("Sort Order"); ?></td>
+							<td class="left"><?= _("Status"); ?></td>
+							<td></td>
 						</tr>
-						</tbody>
+					</thead>
+
+					<tbody id="task_list">
+					<? foreach ($tasks as $row => $task) { ?>
+						<tr class="task" data-row="<?= $row; ?>">
+							<td class="left"><input type="text" name="tasks[<?= $row; ?>][name]" value="<?= $tasks[$row]['name']; ?>" size="30" maxlength="30"/></td>
+							<td class="left">
+								<label for="select_file<?= $row; ?>"><?= _("Cron File"); ?></label>
+								<select id="select_file<?= $row; ?>" name="tasks[<?= $row; ?>][file]">
+								<? foreach ($data_files as $key => $file) { ?>
+									<option value="<?= $file; ?>" data-key="<?= $key; ?>"><?= $file; ?></option>
+								<? } ?>
+								</select>
+
+								<? foreach ($data_methods as $key => $methods) { ?>
+									<select data-key="<?= $key; ?>" name="tasks[<?= $row; ?>][method]">
+										<? foreach ($methods as $method) { ?>
+											<option value="<?= $method; ?>"><?= $method; ?></option>
+										<? } ?>
+									</select>
+								<? } ?>
+							</td>
+							<td class="left">
+								<table class="crontime">
+									<thead>
+										<tr>
+											<td><?= _("Minute"); ?></td>
+											<td><?= _("Hour"); ?></td>
+											<td><?= _("Day of Month"); ?></td>
+											<td><?= _("Month"); ?></td>
+											<td><?= _("Day of Week"); ?></td>
+										</tr>
+									</thead>
+									<tr>
+										<td><input type="text" size="3" name="tasks[<?= $row; ?>][time][i]" value="<?= $tasks[$row]['time']['i']; ?>"/></td>
+										<td><input type="text" size="3" name="tasks[<?= $row; ?>][time][h]" value="<?= $tasks[$row]['time']['h']; ?>"/></td>
+										<td><input type="text" size="3" name="tasks[<?= $row; ?>][time][d]" value="<?= $tasks[$row]['time']['d']; ?>"/></td>
+										<td><input type="text" size="3" name="tasks[<?= $row; ?>][time][m]" value="<?= $tasks[$row]['time']['m']; ?>"/></td>
+										<td><input type="text" size="3" name="tasks[<?= $row; ?>][time][w]" value="<?= $tasks[$row]['time']['w']; ?>"/></td>
+									</tr>
+								</table>
+							</td>
+							<td class="right"><input type="text" class="sort_order" name="tasks[<?= $row; ?>][sort_order]" value="<?= $tasks[$row]['sort_order']; ?>" size="3"/></td>
+							<td class="left"><?= $this->builder->build('select', $data_statuses, "tasks[$row][status]", $tasks[$row]['status']); ?></td>
+							<td class="left"><a onclick="$('#module-row<?= $row; ?>').remove();" class="button_remove"></a></td>
+						</tr>
 					<? } ?>
+					</tbody>
+
 					<tfoot>
-					<tr>
-						<td colspan="8"></td>
-						<td class="left"><a onclick="addModule();" class="button"><?= $button_add_task; ?></a></td>
-					</tr>
+						<tr>
+							<td colspan="6" class="center"><a id="add_task" class="button"><?= _("Add Task"); ?></a></td>
+						</tr>
 					</tfoot>
 				</table>
 			</form>
 		</div>
 	</div>
 
-	<script type="text/javascript">//<!--
-		function add_cron_time(context, row) {
-			html = '<li>';
-			html += '<input type="text" name="tasks[%row%][times][]" value="" class="time" />';
-			html += '<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" onclick="$(this).parent().remove();" />';
-			html += '</li>';
+<script type="text/javascript">//<!--
+	$('#task_list').ac_template('task_list', {defaults: <?= json_encode($tasks['__ac_template__']); ?>});
 
-			context.closest('td').find('.time_list').append(html.replace(/%row%/g, row))
-				.children().last().find('.time').timepicker({timeFormat: 'h:m'});
-		}
+	$('#add_task').click(function(){
+		$.ac_template('task_list', 'add');
+		$('#task_list').update_index();
+	});
 
-		var task_row = <?= count($tasks); ?>;
-
-		function addModule() {
-			html = '<tbody id="module-row%modrow%">';
-			html += '	<tr>';
-			html += '		<td class="left"><input type="text" name="tasks[%modrow%][name]" value="" size="30" maxlength="30" /></td>';
-			html += '		<td class="left"><input type="text" name="tasks[%modrow%][action]" value="" size="100" maxlength="100" /></td>';
-			html += '		<td class="left">' + "<?= $this->builder->build('select',$statuses,'tasks[%modrow%][status]',1); ?>" + '</td>';
-			html += '		<td class="right"><input type="text" name="tasks[%modrow%][sort_order]" value="0" size="3" /></td>';
-			html += '		<td class="left"><a onclick="$(\'#module-row%modrow%\').remove();" class="button"><?= $button_remove; ?></a></td>';
-			html += '	</tr>';
-			html += '</tbody>';
-
-			$('#module tfoot').before(html.replace(/%modrow%/g, task_row));
-			task_row++;
-		}
+	$('#task_list').sortable({stop: function(){
+		$(this).update_index();
+	}});
 //--></script>
 
 <?= $this->builder->js('datepicker', true); ?>

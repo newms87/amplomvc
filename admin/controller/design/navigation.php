@@ -284,7 +284,7 @@ class Admin_Controller_Design_Navigation extends Controller
 		//Additional Data
 		$admin_store = array(
 			'admin' => array(
-				'store_id' => 0,
+				'store_id' => -1,
 				'name'     => $this->_('text_admin_panel')
 			)
 		);

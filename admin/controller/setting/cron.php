@@ -1,19 +1,12 @@
 <?php
-class Admin_Controller_Module_Cron extends Controller
+class Admin_Controller_Setting_Cron extends Controller
 {
-
 	public function index()
 	{
-		$this->language->load('module/cron');
-
-		$this->template->load('module/cron');
-
-		$this->document->setTitle($this->_('head_title'));
+		$this->document->setTitle(_("Automated Tasks"));
 
 		if ($this->request->isPost() && $this->validate()) {
-
-			$this->System_Model_Setting->editSetting('cron_tasks', $_POST);
-
+			$this->config->save('cron', 'cron_tasks', $_POST, 0, false);
 
 			//TODO: Implement full cron control from this code:
 			/*
@@ -24,35 +17,87 @@ class Admin_Controller_Module_Cron extends Controller
 		echo exec('rm -fv /tmp/crontab.txt');
 			*/
 
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _('Successfully updated the Automated Tasks!'));
 
-			$this->url->redirect($this->url->link('module/cron'));
+			$this->url->redirect($this->url->link('setting/cron'));
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_module'), $this->url->link('extension/module'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('module/cron'));
+		//Breadcrumbs
+		$this->breadcrumb->add(_("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_('System Settings'), $this->url->link('setting/store'));
+		$this->breadcrumb->add(_('Automated Tasks'), $this->url->link('setting/cron'));
 
-		$this->data['action'] = $this->url->link('module/cron');
-		$this->data['cancel'] = $this->url->link('extension/module');
+		if ($this->request->isPost()) {
+			$tasks = $_POST;
+		} else {
+			$tasks = $this->config->load('cron', 'cron_tasks', 0);
+		}
 
-		$this->data['run_cron'] = $this->url->store(null, 'cron/cron');
+		$this->data = $tasks;
 
-		$info                = isset($_POST['cron_tasks']) ? $_POST['cron_tasks'] : $this->System_Model_Setting->getSetting('cron_tasks');
-		$this->data['tasks'] = isset($info['tasks']) ? $info['tasks'] : array();
+		//AC Template
+		$this->data['tasks']['__ac_template__'] = array(
+			'name'       => "New Task",
+			'file'       => '',
+			'method'     => '',
+			'time'       => array(
+				'i' => '0',
+				'h' => '*',
+				'd' => '*',
+				'm' => '*',
+				'w' => '*',
+			),
+			'status'     => 1,
+			'sort_order' => 0,
+		);
 
+		//Template Data
+		$cron_files = $this->tool->get_files_r(DIR_CRON);
+
+		$cron_methods = array();
+
+		foreach ($cron_files as $key => &$file) {
+			$filename = pathinfo($file, PATHINFO_FILENAME);
+
+			if ($filename === 'cron_job') {
+				unset($cron_files[$key]);
+				continue;
+			}
+			$contents = file_get_contents($file);
+
+			$matches = null;
+			preg_match_all("/public\\s*function\\s*([a-z0-9_]*)/i", $contents, $matches);
+
+			$cron_methods[$key] = $matches[1];
+
+			$file = $filename;
+		}
+
+		$this->data['data_files']   = $cron_files;
+		$this->data['data_methods'] = $cron_methods;
+
+		//Action Buttons
+		$this->data['save']     = $this->url->link('setting/cron');
+		$this->data['cancel']   = $this->url->link('setting/store');
+		$this->data['run_cron'] = $this->url->link('common/home', 'run_cron');
+
+		//The Template
+		$this->template->load('setting/cron');
+
+		//Dependencies
 		$this->children = array(
 			'common/header',
 			'common/footer'
 		);
 
+		//Render
 		$this->response->setOutput($this->render());
 	}
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'module/cron')) {
-			$this->error['warning'] = $this->_('error_permission');
+		if (!$this->user->hasPermission('modify', 'setting/cron')) {
+			$this->error['warning'] = _('You do not have permission to modify the Automated Tasks');
 		}
 
 		return $this->error ? false : true;

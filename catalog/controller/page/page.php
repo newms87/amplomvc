@@ -41,12 +41,16 @@ class Catalog_Controller_Page_Page extends Controller
 
 	public function preview()
 	{
-		$page_id = !empty($_GET['page_id']) ? $_GET['page_id'] : 0;
+		$page_id = !empty($_GET['page_id']) ? (int)$_GET['page_id'] : 0;
 
-		$page = $this->Model_Page_Page->getPage($page_id);
-
-		if (!$page) {
-			$this->url->redirect("error/not_found");
+		if ($page_id) {
+			$page = $this->Model_Page_Page->getPageForPreview($page_id);
+		} else {
+			$page = array(
+				'title'         => "New Page",
+				'display_title' => 1,
+				'content'       => '',
+			);
 		}
 
 		//Breadcrumbs
@@ -71,7 +75,7 @@ class Catalog_Controller_Page_Page extends Controller
 		$this->document->addScript(HTTP_THEME_JS . 'common.js', 56);
 
 		//Page Head
-		$this->data['direction']      = $this->language->getInfo('direction');
+		$this->data['direction'] = $this->language->getInfo('direction');
 		$this->language->set('lang', $this->language->getInfo('code'));
 
 		$this->data['styles']  = $this->document->renderStyles();

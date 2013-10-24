@@ -90,7 +90,23 @@ $.ac_template = $.fn.ac_template = function (name, action, data) {
 
 				key = e_name.replace(/^.*\[([^\]]+)\]$/, '$1');
 
-				var value = typeof data[key] !== 'undefined' ? data[key] : '';
+				//Depth-First search for key
+				function find_value(key, data) {
+					var v = '';
+
+					for (d in data) {
+						if (typeof d === 'object') {
+							v = find_value(key, data);
+							if (v) return v;
+						}
+						else {
+							if (d == key) return data[d];
+						}
+					}
+				}
+
+				var value = find_value(key, data);
+
 				if ($.inArray($(e).attr('type'), ['checkbox','radio']) >= 0) {
 					$(e).prop('checked', value);
 				} else {

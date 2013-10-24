@@ -29,6 +29,7 @@ define('DIR_EXCEL_TEMPLATE', SITE_DIR . 'system/php-excel/templates/');
 define('DIR_EXCEL_FPO', SITE_DIR . 'upload/fpo/');
 define('DIR_RESOURCES', SITE_DIR . 'system/resources/');
 define('DIR_SYSTEM', SITE_DIR . 'system/');
+define('DIR_CRON', SITE_DIR . 'system/cron/');
 define('DIR_DATABASE', SITE_DIR . 'system/database/');
 define('DIR_DATABASE_BACKUP', SITE_DIR . 'system/database/backups/');
 define('DIR_CONFIG', SITE_DIR . 'system/config/');
