@@ -81,7 +81,11 @@
 </div>
 
 <script type="text/javascript">//<!--
-	$('.address_list').ac_radio().ac_slidelist({pad_y: -15, x_dir: -1});
+	var addresses = $('.address_list').ac_radio();
+
+	if (addresses.children().length > 2) {
+		addresses.ac_slidelist({pad_y: -15, x_dir: -1});
+	}
 
 	$('.address_list .remove').click(function(){
 		var address = $(this);

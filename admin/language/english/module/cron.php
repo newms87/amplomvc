@@ -16,5 +16,6 @@ $_['entry_sort_order'] = 'Sort Order:';
 
 $_['button_run_cron'] = "Run BettyCron Now";
 $_['button_add_task'] = "Add Task";
+
 // Error
 $_['error_permission'] = 'Warning: You do not have permission to modify module BettyCron!';

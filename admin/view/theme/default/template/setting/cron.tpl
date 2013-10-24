@@ -1,21 +1,15 @@
 <?= $header; ?>
 <div class="section">
 <?= $this->breadcrumb->render(); ?>
-<? if ($errors) { ?>
-	<div class="message_box warning">
-		<? $br = false;
-		foreach ($errors as $e) {
-			echo ($br ? '<br>' : '') . $e;
-			$br = true;
-		} ?>
-	</div>
-<? } ?>
+
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= $head_title; ?></h1>
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= _("Cron Jobs"); ?></h1>
 
-			<div class="buttons"><a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a><a
-					href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
+			<div class="buttons">
+				<a onclick="$('#form').submit();" class="button"><?= $button_save; ?></a>
+				<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
+			</div>
 		</div>
 		<div class="section">
 			<a href='<?= $run_cron; ?>' target="_blank" class="button run_cron_button"><?= $button_run_cron; ?></a>
@@ -36,15 +30,13 @@
 						<tr>
 							<td class="left"><input type="text" name="tasks[<?= $row; ?>][name]" value="<?= $tasks[$row]['name']; ?>" size="30" maxlength='30'/></td>
 							<td class="left"><input type="text" name="tasks[<?= $row; ?>][action]" value="<?= $tasks[$row]['action']; ?>" size="100" maxlength='100'/></td>
-							<td
-								class="left"><?= $this->builder->build('select', $statuses, "tasks[$row][status]", (int)$tasks[$row]['status']); ?></td>
+							<td class="left"><?= $this->builder->build('select', $statuses, "tasks[$row][status]", (int)$tasks[$row]['status']); ?></td>
 							<td class="left">
 								<ul class='time_list'>
 									<? if (isset($tasks[$row]['times'])) { ?>
 										<? foreach ($tasks[$row]['times'] as $time) { ?>
 											<li>
-												<input type="text" name="tasks[<?= $row; ?>][times][]" value="<?= $time; ?>"
-												       class='time'/>
+												<input type="text" name="tasks[<?= $row; ?>][times][]" value="<?= $time; ?>" class='time'/>
 												<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" onclick="$(this).parent().remove();"/>
 											</li>
 										<? } ?>

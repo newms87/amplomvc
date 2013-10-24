@@ -326,19 +326,41 @@ ul > li > ul > li:hover > ul.link_list, ul > li > ul > li.hover > ul.link_list {
 	width: 80%;
 	max-height: 26px;
 	min-height: 26px;
-	padding: 10px 10px 10px 33px;
+	padding: 10px 10px 40px 33px;
 	color: #555555;
 	font-size: 15px;
 	border: 1px solid #CFCFCF;
 	background-color: #EEEEEE;
 	border-radius: 5px 5px 0 0;
-	z-index: 100000;
+	z-index: 1005;
 
 	-webkit-transition: .5s;
 	transition: .5s;
 
 	-moz-animation: messageIn .5s;
 	-webkit-animation: messageIn .5s;
+}
+
+.message_box + .message_box{
+	padding-bottom: 70px;
+	z-index: 1004;
+}
+
+.message_box + .message_box:hover{
+	padding-bottom: 110px;
+}
+
+.message_box + .message_box + .message_box{
+	padding-bottom: 100px;
+	z-index: 1003;
+}
+
+.message_box + .message_box + .message_box:hover{
+	padding-bottom: 140px;
+}
+
+.message_box > .message_list > div{
+	padding-right: 20px;
 }
 
 @keyframes messageIn {

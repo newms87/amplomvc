@@ -220,8 +220,6 @@ class Customer extends Library
 		$addresses = $this->getAddresses($filter + $defaults);
 
 		if (empty($filter) && !array_search_key('default_shipping', true, $addresses)) {
-			html_dump($addresses, 'addresses');
-			echo 'setting meta default shipping';
 			//Reference first Address in array, then break loop
 			foreach ($addresses as &$address) {
 				$address['default_shipping'] = true;

@@ -137,18 +137,7 @@ class Plugin extends Library
 	{
 		$dir = DIR_PLUGIN . $name . '/new_files/';
 
-		$file_types = array(
-			'php',
-			'tpl',
-			'js',
-			'css',
-			'png',
-			'jpg',
-			'jpeg',
-			'gif'
-		);
-
-		return $this->tool->get_files_r($dir, $file_types);
+		return $this->tool->get_files_r($dir, false);
 	}
 
 	public function integrateNewFiles($name)

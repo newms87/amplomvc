@@ -166,7 +166,7 @@ abstract class Model
 		return $update_id;
 	}
 
-	protected function delete($table, $where=null)
+	protected function delete($table, $where = null)
 	{
 		$this->action_filter('delete', $table, $data);
 
@@ -180,7 +180,7 @@ abstract class Model
 			$where = "`$primary_key` = '$where'";
 		}
 		elseif (is_array($where)) {
-			$where = $this->getWhere($table, $where);
+			$where = $this->getWhere($table, $where, null, null, true);
 		}
 
 		$table = $this->db->escape($table);
@@ -291,9 +291,13 @@ abstract class Model
 		return $primary_key;
 	}
 
-	public function getWhere($table, $data, $prefix = '', $glue = 'AND', $primary_key = false)
+	public function getWhere($table, $data, $prefix = '', $glue = '', $primary_key = false)
 	{
 		$data = $this->getEscapedValues($table, $data, $primary_key);
+
+		if (!$glue) {
+			$glue = 'AND';
+		}
 
 		$values = '';
 

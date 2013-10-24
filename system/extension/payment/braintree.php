@@ -213,7 +213,6 @@ class System_Extension_Payment_Braintree extends PaymentSubscription
 		//Language
 		$this->language->system('extension/payment/braintree');
 
-
 		//Data
 		$this->data['encryption_key'] = $this->settings['client_side_encryption_key'];
 		$this->data['cards']          = $this->customer->getMeta('braintree_cards');

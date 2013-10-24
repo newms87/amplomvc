@@ -24,10 +24,12 @@ class System_Model_Address extends Model
 
 	public function deleteAddress($address_id)
 	{
-		$this->delete('address', array(
-		                              'address_id'  => $address_id,
-		                              'customer_id' => $this->customer->getId()
-		                         ));
+		$where = array(
+			'address_id'  => $address_id,
+			'customer_id' => $this->customer->getId()
+		);
+
+		$this->delete('address', $where);
 	}
 
 	public function isValidAddress($address)

@@ -85,7 +85,7 @@ _is_writable(DIR_IMAGE . 'cache/', $config->get('config_image_dir_mode'));
 _is_writable(DIR_DOWNLOAD, $config->get('config_default_dir_mode'));
 _is_writable(DIR_LOGS, $config->get('config_default_dir_mode'));
 
-// Session
+//Session
 $registry->set('session', new Session($registry));
 
 //Mod Files
