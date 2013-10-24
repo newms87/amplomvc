@@ -2,8 +2,10 @@ User-agent: *
 Disallow: /*&limit
 Disallow: /*&sort
 Disallow: /*&filter
-Disallow: /*?route=checkout/
-Disallow: /*?route=account/
-Disallow: /*?route=product/search
-Disallow: /*?route=affiliate/
+Disallow: /*&order
+Disallow: /tool/
+Disallow: /checkout/
+Disallow: /account/
+Disallow: /product/search
+Disallow: /affiliate/
 Allow: /
