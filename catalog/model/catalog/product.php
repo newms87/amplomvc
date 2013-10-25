@@ -12,9 +12,7 @@ class Catalog_Model_Catalog_Product extends Model
 
 		//Validate Product time constraints to allow for caching
 		if ($product) {
-			$current_datetime = $this->date->now();
-
-			if ($product['date_available'] > $current_datetime || $product['date_expires'] <= $current_datetime) {
+			if ($this->date->isInFuture($product['date_available']) || $this->date->isInPast($product['date_expires'], false)) {
 				$product = false;
 			}
 		}
@@ -32,7 +30,7 @@ class Catalog_Model_Catalog_Product extends Model
 
 			$manufacturer = DB_PREFIX . "manufacturer m ON (p.manufacturer_id = m.manufacturer_id)";
 			$category     = DB_PREFIX . "product_to_category p2c ON (p2c.product_id=p.product_id)";
-			$store        = DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id AND p2s.store_id='$store_id')";
+			$store        = DB_PREFIX . "product_to_store p2s ON (p.product_id = p2s.product_id)";
 
 			$query =
 				"SELECT p.*, p2c.category_id, p2s.*, $special, p.image, m.name AS manufacturer, m.keyword, m.status as manufacturer_status, $discount, $reward, $stock_status, $weight_class, $length_class, $rating, $reviews, $template, p.sort_order " .
@@ -41,9 +39,8 @@ class Catalog_Model_Catalog_Product extends Model
 			if ($ignore_status) {
 				$query .= " WHERE p.product_id = '$product_id'";
 			} else {
-				$query .= " WHERE p.product_id='$product_id' AND p.status = '1' AND (m.manufacturer_id IS NULL OR m.status='1') AND (p.date_available <= NOW() OR p.date_available = '" . DATETIME_ZERO . "') AND (p.date_expires > NOW() OR p.date_expires = '" . DATETIME_ZERO . "')";
+				$query .= " WHERE p.product_id='$product_id' AND p.status = '1' AND p2s.store_id = $store_id AND (m.manufacturer_id IS NULL OR m.status='1') AND (p.date_available <= NOW() OR p.date_available = '" . DATETIME_ZERO . "') AND (p.date_expires > NOW() OR p.date_expires = '" . DATETIME_ZERO . "')";
 			}
-
 
 			$product = $this->queryRow($query);
 
@@ -288,7 +285,7 @@ class Catalog_Model_Catalog_Product extends Model
 		$attribute_groups = $this->queryRows($query, 'attribute_group_id');
 
 		if (!empty($attribute_groups)) {
-			$this->translation->translate_all('attribute_group', 'attribute_group_id', $attribute_groups);
+			$this->translation->translateAll('attribute_group', 'attribute_group_id', $attribute_groups);
 
 			foreach ($attribute_groups as &$attribute_group) {
 				$query =
@@ -298,7 +295,7 @@ class Catalog_Model_Catalog_Product extends Model
 
 				$attributes = $this->queryRows($query, 'attribute_id');
 
-				$this->translation->translate_all('attribute', 'attribute_id', $attributes);
+				$this->translation->translateAll('attribute', 'attribute_id', $attributes);
 
 				$attribute_group['attributes'] = $attributes;
 			}
@@ -422,7 +419,7 @@ class Catalog_Model_Catalog_Product extends Model
 	{
 		$downloads = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_to_download p2d LEFT JOIN " . DB_PREFIX . "download d ON (p2d.download_id = d.download_id) WHERE p2d.product_id = " . (int)$product_id);
 
-		$this->translation->translate_all('download', 'download_id', $downloads);
+		$this->translation->translateAll('download', 'download_id', $downloads);
 
 		return $downloads;
 	}
@@ -513,7 +510,7 @@ class Catalog_Model_Catalog_Product extends Model
 			} else {
 				$attributes = $result->rows;
 
-				$this->translation->translate_all('attribute', 'attribute_id', $attributes);
+				$this->translation->translateAll('attribute', 'attribute_id', $attributes);
 			}
 		}
 

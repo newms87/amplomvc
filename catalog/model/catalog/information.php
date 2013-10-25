@@ -25,7 +25,7 @@ class Catalog_Model_Catalog_Information extends Model
 
 		$informations = $this->queryRows($query);
 
-		$this->translation->translate_all('information', 'information_id', $informations);
+		$this->translation->translateAll('information', 'information_id', $informations);
 
 		return $informations;
 	}

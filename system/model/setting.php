@@ -27,7 +27,7 @@ class System_Model_Setting extends Model
 
 				if ($this->translate && $setting['translate']) {
 					if (is_array($value)) {
-						$this->translation->translate_all($setting['key'], false, $value);
+						$this->translation->translateAll($setting['key'], false, $value);
 					} elseif (is_string($value)) {
 						$setting_value = array($setting['key'] => $value);
 

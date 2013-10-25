@@ -97,6 +97,21 @@ class Date extends Library
 		}
 	}
 
+	public function getCronUnits($date = null)
+	{
+		$this->getObject($date);
+
+		return array(
+			'i' => (int)$this->format($date, 'i'),
+			'h' => (int)$this->format($date, 'H'),
+			'd' => (int)$this->format($date, 'd'),
+			'm' => (int)$this->format($date, 'm'),
+			'w' => ($w = (int)$this->format($date, 'w')) === 7 ? 0 : $w,
+			'y' => (int)$this->format($date, 'Y'),
+			't' => (int)$this->format($date, 't'),
+		);
+	}
+
 	public function getDayOfWeek($date = null)
 	{
 		return $this->format($date, 'w');
@@ -109,7 +124,13 @@ class Date extends Library
 
 	public function getDayOfYear($date = null)
 	{
-		return $this->format($date, 'z');
+		return $this->getObject($date)->format('z');
+	}
+
+	public function isToday($date = null)
+	{
+		$diff = $this->diff($date);
+		return $diff->days === 0;
 	}
 
 	public function diff($d1, $d2 = null)
@@ -122,12 +143,12 @@ class Date extends Library
 
 	public function isBefore($d1, $d2)
 	{
-		return $this->diff($d1,$d2)->invert == 1;
+		return $this->diff($d1,$d2)->invert === 0;
 	}
 
 	public function isAfter($d1, $d2)
 	{
-		return $this->diff($d1,$d2)->invert == 0;
+		return $this->diff($d1,$d2)->invert === 1;
 	}
 
 	public function format($date = null, $format = '')
@@ -158,6 +179,10 @@ class Date extends Library
 				case 'default':
 				case 'datetime':
 					$format = $this->language->getInfo('datetime_format');
+					break;
+
+				case 'full':
+					$format = 'D, d M, Y H:i:s';
 					break;
 			}
 		}

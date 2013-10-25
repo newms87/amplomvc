@@ -244,6 +244,21 @@ if (!function_exists('html2text')) {
 	}
 }
 
+/**
+ * This is a wrapper for is_link() to check for windows .lnk files
+ * TODO: This is here temporarily, testing to ensure no issues with links on windows (dont mind the .lnk issue)
+ *
+ * @param $filename
+ * @return bool
+ */
+function _is_link($filename)
+{
+	clearstatcache();
+
+	return is_link($filename);
+}
+
+
 function get_caller($offset = 0, $limit = 1) {
 	$calls = debug_backtrace(false);
 

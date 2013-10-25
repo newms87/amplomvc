@@ -89,6 +89,12 @@ abstract class PaymentSubscription extends PaymentCard
 	{
 		$subscription = $customer_subscription['subscription'];
 
+		$last_payment = $this->subscription->getMeta($customer_subscription['customer_subscription_id'], 'last_payment');
+
+		if ($last_payment && $this->date->isToday($last_payment)) {
+			return false;
+		}
+
 		//Limit Number of Charges from date_added
 		if ($subscription['cycles']) {
 			$diff = $this->date->diff($customer_subscription['date_activated']);

@@ -32,7 +32,7 @@ class Translation extends Library
 		$data = $translations + $data;
 	}
 
-	public function translate_all($table, $object_key, &$data)
+	public function translateAll($table, $object_key, &$data)
 	{
 		foreach ($data as $key => $item) {
 			if ($object_key) {

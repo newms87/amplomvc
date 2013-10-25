@@ -19,7 +19,7 @@ class Catalog_Model_Catalog_Review extends Model
 	{
 		$reviews = $this->queryRows("SELECT r.review_id, r.author, r.rating, r.text, p.product_id, pd.name, p.price, p.image, r.date_added FROM " . DB_PREFIX . "review r LEFT JOIN " . DB_PREFIX . "product p ON (r.product_id = p.product_id) WHERE p.product_id = '" . (int)$product_id . "' AND p.date_available <= NOW() AND p.status = '1' AND r.status = '1' ORDER BY r.date_added DESC LIMIT " . (int)$start . "," . (int)$limit);
 
-		$this->translation->translate_all('product', 'product_id', $reviews);
+		$this->translation->translateAll('product', 'product_id', $reviews);
 
 		return $reviews;
 	}

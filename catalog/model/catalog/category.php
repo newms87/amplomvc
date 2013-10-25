@@ -72,7 +72,7 @@ class Catalog_Model_Catalog_Category extends Model
 			return $result->row['total'];
 		}
 
-		$this->translation->translate_all('category', 'category_id', $result->rows);
+		$this->translation->translateAll('category', 'category_id', $result->rows);
 
 		return $result->rows;
 	}

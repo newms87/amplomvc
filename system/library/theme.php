@@ -118,7 +118,8 @@ class Theme extends Library
 		//invalidate all themes if one of the themes' settings has been updated
 		if ($themes) {
 			foreach ($themes as $theme) {
-				if (filemtime($theme_dir . $theme['name'] . '/settings.php') != $theme['settings']['mod_time']) {
+				$settings_file = $theme_dir . $theme['name'] . '/settings.php';
+				if (is_file($settings_file) && filemtime($settings_file) != $theme['settings']['mod_time']) {
 					$themes = false;
 					$this->cache->delete('theme');
 					break;

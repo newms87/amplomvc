@@ -365,7 +365,7 @@ class Cart extends Library
 	public function getProductTotal($product_id, $quantity, $product_options = array(), &$product = null)
 	{
 		if (!$product) {
-			$product = $this->Model_Catalog_Product->getProduct($product_id);
+			$product = $this->Catalog_Model_Catalog_Product->getProduct($product_id);
 		}
 
 		$product += array(

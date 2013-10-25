@@ -28,8 +28,13 @@ class Admin_Model_Catalog_ProductClass extends Model
 
 	public function editProductClass($product_class_id, $data)
 	{
-		$data['front_template'] = !empty($data['front_template']) ? serialize($data['front_template']) : '';
-		$data['admin_template'] = !empty($data['admin_template']) ? serialize($data['admin_template']) : '';
+		if (isset($data['front_template'])) {
+			$data['front_template'] = !empty($data['front_template']) ? serialize($data['front_template']) : '';
+		}
+
+		if (isset($data['admin_template'])) {
+			$data['admin_template'] = !empty($data['admin_template']) ? serialize($data['admin_template']) : '';
+		}
 
 		$this->update('product_class', $data, $product_class_id);
 
@@ -60,7 +65,7 @@ class Admin_Model_Catalog_ProductClass extends Model
 		return $this->getProductClass($product_class_id);
 	}
 
-	public function getProductClasses($data = array(), $select = '', $total = false)
+	public function getProductClasses($filter = array(), $select = '', $total = false)
 	{
 		//Select
 		if ($total) {
@@ -73,16 +78,20 @@ class Admin_Model_Catalog_ProductClass extends Model
 		$from = DB_PREFIX . "product_class";
 
 		//Where
-		$where = "1";
+		if (!isset($filter['status'])) {
+			$filter['status'] = 1;
+		}
 
-		if (!empty($data['product_class_ids'])) {
-			$where .= " AND product_class_id IN (" . implode(',', $data['product_class_ids']) . ")";
+		$where = $this->getWhere('product_class', $filter);
+
+		if (!empty($filter['product_class_ids'])) {
+			$where .= " AND product_class_id IN (" . implode(',', $filter['product_class_ids']) . ")";
 		}
 
 		//Order By and Limit
 		if (!$total) {
-			$order = $this->extract_order($data);
-			$limit = $this->extract_limit($data);
+			$order = $this->extract_order($filter);
+			$limit = $this->extract_limit($filter);
 		} else {
 			$order = '';
 			$limit = '';

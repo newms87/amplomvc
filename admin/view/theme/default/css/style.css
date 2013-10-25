@@ -2589,3 +2589,10 @@ div .easy_list li > * + * {
 #zoom_preview img:active {
 	background: #E3F9DC;
 }
+
+/** Cron Manager**/
+#task_list .cron_action label{
+	display:inline-block;
+	text-align:right;
+	width: 50px;
+}

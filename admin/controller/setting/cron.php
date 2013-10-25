@@ -47,6 +47,7 @@ class Admin_Controller_Setting_Cron extends Controller
 				'm' => '*',
 				'w' => '*',
 			),
+			'last_run'   => '',
 			'status'     => 1,
 			'sort_order' => 0,
 		);
@@ -68,7 +69,7 @@ class Admin_Controller_Setting_Cron extends Controller
 			$matches = null;
 			preg_match_all("/public\\s*function\\s*([a-z0-9_]*)/i", $contents, $matches);
 
-			$cron_methods[$key] = $matches[1];
+			$cron_methods[$filename] = $matches[1];
 
 			$file = $filename;
 		}

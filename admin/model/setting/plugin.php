@@ -86,11 +86,11 @@ class Admin_Model_Setting_Plugin extends Model
 			}
 
 			if (!empty($data['date'])) {
-				if (!empty($data['date']['start']) && $this->date->isBefore($data['date']['start'], $plugin['date'])) {
+				if (!empty($data['date']['start']) && $this->date->isAfter($data['date']['start'], $plugin['date'])) {
 					continue;
 				}
 
-				if (!empty($data['date']['end']) && $this->date->isAfter($this->date->add($data['date']['end'], '1 day'), $plugin['date'])) {
+				if (!empty($data['date']['end']) && $this->date->isBefore($this->date->add($data['date']['end'], '1 day'), $plugin['date'])) {
 					continue;
 				}
 			}
