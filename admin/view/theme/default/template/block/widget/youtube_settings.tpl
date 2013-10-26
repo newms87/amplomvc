@@ -15,7 +15,7 @@
 					<li class="video <?= $key; ?>">
 						<input id="title_<?= $row; ?>" class="video_title" size="50" type="text" name="settings[videos][<?= $row; ?>][title]" value="<?= $video['title']; ?>"/><br/>
 						<input id="href_<?= $row; ?>" class="video_href" size="50" type="text" name="settings[videos][<?= $row; ?>][href]" value="<?= $video['href']; ?>"/>
-						<a class="delete_button text" onclick="$(this).closest('.video').remove()"><?= $button_delete; ?></a>
+						<a class="button delete text" onclick="$(this).closest('.video').remove()"><?= $button_delete; ?></a>
 					</li>
 				<? } ?>
 

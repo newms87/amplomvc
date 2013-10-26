@@ -1,33 +1,45 @@
 <?php
 class Cron extends Library
 {
+	public function check()
+	{
+		$last_run = $this->config->get('cron_last_run');
+
+		$diff = $this->date->diff($last_run);
+
+		//Run Cron every minute (will check task times first)
+		if (($diff->days + $diff->h + $diff->i) > 0) {
+			$this->run();
+		}
+	}
+
 	public function run()
 	{
 		require_once(DIR_CRON . 'cron_job.php');
 
 		$tasks = $this->config->load('cron', 'cron_tasks', 0);
 
-		echo "Running Cron - " . $this->date->now() . "<br><br>";
+		$msg = "------ Cron START " . $this->date->now() . "------\r\n\r\n";
 
 		foreach ($tasks['tasks'] as &$task) {
 			if ($task['status'] != '1') {
 				continue;
 			}
 
-			echo 'checking ' . $task['name'] . "<br>";
+			$msg .= "Task $task[name]: ";
 
 			if (empty($task['last_run'])) {
 				$task['last_run'] = DATETIME_ZERO;
 			}
 			$last_scheduled = $this->getPrevRun($task['time']);
 
-			echo "Last Scheduled Job: " . $this->date->format($last_scheduled, 'full') . "<BR>";
-			echo "Last Run: " . $this->date->format($task['last_run'], 'full') . '<BR>';
+			$msg .= "Last Scheduled (" . $this->date->format($last_scheduled, 'full') . "), ";
+			$msg .= "Last Run (" . $this->date->format($task['last_run'], 'full') . ")\r\n";
 
 			if (!$task['last_run'] || $this->date->isAfter($last_scheduled, $task['last_run'])) {
 				$task['last_run'] = $this->date->now();
 
-				echo "Executing $task[name]<br>";
+				$msg .= "Executing $task[name]\r\n";
 
 				$classname = "System_Cron_" . $this->tool->formatClassname($task['file']);
 				$method = $task['method'];
@@ -35,21 +47,29 @@ class Cron extends Library
 				if (method_exists($classname, $method)) {
 					$this->$classname->$method();
 				} else {
-					$this->error_log->write(_("Cron::run(): Failed to run $task[name]. Class Method, $classname::$method() was not found."));
+					$error = _("Cron::run(): Failed to run $task[name]. Class Method, $classname::$method() was not found.");
+					$msg .= $error;
+					$this->error_log->write($error);
 				}
 
-				echo "<br><br>";
+
 
 			} else {
-				echo "Skipping...<br><br>";
-				continue;
+				$msg .= "Skipping...";
 			}
+
+			$msg .= "\r\n\r\n";
 		}
 		unset($task);
 
 		$this->config->save('cron', 'cron_tasks', $tasks, 0, false);
+		$this->config->save('cron', 'cron_last_run', $this->date->now());
 
-		echo "Cron ran successfully!";
+		$msg .= "Cron ran successfully!";
+
+		$this->log->write($msg);
+
+		return $msg;
 	}
 
 	public function getNextRun($tab)

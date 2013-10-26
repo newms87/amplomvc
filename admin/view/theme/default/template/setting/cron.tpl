@@ -13,6 +13,12 @@
 			</div>
 		</div>
 		<div class="section">
+
+			<form id="cron_activate_form" action="<?= $activate; ?>" method="post">
+				<input type="hidden" name="cron_status" value="<?= (int)!$cron_status; ?>" />
+				<input type="submit" class="button <?= !$cron_status ? 'add' : 'delete'; ?>" value="<?= !$cron_status ? _("Activate Automated Tasks") : _("Disable Automated Tasks"); ?>"/>
+			</form>
+
 			<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table id="module" class="list">
 					<thead>
@@ -78,7 +84,7 @@
 								<input type="hidden" name="tasks[<?= $row; ?>][last_run]" value="<?= $task['last_run']; ?>" />
 							</td>
 							<td class="left"><?= $this->builder->build('select', $data_statuses, "tasks[$row][status]", $task['status']); ?></td>
-							<td class="left"><a onclick="$(this).closest('.task').remove();" class="button_remove"></a></td>
+							<td class="left"><a onclick="$(this).closest('.task').remove();" class="button delete">X</a></td>
 						</tr>
 					<? } ?>
 					</tbody>

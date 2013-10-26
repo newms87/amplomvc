@@ -25,10 +25,5 @@ require_once(DIR_SYSTEM . 'ac_mod_file.php');
 //Bootstrap
 require_once(_ac_mod_file(DIR_SYSTEM . 'startup.php'));
 
-if (isset($_GET['_ajax_'])) {
-	//Load Ajax Admin
-	require_once(_ac_mod_file(DIR_APPLICATION . 'ajax.php'));
-} else {
-	//Load Admin
-	require_once(_ac_mod_file(DIR_APPLICATION . 'load.php'));
-}
+//Load
+require_once(_ac_mod_file(DIR_SYSTEM . 'load.php'));

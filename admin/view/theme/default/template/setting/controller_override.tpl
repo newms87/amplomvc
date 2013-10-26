@@ -22,7 +22,7 @@
 											<input class="original" size="50" type="text" name="controller_overrides[<?= $row; ?>][original]" value="<?= $override['original']; ?>"/>
 											<input class="alternate" size="50" type="text" name="controller_overrides[<?= $row; ?>][alternate]" value="<?= $override['alternate']; ?>"/>
 											<input class="condition" size="50" type="text" name="controller_overrides[<?= $row; ?>][condition]" value="<?= $override['condition']; ?>"/>
-											<a class="delete_button text" onclick="$(this).closest('li').remove()"><?= $button_delete; ?></a>
+											<a class="delete button text" onclick="$(this).closest('li').remove()"><?= $button_delete; ?></a>
 										</li>
 									<? } ?>
 								</ul>

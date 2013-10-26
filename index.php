@@ -39,10 +39,5 @@ require_once(DIR_SYSTEM . 'ac_mod_file.php');
 // System Startup
 require_once(_ac_mod_file(DIR_SYSTEM . 'startup.php'));
 
-if (isset($_GET['_ajax_'])) {
-	//Load Ajax Front End
-	require_once(_ac_mod_file(SITE_DIR . 'ajax.php'));
-} else {
-	//Load Front End
-	require_once(_ac_mod_file(SITE_DIR . 'load.php'));
-}
+// Load
+require_once(_ac_mod_file(DIR_SYSTEM . 'load.php'));

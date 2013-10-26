@@ -28,7 +28,7 @@
 											</div>
 
 											<? if (empty($policy['no_delete'])) { ?>
-												<a class="delete_button text" onclick="$(this).closest('li').remove()"><?= $button_delete; ?></a>
+												<a class="button delete text" onclick="$(this).closest('li').remove()"><?= $button_delete; ?></a>
 											<? } ?>
 										</li>
 									<? } ?>

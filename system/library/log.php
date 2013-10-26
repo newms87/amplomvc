@@ -1,32 +1,44 @@
 <?php
 class Log
 {
-	private $filename;
-	private $store_name;
+	private $file;
+	private $store_id;
 
-	public function __construct($filename, $store_name = 'Default')
+	public function __construct($filename, $store_id = 0)
 	{
-		$this->filename = $filename;
-		$this->store_name = $store_name;
+		$this->file = realpath(DIR_LOGS . $filename);
+
+		if (!$this->file) {
+			$this->file = DIR_LOGS . basename($filename);
+		}
+
+		_is_writable(dirname($this->file));
+
+		if (!is_file($this->file)) {
+			touch($this->file);
+			chmod($this->file, 0755);
+		}
+
+		$this->store_id = $store_id;
 	}
 
 	public function write($message)
 	{
-		$file = DIR_LOGS . $this->filename;
+		$handle = fopen($this->file, 'a+');
 
-		$handle = fopen($file, 'a+');
+		$newlines = array(
+			"\r\n",
+			"\r",
+			"\n"
+		);
 
 		$log = date('Y-m-d G:i:s');
 		$log .= "\t" . $_SERVER['REMOTE_ADDR'];
 		$log .= "\t" . preg_replace("/\?.*/", "", $_SERVER['REQUEST_URI']);
 		$log .= "\t" . $_SERVER['QUERY_STRING'];
-		$log .= "\t" . $this->store_name;
+		$log .= "\t" . "Store ID: $this->store_id";
 		$log .= "\t" . (isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '');
-		$log .= "\t" . str_replace(array(
-		                                "\r\n",
-		                                "\r",
-		                                "\n"
-		                           ), '<br />', $message);
+		$log .= "\t" . str_replace($newlines, '<br />', $message);
 
 		fwrite($handle, $log . "\r\n");
 

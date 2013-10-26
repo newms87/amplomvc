@@ -1,7 +1,7 @@
 <?php
-final class Front
+final class Router
 {
-	protected $registry;
+	private $registry;
 	private $error_path = 'error/not_found';
 	private $path;
 
@@ -15,14 +15,20 @@ final class Front
 		return $this->registry->get($key);
 	}
 
+	public function route()
+	{
+		$this->path = $this->url->getPath();
+
+		if ($this->config->isAdmin()) {
+			$this->routeAdmin();
+		} else {
+			$this->routeFront();
+		}
+	}
 	public function routeAdmin()
 	{
-		if (isset($_GET['run_cron'])) {
-			$this->cron->run();
-			exit;
-		}
-
-		$this->path = $this->url->getPath();
+		//Initialize site configurations
+		$this->config->run_site_config();
 
 		if (!$this->user->isLogged()) {
 			$allowed = array(
@@ -74,13 +80,6 @@ final class Front
 
 	public function routeFront()
 	{
-		if (isset($_GET['run_cron'])) {
-			$this->cron->run();
-			exit;
-		}
-
-		$this->path = $this->url->getPath();
-
 		//Do not show maintenance page if user is an admin
 		// or if the path is a a request by a payment provider (IPN from Paypal, etc.)
 		if ($this->config->get('config_maintenance') && !$this->user->isAdmin() && strpos($this->path, 'payment') !== 0 ) {
@@ -99,6 +98,16 @@ final class Front
 				}
 			}
 		}
+
+		//Tracking
+		if (isset($_GET['tracking']) && !isset($_COOKIE['tracking'])) {
+			setcookie('tracking', $_GET['tracking'], time() + 3600 * 24 * 1000, '/');
+		}
+
+		//Resolve Layout ID
+		$layout = $this->db->queryRow("SELECT layout_id FROM " . DB_PREFIX . "layout_route WHERE '" . $this->db->escape($this->path) . "' LIKE CONCAT(route, '%') AND store_id = '" . $this->config->get('config_store_id') . "' ORDER BY route ASC LIMIT 1");
+		$layout_id = $layout ? $layout['layout_id'] : $this->config->get('config_default_layout_id');
+		$this->config->set('config_layout_id', $layout_id);
 	}
 
 	public function pathIsIn($paths)

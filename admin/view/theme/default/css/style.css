@@ -592,7 +592,6 @@ ul > li > ul > li:hover > ul.link_list, ul > li > ul > li.hover > ul.link_list {
 	border-right: 1px solid #CCCCCC;
 	border-bottom: 1px solid #CCCCCC;
 	min-height: 300px;
-	overflow: auto;
 }
 
 /* button */
@@ -612,6 +611,9 @@ ul > li > ul > li:hover > ul.link_list, ul > li > ul > li.hover > ul.link_list {
 	border-radius: 7px 7px 7px 7px;
 	padding: 6px 12px 6px 12px;
 	box-shadow: 3px 3px 6px rgba(0, 0, 0, .8);
+
+	-webkit-transition: .05s;
+	transition: .05s;
 }
 
 input.button {
@@ -636,8 +638,7 @@ a.button:visited {
 	color: #FFFFFF;
 }
 
-.add_button {
-	cursor: pointer;
+.button.add {
 	color: #FFFFFF;
 	line-height: 12px;
 	font-size: 12px;
@@ -646,42 +647,15 @@ a.button:visited {
 	background: #646807; /* Old browsers */
 	background: -webkit-linear-gradient(top, #BFDA36 0%, #646807 100%); /* Chrome10+,Safari5.1+ */
 	background: linear-gradient(to bottom, #BFDA36 0%, #646807 100%); /* W3C */
-
-	-webkit-border-radius: 7px 7px 7px 7px;
-	-moz-border-radius: 7px 7px 7px 7px;
-	-khtml-border-radius: 7px 7px 7px 7px;
-	border-radius: 7px 7px 7px 7px;
-	-webkit-box-shadow: 0 2px 2px #DDDDDD;
-	-moz-box-shadow: 0 2px 2px #DDDDDD;
-	box-shadow: 0 2px 2px #DDDDDD;
 }
 
-.add_button:after {
-	content: "+";
-}
-
-.add_button.text:after {
-	content: "";
-}
-
-a.add_button {
-	display: inline-block;
-	text-decoration: none;
-	padding: 6px 12px 6px 12px;
-}
-
-.add_button:hover {
+.button.add:hover {
 	background: #BFDA36; /* Old browsers */
 	background: -webkit-linear-gradient(top, #646807 0%, #BFDA36 100%); /* Chrome10+,Safari5.1+ */
 	background: linear-gradient(to bottom, #646807 0%, #BFDA36 100%); /* W3C */
 }
 
-a.add_button:visited {
-	color: #FFFFFF;
-}
-
-.delete_button {
-	cursor: pointer;
+.button.delete {
 	color: #FFFFFF;
 	line-height: 12px;
 	font-size: 12px;
@@ -690,31 +664,9 @@ a.add_button:visited {
 	background: #B11818; /* Old browsers */
 	background: -webkit-linear-gradient(top, #F99898 0%, #B11818 100%); /* Chrome10+,Safari5.1+ */
 	background: linear-gradient(to bottom, #F99898 0%, #B11818 100%); /* W3C */
-
-	border-radius: 7px 7px 7px 7px;
-	box-shadow: 0 2px 2px #DDDDDD;
 }
 
-.delete_button:after {
-	content: "X";
-}
-
-.delete_button.text:after {
-	content: "";
-}
-
-a.delete_button {
-	display: inline-block;
-	text-decoration: none;
-	padding: 6px 12px 6px 12px;
-}
-
-a.delete_button:visited {
-	color: #FFFFFF;
-	text-decoration: none;
-}
-
-.delete_button:hover {
+.button.delete:hover {
 	background: #F99898; /* Old browsers */
 	background: -webkit-linear-gradient(top, #B11818 0%, #F99898 100%); /* Chrome10+,Safari5.1+ */
 	background: linear-gradient(to bottom, #B11818 0%, #F99898 100%); /* W3C */
@@ -2281,10 +2233,16 @@ body .easy_list li textarea:focus {
 	background: #BBDF8D;
 }
 
-.easy_list > li > .delete_button {
+.easy_list > li > .button.delete {
 	position: absolute;
 	top: 10px;
 	right: 10px;
+	left:auto;
+	bottom:auto;
+}
+.easy_list > li > .button.delete:hover {
+	top: 12px;
+	right: 9px;
 }
 
 .easy_list .easy_list {
@@ -2325,14 +2283,6 @@ div .easy_list li > * + * {
 #faq_list .faq_question_list .question {
 	font-size: 14px;
 	font-weight: bold;
-}
-
-#faq_list .faq_item .delete_button {
-	position: absolute;
-	top: 4px;
-	left: -40px;
-	right: auto;
-	bottom: auto;
 }
 
 /** CSS Loader **/
@@ -2504,10 +2454,11 @@ div .easy_list li > * + * {
 	margin-top: 15px;
 }
 
-.ac_carousel_slide .delete_button {
+.ac_carousel_slide .button.delete {
 	position: absolute;
 	top: 5px;
 	right: 5px;
+	left: auto;
 	height: 12px;
 	width: 9px;
 	padding: 6px;
@@ -2515,7 +2466,7 @@ div .easy_list li > * + * {
 	opacity: .5;
 }
 
-.ac_carousel_slide .delete_button:hover {
+.ac_carousel_slide .button.delete:hover {
 	opacity: 1;
 }
 
@@ -2595,4 +2546,8 @@ div .easy_list li > * + * {
 	display:inline-block;
 	text-align:right;
 	width: 50px;
+}
+#cron_activate_form{
+	display:block;
+	margin-bottom:20px;
 }

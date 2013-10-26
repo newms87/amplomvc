@@ -21,7 +21,7 @@
 										<li class="return_reason" data-row="<?= $row; ?>">
 											<input class="title" size="50" type="text" name="return_reasons[<?= $row; ?>][title]" value="<?= $reason['title']; ?>"/><br/>
 											<? if (empty($reason['no_delete'])) { ?>
-												<a class="delete_button text" onclick="$(this).closest('li').remove()"><?= $button_delete; ?></a>
+												<a class="delete button text" onclick="$(this).closest('li').remove()"><?= $button_delete; ?></a>
 											<? } ?>
 										</li>
 									<? } ?>

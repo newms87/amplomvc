@@ -53,6 +53,8 @@ class Admin_Controller_Setting_Cron extends Controller
 		);
 
 		//Template Data
+		$this->data['cron_status'] = $this->config->load('cron', 'cron_status');
+
 		$cron_files = $this->tool->get_files_r(DIR_CRON);
 
 		$cron_methods = array();
@@ -81,6 +83,7 @@ class Admin_Controller_Setting_Cron extends Controller
 		$this->data['save']     = $this->url->link('setting/cron');
 		$this->data['cancel']   = $this->url->link('setting/store');
 		$this->data['run_cron'] = $this->url->link('common/home', 'run_cron');
+		$this->data['activate'] = $this->url->link('setting/cron/activate');
 
 		//The Template
 		$this->template->load('setting/cron');
@@ -93,6 +96,15 @@ class Admin_Controller_Setting_Cron extends Controller
 
 		//Render
 		$this->response->setOutput($this->render());
+	}
+
+	public function activate()
+	{
+		if (isset($_POST['cron_status'])) {
+			$this->config->save('cron', 'cron_status', $_POST['cron_status'] ? 1 : 0);
+		}
+
+		$this->url->redirect($this->url->link('setting/cron'));
 	}
 
 	private function validate()

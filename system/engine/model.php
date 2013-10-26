@@ -305,7 +305,7 @@ abstract class Model
 			$values .= ($values ? ' '.$glue.' ' : '') . ($prefix ? $prefix . '.' : '') . "`$key` = '$value'";
 		}
 
-		return $values;
+		return $values ? $values : '1';
 	}
 
 	public function getSetValues($table, $data, $primary_key = false)

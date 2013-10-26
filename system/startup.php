@@ -89,7 +89,7 @@ require_once(_ac_mod_file(DIR_SYSTEM . 'helper/json.php'));
 // Engine
 require_once(_ac_mod_file(DIR_SYSTEM . 'engine/action.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'engine/controller.php'));
-require_once(_ac_mod_file(DIR_SYSTEM . 'engine/front.php'));
+require_once(_ac_mod_file(DIR_SYSTEM . 'engine/router.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'engine/library.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'engine/loader.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'engine/model.php'));
@@ -100,18 +100,9 @@ require_once(_ac_mod_file(DIR_SYSTEM . 'library/cache.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'library/config.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'library/db.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'library/mod.php'));
-require_once(_ac_mod_file(DIR_SYSTEM . 'library/language.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'library/log.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'library/plugin.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'library/request.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'library/response.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'library/session.php'));
-require_once(_ac_mod_file(DIR_SYSTEM . 'library/theme.php'));
-require_once(_ac_mod_file(DIR_SYSTEM . 'library/template.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'library/url.php'));
-
-//TODO: Resolve which libraries are needed for ajax
-if (true || !isset($_GET['_ajax_'])) {
-	require_once(_ac_mod_file(DIR_SYSTEM . 'library/document.php'));
-	require_once(_ac_mod_file(DIR_SYSTEM . 'library/image.php'));
-}

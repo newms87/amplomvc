@@ -2,6 +2,7 @@
 // Registry
 $registry = new Registry();
 
+//TODO: Maybe make this our main handler for loading (move out of registry)??
 spl_autoload_register(function($class) use($registry){
 	$registry->get($class);
 });
@@ -21,17 +22,27 @@ $db->query("SET time_zone='" . MYSQL_TIMEZONE . "'");
 $cache = new Cache($registry);
 $registry->set('cache', $cache);
 
-//Config is self assigning to registry.
+//TODO: WE NEED TO SEPARATE OUT ADMIN CONFIG FROM FRONT END CONFIGS (and common in both front / back and front only)!!
+
+//config is self assigning to registry.
 $config = new Config($registry);
 
 //Setup Cache ignore list
 $cache->ignore($config->get('config_cache_ignore'));
 
+//Database Structure Validation
+$row = $db->queryRow("SHOW GLOBAL STATUS WHERE Variable_name = 'com_alter_table' AND Value > '" . (int)$cache->get('db_last_update') . "'");
+
+if ($row) {
+	$cache->delete('model');
+	$cache->set('db_last_update', $row['Value']);
+}
+
 //System Logs
-$error_log = new Log($config->get('config_error_filename'), $config->get('config_name'));
+$error_log = new Log(AC_LOG_ERROR_FILE, $config->get('config_store_id'));
 $registry->set('error_log', $error_log);
 
-$log = new Log($config->get('config_log_filename'), $config->get('config_name'));
+$log = new Log(AC_LOG_FILE, $config->get('config_store_id'));
 $registry->set('log', $log);
 
 //Error Callbacks allow customization of error display / messages
@@ -67,6 +78,7 @@ $error_handler = function($errno, $errstr, $errfile, $errline) use($error_log, $
 	if ($error) {
 		if ($config->get('config_error_display')) {
 			echo '<b>' . $error . '</b>: ' . $errstr . ' in <b>' . $errfile . '</b> on line <b>' . $errline . '</b><br /><br />';
+			flush(); //Flush the error to block any redirects that may execute, this ensure errors are seen!
 		}
 
 		if ($config->get('config_error_log')) {
@@ -85,26 +97,14 @@ _is_writable(DIR_IMAGE . 'cache/', $config->get('config_image_dir_mode'));
 _is_writable(DIR_DOWNLOAD, $config->get('config_default_dir_mode'));
 _is_writable(DIR_LOGS, $config->get('config_default_dir_mode'));
 
-//Session
+// Session
 $registry->set('session', new Session($registry));
 
 //Mod Files
 $registry->set('mod', new Mod($registry));
 
 // Url
-$url = new Url($registry);
-$registry->set('url', $url);
-
-//Images
-$registry->set('image', new Image($registry));
-
-//Database Structure Validation
-$row = $db->queryRow("SHOW GLOBAL STATUS WHERE Variable_name = 'com_alter_table' AND Value > '" . (int)$cache->get('db_last_update') . "'");
-
-if ($row) {
-	$cache->delete('model');
-	$cache->set('db_last_update', $row['Value']);
-}
+$registry->set('url', new Url($registry));
 
 // Response
 $response = new Response();
@@ -112,38 +112,22 @@ $response->addHeader('Content-Type: text/html; charset=utf-8');
 $response->setCompression($config->get('config_compression'));
 $registry->set('response', $response);
 
-// Language
-$registry->set('language', new Language($registry));
-
 //Plugins (self assigning to registry)
 $plugin = new Plugin($registry);
 
-// Document
-$registry->set('document', new Document($registry));
-
-//Affiliate Tracking
-if (isset($_GET['tracking']) && !isset($_COOKIE['tracking'])) {
-	setcookie('tracking', $_GET['tracking'], time() + 3600 * 24 * 1000, '/');
+//Cron
+if (isset($_GET['run_cron'])) {
+	echo nl2br($registry->get('cron')->run());
+	exit;
+}
+elseif ($config->get('cron_status')) {
+	$registry->get('cron')->check();
 }
 
-//Theme
-$registry->set('theme', new Theme($registry));
-
-//Resolve Layout ID
-$layout = $db->queryRow("SELECT layout_id FROM " . DB_PREFIX . "layout_route WHERE '" . $db->escape($url->getPath()) . "' LIKE CONCAT(route, '%') AND store_id = '" . $config->get('config_store_id') . "' ORDER BY route ASC LIMIT 1");
-
-if ($layout) {
-	$config->set('config_layout_id', $layout['layout_id']);
-} else {
-	$config->set('config_layout_id', $config->get('config_default_layout_id'));
-}
-
-// Front Controller
-$controller = new Front($registry);
-$controller->routeFront();
-
-// Dispatch
-$controller->dispatch();
+//Router
+$router = new Router($registry);
+$router->route();
+$router->dispatch();
 
 // Output
 $response->output();
@@ -158,7 +142,13 @@ if ($config->get('config_performance_log')) {
 		'execution_time' => microtime(true) - $__start,
 	);
 
+	$html = "<div class=\"title\">" . _("System Performance:") . "</div>";
+
 	foreach ($stats as $key => $s) {
-		echo "$key = $s<br>";
+		$html .= "<div>$key = $s</div>";
 	}
+
+	$html = "<div class=\"performance\">$html</div>";
+
+	echo "<script>show_msg('success', '$html')</script>";
 }
