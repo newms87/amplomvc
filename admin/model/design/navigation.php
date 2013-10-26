@@ -113,12 +113,15 @@ class Admin_Model_Design_Navigation extends Model
 				$link['status'] = 1;
 			}
 
-			if (($pid = $link['parent_id']) != 0) {
+			if (isset($link['parent_id']) && ($pid = $link['parent_id']) != 0) {
 				if (!isset($links[$pid]['children'])) {
 					$links[$pid]['children'] = array();
 				}
 
 				$links[$pid]['children'][$nav_id] = &$link;
+			}
+			else {
+				$link['parent_id'] = 0;
 			}
 		}
 		unset($link);
