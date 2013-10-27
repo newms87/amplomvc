@@ -697,6 +697,7 @@ a.button:visited {
 	border-top: 1px solid #DDDDDD;
 	border-left: 1px solid #DDDDDD;
 	margin-bottom: 20px;
+	clear:both;
 }
 
 #listing .rowid {
