@@ -341,25 +341,25 @@ ul > li > ul > li:hover > ul.link_list, ul > li > ul > li.hover > ul.link_list {
 	-webkit-animation: messageIn .5s;
 }
 
-.message_box + .message_box{
+.message_box + .message_box {
 	padding-bottom: 70px;
 	z-index: 1004;
 }
 
-.message_box + .message_box:hover{
+.message_box + .message_box:hover {
 	padding-bottom: 110px;
 }
 
-.message_box + .message_box + .message_box{
+.message_box + .message_box + .message_box {
 	padding-bottom: 100px;
 	z-index: 1003;
 }
 
-.message_box + .message_box + .message_box:hover{
+.message_box + .message_box + .message_box:hover {
 	padding-bottom: 140px;
 }
 
-.message_box > .message_list > div{
+.message_box > .message_list > div {
 	padding-right: 20px;
 }
 
@@ -697,7 +697,7 @@ a.button:visited {
 	border-top: 1px solid #DDDDDD;
 	border-left: 1px solid #DDDDDD;
 	margin-bottom: 20px;
-	clear:both;
+	clear: both;
 }
 
 #listing .rowid {
@@ -2238,9 +2238,10 @@ body .easy_list li textarea:focus {
 	position: absolute;
 	top: 10px;
 	right: 10px;
-	left:auto;
-	bottom:auto;
+	left: auto;
+	bottom: auto;
 }
+
 .easy_list > li > .button.delete:hover {
 	top: 12px;
 	right: 9px;
@@ -2496,7 +2497,8 @@ div .easy_list li > * + * {
 	margin-right: 1%;
 	float: left;
 }
-#code_editor_preview .CodeMirror{
+
+#code_editor_preview .CodeMirror {
 	height: 350px;
 	margin-bottom: 10px;
 }
@@ -2506,9 +2508,10 @@ div .easy_list li > * + * {
 	float: left;
 }
 
-#code_editor_preview .page_title{
+#code_editor_preview .page_title {
 	margin-bottom: 10px;
 }
+
 #preview_frame {
 	width: 100%;
 	min-height: 814px;
@@ -2543,12 +2546,13 @@ div .easy_list li > * + * {
 }
 
 /** Cron Manager**/
-#task_list .cron_action label{
-	display:inline-block;
-	text-align:right;
+#task_list .cron_action label {
+	display: inline-block;
+	text-align: right;
 	width: 50px;
 }
-#cron_activate_form{
-	display:block;
-	margin-bottom:20px;
+
+#cron_activate_form {
+	display: block;
+	margin-bottom: 20px;
 }

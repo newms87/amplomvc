@@ -103,6 +103,9 @@ $registry->set('session', new Session($registry));
 //Mod Files
 $registry->set('mod', new Mod($registry));
 
+//Theme
+$registry->set('theme', new Theme($registry));
+
 // Url
 $registry->set('url', new Url($registry));
 

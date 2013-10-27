@@ -105,4 +105,5 @@ require_once(_ac_mod_file(DIR_SYSTEM . 'library/plugin.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'library/request.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'library/response.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'library/session.php'));
+require_once(_ac_mod_file(DIR_SYSTEM . 'library/theme.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'library/url.php'));
