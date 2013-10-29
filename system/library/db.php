@@ -254,7 +254,7 @@ class DB
 		return true;
 	}
 
-	public function dump($file, $tables = '', $prefix = null)
+	public function dump($file, $tables = array(), $prefix = null)
 	{
 		_is_writable(dirname($file));
 
