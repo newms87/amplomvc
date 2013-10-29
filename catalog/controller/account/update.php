@@ -42,8 +42,9 @@ class Catalog_Controller_Account_Update extends Controller
 			$customer_info             = $this->customer->info();
 			$customer_info['metadata'] = $this->customer->getMetaData();
 		}
-
-		$addresses = $this->customer->getShippingAddresses();
+		else {
+			$customer_info = $_POST;
+		}
 
 		//Load Data or Defaults
 		$defaults = array(
@@ -56,18 +57,12 @@ class Catalog_Controller_Account_Update extends Controller
 			'newsletter' => 1,
 		);
 
-		foreach ($defaults as $key => $default) {
-			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
-			} elseif (isset($customer_info[$key])) {
-				$this->data[$key] = $customer_info[$key];
-			} else {
-				$this->data[$key] = $default;
-			}
-		}
+		$this->data += $customer_info + $defaults;
 
 		//Additional Data
-		$default_shipping_address_id = $this->data['metadata']['default_shipping_address_id'];
+		$default_shipping_address_id = isset($this->data['metadata']['default_shipping_address_id']) ? $this->data['metadata']['default_shipping_address_id'] : null;
+
+		$addresses = $this->customer->getShippingAddresses();
 
 		if (!empty($addresses) && (!$default_shipping_address_id || !array_search_key('address_id', $default_shipping_address_id, $addresses))) {
 			$first_address                                         = current($addresses);

@@ -49,15 +49,17 @@
 		<div class="section right">
 			<div class="shipping_address">
 				<h2><?= $entry_shipping_address; ?></h2>
-				<div class="address_list noselect">
-					<? foreach ($data_addresses as $address) { ?>
-						<div class="address <?= $address['default_shipping'] ? 'checked' : ''; ?>">
-							<input id="shipaddress<?= $address['address_id']; ?>" type="radio" name="metadata[default_shipping_address_id]" value="<?= $address['address_id']; ?>" <?= $address['default_shipping'] ? 'checked="checked"' : ''; ?> />
-							<label for="shipaddress<?= $address['address_id']; ?>"><?= $address['display']; ?></label>
-							<a href="<?= $address['remove']; ?>" class="remove"></a>
-						</div>
-					<? } ?>
-					<a href="<?= $add_address; ?>" class="address add_slide noradio" onclick="return colorbox($(this));"><?= $button_add_address; ?></a>
+				<div class="address_list_box">
+					<div class="address_list noselect">
+						<? foreach ($data_addresses as $address) { ?>
+							<div class="address <?= $address['default_shipping'] ? 'checked' : ''; ?>">
+								<input id="shipaddress<?= $address['address_id']; ?>" type="radio" name="metadata[default_shipping_address_id]" value="<?= $address['address_id']; ?>" <?= $address['default_shipping'] ? 'checked="checked"' : ''; ?> />
+								<label for="shipaddress<?= $address['address_id']; ?>"><?= $address['display']; ?></label>
+								<a href="<?= $address['remove']; ?>" class="remove"></a>
+							</div>
+						<? } ?>
+						<a href="<?= $add_address; ?>" class="address add_slide noradio" onclick="return colorbox($(this));"><?= $button_add_address; ?></a>
+					</div>
 				</div>
 			</div>
 

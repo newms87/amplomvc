@@ -26,6 +26,6 @@ $_['button_submit']   = "Submit";
 $_['error_no_card']             = "There was a problem while processing your card. Please make sure Javascript is enabled and try again.";
 $_['error_duplicate_card']      = "That card was already added to your account!";
 $_['error_braintree_customer']  = "Your Customer information was not found. Please try <a href=\"%s\">registering a credit card</a>";
-$_['error_payment_key']         = "The Credit Card was not selected.";
+$_['error_payment_key']         = "Please select a payment method.";
 $_['error_transaction_failed']  = "Transaction failed. Unable to activate subscription.";
 $_['error_subscription_active'] = "The subscription was already active with a subscription ID!";
