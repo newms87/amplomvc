@@ -355,11 +355,11 @@ class DB
 
 	public function getTables()
 	{
-		$result = $this->queryRows("SHOW TABLES");
+		$rows = $this->queryRows("SHOW TABLES");
 
 		$tables = array();
 
-		foreach ($result->rows as $row) {
+		foreach ($rows as $row) {
 			$tables[current($row)] = current($row);
 		}
 
@@ -395,7 +395,7 @@ class DB
 		$rows = $this->queryRows("SHOW COLUMNS FROM " . DB_PREFIX . "$table");
 
 		foreach ($rows as $row) {
-			if (strtolower($row['Field']) == strtolower($column)) {
+			if (strtolower($row['Field']) === strtolower($column)) {
 				return true;
 			}
 		}
