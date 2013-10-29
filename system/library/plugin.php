@@ -85,7 +85,7 @@ class Plugin extends Library
 
 		$this->mod->addFiles(null, $file_mods);
 
-		if (!$this->mod->apply()) {
+		if (!$this->mod->apply(true)) {
 			$this->message->add('warning', $this->mod->fetchErrors());
 			$this->message->add('warning', $this->_('error_install', $name));
 			$this->uninstall($name);
@@ -122,7 +122,7 @@ class Plugin extends Library
 
 		$this->mod->removeDirectory(DIR_PLUGIN . $name);
 
-		if ($this->mod->apply()) {
+		if ($this->mod->apply(true)) {
 			$this->mod->write();
 
 			$this->message->add('notify', $this->_('success_uninstall', $name));

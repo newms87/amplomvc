@@ -198,7 +198,7 @@ class Mod extends Library
 		return $this->error ? false : true;
 	}
 
-	public function apply($invalidated = false)
+	public function apply($invalidated_only = false)
 	{
 		$this->live_registry = array();
 
@@ -209,10 +209,10 @@ class Mod extends Library
 					$this->live_registry[$source] = $destination;
 				}
 
-				if ($invalidated) {
+				if ($invalidated_only) {
 					if (!isset($this->invalid[$destination])) continue; //skip if no changes made
 
-					$this->message->add('notify', "Mod File $destination was updated");
+					$this->message->add('notify', _("Mod File $destination was updated"));
 				}
 
 				//Each mod file using the same destination will stack changes on the destination file

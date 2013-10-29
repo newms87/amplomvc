@@ -255,7 +255,7 @@ function _is_link($filename)
 {
 	clearstatcache();
 
-	return is_link($filename);
+	return is_link($filename) || readlink($filename) !== $filename;
 }
 
 

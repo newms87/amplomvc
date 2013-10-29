@@ -127,6 +127,12 @@ elseif ($config->get('cron_status')) {
 	$registry->get('cron')->check();
 }
 
+//PHP Info
+if (isset($_GET['phpinfo']) && $registry->get('user')->isAdmin()) {
+	phpinfo();
+	exit;
+}
+
 //Router
 $router = new Router($registry);
 $router->route();
