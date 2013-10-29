@@ -174,7 +174,7 @@ class Plugin extends Library
 		$files = $this->getNewFiles($name);
 
 		foreach ($files as $key => $file) {
-			$filepath = str_replace('\\','/',$file->getPathName());
+			$filepath = str_replace('\\', '/', $file->getPathName());
 			if (!array_search_key('plugin_file', $filepath, $this->plugin_registry)) {
 				$changes['new_files'][] = $filepath;
 			}
@@ -243,19 +243,23 @@ class Plugin extends Library
 
 		//Live file already exists! This is a possible conlflict...
 		//If it is not a registered plugin file for this plugin, ask admin what to do.
-		if (is_file($live_file)
-			&& (!isset($this->plugin_registry[$live_file]) || $this->plugin_registry[$live_file]['name'] !== $name)
-		) {
+		if (is_file($live_file) && (!isset($this->plugin_registry[$live_file]) || $this->plugin_registry[$live_file]['name'] !== $name)) {
 			//If no request to overwrite the live file
-			if ((empty($_GET['force_install']) || $_GET['force_install'] !== $name)
-				&& (empty($_GET['overwrite_file']) || $_GET['overwrite_file'] !== $live_file)
-			) {
-				$overwrite_file_url = $this->url->link($this->url->getPath(), $this->url->getQuery() . "&name=$name&overwrite_file=" . urlencode($live_file));
-				$force_install_url  = $this->url->link($this->url->getPath(), $this->url->getQuery() . "&name=$name&force_install=$name");
-				$msg                =
-					"Unable to integrate the file $plugin_file for the plugin <strong>$name</strong> because the file $live_file already exists!" .
-					" Either manually remove the file or <a href=\"$overwrite_file_url\">overwrite</a> this file with the plugin file.<br /><br />" .
-					"To overwrite all files for this plugin installation <a href=\"$force_install_url\">click here</a><br />";
+			if ((empty($_GET['force_install']) || $_GET['force_install'] !== $name) && (empty($_GET['overwrite_file']) || $_GET['overwrite_file'] !== $live_file)) {
+				$conflicting_plugin = isset($this->plugin_registry[$live_file]) ? $this->plugin_registry[$live_file] : null;
+
+				if ($conflicting_plugin) {
+					$msg = _("There is a conflict with the <strong>$conflicting_plugin[name]</strong> plugin for the file $live_file. Please uninstall <strong>$conflicting_plugin[name]</strong> or resolve the conflict.");
+				}
+				else {
+					$overwrite_file_url = $this->url->link($this->url->getPath(), $this->url->getQuery() . "&name=$name&overwrite_file=" . urlencode($live_file));
+					$force_install_url  = $this->url->link($this->url->getPath(), $this->url->getQuery() . "&name=$name&force_install=$name");
+
+					$msg =
+						_("Unable to integrate the file $plugin_file for the plugin <strong>$name</strong> because the file $live_file already exists!" .
+						" Either manually remove the file or <a href=\"$overwrite_file_url\">overwrite</a> this file with the plugin file.<br /><br />" .
+						"To overwrite all files for this plugin installation <a href=\"$force_install_url\">click here</a><br />");
+				}
 
 				$this->message->add("warning", $msg);
 

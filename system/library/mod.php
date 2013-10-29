@@ -638,7 +638,9 @@ class Mod extends Library
 			$source_filemtime = filemtime($source);
 
 			foreach ($mods as $destination => $mod_files) {
-				if (!is_file($destination) || (($dest_filemtime = filemtime($destination)) < $source_filemtime)) {
+				$destination_filemtime = filemtime($destination);
+
+				if (!is_file($destination) || ($destination_filemtime < $source_filemtime)) {
 					$this->invalid[$destination] = true;
 				}
 
@@ -646,7 +648,7 @@ class Mod extends Library
 					if (!is_file($mod_file)) {
 						$this->removeFile($mod_file);
 						$this->invalid[$destination] = true;
-					} elseif (filemtime($mod_file) > $dest_filemtime) {
+					} elseif (filemtime($mod_file) > $destination_filemtime) {
 						$this->invalid[$destination] = true;
 					}
 				}
