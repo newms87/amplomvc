@@ -175,7 +175,15 @@ abstract class ExtensionModel extends Model
 	protected function loadClass($type, $code, $info = null)
 	{
 		require_once(_ac_mod_file(DIR_SYSTEM . 'extension/extension.php'));
-		require_once(_ac_mod_file(DIR_SYSTEM . 'extension/' . $type . '/' . $code . '.php'));
+
+		$ext_file = DIR_SYSTEM . 'extension/' . $type . '/' . $code . '.php';
+
+		if (!is_file ($ext_file)) {
+			$this->message->add('warning', _l("Unable to load %s because %s was not found.", $code, $ext_file));
+			return null;
+		}
+
+		require_once(_ac_mod_file($ext_file));
 
 		$class = 'System_Extension_' . $this->tool->formatClassname($type) . '_' . $this->tool->formatClassname($code);
 
