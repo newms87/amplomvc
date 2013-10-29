@@ -1,11 +1,4 @@
 <?php
-//Check PHP Info if requested
-//TODO: This is a security issue. Must hide PHPINFO unless logged into admin panel!!
-if (isset($_GET['phpinfo'])) {
-	phpinfo();
-	exit;
-}
-
 // Configuration
 if (is_file('ac_config.php')) {
 	require_once('ac_config.php');

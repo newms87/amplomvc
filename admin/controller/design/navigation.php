@@ -239,18 +239,28 @@ class Admin_Controller_Design_Navigation extends Controller
 		$this->template->load('design/navigation_form');
 
 		//Insert or Update
-		$navigation_group_id = isset($_GET['navigation_group_id']) ? $_GET['navigation_group_id'] : null;
+		$navigation_group_id = isset($_GET['navigation_group_id']) ? (int)$_GET['navigation_group_id'] : null;
 
 		//Breadcrumbs
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
 		$this->breadcrumb->add($this->_('head_title'), $this->url->link('design/navigation'));
 
-		//Load Information
-		if ($navigation_group_id && !$this->request->isPost()) {
+		if ($navigation_group_id) {
+			$this->breadcrumb->add(_("Edit"), $this->url->link('design/navigation', 'navigation_group_id=' . $navigation_group_id));
+		} else {
+			$this->breadcrumb->add(_("Add"), $this->url->link('design/navigation'));
+		}
+
+		//Load Values or Defaults
+		$navigation_group_info = array();
+
+		if ($this->request->isPost()) {
+			$navigation_group_info = $_POST;
+		}
+		elseif ($navigation_group_id) {
 			$navigation_group_info = $this->Model_Design_Navigation->getNavigationGroup($navigation_group_id);
 		}
 
-		//Set Values or Defaults
 		$defaults = array(
 			'name'   => '',
 			'links'  => array(),
@@ -258,15 +268,7 @@ class Admin_Controller_Design_Navigation extends Controller
 			'status' => 1,
 		);
 
-		foreach ($defaults as $key => $default) {
-			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
-			} elseif (isset($navigation_group_info[$key])) {
-				$this->data[$key] = $navigation_group_info[$key];
-			} elseif (!$navigation_group_id) {
-				$this->data[$key] = $default;
-			}
-		}
+		$this->data += $navigation_group_info + $defaults;
 
 		//Link AC Template
 		$this->data['links']['__ac_template__'] = array(
@@ -285,7 +287,7 @@ class Admin_Controller_Design_Navigation extends Controller
 		$admin_store = array(
 			'admin' => array(
 				'store_id' => -1,
-				'name'     => $this->_('text_admin_panel')
+				'name'     => _("Admin Panel"),
 			)
 		);
 

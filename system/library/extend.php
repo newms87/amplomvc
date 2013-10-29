@@ -14,14 +14,10 @@ class Extend extends Library
 			'status'     => 1,
 		);
 
-		foreach ($defaults as $key => $default) {
-			if (!isset($link[$key])) {
-				$link[$key] = $default;
-			}
-		}
+		$link += $defaults;
 
 		if (empty($link['display_name'])) {
-			$this->message->add("warning", "Extend::addNavigationLink(): You must specify the display_name when adding a new navigation link!");
+			$this->message->add("warning", __METHOD__ . "(): " . _("You must specify the display_name when adding a new navigation link!"));
 
 			return false;
 		}
@@ -30,9 +26,9 @@ class Extend extends Library
 			$link['name'] = $this->tool->getSlug($link['display_name']);
 		}
 
+		//Link already exists
 		if ($this->db->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "navigation WHERE name = '" . $this->db->escape($link['name']) . "'")) {
-			$this->message->add("notify", "Extend::addNavigationLink(): A Link with that name already exists!");
-			return false;
+			return 'exists';
 		}
 
 		if (!$link['parent_id'] && $link['parent']) {
@@ -43,6 +39,10 @@ class Extend extends Library
 
 		if ($navigation_group_id) {
 			$this->Admin_Model_Design_Navigation->addNavigationLink($navigation_group_id, $link);
+		}
+		else {
+			$this->message->add('warning', __METHOD__ . "(): " . _("The Navigation Group $group does not exist!"));
+			return false;
 		}
 
 		return true;

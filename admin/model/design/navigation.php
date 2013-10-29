@@ -106,7 +106,7 @@ class Admin_Model_Design_Navigation extends Model
 		//Transform links into Tree structure (if not already)
 		foreach ($links as $nav_id => &$link) {
 			if (empty($link['name'])) {
-				$link['name'] = 'link_' . $nav_id;
+				$link['name'] = $nav_id;
 			}
 
 			if (!isset($link['status'])) {
