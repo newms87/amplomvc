@@ -94,7 +94,7 @@ class Theme extends Library
 			$theme_settings_admin['data_positions'] = array();
 
 			foreach ($themes as $theme) {
-				$theme_settings_admin['data_positions'] = $theme['settings']['data_positions'];
+				$theme_settings_admin['data_positions'] += !empty($theme['settings']['data_positions']) ? $theme['settings']['data_positions'] : array();
 			}
 
 			$theme_settings_admin['themes'] = $themes;

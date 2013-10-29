@@ -14,7 +14,7 @@ abstract class Library
 		return $this->registry->get($key);
 	}
 
-	public function _l($key)
+	public function _($key)
 	{
 		if (func_num_args() > 1) {
 			$args = func_get_args();
