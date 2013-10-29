@@ -266,7 +266,8 @@ class Admin_Controller_Page_Page extends Controller
 		$this->data['url_create_layout'] = $this->url->link('page/page/create_layout');
 		$this->data['url_load_blocks']   = $this->url->link('page/page/loadBlocks');
 
-		$this->data['page_preview'] = $this->url->store(current($this->data['stores']), 'page/page/preview', 'page_id=' . $page_id);
+		$store_front = current($this->data['stores']);
+		$this->data['page_preview'] = $this->url->store($store_front['store_id'], 'page/page/preview', 'page_id=' . $page_id);
 
 		//Action Buttons
 		$this->data['save']   = $this->url->link('page/page/update', 'page_id=' . $page_id);
