@@ -3,6 +3,7 @@
 abstract class Library
 {
 	protected $registry;
+	protected $error = array();
 
 	public function __construct($registry)
 	{
