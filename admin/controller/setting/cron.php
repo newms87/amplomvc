@@ -101,7 +101,7 @@ class Admin_Controller_Setting_Cron extends Controller
 	public function activate()
 	{
 		if (isset($_POST['cron_status'])) {
-			$this->config->save('cron', 'cron_status', $_POST['cron_status'] ? 1 : 0);
+			$this->config->save('cron', 'cron_status', $_POST['cron_status'] ? 1 : 0, 0, true);
 		}
 
 		$this->url->redirect($this->url->link('setting/cron'));

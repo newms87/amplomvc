@@ -8,7 +8,7 @@ class Cron extends Library
 		$diff = $this->date->diff($last_run);
 
 		//Run Cron every minute (will check task times first)
-		if (($diff->days + $diff->h + $diff->i) > 0) {
+		if (($diff->days + $diff->h + $diff->i) > 0 || true) {
 			$this->run();
 		}
 	}
@@ -37,7 +37,12 @@ class Cron extends Library
 				$msg .= _l("Last Scheduled (%s), ", $this->date->format($last_scheduled, 'full'));
 				$msg .= _l("Last Run (%s)\r\n", $this->date->format($task['last_run'], 'full'));
 
-				if (!$task['last_run'] || $this->date->isAfter($last_scheduled, $task['last_run'])) {
+				$diff = $this->date->diff($last_scheduled, $task['last_run']);
+
+				if ($diff->days + $diff->h + $diff->i <= 0) {
+					$msg .= _l("Already ran.");
+				}
+				elseif (!$task['last_run'] || $this->date->isAfter($last_scheduled, $task['last_run'])) {
 					$task['last_run'] = $this->date->now();
 
 					$msg .= _l("Executing %s\r\n", $task['name']);
