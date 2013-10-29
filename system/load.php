@@ -7,6 +7,20 @@ spl_autoload_register(function($class) use($registry){
 	$registry->get($class);
 });
 
+//Language
+function _l($message)
+{
+	$values = func_get_args();
+
+	array_shift($values);
+
+	if (empty($values)) {
+		return _($message);
+	}
+
+	return vsprintf(_($message), $values);
+}
+
 // Request
 $registry->set('request', new Request());
 
@@ -151,7 +165,7 @@ if ($config->get('config_performance_log')) {
 		'execution_time' => microtime(true) - $__start,
 	);
 
-	$html = "<div class=\"title\">" . _("System Performance:") . "</div>";
+	$html = "<div class=\"title\">" . _l("System Performance:") . "</div>";
 
 	foreach ($stats as $key => $s) {
 		$html .= "<div>$key = $s</div>";

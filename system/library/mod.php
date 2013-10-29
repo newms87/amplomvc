@@ -212,7 +212,7 @@ class Mod extends Library
 				if ($invalidated_only) {
 					if (!isset($this->invalid[$destination])) continue; //skip if no changes made
 
-					$this->message->add('notify', _("Mod File $destination was updated"));
+					$this->message->add('notify', _l("Mod File $destination was updated"));
 				}
 
 				//Each mod file using the same destination will stack changes on the destination file

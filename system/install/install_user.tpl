@@ -5,7 +5,6 @@
 <title><?= $text_title; ?></title>
 
 <link rel="stylesheet" media="screen" type="text/css" href="system/install/install.css" />
-<script type="text/javascript" src="install/script.js"></script>
 </head>
 <body>
 <div id="container">

@@ -5,7 +5,6 @@
 <title><?= $text_title; ?></title>
 
 <link rel="stylesheet" media="screen" type="text/css" href="system/install/install.css" />
-<script type="text/javascript" src="install/script.js"></script>
 </head>
 <body>
 <div id="container">
@@ -15,20 +14,20 @@
 			<div id="slogan"><?= $text_slogan; ?></div>
 		</div>
 	</div>
-	
+
 	<div id="content_holder">
 		<h1><?= $text_setup; ?></h1>
-		
+
 		<div id="notification">
 			<? if ($error_msg) { ?>
 				<div class="message_box warning"><?= $error_msg; ?></div>
 			<? } ?>
-			
+
 			<? if ($success_msg) { ?>
 				<div class="message_box success"><?= $success_msg; ?></div>
 			<? } ?>
 		</div>
-		
+
 		<form action="" method="post">
 			<div class="install_item">
 				<label><?= $entry_db_type; ?></label>

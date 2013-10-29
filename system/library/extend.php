@@ -17,7 +17,7 @@ class Extend extends Library
 		$link += $defaults;
 
 		if (empty($link['display_name'])) {
-			$this->message->add("warning", __METHOD__ . "(): " . _("You must specify the display_name when adding a new navigation link!"));
+			$this->message->add("warning", __METHOD__ . "(): " . _l("You must specify the display_name when adding a new navigation link!"));
 
 			return false;
 		}
@@ -41,7 +41,7 @@ class Extend extends Library
 			$this->Admin_Model_Design_Navigation->addNavigationLink($navigation_group_id, $link);
 		}
 		else {
-			$this->message->add('warning', __METHOD__ . "(): " . _("The Navigation Group $group does not exist!"));
+			$this->message->add('warning', __METHOD__ . "(): " . _l("The Navigation Group $group does not exist!"));
 			return false;
 		}
 

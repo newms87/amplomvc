@@ -241,7 +241,7 @@ class Plugin extends Library
 		$plugin_file = is_object($file) ? str_replace("\\", "/", $file->getPathName()) : $file;
 		$live_file   = str_replace($dir, SITE_DIR, $plugin_file);
 
-		//Live file already exists! This is a possible conlflict...
+		//Live file already exists! This is a possible conflict...
 		//If it is not a registered plugin file for this plugin, ask admin what to do.
 		if (is_file($live_file) && (!isset($this->plugin_registry[$live_file]) || $this->plugin_registry[$live_file]['name'] !== $name)) {
 			//If no request to overwrite the live file
@@ -249,21 +249,23 @@ class Plugin extends Library
 				$conflicting_plugin = isset($this->plugin_registry[$live_file]) ? $this->plugin_registry[$live_file] : null;
 
 				if ($conflicting_plugin) {
-					$msg = _("There is a conflict with the <strong>$conflicting_plugin[name]</strong> plugin for the file $live_file. Please uninstall <strong>$conflicting_plugin[name]</strong> or resolve the conflict.");
+					if ($conflicting_plugin['name'] !== $name) {
+						$this->message->add('warning', _l("There is a conflict with the <strong>%s</strong> plugin for the file %s. Please uninstall <strong>%s</strong> or resolve the conflict.", $conflicting_plugin['name'], $live_file, $conflicting_plugin['name']));
+						return false;
+					}
 				}
 				else {
 					$overwrite_file_url = $this->url->link($this->url->getPath(), $this->url->getQuery() . "&name=$name&overwrite_file=" . urlencode($live_file));
 					$force_install_url  = $this->url->link($this->url->getPath(), $this->url->getQuery() . "&name=$name&force_install=$name");
 
 					$msg =
-						_("Unable to integrate the file $plugin_file for the plugin <strong>$name</strong> because the file $live_file already exists!" .
-						" Either manually remove the file or <a href=\"$overwrite_file_url\">overwrite</a> this file with the plugin file.<br /><br />" .
-						"To overwrite all files for this plugin installation <a href=\"$force_install_url\">click here</a><br />");
+						_l("Unable to integrate the file %s for the plugin <strong>%s</strong> because the file %s already exists!", $plugin_file, $name, $live_file) .
+						_l(" Either manually remove the file or <a href=\"%s\">overwrite</a> this file with the plugin file.<br /><br />", $overwrite_file_url) .
+						_l("To overwrite all files for this plugin installation <a href=\"%s\">click here</a><br />", $force_install_url);
+
+					$this->message->add("warning", $msg);
+					return false;
 				}
-
-				$this->message->add("warning", $msg);
-
-				return false;
 			}
 		}
 

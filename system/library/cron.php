@@ -19,53 +19,56 @@ class Cron extends Library
 
 		$tasks = $this->config->load('cron', 'cron_tasks', 0);
 
-		$msg = "------ Cron START " . $this->date->now() . "------\r\n\r\n";
+		$msg = _l("------ Cron START %s ------\r\n\r\n", $this->date->now());
 
-		foreach ($tasks['tasks'] as &$task) {
-			if ($task['status'] != '1') {
-				continue;
-			}
-
-			$msg .= "Task $task[name]: ";
-
-			if (empty($task['last_run'])) {
-				$task['last_run'] = DATETIME_ZERO;
-			}
-			$last_scheduled = $this->getPrevRun($task['time']);
-
-			$msg .= "Last Scheduled (" . $this->date->format($last_scheduled, 'full') . "), ";
-			$msg .= "Last Run (" . $this->date->format($task['last_run'], 'full') . ")\r\n";
-
-			if (!$task['last_run'] || $this->date->isAfter($last_scheduled, $task['last_run'])) {
-				$task['last_run'] = $this->date->now();
-
-				$msg .= "Executing $task[name]\r\n";
-
-				$classname = "System_Cron_" . $this->tool->formatClassname($task['file']);
-				$method = $task['method'];
-
-				if (method_exists($classname, $method)) {
-					$this->$classname->$method();
-				} else {
-					$error = _("Cron::run(): Failed to run $task[name]. Class Method, $classname::$method() was not found.");
-					$msg .= $error;
-					$this->error_log->write($error);
+		if (!empty($tasks['tasks'])) {
+			foreach ($tasks['tasks'] as &$task) {
+				if ($task['status'] != '1') {
+					continue;
 				}
 
+				$msg .= "Task $task[name]: ";
 
+				if (empty($task['last_run'])) {
+					$task['last_run'] = DATETIME_ZERO;
+				}
+				$last_scheduled = $this->getPrevRun($task['time']);
 
-			} else {
-				$msg .= "Skipping...";
+				$msg .= _l("Last Scheduled (%s), ", $this->date->format($last_scheduled, 'full'));
+				$msg .= _l("Last Run (%s)\r\n", $this->date->format($task['last_run'], 'full'));
+
+				if (!$task['last_run'] || $this->date->isAfter($last_scheduled, $task['last_run'])) {
+					$task['last_run'] = $this->date->now();
+
+					$msg .= _l("Executing %s\r\n", $task['name']);
+
+					$classname = "System_Cron_" . $this->tool->formatClassname($task['file']);
+					$method = $task['method'];
+
+					if (method_exists($classname, $method)) {
+						$this->$classname->$method();
+					} else {
+						$error = _l("Cron::run(): Failed to run %s. Class Method, %s() was not found.", $task['name'], $classname . '::' . $method);
+						$msg .= $error;
+						$this->error_log->write($error);
+					}
+				} else {
+					$msg .= _l("Skipping...");
+				}
+
+				$msg .= "\r\n\r\n";
 			}
+			unset($task);
 
-			$msg .= "\r\n\r\n";
+			$this->config->save('cron', 'cron_tasks', $tasks, 0, false);
 		}
-		unset($task);
+		else {
+			$msg .= _l("There are no tasks to run.\r\n");
+		}
 
-		$this->config->save('cron', 'cron_tasks', $tasks, 0, false);
 		$this->config->save('cron', 'cron_last_run', $this->date->now());
 
-		$msg .= "Cron ran successfully!";
+		$msg .= _l("Cron ran successfully!");
 
 		$this->log->write($msg);
 

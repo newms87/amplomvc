@@ -13,8 +13,8 @@
 		<div class="section">
 
 			<div id="tabs" class="htabs">
-				<a href="#tab-content"><?= _("Content"); ?></a>
-				<a href="#tab-data"><?= _("Data"); ?></a>
+				<a href="#tab-content"><?= _l("Content"); ?></a>
+				<a href="#tab-data"><?= _l("Data"); ?></a>
 				<a href="#tab-design"><?= $tab_design; ?></a>
 			</div>
 
@@ -23,17 +23,17 @@
 				<div id="tab-content">
 					<div id="code_editor_preview">
 						<div class="page_title">
-							<div class="title"><?= _("Page Title"); ?></div>
+							<div class="title"><?= _l("Page Title"); ?></div>
 							<input type="text" name="title" size="60" value="<?= $title; ?>"/>
 							<span class="display_title">
 								<input type="checkbox" id="display_title" name="display_title" <?= $display_title ? "checked=\"checked\"" : ''; ?> value="1" />
-								<label for="display_title"><?= _("Display Title?"); ?></label>
+								<label for="display_title"><?= _l("Display Title?"); ?></label>
 							</span>
 						</div>
 
-						<div class="html_title"><?= _("HTML"); ?></div>
+						<div class="html_title"><?= _l("HTML"); ?></div>
 						<textarea id="html_editor" name="content"><?= $content; ?></textarea>
-						<div class="css_title"><?= _("CSS"); ?></div>
+						<div class="css_title"><?= _l("CSS"); ?></div>
 						<textarea id="css_editor" name="css"><?= $css; ?></textarea>
 					</div>
 

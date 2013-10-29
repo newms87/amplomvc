@@ -169,11 +169,11 @@ class PrettyLanguage
 
 			array_walk($dir_components, function (&$e, $index) {
 				$e = ucfirst($e);
-				$e = preg_replace_callback("/_([a-z])/", function ($matches) { return strtoupper($matches[1]); }, $e);
+				$e = preg_replace_callback("/_l([a-z])/", function ($matches) { return strtoupper($matches[1]); }, $e);
 			});
 
 			$file_component = ucfirst(str_replace('.php', '', basename($file)));
-			$file_component = preg_replace_callback("/_([a-z])/", function ($matches) { return strtoupper($matches[1]); }, $file_component);
+			$file_component = preg_replace_callback("/_l([a-z])/", function ($matches) { return strtoupper($matches[1]); }, $file_component);
 
 			$classname = implode('_', $dir_components) . '_' . $file_component;
 

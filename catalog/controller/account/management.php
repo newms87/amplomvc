@@ -11,11 +11,11 @@ class Catalog_Controller_Account_Management extends Controller
 		}
 
 		//Page Head
-		$this->document->setTitle(_("Account Manager"));
+		$this->document->setTitle(_l("Account Manager"));
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_("Account Manager"), $this->url->link('account/management'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l("Account Manager"), $this->url->link('account/management'));
 
 		//Page Information
 		$shipping_address               = $this->customer->getDefaultShippingAddress();
@@ -27,7 +27,7 @@ class Catalog_Controller_Account_Management extends Controller
 
 		$customer['display_name'] = $customer['firstname'] . ' ' . $customer['lastname'];
 
-		$this->data['newsletter_display'] = $customer['newsletter'] ? _("Send me RealMeal weekly updates!") : _("Do not send me any emails.");
+		$this->data['newsletter_display'] = $customer['newsletter'] ? _l("Send me RealMeal weekly updates!") : _l("Do not send me any emails.");
 
 		$this->data['customer'] = $customer;
 

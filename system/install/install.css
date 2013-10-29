@@ -218,17 +218,17 @@ ul{
 }
 
 .message_box.success {
-	background: #EAF7D9 url('../image/success.png') 10px center no-repeat;
+	background: #EAF7D9 url('image/success.png') 10px center no-repeat;
 	background-size:16px 16px;
 	border-color: #BBDF8D;
 }
 .message_box.warning {
-	background: #FFD1D1 url('../image/warning.png') 10px center no-repeat;
+	background: #FFD1D1 url('image/warning.png') 10px center no-repeat;
 	background-size:16px 16px;
 	border-color: #F8ACAC;
 }
 .message_box.attention,.message_box.notify {
-	background: #FFF5CC url('../image/attention.png') 10px center no-repeat;
+	background: #FFF5CC url('image/attention.png') 10px center no-repeat;
 	background-size:16px 16px;
 	border-color: #F2DD8C;
 }
@@ -236,14 +236,14 @@ ul{
 .message_box .close{
 	float: right;
 	cursor: pointer;
-	background: transparent url('../image/close.png') 0px center no-repeat;
+	background: transparent url('image/close.png') 0px center no-repeat;
 	background-size: 32px 16px;
 	width: 16px;
 	height: 16px;
 }
 
 .message_box .close:hover, .message_box .close:active{
-	background: transparent url('../image/close.png') -16px center no-repeat;
+	background: transparent url('image/close.png') -16px center no-repeat;
 	background-size: 32px 16px;
 }
 
@@ -264,7 +264,7 @@ ul{
 	line-height: 12px;
 	font-size: 12px;
 	font-weight: bold;
-	
+
 	background: #003366; /* Old browsers */
 	background: -webkit-linear-gradient(top,  #003366 0%,#212121 100%); /* Chrome10+,Safari5.1+ */
 	background: -moz-linear-gradient(top,  #003366 0%, #212121 100%); /* FF3.6+ */
@@ -340,7 +340,7 @@ input.button {
 }
 
 .install_item input{
-	
+
 }
 
 /* help icon */
@@ -353,16 +353,16 @@ input.button {
 	font-size:11px;
 	width:8px;
 	height:13px;
-	
+
 	font-weight: bold;
 	color:#A0C0F0;
 	border: solid 1px #A0C0F0;
 	background-color: white;
-	
+
 	-moz-box-shadow: 0 4px 4px rgba(0,0,0,0.2);
 	-webkit-box-shadow: 0 4px 4px rgba(0,0,0,0.2);
 	box-shadow: 0 4px 4px rgba(0,0,0,0.2);
-	
+
   	-moz-border-radius: 50%;
   	-khtml-border-radius: 50%;
   	-webkit-border-radius:50%;
@@ -394,12 +394,12 @@ input.button {
 	padding: 10px;
 	color:#A0C0F0;
 	font-size:11px;
-	
+
 	background:white;
 	-moz-box-shadow: 0 4px 4px rgba(0,0,0,0.2);
 	-webkit-box-shadow: 0 4px 4px rgba(0,0,0,0.2);
 	box-shadow: 0 4px 4px rgba(0,0,0,0.2);
-	
+
   	-moz-border-radius: 10px;
   	-khtml-border-radius: 10px;
   	-webkit-border-radius:10px;

@@ -4,21 +4,21 @@
 	<?= $this->breadcrumb->render(); ?>
 	<?= $content_top; ?>
 
-	<h1><?= _("Account Manager"); ?></h1>
+	<h1><?= _l("Account Manager"); ?></h1>
 
 	<div class="section left">
-		<h2><?= _("Customer Information"); ?></h2>
+		<h2><?= _l("Customer Information"); ?></h2>
 		<div class="name"><?= $customer['display_name']; ?></div>
 		<div class="phone"><?= $customer['telephone']; ?></div>
 		<div class="email"><?= $customer['email']; ?></div>
 		<br />
-		<h2><?= _("Default Shipping Address"); ?></h2>
+		<h2><?= _l("Default Shipping Address"); ?></h2>
 		<div class="shipping_address"><?= $shipping_address['display']; ?></div>
 		<br />
-		<h2><?= _("Newsletter"); ?></h2>
+		<h2><?= _l("Newsletter"); ?></h2>
 		<div class="newsletter"><?= $newsletter_display; ?></div>
 		<br />
-		<a class="button small account_edit" href="<?= $edit_account; ?>"><?= _("Edit Information"); ?></a>
+		<a class="button small account_edit" href="<?= $edit_account; ?>"><?= _l("Edit Information"); ?></a>
 	</div>
 
 	<? if (!empty($data_subscriptions)) { ?>

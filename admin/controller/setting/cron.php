@@ -3,7 +3,7 @@ class Admin_Controller_Setting_Cron extends Controller
 {
 	public function index()
 	{
-		$this->document->setTitle(_("Automated Tasks"));
+		$this->document->setTitle(_l("Automated Tasks"));
 
 		if ($this->request->isPost() && $this->validate()) {
 			$this->config->save('cron', 'cron_tasks', $_POST, 0, false);
@@ -17,15 +17,15 @@ class Admin_Controller_Setting_Cron extends Controller
 		echo exec('rm -fv /tmp/crontab.txt');
 			*/
 
-			$this->message->add('success', _('Successfully updated the Automated Tasks!'));
+			$this->message->add('success', _l('Successfully updated the Automated Tasks!'));
 
 			$this->url->redirect($this->url->link('setting/cron'));
 		}
 
 		//Breadcrumbs
-		$this->breadcrumb->add(_("Home"), $this->url->link('common/home'));
-		$this->breadcrumb->add(_('System Settings'), $this->url->link('setting/store'));
-		$this->breadcrumb->add(_('Automated Tasks'), $this->url->link('setting/cron'));
+		$this->breadcrumb->add(_l("Home"), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l('System Settings'), $this->url->link('setting/store'));
+		$this->breadcrumb->add(_l('Automated Tasks'), $this->url->link('setting/cron'));
 
 		if ($this->request->isPost()) {
 			$tasks = $_POST;
@@ -110,7 +110,7 @@ class Admin_Controller_Setting_Cron extends Controller
 	private function validate()
 	{
 		if (!$this->user->hasPermission('modify', 'setting/cron')) {
-			$this->error['warning'] = _('You do not have permission to modify the Automated Tasks');
+			$this->error['warning'] = _l('You do not have permission to modify the Automated Tasks');
 		}
 
 		return $this->error ? false : true;

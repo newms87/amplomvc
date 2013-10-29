@@ -4,31 +4,31 @@
 
 	<div class="box">
 		<div class="heading">
-			<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= _("Cron Jobs"); ?></h1>
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= _l("Cron Jobs"); ?></h1>
 
 			<div class="buttons">
-				<a href="<?= $run_cron; ?>" target="_blank" class="button run_cron_button"><?= _("Run Cron"); ?></a>
-				<a onclick="$('#form').submit();" class="button"><?= _("Save"); ?></a>
-				<a href="<?= $cancel; ?>" class="button"><?= _("Cancel"); ?></a>
+				<a href="<?= $run_cron; ?>" target="_blank" class="button run_cron_button"><?= _l("Run Cron"); ?></a>
+				<a onclick="$('#form').submit();" class="button"><?= _l("Save"); ?></a>
+				<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
 			</div>
 		</div>
 		<div class="section">
 
 			<form id="cron_activate_form" action="<?= $activate; ?>" method="post">
 				<input type="hidden" name="cron_status" value="<?= (int)!$cron_status; ?>" />
-				<input type="submit" class="button <?= !$cron_status ? 'add' : 'delete'; ?>" value="<?= !$cron_status ? _("Activate Automated Tasks") : _("Disable Automated Tasks"); ?>"/>
+				<input type="submit" class="button <?= !$cron_status ? 'add' : 'delete'; ?>" value="<?= !$cron_status ? _l("Activate Automated Tasks") : _l("Disable Automated Tasks"); ?>"/>
 			</form>
 
 			<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="form">
 				<table id="module" class="list">
 					<thead>
 						<tr>
-							<td class="left"><?= _("Name"); ?></td>
-							<td class="left"><?= _("Action"); ?><span class="help"><?= _("These files are located in " . DIR_CRON); ?></span></td>
-							<td class="left"><?= _("Time"); ?></td>
-							<td class="right"><?= _("Sort Order"); ?></td>
-							<td class="center"><?= _("Last Run"); ?></td>
-							<td class="left"><?= _("Status"); ?></td>
+							<td class="left"><?= _l("Name"); ?></td>
+							<td class="left"><?= _l("Action"); ?><span class="help"><?= _l("These files are located in " . DIR_CRON); ?></span></td>
+							<td class="left"><?= _l("Time"); ?></td>
+							<td class="right"><?= _l("Sort Order"); ?></td>
+							<td class="center"><?= _l("Last Run"); ?></td>
+							<td class="left"><?= _l("Status"); ?></td>
 							<td></td>
 						</tr>
 					</thead>
@@ -39,7 +39,7 @@
 							<td class="left"><input type="text" name="tasks[<?= $row; ?>][name]" value="<?= $task['name']; ?>" size="30" maxlength="30"/></td>
 							<td class="left cron_action">
 
-								<label for="select_file<?= $row; ?>"><?= _("Cron File"); ?></label>
+								<label for="select_file<?= $row; ?>"><?= _l("Cron File"); ?></label>
 								<select id="select_file<?= $row; ?>" class="select_file" name="tasks[<?= $row; ?>][file]">
 								<? foreach ($data_files as $file) { ?>
 									<option value="<?= $file; ?>" <?= $file === $task['file'] ? 'selected="selected"' : ''; ?>><?= $file; ?></option>
@@ -47,7 +47,7 @@
 								</select>
 
 								<br/><br/>
-								<label><?= _("Method"); ?></label>
+								<label><?= _l("Method"); ?></label>
 								<span class="method_list">
 									<? foreach ($data_methods as $file => $methods) { ?>
 										<select class="select_method" data-file="<?= $file; ?>" data-name="tasks[<?= $row; ?>][method]">
@@ -62,11 +62,11 @@
 								<table class="crontime">
 									<thead>
 										<tr>
-											<td><?= _("Minute"); ?></td>
-											<td><?= _("Hour"); ?></td>
-											<td><?= _("Day of Month"); ?></td>
-											<td><?= _("Month"); ?></td>
-											<td><?= _("Day of Week"); ?></td>
+											<td><?= _l("Minute"); ?></td>
+											<td><?= _l("Hour"); ?></td>
+											<td><?= _l("Day of Month"); ?></td>
+											<td><?= _l("Month"); ?></td>
+											<td><?= _l("Day of Week"); ?></td>
 										</tr>
 									</thead>
 									<tr>
@@ -80,7 +80,7 @@
 							</td>
 							<td class="right"><input type="text" class="sort_order" name="tasks[<?= $row; ?>][sort_order]" value="<?= $task['sort_order']; ?>" size="3"/></td>
 							<td class="center">
-								<?= empty($task['last_run']) ? _("Never") : $task['last_run']; ?>
+								<?= empty($task['last_run']) ? _l("Never") : $task['last_run']; ?>
 								<input type="hidden" name="tasks[<?= $row; ?>][last_run]" value="<?= $task['last_run']; ?>" />
 							</td>
 							<td class="left"><?= $this->builder->build('select', $data_statuses, "tasks[$row][status]", $task['status']); ?></td>
@@ -91,7 +91,7 @@
 
 					<tfoot>
 						<tr>
-							<td colspan="7" class="center"><a id="add_task" class="button"><?= _("Add Task"); ?></a></td>
+							<td colspan="7" class="center"><a id="add_task" class="button"><?= _l("Add Task"); ?></a></td>
 						</tr>
 					</tfoot>
 				</table>

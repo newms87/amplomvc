@@ -246,9 +246,9 @@ class Admin_Controller_Design_Navigation extends Controller
 		$this->breadcrumb->add($this->_('head_title'), $this->url->link('design/navigation'));
 
 		if ($navigation_group_id) {
-			$this->breadcrumb->add(_("Edit"), $this->url->link('design/navigation', 'navigation_group_id=' . $navigation_group_id));
+			$this->breadcrumb->add(_l("Edit"), $this->url->link('design/navigation', 'navigation_group_id=' . $navigation_group_id));
 		} else {
-			$this->breadcrumb->add(_("Add"), $this->url->link('design/navigation'));
+			$this->breadcrumb->add(_l("Add"), $this->url->link('design/navigation'));
 		}
 
 		//Load Values or Defaults
@@ -287,7 +287,7 @@ class Admin_Controller_Design_Navigation extends Controller
 		$admin_store = array(
 			'admin' => array(
 				'store_id' => -1,
-				'name'     => _("Admin Panel"),
+				'name'     => _l("Admin Panel"),
 			)
 		);
 
