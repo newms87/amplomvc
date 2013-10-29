@@ -8,7 +8,11 @@ ac_config.php
 !/image/data/ac_icon.png
 
 logs
+
 /system/cron/*
+!/system/cron/ac_cron.php
+!/system/cron/cron_jobs.php
+
 /system/plugins/merged
 cache
 /download
