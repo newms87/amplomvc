@@ -48,7 +48,7 @@ $registry->set('log', $log);
 //Error Callbacks allow customization of error display / messages
 $error_callbacks = array();
 
-$error_handler = function($errno, $errstr, $errfile, $errline) use($error_log, $config){
+$error_handler = function($errno, $errstr, $errfile, $errline, $errcontext) use($error_log, $config){
 	switch ($errno) {
 		case E_NOTICE:
 		case E_USER_NOTICE:

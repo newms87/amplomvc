@@ -355,7 +355,7 @@ class DB
 
 	public function getTables()
 	{
-		$result = $this->driver->query("SHOW TABLES");
+		$result = $this->queryRows("SHOW TABLES");
 
 		$tables = array();
 
@@ -368,47 +368,45 @@ class DB
 
 	public function createTable($table, $sql)
 	{
-		return $this->driver->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "$table` ($sql)");
+		return $this->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "$table` ($sql)");
 	}
 
 	public function dropTable($table)
 	{
-		return $this->driver->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "$table`");
+		return $this->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "$table`");
 	}
 
 	public function countTables()
 	{
-		$result = $this->driver->query("SHOW TABLES");
+		$result = $this->query("SHOW TABLES");
 
-		return $result->num_rows;
+		return $result ? $result->num_rows : null;
 	}
 
 	public function getKeyColumn($table)
 	{
-		$result = $this->driver->query("SHOW KEYS FROM " . DB_PREFIX . "$table WHERE Key_name = 'PRIMARY'");
+		$result = $this->queryRow("SHOW KEYS FROM " . DB_PREFIX . "$table WHERE Key_name = 'PRIMARY'");
 
-		if ($result->num_rows) {
-			return $result->row['Column_name'];
-		}
-
-		return false;
+		return $result ? $result['Column_name'] : false;
 	}
 
 	public function hasColumn($table, $column)
 	{
-		$query = $this->driver->query("SHOW COLUMNS FROM " . DB_PREFIX . "$table");
-		foreach ($query->rows as $row) {
+		$rows = $this->queryRows("SHOW COLUMNS FROM " . DB_PREFIX . "$table");
+
+		foreach ($rows as $row) {
 			if (strtolower($row['Field']) == strtolower($column)) {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
 	public function addColumn($table, $column, $options = '')
 	{
 		if (!$this->hasColumn($table, $column)) {
-			return $this->driver->query("ALTER TABLE `" . DB_PREFIX . "$table` ADD COLUMN `$column` $options");
+			return $this->query("ALTER TABLE `" . DB_PREFIX . "$table` ADD COLUMN `$column` $options");
 		}
 
 		return false;
@@ -423,14 +421,14 @@ class DB
 				return false;
 			}
 
-			return $this->driver->query("ALTER TABLE `" . DB_PREFIX . "$table` CHANGE COLUMN `$column` `$new_column` $options");
+			return $this->query("ALTER TABLE `" . DB_PREFIX . "$table` CHANGE COLUMN `$column` `$new_column` $options");
 		}
 	}
 
 	public function dropColumn($table, $column)
 	{
 		if ($this->hasColumn($table, $column)) {
-			return $this->driver->query("ALTER TABLE `" . DB_PREFIX . "$table` DROP COLUMN `$column`");
+			return $this->query("ALTER TABLE `" . DB_PREFIX . "$table` DROP COLUMN `$column`");
 		}
 
 		return false;
@@ -445,17 +443,6 @@ class DB
 		}
 
 		return true;
-	}
-
-	public function getInsertString($data)
-	{
-		$str = array();
-
-		foreach ($data as $key => $value) {
-			$str[] = "`$key`='$value'";
-		}
-
-		return implode(',', $str);
 	}
 
 	public function escape($value)

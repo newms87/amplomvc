@@ -171,4 +171,19 @@ class System_Model_Setting extends Model
 		$this->cache->delete('setting');
 		$this->cache->delete('store');
 	}
+
+	public function addStore($data)
+	{
+		return $this->insert("store", $data);
+	}
+
+	public function editStore($store_id, $data)
+	{
+		$this->update("store", $store_id, $data);
+	}
+
+	public function deleteStore($store_id)
+	{
+		$this->delete("store", $store_id);
+	}
 }

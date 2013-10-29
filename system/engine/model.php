@@ -106,7 +106,7 @@ abstract class Model
 	{
 		$this->action_filter('insert', $table, $data);
 
-		$values = $this->getSetValues($table, $data, false);
+		$values = $this->getInsertString($table, $data, false);
 
 		$success = $this->db->query("INSERT INTO " . DB_PREFIX . "$table SET $values");
 
@@ -125,7 +125,7 @@ abstract class Model
 
 		$primary_key = $this->get_primary_key($table);
 
-		$values = $this->getSetValues($table, $data);
+		$values = $this->getInsertString($table, $data);
 
 		$update_id = true; //Our Return value
 
@@ -138,7 +138,7 @@ abstract class Model
 
 			$where = "WHERE `$primary_key` = $update_id";
 		}
-		elseif (is_integer($where) || (is_string($where) && !preg_match("/[^\d]/", $where))) {
+		elseif (is_integer($where) || (is_string($where) && !preg_match("/[^\\d]/", $where))) {
 			if (!$primary_key) {
 				trigger_error("UPDATE $table does not have an integer primary key!" . get_caller(0, 4));
 				return null;
@@ -308,7 +308,7 @@ abstract class Model
 		return $values ? $values : '1';
 	}
 
-	public function getSetValues($table, $data, $primary_key = false)
+	public function getInsertString($table, $data, $primary_key = false)
 	{
 		$data = $this->getEscapedValues($table, $data, $primary_key);
 
@@ -318,7 +318,7 @@ abstract class Model
 			$values .= ($values ? ',' : '') . "`$key` = '$value'";
 		}
 
-		return $values ? $values : '1';
+		return $values;
 	}
 
 	public function getEscapedValues($table, $data, $auto_inc = true)
