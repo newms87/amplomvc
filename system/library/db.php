@@ -1,5 +1,5 @@
 <?php
-class DB
+class DB extends Library
 {
 	private $driver;
 
