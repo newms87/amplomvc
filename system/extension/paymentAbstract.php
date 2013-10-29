@@ -1,6 +1,11 @@
 <?php
 abstract class Payment extends Extension
 {
+	public function getErrors()
+	{
+		return $this->error;
+	}
+
 	public function renderTemplate()
 	{
 		$this->template->load('payment/payment');
