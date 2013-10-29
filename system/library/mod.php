@@ -638,9 +638,9 @@ class Mod extends Library
 			$source_filemtime = filemtime($source);
 
 			foreach ($mods as $destination => $mod_files) {
-				$destination_filemtime = filemtime($destination);
+				$destination_filemtime = is_file($destination) ? filemtime($destination) : 0;
 
-				if (!is_file($destination) || ($destination_filemtime < $source_filemtime)) {
+				if ($destination_filemtime < $source_filemtime) {
 					$this->invalid[$destination] = true;
 				}
 
