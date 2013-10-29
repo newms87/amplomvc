@@ -4,8 +4,6 @@ class Mod extends Library
 	private $mod_registry;
 	private $live_registry;
 
-	private $error = array();
-
 	function __construct($registry)
 	{
 		parent::__construct($registry);

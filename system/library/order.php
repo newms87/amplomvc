@@ -1,8 +1,6 @@
 <?php
 class Order Extends Library
 {
-	private $error = array();
-
 	public function __construct($registry)
 	{
 		parent::__construct($registry);

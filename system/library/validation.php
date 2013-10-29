@@ -1,8 +1,6 @@
 <?php
 class Validation extends Library
 {
-	private $error = array();
-
 	private $encoding;
 
 	function __construct($registry)
@@ -15,11 +13,6 @@ class Validation extends Library
 	public function set_encoding($encoding)
 	{
 		$this->encoding = $encoding;
-	}
-
-	public function get_errors()
-	{
-		return $this->error;
 	}
 
 	public function fetch_error()

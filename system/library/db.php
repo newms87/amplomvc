@@ -2,7 +2,6 @@
 class DB
 {
 	private $driver;
-	private $error;
 
 	public function __construct($driver, $hostname, $username, $password, $database)
 	{

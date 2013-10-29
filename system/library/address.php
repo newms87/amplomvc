@@ -1,13 +1,6 @@
 <?php
 class Address extends Library
 {
-	private $error = array();
-
-	public function getError()
-	{
-		return $this->error;
-	}
-
 	public function add($address)
 	{
 		if (!isset($address['customer_id']) && $this->customer->isLogged()) {

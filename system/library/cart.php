@@ -3,7 +3,6 @@ class Cart extends Library
 {
 	private $data = array();
 	private $totals = null;
-	private $error = array();
 	private $error_code = null;
 
 	public function __construct($registry)
@@ -32,6 +31,7 @@ class Cart extends Library
 		return $this->error_code;
 	}
 
+	//TODO: This function exists in the Library abstract class. Use that maybe?
 	public function get_errors($type = null, $pop = false, $name_format = false)
 	{
 		//Get Specific Error

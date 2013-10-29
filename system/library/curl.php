@@ -1,13 +1,7 @@
 <?php
 class Curl extends Library
 {
-	private $error;
 	private $response;
-
-	public function getError()
-	{
-		return $this->error;
-	}
 
 	public function getResponse()
 	{

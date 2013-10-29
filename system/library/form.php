@@ -14,8 +14,6 @@ class Form extends Library
 	private $template_file;
 	private $data = array();
 
-	private $error;
-
 	public function init($form)
 	{
 		$this->name          = $form;

@@ -25,4 +25,9 @@ abstract class Library
 
 		return $this->language->get($key);
 	}
+
+	public function getError()
+	{
+		return $this->error;
+	}
 }
