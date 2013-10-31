@@ -2,6 +2,8 @@
 // Configuration
 if (is_file('ac_config.php')) {
 	require_once('ac_config.php');
+} else {
+	define('SITE_DIR', str_replace('\\','/',dirname(__FILE__) . '/'));
 }
 
 //System / URL Paths
