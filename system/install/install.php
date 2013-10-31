@@ -100,6 +100,7 @@ function setup_db($_) {
 	define("DB_PREFIX", $_POST['db_prefix']);
 
 	require_once(DIR_DATABASE . "database.php");
+	require_once(SITE_DIR . "system/engine/library.php");
 	require_once(SITE_DIR . "system/library/db.php");
 
 	$db = @new DB($_POST['db_type'], $_POST['db_host'], $_POST['db_username'], $_POST['db_password'], $_POST['db_name']);

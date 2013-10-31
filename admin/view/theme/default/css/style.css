@@ -774,7 +774,8 @@ a.action-install, a.action-install:visited {
 	border-bottom: 1px solid #DDDDDD;
 }
 
-.list > thead > tr > td {
+.list > thead > tr > td,
+.list > thead > tr > th{
 	background-color: #FDE2C6;
 	padding: 10px 10px;
 }
