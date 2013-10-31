@@ -13,6 +13,7 @@ $language = (!empty($_GET['language']) && is_file($_GET['language'] . '.php')) ?
 $_ = array();
 
 require_once($language . '.php');
+require_once(DIR_SYSTEM . 'functions.php');
 
 extract($_);
 
