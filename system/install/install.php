@@ -5,7 +5,7 @@ if (!defined("AMPLOCART_INSTALL")) {
 	exit;
 }
 
-define("SITE_DIR", str_replace('system/install','', rtrim(str_replace('\\','/',dirname(__FILE__)), '/')));
+define("SITE_DIR", str_replace('system/install', '', rtrim(str_replace('\\', '/', dirname(__FILE__)), '/')));
 define("DIR_DATABASE", SITE_DIR . 'system/database/');
 
 $language = (!empty($_GET['language']) && is_file($_GET['language'] . '.php')) ? $_GET['language'] : 'english';
@@ -16,8 +16,8 @@ require_once($language . '.php');
 
 extract($_);
 
-$template = !empty($_GET['page']) ? $_GET['page'] : 'db';
-$error_msg = '';
+$template    = !empty($_GET['page']) ? $_GET['page'] : 'db';
+$error_msg   = '';
 $success_msg = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
 
 			if ($result === true) {
 				$success_msg = $_['success_db'];
-				$template = 'user';
+				$template    = 'user';
 			} else {
 				$error_msg = $result;
 			}
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
 
 		case 'user_setup':
 			$template = 'user';
-			$result = setup_user($_);
+			$result   = setup_user($_);
 
 			if ($result === true) {
 				$success_msg = $_['success_user'];
@@ -51,21 +51,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['action'])) {
 switch ($template) {
 	case 'db':
 		$defaults = array(
-			'db_type' => 'mysqlidb',
-			'db_host' => '',
-			'db_name' => '',
+			'db_type'     => 'mysqlidb',
+			'db_host'     => '',
+			'db_name'     => '',
 			'db_username' => '',
 			'db_password' => '',
-			'db_prefix' => 'ac_',
+			'db_prefix'   => 'ac_',
 		);
 		break;
 
 	case 'user':
 		$defaults = array(
-			'username'	=> '',
-			'email'		=> '',
-			'password'	=> '',
-			'confirm'	=> '',
+			'username' => '',
+			'email'    => '',
+			'password' => '',
+			'confirm'  => '',
 		);
 		break;
 
@@ -86,17 +86,18 @@ foreach ($defaults as $key => $default) {
 $logo = "image/data/ac_logo.png";
 
 $db_types = array(
-	'mysqlidb'	=> "MySQL",
-	'mmsql'		=> "MMSQL",
-	'odbc'		=> "ODBC",
-	'postgre'	=> "Postgre",
-	'sqlite'		=> "SQLite",
+	'mysqlidb' => "MySQL",
+	'mmsql'    => "MMSQL",
+	'odbc'     => "ODBC",
+	'postgre'  => "Postgre",
+	'sqlite'   => "SQLite",
 );
 
 require_once("system/install/install_{$template}.tpl");
 
 
-function setup_db($_) {
+function setup_db($_)
+{
 	define("DB_PREFIX", $_POST['db_prefix']);
 
 	require_once(DIR_DATABASE . "database.php");
@@ -124,30 +125,17 @@ function setup_db($_) {
 	}
 
 	$config_template = SITE_DIR . 'system/install/config_template.php';
-	$ac_config = SITE_DIR . 'ac_config.php';
+	$ac_config       = SITE_DIR . 'ac_config.php';
 
 	$contents = file_get_contents($config_template);
-
-	$patterns = array(
-		"/%site_url%/",
-		'/%site_ssl%/',
-		'/%db_type%/',
-		'/%db_name%/',
-		'/%db_host%/',
-		'/%db_username%/',
-		'/%db_password%/',
-		'/%db_prefix%/',
-		'/%time_zone_name%/',
-		'/%time_zone%/',
-	);
 
 	$url = $_SERVER["SERVER_NAME"];
 
 	if ($_SERVER["SERVER_PORT"] !== "80") {
-		$url .= ":".$_SERVER["SERVER_PORT"];
+		$url .= ":" . $_SERVER["SERVER_PORT"];
 	}
 
-	if (strpos($_SERVER['REQUEST_URI'],'index.php')) {
+	if (strpos($_SERVER['REQUEST_URI'], 'index.php')) {
 		$uri = dirname($_SERVER["REQUEST_URI"]);
 	} else {
 		$uri = $_SERVER['REQUEST_URI'];
@@ -155,20 +143,21 @@ function setup_db($_) {
 
 	$url .= rtrim($uri, '/') . '/';
 
-	$replacements = array(
-		'http://' . $url,
-		'https://' . $url,
-		$_POST['db_type'],
-		$_POST['db_name'],
-		$_POST['db_host'],
-		$_POST['db_username'],
-		$_POST['db_password'],
-		$_POST['db_prefix'],
-		"America/New_York",
-		"-4:00",
+	$patterns = array(
+		"/%site_url%/"       => 'http://' . $url,
+		'/%site_ssl%/'       => 'https://' . $url,
+		'/%db_type%/'        => $_POST['db_type'],
+		'/%db_name%/'        => $_POST['db_name'],
+		'/%db_host%/'        => $_POST['db_host'],
+		'/%db_username%/'    => $_POST['db_username'],
+		'/%db_password%/'    => $_POST['db_password'],
+		'/%db_prefix%/'      => $_POST['db_prefix'],
+		'/%time_zone_name%/' => "America/New_York",
+		'/%time_zone%/'      => "-4:00",
+		'/%password_cost%/'  => getCostBenchmark(),
 	);
 
-	$contents = preg_replace($patterns, $replacements, $contents);
+	$contents = preg_replace(array_keys($patterns), array_values($patterns), $contents);
 
 	//Allows for user installation (will be removed after user installation
 	$contents .= "\r\n\r\ndefine(\"AMPLOCART_INSTALL_USER\", 1);";
@@ -177,7 +166,7 @@ function setup_db($_) {
 
 	//Setup .htaccess file
 	$htaccess_template = SITE_DIR . 'system/install/template.htaccess';
-	$htaccess = SITE_DIR . '.htaccess';
+	$htaccess          = SITE_DIR . '.htaccess';
 
 	$contents = file_get_contents($htaccess_template);
 
@@ -188,21 +177,26 @@ function setup_db($_) {
 	return true;
 }
 
-function setup_user($_) {
+function setup_user($_)
+{
 	if ($_POST['password'] !== $_POST['confirm']) {
 		$_POST['password'] = $_POST['confirm'] = '';
 
 		return $_['error_password_confirm'];
 	}
+
+	global $password_salt;
+
 	require_once("ac_config.php");
+	require_once(SITE_DIR . "system/engine/library.php");
 	require_once(SITE_DIR . "system/library/db.php");
 
 	$db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 
-	$username = $db->escape($_POST['username']);
-	$email = $db->escape($_POST['email']);
-	$password = $db->escape(md5($_POST['password']));
-	$ip = $_SERVER['REMOTE_ADDR'];
+	$username   = $db->escape($_POST['username']);
+	$email      = $db->escape($_POST['email']);
+	$password   = $db->escape(password_hash($_POST['password'], PASSWORD_DEFAULT));
+	$ip         = $_SERVER['REMOTE_ADDR'];
 	$date_added = date('Y-m-d H:i:s', time());
 
 	$db->query("DELETE FROM " . DB_PREFIX . "user WHERE email = '$email' OR username = '$username'");
@@ -233,6 +227,21 @@ function setup_user($_) {
 	);
 
 	header("Location: " . SITE_URL . 'admin');
+}
+
+function getCostBenchmark()
+{
+	$timeTarget = 0.2;
+	$cost       = 9;
+
+	do {
+		$cost++;
+		$start = microtime(true);
+		password_hash("test", PASSWORD_DEFAULT, ["cost" => $cost]);
+		$end = microtime(true);
+	} while (($end - $start) < $timeTarget);
+
+	return $cost;
 }
 
 exit;

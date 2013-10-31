@@ -76,13 +76,12 @@ class Customer extends Library
 		return (int)$this->config->get('config_customer_group_id');
 	}
 
+	//TODO: Should get rid of override for users. This is a security flaw
 	public function login($email, $password, $override = false)
 	{
 		$where = "LOWER(email) = '" . $this->db->escape(strtolower($email)) . "' AND status = '1'";
 
 		if (!$override) {
-			$where .= " AND password = '" . $this->customer->encrypt($password) . "'";
-
 			if ($this->config->get('config_customer_approval')) {
 				$where .= " AND approved = '1'";
 			}
@@ -91,6 +90,12 @@ class Customer extends Library
 		$customer = $this->db->queryRow("SELECT * FROM " . DB_PREFIX . "customer WHERE $where LIMIT 1");
 
 		if ($customer) {
+			if (!$override) {
+				if (!password_verify($password, $customer['password'])) {
+					return false;
+				}
+			}
+
 			$this->setCustomer($customer);
 
 			if (!empty($customer['cart'])) {
@@ -278,7 +283,7 @@ class Customer extends Library
 
 	public function encrypt($password)
 	{
-		return md5($password);
+		return password_hash($password, PASSWORD_DEFAULT, array('cost' => PASSWORD_COST));
 	}
 
 	private function setCustomer($customer)

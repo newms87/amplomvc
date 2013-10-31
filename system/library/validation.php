@@ -124,14 +124,13 @@ class Validation extends Library
 
 	public function password($password)
 	{
-		if (strlen($password) < 4 || strlen($password) > 20) {
+		if (strlen($password) < 8) {
 			$this->error['password'] = true;
 			return false;
 		}
 
 		return true;
 	}
-
 
 	public function datetime($date, $format = null)
 	{

@@ -3,58 +3,46 @@ class Catalog_Controller_Account_Forgotten extends Controller
 {
 	public function index()
 	{
-		$this->template->load('account/forgotten');
-
+		//Customer already logged in.
 		if ($this->customer->isLogged()) {
 			$this->url->redirect($this->url->link('account/account'));
 		}
 
-		$this->language->load('account/forgotten');
-
+		//Page Head
 		$this->document->setTitle($this->_('head_title'));
 
+		//Handle POST
 		if ($this->request->isPost() && $this->validate()) {
-			$this->language->load('mail/forgotten');
-
-			$password = substr(md5(rand()), 0, 7);
+			$password = substr(md5(rand()), 0, 10);
 
 			$customer_id = $this->customer->emailRegistered($_POST['email']);
 			$this->customer->editPassword($customer_id, $password);
 
-			$subject = sprintf($this->_('text_subject'), $this->config->get('config_name'));
+			$data = array(
+				'email' => $_POST['email'],
+				'password' => $password,
+			);
 
-			$message = sprintf($this->_('text_greeting'), $this->config->get('config_name')) . "\n\n";
-			$message .= $this->_('text_password') . "\n\n";
-			$message .= $password;
+			$this->mail->callController('forgotten', $data);
 
-			$this->mail->init();
-
-			$this->mail->setTo($_POST['email']);
-			$this->mail->setFrom($this->config->get('config_email'));
-			$this->mail->setSender($this->config->get('config_name'));
-			$this->mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
-			$this->mail->setText(html_entity_decode($message, ENT_QUOTES, 'UTF-8'));
-			$this->mail->send();
-
-			$this->message->add('success', $this->_('text_success'));
+			$this->message->add('success', _l('Your password has been reset! Your new password has been sent to your email. Please change your password as soon as you log into your account!'));
 
 			$this->url->redirect($this->url->link('account/login'));
 		}
 
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('text_account'), $this->url->link('account/account'));
-		$this->breadcrumb->add($this->_('text_forgotten'), $this->url->link('account/forgotten'));
+		//Breadcrumbs
+		$this->breadcrumb->add(_l('Home'), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l('Account'), $this->url->link('account/account'));
+		$this->breadcrumb->add(_l('Forgotten Password'), $this->url->link('account/forgotten'));
 
-		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
-		} else {
-			$this->data['error_warning'] = '';
-		}
-
-		$this->data['action'] = $this->url->link('account/forgotten');
-
+		//Action Buttons
+		$this->data['save'] = $this->url->link('account/forgotten');
 		$this->data['back'] = $this->url->link('account/login');
 
+		//The Template
+		$this->template->load('account/forgotten');
+
+		//Dependencies
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
@@ -64,15 +52,16 @@ class Catalog_Controller_Account_Forgotten extends Controller
 			'common/header'
 		);
 
+		//Render
 		$this->response->setOutput($this->render());
 	}
 
 	private function validate()
 	{
-		if (!isset($_POST['email'])) {
-			$this->error['warning'] = $this->_('error_email');
+		if (!$this->validation->email($_POST['email'])) {
+			$this->error['email'] = _l('Please enter a valid email address.');
 		} elseif (!$this->customer->emailRegistered($_POST['email'])) {
-			$this->error['warning'] = $this->_('error_email');
+			$this->error['email'] = _l('That email address is not registered with us.');
 		}
 
 		return $this->error ? false : true;

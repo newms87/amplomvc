@@ -322,3 +322,8 @@ function _is_writable($dir, $mode = 0755) {
 function console($msg) {
 	echo "<script>console.log('$msg');</script>";
 }
+
+
+if (!defined('PASSWORD_DEFAULT')) {
+	require_once(DIR_RESOURCES . 'password_compat.php');
+}

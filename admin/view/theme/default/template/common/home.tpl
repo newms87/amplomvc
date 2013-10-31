@@ -1,6 +1,7 @@
 <?= $header; ?>
 	<div class="section">
 		<?= $this->breadcrumb->render(); ?>
+
 		<div class="box">
 			<div class="heading">
 				<h1><img src="<?= HTTP_THEME_IMAGE . 'home.png'; ?>" alt=""/> <?= $head_title; ?></h1>

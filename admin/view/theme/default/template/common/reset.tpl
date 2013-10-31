@@ -1,34 +1,37 @@
 <?= $header; ?>
-	<div class="section">
-		<?= $this->breadcrumb->render(); ?>
-		<div class="box">
-			<div class="heading">
-				<h1><img src="<?= HTTP_THEME_IMAGE . 'user.png'; ?>" alt=""/> <?= $head_title; ?></h1>
 
-				<div class="buttons"><a onclick="$('#reset').submit();" class="button"><?= $button_save; ?></a><a
-						href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a></div>
-			</div>
-			<div class="section">
-				<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="reset">
-					<p><?= $text_password; ?></p>
-					<table class="form">
-						<tr>
-							<td><?= $entry_password; ?></td>
-							<td><input type="text" autocomplete='off' name="password" value="<?= $password; ?>"/>
-								<? if ($error_password) { ?>
-									<span class="error"><?= $error_password; ?></span>
-								<? } ?></td>
-						</tr>
-						<tr>
-							<td><?= $entry_confirm; ?></td>
-							<td><input type="text" name="confirm" value="<?= $confirm; ?>"/>
-								<? if ($error_confirm) { ?>
-									<span class="error"><?= $error_confirm; ?></span>
-								<? } ?></td>
-						</tr>
-					</table>
-				</form>
+<div class="section clear">
+	<?= $this->breadcrumb->render(); ?>
+
+	<div class="box">
+		<div class="heading">
+			<h1><img src="<?= HTTP_THEME_IMAGE . 'user.png'; ?>" alt=""/> <?= _l("Reset Your Password"); ?></h1>
+
+			<div class="buttons">
+				<a href="<?= $cancel; ?>" class="button"><?= _l("Cancel"); ?></a>
 			</div>
 		</div>
+
+		<div class="section">
+			<form action="<?= $save; ?>" method="post" enctype="multipart/form-data" id="reset">
+				<h2><?= _l("Enter your new Password:"); ?></h2>
+				<table class="form">
+					<tr>
+						<td><?= _l("Password:"); ?></td>
+						<td><input type="password" autocomplete='off' name="password" value="<?= $password; ?>"/></td>
+					</tr>
+					<tr>
+						<td><?= _l("Password Confirmation:"); ?></td>
+						<td><input type="password" name="confirm" value="<?= $confirm; ?>"/></td>
+					</tr>
+				</table>
+
+				<input type="submit" class="button" value="<?= _l("Change Password"); ?>" />
+			</form>
+		</div>
 	</div>
+</div>
+
+<?= $this->builder->js('errors', $errors); ?>
+
 <?= $footer; ?>

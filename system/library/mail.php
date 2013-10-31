@@ -1,6 +1,8 @@
 <?php
 class Mail extends Library
 {
+	private $handle;
+
 	protected $to;
 	protected $cc;
 	protected $bcc;
@@ -40,6 +42,7 @@ class Mail extends Library
 
 	public function init()
 	{
+		$this->handle      = null;
 		$this->to          = null;
 		$this->cc          = null;
 		$this->bcc         = null;
@@ -201,6 +204,7 @@ class Mail extends Library
 		}
 
 		$errors = '';
+
 		if (!$this->to) {
 			$msg = 'E-Mail To required!';
 			$this->trigger_error($msg);
@@ -292,7 +296,7 @@ class Mail extends Library
 			if ($this->text) {
 				$message .= $this->text . $this->newline;
 			} else {
-				$message .= 'This is a HTML email and your email client software does not support HTML email!' . $this->newline;
+				$message .= _l('This is a HTML email and your email client software does not support HTML email!') . $this->newline;
 			}
 
 			$message .= '--' . $boundary . '_alt' . $this->newline;
@@ -304,11 +308,7 @@ class Mail extends Library
 
 		foreach ($this->attachments as $attachment) {
 			if (file_exists($attachment)) {
-				$handle = fopen($attachment, 'r');
-
-				$content = fread($handle, filesize($attachment));
-
-				fclose($handle);
+				$contents = file_get_contents($attachment);
 
 				$message .= '--' . $boundary . $this->newline;
 				$message .= 'Content-Type: application/octet-stream; name="' . basename($attachment) . '"' . $this->newline;
@@ -316,13 +316,15 @@ class Mail extends Library
 				$message .= 'Content-Disposition: attachment; filename="' . basename($attachment) . '"' . $this->newline;
 				$message .= 'Content-ID: <' . basename(urlencode($attachment)) . '>' . $this->newline;
 				$message .= 'X-Attachment-Id: ' . basename(urlencode($attachment)) . $this->newline . $this->newline;
-				$message .= chunk_split(base64_encode($content));
+				$message .= chunk_split(base64_encode($contents));
 			}
 		}
 
 		$message .= '--' . $boundary . '--' . $this->newline;
 
-		if ($this->protocol == 'mail') {
+		if ($this->protocol == 'smtp') {
+			$this->sendSmtp($header, $message);
+		} else {
 			ini_set('sendmail_from', $this->from);
 
 			if (!$this->parameter) {
@@ -332,260 +334,166 @@ class Mail extends Library
 			if (!mail($this->to, '=?UTF-8?B?' . base64_encode($this->subject) . '?=', $message, $header, $this->parameter)) {
 				$this->trigger_error("There was an error while sending the email message to: $this->to  -- from: $this->from");
 			}
-		} elseif ($this->protocol == 'smtp') {
-			$handle = fsockopen($this->hostname, $this->port, $errno, $errstr, $this->timeout);
-
-			if (!$handle) {
-				$this->trigger_error('' . $errstr . ' (' . $errno . ')');
-				return false;
-			}
-
-			if (substr(PHP_OS, 0, 3) != 'WIN') {
-				socket_set_timeout($handle, $this->timeout, 0);
-			}
-
-			while ($line = fgets($handle, 515)) {
-				if (substr($line, 3, 1) == ' ') {
-					break;
-				}
-			}
-
-			if (substr($this->hostname, 0, 3) == 'tls') {
-				fputs($handle, 'STARTTLS' . $this->crlf);
-
-				while ($line = fgets($handle, 515)) {
-					$reply .= $line;
-
-					if (substr($line, 3, 1) == ' ') {
-						break;
-					}
-				}
-
-				if (substr($reply, 0, 3) != 220) {
-					$this->trigger_error('STARTTLS not accepted from server!');
-					return false;
-				}
-			}
-
-			if (!empty($this->username) && !empty($this->password)) {
-				fputs($handle, 'EHLO ' . getenv('SERVER_NAME') . $this->crlf);
-
-				$reply = '';
-
-				while ($line = fgets($handle, 515)) {
-					$reply .= $line;
-
-					if (substr($line, 3, 1) == ' ') {
-						break;
-					}
-				}
-
-				if (substr($reply, 0, 3) != 250) {
-					$this->trigger_error('EHLO not accepted from server!');
-					return false;
-				}
-
-				fputs($handle, 'AUTH LOGIN' . $this->crlf);
-
-				$reply = '';
-
-				while ($line = fgets($handle, 515)) {
-					$reply .= $line;
-
-					if (substr($line, 3, 1) == ' ') {
-						break;
-					}
-				}
-
-				if (substr($reply, 0, 3) != 334) {
-					$this->trigger_error('AUTH LOGIN not accepted from server!');
-					return false;
-				}
-
-				fputs($handle, base64_encode($this->username) . $this->crlf);
-
-				$reply = '';
-
-				while ($line = fgets($handle, 515)) {
-					$reply .= $line;
-
-					if (substr($line, 3, 1) == ' ') {
-						break;
-					}
-				}
-
-				if (substr($reply, 0, 3) != 334) {
-					$this->trigger_error('Username not accepted from server!');
-					return false;
-				}
-
-				fputs($handle, base64_encode($this->password) . $this->crlf);
-
-				$reply = '';
-
-				while ($line = fgets($handle, 515)) {
-					$reply .= $line;
-
-					if (substr($line, 3, 1) == ' ') {
-						break;
-					}
-				}
-
-				if (substr($reply, 0, 3) != 235) {
-					$this->trigger_error('Password not accepted from server!');
-					return false;
-				}
-			} else {
-				fputs($handle, 'HELO ' . getenv('SERVER_NAME') . $this->crlf);
-
-				$reply = '';
-
-				while ($line = fgets($handle, 515)) {
-					$reply .= $line;
-
-					if (substr($line, 3, 1) == ' ') {
-						break;
-					}
-				}
-
-				if (substr($reply, 0, 3) != 250) {
-					$this->trigger_error('HELO not accepted from server!');
-					return false;
-				}
-			}
-
-			if ($this->verp) {
-				fputs($handle, 'MAIL FROM: <' . $this->from . '>XVERP' . $this->crlf);
-			} else {
-				fputs($handle, 'MAIL FROM: <' . $this->from . '>' . $this->crlf);
-			}
-
-			$reply = '';
-
-			while ($line = fgets($handle, 515)) {
-				$reply .= $line;
-
-				if (substr($line, 3, 1) == ' ') {
-					break;
-				}
-			}
-
-			if (substr($reply, 0, 3) != 250) {
-				$this->trigger_error('MAIL FROM not accepted from server!');
-				return false;
-			}
-
-			if (!is_array($this->to)) {
-				fputs($handle, 'RCPT TO: <' . $this->to . '>' . $this->crlf);
-
-				$reply = '';
-
-				while ($line = fgets($handle, 515)) {
-					$reply .= $line;
-
-					if (substr($line, 3, 1) == ' ') {
-						break;
-					}
-				}
-
-				if ((substr($reply, 0, 3) != 250) && (substr($reply, 0, 3) != 251)) {
-					$this->trigger_error('RCPT TO not accepted from server!');
-					return false;
-				}
-			} else {
-				foreach ($this->to as $recipient) {
-					fputs($handle, 'RCPT TO: <' . $recipient . '>' . $this->crlf);
-
-					$reply = '';
-
-					while ($line = fgets($handle, 515)) {
-						$reply .= $line;
-
-						if (substr($line, 3, 1) == ' ') {
-							break;
-						}
-					}
-
-					if ((substr($reply, 0, 3) != 250) && (substr($reply, 0, 3) != 251)) {
-						$this->trigger_error('RCPT TO not accepted from server!');
-						return false;
-					}
-				}
-			}
-
-			fputs($handle, 'DATA' . $this->crlf);
-
-			$reply = '';
-
-			while ($line = fgets($handle, 515)) {
-				$reply .= $line;
-
-				if (substr($line, 3, 1) == ' ') {
-					break;
-				}
-			}
-
-			if (substr($reply, 0, 3) != 354) {
-				$this->trigger_error('DATA not accepted from server!');
-				return false;
-			}
-
-			// According to rfc 821 we should not send more than 1000 including the CRLF
-			$message = str_replace("\r\n", "\n", $header . $message);
-			$message = str_replace("\r", "\n", $message);
-
-			$lines = explode("\n", $message);
-
-			foreach ($lines as $line) {
-				$results = str_split($line, 998);
-
-				foreach ($results as $result) {
-					if (substr(PHP_OS, 0, 3) != 'WIN') {
-						fputs($handle, $result . $this->crlf);
-					} else {
-						fputs($handle, str_replace("\n", "\r\n", $result) . $this->crlf);
-					}
-				}
-			}
-
-			fputs($handle, '.' . $this->crlf);
-
-			$reply = '';
-
-			while ($line = fgets($handle, 515)) {
-				$reply .= $line;
-
-				if (substr($line, 3, 1) == ' ') {
-					break;
-				}
-			}
-
-			if (substr($reply, 0, 3) != 250) {
-				$this->trigger_error('DATA not accepted from server!');
-				return false;
-			}
-
-			fputs($handle, 'QUIT' . $this->crlf);
-
-			$reply = '';
-
-			while ($line = fgets($handle, 515)) {
-				$reply .= $line;
-
-				if (substr($line, 3, 1) == ' ') {
-					break;
-				}
-			}
-
-			if (substr($reply, 0, 3) != 221) {
-				$this->trigger_error('QUIT not accepted from server!');
-				return false;
-			}
-
-			fclose($handle);
 		}
 
 		return true;
+	}
+
+	private function sendSmtp($header, $message)
+	{
+		$this->handle = fsockopen($this->hostname, $this->port, $errno, $errstr, $this->timeout);
+
+		if (!$this->handle) {
+			$this->trigger_error('' . $errstr . ' (' . $errno . ')');
+			return false;
+		}
+
+		stream_set_timeout($this->handle, $this->timeout, 0);
+
+		while ($line = fgets($this->handle, 515)) {
+			if (substr($line, 3, 1) === ' ') {
+				break;
+			}
+		}
+
+		if (substr($this->hostname, 0, 3) === 'tls') {
+			fputs($this->handle, 'STARTTLS' . $this->crlf);
+
+			if (!$this->checkReplyCode(220)) {
+				$this->trigger_error('STARTTLS not accepted from server!');
+				return false;
+			}
+		}
+
+		if (!empty($this->username) && !empty($this->password)) {
+			fputs($this->handle, 'EHLO ' . getenv('SERVER_NAME') . $this->crlf);
+
+			if (!$this->checkReplyCode(250)) {
+				$this->trigger_error('EHLO not accepted from server!');
+				return false;
+			}
+
+			fputs($this->handle, 'AUTH LOGIN' . $this->crlf);
+
+			if (!$this->checkReplyCode(334)) {
+				$this->trigger_error('AUTH LOGIN not accepted from server!');
+				return false;
+			}
+
+			fputs($this->handle, base64_encode($this->username) . $this->crlf);
+
+			if (!$this->checkReplyCode(334)) {
+				$this->trigger_error('Username not accepted from server!');
+				return false;
+			}
+
+			fputs($this->handle, base64_encode($this->password) . $this->crlf);
+
+			if (!$this->checkReplyCode(235)) {
+				$this->trigger_error('Password not accepted from server!');
+				return false;
+			}
+		} else {
+			fputs($this->handle, 'HELO ' . getenv('SERVER_NAME') . $this->crlf);
+
+			if (!$this->checkReplyCode(250)) {
+				$this->trigger_error('HELO not accepted from server!');
+				return false;
+			}
+		}
+
+		if ($this->verp) {
+			fputs($this->handle, 'MAIL FROM: <' . $this->from . '>XVERP' . $this->crlf);
+		} else {
+			fputs($this->handle, 'MAIL FROM: <' . $this->from . '>' . $this->crlf);
+		}
+
+		if (!$this->checkReplyCode(250)) {
+			$this->trigger_error('MAIL FROM not accepted from server!');
+			return false;
+		}
+
+		if (!is_array($this->to)) {
+			$this->to = array($this->to);
+		}
+
+		foreach ($this->to as $recipient) {
+			fputs($this->handle, 'RCPT TO: <' . $recipient . '>' . $this->crlf);
+
+			if (!$this->checkReplyCode(array(250,251))) {
+				$this->trigger_error('RCPT TO not accepted from server!');
+				return false;
+			}
+		}
+
+		fputs($this->handle, 'DATA' . $this->crlf);
+
+		if (!$this->checkReplyCode(354)) {
+			$this->trigger_error('DATA not accepted from server!');
+			return false;
+		}
+
+		// According to rfc 821 we should not send more than 1000 characters including the CRLF
+		$message = str_replace("\r\n", "\n", $header . $message);
+		$message = str_replace("\r", "\n", $message);
+
+		$lines = explode("\n", $message);
+
+		foreach ($lines as $line) {
+			$results = str_split($line, 998);
+
+			foreach ($results as $result) {
+				if (substr(PHP_OS, 0, 3) != 'WIN') {
+					fputs($this->handle, $result . $this->crlf);
+				} else {
+					fputs($this->handle, str_replace("\n", "\r\n", $result) . $this->crlf);
+				}
+			}
+		}
+
+		fputs($this->handle, '.' . $this->crlf);
+
+		if (!$this->checkReplyCode(250)) {
+			$this->trigger_error('DATA not accepted from server!');
+			return false;
+		}
+
+		fputs($this->handle, 'QUIT' . $this->crlf);
+
+		if (!$this->checkReplyCode(221)) {
+			$this->trigger_error('QUIT not accepted from server!');
+			return false;
+		}
+
+		fclose($this->handle);
+	}
+
+	private function getReply()
+	{
+		$reply = '';
+
+		while ($line = fgets($this->handle, 515)) {
+			$reply .= $line;
+
+			if (substr($line, 3, 1) == ' ') {
+				break;
+			}
+		}
+
+		return $reply;
+	}
+
+	private function checkReplyCode($codes)
+	{
+		$reply = $this->getReply();
+
+		$code = (int)substr($reply, 0, 3);
+
+		if (is_array($code)) {
+			return in_array($code, $codes);
+		}
+
+		return $codes === (int)$code;
 	}
 
 	private function trigger_error($msg)

@@ -1,8 +1,6 @@
 <?php
 class Admin_Controller_User_User extends Controller
 {
-
-
 	public function index()
 	{
 		$this->language->load('user/user');

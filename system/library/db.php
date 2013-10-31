@@ -416,7 +416,7 @@ class DB extends Library
 		if ($this->hasColumn($table, $column)) {
 			if (!$new_column) {
 				$new_column = $column;
-			} elseif ($this->hasColumn($table, $new_column)) {
+			} elseif ($column !== $new_column && $this->hasColumn($table, $new_column)) {
 				return false;
 			}
 

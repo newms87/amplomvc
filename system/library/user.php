@@ -55,9 +55,13 @@ class User extends Library
 	{
 		$username = $this->db->escape($username);
 
-		$user = $this->db->queryRow("SELECT * FROM `" . DB_PREFIX . "user` WHERE (username = '$username' OR email='$username') AND password = '" . $this->encrypt($password) . "' AND status = '1'");
+		$user = $this->db->queryRow("SELECT * FROM `" . DB_PREFIX . "user` WHERE (username = '$username' OR email='$username') AND status = '1'");
 
 		if ($user) {
+			if (!password_verify($password, $user['password'])) {
+				return false;
+			}
+
 			$this->loadUser($user);
 
 			$this->session->setToken();
@@ -88,6 +92,11 @@ class User extends Library
 		}
 
 		return false;
+	}
+
+	public function updatePassword($user_id, $password)
+	{
+		$this->Model_User_User->editPassword($user_id, $password);
 	}
 
 	public function canPreview($type)
@@ -148,6 +157,6 @@ class User extends Library
 
 	public function encrypt($password)
 	{
-		return md5($password);
+		return password_hash($password, PASSWORD_DEFAULT, array('cost' => PASSWORD_COST));
 	}
 }

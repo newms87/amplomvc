@@ -1,8 +1,6 @@
 <?php
 class Admin_Controller_Common_Forgotten extends Controller
 {
-
-
 	public function index()
 	{
 		$this->template->load('common/forgotten');
@@ -36,6 +34,7 @@ class Admin_Controller_Common_Forgotten extends Controller
 			$this->mail->setSender($this->config->get('config_name'));
 			$this->mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
 			$this->mail->setText(html_entity_decode($message, ENT_QUOTES, 'UTF-8'));
+
 			$this->mail->send();
 
 			$this->message->add('success', $this->_('text_success'));

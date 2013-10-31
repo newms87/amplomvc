@@ -1,4 +1,5 @@
 <?php
+//TODO: Move this to System/Model.
 class Admin_Model_User_User extends Model
 {
 	public function addUser($data)

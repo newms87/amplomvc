@@ -185,15 +185,6 @@ class Config extends Library
 	//TODO: Need to rethink this site config. At very least move store model into system directory.
 	public function run_site_config()
 	{
-		$admin_store = $this->site_config['admin_store'];
-
-		$admin_exists = $this->db->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "store WHERE store_id = " . (int)$admin_store['store_id'] . " AND `url` ='" . $this->db->escape($admin_store['url']) . "' AND `ssl` = '" . $this->db->escape($admin_store['ssl']) . "'");
-
-		if (!$admin_exists) {
-			$this->System_Model_Setting->deleteStore($admin_store['store_id']);
-			$this->System_Model_Setting->addStore($admin_store);
-		}
-
 		$default_exists = $this->db->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "store WHERE store_id > 0 LIMIT 1");
 
 		if (!$default_exists) {
