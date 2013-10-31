@@ -261,7 +261,7 @@ class Mail extends Library
 
 		$header .= 'MIME-Version: 1.0' . $this->crlf;
 
-		if ($this->protocol != 'mail') {
+		if ($this->protocol !== 'mail') {
 			$header .= 'To: ' . $this->to . $this->crlf;
 			$header .= 'Subject: ' . $this->subject . $this->crlf;
 		}
@@ -322,18 +322,24 @@ class Mail extends Library
 
 		$message .= '--' . $boundary . '--' . $this->newline;
 
-		if ($this->protocol == 'smtp') {
-			$this->sendSmtp($header, $message);
-		} else {
-			ini_set('sendmail_from', $this->from);
-
-			if (!$this->parameter) {
-				$this->parameter = null;
+		if ($this->protocol === 'smtp') {
+			if ($this->sendSmtp($header, $message)) {
+				return true;
 			}
+			//If sendSmtp Fails, we continue to attempt sending mail via the regular way.
+		}
 
-			if (!mail($this->to, '=?UTF-8?B?' . base64_encode($this->subject) . '?=', $message, $header, $this->parameter)) {
-				$this->trigger_error("There was an error while sending the email message to: $this->to  -- from: $this->from");
-			}
+		//Send via standard PHP
+		ini_set('sendmail_from', $this->from);
+
+		if (!$this->parameter) {
+			$this->parameter = null;
+		}
+
+		if (!mail($this->to, '=?UTF-8?B?' . base64_encode($this->subject) . '?=', $message, $header, $this->parameter)) {
+			$this->trigger_error("There was an error while sending the email message to: $this->to  -- from: $this->from");
+
+			return false;
 		}
 
 		return true;
