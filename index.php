@@ -4,6 +4,10 @@ if (is_file('ac_config.php')) {
 	require_once('ac_config.php');
 }
 
+//System / URL Paths
+require_once('path_config.php');
+require_once(DIR_SYSTEM . 'functions.php');
+
 // Install
 if (!defined('SITE_URL') || defined("AMPLOCART_INSTALL_USER")) {
 	define("AMPLOCART_INSTALL", true);
@@ -11,11 +15,6 @@ if (!defined('SITE_URL') || defined("AMPLOCART_INSTALL_USER")) {
 }
 
 $__start = microtime(true);
-
-//System / URL Paths
-require_once('path_config.php');
-
-require_once(DIR_SYSTEM . 'functions.php');
 
 /*  PRETTY LANGUAGE TESTING
 echo 'testing pretty language<br /><br />';

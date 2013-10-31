@@ -13,7 +13,6 @@ $language = (!empty($_GET['language']) && is_file($_GET['language'] . '.php')) ?
 $_ = array();
 
 require_once($language . '.php');
-require_once(SITE_DIR . 'system/functions.php');
 
 extract($_);
 
@@ -102,8 +101,8 @@ function setup_db($_)
 	define("DB_PREFIX", $_POST['db_prefix']);
 
 	require_once(DIR_DATABASE . "database.php");
-	require_once(SITE_DIR . "system/engine/library.php");
-	require_once(SITE_DIR . "system/library/db.php");
+	require_once(DIR_SYSTEM . "engine/library.php");
+	require_once(DIR_SYSTEM . "library/db.php");
 
 	$db = @new DB($_POST['db_type'], $_POST['db_host'], $_POST['db_username'], $_POST['db_password'], $_POST['db_name']);
 
@@ -115,7 +114,7 @@ function setup_db($_)
 
 	$db_prefix = DB_PREFIX;
 
-	$db_sql = SITE_DIR . 'system/install/db.sql';
+	$db_sql = DIR_SYSTEM . 'install/db.sql';
 
 	$contents = file_get_contents($db_sql);
 
@@ -125,7 +124,7 @@ function setup_db($_)
 		return $db->getError();
 	}
 
-	$config_template = SITE_DIR . 'system/install/config_template.php';
+	$config_template = DIR_SYSTEM . 'install/config_template.php';
 	$ac_config       = SITE_DIR . 'ac_config.php';
 
 	$contents = file_get_contents($config_template);
@@ -166,7 +165,7 @@ function setup_db($_)
 	file_put_contents($ac_config, $contents);
 
 	//Setup .htaccess file
-	$htaccess_template = SITE_DIR . 'system/install/template.htaccess';
+	$htaccess_template = DIR_SYSTEM . 'install/template.htaccess';
 	$htaccess          = SITE_DIR . '.htaccess';
 
 	$contents = file_get_contents($htaccess_template);
@@ -186,17 +185,15 @@ function setup_user($_)
 		return $_['error_password_confirm'];
 	}
 
-	global $password_salt;
-
 	require_once("ac_config.php");
-	require_once(SITE_DIR . "system/engine/library.php");
-	require_once(SITE_DIR . "system/library/db.php");
+	require_once(DIR_SYSTEM . "engine/library.php");
+	require_once(DIR_SYSTEM . "library/db.php");
 
 	$db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 
 	$username   = $db->escape($_POST['username']);
 	$email      = $db->escape($_POST['email']);
-	$password   = $db->escape(password_hash($_POST['password'], PASSWORD_DEFAULT));
+	$password   = $db->escape(password_hash($_POST['password'], PASSWORD_DEFAULT, array('cost' => PASSWORD_COST)));
 	$ip         = $_SERVER['REMOTE_ADDR'];
 	$date_added = date('Y-m-d H:i:s', time());
 
@@ -238,7 +235,7 @@ function getCostBenchmark()
 	do {
 		$cost++;
 		$start = microtime(true);
-		password_hash("test", PASSWORD_DEFAULT, ["cost" => $cost]);
+		password_hash("test", PASSWORD_DEFAULT, array("cost" => $cost));
 		$end = microtime(true);
 	} while (($end - $start) < $timeTarget);
 
