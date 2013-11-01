@@ -10,7 +10,7 @@
 				<a href="<?= $cancel; ?>" class="button"><?= $button_cancel; ?></a>
 			</div>
 		</div>
-		<div class="section">
+		<div class="section floatfix">
 
 			<div id="tabs" class="htabs">
 				<a href="#tab-content"><?= _l("Content"); ?></a>

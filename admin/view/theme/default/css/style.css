@@ -238,9 +238,8 @@ li ul.link_list li:hover {
 	background-color: black;
 }
 
-ul.top_menu > li:hover > a, ul.top_menu > li.hover > a {
+ul.top_menu > li.has_children:hover > a, ul.top_menu > li.has_children.hover > a {
 	padding-bottom: 25px !important;
-
 }
 
 li:hover > ul.link_list {

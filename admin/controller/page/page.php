@@ -283,11 +283,6 @@ class Admin_Controller_Page_Page extends Controller
 		$this->response->setOutput($this->render());
 	}
 
-	public function save()
-	{
-
-	}
-
 	public function create_layout()
 	{
 		if (!empty($_POST['name'])) {

@@ -84,9 +84,12 @@ class Admin_Model_Page_Page extends Model
 
 	public function getPage($page_id)
 	{
-		$result = $this->queryRow("SELECT * FROM " . DB_PREFIX . "page WHERE page_id = '" . (int)$page_id . "'");
+		$page = $this->queryRow("SELECT * FROM " . DB_PREFIX . "page WHERE page_id = '" . (int)$page_id . "'");
 
-		$result['alias'] = $this->url->getAlias('page/page', 'page_id=' . (int)$page_id);
+		$page['content'] = html_entity_decode($page['content']);
+		$page['css'] = html_entity_decode($page['css']);
+
+		$page['alias'] = $this->url->getAlias('page/page', 'page_id=' . (int)$page_id);
 
 		//Translations
 		$translate_fields = array(
@@ -96,9 +99,9 @@ class Admin_Model_Page_Page extends Model
 			'content',
 		);
 
-		$result['translations'] = $this->translation->getTranslations('page', $page_id, $translate_fields);
+		$page['translations'] = $this->translation->getTranslations('page', $page_id, $translate_fields);
 
-		return $result;
+		return $page;
 	}
 
 	public function getPages($data = array(), $select = null, $total = false)
@@ -151,6 +154,12 @@ class Admin_Model_Page_Page extends Model
 		if ($total) {
 			return $result->row['total'];
 		}
+
+		foreach ($result->rows as &$row) {
+			$row['content'] = html_entity_decode($row['content']);
+			$row['css'] = html_entity_decode($row['css']);
+		}
+		unset($row);
 
 		return $result->rows;
 	}

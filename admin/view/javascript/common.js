@@ -41,6 +41,10 @@ $(document).ready(function () {
 		}
 	});
 
+	$('.link_list.top_menu').mouseout(function() {
+		$(this).find('.hover').removeClass('hover');
+	});
+
 });
 
 function handle_response(response) {
