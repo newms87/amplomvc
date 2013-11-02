@@ -85,7 +85,7 @@ class Catalog_Controller_Block_Widget_Janrain extends Controller
 		if (empty($settings['api_key'])) {
 			trigger_error("Janrain API key was not set. You must set the API key before users can be authorized!");
 			$this->message->add('warning', "Janrain Engage has not been configured. Please log in using your username and password.");
-			$this->url->redirect($this->url->link('account/login'));
+			$this->url->redirect('account/login');
 		}
 
 		$application_domain = $settings['application_domain'];
@@ -123,7 +123,7 @@ class Catalog_Controller_Block_Widget_Janrain extends Controller
 			} else {
 				$this->error_log->write("Janrain Error ({$auth_info['err']['code']}): {$auth_info['err']['msg']}");
 				$this->message->add("warning", $this->_('error_janrain_auth', $this->config->get('config_email'), $this->config->get('config_email')));
-				$this->url->redirect($this->url->link('account/login'));
+				$this->url->redirect('account/login');
 			}
 		}
 

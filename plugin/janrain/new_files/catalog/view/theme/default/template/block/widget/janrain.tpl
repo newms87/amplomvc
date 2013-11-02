@@ -26,7 +26,7 @@
 	</div>
 <? } ?>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	window.janrain = {};
 	window.janrain.settings = {};
 
@@ -46,4 +46,4 @@
 	$(document).ready(function () {
 		$.getScript(src);
 	});
-//--></script>
+</script>
