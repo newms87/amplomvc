@@ -19,7 +19,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 				$this->message->add('success', $this->_('text_success'));
 			}
 
-			$this->url->redirect($this->url->link('catalog/manufacturer'));
+			$this->url->redirect('catalog/manufacturer');
 		}
 
 		$this->getForm();
@@ -36,7 +36,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
-				$this->url->redirect($this->url->link('catalog/manufacturer'));
+				$this->url->redirect('catalog/manufacturer');
 			}
 		}
 
@@ -52,7 +52,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
-				$this->url->redirect($this->url->link('catalog/manufacturer', $this->url->getQueryExclude('manufacturer_id')));
+				$this->url->redirect('catalog/manufacturer', $this->url->getQueryExclude('manufacturer_id'));
 			}
 		}
 
@@ -90,7 +90,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 			if (!$this->error && !$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('catalog/manufacturer', $this->url->getQueryExclude('action')));
+				$this->url->redirect('catalog/manufacturer', $this->url->getQueryExclude('action'));
 			}
 		}
 

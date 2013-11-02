@@ -23,7 +23,7 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 
 			$this->message->add('success', $this->_('text_success'));
 
-			$this->url->redirect($this->url->link('localisation/geo_zone'));
+			$this->url->redirect('localisation/geo_zone');
 		}
 
 		$this->getForm();
@@ -40,7 +40,7 @@ class Admin_Controller_Localisation_GeoZone extends Controller
 
 			$this->message->add('success', $this->_('text_success'));
 
-			$this->url->redirect($this->url->link('localisation/geo_zone'));
+			$this->url->redirect('localisation/geo_zone');
 		}
 
 		$this->getForm();

@@ -29,7 +29,7 @@
 	<?= $form_payment_address; ?>
 </div>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	$('[name=payment_address]').change(function () {
 		if ($('[name=payment_address]:checked').val() == 'existing') {
 			$('#payment_new').hide();
@@ -46,4 +46,4 @@
 			$('#payment_existing').hide();
 		}
 	}).trigger('change');
-//--></script>
+</script>

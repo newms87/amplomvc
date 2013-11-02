@@ -27,10 +27,10 @@
 	<? } ?>
 </div>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	$('#braintree_card_list').ac_radio().ac_slidelist({max_rows: 3, x_dir:-1, pad_y: -18});
 
 	$('.new_card, .register_card').click(function(){
 		return colorbox($(this));
 	});
-//--></script>
+</script>

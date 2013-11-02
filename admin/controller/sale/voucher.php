@@ -24,7 +24,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('sale/voucher'));
+				$this->url->redirect('sale/voucher');
 			}
 		}
 
@@ -41,7 +41,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('sale/voucher'));
+				$this->url->redirect('sale/voucher');
 			}
 		}
 
@@ -79,7 +79,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 			if (!$this->error && !$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('sale/voucher', $this->url->getQueryExclude('action')));
+				$this->url->redirect('sale/voucher', $this->url->getQueryExclude('action'));
 			}
 		}
 

@@ -19,8 +19,8 @@
 		</div>
 	</div>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	$('#extension_editor_textarea').codemirror({mode: 'php'});
-//--></script>
+</script>
 
 <?= $footer; ?>

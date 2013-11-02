@@ -114,5 +114,5 @@
 				return false;
 			}
 		});
-//--></script>
+</script>
 <?= $footer; ?>

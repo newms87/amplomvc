@@ -4,7 +4,6 @@
 	</div>
 </div>
 <script type="text/javascript">
-	//<!--
 	$('#button-confirm').bind('click', function () {
 		$.ajax({
 			type: 'GET',
@@ -14,4 +13,4 @@
 			}
 		});
 	});
-//--></script>
+</script>

@@ -18,7 +18,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('catalog/information'));
+				$this->url->redirect('catalog/information');
 			}
 		}
 
@@ -35,7 +35,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('catalog/information'));
+				$this->url->redirect('catalog/information');
 			}
 		}
 
@@ -52,7 +52,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('catalog/information', $this->url->getQueryExclude('information_id')));
+				$this->url->redirect('catalog/information', $this->url->getQueryExclude('information_id'));
 			}
 		}
 
@@ -69,7 +69,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('catalog/information', $this->url->getQueryExclude('information_id')));
+				$this->url->redirect('catalog/information', $this->url->getQueryExclude('information_id'));
 			}
 		}
 
@@ -107,7 +107,7 @@ class Admin_Controller_Catalog_Information extends Controller
 			if (!$this->error && !$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('catalog/information', $this->url->getQueryExclude('action')));
+				$this->url->redirect('catalog/information', $this->url->getQueryExclude('action'));
 			}
 		}
 

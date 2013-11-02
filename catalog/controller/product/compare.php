@@ -20,7 +20,7 @@ class Catalog_Controller_Product_Compare extends Controller
 
 			$this->message->add('success', $this->_('text_remove'));
 
-			$this->url->redirect($this->url->link('product/compare'));
+			$this->url->redirect('product/compare');
 		}
 
 		$this->document->setTitle($this->_('head_title'));

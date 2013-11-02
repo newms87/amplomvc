@@ -15,7 +15,7 @@ class Catalog_Controller_Product_Product extends Controller
 
 		//Redirect if requested product was not found
 		if (empty($product_info)) {
-			$this->url->redirect($this->url->link('error/not_found'));
+			$this->url->redirect('error/not_found');
 		}
 
 		$this->data = $product_info;

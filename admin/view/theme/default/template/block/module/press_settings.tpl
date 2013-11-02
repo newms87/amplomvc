@@ -70,7 +70,7 @@
 
 <?= $this->builder->js('ckeditor'); ?>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	var image_tmp = $('#press_list .press_image_list .template_row');
 	image_tmp.find('script').remove();
 	var image_template = image_tmp.html();
@@ -118,4 +118,4 @@
 
 		press_list.attr('count', press_id + 1);
 	});
-//--></script>
+</script>

@@ -4,7 +4,7 @@ class Admin_Controller_Common_Reset extends Controller
 	public function index()
 	{
 		if ($this->user->isLogged()) {
-			$this->url->redirect($this->url->link('common/home'));
+			$this->url->redirect('common/home');
 		}
 
 		$code = !empty($_GET['code']) ? $_GET['code'] : '';
@@ -13,7 +13,7 @@ class Admin_Controller_Common_Reset extends Controller
 
 		//User not found
 		if (!$user_info) {
-			$this->url->redirect($this->url->link('common/login'));
+			$this->url->redirect('common/login');
 		}
 
 		//Handle POST
@@ -22,7 +22,7 @@ class Admin_Controller_Common_Reset extends Controller
 
 			$this->message->add('success', _l('You have successfully updated your password!'));
 
-			$this->url->redirect($this->url->link('common/login'));
+			$this->url->redirect('common/login');
 		}
 
 		//Breadcrumbs

@@ -30,7 +30,7 @@ class Admin_Controller_Page_Page extends Controller
 				$this->message->add('success', $this->_('text_success_update'));
 
 				if (!$this->request->isAjax()) {
-					$this->url->redirect($this->url->link('page/page'));
+					$this->url->redirect('page/page');
 				}
 			}
 		}
@@ -55,7 +55,7 @@ class Admin_Controller_Page_Page extends Controller
 			}
 		}
 
-		$this->url->redirect($this->url->link('page/page'));
+		$this->url->redirect('page/page');
 	}
 
 	public function batch_update()
@@ -86,7 +86,7 @@ class Admin_Controller_Page_Page extends Controller
 			}
 		}
 
-		$this->url->redirect($this->url->link('page/page'));
+		$this->url->redirect('page/page');
 	}
 
 	private function getList()

@@ -8,7 +8,7 @@ class Catalog_Controller_Affiliate_Register extends Controller
 		$this->template->load('affiliate/register');
 
 		if ($this->affiliate->isLogged()) {
-			$this->url->redirect($this->url->link('affiliate/account'));
+			$this->url->redirect('affiliate/account');
 		}
 
 		$this->language->load('affiliate/register');
@@ -20,7 +20,7 @@ class Catalog_Controller_Affiliate_Register extends Controller
 
 			$this->affiliate->login($_POST['email'], $_POST['password']);
 
-			$this->url->redirect($this->url->link('affiliate/success'));
+			$this->url->redirect('affiliate/success');
 		}
 
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));

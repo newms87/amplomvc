@@ -102,7 +102,7 @@ class Catalog_Controller_Cart_Cart extends Controller
 		}
 
 		if (!$this->request->isAjax()) {
-			$this->url->redirect($this->url->link('cart/cart'));
+			$this->url->redirect('cart/cart');
 		}
 	}
 }

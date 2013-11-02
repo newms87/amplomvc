@@ -80,7 +80,7 @@
 	</div>
 </div>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	$('#option_value_list').ac_template('ov_list');
 
 	function add_option_value() {
@@ -91,7 +91,7 @@
 	$('#option_value_list').sortable({cursor: "move", stop: function () {
 		$('#option_value_list').update_index();
 	} });
-//--></script>
+</script>
 
 <?= $this->builder->js('errors', $errors); ?>
 

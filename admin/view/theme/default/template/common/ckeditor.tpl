@@ -128,7 +128,7 @@
 	<div id="column-left"></div>
 	<div id="column-right"></div>
 </div>
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 $(document).ready(function () {
 	alert("This has not been fully implemented! You will not be able to upload picture to the CKEDITOR this way for now...");
 	$('#column-left').tree({
@@ -617,6 +617,6 @@ $(document).ready(function () {
 		tree.refresh(tree.selected);
 	});
 });
-//--></script>
+</script>
 </body>
 </html>

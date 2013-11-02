@@ -23,7 +23,7 @@ class Admin_Controller_Setting_Update extends Controller
 			}
 
 			if (!$this->message->error_set()) {
-				$this->url->redirect($this->url->link('setting/update'));
+				$this->url->redirect('setting/update');
 			}
 		}
 

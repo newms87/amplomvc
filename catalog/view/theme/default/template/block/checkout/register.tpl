@@ -38,10 +38,10 @@
 
 <?= $this->builder->js('load_zones', "#register_address", '.country_select', '.zone_select'); ?>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	$('#button_register').click(function () {
 		validate_form($('#register_account form'));
 
 		return false;
 	});
-//--></script>
+</script>

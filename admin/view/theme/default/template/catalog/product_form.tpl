@@ -306,9 +306,9 @@
 													<div class="unused_option_value" data-row="<?= $uov_row; ?>" data-id="<?= $option_value['option_value_id']; ?>" onclick="add_option_value($(this));">
 														<span class="uov_label"><?= $option_value['value']; ?></span>
 														<img src="<?= HTTP_THEME_IMAGE . "add.png"; ?>"/>
-														<script type="text/javascript">//<!--
+														<script type="text/javascript">
 															$('#tab-option-<?= $row; ?> .unused_option_value[data-id=<?= $option_value['option_value_id']; ?>]').data('option_value', <?= json_encode($option_value); ?>);
-														//--></script>
+														</script>
 													</div>
 												<? } ?>
 											</div>
@@ -409,18 +409,18 @@
 													</td>
 													<td class="left">
 														<span onclick="remove_option_value($(this))" class="button"><?= $button_remove; ?></span>
-														<script type="text/javascript">//<!--
+														<script type="text/javascript">
 															$('#tab-option-<?= $row; ?> .product_option_value[data-row=<?= $pov_row; ?>]').data('option_value', <?= json_encode($product_option_value); ?>);
-														//--></script>
+														</script>
 													</td>
 												</tr>
 											<? } ?>
 										<? } ?>
 									</tbody>
 								</table>
-								<script type="text/javascript">//<!--
+								<script type="text/javascript">
 									$('#tab-option-<?= $row; ?>').data('option', <?= json_encode($product_option); ?>);
-								//--></script>
+								</script>
 							</div>
 						<? } ?>
 					</div>
@@ -641,7 +641,7 @@
 
 <?= $this->builder->js('ckeditor'); ?>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 var related_list = $('#product_related_list');
 related_list.ac_template('related_list', {unique: 'product_id'});
 
@@ -661,9 +661,9 @@ $('#related_autocomplete').autocomplete({
 		return false;
 	}
 });
-//--></script>
+</script>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 $('.product_option_value_list [type=radio]').change(function(){
 	//We need this check for AC_template validation (changes input type, originally always radio)
 	if ($(this).is('input[type=radio]')) {
@@ -701,9 +701,9 @@ function generate_model(context) {
 		});
 	}
 }
-//--></script>
+</script>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 $('[name=shipping]').change(function () {
 	if ($(this).is(':checked')) {
 		if ($(this).val() === '1') {
@@ -713,9 +713,9 @@ $('[name=shipping]').change(function () {
 		}
 	}
 }).change();
-//--></script>
+</script>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 var attribute_list = $('#product_attribute_list');
 attribute_list.ac_template('attribute_list', {unique: 'attribute_id'});
 
@@ -745,9 +745,9 @@ $('#product_attribute_autocomplete').autocomplete({
 attribute_list.sortable({cursor:'move', stop: function(){
 	attribute_list.update_index('.sort_order');
 }});
-//--></script>
+</script>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 var po_list = $('#product_option_list');
 //po_list.find('.product_option_value_restriction_list').ac_template('povr_list');
 po_list.find('.unused_option_value_list').ac_template('uov_list', {unique: 'option_value_id'});
@@ -905,9 +905,9 @@ function update_ov_entries_select() {
 		$(e).val(select);
 	});
 }
-//--></script>
+</script>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 $('#product_image_list').ac_template('image_list', {defaults: <?= json_encode($product_images['__ac_template__']); ?>});
 
 function add_product_image() {
@@ -920,28 +920,28 @@ function add_product_image() {
 $('#product_image_list').sortable({cursor: 'move', stop: function () {
 	$(this).update_index('.sort_order');
 } });
-//--></script>
+</script>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 $('#product_discount_list').ac_template('discount_list', {defaults: <?= json_encode($product_discounts['__ac_template__']); ?>});
 
 $('#add_product_discount').click(function () {
 	$.ac_template('discount_list', 'add');
 });
-//--></script>
+</script>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 $('#product_special_list').ac_template('special_list', {defaults: <?= json_encode($product_specials['__ac_template__']); ?>});
 
 $('#add_product_special').click(function () {
 	$.ac_template('special_list', 'add');
 });
-//--></script>
+</script>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 $('#tabs a').tabs();
 $('#option_tab_list > a').tabs();
-//--></script>
+</script>
 
 <?= $this->builder->js('translations', $translations); ?>
 <?= $this->builder->js('errors', $errors); ?>

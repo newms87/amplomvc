@@ -10,7 +10,7 @@
 	</div>
 </div>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	$(document).ready(function () {
 		$('.addthis_button_tumblr').append("<img src='<?= HTTPS_IMAGE . 'data/tumblr_pill.png'; ?>' />");
 		$.getScript("http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4febc0f66808d769",
@@ -36,4 +36,4 @@
 			setTimeout(show_social_media_sharing, 200);
 		}
 	}
-//--></script>
+</script>

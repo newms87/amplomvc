@@ -11,7 +11,7 @@ class Admin_Controller_Extension_Payment extends Controller
 			if (!$this->System_Extension_Payment->has($_GET['code'])) {
 				$this->message->add('warning', $this->_('error_unknown_extension', $_GET['code']));
 
-				$this->url->redirect($this->url->link('extension/payment'));
+				$this->url->redirect('extension/payment');
 			}
 
 			$this->getForm();
@@ -32,7 +32,7 @@ class Admin_Controller_Extension_Payment extends Controller
 				$this->message->add('success', $this->_('text_success_delete'));
 			}
 
-			$this->url->redirect($this->url->link('extension/payment', $this->url->getQueryExclude('name')));
+			$this->url->redirect('extension/payment', $this->url->getQueryExclude('name'));
 		}
 
 		$this->index();
@@ -166,7 +166,7 @@ class Admin_Controller_Extension_Payment extends Controller
 
 			$this->message->add('success', $this->_('text_settings_success', $code));
 
-			$this->url->redirect($this->url->link('extension/payment'));
+			$this->url->redirect('extension/payment');
 		}
 
 		$extension = $this->System_Extension_Payment->get($code);
@@ -244,7 +244,7 @@ class Admin_Controller_Extension_Payment extends Controller
 
 		if (!is_file($file)) {
 			$this->message->add('warning', $this->_('error_extension_file', $file));
-			$this->url->redirect($this->url->link('extension/payment'));
+			$this->url->redirect('extension/payment');
 		}
 
 		//Handle POST
@@ -255,7 +255,7 @@ class Admin_Controller_Extension_Payment extends Controller
 				$this->message->add('warning', $this->_('error_edit_fail', $file));
 			}
 
-			$this->url->redirect($this->url->link('extension/payment'));
+			$this->url->redirect('extension/payment');
 		}
 
 		//Load extension
@@ -347,7 +347,7 @@ class Admin_Controller_Extension_Payment extends Controller
 			$this->message->add('success', $this->_('text_install_success', $_GET['code']));
 		}
 
-		$this->url->redirect($this->url->link('extension/payment'));
+		$this->url->redirect('extension/payment');
 	}
 
 	public function uninstall()
@@ -359,6 +359,6 @@ class Admin_Controller_Extension_Payment extends Controller
 		}
 
 
-		$this->url->redirect($this->url->link('extension/payment'));
+		$this->url->redirect('extension/payment');
 	}
 }

@@ -38,14 +38,14 @@
 	<?= $this->builder->js('translations', $reason['translations'], "return_reasons[$key][%name%]"); ?>
 <? } ?>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		$('#return_reason_list').ac_template('rr_list', {defaults: <?= json_encode($return_reasons['__ac_template__']); ?>});
 		$('#add_reason').click(function () {
 			$.ac_template('rr_list', 'add')
 		});
 
 		$('#return_reason_list').sortable();
-//--></script>
+</script>
 
 <?= $this->builder->js('errors', $errors); ?>
 

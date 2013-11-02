@@ -16,7 +16,7 @@ class Admin_Controller_Module_DnCarousel extends Controller
 
 			$this->message->add('success', $this->_('text_success'));
 
-			$this->url->redirect($this->url->link('extension/module'));
+			$this->url->redirect('extension/module');
 		}
 
 		$this->language->set('button_add_module', $this->_('button_add_carousel'));

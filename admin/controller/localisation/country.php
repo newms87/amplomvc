@@ -37,7 +37,7 @@ class Admin_Controller_Localisation_Country extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('localisation/country', $url));
+			$this->url->redirect('localisation/country', $url);
 		}
 
 		$this->getForm();
@@ -68,7 +68,7 @@ class Admin_Controller_Localisation_Country extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('localisation/country', $url));
+			$this->url->redirect('localisation/country', $url);
 		}
 
 		$this->getForm();
@@ -101,7 +101,7 @@ class Admin_Controller_Localisation_Country extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('localisation/country', $url));
+			$this->url->redirect('localisation/country', $url);
 		}
 
 		$this->getList();

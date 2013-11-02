@@ -37,7 +37,7 @@ class Admin_Controller_Localisation_Currency extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('localisation/currency', $url));
+			$this->url->redirect('localisation/currency', $url);
 		}
 
 		$this->getForm();
@@ -68,7 +68,7 @@ class Admin_Controller_Localisation_Currency extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('localisation/currency', $url));
+			$this->url->redirect('localisation/currency', $url);
 		}
 
 		$this->getForm();
@@ -101,7 +101,7 @@ class Admin_Controller_Localisation_Currency extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('localisation/currency', $url));
+			$this->url->redirect('localisation/currency', $url);
 		}
 
 		$this->getList();

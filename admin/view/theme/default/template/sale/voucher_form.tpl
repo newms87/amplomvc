@@ -78,7 +78,7 @@
 	</div>
 
 <? if ($voucher_id) { ?>
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		$('#history .pagination a').live('click', function () {
 			$('#history').load(this.href);
 
@@ -96,12 +96,12 @@
 				}
 			});
 		}
-//--></script>
+</script>
 <? } ?>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		$('#tabs a').tabs();
-//--></script>
+</script>
 
 <?= $this->builder->js('errors', $errors); ?>
 

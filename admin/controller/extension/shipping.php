@@ -73,7 +73,7 @@ class Admin_Controller_Extension_Shipping extends Controller
 		if (!$this->user->hasPermission('modify', 'extension/shipping')) {
 			$this->session->data['error'] = $this->_('error_permission');
 
-			$this->url->redirect($this->url->link('extension/shipping'));
+			$this->url->redirect('extension/shipping');
 		} else {
 			$this->Model_Setting_Extension->install('shipping', $_GET['extension']);
 
@@ -89,7 +89,7 @@ class Admin_Controller_Extension_Shipping extends Controller
 				$class->install();
 			}
 
-			$this->url->redirect($this->url->link('extension/shipping'));
+			$this->url->redirect('extension/shipping');
 		}
 	}
 
@@ -98,7 +98,7 @@ class Admin_Controller_Extension_Shipping extends Controller
 		if (!$this->user->hasPermission('modify', 'extension/shipping')) {
 			$this->session->data['error'] = $this->_('error_permission');
 
-			$this->url->redirect($this->url->link('extension/shipping'));
+			$this->url->redirect('extension/shipping');
 		} else {
 			$this->Model_Setting_Extension->uninstall('shipping', $_GET['extension']);
 
@@ -113,7 +113,7 @@ class Admin_Controller_Extension_Shipping extends Controller
 				$class->uninstall();
 			}
 
-			$this->url->redirect($this->url->link('extension/shipping'));
+			$this->url->redirect('extension/shipping');
 		}
 	}
 }

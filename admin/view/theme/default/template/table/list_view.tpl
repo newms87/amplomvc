@@ -262,7 +262,7 @@
 </tbody>
 </table>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	$("#filter_list").keydown(function (e) {
 		if (e.keyCode == 13) {
 			return apply_filter();
@@ -341,4 +341,4 @@
 		$('#filter_list').find('[name]').val('');
 		return apply_filter();
 	}
-//--></script>
+</script>

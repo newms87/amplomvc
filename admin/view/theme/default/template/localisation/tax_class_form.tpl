@@ -114,5 +114,5 @@
 
 			tax_rule_row++;
 		}
-//--></script>
+</script>
 <?= $footer; ?>

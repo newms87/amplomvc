@@ -24,7 +24,7 @@ class Admin_Controller_Sale_Order extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('sale/order'));
+				$this->url->redirect('sale/order');
 			}
 		}
 
@@ -43,7 +43,7 @@ class Admin_Controller_Sale_Order extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('sale/order'));
+				$this->url->redirect('sale/order');
 			}
 		}
 
@@ -422,7 +422,7 @@ class Admin_Controller_Sale_Order extends Controller
 		//Order Not Found
 		if (!$order_info) {
 			$this->message->add("warning", $this->_('error_order_info_not_found'));
-			$this->url->redirect($this->url->link('sale/order'));
+			$this->url->redirect('sale/order');
 		}
 
 		//Template

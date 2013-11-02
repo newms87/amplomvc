@@ -80,7 +80,7 @@
 
 
 <? //We use javascript to hide for no script compatibility ?>
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	<? if(!empty($block_coupon)) {?>
 	$('#toggle_block_coupon').hide();
 	<? }?>
@@ -97,7 +97,7 @@
 	function handle_ajax_cart_load(action, data) {
 		load_block($('#cart_block_total'), 'block/cart/total');
 	}
-//--></script>
+</script>
 
 
 <?= $footer; ?>

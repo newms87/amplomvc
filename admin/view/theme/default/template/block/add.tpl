@@ -51,7 +51,7 @@
 	</div>
 </div>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	$('[name=has_template]').change(function () {
 		if ($(this).is(':checked')) {
 			$('#template_file_data').slideDown();
@@ -59,7 +59,7 @@
 			$('#template_file_data').hide();
 		}
 	}).change();
-//--></script>
+</script>
 
 <?= $this->builder->js('errors', $errors); ?>
 

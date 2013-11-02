@@ -51,7 +51,7 @@
 		</div>
 	</div>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		$('ol li').click(toggle_item).each(
 			function (i, e) {
 				if ($(e).next('ol').length || $(e).children('ol').length)
@@ -77,5 +77,5 @@
 			window.event.cancelBubble = true;
 			return false;
 		}
-//--></script>
+</script>
 <?= $footer; ?>

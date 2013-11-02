@@ -186,7 +186,7 @@ class Admin_Controller_Extension_Plugin extends Controller
 
 		if (!isset($_GET['name'])) {
 			$this->message->add('warning', $this->_('error_no_plugin'));
-			$this->url->redirect($this->url->link('extension/plugin'));
+			$this->url->redirect('extension/plugin');
 		}
 		$plugin_name = $_GET['name'];
 
@@ -222,7 +222,7 @@ class Admin_Controller_Extension_Plugin extends Controller
 
 		if (!isset($_GET['name'])) {
 			$this->message->add('warning', $this->_('error_no_plugin'));
-			$this->url->redirect($this->url->link('extension/plugin'));
+			$this->url->redirect('extension/plugin');
 		}
 
 		$this->document->setTitle($this->_('head_title'));
@@ -232,7 +232,7 @@ class Admin_Controller_Extension_Plugin extends Controller
 
 			$this->message->add('success', $this->_('text_success'));
 
-			$this->url->redirect($this->url->link('extension/plugin'));
+			$this->url->redirect('extension/plugin');
 		}
 
 		$this->getForm();
@@ -244,7 +244,7 @@ class Admin_Controller_Extension_Plugin extends Controller
 			$this->plugin->integrateChanges($_GET['name']);
 		}
 
-		$this->url->redirect($this->url->link('extension/plugin'));
+		$this->url->redirect('extension/plugin');
 	}
 
 	public function install()
@@ -253,7 +253,7 @@ class Admin_Controller_Extension_Plugin extends Controller
 			$this->plugin->install($_GET['name']);
 		}
 
-		$this->url->redirect($this->url->link('extension/plugin'));
+		$this->url->redirect('extension/plugin');
 	}
 
 	public function uninstall()
@@ -264,7 +264,7 @@ class Admin_Controller_Extension_Plugin extends Controller
 			$this->plugin->uninstall($_GET['name'], $keep_data);
 		}
 
-		$this->url->redirect($this->url->link('extension/plugin'));
+		$this->url->redirect('extension/plugin');
 	}
 
 	private function validateForm()

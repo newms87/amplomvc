@@ -13,7 +13,7 @@ class Admin_Controller_Common_Login extends Controller
 		if (isset($_POST['username']) && isset($_POST['password'])) {
 			$this->user->logout();
 		} elseif ($this->user->isLogged()) {
-			$this->url->redirect($this->url->link('common/home'));
+			$this->url->redirect('common/home');
 		}
 
 		//if user is not logged in and has provided valid login credentials
@@ -21,7 +21,7 @@ class Admin_Controller_Common_Login extends Controller
 			if (!empty($_GET['redirect'])) {
 				$this->url->redirect(urldecode($_GET['redirect']));
 			} else {
-				$this->url->redirect($this->url->link('common/home'));
+				$this->url->redirect('common/home');
 			}
 		}
 

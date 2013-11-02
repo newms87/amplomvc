@@ -97,7 +97,7 @@
 		</div>
 	</div>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		var list_template = $('#flat_rates').find('.template_row');
 		var flat_rate_template = list_template.html();
 		list_template.remove();
@@ -117,7 +117,7 @@
 
 			$('#flat_rates').append($('<table class="form rate" />').append(template));
 		});
-//--></script>
+</script>
 
 <?= $this->builder->js('errors', $errors); ?>
 <?= $footer; ?>

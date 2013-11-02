@@ -109,7 +109,7 @@ class Admin_Controller_Report_ProductViewed extends Controller
 
 		$this->message->add('success', $this->_('text_success'));
 
-		$this->url->redirect($this->url->link('report/product_viewed'));
+		$this->url->redirect('report/product_viewed');
 	}
 
 	private function get_url($filters = null)

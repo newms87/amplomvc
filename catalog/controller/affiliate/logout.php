@@ -8,7 +8,7 @@ class Catalog_Controller_Affiliate_Logout extends Controller
 		if ($this->affiliate->isLogged()) {
 			$this->affiliate->logout();
 
-			$this->url->redirect($this->url->link('affiliate/logout'));
+			$this->url->redirect('affiliate/logout');
 		}
 
 		$this->language->load('affiliate/logout');

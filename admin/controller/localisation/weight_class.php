@@ -37,7 +37,7 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('localisation/weight_class', $url));
+			$this->url->redirect('localisation/weight_class', $url);
 		}
 
 		$this->getForm();
@@ -68,7 +68,7 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('localisation/weight_class', $url));
+			$this->url->redirect('localisation/weight_class', $url);
 		}
 
 		$this->getForm();
@@ -101,7 +101,7 @@ class Admin_Controller_Localisation_WeightClass extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('localisation/weight_class', $url));
+			$this->url->redirect('localisation/weight_class', $url);
 		}
 
 		$this->getList();

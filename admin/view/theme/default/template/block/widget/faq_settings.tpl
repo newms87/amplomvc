@@ -44,7 +44,7 @@
 	</tr>
 </table>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	template = $('.faq_item.template_row').removeClass('template_row');
 	var faq_template = template[0].outerHTML;
 	template.remove();
@@ -74,4 +74,4 @@
 
 		context.closest('li').before(template);
 	}
-//--></script>
+</script>

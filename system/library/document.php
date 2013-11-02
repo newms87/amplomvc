@@ -271,7 +271,7 @@ class Document extends Library
 					ob_start();
 					include($file);
 					$html .= ob_get_clean();
-					$html .= "\r\n//--></script>\r\n";
+					$html .= "\r\n</script>\r\n";
 				}
 			} else {
 				$html .= "<script type=\"text/javascript\" src=\"$script\"></script>\r\n";

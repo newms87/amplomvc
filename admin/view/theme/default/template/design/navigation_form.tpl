@@ -100,7 +100,7 @@
 	</div>
 <?= $footer; ?>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	$('#sorted_links').ac_template('link_list', {defaults: <?= json_encode($links['__ac_template__']); ?>});
 
 	function add_navigation_link() {
@@ -192,5 +192,5 @@
 	function update_display_name(context) {
 		context.closest('.link_info').find('.display_name').html(context.val())
 	}
-//--></script>
+</script>
 <?= $this->builder->js('errors', $errors); ?>

@@ -9,7 +9,7 @@
 		<?= $styles; ?>
 		<?= $scripts; ?>
 
-		<script type="text/javascript">//<!--
+		<script type="text/javascript">
 			if (Function('/*@cc_on return document.documentMode===10@*/')()) {
 				document.documentElement.className += ' IE10';
 			}
@@ -22,7 +22,7 @@
 			else if (Function('/*@cc_on return document.documentMode===7@*/')()) {
 				document.documentElement.className += ' IE7';
 			}
-			//--></script>
+			</script>
 
 		<!--[if IE 9]>
 		<link rel="stylesheet" type="text/css" href="<?= HTTP_THEME_STYLE . " ie9.css"; ?>" />
@@ -56,6 +56,6 @@
 	</body>
 </html>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	$('#container').draggable();
-//--></script>
+</script>

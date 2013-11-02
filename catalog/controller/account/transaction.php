@@ -8,7 +8,7 @@ class Catalog_Controller_Account_Transaction extends Controller
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/transaction');
 
-			$this->url->redirect($this->url->link('account/login'));
+			$this->url->redirect('account/login');
 		}
 
 		$this->language->load('account/transaction');

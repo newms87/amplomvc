@@ -33,11 +33,11 @@
 		<? } ?>
 	</form>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		$('#add_comment div').click(function () {
 			$('#add_comment textarea').slideToggle()
 		});
-//--></script>
+</script>
 
 <? } else { ?>
 	<h2><?= $error_no_payment_method; ?></h2>

@@ -37,10 +37,10 @@
 
 <?= $this->builder->js('autocomplete', $autocomplete_data); ?>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		function affiliate_autocomplete_callback(label, value) {
 			$('input[name=product]').attr('value', label);
 			$('textarea[name=link]').attr('value', value);
 		}
-//--></script>
+</script>
 <?= $footer; ?>

@@ -25,7 +25,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
-				$this->url->redirect($this->url->link('sale/voucher_theme'));
+				$this->url->redirect('sale/voucher_theme');
 			}
 		}
 
@@ -41,7 +41,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
-				$this->url->redirect($this->url->link('sale/voucher_theme'));
+				$this->url->redirect('sale/voucher_theme');
 			}
 		}
 

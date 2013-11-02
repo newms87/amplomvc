@@ -38,7 +38,7 @@
 	</li>
 </ul>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	var network_id = <?= $network_id+1; ?>;
 
 	function add_network(data) {
@@ -61,4 +61,4 @@
 	$('#form').on('saving', function () {
 		$('#network_template').remove();
 	});
-//--></script>
+</script>

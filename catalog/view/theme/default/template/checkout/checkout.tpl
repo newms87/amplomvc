@@ -21,7 +21,7 @@
 		<?= $content_bottom; ?>
 	</div>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 
 		$(document).ready(function () {
 			<? if($logged){ ?>
@@ -160,5 +160,5 @@
 				}
 			}
 		}
-//--></script>
+</script>
 <?= $footer; ?>

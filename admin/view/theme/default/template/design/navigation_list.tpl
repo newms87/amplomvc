@@ -22,9 +22,9 @@
 		</div>
 	</div>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		$('.actions a.reset').click(function () {
 			return confirm("<?= $text_admin_nav_reset; ?>");
 		});
-//--></script>
+</script>
 <?= $footer; ?>

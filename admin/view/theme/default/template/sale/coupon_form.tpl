@@ -127,7 +127,7 @@
 	</div>
 	<script type="text/javascript"><!--
 
-//--></script>
+</script>
 
 <?= $this->builder->js('datepicker'); ?>
 
@@ -140,11 +140,11 @@
 		});
 
 		$('#history').load("<?= $url_coupon_history; ?>" + '&coupon_id=<?= $coupon_id; ?>');
-//--></script>
+</script>
 <? } ?>
 	<script type="text/javascript"><!--
 		$('#tabs a').tabs();
-//--></script>
+</script>
 
 <?= $this->builder->js('errors', $errors); ?>
 <?= $footer; ?>

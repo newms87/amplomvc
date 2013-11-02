@@ -34,12 +34,12 @@
 		</div>
 	</div>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		$('#controller_override_list').ac_template('co_list', {defaults: <?= json_encode($controller_overrides['__ac_template__']); ?>});
 		$('#add_override').click(function () {
 			$.ac_template('co_list', 'add')
 		});
-//--></script>
+</script>
 
 <?= $this->builder->js('errors', $errors); ?>
 

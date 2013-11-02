@@ -24,7 +24,7 @@
 	</div>
 </div>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 <? foreach ($press_list as $row => $press) { ?>
 	<? $colorbox_group = 'press-item-' . $row; ?>
 	$('.<?= $colorbox_group; ?>').colorbox({
@@ -33,4 +33,4 @@
 		height: '80%'
 	});
 <? } ?>
-//--></script>
+</script>

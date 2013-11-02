@@ -95,7 +95,7 @@
 
 <?= $this->builder->js('ckeditor'); ?>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		$('a.edit_message').click(function () {
 			message = $(this).closest('.message_preview');
 
@@ -142,7 +142,7 @@
 				remove_ckeditor_for($('#mail_message'));
 			}
 		}).change();
-//--></script>
+</script>
 
 <?= $this->builder->js('errors', $errors); ?>
 

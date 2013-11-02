@@ -18,7 +18,7 @@
 	</div>
 </div>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 $('.action-uninstall').click(function(){
 	keep_data = 0;
 
@@ -28,6 +28,6 @@ $('.action-uninstall').click(function(){
 
 	$(this).attr('href', $(this).attr('href') + '&keep_data=' + keep_data);
 });
-//--></script>
+</script>
 
 <?= $footer; ?>

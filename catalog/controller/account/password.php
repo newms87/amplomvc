@@ -10,7 +10,7 @@ class Catalog_Controller_Account_Password extends Controller
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/password');
 
-			$this->url->redirect($this->url->link('account/login'));
+			$this->url->redirect('account/login');
 		}
 
 		$this->language->load('account/password');
@@ -22,7 +22,7 @@ class Catalog_Controller_Account_Password extends Controller
 
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
-				$this->url->redirect($this->url->link('account/account'));
+				$this->url->redirect('account/account');
 			}
 		}
 

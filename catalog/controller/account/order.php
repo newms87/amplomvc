@@ -11,7 +11,7 @@ class Catalog_Controller_Account_Order extends Controller
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/order');
 
-			$this->url->redirect($this->url->link('account/login'));
+			$this->url->redirect('account/login');
 		}
 
 		//Page Head
@@ -87,7 +87,7 @@ class Catalog_Controller_Account_Order extends Controller
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/order/info', 'order_id=' . $order_id);
 
-			$this->url->redirect($this->url->link('account/login'));
+			$this->url->redirect('account/login');
 		}
 
 		//Order Validation
@@ -96,7 +96,7 @@ class Catalog_Controller_Account_Order extends Controller
 		if (!$order) {
 			$this->message->add('warning', 'error_order_info');
 
-			$this->url->redirect($this->url->link('account/order'));
+			$this->url->redirect('account/order');
 		}
 
 		//Page Head
@@ -231,7 +231,7 @@ class Catalog_Controller_Account_Order extends Controller
 					$this->cart->add($order_product['product_id'], $order_product['quantity'], $option_data);
 				}
 
-				$this->url->redirect($this->url->link('cart/cart'));
+				$this->url->redirect('cart/cart');
 			}
 		}
 

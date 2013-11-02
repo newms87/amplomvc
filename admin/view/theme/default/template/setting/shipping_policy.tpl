@@ -39,14 +39,14 @@
 	<?= $this->builder->js('translations', $policy['translations'], "shipping_policies[$key][%name%]"); ?>
 <? } ?>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		$('#shipping_policy_list').ac_template('sp_list', {defaults: <?= json_encode($shipping_policies['__ac_template__']); ?>});
 		$('#add_policy').click(function () {
 			$.ac_template('sp_list', 'add')
 		});
 
 		$('#shipping_policy_list').sortable();
-//--></script>
+</script>
 
 <?= $this->builder->js('ckeditor'); ?>
 <?= $this->builder->js('errors', $errors); ?>

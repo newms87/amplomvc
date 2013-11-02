@@ -86,7 +86,7 @@
 		});
 		--></script>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		designer_list = <?= json_encode($designers); ?>;
 		function add_selected_designer() {
 			id = $('#designer_list').val();
@@ -103,8 +103,8 @@
 
 			$('#featured_list').append(html);
 		}
-//--></script>
-	<script type="text/javascript">//<!--
+</script>
+	<script type="text/javascript">
 		var module_row = <?= $module_row; ?>;
 
 		function addModule() {
@@ -124,9 +124,9 @@
 			$('#module tfoot').before(html.replace(/%modrow%/g, module_row));
 			module_row++;
 		}
-//--></script>
+</script>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		$('input[name=\'choose_product\']').autocomplete({
 			delay: 0,
 			source: function (request, response) {
@@ -149,5 +149,5 @@
 				return false;
 			}
 		});
-//--></script>
+</script>
 <?= $footer; ?>

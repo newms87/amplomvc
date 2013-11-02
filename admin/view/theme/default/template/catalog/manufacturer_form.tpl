@@ -81,7 +81,7 @@
 
 <?= $this->builder->js('ckeditor'); ?>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		$('.datetimepicker').ac_datepicker();
 
 		function generate_url_warning(field) {
@@ -100,11 +100,11 @@
 				$('input[name="keyword"]').val(json);
 			}, 'json');
 		}
-//--></script>
+</script>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		$('#tabs a').tabs();
-//--></script>
+</script>
 
 <?= $this->builder->js('errors', $errors); ?>
 <?= $this->builder->js('translations', $translations); ?>

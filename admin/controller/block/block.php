@@ -13,7 +13,7 @@ class Admin_Controller_Block_Block extends Controller
 			if (!$this->Model_Block_Block->isBlock($_GET['name'])) {
 				$this->message->add('warning', $this->_('error_unknown_block'));
 
-				$this->url->redirect($this->url->link('block/block'));
+				$this->url->redirect('block/block');
 			}
 
 			$this->getForm();
@@ -33,7 +33,7 @@ class Admin_Controller_Block_Block extends Controller
 				$this->message->add('success', $this->_('text_success_delete'));
 			}
 
-			$this->url->redirect($this->url->link('block/block', $this->url->getQueryExclude('name')));
+			$this->url->redirect('block/block', $this->url->getQueryExclude('name'));
 		}
 
 		$this->index();
@@ -145,7 +145,7 @@ class Admin_Controller_Block_Block extends Controller
 
 			$this->message->add('success', $this->_('text_success'));
 
-			$this->url->redirect($this->url->link('block/block'));
+			$this->url->redirect('block/block');
 		}
 
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));

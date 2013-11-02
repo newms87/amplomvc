@@ -8,7 +8,7 @@ class Catalog_Controller_Account_Wishlist extends Controller
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/wishlist');
 
-			$this->url->redirect($this->url->link('account/login'));
+			$this->url->redirect('account/login');
 		}
 
 		$this->language->load('account/wishlist');
@@ -26,7 +26,7 @@ class Catalog_Controller_Account_Wishlist extends Controller
 
 			$this->message->add('success', $this->_('text_remove'));
 
-			$this->url->redirect($this->url->link('account/wishlist'));
+			$this->url->redirect('account/wishlist');
 		}
 
 		$this->document->setTitle($this->_('head_title'));

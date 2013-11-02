@@ -236,7 +236,7 @@
 		});
 
 		$('input[name=\'payment\']:checked').trigger('change');
-//--></script>
+</script>
 	<script type="text/javascript"><!--
 		$('#transaction .pagination a').live('click', function () {
 			$('#transaction').load(this.href);
@@ -269,8 +269,8 @@
 				}
 			});
 		}
-//--></script>
+</script>
 	<script type="text/javascript"><!--
 		$('.htabs a').tabs();
-//--></script>
+</script>
 <?= $footer; ?>

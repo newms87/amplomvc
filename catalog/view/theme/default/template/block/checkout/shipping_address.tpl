@@ -39,7 +39,7 @@
 </div>
 
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 $('[name=shipping_address]').change(function () {
 	if ($('[name=shipping_address]:checked').val() == 'existing') {
 		$('#shipping_new').hide();
@@ -56,4 +56,4 @@ $('[name=shipping_address]').change(function () {
 		$('#shipping_existing').hide();
 	}
 }).trigger('change');
-//--></script>
+</script>

@@ -9,7 +9,7 @@ class Catalog_Controller_Newsletter_Newsletter extends Controller
 
 		if (!$newsletter_id) {
 			$this->message->add('warning', $this->_('error_newsletter_preview'));
-			$this->url->redirect($this->url->link('error/not_found'));
+			$this->url->redirect('error/not_found');
 			return;
 		}
 

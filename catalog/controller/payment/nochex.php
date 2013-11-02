@@ -75,7 +75,7 @@ class Catalog_Controller_Payment_Nochex extends Controller
 		if (isset($_GET['method']) && $_GET['method'] == 'decline') {
 			$this->session->data['error'] = $this->_('error_declined');
 
-			$this->url->redirect($this->url->link('cart/cart'));
+			$this->url->redirect('cart/cart');
 		}
 
 		if (isset($_POST['order_id'])) {
@@ -89,7 +89,7 @@ class Catalog_Controller_Payment_Nochex extends Controller
 		if (!$order_info) {
 			$this->session->data['error'] = $this->_('error_no_order');
 
-			$this->url->redirect($this->url->link('cart/cart'));
+			$this->url->redirect('cart/cart');
 		}
 
 		// Fraud Verification Step.
@@ -120,6 +120,6 @@ class Catalog_Controller_Payment_Nochex extends Controller
 
 		// Since it returned, the customer should see success.
 		// It's up to the store owner to manually verify payment.
-		$this->url->redirect($this->url->link('checkout/success'));
+		$this->url->redirect('checkout/success');
 	}
 }

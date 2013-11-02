@@ -16,7 +16,7 @@ class Admin_Controller_Module_FlashsaleSidebar extends Controller
 
 			$this->message->add('success', $this->_('text_success'));
 
-			$this->url->redirect($this->url->link('module/flashsale_sidebar'));
+			$this->url->redirect('module/flashsale_sidebar');
 		}
 
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));

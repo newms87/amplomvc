@@ -218,7 +218,7 @@
 	</div>
 
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		$(document).ready(function () {
 			$('.image-additional a img, .option_image a img').click(function () {
 				if ($(this).attr('src').replace(/-\d+x\d+/, '') == $('#the_zoombox .zoomPad > img').attr('src').replace(/-\d+x\d+/, '')) {
@@ -235,9 +235,9 @@
 				preloadText: '<?= $text_zoombox_load; ?>'
 			});
 		});
-//--></script>
+</script>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		//Check if Product description is overflowed
 		pd = $('.product_info .product_description')[0];
 		if (pd.scrollHeight > pd.clientHeight) {
@@ -324,10 +324,10 @@
 				}
 			});
 		});
-//--></script>
+</script>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		$('#product_additional_tabs a').tabs();
-//--></script>
+</script>
 
 <?= $footer; ?>

@@ -123,7 +123,7 @@
 	</div>
 </div>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	var block_template = $('#block_template')[0].outerHTML;
 	$('#block_template').remove();
 
@@ -238,7 +238,7 @@
 	$(document).ready(function(){
 		$('#preview_frame').attr('src',"<?= $page_preview; ?>");
 	});
-//--></script>
+</script>
 
 <?= $this->builder->js('translations', $translations); ?>
 

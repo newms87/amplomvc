@@ -212,7 +212,6 @@
 <?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select'); ?>
 
 	<script type="text/javascript">
-		//<!--
 		$('input[name=\'payment\']').bind('change', function () {
 			$('.payment').hide();
 
@@ -220,12 +219,11 @@
 		});
 
 		$('input[name=\'payment\']:checked').trigger('change');
-//--></script>
+</script>
 	<script type="text/javascript">
-		//<!--
 		$('.colorbox').colorbox({
 			width: 560,
 			height: 560
 		});
-//--></script>
+</script>
 <?= $footer; ?>

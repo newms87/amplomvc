@@ -47,7 +47,7 @@
 	</div>
 <? } ?>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	$('#review .pagination a')
 	click(function () {
 		$('#review').slideUp('slow');
@@ -92,4 +92,4 @@
 			}
 		});
 	});
-//--></script>
+</script>

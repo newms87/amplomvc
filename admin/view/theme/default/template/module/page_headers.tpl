@@ -73,7 +73,7 @@
 		</div>
 	</div>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		function add_layout_header(c) {
 			html = '<div class="layout_header">';
 			html += "	<?= $this->builder->build('select',$layouts, "page_headers[%modrow%][layouts][]"); ?>";
@@ -83,9 +83,9 @@
 			row = parseInt($(c).closest('tbody').attr('id').replace(/module-row/, ''));
 			$(c).before(html.replace('%modrow%', row));
 		}
-//--></script>
+</script>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		var module_row = <?= $max_header_id+1; ?>;
 		function addModule() {
 			html = '<tbody id="module-row%modrow%">';
@@ -116,12 +116,12 @@
 			$('#languages-' + module_row + ' a').tabs();
 			module_row++;
 		}
-//--></script>
-	<script type="text/javascript">//<!--
+</script>
+	<script type="text/javascript">
 		<? foreach ($headers as $hid=>$h) { ?>
 		$('#languages-<?= $hid; ?> a').tabs();
 		<? }?>
-//--></script>
+</script>
 <?= $this->builder->js('ckeditor'); ?>
 <?= $this->builder->js('errors'); ?>
 <?= $footer; ?>

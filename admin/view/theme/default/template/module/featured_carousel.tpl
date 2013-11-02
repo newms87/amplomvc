@@ -119,7 +119,7 @@
 		});
 		--></script>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		designer_list = <?= json_encode($data_designers); ?>;
 		function add_selected_designer() {
 			id = $('#designer_list').val();
@@ -152,9 +152,9 @@
 
 			list.append(html);
 		}
-//--></script>
+</script>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		var module_row = <?= $module_row; ?>;
 
 		function addModule() {
@@ -175,7 +175,7 @@
 			$('#module tfoot').before(html.replace(/%modrow%/g, module_row));
 			module_row++;
 		}
-//--></script>
+</script>
 
 <?= $this->builder->js('autocomplete', '.autocomplete', 'name', 'product_id', 'add_to_list'); ?>
 

@@ -104,7 +104,7 @@
 
 <?= $this->builder->js('ckeditor'); ?>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 function generate_url(context) {
 	$.clear_errors('gen_url');
 
@@ -124,7 +124,7 @@ function generate_url(context) {
 
 //Tabs
 $('#tabs a').tabs();
-//--></script>
+</script>
 
 <?= $this->builder->js('errors', $errors); ?>
 <?= $this->builder->js('translations', $translations); ?>

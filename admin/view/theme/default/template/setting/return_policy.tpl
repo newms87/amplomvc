@@ -45,7 +45,7 @@
 	<?= $this->builder->js('translations', $policy['translations'], "return_policies[$key][%name%]"); ?>
 <? } ?>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		$('[name=data_days]').change(function () {
 			days_input = $(this).closest('.return_days_box').find('input');
 			if ($(this).val() == 'final') {
@@ -68,7 +68,7 @@
 		});
 
 		$('#return_policy_list').sortable();
-//--></script>
+</script>
 
 <?= $this->builder->js('errors', $errors); ?>
 

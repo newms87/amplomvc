@@ -86,7 +86,7 @@
 	</table>
 </div>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	$('[name="settings[button_graphic]"]').change(function(){
 		$('#button_graphic_img').attr('src', $(this).val());
 	});
@@ -100,6 +100,6 @@
 			token_row.hide();
 		}
 	}).change();
-//--></script>
+</script>
 
 <?= $this->builder->js('errors', $errors); ?>

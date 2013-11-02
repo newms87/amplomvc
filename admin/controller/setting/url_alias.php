@@ -24,7 +24,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('setting/url_alias'));
+				$this->url->redirect('setting/url_alias');
 			}
 		}
 
@@ -41,7 +41,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('setting/url_alias'));
+				$this->url->redirect('setting/url_alias');
 			}
 		}
 
@@ -78,7 +78,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 			}
 		}
 
-		$this->url->redirect($this->url->link('setting/url_alias', $this->url->getQueryExclude('action', 'action_value')));
+		$this->url->redirect('setting/url_alias', $this->url->getQueryExclude('action', 'action_value'));
 	}
 
 	private function getList()

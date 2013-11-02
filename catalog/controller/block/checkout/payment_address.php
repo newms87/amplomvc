@@ -79,7 +79,7 @@ class Catalog_Controller_Block_Checkout_PaymentAddress extends Controller
 				}
 
 				//We redirect because we are only a block, not a full page!
-				$this->url->redirect($this->url->link('checkout/checkout'));
+				$this->url->redirect('checkout/checkout');
 			}
 		}
 

@@ -13,7 +13,7 @@ class Catalog_Controller_Payment_Confirm extends Controller
 					$extension->confirm();
 				} else {
 					$this->message->add('error', $this->_('error_method', $this->config->get('config_email'), $this->config->get('config_email')));
-					$this->url->redirect($this->url->link('checkout/checkout'));
+					$this->url->redirect('checkout/checkout');
 				}
 			} else {
 				$this->order->update($_GET['order_id'], $this->config->get('config_order_complete_status_id'));
@@ -22,9 +22,9 @@ class Catalog_Controller_Payment_Confirm extends Controller
 			$this->language->load('payment/payment');
 
 			$this->message->add('error', $this->_('error_confirm', $this->config->get('config_email'), $this->config->get('config_email')));
-			$this->url->redirect($this->url->link('checkout/checkout'));
+			$this->url->redirect('checkout/checkout');
 		}
 
-		$this->url->redirect($this->url->link('checkout/success'));
+		$this->url->redirect('checkout/success');
 	}
 }

@@ -28,7 +28,7 @@ class Admin_Controller_Setting_Store extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('setting/store'));
+				$this->url->redirect('setting/store');
 			}
 		}
 
@@ -49,7 +49,7 @@ class Admin_Controller_Setting_Store extends Controller
 			}
 		}
 
-		$this->url->redirect($this->url->link('setting/store'));
+		$this->url->redirect('setting/store');
 	}
 
 	private function getList()
@@ -189,7 +189,7 @@ class Admin_Controller_Setting_Store extends Controller
 
 			if (!$store) {
 				$this->message->add('warning', $this->_('error_store_invalid'));
-				$this->url->redirect($this->url->link('setting/store'));
+				$this->url->redirect('setting/store');
 			}
 
 			$store_config = $this->System_Model_Setting->getSetting('config', $store_id);

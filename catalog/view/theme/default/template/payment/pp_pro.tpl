@@ -59,7 +59,6 @@
 	</div>
 </div>
 <script type="text/javascript">
-	//<!--
 	$('#button-confirm').bind('click', function () {
 		$.ajax({
 			url: "<?= HTTP_CATALOG . "index.php?route=payment/pp_pro/send"; ?>",
@@ -86,4 +85,4 @@
 			}
 		});
 	});
-//--></script>
+</script>

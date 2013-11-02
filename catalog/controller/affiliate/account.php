@@ -8,7 +8,7 @@ class Catalog_Controller_Affiliate_Account extends Controller
 		if (!$this->affiliate->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('affiliate/account');
 
-			$this->url->redirect($this->url->link('affiliate/login'));
+			$this->url->redirect('affiliate/login');
 		}
 
 		$this->language->load('affiliate/account');

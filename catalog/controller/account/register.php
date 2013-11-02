@@ -6,7 +6,7 @@ class Catalog_Controller_Account_Register extends Controller
 		$this->template->load('account/register');
 
 		if ($this->customer->isLogged()) {
-			$this->url->redirect($this->url->link('account/account'));
+			$this->url->redirect('account/account');
 		}
 
 		$this->language->load('account/register');
@@ -18,7 +18,7 @@ class Catalog_Controller_Account_Register extends Controller
 
 			$this->customer->login($_POST['email'], $_POST['password']);
 
-			$this->url->redirect($this->url->link('account/success'));
+			$this->url->redirect('account/success');
 		}
 
 		$this->_('text_account_already', $this->url->link('account/login'));

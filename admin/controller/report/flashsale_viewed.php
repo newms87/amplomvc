@@ -110,7 +110,7 @@ class Admin_Controller_Report_FlashsaleViewed extends Controller
 
 		$this->message->add('success', $this->_('text_success'));
 
-		$this->url->redirect($this->url->link('report/flashsale_viewed'));
+		$this->url->redirect('report/flashsale_viewed');
 	}
 
 	private function get_url($filters = null)

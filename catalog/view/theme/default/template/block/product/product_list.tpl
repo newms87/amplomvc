@@ -64,7 +64,7 @@
 	<? } ?>
 </div>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	$('[name=sort_list]').change(function () {
 		location = "<?= $sort_url ; ?>" + $(this).val();
 	});
@@ -91,4 +91,4 @@
 	view = $.cookie('display') || 'grid';
 
 	$('#toggle_' + view).click();
-//--></script>
+</script>

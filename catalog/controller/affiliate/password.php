@@ -10,7 +10,7 @@ class Catalog_Controller_Affiliate_Password extends Controller
 		if (!$this->affiliate->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('affiliate/password');
 
-			$this->url->redirect($this->url->link('affiliate/login'));
+			$this->url->redirect('affiliate/login');
 		}
 
 		$this->language->load('affiliate/password');
@@ -22,7 +22,7 @@ class Catalog_Controller_Affiliate_Password extends Controller
 
 			$this->message->add('success', $this->_('text_success'));
 
-			$this->url->redirect($this->url->link('affiliate/account'));
+			$this->url->redirect('affiliate/account');
 		}
 
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));

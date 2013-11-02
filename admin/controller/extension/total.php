@@ -11,7 +11,7 @@ class Admin_Controller_Extension_Total extends Controller
 			if (!$this->System_Extension_Total->has($_GET['code'])) {
 				$this->message->add('warning', $this->_('error_unknown_extension', $_GET['code']));
 
-				$this->url->redirect($this->url->link('extension/total'));
+				$this->url->redirect('extension/total');
 			}
 
 			$this->getForm();
@@ -32,7 +32,7 @@ class Admin_Controller_Extension_Total extends Controller
 				$this->message->add('success', $this->_('text_success_delete'));
 			}
 
-			$this->url->redirect($this->url->link('extension/total', $this->url->getQueryExclude('name')));
+			$this->url->redirect('extension/total', $this->url->getQueryExclude('name'));
 		}
 
 		$this->index();
@@ -166,7 +166,7 @@ class Admin_Controller_Extension_Total extends Controller
 
 			$this->message->add('success', $this->_('text_success', $code));
 
-			$this->url->redirect($this->url->link('extension/total'));
+			$this->url->redirect('extension/total');
 		}
 
 		if (!$this->request->isPost()) {
@@ -229,7 +229,7 @@ class Admin_Controller_Extension_Total extends Controller
 
 		if (!is_file($file)) {
 			$this->message->add('warning', $this->_('error_extension_file', $file));
-			$this->url->redirect($this->url->link('extension/total'));
+			$this->url->redirect('extension/total');
 		}
 
 		//Handle POST
@@ -240,7 +240,7 @@ class Admin_Controller_Extension_Total extends Controller
 				$this->message->add('warning', $this->_('error_edit_fail', $file));
 			}
 
-			$this->url->redirect($this->url->link('extension/total'));
+			$this->url->redirect('extension/total');
 		}
 
 		//Load extension
@@ -328,7 +328,7 @@ class Admin_Controller_Extension_Total extends Controller
 			$this->message->add('success', $this->_('text_install_success', $_GET['code']));
 		}
 
-		$this->url->redirect($this->url->link('extension/total'));
+		$this->url->redirect('extension/total');
 	}
 
 	public function uninstall()
@@ -340,6 +340,6 @@ class Admin_Controller_Extension_Total extends Controller
 		}
 
 
-		$this->url->redirect($this->url->link('extension/total'));
+		$this->url->redirect('extension/total');
 	}
 }

@@ -89,7 +89,7 @@ class Catalog_Controller_Payment_Paymate extends Controller
 		} else {
 			$this->order->update($order_id, $this->config->get('paymate_order_status_id'));
 
-			$this->url->redirect($this->url->link('checkout/success'));
+			$this->url->redirect('checkout/success');
 		}
 	}
 }

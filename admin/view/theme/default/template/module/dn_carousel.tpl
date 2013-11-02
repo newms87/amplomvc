@@ -204,12 +204,12 @@
 			href = $(this).closest('.vtabs-content').attr('id');
 			$("#" + href + "-title").html($(this).attr('value'));
 		});
-//--></script>
-	<script type="text/javascript">//<!--
+</script>
+	<script type="text/javascript">
 		$('.vtabs a').tabs();
-//--></script>
+</script>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		set_autocomplete($('.rel_article'));
 		function set_autocomplete(selector) {
 			selector.autocomplete({
@@ -284,8 +284,8 @@
 			$('#article-related div:odd').attr('class', 'odd');
 			$('#article-related div:even').attr('class', 'even');
 		});
-//--></script>
-	<script type="text/javascript">//<!--
+</script>
+	<script type="text/javascript">
 		function image_upload(field, thumb) {
 			$('#dialog').remove();
 
@@ -312,12 +312,12 @@
 			});
 		}
 		;
-//--></script>
-	<script type="text/javascript">//<!--
+</script>
+	<script type="text/javascript">
 		<? $module_row = 1; ?>
 		<? foreach ($modules as $module) { ?>
 		$('#language-<?= $module_row; ?> a').tabs();
 		<? $module_row++; ?>
 		<? } ?>
-//--></script>
+</script>
 <?= $footer; ?>

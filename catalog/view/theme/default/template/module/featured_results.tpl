@@ -72,7 +72,6 @@
 					p.find('.fs_countdown').remove();
 				}
 			}
-			//-->
-		</script>
+			</script>
 	<? } ?>
 <? } ?>

@@ -5,7 +5,7 @@ class Catalog_Controller_Checkout_Checkout extends Controller
 	{
 		if (!$this->cart->validate()) {
 			$this->message->add('warning', $this->cart->get_errors());
-			$this->url->redirect($this->url->link('cart/cart'));
+			$this->url->redirect('cart/cart');
 		}
 
 		$this->template->load('checkout/checkout');

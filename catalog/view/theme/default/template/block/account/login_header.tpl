@@ -10,7 +10,7 @@
 	</form>
 </div>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	$('.login-form div input').focus(function () {
 		if ($(this).hasClass('empty_val')) {
 			$(this).removeClass('empty_val').val('');
@@ -23,4 +23,4 @@
 			}
 		})
 		.trigger('blur');
-//--></script>
+</script>

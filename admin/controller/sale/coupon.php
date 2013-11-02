@@ -24,7 +24,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 
 			$url = $this->get_url();
 
-			$this->url->redirect($this->url->link('sale/coupon', $url));
+			$this->url->redirect('sale/coupon', $url);
 		}
 
 		$this->getForm();
@@ -43,7 +43,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 
 			$url = $this->get_url();
 
-			$this->url->redirect($this->url->link('sale/coupon', $url));
+			$this->url->redirect('sale/coupon', $url);
 		}
 
 		$this->getForm();
@@ -64,7 +64,7 @@ class Admin_Controller_Sale_Coupon extends Controller
 
 			$url = $this->get_url();
 
-			$this->url->redirect($this->url->link('sale/coupon', $url));
+			$this->url->redirect('sale/coupon', $url);
 		}
 
 		$this->getList();

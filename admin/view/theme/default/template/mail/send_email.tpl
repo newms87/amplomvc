@@ -44,7 +44,7 @@
 
 <?= $this->builder->js('ckeditor'); ?>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		$('#allow_html').change(function () {
 			message = $('#mail_message');
 
@@ -57,7 +57,7 @@
 				remove_ckeditor_for($('#mail_message'));
 			}
 		}).change();
-//--></script>
+</script>
 
 <?= $this->builder->js('errors', $errors); ?>
 

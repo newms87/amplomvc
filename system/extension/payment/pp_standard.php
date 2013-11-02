@@ -419,7 +419,7 @@ class System_Extension_Payment_PpStandard extends Payment
 			$this->mail->send();
 		}
 
-		//$this->url->redirect($this->url->link('checkout/success'));
+		//$this->url->redirect('checkout/success');
 	}
 
 	public function validate($address, $total)

@@ -79,4 +79,4 @@
 
 		location = url + '&' + selected.serialize();
 	}
-//--></script>
+</script>

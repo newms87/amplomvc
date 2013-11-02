@@ -227,8 +227,20 @@ class Url extends Library
 		$this->rewrite[] = $rewrite;
 	}
 
-	public function redirect($url, $status = 302)
+	/**
+	 * Redirect the request to a new URL.
+	 *
+	 * @param $url - The full url or the controller path. If the full URL (eg: starting with http(s):// ) is given, Url::redirect() will ignore $query.
+	 * @param int $status - The header redirect status to send back to the requesting client.
+	 */
+
+	public function redirect($url, $query = '', $status = 302)
 	{
+		//Check if this is a controller path
+		if (!preg_match("/https?:\\/\\//", $url)) {
+			$url = $this->link($url, $query);
+		}
+
 		header('Status: ' . $status);
 		header('Location: ' . str_replace('&amp;', '&', $url));
 		exit();

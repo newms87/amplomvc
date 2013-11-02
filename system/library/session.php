@@ -38,7 +38,7 @@ class Session extends Library
 		} elseif (isset($this->data['token']) && empty($_COOKIE)) {
 			unset($this->data['token']);
 			$this->data['messages']['warning'][] = "You must enable cookies to login to the admin portal!";
-			$this->url->redirect($this->url->link('common/home'));
+			$this->url->redirect('common/home');
 			exit();
 		} elseif (!isset($this->data['session_token_saved'])) {
 			$ip_session_exists = $this->db->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "session WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "'");

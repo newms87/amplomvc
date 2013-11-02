@@ -45,7 +45,7 @@
 </div>
 
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	//invalidate an info item if any changes are detected
 	$('.info_item [name]').change(function () {
 		info_item = $(this).closest('.info_item');
@@ -231,9 +231,9 @@
 
 		return false;
 	}
-//--></script>
+</script>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	<? if(!empty($guest_checkout)) { ?>
 
 	$('input[name=submit_guest_checkout]').click(function () {
@@ -280,4 +280,4 @@
 	});
 
 	$('.info_item').trigger('loaded');
-//--></script>
+</script>

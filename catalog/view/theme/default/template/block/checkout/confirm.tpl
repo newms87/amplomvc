@@ -1,7 +1,7 @@
 <? if (!empty($redirect)) { ?>
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		location = "<?= $redirect; ?>";
-//--></script>
+</script>
 
 <? } elseif (!empty($totals_only)) { ?>
 	<div class='checkout_totals'>
@@ -46,7 +46,7 @@
 		<span class='loading_message'><?= $text_loading_details; ?></span>
 	</div>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		$('body').on('coupon_success', function (event, json) {
 			load_block($('#checkout_details .checkout_totals'), 'block/cart/total');
 		});
@@ -76,5 +76,5 @@
 				}
 			});
 		}
-//--></script>
+</script>
 <? } ?>

@@ -84,7 +84,6 @@
 	</div>
 
 	<script type="text/javascript">
-		//<!--
 		$('input[name=\'payment\']').bind('change', function () {
 			$('.payment').hide();
 
@@ -92,5 +91,5 @@
 		});
 
 		$('input[name=\'payment\']:checked').trigger('change');
-//--></script>
+</script>
 <?= $footer; ?>

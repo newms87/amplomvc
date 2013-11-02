@@ -134,5 +134,5 @@
 		}
 
 		getSalesChart($('#range').val());
-//--></script>
+</script>
 <?= $footer; ?>

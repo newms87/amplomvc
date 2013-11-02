@@ -37,7 +37,7 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('sale/customer_blacklist', $url));
+			$this->url->redirect('sale/customer_blacklist', $url);
 		}
 
 		$this->getForm();
@@ -68,7 +68,7 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('sale/customer_blacklist', $url));
+			$this->url->redirect('sale/customer_blacklist', $url);
 		}
 
 		$this->getForm();
@@ -101,7 +101,7 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('sale/customer_blacklist', $url));
+			$this->url->redirect('sale/customer_blacklist', $url);
 		}
 
 		$this->getList();

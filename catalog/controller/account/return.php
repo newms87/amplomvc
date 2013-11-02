@@ -8,7 +8,7 @@ class Catalog_Controller_Account_Return extends Controller
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/return');
 
-			$this->url->redirect($this->url->link('account/login'));
+			$this->url->redirect('account/login');
 		}
 
 		$this->language->load('account/return');
@@ -60,7 +60,7 @@ class Catalog_Controller_Account_Return extends Controller
 				'redirect' => $this->url->link('account/return/info', 'return_id=' . $return_id)
 			);
 
-			$this->url->redirect($this->url->link('account/login', $query));
+			$this->url->redirect('account/login', $query);
 		}
 
 		$return_id = isset($_GET['return_id']) ? $_GET['return_id'] : 0;
@@ -160,7 +160,7 @@ class Catalog_Controller_Account_Return extends Controller
 				'return_ids' => array_column($_POST['return_products'], 'return_id'),
 			);
 
-			$this->url->redirect($this->url->link('account/return/success', $url_query));
+			$this->url->redirect('account/return/success', $url_query);
 		}
 
 		//Page Head
@@ -186,7 +186,7 @@ class Catalog_Controller_Account_Return extends Controller
 				//If the lookup email does not match the order email, customer may not view this order
 				if (empty($_GET['email']) || $_GET['email'] !== $order_info['email']) {
 					$this->message->add('warning', $this->_('error_invalid_order_id', $order_id));
-					$this->url->redirect($this->url->link('account/return/insert'));
+					$this->url->redirect('account/return/insert');
 				}
 			} //This order belongs to this customer, so they may request an exchange
 			else {
@@ -351,7 +351,7 @@ class Catalog_Controller_Account_Return extends Controller
 			$this->message->add("warning", $this->_('error_order_lookup'));
 		}
 
-		$this->url->redirect($this->url->link('account/return/insert', $url_query));
+		$this->url->redirect('account/return/insert', $url_query);
 	}
 
 	public function success()

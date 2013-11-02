@@ -24,7 +24,7 @@ class Admin_Controller_Design_Layout extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('design/layout'));
+				$this->url->redirect('design/layout');
 			}
 		}
 
@@ -41,7 +41,7 @@ class Admin_Controller_Design_Layout extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('design/layout'));
+				$this->url->redirect('design/layout');
 			}
 		}
 
@@ -78,7 +78,7 @@ class Admin_Controller_Design_Layout extends Controller
 			if (!$this->error && !$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('design/layout', $this->url->getQueryExclude('action')));
+				$this->url->redirect('design/layout', $this->url->getQueryExclude('action'));
 			}
 		}
 

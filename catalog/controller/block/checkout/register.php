@@ -62,7 +62,7 @@ class Catalog_Controller_Block_Checkout_Register extends Controller
 
 		if ($json) {
 			if (!empty($_POST['async'])) {
-				$this->url->redirect($this->url->link('checkout/checkout'));
+				$this->url->redirect('checkout/checkout');
 			}
 
 			$this->response->setOutput(json_encode($json));
@@ -135,7 +135,7 @@ class Catalog_Controller_Block_Checkout_Register extends Controller
 			}
 
 			//We redirect because we are only a block, not a full page!
-			$this->url->redirect($this->url->link('checkout/checkout'));
+			$this->url->redirect('checkout/checkout');
 		}
 
 		$this->response->setOutput(json_encode($json));

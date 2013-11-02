@@ -164,12 +164,12 @@
 
 			location = url;
 		}
-//--></script>
+</script>
 	<script type="text/javascript"><!--
 		$(document).ready(function () {
 			$('#date').datepicker({dateFormat: 'yy-mm-dd'});
 		});
-//--></script>
+</script>
 	<script type="text/javascript"><!--
 		$('input[name=\'filter_name\']').autocomplete({
 			delay: 0,
@@ -193,5 +193,5 @@
 				return false;
 			}
 		});
-//--></script>
+</script>
 <?= $footer; ?>

@@ -71,10 +71,10 @@
 	<?= $content_bottom; ?>
 </div>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 $('.cancelled .button.delete').click(function(){
 	return confirm("<?= $text_confirm_remove; ?>");
 });
-//--></script>
+</script>
 
 <?= $footer; ?>

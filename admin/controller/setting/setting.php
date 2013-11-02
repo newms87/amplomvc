@@ -20,7 +20,7 @@ class Admin_Controller_Setting_Setting extends Controller
 
 			$this->message->add('success', $this->_('text_success'));
 
-			$this->url->redirect($this->url->link('setting/store'));
+			$this->url->redirect('setting/store');
 		}
 
 		//Breadcrumbs

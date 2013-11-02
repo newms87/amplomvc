@@ -82,7 +82,7 @@
 	<?= $content_bottom; ?>
 </div>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	var addresses = $('.address_list').ac_radio();
 
 	if (addresses.children().length > 2) {
@@ -102,5 +102,5 @@
 	});
 
 	$.ac_datepicker({changeYear: true, yearRange: "c-150:c", changeMonth: true});
-//--></script>
+</script>
 <?= $footer; ?>

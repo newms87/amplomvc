@@ -76,7 +76,7 @@
 
 <?= $this->builder->js('load_zones', '.contact_address', '.contact_country select', '.contact_zone select'); ?>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 
 	function build_phone_item(row, phonerow) {
 		html = '<li>';
@@ -124,4 +124,4 @@
 		$('#contact-' + contact_row + ' .contact_country select').trigger('change');
 		contact_row++;
 	}
-//--></script>
+</script>

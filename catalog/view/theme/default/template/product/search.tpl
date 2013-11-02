@@ -257,5 +257,5 @@
 		} else {
 			display('list');
 		}
-//--></script>
+</script>
 <?= $footer; ?>

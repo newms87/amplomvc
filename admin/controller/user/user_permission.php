@@ -37,7 +37,7 @@ class Admin_Controller_User_UserPermission extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('user/user_permission', $url));
+			$this->url->redirect('user/user_permission', $url);
 		}
 
 		$this->getForm();
@@ -68,7 +68,7 @@ class Admin_Controller_User_UserPermission extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('user/user_permission', $url));
+			$this->url->redirect('user/user_permission', $url);
 		}
 
 		$this->getForm();
@@ -101,7 +101,7 @@ class Admin_Controller_User_UserPermission extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('user/user_permission', $url));
+			$this->url->redirect('user/user_permission', $url);
 		}
 
 		$this->getList();

@@ -57,7 +57,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('sale/affiliate', $url));
+			$this->url->redirect('sale/affiliate', $url);
 		}
 
 		$this->getForm();
@@ -108,7 +108,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('sale/affiliate', $url));
+			$this->url->redirect('sale/affiliate', $url);
 		}
 
 		$this->getForm();
@@ -161,7 +161,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('sale/affiliate', $url));
+			$this->url->redirect('sale/affiliate', $url);
 		}
 
 		$this->getList();
@@ -224,7 +224,7 @@ class Admin_Controller_Sale_Affiliate extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('sale/affiliate', $url));
+			$this->url->redirect('sale/affiliate', $url);
 		}
 
 		$this->getList();

@@ -68,7 +68,7 @@ class Catalog_Controller_Block_Checkout_GuestInformation extends Controller
 		//Redirect if set
 		if ($json) {
 			if (!empty($_POST['async'])) {
-				$this->url->redirect($this->url->link('checkout/checkout'));
+				$this->url->redirect('checkout/checkout');
 			}
 		} else {
 			//Validate Guest Information
@@ -138,7 +138,7 @@ class Catalog_Controller_Block_Checkout_GuestInformation extends Controller
 				}
 
 				//We redirect because we are only a block, not a full page!
-				$this->url->redirect($this->url->link('checkout/checkout'));
+				$this->url->redirect('checkout/checkout');
 			}
 		}
 

@@ -58,7 +58,7 @@
 	<? } ?>
 </div>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	$('#product_options input, #product_options select').change(update_option_restrictions);
 
 	var restrictions = <?= '[]'; //json_encode($product_option_restrictions); ?>;
@@ -102,4 +102,4 @@
 
 		update_option_restrictions(parseInt($(this).attr('ov')));
 	});
-//--></script>
+</script>

@@ -80,7 +80,7 @@
 <?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select'); ?>
 
 <? if ($this->request->isAjax()) { ?>
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 $('#new_address_form').submit(function(){
 	$.post($(this).attr('action'), $(this).serialize(), function(html){
 		if (html) {
@@ -92,7 +92,7 @@ $('#new_address_form').submit(function(){
 	});
 	return false;
 });
-//--></script>
+</script>
 <? } ?>
 
 <?= $this->builder->js('errors', $errors); ?>

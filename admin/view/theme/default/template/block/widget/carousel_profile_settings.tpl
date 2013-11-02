@@ -25,7 +25,7 @@
 </div>
 <? } ?>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 $('.ac_carousel_slide[data-row=__ac_template__]').parent().ac_template('ac_carousel_list', {defaults: <?= json_encode($profile_setting); ?>});
 
 $('.add_carousel_slide').click(function(){
@@ -34,4 +34,4 @@ $('.add_carousel_slide').click(function(){
 });
 
 $('.ac_carousel_list').sortable();
-//--></script>
+</script>

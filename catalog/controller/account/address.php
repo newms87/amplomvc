@@ -6,7 +6,7 @@ class Catalog_Controller_Account_Address extends Controller
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/address');
 
-			$this->url->redirect($this->url->link('account/login'));
+			$this->url->redirect('account/login');
 		}
 
 		$this->language->load('account/address');
@@ -19,7 +19,7 @@ class Catalog_Controller_Account_Address extends Controller
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/address');
 
-			$this->url->redirect($this->url->link('account/login'));
+			$this->url->redirect('account/login');
 		}
 
 		$this->language->load('account/address');
@@ -54,7 +54,7 @@ class Catalog_Controller_Account_Address extends Controller
 					return; //output nothing for an ajax request
 				} else {
 					$this->message->add('success', !empty($_GET['address_id']) ? $this->_('text_update') : $this->_('text_insert'));
-					$this->url->redirect($this->url->link('account/address'));
+					$this->url->redirect('account/address');
 				}
 			}
 		}
@@ -67,7 +67,7 @@ class Catalog_Controller_Account_Address extends Controller
 		if (!$this->customer->isLogged()) {
 			$this->session->data['redirect'] = $this->url->link('account/address');
 
-			$this->url->redirect($this->url->link('account/login'));
+			$this->url->redirect('account/login');
 		}
 
 		$this->language->load('account/address');
@@ -89,7 +89,7 @@ class Catalog_Controller_Account_Address extends Controller
 
 			$this->message->add('success', $this->_('text_delete'));
 
-			$this->url->redirect($this->url->link('account/address'));
+			$this->url->redirect('account/address');
 		}
 
 		$this->getList();

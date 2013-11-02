@@ -37,7 +37,7 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('localisation/tax_rate', $url));
+			$this->url->redirect('localisation/tax_rate', $url);
 		}
 
 		$this->getForm();
@@ -68,7 +68,7 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('localisation/tax_rate', $url));
+			$this->url->redirect('localisation/tax_rate', $url);
 		}
 
 		$this->getForm();
@@ -101,7 +101,7 @@ class Admin_Controller_Localisation_TaxRate extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('localisation/tax_rate', $url));
+			$this->url->redirect('localisation/tax_rate', $url);
 		}
 
 		$this->getList();

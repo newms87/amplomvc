@@ -12,7 +12,7 @@ class Catalog_Controller_Block_Localisation_Currency extends Controller
 			if (isset($_POST['redirect'])) {
 				$this->url->redirect($_POST['redirect']);
 			} else {
-				$this->url->redirect($this->url->link('common/home'));
+				$this->url->redirect('common/home');
 			}
 		}
 

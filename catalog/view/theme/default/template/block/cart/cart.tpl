@@ -104,7 +104,7 @@
 </div>
 
 <? if ($ajax_cart) { ?>
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		$('.block_cart_update').click(function () {
 			form = $('form#cart_form');
 
@@ -138,5 +138,5 @@
 
 			return false;
 		});
-//--></script>
+</script>
 <? } ?>

@@ -174,7 +174,7 @@ class System_Extension_Payment_Braintree extends PaymentSubscription
 
 		$this->message->add('notify', $this->_('text_removed_card'));
 
-		$this->url->redirect($this->url->link('account/update'));
+		$this->url->redirect('account/update');
 	}
 
 	public function charge($card_id, $amount, $info = array())

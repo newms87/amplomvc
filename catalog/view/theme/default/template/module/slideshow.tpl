@@ -10,9 +10,7 @@
 	</div>
 </div>
 <script type="text/javascript">
-	//<!--
 	$(document).ready(function () {
 		$('#slideshow<?= $module; ?>').nivoSlider();
 	});
-	//-->
-</script>
+	</script>

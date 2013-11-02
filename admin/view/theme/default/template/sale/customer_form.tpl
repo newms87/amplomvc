@@ -332,7 +332,7 @@
 
 			address_row++;
 		}
-//--></script>
+</script>
 
 <?= $this->builder->js('load_zones', 'table.form', '.country_select', '.zone_select'); ?>
 
@@ -368,7 +368,7 @@
 				}
 			});
 		}
-//--></script>
+</script>
 	<script type="text/javascript"><!--
 		$('#reward .pagination a').live('click', function () {
 			$('#reward').load(this.href);
@@ -466,9 +466,9 @@
 			});
 		}
 		;
-//--></script>
+</script>
 	<script type="text/javascript"><!--
 		$('.htabs a').tabs();
 		$('.vtabs a').tabs();
-//--></script>
+</script>
 <?= $footer; ?>

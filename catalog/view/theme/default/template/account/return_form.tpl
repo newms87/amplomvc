@@ -133,11 +133,11 @@
 		<?= $content_bottom; ?>
 	</div>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		$('.order_info.order_id select').change(function () {
 			location = "<?= $return_product_url; ?>" + '&order_id=' + $(this).val();
 		});
-//--></script>
+</script>
 
 <?= $this->builder->js('datepicker'); ?>
 <?= $this->builder->js('errors', $errors); ?>

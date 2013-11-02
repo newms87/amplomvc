@@ -29,7 +29,7 @@ class Admin_Controller_Module_Featured extends Controller
 
 			$this->message->add('success', $this->_('text_success'));
 
-			$this->url->redirect($this->url->link('module/featured'));
+			$this->url->redirect('module/featured');
 		}
 
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));

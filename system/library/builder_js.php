@@ -22,7 +22,7 @@ switch ($js) {
 
 		$url_load_zones = $this->url->link('tool/data/load_zones', ((count($args) > 3 && $args[3]) ? "allow_all" : "") . '&country_id=');
 		?>
-		<script type="text/javascript">//<!--
+		<script type="text/javascript">
 			country_selectors = $('<?= $parent_selector;?>').find('<?= $country_selector;?>');
 
 			country_selectors.change(function (event) {
@@ -55,7 +55,7 @@ switch ($js) {
 					$(e).trigger('change', $(e));
 				}
 			});
-		//--></script>
+		</script>
 		<?   break;
 
 	/**
@@ -68,10 +68,10 @@ switch ($js) {
 	case 'image_manager':
 		?>
 		<? if (!isset($js_loaded_files['image_manager'])) { ?>
-		<script type="text/javascript">//<!--
+		<script type="text/javascript">
 			var image_manager_url = "<?= $this->url->link('common/filemanager'); ?>";
 			var no_image = "<?= HTTP_THEME_IMAGE . "no_image.png"; ?>"
-		//--></script>
+		</script>
 		<script type="text/javascript" src="<?= HTTP_JS . "image_manager.js"; ?>"></script>
 	<? } ?>
 		<? break;
@@ -90,7 +90,7 @@ switch ($js) {
 			var error_holder = $('#<?= $script_id; ?>').parent();
 
 			show_errors(errors, error_holder);
-		//--></script>
+		</script>
 
 		<?php break;
 
@@ -99,7 +99,7 @@ switch ($js) {
 		?>
 		<? if (!isset($js_loaded_files['ckeditor'])) { ?>
 		<script type="text/javascript" src="<?= HTTP_JS . 'ckeditor/ckeditor.js'; ?>"></script>
-		<script type="text/javascript">//<!--
+		<script type="text/javascript">
 			var ckedit_index = 0;
 
 			function init_ckeditor_for(context) {
@@ -126,7 +126,7 @@ switch ($js) {
 					CKEDITOR.instances[$(e).attr('id')].destroy();
 				});
 			}
-		//--></script>
+		</script>
 	<? } ?>
 		<?php break;
 
@@ -158,7 +158,7 @@ switch ($js) {
 			</div>
 		</div>
 
-		<script type="text/javascript">//<!--
+		<script type="text/javascript">
 			$('.language_menu .language_item').click(function () {
 				lang_id = $(this).attr('lang_id');
 				$('.translation').hide();
@@ -233,7 +233,7 @@ switch ($js) {
 					context.show();
 				}
 			}
-		//--></script>
+		</script>
 
 		<?php break;
 

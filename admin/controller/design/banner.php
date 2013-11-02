@@ -25,7 +25,7 @@ class Admin_Controller_Design_Banner extends Controller
 
 			$url = $this->get_url();
 
-			$this->url->redirect($this->url->link('design/banner', $url));
+			$this->url->redirect('design/banner', $url);
 		}
 
 		$this->getForm();
@@ -44,7 +44,7 @@ class Admin_Controller_Design_Banner extends Controller
 
 			$url = $this->get_url();
 
-			$this->url->redirect($this->url->link('design/banner', $url));
+			$this->url->redirect('design/banner', $url);
 		}
 
 		$this->getForm();
@@ -65,7 +65,7 @@ class Admin_Controller_Design_Banner extends Controller
 
 			$url = $this->get_url();
 
-			$this->url->redirect($this->url->link('design/banner', $url));
+			$this->url->redirect('design/banner', $url);
 		}
 
 		$this->getList();

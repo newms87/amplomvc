@@ -69,7 +69,7 @@ class Admin_Controller_Sale_Return extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('sale/return', $url));
+			$this->url->redirect('sale/return', $url);
 		}
 
 		$this->getForm();
@@ -132,7 +132,7 @@ class Admin_Controller_Sale_Return extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('sale/return', $url));
+			$this->url->redirect('sale/return', $url);
 		}
 
 		$this->getForm();
@@ -197,7 +197,7 @@ class Admin_Controller_Sale_Return extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('sale/return', $url));
+			$this->url->redirect('sale/return', $url);
 		}
 
 		$this->getList();

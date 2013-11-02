@@ -79,7 +79,7 @@
 
 <?= $this->builder->js('load_zones', '.geozone_selector', '.country_selector', '.zone_selector', true); ?>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		function add_all_zones(context) {
 			country_id = context.closest('.geozone_selector').find('.country_selector').val();
 			zone_id = context.closest('.geozone_selector').find('.zone_selector').val();
@@ -105,9 +105,9 @@
 				}
 			});
 		}
-//--></script>
+</script>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		var temp = $('#zone_list').find('.template_row');
 		var zone_template = temp.html();
 		temp.remove();
@@ -130,7 +130,7 @@
 			zone_row++;
 		}
 		;
-//--></script>
+</script>
 
 <?= $this->builder->js('errors', $errors); ?>
 

@@ -24,7 +24,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('catalog/product'));
+				$this->url->redirect('catalog/product');
 			}
 		}
 
@@ -43,7 +43,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			}
 		}
 
-		$this->url->redirect($this->url->link('catalog/product/update', $this->url->getQuery()));
+		$this->url->redirect('catalog/product/update', $this->url->getQuery());
 	}
 
 	public function delete()
@@ -58,7 +58,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('catalog/product'));
+				$this->url->redirect('catalog/product');
 			}
 		}
 
@@ -77,7 +77,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('catalog/product'));
+				$this->url->redirect('catalog/product');
 			}
 		}
 
@@ -144,7 +144,7 @@ class Admin_Controller_Catalog_Product extends Controller
 			}
 		}
 
-		$this->url->redirect($this->url->link('catalog/product', $this->url->getQueryExclude('action', 'action_value')));
+		$this->url->redirect('catalog/product', $this->url->getQueryExclude('action', 'action_value'));
 	}
 
 	private function getList()

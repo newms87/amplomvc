@@ -574,18 +574,18 @@ ul > li > ul > li:hover > ul.link_list, ul > li > ul > li.hover > ul.link_list {
 	margin-right: 20px;
 }
 
-.box > .section .limits {
+.box > .section .limits, .box > section .limits {
 	float: right;
 	padding: 5px 0 15px 0;
 	margin-right: 20px;
 }
 
-.box > .section .limits .selected {
+.box > .section .limits .selected, .box > section .limits .selected {
 	color: black;
 	text-decoration: none;
 }
 
-.box > .section {
+.box > .section, .box > section {
 	padding: 10px;
 	border-left: 1px solid #CCCCCC;
 	border-right: 1px solid #CCCCCC;
@@ -774,7 +774,7 @@ a.action-install, a.action-install:visited {
 }
 
 .list > thead > tr > td,
-.list > thead > tr > th{
+.list > thead > tr > th {
 	background-color: #FDE2C6;
 	padding: 10px 10px;
 }
@@ -1819,18 +1819,21 @@ td.mail_info label {
 }
 
 /** Navigation Links Form **/
-#links_list_data .section .right {
+#links_list_data .section .right,
+#links_list_data section .right {
 	float: right;
 	width: 75%;
 }
 
-#links_list_data .section .left {
+#links_list_data .section .left,
+#links_list_data section .left {
 	float: left;
 	border-right: 1px dotted #CCCCCC;
 	width: 20%;
 }
 
-#links_list_data .section .left input.button {
+#links_list_data .section .left input.button,
+#links_list_data section .left input.button {
 	width: 50%;
 	margin-left: 25%;
 }

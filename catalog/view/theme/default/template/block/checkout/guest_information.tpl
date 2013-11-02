@@ -36,7 +36,7 @@
 
 <?= $this->builder->js('load_zones', '#guest_checkout .shipping_address, #guest_checkout .payment_address', '.country_select', '.zone_select'); ?>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	$('#guest_checkout input[name=same_shipping_address]').change(function () {
 		shipping_form = $('#guest_shipping_address');
 
@@ -47,4 +47,4 @@
 			shipping_form.slideDown('fast');
 		}
 	}).trigger('change');
-//--></script>
+</script>

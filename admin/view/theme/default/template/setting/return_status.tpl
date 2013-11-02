@@ -38,14 +38,14 @@
 	<?= $this->builder->js('translations', $status['translations'], "return_statuses[$key][%name%]"); ?>
 <? } ?>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		$('#return_status_list').ac_template('rs_list', {defaults: <?= json_encode($return_statuses['__ac_template__']); ?>});
 		$('#add_status').click(function () {
 			$.ac_template('rs_list', 'add')
 		});
 
 		$('#return_status_list').sortable();
-//--></script>
+</script>
 
 <?= $this->builder->js('errors', $errors); ?>
 

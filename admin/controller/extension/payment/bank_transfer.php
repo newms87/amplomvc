@@ -16,7 +16,7 @@ class Admin_Controller_Payment_BankTransfer extends Controller
 
 			$this->message->add('success', $this->_('text_success'));
 
-			$this->url->redirect($this->url->link('extension/payment'));
+			$this->url->redirect('extension/payment');
 		}
 
 		if (isset($this->error['warning'])) {

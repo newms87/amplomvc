@@ -28,9 +28,9 @@ class Admin_Controller_User_User extends Controller
 			$url = $this->get_url();
 
 			if ($this->user->isAdmin()) {
-				$this->url->redirect($this->url->link('user/user', $url));
+				$this->url->redirect('user/user', $url);
 			} else {
-				$this->url->redirect($this->url->link('common/home', $url));
+				$this->url->redirect('common/home', $url);
 			}
 		}
 
@@ -49,7 +49,7 @@ class Admin_Controller_User_User extends Controller
 			$url = $this->get_url();
 
 			$this->message->add('success', $this->_('text_success'));
-			$this->url->redirect($this->url->link('user/user', $url));
+			$this->url->redirect('user/user', $url);
 		}
 
 		$this->getForm();
@@ -74,7 +74,7 @@ class Admin_Controller_User_User extends Controller
 
 			$url = $this->get_url();
 
-			$this->url->redirect($this->url->link('user/user', $url));
+			$this->url->redirect('user/user', $url);
 		}
 
 		$this->getList();

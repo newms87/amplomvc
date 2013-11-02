@@ -7,7 +7,7 @@
 </div>
 
 <? if ($ajax) { ?>
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		function apply_coupon() {
 			if ($('#coupon_code').val()) {
 				submit_block('coupon', '<?= $ajax_url; ?>', $('#coupon_block form'));
@@ -21,5 +21,5 @@
 		});
 		$('body').bind('coupon_error', function () {
 		});
-//--></script>
+</script>
 <? } ?>

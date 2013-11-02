@@ -24,7 +24,7 @@
 	</tr>
 </table>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	template = $('.video.template_row');
 	var video_template = template[0].outerHTML;
 	template.remove();
@@ -41,4 +41,4 @@
 	});
 
 	$('#video_list').sortable();
-//--></script>
+</script>

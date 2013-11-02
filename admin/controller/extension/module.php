@@ -87,7 +87,7 @@ class Admin_Controller_Extension_Module extends Controller
 		if (!$this->user->hasPermission('modify', 'extension/module')) {
 			$this->session->data['error'] = $this->_('error_permission');
 
-			$this->url->redirect($this->url->link('extension/module'));
+			$this->url->redirect('extension/module');
 		} else {
 			$this->Model_Setting_Extension->install('module', $_GET['extension']);
 
@@ -103,7 +103,7 @@ class Admin_Controller_Extension_Module extends Controller
 				$class->install();
 			}
 
-			$this->url->redirect($this->url->link('extension/module'));
+			$this->url->redirect('extension/module');
 		}
 	}
 
@@ -114,7 +114,7 @@ class Admin_Controller_Extension_Module extends Controller
 		if (!$this->user->hasPermission('modify', 'extension/module')) {
 			$this->session->data['error'] = $this->_('error_permission');
 
-			$this->url->redirect($this->url->link('extension/module'));
+			$this->url->redirect('extension/module');
 		} else {
 			$this->Model_Setting_Extension->uninstall('module', $_GET['extension']);
 
@@ -131,7 +131,7 @@ class Admin_Controller_Extension_Module extends Controller
 
 			$this->message->add('success', $this->_('text_uninstalled_module'));
 
-			$this->url->redirect($this->url->link('extension/module'));
+			$this->url->redirect('extension/module');
 		}
 	}
 }

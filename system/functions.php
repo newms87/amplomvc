@@ -45,7 +45,7 @@ function open_html_dump(id) {
 	w.document.body.innerHTML = document.getElementById(id).innerHTML;
 	document.getElementById(id + '-output').setAttribute('style','display:none');
 }
-//--></script>
+</script>
 <? } ?>
 
 <?

@@ -99,7 +99,7 @@
 		</div>
 	</div>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	$('#task_list .select_file').change(function(){
 		var list = $(this).siblings('.method_list');
 		list.find('.select_method').hide().removeAttr('name');
@@ -118,6 +118,6 @@
 	$('#task_list').sortable({stop: function(){
 		$(this).update_index();
 	}});
-//--></script>
+</script>
 
 <?= $footer; ?>

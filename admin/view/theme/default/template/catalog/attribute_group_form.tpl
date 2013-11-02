@@ -74,7 +74,7 @@
 
 <?= $this->builder->js('translations', $translations); ?>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 var a_list = $('#attribute_list');
 a_list.ac_template('a_list');
 
@@ -86,7 +86,7 @@ $('#add_attribute').click(function () {
 a_list.sortable({cursor: 'move', stop: function () {
 	$(this).update_index('.sort_order');
 }});
-//--></script>
+</script>
 
 <?= $this->builder->js('errors', $errors); ?>
 

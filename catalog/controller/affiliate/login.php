@@ -8,7 +8,7 @@ class Catalog_Controller_Affiliate_Login extends Controller
 		$this->template->load('affiliate/login');
 
 		if ($this->affiliate->isLogged()) {
-			$this->url->redirect($this->url->link('affiliate/account'));
+			$this->url->redirect('affiliate/account');
 		}
 
 		$this->language->load('affiliate/login');
@@ -19,7 +19,7 @@ class Catalog_Controller_Affiliate_Login extends Controller
 			if (isset($_POST['redirect'])) {
 				$this->url->redirect(str_replace('&amp;', '&', $_POST['redirect']));
 			} else {
-				$this->url->redirect($this->url->link('affiliate/account'));
+				$this->url->redirect('affiliate/account');
 			}
 		}
 

@@ -23,7 +23,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 				$this->message->add('success', $this->_('text_success'));
 			}
 
-			$this->url->redirect($this->url->link('mail/newsletter/update', 'newsletter_id=' . $newsletter_id));
+			$this->url->redirect('mail/newsletter/update', 'newsletter_id=' . $newsletter_id);
 		}
 
 		$this->getForm();
@@ -77,7 +77,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 			if (!$this->error) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('mail/newsletter', $this->url->getQuery()));
+				$this->url->redirect('mail/newsletter', $this->url->getQuery());
 			}
 		}
 
@@ -303,7 +303,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 			} else {
 				$this->message->add('warning', $this->_('error_newsletter_preview'));
 				$this->message->add('warning', $this->error);
-				$this->url->redirect($this->url->link('error/not_found'));
+				$this->url->redirect('error/not_found');
 			}
 
 			$this->data = $_POST;
@@ -312,7 +312,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 
 			if (!$newsletter_id) {
 				$this->message->add('warning', $this->_('error_newsletter_preview'));
-				$this->url->redirect($this->url->link('error/not_found'));
+				$this->url->redirect('error/not_found');
 				return;
 			}
 

@@ -19,7 +19,7 @@ class Admin_Controller_Setting_Cron extends Controller
 
 			$this->message->add('success', _l('Successfully updated the Automated Tasks!'));
 
-			$this->url->redirect($this->url->link('setting/cron'));
+			$this->url->redirect('setting/cron');
 		}
 
 		//Breadcrumbs
@@ -104,7 +104,7 @@ class Admin_Controller_Setting_Cron extends Controller
 			$this->config->save('cron', 'cron_status', $_POST['cron_status'] ? 1 : 0, 0, true);
 		}
 
-		$this->url->redirect($this->url->link('setting/cron'));
+		$this->url->redirect('setting/cron');
 	}
 
 	private function validate()

@@ -66,7 +66,7 @@
 	</div>
 </form>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	$('#submit_pp_button input').click(function () {
 		$('#processing_payment').fadeIn(500);
 		$('#submit_pp_button').hide();
@@ -87,4 +87,4 @@
 			}
 		});
 	}
-//--></script>
+</script>

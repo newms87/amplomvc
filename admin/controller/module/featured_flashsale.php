@@ -19,7 +19,7 @@ class Admin_Controller_Module_FeaturedFlashsale extends Controller
 
 			$this->message->add('success', $this->_('text_success'));
 
-			$this->url->redirect($this->url->link('module/featured_flashsale'));
+			$this->url->redirect('module/featured_flashsale');
 		}
 
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));

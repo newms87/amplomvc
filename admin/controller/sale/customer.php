@@ -65,7 +65,7 @@ class Admin_Controller_Sale_Customer extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('sale/customer', $url));
+			$this->url->redirect('sale/customer', $url);
 		}
 
 		$this->getForm();
@@ -124,7 +124,7 @@ class Admin_Controller_Sale_Customer extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('sale/customer', $url));
+			$this->url->redirect('sale/customer', $url);
 		}
 
 		$this->getForm();
@@ -185,7 +185,7 @@ class Admin_Controller_Sale_Customer extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('sale/customer', $url));
+			$this->url->redirect('sale/customer', $url);
 		}
 
 		$this->getList();
@@ -256,7 +256,7 @@ class Admin_Controller_Sale_Customer extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('sale/customer', $url));
+			$this->url->redirect('sale/customer', $url);
 		}
 
 		$this->getList();

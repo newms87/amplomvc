@@ -5,6 +5,6 @@ class Admin_Controller_Common_Logout extends Controller
 	{
 		$this->user->logout();
 
-		$this->url->redirect($this->url->link('common/login'));
+		$this->url->redirect('common/login');
 	}
 }

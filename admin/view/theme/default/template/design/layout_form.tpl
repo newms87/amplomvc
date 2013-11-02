@@ -54,11 +54,11 @@
 
 <?= $this->builder->js('ckeditor'); ?>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		$('#route_list').ac_template('route_list');
 
 		$('#add_route').click(function () {
 			$.ac_template('route_list', 'add');
 		});
-//--></script>
+</script>
 <?= $footer; ?>

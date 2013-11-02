@@ -7,10 +7,9 @@
 	</ul>
 </div>
 <script type="text/javascript">
-	//<!--
 	$('#carousel<?= $module; ?> ul').jcarousel({
 		vertical: false,
 		visible: <?= $limit; ?>,
 		scroll: <?= $scroll; ?>
 	});
-//--></script>
+</script>

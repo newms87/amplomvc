@@ -221,7 +221,7 @@
 	</div>
 	</div>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 
 		designer_info = <?= json_encode($data_designers); ?>;
 
@@ -309,8 +309,8 @@
 
 			article_row++;
 		});
-//--></script>
-	<script type="text/javascript">//<!--
+</script>
+	<script type="text/javascript">
 		$(document).ready(function () {
 			$('#featured_article_list').sortable({revert: true});
 		});
@@ -343,7 +343,7 @@
 
 			featured_article_row++;
 		});
-//--></script>
+</script>
 
 <? $product_autocomplete_data = array(
 	'selector' => '#product_list_autocomplete',
@@ -367,7 +367,7 @@
 
 <?= $this->builder->js('autocomplete', $manufacturer_autocomplete_data); ?>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		$(document).ready(function () {
 			$('#product_list, #designer_list').sortable({revert: true});
 		});
@@ -405,7 +405,7 @@
 
 			$('#designer_list').append(html);
 		}
-//--></script>
+</script>
 
 	<div id="preview_page">
 		<div id="preview_window">
@@ -436,7 +436,7 @@
 			});
 
 		}
-//--></script>
+</script>
 
 <?= $this->builder->js('ckeditor'); ?>
 

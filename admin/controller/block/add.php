@@ -13,7 +13,7 @@ class Admin_Controller_Block_Add extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success', $_POST['name']));
 
-				$this->url->redirect($this->url->link('block/block', 'name=' . $_POST['route']));
+				$this->url->redirect('block/block', 'name=' . $_POST['route']);
 			}
 
 			$this->message->add('warning', $this->_('error_add_block'));

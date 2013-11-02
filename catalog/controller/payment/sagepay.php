@@ -174,7 +174,7 @@ class Catalog_Controller_Payment_Sagepay extends Controller
 					$this->Model_Checkout_Order->update_order($_GET['order_id'], $this->config->get('config_order_complete_status_id'), $message, false);
 				}
 
-				$this->url->redirect($this->url->link('checkout/success'));
+				$this->url->redirect('checkout/success');
 			}
 		}
 	}

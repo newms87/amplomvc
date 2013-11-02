@@ -23,7 +23,7 @@
 	<?= $styles; ?>
 	<?= $scripts; ?>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 		if (Function('/*@cc_on return document.documentMode===10@*/')()) {
 			document.documentElement.className += ' IE10';
 		}
@@ -36,7 +36,7 @@
 		else if (Function('/*@cc_on return document.documentMode===7@*/')()) {
 			document.documentElement.className += ' IE7';
 		}
-//--></script>
+</script>
 
 	<!--[if IE 9]>
 	<link rel="stylesheet" type="text/css" href="<?= HTTP_THEME_STYLE . " ie9.css"; ?>" />
@@ -50,14 +50,14 @@
 
 	<? if ($google_analytics) { ?>
 		<!-- Google Analytics Tracker -->
-		<script type="text/javascript">//<!--
+		<script type="text/javascript">
 			<?= $google_analytics; ?>
-	//--></script>
+	</script>
 	<? } ?>
 
 	<? if (!empty($statcounter)) { ?>
 		<!-- Stat Counter Tracker -->
-		<script type="text/javascript">//<!--
+		<script type="text/javascript">
 			var sc_project = "<?= $statcounter['project']; ?>";
 			var sc_invisible = 1;
 			var sc_security = "<?= $statcounter['security']; ?>";
@@ -65,7 +65,7 @@
 			$(document).ready(function () {
 				$.getScript('http://www.statcounter.com/counter/counter.js');
 			});
-	//--></script>
+	</script>
 		<noscript>
 			<div class="statcounter">
 				<a title="tumblr tracker" href="http://statcounter.com/tumblr/" target="_blank">
@@ -148,7 +148,7 @@
 
 			<?= $this->builder->displayMessages($messages); ?>
 
-			<script type="text/javascript">//<!--
+			<script type="text/javascript">
 				$('#links_primary .top_menu > li').hover(top_menu_hoverin, top_menu_hoverout);
 				function top_menu_hoverin() {
 					$(this).addClass('hover')
@@ -160,6 +160,6 @@
 					$(this).removeClass('hover')
 						.find('.submenu_arrow').remove();
 				}
-		//--></script>
+		</script>
 
 			<?= $above_content; ?>

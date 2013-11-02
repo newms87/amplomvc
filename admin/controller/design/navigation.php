@@ -25,7 +25,7 @@ class Admin_Controller_Design_Navigation extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('design/navigation'));
+				$this->url->redirect('design/navigation');
 			}
 		}
 
@@ -42,7 +42,7 @@ class Admin_Controller_Design_Navigation extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('design/navigation'));
+				$this->url->redirect('design/navigation');
 			}
 		}
 
@@ -55,7 +55,7 @@ class Admin_Controller_Design_Navigation extends Controller
 
 		$this->message->add("notify", "Admin Navigation Group has been reset!");
 
-		$this->url->redirect($this->url->link("design/navigation"));
+		$this->url->redirect('design/navigation');
 	}
 
 	public function batch_update()
@@ -88,7 +88,7 @@ class Admin_Controller_Design_Navigation extends Controller
 				if (!$this->message->error_set()) {
 					$this->message->add('success', $this->_('text_success'));
 
-					$this->url->redirect($this->url->link('design/navigation'));
+					$this->url->redirect('design/navigation');
 				}
 			}
 		}

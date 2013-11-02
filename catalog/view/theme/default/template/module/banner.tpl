@@ -10,7 +10,6 @@
 	<? } ?>
 </div>
 <script type="text/javascript">
-	//<!--
 	$(document).ready(function () {
 		$('#banner<?= $module; ?> div:first-child').css('display', 'block');
 	});
@@ -24,4 +23,4 @@
 	}
 
 	setTimeout(banner, 2000);
-//--></script>
+</script>

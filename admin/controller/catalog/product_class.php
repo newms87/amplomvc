@@ -24,7 +24,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('catalog/product_class'));
+				$this->url->redirect('catalog/product_class');
 			}
 		}
 
@@ -41,7 +41,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('catalog/product_class'));
+				$this->url->redirect('catalog/product_class');
 			}
 		}
 
@@ -69,7 +69,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 			}
 		}
 
-		$this->url->redirect($this->url->link('catalog/product_class', $this->url->getQueryExclude('action', 'action_value')));
+		$this->url->redirect('catalog/product_class', $this->url->getQueryExclude('action', 'action_value'));
 	}
 
 	private function getList()

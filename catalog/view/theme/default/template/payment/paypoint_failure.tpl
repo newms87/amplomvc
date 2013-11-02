@@ -20,8 +20,7 @@
 	<p><?= $text_failure_wait; ?></p>
 </div>
 <script type="text/javascript">
-	//<!--
 	setTimeout('location = \'<?= $continue; ?>\';', 2500);
-//--></script>
+</script>
 </body>
 </html>

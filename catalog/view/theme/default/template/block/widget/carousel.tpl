@@ -16,7 +16,7 @@
 </div>
 
 <? if (count($slides) > 1) { ?>
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 $('#<?= $slider_id; ?>').nivoSlider(<?= $json_params; ?>);
-//--></script>
+</script>
 <? } ?>

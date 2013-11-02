@@ -157,6 +157,6 @@
 			$('#module tfoot').before(html.replace(/%modrow%/g, module_row));
 			module_row++;
 		}
-//--></script>
+</script>
 <?= $this->builder->js('errors', $errors); ?>
 <?= $footer; ?>

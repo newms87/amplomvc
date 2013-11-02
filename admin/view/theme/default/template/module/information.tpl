@@ -115,5 +115,5 @@
 
 			module_row++;
 		}
-//--></script>
+</script>
 <?= $footer; ?>

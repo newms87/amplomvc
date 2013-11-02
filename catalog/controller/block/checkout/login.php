@@ -51,9 +51,9 @@ class Catalog_Controller_Block_Checkout_Login extends Controller
 		}
 
 		if (!$this->cart->validate()) {
-			$this->url->redirect($this->url->link('cart/cart'));
+			$this->url->redirect('cart/cart');
 		}
 
-		$this->url->redirect($this->url->link('checkout/checkout'));
+		$this->url->redirect('checkout/checkout');
 	}
 }

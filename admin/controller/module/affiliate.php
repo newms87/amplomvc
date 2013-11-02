@@ -16,7 +16,7 @@ class Admin_Controller_Module_Affiliate extends Controller
 
 			$this->message->add('success', $this->_('text_success'));
 
-			$this->url->redirect($this->url->link('extension/module'));
+			$this->url->redirect('extension/module');
 		}
 
 		if (isset($this->error['warning'])) {

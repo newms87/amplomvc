@@ -37,7 +37,7 @@ class Admin_Controller_Catalog_Review extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('catalog/review', $url));
+			$this->url->redirect('catalog/review', $url);
 		}
 
 		$this->getForm();
@@ -68,7 +68,7 @@ class Admin_Controller_Catalog_Review extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('catalog/review', $url));
+			$this->url->redirect('catalog/review', $url);
 		}
 
 		$this->getForm();
@@ -101,7 +101,7 @@ class Admin_Controller_Catalog_Review extends Controller
 				$url .= '&page=' . $_GET['page'];
 			}
 
-			$this->url->redirect($this->url->link('catalog/review', $url));
+			$this->url->redirect('catalog/review', $url);
 		}
 
 		$this->getList();

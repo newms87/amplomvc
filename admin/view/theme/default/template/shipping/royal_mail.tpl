@@ -441,5 +441,5 @@
 </div>
 <script type="text/javascript"><!--
 	$('.vtabs a').tabs();
-//--></script>
+</script>
 <?= $footer; ?>

@@ -5,7 +5,7 @@ class Catalog_Controller_Account_Forgotten extends Controller
 	{
 		//Customer already logged in.
 		if ($this->customer->isLogged()) {
-			$this->url->redirect($this->url->link('account/account'));
+			$this->url->redirect('account/account');
 		}
 
 		//Page Head
@@ -27,7 +27,7 @@ class Catalog_Controller_Account_Forgotten extends Controller
 
 			$this->message->add('success', _l('Your password has been reset! Your new password has been sent to your email. Please change your password as soon as you log into your account!'));
 
-			$this->url->redirect($this->url->link('account/login'));
+			$this->url->redirect('account/login');
 		}
 
 		//Breadcrumbs

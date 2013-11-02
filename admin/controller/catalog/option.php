@@ -24,7 +24,7 @@ class Admin_Controller_Catalog_Option extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('catalog/option'));
+				$this->url->redirect('catalog/option');
 			}
 		}
 
@@ -43,7 +43,7 @@ class Admin_Controller_Catalog_Option extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('catalog/option'));
+				$this->url->redirect('catalog/option');
 			}
 		}
 
@@ -72,7 +72,7 @@ class Admin_Controller_Catalog_Option extends Controller
 			if (!$this->error && !$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('catalog/option', $this->url->getQueryExclude('action')));
+				$this->url->redirect('catalog/option', $this->url->getQueryExclude('action'));
 			}
 		}
 

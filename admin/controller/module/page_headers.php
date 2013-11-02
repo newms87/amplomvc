@@ -14,7 +14,7 @@ class Admin_Controller_Module_PageHeaders extends Controller
 		if ($this->request->isPost() && $this->validate()) {
 			$this->Model_Design_Layout->setLayoutPageHeaders($_POST);
 			$this->message->add('success', $this->_('text_success'));
-			$this->url->redirect($this->url->link('module/page_headers'));
+			$this->url->redirect('module/page_headers');
 		}
 
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));

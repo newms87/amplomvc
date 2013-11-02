@@ -24,7 +24,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('catalog/attribute_group'));
+				$this->url->redirect('catalog/attribute_group');
 			}
 		}
 
@@ -41,7 +41,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('catalog/attribute_group'));
+				$this->url->redirect('catalog/attribute_group');
 			}
 		}
 
@@ -70,7 +70,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 			if (!$this->error && !$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('catalog/attribute_group'));
+				$this->url->redirect('catalog/attribute_group');
 			}
 		}
 

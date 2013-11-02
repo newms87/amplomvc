@@ -24,7 +24,7 @@ class Admin_Controller_Catalog_Category extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('catalog/category'));
+				$this->url->redirect('catalog/category');
 			}
 		}
 
@@ -41,7 +41,7 @@ class Admin_Controller_Catalog_Category extends Controller
 			if (!$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('catalog/category'));
+				$this->url->redirect('catalog/category');
 			}
 		}
 
@@ -77,7 +77,7 @@ class Admin_Controller_Catalog_Category extends Controller
 			if (!$this->error && !$this->message->error_set()) {
 				$this->message->add('success', $this->_('text_success'));
 
-				$this->url->redirect($this->url->link('catalog/category', $this->url->getQueryExclude('action')));
+				$this->url->redirect('catalog/category', $this->url->getQueryExclude('action'));
 			}
 		}
 

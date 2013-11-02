@@ -43,7 +43,7 @@
 	</tr>
 </table>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	var list_template = $('#attribute_list').find('.template_row');
 	var attributes_template = list_template.html();
 	list_template.remove();
@@ -60,4 +60,4 @@
 
 		$('#attribute_list').append($('<div class="attribute ' + $(this).val() + '" />').append(template));
 	});
-//--></script>
+</script>

@@ -15,7 +15,7 @@ class Admin_Controller_Module_DesignerSidebar extends Controller
 
 			$this->message->add('success', $this->_('text_success'));
 
-			$this->url->redirect($this->url->link('module/designer_sidebar'));
+			$this->url->redirect('module/designer_sidebar');
 		}
 
 		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));

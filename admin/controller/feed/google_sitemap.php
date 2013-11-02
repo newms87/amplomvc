@@ -16,7 +16,7 @@ class Admin_Controller_Feed_GoogleSitemap extends Controller
 
 			$this->message->add('success', $this->_('text_success'));
 
-			$this->url->redirect($this->url->link('extension/feed'));
+			$this->url->redirect('extension/feed');
 		}
 
 		if (isset($this->error['warning'])) {

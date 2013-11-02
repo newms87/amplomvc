@@ -70,7 +70,7 @@
 		</div>
 	</div>
 
-	<script type="text/javascript">//<!--
+	<script type="text/javascript">
 
 
 		$('input[name=primary_product_image]').live("change", function () {
@@ -100,7 +100,7 @@
 				scrollSensitivity: 30,
 				scrollSpeed: 30});
 		});
-//--></script>
+</script>
 
 <?= $this->builder->js('errors', $errors); ?>
 
