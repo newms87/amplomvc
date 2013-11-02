@@ -68,10 +68,10 @@
 		</div>
 	</div>
 
-<script type="text/javascript">//<!--
+<script type="text/javascript">
 	$('#overwrite_default_db').click(function () {
 		return confirm("This will overwrite the Default Database Installation for Amplo Cart! Are you sure you want to continue?");
 	});
-//--></script>
+</script>
 
 <?= $footer; ?>
