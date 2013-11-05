@@ -132,7 +132,7 @@ class Admin_Controller_Extension_Total extends Controller
 		$this->data['insert'] = $this->url->link('extension/add');
 
 		//Render limit Menu
-		$this->data['limits'] = $this->sort->render_limit();
+		$this->data['limits'] = $this->sort->renderLimits();
 
 		//Pagination
 		$this->pagination->init();

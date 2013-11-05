@@ -26,19 +26,13 @@ class Log
 	{
 		$handle = fopen($this->file, 'a+');
 
-		$newlines = array(
-			"\r\n",
-			"\r",
-			"\n"
-		);
-
 		$log = date('Y-m-d G:i:s');
 		$log .= "\t" . $_SERVER['REMOTE_ADDR'];
-		$log .= "\t" . preg_replace("/\?.*/", "", $_SERVER['REQUEST_URI']);
+		$log .= "\t" . preg_replace("/\\?.*/", "", $_SERVER['REQUEST_URI']);
 		$log .= "\t" . $_SERVER['QUERY_STRING'];
 		$log .= "\t" . "Store ID: $this->store_id";
 		$log .= "\t" . (isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '');
-		$log .= "\t" . str_replace($newlines, '<br />', $message);
+		$log .= "\t" . str_replace("\n", "__nl__", $message);
 
 		fwrite($handle, $log . "\r\n");
 

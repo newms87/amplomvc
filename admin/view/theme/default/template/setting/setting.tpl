@@ -619,18 +619,7 @@
 		<table class="form">
 			<tr>
 				<td><?= $entry_mail_protocol; ?></td>
-				<td><select name="config_mail_protocol">
-						<? if ($config_mail_protocol == 'mail') { ?>
-							<option value="mail" selected="selected"><?= $text_mail; ?></option>
-						<? } else { ?>
-							<option value="mail"><?= $text_mail; ?></option>
-						<? } ?>
-						<? if ($config_mail_protocol == 'smtp') { ?>
-							<option value="smtp" selected="selected"><?= $text_smtp; ?></option>
-						<? } else { ?>
-							<option value="smtp"><?= $text_smtp; ?></option>
-						<? } ?>
-					</select></td>
+				<td><?= $this->builder->build('select', $data_mail_protocols, "config_mail_protocol", $config_mail_protocol); ?></td>
 			</tr>
 			<tr>
 				<td><?= $entry_mail_parameter; ?></td>
@@ -658,35 +647,19 @@
 			</tr>
 			<tr>
 				<td><?= $entry_alert_mail; ?></td>
-				<td><? if ($config_alert_mail) { ?>
-						<input type="radio" name="config_alert_mail" value="1" checked="checked"/>
-						<?= $text_yes; ?>
-						<input type="radio" name="config_alert_mail" value="0"/>
-						<?= $text_no; ?>
-					<? } else { ?>
-						<input type="radio" name="config_alert_mail" value="1"/>
-						<?= $text_yes; ?>
-						<input type="radio" name="config_alert_mail" value="0" checked="checked"/>
-						<?= $text_no; ?>
-					<? } ?></td>
+				<td><?= $this->builder->build('radio', $data_yes_no, 'config_alert_mail', $config_alert_mail); ?></td>
 			</tr>
 			<tr>
 				<td><?= $entry_account_mail; ?></td>
-				<td><? if ($config_account_mail) { ?>
-						<input type="radio" name="config_account_mail" value="1" checked="checked"/>
-						<?= $text_yes; ?>
-						<input type="radio" name="config_account_mail" value="0"/>
-						<?= $text_no; ?>
-					<? } else { ?>
-						<input type="radio" name="config_account_mail" value="1"/>
-						<?= $text_yes; ?>
-						<input type="radio" name="config_account_mail" value="0" checked="checked"/>
-						<?= $text_no; ?>
-					<? } ?></td>
+				<td><?= $this->builder->build('radio', $data_yes_no, 'config_account_mail', $config_account_mail); ?></td>
 			</tr>
 			<tr>
 				<td><?= $entry_alert_emails; ?></td>
 				<td><textarea name="config_alert_emails" cols="40" rows="5"><?= $config_alert_emails; ?></textarea></td>
+			</tr>
+			<tr>
+				<td><?= _l("Enable Mail Logging"); ?></td>
+				<td><?= $this->builder->build('radio', $data_yes_no, 'config_mail_logging', $config_mail_logging); ?></td>
 			</tr>
 		</table>
 	</div>

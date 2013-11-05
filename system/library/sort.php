@@ -102,7 +102,7 @@ class Sort extends Library
 		$this->sort_template = $template;
 	}
 
-	public function render_limit($limits = null)
+	public function renderLimits($limits = null)
 	{
 		if (!$this->limit_template) {
 			$template = 'block/widget/limit';

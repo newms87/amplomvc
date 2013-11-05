@@ -12,8 +12,9 @@ class Admin_Controller_Setting_Setting extends Controller
 
 		//Handle Post
 		if ($this->request->isPost() && $this->validate()) {
-			$this->System_Model_Setting->editSetting('config', $_POST);
+			$this->config->saveGroup('config', $_POST, 0, true);
 
+			//TODO: Move this to Cron
 			if ($this->config->get('config_currency_auto')) {
 				$this->Model_Localisation_Currency->updateCurrencies();
 			}
@@ -31,6 +32,9 @@ class Admin_Controller_Setting_Setting extends Controller
 		//Load Information
 		if (!$this->request->isPost()) {
 			$config_data = $this->config->loadGroup('config', 0);
+		}
+		else {
+			$config_data = $_POST;
 		}
 
 		$defaults = array(
@@ -144,6 +148,7 @@ class Admin_Controller_Setting_Setting extends Controller
 			'config_alert_mail'                       => '',
 			'config_account_mail'                     => '',
 			'config_alert_emails'                     => '',
+			'config_mail_logging'                     => 1,
 			'config_fraud_detection'                  => '',
 			'config_fraud_key'                        => '',
 			'config_fraud_score'                      => '',
@@ -169,15 +174,7 @@ class Admin_Controller_Setting_Setting extends Controller
 			'config_plugin_dir_mode'                  => 755,
 		);
 
-		foreach ($defaults as $key => $default) {
-			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
-			} elseif (isset($config_data[$key])) {
-				$this->data[$key] = $config_data[$key];
-			} else {
-				$this->data[$key] = $default;
-			}
-		}
+		$this->data += $config_data + $defaults;
 
 		$octals = array(
 			'config_default_file_mode',
@@ -211,13 +208,18 @@ class Admin_Controller_Setting_Setting extends Controller
 		$this->data['data_return_policies']   = $this->cart->getReturnPolicies();
 		$this->data['data_shipping_policies'] = $this->cart->getShippingPolicies();
 
+		$this->data['data_mail_protocols'] = array(
+			'smtp' => "SMTP",
+			'mail' => _l("PHP Mail"),
+		);
+
 		$this->data['load_theme_img'] = $this->url->link('setting/setting/theme');
 
 		$this->_('text_add_return_policy', $this->url->link('setting/return_policy'));
 		$this->_('text_add_shipping_policy', $this->url->link('setting/shipping_policy'));
 
 		//Action Buttons
-		$this->data['save'] = $this->url->link('setting/setting');
+		$this->data['save']   = $this->url->link('setting/setting');
 		$this->data['cancel'] = $this->url->link('setting/store');
 
 		//Dependencies

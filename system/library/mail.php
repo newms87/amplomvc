@@ -25,6 +25,9 @@ class Mail extends Library
 	public $crlf;
 	public $verp;
 
+	private $logging;
+	private $log_entry = '';
+
 	public function __construct($registry)
 	{
 		parent::__construct($registry);
@@ -36,6 +39,12 @@ class Mail extends Library
 		$this->password  = $this->config->get('config_smtp_password');
 		$this->port      = $this->config->get('config_smtp_port');
 		$this->timeout   = $this->config->get('config_smtp_timeout');
+
+		$this->logging = $this->config->get('config_mail_logging');
+
+		if ($this->logging) {
+			$this->registry->set('mail_log', new Log(DIR_LOGS . 'mail_log.txt'), $this->config->get('config_store_id'));
+		}
 
 		$this->init();
 	}
@@ -157,7 +166,7 @@ class Mail extends Library
 		$this->language->setRoot(DIR_LANGUAGE);
 	}
 
-	public function send($data = null)
+	public function setData($data)
 	{
 		if ($data) {
 			if (isset($data['sender'])) {
@@ -190,31 +199,28 @@ class Mail extends Library
 				$this->setText($data['text']);
 			}
 
-			if (isset($data['attachment'])) {
-				if (!empty($_FILES['attachment']) && empty($_FILES['attachment']['error'])) {
-					$files = $_FILES['attachment'];
+			if (!empty($data['attachment'])) {
+				if (!is_array($data['attachment'])) {
+					$data['attachment'] = array($data['attachment']);
+				}
 
-					for ($i = 0; $i < count($files['name']); $i++) {
-						$file_name = dirname($files['tmp_name'][$i]) . '/' . $files['name'][$i];
-						rename($files['tmp_name'][$i], $file_name);
-						$this->addAttachment($file_name);
-					}
+				foreach ($data['attachment'] as $attachment) {
+					$this->addAttachment($attachment);
 				}
 			}
 		}
+	}
 
+	public function send()
+	{
 		$errors = '';
 
 		if (!$this->to) {
-			$msg = 'E-Mail To required!';
-			$this->trigger_error($msg);
-			$errors .= $msg;
+			$errors .= _l('E-Mail To required!');
 		}
 
 		if (!$this->from) {
-			$msg = 'E-Mail From required!';
-			$this->trigger_error($msg);
-			$errors .= $msg;
+			$errors .= _l('E-Mail From required!');
 		}
 
 		if (!$this->sender) {
@@ -222,23 +228,17 @@ class Mail extends Library
 		}
 
 		if (!$this->subject) {
-			$msg = 'E-Mail subject required!';
-			$this->trigger_error($msg);
-			$errors .= $msg;
+			$errors .= _l('E-Mail subject required!');
 		}
 
 		if ((!$this->text) && (!$this->html)) {
-			$msg = 'E-Mail message required!';
-			$this->trigger_error($msg);
-			$errors .= $msg;
+			$errors .= _l('E-Mail message required!');
 		}
 
 		if ($errors) {
 			$cc  = $this->cc ? "(CC: $this->cc)" : '';
 			$bcc = $this->bcc ? "(BCC: $this->bcc)" : '';
 			$msg = "There was a problem while sending an email to $this->to $cc $bcc<br />\r\n<br />\r\nThe Errors were as follows below: <br />\r\n<br />\r\n$errors";
-
-			$msg .= get_caller();
 
 			$this->trigger_error($msg);
 
@@ -323,30 +323,56 @@ class Mail extends Library
 		$message .= '--' . $boundary . '--' . $this->newline;
 
 		if ($this->protocol === 'smtp') {
+			$this->log(_l("\r\nSending via SMTP:\r\n"));
+
 			if ($this->sendSmtp($header, $message)) {
+				$this->log(_l("\r\nSMTP Mail Sent!\r\n\r\n"), true);
 				return true;
 			}
-			//If sendSmtp Fails, we continue to attempt sending mail via the regular way.
+
+			$this->log(_l("\r\nSMTP Failed\r\n\r\n"), true);
 		}
 
 		//Send via standard PHP
+		$this->log(_l("\r\nSending via PHP mail()\r\n"));
+
 		ini_set('sendmail_from', $this->from);
 
 		if (!$this->parameter) {
 			$this->parameter = null;
 		}
 
+		if (is_array($this->to)) {
+			$this->to = implode(', ', $this->to);
+		}
+
 		if (!mail($this->to, '=?UTF-8?B?' . base64_encode($this->subject) . '?=', $message, $header, $this->parameter)) {
-			$this->trigger_error("There was an error while sending the email message to: $this->to  -- from: $this->from");
+			$this->trigger_error(_l("There was an error while sending the email message to: %s -- from: %s", $this->to, $this->from));
+
+			$this->log(_l("\r\nPHP mail() Failed\r\n\r\n"), true);
 
 			return false;
 		}
+
+		$this->log(_l("\r\nPHP mail() Sent!\r\n\r\n"), true);
 
 		return true;
 	}
 
 	private function sendSmtp($header, $message)
 	{
+		if (!$this->hostname) {
+			$this->hostname = '127.0.0.1';
+		}
+
+		if (!$this->port) {
+			$this->port = 25;
+		}
+
+		if ((int)$this->timeout <= 0) {
+			$this->timeout = 5;
+		}
+
 		$this->handle = fsockopen($this->hostname, $this->port, $errno, $errstr, $this->timeout);
 
 		if (!$this->handle) {
@@ -356,66 +382,46 @@ class Mail extends Library
 
 		stream_set_timeout($this->handle, $this->timeout, 0);
 
-		while ($line = fgets($this->handle, 515)) {
-			if (substr($line, 3, 1) === ' ') {
-				break;
-			}
-		}
+		//Clear Socket
+		$this->getReply();
 
 		if (substr($this->hostname, 0, 3) === 'tls') {
-			fputs($this->handle, 'STARTTLS' . $this->crlf);
-
-			if (!$this->checkReplyCode(220)) {
-				$this->trigger_error('STARTTLS not accepted from server!');
+			if (!$this->talk("STARTTLS", 220)) {
+				$this->trigger_error(_l('STARTTLS not accepted from server!'));
 				return false;
 			}
 		}
 
 		if (!empty($this->username) && !empty($this->password)) {
-			fputs($this->handle, 'EHLO ' . getenv('SERVER_NAME') . $this->crlf);
 
-			if (!$this->checkReplyCode(250)) {
-				$this->trigger_error('EHLO not accepted from server!');
+			if (!$this->talk('EHLO ' . getenv('SERVER_NAME'), 250)) {
+				$this->trigger_error(_l('EHLO not accepted from server!'));
 				return false;
 			}
 
-			fputs($this->handle, 'AUTH LOGIN' . $this->crlf);
-
-			if (!$this->checkReplyCode(334)) {
-				$this->trigger_error('AUTH LOGIN not accepted from server!');
+			if (!$this->talk('AUTH LOGIN', 334)) {
+				$this->trigger_error(_l('AUTH LOGIN not accepted from server!'));
 				return false;
 			}
 
-			fputs($this->handle, base64_encode($this->username) . $this->crlf);
-
-			if (!$this->checkReplyCode(334)) {
-				$this->trigger_error('Username not accepted from server!');
+			if (!$this->talk(base64_encode($this->username), 334)) {
+				$this->trigger_error(_l('Username not accepted from server!'));
 				return false;
 			}
 
-			fputs($this->handle, base64_encode($this->password) . $this->crlf);
-
-			if (!$this->checkReplyCode(235)) {
-				$this->trigger_error('Password not accepted from server!');
+			if (!$this->talk(base64_encode($this->password), 235)) {
+				$this->trigger_error(_l('Password not accepted from server!'));
 				return false;
 			}
 		} else {
-			fputs($this->handle, 'HELO ' . getenv('SERVER_NAME') . $this->crlf);
-
-			if (!$this->checkReplyCode(250)) {
-				$this->trigger_error('HELO not accepted from server!');
+			if (!$this->talk('HELO ' . getenv('SERVER_NAME'), 250)) {
+				$this->trigger_error(_l('HELO not accepted from server!'));
 				return false;
 			}
 		}
 
-		if ($this->verp) {
-			fputs($this->handle, 'MAIL FROM: <' . $this->from . '>XVERP' . $this->crlf);
-		} else {
-			fputs($this->handle, 'MAIL FROM: <' . $this->from . '>' . $this->crlf);
-		}
-
-		if (!$this->checkReplyCode(250)) {
-			$this->trigger_error('MAIL FROM not accepted from server!');
+		if (!$this->talk('MAIL FROM: <' . $this->from . '>' . ($this->verp ? 'XVERP' : ''), 250)) {
+			$this->trigger_error(_l('MAIL FROM not accepted from server!'));
 			return false;
 		}
 
@@ -423,55 +429,73 @@ class Mail extends Library
 			$this->to = array($this->to);
 		}
 
-		foreach ($this->to as $recipient) {
-			fputs($this->handle, 'RCPT TO: <' . $recipient . '>' . $this->crlf);
+		$reply_codes = array(
+			250,
+			251
+		);
 
-			if (!$this->checkReplyCode(array(250,251))) {
-				$this->trigger_error('RCPT TO not accepted from server!');
+		foreach ($this->to as $recipient) {
+			if (!$this->talk('RCPT TO: <' . $recipient . '>', $reply_codes)) {
+				$this->trigger_error(_l('RCPT TO not accepted from server!'));
 				return false;
 			}
 		}
 
-		fputs($this->handle, 'DATA' . $this->crlf);
-
-		if (!$this->checkReplyCode(354)) {
-			$this->trigger_error('DATA not accepted from server!');
+		if (!$this->talk('DATA', 354)) {
+			$this->trigger_error(_l('DATA not accepted from server!'));
 			return false;
 		}
 
-		// According to rfc 821 we should not send more than 1000 characters including the CRLF
+		// RFC 821 - do not send more than 1000 characters including the CRLF
 		$message = str_replace("\r\n", "\n", $header . $message);
 		$message = str_replace("\r", "\n", $message);
 
 		$lines = explode("\n", $message);
 
 		foreach ($lines as $line) {
-			$results = str_split($line, 998);
+			$parts = str_split($line, 998);
 
-			foreach ($results as $result) {
-				if (substr(PHP_OS, 0, 3) != 'WIN') {
-					fputs($this->handle, $result . $this->crlf);
-				} else {
-					fputs($this->handle, str_replace("\n", "\r\n", $result) . $this->crlf);
-				}
+			foreach ($parts as $part) {
+				$this->talk($part);
 			}
 		}
 
-		fputs($this->handle, '.' . $this->crlf);
-
-		if (!$this->checkReplyCode(250)) {
-			$this->trigger_error('DATA not accepted from server!');
+		if (!$this->talk('.', 250)) {
+			$this->trigger_error(_l('DATA not accepted from server!'));
 			return false;
 		}
 
-		fputs($this->handle, 'QUIT' . $this->crlf);
-
-		if (!$this->checkReplyCode(221)) {
-			$this->trigger_error('QUIT not accepted from server!');
+		if (!$this->talk('QUIT', 221)) {
+			$this->trigger_error(_l('QUIT not accepted from server!'));
 			return false;
 		}
 
 		fclose($this->handle);
+
+		return true;
+	}
+
+	private function talk($msg, $code = null)
+	{
+
+		$this->log(_l("SEND: ") . $msg . "\r\n");
+
+		fputs($this->handle, $msg . $this->crlf);
+
+		if ($code) {
+			$reply      = $this->getReply();
+			$reply_code = (int)substr($reply, 0, 3);
+
+			$this->log(_l("REPLY: ") . $reply . "\r\n");
+
+			if (is_array($code)) {
+				return in_array($reply_code, $code);
+			}
+
+			return (int)$code === (int)$reply_code;
+		}
+
+		return true;
 	}
 
 	private function getReply()
@@ -489,23 +513,14 @@ class Mail extends Library
 		return $reply;
 	}
 
-	private function checkReplyCode($codes)
-	{
-		$reply = $this->getReply();
-
-		$code = (int)substr($reply, 0, 3);
-
-		if (is_array($code)) {
-			return in_array($code, $codes);
-		}
-
-		return $codes === (int)$code;
-	}
-
 	private function trigger_error($msg)
 	{
+		$msg .= get_caller(0, 2);
+
+		$this->log(_l("MAIL ERROR: ") . $msg . "\r\n", true);
+
 		//Hide Mail errors when ajax pages are requested
-		if (!empty($_POST['async']) && $this->config->get('config_error_display')) {
+		if ($this->request->isAjax() && $this->config->get('config_error_display')) {
 			$this->config->set('config_error_display', false);
 			trigger_error($msg);
 			$this->config->set('config_error_display', true);
@@ -542,5 +557,16 @@ class Mail extends Library
 		$mail_fail = $this->db->escape($mail_fail);
 
 		$this->db->query("INSERT INTO " . DB_PREFIX . "setting SET store_id = '0', `group` = 'mail_fail', `key` = 'mail_fail', value = '$mail_fail', serialized = '1', auto_load = '0'");
+	}
+
+	private function log($msg, $flush = false)
+	{
+		if (!$this->logging) return;
+
+		$this->log_entry .= $msg . "\r\n";
+
+		if ($flush) {
+			$this->mail_log->write($this->log_entry);
+		}
 	}
 }

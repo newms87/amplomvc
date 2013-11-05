@@ -186,7 +186,7 @@ class Admin_Controller_Page_Page extends Controller
 		$this->data['batch_update'] = 'page/page/batch_update';
 
 		//Render Limit Menu
-		$this->data['limits'] = $this->sort->render_limit();
+		$this->data['limits'] = $this->sort->renderLimits();
 
 		//Pagination
 		$this->pagination->init();

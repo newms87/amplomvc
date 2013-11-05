@@ -190,7 +190,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 		$this->data['batch_update'] = 'setting/url_alias/batch_update';
 
 		//Render Limit Menu
-		$this->data['limits'] = $this->sort->render_limit();
+		$this->data['limits'] = $this->sort->renderLimits();
 
 		//Pagination
 		$this->pagination->init();

@@ -109,7 +109,7 @@ class Catalog_Controller_Product_Category extends Controller
 
 			$this->data['sorts'] = $this->sort->render_sort($sorts);
 
-			$this->data['limits'] = $this->sort->render_limit();
+			$this->data['limits'] = $this->sort->renderLimits();
 
 			$this->pagination->init();
 			$this->pagination->total = $product_total;

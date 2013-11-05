@@ -165,7 +165,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 		$this->data['batch_update'] = 'catalog/attribute_group/batch_update';
 
 		//Render Limit Menu
-		$this->data['limits'] = $this->sort->render_limit();
+		$this->data['limits'] = $this->sort->renderLimits();
 
 		//Action Buttons
 		$this->data['insert'] = $this->url->link('catalog/attribute_group/update');
