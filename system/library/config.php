@@ -29,15 +29,13 @@ class Config extends Library
 		$settings = $this->cache->get('setting.config.' . $this->store_id);
 
 		if (!$settings) {
-			//TODO: all settings for store should be under setting store_id = n (should not use IN (0, n))
 			//TODO: Should use $this->System_Model_Setting->getSetting('config', $this->store_id);
-			$results = $this->db->query("SELECT * FROM " . DB_PREFIX . "setting WHERE store_id = '0' OR store_id = '$this->store_id' ORDER BY store_id ASC");
+			$settings = $this->db->queryRows("SELECT * FROM " . DB_PREFIX . "setting WHERE auto_load = 1 AND store_id IN (0, $this->store_id) ORDER BY store_id ASC", 'key');
 
-			$settings = array();
-
-			foreach ($results->rows as $row) {
-				$settings[$row['key']] = $row['serialized'] ? unserialize($row['value']) : $row['value'];
+			foreach ($settings as &$setting) {
+				$setting = $setting['serialized'] ? unserialize($setting['value']) : $setting['value'];
 			}
+			unset($setting);
 
 			$this->cache->set('setting.config.' . $this->store_id, $settings);
 		}

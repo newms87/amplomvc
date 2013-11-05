@@ -210,7 +210,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 		$this->data['batch_update'] = 'sale/voucher/batch_update';
 
 		//Render Limit Menu
-		$this->data['limits'] = $this->sort->render_limit();
+		$this->data['limits'] = $this->sort->renderLimits();
 
 		//Pagination
 		$this->pagination->init();

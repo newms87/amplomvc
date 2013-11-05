@@ -162,7 +162,7 @@ class Admin_Controller_Extension_Plugin extends Controller
 		$this->data['list_view'] = $this->table->render();
 
 		//Render Limit Menu
-		$this->data['limits'] = $this->sort->render_limit();
+		$this->data['limits'] = $this->sort->renderLimits();
 
 		//Pagination
 		$this->pagination->init();

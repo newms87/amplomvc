@@ -51,10 +51,17 @@ class Admin_Controller_Mail_Error extends Controller
 			$mail = $_POST;
 
 			if (!empty($_FILES['attachment']) && empty($_FILES['attachment']['error'])) {
-				$mail['attachment'] = $_FILES['attachment'];
+				$files = $_FILES['attachment'];
+
+				for ($i = 0; $i < count($files['name']); $i++) {
+					$file_name = dirname($files['tmp_name'][$i]) . '/' . $files['name'][$i];
+					rename($files['tmp_name'][$i], $file_name);
+					$mail['attachment'][] = $file_name;
+				}
 			}
 
-			$message = $this->Model_Mail_Error->getFailedMessage($_POST['mail_fail_id']);
+			$message = $this->Model_Mail_Error->getFailedMessage($mail['mail_fail_id']);
+			$this->Model_Mail_Error->deleteFailedMessage($mail['mail_fail_id']);
 
 			if (!empty($mail['allow_html'])) {
 				$mail['html'] = html_entity_decode($message['html'], ENT_QUOTES, 'UTF-8');
@@ -64,9 +71,9 @@ class Admin_Controller_Mail_Error extends Controller
 
 			$this->mail->init();
 
-			$this->Model_Mail_Error->deleteFailedMessage($mail['mail_fail_id']);
+			$this->mail->setData($mail);
 
-			if ($this->mail->send($mail)) {
+			if ($this->mail->send()) {
 				$this->message->add('success', 'text_message_sent');
 			}
 		}

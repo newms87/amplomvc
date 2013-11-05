@@ -173,7 +173,7 @@ class Admin_Controller_Design_Layout extends Controller
 		$this->data['batch_update'] = 'design/layout/batch_update';
 
 		//Render Limit Menu
-		$this->data['limits'] = $this->sort->render_limit();
+		$this->data['limits'] = $this->sort->renderLimits();
 
 		//Pagination
 		$this->pagination->init();

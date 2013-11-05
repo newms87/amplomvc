@@ -172,7 +172,7 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 		$this->data['batch_update'] = 'catalog/product_class/batch_update';
 
 		//Render Limit Menu
-		$this->data['limits'] = $this->sort->render_limit();
+		$this->data['limits'] = $this->sort->renderLimits();
 
 		//Pagination
 		$this->pagination->init();

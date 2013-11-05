@@ -157,7 +157,7 @@ class Admin_Controller_Catalog_Option extends Controller
 		$this->data['batch_update'] = 'catalog/option/batch_update';
 
 		//Render Limit Menu
-		$this->data['limits'] = $this->sort->render_limit();
+		$this->data['limits'] = $this->sort->renderLimits();
 
 		//Pagination
 		$this->pagination->init();

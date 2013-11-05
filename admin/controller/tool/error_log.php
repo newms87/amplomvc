@@ -1,8 +1,6 @@
 <?php
 class Admin_Controller_Tool_ErrorLog extends Controller
 {
-
-
 	public function index()
 	{
 		$this->template->load('tool/error_log');

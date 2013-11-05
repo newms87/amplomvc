@@ -50,7 +50,7 @@ class Catalog_Controller_Account_Order extends Controller
 		$this->data['orders'] = $orders;
 
 		//Render Limit Menu
-		//$this->data['limits'] = $this->sort->render_limit();
+		//$this->data['limits'] = $this->sort->renderLimits();
 
 		//Pagination
 		$this->pagination->init();

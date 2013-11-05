@@ -272,8 +272,11 @@ function get_caller($offset = 0, $limit = 1) {
 		if (isset($caller['file'])) {
 			$msg = "Called from <b style=\"color:red\">$caller[file]</b> on line <b style=\"color:red\">$caller[line]</b>";
 		}
-		else {
+		elseif (isset($caller['class'])) {
 			$msg = "Called from <b style=\"color:red\">$caller[class]::$caller[function]</b>";
+		}
+		else {
+			$msg = "Called from <b style=\"color:red\">$caller[function]()</b>";
 		}
 
 		$html = "<div style=\"margin-top:5px\"><b>&#187;</b> $msg</div>" . $html;

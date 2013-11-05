@@ -218,7 +218,7 @@ class Admin_Controller_Catalog_Information extends Controller
 		$this->data['batch_update'] = 'catalog/information/batch_update';
 
 		//Render Limit Menu
-		$this->data['limits'] = $this->sort->render_limit();
+		$this->data['limits'] = $this->sort->renderLimits();
 
 		//Action Buttons
 		$this->data['insert'] = $this->url->link('catalog/information/insert');
