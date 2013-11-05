@@ -336,6 +336,10 @@ class Mail extends Library
 			$this->parameter = null;
 		}
 
+		if (is_array($this->to)) {
+			$this->to = implode(',', $this->to);
+		}
+
 		if (!mail($this->to, '=?UTF-8?B?' . base64_encode($this->subject) . '?=', $message, $header, $this->parameter)) {
 			$this->trigger_error("There was an error while sending the email message to: $this->to  -- from: $this->from");
 
@@ -495,7 +499,7 @@ class Mail extends Library
 
 		$code = (int)substr($reply, 0, 3);
 
-		if (is_array($code)) {
+		if (is_array($codes)) {
 			return in_array($code, $codes);
 		}
 
