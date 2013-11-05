@@ -22,6 +22,8 @@ class Image extends Library
 
 	public function get($filename)
 	{
+		$filename = str_replace('\\','/', $filename);
+		
 		if (!is_file(DIR_IMAGE . $filename)) {
 			return is_file($filename) ? $filename : '';
 		}

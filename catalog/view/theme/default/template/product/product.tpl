@@ -240,7 +240,7 @@
 	<script type="text/javascript">//<!--
 		//Check if Product description is overflowed
 		pd = $('.product_info .product_description')[0];
-		if (pd.scrollHeight > pd.clientHeight) {
+		if ( pd && pd.scrollHeight > pd.clientHeight) {
 			$(pd).addClass('overflowed');
 			$(pd).click(function () {
 				$(this).toggleClass('hover');
