@@ -635,9 +635,9 @@ class Admin_Model_Design_Navigation extends Model
 						'display_name' => 'System Tools',
 						'href'         => 'tool/tool',
 					),
-					'system_error_logs'      => array(
-						'display_name' => 'Error Logs',
-						'href'         => 'tool/error_log',
+					'system_logs'      => array(
+						'display_name' => 'Logs',
+						'href'         => 'tool/logs',
 					),
 					'system_localisation'    => array(
 						'display_name' => 'Localisation',

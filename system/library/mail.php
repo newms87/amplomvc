@@ -323,18 +323,18 @@ class Mail extends Library
 		$message .= '--' . $boundary . '--' . $this->newline;
 
 		if ($this->protocol === 'smtp') {
-			$this->log(_l("\r\nSending via SMTP:\r\n"));
+			$this->log(_l("Sending via SMTP:"));
 
 			if ($this->sendSmtp($header, $message)) {
-				$this->log(_l("\r\nSMTP Mail Sent!\r\n\r\n"), true);
+				$this->log(_l("SMTP Mail Sent!"), true);
 				return true;
 			}
 
-			$this->log(_l("\r\nSMTP Failed\r\n\r\n"), true);
+			$this->log(_l("SMTP Failed"), true);
 		}
 
 		//Send via standard PHP
-		$this->log(_l("\r\nSending via PHP mail()\r\n"));
+		$this->log(_l("Sending via PHP mail():"));
 
 		ini_set('sendmail_from', $this->from);
 
@@ -349,12 +349,12 @@ class Mail extends Library
 		if (!mail($this->to, '=?UTF-8?B?' . base64_encode($this->subject) . '?=', $message, $header, $this->parameter)) {
 			$this->trigger_error(_l("There was an error while sending the email message to: %s -- from: %s", $this->to, $this->from));
 
-			$this->log(_l("\r\nPHP mail() Failed\r\n\r\n"), true);
+			$this->log(_l("PHP mail() Failed"), true);
 
 			return false;
 		}
 
-		$this->log(_l("\r\nPHP mail() Sent!\r\n\r\n"), true);
+		$this->log(_l("PHP mail() Sent!"), true);
 
 		return true;
 	}
@@ -478,7 +478,7 @@ class Mail extends Library
 	private function talk($msg, $code = null)
 	{
 
-		$this->log(_l("SEND: ") . $msg . "\r\n");
+		$this->log(_l("SEND: ") . $msg);
 
 		fputs($this->handle, $msg . $this->crlf);
 
@@ -486,7 +486,7 @@ class Mail extends Library
 			$reply      = $this->getReply();
 			$reply_code = (int)substr($reply, 0, 3);
 
-			$this->log(_l("REPLY: ") . $reply . "\r\n");
+			$this->log(_l("REPLY: ") . $reply);
 
 			if (is_array($code)) {
 				return in_array($reply_code, $code);
@@ -517,7 +517,7 @@ class Mail extends Library
 	{
 		$msg .= get_caller(0, 2);
 
-		$this->log(_l("MAIL ERROR: ") . $msg . "\r\n", true);
+		$this->log(_l("MAIL ERROR: ") . $msg, true);
 
 		//Hide Mail errors when ajax pages are requested
 		if ($this->request->isAjax() && $this->config->get('config_error_display')) {

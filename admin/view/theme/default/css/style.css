@@ -2559,3 +2559,37 @@ div .easy_list li > * + * {
 	display: block;
 	margin-bottom: 20px;
 }
+
+/** Logs **/
+td.log_remove{
+	position:relative;
+	padding:5px;
+}
+
+td.log_remove .message_box{
+	position:absolute;
+top:5px;
+}
+
+.change_log{
+	padding-top: 12px;
+	margin-left: 20px;
+}
+.change_log .log_file{
+	padding: 5px 10px;
+	padding-left: 30px;
+	margin-right: 10px;
+	margin-top: 5px;
+	background: url(../image/log-icon.png) 5px 5px no-repeat;
+	background-size: 20px 15px;
+	background-color: #DFCFFF;
+	border: 1px solid #AA7FFF;
+	border-radius: 8px;
+	text-decoration:none;
+	color: #631EED;
+}
+
+.change_log .log_file.selected,
+.change_log .log_file:hover{
+	background-color: #AA7FFF;
+}

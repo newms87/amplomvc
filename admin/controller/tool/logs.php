@@ -3,15 +3,18 @@ class Admin_Controller_Tool_Logs extends Controller
 {
 	public function index()
 	{
-		//Page Head
-		$this->document->setTitle($this->_('head_title'));
-
-		//Breadcrumbs
-		$this->breadcrumb->add($this->_('text_home'), $this->url->link('common/home'));
-		$this->breadcrumb->add($this->_('head_title'), $this->url->link('tool/logs'));
-
 		//Log File
 		$log = isset($_GET['log']) ? $_GET['log'] : 'log';
+
+		$log_name = $log === 'log' ? _l("Default") : ucfirst($log);
+
+		//Page Head
+		$this->document->setTitle(_l("%s Log", $log_name));
+
+		//Breadcrumbs
+		$this->breadcrumb->add(_l('Home'), $this->url->link('common/home'));
+		$this->breadcrumb->add(_l('Log Files'), $this->url->link('tool/logs'));
+		$this->breadcrumb->add(_l("%s Log", $log_name), $this->url->link('tool/logs', 'log=' . $log));
 
 		//Action Buttons
 		$this->data['remove'] = $this->url->link('tool/logs/remove', 'log=' . $log);
@@ -26,7 +29,7 @@ class Admin_Controller_Tool_Logs extends Controller
 
 		$current = -1;
 
-		$file    = DIR_LOGS . $this->config->get('config_error_filename');
+		$file    = DIR_LOGS . $log . '.txt';
 		$entries = array();
 
 		if (file_exists($file)) {
@@ -52,7 +55,7 @@ class Admin_Controller_Tool_Logs extends Controller
 							'query'   => $data[3],
 							'store'   => $data[4],
 							'agent'   => $data[5],
-							'message' => $data[6],
+							'message' => str_replace("__nl__", "<br />", $data[6]),
 						);
 					}
 				}
@@ -74,13 +77,23 @@ class Admin_Controller_Tool_Logs extends Controller
 		}
 
 		//Template Data
-		$this->data['log_name'] = $log;
+		$this->data['log_name'] = $log_name;
 
+		$log_files = $this->tool->get_files_r(DIR_LOGS, array('txt'));
 
-		$this->data['filter_url'] = $this->url->link('tool/logs');
+		foreach ($log_files as &$file) {
+			$base = $file->getBasename('.txt');
 
-		$stores               = $this->Model_Setting_Store->getStoreNames();
-		$this->data['stores'] = $stores;
+			$file = array(
+				'name' => $base === 'log' ? _l("Default") : ucfirst($base),
+				'href' => $this->url->link('tool/logs', 'log=' . $base),
+				'selected' => $base === $log,
+			);
+		}
+
+		$this->data['data_log_files'] = $log_files;
+
+		$this->data['limit'] = $sort['limit'];
 
 		//Limits
 		$this->data['limits'] = $this->sort->renderLimits();
@@ -98,30 +111,20 @@ class Admin_Controller_Tool_Logs extends Controller
 		$this->response->setOutput($this->render());
 	}
 
-	public function remove($lines = null, $get_page = false)
+	public function remove($lines = null)
 	{
-		$get_page = $lines !== null ? $get_page : !isset($_POST['no_page']);
+		if (empty($_GET['log'])) {
+			$this->url->redirect('tool/logs');
+		}
 
 		if (!isset($_POST['entries']) && $lines === null) {
-			$msg = "No entries were selected for removal!";
-			if ($get_page) {
-				$this->message->add('warning', $msg);
-			} else {
-				echo $msg;
-			}
+			$this->message->add('warning', _l("No entries were selected for removal!"));
 		} else {
 			$entries = ($lines !== null) ? $lines : $_POST['entries'];
 
-			if (preg_match("/[^\d\s,-]/", $entries) > 0) {
-				$msg = "Invalid Entries for removal: $entries. Use either ranges or integer values (eg: 3,40-50,90,100)";
-				if ($get_page) {
-					$this->message->add('warning', $msg);
-				} else {
-					echo $msg;
-				}
+			if (preg_match("/[^\\d\\s,-]/", $entries) > 0) {
+				$this->message->add('warning', _l("Invalid Entries for removal: %s. Use either ranges or integer values (eg: 3,40-50,90,100)", $entries));
 			}
-
-			$this->language->load('tool/logs');
 
 			$file = DIR_LOGS . $this->config->get('config_error_filename');
 
@@ -139,15 +142,14 @@ class Admin_Controller_Tool_Logs extends Controller
 			}
 
 			file_put_contents($file, implode("\n", $file_lines));
-			$msg = $this->_('text_success_remove');
-			if ($get_page) {
-				$this->message->add('success', $msg);
-			} else {
-				echo $msg;
-			}
+
+			$this->message->add('success', _l('Entry Removed!'));
 		}
-		if ($get_page) {
-			$this->index();
+
+		if ($this->request->isAjax()) {
+			$this->response->setOutput(json_encode($this->message->fetch()));
+		} else {
+			$this->url->redirect('tool/logs', 'log=' . $_GET['log']);
 		}
 	}
 
@@ -159,10 +161,9 @@ class Admin_Controller_Tool_Logs extends Controller
 
 		$file = DIR_LOGS . $_GET['log'] . '.txt';
 
-		$handle = fopen($file, 'w+');
-		fclose($handle);
+		file_put_contents($file, '');
 
-		$this->message->add('success', _l('Log Entries have been cleared!'));
+		$this->message->add('success', _l("Log Entries have been cleared in <strong>$file</strong>!"));
 
 		$this->url->redirect('tool/logs', 'log=' . $_GET['log']);
 	}

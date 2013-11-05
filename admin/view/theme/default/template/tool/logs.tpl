@@ -6,33 +6,39 @@
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'log.png'; ?>" alt=""/> <?= _l("%s Log", $log_name); ?></h1>
 
+			<div class="change_log right">
+				<? foreach ($data_log_files as $file) { ?>
+					<a href="<?= $file['href']; ?>" class="log_file <?= $file['selected'] ? 'selected' : ''; ?>"><?= $file['name']; ?></a>
+				<? } ?>
+			</div>
+
 			<div class="buttons">
-				<? if ($prev || $next) { ?>
-					<?= $text_limit; ?> <input type='text' id='limit' value='<?= $limit; ?>' onchange='update_limit();'/>
-				<? } ?>
-				<? if ($prev) { ?>
-					<a id='button_prev' href="<?= $prev; ?>" class="button"><?= _l("Previous"); ?></a>
-				<? } ?>
-				<? if ($next) { ?>
-					<a id='button_next' href="<?= $next; ?>" class="button"><?= _l("Next"); ?></a>
+				<? if (!empty($prev) || !empty($next)) { ?>
+					<?= _l("Limit"); ?> <input type="text" id="limit" value="<?= $limit; ?>" onchange="update_limit();"/>
+					<? if (!empty($prev)) { ?>
+						<a id="button_prev" href="<?= $prev; ?>" class="button"><?= _l("Previous"); ?></a>
+					<? } ?>
+					<? if (!empty($next)) { ?>
+						<a id="button_next" href="<?= $next; ?>" class="button"><?= _l("Next"); ?></a>
+					<? } ?>
 				<? } ?>
 			</div>
 		</div>
 		<div class="section">
-			<table class='form'>
+			<table class="form">
 				<tr>
 					<td><?= _l("Remove"); ?></td>
 					<td>
-						<form action="<?= $remove; ?>" method="post" style='float:left;'>
-							<input id='remove_entries' type='text' name='entries' value=""/>
-							<a class='button' onclick="$(this).closest('form').submit();"><?= _l("Remove"); ?></a>
+						<form action="<?= $remove; ?>" method="post" style="float:left;">
+							<input id="remove_entries" type="text" name="entries" value=""/>
+							<a class="button" onclick="$(this).closest('form').submit();"><?= _l("Remove"); ?></a>
 						</form>
 						<a href="<?= $clear; ?>" class="button"
-						   style='float:left;margin-left:20px'><?= _l("Clear Log Entries"); ?></a>
+						   style="float:left;margin-left:20px"><?= _l("Clear Log Entries"); ?></a>
 					</td>
 				</tr>
 			</table>
-			<table class="list" width='100%'>
+			<table class="list" width="100%">
 				<thead>
 				<tr>
 					<td width="2%"><?= _l("Remove"); ?></td>
@@ -48,8 +54,8 @@
 				</thead>
 				<tbody>
 				<? foreach ($entries as $e) { ?>
-					<tr id='entry<?= $e['line']; ?>'>
-						<td><a class='button' onclick="remove_entry(<?= (int)$e['line']; ?>);"><?= 'X'; ?></a></td>
+					<tr data-line="<?= $e['line']; ?>">
+						<td><a class="button remove" onclick="remove_entry($(this).closest('tr'));">X</a></td>
 						<td><?= $e['line']; ?></td>
 						<td><?= $e['date']; ?></td>
 						<td><?= $e['ip']; ?></td>
@@ -65,38 +71,31 @@
 		</div>
 	</div>
 </div>
-<script type='text/javascript'>
-	function remove_entry(line) {
-		$.post("<?= $remove; ?>", {entries: line, no_page: 1},
+
+<script type="text/javascript">
+	var remove_tpl = $('#log_template').remove().removeAttr('id');
+
+	function remove_entry(context) {
+		$.post("<?= $remove; ?>", {entries: context.attr('data-line'), no_page: 1},
 			function (msg) {
-				$('#entry' + line).css({height: 50})
-					.html("<td colspan='7' style='position:relative;padding:5px'><span style='position:absolute;top:5px;' class='message_box success'>" + msg + "</span></td>");
+				show_msg('warning', msg);
+
 				setTimeout(function () {
-					$('#entry' + line).fadeOut(300);
+					context.fadeOut(300);
 				}, 1000);
 			}
 		);
-		$('#entry' + line).loading();
+
+		context.loading();
 	}
 
 	$('#button_prev, #button_next').trigger('change');
+
 	function update_limit() {
 		limit = $('#limit').val();
 		$('#button_prev, #button_next').each(function (i, e) {
 			$(e).attr('href', $(e).attr('href').replace(/&limit=\d*/gi, '') + '&limit=' + limit);
 		});
 	}
-
-	function set_filter_url() {
-		filters = '';
-
-		$('#filter_types select').each(function (i, e) {
-			filters += $(e).val() ? '&' + $(e).attr('name') + '=' + $(e).val() : '';
-		});
-
-		$('#filter_link').attr('href', '<?= $filter_url; ?>' + filters);
-		return true;
-	}
-
 </script>
 <?= $footer; ?>
