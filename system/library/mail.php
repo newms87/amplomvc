@@ -508,6 +508,8 @@ class Mail extends Library
 
 	private function trigger_error($msg)
 	{
+		$msg .= get_caller(0,2);
+
 		//Hide Mail errors when ajax pages are requested
 		if (!empty($_POST['async']) && $this->config->get('config_error_display')) {
 			$this->config->set('config_error_display', false);
