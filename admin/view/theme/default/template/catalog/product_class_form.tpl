@@ -25,6 +25,7 @@
 									<tr>
 										<td><?= $entry_theme_name; ?></td>
 										<td><?= $entry_theme_template; ?></td>
+										<td><?= _l("Controller:"); ?></td>
 									</tr>
 									</thead>
 									<tbody>
@@ -32,6 +33,7 @@
 										<tr>
 											<td><?= $theme; ?></td>
 											<td><?= $this->builder->build('select', $templates, "front_template[$theme]", isset($front_template[$theme]) ? $front_template[$theme] : ''); ?></td>
+											<td><input type="text" name="front_controller[<?= $theme; ?>]" value="<?= $front_controller[$theme]; ?>" /></td>
 										</tr>
 									<? } ?>
 									</tbody>
@@ -46,6 +48,7 @@
 									<tr>
 										<td><?= $entry_theme_name; ?></td>
 										<td><?= $entry_theme_template; ?></td>
+										<td><?= _l("Controller:"); ?></td>
 									</tr>
 									</thead>
 									<tbody>
@@ -53,6 +56,7 @@
 										<tr>
 											<td><?= $theme; ?></td>
 											<td><?= $this->builder->build('select', $templates, "admin_template[$theme]", isset($admin_template[$theme]) ? $admin_template[$theme] : ''); ?></td>
+											<td><input type="text" name="admin_controller[<?= $theme; ?>]" value="<?= $admin_controller[$theme]; ?>" /></td>
 										</tr>
 									<? } ?>
 									</tbody>

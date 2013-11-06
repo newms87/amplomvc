@@ -86,6 +86,11 @@ final class Router
 			$this->path = 'common/maintenance';
 		}
 
+		//Product Class Routing
+		if ($this->path === 'product/product' && !empty($_GET['product_id'])) {
+			$this->path = $this->Model_Catalog_Product->getClassController($_GET['product_id']);
+		}
+
 		//Controller Overrides
 		$controller_overrides = $this->config->load('controller_override', 'controller_override');
 

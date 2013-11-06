@@ -73,7 +73,7 @@ class Catalog_Model_Catalog_Product extends Model
 
 	public function getProducts($data = array(), $select = '*', $total = false)
 	{
-		$store_id    = (int)$this->config->get('config_store_id');
+		$store_id = (int)$this->config->get('config_store_id');
 
 		/* TODO:
 		 *
@@ -487,7 +487,7 @@ class Catalog_Model_Catalog_Product extends Model
 					"SELECT pa.attribute_id FROM " . DB_PREFIX . "product_attribute pa" .
 					" LEFT JOIN " . DB_PREFIX . "product_to_category p2c ON (p2c.product_id=pa.product_id)" .
 					" WHERE p2c.category_id IN (" . implode(',', $data['category_ids']) . ")" .
-				")";
+					")";
 			}
 
 			//Group By, Order By and Limit
@@ -519,32 +519,49 @@ class Catalog_Model_Catalog_Product extends Model
 		return $attributes;
 	}
 
+	public function getClassController($product_id)
+	{
+		$product_class_id = $this->queryVar("SELECT product_class_id FROM " . DB_PREFIX . "product WHERE product_id = " . (int)$product_id);
+
+		$product_class = $this->getProductClass($product_class_id);
+
+		return $product_class['controller'] ? $product_class['controller'] : 'product/product';
+	}
+
 	public function getClassTemplate($product_class_id)
 	{
-		$product_classes = $this->cache->get('product_classes');
+		$product_class = $this->getProductClass($product_class_id);
 
-		if (is_null($product_classes)) {
+		return !empty($product_class['template']) ? 'product/' . $product_class['template'] : 'product/product';
+	}
+
+	public function getProductClass($product_class_id)
+	{
+		$product_class = $this->cache->get('product_class.' . $product_class_id);
+
+		if (is_null($product_class)) {
 			$product_classes = $this->queryRows("SELECT * FROM " . DB_PREFIX . "product_class");
 
 			foreach ($product_classes as &$product_class) {
-				$product_class['front_template'] = unserialize($product_class['front_template']);
-				$product_class['admin_template'] = unserialize($product_class['admin_template']);
-				$product_class['defaults']       = unserialize($product_class['defaults']);
+				$product_class['front_template']   = unserialize($product_class['front_template']);
+				$product_class['front_controller'] = unserialize($product_class['front_controller']);
+				$product_class['defaults']         = unserialize($product_class['defaults']);
 			}
 			unset($product_class);
 
-			$this->cache->set('product_classes', $product_classes);
+			$theme = $this->theme->getTheme();
+
+			$product_class = array_search_key('product_class_id', $product_class_id, $product_classes);
+
+			$product_class = array(
+				'controller' => $product_class['front_controller'][$theme],
+				'template'   => $product_class['front_template'][$theme],
+			);
+
+			$this->cache->set('product_class.' . $product_class_id, $product_class);
 		}
 
-		$theme = $this->theme->getTheme();
-
-		$product_class = array_search_key('product_class_id', $product_class_id, $product_classes);
-
-		if (!empty($product_class['front_template'][$theme])) {
-			return 'product/' . $product_class['front_template'][$theme];
-		}
-
-		return 'product/product';
+		return $product_class;
 	}
 
 	public function getTotalProducts($data = array())

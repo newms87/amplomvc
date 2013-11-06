@@ -16,8 +16,10 @@ class Admin_Model_Catalog_ProductClass extends Model
 
 	public function addProductClass($data)
 	{
-		$data['front_template'] = !empty($data['front_template']) ? serialize($data['front_template']) : '';
-		$data['admin_template'] = !empty($data['admin_template']) ? serialize($data['admin_template']) : '';
+		$data['front_template']   = !empty($data['front_template']) ? serialize($data['front_template']) : '';
+		$data['front_controller'] = !empty($data['front_controller']) ? serialize($data['front_controller']) : '';
+		$data['admin_template']   = !empty($data['admin_template']) ? serialize($data['admin_template']) : '';
+		$data['admin_controller'] = !empty($data['admin_controller']) ? serialize($data['admin_controller']) : '';
 
 		$product_class_id = $this->insert('product_class', $data);
 
@@ -32,9 +34,18 @@ class Admin_Model_Catalog_ProductClass extends Model
 			$data['front_template'] = !empty($data['front_template']) ? serialize($data['front_template']) : '';
 		}
 
+		if (isset($data['front_controller'])) {
+			$data['front_controller'] = !empty($data['front_controller']) ? serialize($data['front_controller']) : '';
+		}
+
 		if (isset($data['admin_template'])) {
 			$data['admin_template'] = !empty($data['admin_template']) ? serialize($data['admin_template']) : '';
 		}
+
+		if (isset($data['admin_controller'])) {
+			$data['admin_controller'] = !empty($data['admin_controller']) ? serialize($data['admin_controller']) : '';
+		}
+
 
 		$this->update('product_class', $data, $product_class_id);
 
@@ -52,8 +63,10 @@ class Admin_Model_Catalog_ProductClass extends Model
 	{
 		$product_class = $this->queryRow("SELECT * FROM " . DB_PREFIX . "product_class WHERE product_class_id = " . (int)$product_class_id);
 
-		$product_class['front_template'] = unserialize($product_class['front_template']);
-		$product_class['admin_template'] = unserialize($product_class['admin_template']);
+		$product_class['front_template']   = unserialize($product_class['front_template']);
+		$product_class['front_controller'] = unserialize($product_class['front_controller']);
+		$product_class['admin_template']   = unserialize($product_class['admin_template']);
+		$product_class['admin_controller'] = unserialize($product_class['admin_controller']);
 
 		return $product_class;
 	}

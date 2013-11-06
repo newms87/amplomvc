@@ -218,23 +218,20 @@ class Admin_Controller_Catalog_ProductClass extends Controller
 		if ($product_class_id && !$this->request->isPost()) {
 			$product_class_info = $this->Model_Catalog_ProductClass->getProductClass($product_class_id);
 		}
+		else {
+			$product_class_info = $_POST;
+		}
 
 		//Set Values or Defaults
 		$defaults = array(
-			'name'           => '',
-			'front_template' => array(),
-			'admin_template' => array(),
+			'name'             => '',
+			'front_template'   => array(),
+			'front_controller' => array(),
+			'admin_template'   => array(),
+			'admin_controller' => array(),
 		);
 
-		foreach ($defaults as $key => $default) {
-			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
-			} elseif (isset($product_class_info[$key])) {
-				$this->data[$key] = $product_class_info[$key];
-			} else {
-				$this->data[$key] = $default;
-			}
-		}
+		$this->data += $product_class_info + $defaults;
 
 		//Additional Data
 		$this->data['data_front_templates'] = $this->Model_Catalog_ProductClass->getFrontTemplates();
