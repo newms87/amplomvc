@@ -9,7 +9,7 @@
 			<span id='cart_weight'>(<?= $weight; ?>)</span>
 		<? } ?>
 	</h1>
-	<? if ($block_cart) { ?>
+	<? if (!$cart_empty) { ?>
 		<div class="buttons">
 			<div class="right"><a href="<?= $checkout; ?>" class="button"><?= $button_checkout; ?></a></div>
 			<div class="center"><a href="<?= $continue; ?>" class="button"><?= $button_shopping; ?></a></div>
@@ -71,7 +71,7 @@
 			<div class="center"><a href="<?= $continue; ?>" class="button"><?= $button_shopping; ?></a></div>
 		</div>
 	<? } else { ?>
-		<h3><?= $text_cart_empty; ?></h3>
+		<?= $block_cart; ?>
 		<div class="center"><a href="<?= $continue; ?>" class="button"><?= $button_shopping; ?></a></div>
 	<? } ?>
 
@@ -94,9 +94,9 @@
 	$('#toggle_block_shipping').hide();
 	<? }?>
 
-	function handle_ajax_cart_load(action, data) {
+	$('#the_cart').on('cart_loaded', function() {
 		load_block($('#cart_block_total'), 'block/cart/total');
-	}
+	});
 </script>
 
 

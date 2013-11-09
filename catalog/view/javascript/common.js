@@ -1,8 +1,8 @@
 $.add_to_cart = function (params) {
 	var data;
 
-	if (params.form && params.form.length) {
-		data = params.form.serialize();
+	if (params.form && $(params.form).length) {
+		data = $(params.form).serialize();
 	} else {
 		data = {
 			product_id: params.product_id || 0,
@@ -11,7 +11,7 @@ $.add_to_cart = function (params) {
 
 		//Process Options if set
 		if (params.options && params.options.length) {
-			data['product_options'] = params.options.serialize();
+			data['options'] = params.options.serialize();
 		}
 	}
 
@@ -59,6 +59,7 @@ $.add_to_cart = function (params) {
 
 $.fn.add_to_cart = function (params) {
 	params = $.extend({}, {
+		form: null,
 		product_id: 0,
 		options: null,
 		quantity: 1,
@@ -68,7 +69,10 @@ $.fn.add_to_cart = function (params) {
 		context: this
 	}, params);
 
-	if (params.product_id === 0) return false;
+	if (!params.form && params.product_id === 0) {
+		console.error("$.fn.add_to_cart(): You must provide either the form element or the product_id in the parameters!");
+		return false;
+	}
 
 	this.click(function () {
 		$.add_to_cart(params);

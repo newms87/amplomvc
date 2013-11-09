@@ -586,5 +586,112 @@ class Catalog_Model_Catalog_Product extends Model
 	{
 		return $this->queryVar("SELECT product_option_id FROM " . DB_PREFIX . "product_option WHERE product_id = " . (int)$product_id . " AND option_id = " . (int)$option_id);
 	}
+
+	public function fillProductDetails(&$details, $product_id, $quantity, &$options = array(), $ignore_status = false)
+	{
+		$product = isset($details['product']) ? $details['product'] : $this->getProduct($product_id, $ignore_status);
+
+		if (!$product) {
+			return false;
+		}
+
+		// Product Specials / Discounts
+		if ($product['special']) {
+			$price = $product['special'];
+		} elseif ($product['discount']) {
+			$price = $product['discount'];
+		} else {
+			$price = $product['price'];
+		}
+
+		// Stock
+		$in_stock = $product['subtract'] ? (int)$product['quantity'] >= $quantity : true;
+
+		// Calculate Option totals
+		$option_cost   = 0;
+		$option_price  = 0;
+		$option_points = 0;
+		$option_weight = 0;
+
+		if (!empty($options)) {
+			if (!$this->fillProductOptions($product_id, $options)) {
+				return false;
+			}
+
+			if (!empty($options)) {
+				foreach ($options as $values) {
+					foreach ($values as $product_option_value) {
+						$option_cost += $product_option_value['cost'];
+						$option_price += $product_option_value['price'];
+						$option_points += $product_option_value['points'];
+						$option_weight += $product_option_value['weight'];
+
+						if ($product_option_value['subtract'] && $product_option_value['quantity'] < $quantity) {
+							$in_stock = false;
+						}
+					}
+				}
+			}
+		}
+
+		// Downloads
+		$downloads = $this->getProductDownloads($product_id);
+
+		//Product Details
+		$details['price']        = $price + $option_price;
+		$details['total']        = $details['price'] * $quantity;
+		$details['cost']         = $product['cost'] + $option_cost;
+		$details['total_cost']   = $details['cost'] * $quantity;
+		$details['in_stock']     = $in_stock;
+		$details['points']       = ((int)$product['points'] + $option_points) * $quantity;
+		$details['weight']       = ((float)$product['weight'] + $option_weight) * $quantity;
+		$details['total_reward'] = $product['reward'] * $quantity;
+		$details['product']      = $product;
+		$details['options']      = $options;
+		$details['downloads']    = $downloads;
+
+		return true;
+	}
+
+	private function fillProductOptions($product_id, &$options)
+	{
+		$filter = array(
+			'product_option_ids' => array_keys($options),
+		);
+
+		$product_option_data = $this->getFilteredProductOptions($filter);
+
+		foreach ($options as $product_option_id => &$product_option_values) {
+			if (empty($product_option_values)) {
+				continue;
+			} elseif (!is_array($product_option_values)) {
+				$product_option_values = array($product_option_values);
+			}
+
+			foreach ($product_option_values as &$product_option_value) {
+				//Information already filled
+				if (is_array($product_option_value)) {
+					continue;
+				}
+
+				$product_option_value = $this->getProductOptionValue($product_id, $product_option_id, $product_option_value);
+
+				if ($product_option_value) {
+					$data = array_search_key('product_option_id', $product_option_id, $product_option_data);
+
+					//Validate that all options exist for this product
+					if (!$data) {
+						return false;
+					}
+
+					$product_option_value += $data;
+				}
+			}
+			unset($product_option_value);
+		}
+		unset($product_option_values);
+
+		return true;
+	}
 }
 

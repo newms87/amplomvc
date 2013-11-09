@@ -1,6 +1,6 @@
 <?php
 // Version
-define('AC_VERSION', '0.0.17');
+define('AC_VERSION', '0.0.18');
 
 // Error Reporting
 error_reporting(E_ALL);
@@ -82,9 +82,6 @@ if (!isset($_SERVER['REQUEST_URI'])) {
 if (is_dir(dirname(DIR_APPLICATION) . '/install')) {
 	$this->error['error_install'] = $this->_('error_install');
 }
-
-// Helper
-require_once(_ac_mod_file(DIR_SYSTEM . 'helper/json.php'));
 
 // Engine
 require_once(_ac_mod_file(DIR_SYSTEM . 'engine/action.php'));

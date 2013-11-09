@@ -228,7 +228,7 @@ class Catalog_Controller_Account_Order extends Controller
 
 					$this->message->add('success', $this->_('text_success', $order_id));
 
-					$this->cart->add($order_product['product_id'], $order_product['quantity'], $option_data);
+					$this->cart->addProduct($order_product['product_id'], $order_product['quantity'], $option_data);
 				}
 
 				$this->url->redirect('cart/cart');

@@ -1,7 +1,9 @@
 <?php
 class Cart extends Library
 {
-	private $data = array();
+	const PRODUCTS = 'products';
+	const VOUCHERS = 'vouchers';
+
 	private $totals = null;
 	private $error_code = null;
 
@@ -19,6 +21,10 @@ class Cart extends Library
 			$this->session->data['wishlist'] = array();
 		}
 	}
+
+	/******************
+	 * Error Handling *
+	 ******************/
 
 	public function _e($code, $type, $key)
 	{
@@ -76,45 +82,95 @@ class Cart extends Library
 		return true;
 	}
 
-	/**
-	 * Cart Functions
-	 */
-	public function getCart()
+	/******************
+	 * Cart Functions *
+	 ******************/
+
+	public function get($type = null)
 	{
-		return !empty($this->session->data['cart']) ? $this->session->data['cart'] : null;
+		if ($type) {
+			return !empty($this->session->data['cart'][$type]) ? $this->session->data['cart'][$type] : array();
+		}
+
+		return $this->session->data['cart'];
 	}
 
-	public function add($product_id, $quantity = 1, $product_options = array())
+	public function has($type)
 	{
-		if ($this->validateProduct($product_id, $quantity, $product_options) && (int)$quantity > 0) {
-			$key = (int)$product_id . ':' . base64_encode(serialize($product_options));
+		return !empty($this->session->data['cart'][$type]);
+	}
 
-			if (empty($this->session->data['cart'][$key])) {
-				$this->session->data['cart'][$key] = $quantity;
-			} else {
-				$this->session->data['cart'][$key] += $quantity;
+	public function isEmpty()
+	{
+		if (!empty($this->session->data['cart'])) {
+			foreach ($this->session->data['cart'] as $cart) {
+				if (!empty($cart)) {
+					return false;
+				}
 			}
-
-			//Invalidate Rendered Data
-			$this->data   = array();
-			$this->totals = null;
-
-			return $key;
 		}
 
-		return false;
+		return true;
 	}
 
-	public function update($key, $qty)
+	public function countItems($type)
 	{
-		if ((int)$qty > 0) {
-			$this->session->data['cart'][$key] = (int)$qty;
+		return array_sum($this->get($type));
+	}
+
+	/**
+	 * Add an item to the Cart.
+	 *
+	 * @param string $type - The cart set to add to. Can be Cart::PRODUCTS, Cart::VOUCHERS, or a custom cart set (eg: 'subscriptions')
+	 * @param $item_id - The ID of the product to add
+	 * @param int $quantity - number of this product / options selected to add
+	 * @param array $options - A set of options selected for this product
+	 *
+	 * @return bool|string The key for the cart item added (used to reference this item to update / remove from cart)
+	 */
+
+	public function add($type, $item_id, $quantity = 1, $options = array())
+	{
+		$key = (int)$item_id . ':' . base64_encode(serialize($options));
+
+		if (empty($this->session->data['cart'][$type][$key])) {
+			$this->session->data['cart'][$type][$key] = array(
+				'id'       => $item_id,
+				'quantity' => $quantity,
+				'options'  => $options,
+				'key'      => $key,
+			);
 		} else {
-			$this->remove($key);
+			$this->session->data['cart'][$type][$key]['quantity'] += $quantity;
 		}
 
-		$this->data   = array();
+		//Invalidate Rendered Data
 		$this->totals = null;
+
+		return $key;
+	}
+
+	public function update($type, $key, $quantity)
+	{
+		if (!isset($this->session->data['cart'][$type][$key])) {
+			return false;
+		}
+
+		if ((int)$quantity > 0) {
+			$this->session->data['cart'][$type][$key]['quantity'] = (int)$quantity;
+		} else {
+			$this->remove($type, $key);
+		}
+
+		$this->totals = null;
+	}
+
+	public function remove($type, $key)
+	{
+		if (isset($this->session->data['cart'][$type][$key])) {
+			unset($this->session->data['cart'][$type][$key]);
+			$this->totals = null;
+		}
 	}
 
 	public function merge($cart)
@@ -127,11 +183,13 @@ class Cart extends Library
 			return false;
 		}
 
-		foreach ($cart as $key => $qty) {
-			if (!empty($this->session->data['cart'][$key])) {
-				$this->session->data['cart'][$key] += $qty;
-			} else {
-				$this->session->data['cart'][$key] = $qty;
+		foreach ($cart as $type => $items) {
+			foreach ($items as $key => $data) {
+				if (!empty($this->session->data['cart'][$type][$key])) {
+					$this->session->data['cart'][$type][$key]['quantity'] += $data['quantity'];
+				} else {
+					$this->session->data['cart'][$type][$key] = $data;
+				}
 			}
 		}
 
@@ -140,19 +198,8 @@ class Cart extends Library
 		return true;
 	}
 
-	public function remove($key)
-	{
-		if (isset($this->session->data['cart'][$key])) {
-			unset($this->session->data['cart'][$key]);
-		}
-
-		$this->data   = array();
-		$this->totals = null;
-	}
-
 	public function clear()
 	{
-		$this->data   = array();
 		$this->totals = null;
 
 		$this->session->data['cart']     = array();
@@ -253,19 +300,22 @@ class Cart extends Library
 	 * Taxes
 	 **/
 
+	//TODO: This can probably be improved...
 	public function getTaxes()
 	{
 		$tax_data = array();
 
-		foreach ($this->getProducts() as $product) {
+		foreach ($this->getProducts() as $cart_product) {
+			$product = $cart_product['product'];
 			if ($product['tax_class_id']) {
-				$tax_rates = $this->tax->getRates($product['total'], $product['tax_class_id']);
+				//TODO: Should be tax->calculate... right?
+				$tax_rates = $this->tax->getRates($cart_product['total'], $product['tax_class_id']);
 
 				foreach ($tax_rates as $tax_rate) {
 					$amount = 0;
 
 					if ($tax_rate['type'] == 'F') {
-						$amount = ($tax_rate['amount'] * $product['quantity']);
+						$amount = ($tax_rate['amount'] * $cart_product['quantity']);
 					} elseif ($tax_rate['type'] == 'P') {
 						$amount = $tax_rate['amount'];
 					}
@@ -286,14 +336,38 @@ class Cart extends Library
 	 *  Cart Products
 	 */
 
+	public function addProduct($product_id, $quantity = 1, $options = array())
+	{
+		if ($this->validateProduct($product_id, $quantity, $options) && (int)$quantity > 0) {
+			$this->add($product_id, $quantity, $options, self::PRODUCTS);
+		}
+	}
+
+	public function updateProduct($key, $quantity)
+	{
+		$this->update(self::PRODUCTS, $key, $quantity);
+	}
+
+	public function removeProduct($key)
+	{
+		$this->remove(self::PRODUCTS, $key);
+	}
+
+	public function hasProducts()
+	{
+		return $this->has(self::PRODUCTS);
+	}
+
 	public function getProduct($key)
 	{
-		return array_search_key('key', $key, $this->getProducts());
+		$products = $this->getProducts();
+
+		return isset($products[$key]) ? $products[$key] : null;
 	}
 
 	public function getProductId($key)
 	{
-		if (!isset($this->session->data['cart'][$key])) {
+		if (!isset($this->session->data['cart'][self::PRODUCTS][$key])) {
 			return false;
 		}
 
@@ -305,186 +379,51 @@ class Cart extends Library
 
 	public function getProductName($key)
 	{
-		if (!isset($this->session->data['cart'][$key])) {
-			return '';
+		$products = $this->get(self::PRODUCTS);
+
+		if (isset($products[$key])) {
+			return $this->Model_Catalog_Product->getProductName($products[$key]['id']);
 		}
-
-		$product = explode(':', $key);
-
-		$product_id = $product[0];
-
-		return $this->Model_Catalog_Product->getProductName($product_id);
 	}
 
 	public function getProductIds()
 	{
-		$product_ids = array();
+		$products = $this->get(self::PRODUCTS);
 
-		foreach ($this->session->data['cart'] as $key => $quantity) {
-			$cart_product  = explode(':', $key);
-			$product_ids[] = $cart_product[0];
-		}
-
-		return $product_ids;
+		return array_column($products, 'id');
 	}
 
 	public function getProducts()
 	{
-		if (!$this->data) {
-			foreach ($this->session->data['cart'] as $key => $quantity) {
-				$cart_product = explode(':', $key);
-				$product_id   = $cart_product[0];
+		$cart_products = $this->get(self::PRODUCTS);
 
-				// Options
-				if (!empty($cart_product[1])) {
-					$product_options = unserialize(base64_decode($cart_product[1]));
-				} else {
-					$product_options = array();
-				}
+		foreach ($cart_products as $key => &$product) {
+			if (!$this->Catalog_Model_Catalog_Product->fillProductDetails($product, $product['id'], $product['quantity'], $product['options'])) {
+				$this->message->add('warning', _l("%s is no longer available and has been removed from your cart. We apologize for the inconvenience.", $product['product']['name']));
 
-				$product = $this->Model_Catalog_Product->getProduct($product_id);
+				unset($cart_products[$key]);
+				$this->remove(self::PRODUCTS, $key);
 
-				if ($product) {
-					$product['key']       = $key;
-					$product['remaining'] = $product['quantity'];
+				continue;
+			}
 
-					$this->getProductTotal($product['product_id'], $quantity, $product_options, $product);
+			//Allow Extensions to modify product total / details
+			$total_extensions = $this->System_Extension_Total->getActive();
 
-					$product['quantity'] = $quantity;
-
-					$this->data[$key] = $product;
-				} else {
-					$this->remove($key);
+			foreach ($total_extensions as $extension) {
+				if (method_exists($extension, 'calculateProductTotal')) {
+					$extension->calculateProductTotal($product);
 				}
 			}
 		}
+		unset($product);
 
-		return $this->data;
-	}
-
-	public function getProductTotal($product_id, $quantity, $product_options = array(), &$product = null)
-	{
-		if (!$product) {
-			$product = $this->Catalog_Model_Catalog_Product->getProduct($product_id);
-		}
-
-		$product += array(
-			'in_stock'    => true,
-			'base_price'  => $product['price'],
-			'base_cost'   => $product['cost'],
-			'base_points' => $product['points'],
-			'base_weight' => $product['weight'],
-		);
-
-		//Calculate Option totals
-		$option_cost   = 0;
-		$option_price  = 0;
-		$option_points = 0;
-		$option_weight = 0;
-
-		$selected_options = $this->getProductOptionInfo($product_id, $product_options);
-
-		if (!empty($selected_options)) {
-			foreach ($selected_options as $product_option_value) {
-				$option_cost += $product_option_value['cost'];
-				$option_price += $product_option_value['price'];
-				$option_points += $product_option_value['points'];
-				$option_weight += $product_option_value['weight'];
-
-				if ($product_option_value['subtract'] && $product_option_value['quantity'] < $quantity) {
-					$product['in_stock'] = false;
-				}
-			}
-		}
-
-		$product['selected_options'] = $selected_options;
-
-		// Product Specials / Discounts
-		if ($product['special']) {
-			$product['price'] = $product['special'];
-		} elseif ($product['discount']) {
-			$product['price'] = $product['discount'];
-		}
-
-		// Downloads
-		$product['downloads'] = $this->Model_Catalog_Product->getProductDownloads($product_id);
-
-		// Stock
-		if ($product['subtract'] && (!$product['quantity'] || ($product['quantity'] < $quantity))) {
-			$product['in_stock'] = false;
-		}
-
-		$product['cost'] += $option_cost;
-		$product['price'] += $option_price;
-		$product['total_cost']   = $product['cost'] * $quantity;
-		$product['total']        = $product['price'] * $quantity;
-		$product['total_reward'] = $product['reward'] * $quantity;
-		$product['points']       = ((int)$product['points'] + $option_points) * $quantity;
-		$product['weight']       = ((float)$product['weight'] + $option_weight) * $quantity;
-
-		//Allow Extensions to modify product info in cart
-		$total_extensions = $this->System_Extension_Total->getActive();
-
-		foreach ($total_extensions as $extension) {
-			if (method_exists($extension, 'getProductTotal')) {
-				$total = $extension->getProductTotal($product_id, $quantity, $selected_options, $product);
-
-				if ($product && !is_null($total)) {
-					$product['total'] = $total;
-				}
-			}
-		}
-
-		return $product['total'];
-	}
-
-	public function getProductOptionInfo($product_id, $product_options)
-	{
-		foreach ($product_options as $key => &$product_option) {
-			//be sure each value is an array of values
-			if (!is_array($product_option)) {
-				$product_option = array($product_option);
-			} //Check if information already loaded and in correct format
-			elseif (is_string(key($product_option))) {
-				return $product_options;
-			}
-		}
-		unset($product_option);
-
-		//Load option information and format $selected_options as an array where each element is an associative array of option_value data
-		$filter = array(
-			'product_option_ids' => array_keys($product_options),
-		);
-
-		$product_option_data = $this->Model_Catalog_Product->getFilteredProductOptions($filter);
-
-		$selected_options = array();
-
-		foreach ($product_options as $product_option_id => $product_option_values) {
-			if (!empty($product_option_values)) {
-				foreach ($product_option_values as $product_option_value_id) {
-					$product_option_value = $this->Model_Catalog_Product->getProductOptionValue($product_id, $product_option_id, $product_option_value_id);
-
-					if ($product_option_value) {
-						$product_option_value += array_search_key('product_option_id', $product_option_id, $product_option_data);
-
-						$selected_options[$product_option_value_id] = $product_option_value;
-					}
-				}
-			}
-		}
-
-		return $selected_options;
+		return $cart_products;
 	}
 
 	public function countProducts()
 	{
-		return array_sum($this->getCart());
-	}
-
-	public function hasProducts()
-	{
-		return !empty($this->session->data['cart']);
+		return $this->countItems(self::PRODUCTS);
 	}
 
 	public function productPurchasable($product)
@@ -563,16 +502,12 @@ class Cart extends Library
 	 * Cart Stock
 	 */
 
-	public function isEmpty()
-	{
-		return !(count($this->session->data['cart']) || !empty($this->session->data['vouchers']));
-	}
-
 	public function hasStock()
 	{
-		foreach ($this->getProducts() as $product) {
-			if (!$product['in_stock']) {
-				$this->_e('C-2', 'cart', $this->_('error_cart_stock', $this->url->link('product/product', 'product_id=' . $product['product_id']), $product['name']));
+		foreach ($this->getProducts() as $cart_product) {
+			$product = $cart_product['product'];
+			if (!$cart_product['in_stock']) {
+				$this->_e('C-2', 'cart', _l('We do not have the request quantity for <a href="%s">%s</a> (marked with <span class="out_of_stock"></span>) available at this time.', $this->url->link('product/product', 'product_id=' . $product['product_id']), $product['name']));
 				return false;
 			}
 		}
@@ -584,17 +519,18 @@ class Cart extends Library
 	{
 		$product_total = 0;
 
-		$products = $this->getProducts();
+		$cart_products = $this->getProducts();
 
-		foreach ($products as $product) {
-			foreach ($products as $product_2) {
-				if ($product_2['product_id'] == $product['product_id']) {
-					$product_total += $product_2['quantity'];
+		foreach ($cart_products as $cart_product) {
+			foreach ($cart_products as $cart_product_2) {
+				//Add up all products with same ID (including ourselves)
+				if ($cart_product_2['id'] === $cart_product['id']) {
+					$product_total += $cart_product_2['quantity'];
 				}
 			}
 
-			if ($product_total < $product['minimum']) {
-				$this->_e('C-3', 'cart', $this->_('error_product_minimum', $product['name'], $product['minimum']));
+			if ($product_total < $cart_product['product']['minimum']) {
+				$this->_e('C-3', 'cart', _l('You must order at least %s units for %s', $cart_product['product']['minimum'], $cart_product['product']['name']));
 				return false;
 			}
 		}
@@ -756,8 +692,8 @@ class Cart extends Library
 	/** Shipping Address Operations **/
 	public function hasShipping()
 	{
-		foreach ($this->getProducts() as $product) {
-			if ($product['shipping']) {
+		foreach ($this->getProducts() as $cart_product) {
+			if ($cart_product['product']['shipping']) {
 				return true;
 			}
 		}
@@ -856,15 +792,6 @@ class Cart extends Library
 		}
 
 		return false;
-	}
-
-	public function getPaymentMethodTemplate()
-	{
-		$extension = $this->System_Extension_Payment->get($this->getPaymentMethodId());
-
-		$extension->renderTemplate();
-
-		return $extension->output;
 	}
 
 	public function getPaymentMethodData($payment_method_id = null)
@@ -1230,6 +1157,11 @@ class Cart extends Library
 
 		return true;
 	}
+
+
+	/**********************
+	 *       Vouchers     *
+	 **********************/
 
 	public function hasVouchers($voucher_id = null)
 	{

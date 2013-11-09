@@ -119,8 +119,7 @@
 						<img src="<?= $url_captcha_image; ?>" alt=""/>
 						<input type="text" name="captcha" value="<?= $captcha; ?>"/>
 					</div>
-					<div class="clear"></div>
-					<div class="buttons">
+					<div class="buttons clear">
 						<div class="left"><a href="<?= $back; ?>" class="button"><?= $button_back; ?></a></div>
 						<div class="right">
 							<input type="submit" value="<?= $button_continue; ?>" class="button"/>

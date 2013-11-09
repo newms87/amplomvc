@@ -40,8 +40,10 @@ class Catalog_Controller_Cart_Cart extends Controller
 
 		$this->data['block_total'] = $this->getBlock('cart/total');
 
+		$this->data['cart_empty'] = $this->cart->isEmpty();
+
 		//Set Continue to the redirect unless we are redirecting to the cart page
-		if (isset($_GET['redirect']) && preg_match("/cart\/cart/", $_GET['redirect']) == 0) {
+		if (isset($_GET['redirect']) && preg_match("/cart\\/cart/", $_GET['redirect']) == 0) {
 			$this->data['continue'] = urldecode($_GET['redirect']);
 		} else {
 			$this->data['continue'] = $this->url->link('product/category');
@@ -61,48 +63,61 @@ class Catalog_Controller_Cart_Cart extends Controller
 		$this->response->setOutput($this->render());
 	}
 
-	public function add()
+	public function buy_now()
 	{
-		$this->language->load('cart/cart');
+		$product_id = isset($_POST['product_id']) ? $_POST['product_id'] : 0;
+		$type       = !empty($_POST['type']) ? $_POST['type'] : Cart::PRODUCTS;
+		$quantity   = isset($_POST['quantity']) ? $_POST['quantity'] : 1;
+		$options    = !empty($_POST['options']) ? $_POST['options'] : array();
 
-		$product_id       = isset($_POST['product_id']) ? $_POST['product_id'] : 0;
-		$quantity         = isset($_POST['quantity']) ? $_POST['quantity'] : 1;
-		$product_options = !empty($_POST['product_options']) ? $_POST['product_options'] : array();
-		$load_page        = isset($_POST['load_page']);
+		$this->cart->add($type, $product_id, $quantity, $options);
 
-		$key = $this->cart->add($product_id, $quantity, $product_options);
-
-		if ($load_page) {
-			$this->index();
-		} else {
-			$json = array();
-
-			if (!$this->cart->has_error('add')) {
+		if (!$this->cart->has_error('add')) {
+			if ($type === Cart::PRODUCTS) {
 				$name = $this->Model_Catalog_Product->getProductName($product_id);
-
-				$redirect = urlencode($this->url->link('product/product', 'product_id=' . $product_id));
-
-				$json['success'] = $this->_('text_success', $this->url->link('product/product', 'product_id=' . $product_id), $name, $this->url->link('cart/cart', "redirect=$redirect"));
-
-				$json['total'] = $this->_('text_items', $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($this->cart->getTotal()));
-
-				$json['key'] = $key;
-			} else {
-				$json['error'] = $this->cart->get_errors('add');
 			}
 
-			$this->response->setOutput(json_encode($json));
+			$this->url->setRedirect('product/product', 'product_id=' . $product_id);
+
+			$url_product = $this->url->link('product/product', 'product_id=' . $product_id);
+			$url_cart    = $this->url->link('cart/cart');
+			$this->message->add('success', _l('<a href="%s">%s</a> has been added to <a href="%s">the cart</a>', $url_product, $name, $url_cart));
+		} else {
+			$this->message->add('error', $this->cart->get_errors('add'));
 		}
+
+		$this->url->redirect('checkout/checkout');
 	}
 
-	public function remove()
+	public function add()
 	{
-		if (!empty($_GET['key'])) {
-			$this->cart->remove($_GET['key']);
+		$product_id = isset($_POST['product_id']) ? $_POST['product_id'] : 0;
+		$type       = !empty($_POST['type']) ? $_POST['type'] : Cart::PRODUCTS;
+		$quantity   = isset($_POST['quantity']) ? $_POST['quantity'] : 1;
+		$options    = !empty($_POST['options']) ? $_POST['options'] : array();
+
+		$key = $this->cart->add($type, $product_id, $quantity, $options);
+
+		if (!$this->cart->has_error('add')) {
+			if ($type === Cart::PRODUCTS) {
+				$name = $this->Model_Catalog_Product->getProductName($product_id);
+			}
+
+			$this->url->setRedirect('product/product', 'product_id=' . $product_id);
+
+			$url_product = $this->url->link('product/product', 'product_id=' . $product_id);
+			$url_cart    = $this->url->link('cart/cart');
+			$this->message->add('success', _l('<a href="%s">%s</a> has been added to <a href="%s">the cart</a>', $url_product, $name, $url_cart));
+
+			$item_count = $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0);
+			$total      = $this->currency->format($this->cart->getTotal());
+			$this->message->add('total', _l('%s item(s) - %s', $item_count, $total));
+
+			$this->message->add('key', $key);
+		} else {
+			$this->message->add('error', $this->cart->get_errors('add'));
 		}
 
-		if (!$this->request->isAjax()) {
-			$this->url->redirect('cart/cart');
-		}
+		$this->response->setOutput($this->message->toJSON());
 	}
 }

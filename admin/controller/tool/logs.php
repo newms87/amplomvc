@@ -147,7 +147,7 @@ class Admin_Controller_Tool_Logs extends Controller
 		}
 
 		if ($this->request->isAjax()) {
-			$this->response->setOutput(json_encode($this->message->fetch()));
+			$this->response->setOutput($this->message->toJSON());
 		} else {
 			$this->url->redirect('tool/logs', 'log=' . $_GET['log']);
 		}

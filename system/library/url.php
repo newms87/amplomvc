@@ -161,7 +161,7 @@ class Url extends Library
 			$store_id = $this->config->get('config_store_id');
 		}
 
-		return $this->store_base($store_id) . $path .  '?' . rtrim('ajax=1&' . $query, '&');
+		return $this->store_base($store_id) . $path . '?' . rtrim('ajax=1&' . $query, '&');
 	}
 
 	public function store_base($store_id, $ssl = false)
@@ -231,6 +231,7 @@ class Url extends Library
 	 * Redirect the request to a new URL.
 	 *
 	 * @param $url - The full url or the controller path. If the full URL (eg: starting with http(s):// ) is given, Url::redirect() will ignore $query.
+	 * @param mixed $query - a string URI or associative array to be converted into a string URI
 	 * @param int $status - The header redirect status to send back to the requesting client.
 	 */
 
@@ -244,6 +245,39 @@ class Url extends Library
 		header('Status: ' . $status);
 		header('Location: ' . str_replace('&amp;', '&', $url));
 		exit();
+	}
+
+	/**
+	 * Redirect the browser by sending a javascript redirect call.
+	 * Warning: This will only work if the users browser has JS enabled! Make sure this is the case.
+	 *
+	 * @param $url - The full url or the controller path. If the full URL (eg: starting with http(s):// ) is given, Url::redirect() will ignore $query.
+	 * @param mixed $query - a string URI or associative array to be converted into a string URI
+	 */
+	public function redirectBrowser($url, $query = '')
+	{
+		//Check if this is a controller path
+		if (!preg_match("/https?:\\/\\//", $url)) {
+			$url = $this->link($url, $query);
+		}
+
+		echo "<script type=\"text/javascript\">location=\"$url\"</script>";
+		exit;
+	}
+
+	public function setRedirect($url, $query = '')
+	{
+		//Check if this is a controller path
+		if (!preg_match("/https?:\\/\\//", $url)) {
+			$url = $this->link($url, $query);
+		}
+
+		$this->session->data['redirect'] = $url;
+	}
+
+	public function getRedirect()
+	{
+		return !empty($this->session->data['redirect']) ? $this->session->data['redirect'] : '';
 	}
 
 	private function loadSeoUrl()

@@ -1,6 +1,6 @@
 <?= $header; ?>
 <?= $column_left; ?><?= $column_right; ?>
-	<div class="content">
+<div class="content">
 	<?= $this->breadcrumb->render(); ?>
 	<?= $content_top; ?>
 
@@ -9,7 +9,7 @@
 			<? if (!empty($thumb)) { ?>
 				<div id='the_zoombox' class="image">
 					<a id="zoombox_image_link" onclick="return colorbox($(this), {width: '70%', height: '90%'});" href="<?= $popup; ?>"
-					   title="<?= $head_title; ?>" class="zoombox" rel='gal1'>
+						title="<?= $head_title; ?>" class="zoombox" rel='gal1'>
 						<img src="<?= $thumb; ?>" title="<?= $head_title; ?>" alt="<?= $head_title; ?>" id="image"/>
 					</a>
 					<a class="view_full_size" onclick="return colorbox($('#zoombox_image_link'), {width: '70%', height: '90%'});"><?= $text_view_full_size_image; ?></a>
@@ -188,17 +188,17 @@
 				<table class="attribute">
 					<? foreach ($attribute_groups as $attribute_group) { ?>
 						<thead>
-						<tr>
-							<td colspan="2"><?= $attribute_group['name']; ?></td>
-						</tr>
+							<tr>
+								<td colspan="2"><?= $attribute_group['name']; ?></td>
+							</tr>
 						</thead>
 						<tbody>
-						<? foreach ($attribute_group['attributes'] as $attribute) { ?>
-							<tr>
-								<td><?= $attribute['name']; ?></td>
-								<td><?= $attribute['text']; ?></td>
-							</tr>
-						<? } ?>
+							<? foreach ($attribute_group['attributes'] as $attribute) { ?>
+								<tr>
+									<td><?= $attribute['name']; ?></td>
+									<td><?= $attribute['text']; ?></td>
+								</tr>
+							<? } ?>
 						</tbody>
 					<? } ?>
 				</table>
@@ -215,119 +215,119 @@
 	<? } ?>
 
 	<?= $content_bottom; ?>
-	</div>
+</div>
 
 
-	<script type="text/javascript">
-		$(document).ready(function () {
-			$('.image-additional a img, .option_image a img').click(function () {
-				if ($(this).attr('src').replace(/-\d+x\d+/, '') == $('#the_zoombox .zoomPad > img').attr('src').replace(/-\d+x\d+/, '')) {
-					event.preventDefault();
-					return false;
-				}
-			});
-			$('.zoombox').jqzoom({
-				zoomWidth: $.ac_vars.image_thumb_width,
-				zoomHeight: $.ac_vars.image_thumb_height,
-				position: 'right',
-				xOffset: 25,
-				yOffset: 0,
-				preloadText: '<?= $text_zoombox_load; ?>'
-			});
+<script type="text/javascript">
+	$(document).ready(function () {
+		$('.image-additional a img, .option_image a img').click(function () {
+			if ($(this).attr('src').replace(/-\d+x\d+/, '') == $('#the_zoombox .zoomPad > img').attr('src').replace(/-\d+x\d+/, '')) {
+				event.preventDefault();
+				return false;
+			}
 		});
+		$('.zoombox').jqzoom({
+			zoomWidth: $.ac_vars.image_thumb_width,
+			zoomHeight: $.ac_vars.image_thumb_height,
+			position: 'right',
+			xOffset: 25,
+			yOffset: 0,
+			preloadText: '<?= $text_zoombox_load; ?>'
+		});
+	});
 </script>
 
-	<script type="text/javascript">
-		//Check if Product description is overflowed
-		pd = $('.product_info .product_description')[0];
-		if ( pd && pd.scrollHeight > pd.clientHeight) {
-			$(pd).addClass('overflowed');
-			$(pd).click(function () {
-				$(this).toggleClass('hover');
-			})
-		}
+<script type="text/javascript">
+	//Check if Product description is overflowed
+	pd = $('.product_info .product_description')[0];
+	if (pd && pd.scrollHeight > pd.clientHeight) {
+		$(pd).addClass('overflowed');
+		$(pd).click(function () {
+			$(this).toggleClass('hover');
+		})
+	}
 
-		function option_select_post_before() {
-			$('#button-cart, #button-buy-now').attr('disabled', true);
-			$('#buy_product_buttons').hide();
-			$('#processing_product').fadeIn(100);
-		}
+	function option_select_post_before() {
+		$('#button-cart, #button-buy-now').attr('disabled', true);
+		$('#buy_product_buttons').hide();
+		$('#processing_product').fadeIn(100);
+	}
 
-		function option_select_post_after() {
-			$('#button-cart, #button-buy-now').attr('disabled', false);
-			$('#buy_product_buttons').fadeIn(800);
-			$('#processing_product').fadeOut(200);
-		}
+	function option_select_post_after() {
+		$('#button-cart, #button-buy-now').attr('disabled', false);
+		$('#buy_product_buttons').fadeIn(800);
+		$('#processing_product').fadeOut(200);
+	}
 
-		$('#button-cart, #button-buy-now').click(function () {
-			buynow = this.id == 'button-buy-now';
+	$('#button-cart, #button-buy-now').click(function () {
+		buynow = this.id == 'button-buy-now';
 
-			option_select_post_before();
+		option_select_post_before();
 
-			selected_options = {};
+		selected_options = {};
 
-			$('.product_option').each(function (opt_i, opt_e) {
-				product_options = {}
+		$('.product_option').each(function (opt_i, opt_e) {
+			product_options = {}
 
-				$(opt_e).find('input[type=text],select,input[type=radio]:checked,input[type=checkbox]:checked').each(function (i, e) {
-					if ($(e).val() !== '') {
-						product_options[$(e).val()] = true;
-					}
-				});
-
-				selected_options[$(opt_e).attr('data-po-id')] = product_options;
-			});
-
-			data = {selected_options: selected_options, product_id: <?= $product_id; ?>, quantity: $('#quantity').val()};
-
-			$.ajax({
-				url: "<?= $url_add_to_cart; ?>",
-				type: 'post',
-				data: data,
-				dataType: 'json',
-				success: function (json) {
-					clear_msgs();
-					$('#product_options .product_option').removeClass('option_error');
-					$('#product_options .error').remove();
-
-					if (json['error']) {
-						if (json['error']['option']) {
-							msgs = '';
-							for (o in json['error']['option']) {
-								$('[data-po-id=' + o + ']').after('<span class="error">' + json['error']['option'][o] + '</span>').addClass('option_error');
-								msgs += json['error']['option'][o] + '<br>';
-							}
-
-							show_msg('error', msgs);
-						}
-					}
-
-					if (json['success']) {
-						if (buynow) {
-							buynow = 'redirect';
-							window.location = '<?= $checkout_link; ?>';
-						}
-						else {
-							show_msg('success', json['success']);
-							$('#cart-total').html(json['total']);
-						}
-					}
-				},
-				complete: function (json, status) {
-					if (buynow != 'redirect') {
-						option_select_post_after();
-					}
-
-					if (status != 'success') {
-						show_msg('warning', '<?= $error_add_to_cart; ?>');
-					}
+			$(opt_e).find('input[type=text],select,input[type=radio]:checked,input[type=checkbox]:checked').each(function (i, e) {
+				if ($(e).val() !== '') {
+					product_options[$(e).val()] = true;
 				}
 			});
+
+			selected_options[$(opt_e).attr('data-po-id')] = product_options;
 		});
+
+		data = {selected_options: selected_options, product_id: <?= $product_id; ?>, quantity: $('#quantity').val()};
+
+		$.ajax({
+			url: "<?= $url_add_to_cart; ?>",
+			type: 'post',
+			data: data,
+			dataType: 'json',
+			success: function (json) {
+				clear_msgs();
+				$('#product_options .product_option').removeClass('option_error');
+				$('#product_options .error').remove();
+
+				if (json['error']) {
+					if (json['error']['option']) {
+						msgs = '';
+						for (o in json['error']['option']) {
+							$('[data-po-id=' + o + ']').after('<span class="error">' + json['error']['option'][o] + '</span>').addClass('option_error');
+							msgs += json['error']['option'][o] + '<br>';
+						}
+
+						show_msg('error', msgs);
+					}
+				}
+
+				if (json['success']) {
+					if (buynow) {
+						buynow = 'redirect';
+						window.location = '<?= $checkout_link; ?>';
+					}
+					else {
+						show_msg('success', json['success']);
+						$('#cart-total').html(json['total']);
+					}
+				}
+			},
+			complete: function (json, status) {
+				if (buynow != 'redirect') {
+					option_select_post_after();
+				}
+
+				if (status != 'success') {
+					show_msg('warning', '<?= $error_add_to_cart; ?>');
+				}
+			}
+		});
+	});
 </script>
 
-	<script type="text/javascript">
-		$('#product_additional_tabs a').tabs();
+<script type="text/javascript">
+	$('#product_additional_tabs a').tabs();
 </script>
 
 <?= $footer; ?>

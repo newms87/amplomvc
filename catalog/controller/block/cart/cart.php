@@ -3,85 +3,69 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 {
 	public function index($settings = array())
 	{
-		//Template and Language
-		$this->template->load('block/cart/cart');
+		//Language
 		$this->language->load('block/cart/cart');
 
-		$ajax_cart = isset($settings['ajax_cart']) ? $settings['ajax_cart'] : true;
-
-		//Update Product
-		if (isset($_POST['cart_form'])) {
-			if ($_POST['action'] == 'update') {
+		if ($this->request->isPost()) {
+			//Update Product
+			if (isset($_POST['cart_update'])) {
 				if (!empty($_POST['quantity'])) {
-					foreach ($_POST['quantity'] as $key => $value) {
-						$this->cart->update($key, $value);
+					foreach ($_POST['quantity'] as $key => $quantity) {
+						$this->cart->updateProduct($key, $quantity);
 					}
 
-					$this->message->add('success', $this->_('text_update'));
+					$this->message->add('success', _l("Your cart has been updated!"));
 				}
 			}
-		} elseif (!empty($_GET['remove'])) {
-			$product_index = $_GET['remove'];
+			elseif (isset($_POST['cart_remove'])) {
+				$cart_product = $this->cart->getProduct($_POST['cart_remove'], true);
 
-			$id   = $this->cart->getProductId($product_index);
-			$name = $this->cart->getProductName($product_index);
+				$this->message->add('success', _l('<a href="%s">%s</a> has been removed from your cart.', $this->url->link('product/product', 'product_id=' . $cart_product['id']), $cart_product['product']['name']));
 
-			$this->cart->remove($product_index);
-
-			$this->message->add('success', $this->_('text_remove', $this->url->link('product/product', 'product_id=' . $id), $name));
-		} elseif (!empty($_GET['removevoucher'])) {
-			$this->cart->removeVoucher($_GET['removevoucher']);
-
-			$this->message->add('success', $this->_('text_remove', $this->_('text_voucher')));
+				$this->cart->removeProduct($_POST['cart_remove']);
+			}
+			elseif (isset($_POST['cart_remove_voucher'])) {
+				$this->cart->removeVoucher($_POST['remove_voucher']);
+				$this->message->add('success', _l('The voucher was removed from your cart.'));
+			}
 		}
 
-		if (!$this->cart->isEmpty()) {
-			//Check if the shipping estimate was invalidated and that we are not in the checkout process
-			// -> update the shipping estimate to the first Shipping option
-			if (!$this->order->hasOrder() && $this->cart->hasShippingMethod()) {
-				$shipping_methods = $this->cart->getShippingMethods();
+		//Check if the shipping estimate was invalidated and that we are not in the checkout process
+		// -> update the shipping estimate to the first Shipping option
+		if (!$this->order->hasOrder() && $this->cart->hasShippingMethod()) {
+			$shipping_methods = $this->cart->getShippingMethods();
 
-				if (!empty($shipping_methods) && !isset($shipping_methods[$this->cart->getShippingMethodId()])) {
-					$this->cart->setShippingMethod(key($shipping_methods));
-				}
+			if (!empty($shipping_methods) && !isset($shipping_methods[$this->cart->getShippingMethodId()])) {
+				$this->cart->setShippingMethod(key($shipping_methods));
 			}
+		}
 
-			if ($ajax_cart) {
-				$this->data['action'] = $this->url->ajax('block/cart/cart');
+		if ($this->config->get('config_customer_hide_price') && !$this->customer->isLogged()) {
+			$this->data['no_price_display'] = $this->_('text_login', $this->url->link('account/login'), $this->url->link('account/register'));
+		}
 
-				$this->data['messages'] = $this->message->fetch();
-			} else {
-				$this->data['action'] = $this->url->here();
-			}
+		if (!$this->cart->validate()) {
+			$this->message->add('error', $this->cart->get_errors(null, true));
+		}
 
-			if ($this->config->get('config_customer_hide_price') && !$this->customer->isLogged()) {
-				$this->data['no_price_display'] = $this->_('text_login', $this->url->link('account/login'), $this->url->link('account/register'));
-			}
+		$show_return_policy = $this->config->get('config_cart_show_return_policy');
 
-			if (!$this->cart->validate()) {
-				$this->error = $this->cart->get_errors(null, true);
-			}
-
-			$show_return_policy = $this->config->get('config_cart_show_return_policy');
-
-			$products = $this->cart->getProducts();
+		//Get the cart Products
+		if ($this->cart->hasProducts()) {
+			$cart_products = $this->cart->getProducts();
 
 			$image_width  = $this->config->get('config_image_cart_width');
 			$image_height = $this->config->get('config_image_cart_height');
 
-			foreach ($products as &$product) {
+			foreach ($cart_products as &$cart_product) {
+				$product = & $cart_product['product'];
+
 				if ($product['image']) {
-					$product['thumb'] = $this->image->resize($product['image'], $image_width, $image_height);
+					$cart_product['thumb'] = $this->image->resize($product['image'], $image_width, $image_height);
 				}
 
-				foreach ($product['selected_options'] as &$product_option) {
-					$product_option['product_option'] = $this->Model_Catalog_Product->getProductOption($product['product_id'], $product_option['product_option_id']);
-					$product_option['value']          = $this->tool->limit_characters($product_option['value'], 20);
-				}
-				unset($product_option);
-
-				$product['price'] = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id']));
-				$product['total'] = $this->currency->format($this->tax->calculate($product['total'], $product['tax_class_id']));
+				$cart_product['price_display'] = $this->currency->format($this->tax->calculate($cart_product['price'], $product['tax_class_id']));
+				$cart_product['total_display'] = $this->currency->format($this->tax->calculate($cart_product['total'], $product['tax_class_id']));
 
 				if ($product['reward']) {
 					$product['reward'] = $this->_('text_points', $product['reward']);
@@ -99,41 +83,56 @@ class Catalog_Controller_Block_Cart_Cart extends Controller
 					}
 				}
 
-				$product['href'] = $this->url->link('product/product', 'product_id=' . $product['product_id']);
-
-				if ($ajax_cart) {
-					$product['remove'] = $this->url->ajax('block/cart/cart', 'remove=' . $product['key']);
-				} else {
-					$product['remove'] = $this->url->link('block/cart/cart', 'remove=' . $product['key']);
-				}
+				$cart_product['href'] = $this->url->link('product/product', 'product_id=' . $product['product_id']);
 			}
 			unset($product);
 
-			$this->data['products'] = $products;
-
-			// Gift Voucher
-			if ($this->cart->hasVouchers()) {
-				$vouchers = $this->cart->getVouchers();
-
-				foreach ($vouchers as $voucher_id => &$voucher) {
-					$voucher['amount'] = $this->currency->format($voucher['amount']);
-
-					if ($ajax_cart) {
-						$voucher['remove'] = $this->url->ajax('block/cart/cart', 'removevoucher=' . $voucher_id);
-					} else {
-						$voucher['remove'] = $this->url->link('block/cart/cart', 'removevoucher=' . $voucher_id);
-					}
-				}
-
-				$this->data['vouchers'] = $vouchers;
-			}
-
-			$this->data['ajax_cart']          = $ajax_cart;
-			$this->data['show_return_policy'] = $show_return_policy;
-
-			$this->response->setOutput($this->render());
-		} else {
-			$this->response->setOutput('');
+			$this->data['cart_products'] = $cart_products;
 		}
+
+		// Gift Voucher
+		if ($this->cart->hasVouchers()) {
+			$vouchers = $this->cart->getVouchers();
+
+			foreach ($vouchers as $voucher_id => &$voucher) {
+				$voucher['amount_display'] = $this->currency->format($voucher['amount']);
+			}
+			unset($voucher);
+
+			$this->data['cart_vouchers'] = $vouchers;
+		}
+
+		//Additional Data
+		$this->data['show_return_policy'] = $show_return_policy;
+
+		//Url
+		$this->data['url_cart'] = $this->url->link('cart/cart');
+
+		//Ajax
+		$this->data['ajax_block_cart'] = $this->url->ajax("block/cart/cart");
+
+		//Render Additional Carts
+		$carts = $this->System_Extension_Cart->renderCarts();
+
+		$this->data['cart_inline'] = $carts['inline'];
+		$this->data['cart_extend'] = $carts['extend'];
+
+		$this->data['cart_empty'] = $this->cart->isEmpty();
+
+		//Ajax Messages
+		if ($this->request->isAjax()) {
+			$this->data['messages'] = $this->message->fetch();
+			var_dump($this->data['messages']);
+
+			if ($this->data['cart_empty']) {
+				$this->url->redirectBrowser('cart/cart');
+			}
+		}
+
+		//The Template
+		$this->template->load('block/cart/cart');
+
+		//Render
+		$this->response->setOutput($this->render());
 	}
 }

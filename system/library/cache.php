@@ -85,8 +85,10 @@ class Cache
 	{
 		$files = glob(DIR_CACHE . '*.' . preg_replace('/[^A-Z0-9\._-]/i', '', $key) . '*.cache');
 		if ($files) {
+			clearstatcache();
+
 			foreach ($files as $file) {
-				if (file_exists($file)) {
+				if (is_file($file) && is_readable($file)) {
 					unlink($file);
 				}
 			}

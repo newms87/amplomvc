@@ -234,8 +234,8 @@ class Catalog_Controller_Product_Product extends Controller
 			$this->data['description'] = html_entity_decode($product_info['description']);
 		}
 
-		//Ajax Urls
-		$this->data['url_add_to_cart'] = $this->url->ajax('cart/cart/add');
+		//Action Buttons
+		$this->data['buy_now'] = $this->url->link('cart/cart/buy_now');
 
 		//Dependencies
 		$this->children = array(

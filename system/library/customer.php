@@ -308,7 +308,7 @@ class Customer extends Library
 			);
 		}
 
-		$cart     = $this->cart->getCart();
+		$cart     = $this->cart->get();
 		$wishlist = $this->cart->getWishlist();
 
 		$this->db->query("UPDATE " . DB_PREFIX . "customer SET cart = '" . $this->db->escape(serialize($cart)) . "', wishlist = '" . $this->db->escape(serialize($wishlist)) . "', ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "' WHERE customer_id = '" . (int)$this->customer_id . "'");

@@ -13,7 +13,7 @@
 		</tr>
 	</table>
 
-	<div class="ac_carousel_list">
+	<div class="ac_carousel_list clearfix">
 		<? foreach ($profile_setting['slides'] as $slide_row => $slide) { ?>
 			<div class="ac_carousel_slide" data-row="<?= $slide_row; ?>">
 				<?= $this->builder->imageInput("profile_settings[$row][slides][$slide_row][image]", $slide['image']); ?>

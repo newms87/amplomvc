@@ -1,142 +1,158 @@
-<div id='the_cart'>
+<div id="the_cart">
 	<? if (isset($no_price_display)) { ?>
-		<span id='cart_no_price_display'><?= $no_price_display; ?></span>
+		<span id="cart_no_price_display"><?= $no_price_display; ?></span>
 	<? } ?>
-	<form id='cart_form' action="<?= $action; ?>" method="post" enctype="multipart/form-data">
-		<input type="hidden" name="cart_form" value="1"/>
 
-		<div class="cart-info">
-			<table>
-				<thead>
-				<tr>
-					<td class="image"><?= $column_image; ?></td>
-					<td class="name"><?= $column_name; ?></td>
-					<td class="model"><?= $column_model; ?></td>
-					<td class="quantity"><?= $column_quantity; ?></td>
+	<form id="cart_form" action="" method="post" enctype="multipart/form-data">
+		<input type="hidden" name="block_cart_form" value="1"/>
 
-					<? if (!empty($show_return_policy)) { ?>
-						<td class="return_policy"><?= $column_return_policy; ?></td>
-					<? } ?>
-
-					<? if (empty($no_price_display)) { ?>
-						<td class="price"><?= $column_price; ?></td>
-						<td class="total"><?= $column_total; ?></td>
-					<? } ?>
-				</tr>
-				</thead>
-				<tbody>
-				<? foreach ($products as $product) { ?>
-					<tr>
-						<td class="image">
-							<? if ($product['thumb']) { ?>
-								<a href="<?= $product['href']; ?>">
-									<img src="<?= $product['thumb']; ?>" alt="<?= $product['name']; ?>"
-									     title="<?= $product['name']; ?>"/>
-								</a>
-							<? } ?>
-						</td>
-						<td class="name">
-							<a href="<?= $product['href']; ?>"><?= $product['name']; ?></a>
-							<? if (!$product['in_stock']) { ?>
-								<span class="stock">***</span>
-							<? } ?>
-
-							<? if (!empty($product['selected_options'])) { ?>
-								<div class="product_option_description">
-									<? foreach ($product['selected_options'] as $selected_option) { ?>
-										<div class='cart_product_option_value'>
-											<?= $text_option_bullet; ?><?= $selected_option['product_option']['display_name']; ?>
-											: <?= $selected_option['value']; ?>
-										</div>
-									<? } ?>
-								</div>
-							<? } ?>
-
-							<? if ($product['reward']) { ?>
-								<span class='cart_product_reward'><?= $product['reward']; ?></span>
-							<? } ?>
-						</td>
-						<td class="model"><?= $product['model']; ?></td>
-						<td class="quantity">
-							<input type="text" name="quantity[<?= $product['key']; ?>]" value="<?= $product['quantity']; ?>" size="1"/>
-							<input class="block_cart_update" onclick="javascript: void(0)" type="image" name='action' value='update' src="<?= HTTP_THEME_IMAGE . 'update.png'; ?>" alt="<?= $button_update; ?>" title="<?= $button_update; ?>"/>
-							<label><?= $text_update_cart; ?></label>
-							<a class="button remove" onclick="return false;" href="<?= $product['remove']; ?>"></a>
-						</td>
-
-						<? if (!empty($show_return_policy)) { ?>
-							<td class='return_policy'>
-								<div><?= $product['return_policy']; ?></div>
-							</td>
-						<? } ?>
-
-						<? if (!isset($no_price_display)) { ?>
-							<td class="price"><?= $product['price']; ?></td>
-							<td class="total"><?= $product['total']; ?></td>
-						<? } ?>
-					</tr>
-				<? } ?>
-
-				<? if (!empty($vouchers)) { ?>
-					<? foreach ($vouchers as $key => $voucher) { ?>
+		<? if (!empty($cart_products) || !empty($cart_vouchers)) { ?>
+			<div class="cart-info">
+				<table>
+					<thead>
 						<tr>
-							<td class="image"></td>
-							<td class="name"><?= $voucher['description']; ?></td>
-							<td class="model"></td>
-							<td class="quantity">
-								<input type="text" name="" value="1" size="1" disabled="disabled"/>
-								<a href="<?= $voucher['remove']; ?>">
-									<img src="<?= HTTP_THEME_IMAGE . 'remove.png'; ?>" alt="<?= $text_remove; ?>"
-									     title="<?= $button_remove; ?>"/>
-								</a>
-							</td>
-							<? if (!isset($no_price_display)) { ?>
-								<td class="price"><?= $voucher['amount']; ?></td>
-								<td class="total"><?= $voucher['amount']; ?></td>
+							<td class="image"><?= $column_image; ?></td>
+							<td class="name"><?= $column_name; ?></td>
+							<td class="model"><?= $column_model; ?></td>
+							<td class="quantity"><?= $column_quantity; ?></td>
+
+							<? if (!empty($show_return_policy)) { ?>
+								<td class="return_policy"><?= $column_return_policy; ?></td>
 							<? } ?>
+
+							<? if (empty($no_price_display)) { ?>
+								<td class="price"><?= $column_price; ?></td>
+								<td class="total"><?= $column_total; ?></td>
+							<? } ?>
+
+							<td class="center remove"><?= _l("Remove"); ?></td>
 						</tr>
-					<? } ?>
-				<? } ?>
-				</tbody>
-			</table>
-		</div>
+					</thead>
+
+					<tbody>
+						<? if (!empty($cart_products)) { ?>
+							<? foreach ($cart_products as $cart_product) { ?>
+								<? $product = $cart_product['product']; ?>
+								<tr class="product">
+									<td class="image">
+										<? if ($cart_product['thumb']) { ?>
+											<a href="<?= $cart_product['href']; ?>">
+												<img src="<?= $cart_product['thumb']; ?>" alt="<?= $product['name']; ?>"
+													title="<?= $product['name']; ?>"/>
+											</a>
+										<? } ?>
+									</td>
+									<td class="name">
+										<a href="<?= $cart_product['href']; ?>"><?= $product['name']; ?></a>
+										<? if (!$cart_product['in_stock']) { ?>
+											<span class="out_of_stock"></span>
+										<? } ?>
+
+										<? if (!empty($cart_product['options'])) { ?>
+											<div class="product_option_description">
+												<? foreach ($cart_product['options'] as $product_option_id => $product_option_values) { ?>
+													<? foreach ($product_option_values as $product_option_value) { ?>
+														<div class="cart_product_option_value">
+															<?= _l("%s: %s", $product_option_value['display_name'], $product_option_value['value']); ?>
+														</div>
+													<? } ?>
+												<? } ?>
+											</div>
+										<? } ?>
+
+										<? if ($product['reward']) { ?>
+											<span class="cart_product_reward"><?= $product['reward']; ?></span>
+										<? } ?>
+									</td>
+									<td class="model"><?= $product['model']; ?></td>
+									<td class="quantity">
+										<input type="text" name="quantity[<?= $cart_product['key']; ?>]" value="<?= $cart_product['quantity']; ?>" size="1"/>
+										<input class="update" type="image" name="cart_update" value="1" onclick="return cart_update($(this));" src="<?= HTTP_THEME_IMAGE . 'update.png'; ?>" alt="<?= _l("Update"); ?>" title="<?= _l("Update your Cart"); ?>"/>
+										<label><?= $text_update_cart; ?></label>
+									</td>
+
+									<? if (!empty($show_return_policy)) { ?>
+										<td class="return_policy">
+											<div><?= $product['return_policy']; ?></div>
+										</td>
+									<? } ?>
+
+									<? if (!isset($no_price_display)) { ?>
+										<td class="price"><?= $cart_product['price_display']; ?></td>
+										<td class="total"><?= $cart_product['total_display']; ?></td>
+									<? } ?>
+
+									<td class="center"><input type="image" src="" class="button remove" name="cart_remove" value="<?= $cart_product['key']; ?>" onclick="return cart_update($(this));" /></td>
+								</tr>
+							<? } ?>
+						<? } ?>
+
+						<? if (!empty($vouchers)) { ?>
+							<? foreach ($vouchers as $key => $voucher) { ?>
+								<tr class="voucher">
+									<td class="image"></td>
+									<td class="name"><?= $voucher['description']; ?></td>
+									<td class="model"></td>
+									<td class="quantity"><input type="text" name="" value="1" size="1" disabled="disabled"/></td>
+
+									<? if (!isset($no_price_display)) { ?>
+										<td class="price"><?= $voucher['amount']; ?></td>
+										<td class="total"><?= $voucher['amount']; ?></td>
+									<? } ?>
+
+									<td class="remove_voucher center"><input type="submit" class="button remove" name="cart_remove_voucher" value="<?= $cart_voucher['key']; ?>" onclick="return cart_update($(this));"></td>
+								</tr>
+							<? } ?>
+						<? } ?>
+
+						<?= $cart_inline; ?>
+
+					</tbody>
+				</table>
+			</div>
+		<? } elseif ($cart_empty) { ?>
+			<div class="center">
+				<h2><?= _l("Your shopping cart is empty! Please check back here after you have added something to your cart!"); ?></h2>
+			</div>
+		<? } ?>
 	</form>
+
+	<?= $cart_extend; ?>
+
+	<? //Handle Ajax messages
+	if (!empty($messages)) { ?>
+		<script type="text/javascript">
+			<? foreach ($messages as $type => $msgs) { ?>
+				<? foreach ($msgs as $message) { ?>
+					show_msg("<?= addslashes($type); ?>", "<?= addslashes($message); ?>");
+				<? } ?>
+			<? } ?>
+		</script>
+	<? } ?>
+
 </div>
 
-<? if ($ajax_cart) { ?>
-	<script type="text/javascript">
-		$('.block_cart_update').click(function () {
-			form = $('form#cart_form');
+<script type="text/javascript">
+	var the_cart = $('#the_cart');
 
-			data = form.find('input[value=update], select, input:checked, input[type="text"], input[type="hidden"], textarea');
+	function cart_update(context) {
+		var data = context.closest('form').serializeArray();
 
-			if (typeof handle_ajax_cart_preload == 'function') {
-				handle_ajax_cart_preload('update', data);
+		data.push({name: context.attr('name'), value: context.attr('value')});
+
+		$.post("<?= $ajax_block_cart; ?>", data, function (html) {
+			//Cart is empty (or something went wrong)
+			if (!html) {
+				location = "<?= $url_cart; ?>";
 			}
 
-			$('#the_cart').load(form.attr('action'), data, function () {
-				if (typeof handle_ajax_cart_load == 'function') {
-					handle_ajax_cart_load('update', data);
-				}
-			});
+			var new_cart = $('<div />').append(html).find('#the_cart');
 
-			return false;
-		});
+			the_cart.html(new_cart.length ? new_cart.html() : html);
 
-		$('.block_cart_remove').click(function () {
-			context = $(this);
+			the_cart.trigger('cart_loaded');
+		}, 'html');
 
-			if (typeof handle_ajax_cart_preload == 'function') {
-				handle_ajax_cart_preload('remove', context);
-			}
-
-			$('#the_cart').load(context.attr('href'), {}, function () {
-				if (typeof handle_ajax_cart_load == 'function') {
-					handle_ajax_cart_load('remove', context);
-				}
-			});
-
-			return false;
-		});
+		return false;
+	}
 </script>
-<? } ?>

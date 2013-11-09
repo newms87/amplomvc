@@ -64,8 +64,7 @@ div.right {
 	float: right;
 }
 
-.floatfix:after,
-.ac_carousel_list:after {
+.clearfix:after {
 	visibility: hidden;
 	display: block;
 	font-size: 0;
@@ -88,6 +87,10 @@ div.right {
 	cursor: pointer;
 }
 
+#header .div2 span {
+	font-weight: bold;
+}
+
 #header .div3 {
 	font-size: 12px;
 	color: #000;
@@ -95,10 +98,6 @@ div.right {
 	padding: 0;
 	padding-top: 15px;
 	float: right;
-}
-
-#header .div2 span {
-	font-weight: bold;
 }
 
 #header_secure_lock {
@@ -2561,21 +2560,22 @@ div .easy_list li > * + * {
 }
 
 /** Logs **/
-td.log_remove{
-	position:relative;
-	padding:5px;
+td.log_remove {
+	position: relative;
+	padding: 5px;
 }
 
-td.log_remove .message_box{
-	position:absolute;
-top:5px;
+td.log_remove .message_box {
+	position: absolute;
+	top: 5px;
 }
 
-.change_log{
+.change_log {
 	padding-top: 12px;
 	margin-left: 20px;
 }
-.change_log .log_file{
+
+.change_log .log_file {
 	padding: 5px 10px;
 	padding-left: 30px;
 	margin-right: 10px;
@@ -2585,11 +2585,11 @@ top:5px;
 	background-color: #DFCFFF;
 	border: 1px solid #AA7FFF;
 	border-radius: 8px;
-	text-decoration:none;
+	text-decoration: none;
 	color: #631EED;
 }
 
 .change_log .log_file.selected,
-.change_log .log_file:hover{
+.change_log .log_file:hover {
 	background-color: #AA7FFF;
 }

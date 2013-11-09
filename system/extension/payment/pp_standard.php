@@ -1,7 +1,7 @@
 <?php
 class System_Extension_Payment_PpStandard extends Payment
 {
-	public function getTemplate()
+	public function renderTemplate()
 	{
 		$this->language->system('extension/payment/pp_standard');
 
@@ -92,7 +92,7 @@ class System_Extension_Payment_PpStandard extends Payment
 		$this->template->load('payment/pp_standard');
 
 		//Render
-		$this->render();
+		return $this->render();
 	}
 
 	public function info()

@@ -63,7 +63,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 							}
 						}
 
-						$this->cart->add($order_product['product_id'], $order_product['quantity'], $option_data);
+						$this->cart->addProduct($order_product['product_id'], $order_product['quantity'], $option_data);
 					}
 				}
 			}
@@ -93,7 +93,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 					}
 
 					if (!isset($json['error']['product']['option'])) {
-						$this->cart->add($_POST['product_id'], $quantity, $option);
+						$this->cart->addProduct($_POST['product_id'], $quantity, $option);
 					}
 				}
 			}
