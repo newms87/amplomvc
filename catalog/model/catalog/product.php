@@ -618,17 +618,19 @@ class Catalog_Model_Catalog_Product extends Model
 				return false;
 			}
 
-			if (!empty($options)) {
-				foreach ($options as $values) {
-					foreach ($values as $product_option_value) {
-						$option_cost += $product_option_value['cost'];
-						$option_price += $product_option_value['price'];
-						$option_points += $product_option_value['points'];
-						$option_weight += $product_option_value['weight'];
+			foreach ($options as $values) {
+				foreach ($values as $product_option_value) {
+					if (empty($product_option_value)) {
+						continue;
+					}
 
-						if ($product_option_value['subtract'] && $product_option_value['quantity'] < $quantity) {
-							$in_stock = false;
-						}
+					$option_cost += $product_option_value['cost'];
+					$option_price += $product_option_value['price'];
+					$option_points += $product_option_value['points'];
+					$option_weight += $product_option_value['weight'];
+
+					if ($product_option_value['subtract'] && $product_option_value['quantity'] < $quantity) {
+						$in_stock = false;
 					}
 				}
 			}
@@ -668,7 +670,7 @@ class Catalog_Model_Catalog_Product extends Model
 				$product_option_values = array($product_option_values);
 			}
 
-			foreach ($product_option_values as &$product_option_value) {
+			foreach ($product_option_values as $pov_key => &$product_option_value) {
 				//Check if information already filled.
 				if (is_array($product_option_value)) {
 					//We verify option_id as this is not included with a typical Product Option Value, so make sure we load all necessary information
@@ -691,8 +693,17 @@ class Catalog_Model_Catalog_Product extends Model
 
 					$product_option_value += $data;
 				}
+				else {
+					//Option not found! Probably was deleted, and therefore no longer available.
+					unset($product_option_values[$pov_key]);
+				}
 			}
 			unset($product_option_value);
+
+			//Clean up
+			if (empty($product_option_values)) {
+				unset($options[$product_option_id]);
+			}
 		}
 		unset($product_option_values);
 
