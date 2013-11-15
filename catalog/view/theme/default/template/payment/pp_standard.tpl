@@ -15,9 +15,16 @@
 		<input type="hidden" name="weight_<?= $i; ?>" value="<?= $cart_product['weight']; ?>"/>
 		<? if (!empty($cart_product['options'])) { ?>
 			<? $j = 0; ?>
-			<? foreach ($cart_product['options'] as $option) { ?>
-				<input type="hidden" name="on<?= $j; ?>_<?= $i; ?>" value="<?= $option['display_name']; ?>"/>
-				<input type="hidden" name="os<?= $j; ?>_<?= $i; ?>" value="<?= $option['value']; ?>"/>
+			<? foreach ($cart_product['options'] as $option_values) { ?>
+				<? foreach ($option_values as $product_option_value) { ?>
+					<? if ($product_option_value['display_value']) { ?>
+						<input type="hidden" name="on<?= $j; ?>_<?= $i; ?>" value="<?= $product_option_value['name']; ?>"/>
+						<input type="hidden" name="os<?= $j; ?>_<?= $i; ?>" value="<?= $product_option_value['display_value']; ?>"/>
+					<? } else { ?>
+						<input type="hidden" name="on<?= $j; ?>_<?= $i; ?>" value="<?= $product_option_value['display_name']; ?>"/>
+						<input type="hidden" name="os<?= $j; ?>_<?= $i; ?>" value="<?= $product_option_value['value']; ?>"/>
+					<? } ?>
+				<? } ?>
 				<? $j++; ?>
 			<? } ?>
 		<? } ?>
@@ -72,7 +79,7 @@
 				<input type="submit" value="<?= $button_confirm; ?>" class="button"/></div>
 			<div id="processing_payment">
 				<img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>"
-				     alt=""/><span><?= $text_processing_payment; ?></span><br/>
+					alt=""/><span><?= $text_processing_payment; ?></span><br/>
 				<input type="submit" value="<?= $button_try_again; ?>" class="button"/>
 			</div>
 		</div>
