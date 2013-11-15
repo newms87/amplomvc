@@ -172,14 +172,14 @@
 			<table class="form">
 				<tr>
 					<td class="required"> <?= $entry_password; ?></td>
-					<td><input type="password" autocomplete='off' name="password" value="<?= $password; ?>"/>
+					<td><input type="password" autocomplete="off" name="password" value="<?= $password; ?>"/>
 						<? if ($error_password) { ?>
 							<span class="error"><?= $error_password; ?></span>
 						<? } ?></td>
 				</tr>
 				<tr>
 					<td class="required"> <?= $entry_confirm; ?></td>
-					<td><input type="password" autocomplete='off' name="confirm" value="<?= $confirm; ?>"/>
+					<td><input type="password" autocomplete="off" name="confirm" value="<?= $confirm; ?>"/>
 						<? if ($error_confirm) { ?>
 							<span class="error"><?= $error_confirm; ?></span>
 						<? } ?></td>

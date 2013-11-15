@@ -495,8 +495,8 @@
 			delay: 0,
 			source: function (request, response) {
 				$.ajax({
-					url: "<?= //TODO: standardize .. $url_autocomplete; ?>" + '&filter_name=' + encodeURIComponent(request.term),
-					dataType: 'json',
+					url: "<?= //TODO: standardize .. $url_autocomplete; ?>" + '&filter_name=" + encodeURIComponent(request.term),
+					dataType: "json',
 					success: function (json) {
 						response($.map(json, function (item) {
 							return {
@@ -542,8 +542,8 @@
 			delay: 0,
 			source: function (request, response) {
 				$.ajax({
-					url: "<?= HTTP_ADMIN . "index.php?route=sale/affiliate/autocomplete"; ?>" + '&filter_name=' + encodeURIComponent(request.term),
-					dataType: 'json',
+					url: "<?= HTTP_ADMIN . "index.php?route=sale/affiliate/autocomplete"; ?>" + '&filter_name=" + encodeURIComponent(request.term),
+					dataType: "json',
 					success: function (json) {
 						response($.map(json, function (item) {
 							return {
@@ -564,8 +564,8 @@
 
 		$('select[name=\'payment_address\']').bind('change', function () {
 			$.ajax({
-				url: "<?= HTTP_ADMIN . "index.php?route=sale/customer/address"; ?>" + '&address_id=' + this.value,
-				dataType: 'json',
+				url: "<?= HTTP_ADMIN . "index.php?route=sale/customer/address"; ?>" + '&address_id=" + this.value,
+				dataType: "json',
 				success: function (json) {
 					if (json != '') {
 						$('input[name=\'payment_firstname\']').attr('value', json['firstname']);
@@ -576,7 +576,7 @@
 						$('input[name=\'payment_city\']').attr('value', json['city']);
 						$('input[name=\'payment_postcode\']').attr('value', json['postcode']);
 						$('select[name=\'payment_country_id\']').attr('value', json['country_id']);
-						$('select[name=\'payment_zone_id\']').load("<?= HTTP_ADMIN . "index.php?route=tool/data/load_zones"; ?>" + '&country_id=' + json['country_id'] + '&zone_id=' + json['zone_id']);
+						$('select[name=\'payment_zone_id\']').load("<?= HTTP_ADMIN . "index.php?route=tool/data/load_zones"; ?>" + '&country_id=" + json["country_id'] + '&zone_id=" + json["zone_id']);
 					}
 				}
 			});
@@ -584,8 +584,8 @@
 
 		$('select[name=\'shipping_address\']').bind('change', function () {
 			$.ajax({
-				url: "<?= HTTP_ADMIN . "index.php?route=sale/customer/address"; ?>" + '&address_id=' + this.value,
-				dataType: 'json',
+				url: "<?= HTTP_ADMIN . "index.php?route=sale/customer/address"; ?>" + '&address_id=" + this.value,
+				dataType: "json',
 				success: function (json) {
 					if (json != '') {
 						$('input[name=\'shipping_firstname\']').attr('value', json['firstname']);
@@ -596,7 +596,7 @@
 						$('input[name=\'shipping_city\']').attr('value', json['city']);
 						$('input[name=\'shipping_postcode\']').attr('value', json['postcode']);
 						$('select[name=\'shipping_country_id\']').attr('value', json['country_id']);
-						$('select[name=\'shipping_zone_id\']').load("<?= HTTP_ADMIN . "index.php?route=tool/data/load_zones"; ?>" + '&country_id=' + json['country_id'] + '&zone_id=' + json['zone_id']);
+						$('select[name=\'shipping_zone_id\']').load("<?= HTTP_ADMIN . "index.php?route=tool/data/load_zones"; ?>" + '&country_id=" + json["country_id'] + '&zone_id=" + json["zone_id']);
 					}
 				}
 			});
@@ -610,8 +610,8 @@
 		delay: 0,
 		source: function (request, response) {
 			$.ajax({
-				url: "<?= HTTP_ADMIN . "index.php?route=catalog/product/autocomplete"; ?>" + '&filter_name=' + encodeURIComponent(request.term),
-				dataType: 'json',
+				url: "<?= HTTP_ADMIN . "index.php?route=catalog/product/autocomplete"; ?>" + '&filter_name=" + encodeURIComponent(request.term),
+				dataType: "json',
 				success: function (json) {
 					response($.map(json, function (item) {
 						return {

@@ -1,8 +1,10 @@
 <?php
-class System_Extension_Payment_Cod extends Payment
+class System_Extension_Payment_Cod extends PaymentExtension
 {
-	public function confirm($order_id)
+	public function confirm()
 	{
-		$this->order->update($order_id, $this->settings['order_status_id']);
+		if (isset($_GET['order_id'])) {
+			$this->order->update($_GET['order_id'], $this->settings['complete_order_status_id']);
+		}
 	}
 }

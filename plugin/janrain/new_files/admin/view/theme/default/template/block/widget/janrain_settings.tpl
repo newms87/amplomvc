@@ -16,12 +16,12 @@
 	<tr>
 		<td><label><?= $entry_display_icons; ?></label></td>
 		<td>
-			<div class='display_icon_list'>
+			<div class="display_icon_list">
 				<? foreach ($data_display_icons as $key => $icon) { ?>
-					<div class='display_icon_label'>
-						<input id="icon-<?= $key; ?>" type='checkbox' name="settings[display_icons][]" value="<?= $key; ?>" <?= in_array($key, $display_icons) ? 'checked="checked"' : ''; ?> />
+					<div class="display_icon_label">
+						<input id="icon-<?= $key; ?>" type="checkbox" name="settings[display_icons][]" value="<?= $key; ?>" <?= in_array($key, $display_icons) ? 'checked="checked"' : ''; ?> />
 						<label for="icon-<?= $key; ?>" style="display: block">
-							<div class='janrain-icon-small'
+							<div class="janrain-icon-small"
 							     style="background: url(<?= $social_icon_sprite; ?>) no-repeat 0 <?= $image_offset[$key] * -16; ?>px;"></div>
 							<?= $icon; ?>
 						</label>

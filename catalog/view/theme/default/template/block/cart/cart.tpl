@@ -53,7 +53,7 @@
 												<? foreach ($cart_product['options'] as $product_option_id => $product_option_values) { ?>
 													<? foreach ($product_option_values as $product_option_value) { ?>
 														<div class="cart_product_option_value">
-															<?= _l("%s: %s", $product_option_value['display_name'], $product_option_value['value']); ?>
+															<?= $product_option_value['display_value']; ?>
 														</div>
 													<? } ?>
 												<? } ?>

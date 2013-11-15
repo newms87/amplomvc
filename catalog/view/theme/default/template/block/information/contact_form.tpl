@@ -1,4 +1,4 @@
-<form id='contact_form' action="<?= $action; ?>" method="post" enctype="multipart/form-data">
+<form id="contact_form" action="<?= $action; ?>" method="post" enctype="multipart/form-data">
 	<div class="section">
 		<div class="cf_item">
 			<label for="contact_name"><?= $entry_name; ?></label>

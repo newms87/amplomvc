@@ -95,8 +95,8 @@
 			delay: 0,
 			source: function (request, response) {
 				$.ajax({
-					url: "<?= $url_product_autocomplete; ?>" + '&filter_name=' + encodeURIComponent(request.term),
-					dataType: 'json',
+					url: "<?= $url_product_autocomplete; ?>" + '&filter_name=" + encodeURIComponent(request.term),
+					dataType: "json',
 					success: function (json) {
 						response($.map(json, function (item) {
 							return {

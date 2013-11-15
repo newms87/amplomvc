@@ -36,7 +36,7 @@
 						<option value="<?= $key; ?>" <?= $key === $db_type ? 'selected="selected"' : ''; ?>><?= $name; ?></option>
 					<? } ?>
 				</select>
-				<div class="help_icon_box"><span class='help_icon'><span class='help_icon_popup'><?= $text_db_type_help; ?></span></span></div>
+				<div class="help_icon_box"><span class="help_icon"><span class="help_icon_popup"><?= $text_db_type_help; ?></span></span></div>
 			</div>
 			<div class="install_item">
 				<label for="db_host"><?= $entry_db_host; ?></label>

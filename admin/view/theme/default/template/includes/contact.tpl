@@ -1,4 +1,4 @@
-<table class='list'>
+<table class="list">
 	<thead>
 	<tr>
 		<td><?= $entry_contact_first_name; ?></td>
@@ -13,7 +13,7 @@
 	</tr>
 	</thead>
 	<? foreach ($contact_info as $row => $contact) { ?>
-		<tbody id='contact-<?= $row; ?>'>
+		<tbody id="contact-<?= $row; ?>">
 		<tr>
 			<td class="left"><input type="text" name="contact[<?= $row; ?>][first_name]" value="<?= $contact['first_name']; ?>"/></td>
 			<td class="left"><input type="text" name="contact[<?= $row; ?>][last_name]" value="<?= $contact['last_name']; ?>"/></td>

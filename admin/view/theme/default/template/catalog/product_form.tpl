@@ -74,14 +74,14 @@
 							<td class="required"> <?= $entry_model; ?></td>
 							<td>
 								<input type="text" name="model" value="<?= $model; ?>"/>
-								<a class='gen_url' onclick='generate_model(this)'><?= $button_generate_model; ?></a>
+								<a class="gen_url" onclick="generate_model(this)"><?= $button_generate_model; ?></a>
 							</td>
 						</tr>
 						<tr>
 							<td class="required"><?= $entry_alias; ?></td>
 							<td>
 								<input type="text" onfocus="$(this).display_error('<?= $warning_generate_url; ?>', 'gen_url');" name="alias" value="<?= $alias; ?>"/>
-								<a class='gen_url' onclick='generate_url(this)'><?= $button_generate_url; ?></a>
+								<a class="gen_url" onclick="generate_url(this)"><?= $button_generate_url; ?></a>
 							</td>
 						</tr>
 						<tr>
@@ -119,7 +119,7 @@
 							<td><?= $entry_subtract; ?></td>
 							<td>
 								<?= $this->builder->build('select', $data_yes_no, "subtract", (int)$subtract); ?>
-								<input type='hidden' name='stock_status_id' value='<?= $stock_status_id; ?>'/>
+								<input type="hidden" name="stock_status_id" value="<?= $stock_status_id; ?>"/>
 							</td>
 						</tr>
 						<tr>
@@ -275,7 +275,7 @@
 							<input id="product_option_autocomplete" value=""/>
 							<img src="<?= HTTP_THEME_IMAGE . 'add.png'; ?>" alt="<?= $button_add_option; ?>" title="<?= $button_add_option; ?>"/>
 						</div>
-						<div class='help'><?= $text_option_help; ?></div>
+						<div class="help"><?= $text_option_help; ?></div>
 					</div>
 
 					<div id="product_option_list">
@@ -301,7 +301,7 @@
 									<tr>
 										<td><?= $entry_option_value_list; ?></td>
 										<td>
-											<div class='scrollbox unused_option_value_list clickable'>
+											<div class="scrollbox unused_option_value_list clickable">
 												<? foreach ($product_option['unused_option_values'] as $uov_row => $option_value) { ?>
 													<div class="unused_option_value" data-row="<?= $uov_row; ?>" data-id="<?= $option_value['option_value_id']; ?>" onclick="add_option_value($(this));">
 														<span class="uov_label"><?= $option_value['value']; ?></span>
@@ -330,7 +330,7 @@
 											<td></td>
 										</tr>
 									</thead>
-									<tbody class='product_option_value_list'>
+									<tbody class="product_option_value_list">
 										<? if (!empty($product_option['product_option_values'])) { ?>
 											<? foreach ($product_option['product_option_values'] as $pov_row => $product_option_value) { ?>
 												<? $product_option_value_row = "product_options[$row][product_option_values][$pov_row]"; ?>
@@ -339,7 +339,7 @@
 														<input type="hidden" name="<?= $product_option_value_row; ?>[product_option_value_id]" value="<?= $product_option_value['product_option_value_id']; ?>"/>
 														<input type="hidden" name="<?= $product_option_value_row; ?>[option_value_id]" value="<?= $product_option_value['option_value_id']; ?>"/>
 														<input type="hidden" name="<?= $product_option_value_row; ?>[value]" value="<?= $product_option_value['value']; ?>"/>
-														<span class='option_value_label'><?= $product_option_value['value']; ?></span>
+														<span class="option_value_label"><?= $product_option_value['value']; ?></span>
 													</td>
 													<td class="center default_option">
 														<? $type = $product_option['type'] === 'checkbox' ? 'checkbox' : 'radio'; ?>
@@ -374,7 +374,7 @@
 													</td>
 													<td class="center">
 														<? /** ?>
-														<!--<table class='list'>
+														<!--<table class="list">
 															<thead>
 															<tr>
 																<td class="center"><?= $entry_restriction_option_value; ?></td>
@@ -391,7 +391,7 @@
 																			<? // $this->builder->setConfig('product_option_value_id', 'name'); ?>
 																			<? // $this->builder->build('select', $all_product_option_values, $restriction_row."[restrict_option_value_id]", $restriction['restrict_option_value_id']); ?>
 																		</td>
-																		<td class="center"><input type="text" size='3' name="<?= $restriction_row; ?>[quantity]" value="<?= $restriction['quantity']; ?>"/></td>
+																		<td class="center"><input type="text" size="3" name="<?= $restriction_row; ?>[quantity]" value="<?= $restriction['quantity']; ?>"/></td>
 																		<td class="center"><a onclick="$(this).closest('tr').remove()" class="button_remove"></a></td>
 																	</tr>
 																<? } ?>
@@ -399,7 +399,7 @@
 															</tbody>
 															<tfoot>
 															<tr>
-																<td colspan='2'></td>
+																<td colspan="2"></td>
 																<td class="center"><a onclick="return add_restriction_value($(this))" class="button_add"></a></td>
 															</tr>
 															</tfoot>
@@ -777,7 +777,7 @@ function autocomplete_callback_product_option(event, data) {
 		//If false, the product option already exists
 		if (product_option === false) {
 			//Click tab for this product option
-			$('[href=#' + $('.product_option[data-id=' + data.item.option_id + ']').attr('id') + ']').click();
+			$('[href=#' + $('.product_option[data-id=" + data.item.option_id + "]').attr('id') + ']').click();
 		}
 
 		return false;

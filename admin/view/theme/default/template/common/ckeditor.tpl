@@ -182,7 +182,7 @@ $(document).ready(function () {
 				$.ajax({
 					url: "<?= HTTP_AJAX . "common/filemanager/files"; ?>",
 					type: 'post',
-					data: 'directory=' + encodeURIComponent($(NODE).attr('directory')),
+					data: 'directory=" + encodeURIComponent($(NODE).attr("directory')),
 					dataType: 'json',
 					success: function (json) {
 						html = '<div>';
@@ -209,7 +209,7 @@ $(document).ready(function () {
 
 						$('#column-right a').each(function (index, element) {
 							$.ajax({
-								url: "<?= HTTP_AJAX . "common/filemanager/image"; ?>" + '?image=' + encodeURIComponent('data/' + $(element).find('input[name=\'image\']').attr('value')),
+								url: "<?= HTTP_AJAX . "common/filemanager/image"; ?>" + '?image=" + encodeURIComponent("data/' + $(element).find('input[name=\'image\']').attr('value')),
 								dataType: 'html',
 								success: function (html) {
 									$(element).prepend('<img src="' + html + '" title="" style="display: none;" /><br />');
@@ -271,7 +271,7 @@ $(document).ready(function () {
 				$.ajax({
 					url: "<?= HTTP_AJAX . "common/filemanager/create"; ?>",
 					type: 'post',
-					data: 'directory=' + encodeURIComponent($(tree.selected).attr('directory')) + '&name=' + encodeURIComponent($('#dialog input[name=\'name\']').val()),
+					data: 'directory=" + encodeURIComponent($(tree.selected).attr("directory')) + '&name=" + encodeURIComponent($("#dialog input[name=\'name\']').val()),
 					dataType: 'json',
 					success: function (json) {
 						if (json.success) {
@@ -301,8 +301,8 @@ $(document).ready(function () {
 			$.ajax({
 				url: "<?= HTTP_AJAX . "common/filemanager/delete"; ?>",
 				type: 'post',
-				data: 'path=' + encodeURIComponent(path),
-				dataType: 'json',
+				data: 'path=" + encodeURIComponent(path),
+				dataType: "json',
 				success: function (json) {
 					if (json.success) {
 						var tree = $.tree.focused();
@@ -327,7 +327,7 @@ $(document).ready(function () {
 				$.ajax({
 					url: "<?= HTTP_AJAX . "common/filemanager/delete"; ?>",
 					type: 'post',
-					data: 'path=' + encodeURIComponent($(tree.selected).attr('directory')),
+					data: 'path=" + encodeURIComponent($(tree.selected).attr("directory')),
 					dataType: 'json',
 					success: function (json) {
 						if (json.success) {
@@ -375,7 +375,7 @@ $(document).ready(function () {
 				$.ajax({
 					url: "<?= HTTP_AJAX . "common/filemanager/move"; ?>",
 					type: 'post',
-					data: 'from=' + encodeURIComponent(path) + '&to=' + encodeURIComponent($('#dialog select[name=\'to\']').val()),
+					data: 'from=" + encodeURIComponent(path) + "&to=" + encodeURIComponent($("#dialog select[name=\'to\']').val()),
 					dataType: 'json',
 					success: function (json) {
 						if (json.success) {
@@ -402,7 +402,7 @@ $(document).ready(function () {
 				$.ajax({
 					url: "<?= HTTP_AJAX . "common/filemanager/move"; ?>",
 					type: 'post',
-					data: 'from=' + encodeURIComponent($(tree.selected).attr('directory')) + '&to=' + encodeURIComponent($('#dialog select[name=\'to\']').val()),
+					data: 'from=" + encodeURIComponent($(tree.selected).attr("directory')) + '&to=" + encodeURIComponent($("#dialog select[name=\'to\']').val()),
 					dataType: 'json',
 					success: function (json) {
 						if (json.success) {
@@ -450,7 +450,7 @@ $(document).ready(function () {
 				$.ajax({
 					url: "<?= HTTP_AJAX . "common/filemanager/copy"; ?>",
 					type: 'post',
-					data: 'path=' + encodeURIComponent(path) + '&name=' + encodeURIComponent($('#dialog input[name=\'name\']').val()),
+					data: 'path=" + encodeURIComponent(path) + "&name=" + encodeURIComponent($("#dialog input[name=\'name\']').val()),
 					dataType: 'json',
 					success: function (json) {
 						if (json.success) {
@@ -477,7 +477,7 @@ $(document).ready(function () {
 				$.ajax({
 					url: "<?= HTTP_AJAX . "common/filemanager/copy"; ?>",
 					type: 'post',
-					data: 'path=' + encodeURIComponent($(tree.selected).attr('directory')) + '&name=' + encodeURIComponent($('#dialog input[name=\'name\']').val()),
+					data: 'path=" + encodeURIComponent($(tree.selected).attr("directory')) + '&name=" + encodeURIComponent($("#dialog input[name=\'name\']').val()),
 					dataType: 'json',
 					success: function (json) {
 						if (json.success) {
@@ -523,7 +523,7 @@ $(document).ready(function () {
 				$.ajax({
 					url: "<?= HTTP_AJAX . "common/filemanager/rename"; ?>",
 					type: 'post',
-					data: 'path=' + encodeURIComponent(path) + '&name=' + encodeURIComponent($('#dialog input[name=\'name\']').val()),
+					data: 'path=" + encodeURIComponent(path) + "&name=" + encodeURIComponent($("#dialog input[name=\'name\']').val()),
 					dataType: 'json',
 					success: function (json) {
 						if (json.success) {
@@ -550,7 +550,7 @@ $(document).ready(function () {
 				$.ajax({
 					url: "<?= HTTP_AJAX . "common/filemanager/rename"; ?>",
 					type: 'post',
-					data: 'path=' + encodeURIComponent($(tree.selected).attr('directory')) + '&name=' + encodeURIComponent($('#dialog input[name=\'name\']').val()),
+					data: 'path=" + encodeURIComponent($(tree.selected).attr("directory')) + '&name=" + encodeURIComponent($("#dialog input[name=\'name\']').val()),
 					dataType: 'json',
 					success: function (json) {
 						if (json.success) {

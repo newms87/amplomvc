@@ -1,12 +1,12 @@
 <?php
-class System_Extension_Payment_PpStandard extends Payment
+class System_Extension_Payment_PpStandard extends PaymentExtension
 {
 	public function renderTemplate()
 	{
 		$this->language->system('extension/payment/pp_standard');
 
 		if ($this->settings['test']) {
-			$this->data['action'] = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
+			$this->data['action']   = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
 			$this->data['business'] = $this->settings['test_email'] ? $this->settings['test_email'] : $this->settings['email'];
 		} else {
 			$this->data['action']   = 'https://www.paypal.com/cgi-bin/webscr';
@@ -23,35 +23,39 @@ class System_Extension_Payment_PpStandard extends Payment
 		$this->data['order_id']  = $order['order_id'];
 		$this->data['item_name'] = html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
 
-		$products = $this->cart->getProducts();
+		$cart_products = $this->cart->getProducts();
 
-		foreach ($products as &$product) {
-			foreach ($product['selected_options'] as &$selected_option) {
-				$selected_option['product_option'] = $this->Model_Catalog_Product->getProductOption($product['product_id'], $selected_option['product_option_id']);
-				$selected_option['value']          = $this->tool->limit_characters($selected_option['value'], 20);
+		foreach ($cart_products as &$cart_product) {
+			foreach ($cart_product['options'] as $product_option_id => &$product_option_values) {
+				foreach ($product_option_values as &$product_option_value) {
+					$product_option_value['value'] = $this->tool->limit_characters($product_option_value['value'], 20);
+				}
+				unset($product_option_value);
 			}
-			unset($product_option);
+			unset($product_option_values);
 
-			$product['price'] = $this->currency->format($product['price'], $order['currency_code'], false, false);
+			$cart_product['price'] = $this->currency->format($cart_product['price'], $order['currency_code'], false, false);
 		}
-		unset($product);
+		unset($cart_product);
 
-		$this->data['products'] = $products;
+		$this->data['products'] = $cart_products;
 
 		$this->data['discount_amount_cart'] = 0;
 
-		$total = $this->currency->format($order['total'] - $this->cart->getSubTotal(), $order['currency_code'], false, false);
+		$extra_total = $this->currency->format($order['total'] - $this->cart->getSubTotal(), $order['currency_code'], false, false);
 
-		if ($total > 0) {
-			$this->data['products'][] = array(
-				'name'     => $this->_('text_total'),
-				'model'    => '',
-				'price'    => $total,
-				'quantity' => 1,
-				'weight'   => 0
+		if ($extra_total > 0) {
+			$this->data['extras'] = array(
+				array(
+					'name'     => _l('Shipping, Handling, Discounts & Taxes'),
+					'model'    => '',
+					'price'    => $extra_total,
+					'quantity' => 1,
+					'weight'   => 0,
+				)
 			);
 		} else {
-			$this->data['discount_amount_cart'] -= $total;
+			$this->data['discount_amount_cart'] -= $extra_total;
 		}
 
 		$payment_address_info = $this->Model_Localisation_Country->getCountry($order['payment_country_id']);
@@ -86,7 +90,7 @@ class System_Extension_Payment_PpStandard extends Payment
 		$this->data['image_url']     = $server . $this->config->get('config_logo');
 		$this->data['paymentaction'] = $this->settings['transaction'] ? 'sale' : 'authorization';
 		$this->data['custom']        = $this->encryption->encrypt($order['order_id']);
-		$this->data['testmode'] = $this->settings['test'];
+		$this->data['testmode']      = $this->settings['test'];
 
 		//The Template
 		$this->template->load('payment/pp_standard');

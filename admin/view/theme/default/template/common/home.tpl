@@ -109,8 +109,8 @@
 		function getSalesChart(range) {
 			$.ajax({
 				type: 'GET',
-				url: "<?= $url_chart; ?>" + '&range=' + range,
-				dataType: 'json',
+				url: "<?= $url_chart; ?>" + '&range=" + range,
+				dataType: "json',
 				async: false,
 				success: function (json) {
 					var option = {

@@ -108,14 +108,14 @@ class Order Extends Library
 		$data['totals'] = $this->cart->getTotals();
 
 		//Products
-		$products = $this->cart->getProducts();
+		$cart_products = $this->cart->getProducts();
 
-		foreach ($products as &$product) {
-			$product['tax'] = $this->tax->getTax($product['total'], $product['tax_class_id']);
+		foreach ($cart_products as &$cart_product) {
+			$cart_product['tax'] = $this->tax->getTax($cart_product['total'], $cart_product['product']['tax_class_id']);
 		}
 		unset($product);
 
-		$data['products'] = $products;
+		$data['products'] = $cart_products;
 
 		// Gift Voucher
 		if ($this->cart->hasVouchers()) {

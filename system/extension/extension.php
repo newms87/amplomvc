@@ -3,17 +3,6 @@ abstract class Extension extends Controller
 {
 	protected $info;
 	protected $settings;
-	protected $language;
-
-	public function __construct($registry)
-	{
-		parent::__construct($registry);
-
-		//Create an independent copy of language for extensions avoid overwriting mistakes!)
-		$lang = $registry->get('language');
-		$this->language = new Language($registry, $lang->id(), false, false);
-		$this->language->data = $lang->data;
-	}
 
 	public function isActive()
 	{

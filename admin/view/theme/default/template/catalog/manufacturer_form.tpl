@@ -25,13 +25,13 @@
 							<tr>
 								<td class="required"><?= $entry_keyword; ?></td>
 								<td>
-									<input type="text" onfocus='generate_url_warning(this)' name="keyword" value="<?= $keyword; ?>"/>
-									<a class='gen_url' onclick='generate_url(this)'><?= $button_generate_url; ?></a>
+									<input type="text" onfocus="generate_url_warning(this)" name="keyword" value="<?= $keyword; ?>"/>
+									<a class="gen_url" onclick="generate_url(this)"><?= $button_generate_url; ?></a>
 								</td>
 							</tr>
 							<tr>
 								<td><?= $entry_teaser; ?></td>
-								<td><input type='text' name="teaser" value="<?= $teaser; ?>" size="80"/></td>
+								<td><input type="text" name="teaser" value="<?= $teaser; ?>" size="80"/></td>
 							</tr>
 							<tr>
 								<td><?= $entry_description; ?></td>
@@ -57,12 +57,12 @@
 							</tr>
 							<tr>
 								<td><?= $entry_date_active; ?></td>
-								<td><input type='text' class="datetimepicker" name='date_active' value='<?= $date_active; ?>'/>
+								<td><input type="text" class="datetimepicker" name="date_active" value="<?= $date_active; ?>"/>
 								</td>
 							</tr>
 							<tr>
 								<td><?= $entry_date_expires; ?></td>
-								<td><input type='text' class="datetimepicker" name='date_expires' value='<?= $date_expires; ?>'/></td>
+								<td><input type="text" class="datetimepicker" name="date_expires" value="<?= $date_expires; ?>"/></td>
 							</tr>
 							<tr>
 								<td><?= $entry_sort_order; ?></td>

@@ -55,7 +55,7 @@ class Cache
 		$files = glob(DIR_CACHE . '*.' . preg_replace('/[^A-Z0-9\._-]/i', '', $key) . '.cache');
 
 		if ($files) {
-			$this->loaded[$key]['data'] = unserialize(file_get_contents($files[0]));
+			$this->loaded[$key]['data'] = unserialize(@file_get_contents($files[0]));
 			$this->loaded[$key]['file'] = $files[0];
 
 			return $this->loaded[$key]['data'];
@@ -89,7 +89,7 @@ class Cache
 
 			foreach ($files as $file) {
 				if (is_file($file) && is_readable($file)) {
-					unlink($file);
+					@unlink($file);
 				}
 			}
 		}

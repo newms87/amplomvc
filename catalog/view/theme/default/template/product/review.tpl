@@ -66,7 +66,7 @@
 			url: "<?= HTTP_CATALOG . "index.php?route=product/product/write"; ?>" + '&product_id=<?= $product_id; ?>',
 			type: 'post',
 			dataType: 'json',
-			data: 'name=' + encodeURIComponent($('input[name=\'name\']').val()) + '&text=' + encodeURIComponent($('textarea[name=\'text\']').val()) + '&rating=' + encodeURIComponent($('input[name=\'rating\']:checked').val() ? $('input[name=\'rating\']:checked').val() : '') + '&captcha=' + encodeURIComponent($('input[name=\'captcha\']').val()),
+			data: 'name=" + encodeURIComponent($("input[name=\'name\']').val()) + '&text=" + encodeURIComponent($("textarea[name=\'text\']').val()) + '&rating=" + encodeURIComponent($("input[name=\'rating\']:checked').val() ? $('input[name=\'rating\']:checked').val() : '') + '&captcha=" + encodeURIComponent($("input[name=\'captcha\']').val()),
 			beforeSend: function () {
 				$('.success, .warning').remove();
 				$('#button-review').attr('disabled', true);

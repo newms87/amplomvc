@@ -16,7 +16,7 @@
 			       PLUGINSPAGE="http://www.macromedia.com/go/getflashplayer"></EMBED>
 		</OBJECT>
 
-		<div class='product_info'>
+		<div class="product_info">
 
 			<div class="product_video">
 				<div class="left">
@@ -31,7 +31,7 @@
 			<div class="description">
 				<? if (isset($manufacturer) && $manufacturer) { ?>
 					<div class="description_manufacturer"><span><?= $text_more_from_designer; ?></span><a
-							href='<?= $manufacturer_url; ?>' class='manufacturer_link'><?= $manufacturer; ?></a><span
+							href="<?= $manufacturer_url; ?>" class="manufacturer_link"><?= $manufacturer; ?></a><span
 							style="margin-left:7px"><?= $text_on_store; ?></span></div>
 				<? } ?>
 

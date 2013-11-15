@@ -10,7 +10,7 @@
 				</div>
 			</div>
 			<div class="section">
-				<form action='' method="post">
+				<form action="" method="post">
 					<table class="form">
 						<tr>
 							<td><label for="domain"><?= $entry_domain; ?></label></td>
@@ -49,7 +49,7 @@
 							<td class="center"><?= $site['username']; ?></td>
 							<td class="center"><?= $data_site_status[$site['status']]; ?></td>
 							<td class="center">
-								<form action='' method='post'>
+								<form action="" method="post">
 									<input type="hidden" name="domain" value="<?= $site['domain']; ?>"/>
 									<input type="submit" name="delete_site" class="button" value="Delete"/>
 								</form>

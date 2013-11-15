@@ -3,7 +3,6 @@ class Catalog_Controller_Cart_Cart extends Controller
 {
 	public function index()
 	{
-		$this->template->load('cart/cart');
 		$this->language->load('cart/cart');
 
 		$this->document->setTitle($this->_('head_title'));
@@ -41,6 +40,7 @@ class Catalog_Controller_Cart_Cart extends Controller
 		$this->data['block_total'] = $this->getBlock('cart/total');
 
 		$this->data['cart_empty'] = $this->cart->isEmpty();
+		$this->data['can_checkout'] = $this->cart->canCheckout();
 
 		//Set Continue to the redirect unless we are redirecting to the cart page
 		if (isset($_GET['redirect']) && preg_match("/cart\\/cart/", $_GET['redirect']) == 0) {
@@ -51,6 +51,10 @@ class Catalog_Controller_Cart_Cart extends Controller
 
 		$this->data['checkout'] = $this->url->link('checkout/checkout');
 
+		//The Template
+		$this->template->load('cart/cart');
+
+		//Dependencies
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
@@ -60,6 +64,7 @@ class Catalog_Controller_Cart_Cart extends Controller
 			'common/header'
 		);
 
+		//Render
 		$this->response->setOutput($this->render());
 	}
 
@@ -109,7 +114,7 @@ class Catalog_Controller_Cart_Cart extends Controller
 			$url_cart    = $this->url->link('cart/cart');
 			$this->message->add('success', _l('<a href="%s">%s</a> has been added to <a href="%s">the cart</a>', $url_product, $name, $url_cart));
 
-			$item_count = $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0);
+			$item_count = $this->cart->countItems();
 			$total      = $this->currency->format($this->cart->getTotal());
 			$this->message->add('total', _l('%s item(s) - %s', $item_count, $total));
 

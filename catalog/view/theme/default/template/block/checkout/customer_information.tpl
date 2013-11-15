@@ -1,46 +1,45 @@
 <div id="customer_information_box">
 	<? if (!empty($guest_checkout)) { ?>
-		<div id='guest_information' class='info_item' route='block/checkout/guest_information'>
-			<div class='info_content'><?= $block_guest_information; ?></div>
-			<div class='validation_status'></div>
+		<div id="guest_information" class="info_item" route="block/checkout/guest_information">
+			<div class="info_content"><?= $block_guest_information; ?></div>
+			<div class="validation_status"></div>
 		</div>
 	<? } else { ?>
 		<? if (!empty($block_shipping_address)) { ?>
-			<div id='shipping_address' class='info_item' route='block/checkout/shipping_address'>
-				<h2 class='info_heading'><?= $text_shipping_information; ?></h2>
+			<div id="shipping_address" class="info_item" route="block/checkout/shipping_address">
+				<h2 class="info_heading"><?= $text_shipping_information; ?></h2>
 
-				<div class='info_content'><?= $block_shipping_address; ?></div>
-				<div class='validation_status'></div>
+				<div class="info_content"><?= $block_shipping_address; ?></div>
+				<div class="validation_status"></div>
 			</div>
 		<? } ?>
 
-		<div id='payment_address' class='info_item' route='block/checkout/payment_address'>
-			<h2 class='info_heading'><?= $text_payment_address; ?></h2>
+		<div id="payment_address" class="info_item" route="block/checkout/payment_address">
+			<h2 class="info_heading"><?= $text_payment_address; ?></h2>
 
-			<div class='info_content'><?= $block_payment_address; ?></div>
-			<div class='validation_status'></div>
+			<div class="info_content"><?= $block_payment_address; ?></div>
+			<div class="validation_status"></div>
 		</div>
 	<? } ?>
 
 	<? if (!empty($block_shipping_method)) { ?>
-		<div id='shipping_method' class='info_item' route='block/checkout/shipping_method'>
-			<h2 class='info_heading'><?= !empty($guest_checkout) ? $text_shipping_method : ''; ?></h2>
+		<div id="shipping_method" class="info_item" route="block/checkout/shipping_method">
+			<h2 class="info_heading"><?= !empty($guest_checkout) ? $text_shipping_method : ''; ?></h2>
 
-			<div class='info_content'><?= $block_shipping_method; ?></div>
-			<div class='validation_status'></div>
+			<div class="info_content"><?= $block_shipping_method; ?></div>
+			<div class="validation_status"></div>
 		</div>
 	<? } ?>
 
-	<div id='payment_method' class='info_item' route='block/checkout/payment_method'>
-		<h2 class='info_heading'><?= $text_payment_method; ?></h2>
+	<div id="payment_method" class="info_item" route="block/checkout/payment_method">
+		<h2 class="info_heading"><?= $text_payment_method; ?></h2>
 
-		<div class='info_content'><?= $block_payment_method; ?></div>
-		<div class='validation_status'></div>
+		<div class="info_content"><?= $block_payment_method; ?></div>
+		<div class="validation_status"></div>
 	</div>
 
 	<div id="customer_checkout_submit" class="buttons">
-		<div class="right"><input type="button" value="<?= $button_continue; ?>" onclick="validate_submit($(this))"
-		                          class="button"/></div>
+		<div class="right"><input type="button" value="<?= $button_continue; ?>" onclick="validate_submit($(this))" class="button"/></div>
 	</div>
 </div>
 
@@ -65,10 +64,7 @@
 	}
 
 	function info_page_loading(info_item) {
-		set_validation_status(info_item, 'validating', "<?= $text_info_validating; ?> <img src='<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>' alt='' />");
-	}
-
-	function info_page_received(info_item) {
+		set_validation_status(info_item, 'validating', "<?= $text_info_validating; ?> <img src=\"<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>\" alt=\"\" />");
 	}
 
 	function load_info_item(info_item, route, callback) {
@@ -249,7 +245,7 @@
 	<? } else { ?>
 
 	$('#shipping_new input[type=submit], #payment_new input[type=submit]').click(function () {
-		ci_validate_form($(this).closest('form'), true, function(form, json) {
+		ci_validate_form($(this).closest('form'), true, function (form, json) {
 			if (form.closest('.info_item').attr('id') === 'payment_address') {
 				load_info_item($('#shipping_address'));
 			} else {

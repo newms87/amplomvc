@@ -93,7 +93,7 @@
 			</tr>
 			<tr>
 				<td class="required"> <?= $entry_zone; ?></td>
-				<td><select zone_id='<?= $zone_id; ?>' name="zone_id"></select>
+				<td><select zone_id="<?= $zone_id; ?>" name="zone_id"></select>
 					<? if ($error_zone) { ?>
 						<span class="error"><?= $error_zone; ?></span>
 					<? } ?></td>
@@ -107,14 +107,14 @@
 			</tr>
 			<tr>
 				<td><?= $entry_password; ?></td>
-				<td><input type="password" autocomplete='off' name="password" value="<?= $password; ?>"/>
+				<td><input type="password" autocomplete="off" name="password" value="<?= $password; ?>"/>
 					<? if ($error_password) { ?>
 						<span class="error"><?= $error_password; ?></span>
 					<? } ?></td>
 			</tr>
 			<tr>
 				<td><?= $entry_confirm; ?></td>
-				<td><input type="password" autocomplete='off' name="confirm" value="<?= $confirm; ?>"/>
+				<td><input type="password" autocomplete="off" name="confirm" value="<?= $confirm; ?>"/>
 					<? if ($error_confirm) { ?>
 						<span class="error"><?= $error_confirm; ?></span>
 					<? } ?></td>
@@ -251,7 +251,7 @@
 				url: "<?= $url_transaction; ?>",
 				type: 'post',
 				dataType: 'html',
-				data: 'description=' + encodeURIComponent($('#tab-transaction input[name=\'description\']').val()) + '&amount=' + encodeURIComponent($('#tab-transaction input[name=\'amount\']').val()),
+				data: 'description=" + encodeURIComponent($("#tab-transaction input[name=\'description\']').val()) + '&amount=" + encodeURIComponent($("#tab-transaction input[name=\'amount\']').val()),
 				beforeSend: function () {
 					$('.success, .warning').remove();
 					$('#button-transaction').attr('disabled', true);

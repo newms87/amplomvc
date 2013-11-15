@@ -6,7 +6,7 @@
 
 	<h1><?= $head_title; ?>
 		<? if (isset($weight)) { ?>
-			<span id='cart_weight'>(<?= $weight; ?>)</span>
+			<span id="cart_weight">(<?= $weight; ?>)</span>
 		<? } ?>
 	</h1>
 	<? if (!$cart_empty) { ?>
@@ -17,13 +17,13 @@
 
 		<?= $block_cart; ?>
 
-		<div id='cart_actions'>
+		<div id="cart_actions">
 			<h2><?= $text_next; ?></h2>
 			<? if (!empty($block_coupon)) { ?>
 				<div>
-					<a id='text_block_coupon' onclick="$('#toggle_block_coupon').slideToggle();"><?= $text_use_coupon; ?></a>
+					<a id="text_block_coupon" onclick="$('#toggle_block_coupon').slideToggle();"><?= $text_use_coupon; ?></a>
 
-					<div id='toggle_block_coupon' class='content'>
+					<div id="toggle_block_coupon" class="content">
 						<?= $block_coupon; ?>
 					</div>
 				</div>
@@ -31,9 +31,9 @@
 
 			<? if (!empty($block_voucher)) { ?>
 				<div>
-					<a id='text_block_voucher' onclick="$('#toggle_block_voucher').slideToggle();"><?= $text_use_voucher; ?></a>
+					<a id="text_block_voucher" onclick="$('#toggle_block_voucher').slideToggle();"><?= $text_use_voucher; ?></a>
 
-					<div id='toggle_block_voucher' class='content'>
+					<div id="toggle_block_voucher" class="content">
 						<?= $block_voucher; ?>
 					</div>
 				</div>
@@ -41,9 +41,9 @@
 
 			<? if (!empty($block_reward)) { ?>
 				<div>
-					<a id='text_block_reward' onclick="$('#toggle_block_reward').slideToggle();"><?= $text_use_reward; ?></a>
+					<a id="text_block_reward" onclick="$('#toggle_block_reward').slideToggle();"><?= $text_use_reward; ?></a>
 
-					<div id='toggle_block_reward' class='content'>
+					<div id="toggle_block_reward" class="content">
 						<?= $block_reward; ?>
 					</div>
 				</div>
@@ -51,9 +51,9 @@
 
 			<? if (!empty($block_shipping)) { ?>
 				<div>
-					<a id='text_block_shipping' onclick="$('#toggle_block_shipping').slideToggle();"><?= $text_use_shipping; ?></a>
+					<a id="text_block_shipping" onclick="$('#toggle_block_shipping').slideToggle();"><?= $text_use_shipping; ?></a>
 
-					<div id='toggle_block_shipping' class='content'>
+					<div id="toggle_block_shipping" class="content">
 						<?= $block_shipping; ?>
 					</div>
 				</div>
@@ -61,7 +61,7 @@
 		</div>
 
 		<? if (isset($block_total)) { ?>
-			<div id='cart_block_total'>
+			<div id="cart_block_total">
 				<?= $block_total; ?>
 			</div>
 		<? } ?>

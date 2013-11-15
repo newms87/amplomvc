@@ -59,7 +59,7 @@
 						<textarea class="<?= $key === 'template_row' ? 'template' : ''; ?>" name="settings[press_items][<?= $row; ?>][description]"><?= $press['description']; ?></textarea
 					</span>
 					-->
-						<div class='button_remove' onclick="$(this).closest('.press_item').remove()"></div>
+						<div class="button_remove" onclick="$(this).closest('.press_item').remove()"></div>
 					</li>
 				<? } ?>
 			</ul>

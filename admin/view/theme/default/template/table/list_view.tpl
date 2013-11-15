@@ -140,7 +140,7 @@
 		<tr class="filter_list_item">
 			<? if (!empty($row_id)) { ?>
 			<td class="center">
-				<input id="rowid<?= $row[$row_id]; ?>" type="checkbox" name="selected[]" onclick="$(this).data('clicked',true)" value="<?= $row[$row_id]; ?>" <?= !empty($row['selected']) ? "checked='checked'" : ""; ?> />
+				<input id="rowid<?= $row[$row_id]; ?>" type="checkbox" name="selected[]" onclick="$(this).data('clicked',true)" value="<?= $row[$row_id]; ?>" <?= !empty($row['selected']) ? "checked=\"checked\"" : ""; ?> />
 				<label for="rowid<?= $row[$row_id]; ?>" class="rowid"><?= $text_id; ?><?= $row[$row_id]; ?></label>
 			</td>
 			<? } ?>

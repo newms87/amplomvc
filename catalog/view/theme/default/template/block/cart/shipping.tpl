@@ -20,7 +20,7 @@
 	<input type="button" value="<?= $button_quote; ?>" id="button-quote" class="button"/>
 </form>
 
-<div id='shipping_quote_template' class="shipping_quote" style='display:none'>
+<div id="shipping_quote_template" class="shipping_quote" style="display:none">
 	<h2><?= $text_shipping_method; ?></h2>
 
 	<form action="<?= $apply; ?>" method="post" enctype="multipart/form-data">
@@ -33,7 +33,7 @@
 				<td><label for="%method%">%title%</label></td>
 				<td class="method"><label for="%method%">%text%</label></td>
 			</tr>
-			<tr class='error_msg'>
+			<tr class="error_msg">
 				<td colspan="3">
 					<div class="error">%error%</div>
 				</td>
@@ -69,9 +69,9 @@
 		var shipping_quote = shipping_quote_template.clone();
 
 		country_id = $('#cart_shipping [name=country_id]').val();
-		country_name = $('#cart_shipping [name=country_id] option[value=' + country_id + ']').html();
+		country_name = $('#cart_shipping [name=country_id] option[value=" + country_id + "]').html();
 		zone_id = $('#cart_shipping [name=zone_id]').val();
-		zone_name = $('#cart_shipping [name=zone_id] option[value=' + zone_id + ']').html();
+		zone_name = $('#cart_shipping [name=zone_id] option[value=" + zone_id + "]').html();
 		postcode = $('#cart_shipping [name=postcode]').val();
 
 		shipping_quote.find('[name=country_id]').val(country_id);
@@ -102,7 +102,7 @@
 					msg = '';
 					for (var e in json['error']) {
 						msg += (msg ? "<br />" : '') + json['error'][e];
-						$('#cart_shipping [name=' + e + ']').after('<span class="error">' + json['error'][e] + '</span>');
+						$('#cart_shipping [name=" + e + "]').after('<span class="error">' + json['error'][e] + '</span>');
 					}
 					show_msg('warning', msg);
 				}

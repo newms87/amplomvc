@@ -3,6 +3,7 @@ class Weight extends Library
 {
 	private $weights = array();
 
+	//TODO: Update weight classes to stop using description table
 	public function __construct($registry)
 	{
 		parent::__construct($registry);
@@ -12,6 +13,17 @@ class Weight extends Library
 		foreach ($weight_classes as $weight_class) {
 			$this->weights[$weight_class['weight_class_id']] = $weight_class;
 		}
+
+		$this->weight_class_id = $this->config->get('config_weight_class_id');
+	}
+
+	public function get($value, $weight_class_id)
+	{
+		if ($weight_class_id !== $this->weight_class_id){
+			$value = $this->convert($value, $weight_class_id, $this->weight_class_id);
+		}
+
+		return $value;
 	}
 
 	public function convert($value, $from, $to)

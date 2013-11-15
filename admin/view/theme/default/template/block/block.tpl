@@ -18,7 +18,7 @@
 			</div>
 			<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
 
-				<div id='tab-settings'>
+				<div id="tab-settings">
 					<table class="form">
 						<? if (!empty($extend_settings)) { ?>
 							<tr>
@@ -32,7 +32,7 @@
 					</table>
 				</div>
 
-				<div id='tab-profile-settings'>
+				<div id="tab-profile-settings">
 					<div id="profile_settings_tab_list" class="vtabs">
 						<span id="add_profile_setting">
 							<span><?= $button_add_profile_setting; ?></span>
@@ -71,7 +71,7 @@
 					<? } ?>
 				</div>
 
-				<div id='tab-profile'>
+				<div id="tab-profile">
 					<div id="profile_tab_list" class="vtabs">
 						<span id="add_profile">
 							<span><?= $button_add_profile; ?></span>

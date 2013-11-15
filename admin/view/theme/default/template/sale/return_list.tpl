@@ -127,46 +127,46 @@
 		var filter_return_id = $('input[name=\'filter_return_id\']').attr('value');
 
 		if (filter_return_id) {
-			url += '&filter_return_id=' + encodeURIComponent(filter_return_id);
+			url += '&filter_return_id=" + encodeURIComponent(filter_return_id);
 		}
 
-		var filter_order_id = $('input[name=\'filter_order_id\']').attr('value');
+		var filter_order_id = $("input[name=\'filter_order_id\']').attr('value');
 
 		if (filter_order_id) {
-			url += '&filter_order_id=' + encodeURIComponent(filter_order_id);
+			url += '&filter_order_id=" + encodeURIComponent(filter_order_id);
 		}
 
-		var filter_customer = $('input[name=\'filter_customer\']').attr('value');
+		var filter_customer = $("input[name=\'filter_customer\']').attr('value');
 
 		if (filter_customer) {
-			url += '&filter_customer=' + encodeURIComponent(filter_customer);
+			url += '&filter_customer=" + encodeURIComponent(filter_customer);
 		}
 
-		var filter_product = $('input[name=\'filter_product\']').attr('value');
+		var filter_product = $("input[name=\'filter_product\']').attr('value');
 
 		if (filter_product) {
-			url += '&filter_product=' + encodeURIComponent(filter_product);
+			url += '&filter_product=" + encodeURIComponent(filter_product);
 		}
 
-		var filter_model = $('input[name=\'filter_model\']').attr('value');
+		var filter_model = $("input[name=\'filter_model\']').attr('value');
 
 		if (filter_model) {
-			url += '&filter_model=' + encodeURIComponent(filter_model);
+			url += '&filter_model=" + encodeURIComponent(filter_model);
 		}
 
-		var filter_return_status_id = $('select[name=\'filter_return_status_id\']').attr('value');
+		var filter_return_status_id = $("select[name=\'filter_return_status_id\']').attr('value');
 
 		if (filter_return_status_id != '*') {
-			url += '&filter_return_status_id=' + encodeURIComponent(filter_return_status_id);
+			url += '&filter_return_status_id=" + encodeURIComponent(filter_return_status_id);
 		}
 
-		var filter_date_added = $('input[name=\'filter_date_added\']').attr('value');
+		var filter_date_added = $("input[name=\'filter_date_added\']').attr('value');
 
 		if (filter_date_added) {
-			url += '&filter_date_added=' + encodeURIComponent(filter_date_added);
+			url += '&filter_date_added=" + encodeURIComponent(filter_date_added);
 		}
 
-		var filter_date_modified = $('input[name=\'filter_date_modified\']').attr('value');
+		var filter_date_modified = $("input[name=\'filter_date_modified\']').attr('value');
 
 		if (filter_date_modified) {
 			url += '&filter_date_modified=' + encodeURIComponent(filter_date_modified);
@@ -196,8 +196,8 @@
 		delay: 0,
 		source: function (request, response) {
 			$.ajax({
-				url: "<?= HTTP_ADMIN . "index.php?route=sale/customer/autocomplete"; ?>" + '&filter_name=' + encodeURIComponent(request.term),
-				dataType: 'json',
+				url: "<?= HTTP_ADMIN . "index.php?route=sale/customer/autocomplete"; ?>" + '&filter_name=" + encodeURIComponent(request.term),
+				dataType: "json',
 				success: function (json) {
 					response($.map(json, function (item) {
 						return {

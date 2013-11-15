@@ -16,7 +16,7 @@
 					<span class="social_url">
 						<input type="text" name="settings[networks][<?= $network_id; ?>][href]" value="<?= $network['href']; ?>"/>
 					</span>
-						<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" class='delete' onclick="$(this).parent().remove()"/>
+						<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" class="delete" onclick="$(this).parent().remove()"/>
 					</li>
 					<? $network_id++; ?>
 				<? } ?>
@@ -34,7 +34,7 @@
 		<span class="social_url">
 			<input type="text" name="settings[networks][%net_id%][href]" value="http://www.your-network.com"/>
 		</span>
-		<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" class='delete' onclick="$(this).parent().remove()"/>
+		<img src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>" class="delete" onclick="$(this).parent().remove()"/>
 	</li>
 </ul>
 

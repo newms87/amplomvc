@@ -24,7 +24,7 @@
 						<br/>
 						<br/>
 						<b><?= $entry_password; ?></b><br/>
-						<input type="password" autocomplete='off' name="password" value=""/>
+						<input type="password" autocomplete="off" name="password" value=""/>
 						<br/>
 						<a href="<?= $forgotten; ?>"><?= $text_forgotten; ?></a><br/>
 						<br/>

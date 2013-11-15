@@ -28,7 +28,7 @@
 						</tr>
 						<tr>
 							<td class="required"> <?= $entry_description; ?></td>
-							<td><textarea class='ckedit' name="description"><?= $description; ?></textarea></td>
+							<td><textarea class="ckedit" name="description"><?= $description; ?></textarea></td>
 						</tr>
 						<tr>
 							<td><?= $entry_sort_order; ?></td>

@@ -1,4 +1,4 @@
-<div id='guest_checkout'>
+<div id="guest_checkout">
 	<form action="<?= $validate_guest_checkout; ?>" method="post">
 		<div class="left general_form">
 			<h2><?= $text_your_details; ?></h2>

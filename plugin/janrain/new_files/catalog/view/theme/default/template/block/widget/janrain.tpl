@@ -32,7 +32,7 @@
 
 	janrain.settings = {};
 	janrain.settings.tokenUrl = '<?= $janrain_token_url; ?>';
-	janrain.settings.type = '<?= $display_type=='iframe' ? 'embed' : 'modal';; ?>';
+	janrain.settings.type = '<?= $display_type=="iframe" ? 'embed' : 'modal';; ?>';
 	janrain.settings.language = '<?= $janrain_lang; ?>';
 	janrain.settings.showAttribution = false;
 	janrain.ready = true;

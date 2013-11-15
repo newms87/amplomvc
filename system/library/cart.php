@@ -95,6 +95,13 @@ class Cart extends Library
 		return $this->session->data['cart'];
 	}
 
+	public function getItem($type, $key)
+	{
+		$items = $this->get($type);
+
+		return isset($items[$key]) ? $items[$key] : null;
+	}
+
 	public function has($type)
 	{
 		return !empty($this->session->data['cart'][$type]);
@@ -113,9 +120,33 @@ class Cart extends Library
 		return true;
 	}
 
-	public function countItems($type)
+	public function countItems($type = null)
 	{
-		return array_sum($this->get($type));
+		$count = 0;
+
+		if (!$type ) {
+			foreach ($this->get() as $type => $items) {
+				foreach ($items as $item) {
+					$count += $item['quantity'];
+				}
+			}
+
+			return $count;
+		}
+
+		$items = $this->get($type);
+
+		foreach ($items as $item) {
+			$count += $item['quantity'];
+		}
+
+		return $count;;
+	}
+
+	//TODO: Need to implement a more dynamic cart system to incorporate other cart types (eg: subscriptions, user_custom_types, etc..)
+	public function canCheckout()
+	{
+		return $this->hasProducts();
 	}
 
 	/**
@@ -221,9 +252,10 @@ class Cart extends Library
 	{
 		$weight = 0;
 
-		foreach ($this->getProducts() as $product) {
+		foreach ($this->getProducts() as $cart_product) {
+			$product = $cart_product['product'];
 			if ($product['shipping']) {
-				$weight += $this->weight->convert($product['weight'], $product['weight_class_id'], $this->config->get('config_weight_class_id'));
+				$weight += $this->weight->get($product['weight'], $product['weight_class_id']);
 			}
 		}
 
@@ -339,7 +371,7 @@ class Cart extends Library
 	public function addProduct($product_id, $quantity = 1, $options = array())
 	{
 		if ($this->validateProduct($product_id, $quantity, $options) && (int)$quantity > 0) {
-			$this->add($product_id, $quantity, $options, self::PRODUCTS);
+			$this->add(self::PRODUCTS, $product_id, $quantity, $options);
 		}
 	}
 
@@ -360,30 +392,7 @@ class Cart extends Library
 
 	public function getProduct($key)
 	{
-		$products = $this->getProducts();
-
-		return isset($products[$key]) ? $products[$key] : null;
-	}
-
-	public function getProductId($key)
-	{
-		if (!isset($this->session->data['cart'][self::PRODUCTS][$key])) {
-			return false;
-		}
-
-		$product = explode(':', $key);
-
-		return $product[0];
-
-	}
-
-	public function getProductName($key)
-	{
-		$products = $this->get(self::PRODUCTS);
-
-		if (isset($products[$key])) {
-			return $this->Model_Catalog_Product->getProductName($products[$key]['id']);
-		}
+		return $this->getItem(self::PRODUCTS, $key);
 	}
 
 	public function getProductIds()
@@ -913,6 +922,7 @@ class Cart extends Library
 				return false;
 			}
 
+			//TODO: This is validated in getQuote typically.. maybe rethink how we handle this.
 			if (!$this->isAllowedShippingZone($shipping_address)) {
 				$this->_e('SM-3', 'shipping_method', 'error_shipping_zone');
 				return false;
@@ -1294,5 +1304,10 @@ class Cart extends Library
 	public function getReturnPolicies()
 	{
 		return $this->config->load('policies', 'return_policies', 0);
+	}
+
+	public function isCheckout()
+	{
+		return $this->url->is('block/checkout') || $this->url->is('checkout/checkout');
 	}
 }

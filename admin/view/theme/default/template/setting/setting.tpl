@@ -203,11 +203,11 @@
 	</tr>
 	<tr>
 		<td class="required"> <?= $entry_breadcrumb_separator; ?></td>
-		<td><input type="text" style='font-size:20px' name="config_breadcrumb_separator" value="<?= $config_breadcrumb_separator; ?>" size="1"/>
+		<td><input type="text" style="font-size:20px" name="config_breadcrumb_separator" value="<?= $config_breadcrumb_separator; ?>" size="1"/>
 	</tr>
 	<tr>
 		<td class="required"> <?= $entry_breadcrumb_separator_admin; ?></td>
-		<td><input type="text" style='font-size:20px' name="config_breadcrumb_separator_admin" value="<?= $config_breadcrumb_separator_admin; ?>" size="1"/>
+		<td><input type="text" style="font-size:20px" name="config_breadcrumb_separator_admin" value="<?= $config_breadcrumb_separator_admin; ?>" size="1"/>
 	</tr>
 	<tr>
 		<td class="required"> <?= $entry_catalog_limit; ?></td>
@@ -253,7 +253,7 @@
 		</td>
 	<tr>
 		<td><?= $entry_cache_ignore; ?></td>
-		<td><textarea name='config_cache_ignore'><?= $config_cache_ignore; ?></textarea></td>
+		<td><textarea name="config_cache_ignore"><?= $config_cache_ignore; ?></textarea></td>
 	</tr>
 	<tr>
 		<td><?= $entry_allow_close_message_box; ?></td>
@@ -689,12 +689,12 @@
 			</tr>
 		</table>
 	</div>
-	<div id='tab-file-permissions'>
+	<div id="tab-file-permissions">
 		<table class="form">
 			<tr>
 				<td></td>
 				<td>
-					<table class='mode_explanation'>
+					<table class="mode_explanation">
 						<tbody>
 						<tr><?= $text_mode_explanation; ?></tr>
 						<tr>
@@ -749,28 +749,28 @@
 			<tr>
 				<td><?= $entry_default_modes; ?></td>
 				<td>
-					<label for='default_file_mode'><?= $entry_default_file_mode; ?></label>
-					<input id='default_file_mode' type='text' size='3' maxlength='3' name='config_default_file_mode' value="<?= $config_default_file_mode; ?>"/>
-					<label for='default_dir_mode'><?= $entry_default_dir_mode; ?></label>
-					<input id='default_dir_mode' type='text' size='3' maxlength='3' name='config_default_dir_mode' value="<?= $config_default_dir_mode; ?>"/>
+					<label for="default_file_mode"><?= $entry_default_file_mode; ?></label>
+					<input id="default_file_mode" type="text" size="3" maxlength="3" name="config_default_file_mode" value="<?= $config_default_file_mode; ?>"/>
+					<label for="default_dir_mode"><?= $entry_default_dir_mode; ?></label>
+					<input id="default_dir_mode" type="text" size="3" maxlength="3" name="config_default_dir_mode" value="<?= $config_default_dir_mode; ?>"/>
 				</td>
 			</tr>
 			<tr>
 				<td><?= $entry_image_modes; ?></td>
 				<td>
-					<label for='image_file_mode'><?= $entry_image_file_mode; ?></label>
-					<input id='image_file_mode' type='text' size='3' maxlength='3' name='config_image_file_mode' value="<?= $config_image_file_mode; ?>"/>
-					<label for='_dir_mode'><?= $entry_image_dir_mode; ?></label>
-					<input id='image_dir_mode' type='text' size='3' maxlength='3' name='config_image_dir_mode' value="<?= $config_image_dir_mode; ?>"/>
+					<label for="image_file_mode"><?= $entry_image_file_mode; ?></label>
+					<input id="image_file_mode" type="text" size="3" maxlength="3" name="config_image_file_mode" value="<?= $config_image_file_mode; ?>"/>
+					<label for="_dir_mode"><?= $entry_image_dir_mode; ?></label>
+					<input id="image_dir_mode" type="text" size="3" maxlength="3" name="config_image_dir_mode" value="<?= $config_image_dir_mode; ?>"/>
 				</td>
 			</tr>
 			<tr>
 				<td><?= $entry_plugin_modes; ?></td>
 				<td>
-					<label for='plugin_file_mode'><?= $entry_plugin_file_mode; ?></label>
-					<input id='plugin_file_mode' type='text' size='3' maxlength='3' name='config_plugin_file_mode' value="<?= $config_plugin_file_mode; ?>"/>
-					<label for='_dir_mode'><?= $entry_plugin_dir_mode; ?></label>
-					<input id='plugin_dir_mode' type='text' size='3' maxlength='3' name='config_plugin_dir_mode' value="<?= $config_plugin_dir_mode; ?>"/>
+					<label for="plugin_file_mode"><?= $entry_plugin_file_mode; ?></label>
+					<input id="plugin_file_mode" type="text" size="3" maxlength="3" name="config_plugin_file_mode" value="<?= $config_plugin_file_mode; ?>"/>
+					<label for="_dir_mode"><?= $entry_plugin_dir_mode; ?></label>
+					<input id="plugin_dir_mode" type="text" size="3" maxlength="3" name="config_plugin_dir_mode" value="<?= $config_plugin_dir_mode; ?>"/>
 				</td>
 			</tr>
 		</table>

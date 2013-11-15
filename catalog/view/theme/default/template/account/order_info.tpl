@@ -1,17 +1,17 @@
 <?= $header; ?>
 <?= $column_left; ?><?= $column_right; ?>
-	<div class="content">
-		<?= $content_top; ?>
-		<?= $this->breadcrumb->render(); ?>
+<div id="order_info" class="content">
+	<?= $content_top; ?>
+	<?= $this->breadcrumb->render(); ?>
 
-		<h1><?= $head_title; ?></h1>
-		<table class="list">
-			<thead>
+	<h1><?= $head_title; ?></h1>
+	<table class="list">
+		<thead>
 			<tr>
 				<td class="left" colspan="2"><?= $text_order_detail; ?></td>
 			</tr>
-			</thead>
-			<tbody>
+		</thead>
+		<tbody>
 			<tr>
 				<td class="left half">
 					<? if (!empty($invoice_id)) { ?>
@@ -29,59 +29,63 @@
 					<? } ?>
 				</td>
 			</tr>
-			</tbody>
-		</table>
-		<table class="list">
-			<thead>
+		</tbody>
+	</table>
+	<table class="list">
+		<thead>
 			<tr>
 				<td class="left"><?= $text_payment_address; ?></td>
 				<? if (!empty($shipping_address)) { ?>
 					<td class="left"><?= $text_shipping_address; ?></td>
 				<? } ?>
 			</tr>
-			</thead>
-			<tbody>
+		</thead>
+		<tbody>
 			<tr>
 				<td class="left"><?= $payment_address; ?></td>
 				<? if (!empty($shipping_address)) { ?>
 					<td class="left"><?= $shipping_address; ?></td>
 				<? } ?>
 			</tr>
-			</tbody>
-		</table>
-		<table class="list">
-			<thead>
+		</tbody>
+	</table>
+	<table class="list">
+		<thead>
 			<tr>
-				<td class="left"><?= $column_name; ?></td>
+				<td class="left"><?= _l("Product"); ?></td>
 				<td class="left"><?= $column_model; ?></td>
 				<td class="right"><?= $column_quantity; ?></td>
 				<td class="right"><?= $column_price; ?></td>
 				<td class="right"><?= $column_total; ?></td>
 				<? if (!empty($products)) { ?>
-					<td style="width: 1px;"></td>
+					<td></td>
 				<? } ?>
 			</tr>
-			</thead>
-			<tbody>
+		</thead>
+		<tbody>
 			<? foreach ($products as $product) { ?>
-				<tr>
-					<td class="left"><?= $product['name']; ?>
-						<? foreach ($product['option'] as $option) { ?>
-							<br/>
-							&nbsp;
-							<small> - <?= $option['name']; ?>: <?= $option['value']; ?></small>
-						<? } ?></td>
+				<tr class="order_product">
+					<td class="left">
+						<div class="name"><?= $product['name']; ?></div>
+						<div class="options">
+							<? foreach ($product['options'] as $option) { ?>
+								<div class="option">
+									<span class="option_name"><?= $option['display_value']; ?></span>
+								</div>
+							<? } ?>
+						</div>
+					</td>
 					<td class="left"><?= $product['model']; ?></td>
 					<td class="right"><?= $product['quantity']; ?></td>
 					<td class="right"><?= $product['price']; ?></td>
 					<td class="right"><?= $product['total']; ?></td>
 					<td class="right">
 						<? if ($product['return_policy']['days'] < 0) { ?>
-							<div class='final_sale_small'><span class='final_sale'></span></div>
+							<div class="final_sale_small"><span class="final_sale"></span></div>
 						<? } else { ?>
 							<a href="<?= $product['return']; ?>">
 								<img src="<?= HTTP_THEME_IMAGE . 'return.png'; ?>" alt="<?= $button_return; ?>"
-								     title="<?= $button_return; ?>"/>
+									title="<?= $button_return; ?>"/>
 							</a>
 						<? } ?>
 					</td>
@@ -99,8 +103,8 @@
 					<? } ?>
 				</tr>
 			<? } ?>
-			</tbody>
-			<tfoot>
+		</tbody>
+		<tfoot>
 			<? foreach ($totals as $total) { ?>
 				<tr>
 					<td colspan="3"></td>
@@ -111,33 +115,33 @@
 					<? } ?>
 				</tr>
 			<? } ?>
-			</tfoot>
-		</table>
-		<? if ($comment) { ?>
-			<table class="list">
-				<thead>
+		</tfoot>
+	</table>
+	<? if ($comment) { ?>
+		<table class="list">
+			<thead>
 				<tr>
 					<td class="left"><?= $text_comment; ?></td>
 				</tr>
-				</thead>
-				<tbody>
+			</thead>
+			<tbody>
 				<tr>
 					<td class="left"><?= $comment; ?></td>
 				</tr>
-				</tbody>
-			</table>
-		<? } ?>
-		<? if ($histories) { ?>
-			<h2><?= $text_history; ?></h2>
-			<table class="list">
-				<thead>
+			</tbody>
+		</table>
+	<? } ?>
+	<? if ($histories) { ?>
+		<h2><?= $text_history; ?></h2>
+		<table class="list">
+			<thead>
 				<tr>
 					<td class="left"><?= $column_date_added; ?></td>
 					<td class="left"><?= $column_status; ?></td>
 					<td class="left"><?= $column_comment; ?></td>
 				</tr>
-				</thead>
-				<tbody>
+			</thead>
+			<tbody>
 				<? foreach ($histories as $history) { ?>
 					<tr>
 						<td class="left"><?= $history['date_added']; ?></td>
@@ -145,17 +149,17 @@
 						<td class="left"><?= $history['comment']; ?></td>
 					</tr>
 				<? } ?>
-				</tbody>
-			</table>
-		<? } ?>
-		<div class='footer_text'>
-			* <?= $final_sale_explanation; ?>
-		</div>
-		<div class="buttons">
-			<div class="right"><a href="<?= $continue; ?>" class="button"><?= $button_continue; ?></a></div>
-		</div>
-
-		<?= $content_bottom; ?>
+			</tbody>
+		</table>
+	<? } ?>
+	<div class="footer_text">
+		* <?= $final_sale_explanation; ?>
 	</div>
+	<div class="buttons">
+		<div class="right"><a href="<?= $continue; ?>" class="button"><?= $button_continue; ?></a></div>
+	</div>
+
+	<?= $content_bottom; ?>
+</div>
 
 <?= $footer; ?>

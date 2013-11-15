@@ -31,11 +31,11 @@
 				<table class="form">
 					<tr>
 						<td class="required"> <?= $entry_password; ?></td>
-						<td><input type="password" autocomplete='off' name="password" value="<?= $password; ?>"/></td>
+						<td><input type="password" autocomplete="off" name="password" value="<?= $password; ?>"/></td>
 					</tr>
 					<tr>
 						<td class="required"> <?= $entry_confirm; ?></td>
-						<td><input type="password" autocomplete='off' name="confirm" value="<?= $confirm; ?>"/></td>
+						<td><input type="password" autocomplete="off" name="confirm" value="<?= $confirm; ?>"/></td>
 					</tr>
 				</table>
 			</div>

@@ -10,7 +10,7 @@
 
 	foreach ($columns as $column) {
 		?>
-		<table class='form table_set_template' style="width:<?= $col_width; ?>">
+		<table class="form table_set_template" style="width:<?= $col_width; ?>">
 			<? foreach ($column as $field) {
 				if (empty($field)) {
 					continue;
@@ -34,7 +34,7 @@
 									; ?>
 									<span class="required"></span>
 								<? } ?>
-								<span class='form_entry'><?= $field['display_name']; ?></span>
+								<span class="form_entry"><?= $field['display_name']; ?></span>
 							</div>
 						<? } ?>
 						<? switch ($field['type']) {

@@ -66,16 +66,16 @@
 			var filter_date_start = $('input[name=\'filter_date_start\']').attr('value');
 
 			if (filter_date_start) {
-				url += '&filter_date_start=' + encodeURIComponent(filter_date_start);
+				url += '&filter_date_start=" + encodeURIComponent(filter_date_start);
 			}
 
-			var filter_date_end = $('input[name=\'filter_date_end\']').attr('value');
+			var filter_date_end = $("input[name=\'filter_date_end\']').attr('value');
 
 			if (filter_date_end) {
-				url += '&filter_date_end=' + encodeURIComponent(filter_date_end);
+				url += '&filter_date_end=" + encodeURIComponent(filter_date_end);
 			}
 
-			var filter_order_status_id = $('select[name=\'filter_order_status_id\']').attr('value');
+			var filter_order_status_id = $("select[name=\'filter_order_status_id\']').attr('value');
 
 			if (filter_order_status_id) {
 				url += '&filter_order_status_id=' + encodeURIComponent(filter_order_status_id);

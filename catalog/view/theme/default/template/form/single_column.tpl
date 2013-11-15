@@ -2,14 +2,14 @@
 	<form action="<?= $action; ?>" method="<?= $method; ?>">
 <? } ?>
 
-	<table id="<?= $form_id; ?>" class='form form_single_column'>
+	<table id="<?= $form_id; ?>" class="form form_single_column">
 		<? foreach ($fields as $name => $field) { ?>
 			<tr>
 				<td>
 					<? if ($field['required']) { ?>
 						<span class="required"></span>
 					<? } ?>
-					<span class='form_entry'><?= $field['display_name']; ?></span><br/>
+					<span class="form_entry"><?= $field['display_name']; ?></span><br/>
 
 					<? switch ($field['type']) {
 

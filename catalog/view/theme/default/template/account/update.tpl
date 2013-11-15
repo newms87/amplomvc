@@ -30,13 +30,13 @@
 				<tr>
 					<td class="required"> <?= $entry_password; ?></td>
 					<td>
-						<input type="password" autocomplete='off' name="password" value=""/>
+						<input type="password" autocomplete="off" name="password" value=""/>
 						<span class="help"><?= $text_password_help; ?></span>
 					</td>
 				</tr>
 				<tr>
 					<td class="required"> <?= $entry_confirm; ?></td>
-					<td><input type="password" autocomplete='off' name="confirm" value=""/></td>
+					<td><input type="password" autocomplete="off" name="confirm" value=""/></td>
 				</tr>
 				<tr><td><h2><?= $section_newsletter; ?></h2></td></tr>
 				<tr>

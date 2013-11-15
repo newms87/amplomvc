@@ -1,5 +1,5 @@
 <?= $header; ?>
-<div class="section" id='mail_newsletter'>
+<div class="section" id="mail_newsletter">
 <?= $this->breadcrumb->render(); ?>
 	<div class="box">
 	<div class="heading">
@@ -46,12 +46,12 @@
 						</div>
 					</td>
 					<td>
-						<div id='newsletter_featured'>
-							<div class='product_image'>
+						<div id="newsletter_featured">
+							<div class="product_image">
 								<div>
 									<?= $this->builder->imageInput("newsletter[featured][product][image]", !empty($newsletter) ? $newsletter['featured']['product']['image'] : ''); ?>
 								</div>
-								<div class='image_heading'>
+								<div class="image_heading">
 									<input type="text" name="newsletter[featured][product][name]" value="<?= !empty($newsletter) ? $newsletter['featured']['product']['name'] : ''; ?>"/>
 								</div>
 								<div>
@@ -61,11 +61,11 @@
 								</div>
 								<div style="margin-top:10px"><?= $entry_featured_product_image; ?></div>
 							</div>
-							<div class='designer_image'>
+							<div class="designer_image">
 								<div>
 									<?= $this->builder->imageInput("newsletter[featured][designer][image]", !empty($newsletter) ? $newsletter['featured']['designer']['image'] : ''); ?>
 								</div>
-								<div class='image_heading'>
+								<div class="image_heading">
 									<input type="text" name="newsletter[featured][designer][name]" value="<?= !empty($newsletter) ? $newsletter['featured']['designer']['name'] : ''; ?>"/>
 								</div>
 								<div>
@@ -75,15 +75,15 @@
 								</div>
 								<div style="margin-top:10px"><?= $entry_featured_designer_image; ?></div>
 							</div>
-							<div class='featured_info'>
+							<div class="featured_info">
 								<div>
-									<label for='designer_title'><?= $entry_designer_title; ?></label>
+									<label for="designer_title"><?= $entry_designer_title; ?></label>
 									<input type="text" name="newsletter[featured][designer][title]" value="<?= !empty($newsletter) ? $newsletter['featured']['designer']['title'] : ''; ?>"/>
 								</div>
 								<div>
-									<label for='designer_description'><?= $entry_designer_description; ?></label>
+									<label for="designer_description"><?= $entry_designer_description; ?></label>
 									<textarea name="newsletter[featured][designer][description]"
-									          class='ckedit'><?= !empty($newsletter) ? $newsletter['featured']['designer']['description'] : ''; ?></textarea>
+									          class="ckedit"><?= !empty($newsletter) ? $newsletter['featured']['designer']['description'] : ''; ?></textarea>
 								</div>
 								<div>
 									<label for="designer_article"><?= $entry_designer_article; ?></label>
@@ -96,7 +96,7 @@
 				<tr>
 					<td>
 						<div><?= $entry_product_list; ?></div>
-						<div><input type="text" id='product_list_autocomplete'/></div>
+						<div><input type="text" id="product_list_autocomplete"/></div>
 						<div><span class="help">(<?= $text_autocomplete; ?>)</span></div>
 					</td>
 					<td>
@@ -104,8 +104,8 @@
 							<? if (!empty($newsletter['products'])) { ?>
 								<? foreach ($newsletter['products'] as $product) { ?>
 									<li>
-										<div class='editable_label'>
-											<input type="hidden" class='ac_item_id' name="newsletter[products][<?= $product['product_id']; ?>][product_id]" value="<?= $product['product_id']; ?>"/>
+										<div class="editable_label">
+											<input type="hidden" class="ac_item_id" name="newsletter[products][<?= $product['product_id']; ?>][product_id]" value="<?= $product['product_id']; ?>"/>
 											<input type="text" size="60" name="newsletter[products][<?= $product['product_id']; ?>][name]" value="<?= $product['name']; ?>"/>
 										</div>
 										<img onclick="$(this).parent().remove()" src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"/>
@@ -118,7 +118,7 @@
 				<tr>
 					<td>
 						<div><?= $entry_designer_list; ?></div>
-						<div><input type="text" id='designer_list_autocomplete'/></div>
+						<div><input type="text" id="designer_list_autocomplete"/></div>
 						<div><span class="help">(<?= $text_autocomplete; ?>)</span></div>
 					</td>
 					<td>
@@ -126,9 +126,9 @@
 							<? if (!empty($newsletter['designers'])) { ?>
 								<? foreach ($newsletter['designers'] as $designer) { ?>
 									<li>
-										<input type="hidden" class='ac_item_id' name="newsletter[designers][<?= $designer['designer_id']; ?>][designer_id]" value="<?= $designer['designer_id']; ?>"/>
+										<input type="hidden" class="ac_item_id" name="newsletter[designers][<?= $designer['designer_id']; ?>][designer_id]" value="<?= $designer['designer_id']; ?>"/>
 
-										<div class='editable_label'>
+										<div class="editable_label">
 											<input type="text" name="newsletter[designers][<?= $designer['designer_id']; ?>][name]" value="<?= $designer['name']; ?>"/>
 										</div>
 										<img onclick="$(this).parent().remove()" src="<?= HTTP_THEME_IMAGE . 'delete.png'; ?>"/>
@@ -148,8 +148,8 @@
 							<input type="text" name="newsletter[articles_url]" value="<?= !empty($newsletter['articles_url']) ? $newsletter['articles_url'] : ''; ?>"
 							       size="50"/>
 						</div>
-						<div style='margin-top:10px;'><?= $entry_article_list_articles; ?></div>
-						<div id='add_article_form'>
+						<div style="margin-top:10px;"><?= $entry_article_list_articles; ?></div>
+						<div id="add_article_form">
 							<label for="add_article_title"><?= $entry_article_title; ?></label><input type="text"
 							                                                                          id="add_article_title"
 							                                                                          size="30"/>
@@ -164,7 +164,7 @@
 								<? if (!empty($newsletter['articles'])) { ?>
 									<? foreach ($newsletter['articles'] as $article) { ?>
 										<li>
-											<div class='editable_label'>
+											<div class="editable_label">
 												<input type="text" name="newsletter[articles][<?= $article_row ?>][title]" value="<?= $article['title']; ?>" size="30"/>
 												<input type="text" name="newsletter[articles][<?= $article_row; ?>][href]" value="<?= $article['href']; ?>" size="50"/>
 											</div>
@@ -181,7 +181,7 @@
 				<tr>
 					<td><?= $entry_featured_article_list; ?></td>
 					<td>
-						<div id='add_featured_article_form'>
+						<div id="add_featured_article_form">
 							<?= $this->builder->imageInput("", ''); ?>
 							<label for="add_featured_article_title"><?= $entry_article_title; ?></label><input type="text"
 							                                                                                   id="add_featured_article_title"
@@ -200,7 +200,7 @@
 								<? if (!empty($newsletter['featured']['articles'])) { ?>
 									<? foreach ($newsletter['featured']['articles'] as $article) { ?>
 										<li>
-											<div class='editable_label'>
+											<div class="editable_label">
 												<?= $this->builder->imageInput("newsletter[featured][articles][$featured_article_row][image]", $article['image']); ?>
 												<input type="text" name="newsletter[featured][articles][<?= $featured_article_row ?>][title]" value="<?= $article['title']; ?>" size="30"/>
 												<input type="text" name="newsletter[featured][articles][<?= $featured_article_row ?>][teaser]" value="<?= $article['teaser']; ?>" size="30"/>
@@ -373,7 +373,7 @@
 		});
 
 		function callback_product_autocomplete(selector, data) {
-			if ($('#product_list').find('.ac_item_id[value=' + data.product_id + ']').length > 0) return;
+			if ($('#product_list').find('.ac_item_id[value=" + data.product_id + "]').length > 0) return;
 
 			html = '<li>';
 			html += '	<input type="hidden" class="ac_item_id" name="newsletter[products][%product_id%][product_id]" value="%product_id%" />';
@@ -390,7 +390,7 @@
 		}
 
 		function callback_designer_autocomplete(selector, data) {
-			if ($('#designer_list').find('.ac_item_id[value=' + data.manufacturer_id + ']').length > 0) return;
+			if ($('#designer_list').find('.ac_item_id[value=" + data.manufacturer_id + "]').length > 0) return;
 
 			html = '<li>';
 			html += '	<input type="hidden" class="ac_item_id" name="newsletter[designers][%manufacturer_id%][designer_id]" value="%manufacturer_id%" />';

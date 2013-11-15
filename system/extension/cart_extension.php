@@ -1,5 +1,5 @@
 <?php
-abstract class Cart_Extension extends Controller
+abstract class CartExtension extends Extension
 {
 	public function renderCart()
 	{

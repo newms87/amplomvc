@@ -73,8 +73,8 @@ class Catalog_Controller_Block_Checkout_Confirm extends Controller
 				$this->data['checkout_url'] = $this->url->link('checkout/checkout');
 
 				$payment = $this->cart->getPaymentMethod();
-
-				$this->data['payment'] = $payment->renderTemplate();
+				$payment->renderTemplate();
+				$this->data['payment'] = $payment->output;
 			}
 		}
 

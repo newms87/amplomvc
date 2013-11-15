@@ -18,7 +18,7 @@
 				<table class="form">
 					<tr>
 						<td><?= _l("Password:"); ?></td>
-						<td><input type="password" autocomplete='off' name="password" value=""/></td>
+						<td><input type="password" autocomplete="off" name="password" value=""/></td>
 					</tr>
 					<tr>
 						<td><?= _l("Password Confirmation:"); ?></td>

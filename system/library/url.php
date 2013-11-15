@@ -42,9 +42,59 @@ class Url extends Library
 		}
 	}
 
+	/**
+	 * Checks if the current path starts with $path
+	 *
+	 * @param string $path - The path to check
+	 * @return bool true if the current path starts with $path
+	 */
+
+	public function is($path)
+	{
+		return strpos($this->path, $path) === 0;
+	}
+
 	public function getPath()
 	{
 		return $this->path;
+	}
+
+	public function getQuery()
+	{
+		$args = func_get_args();
+
+		if (empty($args)) {
+			return http_build_query($_GET); //We do not use the query string for SEO URLs to function
+		}
+
+		$query = array();
+
+		foreach ($_GET as $key => $value) {
+			if (in_array($key, $args)) {
+				$query[$key] = $value;
+			}
+		}
+
+		return http_build_query($query);
+	}
+
+	public function getQueryExclude()
+	{
+		$args = func_get_args();
+
+		if (empty($args)) {
+			return http_build_query($_GET); //We do not use the query string for SEO URLs to function
+		}
+
+		$query = array();
+
+		foreach ($_GET as $key => $value) {
+			if (!in_array($key, $args)) {
+				$query[$key] = $value;
+			}
+		}
+
+		return http_build_query($query);
 	}
 
 	public function here()
@@ -89,44 +139,6 @@ class Url extends Library
 		curl_close($ch);
 
 		return $data;
-	}
-
-	public function getQuery()
-	{
-		$args = func_get_args();
-
-		if (empty($args)) {
-			return http_build_query($_GET); //We do not use the query string for SEO URLs to function
-		}
-
-		$query = array();
-
-		foreach ($_GET as $key => $value) {
-			if (in_array($key, $args)) {
-				$query[$key] = $value;
-			}
-		}
-
-		return http_build_query($query);
-	}
-
-	public function getQueryExclude()
-	{
-		$args = func_get_args();
-
-		if (empty($args)) {
-			return http_build_query($_GET); //We do not use the query string for SEO URLs to function
-		}
-
-		$query = array();
-
-		foreach ($_GET as $key => $value) {
-			if (!in_array($key, $args)) {
-				$query[$key] = $value;
-			}
-		}
-
-		return http_build_query($query);
 	}
 
 	public function getSeoUrl()

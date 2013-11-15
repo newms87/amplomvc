@@ -143,9 +143,9 @@
 				url: "<?= HTTP_ADMIN . "index.php?route=sale/return/action"; ?>" + '&return_id=<?= $return_id; ?>',
 				type: 'post',
 				dataType: 'json',
-				data: 'return_action_id=' + this.value,
+				data: 'return_action_id=" + this.value,
 				beforeSend: function () {
-					$('.success, .warning, .attention').remove();
+					$(".success, .warning, .attention').remove();
 
 					$('.box').before('<div class="attention"><img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> <?= $text_wait; ?></div>');
 				},
@@ -183,7 +183,7 @@
 				url: "<?= HTTP_ADMIN . "index.php?route=sale/return/history"; ?>" + '&return_id=<?= $return_id; ?>',
 				type: 'post',
 				dataType: 'html',
-				data: 'return_status_id=' + encodeURIComponent($('select[name=\'return_status_id\']').val()) + '&notify=' + encodeURIComponent($('input[name=\'notify\']').attr('checked') ? 1 : 0) + '&append=' + encodeURIComponent($('input[name=\'append\']').attr('checked') ? 1 : 0) + '&comment=' + encodeURIComponent($('textarea[name=\'comment\']').val()),
+				data: 'return_status_id=" + encodeURIComponent($("select[name=\'return_status_id\']').val()) + '&notify=" + encodeURIComponent($("input[name=\'notify\']').attr('checked') ? 1 : 0) + '&append=" + encodeURIComponent($("input[name=\'append\']').attr('checked') ? 1 : 0) + '&comment=" + encodeURIComponent($("textarea[name=\'comment\']').val()),
 				beforeSend: function () {
 					$('.success, .warning').remove();
 					$('#button-history').attr('disabled', true);

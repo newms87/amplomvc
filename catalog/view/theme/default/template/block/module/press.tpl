@@ -1,8 +1,8 @@
-<div id='press_entries' class="box">
+<div id="press_entries" class="box">
 	<h1><?= $head_title; ?></h1>
 
 	<div class="box_content">
-		<ul id='press_list'>
+		<ul id="press_list">
 			<? foreach ($press_list as $row => $press) { ?>
 				<li>
 					<div class="press_item">

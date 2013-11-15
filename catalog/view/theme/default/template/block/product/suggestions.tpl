@@ -1,5 +1,5 @@
 <div id="suggested_products">
-	<div id="catalog_list" class='grid'>
+	<div id="catalog_list" class="grid">
 		<? foreach ($products as $product) { ?>
 			<a class="item_block" href="<?= $product['href']; ?>">
 

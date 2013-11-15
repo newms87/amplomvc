@@ -1,5 +1,5 @@
 <?php
-class System_Extension_Payment_Braintree extends PaymentSubscription
+class System_Extension_Payment_Braintree extends PaymentSubscriptionExtension
 {
 	private $cards;
 	private $bt_customer;

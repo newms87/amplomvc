@@ -12,7 +12,7 @@
 				<div id="tabs" class="htabs"><a href="#tab-general"><?= $tab_general; ?></a><a
 						href="#tab-contact"><?= $tab_contact; ?></a></div>
 				<form action="<?= $action; ?>" method="post" enctype="multipart/form-data" id="form">
-					<div id='tab-general'>
+					<div id="tab-general">
 						<table class="form">
 							<tr>
 								<td class="required"> <?= $entry_username; ?></td>
@@ -39,7 +39,7 @@
 									<? } else { ?>
 										<? foreach ($user_groups as $ug) {
 											if ($ug['user_group_id'] == $user_group_id) { ?>
-												<input type='hidden' name='user_group_id' value='<?= $user_group_id; ?>'/>
+												<input type="hidden" name="user_group_id" value="<?= $user_group_id; ?>"/>
 												<div><?= $ug['name']; ?></div>
 											<? }
 										} ?>
@@ -48,20 +48,20 @@
 							</tr>
 							<tr>
 								<td><?= $entry_password; ?></td>
-								<td><input type="password" autocomplete='off' name="password" value="<?= $password; ?>"/></td>
+								<td><input type="password" autocomplete="off" name="password" value="<?= $password; ?>"/></td>
 							</tr>
 							<tr>
 								<td><?= $entry_confirm; ?></td>
-								<td><input type="password" autocomplete='off' name="confirm" value="<?= $confirm; ?>"/></td>
+								<td><input type="password" autocomplete="off" name="confirm" value="<?= $confirm; ?>"/></td>
 							</tr>
 							<tr>
 								<td><?= $entry_designers; ?></td>
 								<td>
-									<ul id='designer_list'><? if (isset($designers)) {
+									<ul id="designer_list"><? if (isset($designers)) {
 											foreach ($designers as $d) {
 												echo "<li>";
 												echo $this->builder->build('select', $manufacturers, 'designers[]', (int)$d);
-												echo "<a onclick='$(this).parent().remove()'>remove</a>";
+												echo "<a onclick="$(this).parent().remove()">remove</a>";
 											}
 										}?>
 									</ul>
@@ -74,7 +74,7 @@
 							</tr>
 						</table>
 					</div>
-					<div id='tab-contact'>
+					<div id="tab-contact">
 						<?= $contact_template; ?>
 					</div>
 				</form>
@@ -83,7 +83,7 @@
 	</div>
 <?= $footer; ?>
 
-	<script type='text/javascript'><!--
+	<script type="text/javascript"><!--
 		function add_designer() {
 			html = '<li>' + "<?= $this->builder->build('select',$manufacturers,'designers[]'); ?>" + '<a onclick="$(this).parent().remove();">remove</a></li>';
 			$('#designer_list').append(html);

@@ -384,8 +384,8 @@
 							    style="padding-left:3px; padding-right:2px;padding-top:5px; padding-bottom:12px">
 								<table style="border-collapse: collapse;" border="0" cellpadding="0" cellspacing="0">
 									<tr>
-										<td><a href="<?= $designer['href']; ?>"><img alt='<?= $designer['name']; ?>'
-										                                             title='<?= $designer['name']; ?>'
+										<td><a href="<?= $designer['href']; ?>"><img alt="<?= $designer['name']; ?>"
+										                                             title="<?= $designer['name']; ?>"
 										                                             src="<?= $designer['thumb']; ?>" width="154"
 										                                             height="164" style="border: 0pt none;"/></a>
 										</td>

@@ -3,6 +3,12 @@ class Catalog_Controller_Checkout_Checkout extends Controller
 {
 	public function index()
 	{
+		//TODO: Need to implement a more dynamic cart system to incorporate other cart types (eg: subscriptions, user_custom_types, etc..)
+		if (!$this->cart->canCheckout()) {
+			$this->message->add("warning", _l("You do not have any products in your cart. Please continue with your purchase via a different method provided from the cart."));
+			$this->url->redirect('cart/cart');
+		}
+
 		if (!$this->cart->validate()) {
 			$this->url->redirect('cart/cart');
 		}

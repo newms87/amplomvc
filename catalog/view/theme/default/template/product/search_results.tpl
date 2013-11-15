@@ -1,49 +1,49 @@
-<div id='search_content'>
+<div id="search_content">
 
-	<div class='product_list' style='overflow:hidden'>
+	<div class="product_list" style="overflow:hidden">
 		<?
 		if (count($results)) {
 			$cols  = 2;
 			$count = 0;
 			foreach ($results as $product) {
 				extract($product);?>
-				<div class='search_result' onclick="open_product_view('<?= $product['href']; ?>')">
-					<div class='product_left'>
+				<div class="search_result" onclick="open_product_view('<?= $product['href']; ?>')">
+					<div class="product_left">
 						<div class="image"><img src="<?= $image; ?>" title="<?= $name; ?>" alt="<?= $name; ?>"/></div>
 						<div class="name">
-							<a class='product_name' onclick="open_product_view('<?= $href; ?>')"><?= $name; ?></a>
+							<a class="product_name" onclick="open_product_view('<?= $href; ?>')"><?= $name; ?></a>
 
-							<div class='designer_name'>by <?= $designer_name; ?></div>
+							<div class="designer_name">by <?= $designer_name; ?></div>
 						</div>
 						<? if ($rating) { ?>
 							<div class="rating">
 								<?= get_star_rating($rating); ?>
-								<div class='reviews'><?= $reviews . " reviews"; ?></div>
+								<div class="reviews"><?= $reviews . " reviews"; ?></div>
 							</div>
 						<? } ?>
 					</div>
-					<div class='product_right'>
-						<div class='description'><?= $description; ?></div>
+					<div class="product_right">
+						<div class="description"><?= $description; ?></div>
 						<div class="price">
 							<?=
 							isset($special) ?
-								"<div class='product_info_orig_price'>$price</div><div class='product_info_price_text'>On Sale!</div><div class='product_info_price'>$special</div>" :
-								"<div class='product_info_price' style='margin-top:10px;'>$price</div>"; ?>
+								"<div class="product_info_orig_price">$price</div><div class="product_info_price_text">On Sale!</div><div class="product_info_price">$special</div>" :
+								"<div class="product_info_price" style="margin-top:10px;">$price</div>"; ?>
 						</div>
 					</div>
 				</div>
 				<?
-				echo($count++ % $cols == 1 ? "<div style='clear:both'></div>" : "");
+				echo($count++ % $cols == 1 ? "<div style="clear:both"></div>" : "");
 			}
 		} else {
 			?>
-			<div id='no_search_results'>Sorry, there were no products found matching your criteria.</div>
+			<div id="no_search_results">Sorry, there were no products found matching your criteria.</div>
 		<? } ?>
 	</div>
 
 </div>
 
-<script type='text/javascript'>
+<script type="text/javascript">
 	function open_product_view(href) {
 		var sc = $('#search_content .product_list');
 		sc.data('orig_height', sc.data('orig_height') || sc.height());

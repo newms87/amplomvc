@@ -1,7 +1,7 @@
-<div id='sidebar_menu' class="box sidebar_box">
+<div id="sidebar_menu" class="box sidebar_box">
 	<div class="box_heading"><?= $head_title; ?></div>
 	<div class="box_content">
-		<div id='sidebar_menu_links'>
+		<div id="sidebar_menu_links">
 			<div class="sidebar_main">
 				<!--<div class="label"><?= $main_menu['label']; ?></div>-->
 				<div class="links"><?= $this->document->renderLinks($main_menu['menu']); ?></div>

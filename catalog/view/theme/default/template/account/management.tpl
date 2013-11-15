@@ -1,6 +1,6 @@
 <?= $header; ?>
 <?= $column_left; ?><?= $column_right; ?>
-<div class="content">
+<div id="account_manage" class="content">
 	<?= $this->breadcrumb->render(); ?>
 	<?= $content_top; ?>
 
@@ -60,6 +60,10 @@
 			</div>
 		</div>
 	<? } ?>
+
+	<div class="clear links">
+		<a href="<?= $url_order_history; ?>" class="button small"><?= _l("Order History"); ?></a>
+	</div>
 
 	<div class="clear buttons">
 		<div class="left"><a href="<?= $back; ?>" class="button"><?= $button_back; ?></a></div>

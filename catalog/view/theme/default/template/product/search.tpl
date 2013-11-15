@@ -143,16 +143,16 @@
 			var filter_name = $('#content input[name=\'filter_name\']').attr('value');
 
 			if (filter_name) {
-				url += '&filter_name=' + encodeURIComponent(filter_name);
+				url += '&filter_name=" + encodeURIComponent(filter_name);
 			}
 
-			var filter_category_id = $('#content select[name=\'filter_category_id\']').attr('value');
+			var filter_category_id = $("#content select[name=\'filter_category_id\']').attr('value');
 
 			if (filter_category_id > 0) {
-				url += '&filter_category_id=' + encodeURIComponent(filter_category_id);
+				url += '&filter_category_id=" + encodeURIComponent(filter_category_id);
 			}
 
-			var filter_sub_category = $('#content input[name=\'filter_sub_category\']:checked').attr('value');
+			var filter_sub_category = $("#content input[name=\'filter_sub_category\']:checked').attr('value');
 
 			if (filter_sub_category) {
 				url += '&filter_sub_category=true';

@@ -20,23 +20,26 @@ class System_Model_Order extends Model
 
 		$order_id = $this->insert('order', $data);
 
-		foreach ($data['products'] as $product) {
-			$product['order_id'] = $order_id;
+		foreach ($data['products'] as $cart_product) {
+			$order_product = $cart_product + $cart_product['product'];
+			$order_product['order_id'] = $order_id;
 
-			$order_product_id = $this->insert('order_product', $product);
+			$order_product_id = $this->insert('order_product', $order_product);
 
-			foreach ($product['selected_options'] as $selected_option) {
-				$selected_option['order_id'] = $order_id;
-				$selected_option['order_product_id'] = $order_product_id;
+			foreach ($order_product['options'] as $product_option_values) {
+				foreach ($product_option_values as $product_option_value) {
+					$product_option_value['order_id'] = $order_id;
+					$product_option_value['order_product_id'] = $order_product_id;
 
-				$this->insert('order_option', $selected_option);
+					$this->insert('order_option', $product_option_value);
+				}
 			}
 
-			if (!empty($product['download'])) {
-				foreach ($product['download'] as $download) {
+			if (!empty($cart_product['downloads'])) {
+				foreach ($cart_product['downloads'] as $download) {
 					$download['order_id'] = $order_id;
 					$download['order_product_id'] = $order_product_id;
-					$download['remaining'] = $download['remaining'] * $product['quantity'];
+					$download['remaining'] = $download['remaining'] * $cart_product['quantity'];
 
 					$this->insert('order_download', $download);
 				}

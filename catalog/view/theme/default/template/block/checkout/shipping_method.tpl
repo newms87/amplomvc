@@ -7,10 +7,10 @@
 	<? if (!empty($allowed_shipping_zones)) { ?>
 		<br/>
 		<h2><?= $text_zone_allowed; ?></h2>
-		<div class='allowed_zone_list'>
+		<div class="allowed_zone_list">
 			<? foreach ($allowed_shipping_zones as $i => $geo_zone) { ?>
 				<span
-					class='allowed_zone_item'><?= $geo_zone['country']['name'] . (($i == count($allowed_shipping_zones) - 1) ? '' : $text_zone_separator); ?></span>
+					class="allowed_zone_item"><?= $geo_zone['country']['name'] . (($i == count($allowed_shipping_zones) - 1) ? '' : $text_zone_separator); ?></span>
 			<? } ?>
 		</div>
 	<? } ?>

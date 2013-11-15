@@ -18,7 +18,7 @@
 		</table>
 		<br/>
 
-		<div id='add_comment'>
+		<div id="add_comment">
 			<div><?= $text_comments; ?></div>
 			<textarea name="comment" rows="8"><?= $comment; ?></textarea>
 		</div>

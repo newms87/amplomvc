@@ -28,7 +28,7 @@
 						</thead>
 						<? $row = 0; ?>
 						<? foreach ($plugin_data as $data) { ?>
-							<tbody id="plug-row<?= $row; ?>" row='<?= $row; ?>'>
+							<tbody id="plug-row<?= $row; ?>" row="<?= $row; ?>">
 							<tr>
 								<td class="left"><input type="text" name="plugin_data[<?= $row; ?>][on_render]" value="<?= $data['on_render']; ?>" size="30"/></td>
 								<td class="left"><input type="text" name="plugin_data[<?= $row; ?>][plugin_path]" value="<?= $data['plugin_path']; ?>" size="30"/></td>
@@ -43,19 +43,19 @@
 								<td class="left">
 									<? if (isset($data['hooks']) && $data['hooks']) { ?>
 										<? foreach ($data['hooks'] as $key => $hook) { ?>
-											<div class='hook_input'>
-												<label for='hook-method-<?= $key; ?>'><?= $entry_hook_method; ?></label><input
-													id='hook-method-<?= $key; ?>' type="text" name="plugin_data[<?= $row; ?>][hooks][<?= $key; ?>][callback]" value="<?= $hook['callback']; ?>" size="25"/>
+											<div class="hook_input">
+												<label for="hook-method-<?= $key; ?>"><?= $entry_hook_method; ?></label><input
+													id="hook-method-<?= $key; ?>" type="text" name="plugin_data[<?= $row; ?>][hooks][<?= $key; ?>][callback]" value="<?= $hook['callback']; ?>" size="25"/>
 												<?= $this->builder->build('select', $call_when, "plugin_data[$row][hooks][$key][when]", $hook['when']); ?>
 												<br/>
-												<label for='hook-for-<?= $key; ?>'><?= $entry_hook_for; ?></label><input
-													id='hook-for-<?= $key; ?>' type="text" name="plugin_data[<?= $row; ?>][hooks][<?= $key; ?>][for]" value="<?= $key; ?>"
+												<label for="hook-for-<?= $key; ?>"><?= $entry_hook_for; ?></label><input
+													id="hook-for-<?= $key; ?>" type="text" name="plugin_data[<?= $row; ?>][hooks][<?= $key; ?>][for]" value="<?= $key; ?>"
 													size="25"/>
 												<a onclick="$(this).parent().remove()"><?= $button_hook_remove; ?></a>
 											</div>
 										<? } ?>
 									<? } ?>
-									<a class='remove_hook' onclick='addHook(this);'><?= $button_add_hook; ?></a>
+									<a class="remove_hook" onclick="addHook(this);"><?= $button_add_hook; ?></a>
 								</td>
 								<td
 									class="left"><?= $this->builder->build('select', $statuses, "plugin_data[$row][status]", (int)$data['status']); ?></td>

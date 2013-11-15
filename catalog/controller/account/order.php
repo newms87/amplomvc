@@ -135,11 +135,17 @@ class Catalog_Controller_Account_Order extends Controller
 			$options = $this->System_Model_Order->getOrderProductOptions($order_id, $product['order_product_id']);
 
 			foreach ($options as &$option) {
-				$option['value'] = $this->tool->limit_characters($option['value'], 20);
+				$option = $this->Model_Catalog_Product->getProductOptionValue($product['product_id'], $option['product_option_id'], $option['product_option_value_id']);
+
+				if (!$option['display_value']) {
+					$option['display_value'] = ($option['name'] ? $option['name'] . ': ' : '') . $option['value'];
+				}
+
+				$option['display_value'] = $this->tool->limit_characters($option['display_value'], 30);
 			}
 			unset($option);
 
-			$product['option'] = $options;
+			$product['options'] = $options;
 			$product['price']  = $this->currency->format($product['price'], $order['currency_code'], $order['currency_value']);
 			$product['total']  = $this->currency->format($product['total'], $order['currency_code'], $order['currency_value']);
 
@@ -218,24 +224,24 @@ class Catalog_Controller_Account_Order extends Controller
 				$order_products = $this->System_Model_Order->getOrderProducts($order_id);
 
 				foreach ($order_products as $order_product) {
-					$option_data = array();
-
 					$order_options = $this->System_Model_Order->getOrderProductOptions($order_id, $order_product['order_product_id']);
 
+					$options = array();
+
 					foreach ($order_options as $order_option) {
-						$option_data[$order_option['product_option_id']][] = $order_option;
+						$options[$order_option['product_option_id']][$order_option['product_option_value_id']] = $order_option;
 					}
 
 					$this->message->add('success', $this->_('text_success', $order_id));
 
-					$this->cart->addProduct($order_product['product_id'], $order_product['quantity'], $option_data);
+					$this->cart->addProduct($order_product['product_id'], $order_product['quantity'], $options);
 				}
 
 				$this->url->redirect('cart/cart');
 			}
 		}
 
-		$this->message->add('warning', 'error_reorder');
+		$this->message->add('warning', _l("Unable to locate the order you have requested to reorder."));
 
 		$this->index();
 	}

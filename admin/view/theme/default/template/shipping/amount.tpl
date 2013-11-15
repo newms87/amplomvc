@@ -54,10 +54,10 @@
 											class="left"><?= $this->builder->build('select', $priceset_ranges, "amount_priceset[$set_row][range]", $set['range'], array('onclick' => 'range_values($(this))')); ?></td>
 										<td class="left pricetotal">
 											<span
-												class='total' <?= $set['range'] == 'range' ? "style='display:none'" : ''; ?>><input
+												class="total" <?= $set['range'] == 'range' ? "style="display:none"" : ''; ?>><input
 													type="text" name="amount_priceset[<?= $set_row; ?>][total]" value="<?= $set['total']; ?>"/></span>
 													<span
-														class='pricerange' <?= $set['range'] != 'range' ? "style='display:none'" : ''; ?>>
+														class="pricerange" <?= $set['range'] != 'range' ? "style="display:none"" : ''; ?>>
 															<?= $entry_priceset_min; ?><input type="text" name="amount_priceset[<?= $set_row; ?>][from]" value="<?= $set['from']; ?>"/>
 														<?= $entry_priceset_max; ?><input type="text" name="amount_priceset[<?= $set_row; ?>][to]" value="<?= $set['to']; ?>"/>
 													</span>
@@ -133,7 +133,7 @@
 
 <?= $this->builder->js('load_zones', 'tbody', '.country_select', '.zone_select', true); ?>
 
-<script type='text/javascript'>//<!--
+<script type="text/javascript">//<!--
 	var set_row = <?= $set_row; ?>;
 	function addPriceSet() {
 		html = '<tbody id="set-row%set_row%">';

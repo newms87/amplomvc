@@ -114,10 +114,7 @@ class Catalog_Controller_Product_Product extends Controller
 		$this->data['discounts'] = $discounts;
 
 		//customers must order at least 1 of this product
-		$this->data['minimum'] = max(array(
-		                                  (int)$product_info['minimum'],
-		                                  1
-		                             ));
+		$this->data['minimum'] = max((int)$product_info['minimum'], 1);
 		$this->_('text_minimum', $product_info['minimum']);
 
 		//Product Review

@@ -1,5 +1,5 @@
-<div id='register_account'>
-	<form action='<?= $action_register; ?>' method="post">
+<div id="register_account">
+	<form action="<?= $action_register; ?>" method="post">
 		<div class="left">
 			<h2><?= $text_your_details; ?></h2>
 
@@ -16,12 +16,12 @@
 		<div class="right">
 			<h2><?= $text_your_address; ?></h2>
 
-			<div id='register_address' class="checkout_form">
+			<div id="register_address" class="checkout_form">
 				<?= $form_address; ?>
 			</div>
 		</div>
 		<div class="checkout_newsletter_signup">
-			<input type="checkbox" name="newsletter" value="1" id="newsletter" checked='checked'/>
+			<input type="checkbox" name="newsletter" value="1" id="newsletter" checked="checked"/>
 			<label for="newsletter"><?= $entry_newsletter; ?></label>
 		</div>
 		<div class="buttons">

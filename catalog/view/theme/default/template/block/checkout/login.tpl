@@ -1,5 +1,5 @@
 <div id="checkout_register" class="left">
-	<div class='janrain_login'><?= $rpx_login; ?></div>
+	<div class="janrain_login"><?= $rpx_login; ?></div>
 	<h2><?= $text_new_customer; ?></h2>
 
 	<p><?= $text_checkout; ?></p>

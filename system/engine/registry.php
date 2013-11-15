@@ -8,13 +8,10 @@ final class Registry
 		if (isset($this->data[$key])) {
 			return $this->data[$key];
 		}
-		elseif (strpos($key, "System_Extension_") === 0) {
+
+		if (strpos($key, "System_Extension_") === 0) {
 			require_once(_ac_mod_file(DIR_SYSTEM . "extension/extension_model.php"));
 			require_once(_ac_mod_file(DIR_SYSTEM . "extension/extension.php"));
-
-			if (strpos($key, "System_Extension_Payment") === 0) {
-				require_once(_ac_mod_file(DIR_SYSTEM . "extension/paymentAbstract.php"));
-			}
 
 			return $this->data['load']->model($key);
 		}

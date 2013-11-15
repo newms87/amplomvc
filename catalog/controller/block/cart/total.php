@@ -1,7 +1,7 @@
 <?php
 class Catalog_Controller_Block_Cart_Total extends Controller
 {
-	public function index($settings = null)
+	public function index()
 	{
 		$this->template->load('block/cart/total');
 

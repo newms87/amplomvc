@@ -1,6 +1,13 @@
 <?php
 class System_Extension_Total extends ExtensionModel
 {
+	public function __construct($registry)
+	{
+		parent::__construct($registry);
+
+		require_once(DIR_SYSTEM . "extension/total_extension.php");
+	}
+
 	public function has($code)
 	{
 		return $this->extensionExists('total', $code);

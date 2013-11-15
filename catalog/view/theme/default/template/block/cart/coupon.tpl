@@ -1,7 +1,7 @@
 <div id="coupon_block">
 	<form action="" method="post" <?= $ajax ? "onclick=\"return apply_coupon();\"" : ''; ?>>
 		<span><?= $entry_coupon; ?></span>
-		<input id='coupon_code' type="text" name="coupon_code" value=""/>
+		<input id="coupon_code" type="text" name="coupon_code" value=""/>
 		<input type="submit" value="<?= $button_coupon; ?>" class="button small"/>
 	</form>
 </div>

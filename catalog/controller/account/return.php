@@ -172,33 +172,37 @@ class Catalog_Controller_Account_Return extends Controller
 		$this->breadcrumb->add($this->_('text_return_list'), $this->url->link('account/return'));
 		$this->breadcrumb->add($this->_('head_title'), $this->url->link('account/return/insert'));
 
-		//Action Buttons
-		$this->data['action'] = $this->url->link('account/return/insert');
-
 		//The Data
-		$customer_orders = $this->customer->getOrders();
-
-		if ($order_lookup) {
-			//If order does not belong to this customer, lookup the order info
-			if (!empty($customer_orders) && !in_array($order_id, array_column($customer_orders, 'order_id'))) {
-				$order_info = $this->order->get($order_id, false);
-
-				//If the lookup email does not match the order email, customer may not view this order
-				if (empty($_GET['email']) || $_GET['email'] !== $order_info['email']) {
-					$this->message->add('warning', $this->_('error_invalid_order_id', $order_id));
-					$this->url->redirect('account/return/insert');
-				}
-			} //This order belongs to this customer, so they may request an exchange
-			else {
-				$order_lookup = false;
-			}
+		if ($this->request->isPost()) {
+			$order_info = $_POST;
+		}
+		else {
+			$order_info = array();
 		}
 
-		if (empty($order_info)) {
+		$customer_orders = $this->customer->getOrders();
+
+		if ($customer_orders) {
+			if ($order_lookup) {
+				//If order does not belong to this customer, lookup the order info
+				if (!empty($customer_orders) && !in_array($order_id, array_column($customer_orders, 'order_id'))) {
+					$order_info = $this->order->get($order_id, false);
+
+					//If the lookup email does not match the order email, customer may not view this order
+					if (empty($_GET['email']) || $_GET['email'] !== $order_info['email']) {
+						$this->message->add('warning', $this->_('error_invalid_order_id', $order_id));
+						$this->url->redirect('account/return/insert');
+					}
+				} //This order belongs to this customer, so they may request an exchange
+				else {
+					$order_lookup = false;
+				}
+			}
+
 			if ($order_id) {
 				foreach ($customer_orders as $order) {
 					if ((int)$order['order_id'] === (int)$order_id) {
-						$order_info = $order;
+						$order_info += $order;
 						break;
 					}
 				}
@@ -268,17 +272,7 @@ class Catalog_Controller_Account_Return extends Controller
 			'captcha'      => '',
 		);
 
-		foreach ($defaults as $key => $default) {
-			if (isset($_POST[$key])) {
-				$this->data[$key] = $_POST[$key];
-			} elseif (isset($order_info[$key])) {
-				$this->data[$key] = $order_info[$key];
-			} else {
-				$this->data[$key] = $default;
-			}
-		}
-
-		$this->data['return_products'] = $order_info['return_products'];
+		$this->data += $order_info + $defaults;
 
 		if (!empty($customer_orders)) {
 			foreach ($customer_orders as &$order) {
@@ -304,10 +298,13 @@ class Catalog_Controller_Account_Return extends Controller
 			$this->message->add('warning', $this->_('error_customer_logged'));
 		}
 
+		//Action Buttons
+		$this->data['action'] = $this->url->link('account/return/insert');
 
 		//Ajax Urls
 		$this->data['url_captcha_image'] = $this->url->ajax('account/return/captcha');
 
+		//Dependencies
 		$this->children = array(
 			'common/column_left',
 			'common/column_right',
@@ -317,6 +314,7 @@ class Catalog_Controller_Account_Return extends Controller
 			'common/header'
 		);
 
+		//Render
 		$this->response->setOutput($this->render());
 	}
 

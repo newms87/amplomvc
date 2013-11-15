@@ -6,7 +6,7 @@
 		<div class="heading">
 			<h1><img src="<?= HTTP_THEME_IMAGE . 'module.png'; ?>" alt=""/> <?= $head_title; ?></h1>
 		</div>
-		<div id='help_docs' class="section">
+		<div id="help_docs" class="section">
 			<? function display_levels($sub, $level)
 			{
 				$list_types = array(
@@ -15,7 +15,7 @@
 					'a'
 				);
 				$t          = $list_types[$level % 3];
-				echo "<ol type='$t' class='level-$level'>";
+				echo "<ol type="$t" class="level-$level">";
 				foreach ($sub as $item) {
 					if (!is_array($item)) {
 						echo "<li>$item</li>";
@@ -40,7 +40,7 @@
 				echo "</ol>";
 			}
 
-			echo "<ol type='I' class='top'>";
+			echo "<ol type="I" class="top">";
 			foreach ($sections as $s) {
 				echo "<li>$s[title]";
 				display_levels($s['sub'], 0);

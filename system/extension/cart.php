@@ -5,7 +5,7 @@ class System_Extension_Cart extends Controller
 	{
 		parent::__construct($registry);
 
-		require_once(DIR_SYSTEM . "extension/cartExtension.php");
+		require_once(DIR_SYSTEM . "extension/cart_extension.php");
 	}
 
 	public function renderCarts()

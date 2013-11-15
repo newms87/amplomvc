@@ -669,9 +669,14 @@ class Catalog_Model_Catalog_Product extends Model
 			}
 
 			foreach ($product_option_values as &$product_option_value) {
-				//Information already filled
+				//Check if information already filled.
 				if (is_array($product_option_value)) {
-					continue;
+					//We verify option_id as this is not included with a typical Product Option Value, so make sure we load all necessary information
+					if (!isset($product_option_value['option_id'])) {
+						$product_option_value = $product_option_value['product_option_value_id'];
+					} else {
+						continue;
+					}
 				}
 
 				$product_option_value = $this->getProductOptionValue($product_id, $product_option_id, $product_option_value);

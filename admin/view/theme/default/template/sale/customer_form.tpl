@@ -64,7 +64,7 @@
 				</tr>
 				<tr>
 					<td><?= $entry_password; ?></td>
-					<td><input type="password" autocomplete='off' name="password" value="<?= $password; ?>"/>
+					<td><input type="password" autocomplete="off" name="password" value="<?= $password; ?>"/>
 						<br/>
 						<? if ($error_password) { ?>
 							<span class="error"><?= $error_password; ?></span>
@@ -72,7 +72,7 @@
 				</tr>
 				<tr>
 					<td><?= $entry_confirm; ?></td>
-					<td><input type="password" autocomplete='off' name="confirm" value="<?= $confirm; ?>"/>
+					<td><input type="password" autocomplete="off" name="confirm" value="<?= $confirm; ?>"/>
 						<? if ($error_confirm) { ?>
 							<span class="error"><?= $error_confirm; ?></span>
 						<? } ?></td>
@@ -350,7 +350,7 @@
 				url: "<?= $url_transaction; ?>",
 				type: 'post',
 				dataType: 'html',
-				data: 'description=' + encodeURIComponent($('#tab-transaction input[name=\'description\']').val()) + '&amount=' + encodeURIComponent($('#tab-transaction input[name=\'amount\']').val()),
+				data: 'description=" + encodeURIComponent($("#tab-transaction input[name=\'description\']').val()) + '&amount=" + encodeURIComponent($("#tab-transaction input[name=\'amount\']').val()),
 				beforeSend: function () {
 					$('.success, .warning').remove();
 					$('#button-transaction').attr('disabled', true);
@@ -383,7 +383,7 @@
 				url: "<?= $url_reward; ?>",
 				type: 'post',
 				dataType: 'html',
-				data: 'description=' + encodeURIComponent($('#tab-reward input[name=\'description\']').val()) + '&points=' + encodeURIComponent($('#tab-reward input[name=\'points\']').val()),
+				data: 'description=" + encodeURIComponent($("#tab-reward input[name=\'description\']').val()) + '&points=" + encodeURIComponent($("#tab-reward input[name=\'points\']').val()),
 				beforeSend: function () {
 					$('.success, .warning').remove();
 					$('#button-reward').attr('disabled', true);
@@ -407,9 +407,9 @@
 				url: "<?= $url_blacklist; ?>",
 				type: 'post',
 				dataType: 'json',
-				data: 'ip=' + encodeURIComponent(ip),
+				data: 'ip=" + encodeURIComponent(ip),
 				beforeSend: function () {
-					$('.success, .warning').remove();
+					$(".success, .warning').remove();
 
 					$('.box').before('<div class="attention"><img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> Please wait!</div>');
 				},
@@ -439,9 +439,9 @@
 				url: "<?= $url_remove_blacklist; ?>",
 				type: 'post',
 				dataType: 'json',
-				data: 'ip=' + encodeURIComponent(ip),
+				data: 'ip=" + encodeURIComponent(ip),
 				beforeSend: function () {
-					$('.success, .warning').remove();
+					$(".success, .warning').remove();
 
 					$('.box').before('<div class="attention"><img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>" alt="" /> Please wait!</div>');
 				},

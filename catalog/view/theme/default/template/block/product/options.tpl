@@ -1,4 +1,4 @@
-<div id='product_options' class="options">
+<div id="product_options" class="options">
 	<h2><?= $text_option; ?></h2>
 	<br/>
 	<?= $this->builder->setConfig('product_option_value_id', 'value'); ?>
@@ -13,17 +13,17 @@
 			<? switch ($product_option['type']) {
 				case 'select':
 					?>
-					<?= $this->builder->build('select', $product_option['product_option_values'], "product_options[$product_option[product_option_id]]"); ?>
+					<?= $this->builder->build('select', $product_option['product_option_values'], "options[$product_option[product_option_id]]"); ?>
 					<? break;
 
 				case 'radio':
 					?>
-					<?= $this->builder->build('radio', $product_option['product_option_values'], "product_options[$product_option[product_option_id]]"); ?>
+					<?= $this->builder->build('radio', $product_option['product_option_values'], "options[$product_option[product_option_id]]"); ?>
 					<? break;
 
 				case 'checkbox':
 					?>
-					<?= $this->builder->build('checkbox', $product_option['product_option_values'], "product_options[$product_option[product_option_id]]"); ?>
+					<?= $this->builder->build('checkbox', $product_option['product_option_values'], "options[$product_option[product_option_id]]"); ?>
 					<? break;
 
 				case 'image':
@@ -31,7 +31,7 @@
 					<div class="option_image_list">
 						<? foreach ($product_option['product_option_values'] as $product_option_value) { ?>
 							<? $id = "product_option_image_$product_option_value[product_option_value_id]"; ?>
-							<input style="display:none" type="radio" id="<?= $id; ?>" name="product_options[<?= $product_option['product_option_id']; ?>]" value="<?= $product_option_value['product_option_value_id']; ?>"/>
+							<input style="display:none" type="radio" id="<?= $id; ?>" name="options[<?= $product_option['product_option_id']; ?>]" value="<?= $product_option_value['product_option_value_id']; ?>"/>
 							<label for="<?= $id; ?>" class="option_image">
 								<div class="option_image_box">
 									<? if ($product_option_value['thumb']) { ?>

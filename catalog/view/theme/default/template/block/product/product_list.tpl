@@ -3,7 +3,7 @@
 	<a id="toggle_list"><?= $text_list; ?></a> <b>/</b> <a class="active" id="toggle_grid"><?= $text_grid; ?></a>
 </div>
 
-<div id="catalog_list" class='grid'>
+<div id="catalog_list" class="grid">
 	<? foreach ($products as $product) { ?>
 		<a class="item_block" href="<?= $product['href']; ?>">
 

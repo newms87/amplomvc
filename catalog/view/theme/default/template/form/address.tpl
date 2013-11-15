@@ -2,7 +2,7 @@
 <form action="<?= $action; ?>" method="<?= $method; ?>">
 	<? } ?>
 
-	<table id="<?= $form_id; ?>" class='form <?= $form_name; ?>'>
+	<table id="<?= $form_id; ?>" class="form <?= $form_name; ?>">
 		<? foreach ($fields as $name => $field) { ?>
 			<? if ($name == 'default' || $name == 'submit_address') {
 				continue;
@@ -13,7 +13,7 @@
 					<? if ($field['required']) { ?>
 						<span class="required"></span>
 					<? } ?>
-					<span class='form_entry'><?= $field['display_name']; ?></span>
+					<span class="form_entry"><?= $field['display_name']; ?></span>
 				</td>
 				<td>
 					<? switch ($field['type']) {

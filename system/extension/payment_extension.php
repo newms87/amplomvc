@@ -1,5 +1,5 @@
 <?php
-abstract class Payment extends Extension
+abstract class PaymentExtension extends Extension
 {
 	public function getErrors()
 	{
@@ -8,10 +8,13 @@ abstract class Payment extends Extension
 
 	public function renderTemplate()
 	{
-		$this->template->load('payment/payment');
-
+		//Template Data
 		$this->data['confirm'] = $this->url->link('payment/confirm', 'code=' . $this->info['code'] . '&order_id=' . $this->order->getId());
 
+		//The Template
+		$this->template->load('payment/payment');
+
+		//Render
 		$this->render();
 	}
 
@@ -39,7 +42,7 @@ abstract class Payment extends Extension
 	}
 }
 
-abstract class PaymentCard extends Payment
+abstract class PaymentCardExtension extends PaymentExtension
 {
 	public function hasCard($id)
 	{
@@ -88,7 +91,7 @@ abstract class PaymentCard extends Payment
 	public function register_card() { }
 }
 
-abstract class PaymentSubscription extends PaymentCard
+abstract class PaymentSubscriptionExtension extends PaymentCardExtension
 {
 	public function isDue($customer_subscription)
 	{

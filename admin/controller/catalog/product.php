@@ -759,14 +759,18 @@ class Admin_Controller_Catalog_Product extends Controller
 
 		//validate the quantities
 		if (!empty($_POST['product_options'])) {
-			foreach ($_POST['product_options'] as $option_id => $product_option) {
+			foreach ($_POST['product_options'] as $option_id => &$product_option) {
 				if (empty($product_option['product_option_values'])) {
 					$this->error["option_value$option_id"] = $this->_('error_no_option_value', $product_option['name']);
 					continue;
 				}
 
 				//Validate Product Option Value Restrictions
-				foreach ($product_option['product_option_values'] as $product_option_value_id => $product_option_value) {
+				foreach ($product_option['product_option_values'] as $product_option_value_id => &$product_option_value) {
+					if (!isset($product_option_value['subtract'])) {
+						$product_option_value['subtract'] = 0;
+					}
+
 					if (!empty($product_option_value['restrictions'])) {
 						foreach ($product_option_value['restrictions'] as $r_key => $restriction) {
 							if ($restriction['restrict_option_value_id'] == $product_option_value_id) {
@@ -787,7 +791,9 @@ class Admin_Controller_Catalog_Product extends Controller
 						}
 					}
 				}
+				unset($product_option_value);
 			}
+			unset($product_option);
 		}
 
 		return $this->error ? false : true;

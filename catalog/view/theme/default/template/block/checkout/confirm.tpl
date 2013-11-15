@@ -1,10 +1,10 @@
 <? if (!empty($redirect)) { ?>
 	<script type="text/javascript">
 		location = "<?= $redirect; ?>";
-</script>
+	</script>
 
 <? } elseif (!empty($totals_only)) { ?>
-	<div class='checkout_totals'>
+	<div class="checkout_totals">
 		<?= $block_totals; ?>
 	</div>
 
@@ -19,19 +19,19 @@
 		<? } ?>
 
 		<? if (isset($block_cart)) { ?>
-			<div class='checkout_cart'>
+			<div class="checkout_cart">
 				<?= $block_cart; ?>
 			</div>
 		<? } ?>
 
 		<? if (isset($block_coupon)) { ?>
-			<div class='checkout_coupon'>
+			<div class="checkout_coupon">
 				<?= $block_coupon; ?>
 			</div>
 		<? } ?>
 
-		<div id='checkout_details'>
-			<div class='checkout_totals'>
+		<div id="checkout_details">
+			<div class="checkout_totals">
 				<?= $block_totals; ?>
 			</div>
 
@@ -41,9 +41,9 @@
 		</div>
 	</div>
 
-	<div id='loading_details' style='display:none'>
-		<img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>"/>
-		<span class='loading_message'><?= $text_loading_details; ?></span>
+	<div id="loading_details" style="display:none">
+		<div class="loader"></div>
+		<span class="loading_message"><?= $text_loading_details; ?></span>
 	</div>
 
 	<script type="text/javascript">
@@ -51,15 +51,20 @@
 			load_block($('#checkout_details .checkout_totals'), 'block/cart/total');
 		});
 
-		var loading_html = $('#loading_details').clone();
-		$('#loading_details').remove();
+		var loading_html = $('#loading_details').remove();
 
 		function handle_ajax_cart_preload(action, data) {
 			$('#checkout_details').html(loading_html.show().height($('#checkout_details').height()));
 		}
 
+		$('#the_cart').on('cart_loaded', function () {
+			//load_block($('#checkout_details .checkout_totals'), 'block/cart/total');
+			handle_ajax_cart_load();
+		});
+
 		var retry_count = 3;
-		function handle_ajax_cart_load(action, context) {
+
+		function handle_ajax_cart_load() {
 			$.get("<?= $reload_totals; ?>", {}, function (html) {
 				details = $('#checkout_details').html(html);
 
@@ -69,12 +74,10 @@
 					}
 					else {
 						retry_count--;
-						setTimeout(function () {
-							handle_ajax_cart_load(action, context)
-						}, 200);
+						setTimeout(handle_ajax_cart_load, 200);
 					}
 				}
 			});
 		}
-</script>
+	</script>
 <? } ?>

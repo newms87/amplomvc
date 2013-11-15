@@ -1,7 +1,7 @@
 <? if ($use_form_tag) { ?>
 	<form action="<?= $action; ?>" method="<?= $method; ?>" <?= $form_tag_attrs; ?>>
 <? } ?>
-	<table class='form'>
+	<table class="form">
 		<? foreach ($fields as $name => $field) {
 
 			if (!in_array($field['type'], array(
@@ -17,7 +17,7 @@
 							; ?>
 							<span class="required"></span>
 						<? } ?>
-						<span class='form_entry'><?= $field['display_name']; ?></span>
+						<span class="form_entry"><?= $field['display_name']; ?></span>
 					</td>
 				</tr>
 			<? } ?>

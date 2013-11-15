@@ -6,22 +6,35 @@
 	<input type="hidden" name="upload" value="1"/>
 	<input type="hidden" name="business" value="<?= $business; ?>"/>
 	<? $i = 1; ?>
-	<? foreach ($products as $product) { ?>
+	<? foreach ($products as $cart_product) { ?>
+		<? $product = $cart_product['product']; ?>
 		<input type="hidden" name="item_name_<?= $i; ?>" value="<?= $product['name']; ?>"/>
 		<input type="hidden" name="item_number_<?= $i; ?>" value="<?= $product['model']; ?>"/>
-		<input type="hidden" name="amount_<?= $i; ?>" value="<?= $product['price']; ?>"/>
-		<input type="hidden" name="quantity_<?= $i; ?>" value="<?= $product['quantity']; ?>"/>
-		<input type="hidden" name="weight_<?= $i; ?>" value="<?= $product['weight']; ?>"/>
-		<? if (!empty($product['selected_options'])) { ?>
+		<input type="hidden" name="amount_<?= $i; ?>" value="<?= $cart_product['price']; ?>"/>
+		<input type="hidden" name="quantity_<?= $i; ?>" value="<?= $cart_product['quantity']; ?>"/>
+		<input type="hidden" name="weight_<?= $i; ?>" value="<?= $cart_product['weight']; ?>"/>
+		<? if (!empty($cart_product['options'])) { ?>
 			<? $j = 0; ?>
-			<? foreach ($product['selected_options'] as $selected_option) { ?>
-				<input type="hidden" name="on<?= $j; ?>_<?= $i; ?>" value="<?= $selected_option['product_option']['name']; ?>"/>
-				<input type="hidden" name="os<?= $j; ?>_<?= $i; ?>" value="<?= $selected_option['value']; ?>"/>
+			<? foreach ($cart_product['options'] as $option) { ?>
+				<input type="hidden" name="on<?= $j; ?>_<?= $i; ?>" value="<?= $option['display_name']; ?>"/>
+				<input type="hidden" name="os<?= $j; ?>_<?= $i; ?>" value="<?= $option['value']; ?>"/>
 				<? $j++; ?>
 			<? } ?>
 		<? } ?>
 		<? $i++; ?>
 	<? } ?>
+
+	<? if (!empty($extras)) { ?>
+		<? foreach ($extras as $extra) { ?>
+			<input type="hidden" name="item_name_<?= $i; ?>" value="<?= $extra['name']; ?>"/>
+			<input type="hidden" name="item_number_<?= $i; ?>" value="<?= $extra['model']; ?>"/>
+			<input type="hidden" name="amount_<?= $i; ?>" value="<?= $extra['price']; ?>"/>
+			<input type="hidden" name="quantity_<?= $i; ?>" value="<?= $extra['quantity']; ?>"/>
+			<input type="hidden" name="weight_<?= $i; ?>" value="<?= $extra['weight']; ?>"/>
+			<? $i++; ?>
+		<? } ?>
+	<? } ?>
+
 	<? if ($discount_amount_cart) { ?>
 		<input type="hidden" name="discount_amount_cart" value="<?= $discount_amount_cart; ?>"/>
 	<? } ?>
@@ -54,10 +67,10 @@
 
 	<div class="buttons">
 		<div class="right">
-			<div id='submit_pp_button'>
+			<div id="submit_pp_button">
 				<div id="submit_payment"><?= $text_submit_payment; ?></div>
 				<input type="submit" value="<?= $button_confirm; ?>" class="button"/></div>
-			<div id='processing_payment'>
+			<div id="processing_payment">
 				<img src="<?= HTTP_THEME_IMAGE . 'loading.gif'; ?>"
 				     alt=""/><span><?= $text_processing_payment; ?></span><br/>
 				<input type="submit" value="<?= $button_try_again; ?>" class="button"/>

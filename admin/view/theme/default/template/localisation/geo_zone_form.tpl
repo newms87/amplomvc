@@ -57,7 +57,7 @@
 								</td>
 								<td class="left">
 									<select name="zones[<?= $row; ?>][zone_id]" zone_id="<?= $zone['zone_id']; ?>"
-									        class='zone_selector'></select>
+									        class="zone_selector"></select>
 								</td>
 								<td class="left"><a onclick="$(this).closest('.geozone_selector').remove();"
 								                    class="button"><?= $button_remove; ?></a></td>
