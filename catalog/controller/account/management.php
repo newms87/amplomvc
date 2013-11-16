@@ -41,8 +41,8 @@ class Catalog_Controller_Account_Management extends Controller
 
 		$subscriptions = $this->subscription->getCustomerSubscriptions(null, $filter);
 
-		if ($this->subscription->hasErrors()) {
-			$this->message->add('warning', $this->subscription->getErrors());
+		if ($this->subscription->hasError()) {
+			$this->message->add('warning', $this->subscription->getError());
 		}
 
 		$thumb_width  = $this->config->get('config_image_category_width');
