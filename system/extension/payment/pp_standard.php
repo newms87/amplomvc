@@ -25,7 +25,6 @@ class System_Extension_Payment_PpStandard extends PaymentExtension
 
 		$cart_products = $this->cart->getProducts();
 
-		html_dump($cart_products, 'products');
 		foreach ($cart_products as &$cart_product) {
 			foreach ($cart_product['options'] as $product_option_id => &$product_option_values) {
 				foreach ($product_option_values as &$product_option_value) {
