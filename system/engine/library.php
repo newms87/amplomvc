@@ -26,13 +26,21 @@ abstract class Library
 		return $this->language->get($key);
 	}
 
-	public function hasError()
+	public function hasError($type = null)
 	{
+		if ($type) {
+			return !empty($this->error[$type]);
+		}
+
 		return !empty($this->error);
 	}
 
-	public function getError()
+	public function getError($type = null)
 	{
+		if ($type) {
+			return isset($this->error[$type]) ? $this->error[$type] : null;
+		}
+
 		return $this->error;
 	}
 }

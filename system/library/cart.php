@@ -67,21 +67,6 @@ class Cart extends Library
 		return $e;
 	}
 
-	public function has_error($type)
-	{
-		$type_list = explode('>', $type);
-
-		$error = $this->error;
-		foreach ($type_list as $t) {
-			if (!isset($error[$t])) {
-				return false;
-			}
-			$error = $error[$t];
-		}
-
-		return true;
-	}
-
 	/******************
 	 * Cart Functions *
 	 ******************/

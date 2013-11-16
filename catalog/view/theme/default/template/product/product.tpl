@@ -121,8 +121,8 @@
 						</div>
 
 						<div id="cart_additional_buttons">
-							<a href="<?= $view_cart_link; ?>"><?= $button_view_cart; ?></a>
-							<a href="<?= $checkout_link; ?>"><?= $button_checkout; ?></a>
+							<a href="<?= $view_cart_link; ?>"><?= _l("View Cart"); ?></a>
+							<a href="<?= $checkout_link; ?>"><?= _l("Checkout"); ?></a>
 							<a href="<?= $continue_shopping_link; ?>"><?= $button_shopping; ?></a>
 						</div>
 						<? if ($minimum > 1) { ?>

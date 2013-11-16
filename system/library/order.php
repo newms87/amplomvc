@@ -26,11 +26,6 @@ class Order Extends Library
 		return $this->error;
 	}
 
-	public function hasError($type)
-	{
-		return !empty($this->error);
-	}
-
 	public function add()
 	{
 		if (!$this->cart->validate()) {

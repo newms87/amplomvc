@@ -77,7 +77,7 @@ class Catalog_Controller_Cart_Cart extends Controller
 
 		$this->cart->add($type, $product_id, $quantity, $options);
 
-		if (!$this->cart->has_error('add')) {
+		if (!$this->cart->hasError('add')) {
 			if ($type === Cart::PRODUCTS) {
 				$name = $this->Model_Catalog_Product->getProductName($product_id);
 			}
@@ -103,7 +103,7 @@ class Catalog_Controller_Cart_Cart extends Controller
 
 		$key = $this->cart->add($type, $product_id, $quantity, $options);
 
-		if (!$this->cart->has_error('add')) {
+		if (!$this->cart->hasError('add')) {
 			if ($type === Cart::PRODUCTS) {
 				$name = $this->Model_Catalog_Product->getProductName($product_id);
 			}
