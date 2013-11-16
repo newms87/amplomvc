@@ -117,7 +117,7 @@
 	$('.nav_link').each(function(i,e){
 		var parent_id = $(e).children('.link_info').find('.parent_id').val();
 		if (parent_id > 0) {
-			$('.nav_link[data-row=" + parent_id + "]').children('.child_list').append($(e));
+			$('.nav_link[data-row=' + parent_id + ']').children('.child_list').append($(e));
 		}
 	});
 
@@ -129,7 +129,7 @@
 		list = $('#links_list ul');
 
 		list.find('[parent_id]').each(function (i, e) {
-			$(e).appendTo($('[link_id=" + $(e).attr("parent_id') + '] > ul'));
+			$(e).appendTo($('[link_id=' + $(e).attr('parent_id') + '] > ul'));
 		});
 
 		list.sortable({
