@@ -40,7 +40,7 @@ class Admin_Controller_Setting_Store extends Controller
 		$this->language->load('setting/store');
 
 		//TODO: Change Permissions to include a query parameter (eg: store_id=$store_id). (by default this can be *, so no code breaking necessary)
-		if (!empty($_GET['store_id']) && $this->user->hasPermission('modify', 'setting/store') && $this->canDelete($_GET['store_id'])) {
+		if (!empty($_GET['store_id']) && $this->user->can('modify', 'setting/store') && $this->canDelete($_GET['store_id'])) {
 			$this->Model_Setting_Store->deleteStore($_GET['store_id']);
 			$this->System_Model_Setting->deleteSetting('config', $_GET['store_id']);
 
@@ -296,7 +296,7 @@ class Admin_Controller_Setting_Store extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'setting/store')) {
+		if (!$this->user->can('modify', 'setting/store')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -362,7 +362,7 @@ class Admin_Controller_Setting_Store extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'setting/store')) {
+		if (!$this->user->can('modify', 'setting/store')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

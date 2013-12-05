@@ -3,7 +3,6 @@ class Customer extends Library
 {
 	private $customer_id;
 	private $information;
-	private $payment_info;
 	private $metadata;
 
 	public function __construct($registry)
@@ -11,7 +10,7 @@ class Customer extends Library
 		parent::__construct($registry);
 
 		if (isset($this->session->data['customer_id'])) {
-			$customer = $this->db->queryRow("SELECT * FROM " . DB_PREFIX . "customer WHERE customer_id = '" . (int)$this->session->data['customer_id'] . "' AND status = '1'");
+			$customer = $this->queryRow("SELECT * FROM " . DB_PREFIX . "customer WHERE customer_id = '" . (int)$this->session->data['customer_id'] . "' AND status = '1'");
 
 			if (!empty($customer)) {
 				$this->setCustomer($customer);
@@ -79,7 +78,7 @@ class Customer extends Library
 	//TODO: Should get rid of override for users. This is a security flaw
 	public function login($email, $password, $override = false)
 	{
-		$where = "LOWER(email) = '" . $this->db->escape(strtolower($email)) . "' AND status = '1'";
+		$where = "LOWER(email) = '" . $this->escape(strtolower($email)) . "' AND status = '1'";
 
 		if (!$override) {
 			if ($this->config->get('config_customer_approval')) {
@@ -87,7 +86,7 @@ class Customer extends Library
 			}
 		}
 
-		$customer = $this->db->queryRow("SELECT * FROM " . DB_PREFIX . "customer WHERE $where LIMIT 1");
+		$customer = $this->queryRow("SELECT * FROM " . DB_PREFIX . "customer WHERE $where LIMIT 1");
 
 		if ($customer) {
 			if (!$override) {
@@ -116,7 +115,7 @@ class Customer extends Library
 
 	public function logout()
 	{
-		$this->db->query("UPDATE " . DB_PREFIX . "customer SET cart = '" . $this->db->escape(isset($this->session->data['cart']) ? serialize($this->session->data['cart']) : '') . "', wishlist = '" . $this->db->escape(isset($this->session->data['wishlist']) ? serialize($this->session->data['wishlist']) : '') . "' WHERE customer_id = '" . (int)$this->customer_id . "'");
+		$this->query("UPDATE " . DB_PREFIX . "customer SET cart = '" . $this->escape(isset($this->session->data['cart']) ? serialize($this->session->data['cart']) : '') . "', wishlist = '" . $this->escape(isset($this->session->data['wishlist']) ? serialize($this->session->data['wishlist']) : '') . "' WHERE customer_id = '" . (int)$this->customer_id . "'");
 
 		$this->session->end();
 
@@ -156,18 +155,16 @@ class Customer extends Library
 
 	public function getAddress($address_id)
 	{
-		$address = $this->System_Model_Address->getAddress($address_id);
+		$address = $this->address->getAddress($address_id);
 
 		if (!$address) {
 			return null;
 		}
 
 		if ($this->isLogged()) {
-			//Associate this address to this customer
-			if (!(int)$address['customer_id']) {
-				$address['customer_id'] = $this->customer_id;
-				$this->address->update($address_id, $address);
-			} elseif ((int)$address['customer_id'] !== $this->customer_id) {
+			$is_customer_address = $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "customer_address WHERE customer_id = " . (int)$this->customer_id . " AND address_id = " . (int)$address_id);
+			
+			if (!$is_customer_address) {
 				trigger_error("Customer (id: $this->customer_id) attempted to access an unassociated address!");
 
 				return null;
@@ -181,7 +178,7 @@ class Customer extends Library
 	{
 		$filter['customer_ids'] = array($this->customer_id);
 
-		$addresses = $this->System_Model_Address->getAddresses($filter);
+		$addresses = $this->address->getAddresses($filter);
 
 		$payment_address_id = (int)$this->getMeta('default_payment_address_id');
 		$shipping_address_id = (int)$this->getMeta('default_shipping_address_id');
@@ -257,7 +254,7 @@ class Customer extends Library
 	public function getOrders()
 	{
 		if ($this->isLogged()) {
-			return $this->db->queryRows("SELECT * FROM " . DB_PREFIX . "order WHERE customer_id = '" . $this->customer_id . "' AND order_status_id > 0");
+			return $this->queryRows("SELECT * FROM " . DB_PREFIX . "order WHERE customer_id = '" . $this->customer_id . "' AND order_status_id > 0");
 		}
 
 		return false;
@@ -269,7 +266,7 @@ class Customer extends Library
 			return 0;
 		}
 
-		return $this->db->queryVar("SELECT SUM(amount) AS total FROM " . DB_PREFIX . "customer_transaction WHERE customer_id = '" . (int)$this->customer_id . "'");
+		return $this->queryVar("SELECT SUM(amount) AS total FROM " . DB_PREFIX . "customer_transaction WHERE customer_id = '" . (int)$this->customer_id . "'");
 	}
 
 	public function getRewardPoints()
@@ -278,7 +275,7 @@ class Customer extends Library
 			return 0;
 		}
 
-		return $this->db->queryVar("SELECT SUM(points) AS total FROM " . DB_PREFIX . "customer_reward WHERE customer_id = '" . (int)$this->customer_id . "'");
+		return $this->queryVar("SELECT SUM(points) AS total FROM " . DB_PREFIX . "customer_reward WHERE customer_id = '" . (int)$this->customer_id . "'");
 	}
 
 	public function encrypt($password)
@@ -299,30 +296,21 @@ class Customer extends Library
 		//Load Customer Settings
 		$this->metadata = $this->System_Model_Customer->getMetaData($this->customer_id);
 
-		$this->payment_info = $this->getMeta('payment_info_' . $this->information['payment_code']);
-
-		if (!$this->payment_info) {
-			$this->payment_info = array(
-				'address_id'   => $this->information['address_id'],
-				'payment_code' => $this->information['payment_code'],
-			);
-		}
-
 		$cart     = $this->cart->get();
 		$wishlist = $this->cart->getWishlist();
 
-		$this->db->query("UPDATE " . DB_PREFIX . "customer SET cart = '" . $this->db->escape(serialize($cart)) . "', wishlist = '" . $this->db->escape(serialize($wishlist)) . "', ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "' WHERE customer_id = '" . (int)$this->customer_id . "'");
+		$this->query("UPDATE " . DB_PREFIX . "customer SET cart = '" . $this->escape(serialize($cart)) . "', wishlist = '" . $this->escape(serialize($wishlist)) . "', ip = '" . $this->escape($_SERVER['REMOTE_ADDR']) . "' WHERE customer_id = '" . (int)$this->customer_id . "'");
 
-		$ip_set = $this->db->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "customer_ip WHERE customer_id = '" . (int)$this->session->data['customer_id'] . "' AND ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "'");
+		$ip_set = $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "customer_ip WHERE customer_id = '" . (int)$this->session->data['customer_id'] . "' AND ip = '" . $this->escape($_SERVER['REMOTE_ADDR']) . "'");
 
 		if (!$ip_set) {
-			$this->db->query("INSERT INTO " . DB_PREFIX . "customer_ip SET customer_id = '" . $this->customer_id . "', ip = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "', date_added = NOW()");
+			$this->query("INSERT INTO " . DB_PREFIX . "customer_ip SET customer_id = '" . $this->customer_id . "', ip = '" . $this->escape($_SERVER['REMOTE_ADDR']) . "', date_added = NOW()");
 		}
 	}
 
 	public function emailRegistered($email)
 	{
-		return (int)$this->db->queryVar("SELECT customer_id FROM " . DB_PREFIX . "customer WHERE email = '" . $this->db->escape($email) . "'");
+		return (int)$this->queryVar("SELECT customer_id FROM " . DB_PREFIX . "customer WHERE email = '" . $this->escape($email) . "'");
 	}
 
 	public function isBlacklisted($customer_id = null, $ips = array())
@@ -332,7 +320,7 @@ class Customer extends Library
 		}
 
 		if ($customer_id) {
-			$customer_ips = $this->db->queryColumn("SELECT ip FROM " . DB_PREFIX . "customer_ip WHERE customer_id = " . (int)$customer_id);
+			$customer_ips = $this->queryColumn("SELECT ip FROM " . DB_PREFIX . "customer_ip WHERE customer_id = " . (int)$customer_id);
 
 			if ($customer_ips) {
 				$ips += $customer_ips;
@@ -343,6 +331,6 @@ class Customer extends Library
 			return false;
 		}
 
-		return $this->db->queryVar("SELECT COUNT(*) FROM `" . DB_PREFIX . "customer_ip_blacklist` WHERE ip IN ('" . implode("','", $ips) . "')");
+		return $this->queryVar("SELECT COUNT(*) FROM `" . DB_PREFIX . "customer_ip_blacklist` WHERE ip IN ('" . implode("','", $ips) . "')");
 	}
 }

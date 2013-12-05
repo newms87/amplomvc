@@ -80,9 +80,9 @@ class Catalog_Controller_Payment_Twocheckout extends Controller
 
 		if (strtoupper(md5($this->config->get('twocheckout_secret') . $this->config->get('twocheckout_account') . $order_number . $_POST['total'])) == $_POST['key']) {
 			if ($this->currency->format($order_info['total'], $order_info['currency_code'], $order_info['currency_value'], false) == $_POST['total']) {
-				$this->order->update($_POST['cart_order_id'], $this->config->get('twocheckout_order_status_id'));
+				$this->order->updateOrder($_POST['cart_order_id'], $this->config->get('twocheckout_order_status_id'));
 			} else {
-				$this->order->update($_POST['cart_order_id'], $this->config->get('config_order_complete_status_id')); // Ugh. Some one've faked the sum. What should we do? Probably drop a mail to the shop owner?
+				$this->order->updateOrder($_POST['cart_order_id'], $this->config->get('config_order_complete_status_id')); // Ugh. Some one've faked the sum. What should we do? Probably drop a mail to the shop owner?
 			}
 
 			// We can't use $this->url->redirect() here, because of 2CO behavior. It fetches this page

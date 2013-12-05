@@ -302,7 +302,7 @@ class Admin_Controller_Extension_Payment extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'extension/payment')) {
+		if (!$this->user->can('modify', 'extension/payment')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -317,7 +317,7 @@ class Admin_Controller_Extension_Payment extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'extension/payment')) {
+		if (!$this->user->can('modify', 'extension/payment')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

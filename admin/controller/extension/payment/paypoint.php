@@ -101,7 +101,7 @@ class Admin_Controller_Payment_Paypoint extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'payment/paypoint')) {
+		if (!$this->user->can('modify', 'payment/paypoint')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

@@ -82,7 +82,7 @@ class Admin_Controller_Tool_Backup extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'tool/backup')) {
+		if (!$this->user->can('modify', 'tool/backup')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

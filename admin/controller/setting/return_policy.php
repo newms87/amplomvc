@@ -87,7 +87,7 @@ class Admin_Controller_Setting_ReturnPolicy extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'setting/return_policy')) {
+		if (!$this->user->can('modify', 'setting/return_policy')) {
 			$this->error['permission'] = $this->_('error_permission');
 		}
 

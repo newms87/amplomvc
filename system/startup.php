@@ -1,6 +1,6 @@
 <?php
 // Version
-define('AC_VERSION', '0.0.19');
+define('AC_VERSION', '0.0.20');
 
 // Error Reporting
 error_reporting(E_ALL);
@@ -83,19 +83,20 @@ if (is_dir(dirname(DIR_APPLICATION) . '/install')) {
 	$this->error['error_install'] = $this->_('error_install');
 }
 
+//Core
+require_once(_ac_mod_file(DIR_DATABASE . 'db.php'));
+
 // Engine
 require_once(_ac_mod_file(DIR_SYSTEM . 'engine/action.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'engine/controller.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'engine/router.php'));
-require_once(_ac_mod_file(DIR_SYSTEM . 'engine/library.php'));
-require_once(_ac_mod_file(DIR_SYSTEM . 'engine/loader.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'engine/model.php'));
+require_once(_ac_mod_file(DIR_SYSTEM . 'engine/library.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'engine/registry.php'));
+require_once(_ac_mod_file(DIR_SYSTEM . 'engine/cache.php'));
 
 // Common
-require_once(_ac_mod_file(DIR_SYSTEM . 'library/cache.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'library/config.php'));
-require_once(_ac_mod_file(DIR_SYSTEM . 'library/db.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'library/mod.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'library/log.php'));
 require_once(_ac_mod_file(DIR_SYSTEM . 'library/plugin.php'));

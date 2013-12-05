@@ -46,6 +46,7 @@ define('DIR_CACHE', SITE_DIR . 'system/cache/');
 define('DIR_DOWNLOAD', SITE_DIR . 'download/');
 define('DIR_MOD_FILES', SITE_DIR . 'system/mods/');
 define('DIR_LOGS', SITE_DIR . 'system/logs/');
+define('DIR_LOCALE', SITE_DIR . 'system/locale/');
 
 //Log Files
 define("AC_LOG_FILE", DIR_LOGS . 'log.txt');

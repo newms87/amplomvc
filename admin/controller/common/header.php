@@ -56,7 +56,7 @@ class Admin_Controller_Common_Header extends Controller
 		} else {
 			$this->data['home'] = $this->url->link('common/home');
 
-			$this->data['logged'] = $this->_('text_logged', $this->user->getUserName());
+			$this->data['logged'] = $this->_('text_logged', $this->user->info('username'));
 
 			$menu_items = array();
 
@@ -89,7 +89,7 @@ class Admin_Controller_Common_Header extends Controller
 			}
 
 			//Add the Image Manager to the Main Menu if user has permissions
-			if ($this->user->hasPermission('access', 'common/filemanager')) {
+			if ($this->user->can('access', 'common/filemanager')) {
 				$link_image_manager = array(
 					'name'       => $this->_('text_image_manager'),
 					'sort_order' => 5,

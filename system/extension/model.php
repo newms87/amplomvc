@@ -1,5 +1,5 @@
 <?php
-abstract class ExtensionModel extends Model
+abstract class System_Extension_Model extends Model
 {
 	private $extensions;
 

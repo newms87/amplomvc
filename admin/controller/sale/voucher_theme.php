@@ -220,7 +220,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'sale/voucher_theme')) {
+		if (!$this->user->can('modify', 'sale/voucher_theme')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -237,7 +237,7 @@ class Admin_Controller_Sale_VoucherTheme extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'sale/voucher_theme')) {
+		if (!$this->user->can('modify', 'sale/voucher_theme')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

@@ -64,7 +64,7 @@ class Admin_Controller_Setting_ControllerOverride extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'localisation/controller_override')) {
+		if (!$this->user->can('modify', 'localisation/controller_override')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

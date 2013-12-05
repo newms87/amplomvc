@@ -258,7 +258,7 @@ class Admin_Controller_Catalog_Option extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'catalog/option')) {
+		if (!$this->user->can('modify', 'catalog/option')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -289,7 +289,7 @@ class Admin_Controller_Catalog_Option extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'catalog/option')) {
+		if (!$this->user->can('modify', 'catalog/option')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

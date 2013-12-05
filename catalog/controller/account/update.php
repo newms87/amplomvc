@@ -101,8 +101,8 @@ class Catalog_Controller_Account_Update extends Controller
 	public function remove_address()
 	{
 		if (!empty($_GET['address_id'])) {
-			if ($this->address->canDelete($_GET['address_id'])) {
-				$this->address->delete($_GET['address_id']);
+			if ($this->address->canRemove($_GET['address_id'])) {
+				$this->address->remove($_GET['address_id']);
 			}
 
 			$error = $this->address->getError();

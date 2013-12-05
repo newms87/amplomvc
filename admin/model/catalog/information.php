@@ -112,7 +112,7 @@ class Admin_Model_Catalog_Information extends Model
 
 		$this->url->removeAlias('information/information', 'information_id=' . (int)$information_id);
 
-		$this->translation->delete('information', $information_id);
+		$this->translation->deleteTranslation('information', $information_id);
 
 		$this->cache->delete('information');
 	}
@@ -161,8 +161,8 @@ class Admin_Model_Catalog_Information extends Model
 
 		//Order and Limit
 		if (!$total) {
-			$order = $this->extract_order($data);
-			$limit = $this->extract_limit($data);
+			$order = $this->extractOrder($data);
+			$limit = $this->extractLimit($data);
 		} else {
 			$order = '';
 			$limit = '';

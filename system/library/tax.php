@@ -58,7 +58,7 @@ final class Tax extends Library
 
 	public function getRateInfo($tax_rate_id)
 	{
-		return $this->db->queryRow("SELECT * FROM " . DB_PREFIX . "tax_rate WHERE tax_rate_id = '" . (int)$tax_rate_id . "'");
+		return $this->queryRow("SELECT * FROM " . DB_PREFIX . "tax_rate WHERE tax_rate_id = '" . (int)$tax_rate_id . "'");
 	}
 
 	public function getRates($value, $tax_class_id)
@@ -117,7 +117,7 @@ final class Tax extends Library
 			" WHERE tr1.tax_class_id = '" . (int)$tax_class_id . "' AND tr1.based = '$type' AND tr2cg.customer_group_id = '" . (int)$customer_group_id . "'" .
 			" ORDER BY tr1.priority ASC";
 
-		$result = $this->db->query($query);
+		$result = $this->query($query);
 
 		//TODO HACK TO APPLY ZONE CODES - SHOULD MOVE THIS TO A NEW TAX TOTAL LINE ITEM!
 		$county_tax = array(

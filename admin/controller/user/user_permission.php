@@ -290,7 +290,7 @@ class Admin_Controller_User_UserPermission extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'user/user_permission')) {
+		if (!$this->user->can('modify', 'user/user_permission')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -303,7 +303,7 @@ class Admin_Controller_User_UserPermission extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'user/user_permission')) {
+		if (!$this->user->can('modify', 'user/user_permission')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

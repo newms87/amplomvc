@@ -277,7 +277,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'setting/url_alias')) {
+		if (!$this->user->can('modify', 'setting/url_alias')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -290,7 +290,7 @@ class Admin_Controller_Setting_UrlAlias extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'setting/url_alias')) {
+		if (!$this->user->can('modify', 'setting/url_alias')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

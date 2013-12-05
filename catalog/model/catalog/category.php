@@ -56,8 +56,8 @@ class Catalog_Model_Catalog_Category extends Model
 				}
 			}
 
-			$order = $this->extract_order($data);
-			$limit = $this->extract_limit($data);
+			$order = $this->extractOrder($data);
+			$limit = $this->extractLimit($data);
 		} else {
 			$order = '';
 			$limit = '';

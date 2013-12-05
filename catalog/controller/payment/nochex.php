@@ -113,9 +113,9 @@ class Catalog_Controller_Payment_Nochex extends Controller
 		curl_close($curl);
 
 		if (strcmp($response, 'AUTHORISED') == 0) {
-			$this->order->update($order_id, $this->config->get('nochex_order_status_id'));
+			$this->order->updateOrder($order_id, $this->config->get('nochex_order_status_id'));
 		} else {
-			$this->order->update($order_id, $this->config->get('config_order_complete_status_id'), 'Auto-Verification step failed. Manually check the transaction.');
+			$this->order->updateOrder($order_id, $this->config->get('config_order_complete_status_id'), 'Auto-Verification step failed. Manually check the transaction.');
 		}
 
 		// Since it returned, the customer should see success.

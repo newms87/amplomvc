@@ -354,7 +354,7 @@ class Admin_Controller_Localisation_Currency extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'localisation/currency')) {
+		if (!$this->user->can('modify', 'localisation/currency')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -371,7 +371,7 @@ class Admin_Controller_Localisation_Currency extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'localisation/currency')) {
+		if (!$this->user->can('modify', 'localisation/currency')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

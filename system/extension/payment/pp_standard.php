@@ -310,7 +310,7 @@ class System_Extension_Payment_PpStandard extends PaymentExtension
 						$this->log->write("PP_STANDARD :: Updating Order ( order_id: $order_id ) to order status $status[title] ( order_status_id: $order_status_id )");
 					}
 
-					$this->order->update($order_id, $order_status_id);
+					$this->order->updateOrder($order_id, $order_status_id);
 					return true;
 				}
 			} else {

@@ -11,12 +11,7 @@ class Template extends Library
 	private $root_dir = null;
 	private $theme_override = null;
 
-	public function __construct($registry)
-	{
-		parent::__construct($registry);
-	}
-
-	public function template()
+	public function getTemplate()
 	{
 		return $this->template;
 	}

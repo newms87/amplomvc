@@ -337,7 +337,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'catalog/manufacturer')) {
+		if (!$this->user->can('modify', 'catalog/manufacturer')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -354,7 +354,7 @@ class Admin_Controller_Catalog_Manufacturer extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'catalog/manufacturer')) {
+		if (!$this->user->can('modify', 'catalog/manufacturer')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

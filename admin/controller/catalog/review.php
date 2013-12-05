@@ -364,7 +364,7 @@ class Admin_Controller_Catalog_Review extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'catalog/review')) {
+		if (!$this->user->can('modify', 'catalog/review')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -389,7 +389,7 @@ class Admin_Controller_Catalog_Review extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'catalog/review')) {
+		if (!$this->user->can('modify', 'catalog/review')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

@@ -97,7 +97,7 @@ class Admin_Model_Catalog_Category extends Model
 
 		$this->url->removeAlias('product/category', 'category_id=' . (int)$category_id);
 
-		$this->translation->delete('category', $category_id);
+		$this->translation->deleteTranslation('category', $category_id);
 
 		$this->delete('product_to_category', array('category_id' => $category_id));
 
@@ -156,8 +156,8 @@ class Admin_Model_Catalog_Category extends Model
 				}
 			}
 
-			$order = $this->extract_order($data);
-			$limit = $this->extract_limit($data);
+			$order = $this->extractOrder($data);
+			$limit = $this->extractLimit($data);
 		} else {
 			$order = '';
 			$limit = '';

@@ -107,7 +107,7 @@ class Admin_Controller_Payment_Twocheckout extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'payment/twocheckout')) {
+		if (!$this->user->can('modify', 'payment/twocheckout')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

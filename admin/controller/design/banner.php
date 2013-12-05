@@ -235,7 +235,7 @@ class Admin_Controller_Design_Banner extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'design/banner')) {
+		if (!$this->user->can('modify', 'design/banner')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -258,7 +258,7 @@ class Admin_Controller_Design_Banner extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'design/banner')) {
+		if (!$this->user->can('modify', 'design/banner')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

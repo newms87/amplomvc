@@ -101,7 +101,7 @@ class Admin_Controller_Payment_SagepayUs extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'payment/sagepay_us')) {
+		if (!$this->user->can('modify', 'payment/sagepay_us')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

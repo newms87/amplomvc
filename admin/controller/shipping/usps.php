@@ -438,7 +438,7 @@ class Admin_Controller_Shipping_Usps extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'shipping/usps')) {
+		if (!$this->user->can('modify', 'shipping/usps')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

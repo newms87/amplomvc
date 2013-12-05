@@ -310,7 +310,7 @@ class Admin_Controller_Design_Navigation extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'design/navigation')) {
+		if (!$this->user->can('modify', 'design/navigation')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -356,7 +356,7 @@ class Admin_Controller_Design_Navigation extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'design/navigation')) {
+		if (!$this->user->can('modify', 'design/navigation')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

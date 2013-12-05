@@ -383,7 +383,7 @@ class Admin_Controller_Shipping_RoyalMail extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'shipping/royal_mail')) {
+		if (!$this->user->can('modify', 'shipping/royal_mail')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

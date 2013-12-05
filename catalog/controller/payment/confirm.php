@@ -15,7 +15,7 @@ class Catalog_Controller_Payment_Confirm extends Controller
 					$this->url->redirect('checkout/checkout');
 				}
 			} else {
-				$this->order->update($_GET['order_id'], $this->config->get('config_order_complete_status_id'));
+				$this->order->updateOrder($_GET['order_id'], $this->config->get('config_order_complete_status_id'));
 			}
 		} else {
 			$this->message->add('error', _l("We were unable to find your order your request. Please try completing your order again."));

@@ -108,7 +108,7 @@ class Admin_Controller_Payment_SagepayDirect extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'payment/sagepay_direct')) {
+		if (!$this->user->can('modify', 'payment/sagepay_direct')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

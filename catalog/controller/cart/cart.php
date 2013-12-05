@@ -75,7 +75,7 @@ class Catalog_Controller_Cart_Cart extends Controller
 		$quantity   = isset($_POST['quantity']) ? $_POST['quantity'] : 1;
 		$options    = !empty($_POST['options']) ? $_POST['options'] : array();
 
-		$this->cart->add($type, $product_id, $quantity, $options);
+		$this->cart->addItem($type, $product_id, $quantity, $options);
 
 		if (!$this->cart->hasError('add')) {
 			if ($type === Cart::PRODUCTS) {
@@ -101,7 +101,7 @@ class Catalog_Controller_Cart_Cart extends Controller
 		$quantity   = isset($_POST['quantity']) ? $_POST['quantity'] : 1;
 		$options    = !empty($_POST['options']) ? $_POST['options'] : array();
 
-		$key = $this->cart->add($type, $product_id, $quantity, $options);
+		$key = $this->cart->addItem($type, $product_id, $quantity, $options);
 
 		if (!$this->cart->hasError('add')) {
 			if ($type === Cart::PRODUCTS) {

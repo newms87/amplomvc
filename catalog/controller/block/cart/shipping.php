@@ -119,7 +119,7 @@ class Catalog_Controller_Block_Cart_Shipping extends Controller
 				'postcode'    => $_POST['postcode'],
 			);
 
-			$address_id = $this->System_Model_Address->addressExists($address);
+			$address_id = $this->address->exists($address);
 		}
 
 		if (!empty($address_id)) {

@@ -58,7 +58,7 @@ final class Router
 				if (!isset($parts[0]) || !isset($parts[1])) {
 					$this->path = 'common/home';
 				}
-				elseif (!$this->user->hasPermission('access', $parts[0] . '/' . $parts[1])) {
+				elseif (!$this->user->can('access', $parts[0] . '/' . $parts[1])) {
 					$this->path = 'error/permission';
 				}
 			}

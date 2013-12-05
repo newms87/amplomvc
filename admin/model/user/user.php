@@ -89,8 +89,8 @@ class Admin_Model_User_User extends Model
 
 		//Order and Limit
 		if (!$total) {
-			$order = $this->extract_order($data);
-			$limit = $this->extract_limit($data);
+			$order = $this->extractOrder($data);
+			$limit = $this->extractLimit($data);
 		} else {
 			$order = '';
 			$limit = '';

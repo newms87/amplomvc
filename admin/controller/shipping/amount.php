@@ -64,7 +64,7 @@ class Admin_Controller_Shipping_Amount extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'shipping/amount')) {
+		if (!$this->user->can('modify', 'shipping/amount')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

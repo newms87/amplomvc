@@ -349,7 +349,7 @@ class Admin_Controller_Page_Page extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'page/page')) {
+		if (!$this->user->can('modify', 'page/page')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -366,7 +366,7 @@ class Admin_Controller_Page_Page extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'page/page')) {
+		if (!$this->user->can('modify', 'page/page')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

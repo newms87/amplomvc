@@ -1,5 +1,5 @@
 <?php
-class System_Cron_AcCron extends CronJob
+class System_Cron_AcCron extends System_Cron_Job
 {
 	public function backup()
 	{

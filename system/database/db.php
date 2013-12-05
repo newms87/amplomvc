@@ -1,7 +1,9 @@
 <?php
-class DB extends Library
+class DB
 {
 	private $driver;
+
+	protected $error = array();
 
 	public function __construct($driver, $hostname, $username, $password, $database)
 	{
@@ -32,15 +34,27 @@ class DB extends Library
 		$this->driver = new $driver($hostname, $username, $password, $database);
 	}
 
-	public function getError()
+	public function hasError($type = null)
 	{
-		$driver_error = $this->driver->getError();
-
-		if ($this->error) {
-			$driver_error = '<br>' . $this->error;
+		if ($type) {
+			return !empty($this->error[$type]);
 		}
 
-		return $driver_error;
+		return !empty($this->error);
+	}
+
+	public function getError($type = null)
+	{
+		if ($type) {
+			return isset($this->error[$type]) ? $this->error[$type] : null;
+		}
+
+		return $this->error;
+	}
+
+	public function clearErrors()
+	{
+		$this->error = array();
 	}
 
 	/**

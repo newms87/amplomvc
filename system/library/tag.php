@@ -3,7 +3,7 @@ class Tag Extends Library
 {
 	public function get($text)
 	{
-		return $this->db->queryVar("SELECT tag_id FROM " . DB_PREFIX . "tag WHERE LCASE(text) = '" . $this->db->escape(strtolower(trim($text))) . "'");
+		return $this->queryVar("SELECT tag_id FROM " . DB_PREFIX . "tag WHERE LCASE(text) = '" . $this->escape(strtolower(trim($text))) . "'");
 	}
 
 	public function add($text)
@@ -15,9 +15,9 @@ class Tag Extends Library
 		$tag_id = $this->get($text);
 
 		if (!$tag_id) {
-			$this->db->query("INSERT INTO " . DB_PREFIX . "tag SET `text` = '" . $this->db->escape(strtolower(trim($text))) . "'");
+			$this->query("INSERT INTO " . DB_PREFIX . "tag SET `text` = '" . $this->escape(strtolower(trim($text))) . "'");
 
-			$tag_id = $this->db->getLastId();
+			$tag_id = $this->getLastId();
 		}
 
 		return $tag_id;

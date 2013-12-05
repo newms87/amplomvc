@@ -122,9 +122,14 @@ final class Action
 
 	public function execute()
 	{
+		global $language_group;
+
 		$controller = $this->getController();
 
 		if (is_callable(array($controller, $this->method))) {
+			//Set our language group for translations
+			$language_group = $this->class;
+
 			call_user_func_array(array($controller, $this->method), $this->parameters);
 
 			$this->output = $controller->output;

@@ -131,7 +131,7 @@ class Admin_Controller_Payment_Moneybookers extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'payment/moneybookers')) {
+		if (!$this->user->can('modify', 'payment/moneybookers')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

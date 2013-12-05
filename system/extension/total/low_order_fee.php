@@ -1,5 +1,5 @@
 <?php
-class System_Extension_Total_LowOrderFee extends Extension
+class System_Extension_Total_LowOrderFee extends TotalExtension
 {
 	public function getTotal(&$total_data, &$total, &$taxes)
 	{

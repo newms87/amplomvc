@@ -20,7 +20,7 @@ class Url extends Library
 			$this->ssl = $this->config->get('config_ssl');
 
 			//TODO - finish secure pages
-			$query              = $this->db->query("SELECT * FROM " . DB_PREFIX . "secure_page");
+			$query              = $this->query("SELECT * FROM " . DB_PREFIX . "secure_page");
 			$this->secure_pages = $query->rows;
 		}
 
@@ -190,7 +190,7 @@ class Url extends Library
 			return SITE_URL . 'admin/';
 		}
 
-		$link = $this->db->queryVar("SELECT $scheme as link FROM " . DB_PREFIX . "store WHERE store_id = '" . (int)$store_id . "'");
+		$link = $this->queryVar("SELECT $scheme as link FROM " . DB_PREFIX . "store WHERE store_id = '" . (int)$store_id . "'");
 
 		if (!is_string($link)) {
 			trigger_error("Error in Url Library: Store did not exist! store_id = " . $store_id . '.  ' . get_caller(0, 3));
@@ -295,15 +295,15 @@ class Url extends Library
 	private function loadSeoUrl()
 	{
 		// Decode URL
-		$path  = $this->db->escape($this->path);
-		$query = $this->db->escape($this->getQuery());
+		$path  = $this->escape($this->path);
+		$query = $this->escape($this->getQuery());
 
 		$sql =
 			"SELECT * FROM " . DB_PREFIX . "url_alias" .
 			" WHERE (alias = '$path' OR (path = '$path' AND (query = '*' OR '$query' like CONCAT('%', query, '%'))) )" .
 			" AND status = '1' AND store_id IN (0, " . (int)$this->config->get('config_store_id') . ") LIMIT 1";
 
-		$url_alias = $this->db->queryRow($sql);
+		$url_alias = $this->queryRow($sql);
 
 		if ($url_alias) {
 			//TODO: We need to reconsider how we handle all stores...
@@ -366,19 +366,19 @@ class Url extends Library
 		}
 
 		if ($query) {
-			$query_sql = "'" . $this->db->escape($query) . "' like CONCAT('%', query, '%')";
+			$query_sql = "'" . $this->escape($query) . "' like CONCAT('%', query, '%')";
 		} else {
 			$query_sql = "query = ''";
 		}
 
 		$where = "WHERE $query_sql AND status='1'";
 		$where .= " AND store_id IN (0, " . (int)$store_id . ")";
-		$where .= " AND path = '" . $this->db->escape($path) . "'";
+		$where .= " AND path = '" . $this->escape($path) . "'";
 
 		//TODO: Validate that we need to ORDER BY query here... can be costly with a large number of aliases
 		$sql = "SELECT * FROM " . DB_PREFIX . "url_alias $where ORDER BY query DESC LIMIT 1";
 
-		$url_alias = $this->db->queryRow($sql);
+		$url_alias = $this->queryRow($sql);
 
 		if ($url_alias) {
 			if ($url_alias['redirect']) {
@@ -437,11 +437,11 @@ class Url extends Library
 	{
 		$sql_query =
 			"SELECT alias FROM " . DB_PREFIX . "url_alias" .
-			" WHERE `path` = '" . $this->db->escape($path) . "'" .
-			" AND `query` = '" . $this->db->escape($query) . "'" .
+			" WHERE `path` = '" . $this->escape($path) . "'" .
+			" AND `query` = '" . $this->escape($query) . "'" .
 			" AND store_id IN (0, '" . (int)$store_id . "')";
 
-		return $this->db->queryVar($sql_query);
+		return $this->queryVar($sql_query);
 	}
 
 	public function setAlias($alias, $path, $query = '', $store_id = 0)
@@ -463,15 +463,15 @@ class Url extends Library
 	{
 		$sql_query =
 			"SELECT url_alias_id FROM " . DB_PREFIX . "url_alias" .
-			" WHERE `path` = '" . $this->db->escape($path) . "'" .
-			" AND `query` = '" . $this->db->escape($query) . "'" .
+			" WHERE `path` = '" . $this->escape($path) . "'" .
+			" AND `query` = '" . $this->escape($query) . "'" .
 			" AND store_id = '" . (int)$store_id . "'";
 
 		if ($alias) {
-			$sql_query .= " AND alias = '" . $this->db->escape($alias) . "'";
+			$sql_query .= " AND alias = '" . $this->escape($alias) . "'";
 		}
 
-		$url_alias_ids = $this->db->queryColumn($sql_query);
+		$url_alias_ids = $this->queryColumn($sql_query);
 
 		foreach ($url_alias_ids as $url_alias_id) {
 			$this->Model_Setting_UrlAlias->deleteUrlAlias($url_alias_id);

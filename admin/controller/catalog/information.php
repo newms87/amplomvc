@@ -312,7 +312,7 @@ class Admin_Controller_Catalog_Information extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'catalog/information')) {
+		if (!$this->user->can('modify', 'catalog/information')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -347,7 +347,7 @@ class Admin_Controller_Catalog_Information extends Controller
 
 	private function validateCopy()
 	{
-		if (!$this->user->hasPermission('modify', 'catalog/information')) {
+		if (!$this->user->can('modify', 'catalog/information')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -356,7 +356,7 @@ class Admin_Controller_Catalog_Information extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'catalog/information')) {
+		if (!$this->user->can('modify', 'catalog/information')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

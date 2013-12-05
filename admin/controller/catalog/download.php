@@ -365,7 +365,7 @@ class Admin_Controller_Catalog_Download extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'catalog/download')) {
+		if (!$this->user->can('modify', 'catalog/download')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -394,7 +394,7 @@ class Admin_Controller_Catalog_Download extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'catalog/download')) {
+		if (!$this->user->can('modify', 'catalog/download')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

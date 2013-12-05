@@ -160,7 +160,7 @@ class System_Model_Setting extends Model
 				if ($setting['serialized']) {
 					$this->translation->deleteAll($setting['key']);
 				} else {
-					$this->translation->delete('setting', $setting['setting_id']);
+					$this->translation->deleteTranslation('setting', $setting['setting_id']);
 				}
 			}
 		}

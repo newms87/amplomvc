@@ -81,7 +81,7 @@ class Admin_Controller_Shipping_Weight extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'shipping/weight')) {
+		if (!$this->user->can('modify', 'shipping/weight')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

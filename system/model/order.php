@@ -134,7 +134,7 @@ class System_Model_Order extends Model
 		$history_data = array(
 			'order_id' => $order_id,
 			'order_status_id' => $data['order_status_id'],
-			'comment' => $this->_('text_order_updated', $this->user->getUserName()),
+			'comment' => $this->_('text_order_updated', $this->user->info('username')),
 			'notify' => 0,
 			'date_added' => $this->date->now(),
 		);
@@ -293,10 +293,10 @@ class System_Model_Order extends Model
 			}
 
 			if (empty($order)) {
-				$order = $this->extract_order($data);
+				$order = $this->extractOrder($data);
 			}
 
-			$limit = $this->extract_limit($data);
+			$limit = $this->extractLimit($data);
 		} else {
 			$order = '';
 			$limit = '';
@@ -359,8 +359,8 @@ class System_Model_Order extends Model
 
 		//Order By and Limit
 		if (!$total) {
-			$order = $this->extract_order($data);
-			$limit = $this->extract_limit($data);
+			$order = $this->extractOrder($data);
+			$limit = $this->extractLimit($data);
 		} else {
 			$order = '';
 			$limit = '';
@@ -394,7 +394,15 @@ class System_Model_Order extends Model
 
 	public function getOrderProductOptions($order_id, $order_product_id)
 	{
-		return $this->queryRows("SELECT * FROM " . DB_PREFIX . "order_option WHERE order_id = " . (int)$order_id . " AND order_product_id = " . (int)$order_product_id);
+		$options = $this->queryRows("SELECT * FROM " . DB_PREFIX . "order_option WHERE order_id = " . (int)$order_id . " AND order_product_id = " . (int)$order_product_id);
+
+		foreach ($options as &$option) {
+			$option += $this->Model_Catalog_Product->getProductOptionValue($option['product_id'], $option['product_option_id'], $option['product_option_value_id']);
+			$option += $this->Model_Catalog_Product->getProductOption($option['product_id'], $option['product_option_id']);
+		}
+		unset($option);
+
+		return $options;
 	}
 
 	public function getOrderTotals($order_id)

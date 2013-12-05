@@ -163,7 +163,8 @@ class Admin_Controller_Dev_Dev extends Controller
 					if ($this->dev->site_restore($_FILES['filename']['tmp_name'], true)) {
 						$this->message->add('success', "Successfully synchronized your site!");
 					} else {
-						$this->message->add('warning', "There was a problem while synchronizing from the sync file. " . $this->db->getError());
+						$this->message->add('warning', "There was a problem while synchronizing from the sync file. ");
+						$this->message->add('warning', $this->db->getError());
 					}
 				}
 			}
@@ -171,9 +172,10 @@ class Admin_Controller_Dev_Dev extends Controller
 				if (is_uploaded_file($_FILES['filename']['tmp_name'])) {
 					$filename = $_FILES['filename']['name'];
 					if ($this->db->executeFile($_FILES['filename']['tmp_name'])) {
-						$this->message->add('success', "Successfully executed the contents of $filename!");
+						$this->message->add('success', _l("Successfully executed the contents of $filename!"));
 					} else {
-						$this->message->add('warning', "There was a problem while executing $filename. " . $this->db->getError());
+						$this->message->add('warning', _l("There was a problem while executing $filename. "));
+						$this->message->add('warning', $this->db->getError());
 					}
 				}
 			}
@@ -246,7 +248,7 @@ class Admin_Controller_Dev_Dev extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'dev/dev')) {
+		if (!$this->user->can('modify', 'dev/dev')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

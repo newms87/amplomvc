@@ -15,8 +15,8 @@ class Admin_Model_Report_Product extends Model
 		$from = DB_PREFIX . "product p JOIN " .
 			DB_PREFIX . "product_views pv ON(pv.product_id=p.product_id)";
 
-		$order = $this->extract_order();
-		$limit = $this->extract_limit();
+		$order = $this->extractOrder();
+		$limit = $this->extractLimit();
 
 		$query = "SELECT $select FROM $from GROUP BY pv.product_id ORDER BY views DESC $limit";
 

@@ -109,7 +109,7 @@ class Admin_Controller_Payment_Paymate extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'payment/paymate')) {
+		if (!$this->user->can('modify', 'payment/paymate')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

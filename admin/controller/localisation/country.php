@@ -338,7 +338,7 @@ class Admin_Controller_Localisation_Country extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'localisation/country')) {
+		if (!$this->user->can('modify', 'localisation/country')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -351,7 +351,7 @@ class Admin_Controller_Localisation_Country extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'localisation/country')) {
+		if (!$this->user->can('modify', 'localisation/country')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

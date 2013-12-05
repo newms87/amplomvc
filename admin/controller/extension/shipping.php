@@ -70,7 +70,7 @@ class Admin_Controller_Extension_Shipping extends Controller
 
 	public function install()
 	{
-		if (!$this->user->hasPermission('modify', 'extension/shipping')) {
+		if (!$this->user->can('modify', 'extension/shipping')) {
 			$this->session->data['error'] = $this->_('error_permission');
 
 			$this->url->redirect('extension/shipping');
@@ -95,7 +95,7 @@ class Admin_Controller_Extension_Shipping extends Controller
 
 	public function uninstall()
 	{
-		if (!$this->user->hasPermission('modify', 'extension/shipping')) {
+		if (!$this->user->can('modify', 'extension/shipping')) {
 			$this->session->data['error'] = $this->_('error_permission');
 
 			$this->url->redirect('extension/shipping');

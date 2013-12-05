@@ -90,7 +90,7 @@ class Admin_Controller_Mail_SendEmail extends Controller
 
 	public function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'mail/send_email')) {
+		if (!$this->user->can('modify', 'mail/send_email')) {
 			$this->error['permission'] = $this->_('error_permission');
 		}
 

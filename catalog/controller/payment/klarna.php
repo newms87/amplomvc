@@ -175,12 +175,12 @@ class Catalog_Controller_Payment_Klarna extends Controller
 				}
 
 				if (!$order_info['order_status_id']) {
-					$this->order->update($order_id, $order_status_id);
+					$this->order->updateOrder($order_id, $order_status_id);
 				} else {
 					$this->Model_Checkout_Order->update_order($order_id, $order_status_id);
 				}
 			} else {
-				$this->order->update($order_id, $this->config->get('config_order_complete_status_id'));
+				$this->order->updateOrder($order_id, $this->config->get('config_order_complete_status_id'));
 			}
 
 			curl_close($curl);

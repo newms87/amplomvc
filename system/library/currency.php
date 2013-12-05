@@ -8,7 +8,7 @@ class Currency extends Library
 	{
 		parent::__construct($registry);
 
-		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "currency");
+		$query = $this->query("SELECT * FROM " . DB_PREFIX . "currency");
 
 		foreach ($query->rows as $result) {
 			$this->currencies[$result['code']] = array(

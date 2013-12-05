@@ -224,10 +224,10 @@ class Catalog_Model_Catalog_Product extends Model
 				$ord   = ((!empty($data['order']) && strtoupper($data['order']) === 'DESC') ? 'DESC' : 'ASC');
 				$order = "ORDER BY if(special IS NULL, p.price, special) $ord";
 			} else {
-				$order = $this->extract_order($data);
+				$order = $this->extractOrder($data);
 			}
 
-			$limit = $this->extract_limit($data);
+			$limit = $this->extractLimit($data);
 		} else {
 			$group_by = '';
 			$order    = '';
@@ -380,8 +380,8 @@ class Catalog_Model_Catalog_Product extends Model
 
 		//Group By, Order By and Limit
 		if (!$total) {
-			$order = $this->extract_order($data);
-			$limit = $this->extract_limit($data);
+			$order = $this->extractOrder($data);
+			$limit = $this->extractLimit($data);
 		} else {
 			$order = '';
 			$limit = '';
@@ -424,7 +424,7 @@ class Catalog_Model_Catalog_Product extends Model
 		return $downloads;
 	}
 
-	public function getProdutReward($product_id)
+	public function getProductReward($product_id)
 	{
 		return (int)$this->queryVar("SELECT points FROM " . DB_PREFIX . "product_reward WHERE product_id = " . (int)$product_id . " AND customer_group_id = " . (int)$this->customer->getCustomerGroupId());
 	}
@@ -492,8 +492,8 @@ class Catalog_Model_Catalog_Product extends Model
 
 			//Group By, Order By and Limit
 			if (!$total) {
-				$order = $this->extract_order($data);
-				$limit = $this->extract_limit($data);
+				$order = $this->extractOrder($data);
+				$limit = $this->extractLimit($data);
 			} else {
 				$order = 'ORDER BY name ASC';
 				$limit = '';
@@ -692,8 +692,7 @@ class Catalog_Model_Catalog_Product extends Model
 					}
 
 					$product_option_value += $data;
-				}
-				else {
+				} else {
 					//Option not found! Probably was deleted, and therefore no longer available.
 					unset($product_option_values[$pov_key]);
 				}

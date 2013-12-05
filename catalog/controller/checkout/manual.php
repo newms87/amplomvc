@@ -11,7 +11,7 @@ class Catalog_Controller_Checkout_Manual extends Controller
 
 		$json = array();
 
-		if ($this->user->isLogged() && $this->user->hasPermission('modify', 'sale/order')) {
+		if ($this->user->isLogged() && $this->user->can('modify', 'sale/order')) {
 			// Reset everything
 			$this->cart->clear();
 			$this->customer->logout();

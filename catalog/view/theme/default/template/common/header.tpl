@@ -39,13 +39,13 @@
 		</script>
 
 		<!--[if IE 9]>
-		<link rel="stylesheet" type="text/css" href="<?= HTTP_THEME_STYLE . " ie9.css"; ?>" />
+		<link rel="stylesheet" type="text/css" href="<?= HTTP_THEME_STYLE . "ie9.css"; ?>" />
 		<![endif]-->
 		<!--[if IE 8]>
-		<link rel="stylesheet" type="text/css" href="<?= HTTP_THEME_STYLE . " ie8.css"; ?>" />
+		<link rel="stylesheet" type="text/css" href="<?= HTTP_THEME_STYLE . "ie8.css"; ?>" />
 		<![endif]-->
 		<!--[if IE 7]>
-		<link rel="stylesheet" type="text/css" href="<?= HTTP_THEME_STYLE . " ie7.css"; ?>" />
+		<link rel="stylesheet" type="text/css" href="<?= HTTP_THEME_STYLE . "ie7.css"; ?>" />
 		<![endif]-->
 
 		<? if ($google_analytics) { ?>

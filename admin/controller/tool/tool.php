@@ -57,7 +57,7 @@ class Admin_Controller_Tool_Tool extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'tool/tool')) {
+		if (!$this->user->can('modify', 'tool/tool')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

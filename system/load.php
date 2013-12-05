@@ -4,16 +4,29 @@ $registry = new Registry();
 
 //TODO: Maybe make this our main handler for loading (move out of registry)??
 spl_autoload_register(function($class) use($registry){
-	$registry->get($class);
+	$registry->loadClass($class, false);
 });
 
 //Language
+global $language_group;
+$language_group = "Load";
+
+/**
+ * Translate a string to the current requested language
+ *
+ * @param $message
+ * @return mixed|string
+ */
 function _l($message)
 {
+	//TODO: Set translations based on language group
+	global $language_group;
+
 	$values = func_get_args();
 
 	array_shift($values);
 
+	//TODO: See bitbucket issue https://bitbucket.org/newms87/dopencart/issue/20/language-translation-engine
 	if (empty($values)) {
 		return _($message);
 	}
@@ -21,11 +34,43 @@ function _l($message)
 	return vsprintf(_($message), $values);
 }
 
+/**
+ * Change Language Group just for this message, then revert back if $message is given.
+ * If $message is null, then the language group is changed permanently.
+ *
+ * @param $group - The language group to change to.
+ * @param $message - The Message
+ * @param $var1, $var2, etc.. The variables to pass to vsprintf() with the message.
+ *
+ * @return null | String with the translated message
+ */
+
+function _lg($group, $message = null)
+{
+	global $language_group;
+
+	//Permanently change Group.
+	if ($message === null) {
+		$language_group = $group;
+		return;
+	}
+
+	//Temporarily Change Group
+	$temp = $language_group;
+	$language_group = $group;
+
+	$params = func_get_args();
+	array_shift($params);
+
+	$return = call_user_func_array('_l', $params);
+
+	$language_group = $temp;
+
+	return $return;
+}
+
 // Request
 $registry->set('request', new Request());
-
-// Loader
-$registry->set('load', new Loader($registry));
 
 // Database
 $db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);

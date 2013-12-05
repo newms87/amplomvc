@@ -103,7 +103,7 @@ class Admin_Model_Catalog_Manufacturer extends Model
 
 		$this->url->removeAlias('product/manufacturer', 'manufacturer_id=' . (int)$manufacturer_id);
 
-		$this->translation->delete('manufacturer', $manufacturer_id);
+		$this->translation->deleteTranslation('manufacturer', $manufacturer_id);
 
 		$this->cache->delete('manufacturer');
 	}
@@ -156,8 +156,8 @@ class Admin_Model_Catalog_Manufacturer extends Model
 				}
 			}
 
-			$order = $this->extract_order($data);
-			$limit = $this->extract_limit($data);
+			$order = $this->extractOrder($data);
+			$limit = $this->extractLimit($data);
 		} else {
 			$order = '';
 			$limit = '';

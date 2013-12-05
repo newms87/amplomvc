@@ -86,7 +86,7 @@ class Admin_Controller_Setting_ReturnAction extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'localisation/return_action')) {
+		if (!$this->user->can('modify', 'localisation/return_action')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

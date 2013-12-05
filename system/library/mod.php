@@ -285,7 +285,20 @@ class Mod extends Library
 			$destination = str_replace(SITE_DIR, DIR_MOD_FILES, $source);
 		}
 
-		$algorithm = !empty($directives['algorithm']) ? trim($directives['algorithm']) : 'fileMerge';
+		if (!empty($directives['algorithm'])) {
+			$algorithm = trim($directives['algorithm']);
+		}
+		//Intelligent Guess
+		else {
+			$contents = file_get_contents($mod_file);
+
+			if (strpos($contents, '=====')) {
+				$algorithm = 'fileMerge';
+			}
+			else {
+				$algorithm = 'Replace';
+			}
+		}
 
 		switch ($algorithm) {
 			case 'Ganon':
@@ -293,6 +306,9 @@ class Mod extends Library
 				break;
 			case 'fileMerge':
 				$contents = $this->fileMerge($source, $mod_file);
+				break;
+			case 'Replace':
+				$contents = file_get_contents($mod_file);
 				break;
 			default:
 				$this->error[] = "File Merge Failed! Unknown algorithm: $algorithm." . get_caller(0, 4);

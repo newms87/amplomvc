@@ -318,7 +318,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'localisation/tax_class')) {
+		if (!$this->user->can('modify', 'localisation/tax_class')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -335,7 +335,7 @@ class Admin_Controller_Localisation_TaxClass extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'localisation/tax_class')) {
+		if (!$this->user->can('modify', 'localisation/tax_class')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

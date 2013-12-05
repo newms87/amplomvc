@@ -23,7 +23,7 @@ class Image extends Library
 	public function get($filename)
 	{
 		$filename = str_replace('\\','/', $filename);
-		
+
 		if (!is_file(DIR_IMAGE . $filename)) {
 			return is_file($filename) ? $filename : '';
 		}
@@ -31,8 +31,10 @@ class Image extends Library
 		return ($this->url->is_ssl() ? HTTPS_IMAGE : HTTP_IMAGE) . $filename;
 	}
 
-	public function set_image($file)
+	public function set_image($image)
 	{
+		$file = is_file($image) ? $image : DIR_IMAGE . $image;
+
 		if (is_file($file)) {
 			$this->file = $file;
 
@@ -538,5 +540,114 @@ class Image extends Library
 	{
 		$this->safe_shutdown = false;
 		$this->shutdown_file = '';
+	}
+
+	public function getPixelColor($image, $x, $y, $format = 'hex')
+	{
+		$rgb = imagecolorat($image, $x, $y);
+		$r = ($rgb >> 16) & 0xFF;
+		$g = ($rgb >> 8) & 0xFF;
+		$b = $rgb & 0xFF;
+
+		if ($format === 'hex') {
+			return '#' . dechex($r) . dechex($g) . dechex($b);
+		}
+
+		return array('r' => $r, 'g' => $g, 'b' => $b);
+	}
+
+	public function getBoxColor($image, $start_x, $start_y, $width, $height, $format = 'hex')
+	{
+		$end_x = $start_x + $width;
+		$end_y = $start_y + $height;
+
+		$r = $g = $b = 0;
+
+		for ($x = $start_x; $x < $end_x; $x++) {
+			for ($y = $start_y; $y < $end_y; $y++) {
+				$rgb = imagecolorat($image, $x, $y);
+				$r += ($rgb >> 16) & 0xFF;
+				$g += ($rgb >> 8) & 0xFF;
+				$b += $rgb & 0xFF;
+			}
+		}
+
+		$total = $width * $height;
+
+		$r /= $total;
+		$g /= $total;
+		$b /= $total;
+
+		if ($format === 'hex') {
+			return '#' . str_pad(dechex($r),2,'0', STR_PAD_LEFT) . str_pad(dechex($g),2,'0', STR_PAD_LEFT) . str_pad(dechex($b),2,'0', STR_PAD_LEFT);
+		}
+
+		return array('r' => $r, 'g' => $g, 'b' => $b);
+	}
+
+	public function hex6to3($hex){
+		preg_match("|#([\\da-f]{2})([\\da-f]{2})([\\da-f]{2})|", $hex, $match);
+
+		array_shift($match);
+
+		//Not a 6-digit hex number
+		if (count($match) !== 3) return $hex;
+
+		foreach($match as &$m) {
+			$n = hexdec($m);
+			$m = dechex( intval($n/17) + ( ($n%17 < 8) ? 0 : 1) );
+		}
+		unset($m);
+
+		return "#". implode("", $match);
+	}
+
+	public function mosaic($image, $rows = 60, $cols = null, $colors = '32bit', $inline_size = false)
+	{
+		$this->set_image($image);
+
+		$width = $this->info['width'];
+		$height = $this->info['height'];
+
+		$y_offset = floor($height / $rows);
+
+		if (!$cols) {
+			$cols = floor(($width / $height) * $rows);
+		}
+
+		$x_offset = floor($width / $cols);
+
+		$mosaic = '';
+
+		for ($y = 0; $y < $height - $y_offset; $y += $y_offset) {
+			$line = '';
+
+			for ($x = 0; $x < $width - $x_offset; $x += $x_offset) {
+				$hex = $this->getBoxColor($this->image, $x, $y, $x_offset, $y_offset);
+
+				//Not recommended for emails!
+				if ($colors === '16bit') {
+					$hex = $this->hex6to3($hex);
+				}
+
+				if ($inline_size) {
+					$line .= "<td width=\"$x_offset\" height=\"$y_offset\" bgcolor=\"$hex\">&nbsp;</td>";
+				} else {
+					$line .= "<td bgcolor=\"$hex\">&nbsp;</td>\n";
+				}
+			}
+
+			$mosaic .= "<tr>$line</tr>";
+		}
+
+		$bytes = strlen($mosaic);
+
+		$mosaic = "<table class=\"mosaic\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">$mosaic</table>";
+
+		if (!$inline_size) {
+			$mosaic = "<style type=\"text/css\">.mosaic td{font-size: 1px; line-height:1px; width: " . $x_offset . "px; height: " . $y_offset . "px}</style>" . $mosaic;
+		}
+
+		return $mosaic;
 	}
 }

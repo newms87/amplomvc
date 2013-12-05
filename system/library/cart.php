@@ -145,7 +145,7 @@ class Cart extends Library
 	 * @return bool|string The key for the cart item added (used to reference this item to update / remove from cart)
 	 */
 
-	public function add($type, $item_id, $quantity = 1, $options = array())
+	public function addItem($type, $item_id, $quantity = 1, $options = array())
 	{
 		$key = (int)$item_id . ':' . base64_encode(serialize($options));
 
@@ -166,7 +166,7 @@ class Cart extends Library
 		return $key;
 	}
 
-	public function update($type, $key, $quantity)
+	public function updateItem($type, $key, $quantity)
 	{
 		if (!isset($this->session->data['cart'][$type][$key])) {
 			return false;
@@ -181,7 +181,7 @@ class Cart extends Library
 		$this->totals = null;
 	}
 
-	public function remove($type, $key)
+	public function removeItem($type, $key)
 	{
 		if (isset($this->session->data['cart'][$type][$key])) {
 			unset($this->session->data['cart'][$type][$key]);
@@ -356,18 +356,18 @@ class Cart extends Library
 	public function addProduct($product_id, $quantity = 1, $options = array())
 	{
 		if ($this->validateProduct($product_id, $quantity, $options) && (int)$quantity > 0) {
-			$this->add(self::PRODUCTS, $product_id, $quantity, $options);
+			$this->addItem(self::PRODUCTS, $product_id, $quantity, $options);
 		}
 	}
 
 	public function updateProduct($key, $quantity)
 	{
-		$this->update(self::PRODUCTS, $key, $quantity);
+		$this->updateItem(self::PRODUCTS, $key, $quantity);
 	}
 
 	public function removeProduct($key)
 	{
-		$this->remove(self::PRODUCTS, $key);
+		$this->removeItem(self::PRODUCTS, $key);
 	}
 
 	public function hasProducts()
@@ -1106,12 +1106,12 @@ class Cart extends Library
 		$country_id = !empty($address['country_id']) ? (int)$address['country_id'] : 0;
 		$zone_id    = !empty($address['zone_id']) ? (int)$address['zone_id'] : 0;
 
-		if (!$this->db->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "country WHERE country_id = '$country_id'")) {
+		if (!$this->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "country WHERE country_id = '$country_id'")) {
 			$this->_e('PA-2', 'payment_address', 'error_country_id');
 			return false;
 		}
 
-		if (!$this->db->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "zone WHERE zone_id = '$zone_id' AND country_id = '$country_id'")) {
+		if (!$this->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "zone WHERE zone_id = '$zone_id' AND country_id = '$country_id'")) {
 			$this->_e('PA-3', 'payment_address', 'error_zone_id');
 			return false;
 		}
@@ -1135,12 +1135,12 @@ class Cart extends Library
 		$country_id = !empty($address['country_id']) ? (int)$address['country_id'] : 0;
 		$zone_id    = !empty($address['zone_id']) ? (int)$address['zone_id'] : 0;
 
-		if (!$this->db->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "country WHERE country_id = '$country_id'")) {
+		if (!$this->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "country WHERE country_id = '$country_id'")) {
 			$this->_e('SA-2', 'shipping_address', 'error_country_id');
 			return false;
 		}
 
-		if (!$this->db->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "zone WHERE zone_id = '$zone_id' AND country_id = '$country_id'")) {
+		if (!$this->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "zone WHERE zone_id = '$zone_id' AND country_id = '$country_id'")) {
 			$this->_e('SA-3', 'shipping_address', 'error_zone_id');
 			return false;
 		}
@@ -1246,7 +1246,7 @@ class Cart extends Library
 
 	public function getProductShippingPolicy($product_id)
 	{
-		$shipping_policy_id = $this->db->queryVar("SELECT shipping_policy_id FROM " . DB_PREFIX . "product WHERE product_id = " . (int)$product_id);
+		$shipping_policy_id = $this->queryVar("SELECT shipping_policy_id FROM " . DB_PREFIX . "product WHERE product_id = " . (int)$product_id);
 
 		if (!is_null($shipping_policy_id)) {
 			return $this->getShippingPolicy($shipping_policy_id);
@@ -1277,7 +1277,7 @@ class Cart extends Library
 
 	public function getProductReturnPolicy($product_id)
 	{
-		$return_policy_id = $this->db->queryVar("SELECT return_policy_id FROM " . DB_PREFIX . "product WHERE product_id = " . (int)$product_id);
+		$return_policy_id = $this->queryVar("SELECT return_policy_id FROM " . DB_PREFIX . "product WHERE product_id = " . (int)$product_id);
 
 		if (!is_null($return_policy_id)) {
 			return $this->getReturnPolicy($return_policy_id);

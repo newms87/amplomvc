@@ -25,7 +25,7 @@ class Admin_Model_Sale_VoucherTheme extends Model
 	{
 		$this->delete('voucher_theme', $voucher_theme_id);
 
-		$this->translation->delete('voucher_theme', $voucher_theme_id);
+		$this->translation->deleteTranslation('voucher_theme', $voucher_theme_id);
 	}
 
 	public function getVoucherTheme($voucher_theme_id)
@@ -60,8 +60,8 @@ class Admin_Model_Sale_VoucherTheme extends Model
 				}
 			}
 
-			$order = $this->extract_order($data);
-			$limit = $this->extract_limit($data);
+			$order = $this->extractOrder($data);
+			$limit = $this->extractLimit($data);
 		} else {
 			$order = '';
 			$limit = '';

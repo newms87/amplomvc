@@ -288,7 +288,7 @@ class Admin_Controller_Block_Block extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'block/block')) {
+		if (!$this->user->can('modify', 'block/block')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -299,7 +299,7 @@ class Admin_Controller_Block_Block extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'block/block')) {
+		if (!$this->user->can('modify', 'block/block')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

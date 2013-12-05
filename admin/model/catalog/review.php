@@ -48,8 +48,8 @@ class Admin_Model_Catalog_Review extends Model
 
 		//Order and Limit
 		if (!$total) {
-			$order = $this->extract_order($order);
-			$limit = $this->extract_limit($limit);
+			$order = $this->extractOrder($order);
+			$limit = $this->extractLimit($limit);
 		} else {
 			$order = '';
 			$limit = '';

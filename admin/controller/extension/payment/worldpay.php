@@ -109,7 +109,7 @@ class Admin_Controller_Payment_Worldpay extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'payment/worldpay')) {
+		if (!$this->user->can('modify', 'payment/worldpay')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

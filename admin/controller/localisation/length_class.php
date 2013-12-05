@@ -314,7 +314,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'localisation/length_class')) {
+		if (!$this->user->can('modify', 'localisation/length_class')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -333,7 +333,7 @@ class Admin_Controller_Localisation_LengthClass extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'localisation/length_class')) {
+		if (!$this->user->can('modify', 'localisation/length_class')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

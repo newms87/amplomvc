@@ -77,7 +77,7 @@ class Admin_Controller_Shipping_Item extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'shipping/item')) {
+		if (!$this->user->can('modify', 'shipping/item')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

@@ -13,11 +13,6 @@ abstract class Model
 		return $this->registry->get($key);
 	}
 
-	public function __set($key, $value)
-	{
-		$this->registry->set($key, $value);
-	}
-
 	public function _($key)
 	{
 		if (func_num_args() > 1) {
@@ -29,34 +24,9 @@ abstract class Model
 		return $this->language->get($key);
 	}
 
-	public function countAffected()
+	protected function countAffected()
 	{
 		return $this->db->countAffected();
-	}
-
-	/**
-	* Calls a controller and returns the output
-	*
-	* @param $route - The route (and function name) of the controller (eg. product/product OR product/product/review)
-	* @param $arg1, $arg2, $arg3... etc. Additional arguments to pass to the controller
-	*
-	* @return mixed - usually HTML, output from the rendered controller
-	*/
-	protected function callController($route, $param)
-	{
-		//TODO: We can probably find a better way to implement this...
-
-		$params = func_get_args();
-		array_shift($params);
-
-		$action = new Action($this->registry, $route, $param);
-
-		if ($action->execute()) {
-			return $action->get_result();
-		} else {
-			trigger_error('Error: Could not load controller ' . $route. '! The file ' . $file . ' does not exist.');
-			exit();
-		}
 	}
 
 	protected function query($sql)
@@ -64,7 +34,11 @@ abstract class Model
 		$resource = $this->db->query($sql);
 		if (!$resource) {
 			if ($this->config->get('config_error_display')) {
-				$this->message->add("warning", "The Database Query Failed! " . $this->db->getError());
+				$this->message->add("warning", _l("The Database Query Failed!"));
+
+				if ($this->db->hasError()) {
+					$this->message->add('warning', $this->db->getError());
+				}
 			}
 		}
 
@@ -111,8 +85,12 @@ abstract class Model
 		$success = $this->db->query("INSERT INTO " . DB_PREFIX . "$table SET $values");
 
 		if (!$success) {
-			$err_msg = $this->config->get('config_error_display')?"<br /><br />" . $this->db->getError():'';
-			$this->message->add("warning", "There was a problem inserting entry for $table! $table was not modified." . $err_msg);
+			trigger_error(_l("There was a problem inserting entry for %s! %s was not modified.", $table, $table) . get_caller(0,4));
+
+			if ($this->db->hasError()) {
+				trigger_error($this->db->getError());
+			}
+
 			return false;
 		}
 
@@ -138,9 +116,9 @@ abstract class Model
 
 			$where = "WHERE `$primary_key` = $update_id";
 		}
-		elseif (is_integer($where) || (is_string($where) && !preg_match("/[^\\d]/", $where))) {
+		elseif (is_integer($where) || (is_string($where) && preg_match("/[^\\d]/", $where) === 0)) {
 			if (!$primary_key) {
-				trigger_error("UPDATE $table does not have an integer primary key!" . get_caller(0, 4));
+				trigger_error("UPDATE $table " . _l("does not have an integer primary key!") . get_caller(0, 4));
 				return null;
 			}
 
@@ -156,10 +134,15 @@ abstract class Model
 			}
 		}
 
-		if (!$this->db->query("UPDATE " . DB_PREFIX . "$table SET $values $where")) {
-			$err_msg = "There was a problem updating entry for $table! $table was not modified." . get_caller(0, 4);
-			trigger_error($err_msg);
-			$this->message->add("warning", $err_msg);
+		$success = $this->db->query("UPDATE " . DB_PREFIX . "$table SET $values $where");
+
+		if (!$success) {
+			trigger_error(_l("There was a problem updating entry for %s! %s was not modified.", $table, $table) . get_caller(0, 4));
+
+			if ($this->db->hasError()) {
+				trigger_error($this->db->getError());
+			}
+
 			return false;
 		}
 
@@ -170,10 +153,10 @@ abstract class Model
 	{
 		$this->action_filter('delete', $table, $data);
 
-		if (is_integer($where) || (is_string($where) && preg_match("/[^\d]/", $where) == 0)) {
+		if (is_integer($where) || (is_string($where) && preg_match("/[^\\d]/", $where) === 0)) {
 			$primary_key = $this->get_primary_key($table);
 			if (!$primary_key) {
-				trigger_error("DELETE $table does not have an integer primary key!");
+				trigger_error("DELETE " . _l("%s does not have an integer primary key!") . get_caller(0,4));
 				return null;
 			}
 
@@ -192,9 +175,8 @@ abstract class Model
 			$truncate_allowed = $this->db->queryVar("SELECT COUNT(*) FROM `" . DB_PREFIX . "db_rule` WHERE `table`='$table' AND `truncate`='1'");
 
 			if (!$truncate_allowed) {
-				$msg = "Attempt to TRUNCATE $table not allowed for this table! Please specify this in the Database Rules if you want this functionality. " . get_caller(0, 1);
-				trigger_error($msg);
-				$this->message->add('warning', $msg);
+				trigger_error(_l("Attempt to TRUNCATE %s not allowed for this table! Please specify this in the Database Rules if you want this functionality. ", $table) . get_caller(0, 4));
+
 				return;
 			}
 		}
@@ -202,12 +184,134 @@ abstract class Model
 		$success = $this->db->query("DELETE FROM " . DB_PREFIX . "$table $where");
 
 		if (!$success) {
-			$err_msg = $this->config->get('config_error_display')?"<br /><br />" . $this->db->getError():'';
-			$this->message->add("warning", "There was a problem deleting entry for $table! $table was not modified." . $err_msg);
+			trigger_error(_l("There was a problem deleting entry for %s! %s was not modified.", $table, $table));
+
+			if ($this->db->hasError()) {
+				trigger_error($this->db->getError());
+			}
+
 			return false;
 		}
 
 		return true;
+	}
+
+	protected function getWhere($table, $data, $prefix = '', $glue = '', $primary_key = false)
+	{
+		$data = $this->getEscapedValues($table, $data, $primary_key);
+
+		if (!$glue) {
+			$glue = 'AND';
+		}
+
+		$values = '';
+
+		foreach ($data as $key => $value) {
+			$values .= ($values ? ' '.$glue.' ' : '') . ($prefix ? $prefix . '.' : '') . "`$key` = '$value'";
+		}
+
+		return $values ? $values : '1';
+	}
+
+	protected function getInsertString($table, $data, $primary_key = false)
+	{
+		$data = $this->getEscapedValues($table, $data, $primary_key);
+
+		$values = '';
+
+		foreach ($data as $key => $value) {
+			$values .= ($values ? ',' : '') . "`$key` = '$value'";
+		}
+
+		return $values;
+	}
+
+	protected function getEscapedValues($table, $data, $auto_inc = true)
+	{
+		$table_model = $this->get_table_model($table);
+
+		$data = array_intersect_key($data, $table_model);
+
+		foreach ($data as $key => &$value) {
+
+			if (is_resource($value) || is_array($value) || is_object($value)) {
+				trigger_error(__METHOD__ . "(): " . _l("The field %s was given a value that was not a valid type! Value: %s.", $key, gettype($value)) . get_caller(0,4));
+				exit;
+			}
+
+			switch((int)$table_model[$key]){
+				case DB_AUTO_INCREMENT_PK:
+				case DB_AUTO_INCREMENT:
+					if ($auto_inc) {
+						$value = $this->db->escape($value);
+					}
+					else {
+						unset($data[$key]);
+					}
+					break;
+				case DB_ESCAPE:
+					$value = $this->db->escape($value);
+					break;
+				case DB_NO_ESCAPE:
+					break;
+				case DB_IMAGE:
+					$value = $this->db->escape(html_entity_decode($value, ENT_QUOTES, 'UTF-8'));
+					break;
+				case DB_INTEGER:
+					$value = (int)$value;
+					break;
+				case DB_FLOAT:
+					$value = (float)$value;
+					break;
+				case DB_DATETIME:
+					if (!$value) {
+						$value = DATETIME_ZERO;
+					}
+					$value = $this->date->format($value);
+					break;
+
+				default:
+					$value = $this->db->escape($value);
+					break;
+			}
+		}unset($value);
+
+		return $data;
+	}
+
+	protected function extractOrder($data)
+	{
+		$sort = '';
+
+		if (!empty($data['sort'])) {
+			$order = (isset($data['order']) && strtoupper($data['order']) === 'DESC') ? 'DESC' : 'ASC';
+
+			if (!preg_match("/[^a-z0-9_]/i", $data['sort'])) {
+				$data['sort'] = "`" . $this->db->escape($data['sort']) . "`";
+			} else {
+				$data['sort'] = $this->db->escape($data['sort']);
+			}
+
+			$sort = "ORDER BY " . $data['sort'] . " $order";
+		}
+
+		return $sort;
+	}
+
+	protected function extractLimit($data)
+	{
+		$limit = '';
+
+		if (isset($data['limit'])) {
+			if ((int)$data['limit'] > 0) {
+
+				$start = (isset($data['start']) && (int)$data['start'] > 0) ? (int)$data['start'] : 0;
+
+				$limit = " LIMIT $start," . (int)$data['limit'];
+			}
+		}
+
+		return $limit;
 	}
 
 	private function get_table_model($table)
@@ -289,124 +393,6 @@ abstract class Model
 		}
 
 		return $primary_key;
-	}
-
-	public function getWhere($table, $data, $prefix = '', $glue = '', $primary_key = false)
-	{
-		$data = $this->getEscapedValues($table, $data, $primary_key);
-
-		if (!$glue) {
-			$glue = 'AND';
-		}
-
-		$values = '';
-
-		foreach ($data as $key => $value) {
-			$values .= ($values ? ' '.$glue.' ' : '') . ($prefix ? $prefix . '.' : '') . "`$key` = '$value'";
-		}
-
-		return $values ? $values : '1';
-	}
-
-	public function getInsertString($table, $data, $primary_key = false)
-	{
-		$data = $this->getEscapedValues($table, $data, $primary_key);
-
-		$values = '';
-
-		foreach ($data as $key => $value) {
-			$values .= ($values ? ',' : '') . "`$key` = '$value'";
-		}
-
-		return $values;
-	}
-
-	public function getEscapedValues($table, $data, $auto_inc = true)
-	{
-		$table_model = $this->get_table_model($table);
-
-		$data = array_intersect_key($data, $table_model);
-
-		foreach ($data as $key => &$value) {
-
-			if (is_resource($value) || is_array($value) || is_object($value)) {
-				trigger_error("Model::escape_value(): The field $key was given a value that was not a valid type! Value: " . gettype($value) . ". " . get_caller(0,2));
-				exit;
-			}
-
-			switch((int)$table_model[$key]){
-				case DB_AUTO_INCREMENT_PK:
-				case DB_AUTO_INCREMENT:
-					if ($auto_inc) {
-						$value = $this->db->escape($value);
-					}
-					else {
-						unset($data[$key]);
-					}
-					break;
-				case DB_ESCAPE:
-					$value = $this->db->escape($value);
-					break;
-				case DB_NO_ESCAPE:
-					break;
-				case DB_IMAGE:
-					$value = $this->db->escape(html_entity_decode($value, ENT_QUOTES, 'UTF-8'));
-					break;
-				case DB_INTEGER:
-					$value = (int)$value;
-					break;
-				case DB_FLOAT:
-					$value = (float)$value;
-					break;
-				case DB_DATETIME:
-					if (!$value) {
-						$value = DATETIME_ZERO;
-					}
-					$value = $this->date->format($value);
-					break;
-
-				default:
-					$value = $this->db->escape($value);
-					break;
-			}
-		}unset($value);
-
-		return $data;
-	}
-
-	public function extract_order($data)
-	{
-		$sort = '';
-
-		if (!empty($data['sort'])) {
-			$order = (isset($data['order']) && strtoupper($data['order']) === 'DESC') ? 'DESC' : 'ASC';
-
-			if (!preg_match("/[^a-z0-9_]/i", $data['sort'])) {
-				$data['sort'] = "`" . $this->db->escape($data['sort']) . "`";
-			} else {
-				$data['sort'] = $this->db->escape($data['sort']);
-			}
-
-			$sort = "ORDER BY " . $data['sort'] . " $order";
-		}
-
-		return $sort;
-	}
-
-	public function extract_limit($data)
-	{
-		$limit = '';
-
-		if (isset($data['limit'])) {
-			if ((int)$data['limit'] > 0) {
-
-				$start = (isset($data['start']) && (int)$data['start'] > 0) ? (int)$data['start'] : 0;
-
-				$limit = " LIMIT $start," . (int)$data['limit'];
-			}
-		}
-
-		return $limit;
 	}
 
 	private function action_filter($action, $table, &$data)

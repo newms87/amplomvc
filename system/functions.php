@@ -2,7 +2,8 @@
 //custom var dump
 global $html_dump_count;
 $html_dump_count = 0;
-function html_dump($var, $label= "HTML Dump", $level=0, $max = -1, $print = true) {
+function html_dump($var, $label = "HTML Dump", $level = 0, $max = -1, $print = true)
+{
 	global $html_dump_count;
 
 	$id = 'html_dump-' . $html_dump_count;
@@ -10,45 +11,72 @@ function html_dump($var, $label= "HTML Dump", $level=0, $max = -1, $print = true
 	if (!$print) {
 		ob_start();
 	}
-?>
+	?>
 
-<? if (!$html_dump_count) { ?>
-<style>
-.html_dump{
-	display:inline-block;
-	margin-bottom:15px;
-	margin-left:20px
-}
-</style>
-<? } ?>
-
-<a id="<?=$id;?>" class ='html_dump' onclick="open_html_dump('<?=$id;?>')">
+	<? if (!$html_dump_count) { ?>
 	<style>
-	.html_dump_label{cursor:pointer; color:blue; text-decoration:underline;}
-	.dump_output{margin:15px;}
-	.dump_output .key_value_pair{position:relative; height:20px;overflow:visible;}
-	.dump_output .type_label{background: #EF99A8;}
-	.dump_output .key_value_pair > .key{word-wrap:break-word; max-width:200px;background: #82E182;padding:3px 5px}
-	.dump_output .key_value_pair > .value{background: #92ADE3;max-width:800px; word-wrap:break-word}
+		.html_dump {
+			display: inline-block;
+			margin-bottom: 15px;
+			margin-left: 20px
+		}
 	</style>
-	<span class='html_dump_label'><?=$label;?></span>
-	<div class ='dump_output' id='<?=$id;?>-output' style='display:none'>
-		<? $dump = html_dump_r($var,$level,$max);?>
-	</div>
-</a>
-
-<? if ($html_dump_count == 0) { ?>
-<script type='text/javascript'>//<!--
-function open_html_dump(id) {
-	var w = window.open(null, 'newwindow', 'resizable=1,scrollbars=1, width=800, height=800');
-	document.getElementById(id + '-output').setAttribute('style','display:block');
-	w.document.body.innerHTML = document.getElementById(id).innerHTML;
-	document.getElementById(id + '-output').setAttribute('style','display:none');
-}
-</script>
 <? } ?>
 
-<?
+	<a id="<?= $id; ?>" class='html_dump' onclick="open_html_dump('<?= $id; ?>')">
+		<style>
+			.html_dump_label {
+				cursor: pointer;
+				color: blue;
+				text-decoration: underline;
+			}
+
+			.dump_output {
+				margin: 15px;
+			}
+
+			.dump_output .key_value_pair {
+				position: relative;
+				height: 20px;
+				overflow: visible;
+			}
+
+			.dump_output .type_label {
+				background: #EF99A8;
+			}
+
+			.dump_output .key_value_pair > .key {
+				word-wrap: break-word;
+				max-width: 200px;
+				background: #82E182;
+				padding: 3px 5px
+			}
+
+			.dump_output .key_value_pair > .value {
+				background: #92ADE3;
+				max-width: 800px;
+				word-wrap: break-word
+			}
+		</style>
+		<span class='html_dump_label'><?= $label; ?></span>
+
+		<div class='dump_output' id='<?= $id; ?>-output' style='display:none'>
+			<? $dump = html_dump_r($var, $level, $max); ?>
+		</div>
+	</a>
+
+	<? if ($html_dump_count == 0) { ?>
+	<script type='text/javascript'>//<!--
+		function open_html_dump(id) {
+			var w = window.open(null, 'newwindow', 'resizable=1,scrollbars=1, width=800, height=800');
+			document.getElementById(id + '-output').setAttribute('style', 'display:block');
+			w.document.body.innerHTML = document.getElementById(id).innerHTML;
+			document.getElementById(id + '-output').setAttribute('style', 'display:none');
+		}
+	</script>
+<? } ?>
+
+	<?
 	$html_dump_count++;
 
 	if (!$print) {
@@ -56,51 +84,53 @@ function open_html_dump(id) {
 	}
 }
 
-function html_dump_r($var, $level, $max) {
+function html_dump_r($var, $level, $max)
+{
 	if (is_array($var) || is_object($var)) {
 		$left_offset = $level * 20 . "px";
-		$type = is_array($var)?"Array":"Object";
-		$type .= " (".count($var).")";
+		$type        = is_array($var) ? "Array" : "Object";
+		$type .= " (" . count($var) . ")";
 		echo "<table><tr><td class ='type_label' colspan='2'>$type</td></tr>";
-		foreach($var as $key=>$v) {
+		foreach ($var as $key => $v) {
 			echo "<tr class ='key_value_pair'>";
 			echo "<td valign='top' class='key'>[$key]</td>";
 
-			if ((is_array($v) || is_object($v)) && !($max >= 0 && $level >= ($max-1))) {
+			if ((is_array($v) || is_object($v)) && !($max >= 0 && $level >= ($max - 1))) {
 				echo "<td class ='value'>";
-				html_dump_r($v, $level+1, $max);
+				html_dump_r($v, $level + 1, $max);
 				echo "</td>";
-			}
-			else {
-				if(is_array($v))
+			} else {
+				if (is_array($v)) {
 					$val = "Array (" . count($v) . ")";
-				elseif(is_object($v))
+				} elseif (is_object($v)) {
 					$val = "Object (" . count($v) . ")";
-				elseif(is_bool($v))
-					$val = "Bool (" . ($v?"true":"false") . ')';
-				elseif(is_string($v) && empty($v) && $v !== '0')
+				} elseif (is_bool($v)) {
+					$val = "Bool (" . ($v ? "true" : "false") . ')';
+				} elseif (is_string($v) && empty($v) && $v !== '0') {
 					$val = "String (empty)";
-				elseif(is_null($v))
+				} elseif (is_null($v)) {
 					$val = "NULL";
-				else
+				} else {
 					$val = $v;
+				}
 
 				echo "<td class ='value'>$val</td>";
 			}
 			echo "</tr>";
 		}
 		echo "</table>";
-	}
-	else {
+	} else {
 		htmlspecialchars(var_dump($var));
 	}
 }
 
-function html_backtrace($depth=3, $var_depth = -1, $print = true) {
-	return html_dump(debug_stack($depth, 1),'call stack', 0, $var_depth, $print);
+function html_backtrace($depth = 3, $var_depth = -1, $print = true)
+{
+	return html_dump(debug_stack($depth, 1), 'call stack', 0, $var_depth, $print);
 }
 
-function debug_stack($depth = 10, $offset = 0) {
+function debug_stack($depth = 10, $offset = 0)
+{
 	return array_slice(debug_backtrace(false), 1 + $offset, $depth);
 }
 
@@ -146,7 +176,8 @@ if (!function_exists('array_search_key')) {
 	 * @return mixed the key for needle if it is found in the array, false otherwise.
 	 */
 
-	function array_search_key($search_key, $needle, $haystack, $strict = false){
+	function array_search_key($search_key, $needle, $haystack, $strict = false)
+	{
 		foreach ($haystack as $key => $value) {
 			if (is_array($value)) {
 				$result = array_search_key($search_key, $needle, $value, $strict);
@@ -156,8 +187,8 @@ if (!function_exists('array_search_key')) {
 				}
 			}
 
-	 		if ($key === $search_key && $value == $needle) {
-	 			return $haystack;
+			if ($key === $search_key && $value == $needle) {
+				return $haystack;
 			}
 		}
 	}
@@ -169,7 +200,7 @@ if (!function_exists('array_unique_keys')) {
 	 *
 	 * @param array array - The array to filter duplicate values from
 	 * @param key1 string - the first key to filter by
-	 * @param key2... string (optional) - the second key to filter by
+	 * @param key2 ... string (optional) - the second key to filter by
 	 *
 	 * @return array An array of arrays with unique elements based on specified keys
 	 */
@@ -224,7 +255,11 @@ if (!function_exists('array_walk_children')) {
 			call_user_func_array($callback, array_merge(array(&$node), $args));
 
 			if (!empty($node[$children])) {
-				call_user_func_array('array_walk_children', array_merge(array(&$node[$children], $children, $callback), $args));
+				call_user_func_array('array_walk_children', array_merge(array(
+				                                                             &$node[$children],
+				                                                             $children,
+				                                                             $callback
+				                                                        ), $args));
 			}
 		}
 	}
@@ -259,23 +294,22 @@ function _is_link($filename)
 }
 
 
-function get_caller($offset = 0, $limit = 1) {
+function get_caller($offset = 0, $limit = 1)
+{
 	$calls = debug_backtrace(false);
 
 	$html = "";
 
 	$limit += $offset;
 
-	while ( $offset < $limit && $offset < count($calls) ) {
+	while ($offset < $limit && $offset < count($calls)) {
 		$caller = $calls[$offset + 1];
 
 		if (isset($caller['file'])) {
 			$msg = "Called from <b style=\"color:red\">$caller[file]</b> on line <b style=\"color:red\">$caller[line]</b>";
-		}
-		elseif (isset($caller['class'])) {
+		} elseif (isset($caller['class'])) {
 			$msg = "Called from <b style=\"color:red\">$caller[class]::$caller[function]</b>";
-		}
-		else {
+		} else {
 			$msg = "Called from <b style=\"color:red\">$caller[function]()</b>";
 		}
 
@@ -296,18 +330,18 @@ if (!defined("AMPLOCART_FILE_MODE")) {
 }
 
 //TODO: do we allow different modes?
-function _is_writable($dir, $mode = 0755) {
+function _is_writable($dir, $mode = 0755)
+{
 	if (!is_writable($dir)) {
 		if (!is_dir($dir)) {
-			mkdir($dir, AMPLOCART_DIR_MODE,true);
+			mkdir($dir, AMPLOCART_DIR_MODE, true);
 			chmod($dir, AMPLOCART_DIR_MODE);
 		}
 
 		if (!is_dir($dir)) {
 			trigger_error("Do not have write permissions to create directory " . $dir . ". Please change the permissions to allow writing to this directory.");
 			return false;
-		}
-		else {
+		} else {
 			$t_file = $dir . uniqid('test') . '.txt';
 			touch($t_file);
 			if (!is_file($t_file)) {
@@ -322,7 +356,8 @@ function _is_writable($dir, $mode = 0755) {
 }
 
 //prints to the console in javascript
-function console($msg) {
+function console($msg)
+{
 	echo "<script>console.log('$msg');</script>";
 }
 

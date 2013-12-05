@@ -474,7 +474,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'mail/newsletter')) {
+		if (!$this->user->can('modify', 'mail/newsletter')) {
 			$this->error['permission'] = $this->_('error_permission');
 		}
 
@@ -491,7 +491,7 @@ class Admin_Controller_Mail_Newsletter extends Controller
 
 	private function validateModify()
 	{
-		if (!$this->user->hasPermission('modify', 'mail/newsletter')) {
+		if (!$this->user->can('modify', 'mail/newsletter')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

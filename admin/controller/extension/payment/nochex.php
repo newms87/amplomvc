@@ -119,7 +119,7 @@ class Admin_Controller_Payment_Nochex extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'payment/nochex')) {
+		if (!$this->user->can('modify', 'payment/nochex')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

@@ -30,7 +30,7 @@ class Config extends Library
 
 		if (!$settings) {
 			//TODO: Should use $this->System_Model_Setting->getSetting('config', $this->store_id);
-			$settings = $this->db->queryRows("SELECT * FROM " . DB_PREFIX . "setting WHERE auto_load = 1 AND store_id IN (0, $this->store_id) ORDER BY store_id ASC", 'key');
+			$settings = $this->queryRows("SELECT * FROM " . DB_PREFIX . "setting WHERE auto_load = 1 AND store_id IN (0, $this->store_id) ORDER BY store_id ASC", 'key');
 
 			foreach ($settings as &$setting) {
 				$setting = $setting['serialized'] ? unserialize($setting['value']) : $setting['value'];
@@ -86,15 +86,15 @@ class Config extends Library
 
 				$url = $scheme . str_replace('www.', '', $_SERVER['HTTP_HOST']) . rtrim(dirname($_SERVER['PHP_SELF']), '/.\\') . '/';
 
-				$store = $this->db->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE `$field` = '" . $this->db->escape($url) . "'");
+				$store = $this->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE `$field` = '" . $this->escape($url) . "'");
 
 				if (empty($store)) {
-					$store_id = $this->db->queryVar("SELECT `value` FROM " . DB_PREFIX . "setting WHERE `key` = 'config_default_store'");
-					$store    = $this->db->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE store_id = '$store_id'");
+					$store_id = $this->queryVar("SELECT `value` FROM " . DB_PREFIX . "setting WHERE `key` = 'config_default_store'");
+					$store    = $this->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE store_id = '$store_id'");
 				}
 			}
 		} else {
-			$store = $this->db->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE store_id = '$store_id'");
+			$store = $this->queryRow("SELECT * FROM " . DB_PREFIX . "store WHERE store_id = '$store_id'");
 		}
 
 		if (!empty($store)) {
@@ -120,7 +120,7 @@ class Config extends Library
 			$store_id = $this->store_id;
 		}
 
-		if (!isset($this->data[$key]) || $store_id !== $this->store_id) {
+		if (!isset($this->data[$key]) || ($store_id !== $this->store_id && $store_id !== 0)) {
 			$this->data[$key] = $this->System_Model_Setting->getSettingKey($group, $key, $store_id);
 		}
 
@@ -183,10 +183,10 @@ class Config extends Library
 	//TODO: Need to rethink this site config. At very least move store model into system directory.
 	public function run_site_config()
 	{
-		$default_exists = $this->db->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "store WHERE store_id > 0 LIMIT 1");
+		$default_exists = $this->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "store WHERE store_id > 0 LIMIT 1");
 
 		if (!$default_exists) {
-			$this->db->setAutoincrement('store', 0);
+			$this->setAutoincrement('store', 0);
 			$this->Model_Setting_Store->addStore($this->site_config['default_store']);
 		}
 	}

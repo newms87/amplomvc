@@ -3,8 +3,6 @@ class Catalog_Controller_Mail_Order extends Controller
 {
 	public function index($order)
 	{
-		$this->language->loadTemporary('mail/order', $order['language_id']);
-
 		$order_id = $order['order_id'];
 
 		//Order Information
@@ -34,12 +32,6 @@ class Catalog_Controller_Mail_Order extends Controller
 			$product['total'] = $this->currency->format($product['total'], $order['currency_code'], $order['currency_value']);
 
 			$product += $this->Model_Catalog_Product->getProduct($product['product_id']);
-
-			foreach ($product['option'] as &$option) {
-				$option['value'] = $this->tool->limit_characters($option['value'], 20);
-			}
-			unset($option);
-
 		}
 		unset($product);
 
@@ -56,20 +48,14 @@ class Catalog_Controller_Mail_Order extends Controller
 			$this->data['downloads_url'] = $this->url->store($order['store_id'], 'account/download');
 		}
 
-		$store = $this->config->getStore($order['store_id']);
-
-		$subject = $this->_('text_subject', $store['name'], $order_id);
-		$this->_('text_greeting', $store['name']);
-
-		$this->data['store_name'] = $store['name'];
-		$this->data['store_url']  = $store['url'];
-
 		$this->data += $order;
 
-		//Generate Text email
-		$this->template->load('mail/order_text');
+		$store = $this->config->getStore($order['store_id']);
+		$this->data['store'] = $store;
 
 		$this->mail->init();
+
+		$subject =_l('%s - Order %s', $store['name'], $order_id);
 
 		if (empty($order['email'])) {
 			$order['email'] = $this->config->get('config_email_error');
@@ -81,16 +67,17 @@ class Catalog_Controller_Mail_Order extends Controller
 		$this->mail->setFrom($this->config->get('config_email'));
 		$this->mail->setSender($store['name']);
 		$this->mail->setSubject($subject);
+
+		//Text Email
+		$this->template->load('mail/order_text');
 		$this->mail->setText(html_entity_decode($this->render(), ENT_QUOTES, 'UTF-8'));
 
-		$this->mail->send();
-
-		//Generate HTML email
-		$this->data['shipping_address_html'] = nl2br(htmlentities($this->data['shipping_address']));
-		$this->data['payment_address_html']  = nl2br(htmlentities($this->data['payment_address']));
+		//HTML email
+		//TODO: Need to verify that these will always have line breaks!! use nl2br() if not...
+		$this->data['shipping_address_html'] = $this->data['shipping_address'];
+		$this->data['payment_address_html']  = $this->data['payment_address'];
 
 		$this->template->load('mail/order_html');
-
 		$this->mail->setHtml($this->render());
 
 		$this->mail->send();
@@ -99,8 +86,6 @@ class Catalog_Controller_Mail_Order extends Controller
 		// Admin Alert Mail
 		if ($this->config->get('config_alert_mail')) {
 			$this->template->load('mail/order_text_admin');
-
-			$subject = $this->_('text_subject', $this->config->get('config_name'), $order_id);
 
 			$to = $this->config->get('config_email');
 
@@ -117,8 +102,5 @@ class Catalog_Controller_Mail_Order extends Controller
 			$this->mail->setText(html_entity_decode($this->render(), ENT_QUOTES, 'UTF-8'));
 			$this->mail->send();
 		}
-
-		//Unload Temporary Language Data
-		$this->language->unloadTemporary();
 	}
 }

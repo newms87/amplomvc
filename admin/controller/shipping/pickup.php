@@ -63,7 +63,7 @@ class Admin_Controller_Shipping_Pickup extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'shipping/pickup')) {
+		if (!$this->user->can('modify', 'shipping/pickup')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

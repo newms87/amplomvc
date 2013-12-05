@@ -92,7 +92,7 @@ class Admin_Controller_Mail_Error extends Controller
 
 	public function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'mail/error')) {
+		if (!$this->user->can('modify', 'mail/error')) {
 			$this->error['permission'] = $this->_('error_permission');
 		}
 

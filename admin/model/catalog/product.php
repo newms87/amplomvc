@@ -518,7 +518,7 @@ class Admin_Model_Catalog_Product extends Model
 
 		$this->url->removeAlias('product/product', 'product_id=' . (int)$product_id);
 
-		$this->translation->delete('product', $product_id);
+		$this->translation->deleteTranslation('product', $product_id);
 
 		$this->cache->delete("product.$product_id");
 	}
@@ -712,8 +712,8 @@ class Admin_Model_Catalog_Product extends Model
 				}
 			}
 
-			$order = $this->extract_order($data);
-			$limit = $this->extract_limit($data);
+			$order = $this->extractOrder($data);
+			$limit = $this->extractLimit($data);
 		} else {
 			$group_by = '';
 			$order    = '';

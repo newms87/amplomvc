@@ -103,7 +103,7 @@ class Admin_Controller_Payment_Alertpay extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'payment/alertpay')) {
+		if (!$this->user->can('modify', 'payment/alertpay')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

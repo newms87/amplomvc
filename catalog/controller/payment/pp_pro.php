@@ -157,7 +157,7 @@ class Catalog_Controller_Payment_PpPro extends Controller
 		$json = array();
 
 		if (($response_data['ACK'] == 'Success') || ($response_data['ACK'] == 'SuccessWithWarning')) {
-			$this->order->update($this->session->data['order_id'], $this->config->get('config_order_complete_status_id'));
+			$this->order->updateOrder($this->session->data['order_id'], $this->config->get('config_order_complete_status_id'));
 
 			$message = '';
 

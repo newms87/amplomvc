@@ -98,7 +98,7 @@ class Admin_Controller_Payment_BankTransfer extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'payment/bank_transfer')) {
+		if (!$this->user->can('modify', 'payment/bank_transfer')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

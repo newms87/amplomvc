@@ -72,7 +72,7 @@ class Admin_Controller_Setting_Update extends Controller
 
 	public function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'setting/update')) {
+		if (!$this->user->can('modify', 'setting/update')) {
 			$this->error['permission'] = $this->_('error_permission');
 		}
 

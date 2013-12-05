@@ -27,15 +27,15 @@ class Extend extends Library
 		}
 
 		//Link already exists
-		if ($this->db->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "navigation WHERE name = '" . $this->db->escape($link['name']) . "'")) {
+		if ($this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "navigation WHERE name = '" . $this->escape($link['name']) . "'")) {
 			return 'exists';
 		}
 
 		if (!$link['parent_id'] && $link['parent']) {
-			$link['parent_id'] = $this->db->queryVar("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE name = '" . $this->db->escape($link['parent']) . "'");
+			$link['parent_id'] = $this->queryVar("SELECT navigation_id FROM " . DB_PREFIX . "navigation WHERE name = '" . $this->escape($link['parent']) . "'");
 		}
 
-		$navigation_group_id = $this->db->queryVar("SELECT navigation_group_id FROM " . DB_PREFIX . "navigation_group WHERE name = '" . $this->db->escape($group) . "'");
+		$navigation_group_id = $this->queryVar("SELECT navigation_group_id FROM " . DB_PREFIX . "navigation_group WHERE name = '" . $this->escape($group) . "'");
 
 		if ($navigation_group_id) {
 			$this->Admin_Model_Design_Navigation->addNavigationLink($navigation_group_id, $link);
@@ -52,9 +52,9 @@ class Extend extends Library
 	{
 		$query = "SELECT navigation_id FROM " . DB_PREFIX . "navigation n" .
 			" LEFT JOIN " . DB_PREFIX . "navigation_group ng ON (ng.navigation_group_id=n.navigation_group_id)" .
-			" WHERE ng.name = '" . $this->db->escape($group) . "' AND n.name = '" . $this->db->escape($name) . "'";
+			" WHERE ng.name = '" . $this->escape($group) . "' AND n.name = '" . $this->escape($name) . "'";
 
-		$navigation_ids = $this->db->queryColumn($query);
+		$navigation_ids = $this->queryColumn($query);
 
 		foreach ($navigation_ids as $navigation_id) {
 			$this->Admin_Model_Design_Navigation->deleteNavigationLink($navigation_id);
@@ -67,7 +67,7 @@ class Extend extends Library
 			$routes = array($routes);
 		}
 
-		$exists = $this->db->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "layout WHERE name='$name'");
+		$exists = $this->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "layout WHERE name='$name'");
 
 		if ($exists) {
 			$this->message->add("warning", "Error while adding $name to layout! Duplicate name exists!");
@@ -99,7 +99,7 @@ class Extend extends Library
 	//TODO: This should remove based on a unique ID not the name...
 	public function remove_layout($name)
 	{
-		$result = $this->db->query("SELECT layout_id FROM " . DB_PREFIX . "layout WHERE name='" . $this->db->escape($name) . "' LIMIT 1");
+		$result = $this->query("SELECT layout_id FROM " . DB_PREFIX . "layout WHERE name='" . $this->escape($name) . "' LIMIT 1");
 
 		if ($result->num_rows) {
 			$this->Admin_Model_Design_Layout->deleteLayout($result->row['layout_id']);
@@ -201,16 +201,16 @@ class Extend extends Library
 
 		$sort_column = '__image_sort__' . $column;
 
-		$this->db->addColumn($table, $sort_column, 'FLOAT NULL');
+		$this->addColumn($table, $sort_column, 'FLOAT NULL');
 
-		$key_column = $this->db->getKeyColumn($table);
+		$key_column = $this->getKeyColumn($table);
 
-		$rows = $this->db->queryRows("SELECT $key_column, $column, $sort_column FROM " . DB_PREFIX . "$table");
+		$rows = $this->queryRows("SELECT $key_column, $column, $sort_column FROM " . DB_PREFIX . "$table");
 
 		foreach ($rows as $row) {
 			$this->update_hsv_value($row, $table, $column, true);
 
-			$this->db->query("UPDATE " . DB_PREFIX . "$table SET `$sort_column` = '$row[$sort_column]' WHERE `$key_column` = '$row[$key_column]'");
+			$this->query("UPDATE " . DB_PREFIX . "$table SET `$sort_column` = '$row[$sort_column]' WHERE `$key_column` = '$row[$key_column]'");
 		}
 	}
 
@@ -220,7 +220,7 @@ class Extend extends Library
 
 		$this->remove_db_hook($hook_id);
 
-		$this->db->dropColumn($table, '__image_sort__' . $column);
+		$this->dropColumn($table, '__image_sort__' . $column);
 	}
 
 	public function update_hsv_value(&$data, $table, $column, $force = false)
@@ -230,7 +230,7 @@ class Extend extends Library
 		}
 
 		//If the image has not changed, do nothing.
-		if (!$force && $this->db->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "{$table} WHERE `{$column}` = '{$data[$column]}'")) {
+		if (!$force && $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "{$table} WHERE `{$column}` = '{$data[$column]}'")) {
 			return;
 		}
 

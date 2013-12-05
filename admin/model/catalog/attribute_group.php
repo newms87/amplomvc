@@ -69,12 +69,12 @@ class Admin_Model_Catalog_AttributeGroup extends Model
 	{
 		$this->delete('attribute_group', $attribute_group_id);
 
-		$this->translation->delete('attribute_group', $attribute_group_id);
+		$this->translation->deleteTranslation('attribute_group', $attribute_group_id);
 
 		$attributes = $this->queryRows("SELECT attribute_id FROM " . DB_PREFIX . "attribute WHERE attribute_group_id = '" . (int)$attribute_group_id . "'");
 
 		foreach ($attributes as $attribute) {
-			$this->translation->delete('attribute', $attribute['attribute_id']);
+			$this->translation->deleteTranslation('attribute', $attribute['attribute_id']);
 		}
 
 		$this->delete('attribute', array('attribute_group_id' => $attribute_group_id));
@@ -121,8 +121,8 @@ class Admin_Model_Catalog_AttributeGroup extends Model
 		}
 
 		if (!$total) {
-			$order = $this->extract_order($data);
-			$limit = $this->extract_limit($data);
+			$order = $this->extractOrder($data);
+			$limit = $this->extractLimit($data);
 		} else {
 			$order = '';
 			$limit = '';
@@ -168,8 +168,8 @@ class Admin_Model_Catalog_AttributeGroup extends Model
 		}
 
 		//Order and Limit
-		$order = $this->extract_order($data);
-		$limit = $this->extract_limit($data);
+		$order = $this->extractOrder($data);
+		$limit = $this->extractLimit($data);
 
 		$query = "SELECT * FROM $from WHERE $where $order $limit";
 

@@ -79,7 +79,7 @@ class Admin_Controller_Shipping_Citylink extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'shipping/citylink')) {
+		if (!$this->user->can('modify', 'shipping/citylink')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

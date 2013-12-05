@@ -85,7 +85,7 @@ class Admin_Controller_Extension_Feed extends Controller
 
 	public function install()
 	{
-		if (!$this->user->hasPermission('modify', 'extension/feed')) {
+		if (!$this->user->can('modify', 'extension/feed')) {
 			$this->session->data['error'] = $this->_('error_permission');
 
 			$this->url->redirect('extension/feed');
@@ -110,7 +110,7 @@ class Admin_Controller_Extension_Feed extends Controller
 
 	public function uninstall()
 	{
-		if (!$this->user->hasPermission('modify', 'extension/feed')) {
+		if (!$this->user->can('modify', 'extension/feed')) {
 			$this->session->data['error'] = $this->_('error_permission');
 
 			$this->url->redirect('extension/feed');

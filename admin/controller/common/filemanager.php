@@ -168,7 +168,7 @@ class Admin_Controller_Common_Filemanager extends Controller
 			$json['error'] = $this->_('error_directory');
 		}
 
-		if (!$this->user->hasPermission('modify', 'common/filemanager')) {
+		if (!$this->user->can('modify', 'common/filemanager')) {
 			$json['error'] = $this->_('error_permission');
 		}
 
@@ -201,7 +201,7 @@ class Admin_Controller_Common_Filemanager extends Controller
 			$json['error'] = $this->_('error_select');
 		}
 
-		if (!$this->user->hasPermission('modify', 'common/filemanager')) {
+		if (!$this->user->can('modify', 'common/filemanager')) {
 			$json['error'] = $this->_('error_permission');
 		}
 
@@ -275,7 +275,7 @@ class Admin_Controller_Common_Filemanager extends Controller
 			$json['error'] = $this->_('error_directory');
 		}
 
-		if (!$this->user->hasPermission('modify', 'common/filemanager')) {
+		if (!$this->user->can('modify', 'common/filemanager')) {
 			$json['error'] = $this->_('error_permission');
 		}
 
@@ -320,7 +320,7 @@ class Admin_Controller_Common_Filemanager extends Controller
 			$json['error'] = $this->_('error_select');
 		}
 
-		if (!$this->user->hasPermission('modify', 'common/filemanager')) {
+		if (!$this->user->can('modify', 'common/filemanager')) {
 			$json['error'] = $this->_('error_permission');
 		}
 
@@ -406,7 +406,7 @@ class Admin_Controller_Common_Filemanager extends Controller
 			}
 		}
 
-		if (!$this->user->hasPermission('modify', 'common/filemanager')) {
+		if (!$this->user->can('modify', 'common/filemanager')) {
 			$json['error'] = $this->_('error_permission');
 		}
 
@@ -470,7 +470,7 @@ class Admin_Controller_Common_Filemanager extends Controller
 			$json['error'] = $this->_('error_directory');
 		}
 
-		if (!$this->user->hasPermission('modify', 'common/filemanager')) {
+		if (!$this->user->can('modify', 'common/filemanager')) {
 			$json['error'] = $this->_('error_permission');
 		}
 

@@ -24,7 +24,7 @@ class Catalog_Controller_Payment_Alertpay extends Controller
 	public function callback()
 	{
 		if (isset($_POST['ap_securitycode']) && ($_POST['ap_securitycode'] == $this->config->get('alertpay_security'))) {
-			$this->order->update($_POST['ap_itemcode'], $this->config->get('alertpay_order_status_id'));
+			$this->order->updateOrder($_POST['ap_itemcode'], $this->config->get('alertpay_order_status_id'));
 		}
 	}
 }

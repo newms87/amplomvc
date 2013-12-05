@@ -90,7 +90,7 @@ class Admin_Controller_Setting_ReturnStatus extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'setting/return_status')) {
+		if (!$this->user->can('modify', 'setting/return_status')) {
 			$this->error['permission'] = $this->_('error_permission');
 		}
 

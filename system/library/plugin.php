@@ -13,7 +13,7 @@ class Plugin extends Library
 
 		$this->language->system('plugin');
 
-		$this->installed = $this->db->queryColumn("SELECT * FROM " . DB_PREFIX . "plugin WHERE status = 1");
+		$this->installed = $this->queryColumn("SELECT * FROM " . DB_PREFIX . "plugin WHERE status = 1");
 
 		if ($this->config->isAdmin()) {
 			$this->validatePluginModFiles();
@@ -291,11 +291,11 @@ class Plugin extends Library
 		$values = '';
 
 		foreach ($data as $key => $value) {
-			$values .= ($values ? ',' : '') . "`$key`='" . $this->db->escape($value) . "'";
+			$values .= ($values ? ',' : '') . "`$key`='" . $this->escape($value) . "'";
 		}
 
-		$this->db->query("DELETE FROM " . DB_PREFIX . "plugin_registry WHERE plugin_file = '" . $this->db->escape($data['plugin_file']) . "'");
-		$this->db->query("INSERT INTO " . DB_PREFIX . "plugin_registry SET $values");
+		$this->query("DELETE FROM " . DB_PREFIX . "plugin_registry WHERE plugin_file = '" . $this->escape($data['plugin_file']) . "'");
+		$this->query("INSERT INTO " . DB_PREFIX . "plugin_registry SET $values");
 
 		$this->cache->delete("plugin");
 
@@ -307,7 +307,7 @@ class Plugin extends Library
 		$this->plugin_registry = $this->cache->get('plugin.registry');
 
 		if (!$this->plugin_registry) {
-			$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "plugin_registry");
+			$query = $this->query("SELECT * FROM " . DB_PREFIX . "plugin_registry");
 
 			$this->plugin_registry = array();
 

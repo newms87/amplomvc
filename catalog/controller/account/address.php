@@ -34,7 +34,7 @@ class Catalog_Controller_Account_Address extends Controller
 				}
 			} //Update
 			else {
-				$this->address->update($_GET['address_id'], $_POST);
+				$this->address->edit($_GET['address_id'], $_POST);
 
 				if (!empty($_POST['default'])) {
 					$this->customer->setMeta('default_shipping_address_id', $_GET['address_id']);
@@ -75,7 +75,7 @@ class Catalog_Controller_Account_Address extends Controller
 		$this->document->setTitle($this->_('head_title'));
 
 		if (isset($_GET['address_id']) && $this->validateDelete()) {
-			$this->address->delete($_GET['address_id']);
+			$this->address->remove($_GET['address_id']);
 
 			if ((int)$_GET['address_id'] === $this->cart->getShippingAddressId()) {
 				$this->cart->setShippingAddress();
@@ -250,7 +250,7 @@ class Catalog_Controller_Account_Address extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->address->canDelete($_POST['address_id'])) {
+		if (!$this->address->canRemove($_POST['address_id'])) {
 			$this->error += $this->address->getError();
 		}
 

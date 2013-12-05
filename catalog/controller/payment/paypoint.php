@@ -103,7 +103,7 @@ class Catalog_Controller_Payment_Paypoint extends Controller
 			if (isset($_GET['code']) && $_GET['code'] == 'A') {
 				$this->template->load('payment/paypoint_success');
 
-				$this->order->update($_GET['trans_id'], $this->config->get('config_order_complete_status_id'));
+				$this->order->updateOrder($_GET['trans_id'], $this->config->get('config_order_complete_status_id'));
 
 				$message = '';
 

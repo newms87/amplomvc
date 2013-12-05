@@ -49,7 +49,7 @@ class Admin_Controller_Dev_DbAdmin extends Controller
 
 	public function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'dev/dev')) {
+		if (!$this->user->can('modify', 'dev/dev')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

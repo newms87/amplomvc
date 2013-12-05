@@ -69,7 +69,7 @@ class Admin_Controller_Shipping_Free extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'shipping/free')) {
+		if (!$this->user->can('modify', 'shipping/free')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

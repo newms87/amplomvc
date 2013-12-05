@@ -57,7 +57,7 @@ class Catalog_Controller_Payment_Moneybookers extends Controller
 		$order_info = $this->order->get($order_id);
 
 		if ($order_info) {
-			$this->order->update($order_id, $this->config->get('config_order_complete_status_id'));
+			$this->order->updateOrder($order_id, $this->config->get('config_order_complete_status_id'));
 
 			$verified = true;
 

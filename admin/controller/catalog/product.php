@@ -35,7 +35,7 @@ class Admin_Controller_Catalog_Product extends Controller
 	{
 		$this->language->load('catalog/product');
 
-		if (!empty($_GET['product_id']) && $this->request->isPost() && $this->user->hasPermission('modify', 'catalog/product')) {
+		if (!empty($_GET['product_id']) && $this->request->isPost() && $this->user->can('modify', 'catalog/product')) {
 			$this->Model_Catalog_Product->editProduct($_GET['product_id'], $_POST, true);
 
 			if (!$this->message->error_set()) {
@@ -710,7 +710,7 @@ class Admin_Controller_Catalog_Product extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'catalog/product')) {
+		if (!$this->user->can('modify', 'catalog/product')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -801,7 +801,7 @@ class Admin_Controller_Catalog_Product extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'catalog/product')) {
+		if (!$this->user->can('modify', 'catalog/product')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -826,7 +826,7 @@ class Admin_Controller_Catalog_Product extends Controller
 
 	private function validateCopy()
 	{
-		if (!$this->user->hasPermission('modify', 'catalog/product')) {
+		if (!$this->user->can('modify', 'catalog/product')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

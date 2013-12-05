@@ -63,7 +63,7 @@ class Admin_Controller_Payment_FreeCheckout extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'payment/free_checkout')) {
+		if (!$this->user->can('modify', 'payment/free_checkout')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

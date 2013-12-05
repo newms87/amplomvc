@@ -1,5 +1,5 @@
 <?php
-class System_Extension_Payment extends ExtensionModel
+class System_Extension_Payment extends System_Extension_Model
 {
 	public function __construct($registry)
 	{
@@ -68,7 +68,7 @@ class System_Extension_Payment extends ExtensionModel
 		//Language
 		$this->language->system('extension/payment');
 
-		if (!$this->user->hasPermission('modify', 'extension/payment')) {
+		if (!$this->user->can('modify', 'extension/payment')) {
 			$this->message->add('warning', 'error_permission');
 			return false;
 		}

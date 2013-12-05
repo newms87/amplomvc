@@ -84,7 +84,7 @@ class Admin_Controller_Extension_Module extends Controller
 
 	public function install()
 	{
-		if (!$this->user->hasPermission('modify', 'extension/module')) {
+		if (!$this->user->can('modify', 'extension/module')) {
 			$this->session->data['error'] = $this->_('error_permission');
 
 			$this->url->redirect('extension/module');
@@ -111,7 +111,7 @@ class Admin_Controller_Extension_Module extends Controller
 	{
 		$this->language->load('extension/module');
 
-		if (!$this->user->hasPermission('modify', 'extension/module')) {
+		if (!$this->user->can('modify', 'extension/module')) {
 			$this->session->data['error'] = $this->_('error_permission');
 
 			$this->url->redirect('extension/module');

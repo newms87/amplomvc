@@ -3,40 +3,180 @@ class Address extends Library
 {
 	public function add($address)
 	{
-		if (!isset($address['customer_id']) && $this->customer->isLogged()) {
-			$address['customer_id'] = $this->customer->getId();
+		$existing = $this->exists($address);
+
+		if ($existing) {
+			return $existing;
 		}
 
-		return $this->System_Model_Address->addAddress($address);
+		return $this->insert('address', $address);
 	}
 
-	public function update($address_id, $address)
+	/**
+	 * Edits an existing address in the database
+	 *
+	 * WARNING: This may change the address ID associated for the address being edited to preserve Address Integrity for Transactions, etc.
+	 * In the event an address ID is changed, the address ID will be returned, otherwise the return value is null
+	 *
+	 * @param $address_id - THe ID for the address to edit.
+	 * @param $address - The address data, name, street, etc.
+	 * @return null | int - If address_id has been changed, then the new address id is returned. Otherwise null.
+	 */
+	public function edit($address_id, $address)
 	{
-		if (!isset($address['customer_id']) && $this->customer->isLogged()) {
-			$address['customer_id'] = $this->customer->getId();
+		//Address cannot be edited, therefore, archive the address and create a new one (associating a new address ID to this address)
+		if ($this->isLocked($address_id)) {
+			$new_address_id = $this->add($address);
+
+			$this->archive($address_id, $new_address_id);
+
+			return $new_address_id;
 		}
 
-		$this->System_Model_Address->editAddress($address_id, $address);
+		$this->update('address', $address, $address_id);
 	}
 
-	public function delete($address_id)
+	public function getAddress($address_id)
 	{
-		$this->System_Model_Address->deleteAddress($address_id);
+		$address = $this->queryRow("SELECT * FROM " . DB_PREFIX . "address WHERE address_id = '" . (int)$address_id . "'");
+
+		if (!$this->validate($address)) {
+			$this->remove($address_id);
+			return null;
+		}
+
+		$address['country'] = $this->Model_Localisation_Country->getCountry($address['country_id']);
+		$address['zone']    = $this->Model_Localisation_Zone->getZone($address['zone_id']);
+
+		return $address;
 	}
 
-	public function canDelete($address_id)
+	public function getAddresses($data = array(), $select = '', $total = false)
+	{
+		//Select
+		if ($total) {
+			$select = "COUNT(*) as total";
+		} elseif (empty($select)) {
+			$select = '*';
+		}
+
+		//From
+		$from = DB_PREFIX . "address a";
+
+		//Where
+		$where = "1";
+
+		if (!empty($data['customer_ids'])) {
+			$from .= " LEFT JOIN " . DB_PREFIX . "customer_address ca ON (ca.address_id=a.address_id)";
+
+			$where .= " AND ca.customer_id IN (" . implode(',', $data['customer_ids']) . ")";
+		}
+
+		if (!empty($data['country_ids'])) {
+			$where .= " AND a.country_id IN (0, " . implode(',', $data['country_ids']) . ")";
+		}
+
+		if (!empty($data['zone_ids'])) {
+			$where .= " AND a.zone_id IN (0, " . implode(',', $data['zone_ids']) . ")";
+		}
+
+		if (isset($data['status'])) {
+			$where .= " AND a.status = " . $data['status'] ? 1 : 0;
+		}
+
+		//Order By and Limit
+		if (!$total) {
+			$order = $this->extractOrder($data);
+			$limit = $this->extractLimit($data);
+		} else {
+			$order = '';
+			$limit = '';
+		}
+
+		//The Query
+		$query = "SELECT $select FROM $from WHERE $where $order $limit";
+
+		$result = $this->query($query);
+
+		if ($total) {
+			return $result->row['total'];
+		}
+
+		$addresses = array();
+
+		foreach ($result->rows as $address) {
+			if ($this->validate($address)) {
+				$address['country'] = $this->Model_Localisation_Country->getCountry($address['country_id']);
+				$address['zone']    = $this->Model_Localisation_Zone->getZone($address['zone_id']);
+
+				$addresses[] = $address;
+			} else {
+				$this->delete('address', array('address_id' => $address['address_id']));
+			}
+		}
+
+		return $addresses;
+	}
+
+	public function getTotalAddresses($data = array())
+	{
+		return $this->getAddresses($data, '', true);
+	}
+
+	public function remove($address_id)
+	{
+		if ($this->isLocked($address_id)) {
+			$this->archive($address_id);
+		}
+
+		$this->delete('address', $address_id);
+	}
+
+	public function canRemove($address_id)
 	{
 		$this->language->system('address');
 
-		if ($this->System_Model_Address->getTotalAddresses() == 1) {
+		if ($this->getTotalAddresses() == 1) {
 			$this->error['warning'] = $this->_('error_delete');
 		}
 
-		if ((int)$this->customer->getMeta('default_shipping_address_id') === (int)$_GET['address_id']) {
+		if ((int)$this->customer->getMeta('default_shipping_address_id') === (int)$address_id) {
 			$this->error['warning'] = $this->_('error_default');
 		}
 
 		return $this->error ? false : true;
+	}
+
+	public function lock($address_id)
+	{
+		$this->update('address', array('locked' => 1), $address_id);
+	}
+
+	public function isLocked($address_id)
+	{
+		return $this->queryVar("SELECT locked FROM " . DB_PREFIX . "address WHERE address_id = " . (int)$address_id);
+	}
+
+	public function exists($address)
+	{
+		$where = $this->getWhere('address', $address);
+
+		if (empty($where)) {
+			return false;
+		}
+
+		return $this->queryVar("SELECT address_id FROM " . DB_PREFIX . "address WHERE $where");
+	}
+
+	private function archive($address_id, $new_address_id = null)
+	{
+		$this->update('address', array('status' => 0), $address_id);
+
+		if ($new_address_id) {
+			$this->queryRows("UPDATE TABLE " . DB_PREFIX . "customer_address SET address_id = " . (int)$new_address_id . " WHERE address_id = " . (int)$address_id);
+		} else {
+			$this->delete('customer_address', $address_id);
+		}
 	}
 
 	public function inGeoZone($address, $geo_zone_id)
@@ -49,7 +189,7 @@ class Address extends Library
 		}
 
 		if (!is_array($address)) {
-			$address = $this->System_Model_Address->getAddress($address);
+			$address = $this->getAddress($address);
 		}
 
 		$geo_zone_id = (int)$geo_zone_id;
@@ -61,14 +201,14 @@ class Address extends Library
 
 		$query = "SELECT COUNT(*) FROM " . DB_PREFIX . "geo_zone g WHERE g.geo_zone_id = '$geo_zone_id' AND IF (g.exclude = '0', $include, $exclude)";
 
-		return $this->db->queryVar($query) > 0;
+		return $this->queryVar($query) > 0;
 	}
 
 	public function format($address)
 	{
 		static $address_formats = array();
 
-		if (!$this->System_Model_Address->isValidAddress($address)) {
+		if (!$this->validate($address)) {
 			return '';
 		}
 
@@ -77,7 +217,7 @@ class Address extends Library
 		if (isset($address_formats[$country_id])) {
 			$address_format = $address_formats[$country_id];
 		} else {
-			$address_format = $this->db->queryVar("SELECT address_format FROM " . DB_PREFIX . "country WHERE country_id = '" . (int)$country_id . "'");
+			$address_format = $this->queryVar("SELECT address_format FROM " . DB_PREFIX . "country WHERE country_id = '" . (int)$country_id . "'");
 
 			if (empty($address_format)) {
 				$address_format =
@@ -116,5 +256,26 @@ class Address extends Library
 		}
 
 		return preg_replace('/<br \/>\s+<br \/>/', '<br />', nl2br($this->tool->insertables($insertables, $address_format, '{', '}')));
+	}
+
+	public function validate($address)
+	{
+		if (empty($address['firstname']) || empty($address['lastname']) || !trim($address['firstname'] . $address['lastname'])) {
+			return false;
+		}
+		if (empty($address['address_1']) || !trim($address['address_1'])) {
+			return false;
+		}
+		if (empty($address['city']) || !trim($address['city'])) {
+			return false;
+		}
+		if (empty($address['zone_id'])) {
+			return false;
+		}
+		if (empty($address['country_id'])) {
+			return false;
+		}
+
+		return true;
 	}
 }

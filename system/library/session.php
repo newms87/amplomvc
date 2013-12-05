@@ -32,7 +32,7 @@ class Session extends Library
 		if (isset($_COOKIE['token'])) {
 			$this->setCookie('token', $_COOKIE['token'], 3600);
 			if (isset($this->data['session_token_saved'])) {
-				$this->db->query("DELETE FROM " . DB_PREFIX . "session WHERE `ip` = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "'");
+				$this->query("DELETE FROM " . DB_PREFIX . "session WHERE `ip` = '" . $this->escape($_SERVER['REMOTE_ADDR']) . "'");
 				unset($this->data['session_token_saved']);
 			}
 		} elseif (isset($this->data['token']) && empty($_COOKIE)) {
@@ -41,10 +41,10 @@ class Session extends Library
 			$this->url->redirect('common/home');
 			exit();
 		} elseif (!isset($this->data['session_token_saved'])) {
-			$ip_session_exists = $this->db->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "session WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "'");
+			$ip_session_exists = $this->queryVar("SELECT COUNT(*) as total FROM " . DB_PREFIX . "session WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "'");
 
 			if ($ip_session_exists) {
-				$this->db->query("DELETE FROM " . DB_PREFIX . "session WHERE `ip` = '" . $this->db->escape($_SERVER['REMOTE_ADDR']) . "'");
+				$this->query("DELETE FROM " . DB_PREFIX . "session WHERE `ip` = '" . $this->escape($_SERVER['REMOTE_ADDR']) . "'");
 				$this->data['messages']['warning'][] = "You must enable cookies to login to the admin portal!";
 			}
 		}
@@ -52,10 +52,10 @@ class Session extends Library
 
 	public function loadTokenSession($token)
 	{
-		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "session WHERE `token` = '" . $this->db->escape($token) . "' LIMIT 1");
+		$query = $this->query("SELECT * FROM " . DB_PREFIX . "session WHERE `token` = '" . $this->escape($token) . "' LIMIT 1");
 
 		if ($query->num_rows) {
-			$this->db->query("DELETE FROM " . DB_PREFIX . "session WHERE `token` = '" . $this->db->escape($token) . "'");
+			$this->query("DELETE FROM " . DB_PREFIX . "session WHERE `token` = '" . $this->escape($token) . "'");
 			$this->data['token']   = $query->row['token'];
 			$this->data['user_id'] = $query->row['user_id'];
 
@@ -71,7 +71,7 @@ class Session extends Library
 			return false;
 		}
 
-		$this->db->query("INSERT INTO " . DB_PREFIX . "session SET `token` = '" . $this->db->escape($this->data['token']) . "', `user_id` = '" . $this->db->escape($this->data['user_id']) . "', `data` = '" . $this->db->escape(serialize($this->data)) . "', `ip` = '" . $_SERVER['REMOTE_ADDR'] . "'");
+		$this->query("INSERT INTO " . DB_PREFIX . "session SET `token` = '" . $this->escape($this->data['token']) . "', `user_id` = '" . $this->escape($this->data['user_id']) . "', `data` = '" . $this->escape(serialize($this->data)) . "', `ip` = '" . $_SERVER['REMOTE_ADDR'] . "'");
 		$this->data['session_token_saved'] = 1;
 	}
 

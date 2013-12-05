@@ -283,7 +283,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'catalog/attribute_group')) {
+		if (!$this->user->can('modify', 'catalog/attribute_group')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -296,7 +296,7 @@ class Admin_Controller_Catalog_AttributeGroup extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'catalog/attribute_group')) {
+		if (!$this->user->can('modify', 'catalog/attribute_group')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

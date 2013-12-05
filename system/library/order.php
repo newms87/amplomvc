@@ -193,9 +193,9 @@ class Order Extends Library
 			return;
 		}
 
-		$this->db->query(
+		$this->query(
 			"UPDATE " . DB_PREFIX . "order SET customer_id = '" . (int)$customer['customer_id'] . "'" .
-			" WHERE customer_id = 0 AND email = '" . $this->db->escape($customer['email']) . "'"
+			" WHERE customer_id = 0 AND email = '" . $this->escape($customer['email']) . "'"
 		);
 	}
 
@@ -340,7 +340,7 @@ class Order Extends Library
 	 *
 	 */
 
-	public function update($order_id, $order_status_id, $comment = '', $notify = false)
+	public function updateOrder($order_id, $order_status_id, $comment = '', $notify = false)
 	{
 		$order = $this->get($order_id);
 
@@ -366,7 +366,7 @@ class Order Extends Library
 		}
 
 		if ($notify) {
-			$this->mail->callController('order_update_notify', $order);
+			$this->mail->callController('order_update_notify', $comment, $order_status_id, $order);
 		}
 	}
 
@@ -375,17 +375,17 @@ class Order Extends Library
 		$order_id = (int)$order['order_id'];
 
 		//Confirm Order
-		$this->db->query("UPDATE " . DB_PREFIX . "order SET confirmed = 1 WHERE order_id = $order_id");
+		$this->query("UPDATE " . DB_PREFIX . "order SET confirmed = 1 WHERE order_id = $order_id");
 
 		// Products
-		$order_products = $this->db->queryRows("SELECT * FROM " . DB_PREFIX . "order_product WHERE order_id = $order_id");
+		$order_products = $this->queryRows("SELECT * FROM " . DB_PREFIX . "order_product WHERE order_id = $order_id");
 
 		foreach ($order_products as &$product) {
 			//subtract Quantity from this product
-			$this->db->query("UPDATE " . DB_PREFIX . "product SET quantity = (quantity - " . (int)$product['quantity'] . ") WHERE product_id = '" . (int)$product['product_id'] . "' AND subtract = '1'");
+			$this->query("UPDATE " . DB_PREFIX . "product SET quantity = (quantity - " . (int)$product['quantity'] . ") WHERE product_id = '" . (int)$product['product_id'] . "' AND subtract = '1'");
 
 			//Subtract Quantities from Product Option Values and Restrictions
-			$product_option_values = $this->db->queryRows("SELECT pov.product_option_value_id, pov.option_value_id FROM " . DB_PREFIX . "order_option oo LEFT JOIN " . DB_PREFIX . "product_option_value pov ON (pov.product_option_value_id=oo.product_option_value_id) WHERE oo.order_id = '$order_id' AND order_product_id = '" . (int)$product['order_product_id'] . "'");
+			$product_option_values = $this->queryRows("SELECT pov.product_option_value_id, pov.option_value_id FROM " . DB_PREFIX . "order_option oo LEFT JOIN " . DB_PREFIX . "product_option_value pov ON (pov.product_option_value_id=oo.product_option_value_id) WHERE oo.order_id = '$order_id' AND order_product_id = '" . (int)$product['order_product_id'] . "'");
 
 			$pov_to_ov = array();
 
@@ -396,14 +396,16 @@ class Order Extends Library
 			$order_options = $this->System_Model_Order->getOrderProductOptions($order_id, $product['order_product_id']);
 
 			foreach ($order_options as $option) {
-				$this->db->query("UPDATE " . DB_PREFIX . "product_option_value SET quantity = (quantity - " . (int)$product['quantity'] . ") WHERE product_option_value_id = '" . (int)$option['product_option_value_id'] . "' AND subtract = '1'");
+				$this->query("UPDATE " . DB_PREFIX . "product_option_value SET quantity = (quantity - " . (int)$product['quantity'] . ") WHERE product_option_value_id = '" . (int)$option['product_option_value_id'] . "' AND subtract = '1'");
 
-				$this->db->query("UPDATE " . DB_PREFIX . "product_option_value_restriction SET quantity = (quantity - " . (int)$product['quantity'] . ")" .
-				" WHERE product_option_value_id = '" . ($pov_to_ov[$option['product_option_value_id']]) . "' AND restrict_product_option_value_id IN (" . implode(',', $pov_to_ov) . ")");
+				$this->query(
+					"UPDATE " . DB_PREFIX . "product_option_value_restriction SET quantity = (quantity - " . (int)$product['quantity'] . ")" .
+					" WHERE product_option_value_id = '" . ($pov_to_ov[$option['product_option_value_id']]) . "' AND restrict_product_option_value_id IN (" . implode(',', $pov_to_ov) . ")"
+				);
 			}
 
 			//Add Product Options to product data
-			$product['option'] = $order_options;
+			$product['options'] = $order_options;
 
 			//We must invalidate the product for each order to keep the product quantities valid!
 			$this->cache->delete('product.' . $product['product_id']);
@@ -413,10 +415,10 @@ class Order Extends Library
 		$order['order_products'] = $order_products;
 
 		// Downloads
-		$order['order_downloads'] = $this->db->queryRows("SELECT * FROM " . DB_PREFIX . "order_download WHERE order_id = '$order_id'");
+		$order['order_downloads'] = $this->queryRows("SELECT * FROM " . DB_PREFIX . "order_download WHERE order_id = '$order_id'");
 
 		// Gift Voucher
-		$order_vouchers = $this->db->queryRows("SELECT voucher_id FROM " . DB_PREFIX . "order_voucher WHERE order_id = '$order_id'");
+		$order_vouchers = $this->queryRows("SELECT voucher_id FROM " . DB_PREFIX . "order_voucher WHERE order_id = '$order_id'");
 
 		foreach ($order_vouchers as $voucher) {
 			$this->System_Model_Voucher->activate($voucher['voucher_id']);
@@ -425,7 +427,7 @@ class Order Extends Library
 		$order['order_vouchers'] = $order_vouchers;
 
 		// Order Totals
-		$order_totals = $this->db->queryRows("SELECT * FROM `" . DB_PREFIX . "order_total` WHERE order_id = '$order_id' ORDER BY sort_order ASC");
+		$order_totals = $this->queryRows("SELECT * FROM `" . DB_PREFIX . "order_total` WHERE order_id = '$order_id' ORDER BY sort_order ASC");
 
 		foreach ($order_totals as &$order_total) {
 			$extension = $this->System_Extension_Total->get($order_total['code']);

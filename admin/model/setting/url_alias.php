@@ -86,8 +86,8 @@ class Admin_Model_Setting_UrlAlias extends Model
 
 		//Order By and Limit
 		if (!$total) {
-			$order = $this->extract_order($data);
-			$limit = $this->extract_limit($data);
+			$order = $this->extractOrder($data);
+			$limit = $this->extractLimit($data);
 		} else {
 			$order = '';
 			$limit = '';

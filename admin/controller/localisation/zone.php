@@ -324,7 +324,7 @@ class Admin_Controller_Localisation_Zone extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'localisation/zone')) {
+		if (!$this->user->can('modify', 'localisation/zone')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -337,7 +337,7 @@ class Admin_Controller_Localisation_Zone extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'localisation/zone')) {
+		if (!$this->user->can('modify', 'localisation/zone')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

@@ -124,7 +124,7 @@ class Catalog_Controller_Payment_Sagepay extends Controller
 			$data = $this->getToken($output);
 
 			if ($data && is_array($data)) {
-				$this->order->update($_GET['order_id'], $this->config->get('config_order_complete_status_id'));
+				$this->order->updateOrder($_GET['order_id'], $this->config->get('config_order_complete_status_id'));
 
 				$message = '';
 

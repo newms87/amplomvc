@@ -125,7 +125,7 @@ class Admin_Controller_Payment_AuthorizenetAim extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'payment/authorizenet_aim')) {
+		if (!$this->user->can('modify', 'payment/authorizenet_aim')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

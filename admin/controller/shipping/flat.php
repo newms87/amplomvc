@@ -58,7 +58,7 @@ class Admin_Controller_Shipping_Flat extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'shipping/flat')) {
+		if (!$this->user->can('modify', 'shipping/flat')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

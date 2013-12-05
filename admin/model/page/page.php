@@ -77,7 +77,7 @@ class Admin_Model_Page_Page extends Model
 
 		$this->url->removeAlias('page/page', 'page_id=' . $page_id);
 
-		$this->translation->delete('page', $page_id);
+		$this->translation->deleteTranslation('page', $page_id);
 
 		$this->cache->delete('page');
 	}
@@ -137,8 +137,8 @@ class Admin_Model_Page_Page extends Model
 
 		//Order By & Limit
 		if (!$total) {
-			$order = $this->extract_order($data);
-			$limit = $this->extract_limit($data);
+			$order = $this->extractOrder($data);
+			$limit = $this->extractLimit($data);
 		} else {
 			$order = '';
 			$limit = '';

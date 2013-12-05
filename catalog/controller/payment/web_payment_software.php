@@ -86,7 +86,7 @@ class Catalog_Controller_Payment_WebPaymentSoftware extends Controller
 
 		//If successful log transaction in opencart system
 		if ('00' === (string)$xml->response_code) {
-			$this->order->update($this->session->data['order_id'], $this->config->get('config_order_complete_status_id'));
+			$this->order->updateOrder($this->session->data['order_id'], $this->config->get('config_order_complete_status_id'));
 
 			$message = '';
 

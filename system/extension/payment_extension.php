@@ -1,5 +1,5 @@
 <?php
-abstract class PaymentExtension extends Extension
+abstract class PaymentExtension extends System_Extension_Extension
 {
 	public function getErrors()
 	{
@@ -93,74 +93,6 @@ abstract class PaymentCardExtension extends PaymentExtension
 
 abstract class PaymentSubscriptionExtension extends PaymentCardExtension
 {
-	public function isDue($customer_subscription)
-	{
-		$subscription = $customer_subscription['subscription'];
-
-		$last_payment = $this->subscription->getMeta($customer_subscription['customer_subscription_id'], 'last_payment');
-
-		if ($last_payment && $this->date->isToday($last_payment)) {
-			return false;
-		}
-
-		//Limit Number of Charges from date_added
-		if ($subscription['cycles']) {
-			$diff = $this->date->diff($customer_subscription['date_activated']);
-			$total_period = $subscription['cycles'] * $subscription['time'];
-
-			switch ($subscription['time_unit']) {
-				//Charge every x weeks until end of period
-				case 'W':
-					if (($diff['d'] > $total_period) || ($diff['d'] % $subscription['time'] !== 0)) {
-						return false;
-					}
-					break;
-
-				//Charge every x months until end of period
-				case 'M':
-					if ($diff['m'] > $total_period || ($diff['m'] % $subscription['time'] !== 0)) {
-						return false;
-					}
-					break;
-
-				//Charge every x years until end of period
-				case 'Y':
-					if ($diff['y'] > $total_period || ($diff['y'] % $subscription['time'] !== 0)) {
-						return false;
-					}
-					break;
-			}
-		}
-
-		//Charge Only on a specific day
-		if ($subscription['day']) {
-			switch ($subscription['time_unit']) {
-				//Charge on day of week
-				case 'W':
-					if ($this->date->getDayOfWeek() !== $subscription['day']) {
-						return false;
-					}
-					break;
-
-				//Charge on day of month
-				case 'M':
-					if ($this->date->getDayOfMonth() !== $subscription['day']) {
-						return false;
-					}
-					break;
-
-				//Charge on day of year
-				case 'Y':
-					if ($this->date->getDayOfYear() !== $subscription['day']) {
-						return false;
-					}
-					break;
-			}
-		}
-
-		return true;
-	}
-
 	public function getSubscription($id) { return true; }
 
 	public function addSubscription($subscription) { return true; }

@@ -83,7 +83,7 @@ class Admin_Controller_Setting_OrderStatus extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'setting/order_status')) {
+		if (!$this->user->can('modify', 'setting/order_status')) {
 			$this->error['permission'] = $this->_('error_permission');
 		}
 

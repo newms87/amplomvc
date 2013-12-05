@@ -292,7 +292,7 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'localisation/stock_status')) {
+		if (!$this->user->can('modify', 'localisation/stock_status')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -307,7 +307,7 @@ class Admin_Controller_Localisation_StockStatus extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'localisation/stock_status')) {
+		if (!$this->user->can('modify', 'localisation/stock_status')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

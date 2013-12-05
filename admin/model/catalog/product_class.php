@@ -103,8 +103,8 @@ class Admin_Model_Catalog_ProductClass extends Model
 
 		//Order By and Limit
 		if (!$total) {
-			$order = $this->extract_order($filter);
-			$limit = $this->extract_limit($filter);
+			$order = $this->extractOrder($filter);
+			$limit = $this->extractLimit($filter);
 		} else {
 			$order = '';
 			$limit = '';

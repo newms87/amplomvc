@@ -232,7 +232,7 @@ class Admin_Controller_Localisation_Language extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'localisation/language')) {
+		if (!$this->user->can('modify', 'localisation/language')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -265,7 +265,7 @@ class Admin_Controller_Localisation_Language extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'localisation/language')) {
+		if (!$this->user->can('modify', 'localisation/language')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

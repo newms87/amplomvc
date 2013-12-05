@@ -113,7 +113,7 @@ class Admin_Controller_Payment_Liqpay extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'payment/liqpay')) {
+		if (!$this->user->can('modify', 'payment/liqpay')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

@@ -131,7 +131,7 @@ class Catalog_Controller_Payment_PpProUk extends Controller
 		$json = array();
 
 		if ($response_data['RESULT'] == '0') {
-			$this->order->update($this->session->data['order_id'], $this->config->get('config_order_complete_status_id'));
+			$this->order->updateOrder($this->session->data['order_id'], $this->config->get('config_order_complete_status_id'));
 
 			$message = '';
 

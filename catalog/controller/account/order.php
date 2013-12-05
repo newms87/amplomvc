@@ -136,6 +136,7 @@ class Catalog_Controller_Account_Order extends Controller
 
 			foreach ($options as &$option) {
 				$option = $this->Model_Catalog_Product->getProductOptionValue($product['product_id'], $option['product_option_id'], $option['product_option_value_id']);
+				$option += $this->Model_Catalog_Product->getProductOption($product['product_id'], $option['product_option_id']);
 
 				if (!$option['display_value']) {
 					$option['display_value'] = ($option['name'] ? $option['name'] . ': ' : '') . $option['value'];

@@ -112,7 +112,7 @@ class Catalog_Controller_Payment_AuthorizenetAim extends Controller
 
 			if ($response_data[1] == '1') {
 				if (strtoupper($response_data[38]) != strtoupper(md5($this->config->get('authorizenet_aim_hash') . $this->config->get('authorizenet_aim_login') . $response_data[6] . $this->currency->format($order_info['total'], $order_info['currency_code'], 1.00000, false)))) {
-					$this->order->update($this->session->data['order_id'], $this->config->get('config_order_complete_status_id'));
+					$this->order->updateOrder($this->session->data['order_id'], $this->config->get('config_order_complete_status_id'));
 
 					$message = '';
 

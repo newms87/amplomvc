@@ -269,7 +269,7 @@ class Admin_Controller_Extension_Plugin extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'extension/plugin')) {
+		if (!$this->user->can('modify', 'extension/plugin')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

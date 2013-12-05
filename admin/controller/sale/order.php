@@ -300,7 +300,7 @@ class Admin_Controller_Sale_Order extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'sale/order')) {
+		if (!$this->user->can('modify', 'sale/order')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -403,7 +403,7 @@ class Admin_Controller_Sale_Order extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'sale/order')) {
+		if (!$this->user->can('modify', 'sale/order')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -546,7 +546,7 @@ class Admin_Controller_Sale_Order extends Controller
 
 			$json = array();
 
-			if (!$this->user->hasPermission('modify', 'sale/order')) {
+			if (!$this->user->can('modify', 'sale/order')) {
 				$json['error'] = $this->_('error_permission');
 			} else {
 				$invoice_no = $this->System_Model_Order->generateInvoiceId($order_id);
@@ -568,7 +568,7 @@ class Admin_Controller_Sale_Order extends Controller
 
 		$json = array();
 
-		if (!$this->user->hasPermission('modify', 'sale/order')) {
+		if (!$this->user->can('modify', 'sale/order')) {
 			$json['error'] = $this->_('error_permission');
 		} elseif (isset($_GET['order_id'])) {
 			$order_info = $this->Model_Sale_Order->getOrder($_GET['order_id']);
@@ -595,7 +595,7 @@ class Admin_Controller_Sale_Order extends Controller
 
 		$json = array();
 
-		if (!$this->user->hasPermission('modify', 'sale/order')) {
+		if (!$this->user->can('modify', 'sale/order')) {
 			$json['error'] = $this->_('error_permission');
 		} elseif (isset($_GET['order_id'])) {
 			$order_info = $this->Model_Sale_Order->getOrder($_GET['order_id']);
@@ -618,7 +618,7 @@ class Admin_Controller_Sale_Order extends Controller
 
 		$json = array();
 
-		if (!$this->user->hasPermission('modify', 'sale/order')) {
+		if (!$this->user->can('modify', 'sale/order')) {
 			$json['error'] = $this->_('error_permission');
 		} elseif (isset($_GET['order_id'])) {
 			$order_info = $this->Model_Sale_Order->getOrder($_GET['order_id']);
@@ -647,7 +647,7 @@ class Admin_Controller_Sale_Order extends Controller
 
 		$json = array();
 
-		if (!$this->user->hasPermission('modify', 'sale/order')) {
+		if (!$this->user->can('modify', 'sale/order')) {
 			$json['error'] = $this->_('error_permission');
 		} elseif (isset($_GET['order_id'])) {
 			$order_info = $this->Model_Sale_Order->getOrder($_GET['order_id']);
@@ -670,7 +670,7 @@ class Admin_Controller_Sale_Order extends Controller
 
 		$json = array();
 
-		if (!$this->user->hasPermission('modify', 'sale/order')) {
+		if (!$this->user->can('modify', 'sale/order')) {
 			$json['error'] = $this->_('error_permission');
 		} elseif (isset($_GET['order_id'])) {
 			$order_info = $this->Model_Sale_Order->getOrder($_GET['order_id']);
@@ -699,7 +699,7 @@ class Admin_Controller_Sale_Order extends Controller
 
 		$json = array();
 
-		if (!$this->user->hasPermission('modify', 'sale/order')) {
+		if (!$this->user->can('modify', 'sale/order')) {
 			$json['error'] = $this->_('error_permission');
 		} elseif (isset($_GET['order_id'])) {
 			$order_info = $this->Model_Sale_Order->getOrder($_GET['order_id']);
@@ -725,7 +725,7 @@ class Admin_Controller_Sale_Order extends Controller
 		$order_id = (int)$_GET['order_id'];
 
 		if ($this->request->isPost()) {
-			if (!$this->user->hasPermission('modify', 'sale/order')) {
+			if (!$this->user->can('modify', 'sale/order')) {
 				$this->message->add('warning', $this->_('error_permission'));
 			} else {
 				$this->order->addHistory($order_id, $_POST);

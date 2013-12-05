@@ -49,7 +49,7 @@ class Admin_Controller_Mail_Messages extends Controller
 
 	public function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'mail/messages')) {
+		if (!$this->user->can('modify', 'mail/messages')) {
 			$this->error['permission'] = $this->_('error_permission');
 		}
 

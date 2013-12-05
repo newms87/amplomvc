@@ -48,8 +48,8 @@ class Admin_Model_Sale_CustomerGroup extends Model
 				$data['order'] = 'ASC';
 			}
 
-			$order = $this->extract_order($data);
-			$limit = $this->extract_limit($data);
+			$order = $this->extractOrder($data);
+			$limit = $this->extractLimit($data);
 		} else {
 			$order = '';
 			$limit = '';

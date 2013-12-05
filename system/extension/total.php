@@ -1,5 +1,5 @@
 <?php
-class System_Extension_Total extends ExtensionModel
+class System_Extension_Total extends System_Extension_Model
 {
 	public function __construct($registry)
 	{
@@ -68,7 +68,7 @@ class System_Extension_Total extends ExtensionModel
 		//Language
 		$this->language->system('extension/total');
 
-		if (!$this->user->hasPermission('modify', 'extension/total')) {
+		if (!$this->user->can('modify', 'extension/total')) {
 			$this->message->add('warning', 'error_permission');
 			return false;
 		}

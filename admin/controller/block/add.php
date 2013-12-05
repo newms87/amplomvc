@@ -67,7 +67,7 @@ class Admin_Controller_Block_Add extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'block/add')) {
+		if (!$this->user->can('modify', 'block/add')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

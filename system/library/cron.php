@@ -15,8 +15,6 @@ class Cron extends Library
 
 	public function run()
 	{
-		require_once(DIR_CRON . 'cron_job.php');
-
 		$tasks = $this->config->load('cron', 'cron_tasks', 0);
 
 		$msg = _l("------ Cron START %s ------\r\n\r\n", $this->date->now());

@@ -51,7 +51,7 @@ class Admin_Controller_Feed_GoogleSitemap extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'feed/google_sitemap')) {
+		if (!$this->user->can('modify', 'feed/google_sitemap')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

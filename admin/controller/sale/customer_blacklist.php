@@ -296,7 +296,7 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'sale/customer_blacklist')) {
+		if (!$this->user->can('modify', 'sale/customer_blacklist')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -309,7 +309,7 @@ class Admin_Controller_Sale_CustomerBlacklist extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'sale/customer_blacklist')) {
+		if (!$this->user->can('modify', 'sale/customer_blacklist')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

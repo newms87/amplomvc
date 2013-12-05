@@ -113,7 +113,7 @@ class Admin_Controller_Payment_WebPaymentSoftware extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'payment/web_payment_software')) {
+		if (!$this->user->can('modify', 'payment/web_payment_software')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

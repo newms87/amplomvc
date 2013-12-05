@@ -86,7 +86,7 @@ class Admin_Controller_Setting_ShippingPolicy extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'setting/shipping_policy')) {
+		if (!$this->user->can('modify', 'setting/shipping_policy')) {
 			$this->error['permission'] = $this->_('error_permission');
 		}
 

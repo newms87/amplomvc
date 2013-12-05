@@ -305,7 +305,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'sale/voucher')) {
+		if (!$this->user->can('modify', 'sale/voucher')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -346,7 +346,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'sale/voucher')) {
+		if (!$this->user->can('modify', 'sale/voucher')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -412,7 +412,7 @@ class Admin_Controller_Sale_Voucher extends Controller
 
 		$json = array();
 
-		if (!$this->user->hasPermission('modify', 'sale/voucher')) {
+		if (!$this->user->can('modify', 'sale/voucher')) {
 			$json['error'] = $this->_('error_permission');
 		} else {
 			$voucher_id = isset($_GET['voucher_id']) ? $_GET['voucher_id'] : false;

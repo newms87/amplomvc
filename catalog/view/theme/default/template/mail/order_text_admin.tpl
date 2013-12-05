@@ -1,17 +1,17 @@
 <?php
-echo "$text_received\n\n";
+echo _l("You have received an order.\n\n");
 
-echo "$text_order_id $order_id\n";
-echo "$text_date_added $date_added\n";
-echo "$text_order_status $order_status[title]\n\n";
+echo _l("Order ID: ") . $order_id . "\n";
+echo _l("Date Added: ") . $date_added . "\n";
+echo _l("Order Status: ") . $order_status['title'] . "\n\n";
 
-echo "$text_products\n";
+echo _l("Products\n");
 
 foreach ($order_products as $product) {
 	echo "$product[quantity]x $product[name] ($product[model]) - $product[total]\n";
 
-	foreach ($product['option'] as $option) {
-		echo chr(9) . "- $option[name]: $option[value]\n";
+	foreach ($product['options'] as $option) {
+		echo chr(9) . "- $option[name]: " . ($option['display_value'] ? $option['display_value'] : $option['value']) . "\n";
 	}
 }
 
@@ -21,7 +21,7 @@ foreach ($order_vouchers as $voucher) {
 
 echo "\n";
 
-echo "$text_order_total\n";
+echo _l("Order Total: ") . "\n";
 
 foreach ($order_totals as $total) {
 	echo "$total[title]: $total[text]\n";
@@ -30,5 +30,5 @@ foreach ($order_totals as $total) {
 echo "\n";
 
 if ($comment) {
-	echo "$text_comment\n\n$comment\n\n";
+	echo _l("Order Comments: \n\n") . $comment . "\n\n";
 }

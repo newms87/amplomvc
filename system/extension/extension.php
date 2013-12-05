@@ -1,5 +1,5 @@
 <?php
-abstract class Extension extends Controller
+abstract class System_Extension_Extension extends Controller
 {
 	protected $info;
 	protected $settings;

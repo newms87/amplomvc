@@ -49,21 +49,28 @@ class Mail extends Library
 		$this->init();
 	}
 
-	public function init()
+	public function init($data = array())
 	{
-		$this->handle      = null;
-		$this->to          = null;
-		$this->cc          = null;
-		$this->bcc         = null;
-		$this->from        = null;
-		$this->sender      = null;
-		$this->subject     = null;
-		$this->text        = null;
-		$this->html        = null;
-		$this->attachments = array();
-		$this->newline     = "\n";
-		$this->crlf        = "\r\n";
-		$this->verp        = false;
+		//Defaults
+		$data += array(
+			'handle'      => null,
+			'to'          => null,
+			'cc'          => null,
+			'bcc'         => null,
+			'from'        => null,
+			'sender'      => null,
+			'subject'     => null,
+			'text'        => null,
+			'html'        => null,
+			'attachments' => array(),
+			'newline'     => "\n",
+			'crlf'        => "\r\n",
+			'verp'        => false,
+		);
+
+		foreach ($data as $key => $value) {
+			$this->$key = $value;
+		}
 	}
 
 	/**
@@ -160,7 +167,7 @@ class Mail extends Library
 		$action->getController()->template->setRootDirectory(SITE_DIR . 'catalog/view/theme/');
 
 		if (!$action->execute()) {
-			$this->mail->callController('error', "Failed to call Mail Controller: " . $action->getClass() . "! " . get_caller(0, 2));
+			$this->callController('error', "Failed to call Mail Controller: " . $action->getClass() . "! " . get_caller(0, 2));
 		}
 
 		$this->language->setRoot(DIR_LANGUAGE);
@@ -255,7 +262,7 @@ class Mail extends Library
 		}
 
 
-		$boundary = '----=_NextPart_' . md5(time());
+		$boundary = '----=_NextPart_' . uniqid('np');
 
 		$header = '';
 
@@ -554,14 +561,16 @@ class Mail extends Library
 		$mail_fail      = serialize($mail_fail);
 		$this->registry = $temp;
 
-		$mail_fail = $this->db->escape($mail_fail);
+		$mail_fail = $this->escape($mail_fail);
 
-		$this->db->query("INSERT INTO " . DB_PREFIX . "setting SET store_id = '0', `group` = 'mail_fail', `key` = 'mail_fail', value = '$mail_fail', serialized = '1', auto_load = '0'");
+		$this->query("INSERT INTO " . DB_PREFIX . "setting SET store_id = '0', `group` = 'mail_fail', `key` = 'mail_fail', value = '$mail_fail', serialized = '1', auto_load = '0'");
 	}
 
 	private function log($msg, $flush = false)
 	{
-		if (!$this->logging) return;
+		if (!$this->logging) {
+			return;
+		}
 
 		$this->log_entry .= $msg . "\r\n";
 

@@ -1,40 +1,41 @@
 <?php
 class Catalog_Controller_Mail_OrderUpdateNotify extends Controller
 {
-	public function index($order_info)
+	public function index($comment, $order_status_id, $order)
 	{
-		$language = $this->language->fetch('mail/order', $order['language_directory']);
-		$language += $this->language->fetch($order['language_filename'], $order['language_directory']);
+		//TODO: Need to implement changing language / locale $this->language->setLanguage($order['language_id']);
 
-		$subject = sprintf($language['text_update_subject'], html_entity_decode($order['store_name'], ENT_QUOTES, 'UTF-8'), $order_id);
+		$store = $this->config->getStore($order['store_id']);
 
-		$message = $language['text_update_order'] . ' ' . $order_id . "\n";
-		$message .= $language['text_update_date_added'] . ' ' . $this->date->format($order['date_added'], $language['date_format_short']) . "\n\n";
+		$subject = _l("%s - Order Update %s", html_entity_decode($store['name'], ENT_QUOTES, 'UTF-8'), $order['order_id']);
 
-		$order_status_query = $this->query("SELECT * FROM " . DB_PREFIX . "order_status WHERE order_status_id = '" . (int)$order_status_id . "' AND language_id = '" . (int)$order['language_id'] . "'");
+		$message = _l("Order ID: ") . $order['order_id'] . "\n";
+		$message .= _l("Date Added: ") . $this->date->format($order['date_added'], 'short') . "\n\n";
 
-		if ($order_status_query->num_rows) {
-			$message .= $language['text_update_order_status'] . "\n\n";
-			$message .= $order_status_query->row['name'] . "\n\n";
+		$order_status_from = $this->order->getOrderStatus($order['order_status_id']);
+		$order_status_to = $this->order->getOrderStatus($order_status_id);
+
+		if ($order_status_to) {
+			$message .= _l("Your Order Status has been updated from %s to %s. ", $order_status_from['title'], $order_status_to['title']) . "\n\n";
 		}
 
 		if ($order['customer_id']) {
-			$message .= $language['text_update_link'] . "\n";
-			$message .= $this->url->store($order_info['store_id'], 'account/order/info', 'order_id=' . $order_id) . "\n\n";
+			$message .= _l("To view your order click on the link below:\n");
+			$message .= $this->url->store($order['store_id'], 'account/order/info', 'order_id=' . $order['order_id']) . "\n\n";
 		}
 
 		if ($comment) {
-			$message .= $language['text_update_comment'] . "\n\n";
+			$message .= _l("Comments:\n\n");
 			$message .= $comment . "\n\n";
 		}
 
-		$message .= $language['text_update_footer'];
+		$message .= _l("Please reply to this email if you have any questions.");
 
 		$this->mail->init();
 
 		$this->mail->setTo($order['email']);
 		$this->mail->setFrom($this->config->get('config_email'));
-		$this->mail->setSender($order['store_name']);
+		$this->mail->setSender($store['name']);
 		$this->mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
 		$this->mail->setText(html_entity_decode($message, ENT_QUOTES, 'UTF-8'));
 

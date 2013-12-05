@@ -105,7 +105,7 @@ class Admin_Controller_Shipping_Parcelforce4848_Controller_Shipping_Parcelforce4
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'shipping/parcelforce_48')) {
+		if (!$this->user->can('modify', 'shipping/parcelforce_48')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

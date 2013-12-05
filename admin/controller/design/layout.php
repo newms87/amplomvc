@@ -52,7 +52,7 @@ class Admin_Controller_Design_Layout extends Controller
 	{
 		$this->language->load('design/layout');
 
-		if (!empty($_GET['selected']) && isset($_GET['action']) && $this->user->hasPermission('modify', 'design/layout')) {
+		if (!empty($_GET['selected']) && isset($_GET['action']) && $this->user->can('modify', 'design/layout')) {
 			foreach ($_GET['selected'] as $layout_id) {
 				switch ($_GET['action']) {
 					case 'enable':
@@ -256,7 +256,7 @@ class Admin_Controller_Design_Layout extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'design/layout')) {
+		if (!$this->user->can('modify', 'design/layout')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -269,7 +269,7 @@ class Admin_Controller_Design_Layout extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'design/layout')) {
+		if (!$this->user->can('modify', 'design/layout')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

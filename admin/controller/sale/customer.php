@@ -197,7 +197,7 @@ class Admin_Controller_Sale_Customer extends Controller
 
 		$this->document->setTitle($this->_('head_title'));
 
-		if (!$this->user->hasPermission('modify', 'sale/customer')) {
+		if (!$this->user->can('modify', 'sale/customer')) {
 			$this->error['warning'] = $this->_('error_permission');
 		} elseif (isset($_GET['selected'])) {
 			$approved = 0;
@@ -821,7 +821,7 @@ class Admin_Controller_Sale_Customer extends Controller
 
 	private function validateForm()
 	{
-		if (!$this->user->hasPermission('modify', 'sale/customer')) {
+		if (!$this->user->can('modify', 'sale/customer')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -906,7 +906,7 @@ class Admin_Controller_Sale_Customer extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'sale/customer')) {
+		if (!$this->user->can('modify', 'sale/customer')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -968,7 +968,7 @@ class Admin_Controller_Sale_Customer extends Controller
 
 		$this->language->load('sale/customer');
 
-		if ($this->request->isPost() && $this->user->hasPermission('modify', 'sale/customer')) {
+		if ($this->request->isPost() && $this->user->can('modify', 'sale/customer')) {
 			$this->Model_Sale_Customer->addTransaction($_GET['customer_id'], $_POST['description'], $_POST['amount']);
 
 			$this->language->set('success', $this->_('text_success'));
@@ -976,7 +976,7 @@ class Admin_Controller_Sale_Customer extends Controller
 			$this->data['success'] = '';
 		}
 
-		if ($this->request->isPost() && !$this->user->hasPermission('modify', 'sale/customer')) {
+		if ($this->request->isPost() && !$this->user->can('modify', 'sale/customer')) {
 			$this->language->set('error_warning', $this->_('error_permission'));
 		} else {
 			$this->data['error_warning'] = '';
@@ -1018,7 +1018,7 @@ class Admin_Controller_Sale_Customer extends Controller
 
 		$this->language->load('sale/customer');
 
-		if ($this->request->isPost() && $this->user->hasPermission('modify', 'sale/customer')) {
+		if ($this->request->isPost() && $this->user->can('modify', 'sale/customer')) {
 			$this->Model_Sale_Customer->addReward($_GET['customer_id'], $_POST['description'], $_POST['points']);
 
 			$this->language->set('success', $this->_('text_success'));
@@ -1026,7 +1026,7 @@ class Admin_Controller_Sale_Customer extends Controller
 			$this->data['success'] = '';
 		}
 
-		if ($this->request->isPost() && !$this->user->hasPermission('modify', 'sale/customer')) {
+		if ($this->request->isPost() && !$this->user->can('modify', 'sale/customer')) {
 			$this->language->set('error_warning', $this->_('error_permission'));
 		} else {
 			$this->data['error_warning'] = '';
@@ -1069,7 +1069,7 @@ class Admin_Controller_Sale_Customer extends Controller
 		$json = array();
 
 		if (isset($_POST['ip'])) {
-			if (!$this->user->hasPermission('modify', 'sale/customer')) {
+			if (!$this->user->can('modify', 'sale/customer')) {
 				$json['error'] = $this->_('error_permission');
 			} else {
 				$this->Model_Sale_Customer->addBlacklist($_POST['ip']);
@@ -1088,7 +1088,7 @@ class Admin_Controller_Sale_Customer extends Controller
 		$json = array();
 
 		if (isset($_POST['ip'])) {
-			if (!$this->user->hasPermission('modify', 'sale/customer')) {
+			if (!$this->user->can('modify', 'sale/customer')) {
 				$json['error'] = $this->_('error_permission');
 			} else {
 				$this->Model_Sale_Customer->deleteBlacklist($_POST['ip']);

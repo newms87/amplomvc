@@ -287,7 +287,7 @@ class Admin_Controller_Extension_Total extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'extension/total')) {
+		if (!$this->user->can('modify', 'extension/total')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
@@ -302,7 +302,7 @@ class Admin_Controller_Extension_Total extends Controller
 
 	private function validateDelete()
 	{
-		if (!$this->user->hasPermission('modify', 'extension/total')) {
+		if (!$this->user->can('modify', 'extension/total')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 

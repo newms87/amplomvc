@@ -303,6 +303,30 @@ $.fn.apply_filter = function (url) {
 	location = url;
 }
 
+$.fn.ac_msgbox = function (type, msg, prepend, replace) {
+	replace = replace || false;
+
+	if (replace) {
+		$('.message_box, .warning, .success, .notify').remove();
+	}
+
+	return this.each(function(i,e){
+		var box = $(e).find('.message_box.' + type);
+
+		if (!box.length) {
+			box = $('<div class="message_box ' + type + '" style="display: none;"><span class="close"></span></div>');
+			box.fadeIn('slow').find('.close').click(function () { $(this).parent().remove(); });
+			if (prepend) {
+				$(e).prepend(box);
+			} else {
+				$(e).append(box);
+			}
+		}
+
+		box.prepend($('<div />').html(msg));
+	});
+}
+
 //A jQuery Plugin to update the sort orders columns (or any column needing to be indexed)
 $.fn.update_index = function (column) {
 	column = column || '.sort_order';

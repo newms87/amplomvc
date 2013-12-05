@@ -139,7 +139,7 @@ class Admin_Controller_Payment_PpProUk extends Controller
 
 	private function validate()
 	{
-		if (!$this->user->hasPermission('modify', 'payment/pp_pro_uk')) {
+		if (!$this->user->can('modify', 'payment/pp_pro_uk')) {
 			$this->error['warning'] = $this->_('error_permission');
 		}
 
