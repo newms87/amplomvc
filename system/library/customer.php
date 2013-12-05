@@ -163,7 +163,7 @@ class Customer extends Library
 
 		if ($this->isLogged()) {
 			$is_customer_address = $this->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "customer_address WHERE customer_id = " . (int)$this->customer_id . " AND address_id = " . (int)$address_id);
-			
+
 			if (!$is_customer_address) {
 				trigger_error("Customer (id: $this->customer_id) attempted to access an unassociated address!");
 
