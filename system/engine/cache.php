@@ -74,11 +74,7 @@ class Cache
 
 		$file = DIR_CACHE . (time() + $this->expire) . '.' . preg_replace('/[^A-Z0-9\._-]/i', '', $key) . '.cache';
 
-		$handle = fopen($file, 'w');
-
-		fwrite($handle, serialize($value));
-
-		fclose($handle);
+		file_put_contents($file, serialize($value));
 	}
 
 	public function delete($key)

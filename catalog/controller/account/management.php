@@ -56,6 +56,7 @@ class Catalog_Controller_Account_Management extends Controller
 
 				case Subscription::ON_HOLD:
 					$subscription['edit'] = $this->url->link('account/subscription', 'subscription_id=' . $subscription['customer_subscription_id']);
+					$subscription['resume'] = $this->url->link('account/subscription/resume', 'subscription_id=' . $subscription['customer_subscription_id']);
 					break;
 
 				default:

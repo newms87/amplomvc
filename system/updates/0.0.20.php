@@ -88,7 +88,7 @@ SQL
 $addresses = $this->db->queryRows("SELECT * FROM " . DB_PREFIX . "address");
 
 foreach ($addresses as $address) {
-	if ($address['customer_id']) {
+	if (!empty($address['customer_id'])) {
 		if (!$this->db->queryVar("SELECT COUNT(*) FROM " . DB_PREFIX . "customer_address WHERE customer_id = $address[customer_id] AND address_id = $address[address_id]")) {
 			$this->db->query("INSERT INTO " . DB_PREFIX . "customer_address SET customer_id = $address[customer_id], address_id = $address[address_id]");
 		}
